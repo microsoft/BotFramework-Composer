@@ -577,6 +577,11 @@ adm-zip@0.4.14:
   resolved "https://registry.yarnpkg.com/adm-zip/-/adm-zip-0.4.14.tgz#2cf312bcc9f8875df835b0f6040bd89be0a727a9"
   integrity sha512-/9aQCnQHF+0IiCl0qhXoK7qs//SwYE7zX8lsr/DNk1BRAHYxeLZPL4pguwK29gUEqasYQjqPtEpDRSWEkdHn9g==
 
+adm-zip@^0.4.14:
+  version "0.4.16"
+  resolved "https://registry.yarnpkg.com/adm-zip/-/adm-zip-0.4.16.tgz#cf4c508fdffab02c269cbc7f471a875f05570365"
+  integrity sha512-TFi4HBKSGfIKsK5YCkKaaFG2m4PEDyViZmEwof3MTIgzimHLto6muaHVpbrljdIvIrFZzEq/p4nafOeLcYegrg==
+
 ajv@^6.5.5:
   version "6.12.2"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.12.2.tgz#c629c5eced17baf314437918d2da88c99d5958cd"

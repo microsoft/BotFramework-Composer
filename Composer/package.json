@@ -28,12 +28,13 @@
     "packages/tools/built-in-functions",
     "packages/tools/language-servers",
     "packages/tools/language-servers/*",
-    "packages/ui-plugins/*"
+    "packages/ui-plugins/*",
+    "packages/va-creation"
   ],
   "scripts": {
     "build": "node scripts/begin.js && yarn build:prod",
     "build:prod": "yarn build:dev && yarn build:server && yarn build:client && yarn build:electron",
-    "build:dev": "yarn build:test && yarn build:lib && yarn build:tools && yarn build:extensions && yarn build:plugins",
+    "build:dev": "yarn build:test && yarn build:lib && yarn build:tools && yarn build:extensions && yarn build:plugins && yarn build:vacreation ",
     "build:test": "yarn workspace @bfc/test-utils build",
     "build:lib": "yarn workspace @bfc/libs build:all",
     "build:electron": "yarn workspace @bfc/electron-server build",
@@ -42,6 +43,7 @@
     "build:client": "yarn workspace @bfc/client build",
     "build:tools": "yarn workspace @bfc/tools build:all",
     "build:plugins": "cd plugins && yarn install && yarn build:all",
+    "build:vacreation": "yarn workspace @bfc/va-creation build:all",
     "start": "cross-env NODE_ENV=production PORT=3000 yarn start:server",
     "startall": "yarn start",
     "start:dev": "concurrently  \"npm:start:client\" \"npm:start:server:dev\"",

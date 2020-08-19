@@ -10,14 +10,16 @@
       "azurePublish",
       "samples",
       "localPublish",
+      "vacore",
       "lib",
       "lib/*"
     ],
     "scripts": {
-      "build:all": "yarn build:lib && yarn build:localpublish && yarn build:samples && yarn build:azurePublish && yarn build:azureFunctionsPublish",
+      "build:all": "yarn build:lib && yarn build:localpublish && yarn build:samples && yarn build:azurePublish && yarn build:azureFunctionsPublish && yarn build:vacore",
       "build:localpublish": "yarn workspace localpublish build",
       "build:samples": "yarn workspace samples build",
       "build:azurePublish": "yarn workspace azurePublish build",
+      "build:vacore": "yarn workspace vacore build",
       "build:azureFunctionsPublish": "yarn workspace azureFunctionsPublish build",
       "build:lib": "yarn workspace @bfc/plugins-libs build:all"
     }
