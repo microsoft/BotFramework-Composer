@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 import { Request, Response } from 'express';
 
-import { parseQnAContent } from '../models/helper/parser';
+import { parseQnAContent } from '../models/utilities/parser';
 
 async function getQnaContent(req: Request, res: Response) {
   try {
@@ -14,6 +14,6 @@ async function getQnaContent(req: Request, res: Response) {
   }
 }
 
-export const HelperController = {
+export const UtilitiesController = {
   getQnaContent,
 };
