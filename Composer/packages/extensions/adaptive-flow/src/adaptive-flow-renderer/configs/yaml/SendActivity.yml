@@ -1,5 +1,4 @@
-# SendActivity
-$kind: 'Microsoft.SendActivity'
+Microsoft.SendActivity:
   widget: 'ActionCard'
   header:
     icon: 'MessageBot'

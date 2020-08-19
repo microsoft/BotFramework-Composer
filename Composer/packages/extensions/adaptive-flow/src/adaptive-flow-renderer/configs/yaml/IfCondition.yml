@@ -1,0 +1,8 @@
+Microsoft.IfCondition:
+  widget: 'IfConditionWidget'
+  nowrap: true
+  judgement:
+    widget: 'ActionCard'
+    header: 'Branch: If/else'
+    body: '@condition'
+

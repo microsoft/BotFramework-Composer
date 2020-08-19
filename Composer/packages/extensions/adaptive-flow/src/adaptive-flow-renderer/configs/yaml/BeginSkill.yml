@@ -1,0 +1,11 @@
+Microsoft.BeginSkill:
+  widget: 'ActionCard'
+  header:
+    title: Connect to a skill
+    icon: 'Library'
+    colors:
+      theme: 'DarkBlue'
+      text: 'White'
+      icon: 'White'
+  body: '<span style="color:grey">Host</span> {@skillEndpoint || ?}'
+  footer: '@resultProperty ? {@resultProperty} <span style="color: grey">= Result</span>'

@@ -1,5 +1,4 @@
-# ChoiceInput
-$kind: 'Microsoft.ChoiceInput'
+Microsoft.ChoiceInput:
   widget: 'PromptWidget'
   nowrap: true
   botAsks:

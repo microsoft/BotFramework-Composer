@@ -1,0 +1,7 @@
+Microsoft.BeginDialog:
+  widget: 'ActionCard'
+  header: 'Begin a new dialog'
+  body:
+    widget: 'DialogReference'
+    dialog: '@dialog'
+  footer: '@resultProperty && {@resultProperty} <span style="color:grey">= Return value</span> : '''
