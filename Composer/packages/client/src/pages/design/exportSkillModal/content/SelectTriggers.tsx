@@ -2,21 +2,10 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import React, { useMemo } from 'react';
-import {
-  CheckboxVisibility,
-  DetailsList,
-  DetailsListLayoutMode,
-  IDetailsRowProps,
-  SelectionMode,
-} from 'office-ui-fabric-react/lib/DetailsList';
 import { DialogInfo, ITrigger, SDKKinds } from '@bfc/shared';
-import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
 import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
-import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
-import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
@@ -25,15 +14,7 @@ import { dialogsState, schemasState } from '../../../../recoilModel';
 import { getFriendlyName } from '../../../../utils/dialogUtil';
 import { isSupportedTrigger } from '../generateSkillManifest';
 
-const styles = {
-  detailListContainer: css`
-    flex-grow: 1;
-    height: 350px;
-    position: relative;
-    padding-top: 10px;
-    overflow: hidden;
-  `,
-};
+import { SelectItems } from './SelectItems';
 
 const getLabel = (kind: SDKKinds, uiSchema) => {
   const { label } = uiSchema?.[kind]?.form || {};
@@ -111,38 +92,5 @@ export const SelectTriggers: React.FC<ContentProps> = ({ setSelectedTriggers }) 
     []
   );
 
-  function onRenderDetailsHeader(props, defaultRender) {
-    return (
-      <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
-        {defaultRender({
-          ...props,
-          onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
-        })}
-      </Sticky>
-    );
-  }
-
-  const onRenderRow = (props?: IDetailsRowProps, defaultRender?: IRenderFunction<IDetailsRowProps>): JSX.Element => {
-    return <div data-selection-toggle="true">{defaultRender && defaultRender(props)}</div>;
-  };
-
-  return (
-    <div css={styles.detailListContainer}>
-      <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
-        <DetailsList
-          isHeaderVisible
-          checkboxVisibility={CheckboxVisibility.always}
-          columns={tableColumns}
-          compact={false}
-          getKey={(item) => item.id}
-          items={items}
-          layoutMode={DetailsListLayoutMode.justified}
-          selection={selection}
-          selectionMode={SelectionMode.multiple}
-          onRenderDetailsHeader={onRenderDetailsHeader}
-          onRenderRow={onRenderRow}
-        />
-      </ScrollablePane>
-    </div>
-  );
+  return <SelectItems items={items} selection={selection} tableColumns={tableColumns} />;
 };

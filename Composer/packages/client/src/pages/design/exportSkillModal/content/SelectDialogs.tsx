@@ -1,61 +1,134 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-/** @jsx jsx */
-import { css, jsx } from '@emotion/core';
-import React, { useMemo } from 'react';
-import {
-  CheckboxVisibility,
-  DetailsList,
-  DetailsListLayoutMode,
-  IDetailsRowProps,
-  SelectionMode,
-} from 'office-ui-fabric-react/lib/DetailsList';
+import React, { useMemo, useState, useRef, useEffect } from 'react';
 import { DialogInfo } from '@bfc/shared';
-import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
+import { NeutralColors } from '@uifabric/fluent-theme/lib/fluent/FluentColors';
 import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
-import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
-import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { useRecoilValue } from 'recoil';
+import debounce from 'lodash/debounce';
 import formatMessage from 'format-message';
 
 import { ContentProps } from '../constants';
-import { dialogsState } from '../../../../recoilModel';
+import { dispatcherState } from '../../../../recoilModel';
+import { validatedDialogsSelector } from '../../../../recoilModel/selectors/validatedDialogs';
 
-const styles = {
-  detailListContainer: css`
-    flex-grow: 1;
-    height: 350px;
-    position: relative;
-    padding-top: 10px;
-    overflow: hidden;
-  `,
+import { SelectItems } from './SelectItems';
+
+const textFieldStyles = (focused: boolean) => ({
+  fieldGroup: {
+    margin: '-5px 0',
+    transition: 'border-color 0.1s linear',
+    borderColor: 'transparent',
+    backgroundColor: focused ? undefined : 'transparent',
+    selectors: {
+      ':hover': {
+        borderColor: NeutralColors.gray30,
+      },
+    },
+  },
+});
+
+const DescriptionColumn: React.FC<DialogInfo> = ({ id, displayName }: DialogInfo) => {
+  const items = useRecoilValue(validatedDialogsSelector);
+  const { content } = items.find(({ id: dialogId }) => dialogId === id) || {};
+
+  const [value, setValue] = useState(content?.$designer?.description);
+  const [focused, setFocused] = useState(false);
+  const { updateDialog } = useRecoilValue(dispatcherState);
+
+  const sync = useRef(
+    debounce((updateDialog: any, description: string, content: any) => {
+      updateDialog({
+        id,
+        content: {
+          ...content,
+          $designer: {
+            ...content.$designer,
+            description,
+          },
+        },
+      });
+    }, 400)
+  ).current;
+
+  useEffect(() => {
+    if (value !== content.$designer?.description) {
+      sync(updateDialog, value, content);
+    }
+  }, [value, updateDialog]);
+
+  const handleChange = (_, newValue?: string) => {
+    if (typeof newValue === 'string') {
+      setValue(newValue);
+    }
+  };
+
+  return (
+    <div data-is-focusable aria-label={formatMessage('Edit {displayName} dialog description', { displayName })}>
+      <TextField
+        styles={{
+          ...textFieldStyles(focused),
+          root: { width: '100%' },
+        }}
+        value={value || ''}
+        onBlur={() => {
+          setFocused(false);
+        }}
+        onChange={handleChange}
+        onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+        }}
+        onFocus={() => {
+          setFocused(true);
+        }}
+      />
+    </div>
+  );
 };
 
-export const SelectDialogs: React.FC<ContentProps> = ({ editJson, schema, setSelectedDialogs }) => {
-  const items = useRecoilValue(dialogsState);
+export const SelectDialogs: React.FC<ContentProps> = ({ setSelectedDialogs }) => {
+  const dialogs = useRecoilValue(validatedDialogsSelector);
+  const items = useMemo(() => dialogs.map(({ id, content, displayName }) => ({ id, content, displayName })), []);
 
   // for detail file list in open panel
-  const tableColumns = [
-    {
-      key: 'column1',
-      name: formatMessage('Name'),
-      fieldName: 'id',
-      minWidth: 300,
-      maxWidth: 350,
-      isRowHeader: true,
-      isResizable: true,
-      isSortedDescending: false,
-      sortAscendingAriaLabel: formatMessage('Sorted A to Z'),
-      sortDescendingAriaLabel: formatMessage('Sorted Z to A'),
-      data: 'string',
-      onRender: (item: DialogInfo) => {
-        return <span aria-label={item.displayName}>{item.displayName}</span>;
+  const tableColumns = useMemo(
+    () => [
+      {
+        key: 'column1',
+        name: formatMessage('Name'),
+        fieldName: 'id',
+        minWidth: 300,
+        maxWidth: 350,
+        isRowHeader: true,
+        isResizable: true,
+        isSortedDescending: false,
+        sortAscendingAriaLabel: formatMessage('Sorted A to Z'),
+        sortDescendingAriaLabel: formatMessage('Sorted Z to A'),
+        data: 'string',
+        onRender: (item: DialogInfo) => {
+          return <span aria-label={item.displayName}>{item.displayName}</span>;
+        },
+        isPadded: true,
       },
-      isPadded: true,
-    },
-  ];
+      {
+        key: 'column2',
+        name: formatMessage('Description'),
+        fieldName: 'description',
+        minWidth: 300,
+        maxWidth: 350,
+        isRowHeader: true,
+        isResizable: true,
+        isSortedDescending: false,
+        data: 'string',
+        onRender: DescriptionColumn,
+        isPadded: true,
+      },
+    ],
+    []
+  );
 
   const selection = useMemo(
     () =>
@@ -68,38 +141,5 @@ export const SelectDialogs: React.FC<ContentProps> = ({ editJson, schema, setSel
     []
   );
 
-  function onRenderDetailsHeader(props, defaultRender) {
-    return (
-      <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
-        {defaultRender({
-          ...props,
-          onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
-        })}
-      </Sticky>
-    );
-  }
-
-  const onRenderRow = (props?: IDetailsRowProps, defaultRender?: IRenderFunction<IDetailsRowProps>): JSX.Element => {
-    return <div data-selection-toggle="true">{defaultRender && defaultRender(props)}</div>;
-  };
-
-  return (
-    <div css={styles.detailListContainer}>
-      <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
-        <DetailsList
-          isHeaderVisible
-          checkboxVisibility={CheckboxVisibility.always}
-          columns={tableColumns}
-          compact={false}
-          getKey={(item) => item.id}
-          items={items}
-          layoutMode={DetailsListLayoutMode.justified}
-          selection={selection}
-          selectionMode={SelectionMode.multiple}
-          onRenderDetailsHeader={onRenderDetailsHeader}
-          onRenderRow={onRenderRow}
-        />
-      </ScrollablePane>
-    </div>
-  );
+  return <SelectItems items={items} selection={selection} tableColumns={tableColumns} />;
 };
