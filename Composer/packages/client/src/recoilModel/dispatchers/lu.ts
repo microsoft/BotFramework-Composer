@@ -9,7 +9,6 @@ import { luUtil } from '@bfc/indexers';
 
 import luWorker from '../parsers/luWorker';
 import { getBaseName, getExtension } from '../../utils/fileUtil';
-import { checkLuisPublish, createCrossTrainConfig } from '../../utils/luUtil';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { luFilesState, projectIdState, localeState, settingsState } from '../atoms/botState';
 
