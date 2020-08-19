@@ -25,7 +25,6 @@ describe('getReferredLuFiles', () => {
           { intent: 'dia2_trigger', dialogs: ['dia2'] },
           { intent: 'dias_trigger', dialogs: ['dia5', 'dia6'] },
           { intent: 'no_dialog', dialogs: [] },
-          { intent: 'dialog_without_lu', dialogs: ['dialog_without_lu'] },
           { intent: '', dialogs: ['start_dialog_without_intent'] },
         ],
       },
@@ -73,25 +72,31 @@ describe('getReferredLuFiles', () => {
       },
     ];
     const luFiles = [
-      { id: 'main.en-us' },
-      { id: 'dia1.en-us' },
+      {
+        id: 'main.en-us',
+        intents: [
+          { Name: 'dia1_trigger' },
+          { Name: 'dia2_trigger' },
+          { Name: 'dias_trigger' },
+          { Name: 'no_dialog' },
+          { Name: 'dialog_without_lu' },
+        ],
+      },
+      { id: 'dia1.en-us', intents: [{ Name: 'dia3_trigger' }, { Name: 'dia4_trigger' }] },
       { id: 'dia2.en-us' },
       { id: 'dia3.en-us' },
       { id: 'dia5.en-us' },
       { id: 'dia6.en-us' },
-      { id: 'start_dialog_without_intent.en-us' },
     ];
     const config = createCrossTrainConfig(dialogs as DialogInfo[], luFiles as LuFile[]);
     expect(config.rootIds.length).toEqual(1);
     expect(config.rootIds[0]).toEqual('main.en-us.lu');
     expect(config.triggerRules['main.en-us.lu'].dia1_trigger).toEqual('dia1.en-us.lu');
     expect(config.triggerRules['main.en-us.lu'].no_dialog).toEqual('');
-    expect(config.triggerRules['main.en-us.lu']['']).toEqual('start_dialog_without_intent.en-us.lu');
     expect(config.triggerRules['main.en-us.lu'].dia1_trigger).toEqual('dia1.en-us.lu');
     expect(config.triggerRules['main.en-us.lu'].dias_trigger.length).toBe(2);
     expect(config.triggerRules['dia1.en-us.lu'].dia3_trigger).toEqual('dia3.en-us.lu');
     expect(config.triggerRules['dia1.en-us.lu']['dia4.en-us.lu']).toBeUndefined();
-    expect(config.triggerRules['main.en-us.lu'].dialog_without_lu).toEqual('');
   });
 });
 
@@ -114,6 +119,6 @@ it('check the lu files before publish', () => {
   }).toThrowError(/wrong/);
 
   luFiles[0].empty = false;
-
+  luFiles[0].diagnostics = [];
   expect(checkLuisBuild(luFiles, dialogs)[0].id).toEqual('a.en-us');
 });
