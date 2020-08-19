@@ -1,0 +1,11 @@
+# SendActivity
+$kind: 'Microsoft.SendActivity'
+  widget: 'ActionCard'
+  header:
+    icon: 'MessageBot'
+    colors:
+      theme: '#EEEAF4'
+      icon: '#5C2E91'
+  body:
+    widget: 'LgWidget'
+    value: '@activity'

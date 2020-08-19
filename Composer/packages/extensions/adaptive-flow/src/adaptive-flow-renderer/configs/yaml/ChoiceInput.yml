@@ -1,0 +1,29 @@
+# ChoiceInput
+$kind: 'Microsoft.ChoiceInput'
+  widget: 'PromptWidget'
+  nowrap: true
+  botAsks:
+    widget: 'ActionCard'
+    header:
+      title: 'Bot Asks (Choice)'
+      icon: 'MessageBot'
+      colors:
+        theme: '#EEEAF4'
+        icon: '#5C2E91'
+    body:
+      widget: 'LG'
+      value: '@prompt'
+      placeholder: '<prompt>'
+  userInput:
+    widget: 'ActionCard'
+    header:
+      title: 'User Input (Choice)'
+      icon: 'User'
+      menu: false
+      colors:
+        theme: '#lightblue'
+        icon: '#azureblue'
+    body:
+      widget: 'InputChoices'
+      items: '@choices'
+    footer: '@property ? {@property} <span style="color:grey">= Input(Choice)</span> : '''
