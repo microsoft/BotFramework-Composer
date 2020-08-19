@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import formatMessage from 'format-message';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
@@ -16,6 +16,7 @@ import { RouteComponentProps } from '@reach/router';
 
 import { QnAMakerLearningUrl, knowledgeBaseSourceUrl } from '../../constants';
 import { FieldConfig, useForm } from '../../hooks/useForm';
+
 const styles = {
   dialog: {
     title: {
@@ -86,39 +87,66 @@ interface ImportQnAFromUrlModalProps
   onSubmit: (urls: string[]) => void;
 }
 
-interface ImportQnAFromUrlModalFormData {
+const DialogTitle = () => {
+  return (
+    <div>
+      {formatMessage('Populate your KB.')}
+      <p>
+        <span css={subText}>
+          {formatMessage(
+            'Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence. '
+          )}
+          <Link href={knowledgeBaseSourceUrl} target={'_blank'}>
+            {formatMessage('Learn more about knowledge base sources. ')}
+          </Link>
+          {formatMessage(
+            'Skip this step to add questions and answers manually after creation. The number of sources and file size you can add depends on the QnA service SKU you choose. '
+          )}
+          <Link href={QnAMakerLearningUrl} target={'_blank'}>
+            {formatMessage('Learn more about QnA Maker SKUs.')}
+          </Link>
+        </span>
+      </p>
+    </div>
+  );
+};
+
+interface FormField {
   urls: string[];
 }
+
+const validateUrls = (urls: string[]) => {
+  const errors = Array(urls.length).fill('');
+  for (let i = 0; i < urls.length; i++) {
+    if (!urls[i].startsWith('http://') && !urls[i].startsWith('https://')) {
+      errors[i] = formatMessage('A valid url should start with http:// or https://');
+    }
+  }
+
+  for (let i = 0; i < urls.length; i++) {
+    for (let j = 0; j < urls.length; j++) {
+      if (urls[i] === urls[j] && i !== j) {
+        errors[i] = errors[j] = formatMessage('This url is duplicated');
+      }
+    }
+  }
+  return errors;
+};
+
+const formConfig: FieldConfig<FormField> = {
+  urls: {
+    required: true,
+    defaultValue: [''],
+  },
+};
 
 export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (props) => {
   const { onDismiss, onSubmit, dialogId } = props;
   const [urlErrors, setUrlErrors] = useState(['']);
-  const formConfig: FieldConfig<ImportQnAFromUrlModalFormData> = {
-    urls: {
-      required: true,
-      defaultValue: [''],
-    },
-  };
+
   const { formData, updateField, hasErrors } = useForm(formConfig);
   const isQnAFileselected = !(dialogId === 'all');
   const disabled = !isQnAFileselected || hasErrors || urlErrors.some((e) => !!e) || formData.urls.some((url) => !url);
-  const validateUrls = (urls: string[]) => {
-    const errors = Array(urls.length).fill('');
-    for (let i = 0; i < urls.length; i++) {
-      if (!urls[i].startsWith('http://') && !urls[i].startsWith('https://')) {
-        errors[i] = formatMessage('A valid url should start with http:// or https://');
-      }
-    }
-
-    for (let i = 0; i < urls.length; i++) {
-      for (let j = i + 1; j < urls.length; j++) {
-        if (urls[i] === urls[j]) {
-          errors[i] = errors[j] = formatMessage('This url is duplicated');
-        }
-      }
-    }
-    return errors;
-  };
 
   const addNewUrl = () => {
     const urls = [...formData.urls, ''];
@@ -139,41 +167,12 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
     updateField('urls', urls);
     setUrlErrors(validateUrls(urls));
   };
-  /*
-formatMessage('Populate your KB.'),
-        subText: formatMessage(
-          'Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence. Learn more about knowledge base sources. Skip this step to add questions and answers manually after creation. The number of sources and file size you can add depends on the QnA service SKU you choose. Learn more about QnA Maker SKUs.'
-        ),
-  */
-  const dialogTitle = useMemo(() => {
-    return (
-      <div>
-        {formatMessage('Populate your KB.')}
-        <p>
-          <span css={subText}>
-            {formatMessage(
-              'Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence. '
-            )}
-            <Link href={knowledgeBaseSourceUrl} target={'_blank'}>
-              {formatMessage('Learn more about knowledge base sources. ')}
-            </Link>
-            {formatMessage(
-              'Skip this step to add questions and answers manually after creation. The number of sources and file size you can add depends on the QnA service SKU you choose. '
-            )}
-            <Link href={QnAMakerLearningUrl} target={'_blank'}>
-              {formatMessage('Learn more about QnA Maker SKUs.')}
-            </Link>
-          </span>
-        </p>
-      </div>
-    );
-  }, []);
 
   return (
     <Dialog
       dialogContentProps={{
         type: DialogType.normal,
-        title: dialogTitle,
+        title: <DialogTitle />,
         styles: styles.dialog,
       }}
       hidden={false}
@@ -189,7 +188,7 @@ formatMessage('Populate your KB.'),
             return (
               <div key={index} css={urlContainer}>
                 <TextField
-                  data-testid="knowledgeLocationTextField"
+                  data-testid={`knowledgeLocationTextField-${index}`}
                   errorMessage={urlErrors[index]}
                   label={index === 0 ? formatMessage('URL') : ''}
                   placeholder={'http://'}
@@ -200,7 +199,8 @@ formatMessage('Populate your KB.'),
                 {index !== 0 && (
                   <ActionButton
                     css={cancel}
-                    data-testid={'deleteImportQnAUrl'}
+                    data-testid={`deleteImportQnAUrl-${index}`}
+                    hidden={index === 0}
                     iconProps={{ iconName: 'Cancel' }}
                     onClick={(e) => removeUrl(index)}
                   />
