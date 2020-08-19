@@ -15,5 +15,5 @@ For all users need to install npm before start composer.
 
  * user need to install `windows-build-tools` before start composer. By running `npm install --global windows-build-tools`. Otherwise it may throw `gyp build Err` during npm install, because we use `restify` as server and its dependency `dtrace-provider` need `gyp` to build.
 
-## for linux users
- * user need to install `xcode-select` before start composer. By running `xcode-select --install`.
+## for Mac users
+ * user need to have `xcode-select` before start composer. Otherwise it may throw `gyp build Err` during npm install. You can install or re-install it by running `sudo rm -rf $(xcode-select -print-path)`, `xcode-select --install` then `sudo xcode-select -s /Applications/Xcode.app/Contents/Developer`
