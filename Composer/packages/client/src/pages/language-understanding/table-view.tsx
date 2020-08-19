@@ -104,17 +104,15 @@ const TableView: React.FC<TableViewProps> = (props) => {
   }, [luFiles, activeDialog, projectId]);
 
   const handleIntentUpdate = useCallback(
-    (intentName: string, intent: LuIntentSection) => {
-      if (file) {
-        const payload = {
-          id: file.id,
-          intentName,
-          intent,
-        };
-        updateLuIntent(payload);
-      }
+    (fileId: string, intentName: string, intent: LuIntentSection) => {
+      const payload = {
+        id: fileId,
+        intentName,
+        intent,
+      };
+      updateLuIntent(payload);
     },
-    [intents, file, projectId]
+    [intents, projectId]
   );
 
   const handleTemplateUpdateDefaultLocale = useCallback(
@@ -177,7 +175,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 onBlur={(_id, value) => {
                   const newValue = value?.trim().replace(/^#/, '');
                   if (newValue) {
-                    handleIntentUpdate(item.name, { Name: newValue, Body: item.phrases });
+                    handleIntentUpdate(item.fileId, item.name, { Name: newValue, Body: item.phrases });
                   }
                 }}
                 onChange={() => {}}
@@ -207,7 +205,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 onBlur={(_id, value) => {
                   const newValue = value?.trim();
                   if (newValue) {
-                    handleIntentUpdate(item.name, { Name: item.name, Body: newValue });
+                    handleIntentUpdate(item.fileId, item.name, { Name: item.name, Body: newValue });
                   }
                 }}
                 onChange={() => {}}
@@ -238,7 +236,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 onBlur={(_id, value) => {
                   const newValue = value?.trim().replace(/^#/, '');
                   if (newValue) {
-                    handleIntentUpdate(item.name, { Name: item.name, Body: newValue });
+                    handleIntentUpdate(item.fileId, item.name, { Name: item.name, Body: newValue });
                   }
                 }}
                 onChange={() => {}}
