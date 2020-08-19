@@ -341,7 +341,7 @@ describe('skill operation', () => {
     } as Request;
     await ProjectController.getSkill(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
-  }, 5000);
+  }, 10000);
 
   it('should update skill', async () => {
     const mockReq = {
