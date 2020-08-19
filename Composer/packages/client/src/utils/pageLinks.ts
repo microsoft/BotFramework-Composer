@@ -34,7 +34,7 @@ export const topLinks = (projectId: string, openedDialogId: string) => {
       disabled: !botLoaded,
     },
     {
-      to: `/bot/${projectId}/qna`,
+      to: `/bot/${projectId}/knowledge-base`,
       iconName: 'QnAIcon',
       labelName: formatMessage('QnA'),
       exact: true,

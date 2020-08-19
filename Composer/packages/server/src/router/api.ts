@@ -9,7 +9,7 @@ import { PublishController } from '../controllers/publisher';
 import { AssetController } from '../controllers/asset';
 import { EjectController } from '../controllers/eject';
 
-import { HelperController } from './../controllers/helper';
+import { UtilitiesController } from './../controllers/utilities';
 
 const router: Router = express.Router({});
 
@@ -59,7 +59,7 @@ router.post('/runtime/eject/:projectId/:template', EjectController.eject);
 router.get('/assets/projectTemplates', AssetController.getProjTemplates);
 
 //help api
-router.get('/helper/qna/parse', HelperController.getQnaContent);
+router.get('/utilities/qna/parse', UtilitiesController.getQnaContent);
 
 const ErrorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
   Promise.resolve(handler(req, res, next)).catch(next);
