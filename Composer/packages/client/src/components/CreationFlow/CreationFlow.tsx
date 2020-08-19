@@ -21,6 +21,7 @@ import {
 import Home from '../../pages/home/Home';
 import ImportQnAFromUrlModal from '../../pages/qna/ImportQnAFromUrlModal';
 import { QnABotTemplateId } from '../../constants';
+import { useProjectIdCache } from '../../utils/hooks';
 
 import { CreateOptions } from './CreateOptions';
 import { OpenProject } from './OpenProject';
@@ -42,6 +43,8 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     updateFolder,
     saveTemplateId,
     importQnAFromUrl,
+    fetchProjectById,
+    fetchRecentProjects,
   } = useRecoilValue(dispatcherState);
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
   const projectId = useRecoilValue(projectIdState);
@@ -49,6 +52,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   const storages = useRecoilValue(storagesState);
   const focusedStorageFolder = useRecoilValue(focusedStorageFolderState);
   const locale = useRecoilValue(localeState);
+  const cachedProjectId = useProjectIdCache();
   const currentStorageIndex = useRef(0);
   const storage = storages[currentStorageIndex.current];
   const currentStorageId = storage ? storage.id : 'default';
@@ -63,9 +67,19 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     }
   }, [storages]);
 
-  useEffect(() => {
-    fetchStorages();
+  const fetchResources = async () => {
+    // fetchProject use `gotoSnapshot` which will wipe out all state value.
+    // so here make those methods call in sequence.
+    if (!projectId && cachedProjectId) {
+      await fetchProjectById(cachedProjectId);
+    }
+    await fetchStorages();
     fetchTemplates();
+    fetchRecentProjects();
+  };
+
+  useEffect(() => {
+    fetchResources();
   }, []);
 
   const updateCurrentPath = async (newPath, storageId) => {
