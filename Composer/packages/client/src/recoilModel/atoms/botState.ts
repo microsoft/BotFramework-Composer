@@ -17,7 +17,6 @@ import { BotLoadError, DesignPageLocation } from '../../recoilModel/types';
 
 import { PublishType, BreadcrumbItem } from './../../recoilModel/types';
 import { BotStatus } from './../../constants';
-
 const getFullyQualifiedKey = (value: string) => {
   return `Bot_${value}_State`;
 };
@@ -203,4 +202,9 @@ export const onAddLanguageDialogCompleteState = atom<any>({
 export const onDelLanguageDialogCompleteState = atom<any>({
   key: getFullyQualifiedKey('onDelLanguageDialogComplete'),
   default: { func: undefined },
+});
+
+export const isEjectRuntimeExistState = atom<boolean>({
+  key: getFullyQualifiedKey('isEjectRuntimeExist'),
+  default: false,
 });
