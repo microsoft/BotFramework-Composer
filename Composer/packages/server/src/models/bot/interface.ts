@@ -1,9 +1,20 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ICrossTrainConfig } from './builder';
+
 export interface LocationRef {
   storageId: string;
   path: string;
+}
+
+export interface IBuildConfig {
+  authoringKey: string;
+  subscriptionKey: string;
+  qnaRegion: string;
+  luFileIds: string[];
+  qnaFileIds: string[];
+  crossTrainConfig: ICrossTrainConfig;
 }
 
 export interface ILuisSettings {

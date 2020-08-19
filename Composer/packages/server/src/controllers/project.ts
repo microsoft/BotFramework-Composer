@@ -335,14 +335,15 @@ async function build(req: Request, res: Response) {
   const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
     try {
-      const files = await currentProject.buildFiles(
-        req.body.authoringKey,
-        req.body.subscriptionKey,
-        req.body.qnaRegion,
-        req.body.luFiles,
-        req.body.qnaFiles,
-        req.body.crossTrainConfig
-      );
+      const { authoringKey, subscriptionKey, qnaRegion, luFiles, qnaFiles, crossTrainConfig } = req.body;
+      const files = await currentProject.buildFiles({
+        authoringKey,
+        subscriptionKey,
+        qnaRegion,
+        luFileIds: luFiles,
+        qnaFileIds: qnaFiles,
+        crossTrainConfig,
+      });
       res.status(200).json(files);
     } catch (error) {
       res.status(400).json({

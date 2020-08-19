@@ -19,7 +19,7 @@ import { BotProjectService } from '../../services/project';
 
 import { ICrossTrainConfig, Builder } from './builder';
 import { IFileStorage } from './../storage/interface';
-import { LocationRef } from './interface';
+import { LocationRef, IBuildConfig } from './interface';
 import { extractSkillManifestUrl } from './skillManager';
 import { defaultFilePath, serializeFiles, parseFileName } from './botStructure';
 
@@ -391,14 +391,14 @@ export class BotProject implements IBotProject {
     return createdFiles;
   };
 
-  public buildFiles = async (
-    authoringKey: string,
-    subscriptionKey: string,
-    qnaRegion: string,
-    luFileIds: string[] = [],
-    qnaFileIds: string[] = [],
-    crossTrainConfig: ICrossTrainConfig
-  ) => {
+  public buildFiles = async ({
+    authoringKey,
+    subscriptionKey,
+    qnaRegion,
+    luFileIds = [],
+    qnaFileIds = [],
+    crossTrainConfig,
+  }: IBuildConfig) => {
     if ((luFileIds.length || qnaFileIds.length) && this.settings) {
       const luFiles: FileInfo[] = [];
       luFileIds.forEach((id) => {
