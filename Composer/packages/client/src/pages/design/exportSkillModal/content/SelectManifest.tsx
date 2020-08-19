@@ -7,21 +7,19 @@ import React, { useMemo, useState } from 'react';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import {
+  CheckboxVisibility,
   DetailsList,
   DetailsListLayoutMode,
   SelectionMode,
-  CheckboxVisibility,
 } from 'office-ui-fabric-react/lib/DetailsList';
+import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import formatMessage from 'format-message';
-import { useRecoilValue } from 'recoil';
 
 import { calculateTimeDiff } from '../../../../utils/fileUtil';
 import { ContentProps, SCHEMA_URIS, VERSION_REGEX } from '../constants';
-import { botNameState, dispatcherState } from '../../../../recoilModel';
 
 const styles = {
   detailListContainer: css`
@@ -38,13 +36,9 @@ const styles = {
 };
 
 export const SelectManifest: React.FC<ContentProps> = ({ completeStep, skillManifests, setSkillManifest }) => {
-  const actions = useRecoilValue(dispatcherState);
-  const botName = useRecoilValue(botNameState);
   const [manifestVersion, setManifestVersion] = useState<string>(SCHEMA_URIS[0]);
   const [errors, setErrors] = useState<{ version?: string }>({});
-
-  const [version] = VERSION_REGEX.exec(manifestVersion) || [''];
-  const fileName = `${botName}-${version.replace(/\./g, '-')}-manifest`;
+  const [version] = useMemo(() => VERSION_REGEX.exec(manifestVersion) || [''], []);
 
   const options: IDropdownOption[] = useMemo(
     () =>
@@ -67,15 +61,11 @@ export const SelectManifest: React.FC<ContentProps> = ({ completeStep, skillMani
   };
 
   const handleCreate = () => {
-    if (skillManifests.some((manifest) => manifest.id === fileName)) {
-      setErrors({ version: formatMessage('{fileName} already exists', { fileName }) });
-      return;
-    } else if (!version) {
+    if (!version) {
       setErrors({ version: formatMessage('Please select a version of the manifest schema') });
       return;
     }
-    actions.createSkillManifest({ id: fileName, content: { $schema: manifestVersion } });
-    setSkillManifest(fileName);
+    setSkillManifest({ content: { $schema: manifestVersion } });
     completeStep();
   };
 
@@ -85,8 +75,8 @@ export const SelectManifest: React.FC<ContentProps> = ({ completeStep, skillMani
       key: 'column1',
       name: formatMessage('Name'),
       fieldName: 'id',
-      minWidth: 150,
-      maxWidth: 200,
+      minWidth: 300,
+      maxWidth: 350,
       isRowHeader: true,
       isResizable: true,
       isSorted: true,
@@ -108,7 +98,7 @@ export const SelectManifest: React.FC<ContentProps> = ({ completeStep, skillMani
       isResizable: true,
       data: 'number',
       onRender: (item) => {
-        return <span>{calculateTimeDiff(item.dateModified)}</span>;
+        return <span>{calculateTimeDiff(item.lastModified)}</span>;
       },
       isPadded: true,
     },
@@ -171,7 +161,7 @@ export const SelectManifest: React.FC<ContentProps> = ({ completeStep, skillMani
             items={skillManifests}
             layoutMode={DetailsListLayoutMode.justified}
             selectionMode={SelectionMode.single}
-            onActiveItemChanged={({ id }) => setSkillManifest(id)}
+            onActiveItemChanged={setSkillManifest}
             onRenderDetailsHeader={onRenderDetailsHeader}
           />
         </ScrollablePane>

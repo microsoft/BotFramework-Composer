@@ -64,8 +64,8 @@ export const defaultFilePath = (botName: string, defaultLocale: string, filename
     });
   }
 
-  const DIALOGNAME = fileId.toLowerCase();
-  const isRootFile = BOTNAME === DIALOGNAME;
+  const DIALOGNAME = fileId;
+  const isRootFile = BOTNAME === DIALOGNAME.toLowerCase();
 
   let TemplatePath = '';
   if (fileType === FileExtensions.Dialog) {
