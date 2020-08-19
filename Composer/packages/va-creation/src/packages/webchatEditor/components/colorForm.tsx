@@ -1,6 +1,6 @@
-import React from 'react';
 import { Label } from 'office-ui-fabric-react/lib/Label';
-import { SwatchColorPicker, ISwatchColorPickerStyles } from 'office-ui-fabric-react/lib/SwatchColorPicker';
+import { SwatchColorPicker } from 'office-ui-fabric-react/lib/SwatchColorPicker';
+import React from 'react';
 
 interface IColorFormProps {
   updateStyleElement: (styleElementName: string, value: any) => void;

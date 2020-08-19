@@ -51,7 +51,7 @@ async function getBlob(req: Request, res: Response) {
     if (!req.query.path) {
       throw new Error('path missing from query');
     }
-    const reqpath = decodeURI(req.query.path);
+    const reqpath = decodeURI(req.query.path as string);
     if (!Path.isAbsolute(reqpath)) {
       throw new Error('path must be absolute');
     }

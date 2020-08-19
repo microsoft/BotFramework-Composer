@@ -1,18 +1,12 @@
+import { mergeStyles } from '@uifabric/merge-styles';
+import { ISeparatorStyles, Separator } from 'office-ui-fabric-react/lib/Separator';
+import { Text } from 'office-ui-fabric-react/lib/Text';
 import React from 'react';
-import { IAppState, ICreationState, IAvailableHostedSkill } from '../../../models/reduxState';
 import { connect } from 'react-redux';
-import { actionTypes, genericSingleAction } from '../../shared/actions';
-import { Dispatch, AnyAction } from 'redux';
-import { ModalShell } from './modalShell';
+import { AnyAction, Dispatch } from 'redux';
+import { IAppState, IAvailableHostedSkill, ICreationState } from '../../../models/reduxState';
 import { RouterPaths } from '../../shared/constants';
-import { List } from 'office-ui-fabric-react/lib/List';
-import { ChoiceGroup, IChoiceGroupOption, IChoiceGroupOptionStyleProps } from 'office-ui-fabric-react/lib/ChoiceGroup';
-import { Dropdown, IDropdownStyles, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { BotTypeTile } from './botTypeTile';
-import { Label } from 'office-ui-fabric-react/lib/Label';
-import { Text, ITextProps } from 'office-ui-fabric-react/lib/Text';
-import { mergeStyles, mergeStyleSets } from '@uifabric/merge-styles';
-import { Separator, ISeparatorStyles } from 'office-ui-fabric-react/lib/Separator';
+import { ModalShell } from './modalShell';
 
 interface StateProps {
   creationState: ICreationState;

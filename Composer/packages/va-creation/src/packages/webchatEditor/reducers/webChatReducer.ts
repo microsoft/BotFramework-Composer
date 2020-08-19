@@ -1,11 +1,5 @@
-import {
-  INavState,
-  initialNavState,
-  initialWebChatState,
-  IWebChatState,
-  WebChatStyleOption,
-} from '../../../models/reduxState';
-import { GenericAction, actionTypes } from '../../shared/actions';
+import { initialWebChatState, IWebChatState, WebChatStyleOption } from '../../../models/reduxState';
+import { actionTypes, GenericAction } from '../../shared/actions';
 
 export function updateStyleElement(
   state: IWebChatState,

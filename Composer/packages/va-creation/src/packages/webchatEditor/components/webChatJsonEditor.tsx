@@ -1,14 +1,12 @@
-import React from 'react';
-import { withRouter } from 'react-router-dom';
-import { IAppState, WebChatStyleOption } from '../../../models/reduxState';
-import { connect } from 'react-redux';
-import { actionTypes, genericSingleAction } from '../../shared/actions';
-import { Dispatch, AnyAction } from 'redux';
+import { mergeStyles } from '@uifabric/merge-styles';
+import { MessageBar, MessageBarType, PrimaryButton } from 'office-ui-fabric-react';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import React from 'react';
+import { connect } from 'react-redux';
+import { AnyAction, Dispatch } from 'redux';
+import { IAppState, WebChatStyleOption } from '../../../models/reduxState';
+import { actionTypes, genericSingleAction } from '../../shared/actions';
 import { defaultStyleOptions } from '../constants';
-import { Link, MessageBar, MessageBarType } from 'office-ui-fabric-react';
-import { DefaultButton, PrimaryButton, Stack, IStackTokens } from 'office-ui-fabric-react';
-import { mergeStyles, mergeStyleSets } from '@uifabric/merge-styles';
 
 interface StateProps {
   currentStyleOptions: WebChatStyleOption;

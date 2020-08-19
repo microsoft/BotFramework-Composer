@@ -1,8 +1,8 @@
-import { Separator, ISeparatorStyles } from 'office-ui-fabric-react/lib/Separator';
-import React from 'react';
-import { Text, ITextProps } from 'office-ui-fabric-react/lib/Text';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
+import { ISeparatorStyles, Separator } from 'office-ui-fabric-react/lib/Separator';
 import { mergeStyles } from 'office-ui-fabric-react/lib/Styling';
+import { Text } from 'office-ui-fabric-react/lib/Text';
+import React from 'react';
 
 interface ICollapsibleHeaderProps {
   headerText: string;

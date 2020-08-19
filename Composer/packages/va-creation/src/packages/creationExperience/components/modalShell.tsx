@@ -1,21 +1,7 @@
-import React from 'react';
-import {
-  getTheme,
-  mergeStyles,
-  mergeStyleSets,
-  FontWeights,
-  ContextualMenu,
-  Toggle,
-  DefaultButton,
-  Modal,
-  IDragOptions,
-  IconButton,
-  IIconProps,
-} from 'office-ui-fabric-react';
-
-import { PrimaryButton, Stack, IStackTokens } from 'office-ui-fabric-react';
-import { Text, ITextProps } from 'office-ui-fabric-react/lib/Text';
 import { Icon } from '@fluentui/react/lib/Icon';
+import { DefaultButton, IStackTokens, mergeStyles, PrimaryButton, Stack } from 'office-ui-fabric-react';
+import { Text } from 'office-ui-fabric-react/lib/Text';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 interface IModalShellProps {
@@ -28,8 +14,6 @@ interface IModalShellProps {
 export const ModalShell: React.FunctionComponent<React.PropsWithChildren<IModalShellProps>> = (
   props: React.PropsWithChildren<IModalShellProps>
 ) => {
-  const cancelIcon: IIconProps = { iconName: 'Cancel' };
-
   const stackTokens: IStackTokens = { childrenGap: 20 };
 
   const headerClassName = mergeStyles({

@@ -1,14 +1,14 @@
-import React from 'react';
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { NavigationBar } from './packages/app/components/navigationBar';
-import { Home } from './packages/home/home';
-import { BotSettingsPage } from './packages/botSettings/botSettingsPage';
-import Sidebar from './packages/app/components/sideBar';
 import { initializeIcons } from '@uifabric/icons';
-import WebChatEditor from './packages/webchatEditor/components/webChatEditor';
-import { mergeStyles, mergeStyleSets } from '@uifabric/merge-styles';
+import { mergeStyles } from '@uifabric/merge-styles';
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import { NavigationBar } from './packages/app/components/navigationBar';
+import Sidebar from './packages/app/components/sideBar';
+import { BotSettingsPage } from './packages/botSettings/botSettingsPage';
 import { CreationExperiencePage } from './packages/creationExperience/components/creationExperiencePage';
+import { Home } from './packages/home/home';
+import WebChatEditor from './packages/webchatEditor/components/webChatEditor';
 
 export class VACreationApp extends React.Component<any, any> {
   constructor(props: any) {

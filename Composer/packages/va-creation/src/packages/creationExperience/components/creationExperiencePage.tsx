@@ -1,32 +1,14 @@
+import { DefaultButton, Modal } from 'office-ui-fabric-react';
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
-import { IAppState } from '../../../models/reduxState';
 import { connect } from 'react-redux';
-import { actionTypes, genericSingleAction } from '../../shared/actions';
-import { Dispatch, AnyAction } from 'redux';
-import { useId, useBoolean } from '@uifabric/react-hooks';
-import {
-  getTheme,
-  mergeStyleSets,
-  FontWeights,
-  ContextualMenu,
-  Toggle,
-  DefaultButton,
-  Modal,
-  IDragOptions,
-  IconButton,
-  IIconProps,
-  PrimaryButton,
-} from 'office-ui-fabric-react';
-import { Home } from '../../home/home';
-import { BotSettingsPage } from '../../botSettings/botSettingsPage';
-import { WebChatEditor } from '../../webchatEditor/components/webChatEditor';
-import NewBotPage from './newBotPage';
-import { Link } from 'react-router-dom';
-import CustomizeBotPage from './customizeBotPage';
-import AddSkillsPage from './addSkillsPage';
-import SummaryPage from './summaryPage';
+import { Link, Route, Switch } from 'react-router-dom';
+import { AnyAction, Dispatch } from 'redux';
+import { IAppState } from '../../../models/reduxState';
 import AddQnaPage from './addQnaPage';
+import AddSkillsPage from './addSkillsPage';
+import CustomizeBotPage from './customizeBotPage';
+import NewBotPage from './newBotPage';
+import SummaryPage from './summaryPage';
 
 interface StateProps {}
 

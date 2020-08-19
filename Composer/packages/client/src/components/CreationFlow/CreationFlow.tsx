@@ -7,6 +7,7 @@ import Path from 'path';
 import React, { useEffect, useRef, Fragment } from 'react';
 import { RouteComponentProps, Router, navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
+//import VACreationApp from '@bfc/va-creation/src/App'
 
 import { CreationFlowStatus } from '../../constants';
 import {
@@ -111,6 +112,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   return (
     <Fragment>
       <Home />
+      {/* <VACreationApp></VACreationApp> */}
       <Router>
         <DefineConversation
           createFolder={createFolder}

@@ -1,8 +1,8 @@
-import React, { useMemo } from 'react';
-import { IAppState } from '../../../models/reduxState';
+import ReactWebChat, { createDirectLine } from 'botframework-webchat';
+import React from 'react';
 import { connect } from 'react-redux';
-import { WebChatPaneStyling, WebChatContainerStyling } from '../styles';
-import ReactWebChat, { createDirectLine, createStyleSet } from 'botframework-webchat';
+import { IAppState } from '../../../models/reduxState';
+import { WebChatContainerStyling, WebChatPaneStyling } from '../styles';
 
 interface StateProps {
   webChatStyleOptions: any;

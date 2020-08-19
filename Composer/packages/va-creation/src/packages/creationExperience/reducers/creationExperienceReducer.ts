@@ -1,12 +1,5 @@
-import {
-  INavState,
-  initialNavState,
-  initialWebChatState,
-  IWebChatState,
-  ICreationState,
-  initialCreationState,
-} from '../../../models/reduxState';
-import { GenericAction, actionTypes } from '../../shared/actions';
+import { ICreationState, initialCreationState } from '../../../models/reduxState';
+import { actionTypes, GenericAction } from '../../shared/actions';
 
 export function updateRootStateVariable(state: ICreationState, stateVariableName: string, value: any): ICreationState {
   console.log('in here 2');

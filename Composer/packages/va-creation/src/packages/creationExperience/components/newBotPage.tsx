@@ -1,17 +1,15 @@
-import React from 'react';
-import { IAppState, IAssistant, initialCreationState } from '../../../models/reduxState';
-import { connect } from 'react-redux';
-import { actionTypes, genericSingleAction } from '../../shared/actions';
-import { Dispatch, AnyAction } from 'redux';
-import { ModalShell } from './modalShell';
-import { RouterPaths } from '../../shared/constants';
-import { List } from 'office-ui-fabric-react/lib/List';
-import { ChoiceGroup, IChoiceGroupOption, IChoiceGroupOptionStyleProps } from 'office-ui-fabric-react/lib/ChoiceGroup';
-import { Dropdown, IDropdownStyles, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { BotTypeTile } from './botTypeTile';
-import { Label } from 'office-ui-fabric-react/lib/Label';
+import { mergeStyles } from '@uifabric/merge-styles';
+import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { Image } from 'office-ui-fabric-react/lib/Image';
-import { mergeStyles, mergeStyleSets } from '@uifabric/merge-styles';
+import { Label } from 'office-ui-fabric-react/lib/Label';
+import React from 'react';
+import { connect } from 'react-redux';
+import { AnyAction, Dispatch } from 'redux';
+import { IAppState, IAssistant } from '../../../models/reduxState';
+import { actionTypes, genericSingleAction } from '../../shared/actions';
+import { RouterPaths } from '../../shared/constants';
+import { BotTypeTile } from './botTypeTile';
+import { ModalShell } from './modalShell';
 
 const customImg = require('../../shared/assets/customAssistant.jpg');
 const hospitalityImg = require('../../shared/assets/hospitality.jpg');
@@ -87,7 +85,7 @@ export class NewBotPage extends React.Component<PropsType> {
     return (
       <Image
         className={imageClassName}
-        src={assistantImage}
+        src={assistantImage ?? ''}
         alt="Example with no image fit value and no height or width is specified."
       />
     );

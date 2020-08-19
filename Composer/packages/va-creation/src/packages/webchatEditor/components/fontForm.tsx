@@ -1,7 +1,6 @@
-import React from 'react';
-import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
-import { Dropdown, DropdownMenuItemType, IDropdownStyles, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { Dropdown, IDropdownOption, IDropdownStyles } from 'office-ui-fabric-react/lib/Dropdown';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import React from 'react';
 
 interface IFontForm {
   updateStyleElement: (styleElementName: string, value: any) => void;

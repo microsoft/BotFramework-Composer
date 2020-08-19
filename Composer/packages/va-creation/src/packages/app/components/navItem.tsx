@@ -1,8 +1,8 @@
-import { Link } from 'react-router-dom';
-import React from 'react';
-import { NavItemStyling } from '../styles';
 import { Icon } from '@fluentui/react/lib/Icon';
-import { mergeStyles, mergeStyleSets } from '@uifabric/merge-styles';
+import { mergeStyles } from '@uifabric/merge-styles';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { NavItemStyling } from '../styles';
 
 export class NavItem extends React.Component<any, any> {
   handleClick = () => {

@@ -1,19 +1,17 @@
-import React from 'react';
-import { withRouter } from 'react-router-dom';
-import { IAppState } from '../../../models/reduxState';
-import { connect } from 'react-redux';
-import { WebChatContainerStyling } from '../styles';
-import WebChat from './webChat';
-import { mergeStyles, mergeStyleSets } from '@uifabric/merge-styles';
-import { actionTypes, genericSingleAction } from '../../shared/actions';
-import { Dispatch, AnyAction } from 'redux';
+import { mergeStyles } from '@uifabric/merge-styles';
+import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import React from 'react';
+import { connect } from 'react-redux';
+import { AnyAction, Dispatch } from 'redux';
+import { IAppState } from '../../../models/reduxState';
+import { actionTypes, genericSingleAction } from '../../shared/actions';
+import { AvatarForm } from './avatarForm';
 import { CollapsibleHeader } from './collapsibleHeader';
 import { ColorForm } from './colorForm';
 import { FontForm } from './fontForm';
-import { AvatarForm } from './avatarForm';
 import { MiscForm } from './miscForm';
-import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
+import WebChat from './webChat';
 import WebChatJsonEditor from './webChatJsonEditor';
 
 interface StateProps {}

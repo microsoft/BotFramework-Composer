@@ -1,20 +1,13 @@
-import React from 'react';
-import { IAppState } from '../../../models/reduxState';
-import { connect } from 'react-redux';
-import { actionTypes, genericSingleAction } from '../../shared/actions';
-import { Dispatch, AnyAction } from 'redux';
-import { ModalShell } from './modalShell';
-import { RouterPaths } from '../../shared/constants';
-import { List } from 'office-ui-fabric-react/lib/List';
-import { ChoiceGroup, IChoiceGroupOption, IChoiceGroupOptionStyleProps } from 'office-ui-fabric-react/lib/ChoiceGroup';
-import { Dropdown, IDropdownStyles, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { BotTypeTile } from './botTypeTile';
-import { TextField, MaskedTextField } from 'office-ui-fabric-react/lib/TextField';
-import { Label } from 'office-ui-fabric-react/lib/Label';
-import { DefaultButton, PrimaryButton, Stack, IStackTokens } from 'office-ui-fabric-react';
-import { mergeStyles, mergeStyleSets } from '@uifabric/merge-styles';
-import { CommandButton, IContextualMenuProps, IIconProps } from 'office-ui-fabric-react';
+import { mergeStyles } from '@uifabric/merge-styles';
+import { CommandButton, DefaultButton } from 'office-ui-fabric-react';
 import { Image } from 'office-ui-fabric-react/lib/Image';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import React from 'react';
+import { connect } from 'react-redux';
+import { AnyAction, Dispatch } from 'redux';
+import { IAppState } from '../../../models/reduxState';
+import { RouterPaths } from '../../shared/constants';
+import { ModalShell } from './modalShell';
 const cloudFileImage = require('../../shared/assets/cloudFileImg.jpg');
 
 interface StateProps {}

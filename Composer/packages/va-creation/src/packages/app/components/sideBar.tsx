@@ -1,11 +1,10 @@
 import React from 'react';
-import styled from '@emotion/styled';
-import { NavItem } from './navItem';
-import { SideNavStyling } from '../styles';
-import { IAppState, ISideBarEntry } from '../../../models/reduxState';
 import { connect } from 'react-redux';
-import { genericSingleAction, actionTypes } from '../../shared/actions';
-import { Dispatch, AnyAction } from 'redux';
+import { AnyAction, Dispatch } from 'redux';
+import { IAppState, ISideBarEntry } from '../../../models/reduxState';
+import { actionTypes, genericSingleAction } from '../../shared/actions';
+import { SideNavStyling } from '../styles';
+import { NavItem } from './navItem';
 
 interface StateProps {
   activePath: string;

@@ -1,13 +1,12 @@
-import React from 'react';
-import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { Label } from 'office-ui-fabric-react/lib/Label';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { mergeStyles, mergeStyleSets } from '@uifabric/merge-styles';
-import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
+import { mergeStyles } from '@uifabric/merge-styles';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
+import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
+import { Dropdown, IDropdownOption, IDropdownStyles } from 'office-ui-fabric-react/lib/Dropdown';
+import { Label } from 'office-ui-fabric-react/lib/Label';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { Dropdown, DropdownMenuItemType, IDropdownStyles, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import React from 'react';
+import { connect } from 'react-redux';
 import { IAppState } from '../../models/reduxState';
 import WebChat from '../webchatEditor/components/webChat';
 
@@ -23,8 +22,6 @@ export class BotSettingsPage extends React.Component<PropsType> {
   constructor(props: PropsType) {
     super(props);
   }
-
-  private onUserInputChange = () => {};
 
   private onLanguageChange = () => {};
 
