@@ -1,5 +1,5 @@
 # TextInput
-$kind: 'Microsoft.TextInput'
+Microsoft.TextInput:
   widget: 'PromptWidget'
   nowrap: true
   botAsks:

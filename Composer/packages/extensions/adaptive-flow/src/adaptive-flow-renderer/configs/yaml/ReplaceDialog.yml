@@ -1,0 +1,6 @@
+Microsoft.ReplaceDialog:
+  widget: 'ActionCard'
+  header: 'Replace this dialog'
+  body:
+    widget: 'DialogReference'
+    dialog: '@dialog'
