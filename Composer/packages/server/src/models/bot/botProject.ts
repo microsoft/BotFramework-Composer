@@ -17,7 +17,7 @@ import { DefaultSettingManager } from '../settings/defaultSettingManager';
 import log from '../../logger';
 import { BotProjectService } from '../../services/project';
 
-import { ICrossTrainConfig, Builder } from './builder';
+import { Builder } from './builder';
 import { IFileStorage } from './../storage/interface';
 import { LocationRef, IBuildConfig } from './interface';
 import { extractSkillManifestUrl } from './skillManager';
@@ -467,7 +467,7 @@ export class BotProject implements IBotProject {
   public updateQnaEndpointKey = async (subscriptionKey: string) => {
     const qnaEndpointKey = await this.builder.getQnaEndpointKey(subscriptionKey, {
       ...this.settings?.luis,
-      qnaRegion: this.settings?.qna.qnaRegion,
+      qnaRegion: this.settings?.qna.qnaRegion || this.settings?.luis.authoringRegion,
       subscriptionKey,
     });
     return qnaEndpointKey;

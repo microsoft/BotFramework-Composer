@@ -55,7 +55,7 @@ export class DefaultSettingManager extends FileSettingManager {
         knowledgebaseid: '',
         endpointKey: '',
         hostname: '',
-        region: 'westus',
+        qnaRegion: 'westus',
       },
       telemetry: {
         logPersonalInformation: false,

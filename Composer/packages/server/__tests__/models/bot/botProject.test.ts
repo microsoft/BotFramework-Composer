@@ -258,12 +258,13 @@ describe('buildFiles', () => {
     const luFileIds = ['a.en-us', 'b.en-us', 'bot1.en-us'];
     const qnaFileIds = ['a.en-us', 'b.en-us', 'bot1.en-us'];
     const crossTrainConfig = {
+      botName: 'bot1',
       rootIds: [],
       triggerRules: {},
       intentName: '_Interruption',
       verbose: true,
     };
-    await proj.buildFiles(authoringKey, subscriptionKey, qnaRegion, luFileIds, qnaFileIds, crossTrainConfig);
+    await proj.buildFiles({ authoringKey, subscriptionKey, qnaRegion, luFileIds, qnaFileIds, crossTrainConfig });
 
     try {
       if (fs.existsSync(path)) {
