@@ -172,7 +172,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
   useEffect(() => {
     const index = currentDialog.triggers.findIndex(({ type }) => type === SDKKinds.OnBeginDialog);
-    if (index >= 0 && !designPageLocation.selected) {
+    if (index >= 0 && !designPageLocation.selected && designPageLocation.projectId === projectId) {
       selectTo(createSelectedPath(index));
     }
   }, [currentDialog?.id]);
