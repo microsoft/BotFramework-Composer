@@ -43,10 +43,10 @@ export async function parseQnAContent(url: string) {
       url,
       subscriptionKey,
       COGNITIVE_SERVICES_ENDPOINTS,
-      uuid
+      uuid()
     );
   } else {
-    qnaContent = await builder.importUrlReference(url, subscriptionKey, COGNITIVE_SERVICES_ENDPOINTS, uuid);
+    qnaContent = await builder.importUrlReference(url, subscriptionKey, COGNITIVE_SERVICES_ENDPOINTS, uuid());
   }
 
   return qnaContent;
