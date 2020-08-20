@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 import { css } from '@emotion/core';
 import { FontWeights } from '@uifabric/styling';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { IIconStyles } from 'office-ui-fabric-react/lib/Icon';
 export const content = css`
   min-height: 28px;
@@ -28,18 +28,15 @@ export const formCell = css`
 `;
 
 export const inlineContainer = (isBold) => css`
-  display: inline-block;
   font-weight: ${isBold ? FontWeights.semibold : 400};
 `;
 
 export const textFieldQuestion = {
   root: {
-    width: 'auto',
     height: 28,
     marginLeft: -5,
   },
   field: {
-    width: 'auto',
     paddingLeft: 4,
     marginTop: -5,
   },
@@ -112,6 +109,12 @@ export const rowDetails = {
       '&.is-selected .ms-Button--icon': {
         visibility: 'visible',
       },
+      '&:hover .ms-Button': {
+        visibility: 'visible',
+      },
+      '&.is-selected .ms-Button': {
+        visibility: 'visible',
+      },
     },
   },
 };
@@ -129,8 +132,28 @@ export const addButtonContainer = css`
   background: ${NeutralColors.white};
 `;
 
-export const addAlternativeLink = {
+export const addAlternative = {
   root: {
-    width: 150,
+    fontSize: 16,
+    paddingLeft: 0,
+    marginLeft: -5,
+    color: SharedColors.cyanBlue10,
+    visibility: 'hidden',
+  },
+};
+
+export const addQnAPair = {
+  root: {
+    fontSize: 16,
+    paddingLeft: 0,
+    marginLeft: 68,
+    color: SharedColors.cyanBlue10,
+  },
+};
+
+export const addIcon = {
+  root: {
+    fontSize: '16px',
+    color: SharedColors.cyanBlue10,
   },
 };

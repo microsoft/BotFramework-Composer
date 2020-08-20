@@ -14,8 +14,7 @@ import {
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+import { IconButton, ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
@@ -39,13 +38,14 @@ import {
   textFieldQuestion,
   textFieldAnswer,
   contentAnswer,
-  addQnAPairLink,
+  addIcon,
   divider,
   rowDetails,
   icon,
   addButtonContainer,
-  addAlternativeLink,
+  addAlternative,
   inlineContainer,
+  addQnAPair,
 } from './styles';
 
 interface TableViewProps extends RouteComponentProps<{}> {
@@ -338,9 +338,13 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 />
               )}
               {!(editMode === EditMode.Creating && qnaSectionIndex === qnaIndex) && dialogId !== 'all' && (
-                <Link styles={addAlternativeLink} onClick={(e) => handleAddingAlternatives(e, qnaIndex)}>
+                <ActionButton
+                  styles={addAlternative}
+                  iconProps={{ iconName: 'Add', styles: addIcon }}
+                  onClick={(e) => handleAddingAlternatives(e, qnaIndex)}
+                >
                   {formatMessage('add alternative phrasing')}
-                </Link>
+                </ActionButton>
               )}
             </div>
           );
@@ -467,15 +471,17 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
             {dialogIdRef.current !== 'all' && (
               <div css={addButtonContainer}>
-                <Link
-                  styles={addQnAPairLink}
+                <ActionButton
+                  styles={addQnAPair}
+                  data-testid={'addQnAPairButton'}
+                  iconProps={{ iconName: 'Add' }}
                   onClick={() => {
                     onCreateNewTemplate();
                     actions.setMessage('item added');
                   }}
                 >
-                  {formatMessage('+ Add QnA Pair')}
-                </Link>
+                  {formatMessage('Add QnA Pair')}
+                </ActionButton>
               </div>
             )}
             <div css={divider}> </div>

@@ -3,7 +3,7 @@
 
 import fs from 'fs';
 
-import uniqueId from 'lodash/uniqueId';
+import { v4 as uuid } from 'uuid';
 
 import { Path } from '../../utility/path';
 
@@ -35,7 +35,6 @@ export async function parseQnAContent(url: string) {
   if (!subscriptionKey) {
     throw new Error('please set env virable QNA_SUBSCRIPTION_KEY={your subscpriont key}');
   }
-
   if (DOC_EXTENSIONS.some((e) => url.endsWith(e))) {
     const index = url.lastIndexOf('.');
     const extension = url.substring(index);
@@ -44,10 +43,10 @@ export async function parseQnAContent(url: string) {
       url,
       subscriptionKey,
       COGNITIVE_SERVICES_ENDPOINTS,
-      uniqueId()
+      uuid
     );
   } else {
-    qnaContent = await builder.importUrlReference(url, subscriptionKey, COGNITIVE_SERVICES_ENDPOINTS, uniqueId());
+    qnaContent = await builder.importUrlReference(url, subscriptionKey, COGNITIVE_SERVICES_ENDPOINTS, uuid);
   }
 
   return qnaContent;
