@@ -46,16 +46,24 @@ export function luImportResolverGenerator(files: ResolverResource[]) {
    *  botframework-cli/packages/lu/src/parser/lu/luMerger.js#findLuFilesInDir
    *  Diffrence is composer support import by id, but not support * / ** file match
    */
+
+  /**
+   * common.lu#Help
+   * common.lu#*utterances*
+   * common.lu#*patterns*
+   */
+  const fragmentReg = new RegExp('#.*$');
+  const ext = '.lu';
+  // eslint-disable-next-line security/detect-non-literal-regexp
+  const extReg = new RegExp(ext + '$');
+
   return (srcId: string, idsToFind: any[]) => {
-    const ext = '.lu';
-    // eslint-disable-next-line security/detect-non-literal-regexp
-    const extReg = new RegExp(ext + '$');
     const sourceId = getFileName(srcId).replace(extReg, '');
     const locale = /\w\.\w/.test(sourceId) ? sourceId.split('.').pop() : 'en-us';
 
     const luObjects = idsToFind.map((file) => {
       const fileId = file.filePath;
-      const targetId = getFileName(fileId).replace(extReg, '');
+      const targetId = getFileName(fileId).replace(fragmentReg, '').replace(extReg, '');
 
       const targetFile =
         files.find(({ id }) => id === `${targetId}.${locale}`) || files.find(({ id }) => id === `${targetId}`);
