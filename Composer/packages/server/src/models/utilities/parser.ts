@@ -33,7 +33,7 @@ export async function parseQnAContent(url: string) {
   const subscriptionKey = QNA_SUBSCRIPTION_KEY || getBuildEnvironment()?.QNA_SUBSCRIPTION_KEY;
 
   if (!subscriptionKey) {
-    throw new Error('please set env virable QNA_SUBSCRIPTION_KEY={your subscpriont key}');
+    throw new Error('Missing subscription key for QnAMaker');
   }
   if (DOC_EXTENSIONS.some((e) => url.endsWith(e))) {
     const index = url.lastIndexOf('.');
