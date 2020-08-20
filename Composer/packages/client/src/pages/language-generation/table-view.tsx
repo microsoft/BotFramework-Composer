@@ -335,7 +335,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         maxWidth: 50,
         fieldName: 'buttons',
         data: 'string',
-        onRender: (item, index) => {
+        onRender: (item) => {
           return (
             <TooltipHost calloutProps={{ gapSpace: 10 }} content={moreLabel}>
               <IconButton
@@ -343,7 +343,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 menuIconProps={{ iconName: 'MoreVertical' }}
                 menuProps={{
                   shouldFocusOnMount: true,
-                  items: getTemplatesMoreButtons(item, index),
+                  items: getTemplatesMoreButtons(item),
                 }}
                 styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
               />
