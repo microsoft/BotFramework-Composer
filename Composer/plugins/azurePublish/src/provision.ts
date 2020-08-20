@@ -17,7 +17,6 @@ import { GraphRbacManagementClient } from '@azure/graph';
 import { DeviceTokenCredentials } from '@azure/ms-rest-nodeauth';
 import * as fs from 'fs-extra';
 import * as rp from 'request-promise';
-import { FileInfo } from '@bfc/shared';
 
 import { BotProjectDeployConfig } from './botProjectDeployConfig';
 import { BotProjectDeployLoggerType } from './botProjectLoggerType';
@@ -29,7 +28,6 @@ export class BotProjectProvision {
   private projPath: string;
   private templatePath: string;
   private logger: (string) => any;
-  private crossTrainConfig: ICrossTrainConfig;
 
   // Will be assigned by create or deploy
   private tenantId = '';

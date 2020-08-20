@@ -381,9 +381,18 @@ export class LuisAndQnaPublish {
       await this.createGeneratedDir();
       await this.crossTrain(luFiles, qnaFiles);
       const { interruptionLuFiles, interruptionQnaFiles } = await this.getInterruptionFiles();
-      await this.publishLuis(name, environment, accessToken, language, luisSettings, interruptionLuFiles, luisResource);
+      const luisAppIds = await this.publishLuis(
+        name,
+        environment,
+        accessToken,
+        language,
+        luisSettings,
+        interruptionLuFiles,
+        luisResource
+      );
       await this.publishQna(name, environment, language, qnaSettings, interruptionQnaFiles);
       await this.cleanCrossTrain();
+      return luisAppIds;
     }
   }
 }
