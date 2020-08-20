@@ -1,13 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Bot.Builder.AI.Luis;
 using Microsoft.BotFramework.Composer.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -27,13 +22,8 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             {
                 var env = hostingContext.HostingEnvironment;
 
-                builder.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-
-                if (env.IsDevelopment())
-                {
-                    // Local Debug
-                    builder.AddJsonFile("appsettings.development.json", optional: true, reloadOnChange: true);
-                }
+                // Use Composer bot path adapter
+                builder.UseBotPathConverter(env.IsDevelopment());
 
                 var configuration = builder.Build();
 
@@ -43,27 +33,8 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
 
                 builder.AddJsonFile(configFile, optional: true, reloadOnChange: true);
 
-                try
-                {
-                    foreach (string filePath in Directory.GetFiles(botRoot, "generated/qnamaker.settings.*.json"))
-                    {
-                        builder.AddJsonFile(Path.GetFullPath(filePath), optional: true, reloadOnChange: true);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Trace.WriteLine(ex.Message);
-                }
-
-                // Need to put this part here to override the any customized settings
-                if (!env.IsDevelopment())
-                {
-                    //Azure Deploy
-                    builder.AddJsonFile("appsettings.deployment.json", optional: true, reloadOnChange: true);
-                }
-
-                builder.UseLuisConfigAdapter()
-                    .UseLuisSettings();
+                // Use Composer luis settings extensions
+                builder.UseComposerLuisSettings();
 
                 builder.AddEnvironmentVariables()
                        .AddCommandLine(args);

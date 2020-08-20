@@ -9,7 +9,6 @@ import { Path } from '../../utility/path';
 import log from '../../logger';
 
 import { FileSettingManager } from './fileSettingManager';
-
 const debug = log.extend('default-settings-manager');
 
 export class DefaultSettingManager extends FileSettingManager {

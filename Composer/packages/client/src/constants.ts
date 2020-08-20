@@ -196,11 +196,6 @@ export enum AppUpdaterStatus {
   UPDATE_SUCCEEDED,
 }
 
-export const DefaultPublishConfig = {
-  name: 'default',
-  type: 'localpublish',
-};
-
 export const EmptyBotTemplateId = 'EmptyBot';
 
 export const QnABotTemplateId = 'QnASample';
