@@ -65,7 +65,10 @@
               "actions": [
                 {
                   "$kind": "Microsoft.SendActivity",
-                  "activity": "${WelcomeUser()}"
+                  "$designer": {
+                    "id": "xh61dm"
+                  },
+                  "activity": "${SendActivity_xh61dm()}"
                 }
               ]
             }
