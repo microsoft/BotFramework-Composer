@@ -312,6 +312,7 @@ export class BotProject implements IBotProject {
       newDesigner = getNewDesigner(name, description);
     }
     content.$designer = newDesigner;
+    content.id = name;
     const updatedContent = autofixReferInDialog(botName, JSON.stringify(content, null, 2));
     await this._updateFile(relativePath, updatedContent);
     await serializeFiles(this.fileStorage, this.dataDir, botName);
