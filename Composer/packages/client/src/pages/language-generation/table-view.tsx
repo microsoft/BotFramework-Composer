@@ -62,8 +62,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const moreLabel = formatMessage('Actions');
 
   const onClickEdit = useCallback(
-    (template: LgTemplate) => {
-      const { name } = template;
+    (name: string) => {
       navigateTo(`/bot/${projectId}/language-generation/${dialogId}/edit?t=${encodeURIComponent(name)}`);
     },
     [dialogId, projectId]
@@ -71,7 +70,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
   const onCreateNewTemplate = useCallback(() => {
     if (file) {
-      const newName = lgUtil.increaseNameUtilNotExist(templates, 'TemplateName');
+      const newName = lgUtil.increaseNameUtilNotExist(file.templates, 'TemplateName');
       const payload = {
         id: file.id,
         template: {
@@ -80,39 +79,38 @@ const TableView: React.FC<TableViewProps> = (props) => {
         } as LgTemplate,
       };
       createLgTemplate(payload);
-      setFocusedIndex(templates.length);
+      setFocusedIndex(file.templates.length);
     }
-  }, [templates, file, projectId]);
+  }, [file]);
 
   const onRemoveTemplate = useCallback(
-    (index) => {
+    (name) => {
       if (file) {
         const payload = {
           id: file.id,
-          templateName: templates[index].name,
+          templateName: name,
         };
-
         removeLgTemplate(payload);
+        setFocusedIndex(file.templates.findIndex((item) => item.name === name));
       }
     },
-    [templates, file, projectId]
+    [file]
   );
 
   const onCopyTemplate = useCallback(
-    (index) => {
+    (name) => {
       if (file) {
-        const name = templates[index].name;
-        const resolvedName = lgUtil.increaseNameUtilNotExist(templates, `${name}_Copy`);
+        const resolvedName = lgUtil.increaseNameUtilNotExist(file.templates, `${name}_Copy`);
         const payload = {
           id: file.id,
           fromTemplateName: name,
           toTemplateName: resolvedName,
         };
         copyLgTemplate(payload);
-        setFocusedIndex(templates.length);
+        setFocusedIndex(file.templates.length);
       }
     },
-    [templates, file, projectId]
+    [file]
   );
 
   const handleTemplateUpdate = useCallback(
@@ -126,7 +124,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         updateLgTemplate(payload);
       }
     },
-    [templates, file, projectId]
+    [file]
   );
 
   const handleTemplateUpdateDefaultLocale = useCallback(
@@ -140,17 +138,17 @@ const TableView: React.FC<TableViewProps> = (props) => {
         updateLgTemplate(payload);
       }
     },
-    [templates, file, projectId]
+    [defaultLangFile]
   );
 
   const getTemplatesMoreButtons = useCallback(
-    (item, index) => {
+    (item) => {
       const buttons = [
         {
           key: 'edit',
           name: formatMessage('Edit'),
           onClick: () => {
-            onClickEdit(templates[index]);
+            onClickEdit(item.name);
           },
         },
         {
@@ -158,7 +156,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           name: formatMessage('Delete'),
           onClick: () => {
             setMessage('item deleted');
-            onRemoveTemplate(index);
+            onRemoveTemplate(item.name);
           },
         },
         {
@@ -166,7 +164,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           name: formatMessage('Make a copy'),
           onClick: () => {
             setMessage('item copied');
-            onCopyTemplate(index);
+            onCopyTemplate(item.name);
           },
         },
       ];

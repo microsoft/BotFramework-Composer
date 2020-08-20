@@ -78,16 +78,22 @@ export function updateTemplate(
   const { id, content } = lgFile;
   const resource = Templates.parseText(content, undefined, importResolver);
   const originTemplate = resource.toArray().find((t) => t.name === templateName);
+  const templateToUpdate = {
+    name: name || originTemplate?.name || templateName,
+    parameters: parameters || originTemplate?.parameters || [],
+    body: body || originTemplate?.body || '',
+  };
+
   let templates;
   // add if not exist
   if (!originTemplate) {
-    templates = resource.addTemplate(templateName, parameters || [], body || '');
+    templates = resource.addTemplate(templateName, templateToUpdate.parameters, templateToUpdate.body);
   } else {
     templates = resource.updateTemplate(
       templateName,
-      name || originTemplate.name,
-      parameters || originTemplate.parameters,
-      body || originTemplate.body
+      templateToUpdate.name,
+      templateToUpdate.parameters,
+      templateToUpdate.body
     );
   }
 
