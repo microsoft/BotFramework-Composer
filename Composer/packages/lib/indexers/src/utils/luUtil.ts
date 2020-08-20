@@ -204,7 +204,7 @@ export function updateIntent(
   const orginSection = Sections.find(({ Name }) => Name === intentName);
   const intentToUpdate: LuIntentSection = {
     ...orginSection,
-    Name: intent?.Name || orginSection?.Name || '',
+    Name: intent?.Name || orginSection?.Name || intentName,
     Body: intent?.Body || orginSection?.Body || '',
   };
 
