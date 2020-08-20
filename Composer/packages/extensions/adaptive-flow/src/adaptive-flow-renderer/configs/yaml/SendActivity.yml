@@ -8,3 +8,4 @@ Microsoft.SendActivity:
   body:
     widget: 'LgWidget'
     value: '@activity'
+  

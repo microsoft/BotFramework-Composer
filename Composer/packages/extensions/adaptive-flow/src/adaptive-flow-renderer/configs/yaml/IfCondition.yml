@@ -5,4 +5,3 @@ Microsoft.IfCondition:
     widget: 'ActionCard'
     header: 'Branch: If/else'
     body: '@condition'
-
