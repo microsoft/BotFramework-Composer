@@ -9,3 +9,4 @@ Microsoft.BeginSkill:
       icon: 'White'
   body: '<span style="color:grey">Host</span> {@skillEndpoint || ?}'
   footer: '@resultProperty ? {@resultProperty} <span style="color: grey">= Result</span>'
+  
