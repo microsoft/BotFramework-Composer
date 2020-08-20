@@ -54,6 +54,49 @@ describe('update lg template', () => {
     expect(templates[0].body).toEqual('-Bye');
   });
 
+  it('should update lg template with only name', () => {
+    const content = `# Exit
+-Thanks for using todo bot.
+
+# Greeting
+-What's up bro`;
+
+    const lgFile = parse('a.lg', content, []);
+    const updatedLgFile = updateTemplate(lgFile, 'Exit', { name: 'Exit1' });
+    const templates = Templates.parseText(updatedLgFile.content).toArray();
+    expect(templates.length).toEqual(2);
+    expect(templates[0].name).toEqual('Exit1');
+    expect(templates[0].body).toContain('-Thanks for using todo bot.');
+  });
+
+  it('should update lg template with only body', () => {
+    const content = `# Exit
+-Thanks for using todo bot.
+
+# Greeting
+-What's up bro`;
+
+    const lgFile = parse('a.lg', content, []);
+    const updatedLgFile = updateTemplate(lgFile, 'Exit', { body: '-Bye' });
+    const templates = Templates.parseText(updatedLgFile.content).toArray();
+    expect(templates.length).toEqual(2);
+    expect(templates[0].name).toEqual('Exit');
+    expect(templates[0].body).toEqual('-Bye');
+  });
+
+  it('update lg template with empty, should perform a remove', () => {
+    const content = `# Exit
+-Thanks for using todo bot.
+
+# Greeting
+-What's up bro`;
+
+    const lgFile = parse('a.lg', content, []);
+    const updatedLgFile = updateTemplate(lgFile, 'Exit', {});
+    const templates = Templates.parseText(updatedLgFile.content).toArray();
+    expect(templates.length).toEqual(1);
+  });
+
   it('should update lg template with error', () => {
     const content = `# Exit
 -Thanks for using todo bot.\${
