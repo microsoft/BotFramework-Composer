@@ -11,6 +11,7 @@ import { Templates, Diagnostic as LGDiagnostic, ImportResolverDelegate } from 'b
 import { LgTemplate, importResolverGenerator, TextFile, Diagnostic, Position, Range, LgFile } from '@bfc/shared';
 import get from 'lodash/get';
 import formatMessage from 'format-message';
+import isEmpty from 'lodash/isEmpty';
 
 import { lgIndexer } from '../lgIndexer';
 
@@ -72,10 +73,11 @@ export function increaseNameUtilNotExist(templates: LgTemplate[], name: string):
 export function updateTemplate(
   lgFile: LgFile,
   templateName: string,
-  { name, parameters, body }: { name?: string; parameters?: string[]; body?: string },
+  template: { name?: string; parameters?: string[]; body?: string },
   importResolver?: ImportResolverDelegate
 ): LgFile {
   const { id, content } = lgFile;
+  const { name, parameters, body } = template;
   const resource = Templates.parseText(content, undefined, importResolver);
   const originTemplate = resource.toArray().find((t) => t.name === templateName);
   const templateToUpdate = {
@@ -88,6 +90,9 @@ export function updateTemplate(
   // add if not exist
   if (!originTemplate) {
     templates = resource.addTemplate(templateName, templateToUpdate.parameters, templateToUpdate.body);
+    // remove if template is null
+  } else if (!template || isEmpty(template)) {
+    templates = resource.deleteTemplate(templateName);
   } else {
     templates = resource.updateTemplate(
       templateName,
