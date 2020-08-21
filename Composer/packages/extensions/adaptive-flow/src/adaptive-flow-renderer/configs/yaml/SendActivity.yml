@@ -1,6 +1,7 @@
 Microsoft.SendActivity:
   widget: 'ActionCard'
   header:
+    text: 'Send a response'
     icon: 'MessageBot'
     colors:
       theme: '#EEEAF4'

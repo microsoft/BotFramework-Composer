@@ -1,6 +1,6 @@
-Microsoft.DeleteProperty:
+Microsoft.DeleteProperties:
   widget: 'ActionCard'
-  header: 'Delete a property'
+  header: 'Delete properties'
   body:
     widget: 'ListOverview'
     items: '@properties'

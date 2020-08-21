@@ -1,0 +1,7 @@
+Microsoft.ForeachPage:
+  widget: 'ForeachWidget'
+  nowrap: true
+  loop:
+    widget: 'ActionCard'
+    header: 'Loop: For each page (multiple items)'
+    body: 'Each page of {@pageSizeString || ?} in {@propString || ?}'

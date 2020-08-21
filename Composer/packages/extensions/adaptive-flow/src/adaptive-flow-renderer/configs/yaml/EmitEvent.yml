@@ -1,3 +1,4 @@
 Microsoft.EmitEvent:
   widget: 'ActionCard'
+  header: 'Emit a custom event'
   body: '{@eventName || ?} <span style="color: grey"/>(Event)<span>'

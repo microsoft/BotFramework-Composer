@@ -1,5 +1,6 @@
 Microsoft.SetProperty:
   widget: 'ActionCard'
+  header: 'Set a property'
   body:
     widget: 'PropertyAssignment'
     property: '@property'

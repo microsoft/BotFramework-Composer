@@ -1,4 +1,5 @@
 Microsoft.HttpRequest:
   widget: 'ActionCard'
+  header: 'Send an HTTP request'
   body: '<span style="color: grey">{@method}</span> {@url}'
   footer: '@resultProperty ? {@resultProperty} <span style="color: grey">= Result property</span> : null'
