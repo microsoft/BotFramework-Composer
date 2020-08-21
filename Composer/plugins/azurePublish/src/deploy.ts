@@ -55,7 +55,7 @@ export class BotProjectDeploy {
 
       // STEP 2: UPDATE LUIS
       // Do the LUIS build if LUIS settings are present
-      if (settings.luis) {
+      if (settings.luis && settings.qna) {
         const luisAuthoringKey = settings.luis.authoringKey;
         const luisAuthoringRegion = settings.luis.authoringRegion || settings.luis.region;
 
@@ -67,7 +67,7 @@ export class BotProjectDeploy {
 
           // this function returns an object that contains the luis APP ids mapping
           // each dialog to its matching app.
-          const luisAppIDs = await publisher.publishLuisAndQna(
+          const { luisAppIds, qnaConfig } = await publisher.publishLuisAndQna(
             name,
             environment,
             this.accessToken,
@@ -80,7 +80,11 @@ export class BotProjectDeploy {
           // amend luis settings with newly generated values
           settings.luis = {
             ...settings.luis,
-            ...luisAppIDs,
+            ...luisAppIds,
+          };
+          settings.qna = {
+            ...settings.qna,
+            ...qnaConfig,
           };
         }
       }
