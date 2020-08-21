@@ -30,7 +30,6 @@ export class LuisAndQnaPublish {
   private remoteBotPath: string;
   private generatedFolder: string;
   private interruptionFolderPath: string;
-  private deploymentSettingsPath: string;
   private crossTrainConfig: ICrossTrainConfig;
 
   constructor(config: PublishConfig) {
@@ -39,9 +38,6 @@ export class LuisAndQnaPublish {
     this.remoteBotPath = path.join(config.projPath, 'ComposerDialogs');
     this.generatedFolder = path.join(this.remoteBotPath, 'generated');
     this.interruptionFolderPath = path.join(this.generatedFolder, INTERUPTION);
-
-    // path to the deployed settings file that contains additional luis information
-    this.deploymentSettingsPath = path.join(config.projPath, 'appsettings.deployment.json');
 
     // Cross Train config
     this.crossTrainConfig = {
@@ -366,10 +362,12 @@ export class LuisAndQnaPublish {
     );
     const qna: any = {};
 
-    // Read in all the luis app id mappings
-    const qnaConfig = await fs.readJson(qnaConfigFile);
-    const endpointKey = await builder.getEndpointKeys(subscriptionKey, endpoint);
-    Object.assign(qna, qnaConfig.qna, { endpointKey: endpointKey.primaryEndpointKey });
+    // Read the qna settings
+    if (qnaConfigFile) {
+      const qnaConfig = await fs.readJson(qnaConfigFile);
+      const endpointKey = await builder.getEndpointKeys(subscriptionKey, endpoint);
+      Object.assign(qna, qnaConfig.qna, { endpointKey: endpointKey.primaryEndpointKey });
+    }
     return qna;
   }
 
