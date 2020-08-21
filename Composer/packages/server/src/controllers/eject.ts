@@ -19,7 +19,7 @@ export const EjectController = {
     if (template) {
       let runtimePath;
       try {
-        runtimePath = await template.eject(currentProject, new LocalDiskStorage());
+        runtimePath = await template.eject(currentProject, new LocalDiskStorage(), req.body?.isReplace);
         // init bot project, make sure it include customize schema files
         await currentProject.init();
       } catch (err) {
@@ -31,6 +31,8 @@ export const EjectController = {
 
       res.json({
         settings: {
+          key: template.key,
+          name: template.name,
           path: runtimePath,
           startCommand: template.startCommand,
         },

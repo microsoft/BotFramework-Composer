@@ -18,7 +18,6 @@ import { BotLoadError, DesignPageLocation, QnAAllUpViewStatus } from '../../reco
 
 import { PublishType, BreadcrumbItem } from './../../recoilModel/types';
 import { BotStatus } from './../../constants';
-
 const getFullyQualifiedKey = (value: string) => {
   return `Bot_${value}_State`;
 };
@@ -214,4 +213,9 @@ export const onDelLanguageDialogCompleteState = atom<any>({
 export const qnaAllUpViewStatusState = atom<any>({
   key: getFullyQualifiedKey('qnaAllUpViewStatusState'),
   default: QnAAllUpViewStatus.Success,
+});
+
+export const isEjectRuntimeExistState = atom<boolean>({
+  key: getFullyQualifiedKey('isEjectRuntimeExist'),
+  default: false,
 });

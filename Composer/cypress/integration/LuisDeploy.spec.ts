@@ -4,9 +4,9 @@
 context('Luis Deploy', () => {
   beforeEach(() => {
     cy.server();
-    cy.route('POST', '/api/publish/*/publish/default', { endpointURL: 'anything' });
+    cy.route('POST', '/api/publish/*/publish/default', { endpointURL: 'anything', status: 202 });
     cy.route('POST', '/api/projects/*/settings', 'OK');
-    cy.route('GET', '/api/publish/*/status/default', { endpointURL: 'anything' });
+    cy.route('GET', '/api/publish/*/status/default', { endpointURL: 'anything', status: 200 });
     cy.visit('/home');
     cy.createBot('ToDoBotWithLuisSample');
   });

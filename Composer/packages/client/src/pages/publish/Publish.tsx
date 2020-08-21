@@ -8,8 +8,8 @@ import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { useRecoilValue } from 'recoil';
 import { PublishTarget } from '@bfc/shared';
+import { useRecoilValue } from 'recoil';
 
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { projectContainer } from '../design/styles';
@@ -225,7 +225,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
         },
       ]);
     }
-  }, [publishHistory, selectedTargetName]);
+  }, [publishHistory, selectedTargetName, settings.publishTargets]);
 
   // check history to see if a 202 is found
   useEffect(() => {

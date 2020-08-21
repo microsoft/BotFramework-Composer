@@ -79,7 +79,7 @@ describe('generateOtherActivities', () => {
 describe('generateActivity', () => {
   it('should return simple activity when there is no dialog schema', () => {
     const dialogSchemas = [];
-    const dialog: any = { id: 'test' };
+    const dialog: any = { id: 'test', content: { $designer: {} } };
     const result = generateActivity(dialogSchemas, dialog);
     expect(result).toEqual(
       expect.objectContaining({
@@ -93,13 +93,14 @@ describe('generateActivity', () => {
 
   it('should return activity that includes value and result when dialog schema is available', () => {
     const dialogSchemas = [dialogSchema];
-    const dialog: any = { id: 'test' };
+    const dialog: any = { id: 'test', content: { $designer: { description: 'Test Dialog' } } };
     const result = generateActivity(dialogSchemas, dialog);
     expect(result).toEqual(
       expect.objectContaining({
         test: {
           type: 'event',
           name: 'test',
+          description: 'Test Dialog',
           value: {
             type: 'object',
             properties: {
@@ -134,7 +135,7 @@ describe('generateActivities', () => {
   it('should return an object containing activities', () => {
     const dialogSchemas = [dialogSchema];
     const triggers: any = [{ $kind: SDKKinds.OnTypingActivity }, { $kind: SDKKinds.OnHandoffActivity }];
-    const dialogs: any = [{ id: 'test' }];
+    const dialogs: any = [{ id: 'test', content: { $designer: {} } }];
     const result = generateActivities(dialogSchemas, triggers, dialogs);
     expect(result).toEqual(
       expect.objectContaining({
