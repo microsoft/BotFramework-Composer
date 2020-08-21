@@ -220,6 +220,10 @@ const builtinVisualSDKSchema: FlowSchema = {
   },
   [SDKKinds.TelemetryTrackEvent]: {
     widget: 'ActionCard',
+    header: {
+      widget: 'ActionHeader',
+      title: 'Telemetry - Trace Event',
+    },
     body: (data) => (
       <>
         {data.eventName || '?'}
