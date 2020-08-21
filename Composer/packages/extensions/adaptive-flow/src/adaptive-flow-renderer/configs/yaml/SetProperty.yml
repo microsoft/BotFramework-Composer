@@ -1,0 +1,6 @@
+Microsoft.SetProperty:
+  widget: 'ActionCard'
+  body:
+    widget: 'PropertyAssignment'
+    property: '@property'
+    value: '@value'

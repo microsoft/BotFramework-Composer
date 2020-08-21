@@ -1,0 +1,4 @@
+Microsoft.OAuthInput:
+  widget: 'ActionCard'
+  body: '@connectionName'
+  footer: '@tokenProperty ? {@tokenProperty} <span style="color: grey">= Token Property</span> : null'

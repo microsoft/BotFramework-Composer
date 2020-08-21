@@ -1,0 +1,3 @@
+Microsoft.EmitEvent:
+  widget: 'ActionCard'
+  body: '{@eventName || ?} <span style="color: grey"/>(Event)<span>'
