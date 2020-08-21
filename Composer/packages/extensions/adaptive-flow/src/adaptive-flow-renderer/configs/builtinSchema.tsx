@@ -218,6 +218,15 @@ const builtinVisualSDKSchema: FlowSchema = {
         </>
       ) : null,
   },
+  [SDKKinds.TelemetryTrackEvent]: {
+    widget: 'ActionCard',
+    body: (data) => (
+      <>
+        {data.eventName || '?'}
+        <FixedInfo>{formatMessage(' (Event)')}</FixedInfo>
+      </>
+    ),
+  },
 };
 
 export default builtinVisualSDKSchema;

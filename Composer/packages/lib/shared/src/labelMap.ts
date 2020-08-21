@@ -245,4 +245,7 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
   [SDKKinds.TrueSelector]: {
     title: formatMessage('TrueSelector'),
   },
+  [SDKKinds.TelemetryTrackEvent]: {
+    title: formatMessage('Telemetry - Track Event'),
+  },
 };
