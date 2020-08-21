@@ -115,6 +115,7 @@ export enum SDKKinds {
   BeginSkill = 'Microsoft.BeginSkill',
   StaticActivityTemplate = 'Microsoft.StaticActivityTemplate',
   SwitchCondition = 'Microsoft.SwitchCondition',
+  TelemetryTrackEvent = 'Microsoft.TelemetryTrackEvent',
   TemperatureEntityRecognizer = 'Microsoft.TemperatureEntityRecognizer',
   TemplateEngineLanguageGenerator = 'Microsoft.TemplateEngineLanguageGenerator',
   TextInput = 'Microsoft.TextInput',
