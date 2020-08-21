@@ -174,12 +174,7 @@ export const luDispatcher = () => {
 
           // body change, only update current locale file
         } else {
-          const intentToUpdate: any = { Body: intent.Body };
-          // if current update intent not found in origin luFile, do create.
-          if (!luFile.intents.find((item) => item.Name === intentName)) {
-            intentToUpdate.Name = intent.Name;
-          }
-          const updatedFile = luUtil.updateIntent(luFile, intentName, intentToUpdate);
+          const updatedFile = luUtil.updateIntent(luFile, intentName, { Body: intent.Body });
           return luFiles.map((file) => {
             return file.id === id ? updatedFile : file;
           });
