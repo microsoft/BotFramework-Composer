@@ -312,7 +312,8 @@ export class LuisAndQnaPublish {
     interruptionQnaFiles: string[]
   ) {
     // eslint-disable-next-line prefer-const
-    let { subscriptionKey, authoringRegion } = qnaSettings;
+    let { subscriptionKey } = qnaSettings;
+    const authoringRegion = 'westus';
     // publishing luis
     const builder = new qnaBuild.Builder((msg) =>
       this.logger({
