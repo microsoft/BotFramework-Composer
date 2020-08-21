@@ -1,0 +1,3 @@
+Microsoft.CancelAllDialogs:
+  widget: 'ActionCard'
+  body: '{@eventName || ?} <span>(Event)</span>'

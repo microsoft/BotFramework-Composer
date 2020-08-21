@@ -2,3 +2,4 @@ Microsoft.EditArray:
   widget: 'ActionCard'
   header: 'Edit an array property'
   body: '<span style="color: grey">{@changeType || ?}</span> {@itemsProperty || ?}'
+  footer: '@resultProperty ? {@resultProperty} <span style="color: grey">= Result</span> : '''
