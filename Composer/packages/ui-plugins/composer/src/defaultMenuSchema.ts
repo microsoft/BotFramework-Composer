@@ -159,4 +159,8 @@ export const DefaultMenuSchema: MenuUISchema = {
     label: formatMessage('Emit a trace event'),
     submenu: [SubmenuNames.Debugging],
   },
+  [SDKKinds.TelemetryTrackEvent]: {
+    label: formatMessage('Emit a telemetry track event'),
+    submenu: [SubmenuNames.Debugging],
+  },
 };
