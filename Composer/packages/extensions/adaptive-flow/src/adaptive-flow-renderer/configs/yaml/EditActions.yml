@@ -1,3 +1,0 @@
-Microsoft.EditActions:
-  widget: 'ActionCard'
-  body: '@changeType'

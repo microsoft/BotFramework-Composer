@@ -1,3 +1,4 @@
 Microsoft.CancelAllDialogs:
   widget: 'ActionCard'
+  header: 'Cancel all active dialogs'
   body: '{@eventName || ?} <span>(Event)</span>'
