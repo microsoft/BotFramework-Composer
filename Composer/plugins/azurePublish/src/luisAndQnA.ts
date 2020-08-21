@@ -219,7 +219,9 @@ export class LuisAndQnaPublish {
       true,
       false,
       loadResult.multiRecognizers,
-      loadResult.settings
+      loadResult.settings,
+      loadResult.crosstrainedRecognizers,
+      'crosstrained'
     );
 
     // Write the generated files to the generated folder
