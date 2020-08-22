@@ -472,9 +472,9 @@ const TableView: React.FC<TableViewProps> = (props) => {
             {dialogIdRef.current !== 'all' && (
               <div css={addButtonContainer}>
                 <ActionButton
-                  styles={addQnAPair}
                   data-testid={'addQnAPairButton'}
                   iconProps={{ iconName: 'Add' }}
+                  styles={addQnAPair}
                   onClick={() => {
                     onCreateNewTemplate();
                     actions.setMessage('item added');
