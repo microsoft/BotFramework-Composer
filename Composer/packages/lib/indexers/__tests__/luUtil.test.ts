@@ -128,6 +128,60 @@ hi
     expect(luresource2.Sections[1].UtteranceAndEntitiesMap[2].utterance).toEqual('check my mail box please');
   });
 
+  it('update section with only name', () => {
+    const intentName = 'CheckEmail';
+
+    const luFile1 = luIndexer.parse(fileContent, fileId1);
+    const updatedLuFile = updateIntent(luFile1, intentName, { Name: 'CheckEmail1' });
+    const luresource = updatedLuFile.resource;
+
+    const { Sections, Errors } = luresource;
+
+    expect(Errors.length).toEqual(0);
+    expect(Sections.length).toEqual(2);
+    expect(Sections[1].Errors.length).toEqual(0);
+    expect(luresource.Sections[1].SectionType).toEqual(luSectionTypes.SIMPLEINTENTSECTION);
+    expect(luresource.Sections[1].Name).toEqual('CheckEmail1');
+    expect(luresource.Sections[1].UtteranceAndEntitiesMap.length).toEqual(2);
+    expect(luresource.Sections[1].UtteranceAndEntitiesMap[0].utterance).toEqual('check my email');
+    expect(luresource.Sections[1].UtteranceAndEntitiesMap[1].utterance).toEqual('show my emails');
+  });
+
+  it('update section with only body', () => {
+    const intentName = 'CheckEmail';
+    const updatedBody = `- check my email
+- show my emails 2
+- check my mail box please`;
+
+    const luFile1 = luIndexer.parse(fileContent, fileId1);
+    const updatedLuFile = updateIntent(luFile1, intentName, { Body: updatedBody });
+    const luresource = updatedLuFile.resource;
+
+    const { Sections, Errors } = luresource;
+
+    expect(Errors.length).toEqual(0);
+    expect(Sections.length).toEqual(2);
+    expect(Sections[1].Errors.length).toEqual(0);
+    expect(luresource.Sections[1].SectionType).toEqual(luSectionTypes.SIMPLEINTENTSECTION);
+    expect(luresource.Sections[1].Name).toEqual('CheckEmail');
+    expect(luresource.Sections[1].UtteranceAndEntitiesMap.length).toEqual(3);
+    expect(luresource.Sections[1].UtteranceAndEntitiesMap[0].utterance).toEqual('check my email');
+    expect(luresource.Sections[1].UtteranceAndEntitiesMap[1].utterance).toEqual('show my emails 2');
+    expect(luresource.Sections[1].UtteranceAndEntitiesMap[2].utterance).toEqual('check my mail box please');
+  });
+
+  it('update section with empty, should perform a remove', () => {
+    const intentName = 'CheckEmail';
+    const luFile1 = luIndexer.parse(fileContent, fileId1);
+    const updatedLuFile = updateIntent(luFile1, intentName, null);
+    const luresource = updatedLuFile.resource;
+
+    const { Sections, Errors } = luresource;
+
+    expect(Errors.length).toEqual(0);
+    expect(Sections.length).toEqual(1);
+  });
+
   it('update section with syntax error: missing -', () => {
     const intentName = 'CheckEmail';
 
