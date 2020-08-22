@@ -339,8 +339,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
               )}
               {!(editMode === EditMode.Creating && qnaSectionIndex === qnaIndex) && dialogId !== 'all' && (
                 <ActionButton
-                  styles={addAlternative}
                   iconProps={{ iconName: 'Add', styles: addIcon }}
+                  styles={addAlternative}
                   onClick={(e) => handleAddingAlternatives(e, qnaIndex)}
                 >
                   {formatMessage('add alternative phrasing')}
