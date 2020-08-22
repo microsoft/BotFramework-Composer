@@ -8,12 +8,11 @@ import { jsx, css } from '@emotion/core';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
+import { defaultPublishConfig } from '@bfc/shared';
 
-import { DefaultPublishConfig } from '../../constants';
 import {
   botNameState,
   botStatusState,
-  dialogsState,
   luFilesState,
   settingsState,
   projectIdState,
@@ -26,6 +25,7 @@ import { BotStatus, LuisConfig } from '../../constants';
 import { isAbsHosted } from '../../utils/envUtil';
 import useNotifications from '../../pages/notifications/useNotifications';
 import { navigateTo, openInEmulator } from '../../utils/navigation';
+import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 
 import { getReferredFiles } from './../../utils/luUtil';
 import { PublishLuisDialog } from './publishDialog';
@@ -49,15 +49,17 @@ export const botButton = css`
 `;
 
 // -------------------- TestController -------------------- //
-
+const POLLING_INTERVAL = 2500;
 export const TestController: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [calloutVisible, setCalloutVisible] = useState(false);
+  const [botStatusInterval, setBotStatusInterval] = useState<NodeJS.Timeout | undefined>(undefined);
+
   const botActionRef = useRef(null);
   const notifications = useNotifications();
   const botName = useRecoilValue(botNameState);
   const botStatus = useRecoilValue(botStatusState);
-  const dialogs = useRecoilValue(dialogsState);
+  const dialogs = useRecoilValue(validatedDialogsSelector);
   const luFiles = useRecoilValue(luFilesState);
   const settings = useRecoilValue(settingsState);
   const projectId = useRecoilValue(projectIdState);
@@ -82,7 +84,7 @@ export const TestController: React.FC = () => {
 
   useEffect(() => {
     if (projectId) {
-      getPublishStatus(projectId, DefaultPublishConfig);
+      getPublishStatus(projectId, defaultPublishConfig);
     }
   }, [projectId]);
 
@@ -90,12 +92,26 @@ export const TestController: React.FC = () => {
     switch (botStatus) {
       case BotStatus.failed:
         openCallout();
+        stopPollingRuntime();
         setBotStatus(BotStatus.pending);
         break;
       case BotStatus.published:
+        stopPollingRuntime();
         handleLoadBot();
         break;
+      case BotStatus.reloading:
+        startPollingRuntime();
+        break;
+      default:
+      case BotStatus.connected:
+        stopPollingRuntime();
+        break;
     }
+    // return the stoppolling function so the component will clean up
+    return () => {
+      stopPollingRuntime();
+      return;
+    };
   }, [botStatus]);
 
   function dismissDialog() {
@@ -114,6 +130,23 @@ export const TestController: React.FC = () => {
     setCalloutVisible(true);
   }
 
+  function startPollingRuntime() {
+    if (!botStatusInterval) {
+      const cancelInterval = setInterval(() => {
+        // get publish status
+        getPublishStatus(projectId, defaultPublishConfig);
+      }, POLLING_INTERVAL);
+      setBotStatusInterval(cancelInterval);
+    }
+  }
+
+  function stopPollingRuntime() {
+    if (botStatusInterval) {
+      clearInterval(botStatusInterval);
+      setBotStatusInterval(undefined);
+    }
+  }
+
   async function handlePublishLuis(luisConfig) {
     setBotStatus(BotStatus.publishing);
     dismissDialog();
@@ -124,7 +157,7 @@ export const TestController: React.FC = () => {
   async function handleLoadBot() {
     setBotStatus(BotStatus.reloading);
     const sensitiveSettings = settingsStorage.get(projectId);
-    await publishToTarget(projectId, DefaultPublishConfig, { comment: '' }, sensitiveSettings);
+    await publishToTarget(projectId, defaultPublishConfig, { comment: '' }, sensitiveSettings);
   }
 
   function isLuisConfigComplete(config) {

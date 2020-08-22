@@ -2,19 +2,32 @@
 // Licensed under the MIT License.
 
 import { atom } from 'recoil';
-import { DialogInfo, Diagnostic, LgFile, LuFile, BotSchemas, Skill, DialogSetting } from '@bfc/shared';
+import {
+  DialogInfo,
+  DialogSchemaFile,
+  Diagnostic,
+  LgFile,
+  LuFile,
+  BotSchemas,
+  Skill,
+  DialogSetting,
+} from '@bfc/shared';
 
 import { BotLoadError, DesignPageLocation } from '../../recoilModel/types';
 
 import { PublishType, BreadcrumbItem } from './../../recoilModel/types';
 import { BotStatus } from './../../constants';
-
 const getFullyQualifiedKey = (value: string) => {
   return `Bot_${value}_State`;
 };
 
 export const dialogsState = atom<DialogInfo[]>({
   key: getFullyQualifiedKey('dialogs'),
+  default: [],
+});
+
+export const dialogSchemasState = atom<DialogSchemaFile[]>({
+  key: getFullyQualifiedKey('dialogSchema'),
   default: [],
 });
 
@@ -189,4 +202,9 @@ export const onAddLanguageDialogCompleteState = atom<any>({
 export const onDelLanguageDialogCompleteState = atom<any>({
   key: getFullyQualifiedKey('onDelLanguageDialogComplete'),
   default: { func: undefined },
+});
+
+export const isEjectRuntimeExistState = atom<boolean>({
+  key: getFullyQualifiedKey('isEjectRuntimeExist'),
+  default: false,
 });

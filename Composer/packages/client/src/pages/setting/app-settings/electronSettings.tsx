@@ -27,7 +27,7 @@ export const ElectronSettings: React.FC<RouteComponentProps> = () => {
       <h2>{formatMessage('Application Updates')}</h2>
       <SettingToggle
         checked={userSettings.appUpdater.autoDownload}
-        description={formatMessage('Check for updates and installs them automatically.')}
+        description={formatMessage('Check for updates and install them automatically.')}
         image={images.autoUpdate}
         title={formatMessage('Auto update')}
         onToggle={onAppUpdatesChange('autoDownload')}

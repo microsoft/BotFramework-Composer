@@ -40,7 +40,7 @@ describe('App menu', () => {
 
     // Edit
     expect(menuTemplate[1].label).toBe('Edit');
-    expect(menuTemplate[1].submenu.length).toBe(9);
+    expect(menuTemplate[1].submenu.length).toBe(12);
 
     // View
     expect(menuTemplate[2].label).toBe('View');
@@ -75,7 +75,7 @@ describe('App menu', () => {
 
     // Edit
     expect(menuTemplate[2].label).toBe('Edit');
-    expect(menuTemplate[2].submenu.length).toBe(9);
+    expect(menuTemplate[2].submenu.length).toBe(12);
 
     // View
     expect(menuTemplate[3].label).toBe('View');

@@ -1,0 +1,50 @@
+{
+  "add_multiple_comma_separated_synonyms_2639283f": {
+    "message": "Add multiple comma-separated synonyms"
+  },
+  "add_new_validation_rule_here_eb675ccf": {
+    "message": "Add new validation rule here"
+  },
+  "add_some_expected_user_responses_please_remind_me__31dc5c07": {
+    "message": "> add some expected user responses:\n> - Please remind me to '{'itemTitle=buy milk'}'\n> - remind me to '{'itemTitle'}'\n> - add '{'itemTitle'}' to my todo list\n>\n> entity definitions:\n> @ ml itemTitle\n"
+  },
+  "append_choices_35c45a2d": {
+    "message": "Append choices"
+  },
+  "choice_name_fe8411f4": {
+    "message": "Choice Name"
+  },
+  "confirm_choices_db8e99fb": {
+    "message": "Confirm Choices"
+  },
+  "expected_responses_intent_intentname_44b051c": {
+    "message": "Expected responses (intent: #{ intentName })"
+  },
+  "expression_7f906a13": {
+    "message": "Expression"
+  },
+  "prompt_for_a_date_5d2c689e": {
+    "message": "Prompt for a date"
+  },
+  "prompt_for_a_number_84999edb": {
+    "message": "Prompt for a number"
+  },
+  "prompt_for_attachment_727d4fac": {
+    "message": "Prompt for Attachment"
+  },
+  "prompt_for_confirmation_dc85565c": {
+    "message": "Prompt for confirmation"
+  },
+  "prompt_for_text_5c524f80": {
+    "message": "Prompt for text"
+  },
+  "prompt_with_multi_choice_f428542f": {
+    "message": "Prompt with multi-choice"
+  },
+  "synonyms_optional_afe5cdb1": {
+    "message": "Synonyms (Optional)"
+  },
+  "validation_rules_efd3144d": {
+    "message": "Validation Rules"
+  }
+}

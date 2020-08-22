@@ -8,8 +8,8 @@ import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { useRecoilValue } from 'recoil';
 import { PublishTarget } from '@bfc/shared';
+import { useRecoilValue } from 'recoil';
 
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { projectContainer } from '../design/styles';
@@ -63,12 +63,12 @@ const Publish: React.FC<PublishPageProps> = (props) => {
   const [groups, setGroups] = useState<any[]>([]);
   const [selectedVersion, setSelectedVersion] = useState<IStatus | null>(null);
   const [dialogProps, setDialogProps] = useState({
-    title: 'Title',
+    title: formatMessage('Title'),
     type: DialogType.normal,
     children: {},
   });
   const [editDialogProps, setEditDialogProps] = useState({
-    title: 'Title',
+    title: formatMessage('Title'),
     type: DialogType.normal,
     children: {},
   });
@@ -224,7 +224,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
         },
       ]);
     }
-  }, [publishHistory, selectedTargetName]);
+  }, [publishHistory, selectedTargetName, settings.publishTargets]);
 
   // check history to see if a 202 is found
   useEffect(() => {
@@ -398,7 +398,12 @@ const Publish: React.FC<PublishPageProps> = (props) => {
         <h1 css={HeaderText}>{selectedTarget ? selectedTargetName : formatMessage('Publish Profiles')}</h1>
       </div>
       <div css={ContentStyle} data-testid="Publish" role="main">
-        <div aria-label={formatMessage('Navigation panel')} css={projectContainer} role="region">
+        <div
+          aria-label={formatMessage('Navigation panel')}
+          css={projectContainer}
+          data-testid="target-list"
+          role="region"
+        >
           <div
             key={'_all'}
             css={selectedTargetName === 'all' ? targetSelected : overflowSet}

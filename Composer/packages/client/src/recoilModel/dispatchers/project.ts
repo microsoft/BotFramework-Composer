@@ -19,6 +19,7 @@ import settingStorage from '../../utils/dialogSettingStorage';
 import filePersistence from '../persistence/FilePersistence';
 import { navigateTo } from '../../utils/navigation';
 import languageStorage from '../../utils/languageStorage';
+import { projectIdCache } from '../../utils/projectCache';
 import { designPageLocationState } from '../atoms/botState';
 
 import {
@@ -44,6 +45,7 @@ import {
   templateIdState,
   announcementState,
   boilerplateVersionState,
+  dialogSchemasState,
 } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
 
@@ -117,6 +119,9 @@ export const projectDispatcher = () => {
     const storedLocale = languageStorage.get(botName)?.locale;
     const locale = settings.languages.includes(storedLocale) ? storedLocale : settings.defaultLanguage;
 
+    // cache current projectId in session, resolve page refresh caused state lost.
+    projectIdCache.set(projectId);
+
     try {
       schemas.sdk.content = processSchema(projectId, schemas.sdk.content);
     } catch (err) {
@@ -126,7 +131,7 @@ export const projectDispatcher = () => {
     }
 
     try {
-      const { dialogs, luFiles, lgFiles, skillManifestFiles } = indexer.index(files, botName, locale);
+      const { dialogs, dialogSchemas, luFiles, lgFiles, skillManifestFiles } = indexer.index(files, botName, locale);
       let mainDialog = '';
       const verifiedDialogs = dialogs.map((dialog) => {
         if (dialog.isRoot) {
@@ -136,11 +141,13 @@ export const projectDispatcher = () => {
         return dialog;
       });
 
+      // Important: gotoSnapshot will wipe all states.
       const newSnapshot = snapshot.map(({ set }) => {
         set(skillManifestsState, skillManifestFiles);
         set(luFilesState, initLuFilesStatus(botName, luFiles, dialogs));
         set(lgFilesState, lgFiles);
         set(dialogsState, verifiedDialogs);
+        set(dialogSchemasState, dialogSchemas);
         set(botEnvironmentState, botEnvironment);
         set(botNameState, botName);
         if (location !== curLocation) {

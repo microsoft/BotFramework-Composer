@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { UIOptions, FieldWidget, JSONSchema7, FormUISchema } from '@bfc/extension';
+import { FieldWidget, FormUISchema, JSONSchema7, UIOptions } from '@bfc/extension';
 
 import * as DefaultFields from '../components/fields';
 
@@ -45,6 +45,10 @@ export function resolveFieldWidget(
       return DefaultFields.SelectField;
     }
 
+    if (uiOptions?.intellisenseScopes?.length) {
+      return DefaultFields.IntellisenseField;
+    }
+
     switch (schema.type) {
       case undefined:
       case 'string':
@@ -59,7 +63,7 @@ export function resolveFieldWidget(
 
         if (Array.isArray(items) && typeof items[0] === 'object' && items[0].type === 'object') {
           return DefaultFields.ObjectArrayField;
-        } else if (!Array.isArray(items) && typeof items === 'object' && items?.type === 'object') {
+        } else if (!Array.isArray(items) && typeof items === 'object' && items.type === 'object') {
           return DefaultFields.ObjectArrayField;
         }
 

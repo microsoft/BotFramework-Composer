@@ -58,9 +58,11 @@ const styles = css`
 `;
 
 export interface VisualDesignerProps {
+  onFocus?: (event: React.FocusEvent<HTMLDivElement>) => void;
+  onBlur?: (event: React.FocusEvent<HTMLDivElement>) => void;
   schema?: JSONSchema7;
 }
-const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element => {
+const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema }): JSX.Element => {
   const { shellApi, ...shellData } = useShellApi();
   const { schema: schemaFromPlugins, widgets: widgetsFromPlugins } = useFlowUIOptions();
   const {
@@ -89,7 +91,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
   const focusedId = Array.isArray(focusedActions) && focusedActions[0] ? focusedActions[0] : '';
 
   // Compute schema diff
-  const customSchema = useMemo(() => getCustomSchema(schemas?.default, schemas?.sdk?.content), [
+  const customActionSchema = useMemo(() => getCustomSchema(schemas?.default, schemas?.sdk?.content).actions, [
     schemas?.sdk?.content,
     schemas?.default,
   ]);
@@ -100,7 +102,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
     focusedTab,
     clipboardActions: clipboardActions || [],
     dialogFactory: new DialogFactory(schema),
-    customSchemas: customSchema ? [customSchema] : [],
+    customSchemas: customActionSchema ? [customActionSchema] : [],
   };
 
   const customFlowSchema: FlowSchema = nodeContext.customSchemas.reduce((result, s) => {
@@ -137,6 +139,8 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
             ref={divRef}
             css={styles}
             tabIndex={0}
+            onBlur={onBlur}
+            onFocus={onFocus}
             {...enableKeyboardCommandAttributes(handleCommand)}
             data-testid="visualdesigner-container"
           >

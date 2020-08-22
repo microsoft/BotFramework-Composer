@@ -8,28 +8,34 @@ import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcru
 import formatMessage from 'format-message';
 import { globalHistory, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
-import { DialogFactory, SDKKinds, DialogInfo, PromptTab } from '@bfc/shared';
+import {
+  DialogFactory,
+  SDKKinds,
+  DialogInfo,
+  PromptTab,
+  LuIntentSection,
+  getEditorAPI,
+  registerEditorAPI,
+} from '@bfc/shared';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
-import { useTriggerApi } from '@bfc/extension';
+import Extension, { useTriggerApi, PluginConfig } from '@bfc/extension';
 import { useRecoilValue } from 'recoil';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TestController } from '../../components/TestController/TestController';
 import { DialogDeleting } from '../../constants';
 import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils/dialogUtil';
-import { LuFilePayload } from '../../components/ProjectTree/TriggerCreationModal';
 import { Conversation } from '../../components/Conversation';
 import { dialogStyle } from '../../components/Modal/dialogStyle';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { ProjectTree } from '../../components/ProjectTree/ProjectTree';
-import { undoHistory } from '../../recoilModel/undo';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { clearBreadcrumb } from '../../utils/navigation';
 import { navigateTo } from '../../utils/navigation';
 import { useShell } from '../../shell';
+import { undoFunctionState, undoVersionState } from '../../recoilModel/undo/history';
 import {
-  dialogsState,
   projectIdState,
   schemasState,
   showCreateDialogModalState,
@@ -43,9 +49,13 @@ import {
   skillsState,
   actionsSeedState,
   userSettingsState,
+  luFilesState,
+  localeState,
 } from '../../recoilModel';
+import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
+import plugins, { mergePluginConfigs } from '../../plugins';
+import { useElectronFeatures } from '../../hooks/useElectronFeatures';
 
-import { VisualEditorAPI } from './FrameAPI';
 import {
   breadcrumbClass,
   contentWrapper,
@@ -99,7 +109,7 @@ const getTabFromFragment = () => {
 };
 
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = (props) => {
-  const dialogs = useRecoilValue(dialogsState);
+  const dialogs = useRecoilValue(validatedDialogsSelector);
   const projectId = useRecoilValue(projectIdState);
   const schemas = useRecoilValue(schemasState);
   const displaySkillManifest = useRecoilValue(displaySkillManifestState);
@@ -109,9 +119,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const designPageLocation = useRecoilValue(designPageLocationState);
   const showCreateDialogModal = useRecoilValue(showCreateDialogModalState);
   const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState);
+  const { undo, redo, canRedo, canUndo, commitChanges, clearUndo } = useRecoilValue(undoFunctionState);
   const skills = useRecoilValue(skillsState);
   const actionsSeed = useRecoilValue(actionsSeedState);
   const userSettings = useRecoilValue(userSettingsState);
+  const luFiles = useRecoilValue(luFilesState);
+  const locale = useRecoilValue(localeState);
+  const undoVersion = useRecoilValue(undoVersionState);
   const {
     removeDialog,
     updateDialog,
@@ -124,20 +138,23 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     selectTo,
     selectAndFocus,
     addSkillDialogCancel,
-    updateLuFile,
+    createLuIntent,
     updateSkill,
     exportToZip,
     onboardingAddCoachMarkRef,
   } = useRecoilValue(dispatcherState);
 
   const { location, dialogId } = props;
+  const luFile = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const params = new URLSearchParams(location?.search);
   const selected = params.get('selected') || '';
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
   const [dialogJsonVisible, setDialogJsonVisibility] = useState(false);
   const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0]);
   const [exportSkillModalVisible, setExportSkillModalVisible] = useState(false);
-  const shell = useShell('ProjectTree');
+  const shell = useShell('DesignPage');
+  const shellForFlowEditor = useShell('FlowEditor');
+  const shellForPropertyEditor = useShell('PropertyEditor');
   const triggerApi = useTriggerApi(shell.api);
 
   useEffect(() => {
@@ -155,7 +172,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
   useEffect(() => {
     const index = currentDialog.triggers.findIndex(({ type }) => type === SDKKinds.OnBeginDialog);
-    if (index >= 0 && !designPageLocation.selected) {
+    if (index >= 0 && !designPageLocation.selected && designPageLocation.projectId === projectId) {
       selectTo(createSelectedPath(index));
     }
   }, [currentDialog?.id]);
@@ -176,11 +193,17 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       // @ts-ignore
       globalHistory._onTransitionComplete();
       /* eslint-enable */
-    } else {
-      //leave design page should clear the history
-      // clearUndoHistory(); //TODO: undo/redo
     }
   }, [location]);
+
+  useEffect(() => {
+    registerEditorAPI('Editing', {
+      Undo: () => undo(),
+      Redo: () => redo(),
+    });
+    //leave design page should clear the history
+    return clearUndo;
+  }, []);
 
   const onTriggerCreationDismiss = () => {
     setTriggerModalVisibility(false);
@@ -190,19 +213,14 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     setTriggerModalVisibility(true);
   };
 
-  const onTriggerCreationSubmit = (dialog: DialogInfo, luFile?: LuFilePayload) => {
+  const onTriggerCreationSubmit = (dialog: DialogInfo, intent?: LuIntentSection) => {
     const dialogPayload = {
       id: dialog.id,
       projectId,
       content: dialog.content,
     };
-    if (luFile) {
-      const luFilePayload = {
-        id: luFile.id,
-        content: luFile.content,
-        projectId,
-      };
-      updateLuFile(luFilePayload);
+    if (luFile && intent) {
+      createLuIntent({ id: luFile.id, intent, projectId });
     }
 
     const index = get(dialog, 'content.triggers', []).length - 1;
@@ -224,10 +242,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     }
   };
 
+  const [flowEditorFocused, setFlowEditorFocused] = useState(false);
   const { actionSelected, showDisableBtn, showEnableBtn } = useMemo(() => {
     const actionSelected = Array.isArray(visualEditorSelection) && visualEditorSelection.length > 0;
     if (!actionSelected) {
-      return {};
+      return { actionSelected: false, showDisableBtn: false, showEnableBtn: false };
     }
     const selectedActions = visualEditorSelection.map((id) => get(currentDialog?.content, id));
     const showDisableBtn = selectedActions.some((x) => get(x, 'disabled') !== true);
@@ -235,6 +254,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     return { actionSelected, showDisableBtn, showEnableBtn };
   }, [visualEditorSelection]);
 
+  useElectronFeatures(actionSelected, flowEditorFocused, canUndo(), canRedo());
+
+  const EditorAPI = getEditorAPI();
   const toolbarItems: IToolbarItem[] = [
     {
       type: 'dropdown',
@@ -280,25 +302,21 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           {
             key: 'edit.undo',
             text: formatMessage('Undo'),
-            disabled: !undoHistory.canUndo(),
-            onClick: () => {
-              //ToDo undo
-            },
+            disabled: !canUndo(),
+            onClick: undo,
           },
           {
             key: 'edit.redo',
             text: formatMessage('Redo'),
-            disabled: !undoHistory.canRedo(),
-            onClick: () => {
-              //ToDo redo
-            },
+            disabled: !canRedo(),
+            onClick: redo,
           },
           {
             key: 'edit.cut',
             text: formatMessage('Cut'),
             disabled: !actionSelected,
             onClick: () => {
-              VisualEditorAPI.cutSelection();
+              EditorAPI.Actions.CutSelection();
             },
           },
           {
@@ -306,7 +324,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             text: formatMessage('Copy'),
             disabled: !actionSelected,
             onClick: () => {
-              VisualEditorAPI.copySelection();
+              EditorAPI.Actions.CopySelection();
             },
           },
           {
@@ -314,7 +332,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             text: formatMessage('Move'),
             disabled: !actionSelected,
             onClick: () => {
-              VisualEditorAPI.moveSelection();
+              EditorAPI.Actions.MoveSelection();
             },
           },
           {
@@ -322,7 +340,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             text: formatMessage('Delete'),
             disabled: !actionSelected,
             onClick: () => {
-              VisualEditorAPI.deleteSelection();
+              EditorAPI.Actions.DeleteSelection();
             },
           },
         ],
@@ -343,7 +361,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             text: formatMessage('Disable'),
             disabled: !showDisableBtn,
             onClick: () => {
-              VisualEditorAPI.disableSelection();
+              EditorAPI.Actions.DisableSelection();
             },
           },
           {
@@ -351,7 +369,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             text: formatMessage('Enable'),
             disabled: !showEnableBtn,
             onClick: () => {
-              VisualEditorAPI.enableSelection();
+              EditorAPI.Actions.EnableSelection();
             },
           },
         ],
@@ -444,7 +462,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     updateSkill({ projectId, targetId: -1, skillData });
   }
 
-  function handleCreateDialogSubmit(data: { name: string; description: string }) {
+  async function handleCreateDialogSubmit(data: { name: string; description: string }) {
     const seededContent = new DialogFactory(schemas.sdk?.content).create(SDKKinds.AdaptiveDialog, {
       $designer: { name: data.name, description: data.description },
       generator: `${data.name}.lg`,
@@ -452,7 +470,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     if (seededContent.triggers?.[0]) {
       seededContent.triggers[0].actions = actionsSeed;
     }
-    createDialog({ id: data.name, content: seededContent });
+    await createDialog({ id: data.name, content: seededContent });
+    commitChanges();
   }
 
   async function handleDeleteDialog(id) {
@@ -476,7 +495,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     const result = await OpenConfirmModal(title, subTitle, setting);
 
     if (result) {
-      removeDialog(id);
+      await removeDialog(id);
+      commitChanges();
     }
   }
 
@@ -484,7 +504,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     const content = deleteTrigger(dialogs, id, index, (trigger) => triggerApi.deleteTrigger(id, trigger));
 
     if (content) {
-      await updateDialog({ id, content });
+      updateDialog({ id, content });
       const match = /\[(\d+)\]/g.exec(selected);
       const current = match && match[1];
       if (!current) return;
@@ -506,6 +526,12 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const addNewBtnRef = useCallback((addNew) => {
     onboardingAddCoachMarkRef({ addNew });
   }, []);
+
+  const pluginConfig: PluginConfig = useMemo(() => {
+    const sdkUISchema = schemas?.ui?.content ?? {};
+    const userUISchema = schemas?.uiOverrides?.content ?? {};
+    return mergePluginConfigs({ uiSchema: sdkUISchema }, plugins, { uiSchema: userUISchema });
+  }, [schemas?.ui?.content, schemas?.uiOverrides?.content]);
 
   if (!dialogId) {
     return <LoadingSpinner />;
@@ -537,7 +563,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                 {breadcrumbItems}
                 {dialogJsonVisible ? (
                   <JsonEditor
-                    key="dialogjson"
+                    key={'dialogjson'}
                     editorSettings={userSettings.codeEditor}
                     id={currentDialog.id}
                     schema={schemas.sdk.content}
@@ -547,10 +573,18 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                     }}
                   />
                 ) : (
-                  <VisualEditor openNewTriggerModal={openNewTriggerModal} />
+                  <Extension plugins={pluginConfig} shell={shellForFlowEditor}>
+                    <VisualEditor
+                      openNewTriggerModal={openNewTriggerModal}
+                      onBlur={() => setFlowEditorFocused(false)}
+                      onFocus={() => setFlowEditorFocused(true)}
+                    />
+                  </Extension>
                 )}
               </div>
-              <PropertyEditor key={focusPath} />
+              <Extension plugins={pluginConfig} shell={shellForPropertyEditor}>
+                <PropertyEditor key={focusPath + undoVersion} />
+              </Extension>
             </div>
           </Conversation>
         </div>

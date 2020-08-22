@@ -13,6 +13,7 @@ import { FormFieldAlignHorizontalBotSettings } from './styles';
 export interface ISkillFormProps {
   botId?: string;
   skillHostEndpoint?: string;
+  botPassword?: string;
   setSettings: (projectId: string, settings: DialogSetting) => Promise<void>;
   projectId: string;
   botName: string;
@@ -23,13 +24,15 @@ const SkillSettings: React.FC<ISkillFormProps> = (props) => {
   const [skillSettings, setSkillSettings] = useState({
     botId: props.botId,
     skillHostEndpoint: props.skillHostEndpoint,
+    botPassword: props.botPassword,
   });
   useEffect(() => {
     setSkillSettings({
       botId: props.botId,
       skillHostEndpoint: props.skillHostEndpoint,
+      botPassword: props.botPassword,
     });
-  }, [props.botId, props.skillHostEndpoint]);
+  }, [props.botId, props.botPassword, props.skillHostEndpoint]);
 
   const handleFieldChange = (event) => {
     const localSettings = {
@@ -37,6 +40,7 @@ const SkillSettings: React.FC<ISkillFormProps> = (props) => {
       [event.target.id]: event.target.value,
     };
     setSkillSettings({ ...localSettings });
+    console.log('ehh', localSettings);
     props.setSettings(props.projectId, { ...props.settings, ...localSettings });
   };
 
@@ -55,7 +59,20 @@ const SkillSettings: React.FC<ISkillFormProps> = (props) => {
           onChange={handleFieldChange}
         />
       </div>
-      <div style={{ marginLeft: '50px' }}>
+      <div style={{ marginLeft: '20px' }}>
+        <TextField
+          underlined
+          aria-labelledby={'microsoftAppPassword'}
+          data-testid="SkillBotPassword"
+          description={formatMessage('The Microsoft App Password that will be calling the skill.')}
+          id={'MicrosoftAppPassword'}
+          label={formatMessage('Microsoft App Password')}
+          style={{ maxWidth: '300px' }}
+          value={skillSettings.botPassword}
+          onChange={handleFieldChange}
+        />
+      </div>
+      <div style={{ marginLeft: '20px' }}>
         <TextField
           underlined
           aria-labelledby={'skillHostEndpoint'}

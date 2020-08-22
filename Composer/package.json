@@ -25,22 +25,27 @@
     "packages/server",
     "packages/test-utils",
     "packages/tools",
+    "packages/tools/built-in-functions",
     "packages/tools/language-servers",
     "packages/tools/language-servers/*",
     "packages/ui-plugins/*"
   ],
   "scripts": {
-    "build": "node scripts/begin.js && yarn build:prod && yarn build:plugins",
+    "build": "node scripts/begin.js && yarn build:prod",
     "build:prod": "yarn build:dev && yarn build:server && yarn build:client && yarn build:electron",
     "build:dev": "yarn build:test && yarn build:lib && yarn build:tools && yarn build:extensions && yarn build:plugins",
     "build:test": "yarn workspace @bfc/test-utils build",
     "build:lib": "yarn workspace @bfc/libs build:all",
     "build:electron": "yarn workspace @bfc/electron-server build",
-    "build:extensions": "wsrun -lt -p @bfc/plugin-loader @bfc/extension @bfc/adaptive-form @bfc/adaptive-flow @bfc/ui-plugin-* -c build",
+    "build:extensions": "wsrun -lt -p @bfc/plugin-loader @bfc/intellisense @bfc/extension @bfc/adaptive-form @bfc/adaptive-flow @bfc/ui-plugin-* -c build",
     "build:server": "yarn workspace @bfc/server build",
     "build:client": "yarn workspace @bfc/client build",
     "build:tools": "yarn workspace @bfc/tools build:all",
-    "build:plugins": "cd plugins && yarn install && yarn build:all",
+    "build:plugins": "yarn build:plugins:localpublish && yarn build:plugins:samples && yarn build:plugins:azurePublish && yarn build:plugins:runtimes",
+    "build:plugins:localpublish": "cd plugins/localPublish && yarn install && yarn build",
+    "build:plugins:samples": "cd plugins/samples && yarn install && yarn build",
+    "build:plugins:azurePublish": "cd plugins/azurePublish && yarn install && yarn build",
+    "build:plugins:runtimes": "cd plugins/runtimes && yarn install && yarn build",
     "start": "cross-env NODE_ENV=production PORT=3000 yarn start:server",
     "startall": "yarn start",
     "start:dev": "concurrently  \"npm:start:client\" \"npm:start:server:dev\"",
@@ -89,6 +94,7 @@
     "chalk": "^4.0.0",
     "concurrently": "^4.1.0",
     "coveralls": "^3.1.0",
+    "cross-env": "^6.0.3",
     "cypress": "^4.5.0",
     "cypress-plugin-tab": "^1.0.5",
     "eslint": "7.0.0",
@@ -109,11 +115,10 @@
     "lint-staged": "^8.1.0",
     "prettier": "2.0.5",
     "rimraf": "^2.6.3",
+    "tslib": "^2.0.0",
     "ts-loader": "7.0.4",
     "typescript": "3.9.2",
     "wsrun": "^5.2.0"
   },
-  "dependencies": {
-    "cross-env": "^6.0.3"
-  }
+  "dependencies": {}
 }

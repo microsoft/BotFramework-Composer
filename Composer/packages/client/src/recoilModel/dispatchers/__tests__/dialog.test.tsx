@@ -15,6 +15,7 @@ import {
   actionsSeedState,
   onCreateDialogCompleteState,
   showCreateDialogModalState,
+  dialogSchemasState,
 } from '../../atoms';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 
@@ -36,6 +37,18 @@ jest.mock('@bfc/indexers', () => {
     },
     luIndexer: {
       parse: (content, id) => ({
+        id,
+        content,
+      }),
+    },
+    lgUtil: {
+      parse: (id, content) => ({
+        id,
+        content,
+      }),
+    },
+    luUtil: {
+      parse: (id, content) => ({
         id,
         content,
       }),
@@ -71,6 +84,7 @@ describe('dialog dispatcher', () => {
   beforeEach(() => {
     const useRecoilTestHook = () => {
       const dialogs = useRecoilValue(dialogsState);
+      const dialogSchemas = useRecoilValue(dialogSchemasState);
       const luFiles = useRecoilValue(luFilesState);
       const lgFiles = useRecoilValue(lgFilesState);
       const currentDispatcher = useRecoilValue(dispatcherState);
@@ -80,6 +94,7 @@ describe('dialog dispatcher', () => {
 
       return {
         dialogs,
+        dialogSchemas,
         luFiles,
         lgFiles,
         currentDispatcher,
@@ -92,6 +107,7 @@ describe('dialog dispatcher', () => {
     const { result } = renderRecoilHook(useRecoilTestHook, {
       states: [
         { recoilState: dialogsState, initialValue: [{ id: '1' }, { id: '2' }] },
+        { recoilState: dialogSchemasState, initialValue: [{ id: '1' }, { id: '2' }] },
         { recoilState: lgFilesState, initialValue: [{ id: '1.lg' }, { id: '2' }] },
         { recoilState: luFilesState, initialValue: [{ id: '1.lu' }, { id: '2' }] },
         { recoilState: schemasState, initialValue: { sdk: { content: '' } } },
@@ -112,6 +128,7 @@ describe('dialog dispatcher', () => {
       await dispatcher.removeDialog('1');
     });
     expect(renderedComponent.current.dialogs).toEqual([{ id: '2' }]);
+    expect(renderedComponent.current.dialogSchemas).toEqual([{ id: '2' }]);
     expect(renderedComponent.current.lgFiles).toEqual([{ id: '2' }]);
     expect(renderedComponent.current.luFiles).toEqual([{ id: '2' }]);
   });

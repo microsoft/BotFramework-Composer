@@ -22,7 +22,7 @@ import { IFileStorage } from './../storage/interface';
 import { LocationRef } from './interface';
 import { LuPublisher } from './luPublisher';
 import { extractSkillManifestUrl } from './skillManager';
-import { defaultFilePath, serializeFiles } from './botStructure';
+import { defaultFilePath, serializeFiles, parseFileName } from './botStructure';
 
 const debug = log.extend('bot-project');
 const mkDirAsync = promisify(fs.mkdir);
@@ -81,6 +81,17 @@ export class BotProject implements IBotProject {
     return files;
   }
 
+  public get dialogSchemaFiles() {
+    const files: FileInfo[] = [];
+    this.files.forEach((file) => {
+      if (file.name.endsWith('.dialog.schema')) {
+        files.push(file);
+      }
+    });
+
+    return files;
+  }
+
   public get lgFiles() {
     const files: FileInfo[] = [];
     this.files.forEach((file) => {
@@ -122,7 +133,7 @@ export class BotProject implements IBotProject {
   public init = async () => {
     this.diagnostics = [];
     this.settings = await this.getEnvSettings(false);
-    const { skillsParsed, diagnostics } = await extractSkillManifestUrl(this.settings?.skill || []);
+    const { skillsParsed, diagnostics } = await extractSkillManifestUrl(this.settings?.skill || ([] as any));
     this.skills = skillsParsed;
     this.diagnostics.push(...diagnostics);
     this.files = await this._getFiles();
@@ -341,8 +352,27 @@ export class BotProject implements IBotProject {
     }
   };
 
+  public validateFileName = (name: string) => {
+    const nameRegex = /^[a-zA-Z0-9-_]+$/;
+    const { fileId, fileType } = parseFileName(name, '');
+
+    let fileName = fileId;
+    if (fileType === '.dialog') {
+      fileName = Path.basename(name, fileType);
+    }
+
+    if (!fileName) {
+      throw new Error('The file name can not be empty');
+    }
+
+    if (!nameRegex.test(fileName)) {
+      throw new Error('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
+    }
+  };
+
   public createFile = async (name: string, content = '') => {
     const filename = name.trim();
+    this.validateFileName(filename);
     const botName = this.name;
     const defaultLocale = this.settings?.defaultLanguage || defaultLanguage;
     const relativePath = defaultFilePath(botName, defaultLocale, filename);
@@ -537,7 +567,7 @@ export class BotProject implements IBotProject {
     }
 
     const fileList = new Map<string, FileInfo>();
-    const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu', 'manifests/*.json'];
+    const patterns = ['**/*.dialog', '**/*.dialog.schema', '**/*.lg', '**/*.lu', 'manifests/*.json'];
     for (const pattern of patterns) {
       // load only from the data dir, otherwise may get "build" versions from
       // deployment process
