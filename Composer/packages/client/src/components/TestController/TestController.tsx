@@ -161,7 +161,7 @@ export const TestController: React.FC = () => {
       luis: luis,
       qna: Object.assign({}, settings.qna, qna),
     });
-    await build(luis.authoringKey, qna.subscriptionKey, qna.qnaRegion, projectId);
+    await build(luis, qna, projectId);
   }
 
   async function handleLoadBot() {

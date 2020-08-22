@@ -393,9 +393,8 @@ export class BotProject implements IBotProject {
   };
 
   public buildFiles = async ({
-    authoringKey,
-    subscriptionKey,
-    qnaRegion,
+    luisConfig,
+    qnaConfig,
     luFileIds = [],
     qnaFileIds = [],
     crossTrainConfig,
@@ -416,7 +415,7 @@ export class BotProject implements IBotProject {
         }
       });
       this.builder.setBuildConfig(
-        { ...this.settings.luis, authoringKey, subscriptionKey, qnaRegion },
+        { ...luisConfig, subscriptionKey: qnaConfig.subscriptionKey, qnaRegion: qnaConfig.qnaRegion },
         crossTrainConfig,
         this.settings.downsampling
       );

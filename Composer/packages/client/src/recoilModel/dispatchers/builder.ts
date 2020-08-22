@@ -3,6 +3,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import { useRecoilCallback, CallbackInterface } from 'recoil';
+import { ILuisConfig, IQnAConfig } from '@bfc/shared';
 
 import * as luUtil from '../../utils/luUtil';
 import { Text, BotStatus } from '../../constants';
@@ -18,9 +19,8 @@ const checkEmptyQuestionOrAnswerInQnAFile = (sections) => {
 export const builderDispatcher = () => {
   const build = useRecoilCallback(
     ({ set, snapshot }: CallbackInterface) => async (
-      authoringKey: string,
-      subscriptionKey: string,
-      qnaRegion: string,
+      luisConfig: ILuisConfig,
+      qnaConfig: IQnAConfig,
       projectId: string
     ) => {
       const dialogs = await snapshot.getPromise(dialogsState);
@@ -50,9 +50,8 @@ export const builderDispatcher = () => {
         //TODO crosstrain should add locale
         const crossTrainConfig = luUtil.createCrossTrainConfig(dialogs, referredLuFiles);
         await httpClient.post(`/projects/${projectId}/build`, {
-          authoringKey,
-          subscriptionKey,
-          qnaRegion,
+          luisConfig,
+          qnaConfig,
           projectId,
           crossTrainConfig,
           luFiles: referredLuFiles.map((file) => file.id),

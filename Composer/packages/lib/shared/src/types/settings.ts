@@ -55,6 +55,7 @@ export interface ILuisConfig {
 export interface IQnAConfig {
   subscriptionKey: string;
   endpointKey: string;
+  qnaRegion: string;
   [key: string]: string;
 }
 

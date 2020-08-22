@@ -252,9 +252,21 @@ describe('buildFiles', () => {
   });
   it('should build lu & qna file successfully', async () => {
     proj.init();
-    const authoringKey = '412f0bfc19824ceca7a6076d05478850';
-    const subscriptionKey = '21640b8e2110449abfdfccf2f6bbee02';
-    const qnaRegion = 'en-us';
+    const luisConfig = {
+      authoringEndpoint: '',
+      authoringKey: '412f0bfc19824ceca7a6076d05478850',
+      authoringRegion: 'westus',
+      defaultLanguage: 'en-us',
+      endpoint: '',
+      endpointKey: '',
+      environment: 'composer',
+      name: 'alan-qna',
+    };
+    const qnaConfig = {
+      endpointKey: '',
+      qnaRegion: 'westus',
+      subscriptionKey: '21640b8e2110449abfdfccf2f6bbee02',
+    };
     const luFileIds = ['a.en-us', 'b.en-us', 'bot1.en-us'];
     const qnaFileIds = ['a.en-us', 'b.en-us', 'bot1.en-us'];
     const crossTrainConfig = {
@@ -264,7 +276,7 @@ describe('buildFiles', () => {
       intentName: '_Interruption',
       verbose: true,
     };
-    await proj.buildFiles({ authoringKey, subscriptionKey, qnaRegion, luFileIds, qnaFileIds, crossTrainConfig });
+    await proj.buildFiles({ luisConfig, qnaConfig, luFileIds, qnaFileIds, crossTrainConfig });
 
     try {
       if (fs.existsSync(path)) {
