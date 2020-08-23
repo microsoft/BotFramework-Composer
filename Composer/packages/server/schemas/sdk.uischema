@@ -145,6 +145,18 @@
       "subtitle": "Delete Property"
     }
   },
+  "Microsoft.DeleteActivity": {
+    "form": {
+      "label": "Delete activity"
+    }
+  },
+  "Microsoft.DeleteProperty": {
+    "form": {
+      "helpLink": "https://aka.ms/bfc-using-memory",
+      "label": "Delete a property",
+      "subtitle": "Delete Property"
+    }
+  },
   "Microsoft.EditActions": {
     "form": {
       "label": "Modify active dialog",
