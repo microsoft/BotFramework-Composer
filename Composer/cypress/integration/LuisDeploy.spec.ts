@@ -18,7 +18,7 @@ context('Luis Deploy', () => {
       method: 'POST',
       url: 'api/projects/*/build',
       status: 200,
-      response: 'fixture:build/success',
+      response: 'fixture:luPublish/success',
     });
     cy.findByText('Start Bot').click();
 
@@ -35,7 +35,7 @@ context('Luis Deploy', () => {
       method: 'POST',
       url: 'api/projects/*/build',
       status: 400,
-      response: 'fixture:build/error',
+      response: 'fixture:luPublish/error',
     });
     cy.findByText('Restart Bot').click();
     cy.findByText('Try again').click();
