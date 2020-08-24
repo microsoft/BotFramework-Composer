@@ -4,9 +4,9 @@
 import { FileInfo, ResolverResource } from '@bfc/shared';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const luObject = require('@bfcomposer/bf-lu/lib/parser/lu/lu.js');
+const luObject = require('@microsoft/bf-lu/lib/parser/lu/lu.js');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const luOptions = require('@bfcomposer/bf-lu/lib/parser/lu/luOptions.js');
+const luOptions = require('@microsoft/bf-lu/lib/parser/lu/luOptions.js');
 
 function getFileName(path: string): string {
   return path.split('/').pop() || path;

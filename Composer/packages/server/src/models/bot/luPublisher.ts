@@ -12,13 +12,13 @@ import { ComposerReservoirSampler } from './sampler/ReservoirSampler';
 import { ComposerBootstrapSampler } from './sampler/BootstrapSampler';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const crossTrainer = require('@bfcomposer/bf-lu/lib/parser/cross-train/crossTrainer.js');
+const crossTrainer = require('@microsoft/bf-lu/lib/parser/cross-train/crossTrainer.js');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const luBuild = require('@bfcomposer/bf-lu/lib/parser/lubuild/builder.js');
+const luBuild = require('@microsoft/bf-lu/lib/parser/lubuild/builder.js');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const LuisBuilder = require('@bfcomposer/bf-lu/lib/parser/luis/luisBuilder');
+const LuisBuilder = require('@microsoft/bf-lu/lib/parser/luis/luisBuilder');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const luisToLuContent = require('@bfcomposer/bf-lu/lib/parser/luis/luConverter');
+const luisToLuContent = require('@microsoft/bf-lu/lib/parser/luis/luConverter');
 
 const GENERATEDFOLDER = 'generated';
 const INTERUPTION = 'interuption';
