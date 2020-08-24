@@ -42,7 +42,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     updateCurrentPathForStorage,
     updateFolder,
     saveTemplateId,
-    importQnAFromUrl,
+    importQnAFromUrls,
     fetchProjectById,
     fetchRecentProjects,
   } = useRecoilValue(dispatcherState);
@@ -110,14 +110,11 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     saveProjectAs(projectId, formData.name, formData.description, formData.location);
   };
 
-  const handleCreateQnA = async (importUrls: string[]) => {
+  const handleCreateQnA = async (urls: string[]) => {
     saveTemplateId(QnABotTemplateId);
-    setCreationFlowStatus(CreationFlowStatus.CLOSE);
+    handleDismiss();
     await handleCreateNew(formData, QnABotTemplateId);
-    for (let i = 0; i < importUrls.length; i++) {
-      if (!importUrls[i]) continue;
-      await importQnAFromUrl({ id: `${formData.name.toLocaleLowerCase()}.${locale}`, url: importUrls[i] });
-    }
+    await importQnAFromUrls({ id: `${formData.name.toLocaleLowerCase()}.${locale}`, urls });
   };
 
   const handleSubmitOrImportQnA = async (formData, templateId: string) => {

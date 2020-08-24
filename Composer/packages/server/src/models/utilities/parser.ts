@@ -25,7 +25,7 @@ function getBuildEnvironment() {
   return {};
 }
 
-export async function parseQnAContent(url: string) {
+export async function parseQnAContent(urls: string[]) {
   const builder = new qnaBuild.Builder((message: string) => debug(message));
 
   let qnaContent = '';
@@ -35,19 +35,28 @@ export async function parseQnAContent(url: string) {
   if (!subscriptionKey) {
     throw new Error('Missing subscription key for QnAMaker');
   }
-  if (DOC_EXTENSIONS.some((e) => url.endsWith(e))) {
-    const index = url.lastIndexOf('.');
-    const extension = url.substring(index);
-    qnaContent = await builder.importFileReference(
-      `onlineFile${extension}`,
-      url,
-      subscriptionKey,
-      COGNITIVE_SERVICES_ENDPOINTS,
-      uuid()
-    );
-  } else {
-    qnaContent = await builder.importUrlReference(url, subscriptionKey, COGNITIVE_SERVICES_ENDPOINTS, uuid());
-  }
 
+  const contents = await Promise.all(
+    urls.map(async (url) => {
+      url = url.trim();
+      if (DOC_EXTENSIONS.some((e) => url.endsWith(e))) {
+        const index = url.lastIndexOf('.');
+        const extension = url.substring(index);
+        return await builder.importFileReference(
+          `onlineFile${extension}`,
+          url,
+          subscriptionKey,
+          COGNITIVE_SERVICES_ENDPOINTS,
+          uuid()
+        );
+      } else {
+        return await builder.importUrlReference(url, subscriptionKey, COGNITIVE_SERVICES_ENDPOINTS, uuid());
+      }
+    })
+  );
+
+  contents.forEach((content) => {
+    qnaContent += content;
+  });
   return qnaContent;
 }

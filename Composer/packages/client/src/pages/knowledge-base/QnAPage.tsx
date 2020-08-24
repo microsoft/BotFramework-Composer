@@ -95,7 +95,7 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
         items: [
           {
             'data-testid': 'FlyoutNewDialog',
-            key: 'importQnAFromUrl',
+            key: 'importQnAFromUrls',
             text: formatMessage('Import QnA From Url'),
             onClick: () => {
               setImportQnAFromUrlModalVisiability(true);
@@ -134,10 +134,7 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
 
   const onSubmit = async (urls: string[]) => {
     onDismiss();
-    for (let i = 0; i < urls.length; i++) {
-      if (!urls[i]) continue;
-      await actions.importQnAFromUrl({ id: `${dialogId}.${locale}`, url: urls[i] });
-    }
+    await actions.importQnAFromUrls({ id: `${dialogId}.${locale}`, urls });
   };
 
   return (

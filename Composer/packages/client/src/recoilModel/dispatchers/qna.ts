@@ -87,15 +87,15 @@ export const qnaDispatcher = () => {
     }
   );
 
-  const importQnAFromUrl = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({ id, url }: { id: string; url: string }) => {
+  const importQnAFromUrls = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async ({ id, urls }: { id: string; urls: string[] }) => {
       const { set, snapshot } = callbackHelpers;
       const qnaFiles = await snapshot.getPromise(qnaFilesState);
       const qnaFile = qnaFiles.find((f) => f.id === id);
       set(qnaAllUpViewStatusState, QnAAllUpViewStatus.Loading);
       try {
         const response = await httpClient.get(`/utilities/qna/parse`, {
-          params: { url },
+          params: { urls },
         });
         const content = qnaFile ? qnaFile.content + '\n' + response.data : response.data;
 
@@ -112,6 +112,6 @@ export const qnaDispatcher = () => {
   return {
     createQnAFile,
     updateQnAFile,
-    importQnAFromUrl,
+    importQnAFromUrls,
   };
 };

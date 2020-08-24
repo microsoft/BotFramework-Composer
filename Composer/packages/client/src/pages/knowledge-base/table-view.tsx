@@ -106,10 +106,10 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const [questionIndex, setQuestionIndex] = useState(-1); //used in QnASection.Questions array
   const [question, setQuestion] = useState('');
   const [editMode, setEditMode] = useState(EditMode.None);
-  const [answerIndex, setAnswerIndex] = useState(-1);
+  const [isUpdatingAnswer, setIsUpdatingAnswer] = useState(false);
   const [answer, setAnswer] = useState('');
   const createOrUpdateQuestion = () => {
-    if (question && editMode === EditMode.Creating) {
+    if (editMode === EditMode.Creating && question) {
       const updatedQnAFileContent = addQuestion(question, qnaSections, qnaSectionIndex);
       actions.updateQnAFile({ id: `${dialogIdRef.current}.${localeRef.current}`, content: updatedQnAFileContent });
     }
@@ -138,7 +138,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const cancelAnswerEditOperation = () => {
     setEditMode(EditMode.None);
     setAnswer('');
-    setAnswerIndex(-1);
+    setIsUpdatingAnswer(false);
     setQnASectionIndex(-1);
   };
 
@@ -213,7 +213,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     if (e.key === 'Escape') {
       setEditMode(EditMode.None);
       setQnASectionIndex(-1);
-      setAnswerIndex(-1);
+      setIsUpdatingAnswer(false);
       e.preventDefault();
     }
   };
@@ -232,13 +232,43 @@ const TableView: React.FC<TableViewProps> = (props) => {
     setEditMode(EditMode.Updating);
     setAnswer(answer);
     setQnASectionIndex(qnaSectionIndex);
-    setAnswerIndex(0);
+    setIsUpdatingAnswer(true);
     expandDetails(qnaSectionIndex);
   };
 
   const handleAnswerOnChange = (answer, index: number) => {
     if (index !== qnaSectionIndex) return;
     setAnswer(answer);
+  };
+
+  const deleteQnASection = (qnaSectionIndex: number) => {
+    actions.setMessage('item deleted');
+    if (fileRef && fileRef.current) {
+      const updatedQnAFileContent = removeSection(qnaSectionIndex, fileRef.current.content);
+      actions.updateQnAFile({
+        id: `${dialogIdRef.current}.${localeRef.current}`,
+        content: updatedQnAFileContent,
+      });
+    }
+    const newArray = [...showQnAPairDetails];
+    newArray.splice(qnaSectionIndex, 1);
+    setShowQnAPairDetails(newArray);
+  };
+
+  const isUpdatingIthQnASectionKthQuestion = (ithQnASection: number, kthQuestion: number, operationMode: EditMode) => {
+    return qnaSectionIndex === ithQnASection && questionIndex === kthQuestion && operationMode === EditMode.Updating;
+  };
+
+  const isCreatingNewQuestionOnIthQnASection = (ithQnASection: number, operationMode: EditMode) => {
+    return operationMode === EditMode.Creating && qnaSectionIndex === ithQnASection;
+  };
+
+  const isUpdateingIthQnASectionAnswer = (
+    ithQnASection: number,
+    isUpdatingAnswer: boolean,
+    operationMode: EditMode
+  ) => {
+    return qnaSectionIndex === ithQnASection && isUpdatingAnswer && operationMode === EditMode.Updating;
   };
 
   const getTableColums = () => {
@@ -273,12 +303,12 @@ const TableView: React.FC<TableViewProps> = (props) => {
         onRender: (item, qnaIndex) => {
           const questions = get(item, 'Questions', []);
           const showingQuestions = showQnAPairDetails[qnaIndex] ? questions : questions.slice(0, limitedNumber);
-          //This question of this qna Section is '#?'
+          //This question content of this qna Section is '#?'
           const isQuestionEmpty = showingQuestions.length === 1 && showingQuestions[0].content === '';
           return (
             <div data-is-focusable css={formCell}>
               {showingQuestions.map((q, qIndex) => {
-                if (qnaIndex !== qnaSectionIndex || questionIndex !== qIndex || editMode !== EditMode.Updating) {
+                if (!isUpdatingIthQnASectionKthQuestion(qnaIndex, qIndex, editMode)) {
                   return (
                     <div
                       key={q.id}
@@ -306,7 +336,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                     </div>
                   );
                   //It is updating this qnaSection's qIndex-th Question
-                } else if (qnaIndex === qnaSectionIndex && questionIndex === qIndex && editMode === EditMode.Updating) {
+                } else if (isUpdatingIthQnASectionKthQuestion(qnaIndex, qIndex, editMode)) {
                   return (
                     <TextField
                       autoFocus
@@ -324,7 +354,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 }
               })}
 
-              {editMode === EditMode.Creating && qnaSectionIndex === qnaIndex && dialogId !== 'all' && (
+              {isCreatingNewQuestionOnIthQnASection(qnaIndex, editMode) && dialogId !== 'all' && (
                 <TextField
                   autoFocus
                   onBlur={(e) => {
@@ -337,7 +367,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                   onKeyDown={(e) => handleQuestionKeydown(e)}
                 />
               )}
-              {!(editMode === EditMode.Creating && qnaSectionIndex === qnaIndex) && dialogId !== 'all' && (
+              {!isCreatingNewQuestionOnIthQnASection(qnaIndex, editMode) && dialogId !== 'all' && (
                 <ActionButton
                   iconProps={{ iconName: 'Add', styles: addIcon }}
                   styles={addAlternative}
@@ -361,7 +391,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         onRender: (item, qnaIndex) => {
           return (
             <div data-is-focusable css={formCell}>
-              {(qnaIndex !== qnaSectionIndex || answerIndex === -1 || editMode !== EditMode.Updating) && (
+              {!isUpdateingIthQnASectionAnswer(qnaIndex, isUpdatingAnswer, editMode) && (
                 <div
                   aria-label={formatMessage(`Answer is {answer}`, { answer: item.Answer })}
                   css={contentAnswer(showQnAPairDetails[qnaIndex])}
@@ -378,7 +408,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                   {item.Answer || formatMessage('Enter an answer')}
                 </div>
               )}
-              {qnaIndex === qnaSectionIndex && answerIndex === 0 && editMode === EditMode.Updating && (
+              {isUpdateingIthQnASectionAnswer(qnaIndex, isUpdatingAnswer, editMode) && (
                 <TextField
                   autoFocus
                   multiline
@@ -417,14 +447,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
               styles={icon}
               title="Delete"
               onClick={() => {
-                actions.setMessage('item deleted');
-                if (fileRef && fileRef.current) {
-                  const updatedQnAFileContent = removeSection(qnaIndex, fileRef.current.content);
-                  actions.updateQnAFile({
-                    id: `${dialogIdRef.current}.${localeRef.current}`,
-                    content: updatedQnAFileContent,
-                  });
-                }
+                deleteQnASection(qnaIndex);
               }}
             />
           );
@@ -489,7 +512,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         </div>
       );
     },
-    [dialogIdRef]
+    [dialogIdRef, showQnAPairDetails]
   );
 
   const onRenderRow = (props) => {
