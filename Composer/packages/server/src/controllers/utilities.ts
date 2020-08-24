@@ -5,15 +5,9 @@ import { Request, Response } from 'express';
 import { parseQnAContent } from '../models/utilities/parser';
 
 async function getQnaContent(req: Request, res: Response) {
-  const urls = req.query.urls as string[];
   try {
-    if (Array.isArray(urls)) {
-      res.status(200).json(await parseQnAContent(urls));
-    } else {
-      res.status(400).json({
-        message: 'Bad Argument',
-      });
-    }
+    const urls = req.query.urls.split(',');
+    res.status(200).json(await parseQnAContent(urls));
   } catch (e) {
     res.status(400).json({
       message: e.message || e.text,
