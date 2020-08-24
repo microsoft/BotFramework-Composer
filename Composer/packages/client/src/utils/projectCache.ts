@@ -21,6 +21,10 @@ class ProjectIdCache {
     this.currentProjectId = projectId;
     this.storage.set(KEY, this.currentProjectId);
   }
+
+  clear() {
+    this.set('');
+  }
 }
 
 export const projectIdCache = new ProjectIdCache();
