@@ -392,6 +392,13 @@ export class LuisAndQnaPublish {
       const qnaFiles = botFiles.filter((name) => {
         return name.endsWith('.qna') && this.notEmptyModel(name);
       });
+
+      if (luFiles.length > 0 && !(authoringKey && authoringRegion)) {
+        throw 'Should have luis authoringKey and authoringRegion when lu file not empty';
+      }
+      if (qnaFiles.length > 0 && !subscriptionKey) {
+        throw 'Should have qna subscriptionKey when qna file not empty';
+      }
       const dialogFiles = botFiles.filter((name) => {
         return name.endsWith('.dialog') && this.notEmptyModel(name);
       });

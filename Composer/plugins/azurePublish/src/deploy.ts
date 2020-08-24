@@ -55,39 +55,32 @@ export class BotProjectDeploy {
 
       // STEP 2: UPDATE LUIS
       // Do the LUIS build if LUIS settings are present
-      if (settings.luis && settings.qna) {
-        const luisAuthoringKey = settings.luis.authoringKey;
-        const luisAuthoringRegion = settings.luis.authoringRegion || settings.luis.region;
-
-        if (luisAuthoringKey && luisAuthoringRegion) {
-          if (!language) {
-            language = 'en-us';
-          }
-          const publisher = new LuisAndQnaPublish({ logger: this.logger, projPath: this.projPath });
-
-          // this function returns an object that contains the luis APP ids mapping
-          // each dialog to its matching app.
-          const { luisAppIds, qnaConfig } = await publisher.publishLuisAndQna(
-            name,
-            environment,
-            this.accessToken,
-            language,
-            settings.luis,
-            settings.qna,
-            luisResource
-          );
-
-          // amend luis settings with newly generated values
-          settings.luis = {
-            ...settings.luis,
-            ...luisAppIds,
-          };
-          settings.qna = {
-            ...settings.qna,
-            ...qnaConfig,
-          };
-        }
+      if (!language) {
+        language = 'en-us';
       }
+      const publisher = new LuisAndQnaPublish({ logger: this.logger, projPath: this.projPath });
+
+      // this function returns an object that contains the luis APP ids mapping
+      // each dialog to its matching app.
+      const { luisAppIds, qnaConfig } = await publisher.publishLuisAndQna(
+        name,
+        environment,
+        this.accessToken,
+        language,
+        settings.luis,
+        settings.qna,
+        luisResource
+      );
+
+      // amend luis settings with newly generated values
+      settings.luis = {
+        ...settings.luis,
+        ...luisAppIds,
+      };
+      settings.qna = {
+        ...settings.qna,
+        ...qnaConfig,
+      };
 
       // STEP 3: BUILD
       // run any platform specific build steps.

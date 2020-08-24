@@ -16,9 +16,9 @@ context('Luis Deploy', () => {
     cy.url().should('contain', 'language-understanding/all');
     cy.route({
       method: 'POST',
-      url: 'api/projects/*/luFiles/publish',
+      url: 'api/projects/*/build',
       status: 200,
-      response: 'fixture:luPublish/success',
+      response: 'fixture:build/success',
     });
     cy.findByText('Start Bot').click();
 
@@ -33,9 +33,9 @@ context('Luis Deploy', () => {
 
     cy.route({
       method: 'POST',
-      url: 'api/projects/*/luFiles/publish',
+      url: 'api/projects/*/build',
       status: 400,
-      response: 'fixture:luPublish/error',
+      response: 'fixture:build/error',
     });
     cy.findByText('Restart Bot').click();
     cy.findByText('Try again').click();
