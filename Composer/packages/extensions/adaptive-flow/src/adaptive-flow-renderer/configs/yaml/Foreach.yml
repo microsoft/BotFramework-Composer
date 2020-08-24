@@ -1,7 +1,7 @@
 Microsoft.Foreach:
-  widget: 'ForeachWidget'
+  widget: ForeachWidget
   nowrap: true
   loop:
-    widget: 'ActionCard'
-    header: 'Loop: For each item'
-    body: 'Each value in {@itemsProperty || ?}'
+    widget: ActionCard
+    header: Loop: For each item
+    body: Each value in ${coalesce(action.itemsProperty, "?")}

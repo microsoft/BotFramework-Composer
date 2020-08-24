@@ -1,28 +1,28 @@
 Microsoft.ChoiceInput:
-  widget: 'PromptWidget'
+  widget: PromptWidget
   nowrap: true
   botAsks:
-    widget: 'ActionCard'
+    widget: ActionCard
     header:
-      title: 'Bot Asks (Choice)'
-      icon: 'MessageBot'
+      title: Bot Asks (Choice)
+      icon: MessageBot
       colors:
         theme: '#EEEAF4'
         icon: '#5C2E91'
     body:
-      widget: 'LG'
-      value: '@prompt'
-      placeholder: '<prompt>'
+      widget: LG
+      value: ${action.prompt}
+      placeholder: <prompt>
   userInput:
-    widget: 'ActionCard'
+    widget: ActionCard
     header:
-      title: 'User Input (Choice)'
-      icon: 'User'
+      title: User Input (Choice)
+      icon: User
       menu: false
       colors:
-        theme: '#lightblue'
-        icon: '#azureblue'
+        theme: '#E5F0FF'
+        icon: '#0078D4'
     body:
-      widget: 'InputChoices'
-      items: '@choices'
-    footer: '@property ? {@property} <span style="color:grey">= Input(Choice)</span> : '''
+      widget: InputChoices
+      items: ${action.choices}
+    footer: ${if(action.property, concat(action.property, ' ', Gray30("= Input(Choice)")), null)}

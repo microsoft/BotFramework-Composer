@@ -1,12 +1,12 @@
 Microsoft.SendActivity:
-  widget: 'ActionCard'
+  widget: ActionCard
   header:
-    text: 'Send a response'
-    icon: 'MessageBot'
+    title: Send a response
+    icon: MessageBot
     colors:
       theme: '#EEEAF4'
       icon: '#5C2E91'
   body:
-    widget: 'LgWidget'
-    value: '@activity'
+    widget: LgWidget
+    value: ${action.activity}
   

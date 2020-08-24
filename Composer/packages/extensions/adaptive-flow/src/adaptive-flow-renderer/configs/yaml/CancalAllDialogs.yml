@@ -1,4 +1,4 @@
 Microsoft.CancelAllDialogs:
-  widget: 'ActionCard'
-  header: 'Cancel all active dialogs'
-  body: '{@eventName || ?} <span>(Event)</span>'
+  widget: ActionCard
+  header: Cancel all active dialogs
+  body: ${coalesce(action.eventName, "?")} ${Gray30("(Event)")}

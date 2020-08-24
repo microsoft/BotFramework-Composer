@@ -1,5 +1,7 @@
 Microsoft.EditArray:
-  widget: 'ActionCard'
-  header: 'Edit an array property'
-  body: '<span style="color: grey">{@changeType || ?}</span> {@itemsProperty || ?}'
-  footer: '@resultProperty ? {@resultProperty} <span style="color: grey">= Result</span> : '''
+  widget: ActionCard
+  header: Edit an array property
+  body: ${coalesce(Gray30(action.changeType), "?")} ${coalesce(action.itemsProperty, "?")}
+  footer:
+    widget: SetResult
+    value: ${action.resultProperty}

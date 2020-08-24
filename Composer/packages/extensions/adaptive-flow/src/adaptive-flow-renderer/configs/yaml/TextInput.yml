@@ -1,26 +1,26 @@
 # TextInput
 Microsoft.TextInput:
-  widget: 'PromptWidget'
+  widget: PromptWidget
   nowrap: true
   botAsks:
-    widget: 'ActionCard'
+    widget: ActionCard
     header:
-      title: 'Bot Asks (Text)'
-      icon: 'MessageBot'
+      title: Bot Asks (Text)
+      icon: MessageBot
       colors:
         theme: '#EEEAF4'
         icon: '#5C2E91'
     body:
-      widget: 'LG'
-      value: '@prompt'
-      placeholder: '<prompt>'
+      widget: LG
+      value: ${action.prompt}
+      placeholder: <prompt>
   userInput:
-    widget: 'ActionCard'
+    widget: ActionCard
     header:
-      title: 'User Input (Text)'
-      icon: 'User'
+      title: User Input (Text)
+      icon: User
       menu: false
       colors:
-        theme: '#lightblue'
-        icon: '#azureblue'
-    body: '@property ? {@property} <span style="color:grey">= Input(Text)</span> : '''
+        theme: '#E5F0FF'
+        icon: '#0078D4'
+    body: ${if(action.property, concant(action.property, " ", Gray30("= Input(Text)")), null)}

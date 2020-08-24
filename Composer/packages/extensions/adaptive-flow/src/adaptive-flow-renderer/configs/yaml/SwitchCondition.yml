@@ -1,6 +1,6 @@
 Microsoft.SwitchCondition:
-  widget: 'SwitchConditionWidget'
+  widget: SwitchConditionWidget
   nowrap: true
   judgement:
-    header: 'Branch: Switch (multiple options)'
-    body: '@condition'
+    header: Branch: Switch (multiple options)
+    body: ${action.condition}
