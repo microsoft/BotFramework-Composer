@@ -21,7 +21,6 @@ import { getFocusPath } from './navigation';
 import { upperCaseName } from './fileUtil';
 
 const conceptLabels = conceptLabelsFn();
-console.log(conceptLabels);
 
 interface DialogsMap {
   [dialogId: string]: any;
