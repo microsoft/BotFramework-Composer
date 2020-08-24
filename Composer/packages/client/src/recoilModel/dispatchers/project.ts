@@ -256,6 +256,7 @@ export const projectDispatcher = () => {
       await httpClient.delete(`/projects/${projectId}`);
       luFileStatusStorage.removeAllStatuses(projectId);
       settingStorage.remove(projectId);
+      projectIdCache.clear();
       reset(projectIdState);
       reset(dialogsState);
       reset(botEnvironmentState);
