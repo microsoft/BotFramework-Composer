@@ -28,7 +28,6 @@ const config: PluginConfig = {
           icon: 'MessageBot',
           colors: {
             theme: Colors.BlueMagenta20,
-            icon: Colors.BlueMagenta30,
           },
         },
         body: {

@@ -130,7 +130,6 @@
       "label": "Debug Break"
     }
   },
-  "Microsoft.DeleteActivity": {},
   "Microsoft.DeleteProperties": {
     "form": {
       "helpLink": "https://aka.ms/bfc-using-memory",
@@ -148,13 +147,6 @@
   "Microsoft.DeleteActivity": {
     "form": {
       "label": "Delete activity"
-    }
-  },
-  "Microsoft.DeleteProperty": {
-    "form": {
-      "helpLink": "https://aka.ms/bfc-using-memory",
-      "label": "Delete a property",
-      "subtitle": "Delete Property"
     }
   },
   "Microsoft.EditActions": {
@@ -334,7 +326,11 @@
       "subtitle": "Trace Activity"
     }
   },
-  "Microsoft.UpdateActivity": {},
+  "Microsoft.UpdateActivity": {
+    "form": {
+      "label": "Update an activity"
+    }
+  },
   "Microsoft.CrossTrainedRecognizerSet": {},
   "Microsoft.MultiLanguageRecognizer": {},
   "Microsoft.RecognizerSet": {},
