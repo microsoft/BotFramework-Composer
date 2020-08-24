@@ -63,9 +63,8 @@
               ]
             }
           ],
-          "appendChoices": "true",
           "defaultLocale": "en-us",
-          "style": "Auto",
+          "style": "auto",
           "choiceOptions": {
             "inlineSeparator": ", ",
             "inlineOr": " or ",
@@ -133,9 +132,8 @@
               "allowInterruptions": "!@itemTitle && !@number",
               "outputFormat": "value",
               "choices": "=user.lists[dialog.listType]",
-              "appendChoices": "true",
               "defaultLocale": "en-us",
-              "style": "List",
+              "style": "list",
               "choiceOptions": {
                 "inlineSeparator": ", ",
                 "inlineOr": " or ",

@@ -8,6 +8,7 @@ import { jsx } from '@emotion/core';
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { ScrollablePane, IScrollablePaneStyles } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
@@ -39,6 +40,7 @@ const AddLanguageModal: React.FC<IAddLanguageModalProps> = (props) => {
     switchTo: false,
   };
   const [formData, setFormData] = useState<ILanguageFormData>(initialFormData);
+  const [searchKeywords, setSearchKeywords] = useState('');
 
   useEffect(() => {
     setFormData({ ...formData, defaultLang: defaultLanguage });
@@ -94,27 +96,29 @@ const AddLanguageModal: React.FC<IAddLanguageModalProps> = (props) => {
 
   const formTitles = { ...MultiLanguagesDialog.ADD_DIALOG };
 
-  const languageCheckBoxList = languageListTemplatesSorted(currentLanguages, locale, defaultLanguage).map((item) => {
-    const { language, isEnabled, isCurrent, isDefault, locale } = item;
-    let label = language;
-    if (isDefault) {
-      label += formatMessage(' - Original');
-    }
-    if (isCurrent) {
-      label += formatMessage(' - Current');
-    }
-    return (
-      <Checkbox
-        key={locale}
-        className={classNames.checkboxItem}
-        defaultChecked={isEnabled}
-        disabled={isEnabled}
-        label={label}
-        title={locale}
-        onChange={onChange(locale)}
-      />
-    );
-  });
+  const languageCheckBoxList = languageListTemplatesSorted(currentLanguages, locale, defaultLanguage)
+    .filter((item) => item.language.toLowerCase().includes(searchKeywords.toLowerCase()))
+    .map((item) => {
+      const { language, isEnabled, isCurrent, isDefault, locale } = item;
+      let label = language;
+      if (isDefault) {
+        label += formatMessage(' - Original');
+      }
+      if (isCurrent) {
+        label += formatMessage(' - Current');
+      }
+      return (
+        <Checkbox
+          key={locale}
+          className={classNames.checkboxItem}
+          defaultChecked={isEnabled}
+          disabled={isEnabled}
+          label={label}
+          title={locale}
+          onChange={onChange(locale)}
+        />
+      );
+    });
 
   const defalutLanguageListOptions = useMemo(() => {
     const languageList = languageListTemplates(currentLanguages, locale, defaultLanguage);
@@ -128,6 +132,10 @@ const AddLanguageModal: React.FC<IAddLanguageModalProps> = (props) => {
       };
     });
   }, [currentLanguages]);
+
+  const onSearch = (_e, newValue) => {
+    setSearchKeywords(newValue.trim());
+  };
 
   const scrollablePaneStyles: Partial<IScrollablePaneStyles> = { root: classNames.pane };
 
@@ -149,6 +157,12 @@ const AddLanguageModal: React.FC<IAddLanguageModalProps> = (props) => {
           </StackItem>
           <StackItem grow={0}>
             <Label>{MultiLanguagesDialog.ADD_DIALOG.selectionTitle}</Label>
+            <SearchBox
+              disableAnimation
+              placeholder={MultiLanguagesDialog.ADD_DIALOG.searchPlaceHolder}
+              styles={{ root: { width: 300 } }}
+              onChange={onSearch}
+            />
             <ScrollablePane styles={scrollablePaneStyles}>{languageCheckBoxList}</ScrollablePane>
           </StackItem>
           <StackItem>

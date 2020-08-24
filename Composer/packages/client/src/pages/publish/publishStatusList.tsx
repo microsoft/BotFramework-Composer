@@ -176,7 +176,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
   }, [selectIndex, items]);
 
   return (
-    <div css={listRoot}>
+    <div css={listRoot} data-testid={'publish-status-list'}>
       <div css={tableView}>
         <DetailsList
           isHeaderVisible

@@ -1,0 +1,18 @@
+{
+  "name": "plugin-runtimes",
+  "version": "1.0.0",
+  "description": "provide info about available runtimes",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "extendsComposer": true,
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fs-extra": "^9.0.1",
+    "rimraf": "^3.0.2",
+    "path": "^0.12.7"
+  }
+}

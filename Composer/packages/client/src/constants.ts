@@ -126,6 +126,7 @@ export const MultiLanguagesDialog = {
       'This language will be copied and used as the basis (and fallback language) for the translation.'
     ),
     selectionTitle: formatMessage('To which language will you be translating your bot?'),
+    searchPlaceHolder: formatMessage('Search'),
     whenDoneText: formatMessage(
       'When done, switch to the newly created language and start the (manual) translation process.'
     ),
@@ -177,11 +178,6 @@ export enum AppUpdaterStatus {
   UPDATE_FAILED,
   UPDATE_SUCCEEDED,
 }
-
-export const DefaultPublishConfig = {
-  name: 'default',
-  type: 'localpublish',
-};
 
 export const EmptyBotTemplateId = 'EmptyBot';
 
