@@ -138,7 +138,7 @@ export class BotProject implements IBotProject {
   public init = async () => {
     this.diagnostics = [];
     this.settings = await this.getEnvSettings(false);
-    const { skillsParsed, diagnostics } = await extractSkillManifestUrl(this.settings?.skill || []);
+    const { skillsParsed, diagnostics } = await extractSkillManifestUrl(this.settings?.skill || ([] as any));
     this.skills = skillsParsed;
     this.diagnostics.push(...diagnostics);
     this.files = await this._getFiles();

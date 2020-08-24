@@ -47,7 +47,7 @@ export interface IChoiceObject {
 
 export type IChoice = IChoiceObject[] | string;
 
-type IListStyle = 'None' | 'Auto' | 'Inline' | 'List' | 'SuggestedAction' | 'HeroCard';
+type IListStyle = 'none' | 'auto' | 'inline' | 'list' | 'suggestedAction' | 'heroCard';
 
 export interface IChoiceOption {
   /** Character used to separate individual choices when there are more than 2 choices */

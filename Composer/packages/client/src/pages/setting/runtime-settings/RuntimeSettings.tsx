@@ -20,6 +20,7 @@ import {
   dispatcherState,
   ejectRuntimeSelector,
   boilerplateVersionState,
+  isEjectRuntimeExistState,
 } from '../../../recoilModel';
 import { OpenConfirmModal } from '../../../components/Modal/ConfirmDialog';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
@@ -33,10 +34,14 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
   const settings = useRecoilValue(settingsState);
   const projectId = useRecoilValue(projectIdState);
   const boilerplateVersion = useRecoilValue(boilerplateVersionState);
-
-  const { setCustomRuntime, setRuntimeField, getBoilerplateVersion, updateBoilerplate } = useRecoilValue(
-    dispatcherState
-  );
+  const isEjectRuntimeExist = useRecoilValue(isEjectRuntimeExistState);
+  const {
+    setCustomRuntime,
+    setRuntimeField,
+    getBoilerplateVersion,
+    updateBoilerplate,
+    stopPublishBot,
+  } = useRecoilValue(dispatcherState);
   const runtimeEjection = useRecoilValue(ejectRuntimeSelector);
 
   const [formDataErrors, setFormDataErrors] = useState({ command: '', path: '' });
@@ -44,6 +49,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
   const [working, setWorking] = useState(false);
   const [ejecting, setEjecting] = useState(false);
   const [needsUpdate, setNeedsUpdate] = useState(false);
+  const [templateKey, setTemplateKey] = useState('');
 
   useEffect(() => {
     // check the status of the boilerplate material and see if it requires an update
@@ -53,6 +59,13 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
   useEffect(() => {
     setNeedsUpdate(boilerplateVersion.updateRequired || false);
   }, [boilerplateVersion.updateRequired]);
+
+  useEffect(() => {
+    if (isEjectRuntimeExist && templateKey) {
+      confirmReplaceEject(templateKey);
+      setTemplateKey('');
+    }
+  }, [isEjectRuntimeExist, templateKey]);
 
   const handleChangeToggle = (_, isOn = false) => {
     setCustomRuntime(projectId, isOn);
@@ -104,6 +117,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
     closeEjectModal();
     await runtimeEjection?.onAction(projectId, templateKey);
     setEjecting(false);
+    setTemplateKey(templateKey);
   };
 
   const callUpdateBoilerplate = async () => {
@@ -122,6 +136,20 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
           resolve();
         }, 500);
       });
+    }
+  };
+
+  const confirmReplaceEject = async (templateKey: string) => {
+    const title = formatMessage('Runtime already exists');
+    const msg = formatMessage('Are you sure you want to stop current runtime and replace them?');
+    const res = await OpenConfirmModal(title, msg);
+    if (res) {
+      setEjecting(true);
+      // stop runtime
+      await stopPublishBot(projectId);
+      // replace the runtime
+      await runtimeEjection?.onAction(projectId, templateKey, true);
+      setEjecting(false);
     }
   };
 
