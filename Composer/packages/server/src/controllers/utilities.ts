@@ -5,13 +5,15 @@ import { Request, Response } from 'express';
 import { parseQnAContent } from '../models/utilities/parser';
 
 async function getQnaContent(req: Request, res: Response) {
-  if (!Array.isArray(req.query.urls)) {
-    res.status(400).json({
-      message: 'Invalid parameters',
-    });
-  }
+  const urls = req.query.urls;
   try {
-    res.status(200).json(await parseQnAContent(req.query.urls));
+    if (Array.isArray(urls)) {
+      res.status(200).json(await parseQnAContent(urls));
+    } else {
+      res.status(400).json({
+        message: 'Bad Argument',
+      });
+    }
   } catch (e) {
     res.status(400).json({
       message: e.message || e.text,
