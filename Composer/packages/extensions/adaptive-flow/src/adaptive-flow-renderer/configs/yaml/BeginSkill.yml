@@ -1,12 +1,13 @@
 Microsoft.BeginSkill:
-  widget: 'ActionCard'
+  widget: ActionCard
   header:
     title: Connect to a skill
-    icon: 'Library'
+    icon: Library
     colors:
-      theme: 'DarkBlue'
-      text: 'White'
-      icon: 'White'
-  body: '<span style="color:grey">Host</span> {@skillEndpoint || ?}'
-  footer: '@resultProperty ? {@resultProperty} <span style="color: grey">= Result</span>'
-  
+      theme: DarkBlue
+      text: white
+      icon: white
+  body: ${concat(Gray30(Host")} ${coalesce(action.skillEndpoint, "?")}
+  footer:
+    widget: SetResult
+    value: ${action.resultProperty}  

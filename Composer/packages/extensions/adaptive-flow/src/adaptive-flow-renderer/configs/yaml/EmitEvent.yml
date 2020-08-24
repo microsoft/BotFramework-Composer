@@ -1,4 +1,4 @@
 Microsoft.EmitEvent:
-  widget: 'ActionCard'
-  header: 'Emit a custom event'
-  body: '{@eventName || ?} <span style="color: grey"/>(Event)<span>'
+  widget: ActionCard
+  header: Emit a custom event
+  body: ${coalesce(action.eventName, "?")} ${Gray30("(Event)")}

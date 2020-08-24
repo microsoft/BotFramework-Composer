@@ -1,7 +1,7 @@
 Microsoft.SetProperties:
-  widget: 'ActionCard'
-  header: 'Set properties'
+  widget: ActionCard
+  header: Set properties
   body:
-    widget: 'ListOverview'
-    items: '@assignments.map(x => {{ property: x.property, value: x.value }})'
-    itemWidget: 'PropertyAssignment'
+    widget: ListOverview
+    items: ${action.assignments}
+    itemWidget: PropertyAssignment

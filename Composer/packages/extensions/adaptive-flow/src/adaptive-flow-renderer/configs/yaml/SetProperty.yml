@@ -1,7 +1,7 @@
 Microsoft.SetProperty:
-  widget: 'ActionCard'
-  header: 'Set a property'
+  widget: ActionCard
+  header: Set a property
   body:
-    widget: 'PropertyAssignment'
-    property: '@property'
-    value: '@value'
+    widget: PropertyAssignment
+    property: ${action.property}
+    value: ${action.value}
