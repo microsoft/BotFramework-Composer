@@ -58,7 +58,10 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
           description={formatMessage('Language to use within the Composer application itself.')}
           image={images.minimap}
           options={[
-            { key: 'en-US', text: formatMessage('US English') },
+            {
+              key: 'en-US',
+              text: formatMessage('US English'),
+            },
             {
               key: 'en-US-pseudo',
               text: formatMessage('Pseudo'),

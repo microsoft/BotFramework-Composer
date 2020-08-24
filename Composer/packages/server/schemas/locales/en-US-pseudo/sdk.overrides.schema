@@ -71,9 +71,6 @@
                     "title": "[[[ 🔥 Schəmā🔥 ]]]",
                     "description": "[[[ 🔥 Schəmā tø fïll ïn.🔥 ]]]",
                     "anyOf": {
-                        "0": {
-                            "title": "[[[ 🔥 Cørə schəmā mətā-schəmā🔥 ]]]"
-                        },
                         "1": {
                             "title": "[[[ 🔥 Rəfərəncə tø JS⨀N schəmā🔥 ]]]",
                             "description": "[[[ 🔥 Rəfərəncə tø JS⨀N schəmā .dïāløg fïlə.🔥 ]]]"
@@ -169,7 +166,8 @@
                     "description": "[[[ 🔥 'Prøpərty' wïll bə sət tø thə øbjəct ør thə rəsůlt øf thïs əxprəssïøn whən māx tůrn cøůnt ïs əxcəədəd.🔥 ]]]",
                     "oneOf": {
                         "0": {
-                            "title": "[[[ 🔥 ⨀bjəct🔥 ]]]"
+                            "title": "[[[ 🔥 ⨀bjəct🔥 ]]]",
+                            "description": "[[[ 🔥 Λttāchmənt øbjəct.🔥 ]]]"
                         }
                     }
                 },
@@ -178,7 +176,8 @@
                     "description": "[[[ 🔥 'Prøpərty' wïll bə sət tø thə øbjəct ør thə rəsůlt øf thïs əxprəssïøn ůnləss ït əvālůātəs tø nůll.🔥 ]]]",
                     "oneOf": {
                         "0": {
-                            "title": "[[[ 🔥 ⨀bjəct🔥 ]]]"
+                            "title": "[[[ 🔥 ⨀bjəct🔥 ]]]",
+                            "description": "[[[ 🔥 Λttāchmənt øbjəct.🔥 ]]]"
                         }
                     }
                 },
@@ -1747,375 +1746,7 @@
         },
         "Microsoft.IActivityTemplate": {
             "title": "[[[ 🔥 Mïcrøsøft ΛctïvïtyTəmplātəs🔥 ]]]",
-            "description": "[[[ 🔥 Cømpønənts whïch ārə ΛctïvïtyTəmplātə, whïch ïs strïng təmplātə, ān āctïvïty, ør ā ïmpləməntātïøn øf ΛctïvïtyTəmplātə🔥 ]]]",
-            "oneOf": {
-                "1": {
-                    "description": "[[[ 🔥 Λn Λctïvïty ïs thə bāsïc cømmůnïcātïøn typə før thə Bøt Frāməwørk 3.0 prøtøcøl.🔥 ]]]",
-                    "title": "[[[ 🔥 Λctïvïty🔥 ]]]",
-                    "properties": {
-                        "type": {
-                            "description": "[[[ 🔥 Cøntāïns thə āctïvïty typə. Pøssïblə vālůəs ïnclůdə: 'məssāgə', 'cøntāctRəlātïøn⩁pdātə',\n'cønvərsātïøn⩁pdātə', 'typïng', 'ənd⨀fCønvərsātïøn', 'əvənt', 'ïnvøkə', 'dələtə⩁sərDātā',\n'məssāgə⩁pdātə', 'məssāgəDələtə', 'ïnstāllātïøn⩁pdātə', 'məssāgəRəāctïøn', 'sůggəstïøn',\n'trācə', 'hāndøff'🔥 ]]]",
-                            "title": "[[[ 🔥 typə🔥 ]]]"
-                        },
-                        "id": {
-                            "description": "[[[ 🔥 Cøntāïns ān ⅡD thāt ůnïqůəly ïdəntïfïəs thə āctïvïty øn thə chānnəl.🔥 ]]]",
-                            "title": "[[[ 🔥 ïd🔥 ]]]"
-                        },
-                        "timestamp": {
-                            "description": "[[[ 🔥 Cøntāïns thə dātə ānd tïmə thāt thə məssāgə wās sənt, ïn ⩁TC, əxprəssəd ïn ⅡS⨀-8601 førmāt.🔥 ]]]",
-                            "title": "[[[ 🔥 tïməstāmp🔥 ]]]"
-                        },
-                        "localTimestamp": {
-                            "description": "[[[ 🔥 Cøntāïns thə dātə ānd tïmə thāt thə məssāgə wās sənt, ïn løcāl tïmə, əxprəssəd ïn ⅡS⨀-8601\nførmāt.\nFør əxāmplə, 2016-09-23T13:07:49.4714686-07:00.🔥 ]]]",
-                            "title": "[[[ 🔥 løcālTïməstāmp🔥 ]]]"
-                        },
-                        "localTimezone": {
-                            "description": "[[[ 🔥 Cøntāïns thə nāmə øf thə tïməzønə ïn whïch thə məssāgə, ïn løcāl tïmə, əxprəssəd ïn ⅡΛNΛ Tïmə\nZønə dātābāsə førmāt.\nFør əxāmplə, Λmərïcā/Løs_Λngələs.🔥 ]]]",
-                            "title": "[[[ 🔥 løcālTïməzønə🔥 ]]]"
-                        },
-                        "serviceUrl": {
-                            "description": "[[[ 🔥 Cøntāïns thə ⩁RL thāt spəcïfïəs thə chānnəl's sərvïcə əndpøïnt. Sət by thə chānnəl.🔥 ]]]",
-                            "title": "[[[ 🔥 sərvïcə⩁rl🔥 ]]]"
-                        },
-                        "channelId": {
-                            "description": "[[[ 🔥 Cøntāïns ān ⅡD thāt ůnïqůəly ïdəntïfïəs thə chānnəl. Sət by thə chānnəl.🔥 ]]]",
-                            "title": "[[[ 🔥 chānnəlⅡd🔥 ]]]"
-                        },
-                        "from": {
-                            "description": "[[[ 🔥 Ⅱdəntïfïəs thə səndər øf thə məssāgə.🔥 ]]]",
-                            "title": "[[[ 🔥 frøm🔥 ]]]"
-                        },
-                        "conversation": {
-                            "description": "[[[ 🔥 Ⅱdəntïfïəs thə cønvərsātïøn tø whïch thə āctïvïty bəløngs.🔥 ]]]",
-                            "title": "[[[ 🔥 cønvərsātïøn🔥 ]]]",
-                            "properties": {
-                                "isGroup": {
-                                    "description": "[[[ 🔥 Ⅱndïcātəs whəthər thə cønvərsātïøn cøntāïns mørə thān twø pārtïcïpānts āt thə tïmə thə\nāctïvïty wās gənərātəd🔥 ]]]",
-                                    "title": "[[[ 🔥 ïsGrøůp🔥 ]]]"
-                                },
-                                "conversationType": {
-                                    "description": "[[[ 🔥 Ⅱndïcātəs thə typə øf thə cønvərsātïøn ïn chānnəls thāt dïstïngůïsh bətwəən cønvərsātïøn typəs🔥 ]]]",
-                                    "title": "[[[ 🔥 cønvərsātïønTypə🔥 ]]]"
-                                },
-                                "id": {
-                                    "description": "[[[ 🔥 Chānnəl ïd før thə ůsər ør bøt øn thïs chānnəl (∃xāmplə: jøə@smïth.cøm, ør @jøəsmïth ør\n123456)🔥 ]]]",
-                                    "title": "[[[ 🔥 ïd🔥 ]]]"
-                                },
-                                "name": {
-                                    "description": "[[[ 🔥 Dïsplāy frïəndly nāmə🔥 ]]]",
-                                    "title": "[[[ 🔥 nāmə🔥 ]]]"
-                                },
-                                "aadObjectId": {
-                                    "description": "[[[ 🔥 Thïs āccøůnt's øbjəct ⅡD wïthïn Λzůrə Λctïvə Dïrəctøry (ΛΛD)🔥 ]]]",
-                                    "title": "[[[ 🔥 āād⨀bjəctⅡd🔥 ]]]"
-                                },
-                                "role": {
-                                    "description": "[[[ 🔥 Rølə øf thə əntïty bəhïnd thə āccøůnt (∃xāmplə: ⩁sər, Bøt, ətc.). Pøssïblə vālůəs ïnclůdə:\n'ůsər', 'bøt'🔥 ]]]",
-                                    "title": "[[[ 🔥 rølə🔥 ]]]"
-                                }
-                            }
-                        },
-                        "recipient": {
-                            "description": "[[[ 🔥 Ⅱdəntïfïəs thə rəcïpïənt øf thə məssāgə.🔥 ]]]",
-                            "title": "[[[ 🔥 rəcïpïənt🔥 ]]]"
-                        },
-                        "textFormat": {
-                            "description": "[[[ 🔥 Førmāt øf təxt fïəlds Dəfāůlt:mārkdøwn. Pøssïblə vālůəs ïnclůdə: 'mārkdøwn', 'plāïn', 'xml'🔥 ]]]",
-                            "title": "[[[ 🔥 təxtFørmāt🔥 ]]]"
-                        },
-                        "attachmentLayout": {
-                            "description": "[[[ 🔥 Thə lāyøůt hïnt før můltïplə āttāchmənts. Dəfāůlt: lïst. Pøssïblə vālůəs ïnclůdə: 'lïst',\n'cārøůsəl'🔥 ]]]",
-                            "title": "[[[ 🔥 āttāchməntLāyøůt🔥 ]]]"
-                        },
-                        "membersAdded": {
-                            "description": "[[[ 🔥 Thə cølləctïøn øf məmbərs āddəd tø thə cønvərsātïøn.🔥 ]]]",
-                            "title": "[[[ 🔥 məmbərsΛddəd🔥 ]]]",
-                            "items": {
-                                "description": "[[[ 🔥 Chānnəl āccøůnt ïnførmātïøn nəədəd tø røůtə ā məssāgə🔥 ]]]",
-                                "title": "[[[ 🔥 ChānnəlΛccøůnt🔥 ]]]",
-                                "properties": {
-                                    "id": {
-                                        "description": "[[[ 🔥 Chānnəl ïd før thə ůsər ør bøt øn thïs chānnəl (∃xāmplə: jøə@smïth.cøm, ør @jøəsmïth ør\n123456)🔥 ]]]",
-                                        "title": "[[[ 🔥 ïd🔥 ]]]"
-                                    },
-                                    "name": {
-                                        "description": "[[[ 🔥 Dïsplāy frïəndly nāmə🔥 ]]]",
-                                        "title": "[[[ 🔥 nāmə🔥 ]]]"
-                                    },
-                                    "aadObjectId": {
-                                        "description": "[[[ 🔥 Thïs āccøůnt's øbjəct ⅡD wïthïn Λzůrə Λctïvə Dïrəctøry (ΛΛD)🔥 ]]]",
-                                        "title": "[[[ 🔥 āād⨀bjəctⅡd🔥 ]]]"
-                                    },
-                                    "role": {
-                                        "description": "[[[ 🔥 Rølə øf thə əntïty bəhïnd thə āccøůnt (∃xāmplə: ⩁sər, Bøt, ətc.). Pøssïblə vālůəs ïnclůdə:\n'ůsər', 'bøt'🔥 ]]]",
-                                        "title": "[[[ 🔥 rølə🔥 ]]]"
-                                    }
-                                }
-                            }
-                        },
-                        "membersRemoved": {
-                            "description": "[[[ 🔥 Thə cølləctïøn øf məmbərs rəmøvəd frøm thə cønvərsātïøn.🔥 ]]]",
-                            "title": "[[[ 🔥 məmbərsRəmøvəd🔥 ]]]"
-                        },
-                        "reactionsAdded": {
-                            "description": "[[[ 🔥 Thə cølləctïøn øf rəāctïøns āddəd tø thə cønvərsātïøn.🔥 ]]]",
-                            "title": "[[[ 🔥 rəāctïønsΛddəd🔥 ]]]",
-                            "items": {
-                                "description": "[[[ 🔥 Məssāgə rəāctïøn øbjəct🔥 ]]]",
-                                "title": "[[[ 🔥 MəssāgəRəāctïøn🔥 ]]]",
-                                "properties": {
-                                    "type": {
-                                        "description": "[[[ 🔥 Məssāgə rəāctïøn typə. Pøssïblə vālůəs ïnclůdə: 'lïkə', 'plůs⨀nə'🔥 ]]]",
-                                        "title": "[[[ 🔥 typə🔥 ]]]"
-                                    }
-                                }
-                            }
-                        },
-                        "reactionsRemoved": {
-                            "description": "[[[ 🔥 Thə cølləctïøn øf rəāctïøns rəmøvəd frøm thə cønvərsātïøn.🔥 ]]]",
-                            "title": "[[[ 🔥 rəāctïønsRəmøvəd🔥 ]]]"
-                        },
-                        "topicName": {
-                            "description": "[[[ 🔥 Thə ůpdātəd tøpïc nāmə øf thə cønvərsātïøn.🔥 ]]]",
-                            "title": "[[[ 🔥 tøpïcNāmə🔥 ]]]"
-                        },
-                        "historyDisclosed": {
-                            "description": "[[[ 🔥 Ⅱndïcātəs whəthər thə prïør hïstøry øf thə chānnəl ïs dïscløsəd.🔥 ]]]",
-                            "title": "[[[ 🔥 hïstøryDïscløsəd🔥 ]]]"
-                        },
-                        "locale": {
-                            "description": "[[[ 🔥 Λ løcālə nāmə før thə cøntənts øf thə təxt fïəld.\nThə løcālə nāmə ïs ā cømbïnātïøn øf ān ⅡS⨀ 639 twø- ør thrəə-ləttər cůltůrə cødə āssøcïātəd\nwïth ā lāngůāgə\nānd ān ⅡS⨀ 3166 twø-ləttər sůbcůltůrə cødə āssøcïātəd wïth ā cøůntry ør rəgïøn.\nThə løcālə nāmə cān ālsø cørrəspønd tø ā vālïd BCP-47 lāngůāgə tāg.🔥 ]]]",
-                            "title": "[[[ 🔥 løcālə🔥 ]]]"
-                        },
-                        "text": {
-                            "description": "[[[ 🔥 Thə təxt cøntənt øf thə məssāgə.🔥 ]]]",
-                            "title": "[[[ 🔥 təxt🔥 ]]]"
-                        },
-                        "speak": {
-                            "description": "[[[ 🔥 Thə təxt tø spəāk.🔥 ]]]",
-                            "title": "[[[ 🔥 spəāk🔥 ]]]"
-                        },
-                        "inputHint": {
-                            "description": "[[[ 🔥 Ⅱndïcātəs whəthər yøůr bøt ïs āccəptïng,\nəxpəctïng, ør ïgnørïng ůsər ïnpůt āftər thə məssāgə ïs dəlïvərəd tø thə clïənt. Pøssïblə\nvālůəs ïnclůdə: 'āccəptïngⅡnpůt', 'ïgnørïngⅡnpůt', 'əxpəctïngⅡnpůt'🔥 ]]]",
-                            "title": "[[[ 🔥 ïnpůtHïnt🔥 ]]]"
-                        },
-                        "summary": {
-                            "description": "[[[ 🔥 Thə təxt tø dïsplāy ïf thə chānnəl cānnøt rəndər cārds.🔥 ]]]",
-                            "title": "[[[ 🔥 sůmmāry🔥 ]]]"
-                        },
-                        "suggestedActions": {
-                            "description": "[[[ 🔥 Thə sůggəstəd āctïøns før thə āctïvïty.🔥 ]]]",
-                            "title": "[[[ 🔥 sůggəstədΛctïøns🔥 ]]]",
-                            "properties": {
-                                "to": {
-                                    "description": "[[[ 🔥 Ⅱds øf thə rəcïpïənts thāt thə āctïøns shøůld bə shøwn tø.  Thəsə Ⅱds ārə rəlātïvə tø thə\nchānnəlⅡd ānd ā sůbsət øf āll rəcïpïənts øf thə āctïvïty🔥 ]]]",
-                                    "title": "[[[ 🔥 tø🔥 ]]]",
-                                    "items": {
-                                        "title": "[[[ 🔥 Ⅱd🔥 ]]]",
-                                        "description": "[[[ 🔥 Ⅱd øf rəcïpïənt.🔥 ]]]"
-                                    }
-                                },
-                                "actions": {
-                                    "description": "[[[ 🔥 Λctïøns thāt cān bə shøwn tø thə ůsər🔥 ]]]",
-                                    "title": "[[[ 🔥 āctïøns🔥 ]]]",
-                                    "items": {
-                                        "description": "[[[ 🔥 Λ clïckāblə āctïøn🔥 ]]]",
-                                        "title": "[[[ 🔥 CārdΛctïøn🔥 ]]]",
-                                        "properties": {
-                                            "type": {
-                                                "description": "[[[ 🔥 Thə typə øf āctïøn ïmpləməntəd by thïs bůttøn. Pøssïblə vālůəs ïnclůdə: 'øpən⩁rl', 'ïmBāck',\n'pøstBāck', 'plāyΛůdïø', 'plāyVïdəø', 'shøwⅡmāgə', 'døwnløādFïlə', 'sïgnïn', 'cāll',\n'pāymənt', 'məssāgəBāck'🔥 ]]]",
-                                                "title": "[[[ 🔥 typə🔥 ]]]"
-                                            },
-                                            "title": {
-                                                "description": "[[[ 🔥 Təxt dəscrïptïøn whïch āppəārs øn thə bůttøn🔥 ]]]",
-                                                "title": "[[[ 🔥 tïtlə🔥 ]]]"
-                                            },
-                                            "image": {
-                                                "description": "[[[ 🔥 Ⅱmāgə ⩁RL whïch wïll āppəār øn thə bůttøn, nəxt tø təxt lābəl🔥 ]]]",
-                                                "title": "[[[ 🔥 ïmāgə🔥 ]]]"
-                                            },
-                                            "text": {
-                                                "description": "[[[ 🔥 Təxt før thïs āctïøn🔥 ]]]",
-                                                "title": "[[[ 🔥 təxt🔥 ]]]"
-                                            },
-                                            "displayText": {
-                                                "description": "[[[ 🔥 (⨀ptïønāl) təxt tø dïsplāy ïn thə chāt fəəd ïf thə bůttøn ïs clïckəd🔥 ]]]",
-                                                "title": "[[[ 🔥 dïsplāyTəxt🔥 ]]]"
-                                            },
-                                            "value": {
-                                                "description": "[[[ 🔥 Sůppləməntāry pārāmətər før āctïøn. Cøntənt øf thïs prøpərty dəpənds øn thə ΛctïønTypə🔥 ]]]",
-                                                "title": "[[[ 🔥 vālůə🔥 ]]]"
-                                            },
-                                            "channelData": {
-                                                "description": "[[[ 🔥 Chānnəl-spəcïfïc dātā āssøcïātəd wïth thïs āctïøn🔥 ]]]",
-                                                "title": "[[[ 🔥 chānnəlDātā🔥 ]]]"
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "attachments": {
-                            "description": "[[[ 🔥 Λttāchmənts🔥 ]]]",
-                            "title": "[[[ 🔥 āttāchmənts🔥 ]]]",
-                            "items": {
-                                "description": "[[[ 🔥 Λn āttāchmənt wïthïn ān āctïvïty🔥 ]]]",
-                                "title": "[[[ 🔥 Λttāchmənt🔥 ]]]",
-                                "properties": {
-                                    "contentType": {
-                                        "description": "[[[ 🔥 mïmətypə/Cøntənttypə før thə fïlə🔥 ]]]",
-                                        "title": "[[[ 🔥 cøntəntTypə🔥 ]]]"
-                                    },
-                                    "contentUrl": {
-                                        "description": "[[[ 🔥 Cøntənt ⩁rl🔥 ]]]",
-                                        "title": "[[[ 🔥 cøntənt⩁rl🔥 ]]]"
-                                    },
-                                    "content": {
-                                        "description": "[[[ 🔥 ∃mbəddəd cøntənt🔥 ]]]",
-                                        "title": "[[[ 🔥 cøntənt🔥 ]]]"
-                                    },
-                                    "name": {
-                                        "description": "[[[ 🔥 (⨀PTⅡ⨀NΛL) Thə nāmə øf thə āttāchmənt🔥 ]]]",
-                                        "title": "[[[ 🔥 nāmə🔥 ]]]"
-                                    },
-                                    "thumbnailUrl": {
-                                        "description": "[[[ 🔥 (⨀PTⅡ⨀NΛL) Thůmbnāïl āssøcïātəd wïth āttāchmənt🔥 ]]]",
-                                        "title": "[[[ 🔥 thůmbnāïl⩁rl🔥 ]]]"
-                                    }
-                                }
-                            }
-                        },
-                        "entities": {
-                            "description": "[[[ 🔥 Rəprəsənts thə əntïtïəs thāt wərə məntïønəd ïn thə məssāgə.🔥 ]]]",
-                            "title": "[[[ 🔥 əntïtïəs🔥 ]]]",
-                            "items": {
-                                "description": "[[[ 🔥 Mətādātā øbjəct pərtāïnïng tø ān āctïvïty🔥 ]]]",
-                                "title": "[[[ 🔥 ∃ntïty🔥 ]]]",
-                                "properties": {
-                                    "type": {
-                                        "description": "[[[ 🔥 Typə øf thïs əntïty (RFC 3987 ⅡRⅡ)🔥 ]]]",
-                                        "title": "[[[ 🔥 typə🔥 ]]]"
-                                    }
-                                }
-                            }
-                        },
-                        "channelData": {
-                            "description": "[[[ 🔥 Cøntāïns chānnəl-spəcïfïc cøntənt.🔥 ]]]",
-                            "title": "[[[ 🔥 chānnəlDātā🔥 ]]]"
-                        },
-                        "action": {
-                            "description": "[[[ 🔥 Ⅱndïcātəs whəthər thə rəcïpïənt øf ā cøntāctRəlātïøn⩁pdātə wās āddəd ør rəmøvəd frøm thə\nsəndər's cøntāct lïst.🔥 ]]]",
-                            "title": "[[[ 🔥 āctïøn🔥 ]]]"
-                        },
-                        "replyToId": {
-                            "description": "[[[ 🔥 Cøntāïns thə ⅡD øf thə məssāgə tø whïch thïs məssāgə ïs ā rəply.🔥 ]]]",
-                            "title": "[[[ 🔥 rəplyTøⅡd🔥 ]]]"
-                        },
-                        "label": {
-                            "description": "[[[ 🔥 Λ dəscrïptïvə lābəl før thə āctïvïty.🔥 ]]]",
-                            "title": "[[[ 🔥 lābəl🔥 ]]]"
-                        },
-                        "valueType": {
-                            "description": "[[[ 🔥 Thə typə øf thə āctïvïty's vālůə øbjəct.🔥 ]]]",
-                            "title": "[[[ 🔥 vālůəTypə🔥 ]]]"
-                        },
-                        "value": {
-                            "description": "[[[ 🔥 Λ vālůə thāt ïs āssøcïātəd wïth thə āctïvïty.🔥 ]]]",
-                            "title": "[[[ 🔥 vālůə🔥 ]]]"
-                        },
-                        "name": {
-                            "description": "[[[ 🔥 Thə nāmə øf thə øpərātïøn āssøcïātəd wïth ān ïnvøkə ør əvənt āctïvïty.🔥 ]]]",
-                            "title": "[[[ 🔥 nāmə🔥 ]]]"
-                        },
-                        "relatesTo": {
-                            "description": "[[[ 🔥 Λ rəfərəncə tø ānøthər cønvərsātïøn ør āctïvïty.🔥 ]]]",
-                            "title": "[[[ 🔥 rəlātəsTø🔥 ]]]",
-                            "properties": {
-                                "activityId": {
-                                    "description": "[[[ 🔥 (⨀ptïønāl) ⅡD øf thə āctïvïty tø rəfər tø🔥 ]]]",
-                                    "title": "[[[ 🔥 āctïvïtyⅡd🔥 ]]]"
-                                },
-                                "user": {
-                                    "description": "[[[ 🔥 (⨀ptïønāl) ⩁sər pārtïcïpātïng ïn thïs cønvərsātïøn🔥 ]]]",
-                                    "title": "[[[ 🔥 ůsər🔥 ]]]"
-                                },
-                                "bot": {
-                                    "description": "[[[ 🔥 Bøt pārtïcïpātïng ïn thïs cønvərsātïøn🔥 ]]]",
-                                    "title": "[[[ 🔥 bøt🔥 ]]]"
-                                },
-                                "conversation": {
-                                    "description": "[[[ 🔥 Cønvərsātïøn rəfərəncə🔥 ]]]",
-                                    "title": "[[[ 🔥 cønvərsātïøn🔥 ]]]"
-                                },
-                                "channelId": {
-                                    "description": "[[[ 🔥 Chānnəl ⅡD🔥 ]]]",
-                                    "title": "[[[ 🔥 chānnəlⅡd🔥 ]]]"
-                                },
-                                "serviceUrl": {
-                                    "description": "[[[ 🔥 Sərvïcə əndpøïnt whərə øpərātïøns cøncərnïng thə rəfərəncəd cønvərsātïøn māy bə pərførməd🔥 ]]]",
-                                    "title": "[[[ 🔥 sərvïcə⩁rl🔥 ]]]"
-                                }
-                            }
-                        },
-                        "code": {
-                            "description": "[[[ 🔥 Thə ā cødə før ənd⨀fCønvərsātïøn āctïvïtïəs thāt ïndïcātəs why thə cønvərsātïøn əndəd.\nPøssïblə vālůəs ïnclůdə: 'ůnknøwn', 'cømplətədSůccəssfůlly', 'ůsərCāncəlləd', 'bøtTïməd⨀ůt',\n'bøtⅡssůədⅡnvālïdMəssāgə', 'chānnəlFāïləd'🔥 ]]]",
-                            "title": "[[[ 🔥 cødə🔥 ]]]"
-                        },
-                        "expiration": {
-                            "description": "[[[ 🔥 Thə tïmə āt whïch thə āctïvïty shøůld bə cønsïdərəd tø bə \"əxpïrəd\" ānd shøůld nøt bə\nprəsəntəd tø thə rəcïpïənt.🔥 ]]]",
-                            "title": "[[[ 🔥 əxpïrātïøn🔥 ]]]"
-                        },
-                        "importance": {
-                            "description": "[[[ 🔥 Thə ïmpørtāncə øf thə āctïvïty. Pøssïblə vālůəs ïnclůdə: 'løw', 'nørmāl', 'hïgh'🔥 ]]]",
-                            "title": "[[[ 🔥 ïmpørtāncə🔥 ]]]"
-                        },
-                        "deliveryMode": {
-                            "description": "[[[ 🔥 Λ dəlïvəry hïnt tø sïgnāl tø thə rəcïpïənt āltərnātə dəlïvəry pāths før thə āctïvïty.\nThə dəfāůlt dəlïvəry mødə ïs \"dəfāůlt\". Pøssïblə vālůəs ïnclůdə: 'nørmāl', 'nøtïfïcātïøn'🔥 ]]]",
-                            "title": "[[[ 🔥 dəlïvəryMødə🔥 ]]]"
-                        },
-                        "listenFor": {
-                            "description": "[[[ 🔥 Lïst øf phrāsəs ānd rəfərəncəs thāt spəəch ānd lāngůāgə prïmïng systəms shøůld lïstən før🔥 ]]]",
-                            "title": "[[[ 🔥 lïstənFør🔥 ]]]",
-                            "items": {
-                                "title": "[[[ 🔥 Phrāsə🔥 ]]]",
-                                "description": "[[[ 🔥 Phrāsə tø lïstən før.🔥 ]]]"
-                            }
-                        },
-                        "textHighlights": {
-                            "description": "[[[ 🔥 Thə cølləctïøn øf təxt frāgmənts tø hïghlïght whən thə āctïvïty cøntāïns ā RəplyTøⅡd vālůə.🔥 ]]]",
-                            "title": "[[[ 🔥 təxtHïghlïghts🔥 ]]]",
-                            "items": {
-                                "description": "[[[ 🔥 Rəfərs tø ā sůbstrïng øf cøntənt wïthïn ānøthər fïəld🔥 ]]]",
-                                "title": "[[[ 🔥 TəxtHïghlïght🔥 ]]]",
-                                "properties": {
-                                    "text": {
-                                        "description": "[[[ 🔥 Dəfïnəs thə snïppət øf təxt tø hïghlïght🔥 ]]]",
-                                        "title": "[[[ 🔥 təxt🔥 ]]]"
-                                    },
-                                    "occurrence": {
-                                        "description": "[[[ 🔥 ⨀ccůrrəncə øf thə təxt fïəld wïthïn thə rəfərəncəd təxt, ïf můltïplə əxïst.🔥 ]]]",
-                                        "title": "[[[ 🔥 øccůrrəncə🔥 ]]]"
-                                    }
-                                }
-                            }
-                        },
-                        "semanticAction": {
-                            "description": "[[[ 🔥 Λn øptïønāl prøgrāmmātïc āctïøn āccømpānyïng thïs rəqůəst🔥 ]]]",
-                            "title": "[[[ 🔥 səmāntïcΛctïøn🔥 ]]]",
-                            "properties": {
-                                "id": {
-                                    "description": "[[[ 🔥 ⅡD øf thïs āctïøn🔥 ]]]",
-                                    "title": "[[[ 🔥 ïd🔥 ]]]"
-                                },
-                                "entities": {
-                                    "description": "[[[ 🔥 ∃ntïtïəs āssøcïātəd wïth thïs āctïøn🔥 ]]]",
-                                    "title": "[[[ 🔥 əntïtïəs🔥 ]]]"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            "description": "[[[ 🔥 Cømpønənts whïch ārə ΛctïvïtyTəmplātə, whïch ïs strïng təmplātə, ān āctïvïty, ør ā ïmpləməntātïøn øf ΛctïvïtyTəmplātə🔥 ]]]"
         },
         "Microsoft.IDialog": {
             "title": "[[[ 🔥 Mïcrøsøft Dïāløgs🔥 ]]]",
@@ -2861,6 +2492,22 @@
                 }
             },
             "properties": {
+                "condition": {
+                    "title": "[[[ 🔥 Cøndïtïøn🔥 ]]]",
+                    "description": "[[[ 🔥 Cøndïtïøn (əxprəssïøn).🔥 ]]]"
+                },
+                "actions": {
+                    "title": "[[[ 🔥 Λctïøns🔥 ]]]",
+                    "description": "[[[ 🔥 Səqůəncə øf āctïøns tø əxəcůtə.🔥 ]]]"
+                },
+                "priority": {
+                    "title": "[[[ 🔥 Prïørïty🔥 ]]]",
+                    "description": "[[[ 🔥 Prïørïty før trïggər wïth 0 bəïng thə hïghəst ānd < 0 ïgnørəd.🔥 ]]]"
+                },
+                "runOnce": {
+                    "title": "[[[ 🔥 Růn ⨀ncə🔥 ]]]",
+                    "description": "[[[ 🔥 Trůə ïf růlə shøůld růn øncə pər ůnïqůə cøndïtïøns🔥 ]]]"
+                },
                 "$kind": {
                     "title": "[[[ 🔥 Kïnd øf dïāløg øbjəct🔥 ]]]",
                     "description": "[[[ 🔥 Dəfïnəs thə vālïd prøpərtïəs før thə cømpønənt yøů ārə cønfïgůrïng (frøm ā dïāløg .schəmā fïlə)🔥 ]]]"
@@ -3018,6 +2665,42 @@
         "Microsoft.OnCondition": {
             "title": "[[[ 🔥 ⨀n cøndïtïøn🔥 ]]]",
             "description": "[[[ 🔥 Λctïøns tø pərførm whən spəcïfïəd cøndïtïøn ïs trůə.🔥 ]]]",
+            "patternProperties": {
+                "^\\$": {
+                    "title": "[[[ 🔥 Tøølïng prøpərty🔥 ]]]",
+                    "description": "[[[ 🔥 ⨀pən əndəd prøpərty før tøølïng.🔥 ]]]"
+                }
+            },
+            "properties": {
+                "condition": {
+                    "title": "[[[ 🔥 Cøndïtïøn🔥 ]]]",
+                    "description": "[[[ 🔥 Cøndïtïøn (əxprəssïøn).🔥 ]]]"
+                },
+                "actions": {
+                    "title": "[[[ 🔥 Λctïøns🔥 ]]]",
+                    "description": "[[[ 🔥 Səqůəncə øf āctïøns tø əxəcůtə.🔥 ]]]"
+                },
+                "priority": {
+                    "title": "[[[ 🔥 Prïørïty🔥 ]]]",
+                    "description": "[[[ 🔥 Prïørïty før trïggər wïth 0 bəïng thə hïghəst ānd < 0 ïgnørəd.🔥 ]]]"
+                },
+                "runOnce": {
+                    "title": "[[[ 🔥 Růn ⨀ncə🔥 ]]]",
+                    "description": "[[[ 🔥 Trůə ïf růlə shøůld růn øncə pər ůnïqůə cøndïtïøns🔥 ]]]"
+                },
+                "$kind": {
+                    "title": "[[[ 🔥 Kïnd øf dïāløg øbjəct🔥 ]]]",
+                    "description": "[[[ 🔥 Dəfïnəs thə vālïd prøpərtïəs før thə cømpønənt yøů ārə cønfïgůrïng (frøm ā dïāløg .schəmā fïlə)🔥 ]]]"
+                },
+                "$designer": {
+                    "title": "[[[ 🔥 Dəsïgnər ïnførmātïøn🔥 ]]]",
+                    "description": "[[[ 🔥 ∃xtrā ïnførmātïøn før thə Bøt Frāməwørk Cømpøsər.🔥 ]]]"
+                }
+            }
+        },
+        "Microsoft.OnContinueConversation": {
+            "title": "[[[ 🔥 ⨀n Cøntïnůə Cønvərsātïøn🔥 ]]]",
+            "description": "[[[ 🔥 Λctïøns tø pərførm whən ā cønvərsātïøn ïs stārtəd ůp āgāïn frøm ā CøntïnůəCønvərsātïønLātər āctïøn.🔥 ]]]",
             "patternProperties": {
                 "^\\$": {
                     "title": "[[[ 🔥 Tøølïng prøpərty🔥 ]]]",
@@ -3645,7 +3328,7 @@
         },
         "Microsoft.OnUnknownIntent": {
             "title": "[[[ 🔥 ⨀n ůnknøwn ïntənt🔥 ]]]",
-            "description": "[[[ 🔥 Λctïøn tø pərførm whən ůsər ïnpůt ïs ůnrəcøgnïzəd ānd ïf nønə øf thə 'øn ïntənt rəcøgnïtïøn' trïggərs mātch rəcøgnïzəd ïntənt.🔥 ]]]",
+            "description": "[[[ 🔥 Λctïøn tø pərførm whən ůsər ïnpůt ïs ůnrəcøgnïzəd ør ïf nønə øf thə 'øn ïntənt rəcøgnïtïøn' trïggərs mātch rəcøgnïzəd ïntənt.🔥 ]]]",
             "patternProperties": {
                 "^\\$": {
                     "title": "[[[ 🔥 Tøølïng prøpərty🔥 ]]]",
@@ -4313,8 +3996,8 @@
                     "description": "[[[ 🔥 ⨀ptïønāl ïd før thə dïāløg🔥 ]]]"
                 },
                 "userId": {
-                    "title": "[[[ 🔥 ΛctïvïtyⅡd🔥 ]]]",
-                    "description": "[[[ 🔥 əxprəssïøn tø ān āctïvïtyⅡd tø gət thə məmbərs. Ⅱf nønə ïs dəfïnəd thən thə cůrrənt āctïvïty ïd wïll bə ůsəd.🔥 ]]]"
+                    "title": "[[[ 🔥 ⩁sərⅡd🔥 ]]]",
+                    "description": "[[[ 🔥 ∃xprəssïøn tø ān ůsər tø sïgnøůt. Dəfāůlt ïs ůsər.ïd.🔥 ]]]"
                 },
                 "connectionName": {
                     "title": "[[[ 🔥 Cønnəctïøn Nāmə🔥 ]]]",
@@ -4401,6 +4084,42 @@
                 "default": {
                     "title": "[[[ 🔥 Dəfāůlt🔥 ]]]",
                     "description": "[[[ 🔥 Λctïøns tø əxəcůtə ïf nønə øf thə cāsəs məət thə cøndïtïøn.🔥 ]]]"
+                },
+                "$kind": {
+                    "title": "[[[ 🔥 Kïnd øf dïāløg øbjəct🔥 ]]]",
+                    "description": "[[[ 🔥 Dəfïnəs thə vālïd prøpərtïəs før thə cømpønənt yøů ārə cønfïgůrïng (frøm ā dïāløg .schəmā fïlə)🔥 ]]]"
+                },
+                "$designer": {
+                    "title": "[[[ 🔥 Dəsïgnər ïnførmātïøn🔥 ]]]",
+                    "description": "[[[ 🔥 ∃xtrā ïnførmātïøn før thə Bøt Frāməwørk Cømpøsər.🔥 ]]]"
+                }
+            }
+        },
+        "Microsoft.TelemetryTrackEvent": {
+            "title": "[[[ 🔥 Tələmətry - Trāck ∃vənt🔥 ]]]",
+            "description": "[[[ 🔥 Trāck ā cůstøm əvənt ůsïng thə rəgïstərəd Tələmətry Clïənt.🔥 ]]]",
+            "patternProperties": {
+                "^\\$": {
+                    "title": "[[[ 🔥 Tøølïng prøpərty🔥 ]]]",
+                    "description": "[[[ 🔥 ⨀pən əndəd prøpərty før tøølïng.🔥 ]]]"
+                }
+            },
+            "properties": {
+                "id": {
+                    "title": "[[[ 🔥 Ⅱd🔥 ]]]",
+                    "description": "[[[ 🔥 ⨀ptïønāl ïd før thə dïāløg🔥 ]]]"
+                },
+                "disabled": {
+                    "title": "[[[ 🔥 Dïsābləd🔥 ]]]",
+                    "description": "[[[ 🔥 ⨀ptïønāl cøndïtïøn whïch ïf trůə wïll dïsāblə thïs āctïøn.🔥 ]]]"
+                },
+                "eventName": {
+                    "title": "[[[ 🔥 ∃vənt Nāmə🔥 ]]]",
+                    "description": "[[[ 🔥 Thə nāmə øf thə əvənt tø trāck.🔥 ]]]"
+                },
+                "properties": {
+                    "title": "[[[ 🔥 Prøpərtïəs🔥 ]]]",
+                    "description": "[[[ 🔥 ⨀nə ør mørə prøpərtïəs tø āttāch tø thə əvənt bəïng trāckəd.🔥 ]]]"
                 },
                 "$kind": {
                     "title": "[[[ 🔥 Kïnd øf dïāløg øbjəct🔥 ]]]",
@@ -4805,6 +4524,719 @@
                     "description": "[[[ 🔥 Nůmbər cønstānt.🔥 ]]]"
                 }
             }
+        },
+        "schema": {
+            "title": "[[[ 🔥 Cørə schəmā mətā-schəmā🔥 ]]]"
+        },
+        "botframework.json": {
+            "definitions": {
+                "ChannelAccount": {
+                    "description": "[[[ 🔥 Chānnəl āccøůnt ïnførmātïøn nəədəd tø røůtə ā məssāgə🔥 ]]]",
+                    "title": "[[[ 🔥 ChānnəlΛccøůnt🔥 ]]]",
+                    "properties": {
+                        "id": {
+                            "description": "[[[ 🔥 Chānnəl ïd før thə ůsər ør bøt øn thïs chānnəl (∃xāmplə: jøə@smïth.cøm, ør @jøəsmïth ør\n123456)🔥 ]]]",
+                            "title": "[[[ 🔥 ïd🔥 ]]]"
+                        },
+                        "name": {
+                            "description": "[[[ 🔥 Dïsplāy frïəndly nāmə🔥 ]]]",
+                            "title": "[[[ 🔥 nāmə🔥 ]]]"
+                        },
+                        "aadObjectId": {
+                            "description": "[[[ 🔥 Thïs āccøůnt's øbjəct ⅡD wïthïn Λzůrə Λctïvə Dïrəctøry (ΛΛD)🔥 ]]]",
+                            "title": "[[[ 🔥 āād⨀bjəctⅡd🔥 ]]]"
+                        },
+                        "role": {
+                            "description": "[[[ 🔥 Rølə øf thə əntïty bəhïnd thə āccøůnt (∃xāmplə: ⩁sər, Bøt, ətc.). Pøssïblə vālůəs ïnclůdə:\n'ůsər', 'bøt'🔥 ]]]",
+                            "title": "[[[ 🔥 rølə🔥 ]]]"
+                        }
+                    }
+                },
+                "ConversationAccount": {
+                    "description": "[[[ 🔥 Chānnəl āccøůnt ïnførmātïøn før ā cønvərsātïøn🔥 ]]]",
+                    "title": "[[[ 🔥 CønvərsātïønΛccøůnt🔥 ]]]",
+                    "properties": {
+                        "isGroup": {
+                            "description": "[[[ 🔥 Ⅱndïcātəs whəthər thə cønvərsātïøn cøntāïns mørə thān twø pārtïcïpānts āt thə tïmə thə\nāctïvïty wās gənərātəd🔥 ]]]",
+                            "title": "[[[ 🔥 ïsGrøůp🔥 ]]]"
+                        },
+                        "conversationType": {
+                            "description": "[[[ 🔥 Ⅱndïcātəs thə typə øf thə cønvərsātïøn ïn chānnəls thāt dïstïngůïsh bətwəən cønvərsātïøn typəs🔥 ]]]",
+                            "title": "[[[ 🔥 cønvərsātïønTypə🔥 ]]]"
+                        },
+                        "id": {
+                            "description": "[[[ 🔥 Chānnəl ïd før thə ůsər ør bøt øn thïs chānnəl (∃xāmplə: jøə@smïth.cøm, ør @jøəsmïth ør\n123456)🔥 ]]]",
+                            "title": "[[[ 🔥 ïd🔥 ]]]"
+                        },
+                        "name": {
+                            "description": "[[[ 🔥 Dïsplāy frïəndly nāmə🔥 ]]]",
+                            "title": "[[[ 🔥 nāmə🔥 ]]]"
+                        },
+                        "aadObjectId": {
+                            "description": "[[[ 🔥 Thïs āccøůnt's øbjəct ⅡD wïthïn Λzůrə Λctïvə Dïrəctøry (ΛΛD)🔥 ]]]",
+                            "title": "[[[ 🔥 āād⨀bjəctⅡd🔥 ]]]"
+                        },
+                        "role": {
+                            "description": "[[[ 🔥 Rølə øf thə əntïty bəhïnd thə āccøůnt (∃xāmplə: ⩁sər, Bøt, ətc.). Pøssïblə vālůəs ïnclůdə:\n'ůsər', 'bøt'🔥 ]]]",
+                            "title": "[[[ 🔥 rølə🔥 ]]]"
+                        }
+                    }
+                },
+                "MessageReaction": {
+                    "description": "[[[ 🔥 Məssāgə rəāctïøn øbjəct🔥 ]]]",
+                    "title": "[[[ 🔥 MəssāgəRəāctïøn🔥 ]]]",
+                    "properties": {
+                        "type": {
+                            "description": "[[[ 🔥 Məssāgə rəāctïøn typə. Pøssïblə vālůəs ïnclůdə: 'lïkə', 'plůs⨀nə'🔥 ]]]",
+                            "title": "[[[ 🔥 typə🔥 ]]]"
+                        }
+                    }
+                },
+                "CardAction": {
+                    "description": "[[[ 🔥 Λ clïckāblə āctïøn🔥 ]]]",
+                    "title": "[[[ 🔥 CārdΛctïøn🔥 ]]]",
+                    "properties": {
+                        "type": {
+                            "description": "[[[ 🔥 Thə typə øf āctïøn ïmpləməntəd by thïs bůttøn. Pøssïblə vālůəs ïnclůdə: 'øpən⩁rl', 'ïmBāck',\n'pøstBāck', 'plāyΛůdïø', 'plāyVïdəø', 'shøwⅡmāgə', 'døwnløādFïlə', 'sïgnïn', 'cāll',\n'pāymənt', 'məssāgəBāck'🔥 ]]]",
+                            "title": "[[[ 🔥 typə🔥 ]]]"
+                        },
+                        "title": {
+                            "description": "[[[ 🔥 Təxt dəscrïptïøn whïch āppəārs øn thə bůttøn🔥 ]]]",
+                            "title": "[[[ 🔥 tïtlə🔥 ]]]"
+                        },
+                        "image": {
+                            "description": "[[[ 🔥 Ⅱmāgə ⩁RL whïch wïll āppəār øn thə bůttøn, nəxt tø təxt lābəl🔥 ]]]",
+                            "title": "[[[ 🔥 ïmāgə🔥 ]]]"
+                        },
+                        "text": {
+                            "description": "[[[ 🔥 Təxt før thïs āctïøn🔥 ]]]",
+                            "title": "[[[ 🔥 təxt🔥 ]]]"
+                        },
+                        "displayText": {
+                            "description": "[[[ 🔥 (⨀ptïønāl) təxt tø dïsplāy ïn thə chāt fəəd ïf thə bůttøn ïs clïckəd🔥 ]]]",
+                            "title": "[[[ 🔥 dïsplāyTəxt🔥 ]]]"
+                        },
+                        "value": {
+                            "description": "[[[ 🔥 Sůppləməntāry pārāmətər før āctïøn. Cøntənt øf thïs prøpərty dəpənds øn thə ΛctïønTypə🔥 ]]]",
+                            "title": "[[[ 🔥 vālůə🔥 ]]]"
+                        },
+                        "channelData": {
+                            "description": "[[[ 🔥 Chānnəl-spəcïfïc dātā āssøcïātəd wïth thïs āctïøn🔥 ]]]",
+                            "title": "[[[ 🔥 chānnəlDātā🔥 ]]]"
+                        }
+                    }
+                },
+                "SuggestedActions": {
+                    "description": "[[[ 🔥 SůggəstədΛctïøns thāt cān bə pərførməd🔥 ]]]",
+                    "title": "[[[ 🔥 SůggəstədΛctïøns🔥 ]]]",
+                    "properties": {
+                        "to": {
+                            "description": "[[[ 🔥 Ⅱds øf thə rəcïpïənts thāt thə āctïøns shøůld bə shøwn tø.  Thəsə Ⅱds ārə rəlātïvə tø thə\nchānnəlⅡd ānd ā sůbsət øf āll rəcïpïənts øf thə āctïvïty🔥 ]]]",
+                            "title": "[[[ 🔥 tø🔥 ]]]",
+                            "items": {
+                                "title": "[[[ 🔥 Ⅱd🔥 ]]]",
+                                "description": "[[[ 🔥 Ⅱd øf rəcïpïənt.🔥 ]]]"
+                            }
+                        },
+                        "actions": {
+                            "description": "[[[ 🔥 Λctïøns thāt cān bə shøwn tø thə ůsər🔥 ]]]",
+                            "title": "[[[ 🔥 āctïøns🔥 ]]]"
+                        }
+                    }
+                },
+                "Attachment": {
+                    "description": "[[[ 🔥 Λn āttāchmənt wïthïn ān āctïvïty🔥 ]]]",
+                    "title": "[[[ 🔥 Λttāchmənt🔥 ]]]",
+                    "properties": {
+                        "contentType": {
+                            "description": "[[[ 🔥 mïmətypə/Cøntənttypə før thə fïlə🔥 ]]]",
+                            "title": "[[[ 🔥 cøntəntTypə🔥 ]]]"
+                        },
+                        "contentUrl": {
+                            "description": "[[[ 🔥 Cøntənt ⩁rl🔥 ]]]",
+                            "title": "[[[ 🔥 cøntənt⩁rl🔥 ]]]"
+                        },
+                        "content": {
+                            "description": "[[[ 🔥 ∃mbəddəd cøntənt🔥 ]]]",
+                            "title": "[[[ 🔥 cøntənt🔥 ]]]"
+                        },
+                        "name": {
+                            "description": "[[[ 🔥 (⨀PTⅡ⨀NΛL) Thə nāmə øf thə āttāchmənt🔥 ]]]",
+                            "title": "[[[ 🔥 nāmə🔥 ]]]"
+                        },
+                        "thumbnailUrl": {
+                            "description": "[[[ 🔥 (⨀PTⅡ⨀NΛL) Thůmbnāïl āssøcïātəd wïth āttāchmənt🔥 ]]]",
+                            "title": "[[[ 🔥 thůmbnāïl⩁rl🔥 ]]]"
+                        }
+                    }
+                },
+                "Entity": {
+                    "description": "[[[ 🔥 Mətādātā øbjəct pərtāïnïng tø ān āctïvïty🔥 ]]]",
+                    "title": "[[[ 🔥 ∃ntïty🔥 ]]]",
+                    "properties": {
+                        "type": {
+                            "description": "[[[ 🔥 Typə øf thïs əntïty (RFC 3987 ⅡRⅡ)🔥 ]]]",
+                            "title": "[[[ 🔥 typə🔥 ]]]"
+                        }
+                    }
+                },
+                "ConversationReference": {
+                    "description": "[[[ 🔥 Λn øbjəct rəlātïng tø ā pārtïcůlār pøïnt ïn ā cønvərsātïøn🔥 ]]]",
+                    "title": "[[[ 🔥 CønvərsātïønRəfərəncə🔥 ]]]",
+                    "properties": {
+                        "activityId": {
+                            "description": "[[[ 🔥 (⨀ptïønāl) ⅡD øf thə āctïvïty tø rəfər tø🔥 ]]]",
+                            "title": "[[[ 🔥 āctïvïtyⅡd🔥 ]]]"
+                        },
+                        "user": {
+                            "description": "[[[ 🔥 (⨀ptïønāl) ⩁sər pārtïcïpātïng ïn thïs cønvərsātïøn🔥 ]]]",
+                            "title": "[[[ 🔥 ůsər🔥 ]]]"
+                        },
+                        "bot": {
+                            "description": "[[[ 🔥 Bøt pārtïcïpātïng ïn thïs cønvərsātïøn🔥 ]]]",
+                            "title": "[[[ 🔥 bøt🔥 ]]]"
+                        },
+                        "conversation": {
+                            "description": "[[[ 🔥 Cønvərsātïøn rəfərəncə🔥 ]]]",
+                            "title": "[[[ 🔥 cønvərsātïøn🔥 ]]]"
+                        },
+                        "channelId": {
+                            "description": "[[[ 🔥 Chānnəl ⅡD🔥 ]]]",
+                            "title": "[[[ 🔥 chānnəlⅡd🔥 ]]]"
+                        },
+                        "serviceUrl": {
+                            "description": "[[[ 🔥 Sərvïcə əndpøïnt whərə øpərātïøns cøncərnïng thə rəfərəncəd cønvərsātïøn māy bə pərførməd🔥 ]]]",
+                            "title": "[[[ 🔥 sərvïcə⩁rl🔥 ]]]"
+                        }
+                    }
+                },
+                "TextHighlight": {
+                    "description": "[[[ 🔥 Rəfərs tø ā sůbstrïng øf cøntənt wïthïn ānøthər fïəld🔥 ]]]",
+                    "title": "[[[ 🔥 TəxtHïghlïght🔥 ]]]",
+                    "properties": {
+                        "text": {
+                            "description": "[[[ 🔥 Dəfïnəs thə snïppət øf təxt tø hïghlïght🔥 ]]]",
+                            "title": "[[[ 🔥 təxt🔥 ]]]"
+                        },
+                        "occurrence": {
+                            "description": "[[[ 🔥 ⨀ccůrrəncə øf thə təxt fïəld wïthïn thə rəfərəncəd təxt, ïf můltïplə əxïst.🔥 ]]]",
+                            "title": "[[[ 🔥 øccůrrəncə🔥 ]]]"
+                        }
+                    }
+                },
+                "SemanticAction": {
+                    "description": "[[[ 🔥 Rəprəsənts ā rəfərəncə tø ā prøgrāmmātïc āctïøn🔥 ]]]",
+                    "title": "[[[ 🔥 SəmāntïcΛctïøn🔥 ]]]",
+                    "properties": {
+                        "id": {
+                            "description": "[[[ 🔥 ⅡD øf thïs āctïøn🔥 ]]]",
+                            "title": "[[[ 🔥 ïd🔥 ]]]"
+                        },
+                        "entities": {
+                            "description": "[[[ 🔥 ∃ntïtïəs āssøcïātəd wïth thïs āctïøn🔥 ]]]",
+                            "title": "[[[ 🔥 əntïtïəs🔥 ]]]"
+                        }
+                    }
+                },
+                "Activity": {
+                    "description": "[[[ 🔥 Λn Λctïvïty ïs thə bāsïc cømmůnïcātïøn typə før thə Bøt Frāməwørk 3.0 prøtøcøl.🔥 ]]]",
+                    "title": "[[[ 🔥 Λctïvïty🔥 ]]]",
+                    "properties": {
+                        "type": {
+                            "description": "[[[ 🔥 Cøntāïns thə āctïvïty typə. Pøssïblə vālůəs ïnclůdə: 'məssāgə', 'cøntāctRəlātïøn⩁pdātə',\n'cønvərsātïøn⩁pdātə', 'typïng', 'ənd⨀fCønvərsātïøn', 'əvənt', 'ïnvøkə', 'dələtə⩁sərDātā',\n'məssāgə⩁pdātə', 'məssāgəDələtə', 'ïnstāllātïøn⩁pdātə', 'məssāgəRəāctïøn', 'sůggəstïøn',\n'trācə', 'hāndøff'🔥 ]]]",
+                            "title": "[[[ 🔥 typə🔥 ]]]"
+                        },
+                        "id": {
+                            "description": "[[[ 🔥 Cøntāïns ān ⅡD thāt ůnïqůəly ïdəntïfïəs thə āctïvïty øn thə chānnəl.🔥 ]]]",
+                            "title": "[[[ 🔥 ïd🔥 ]]]"
+                        },
+                        "timestamp": {
+                            "description": "[[[ 🔥 Cøntāïns thə dātə ānd tïmə thāt thə məssāgə wās sənt, ïn ⩁TC, əxprəssəd ïn ⅡS⨀-8601 førmāt.🔥 ]]]",
+                            "title": "[[[ 🔥 tïməstāmp🔥 ]]]"
+                        },
+                        "localTimestamp": {
+                            "description": "[[[ 🔥 Cøntāïns thə dātə ānd tïmə thāt thə məssāgə wās sənt, ïn løcāl tïmə, əxprəssəd ïn ⅡS⨀-8601\nførmāt.\nFør əxāmplə, 2016-09-23T13:07:49.4714686-07:00.🔥 ]]]",
+                            "title": "[[[ 🔥 løcālTïməstāmp🔥 ]]]"
+                        },
+                        "localTimezone": {
+                            "description": "[[[ 🔥 Cøntāïns thə nāmə øf thə tïməzønə ïn whïch thə məssāgə, ïn løcāl tïmə, əxprəssəd ïn ⅡΛNΛ Tïmə\nZønə dātābāsə førmāt.\nFør əxāmplə, Λmərïcā/Løs_Λngələs.🔥 ]]]",
+                            "title": "[[[ 🔥 løcālTïməzønə🔥 ]]]"
+                        },
+                        "serviceUrl": {
+                            "description": "[[[ 🔥 Cøntāïns thə ⩁RL thāt spəcïfïəs thə chānnəl's sərvïcə əndpøïnt. Sət by thə chānnəl.🔥 ]]]",
+                            "title": "[[[ 🔥 sərvïcə⩁rl🔥 ]]]"
+                        },
+                        "channelId": {
+                            "description": "[[[ 🔥 Cøntāïns ān ⅡD thāt ůnïqůəly ïdəntïfïəs thə chānnəl. Sət by thə chānnəl.🔥 ]]]",
+                            "title": "[[[ 🔥 chānnəlⅡd🔥 ]]]"
+                        },
+                        "from": {
+                            "description": "[[[ 🔥 Ⅱdəntïfïəs thə səndər øf thə məssāgə.🔥 ]]]",
+                            "title": "[[[ 🔥 frøm🔥 ]]]"
+                        },
+                        "conversation": {
+                            "description": "[[[ 🔥 Ⅱdəntïfïəs thə cønvərsātïøn tø whïch thə āctïvïty bəløngs.🔥 ]]]",
+                            "title": "[[[ 🔥 cønvərsātïøn🔥 ]]]"
+                        },
+                        "recipient": {
+                            "description": "[[[ 🔥 Ⅱdəntïfïəs thə rəcïpïənt øf thə məssāgə.🔥 ]]]",
+                            "title": "[[[ 🔥 rəcïpïənt🔥 ]]]"
+                        },
+                        "textFormat": {
+                            "description": "[[[ 🔥 Førmāt øf təxt fïəlds Dəfāůlt:mārkdøwn. Pøssïblə vālůəs ïnclůdə: 'mārkdøwn', 'plāïn', 'xml'🔥 ]]]",
+                            "title": "[[[ 🔥 təxtFørmāt🔥 ]]]"
+                        },
+                        "attachmentLayout": {
+                            "description": "[[[ 🔥 Thə lāyøůt hïnt før můltïplə āttāchmənts. Dəfāůlt: lïst. Pøssïblə vālůəs ïnclůdə: 'lïst',\n'cārøůsəl'🔥 ]]]",
+                            "title": "[[[ 🔥 āttāchməntLāyøůt🔥 ]]]"
+                        },
+                        "membersAdded": {
+                            "description": "[[[ 🔥 Thə cølləctïøn øf məmbərs āddəd tø thə cønvərsātïøn.🔥 ]]]",
+                            "title": "[[[ 🔥 məmbərsΛddəd🔥 ]]]"
+                        },
+                        "membersRemoved": {
+                            "description": "[[[ 🔥 Thə cølləctïøn øf məmbərs rəmøvəd frøm thə cønvərsātïøn.🔥 ]]]",
+                            "title": "[[[ 🔥 məmbərsRəmøvəd🔥 ]]]"
+                        },
+                        "reactionsAdded": {
+                            "description": "[[[ 🔥 Thə cølləctïøn øf rəāctïøns āddəd tø thə cønvərsātïøn.🔥 ]]]",
+                            "title": "[[[ 🔥 rəāctïønsΛddəd🔥 ]]]"
+                        },
+                        "reactionsRemoved": {
+                            "description": "[[[ 🔥 Thə cølləctïøn øf rəāctïøns rəmøvəd frøm thə cønvərsātïøn.🔥 ]]]",
+                            "title": "[[[ 🔥 rəāctïønsRəmøvəd🔥 ]]]"
+                        },
+                        "topicName": {
+                            "description": "[[[ 🔥 Thə ůpdātəd tøpïc nāmə øf thə cønvərsātïøn.🔥 ]]]",
+                            "title": "[[[ 🔥 tøpïcNāmə🔥 ]]]"
+                        },
+                        "historyDisclosed": {
+                            "description": "[[[ 🔥 Ⅱndïcātəs whəthər thə prïør hïstøry øf thə chānnəl ïs dïscløsəd.🔥 ]]]",
+                            "title": "[[[ 🔥 hïstøryDïscløsəd🔥 ]]]"
+                        },
+                        "locale": {
+                            "description": "[[[ 🔥 Λ løcālə nāmə før thə cøntənts øf thə təxt fïəld.\nThə løcālə nāmə ïs ā cømbïnātïøn øf ān ⅡS⨀ 639 twø- ør thrəə-ləttər cůltůrə cødə āssøcïātəd\nwïth ā lāngůāgə\nānd ān ⅡS⨀ 3166 twø-ləttər sůbcůltůrə cødə āssøcïātəd wïth ā cøůntry ør rəgïøn.\nThə løcālə nāmə cān ālsø cørrəspønd tø ā vālïd BCP-47 lāngůāgə tāg.🔥 ]]]",
+                            "title": "[[[ 🔥 løcālə🔥 ]]]"
+                        },
+                        "text": {
+                            "description": "[[[ 🔥 Thə təxt cøntənt øf thə məssāgə.🔥 ]]]",
+                            "title": "[[[ 🔥 təxt🔥 ]]]"
+                        },
+                        "speak": {
+                            "description": "[[[ 🔥 Thə təxt tø spəāk.🔥 ]]]",
+                            "title": "[[[ 🔥 spəāk🔥 ]]]"
+                        },
+                        "inputHint": {
+                            "description": "[[[ 🔥 Ⅱndïcātəs whəthər yøůr bøt ïs āccəptïng,\nəxpəctïng, ør ïgnørïng ůsər ïnpůt āftər thə məssāgə ïs dəlïvərəd tø thə clïənt. Pøssïblə\nvālůəs ïnclůdə: 'āccəptïngⅡnpůt', 'ïgnørïngⅡnpůt', 'əxpəctïngⅡnpůt'🔥 ]]]",
+                            "title": "[[[ 🔥 ïnpůtHïnt🔥 ]]]"
+                        },
+                        "summary": {
+                            "description": "[[[ 🔥 Thə təxt tø dïsplāy ïf thə chānnəl cānnøt rəndər cārds.🔥 ]]]",
+                            "title": "[[[ 🔥 sůmmāry🔥 ]]]"
+                        },
+                        "suggestedActions": {
+                            "description": "[[[ 🔥 Thə sůggəstəd āctïøns før thə āctïvïty.🔥 ]]]",
+                            "title": "[[[ 🔥 sůggəstədΛctïøns🔥 ]]]"
+                        },
+                        "attachments": {
+                            "description": "[[[ 🔥 Λttāchmənts🔥 ]]]",
+                            "title": "[[[ 🔥 āttāchmənts🔥 ]]]"
+                        },
+                        "entities": {
+                            "description": "[[[ 🔥 Rəprəsənts thə əntïtïəs thāt wərə məntïønəd ïn thə məssāgə.🔥 ]]]",
+                            "title": "[[[ 🔥 əntïtïəs🔥 ]]]"
+                        },
+                        "channelData": {
+                            "description": "[[[ 🔥 Cøntāïns chānnəl-spəcïfïc cøntənt.🔥 ]]]",
+                            "title": "[[[ 🔥 chānnəlDātā🔥 ]]]"
+                        },
+                        "action": {
+                            "description": "[[[ 🔥 Ⅱndïcātəs whəthər thə rəcïpïənt øf ā cøntāctRəlātïøn⩁pdātə wās āddəd ør rəmøvəd frøm thə\nsəndər's cøntāct lïst.🔥 ]]]",
+                            "title": "[[[ 🔥 āctïøn🔥 ]]]"
+                        },
+                        "replyToId": {
+                            "description": "[[[ 🔥 Cøntāïns thə ⅡD øf thə məssāgə tø whïch thïs məssāgə ïs ā rəply.🔥 ]]]",
+                            "title": "[[[ 🔥 rəplyTøⅡd🔥 ]]]"
+                        },
+                        "label": {
+                            "description": "[[[ 🔥 Λ dəscrïptïvə lābəl før thə āctïvïty.🔥 ]]]",
+                            "title": "[[[ 🔥 lābəl🔥 ]]]"
+                        },
+                        "valueType": {
+                            "description": "[[[ 🔥 Thə typə øf thə āctïvïty's vālůə øbjəct.🔥 ]]]",
+                            "title": "[[[ 🔥 vālůəTypə🔥 ]]]"
+                        },
+                        "value": {
+                            "description": "[[[ 🔥 Λ vālůə thāt ïs āssøcïātəd wïth thə āctïvïty.🔥 ]]]",
+                            "title": "[[[ 🔥 vālůə🔥 ]]]"
+                        },
+                        "name": {
+                            "description": "[[[ 🔥 Thə nāmə øf thə øpərātïøn āssøcïātəd wïth ān ïnvøkə ør əvənt āctïvïty.🔥 ]]]",
+                            "title": "[[[ 🔥 nāmə🔥 ]]]"
+                        },
+                        "relatesTo": {
+                            "description": "[[[ 🔥 Λ rəfərəncə tø ānøthər cønvərsātïøn ør āctïvïty.🔥 ]]]",
+                            "title": "[[[ 🔥 rəlātəsTø🔥 ]]]"
+                        },
+                        "code": {
+                            "description": "[[[ 🔥 Thə ā cødə før ənd⨀fCønvərsātïøn āctïvïtïəs thāt ïndïcātəs why thə cønvərsātïøn əndəd.\nPøssïblə vālůəs ïnclůdə: 'ůnknøwn', 'cømplətədSůccəssfůlly', 'ůsərCāncəlləd', 'bøtTïməd⨀ůt',\n'bøtⅡssůədⅡnvālïdMəssāgə', 'chānnəlFāïləd'🔥 ]]]",
+                            "title": "[[[ 🔥 cødə🔥 ]]]"
+                        },
+                        "expiration": {
+                            "description": "[[[ 🔥 Thə tïmə āt whïch thə āctïvïty shøůld bə cønsïdərəd tø bə \"əxpïrəd\" ānd shøůld nøt bə\nprəsəntəd tø thə rəcïpïənt.🔥 ]]]",
+                            "title": "[[[ 🔥 əxpïrātïøn🔥 ]]]"
+                        },
+                        "importance": {
+                            "description": "[[[ 🔥 Thə ïmpørtāncə øf thə āctïvïty. Pøssïblə vālůəs ïnclůdə: 'løw', 'nørmāl', 'hïgh'🔥 ]]]",
+                            "title": "[[[ 🔥 ïmpørtāncə🔥 ]]]"
+                        },
+                        "deliveryMode": {
+                            "description": "[[[ 🔥 Λ dəlïvəry hïnt tø sïgnāl tø thə rəcïpïənt āltərnātə dəlïvəry pāths før thə āctïvïty.\nThə dəfāůlt dəlïvəry mødə ïs \"dəfāůlt\". Pøssïblə vālůəs ïnclůdə: 'nørmāl', 'nøtïfïcātïøn'🔥 ]]]",
+                            "title": "[[[ 🔥 dəlïvəryMødə🔥 ]]]"
+                        },
+                        "listenFor": {
+                            "description": "[[[ 🔥 Lïst øf phrāsəs ānd rəfərəncəs thāt spəəch ānd lāngůāgə prïmïng systəms shøůld lïstən før🔥 ]]]",
+                            "title": "[[[ 🔥 lïstənFør🔥 ]]]",
+                            "items": {
+                                "title": "[[[ 🔥 Phrāsə🔥 ]]]",
+                                "description": "[[[ 🔥 Phrāsə tø lïstən før.🔥 ]]]"
+                            }
+                        },
+                        "textHighlights": {
+                            "description": "[[[ 🔥 Thə cølləctïøn øf təxt frāgmənts tø hïghlïght whən thə āctïvïty cøntāïns ā RəplyTøⅡd vālůə.🔥 ]]]",
+                            "title": "[[[ 🔥 təxtHïghlïghts🔥 ]]]"
+                        },
+                        "semanticAction": {
+                            "description": "[[[ 🔥 Λn øptïønāl prøgrāmmātïc āctïøn āccømpānyïng thïs rəqůəst🔥 ]]]",
+                            "title": "[[[ 🔥 səmāntïcΛctïøn🔥 ]]]"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "Microsoft.AdaptiveDialog": {
+        "form": {
+            "description": "[[[ 🔥 Thïs cønfïgůrəs ā dātā drïvən dïāløg vïā ā cølləctïøn øf əvənts ānd āctïøns.🔥 ]]]",
+            "label": "[[[ 🔥 Λdāptïvə dïāløg🔥 ]]]",
+            "properties": {
+                "recognizer": {
+                    "description": "[[[ 🔥 Tø ůndərstānd whāt thə ůsər sāys, yøůr dïāløg nəəds ā \"Rəcøgnïzər\"; thāt ïnclůdəs əxāmplə wørds ānd səntəncəs thāt ůsərs māy ůsə.🔥 ]]]",
+                    "label": "[[[ 🔥 Lāngůāgə ⩁ndərstāndïng🔥 ]]]"
+                }
+            }
+        }
+    },
+    "Microsoft.AttachmentInput": {
+        "form": {
+            "label": "[[[ 🔥 Prømpt før ā fïlə ør ān āttāchmənt🔥 ]]]",
+            "subtitle": "[[[ 🔥 Λttāchmənt Ⅱnpůt🔥 ]]]"
+        }
+    },
+    "Microsoft.ChoiceInput": {
+        "form": {
+            "label": "[[[ 🔥 Prømpt wïth můltï-chøïcə🔥 ]]]",
+            "subtitle": "[[[ 🔥 Chøïcə Ⅱnpůt🔥 ]]]"
+        }
+    },
+    "Microsoft.ConfirmInput": {
+        "form": {
+            "label": "[[[ 🔥 Prømpt før cønfïrmātïøn🔥 ]]]",
+            "subtitle": "[[[ 🔥 Cønfïrm Ⅱnpůt🔥 ]]]"
+        }
+    },
+    "Microsoft.DateTimeInput": {
+        "form": {
+            "label": "[[[ 🔥 Prømpt før ā dātə ør ā tïmə🔥 ]]]",
+            "subtitle": "[[[ 🔥 Dātə Tïmə Ⅱnpůt🔥 ]]]"
+        }
+    },
+    "Microsoft.NumberInput": {
+        "form": {
+            "label": "[[[ 🔥 Prømpt før ā nůmbər🔥 ]]]",
+            "subtitle": "[[[ 🔥 Nůmbər Ⅱnpůt🔥 ]]]"
+        }
+    },
+    "Microsoft.OAuthInput": {
+        "form": {
+            "label": "[[[ 🔥 ⨀Λůth løgïn🔥 ]]]",
+            "subtitle": "[[[ 🔥 ⨀Λůth Ⅱnpůt🔥 ]]]"
+        }
+    },
+    "Microsoft.TextInput": {
+        "form": {
+            "label": "[[[ 🔥 Prømpt før təxt🔥 ]]]",
+            "subtitle": "[[[ 🔥 Təxt Ⅱnpůt🔥 ]]]"
+        }
+    },
+    "Microsoft.BeginDialog": {
+        "form": {
+            "label": "[[[ 🔥 Bəgïn ā nəw dïāløg🔥 ]]]",
+            "subtitle": "[[[ 🔥 Bəgïn Dïāløg🔥 ]]]"
+        }
+    },
+    "Microsoft.BeginSkill": {
+        "form": {
+            "label": "[[[ 🔥 Cønnəct tø ā skïll🔥 ]]]",
+            "subtitle": "[[[ 🔥 Skïll Dïāløg🔥 ]]]"
+        }
+    },
+    "Microsoft.BreakLoop": {
+        "form": {
+            "label": "[[[ 🔥 Brəāk øůt øf løøp🔥 ]]]",
+            "subtitle": "[[[ 🔥 Brəāk øůt øf løøp🔥 ]]]"
+        }
+    },
+    "Microsoft.CancelAllDialogs": {
+        "form": {
+            "label": "[[[ 🔥 Cāncəl āll āctïvə dïāløgs🔥 ]]]",
+            "subtitle": "[[[ 🔥 Cāncəl Λll Dïāløgs🔥 ]]]"
+        }
+    },
+    "Microsoft.ContinueLoop": {
+        "form": {
+            "label": "[[[ 🔥 Cøntïnůə løøp🔥 ]]]",
+            "subtitle": "[[[ 🔥 Cøntïnůə løøp🔥 ]]]"
+        }
+    },
+    "Microsoft.DebugBreak": {
+        "form": {
+            "label": "[[[ 🔥 Dəbůg Brəāk🔥 ]]]"
+        }
+    },
+    "Microsoft.DeleteProperties": {
+        "form": {
+            "label": "[[[ 🔥 Dələtə prøpərtïəs🔥 ]]]",
+            "subtitle": "[[[ 🔥 Dələtə Prøpərtïəs🔥 ]]]"
+        }
+    },
+    "Microsoft.DeleteProperty": {
+        "form": {
+            "label": "[[[ 🔥 Dələtə ā prøpərty🔥 ]]]",
+            "subtitle": "[[[ 🔥 Dələtə Prøpərty🔥 ]]]"
+        }
+    },
+    "Microsoft.EditActions": {
+        "form": {
+            "label": "[[[ 🔥 Mødïfy āctïvə dïāløg🔥 ]]]",
+            "subtitle": "[[[ 🔥 ∃dït Λctïøns🔥 ]]]"
+        }
+    },
+    "Microsoft.EditArray": {
+        "form": {
+            "label": "[[[ 🔥 ∃dït ān ārrāy prøpərty🔥 ]]]",
+            "subtitle": "[[[ 🔥 ∃dït Λrrāy🔥 ]]]"
+        }
+    },
+    "Microsoft.EmitEvent": {
+        "form": {
+            "label": "[[[ 🔥 ∃mït ā cůstøm əvənt🔥 ]]]",
+            "subtitle": "[[[ 🔥 ∃mït ∃vənt🔥 ]]]"
+        }
+    },
+    "Microsoft.EndDialog": {
+        "form": {
+            "label": "[[[ 🔥 ∃nd thïs dïāløg🔥 ]]]",
+            "subtitle": "[[[ 🔥 ∃nd Dïāløg🔥 ]]]"
+        }
+    },
+    "Microsoft.EndTurn": {
+        "form": {
+            "label": "[[[ 🔥 ∃nd tůrn🔥 ]]]",
+            "subtitle": "[[[ 🔥 ∃nd Tůrn🔥 ]]]"
+        }
+    },
+    "Microsoft.Foreach": {
+        "form": {
+            "label": "[[[ 🔥 Løøp: Før əāch ïtəm🔥 ]]]",
+            "subtitle": "[[[ 🔥 Før ∃āch🔥 ]]]"
+        }
+    },
+    "Microsoft.ForeachPage": {
+        "form": {
+            "label": "[[[ 🔥 Løøp: Før əāch pāgə (můltïplə ïtəms)🔥 ]]]",
+            "subtitle": "[[[ 🔥 Før ∃āch Pāgə🔥 ]]]"
+        }
+    },
+    "Microsoft.HttpRequest": {
+        "form": {
+            "label": "[[[ 🔥 Sənd ān HTTP rəqůəst🔥 ]]]",
+            "subtitle": "[[[ 🔥 HTTP Rəqůəst🔥 ]]]"
+        }
+    },
+    "Microsoft.IfCondition": {
+        "form": {
+            "label": "[[[ 🔥 Brānch: Ⅱf/∃lsə🔥 ]]]",
+            "subtitle": "[[[ 🔥 Ⅱf Cøndïtïøn🔥 ]]]"
+        }
+    },
+    "Microsoft.LogAction": {
+        "form": {
+            "label": "[[[ 🔥 Løg tø cønsølə🔥 ]]]",
+            "subtitle": "[[[ 🔥 Løg Λctïøn🔥 ]]]"
+        }
+    },
+    "Microsoft.RepeatDialog": {
+        "form": {
+            "label": "[[[ 🔥 Rəpəāt thïs dïāløg🔥 ]]]",
+            "subtitle": "[[[ 🔥 Rəpəāt Dïāløg🔥 ]]]"
+        }
+    },
+    "Microsoft.ReplaceDialog": {
+        "form": {
+            "label": "[[[ 🔥 Rəplācə thïs dïāløg🔥 ]]]",
+            "subtitle": "[[[ 🔥 Rəplācə Dïāløg🔥 ]]]"
+        }
+    },
+    "Microsoft.SendActivity": {
+        "form": {
+            "label": "[[[ 🔥 Sənd ā rəspønsə🔥 ]]]",
+            "subtitle": "[[[ 🔥 Sənd Λctïvïty🔥 ]]]"
+        }
+    },
+    "Microsoft.SetProperties": {
+        "form": {
+            "label": "[[[ 🔥 Sət prøpərtïəs🔥 ]]]",
+            "subtitle": "[[[ 🔥 Sət Prøpərtïəs🔥 ]]]"
+        }
+    },
+    "Microsoft.SetProperty": {
+        "form": {
+            "label": "[[[ 🔥 Sət ā prøpərty🔥 ]]]",
+            "subtitle": "[[[ 🔥 Sət Prøpərty🔥 ]]]"
+        }
+    },
+    "Microsoft.SignOutUser": {
+        "form": {
+            "label": "[[[ 🔥 Sïgn øůt ůsər🔥 ]]]",
+            "subtitle": "[[[ 🔥 Sïgnøůt ⩁sər🔥 ]]]"
+        }
+    },
+    "Microsoft.SwitchCondition": {
+        "form": {
+            "label": "[[[ 🔥 Brānch: Swïtch (můltïplə øptïøns)🔥 ]]]",
+            "subtitle": "[[[ 🔥 Swïtch Cøndïtïøn🔥 ]]]"
+        }
+    },
+    "Microsoft.TraceActivity": {
+        "form": {
+            "label": "[[[ 🔥 ∃mït ā trācə əvənt🔥 ]]]",
+            "subtitle": "[[[ 🔥 Trācə Λctïvïty🔥 ]]]"
+        }
+    },
+    "Microsoft.OnActivity": {
+        "form": {
+            "label": "[[[ 🔥 Λctïvïtïəs🔥 ]]]",
+            "subtitle": "[[[ 🔥 Λctïvïty rəcəïvəd🔥 ]]]"
+        }
+    },
+    "Microsoft.OnBeginDialog": {
+        "form": {
+            "label": "[[[ 🔥 Dïāløg stārtəd🔥 ]]]",
+            "subtitle": "[[[ 🔥 Bəgïn dïāløg əvənt🔥 ]]]"
+        }
+    },
+    "Microsoft.OnCancelDialog": {
+        "form": {
+            "label": "[[[ 🔥 Dïāløg cāncəlləd🔥 ]]]",
+            "subtitle": "[[[ 🔥 Cāncəl dïāløg əvənt🔥 ]]]"
+        }
+    },
+    "Microsoft.OnCondition": {
+        "form": {
+            "label": "[[[ 🔥 Hāndlə ā cøndïtïøn🔥 ]]]",
+            "subtitle": "[[[ 🔥 Cøndïtïøn🔥 ]]]"
+        }
+    },
+    "Microsoft.OnConversationUpdateActivity": {
+        "form": {
+            "description": "[[[ 🔥 Hāndlə thə əvənts fïrəd whən ā ůsər bəgïns ā nəw cønvərsātïøn wïth thə bøt.🔥 ]]]",
+            "label": "[[[ 🔥 Grəətïng🔥 ]]]",
+            "subtitle": "[[[ 🔥 Cønvərsātïøn⩁pdātə āctïvïty🔥 ]]]"
+        }
+    },
+    "Microsoft.OnDialogEvent": {
+        "form": {
+            "label": "[[[ 🔥 Dïāløg əvənts🔥 ]]]",
+            "subtitle": "[[[ 🔥 Dïāløg əvənt🔥 ]]]"
+        }
+    },
+    "Microsoft.OnEndOfConversationActivity": {
+        "form": {
+            "label": "[[[ 🔥 Cønvərsātïøn əndəd🔥 ]]]",
+            "subtitle": "[[[ 🔥 ∃nd⨀fCønvərsātïøn āctïvïty🔥 ]]]"
+        }
+    },
+    "Microsoft.OnError": {
+        "form": {
+            "label": "[[[ 🔥 ∃rrør øccůrrəd🔥 ]]]",
+            "subtitle": "[[[ 🔥 ∃rrør əvənt🔥 ]]]"
+        }
+    },
+    "Microsoft.OnEventActivity": {
+        "form": {
+            "label": "[[[ 🔥 ∃vənt rəcəïvəd🔥 ]]]",
+            "subtitle": "[[[ 🔥 ∃vənt āctïvïty🔥 ]]]"
+        }
+    },
+    "Microsoft.OnHandoffActivity": {
+        "form": {
+            "label": "[[[ 🔥 Hāndøvər tø hůmān🔥 ]]]",
+            "subtitle": "[[[ 🔥 Hāndøff āctïvïty🔥 ]]]"
+        }
+    },
+    "Microsoft.OnIntent": {
+        "form": {
+            "label": "[[[ 🔥 Ⅱntənt rəcøgnïzəd🔥 ]]]",
+            "subtitle": "[[[ 🔥 Ⅱntənt rəcøgnïzəd🔥 ]]]"
+        }
+    },
+    "Microsoft.OnInvokeActivity": {
+        "form": {
+            "label": "[[[ 🔥 Cønvərsātïøn ïnvøkəd🔥 ]]]",
+            "subtitle": "[[[ 🔥 Ⅱnvøkə āctïvïty🔥 ]]]"
+        }
+    },
+    "Microsoft.OnMessageActivity": {
+        "form": {
+            "label": "[[[ 🔥 Məssāgə rəcəïvəd🔥 ]]]",
+            "subtitle": "[[[ 🔥 Məssāgə rəcəïvəd āctïvïty🔥 ]]]"
+        }
+    },
+    "Microsoft.OnMessageDeleteActivity": {
+        "form": {
+            "label": "[[[ 🔥 Məssāgə dələtəd🔥 ]]]",
+            "subtitle": "[[[ 🔥 Məssāgə dələtəd āctïvïty🔥 ]]]"
+        }
+    },
+    "Microsoft.OnMessageReactionActivity": {
+        "form": {
+            "label": "[[[ 🔥 Məssāgə rəāctïøn🔥 ]]]",
+            "subtitle": "[[[ 🔥 Məssāgə rəāctïøn āctïvïty🔥 ]]]"
+        }
+    },
+    "Microsoft.OnMessageUpdateActivity": {
+        "form": {
+            "label": "[[[ 🔥 Məssāgə ůpdātəd🔥 ]]]",
+            "subtitle": "[[[ 🔥 Məssāgə ůpdātəd āctïvïty🔥 ]]]"
+        }
+    },
+    "Microsoft.OnRepromptDialog": {
+        "form": {
+            "label": "[[[ 🔥 Rə-prømpt før ïnpůt🔥 ]]]",
+            "subtitle": "[[[ 🔥 Rəprømpt dïāløg əvənt🔥 ]]]"
+        }
+    },
+    "Microsoft.OnTypingActivity": {
+        "form": {
+            "label": "[[[ 🔥 ⩁sər ïs typïng🔥 ]]]",
+            "subtitle": "[[[ 🔥 Typïng āctïvïty🔥 ]]]"
+        }
+    },
+    "Microsoft.OnUnknownIntent": {
+        "form": {
+            "label": "[[[ 🔥 ⩁nknøwn ïntənt🔥 ]]]",
+            "subtitle": "[[[ 🔥 ⩁nknøwn ïntənt rəcøgnïzəd🔥 ]]]"
         }
     }
 }

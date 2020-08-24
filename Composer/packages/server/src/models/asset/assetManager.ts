@@ -51,7 +51,7 @@ export class AssetManager {
     }
     // copy Composer data files
     await copyDir(template.path, this.templateStorage, dstDir, dstStorage);
-    // if we have a locale, copy that over too
+    // if we have a locale override, copy that over too
     if (locale != null) {
       const localePath = path.join(__dirname, '..', '..', '..', 'schemas', 'locales', locale);
       copyDir(localePath, this.templateStorage, dstDir, dstStorage);
