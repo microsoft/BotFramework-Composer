@@ -5,7 +5,7 @@ import { Request, Response } from 'express';
 import { parseQnAContent } from '../models/utilities/parser';
 
 async function getQnaContent(req: Request, res: Response) {
-  const urls = req.query.urls;
+  const urls = req.query.urls as string[];
   try {
     if (Array.isArray(urls)) {
       res.status(200).json(await parseQnAContent(urls));
