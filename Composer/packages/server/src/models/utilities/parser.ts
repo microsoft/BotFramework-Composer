@@ -25,6 +25,27 @@ function getBuildEnvironment() {
   return {};
 }
 
+async function importQnAFromUrl(builder: any, url: string, subscriptionKey: string) {
+  url = url.trim();
+  let onlineQnAContent = '';
+  if (DOC_EXTENSIONS.some((e) => url.endsWith(e))) {
+    const index = url.lastIndexOf('.');
+    const extension = url.substring(index);
+    onlineQnAContent = await builder.importFileReference(
+      `onlineFile${extension}`,
+      url,
+      subscriptionKey,
+      COGNITIVE_SERVICES_ENDPOINTS,
+      uuid()
+    );
+  } else {
+    onlineQnAContent = await builder.importUrlReference(url, subscriptionKey, COGNITIVE_SERVICES_ENDPOINTS, uuid());
+  }
+  return onlineQnAContent;
+}
+
+//https://azure.microsoft.com/en-us/pricing/details/cognitive-services/qna-maker/
+//limited to 3 transactions per second
 export async function parseQnAContent(urls: string[]) {
   const builder = new qnaBuild.Builder((message: string) => debug(message));
 
@@ -36,27 +57,20 @@ export async function parseQnAContent(urls: string[]) {
     throw new Error('Missing subscription key for QnAMaker');
   }
 
-  const contents = await Promise.all(
-    urls.map(async (url) => {
-      url = url.trim();
-      if (DOC_EXTENSIONS.some((e) => url.endsWith(e))) {
-        const index = url.lastIndexOf('.');
-        const extension = url.substring(index);
-        return await builder.importFileReference(
-          `onlineFile${extension}`,
-          url,
-          subscriptionKey,
-          COGNITIVE_SERVICES_ENDPOINTS,
-          uuid()
-        );
-      } else {
-        return await builder.importUrlReference(url, subscriptionKey, COGNITIVE_SERVICES_ENDPOINTS, uuid());
-      }
-    })
-  );
+  const limitedNumInBatch = 3;
+  let i = 0;
 
-  contents.forEach((content) => {
-    qnaContent += content;
-  });
+  while (i < urls.length) {
+    const batchUrls = urls.slice(i, i + limitedNumInBatch);
+    const contents = await Promise.all(
+      batchUrls.map(async (url) => {
+        return await importQnAFromUrl(builder, url, subscriptionKey);
+      })
+    );
+    contents.forEach((content) => {
+      qnaContent += content;
+    });
+    i = i + limitedNumInBatch;
+  }
   return qnaContent;
 }
