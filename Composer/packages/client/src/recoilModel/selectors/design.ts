@@ -39,7 +39,9 @@ import {
   botNameState,
   dialogSchemasState,
   designPageLocationState,
+  projectMetaDataState,
 } from '../atoms';
+import { undoFunctionState, undoVersionState } from '../undo/history';
 import { dispatcherState } from '../DispatcherWrapper';
 import { Dispatcher } from '../dispatchers';
 
@@ -47,7 +49,6 @@ export const botStateByProjectIdSelector = selector({
   key: 'botStateByProjectIdSelector',
   get: ({ get }) => {
     const projectId = get(currentProjectIdState);
-
     const dialogs = get(dialogsState(projectId));
     const schemas = get(schemasState(projectId));
     const botName = get(botNameState(projectId));
@@ -82,6 +83,9 @@ export const botStateByProjectIdSelector = selector({
     const botLoadErrorMsg = get(botLoadErrorState(projectId));
     const dialogSchemas = get(dialogSchemasState(projectId));
     const designPageLocation = get(designPageLocationState(projectId));
+    const undoFunction = get(undoFunctionState(projectId));
+    const undoVersion = get(undoVersionState(projectId));
+    const projectMetaData = get(projectMetaDataState(projectId));
 
     const validatedDialogs = dialogs.map((dialog) => {
       return { ...dialog, diagnostics: validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles) };
@@ -123,6 +127,9 @@ export const botStateByProjectIdSelector = selector({
       onDelLanguageDialogComplete,
       dialogSchemas,
       designPageLocation,
+      undoFunction,
+      undoVersion,
+      projectMetaData,
       projectId,
     };
   },

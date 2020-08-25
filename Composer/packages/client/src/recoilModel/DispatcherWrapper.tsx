@@ -7,11 +7,12 @@ import { atom, useRecoilTransactionObserver_UNSTABLE, Snapshot, useRecoilState }
 import once from 'lodash/once';
 import React from 'react';
 import { BotAssets } from '@bfc/shared';
+import { useRecoilValue } from 'recoil';
 
 import { prepareAxios } from './../utils/auth';
 import filePersistence from './persistence/FilePersistence';
 import createDispatchers, { Dispatcher } from './dispatchers';
-import { currentProjectIdState } from './atoms';
+import { currentProjectIdState, botProjectsState } from './atoms';
 import { UndoRoot } from './undo/history';
 import { botStateByProjectIdSelector } from './selectors';
 
@@ -68,6 +69,7 @@ const InitDispatcher = ({ onLoad }) => {
 
 export const DispatcherWrapper = ({ children }) => {
   const [loaded, setLoaded] = useState(false);
+  const botProjects = useRecoilValue(botProjectsState);
 
   useRecoilTransactionObserver_UNSTABLE(async ({ snapshot, previousSnapshot }) => {
     const assets = await getBotAssets(snapshot);
@@ -77,7 +79,9 @@ export const DispatcherWrapper = ({ children }) => {
 
   return (
     <Fragment>
-      <UndoRoot />
+      {botProjects.map((projectId) => (
+        <UndoRoot key={projectId} projectId={projectId} />
+      ))}
       <InitDispatcher onLoad={setLoaded} />
       {loaded ? children : null}
     </Fragment>

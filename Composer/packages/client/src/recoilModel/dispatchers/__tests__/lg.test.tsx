@@ -84,7 +84,7 @@ describe('Lg dispatcher', () => {
 
   it('should update a lg file', async () => {
     await act(async () => {
-      await dispatcher.updateLgFile({ id: 'common.en-us', content: `test` });
+      await dispatcher.updateLgFile({ id: 'common.en-us', content: `test`, projectId });
     });
 
     expect(renderedComponent.current.lgFiles[0].content).toBe(`test`);
@@ -96,6 +96,7 @@ describe('Lg dispatcher', () => {
         id: 'common.en-us',
         templateName: 'Hello',
         template: getLgTemplate('Hello', '-TemplateValue'),
+        projectId,
       });
     });
 
@@ -107,6 +108,7 @@ describe('Lg dispatcher', () => {
       await dispatcher.removeLgTemplate({
         id: 'common.en-us',
         templateName: 'Hello',
+        projectId,
       });
     });
 
@@ -118,6 +120,7 @@ describe('Lg dispatcher', () => {
       await dispatcher.removeLgTemplates({
         id: 'common.en-us',
         templateNames: ['Hello'],
+        projectId,
       });
     });
 

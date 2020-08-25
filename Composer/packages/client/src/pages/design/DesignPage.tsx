@@ -34,12 +34,10 @@ import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { clearBreadcrumb } from '../../utils/navigation';
 import { navigateTo } from '../../utils/navigation';
 import { useShell } from '../../shell';
-import { undoFunctionState, undoVersionState } from '../../recoilModel/undo/history';
 import plugins, { mergePluginConfigs } from '../../plugins';
 import { useElectronFeatures } from '../../hooks/useElectronFeatures';
 import {
   botStateByProjectIdSelector,
-  designPageLocationState,
   visualEditorSelectionState,
   dispatcherState,
   userSettingsState,
@@ -112,10 +110,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     luFiles,
     validatedDialogs: dialogs,
     designPageLocation,
+    undoVersion,
+    undoFunction: { undo, redo, canRedo, canUndo, commitChanges, clearUndo },
   } = useRecoilValue(botStateByProjectIdSelector);
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
-  const undoVersion = useRecoilValue(undoVersionState);
-  const { undo, redo, canRedo, canUndo, commitChanges, clearUndo } = useRecoilValue(undoFunctionState);
   const {
     removeDialog,
     updateDialog,
@@ -174,9 +172,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     if (location && props.dialogId && props.projectId) {
       const { dialogId, projectId } = props;
       const params = new URLSearchParams(location.search);
-      setDesignPageLocation({
+      setDesignPageLocation(projectId, {
         dialogId,
-        projectId,
+
         selected: params.get('selected') ?? '',
         focused: params.get('focused') ?? '',
         breadcrumb: location.state ? location.state.breadcrumb || [] : [],

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { atom, atomFamily } from 'recoil';
+import { atomFamily } from 'recoil';
 import {
   DialogInfo,
   DialogSchemaFile,
@@ -217,7 +217,7 @@ export const onDelLanguageDialogCompleteState = atomFamily<any, string>({
   default: { func: undefined },
 });
 
-export const projectsMetaDataState = atomFamily<any, string>({
+export const projectMetaDataState = atomFamily<any, string>({
   key: getFullyQualifiedKey('projectsMetaDataState'),
   default: (id) => {
     return {};

@@ -42,12 +42,12 @@ const state = {
 
 const initRecoilState = ({ set }) => {
   set(currentProjectIdState, state.projectId);
-  set(localeState, state.locale);
-  set(dialogsState, state.dialogs);
-  set(luFilesState, state.luFiles);
-  set(lgFilesState, state.lgFiles);
-  set(settingsState, state.settings);
-  set(schemasState, mockProjectResponse.schemas);
+  set(localeState(state.projectId), state.locale);
+  set(dialogsState(state.projectId), state.dialogs);
+  set(luFilesState(state.projectId), state.luFiles);
+  set(lgFilesState(state.projectId), state.lgFiles);
+  set(settingsState(state.projectId), state.settings);
+  set(schemasState(state.projectId), mockProjectResponse.schemas);
 };
 
 describe('LU page all up view', () => {
@@ -58,6 +58,6 @@ describe('LU page all up view', () => {
   });
 
   it('should render lu page code editor', () => {
-    renderWithRecoil(<CodeEditor dialogId={'a'} />, initRecoilState);
+    renderWithRecoil(<CodeEditor dialogId={'a'} projectId={state.projectId} />, initRecoilState);
   });
 });

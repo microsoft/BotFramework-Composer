@@ -16,6 +16,7 @@ jest.mock('@bfc/code-editor', () => {
     LuEditor: () => <div></div>,
   };
 });
+const projectId = '1234a-324234';
 
 describe('<ProjectTree/>', () => {
   it('should render the ProjectTree', async () => {
@@ -60,7 +61,13 @@ describe('<ProjectTree/>', () => {
     });
     const handleSubmit = jest.fn(() => {});
     const { getByText } = renderWithRecoil(
-      <TriggerCreationModal dialogId={'todobot'} isOpen={isOpen} onDismiss={handleDismiss} onSubmit={handleSubmit} />
+      <TriggerCreationModal
+        dialogId={'todobot'}
+        isOpen={isOpen}
+        projectId={projectId}
+        onDismiss={handleDismiss}
+        onSubmit={handleSubmit}
+      />
     );
     const cancelButton = getByText('Cancel');
     fireEvent.click(cancelButton);

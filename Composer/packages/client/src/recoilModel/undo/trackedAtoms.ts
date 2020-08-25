@@ -7,6 +7,6 @@ import { dialogsState, luFilesState, lgFilesState } from './../atoms/botState';
 
 export type AtomAssetsMap = Map<RecoilState<any>, any>;
 
-export const trackedAtoms = (projectId: string) => {
+export const trackedAtoms = (projectId: string): RecoilState<any>[] => {
   return [dialogsState(projectId), luFilesState(projectId), lgFilesState(projectId)];
 };
