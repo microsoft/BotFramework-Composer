@@ -6,7 +6,7 @@ import { parseQnAContent } from '../models/utilities/parser';
 
 async function getQnaContent(req: Request, res: Response) {
   try {
-    const urls = req.query.urls.split(',');
+    const urls = decodeURIComponent(req.query.urls).split(',');
     res.status(200).json(await parseQnAContent(urls));
   } catch (e) {
     res.status(400).json({

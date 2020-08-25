@@ -95,7 +95,7 @@ export const qnaDispatcher = () => {
       set(qnaAllUpViewStatusState, QnAAllUpViewStatus.Loading);
       try {
         const response = await httpClient.get(`/utilities/qna/parse`, {
-          params: { urls: urls.join(',') },
+          params: { urls: encodeURIComponent(urls.join(',')) },
         });
         const content = qnaFile ? qnaFile.content + '\n' + response.data : response.data;
 
