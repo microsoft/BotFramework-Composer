@@ -5,6 +5,7 @@ export enum FileExtensions {
   Dialog = '.dialog',
   DialogSchema = '.schema',
   Lu = '.lu',
+  QnA = '.qna',
   lg = '.lg',
   Manifest = '.json',
 }

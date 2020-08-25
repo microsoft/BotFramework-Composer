@@ -51,7 +51,7 @@ namespace Microsoft.BotFramework.Composer.Functions
             var configFile = Path.GetFullPath(Path.Combine(rootDirectory, @"ComposerDialogs/settings/appsettings.json"));
             config.AddJsonFile(configFile, optional: true, reloadOnChange: true);
 
-            config.UseComposerLuisSettings();
+            config.UseComposerSettings();
 
             if (!Debugger.IsAttached)
             {

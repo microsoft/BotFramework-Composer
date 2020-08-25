@@ -3,10 +3,12 @@
 
 import { useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
+import get from 'lodash/get';
 import { BotIndexer } from '@bfc/indexers';
 
 import {
   luFilesState,
+  qnaFilesState,
   lgFilesState,
   projectIdState,
   BotDiagnosticsState,
@@ -22,13 +24,16 @@ import {
   SettingNotification,
   LuNotification,
   LgNotification,
+  QnANotification,
   ServerNotification,
   SkillNotification,
 } from './types';
-import { getReferredFiles } from './../../utils/luUtil';
+import { getReferredLuFiles } from './../../utils/luUtil';
+
 export default function useNotifications(filter?: string) {
   const dialogs = useRecoilValue(validatedDialogsSelector);
   const luFiles = useRecoilValue(luFilesState);
+  const qnaFiles = useRecoilValue(qnaFilesState);
   const projectId = useRecoilValue(projectIdState);
   const lgFiles = useRecoilValue(lgFilesState);
   const diagnostics = useRecoilValue(BotDiagnosticsState);
@@ -39,49 +44,56 @@ export default function useNotifications(filter?: string) {
     projectId,
     dialogs,
     luFiles,
+    qnaFiles,
     lgFiles,
     skillManifests,
     setting,
     dialogSchemas,
   };
   const memoized = useMemo(() => {
-    const notifactions: Notification[] = [];
+    const notifications: Notification[] = [];
     diagnostics.forEach((d) => {
-      notifactions.push(new ServerNotification(projectId, '', d.source, d));
+      notifications.push(new ServerNotification(projectId, '', d.source, d));
     });
     const skillDiagnostics = BotIndexer.checkSkillSetting(botAssets);
     skillDiagnostics.forEach((item) => {
       if (item.source.endsWith('.json')) {
-        notifactions.push(new SkillNotification(projectId, item.source, item.source, item));
+        notifications.push(new SkillNotification(projectId, item.source, item.source, item));
       } else {
-        notifactions.push(new DialogNotification(projectId, item.source, item.source, item));
+        notifications.push(new DialogNotification(projectId, item.source, item.source, item));
       }
     });
     const luisLocaleDiagnostics = BotIndexer.checkLUISLocales(botAssets);
 
     luisLocaleDiagnostics.forEach((item) => {
-      notifactions.push(new SettingNotification(projectId, item.source, item.source, item));
+      notifications.push(new SettingNotification(projectId, item.source, item.source, item));
     });
 
     dialogs.forEach((dialog) => {
       dialog.diagnostics.map((diagnostic) => {
         const location = `${dialog.id}.dialog`;
-        notifactions.push(new DialogNotification(projectId, dialog.id, location, diagnostic));
+        notifications.push(new DialogNotification(projectId, dialog.id, location, diagnostic));
       });
     });
-    getReferredFiles(luFiles, dialogs).forEach((lufile) => {
+    getReferredLuFiles(luFiles, dialogs).forEach((lufile) => {
       lufile.diagnostics.map((diagnostic) => {
         const location = `${lufile.id}.lu`;
-        notifactions.push(new LuNotification(projectId, lufile.id, location, diagnostic, lufile, dialogs));
+        notifications.push(new LuNotification(projectId, lufile.id, location, diagnostic, lufile, dialogs));
       });
     });
     lgFiles.forEach((lgFile) => {
       lgFile.diagnostics.map((diagnostic) => {
         const location = `${lgFile.id}.lg`;
-        notifactions.push(new LgNotification(projectId, lgFile.id, location, diagnostic, lgFile, dialogs));
+        notifications.push(new LgNotification(projectId, lgFile.id, location, diagnostic, lgFile, dialogs));
       });
     });
-    return notifactions;
+    qnaFiles.forEach((qnaFile) => {
+      get(qnaFile, 'diagnostics', []).map((diagnostic) => {
+        const location = `${qnaFile.id}.qna`;
+        notifications.push(new QnANotification(projectId, qnaFile.id, location, diagnostic));
+      });
+    });
+    return notifications;
   }, [botAssets, diagnostics]);
 
   const notifications: Notification[] = filter ? memoized.filter((x) => x.severity === filter) : memoized;
