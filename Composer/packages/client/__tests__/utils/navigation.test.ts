@@ -13,6 +13,8 @@ import {
   convertPathToUrl,
 } from './../../src/utils/navigation';
 
+const projectId = '123a-sdf123';
+
 describe('getFocusPath', () => {
   it('return focus path', () => {
     const result1 = getFocusPath('selected', 'focused');
@@ -71,17 +73,19 @@ describe('composer url util', () => {
   });
 
   it('check url', () => {
-    const result1 = checkUrl(`/bot/1/dialogs/a?selected=triggers[0]&focused=triggers[0].actions[0]#botAsks`, {
-      dialogId: 'a',
-      projectId: '1',
-      selected: 'triggers[0]',
-      focused: 'triggers[0].actions[0]',
-      promptTab: PromptTab.BOT_ASKS,
-    });
+    const result1 = checkUrl(
+      `/bot/1/dialogs/a?selected=triggers[0]&focused=triggers[0].actions[0]#botAsks`,
+      projectId,
+      {
+        dialogId: 'a',
+        selected: 'triggers[0]',
+        focused: 'triggers[0].actions[0]',
+        promptTab: PromptTab.BOT_ASKS,
+      }
+    );
     expect(result1).toEqual(true);
-    const result2 = checkUrl(`test`, {
+    const result2 = checkUrl(`test`, projectId, {
       dialogId: 'a',
-      projectId: '1',
       selected: 'triggers[0]',
       focused: 'triggers[0].actions[0]',
       promptTab: PromptTab.BOT_ASKS,

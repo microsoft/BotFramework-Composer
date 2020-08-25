@@ -15,14 +15,10 @@ import { updateBreadcrumb, navigateTo, checkUrl, getUrlSearch, BreadcrumbUpdateT
 
 export const navigationDispatcher = () => {
   const setDesignPageLocation = useRecoilCallback(
-    ({ set }: CallbackInterface) => async ({
-      projectId,
-      dialogId = '',
-      selected = '',
-      focused = '',
-      breadcrumb = [],
-      promptTab,
-    }) => {
+    ({ set }: CallbackInterface) => async (
+      projectId: string,
+      { dialogId = '', selected = '', focused = '', breadcrumb = [], promptTab }
+    ) => {
       //generate focusedPath. This will remove when all focusPath related is removed
       set(currentProjectIdState, projectId);
 
@@ -53,7 +49,7 @@ export const navigationDispatcher = () => {
     ) => {
       const designPageLocation = await snapshot.getPromise(designPageLocationState(projectId));
       const currentUri = `/bot/${projectId}/dialogs/${dialogId}`;
-      if (checkUrl(currentUri, designPageLocation)) return;
+      if (checkUrl(currentUri, projectId, designPageLocation)) return;
       //if dialog change we should flush some debounced functions
 
       navigateTo(currentUri, { state: { breadcrumb } });
@@ -75,7 +71,7 @@ export const navigationDispatcher = () => {
 
       currentUri = `${currentUri}?selected=${selectPath}`;
 
-      if (checkUrl(currentUri, designPageLocation)) return;
+      if (checkUrl(currentUri, projectId, designPageLocation)) return;
       navigateTo(currentUri, { state: { breadcrumb: updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Selected) } });
     }
   );
@@ -105,7 +101,7 @@ export const navigationDispatcher = () => {
       if (fragment && typeof fragment === 'string') {
         currentUri += `#${fragment}`;
       }
-      if (checkUrl(currentUri, designPageLocation)) return;
+      if (checkUrl(currentUri, projectId, designPageLocation)) return;
       navigateTo(currentUri, { state: { breadcrumb: updatedBreadcrumb } });
     }
   );
@@ -123,7 +119,7 @@ export const navigationDispatcher = () => {
       if (search) {
         const currentUri = `/bot/${projectId}/dialogs/${dialogId}${getUrlSearch(selectPath, focusPath)}`;
 
-        if (checkUrl(currentUri, designPageLocation)) return;
+        if (checkUrl(currentUri, projectId, designPageLocation)) return;
         navigateTo(currentUri, { state: { breadcrumb } });
       } else {
         navTo(projectId, dialogId, breadcrumb);

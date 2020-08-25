@@ -19,7 +19,13 @@ import settingStorage from '../../utils/dialogSettingStorage';
 import filePersistence from '../persistence/FilePersistence';
 import { navigateTo } from '../../utils/navigation';
 import languageStorage from '../../utils/languageStorage';
-import { designPageLocationState, botDiagnosticsState, botProjectsState, projectsMetaDataState } from '../atoms';
+import {
+  designPageLocationState,
+  botDiagnosticsState,
+  botProjectsState,
+  projectMetaDataState,
+  currentProjectIdState,
+} from '../atoms';
 
 import {
   skillManifestsState,
@@ -111,7 +117,7 @@ const initLuFilesStatus = (projectId: string, luFiles: LuFile[], dialogs: Dialog
 export const projectDispatcher = () => {
   const initBotState = async (callbackHelpers: CallbackInterface, data: any, jumpToMain: boolean) => {
     const { snapshot, gotoSnapshot } = callbackHelpers;
-    const { files, botName, botEnvironment, location, schemas, settings, projectId, diagnostics, skills } = data;
+    const { files, botName, botEnvironment, location, schemas, settings, id: projectId, diagnostics, skills } = data;
     const curLocation = await snapshot.getPromise(locationState(projectId));
     const storedLocale = languageStorage.get(botName)?.locale;
     const locale = settings.languages.includes(storedLocale) ? storedLocale : settings.defaultLanguage;
@@ -262,7 +268,7 @@ export const projectDispatcher = () => {
       reset(settingsState(projectId));
       reset(localeState(projectId));
       reset(skillManifestsState(projectId));
-      reset(designPageLocationState);
+      reset(designPageLocationState(projectId));
     } catch (e) {
       logMessage(callbackHelpers, e.message);
     }
@@ -390,7 +396,7 @@ export const projectDispatcher = () => {
   const addToBotProject = useRecoilCallback(
     ({ set }: CallbackInterface) => async (projectId: string, isRootBot: boolean) => {
       set(botProjectsState, (current) => [...current, projectId]);
-      set(projectsMetaDataState(projectId), {
+      set(projectMetaDataState(projectId), {
         isRootBot,
       });
     }

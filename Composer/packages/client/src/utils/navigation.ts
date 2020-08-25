@@ -68,7 +68,8 @@ export function getUrlSearch(selected: string, focused: string): string {
 
 export function checkUrl(
   currentUri: string,
-  { dialogId, projectId, selected, focused, promptTab }: DesignPageLocation
+  projectId: string,
+  { dialogId, selected, focused, promptTab }: DesignPageLocation
 ) {
   let lastUri = `/bot/${projectId}/dialogs/${dialogId}${getUrlSearch(selected, focused)}`;
   if (promptTab) {

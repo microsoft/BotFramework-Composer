@@ -5,7 +5,14 @@ import { useRecoilValue } from 'recoil';
 import { act } from '@bfc/test-utils/lib/hooks';
 
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
-import { luFilesState, lgFilesState, settingsState, dialogsState, localeState } from '../../atoms';
+import {
+  luFilesState,
+  lgFilesState,
+  settingsState,
+  dialogsState,
+  localeState,
+  currentProjectIdState,
+} from '../../atoms';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
 import { multilangDispatcher } from '../multilang';
@@ -33,6 +40,7 @@ describe('Multilang dispatcher', () => {
   let renderedComponent, dispatcher: Dispatcher;
   beforeEach(() => {
     const useRecoilTestHook = () => {
+      console.log('HIT ME');
       const {
         actionsSeed,
         dialogs,
@@ -45,7 +53,7 @@ describe('Multilang dispatcher', () => {
       } = useRecoilValue(botStateByProjectIdSelector);
 
       const currentDispatcher = useRecoilValue(dispatcherState);
-
+      console.log('HIT before');
       return {
         dialogs,
         locale,
@@ -58,9 +66,10 @@ describe('Multilang dispatcher', () => {
         onDelLanguageDialogComplete,
       };
     };
-
+    console.log('HIT befordsfsdfsdfsdfsdfsdfsdfse');
     const { result } = renderRecoilHook(useRecoilTestHook, {
       states: [
+        { recoilState: currentProjectIdState, initialValue: state.projectId },
         { recoilState: dialogsState(state.projectId), initialValue: state.dialogs },
         { recoilState: localeState(state.projectId), initialValue: state.locale },
         { recoilState: lgFilesState(state.projectId), initialValue: state.lgFiles },
@@ -74,11 +83,14 @@ describe('Multilang dispatcher', () => {
         },
       },
     });
+    console.log('HIT after');
     renderedComponent = result;
+    console.log('sdfsdfsdfsdfsdfsdfs sdfsdfsdfsdf', renderedComponent);
     dispatcher = renderedComponent.current.currentDispatcher;
   });
 
-  it('add language', async () => {
+  fit('add language', async () => {
+    console.log('DISPATCHER', dispatcher);
     await act(async () => {
       await dispatcher.addLanguages({
         languages: ['zh-cn'],

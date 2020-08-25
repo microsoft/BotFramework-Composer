@@ -2,22 +2,18 @@
 // Licensed under the MIT License.
 
 import React, { useEffect, useRef, useCallback, useState } from 'react';
-import {
-  useRecoilTransactionObserver_UNSTABLE as useRecoilTransactionObserver,
-  RecoilState,
-  useRecoilValue,
-} from 'recoil';
-import { atom, Snapshot, useRecoilCallback, CallbackInterface, useSetRecoilState } from 'recoil';
+import { useRecoilTransactionObserver_UNSTABLE as useRecoilTransactionObserver, RecoilState } from 'recoil';
+import { atomFamily, Snapshot, useRecoilCallback, CallbackInterface, useSetRecoilState } from 'recoil';
 import uniqueId from 'lodash/uniqueId';
 
 import { navigateTo, getUrlSearch } from '../../utils/navigation';
 
-import { breadcrumbState, projectsMetaDataState } from './../atoms/botState';
-import { designPageLocationState, currentProjectIdState, botProjectsState } from './../atoms';
+import { breadcrumbState, projectMetaDataState } from './../atoms/botState';
+import { designPageLocationState, botProjectsState } from './../atoms';
 import undoHistory, { UndoHistory } from './undoHistory';
 import { trackedAtoms, AtomAssetsMap } from './trackedAtoms';
 
-export const undoFunctionState = atom({
+export const undoFunctionState = atomFamily({
   key: 'undoFunction',
   default: {
     undo: () => {},
@@ -29,22 +25,22 @@ export const undoFunctionState = atom({
   },
 });
 
-export const undoVersionState = atom({
+export const undoVersionState = atomFamily({
   key: 'version',
   default: '',
 });
 
-const getAtomAssetsMap = (snap: Snapshot): AtomAssetsMap => {
+const getAtomAssetsMap = (snap: Snapshot, projectId: string): AtomAssetsMap => {
   const atomMap = new Map<RecoilState<any>, any>();
-  trackedAtoms.forEach((atom) => {
+  const atomsToBeTracked = trackedAtoms(projectId);
+  atomsToBeTracked.forEach((atom) => {
     const loadable = snap.getLoadable(atom);
     atomMap.set(atom, loadable.state === 'hasValue' ? loadable.contents : null);
   });
 
   //should record the location state
-  atomMap.set(designPageLocationState, snap.getLoadable(designPageLocationState).contents);
-  atomMap.set(currentProjectIdState, snap.getLoadable(currentProjectIdState).contents);
-  atomMap.set(breadcrumbState, snap.getLoadable(breadcrumbState).contents);
+  atomMap.set(designPageLocationState(projectId), snap.getLoadable(designPageLocationState(projectId)).contents);
+  atomMap.set(breadcrumbState(projectId), snap.getLoadable(breadcrumbState(projectId)).contents);
   return atomMap;
 };
 
@@ -102,26 +98,26 @@ function setInitialLocation(snapshot: Snapshot, projectId: string, undoHistory: 
   }
 }
 
-export const UndoRoot = React.memo(() => {
+export const UndoRoot = React.memo((props: { projectId: string }) => {
+  const { projectId } = props;
   const history = useRef(undoHistory).current;
-  const setUndoFunction = useSetRecoilState(undoFunctionState);
+  const setUndoFunction = useSetRecoilState(undoFunctionState(projectId));
   const [, forceUpdate] = useState([]);
-  const setVersion = useSetRecoilState(undoVersionState);
-  const projectId = useRecoilValue(currentProjectIdState);
+  const setVersion = useSetRecoilState(undoVersionState(projectId));
 
   //use to record the first time change, this will help to get the init location
   //init location is used to undo navigate
   const assetsChanged = useRef(false);
 
   useRecoilTransactionObserver(({ snapshot, previousSnapshot }) => {
-    const currentAssets = getAtomAssetsMap(snapshot);
-    const previousAssets = getAtomAssetsMap(previousSnapshot);
+    const currentAssets = getAtomAssetsMap(snapshot, projectId);
+    const previousAssets = getAtomAssetsMap(previousSnapshot, projectId);
     const botProjects = snapshot.getLoadable(botProjectsState);
     const rootBotProjectId = botProjects[0];
-    if (checkAtomChanged(currentAssets, previousAssets, projectsMetaDataState(rootBotProjectId))) {
+    if (checkAtomChanged(currentAssets, previousAssets, projectMetaDataState(rootBotProjectId))) {
       //switch project should clean the undo history when the root bot has been changed
       undoHistory.clear();
-      undoHistory.add(getAtomAssetsMap(snapshot));
+      undoHistory.add(getAtomAssetsMap(snapshot, projectId));
     } else if (!assetsChanged.current) {
       if (checkAtomsChanged(currentAssets, previousAssets, trackedAtoms(projectId))) {
         assetsChanged.current = true;
@@ -142,7 +138,7 @@ export const UndoRoot = React.memo(() => {
     navigate(next, projectId);
   };
 
-  const undo = useRecoilCallback(({ snapshot, gotoSnapshot }: CallbackInterface) => (projectId: string) => {
+  const undo = useRecoilCallback(({ snapshot, gotoSnapshot }: CallbackInterface) => () => {
     if (history.canUndo()) {
       const present = history.getPresentAssets();
       const next = history.undo();
@@ -151,7 +147,7 @@ export const UndoRoot = React.memo(() => {
     }
   });
 
-  const redo = useRecoilCallback(({ snapshot, gotoSnapshot }: CallbackInterface) => (projectId: string) => {
+  const redo = useRecoilCallback(({ snapshot, gotoSnapshot }: CallbackInterface) => () => {
     if (history.canRedo()) {
       const present = history.getPresentAssets();
       const next = history.redo();
@@ -169,11 +165,11 @@ export const UndoRoot = React.memo(() => {
   };
 
   const commit = useRecoilCallback(({ snapshot }) => () => {
-    const currentAssets = getAtomAssetsMap(snapshot);
+    const currentAssets = getAtomAssetsMap(snapshot, projectId);
     const previousAssets = history.getPresentAssets();
     //filter some invalid changes
-    if (previousAssets && checkAtomsChanged(currentAssets, previousAssets, trackedAtoms)) {
-      history.add(getAtomAssetsMap(snapshot));
+    if (previousAssets && checkAtomsChanged(currentAssets, previousAssets, trackedAtoms(projectId))) {
+      history.add(getAtomAssetsMap(snapshot, projectId));
     }
   });
 
@@ -185,7 +181,7 @@ export const UndoRoot = React.memo(() => {
 
   const clearUndo = useRecoilCallback(({ snapshot }) => () => {
     history.clear();
-    history.add(getAtomAssetsMap(snapshot));
+    history.add(getAtomAssetsMap(snapshot, projectId));
     assetsChanged.current = false;
   });
 

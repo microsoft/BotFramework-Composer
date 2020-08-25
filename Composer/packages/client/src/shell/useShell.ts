@@ -10,7 +10,6 @@ import { updateRegExIntent, renameRegExIntent, updateIntentTrigger } from '../ut
 import { getDialogData, setDialogData } from '../utils/dialogUtil';
 import { getFocusPath } from '../utils/navigation';
 import { isAbsHosted } from '../utils/envUtil';
-import { undoFunctionState } from '../recoilModel/undo/history';
 import { dispatcherState, userSettingsState, clipboardActionsState, botStateByProjectIdSelector } from '../recoilModel';
 
 import { useLgApi } from './lgApi';
@@ -35,11 +34,11 @@ export function useShell(source: EventSource): Shell {
     dialogSchemas,
     designPageLocation,
     projectId,
+    undoFunction: { undo, redo, commitChanges },
   } = useRecoilValue(botStateByProjectIdSelector);
 
   const userSettings = useRecoilValue(userSettingsState);
   const clipboardActions = useRecoilValue(clipboardActionsState);
-  const { undo, redo, commitChanges } = useRecoilValue(undoFunctionState);
   const {
     updateDialog,
     updateDialogSchema,
