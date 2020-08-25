@@ -9,9 +9,7 @@ bot
   /language-understanding
   /dialogs
      /customized-dialogs
-  /runtime
-     /azurewebapp
-     /azurefunctions
+  /runtime     
   /schemas
      sdk.schema
 ```
@@ -30,7 +28,7 @@ npm i -g @microsoft/botframework-cli
 > bf plugins:uninstall @microsoft/bf-dialog
 > ```
 
-## Adding Custom Actions to your Composer bot
+## Adding Custom Actions to your Composer bot for C#
 
 **NOTE: These steps assume you are using azurewebapp as your deployment solution. Replicating it on azurefunctions would be similar
 **
@@ -54,6 +52,29 @@ ComponentRegistration.Add(new CustomActionComponentRegistration());
 - Navigate to to the `schemas (bot/schemas)` folder. This folder contains a Powershell script and a bash script. Run either of these scripts `./update-schema.ps1 -runtime azurewebapp` or `sh ./update-schema.sh -runtime azurewebapp`. The runtime `azurewebapp` is chosen by default if no argument is passed.
 
 - Validate that the partial schema (MultiplyDialog.schema inside customaction/Schema) has been appended to the default sdk.schema file to generate one single consolidated sdk.schema file.
+
+The above steps should have generated a new sdk.schema file inside `schemas` folder for Composer to use. Reload the bot and you should be able to include your new custom action!
+
+## Adding Custom Actions to your Composer bot for NodeJS
+
+**
+
+- In this tutorial, we will be going over the steps to include a custom action `MultiplyDialog` that multiplies two numbers passed as inputs. Note that the ejected runtime should contain a `customaction` folder that has this sample.
+
+- Uncomment line 19 and 40 in src/shared/ComposerBot.ts.
+
+```
+
+import { CustomActionComponentRegistration } from '../customaction/customActionComponentRegistration';
+this.resourceExplorer.addComponent(new CustomActionComponentRegistration(this.resourceExplorer));
+
+```
+
+- Run the command `npm run build` to verify if it passes build after adding custom actions to it.
+
+- Navigate to to the `schemas (bot/schemas)` folder. This folder contains a Powershell script and a bash script. Run either of these scripts `./update-schema.ps1 -runtime nodejs` or `sh ./update-schema.sh -runtime nodejs`. 
+
+- Validate that the partial schema (MultiplyDialog.schema inside src/customaction) has been appended to the default sdk.schema file to generate one single consolidated sdk.schema file.
 
 The above steps should have generated a new sdk.schema file inside `schemas` folder for Composer to use. Reload the bot and you should be able to include your new custom action!
 

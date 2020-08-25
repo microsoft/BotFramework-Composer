@@ -11,11 +11,14 @@ Write-Host "Running schema merge on $runtime runtime."
 if (Test-Path $SCHEMA_FILE -PathType leaf) { Move-Item -Force -Path $SCHEMA_FILE -Destination $BACKUP_SCHEMA_FILE }
 if (Test-Path $UISCHEMA_FILE -PathType leaf) { Move-Item -Force -Path $UISCHEMA_FILE -Destination $BACKUP_UISCHEMA_FILE }
 
-if ($runtime == "JS")
+if ($runtime -eq "nodejs")
 {
-  bf dialog:merge "sdkSchemas/*.schema" "!sdk-backup.schema" "sdkSchemas/*.uischema" "!sdk-backup.uischema" "!sdk.override.uischema" "../runtime/src/customaction/*schema" -o $SCHEMA_FILE
+  bf dialog:merge "sdkSchemas/*.schema" "!sdk-backup.schema" "sdkSchemas/*.uischema" "!sdk-backup.uischema" "!sdk.override.uischema" "../runtime/src/customaction/*.schema" "../runtime/src/customaction/*.uischema"-o $SCHEMA_FILE
 }
-bf dialog:merge "*.schema" "!sdk-backup.schema" "*.uischema" "!sdk-backup.uischema" "!sdk.override.uischema" "../runtime/$runtime/*.csproj" -o $SCHEMA_FILE
+else
+{
+  bf dialog:merge "*.schema" "!sdk-backup.schema" "*.uischema" "!sdk-backup.uischema" "!sdk.override.uischema" "../runtime/$runtime/*.csproj" -o $SCHEMA_FILE
+}
 
 if (Test-Path $SCHEMA_FILE -PathType leaf)
 {
