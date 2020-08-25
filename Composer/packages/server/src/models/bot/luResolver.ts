@@ -3,6 +3,8 @@
 
 import { FileInfo, ResolverResource } from '@bfc/shared';
 
+import { Path } from '../../utility/path';
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const luObject = require('@microsoft/bf-lu/lib/parser/lu/lu.js');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -14,6 +16,14 @@ function getFileName(path: string): string {
 function getBaseName(filename?: string): string | any {
   if (typeof filename !== 'string') return filename;
   return filename.substring(0, filename.lastIndexOf('.')) || filename;
+}
+
+function isWildcardPattern(str: string): boolean {
+  return str.endsWith('/*') || str.endsWith('/**');
+}
+
+function isURIContainsPath(str: string): boolean {
+  return str.startsWith('/') || str.startsWith('./') || str.startsWith('../');
 }
 
 export function getLUFiles(files: FileInfo[]): FileInfo[] {
@@ -29,10 +39,10 @@ export function fileInfoToResources(files: FileInfo[]): ResolverResource[] {
   });
 }
 
-export function luImportResolverGenerator(files: ResolverResource[]) {
+export function luImportResolverGenerator(files: FileInfo[]) {
   /**
-   *  @param srcId current file id
-   *  @param idsToFind imported file id
+   *  @param srcId current <file path> file id
+   *  @param idsToFind imported <file path> file id
    *  for example:
    *  in todosample.en-us.lu:
    *   [help](help.lu)
@@ -44,7 +54,7 @@ export function luImportResolverGenerator(files: ResolverResource[]) {
    *
    *  Overlap implemented built-in fs resolver in
    *  botframework-cli/packages/lu/src/parser/lu/luMerger.js#findLuFilesInDir
-   *  Diffrence is composer support import by id, but not support * / ** file match
+   *  Not only by path, composer also support import by id and without locale
    */
 
   /**
@@ -61,19 +71,53 @@ export function luImportResolverGenerator(files: ResolverResource[]) {
     const sourceId = getFileName(srcId).replace(extReg, '');
     const locale = /\w\.\w/.test(sourceId) ? sourceId.split('.').pop() : 'en-us';
 
-    const luObjects = idsToFind.map((file) => {
-      const fileId = file.filePath;
-      const targetId = getFileName(fileId).replace(fragmentReg, '').replace(extReg, '');
+    const sourceFile =
+      files.find(({ name }) => name === `${sourceId}.${locale}${ext}`) ||
+      files.find(({ name }) => name === `${sourceId}${ext}`);
 
-      const targetFile =
-        files.find(({ id }) => id === `${targetId}.${locale}`) || files.find(({ id }) => id === `${targetId}`);
+    if (!sourceFile) throw new Error(`File: ${srcId} not found`);
+
+    const wildcardIds = idsToFind.filter((item) => isWildcardPattern(item.filePath));
+    const fileIds = idsToFind.filter((item) => !isWildcardPattern(item.filePath));
+
+    const luObjectFromWildCardIds = wildcardIds.reduce((prev, currValue) => {
+      const luObjects = files.map((item) => {
+        const options = new luOptions(item.path, currValue.includeInCollate, locale);
+        return new luObject(item.content, options);
+      });
+
+      return prev.concat(luObjects);
+    }, []);
+
+    const luObjects = fileIds.map((file) => {
+      const targetPath = file.filePath;
+      const targetId = getFileName(targetPath).replace(fragmentReg, '').replace(extReg, '');
+
+      let targetFile: FileInfo | undefined;
+      if (isURIContainsPath(targetPath)) {
+        // by path
+        const targetFullPath = Path.resolve(sourceFile.path, targetPath.replace(fragmentReg, ''));
+        const targetFullPath2 = Path.resolve(
+          sourceFile.path,
+          targetPath.replace(fragmentReg, '').replace(extReg, `.${locale}${ext}`)
+        );
+        targetFile =
+          files.find(({ path }) => path === targetFullPath) || files.find(({ path }) => path === targetFullPath2);
+      } else {
+        // by id
+        targetFile =
+          files.find(({ name }) => name === `${targetId}.${locale}${ext}`) ||
+          files.find(({ name }) => name === `${targetId}${ext}`);
+      }
 
       if (!targetFile) throw new Error(`File: ${file.filePath} not found`);
 
-      const options = new luOptions(targetId, file.includeInCollate, locale);
+      // lubuild use targetId index all luObjects, it should be uniq for each lu file.
+      // absolute file path is an idea identifier.
+      const options = new luOptions(targetFile.path, file.includeInCollate, locale);
       return new luObject(targetFile.content, options);
     });
 
-    return luObjects;
+    return luObjects.concat(luObjectFromWildCardIds);
   };
 }
