@@ -248,11 +248,9 @@ export class BotProject implements IBotProject {
       }
     }
 
-    console.log(uiSchemaOverridesFile, uiSchemaOverrides);
-
     return {
       sdk: {
-        content: sdkSchema,
+        content: merge(sdkSchema, uiSchemaOverrides),
       },
       ui: {
         content: uiSchema,
