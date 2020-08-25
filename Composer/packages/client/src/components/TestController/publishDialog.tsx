@@ -165,7 +165,7 @@ export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
       if (hasErrors) {
         return;
       }
-      const newValue = formData;
+      const newValue = Object.assign({}, formData);
       const subscriptionKey = formData.subscriptionKey;
       const qnaRegion = formData.qnaRegion;
       delete newValue.subscriptionKey;
