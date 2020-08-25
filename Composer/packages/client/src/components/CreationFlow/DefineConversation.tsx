@@ -14,7 +14,7 @@ import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 import { FontWeights } from '@uifabric/styling';
 
-import { DialogCreationCopy, nameRegex } from '../../constants';
+import { DialogCreationCopy, QnABotTemplateId, nameRegex } from '../../constants';
 import { DialogWrapper, DialogTypes } from '../DialogWrapper';
 import { FieldConfig, useForm } from '../../hooks/useForm';
 import { StorageFolder } from '../../recoilModel/types';
@@ -259,7 +259,7 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
             <PrimaryButton
               data-testid="SubmitNewBotBtn"
               disabled={hasErrors || !writable}
-              text={formatMessage('OK')}
+              text={templateId === QnABotTemplateId ? formatMessage('Next') : formatMessage('OK')}
               onClick={handleSubmit}
             />
           </DialogFooter>

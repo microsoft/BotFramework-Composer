@@ -419,6 +419,7 @@ export class BotProjectProvision {
     });
 
     // Handle errors
+    // eslint-disable-next-line no-underscore-dangle
     if (deployment._response.status != 200) {
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
@@ -486,6 +487,7 @@ export class BotProjectProvision {
           botCreated.properties.developerAppInsightsApplicationId = appinsightsId;
           const botUpdateResult = await botServiceClient.bots.update(resourceGroupName, name, botCreated);
 
+          // eslint-disable-next-line no-underscore-dangle
           if (botUpdateResult._response.status != 200) {
             this.logger({
               status: BotProjectDeployLoggerType.PROVISION_ERROR,

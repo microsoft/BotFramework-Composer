@@ -22,7 +22,7 @@ export interface IBotProject {
   dataDir: string;
   id: string | undefined;
   name: string;
-  luPublisher: any;
+  builder: any;
   defaultSDKSchema: {
     [key: string]: string;
   };

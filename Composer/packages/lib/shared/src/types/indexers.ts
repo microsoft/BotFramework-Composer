@@ -12,6 +12,7 @@ export enum FileExtensions {
   Manifest = '.json',
   Lu = '.lu',
   Lg = '.lg',
+  Qna = '.qna',
   Setting = 'appsettings.json',
 }
 
@@ -49,6 +50,7 @@ export interface DialogInfo {
   lgFile: string;
   lgTemplates: LgTemplateJsonPath[];
   luFile: string;
+  qnaFile: string;
   referredLuIntents: ReferredLuIntents[];
   referredDialogs: string[];
   triggers: ITrigger[];
@@ -102,6 +104,20 @@ export interface LuFile {
   empty: boolean;
   [key: string]: any;
 }
+
+export interface QnASection {
+  Questions: { content: string; id: string }[];
+  Answer: string;
+  Body: string;
+}
+
+export interface QnAFile {
+  id: string;
+  content: string;
+  qnaSections: QnASection[];
+  [key: string]: any;
+}
+
 
 export interface LgTemplate {
   name: string;
@@ -161,6 +177,7 @@ export type BotAssets = {
   dialogs: DialogInfo[];
   luFiles: LuFile[];
   lgFiles: LgFile[];
+  qnaFiles: QnAFile[];
   skillManifests: SkillManifest[];
   setting: DialogSetting;
   dialogSchemas: DialogSchemaFile[];

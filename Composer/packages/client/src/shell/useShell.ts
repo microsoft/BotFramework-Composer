@@ -20,6 +20,7 @@ import {
   projectIdState,
   localeState,
   luFilesState,
+  qnaFilesState,
   dispatcherState,
   breadcrumbState,
   designPageLocationState,
@@ -31,6 +32,8 @@ import { validatedDialogsSelector } from '../recoilModel/selectors/validatedDial
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
+import { useQnaApi } from './qnaApi';
+import { useTriggerApi } from './triggerApi';
 
 const FORM_EDITOR = 'PropertyEditor';
 
@@ -42,6 +45,7 @@ export function useShell(source: EventSource): Shell {
   const dialogs = useRecoilValue(validatedDialogsSelector);
   const dialogSchemas = useRecoilValue(dialogSchemasState);
   const luFiles = useRecoilValue(luFilesState);
+  const qnaFiles = useRecoilValue(qnaFilesState);
   const projectId = useRecoilValue(projectIdState);
   const locale = useRecoilValue(localeState);
   const lgFiles = useRecoilValue(lgFilesState);
@@ -70,7 +74,8 @@ export function useShell(source: EventSource): Shell {
   } = useRecoilValue(dispatcherState);
   const lgApi = useLgApi();
   const luApi = useLuApi();
-
+  const qnaApi = useQnaApi();
+  const triggerApi = useTriggerApi();
   const { dialogId, selected, focused, promptTab } = designPageLocation;
 
   const dialogsMap = useMemo(() => {
@@ -166,6 +171,8 @@ export function useShell(source: EventSource): Shell {
     },
     ...lgApi,
     ...luApi,
+    ...qnaApi,
+    ...triggerApi,
     updateRegExIntent: updateRegExIntentHandler,
     renameRegExIntent: renameRegExIntentHandler,
     updateIntentTrigger: updateIntentTriggerHandler,
@@ -218,6 +225,7 @@ export function useShell(source: EventSource): Shell {
         schemas,
         lgFiles,
         luFiles,
+        qnaFiles,
         currentDialog,
         userSettings,
         designerId: editorData?.$designer?.id,

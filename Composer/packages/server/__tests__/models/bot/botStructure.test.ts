@@ -55,6 +55,12 @@ describe('Bot structure file path', () => {
     expect(targetPath).toEqual('dialogs/greeting/greeting.dialog');
   });
 
+  // entry dialog's qna
+  it('should get entry dialog-qna file path', async () => {
+    const targetPath = defaultFilePath(botName, defaultLocale, 'mybot.en-us.qna');
+    expect(targetPath).toEqual('knowledge-base/en-us/mybot.en-us.qna');
+  });
+
   // child dialog's lg
   it('should get child dialog-lg file path', async () => {
     const targetPath = defaultFilePath(botName, defaultLocale, 'greeting.en-us.lg');
@@ -65,6 +71,12 @@ describe('Bot structure file path', () => {
   it('should get child dialog-lu file path', async () => {
     const targetPath = defaultFilePath(botName, defaultLocale, 'greeting.en-us.lu');
     expect(targetPath).toEqual('dialogs/greeting/language-understanding/en-us/greeting.en-us.lu');
+  });
+
+  // child dialog's qna
+  it('should get child dialog-qna file path', async () => {
+    const targetPath = defaultFilePath(botName, defaultLocale, 'greeting.en-us.qna');
+    expect(targetPath).toEqual('dialogs/greeting/knowledge-base/en-us/greeting.en-us.qna');
   });
 });
 

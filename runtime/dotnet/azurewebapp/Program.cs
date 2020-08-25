@@ -33,8 +33,8 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
 
                 builder.AddJsonFile(configFile, optional: true, reloadOnChange: true);
 
-                // Use Composer luis settings extensions
-                builder.UseComposerLuisSettings();
+                // Use Composer luis and qna settings extensions
+                builder.UseComposerSettings();
 
                 builder.AddEnvironmentVariables()
                        .AddCommandLine(args);

@@ -13,12 +13,13 @@ import selectDialog from '@bfc/ui-plugin-select-dialog';
 import selectSkillDialog from '@bfc/ui-plugin-select-skill-dialog';
 import lg from '@bfc/ui-plugin-lg';
 import lu from '@bfc/ui-plugin-luis';
+import crossTrained from '@bfc/ui-plugin-cross-trained';
 
 const mergeArrays: MergeWithCustomizer = (objValue, srcValue, key) => {
   if (isArray(objValue)) {
     // merge recognizers into defaults
     if (key === 'recognizers') {
-      return objValue.concat(srcValue);
+      return srcValue.concat(objValue);
     }
 
     // otherwise override other arrays
@@ -36,4 +37,13 @@ export function mergePluginConfigs(...plugins: PluginConfig[]): Required<PluginC
   return mergeWith({}, defaultPlugin, ...plugins, mergeArrays);
 }
 
-export default mergePluginConfigs(composer, prompts, selectDialog, selectSkillDialog, lg, lu, schemaEditor);
+export default mergePluginConfigs(
+  composer,
+  prompts,
+  selectDialog,
+  selectSkillDialog,
+  lg,
+  lu,
+  crossTrained,
+  schemaEditor
+);

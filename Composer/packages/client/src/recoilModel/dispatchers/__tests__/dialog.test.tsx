@@ -16,6 +16,7 @@ import {
   onCreateDialogCompleteState,
   showCreateDialogModalState,
   dialogSchemasState,
+  qnaFilesState,
 } from '../../atoms';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 
@@ -79,6 +80,12 @@ jest.mock('../../parsers/lgWorker', () => {
   };
 });
 
+jest.mock('../../parsers/qnaWorker', () => {
+  return {
+    parse: (id, content) => ({ id, content }),
+  };
+});
+
 describe('dialog dispatcher', () => {
   let renderedComponent, dispatcher;
   beforeEach(() => {
@@ -91,7 +98,7 @@ describe('dialog dispatcher', () => {
       const actionsSeed = useRecoilValue(actionsSeedState);
       const onCreateDialogComplete = useRecoilValue(onCreateDialogCompleteState);
       const showCreateDialogModal = useRecoilValue(showCreateDialogModalState);
-
+      const qnaFiles = useRecoilValue(qnaFilesState);
       return {
         dialogs,
         dialogSchemas,
@@ -101,6 +108,7 @@ describe('dialog dispatcher', () => {
         actionsSeed,
         onCreateDialogComplete,
         showCreateDialogModal,
+        qnaFiles,
       };
     };
 
@@ -147,6 +155,7 @@ describe('dialog dispatcher', () => {
     });
     expect(renderedComponent.current.luFiles.find((dialog) => dialog.id === '100.en-us')).not.toBeNull();
     expect(renderedComponent.current.lgFiles.find((dialog) => dialog.id === '100.en-us')).not.toBeNull();
+    expect(renderedComponent.current.qnaFiles.find((dialog) => dialog.id === '100.en-us')).not.toBeNull();
     expect(renderedComponent.current.dialogs.find((dialog) => dialog.id === '100').content).toEqual('abcde');
   });
 
