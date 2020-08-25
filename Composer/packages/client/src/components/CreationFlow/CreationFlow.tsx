@@ -114,7 +114,10 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     saveTemplateId(QnABotTemplateId);
     handleDismiss();
     await handleCreateNew(formData, QnABotTemplateId);
-    await importQnAFromUrls({ id: `${formData.name.toLocaleLowerCase()}.${locale}`, urls });
+    // import qna from urls
+    if (urls.length > 0) {
+      await importQnAFromUrls({ id: `${formData.name.toLocaleLowerCase()}.${locale}`, urls });
+    }
   };
 
   const handleSubmitOrImportQnA = async (formData, templateId: string) => {
