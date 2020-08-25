@@ -123,7 +123,6 @@ export const icon = {
   root: {
     color: NeutralColors.black,
     visibility: 'hidden',
-    paddingLeft: 18,
   },
 };
 

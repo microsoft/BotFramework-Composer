@@ -117,19 +117,21 @@ interface FormField {
 
 const validateUrls = (urls: string[]) => {
   const errors = Array(urls.length).fill('');
+
+  for (let i = 0; i < urls.length; i++) {
+    for (let j = 0; j < urls.length; j++) {
+      if (urls[i] && urls[i] === urls[j] && i !== j) {
+        errors[i] = errors[j] = formatMessage('This url is duplicated');
+      }
+    }
+  }
+
   for (let i = 0; i < urls.length; i++) {
     if (!urls[i].startsWith('http://') && !urls[i].startsWith('https://')) {
       errors[i] = formatMessage('A valid url should start with http:// or https://');
     }
   }
 
-  for (let i = 0; i < urls.length; i++) {
-    for (let j = 0; j < urls.length; j++) {
-      if (urls[i] === urls[j] && i !== j) {
-        errors[i] = errors[j] = formatMessage('This url is duplicated');
-      }
-    }
-  }
   return errors;
 };
 
