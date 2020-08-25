@@ -64,15 +64,12 @@ router.get('/assets/projectTemplates', AssetController.getProjTemplates);
 
 router.use('/assets/locales/', express.static(path.join(__dirname, '..', '/locales')));
 
-// const errorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
-//   Promise.resolve(handler(req, res, next)).catch(next);
-// };
 //help api
 router.get('/utilities/qna/parse', UtilitiesController.getQnaContent);
 
-const ErrorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
-  Promise.resolve(handler(req, res, next)).catch(next);
-};
+// const ErrorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
+//   Promise.resolve(handler(req, res, next)).catch(next);
+// };
 
 // router.stack.map((layer) => {
 //   const fn: RequestHandler = layer.route.stack[0].handle;

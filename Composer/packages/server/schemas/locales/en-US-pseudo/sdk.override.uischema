@@ -5016,6 +5016,11 @@
             "subtitle": "[[[ 🔥 Dələtə Prøpərty🔥 ]]]"
         }
     },
+    "Microsoft.DeleteActivity": {
+        "form": {
+            "label": "[[[ 🔥 Dələtə āctïvïty🔥 ]]]"
+        }
+    },
     "Microsoft.EditActions": {
         "form": {
             "label": "[[[ 🔥 Mødïfy āctïvə dïāløg🔥 ]]]",
@@ -5122,6 +5127,11 @@
         "form": {
             "label": "[[[ 🔥 ∃mït ā trācə əvənt🔥 ]]]",
             "subtitle": "[[[ 🔥 Trācə Λctïvïty🔥 ]]]"
+        }
+    },
+    "Microsoft.UpdateActivity": {
+        "form": {
+            "label": "[[[ 🔥 ⩁pdātə ān āctïvïty🔥 ]]]"
         }
     },
     "Microsoft.OnActivity": {

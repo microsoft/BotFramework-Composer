@@ -5016,6 +5016,11 @@
             "subtitle": "Delete Property"
         }
     },
+    "Microsoft.DeleteActivity": {
+        "form": {
+            "label": "Delete activity"
+        }
+    },
     "Microsoft.EditActions": {
         "form": {
             "label": "Modify active dialog",
@@ -5122,6 +5127,11 @@
         "form": {
             "label": "Emit a trace event",
             "subtitle": "Trace Activity"
+        }
+    },
+    "Microsoft.UpdateActivity": {
+        "form": {
+            "label": "Update an activity"
         }
     },
     "Microsoft.OnActivity": {

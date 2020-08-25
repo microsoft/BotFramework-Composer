@@ -123,7 +123,6 @@ export class BotProject implements IBotProject {
   }
 
   public get uiSchemaOverrides() {
-    console.log(this.files);
     return this.files.get('sdk.override.uischema');
   }
 
