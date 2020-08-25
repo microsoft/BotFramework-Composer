@@ -177,6 +177,7 @@ function extractReferredSkills(dialog): string[] {
 
 function parse(id: string, content: any) {
   const luFile = typeof content.recognizer === 'string' ? content.recognizer : '';
+  const qnaFile = typeof content.recognizer === 'string' ? content.recognizer : '';
   const lgFile = typeof content.generator === 'string' ? content.generator : '';
   const diagnostics: Diagnostic[] = [];
   return {
@@ -187,6 +188,7 @@ function parse(id: string, content: any) {
     lgTemplates: extractLgTemplates(id, content),
     referredLuIntents: extractLuIntents(content, id),
     luFile: getBaseName(luFile, '.lu'),
+    qnaFile: getBaseName(qnaFile, '.lu.qna') || getBaseName(qnaFile, '.lu'),
     lgFile: getBaseName(lgFile, '.lg'),
     triggers: extractTriggers(content),
     intentTriggers: extractIntentTriggers(content),

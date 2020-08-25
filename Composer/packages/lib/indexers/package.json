@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@bfc/shared": "*",
-    "@microsoft/bf-lu": "^4.10.0-dev.20200728.930f45e",
+    "@microsoft/bf-lu": "^4.10.0-dev.20200808.5a7c973",
     "adaptive-expressions": "4.10.0-preview-147186",
     "botbuilder-lg": "^4.10.0-preview-150886",
     "lodash": "^4.17.19"

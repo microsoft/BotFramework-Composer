@@ -50,9 +50,11 @@ export class DefaultSettingManager extends FileSettingManager {
       },
       publishTargets: [],
       qna: {
+        subscriptionKey: '',
         knowledgebaseid: '',
-        endpointkey: '',
+        endpointKey: '',
         hostname: '',
+        qnaRegion: 'westus',
       },
       telemetry: {
         logPersonalInformation: false,

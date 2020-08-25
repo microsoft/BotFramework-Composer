@@ -13,6 +13,7 @@ export enum FileExtensions {
   Manifest = '.json',
   Lu = '.lu',
   Lg = '.lg',
+  QnA = '.qna',
   Setting = 'appsettings.json',
 }
 

@@ -2,21 +2,14 @@
 // Licensed under the MIT License.
 
 import { PluginConfig, FormUISchema, RecognizerSchema, UISchema, MenuUISchema } from '@bfc/extension';
-import { IntentField, RecognizerField, RegexIntentField } from '@bfc/adaptive-form';
 import { SDKKinds } from '@bfc/shared';
 import formatMessage from 'format-message';
 import mapValues from 'lodash/mapValues';
+import { IntentField, RecognizerField, RegexIntentField, QnAActionsField } from '@bfc/adaptive-form';
 
 import { DefaultMenuSchema } from './defaultMenuSchema';
 
 const DefaultRecognizers: RecognizerSchema[] = [
-  {
-    id: 'none',
-    displayName: () => formatMessage('None'),
-    isSelected: (data) => data === undefined,
-    handleRecognizerChange: (props) => props.onChange(undefined),
-    renameIntent: () => {},
-  },
   {
     id: SDKKinds.RegexRecognizer,
     displayName: () => formatMessage('Regular Expression'),
@@ -31,6 +24,44 @@ const DefaultRecognizers: RecognizerSchema[] = [
       const { currentDialog } = shellData;
       shellApi.renameRegExIntent(currentDialog.id, intentName, newIntentName);
     },
+  },
+  {
+    id: SDKKinds.CustomRecognizer,
+    displayName: () => formatMessage('Custom recognizer'),
+    isSelected: (data) => typeof data === 'object',
+    handleRecognizerChange: (props) =>
+      props.onChange({
+        $kind: 'Microsoft.MultiLanguageRecognizer',
+        recognizers: {
+          'en-us': {
+            $kind: 'Microsoft.RegexRecognizer',
+            intents: [
+              {
+                intent: 'greeting',
+                pattern: 'hello',
+              },
+              {
+                intent: 'test',
+                pattern: 'test',
+              },
+            ],
+          },
+          'zh-cn': {
+            $kind: 'Microsoft.RegexRecognizer',
+            intents: [
+              {
+                intent: 'greeting',
+                pattern: '你好',
+              },
+              {
+                intent: 'test',
+                pattern: '测试',
+              },
+            ],
+          },
+        },
+      }),
+    renameIntent: () => {},
   },
 ];
 
@@ -169,6 +200,17 @@ const DefaultFormSchema: FormUISchema = {
     properties: {
       intent: {
         field: IntentField,
+      },
+    },
+  },
+  [SDKKinds.OnQnAMatch]: {
+    label: () => formatMessage('QnA Intent recognized'),
+    subtitle: () => formatMessage('QnA Intent recognized'),
+    order: ['actions', 'condition', '*'],
+    hidden: ['entities'],
+    properties: {
+      actions: {
+        field: QnAActionsField,
       },
     },
   },

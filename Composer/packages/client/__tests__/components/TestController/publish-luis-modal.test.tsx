@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { fireEvent } from '@bfc/test-utils';
 
-import { PublishLuisDialog } from '../../../src/components/TestController/publishDialog';
+import { PublishDialog } from '../../../src/components/TestController/publishDialog';
 import { projectIdState, botNameState, settingsState, dispatcherState } from '../../../src/recoilModel';
 import { renderWithRecoil } from '../../testUtils';
 jest.useFakeTimers();
@@ -18,8 +18,10 @@ const luisConfig = {
   defaultLanguage: 'en-us',
   environment: 'composer',
 };
-describe('<PublishLuisDialog />', () => {
-  it('should render the <PublishLuisDialog />', () => {
+const config = { subscriptionKey: '12345', qnaRegion: 'westus', ...luisConfig };
+const qnaConfig = { subscriptionKey: '12345', endpointKey: '12345', qnaRegion: 'westus' };
+describe('<PublishDialog />', () => {
+  it('should render the <PublishDialog />', () => {
     const onDismiss = jest.fn(() => {});
     const onPublish = jest.fn(() => {});
     const setSettingsMock = jest.fn(() => {});
@@ -31,16 +33,11 @@ describe('<PublishLuisDialog />', () => {
       set(botNameState, 'sampleBot0');
       set(settingsState, {
         luis: luisConfig,
+        qna: qnaConfig,
       });
     };
     const { getByText } = renderWithRecoil(
-      <PublishLuisDialog
-        isOpen
-        botName={'sampleBot0'}
-        config={luisConfig}
-        onDismiss={onDismiss}
-        onPublish={onPublish}
-      />,
+      <PublishDialog isOpen botName={'sampleBot0'} config={config} onDismiss={onDismiss} onPublish={onPublish} />,
       recoilInitState
     );
 
@@ -50,14 +47,21 @@ describe('<PublishLuisDialog />', () => {
     fireEvent.click(publishButton);
     expect(onPublish).toBeCalled();
     expect(onPublish).toBeCalledWith({
-      name: 'sampleBot0',
-      authoringKey: '12345',
-      authoringEndpoint: 'testAuthoringEndpoint',
-      endpointKey: '12345',
-      endpoint: 'testEndpoint',
-      authoringRegion: 'westus',
-      defaultLanguage: 'en-us',
-      environment: 'composer',
+      luis: {
+        name: 'sampleBot0',
+        authoringKey: '12345',
+        authoringEndpoint: 'testAuthoringEndpoint',
+        endpointKey: '12345',
+        endpoint: 'testEndpoint',
+        authoringRegion: 'westus',
+        defaultLanguage: 'en-us',
+        environment: 'composer',
+      },
+      qna: {
+        subscriptionKey: '12345',
+        endpointKey: '',
+        qnaRegion: 'westus',
+      },
     });
   });
 });

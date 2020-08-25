@@ -24,6 +24,9 @@ describe('<RecognizerField />', () => {
   beforeEach(() => {
     (useShellApi as jest.Mock).mockReturnValue({
       shellApi: 'shell api',
+      qnaFiles: [],
+      luFiles: [],
+      currentDialog: { id: 'testId' },
       other: 'data',
     });
   });
@@ -34,22 +37,7 @@ describe('<RecognizerField />', () => {
     expect(container).toHaveTextContent(/Unable to determine recognizer type from data:/);
   });
 
-  it('renders error message when multiple recognizers matched', () => {
-    (useRecognizerConfig as jest.Mock).mockReturnValue([
-      {
-        id: 'one',
-        isSelected: () => true,
-      },
-      {
-        id: 'two',
-        isSelected: () => true,
-      },
-    ]);
-    const { container } = renderSubject();
-    expect(container).toHaveTextContent(/Unable to determine recognizer type from data:/);
-  });
-
-  it('renders a dropdown when only one recognizer matches', () => {
+  it('renders a dropdown when recognizer matches', () => {
     const handleChange = jest.fn();
     (useRecognizerConfig as jest.Mock).mockReturnValue([
       {
@@ -65,7 +53,7 @@ describe('<RecognizerField />', () => {
         handleRecognizerChange: jest.fn(),
       },
     ]);
-    const { getByTestId } = renderSubject();
+    const { getByTestId } = renderSubject({ value: 'one' });
     const dropdown = getByTestId('recognizerTypeDropdown');
     expect(dropdown).toHaveTextContent('Two Recognizer');
     fireEvent.click(dropdown);
