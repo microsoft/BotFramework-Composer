@@ -13,7 +13,7 @@ if (Test-Path $UISCHEMA_FILE -PathType leaf) { Move-Item -Force -Path $UISCHEMA_
 
 if ($runtime == "JS")
 {
-   bf dialog:merge "*.schema" "!sdk-backup.schema" "*.uischema" "!sdk-backup.uischema" "!sdk.override.uischema -o $SCHEMA_FILE"    
+  bf dialog:merge "sdkSchemas/*.schema" "!sdk-backup.schema" "sdkSchemas/*.uischema" "!sdk-backup.uischema" "!sdk.override.uischema" "../runtime/src/customaction/*schema" -o $SCHEMA_FILE
 }
 bf dialog:merge "*.schema" "!sdk-backup.schema" "*.uischema" "!sdk-backup.uischema" "!sdk.override.uischema" "../runtime/$runtime/*.csproj" -o $SCHEMA_FILE
 
