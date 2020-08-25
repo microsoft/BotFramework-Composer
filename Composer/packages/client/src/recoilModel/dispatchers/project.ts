@@ -290,6 +290,7 @@ export const projectDispatcher = () => {
       luFileStatusStorage.removeAllStatuses(projectId);
       qnaFileStatusStorage.removeAllStatuses(projectId);
       settingStorage.remove(projectId);
+      projectIdCache.clear();
       reset(projectIdState);
       reset(dialogsState);
       reset(botEnvironmentState);

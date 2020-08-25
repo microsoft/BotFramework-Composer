@@ -65,7 +65,6 @@ export const publisherDispatcher = () => {
         ],
       };
     });
-    set(publishTypesState, data);
   };
 
   const updatePublishStatus = ({ set }: CallbackInterface, projectId: string, target: any, data: any) => {

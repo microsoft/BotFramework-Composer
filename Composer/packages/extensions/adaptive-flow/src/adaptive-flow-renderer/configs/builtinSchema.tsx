@@ -146,6 +146,26 @@ const builtinVisualSDKSchema: FlowSchema = {
       />
     ),
   },
+  [SDKKinds.DeleteActivity]: {
+    widget: 'ActionCard',
+    header: {
+      widget: 'ActionHeader',
+      title: 'Delete activity',
+    },
+    body: (data) => (
+      <>
+        <FixedInfo>{data.activityId || '?'}</FixedInfo>
+      </>
+    ),
+  },
+  [SDKKinds.UpdateActivity]: {
+    widget: 'ActionCard',
+    header: {
+      widget: 'ActionHeader',
+      title: 'Update activity',
+    },
+    body: (data) => data.activity,
+  },
   [SDKKinds.DeleteProperty]: {
     widget: 'ActionCard',
     body: (data) => data.property,
