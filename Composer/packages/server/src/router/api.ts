@@ -12,6 +12,8 @@ import { PublishController } from '../controllers/publisher';
 import { AssetController } from '../controllers/asset';
 import { EjectController } from '../controllers/eject';
 
+import { UtilitiesController } from './../controllers/utilities';
+
 const router: Router = express.Router({});
 
 router.post('/projects', ProjectController.createProject);
@@ -26,7 +28,8 @@ router.delete('/projects/:projectId/files/:name', ProjectController.removeFile);
 router.post('/projects/:projectId/files', ProjectController.createFile);
 router.post('/projects/:projectId/skills', ProjectController.updateSkill);
 router.post('/projects/:projectId/skill/check', ProjectController.getSkill);
-router.post('/projects/:projectId/luFiles/publish', ProjectController.publishLuis);
+router.post('/projects/:projectId/build', ProjectController.build);
+router.post('/projects/:projectId/qnaSettings/set', ProjectController.setQnASettings);
 router.post('/projects/:projectId/project/saveAs', ProjectController.saveProjectAs);
 router.get('/projects/:projectId/export', ProjectController.exportProject);
 
@@ -64,6 +67,12 @@ router.use('/assets/locales/', express.static(path.join(__dirname, '..', '/local
 // const errorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
 //   Promise.resolve(handler(req, res, next)).catch(next);
 // };
+//help api
+router.get('/utilities/qna/parse', UtilitiesController.getQnaContent);
+
+const ErrorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
+  Promise.resolve(handler(req, res, next)).catch(next);
+};
 
 // router.stack.map((layer) => {
 //   const fn: RequestHandler = layer.route.stack[0].handle;

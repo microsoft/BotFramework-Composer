@@ -1,0 +1,41 @@
+{
+  "name": "@bfc/ui-plugin-cross-trained",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Botframework Composer plugin that adds crossTrained recognizer set.",
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "start": "tsc --watch --preserveWatchOutput",
+    "build": "tsc --build ./tsconfig.build.json",
+    "lint": "eslint --quiet --ext .ts,.tsx src",
+    "prepare": "yarn build"
+  },
+  "keywords": [
+    "botframework",
+    "composer"
+  ],
+  "author": "jun.long@microsoft.com",
+  "license": "MIT",
+  "peerDependencies": {
+    "@bfc/adaptive-form": "*",
+    "@bfc/extension": "*",
+    "react": "16.13.0",
+    "react-dom": "16.13.0"
+  },
+  "devDependencies": {
+    "@bfc/adaptive-form": "*",
+    "@bfc/extension": "*",
+    "@types/react": "16.9.23",
+    "@types/react-dom": "16.9.5",
+    "react": "16.13.0",
+    "react-dom": "16.13.0"
+  },
+  "dependencies": {
+    "@bfc/shared": "*",
+    "@bfc/indexers": "*",
+    "@emotion/core": "^10.0.27"
+  }
+}

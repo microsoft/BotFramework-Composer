@@ -13,7 +13,7 @@ export function autofixReferInDialog(dialogId: string, content: string): string 
 
     // fix lu referrence
     if (typeof dialogJson.recognizer === 'string') {
-      dialogJson.recognizer = `${dialogId}.lu`;
+      dialogJson.recognizer = `${dialogId}.lu.qna`;
     }
     return JSON.stringify(dialogJson, null, 2);
   } catch (_error) {

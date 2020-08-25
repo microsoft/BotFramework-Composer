@@ -2933,10 +2933,10 @@
     semver "^5.5.1"
     tslib "^1.10.0"
 
-"@microsoft/bf-lu@^4.10.0-dev.20200728.930f45e":
-  version "4.10.0-dev.20200728.930f45e"
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.10.0-dev.20200728.930f45e.tgz#d8a5867d1e3028124b9e0171877b1f063b2bd08e"
-  integrity sha1-2KWGfR4wKBJLngFxh3sfBjsr0I4=
+"@microsoft/bf-lu@^4.10.0-dev.20200808.5a7c973":
+  version "4.10.0-dev.20200808.5a7c973"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.10.0-dev.20200808.5a7c973.tgz#5ef0741e48bc1ac6dc82afd3128777bde737d658"
+  integrity sha512-rrXGtaQcGuR8qCkDmLXxJrdPaYMnOq34hViz9ZkYh+wSIWaOgDjSbZ3/NwFcgmLAXFceajN9BQRYxhkosrJZMQ==
   dependencies:
     "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
     "@azure/ms-rest-azure-js" "2.0.1"

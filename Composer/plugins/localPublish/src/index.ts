@@ -353,6 +353,12 @@ class LocalPublisher {
       configList.push('--luis:endpointKey');
       configList.push(config.luis.endpointKey || config.luis.authoringKey);
     }
+    if (config.qna.endpointKey) {
+      configList.push('--qna:endpointKey');
+      configList.push(config.qna.endpointKey);
+    }
+    // console.log(config.qna);
+    // console.log(configList);
     return configList;
   };
 

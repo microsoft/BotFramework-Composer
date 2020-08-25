@@ -15,6 +15,7 @@ import { useRecoilValue } from 'recoil';
 import { useLocation, useRouterCache } from '../utils/hooks';
 import { dispatcherState } from '../recoilModel';
 
+import { QnAIcon } from './QnAIcon';
 // -------------------- Styles -------------------- //
 
 const link = (active: boolean, disabled: boolean) => css`
@@ -98,9 +99,12 @@ export const NavItem: React.FC<INavItemProps> = (props) => {
   const active = pathname.startsWith(to);
 
   const addRef = useCallback((ref) => onboardingAddCoachMarkRef({ [`nav${labelName.replace(' ', '')}`]: ref }), []);
-
-  const iconElement = <Icon iconName={iconName} styles={icon(active, disabled)} />;
-
+  const iconElement =
+    iconName === 'QnAIcon' ? (
+      <QnAIcon active={active} disabled={disabled} />
+    ) : (
+      <Icon iconName={iconName} styles={icon(active, disabled)} />
+    );
   const activeArea = (
     <div
       aria-disabled={disabled}
@@ -110,7 +114,11 @@ export const NavItem: React.FC<INavItemProps> = (props) => {
       tabIndex={-1}
     >
       {showTooltip ? (
-        <TooltipHost content={labelName} directionalHint={DirectionalHint.rightCenter}>
+        <TooltipHost
+          content={labelName}
+          directionalHint={DirectionalHint.rightCenter}
+          styles={{ root: { height: 32 } }}
+        >
           {iconElement}
         </TooltipHost>
       ) : (

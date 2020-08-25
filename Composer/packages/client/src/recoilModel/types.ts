@@ -107,3 +107,9 @@ export type BoilerplateVersion = {
   currentVersion?: string;
   updateRequired?: boolean;
 };
+
+export enum QnAAllUpViewStatus {
+  Loading,
+  Success,
+  Failed,
+}
