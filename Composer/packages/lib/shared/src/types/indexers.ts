@@ -118,7 +118,6 @@ export interface QnAFile {
   [key: string]: any;
 }
 
-
 export interface LgTemplate {
   name: string;
   body: string;
