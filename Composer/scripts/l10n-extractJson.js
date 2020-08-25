@@ -33,8 +33,8 @@ try {
 const output = keep(schema, L10N_FIELDS);
 const uiOutput = keep(uiSchema, L10N_FIELDS);
 const outputTransformed = keep(merge(output, uiOutput), L10N_FIELDS, transFn);
-const outputFn = outputDir + path.sep + 'sdk.overrides.schema';
-const outputFnTrans = outputDirTrans + path.sep + 'sdk.overrides.schema';
+const outputFn = outputDir + path.sep + 'sdk.override.uischema';
+const outputFnTrans = outputDirTrans + path.sep + 'sdk.override.uischema';
 
 console.log('writing', outputFn);
 fs.writeFileSync(outputFn, JSON.stringify(keep(merge(output, uiOutput), L10N_FIELDS), null, 4));

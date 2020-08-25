@@ -124,11 +124,8 @@ export class BotProject implements IBotProject {
   }
 
   public get uiSchemaOverrides() {
+    console.log(this.files);
     return this.files.get('sdk.override.uischema');
-  }
-
-  public get uiSchemaLocalized() {
-    return {};
   }
 
   public getFile(id: string) {
@@ -215,7 +212,6 @@ export class BotProject implements IBotProject {
     let sdkSchema = this.defaultSDKSchema;
     let uiSchema = this.defaultUISchema;
     let uiSchemaOverrides = {};
-    const uiSchemaLocalized = this.uiSchemaLocalized;
     const diagnostics: string[] = [];
 
     const userSDKSchemaFile = this.schema;
@@ -254,6 +250,8 @@ export class BotProject implements IBotProject {
       }
     }
 
+    console.log(uiSchemaOverridesFile, uiSchemaOverrides);
+
     return {
       sdk: {
         content: sdkSchema,
@@ -262,7 +260,7 @@ export class BotProject implements IBotProject {
         content: uiSchema,
       },
       uiOverrides: {
-        content: merge(uiSchemaOverrides, uiSchemaLocalized),
+        content: uiSchemaOverrides,
       },
       default: this.defaultSDKSchema,
       diagnostics,
@@ -579,6 +577,7 @@ export class BotProject implements IBotProject {
       '**/*.lg',
       '**/*.lu',
       'manifests/*.json',
+      'sdk.override.uischema',
       'sdk.schema',
       'sdk.uischema',
     ];
