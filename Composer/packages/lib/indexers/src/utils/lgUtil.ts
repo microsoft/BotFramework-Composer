@@ -11,6 +11,7 @@ import { Templates, Template, Diagnostic as LGDiagnostic, ImportResolverDelegate
 import { LgTemplate, importResolverGenerator, TextFile, Diagnostic, Position, Range, LgFile } from '@bfc/shared';
 import formatMessage from 'format-message';
 import isEmpty from 'lodash/isEmpty';
+import { SourceRange } from 'botbuilder-lg/lib/sourceRange';
 
 import { lgIndexer } from '../lgIndexer';
 
@@ -25,13 +26,20 @@ function convertLGDiagnostic(d: LGDiagnostic, source: string): Diagnostic {
   return result;
 }
 
+function convertLGRange(s: SourceRange): Range {
+  const start: Position = new Position(s.range.start.line, s.range.start.character);
+  const end: Position = new Position(s.range.end.line, s.range.end.character);
+
+  return new Range(start, end);
+}
+
 function templateToLgTemplate(templates: Template[]): LgTemplate[] {
   return templates.map((t) => {
     return {
       name: t.name,
       body: t.body,
       parameters: t.parameters || [],
-      range: t.sourceRange.range,
+      range: convertLGRange(t.sourceRange),
     };
   });
 }
