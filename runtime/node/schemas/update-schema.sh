@@ -1,5 +1,4 @@
 #!/bin/bash
-runtime=${runtime:-azurewebapp}
 SCHEMA_FILE=sdk.schema
 UISCHEMA_FILE=sdk.uischema
 BACKUP_SCHEMA_FILE=sdk-backup.schema
@@ -13,15 +12,11 @@ while [ $# -gt 0 ]; do
   shift
 done
 
-echo "Running schema merge on $runtime runtime."
+echo "Running schema merge on nodejs runtime."
 [ -f "$SCHEMA_FILE" ] && mv "./$SCHEMA_FILE" "./$BACKUP_SCHEMA_FILE"
 [ -f "$UISCHEMA_FILE" ] && mv "./$UISCHEMA_FILE" "./$BACKUP_UISCHEMA_FILE"
 
-if [[ $runtime == "nodejs" ]]; then
-  bf dialog:merge "sdkSchemas/*.schema" "!sdk-backup.schema" "sdkSchemas/*.uischema" "!sdk-backup.uischema" "!sdk.override.uischema" "../runtime/src/customaction/*.schema" "../runtime/src/customaction/*.uischema"-o $SCHEMA_FILE
-else     
-  bf dialog:merge "*.schema" "!sdk-backup.schema" "*.uischema" "!sdk-backup.uischema" "!sdk.override.uischema" "../runtime/$runtime/*.csproj" -o $SCHEMA_FILE
-fi
+bf dialog:merge "sdkSchemas/*.schema" "!sdk-backup.schema" "sdkSchemas/*.uischema" "!sdk-backup.uischema" "!sdk.override.uischema" "../runtime/src/customaction/*.schema" "../runtime/src/customaction/*.uischema"-o $SCHEMA_FILE
 
 if [ -f "$SCHEMA_FILE" ]; then
   rm -rf "./$BACKUP_SCHEMA_FILE"
