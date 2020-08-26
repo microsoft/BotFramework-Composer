@@ -8,7 +8,7 @@ import formatMessage from 'format-message';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import cloneDeep from 'lodash/cloneDeep';
@@ -23,7 +23,6 @@ import {
   localeState,
 } from '../../../recoilModel';
 import { languageListTemplates } from '../../../components/MultiLanguage';
-import { navigateTo } from '../../../utils/navigation';
 
 import { settingsEditor, toolbar } from './style';
 import { BotSettings } from './constants';
@@ -37,9 +36,6 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
   const { setSettings, setLocale, addLanguageDialogBegin } = useRecoilValue(dispatcherState);
 
   const { languages, defaultLanguage } = settings;
-  useEffect(() => {
-    if (!botName) navigateTo('/home');
-  }, [botName]);
 
   const saveChangeResult = (result) => {
     try {

@@ -5,23 +5,12 @@ import { LuFile, LuIntentSection } from '@bfc/shared';
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 import differenceBy from 'lodash/differenceBy';
 import formatMessage from 'format-message';
+import { luUtil } from '@bfc/indexers';
 
 import luWorker from '../parsers/luWorker';
 import { getBaseName, getExtension } from '../../utils/fileUtil';
-import * as luUtil from '../../utils/luUtil';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
-import {
-  luFilesState,
-  botLoadErrorState,
-  projectIdState,
-  botStatusState,
-  dialogsState,
-  localeState,
-  settingsState,
-} from '../atoms/botState';
-
-import httpClient from './../../utils/httpUtil';
-import { Text, BotStatus } from './../../constants';
+import { luFilesState, projectIdState, localeState, settingsState } from '../atoms/botState';
 
 const intentIsNotEmpty = ({ Name, Body }) => {
   return !!Name && !!Body;
@@ -90,7 +79,7 @@ export const createLuFileState = async (
   const { languages } = await snapshot.getPromise(settingsState);
   const createdLuId = `${id}.${locale}`;
   const createdLuFile = (await luUtil.parse(id, content)) as LuFile;
-  if (luFiles.find((lg) => lg.id === createdLuId)) {
+  if (luFiles.find((lu) => lu.id === createdLuId)) {
     throw new Error('lu file already exist');
   }
   const changes: LuFile[] = [];
@@ -146,18 +135,38 @@ export const luDispatcher = () => {
       id,
       intentName,
       intent,
-      projectId,
     }: {
       id: string;
       intentName: string;
       intent: LuIntentSection;
-      projectId: string;
     }) => {
       set(luFilesState, (luFiles) => {
-        const file = luFiles.find((temp) => temp.id === id);
-        if (!file) return luFiles;
-        const updatedFile = luUtil.updateIntent(file, intentName, intent);
-        return updateLuFileState(luFiles, updatedFile, projectId);
+        const luFile = luFiles.find((temp) => temp.id === id);
+        if (!luFile) return luFiles;
+        // const updatedFile = luUtil.updateIntent(file, intentName, intent);
+        // return updateLuFileState(luFiles, updatedFile, projectId);
+
+        const sameIdOtherLocaleFiles = luFiles.filter((file) => getBaseName(file.id) === getBaseName(id));
+
+        // name change, need update cross multi locale file.
+        if (intent.Name !== intentName) {
+          const changes: LuFile[] = [];
+          for (const item of sameIdOtherLocaleFiles) {
+            const updatedFile = luUtil.updateIntent(item, intentName, { Name: intent.Name });
+            changes.push(updatedFile);
+          }
+          return luFiles.map((file) => {
+            const changedFile = changes.find(({ id }) => id === file.id);
+            return changedFile ? changedFile : file;
+          });
+
+          // body change, only update current locale file
+        } else {
+          const updatedFile = luUtil.updateIntent(luFile, intentName, { Body: intent.Body });
+          return luFiles.map((file) => {
+            return file.id === id ? updatedFile : file;
+          });
+        }
       });
     }
   );
@@ -200,34 +209,10 @@ export const luDispatcher = () => {
     }
   );
 
-  const publishLuis = useRecoilCallback(
-    ({ set, snapshot }: CallbackInterface) => async (luisConfig, projectId: string) => {
-      const dialogs = await snapshot.getPromise(dialogsState);
-      try {
-        const luFiles = await snapshot.getPromise(luFilesState);
-        const referred = luUtil.checkLuisPublish(luFiles, dialogs);
-        //TODO crosstrain should add locale
-        const crossTrainConfig = luUtil.createCrossTrainConfig(dialogs, referred);
-        await httpClient.post(`/projects/${projectId}/luFiles/publish`, {
-          luisConfig,
-          projectId,
-          crossTrainConfig,
-          luFiles: referred.map((file) => file.id),
-        });
-        luFileStatusStorage.publishAll(projectId);
-        set(botStatusState, BotStatus.published);
-      } catch (err) {
-        set(botStatusState, BotStatus.failed);
-        set(botLoadErrorState, { title: Text.LUISDEPLOYFAILURE, message: err.response?.data?.message || err.message });
-      }
-    }
-  );
-
   return {
     updateLuFile,
     updateLuIntent,
     createLuIntent,
     removeLuIntent,
-    publishLuis,
   };
 };

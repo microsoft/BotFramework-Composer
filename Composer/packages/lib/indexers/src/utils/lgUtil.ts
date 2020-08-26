@@ -7,18 +7,12 @@
  *
  */
 
-import { Templates, Diagnostic as LGDiagnostic, ImportResolverDelegate } from 'botbuilder-lg';
+import { Templates, Template, Diagnostic as LGDiagnostic, ImportResolverDelegate } from 'botbuilder-lg';
 import { LgTemplate, importResolverGenerator, TextFile, Diagnostic, Position, Range, LgFile } from '@bfc/shared';
-import get from 'lodash/get';
 import formatMessage from 'format-message';
+import isEmpty from 'lodash/isEmpty';
 
 import { lgIndexer } from '../lgIndexer';
-
-export interface Template {
-  name: string;
-  parameters?: string[];
-  body: string;
-}
 
 // NOTE: LGDiagnostic is defined in PascalCase which should be corrected
 function convertLGDiagnostic(d: LGDiagnostic, source: string): Diagnostic {
@@ -37,10 +31,7 @@ function templateToLgTemplate(templates: Template[]): LgTemplate[] {
       name: t.name,
       body: t.body,
       parameters: t.parameters || [],
-      range: {
-        startLineNumber: get(t, 'sourceRange.range.start.line', 0),
-        endLineNumber: get(t, 'sourceRange.range.end.line', 0),
-      },
+      range: t.sourceRange.range,
     };
   });
 }
@@ -72,22 +63,32 @@ export function increaseNameUtilNotExist(templates: LgTemplate[], name: string):
 export function updateTemplate(
   lgFile: LgFile,
   templateName: string,
-  { name, parameters, body }: { name?: string; parameters?: string[]; body?: string },
+  template: { name?: string; parameters?: string[]; body?: string },
   importResolver?: ImportResolverDelegate
 ): LgFile {
   const { id, content } = lgFile;
+  const { name, parameters, body } = template;
   const resource = Templates.parseText(content, undefined, importResolver);
   const originTemplate = resource.toArray().find((t) => t.name === templateName);
+  const templateToUpdate = {
+    name: name || originTemplate?.name || templateName,
+    parameters: parameters || originTemplate?.parameters || [],
+    body: body || originTemplate?.body || '',
+  };
+
   let templates;
   // add if not exist
   if (!originTemplate) {
-    templates = resource.addTemplate(templateName, parameters || [], body || '');
+    templates = resource.addTemplate(templateName, templateToUpdate.parameters, templateToUpdate.body);
+    // remove if template is null
+  } else if (!template || isEmpty(template)) {
+    templates = resource.deleteTemplate(templateName);
   } else {
     templates = resource.updateTemplate(
       templateName,
-      name || originTemplate.name,
-      parameters || originTemplate.parameters,
-      body || originTemplate.body
+      templateToUpdate.name,
+      templateToUpdate.parameters,
+      templateToUpdate.body
     );
   }
 

@@ -104,6 +104,7 @@ export class LocalDiskStorage implements IFileStorage {
       path.format({ dir: `${source}/language-generation/` }),
       path.format({ dir: `${source}/settings/` }),
       path.format({ dir: `${source}/generated/` }),
+      path.format({ dir: `${source}/knowledge-base/` }),
     ].forEach((directory) => {
       archive.directory(directory, directory.split(source)[1]);
     });

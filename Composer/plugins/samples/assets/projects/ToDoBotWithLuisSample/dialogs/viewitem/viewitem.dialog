@@ -53,9 +53,8 @@
               ]
             }
           ],
-          "appendChoices": "true",
           "defaultLocale": "en-us",
-          "style": "Auto",
+          "style": "auto",
           "choiceOptions": {
             "inlineSeparator": ", ",
             "inlineOr": " or ",

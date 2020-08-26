@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Range, Position } from '@bfc/shared';
+
 import luWorker from '../luWorker';
 
 jest.mock('./../workers/luParser.worker.ts', () => {
@@ -21,7 +23,9 @@ describe('test lu worker', () => {
     const content = `# Hello
 - hi`;
     const result: any = await luWorker.parse('', content);
-    const expected = [{ Body: '- hi', Entities: [], Name: 'Hello', range: { endLineNumber: 2, startLineNumber: 1 } }];
+    const expected = [
+      { Body: '- hi', Entities: [], Name: 'Hello', range: new Range(new Position(1, 0), new Position(2, 4)) },
+    ];
     expect(result.intents).toMatchObject(expected);
   });
 
