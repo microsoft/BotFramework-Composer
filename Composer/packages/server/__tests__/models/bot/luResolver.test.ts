@@ -13,10 +13,22 @@ const files = [
     relativePath: 'language-understanding/en-us/common.en-us.lu',
   },
   {
+    name: 'greeting.en-us.lu',
+    content: '> greeting.en-us.lu',
+    path: '/users/foo/mybot/language-understanding/en-us/greeting.en-us.lu',
+    relativePath: 'language-understanding/en-us/greeting.en-us.lu',
+  },
+  {
     name: 'a.en-us.lu',
     content: '> a.en-us.lu',
     path: '/users/foo/mybot/dialogs/a/language-understanding/en-us/a.en-us.lu',
     relativePath: 'dialogs/a/language-understanding/en-us/a.en-us.lu',
+  },
+  {
+    name: 'aa.en-us.lu',
+    content: '> aa.en-us.lu',
+    path: '/users/foo/mybot/dialogs/a/language-understanding/en-us/imports/aa.en-us.lu',
+    relativePath: 'dialogs/a/language-understanding/en-us/imports/aa.en-us.lu',
   },
   {
     name: 'b.en-us.lu',
@@ -29,16 +41,58 @@ const files = [
 describe('Lu Resolver', () => {
   const resolver = luImportResolverGenerator(files);
 
+  const resultOfA = {
+    content: '> a.en-us.lu',
+    id: '/users/foo/mybot/dialogs/a/language-understanding/en-us/a.en-us.lu',
+    language: 'en-us',
+  };
+
+  const resultOfAA = {
+    content: '> aa.en-us.lu',
+    id: '/users/foo/mybot/dialogs/a/language-understanding/en-us/imports/aa.en-us.lu',
+    language: 'en-us',
+  };
+
   const resultOfCommon = {
     content: '> common.en-us.lu',
     id: '/users/foo/mybot/language-understanding/en-us/common.en-us.lu',
     language: 'en-us',
   };
+  const resultOfGreeting = {
+    content: '> greeting.en-us.lu',
+    id: '/users/foo/mybot/language-understanding/en-us/greeting.en-us.lu',
+    language: 'en-us',
+  };
 
   it('should resolve ./*', async () => {
     const case1 = resolver('a.en-us', [{ filePath: './*', includeInCollate: true }]);
-    expect(case1.length).toEqual(3);
+    expect(case1.length).toEqual(1);
+    expect(case1[0]).toMatchObject(resultOfA);
+  });
+
+  it('should resolve ./**', async () => {
+    const case1 = resolver('a.en-us', [{ filePath: './**', includeInCollate: true }]);
+    expect(case1.length).toEqual(2);
+    expect(case1[0]).toMatchObject(resultOfA);
+    expect(case1[1]).toMatchObject(resultOfAA);
+  });
+
+  it('should resolve <.lu file path>/*', async () => {
+    const case1 = resolver('a.en-us', [
+      { filePath: '../../../../language-understanding/en-us/*', includeInCollate: true },
+    ]);
+    expect(case1.length).toEqual(2);
     expect(case1[0]).toMatchObject(resultOfCommon);
+    expect(case1[1]).toMatchObject(resultOfGreeting);
+  });
+
+  it('should resolve <.lu file path>/**', async () => {
+    const case1 = resolver('a.en-us', [
+      { filePath: '../../../../language-understanding/en-us/**', includeInCollate: true },
+    ]);
+    expect(case1.length).toEqual(2);
+    expect(case1[0]).toMatchObject(resultOfCommon);
+    expect(case1[1]).toMatchObject(resultOfGreeting);
   });
 
   it('should resolve <.lu file id> no locale', async () => {
@@ -55,7 +109,7 @@ describe('Lu Resolver', () => {
 
   it('should resolve <.lu file path> no locale', async () => {
     const case1 = resolver('a.en-us', [
-      { filePath: '../../../../../language-understanding/en-us/common.lu', includeInCollate: true },
+      { filePath: '../../../../language-understanding/en-us/common.lu', includeInCollate: true },
     ]);
     expect(case1.length).toEqual(1);
     expect(case1[0]).toMatchObject(resultOfCommon);
@@ -63,7 +117,7 @@ describe('Lu Resolver', () => {
 
   it('should resolve <.lu file path> with locale', async () => {
     const case1 = resolver('a.en-us', [
-      { filePath: '../../../../../language-understanding/en-us/common.en-us.lu', includeInCollate: true },
+      { filePath: '../../../../language-understanding/en-us/common.en-us.lu', includeInCollate: true },
     ]);
     expect(case1.length).toEqual(1);
     expect(case1[0]).toMatchObject(resultOfCommon);

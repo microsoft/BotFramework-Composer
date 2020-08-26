@@ -1,7 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FileInfo, ResolverResource } from '@bfc/shared';
+import { FileInfo } from '@bfc/shared';
+import multimatch from 'multimatch';
 
 import { Path } from '../../utility/path';
 
@@ -9,14 +10,6 @@ import { Path } from '../../utility/path';
 const luObject = require('@microsoft/bf-lu/lib/parser/lu/lu.js');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const luOptions = require('@microsoft/bf-lu/lib/parser/lu/luOptions.js');
-
-function getFileName(path: string): string {
-  return path.split('/').pop() || path;
-}
-function getBaseName(filename?: string): string | any {
-  if (typeof filename !== 'string') return filename;
-  return filename.substring(0, filename.lastIndexOf('.')) || filename;
-}
 
 function isWildcardPattern(str: string): boolean {
   return str.endsWith('/*') || str.endsWith('/**');
@@ -26,17 +19,17 @@ function isURIContainsPath(str: string): boolean {
   return str.startsWith('/') || str.startsWith('./') || str.startsWith('../');
 }
 
-export function getLUFiles(files: FileInfo[]): FileInfo[] {
-  return files.filter(({ name }) => name.endsWith('.lu'));
+function globMatch(files: FileInfo[], sourceFileDir: string, targetPath: string): FileInfo[] {
+  const targetFullPath = Path.resolve(sourceFileDir, targetPath);
+
+  return files.filter((item) => {
+    const match = multimatch([item.path], targetFullPath);
+    return match.length;
+  });
 }
 
-export function fileInfoToResources(files: FileInfo[]): ResolverResource[] {
-  return files.map((file) => {
-    return {
-      id: getBaseName(file.name),
-      content: file.content,
-    };
-  });
+export function getLUFiles(files: FileInfo[]): FileInfo[] {
+  return files.filter(({ name }) => name.endsWith('.lu'));
 }
 
 export function luImportResolverGenerator(files: FileInfo[]) {
@@ -68,7 +61,7 @@ export function luImportResolverGenerator(files: FileInfo[]) {
   const extReg = new RegExp(ext + '$');
 
   return (srcId: string, idsToFind: any[]) => {
-    const sourceId = getFileName(srcId).replace(extReg, '');
+    const sourceId = Path.basename(srcId).replace(extReg, '');
     const locale = /\w\.\w/.test(sourceId) ? sourceId.split('.').pop() : 'en-us';
 
     const sourceFile =
@@ -76,13 +69,17 @@ export function luImportResolverGenerator(files: FileInfo[]) {
       files.find(({ name }) => name === `${sourceId}${ext}`);
 
     if (!sourceFile) throw new Error(`File: ${srcId} not found`);
+    const sourceFileDir = Path.dirname(sourceFile.path);
 
     const wildcardIds = idsToFind.filter((item) => isWildcardPattern(item.filePath));
     const fileIds = idsToFind.filter((item) => !isWildcardPattern(item.filePath));
 
-    const luObjectFromWildCardIds = wildcardIds.reduce((prev, currValue) => {
-      const luObjects = files.map((item) => {
-        const options = new luOptions(item.path, currValue.includeInCollate, locale);
+    const luObjectFromWildCardIds = wildcardIds.reduce((prev, file) => {
+      const targetPath = file.filePath;
+      const referdFiles = globMatch(files, sourceFileDir, targetPath);
+
+      const luObjects = referdFiles.map((item) => {
+        const options = new luOptions(item.path, file.includeInCollate, locale);
         return new luObject(item.content, options);
       });
 
@@ -91,14 +88,14 @@ export function luImportResolverGenerator(files: FileInfo[]) {
 
     const luObjects = fileIds.map((file) => {
       const targetPath = file.filePath;
-      const targetId = getFileName(targetPath).replace(fragmentReg, '').replace(extReg, '');
+      const targetId = Path.basename(targetPath).replace(fragmentReg, '').replace(extReg, '');
 
       let targetFile: FileInfo | undefined;
       if (isURIContainsPath(targetPath)) {
         // by path
-        const targetFullPath = Path.resolve(sourceFile.path, targetPath.replace(fragmentReg, ''));
+        const targetFullPath = Path.resolve(sourceFileDir, targetPath.replace(fragmentReg, ''));
         const targetFullPath2 = Path.resolve(
-          sourceFile.path,
+          sourceFileDir,
           targetPath.replace(fragmentReg, '').replace(extReg, `.${locale}${ext}`)
         );
         targetFile =
