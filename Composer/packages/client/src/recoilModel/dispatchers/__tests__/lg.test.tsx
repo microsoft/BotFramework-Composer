@@ -8,19 +8,30 @@ import { act } from '@bfc/test-utils/lib/hooks';
 
 import { lgDispatcher } from '../lg';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
-import { lgFilesState } from '../../atoms';
+import { lgFilesState, projectIdState } from '../../atoms';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
 
 jest.mock('../../parsers/lgWorker', () => {
+  const filterParseResult = (lgFile: LgFile) => {
+    const cloned = { ...lgFile };
+    delete cloned.parseResult;
+    return cloned;
+  };
   return {
-    parse: (id, content) => ({ id, content }),
-    addTemplate: require('../../../utils/lgUtil').addTemplate,
-    addTemplates: require('../../../utils/lgUtil').addTemplates,
-    updateTemplate: require('../../../utils/lgUtil').updateTemplate,
-    removeTemplate: require('../../../utils/lgUtil').removeTemplate,
-    removeAllTemplates: require('../../../utils/lgUtil').removeTemplates,
-    copyTemplate: require('../../../utils/lgUtil').copyTemplate,
+    parse: (projectId, id, content) => ({ id, content }),
+    addTemplate: (projectId, lgFile, template) =>
+      filterParseResult(require('../../../utils/lgUtil').addTemplate(lgFile, template)),
+    addTemplates: (projectId, lgFile, templates) =>
+      filterParseResult(require('../../../utils/lgUtil').addTemplates(lgFile, templates)),
+    updateTemplate: (projectId, lgFile, templateName, template) =>
+      filterParseResult(require('../../../utils/lgUtil').updateTemplate(lgFile, templateName, template)),
+    removeTemplate: (projectId, lgFile, templateName) =>
+      filterParseResult(require('../../../utils/lgUtil').removeTemplate(lgFile, templateName)),
+    removeTemplates: (projectId, lgFile, templateNames) =>
+      filterParseResult(require('../../../utils/lgUtil').removeTemplates(lgFile, templateNames)),
+    copyTemplate: (projectId, lgFile, fromTemplateName, toTemplateName) =>
+      filterParseResult(require('../../../utils/lgUtil').copyTemplate(lgFile, fromTemplateName, toTemplateName)),
   };
 });
 const lgFiles = [
@@ -53,7 +64,10 @@ describe('Lg dispatcher', () => {
     };
 
     const { result } = renderRecoilHook(useRecoilTestHook, {
-      states: [{ recoilState: lgFilesState, initialValue: lgFiles }],
+      states: [
+        { recoilState: lgFilesState, initialValue: lgFiles },
+        { recoilState: projectIdState, initialValue: 'test' },
+      ],
       dispatcher: {
         recoilState: dispatcherState,
         initialValue: {
