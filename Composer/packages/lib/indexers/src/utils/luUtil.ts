@@ -22,7 +22,7 @@ const NEWLINE = '\r\n';
 // when new add a section in inline editor, the section haven't exist on file context, to make suggestion/validation possiable here mock one.
 export const PlaceHolderSectionName = formatMessage(`_NewSectionPlaceHolderSectionName`);
 
-export function convertLuDiagnostic(d: any, source: string): Diagnostic {
+export function convertLuDiagnostic(d: any, source: string, offset = 0): Diagnostic {
   const severityMap = {
     ERROR: DiagnosticSeverity.Error,
     WARN: DiagnosticSeverity.Warning,
@@ -31,8 +31,10 @@ export function convertLuDiagnostic(d: any, source: string): Diagnostic {
   };
   const result = new Diagnostic(d.Message, source, severityMap[d.Severity]);
 
-  const start: Position = d.Range ? new Position(d.Range.Start.Line, d.Range.Start.Character) : new Position(0, 0);
-  const end: Position = d.Range ? new Position(d.Range.End.Line, d.Range.End.Character) : new Position(0, 0);
+  const start: Position = d.Range
+    ? new Position(d.Range.Start.Line - offset, d.Range.Start.Character)
+    : new Position(0, 0);
+  const end: Position = d.Range ? new Position(d.Range.End.Line - offset, d.Range.End.Character) : new Position(0, 0);
   result.range = new Range(start, end);
 
   return result;
@@ -44,20 +46,20 @@ export function convertLuParseResultToLuFile(id = '', resource): LuFile {
   const intents: LuIntentSection[] = [];
   Sections.forEach((section) => {
     const { Name, Body, SectionType } = section;
-    const range = {
-      startLineNumber: get(section, 'Range.Start.Line', 0),
-      endLineNumber: get(section, 'Range.End.Line', 0),
-    };
+    const range = new Range(
+      new Position(get(section, 'Range.Start.Line', 0), get(section, 'Range.Start.Character', 0)),
+      new Position(get(section, 'Range.End.Line', 0), get(section, 'Range.End.Character', 0))
+    );
     if (SectionType === LuSectionTypes.SIMPLEINTENTSECTION) {
       const Entities = section.Entities.map(({ Name }) => Name);
       intents.push({ Name, Body, Entities, range });
     } else if (SectionType === LuSectionTypes.NESTEDINTENTSECTION) {
       const Children = section.SimpleIntentSections.map((subSection) => {
         const { Name, Body } = subSection;
-        const range = {
-          startLineNumber: get(subSection, 'Range.Start.Line', 0),
-          endLineNumber: get(subSection, 'Range.End.Line', 0),
-        };
+        const range = new Range(
+          new Position(get(section, 'Range.Start.Line', 0), get(subSection, 'Range.Start.Character', 0)),
+          new Position(get(section, 'Range.End.Line', 0), get(subSection, 'Range.End.Character', 0))
+        );
         const Entities = subSection.Entities.map(({ Name }) => Name);
         return { Name, Body, Entities, range };
       });
@@ -132,7 +134,7 @@ export function checkSection(intent: LuIntentSection, enableSections = true): Di
   const text = textFromIntent(intent, 1, enableSections);
   const result = luParser.parse(text);
   const { Errors } = result;
-  return Errors.map((e) => convertLuDiagnostic(e, ''));
+  return Errors.map((e) => convertLuDiagnostic(e, '', enableSections ? 1 : 0));
 }
 
 export function checkIsSingleSection(intent: LuIntentSection, enableSections = true): boolean {
