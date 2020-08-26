@@ -6,7 +6,7 @@ import { MicrosoftIDialog } from '../types';
 import { ExternalApi } from './ExternalApi';
 import CopyConstructorMap from './CopyConstructorMap';
 
-export function copyAdaptiveAction(data: MicrosoftIDialog, externalApi: ExternalApi): MicrosoftIDialog {
+export async function copyAdaptiveAction(data: MicrosoftIDialog, externalApi: ExternalApi): Promise<MicrosoftIDialog> {
   if (typeof data === 'string') {
     return data;
   }
@@ -15,5 +15,5 @@ export function copyAdaptiveAction(data: MicrosoftIDialog, externalApi: External
 
   const copier = CopyConstructorMap[data.$kind] || CopyConstructorMap.default;
 
-  return copier(data, externalApi);
+  return await copier(data, externalApi);
 }

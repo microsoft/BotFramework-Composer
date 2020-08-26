@@ -17,7 +17,7 @@ export type FieldProcessorAsync<T> = (
   toActionId: string,
   toAction: BaseSchema,
   fieldName: string
-) => T;
+) => Promise<T>;
 
 export interface ExternalApi {
   getDesignerId: (data?: DesignerData) => DesignerData;
