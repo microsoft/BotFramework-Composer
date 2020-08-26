@@ -56,6 +56,7 @@ describe('test lg worker', () => {
       range: new Range(new Position(4, 0), new Position(5, 4)),
     };
     expect(result.templates[1]).toMatchObject(expected);
+    lgFiles[0] = result;
   });
 
   it('get expected add templates result', async () => {
@@ -73,6 +74,7 @@ describe('test lg worker', () => {
     };
     expect(result.templates.length).toBe(4);
     expect(result.templates[3]).toMatchObject(expected);
+    lgFiles[0] = result;
   });
 
   it('get expected update template result', async () => {
@@ -91,11 +93,13 @@ describe('test lg worker', () => {
     };
     expect(result.templates.length).toBe(4);
     expect(result.templates[3]).toMatchObject(expected);
+    lgFiles[0] = result;
   });
 
   it('get expected remove template result', async () => {
     const result: any = await lgWorker.removeTemplate('test', lgFiles[0], 'Test2', lgFiles);
     expect(result.templates.length).toBe(3);
+    lgFiles[0] = result;
   });
 
   it('get expected copy template result', async () => {
@@ -108,11 +112,13 @@ describe('test lg worker', () => {
       range: new Range(new Position(8, 0), new Position(9, 4)),
     };
     expect(result.templates[3]).toMatchObject(expected);
+    lgFiles[0] = result;
   });
 
   it('get expected remove templates result', async () => {
     const result: any = await lgWorker.removeTemplates('test', lgFiles[0], ['Test2', 'Test1'], lgFiles);
     expect(result.templates.length).toBe(2);
+    lgFiles[0] = result;
   });
 
   it('clean project', async () => {
