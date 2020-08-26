@@ -4,7 +4,6 @@
 import { SDKKinds } from '@bfc/shared';
 import formatMessage from 'format-message';
 import React from 'react';
-import get from 'lodash/get';
 import { FixedInfo, SingleLineDiv, ListOverview, PropertyAssignment } from '@bfc/ui-shared';
 
 import { FlowSchema, FlowWidget } from '../types/flowRenderer.types';
@@ -28,7 +27,7 @@ const builtinVisualSDKSchema: FlowSchema = {
     nowrap: true,
     judgement: {
       widget: 'ActionCard',
-      body: (data) => data.condition,
+      body: '${coalesce(action.condition, "<condition>")}',
     },
   },
   [SDKKinds.SwitchCondition]: {
@@ -36,7 +35,7 @@ const builtinVisualSDKSchema: FlowSchema = {
     nowrap: true,
     judgement: {
       widget: 'ActionCard',
-      body: (data) => data.condition,
+      body: '${coalesce(action.condition, "<condition>")}',
     },
   },
   [SDKKinds.Foreach]: {
@@ -44,7 +43,7 @@ const builtinVisualSDKSchema: FlowSchema = {
     nowrap: true,
     loop: {
       widget: 'ActionCard',
-      body: (data) => `${formatMessage('Each value in')} {${data.itemsProperty || '?'}}`,
+      body: 'Each value in ${coalesce(action.itemsProperty, "?")}',
     },
   },
   [SDKKinds.ForeachPage]: {
@@ -52,11 +51,7 @@ const builtinVisualSDKSchema: FlowSchema = {
     nowrap: true,
     loop: {
       widget: 'ActionCard',
-      body: (data) => {
-        const pageSizeString = get(data, 'pageSize', '?');
-        const propString = get(data, 'itemsProperty', '?');
-        return formatMessage('Each page of {pageSizeString} in {propString}', { pageSizeString, propString });
-      },
+      body: 'Each page of ${action.pageSize} in ${action.propString}',
     },
   },
   [SDKKinds.SendActivity]: {
