@@ -1,0 +1,22 @@
+{
+  "name": "vacore",
+  "version": "1.0.0",
+  "description": "provide functionality around using VA core",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "extendsComposer": true,
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "adm-zip": "^0.4.14",
+    "archiver": "^3.1.1",
+    "globby": "^11.0.0",
+    "path": "^0.12.7",
+    "portfinder": "^1.0.26",
+    "rimraf": "^3.0.2",
+    "uuid": "^7.0.1"
+  }
+}

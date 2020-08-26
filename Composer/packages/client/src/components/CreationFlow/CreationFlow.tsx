@@ -26,6 +26,7 @@ import { useProjectIdCache } from '../../utils/hooks';
 import { CreateOptions } from './CreateOptions';
 import { OpenProject } from './OpenProject';
 import DefineConversation from './DefineConversation';
+import { VirtualAssistantCreationModal } from '@bfc/ui-plugin-va-creation';
 
 type CreationFlowProps = RouteComponentProps<{}>;
 
@@ -126,6 +127,10 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
       navigate(`./QnASample/importQnA`);
       return;
     }
+    if (templateId === 'va-core') {
+      navigate(`./create/va-core/configure`);
+      return;
+    }
     handleSubmit(formData, templateId);
   };
 
@@ -180,6 +185,12 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
         <ImportQnAFromUrlModal
           dialogId={formData.name.toLowerCase()}
           path="create/QnASample/importQnA"
+          onDismiss={handleDismiss}
+          onSubmit={handleCreateQnA}
+        />
+        <VirtualAssistantCreationModal
+          dialogId={formData.name.toLowerCase()}
+          path="create/va-core/configure"
           onDismiss={handleDismiss}
           onSubmit={handleCreateQnA}
         />
