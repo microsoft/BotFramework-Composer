@@ -5,7 +5,7 @@ import get from 'lodash/get';
 import formatMessage from 'format-message';
 
 import { SDKKinds } from './types';
-import { conceptLabels } from './labelMap';
+import { conceptLabels as conceptLabelsFn } from './labelMap';
 import { PromptTab, PromptTabTitles } from './promptTabs';
 
 export const PROMPT_TYPES = [
@@ -190,11 +190,11 @@ const truncateSDKType = ($kind) => (typeof $kind === 'string' ? $kind.replace('M
  */
 export function generateSDKTitle(data, customizedTitle?: string, tab?: PromptTab) {
   const $kind = get(data, '$kind');
+  const titleFromShared = get(conceptLabelsFn(), [$kind, 'title']);
   const titleFrom$designer = get(data, '$designer.name');
-  const titleFromShared = get(conceptLabels(), [$kind, 'title']);
   const titleFrom$kind = truncateSDKType($kind);
 
-  const title = titleFrom$designer || customizedTitle || titleFromShared || titleFrom$kind;
+  const title = titleFromShared || titleFrom$designer || customizedTitle || titleFrom$kind;
   if (tab) {
     return `${PromptTabTitles} (${title})`;
   }
