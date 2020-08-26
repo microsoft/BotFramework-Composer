@@ -102,8 +102,8 @@ export class LgNotification extends Notification {
   private findDialogPath(lgFile: LgFile, dialogs: DialogInfo[], diagnostic: Diagnostic) {
     const mappedTemplate = lgFile.templates.find(
       (t) =>
-        get(diagnostic, 'range.start.line') >= get(t, 'range.startLineNumber') &&
-        get(diagnostic, 'range.end.line') <= get(t, 'range.endLineNumber')
+        get(diagnostic, 'range.start.line') >= get(t, 'range.start.line') &&
+        get(diagnostic, 'range.end.line') <= get(t, 'range.end.line')
     );
     if (mappedTemplate && mappedTemplate.name.match(LgNamePattern)) {
       //should navigate to design page

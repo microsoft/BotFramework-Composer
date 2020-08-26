@@ -2,10 +2,27 @@
 // Licensed under the MIT License.
 import { sectionHandler } from '@microsoft/bf-lu/lib/parser/composerindex';
 
-import { updateIntent, addIntent, removeIntent } from '../src/utils/luUtil';
+import { updateIntent, addIntent, removeIntent, checkSection, parse } from '../src/utils/luUtil';
 import { luIndexer } from '../src/luIndexer';
 
 const { luParser, luSectionTypes } = sectionHandler;
+
+describe('LU Check', () => {
+  const diagnostics1 = checkSection({
+    Name: 'Greeting',
+    Body: `- hi
+- hello`,
+  });
+  expect(diagnostics1.length).toEqual(0);
+
+  const diagnostics2 = checkSection({
+    Name: 'Greeting',
+    Body: `- hi
+hello`,
+  });
+  expect(diagnostics2.length).toEqual(1);
+  expect(diagnostics2[0].range?.start.line).toEqual(3);
+});
 
 describe('LU Section CRUD test', () => {
   const fileContent = `# Greeting
@@ -56,6 +73,19 @@ hi
     expect(Sections.length).toEqual(3);
     expect(Sections[0].Errors.length).toEqual(1);
     expect(Sections[2].Errors.length).toEqual(1);
+  });
+
+  it('parse section can get diagnostic line number', () => {
+    const luFile = parse(fileId2, fileContentError1);
+    const { intents, diagnostics, content } = luFile;
+
+    expect(content).toEqual(fileContentError1);
+    expect(intents.length).toEqual(3);
+    expect(diagnostics.length).toEqual(2);
+    expect(diagnostics[0].range?.start.line).toEqual(3);
+    expect(diagnostics[0].range?.end.line).toEqual(3);
+    expect(diagnostics[1].range?.start.line).toEqual(10);
+    expect(diagnostics[1].range?.end.line).toEqual(10);
   });
 
   it('add simpleIntentSection test', () => {
