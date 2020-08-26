@@ -213,7 +213,7 @@ export default async (composer: any): Promise<void> => {
         await copyDir(sourcePath, localDisk, destPath, project.fileStorage, excludeFolder);
 
         const schemaDstPath = path.join(project.dir, 'schemas');
-        const schemaSrcPath = path.join(sourcePath, 'Schemas');
+        const schemaSrcPath = path.join(sourcePath, 'schemas');
         const customSchemaExists = fs.existsSync(schemaDstPath);
         const pathsToExclude: Set<string> = new Set();
         if (customSchemaExists) {
@@ -223,7 +223,7 @@ export default async (composer: any): Promise<void> => {
           }
         }
         await copyDir(schemaSrcPath, localDisk, schemaDstPath, project.fileStorage, pathsToExclude);
-        const schemaFolderInRuntime = path.join(destPath, 'Schemas');
+        const schemaFolderInRuntime = path.join(destPath, 'schemas');
         await removeDirAndFiles(schemaFolderInRuntime);
 
         // install dev dependencies in production, make sure typescript is installed
