@@ -27,8 +27,7 @@ function convertQnADiagnostic(d: any, source: string): Diagnostic {
 
 function parse(content: string, id = '') {
   const { Sections, Errors } = LUParser.parse(content);
-  const qnaSections: any[] = [];
-  Sections.forEach((section) => {
+  const qnaSections = Sections.filter(({ SectionType }) => SectionType === 'qnaSection').map((section) => {
     const {
       Answer,
       Body,
@@ -54,7 +53,7 @@ function parse(content: string, id = '') {
       };
     });
 
-    qnaSections.push({
+    return {
       Answer,
       Body,
       FilterPairs,
@@ -69,7 +68,7 @@ function parse(content: string, id = '') {
       source,
       range,
       uuid: nanoid(6),
-    });
+    };
   });
   const diagnostics = Errors.map((e) => convertQnADiagnostic(e, id));
   return {
