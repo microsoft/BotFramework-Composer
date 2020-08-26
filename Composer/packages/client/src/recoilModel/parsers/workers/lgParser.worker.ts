@@ -138,7 +138,9 @@ const filterParseResult = (lgFile: LgFile) => {
 };
 
 const getTargetFile = (projectId: string, lgFile: LgFile) => {
-  return cache.get(projectId, lgFile.id) ?? lgFile;
+  const cachedFile = cache.get(projectId, lgFile.id);
+
+  return !cachedFile || cachedFile.content !== lgFile.content ? lgFile : cachedFile;
 };
 
 export const handleMessage = (msg: LgMessageEvent) => {
