@@ -53,10 +53,7 @@ describe('test lg worker', () => {
       body: '-add',
       name: 'Test',
       parameters: [],
-      range: {
-        endLineNumber: 5,
-        startLineNumber: 4,
-      },
+      range: new Range(new Position(4, 0), new Position(5, 4)),
     };
     expect(result.templates[1]).toMatchObject(expected);
   });
@@ -72,10 +69,7 @@ describe('test lg worker', () => {
       body: '-add2',
       name: 'Test2',
       parameters: [],
-      range: {
-        endLineNumber: 9,
-        startLineNumber: 8,
-      },
+      range: new Range(new Position(8, 0), new Position(9, 5)),
     };
     expect(result.templates.length).toBe(4);
     expect(result.templates[3]).toMatchObject(expected);
@@ -93,10 +87,7 @@ describe('test lg worker', () => {
       body: '-update',
       name: 'Test2',
       parameters: [],
-      range: {
-        endLineNumber: 9,
-        startLineNumber: 8,
-      },
+      range: new Range(new Position(8, 0), new Position(9, 7)),
     };
     expect(result.templates.length).toBe(4);
     expect(result.templates[3]).toMatchObject(expected);
@@ -114,10 +105,7 @@ describe('test lg worker', () => {
       body: '-add',
       name: 'Test2',
       parameters: [],
-      range: {
-        endLineNumber: 9,
-        startLineNumber: 8,
-      },
+      range: new Range(new Position(8, 0), new Position(9, 4)),
     };
     expect(result.templates[3]).toMatchObject(expected);
   });
