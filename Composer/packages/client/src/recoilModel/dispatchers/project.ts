@@ -19,13 +19,7 @@ import settingStorage from '../../utils/dialogSettingStorage';
 import filePersistence from '../persistence/FilePersistence';
 import { navigateTo } from '../../utils/navigation';
 import languageStorage from '../../utils/languageStorage';
-import {
-  designPageLocationState,
-  botDiagnosticsState,
-  botProjectsState,
-  projectMetaDataState,
-  currentProjectIdState,
-} from '../atoms';
+import { designPageLocationState, botDiagnosticsState, botProjectsState, projectMetaDataState } from '../atoms';
 
 import {
   skillManifestsState,

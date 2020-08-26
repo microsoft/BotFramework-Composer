@@ -98,12 +98,12 @@ describe('dialog dispatcher', () => {
 
     const { result } = renderRecoilHook(useRecoilTestHook, {
       states: [
+        { recoilState: currentProjectIdState, initialValue: projectId },
         { recoilState: dialogsState(projectId), initialValue: [{ id: '1' }, { id: '2' }] },
         { recoilState: dialogSchemasState(projectId), initialValue: [{ id: '1' }, { id: '2' }] },
         { recoilState: lgFilesState(projectId), initialValue: [{ id: '1.lg' }, { id: '2' }] },
         { recoilState: luFilesState(projectId), initialValue: [{ id: '1.lu' }, { id: '2' }] },
         { recoilState: schemasState(projectId), initialValue: { sdk: { content: '' } } },
-        { recoilState: currentProjectIdState, initialValue: projectId },
       ],
       dispatcher: {
         recoilState: dispatcherState,
@@ -118,6 +118,9 @@ describe('dialog dispatcher', () => {
 
   fit('removes a dialog file', async () => {
     await act(async () => {
+      await dispatcher.createDialog({ id: '1', content: 'abcde', projectId });
+    });
+    await act(async () => {
       await dispatcher.removeDialog('1', projectId);
     });
 
@@ -130,7 +133,7 @@ describe('dialog dispatcher', () => {
   it('updates a dialog file', async () => {
     test.validateDialog = jest.fn().mockReturnValue([]);
     await act(async () => {
-      await dispatcher.updateDialog({ id: '1', content: 'new', projectId });
+      dispatcher.updateDialog({ id: '1', content: 'new', projectId });
     });
     expect(renderedComponent.current.dialogs.find((dialog) => dialog.id === '1').content).toEqual('new');
   });
@@ -149,7 +152,7 @@ describe('dialog dispatcher', () => {
     const ON_COMPLETE = { action: 'moreStuff' };
 
     await act(async () => {
-      await dispatcher.createDialogBegin({ actions: ACTIONS }, ON_COMPLETE, projectId);
+      dispatcher.createDialogBegin({ actions: ACTIONS }, ON_COMPLETE, projectId);
     });
 
     expect(renderedComponent.current.actionsSeed).toEqual({ actions: ACTIONS });

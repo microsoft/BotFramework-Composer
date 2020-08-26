@@ -14,6 +14,7 @@ import filePersistence from './persistence/FilePersistence';
 import createDispatchers, { Dispatcher } from './dispatchers';
 import { currentProjectIdState, botProjectsState } from './atoms';
 import { UndoRoot } from './undo/history';
+import UndoHistory from './undo/undoHistory';
 import { botStateByProjectIdSelector } from './selectors';
 
 const getBotAssets = async (snapshot: Snapshot): Promise<BotAssets> => {
@@ -80,7 +81,7 @@ export const DispatcherWrapper = ({ children }) => {
   return (
     <Fragment>
       {botProjects.map((projectId) => (
-        <UndoRoot key={projectId} projectId={projectId} />
+        <UndoRoot key={projectId} projectId={projectId} undoHistory={new UndoHistory()} />
       ))}
       <InitDispatcher onLoad={setLoaded} />
       {loaded ? children : null}

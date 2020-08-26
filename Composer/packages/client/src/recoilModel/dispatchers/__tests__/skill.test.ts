@@ -137,7 +137,7 @@ describe('skill dispatcher', () => {
     it('adds a skill', async () => {
       await act(async () => {
         dispatcher.updateSkill({
-          projectId: 'projectId',
+          projectId,
           targetId: -1,
           skillData: makeTestSkill(3),
         });
@@ -153,7 +153,7 @@ describe('skill dispatcher', () => {
     it('modifies a skill', async () => {
       await act(async () => {
         dispatcher.updateSkill({
-          projectId: 'projectId',
+          projectId,
           targetId: 0,
           skillData: makeTestSkill(100),
         });
