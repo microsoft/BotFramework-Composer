@@ -21,6 +21,7 @@
     "@bfc/code-editor": "*",
     "@bfc/extension": "*",
     "@bfc/intellisense": "*",
+    "@bfc/ui-shared": "*",
     "@uifabric/fluent-theme": "^7.1.4",
     "@uifabric/icons": "^7.3.0",
     "@uifabric/styling": "^7.7.4",
