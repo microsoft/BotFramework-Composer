@@ -13,6 +13,7 @@ export enum FileExtensions {
   Lu = '.lu',
   Lg = '.lg',
   Qna = '.qna',
+  SourceQnA = '.source.qna',
   Setting = 'appsettings.json',
 }
 

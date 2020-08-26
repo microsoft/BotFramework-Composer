@@ -11,6 +11,7 @@ const BotStructureTemplate = {
   lg: 'language-generation/${LOCALE}/${BOTNAME}.${LOCALE}.lg',
   lu: 'language-understanding/${LOCALE}/${BOTNAME}.${LOCALE}.lu',
   qna: 'knowledge-base/en-us/${BOTNAME}.en-us.qna',
+  sourceQnA: 'knowledge-base/source/${FILENAME}.source.qna',
   dialogSchema: '${BOTNAME}.dialog.schema',
   schema: '${FILENAME}',
   settings: 'settings/${FILENAME}',
@@ -22,6 +23,7 @@ const BotStructureTemplate = {
     lg: 'dialogs/${DIALOGNAME}/language-generation/${LOCALE}/${DIALOGNAME}.${LOCALE}.lg',
     lu: 'dialogs/${DIALOGNAME}/language-understanding/${LOCALE}/${DIALOGNAME}.${LOCALE}.lu',
     qna: 'dialogs/${DIALOGNAME}/knowledge-base/en-us/${DIALOGNAME}.en-us.qna',
+    sourceQnA: 'dialogs/${DIALOGNAME}/knowledge-base/source/${FILENAME}.source.qna',
     dialogSchema: 'dialogs/${DIALOGNAME}/${DIALOGNAME}.dialog.schema',
   },
   skillManifests: 'manifests/${MANIFESTFILENAME}',
@@ -30,6 +32,7 @@ const BotStructureTemplate = {
 const templateInterpolate = (str: string, obj: { [key: string]: string }) =>
   str.replace(/\${([^}]+)}/g, (_, prop) => obj[prop]);
 
+// parse file name: [fileId].[locale].[fileType]
 export const parseFileName = (name: string, defaultLocale: string) => {
   const fileType = Path.extname(name);
   const id = Path.basename(name, fileType);
@@ -44,11 +47,33 @@ export const parseFileName = (name: string, defaultLocale: string) => {
   return { fileId, locale, fileType };
 };
 
-// only
+// parse QnA source file name: [dialogId].[fileId].source.qna, ignore locale for now.
+export const parseSourceFileName = (name: string) => {
+  const fileType = FileExtensions.SourceQnA;
+  const id = Path.basename(name, fileType);
+  const [dialogId, fileId] = id.split('.');
+
+  if (!dialogId) {
+    throw new Error(`parse source file name ${name} error.`);
+  }
+  return { fileId: fileId || dialogId, dialogId, fileType };
+};
+
 export const defaultFilePath = (botName: string, defaultLocale: string, filename: string): string => {
-  const { fileId, locale, fileType } = parseFileName(filename, defaultLocale);
   const BOTNAME = botName.toLowerCase();
   const CommonFileId = 'common';
+
+  if (filename.endsWith(FileExtensions.SourceQnA)) {
+    const { fileId: FILENAME, dialogId: DIALOGNAME } = parseSourceFileName(filename);
+    const isRootFile = BOTNAME === DIALOGNAME.toLowerCase();
+    const TemplatePath = isRootFile ? BotStructureTemplate.sourceQnA : BotStructureTemplate.dialogs.sourceQnA;
+    return templateInterpolate(TemplatePath, {
+      FILENAME,
+      DIALOGNAME,
+    });
+  }
+
+  const { fileId, locale, fileType } = parseFileName(filename, defaultLocale);
   const LOCALE = locale;
 
   // 1. Even appsettings.json hit FileExtensions.Manifest, but it never use this do created.
