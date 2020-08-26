@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /**
- * qnaUtil.ts is a single place handle lu file operation.
+ * qnaUtil.ts is a single place handle qna file operation.
  * it's designed have no state, input text file, output text file.
  */
 

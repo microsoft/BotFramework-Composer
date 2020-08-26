@@ -1,9 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-// import { QnASection } from '@bfc/shared';
-// import { sectionHandler } from '@microsoft/bf-lu/lib/parser/composerindex';
-// import cloneDeep from 'lodash/cloneDeep';
 import { qnaIndexer } from '@bfc/indexers/src/qnaIndexer';
 
 import {
