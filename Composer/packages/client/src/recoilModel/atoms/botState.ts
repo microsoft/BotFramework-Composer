@@ -8,16 +8,16 @@ import {
   Diagnostic,
   LgFile,
   LuFile,
+  QnAFile,
   BotSchemas,
   Skill,
   DialogSetting,
 } from '@bfc/shared';
 
-import { BotLoadError, DesignPageLocation } from '../../recoilModel/types';
+import { BotLoadError, DesignPageLocation, QnAAllUpViewStatus } from '../../recoilModel/types';
 
 import { PublishType, BreadcrumbItem } from './../../recoilModel/types';
 import { BotStatus } from './../../constants';
-
 const getFullyQualifiedKey = (value: string) => {
   return `Bot_${value}_State`;
 };
@@ -147,7 +147,7 @@ export const showAddSkillDialogModalState = atomFamily<boolean, string>({
 
 export const settingsState = atomFamily<DialogSetting, string>({
   key: getFullyQualifiedKey('settings'),
-  default: { defaultLanguage: 'en-us', languages: ['en-us'], luis: {} } as DialogSetting,
+  default: { defaultLanguage: 'en-us', languages: ['en-us'], luis: {}, qna: {} } as DialogSetting,
 });
 
 export const publishVersionsState = atomFamily<any, string>({
@@ -231,4 +231,19 @@ export const designPageLocationState = atomFamily<DesignPageLocation, string>({
     focused: '',
     selected: '',
   },
+});
+
+export const qnaAllUpViewStatusState = atomFamily<any, string>({
+  key: getFullyQualifiedKey('qnaAllUpViewStatusState'),
+  default: QnAAllUpViewStatus.Success,
+});
+
+export const isEjectRuntimeExistState = atomFamily<boolean, string>({
+  key: getFullyQualifiedKey('isEjectRuntimeExist'),
+  default: false,
+});
+
+export const qnaFilesState = atomFamily<QnAFile[], string>({
+  key: getFullyQualifiedKey('qnaFiles'),
+  default: [],
 });

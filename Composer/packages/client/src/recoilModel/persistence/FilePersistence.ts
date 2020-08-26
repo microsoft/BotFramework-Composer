@@ -5,7 +5,7 @@ import differenceWith from 'lodash/differenceWith';
 import isEqual from 'lodash/isEqual';
 import { DialogInfo, DialogSchemaFile, DialogSetting, SkillManifest, BotAssets } from '@bfc/shared';
 
-import { LuFile, LgFile } from './../../../../lib/shared/src/types/indexers';
+import { LuFile, LgFile, QnAFile } from './../../../../lib/shared/src/types/indexers';
 import * as client from './http';
 import { IFileChange, ChangeType, FileExtensions } from './types';
 
@@ -187,6 +187,12 @@ class FilePersistence {
     return changes;
   }
 
+  private getQnAChanges(current: QnAFile[], previous: QnAFile[]) {
+    const changeItems = this.getDifferenceItems(current, previous);
+    const changes = this.getFileChanges(FileExtensions.QnA, changeItems);
+    return changes;
+  }
+
   private getLgChanges(current: LgFile[], previous: LgFile[]) {
     const changeItems = this.getDifferenceItems(current, previous);
     const changes = this.getFileChanges(FileExtensions.Lg, changeItems);
@@ -217,6 +223,7 @@ class FilePersistence {
     const dialogChanges = this.getDialogChanges(currentAssets.dialogs, previousAssets.dialogs);
     const dialogSchemaChanges = this.getDialogSchemaChanges(currentAssets.dialogSchemas, previousAssets.dialogSchemas);
     const luChanges = this.getLuChanges(currentAssets.luFiles, previousAssets.luFiles);
+    const qnaChanges = this.getQnAChanges(currentAssets.qnaFiles, previousAssets.qnaFiles);
     const lgChanges = this.getLgChanges(currentAssets.lgFiles, previousAssets.lgFiles);
     const skillManifestChanges = this.getSkillManifestsChanges(
       currentAssets.skillManifests,
@@ -227,6 +234,7 @@ class FilePersistence {
       ...dialogChanges,
       ...dialogSchemaChanges,
       ...luChanges,
+      ...qnaChanges,
       ...lgChanges,
       ...skillManifestChanges,
       ...settingChanges,

@@ -3,7 +3,6 @@
 
 import { RequestHandler } from 'express-serve-static-core';
 import { Debugger } from 'debug';
-import { JSONSchema7 } from 'json-schema';
 
 import { PluginLoader } from './pluginLoader';
 import log from './logger';
@@ -56,13 +55,16 @@ export class ComposerPluginRegistration {
   /**************************************************************************************
    * Publish related features
    *************************************************************************************/
-  public async addPublishMethod(plugin: PublishPlugin, schema?: JSONSchema7, instructions?: string) {
+  public async addPublishMethod(plugin: PublishPlugin) {
     log('registering publish method', this.name);
-    this.loader.extensions.publish[this.name] = {
-      plugin: this,
-      instructions: instructions,
+    this.loader.extensions.publish[plugin.customName || this.name] = {
+      plugin: {
+        name: plugin.customName || this.name,
+        description: plugin.customDescription || this.description,
+        instructions: plugin.instructions,
+        schema: plugin.schema,
+      },
       methods: plugin,
-      schema: schema,
     };
   }
 
@@ -87,6 +89,20 @@ export class ComposerPluginRegistration {
    */
   public addRuntimeTemplate(plugin: RuntimeTemplate) {
     this.loader.extensions.runtimeTemplates.push(plugin);
+  }
+
+  /**************************************************************************************
+   * Get current runtime from project
+   *************************************************************************************/
+  public getRuntimeByProject(project): RuntimeTemplate {
+    return this.loader.getRuntimeByProject(project);
+  }
+
+  /**************************************************************************************
+   * Get current runtime by type
+   *************************************************************************************/
+  public getRuntime(type: string | undefined): RuntimeTemplate {
+    return this.loader.getRuntime(type);
   }
 
   /**************************************************************************************

@@ -19,6 +19,7 @@ import { LoadingSpinner } from './components/LoadingSpinner';
 
 const DesignPage = React.lazy(() => import('./pages/design/DesignPage'));
 const LUPage = React.lazy(() => import('./pages/language-understanding/LUPage'));
+const QnAPage = React.lazy(() => import('./pages/knowledge-base/QnAPage'));
 const LGPage = React.lazy(() => import('./pages/language-generation/LGPage'));
 const SettingPage = React.lazy(() => import('./pages/setting/SettingsPage'));
 const Notifications = React.lazy(() => import('./pages/notifications/Notifications'));
@@ -42,12 +43,14 @@ const Routes = (props) => {
             from="/bot/:projectId/language-understanding"
             to="/bot/:projectId/language-understanding/all"
           />
+          <Redirect noThrow from="/bot/:projectId/knowledge-base" to="/bot/:projectId/knowledge-base/all" />
           <Redirect noThrow from="/bot/:projectId/publish" to="/bot/:projectId/publish/all" />
           <Redirect noThrow from="/" to={resolveToBasePath(BASEPATH, 'home')} />
           <ProjectRouter path="/bot/:projectId">
             <DesignPage path="dialogs/:dialogId/*" />
             <LUPage path="language-understanding/:dialogId/*" />
             <LGPage path="language-generation/:dialogId/*" />
+            <QnAPage path="knowledge-base/:dialogId/*" />
             <Notifications path="notifications" />
             <Publish path="publish/:targetName" />
             <Skills path="skills/*" />

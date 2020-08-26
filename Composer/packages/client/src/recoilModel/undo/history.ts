@@ -106,9 +106,9 @@ function setInitialLocation(snapshot: Snapshot, projectId: string, undoHistory: 
   }
 }
 
-export const UndoRoot = React.memo(({ projectId, undoHistory }: { projectId: string; undoHistory: UndoHistory }) => {
+export const UndoRoot = React.memo(({ projectId }: { projectId: string }) => {
+  const undoHistory = new UndoHistory();
   const history: UndoHistory = useRef(undoHistory).current;
-  console.log('HISTORY', history);
 
   const setUndoFunction = useSetRecoilState(undoFunctionState(projectId));
   const [, forceUpdate] = useState([]);

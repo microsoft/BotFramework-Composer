@@ -12,7 +12,7 @@ function mergeConfig<T extends object>(base: T, overrides?: T) {
 
   return mergeWith(base, overrides, (objValue, srcValue) => {
     if (isArray(objValue)) {
-      return objValue.concat(srcValue);
+      return srcValue.concat(objValue);
     }
   });
 }

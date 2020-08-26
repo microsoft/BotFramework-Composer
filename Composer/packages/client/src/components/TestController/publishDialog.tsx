@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React, { useCallback } from 'react';
+import React, { useCallback, Fragment } from 'react';
 import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
@@ -14,10 +14,15 @@ import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import formatMessage from 'format-message';
-import { ILuisConfig } from '@bfc/shared';
+import { useRecoilValue } from 'recoil';
+import { IConfig, IPublishConfig } from '@bfc/shared';
+import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
 import { Text, Tips, Links, nameRegex } from '../../constants';
 import { FieldConfig, useForm } from '../../hooks/useForm';
+import { dialogsState, luFilesState, qnaFilesState } from '../../recoilModel/atoms/botState';
+import { getReferredQnaFiles } from '../../utils/qnaUtil';
+import { getReferredLuFiles } from '../../utils/luUtil';
 
 // -------------------- Styles -------------------- //
 const textFieldLabel = css`
@@ -45,10 +50,11 @@ const dialogModal = {
     maxWidth: '450px !important',
   },
 };
-
-interface LuisFormData {
+interface FormData {
   name: string;
   authoringKey: string;
+  subscriptionKey: string;
+  qnaRegion: string;
   endpointKey: string;
   authoringRegion: string;
   defaultLanguage: string;
@@ -73,27 +79,56 @@ const onRenderLabel = (info) => (props) => (
   </Stack>
 );
 
-interface IPublishLuisDialogProps {
+const regionOptions: IDropdownOption[] = [
+  {
+    key: 'westus',
+    text: formatMessage('westus'),
+  },
+  {
+    key: 'westeurope',
+    text: formatMessage('westeurope'),
+  },
+  {
+    key: 'australia',
+    text: formatMessage('australia'),
+  },
+];
+
+interface IPublishDialogProps {
   botName: string;
   isOpen: boolean;
-  config: ILuisConfig;
+  config: IConfig;
   onDismiss: () => void;
-  onPublish: (data: LuisFormData) => void;
+  onPublish: (data: IPublishConfig) => void;
 }
 
-export const PublishLuisDialog: React.FC<IPublishLuisDialogProps> = (props) => {
+export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
   const { isOpen, onDismiss, onPublish, botName, config } = props;
+  const dialogs = useRecoilValue(dialogsState);
+  const luFiles = useRecoilValue(luFilesState);
+  const qnaFiles = useRecoilValue(qnaFilesState);
+  const qnaConfigShow = getReferredQnaFiles(qnaFiles, dialogs).length > 0;
+  const luConfigShow = getReferredLuFiles(luFiles, dialogs).length > 0;
 
-  const luisFormConfig: FieldConfig<LuisFormData> = {
+  const formConfig: FieldConfig<FormData> = {
     name: {
       required: true,
       validate: validate,
       defaultValue: config.name || botName,
     },
     authoringKey: {
-      required: true,
+      required: luConfigShow,
       validate: validate,
       defaultValue: config.authoringKey,
+    },
+    subscriptionKey: {
+      required: qnaConfigShow,
+      validate: validate,
+      defaultValue: config.subscriptionKey,
+    },
+    qnaRegion: {
+      required: true,
+      defaultValue: config.qnaRegion || 'westus',
     },
     endpointKey: {
       required: false,
@@ -122,7 +157,7 @@ export const PublishLuisDialog: React.FC<IPublishLuisDialogProps> = (props) => {
     },
   };
 
-  const { formData, formErrors, hasErrors, updateField } = useForm(luisFormConfig, { validateOnMount: true });
+  const { formData, formErrors, hasErrors, updateField } = useForm(formConfig, { validateOnMount: true });
 
   const handlePublish = useCallback(
     (e) => {
@@ -130,17 +165,52 @@ export const PublishLuisDialog: React.FC<IPublishLuisDialogProps> = (props) => {
       if (hasErrors) {
         return;
       }
-
-      onPublish(formData);
+      const newValue = Object.assign({}, formData);
+      const subscriptionKey = formData.subscriptionKey;
+      const qnaRegion = formData.qnaRegion;
+      delete newValue.subscriptionKey;
+      delete newValue.qnaRegion;
+      const publishConfig = {
+        luis: newValue,
+        qna: {
+          subscriptionKey,
+          qnaRegion,
+          endpointKey: '',
+        },
+      };
+      onPublish(publishConfig);
     },
     [hasErrors, formData]
   );
 
+  const luisTitleRender = () => {
+    return (
+      <Fragment>
+        <br />
+        {Text.LUISDEPLOY}
+        <Link href={Links.LUIS} target="_blank">
+          {formatMessage('Learn more.')}
+        </Link>
+      </Fragment>
+    );
+  };
+
+  const qnaTitleRender = () => {
+    return (
+      <Fragment>
+        <br />
+        {Text.QNADEPLOY}
+        <Link href={Links.QNA} target="_blank">
+          {formatMessage('Learn more.')}
+        </Link>
+      </Fragment>
+    );
+  };
   return (
     <Dialog
       dialogContentProps={{
         type: DialogType.normal,
-        title: formatMessage('Publish LUIS models'),
+        title: formatMessage('Publish models'),
         styles: dialog,
       }}
       hidden={!isOpen}
@@ -152,10 +222,9 @@ export const PublishLuisDialog: React.FC<IPublishLuisDialogProps> = (props) => {
       onDismiss={onDismiss}
     >
       <div css={dialogSubTitle}>
-        {Text.LUISDEPLOY}{' '}
-        <Link href={Links.LUIS} target="_blank">
-          {formatMessage('Learn more.')}
-        </Link>
+        {Text.DEPLOY}
+        {luConfigShow ? luisTitleRender() : ''}
+        {qnaConfigShow ? qnaTitleRender() : ''}
       </div>
       <form css={dialogContent} onSubmit={handlePublish}>
         <Stack gap={20}>
@@ -175,21 +244,49 @@ export const PublishLuisDialog: React.FC<IPublishLuisDialogProps> = (props) => {
             onChange={(_e, val) => updateField('environment', val)}
             onRenderLabel={onRenderLabel(Tips.ENVIRONMENT)}
           />
-          <TextField
-            data-testid="AuthoringKeyInput"
-            errorMessage={formErrors.authoringKey}
-            label={formatMessage('LUIS Authoring key:')}
-            value={formData.authoringKey}
-            onChange={(_e, val) => updateField('authoringKey', val)}
-            onRenderLabel={onRenderLabel(Tips.AUTHORING_KEY)}
-          />
-          <TextField
-            disabled
-            errorMessage={formErrors.authoringRegion}
-            label={formatMessage('Authoring Region')}
-            value={formData.authoringRegion}
-            onRenderLabel={onRenderLabel(Tips.AUTHORING_REGION)}
-          />
+          {luConfigShow && (
+            <Fragment>
+              <TextField
+                data-testid="AuthoringKeyInput"
+                errorMessage={formErrors.authoringKey}
+                label={formatMessage('LUIS Authoring key:')}
+                value={formData.authoringKey}
+                onChange={(_e, val) => updateField('authoringKey', val)}
+                onRenderLabel={onRenderLabel(Tips.AUTHORING_KEY)}
+              />
+              <Dropdown
+                data-testid="regionDropdown"
+                label={formatMessage('Luis Authoring Region')}
+                options={regionOptions}
+                responsiveMode={ResponsiveMode.large}
+                selectedKey={formData.authoringRegion}
+                onChange={(_e, option) => {
+                  if (option) {
+                    updateField('authoringRegion', option.key.toString());
+                  }
+                }}
+              />
+            </Fragment>
+          )}
+          {qnaConfigShow && (
+            <Fragment>
+              <TextField
+                data-testid="SubscriptionKeyInput"
+                errorMessage={formErrors.subscriptionKey}
+                label={formatMessage('QNA Subscription key:')}
+                value={formData.subscriptionKey}
+                onChange={(_e, val) => updateField('subscriptionKey', val)}
+                onRenderLabel={onRenderLabel(Tips.SUBSCRIPTION_KEY)}
+              />
+              <TextField
+                disabled
+                errorMessage={formErrors.qnaRegion}
+                label={formatMessage('QnA Region')}
+                value={formData.qnaRegion}
+                onRenderLabel={onRenderLabel(Tips.AUTHORING_REGION)}
+              />
+            </Fragment>
+          )}
           <TextField
             disabled
             errorMessage={formErrors.defaultLanguage}

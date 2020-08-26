@@ -24,7 +24,8 @@ export const Endpoints: React.FC<ContentProps> = ({ errors, value, schema, onCha
     label: false,
     properties: {
       endpoints: {
-        order: [['name', 'endpointUrl'], ['description', 'protocol'], '*'],
+        hidden: ['protocol'],
+        order: [['name', 'endpointUrl'], ['description', 'msAppId'], '*'],
       },
     },
   };

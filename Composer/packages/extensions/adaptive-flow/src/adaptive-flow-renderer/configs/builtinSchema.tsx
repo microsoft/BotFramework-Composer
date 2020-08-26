@@ -146,6 +146,26 @@ const builtinVisualSDKSchema: FlowSchema = {
       />
     ),
   },
+  [SDKKinds.DeleteActivity]: {
+    widget: 'ActionCard',
+    header: {
+      widget: 'ActionHeader',
+      title: 'Delete activity',
+    },
+    body: (data) => (
+      <>
+        <FixedInfo>{data.activityId || '?'}</FixedInfo>
+      </>
+    ),
+  },
+  [SDKKinds.UpdateActivity]: {
+    widget: 'ActionCard',
+    header: {
+      widget: 'ActionHeader',
+      title: 'Update activity',
+    },
+    body: (data) => data.activity,
+  },
   [SDKKinds.DeleteProperty]: {
     widget: 'ActionCard',
     body: (data) => data.property,
@@ -217,6 +237,19 @@ const builtinVisualSDKSchema: FlowSchema = {
           <FixedInfo>{formatMessage(' = Token Property')}</FixedInfo>
         </>
       ) : null,
+  },
+  [SDKKinds.TelemetryTrackEvent]: {
+    widget: 'ActionCard',
+    header: {
+      widget: 'ActionHeader',
+      title: 'Telemetry - Trace Event',
+    },
+    body: (data) => (
+      <>
+        {data.eventName || '?'}
+        <FixedInfo>{formatMessage(' (Event)')}</FixedInfo>
+      </>
+    ),
   },
 };
 

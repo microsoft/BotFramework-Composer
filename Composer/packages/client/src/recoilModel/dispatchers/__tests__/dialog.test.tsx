@@ -43,6 +43,18 @@ jest.mock('@bfc/indexers', () => {
         content,
       }),
     },
+    lgUtil: {
+      parse: (id, content) => ({
+        id,
+        content,
+      }),
+    },
+    luUtil: {
+      parse: (id, content) => ({
+        id,
+        content,
+      }),
+    },
   };
 });
 
@@ -69,6 +81,12 @@ jest.mock('../../parsers/lgWorker', () => {
   };
 });
 
+jest.mock('../../parsers/qnaWorker', () => {
+  return {
+    parse: (id, content) => ({ id, content }),
+  };
+});
+
 describe('dialog dispatcher', () => {
   let renderedComponent, dispatcher: Dispatcher;
   beforeEach(() => {
@@ -81,6 +99,7 @@ describe('dialog dispatcher', () => {
         actionsSeed,
         onCreateDialogComplete,
         showCreateDialogModal,
+        qnaFiles,
       } = useRecoilValue(botStateByProjectIdSelector);
       const currentDispatcher = useRecoilValue(dispatcherState);
 
@@ -93,6 +112,7 @@ describe('dialog dispatcher', () => {
         actionsSeed,
         onCreateDialogComplete,
         showCreateDialogModal,
+        qnaFiles,
       };
     };
 
@@ -144,6 +164,7 @@ describe('dialog dispatcher', () => {
     });
     expect(renderedComponent.current.luFiles.find((dialog) => dialog.id === '100.en-us')).not.toBeNull();
     expect(renderedComponent.current.lgFiles.find((dialog) => dialog.id === '100.en-us')).not.toBeNull();
+    expect(renderedComponent.current.qnaFiles.find((dialog) => dialog.id === '100.en-us')).not.toBeNull();
     expect(renderedComponent.current.dialogs.find((dialog) => dialog.id === '100').content).toEqual('abcde');
   });
 

@@ -9,6 +9,8 @@ import { PublishController } from '../controllers/publisher';
 import { AssetController } from '../controllers/asset';
 import { EjectController } from '../controllers/eject';
 
+import { UtilitiesController } from './../controllers/utilities';
+
 const router: Router = express.Router({});
 
 router.post('/projects', ProjectController.createProject);
@@ -23,7 +25,8 @@ router.delete('/projects/:projectId/files/:name', ProjectController.removeFile);
 router.post('/projects/:projectId/files', ProjectController.createFile);
 router.post('/projects/:projectId/skills', ProjectController.updateSkill);
 router.post('/projects/:projectId/skill/check', ProjectController.getSkill);
-router.post('/projects/:projectId/luFiles/publish', ProjectController.publishLuis);
+router.post('/projects/:projectId/build', ProjectController.build);
+router.post('/projects/:projectId/qnaSettings/set', ProjectController.setQnASettings);
 router.post('/projects/:projectId/project/saveAs', ProjectController.saveProjectAs);
 router.get('/projects/:projectId/export', ProjectController.exportProject);
 
@@ -45,6 +48,7 @@ router.get('/publish/:projectId/status/:target', PublishController.status);
 router.post('/publish/:projectId/publish/:target', PublishController.publish);
 router.get('/publish/:projectId/history/:target', PublishController.history);
 router.post('/publish/:projectId/rollback/:target', PublishController.rollback);
+router.post('/publish/:projectId/stopPublish/:target', PublishController.stopBot);
 
 router.get('/publish/:method', PublishController.publish);
 
@@ -54,6 +58,9 @@ router.post('/runtime/eject/:projectId/:template', EjectController.eject);
 
 //assets
 router.get('/assets/projectTemplates', AssetController.getProjTemplates);
+
+//help api
+router.get('/utilities/qna/parse', UtilitiesController.getQnaContent);
 
 const ErrorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
   Promise.resolve(handler(req, res, next)).catch(next);

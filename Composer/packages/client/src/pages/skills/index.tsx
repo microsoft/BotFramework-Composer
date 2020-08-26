@@ -84,6 +84,7 @@ const Skills: React.FC<RouteComponentProps> = () => {
         <SkillSettings
           botId={settings.MicrosoftAppId}
           botName={botName}
+          botPassword={settings.MicrosoftAppPassword}
           projectId={projectId}
           setSettings={setSettings}
           settings={settings}

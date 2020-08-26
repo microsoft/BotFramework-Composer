@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { LuIntentSection, LgFile, FileInfo, LgTemplate } from '@bfc/shared';
+import { LuIntentSection, LgFile, QnASection, FileInfo, LgTemplate } from '@bfc/shared';
 
 export type LuPayload = {
   content: string;
@@ -10,53 +10,76 @@ export type LuPayload = {
 };
 
 export type LgParsePayload = {
+  projectId: string;
   id: string;
   content: string;
   lgFiles: LgFile[];
 };
 
 export interface LgCreateTemplatePayload {
-  id: string;
-  content: string;
+  projectId: string;
+  lgFile: LgFile;
   template: LgTemplate;
+  lgFiles: LgFile[];
 }
 
 export interface LgCreateTemplatesPayload {
-  id: string;
-  content: string;
+  projectId: string;
+  lgFile: LgFile;
   templates: LgTemplate[];
+  lgFiles: LgFile[];
 }
 
 export interface LgUpdateTemplatePayload {
-  id: string;
-  content: string;
+  projectId: string;
+  lgFile: LgFile;
   templateName: string;
-  template: LgTemplate;
+  template: { name?: string; parameters?: string[]; body?: string };
+  lgFiles: LgFile[];
 }
 
 export interface LgRemoveTemplatePayload {
-  id: string;
-  content: string;
+  projectId: string;
+  lgFile: LgFile;
   templateName: string;
+  lgFiles: LgFile[];
 }
 
 export interface LgRemoveAllTemplatesPayload {
-  id: string;
-  content: string;
+  projectId: string;
+  lgFile: LgFile;
   templateNames: string[];
+  lgFiles: LgFile[];
+}
+
+export interface LgNewCachePayload {
+  projectId: string;
+  lgFiles: LgFile[];
+}
+
+export interface LgCleanCachePayload {
+  projectId: string;
 }
 
 export interface LgCopyTemplatePayload {
-  id: string;
-  content: string;
+  projectId: string;
+  lgFile: LgFile;
   fromTemplateName: string;
   toTemplateName: string;
+  lgFiles: LgFile[];
 }
+
 export type IndexPayload = {
   files: FileInfo;
   botName: string;
   schemas: any;
   locale: string;
+};
+
+export type QnAPayload = {
+  content: string;
+  id?: string;
+  section?: QnASection;
 };
 
 export enum LuActionType {
@@ -69,6 +92,8 @@ export enum LuActionType {
 }
 
 export enum LgActionType {
+  CleanCache = 'clean',
+  NewCache = 'new',
   Parse = 'parse',
   AddTemplate = 'add-template',
   AddTemplates = 'add-templates',
@@ -80,4 +105,11 @@ export enum LgActionType {
 
 export enum IndexerActionType {
   Index = 'index',
+}
+
+export enum QnAActionType {
+  Parse = 'parse',
+  AddSection = 'add-section',
+  UpdateSection = 'update-section',
+  RemoveSection = 'remove-section',
 }

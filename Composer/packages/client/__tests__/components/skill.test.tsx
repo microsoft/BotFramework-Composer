@@ -58,6 +58,11 @@ const recoilInitState = ({ set }) => {
       defaultLanguage: 'en-us',
       environment: 'composer',
     },
+    qna: {
+      subscriptionKey: '12345',
+      qnaRegion: 'westus',
+      endpointKey: '',
+    },
   });
 };
 
