@@ -11,7 +11,7 @@ context('Onboarding', () => {
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('Application Settings').click();
     });
-    cy.findByLabelText('Onboarding').click();
+    cy.findByTestId('onboardingToggle').click();
     cy.visitPage('Design');
   });
 
