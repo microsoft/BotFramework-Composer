@@ -128,7 +128,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
       return;
     }
     if (templateId === 'va-core') {
-      navigate(`./va-core/configure`);
+      navigate(`./va-core`);
       return;
     }
     handleSubmit(formData, templateId);
@@ -192,7 +192,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
           formData={formData}
           onDismiss={handleDismiss}
           handleCreateNew={handleCreateNew}
-          path="create/va-core/configure"
+          path="create/va-core/*"
         />
       </Router>
     </Fragment>

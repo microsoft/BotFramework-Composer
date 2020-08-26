@@ -1,11 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from 'react';
-import { RouteComponentProps } from '@reach/router';
-import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
+import React, { Fragment } from 'react';
+import { RouteComponentProps, Router } from '@reach/router';
+import NewBotPage from './newBotPage';
+import CustomizeBotPage from './customizeBotPage';
+import PreProvisionPage from './preProvisionPage';
 
-interface ImportQnAFromUrlModalProps
+interface VirtualAssistantCreationModalProps
   extends RouteComponentProps<{
     location: string;
   }> {
@@ -15,15 +17,16 @@ interface ImportQnAFromUrlModalProps
   formData: any;
 }
 
-export const VirtualAssistantCreationModal: React.FC<ImportQnAFromUrlModalProps> = (props) => {
+export const VirtualAssistantCreationModal: React.FC<VirtualAssistantCreationModalProps> = (props) => {
+  console.log(props.location);
   return (
-    <DialogWrapper
-      isOpen={true}
-      // onDismiss={null}
-      title={'test'}
-      subText={'test test'}
-      dialogType={DialogTypes.DesignFlow}
-    ></DialogWrapper>
+    <Fragment>
+      <Router>
+        <NewBotPage path="projects/create/va-core" />
+        <CustomizeBotPage path="projects/create/va-core/test" />
+        <PreProvisionPage path="projects/create/va-core/preprovisioning" />
+      </Router>
+    </Fragment>
   );
 };
 
