@@ -285,7 +285,7 @@ const getLabel = (dialog: DialogInfo, dataPath: string) => {
   return getFriendlyName(data);
 };
 
-export function getbreadcrumbLabel(dialogs: DialogInfo[], dialogId: string, selected: string, focused: string) {
+export function getBreadcrumbLabel(dialogs: DialogInfo[], dialogId: string, selected: string, focused: string) {
   let label = '';
   const dataPath = getFocusPath(selected, focused);
   if (!dataPath) {
