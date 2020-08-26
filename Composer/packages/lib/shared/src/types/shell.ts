@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { DialogInfo, LuFile, LgFile, LuIntentSection, LgTemplate, DialogSchemaFile } from './indexers';
+import { DialogInfo, LuFile, LgFile, QnAFile, LuIntentSection, LgTemplate, DialogSchemaFile } from './indexers';
 import { UserSettings } from './settings';
 import { OBISchema } from './schema';
 
@@ -55,6 +55,7 @@ export interface ShellData {
   hosted: boolean;
   lgFiles: LgFile[];
   luFiles: LuFile[];
+  qnaFiles: QnAFile[];
   userSettings: UserSettings;
   skills: any[];
   // TODO: remove
@@ -81,6 +82,7 @@ export interface ShellApi {
   updateLuIntent: (id: string, intentName: string, intent: LuIntentSection) => void;
   renameLuIntent: (id: string, intentName: string, newIntentName: string) => void;
   removeLuIntent: (id: string, intentName: string) => void;
+  updateQnaContent: (id: string, content: string) => void;
   updateRegExIntent: (id: string, intentName: string, pattern: string) => void;
   renameRegExIntent: (id: string, intentName: string, newIntentName: string) => void;
   updateIntentTrigger: (id: string, intentName: string, newIntentName: string) => void;
@@ -95,6 +97,12 @@ export interface ShellApi {
   announce: (message: string) => void;
   displayManifestModal: (manifestId: string) => void;
   updateDialogSchema: (_: DialogSchemaFile) => Promise<void>;
+  createTrigger: (id: string, formData, url?: string) => void;
+}
+
+export interface Shell {
+  api: ShellApi;
+  data: ShellData;
 }
 
 export interface Shell {

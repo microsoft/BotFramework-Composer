@@ -6,7 +6,7 @@ import fs from 'fs';
 
 import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
-import { getNewDesigner, FileInfo, Skill, Diagnostic, IBotProject, DialogSetting, ILuisConfig } from '@bfc/shared';
+import { getNewDesigner, FileInfo, Skill, Diagnostic, IBotProject, DialogSetting } from '@bfc/shared';
 import { UserIdentity, pluginLoader } from '@bfc/plugin-loader';
 
 import { Path } from '../../utility/path';
@@ -17,10 +17,9 @@ import { DefaultSettingManager } from '../settings/defaultSettingManager';
 import log from '../../logger';
 import { BotProjectService } from '../../services/project';
 
-import { ICrossTrainConfig } from './luPublisher';
+import { Builder } from './builder';
 import { IFileStorage } from './../storage/interface';
-import { LocationRef } from './interface';
-import { LuPublisher } from './luPublisher';
+import { LocationRef, IBuildConfig } from './interface';
 import { extractSkillManifestUrl } from './skillManager';
 import { defaultFilePath, serializeFiles, parseFileName } from './botStructure';
 
@@ -42,7 +41,7 @@ export class BotProject implements IBotProject {
   public dir: string;
   public dataDir: string;
   public fileStorage: IFileStorage;
-  public luPublisher: LuPublisher;
+  public builder: Builder;
   public defaultSDKSchema: {
     [key: string]: string;
   };
@@ -67,7 +66,7 @@ export class BotProject implements IBotProject {
 
     this.settingManager = new DefaultSettingManager(this.dir);
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId, user);
-    this.luPublisher = new LuPublisher(this.dir, this.fileStorage, defaultLanguage);
+    this.builder = new Builder(this.dir, this.fileStorage, defaultLanguage);
   }
 
   public get dialogFiles() {
@@ -313,6 +312,7 @@ export class BotProject implements IBotProject {
       newDesigner = getNewDesigner(name, description);
     }
     content.$designer = newDesigner;
+    content.id = name;
     const updatedContent = autofixReferInDialog(botName, JSON.stringify(content, null, 2));
     await this._updateFile(relativePath, updatedContent);
     await serializeFiles(this.fileStorage, this.dataDir, botName);
@@ -392,18 +392,34 @@ export class BotProject implements IBotProject {
     return createdFiles;
   };
 
-  public publishLuis = async (luisConfig: ILuisConfig, fileIds: string[] = [], crossTrainConfig: ICrossTrainConfig) => {
-    if (fileIds.length && this.settings) {
+  public buildFiles = async ({
+    luisConfig,
+    qnaConfig,
+    luFileIds = [],
+    qnaFileIds = [],
+    crossTrainConfig,
+  }: IBuildConfig) => {
+    if ((luFileIds.length || qnaFileIds.length) && this.settings) {
       const luFiles: FileInfo[] = [];
-      fileIds.forEach((id) => {
+      luFileIds.forEach((id) => {
         const f = this.files.get(`${id}.lu`);
         if (f) {
           luFiles.push(f);
         }
       });
-
-      this.luPublisher.setPublishConfig(luisConfig, crossTrainConfig, this.settings.downsampling);
-      await this.luPublisher.publish(luFiles, Array.from(this.files.values()));
+      const qnaFiles: FileInfo[] = [];
+      qnaFileIds.forEach((id) => {
+        const f = this.files.get(`${id}.qna`);
+        if (f) {
+          qnaFiles.push(f);
+        }
+      });
+      this.builder.setBuildConfig(
+        { ...luisConfig, subscriptionKey: qnaConfig.subscriptionKey, qnaRegion: qnaConfig.qnaRegion },
+        crossTrainConfig,
+        this.settings.downsampling
+      );
+      await this.builder.build(luFiles, qnaFiles, Array.from(this.files.values()) as FileInfo[]);
     }
   };
 
@@ -446,6 +462,16 @@ export class BotProject implements IBotProject {
     }
     return true;
   }
+
+  // update qna endpointKey in settings
+  public updateQnaEndpointKey = async (subscriptionKey: string) => {
+    const qnaEndpointKey = await this.builder.getQnaEndpointKey(subscriptionKey, {
+      ...this.settings?.luis,
+      qnaRegion: this.settings?.qna.qnaRegion || this.settings?.luis.authoringRegion,
+      subscriptionKey,
+    });
+    return qnaEndpointKey;
+  };
 
   private async removeLocalRuntimeData(projectId) {
     const method = 'localpublish';
@@ -567,7 +593,7 @@ export class BotProject implements IBotProject {
     }
 
     const fileList = new Map<string, FileInfo>();
-    const patterns = ['**/*.dialog', '**/*.dialog.schema', '**/*.lg', '**/*.lu', 'manifests/*.json'];
+    const patterns = ['**/*.dialog', '**/*.dialog.schema', '**/*.lg', '**/*.lu', '**/*.qna', 'manifests/*.json'];
     for (const pattern of patterns) {
       // load only from the data dir, otherwise may get "build" versions from
       // deployment process

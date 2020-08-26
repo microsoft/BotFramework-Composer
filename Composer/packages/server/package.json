@@ -9,7 +9,7 @@
   },
   "scripts": {
     "analyze": "source-map-explorer 'build/public/static/js/*.js'",
-    "build": "tsc -p tsconfig.build.json",
+    "build": "tsc -p tsconfig.build.json && node scripts/build.js",
     "clean": "rimraf build",
     "prep:dist:electron": "yarn build --outDir ../electron-server/dist && node scripts/copyAssets.js",
     "start": "node build/init.js",
@@ -92,6 +92,7 @@
     "portfinder": "1.0.25",
     "rimraf": "^3.0.2",
     "ts-md5": "^1.2.7",
+    "uuid": "^8.3.0",
     "vscode-languageserver": "^5.3.0-next",
     "vscode-ws-jsonrpc": "^0.1.1",
     "ws": "^5.0.0"

@@ -8,12 +8,13 @@ import { jsx, css } from '@emotion/core';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
-import { defaultPublishConfig } from '@bfc/shared';
+import { IConfig, IPublishConfig, defaultPublishConfig } from '@bfc/shared';
 
 import {
   botNameState,
   botStatusState,
   luFilesState,
+  qnaFilesState,
   settingsState,
   projectIdState,
   botLoadErrorState,
@@ -21,14 +22,15 @@ import {
   dispatcherState,
 } from '../../recoilModel';
 import settingsStorage from '../../utils/dialogSettingStorage';
-import { BotStatus, LuisConfig } from '../../constants';
+import { QnaConfig, BotStatus, LuisConfig } from '../../constants';
 import { isAbsHosted } from '../../utils/envUtil';
 import useNotifications from '../../pages/notifications/useNotifications';
 import { navigateTo, openInEmulator } from '../../utils/navigation';
+import { getReferredQnaFiles } from '../../utils/qnaUtil';
 import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 
-import { getReferredFiles } from './../../utils/luUtil';
-import { PublishLuisDialog } from './publishDialog';
+import { getReferredLuFiles } from './../../utils/luUtil';
+import { PublishDialog } from './publishDialog';
 import { ErrorCallout } from './errorCallout';
 import { EmulatorOpenButton } from './emulatorOpenButton';
 import { Loading } from './loading';
@@ -61,6 +63,7 @@ export const TestController: React.FC = () => {
   const botStatus = useRecoilValue(botStatusState);
   const dialogs = useRecoilValue(validatedDialogsSelector);
   const luFiles = useRecoilValue(luFilesState);
+  const qnaFiles = useRecoilValue(qnaFilesState);
   const settings = useRecoilValue(settingsState);
   const projectId = useRecoilValue(projectIdState);
   const botLoadErrorMsg = useRecoilValue(botLoadErrorState);
@@ -68,10 +71,11 @@ export const TestController: React.FC = () => {
   const {
     publishToTarget,
     onboardingAddCoachMarkRef,
-    publishLuis,
+    build,
     getPublishStatus,
     setBotStatus,
     setSettings,
+    setQnASettings,
   } = useRecoilValue(dispatcherState);
   const connected = botStatus === BotStatus.connected;
   const publishing = botStatus === BotStatus.publishing;
@@ -79,6 +83,7 @@ export const TestController: React.FC = () => {
   const addRef = useCallback((startBot) => onboardingAddCoachMarkRef({ startBot }), []);
   const errorLength = notifications.filter((n) => n.severity === 'Error').length;
   const showError = errorLength > 0;
+  const publishDialogConfig = { subscriptionKey: settings.qna.subscriptionKey, ...settings.luis } as IConfig;
   const warningLength = notifications.filter((n) => n.severity === 'Warning').length;
   const showWarning = !showError && warningLength > 0;
 
@@ -147,39 +152,69 @@ export const TestController: React.FC = () => {
     }
   }
 
-  async function handlePublishLuis(luisConfig) {
+  async function handlePublish(config: IPublishConfig) {
     setBotStatus(BotStatus.publishing);
     dismissDialog();
-    await setSettings(projectId, { ...settings, luis: luisConfig });
-    await publishLuis(luisConfig, projectId);
+    const { luis, qna } = config;
+    await setSettings(projectId, {
+      ...settings,
+      luis: luis,
+      qna: Object.assign({}, settings.qna, qna),
+    });
+    await build(luis, qna, projectId);
   }
 
   async function handleLoadBot() {
     setBotStatus(BotStatus.reloading);
+    if (settings.qna && settings.qna.subscriptionKey) {
+      await setQnASettings(projectId, settings.qna.subscriptionKey);
+    }
     const sensitiveSettings = settingsStorage.get(projectId);
     await publishToTarget(projectId, defaultPublishConfig, { comment: '' }, sensitiveSettings);
   }
 
-  function isLuisConfigComplete(config) {
+  function isConfigComplete(config) {
     let complete = true;
-    for (const key in LuisConfig) {
-      if (config?.[LuisConfig[key]] === '') {
+    if (getReferredLuFiles(luFiles, dialogs).length > 0) {
+      if (Object.values(LuisConfig).some((luisConfigKey) => config.luis[luisConfigKey] === '')) {
         complete = false;
-        break;
+      }
+    }
+    if (getReferredQnaFiles(qnaFiles, dialogs).length > 0) {
+      if (Object.values(QnaConfig).some((qnaConfigKey) => config.qna[qnaConfigKey] === '')) {
+        complete = false;
       }
     }
     return complete;
   }
 
+  // return true if dialogs have one with default recognizer.
+  function needsPublish(dialogs) {
+    let isDefaultRecognizer = false;
+    if (dialogs.some((dialog) => typeof dialog.content.recognizer === 'string')) {
+      isDefaultRecognizer = true;
+    }
+    return isDefaultRecognizer;
+  }
+
   async function handleStart() {
     dismissCallout();
-    const config = settings.luis;
-
-    if (!isAbsHosted() && getReferredFiles(luFiles, dialogs).length > 0) {
-      if (botStatus === BotStatus.failed || botStatus === BotStatus.pending || !isLuisConfigComplete(config)) {
+    const config = Object.assign(
+      {},
+      {
+        luis: settings.luis,
+        qna: {
+          subscriptionKey: settings.qna.subscriptionKey,
+          qnaRegion: settings.qna.qnaRegion,
+          endpointKey: '',
+        },
+      }
+    );
+    if (!isAbsHosted() && needsPublish(dialogs)) {
+      if (botStatus === BotStatus.failed || botStatus === BotStatus.pending || !isConfigComplete(config)) {
         openDialog();
       } else {
-        await handlePublishLuis(config);
+        await handlePublish(config);
       }
     } else {
       await handleLoadBot();
@@ -234,13 +269,13 @@ export const TestController: React.FC = () => {
         onDismiss={dismissCallout}
         onTry={handleStart}
       />
-      {settings.luis && (
-        <PublishLuisDialog
+      {settings.luis && modalOpen && (
+        <PublishDialog
           botName={botName}
-          config={settings.luis}
+          config={publishDialogConfig}
           isOpen={modalOpen}
           onDismiss={dismissDialog}
-          onPublish={handlePublishLuis}
+          onPublish={handlePublish}
         />
       )}
     </Fragment>

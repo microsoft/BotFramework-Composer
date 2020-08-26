@@ -46,8 +46,9 @@ const settings = {
   publishTargets: [],
   qna: {
     knowledgebaseid: '',
-    endpointkey: '',
+    endpointKey: '',
     hostname: '',
+    qnaRegion: 'westus',
   },
   telemetry: {
     logPersonalInformation: false,
@@ -96,6 +97,7 @@ describe('setting dispatcher', () => {
         ...settings,
         MicrosoftAppPassword: 'test',
         luis: { ...settings.luis, authoringKey: 'test', endpointKey: 'test' },
+        qna: { ...settings.qna, subscriptionKey: 'test', endpointKey: 'test' },
       });
     });
 

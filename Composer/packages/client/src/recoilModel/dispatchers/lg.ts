@@ -196,6 +196,17 @@ export const lgDispatcher = () => {
     }
   );
 
+  const createLgTemplates = useRecoilCallback(
+    ({ set }: CallbackInterface) => async ({ id, templates }: { id: string; templates: LgTemplate[] }) => {
+      set(lgFilesState, (lgFiles) => {
+        const lgFile = lgFiles.find((file) => file.id === id);
+        if (!lgFile) return lgFiles;
+        const updatedFile = lgUtil.addTemplates(lgFile, templates, lgFileResolver(lgFiles));
+        return updateLgFileState(lgFiles, updatedFile);
+      });
+    }
+  );
+
   const removeLgTemplate = useRecoilCallback(
     ({ set }: CallbackInterface) => ({ id, templateName }: { id: string; templateName: string }) => {
       set(lgFilesState, (lgFiles) => {
@@ -243,6 +254,7 @@ export const lgDispatcher = () => {
     removeLgFile,
     updateLgTemplate,
     createLgTemplate,
+    createLgTemplates,
     removeLgTemplate,
     removeLgTemplates,
     copyLgTemplate,
