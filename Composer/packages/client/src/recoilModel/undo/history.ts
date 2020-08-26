@@ -10,10 +10,19 @@ import { navigateTo, getUrlSearch } from '../../utils/navigation';
 
 import { breadcrumbState, projectMetaDataState } from './../atoms/botState';
 import { designPageLocationState, botProjectsState } from './../atoms';
-import undoHistory, { UndoHistory } from './undoHistory';
+import UndoHistory from './undoHistory';
 import { trackedAtoms, AtomAssetsMap } from './trackedAtoms';
 
-export const undoFunctionState = atomFamily({
+type IUndoRedo = {
+  undo: () => void;
+  redo: () => void;
+  canUndo: () => boolean;
+  canRedo: () => boolean;
+  commitChanges: () => void;
+  clearUndo: () => void;
+};
+
+export const undoFunctionState = atomFamily<IUndoRedo, string>({
   key: 'undoFunction',
   default: {
     undo: () => {},
@@ -47,7 +56,6 @@ const getAtomAssetsMap = (snap: Snapshot, projectId: string): AtomAssetsMap => {
 const checkAtomChanged = (current: AtomAssetsMap, previous: AtomAssetsMap, atom: RecoilState<any>) => {
   const currVal = current.get(atom);
   const prevVal = previous.get(atom);
-
   if (prevVal !== currVal) {
     return true;
   }
@@ -98,9 +106,10 @@ function setInitialLocation(snapshot: Snapshot, projectId: string, undoHistory: 
   }
 }
 
-export const UndoRoot = React.memo((props: { projectId: string }) => {
-  const { projectId } = props;
-  const history = useRef(undoHistory).current;
+export const UndoRoot = React.memo(({ projectId, undoHistory }: { projectId: string; undoHistory: UndoHistory }) => {
+  const history: UndoHistory = useRef(undoHistory).current;
+  console.log('HISTORY', history);
+
   const setUndoFunction = useSetRecoilState(undoFunctionState(projectId));
   const [, forceUpdate] = useState([]);
   const setVersion = useSetRecoilState(undoVersionState(projectId));
@@ -112,12 +121,15 @@ export const UndoRoot = React.memo((props: { projectId: string }) => {
   useRecoilTransactionObserver(({ snapshot, previousSnapshot }) => {
     const currentAssets = getAtomAssetsMap(snapshot, projectId);
     const previousAssets = getAtomAssetsMap(previousSnapshot, projectId);
-    const botProjects = snapshot.getLoadable(botProjectsState);
+    const botProjects = snapshot.getLoadable(botProjectsState).contents;
     const rootBotProjectId = botProjects[0];
+
     if (checkAtomChanged(currentAssets, previousAssets, projectMetaDataState(rootBotProjectId))) {
       //switch project should clean the undo history when the root bot has been changed
       undoHistory.clear();
-      undoHistory.add(getAtomAssetsMap(snapshot, projectId));
+      const assetMap = getAtomAssetsMap(snapshot, projectId);
+
+      undoHistory.add(assetMap);
     } else if (!assetsChanged.current) {
       if (checkAtomsChanged(currentAssets, previousAssets, trackedAtoms(projectId))) {
         assetsChanged.current = true;
@@ -168,6 +180,7 @@ export const UndoRoot = React.memo((props: { projectId: string }) => {
     const currentAssets = getAtomAssetsMap(snapshot, projectId);
     const previousAssets = history.getPresentAssets();
     //filter some invalid changes
+
     if (previousAssets && checkAtomsChanged(currentAssets, previousAssets, trackedAtoms(projectId))) {
       history.add(getAtomAssetsMap(snapshot, projectId));
     }

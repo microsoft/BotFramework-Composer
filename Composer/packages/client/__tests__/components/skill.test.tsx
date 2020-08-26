@@ -4,6 +4,7 @@
 import * as React from 'react';
 import { fireEvent, getByLabelText, getByTestId } from '@bfc/test-utils';
 import { Skill } from '@bfc/shared';
+import { act } from '@bfc/test-utils/lib/hooks';
 
 import httpClient from '../../src//utils/httpUtil';
 import Skills from '../../src/pages/skills';
@@ -65,7 +66,9 @@ describe('Skill page', () => {
     const { getByText } = renderWithRecoil(<Skills />, recoilInitState);
 
     const button = getByText('Connect to a new skill');
-    fireEvent.click(button);
+    act(() => {
+      fireEvent.click(button);
+    });
 
     const manifestUrl = getByLabelText(document.body, 'Manifest url');
     expect(manifestUrl).toBeTruthy();
@@ -124,7 +127,9 @@ describe('<SkillForm />', () => {
     fireEvent.change(urlInput, { target: { value: 'http://AwesomeSkill' } });
 
     const submitButton = getByText('Confirm');
-    fireEvent.click(submitButton);
+    act(() => {
+      fireEvent.click(submitButton);
+    });
     expect(onSubmit).not.toBeCalled();
   });
 });

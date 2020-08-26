@@ -234,7 +234,7 @@ describe('navigation dispatcher', () => {
   });
 
   describe('selectAndFocus', () => {
-    it('sets selection and focus with a valud search', async () => {
+    fit('sets selection and focus with a valud search', async () => {
       mockGetUrlSearch.mockReturnValue('?foo=bar&baz=quux');
       await act(async () => {
         await dispatcher.selectAndFocus(projectId, 'dialogId', 'select', 'focus');

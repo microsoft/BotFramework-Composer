@@ -8,7 +8,7 @@ import { AtomAssetsMap } from './trackedAtoms';
 // use number to limit the stack size first
 const MAX_STACK_LENGTH = 30;
 
-export class UndoHistory {
+export default class {
   public stack: AtomAssetsMap[] = [];
   public present = -1;
 
@@ -63,6 +63,3 @@ export class UndoHistory {
   public isEmpty = () => this.stack.length === 0;
   public getPresentAssets = () => (this.present > -1 ? this.stack[this.present] : null);
 }
-
-const undoHistory = new UndoHistory();
-export default undoHistory;
