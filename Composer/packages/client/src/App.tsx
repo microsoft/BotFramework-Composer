@@ -9,11 +9,13 @@ import { Header } from './components/Header';
 import { Announcement } from './components/AppComponents/Announcement';
 import { MainContainer } from './components/AppComponents/MainContainer';
 import { userSettingsState } from './recoilModel';
+import { loadLocale } from './utils/fileUtil';
 
 initializeIcons(undefined, { disableWarnings: true });
 
 export const App: React.FC = () => {
   const { appLocale } = useRecoilValue(userSettingsState);
+  loadLocale(appLocale);
 
   return (
     <Fragment key={appLocale}>

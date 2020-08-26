@@ -161,6 +161,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const shellForPropertyEditor = useShell('PropertyEditor');
   const triggerApi = useTriggerApi(shell.api);
   const { createTrigger } = shell.api;
+
   useEffect(() => {
     const currentDialog = dialogs.find(({ id }) => id === dialogId);
     if (currentDialog) {
