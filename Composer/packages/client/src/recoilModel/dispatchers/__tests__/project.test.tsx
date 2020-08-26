@@ -54,6 +54,7 @@ jest.mock('../../../utils/httpUtil');
 jest.mock('../../parsers/lgWorker', () => {
   return {
     flush: () => new Promise((resolve) => resolve()),
+    addProject: () => new Promise((resolve) => resolve()),
   };
 });
 

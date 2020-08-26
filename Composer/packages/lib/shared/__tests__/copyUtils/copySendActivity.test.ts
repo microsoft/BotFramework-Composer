@@ -8,7 +8,7 @@ import { externalApiStub as externalApi } from '../__mocks__/externalApiStub';
 describe('copySendActivity', () => {
   const externalApiWithLgCopy: ExternalApi = {
     ...externalApi,
-    copyLgField: (fromId, fromData, toId, toData, fieldName) => fromData[fieldName] + '(copy)',
+    copyLgField: (fromId, fromData, toId, toData, fieldName) => Promise.resolve(fromData[fieldName] + '(copy)'),
   };
 
   it('can copy SendActivity', async () => {
@@ -17,7 +17,7 @@ describe('copySendActivity', () => {
       activity: '[SendActivity_1234]',
     };
 
-    expect(copySendActivity(sendActivity, externalApiWithLgCopy)).toEqual({
+    expect(await copySendActivity(sendActivity, externalApiWithLgCopy)).toEqual({
       $kind: 'Microsoft.SendActivity',
       $designer: { id: '5678' },
       activity: '[SendActivity_1234](copy)',
