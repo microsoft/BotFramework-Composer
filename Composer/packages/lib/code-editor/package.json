@@ -21,8 +21,7 @@
     "lint": "eslint --quiet ./src",
     "lint:fix": "yarn lint --fix",
     "lint:typecheck": "tsc --noEmit",
-    "watch": "yarn build:ts --watch",
-    "extract": "cross-env NODE_ENV=production format-message extract -g underscored_crc32 -o src/locales/en-US.json src/**/*.ts src/**/*.tsx"
+    "watch": "yarn build:ts --watch"
   },
   "peerDependencies": {
     "react": "16.13.0",
@@ -40,7 +39,6 @@
     "copyfiles": "^2.2.0",
     "css-loader": "^2.1.1",
     "express": "^4.17.1",
-    "format-message-cli": "^6.2.3",
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^0.6.0",
     "postcss-loader": "^3.0.0",
