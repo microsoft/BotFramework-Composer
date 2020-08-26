@@ -20,8 +20,6 @@ import formatMessage from 'format-message';
 import { getFocusPath } from './navigation';
 import { upperCaseName } from './fileUtil';
 
-const conceptLabels = conceptLabelsFn();
-
 interface DialogsMap {
   [dialogId: string]: any;
 }
@@ -197,6 +195,7 @@ export function deleteTrigger(
 }
 
 export function getTriggerTypes(): IDropdownOption[] {
+  const conceptLabels = conceptLabelsFn();
   const triggerTypes: IDropdownOption[] = [
     ...dialogGroups[DialogGroup.EVENTS].types.map((t) => {
       let name = t as string;
@@ -217,6 +216,7 @@ export function getTriggerTypes(): IDropdownOption[] {
 }
 
 export function getEventTypes(): IComboBoxOption[] {
+  const conceptLabels = conceptLabelsFn();
   const eventTypes: IComboBoxOption[] = [
     ...dialogGroups[DialogGroup.DIALOG_EVENT_TYPES].types.map((t) => {
       let name = t as string;
@@ -237,6 +237,7 @@ export function getEventTypes(): IComboBoxOption[] {
 }
 
 export function getActivityTypes(): IDropdownOption[] {
+  const conceptLabels = conceptLabelsFn();
   const activityTypes: IDropdownOption[] = [
     ...dialogGroups[DialogGroup.ADVANCED_EVENTS].types.map((t) => {
       let name = t as string;
@@ -264,6 +265,7 @@ function getDialogsMap(dialogs: DialogInfo[]): DialogsMap {
 }
 
 export function getFriendlyName(data) {
+  const conceptLabels = conceptLabelsFn();
   if (get(data, '$designer.name')) {
     return get(data, '$designer.name');
   }
@@ -302,6 +304,7 @@ export function getBreadcrumbLabel(dialogs: DialogInfo[], dialogId: string, sele
 }
 
 export function getDialogData(dialogsMap: DialogsMap, dialogId: string, dataPath = '') {
+  const conceptLabels = conceptLabelsFn();
   if (!dialogId) return '';
   const dialog = dialogsMap[dialogId];
 
@@ -327,6 +330,7 @@ export function getSelected(focused: string): string {
 }
 
 export function replaceDialogDiagnosticLabel(path?: string): string {
+  const conceptLabels = conceptLabelsFn();
   if (!path) return '';
   let list = path.split('#');
   list = list.map((item) => {
