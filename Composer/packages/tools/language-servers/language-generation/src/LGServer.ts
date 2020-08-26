@@ -720,7 +720,7 @@ export class LGServer {
 
       // filter diagnostics belong to this template.
       const lgDiagnostics = filterTemplateDiagnostics(lgFile, templateId);
-      const lspDiagnostics = convertDiagnostics(lgDiagnostics, document, 1);
+      const lspDiagnostics = convertDiagnostics(lgDiagnostics, document);
       this.sendDiagnostics(document, lspDiagnostics);
       return;
     }

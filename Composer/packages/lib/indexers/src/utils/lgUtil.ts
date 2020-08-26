@@ -7,19 +7,12 @@
  *
  */
 
-import { Templates, Diagnostic as LGDiagnostic, ImportResolverDelegate } from 'botbuilder-lg';
+import { Templates, Template, Diagnostic as LGDiagnostic, ImportResolverDelegate } from 'botbuilder-lg';
 import { LgTemplate, importResolverGenerator, TextFile, Diagnostic, Position, Range, LgFile } from '@bfc/shared';
-import get from 'lodash/get';
 import formatMessage from 'format-message';
 import isEmpty from 'lodash/isEmpty';
 
 import { lgIndexer } from '../lgIndexer';
-
-export interface Template {
-  name: string;
-  parameters?: string[];
-  body: string;
-}
 
 // NOTE: LGDiagnostic is defined in PascalCase which should be corrected
 function convertLGDiagnostic(d: LGDiagnostic, source: string): Diagnostic {
@@ -38,10 +31,7 @@ function templateToLgTemplate(templates: Template[]): LgTemplate[] {
       name: t.name,
       body: t.body,
       parameters: t.parameters || [],
-      range: {
-        startLineNumber: get(t, 'sourceRange.range.start.line', 0),
-        endLineNumber: get(t, 'sourceRange.range.end.line', 0),
-      },
+      range: t.sourceRange.range,
     };
   });
 }
