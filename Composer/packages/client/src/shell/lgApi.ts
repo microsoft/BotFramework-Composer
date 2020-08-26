@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { LgFile } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
+import debounce from 'lodash/debounce';
 
 import { useResolvers } from '../hooks/useResolver';
 
@@ -27,48 +28,48 @@ function createLgApi(
     return file.templates;
   };
 
-  const updateLgTemplate = (id: string, templateName: string, templateBody: string) => {
+  const updateLgTemplate = async (id: string, templateName: string, templateBody: string) => {
     const file = lgFileResolver(id);
     if (!file) throw new Error(fileNotFound(id));
     if (!templateName) throw new Error(TEMPLATE_ERROR);
     const template = { name: templateName, body: templateBody, parameters: [] };
 
-    return actions.updateLgTemplate({
+    return await actions.updateLgTemplate({
       id: file.id,
       templateName,
       template,
     });
   };
 
-  const copyLgTemplate = (id, fromTemplateName, toTemplateName) => {
+  const copyLgTemplate = async (id, fromTemplateName, toTemplateName) => {
     const file = lgFileResolver(id);
     if (!file) throw new Error(fileNotFound(id));
     if (!fromTemplateName || !toTemplateName) throw new Error(TEMPLATE_ERROR);
 
-    return actions.copyLgTemplate({
+    return await actions.copyLgTemplate({
       id: file.id,
       fromTemplateName,
       toTemplateName,
     });
   };
 
-  const removeLgTemplate = (id, templateName) => {
+  const removeLgTemplate = async (id, templateName) => {
     const file = lgFileResolver(id);
     if (!file) throw new Error(fileNotFound(id));
     if (!templateName) throw new Error(TEMPLATE_ERROR);
 
-    return actions.removeLgTemplate({
+    return await actions.removeLgTemplate({
       id: file.id,
       templateName,
     });
   };
 
-  const removeLgTemplates = (id, templateNames) => {
+  const removeLgTemplates = async (id, templateNames) => {
     const file = lgFileResolver(id);
     if (!file) throw new Error(fileNotFound(id));
     if (!templateNames) throw new Error(TEMPLATE_ERROR);
 
-    return actions.removeLgTemplates({
+    return await actions.removeLgTemplates({
       id: file.id,
       templateNames,
     });
@@ -78,6 +79,7 @@ function createLgApi(
     addLgTemplate: updateLgTemplate,
     getLgTemplates,
     updateLgTemplate,
+    deboucedUpdateLgTemplate: debounce(updateLgTemplate, 250),
     removeLgTemplate,
     removeLgTemplates,
     copyLgTemplate,

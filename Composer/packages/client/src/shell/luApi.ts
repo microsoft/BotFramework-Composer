@@ -20,23 +20,23 @@ function createLuApi(
   dispatchers: any, //TODO
   luFileResolver: (id: string) => LuFile | undefined
 ) {
-  const addLuIntent = (id: string, intentName: string, intent: LuIntentSection) => {
+  const addLuIntent = async (id: string, intentName: string, intent: LuIntentSection) => {
     const file = luFileResolver(id);
     if (!file) throw new Error(fileNotFound(id));
     if (!intentName) throw new Error(INTENT_ERROR);
 
-    return dispatchers.createLuIntent({ id: file.id, intent, projectId: state.projectId });
+    return await dispatchers.createLuIntent({ id: file.id, intent, projectId: state.projectId });
   };
 
-  const updateLuIntent = (id: string, intentName: string, intent: LuIntentSection) => {
+  const updateLuIntent = async (id: string, intentName: string, intent: LuIntentSection) => {
     const file = luFileResolver(id);
     if (!file) throw new Error(fileNotFound(id));
     if (!intentName) throw new Error(INTENT_ERROR);
 
-    return dispatchers.updateLuIntent({ id: file.id, intentName, intent, projectId: state.projectId });
+    return await dispatchers.updateLuIntent({ id: file.id, intentName, intent, projectId: state.projectId });
   };
 
-  const renameLuIntent = (id: string, intentName: string, newIntentName: string) => {
+  const renameLuIntent = async (id: string, intentName: string, newIntentName: string) => {
     const file = luFileResolver(id);
     if (!file) throw new Error(`lu file ${id} not found`);
     if (!intentName) throw new Error(`intentName is missing or empty`);
@@ -46,15 +46,15 @@ function createLuApi(
 
     const newIntent = { ...oldIntent, Name: newIntentName };
 
-    return dispatchers.updateLuIntent({ id: file.id, intentName, intent: newIntent });
+    return await dispatchers.updateLuIntent({ id: file.id, intentName, intent: newIntent });
   };
 
-  const removeLuIntent = (id: string, intentName: string) => {
+  const removeLuIntent = async (id: string, intentName: string) => {
     const file = luFileResolver(id);
     if (!file) throw new Error(fileNotFound(id));
     if (!intentName) throw new Error(INTENT_ERROR);
 
-    return dispatchers.removeLuIntent({ id: file.id, intentName, projectId: state.projectId });
+    return await dispatchers.removeLuIntent({ id: file.id, intentName, projectId: state.projectId });
   };
 
   const getLuIntents = (id: string): LuIntentSection[] => {
