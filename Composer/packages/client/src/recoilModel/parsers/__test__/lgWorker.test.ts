@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LgFile, LgTemplate } from '@bfc/shared';
+import { LgFile, Range, Position, LgTemplate } from '@bfc/shared';
 
 import lgWorker from '../lgWorker';
 
@@ -41,7 +41,9 @@ describe('test lg worker', () => {
 
   it('get expected parse result', async () => {
     const result: any = await lgWorker.parse('test', 'common.en-us', `\r\n# Hello\r\n-hi`, lgFiles);
-    const expected = [{ body: '-hi', name: 'Hello', parameters: [], range: { endLineNumber: 3, startLineNumber: 2 } }];
+    const expected = [
+      { body: '-hi', name: 'Hello', parameters: [], range: new Range(new Position(2, 0), new Position(3, 3)) },
+    ];
     expect(result.templates).toMatchObject(expected);
   });
 

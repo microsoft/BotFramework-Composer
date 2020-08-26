@@ -174,8 +174,7 @@ export class LUServer {
       }
 
       const id = fileId || uri;
-      const { intents: sections, diagnostics: bfIndexerDiags } = parse(content, id);
-      const diagnostics = convertDiagnostics(bfIndexerDiags, document);
+      const { intents: sections, diagnostics } = parse(content, id);
 
       return { sections, diagnostics, content };
     };
