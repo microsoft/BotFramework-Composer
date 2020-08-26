@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { defaultFilePath, parseFileName, parseSourceFileName } from '../../../src/models/bot/botStructure';
+import { defaultFilePath, parseFileName } from '../../../src/models/bot/botStructure';
 
 const botName = 'Mybot';
 const defaultLocale = 'en-us';
@@ -127,7 +127,7 @@ describe('Parse file name', () => {
 
   // entry dialog's source qna
   it('should parse entry dialog.qna file name', async () => {
-    const { fileId, dialogId, fileType } = parseSourceFileName('mybot.myimport1.source.qna');
+    const { fileId, dialogId, fileType } = parseFileName('mybot.myimport1.source.qna', defaultLocale);
     expect(dialogId).toEqual('mybot');
     expect(fileId).toEqual('myimport1');
     expect(fileType).toEqual('.source.qna');
@@ -167,7 +167,7 @@ describe('Parse file name', () => {
 
   // child dialog's source qna
   it('should parse child dialog.qna file name', async () => {
-    const { fileId, dialogId, fileType } = parseSourceFileName('greeting.myimport1.source.qna');
+    const { fileId, dialogId, fileType } = parseFileName('greeting.myimport1.source.qna', defaultLocale);
     expect(dialogId).toEqual('greeting');
     expect(fileId).toEqual('myimport1');
     expect(fileType).toEqual('.source.qna');
