@@ -32,7 +32,6 @@
     }
   },
   "extendsComposer": true,
-  "description": "Publish using custom UI",
   "main": "dist/index.js",
   "dependencies": {
     "@bfc/client-plugin-lib": "file:../../packages/extensions/client-plugin-lib",

@@ -24,11 +24,13 @@ interface PublishPlugin<Config = any> {
 // this will be called by composer
 function initialize(registration) {
   const plugin = {
+    customDescription: 'Publish using custom UI',
+    hasView: true /** we have custom UI to host */,
     history: getHistory,
     publish,
     getStatus,
   };
-  registration.addPublishMethod(plugin, null, null, true /** we have custom UI to host */);
+  registration.addPublishMethod(plugin);
 }
 
 const baseURL = 'http://localhost:3003/api/';
