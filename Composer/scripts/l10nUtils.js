@@ -32,12 +32,12 @@ const ENCODE = {
 function transFn(str) {
   try {
     return (
-      '[[[ 🔥 ' +
+      '[ 🔴 ' +
       str
         .split('')
         .map((ch) => ENCODE[ch] || ch)
         .join('') +
-      '🔥 ]]]'
+      '🟢 ]'
     );
   } catch (e) {
     console.log('error encountered transforming "' + str + '"');
