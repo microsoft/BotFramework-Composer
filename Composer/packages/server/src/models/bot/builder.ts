@@ -202,12 +202,14 @@ export class Builder {
     // if (config.models.length === 0) {
     //   throw new Error('No LUIS files exist');
     // }
-
+    const resolver = luImportResolverGenerator(getLUFiles(allFiles));
     const loadResult = await this.luBuilder.loadContents(
       config.models,
       config.fallbackLocal,
       config.suffix,
-      config.region
+      config.region,
+      null,
+      resolver
     );
     loadResult.luContents = await this.downsizeUtterances(loadResult.luContents);
     const authoringEndpoint = config.authoringEndpoint ?? `https://${config.region}.api.cognitive.microsoft.com`;
