@@ -71,7 +71,7 @@ export const content = css`
   flex: 4;
   padding: 20px;
   position: relative;
-  overflow: scroll;
+  overflow: auto;
 
   label: PageContent;
 `;

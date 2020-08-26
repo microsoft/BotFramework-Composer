@@ -12,7 +12,7 @@ const mergeArrays: MergeWithCustomizer = (objValue, srcValue, key) => {
   if (isArray(objValue)) {
     // merge recognizers into defaults
     if (key === 'recognizers') {
-      return objValue.concat(srcValue);
+      return srcValue.concat(objValue);
     }
 
     // otherwise override other arrays

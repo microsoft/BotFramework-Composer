@@ -51,7 +51,12 @@ const WelcomeModal = () => {
               title={formatMessage('Collapse')}
               onClick={toggleMinimized}
             />
-            <IconButton iconProps={{ iconName: 'ChromeClose' }} title={formatMessage('Close')} onClick={exit} />
+            <IconButton
+              data-testid={'WelcomeModalCloseIcon'}
+              iconProps={{ iconName: 'ChromeClose' }}
+              title={formatMessage('Close')}
+              onClick={exit}
+            />
           </div>
         </div>
         <img alt="Welcome" src={welcomeImage} />

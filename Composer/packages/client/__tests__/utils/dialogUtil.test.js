@@ -186,9 +186,11 @@ describe('getTriggerTypes', () => {
     const triggerTypes = getTriggerTypes();
     expect(triggerTypes).toEqual([
       { key: 'Microsoft.OnIntent', text: 'Intent recognized' },
+      { key: 'Microsoft.OnQnAMatch', text: 'QnA Intent recognized' },
       { key: 'Microsoft.OnUnknownIntent', text: 'Unknown intent' },
       { key: 'Microsoft.OnDialogEvent', text: 'Dialog events' },
       { key: 'Microsoft.OnActivity', text: 'Activities' },
+      { key: 'Microsoft.OnChooseIntent', text: 'Duplicated intents recognized' },
       { key: 'OnCustomEvent', text: 'Custom events' },
     ]);
   });

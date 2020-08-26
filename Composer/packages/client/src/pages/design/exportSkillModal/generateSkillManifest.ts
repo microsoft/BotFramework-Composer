@@ -18,7 +18,7 @@ export const generateSkillManifest = (
   dialogSchemas: DialogSchemaFile[],
   luFiles: LuFile[],
   selectedTriggers: ITrigger[],
-  selectedDialogs: DialogInfo[]
+  selectedDialogs: Partial<DialogInfo>[]
 ) => {
   const {
     activities: previousActivities,
@@ -32,15 +32,17 @@ export const generateSkillManifest = (
     return skillManifest;
   }
 
+  const resolvedDialogs = dialogs.filter(({ id }) => selectedDialogs.find(({ id: dialogId }) => id === dialogId));
+
   const { content } = rootDialog;
   const triggers = selectedTriggers.reduce((acc: ITrigger[], { id: path }) => {
     const trigger = get(content, path);
     return trigger ? [...acc, trigger] : acc;
   }, []);
 
-  const activities = generateActivities(dialogSchemas, triggers, selectedDialogs);
+  const activities = generateActivities(dialogSchemas, triggers, resolvedDialogs);
   const dispatchModels = generateDispatchModels(schema, dialogs, triggers, luFiles);
-  const definitions = getDefinitions(dialogSchemas, selectedDialogs);
+  const definitions = getDefinitions(dialogSchemas, resolvedDialogs);
 
   return {
     ...skillManifest,
@@ -73,15 +75,20 @@ export const generateActivities = (
 };
 
 export const generateActivity = (dialogSchemas: DialogSchemaFile[], dialog: DialogInfo): Activities => {
-  const { id: name } = dialog;
+  const {
+    id: name,
+    content: { $designer },
+  } = dialog;
 
   const { content = {} } = dialogSchemas.find(({ id }) => id === name) || {};
   const { properties, $result: resultValue, type } = content;
+  const { description } = $designer || {};
 
   return {
     [name]: {
       type: ActivityTypes.Event,
       name,
+      ...(description ? { description } : {}),
       ...(Object.keys(properties || {}).length ? { value: { properties, type } } : {}),
       ...(Object.keys(resultValue?.properties || {}).length ? { resultValue } : {}),
     },
@@ -132,11 +139,11 @@ export const generateDispatchModels = (
         },
       ],
     };
-  }, {} as any);
+  }, {});
 
   return {
     dispatchModels: {
-      ...(Object.keys(languages || {}).length ? { languages } : {}),
+      ...(Object.keys(languages).length ? { languages } : {}),
       ...(intents.length ? { intents } : {}),
     },
   };

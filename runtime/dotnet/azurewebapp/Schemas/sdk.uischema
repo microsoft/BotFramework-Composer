@@ -23,68 +23,6 @@
       }
     }
   },
-  "Microsoft.IEntityRecognizer": {},
-  "Microsoft.ILanguageGenerator": {},
-  "Microsoft.ITrigger": {},
-  "Microsoft.ITriggerSelector": {},
-  "Microsoft.LanguagePolicy": {},
-  "Microsoft.Ask": {},
-  "Microsoft.AttachmentInput": {
-    "form": {
-      "helpLink": "https://aka.ms/bfc-ask-for-user-input",
-      "label": "Prompt for a file or an attachment",
-      "subtitle": "Attachment Input"
-    }
-  },
-  "Microsoft.ChoiceInput": {
-    "form": {
-      "helpLink": "https://aka.ms/bfc-ask-for-user-input",
-      "label": "Prompt with multi-choice",
-      "subtitle": "Choice Input"
-    }
-  },
-  "Microsoft.ConfirmInput": {
-    "form": {
-      "helpLink": "https://aka.ms/bfc-ask-for-user-input",
-      "label": "Prompt for confirmation",
-      "subtitle": "Confirm Input"
-    }
-  },
-  "Microsoft.DateTimeInput": {
-    "form": {
-      "helpLink": "https://aka.ms/bfc-ask-for-user-input",
-      "label": "Prompt for a date or a time",
-      "subtitle": "Date Time Input"
-    }
-  },
-  "Microsoft.InputDialog": {},
-  "Microsoft.NumberInput": {
-    "form": {
-      "helpLink": "https://aka.ms/bfc-ask-for-user-input",
-      "label": "Prompt for a number",
-      "subtitle": "Number Input"
-    }
-  },
-  "Microsoft.OAuthInput": {
-    "form": {
-      "helpLink": "https://aka.ms/bfc-using-oauth",
-      "label": "OAuth login",
-      "order": [
-        "connectionName",
-        "*"
-      ],
-      "subtitle": "OAuth Input"
-    }
-  },
-  "Microsoft.TextInput": {
-    "form": {
-      "helpLink": "https://aka.ms/bfc-ask-for-user-input",
-      "label": "Prompt for text",
-      "subtitle": "Text Input"
-    }
-  },
-  "Microsoft.ResourceMultiLanguageGenerator": {},
-  "Microsoft.TemplateEngineLanguageGenerator": {},
   "Microsoft.BeginDialog": {
     "form": {
       "helpLink": "https://aka.ms/bfc-understanding-dialogs",
@@ -118,7 +56,6 @@
       "subtitle": "Cancel All Dialogs"
     }
   },
-  "Microsoft.CancelDialog": {},
   "Microsoft.ContinueLoop": {
     "form": {
       "label": "Continue loop",
@@ -130,7 +67,6 @@
       "label": "Debug Break"
     }
   },
-  "Microsoft.DeleteActivity": {},
   "Microsoft.DeleteProperties": {
     "form": {
       "helpLink": "https://aka.ms/bfc-using-memory",
@@ -208,9 +144,6 @@
       "subtitle": "For Each Page"
     }
   },
-  "Microsoft.GetActivityMembers": {},
-  "Microsoft.GetConversationMembers": {},
-  "Microsoft.GotoAction": {},
   "Microsoft.HttpRequest": {
     "form": {
       "helpLink": "https://aka.ms/bfc-using-http",
@@ -314,7 +247,6 @@
       "subtitle": "Switch Condition"
     }
   },
-  "Microsoft.TelemetryTrackEvent": {},
   "Microsoft.TraceActivity": {
     "form": {
       "helpLink": "https://aka.ms/bfc-debugging-bots",
@@ -322,10 +254,59 @@
       "subtitle": "Trace Activity"
     }
   },
-  "Microsoft.UpdateActivity": {},
-  "Microsoft.CrossTrainedRecognizerSet": {},
-  "Microsoft.MultiLanguageRecognizer": {},
-  "Microsoft.RecognizerSet": {},
+  "Microsoft.AttachmentInput": {
+    "form": {
+      "helpLink": "https://aka.ms/bfc-ask-for-user-input",
+      "label": "Prompt for a file or an attachment",
+      "subtitle": "Attachment Input"
+    }
+  },
+  "Microsoft.ChoiceInput": {
+    "form": {
+      "helpLink": "https://aka.ms/bfc-ask-for-user-input",
+      "label": "Prompt with multi-choice",
+      "subtitle": "Choice Input"
+    }
+  },
+  "Microsoft.ConfirmInput": {
+    "form": {
+      "helpLink": "https://aka.ms/bfc-ask-for-user-input",
+      "label": "Prompt for confirmation",
+      "subtitle": "Confirm Input"
+    }
+  },
+  "Microsoft.DateTimeInput": {
+    "form": {
+      "helpLink": "https://aka.ms/bfc-ask-for-user-input",
+      "label": "Prompt for a date or a time",
+      "subtitle": "Date Time Input"
+    }
+  },
+  "Microsoft.NumberInput": {
+    "form": {
+      "helpLink": "https://aka.ms/bfc-ask-for-user-input",
+      "label": "Prompt for a number",
+      "subtitle": "Number Input"
+    }
+  },
+  "Microsoft.OAuthInput": {
+    "form": {
+      "helpLink": "https://aka.ms/bfc-using-oauth",
+      "label": "OAuth login",
+      "order": [
+        "connectionName",
+        "*"
+      ],
+      "subtitle": "OAuth Input"
+    }
+  },
+  "Microsoft.TextInput": {
+    "form": {
+      "helpLink": "https://aka.ms/bfc-ask-for-user-input",
+      "label": "Prompt for text",
+      "subtitle": "Text Input"
+    }
+  },
   "Microsoft.RegexRecognizer": {
     "form": {
       "hidden": [
@@ -333,14 +314,6 @@
       ]
     }
   },
-  "Microsoft.ConditionalSelector": {},
-  "Microsoft.FirstSelector": {},
-  "Microsoft.MostSpecificSelector": {},
-  "Microsoft.RandomSelector": {},
-  "Microsoft.TrueSelector": {},
-  "Microsoft.ActivityTemplate": {},
-  "Microsoft.StaticActivityTemplate": {},
-  "Microsoft.TextTemplate": {},
   "Microsoft.OnActivity": {
     "form": {
       "hidden": [
@@ -354,7 +327,6 @@
       "subtitle": "Activity received"
     }
   },
-  "Microsoft.OnAssignEntity": {},
   "Microsoft.OnBeginDialog": {
     "form": {
       "hidden": [
@@ -381,9 +353,6 @@
       "subtitle": "Cancel dialog event"
     }
   },
-  "Microsoft.OnChooseEntity": {},
-  "Microsoft.OnChooseIntent": {},
-  "Microsoft.OnChooseProperty": {},
   "Microsoft.OnCondition": {
     "form": {
       "hidden": [
@@ -397,7 +366,6 @@
       "subtitle": "Condition"
     }
   },
-  "Microsoft.OnContinueConversation": {},
   "Microsoft.OnConversationUpdateActivity": {
     "form": {
       "description": "Handle the events fired when a user begins a new conversation with the bot.",
@@ -426,7 +394,6 @@
       "subtitle": "Dialog event"
     }
   },
-  "Microsoft.OnEndOfActions": {},
   "Microsoft.OnEndOfConversationActivity": {
     "form": {
       "hidden": [
@@ -559,7 +526,6 @@
       "subtitle": "Message updated activity"
     }
   },
-  "Microsoft.OnQnAMatch": {},
   "Microsoft.OnRepromptDialog": {
     "form": {
       "hidden": [
@@ -598,23 +564,5 @@
       ],
       "subtitle": "Unknown intent recognized"
     }
-  },
-  "Microsoft.AgeEntityRecognizer": {},
-  "Microsoft.ConfirmationEntityRecognizer": {},
-  "Microsoft.CurrencyEntityRecognizer": {},
-  "Microsoft.DateTimeEntityRecognizer": {},
-  "Microsoft.DimensionEntityRecognizer": {},
-  "Microsoft.EmailEntityRecognizer": {},
-  "Microsoft.GuidEntityRecognizer": {},
-  "Microsoft.HashtagEntityRecognizer": {},
-  "Microsoft.IpEntityRecognizer": {},
-  "Microsoft.MentionEntityRecognizer": {},
-  "Microsoft.NumberEntityRecognizer": {},
-  "Microsoft.NumberRangeEntityRecognizer": {},
-  "Microsoft.OrdinalEntityRecognizer": {},
-  "Microsoft.PercentageEntityRecognizer": {},
-  "Microsoft.PhoneNumberEntityRecognizer": {},
-  "Microsoft.RegexEntityRecognizer": {},
-  "Microsoft.TemperatureEntityRecognizer": {},
-  "Microsoft.UrlEntityRecognizer": {}
+  }
 }
