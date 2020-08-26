@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FileInfo } from '@bfc/shared';
+import { FileInfo, FileExtensions } from '@bfc/shared';
 
 import { luImportResolverGenerator } from '../../../src/models/bot/luResolver';
 
@@ -39,7 +39,7 @@ const files = [
 ] as FileInfo[];
 
 describe('Lu Resolver', () => {
-  const resolver = luImportResolverGenerator(files);
+  const resolver = luImportResolverGenerator(files, FileExtensions.Lu);
 
   const resultOfA = {
     content: '> a.en-us.lu',

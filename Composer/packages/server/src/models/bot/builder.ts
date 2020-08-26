@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FileInfo, IConfig } from '@bfc/shared';
+import { FileInfo, IConfig, FileExtensions } from '@bfc/shared';
 
 import { Path } from '../../utility/path';
 import { IFileStorage } from '../storage/interface';
@@ -127,7 +127,7 @@ export class Builder {
     const qnaContents = qnaFiles.map((file) => {
       return { content: file.content, id: file.name };
     });
-    const resolver = luImportResolverGenerator(getLUFiles(allFiles));
+    const resolver = luImportResolverGenerator(getLUFiles(allFiles), FileExtensions.Lu);
     const result = await crossTrainer.crossTrain(luContents, qnaContents, this.crossTrainConfig, resolver);
 
     await this.writeFiles(result.luResult);
@@ -202,7 +202,7 @@ export class Builder {
     // if (config.models.length === 0) {
     //   throw new Error('No LUIS files exist');
     // }
-    const resolver = luImportResolverGenerator(getLUFiles(allFiles));
+    const resolver = luImportResolverGenerator(getLUFiles(allFiles), FileExtensions.Lu);
     const loadResult = await this.luBuilder.loadContents(
       config.models,
       config.fallbackLocal,

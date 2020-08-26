@@ -32,7 +32,7 @@ export function getLUFiles(files: FileInfo[]): FileInfo[] {
   return files.filter(({ name }) => name.endsWith('.lu'));
 }
 
-export function luImportResolverGenerator(files: FileInfo[]) {
+export function luImportResolverGenerator(files: FileInfo[], ext: string) {
   /**
    *  @param srcId current <file path> file id
    *  @param idsToFind imported <file path> file id
@@ -56,7 +56,6 @@ export function luImportResolverGenerator(files: FileInfo[]) {
    * common.lu#*patterns*
    */
   const fragmentReg = new RegExp('#.*$');
-  const ext = '.lu';
   // eslint-disable-next-line security/detect-non-literal-regexp
   const extReg = new RegExp(ext + '$');
 
