@@ -24,7 +24,7 @@ import { ProjectTemplate } from '@bfc/shared';
 import { NeutralColors } from '@uifabric/fluent-theme';
 
 import { DialogCreationCopy, EmptyBotTemplateId, QnABotTemplateId } from '../../constants';
-import { DialogWrapper, DialogTypes } from '../DialogWrapper';
+import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
 // -------------------- Styles -------------------- //
 

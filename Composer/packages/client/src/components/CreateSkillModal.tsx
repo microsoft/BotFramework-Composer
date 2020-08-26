@@ -16,7 +16,7 @@ import { FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { addSkillDialog } from '../constants';
 import httpClient from '../utils/httpUtil';
 
-import { DialogWrapper, DialogTypes } from './DialogWrapper';
+import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
 // -------------------- Styles -------------------- //
 

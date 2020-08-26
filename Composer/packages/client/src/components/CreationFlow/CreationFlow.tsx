@@ -189,10 +189,10 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
           onSubmit={handleCreateQnA}
         />
         <VirtualAssistantCreationModal
-          dialogId={formData.name.toLowerCase()}
-          path="create/va-core/configure"
+          formData={formData}
           onDismiss={handleDismiss}
-          onSubmit={handleCreateQnA}
+          handleCreateNew={handleCreateNew}
+          path="create/va-core/configure"
         />
       </Router>
     </Fragment>

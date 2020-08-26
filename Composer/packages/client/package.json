@@ -25,6 +25,7 @@
     "@bfc/extension": "*",
     "@bfc/indexers": "*",
     "@bfc/shared": "*",
+    "@bfc/ui-shared": "*",
     "@bfc/ui-plugin-composer": "*",
     "@bfc/ui-plugin-dialog-schema-editor": "*",
     "@bfc/ui-plugin-lg": "*",
