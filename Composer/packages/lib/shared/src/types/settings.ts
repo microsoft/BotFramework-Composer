@@ -23,6 +23,7 @@ export interface DialogSetting {
   MicrosoftAppId?: string;
   MicrosoftAppPassword?: string;
   luis: ILuisConfig;
+  qna: IQnAConfig;
   publishTargets?: PublishTarget[];
   runtime: {
     customRuntime: boolean;
@@ -49,6 +50,23 @@ export interface ILuisConfig {
   authoringRegion: string | 'westus';
   defaultLanguage: string | 'en-us';
   environment: string | 'composer';
+}
+
+export interface IQnAConfig {
+  subscriptionKey: string;
+  endpointKey: string;
+  qnaRegion: string;
+  [key: string]: string;
+}
+
+export interface IConfig extends ILuisConfig {
+  subscriptionKey: string;
+  qnaRegion: string | 'westus';
+}
+
+export interface IPublishConfig {
+  luis: ILuisConfig;
+  qna: IQnAConfig;
 }
 
 export interface PublishTarget {

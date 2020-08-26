@@ -40,6 +40,8 @@ import {
   dialogSchemasState,
   designPageLocationState,
   projectMetaDataState,
+  isEjectRuntimeExistState,
+  qnaFilesState,
 } from '../atoms';
 import { undoFunctionState, undoVersionState } from '../undo/history';
 import { dispatcherState } from '../DispatcherWrapper';
@@ -86,6 +88,8 @@ export const botStateByProjectIdSelector = selector({
     const undoFunction = get(undoFunctionState(projectId));
     const undoVersion = get(undoVersionState(projectId));
     const projectMetaData = get(projectMetaDataState(projectId));
+    const isEjectRuntimeExist = get(isEjectRuntimeExistState(projectId));
+    const qnaFiles = get(qnaFilesState(projectId));
 
     const validatedDialogs = dialogs.map((dialog) => {
       return { ...dialog, diagnostics: validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles) };
@@ -131,6 +135,8 @@ export const botStateByProjectIdSelector = selector({
       undoVersion,
       projectMetaData,
       projectId,
+      isEjectRuntimeExist,
+      qnaFiles,
     };
   },
 });

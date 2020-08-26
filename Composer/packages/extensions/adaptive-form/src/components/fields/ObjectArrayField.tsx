@@ -14,7 +14,7 @@ import { FontSizes, NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import map from 'lodash/map';
 
-import { getArrayItemProps, getOrderedProperties, useArrayItems, resolveRef } from '../../utils';
+import { getArrayItemProps, getOrderedProperties, useArrayItems, resolveRef, isPropertyHidden } from '../../utils';
 import { FieldLabel } from '../FieldLabel';
 
 import { objectArrayField } from './styles';
@@ -80,21 +80,16 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = (props) => {
     itemSchema && typeof itemSchema !== 'boolean' ? itemSchema : {},
     uiOptions,
     value
-  );
+  ).filter((property) => Array.isArray(property) || !isPropertyHidden(uiOptions, value, property));
 
   const stackArrayItems = useMemo(() => {
-    const allOrderProps = orderedProperties.reduce((all, prop) => {
-      if (Array.isArray(prop)) {
-        all.push(...prop);
-      } else {
-        all.push(prop);
-      }
-
-      return all;
-    }, [] as string[]);
+    const allOrderProps = orderedProperties.reduce((all: string[], prop: string | string[]) => {
+      return [...all, ...(Array.isArray(prop) ? prop : [prop])];
+    }, []);
 
     return (
       allOrderProps.length > 2 ||
+      orderedProperties.some((property) => Array.isArray(property)) ||
       Object.entries(properties).some(([key, propSchema]) => {
         const resolved = resolveRef(propSchema as JSONSchema7, props.definitions);
         return allOrderProps.includes(key) && resolved.$role === 'expression';

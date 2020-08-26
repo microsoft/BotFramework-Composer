@@ -16,6 +16,7 @@ import { LUOption } from './utils';
 
 export interface LULSPEditorProps extends BaseEditorProps {
   luOption?: LUOption;
+  helpURL?: string;
   languageServer?:
     | {
         host?: string;
@@ -70,7 +71,14 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
     ...props.options,
   };
 
-  const { luOption, languageServer, onInit: onInitProp, placeholder = defaultPlaceholder, ...restProps } = props;
+  const {
+    luOption,
+    languageServer,
+    onInit: onInitProp,
+    placeholder = defaultPlaceholder,
+    helpURL = LU_HELP,
+    ...restProps
+  } = props;
   const luServer = languageServer || defaultLUServer;
 
   let editorId = '';

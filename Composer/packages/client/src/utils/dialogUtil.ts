@@ -49,9 +49,13 @@ export function getDialog(dialogs: DialogInfo[], dialogId: string) {
 
 export const eventTypeKey: string = SDKKinds.OnDialogEvent;
 export const intentTypeKey: string = SDKKinds.OnIntent;
+export const qnaTypeKey: string = SDKKinds.OnQnAMatch;
 export const activityTypeKey: string = SDKKinds.OnActivity;
 export const regexRecognizerKey: string = SDKKinds.RegexRecognizer;
+export const crossTrainedRecognizerSetKey: string = SDKKinds.CrossTrainedRecognizerSet;
 export const customEventKey = 'OnCustomEvent';
+export const qnaMatcherKey: string = SDKKinds.OnQnAMatch;
+export const onChooseIntentKey: string = SDKKinds.OnChooseIntent;
 
 function insert(content, path: string, position: number | undefined, data: any) {
   const current = get(content, path, []);
@@ -75,7 +79,6 @@ function generateNewTrigger(data: TriggerFormData, factory: DialogFactory) {
     optionalAttributes.intent = data.intent;
     optionalAttributes.$designer.name = data.intent;
   }
-
   const newStep = factory.create(data.$kind as SDKKinds, optionalAttributes);
   return newStep;
 }

@@ -2,8 +2,9 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { FieldProps, useShellApi, useRecognizerConfig } from '@bfc/extension';
+import { FieldProps, useShellApi, useRecognizerConfig, FieldWidget } from '@bfc/extension';
 import formatMessage from 'format-message';
+import { SDKKinds } from '@bfc/shared';
 
 import { FieldLabel } from '../FieldLabel';
 
@@ -17,7 +18,12 @@ const IntentField: React.FC<FieldProps> = (props) => {
   };
 
   const recognizer = recognizers.find((r) => r.isSelected(currentDialog?.content?.recognizer));
-  const Editor = recognizer?.editor;
+  let Editor: FieldWidget | undefined;
+  if (recognizer && recognizer.id === SDKKinds.CrossTrainedRecognizerSet) {
+    Editor = recognizers.find((r) => r.id === SDKKinds.LuisRecognizer)?.editor;
+  } else {
+    Editor = recognizer?.editor;
+  }
   const label = formatMessage('Trigger phrases (intent: #{intentName})', { intentName: value });
 
   return (

@@ -4,6 +4,7 @@
 import { useEffect, useState } from 'react';
 import { LgFile } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
+import debounce from 'lodash/debounce';
 
 import { useResolvers } from '../hooks/useResolver';
 import { Dispatcher } from '../recoilModel/dispatchers';
@@ -24,13 +25,13 @@ function createLgApi(
     return file.templates;
   };
 
-  const updateLgTemplate = (id: string, templateName: string, templateBody: string) => {
+  const updateLgTemplate = async (id: string, templateName: string, templateBody: string) => {
     const file = lgFileResolver(id);
     if (!file) throw new Error(`lg file ${id} not found`);
     if (!templateName) throw new Error(`templateName is missing or empty`);
     const template = { name: templateName, body: templateBody, parameters: [] };
 
-    return actions.updateLgTemplate({
+    return await actions.updateLgTemplate({
       id: file.id,
       templateName,
       template,
@@ -38,12 +39,12 @@ function createLgApi(
     });
   };
 
-  const copyLgTemplate = (id, fromTemplateName, toTemplateName) => {
+  const copyLgTemplate = async (id, fromTemplateName, toTemplateName) => {
     const file = lgFileResolver(id);
     if (!file) throw new Error(`lg file ${id} not found`);
     if (!fromTemplateName || !toTemplateName) throw new Error(`templateName is missing or empty`);
 
-    return actions.copyLgTemplate({
+    return await actions.copyLgTemplate({
       id: file.id,
       fromTemplateName,
       toTemplateName,
@@ -51,24 +52,24 @@ function createLgApi(
     });
   };
 
-  const removeLgTemplate = (id, templateName) => {
+  const removeLgTemplate = async (id, templateName) => {
     const file = lgFileResolver(id);
     if (!file) throw new Error(`lg file ${id} not found`);
     if (!templateName) throw new Error(`templateName is missing or empty`);
 
-    return actions.removeLgTemplate({
+    return await actions.removeLgTemplate({
       id: file.id,
       templateName,
       projectId: state.projectId,
     });
   };
 
-  const removeLgTemplates = (id, templateNames) => {
+  const removeLgTemplates = async (id, templateNames) => {
     const file = lgFileResolver(id);
     if (!file) throw new Error(`lg file ${id} not found`);
     if (!templateNames) throw new Error(`templateName is missing or empty`);
 
-    return actions.removeLgTemplates({
+    return await actions.removeLgTemplates({
       id: file.id,
       templateNames,
       projectId: state.projectId,
@@ -79,6 +80,7 @@ function createLgApi(
     addLgTemplate: updateLgTemplate,
     getLgTemplates,
     updateLgTemplate,
+    deboucedUpdateLgTemplate: debounce(updateLgTemplate, 250),
     removeLgTemplate,
     removeLgTemplates,
     copyLgTemplate,

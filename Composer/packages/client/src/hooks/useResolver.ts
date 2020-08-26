@@ -4,13 +4,10 @@ import { useRef } from 'react';
 import { importResolverGenerator } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
-import { localeState, lgFilesState, luFilesState, currentProjectIdState } from '../recoilModel';
+import { botStateByProjectIdSelector } from '../recoilModel';
 
 export const useResolvers = () => {
-  const projectId = useRecoilValue(currentProjectIdState);
-  const lgFiles = useRecoilValue(lgFilesState(projectId));
-  const locale = useRecoilValue(localeState(projectId));
-  const luFiles = useRecoilValue(luFilesState(projectId));
+  const { dialogs, luFiles, lgFiles, locale, qnaFiles } = useRecoilValue(botStateByProjectIdSelector);
 
   const lgFilesRef = useRef(lgFiles);
   lgFilesRef.current = lgFiles;
@@ -20,6 +17,12 @@ export const useResolvers = () => {
 
   const luFilesRef = useRef(luFiles);
   luFilesRef.current = luFiles;
+
+  const qnaFilesRef = useRef(qnaFiles);
+  qnaFilesRef.current = qnaFiles;
+
+  const dialogsRef = useRef(dialogs);
+  dialogsRef.current = dialogs;
 
   const lgImportresolver = () => importResolverGenerator(lgFilesRef.current, '.lg');
 
@@ -33,9 +36,20 @@ export const useResolvers = () => {
     return luFilesRef.current.find(({ id }) => id === fileId);
   };
 
+  const dialogResolver = (dialogId: string) => {
+    return dialogsRef.current.find(({ id }) => id === dialogId);
+  };
+
+  const qnaFileResolver = (id: string) => {
+    const fileId = id.includes('.') ? id : `${id}.${localeRef.current}`;
+    return qnaFilesRef.current.find(({ id }) => id === fileId);
+  };
+
   return {
     lgImportresolver,
     luFileResolver,
     lgFileResolver,
+    qnaFileResolver,
+    dialogResolver,
   };
 };

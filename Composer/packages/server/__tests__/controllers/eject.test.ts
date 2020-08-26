@@ -52,7 +52,12 @@ beforeAll(async () => {
     key: 'azurewebapp',
     name: 'C#',
     startCommand: 'dotnet run --project azurewebapp',
+    path: './',
     eject: jest.fn(),
+    build: jest.fn(),
+    run: jest.fn(),
+    buildDeploy: jest.fn(),
+    setSkillManifest: jest.fn(),
   });
   const currentProjectId = await BotProjectService.openProject(location1);
   const currentProject = await BotProjectService.getProjectById(currentProjectId);

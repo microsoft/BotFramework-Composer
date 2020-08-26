@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import formatMessage from 'format-message';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
@@ -66,17 +66,13 @@ const Home: React.FC<RouteComponentProps> = () => {
   const projectId = useRecoilValue(currentProjectIdState);
   const recentProjects = useRecoilValue(recentProjectsState);
   const templateId = useRecoilValue(templateIdState);
-  const {
-    openProject: openBotProject,
-    fetchRecentProjects,
-    setCreationFlowStatus,
-    onboardingAddCoachMarkRef,
-    saveTemplateId,
-  } = useRecoilValue(dispatcherState);
+  const { openProject, setCreationFlowStatus, onboardingAddCoachMarkRef, saveTemplateId } = useRecoilValue(
+    dispatcherState
+  );
 
   const onItemChosen = async (item) => {
     if (item && item.path) {
-      openBotProject(item.path);
+      openProject(item.path);
     }
   };
 
@@ -140,10 +136,6 @@ const Home: React.FC<RouteComponentProps> = () => {
     },
   ];
 
-  useEffect(() => {
-    fetchRecentProjects();
-  }, []);
-
   return (
     <div css={home.outline}>
       <Toolbar toolbarItems={toolbarItems} />
@@ -176,7 +168,7 @@ const Home: React.FC<RouteComponentProps> = () => {
                 styles={home.latestBotItem}
                 title={''}
                 onClick={async () => {
-                  openBotProject(recentProjects[0].path);
+                  openProject(recentProjects[0].path);
                 }}
               />
             ) : (

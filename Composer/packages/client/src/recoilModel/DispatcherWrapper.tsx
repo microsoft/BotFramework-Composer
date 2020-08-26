@@ -12,21 +12,19 @@ import { useRecoilValue } from 'recoil';
 import { prepareAxios } from './../utils/auth';
 import filePersistence from './persistence/FilePersistence';
 import createDispatchers, { Dispatcher } from './dispatchers';
-import { currentProjectIdState, botProjectsState } from './atoms';
+import { botProjectsState } from './atoms';
 import { UndoRoot } from './undo/history';
-import UndoHistory from './undo/undoHistory';
 import { botStateByProjectIdSelector } from './selectors';
 
 const getBotAssets = async (snapshot: Snapshot): Promise<BotAssets> => {
-  const result = await Promise.all([
-    snapshot.getPromise(currentProjectIdState),
-    snapshot.getPromise(botStateByProjectIdSelector),
-  ]);
-  const { dialogs, luFiles, lgFiles, skillManifests, dialogSetting, dialogSchemas } = result[1];
+  const result = await snapshot.getPromise(botStateByProjectIdSelector);
+
+  const { projectId, qnaFiles, dialogs, luFiles, lgFiles, skillManifests, dialogSetting, dialogSchemas } = result;
   return {
-    projectId: result[0],
+    projectId,
     dialogs,
     luFiles,
+    qnaFiles,
     lgFiles,
     skillManifests,
     setting: dialogSetting,
@@ -81,7 +79,7 @@ export const DispatcherWrapper = ({ children }) => {
   return (
     <Fragment>
       {botProjects.map((projectId) => (
-        <UndoRoot key={projectId} projectId={projectId} undoHistory={new UndoHistory()} />
+        <UndoRoot key={projectId} projectId={projectId} />
       ))}
       <InitDispatcher onLoad={setLoaded} />
       {loaded ? children : null}

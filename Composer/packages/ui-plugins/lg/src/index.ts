@@ -28,7 +28,23 @@ const config: PluginConfig = {
           icon: 'MessageBot',
           colors: {
             theme: Colors.BlueMagenta20,
-            icon: Colors.BlueMagenta30,
+          },
+        },
+        body: {
+          widget: 'LgWidget',
+          field: 'activity',
+        },
+      },
+    },
+    [SDKKinds.UpdateActivity]: {
+      flow: {
+        widget: 'ActionCard',
+        header: {
+          widget: 'ActionHeader',
+          icon: 'MessageBot',
+          colors: {
+            theme: Colors.AzureGray3,
+            icon: Colors.AzureGray2,
           },
         },
         body: {

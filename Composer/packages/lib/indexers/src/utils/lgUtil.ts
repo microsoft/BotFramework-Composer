@@ -7,18 +7,13 @@
  *
  */
 
-import { Templates, Diagnostic as LGDiagnostic, ImportResolverDelegate } from 'botbuilder-lg';
+import { Templates, Template, Diagnostic as LGDiagnostic, ImportResolverDelegate } from 'botbuilder-lg';
 import { LgTemplate, importResolverGenerator, TextFile, Diagnostic, Position, Range, LgFile } from '@bfc/shared';
-import get from 'lodash/get';
 import formatMessage from 'format-message';
+import isEmpty from 'lodash/isEmpty';
+import { SourceRange } from 'botbuilder-lg/lib/sourceRange';
 
 import { lgIndexer } from '../lgIndexer';
-
-export interface Template {
-  name: string;
-  parameters?: string[];
-  body: string;
-}
 
 // NOTE: LGDiagnostic is defined in PascalCase which should be corrected
 function convertLGDiagnostic(d: LGDiagnostic, source: string): Diagnostic {
@@ -31,18 +26,28 @@ function convertLGDiagnostic(d: LGDiagnostic, source: string): Diagnostic {
   return result;
 }
 
+function convertLGRange(s: SourceRange): Range {
+  const start: Position = new Position(s.range.start.line, s.range.start.character);
+  const end: Position = new Position(s.range.end.line, s.range.end.character);
+
+  return new Range(start, end);
+}
+
 function templateToLgTemplate(templates: Template[]): LgTemplate[] {
   return templates.map((t) => {
     return {
       name: t.name,
       body: t.body,
       parameters: t.parameters || [],
-      range: {
-        startLineNumber: get(t, 'sourceRange.range.start.line', 0),
-        endLineNumber: get(t, 'sourceRange.range.end.line', 0),
-      },
+      range: convertLGRange(t.sourceRange),
     };
   });
+}
+
+function getLgResource(lgFile: LgFile, importResolver?: ImportResolverDelegate) {
+  const { content, parseResult } = lgFile;
+
+  return parseResult ?? Templates.parseText(content, undefined, importResolver);
 }
 
 export function convertTemplatesToLgFile(id = '', content: string, parseResult: Templates): LgFile {
@@ -53,7 +58,7 @@ export function convertTemplatesToLgFile(id = '', content: string, parseResult: 
   const templates = templateToLgTemplate(parseResult.toArray());
   const allTemplates = templateToLgTemplate(parseResult.allTemplates);
 
-  return { id, content, templates, allTemplates, diagnostics, options: parseResult.options };
+  return { id, content, templates, allTemplates, diagnostics, options: parseResult.options, parseResult };
 }
 
 export function increaseNameUtilNotExist(templates: LgTemplate[], name: string): string {
@@ -72,22 +77,32 @@ export function increaseNameUtilNotExist(templates: LgTemplate[], name: string):
 export function updateTemplate(
   lgFile: LgFile,
   templateName: string,
-  { name, parameters, body }: { name?: string; parameters?: string[]; body?: string },
+  template: { name?: string; parameters?: string[]; body?: string },
   importResolver?: ImportResolverDelegate
 ): LgFile {
-  const { id, content } = lgFile;
-  const resource = Templates.parseText(content, undefined, importResolver);
+  const { id } = lgFile;
+  const { name, parameters, body } = template;
+  const resource = getLgResource(lgFile, importResolver);
   const originTemplate = resource.toArray().find((t) => t.name === templateName);
+  const templateToUpdate = {
+    name: name || originTemplate?.name || templateName,
+    parameters: parameters || originTemplate?.parameters || [],
+    body: body || originTemplate?.body || '',
+  };
+
   let templates;
   // add if not exist
   if (!originTemplate) {
-    templates = resource.addTemplate(templateName, parameters || [], body || '');
+    templates = resource.addTemplate(templateName, templateToUpdate.parameters, templateToUpdate.body);
+    // remove if template is null
+  } else if (!template || isEmpty(template)) {
+    templates = resource.deleteTemplate(templateName);
   } else {
     templates = resource.updateTemplate(
       templateName,
-      name || originTemplate.name,
-      parameters || originTemplate.parameters,
-      body || originTemplate.body
+      templateToUpdate.name,
+      templateToUpdate.parameters,
+      templateToUpdate.body
     );
   }
 
@@ -100,8 +115,9 @@ export function addTemplate(
   { name, parameters = [], body }: LgTemplate,
   importResolver?: ImportResolverDelegate
 ): LgFile {
-  const { id, content } = lgFile;
-  const resource = Templates.parseText(content, undefined, importResolver);
+  const { id } = lgFile;
+  const resource = getLgResource(lgFile, importResolver);
+
   const templates = resource.addTemplate(name, parameters, body);
   return convertTemplatesToLgFile(id, templates.toString(), templates);
 }
@@ -121,8 +137,8 @@ export function addTemplateAnyway(
   { name = 'TemplateName', parameters = [], body = '-TemplateBody' }: LgTemplate,
   importResolver?: ImportResolverDelegate
 ): LgFile {
-  const { id, content } = lgFile;
-  const resource = Templates.parseText(content, undefined, importResolver);
+  const { id } = lgFile;
+  const resource = getLgResource(lgFile, importResolver);
   const newName = increaseNameUtilNotExist(resource.toArray(), name);
 
   const templates = resource.addTemplate(newName, parameters, body);
@@ -136,8 +152,9 @@ export function copyTemplate(
   toTemplateName: string,
   importResolver?: ImportResolverDelegate
 ): LgFile {
-  const { id, content } = lgFile;
-  const resource = Templates.parseText(content, undefined, importResolver);
+  const { id } = lgFile;
+  const resource = getLgResource(lgFile, importResolver);
+
   const fromTemplate = resource.toArray().find((t) => t.name === fromTemplateName);
   if (!fromTemplate) {
     throw new Error(formatMessage('fromTemplateName does not exist'));
@@ -154,8 +171,8 @@ export function copyTemplateAnyway(
   toTemplateName?: string,
   importResolver?: ImportResolverDelegate
 ): LgFile {
-  const { id, content } = lgFile;
-  const resource = Templates.parseText(content, undefined, importResolver);
+  const { id } = lgFile;
+  const resource = getLgResource(lgFile, importResolver);
   const fromTemplate = resource.toArray().find((t) => t.name === fromTemplateName);
   if (!fromTemplate) {
     return convertTemplatesToLgFile(id, resource.toString(), resource);
@@ -172,8 +189,8 @@ export function copyTemplateAnyway(
 }
 
 export function removeTemplate(lgFile: LgFile, templateName: string, importResolver?: ImportResolverDelegate): LgFile {
-  const { id, content } = lgFile;
-  const resource = Templates.parseText(content, undefined, importResolver);
+  const { id } = lgFile;
+  const resource = getLgResource(lgFile, importResolver);
   const templates = resource.deleteTemplate(templateName);
   return convertTemplatesToLgFile(id, templates.toString(), templates);
 }
@@ -183,8 +200,8 @@ export function removeTemplates(
   templateNames: string[],
   importResolver?: ImportResolverDelegate
 ): LgFile {
-  const { id, content } = lgFile;
-  let resource = Templates.parseText(content, undefined, importResolver);
+  const { id } = lgFile;
+  let resource = getLgResource(lgFile, importResolver);
   templateNames.forEach((templateName) => {
     resource = resource.deleteTemplate(templateName);
   });

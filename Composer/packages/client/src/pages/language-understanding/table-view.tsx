@@ -4,10 +4,10 @@
 /* eslint-disable react/display-name */
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useRef, useEffect, useState, useMemo } from 'react';
+import { useRef, useEffect, useState, useMemo, useCallback } from 'react';
 import isEmpty from 'lodash/isEmpty';
 import get from 'lodash/get';
-import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
+import { DetailsList, DetailsListLayoutMode, SelectionMode, IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
@@ -20,12 +20,13 @@ import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 import { LuFile, LuIntentSection } from '@bfc/shared';
 
+import { EditableField } from '../../components/EditableField';
 import { getExtension } from '../../utils/fileUtil';
 import { languageListTemplates } from '../../components/MultiLanguage';
 import { navigateTo } from '../../utils/navigation';
-import { botStateByProjectIdSelector, currentProjectIdState } from '../../recoilModel';
+import { botStateByProjectIdSelector, dispatcherState } from '../../recoilModel';
 
-import { formCell, luPhraseCell, tableCell, content } from './styles';
+import { formCell, luPhraseCell, tableCell } from './styles';
 interface TableViewProps extends RouteComponentProps<{}> {
   dialogId: string;
 }
@@ -40,14 +41,17 @@ interface Intent {
 }
 
 const TableView: React.FC<TableViewProps> = (props) => {
-  const { luFiles, locale, dialogSetting: settings, validatedDialogs: dialogs } = useRecoilValue(
+  const { updateLuIntent } = useRecoilValue(dispatcherState);
+  const { luFiles, locale, dialogSetting: settings, validatedDialogs: dialogs, projectId } = useRecoilValue(
     botStateByProjectIdSelector
   );
-  const projectId = useRecoilValue(currentProjectIdState);
 
   const { languages, defaultLanguage } = settings;
   const { dialogId } = props;
   const activeDialog = dialogs.find(({ id }) => id === dialogId);
+
+  const file = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
+  const defaultLangFile = luFiles.find(({ id }) => id === `${dialogId}.${defaultLanguage}`);
 
   const [intents, setIntents] = useState<Intent[]>([]);
   const listRef = useRef(null);
@@ -96,6 +100,34 @@ const TableView: React.FC<TableViewProps> = (props) => {
     }
   }, [luFiles, activeDialog, projectId]);
 
+  const handleIntentUpdate = useCallback(
+    (fileId: string, intentName: string, intent: LuIntentSection) => {
+      const payload = {
+        id: fileId,
+        intentName,
+        intent,
+        projectId,
+      };
+      updateLuIntent(payload);
+    },
+    [intents, projectId]
+  );
+
+  const handleTemplateUpdateDefaultLocale = useCallback(
+    (intentName: string, intent: LuIntentSection) => {
+      if (defaultLangFile) {
+        const payload = {
+          id: defaultLangFile.id,
+          intentName,
+          intent,
+          projectId,
+        };
+        updateLuIntent(payload);
+      }
+    },
+    [intents, file, projectId]
+  );
+
   const getTemplatesMoreButtons = (item, index): IContextualMenuItem[] => {
     const buttons = [
       {
@@ -110,7 +142,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     return buttons;
   };
 
-  const getTableColums = () => {
+  const getTableColums = (): IColumn[] => {
     const languagesList = languageListTemplates(languages, locale, defaultLanguage);
     const defaultLangTeamplate = languagesList.find((item) => item.locale === defaultLanguage);
     const currentLangTeamplate = languagesList.find((item) => item.locale === locale);
@@ -125,19 +157,28 @@ const TableView: React.FC<TableViewProps> = (props) => {
         name: formatMessage('Intent'),
         fieldName: 'name',
         minWidth: 100,
-        maxWidth: 150,
+        maxWidth: 200,
+        isResizable: true,
         data: 'string',
         onRender: (item: Intent) => {
-          let displayName = `#${item.name}`;
-          if (item.name.includes('/')) {
-            const [, childName] = item.name.split('/');
-            displayName = `##${childName}`;
-          }
+          const displayName = `#${item.name}`;
           return (
             <div data-is-focusable css={formCell}>
-              <div aria-label={formatMessage(`Name is {name}`, { name: displayName })} css={content} tabIndex={-1}>
-                {displayName}
-              </div>
+              <EditableField
+                multiline
+                ariaLabel={formatMessage(`Name is {name}`, { name: displayName })}
+                depth={0}
+                id={displayName}
+                name={displayName}
+                value={displayName}
+                onBlur={(_id, value) => {
+                  const newValue = value?.trim().replace(/^#/, '');
+                  if (newValue) {
+                    handleIntentUpdate(item.fileId, item.name, { Name: newValue, Body: item.phrases });
+                  }
+                }}
+                onChange={() => {}}
+              />
             </div>
           );
         },
@@ -146,20 +187,28 @@ const TableView: React.FC<TableViewProps> = (props) => {
         key: 'phrases',
         name: formatMessage('Sample Phrases'),
         fieldName: 'phrases',
-        minWidth: 100,
-        maxWidth: 500,
+        minWidth: 500,
         isResizable: true,
         data: 'string',
         onRender: (item) => {
+          const text = item.phrases;
           return (
             <div data-is-focusable css={luPhraseCell}>
-              <div
-                aria-label={formatMessage(`Sample Phrases are {phrases}`, { phrases: item.phrases })}
-                css={content}
-                tabIndex={-1}
-              >
-                {item.phrases}
-              </div>
+              <EditableField
+                multiline
+                ariaLabel={formatMessage(`Sample Phrases are {phrases}`, { phrases: text })}
+                depth={0}
+                id={text}
+                name={text}
+                value={text}
+                onBlur={(_id, value) => {
+                  const newValue = value?.trim();
+                  if (newValue) {
+                    handleIntentUpdate(item.fileId, item.name, { Name: item.name, Body: newValue });
+                  }
+                }}
+                onChange={() => {}}
+              />
             </div>
           );
         },
@@ -168,7 +217,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         key: 'phrases-lang',
         name: currentLangResponsesHeader,
         fieldName: 'phrases',
-        minWidth: 100,
+        minWidth: 300,
         maxWidth: 500,
         isResizable: true,
         data: 'string',
@@ -176,13 +225,21 @@ const TableView: React.FC<TableViewProps> = (props) => {
           const text = item.phrases;
           return (
             <div data-is-focusable css={luPhraseCell}>
-              <div
-                aria-label={formatMessage(`Sample Phrases are {phrases}`, { phrases: text })}
-                css={content}
-                tabIndex={-1}
-              >
-                {text}
-              </div>
+              <EditableField
+                multiline
+                ariaLabel={formatMessage(`Sample Phrases are {phrases}`, { phrases: text })}
+                depth={0}
+                id={text}
+                name={text}
+                value={text}
+                onBlur={(_id, value) => {
+                  const newValue = value?.trim().replace(/^#/, '');
+                  if (newValue) {
+                    handleIntentUpdate(item.fileId, item.name, { Name: item.name, Body: newValue });
+                  }
+                }}
+                onChange={() => {}}
+              />
             </div>
           );
         },
@@ -191,21 +248,31 @@ const TableView: React.FC<TableViewProps> = (props) => {
         key: 'phrases-default-lang',
         name: defaultLangResponsesHeader,
         fieldName: 'phrases-default-lang',
-        minWidth: 100,
-        maxWidth: 500,
+        minWidth: 300,
         isResizable: true,
         data: 'string',
         onRender: (item) => {
           const text = item[`body-${defaultLanguage}`];
           return (
             <div data-is-focusable css={luPhraseCell}>
-              <div
-                aria-label={formatMessage(`Sample Phrases are {phrases}`, { phrases: text })}
-                css={content}
-                tabIndex={-1}
-              >
-                {text}
-              </div>
+              <EditableField
+                multiline
+                ariaLabel={formatMessage(`Sample Phrases are {phrases}`, { phrases: text })}
+                depth={0}
+                id={text}
+                name={text}
+                value={text}
+                onBlur={(_id, value) => {
+                  const newValue = value?.trim().replace(/^#/, '');
+                  if (newValue) {
+                    handleTemplateUpdateDefaultLocale(item.name, {
+                      Name: item.name,
+                      Body: newValue,
+                    });
+                  }
+                }}
+                onChange={() => {}}
+              />
             </div>
           );
         },
@@ -286,7 +353,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         onRender: (item) => {
           return (
             <div data-is-focusable css={tableCell}>
-              <div aria-label={formatMessage(`State is {state}`, { state: item.state })} css={content} tabIndex={-1}>
+              <div aria-label={formatMessage(`State is {state}`, { state: item.state })} tabIndex={-1}>
                 {item.state}
               </div>
             </div>
