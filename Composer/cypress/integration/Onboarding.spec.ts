@@ -5,7 +5,7 @@ context('Onboarding', () => {
   beforeEach(() => {
     cy.visit('/home');
     cy.createBot('TodoSample', 'Onboarding');
-
+    cy.visitPage('Design');
     //enable onboarding setting
     cy.visitPage('Settings');
     cy.findByTestId('ProjectTree').within(() => {
