@@ -5,7 +5,7 @@ import { copyIfCondition } from '../../src/copyUtils/copyIfCondition';
 import { externalApiStub as externalApi } from '../__mocks__/externalApiStub';
 
 describe('#copyIfCondition', () => {
-  it('can copy normal input', () => {
+  it('can copy normal input', async () => {
     const ifCondition = {
       $kind: 'Microsoft.IfCondition',
       condition: 'a == b',
@@ -23,7 +23,7 @@ describe('#copyIfCondition', () => {
       ],
     };
 
-    expect(copyIfCondition(ifCondition, externalApi)).toEqual({
+    expect(await copyIfCondition(ifCondition, externalApi)).toEqual({
       $kind: 'Microsoft.IfCondition',
       $designer: {
         id: '5678',

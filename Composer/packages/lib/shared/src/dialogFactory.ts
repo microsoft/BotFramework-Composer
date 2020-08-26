@@ -327,19 +327,19 @@ export const getDesignerId = (data?: DesignerData) => {
   return newDesigner;
 };
 
-export const deepCopyAction = (
+export const deepCopyAction = async (
   data,
   copyLgTemplate: FieldProcessorAsync<string>,
   copyLuIntent: FieldProcessorAsync<LuIntentSection | string | undefined>
 ) => {
-  return copyAdaptiveAction(data, {
+  return await copyAdaptiveAction(data, {
     getDesignerId,
     copyLgField: copyLgTemplate,
     copyLuField: copyLuIntent,
   });
 };
 
-export const deepCopyActions = (
+export const deepCopyActions = async (
   actions: any[],
   copyLgTemplate: FieldProcessorAsync<string>,
   copyLuIntent: FieldProcessorAsync<LuIntentSection | string | undefined>
@@ -350,7 +350,7 @@ export const deepCopyActions = (
   const copiedActions: any[] = [];
   for (const action of actions) {
     // Deep copy nodes with external resources
-    const copy = deepCopyAction(action, copyLgTemplate, copyLuIntent);
+    const copy = await deepCopyAction(action, copyLgTemplate, copyLuIntent);
     copiedActions.push(copy);
   }
   return copiedActions;
