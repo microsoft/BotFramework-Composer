@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { LuFile, LuIntentSection } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
+import debounce from 'lodash/debounce';
 
 import { projectIdState } from '../recoilModel/atoms/botState';
 import { useResolvers } from '../hooks/useResolver';
@@ -76,6 +77,7 @@ function createLuApi(
     getLuIntents,
     getLuIntent,
     updateLuIntent,
+    deboucedUpdateLuIntent: debounce(updateLuIntent, 250),
     renameLuIntent,
     removeLuIntent,
   };
