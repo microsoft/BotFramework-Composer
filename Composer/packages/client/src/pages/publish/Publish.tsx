@@ -49,6 +49,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
     getPublishHistory,
     setPublishTargets,
     publishToTarget,
+    setQnASettings,
     rollbackToVersion: rollbackToVersionDispatcher,
   } = useRecoilValue(dispatcherState);
 
@@ -318,6 +319,9 @@ const Publish: React.FC<PublishPageProps> = (props) => {
     () => async (comment) => {
       // publish to remote
       if (selectedTarget && settings.publishTargets) {
+        if (settings.qna && Object(settings.qna).subscriptionKey) {
+          await setQnASettings(projectId, Object(settings.qna).subscriptionKey);
+        }
         const sensitiveSettings = settingsStorage.get(projectId);
         await publishToTarget(projectId, selectedTarget, { comment: comment }, sensitiveSettings);
 

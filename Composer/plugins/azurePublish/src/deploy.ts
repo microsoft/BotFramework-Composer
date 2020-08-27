@@ -8,7 +8,7 @@ import * as rp from 'request-promise';
 
 import { BotProjectDeployConfig } from './botProjectDeployConfig';
 import { BotProjectDeployLoggerType } from './botProjectLoggerType';
-import { LuisPublish } from './luis';
+import { LuisAndQnaPublish } from './luisAndQnA';
 import archiver = require('archiver');
 
 export class BotProjectDeploy {
@@ -55,35 +55,32 @@ export class BotProjectDeploy {
 
       // STEP 2: UPDATE LUIS
       // Do the LUIS build if LUIS settings are present
-      if (settings.luis) {
-        const luisAuthoringKey = settings.luis.authoringKey;
-        const luisAuthoringRegion = settings.luis.authoringRegion || settings.luis.region;
-
-        if (luisAuthoringKey && luisAuthoringRegion) {
-          if (!language) {
-            language = 'en-us';
-          }
-          const luis = new LuisPublish({ logger: this.logger });
-
-          // this function returns an object that contains the luis APP ids mapping
-          // each dialog to its matching app.
-          const luisAppIDs = await luis.publishLuis(
-            this.projPath,
-            name,
-            environment,
-            this.accessToken,
-            language,
-            settings.luis,
-            luisResource
-          );
-
-          // amend luis settings with newly generated values
-          settings.luis = {
-            ...settings.luis,
-            ...luisAppIDs,
-          };
-        }
+      if (!language) {
+        language = 'en-us';
       }
+      const publisher = new LuisAndQnaPublish({ logger: this.logger, projPath: this.projPath });
+
+      // this function returns an object that contains the luis APP ids mapping
+      // each dialog to its matching app.
+      const { luisAppIds, qnaConfig } = await publisher.publishLuisAndQna(
+        name,
+        environment,
+        this.accessToken,
+        language,
+        settings.luis,
+        settings.qna,
+        luisResource
+      );
+
+      // amend luis settings with newly generated values
+      settings.luis = {
+        ...settings.luis,
+        ...luisAppIds,
+      };
+      settings.qna = {
+        ...settings.qna,
+        ...qnaConfig,
+      };
 
       // STEP 3: BUILD
       // run any platform specific build steps.

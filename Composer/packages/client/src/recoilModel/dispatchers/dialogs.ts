@@ -16,6 +16,7 @@ import {
 
 import { createLgFileState, removeLgFileState } from './lg';
 import { createLuFileState, removeLuFileState } from './lu';
+import { createQnAFileState, removeQnAFileState } from './qna';
 import { removeDialogSchema } from './dialogSchema';
 
 export const dialogsDispatcher = () => {
@@ -27,10 +28,15 @@ export const dialogsDispatcher = () => {
     //remove dialog should remove all locales lu and lg files and the dialog schema file
     await removeLgFileState(callbackHelpers, { id });
     await removeLuFileState(callbackHelpers, { id });
+    await removeQnAFileState(callbackHelpers, { id });
     await removeDialogSchema(callbackHelpers, id);
   });
 
   const updateDialog = useRecoilCallback(({ set }: CallbackInterface) => ({ id, content }) => {
+    // migration: add id for dialog
+    if (typeof content === 'object' && !content.id) {
+      content.id = id;
+    }
     set(dialogsState, (dialogs) => {
       return dialogs.map((dialog) => {
         if (dialog.id === id) {
@@ -64,8 +70,12 @@ export const dialogsDispatcher = () => {
     const luFiles = await snapshot.getPromise(luFilesState);
     const dialog = { isRoot: false, displayName: id, ...dialogIndexer.parse(id, fixedContent) };
     dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles);
+    if (typeof dialog.content === 'object') {
+      dialog.content.id = id;
+    }
     await createLgFileState(callbackHelpers, { id, content: '' });
     await createLuFileState(callbackHelpers, { id, content: '' });
+    await createQnAFileState(callbackHelpers, { id, content: '' });
 
     set(dialogsState, (dialogs) => [...dialogs, dialog]);
     set(actionsSeedState, []);
@@ -76,6 +86,7 @@ export const dialogsDispatcher = () => {
     }
     set(onCreateDialogCompleteState, { func: undefined });
   });
+
   return {
     removeDialog,
     createDialog,

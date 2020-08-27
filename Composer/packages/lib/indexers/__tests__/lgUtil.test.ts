@@ -25,17 +25,13 @@ describe('update lg template', () => {
     expect(templates[0].name).toEqual('Exit');
     expect(templates[0].body).toContain('-Thanks for using todo bot.');
     expect(templates[0].parameters).toEqual([]);
-    expect(templates[0].range).toEqual({
-      startLineNumber: 1,
-      endLineNumber: 3,
-    });
+    expect(templates[0].range?.start.line).toEqual(1);
+    expect(templates[0].range?.end.line).toEqual(3);
     expect(templates[1].name).toEqual('Greeting');
     expect(templates[1].body).toContain(`-What's up bro`);
     expect(templates[1].parameters).toEqual([]);
-    expect(templates[1].range).toEqual({
-      startLineNumber: 4,
-      endLineNumber: 5,
-    });
+    expect(templates[1].range?.start.line).toEqual(4);
+    expect(templates[1].range?.end.line).toEqual(5);
   });
 
   it('should update lg template', () => {
@@ -105,6 +101,10 @@ describe('update lg template', () => {
 -What's up bro`;
     const lgFile = parse('a.lg', content, []);
 
+    expect(lgFile.diagnostics.length).toEqual(1);
+    expect(lgFile.diagnostics[0].range?.start.line).toEqual(2);
+    expect(lgFile.diagnostics[0].range?.end.line).toEqual(2);
+
     const templates0 = Templates.parseText(content).toArray();
     expect(templates0.length).toEqual(2);
     const template = { name: 'Exit', parameters: [], body: '-Bye' };
@@ -168,6 +168,8 @@ describe('check lg template', () => {
     };
     const diags = checkTemplate(template);
     expect(diags).toHaveLength(1);
+    expect(diags[0].range?.start.line).toEqual(2);
+    expect(diags[0].range?.end.line).toEqual(2);
   });
 });
 
