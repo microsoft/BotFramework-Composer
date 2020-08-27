@@ -81,6 +81,7 @@ export interface ShellApi {
   getLuIntents: (id: string) => LuIntentSection[];
   addLuIntent: (id: string, intentName: string, intent: LuIntentSection) => Promise<void>;
   updateLuIntent: (id: string, intentName: string, intent: LuIntentSection) => Promise<void>;
+  deboucedUpdateLuIntent: (id: string, intentName: string, intent: LuIntentSection) => Promise<void>;
   renameLuIntent: (id: string, intentName: string, newIntentName: string) => Promise<void>;
   removeLuIntent: (id: string, intentName: string) => void;
   updateQnaContent: (id: string, content: string) => void;
