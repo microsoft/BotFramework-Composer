@@ -64,7 +64,13 @@ describe('Bot structure file path', () => {
   // entry dialog's source qna
   it('should get entry dialog.source.qna file path', async () => {
     const targetPath = defaultFilePath(botName, defaultLocale, 'mybot.myimport1.source.qna');
-    expect(targetPath).toEqual('knowledge-base/source/mybot.myimport1.source.qna');
+    expect(targetPath).toEqual('knowledge-base/source/myimport1.source.qna');
+  });
+
+  // shared source qna
+  it('should get shared <name>.source.qna file path', async () => {
+    const targetPath = defaultFilePath(botName, defaultLocale, 'myimport1.source.qna');
+    expect(targetPath).toEqual('knowledge-base/source/myimport1.source.qna');
   });
 
   // child dialog's lg
@@ -88,7 +94,7 @@ describe('Bot structure file path', () => {
   // child dialog's source qna
   it('should get child dialog.source.qna file path', async () => {
     const targetPath = defaultFilePath(botName, defaultLocale, 'greeting.myimport1.source.qna');
-    expect(targetPath).toEqual('dialogs/greeting/knowledge-base/source/greeting.myimport1.source.qna');
+    expect(targetPath).toEqual('dialogs/greeting/knowledge-base/source/myimport1.source.qna');
   });
 });
 
@@ -129,6 +135,14 @@ describe('Parse file name', () => {
   it('should parse entry dialog.qna file name', async () => {
     const { fileId, dialogId, fileType } = parseFileName('mybot.myimport1.source.qna', defaultLocale);
     expect(dialogId).toEqual('mybot');
+    expect(fileId).toEqual('myimport1');
+    expect(fileType).toEqual('.source.qna');
+  });
+
+  // all shared source qna
+  it('should parse <name>.source.qna file name', async () => {
+    const { fileId, dialogId, fileType } = parseFileName('myimport1.source.qna', defaultLocale);
+    expect(dialogId).toEqual('');
     expect(fileId).toEqual('myimport1');
     expect(fileType).toEqual('.source.qna');
   });

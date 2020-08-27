@@ -11,7 +11,7 @@ const BotStructureTemplate = {
   lg: 'language-generation/${LOCALE}/${BOTNAME}.${LOCALE}.lg',
   lu: 'language-understanding/${LOCALE}/${BOTNAME}.${LOCALE}.lu',
   qna: 'knowledge-base/en-us/${BOTNAME}.en-us.qna',
-  sourceQnA: 'knowledge-base/source/${DIALOGNAME}.${FILENAME}.source.qna',
+  sourceQnA: 'knowledge-base/source/${FILENAME}.source.qna',
   dialogSchema: '${BOTNAME}.dialog.schema',
   schema: '${FILENAME}',
   settings: 'settings/${FILENAME}',
@@ -23,7 +23,7 @@ const BotStructureTemplate = {
     lg: 'dialogs/${DIALOGNAME}/language-generation/${LOCALE}/${DIALOGNAME}.${LOCALE}.lg',
     lu: 'dialogs/${DIALOGNAME}/language-understanding/${LOCALE}/${DIALOGNAME}.${LOCALE}.lu',
     qna: 'dialogs/${DIALOGNAME}/knowledge-base/en-us/${DIALOGNAME}.en-us.qna',
-    sourceQnA: 'dialogs/${DIALOGNAME}/knowledge-base/source/${DIALOGNAME}.${FILENAME}.source.qna',
+    sourceQnA: 'dialogs/${DIALOGNAME}/knowledge-base/source/${FILENAME}.source.qna',
     dialogSchema: 'dialogs/${DIALOGNAME}/${DIALOGNAME}.dialog.schema',
   },
   skillManifests: 'manifests/${MANIFESTFILENAME}',
@@ -33,15 +33,21 @@ const templateInterpolate = (str: string, obj: { [key: string]: string }) =>
   str.replace(/\${([^}]+)}/g, (_, prop) => obj[prop]);
 
 // parse QnA source file name: [dialogId].[fileId].source.qna, ignore locale for now.
+// [fileId].source.qna would store to bot root folder.
 const parseSourceFileName = (name: string, locale: string) => {
   const fileType = FileExtensions.SourceQnA;
   const id = Path.basename(name, fileType);
-  const [dialogId, fileId] = id.split('.');
 
-  if (!dialogId) {
-    throw new Error(`parse source file name ${name} error.`);
+  let dialogId = '',
+    fileId = '';
+
+  if (id.includes('.')) {
+    [dialogId, fileId] = id.split('.');
+  } else {
+    fileId = id;
   }
-  return { fileId: fileId || dialogId, dialogId, fileType, locale };
+
+  return { fileId, dialogId, fileType, locale };
 };
 
 // parse file name: [fileId].[locale].[fileType]
@@ -89,7 +95,8 @@ export const defaultFilePath = (botName: string, defaultLocale: string, filename
   const isRootFile = BOTNAME === DIALOGNAME.toLowerCase();
 
   if (fileType === FileExtensions.SourceQnA) {
-    const TemplatePath = isRootFile ? BotStructureTemplate.sourceQnA : BotStructureTemplate.dialogs.sourceQnA;
+    const TemplatePath =
+      isRootFile || !dialogId ? BotStructureTemplate.sourceQnA : BotStructureTemplate.dialogs.sourceQnA;
     return templateInterpolate(TemplatePath, {
       FILENAME: fileId,
       DIALOGNAME,

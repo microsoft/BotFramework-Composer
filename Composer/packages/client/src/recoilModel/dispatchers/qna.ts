@@ -81,7 +81,7 @@ export const createSourceQnAFileState = async (
   const { set, snapshot } = callbackHelpers;
   const projectId = await snapshot.getPromise(projectIdState);
   const qnaFiles = await snapshot.getPromise(qnaFilesState);
-  const createdSourceQnAId = `${getBaseName(id)}.${name}.source`;
+  const createdSourceQnAId = `${name}.source`;
   const updatedQnAId = id;
   const updatedOriginQnAFile = qnaFiles.find((f) => f.id === updatedQnAId);
 

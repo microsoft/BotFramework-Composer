@@ -32,7 +32,11 @@ export function getLUFiles(files: FileInfo[]): FileInfo[] {
   return files.filter(({ name }) => name.endsWith('.lu'));
 }
 
-export function luImportResolverGenerator(files: FileInfo[], ext: string) {
+export function getQnAFiles(files: FileInfo[]): FileInfo[] {
+  return files.filter(({ name }) => name.endsWith('.qna'));
+}
+
+export function luImportResolverGenerator(files: FileInfo[]) {
   /**
    *  @param srcId current <file path> file id
    *  @param idsToFind imported <file path> file id
@@ -56,10 +60,12 @@ export function luImportResolverGenerator(files: FileInfo[], ext: string) {
    * common.lu#*patterns*
    */
   const fragmentReg = new RegExp('#.*$');
-  // eslint-disable-next-line security/detect-non-literal-regexp
-  const extReg = new RegExp(ext + '$');
 
   return (srcId: string, idsToFind: any[]) => {
+    const ext = Path.extname(srcId);
+    // eslint-disable-next-line security/detect-non-literal-regexp
+    const extReg = new RegExp(ext + '$');
+
     const sourceId = Path.basename(srcId).replace(extReg, '');
     const locale = /\w\.\w/.test(sourceId) ? sourceId.split('.').pop() : 'en-us';
 
@@ -67,7 +73,7 @@ export function luImportResolverGenerator(files: FileInfo[], ext: string) {
       files.find(({ name }) => name === `${sourceId}.${locale}${ext}`) ||
       files.find(({ name }) => name === `${sourceId}${ext}`);
 
-    if (!sourceFile) throw new Error(`File: ${srcId} not found`);
+    if (!sourceFile) throw new Error(`Resolve file: ${srcId} not found`);
     const sourceFileDir = Path.dirname(sourceFile.path);
 
     const wildcardIds = idsToFind.filter((item) => isWildcardPattern(item.filePath));
