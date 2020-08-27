@@ -89,7 +89,7 @@ export const createSourceQnAFileState = async (
 
   const createdQnAFile = (await qnaWorker.parse(createdSourceQnAId, content)) as QnAFile;
 
-  const contentForDialogQnA = `[${name}](${createdSourceQnAId}.qna)\n`;
+  const contentForDialogQnA = `[import](${createdSourceQnAId}.qna)\n`;
 
   let newQnAFiles = [...qnaFiles];
 
