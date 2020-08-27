@@ -93,23 +93,23 @@ export const createSourceQnAFileState = async (
 
   let newQnAFiles = [...qnaFiles];
 
-  // if created on a dialog, need update this dialog's qna ref
+  // if created on a dialog, need update this dialog's all locale qna ref
   if (id.includes('.source') === false) {
     const updatedQnAId = id;
-    const updatedOriginQnAFile = qnaFiles.find((f) => f.id === updatedQnAId);
-    if (!updatedOriginQnAFile) {
+    if (!qnaFiles.find((f) => f.id === updatedQnAId)) {
       throw new Error(`update qna file ${updatedQnAId}.qna not exist`);
     }
-    const updatedContent = updatedOriginQnAFile
-      ? contentForDialogQnA + updatedOriginQnAFile.content
-      : contentForDialogQnA;
-    const updatedQnAFile = (await qnaWorker.parse(id, updatedContent)) as QnAFile;
+
     newQnAFiles = qnaFiles.map((file) => {
-      if (file.id === updatedQnAId) {
-        return updatedQnAFile;
+      if (!file.id.endsWith('.source') && getBaseName(file.id) === getBaseName(updatedQnAId)) {
+        return {
+          ...file,
+          content: contentForDialogQnA + file.content,
+        };
       }
       return file;
     });
+
     qnaFileStatusStorage.updateFileStatus(projectId, updatedQnAId);
   }
 
@@ -144,9 +144,16 @@ export const qnaDispatcher = () => {
 
       set(qnaAllUpViewStatusState, QnAAllUpViewStatus.Loading);
 
-      const response = await httpClient.get(`/utilities/qna/parse`, {
-        params: { urls: encodeURIComponent(urls.join(',')) },
-      });
+      let response;
+      try {
+        response = await httpClient.get(`/utilities/qna/parse`, {
+          params: { urls: encodeURIComponent(urls.join(',')) },
+        });
+      } catch (err) {
+        setError(callbackHelpers, err);
+        set(qnaAllUpViewStatusState, QnAAllUpViewStatus.Success);
+        return;
+      }
 
       const contentForSourceQnA = `> !# @source.urls = ${urls}
 > !# @source.name = ${name}
