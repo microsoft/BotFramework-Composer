@@ -66,7 +66,7 @@ export const navigationDispatcher = () => {
       if (dialogId !== designPageLocation.dialogId) {
         // Redirect to Microsoft.OnBeginDialog trigger if it exists on the dialog
         const beginDialogIndex = currentDialog?.triggers.findIndex(({ type }) => type === SDKKinds.OnBeginDialog);
-        if (typeof beginDialogIndex !== 'undefined') {
+        if (typeof beginDialogIndex !== 'undefined' && beginDialogIndex >= 0) {
           path = createSelectedPath(beginDialogIndex);
         }
         breadcrumb.push({ dialogId, selected: '', focused: '' });

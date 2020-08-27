@@ -3,7 +3,7 @@
 
 import { useRecoilValue } from 'recoil';
 import { act } from '@bfc/test-utils/lib/hooks';
-import { SDKKinds } from '@bfc/shared/src/types';
+import { SDKKinds } from '@bfc/shared';
 
 import { navigationDispatcher } from '../navigation';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
