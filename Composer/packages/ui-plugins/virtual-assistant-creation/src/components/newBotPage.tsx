@@ -11,9 +11,9 @@ import { mergeStyles } from '@uifabric/merge-styles';
 import { IAssistant } from '../models/stateModels';
 import { Image, IImageStyles } from 'office-ui-fabric-react/lib/Image';
 import { AppContext } from './VirtualAssistantCreationModal';
-import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
+import { DialogFooterWrapper } from './dialogFooterWrapper';
+import { RouterPaths } from '../shared/constants';
 
 // import { CustomAssistantImg, EnterpriseAssistantImg, HospitalityAssistantImg } from '../shared/assets';
 // const customImg = require('../shared/assets/customAssistant.jpg');
@@ -28,7 +28,7 @@ interface NewBotPageProps
   extends RouteComponentProps<{
     location: string;
   }> {
-  // Add Props Here
+  onDismiss: () => void;
 }
 
 export const NewBotPage: React.FC<NewBotPageProps> = (props) => {
@@ -115,7 +115,7 @@ export const NewBotPage: React.FC<NewBotPageProps> = (props) => {
       <DialogWrapper
         isOpen={true}
         // onDismiss={null}
-        title={'Create New'}
+        title={'Choose Your Assistant'}
         subText={'Create a new bot or choose from Virtual assistant templates. Learn More'}
         dialogType={DialogTypes.CreateFlow}
       >
@@ -140,16 +140,11 @@ export const NewBotPage: React.FC<NewBotPageProps> = (props) => {
             <div className="ms-Grid-col ms-sm6 ms-md6 ms-lg4">{renderImage()}</div>
           </div>
         </div>
-        <DialogFooter>
-          <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
-          <PrimaryButton
-            data-testid="SubmitNewBotBtn"
-            text={formatMessage('Next')}
-            onClick={() => {
-              navigate(`./options`);
-            }}
-          />
-        </DialogFooter>
+        <DialogFooterWrapper
+          prevPath={RouterPaths.defineConversationPage}
+          nextPath={RouterPaths.customizeBotPage}
+          onDismiss={props.onDismiss}
+        />
       </DialogWrapper>
     </Fragment>
   );

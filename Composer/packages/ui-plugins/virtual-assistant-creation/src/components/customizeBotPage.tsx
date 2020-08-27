@@ -15,12 +15,14 @@ import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { mergeStyles } from '@uifabric/merge-styles';
 import { AppContext } from './VirtualAssistantCreationModal';
+import { DialogFooterWrapper } from './dialogFooterWrapper';
+import { RouterPaths } from '../shared/constants';
 
 interface CustomizeBotPageProps
   extends RouteComponentProps<{
     location: string;
   }> {
-  // Add Props Here
+  onDismiss: () => void;
 }
 
 export const CustomizeBotPage: React.FC<CustomizeBotPageProps> = (props) => {
@@ -140,16 +142,11 @@ export const CustomizeBotPage: React.FC<CustomizeBotPageProps> = (props) => {
             setState({ ...state, selectedGreetingMessage: newValue as string });
           }}
         />
-        <DialogFooter>
-          <DefaultButton text={formatMessage('Cancel')} />
-          <PrimaryButton
-            data-testid="SubmitNewBotBtn"
-            text={formatMessage('Next')}
-            onClick={() => {
-              navigate(`./preProvision`);
-            }}
-          />
-        </DialogFooter>
+        <DialogFooterWrapper
+          prevPath={RouterPaths.newBotPage}
+          nextPath={RouterPaths.preProvisionPage}
+          onDismiss={props.onDismiss}
+        />
       </DialogWrapper>
     </Fragment>
   );
