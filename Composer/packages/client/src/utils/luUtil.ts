@@ -15,10 +15,14 @@ import { getBaseName, getExtension } from './fileUtil';
 
 export * from '@bfc/indexers/lib/utils/luUtil';
 
-export function getReferredFiles(luFiles: LuFile[], dialogs: DialogInfo[]) {
+/*
+ * checkoutContent: will check out the file content by default
+ */
+export function getReferredLuFiles(luFiles: LuFile[], dialogs: DialogInfo[], checkContent = true) {
   return luFiles.filter((file) => {
     const idWithOutLocale = getBaseName(file.id);
-    return dialogs.some((dialog) => dialog.luFile === idWithOutLocale);
+    const contentNotEmpty = (checkContent && !!file.content) || !checkContent;
+    return dialogs.some((dialog) => dialog.luFile === idWithOutLocale && contentNotEmpty);
   });
 }
 
@@ -107,27 +111,32 @@ export function createCrossTrainConfig(dialogs: DialogInfo[], luFiles: LuFile[])
   let rootId = '';
   dialogs.forEach((dialog) => {
     if (dialog.isRoot) rootId = dialog.id;
+    const luFile = luFiles.find((luFile) => getBaseName(luFile.id) === dialog.luFile);
+    if (luFile) {
+      const fileId = dialog.id;
+      const { intentTriggers } = dialog;
+      // filter intenttrigger which be involved in lu file
+      //find the trigger's dialog that use a recognizer
+      intentTriggers
+        .filter((intentTrigger) => luFile.intents.find((intent) => intent.Name === intentTrigger.intent))
+        .forEach((item) => {
+          //find all dialogs in trigger that has a luis recognizer
+          const used = item.dialogs.filter((dialog) => !!countMap[dialog]);
 
-    const { intentTriggers } = dialog;
-    const fileId = dialog.id;
-    //find the trigger's dialog that use a recognizer
-    intentTriggers.forEach((item) => {
-      //find all dialogs in trigger that has a luis recognizer
-      const used = item.dialogs.filter((dialog) => !!countMap[dialog]);
+          const deduped = Array.from(new Set<string>(used));
 
-      const deduped = Array.from(new Set<string>(used));
+          const result = {};
+          if (deduped.length === 1) {
+            result[item.intent] = deduped[0];
+          } else if (deduped.length) {
+            result[item.intent] = deduped;
+          } else {
+            result[item.intent] = '';
+          }
 
-      const result = {};
-      if (deduped.length === 1) {
-        result[item.intent] = deduped[0];
-      } else if (deduped.length) {
-        result[item.intent] = deduped;
-      } else {
-        result[item.intent] = '';
-      }
-
-      triggerRules[fileId] = { ...triggerRules[fileId], ...result };
-    });
+          triggerRules[fileId] = { ...triggerRules[fileId], ...result };
+        });
+    }
   });
 
   const crossTrainConfig: ICrossTrainConfig = {
@@ -154,19 +163,14 @@ function generateErrorMessage(invalidLuFile: LuFile[]) {
   }, '');
 }
 
-export function checkLuisPublish(luFiles: LuFile[], dialogs: DialogInfo[]) {
-  const referred = getReferredFiles(luFiles, dialogs);
+export function checkLuisBuild(luFiles: LuFile[], dialogs: DialogInfo[]) {
+  const referred = getReferredLuFiles(luFiles, dialogs, false);
   const invalidLuFile = referred.filter(
     (file) => file.diagnostics.filter((n) => n.severity === DiagnosticSeverity.Error).length !== 0
   );
   if (invalidLuFile.length !== 0) {
     const msg = generateErrorMessage(invalidLuFile);
     throw new Error(formatMessage(`The Following LuFile(s) are invalid: \n`) + msg);
-  }
-  const emptyLuFiles = referred.filter((file) => file.empty);
-  if (emptyLuFiles.length !== 0) {
-    const msg = emptyLuFiles.map((file) => file.id).join(' ');
-    throw new Error(formatMessage(`You have the following empty LuFile(s): `) + msg);
   }
   // supported LUIS locale.
   const supported = BotIndexer.filterLUISFilesToPublish(referred);

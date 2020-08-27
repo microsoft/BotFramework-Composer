@@ -10,6 +10,8 @@ import { storageDispatcher } from './storage';
 import { exportDispatcher } from './export';
 import { lgDispatcher } from './lg';
 import { luDispatcher } from './lu';
+import { qnaDispatcher } from './qna';
+import { builderDispatcher } from './builder';
 import { navigationDispatcher } from './navigation';
 import { publisherDispatcher } from './publisher';
 import { settingsDispatcher } from './setting';
@@ -28,6 +30,8 @@ const createDispatchers = () => {
     ...exportDispatcher(),
     ...lgDispatcher(),
     ...luDispatcher(),
+    ...qnaDispatcher(),
+    ...builderDispatcher(),
     ...navigationDispatcher(),
     ...publisherDispatcher(),
     ...settingsDispatcher(),

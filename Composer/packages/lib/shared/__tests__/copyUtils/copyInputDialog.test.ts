@@ -8,7 +8,7 @@ import { externalApiStub as externalApi } from '../__mocks__/externalApiStub';
 describe('shallowCopyAdaptiveAction', () => {
   const externalApiWithLgCopy: ExternalApi = {
     ...externalApi,
-    copyLgField: (fromId, fromData, toId, toData, fieldName) => fromData[fieldName] + '(copy)',
+    copyLgField: (fromId, fromData, toId, toData, fieldName) => Promise.resolve(fromData[fieldName] + '(copy)'),
   };
 
   it('can copy TextInput', async () => {
@@ -28,7 +28,7 @@ describe('shallowCopyAdaptiveAction', () => {
       defaultValueResponse: '[TextInput_DefaultValueResponse_1234]',
     };
 
-    expect(copyInputDialog(promptText as any, externalApiWithLgCopy)).toEqual({
+    expect(await copyInputDialog(promptText as any, externalApiWithLgCopy)).toEqual({
       $kind: 'Microsoft.TextInput',
       $designer: {
         id: '5678',

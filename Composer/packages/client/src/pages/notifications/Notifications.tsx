@@ -37,6 +37,11 @@ const Notifications: React.FC<RouteComponentProps> = () => {
       }
       navigateTo(uri);
     },
+    [NotificationType.QNA]: (item: INotification) => {
+      const { projectId, resourceId, diagnostic } = item;
+      const uri = `/bot/${projectId}/knowledge-base/${resourceId}/edit#L=${diagnostic.range?.start.line || 0}`;
+      navigateTo(uri);
+    },
     [NotificationType.DIALOG]: (item: INotification) => {
       //path is like main.trigers[0].actions[0]
       //uri = id?selected=triggers[0]&focused=triggers[0].actions[0]
