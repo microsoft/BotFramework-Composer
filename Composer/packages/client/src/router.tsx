@@ -84,8 +84,7 @@ const projectStyle = css`
 `;
 
 const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
-  const { schemas } = useRecoilValue(botStateByProjectIdSelector);
-  const projectId = useRecoilValue(currentProjectIdState);
+  const { schemas, projectId } = useRecoilValue(botStateByProjectIdSelector);
   const botOpening = useRecoilValue(botOpeningState);
   const { fetchProjectById } = useRecoilValue(dispatcherState);
 

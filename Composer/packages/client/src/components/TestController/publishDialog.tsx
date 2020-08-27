@@ -20,9 +20,9 @@ import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-reac
 
 import { Text, Tips, Links, nameRegex } from '../../constants';
 import { FieldConfig, useForm } from '../../hooks/useForm';
-import { dialogsState, luFilesState, qnaFilesState } from '../../recoilModel/atoms/botState';
 import { getReferredQnaFiles } from '../../utils/qnaUtil';
 import { getReferredLuFiles } from '../../utils/luUtil';
+import { botStateByProjectIdSelector } from '../../recoilModel';
 
 // -------------------- Styles -------------------- //
 const textFieldLabel = css`
@@ -104,9 +104,7 @@ interface IPublishDialogProps {
 
 export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
   const { isOpen, onDismiss, onPublish, botName, config } = props;
-  const dialogs = useRecoilValue(dialogsState);
-  const luFiles = useRecoilValue(luFilesState);
-  const qnaFiles = useRecoilValue(qnaFilesState);
+  const { dialogs, luFiles, qnaFiles } = useRecoilValue(botStateByProjectIdSelector);
   const qnaConfigShow = getReferredQnaFiles(qnaFiles, dialogs).length > 0;
   const luConfigShow = getReferredLuFiles(luFiles, dialogs).length > 0;
 

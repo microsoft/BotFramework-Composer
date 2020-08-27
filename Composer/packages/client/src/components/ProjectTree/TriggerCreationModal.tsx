@@ -200,6 +200,7 @@ const validateForm = (
 // -------------------- TriggerCreationModal -------------------- //
 
 interface TriggerCreationModalProps {
+  projectId: string;
   dialogId: string;
   isOpen: boolean;
   onDismiss: () => void;

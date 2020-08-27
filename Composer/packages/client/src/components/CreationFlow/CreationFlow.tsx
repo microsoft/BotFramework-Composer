@@ -116,7 +116,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     await handleCreateNew(formData, QnABotTemplateId);
     // import qna from urls
     if (urls.length > 0) {
-      await importQnAFromUrls({ id: `${formData.name.toLocaleLowerCase()}.${locale}`, urls });
+      await importQnAFromUrls({ id: `${formData.name.toLocaleLowerCase()}.${locale}`, urls, projectId });
     }
   };
 

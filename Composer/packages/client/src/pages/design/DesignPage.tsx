@@ -179,7 +179,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   useEffect(() => {
     dialogs.forEach(async (dialog) => {
       if (!qnaFiles || qnaFiles.length === 0 || !qnaFiles.find((qnaFile) => getBaseName(qnaFile.id) === dialog.id)) {
-        await createQnAFile({ id: dialog.id, content: '' });
+        await createQnAFile({ id: dialog.id, content: '', projectId });
       }
     });
   }, [dialogs]);
@@ -564,7 +564,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       createTrigger(dialogId, formData, url);
       // import qna from urls
       if (urls.length > 0) {
-        await importQnAFromUrls({ id: `${dialogId}.${locale}`, urls });
+        await importQnAFromUrls({ id: `${dialogId}.${locale}`, urls, projectId });
       }
     }
   };
@@ -591,7 +591,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           selected={selected}
           onDeleteDialog={handleDeleteDialog}
           onDeleteTrigger={handleDeleteTrigger}
-          onSelect={handleSelect}
+          onSelect={(...props) => handleSelect(projectId, ...props)}
         />
         <div css={contentWrapper} role="main">
           <div css={{ position: 'relative' }} data-testid="DesignPage-ToolBar">
@@ -673,6 +673,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           <TriggerCreationModal
             dialogId={dialogId}
             isOpen={triggerModalVisible}
+            projectId={projectId}
             onDismiss={onTriggerCreationDismiss}
             onSubmit={onTriggerCreationSubmit}
           />

@@ -78,9 +78,6 @@ export const DispatcherWrapper = ({ children }) => {
 
   return (
     <Fragment>
-      {botProjects.map((projectId) => (
-        <UndoRoot key={projectId} projectId={projectId} />
-      ))}
       <InitDispatcher onLoad={setLoaded} />
       {loaded ? children : null}
     </Fragment>

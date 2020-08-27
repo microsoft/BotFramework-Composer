@@ -7,13 +7,13 @@ import { RecoilRoot } from 'recoil';
 
 import { useTriggerApi } from '../../src/shell/triggerApi';
 import {
-  projectIdState,
   localeState,
   luFilesState,
   lgFilesState,
   dialogsState,
   schemasState,
   dispatcherState,
+  currentProjectIdState,
 } from '../../src/recoilModel';
 import { Dispatcher } from '../../src/recoilModel/dispatchers';
 
@@ -53,7 +53,7 @@ describe('use triggerApi hooks', () => {
     createLuIntentMock = jest.fn();
 
     const initRecoilState = ({ set }) => {
-      set(projectIdState, state.projectId);
+      set(currentProjectIdState, state.projectId);
       set(localeState, 'en-us');
       set(luFilesState, state.luFiles);
       set(lgFilesState, state.lgFiles);

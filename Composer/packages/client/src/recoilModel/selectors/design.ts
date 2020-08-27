@@ -145,11 +145,11 @@ export const botStateByProjectIdSelector = selector({
 
 const loadBotProjects = (dispatcher: Dispatcher) => {
   return {
-    onAction: async (validatedBotProject, pathToFile) => {
-      const projectId = await dispatcher.openProject(validatedBotProject.workspace, 'default', pathToFile);
+    onAction: async (validatedBotProject) => {
+      const projectId = await dispatcher.openProject(validatedBotProject.workspace, 'default');
       dispatcher.addToBotProject(projectId, true);
       for (const skill of validatedBotProject.skills) {
-        const projectId = await dispatcher.openProject(skill.workspace, 'default', pathToFile);
+        const projectId = await dispatcher.openProject(skill.workspace, 'default');
         dispatcher.addToBotProject(projectId, false);
       }
     },
