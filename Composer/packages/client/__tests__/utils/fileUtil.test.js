@@ -1,7 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getExtension, getBaseName, upperCaseName } from '../../src/utils/fileUtil';
+import formatMessage from 'format-message';
+
+import { getExtension, getBaseName, upperCaseName, loadLocale } from '../../src/utils/fileUtil';
+import httpClient from '../../src/utils/httpUtil';
+
+jest.mock('../../src/utils/httpUtil');
+jest.mock('format-message');
 
 const files = ['a.text', 'a.b.text', 1];
 
@@ -35,5 +41,34 @@ describe('upperCaseName', () => {
     expect(result2).toEqual('A.b.text');
     const result3 = upperCaseName(files[2]);
     expect(result3).toEqual(1);
+  });
+});
+
+describe.only('loadLocale', () => {
+  it("does not set locale if it can't find one", () => {
+    jest.spyOn(httpClient, 'get').mockImplementation(() => ({ data: null }));
+
+    loadLocale('en-DoesNotExist');
+    expect(formatMessage.setup).not.toHaveBeenCalled();
+  });
+  it('does not set locale if the server returns an error page', () => {
+    jest.spyOn(httpClient, 'get').mockImplementation(() => ({ data: 'error page' }));
+
+    loadLocale('en-test');
+    expect(formatMessage.setup).not.toHaveBeenCalled();
+  });
+  it('sets locale if it does find one', () => {
+    const RESPONSE = { data: { abc: 'def' } };
+    const LOCALE = 'en-test';
+
+    jest.spyOn(httpClient, 'get').mockImplementation(() => RESPONSE);
+
+    loadLocale(LOCALE);
+    expect(formatMessage.setup).toHaveBeenCalledWith({
+      locale: LOCALE,
+      generateId: expect.anything(),
+      missingTranslation: 'ignore',
+      translations: { [LOCALE]: RESPONSE.data },
+    });
   });
 });
