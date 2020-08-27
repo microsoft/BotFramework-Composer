@@ -44,7 +44,7 @@ describe('upperCaseName', () => {
   });
 });
 
-describe.only('loadLocale', () => {
+describe('loadLocale', () => {
   it("does not set locale if it can't find one", () => {
     jest.spyOn(httpClient, 'get').mockImplementation(() => ({ data: null }));
 
