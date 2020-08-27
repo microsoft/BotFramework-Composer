@@ -166,27 +166,28 @@ export const useEditorEventApi = (
         trackActionChange(eventData.id);
         if (eventData.$kind === MenuEventTypes.Paste) {
           handler = (e) => {
-            const dialog = insertActions(path, data, e.id, e.position, clipboardActions);
-            onChange(dialog);
-            onFocusSteps([`${e.id}[${e.position || 0}]`]);
+            insertActions(path, data, e.id, e.position, clipboardActions).then((dialog) => {
+              onChange(dialog);
+              onFocusSteps([`${e.id}[${e.position || 0}]`]);
+            });
 
             announce(ScreenReaderMessage.ActionCreated);
           };
         } else {
           handler = (e) => {
             const newAction = dialogFactory.create(e.$kind);
-            const dialog = insertAction(path, data, e.id, e.position, newAction);
-            onChange(dialog);
-            onFocusSteps([`${e.id}[${e.position || 0}]`]);
-            announce(ScreenReaderMessage.ActionCreated);
+            insertAction(path, data, e.id, e.position, newAction).then((dialog) => {
+              onChange(dialog);
+              onFocusSteps([`${e.id}[${e.position || 0}]`]);
+              announce(ScreenReaderMessage.ActionCreated);
+            });
           };
         }
         break;
       case NodeEventTypes.CopySelection:
         handler = () => {
           const actionIds = getClipboardTargetsFromContext();
-          const copiedNodes = copySelectedActions(path, data, actionIds);
-          onClipboardChange(copiedNodes);
+          copySelectedActions(path, data, actionIds).then((copiedNodes) => onClipboardChange(copiedNodes));
           announce(ScreenReaderMessage.ActionsCopied);
         };
         break;
@@ -194,10 +195,11 @@ export const useEditorEventApi = (
         handler = () => {
           const actionIds = getClipboardTargetsFromContext();
           trackActionListChange(actionIds);
-          const { dialog, cutActions } = cutSelectedActions(path, data, actionIds);
-          onChange(dialog);
-          onFocusSteps([]);
-          onClipboardChange(cutActions);
+          cutSelectedActions(path, data, actionIds).then(({ dialog, cutActions }) => {
+            onChange(dialog);
+            onFocusSteps([]);
+            onClipboardChange(cutActions);
+          });
           announce(ScreenReaderMessage.ActionsCut);
         };
         break;
@@ -225,8 +227,8 @@ export const useEditorEventApi = (
           let newDialogData = readDialog(newDialogId);
 
           // Using copy->paste->delete pattern is safer than using cut->paste
-          const actionsToBeMoved = copySelectedActions(path, data, actionIds);
-          newDialogData = insertActions(
+          const actionsToBeMoved = await copySelectedActions(path, data, actionIds);
+          newDialogData = await insertActions(
             newDialogId,
             newDialogData,
             `${'triggers'}[0].${'actions'}`,
@@ -247,7 +249,7 @@ export const useEditorEventApi = (
           if (!placeholderPosition) return;
 
           const placeholderAction = dialogFactory.create(SDKKinds.BeginDialog, { dialog: newDialogId });
-          const insertResult = insertAction(
+          const insertResult = await insertAction(
             path,
             deleteResult,
             placeholderPosition.arrayPath,
