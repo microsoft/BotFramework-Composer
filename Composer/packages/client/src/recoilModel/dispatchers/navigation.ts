@@ -68,8 +68,8 @@ export const navigationDispatcher = () => {
         const beginDialogIndex = currentDialog?.triggers.findIndex(({ type }) => type === SDKKinds.OnBeginDialog);
         if (typeof beginDialogIndex !== 'undefined' && beginDialogIndex >= 0) {
           path = createSelectedPath(beginDialogIndex);
+          breadcrumb.push({ dialogId, selected: '', focused: '' });
         }
-        breadcrumb.push({ dialogId, selected: '', focused: '' });
       }
 
       const currentUri = convertPathToUrl(projectId, dialogId, path);
