@@ -42,7 +42,6 @@ import {
   breadcrumbState,
   visualEditorSelectionState,
   focusPathState,
-  designPageLocationState,
   showAddSkillDialogModalState,
   skillsState,
   actionsSeedState,
@@ -118,7 +117,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const breadcrumb = useRecoilValue(breadcrumbState);
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
   const focusPath = useRecoilValue(focusPathState);
-  const designPageLocation = useRecoilValue(designPageLocationState);
   const showCreateDialogModal = useRecoilValue(showCreateDialogModalState);
   const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState);
   const { undo, redo, canRedo, canUndo, commitChanges, clearUndo } = useRecoilValue(undoFunctionState);
@@ -167,7 +165,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     if (currentDialog) {
       setCurrentDialog(currentDialog);
     }
-    const rootDialog = dialogs.find(({ isRoot }) => isRoot === true);
+    const rootDialog = dialogs.find(({ isRoot }) => isRoot);
     if (!currentDialog && rootDialog) {
       const { search } = location || {};
       navigateTo(`/bot/${projectId}/dialogs/${rootDialog.id}${search}`);
@@ -197,13 +195,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   }, [dialogs]);
 
   useEffect(() => {
-    const index = currentDialog.triggers.findIndex(({ type }) => type === SDKKinds.OnBeginDialog);
-    if (index >= 0 && !designPageLocation.selected && designPageLocation.projectId === projectId) {
-      selectTo(createSelectedPath(index));
-    }
-  }, [currentDialog?.id]);
-
-  useEffect(() => {
     if (location && props.dialogId && props.projectId) {
       const { dialogId, projectId } = props;
       const params = new URLSearchParams(location.search);
@@ -212,7 +203,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         projectId: projectId,
         selected: params.get('selected') ?? '',
         focused: params.get('focused') ?? '',
-        breadcrumb: location.state ? location.state.breadcrumb || [] : [],
+        breadcrumb: location.state?.breadcrumb || [],
         promptTab: getTabFromFragment(),
       });
       /* eslint-disable no-underscore-dangle */
