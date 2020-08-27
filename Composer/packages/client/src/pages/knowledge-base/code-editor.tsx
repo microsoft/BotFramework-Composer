@@ -30,7 +30,8 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   const projectId = useRecoilValue(projectIdState);
   const userSettings = useRecoilValue(userSettingsState);
   const { dialogId } = props;
-  const file = qnaFiles.find(({ id }) => id === `${dialogId}.${locale}`);
+  const targetFileId = dialogId.endsWith('.source') ? dialogId : `${dialogId}.${locale}`;
+  const file = qnaFiles.find(({ id }) => id === targetFileId);
   const hash = props.location?.hash ?? '';
   const hashLine = querystring.parse(hash).L;
   const line = Array.isArray(hashLine) ? +hashLine[0] : typeof hashLine === 'string' ? +hashLine : 0;
@@ -65,7 +66,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   const onChangeContent = useMemo(
     () =>
       debounce((newContent: string) => {
-        actions.updateQnAFile({ id: `${dialogId}.${locale}`, content: newContent });
+        actions.updateQnAFile({ id: targetFileId, content: newContent });
       }, 500),
     [projectId]
   );

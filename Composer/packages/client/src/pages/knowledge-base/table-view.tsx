@@ -67,7 +67,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const locale = 'en-us';
   //const locale = useRecoilValue(localeState);
   const { dialogId } = props;
-  const file = qnaFiles.find(({ id }) => id === `${dialogId}.${locale}`);
+  const targetFileId = dialogId.endsWith('.source') ? dialogId : `${dialogId}.${locale}`;
+  const file = qnaFiles.find(({ id }) => id === targetFileId);
   const fileRef = useRef(file);
   fileRef.current = file;
   const dialogIdRef = useRef(dialogId);
@@ -111,11 +112,11 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const createOrUpdateQuestion = () => {
     if (editMode === EditMode.Creating && question) {
       const updatedQnAFileContent = addQuestion(question, qnaSections, qnaSectionIndex);
-      actions.updateQnAFile({ id: `${dialogIdRef.current}.${localeRef.current}`, content: updatedQnAFileContent });
+      actions.updateQnAFile({ id: targetFileId, content: updatedQnAFileContent });
     }
     if (editMode === EditMode.Updating && qnaSections[qnaSectionIndex].Questions[questionIndex].content !== question) {
       const updatedQnAFileContent = updateQuestion(question, questionIndex, qnaSections, qnaSectionIndex);
-      actions.updateQnAFile({ id: `${dialogIdRef.current}.${localeRef.current}`, content: updatedQnAFileContent });
+      actions.updateQnAFile({ id: targetFileId, content: updatedQnAFileContent });
     }
     cancelQuestionEditOperation();
   };
@@ -123,7 +124,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const updateAnswer = () => {
     if (editMode === EditMode.Updating && qnaSections[qnaSectionIndex].Answer !== answer) {
       const updatedQnAFileContent = updateAnswerUtil(answer, qnaSections, qnaSectionIndex);
-      actions.updateQnAFile({ id: `${dialogIdRef.current}.${localeRef.current}`, content: updatedQnAFileContent });
+      actions.updateQnAFile({ id: targetFileId, content: updatedQnAFileContent });
     }
     cancelAnswerEditOperation();
   };
@@ -246,7 +247,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     if (fileRef && fileRef.current) {
       const updatedQnAFileContent = removeSection(qnaSectionIndex, fileRef.current.content);
       actions.updateQnAFile({
-        id: `${dialogIdRef.current}.${localeRef.current}`,
+        id: targetFileId,
         content: updatedQnAFileContent,
       });
     }
@@ -526,7 +527,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     const newQnAPair = generateQnAPair();
     const content = get(fileRef.current, 'content', '');
     const newContent = insertSection(0, content, newQnAPair);
-    actions.updateQnAFile({ id: `${dialogIdRef.current}.${localeRef.current}`, content: newContent });
+    actions.updateQnAFile({ id: targetFileId, content: newContent });
     const newArray = [false, ...showQnAPairDetails];
     setShowQnAPairDetails(newArray);
   };

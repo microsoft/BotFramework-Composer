@@ -82,33 +82,37 @@ export const createSourceQnAFileState = async (
   const projectId = await snapshot.getPromise(projectIdState);
   const qnaFiles = await snapshot.getPromise(qnaFilesState);
   const createdSourceQnAId = `${name}.source`;
-  const updatedQnAId = id;
-  const updatedOriginQnAFile = qnaFiles.find((f) => f.id === updatedQnAId);
 
   if (qnaFiles.find((qna) => qna.id === createdSourceQnAId)) {
     throw new Error(`source qna file ${createdSourceQnAId}.qna already exist`);
   }
 
-  if (!updatedOriginQnAFile) {
-    throw new Error(`update qna file ${updatedQnAId}.qna not exist`);
-  }
-
   const createdQnAFile = (await qnaWorker.parse(createdSourceQnAId, content)) as QnAFile;
 
-  const contentForDialogQnA = `[${name}](../source/${createdSourceQnAId}.qna)\n`;
-  const updatedContent = updatedOriginQnAFile
-    ? contentForDialogQnA + updatedOriginQnAFile.content
-    : contentForDialogQnA;
-  const updatedQnAFile = (await qnaWorker.parse(id, updatedContent)) as QnAFile;
+  const contentForDialogQnA = `[${name}](${createdSourceQnAId}.qna)\n`;
 
-  const newQnAFiles = qnaFiles.map((file) => {
-    if (file.id === updatedQnAId) {
-      return updatedQnAFile;
+  let newQnAFiles = [...qnaFiles];
+
+  // if created on a dialog, need update this dialog's qna ref
+  if (id.includes('.source') === false) {
+    const updatedQnAId = id;
+    const updatedOriginQnAFile = qnaFiles.find((f) => f.id === updatedQnAId);
+    if (!updatedOriginQnAFile) {
+      throw new Error(`update qna file ${updatedQnAId}.qna not exist`);
     }
-    return file;
-  });
+    const updatedContent = updatedOriginQnAFile
+      ? contentForDialogQnA + updatedOriginQnAFile.content
+      : contentForDialogQnA;
+    const updatedQnAFile = (await qnaWorker.parse(id, updatedContent)) as QnAFile;
+    newQnAFiles = qnaFiles.map((file) => {
+      if (file.id === updatedQnAId) {
+        return updatedQnAFile;
+      }
+      return file;
+    });
+    qnaFileStatusStorage.updateFileStatus(projectId, updatedQnAId);
+  }
 
-  qnaFileStatusStorage.updateFileStatus(projectId, updatedQnAId);
   qnaFileStatusStorage.updateFileStatus(projectId, createdSourceQnAId);
   set(qnaFilesState, [...newQnAFiles, createdQnAFile]);
 };
@@ -139,28 +143,23 @@ export const qnaDispatcher = () => {
       const { set } = callbackHelpers;
 
       set(qnaAllUpViewStatusState, QnAAllUpViewStatus.Loading);
-      try {
-        const response = await httpClient.get(`/utilities/qna/parse`, {
-          params: { urls: encodeURIComponent(urls.join(',')) },
-        });
 
-        const contentForSourceQnA = `> !# @source.urls = ${urls}
+      const response = await httpClient.get(`/utilities/qna/parse`, {
+        params: { urls: encodeURIComponent(urls.join(',')) },
+      });
+
+      const contentForSourceQnA = `> !# @source.urls = ${urls}
 > !# @source.name = ${name}
 ${response.data}
 `;
 
-        await createSourceQnAFileState(callbackHelpers, {
-          id,
-          name,
-          content: contentForSourceQnA,
-        });
+      await createSourceQnAFileState(callbackHelpers, {
+        id,
+        name,
+        content: contentForSourceQnA,
+      });
 
-        set(qnaAllUpViewStatusState, QnAAllUpViewStatus.Success);
-      } catch (err) {
-        setError(callbackHelpers, err);
-      } finally {
-        set(qnaAllUpViewStatusState, QnAAllUpViewStatus.Success);
-      }
+      set(qnaAllUpViewStatusState, QnAAllUpViewStatus.Success);
     }
   );
 

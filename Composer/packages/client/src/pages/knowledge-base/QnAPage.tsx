@@ -18,6 +18,7 @@ import { Page } from '../../components/Page';
 import { dialogsState, projectIdState, qnaAllUpViewStatusState, qnaFilesState } from '../../recoilModel/atoms/botState';
 import { dispatcherState } from '../../recoilModel';
 import { QnAAllUpViewStatus } from '../../recoilModel/types';
+import { getBaseName } from '../../utils/fileUtil';
 
 import TableView from './table-view';
 import { ImportQnAFromUrlModal, ImportQnAFormData } from './ImportQnAFromUrlModal';
@@ -66,6 +67,25 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
     });
     return newDialogLinks;
   }, [dialogs]);
+
+  const sourceQnAFiles = qnaFiles.filter(({ id }) => id.endsWith('.source'));
+
+  const sourceQnANavLinks: INavTreeItem[] = sourceQnAFiles.map(({ id }) => {
+    return {
+      id,
+      name: getBaseName(id),
+      ariaLabel: formatMessage('qna file'),
+      url: `/bot/${projectId}/knowledge-base/${id}`,
+    };
+  });
+
+  sourceQnANavLinks.unshift({
+    id: 'source',
+    name: '--- Imported From Urls ----',
+    ariaLabel: formatMessage('Imported From Urls'),
+    disabled: true,
+    url: `/bot/${projectId}/knowledge-base/source`,
+  });
 
   useEffect(() => {
     const activeDialog = dialogs.find(({ id }) => id === dialogId);
@@ -142,7 +162,7 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
     <Page
       data-testid="QnAPage"
       mainRegionName={formatMessage('QnA editor')}
-      navLinks={navLinks}
+      navLinks={[...navLinks, ...sourceQnANavLinks]}
       navRegionName={formatMessage('Qna Navigation Pane')}
       title={formatMessage('QnA')}
       toolbarItems={toolbarItems}
