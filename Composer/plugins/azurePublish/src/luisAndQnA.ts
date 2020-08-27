@@ -393,18 +393,14 @@ export class LuisAndQnaPublish {
     });
 
     // check content
-    const notEmptyLuFiles = luFiles.filter((name) => {
-      return this.notEmptyModel(name);
-    });
-    const notEmptyQnaFiles = qnaFiles.filter((name) => {
-      return this.notEmptyModel(name);
-    });
+    const notEmptyLuFiles = luFiles.some((name) => this.notEmptyModel(name));
+    const notEmptyQnaFiles = qnaFiles.some((name) => this.notEmptyModel(name));
 
-    if (notEmptyLuFiles.length > 0 && !(authoringKey && authoringRegion)) {
-      throw 'Should have luis authoringKey and authoringRegion when lu file not empty';
+    if (notEmptyLuFiles && !(authoringKey && authoringRegion)) {
+      throw Error('Should have luis authoringKey and authoringRegion when lu file not empty');
     }
-    if (notEmptyQnaFiles.length > 0 && !subscriptionKey) {
-      throw 'Should have qna subscriptionKey when qna file not empty';
+    if (notEmptyQnaFiles && !subscriptionKey) {
+      throw Error('Should have qna subscriptionKey when qna file not empty');
     }
     const dialogFiles = botFiles.filter((name) => {
       return name.endsWith('.dialog') && this.notEmptyModel(name);
