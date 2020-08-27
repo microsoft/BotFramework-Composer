@@ -17,7 +17,7 @@ describe('#copyForeach', () => {
       ],
     };
 
-    expect(copyForeach(foreachInstance, externalApi)).toEqual({
+    expect(await copyForeach(foreachInstance, externalApi)).toEqual({
       $kind: 'Microsoft.Foreach',
       itemsProperty: 'name',
       $designer: {
@@ -48,7 +48,7 @@ describe('#copyForeach', () => {
       ],
     };
 
-    expect(copyForeach(foreachPageInstance, externalApi)).toEqual({
+    expect(await copyForeach(foreachPageInstance, externalApi)).toEqual({
       $kind: 'Microsoft.Foreach',
       itemsProperty: 'name',
       pageSize: 10,
