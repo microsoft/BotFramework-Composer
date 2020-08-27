@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Diagnostic } from './diagnostic';
+import { Diagnostic, Range } from './diagnostic';
 import { IIntentTrigger } from './dialogUtils';
 
 import { DialogSetting } from './index';
@@ -77,7 +77,7 @@ export interface LuIntentSection {
   Body: string;
   Entities?: LuEntity[];
   Children?: LuIntentSection[];
-  range?: CodeRange;
+  range?: Range;
 }
 
 export interface LuParsed {
@@ -117,16 +117,12 @@ export interface QnAFile {
   qnaSections: QnASection[];
   [key: string]: any;
 }
-export interface CodeRange {
-  startLineNumber: number;
-  endLineNumber: number;
-}
 
 export interface LgTemplate {
   name: string;
   body: string;
   parameters: string[];
-  range?: CodeRange;
+  range?: Range;
 }
 
 export interface LgParsed {
@@ -141,6 +137,7 @@ export interface LgFile {
   templates: LgTemplate[];
   allTemplates: LgTemplate[];
   options?: string[];
+  parseResult?: any;
 }
 
 export interface Skill {
