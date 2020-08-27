@@ -15,6 +15,9 @@ import { getBaseName, getExtension } from './fileUtil';
 
 export * from '@bfc/indexers/lib/utils/luUtil';
 
+/*
+ * checkoutContent: will check out the file content by default
+ */
 export function getReferredLuFiles(luFiles: LuFile[], dialogs: DialogInfo[], checkContent = true) {
   return luFiles.filter((file) => {
     const idWithOutLocale = getBaseName(file.id);

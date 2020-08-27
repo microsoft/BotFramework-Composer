@@ -169,6 +169,8 @@ export const projectDispatcher = () => {
         return dialog;
       });
 
+      await lgWorker.addProject(projectId, lgFiles);
+
       // Important: gotoSnapshot will wipe all states.
       const newSnapshot = snapshot.map(({ set }) => {
         set(skillManifestsState, skillManifestFiles);

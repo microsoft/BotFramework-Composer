@@ -137,6 +137,7 @@ export interface LgFile {
   templates: LgTemplate[];
   allTemplates: LgTemplate[];
   options?: string[];
+  parseResult?: any;
 }
 
 export interface Skill {
