@@ -156,10 +156,11 @@ export const TestController: React.FC = () => {
     setBotStatus(BotStatus.publishing);
     dismissDialog();
     const { luis, qna } = config;
+    const endpointKey = settings.qna.endpointKey;
     await setSettings(projectId, {
       ...settings,
       luis: luis,
-      qna: Object.assign({}, settings.qna, qna),
+      qna: Object.assign({}, settings.qna, qna, { endpointKey }),
     });
     await build(luis, qna, projectId);
   }
@@ -206,7 +207,7 @@ export const TestController: React.FC = () => {
         qna: {
           subscriptionKey: settings.qna.subscriptionKey,
           qnaRegion: settings.qna.qnaRegion,
-          endpointKey: '',
+          endpointKey: settings.qna.endpointKey,
         },
       }
     );
