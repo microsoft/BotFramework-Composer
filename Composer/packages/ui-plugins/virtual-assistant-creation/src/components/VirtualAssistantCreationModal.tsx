@@ -1,11 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { RouteComponentProps, Router } from '@reach/router';
 import NewBotPage from './newBotPage';
 import CustomizeBotPage from './customizeBotPage';
 import PreProvisionPage from './preProvisionPage';
+import { AppContextDefaultValue } from '../models/stateModels';
 
 interface VirtualAssistantCreationModalProps
   extends RouteComponentProps<{
@@ -17,15 +18,20 @@ interface VirtualAssistantCreationModalProps
   formData: any;
 }
 
+export const AppContext = React.createContext(AppContextDefaultValue);
+
 export const VirtualAssistantCreationModal: React.FC<VirtualAssistantCreationModalProps> = (props) => {
-  console.log(props.location);
+  const [state, setState] = useState(AppContextDefaultValue.state);
+
   return (
     <Fragment>
-      <Router>
-        <NewBotPage path="projects/create/va-core" />
-        <CustomizeBotPage path="projects/create/va-core/test" />
-        <PreProvisionPage path="projects/create/va-core/preprovisioning" />
-      </Router>
+      <AppContext.Provider value={{ state, setState }}>
+        <Router>
+          <NewBotPage path="/" default />
+          <CustomizeBotPage path="options" />
+          <PreProvisionPage path="preProvision" />
+        </Router>
+      </AppContext.Provider>
     </Fragment>
   );
 };
