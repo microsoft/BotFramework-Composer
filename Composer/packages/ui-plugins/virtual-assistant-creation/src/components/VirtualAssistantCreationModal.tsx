@@ -27,9 +27,9 @@ export const VirtualAssistantCreationModal: React.FC<VirtualAssistantCreationMod
     <Fragment>
       <AppContext.Provider value={{ state, setState }}>
         <Router>
-          <NewBotPage path="/" default />
-          <CustomizeBotPage path="options" />
-          <PreProvisionPage path="preProvision" />
+          <NewBotPage path="/projects/create/va-core/customize/" default />
+          <CustomizeBotPage path="/projects/create/va-core/customize/options" />
+          <PreProvisionPage path="/projects/create/va-core/customize/preProvision" />
         </Router>
       </AppContext.Provider>
     </Fragment>

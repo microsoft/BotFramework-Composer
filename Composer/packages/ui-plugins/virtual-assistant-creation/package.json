@@ -35,6 +35,7 @@
     "@bfc/extension": "*",
     "@bfc/intellisense": "*",
     "@bfc/test-utils": "*",
+    "@svgr/webpack": "^5.4.0",
     "@types/lodash": "^4.14.149",
     "@types/react": "16.9.23",
     "format-message": "^6.2.3",

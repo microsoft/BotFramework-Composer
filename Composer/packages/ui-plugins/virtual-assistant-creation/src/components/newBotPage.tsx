@@ -2,18 +2,27 @@
 // Licensed under the MIT License.
 
 import React, { Fragment, useContext } from 'react';
-import { RouteComponentProps } from '@reach/router';
+import { RouteComponentProps, navigate } from '@reach/router';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { BotTypeTile } from './botTypeTile';
 import { Label } from 'office-ui-fabric-react/lib/Label';
-// import { mergeStyles } from '@uifabric/merge-styles';
+import { mergeStyles } from '@uifabric/merge-styles';
 import { IAssistant } from '../models/stateModels';
-// import { Image } from 'office-ui-fabric-react/lib/Image';
+import { Image, IImageStyles } from 'office-ui-fabric-react/lib/Image';
 import { AppContext } from './VirtualAssistantCreationModal';
+import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
+import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import formatMessage from 'format-message';
+
+// import { CustomAssistantImg, EnterpriseAssistantImg, HospitalityAssistantImg } from '../shared/assets';
 // const customImg = require('../shared/assets/customAssistant.jpg');
 // const hospitalityImg = require('../shared/assets/hospitality.jpg');
 // const enterpriseImg = require('../shared/assets/EnterpriseAssistant.jpg');
+// const CloudFileImg = require('./cloud_file_img.svg') as string;
+// const CustomAssistantImg = require('./custom_assistant.svg') as string;
+// const EnterpriseAssistantImg = require('./enterprise_assistant.svg') as string;
+// const HospitalityAssistantImg = require('./hospitality_assistant.svg') as string;
 
 interface NewBotPageProps
   extends RouteComponentProps<{
@@ -55,33 +64,51 @@ export const NewBotPage: React.FC<NewBotPageProps> = (props) => {
     return result;
   };
 
-  // let renderImage = () => {
-  //     const imageClassName = mergeStyles({
-  //         display:'inline-block',
-  //         position:'relative',
-  //     })
+  let renderImage = () => {
+    const imageClassName = mergeStyles({
+      display: 'inline-block',
+      position: 'relative',
+    });
 
-  //     var assistantImage = customImg;
-  //     switch (state.selectedAssistant.name){
-  //         case 'Enterprise Assistant':
-  //             assistantImage = enterpriseImg;
-  //             break;
-  //         case 'Hospitality Assistant':
-  //             assistantImage = hospitalityImg;
-  //             break;
-  //         case 'Custom Assistant':
-  //             assistantImage = customImg;
-  //             break;
-  //     }
+    var assistantImage =
+      'https://social.technet.microsoft.com/wiki/cfs-file.ashx/__key/communityserver-wikis-components-files/00-00-00-00-05/2134.bot_2D00_icon_2D00_2883144_5F00_1280.png';
+    // switch (state.selectedAssistant.name){
+    //     case 'Enterprise Assistant':
+    //         assistantImage = EnterpriseAssistantImg;
+    //         break;
+    //     case 'Hospitality Assistant':
+    //         assistantImage = HospitalityAssistantImg;
+    //         break;
+    //     case 'Custom Assistant':
+    //         assistantImage = CustomAssistantImg;
+    //         break;
+    // }
+    const imageStyles: Partial<IImageStyles> = {
+      image: { height: '200px', width: '200px' },
+    };
+    return (
+      <Image
+        styles={imageStyles}
+        className={imageClassName}
+        src={assistantImage}
+        alt="Example with no image fit value and no height or width is specified."
+      />
+    );
+  };
 
-  //     return (
-  //         <Image
-  //         className={imageClassName}
-  //         src={assistantImage}
-  //         alt="Example with no image fit value and no height or width is specified."
-  //     />
-  //     );
-  // }
+  let onDismiss = () => {
+    const imageClassName = mergeStyles({
+      display: 'inline-block',
+      position: 'relative',
+    });
+  };
+
+  let handleSubmit = () => {
+    const imageClassName = mergeStyles({
+      display: 'inline-block',
+      position: 'relative',
+    });
+  };
 
   return (
     <Fragment>
@@ -110,9 +137,19 @@ export const NewBotPage: React.FC<NewBotPageProps> = (props) => {
                 options={getAssistantsToRender()}
               />
             </div>
-            <div className="ms-Grid-col ms-sm6 ms-md6 ms-lg4">{/* {renderImage()} */}</div>
+            <div className="ms-Grid-col ms-sm6 ms-md6 ms-lg4">{renderImage()}</div>
           </div>
         </div>
+        <DialogFooter>
+          <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
+          <PrimaryButton
+            data-testid="SubmitNewBotBtn"
+            text={formatMessage('Next')}
+            onClick={() => {
+              navigate(`./options`);
+            }}
+          />
+        </DialogFooter>
       </DialogWrapper>
     </Fragment>
   );
