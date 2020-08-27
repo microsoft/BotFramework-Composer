@@ -7,7 +7,6 @@ import { getExtension, getBaseName, upperCaseName, loadLocale } from '../../src/
 import httpClient from '../../src/utils/httpUtil';
 
 jest.mock('../../src/utils/httpUtil');
-jest.mock('format-message');
 
 const files = ['a.text', 'a.b.text', 1];
 
@@ -45,26 +44,23 @@ describe('upperCaseName', () => {
 });
 
 describe('loadLocale', () => {
-  it("does not set locale if it can't find one", () => {
+  const LOCALE = 'en-test';
+  it("does not set locale if it can't find one", async () => {
     jest.spyOn(httpClient, 'get').mockImplementation(() => ({ data: null }));
 
-    loadLocale('en-DoesNotExist');
-    expect(formatMessage.setup).not.toHaveBeenCalled();
+    expect(await loadLocale(LOCALE)).toBeNull();
   });
-  it('does not set locale if the server returns an error page', () => {
+  it('does not set locale if the server returns an error page', async () => {
     jest.spyOn(httpClient, 'get').mockImplementation(() => ({ data: 'error page' }));
 
-    loadLocale('en-test');
-    expect(formatMessage.setup).not.toHaveBeenCalled();
+    expect(await loadLocale(LOCALE)).toBeNull();
   });
-  it('sets locale if it does find one', () => {
+  it('sets locale if it does find one', async () => {
     const RESPONSE = { data: { abc: 'def' } };
-    const LOCALE = 'en-test';
 
     jest.spyOn(httpClient, 'get').mockImplementation(() => RESPONSE);
 
-    loadLocale(LOCALE);
-    expect(formatMessage.setup).toHaveBeenCalledWith({
+    expect(await loadLocale(LOCALE)).toMatchObject({
       locale: LOCALE,
       generateId: expect.anything(),
       missingTranslation: 'ignore',

@@ -90,9 +90,10 @@ export async function loadLocale(locale: string) {
   if (data == null || typeof data === 'string') {
     // this is an invalid locale, so don't set anything
     console.error('Tried to read an invalid locale');
-    return;
+    return null;
   } else {
-    formatMessage.setup({
+    // We don't care about the return value except in our unit tests
+    return formatMessage.setup({
       locale: locale,
       generateId: generate.underscored_crc32,
       missingTranslation: process.env.NODE_ENV === 'development' ? 'warning' : 'ignore',
