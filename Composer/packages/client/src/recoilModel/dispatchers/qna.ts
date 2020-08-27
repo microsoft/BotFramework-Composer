@@ -74,6 +74,45 @@ export const removeQnAFileState = async (callbackHelpers: CallbackInterface, { i
   set(qnaFilesState, qnaFiles);
 };
 
+export const createSourceQnAFileState = async (
+  callbackHelpers: CallbackInterface,
+  { id, name, content }: { id: string; name: string; content: string }
+) => {
+  const { set, snapshot } = callbackHelpers;
+  const projectId = await snapshot.getPromise(projectIdState);
+  const qnaFiles = await snapshot.getPromise(qnaFilesState);
+  const createdSourceQnAId = `${getBaseName(id)}.${name}.source`;
+  const updatedQnAId = id;
+  const updatedOriginQnAFile = qnaFiles.find((f) => f.id === updatedQnAId);
+
+  if (qnaFiles.find((qna) => qna.id === createdSourceQnAId)) {
+    throw new Error(`source qna file ${createdSourceQnAId}.qna already exist`);
+  }
+
+  if (!updatedOriginQnAFile) {
+    throw new Error(`update qna file ${updatedQnAId}.qna not exist`);
+  }
+
+  const createdQnAFile = (await qnaWorker.parse(createdSourceQnAId, content)) as QnAFile;
+
+  const contentForDialogQnA = `[${name}](../source/${createdSourceQnAId}.qna)\n`;
+  const updatedContent = updatedOriginQnAFile
+    ? contentForDialogQnA + updatedOriginQnAFile.content
+    : contentForDialogQnA;
+  const updatedQnAFile = (await qnaWorker.parse(id, updatedContent)) as QnAFile;
+
+  const newQnAFiles = qnaFiles.map((file) => {
+    if (file.id === updatedQnAId) {
+      return updatedQnAFile;
+    }
+    return file;
+  });
+
+  qnaFileStatusStorage.updateFileStatus(projectId, updatedQnAId);
+  qnaFileStatusStorage.updateFileStatus(projectId, createdSourceQnAId);
+  set(qnaFilesState, [...newQnAFiles, createdQnAFile]);
+};
+
 export const qnaDispatcher = () => {
   const updateQnAFile = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async ({ id, content }: { id: string; content: string }) => {
@@ -88,18 +127,34 @@ export const qnaDispatcher = () => {
   );
 
   const importQnAFromUrls = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({ id, urls }: { id: string; urls: string[] }) => {
-      const { set, snapshot } = callbackHelpers;
-      const qnaFiles = await snapshot.getPromise(qnaFilesState);
-      const qnaFile = qnaFiles.find((f) => f.id === id);
+    (callbackHelpers: CallbackInterface) => async ({
+      id,
+      name,
+      urls,
+    }: {
+      id: string; // dialogId.locale
+      name: string;
+      urls: string[];
+    }) => {
+      const { set } = callbackHelpers;
+
       set(qnaAllUpViewStatusState, QnAAllUpViewStatus.Loading);
       try {
         const response = await httpClient.get(`/utilities/qna/parse`, {
           params: { urls: encodeURIComponent(urls.join(',')) },
         });
-        const content = qnaFile ? qnaFile.content + '\n' + response.data : response.data;
 
-        await updateQnAFileState(callbackHelpers, { id, content });
+        const contentForSourceQnA = `> !# @source.urls = ${urls}
+> !# @source.name = ${name}
+${response.data}
+`;
+
+        await createSourceQnAFileState(callbackHelpers, {
+          id,
+          name,
+          content: contentForSourceQnA,
+        });
+
         set(qnaAllUpViewStatusState, QnAAllUpViewStatus.Success);
       } catch (err) {
         setError(callbackHelpers, err);

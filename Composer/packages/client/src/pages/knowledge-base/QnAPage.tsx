@@ -15,12 +15,12 @@ import { navigateTo } from '../../utils/navigation';
 import { TestController } from '../../components/TestController/TestController';
 import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
-import { dialogsState, projectIdState, qnaAllUpViewStatusState } from '../../recoilModel/atoms/botState';
+import { dialogsState, projectIdState, qnaAllUpViewStatusState, qnaFilesState } from '../../recoilModel/atoms/botState';
 import { dispatcherState } from '../../recoilModel';
 import { QnAAllUpViewStatus } from '../../recoilModel/types';
 
 import TableView from './table-view';
-import { ImportQnAFromUrlModal } from './ImportQnAFromUrlModal';
+import { ImportQnAFromUrlModal, ImportQnAFormData } from './ImportQnAFromUrlModal';
 
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
@@ -31,6 +31,7 @@ interface QnAPageProps extends RouteComponentProps<{}> {
 const QnAPage: React.FC<QnAPageProps> = (props) => {
   const actions = useRecoilValue(dispatcherState);
   const dialogs = useRecoilValue(dialogsState);
+  const qnaFiles = useRecoilValue(qnaFilesState);
   const projectId = useRecoilValue(projectIdState);
   //To do: support other languages
   const locale = 'en-us';
@@ -132,9 +133,9 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
     setImportQnAFromUrlModalVisiability(false);
   };
 
-  const onSubmit = async (urls: string[]) => {
+  const onSubmit = async ({ name, urls }: ImportQnAFormData) => {
     onDismiss();
-    await actions.importQnAFromUrls({ id: `${dialogId}.${locale}`, urls });
+    await actions.importQnAFromUrls({ id: `${dialogId}.${locale}`, name, urls });
   };
 
   return (
@@ -156,7 +157,7 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
           <LoadingSpinner message={'Extracting QnA pairs. This could take a moment.'} />
         )}
         {importQnAFromUrlModalVisiability && (
-          <ImportQnAFromUrlModal dialogId={dialogId} onDismiss={onDismiss} onSubmit={onSubmit} />
+          <ImportQnAFromUrlModal dialogId={dialogId} qnaFiles={qnaFiles} onDismiss={onDismiss} onSubmit={onSubmit} />
         )}
       </Suspense>
     </Page>

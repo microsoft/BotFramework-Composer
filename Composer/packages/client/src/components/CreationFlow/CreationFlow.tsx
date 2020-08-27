@@ -17,6 +17,7 @@ import {
   storagesState,
   focusedStorageFolderState,
   localeState,
+  qnaFilesState,
 } from '../../recoilModel';
 import Home from '../../pages/home/Home';
 import ImportQnAFromUrlModal from '../../pages/knowledge-base/ImportQnAFromUrlModal';
@@ -52,6 +53,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   const storages = useRecoilValue(storagesState);
   const focusedStorageFolder = useRecoilValue(focusedStorageFolderState);
   const locale = useRecoilValue(localeState);
+  const qnaFiles = useRecoilValue(qnaFilesState);
   const cachedProjectId = useProjectIdCache();
   const currentStorageIndex = useRef(0);
   const storage = storages[currentStorageIndex.current];
@@ -110,13 +112,13 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     saveProjectAs(projectId, formData.name, formData.description, formData.location);
   };
 
-  const handleCreateQnA = async (urls: string[]) => {
+  const handleCreateQnA = async ({ name, urls }) => {
     saveTemplateId(QnABotTemplateId);
     handleDismiss();
     await handleCreateNew(formData, QnABotTemplateId);
     // import qna from urls
     if (urls.length > 0) {
-      await importQnAFromUrls({ id: `${formData.name.toLocaleLowerCase()}.${locale}`, urls });
+      await importQnAFromUrls({ id: `${formData.name.toLocaleLowerCase()}.${locale}`, name, urls });
     }
   };
 
@@ -180,6 +182,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
         <ImportQnAFromUrlModal
           dialogId={formData.name.toLowerCase()}
           path="create/QnASample/importQnA"
+          qnaFiles={qnaFiles}
           onDismiss={handleDismiss}
           onSubmit={handleCreateQnA}
         />

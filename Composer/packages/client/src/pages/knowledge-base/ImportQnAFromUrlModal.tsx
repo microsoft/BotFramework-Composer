@@ -13,9 +13,10 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 import { FontWeights } from '@uifabric/styling';
 import { FontSizes, SharedColors, NeutralColors } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
+import { QnAFile } from '@bfc/shared';
 
 import { QnAMakerLearningUrl, knowledgeBaseSourceUrl } from '../../constants';
-import { FieldConfig, useForm } from '../../hooks/useForm';
+import { FieldConfig, useForm, FieldValidator } from '../../hooks/useForm';
 
 const styles = {
   dialog: {
@@ -82,9 +83,10 @@ interface ImportQnAFromUrlModalProps
     location: string;
   }> {
   dialogId: string;
+  qnaFiles: QnAFile[];
   subscriptionKey?: string;
   onDismiss: () => void;
-  onSubmit: (urls: string[]) => void;
+  onSubmit: (formData: ImportQnAFormData) => void;
 }
 
 const DialogTitle = () => {
@@ -111,8 +113,9 @@ const DialogTitle = () => {
   );
 };
 
-interface FormField {
+export interface ImportQnAFormData {
   urls: string[];
+  name: string;
 }
 
 const validateUrls = (urls: string[]) => {
@@ -135,20 +138,48 @@ const validateUrls = (urls: string[]) => {
   return errors;
 };
 
-const formConfig: FieldConfig<FormField> = {
+const QnANameRegex = /^\w[-\w]*$/;
+
+const validateName = (sources: QnAFile[]): FieldValidator => {
+  return (name: string) => {
+    let currentError = '';
+    if (name) {
+      if (!QnANameRegex.test(name)) {
+        currentError = formatMessage('Name contains invalid charactors');
+      }
+
+      const duplicatedItemIndex = sources.findIndex((item) => item.name === name);
+      if (duplicatedItemIndex > -1) {
+        currentError = formatMessage('Duplicate imported QnA name');
+      }
+    }
+    return currentError;
+  };
+};
+
+const formConfig: FieldConfig<ImportQnAFormData> = {
   urls: {
     required: true,
     defaultValue: [''],
   },
+  name: {
+    required: true,
+    defaultValue: '',
+  },
 };
 
 export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (props) => {
-  const { onDismiss, onSubmit, dialogId } = props;
+  const { onDismiss, onSubmit, dialogId, qnaFiles } = props;
   const [urlErrors, setUrlErrors] = useState(['']);
 
-  const { formData, updateField, hasErrors } = useForm(formConfig);
+  formConfig.name.validate = validateName(qnaFiles);
+  const { formData, updateField, hasErrors, formErrors } = useForm(formConfig);
   const isQnAFileselected = !(dialogId === 'all');
   const disabled = !isQnAFileselected || hasErrors || urlErrors.some((e) => !!e) || formData.urls.some((url) => !url);
+
+  const updateName = (name = '') => {
+    updateField('name', name);
+  };
 
   const addNewUrl = () => {
     const urls = [...formData.urls, ''];
@@ -185,6 +216,16 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
       onDismiss={onDismiss}
     >
       <div css={dialogWindow}>
+        <Stack>
+          <TextField
+            data-testid={`knowledgeLocationTextField-name`}
+            errorMessage={formErrors.name}
+            label={formatMessage('Name')}
+            styles={textField}
+            value={formData.name}
+            onChange={(e, name) => updateName(name)}
+          />
+        </Stack>
         <Stack>
           {formData.urls.map((l, index) => {
             return (
@@ -244,7 +285,7 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
             if (hasErrors) {
               return;
             }
-            onSubmit(formData.urls);
+            onSubmit(formData);
           }}
         />
       </DialogFooter>
