@@ -7,13 +7,21 @@ import { fireEvent, waitFor } from '@bfc/test-utils';
 import { TriggerCreationModal } from '../../src/components/ProjectTree/TriggerCreationModal';
 import { renderWithRecoil } from '../testUtils';
 
+const projectId = '123a-bv3c4';
+
 describe('<TriggerCreationModal/>', () => {
   const onSubmitMock = jest.fn();
   const onDismissMock = jest.fn();
 
   function renderComponent() {
     return renderWithRecoil(
-      <TriggerCreationModal isOpen dialogId={'todobot'} onDismiss={onDismissMock} onSubmit={onSubmitMock} />
+      <TriggerCreationModal
+        isOpen
+        dialogId={'todobot'}
+        projectId={projectId}
+        onDismiss={onDismissMock}
+        onSubmit={onSubmitMock}
+      />
     );
   }
 

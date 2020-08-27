@@ -45,7 +45,7 @@ describe('<UndoRoot/>', () => {
     const { result } = renderRecoilHook(useRecoilTestHook, {
       wrapper: ({ children }) => (
         <div>
-          <UndoRoot projectId={projectId} undoHistory={undoHistory} />
+          <UndoRoot projectId={projectId} />
           {children}
         </div>
       ),

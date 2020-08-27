@@ -6,7 +6,7 @@ import { QnAFile } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
 import { useResolvers } from '../hooks/useResolver';
-import { projectIdState } from '../recoilModel/atoms';
+import { botStateByProjectIdSelector } from '../recoilModel';
 
 import { dispatcherState } from './../recoilModel/DispatcherWrapper';
 
@@ -24,7 +24,7 @@ function createQnaApi(state: { projectId }, dispatchers: any, qnaFileResolver: (
 }
 
 export function useQnaApi() {
-  const projectId = useRecoilValue(projectIdState);
+  const { projectId } = useRecoilValue(botStateByProjectIdSelector);
   const dispatchers = useRecoilValue(dispatcherState);
   const { qnaFileResolver } = useResolvers();
   const [api, setApi] = useState(createQnaApi({ projectId }, dispatchers, qnaFileResolver));

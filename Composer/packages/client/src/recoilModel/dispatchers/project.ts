@@ -23,7 +23,13 @@ import filePersistence from '../persistence/FilePersistence';
 import { navigateTo } from '../../utils/navigation';
 import languageStorage from '../../utils/languageStorage';
 import { projectIdCache } from '../../utils/projectCache';
-import { designPageLocationState, botDiagnosticsState, botProjectsState, projectMetaDataState } from '../atoms';
+import {
+  designPageLocationState,
+  botDiagnosticsState,
+  botProjectsState,
+  projectMetaDataState,
+  currentProjectIdState,
+} from '../atoms';
 import { QnABotTemplateId } from '../../constants';
 
 import {
@@ -50,7 +56,7 @@ import {
   boilerplateVersionState,
   dialogSchemasState,
 } from './../atoms';
-import { logMessage, setError } from './../dispatchers/shared';
+import { logMessage, setError, ConsoleMsgLevel } from './../dispatchers/shared';
 
 const handleProjectFailure = (callbackHelpers: CallbackInterface, ex) => {
   callbackHelpers.set(botOpeningState, false);
@@ -171,6 +177,7 @@ export const projectDispatcher = () => {
 
       // Important: gotoSnapshot will wipe all states.
       const newSnapshot = snapshot.map(({ set }) => {
+        set(currentProjectIdState, projectId);
         set(skillManifestsState(projectId), skillManifestFiles);
         set(luFilesState(projectId), initLuFilesStatus(botName, luFiles, dialogs));
         set(lgFilesState(projectId), lgFiles);
@@ -187,12 +194,12 @@ export const projectDispatcher = () => {
         set(schemasState(projectId), schemas);
         set(localeState(projectId), locale);
         set(botDiagnosticsState(projectId), diagnostics);
-        set(botOpeningState, false);
 
         refreshLocalStorage(projectId, settings);
         const mergedSettings = mergeLocalStorage(projectId, settings);
         set(settingsState(projectId), mergedSettings);
       });
+
       gotoSnapshot(newSnapshot);
       if (jump && projectId) {
         let url = `/bot/${projectId}/dialogs/${mainDialog}`;
@@ -229,12 +236,11 @@ export const projectDispatcher = () => {
   };
 
   const openProject = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (path: string, storageId = 'default', relativePath = undefined) => {
+    (callbackHelpers: CallbackInterface) => async (path: string, storageId = 'default') => {
       try {
         await setBotOpeningStatus(callbackHelpers);
         const response = await httpClient.put(`/projects/open`, { path, storageId });
         await initBotState(callbackHelpers, response.data, true, '');
-
         return response.data.id;
       } catch (ex) {
         removeRecentProject(callbackHelpers, path);

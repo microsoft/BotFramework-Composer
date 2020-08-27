@@ -167,7 +167,7 @@ export const lgDispatcher = () => {
     }) => {
       const lgFiles = await snapshot.getPromise(lgFilesState(projectId));
       const lgFile = lgFiles.find((file) => file.id === id);
-      if (!lgFile) return lgFiles;
+      if (!lgFile) return;
       const sameIdOtherLocaleFiles = lgFiles.filter((file) => getBaseName(file.id) === getBaseName(id));
 
       if (template.name !== templateName) {
@@ -259,7 +259,7 @@ export const lgDispatcher = () => {
     }) => {
       const lgFiles = await snapshot.getPromise(lgFilesState(projectId));
       const lgFile = lgFiles.find((file) => file.id === id);
-      if (!lgFile) return lgFiles;
+      if (!lgFile) return;
       const updatedFile = (await LgWorker.removeTemplate(projectId, lgFile, templateName, lgFiles)) as LgFile;
 
       const updatedFiles = await updateLgFileState(projectId, lgFiles, updatedFile);
@@ -279,7 +279,7 @@ export const lgDispatcher = () => {
     }) => {
       const lgFiles = await snapshot.getPromise(lgFilesState(projectId));
       const lgFile = lgFiles.find((file) => file.id === id);
-      if (!lgFile) return lgFiles;
+      if (!lgFile) return;
       const updatedFile = (await LgWorker.removeTemplates(projectId, lgFile, templateNames, lgFiles)) as LgFile;
 
       const updatedFiles = await updateLgFileState(projectId, lgFiles, updatedFile);
@@ -301,7 +301,7 @@ export const lgDispatcher = () => {
     }) => {
       const lgFiles = await snapshot.getPromise(lgFilesState(projectId));
       const lgFile = lgFiles.find((file) => file.id === id);
-      if (!lgFile) return lgFiles;
+      if (!lgFile) return;
       const updatedFile = (await LgWorker.copyTemplate(
         projectId,
         lgFile,

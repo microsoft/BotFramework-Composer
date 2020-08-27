@@ -8,9 +8,9 @@ import { LgTemplate } from '@bfc/shared';
 import get from 'lodash/get';
 
 import { useResolvers } from '../hooks/useResolver';
-import { projectIdState, schemasState, dialogsState, localeState, lgFilesState } from '../recoilModel/atoms';
 import { onChooseIntentKey, generateNewDialog, intentTypeKey, qnaMatcherKey } from '../utils/dialogUtil';
 import { navigateTo } from '../utils/navigation';
+import { botStateByProjectIdSelector } from '../recoilModel';
 
 import { dispatcherState } from './../recoilModel/DispatcherWrapper';
 
@@ -101,11 +101,7 @@ function createTriggerApi(
 }
 
 export function useTriggerApi() {
-  const projectId = useRecoilValue(projectIdState);
-  const schemas = useRecoilValue(schemasState);
-  const dialogs = useRecoilValue(dialogsState);
-  const locale = useRecoilValue(localeState);
-  const lgFiles = useRecoilValue(lgFilesState);
+  const { lgFiles, projectId, schemas, dialogs, locale } = useRecoilValue(botStateByProjectIdSelector);
   const dispatchers = useRecoilValue(dispatcherState);
   const { luFileResolver, lgFileResolver, dialogResolver } = useResolvers();
   const [api, setApi] = useState(

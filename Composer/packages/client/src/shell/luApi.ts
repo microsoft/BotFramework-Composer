@@ -36,7 +36,7 @@ function createLuApi(
     return await dispatchers.updateLuIntent({ id: file.id, intentName, intent, projectId: state.projectId });
   };
 
-  const renameLuIntent = async (id: string, intentName: string, newIntentName: string, projectId: string) => {
+  const renameLuIntent = async (id: string, intentName: string, newIntentName: string) => {
     const file = luFileResolver(id);
     if (!file) throw new Error(`lu file ${id} not found`);
     if (!intentName) throw new Error(`intentName is missing or empty`);
@@ -46,7 +46,7 @@ function createLuApi(
 
     const newIntent = { ...oldIntent, Name: newIntentName };
 
-    return await dispatchers.updateLuIntent({ id: file.id, intentName, intent: newIntent, projectId });
+    return await dispatchers.updateLuIntent({ id: file.id, intentName, intent: newIntent, projectId: state.projectId });
   };
 
   const removeLuIntent = async (id: string, intentName: string) => {

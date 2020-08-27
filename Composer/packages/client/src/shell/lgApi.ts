@@ -90,7 +90,7 @@ function createLgApi(
 export function useLgApi() {
   const { focusPath } = useRecoilValue(botStateByProjectIdSelector);
   const projectId = useRecoilValue(currentProjectIdState);
-  const actions = useRecoilValue(dispatcherState);
+  const actions: Dispatcher = useRecoilValue(dispatcherState);
   const { lgFileResolver } = useResolvers();
   const [api, setApi] = useState(createLgApi({ focusPath, projectId }, actions, lgFileResolver));
 
