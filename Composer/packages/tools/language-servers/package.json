@@ -5,9 +5,10 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "build": "yarn build:lg && yarn build:lu",
+        "build": "yarn build:lg && yarn build:lu && yarn build:intellisense",
         "build:lg": "cd language-generation && yarn build",
-        "build:lu": "cd language-understanding && yarn build"
+        "build:lu": "cd language-understanding && yarn build",
+        "build:intellisense": "cd intellisense && yarn build"
     },
     "author": ""
 }

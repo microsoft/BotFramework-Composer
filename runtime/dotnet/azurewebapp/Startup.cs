@@ -16,6 +16,7 @@ using Microsoft.Bot.Builder.Azure;
 using Microsoft.Bot.Builder.BotFramework;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Adaptive;
+using Microsoft.Bot.Builder.Dialogs.Adaptive.Conditions;
 using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
 using Microsoft.Bot.Builder.Integration.ApplicationInsights.Core;
@@ -43,7 +44,7 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
         public IWebHostEnvironment HostingEnvironment { get; }
 
         public IConfiguration Configuration { get; }
-        
+
         public void ConfigureTranscriptLoggerMiddleware(BotFrameworkHttpAdapter adapter, BotSettings settings)
         {
             if (ConfigSectionValid(settings.BlobStorage.ConnectionString) && ConfigSectionValid(settings.BlobStorage.Container))
@@ -132,7 +133,7 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             ComponentRegistration.Add(new LanguageGenerationComponentRegistration());
             ComponentRegistration.Add(new QnAMakerComponentRegistration());
             ComponentRegistration.Add(new LuisComponentRegistration());
-            
+
             // This is for custom action component registration.
             //ComponentRegistration.Add(new CustomActionComponentRegistration());
 
@@ -171,9 +172,11 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             var resourceExplorer = new ResourceExplorer().AddFolder(botDir);
             var rootDialog = GetRootDialog(botDir);
 
-            var defaultLocale = Configuration.GetValue<string>("defaultLocale") ?? "en-us";
+            var defaultLocale = Configuration.GetValue<string>("defaultLanguage") ?? "en-us";
 
             services.AddSingleton(resourceExplorer);
+
+            resourceExplorer.RegisterType<OnQnAMatch>("Microsoft.OnQnAMatch");
 
             services.AddSingleton<IBotFrameworkHttpAdapter, BotFrameworkHttpAdapter>((s) => GetBotAdapter(storage, settings, userState, conversationState, s, s.GetService<TelemetryInitializerMiddleware>()));
 

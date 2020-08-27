@@ -2,9 +2,10 @@
 // Licensed under the MIT License.
 
 import moment from 'moment';
+import formatMessage from 'format-message';
 
 import { FileTypes, SupportedFileTypes } from '../constants';
-import { File } from '../store/types';
+import { File } from '../recoilModel/types';
 
 export function getExtension(filename?: string): string | any {
   if (typeof filename !== 'string') return filename;
@@ -58,11 +59,20 @@ export function getFileEditDate(file: File) {
 }
 
 export function formatBytes(bytes?: number, decimals?: number) {
-  if (bytes === 0 || !bytes) return '0 Bytes';
+  if (bytes === 0 || !bytes) return formatMessage('0 Bytes');
   const k = 1024,
     dm = !decimals || decimals <= 0 ? 0 : decimals || 2,
-    sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+    sizes = [
+      formatMessage('Bytes'),
+      formatMessage('KB'),
+      formatMessage('MB'),
+      formatMessage('GB'),
+      formatMessage('TB'),
+    ],
     i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  // TODO: use Intl.NumberFormat once we can get the locale
+
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
 

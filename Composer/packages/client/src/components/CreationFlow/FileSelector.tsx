@@ -4,8 +4,8 @@
 /** @jsx jsx */
 import path from 'path';
 
+import { useMemo, useState, useRef, useEffect } from 'react';
 import { jsx, css } from '@emotion/core';
-import { useMemo, useState, useRef } from 'react';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
@@ -28,7 +28,7 @@ import moment from 'moment';
 import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 
 import { FileTypes, nameRegex } from '../../constants';
-import { StorageFolder, File } from '../../store/types';
+import { StorageFolder, File } from '../../recoilModel/types';
 import { getFileIconName, calculateTimeDiff } from '../../utils/fileUtil';
 
 // -------------------- Styles -------------------- //
@@ -146,7 +146,9 @@ const renderIcon = (file: File) => {
   }
   // fallback for other possible file types
   const url = `https://static2.sharepointonline.com/files/fabric/assets/brand-icons/document/svg/${iconName}_16x1.svg`;
-  return <img alt={`${iconName} file icon`} className={detailListClass.fileIconImg} src={url} />;
+  return (
+    <img alt={formatMessage(`{iconName} file icon`, { iconName })} className={detailListClass.fileIconImg} src={url} />
+  );
 };
 
 export const FileSelector: React.FC<FileSelectorProps> = (props) => {
@@ -163,7 +165,7 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
   } = props;
   // for detail file list in open panel
   const [currentPath, setCurrentPath] = useState(path.join(focusedStorageFolder.parent, focusedStorageFolder.name));
-  const initialPath = useRef(path.join(focusedStorageFolder.parent, focusedStorageFolder.name)).current;
+  const initialPath = path.join(focusedStorageFolder.parent, focusedStorageFolder.name);
   const currentStorageIndex = useRef(0);
   const storage = storages[currentStorageIndex.current];
   const storageId = storage.id;
@@ -171,6 +173,10 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
   const [folderName, setFolderName] = useState('');
   const [editMode, setEditMode] = useState(EditMode.NONE);
   const [nameError, setNameError] = useState('');
+
+  useEffect(() => {
+    setCurrentPath(initialPath);
+  }, [focusedStorageFolder]);
 
   const createOrUpdateFolder = async (index: number) => {
     const isValid = nameRegex.test(folderName);
@@ -341,7 +347,7 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
           <div data-is-focusable css={tableCell}>
             <div css={content} tabIndex={-1}>
               <IconButton
-                ariaLabel="Edit"
+                ariaLabel={formatMessage('Edit')}
                 iconProps={{ iconName: 'Edit' }}
                 styles={editButton}
                 title="Edit"

@@ -27,7 +27,9 @@
               "connectionName": "Outlook",
               "title": "Log in",
               "text": "Please log in to your email account",
-              "tokenProperty": "user.token"
+              "tokenProperty": "user.token",
+              "allowInterruptions": true,
+              "maxTurnCount": 3
             }
           ]
         },

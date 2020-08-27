@@ -22,7 +22,7 @@
       ],
       "sourceMaps": true,
       "cwd": "${workspaceFolder}/Composer/packages/tools/language-servers/language-understanding/demo/src",
-      "protocol": "inspector",
+      "protocol": "inspector"
     },
     {
       "name": "LG LSP Server",
@@ -38,20 +38,16 @@
       ],
       "sourceMaps": true,
       "cwd": "${workspaceFolder}/Composer/packages/tools/language-servers/language-generation/demo/src",
-      "protocol": "inspector",
+      "protocol": "inspector"
     },
     {
       "type": "node",
       "request": "launch",
       "name": "Server: Launch",
-      "args": [
-        "./build/server.js"
-      ],
+      "args": ["./build/server.js"],
       "preLaunchTask": "server: build",
       "restart": true,
-      "outFiles": [
-        "./build/*"
-      ],
+      "outFiles": ["./build/*"],
       "envFile": "${workspaceFolder}/Composer/packages/server/.env",
       "outputCapture": "std",
       "cwd": "${workspaceFolder}/Composer/packages/server"
@@ -63,14 +59,8 @@
       "name": "Jest Debug",
       "program": "${workspaceRoot}/Composer/node_modules/jest/bin/jest",
       "stopOnEntry": false,
-      "args": [
-        "--runInBand",
-        "--env=jsdom",
-        "--config=jest.config.js"
-      ],
-      "runtimeArgs": [
-        "--inspect-brk"
-      ],
+      "args": ["--runInBand", "--env=jsdom", "--config=jest.config.js"],
+      "runtimeArgs": ["--inspect-brk"],
       "cwd": "${workspaceRoot}/Composer/packages/server",
       "sourceMaps": true,
       "console": "integratedTerminal"
@@ -81,19 +71,33 @@
       "name": "Server: Attach",
       "port": 9228,
       "sourceMaps": true
-    }
+    },
     {
       "type": "node",
       "request": "launch",
       "name": "Electron Main Process",
       "runtimeExecutable": "${workspaceRoot}/Composer/node_modules/.bin/electron",
-      "args": [
-        "${workspaceRoot}/Composer/packages/electron-server",
-      ],
+      "args": ["${workspaceRoot}/Composer/packages/electron-server"],
       "env": {
-        "NODE_ENV": "development",
+        "NODE_ENV": "development"
       },
       "outputCapture": "std"
+    },
+    {
+      "name": "Debug current jest test",
+      "type": "node",
+      "request": "launch",
+      "runtimeArgs": [
+        "--inspect-brk",
+        "${workspaceRoot}/Composer/node_modules/jest/bin/jest",
+        "--runInBand"
+      ],
+      "args": [
+        "${fileBasename}",
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "port": 9229
     }
   ]
 }

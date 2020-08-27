@@ -9,12 +9,6 @@ import { RegexIntentField } from './components/fields/RegexIntentField';
 
 const DefaultRecognizers: RecognizerSchema[] = [
   {
-    id: 'none',
-    displayName: () => formatMessage('None'),
-    isSelected: (data) => data === undefined,
-    handleRecognizerChange: (props) => props.onChange(undefined),
-  },
-  {
     id: SDKKinds.RegexRecognizer,
     displayName: () => formatMessage('Regular Expression'),
     editor: RegexIntentField,
@@ -24,6 +18,48 @@ const DefaultRecognizers: RecognizerSchema[] = [
     handleRecognizerChange: (props) => {
       props.onChange({ $kind: SDKKinds.RegexRecognizer, intents: [] });
     },
+    renameIntent: async (intentName, newIntentName, shellData, shellApi) => {
+      const { currentDialog } = shellData;
+      await shellApi.renameRegExIntent(currentDialog.id, intentName, newIntentName);
+    },
+  },
+  {
+    id: SDKKinds.CustomRecognizer,
+    displayName: () => formatMessage('Custom recognizer'),
+    isSelected: (data) => typeof data === 'object',
+    handleRecognizerChange: (props) =>
+      props.onChange({
+        $kind: 'Microsoft.MultiLanguageRecognizer',
+        recognizers: {
+          'en-us': {
+            $kind: 'Microsoft.RegexRecognizer',
+            intents: [
+              {
+                intent: 'greeting',
+                pattern: 'hello',
+              },
+              {
+                intent: 'test',
+                pattern: 'test',
+              },
+            ],
+          },
+          'zh-cn': {
+            $kind: 'Microsoft.RegexRecognizer',
+            intents: [
+              {
+                intent: 'greeting',
+                pattern: '你好',
+              },
+              {
+                intent: 'test',
+                pattern: '测试',
+              },
+            ],
+          },
+        },
+      }),
+    renameIntent: () => {},
   },
 ];
 

@@ -14,10 +14,10 @@ import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 import { FontWeights } from '@uifabric/styling';
 
-import { DialogCreationCopy, nameRegex } from '../../constants';
+import { DialogCreationCopy, QnABotTemplateId, nameRegex } from '../../constants';
 import { DialogWrapper, DialogTypes } from '../DialogWrapper';
-import { StorageFolder } from '../../store/types';
 import { FieldConfig, useForm } from '../../hooks/useForm';
+import { StorageFolder } from '../../recoilModel/types';
 
 import { LocationSelectContent } from './LocationSelectContent';
 
@@ -65,7 +65,7 @@ interface DefineConversationFormData {
   name: string;
   description: string;
   schemaUrl: string;
-  location: string;
+  location?: string;
 }
 
 interface DefineConversationProps
@@ -74,12 +74,11 @@ interface DefineConversationProps
     location: string;
   }> {
   createFolder: (path: string, name: string) => void;
-  updateFolder: (path: string) => void;
-  onSubmit: (formData: DefineConversationFormData) => void;
+  updateFolder: (path: string, oldName: string, newName: string) => void;
+  onSubmit: (formData: DefineConversationFormData, templateId: string) => void;
   onDismiss: () => void;
   onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;
   onGetErrorMessage?: (text: string) => void;
-  saveTemplateId?: (templateId: string) => void;
   focusedStorageFolder: StorageFolder;
 }
 
@@ -88,7 +87,6 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
     onSubmit,
     onDismiss,
     onCurrentPathUpdate,
-    saveTemplateId,
     templateId,
     focusedStorageFolder,
     createFolder,
@@ -150,12 +148,6 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
   const { formData, formErrors, hasErrors, updateField, updateForm } = useForm(formConfig);
 
   useEffect(() => {
-    if (templateId) {
-      saveTemplateId?.(templateId);
-    }
-  });
-
-  useEffect(() => {
     const formData: DefineConversationFormData = {
       name: getDefaultName(),
       description: '',
@@ -197,9 +189,12 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
         return;
       }
 
-      onSubmit({
-        ...formData,
-      });
+      onSubmit(
+        {
+          ...formData,
+        },
+        templateId || ''
+      );
     },
     [hasErrors, formData]
   );
@@ -264,7 +259,7 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
             <PrimaryButton
               data-testid="SubmitNewBotBtn"
               disabled={hasErrors || !writable}
-              text={formatMessage('OK')}
+              text={templateId === QnABotTemplateId ? formatMessage('Next') : formatMessage('OK')}
               onClick={handleSubmit}
             />
           </DialogFooter>

@@ -8,124 +8,35 @@ export const BASEURL = `${process.env.PUBLIC_URL || ''}/api`;
 
 //the count about the undo/redo
 export const UNDO_LIMIT = 10;
-/**
- * Global ActionTypes Defination Instruction.
- * For unification consideration, please follow the naming pattern below
- * You may not need all of this types. but the type must be one of them.
- * Shortly, a good ActionType name should be:
- * <DO_WHAT_STATUS> or <DO_WHAT>
- *
- * <DO>
- * e.g. 'GET' / 'SET' / 'FETCH' / 'UPDATE' / 'CREATE' etc.
- *
- * <DO_WHAT>
- * usage example, 'GET_DATA' / 'UPDATE_FILE' / 'SET_STATE'
- *
- * <STATUS>
- * START ---> SUCCESS || FAILURE ---> COMPLETE
- * it's a status flow, <STATUS> must be one of them
- * complete is fired no mater it's success or failure.
- * usage example, 'GET_DATA_SUCCESS' / 'UPDATE_FILE_FAILURE' / 'SET_STATE_COMPLETE'
- *
- * Bad Practices:
- * - Reversed <WHAT_DO>, e.g. 'DATA_GET', 'FILE_SET'
- * - ACTION use as ACTION_SUCCESS
- * - Have SUCCESS but no FAILURE
- * - Overdesign, unused types
- */
-
-export enum ActionTypes {
-  GET_PROJECT_SUCCESS = 'GET_PROJECT_SUCCESS',
-  GET_PROJECT_PENDING = 'GET_PROJECT_PENDING',
-  GET_PROJECT_FAILURE = 'GET_PROJECT_FAILURE',
-  REMOVE_PROJECT_SUCCESS = 'REMOVE_PROJECT_SUCCESS',
-  GET_RECENT_PROJECTS_SUCCESS = 'GET_RECENT_PROJECTS_SUCCESS',
-  GET_RECENT_PROJECTS_FAILURE = 'GET_RECENT_PROJECTS_FAILURE',
-  GET_TEMPLATE_PROJECTS_SUCCESS = 'GET_TEMPLATE_PROJECTS_SUCCESS',
-  GET_TEMPLATE_PROJECTS_FAILURE = 'GET_TEMPLATE_PROJECTS_FAILURE',
-  CREATE_DIALOG_BEGIN = 'CREATE_DIALOG_BEGIN',
-  CREATE_DIALOG_CANCEL = 'CREATE_DIALOG_CANCEL',
-  CREATE_DIALOG = 'CREATE_DIALOG',
-  UPDATE_DIALOG = 'UPDATE_DIALOG',
-  REMOVE_DIALOG = 'REMOVE_DIALOG',
-  UPDATE_LG = 'UPDATE_LG',
-  CREATE_LG = 'CREATE_LG',
-  REMOVE_LG = 'REMOVE_LG',
-  UPDATE_LU = 'UPDATE_LU',
-  CREATE_LU = 'CREATE_LU',
-  REMOVE_LU = 'REMOVE_LU',
-  PUBLISH_LU_SUCCCESS = 'PUBLISH_LU_SUCCCESS',
-  PUBLISH_LU_FAILED = 'PUBLISH_LU_FAILED',
-  SAVE_TEMPLATE_ID = 'SAVE_TEMPLATE_ID',
-  GET_STORAGE_SUCCESS = 'GET_STORAGE_SUCCESS',
-  GET_STORAGE_FAILURE = 'GET_STORAGE_FAILURE',
-  SET_STORAGEFILE_FETCHING_STATUS = 'SET_STORAGEFILE_FETCHING_STATUS',
-  GET_STORAGEFILE_SUCCESS = 'GET_STORAGEFILE_SUCCESS',
-  SET_CREATION_FLOW_STATUS = 'SET_CREATION_FLOW_STATUS',
-  SET_DESIGN_PAGE_LOCATION = 'SET_DESIGN_PAGE_LOCATION',
-  RELOAD_BOT_FAILURE = 'RELOAD_BOT_FAILURE',
-  UPDATE_SKILL_SUCCESS = 'UPDATE_SKILL_SUCCESS',
-  SYNC_ENV_SETTING = 'SYNC_ENV_SETTING',
-  SET_ERROR = 'SET_ERROR',
-  REMOVE_RECENT_PROJECT = 'REMOVE_RECENT_PROJECT',
-  EDITOR_RESET_VISUAL = 'EDITOR_RESET_VISUAL',
-  EDITOR_SELECTION_VISUAL = 'EDITOR_SELECTION_VISUAL',
-  EDITOR_CLIPBOARD = 'EDITOR_CLIPBOARD',
-  USER_LOGIN_SUCCESS = 'USER_LOGIN_SUCCESS',
-  USER_LOGIN_FAILURE = 'USER_LOGIN_FAILURE',
-  USER_SESSION_EXPIRED = 'USER_SESSION_EXPIRED',
-  UNDO = 'UNDO',
-  REDO = 'REDO',
-  HISTORY_CLEAR = 'HISTORY_CLEAR',
-  ONBOARDING_ADD_COACH_MARK_REF = 'ONBOARDING_ADD_COACH_MARK_REF',
-  ONBOARDING_SET_COMPLETE = 'ONBOARDING_SET_COMPLETE',
-  GET_PUBLISH_TYPES_SUCCESS = 'GET_PUBLISH_TYPES_SUCCESS',
-  PUBLISH_SUCCESS = 'PUBLISH_SUCCESS',
-  PUBLISH_FAILED = 'PUBLISH_FAILED',
-  PUBLISH_FAILED_DOTNET = 'PUBLISH_FAILED_DOTNET',
-  GET_PUBLISH_STATUS = 'GET_PUBLISH_STATUS',
-  GET_PUBLISH_STATUS_FAILED = 'GET_PUBLISH_STATUS_FAILED',
-  GET_PUBLISH_HISTORY = 'GET_PUBLISH_HISTORY',
-  UPDATE_BOTSTATUS = 'UPDATE_BOTSTATUS',
-  SET_RUNTIME_TEMPLATES = 'SET_RUNTIME_TEMPLATES',
-  SET_USER_SETTINGS = 'SET_USER_SETTINGS',
-  ADD_SKILL_DIALOG_BEGIN = 'ADD_SKILL_DIALOG_BEGIN',
-  ADD_SKILL_DIALOG_END = 'ADD_SKILL_DIALOG_END',
-  EJECT_SUCCESS = 'EJECT_SUCCESS',
-  SET_MESSAGE = 'SET_MESSAGE',
-  SET_APP_UPDATE_ERROR = 'SET_APP_UPDATE_ERROR',
-  SET_APP_UPDATE_PROGRESS = 'SET_APP_UPDATE_PROGRESS',
-  SET_APP_UPDATE_SHOWING = 'SET_APP_UPDATE_SHOWING',
-  SET_APP_UPDATE_STATUS = 'SET_APP_UPDATE_STATUS',
-  CREATE_SKILL_MANIFEST = 'CREATE_SKILL_MANIFEST',
-  UPDATE_SKILL_MANIFEST = 'UPDATE_SKILL_MANIFEST',
-  REMOVE_SKILL_MANIFEST = 'REMOVE_SKILL_MANIFEST',
-  DISPLAY_SKILL_MANIFEST_MODAL = 'DISPLAY_SKILL_MANIFEST_MODAL',
-  DISMISS_SKILL_MANIFEST_MODAL = 'DISMISS_SKILL_MANIFEST_MODAL',
-  SET_PUBLISH_TARGETS = 'SET_PUBLISH_TARGETS',
-  SET_CUSTOM_RUNTIME_TOGGLE = 'SET_CUSTOM_RUNTIME_TOGGLE',
-  SET_RUNTIME_FIELD = 'SET_RUNTIME_FIELD',
-}
 
 export const Tips = {
-  PROJECT_NAME: formatMessage(`Create a name for the project which will be used to name the application:
-    (projectname-environment-LUfilename)`),
-  ENVIRONMENT: formatMessage(`When multiple people are working with models you want to be able to work with
-    models independently from each other tied to the source control.`),
+  PROJECT_NAME: formatMessage(
+    `Create a name for the project which will be used to name the application: (projectname-environment-LUfilename)`
+  ),
+  ENVIRONMENT: formatMessage(
+    `When multiple people are working with models you want to be able to work with models independently from each other tied to the source control.`
+  ),
   AUTHORING_KEY: formatMessage('An authoring key is created automatically when you create a LUIS account.'),
-  AUTHORING_REGION: formatMessage('Authoring region to use [westus,westeurope,australiaeast]'),
+  SUBSCRIPTION_KEY: formatMessage('A subscription key is created when you create a QnA Maker resource.'),
+  AUTHORING_REGION: formatMessage('Authoring region to use (e.g. westus, westeurope, australiaeast)'),
+  QNA_REGION: formatMessage('Authoring region to use (westus)  (QnA maker resource location)'),
   DEFAULT_LANGUAGE: formatMessage(
-    `Configures default language model to use if there is no culture code in the file name (Default:en-us)`
+    `Configures default language model to use if there is no culture code in the file name (Default: en-us)`
   ),
 };
 
 export const Links = {
   LUIS: 'https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-keys?tabs=V2',
+  QNA: 'https://docs.microsoft.com/en-us/azure/cognitive-services/qnamaker/concepts/azure-resources#keys-in-qna-maker',
 };
 
 export const Text = {
+  DEPLOY: formatMessage(`Your bot is using LUIS and QNA for natural language understanding.`),
   LUISDEPLOY: formatMessage(
-    `Your bot is using LUIS for natural language understanding. If you already have a LUIS account, provide the information below. If you do not have an account yet, create a (free) account first.`
+    `If you already have a LUIS account, provide the information below. If you do not have an account yet, create a (free) account first.`
+  ),
+  QNADEPLOY: formatMessage(
+    `If you already have a QNA account, provide the information below. If you do not have an account yet, create a (free) account first.`
   ),
   LUISDEPLOYSUCCESS: formatMessage('Congratulations! Your model is successfully published.'),
   LUISDEPLOYFAILURE: formatMessage('Sorry, something went wrong with publishing. Try again or exit out of this task.'),
@@ -140,6 +51,10 @@ export enum LuisConfig {
   PROJECT_NAME = 'name',
   REGION = 'authoringRegion',
   LANGUAGE = 'defaultLanguage',
+}
+
+export enum QnaConfig {
+  SUBSCRIPTION_KEY = 'subscriptionKey',
 }
 
 export const FileTypes = {
@@ -201,6 +116,12 @@ export const DialogCreationCopy = {
     title: formatMessage('Set destination folder'),
     subText: formatMessage('Choose a location for your new bot project.'),
   },
+  IMPORT_QNA: {
+    title: formatMessage('Create New Knowledge Base'),
+    subText: formatMessage(
+      'Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence. Learn more about knowledge base sources. Skip this step to add questions and answers manually after creation. The number of sources and file size you can add depends on the QnA service SKU you choose. Learn more about QnA Maker SKUs.'
+    ),
+  },
 };
 
 export const DialogDeleting = {
@@ -210,6 +131,29 @@ export const DialogDeleting = {
     `The dialog you have tried to delete is currently used in the below dialog(s). Removing this dialog will cause your Bot to malfunction without additional action.`
   ),
   CONFIRM_CONTENT: formatMessage('Do you wish to continue?'),
+};
+
+export const MultiLanguagesDialog = {
+  ADD_DIALOG: {
+    title: formatMessage('Copy content for translation'),
+    subText: formatMessage(
+      `Composer cannot yet translate your bot automatically.\nTo create a translation manually, Composer will create a copy of your bot’s content with the name of the additional language. This content can then be translated without affecting the original bot logic or flow and you can switch between languages to ensure the responses are correctly and appropriately translated.`
+    ),
+    selectDefaultLangTitle: formatMessage(
+      'This language will be copied and used as the basis (and fallback language) for the translation.'
+    ),
+    selectionTitle: formatMessage('To which language will you be translating your bot?'),
+    searchPlaceHolder: formatMessage('Search'),
+    whenDoneText: formatMessage(
+      'When done, switch to the newly created language and start the (manual) translation process.'
+    ),
+  },
+  DELETE_DIALOG: {
+    title: formatMessage('Select language to delete'),
+    subText: formatMessage(
+      `When deleting a language, only the content will be removed. The flow and logic of the conversation and dialog will remain functional.`
+    ),
+  },
 };
 
 export const addSkillDialog = {
@@ -252,11 +196,17 @@ export enum AppUpdaterStatus {
   UPDATE_SUCCEEDED,
 }
 
-export const DefaultPublishConfig = {
-  name: 'default',
-  type: 'localpublish',
-};
-
 export const EmptyBotTemplateId = 'EmptyBot';
 
+export const QnABotTemplateId = 'QnASample';
+
 export const nameRegex = /^[a-zA-Z0-9-_]+$/;
+
+export const triggerNotSupportedWarning = formatMessage(
+  'This trigger type is not supported by the RegEx recognizer. To ensure this trigger is fired, change the recognizer type.'
+);
+
+export const knowledgeBaseSourceUrl =
+  'https://docs.microsoft.com/en-us/azure/cognitive-services/qnamaker/concepts/content-types';
+
+export const QnAMakerLearningUrl = 'https://azure.microsoft.com/en-us/pricing/details/cognitive-services/qna-maker/';

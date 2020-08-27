@@ -39,6 +39,7 @@ const SettingToggle: React.FC<ISettingToggleProps> = (props) => {
       <div>
         <Toggle
           checked={!!checked}
+          data-testid={id}
           id={id || uniqueId}
           offText={formatMessage('Off')}
           onChange={(_e, checked) => onToggle(!!checked)}

@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import { useState } from 'react';
 import { RouteComponentProps } from '@reach/router';
 
-import { ToolBar } from '../../components/ToolBar';
+import { Toolbar } from '../../components/Toolbar';
 import { navigateTo } from '../../utils/navigation';
 import { convertPathToUrl } from '../../utils/navigation';
 
@@ -37,6 +37,11 @@ const Notifications: React.FC<RouteComponentProps> = () => {
       }
       navigateTo(uri);
     },
+    [NotificationType.QNA]: (item: INotification) => {
+      const { projectId, resourceId, diagnostic } = item;
+      const uri = `/bot/${projectId}/knowledge-base/${resourceId}/edit#L=${diagnostic.range?.start.line || 0}`;
+      navigateTo(uri);
+    },
     [NotificationType.DIALOG]: (item: INotification) => {
       //path is like main.trigers[0].actions[0]
       //uri = id?selected=triggers[0]&focused=triggers[0].actions[0]
@@ -44,13 +49,21 @@ const Notifications: React.FC<RouteComponentProps> = () => {
       const uri = convertPathToUrl(projectId, id, dialogPath);
       navigateTo(uri);
     },
+    [NotificationType.SKILL]: (item: INotification) => {
+      const { projectId } = item;
+      navigateTo(`/bot/${projectId}/skills`);
+    },
+    [NotificationType.SETTING]: (item: INotification) => {
+      const { projectId } = item;
+      navigateTo(`/settings/bot/${projectId}/dialog-settings`);
+    },
   };
   const handleItemClick = (item: INotification) => {
     navigations[item.type](item);
   };
   return (
     <div css={root} data-testid="notifications-page">
-      <ToolBar />
+      <Toolbar />
       <NotificationHeader onChange={setFilter} />
       <NotificationList items={notifications} onItemClick={handleItemClick} />
     </div>

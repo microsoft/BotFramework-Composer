@@ -11,7 +11,8 @@
     "start": "tsc --watch --preserveWatchOutput",
     "build": "tsc --build ./tsconfig.build.json",
     "lint": "eslint --quiet src",
-    "prepare": "yarn build"
+    "prepare": "yarn build",
+    "extract": "cross-env NODE_ENV=production format-message extract -g underscored_crc32 -o locales/en-US.json src/**/*.ts src/**/*.tsx"
   },
   "keywords": [
     "botframework",
@@ -37,6 +38,7 @@
     "@types/react": "16.9.23",
     "@types/react-dom": "16.9.5",
     "format-message": "^6.2.3",
+    "format-message-cli": "6.2.3",
     "react": "16.13.0",
     "react-dom": "16.13.0"
   },

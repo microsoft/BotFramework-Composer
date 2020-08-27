@@ -1,17 +1,18 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import React, { useContext, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { useRecoilValue } from 'recoil';
 
 import { DialogCreationCopy, nameRegex } from '../../constants';
+import { StorageFolder } from '../../recoilModel/types';
 import { DialogWrapper, DialogTypes } from '../../components/DialogWrapper';
-import { StorageFolder } from '../../store/types';
-import { StoreContext } from '../../store';
 import { FieldConfig, useForm } from '../../hooks/useForm';
+import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 
 import { name, description, styles as wizardStyles } from './styles';
 
@@ -29,8 +30,7 @@ interface CreateDialogModalProps {
 }
 
 export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
-  const { state } = useContext(StoreContext);
-  const { dialogs } = state;
+  const dialogs = useRecoilValue(validatedDialogsSelector);
   const { onSubmit, onDismiss, isOpen } = props;
   const formConfig: FieldConfig<DialogFormData> = {
     name: {
@@ -39,13 +39,15 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
         if (!nameRegex.test(value)) {
           return formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
         }
-        if (dialogs.some((dialog) => dialog.id === value)) {
+        if (dialogs.some((dialog) => dialog.id.toLowerCase() === value.toLowerCase())) {
           return formatMessage('Duplicate dialog name');
         }
       },
+      defaultValue: '',
     },
     description: {
       required: false,
+      defaultValue: '',
     },
   };
 
@@ -103,7 +105,7 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
           <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
           <PrimaryButton
             data-testid="SubmitNewDialogBtn"
-            disabled={hasErrors}
+            disabled={hasErrors || formData.name === ''}
             text={formatMessage('OK')}
             onClick={handleSubmit}
           />

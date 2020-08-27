@@ -25,9 +25,17 @@ const rename = promisify(fs.rename);
 export class LocalDiskStorage implements IFileStorage {
   async stat(path: string): Promise<Stat> {
     const fstat = await stat(path);
+    // test to see if this file is writable
+    let writable = true;
+    try {
+      fs.accessSync(path, fs.constants.W_OK);
+    } catch (err) {
+      writable = false;
+    }
     return {
       isDir: fstat.isDirectory(),
       isFile: fstat.isFile(),
+      isWritable: writable,
       lastModified: fstat.mtime.toString(),
       size: fstat.isFile() ? fstat.size.toString() : '',
     };
@@ -96,6 +104,7 @@ export class LocalDiskStorage implements IFileStorage {
       path.format({ dir: `${source}/language-generation/` }),
       path.format({ dir: `${source}/settings/` }),
       path.format({ dir: `${source}/generated/` }),
+      path.format({ dir: `${source}/knowledge-base/` }),
     ].forEach((directory) => {
       archive.directory(directory, directory.split(source)[1]);
     });

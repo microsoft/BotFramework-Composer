@@ -5,8 +5,7 @@ on:
     types: [opened, reopened, synchronize]
   push:
     branches:
-      - master
-      - stable
+      - main
   schedule:
     - cron: "0 0 * * *"
 
@@ -42,7 +41,7 @@ jobs:
       - name: yarn test:coverage
         run: yarn test:coverage
       - name: Coveralls
-        uses: coverallsapp/github-action@master
+        uses: coverallsapp/github-action@v1.1.1
         continue-on-error: true
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -50,7 +49,7 @@ jobs:
           base-path: ./Composer
 
   botproject:
-    name: BotProject
+    name: BotProject-dotnet
     runs-on: windows-latest
     timeout-minutes: 20
 
@@ -68,11 +67,31 @@ jobs:
         run: dotnet test
         working-directory: runtime/dotnet/tests
 
+  nodejs:
+    name: BotProject-nodejs
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set Node Version
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.13.0
+      - name: npm install
+        run: npm install
+        working-directory: runtime/node
+      - name: npm build
+        run: npm run build
+        working-directory: runtime/node
+      - name: npm test
+        run: npm run test
+        working-directory: runtime/node
   # docker-build:
   #   name: Docker Build
   #   timeout-minutes: 20
   #   runs-on: ubuntu-latest
-
   #   steps:
   #     - name: Checkout
   #       uses: actions/checkout@v2
