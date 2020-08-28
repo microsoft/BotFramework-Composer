@@ -7,7 +7,7 @@
  */
 
 //import isEmpty from 'lodash/isEmpty';
-import { QnASection } from '@bfc/shared';
+import { QnASection, QnAFile } from '@bfc/shared';
 import { sectionHandler } from '@microsoft/bf-lu/lib/parser/composerindex';
 import cloneDeep from 'lodash/cloneDeep';
 
@@ -59,7 +59,8 @@ export function getParsedDiagnostics(newContent: string) {
   return diagnostics;
 }
 
-export function addQuestion(newContent: string, qnaSections: QnASection[], qnaSectionIndex: number) {
+export function addQuestion(newContent: string, qnaFile: QnAFile, qnaSectionIndex: number) {
+  const { qnaSections, headers } = qnaFile;
   const qnaFileContent = qnaSections.reduce((result, qnaSection, index) => {
     if (index !== qnaSectionIndex) {
       result = result + (index === 0 ? qnaSection.Body : '\n' + qnaSection.Body);
@@ -69,15 +70,11 @@ export function addQuestion(newContent: string, qnaSections: QnASection[], qnaSe
     }
     return result;
   }, '');
-  return qnaFileContent;
+  return headers + qnaFileContent;
 }
 
-export function updateQuestion(
-  newContent: string,
-  questionIndex: number,
-  qnaSections: QnASection[],
-  qnaSectionIndex: number
-) {
+export function updateQuestion(newContent: string, questionIndex: number, qnaFile: QnAFile, qnaSectionIndex: number) {
+  const { qnaSections, headers } = qnaFile;
   const qnaFileContent = qnaSections.reduce((result, qnaSection, index) => {
     if (index !== qnaSectionIndex) {
       result = result + (index === 0 ? qnaSection.Body : '\n' + qnaSection.Body);
@@ -87,10 +84,11 @@ export function updateQuestion(
     }
     return result;
   }, '');
-  return qnaFileContent;
+  return headers + qnaFileContent;
 }
 
-export function updateAnswer(newContent: string, qnaSections: QnASection[], qnaSectionIndex: number) {
+export function updateAnswer(newContent: string, qnaFile: QnAFile, qnaSectionIndex: number) {
+  const { qnaSections, headers } = qnaFile;
   const qnaFileContent = qnaSections.reduce((result, qnaSection, index) => {
     if (index !== qnaSectionIndex) {
       result = result + (index === 0 ? qnaSection.Body : '\n' + qnaSection.Body);
@@ -100,7 +98,7 @@ export function updateAnswer(newContent: string, qnaSections: QnASection[], qnaS
     }
     return result;
   }, '');
-  return qnaFileContent;
+  return headers + qnaFileContent;
 }
 
 function updateAnswerInQnASection(qnaSection: QnASection, answer: string) {

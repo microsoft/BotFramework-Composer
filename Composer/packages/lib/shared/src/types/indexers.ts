@@ -117,6 +117,7 @@ export interface QnAFile {
   content: string;
   qnaSections: QnASection[];
   imports: string[];
+  headers: string; // options, imports, avoid be wiped when do rebuild text
   [key: string]: any;
 }
 

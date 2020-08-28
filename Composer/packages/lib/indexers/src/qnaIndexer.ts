@@ -87,10 +87,13 @@ function parse(content: string, id = ''): QnAFile {
     ({ ModelInfo }) => ModelInfo
   );
 
+  const headers = qnaSections.length ? content.substring(0, content.indexOf(qnaSections[0].Body)) : content;
+
   const diagnostics = result.Errors.map((e) => convertQnADiagnostic(e, id));
   return {
     id,
     content,
+    headers,
     imports,
     infos,
     empty: isEmpty(result.Sections),
