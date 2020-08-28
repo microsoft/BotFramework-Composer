@@ -56,7 +56,7 @@ const builtinVisualSDKSchema: FlowSchema = {
   },
   [SDKKinds.SendActivity]: {
     widget: 'ActionCard',
-    body: (data) => data.activity,
+    body: '${action.activity}',
   },
   [SDKKinds.AttachmentInput]: BaseInputSchema,
   [SDKKinds.ConfirmInput]: BaseInputSchema,
@@ -68,12 +68,7 @@ const builtinVisualSDKSchema: FlowSchema = {
     widget: 'ActionCard',
     body: {
       widget: 'DialogRef',
-      dialog: (data) => data.dialog,
-      getRefContent: (data) => (dialogRef) => (
-        <>
-          {dialogRef || '?'} <FixedInfo>{formatMessage('(Dialog)')}</FixedInfo>
-        </>
-      ),
+      dialog: '${action.dialog}',
     },
     footer: (data) =>
       data.property ? (
@@ -104,12 +99,7 @@ const builtinVisualSDKSchema: FlowSchema = {
     widget: 'ActionCard',
     body: {
       widget: 'DialogRef',
-      dialog: (data) => data.dialog,
-      getRefContent: (data) => (dialogRef) => (
-        <>
-          {dialogRef || '?'} <FixedInfo>{formatMessage('(Dialog)')}</FixedInfo>
-        </>
-      ),
+      dialog: '${action.dialog}',
     },
   },
   [SDKKinds.EditArray]: {
@@ -159,11 +149,11 @@ const builtinVisualSDKSchema: FlowSchema = {
       widget: 'ActionHeader',
       title: 'Update activity',
     },
-    body: (data) => data.activity,
+    body: '${action.activity}',
   },
   [SDKKinds.DeleteProperty]: {
     widget: 'ActionCard',
-    body: (data) => data.property,
+    body: '${action.property}',
   },
   [SDKKinds.DeleteProperties]: {
     widget: 'ActionCard',
@@ -216,14 +206,15 @@ const builtinVisualSDKSchema: FlowSchema = {
   },
   [SDKKinds.EditActions]: {
     widget: 'ActionCard',
-    body: (data) => data.changeType,
+    body: '${action.changeType}',
   },
   [SDKKinds.QnAMakerDialog]: {
     widget: 'ActionCard',
-    body: (data) => data.hostname,
+    body: '${action.hostname}',
   },
   [SDKKinds.OAuthInput]: {
     widget: 'ActionCard',
+    // TODO: move single line / multi line as ActionCard config
     body: (data) => <SingleLineDiv>{data.connectionName}</SingleLineDiv>,
     footer: (data) =>
       data.tokenProperty ? (
