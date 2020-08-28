@@ -7,21 +7,21 @@ import { ExpressionParser } from 'adaptive-expressions';
 // Capture patterns that are strictly '${EXPRESSION}'
 //   - '${action.condition}'
 //   - '${if(action.value, concat(action.value, "(Event)"))}'
-const ExpressionPattern = new RegExp(/^\$\{(.+)\}$/);
+const ValueAccessPattern = new RegExp(/^\$\{(.+)\}$/);
 
 // Catpure patterns that include '...${...}...'
-const LgTemplatePattern = new RegExp(/\$\{.+\}/);
+const StringTemplatePattern = new RegExp(/\$\{.+\}/);
 
 export const evaluateWidgetProp = (propValue: string, context: any): string => {
   if (typeof propValue !== 'string') return propValue;
 
-  if (ExpressionPattern.test(propValue)) {
-    const matchResult = ExpressionPattern.exec(propValue);
+  if (ValueAccessPattern.test(propValue)) {
+    const matchResult = ValueAccessPattern.exec(propValue);
     const expString = matchResult ? matchResult[1] : '';
     return evaluateAsExpression(expString, context);
   }
 
-  if (LgTemplatePattern.test(propValue)) {
+  if (StringTemplatePattern.test(propValue)) {
     return evaluateAsLGTemplate(propValue, context);
   }
 
