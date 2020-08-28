@@ -50,12 +50,13 @@ export const botButton = css`
   margin-left: 5px;
 `;
 
+let botStatusInterval: NodeJS.Timeout | undefined = undefined;
+
 // -------------------- TestController -------------------- //
 const POLLING_INTERVAL = 2500;
 export const TestController: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [calloutVisible, setCalloutVisible] = useState(false);
-  const [botStatusInterval, setBotStatusInterval] = useState<NodeJS.Timeout | undefined>(undefined);
 
   const botActionRef = useRef(null);
   const notifications = useNotifications();
@@ -112,7 +113,6 @@ export const TestController: React.FC = () => {
         stopPollingRuntime();
         break;
     }
-    // return the stoppolling function so the component will clean up
     return () => {
       stopPollingRuntime();
       return;
@@ -141,14 +141,14 @@ export const TestController: React.FC = () => {
         // get publish status
         getPublishStatus(projectId, defaultPublishConfig);
       }, POLLING_INTERVAL);
-      setBotStatusInterval(cancelInterval);
+      botStatusInterval = cancelInterval;
     }
   }
 
   function stopPollingRuntime() {
     if (botStatusInterval) {
       clearInterval(botStatusInterval);
-      setBotStatusInterval(undefined);
+      botStatusInterval = undefined;
     }
   }
 
