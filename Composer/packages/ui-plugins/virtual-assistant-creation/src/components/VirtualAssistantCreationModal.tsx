@@ -15,20 +15,24 @@ interface VirtualAssistantCreationModalProps
   }> {
   // handleCreateNew: (formData: any, );
   onDismiss: () => void;
-  handleCreateNew: (formData, templateId: string) => void;
+  createAndStoreProject: any;
+  initiateProjectView: (formData: any, templateId: string, response: any, projectId: any) => any;
   formData: any;
 }
 
 export const AppContext = React.createContext(AppContextDefaultValue);
 
 export const VirtualAssistantCreationModal: React.FC<VirtualAssistantCreationModalProps> = (props) => {
-  const { onDismiss, handleCreateNew, formData } = props;
+  const { onDismiss, createAndStoreProject, initiateProjectView, formData } = props;
   const [state, setState] = useState(AppContextDefaultValue.state);
   const { shellApi, ...shellData } = useShellApi();
 
-  const createAndConfigureBot = () => {
-    console.log(formData);
-    handleCreateNew(formData, 'va-core');
+  const createAndConfigureBot = async () => {
+    const response = await createAndStoreProject(formData, 'va-core');
+    // TODO: response is null, investigate
+    console.log(response);
+    console.log('created but not viewed!');
+    initiateProjectView(formData, 'va-core', response, response?.data?.id);
   };
 
   return (
