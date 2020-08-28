@@ -49,6 +49,8 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     importQnAFromUrls,
     fetchProjectById,
     fetchRecentProjects,
+    createAndStoreProject,
+    initiateProjectView,
   } = useRecoilValue(dispatcherState);
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
   const projectId = useRecoilValue(projectIdState);
@@ -109,6 +111,31 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
 
   const handleCreateNew = async (formData, templateId: string) => {
     await createProject(templateId || '', formData.name, formData.description, formData.location, formData.schemaUrl);
+  };
+
+  const handleCreateAndStoreNew = async (formData, templateId) => {
+    console.log('test');
+    const response = await createAndStoreProject(
+      templateId || '',
+      formData.name,
+      formData.description,
+      formData.location,
+      formData.schemaUrl
+    );
+    console.log(response);
+    return await response;
+  };
+
+  const handleInitiateProjectView = async (formData, templateId: string, response: any, projectId: any) => {
+    await initiateProjectView(
+      templateId,
+      formData.name,
+      formData.description,
+      formData.location,
+      response,
+      projectId,
+      formData.schemaUrl
+    );
   };
 
   const handleSaveAs = (formData) => {
@@ -206,9 +233,10 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
             onSubmit={handleCreateQnA}
           />
           <VirtualAssistantCreationModal
+            createAndStoreProject={handleCreateAndStoreNew}
+            initiateProjectView={handleInitiateProjectView}
             formData={formData}
             onDismiss={handleDismiss}
-            handleCreateNew={handleCreateNew}
             path="create/va-core/customize/*"
           />
         </Router>

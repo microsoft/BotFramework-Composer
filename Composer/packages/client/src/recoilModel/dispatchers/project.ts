@@ -53,6 +53,7 @@ import {
   dialogSchemasState,
 } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
+import _ from 'lodash';
 
 const handleProjectFailure = (callbackHelpers: CallbackInterface, ex) => {
   callbackHelpers.set(botOpeningState, false);
@@ -264,6 +265,27 @@ export const projectDispatcher = () => {
       schemaUrl?: string
     ) => {
       try {
+        const response = await createAndStoreProject(templateId, name, description, location, schemaUrl);
+        if (response && response.data) {
+          return initiateProjectView(templateId, name, description, location, response, response.data.id, schemaUrl);
+        } else {
+          handleProjectFailure(callbackHelpers, null);
+        }
+      } catch (ex) {
+        handleProjectFailure(callbackHelpers, ex);
+      }
+    }
+  );
+
+  const createAndStoreProject = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async (
+      templateId: string,
+      name: string,
+      description: string,
+      location: string,
+      schemaUrl?: string
+    ) => {
+      try {
         await setBotOpeningStatus(callbackHelpers);
         const response = await httpClient.post(`/projects`, {
           storageId: 'default',
@@ -277,6 +299,26 @@ export const projectDispatcher = () => {
         if (settingStorage.get(projectId)) {
           settingStorage.remove(projectId);
         }
+        var copyResponse = _.cloneDeep(response);
+        return copyResponse;
+      } catch (ex) {
+        console.log(ex);
+        handleProjectFailure(callbackHelpers, ex);
+      }
+    }
+  );
+
+  const initiateProjectView = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async (
+      templateId: string,
+      name: string,
+      description: string,
+      location: string,
+      response: any,
+      projectId: any,
+      schemaUrl?: string
+    ) => {
+      try {
         await initBotState(callbackHelpers, response.data, true, templateId);
         return projectId;
       } catch (ex) {
@@ -446,5 +488,7 @@ export const projectDispatcher = () => {
     saveTemplateId,
     updateBoilerplate,
     getBoilerplateVersion,
+    createAndStoreProject,
+    initiateProjectView,
   };
 };
