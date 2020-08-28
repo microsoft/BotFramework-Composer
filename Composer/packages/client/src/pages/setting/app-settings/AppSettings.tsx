@@ -53,30 +53,6 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
   return (
     <div css={container}>
       <section css={section}>
-        <h2>{formatMessage('User locale')}</h2>
-        <SettingDropdown
-          description={formatMessage('Language to use within the Composer application itself.')}
-          image={images.minimap}
-          options={[
-            {
-              key: 'en-US',
-              text: formatMessage('US English'),
-            },
-            {
-              key: 'en-US-pseudo',
-              text: formatMessage('Pseudo'),
-            },
-            {
-              key: 'en-US-DoesNotExist',
-              text: formatMessage('Does Not Exist'),
-            },
-          ]}
-          selected={userSettings.appLocale}
-          title={formatMessage('Language')}
-          onChange={onLocaleChange}
-        />
-      </section>
-      <section css={section}>
         <h2>{formatMessage('Onboarding')}</h2>
         <SettingToggle
           checked={!complete}
@@ -156,7 +132,31 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
           onToggle={onCodeEditorChange('wordWrap')}
         />
       </section>
-
+      <section css={section}>
+        <h2>{formatMessage('Application Language')}</h2>
+        <SettingDropdown
+          description={formatMessage('This is the language used for Composer’s user interface.')}
+          image={images.language}
+          options={[
+            {
+              key: 'en-US',
+              text: formatMessage('English (US)'),
+            },
+            // uncomment the following to test out the pseudo-localization:
+            // {
+            //   key: 'en-US-pseudo',
+            //   text: formatMessage('Pseudo'),
+            // },
+            // {
+            //   key: 'en-US-DoesNotExist',
+            //   text: formatMessage('Does Not Exist'),
+            // },
+          ]}
+          selected={userSettings.appLocale}
+          title={formatMessage('Application language')}
+          onChange={onLocaleChange}
+        />
+      </section>
       <Suspense fallback={<div />}>{renderElectronSettings && <ElectronSettings />}</Suspense>
     </div>
   );

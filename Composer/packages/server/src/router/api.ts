@@ -3,8 +3,7 @@
 
 import path from 'path';
 
-//import express, { Router, Request, Response, NextFunction, RequestHandler } from 'express';
-import express, { Router } from 'express';
+import express, { Router, Request, Response, NextFunction, RequestHandler } from 'express';
 
 import { ProjectController } from '../controllers/project';
 import { StorageController } from '../controllers/storage';
@@ -67,13 +66,14 @@ router.use('/assets/locales/', express.static(path.join(__dirname, '..', '/local
 //help api
 router.get('/utilities/qna/parse', UtilitiesController.getQnaContent);
 
-// const ErrorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
-//   Promise.resolve(handler(req, res, next)).catch(next);
-// };
+const errorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
+  Promise.resolve(handler(req, res, next)).catch(next);
+};
 
-// router.stack.map((layer) => {
-//   const fn: RequestHandler = layer.route.stack[0].handle;
-//   layer.route.stack[0].handle = errorHandler(fn);
-// });
+router.stack.map((layer) => {
+  if (layer.route == null) return;
+  const fn: RequestHandler = layer.route.stack[0].handle;
+  layer.route.stack[0].handle = errorHandler(fn);
+});
 
 export const apiRouter = router;

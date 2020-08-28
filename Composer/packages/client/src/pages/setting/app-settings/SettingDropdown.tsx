@@ -28,7 +28,7 @@ const SettingDropdown: React.FC<ISettingToggleProps> = (props) => {
   return (
     <div css={styles.settingsContainer}>
       <div aria-hidden="true" css={styles.image} role="presentation">
-        {image && <img src={image} />}
+        {image && <img aria-hidden alt={''} src={image} />}
       </div>
       <div css={styles.settingsContent}>
         <Label htmlFor={id || uniqueId} styles={{ root: { padding: 0 } }}>

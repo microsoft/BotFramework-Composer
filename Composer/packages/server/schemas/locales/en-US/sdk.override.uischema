@@ -352,6 +352,10 @@
                     "title": "Activity",
                     "description": "The activity to send to the skill."
                 },
+                "allowInterruptions": {
+                    "title": "Allow Interruptions",
+                    "description": "A boolean expression that determines whether the parent should be allowed to interrupt the skill."
+                },
                 "$kind": {
                     "title": "Kind of dialog object",
                     "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"

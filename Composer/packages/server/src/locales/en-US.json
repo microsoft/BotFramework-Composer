@@ -113,6 +113,9 @@
   "add_a_welcome_message_9e1480b2": {
     "message": "Add a welcome message"
   },
+  "add_additional_url_bdfac25d": {
+    "message": "Add additional URL"
+  },
   "add_alternative_phrasing_47234f77": {
     "message": "add alternative phrasing"
   },
@@ -155,9 +158,6 @@
   "add_some_expected_user_responses_please_remind_me__31dc5c07": {
     "message": "> add some expected user responses:\n> - Please remind me to '{'itemTitle=buy milk'}'\n> - remind me to '{'itemTitle'}'\n> - add '{'itemTitle'}' to my todo list\n>\n> entity definitions:\n> @ ml itemTitle\n"
   },
-  "add_url_985d6504": {
-    "message": "Add URL"
-  },
   "add_welcome_message_49d9ded9": {
     "message": "Add welcome message"
   },
@@ -193,6 +193,12 @@
   },
   "append_choices_35c45a2d": {
     "message": "Append choices"
+  },
+  "application_language_87691b6": {
+    "message": "Application Language"
+  },
+  "application_language_f100f3e0": {
+    "message": "Application language"
   },
   "application_settings_39e840c6": {
     "message": "Application Settings"
@@ -668,9 +674,6 @@
   "do_you_wish_to_continue_96469eaf": {
     "message": "Do you wish to continue?"
   },
-  "does_not_exist_3a34b418": {
-    "message": "Does Not Exist"
-  },
   "done_1a4a010a": {
     "message": "Done!"
   },
@@ -772,6 +775,9 @@
   },
   "endofconversation_activity_4aa21306": {
     "message": "EndOfConversation activity"
+  },
+  "english_us_1d884ccd": {
+    "message": "English (US)"
   },
   "enter_a_manifest_url_to_add_a_new_skill_to_your_bo_57e9d660": {
     "message": "Enter a manifest url to add a new skill to your bot."
@@ -1064,17 +1070,11 @@
   "l_startline_startcharacter_l_endline_endcharacter_72bc2e5d": {
     "message": "L{ startLine }:{ startCharacter } - L{ endLine }:{ endCharacter } "
   },
-  "language_6b3e2c7c": {
-    "message": "Language"
-  },
   "language_generation_1876f6d6": {
     "message": "Language Generation"
   },
   "language_generation_file_80c08efe": {
     "message": "language generation file"
-  },
-  "language_to_use_within_the_composer_application_it_694a2b0a": {
-    "message": "Language to use within the Composer application itself."
   },
   "language_understanding_9ae3f1f6": {
     "message": "Language Understanding"
@@ -1466,8 +1466,8 @@
   "please_select_a_event_type_200c4c9f": {
     "message": "Please select a event type"
   },
-  "please_select_a_specific_qna_file_to_import_qna_4f3a8a5b": {
-    "message": "please select a specific qna file to import QnA"
+  "please_select_a_specific_qna_file_to_import_qna_d71d871": {
+    "message": "Please select a specific qna file to import QnA"
   },
   "please_select_a_trigger_type_67417abb": {
     "message": "Please select a trigger type"
@@ -1478,8 +1478,8 @@
   "please_select_an_activity_type_92f4a8a1": {
     "message": "Please select an activity type"
   },
-  "populate_your_kb_133ef6be": {
-    "message": "Populate your KB."
+  "populate_your_knowledge_base_bb2d3605": {
+    "message": "Populate your Knowledge Base"
   },
   "press_enter_to_add_this_item_or_tab_to_move_to_the_6beb8a14": {
     "message": "press Enter to add this item or Tab to move to the next interactive element"
@@ -1540,9 +1540,6 @@
   },
   "provide_a_brief_description_it_will_appear_on_the__f962eb38": {
     "message": "Provide a brief description. It will appear on the publish history list."
-  },
-  "pseudo_1a319287": {
-    "message": "Pseudo"
   },
   "publish_5211dca3": {
     "message": "Publish"
@@ -1940,6 +1937,9 @@
   "this_is_a_severity_notification_9beabb58": {
     "message": "This is a { severity } notification"
   },
+  "this_is_the_language_used_for_composer_s_user_inte_ab7fa82e": {
+    "message": "This is the language used for Composer’s user interface."
+  },
   "this_language_will_be_copied_and_used_as_the_basis_573515e4": {
     "message": "This language will be copied and used as the basis (and fallback language) for the translation."
   },
@@ -2105,9 +2105,6 @@
   "url_should_start_with_http_s_9ca55d94": {
     "message": "Url should start with http[s]://"
   },
-  "us_english_98b1e1bf": {
-    "message": "US English"
-  },
   "use_custom_runtime_d7d323fd": {
     "message": "Use custom runtime"
   },
@@ -2125,9 +2122,6 @@
   },
   "user_is_typing_790cb502": {
     "message": "User is typing"
-  },
-  "user_locale_107a7596": {
-    "message": "User locale"
   },
   "validating_35b79a96": {
     "message": "Validating..."
