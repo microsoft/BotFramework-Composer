@@ -384,41 +384,43 @@ export class LuisAndQnaPublish {
   ) {
     const { authoringKey, authoringRegion } = luisSettings;
     const { subscriptionKey } = qnaSettings;
-    if ((authoringKey && authoringRegion) || subscriptionKey) {
-      const botFiles = await this.getFiles(this.remoteBotPath);
-      const luFiles = botFiles.filter((name) => {
-        return name.endsWith('.lu') && this.notEmptyModel(name);
-      });
-      const qnaFiles = botFiles.filter((name) => {
-        return name.endsWith('.qna') && this.notEmptyModel(name);
-      });
+    const botFiles = await this.getFiles(this.remoteBotPath);
+    const luFiles = botFiles.filter((name) => {
+      return name.endsWith('.lu');
+    });
+    const qnaFiles = botFiles.filter((name) => {
+      return name.endsWith('.qna');
+    });
 
-      if (luFiles.length > 0 && !(authoringKey && authoringRegion)) {
-        throw 'Should have luis authoringKey and authoringRegion when lu file not empty';
-      }
-      if (qnaFiles.length > 0 && !subscriptionKey) {
-        throw 'Should have qna subscriptionKey when qna file not empty';
-      }
-      const dialogFiles = botFiles.filter((name) => {
-        return name.endsWith('.dialog') && this.notEmptyModel(name);
-      });
+    // check content
+    const notEmptyLuFiles = luFiles.some((name) => this.notEmptyModel(name));
+    const notEmptyQnaFiles = qnaFiles.some((name) => this.notEmptyModel(name));
 
-      await this.setCrossTrainConfig(name, dialogFiles, luFiles);
-      await this.createGeneratedDir();
-      await this.crossTrain(luFiles, qnaFiles);
-      const { interruptionLuFiles, interruptionQnaFiles } = await this.getInterruptionFiles();
-      const luisAppIds = await this.publishLuis(
-        name,
-        environment,
-        accessToken,
-        language,
-        luisSettings,
-        interruptionLuFiles,
-        luisResource
-      );
-      const qnaConfig = await this.publishQna(name, environment, language, qnaSettings, interruptionQnaFiles);
-      await this.cleanCrossTrain();
-      return { luisAppIds, qnaConfig };
+    if (notEmptyLuFiles && !(authoringKey && authoringRegion)) {
+      throw Error('Should have luis authoringKey and authoringRegion when lu file not empty');
     }
+    if (notEmptyQnaFiles && !subscriptionKey) {
+      throw Error('Should have qna subscriptionKey when qna file not empty');
+    }
+    const dialogFiles = botFiles.filter((name) => {
+      return name.endsWith('.dialog') && this.notEmptyModel(name);
+    });
+
+    await this.setCrossTrainConfig(name, dialogFiles, luFiles);
+    await this.createGeneratedDir();
+    await this.crossTrain(luFiles, qnaFiles);
+    const { interruptionLuFiles, interruptionQnaFiles } = await this.getInterruptionFiles();
+    const luisAppIds = await this.publishLuis(
+      name,
+      environment,
+      accessToken,
+      language,
+      luisSettings,
+      interruptionLuFiles,
+      luisResource
+    );
+    const qnaConfig = await this.publishQna(name, environment, language, qnaSettings, interruptionQnaFiles);
+    await this.cleanCrossTrain();
+    return { luisAppIds, qnaConfig };
   }
 }
