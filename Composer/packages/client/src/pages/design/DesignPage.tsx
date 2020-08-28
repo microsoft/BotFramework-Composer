@@ -689,7 +689,12 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           />
         )}
         {importQnAModalVisibility && (
-          <ImportQnAFromUrlModal dialogId={dialogId} onDismiss={cancelImportQnAModal} onSubmit={handleCreateQnA} />
+          <ImportQnAFromUrlModal
+            dialogId={dialogId}
+            isCreateFromoScratchButtonVisiable={false}
+            onDismiss={cancelImportQnAModal}
+            onSubmit={handleCreateQnA}
+          />
         )}
         {displaySkillManifest && (
           <DisplayManifestModal manifestId={displaySkillManifest} onDismiss={dismissManifestModal} />

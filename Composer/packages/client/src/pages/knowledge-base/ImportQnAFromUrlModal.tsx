@@ -83,6 +83,7 @@ interface ImportQnAFromUrlModalProps
   }> {
   dialogId: string;
   subscriptionKey?: string;
+  isCreateFromoScratchButtonVisiable?: boolean;
   onDismiss: () => void;
   onSubmit: (urls: string[]) => void;
 }
@@ -119,8 +120,8 @@ const validateUrls = (urls: string[]) => {
   const errors = Array(urls.length).fill('');
 
   for (let i = 0; i < urls.length; i++) {
-    for (let j = 0; j < urls.length; j++) {
-      if (urls[i] && urls[j] && urls[i] === urls[j] && i !== j) {
+    for (let j = i + 1; j < urls.length; j++) {
+      if (urls[i] && urls[j] && (urls[i] === urls[j] || urls[i] === urls[j] + '/' || urls[i] + '/' === urls[j])) {
         errors[i] = errors[j] = formatMessage('This url is duplicated');
       }
     }
@@ -143,7 +144,7 @@ const formConfig: FieldConfig<FormField> = {
 };
 
 export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (props) => {
-  const { onDismiss, onSubmit, dialogId } = props;
+  const { onDismiss, onSubmit, dialogId, isCreateFromoScratchButtonVisiable = true } = props;
   const [urlErrors, setUrlErrors] = useState(['']);
 
   const { formData, updateField, hasErrors } = useForm(formConfig);
@@ -224,17 +225,19 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
         </Stack>
       </div>
       <DialogFooter>
-        <DefaultButton
-          data-testid={'createKnowledgeBaseFromScratch'}
-          styles={{ root: { marginRight: 155 } }}
-          text={formatMessage('Create knowledge base from scratch')}
-          onClick={() => {
-            if (hasErrors) {
-              return;
-            }
-            onSubmit([]);
-          }}
-        />
+        {isCreateFromoScratchButtonVisiable && (
+          <DefaultButton
+            data-testid={'createKnowledgeBaseFromScratch'}
+            styles={{ root: { marginRight: 155 } }}
+            text={formatMessage('Create knowledge base from scratch')}
+            onClick={() => {
+              if (hasErrors) {
+                return;
+              }
+              onSubmit([]);
+            }}
+          />
+        )}
         <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
         <PrimaryButton
           data-testid={'createKnowledgeBase'}

@@ -156,7 +156,12 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
           <LoadingSpinner message={'Extracting QnA pairs. This could take a moment.'} />
         )}
         {importQnAFromUrlModalVisiability && (
-          <ImportQnAFromUrlModal dialogId={dialogId} onDismiss={onDismiss} onSubmit={onSubmit} />
+          <ImportQnAFromUrlModal
+            dialogId={dialogId}
+            isCreateFromoScratchButtonVisiable={false}
+            onDismiss={onDismiss}
+            onSubmit={onSubmit}
+          />
         )}
       </Suspense>
     </Page>

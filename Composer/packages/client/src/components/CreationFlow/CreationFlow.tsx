@@ -178,6 +178,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
           onOpen={openBot}
         />
         <ImportQnAFromUrlModal
+          isCreateFromoScratchButtonVisiable
           dialogId={formData.name.toLowerCase()}
           path="create/QnASample/importQnA"
           onDismiss={handleDismiss}
