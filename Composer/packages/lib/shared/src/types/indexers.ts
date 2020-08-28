@@ -116,6 +116,7 @@ export interface QnAFile {
   id: string;
   content: string;
   qnaSections: QnASection[];
+  imports: string[];
   [key: string]: any;
 }
 

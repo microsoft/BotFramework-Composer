@@ -35,15 +35,42 @@ const content2 = `> # QnA pairs
 
 describe('parse', () => {
   it('should parse QnA file', () => {
-    const result1: any = parse(content1);
+    const result1 = parse(content1);
     expect(result1.diagnostics.length).toEqual(0);
     expect(result1.empty).toEqual(false);
     expect(result1.qnaSections.length).toEqual(2);
 
-    const result2: any = parse(content2);
+    const result2 = parse(content2);
     expect(result2.diagnostics.length).toEqual(0);
     expect(result2.empty).toEqual(false);
     expect(result2.qnaSections.length).toEqual(1);
+  });
+
+  it('should parse QnA file with import', () => {
+    const content = `[import](windows-guide.source.qna)
+  [import](../common/aks.qna)
+  `;
+
+    const result = parse(content);
+    expect(result.imports.length).toEqual(2);
+    expect(result.imports[0]).toEqual('windows-guide.source.qna');
+    expect(result.imports[1]).toEqual('../common/aks.qna');
+    expect(result.empty).toEqual(false);
+    expect(result.qnaSections.length).toEqual(0);
+  });
+
+  it('should parse QnA file with info options ', () => {
+    const content = `> !# @source.urls = https://aka.ms/surface-pro-4-user-guide-EN.pdf
+> !# @source.name = guide
+> # QnA pairs
+`;
+
+    const result = parse(content);
+    expect(result.infos).toEqual([
+      '> !# @source.urls = https://aka.ms/surface-pro-4-user-guide-EN.pdf',
+      '> !# @source.name = guide',
+    ]);
+    expect(result.empty).toEqual(false);
   });
 });
 
@@ -56,7 +83,7 @@ describe('index', () => {
   } as FileInfo;
 
   it('should index qna file', () => {
-    const result: any = index([file])[0];
+    const result = index([file])[0];
     expect(result.id).toEqual('test');
     expect(result.qnaSections.length).toEqual(2);
   });

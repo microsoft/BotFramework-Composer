@@ -2,12 +2,18 @@
 // Licensed under the MIT License.
 import LUParser from '@microsoft/bf-lu/lib/parser/lufile/luParser';
 import { FileInfo, QnAFile } from '@bfc/shared';
-import get from 'lodash/get';
+import isEmpty from 'lodash/isEmpty';
 import { Diagnostic, Position, Range, DiagnosticSeverity } from '@bfc/shared';
 import { nanoid } from 'nanoid';
 
 import { getBaseName } from './utils/help';
 import { FileExtensions } from './utils/fileExtensions';
+
+enum SectionTypes {
+  QnASection = 'qnaSection',
+  ImportSection = 'importSection',
+  LUModelInfo = 'modelInfoSection',
+}
 
 function convertQnADiagnostic(d: any, source: string): Diagnostic {
   const severityMap = {
@@ -25,54 +31,69 @@ function convertQnADiagnostic(d: any, source: string): Diagnostic {
   return result;
 }
 
-function parse(content: string, id = '') {
-  const { Sections, Errors } = LUParser.parse(content);
-  const qnaSections = Sections.filter(({ SectionType }) => SectionType === 'qnaSection').map((section) => {
-    const {
-      Answer,
-      Body,
-      FilterPairs,
-      Id,
-      QAPairId,
-      Questions,
-      SectionType,
-      StartLine,
-      StopLine,
-      prompts,
-      promptsText,
-      source,
-    } = section;
-    const range = {
-      startLineNumber: get(section, 'ParseTree.start.line', 0),
-      endLineNumber: get(section, 'ParseTree.stop.line', 0),
-    };
-    const QuestionsWithId = Questions.map((Q) => {
-      return {
-        content: Q,
-        id: nanoid(6),
-      };
-    });
+function parse(content: string, id = ''): QnAFile {
+  const result = LUParser.parse(content);
+  const qnaSections = result.Sections.filter(({ SectionType }) => SectionType === SectionTypes.QnASection).map(
+    (section) => {
+      const {
+        Answer,
+        Body,
+        FilterPairs,
+        Id,
+        QAPairId,
+        Questions,
+        SectionType,
+        StartLine,
+        StopLine,
+        prompts,
+        promptsText,
+        source,
+      } = section;
+      const range = new Range(
+        new Position(section.Range.Start.Line, section.Range.Start.Character),
+        new Position(section.Range.End.Line, section.Range.End.Character)
+      );
+      const QuestionsWithId = Questions.map((Q) => {
+        return {
+          content: Q,
+          id: nanoid(6),
+        };
+      });
 
-    return {
-      Answer,
-      Body,
-      FilterPairs,
-      Id,
-      QAPairId,
-      Questions: QuestionsWithId,
-      SectionType,
-      StartLine,
-      StopLine,
-      prompts,
-      promptsText,
-      source,
-      range,
-      uuid: nanoid(6),
-    };
-  });
-  const diagnostics = Errors.map((e) => convertQnADiagnostic(e, id));
+      return {
+        Answer,
+        Body,
+        FilterPairs,
+        Id,
+        QAPairId,
+        Questions: QuestionsWithId,
+        SectionType,
+        StartLine,
+        StopLine,
+        prompts,
+        promptsText,
+        source,
+        range,
+        uuid: nanoid(6),
+      };
+    }
+  );
+
+  const imports = result.Sections.filter(({ SectionType }) => SectionType === SectionTypes.ImportSection).map(
+    ({ Path }) => Path
+  );
+
+  const infos = result.Sections.filter(({ SectionType }) => SectionType === SectionTypes.LUModelInfo).map(
+    ({ ModelInfo }) => ModelInfo
+  );
+
+  const diagnostics = result.Errors.map((e) => convertQnADiagnostic(e, id));
   return {
-    empty: !Sections.length,
+    id,
+    content,
+    imports,
+    infos,
+    empty: isEmpty(result.Sections),
     qnaSections,
     fileId: id,
     diagnostics,
@@ -87,7 +108,7 @@ function index(files: FileInfo[]): QnAFile[] {
     if (name.endsWith(FileExtensions.QnA)) {
       const id = getBaseName(name, FileExtensions.QnA);
       const data = parse(content, id);
-      qnaFiles.push({ id, content, ...data });
+      qnaFiles.push(data);
     }
   }
   return qnaFiles;
