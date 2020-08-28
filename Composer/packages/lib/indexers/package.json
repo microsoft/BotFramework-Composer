@@ -27,10 +27,12 @@
     "rimraf": "^2.6.3"
   },
   "dependencies": {
-    "@bfc/shared": "*",
     "@microsoft/bf-lu": "^4.10.0-dev.20200808.5a7c973",
     "adaptive-expressions": "4.10.0-preview-147186",
     "botbuilder-lg": "^4.10.0-preview-150886",
     "lodash": "^4.17.19"
+  },
+  "peerDependencies": {
+    "@bfc/shared": "*"
   }
 }
