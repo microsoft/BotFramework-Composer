@@ -20,6 +20,7 @@ import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
+import { QnAFile } from '@bfc/shared/src/types';
 
 import {
   addQuestion,
@@ -31,6 +32,7 @@ import {
 } from '../../utils/qnaUtil';
 import { dialogsState, qnaFilesState, projectIdState } from '../../recoilModel/atoms/botState';
 import { dispatcherState } from '../../recoilModel';
+import { getBaseName, getFileName } from '../../utils/fileUtil';
 
 import {
   formCell,
@@ -76,6 +78,23 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const localeRef = useRef(locale);
   localeRef.current = locale;
   const limitedNumber = useRef(1).current;
+
+  const importedFiles = useMemo(() => {
+    const file = fileRef.current;
+    const results: QnAFile[] = [];
+    if (file && file.imports) {
+      file.imports.forEach((path) => {
+        const fileName = getFileName(path);
+        const fileId = getBaseName(fileName);
+        const target = qnaFiles.find(({ id }) => id === fileId);
+        if (target) results.push(target);
+      });
+    }
+
+    return results;
+  }, [fileRef.current, qnaFiles]);
+  const importedSourceFiles = importedFiles.filter(({ id }) => id.endsWith('.source'));
+
   const generateQnASections = (file) => {
     return get(file, 'qnaSections', []).map((qnaSection, index) => {
       const qnaDialog = dialogs.find((dialog) => file.id === `${dialog.id}.${locale}`);
@@ -89,6 +108,12 @@ const TableView: React.FC<TableViewProps> = (props) => {
       };
     });
   };
+
+  const importedSourceFileSections = importedSourceFiles.reduce((result: any[], qnaFile) => {
+    const res = generateQnASections(qnaFile);
+    return result.concat(res);
+  }, []);
+
   const allQnASections = qnaFiles.reduce((result: any[], qnaFile) => {
     const res = generateQnASections(qnaFile);
     return result.concat(res);
@@ -102,6 +127,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
       return singleFileQnASections;
     }
   }, [dialogIdRef.current, qnaFiles]);
+
   const [showQnAPairDetails, setShowQnAPairDetails] = useState(Array(qnaSections.length).fill(false));
   const [qnaSectionIndex, setQnASectionIndex] = useState(-1);
   const [questionIndex, setQuestionIndex] = useState(-1); //used in QnASection.Questions array
@@ -110,20 +136,24 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const [isUpdatingAnswer, setIsUpdatingAnswer] = useState(false);
   const [answer, setAnswer] = useState('');
   const createOrUpdateQuestion = () => {
-    if (editMode === EditMode.Creating && question) {
-      const updatedQnAFileContent = addQuestion(question, qnaSections, qnaSectionIndex);
+    if (editMode === EditMode.Creating && question && file) {
+      const updatedQnAFileContent = addQuestion(question, file, qnaSectionIndex);
       actions.updateQnAFile({ id: targetFileId, content: updatedQnAFileContent });
     }
-    if (editMode === EditMode.Updating && qnaSections[qnaSectionIndex].Questions[questionIndex].content !== question) {
-      const updatedQnAFileContent = updateQuestion(question, questionIndex, qnaSections, qnaSectionIndex);
+    if (
+      editMode === EditMode.Updating &&
+      qnaSections[qnaSectionIndex].Questions[questionIndex].content !== question &&
+      file
+    ) {
+      const updatedQnAFileContent = updateQuestion(question, questionIndex, file, qnaSectionIndex);
       actions.updateQnAFile({ id: targetFileId, content: updatedQnAFileContent });
     }
     cancelQuestionEditOperation();
   };
 
   const updateAnswer = () => {
-    if (editMode === EditMode.Updating && qnaSections[qnaSectionIndex].Answer !== answer) {
-      const updatedQnAFileContent = updateAnswerUtil(answer, qnaSections, qnaSectionIndex);
+    if (editMode === EditMode.Updating && qnaSections[qnaSectionIndex].Answer !== answer && file) {
+      const updatedQnAFileContent = updateAnswerUtil(answer, file, qnaSectionIndex);
       actions.updateQnAFile({ id: targetFileId, content: updatedQnAFileContent });
     }
     cancelAnswerEditOperation();
@@ -306,6 +336,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
           const showingQuestions = showQnAPairDetails[qnaIndex] ? questions : questions.slice(0, limitedNumber);
           //This question content of this qna Section is '#?'
           const isQuestionEmpty = showingQuestions.length === 1 && showingQuestions[0].content === '';
+          const isSourceSectionInDialog = item.fileId.endsWith('.source') && !dialogId.endsWith('.source');
+          const isAllowEdit = dialogId !== 'all' && !isSourceSectionInDialog;
           return (
             <div data-is-focusable css={formCell}>
               {showingQuestions.map((q, qIndex) => {
@@ -317,7 +349,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                       role={'textbox'}
                       tabIndex={0}
                       onClick={(e) =>
-                        dialogId !== 'all' ? handleUpdateingAlternatives(e, qnaIndex, qIndex, q.content) : () => {}
+                        isAllowEdit ? handleUpdateingAlternatives(e, qnaIndex, qIndex, q.content) : () => {}
                       }
                       onKeyDown={(e) => {
                         e.preventDefault();
@@ -355,7 +387,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 }
               })}
 
-              {isCreatingNewQuestionOnIthQnASection(qnaIndex, editMode) && dialogId !== 'all' && (
+              {isCreatingNewQuestionOnIthQnASection(qnaIndex, editMode) && isAllowEdit && (
                 <TextField
                   autoFocus
                   onBlur={(e) => {
@@ -368,7 +400,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                   onKeyDown={(e) => handleQuestionKeydown(e)}
                 />
               )}
-              {!isCreatingNewQuestionOnIthQnASection(qnaIndex, editMode) && dialogId !== 'all' && (
+              {!isCreatingNewQuestionOnIthQnASection(qnaIndex, editMode) && isAllowEdit && (
                 <ActionButton
                   iconProps={{ iconName: 'Add', styles: addIcon }}
                   styles={addAlternative}
@@ -390,6 +422,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
         isResizable: true,
         data: 'string',
         onRender: (item, qnaIndex) => {
+          const isSourceSectionInDialog = item.fileId.endsWith('.source') && !dialogId.endsWith('.source');
+          const isAllowEdit = dialogId !== 'all' && !isSourceSectionInDialog;
           return (
             <div data-is-focusable css={formCell}>
               {!isUpdateingIthQnASectionAnswer(qnaIndex, isUpdatingAnswer, editMode) && (
@@ -398,7 +432,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                   css={contentAnswer(showQnAPairDetails[qnaIndex])}
                   role={'textbox'}
                   tabIndex={0}
-                  onClick={(e) => (dialogId !== 'all' ? handleUpdateingAnswer(e, qnaIndex, item.Answer) : () => {})}
+                  onClick={(e) => (isAllowEdit ? handleUpdateingAnswer(e, qnaIndex, item.Answer) : () => {})}
                   onKeyDown={(e) => {
                     e.preventDefault();
                     if (e.key === 'Enter') {
@@ -441,10 +475,15 @@ const TableView: React.FC<TableViewProps> = (props) => {
         fieldName: 'buttons',
         data: 'string',
         onRender: (item, qnaIndex) => {
+          const isSourceSectionInDialog = item.fileId.endsWith('.source') && !dialogId.endsWith('.source');
+          const isAllowEdit = dialogId !== 'all' && !isSourceSectionInDialog;
+
           return (
             <IconButton
               ariaLabel="Delete"
+              hidden={!isAllowEdit}
               iconProps={{ iconName: 'Delete' }}
+              style={{ visibility: isAllowEdit ? 'visible' : 'hidden' }}
               styles={icon}
               title="Delete"
               onClick={() => {
@@ -481,6 +520,23 @@ const TableView: React.FC<TableViewProps> = (props) => {
       tableColums.splice(3, 0, beenUsedColumn);
     }
     return tableColums;
+  };
+
+  const getGroups = () => {
+    if (dialogId === 'all' || dialogId.endsWith('.source') || !file) {
+      return undefined;
+    }
+    const groups = [
+      { key: 'groupred0', name: 'In Dialog', startIndex: 0, count: singleFileQnASections.length, level: 0 },
+    ];
+    importedSourceFiles.forEach((currentFile) => {
+      const lastGroup = groups[groups.length - 1];
+      const startIndex = lastGroup.startIndex + lastGroup.count;
+      const { id, qnaSections } = currentFile;
+      groups.push({ key: `grouped-${id}`, name: id, startIndex, count: qnaSections.length, level: 0 });
+    });
+
+    return groups;
   };
 
   const onRenderDetailsHeader = useCallback(
@@ -540,7 +596,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
           checkboxVisibility={CheckboxVisibility.hidden}
           columns={getTableColums()}
           getKey={getKeyCallback}
-          items={qnaSections}
+          groups={getGroups()}
+          items={[...qnaSections, ...importedSourceFileSections]}
           layoutMode={DetailsListLayoutMode.justified}
           selectionMode={SelectionMode.single}
           onRenderDetailsHeader={onRenderDetailsHeader}
