@@ -101,7 +101,6 @@ export const TestController: React.FC = () => {
         setBotStatus(BotStatus.pending);
         break;
       case BotStatus.published:
-        stopPollingRuntime();
         handleLoadBot();
         break;
       case BotStatus.reloading:
