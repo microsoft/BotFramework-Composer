@@ -23,13 +23,14 @@ import {
   getbreadcrumbLabel,
   qnaMatcherKey,
   TriggerFormData,
+  getDialogData,
 } from '../../utils/dialogUtil';
 import { Conversation } from '../../components/Conversation';
 import { dialogStyle } from '../../components/Modal/dialogStyle';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { ProjectTree } from '../../components/ProjectTree/ProjectTree';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
-import { clearBreadcrumb } from '../../utils/navigation';
+import { clearBreadcrumb, getFocusPath } from '../../utils/navigation';
 import { navigateTo } from '../../utils/navigation';
 import { useShell } from '../../shell';
 import { undoFunctionState, undoVersionState } from '../../recoilModel/undo/history';
@@ -198,11 +199,28 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     if (location && props.dialogId && props.projectId) {
       const { dialogId, projectId } = props;
       const params = new URLSearchParams(location.search);
+      const dialogMap = dialogs.reduce((acc, { content, id }) => ({ ...acc, [id]: content }), {});
+      const selected = params.get('selected') ?? '';
+      const focused = params.get('focused') ?? '';
+
+      //make sure focusPath always valid
+      const data = getDialogData(dialogMap, dialogId, getFocusPath(selected, focused));
+      if (typeof data === 'undefined') {
+        /**
+         * It's improper to fallback to `dialogId` directly:
+         *   - If 'action' not exists at `focused` path, fallback to trigger path;
+         *   - If 'trigger' not exists at `selected` path, fallback to dialog Id;
+         *   - If 'dialog' not exists at `dialogId` path, fallback to main dialog.
+         */
+        navTo(dialogId, []);
+        return;
+      }
+
       setDesignPageLocation({
         dialogId: dialogId,
         projectId: projectId,
-        selected: params.get('selected') ?? '',
-        focused: params.get('focused') ?? '',
+        selected,
+        focused,
         breadcrumb: location.state?.breadcrumb || [],
         promptTab: getTabFromFragment(),
       });

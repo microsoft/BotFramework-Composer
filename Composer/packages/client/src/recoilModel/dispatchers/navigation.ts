@@ -59,13 +59,14 @@ export const navigationDispatcher = () => {
     ({ snapshot }: CallbackInterface) => async (dialogId: string, breadcrumb: BreadcrumbItem[] = []) => {
       const projectId = await snapshot.getPromise(projectIdState);
       const designPageLocation = await snapshot.getPromise(designPageLocationState);
-      const dialogs = await snapshot.getPromise(dialogsState);
-      const currentDialog = dialogs.find(({ id }) => id === dialogId);
 
       let path;
       if (dialogId !== designPageLocation.dialogId) {
         // Redirect to Microsoft.OnBeginDialog trigger if it exists on the dialog
+        const dialogs = await snapshot.getPromise(dialogsState);
+        const currentDialog = dialogs.find(({ id }) => id === dialogId);
         const beginDialogIndex = currentDialog?.triggers.findIndex(({ type }) => type === SDKKinds.OnBeginDialog);
+
         if (typeof beginDialogIndex !== 'undefined' && beginDialogIndex >= 0) {
           path = createSelectedPath(beginDialogIndex);
           breadcrumb.push({ dialogId, selected: '', focused: '' });
