@@ -2,11 +2,10 @@
 // Licensed under the MIT License.
 
 /**
- * qnaUtil.ts is a single place handle lu file operation.
+ * qnaUtil.ts is a single place handle qna file operation.
  * it's designed have no state, input text file, output text file.
  */
 
-//import isEmpty from 'lodash/isEmpty';
 import { QnASection } from '@bfc/shared';
 import { sectionHandler } from '@microsoft/bf-lu/lib/parser/composerindex';
 import cloneDeep from 'lodash/cloneDeep';
@@ -21,9 +20,7 @@ export function checkIsSingleSection(content: string) {
 }
 
 export function generateQnAPair() {
-  let result = '';
-  result += '\n# ?\n```\n\n```';
-  return result;
+  return '\n# ?\n```\n\n```';
 }
 
 export function addSection(content: string, newContent: string) {

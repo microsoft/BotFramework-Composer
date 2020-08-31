@@ -85,6 +85,7 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
         return;
       }
 
+      setIsCustomType(false);
       const handler = recognizers.find((r) => r.id === option.key)?.handleRecognizerChange;
 
       if (handler) {
