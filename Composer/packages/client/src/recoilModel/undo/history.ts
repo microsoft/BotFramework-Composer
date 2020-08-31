@@ -71,7 +71,7 @@ function navigate(next: AtomAssetsMap, projectId: string) {
   const location = next.get(designPageLocationState(projectId));
   const breadcrumb = [...next.get(breadcrumbState(projectId))];
   if (location) {
-    const { dialogId, selected, focused, projectId, promptTab } = location;
+    const { dialogId, selected, focused, promptTab } = location;
     let currentUri = `/bot/${projectId}/dialogs/${dialogId}${getUrlSearch(selected, focused)}`;
     if (promptTab) {
       currentUri += `#${promptTab}`;

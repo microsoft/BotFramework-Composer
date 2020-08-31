@@ -40,6 +40,8 @@ import {
   visualEditorSelectionState,
   userSettingsState,
   dispatcherState,
+  dialogsState,
+  botStateByProjectIdSelectorFamily,
 } from '../../recoilModel';
 import { getBaseName } from '../../utils/fileUtil';
 import ImportQnAFromUrlModal from '../knowledge-base/ImportQnAFromUrlModal';
@@ -99,6 +101,7 @@ const getTabFromFragment = () => {
 };
 
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = (props) => {
+  const { location, dialogId, projectId = '' } = props;
   const userSettings = useRecoilValue(userSettingsState);
   const {
     schemas,
@@ -110,12 +113,12 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     skills,
     actionsSeed,
     locale,
-    projectId,
-    validatedDialogs: dialogs,
     undoVersion,
     qnaFiles,
     undoFunction: { undo, redo, canRedo, canUndo, commitChanges, clearUndo },
-  } = useRecoilValue(botStateByProjectIdSelector);
+  } = useRecoilValue(botStateByProjectIdSelectorFamily(projectId));
+  const dialogs = useRecoilValue(dialogsState(projectId));
+
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
   const {
     removeDialog,
@@ -136,7 +139,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     importQnAFromUrls,
   } = useRecoilValue(dispatcherState);
 
-  const { location, dialogId } = props;
   const params = new URLSearchParams(location?.search);
   const selected = params.get('selected') || '';
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
@@ -178,6 +180,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
   // migration: add qna file for dialog
   useEffect(() => {
+    debugger;
     dialogs.forEach(async (dialog) => {
       if (!qnaFiles || qnaFiles.length === 0 || !qnaFiles.find((qnaFile) => getBaseName(qnaFile.id) === dialog.id)) {
         await createQnAFile({ id: dialog.id, content: '', projectId });
