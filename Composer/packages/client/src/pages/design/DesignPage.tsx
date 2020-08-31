@@ -206,13 +206,16 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       //make sure focusPath always valid
       const data = getDialogData(dialogMap, dialogId, getFocusPath(selected, focused));
       if (typeof data === 'undefined') {
+        const { id } = dialogs.find(({ id }) => id === dialogId) || dialogs.find(({ isRoot }) => isRoot) || {};
         /**
          * It's improper to fallback to `dialogId` directly:
          *   - If 'action' not exists at `focused` path, fallback to trigger path;
          *   - If 'trigger' not exists at `selected` path, fallback to dialog Id;
          *   - If 'dialog' not exists at `dialogId` path, fallback to main dialog.
          */
-        navTo(dialogId, []);
+        if (id) {
+          navTo(id);
+        }
         return;
       }
 

@@ -5,6 +5,7 @@
 //TODO: refactor the router to use one-way data flow
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 import { PromptTab, SDKKinds } from '@bfc/shared';
+import cloneDeep from 'lodash/cloneDeep';
 
 import { createSelectedPath, getSelected } from './../../utils/dialogUtil';
 import { BreadcrumbItem } from './../../recoilModel/types';
@@ -59,6 +60,7 @@ export const navigationDispatcher = () => {
     ({ snapshot }: CallbackInterface) => async (dialogId: string, breadcrumb: BreadcrumbItem[] = []) => {
       const projectId = await snapshot.getPromise(projectIdState);
       const designPageLocation = await snapshot.getPromise(designPageLocationState);
+      const updatedBreadcrumb = cloneDeep(breadcrumb);
 
       let path;
       if (dialogId !== designPageLocation.dialogId) {
@@ -69,7 +71,7 @@ export const navigationDispatcher = () => {
 
         if (typeof beginDialogIndex !== 'undefined' && beginDialogIndex >= 0) {
           path = createSelectedPath(beginDialogIndex);
-          breadcrumb.push({ dialogId, selected: '', focused: '' });
+          updatedBreadcrumb.push({ dialogId, selected: '', focused: '' });
         }
       }
 
@@ -78,7 +80,7 @@ export const navigationDispatcher = () => {
       if (checkUrl(currentUri, designPageLocation)) return;
       //if dialog change we should flush some debounced functions
 
-      navigateTo(currentUri, { state: { breadcrumb } });
+      navigateTo(currentUri, { state: { breadcrumb: updatedBreadcrumb } });
     }
   );
 
