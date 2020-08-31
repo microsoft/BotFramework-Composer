@@ -11,26 +11,11 @@ import { readJson } from 'fs-extra';
 import { pluginLoader } from '../loader';
 import logger from '../logger';
 import { ExtensionManifestStore, PluginBundle } from '../storage/extensionManifestStore';
+import { PackageJSON, PluginInfo } from '../types/types';
 
 const log = logger.extend('plugins');
 
 const exec = promisify(childProcess.exec);
-
-interface PluginInfo {
-  id: string;
-  keywords: string[];
-  version: string;
-  description: string;
-  url: string;
-}
-
-interface PackageJSON {
-  name: string;
-  version: string;
-  description: string;
-  extendsComposer: boolean;
-  composer: any;
-}
 
 let manager: PluginManager;
 
@@ -57,16 +42,28 @@ export class PluginManager {
     this.remotePluginsDir = process.env.COMPOSER_REMOTE_PLUGINS_DIR;
   }
 
+  /**
+   * Returns all extensions currently in the extension manifest
+   */
   public getAll() {
     const extensions = this.manifest.getExtensions();
     return Object.keys(extensions).map((extId) => extensions[extId]);
   }
 
+  /**
+   * Returns the extension manifest entry for the specified extension ID
+   * @param id Id of the extension to search for
+   */
   public find(id: string) {
     return this.manifest.getExtensions()[id];
   }
 
-  public async install(name: string, version?: string) {
+  /**
+   * Installs a remote plugin via NPM
+   * @param name The name of the plugin to install
+   * @param version The version of the plugin to install
+   */
+  public async installRemote(name: string, version?: string) {
     const packageNameAndVersion = version ? `${name}@${version}` : name;
     const cmd = `npm install --no-audit --prefix ${this.remotePluginsDir} ${packageNameAndVersion}`;
     log('Installing %s@%s to %s', name, version, this.remotePluginsDir);
@@ -97,7 +94,9 @@ export class PluginManager {
     }
   }
 
-  // load all the plugins we check into composer source
+  /**
+   * Loads all the plugins that are checked into the Composer project (1P plugins)
+   */
   public async loadBuiltinPlugins() {
     log('Loading inherent plugins from: ', this.builtinPluginsDir);
 
@@ -127,17 +126,13 @@ export class PluginManager {
     }
   }
 
-  public loadRemotePlugin() {
-    // this should share the same code as loadInherentPlugin() but fetch the plugin with an "npm install" / fetch
-  }
-
-  // this will load remote plugins
+  /**
+   * Loads all installed remote plugins
+   * TODO (toanzian / abrown): Needs to be implemented
+   */
   public async loadRemotePlugins() {
-    await Promise.all(
-      this.getAll()
-        .filter((ext) => ext.enabled)
-        .map((p) => this.load(p.id))
-    );
+    // should perform the same function as loadBuiltInPlugins but from the
+    // location that remote / 3P plugins are installed
   }
 
   public async load(id: string) {
@@ -162,18 +157,30 @@ export class PluginManager {
     }
   }
 
+  /**
+   * Enables a plugin
+   * @param id Id of the plugin to be enabled
+   */
   public async enable(id: string) {
     await this.manifest.updateExtensionConfig(id, { enabled: true });
 
     // re-load plugin
   }
 
+  /**
+   * Disables a plugin
+   * @param id Id of the plugin to be disabled
+   */
   public async disable(id: string) {
     await this.manifest.updateExtensionConfig(id, { enabled: false });
 
     // tear down plugin?
   }
 
+  /**
+   * Removes a remote plugin via NPM
+   * @param id Id of the plugin to be removed
+   */
   public async remove(id: string) {
     const cmd = `npm uninstall --no-audit --prefix ${this.remotePluginsDir} ${id}`;
     log('Removing %s', id);
@@ -186,6 +193,10 @@ export class PluginManager {
     this.manifest.removeExtension(id);
   }
 
+  /**
+   * Searches for a plugin via NPM's search function
+   * @param query The search query
+   */
   public async search(query: string) {
     const cmd = `npm search --json "keywords:botframework-composer ${query}"`;
     log(cmd);
@@ -216,6 +227,10 @@ export class PluginManager {
     return Array.from(this.searchCache.values());
   }
 
+  /**
+   * Returns a list of all of an extension's bundles
+   * @param id The ID of the extension for which we will fetch the list of bundles
+   */
   public async getAllBundles(id: string) {
     const info = this.find(id);
 
@@ -226,6 +241,11 @@ export class PluginManager {
     return info.bundles ?? [];
   }
 
+  /**
+   * Returns a specific bundle for an extension
+   * @param id The id of the desired extension
+   * @param bundleId The id of the desired extension's bundle
+   */
   public getBundle(id: string, bundleId: string): string | null {
     const info = this.find(id);
 

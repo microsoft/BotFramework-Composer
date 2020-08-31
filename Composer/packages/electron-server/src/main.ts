@@ -56,6 +56,8 @@ async function createAppDataDir() {
   const localPublishPath: string = join(composerAppDataPath, 'hostedBots');
   const azurePublishPath: string = join(composerAppDataPath, 'publishBots');
   process.env.COMPOSER_APP_DATA = join(composerAppDataPath, 'data.json'); // path to the actual data file
+  process.env.COMPOSER_EXTENSION_DATA = join(composerAppDataPath, 'extension-manifest.json');
+  process.env.COMPOSER_REMOTE_PLUGINS_DIR = join(composerAppDataPath, 'remote-plugins');
 
   log('creating composer app data path at: ', composerAppDataPath);
 
@@ -135,7 +137,6 @@ async function loadServer() {
     const unpackedDir = getUnpackedAsarPath();
     process.env.COMPOSER_RUNTIME_FOLDER = join(unpackedDir, 'runtime');
     process.env.COMPOSER_BUILTIN_PLUGINS_DIR = join(unpackedDir, 'build', 'plugins');
-    process.env.COMPOSER_REMOTE_PLUGINS_DIR = ''; // TODO: assign this
   }
 
   // only create a new data directory if packaged electron app
@@ -174,6 +175,7 @@ async function main() {
 }
 
 async function run() {
+  app.getAppPath;
   fixPath(); // required PATH fix for Mac (https://github.com/electron/electron/issues/5626)
 
   // Force Single Instance Application

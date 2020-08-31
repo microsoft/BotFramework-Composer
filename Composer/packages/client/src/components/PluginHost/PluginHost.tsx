@@ -4,8 +4,7 @@ import * as React from 'react';
 import { useEffect, useRef } from 'react';
 import { iframeStyle } from './styles';
 import { PluginAPI } from '../../plugins/api';
-
-type PluginType = 'publish' | 'page' | 'storage' | 'create';
+import { PluginType } from '../../plugins/types';
 
 interface PluginHostProps {
   extraIframeStyles?: SerializedStyles[];
@@ -37,8 +36,8 @@ export const PluginHost: React.FC<PluginHostProps> = (props) => {
   const { extraIframeStyles = [] } = props;
 
   useEffect(() => {
-    // load the plugin and pass it the render function
     const { pluginName, pluginType } = props;
+    // renders the plugin's UI inside of the iframe
     const renderPluginView = async () => {
       if (pluginName && pluginType) {
         const iframeWindow = targetRef.current?.contentWindow as Window;
@@ -47,7 +46,7 @@ export const PluginHost: React.FC<PluginHostProps> = (props) => {
         // inject the react / react-dom bundles
         injectScript(iframeDocument, 'react-bundle', '/react-bundle.js', false);
         injectScript(iframeDocument, 'react-dom-bundle', '/react-dom-bundle.js', false);
-        // // load the preload script to setup the API
+        // // load the preload script to setup the plugin API
         injectScript(iframeDocument, 'preload-bundle', '/plugin-host-preload.js', false, () => {
           attachPluginAPI(iframeWindow, pluginType);
         });
@@ -58,7 +57,8 @@ export const PluginHost: React.FC<PluginHostProps> = (props) => {
           const cb = () => {
             resolve();
           };
-          injectScript(iframeDocument, pluginScriptId, `/api/plugins/${pluginName}/view/${pluginType}`, false, cb); // Do we want to make this async since it could be a large file?
+          // If plugin bundles end up being too large and block the client thread due to the load, enable the async flag on this call
+          injectScript(iframeDocument, pluginScriptId, `/api/plugins/${pluginName}/view/${pluginType}`, false, cb);
         });
       }
     };

@@ -57,7 +57,7 @@ export async function addPlugin(req: AddPluginRequest, res: Response) {
     return;
   }
 
-  await PluginManager.getInstance().install(name, version);
+  await PluginManager.getInstance().installRemote(name, version);
   await PluginManager.getInstance().load(name);
   res.json(PluginManager.getInstance().find(name));
 }
@@ -98,7 +98,7 @@ export async function removePlugin(req: RemovePluginRequest, res: Response) {
   }
 
   await PluginManager.getInstance().remove(id);
-  res.json(PluginManager.getInstance().getAll()); // might need to have this list all enabled plugins ?
+  res.json(PluginManager.getInstance().getAll());
 }
 
 export async function searchPlugins(req: SearchPluginsRequest, res: Response) {
