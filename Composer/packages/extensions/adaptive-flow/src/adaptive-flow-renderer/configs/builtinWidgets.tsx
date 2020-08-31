@@ -12,6 +12,7 @@ import {
   ForeachWidget,
   ActionHeader,
   PropertyDescription,
+  ResourceOperation,
 } from '../widgets';
 
 const builtinActionWidgets: FlowEditorWidgetMap = {
@@ -23,6 +24,7 @@ const builtinActionWidgets: FlowEditorWidgetMap = {
   ForeachWidget,
   ActionHeader,
   PropertyDescription,
+  ResourceOperation,
 };
 
 export default builtinActionWidgets;
