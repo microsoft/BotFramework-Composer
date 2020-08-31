@@ -7,13 +7,7 @@ import { SDKKinds } from '@bfc/shared';
 
 import { navigationDispatcher } from '../navigation';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
-import {
-  focusPathState,
-  breadcrumbState,
-  designPageLocationState,
-  projectIdState,
-  dialogsState,
-} from '../../atoms/botState';
+import { focusPathState, breadcrumbState, designPageLocationState, dialogsState } from '../../atoms/botState';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import {
   convertPathToUrl,
@@ -27,6 +21,7 @@ import { createSelectedPath, getSelected } from '../../../utils/dialogUtil';
 import { BreadcrumbItem } from '../../../recoilModel/types';
 import { botStateByProjectIdSelector } from '../../selectors';
 import { Dispatcher } from '..';
+import { currentProjectIdState } from '../../atoms';
 
 jest.mock('../../../utils/navigation');
 jest.mock('../../../utils/dialogUtil');
@@ -57,9 +52,10 @@ describe('navigation dispatcher', () => {
     mockCheckUrl.mockReturnValue(false);
 
     const useRecoilTestHook = () => {
-      const { focusPath, breadcrumb, designPageLocation, projectId } = useRecoilValue(botStateByProjectIdSelector);
+      const { focusPath, breadcrumb, designPageLocation, dialogs, projectId } = useRecoilValue(
+        botStateByProjectIdSelector
+      );
       const currentDispatcher = useRecoilValue(dispatcherState);
-      const dialogs = useRecoilValue(dialogsState);
 
       return {
         dialogs,
@@ -83,9 +79,9 @@ describe('navigation dispatcher', () => {
             focused: 'b',
           },
         },
-        { recoilState: projectIdState, initialValue: PROJECT_ID },
+        { recoilState: currentProjectIdState, initialValue: projectId },
         {
-          recoilState: dialogsState,
+          recoilState: dialogsState(projectId),
           initialValue: [{ id: 'newDialogId', triggers: [{ type: SDKKinds.OnBeginDialog }] }],
         },
       ],
@@ -177,22 +173,22 @@ describe('navigation dispatcher', () => {
 
   describe('navTo', () => {
     it('navigates to a destination', async () => {
-      mockConvertPathToUrl.mockReturnValue(`/bot/${PROJECT_ID}/dialogs/dialogId`);
+      mockConvertPathToUrl.mockReturnValue(`/bot/${projectId}/dialogs/dialogId`);
       await act(async () => {
         await dispatcher.navTo(projectId, 'dialogId', []);
       });
-      expectNavTo(`/bot/${PROJECT_ID}/dialogs/dialogId`);
-      expect(mockConvertPathToUrl).toBeCalledWith(PROJECT_ID, 'dialogId', undefined);
+      expectNavTo(`/bot/${projectId}/dialogs/dialogId`);
+      expect(mockConvertPathToUrl).toBeCalledWith(projectId, 'dialogId', undefined);
     });
 
     it('redirects to the begin dialog trigger', async () => {
-      mockConvertPathToUrl.mockReturnValue(`/bot/${PROJECT_ID}/dialogs/newDialogId?selection=triggers[0]`);
+      mockConvertPathToUrl.mockReturnValue(`/bot/${projectId}/dialogs/newDialogId?selection=triggers[0]`);
       mockCreateSelectedPath.mockReturnValue('triggers[0]');
       await act(async () => {
-        await dispatcher.navTo('newDialogId', []);
+        await dispatcher.navTo(projectId, 'newDialogId', []);
       });
-      expectNavTo(`/bot/${PROJECT_ID}/dialogs/newDialogId?selection=triggers[0]`);
-      expect(mockConvertPathToUrl).toBeCalledWith(PROJECT_ID, 'newDialogId', 'triggers[0]');
+      expectNavTo(`/bot/${projectId}/dialogs/newDialogId?selection=triggers[0]`);
+      expect(mockConvertPathToUrl).toBeCalledWith(projectId, 'newDialogId', 'triggers[0]');
       expect(mockCreateSelectedPath).toBeCalledWith(0);
     });
 
@@ -214,12 +210,12 @@ describe('navigation dispatcher', () => {
     });
 
     it('navigates to a default URL with selected path', async () => {
-      mockConvertPathToUrl.mockReturnValue(`/bot/${PROJECT_ID}/dialogs/dialogId?selected=selection`);
+      mockConvertPathToUrl.mockReturnValue(`/bot/${projectId}/dialogs/dialogId?selected=selection`);
       await act(async () => {
         await dispatcher.selectTo(projectId, 'selection');
       });
-      expectNavTo(`/bot/${PROJECT_ID}/dialogs/dialogId?selected=selection`);
-      expect(mockConvertPathToUrl).toBeCalledWith(PROJECT_ID, 'dialogId', 'selection');
+      expectNavTo(`/bot/${projectId}/dialogs/dialogId?selected=selection`);
+      expect(mockConvertPathToUrl).toBeCalledWith(projectId, 'dialogId', 'selection');
     });
 
     it("doesn't go anywhere if we're already there", async () => {

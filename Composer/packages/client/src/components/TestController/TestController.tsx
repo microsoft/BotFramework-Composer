@@ -8,7 +8,7 @@ import { jsx, css } from '@emotion/core';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
-import { IConfig, defaultPublishConfig, IPublishConfig } from '@bfc/shared';
+import { IConfig, IPublishConfig, defaultPublishConfig } from '@bfc/shared';
 
 import { botEndpointsState, dispatcherState, botStateByProjectIdSelector } from '../../recoilModel';
 import settingsStorage from '../../utils/dialogSettingStorage';
@@ -52,15 +52,15 @@ export const TestController: React.FC = () => {
   const {
     botName,
     botStatus,
+    projectId,
     validatedDialogs: dialogs,
     luFiles,
+    qnaFiles,
     dialogSetting: settings,
     botLoadErrorMsg,
-    qnaFiles,
-    projectId,
   } = useRecoilValue(botStateByProjectIdSelector);
-  const botEndpoints = useRecoilValue(botEndpointsState);
 
+  const botEndpoints = useRecoilValue(botEndpointsState);
   const {
     publishToTarget,
     onboardingAddCoachMarkRef,
@@ -85,31 +85,6 @@ export const TestController: React.FC = () => {
       getPublishStatus(projectId, defaultPublishConfig);
     }
   }, [projectId]);
-
-  function dismissCallout() {
-    if (calloutVisible) setCalloutVisible(false);
-  }
-
-  function openCallout() {
-    setCalloutVisible(true);
-  }
-
-  function startPollingRuntime() {
-    if (!botStatusInterval) {
-      const cancelInterval = setInterval(() => {
-        // get publish status
-        getPublishStatus(projectId, defaultPublishConfig);
-      }, POLLING_INTERVAL);
-      setBotStatusInterval(cancelInterval);
-    }
-  }
-
-  function stopPollingRuntime() {
-    if (botStatusInterval) {
-      clearInterval(botStatusInterval);
-      setBotStatusInterval(undefined);
-    }
-  }
 
   useEffect(() => {
     switch (botStatus) {
@@ -253,6 +228,7 @@ export const TestController: React.FC = () => {
       )
     );
   }
+
   return (
     <Fragment>
       <div ref={botActionRef} css={bot}>
