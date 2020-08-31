@@ -16,7 +16,7 @@ import {
   showDelLanguageModalState,
   settingsState,
 } from '../../recoilModel/atoms/botState';
-import { dispatcherState } from '../../recoilModel';
+import { dispatcherState, currentProjectIdState, botStateByProjectIdSelector } from '../../recoilModel';
 import { TestController } from '../../components/TestController/TestController';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { navigateTo } from '../../utils/navigation';
@@ -34,7 +34,7 @@ const getProjectLink = (path: string, id?: string) => {
 };
 2;
 
-const SettingPage: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
+const SettingPage: React.FC<RouteComponentProps> = (props) => {
   const {
     deleteBotProject,
     addLanguageDialogBegin,
@@ -45,11 +45,15 @@ const SettingPage: React.FC<RouteComponentProps<{ projectId: string }>> = (props
     deleteLanguages,
     fetchProjectById,
   } = useRecoilValue(dispatcherState);
-  const projectId = props.projectId || '';
-  const locale = useRecoilValue(localeState(projectId));
-  const showAddLanguageModal = useRecoilValue(showAddLanguageModalState(projectId));
-  const showDelLanguageModal = useRecoilValue(showDelLanguageModalState(projectId));
-  const { defaultLanguage, languages } = useRecoilValue(settingsState(projectId));
+
+  const {
+    projectId,
+    locale,
+    showAddLanguageModal,
+    showDelLanguageModal,
+    dialogSetting: { defaultLanguage, languages },
+  } = useRecoilValue(botStateByProjectIdSelector);
+
   const { navigate } = useLocation();
 
   // when fresh page, projectId in store are empty, no project are opened at client
