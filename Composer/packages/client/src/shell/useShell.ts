@@ -21,13 +21,13 @@ import {
   luFilesState,
   qnaFilesState,
   dispatcherState,
+  breadcrumbState,
   designPageLocationState,
   focusPathState,
   userSettingsState,
   clipboardActionsState,
 } from '../recoilModel';
 import { validatedDialogsSelector } from '../recoilModel/selectors/validatedDialogs';
-import { BreadcrumbItem } from '../recoilModel/types';
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
@@ -51,6 +51,7 @@ export function useShell(source: EventSource): Shell {
   const skills = useRecoilValue(skillsState);
   const schemas = useRecoilValue(schemasState);
   const designPageLocation = useRecoilValue(designPageLocationState);
+  const breadcrumb = useRecoilValue(breadcrumbState);
   const focusPath = useRecoilValue(focusPathState);
   const userSettings = useRecoilValue(userSettingsState);
   const clipboardActions = useRecoilValue(clipboardActionsState);
@@ -104,7 +105,7 @@ export function useShell(source: EventSource): Shell {
     updateDialog({ id, content: newDialog.content });
   }
 
-  function navigationTo(path, breadcrumb: BreadcrumbItem[] = []) {
+  function navigationTo(path) {
     navTo(path, breadcrumb);
   }
 
