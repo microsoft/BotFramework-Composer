@@ -16,16 +16,19 @@ import {
   dialogSchemasState,
   projectIdState,
   luFilesState,
+  qnaFilesState,
   skillManifestsState,
   settingsState,
   lgFilesState,
 } from './atoms';
+import { UndoRoot } from './undo/history';
 
 const getBotAssets = async (snapshot: Snapshot): Promise<BotAssets> => {
   const result = await Promise.all([
     snapshot.getPromise(projectIdState),
     snapshot.getPromise(dialogsState),
     snapshot.getPromise(luFilesState),
+    snapshot.getPromise(qnaFilesState),
     snapshot.getPromise(lgFilesState),
     snapshot.getPromise(skillManifestsState),
     snapshot.getPromise(settingsState),
@@ -35,10 +38,11 @@ const getBotAssets = async (snapshot: Snapshot): Promise<BotAssets> => {
     projectId: result[0],
     dialogs: result[1],
     luFiles: result[2],
-    lgFiles: result[3],
-    skillManifests: result[4],
-    setting: result[5],
-    dialogSchemas: result[6],
+    qnaFiles: result[3],
+    lgFiles: result[4],
+    skillManifests: result[5],
+    setting: result[6],
+    dialogSchemas: result[7],
   };
 };
 
@@ -87,6 +91,7 @@ export const DispatcherWrapper = ({ children }) => {
 
   return (
     <Fragment>
+      <UndoRoot />
       <InitDispatcher onLoad={setLoaded} />
       {loaded ? children : null}
     </Fragment>

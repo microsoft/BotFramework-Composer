@@ -6,7 +6,7 @@ import { FieldProps, UIOptions } from '@bfc/extension';
 import { css, jsx } from '@emotion/core';
 import React from 'react';
 
-import { resolvePropSchema } from '../utils';
+import { isPropertyHidden, resolvePropSchema } from '../utils';
 
 import { SchemaField } from './SchemaField';
 
@@ -46,6 +46,7 @@ export const getRowProps = (rowProps: FormRowProps, field: string) => {
   return {
     id: `${id}.${field}`,
     schema: fieldSchema ?? {},
+    hidden: isPropertyHidden(uiOptions, value, field),
     label: (label === false ? false : undefined) as false | undefined,
     name: field,
     rawErrors: rawErrors?.[field],
@@ -65,7 +66,6 @@ export const getRowProps = (rowProps: FormRowProps, field: string) => {
 const formRow = {
   row: css`
     display: flex;
-    margin: 10px 18px;
 
     label: FormRowContainer;
   `,

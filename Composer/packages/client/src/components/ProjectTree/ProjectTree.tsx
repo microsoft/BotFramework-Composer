@@ -16,6 +16,7 @@ import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 
 import { dispatcherState, userSettingsState } from '../../recoilModel';
 import { createSelectedPath, getFriendlyName } from '../../utils/dialogUtil';
+import { containUnsupportedTriggers, triggerNotSupported } from '../../utils/dialogValidator';
 
 import { TreeItem } from './treeItem';
 

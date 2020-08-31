@@ -3,24 +3,23 @@
 
 import { useMemo, useRef } from 'react';
 import { ShellApi, ShellData, Shell } from '@bfc/shared';
-import isEqual from 'lodash/isEqual';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
-import { updateRegExIntent } from '../utils/dialogUtil';
-import { getDialogData, setDialogData, sanitizeDialogData } from '../utils/dialogUtil';
-import { getFocusPath } from '../utils/navigation';
+import { updateRegExIntent, renameRegExIntent, updateIntentTrigger } from '../utils/dialogUtil';
+import { getDialogData, setDialogData } from '../utils/dialogUtil';
 import { isAbsHosted } from '../utils/envUtil';
+import { undoFunctionState } from '../recoilModel/undo/history';
 import {
   botNameState,
   schemasState,
   skillsState,
   lgFilesState,
-  dialogsState,
   dialogSchemasState,
   projectIdState,
   localeState,
   luFilesState,
+  qnaFilesState,
   dispatcherState,
   breadcrumbState,
   designPageLocationState,
@@ -28,9 +27,12 @@ import {
   userSettingsState,
   clipboardActionsState,
 } from '../recoilModel';
+import { validatedDialogsSelector } from '../recoilModel/selectors/validatedDialogs';
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
+import { useQnaApi } from './qnaApi';
+import { useTriggerApi } from './triggerApi';
 
 const FORM_EDITOR = 'PropertyEditor';
 
@@ -39,19 +41,21 @@ type EventSource = 'FlowEditor' | 'PropertyEditor' | 'DesignPage';
 export function useShell(source: EventSource): Shell {
   const dialogMapRef = useRef({});
   const botName = useRecoilValue(botNameState);
-  const dialogs = useRecoilValue(dialogsState);
+  const dialogs = useRecoilValue(validatedDialogsSelector);
   const dialogSchemas = useRecoilValue(dialogSchemasState);
   const luFiles = useRecoilValue(luFilesState);
+  const qnaFiles = useRecoilValue(qnaFilesState);
   const projectId = useRecoilValue(projectIdState);
   const locale = useRecoilValue(localeState);
   const lgFiles = useRecoilValue(lgFilesState);
   const skills = useRecoilValue(skillsState);
   const schemas = useRecoilValue(schemasState);
-  const breadcrumb = useRecoilValue(breadcrumbState);
   const designPageLocation = useRecoilValue(designPageLocationState);
+  const breadcrumb = useRecoilValue(breadcrumbState);
   const focusPath = useRecoilValue(focusPathState);
   const userSettings = useRecoilValue(userSettingsState);
   const clipboardActions = useRecoilValue(clipboardActionsState);
+  const { undo, redo, commitChanges } = useRecoilValue(undoFunctionState);
   const {
     updateDialog,
     updateDialogSchema,
@@ -69,7 +73,8 @@ export function useShell(source: EventSource): Shell {
   } = useRecoilValue(dispatcherState);
   const lgApi = useLgApi();
   const luApi = useLuApi();
-
+  const qnaApi = useQnaApi();
+  const triggerApi = useTriggerApi();
   const { dialogId, selected, focused, promptTab } = designPageLocation;
 
   const dialogsMap = useMemo(() => {
@@ -79,36 +84,36 @@ export function useShell(source: EventSource): Shell {
     }, {});
   }, [dialogs]);
 
-  async function updateRegExIntentHandler(id, intentName, pattern) {
+  function updateRegExIntentHandler(id, intentName, pattern) {
     const dialog = dialogs.find((dialog) => dialog.id === id);
     if (!dialog) throw new Error(formatMessage(`dialog {dialogId} not found`, { dialogId }));
     const newDialog = updateRegExIntent(dialog, intentName, pattern);
-    return await updateDialog({ id, content: newDialog.content });
+    return updateDialog({ id, content: newDialog.content });
   }
 
-  function cleanData() {
-    const cleanedData = sanitizeDialogData(dialogsMap[dialogId]);
-    if (!isEqual(dialogsMap[dialogId], cleanedData)) {
-      const payload = {
-        id: dialogId,
-        content: cleanedData,
-      };
-      updateDialog(payload);
-    }
+  function renameRegExIntentHandler(id: string, intentName: string, newIntentName: string) {
+    const dialog = dialogs.find((dialog) => dialog.id === id);
+    if (!dialog) throw new Error(`dialog ${dialogId} not found`);
+    const newDialog = renameRegExIntent(dialog, intentName, newIntentName);
+    updateDialog({ id, content: newDialog.content });
+  }
+
+  function updateIntentTriggerHandler(id: string, intentName: string, newIntentName: string) {
+    const dialog = dialogs.find((dialog) => dialog.id === id);
+    if (!dialog) throw new Error(`dialog ${dialogId} not found`);
+    const newDialog = updateIntentTrigger(dialog, intentName, newIntentName);
+    updateDialog({ id, content: newDialog.content });
   }
 
   function navigationTo(path) {
-    cleanData();
     navTo(path, breadcrumb);
   }
 
   function focusEvent(subPath) {
-    cleanData();
     selectTo(subPath);
   }
 
   function focusSteps(subPaths: string[] = [], fragment?: string) {
-    cleanData();
     let dataPath: string = subPaths[0];
 
     if (source === FORM_EDITOR) {
@@ -149,22 +154,15 @@ export function useShell(source: EventSource): Shell {
       };
       dialogMapRef.current[dialogId] = updatedDialog;
       updateDialog(payload);
-
-      //make sure focusPath always valid
-      const data = getDialogData(dialogMapRef.current, dialogId, getFocusPath(selected, focused));
-      if (typeof data === 'undefined') {
-        /**
-         * It's improper to fallback to `dialogId` directly:
-         *   - If 'action' not exists at `focused` path, fallback to trigger path;
-         *   - If 'trigger' not exists at `selected` path, fallback to dialog Id;
-         *   - If 'dialog' not exists at `dialogId` path, fallback to main dialog.
-         */
-        navTo(dialogId, []);
-      }
+      commitChanges();
     },
     ...lgApi,
     ...luApi,
+    ...qnaApi,
+    ...triggerApi,
     updateRegExIntent: updateRegExIntentHandler,
+    renameRegExIntent: renameRegExIntentHandler,
+    updateIntentTrigger: updateIntentTriggerHandler,
     navTo: navigationTo,
     onFocusEvent: focusEvent,
     onFocusSteps: focusSteps,
@@ -184,8 +182,9 @@ export function useShell(source: EventSource): Shell {
         });
       });
     },
-    undo: () => {}, //TODO
-    redo: () => {}, //TODO
+    undo,
+    redo,
+    commitChanges,
     addCoachMarkRef: onboardingAddCoachMarkRef,
     updateUserSettings: updateUserSettings,
     announce: setMessage,
@@ -213,6 +212,7 @@ export function useShell(source: EventSource): Shell {
         schemas,
         lgFiles,
         luFiles,
+        qnaFiles,
         currentDialog,
         userSettings,
         designerId: editorData?.$designer?.id,

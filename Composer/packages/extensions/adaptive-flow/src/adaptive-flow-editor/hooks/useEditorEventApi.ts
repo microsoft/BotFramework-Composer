@@ -149,8 +149,8 @@ export const useEditorEventApi = (
         };
         break;
       case NodeEventTypes.OpenDialog:
-        handler = ({ caller, callee }) => {
-          onOpen(callee, caller);
+        handler = ({ callee }) => {
+          onOpen(callee);
           announce(ScreenReaderMessage.DialogOpened);
         };
         break;
@@ -170,6 +170,7 @@ export const useEditorEventApi = (
               onChange(dialog);
               onFocusSteps([`${e.id}[${e.position || 0}]`]);
             });
+
             announce(ScreenReaderMessage.ActionCreated);
           };
         } else {

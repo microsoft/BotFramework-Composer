@@ -11,7 +11,8 @@ import VisualDesigner from '@bfc/adaptive-flow';
 import { useRecoilValue } from 'recoil';
 
 import grayComposerIcon from '../../images/grayComposerIcon.svg';
-import { schemasState, dialogsState, designPageLocationState, dispatcherState } from '../../recoilModel';
+import { schemasState, designPageLocationState, dispatcherState } from '../../recoilModel';
+import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 
 import { middleTriggerContainer, middleTriggerElements, triggerButton, visualEditor } from './styles';
 
@@ -49,14 +50,16 @@ function onRenderBlankVisual(isTriggerEmpty, onClickAddTrigger) {
 
 interface VisualEditorProps {
   openNewTriggerModal: () => void;
+  onFocus?: (event: React.FocusEvent<HTMLDivElement>) => void;
+  onBlur?: (event: React.FocusEvent<HTMLDivElement>) => void;
 }
 
 const VisualEditor: React.FC<VisualEditorProps> = (props) => {
-  const { openNewTriggerModal } = props;
+  const { openNewTriggerModal, onFocus, onBlur } = props;
   const [triggerButtonVisible, setTriggerButtonVisibility] = useState(false);
   const designPageLocation = useRecoilValue(designPageLocationState);
   const { onboardingAddCoachMarkRef } = useRecoilValue(dispatcherState);
-  const dialogs = useRecoilValue(dialogsState);
+  const dialogs = useRecoilValue(validatedDialogsSelector);
   const schemas = useRecoilValue(schemasState);
   const { dialogId, selected } = designPageLocation;
 
@@ -76,7 +79,7 @@ const VisualEditor: React.FC<VisualEditorProps> = (props) => {
         css={visualEditor(triggerButtonVisible || !selected)}
         data-testid="VisualEditor"
       >
-        <VisualDesigner schema={schemas.sdk?.content} />
+        <VisualDesigner schema={schemas.sdk?.content} onBlur={onBlur} onFocus={onFocus} />
       </div>
       {!selected && onRenderBlankVisual(triggerButtonVisible, openNewTriggerModal)}
     </React.Fragment>

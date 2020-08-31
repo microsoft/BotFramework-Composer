@@ -125,9 +125,9 @@ const schema: JSONSchema7 = {
       },
       luis: {
         authoringKey: '<authoring key>',
-        authoringEndpoint: '<luis authoring endpoint>',
+        authoringEndpoint: '',
         endpointKey: '<endpoint key>',
-        endpoint: '<luis prediction endpoint>',
+        endpoint: '',
         region: 'westus',
       },
       MicrosoftAppId: '<app id from Bot Framework registration>',

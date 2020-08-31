@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { createSingleMessage, combineMessage, findErrors, isValid } from '../../src/utils';
+import { createSingleMessage, combineMessage, findErrors, isValid } from '../../src/utils/diagnosticUtil';
 
 const diagnostics = [
   {

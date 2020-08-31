@@ -4,12 +4,26 @@
 
 //TODO: refactor the router to use one-way data flow
 import { useRecoilCallback, CallbackInterface } from 'recoil';
-import { PromptTab } from '@bfc/shared';
+import { PromptTab, SDKKinds } from '@bfc/shared';
+import cloneDeep from 'lodash/cloneDeep';
 
-import { getSelected } from './../../utils/dialogUtil';
+import { createSelectedPath, getSelected } from './../../utils/dialogUtil';
 import { BreadcrumbItem } from './../../recoilModel/types';
-import { focusPathState, breadcrumbState, designPageLocationState, projectIdState } from './../atoms/botState';
-import { updateBreadcrumb, navigateTo, checkUrl, getUrlSearch, BreadcrumbUpdateType } from './../../utils/navigation';
+import {
+  breadcrumbState,
+  designPageLocationState,
+  dialogsState,
+  focusPathState,
+  projectIdState,
+} from './../atoms/botState';
+import {
+  BreadcrumbUpdateType,
+  checkUrl,
+  convertPathToUrl,
+  getUrlSearch,
+  navigateTo,
+  updateBreadcrumb,
+} from './../../utils/navigation';
 
 export const navigationDispatcher = () => {
   const setDesignPageLocation = useRecoilCallback(
@@ -54,10 +68,25 @@ export const navigationDispatcher = () => {
       if (selectPath != null) {
         currentUri += `?selected=${selectPath}`;
       }
+      const updatedBreadcrumb = cloneDeep(breadcrumb);
+
+      let path;
+      if (dialogId !== designPageLocation.dialogId) {
+        // Redirect to Microsoft.OnBeginDialog trigger if it exists on the dialog
+        const dialogs = await snapshot.getPromise(dialogsState);
+        const currentDialog = dialogs.find(({ id }) => id === dialogId);
+        const beginDialogIndex = currentDialog?.triggers.findIndex(({ type }) => type === SDKKinds.OnBeginDialog);
+
+        if (typeof beginDialogIndex !== 'undefined' && beginDialogIndex >= 0) {
+          path = createSelectedPath(beginDialogIndex);
+          updatedBreadcrumb.push({ dialogId, selected: '', focused: '' });
+        }
+      }
+
       if (checkUrl(currentUri, designPageLocation)) return;
       //if dialog change we should flush some debounced functions
 
-      navigateTo(currentUri, { state: { breadcrumb } });
+      navigateTo(currentUri, { state: { breadcrumb: updatedBreadcrumb } });
     }
   );
 

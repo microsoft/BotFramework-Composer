@@ -3,17 +3,15 @@
 
 import { useEffect, useState } from 'react';
 import { LuFile, LuIntentSection } from '@bfc/shared';
-import throttle from 'lodash/throttle';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
+import debounce from 'lodash/debounce';
 
 import { projectIdState } from '../recoilModel/atoms/botState';
 import { useResolvers } from '../hooks/useResolver';
 
 import { dispatcherState } from './../recoilModel/DispatcherWrapper';
 import { focusPathState } from './../recoilModel/atoms/botState';
-
-const createThrottledFunc = (fn) => throttle(fn, 1000, { leading: true, trailing: true });
 
 const fileNotFound = (id: string) => formatMessage(`LU file {id} not found`, { id });
 const INTENT_ERROR = formatMessage('intentName is missing or empty');
@@ -28,7 +26,7 @@ function createLuApi(
     if (!file) throw new Error(fileNotFound(id));
     if (!intentName) throw new Error(INTENT_ERROR);
 
-    return await dispatchers.createLuIntent({ id: file.id, intent });
+    return await dispatchers.createLuIntent({ id: file.id, intent, projectId: state.projectId });
   };
 
   const updateLuIntent = async (id: string, intentName: string, intent: LuIntentSection) => {
@@ -36,7 +34,20 @@ function createLuApi(
     if (!file) throw new Error(fileNotFound(id));
     if (!intentName) throw new Error(INTENT_ERROR);
 
-    return await dispatchers.updateLuIntent({ id: file.id, intentName, intent });
+    return await dispatchers.updateLuIntent({ id: file.id, intentName, intent, projectId: state.projectId });
+  };
+
+  const renameLuIntent = async (id: string, intentName: string, newIntentName: string) => {
+    const file = luFileResolver(id);
+    if (!file) throw new Error(`lu file ${id} not found`);
+    if (!intentName) throw new Error(`intentName is missing or empty`);
+
+    const oldIntent = file.intents.find((i) => i.Name === intentName);
+    if (!oldIntent) throw new Error(`intent not found with id ${intentName}`);
+
+    const newIntent = { ...oldIntent, Name: newIntentName };
+
+    return await dispatchers.updateLuIntent({ id: file.id, intentName, intent: newIntent });
   };
 
   const removeLuIntent = async (id: string, intentName: string) => {
@@ -44,7 +55,7 @@ function createLuApi(
     if (!file) throw new Error(fileNotFound(id));
     if (!intentName) throw new Error(INTENT_ERROR);
 
-    return await dispatchers.removeLuIntent({ id: file.id, intentName });
+    return await dispatchers.removeLuIntent({ id: file.id, intentName, projectId: state.projectId });
   };
 
   const getLuIntents = (id: string): LuIntentSection[] => {
@@ -65,7 +76,9 @@ function createLuApi(
     addLuIntent,
     getLuIntents,
     getLuIntent,
-    updateLuIntent: createThrottledFunc(updateLuIntent),
+    updateLuIntent,
+    deboucedUpdateLuIntent: debounce(updateLuIntent, 250),
+    renameLuIntent,
     removeLuIntent,
   };
 }

@@ -93,6 +93,7 @@ describe('Lu dispatcher', () => {
       await dispatcher.createLuIntent({
         id: luFiles[0].id,
         intent: getLuIntent('New', '-IntentValue'),
+        projectId: '',
       });
     });
     expect(renderedComponent.current.luFiles[0].content).toMatch(/-IntentValue/);
@@ -103,6 +104,7 @@ describe('Lu dispatcher', () => {
       await dispatcher.removeLuIntent({
         id: luFiles[0].id,
         intentName: 'Hello',
+        projectId: '',
       });
     });
 

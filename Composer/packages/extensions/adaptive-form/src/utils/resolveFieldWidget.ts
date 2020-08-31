@@ -63,7 +63,7 @@ export function resolveFieldWidget(
 
         if (Array.isArray(items) && typeof items[0] === 'object' && items[0].type === 'object') {
           return DefaultFields.ObjectArrayField;
-        } else if (!Array.isArray(items) && typeof items === 'object' && items?.type === 'object') {
+        } else if (!Array.isArray(items) && typeof items === 'object' && items.type === 'object') {
           return DefaultFields.ObjectArrayField;
         }
 

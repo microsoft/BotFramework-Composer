@@ -16,8 +16,8 @@ describe('parse', () => {
 -What's up bro`;
     const { templates }: any = parse(content);
     expect(templates.length).toEqual(2);
-    expect(templates[0].range.startLineNumber).toEqual(1);
-    expect(templates[0].range.endLineNumber).toEqual(3);
+    expect(templates[0].range.start.line).toEqual(1);
+    expect(templates[0].range.end.line).toEqual(3);
     expect(templates[0].parameters).toEqual([]);
     expect(templates[0].name).toEqual('Exit');
     expect(templates[1].name).toEqual('Greeting');

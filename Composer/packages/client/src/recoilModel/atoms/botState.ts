@@ -8,16 +8,16 @@ import {
   Diagnostic,
   LgFile,
   LuFile,
+  QnAFile,
   BotSchemas,
   Skill,
   DialogSetting,
 } from '@bfc/shared';
 
-import { BotLoadError, DesignPageLocation } from '../../recoilModel/types';
+import { BotLoadError, DesignPageLocation, QnAAllUpViewStatus } from '../../recoilModel/types';
 
 import { PublishType, BreadcrumbItem } from './../../recoilModel/types';
 import { BotStatus } from './../../constants';
-
 const getFullyQualifiedKey = (value: string) => {
   return `Bot_${value}_State`;
 };
@@ -83,6 +83,11 @@ export const luFilesState = atom<LuFile[]>({
   default: [],
 });
 
+export const qnaFilesState = atom<QnAFile[]>({
+  key: getFullyQualifiedKey('qnaFiles'),
+  default: [],
+});
+
 export const schemasState = atom<BotSchemas>({
   key: getFullyQualifiedKey('schemas'),
   default: {},
@@ -130,7 +135,7 @@ export const showAddSkillDialogModalState = atom<boolean>({
 
 export const settingsState = atom<DialogSetting>({
   key: getFullyQualifiedKey('settings'),
-  default: { defaultLanguage: 'en-us', languages: ['en-us'], luis: {} } as DialogSetting,
+  default: { defaultLanguage: 'en-us', languages: ['en-us'], luis: {}, qna: {} } as DialogSetting,
 });
 
 export const publishVersionsState = atom<any>({
@@ -203,4 +208,14 @@ export const onAddLanguageDialogCompleteState = atom<any>({
 export const onDelLanguageDialogCompleteState = atom<any>({
   key: getFullyQualifiedKey('onDelLanguageDialogComplete'),
   default: { func: undefined },
+});
+
+export const qnaAllUpViewStatusState = atom<any>({
+  key: getFullyQualifiedKey('qnaAllUpViewStatusState'),
+  default: QnAAllUpViewStatus.Success,
+});
+
+export const isEjectRuntimeExistState = atom<boolean>({
+  key: getFullyQualifiedKey('isEjectRuntimeExist'),
+  default: false,
 });

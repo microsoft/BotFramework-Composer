@@ -8,9 +8,10 @@ import passport from 'passport';
 import { Express } from 'express';
 import { pathToRegexp } from 'path-to-regexp';
 import glob from 'globby';
+import formatMessage from 'format-message';
 
 import { ComposerPluginRegistration } from './composerPluginRegistration';
-import { UserIdentity, ExtensionCollection } from './types';
+import { UserIdentity, ExtensionCollection, RuntimeTemplate, DEFAULT_RUNTIME } from './types';
 import log from './logger';
 
 export class PluginLoader {
@@ -80,7 +81,7 @@ export class PluginLoader {
       // the module exported an object with an initialize method
       thisPlugin.initialize.call(null, pluginRegistration);
     } else {
-      throw new Error('Could not init plugin');
+      throw new Error(formatMessage('Could not init plugin'));
     }
   }
 
@@ -106,6 +107,30 @@ export class PluginLoader {
     const plugins = await glob('*/package.json', { cwd: dir, dot: true });
     for (const p in plugins) {
       await this.loadPluginFromFile(path.join(dir, plugins[p]));
+    }
+  }
+
+  // get the runtime template currently used from project
+  public getRuntimeByProject(project): RuntimeTemplate {
+    const type = project.settings.runtime?.key || DEFAULT_RUNTIME;
+    const template = this.extensions.runtimeTemplates.find((t) => t.key === type);
+    if (template) {
+      return template;
+    } else {
+      throw new Error(formatMessage(`Support for runtime with name ${type} not available`));
+    }
+  }
+
+  // get the runtime template currently used by type
+  public getRuntime(type: string | undefined): RuntimeTemplate {
+    if (!type) {
+      type = DEFAULT_RUNTIME;
+    }
+    const template = this.extensions.runtimeTemplates.find((t) => t.key === type);
+    if (template) {
+      return template;
+    } else {
+      throw new Error(formatMessage(`Support for runtime type ${type} not available`));
     }
   }
 

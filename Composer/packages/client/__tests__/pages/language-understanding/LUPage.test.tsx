@@ -13,7 +13,9 @@ import {
   luFilesState,
   lgFilesState,
   settingsState,
+  schemasState,
 } from '../../../src/recoilModel';
+import mockProjectResponse from '../../../src/recoilModel/dispatchers/__tests__/mocks/mockProjectResponse.json';
 
 const initialContent = `
 # Greeting
@@ -45,6 +47,7 @@ const initRecoilState = ({ set }) => {
   set(luFilesState, state.luFiles);
   set(lgFilesState, state.lgFiles);
   set(settingsState, state.settings);
+  set(schemasState, mockProjectResponse.schemas);
 };
 
 describe('LU page all up view', () => {

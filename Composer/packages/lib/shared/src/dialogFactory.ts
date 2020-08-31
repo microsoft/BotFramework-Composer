@@ -73,6 +73,243 @@ const initialDialogShape = () => ({
   [SDKKinds.SendActivity]: {
     activity: '',
   },
+  [SDKKinds.OnQnAMatch]: {
+    $kind: SDKKinds.OnQnAMatch,
+    $designer: {
+      id: generateDesignerId(),
+    },
+    actions: [
+      {
+        $kind: SDKKinds.IfCondition,
+        $designer: {
+          id: generateDesignerId(),
+        },
+        condition: 'count(turn.recognized.answers[0].context.prompts) > 0',
+        actions: [
+          {
+            $kind: SDKKinds.SetProperty,
+            $designer: {
+              id: generateDesignerId(),
+            },
+            property: 'dialog.qnaContext',
+            value: '=turn.recognized.answers[0].context.prompts',
+          },
+          {
+            $kind: SDKKinds.TextInput,
+            $designer: {
+              id: generateDesignerId(),
+            },
+            maxTurnCount: 3,
+            alwaysPrompt: true,
+            allowInterruptions: false,
+            prompt: `\${TextInput_Prompt_${generateDesignerId()}()}`,
+            property: 'turn.qnaMultiTurnResponse',
+          },
+          {
+            $kind: SDKKinds.SetProperty,
+            $designer: {
+              id: generateDesignerId(),
+            },
+            property: 'turn.qnaMatchFromContext',
+            value: '=where(dialog.qnaContext, item, item.displayText == turn.qnaMultiTurnResponse)',
+          },
+          {
+            $kind: SDKKinds.DeleteProperty,
+            $designer: {
+              id: generateDesignerId(),
+            },
+            property: 'dialog.qnaContext',
+          },
+          {
+            $kind: SDKKinds.IfCondition,
+            $designer: {
+              id: generateDesignerId(),
+            },
+            condition: 'turn.qnaMatchFromContext && count(turn.qnaMatchFromContext) > 0',
+            actions: [
+              {
+                $kind: SDKKinds.SetProperty,
+                $designer: {
+                  id: generateDesignerId(),
+                },
+                property: 'turn.qnaIdFromPrompt',
+                value: '=turn.qnaMatchFromContext[0].qnaId',
+              },
+            ],
+          },
+          {
+            $kind: SDKKinds.EmitEvent,
+            $designer: {
+              id: generateDesignerId(),
+            },
+            eventName: 'activityReceived',
+            eventValue: '=turn.activity',
+          },
+        ],
+        elseActions: [
+          {
+            $kind: SDKKinds.SendActivity,
+            $designer: {
+              id: generateDesignerId(),
+            },
+            activity: `\${SendActivity_${generateDesignerId()}()}`,
+          },
+        ],
+      },
+    ],
+  },
+  [SDKKinds.OnChooseIntent]: {
+    $kind: SDKKinds.OnChooseIntent,
+    $designer: {
+      id: generateDesignerId(),
+    },
+    actions: [
+      {
+        $kind: SDKKinds.SetProperties,
+        $designer: {
+          id: generateDesignerId(),
+        },
+        assignments: [
+          {
+            value: '=turn.recognized.candidates[0]',
+            property: 'dialog.luisResult',
+          },
+          {
+            property: 'dialog.qnaResult',
+            value: '=turn.recognized.candidates[1]',
+          },
+        ],
+      },
+      {
+        $kind: SDKKinds.IfCondition,
+        $designer: {
+          id: generateDesignerId(),
+        },
+        condition: 'dialog.luisResult.score >= 0.9 && dialog.qnaResult.score <= 0.5',
+        actions: [
+          {
+            $kind: SDKKinds.EmitEvent,
+            $designer: {
+              id: generateDesignerId(),
+            },
+            eventName: 'recognizedIntent',
+            eventValue: '=dialog.luisResult.result',
+          },
+          {
+            $kind: SDKKinds.BreakLoop,
+            $designer: {
+              id: generateDesignerId(),
+            },
+          },
+        ],
+      },
+      {
+        $kind: SDKKinds.IfCondition,
+        $designer: {
+          id: generateDesignerId(),
+        },
+        condition: 'dialog.luisResult.score <= 0.5 && dialog.qnaResult.score >= 0.9',
+        actions: [
+          {
+            $kind: SDKKinds.EmitEvent,
+            $designer: {
+              id: generateDesignerId(),
+            },
+            eventName: 'recognizedIntent',
+            eventValue: '=dialog.qnaResult.result',
+          },
+          {
+            $kind: SDKKinds.BreakLoop,
+            $designer: {
+              id: generateDesignerId(),
+            },
+          },
+        ],
+      },
+      {
+        $kind: SDKKinds.IfCondition,
+        $designer: {
+          id: generateDesignerId(),
+        },
+        condition: 'dialog.qnaResult.score <= 0.05',
+        actions: [
+          {
+            $kind: SDKKinds.EmitEvent,
+            $designer: {
+              id: generateDesignerId(),
+            },
+            eventName: 'recognizedIntent',
+            eventValue: '=dialog.luisResult.result',
+          },
+          {
+            $kind: SDKKinds.BreakLoop,
+            $designer: {
+              id: generateDesignerId(),
+            },
+          },
+        ],
+        top: 3,
+        cardNoMatchResponse: 'Thanks for the feedback.',
+        cardNoMatchText: 'None of the above.',
+      },
+      {
+        $kind: SDKKinds.TextInput,
+        $designer: {
+          id: generateDesignerId(),
+        },
+        maxTurnCount: 3,
+        alwaysPrompt: true,
+        allowInterruptions: false,
+        prompt: `\${TextInput_Prompt_${generateDesignerId()}()}`,
+        property: 'turn.intentChoice',
+        value: '=@userChosenIntent',
+        top: 3,
+        cardNoMatchResponse: 'Thanks for the feedback.',
+        cardNoMatchText: 'None of the above.',
+        activeLearningCardTitle: 'Did you mean:',
+        threshold: 0.3,
+        noAnswer: 'Sorry, I did not find an answer.',
+        hostname: '=settings.qna.hostname',
+        endpointKey: '=settings.qna.endpointkey',
+        knowledgeBaseId: '=settings.qna.knowledgebaseid',
+      },
+      {
+        $kind: SDKKinds.IfCondition,
+        $designer: {
+          id: generateDesignerId(),
+        },
+        condition: "turn.intentChoice != 'none'",
+        actions: [
+          {
+            $kind: SDKKinds.EmitEvent,
+            $designer: {
+              id: generateDesignerId(),
+            },
+            eventName: 'recognizedIntent',
+            eventValue: '=dialog[turn.intentChoice].result',
+          },
+        ],
+        elseActions: [
+          {
+            $kind: SDKKinds.SendActivity,
+            $designer: {
+              id: generateDesignerId(),
+            },
+            activity: `\${SendActivity_${generateDesignerId()}()}`,
+          },
+        ],
+        top: 3,
+        cardNoMatchResponse: 'Thanks for the feedback.',
+        cardNoMatchText: 'None of the above.',
+        activeLearningCardTitle: 'Did you mean:',
+        threshold: 0.3,
+        noAnswer: 'Sorry, I did not find an answer.',
+        hostname: '=settings.qna.hostname',
+        endpointKey: '=settings.qna.endpointkey',
+        knowledgeBaseId: '=settings.qna.knowledgebaseid',
+      },
+    ],
+  },
   [SDKKinds.AttachmentInput]: initialInputDialog,
   [SDKKinds.ChoiceInput]: initialInputDialog,
   [SDKKinds.ConfirmInput]: initialInputDialog,
@@ -171,7 +408,6 @@ class DialogFactory {
 
     const { $designer, ...propertyOverrides } = overrides;
     const defaultProperties = initialDialogShape()[$kind] || {};
-
     return merge(
       { $kind, $designer: merge({ id: generateDesignerId() }, $designer) },
       this.seedDefaults($kind),

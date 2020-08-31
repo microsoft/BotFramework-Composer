@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { DialogInfo, LuFile, LgFile, LuIntentSection, LgTemplate, DialogSchemaFile } from './indexers';
+import { DialogInfo, LuFile, LgFile, QnAFile, LuIntentSection, LgTemplate, DialogSchemaFile } from './indexers';
 import { UserSettings } from './settings';
 import { OBISchema } from './schema';
 
@@ -55,6 +55,7 @@ export interface ShellData {
   hosted: boolean;
   lgFiles: LgFile[];
   luFiles: LuFile[];
+  qnaFiles: QnAFile[];
   userSettings: UserSettings;
   skills: any[];
   // TODO: remove
@@ -73,24 +74,37 @@ export interface ShellApi {
   copyLgTemplate: (id: string, fromTemplateName: string, toTemplateName?: string) => Promise<void>;
   addLgTemplate: (id: string, templateName: string, templateStr: string) => Promise<void>;
   updateLgTemplate: (id: string, templateName: string, templateStr: string) => Promise<void>;
+  deboucedUpdateLgTemplate: (id: string, templateName: string, templateStr: string) => Promise<void>;
   removeLgTemplate: (id: string, templateName: string) => Promise<void>;
   removeLgTemplates: (id: string, templateNames: string[]) => Promise<void>;
   getLuIntent: (id: string, intentName: string) => LuIntentSection | undefined;
   getLuIntents: (id: string) => LuIntentSection[];
   addLuIntent: (id: string, intentName: string, intent: LuIntentSection) => Promise<void>;
   updateLuIntent: (id: string, intentName: string, intent: LuIntentSection) => Promise<void>;
+  deboucedUpdateLuIntent: (id: string, intentName: string, intent: LuIntentSection) => Promise<void>;
+  renameLuIntent: (id: string, intentName: string, newIntentName: string) => Promise<void>;
   removeLuIntent: (id: string, intentName: string) => void;
+  updateQnaContent: (id: string, content: string) => void;
   updateRegExIntent: (id: string, intentName: string, pattern: string) => void;
+  renameRegExIntent: (id: string, intentName: string, newIntentName: string) => void;
+  updateIntentTrigger: (id: string, intentName: string, newIntentName: string) => void;
   createDialog: (actions: any) => Promise<string | null>;
   addCoachMarkRef: (ref: { [key: string]: any }) => void;
   onCopy: (clipboardActions: any[]) => void;
   undo: () => void;
   redo: () => void;
+  commitChanges: () => void;
   updateUserSettings: (settings: AllPartial<UserSettings>) => void;
   addSkillDialog: () => Promise<{ manifestUrl: string } | null>;
   announce: (message: string) => void;
   displayManifestModal: (manifestId: string) => void;
   updateDialogSchema: (_: DialogSchemaFile) => Promise<void>;
+  createTrigger: (id: string, formData, url?: string) => void;
+}
+
+export interface Shell {
+  api: ShellApi;
+  data: ShellData;
 }
 
 export interface Shell {

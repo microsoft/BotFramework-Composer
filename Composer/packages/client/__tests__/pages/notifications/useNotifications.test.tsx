@@ -4,6 +4,7 @@
 import * as React from 'react';
 import { RecoilRoot } from 'recoil';
 import { renderHook } from '@bfc/test-utils/lib/hooks';
+import { Range, Position } from '@bfc/shared';
 
 import useNotifications from '../../../src/pages/notifications/useNotifications';
 import {
@@ -13,7 +14,9 @@ import {
   lgFilesState,
   BotDiagnosticsState,
   settingsState,
+  schemasState,
 } from '../../../src/recoilModel';
+import mockProjectResponse from '../../../src/recoilModel/dispatchers/__tests__/mocks/mockProjectResponse.json';
 
 const state = {
   projectId: 'test',
@@ -23,14 +26,6 @@ const state = {
       content: 'test',
       luFile: 'test',
       referredLuIntents: [],
-      diagnostics: [
-        {
-          message: 'must be an expression',
-          path: 'test.triggers[0]#Microsoft.OnUnknownIntent#condition',
-          severity: 1,
-          source: 'test',
-        },
-      ],
       skills: ['https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json'],
     },
   ],
@@ -43,10 +38,7 @@ const state = {
           Body: '- test12345 ss',
           Entities: [],
           Name: 'test',
-          range: {
-            endLineNumber: 7,
-            startLineNumber: 4,
-          },
+          range: new Range(new Position(4, 0), new Position(7, 14)),
         },
       ],
       diagnostics: [
@@ -70,7 +62,7 @@ const state = {
         {
           body: '- ${add(1,2)}',
           name: 'bar',
-          range: { endLineNumber: 0, startLineNumber: 0 },
+          range: new Range(new Position(0, 0), new Position(2, 14)),
         },
       ],
       diagnostics: [
@@ -110,6 +102,7 @@ const initRecoilState = ({ set }) => {
   set(lgFilesState, state.lgFiles);
   set(BotDiagnosticsState, state.diagnostics);
   set(settingsState, state.settings);
+  set(schemasState, mockProjectResponse.schemas);
 };
 
 describe('useNotification hooks', () => {
@@ -127,7 +120,7 @@ describe('useNotification hooks', () => {
   });
 
   it('should return notifications', () => {
-    expect(renderedResult.current.length).toBe(5);
+    expect(renderedResult.current.length).toBe(4);
   });
 
   it('should return filtered notifications', () => {

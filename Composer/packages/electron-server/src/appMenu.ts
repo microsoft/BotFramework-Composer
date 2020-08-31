@@ -66,15 +66,56 @@ export function initAppMenu(win?: Electron.BrowserWindow) {
     {
       label: 'Edit',
       submenu: [
-        // NOTE: Avoid using builtin `role`, it won't override the click handler.
-        { id: 'Undo', label: 'Undo', accelerator: 'CmdOrCtrl+Z', click: () => handleMenuEvents('undo') },
-        { id: 'Redo', label: 'Redo', accelerator: 'CmdOrCtrl+Shift+Z', click: () => handleMenuEvents('redo') },
+        {
+          id: 'Undo',
+          label: 'Undo',
+          enabled: false,
+          accelerator: 'CmdOrCtrl+Z',
+          click: () => handleMenuEvents('undo'),
+        },
+        {
+          id: 'Redo',
+          label: 'Redo',
+          enabled: false,
+          accelerator: 'CmdOrCtrl+Shift+Z',
+          click: () => handleMenuEvents('redo'),
+        },
         { type: 'separator' },
-        { id: 'Cut', label: 'Cut', enabled: false, accelerator: 'CmdOrCtrl+X', click: () => handleMenuEvents('cut') },
+        // Native mode shorcuts
+        {
+          id: 'Cut-native',
+          label: 'Cut',
+          role: 'cut',
+        },
+        {
+          id: 'Copy-native',
+          label: 'Copy',
+          role: 'copy',
+        },
+        {
+          id: 'Paste-native',
+          label: 'Paste',
+          role: 'paste',
+        },
+        {
+          id: 'Delete-native',
+          label: 'Delete',
+          role: 'delete',
+        },
+        // Action editing mode shortcuts
+        {
+          id: 'Cut',
+          label: 'Cut',
+          enabled: false,
+          visible: false,
+          accelerator: 'CmdOrCtrl+X',
+          click: () => handleMenuEvents('cut'),
+        },
         {
           id: 'Copy',
           label: 'Copy',
           enabled: false,
+          visible: false,
           accelerator: 'CmdOrCtrl+C',
           click: () => handleMenuEvents('copy'),
         },
@@ -82,6 +123,7 @@ export function initAppMenu(win?: Electron.BrowserWindow) {
           id: 'Delete',
           label: 'Delete',
           enabled: false,
+          visible: false,
           accelerator: 'Delete',
           click: () => handleMenuEvents('delete'),
         },
@@ -181,14 +223,39 @@ export function initAppMenu(win?: Electron.BrowserWindow) {
   const menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
 
-  // Let menu enable/disable status reflect action selection states.
-  ipcMain &&
-    ipcMain.on &&
+  if (ipcMain && ipcMain.on) {
     ipcMain.on('composer-state-change', (e, state) => {
-      const actionSelected = !!state.actionSelected;
-      ['Cut', 'Copy', 'Delete'].forEach((id) => {
-        menu.getMenuItemById(id).enabled = actionSelected;
-      });
+      const toggleEditingMode = (menu: Menu, mode: 'native' | 'action') => {
+        ['Cut', 'Copy', 'Delete'].forEach((label) => {
+          const nativeModeId = label + '-native';
+          const actionModeId = label;
+          menu.getMenuItemById(nativeModeId).visible = mode === 'native';
+          menu.getMenuItemById(actionModeId).visible = mode === 'action';
+        });
+        menu.getMenuItemById('Paste-native').visible = mode === 'native';
+      };
+
+      // Turn shortcuts to Action editing mode when Flow Editor is focused.
+      const flowFocused = !!state.flowFocused;
+      if (flowFocused) {
+        toggleEditingMode(menu, 'action');
+
+        // Let menu enable/disable status reflects action selection states.
+        const actionSelected = !!state.actionSelected;
+        ['Cut', 'Copy', 'Delete'].forEach((id) => {
+          menu.getMenuItemById(id).enabled = actionSelected;
+        });
+      } else {
+        toggleEditingMode(menu, 'native');
+      }
+
+      // Let menu undo/redo status reflects history status
+      const canUndo = !!state.canUndo;
+      menu.getMenuItemById('Undo').enabled = canUndo;
+      const canRedo = !!state.canRedo;
+      menu.getMenuItemById('Redo').enabled = canRedo;
+
       Menu.setApplicationMenu(menu);
     });
+  }
 }
