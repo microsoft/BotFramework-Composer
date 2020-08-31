@@ -70,12 +70,12 @@ const builtinVisualSDKSchema: FlowSchema = {
       widget: 'DialogRef',
       dialog: '${action.dialog}',
     },
-    footer: (data) =>
-      data.resultProperty ? (
-        <>
-          {data.resultProperty} <FixedInfo>{formatMessage('= Return value')}</FixedInfo>
-        </>
-      ) : null,
+    footer: {
+      widget: 'PropertyDescription',
+      property: (data) => data.resultProperty,
+      description: '= Return value',
+    },
+    hideFooter: (data) => !data.resultProperty,
   },
   [SDKKinds.BeginSkill]: {
     widget: 'ActionCard',
@@ -87,13 +87,12 @@ const builtinVisualSDKSchema: FlowSchema = {
         {data.skillEndpoint || '?'}
       </SingleLineDiv>
     ),
-    footer: (data) =>
-      data.resultProperty ? (
-        <>
-          {data.resultProperty}
-          <FixedInfo>{formatMessage(' = Result')}</FixedInfo>
-        </>
-      ) : null,
+    footer: {
+      widget: 'PropertyDescription',
+      property: (data) => data.resultProperty,
+      description: '= Result',
+    },
+    hideFooter: (data) => !data.resultProperty,
   },
   [SDKKinds.ReplaceDialog]: {
     widget: 'ActionCard',
@@ -109,13 +108,12 @@ const builtinVisualSDKSchema: FlowSchema = {
         <FixedInfo>{data.changeType || '?'}</FixedInfo> {data.itemsProperty || '?'}
       </>
     ),
-    footer: (data) =>
-      data.resultProperty ? (
-        <>
-          {data.resultProperty}
-          <FixedInfo>{formatMessage(' = Result')}</FixedInfo>
-        </>
-      ) : null,
+    footer: {
+      widget: 'PropertyDescription',
+      property: (data) => data.resultProperty,
+      description: '= Result',
+    },
+    hideFooter: (data) => !data.resultProperty,
   },
   [SDKKinds.SetProperty]: {
     widget: 'ActionCard',
@@ -196,13 +194,12 @@ const builtinVisualSDKSchema: FlowSchema = {
         {data.url}
       </SingleLineDiv>
     ),
-    footer: (data) =>
-      data.resultProperty ? (
-        <>
-          {data.resultProperty}
-          <FixedInfo>{formatMessage(' = Result property')}</FixedInfo>
-        </>
-      ) : null,
+    footer: {
+      widget: 'PropertyDescription',
+      property: (data) => data.resultProperty,
+      description: '= Result property',
+    },
+    hideFooter: (data) => !data.resultProperty,
   },
   [SDKKinds.EditActions]: {
     widget: 'ActionCard',
@@ -216,13 +213,12 @@ const builtinVisualSDKSchema: FlowSchema = {
     widget: 'ActionCard',
     // TODO: move single line / multi line as ActionCard config
     body: (data) => <SingleLineDiv>{data.connectionName}</SingleLineDiv>,
-    footer: (data) =>
-      data.tokenProperty ? (
-        <>
-          {data.tokenProperty}
-          <FixedInfo>{formatMessage(' = Token Property')}</FixedInfo>
-        </>
-      ) : null,
+    footer: {
+      widget: 'PropertyDescription',
+      property: (data) => data.property,
+      description: '= Token property',
+    },
+    hideFooter: (data) => !data.property,
   },
   [SDKKinds.TelemetryTrackEvent]: {
     widget: 'ActionCard',
