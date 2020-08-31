@@ -169,22 +169,19 @@ const builtinVisualSDKSchema: FlowSchema = {
   },
   [SDKKinds.CancelAllDialogs]: {
     widget: 'ActionCard',
-    body: (data) =>
-      data.eventName ? (
-        <>
-          {data.eventName || '?'}
-          <FixedInfo>{formatMessage(' (Event)')}</FixedInfo>
-        </>
-      ) : null,
+    body: {
+      widget: 'PropertyDescription',
+      property: '${coalesce(action.eventName, "?")}',
+      description: '(Event)',
+    },
   },
   [SDKKinds.EmitEvent]: {
     widget: 'ActionCard',
-    body: (data) => (
-      <>
-        {data.eventName || '?'}
-        <FixedInfo>{formatMessage(' (Event)')}</FixedInfo>
-      </>
-    ),
+    body: {
+      widget: 'PropertyDescription',
+      property: '${coalesce(action.eventName, "?")}',
+      description: '(Event)',
+    },
   },
   [SDKKinds.HttpRequest]: {
     widget: 'ActionCard',
@@ -226,12 +223,11 @@ const builtinVisualSDKSchema: FlowSchema = {
       widget: 'ActionHeader',
       title: 'Telemetry - Trace Event',
     },
-    body: (data) => (
-      <>
-        {data.eventName || '?'}
-        <FixedInfo>{formatMessage(' (Event)')}</FixedInfo>
-      </>
-    ),
+    body: {
+      widget: 'PropertyDescription',
+      property: '${coalesce(action.eventName, "?")}',
+      description: '(Event)',
+    },
   },
 };
 
