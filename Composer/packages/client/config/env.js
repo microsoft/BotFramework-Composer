@@ -87,8 +87,8 @@ function getClientEnvironment(publicUrl) {
         // images into the `src` and `import` them in code to get their paths.
         PUBLIC_URL: publicUrl,
         GIT_SHA: getGitSha().toString().replace('\n', ''),
-        SDK_PACKAGE_VERSION: '4.9.3', // TODO: change this when Composer supports custom schema/custom runtime
-        COMPOSER_VERSION: '1.0.2',
+        SDK_PACKAGE_VERSION: '4.10.2', // TODO: change this when Composer supports custom schema/custom runtime
+        COMPOSER_VERSION: '1.1.0',
         LOCAL_PUBLISH_PATH:
           process.env.LOCAL_PUBLISH_PATH || path.resolve(process.cwd(), '../../plugins/localPublish/hostedBots'),
       }

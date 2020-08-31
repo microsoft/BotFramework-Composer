@@ -7,7 +7,7 @@ services:
       - "3979-5000:3979-5000"
     volumes:
       - ~/Documents/Composer:/Bots
-      - ./BotProject:/runtime
+      - ./runtime:/runtime
       - ./.appdata:/appdata
       - ./Composer/plugins/localPublish/hostedBots:/app/Composer/plugins/localPublish/hostedBots
     environment:
