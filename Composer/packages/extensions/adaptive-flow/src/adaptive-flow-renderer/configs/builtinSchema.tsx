@@ -2,8 +2,6 @@
 // Licensed under the MIT License.
 
 import { SDKKinds } from '@bfc/shared';
-import React from 'react';
-import { SingleLineDiv, ListOverview, PropertyAssignment } from '@bfc/ui-shared';
 
 import { FlowSchema, FlowWidget } from '../types/flowRenderer.types';
 import { ObiColors } from '../constants/ElementColors';
@@ -120,12 +118,10 @@ const builtinVisualSDKSchema: FlowSchema = {
   },
   [SDKKinds.SetProperties]: {
     widget: 'ActionCard',
-    body: (data) => (
-      <ListOverview
-        items={data.assignments}
-        renderItem={({ property, value }) => <PropertyAssignment property={property} value={value} />}
-      />
-    ),
+    body: {
+      widget: 'ListOverview',
+      items: '${foreach(action.assignments, x => concat(x.property, " : " ,x.value))}',
+    },
   },
   [SDKKinds.DeleteProperty]: {
     widget: 'ActionCard',
@@ -133,16 +129,10 @@ const builtinVisualSDKSchema: FlowSchema = {
   },
   [SDKKinds.DeleteProperties]: {
     widget: 'ActionCard',
-    body: (data) => (
-      <ListOverview
-        items={data.properties}
-        renderItem={(item) => (
-          <SingleLineDiv height={16} title={item}>
-            {item}
-          </SingleLineDiv>
-        )}
-      />
-    ),
+    body: {
+      widget: 'ListOverview',
+      items: '${action.properties}',
+    },
   },
   [SDKKinds.DeleteActivity]: {
     widget: 'ActionCard',
