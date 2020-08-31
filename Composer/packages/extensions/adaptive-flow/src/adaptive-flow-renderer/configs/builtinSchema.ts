@@ -3,13 +3,8 @@
 
 import { SDKKinds } from '@bfc/shared';
 
-import { FlowSchema, FlowWidget } from '../types/flowRenderer.types';
+import { FlowSchema } from '../types/flowRenderer.types';
 import { ObiColors } from '../constants/ElementColors';
-
-const BaseInputSchema: FlowWidget = {
-  widget: 'ActionCard',
-  body: (data) => data.prompt,
-};
 
 const builtinVisualSDKSchema: FlowSchema = {
   default: {
@@ -55,12 +50,30 @@ const builtinVisualSDKSchema: FlowSchema = {
     widget: 'ActionCard',
     body: '${action.activity}',
   },
-  [SDKKinds.AttachmentInput]: BaseInputSchema,
-  [SDKKinds.ConfirmInput]: BaseInputSchema,
-  [SDKKinds.DateTimeInput]: BaseInputSchema,
-  [SDKKinds.NumberInput]: BaseInputSchema,
-  [SDKKinds.TextInput]: BaseInputSchema,
-  [SDKKinds.ChoiceInput]: BaseInputSchema,
+  [SDKKinds.AttachmentInput]: {
+    widget: 'ActionCard',
+    body: '${action.prompt}',
+  },
+  [SDKKinds.ConfirmInput]: {
+    widget: 'ActionCard',
+    body: '${action.prompt}',
+  },
+  [SDKKinds.DateTimeInput]: {
+    widget: 'ActionCard',
+    body: '${action.prompt}',
+  },
+  [SDKKinds.NumberInput]: {
+    widget: 'ActionCard',
+    body: '${action.prompt}',
+  },
+  [SDKKinds.TextInput]: {
+    widget: 'ActionCard',
+    body: '${action.prompt}',
+  },
+  [SDKKinds.ChoiceInput]: {
+    widget: 'ActionCard',
+    body: '${action.prompt}',
+  },
   [SDKKinds.BeginDialog]: {
     widget: 'ActionCard',
     body: {
