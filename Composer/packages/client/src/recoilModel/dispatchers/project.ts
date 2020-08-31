@@ -266,28 +266,6 @@ export const projectDispatcher = () => {
       schemaUrl?: string
     ) => {
       try {
-        const response = await createAndStoreProject(templateId, name, description, location, schemaUrl);
-        if (response && response.data) {
-          return initiateProjectView(templateId, name, description, location, schemaUrl);
-        } else {
-          handleProjectFailure(callbackHelpers, null);
-        }
-      } catch (ex) {
-        handleProjectFailure(callbackHelpers, ex);
-      }
-    }
-  );
-
-  const createAndStoreProject = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (
-      templateId: string,
-      name: string,
-      description: string,
-      location: string,
-      schemaUrl?: string
-    ) => {
-      try {
-        const { set } = callbackHelpers;
         await setBotOpeningStatus(callbackHelpers);
         const response = await httpClient.post(`/projects`, {
           storageId: 'default',
@@ -301,37 +279,68 @@ export const projectDispatcher = () => {
         if (settingStorage.get(projectId)) {
           settingStorage.remove(projectId);
         }
-        set(botCreationResponseState, JSON.stringify(response));
-        return response;
+        await initBotState(callbackHelpers, response.data, true, templateId);
+        return projectId;
       } catch (ex) {
-        console.log(ex);
         handleProjectFailure(callbackHelpers, ex);
       }
     }
   );
 
-  const initiateProjectView = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (
-      templateId: string,
-      name: string,
-      description: string,
-      location: string,
-      schemaUrl?: string
-    ) => {
-      try {
-        const {
-          snapshot: { getPromise },
-        } = callbackHelpers;
-        const botCreationResponseString = await getPromise(botCreationResponseState);
-        const botCreationResponse = JSON.parse(botCreationResponseString);
-        await initBotState(callbackHelpers, botCreationResponse.data, true, templateId);
-        return botCreationResponse?.data?.id;
-      } catch (ex) {
-        console.log(ex);
-        handleProjectFailure(callbackHelpers, ex);
-      }
-    }
-  );
+  // const createAndStoreProject = useRecoilCallback(
+  //   (callbackHelpers: CallbackInterface) => async (
+  //     templateId: string,
+  //     name: string,
+  //     description: string,
+  //     location: string,
+  //     schemaUrl?: string
+  //   ) => {
+  //     try {
+  //       const { set } = callbackHelpers;
+  //       await setBotOpeningStatus(callbackHelpers);
+  //       const response = await httpClient.post(`/projects`, {
+  //         storageId: 'default',
+  //         templateId,
+  //         name,
+  //         description,
+  //         location,
+  //         schemaUrl,
+  //       });
+  //       const projectId = response.data.id;
+  //       if (settingStorage.get(projectId)) {
+  //         settingStorage.remove(projectId);
+  //       }
+  //       set(botCreationResponseState, JSON.stringify(response));
+  //       return response;
+  //     } catch (ex) {
+  //       console.log(ex);
+  //       handleProjectFailure(callbackHelpers, ex);
+  //     }
+  //   }
+  // );
+
+  // const initiateProjectView = useRecoilCallback(
+  //   (callbackHelpers: CallbackInterface) => async (
+  //     templateId: string,
+  //     name: string,
+  //     description: string,
+  //     location: string,
+  //     schemaUrl?: string
+  //   ) => {
+  //     try {
+  //       const {
+  //         snapshot: { getPromise },
+  //       } = callbackHelpers;
+  //       const botCreationResponseString = await getPromise(botCreationResponseState);
+  //       const botCreationResponse = JSON.parse(botCreationResponseString);
+  //       await initBotState(callbackHelpers, botCreationResponse.data, true, templateId);
+  //       return botCreationResponse?.data?.id;
+  //     } catch (ex) {
+  //       console.log(ex);
+  //       handleProjectFailure(callbackHelpers, ex);
+  //     }
+  //   }
+  // );
 
   const deleteBotProject = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
     const { reset } = callbackHelpers;
@@ -494,7 +503,5 @@ export const projectDispatcher = () => {
     saveTemplateId,
     updateBoilerplate,
     getBoilerplateVersion,
-    createAndStoreProject,
-    initiateProjectView,
   };
 };
