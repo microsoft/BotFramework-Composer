@@ -116,7 +116,7 @@ const builtinVisualSDKSchema: FlowSchema = {
   },
   [SDKKinds.SetProperty]: {
     widget: 'ActionCard',
-    body: (data) => <PropertyAssignment property={data.property} value={data.value} />,
+    body: '${action.property} : ${action.value}',
   },
   [SDKKinds.SetProperties]: {
     widget: 'ActionCard',
