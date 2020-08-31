@@ -7,7 +7,7 @@ import { ExpressionParser } from 'adaptive-expressions';
 // Capture patterns that are strictly '${EXPRESSION}'
 //   - '${action.condition}'
 //   - '${if(action.value, concat(action.value, "(Event)"))}'
-const ValueAccessPattern = new RegExp(/^\$\{(.+)\}$/);
+const ValueAccessPattern = new RegExp(/^\$\{([^}]+)\}$/);
 
 // Catpure patterns that include '...${...}...'
 const StringTemplatePattern = new RegExp(/\$\{.+\}/);
