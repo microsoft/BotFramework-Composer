@@ -6,6 +6,7 @@ import { CallbackInterface, useRecoilCallback } from 'recoil';
 import { SkillManifest } from '@bfc/shared';
 
 import httpClient from '../../utils/httpUtil';
+import { convertSkillsToDictionary } from '../../utils/backwardCompatibilityHandler';
 
 import {
   skillManifestsState,
@@ -74,11 +75,10 @@ export const skillDispatcher = () => {
 
         set(showAddSkillDialogModalState, false);
         set(onAddSkillDialogCompleteState, { func: undefined });
+
         set(settingsState, (settings) => ({
           ...settings,
-          skill: skills.map(({ manifestUrl, name }) => {
-            return { manifestUrl, name };
-          }),
+          skill: convertSkillsToDictionary(skills),
         }));
         set(skillsState, skills);
       } catch (err) {

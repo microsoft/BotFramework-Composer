@@ -11,6 +11,7 @@ import { SkillEndpointField } from './SkillEndpointField';
 
 export const BeginSkillDialogField: React.FC<FieldProps> = (props) => {
   const { depth, id, schema, uiOptions, value, onChange, definitions } = props;
+  console.log(value);
   const { projectId, shellApi, skills = [] } = useShellApi();
   const { displayManifestModal } = shellApi;
 
