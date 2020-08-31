@@ -149,8 +149,8 @@ export const useEditorEventApi = (
         };
         break;
       case NodeEventTypes.OpenDialog:
-        handler = ({ caller, callee }) => {
-          onOpen(callee, caller);
+        handler = ({ callee }) => {
+          onOpen(callee);
           announce(ScreenReaderMessage.DialogOpened);
         };
         break;
