@@ -16,7 +16,7 @@ interface VirtualAssistantCreationModalProps
   // handleCreateNew: (formData: any, );
   onDismiss: () => void;
   createAndStoreProject: any;
-  initiateProjectView: (formData: any, templateId: string, response: any, projectId: any) => any;
+  initiateProjectView: (formData: any, templateId: string) => any;
   formData: any;
 }
 
@@ -28,11 +28,10 @@ export const VirtualAssistantCreationModal: React.FC<VirtualAssistantCreationMod
   const { shellApi, ...shellData } = useShellApi();
 
   const createAndConfigureBot = async () => {
-    const response = await createAndStoreProject(formData, 'va-core');
-    // TODO: response is null, investigate
-    console.log(response);
+    await createAndStoreProject(formData, 'va-core');
     console.log('created but not viewed!');
-    initiateProjectView(formData, 'va-core', response, response?.data?.id);
+    await initiateProjectView(formData, 'va-core');
+    await shellApi.updateLgTemplate('Onboarding.en-us', 'SendActivity_5eOsgQ', '- Hello There Mr. Man');
   };
 
   return (

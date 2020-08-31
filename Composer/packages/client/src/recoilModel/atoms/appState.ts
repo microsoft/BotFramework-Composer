@@ -150,3 +150,8 @@ export const boilerplateVersionState = atom<BoilerplateVersion>({
     updateRequired: false,
   },
 });
+
+export const botCreationResponseState = atom<string>({
+  key: getFullyQualifiedKey('botCreationResponse'),
+  default: '',
+});

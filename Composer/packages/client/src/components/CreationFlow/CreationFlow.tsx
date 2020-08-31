@@ -17,6 +17,9 @@ import {
   storagesState,
   focusedStorageFolderState,
   localeState,
+  luFilesState,
+  qnaFilesState,
+  lgFilesState,
 } from '../../recoilModel';
 import Home from '../../pages/home/Home';
 import ImportQnAFromUrlModal from '../../pages/knowledge-base/ImportQnAFromUrlModal';
@@ -64,6 +67,9 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   const currentStorageId = storage ? storage.id : 'default';
   const [formData, setFormData] = useState({ name: '', description: '', location: '' });
   const shellForCreation = useShell('VaCreation');
+  const luFiles = useRecoilValue(luFilesState);
+  const qnaFiles = useRecoilValue(qnaFilesState);
+  const lgFiles = useRecoilValue(lgFilesState);
 
   useEffect(() => {
     if (storages && storages.length) {
@@ -126,16 +132,11 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     return await response;
   };
 
-  const handleInitiateProjectView = async (formData, templateId: string, response: any, projectId: any) => {
-    await initiateProjectView(
-      templateId,
-      formData.name,
-      formData.description,
-      formData.location,
-      response,
-      projectId,
-      formData.schemaUrl
-    );
+  const handleInitiateProjectView = async (formData, templateId: string) => {
+    // console.log(JSON.stringify(luFiles));
+    // console.log(JSON.stringify(qnaFiles));
+    console.log(lgFiles);
+    await initiateProjectView(templateId, formData.name, formData.description, formData.location, formData.schemaUrl);
   };
 
   const handleSaveAs = (formData) => {

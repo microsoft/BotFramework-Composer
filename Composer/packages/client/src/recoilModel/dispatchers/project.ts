@@ -51,6 +51,7 @@ import {
   announcementState,
   boilerplateVersionState,
   dialogSchemasState,
+  botCreationResponseState,
 } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
 import _ from 'lodash';
@@ -267,7 +268,7 @@ export const projectDispatcher = () => {
       try {
         const response = await createAndStoreProject(templateId, name, description, location, schemaUrl);
         if (response && response.data) {
-          return initiateProjectView(templateId, name, description, location, response, response.data.id, schemaUrl);
+          return initiateProjectView(templateId, name, description, location, schemaUrl);
         } else {
           handleProjectFailure(callbackHelpers, null);
         }
@@ -286,6 +287,7 @@ export const projectDispatcher = () => {
       schemaUrl?: string
     ) => {
       try {
+        const { set } = callbackHelpers;
         await setBotOpeningStatus(callbackHelpers);
         const response = await httpClient.post(`/projects`, {
           storageId: 'default',
@@ -299,8 +301,8 @@ export const projectDispatcher = () => {
         if (settingStorage.get(projectId)) {
           settingStorage.remove(projectId);
         }
-        var copyResponse = _.cloneDeep(response);
-        return copyResponse;
+        set(botCreationResponseState, JSON.stringify(response));
+        return response;
       } catch (ex) {
         console.log(ex);
         handleProjectFailure(callbackHelpers, ex);
@@ -314,14 +316,18 @@ export const projectDispatcher = () => {
       name: string,
       description: string,
       location: string,
-      response: any,
-      projectId: any,
       schemaUrl?: string
     ) => {
       try {
-        await initBotState(callbackHelpers, response.data, true, templateId);
-        return projectId;
+        const {
+          snapshot: { getPromise },
+        } = callbackHelpers;
+        const botCreationResponseString = await getPromise(botCreationResponseState);
+        const botCreationResponse = JSON.parse(botCreationResponseString);
+        await initBotState(callbackHelpers, botCreationResponse.data, true, templateId);
+        return botCreationResponse?.data?.id;
       } catch (ex) {
+        console.log(ex);
         handleProjectFailure(callbackHelpers, ex);
       }
     }
