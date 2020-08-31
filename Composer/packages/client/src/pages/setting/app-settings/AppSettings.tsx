@@ -50,6 +50,18 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
 
   const renderElectronSettings = isElectron();
 
+  const languageOptions = [{ key: 'en-US', text: formatMessage('English (US)') }];
+  if (process.env.NODE_ENV !== 'production') {
+    languageOptions.push({
+      key: 'en-US-pseudo',
+      text: formatMessage('Pseudo'),
+    });
+    languageOptions.push({
+      key: 'en-US-DoesNotExist',
+      text: formatMessage('Does Not Exist'),
+    });
+  }
+
   return (
     <div css={container}>
       <section css={section}>
@@ -137,21 +149,7 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
         <SettingDropdown
           description={formatMessage('This is the language used for Composer’s user interface.')}
           image={images.language}
-          options={[
-            {
-              key: 'en-US',
-              text: formatMessage('English (US)'),
-            },
-            // uncomment the following to test out the pseudo-localization:
-            // {
-            //   key: 'en-US-pseudo',
-            //   text: formatMessage('Pseudo'),
-            // },
-            // {
-            //   key: 'en-US-DoesNotExist',
-            //   text: formatMessage('Does Not Exist'),
-            // },
-          ]}
+          options={languageOptions}
           selected={userSettings.appLocale}
           title={formatMessage('Application language')}
           onChange={onLocaleChange}
