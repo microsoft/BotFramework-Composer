@@ -11,6 +11,7 @@ import {
   SwitchConditionWidget,
   ForeachWidget,
   ActionHeader,
+  PropertyDescription,
 } from '../widgets';
 
 const builtinActionWidgets: FlowEditorWidgetMap = {
@@ -21,6 +22,7 @@ const builtinActionWidgets: FlowEditorWidgetMap = {
   SwitchConditionWidget,
   ForeachWidget,
   ActionHeader,
+  PropertyDescription,
 };
 
 export default builtinActionWidgets;
