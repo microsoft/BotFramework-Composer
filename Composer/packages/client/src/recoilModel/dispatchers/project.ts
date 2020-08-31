@@ -56,7 +56,7 @@ import {
   boilerplateVersionState,
   dialogSchemasState,
 } from './../atoms';
-import { logMessage, setError, ConsoleMsgLevel } from './../dispatchers/shared';
+import { logMessage, setError } from './../dispatchers/shared';
 
 const handleProjectFailure = (callbackHelpers: CallbackInterface, ex) => {
   callbackHelpers.set(botOpeningState, false);

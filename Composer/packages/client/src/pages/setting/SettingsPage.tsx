@@ -10,13 +10,7 @@ import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import { useRecoilValue } from 'recoil';
 
-import {
-  localeState,
-  showAddLanguageModalState,
-  showDelLanguageModalState,
-  settingsState,
-} from '../../recoilModel/atoms/botState';
-import { dispatcherState, currentProjectIdState, botStateByProjectIdSelector } from '../../recoilModel';
+import { dispatcherState, botStateByProjectIdSelector } from '../../recoilModel';
 import { TestController } from '../../components/TestController/TestController';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { navigateTo } from '../../utils/navigation';
@@ -32,7 +26,6 @@ import { SettingsRoutes } from './router';
 const getProjectLink = (path: string, id?: string) => {
   return id ? `/settings/bot/${id}/${path}` : `/settings/${path}`;
 };
-2;
 
 const SettingPage: React.FC<RouteComponentProps> = (props) => {
   const {
