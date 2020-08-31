@@ -12,7 +12,7 @@ import { resolveToBasePath } from './utils/fileUtil';
 import { data } from './styles';
 import { NotFound } from './components/NotFound';
 import { BASEPATH } from './constants';
-import { botOpeningState, dispatcherState, botStateByProjectIdSelector, currentProjectIdState } from './recoilModel';
+import { botOpeningState, dispatcherState, botStateByProjectIdSelector } from './recoilModel';
 import { openAlertModal } from './components/Modal/AlertDialog';
 import { dialogStyle } from './components/Modal/dialogStyle';
 import { LoadingSpinner } from './components/LoadingSpinner';
@@ -56,7 +56,7 @@ const Routes = (props) => {
             <Skills path="skills/*" />
             <DesignPage path="*" />
           </ProjectRouter>
-          <SettingPage path="settings/:projectId/*" />
+          <SettingPage path="settings/*" />
           <BotCreationFlowRouter path="projects/*" />
           <BotCreationFlowRouter path="home" />
           <NotFound default />

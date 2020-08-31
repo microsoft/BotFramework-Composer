@@ -74,7 +74,7 @@ const headerTextContainer = css`
 
 export const Header = () => {
   const { setAppUpdateShowing } = useRecoilValue(dispatcherState);
-  const { botName, locale } = useRecoilValue(botStateByProjectIdSelector);
+  const { botName: projectName, locale } = useRecoilValue(botStateByProjectIdSelector);
   const appUpdate = useRecoilValue(appUpdateState);
   const { showing, status } = appUpdate;
 
@@ -94,10 +94,10 @@ export const Header = () => {
       />
       <div css={headerTextContainer}>
         <div css={title}>{formatMessage('Bot Framework Composer')}</div>
-        {botName && (
+        {projectName && (
           <Fragment>
             <div css={divider} />
-            <span css={botName}>{`${botName} (${locale})`}</span>
+            <span css={botName}>{`${projectName} (${locale})`}</span>
           </Fragment>
         )}
       </div>
