@@ -27,7 +27,6 @@ export const evaluateWidgetProp = (propValue: string, context: any): string => {
 
   return propValue;
 };
-(window as any).evaluateWidgetProp = evaluateWidgetProp;
 
 export type WidgetPropEvaluator = (propValue: string, scope: any) => string;
 
