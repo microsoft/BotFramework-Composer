@@ -2,9 +2,8 @@
 // Licensed under the MIT License.
 
 import { SDKKinds } from '@bfc/shared';
-import formatMessage from 'format-message';
 import React from 'react';
-import { FixedInfo, SingleLineDiv, ListOverview, PropertyAssignment } from '@bfc/ui-shared';
+import { SingleLineDiv, ListOverview, PropertyAssignment } from '@bfc/ui-shared';
 
 import { FlowSchema, FlowWidget } from '../types/flowRenderer.types';
 import { ObiColors } from '../constants/ElementColors';
@@ -81,12 +80,12 @@ const builtinVisualSDKSchema: FlowSchema = {
     widget: 'ActionCard',
     colors: { theme: ObiColors.DarkBlue, color: ObiColors.White, icon: ObiColors.White },
     icon: 'Library',
-    body: (data) => (
-      <SingleLineDiv>
-        <FixedInfo>{formatMessage('Host ')}</FixedInfo>
-        {data.skillEndpoint || '?'}
-      </SingleLineDiv>
-    ),
+    body: {
+      widget: 'ResourceOperation',
+      operation: 'Host',
+      resource: '${coalesce(action.skillEndpoint, "?")}',
+      singleline: true,
+    },
     footer: {
       widget: 'PropertyDescription',
       property: '${action.resultProperty}',
@@ -103,11 +102,11 @@ const builtinVisualSDKSchema: FlowSchema = {
   },
   [SDKKinds.EditArray]: {
     widget: 'ActionCard',
-    body: (data) => (
-      <>
-        <FixedInfo>{data.changeType || '?'}</FixedInfo> {data.itemsProperty || '?'}
-      </>
-    ),
+    body: {
+      widget: 'ResourceOperation',
+      operation: '${coalesce(action.changeType, "?")}',
+      resource: '${coalesce(action.itemsProperty, "?")}',
+    },
     footer: {
       widget: 'PropertyDescription',
       property: '${action.resultProperty}',
@@ -185,12 +184,12 @@ const builtinVisualSDKSchema: FlowSchema = {
   },
   [SDKKinds.HttpRequest]: {
     widget: 'ActionCard',
-    body: (data) => (
-      <SingleLineDiv>
-        <FixedInfo>{data.method} </FixedInfo>
-        {data.url}
-      </SingleLineDiv>
-    ),
+    body: {
+      widget: 'ResourceOperation',
+      operation: '${action.method}',
+      resource: '${action.url}',
+      singleline: true,
+    },
     footer: {
       widget: 'PropertyDescription',
       property: '${action.resultProperty}',
@@ -208,8 +207,12 @@ const builtinVisualSDKSchema: FlowSchema = {
   },
   [SDKKinds.OAuthInput]: {
     widget: 'ActionCard',
-    // TODO: move single line / multi line as ActionCard config
-    body: (data) => <SingleLineDiv>{data.connectionName}</SingleLineDiv>,
+    body: {
+      widget: 'ResourceOperation',
+      operation: 'OAuth',
+      resource: '${coalesce(action.connectionName, "?")}',
+      singleline: true,
+    },
     footer: {
       widget: 'PropertyDescription',
       property: '${action.property}',
