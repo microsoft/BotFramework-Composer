@@ -70,6 +70,7 @@ export function useShell(source: EventSource): Shell {
     updateUserSettings,
     setMessage,
     displayManifestModal,
+    updateSkillsInSetting,
   } = useRecoilValue(dispatcherState);
   const lgApi = useLgApi();
   const luApi = useLuApi();
@@ -190,6 +191,7 @@ export function useShell(source: EventSource): Shell {
     announce: setMessage,
     displayManifestModal: displayManifestModal,
     updateDialogSchema,
+    updateSkillsInSetting,
   };
 
   const currentDialog = useMemo(() => dialogs.find((d) => d.id === dialogId), [dialogs, dialogId]);

@@ -3,7 +3,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
-import { SkillManifest } from '@bfc/shared';
+import { SkillManifest, DialogSetting } from '@bfc/shared';
+import get from 'lodash/get';
 
 import httpClient from '../../utils/httpUtil';
 import { convertSkillsToDictionary } from '../../utils/backwardCompatibilityHandler';
@@ -75,7 +76,6 @@ export const skillDispatcher = () => {
 
         set(showAddSkillDialogModalState, false);
         set(onAddSkillDialogCompleteState, { func: undefined });
-
         set(settingsState, (settings) => ({
           ...settings,
           skill: convertSkillsToDictionary(skills),
@@ -116,6 +116,27 @@ export const skillDispatcher = () => {
     set(displaySkillManifestState, undefined);
   });
 
+  const updateSkillsInSetting = useRecoilCallback(
+    ({ set, snapshot }: CallbackInterface) => async (
+      skillName: string,
+      skillInfo: { endpointUrl: string; msAppId: string }
+    ) => {
+      const currentSettings: DialogSetting = await snapshot.getPromise(settingsState);
+      const matchedSkill = get(currentSettings, `skill[${skillName}]`, {});
+      if (matchedSkill) {
+        set(settingsState, {
+          ...currentSettings,
+          skill: {
+            [skillName]: {
+              ...matchedSkill,
+              ...skillInfo,
+            },
+          },
+        });
+      }
+    }
+  );
+
   return {
     createSkillManifest,
     removeSkillManifest,
@@ -126,5 +147,6 @@ export const skillDispatcher = () => {
     addSkillDialogSuccess,
     displayManifestModal,
     dismissManifestModal,
+    updateSkillsInSetting,
   };
 };

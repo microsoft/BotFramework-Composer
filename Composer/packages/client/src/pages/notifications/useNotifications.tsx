@@ -4,7 +4,7 @@
 import { useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
 import get from 'lodash/get';
-import { BotIndexer } from '@bfc/indexers';
+import { checkSkillSetting } from '@bfc/indexers';
 
 import {
   luFilesState,
@@ -55,7 +55,7 @@ export default function useNotifications(filter?: string) {
     diagnostics.forEach((d) => {
       notifications.push(new ServerNotification(projectId, '', d.source, d));
     });
-    const skillDiagnostics = BotIndexer.checkSkillSetting(botAssets);
+    const skillDiagnostics = checkSkillSetting(botAssets);
     skillDiagnostics.forEach((item) => {
       if (item.source.endsWith('.json')) {
         notifications.push(new SkillNotification(projectId, item.source, item.source, item));

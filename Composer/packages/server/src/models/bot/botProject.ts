@@ -8,7 +8,7 @@ import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
 import { getNewDesigner, FileInfo, Skill, Diagnostic, IBotProject, DialogSetting, FileExtensions } from '@bfc/shared';
 import { UserIdentity, pluginLoader } from '@bfc/plugin-loader';
-import { FeedbackType, generate } from '@microsoft/bf-generate-library';
+import keyBy from 'lodash/keyBy';
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
@@ -204,9 +204,7 @@ export class BotProject implements IBotProject {
     const settings = await this.getEnvSettings(false);
     const { skillsParsed } = await extractSkillManifestUrl(config);
 
-    settings.skill = skillsParsed.map(({ manifestUrl, name }) => {
-      return { manifestUrl, name };
-    });
+    settings.skill = keyBy(skillsParsed, 'name');
     await this.settingManager.set(settings);
 
     this.skills = skillsParsed;

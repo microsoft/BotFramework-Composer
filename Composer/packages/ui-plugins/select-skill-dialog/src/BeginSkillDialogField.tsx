@@ -6,16 +6,16 @@ import { FieldProps, JSONSchema7, useShellApi } from '@bfc/extension';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { ObjectField, SchemaField } from '@bfc/adaptive-form';
 import formatMessage from 'format-message';
+import { Skill } from '@bfc/shared';
 
 import { SkillEndpointField } from './SkillEndpointField';
 
 export const BeginSkillDialogField: React.FC<FieldProps> = (props) => {
   const { depth, id, schema, uiOptions, value, onChange, definitions } = props;
-  console.log(value);
   const { projectId, shellApi, skills = [] } = useShellApi();
-  const { displayManifestModal } = shellApi;
+  const { displayManifestModal, updateSkillsInSetting } = shellApi;
 
-  const manifest = useMemo(() => skills.find(({ manifestUrl }) => manifestUrl === value.id), [skills, value.id]);
+  const manifest: Skill = useMemo(() => skills.find(({ manifestUrl }) => manifestUrl === value.id), [skills, value.id]);
   const endpointOptions = useMemo(() => (manifest?.endpoints || []).map(({ name }) => name), [manifest]);
 
   const handleIdChange = ({ key }) => {
@@ -25,9 +25,11 @@ export const BeginSkillDialogField: React.FC<FieldProps> = (props) => {
     }
   };
 
-  const handleEndpointChange = (skillEndpoint) => {
-    const { msAppId } =
+  const handleEndpointChange = async (skillEndpoint) => {
+    const { msAppId, endpointUrl } =
       (manifest?.endpoints || []).find(({ endpointUrl }) => endpointUrl === skillEndpoint) || ({} as any);
+
+    updateSkillsInSetting(manifest.name, { endpointUrl, msAppId });
     onChange({ ...value, skillEndpoint, ...(msAppId ? { skillAppId: msAppId } : {}) });
   };
 

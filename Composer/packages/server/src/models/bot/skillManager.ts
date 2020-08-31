@@ -47,7 +47,7 @@ export const getSkillByUrl = async (url: string, name?: string): Promise<Skill> 
 };
 
 export const extractSkillManifestUrl = async (
-  skills: any[]
+  skills: Skill[]
 ): Promise<{ skillsParsed: Skill[]; diagnostics: Diagnostic[] }> => {
   const skillsParsed: Skill[] = [];
   const diagnostics: Diagnostic[] = [];

@@ -100,6 +100,7 @@ export interface ShellApi {
   displayManifestModal: (manifestId: string) => void;
   updateDialogSchema: (_: DialogSchemaFile) => Promise<void>;
   createTrigger: (id: string, formData, url?: string) => void;
+  updateSkillsInSetting: (skillName: string, skillsData: { msAppId: string; endpointUrl: string }) => void;
 }
 
 export interface Shell {

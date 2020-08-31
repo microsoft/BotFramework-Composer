@@ -4,10 +4,9 @@
  * Verify bot settings, files meet LUIS/QnA requirments.
  */
 
-import { BotAssets, BotInfo, LUISLocales, Diagnostic, DiagnosticSeverity, LuFile } from '@bfc/shared';
+import { BotAssets, LUISLocales, Diagnostic, DiagnosticSeverity } from '@bfc/shared';
 import difference from 'lodash/difference';
-
-import { getLocale } from './utils/help';
+import map from 'lodash/map';
 
 // Verify bot settings, files meet LUIS/QnA requirments.
 const checkLUISLocales = (assets: BotAssets): Diagnostic[] => {
@@ -29,7 +28,7 @@ const checkLUISLocales = (assets: BotAssets): Diagnostic[] => {
 // Verify bot skill setting.
 const checkSkillSetting = (assets: BotAssets): Diagnostic[] => {
   const {
-    setting: { skill = [], botId, skillHostEndpoint },
+    setting: { skill = {}, botId, skillHostEndpoint },
     dialogs,
   } = assets;
   const diagnostics: Diagnostic[] = [];
@@ -37,8 +36,9 @@ const checkSkillSetting = (assets: BotAssets): Diagnostic[] => {
   let skillUsed = false;
   dialogs.forEach((dialog) => {
     // used skill not existed in setting
+    const manifests: string[] = map(skill, ({ manifestUrl }) => manifestUrl);
     dialog.skills.forEach((skillId) => {
-      if (skill.findIndex(({ manifestUrl }) => manifestUrl === skillId) === -1) {
+      if (manifests.findIndex((manifestUrl) => manifestUrl === skillId) === -1) {
         diagnostics.push(
           new Diagnostic(`skill '${skillId}' is not existed in appsettings.json`, dialog.id, DiagnosticSeverity.Error)
         );
@@ -59,29 +59,4 @@ const checkSkillSetting = (assets: BotAssets): Diagnostic[] => {
   }
 
   return diagnostics;
-};
-
-const filterLUISFilesToPublish = (luFiles: LuFile[]): LuFile[] => {
-  return luFiles.filter((file) => {
-    const locale = getLocale(file.id);
-    return locale && LUISLocales.includes(locale);
-  });
-};
-
-const index = (name: string, assets: BotAssets): BotInfo => {
-  const diagnostics: Diagnostic[] = [];
-  diagnostics.push(...checkLUISLocales(assets), ...checkSkillSetting(assets));
-
-  return {
-    name,
-    assets,
-    diagnostics,
-  };
-};
-
-export const BotIndexer = {
-  index,
-  checkLUISLocales,
-  checkSkillSetting,
-  filterLUISFilesToPublish,
 };
