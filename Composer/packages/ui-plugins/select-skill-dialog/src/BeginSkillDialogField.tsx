@@ -20,17 +20,24 @@ export const BeginSkillDialogField: React.FC<FieldProps> = (props) => {
 
   const handleIdChange = ({ key }) => {
     if (!manifest || key !== manifest.manifestUrl) {
+      console.log(manifest);
       const { skillEndpoint, skillAppId, ...rest } = value;
-      onChange({ ...rest, id: key });
+      onChange({ ...rest, id: `=settings.skill[${manifest.manifestUrl}].msAppId` });
     }
   };
 
   const handleEndpointChange = async (skillEndpoint) => {
+    console.log(manifest);
+    console.log(skills);
     const { msAppId, endpointUrl } =
       (manifest?.endpoints || []).find(({ endpointUrl }) => endpointUrl === skillEndpoint) || ({} as any);
 
     updateSkillsInSetting(manifest.name, { endpointUrl, msAppId });
-    onChange({ ...value, skillEndpoint, ...(msAppId ? { skillAppId: msAppId } : {}) });
+    onChange({
+      ...value,
+      skillEndpoint: `=settings.skill[${manifest.name}].endpointUrl`,
+      ...(msAppId ? { skillAppId: `=settings.skill[${manifest.name}].msAppId` } : {}),
+    });
   };
 
   const handleShowManifestClick = () => {

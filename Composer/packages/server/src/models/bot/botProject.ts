@@ -4,6 +4,7 @@
 import { promisify } from 'util';
 import fs from 'fs';
 
+import values from 'lodash/values';
 import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
 import { getNewDesigner, FileInfo, Skill, Diagnostic, IBotProject, DialogSetting, FileExtensions } from '@bfc/shared';
@@ -133,7 +134,8 @@ export class BotProject implements IBotProject {
   public init = async () => {
     this.diagnostics = [];
     this.settings = await this.getEnvSettings(false);
-    const { skillsParsed, diagnostics } = await extractSkillManifestUrl(this.settings?.skill || ([] as any));
+    const skillsCollection = values(this.settings?.skill);
+    const { skillsParsed, diagnostics } = await extractSkillManifestUrl(skillsCollection || ([] as any));
     this.skills = skillsParsed;
     this.diagnostics.push(...diagnostics);
     this.files = await this._getFiles();
@@ -200,7 +202,7 @@ export class BotProject implements IBotProject {
   };
 
   // update skill in settings
-  public updateSkill = async (config: Skill[]) => {
+  public updateSkill = async (config: any[]) => {
     const settings = await this.getEnvSettings(false);
     const { skillsParsed } = await extractSkillManifestUrl(config);
 

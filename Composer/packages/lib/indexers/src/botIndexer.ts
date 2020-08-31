@@ -4,9 +4,11 @@
  * Verify bot settings, files meet LUIS/QnA requirments.
  */
 
-import { BotAssets, LUISLocales, Diagnostic, DiagnosticSeverity } from '@bfc/shared';
+import { BotAssets, BotInfo, LUISLocales, Diagnostic, DiagnosticSeverity, LuFile } from '@bfc/shared';
 import difference from 'lodash/difference';
 import map from 'lodash/map';
+
+import { getLocale } from './utils/help';
 
 // Verify bot settings, files meet LUIS/QnA requirments.
 const checkLUISLocales = (assets: BotAssets): Diagnostic[] => {
@@ -36,9 +38,9 @@ const checkSkillSetting = (assets: BotAssets): Diagnostic[] => {
   let skillUsed = false;
   dialogs.forEach((dialog) => {
     // used skill not existed in setting
-    const manifests: string[] = map(skill, ({ manifestUrl }) => manifestUrl);
     dialog.skills.forEach((skillId) => {
-      if (manifests.findIndex((manifestUrl) => manifestUrl === skillId) === -1) {
+      const manifestUrlCollection = map(skill, ({ manifestUrl }) => manifestUrl);
+      if (manifestUrlCollection.findIndex(({ manifestUrl }) => manifestUrl === skillId) === -1) {
         diagnostics.push(
           new Diagnostic(`skill '${skillId}' is not existed in appsettings.json`, dialog.id, DiagnosticSeverity.Error)
         );
@@ -59,4 +61,29 @@ const checkSkillSetting = (assets: BotAssets): Diagnostic[] => {
   }
 
   return diagnostics;
+};
+
+const filterLUISFilesToPublish = (luFiles: LuFile[]): LuFile[] => {
+  return luFiles.filter((file) => {
+    const locale = getLocale(file.id);
+    return locale && LUISLocales.includes(locale);
+  });
+};
+
+const index = (name: string, assets: BotAssets): BotInfo => {
+  const diagnostics: Diagnostic[] = [];
+  diagnostics.push(...checkLUISLocales(assets), ...checkSkillSetting(assets));
+
+  return {
+    name,
+    assets,
+    diagnostics,
+  };
+};
+
+export const BotIndexer = {
+  index,
+  checkLUISLocales,
+  checkSkillSetting,
+  filterLUISFilesToPublish,
 };
