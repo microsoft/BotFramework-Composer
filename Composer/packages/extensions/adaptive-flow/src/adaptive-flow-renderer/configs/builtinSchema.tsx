@@ -71,9 +71,9 @@ const builtinVisualSDKSchema: FlowSchema = {
       dialog: '${action.dialog}',
     },
     footer: (data) =>
-      data.property ? (
+      data.resultProperty ? (
         <>
-          {data.property} <FixedInfo>{formatMessage('= Return value')}</FixedInfo>
+          {data.resultProperty} <FixedInfo>{formatMessage('= Return value')}</FixedInfo>
         </>
       ) : null,
   },
