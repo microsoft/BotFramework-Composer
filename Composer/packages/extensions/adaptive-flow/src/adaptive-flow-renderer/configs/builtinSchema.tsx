@@ -72,10 +72,10 @@ const builtinVisualSDKSchema: FlowSchema = {
     },
     footer: {
       widget: 'PropertyDescription',
-      property: (data) => data.resultProperty,
+      property: '${action.resultProperty}',
       description: '= Return value',
     },
-    hideFooter: (data) => !data.resultProperty,
+    hideFooter: '${!action.resultProperty}',
   },
   [SDKKinds.BeginSkill]: {
     widget: 'ActionCard',
@@ -89,10 +89,10 @@ const builtinVisualSDKSchema: FlowSchema = {
     ),
     footer: {
       widget: 'PropertyDescription',
-      property: (data) => data.resultProperty,
+      property: '${action.resultProperty}',
       description: '= Result',
     },
-    hideFooter: (data) => !data.resultProperty,
+    hideFooter: '${!action.resultProperty}',
   },
   [SDKKinds.ReplaceDialog]: {
     widget: 'ActionCard',
@@ -110,10 +110,10 @@ const builtinVisualSDKSchema: FlowSchema = {
     ),
     footer: {
       widget: 'PropertyDescription',
-      property: (data) => data.resultProperty,
+      property: '${action.resultProperty}',
       description: '= Result',
     },
-    hideFooter: (data) => !data.resultProperty,
+    hideFooter: '${!action.resultProperty}',
   },
   [SDKKinds.SetProperty]: {
     widget: 'ActionCard',
@@ -196,10 +196,10 @@ const builtinVisualSDKSchema: FlowSchema = {
     ),
     footer: {
       widget: 'PropertyDescription',
-      property: (data) => data.resultProperty,
+      property: '${action.resultProperty}',
       description: '= Result property',
     },
-    hideFooter: (data) => !data.resultProperty,
+    hideFooter: '${!action.resultProperty}',
   },
   [SDKKinds.EditActions]: {
     widget: 'ActionCard',
@@ -215,10 +215,10 @@ const builtinVisualSDKSchema: FlowSchema = {
     body: (data) => <SingleLineDiv>{data.connectionName}</SingleLineDiv>,
     footer: {
       widget: 'PropertyDescription',
-      property: (data) => data.property,
+      property: '${action.property}',
       description: '= Token property',
     },
-    hideFooter: (data) => !data.property,
+    hideFooter: '${!action.property}',
   },
   [SDKKinds.TelemetryTrackEvent]: {
     widget: 'ActionCard',
