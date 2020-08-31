@@ -128,6 +128,24 @@ const builtinVisualSDKSchema: FlowSchema = {
       />
     ),
   },
+  [SDKKinds.DeleteProperty]: {
+    widget: 'ActionCard',
+    body: '${action.property}',
+  },
+  [SDKKinds.DeleteProperties]: {
+    widget: 'ActionCard',
+    body: (data) => (
+      <ListOverview
+        itemPadding={8}
+        items={data.properties}
+        renderItem={(item) => (
+          <SingleLineDiv height={16} title={item}>
+            {item}
+          </SingleLineDiv>
+        )}
+      />
+    ),
+  },
   [SDKKinds.DeleteActivity]: {
     widget: 'ActionCard',
     header: {
@@ -147,24 +165,6 @@ const builtinVisualSDKSchema: FlowSchema = {
       title: 'Update activity',
     },
     body: '${action.activity}',
-  },
-  [SDKKinds.DeleteProperty]: {
-    widget: 'ActionCard',
-    body: '${action.property}',
-  },
-  [SDKKinds.DeleteProperties]: {
-    widget: 'ActionCard',
-    body: (data) => (
-      <ListOverview
-        itemPadding={8}
-        items={data.properties}
-        renderItem={(item) => (
-          <SingleLineDiv height={16} title={item}>
-            {item}
-          </SingleLineDiv>
-        )}
-      />
-    ),
   },
   [SDKKinds.CancelAllDialogs]: {
     widget: 'ActionCard',
