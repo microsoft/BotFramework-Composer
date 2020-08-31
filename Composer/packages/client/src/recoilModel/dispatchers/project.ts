@@ -198,9 +198,13 @@ export const projectDispatcher = () => {
         refreshLocalStorage(projectId, settings);
         const mergedSettings = mergeLocalStorage(projectId, settings);
         set(settingsState(projectId), mergedSettings);
+        set(projectMetaDataState(projectId), {
+          isRootBot: true,
+        });
       });
 
       gotoSnapshot(newSnapshot);
+      callbackHelpers.set(botProjectsState, [projectId]);
       if (jump && projectId) {
         let url = `/bot/${projectId}/dialogs/${mainDialog}`;
         if (templateId === QnABotTemplateId) {
