@@ -122,7 +122,6 @@ const builtinVisualSDKSchema: FlowSchema = {
     widget: 'ActionCard',
     body: (data) => (
       <ListOverview
-        itemPadding={8}
         items={data.assignments}
         renderItem={({ property, value }) => <PropertyAssignment property={property} value={value} />}
       />
@@ -136,7 +135,6 @@ const builtinVisualSDKSchema: FlowSchema = {
     widget: 'ActionCard',
     body: (data) => (
       <ListOverview
-        itemPadding={8}
         items={data.properties}
         renderItem={(item) => (
           <SingleLineDiv height={16} title={item}>

@@ -11,15 +11,10 @@ export interface ListOverviewProps<T> {
   items: T[];
   renderItem: (item: T) => JSX.Element;
   maxCount?: number;
-  itemPadding?: number;
+  itemInterval?: number;
 }
 
-export const ListOverview: FC<ListOverviewProps<any>> = ({
-  items,
-  renderItem,
-  maxCount = 3,
-  itemPadding: itemInterval = 4,
-}) => {
+export const ListOverview: FC<ListOverviewProps<any>> = ({ items, renderItem, maxCount = 3, itemInterval = 8 }) => {
   if (!Array.isArray(items) || !items.length) {
     return null;
   }
