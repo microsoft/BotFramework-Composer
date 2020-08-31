@@ -3,7 +3,7 @@
 import { JSONSchema7 } from '@bfc/extension';
 import { AppUpdaterSettings, CodeEditorSettings, PromptTab } from '@bfc/shared';
 
-import { AppUpdaterStatus, BotStatus } from '../constants';
+import { AppUpdaterStatus } from '../constants';
 
 export interface StateError {
   status?: number;

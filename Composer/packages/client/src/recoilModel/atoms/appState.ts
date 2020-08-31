@@ -10,7 +10,6 @@ import {
   RuntimeTemplate,
   AppUpdateState,
   BoilerplateVersion,
-  DesignPageLocation,
 } from '../../recoilModel/types';
 import { getUserSettings } from '../utils';
 import onboardingStorage from '../../utils/onboardingStorage';
