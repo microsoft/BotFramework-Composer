@@ -177,6 +177,16 @@ describe('getSelectedOption', () => {
         schema: { type: 'string' as const },
       },
     },
+    {
+      key: 'enum',
+      text: 'enum',
+      data: {
+        schema: {
+          type: 'string' as const,
+          enum: ['value1', 'value2', 'value3'],
+        },
+      },
+    },
   ];
 
   it('returns undefined if there are no options', () => {
@@ -220,6 +230,12 @@ describe('getSelectedOption', () => {
 
     it('returns the first option if no type match found', () => {
       expect(getSelectedOption(['foo'], options)).toEqual(options[3]);
+    });
+  });
+
+  describe('when the value is included in an enum', () => {
+    it('returns the enum option', () => {
+      expect(getSelectedOption('value2', options)).toEqual(options[6]);
     });
   });
 });

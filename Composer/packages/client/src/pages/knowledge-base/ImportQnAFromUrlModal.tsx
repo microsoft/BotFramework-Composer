@@ -90,7 +90,7 @@ interface ImportQnAFromUrlModalProps
 const DialogTitle = () => {
   return (
     <div>
-      {formatMessage('Populate your KB.')}
+      {formatMessage('Populate your Knowledge Base')}
       <p>
         <span css={subText}>
           {formatMessage(
@@ -119,8 +119,10 @@ const validateUrls = (urls: string[]) => {
   const errors = Array(urls.length).fill('');
 
   for (let i = 0; i < urls.length; i++) {
+    const baseUrl = urls[i].replace(/\/$/, '');
     for (let j = 0; j < urls.length; j++) {
-      if (urls[i] && urls[j] && urls[i] === urls[j] && i !== j) {
+      const candidateUrl = urls[j].replace(/\/$/, '');
+      if (baseUrl && candidateUrl && baseUrl === candidateUrl && i !== j) {
         errors[i] = errors[j] = formatMessage('This url is duplicated');
       }
     }
@@ -148,7 +150,7 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
 
   const { formData, updateField, hasErrors } = useForm(formConfig);
   const isQnAFileselected = !(dialogId === 'all');
-  const disabled = !isQnAFileselected || hasErrors || urlErrors.some((e) => !!e) || formData.urls.some((url) => !url);
+  const disabled = hasErrors || urlErrors.some((e) => !!e) || formData.urls.some((url) => !url);
 
   const addNewUrl = () => {
     const urls = [...formData.urls, ''];
@@ -216,25 +218,27 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
             iconProps={{ iconName: 'Add' }}
             onClick={addNewUrl}
           >
-            {formatMessage('Add URL')}
+            {formatMessage('Add additional URL')}
           </ActionButton>
           {!isQnAFileselected && (
-            <div css={warning}> {formatMessage('please select a specific qna file to import QnA')}</div>
+            <div css={warning}> {formatMessage('Please select a specific qna file to import QnA')}</div>
           )}
         </Stack>
       </div>
       <DialogFooter>
-        <DefaultButton
-          data-testid={'createKnowledgeBaseFromScratch'}
-          styles={{ root: { marginRight: 155 } }}
-          text={formatMessage('Create knowledge base from scratch')}
-          onClick={() => {
-            if (hasErrors) {
-              return;
-            }
-            onSubmit([]);
-          }}
-        />
+        {window.location.href.indexOf('/knowledge-base/') == -1 && (
+          <DefaultButton
+            data-testid={'createKnowledgeBaseFromScratch'}
+            styles={{ root: { marginRight: 155 } }}
+            text={formatMessage('Create knowledge base from scratch')}
+            onClick={() => {
+              if (hasErrors) {
+                return;
+              }
+              onSubmit([]);
+            }}
+          />
+        )}
         <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
         <PrimaryButton
           data-testid={'createKnowledgeBase'}

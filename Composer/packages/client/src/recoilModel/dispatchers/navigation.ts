@@ -4,14 +4,22 @@
 
 //TODO: refactor the router to use one-way data flow
 import { useRecoilCallback, CallbackInterface } from 'recoil';
-import { PromptTab } from '@bfc/shared';
+import { PromptTab, SDKKinds } from '@bfc/shared';
+import cloneDeep from 'lodash/cloneDeep';
 
 import { botStateByProjectIdSelector } from '../selectors';
 
-import { getSelected } from './../../utils/dialogUtil';
+import { createSelectedPath, getSelected } from './../../utils/dialogUtil';
 import { BreadcrumbItem } from './../../recoilModel/types';
-import { focusPathState, breadcrumbState, designPageLocationState, currentProjectIdState } from './../atoms';
-import { updateBreadcrumb, navigateTo, checkUrl, getUrlSearch, BreadcrumbUpdateType } from './../../utils/navigation';
+import { breadcrumbState, designPageLocationState, focusPathState } from './../atoms/botState';
+import {
+  BreadcrumbUpdateType,
+  checkUrl,
+  convertPathToUrl,
+  getUrlSearch,
+  navigateTo,
+  updateBreadcrumb,
+} from './../../utils/navigation';
 
 export const navigationDispatcher = () => {
   const setDesignPageLocation = useRecoilCallback(
@@ -19,9 +27,6 @@ export const navigationDispatcher = () => {
       projectId: string,
       { dialogId = '', selected = '', focused = '', breadcrumb = [], promptTab }
     ) => {
-      //generate focusedPath. This will remove when all focusPath related is removed
-      set(currentProjectIdState, projectId);
-
       let focusPath = dialogId + '#';
       if (focused) {
         focusPath = dialogId + '#.' + focused;
@@ -47,12 +52,25 @@ export const navigationDispatcher = () => {
       dialogId: string,
       breadcrumb: BreadcrumbItem[] = []
     ) => {
-      const designPageLocation = await snapshot.getPromise(designPageLocationState(projectId));
-      const currentUri = `/bot/${projectId}/dialogs/${dialogId}`;
-      if (checkUrl(currentUri, projectId, designPageLocation)) return;
-      //if dialog change we should flush some debounced functions
+      const { dialogs, designPageLocation } = await snapshot.getPromise(botStateByProjectIdSelector);
+      const updatedBreadcrumb = cloneDeep(breadcrumb);
 
-      navigateTo(currentUri, { state: { breadcrumb } });
+      let path;
+      if (dialogId !== designPageLocation.dialogId) {
+        const currentDialog = dialogs.find(({ id }) => id === dialogId);
+        const beginDialogIndex = currentDialog?.triggers.findIndex(({ type }) => type === SDKKinds.OnBeginDialog);
+
+        if (typeof beginDialogIndex !== 'undefined' && beginDialogIndex >= 0) {
+          path = createSelectedPath(beginDialogIndex);
+          updatedBreadcrumb.push({ dialogId, selected: '', focused: '' });
+        }
+      }
+
+      const currentUri = convertPathToUrl(projectId, dialogId, path);
+
+      if (checkUrl(currentUri, projectId, designPageLocation)) return;
+
+      navigateTo(currentUri, { state: { breadcrumb: updatedBreadcrumb } });
     }
   );
 
@@ -67,9 +85,7 @@ export const navigationDispatcher = () => {
 
       if (!dialogId) dialogId = 'Main';
 
-      let currentUri = `/bot/${projectId}/dialogs/${dialogId}`;
-
-      currentUri = `${currentUri}?selected=${selectPath}`;
+      const currentUri = convertPathToUrl(projectId, dialogId, selectPath);
 
       if (checkUrl(currentUri, projectId, designPageLocation)) return;
       navigateTo(currentUri, { state: { breadcrumb: updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Selected) } });

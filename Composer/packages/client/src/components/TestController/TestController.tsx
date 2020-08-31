@@ -39,12 +39,13 @@ export const botButton = css`
   margin-left: 5px;
 `;
 
+let botStatusInterval: NodeJS.Timeout | undefined = undefined;
+
 // -------------------- TestController -------------------- //
 const POLLING_INTERVAL = 2500;
 export const TestController: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [calloutVisible, setCalloutVisible] = useState(false);
-  const [botStatusInterval, setBotStatusInterval] = useState<NodeJS.Timeout | undefined>(undefined);
 
   const botActionRef = useRef(null);
   const notifications = useNotifications();
@@ -129,7 +130,6 @@ export const TestController: React.FC = () => {
         stopPollingRuntime();
         break;
     }
-    // return the stoppolling function so the component will clean up
     return () => {
       stopPollingRuntime();
       return;
@@ -144,14 +144,40 @@ export const TestController: React.FC = () => {
     setModalOpen(true);
   }
 
+  function dismissCallout() {
+    if (calloutVisible) setCalloutVisible(false);
+  }
+
+  function openCallout() {
+    setCalloutVisible(true);
+  }
+
+  function startPollingRuntime() {
+    if (!botStatusInterval) {
+      const cancelInterval = setInterval(() => {
+        // get publish status
+        getPublishStatus(projectId, defaultPublishConfig);
+      }, POLLING_INTERVAL);
+      botStatusInterval = cancelInterval;
+    }
+  }
+
+  function stopPollingRuntime() {
+    if (botStatusInterval) {
+      clearInterval(botStatusInterval);
+      botStatusInterval = undefined;
+    }
+  }
+
   async function handlePublish(config: IPublishConfig) {
     setBotStatus(BotStatus.publishing, projectId);
     dismissDialog();
     const { luis, qna } = config;
+    const endpointKey = settings.qna.endpointKey;
     await setSettings(projectId, {
       ...settings,
       luis: luis,
-      qna: Object.assign({}, settings.qna, qna),
+      qna: Object.assign({}, settings.qna, qna, { endpointKey }),
     });
     await build(luis, qna, projectId);
   }
@@ -198,7 +224,7 @@ export const TestController: React.FC = () => {
         qna: {
           subscriptionKey: settings.qna.subscriptionKey,
           qnaRegion: settings.qna.qnaRegion,
-          endpointKey: '',
+          endpointKey: settings.qna.endpointKey,
         },
       }
     );

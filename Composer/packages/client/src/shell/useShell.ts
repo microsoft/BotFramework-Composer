@@ -8,7 +8,6 @@ import formatMessage from 'format-message';
 
 import { updateRegExIntent, renameRegExIntent, updateIntentTrigger } from '../utils/dialogUtil';
 import { getDialogData, setDialogData } from '../utils/dialogUtil';
-import { getFocusPath } from '../utils/navigation';
 import { isAbsHosted } from '../utils/envUtil';
 import { dispatcherState, userSettingsState, clipboardActionsState, botStateByProjectIdSelector } from '../recoilModel';
 
@@ -143,18 +142,6 @@ export function useShell(source: EventSource): Shell {
       };
       dialogMapRef.current[dialogId] = updatedDialog;
       updateDialog(payload);
-
-      //make sure focusPath always valid
-      const data = getDialogData(dialogMapRef.current, dialogId, getFocusPath(selected, focused));
-      if (typeof data === 'undefined') {
-        /**
-         * It's improper to fallback to `dialogId` directly:
-         *   - If 'action' not exists at `focused` path, fallback to trigger path;
-         *   - If 'trigger' not exists at `selected` path, fallback to dialog Id;
-         *   - If 'dialog' not exists at `dialogId` path, fallback to main dialog.
-         */
-        navTo(projectId, dialogId, []);
-      }
       commitChanges();
     },
     ...lgApi,
