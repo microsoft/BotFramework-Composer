@@ -135,11 +135,11 @@ const builtinVisualSDKSchema: FlowSchema = {
       widget: 'ActionHeader',
       title: 'Delete activity',
     },
-    body: (data) => (
-      <>
-        <FixedInfo>{data.activityId || '?'}</FixedInfo>
-      </>
-    ),
+    body: {
+      widget: 'PropertyDescription',
+      property: '${coalesce(action.activityId, "?")}',
+      description: '= ActivityId',
+    },
   },
   [SDKKinds.UpdateActivity]: {
     widget: 'ActionCard',
