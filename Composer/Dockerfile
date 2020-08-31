@@ -35,7 +35,6 @@ COPY --from=build /src/Composer/plugins ./plugins
 ENV NODE_ENV "production"
 RUN yarn --production --frozen-lockfile --force --verbose && yarn cache clean
 WORKDIR /app/Composer
-RUN ln -s /runtime runtime
 
 FROM composerbasic
 
