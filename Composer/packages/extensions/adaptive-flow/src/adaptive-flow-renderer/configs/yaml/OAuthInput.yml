@@ -1,5 +1,0 @@
-Microsoft.OAuthInput:
-  widget: ActionCard
-  header: OAuth login
-  body: ${action.connectionName}
-  footer: ${if(action.tokenProperty, concant(action.tokenProperty, " ", Gray30("= Token Property")), null)}

@@ -1,4 +1,0 @@
-Microsoft.EmitEvent:
-  widget: ActionCard
-  header: Emit a custom event
-  body: ${coalesce(action.eventName, "?")} ${Gray30("(Event)")}

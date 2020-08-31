@@ -1,6 +1,0 @@
-Microsoft.DeleteProperty:
-  widget: ActionCard
-  header: Delete a property
-  body:
-    widget: ListOverview
-    items: ${action.properties}
