@@ -1,7 +1,0 @@
-Microsoft.SetProperties:
-  widget: ActionCard
-  header: Set properties
-  body:
-    widget: ListOverview
-    items: ${action.assignments}
-    itemWidget: PropertyAssignment

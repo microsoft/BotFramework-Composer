@@ -1,7 +1,0 @@
-Microsoft.EditArray:
-  widget: ActionCard
-  header: Edit an array property
-  body: ${coalesce(Gray30(action.changeType), "?")} ${coalesce(action.itemsProperty, "?")}
-  footer:
-    widget: SetResult
-    value: ${action.resultProperty}
