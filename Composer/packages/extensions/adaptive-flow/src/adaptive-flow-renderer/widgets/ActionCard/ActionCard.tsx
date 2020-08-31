@@ -12,15 +12,22 @@ export interface ActionCardProps extends WidgetContainerProps {
   header?: ReactNode;
   body?: ReactNode;
   footer?: ReactNode;
+  hideFooter?: boolean;
 }
 
-export const ActionCard: WidgetComponent<ActionCardProps> = ({ header, body, footer, ...widgetContext }) => {
+export const ActionCard: WidgetComponent<ActionCardProps> = ({
+  header,
+  body,
+  footer,
+  hideFooter = false,
+  ...widgetContext
+}) => {
   const disabled = widgetContext.data.disabled === true;
   return (
     <CardTemplate
       body={body}
       disabled={disabled}
-      footer={footer}
+      footer={hideFooter ? null : footer}
       header={header || <ActionHeader {...widgetContext} />}
     />
   );
