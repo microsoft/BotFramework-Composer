@@ -68,6 +68,7 @@ export const navigationDispatcher = () => {
         const beginDialogIndex = currentDialog?.triggers.findIndex(({ type }) => type === SDKKinds.OnBeginDialog);
         if (typeof beginDialogIndex !== 'undefined' && beginDialogIndex >= 0) {
           path = createSelectedPath(beginDialogIndex);
+          breadcrumb = updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Selected);
           breadcrumb.push({ dialogId, selected: '', focused: '' });
         }
       }
