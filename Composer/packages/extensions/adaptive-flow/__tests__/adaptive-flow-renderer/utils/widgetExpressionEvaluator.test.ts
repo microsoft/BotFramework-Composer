@@ -9,6 +9,7 @@ describe('evaluateWidgetExpression()', () => {
     ['${action.x}', 'hello', 'action.x', '= Result Value'].forEach((x) => {
       expect(evaluate(x, {})).toEqual(x);
     });
+    expect(evaluate('= Result', {})).toEqual(undefined);
   });
 
   it('can evaluate basic value access pattern.', () => {
