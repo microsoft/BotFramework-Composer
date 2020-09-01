@@ -5,38 +5,6 @@ import { SDKKinds } from '@bfc/shared';
 import { FlowUISchema } from '@bfc/extension';
 
 export const DefaultFlowSchema: FlowUISchema = {
-  [SDKKinds.IfCondition]: {
-    widget: 'IfConditionWidget',
-    nowrap: true,
-    judgement: {
-      widget: 'ActionCard',
-      body: '${coalesce(action.condition, "<condition>")}',
-    },
-  },
-  [SDKKinds.SwitchCondition]: {
-    widget: 'SwitchConditionWidget',
-    nowrap: true,
-    judgement: {
-      widget: 'ActionCard',
-      body: '${coalesce(action.condition, "<condition>")}',
-    },
-  },
-  [SDKKinds.Foreach]: {
-    widget: 'ForeachWidget',
-    nowrap: true,
-    loop: {
-      widget: 'ActionCard',
-      body: 'Each value in ${coalesce(action.itemsProperty, "?")}',
-    },
-  },
-  [SDKKinds.ForeachPage]: {
-    widget: 'ForeachWidget',
-    nowrap: true,
-    loop: {
-      widget: 'ActionCard',
-      body: 'Each page of ${action.pageSize} in ${action.propString}',
-    },
-  },
   [SDKKinds.SendActivity]: {
     widget: 'ActionCard',
     body: '${action.activity}',
