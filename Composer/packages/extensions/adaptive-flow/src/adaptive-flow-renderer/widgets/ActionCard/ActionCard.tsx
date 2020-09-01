@@ -25,6 +25,7 @@ const safeRender = (input: object | React.ReactNode) => {
     try {
       return JSON.stringify(input);
     } catch (err) {
+      // In case 'input' has circular reference / prototype funcs.
       return '';
     }
   }
