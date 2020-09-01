@@ -169,7 +169,7 @@ export const DefaultFlowSchema: FlowUISchema = {
     widget: 'ActionCard',
     body: {
       widget: 'ResourceOperation',
-      operation: 'OAuth',
+      operation: 'Connection',
       resource: '=coalesce(action.connectionName, "?")',
       singleline: true,
     },
