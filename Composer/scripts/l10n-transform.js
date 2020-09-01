@@ -5,6 +5,8 @@
 const fs = require('fs');
 const path = require('path');
 
+const mapValues = require('lodash/mapValues');
+
 const { transFn } = require('./l10nUtils');
 
 const file = process.argv[2];
@@ -12,11 +14,6 @@ const file = process.argv[2];
 const inFile = JSON.parse(fs.readFileSync(file));
 const dir = path.dirname(file);
 
-const out = {};
-for (const key of Object.keys(inFile)) {
-  out[key] = {
-    message: transFn(inFile[key].message),
-  };
-}
+const out = mapValues(inFile, ({ message }) => ({ message: transFn(message) }));
 
-fs.writeFileSync(dir + path.sep + '/en-US-pseudo.json', JSON.stringify(out, null, 4));
+fs.writeFileSync(path.join(dir, '/en-US-pseudo.json'), JSON.stringify(out, null, 4));

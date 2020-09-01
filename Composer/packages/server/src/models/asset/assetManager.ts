@@ -53,8 +53,9 @@ export class AssetManager {
     await copyDir(template.path, this.templateStorage, dstDir, dstStorage);
     // if we have a locale override, copy that over too
     if (locale != null) {
-      const localePath = path.join(__dirname, '..', '..', '..', 'schemas', 'locales', locale);
-      copyDir(localePath, this.templateStorage, dstDir, dstStorage);
+      const localePath = path.join(__dirname, '..', '..', '..', 'schemas', `sdk.${locale}.uischema`);
+      const content = await this.templateStorage.readFile(localePath);
+      await dstStorage.writeFile(path.join(dstDir, `sdk.override.uischema`), content);
     }
   }
 
