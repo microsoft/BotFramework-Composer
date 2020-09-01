@@ -6,7 +6,7 @@ import { evaluateWidgetExpression } from '../../../src/adaptive-flow-renderer/ut
 const evaluate = evaluateWidgetExpression;
 describe('evaluateWidgetExpression()', () => {
   it('return origin input when input non-expression string.', () => {
-    ['${action.x}', 'hello', 'action.x'].forEach((x) => {
+    ['${action.x}', 'hello', 'action.x', '= Result Value'].forEach((x) => {
       expect(evaluate(x, {})).toEqual(x);
     });
   });
