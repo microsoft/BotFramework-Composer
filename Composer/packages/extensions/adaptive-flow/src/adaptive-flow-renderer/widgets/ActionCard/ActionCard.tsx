@@ -17,8 +17,18 @@ export interface ActionCardProps extends WidgetContainerProps {
 
 const safeRender = (input: object | React.ReactNode) => {
   if (React.isValidElement(input)) return input;
-  if (!input) return input;
-  if (typeof input === 'object') return JSON.stringify(input);
+
+  // null value is not Valid React element
+  if (input === null) return null;
+
+  if (typeof input === 'object') {
+    try {
+      return JSON.stringify(input);
+    } catch (err) {
+      return '';
+    }
+  }
+
   return input;
 };
 
