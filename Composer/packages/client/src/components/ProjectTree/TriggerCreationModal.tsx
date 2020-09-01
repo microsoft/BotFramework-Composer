@@ -432,7 +432,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
                 luOption={{
                   projectId,
                   fileId: dialogId,
-                  sectionId: formData.intent || PlaceHolderSectionName,
+                  sectionId: PlaceHolderSectionName,
                 }}
                 placeholder={inlineModePlaceholder}
                 value={formData.triggerPhrases}
