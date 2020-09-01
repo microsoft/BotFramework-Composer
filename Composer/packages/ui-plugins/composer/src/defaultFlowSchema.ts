@@ -42,7 +42,7 @@ export const DefaultFlowSchema: FlowUISchema = {
     footer: {
       widget: 'PropertyDescription',
       property: '=action.resultProperty',
-      description: '= Return value',
+      description: '=string("= Return value")',
     },
     hideFooter: '=!action.resultProperty',
   },
@@ -59,7 +59,7 @@ export const DefaultFlowSchema: FlowUISchema = {
     footer: {
       widget: 'PropertyDescription',
       property: '=action.resultProperty',
-      description: '= Result',
+      description: '=string("= Result")',
     },
     hideFooter: '!action.resultProperty',
   },
@@ -86,13 +86,13 @@ export const DefaultFlowSchema: FlowUISchema = {
   },
   [SDKKinds.SetProperty]: {
     widget: 'ActionCard',
-    body: '=concat(action.property, " : ", action.value)',
+    body: '=concat(coalesce(action.property, "?"), " : ", coalesce(action.value, "?"))',
   },
   [SDKKinds.SetProperties]: {
     widget: 'ActionCard',
     body: {
       widget: 'ListOverview',
-      items: '=foreach(action.assignments, x => concat(x.property, " : ", x.value))',
+      items: '=foreach(action.assignments, x => concat(coalesce(x.property, "?"), " : ", coalesce(x.value, "?")))',
     },
   },
   [SDKKinds.DeleteProperty]: {
@@ -115,7 +115,7 @@ export const DefaultFlowSchema: FlowUISchema = {
     body: {
       widget: 'PropertyDescription',
       property: '=coalesce(action.activityId, "?")',
-      description: '= ActivityId',
+      description: '=string("= ActivityId")',
     },
   },
   [SDKKinds.UpdateActivity]: {
@@ -176,7 +176,7 @@ export const DefaultFlowSchema: FlowUISchema = {
     footer: {
       widget: 'PropertyDescription',
       property: '=action.property',
-      description: '= Token property',
+      description: '=string("= Token property")',
     },
     hideFooter: '=!action.property',
   },
