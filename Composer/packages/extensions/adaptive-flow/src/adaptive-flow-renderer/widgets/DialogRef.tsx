@@ -7,8 +7,8 @@ import get from 'lodash/get';
 import { LinkBtn, FixedInfo } from '@bfc/ui-shared';
 import { useContext } from 'react';
 import formatMessage from 'format-message';
+import { WidgetContainerProps, WidgetComponent } from '@bfc/extension';
 
-import { WidgetContainerProps, WidgetComponent } from '../types/flowRenderer.types';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { RendererContext } from '../contexts/RendererContext';
 import { ElementWrapperTag } from '../types/PluggableComponents.types';

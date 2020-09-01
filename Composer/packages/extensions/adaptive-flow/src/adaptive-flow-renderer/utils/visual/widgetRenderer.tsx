@@ -3,9 +3,8 @@
 
 import React from 'react';
 import { BaseSchema } from '@bfc/shared';
-import { FlowEditorWidgetMap } from '@bfc/extension';
+import { FlowEditorWidgetMap, FlowWidget, FlowWidgetProp, WidgetEventHandler } from '@bfc/extension';
 
-import { FlowWidget, FlowWidgetProp, WidgetEventHandler } from '../../types/flowRenderer.types';
 import { Boundary } from '../../models/Boundary';
 import { evaluateWidgetExpression } from '../expression/widgetExpressionEvaluator';
 
