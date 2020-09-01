@@ -1,13 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { PluginConfig, FormUISchema, RecognizerSchema, UISchema, MenuUISchema } from '@bfc/extension';
+import mergeWith from 'lodash/mergeWith';
+import { PluginConfig, FormUISchema, RecognizerSchema, UISchema, MenuUISchema, FlowUISchema } from '@bfc/extension';
 import { SDKKinds } from '@bfc/shared';
 import formatMessage from 'format-message';
-import mapValues from 'lodash/mapValues';
 import { IntentField, RecognizerField, RegexIntentField, QnAActionsField } from '@bfc/adaptive-form';
 
 import { DefaultMenuSchema } from './defaultMenuSchema';
+import { DefaultFlowSchema } from './defaultFlowSchema';
 
 const DefaultRecognizers: RecognizerSchema[] = [
   {
@@ -216,20 +217,16 @@ const DefaultFormSchema: FormUISchema = {
   },
 };
 
-const synthesizeUISchema = (formSchema: FormUISchema, menuSchema: MenuUISchema): UISchema => {
-  const uiSchema: UISchema = mapValues(formSchema, (val) => ({ form: val }));
-  for (const [$kind, menuConfig] of Object.entries(menuSchema)) {
-    if (uiSchema[$kind]) {
-      uiSchema[$kind].menu = menuConfig;
-    } else {
-      uiSchema[$kind] = { menu: menuConfig };
-    }
-  }
-  return uiSchema;
+const synthesizeUISchema = (formSchema: FormUISchema, menuSchema: MenuUISchema, flowSchema: FlowUISchema): UISchema => {
+  let uischema: UISchema = {};
+  uischema = mergeWith(uischema, formSchema, (origin, formOption) => ({ ...origin, form: formOption }));
+  uischema = mergeWith(uischema, menuSchema, (origin, menuOption) => ({ ...origin, menu: menuOption }));
+  uischema = mergeWith(uischema, flowSchema, (origin, flowOption) => ({ ...origin, flow: flowOption }));
+  return uischema;
 };
 
 const config: PluginConfig = {
-  uiSchema: synthesizeUISchema(DefaultFormSchema, DefaultMenuSchema),
+  uiSchema: synthesizeUISchema(DefaultFormSchema, DefaultMenuSchema, DefaultFlowSchema),
   recognizers: DefaultRecognizers,
 };
 
