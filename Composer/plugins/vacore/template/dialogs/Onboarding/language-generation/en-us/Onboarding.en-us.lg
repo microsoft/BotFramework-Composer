@@ -1,20 +1,15 @@
 [import](common.lg)
 
-# SendActivity_5eOsgQ()
-- Pleased to meet you, ${user.name}.
-- Nice to meet you, ${user.name}.
-# TextInput_Prompt_iW2zlV()
+# TextInput_Prompt_hWwg7E()
 [Activity
-     Text = What's your name?
-    SuggestedActions  = Why?
+Text = What's your name?
+SuggestedActions = Why?
 ]
-# SendActivity_agc7MH()
+# SendActivity_Fp5DpR()
+- Nice to meet you, ${user.name}!
+# SendActivity_qft3d6()
 - ${YouCanAskMeCard()}
-
-# SendActivity_RMag6B()
+# SendActivity_AXlYsm()
 - ${HowCanIHelp()}
-
-# SendActivity_oSGbxz()
-- I need your name so I can address you!
-- How will I know what to call you?
-- I need your name to know what to call you.
+# SendActivity_dMoo6D()
+- I need your name so I know how to address you.

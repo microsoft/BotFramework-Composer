@@ -1,8 +1,9 @@
 {
   "$kind": "Microsoft.AdaptiveDialog",
   "$designer": {
-    "id": "yNll8R",
-    "name": "Onboarding"
+    "id": "iXqeHu",
+    "name": "Onboarding",
+    "description": ""
   },
   "autoEndDialog": true,
   "defaultResultProperty": "dialog.result",
@@ -11,74 +12,79 @@
       "$kind": "Microsoft.OnBeginDialog",
       "$designer": {
         "name": "BeginDialog",
-        "id": "GeSpdJ"
+        "description": "",
+        "id": "Kwl4Mg"
       },
       "actions": [
         {
           "$kind": "Microsoft.TextInput",
           "$designer": {
-            "id": "iW2zlV"
+            "id": "hWwg7E"
           },
           "disabled": false,
           "maxTurnCount": 3,
           "alwaysPrompt": false,
-          "allowInterruptions": true,
-          "prompt": "${TextInput_Prompt_iW2zlV()}",
+          "allowInterruptions": false,
+          "prompt": "${TextInput_Prompt_hWwg7E()}",
+          "unrecognizedPrompt": "",
+          "invalidPrompt": "",
+          "defaultValueResponse": "",
           "property": "user.name"
         },
         {
           "$kind": "Microsoft.IfCondition",
           "$designer": {
-            "id": "h3EezZ"
+            "id": "Alpkp1"
           },
-          "condition": "exists(turn.recognized.entities.PersonName[0])",
+          "condition": "exists(turn.recognizedEntities.PersonName[0])",
           "actions": [
             {
               "$kind": "Microsoft.SetProperty",
               "$designer": {
-                "id": "8fU7LA"
+                "id": "sCAkak"
               },
-              "value": "${turn.recognized.entities.PersonName[0]}",
-              "property": "user.name"
+              "property": "user.name",
+              "value": "(turn.recognizedEntities.PersonName[0]"
             }
           ]
         },
         {
           "$kind": "Microsoft.SendActivity",
           "$designer": {
-            "id": "5eOsgQ"
+            "id": "Fp5DpR"
           },
-          "activity": "${SendActivity_5eOsgQ()}"
+          "activity": "${SendActivity_Fp5DpR()}"
         },
         {
           "$kind": "Microsoft.SendActivity",
           "$designer": {
-            "id": "agc7MH"
+            "id": "qft3d6"
           },
-          "activity": "${SendActivity_agc7MH()}"
+          "activity": "${SendActivity_qft3d6()}"
         },
         {
           "$kind": "Microsoft.SendActivity",
           "$designer": {
-            "id": "RMag6B"
+            "id": "AXlYsm"
           },
-          "activity": "${SendActivity_RMag6B()}"
+          "activity": "${SendActivity_AXlYsm()}"
         }
       ]
     },
     {
       "$kind": "Microsoft.OnIntent",
       "$designer": {
-        "id": "gkwclz"
+        "id": "C4vzKP",
+        "name": "Why"
       },
       "intent": "Why",
       "actions": [
         {
           "$kind": "Microsoft.SendActivity",
           "$designer": {
-            "id": "oSGbxz"
+            "id": "dMoo6D"
           },
-          "activity": "${SendActivity_oSGbxz()}"
+          "activity": "${SendActivity_dMoo6D()}"
         }
       ]
     }

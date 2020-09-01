@@ -23,6 +23,7 @@ using Microsoft.Bot.Builder.Integration.AspNet.Core;
 using Microsoft.Bot.Builder.Integration.AspNet.Core.Skills;
 using Microsoft.Bot.Builder.Skills;
 using Microsoft.Bot.Connector.Authentication;
+using Microsoft.Bot.Solutions.Middleware;
 using Microsoft.BotFramework.Composer.Core;
 using Microsoft.BotFramework.Composer.Core.Settings;
 
@@ -68,6 +69,14 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             }
         }
 
+        public void ConfigureSetSpeakMiddleWare(BotFrameworkAdapter adapter, BotSettings settings)
+        {
+            if (settings.Feature.UseSetSpeakMiddleware)
+            {
+                adapter.Use(new SetSpeakMiddleware());
+            }
+        }
+
         public IStorage ConfigureStorage(BotSettings settings)
         {
             IStorage storage;
@@ -97,6 +106,7 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             ConfigureTranscriptLoggerMiddleware(adapter, settings);
             ConfigureInspectionMiddleWare(adapter, settings, storage);
             ConfigureShowTypingMiddleWare(adapter, settings);
+            ConfigureSetSpeakMiddleWare(adapter, settings);
 
             adapter.OnTurnError = async (turnContext, exception) =>
             {
@@ -171,7 +181,7 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             var resourceExplorer = new ResourceExplorer().AddFolder(botDir);
             var rootDialog = GetRootDialog(botDir);
 
-            var defaultLocale = Configuration.GetValue<string>("defaultLocale") ?? "en-us";
+            var defaultLocale = Configuration.GetValue<string>("defaultLanguage") ?? "en-us";
 
             services.AddSingleton(resourceExplorer);
 

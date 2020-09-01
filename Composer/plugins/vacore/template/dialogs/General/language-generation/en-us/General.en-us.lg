@@ -1,24 +1,11 @@
 [import](common.lg)
 
-# SendActivity_OQWkiT()
-- OK${UserName()}, let's try again.
-- Sure${UserName()}, let's try again.
-- No problem${UserName()}, we can start over.
-# SendActivity_2hlx4B()
-- I said:
-
-# SendActivity_iMj4p3()
-- OK${UserName()}, you're signed out.
-- Alright${UserName()}, you�re signed out.
-- No problem${UserName()}, I�ve signed you out.
-- Sure, you're signed out.
-# SendActivity_MFFeyH()
+# SendActivity_ORmxjp()
 - ${YouCanAskMeCard()}
-
-# SendActivity_zjCN9U()
+# SendActivity_tJCEYl()
 - Sure, transferring you to an agent.
 
-# SendActivity_7OfACu()
+# SendActivity_JIKBPR()
 - OK.
 - Got it.
 - Sure.
