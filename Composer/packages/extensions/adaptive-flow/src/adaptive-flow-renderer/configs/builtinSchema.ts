@@ -4,7 +4,6 @@
 import { SDKKinds } from '@bfc/shared';
 
 import { FlowSchema } from '../types/flowRenderer.types';
-import { ObiColors } from '../constants/ElementColors';
 
 const builtinVisualSDKSchema: FlowSchema = {
   default: {
@@ -12,7 +11,7 @@ const builtinVisualSDKSchema: FlowSchema = {
   },
   custom: {
     widget: 'ActionHeader',
-    colors: { theme: ObiColors.Gray20, color: ObiColors.White },
+    colors: { theme: '#69797E', color: '#FFFFFF' },
   },
   [SDKKinds.IfCondition]: {
     widget: 'IfConditionWidget',
@@ -89,7 +88,7 @@ const builtinVisualSDKSchema: FlowSchema = {
   },
   [SDKKinds.BeginSkill]: {
     widget: 'ActionCard',
-    colors: { theme: ObiColors.DarkBlue, color: ObiColors.White, icon: ObiColors.White },
+    colors: { theme: '#004578', color: '#FFFFFF', icon: '#FFFFFF' },
     icon: 'Library',
     body: {
       widget: 'ResourceOperation',
