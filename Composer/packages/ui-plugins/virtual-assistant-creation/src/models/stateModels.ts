@@ -83,8 +83,8 @@ export const initialAppState: IAppState = {
   selectedLanguages: [],
   selectedPersonality: '',
   selectedWelcomeImage: '',
-  selectedFallbackText: '',
-  selectedGreetingMessage: '',
+  selectedFallbackText: "I am sorry, I didn't understand that",
+  selectedGreetingMessage: 'Hi! My name is basic bot. Here are some things that I can do!',
   selectedSkills: [],
   selectedQnaFile: '',
 };

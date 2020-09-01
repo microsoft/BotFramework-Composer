@@ -32,18 +32,6 @@ export const CustomizeBotPage: React.FC<CustomizeBotPageProps> = (props) => {
   let textFieldClassName = mergeStyles({
     width: '400px !important',
   });
-  let onLanguageChange = (editedLanguage: string, isAdded?: boolean) => {
-    var resultArray = [...state.selectedLanguages];
-    if (isAdded) {
-      resultArray.push(editedLanguage);
-    } else {
-      var indexToRemove = resultArray.indexOf(editedLanguage);
-      if (indexToRemove !== -1) {
-        resultArray.splice(indexToRemove, 1);
-      }
-    }
-    setState({ ...state, selectedLanguages: resultArray });
-  };
 
   let onUserInputChange = (editedInput: string, isAdded?: boolean) => {
     var resultArray = [...state.selectedUserInput];
@@ -76,6 +64,7 @@ export const CustomizeBotPage: React.FC<CustomizeBotPageProps> = (props) => {
     dropdown: { width: 300 },
   };
   const stackTokens = { childrenGap: 10 };
+  const verticalStackTokens = { childrenGap: 15 };
 
   return (
     <Fragment>
@@ -88,65 +77,76 @@ export const CustomizeBotPage: React.FC<CustomizeBotPageProps> = (props) => {
         }
         dialogType={DialogTypes.CreateFlow}
       >
-        <Label htmlFor={textFieldId}>Bot Name</Label>
-        <TextField
-          onChange={(event: any, newValue?: string) => {
-            setState({ ...state, selectedBotName: newValue as string });
-          }}
-          className={textFieldClassName}
-          id={textFieldId}
-        />
-        <Label>User Input</Label>
-        <Stack horizontal={true} tokens={stackTokens}>
-          <Checkbox
-            label="Text"
-            onChange={(ev: any, checked?: boolean) => {
-              onUserInputChange('Text', checked);
-            }}
-          />
-          <Checkbox
-            label="Speech"
-            onChange={(ev: any, checked?: boolean) => {
-              onUserInputChange('Speech', checked);
-            }}
-          />
-        </Stack>{' '}
-        <br />
-        <Stack tokens={stackTokens}>
-          <Dropdown
-            placeholder="Select an option"
-            label="Personality"
-            options={personalityOptions}
-            styles={dropdownStyles}
-            onChange={(ev: any, option?: IDropdownOption) => {
-              setState({ ...state, selectedPersonality: option?.text as string });
-            }}
+        <Stack tokens={verticalStackTokens}>
+          <Stack.Item>
+            <Label htmlFor={textFieldId}>Bot Name</Label>
+            <TextField
+              onChange={(event: any, newValue?: string) => {
+                setState({ ...state, selectedBotName: newValue as string });
+              }}
+              className={textFieldClassName}
+              id={textFieldId}
+            />
+          </Stack.Item>
+          <Stack.Item>
+            <Label>User Input</Label>
+            <Stack horizontal={true} tokens={stackTokens}>
+              <Checkbox
+                label="Text"
+                onChange={(ev: any, checked?: boolean) => {
+                  onUserInputChange('Text', checked);
+                }}
+              />
+              <Checkbox
+                label="Speech"
+                onChange={(ev: any, checked?: boolean) => {
+                  onUserInputChange('Speech', checked);
+                }}
+              />
+            </Stack>{' '}
+          </Stack.Item>
+          <Stack.Item>
+            {/* <Stack tokens={stackTokens}> */}
+            <Dropdown
+              placeholder="Select an option"
+              label="Personality"
+              options={personalityOptions}
+              styles={dropdownStyles}
+              onChange={(ev: any, option?: IDropdownOption) => {
+                setState({ ...state, selectedPersonality: option?.text as string });
+              }}
+            />
+          </Stack.Item>
+          <Stack.Item>
+            <Label htmlFor={textFieldId}>
+              What will your Virtual Assistant say if it does not understand the user?
+            </Label>
+            <TextField
+              className={textFieldClassName}
+              id={textFieldId}
+              value={state.selectedFallbackText}
+              onChange={(ev?: any, newValue?: string) => {
+                setState({ ...state, selectedFallbackText: newValue as string });
+              }}
+            />
+          </Stack.Item>
+          <Stack.Item>
+            <Label htmlFor={textFieldId}>Greeting Message</Label>
+            <TextField
+              className={textFieldClassName}
+              id={textFieldId}
+              value={state.selectedGreetingMessage}
+              onChange={(ev?: any, newValue?: string) => {
+                setState({ ...state, selectedGreetingMessage: newValue as string });
+              }}
+            />
+          </Stack.Item>
+          <DialogFooterWrapper
+            prevPath={RouterPaths.newBotPage}
+            nextPath={RouterPaths.preProvisionPage}
+            onDismiss={props.onDismiss}
           />
         </Stack>
-        {/* <ChoiceGroup label="Choose Welcome Image" options={iconOptions} onChange={(ev?: any, option?: IChoiceGroupOption) => { setState({ ...state, selectedGreetingMessage: option?.text as string });}} /> */}
-        <Label htmlFor={textFieldId}>What will your Virtual Assistant say if it does not understand the user?</Label>
-        <TextField
-          className={textFieldClassName}
-          id={textFieldId}
-          defaultValue="I am sorry, I didn't understand that"
-          onChange={(ev?: any, newValue?: string) => {
-            setState({ ...state, selectedFallbackText: newValue as string });
-          }}
-        />
-        <Label htmlFor={textFieldId}>Greeting Message</Label>
-        <TextField
-          className={textFieldClassName}
-          id={textFieldId}
-          defaultValue="Hi! My name is basic bot. Here are some things that I can do!"
-          onChange={(ev?: any, newValue?: string) => {
-            setState({ ...state, selectedGreetingMessage: newValue as string });
-          }}
-        />
-        <DialogFooterWrapper
-          prevPath={RouterPaths.newBotPage}
-          nextPath={RouterPaths.preProvisionPage}
-          onDismiss={props.onDismiss}
-        />
       </DialogWrapper>
     </Fragment>
   );

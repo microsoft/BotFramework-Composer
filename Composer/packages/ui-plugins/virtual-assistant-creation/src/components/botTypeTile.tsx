@@ -10,7 +10,7 @@ export const BotTypeTile: React.StatelessComponent<IColorFormProps> = (props: IC
   const containerClassName = mergeStyles({
     display: 'inline-block',
     height: '59px',
-    width: '80%',
+    width: '50%',
     borderBottom: '1px solid #EDEBE9',
     selectors: {
       ':hover': {
@@ -35,16 +35,12 @@ export const BotTypeTile: React.StatelessComponent<IColorFormProps> = (props: IC
   const descriptionFieldClassName = mergeStyles({
     display: 'inline-block',
     height: '59px',
-    width: '80%',
+    width: '50%',
     paddingLeft: '30px',
   });
 
   return (
-    <div className={containerClassName}>
-      <div className={nameFieldClassName}>
-        <p>{props.botName}</p>
-      </div>
-      <div className={descriptionFieldClassName}>{props.botDescription}</div>
-    </div>
+    // <p>{props.botName}</p>
+    <div className={descriptionFieldClassName}>{props.botDescription}</div>
   );
 };

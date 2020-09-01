@@ -50,13 +50,17 @@ export const NewBotPage: React.FC<NewBotPageProps> = (props) => {
     state.availableAssistantTemplates.forEach((assistant: IAssistant) => {
       result.push({
         key: assistant.name,
-        text: '',
+        text: assistant.name,
+        styles: {
+          labelWrapper: { width: '30%' },
+          field: { width: '30%' },
+        },
         onRenderField: (props, render) => {
           return (
-            <Fragment>
+            <div>
               {render!(props)}
               <BotTypeTile botName={assistant.name} botDescription={assistant.description} />
-            </Fragment>
+            </div>
           );
         },
       });
