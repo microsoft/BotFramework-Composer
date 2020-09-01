@@ -44,18 +44,6 @@ const root = css`
 
 // -------------------- ProjectTree -------------------- //
 
-function createGroupItem(dialog: DialogInfo) {
-  return {
-    key: dialog.id,
-    name: dialog.displayName,
-    level: 1,
-    count: dialog.triggers.length,
-    hasMoreData: true,
-    isCollapsed: false,
-    data: dialog,
-  };
-}
-
 function getTriggerName(trigger: ITrigger) {
   return trigger.displayName || getFriendlyName({ $kind: trigger.type });
 }
@@ -72,6 +60,32 @@ function sortDialog(dialogs: DialogInfo[]) {
     }
   });
 }
+
+// function createItemsAndGroups(
+//   dialogs: DialogInfo[],
+//   dialogId: string,
+//   filter: string
+// ): { items: any[]; groups: IGroup[] } {
+//   let position = 0;
+//   const result = dialogs
+//     .filter((dialog) => {
+//       return dialog.displayName.toLowerCase().includes(filter.toLowerCase());
+//     })
+//     .reduce(
+//       (result: { items: any[]; groups: IGroup[] }, dialog) => {
+//         const warningContent = containUnsupportedTriggers(dialog);
+//         result.groups.push(createGroupItem(dialog, dialogId, position, warningContent));
+//         position += dialog.triggers.length;
+//         dialog.triggers.forEach((item, index) => {
+//           const warningContent = triggerNotSupported(dialog, item);
+//           result.items.push(createItem(item, index, warningContent));
+//         });
+//         return result;
+//       },
+//       { items: [], groups: [] }
+//     );
+//   return result;
+// }
 
 interface IProjectTreeProps {
   dialogs: DialogInfo[];
@@ -99,10 +113,10 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
     return sortDialog(dialogs);
   }, [dialogs]);
 
-  const renderHeader = (dialog) => {
+  const renderHeader = (dialog: DialogInfo, warningContent: string) => {
     return (
       <span
-        ref={dialog.isRoot && addMainDialogRef}
+        ref={dialog.isRoot ? addMainDialogRef : null}
         css={css`
           margin-top: -6px;
           width: 100%;
@@ -113,7 +127,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
           depth={0}
           icon={'CannedChat'}
           isSubItemActive={!!selected}
-          link={dialog.data}
+          link={{ ...dialog, warningContent }}
           onDelete={onDeleteDialog}
           onSelect={() => {}}
         />
@@ -145,19 +159,23 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
     updateUserSettings({ dialogNavWidth: currentWidth + d.width });
   };
 
+  function filterMatch(scope: string, target: string) {
+    return scope.toLowerCase().includes(target.toLowerCase());
+  }
+
   function createDetailsTree(dialogs: DialogInfo[], filter: string) {
     const filteredDialogs =
       filter == null || filter.length === 0
         ? dialogs
         : dialogs.filter(
             (dialog) =>
-              dialog.displayName.includes(filter) ||
-              dialog.triggers.some((trigger) => getTriggerName(trigger).includes(filter))
+              filterMatch(dialog.displayName, filter) ||
+              dialog.triggers.some((trigger) => filterMatch(getTriggerName(trigger), filter))
           );
 
     return filteredDialogs.map((dialog: DialogInfo) => {
       const triggerList = dialog.triggers
-        .filter((tr) => dialog.displayName.includes(filter) || getTriggerName(tr).includes(filter))
+        .filter((tr) => filterMatch(dialog.displayName, filter) || filterMatch(getTriggerName(tr), filter))
         .map((tr, index) => renderCell({ ...tr, index, displayName: getTriggerName(tr) }, 1, dialog));
       return (
         <details key={dialog.id} ref={dialog.isRoot ? addMainDialogRef : undefined}>
@@ -168,7 +186,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
               padding-top: 12px;
             `}
           >
-            {renderHeader(createGroupItem(dialog))}
+            {renderHeader(dialog, containUnsupportedTriggers(dialog))}
           </summary>
           {triggerList}
         </details>

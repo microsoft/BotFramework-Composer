@@ -150,13 +150,14 @@ const onRenderItem = (item: IOverflowSetItemProps) => {
   return (
     <div
       data-is-focusable
+      aria-label={warningContent}
       css={itemText(item.depth)}
       role="cell"
       tabIndex={0}
       onBlur={item.onBlur}
       onFocus={item.onFocus}
     >
-      <div css={content} tabIndex={-1}>
+      <div css={content} role="presentation" tabIndex={-1}>
         {item.warningContent ? (
           <TooltipHost content={warningContent} directionalHint={DirectionalHint.bottomLeftEdge}>
             <Icon iconName={'Warning'} style={warningIcon} />
@@ -211,11 +212,15 @@ const onRenderOverflowButton = (isRoot: boolean, isActive: boolean) => {
 export const TreeItem: React.FC<ITreeItemProps> = (props) => {
   const { link, isActive, depth, onDelete, onSelect, icon, dialogName } = props;
 
+  const a11yLabel = `${dialogName ?? '$Root'}_${link.displayName}`;
+
   return (
     <div
+      aria-label={a11yLabel}
       css={navItem(!!isActive)}
-      data-testid={`${dialogName ?? '$Root'}_${link.displayName}`}
-      role="presentation"
+      data-testid={a11yLabel}
+      role="gridcell"
+      tabIndex={0}
       onClick={() => {
         onSelect(link.id);
       }}
@@ -244,6 +249,11 @@ export const TreeItem: React.FC<ITreeItemProps> = (props) => {
             key: 'delete',
             name: formatMessage('Delete'),
             onClick: () => onDelete(link.id),
+          },
+          {
+            key: 'props',
+            name: formatMessage('Properties'),
+            onClick: () => onSelect(link.id),
           },
         ]}
         role="row"
