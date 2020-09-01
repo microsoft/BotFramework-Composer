@@ -3,6 +3,15 @@
 
 import { ValueExpression } from 'adaptive-expressions';
 
+const evaluateAsValueExpression = (propValue: string, scope: any): any => {
+  try {
+    const expResult = new ValueExpression(propValue).tryGetValue(scope);
+    return expResult.value;
+  } catch (err) {
+    return propValue;
+  }
+};
+
 export const evaluateWidgetExpression = (input: string, context: any): any => {
   if (typeof input !== 'string') return input;
 
@@ -10,9 +19,4 @@ export const evaluateWidgetExpression = (input: string, context: any): any => {
     return evaluateAsValueExpression(input, context);
   }
   return input;
-};
-
-export const evaluateAsValueExpression = (propValue: string, scope: any): any => {
-  const expResult = new ValueExpression(propValue).tryGetValue(scope);
-  return expResult.value;
 };
