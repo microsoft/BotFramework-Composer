@@ -7,44 +7,44 @@ import { FlowUISchema } from '@bfc/extension';
 export const DefaultFlowSchema: FlowUISchema = {
   [SDKKinds.SendActivity]: {
     widget: 'ActionCard',
-    body: '${action.activity}',
+    body: '=action.activity',
   },
   [SDKKinds.AttachmentInput]: {
     widget: 'ActionCard',
-    body: '${action.prompt}',
+    body: '=action.prompt',
   },
   [SDKKinds.ConfirmInput]: {
     widget: 'ActionCard',
-    body: '${action.prompt}',
+    body: '=action.prompt',
   },
   [SDKKinds.DateTimeInput]: {
     widget: 'ActionCard',
-    body: '${action.prompt}',
+    body: '=action.prompt',
   },
   [SDKKinds.NumberInput]: {
     widget: 'ActionCard',
-    body: '${action.prompt}',
+    body: '=action.prompt',
   },
   [SDKKinds.TextInput]: {
     widget: 'ActionCard',
-    body: '${action.prompt}',
+    body: '=action.prompt',
   },
   [SDKKinds.ChoiceInput]: {
     widget: 'ActionCard',
-    body: '${action.prompt}',
+    body: '=action.prompt',
   },
   [SDKKinds.BeginDialog]: {
     widget: 'ActionCard',
     body: {
       widget: 'DialogRef',
-      dialog: '${action.dialog}',
+      dialog: '=action.dialog',
     },
     footer: {
       widget: 'PropertyDescription',
-      property: '${action.resultProperty}',
+      property: '=action.resultProperty',
       description: '= Return value',
     },
-    hideFooter: '${!action.resultProperty}',
+    hideFooter: '=!action.resultProperty',
   },
   [SDKKinds.BeginSkill]: {
     widget: 'ActionCard',
@@ -53,57 +53,57 @@ export const DefaultFlowSchema: FlowUISchema = {
     body: {
       widget: 'ResourceOperation',
       operation: 'Host',
-      resource: '${coalesce(action.skillEndpoint, "?")}',
+      resource: '=coalesce(action.skillEndpoint, "?")',
       singleline: true,
     },
     footer: {
       widget: 'PropertyDescription',
-      property: '${action.resultProperty}',
+      property: '=action.resultProperty',
       description: '= Result',
     },
-    hideFooter: '${!action.resultProperty}',
+    hideFooter: '!action.resultProperty',
   },
   [SDKKinds.ReplaceDialog]: {
     widget: 'ActionCard',
     body: {
       widget: 'DialogRef',
-      dialog: '${action.dialog}',
+      dialog: '=action.dialog',
     },
   },
   [SDKKinds.EditArray]: {
     widget: 'ActionCard',
     body: {
       widget: 'ResourceOperation',
-      operation: '${coalesce(action.changeType, "?")}',
-      resource: '${coalesce(action.itemsProperty, "?")}',
+      operation: '=coalesce(action.changeType, "?")',
+      resource: '=coalesce(action.itemsProperty, "?")',
     },
     footer: {
       widget: 'PropertyDescription',
-      property: '${action.resultProperty}',
+      property: '=action.resultProperty',
       description: '= Result',
     },
-    hideFooter: '${!action.resultProperty}',
+    hideFooter: '=!action.resultProperty',
   },
   [SDKKinds.SetProperty]: {
     widget: 'ActionCard',
-    body: '${action.property} : ${action.value}',
+    body: '=concat(action.property, " : ", action.value)',
   },
   [SDKKinds.SetProperties]: {
     widget: 'ActionCard',
     body: {
       widget: 'ListOverview',
-      items: '${foreach(action.assignments, x => concat(x.property, " : " ,x.value))}',
+      items: '=foreach(action.assignments, x => concat(x.property, " : " ,x.value))',
     },
   },
   [SDKKinds.DeleteProperty]: {
     widget: 'ActionCard',
-    body: '${action.property}',
+    body: '=action.property',
   },
   [SDKKinds.DeleteProperties]: {
     widget: 'ActionCard',
     body: {
       widget: 'ListOverview',
-      items: '${action.properties}',
+      items: '=action.properties',
     },
   },
   [SDKKinds.DeleteActivity]: {
@@ -114,7 +114,7 @@ export const DefaultFlowSchema: FlowUISchema = {
     },
     body: {
       widget: 'PropertyDescription',
-      property: '${coalesce(action.activityId, "?")}',
+      property: '=coalesce(action.activityId, "?")',
       description: '= ActivityId',
     },
   },
@@ -124,13 +124,13 @@ export const DefaultFlowSchema: FlowUISchema = {
       widget: 'ActionHeader',
       title: 'Update activity',
     },
-    body: '${action.activity}',
+    body: '=action.activity',
   },
   [SDKKinds.CancelAllDialogs]: {
     widget: 'ActionCard',
     body: {
       widget: 'PropertyDescription',
-      property: '${coalesce(action.eventName, "?")}',
+      property: '=coalesce(action.eventName, "?")',
       description: '(Event)',
     },
   },
@@ -138,7 +138,7 @@ export const DefaultFlowSchema: FlowUISchema = {
     widget: 'ActionCard',
     body: {
       widget: 'PropertyDescription',
-      property: '${coalesce(action.eventName, "?")}',
+      property: '=coalesce(action.eventName, "?")',
       description: '(Event)',
     },
   },
@@ -146,39 +146,39 @@ export const DefaultFlowSchema: FlowUISchema = {
     widget: 'ActionCard',
     body: {
       widget: 'ResourceOperation',
-      operation: '${action.method}',
-      resource: '${action.url}',
+      operation: '=action.method',
+      resource: '=action.url',
       singleline: true,
     },
     footer: {
       widget: 'PropertyDescription',
-      property: '${action.resultProperty}',
+      property: '=action.resultProperty',
       description: '= Result property',
     },
-    hideFooter: '${!action.resultProperty}',
+    hideFooter: '=!action.resultProperty',
   },
   [SDKKinds.EditActions]: {
     widget: 'ActionCard',
-    body: '${action.changeType}',
+    body: '=action.changeType',
   },
   [SDKKinds.QnAMakerDialog]: {
     widget: 'ActionCard',
-    body: '${action.hostname}',
+    body: '=action.hostname',
   },
   [SDKKinds.OAuthInput]: {
     widget: 'ActionCard',
     body: {
       widget: 'ResourceOperation',
       operation: 'OAuth',
-      resource: '${coalesce(action.connectionName, "?")}',
+      resource: '=coalesce(action.connectionName, "?")',
       singleline: true,
     },
     footer: {
       widget: 'PropertyDescription',
-      property: '${action.property}',
+      property: '=action.property',
       description: '= Token property',
     },
-    hideFooter: '${!action.property}',
+    hideFooter: '=!action.property',
   },
   [SDKKinds.TelemetryTrackEvent]: {
     widget: 'ActionCard',
@@ -188,7 +188,7 @@ export const DefaultFlowSchema: FlowUISchema = {
     },
     body: {
       widget: 'PropertyDescription',
-      property: '${coalesce(action.eventName, "?")}',
+      property: '=coalesce(action.eventName, "?")',
       description: '(Event)',
     },
   },

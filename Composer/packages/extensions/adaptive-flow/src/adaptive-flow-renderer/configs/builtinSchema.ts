@@ -17,7 +17,7 @@ const builtinVisualSDKSchema: FlowUISchema = {
     nowrap: true,
     judgement: {
       widget: 'ActionCard',
-      body: '${coalesce(action.condition, "<condition>")}',
+      body: '=coalesce(action.condition, "<condition>")',
     },
   },
   [SDKKinds.SwitchCondition]: {
@@ -25,7 +25,7 @@ const builtinVisualSDKSchema: FlowUISchema = {
     nowrap: true,
     judgement: {
       widget: 'ActionCard',
-      body: '${coalesce(action.condition, "<condition>")}',
+      body: '=coalesce(action.condition, "<condition>")',
     },
   },
   [SDKKinds.Foreach]: {
@@ -33,7 +33,7 @@ const builtinVisualSDKSchema: FlowUISchema = {
     nowrap: true,
     loop: {
       widget: 'ActionCard',
-      body: 'Each value in ${coalesce(action.itemsProperty, "?")}',
+      body: '=concat("Each value in ", coalesce(action.itemsProperty, "?"))',
     },
   },
   [SDKKinds.ForeachPage]: {
@@ -41,7 +41,7 @@ const builtinVisualSDKSchema: FlowUISchema = {
     nowrap: true,
     loop: {
       widget: 'ActionCard',
-      body: 'Each page of ${action.pageSize} in ${action.propString}',
+      body: '=concat("Each page of ", coalesce(action.pageSize, "?"), " in ", coalesce(action.propString, "?"))',
     },
   },
 };
