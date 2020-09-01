@@ -12,20 +12,20 @@ const ValueAccessPattern = new RegExp(/^\$\{([^}]+)\}$/);
 // Catpure patterns that include '...${...}...'
 const StringTemplatePattern = new RegExp(/\$\{.+\}/);
 
-export const evaluateWidgetProp = (propValue: string, context: any): string => {
-  if (typeof propValue !== 'string') return propValue;
+export const evaluateWidgetExpression = (input: string, context: any): string => {
+  if (typeof input !== 'string') return input;
 
-  if (ValueAccessPattern.test(propValue)) {
-    const matchResult = ValueAccessPattern.exec(propValue);
+  if (ValueAccessPattern.test(input)) {
+    const matchResult = ValueAccessPattern.exec(input);
     const expString = matchResult ? matchResult[1] : '';
     return evaluateAsExpression(expString, context);
   }
 
-  if (StringTemplatePattern.test(propValue)) {
-    return evaluateAsLGTemplate(propValue, context);
+  if (StringTemplatePattern.test(input)) {
+    return evaluateAsLGTemplate(input, context);
   }
 
-  return propValue;
+  return input;
 };
 
 export type WidgetPropEvaluator = (propValue: string, scope: any) => string;

@@ -7,8 +7,7 @@ import { FlowEditorWidgetMap } from '@bfc/extension';
 
 import { FlowWidget, FlowWidgetProp, WidgetEventHandler } from '../../types/flowRenderer.types';
 import { Boundary } from '../../models/Boundary';
-
-import { evaluateWidgetProp } from './widgetPropEvaluator';
+import { evaluateWidgetExpression } from '../expression/widgetExpressionEvaluator';
 
 export interface UIWidgetContext {
   /** The uniq id of current schema data. Usually a json path. */
@@ -55,7 +54,7 @@ export const renderUIWidget = (
     // Case 2: For string props, try evaluate it with Expression/LG engine
     if (typeof rawPropValue === 'string') {
       try {
-        return evaluateWidgetProp(rawPropValue, { action: context.data });
+        return evaluateWidgetExpression(rawPropValue, { action: context.data });
       } catch (err) {
         return rawPropValue;
       }
