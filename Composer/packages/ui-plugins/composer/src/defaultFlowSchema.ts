@@ -92,7 +92,7 @@ export const DefaultFlowSchema: FlowUISchema = {
     widget: 'ActionCard',
     body: {
       widget: 'ListOverview',
-      items: '=foreach(action.assignments, x => concat(x.property, " : " ,x.value))',
+      items: '=foreach(action.assignments, x => concat(x.property, " : ", x.value))',
     },
   },
   [SDKKinds.DeleteProperty]: {
