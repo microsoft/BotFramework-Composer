@@ -17,6 +17,6 @@ export type UISchema = {
   [key in SDKKinds]?: {
     flow?: FlowWidget;
     form?: UIOptions;
-    menu?: MenuOptions;
+    menu?: MenuOptions | MenuOptions[];
   };
 };
