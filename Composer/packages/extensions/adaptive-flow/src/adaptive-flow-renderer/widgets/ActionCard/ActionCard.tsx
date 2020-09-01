@@ -15,6 +15,12 @@ export interface ActionCardProps extends WidgetContainerProps {
   hideFooter?: boolean;
 }
 
+const safeRender = (input: object | React.ReactNode) => {
+  if (React.isValidElement(input)) return input;
+  if (typeof input === 'object') return JSON.stringify(input);
+  return input;
+};
+
 export const ActionCard: WidgetComponent<ActionCardProps> = ({
   header,
   body,
@@ -23,12 +29,8 @@ export const ActionCard: WidgetComponent<ActionCardProps> = ({
   ...widgetContext
 }) => {
   const disabled = widgetContext.data.disabled === true;
-  return (
-    <CardTemplate
-      body={body}
-      disabled={disabled}
-      footer={hideFooter ? null : footer}
-      header={header || <ActionHeader {...widgetContext} />}
-    />
-  );
+  const headerNode = safeRender(header) || <ActionHeader {...widgetContext} />;
+  const bodyNode = safeRender(body);
+  const footerNode = hideFooter ? null : safeRender(footer);
+  return <CardTemplate body={bodyNode} disabled={disabled} footer={footerNode} header={headerNode} />;
 };
