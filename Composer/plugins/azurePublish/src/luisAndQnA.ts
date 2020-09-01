@@ -161,8 +161,6 @@ export class LuisAndQnaPublish {
     return { interruptionLuFiles, interruptionQnaFiles };
   }
 
-  // Run through the lubuild process
-  // This happens in the build folder, NOT in the original source folder
   private async publishLuis(
     name: string,
     environment: string,
@@ -172,60 +170,11 @@ export class LuisAndQnaPublish {
     interruptionLuFiles: string[],
     luisResource?: string
   ) {
-    const { authoringKey: luisAuthoringKey, authoringRegion: luisAuthoringRegion } = luisSettings;
-    let { endpoint: luisEndpoint, authoringEndpoint: luisAuthoringEndpoint } = luisSettings;
-
-    // Instantiate the LuBuild object from the LU parsing library
-    // This object is responsible for parsing the LU files and sending them to LUIS
-    const builder = new luBuild.Builder((msg) =>
-      this.logger({
-        status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: msg,
-      })
-    );
-
-    // Pass in the list of the non-empty LU files we got above...
-    const loadResult = await builder.loadContents(
-      interruptionLuFiles,
-      language || 'en-us',
-      environment || '',
-      luisAuthoringRegion || ''
-    );
-
-    // set the default endpoint
-    if (!luisEndpoint) {
-      luisEndpoint = `https://${luisAuthoringRegion}.api.cognitive.microsoft.com`;
-    }
-
-    // if not specified, set the authoring endpoint
-    if (!luisAuthoringEndpoint) {
-      luisAuthoringEndpoint = luisEndpoint;
-    }
-
-    // Perform the Lubuild process
-    // This will create new luis apps for each of the luis models represented in the LU files
-    const buildResult = await builder.build(
-      loadResult.luContents,
-      loadResult.recognizers,
-      luisAuthoringKey,
-      luisAuthoringEndpoint,
-      name,
-      environment,
-      language,
-      true,
-      false,
-      loadResult.multiRecognizers,
-      loadResult.settings,
-      loadResult.crosstrainedRecognizers,
-      'crosstrained'
-    );
-
-    // Write the generated files to the generated folder
-    await builder.writeDialogAssets(buildResult, true, this.generatedFolder);
+    const { authoringKey: luisAuthoringKey, endpoint: luisEndpoint } = luisSettings;
 
     this.logger({
       status: BotProjectDeployLoggerType.DEPLOY_INFO,
-      message: `lubuild succeed`,
+      message: 'start publish luis',
     });
 
     // Find any files that contain the name 'luis.settings' in them
@@ -306,7 +255,73 @@ export class LuisAndQnaPublish {
     // return the new settings that need to be added to the main settings file.
     return luisAppIds;
   }
-  private async publishQna(
+
+  // Run through the lubuild process
+  // This happens in the build folder, NOT in the original source folder
+  private async buildLuis(
+    name: string,
+    environment: string,
+    language: string,
+    luisSettings: ILuisConfig,
+    interruptionLuFiles: string[]
+  ) {
+    const { authoringKey: luisAuthoringKey, authoringRegion: luisAuthoringRegion } = luisSettings;
+
+    // Instantiate the LuBuild object from the LU parsing library
+    // This object is responsible for parsing the LU files and sending them to LUIS
+    const builder = new luBuild.Builder((msg) =>
+      this.logger({
+        status: BotProjectDeployLoggerType.DEPLOY_INFO,
+        message: msg,
+      })
+    );
+
+    // Pass in the list of the non-empty LU files we got above...
+    const loadResult = await builder.loadContents(
+      interruptionLuFiles,
+      language || 'en-us',
+      environment || '',
+      luisAuthoringRegion || ''
+    );
+
+    // set the default endpoint
+    if (!luisSettings.endpoint) {
+      luisSettings.endpoint = `https://${luisAuthoringRegion}.api.cognitive.microsoft.com`;
+    }
+
+    // if not specified, set the authoring endpoint
+    if (!luisSettings.authoringEndpoint) {
+      luisSettings.authoringEndpoint = luisSettings.endpoint;
+    }
+
+    // Perform the Lubuild process
+    // This will create new luis apps for each of the luis models represented in the LU files
+    const buildResult = await builder.build(
+      loadResult.luContents,
+      loadResult.recognizers,
+      luisAuthoringKey,
+      luisSettings.authoringEndpoint,
+      name,
+      environment,
+      language,
+      true,
+      false,
+      loadResult.multiRecognizers,
+      loadResult.settings,
+      loadResult.crosstrainedRecognizers,
+      'crosstrained'
+    );
+
+    // Write the generated files to the generated folder
+    await builder.writeDialogAssets(buildResult, true, this.generatedFolder);
+
+    this.logger({
+      status: BotProjectDeployLoggerType.DEPLOY_INFO,
+      message: `lubuild succeed`,
+    });
+  }
+
+  private async buildQna(
     name: string,
     environment: string,
     language: string,
@@ -410,16 +425,23 @@ export class LuisAndQnaPublish {
     await this.createGeneratedDir();
     await this.crossTrain(luFiles, qnaFiles);
     const { interruptionLuFiles, interruptionQnaFiles } = await this.getInterruptionFiles();
-    const luisAppIds = await this.publishLuis(
-      name,
-      environment,
-      accessToken,
-      language,
-      luisSettings,
-      interruptionLuFiles,
-      luisResource
-    );
-    const qnaConfig = await this.publishQna(name, environment, language, qnaSettings, interruptionQnaFiles);
+
+    await this.buildLuis(name, environment, language, luisSettings, interruptionLuFiles);
+    let luisAppIds = {};
+    // publish luis only when Lu files not empty
+    if (notEmptyLuFiles && authoringKey && authoringRegion) {
+      luisAppIds = await this.publishLuis(
+        name,
+        environment,
+        accessToken,
+        language,
+        luisSettings,
+        interruptionLuFiles,
+        luisResource
+      );
+    }
+
+    const qnaConfig = await this.buildQna(name, environment, language, qnaSettings, interruptionQnaFiles);
     await this.cleanCrossTrain();
     return { luisAppIds, qnaConfig };
   }
