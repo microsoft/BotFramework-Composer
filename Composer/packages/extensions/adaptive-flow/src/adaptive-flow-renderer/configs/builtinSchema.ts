@@ -2,10 +2,9 @@
 // Licensed under the MIT License.
 
 import { SDKKinds } from '@bfc/shared';
+import { FlowUISchema } from '@bfc/extension';
 
-import { FlowSchema } from '../types/flowRenderer.types';
-
-const builtinVisualSDKSchema: FlowSchema = {
+const builtinVisualSDKSchema: FlowUISchema = {
   default: {
     widget: 'ActionHeader',
   },
