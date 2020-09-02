@@ -4,9 +4,10 @@
 import { RequestHandler } from 'express-serve-static-core';
 import { Debugger } from 'debug';
 
-import { PluginLoader } from './pluginLoader';
 import log from '../logger';
 import { PublishPlugin, RuntimeTemplate, BotTemplate } from '../types/types';
+
+import { PluginLoader } from './pluginLoader';
 
 export class ComposerPluginRegistration {
   public loader: PluginLoader;

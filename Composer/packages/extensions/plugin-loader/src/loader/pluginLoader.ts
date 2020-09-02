@@ -10,9 +10,10 @@ import { pathToRegexp } from 'path-to-regexp';
 import glob from 'globby';
 import formatMessage from 'format-message';
 
-import { ComposerPluginRegistration } from './composerPluginRegistration';
 import { UserIdentity, ExtensionCollection, RuntimeTemplate, DEFAULT_RUNTIME } from '../types/types';
 import log from '../logger';
+
+import { ComposerPluginRegistration } from './composerPluginRegistration';
 
 // used to actually call the plugin's main function and inject the composer API in the plugin's node context
 export class PluginLoader {

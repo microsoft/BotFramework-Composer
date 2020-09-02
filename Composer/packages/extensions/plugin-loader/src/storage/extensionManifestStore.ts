@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { existsSync, writeJsonSync, readJsonSync } from 'fs-extra';
 
 import logger from '../logger';

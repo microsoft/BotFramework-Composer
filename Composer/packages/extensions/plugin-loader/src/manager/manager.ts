@@ -4,8 +4,8 @@
 import path from 'path';
 import childProcess from 'child_process';
 import { promisify } from 'util';
-import glob from 'globby';
 
+import glob from 'globby';
 import { readJson } from 'fs-extra';
 
 import { pluginLoader } from '../loader';
