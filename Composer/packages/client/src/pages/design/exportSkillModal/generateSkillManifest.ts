@@ -121,32 +121,34 @@ export const generateDispatchModels = (
     return qnaId === rootId;
   });
 
-  if (!intents.length || !schema.properties?.dispatchModels) {
+  if (!schema.properties?.dispatchModels) {
     return {};
   }
 
-  const luLanguages = rootLuFiles.reduce((acc, { empty, id }) => {
-    const [name, locale] = id.split('.');
-    const { content = {} } = dialogs.find(({ id }) => id === name) || {};
-    const { recognizer = '' } = content;
+  const luLanguages = intents.length
+    ? rootLuFiles.reduce((acc, { empty, id }) => {
+        const [name, locale] = id.split('.');
+        const { content = {} } = dialogs.find(({ id }) => id === name) || {};
+        const { recognizer = '' } = content;
 
-    if (!recognizer.includes('.lu') || empty) {
-      return acc;
-    }
+        if (!recognizer.includes('.lu') || empty) {
+          return acc;
+        }
 
-    return {
-      ...acc,
-      [locale]: [
-        ...(acc[locale] ?? []),
-        {
-          name,
-          contentType: 'application/lu',
-          url: `<${id}.lu url>`,
-          description: '<description>',
-        },
-      ],
-    };
-  }, {});
+        return {
+          ...acc,
+          [locale]: [
+            ...(acc[locale] ?? []),
+            {
+              name,
+              contentType: 'application/lu',
+              url: `<${id}.lu url>`,
+              description: '<description>',
+            },
+          ],
+        };
+      }, {})
+    : {};
 
   const languages = rootQnAFiles.reduce((acc, { empty, id }) => {
     const [name, locale] = id.split('.');
@@ -171,11 +173,13 @@ export const generateDispatchModels = (
     };
   }, luLanguages);
 
+  const dispatchModels = {
+    ...(Object.keys(languages).length ? { languages } : {}),
+    ...(intents.length ? { intents } : {}),
+  };
+
   return {
-    dispatchModels: {
-      ...(Object.keys(languages).length ? { languages } : {}),
-      ...(intents.length ? { intents } : {}),
-    },
+    ...(Object.keys(dispatchModels).length ? { dispatchModels } : {}),
   };
 };
 
