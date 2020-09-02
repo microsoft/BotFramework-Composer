@@ -8,7 +8,7 @@ import React, { useCallback, useState } from 'react';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 
-import { dispatcherState, botStateByProjectIdSelector, currentProjectIdState } from '../../recoilModel';
+import { dispatcherState, settingsState, botNameState, skillsState } from '../../recoilModel';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { TestController } from '../../components/TestController/TestController';
 import { CreateSkillModal, ISkillFormData } from '../../components/CreateSkillModal';
@@ -17,11 +17,12 @@ import { ContainerStyle, ContentHeaderStyle, HeaderText } from './styles';
 import SkillSettings from './skill-settings';
 import SkillList from './skill-list';
 
-const Skills: React.FC<RouteComponentProps> = () => {
+const Skills: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
+  const { projectId = '' } = props;
   const [editIndex, setEditIndex] = useState<number | undefined>();
-
-  const { botName, dialogSetting: settings, skills } = useRecoilValue(botStateByProjectIdSelector);
-  const projectId = useRecoilValue(currentProjectIdState);
+  const skills = useRecoilValue(skillsState(projectId));
+  const settings = useRecoilValue(settingsState(projectId));
+  const botName = useRecoilValue(botNameState(projectId));
   const { setSettings, updateSkill } = useRecoilValue(dispatcherState);
 
   const toolbarItems: IToolbarItem[] = [
@@ -40,7 +41,7 @@ const Skills: React.FC<RouteComponentProps> = () => {
     },
     {
       type: 'element',
-      element: <TestController />,
+      element: <TestController projectId={projectId} />,
       align: 'right',
     },
   ];

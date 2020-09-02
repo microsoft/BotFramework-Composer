@@ -4,10 +4,14 @@ import { useRef } from 'react';
 import { importResolverGenerator } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
-import { botStateByProjectIdSelector } from '../recoilModel';
+import { dialogsState, luFilesState, lgFilesState, localeState, qnaFilesState } from '../recoilModel';
 
-export const useResolvers = () => {
-  const { dialogs, luFiles, lgFiles, locale, qnaFiles } = useRecoilValue(botStateByProjectIdSelector);
+export const useResolvers = (projectId: string) => {
+  const dialogs = useRecoilValue(dialogsState(projectId));
+  const luFiles = useRecoilValue(luFilesState(projectId));
+  const lgFiles = useRecoilValue(lgFilesState(projectId));
+  const locale = useRecoilValue(localeState(projectId));
+  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
 
   const lgFilesRef = useRef(lgFiles);
   lgFilesRef.current = lgFiles;

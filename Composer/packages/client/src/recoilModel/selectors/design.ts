@@ -144,7 +144,6 @@ export const botStateByProjectIdSelector = selector({
 export const botStateByProjectIdSelectorFamily = selectorFamily({
   key: 'botStateByProjectIdSelector',
   get: (projectId: string) => ({ get }) => {
-    console.log('Fuck u');
     const dialogs = get(dialogsState(projectId));
     const schemas = get(schemasState(projectId));
     const botName = get(botNameState(projectId));

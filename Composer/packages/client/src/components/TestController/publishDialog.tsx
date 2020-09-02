@@ -22,7 +22,7 @@ import { Text, Tips, Links, nameRegex } from '../../constants';
 import { FieldConfig, useForm } from '../../hooks/useForm';
 import { getReferredQnaFiles } from '../../utils/qnaUtil';
 import { getReferredLuFiles } from '../../utils/luUtil';
-import { botStateByProjectIdSelector } from '../../recoilModel';
+import { dialogsState, luFilesState, qnaFilesState } from '../../recoilModel';
 
 // -------------------- Styles -------------------- //
 const textFieldLabel = css`
@@ -100,11 +100,14 @@ interface IPublishDialogProps {
   config: IConfig;
   onDismiss: () => void;
   onPublish: (data: IPublishConfig) => void;
+  projectId: string;
 }
 
 export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
-  const { isOpen, onDismiss, onPublish, botName, config } = props;
-  const { dialogs, luFiles, qnaFiles } = useRecoilValue(botStateByProjectIdSelector);
+  const { isOpen, onDismiss, onPublish, botName, config, projectId } = props;
+  const dialogs = useRecoilValue(dialogsState(projectId));
+  const luFiles = useRecoilValue(luFilesState(projectId));
+  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   const qnaConfigShow = getReferredQnaFiles(qnaFiles, dialogs).length > 0;
   const luConfigShow = getReferredLuFiles(luFiles, dialogs).length > 0;
 

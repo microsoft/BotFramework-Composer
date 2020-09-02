@@ -107,7 +107,7 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
     },
     {
       type: 'element',
-      element: <TestController />,
+      element: <TestController projectId={projectId} />,
       align: 'right',
     },
   ];

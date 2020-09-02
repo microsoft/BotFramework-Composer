@@ -7,28 +7,40 @@ import { atom, useRecoilTransactionObserver_UNSTABLE, Snapshot, useRecoilState }
 import once from 'lodash/once';
 import React from 'react';
 import { BotAssets } from '@bfc/shared';
-import { useRecoilValue } from 'recoil';
 
 import { prepareAxios } from './../utils/auth';
 import filePersistence from './persistence/FilePersistence';
 import createDispatchers, { Dispatcher } from './dispatchers';
-import { botProjectsState } from './atoms';
-import { UndoRoot } from './undo/history';
-import { botStateByProjectIdSelector } from './selectors';
+import {
+  botProjectsState,
+  dialogsState,
+  luFilesState,
+  qnaFilesState,
+  lgFilesState,
+  skillManifestsState,
+  dialogSchemasState,
+  settingsState,
+} from './atoms';
 
-const getBotAssets = async (snapshot: Snapshot): Promise<BotAssets> => {
-  const result = await snapshot.getPromise(botStateByProjectIdSelector);
-
-  const { projectId, qnaFiles, dialogs, luFiles, lgFiles, skillManifests, dialogSetting, dialogSchemas } = result;
+const getBotAssets = async (projectId, snapshot: Snapshot): Promise<BotAssets> => {
+  const result = await Promise.all([
+    snapshot.getPromise(dialogsState(projectId)),
+    snapshot.getPromise(luFilesState(projectId)),
+    snapshot.getPromise(qnaFilesState(projectId)),
+    snapshot.getPromise(lgFilesState(projectId)),
+    snapshot.getPromise(skillManifestsState(projectId)),
+    snapshot.getPromise(settingsState(projectId)),
+    snapshot.getPromise(dialogSchemasState(projectId)),
+  ]);
   return {
     projectId,
-    dialogs,
-    luFiles,
-    qnaFiles,
-    lgFiles,
-    skillManifests,
-    setting: dialogSetting,
-    dialogSchemas,
+    dialogs: result[0],
+    luFiles: result[1],
+    qnaFiles: result[2],
+    lgFiles: result[3],
+    skillManifests: result[4],
+    setting: result[5],
+    dialogSchemas: result[6],
   };
 };
 
@@ -68,19 +80,17 @@ const InitDispatcher = ({ onLoad }) => {
 
 export const DispatcherWrapper = ({ children }) => {
   const [loaded, setLoaded] = useState(false);
-  const botProjects = useRecoilValue(botProjectsState);
-
   useRecoilTransactionObserver_UNSTABLE(async ({ snapshot, previousSnapshot }) => {
-    const assets = await getBotAssets(snapshot);
-    const previousAssets = await getBotAssets(previousSnapshot);
-    filePersistence.notify(assets, previousAssets);
+    const botProjects = await snapshot.getPromise(botProjectsState);
+    for (const projectId of botProjects) {
+      const assets = await getBotAssets(projectId, snapshot);
+      const previousAssets = await getBotAssets(projectId, previousSnapshot);
+      filePersistence.notify(assets, previousAssets);
+    }
   });
 
   return (
     <Fragment>
-      {botProjects.map((projectId) => (
-        <UndoRoot key={projectId} projectId={projectId} />
-      ))}
       <InitDispatcher onLoad={setLoaded} />
       {loaded ? children : null}
     </Fragment>

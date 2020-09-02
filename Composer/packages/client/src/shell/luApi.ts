@@ -8,7 +8,7 @@ import formatMessage from 'format-message';
 import debounce from 'lodash/debounce';
 
 import { useResolvers } from '../hooks/useResolver';
-import { botStateByProjectIdSelector, currentProjectIdState } from '../recoilModel';
+import { focusPathState } from '../recoilModel';
 import { Dispatcher } from '../recoilModel/dispatchers';
 
 import { dispatcherState } from './../recoilModel/DispatcherWrapper';
@@ -83,11 +83,10 @@ function createLuApi(
   };
 }
 
-export function useLuApi() {
-  const { focusPath } = useRecoilValue(botStateByProjectIdSelector);
+export function useLuApi(projectId: string) {
+  const focusPath = useRecoilValue(focusPathState(projectId));
   const dispatchers = useRecoilValue(dispatcherState);
-  const { luFileResolver } = useResolvers();
-  const projectId = useRecoilValue(currentProjectIdState);
+  const { luFileResolver } = useResolvers(projectId);
   const [api, setApi] = useState(createLuApi({ focusPath, projectId }, dispatchers, luFileResolver));
 
   useEffect(() => {

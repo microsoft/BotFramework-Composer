@@ -9,7 +9,7 @@ import { useRecoilValue } from 'recoil';
 import onboardingStorage from '../utils/onboardingStorage';
 import { OpenConfirmModal } from '../components/Modal/ConfirmDialog';
 import { useLocation } from '../utils/hooks';
-import { dispatcherState, onboardingState, currentProjectIdState, botStateByProjectIdSelector } from '../recoilModel';
+import { dispatcherState, onboardingState, botProjectsState, validateDialogSelectorFamily } from '../recoilModel';
 
 import OnboardingContext from './OnboardingContext';
 import TeachingBubbles from './TeachingBubbles/TeachingBubbles';
@@ -20,8 +20,9 @@ const getCurrentSet = (stepSets) => stepSets.findIndex(({ id }) => id === onboar
 
 const Onboarding: React.FC = () => {
   const didMount = useRef(false);
-  const projectId = useRecoilValue(currentProjectIdState);
-  const { validatedDialogs: dialogs } = useRecoilValue(botStateByProjectIdSelector);
+  const botProjects = useRecoilValue(botProjectsState);
+  const rootBotProjectId = botProjects[0];
+  const dialogs = useRecoilValue(validateDialogSelectorFamily(rootBotProjectId));
   const { onboardingSetComplete } = useRecoilValue(dispatcherState);
   const onboarding = useRecoilValue(onboardingState);
   const complete = onboarding.complete;
@@ -29,7 +30,7 @@ const Onboarding: React.FC = () => {
   const rootDialogId = dialogs.find(({ isRoot }) => isRoot === true)?.id || 'Main';
 
   const stepSets = useMemo<IStepSet[]>(() => {
-    return defaultStepSets(projectId, rootDialogId)
+    return defaultStepSets(rootBotProjectId, rootDialogId)
       .map((stepSet) => ({
         ...stepSet,
         steps: stepSet.steps.filter(({ targetId }) => {
@@ -42,7 +43,7 @@ const Onboarding: React.FC = () => {
         }),
       }))
       .filter(({ steps }) => steps.length);
-  }, [projectId, rootDialogId]);
+  }, [rootBotProjectId, rootDialogId]);
 
   const [currentSet, setCurrentSet] = useState<number>(getCurrentSet(stepSets));
   const [currentStep, setCurrentStep] = useState<number>(0);
@@ -67,7 +68,7 @@ const Onboarding: React.FC = () => {
     const { steps } = stepSets[currentSet] || { steps: [] };
     const coachMark = steps[currentStep] || {};
     const { id, location, navigateTo, targetId } = coachMark;
-    !complete && projectId && navigateTo && navigate(navigateTo);
+    !complete && rootBotProjectId && navigateTo && navigate(navigateTo);
     setTeachingBubble({ currentStep, id, location, setLength: steps.length, targetId });
 
     setMinimized(currentStep >= 0);
@@ -75,10 +76,10 @@ const Onboarding: React.FC = () => {
     if (currentSet > -1 && currentSet < stepSets.length) {
       onboardingStorage.setCurrentSet(stepSets[currentSet].id);
     }
-  }, [currentSet, currentStep, setTeachingBubble, projectId]);
+  }, [currentSet, currentStep, setTeachingBubble, rootBotProjectId]);
 
   useEffect(() => {
-    setHideModal(pathname !== `/bot/${projectId}/dialogs/${rootDialogId}`);
+    setHideModal(pathname !== `/bot/${rootBotProjectId}/dialogs/${rootDialogId}`);
     if (currentSet === 0) {
       setCurrentStep(pathname === '/home' ? 0 : -1);
     }

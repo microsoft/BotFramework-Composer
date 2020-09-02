@@ -36,16 +36,25 @@ import { useShell } from '../../shell';
 import plugins, { mergePluginConfigs } from '../../plugins';
 import { useElectronFeatures } from '../../hooks/useElectronFeatures';
 import {
-  botStateByProjectIdSelector,
   visualEditorSelectionState,
   userSettingsState,
   dispatcherState,
-  dialogsState,
-  botStateByProjectIdSelectorFamily,
+  schemasState,
+  displaySkillManifestState,
+  validateDialogSelectorFamily,
+  breadcrumbState,
+  focusPathState,
+  showCreateDialogModalState,
+  showAddSkillDialogModalState,
+  skillsState,
+  actionsSeedState,
+  localeState,
+  qnaFilesState,
 } from '../../recoilModel';
 import { getBaseName } from '../../utils/fileUtil';
 import ImportQnAFromUrlModal from '../knowledge-base/ImportQnAFromUrlModal';
 import { triggerNotSupported } from '../../utils/dialogValidator';
+import { undoFunctionState } from '../../recoilModel/undo/history';
 
 import { WarningMessage } from './WarningMessage';
 import {
@@ -103,22 +112,21 @@ const getTabFromFragment = () => {
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = (props) => {
   const { location, dialogId, projectId = '' } = props;
   const userSettings = useRecoilValue(userSettingsState);
-  const {
-    schemas,
-    displaySkillManifest,
-    breadcrumb,
-    focusPath,
-    showCreateDialogModal,
-    showAddSkillDialogModal,
-    skills,
-    actionsSeed,
-    locale,
-    undoVersion,
-    qnaFiles,
-    undoFunction: { undo, redo, canRedo, canUndo, commitChanges, clearUndo },
-  } = useRecoilValue(botStateByProjectIdSelectorFamily(projectId));
-  const dialogs = useRecoilValue(dialogsState(projectId));
 
+  const schemas = useRecoilValue(schemasState(projectId));
+  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const displaySkillManifest = useRecoilValue(displaySkillManifestState(projectId));
+  const breadcrumb = useRecoilValue(breadcrumbState(projectId));
+  const focusPath = useRecoilValue(focusPathState(projectId));
+  const showCreateDialogModal = useRecoilValue(showCreateDialogModalState(projectId));
+  const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState(projectId));
+  const skills = useRecoilValue(skillsState(projectId));
+  const actionsSeed = useRecoilValue(actionsSeedState(projectId));
+  const locale = useRecoilValue(localeState(projectId));
+  const undoVersion = useRecoilValue(undoFunctionState(projectId));
+  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
+  const undoFunction = useRecoilValue(undoFunctionState(projectId));
+  const { undo, redo, canRedo, canUndo, commitChanges, clearUndo } = undoFunction;
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
   const {
     removeDialog,
@@ -147,9 +155,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0]);
   const [exportSkillModalVisible, setExportSkillModalVisible] = useState(false);
   const [warningIsVisible, setWarningIsVisible] = useState(true);
-  const shell = useShell('DesignPage');
-  const shellForFlowEditor = useShell('FlowEditor');
-  const shellForPropertyEditor = useShell('PropertyEditor');
+  const shell = useShell('DesignPage', projectId);
+  const shellForFlowEditor = useShell('FlowEditor', projectId);
+  const shellForPropertyEditor = useShell('PropertyEditor', projectId);
   const triggerApi = useTriggerApi(shell.api);
   const { createTrigger } = shell.api;
 
@@ -180,7 +188,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
   // migration: add qna file for dialog
   useEffect(() => {
-    debugger;
     dialogs.forEach(async (dialog) => {
       if (!qnaFiles || qnaFiles.length === 0 || !qnaFiles.find((qnaFile) => getBaseName(qnaFile.id) === dialog.id)) {
         await createQnAFile({ id: dialog.id, content: '', projectId });
@@ -436,7 +443,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     },
     {
       type: 'element',
-      element: <TestController />,
+      element: <TestController projectId={projectId} />,
       align: 'right',
     },
   ];
@@ -644,7 +651,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                     />
                   )
                 ) : (
-                  <Extension plugins={pluginConfig} shell={shellForFlowEditor}>
+                  <Extension plugins={pluginConfig} projectId={projectId} shell={shellForFlowEditor}>
                     <VisualEditor
                       openNewTriggerModal={openNewTriggerModal}
                       onBlur={() => setFlowEditorFocused(false)}
@@ -653,7 +660,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                   </Extension>
                 )}
               </div>
-              <Extension plugins={pluginConfig} shell={shellForPropertyEditor}>
+              <Extension plugins={pluginConfig} projectId={projectId} shell={shellForPropertyEditor}>
                 <PropertyEditor key={focusPath + undoVersion} />
               </Extension>
             </div>
@@ -664,6 +671,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         {showCreateDialogModal && (
           <CreateDialogModal
             isOpen={showCreateDialogModal}
+            projectId={projectId}
             onDismiss={() => createDialogCancel(projectId)}
             onSubmit={handleCreateDialogSubmit}
           />
@@ -681,6 +689,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         {exportSkillModalVisible && (
           <ExportSkillModal
             isOpen={exportSkillModalVisible}
+            projectId={projectId}
             onDismiss={() => setExportSkillModalVisible(false)}
             onSubmit={() => setExportSkillModalVisible(false)}
           />
@@ -698,7 +707,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           <ImportQnAFromUrlModal dialogId={dialogId} onDismiss={cancelImportQnAModal} onSubmit={handleCreateQnA} />
         )}
         {displaySkillManifest && (
-          <DisplayManifestModal manifestId={displaySkillManifest} onDismiss={() => dismissManifestModal(projectId)} />
+          <DisplayManifestModal
+            manifestId={displaySkillManifest}
+            projectId={projectId}
+            onDismiss={() => dismissManifestModal(projectId)}
+          />
         )}
       </Suspense>
     </React.Fragment>

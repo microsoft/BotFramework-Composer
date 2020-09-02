@@ -17,8 +17,9 @@ import {
   dispatcherState,
   ejectRuntimeSelector,
   boilerplateVersionState,
-  botStateByProjectIdSelector,
-  currentProjectIdState,
+  botNameState,
+  settingsState,
+  isEjectRuntimeExistState,
 } from '../../../recoilModel';
 import { OpenConfirmModal } from '../../../components/Modal/ConfirmDialog';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
@@ -27,9 +28,12 @@ import { EjectModal } from './ejectModal';
 import { WorkingModal } from './workingModal';
 import { breathingSpace, runtimeSettingsStyle, runtimeControls, runtimeToggle, controlGroup } from './style';
 
-export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
-  const { botName, dialogSetting: settings, isEjectRuntimeExist } = useRecoilValue(botStateByProjectIdSelector);
-  const projectId = useRecoilValue(currentProjectIdState);
+export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
+  const { projectId = '' } = props;
+  const botName = useRecoilValue(botNameState(projectId));
+  const settings = useRecoilValue(settingsState(projectId));
+  const ejectedRuntimeExists = useRecoilValue(isEjectRuntimeExistState(projectId));
+
   const boilerplateVersion = useRecoilValue(boilerplateVersionState);
   const {
     setCustomRuntime,
@@ -57,11 +61,11 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
   }, [boilerplateVersion.updateRequired]);
 
   useEffect(() => {
-    if (isEjectRuntimeExist && templateKey) {
+    if (ejectedRuntimeExists && templateKey) {
       confirmReplaceEject(templateKey);
       setTemplateKey('');
     }
-  }, [isEjectRuntimeExist, templateKey]);
+  }, [ejectedRuntimeExists, templateKey]);
 
   const handleChangeToggle = (_, isOn = false) => {
     setCustomRuntime(projectId, isOn);

@@ -24,11 +24,18 @@ import { EditableField } from '../../components/EditableField';
 import { getExtension } from '../../utils/fileUtil';
 import { languageListTemplates } from '../../components/MultiLanguage';
 import { navigateTo } from '../../utils/navigation';
-import { botStateByProjectIdSelector, dispatcherState } from '../../recoilModel';
+import {
+  dispatcherState,
+  luFilesState,
+  localeState,
+  settingsState,
+  validateDialogSelectorFamily,
+} from '../../recoilModel';
 
 import { formCell, luPhraseCell, tableCell } from './styles';
-interface TableViewProps extends RouteComponentProps<{}> {
+interface TableViewProps extends RouteComponentProps<{ dialogId: string; projectId: string }> {
   dialogId: string;
+  projectId: string;
 }
 
 interface Intent {
@@ -41,13 +48,16 @@ interface Intent {
 }
 
 const TableView: React.FC<TableViewProps> = (props) => {
+  const { dialogId, projectId } = props;
   const { updateLuIntent } = useRecoilValue(dispatcherState);
-  const { luFiles, locale, dialogSetting: settings, validatedDialogs: dialogs, projectId } = useRecoilValue(
-    botStateByProjectIdSelector
-  );
+
+  const luFiles = useRecoilValue(luFilesState(projectId));
+  const locale = useRecoilValue(localeState(projectId));
+  const settings = useRecoilValue(settingsState(projectId));
+  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
 
   const { languages, defaultLanguage } = settings;
-  const { dialogId } = props;
+
   const activeDialog = dialogs.find(({ id }) => id === dialogId);
 
   const file = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);

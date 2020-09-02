@@ -12,7 +12,7 @@ import { DialogCreationCopy, nameRegex } from '../../constants';
 import { StorageFolder } from '../../recoilModel/types';
 import { DialogWrapper, DialogTypes } from '../../components/DialogWrapper';
 import { FieldConfig, useForm } from '../../hooks/useForm';
-import { botStateByProjectIdSelector } from '../../recoilModel';
+import { validateDialogSelectorFamily } from '../../recoilModel';
 
 import { name, description, styles as wizardStyles } from './styles';
 
@@ -27,11 +27,12 @@ interface CreateDialogModalProps {
   onCurrentPathUpdate?: (newPath?: string, storageId?: string) => void;
   focusedStorageFolder?: StorageFolder;
   isOpen: boolean;
+  projectId: string;
 }
 
 export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
-  const { validatedDialogs: dialogs } = useRecoilValue(botStateByProjectIdSelector);
-  const { onSubmit, onDismiss, isOpen } = props;
+  const { onSubmit, onDismiss, isOpen, projectId } = props;
+  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
   const formConfig: FieldConfig<DialogFormData> = {
     name: {
       required: true,

@@ -5,14 +5,12 @@
 import { jsx } from '@emotion/core';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import AdaptiveForm, { resolveRef, getUIOptions } from '@bfc/adaptive-form';
-import { FormErrors, JSONSchema7, useFormConfig } from '@bfc/extension';
+import { FormErrors, JSONSchema7, useFormConfig, useShellApi } from '@bfc/extension';
 import formatMessage from 'format-message';
 import isEqual from 'lodash/isEqual';
 import debounce from 'lodash/debounce';
 import { Resizable, ResizeCallback } from 're-resizable';
 import { MicrosoftAdaptiveDialog } from '@bfc/shared';
-
-import { useShell } from '../../shell';
 
 import { formEditor } from './styles';
 
@@ -27,7 +25,7 @@ function resolveBaseSchema(schema: JSONSchema7, $kind: string): JSONSchema7 | un
 }
 
 const PropertyEditor: React.FC = () => {
-  const { api: shellApi, data: shellData } = useShell('PropertyEditor');
+  const { shellApi, ...shellData } = useShellApi();
   const { currentDialog, data: formData = {}, focusPath, focusedSteps, schemas } = shellData;
 
   const currentWidth = shellData?.userSettings?.propertyEditorWidth || 400;

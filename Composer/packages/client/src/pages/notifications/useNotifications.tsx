@@ -6,7 +6,16 @@ import { useRecoilValue } from 'recoil';
 import get from 'lodash/get';
 import { BotIndexer } from '@bfc/indexers';
 
-import { botStateByProjectIdSelector } from '../../recoilModel';
+import {
+  validateDialogSelectorFamily,
+  luFilesState,
+  lgFilesState,
+  botDiagnosticsState,
+  settingsState,
+  skillManifestsState,
+  dialogSchemasState,
+  qnaFilesState,
+} from '../../recoilModel';
 
 import {
   Notification,
@@ -20,18 +29,15 @@ import {
 } from './types';
 import { getReferredLuFiles } from './../../utils/luUtil';
 
-export default function useNotifications(filter?: string) {
-  const {
-    validatedDialogs: dialogs,
-    luFiles,
-    lgFiles,
-    diagnostics,
-    dialogSetting,
-    skillManifests,
-    dialogSchemas,
-    projectId,
-    qnaFiles,
-  } = useRecoilValue(botStateByProjectIdSelector);
+export default function useNotifications(projectId: string, filter?: string) {
+  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const luFiles = useRecoilValue(luFilesState(projectId));
+  const lgFiles = useRecoilValue(lgFilesState(projectId));
+  const diagnostics = useRecoilValue(botDiagnosticsState(projectId));
+  const dialogSetting = useRecoilValue(settingsState(projectId));
+  const skillManifests = useRecoilValue(skillManifestsState(projectId));
+  const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
+  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
 
   const botAssets = {
     projectId,

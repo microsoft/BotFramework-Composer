@@ -10,7 +10,17 @@ import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 import { IConfig, IPublishConfig, defaultPublishConfig } from '@bfc/shared';
 
-import { botEndpointsState, dispatcherState, botStateByProjectIdSelector } from '../../recoilModel';
+import {
+  botEndpointsState,
+  dispatcherState,
+  validateDialogSelectorFamily,
+  botStatusState,
+  botNameState,
+  luFilesState,
+  qnaFilesState,
+  settingsState,
+  botLoadErrorState,
+} from '../../recoilModel';
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { QnaConfig, BotStatus, LuisConfig } from '../../constants';
 import { isAbsHosted } from '../../utils/envUtil';
@@ -43,22 +53,21 @@ let botStatusInterval: NodeJS.Timeout | undefined = undefined;
 
 // -------------------- TestController -------------------- //
 const POLLING_INTERVAL = 2500;
-export const TestController: React.FC = () => {
+export const TestController: React.FC<{ projectId: string }> = (props) => {
+  const { projectId = '' } = props;
   const [modalOpen, setModalOpen] = useState(false);
   const [calloutVisible, setCalloutVisible] = useState(false);
 
   const botActionRef = useRef(null);
   const notifications = useNotifications();
-  const {
-    botName,
-    botStatus,
-    projectId,
-    validatedDialogs: dialogs,
-    luFiles,
-    qnaFiles,
-    dialogSetting: settings,
-    botLoadErrorMsg,
-  } = useRecoilValue(botStateByProjectIdSelector);
+
+  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const botStatus = useRecoilValue(botStatusState(projectId));
+  const botName = useRecoilValue(botNameState(projectId));
+  const luFiles = useRecoilValue(luFilesState(projectId));
+  const settings = useRecoilValue(settingsState(projectId));
+  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
+  const botLoadErrorMsg = useRecoilValue(botLoadErrorState(projectId));
 
   const botEndpoints = useRecoilValue(botEndpointsState);
   const {
@@ -267,6 +276,7 @@ export const TestController: React.FC = () => {
           botName={botName}
           config={publishDialogConfig}
           isOpen={modalOpen}
+          projectId={projectId}
           onDismiss={dismissDialog}
           onPublish={handlePublish}
         />

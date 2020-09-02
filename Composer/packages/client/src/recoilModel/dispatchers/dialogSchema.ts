@@ -5,7 +5,6 @@ import { useRecoilCallback, CallbackInterface } from 'recoil';
 import { DialogSchemaFile } from '@bfc/shared';
 
 import { dialogSchemasState } from '../atoms/botState';
-import { botStateByProjectIdSelector } from '../selectors';
 
 const createDialogSchema = ({ set }: CallbackInterface, dialogSchema: DialogSchemaFile, projectId: string) => {
   set(dialogSchemasState(projectId), (dialogSchemas) => [...dialogSchemas, dialogSchema]);
@@ -22,7 +21,7 @@ export const dialogSchemaDispatcher = () => {
   const updateDialogSchema = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (dialogSchema: DialogSchemaFile, projectId: string) => {
       const { set, snapshot } = callbackHelpers;
-      const { dialogSchemas } = await snapshot.getPromise(botStateByProjectIdSelector);
+      const dialogSchemas = await snapshot.getPromise(dialogSchemasState(projectId));
 
       if (!dialogSchemas.some((dialog) => dialog.id === dialogSchema.id)) {
         return createDialogSchema(callbackHelpers, dialogSchema, projectId);

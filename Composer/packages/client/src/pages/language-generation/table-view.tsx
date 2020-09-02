@@ -22,17 +22,27 @@ import { lgUtil } from '@bfc/indexers';
 import { EditableField } from '../../components/EditableField';
 import { navigateTo } from '../../utils/navigation';
 import { actionButton, formCell } from '../language-understanding/styles';
-import { dispatcherState, botStateByProjectIdSelector } from '../../recoilModel';
+import {
+  dispatcherState,
+  localeState,
+  lgFilesState,
+  settingsState,
+  validateDialogSelectorFamily,
+} from '../../recoilModel';
 import { languageListTemplates } from '../../components/MultiLanguage';
 
-interface TableViewProps extends RouteComponentProps<{}> {
+interface TableViewProps extends RouteComponentProps<{ dialogId: string; projectId: string }> {
   dialogId: string;
+  projectId: string;
 }
 
 const TableView: React.FC<TableViewProps> = (props) => {
-  const { validatedDialogs: dialogs, lgFiles, dialogSetting: settings, locale, projectId } = useRecoilValue(
-    botStateByProjectIdSelector
-  );
+  const { dialogId, projectId } = props;
+
+  const lgFiles = useRecoilValue(lgFilesState(projectId));
+  const locale = useRecoilValue(localeState(projectId));
+  const settings = useRecoilValue(settingsState(projectId));
+  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
 
   const { createLgTemplate, copyLgTemplate, removeLgTemplate, setMessage, updateLgTemplate } = useRecoilValue(
     dispatcherState
@@ -40,7 +50,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
   const { languages, defaultLanguage } = settings;
 
-  const { dialogId } = props;
   const file = lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const defaultLangFile = lgFiles.find(({ id }) => id === `${dialogId}.${defaultLanguage}`);
 

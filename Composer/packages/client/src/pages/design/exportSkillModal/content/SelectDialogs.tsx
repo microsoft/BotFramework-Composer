@@ -11,7 +11,7 @@ import debounce from 'lodash/debounce';
 import formatMessage from 'format-message';
 
 import { ContentProps } from '../constants';
-import { dispatcherState, botStateByProjectIdSelector } from '../../../../recoilModel';
+import { dispatcherState, botStateByProjectIdSelector, validateDialogSelectorFamily } from '../../../../recoilModel';
 
 import { SelectItems } from './SelectItems';
 
@@ -88,9 +88,11 @@ const DescriptionColumn: React.FC<DialogInfo> = ({ id, displayName }: DialogInfo
   );
 };
 
-export const SelectDialogs: React.FC<ContentProps> = ({ setSelectedDialogs }) => {
-  const { validatedDialogs: dialogs } = useRecoilValue(botStateByProjectIdSelector);
-  const items = useMemo(() => dialogs.map(({ id, content, displayName }) => ({ id, content, displayName })), []);
+export const SelectDialogs: React.FC<ContentProps> = ({ setSelectedDialogs, projectId }) => {
+  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const items = useMemo(() => dialogs.map(({ id, content, displayName }) => ({ id, content, displayName })), [
+    projectId,
+  ]);
 
   // for detail file list in open panel
   const tableColumns = useMemo(
@@ -126,7 +128,7 @@ export const SelectDialogs: React.FC<ContentProps> = ({ setSelectedDialogs }) =>
         isPadded: true,
       },
     ],
-    []
+    [projectId]
   );
 
   const selection = useMemo(

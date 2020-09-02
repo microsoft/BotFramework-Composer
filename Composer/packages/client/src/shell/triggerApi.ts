@@ -10,7 +10,7 @@ import get from 'lodash/get';
 import { useResolvers } from '../hooks/useResolver';
 import { onChooseIntentKey, generateNewDialog, intentTypeKey, qnaMatcherKey } from '../utils/dialogUtil';
 import { navigateTo } from '../utils/navigation';
-import { botStateByProjectIdSelector } from '../recoilModel';
+import { schemasState, lgFilesState, dialogsState, localeState } from '../recoilModel';
 
 import { dispatcherState } from './../recoilModel/DispatcherWrapper';
 
@@ -100,10 +100,14 @@ function createTriggerApi(
   };
 }
 
-export function useTriggerApi() {
-  const { lgFiles, projectId, schemas, dialogs, locale } = useRecoilValue(botStateByProjectIdSelector);
+export function useTriggerApi(projectId: string) {
+  const schemas = useRecoilValue(schemasState(projectId));
+  const lgFiles = useRecoilValue(lgFilesState(projectId));
+  const dialogs = useRecoilValue(dialogsState(projectId));
+  const locale = useRecoilValue(localeState(projectId));
+
   const dispatchers = useRecoilValue(dispatcherState);
-  const { luFileResolver, lgFileResolver, dialogResolver } = useResolvers();
+  const { luFileResolver, lgFileResolver, dialogResolver } = useResolvers(projectId);
   const [api, setApi] = useState(
     createTriggerApi(
       { projectId, schemas, dialogs, locale, lgFiles },
