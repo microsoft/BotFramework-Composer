@@ -52,7 +52,10 @@ const initRecoilState = ({ set }) => {
 
 describe('LU page all up view', () => {
   it('should render lu page table view', () => {
-    const { getByText, getByTestId } = renderWithRecoil(<TableView dialogId={'a'} />, initRecoilState);
+    const { getByText, getByTestId } = renderWithRecoil(
+      <TableView dialogId={'a'} projectId={state.projectId} />,
+      initRecoilState
+    );
     getByTestId('table-view');
     getByText('Intent');
   });

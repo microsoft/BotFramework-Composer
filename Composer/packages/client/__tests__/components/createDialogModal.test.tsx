@@ -15,7 +15,7 @@ describe('<CreateDialogModal/>', () => {
 
   function renderComponent() {
     return renderWithRecoil(
-      <CreateDialogModal isOpen onDismiss={onDismissMock} onSubmit={onSubmitMock} />,
+      <CreateDialogModal isOpen projectId={projectId} onDismiss={onDismissMock} onSubmit={onSubmitMock} />,
       ({ set }) => {
         set(showCreateDialogModalState(projectId), true);
       }

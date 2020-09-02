@@ -5,13 +5,14 @@ import React, { useEffect, useRef, useCallback, useState } from 'react';
 import { useRecoilTransactionObserver_UNSTABLE as useRecoilTransactionObserver, RecoilState } from 'recoil';
 import { atomFamily, Snapshot, useRecoilCallback, CallbackInterface, useSetRecoilState } from 'recoil';
 import uniqueId from 'lodash/uniqueId';
+import isArray from 'lodash/isArray';
 
 import { navigateTo, getUrlSearch } from '../../utils/navigation';
 
-import { breadcrumbState, projectMetaDataState } from './../atoms/botState';
+import { breadcrumbState } from './../atoms/botState';
 import { designPageLocationState, botProjectsState } from './../atoms';
-import UndoHistory from './undoHistory';
 import { trackedAtoms, AtomAssetsMap } from './trackedAtoms';
+import UndoHistory from './undoHistory';
 
 type IUndoRedo = {
   undo: () => void;
@@ -63,6 +64,16 @@ const checkAtomChanged = (current: AtomAssetsMap, previous: AtomAssetsMap, atom:
   return false;
 };
 
+const checkIfProjectIsReloaded = (current: AtomAssetsMap, previous: AtomAssetsMap, botProjects: RecoilState<any>) => {
+  const currVal = current.get(botProjects);
+  const prevVal = previous.get(botProjects);
+  if (isArray(prevVal) && isArray(currVal) && prevVal[0] !== currVal[0]) {
+    return true;
+  }
+
+  return false;
+};
+
 const checkAtomsChanged = (current: AtomAssetsMap, previous: AtomAssetsMap, atoms: RecoilState<any>[]) => {
   return atoms.some((atom) => checkAtomChanged(current, previous, atom));
 };
@@ -105,9 +116,12 @@ function setInitialLocation(snapshot: Snapshot, projectId: string, undoHistory: 
     undoHistory.setInitialValue(breadcrumbState(projectId), breadcrumb.contents);
   }
 }
-
-export const UndoRoot = React.memo(({ projectId }: { projectId: string }) => {
-  const undoHistory = new UndoHistory();
+interface UndoRootProps {
+  projectId: string;
+  undoHistory: UndoHistory;
+}
+export const UndoRoot = React.memo((props: UndoRootProps) => {
+  const { undoHistory, projectId } = props;
   const history: UndoHistory = useRef(undoHistory).current;
 
   const setUndoFunction = useSetRecoilState(undoFunctionState(projectId));
@@ -121,16 +135,15 @@ export const UndoRoot = React.memo(({ projectId }: { projectId: string }) => {
   useRecoilTransactionObserver(({ snapshot, previousSnapshot }) => {
     const currentAssets = getAtomAssetsMap(snapshot, projectId);
     const previousAssets = getAtomAssetsMap(previousSnapshot, projectId);
-    const botProjects = snapshot.getLoadable(botProjectsState).contents;
-    const rootBotProjectId = botProjects[0];
 
-    if (checkAtomChanged(currentAssets, previousAssets, projectMetaDataState(rootBotProjectId))) {
+    if (checkIfProjectIsReloaded(currentAssets, previousAssets, botProjectsState)) {
       //switch project should clean the undo history when the root bot has been changed
       undoHistory.clear();
       const assetMap = getAtomAssetsMap(snapshot, projectId);
 
       undoHistory.add(assetMap);
     } else if (!assetsChanged.current) {
+      debugger;
       if (checkAtomsChanged(currentAssets, previousAssets, trackedAtoms(projectId))) {
         assetsChanged.current = true;
       }

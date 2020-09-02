@@ -59,7 +59,10 @@ const initRecoilState = ({ set }) => {
 
 describe('LG page all up view', () => {
   it('should render lg page table view', () => {
-    const { getByText, getByTestId } = renderWithRecoil(<TableView dialogId={'a'} />, initRecoilState);
+    const { getByText, getByTestId } = renderWithRecoil(
+      <TableView dialogId={'a'} projectId={state.projectId} />,
+      initRecoilState
+    );
     getByTestId('table-view');
     getByText('Name');
   });

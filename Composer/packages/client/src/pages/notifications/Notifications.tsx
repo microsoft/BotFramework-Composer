@@ -16,8 +16,7 @@ import { NotificationHeader } from './NotificationHeader';
 import { root } from './styles';
 import { INotification, NotificationType } from './types';
 
-const Notifications: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
-  const { projectId = '' } = props;
+const Notifications: React.FC<RouteComponentProps<{ projectId: string }>> = () => {
   const [filter, setFilter] = useState('');
   const notifications = useNotifications(filter);
   const navigations = {

@@ -112,7 +112,7 @@ const LUPage: React.FC<RouteComponentProps<{
       <Suspense fallback={<LoadingSpinner />}>
         <Router component={Fragment} primary={false}>
           <CodeEditor dialogId={dialogId} path="/edit" projectId={projectId} />
-          <TableView dialogId={dialogId} path="/" />
+          <TableView dialogId={dialogId} path="/" projectId={projectId} />
         </Router>
       </Suspense>
     </Page>
