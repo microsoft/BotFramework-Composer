@@ -19,12 +19,10 @@ import TableView from './table-view';
 import { actionButton } from './styles';
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
-interface LUPageProps {
+const LUPage: React.FC<RouteComponentProps<{
   dialogId?: string;
   projectId: string;
-}
-
-const LUPage: React.FC<RouteComponentProps<LUPageProps>> = (props) => {
+}>> = (props) => {
   const { dialogId = '', projectId = '' } = props;
   const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
 

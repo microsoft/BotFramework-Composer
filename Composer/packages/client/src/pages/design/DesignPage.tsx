@@ -602,7 +602,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     return <LoadingSpinner />;
   }
 
-  const selectedTrigger = currentDialog.triggers.find((t) => t.id === selected);
+  const selectedTrigger = currentDialog?.triggers.find((t) => t.id === selected);
   const withWarning = triggerNotSupported(currentDialog, selectedTrigger);
 
   return (
