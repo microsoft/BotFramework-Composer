@@ -35,6 +35,6 @@ ctx.onmessage = function (msg) {
     }
     ctx.postMessage({ id: msgId, payload: result });
   } catch (error) {
-    ctx.postMessage({ id: msgId, error });
+    ctx.postMessage({ id: msgId, error: error.message });
   }
 };

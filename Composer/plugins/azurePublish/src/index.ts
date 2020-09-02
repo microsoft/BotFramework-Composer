@@ -236,7 +236,6 @@ export default async (composer: any): Promise<void> => {
         }
       } catch (error) {
         this.logger(error);
-        console.error(error);
         if (error instanceof Error) {
           this.logMessages.push(error.message);
         } else if (typeof error === 'object') {

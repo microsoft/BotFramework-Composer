@@ -236,6 +236,6 @@ ctx.onmessage = function (event) {
 
     ctx.postMessage({ id: msg.id, payload });
   } catch (error) {
-    ctx.postMessage({ id: msg.id, error });
+    ctx.postMessage({ id: msg.id, error: error.message });
   }
 };

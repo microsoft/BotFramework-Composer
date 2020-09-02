@@ -38,7 +38,7 @@ export class BaseWorker<ActionType> {
     const { id, error, payload } = msg.data;
     if (error) {
       const reject = this.rejects[id];
-      reject(error);
+      reject({ message: error });
     } else {
       const resolve = this.resolves[id];
       if (resolve) resolve(payload);
