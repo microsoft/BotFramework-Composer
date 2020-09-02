@@ -112,7 +112,7 @@ export class LGServer {
     const responses: FoldingRange[] = [];
     const outliningRegex = /\s*>>.*/;
     const templateNameRegex = /\s*#.*/;
-    let curLineState: FoldingState = FoldingState.OTHER;
+    const curLineState: FoldingState = FoldingState.OTHER;
     const document = this.documents.get(params.textDocument.uri);
     if (!document) {
       return Promise.resolve(null);
@@ -123,26 +123,20 @@ export class LGServer {
     }
 
     const lines: string[] = document.getText().split('\n');
-    let lineNum = 0;
     let start = 0;
-    for (const line of lines) {
-      if (line.match(outliningRegex)) {
-        curLineState = FoldingState.FOLD;
-        start = lineNum;
-      } else if (curLineState === FoldingState.FOLD && line.match(templateNameRegex)) {
-        console.log(start + ':' + lineNum);
-        const folding: FoldingRange = {
-          startLine: start,
-          endLine: lineNum,
-          kind: 'region',
-        };
-
-        responses.push(folding);
-        start = lineNum;
+    let end = 0;
+    for (let idx = 0; idx < lines.length; idx++) {
+      if (lines[idx].match(outliningRegex)) {
+        if (end > 0) {
+          const folding: FoldingRange = { startLine: start, endLine: end - 1 };
+          responses.push(folding);
+          start = idx;
+        }
+      } else {
+        end = idx;
       }
-
-      lineNum += 1;
     }
+
     return Promise.resolve(responses);
   }
 
