@@ -103,21 +103,32 @@ export interface LuFile {
   diagnostics: Diagnostic[];
   intents: LuIntentSection[];
   empty: boolean;
+  resource: LuParseResource;
   [key: string]: any;
 }
 
+export interface LuParseResource {
+  Sections: any[];
+  Errors: any[];
+  Content: string;
+}
+
 export interface QnASection {
+  sectionId: string;
   Questions: { content: string; id: string }[];
   Answer: string;
   Body: string;
+  range?: Range;
 }
 
 export interface QnAFile {
   id: string;
   content: string;
+  diagnostics: Diagnostic[];
   qnaSections: QnASection[];
   imports: string[];
   headers: string; // options, imports, avoid be wiped when do rebuild text
+  resource: LuParseResource;
   [key: string]: any;
 }
 
