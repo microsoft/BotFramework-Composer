@@ -29,6 +29,7 @@ router.post('/projects/:projectId/build', ProjectController.build);
 router.post('/projects/:projectId/qnaSettings/set', ProjectController.setQnASettings);
 router.post('/projects/:projectId/project/saveAs', ProjectController.saveProjectAs);
 router.get('/projects/:projectId/export', ProjectController.exportProject);
+router.get('/projects/checkIfBotProject', ProjectController.handleBotProject);
 
 // update the boilerplate content
 router.get('/projects/:projectId/boilerplateVersion', ProjectController.checkBoilerplateVersion);
