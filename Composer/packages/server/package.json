@@ -63,7 +63,7 @@
     "@bfc/shared": "*",
     "@microsoft/bf-dispatcher": "^4.10.0-preview.141651",
     "@microsoft/bf-lu": "^4.10.0-dev.20200808.5a7c973",
-    "archiver": "^3.0.0",
+    "archiver": "^5.0.0",
     "axios": "^0.19.2",
     "azure-storage": "^2.10.3",
     "body-parser": "^1.18.3",
