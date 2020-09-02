@@ -87,7 +87,11 @@ const Plugins: React.FC<RouteComponentProps> = () => {
       maxWidth: 150,
       onRender: (item: PluginConfig) => {
         const text = item.enabled ? formatMessage('Disable') : formatMessage('Enable');
-        return <DefaultButton onClick={() => togglePlugin(item.id, !item.enabled)}>{text}</DefaultButton>;
+        return (
+          <DefaultButton disabled={item.builtIn} onClick={() => togglePlugin(item.id, !item.enabled)}>
+            {text}
+          </DefaultButton>
+        );
       },
     },
     {
@@ -96,7 +100,11 @@ const Plugins: React.FC<RouteComponentProps> = () => {
       minWidth: 30,
       maxWidth: 150,
       onRender: (item: PluginConfig) => {
-        return <DefaultButton onClick={() => removePlugin(item.id)}>{formatMessage('Remove')}</DefaultButton>;
+        return (
+          <DefaultButton disabled={item.builtIn} onClick={() => removePlugin(item.id)}>
+            {formatMessage('Remove')}
+          </DefaultButton>
+        );
       },
     },
   ];
@@ -146,7 +154,8 @@ const Plugins: React.FC<RouteComponentProps> = () => {
   ];
 
   const toolbarItems: IToolbarItem[] = [
-    {
+    // TODO (toanzian / abrown): re-enable once remote plugins are supported
+    /*{
       type: 'action',
       text: formatMessage('Add'),
       buttonProps: {
@@ -158,7 +167,7 @@ const Plugins: React.FC<RouteComponentProps> = () => {
         },
       },
       align: 'left',
-    },
+    },*/
   ];
 
   const submit = useCallback(() => {

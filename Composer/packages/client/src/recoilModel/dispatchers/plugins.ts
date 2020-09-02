@@ -65,8 +65,17 @@ export const pluginsDispatcher = () => {
           id: pluginId,
           enabled: Boolean(enabled),
         });
+        const toggledPlugin: PluginConfig = res.data;
 
-        set(pluginsState, res.data);
+        set(pluginsState, (plugins) => {
+          return (plugins = plugins.map((p) => {
+            if (p.id === toggledPlugin.id) {
+              // update the toggled plugin
+              return toggledPlugin;
+            }
+            return p;
+          }));
+        });
       } catch (err) {
         // do nothing
         console.error(err);
