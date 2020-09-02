@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { ComposerGlobalName } from '../common/constants';
 import { PublishConfig } from './types';
 
