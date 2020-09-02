@@ -177,7 +177,13 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
     return filteredDialogs.map((dialog: DialogInfo) => {
       const triggerList = dialog.triggers
         .filter((tr) => filterMatch(dialog.displayName, filter) || filterMatch(getTriggerName(tr), filter))
-        .map((tr, index) => renderCell({ ...tr, index, displayName: getTriggerName(tr) }, 1, dialog));
+        .map((tr, index) =>
+          renderCell(
+            { ...tr, index, displayName: getTriggerName(tr), warningContent: triggerNotSupported(dialog, tr) },
+            1,
+            dialog
+          )
+        );
       return (
         <details key={dialog.id} ref={dialog.isRoot ? addMainDialogRef : undefined}>
           <summary
