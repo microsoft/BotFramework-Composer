@@ -34,7 +34,7 @@ describe('test base worker', () => {
     try {
       await testWorker.sendMsg('error', { test: '1' });
     } catch (error) {
-      expect(error).toBe('error');
+      expect(error.message).toBe('error');
     }
   });
 
