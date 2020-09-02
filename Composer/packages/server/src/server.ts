@@ -115,7 +115,7 @@ export async function start(): Promise<number | string> {
     }
   });
 
-  app.get('*', function (req, res) {
+  app.get('*', (req, res) => {
     res.render(path.resolve(clientDirectory, 'index.ejs'), { __nonce__: req.__nonce__ });
   });
 

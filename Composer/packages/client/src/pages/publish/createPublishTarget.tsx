@@ -15,10 +15,10 @@ import { PublishTarget } from '@bfc/shared';
 
 import { PublishType } from '../../recoilModel/types';
 import { userSettingsState } from '../../recoilModel';
-
-import { label, customPublishUISurface } from './styles';
 import { PluginHost } from '../../components/PluginHost/PluginHost';
 import { PluginAPI } from '../../plugins/api';
+
+import { label, customPublishUISurface } from './styles';
 
 interface CreatePublishTargetProps {
   closeDialog: () => void;
@@ -111,9 +111,9 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
       // render custom plugin view
       return (
         <PluginHost
+          extraIframeStyles={[customPublishUISurface]}
           pluginName={targetType}
           pluginType={'publish'}
-          extraIframeStyles={[customPublishUISurface]}
         ></PluginHost>
       );
     }

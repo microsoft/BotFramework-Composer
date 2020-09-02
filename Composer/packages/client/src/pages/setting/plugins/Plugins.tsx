@@ -17,11 +17,11 @@ import formatMessage from 'format-message';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import axios from 'axios';
+import { useRecoilValue } from 'recoil';
 
 import { PluginConfig } from '../../../recoilModel/types';
 import { Toolbar, IToolbarItem } from '../../../components/Toolbar';
 import httpClient from '../../../utils/httpUtil';
-import { useRecoilValue } from 'recoil';
 import { dispatcherState, pluginsState } from '../../../recoilModel';
 
 const Plugins: React.FC<RouteComponentProps> = () => {

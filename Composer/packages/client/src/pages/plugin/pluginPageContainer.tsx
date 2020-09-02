@@ -3,6 +3,7 @@
 
 import React from 'react';
 import { RouteComponentProps } from '@reach/router';
+
 import { PluginHost } from '../../components/PluginHost/PluginHost';
 
 const PluginPageContainer: React.FC<RouteComponentProps<{ pluginId: string }>> = (props) => {

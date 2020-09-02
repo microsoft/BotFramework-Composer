@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import { Request, Response } from 'express';
-
 import { PluginManager } from '@bfc/plugin-loader';
 
 interface AddPluginRequest extends Request {
@@ -139,9 +138,10 @@ export async function performPluginFetch(req: PluginFetchRequest, res: Response)
     const json = await response.json();
     res.json(json);
   } catch (e) {
+    let error = e;
     if (e && e.json) {
-      e = await e.json();
+      error = await e.json();
     }
-    res.status(500).send(e);
+    res.status(500).send(error);
   }
 }

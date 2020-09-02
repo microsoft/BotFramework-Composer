@@ -1,5 +1,9 @@
-import { BrowserWindow } from 'electron';
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { randomBytes } from 'crypto';
+
+import { BrowserWindow } from 'electron';
 
 const composerRedirectUri = 'bfcomposer://oauth';
 const baseUrl = 'https://login.microsoftonline.com/organizations/';

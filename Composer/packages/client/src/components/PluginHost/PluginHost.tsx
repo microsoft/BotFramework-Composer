@@ -1,10 +1,15 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /** @jsx jsx */
 import { jsx, SerializedStyles } from '@emotion/core';
 import * as React from 'react';
 import { useEffect, useRef } from 'react';
-import { iframeStyle } from './styles';
+
 import { PluginAPI } from '../../plugins/api';
 import { PluginType } from '../../plugins/types';
+
+import { iframeStyle } from './styles';
 
 interface PluginHostProps {
   extraIframeStyles?: SerializedStyles[];
@@ -16,7 +21,7 @@ interface PluginHostProps {
 function attachPluginAPI(win: Window, type: PluginType) {
   const api = { ...PluginAPI[type], ...PluginAPI.auth };
   for (const method in api) {
-    win['Composer'][method] = (...args) => api[method](...args);
+    win.Composer[method] = (...args) => api[method](...args);
   }
 }
 

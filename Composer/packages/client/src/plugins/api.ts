@@ -1,15 +1,14 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { OAuthClient, OAuthOptions } from '../utils/oauthClient';
 
 interface IAPI {
   auth: AuthAPI;
-  page?: PageAPI;
+  page?: {};
   publish: PublishAPI;
-  storage?: StorageAPI;
+  storage?: {};
 }
-
-interface StorageAPI {}
-
-interface PageAPI {}
 
 interface PublishConfig {
   [key: string]: any;
