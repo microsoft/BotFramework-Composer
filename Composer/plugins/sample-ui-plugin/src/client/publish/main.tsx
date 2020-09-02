@@ -1,8 +1,11 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import * as React from 'react';
 import { useEffect, useCallback, useState } from 'react';
 import { setConfigIsValid, setPublishConfig, useConfigBeingEdited } from '@bfc/client-plugin-lib';
 
-import { root, row } from './styles';
+import { column, label, publishRoot, textField } from '../styles';
 
 export const Main: React.FC<{}> = (props) => {
   const [configBeingEdited] = useConfigBeingEdited();
@@ -32,18 +35,42 @@ export const Main: React.FC<{}> = (props) => {
   }, [val1, val2, val3]);
 
   return (
-    <div style={root}>
-      <div style={row}>
-        <label htmlFor={'val1'}>Value 1:</label>
-        <input id={'val1'} placeholder={'Enter a value...'} value={val1} onChange={updateVal1}></input>
+    <div className={publishRoot}>
+      <div className={column}>
+        <label className={label} htmlFor={'val1'}>
+          Value 1
+        </label>
+        <input
+          className={textField}
+          id={'val1'}
+          placeholder={'Enter a value...'}
+          value={val1}
+          onChange={updateVal1}
+        ></input>
       </div>
-      <div style={row}>
-        <label htmlFor={'val2'}>Value 2:</label>
-        <input id={'val2'} placeholder={'Enter a value...'} value={val2} onChange={updateVal2}></input>
+      <div className={column}>
+        <label className={label} htmlFor={'val2'}>
+          Value 2
+        </label>
+        <input
+          className={textField}
+          id={'val2'}
+          placeholder={'Enter a value...'}
+          value={val2}
+          onChange={updateVal2}
+        ></input>
       </div>
-      <div style={row}>
-        <label htmlFor={'val3'}>Value 3:</label>
-        <input id={'val3'} placeholder={'Enter a value...'} value={val3} onChange={updateVal3}></input>
+      <div className={column}>
+        <label className={label} htmlFor={'val3'}>
+          Value 3
+        </label>
+        <input
+          className={textField}
+          id={'val3'}
+          placeholder={'Enter a value...'}
+          value={val3}
+          onChange={updateVal3}
+        ></input>
       </div>
     </div>
   );

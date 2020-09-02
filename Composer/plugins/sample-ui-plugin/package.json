@@ -31,15 +31,16 @@
       }
     }
   },
-  "extendsComposer": true,
+  "extendsComposer": false,
   "main": "dist/index.js",
   "dependencies": {
     "@bfc/client-plugin-lib": "file:../../packages/extensions/client-plugin-lib",
+    "emotion": "^10.0.27",
     "react": "^16.13.0",
     "react-dom": "^16.13.0"
   },
   "devDependencies": {
-    "html-webpack-plugin": "^4.3.0",
+    "@types/node": "^14.6.2",
     "rimraf": "^3.0.2",
     "ts-loader": "^8.0.0",
     "typescript": "^3.9.6",

@@ -1,70 +1,40 @@
-interface PublishResult {
-  message: string;
-  comment?: string;
-  log?: string;
-  id?: string;
-  time?: Date;
-  endpointURL?: string;
-  status?: number;
-}
-
-interface PublishResponse {
-  status: number;
-  result: PublishResult;
-}
-
-interface PublishPlugin<Config = any> {
-  publish: (config, project: any, metadata: any, user?) => Promise<PublishResponse>;
-  getStatus?: (config, project: any, user?) => Promise<PublishResponse>;
-  getHistory?: (config, project: any, user?) => Promise<PublishResult[]>;
-  rollback?: (config, project: any, rollbackToVersion: string, user?) => Promise<PublishResponse>;
-  [key: string]: any;
-}
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
 // this will be called by composer
 function initialize(registration) {
   const plugin = {
     customDescription: 'Publish using custom UI',
     hasView: true /** we have custom UI to host */,
-    history: getHistory,
     publish,
     getStatus,
   };
   registration.addPublishMethod(plugin);
 }
 
-const baseURL = 'http://localhost:3003/api/';
-
-async function getHistory(config, project, user) {
-  const endpoint = baseURL + 'history';
-  let res = await fetch(endpoint);
-  res = await res.json();
-  return res;
-}
-
 async function getStatus(config, project, user) {
-  console.log('getting status');
-  const endpoint = baseURL + 'status';
-  let res = await fetch(endpoint);
-  res = await res.json();
-  return {
-    result: res,
+  const response = {
     status: 200,
+    result: {
+      time: new Date(),
+      message: 'Publish successful.',
+      log: [],
+    },
   };
+  return response;
 }
 
 async function publish(config, project, metadata, user) {
-  const options = {
-    method: 'POST',
-    body: JSON.stringify({ config, project, metadata, user }),
+  const response = {
+    status: 202,
+    result: {
+      time: new Date(),
+      message: 'Publish accepted.',
+      log: [],
+      comment: metadata.comment,
+    },
   };
-  const endpoint = baseURL + 'publish';
-  let res = await fetch(endpoint, options);
-  res = await res.json();
-  return {
-    result: res,
-    status: res.status,
-  };
+  return response;
 }
 
 module.exports = {

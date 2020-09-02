@@ -1,5 +1,4 @@
 const { resolve } = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -21,11 +20,4 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.ts', '.tsx'],
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      // only want to run the publish UI locally
-      excludeChunks: ['page'],
-      template: './src/client/index.html',
-    }),
-  ],
 };
