@@ -175,7 +175,6 @@ async function main() {
 }
 
 async function run() {
-  app.getAppPath;
   fixPath(); // required PATH fix for Mac (https://github.com/electron/electron/issues/5626)
 
   // Force Single Instance Application
