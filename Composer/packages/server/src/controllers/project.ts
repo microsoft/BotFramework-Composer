@@ -88,7 +88,7 @@ async function getProjectById(req: Request, res: Response) {
       });
     } else {
       res.status(404).json({
-        message: 'No such bot project opened',
+        message: 'No such project opened',
       });
     }
   } catch (error) {
@@ -410,8 +410,29 @@ async function updateBoilerplate(req: Request, res: Response) {
     }
   } else {
     res.status(404).json({
-      message: 'No such bot project opened',
+      message: 'No such project opened',
     });
+  }
+}
+
+async function handleBotProject(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  const { path, storageId } = req.query;
+  if (!path || !storageId) {
+    res.status(400).json({
+      message: 'parameters not provided, require stoarge id and path',
+    });
+    return;
+  }
+  const location: LocationRef = {
+    storageId,
+    path,
+  };
+
+  try {
+    const id = await BotProjectService.checkIfBotProject(location, user);
+  } catch (ex) {
+    return {};
   }
 }
 
@@ -433,4 +454,5 @@ export const ProjectController = {
   getRecentProjects,
   updateBoilerplate,
   checkBoilerplateVersion,
+  handleBotProject,
 };

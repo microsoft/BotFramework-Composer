@@ -3,6 +3,7 @@
 // Licensed under the MIT License.
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 import { dereferenceDefinitions, LuFile, QnAFile, DialogInfo, SensitiveProperties, DialogSetting } from '@bfc/shared';
+import queryString from 'query-string';
 import { indexer, validateDialog } from '@bfc/indexers';
 import objectGet from 'lodash/get';
 import objectSet from 'lodash/set';
@@ -237,6 +238,28 @@ export const projectDispatcher = () => {
     const { set } = callbackHelpers;
     set(botOpeningState, true);
     await checkProjectUpdates();
+  };
+
+  const checkIfBotProject = async (path: string, storageId: string) => {
+    try {
+      const qs: any = {
+        path,
+        storageId,
+      };
+      const stringified = queryString.stringify(qs, {
+        encode: true,
+      });
+      const response = await httpClient.get(`/projects/checkBotProject?${stringified}`);
+      if (response.data) {
+        const { isBotProject, botProjectData } = response.data;
+        return {
+          isBotProject,
+          botProjectData,
+        };
+      }
+    } catch (ex) {
+      return false;
+    }
   };
 
   const openProject = useRecoilCallback(
