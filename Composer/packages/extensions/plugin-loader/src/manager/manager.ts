@@ -34,9 +34,6 @@ export class PluginManager {
 
   // singleton
   private constructor() {
-    console.log(
-      `PluginManager initializing with the following values: \n${process.env.COMPOSER_BUILTIN_PLUGINS_DIR} \n${process.env.COMPOSER_REMOTE_PLUGINS_DIR}`
-    );
     this.manifest = new ExtensionManifestStore();
     this.builtinPluginsDir = process.env.COMPOSER_BUILTIN_PLUGINS_DIR;
     this.remotePluginsDir = process.env.COMPOSER_REMOTE_PLUGINS_DIR;

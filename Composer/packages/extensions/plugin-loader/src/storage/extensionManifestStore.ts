@@ -62,11 +62,8 @@ export class ExtensionManifestStore {
   private manifestPath: string;
 
   constructor() {
-    // create extension-manifest.json if it doesn't exist
-    console.log(
-      `ExtensionManifestStore initializing with the following value: \n${process.env.COMPOSER_EXTENSION_DATA}`
-    );
     this.manifestPath = process.env.COMPOSER_EXTENSION_DATA as string;
+    // create extension-manifest.json if it doesn't exist
     if (!existsSync(this.manifestPath)) {
       log('extension-manifest.json does not exist yet. Writing file to path: %s', this.manifestPath);
       writeJsonSync(this.manifestPath, DEFAULT_MANIFEST);
