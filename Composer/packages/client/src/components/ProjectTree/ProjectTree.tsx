@@ -124,12 +124,13 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
         role="grid"
       >
         <TreeItem
+          showProps
           depth={0}
           icon={'CannedChat'}
           isSubItemActive={!!selected}
           link={{ ...dialog, warningContent }}
           onDelete={onDeleteDialog}
-          onSelect={() => {}}
+          onSelect={() => onSelect(dialog.id)}
         />
       </span>
     );

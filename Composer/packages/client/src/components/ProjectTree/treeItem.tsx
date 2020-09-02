@@ -141,6 +141,7 @@ interface ITreeItemProps {
   onSelect: (id: string) => void;
   icon?: string;
   dialogName?: string;
+  showProps?: boolean;
 }
 
 const onRenderItem = (item: IOverflowSetItemProps) => {
@@ -214,6 +215,22 @@ export const TreeItem: React.FC<ITreeItemProps> = (props) => {
 
   const a11yLabel = `${dialogName ?? '$Root'}_${link.displayName}`;
 
+  const overflowMenu = [
+    {
+      key: 'delete',
+      name: formatMessage('Delete'),
+      onClick: () => onDelete(link.id),
+    },
+  ];
+
+  if (props.showProps) {
+    overflowMenu.push({
+      key: 'props',
+      name: formatMessage('Properties'),
+      onClick: () => onSelect(link.id),
+    });
+  }
+
   return (
     <div
       aria-label={a11yLabel}
@@ -244,18 +261,7 @@ export const TreeItem: React.FC<ITreeItemProps> = (props) => {
             ...link,
           },
         ]}
-        overflowItems={[
-          {
-            key: 'delete',
-            name: formatMessage('Delete'),
-            onClick: () => onDelete(link.id),
-          },
-          {
-            key: 'props',
-            name: formatMessage('Properties'),
-            onClick: () => onSelect(link.id),
-          },
-        ]}
+        overflowItems={overflowMenu}
         role="row"
         styles={{ item: { flex: 1 } }}
         onRenderItem={onRenderItem}
