@@ -12,7 +12,7 @@ module.exports = {
     libraryTarget: 'var',
   },
   externals: {
-    // ReactDOM depends on React, but we need this to resolve to the globally-exposed React variable in reactIso.js.
+    // ReactDOM depends on React, but we need this to resolve to the globally-exposed React variable in react-bundle.js (created by webpack-react.config.js).
     // If we don't do this, ReactDom will bundle its own copy of React and we will have 2 copies which breaks hooks.
     react: 'React',
   },
