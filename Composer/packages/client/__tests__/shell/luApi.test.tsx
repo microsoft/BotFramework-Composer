@@ -48,7 +48,7 @@ describe('use luApi hooks', () => {
       const { children } = props;
       return <RecoilRoot initializeState={initRecoilState}>{children}</RecoilRoot>;
     };
-    const rendered = renderHook(() => useLuApi(), {
+    const rendered = renderHook(() => useLuApi(state.projectId), {
       wrapper,
     });
     result = rendered.result;

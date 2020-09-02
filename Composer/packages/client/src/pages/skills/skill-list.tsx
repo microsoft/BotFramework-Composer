@@ -174,6 +174,7 @@ const SkillList: React.FC<ISkillListProps> = (props) => {
         isDraggable={false}
         isModeless={false}
         manifestId={selectedSkillUrl}
+        projectId={projectId}
         onDismiss={onDismissManifest}
       />
     </React.Fragment>

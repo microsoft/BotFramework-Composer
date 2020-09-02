@@ -72,7 +72,7 @@ describe('use triggerApi hooks', () => {
       const { children } = props;
       return <RecoilRoot initializeState={initRecoilState}>{children}</RecoilRoot>;
     };
-    const rendered = renderHook(() => useTriggerApi(), {
+    const rendered = renderHook(() => useTriggerApi(state.projectId), {
       wrapper,
     });
     result = rendered.result;

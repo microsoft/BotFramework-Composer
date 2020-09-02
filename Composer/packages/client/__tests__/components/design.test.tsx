@@ -47,7 +47,7 @@ describe('<ProjectTree/>', () => {
     });
     const handleSubmit = jest.fn(() => {});
     const { getByText } = renderWithRecoil(
-      <CreateDialogModal isOpen={isOpen} onDismiss={handleDismiss} onSubmit={handleSubmit} />
+      <CreateDialogModal isOpen={isOpen} projectId={projectId} onDismiss={handleDismiss} onSubmit={handleSubmit} />
     );
     const cancelButton = getByText('Cancel');
     fireEvent.click(cancelButton);

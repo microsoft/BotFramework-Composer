@@ -38,7 +38,14 @@ describe('<PublishDialog />', () => {
       });
     };
     const { getByText } = renderWithRecoil(
-      <PublishDialog isOpen botName={'sampleBot0'} config={config} onDismiss={onDismiss} onPublish={onPublish} />,
+      <PublishDialog
+        isOpen
+        botName={'sampleBot0'}
+        config={config}
+        projectId={projectId}
+        onDismiss={onDismiss}
+        onPublish={onPublish}
+      />,
       recoilInitState
     );
 

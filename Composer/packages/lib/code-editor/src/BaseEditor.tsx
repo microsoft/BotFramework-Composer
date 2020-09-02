@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Editor, { EditorDidMount, EditorProps, Monaco, monaco } from '@monaco-editor/react';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
@@ -12,8 +12,6 @@ import formatMessage from 'format-message';
 import { Diagnostic } from '@bfc/shared';
 import { findErrors, combineSimpleMessage, findWarnings } from '@bfc/indexers';
 import { CodeEditorSettings, assignDefined } from '@bfc/shared';
-import debounce from 'lodash/debounce';
-import isEqual from 'lodash/isEqual';
 
 const defaultOptions = {
   scrollBeyondLastLine: false,
@@ -139,28 +137,13 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
   const [focused, setFocused] = useState(false);
   const [editor, setEditor] = useState<any>();
 
-  const [editorValue, setEditorValue] = useState(value || (hidePlaceholder ? '' : placeholder));
-  const syncData = useRef(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    debounce((shellData: any, localData: any) => {
-      if (!isEqual(shellData, localData)) {
-        setEditorValue(shellData);
-      }
-    }, 300)
-  ).current;
-
-  useEffect(() => {
-    if (editor) {
-      const editorValue = editor.getValue();
-      syncData(value, editorValue);
-    }
-    return () => {
-      syncData.cancel();
-    };
-  }, [value]);
+  // initialValue is designed to imporve local performance
+  // it should be force updated if id change, or previous value is empty.
+  const initialValue = useMemo(() => value || (hidePlaceholder ? '' : placeholder), [id, !!value]);
 
   const onEditorMount: EditorDidMount = (getValue, editor) => {
     setEditor(editor);
+
     if (typeof editorDidMount === 'function') {
       editorDidMount(getValue, editor);
     }
@@ -243,7 +226,7 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
-        <Editor {...rest} key={id} editorDidMount={onEditorMount} options={editorOptions} value={editorValue || ''} />
+        <Editor {...rest} key={id} editorDidMount={onEditorMount} options={editorOptions} value={initialValue || ''} />
       </div>
       {(hasError || hasWarning) && (
         <MessageBar

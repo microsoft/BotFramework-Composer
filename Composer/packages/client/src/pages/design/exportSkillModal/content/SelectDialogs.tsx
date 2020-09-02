@@ -11,7 +11,7 @@ import debounce from 'lodash/debounce';
 import formatMessage from 'format-message';
 
 import { ContentProps } from '../constants';
-import { dispatcherState, botStateByProjectIdSelector, validateDialogSelectorFamily } from '../../../../recoilModel';
+import { dispatcherState, validateDialogSelectorFamily } from '../../../../recoilModel';
 
 import { SelectItems } from './SelectItems';
 
@@ -29,8 +29,13 @@ const textFieldStyles = (focused: boolean) => ({
   },
 });
 
-const DescriptionColumn: React.FC<DialogInfo> = ({ id, displayName }: DialogInfo) => {
-  const { validatedDialogs: items } = useRecoilValue(botStateByProjectIdSelector);
+interface DescriptionColumnProps extends DialogInfo {
+  projectId: string;
+}
+
+const DescriptionColumn: React.FC<DescriptionColumnProps> = (props) => {
+  const { id, displayName, projectId } = props;
+  const items = useRecoilValue(validateDialogSelectorFamily(projectId));
   const { content } = items.find(({ id: dialogId }) => dialogId === id) || {};
 
   const [value, setValue] = useState(content?.$designer?.description);
@@ -124,7 +129,9 @@ export const SelectDialogs: React.FC<ContentProps> = ({ setSelectedDialogs, proj
         isResizable: true,
         isSortedDescending: false,
         data: 'string',
-        onRender: DescriptionColumn,
+        onRender: (item: DialogInfo) => {
+          return <DescriptionColumn {...item} projectId={projectId} />;
+        },
         isPadded: true,
       },
     ],

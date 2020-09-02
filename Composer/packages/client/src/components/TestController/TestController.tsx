@@ -59,7 +59,7 @@ export const TestController: React.FC<{ projectId: string }> = (props) => {
   const [calloutVisible, setCalloutVisible] = useState(false);
 
   const botActionRef = useRef(null);
-  const notifications = useNotifications();
+  const notifications = useNotifications(projectId);
 
   const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
   const botStatus = useRecoilValue(botStatusState(projectId));

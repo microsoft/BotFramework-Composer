@@ -55,7 +55,7 @@ describe('use lgApi hooks', () => {
       const { children } = props;
       return <RecoilRoot initializeState={initRecoilState}>{children}</RecoilRoot>;
     };
-    const rendered = renderHook(() => useLgApi(), {
+    const rendered = renderHook(() => useLgApi(state.projectId), {
       wrapper,
     });
     result = rendered.result;
