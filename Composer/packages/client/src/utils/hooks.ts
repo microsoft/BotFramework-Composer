@@ -7,7 +7,7 @@ import replace from 'lodash/replace';
 import find from 'lodash/find';
 import { useRecoilValue } from 'recoil';
 
-import { botStateByProjectIdSelector, botProjectsState, designPageLocationState } from '../recoilModel';
+import { botProjectsState, designPageLocationState } from '../recoilModel';
 
 import { bottomLinks, topLinks } from './pageLinks';
 import routerCache from './routerCache';

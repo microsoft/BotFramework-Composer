@@ -60,7 +60,7 @@ interface VisualEditorProps {
 }
 
 const VisualEditor: React.FC<VisualEditorProps> = (props) => {
-  const { _, ...shellData } = useShellApi();
+  const { ...shellData } = useShellApi();
   const { projectId } = shellData;
   const { openNewTriggerModal, onFocus, onBlur } = props;
   const [triggerButtonVisible, setTriggerButtonVisibility] = useState(false);
