@@ -9,12 +9,13 @@ import { PluginConfig } from '../types';
 interface ExtensionProps {
   shell: Shell;
   plugins: PluginConfig;
+  projectId: string;
 }
 
-export const Extension: React.FC<ExtensionProps> = ({ shell, plugins, children }) => {
+export const Extension: React.FC<ExtensionProps> = ({ shell, plugins, children, projectId }) => {
   const context = useMemo(() => {
-    return { shellApi: shell.api, shellData: shell.data, plugins };
-  }, [shell.api, shell.data, plugins]);
+    return { shellApi: shell.api, shellData: shell.data, plugins, projectId };
+  }, [shell.api, shell.data, plugins, projectId]);
 
   return <ExtensionContext.Provider value={context}>{children}</ExtensionContext.Provider>;
 };

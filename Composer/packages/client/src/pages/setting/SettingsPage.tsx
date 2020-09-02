@@ -10,7 +10,13 @@ import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import { useRecoilValue } from 'recoil';
 
-import { dispatcherState, botStateByProjectIdSelector } from '../../recoilModel';
+import {
+  dispatcherState,
+  localeState,
+  showDelLanguageModalState,
+  showAddLanguageModalState,
+  settingsState,
+} from '../../recoilModel';
 import { TestController } from '../../components/TestController/TestController';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { navigateTo } from '../../utils/navigation';
@@ -27,7 +33,8 @@ const getProjectLink = (path: string, id?: string) => {
   return id ? `/settings/bot/${id}/${path}` : `/settings/${path}`;
 };
 
-const SettingPage: React.FC<RouteComponentProps> = (props) => {
+const SettingPage: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
+  const { projectId = '' } = props;
   const {
     deleteBotProject,
     addLanguageDialogBegin,
@@ -38,14 +45,11 @@ const SettingPage: React.FC<RouteComponentProps> = (props) => {
     deleteLanguages,
     fetchProjectById,
   } = useRecoilValue(dispatcherState);
-
-  const {
-    projectId,
-    locale,
-    showAddLanguageModal,
-    showDelLanguageModal,
-    dialogSetting: { defaultLanguage, languages },
-  } = useRecoilValue(botStateByProjectIdSelector);
+  const locale = useRecoilValue(localeState(projectId));
+  const showDelLanguageModal = useRecoilValue(showDelLanguageModalState(projectId));
+  const showAddLanguageModal = useRecoilValue(showAddLanguageModalState(projectId));
+  const settings = useRecoilValue(settingsState(projectId));
+  const { defaultLanguage, languages } = settings;
 
   const { navigate } = useLocation();
 
@@ -216,7 +220,7 @@ const SettingPage: React.FC<RouteComponentProps> = (props) => {
 
     {
       type: 'element',
-      element: <TestController />,
+      element: <TestController projectId={projectId} />,
       align: 'right',
     },
   ];

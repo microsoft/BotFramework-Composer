@@ -7,11 +7,9 @@ import { useRecoilCallback, CallbackInterface } from 'recoil';
 import { PromptTab, SDKKinds } from '@bfc/shared';
 import cloneDeep from 'lodash/cloneDeep';
 
-import { botStateByProjectIdSelector } from '../selectors';
-
 import { createSelectedPath, getSelected } from './../../utils/dialogUtil';
 import { BreadcrumbItem } from './../../recoilModel/types';
-import { breadcrumbState, designPageLocationState, focusPathState } from './../atoms/botState';
+import { breadcrumbState, designPageLocationState, focusPathState, dialogsState } from './../atoms/botState';
 import {
   BreadcrumbUpdateType,
   checkUrl,
@@ -52,7 +50,8 @@ export const navigationDispatcher = () => {
       dialogId: string,
       breadcrumb: BreadcrumbItem[] = []
     ) => {
-      const { dialogs, designPageLocation } = await snapshot.getPromise(botStateByProjectIdSelector);
+      const dialogs = await snapshot.getPromise(dialogsState(projectId));
+      const designPageLocation = await snapshot.getPromise(designPageLocationState(projectId));
       const updatedBreadcrumb = cloneDeep(breadcrumb);
 
       let path;
@@ -95,7 +94,7 @@ export const navigationDispatcher = () => {
   const focusTo = useRecoilCallback(
     ({ snapshot }: CallbackInterface) => async (projectId: string, focusPath: string, fragment: string) => {
       const designPageLocation = await snapshot.getPromise(designPageLocationState(projectId));
-      const { breadcrumb } = await snapshot.getPromise(botStateByProjectIdSelector);
+      const breadcrumb = await snapshot.getPromise(breadcrumbState(projectId));
       let updatedBreadcrumb = [...breadcrumb];
       const { dialogId, selected } = designPageLocation;
 

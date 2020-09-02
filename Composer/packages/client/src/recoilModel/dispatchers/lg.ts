@@ -7,7 +7,6 @@ import differenceBy from 'lodash/differenceBy';
 import formatMessage from 'format-message';
 
 import { getBaseName, getExtension } from '../../utils/fileUtil';
-import { botStateByProjectIdSelector } from '../selectors';
 
 import LgWorker from './../parsers/lgWorker';
 import { lgFilesState, localeState, settingsState } from './../atoms/botState';
@@ -110,7 +109,7 @@ export const removeLgFileState = async (
   { id, projectId }: { id: string; projectId: string }
 ) => {
   const { set, snapshot } = callbackHelpers;
-  let { lgFiles } = await snapshot.getPromise(botStateByProjectIdSelector);
+  let lgFiles = await snapshot.getPromise(lgFilesState(projectId));
   lgFiles = lgFiles.filter((file) => getBaseName(file.id) !== id);
   set(lgFilesState(projectId), lgFiles);
 };

@@ -13,7 +13,13 @@ import { useRecoilValue } from 'recoil';
 
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { projectContainer } from '../design/styles';
-import { dispatcherState, botStateByProjectIdSelector, currentProjectIdState } from '../../recoilModel';
+import {
+  dispatcherState,
+  settingsState,
+  botNameState,
+  publishTypesState,
+  publishHistoryState,
+} from '../../recoilModel';
 import { navigateTo } from '../../utils/navigation';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
@@ -24,17 +30,15 @@ import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor, overflowSe
 import { CreatePublishTarget } from './createPublishTarget';
 import { PublishStatusList, IStatus } from './publishStatusList';
 
-interface PublishPageProps extends RouteComponentProps<{}> {
-  targetName?: string;
-}
-
-const Publish: React.FC<PublishPageProps> = (props) => {
+const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: string }>> = (props) => {
   const selectedTargetName = props.targetName;
+  const { projectId = '' } = props;
   const [selectedTarget, setSelectedTarget] = useState<PublishTarget | undefined>();
-  const { dialogSetting: settings, botName, publishTypes, publishHistory } = useRecoilValue(
-    botStateByProjectIdSelector
-  );
-  const projectId = useRecoilValue(currentProjectIdState);
+  const settings = useRecoilValue(settingsState(projectId));
+  const botName = useRecoilValue(botNameState(projectId));
+  const publishTypes = useRecoilValue(publishTypesState(projectId));
+  const publishHistory = useRecoilValue(publishHistoryState(projectId));
+
   const {
     getPublishStatus,
     getPublishTargetTypes,
@@ -386,7 +390,12 @@ const Publish: React.FC<PublishPageProps> = (props) => {
         {editDialogProps.children}
       </Dialog>
       {!publishDialogHidden && (
-        <PublishDialog target={selectedTarget} onDismiss={() => setPublishDialogHidden(true)} onSubmit={publish} />
+        <PublishDialog
+          projectId={projectId}
+          target={selectedTarget}
+          onDismiss={() => setPublishDialogHidden(true)}
+          onSubmit={publish}
+        />
       )}
       {showLog && <LogDialog version={selectedVersion} onDismiss={() => setShowLog(false)} />}
       <Toolbar toolbarItems={toolbarItems} />

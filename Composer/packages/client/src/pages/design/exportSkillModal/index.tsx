@@ -12,7 +12,13 @@ import { Link } from 'office-ui-fabric-react/lib/components/Link';
 import { useRecoilValue } from 'recoil';
 import { SkillManifest } from '@bfc/shared';
 
-import { dispatcherState, botStateByProjectIdSelector, currentProjectIdState } from '../../../recoilModel';
+import {
+  dispatcherState,
+  skillManifestsState,
+  luFilesState,
+  dialogsState,
+  dialogSchemasState,
+} from '../../../recoilModel';
 
 import { editorSteps, ManifestEditorSteps, order } from './constants';
 import { generateSkillManifest } from './generateSkillManifest';
@@ -22,11 +28,14 @@ interface ExportSkillModalProps {
   isOpen: boolean;
   onDismiss: () => void;
   onSubmit: () => void;
+  projectId: string;
 }
 
-const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss: handleDismiss }) => {
-  const { skillManifests, luFiles, dialogSchemas, dialogs } = useRecoilValue(botStateByProjectIdSelector);
-  const projectId = useRecoilValue(currentProjectIdState);
+const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss: handleDismiss, projectId }) => {
+  const skillManifests = useRecoilValue(skillManifestsState(projectId));
+  const luFiles = useRecoilValue(luFilesState(projectId));
+  const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
+  const dialogs = useRecoilValue(dialogsState(projectId));
   const { updateSkillManifest } = useRecoilValue(dispatcherState);
 
   const [editingId, setEditingId] = useState<string>();
@@ -118,6 +127,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
             editJson={handleEditJson}
             errors={errors}
             manifest={skillManifest}
+            projectId={projectId}
             schema={schema}
             setErrors={setErrors}
             setSchema={setSchema}

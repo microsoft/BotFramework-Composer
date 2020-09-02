@@ -9,7 +9,24 @@ import formatMessage from 'format-message';
 import { updateRegExIntent, renameRegExIntent, updateIntentTrigger } from '../utils/dialogUtil';
 import { getDialogData, setDialogData } from '../utils/dialogUtil';
 import { isAbsHosted } from '../utils/envUtil';
-import { dispatcherState, userSettingsState, clipboardActionsState, botStateByProjectIdSelector } from '../recoilModel';
+import {
+  dispatcherState,
+  userSettingsState,
+  clipboardActionsState,
+  schemasState,
+  validateDialogSelectorFamily,
+  breadcrumbState,
+  focusPathState,
+  skillsState,
+  localeState,
+  qnaFilesState,
+  designPageLocationState,
+  botNameState,
+  luFilesState,
+  lgFilesState,
+  dialogSchemasState,
+} from '../recoilModel';
+import { undoFunctionState } from '../recoilModel/undo/history';
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
@@ -20,24 +37,23 @@ const FORM_EDITOR = 'PropertyEditor';
 
 type EventSource = 'FlowEditor' | 'PropertyEditor' | 'DesignPage';
 
-export function useShell(source: EventSource): Shell {
+export function useShell(source: EventSource, projectId: string): Shell {
   const dialogMapRef = useRef({});
-  const {
-    focusPath,
-    breadcrumb,
-    schemas,
-    skills,
-    botName,
-    validatedDialogs: dialogs,
-    luFiles,
-    locale,
-    lgFiles,
-    dialogSchemas,
-    designPageLocation,
-    projectId,
-    undoFunction: { undo, redo, commitChanges },
-    qnaFiles,
-  } = useRecoilValue(botStateByProjectIdSelector);
+
+  const schemas = useRecoilValue(schemasState(projectId));
+  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const breadcrumb = useRecoilValue(breadcrumbState(projectId));
+  const focusPath = useRecoilValue(focusPathState(projectId));
+  const skills = useRecoilValue(skillsState(projectId));
+  const locale = useRecoilValue(localeState(projectId));
+  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
+  const undoFunction = useRecoilValue(undoFunctionState(projectId));
+  const designPageLocation = useRecoilValue(designPageLocationState(projectId));
+  const { undo, redo, commitChanges } = undoFunction;
+  const luFiles = useRecoilValue(luFilesState(projectId));
+  const lgFiles = useRecoilValue(lgFilesState(projectId));
+  const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
+  const botName = useRecoilValue(botNameState(projectId));
 
   const userSettings = useRecoilValue(userSettingsState);
   const clipboardActions = useRecoilValue(clipboardActionsState);
@@ -57,10 +73,10 @@ export function useShell(source: EventSource): Shell {
     displayManifestModal,
   } = useRecoilValue(dispatcherState);
 
-  const lgApi = useLgApi();
-  const luApi = useLuApi();
-  const qnaApi = useQnaApi();
-  const triggerApi = useTriggerApi();
+  const lgApi = useLgApi(projectId);
+  const luApi = useLuApi(projectId);
+  const qnaApi = useQnaApi(projectId);
+  const triggerApi = useTriggerApi(projectId);
   const { dialogId, selected, focused, promptTab } = designPageLocation;
 
   const dialogsMap = useMemo(() => {

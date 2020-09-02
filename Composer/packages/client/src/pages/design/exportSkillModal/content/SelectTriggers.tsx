@@ -10,9 +10,9 @@ import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
 import { ContentProps } from '../constants';
-import { botStateByProjectIdSelector } from '../../../../recoilModel';
 import { getFriendlyName } from '../../../../utils/dialogUtil';
 import { isSupportedTrigger } from '../generateSkillManifest';
+import { dialogsState, schemasState } from '../../../../recoilModel';
 
 import { SelectItems } from './SelectItems';
 
@@ -21,8 +21,9 @@ const getLabel = (kind: SDKKinds, uiSchema) => {
   return label || kind.replace('Microsoft.', '');
 };
 
-export const SelectTriggers: React.FC<ContentProps> = ({ setSelectedTriggers }) => {
-  const { dialogs, schemas } = useRecoilValue(botStateByProjectIdSelector);
+export const SelectTriggers: React.FC<ContentProps> = ({ setSelectedTriggers, projectId }) => {
+  const dialogs = useRecoilValue(dialogsState(projectId));
+  const schemas = useRecoilValue(schemasState(projectId));
 
   const items = useMemo(() => {
     const { triggers = [] } = dialogs.find(({ isRoot }) => isRoot) || ({} as DialogInfo);

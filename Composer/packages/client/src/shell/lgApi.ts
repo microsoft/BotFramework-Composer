@@ -9,7 +9,7 @@ import debounce from 'lodash/debounce';
 import { useResolvers } from '../hooks/useResolver';
 import { Dispatcher } from '../recoilModel/dispatchers';
 
-import { botStateByProjectIdSelector, currentProjectIdState } from './../recoilModel';
+import { focusPathState } from './../recoilModel';
 import { dispatcherState } from './../recoilModel/DispatcherWrapper';
 
 function createLgApi(
@@ -87,11 +87,10 @@ function createLgApi(
   };
 }
 
-export function useLgApi() {
-  const { focusPath } = useRecoilValue(botStateByProjectIdSelector);
-  const projectId = useRecoilValue(currentProjectIdState);
+export function useLgApi(projectId: string) {
+  const focusPath = useRecoilValue(focusPathState(projectId));
   const actions: Dispatcher = useRecoilValue(dispatcherState);
-  const { lgFileResolver } = useResolvers();
+  const { lgFileResolver } = useResolvers(projectId);
   const [api, setApi] = useState(createLgApi({ focusPath, projectId }, actions, lgFileResolver));
 
   useEffect(() => {

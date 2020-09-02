@@ -16,7 +16,7 @@ import { IDialogContentStyles } from 'office-ui-fabric-react/lib/Dialog';
 import { IModalStyles } from 'office-ui-fabric-react/lib/Modal';
 import { useRecoilValue } from 'recoil';
 
-import { userSettingsState, botStateByProjectIdSelector } from '../../recoilModel';
+import { userSettingsState, skillsState } from '../../recoilModel';
 
 // -------------------- Styles -------------------- //
 
@@ -55,6 +55,7 @@ interface DisplayManifestModalProps {
   isModeless?: boolean;
   manifestId?: string | null;
   onDismiss: () => void;
+  projectId: string;
 }
 
 export const DisplayManifestModal: React.FC<DisplayManifestModalProps> = ({
@@ -62,8 +63,9 @@ export const DisplayManifestModal: React.FC<DisplayManifestModalProps> = ({
   isModeless = true,
   manifestId,
   onDismiss,
+  projectId,
 }) => {
-  const { skills } = useRecoilValue(botStateByProjectIdSelector);
+  const skills = useRecoilValue(skillsState(projectId));
   const userSettings = useRecoilValue(userSettingsState);
 
   useEffect(() => onDismiss, []);

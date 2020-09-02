@@ -38,7 +38,7 @@ import {
 import { userSettingsState } from '../../recoilModel/atoms';
 import { nameRegex } from '../../constants';
 import { isRegExRecognizerType, isLUISnQnARecognizerType } from '../../utils/dialogValidator';
-import { botStateByProjectIdSelector } from '../../recoilModel';
+import { validateDialogSelectorFamily } from '../../recoilModel';
 // -------------------- Styles -------------------- //
 
 const styles = {
@@ -208,8 +208,8 @@ interface TriggerCreationModalProps {
 }
 
 export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props) => {
-  const { isOpen, onDismiss, onSubmit, dialogId } = props;
-  const { validatedDialogs: dialogs, projectId } = useRecoilValue(botStateByProjectIdSelector);
+  const { isOpen, onDismiss, onSubmit, dialogId, projectId } = props;
+  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
   const userSettings = useRecoilValue(userSettingsState);
   const dialogFile = dialogs.find((dialog) => dialog.id === dialogId);
   const isRegEx = isRegExRecognizerType(dialogFile);

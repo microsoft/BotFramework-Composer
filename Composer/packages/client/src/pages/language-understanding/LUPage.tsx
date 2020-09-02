@@ -13,7 +13,7 @@ import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TestController } from '../../components/TestController/TestController';
 import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
-import { botStateByProjectIdSelector } from '../../recoilModel';
+import { validateDialogSelectorFamily } from '../../recoilModel';
 
 import TableView from './table-view';
 import { actionButton } from './styles';
@@ -25,10 +25,10 @@ interface LUPageProps {
 }
 
 const LUPage: React.FC<RouteComponentProps<LUPageProps>> = (props) => {
-  const { validatedDialogs: dialogs } = useRecoilValue(botStateByProjectIdSelector);
+  const { dialogId = '', projectId = '' } = props;
+  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
 
   const path = props.location?.pathname ?? '';
-  const { dialogId = '', projectId = '' } = props;
   const edit = /\/edit(\/)?$/.test(path);
   const isRoot = dialogId === 'all';
 
@@ -79,7 +79,7 @@ const LUPage: React.FC<RouteComponentProps<LUPageProps>> = (props) => {
   const toolbarItems = [
     {
       type: 'element',
-      element: <TestController />,
+      element: <TestController projectId={projectId} />,
       align: 'right',
     },
   ];

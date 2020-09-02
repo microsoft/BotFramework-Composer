@@ -10,7 +10,7 @@ import { useRecoilValue } from 'recoil';
 import { SharedColors } from '@uifabric/fluent-theme';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
-import { dispatcherState, appUpdateState, botStateByProjectIdSelector } from '../recoilModel';
+import { dispatcherState, appUpdateState, botProjectsState, botNameState, localeState } from '../recoilModel';
 import composerIcon from '../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../constants';
 
@@ -74,7 +74,9 @@ const headerTextContainer = css`
 
 export const Header = () => {
   const { setAppUpdateShowing } = useRecoilValue(dispatcherState);
-  const { botName: projectName, locale } = useRecoilValue(botStateByProjectIdSelector);
+  const botProjects = useRecoilValue(botProjectsState);
+  const projectName = useRecoilValue(botNameState(botProjects[0]));
+  const locale = useRecoilValue(localeState(botProjects[0]));
   const appUpdate = useRecoilValue(appUpdateState);
   const { showing, status } = appUpdate;
 
