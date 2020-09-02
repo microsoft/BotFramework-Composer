@@ -13,7 +13,12 @@ import {
   DiagnosticSeverity,
   TextEdit,
 } from 'vscode-languageserver-types';
-import { TextDocumentPositionParams, DocumentOnTypeFormattingParams } from 'vscode-languageserver-protocol';
+import {
+  TextDocumentPositionParams,
+  DocumentOnTypeFormattingParams,
+  FoldingRangeParams,
+  FoldingRange,
+} from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
 import { filterTemplateDiagnostics, isValid, lgUtil } from '@bfc/indexers';
 import { MemoryResolver, ResolverResource, LgFile, importResolverGenerator } from '@bfc/shared';
@@ -30,6 +35,7 @@ import {
   cardTypes,
   cardPropDict,
   cardPropPossibleValueType,
+  FoldingState,
 } from './utils';
 
 // define init methods call from client
@@ -73,7 +79,7 @@ export class LGServer {
             triggerCharacters: ['.', '[', '[', '\n'],
           },
           hoverProvider: true,
-          foldingRangeProvider: false,
+          foldingRangeProvider: true,
           documentOnTypeFormattingProvider: {
             firstTriggerCharacter: '\n',
           },
@@ -83,6 +89,7 @@ export class LGServer {
     this.connection.onCompletion(async (params) => await this.completion(params));
     this.connection.onHover(async (params) => await this.hover(params));
     this.connection.onDocumentOnTypeFormatting((docTypingParams) => this.docTypeFormat(docTypingParams));
+    this.connection.onFoldingRanges((foldingParams: FoldingRangeParams) => this.foldingHandler(foldingParams));
 
     this.connection.onRequest((method, params) => {
       if (InitializeDocumentsMethodName === method) {
@@ -99,6 +106,44 @@ export class LGServer {
 
   start() {
     this.connection.listen();
+  }
+
+  protected foldingHandler(params: FoldingRangeParams): Promise<FoldingRange[] | null> {
+    const responses: FoldingRange[] = [];
+    const outliningRegex = /\s*>>.*/;
+    const templateNameRegex = /\s*#.*/;
+    let curLineState: FoldingState = FoldingState.OTHER;
+    const document = this.documents.get(params.textDocument.uri);
+    if (!document) {
+      return Promise.resolve(null);
+    }
+    const lgFile = this.getLGDocument(document)?.index();
+    if (!lgFile) {
+      return Promise.resolve(null);
+    }
+
+    const lines: string[] = document.getText().split('\n');
+    let lineNum = 0;
+    let start = 0;
+    for (const line of lines) {
+      if (line.match(outliningRegex)) {
+        curLineState = FoldingState.FOLD;
+        start = lineNum;
+      } else if (curLineState === FoldingState.FOLD && line.match(templateNameRegex)) {
+        console.log(start + ':' + lineNum);
+        const folding: FoldingRange = {
+          startLine: start,
+          endLine: lineNum,
+          kind: 'region',
+        };
+
+        responses.push(folding);
+        start = lineNum;
+      }
+
+      lineNum += 1;
+    }
+    return Promise.resolve(responses);
   }
 
   protected updateObject(propertyList: string[]): void {

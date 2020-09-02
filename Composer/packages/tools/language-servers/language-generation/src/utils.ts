@@ -19,6 +19,11 @@ export enum LGCursorState {
   DOUBLE = 'double',
 }
 
+export enum FoldingState {
+  FOLD = 0,
+  OTHER = 1,
+}
+
 export interface LGOption {
   projectId: string;
   fileId: string;
