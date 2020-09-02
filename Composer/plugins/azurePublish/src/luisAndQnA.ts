@@ -429,7 +429,7 @@ export class LuisAndQnaPublish {
     await this.buildLuis(name, environment, language, luisSettings, interruptionLuFiles);
     let luisAppIds = {};
     // publish luis only when Lu files not empty
-    if (notEmptyLuFiles && authoringKey && authoringRegion) {
+    if (notEmptyLuFiles) {
       luisAppIds = await this.publishLuis(
         name,
         environment,
