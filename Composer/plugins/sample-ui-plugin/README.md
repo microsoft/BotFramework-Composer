@@ -214,7 +214,7 @@ When Composer tries to load your extension, it will use this `main` property to 
 
 ## Sample
 
-To see a working sample in action, just navigate to `/sample-ui-plugin/package.json` in this directory and change the `extendsComposer` property to `true`.
+To see a working sample in action, just navigate to `/sample-ui-plugin/package.json` in this directory and change the `extendsComposer` property to `true`, and the `composer.contributes.views.page-DISABLED` key to `page`.
 
 Then restart the Composer server.
 

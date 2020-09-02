@@ -24,7 +24,7 @@
         "publish": {
           "bundleId": "publish"
         },
-        "page": {
+        "page-DISABLED": {
           "bundleId": "page",
           "label": "Sample UI Plugin"
         }
