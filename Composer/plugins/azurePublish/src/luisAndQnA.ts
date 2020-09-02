@@ -116,11 +116,14 @@ export class LuisAndQnaPublish {
     if (!(await fs.pathExists(this.interruptionFolderPath))) {
       await fs.mkdir(this.interruptionFolderPath);
     }
-    for (const key of crossTrainResult.keys()) {
-      const fileName = path.basename(key);
-      const newFileId = path.join(this.interruptionFolderPath, fileName);
-      await fs.writeFile(newFileId, crossTrainResult.get(key).Content);
-    }
+
+    await Promise.all(
+      [...crossTrainResult.keys()].map(async (key: string) => {
+        const fileName = path.basename(key);
+        const newFileId = path.join(this.interruptionFolderPath, fileName);
+        await fs.writeFile(newFileId, crossTrainResult.get(key).Content);
+      })
+    );
   }
 
   private async crossTrain(luFiles: string[], qnaFiles: string[]) {
