@@ -89,7 +89,7 @@ describe('<FileSelector/>', () => {
 
   it('should create a new folder', async () => {
     const component = renderComponent();
-    const createFolderBtn = await component.findByText('create new folder');
+    const createFolderBtn = await component.findByText('Create new folder');
     fireEvent.click(createFolderBtn);
     const textField = await component.findByTestId('newFolderTextField');
     fireEvent.change(textField, { target: { value: 'newFolder' } });
