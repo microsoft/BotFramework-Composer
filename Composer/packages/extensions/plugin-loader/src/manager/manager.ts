@@ -10,8 +10,8 @@ import { readJson } from 'fs-extra';
 
 import { pluginLoader } from '../loader';
 import logger from '../logger';
-import { ExtensionManifestStore, PluginBundle } from '../storage/extensionManifestStore';
-import { PackageJSON, PluginInfo } from '../types/types';
+import { ExtensionManifestStore } from '../storage/extensionManifestStore';
+import { ExtensionBundle, PackageJSON, ExtensionMetadata, ExtensionSearchResult } from '../types/extension';
 
 const log = logger.extend('plugins');
 
@@ -19,10 +19,29 @@ const exec = promisify(childProcess.exec);
 
 let manager: PluginManager;
 
+function processBundles(pluginPath: string, bundles: ExtensionBundle[]) {
+  return bundles.map((b) => ({
+    ...b,
+    path: path.resolve(pluginPath, b.path),
+  }));
+}
+
+function getExtensionMetadata(extensionPath: string, packageJson: PackageJSON): ExtensionMetadata {
+  return {
+    id: packageJson.name,
+    name: packageJson.composer?.name ?? packageJson.name,
+    version: packageJson.version,
+    enabled: true,
+    path: extensionPath,
+    bundles: processBundles(extensionPath, packageJson.composer?.bundles ?? []),
+    contributes: packageJson.composer?.contributes ?? {},
+  };
+}
+
 export class PluginManager {
   private builtinPluginsDir;
   private remotePluginsDir;
-  private searchCache = new Map<string, PluginInfo>();
+  private searchCache = new Map<string, ExtensionSearchResult>();
   private manifest: ExtensionManifestStore;
 
   public static getInstance() {
@@ -62,7 +81,7 @@ export class PluginManager {
    */
   public async installRemote(name: string, version?: string) {
     const packageNameAndVersion = version ? `${name}@${version}` : name;
-    const cmd = `npm install --no-audit --prefix ${this.remotePluginsDir} ${packageNameAndVersion}`;
+    const cmd = `npm install --no-audit --prefix ${this.remotePluginsDir} "${packageNameAndVersion}"`;
     log('Installing %s@%s to %s', name, version, this.remotePluginsDir);
     log(cmd);
 
@@ -75,17 +94,7 @@ export class PluginManager {
 
     if (packageJson) {
       const pluginPath = path.resolve(this.remotePluginsDir, 'node_modules', name);
-      await this.manifest.updateExtensionConfig(name, {
-        id: name,
-        name: packageJson.name,
-        version: packageJson.version,
-        enabled: true,
-        // TODO: plugins can provide default configuration
-        configuration: {},
-        path: pluginPath,
-        bundles: this.processBundles(pluginPath, packageJson.composer?.bundles ?? []),
-        contributes: packageJson.composer?.contributes,
-      });
+      this.manifest.updateExtensionConfig(name, getExtensionMetadata(pluginPath, packageJson));
     } else {
       throw new Error(`Unable to install ${packageNameAndVersion}`);
     }
@@ -106,16 +115,9 @@ export class PluginManager {
       const pluginInstallPath = path.dirname(fullPath);
       const packageJson = (await readJson(fullPath)) as PackageJSON;
       if (packageJson && (!!packageJson.composer || !!packageJson.extendsComposer)) {
-        await this.manifest.updateExtensionConfig(packageJson.name, {
-          id: packageJson.name,
-          name: packageJson.name,
-          version: packageJson.version,
-          enabled: true,
-          // TODO: plugins can provide default configuration
-          configuration: {},
-          path: pluginInstallPath,
-          bundles: this.processBundles(pluginInstallPath, packageJson.composer?.bundles ?? []),
-          contributes: packageJson.composer?.contributes,
+        const metadata = getExtensionMetadata(pluginInstallPath, packageJson);
+        this.manifest.updateExtensionConfig(packageJson.name, {
+          ...metadata,
           builtIn: true,
         });
         await pluginLoader.loadPluginFromFile(fullPath);
@@ -139,7 +141,7 @@ export class PluginManager {
       });
       // eslint-disable-next-line @typescript-eslint/no-var-requires, security/detect-non-literal-require
       const plugin = require(modulePath);
-      console.log('got plugin: ', plugin);
+      log('got plugin: ', plugin);
 
       if (!plugin) {
         throw new Error('Plugin not found');
@@ -159,7 +161,7 @@ export class PluginManager {
    * @param id Id of the plugin to be enabled
    */
   public async enable(id: string) {
-    await this.manifest.updateExtensionConfig(id, { enabled: true });
+    this.manifest.updateExtensionConfig(id, { enabled: true });
 
     // re-load plugin
   }
@@ -169,7 +171,7 @@ export class PluginManager {
    * @param id Id of the plugin to be disabled
    */
   public async disable(id: string) {
-    await this.manifest.updateExtensionConfig(id, { enabled: false });
+    this.manifest.updateExtensionConfig(id, { enabled: false });
 
     // tear down plugin?
   }
@@ -269,12 +271,5 @@ export class PluginManager {
       log('Error getting package json for %s', id);
       console.error(err);
     }
-  }
-
-  private processBundles(pluginPath: string, bundles: PluginBundle[]) {
-    return bundles.map((b) => ({
-      ...b,
-      path: path.resolve(pluginPath, b.path),
-    }));
   }
 }

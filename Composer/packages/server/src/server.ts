@@ -49,7 +49,7 @@ export async function start(): Promise<number | string> {
   // load all installed plugins
   setEnvDefault('COMPOSER_EXTENSION_DATA', path.resolve(__dirname, '../extension-manifest.json'));
   setEnvDefault('COMPOSER_BUILTIN_PLUGINS_DIR', path.resolve(__dirname, '../../../plugins'));
-  setEnvDefault('COMPOSER_REMOTE_PLUGINS_DIR', path.resolve(__dirname, '../../..'));
+  setEnvDefault('COMPOSER_REMOTE_PLUGINS_DIR', path.resolve(__dirname, '../../../.composer'));
   await PluginManager.getInstance().loadBuiltinPlugins();
   // TODO (toanzian / abrown): load 3P plugins
 

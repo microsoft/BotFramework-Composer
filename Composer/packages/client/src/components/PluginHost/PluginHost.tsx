@@ -70,5 +70,5 @@ export const PluginHost: React.FC<PluginHostProps> = (props) => {
     renderPluginView();
   }, [props.pluginName, props.pluginType, targetRef]);
 
-  return <iframe ref={targetRef} css={[iframeStyle, ...extraIframeStyles]}></iframe>;
+  return <iframe ref={targetRef} css={[iframeStyle, ...extraIframeStyles]} title={`${props.pluginName} host`}></iframe>;
 };

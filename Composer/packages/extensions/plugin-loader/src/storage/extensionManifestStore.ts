@@ -4,48 +4,12 @@
 import { existsSync, writeJsonSync, readJsonSync } from 'fs-extra';
 
 import logger from '../logger';
+import { ExtensionMap, ExtensionMetadata } from '../types/extension';
 
 const log = logger.extend('plugins');
 
-export interface ExtensionMap {
-  [id: string]: PluginConfig;
-}
-
 export interface ExtensionManifest {
   extensions: ExtensionMap;
-}
-
-export interface PluginBundle {
-  id: string;
-  path: string;
-}
-
-interface PluginContributes {
-  views?: {
-    page?: {
-      id: string;
-      name: string;
-      icon?: string;
-      when?: string;
-    }[];
-    publish?: {
-      bundleId?: string;
-    };
-  };
-}
-
-export interface PluginConfig {
-  id: string;
-  name: string;
-  enabled: boolean;
-  version: string;
-  /** Special property only used in the in-memory representation of plugins to flag as a built-in. Not written to disk. */
-  builtIn?: boolean;
-  configuration: object;
-  /** Path where module is installed */
-  path: string;
-  bundles: PluginBundle[];
-  contributes: PluginContributes;
 }
 
 const DEFAULT_MANIFEST: ExtensionManifest = {
@@ -108,13 +72,13 @@ export class ExtensionManifestStore {
   }
 
   // update extension config
-  public updateExtensionConfig(id: string, newConfig: Partial<PluginConfig>) {
+  public updateExtensionConfig(id: string, newConfig: Partial<ExtensionMetadata>) {
     const currentConfig = this.manifest.extensions[id];
 
     if (currentConfig) {
       this.manifest.extensions[id] = Object.assign(currentConfig, newConfig);
     } else {
-      this.manifest.extensions[id] = Object.assign({} as PluginConfig, newConfig);
+      this.manifest.extensions[id] = Object.assign({} as ExtensionMetadata, newConfig);
     }
     // sync changes to disk
     this.writeManifestToDisk();

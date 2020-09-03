@@ -5,6 +5,7 @@ import { RequestHandler } from 'express-serve-static-core';
 import { JSONSchema7 } from 'json-schema';
 import { DialogSetting } from '@bfc/shared';
 import { IBotProject } from '@bfc/shared';
+
 // TODO: this will be possible when ifilestorage is in a shared module
 
 export interface PublishResult {
@@ -167,22 +168,4 @@ interface Stat {
 
 interface MakeDirectoryOptions {
   recursive?: boolean;
-}
-
-/** Info about a plugin returned from an NPM search query */
-export interface PluginInfo {
-  id: string;
-  keywords: string[];
-  version: string;
-  description: string;
-  url: string;
-}
-
-/** Representation of the properties Composer cares about inside of an extension's package.json */
-export interface PackageJSON {
-  name: string;
-  version: string;
-  description: string;
-  extendsComposer: boolean;
-  composer: any;
 }

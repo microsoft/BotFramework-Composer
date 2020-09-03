@@ -28,7 +28,7 @@ export interface StorageFolder extends File {
 export interface PublishType {
   name: string;
   description: string;
-  hasView: boolean;
+  hasView?: boolean;
   instructions?: string;
   schema?: JSONSchema7;
   features: {
