@@ -260,21 +260,21 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
             onKeyDown={(e) => handleKeydown(e, index)}
           />
         ) : (
-          <Link
-            aria-label={
-              file.name === '..'
-                ? formatMessage('previous folder')
-                : formatMessage('{icon} name is {file}', {
+            <Link
+              aria-label={
+                file.name === '..'
+                  ? formatMessage('previous folder')
+                  : formatMessage('{icon} name is {file}', {
                     icon: iconName,
                     file: file.name,
                   })
-            }
-            styles={{ root: { marginTop: 3, marginLeft: 10 } }}
-            onClick={() => onFileChosen(file)}
-          >
-            {file.name}
-          </Link>
-        )}
+              }
+              styles={{ root: { marginTop: 3, marginLeft: 10 } }}
+              onClick={() => onFileChosen(file)}
+            >
+              {file.name}
+            </Link>
+          )}
       </div>
     );
   };
@@ -344,25 +344,25 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
           !focusedStorageFolder.writable ||
           item.type !== FileTypes.FOLDER ||
           index !== selectedIndex ? null : (
-          <div data-is-focusable css={tableCell}>
-            <div css={content} tabIndex={-1}>
-              <IconButton
-                ariaLabel={formatMessage('Edit')}
-                iconProps={{ iconName: 'Edit' }}
-                styles={editButton}
-                title="Edit"
-                onClick={(e) => {
-                  e.preventDefault();
-                  onEditButtonClick(item);
-                }}
-                onDoubleClick={(e) => {
-                  e.stopPropagation();
-                  e.preventDefault();
-                }}
-              />
+            <div data-is-focusable css={tableCell}>
+              <div css={content} tabIndex={-1}>
+                <IconButton
+                  ariaLabel={formatMessage('Edit')}
+                  iconProps={{ iconName: 'Edit' }}
+                  styles={editButton}
+                  title="Edit"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onEditButtonClick(item);
+                  }}
+                  onDoubleClick={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                  }}
+                />
+              </div>
             </div>
-          </div>
-        );
+          );
       },
       isPadded: true,
     },
@@ -503,7 +503,7 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
         {operationMode.write && (
           <StackItem align={'end'} styles={{ root: { marginBottom: 5 } }}>
             <Link disabled={editMode !== EditMode.NONE} onClick={onCreateNewFolder}>
-              {formatMessage('create new folder')}
+              {formatMessage('Create new folder')}
             </Link>
           </StackItem>
         )}

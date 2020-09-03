@@ -89,7 +89,7 @@ describe('<FileSelector/>', () => {
 
   it('should create a new folder', async () => {
     const component = renderComponent();
-    const createFolderBtn = await component.findByText('create new folder');
+    const createFolderBtn = await component.findByText('Create new folder');
     fireEvent.click(createFolderBtn);
     const textField = await component.findByTestId('newFolderTextField');
     fireEvent.change(textField, { target: { value: 'newFolder' } });
@@ -97,7 +97,7 @@ describe('<FileSelector/>', () => {
     //locally this should be 'C:\\test-folder\\Desktop', but online it should be 'C:/test-folder/Desktop'
     expect(
       createFolder.mock.calls[0][0] === 'C:/test-folder/Desktop' ||
-        createFolder.mock.calls[0][0] === 'C:\\test-folder\\Desktop'
+      createFolder.mock.calls[0][0] === 'C:\\test-folder\\Desktop'
     ).toBeTruthy();
     expect(createFolder.mock.calls[0][1]).toBe('newFolder');
   });
