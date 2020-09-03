@@ -34,7 +34,8 @@ const AUTHORS = {
   VanyLaw: "VanyLaw",
   xieofxie: "xieofxie",
   zeye: "yeze322",
-  zhixzhan: "zhixzhan"
+  zhixzhan: "zhixzhan",
+  "LouisEugeneMSFT": "leugene-microsoft"
 };
 
 const getLatestTag = () =>
