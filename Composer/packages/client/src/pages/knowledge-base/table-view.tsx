@@ -19,20 +19,21 @@ import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
-import get from 'lodash/get';
+import isEmpty from 'lodash/isEmpty';
 import { QnAFile } from '@bfc/shared/src/types';
+import { QnASection } from '@bfc/shared';
 
+import { generateQnAPair } from '../../utils/qnaUtil';
 import {
-  addQuestion,
-  updateQuestion,
-  updateAnswer as updateAnswerUtil,
-  generateQnAPair,
-  insertSection,
-  removeSection,
-} from '../../utils/qnaUtil';
-import { dialogsState, qnaFilesState, projectIdState } from '../../recoilModel/atoms/botState';
+  dialogsState,
+  qnaFilesState,
+  projectIdState,
+  localeState,
+  settingsState,
+} from '../../recoilModel/atoms/botState';
 import { dispatcherState } from '../../recoilModel';
 import { getBaseName, getFileName } from '../../utils/fileUtil';
+import { EditableField } from '../../components/EditableField';
 
 import {
   formCell,
@@ -50,14 +51,15 @@ import {
   addQnAPair,
 } from './styles';
 
-interface TableViewProps extends RouteComponentProps<{}> {
+interface QnASectionItem extends QnASection {
+  fileId: string;
   dialogId: string;
+  used: boolean;
+  expand: boolean;
 }
 
-enum EditMode {
-  None,
-  Creating,
-  Updating,
+interface TableViewProps extends RouteComponentProps<{}> {
+  dialogId: string;
 }
 
 const TableView: React.FC<TableViewProps> = (props) => {
@@ -65,25 +67,64 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const dialogs = useRecoilValue(dialogsState);
   const qnaFiles = useRecoilValue(qnaFilesState);
   const projectId = useRecoilValue(projectIdState);
-  //To do: support other languages
-  const locale = 'en-us';
-  //const locale = useRecoilValue(localeState);
+  const locale = useRecoilValue(localeState);
+  const settings = useRecoilValue(settingsState);
+  const {
+    setMessage,
+    addQnAPairs,
+    removeQnAPairs,
+    addQnAQuestion,
+    removeQnAQuestion,
+    updateQnAAnswer,
+    updateQnAQuestion,
+    updateQnAFile,
+  } = useRecoilValue(dispatcherState);
+
+  const { languages, defaultLanguage } = settings;
+
   const { dialogId } = props;
+  const activeDialog = dialogs.find(({ id }) => id === dialogId);
+
   const targetFileId = dialogId.endsWith('.source') ? dialogId : `${dialogId}.${locale}`;
-  const file = qnaFiles.find(({ id }) => id === targetFileId);
-  const fileRef = useRef(file);
-  fileRef.current = file;
-  const dialogIdRef = useRef(dialogId);
-  dialogIdRef.current = dialogId;
-  const localeRef = useRef(locale);
-  localeRef.current = locale;
-  const limitedNumber = useRef(1).current;
+  const qnaFile = qnaFiles.find(({ id }) => id === targetFileId);
+  const limitedNumber = 1;
+  const generateQnASections = (file: QnAFile): QnASectionItem[] => {
+    return file
+      ? file.qnaSections.map((qnaSection) => {
+          const qnaDialog = dialogs.find((dialog) => file.id === `${dialog.id}.${locale}`);
+          return {
+            fileId: file.id,
+            dialogId: qnaDialog?.id || '',
+            used: !!qnaDialog,
+            expand: false,
+            key: qnaSection.Body,
+            ...qnaSection,
+          };
+        })
+      : [];
+  };
+
+  const [qnaSections, setQnASections] = useState<QnASectionItem[]>([]);
+  useEffect(() => {
+    if (isEmpty(qnaFiles)) return;
+
+    const allSections = qnaFiles.reduce((result: any[], qnaFile) => {
+      const res = generateQnASections(qnaFile);
+      return result.concat(res);
+    }, []);
+
+    if (!activeDialog) {
+      setQnASections(allSections);
+    } else {
+      const dialogSections = allSections.filter((t) => t.dialogId === activeDialog.id);
+      setQnASections(dialogSections);
+    }
+  }, [qnaFiles, activeDialog, projectId]);
 
   const importedFiles = useMemo(() => {
-    const file = fileRef.current;
     const results: QnAFile[] = [];
-    if (file && file.imports) {
-      file.imports.forEach((path) => {
+    if (qnaFile && qnaFile.imports) {
+      qnaFile.imports.forEach((path) => {
         const fileName = getFileName(path);
         const fileId = getBaseName(fileName);
         const target = qnaFiles.find(({ id }) => id === fileId);
@@ -92,215 +133,57 @@ const TableView: React.FC<TableViewProps> = (props) => {
     }
 
     return results;
-  }, [fileRef.current, qnaFiles]);
+  }, [qnaFile, qnaFiles]);
   const importedSourceFiles = importedFiles.filter(({ id }) => id.endsWith('.source'));
-
-  const generateQnASections = (file) => {
-    return get(file, 'qnaSections', []).map((qnaSection, index) => {
-      const qnaDialog = dialogs.find((dialog) => file.id === `${dialog.id}.${locale}`);
-      return {
-        fileId: file.fileId,
-        dialogId: qnaDialog?.id || '',
-        used: !!qnaDialog && qnaDialog,
-        indexId: index,
-        key: qnaSection.Body,
-        ...qnaSection,
-      };
-    });
-  };
 
   const importedSourceFileSections = importedSourceFiles.reduce((result: any[], qnaFile) => {
     const res = generateQnASections(qnaFile);
     return result.concat(res);
   }, []);
 
-  const allQnASections = qnaFiles.reduce((result: any[], qnaFile) => {
-    const res = generateQnASections(qnaFile);
-    return result.concat(res);
-  }, []);
-
-  const singleFileQnASections = generateQnASections(fileRef.current);
-  const qnaSections = useMemo(() => {
-    if (dialogId === 'all') {
-      return allQnASections;
-    } else {
-      return singleFileQnASections;
-    }
-  }, [dialogIdRef.current, qnaFiles]);
-
-  const [showQnAPairDetails, setShowQnAPairDetails] = useState(Array(qnaSections.length).fill(false));
-  const [qnaSectionIndex, setQnASectionIndex] = useState(-1);
-  const [questionIndex, setQuestionIndex] = useState(-1); //used in QnASection.Questions array
-  const [question, setQuestion] = useState('');
-  const [editMode, setEditMode] = useState(EditMode.None);
-  const [isUpdatingAnswer, setIsUpdatingAnswer] = useState(false);
-  const [answer, setAnswer] = useState('');
-  const createOrUpdateQuestion = () => {
-    if (editMode === EditMode.Creating && question && file) {
-      const updatedQnAFileContent = addQuestion(question, file, qnaSectionIndex);
-      actions.updateQnAFile({ id: targetFileId, content: updatedQnAFileContent });
-    }
-    if (
-      editMode === EditMode.Updating &&
-      qnaSections[qnaSectionIndex].Questions[questionIndex].content !== question &&
-      file
-    ) {
-      const updatedQnAFileContent = updateQuestion(question, questionIndex, file, qnaSectionIndex);
-      actions.updateQnAFile({ id: targetFileId, content: updatedQnAFileContent });
-    }
-    cancelQuestionEditOperation();
-  };
-
-  const updateAnswer = () => {
-    if (editMode === EditMode.Updating && qnaSections[qnaSectionIndex].Answer !== answer && file) {
-      const updatedQnAFileContent = updateAnswerUtil(answer, file, qnaSectionIndex);
-      actions.updateQnAFile({ id: targetFileId, content: updatedQnAFileContent });
-    }
-    cancelAnswerEditOperation();
-  };
-
-  const cancelQuestionEditOperation = () => {
-    setEditMode(EditMode.None);
-    setQuestion('');
-    setQuestionIndex(-1);
-    setQnASectionIndex(-1);
-  };
-
-  const cancelAnswerEditOperation = () => {
-    setEditMode(EditMode.None);
-    setAnswer('');
-    setIsUpdatingAnswer(false);
-    setQnASectionIndex(-1);
-  };
-
-  useEffect(() => {
-    setShowQnAPairDetails(Array(qnaSections.length).fill(false));
-  }, [dialogId, projectId]);
-
-  const toggleShowAll = (index: number) => {
-    const newArray = showQnAPairDetails.map((element, i) => {
-      if (i === index) {
-        return !element;
-      } else {
-        return element;
-      }
+  const toggleShowAll = () => {
+    const newSections = qnaSections.map((item) => {
+      return {
+        ...item,
+        expand: true,
+      };
     });
-    setShowQnAPairDetails(newArray);
+    setQnASections(newSections);
   };
 
   const expandDetails = (index: number) => {
-    const newArray = showQnAPairDetails.map((element, i) => {
+    const newSections = qnaSections.map((item, i) => {
       if (i === index) {
-        return true;
+        return {
+          ...item,
+          expand: true,
+        };
       } else {
-        return element;
+        return item;
       }
     });
-    setShowQnAPairDetails(newArray);
+    setQnASections(newSections);
   };
 
-  const handleQuestionKeydown = (e) => {
-    if (e.key === 'Enter') {
-      createOrUpdateQuestion();
-      setEditMode(EditMode.None);
-      e.preventDefault();
-    }
-    if (e.key === 'Escape') {
-      cancelQuestionEditOperation();
-      e.preventDefault();
-    }
-  };
-
-  const handleQuestionOnBlur = (e) => {
-    createOrUpdateQuestion();
-    e.preventDefault();
-  };
-
-  const handleAddingAlternatives = (e, index: number) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setEditMode(EditMode.Creating);
-    setQnASectionIndex(index);
-    setQuestionIndex(-1);
-    expandDetails(index);
-  };
-
-  const handleUpdateingAlternatives = (e, qnaSectionIndex: number, questionIndex: number, question: string) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setEditMode(EditMode.Updating);
-    setQuestion(question);
-    setQnASectionIndex(qnaSectionIndex);
-    setQuestionIndex(questionIndex);
-    expandDetails(qnaSectionIndex);
-  };
-
-  const handleQuestionOnChange = (newValue, index: number) => {
-    if (index !== qnaSectionIndex) return;
-    setQuestion(newValue);
-  };
-
-  const handleAnswerKeydown = (e) => {
-    if (e.key === 'Escape') {
-      setEditMode(EditMode.None);
-      setQnASectionIndex(-1);
-      setIsUpdatingAnswer(false);
-      e.preventDefault();
-    }
-  };
-
-  const handleAnswerOnBlur = (e) => {
-    updateAnswer();
-    setEditMode(EditMode.None);
-    setQnASectionIndex(-1);
-    setQuestionIndex(-1);
-    e.preventDefault();
-  };
-
-  const handleUpdateingAnswer = (e, qnaSectionIndex: number, answer: string) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setEditMode(EditMode.Updating);
-    setAnswer(answer);
-    setQnASectionIndex(qnaSectionIndex);
-    setIsUpdatingAnswer(true);
-    expandDetails(qnaSectionIndex);
-  };
-
-  const handleAnswerOnChange = (answer, index: number) => {
-    if (index !== qnaSectionIndex) return;
-    setAnswer(answer);
-  };
-
-  const deleteQnASection = (qnaSectionIndex: number) => {
+  const deleteQnASection = (sectionId: string) => {
     actions.setMessage('item deleted');
-    if (fileRef && fileRef.current) {
-      const updatedQnAFileContent = removeSection(qnaSectionIndex, fileRef.current.content);
-      actions.updateQnAFile({
-        id: targetFileId,
-        content: updatedQnAFileContent,
+    if (qnaFile) {
+      removeQnAPairs({
+        id: qnaFile.id,
+        sectionId,
       });
     }
-    const newArray = [...showQnAPairDetails];
-    newArray.splice(qnaSectionIndex, 1);
-    setShowQnAPairDetails(newArray);
   };
 
-  const isUpdatingIthQnASectionKthQuestion = (ithQnASection: number, kthQuestion: number, operationMode: EditMode) => {
-    return qnaSectionIndex === ithQnASection && questionIndex === kthQuestion && operationMode === EditMode.Updating;
+  const onCreateNewTemplate = () => {
+    if (!qnaFile) return;
+    const newQnAPair = generateQnAPair();
+    addQnAPairs({ id: qnaFile.id, content: newQnAPair });
   };
 
-  const isCreatingNewQuestionOnIthQnASection = (ithQnASection: number, operationMode: EditMode) => {
-    return operationMode === EditMode.Creating && qnaSectionIndex === ithQnASection;
-  };
+  console.log(qnaSections);
 
-  const isUpdateingIthQnASectionAnswer = (
-    ithQnASection: number,
-    isUpdatingAnswer: boolean,
-    operationMode: EditMode
-  ) => {
-    return qnaSectionIndex === ithQnASection && isUpdatingAnswer && operationMode === EditMode.Updating;
-  };
+  const getKeyCallback = useCallback((item) => item.uuid, []);
 
   const getTableColums = () => {
     const tableColums = [
@@ -311,14 +194,14 @@ const TableView: React.FC<TableViewProps> = (props) => {
         minWidth: 40,
         maxWidth: 40,
         isResizable: true,
-        onRender: (item, qnaIndex) => {
+        onRender: (item) => {
           return (
             <IconButton
               ariaLabel="ChevronDown"
-              iconProps={{ iconName: showQnAPairDetails[qnaIndex] ? 'ChevronDown' : 'ChevronRight' }}
+              iconProps={{ iconName: item.expand ? 'ChevronDown' : 'ChevronRight' }}
               styles={icon}
               title="ChevronDown"
-              onClick={() => toggleShowAll(qnaIndex)}
+              onClick={() => toggleShowAll()}
             />
           );
         },
@@ -331,84 +214,42 @@ const TableView: React.FC<TableViewProps> = (props) => {
         maxWidth: 450,
         isResizable: true,
         data: 'string',
-        onRender: (item, qnaIndex) => {
-          const questions = get(item, 'Questions', []);
-          const showingQuestions = showQnAPairDetails[qnaIndex] ? questions : questions.slice(0, limitedNumber);
+        onRender: (item: QnASectionItem) => {
+          const questions = item.Questions;
+          const showingQuestions = item.expand ? questions : questions.slice(0, limitedNumber);
           //This question content of this qna Section is '#?'
           const isQuestionEmpty = showingQuestions.length === 1 && showingQuestions[0].content === '';
           const isSourceSectionInDialog = item.fileId.endsWith('.source') && !dialogId.endsWith('.source');
           const isAllowEdit = dialogId !== 'all' && !isSourceSectionInDialog;
+
           return (
             <div data-is-focusable css={formCell}>
-              {showingQuestions.map((q, qIndex) => {
-                if (!isUpdatingIthQnASectionKthQuestion(qnaIndex, qIndex, editMode)) {
-                  return (
-                    <div
-                      key={q.id}
-                      css={content}
-                      role={'textbox'}
-                      tabIndex={0}
-                      onClick={(e) =>
-                        isAllowEdit ? handleUpdateingAlternatives(e, qnaIndex, qIndex, q.content) : () => {}
+              {showingQuestions.map((question) => {
+                return (
+                  <EditableField
+                    key={question.id}
+                    multiline
+                    ariaLabel={formatMessage(`Question is {content}`, { content: question.content })}
+                    depth={0}
+                    disabled={isAllowEdit}
+                    id={question.id}
+                    name={question.content}
+                    value={question.content}
+                    onBlur={(_id, value) => {
+                      const newValue = value?.trim().replace(/^#/, '');
+                      if (newValue) {
+                        updateQnAQuestion({
+                          id: item.fileId,
+                          sectionId: item.sectionId,
+                          questionId: question.id,
+                          content: newValue,
+                        });
                       }
-                      onKeyDown={(e) => {
-                        e.preventDefault();
-                        if (e.key === 'Enter') {
-                          handleUpdateingAlternatives(e, qnaIndex, qIndex, q.content);
-                        }
-                      }}
-                    >
-                      {isQuestionEmpty && <div css={inlineContainer(true)}>{formatMessage('Enter a question')}</div>}
-                      {!isQuestionEmpty && (
-                        <div css={inlineContainer(qIndex === 0)}>
-                          {`${q.content} ${
-                            qIndex === 0 && !showQnAPairDetails[qnaIndex] ? `(${questions.length})` : ''
-                          }`}
-                        </div>
-                      )}
-                    </div>
-                  );
-                  //It is updating this qnaSection's qIndex-th Question
-                } else if (isUpdatingIthQnASectionKthQuestion(qnaIndex, qIndex, editMode)) {
-                  return (
-                    <TextField
-                      autoFocus
-                      styles={textFieldQuestion}
-                      value={question}
-                      onBlur={(e) => {
-                        handleQuestionOnBlur(e);
-                      }}
-                      onChange={(e, newValue) => {
-                        handleQuestionOnChange(newValue, qnaIndex);
-                      }}
-                      onKeyDown={(e) => handleQuestionKeydown(e)}
-                    />
-                  );
-                }
+                    }}
+                    onChange={() => {}}
+                  />
+                );
               })}
-
-              {isCreatingNewQuestionOnIthQnASection(qnaIndex, editMode) && isAllowEdit && (
-                <TextField
-                  autoFocus
-                  onBlur={(e) => {
-                    handleQuestionOnBlur(e);
-                  }}
-                  onChange={(e, newValue) => {
-                    e.preventDefault();
-                    handleQuestionOnChange(newValue, qnaIndex);
-                  }}
-                  onKeyDown={(e) => handleQuestionKeydown(e)}
-                />
-              )}
-              {!isCreatingNewQuestionOnIthQnASection(qnaIndex, editMode) && isAllowEdit && (
-                <ActionButton
-                  iconProps={{ iconName: 'Add', styles: addIcon }}
-                  styles={addAlternative}
-                  onClick={(e) => handleAddingAlternatives(e, qnaIndex)}
-                >
-                  {formatMessage('add alternative phrasing')}
-                </ActionButton>
-              )}
             </div>
           );
         },
@@ -421,45 +262,31 @@ const TableView: React.FC<TableViewProps> = (props) => {
         maxWidth: 450,
         isResizable: true,
         data: 'string',
-        onRender: (item, qnaIndex) => {
+        onRender: (item) => {
           const isSourceSectionInDialog = item.fileId.endsWith('.source') && !dialogId.endsWith('.source');
           const isAllowEdit = dialogId !== 'all' && !isSourceSectionInDialog;
           return (
             <div data-is-focusable css={formCell}>
-              {!isUpdateingIthQnASectionAnswer(qnaIndex, isUpdatingAnswer, editMode) && (
-                <div
-                  aria-label={formatMessage(`Answer is {answer}`, { answer: item.Answer })}
-                  css={contentAnswer(showQnAPairDetails[qnaIndex])}
-                  role={'textbox'}
-                  tabIndex={0}
-                  onClick={(e) => (isAllowEdit ? handleUpdateingAnswer(e, qnaIndex, item.Answer) : () => {})}
-                  onKeyDown={(e) => {
-                    e.preventDefault();
-                    if (e.key === 'Enter') {
-                      handleUpdateingAnswer(e, qnaIndex, item.Answer);
-                    }
-                  }}
-                >
-                  {item.Answer || formatMessage('Enter an answer')}
-                </div>
-              )}
-              {isUpdateingIthQnASectionAnswer(qnaIndex, isUpdatingAnswer, editMode) && (
-                <TextField
-                  autoFocus
-                  multiline
-                  autoAdjustHeight={showQnAPairDetails[qnaIndex]}
-                  resizable={false}
-                  styles={textFieldAnswer}
-                  value={answer}
-                  onBlur={(e) => {
-                    handleAnswerOnBlur(e);
-                  }}
-                  onChange={(e, newValue) => {
-                    handleAnswerOnChange(newValue, qnaIndex);
-                  }}
-                  onKeyDown={(e) => handleAnswerKeydown(e)}
-                />
-              )}
+              <EditableField
+                multiline
+                ariaLabel={formatMessage(`Answer is {content}`, { content: item.Answer })}
+                depth={0}
+                disabled={isAllowEdit}
+                id={item.sectionId}
+                name={item.Answer}
+                value={item.Answer}
+                onBlur={(_id, value) => {
+                  const newValue = value?.trim().replace(/^#/, '');
+                  if (newValue) {
+                    updateQnAAnswer({
+                      id: item.fileId,
+                      sectionId: item.sectionId,
+                      content: newValue,
+                    });
+                  }
+                }}
+                onChange={() => {}}
+              />
             </div>
           );
         },
@@ -474,7 +301,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         isResizable: true,
         fieldName: 'buttons',
         data: 'string',
-        onRender: (item, qnaIndex) => {
+        onRender: (item) => {
           const isSourceSectionInDialog = item.fileId.endsWith('.source') && !dialogId.endsWith('.source');
           const isAllowEdit = dialogId !== 'all' && !isSourceSectionInDialog;
 
@@ -487,7 +314,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
               styles={icon}
               title="Delete"
               onClick={() => {
-                deleteQnASection(qnaIndex);
+                deleteQnASection(item.sectionId);
               }}
             />
           );
@@ -497,7 +324,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     }
 
     // all view, show used in column
-    if (dialogIdRef.current === 'all') {
+    if (dialogId === 'all') {
       const beenUsedColumn = {
         key: 'usedIn',
         name: formatMessage('Used In'),
@@ -523,12 +350,10 @@ const TableView: React.FC<TableViewProps> = (props) => {
   };
 
   const getGroups = () => {
-    if (dialogId === 'all' || dialogId.endsWith('.source') || !file) {
+    if (dialogId === 'all' || dialogId.endsWith('.source') || !qnaFile) {
       return undefined;
     }
-    const groups = [
-      { key: 'groupred0', name: 'In Dialog', startIndex: 0, count: singleFileQnASections.length, level: 0 },
-    ];
+    const groups = [{ key: 'groupred0', name: 'In Dialog', startIndex: 0, count: qnaSections.length, level: 0 }];
     importedSourceFiles.forEach((currentFile) => {
       const lastGroup = groups[groups.length - 1];
       const startIndex = lastGroup.startIndex + lastGroup.count;
@@ -549,7 +374,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
               onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
             })}
 
-            {dialogIdRef.current !== 'all' && (
+            {dialogId !== 'all' && (
               <div css={addButtonContainer}>
                 <ActionButton
                   data-testid={'addQnAPairButton'}
@@ -569,7 +394,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         </div>
       );
     },
-    [dialogIdRef, showQnAPairDetails]
+    [dialogId]
   );
 
   const onRenderRow = (props) => {
@@ -579,16 +404,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
     return null;
   };
 
-  const onCreateNewTemplate = () => {
-    const newQnAPair = generateQnAPair();
-    const content = get(fileRef.current, 'content', '');
-    const newContent = insertSection(0, content, newQnAPair);
-    actions.updateQnAFile({ id: targetFileId, content: newContent });
-    const newArray = [false, ...showQnAPairDetails];
-    setShowQnAPairDetails(newArray);
-  };
-
-  const getKeyCallback = useCallback((item) => item.uuid, []);
   return (
     <div data-testid={'table-view'}>
       <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>

@@ -3,6 +3,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { QnAFile } from '@bfc/shared';
 import { useRecoilCallback, CallbackInterface } from 'recoil';
+import { qnaUtil } from '@bfc/indexers';
 
 import qnaWorker from '../parsers/qnaWorker';
 import { qnaFilesState, qnaAllUpViewStatusState, projectIdState, localeState, settingsState } from '../atoms/botState';
@@ -170,7 +171,138 @@ ${response.data}
     }
   );
 
+  const updateQnAQuestion = useRecoilCallback(
+    ({ set, snapshot }: CallbackInterface) => async ({
+      id,
+      sectionId,
+      questionId,
+      content,
+    }: {
+      id: string;
+      sectionId: string;
+      questionId: string;
+      content: string;
+    }) => {
+      const qnaFiles = await snapshot.getPromise(qnaFilesState);
+      const qnaFile = qnaFiles.find((temp) => temp.id === id);
+      if (!qnaFile) return qnaFiles;
+
+      // const updatedFile = await updateQnAFileState(callbackHelpers, { id, content });
+      const updatedFile = qnaUtil.updateQnAQuestion(qnaFile, sectionId, questionId, content);
+      set(qnaFilesState, (qnaFiles) => {
+        return qnaFiles.map((file) => {
+          return file.id === id ? updatedFile : file;
+        });
+      });
+    }
+  );
+
+  const updateQnAAnswer = useRecoilCallback(
+    ({ set, snapshot }: CallbackInterface) => async ({
+      id,
+      sectionId,
+      content,
+    }: {
+      id: string;
+      sectionId: string;
+      content: string;
+    }) => {
+      const qnaFiles = await snapshot.getPromise(qnaFilesState);
+      const qnaFile = qnaFiles.find((temp) => temp.id === id);
+      if (!qnaFile) return qnaFiles;
+
+      const updatedFile = qnaUtil.updateQnAAnswer(qnaFile, sectionId, content);
+      set(qnaFilesState, (qnaFiles) => {
+        return qnaFiles.map((file) => {
+          return file.id === id ? updatedFile : file;
+        });
+      });
+    }
+  );
+
+  const addQnAQuestion = useRecoilCallback(
+    ({ set, snapshot }: CallbackInterface) => async ({
+      id,
+      sectionId,
+      content,
+    }: {
+      id: string;
+      sectionId: string;
+      content: string;
+    }) => {
+      const qnaFiles = await snapshot.getPromise(qnaFilesState);
+      const qnaFile = qnaFiles.find((temp) => temp.id === id);
+      if (!qnaFile) return qnaFiles;
+
+      const updatedFile = qnaUtil.addQnAQuestion(qnaFile, sectionId, content);
+      set(qnaFilesState, (qnaFiles) => {
+        return qnaFiles.map((file) => {
+          return file.id === id ? updatedFile : file;
+        });
+      });
+    }
+  );
+
+  const removeQnAQuestion = useRecoilCallback(
+    ({ set, snapshot }: CallbackInterface) => async ({
+      id,
+      sectionId,
+      questionId,
+    }: {
+      id: string;
+      sectionId: string;
+      questionId: string;
+    }) => {
+      const qnaFiles = await snapshot.getPromise(qnaFilesState);
+      const qnaFile = qnaFiles.find((temp) => temp.id === id);
+      if (!qnaFile) return qnaFiles;
+
+      const updatedFile = qnaUtil.removeQnAQuestion(qnaFile, sectionId, questionId);
+      set(qnaFilesState, (qnaFiles) => {
+        return qnaFiles.map((file) => {
+          return file.id === id ? updatedFile : file;
+        });
+      });
+    }
+  );
+
+  const addQnAPairs = useRecoilCallback(
+    ({ set, snapshot }: CallbackInterface) => async ({ id, content }: { id: string; content: string }) => {
+      const qnaFiles = await snapshot.getPromise(qnaFilesState);
+      const qnaFile = qnaFiles.find((temp) => temp.id === id);
+      if (!qnaFile) return qnaFiles;
+
+      const updatedFile = qnaUtil.addSection(qnaFile, content);
+      set(qnaFilesState, (qnaFiles) => {
+        return qnaFiles.map((file) => {
+          return file.id === id ? updatedFile : file;
+        });
+      });
+    }
+  );
+
+  const removeQnAPairs = useRecoilCallback(
+    ({ set, snapshot }: CallbackInterface) => async ({ id, sectionId }: { id: string; sectionId: string }) => {
+      const qnaFiles = await snapshot.getPromise(qnaFilesState);
+      const qnaFile = qnaFiles.find((temp) => temp.id === id);
+      if (!qnaFile) return qnaFiles;
+
+      const updatedFile = qnaUtil.removeSection(qnaFile, sectionId);
+      set(qnaFilesState, (qnaFiles) => {
+        return qnaFiles.map((file) => {
+          return file.id === id ? updatedFile : file;
+        });
+      });
+    }
+  );
+
   return {
+    addQnAPairs,
+    removeQnAPairs,
+    addQnAQuestion,
+    removeQnAQuestion,
+    updateQnAQuestion,
+    updateQnAAnswer,
     createQnAFile,
     updateQnAFile,
     importQnAFromUrls,
