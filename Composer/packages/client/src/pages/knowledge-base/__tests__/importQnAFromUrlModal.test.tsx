@@ -20,7 +20,7 @@ describe('<ImportQnAFromUrlModal />', () => {
 
   it('renders <ImportQnAFromUrlModal /> and create from scratch', () => {
     const { getByText } = container;
-    expect(getByText('Populate your KB.')).not.toBeNull();
+    expect(getByText('Populate your Knowledge Base')).not.toBeNull();
     const createFromScratchButton = getByText('Create knowledge base from scratch');
     expect(createFromScratchButton).not.toBeNull();
     fireEvent.click(createFromScratchButton);
@@ -44,7 +44,7 @@ describe('<ImportQnAFromUrlModal />', () => {
     expect(input0.value).toBe('test');
     expect(findByText(/A valid url should start with/)).not.toBeNull();
 
-    const addButton = getByText(/Add URL/);
+    const addButton = getByText(/Add additional URL/);
     fireEvent.change(input0, { target: { value: 'http://test' } });
     fireEvent.click(addButton);
     expect(getByTestId('knowledgeLocationTextField-1')).not.toBeNull();

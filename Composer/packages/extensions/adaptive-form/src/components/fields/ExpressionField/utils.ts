@@ -113,7 +113,13 @@ export function getOptions(schema: JSONSchema7, definitions): SchemaOption[] {
 
 export function getSelectedOption(value: any | undefined, options: SchemaOption[]): SchemaOption | undefined {
   const expressionOption = options.find(({ key }) => key === 'expression');
+  const enumOption = options.find(({ data: { schema } }) => schema.enum?.includes(value));
   let valueType = getValueType(value);
+
+  // return the enumOption if the value is included in the option's enum schema
+  if (enumOption) {
+    return enumOption;
+  }
 
   // if its an array, we know it's not an expression
 

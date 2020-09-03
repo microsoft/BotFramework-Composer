@@ -30,7 +30,9 @@ const formatErrorDetail = (error: StateError): React.ReactElement => {
   return (
     <section>
       {helpText}
-      <a href={'https://github.com/microsoft/BotFramework-Composer/issues'}>GitHub</a>
+      <a href={'https://github.com/microsoft/BotFramework-Composer/issues'} rel="noopener noreferrer" target="_blank">
+        GitHub
+      </a>
       {message && <details>{message}</details>}
     </section>
   );
