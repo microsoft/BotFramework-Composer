@@ -1,0 +1,37 @@
+Microsoft.OnIntent:
+  label: Intent recognized
+  submenu: false
+  widget: LUISTriggerWidget
+
+Microsoft.OnQnAIntent:
+  label: QnA Intent recognized
+  submenu: false
+
+Microsoft.OnBeginDialog:
+  label: Dialog started (Begin dialog event)
+  submenu:
+    label: Dialog events
+    prompt: Which event?
+
+Microsoft.OnErrorEvent:
+  label: Error occurred (Error event)
+  submenu:
+    label: Dialog events
+    prompt: Which event?
+
+Microsoft.OnConversationUpdate:
+  label: Greeting (ConversationUpdate activity)
+  submenu:
+    label: Activities
+    prompt: Which activity type?
+
+Microsoft.OnEndOfConversation:
+  label: Conversation ended (EndOfConversation activity)
+  submenu:
+    label: Activities
+    prompt: Which activity type?
+
+Microsoft.OnEvent:
+  label: Custom events
+  submenu: false
+  widget: CustomEventWidget
