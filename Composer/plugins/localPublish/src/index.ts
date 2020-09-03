@@ -233,13 +233,13 @@ class LocalPublisher {
         // stop bot
         this.stopBot(botId);
         // get previous settings
-        // when changing type of runtime
         const settings = JSON.parse(
           await readFile(path.resolve(this.getBotDir(botId), 'settings/appsettings.json'), {
             encoding: 'utf-8',
           })
         );
-        if (!settings.runtime?.key || settings.runtime?.key !== project.settings.runtime?.key) {
+        // when current project set runtime template and different from previous, remove previous runtime and use new one
+        if (project.settings.runtime?.key && settings.runtime?.key !== project.settings.runtime?.key) {
           // in order to change runtime type
           await removeDirAndFiles(this.getBotRuntimeDir(botId));
           // copy runtime template in folder
