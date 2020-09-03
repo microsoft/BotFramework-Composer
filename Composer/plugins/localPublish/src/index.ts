@@ -82,12 +82,7 @@ class LocalPublisher {
           project.fileStorage
         );
       } else {
-        throw {
-          status: 500,
-          result: {
-            message: 'Custom runtime settings are incomplete. Please specify path and command.',
-          },
-        };
+        throw new Error('Custom runtime settings are incomplete. Please specify path and command.');
       }
       await this.setBot(botId, version, fullSettings, project);
     } catch (error) {
