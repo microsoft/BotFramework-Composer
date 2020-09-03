@@ -1,41 +1,48 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { LuIntentSection } from '@bfc/shared';
+import { LuIntentSection, LuFile } from '@bfc/shared';
 
 import Worker from './workers/luParser.worker.ts';
 import { BaseWorker } from './baseWorker';
-import { LuPayload, LuActionType } from './types';
-
+import {
+  LuActionType,
+  LuParsePayload,
+  LuAddIntentPayload,
+  LuAddIntentsPayload,
+  LuRemoveIntentsPayload,
+  LuRemoveIntentPayload,
+  LuUpdateIntentPayload,
+} from './types';
 // Wrapper class
 class LuWorker extends BaseWorker<LuActionType> {
   parse(id: string, content: string) {
     const payload = { id, content };
-    return this.sendMsg<LuPayload>(LuActionType.Parse, payload);
+    return this.sendMsg<LuParsePayload>(LuActionType.Parse, payload);
   }
 
-  addIntent(content: string, intent: LuIntentSection) {
-    const payload = { content, intent };
-    return this.sendMsg<LuPayload>(LuActionType.AddIntent, payload);
+  addIntent(luFile: LuFile, intent: LuIntentSection) {
+    const payload = { luFile, intent };
+    return this.sendMsg<LuAddIntentPayload>(LuActionType.AddIntent, payload);
   }
 
-  updateIntent(content: string, intentName: string, intent?: LuIntentSection) {
-    const payload = { content, intentName, intent };
-    return this.sendMsg<LuPayload>(LuActionType.UpdateIntent, payload);
+  updateIntent(luFile: LuFile, intentName: string, intent?: { Name?: string; Body?: string }) {
+    const payload = { luFile, intentName, intent };
+    return this.sendMsg<LuUpdateIntentPayload>(LuActionType.UpdateIntent, payload);
   }
 
-  removeIntent(content: string, intentName: string) {
-    const payload = { content, intentName };
-    return this.sendMsg<LuPayload>(LuActionType.RemoveIntent, payload);
+  removeIntent(luFile: LuFile, intentName: string) {
+    const payload = { luFile, intentName };
+    return this.sendMsg<LuRemoveIntentPayload>(LuActionType.RemoveIntent, payload);
   }
 
-  addIntents(content: string, intents: LuIntentSection[]) {
-    const payload = { content, intents };
-    return this.sendMsg<LuPayload>(LuActionType.AddIntents, payload);
+  addIntents(luFile: LuFile, intents: LuIntentSection[]) {
+    const payload = { luFile, intents };
+    return this.sendMsg<LuAddIntentsPayload>(LuActionType.AddIntents, payload);
   }
 
-  removeIntents(content: string, intentNames: string[]) {
-    const payload = { content, intentNames };
-    return this.sendMsg<LuPayload>(LuActionType.RemoveIntents, payload);
+  removeIntents(luFile: LuFile, intentNames: string[]) {
+    const payload = { luFile, intentNames };
+    return this.sendMsg<LuRemoveIntentsPayload>(LuActionType.RemoveIntents, payload);
   }
 }
 
