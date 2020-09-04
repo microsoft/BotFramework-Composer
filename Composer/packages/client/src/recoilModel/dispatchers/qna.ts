@@ -157,7 +157,6 @@ export const qnaDispatcher = () => {
       }
 
       const contentForSourceQnA = `> !# @source.urls = ${urls}
-> !# @source.name = ${name}
 ${response.data}
 `;
 
