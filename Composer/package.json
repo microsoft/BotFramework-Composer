@@ -34,7 +34,7 @@
   "scripts": {
     "build": "node scripts/begin.js && yarn build:prod",
     "build:prod": "yarn build:dev && yarn build:server && yarn build:client && yarn build:electron",
-    "build:dev": "yarn build:test && yarn build:lib && yarn build:tools && yarn build:extensions && yarn build:plugins",
+    "build:dev": "yarn build:test && yarn build:lib && yarn build:tools && yarn build:extensions && yarn build:plugins && yarn l10n",
     "build:test": "yarn workspace @bfc/test-utils build",
     "build:lib": "yarn workspace @bfc/libs build:all",
     "build:electron": "yarn workspace @bfc/electron-server build",
