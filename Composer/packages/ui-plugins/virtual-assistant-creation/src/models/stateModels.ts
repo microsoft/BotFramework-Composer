@@ -1,13 +1,15 @@
 import { Dispatch, SetStateAction } from 'react';
+import { AvailablePersonalities } from './creationOptions';
 
 export type IAppState = {
   availableHostedSkills: IAvailableHostedSkill[];
   availableAssistantTemplates: IAssistant[];
   selectedAssistant: IAssistant;
   selectedBotName: string;
-  selectedUserInput: string[];
+  isTextEnabled: boolean;
+  isSpeechEnabled: boolean;
   selectedLanguages: string[];
-  selectedPersonality: string;
+  selectedPersonality: AvailablePersonalities;
   selectedWelcomeImage: string;
   selectedFallbackText: string;
   selectedGreetingMessage: string;
@@ -58,7 +60,7 @@ export const initialAppState: IAppState = {
   ],
   availableAssistantTemplates: [
     {
-      name: 'Custom Assistant',
+      name: 'Basic Assistant',
       description: 'Configured with simple conversational capability like greeting, chit-chat & more.',
       imgName: 'customAssistant.jpg',
     },
@@ -74,17 +76,18 @@ export const initialAppState: IAppState = {
     },
   ],
   selectedAssistant: {
-    name: 'Custom Assistant',
+    name: 'Basic Assistant',
     description: 'Configured with simple conversational capability like greeting, chit-chat & more.',
     imgName: 'customAssistant.jpg',
   },
   selectedBotName: '',
-  selectedUserInput: [],
+  isTextEnabled: true,
+  isSpeechEnabled: false,
   selectedLanguages: [],
-  selectedPersonality: '',
+  selectedPersonality: AvailablePersonalities.professional,
   selectedWelcomeImage: '',
   selectedFallbackText: "I am sorry, I didn't understand that",
-  selectedGreetingMessage: 'Hi! My name is basic bot. Here are some things that I can do!',
+  selectedGreetingMessage: 'Hi there! Here are some things that I can do!',
   selectedSkills: [],
   selectedQnaFile: '',
 };

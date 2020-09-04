@@ -5,9 +5,14 @@ import React, { Fragment, useState } from 'react';
 import { RouteComponentProps, Router } from '@reach/router';
 import NewBotPage from './newBotPage';
 import CustomizeBotPage from './customizeBotPage';
-import PreProvisionPage from './preProvisionPage';
+import PreProvisionPage, { ConfigSummaryPage } from './configSummaryPage';
 import { AppContextDefaultValue } from '../models/stateModels';
 import { useShellApi, JSONSchema7 } from '@bfc/extension';
+import fs from 'fs';
+import axios from 'axios';
+import { updatePersonalityQnaFile } from '../shared/utils/util';
+import ProvisionSummaryPage from './provisionSummaryPage';
+import { RouterPaths } from '../shared/constants';
 
 interface VirtualAssistantCreationModalProps
   extends RouteComponentProps<{
@@ -28,19 +33,49 @@ export const VirtualAssistantCreationModal: React.FC<VirtualAssistantCreationMod
 
   const createAndConfigureBot = async () => {
     await handleCreateNew(formData, 'va-core');
-    await shellApi.updateLgTemplate('Onboarding.en-us', 'SendActivity_5eOsgQ', '- Hello There Mr. Man');
+    await updateBotResponses();
+    await updateQnaFiles();
+  };
+
+  const updateBotResponses = async () => {
+    const generatedLgFileId = formData.name + '.en-us';
+    await shellApi.updateLgTemplate(
+      generatedLgFileId,
+      'ReturningUserGreeting',
+      createLgFromString(state.selectedGreetingMessage)
+    );
+    await shellApi.updateLgTemplate(
+      generatedLgFileId,
+      'NewUserGreeting',
+      createLgFromString(state.selectedGreetingMessage)
+    );
+    await shellApi.updateLgTemplate(generatedLgFileId, 'BotName', createLgFromString(state.selectedBotName));
+    await shellApi.updateLgTemplate(
+      generatedLgFileId,
+      'FallBackMessage',
+      createLgFromString(state.selectedFallbackText)
+    );
+  };
+
+  const updateQnaFiles = async () => {
+    await updatePersonalityQnaFile(shellApi, state.selectedPersonality);
+  };
+
+  const createLgFromString = (text: string) => {
+    return '- ' + text;
   };
 
   return (
     <Fragment>
       <AppContext.Provider value={{ state, setState }}>
         <Router>
-          <NewBotPage onDismiss={onDismiss} path="/projects/create/va-core/customize/" default />
-          <CustomizeBotPage onDismiss={onDismiss} path="/projects/create/va-core/customize/options" />
-          <PreProvisionPage
+          <NewBotPage onDismiss={onDismiss} path={RouterPaths.newBotPage} default />
+          <CustomizeBotPage onDismiss={onDismiss} path={RouterPaths.customizeBotPage} />
+          <ConfigSummaryPage onDismiss={onDismiss} path={RouterPaths.configSummaryPage} />
+          <ProvisionSummaryPage
             onDismiss={onDismiss}
             onSubmit={createAndConfigureBot}
-            path="/projects/create/va-core/customize/preProvision"
+            path={RouterPaths.provisionSummaryPage}
           />
         </Router>
       </AppContext.Provider>

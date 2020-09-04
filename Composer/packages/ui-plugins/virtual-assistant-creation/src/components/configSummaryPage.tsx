@@ -15,15 +15,14 @@ import { AppContext } from './VirtualAssistantCreationModal';
 import { DialogFooterWrapper } from './dialogFooterWrapper';
 import { RouterPaths } from '../shared/constants';
 
-interface PreProvisionPageProps
+interface ConfigSummaryPageProps
   extends RouteComponentProps<{
     location: string;
   }> {
   onDismiss: () => void;
-  onSubmit: () => void;
 }
 
-export const PreProvisionPage: React.FC<PreProvisionPageProps> = (props) => {
+export const ConfigSummaryPage: React.FC<ConfigSummaryPageProps> = (props) => {
   const { state, setState } = useContext(AppContext);
   const { onDismiss, onSubmit } = props;
 
@@ -50,7 +49,7 @@ export const PreProvisionPage: React.FC<PreProvisionPageProps> = (props) => {
 
   let keyText = (text: string) => {
     let className = mergeStyles({
-      fontWeight: '500',
+      fontWeight: 'bold',
     });
 
     return (
@@ -85,8 +84,8 @@ export const PreProvisionPage: React.FC<PreProvisionPageProps> = (props) => {
       <DialogWrapper
         isOpen={true}
         // onDismiss={null}
-        title={'Provisioning Summary'}
-        subText={'The following resources will be provisioned for you'}
+        title={'Configuration Summary'}
+        subText={'The following customizations will be applied to your bot'}
         dialogType={DialogTypes.CreateFlow}
       >
         <div>
@@ -104,33 +103,37 @@ export const PreProvisionPage: React.FC<PreProvisionPageProps> = (props) => {
             {valueText(state.selectedPersonality)}
           </div>
           <div className={KeyValueClassName}>
-            {keyText('Supported User Inputs: ')}
-            {valueText(state.selectedUserInput.toString())}
+            {keyText('Bot configured for Text: ')}
+            {valueText(state.isTextEnabled.toString())}
           </div>
           <div className={KeyValueClassName}>
+            {keyText('Bot configured for Speech: ')}
+            {valueText(state.isSpeechEnabled.toString())}
+          </div>
+          {/* <div className={KeyValueClassName}>
             {keyText('Supported User Languages: ')}
             {valueText(state.selectedLanguages.toString())}
-          </div>
-          {categoryText('Skills')}
-          {renderSkillsList()}
+          </div> */}
+          {/* {categoryText('Skills')}
+          {renderSkillsList()} */}
           {categoryText('Content')}
           <div className={KeyValueClassName}>
             {keyText('Greeting Message: ')}
             {valueText(state.selectedGreetingMessage)}
           </div>
           <div className={KeyValueClassName}>
-            {keyText('Welcome Image: ')}
-            {valueText(state.selectedWelcomeImage)}
-          </div>
-          <div className={KeyValueClassName}>
             {keyText('Fallback Text: ')}
             {valueText(state.selectedFallbackText)}
           </div>
         </div>
-        <DialogFooterWrapper prevPath={RouterPaths.customizeBotPage} onSubmit={onSubmit} onDismiss={onDismiss} />
+        <DialogFooterWrapper
+          prevPath={RouterPaths.customizeBotPage}
+          nextPath={RouterPaths.provisionSummaryPage}
+          onDismiss={onDismiss}
+        />
       </DialogWrapper>
     </Fragment>
   );
 };
 
-export default PreProvisionPage;
+export default ConfigSummaryPage;

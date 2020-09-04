@@ -17,6 +17,7 @@ import { mergeStyles } from '@uifabric/merge-styles';
 import { AppContext } from './VirtualAssistantCreationModal';
 import { DialogFooterWrapper } from './dialogFooterWrapper';
 import { RouterPaths } from '../shared/constants';
+import { AvailablePersonalities } from '../models/creationOptions';
 
 interface CustomizeBotPageProps
   extends RouteComponentProps<{
@@ -33,25 +34,12 @@ export const CustomizeBotPage: React.FC<CustomizeBotPageProps> = (props) => {
     width: '400px !important',
   });
 
-  let onUserInputChange = (editedInput: string, isAdded?: boolean) => {
-    var resultArray = [...state.selectedUserInput];
-    if (isAdded) {
-      resultArray.push(editedInput);
-    } else {
-      var indexToRemove = resultArray.indexOf(editedInput);
-      if (indexToRemove !== -1) {
-        resultArray.splice(indexToRemove, 1);
-      }
-    }
-    setState({ ...state, selectedUserInput: resultArray });
-  };
-
   const personalityOptions: IDropdownOption[] = [
-    { key: 'professional', text: 'Professional' },
-    { key: 'enthusiastic', text: 'Enthusiastic' },
-    { key: 'friendly', text: 'Friendly' },
-    { key: 'witty', text: 'Witty' },
-    { key: 'caring', text: 'Caring' },
+    { key: AvailablePersonalities.professional, text: AvailablePersonalities.professional },
+    { key: AvailablePersonalities.enthusiastic, text: AvailablePersonalities.enthusiastic },
+    { key: AvailablePersonalities.friendly, text: AvailablePersonalities.friendly },
+    { key: AvailablePersonalities.witty, text: AvailablePersonalities.witty },
+    { key: AvailablePersonalities.caring, text: AvailablePersonalities.caring },
   ];
 
   const iconOptions: IChoiceGroupOption[] = [
@@ -84,6 +72,7 @@ export const CustomizeBotPage: React.FC<CustomizeBotPageProps> = (props) => {
               onChange={(event: any, newValue?: string) => {
                 setState({ ...state, selectedBotName: newValue as string });
               }}
+              value={state.selectedBotName}
               className={textFieldClassName}
               id={textFieldId}
             />
@@ -94,14 +83,16 @@ export const CustomizeBotPage: React.FC<CustomizeBotPageProps> = (props) => {
               <Checkbox
                 label="Text"
                 onChange={(ev: any, checked?: boolean) => {
-                  onUserInputChange('Text', checked);
+                  setState({ ...state, isTextEnabled: !state.isTextEnabled });
                 }}
+                checked={state.isTextEnabled}
               />
               <Checkbox
                 label="Speech"
                 onChange={(ev: any, checked?: boolean) => {
-                  onUserInputChange('Speech', checked);
+                  setState({ ...state, isSpeechEnabled: !state.isSpeechEnabled });
                 }}
+                checked={state.isSpeechEnabled}
               />
             </Stack>{' '}
           </Stack.Item>
@@ -112,8 +103,21 @@ export const CustomizeBotPage: React.FC<CustomizeBotPageProps> = (props) => {
               label="Personality"
               options={personalityOptions}
               styles={dropdownStyles}
+              selectedKey={state.selectedPersonality}
               onChange={(ev: any, option?: IDropdownOption) => {
-                setState({ ...state, selectedPersonality: option?.text as string });
+                setState({ ...state, selectedPersonality: AvailablePersonalities[option?.text as string] });
+                console.log(state.selectedPersonality);
+              }}
+            />
+          </Stack.Item>
+          <Stack.Item>
+            <Label htmlFor={textFieldId}>Greeting Message</Label>
+            <TextField
+              className={textFieldClassName}
+              id={textFieldId}
+              value={state.selectedGreetingMessage}
+              onChange={(ev?: any, newValue?: string) => {
+                setState({ ...state, selectedGreetingMessage: newValue as string });
               }}
             />
           </Stack.Item>
@@ -130,20 +134,9 @@ export const CustomizeBotPage: React.FC<CustomizeBotPageProps> = (props) => {
               }}
             />
           </Stack.Item>
-          <Stack.Item>
-            <Label htmlFor={textFieldId}>Greeting Message</Label>
-            <TextField
-              className={textFieldClassName}
-              id={textFieldId}
-              value={state.selectedGreetingMessage}
-              onChange={(ev?: any, newValue?: string) => {
-                setState({ ...state, selectedGreetingMessage: newValue as string });
-              }}
-            />
-          </Stack.Item>
           <DialogFooterWrapper
             prevPath={RouterPaths.newBotPage}
-            nextPath={RouterPaths.preProvisionPage}
+            nextPath={RouterPaths.configSummaryPage}
             onDismiss={props.onDismiss}
           />
         </Stack>
