@@ -108,6 +108,7 @@ const config: PluginConfig = {
           },
           validations: {
             label: () => formatMessage('Validation Rules'),
+            helpLink: 'https://aka.ms/bf-composer-docs-ask-input#prompt-settings-and-validation',
             placeholder: () => formatMessage('Add new validation rule here'),
           },
         },
@@ -124,6 +125,7 @@ const config: PluginConfig = {
           },
           validations: {
             label: () => formatMessage('Validation Rules'),
+            helpLink: 'https://aka.ms/bf-composer-docs-ask-input#prompt-settings-and-validation',
             placeholder: () => formatMessage('Add new validation rule here'),
           },
           choices: {
@@ -144,6 +146,7 @@ const config: PluginConfig = {
           },
           validations: {
             label: () => formatMessage('Validation Rules'),
+            helpLink: 'https://aka.ms/bf-composer-docs-ask-input#prompt-settings-and-validation',
             placeholder: () => formatMessage('Add new validation rule here'),
           },
           confirmChoices: {
@@ -164,6 +167,7 @@ const config: PluginConfig = {
           },
           validations: {
             label: () => formatMessage('Validation Rules'),
+            helpLink: 'https://aka.ms/bf-composer-docs-ask-input#prompt-settings-and-validation',
             placeholder: () => formatMessage('Add new validation rule here'),
           },
         },
@@ -180,6 +184,7 @@ const config: PluginConfig = {
           },
           validations: {
             label: () => formatMessage('Validation Rules'),
+            helpLink: 'https://aka.ms/bf-composer-docs-ask-input#prompt-settings-and-validation',
             placeholder: () => formatMessage('Add new validation rule here'),
           },
         },
@@ -196,6 +201,7 @@ const config: PluginConfig = {
           },
           validations: {
             label: () => formatMessage('Validation Rules'),
+            helpLink: 'https://aka.ms/bf-composer-docs-ask-input#prompt-settings-and-validation',
             placeholder: () => formatMessage('Add new validation rule here'),
           },
         },
