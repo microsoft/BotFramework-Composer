@@ -33,6 +33,7 @@ export class ExtensionManifestStore {
     // create extensions.json if it doesn't exist
     if (!existsSync(this.manifestPath)) {
       log('extensions.json does not exist yet. Writing file to path: %s', this.manifestPath);
+      writeJsonSync(this.manifestPath, DEFAULT_MANIFEST, { spaces: 2 });
     }
     this.readManifestFromDisk(); // load manifest into memory
   }
@@ -50,7 +51,7 @@ export class ExtensionManifestStore {
   // write manifest from memory to disk
   private writeManifestToDisk() {
     try {
-      writeJsonSync(this.manifestPath, this.manifest, { replacer: omitBuiltinProperty });
+      writeJsonSync(this.manifestPath, this.manifest, { replacer: omitBuiltinProperty, spaces: 2 });
     } catch (e) {
       log('Error writing %s: %s', this.manifestPath, e);
     }
