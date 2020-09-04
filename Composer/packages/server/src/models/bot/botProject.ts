@@ -6,8 +6,9 @@ import fs from 'fs';
 
 import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
-import { getNewDesigner, FileInfo, Skill, Diagnostic, IBotProject, DialogSetting } from '@bfc/shared';
+import { getNewDesigner, FileInfo, Skill, Diagnostic, IBotProject, DialogSetting, FileExtensions } from '@bfc/shared';
 import { UserIdentity, pluginLoader } from '@bfc/plugin-loader';
+import { FeedbackType, generate } from '@microsoft/bf-generate-library';
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
@@ -487,6 +488,45 @@ export class BotProject implements IBotProject {
     });
     return qnaEndpointKey;
   };
+
+  public async generateDialog(name: string) {
+    const defaultLocale = this.settings?.defaultLanguage || defaultLanguage;
+    const relativePath = defaultFilePath(this.name, defaultLocale, `${name}${FileExtensions.FormDialogSchema}`);
+    const schemaPath = Path.resolve(this.dir, relativePath);
+
+    const outDir = Path.resolve(this.dir, `dialogs/${name}`);
+
+    const feedback = (type: FeedbackType, message: string): void => {
+      // eslint-disable-next-line no-console
+      console.log(`${type} - ${message}`);
+    };
+
+    const generateParams = {
+      schemaPath,
+      prefix: name,
+      outDir,
+      metaSchema: undefined,
+      allLocales: undefined,
+      templateDirs: [],
+      force: false,
+      merge: true,
+      singleton: true,
+      feedback,
+    };
+
+    await generate(
+      generateParams.schemaPath,
+      generateParams.prefix,
+      generateParams.outDir,
+      generateParams.metaSchema,
+      generateParams.allLocales,
+      generateParams.templateDirs,
+      generateParams.force,
+      generateParams.merge,
+      generateParams.singleton,
+      generateParams.feedback
+    );
+  }
 
   private async removeLocalRuntimeData(projectId) {
     const method = 'localpublish';
