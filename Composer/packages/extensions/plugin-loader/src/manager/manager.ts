@@ -2,8 +2,7 @@
 // Licensed under the MIT License.
 
 import path from 'path';
-import childProcess from 'child_process';
-import { promisify } from 'util';
+import { spawn } from 'child_process';
 
 import glob from 'globby';
 import { readJson } from 'fs-extra';
@@ -15,9 +14,32 @@ import { ExtensionBundle, PackageJSON, ExtensionMetadata, ExtensionSearchResult 
 
 const log = logger.extend('plugins');
 
-const exec = promisify(childProcess.exec);
-
 let manager: PluginManager;
+
+/**
+ * Used to safely execute commands that include user input
+ */
+async function runCommand(command: string): Promise<{ stdout: string; stderr: string }> {
+  return new Promise((resolve) => {
+    const [cmd, ...cmdArgs] = command.split(' ');
+    let stdout = '';
+    let stderr = '';
+
+    const proc = spawn(cmd, cmdArgs);
+
+    proc.stdout.on('data', (data) => {
+      stdout += data;
+    });
+
+    proc.stderr.on('data', (data) => {
+      stderr += data;
+    });
+
+    proc.on('close', () => {
+      resolve({ stdout, stderr });
+    });
+  });
+}
 
 function processBundles(pluginPath: string, bundles: ExtensionBundle[]) {
   return bundles.map((b) => ({
@@ -81,14 +103,13 @@ export class PluginManager {
    */
   public async installRemote(name: string, version?: string) {
     const packageNameAndVersion = version ? `${name}@${version}` : name;
-    const cmd = `npm install --no-audit --prefix ${this.remotePluginsDir} "${packageNameAndVersion}"`;
+    const cmd = `npm install --no-audit --prefix ${this.remotePluginsDir} ${packageNameAndVersion}`;
     log('Installing %s@%s to %s', name, version, this.remotePluginsDir);
     log(cmd);
 
-    const { stdout, stderr } = await exec(cmd);
+    const { stdout } = await runCommand(cmd);
 
     log('%s', stdout);
-    log('%s', stderr);
 
     const packageJson = await this.getPackageJson(name);
 
@@ -185,7 +206,7 @@ export class PluginManager {
     log('Removing %s', id);
     log(cmd);
 
-    const { stdout } = await exec(cmd);
+    const { stdout } = await runCommand(cmd);
 
     log('%s', stdout);
 
@@ -197,10 +218,10 @@ export class PluginManager {
    * @param query The search query
    */
   public async search(query: string) {
-    const cmd = `npm search --json "keywords:botframework-composer ${query}"`;
+    const cmd = `npm search --json keywords:botframework-composer ${query}`;
     log(cmd);
 
-    const { stdout } = await exec(cmd);
+    const { stdout } = await runCommand(cmd);
 
     try {
       const result = JSON.parse(stdout);
