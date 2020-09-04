@@ -307,9 +307,10 @@ describe('QnA Questions/Answer CRUD', () => {
   });
 
   it('update question in qna pair (with model info section in head)', () => {
-    const emptyQnAPair = generateQnAPair('how are you?', 'fine.');
+    const emptyQnAPair = generateQnAPair('how are you?', '');
     const qnaFile = parse(fileId1, content2);
     const updatedQnAFile1 = insertSection(qnaFile, 0, emptyQnAPair);
+
     const question1 = 'How are you?';
     const updatedQnAFile2 = updateQnAQuestion(
       updatedQnAFile1,
@@ -322,7 +323,7 @@ describe('QnA Questions/Answer CRUD', () => {
 
     expect(updatedSection.Body).toEqual(expectedUpdatedSectionBody);
     expect(updatedQnAFile2.diagnostics.length).toEqual(0);
-    expect(updatedQnAFile2.qnaSections.length).toEqual(3);
+    expect(updatedQnAFile2.qnaSections.length).toEqual(5);
     expect(updatedQnAFile2.qnaSections[0].Questions.length).toEqual(1);
     expect(updatedQnAFile2.qnaSections[0].Questions[0]).toMatchObject({
       content: question1,

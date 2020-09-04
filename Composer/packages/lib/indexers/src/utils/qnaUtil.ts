@@ -23,18 +23,15 @@ enum SectionTypes {
   LUModelInfo = 'modelInfoSection',
 }
 
-function rebuildQnaSection(qnaSection, isfirstQnA: boolean) {
+function rebuildQnaSection(qnaSection) {
   const { source, QAPairId, Questions, FilterPairs, Answer, promptsText } = qnaSection;
   let result = '';
   if (source && source !== 'custom editorial') {
-    result += !result && isfirstQnA ? '' : '\n';
-    result += `> !# @qna.pair.source = ${source}`;
+    result += `> !# @qna.pair.source = ${source}\n`;
   }
   if (QAPairId) {
-    result += !result && isfirstQnA ? '' : '\n';
-    result += `<a id = "${QAPairId}"></a>`;
+    result += `<a id = "${QAPairId}"></a>\n`;
   }
-  result += !result && isfirstQnA ? '' : '\n';
   result += `# ? `;
   if (Questions && Questions.length !== 0) {
     result += `${Questions[0].content}`;
@@ -179,7 +176,7 @@ export function insertSection(qnaFile: QnAFile, position: number, sectionContent
   if (position < 0) return qnaFile;
   const { resource } = qnaFile;
 
-  const result = new sectionOperator(resource).insertSection(position, NEWLINE + sectionContent);
+  const result = new sectionOperator(resource).insertSection(position, sectionContent);
   return convertQnAParseResultToQnAFile(qnaFile.id, result);
 }
 
@@ -263,8 +260,7 @@ export function updateQnASection(qnaFile: QnAFile, sectionId: string, changes: Q
     Answer: updatedAnswer,
   };
 
-  const isfirstQnA = Sections[0].sectionId === sectionId;
-  const targetSectionContent = rebuildQnaSection(sectionToUpdate, isfirstQnA);
+  const targetSectionContent = rebuildQnaSection(sectionToUpdate);
 
   return updateSection(qnaFile, sectionId, targetSectionContent);
 }
