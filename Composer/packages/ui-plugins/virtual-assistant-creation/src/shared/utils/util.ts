@@ -18,7 +18,7 @@ export const updatePersonalityQnaFile = async (shellApi: ShellApi, selectedPerso
   }).then(async function (response) {
     console.log(response);
 
-    await shellApi.updateQnaContent('Chitchat2.en-us', atob(response.data.content));
+    await shellApi.updateQnaContent('Chit-chat.en-us', atob(response.data.content));
     return response;
   });
 };
