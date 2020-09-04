@@ -37,5 +37,8 @@
     "request": "2.88.2",
     "request-promise": "4.2.5",
     "uuid": "7.0.3"
+  },
+  "resolutions": {
+    "bl": "^4.0.3"
   }
 }
