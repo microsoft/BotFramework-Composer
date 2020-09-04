@@ -23,17 +23,16 @@ function omitBuiltinProperty(key: string, value: string) {
   return value;
 }
 
-/** In-memory representation of extension-manifest.json as well as reads / writes data to disk. */
+/** In-memory representation of extensions.json as well as reads / writes data to disk. */
 export class ExtensionManifestStore {
   private manifest: ExtensionManifest = DEFAULT_MANIFEST;
   private manifestPath: string;
 
   constructor() {
     this.manifestPath = process.env.COMPOSER_EXTENSION_DATA as string;
-    // create extension-manifest.json if it doesn't exist
+    // create extensions.json if it doesn't exist
     if (!existsSync(this.manifestPath)) {
-      log('extension-manifest.json does not exist yet. Writing file to path: %s', this.manifestPath);
-      writeJsonSync(this.manifestPath, DEFAULT_MANIFEST);
+      log('extensions.json does not exist yet. Writing file to path: %s', this.manifestPath);
     }
     this.readManifestFromDisk(); // load manifest into memory
   }
