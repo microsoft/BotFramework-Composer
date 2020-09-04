@@ -103,7 +103,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         })
       : [];
   };
-
+  const [focusedIndex, setFocusedIndex] = useState(0);
   const [qnaSections, setQnASections] = useState<QnASectionItem[]>([]);
   useEffect(() => {
     if (isEmpty(qnaFiles)) return;
@@ -113,13 +113,13 @@ const TableView: React.FC<TableViewProps> = (props) => {
       return result.concat(res);
     }, []);
 
-    if (!activeDialog) {
+    if (dialogId === 'all') {
       setQnASections(allSections);
     } else {
-      const dialogSections = allSections.filter((t) => t.dialogId === activeDialog.id);
+      const dialogSections = allSections.filter((t) => t.fileId === dialogId);
       setQnASections(dialogSections);
     }
-  }, [qnaFiles, activeDialog, projectId]);
+  }, [qnaFiles, dialogId, projectId]);
 
   const importedFiles = useMemo(() => {
     const results: QnAFile[] = [];
@@ -141,22 +141,12 @@ const TableView: React.FC<TableViewProps> = (props) => {
     return result.concat(res);
   }, []);
 
-  const toggleShowAll = () => {
+  const toggleExpandRow = (sectionId: string, expand?: boolean) => {
     const newSections = qnaSections.map((item) => {
-      return {
-        ...item,
-        expand: true,
-      };
-    });
-    setQnASections(newSections);
-  };
-
-  const expandDetails = (index: number) => {
-    const newSections = qnaSections.map((item, i) => {
-      if (i === index) {
+      if (item.sectionId === sectionId) {
         return {
           ...item,
-          expand: true,
+          expand: expand === undefined ? !item.expand : expand,
         };
       } else {
         return item;
@@ -175,13 +165,25 @@ const TableView: React.FC<TableViewProps> = (props) => {
     }
   };
 
-  const onCreateNewTemplate = () => {
-    if (!qnaFile) return;
+  const onCreateNewQnAPairs = (fileId: string) => {
     const newQnAPair = generateQnAPair();
-    addQnAPairs({ id: qnaFile.id, content: newQnAPair });
+    addQnAPairs({ id: fileId, content: newQnAPair });
   };
 
-  console.log(qnaSections);
+  const onCreateNewQuestion = useCallback(
+    (fileId, sectionId) => {
+      if (qnaFile) {
+        const payload = {
+          id: fileId,
+          sectionId,
+          content: 'Add new question',
+        };
+        addQnAQuestion(payload);
+        setFocusedIndex(qnaSections.length);
+      }
+    },
+    [qnaFile]
+  );
 
   const getKeyCallback = useCallback((item) => item.uuid, []);
 
@@ -201,7 +203,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
               iconProps={{ iconName: item.expand ? 'ChevronDown' : 'ChevronRight' }}
               styles={icon}
               title="ChevronDown"
-              onClick={() => toggleShowAll()}
+              onClick={() => toggleExpandRow(item.sectionId)}
             />
           );
         },
@@ -221,6 +223,16 @@ const TableView: React.FC<TableViewProps> = (props) => {
           const isQuestionEmpty = showingQuestions.length === 1 && showingQuestions[0].content === '';
           const isSourceSectionInDialog = item.fileId.endsWith('.source') && !dialogId.endsWith('.source');
           const isAllowEdit = dialogId !== 'all' && !isSourceSectionInDialog;
+
+          const addQuestionButton = (
+            <ActionButton
+              iconProps={{ iconName: 'Add', styles: addIcon }}
+              styles={addAlternative}
+              onClick={(e) => onCreateNewQuestion(item.fileId, item.sectionId)}
+            >
+              {formatMessage('add alternative phrasing')}
+            </ActionButton>
+          );
 
           return (
             <div data-is-focusable css={formCell}>
@@ -250,6 +262,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                   />
                 );
               })}
+              {addQuestionButton}
             </div>
           );
         },
@@ -381,7 +394,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
                   iconProps={{ iconName: 'Add' }}
                   styles={addQnAPair}
                   onClick={() => {
-                    onCreateNewTemplate();
+                    if (!qnaFile) return;
+                    onCreateNewQnAPairs(qnaFile.id);
                     actions.setMessage('item added');
                   }}
                 >
@@ -412,6 +426,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           columns={getTableColums()}
           getKey={getKeyCallback}
           groups={getGroups()}
+          initialFocusedIndex={focusedIndex}
           items={[...qnaSections, ...importedSourceFileSections]}
           layoutMode={DetailsListLayoutMode.justified}
           selectionMode={SelectionMode.single}

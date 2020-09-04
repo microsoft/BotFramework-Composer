@@ -272,7 +272,8 @@ ${response.data}
       const qnaFile = qnaFiles.find((temp) => temp.id === id);
       if (!qnaFile) return qnaFiles;
 
-      const updatedFile = qnaUtil.addSection(qnaFile, content);
+      // insert into head, need investigate
+      const updatedFile = qnaUtil.insertSection(qnaFile, 0, content);
       set(qnaFilesState, (qnaFiles) => {
         return qnaFiles.map((file) => {
           return file.id === id ? updatedFile : file;

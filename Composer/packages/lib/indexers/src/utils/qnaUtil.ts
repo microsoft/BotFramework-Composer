@@ -15,6 +15,8 @@ import { nanoid } from 'nanoid';
 
 const { luParser, sectionOperator } = sectionHandler;
 
+const NEWLINE = '\n';
+
 enum SectionTypes {
   QnASection = 'qnaSection',
   ImportSection = 'importSection',
@@ -33,7 +35,7 @@ function rebuildQnaSection(qnaSection, isfirstQnA: boolean) {
     result += `<a id = "${QAPairId}"></a>`;
   }
   result += !result && isfirstQnA ? '' : '\n';
-  result += `# ?`;
+  result += `# ? `;
   if (Questions && Questions.length !== 0) {
     result += `${Questions[0].content}`;
     Questions.slice(1).forEach((question) => {
@@ -140,16 +142,15 @@ export function checkIsSingleSection(content: string) {
   return Sections.length === 1;
 }
 
-export function generateQnAPair() {
-  let result = '';
-  result += '\n# ?\n```\n\n```';
-  return result;
+// export function generateQnAPair(question = 'default question', body = 'defualt body') {
+export function generateQnAPair(question = '', body = '') {
+  return `# ? ${question}\n\`\`\`\n${body}\n\`\`\``;
 }
 
 export function addSection(qnaFile: QnAFile, sectionContent: string): QnAFile {
   const { resource } = qnaFile;
 
-  const result = new sectionOperator(resource).addSection(sectionContent);
+  const result = new sectionOperator(resource).addSection(NEWLINE + sectionContent);
   return convertQnAParseResultToQnAFile(qnaFile.id, result);
 }
 
@@ -178,7 +179,7 @@ export function insertSection(qnaFile: QnAFile, position: number, sectionContent
   if (position < 0) return qnaFile;
   const { resource } = qnaFile;
 
-  const result = new sectionOperator(resource).insertSection(position, sectionContent);
+  const result = new sectionOperator(resource).insertSection(position, NEWLINE + sectionContent);
   return convertQnAParseResultToQnAFile(qnaFile.id, result);
 }
 

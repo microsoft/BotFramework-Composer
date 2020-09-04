@@ -1,32 +1,33 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { parse, addSection, removeSection, updateSection, insertSection, updateQnASection } from '../src/utils/qnaUtil';
+import {
+  parse,
+  addSection,
+  removeSection,
+  updateSection,
+  insertSection,
+  updateQnASection,
+  generateQnAPair,
+  updateQnAQuestion,
+} from '../src/utils/qnaUtil';
 
-const content1 = `> # QnA Definitions
-### ? who is the ceo?
+const content1 = `# ? who is the ceo?
 - get me your ceo info?
 	\`\`\`
 	Sorry, I don't know.
 	\`\`\`
 
 
-### ? How do I programmatically update my KB?
+# ? How do I programmatically update my KB?
 	\`\`\`
 	You can use our REST apis to manage your KB.
 	\`\`\`
 `;
-const content2 = `> # QnA pairs
-
-> !# @qna.pair.source = onlineFile.pdf
-
-<a id = "1"></a>
-
-## ? With Windows 10
-
-\`\`\`markdown
-**With Windows 10**
-\`\`\``;
+const content2 = `> !# @source.urls = https://download
+${generateQnAPair()}
+${content1}
+${generateQnAPair()}`;
 
 describe('QnA file parse', () => {
   const fileId1 = 'a.qna';
@@ -48,24 +49,79 @@ describe('QnA file parse', () => {
     });
     expect(qnaSections[1].Answer).toContain('You can use our REST apis to manage your KB.');
   });
+
+  it('parse qna file with options', () => {
+    const qnaFile = parse(fileId1, content2);
+    const { qnaSections, content, id, diagnostics } = qnaFile;
+
+    expect(id).toEqual(fileId1);
+    expect(content).toEqual(content2);
+    expect(diagnostics.length).toEqual(0);
+    expect(qnaSections.length).toEqual(4);
+    expect(qnaSections[0].Body).toEqual(generateQnAPair());
+    expect(qnaSections[0].Questions[0]).toMatchObject({
+      content: '',
+    });
+    expect(qnaSections[0].Answer).toEqual('');
+
+    expect(qnaSections[1].Questions[0]).toMatchObject({
+      content: 'who is the ceo?',
+    });
+    expect(qnaSections[1].Answer).toContain("Sorry, I don't know.");
+    expect(qnaSections[2].Questions[0]).toMatchObject({
+      content: 'How do I programmatically update my KB?',
+    });
+    expect(qnaSections[2].Answer).toContain('You can use our REST apis to manage your KB.');
+
+    expect(qnaSections[3].Body).toEqual(generateQnAPair());
+    expect(qnaSections[3].Questions[0]).toMatchObject({
+      content: '',
+    });
+    expect(qnaSections[3].Answer).toEqual('');
+  });
 });
 
 describe('QnA Section CRUD', () => {
   const fileId1 = 'a.qna';
 
-  it('add section', () => {
-    const newAddedSection = `
-# ? When did Satya Nadella become CEO of Microsoft?
-\`\`\`
-February 4, 2014.
-\`\`\`
-`;
+  it('add empty section', () => {
+    const newAddedSection = generateQnAPair();
     const qnaFile = parse(fileId1, content1);
-    const { qnaSections, content, diagnostics } = addSection(qnaFile, newAddedSection);
+    const { qnaSections, diagnostics } = addSection(qnaFile, newAddedSection);
 
-    expect(content).toEqual(content1 + '\n' + newAddedSection);
     expect(diagnostics.length).toEqual(0);
     expect(qnaSections.length).toEqual(3);
+    expect(qnaSections[2].Body).toEqual(newAddedSection);
+    expect(qnaSections[2].Questions.length).toEqual(1);
+    expect(qnaSections[2].Questions[0]).toMatchObject({
+      content: '',
+    });
+    expect(qnaSections[2].Answer).toEqual('');
+  });
+
+  it('insert empty section', () => {
+    const newAddedSection = generateQnAPair();
+    const qnaFile = parse(fileId1, content1);
+    const { qnaSections, diagnostics } = insertSection(qnaFile, 0, newAddedSection);
+
+    expect(diagnostics.length).toEqual(0);
+    expect(qnaSections.length).toEqual(3);
+    expect(qnaSections[0].Body).toEqual(newAddedSection);
+    expect(qnaSections[0].Questions.length).toEqual(1);
+    expect(qnaSections[0].Questions[0]).toMatchObject({
+      content: '',
+    });
+    expect(qnaSections[0].Answer).toEqual('');
+  });
+
+  it('add section', () => {
+    const newAddedSection = generateQnAPair('When did Satya Nadella become CEO of Microsoft?', 'February 4, 2014.');
+    const qnaFile = parse(fileId1, content1);
+    const { qnaSections, diagnostics } = addSection(qnaFile, newAddedSection);
+
+    expect(diagnostics.length).toEqual(0);
+    expect(qnaSections.length).toEqual(3);
+    expect(qnaSections[2].Body).toEqual(newAddedSection);
     expect(qnaSections[2].Questions.length).toEqual(1);
     expect(qnaSections[2].Questions[0]).toMatchObject({
       content: 'When did Satya Nadella become CEO of Microsoft?',
@@ -224,5 +280,53 @@ describe('QnA Questions/Answer CRUD', () => {
       content: 'get me your ceo info?',
     });
     expect(qnaSections[0].Answer).toContain("Sorry, I don't know.");
+  });
+
+  it('update question in empty qna pair', () => {
+    const emptyQnAPair = generateQnAPair();
+    const qnaFile = parse(fileId1, content1);
+    const updatedQnAFile1 = insertSection(qnaFile, 0, emptyQnAPair);
+    const question1 = 'How are you?';
+    const updatedQnAFile2 = updateQnAQuestion(
+      updatedQnAFile1,
+      updatedQnAFile1.qnaSections[0].sectionId,
+      updatedQnAFile1.qnaSections[0].Questions[0].id,
+      question1
+    );
+    const updatedSection = updatedQnAFile2.qnaSections[0];
+    const expectedUpdatedSectionBody = generateQnAPair(question1, '');
+
+    expect(updatedSection.Body).toEqual(expectedUpdatedSectionBody);
+    expect(updatedQnAFile2.diagnostics.length).toEqual(0);
+    expect(updatedQnAFile2.qnaSections.length).toEqual(3);
+    expect(updatedQnAFile2.qnaSections[0].Questions.length).toEqual(1);
+    expect(updatedQnAFile2.qnaSections[0].Questions[0]).toMatchObject({
+      content: question1,
+    });
+    expect(updatedQnAFile2.qnaSections[0].Answer).toEqual('');
+  });
+
+  it('update question in qna pair (with model info section in head)', () => {
+    const emptyQnAPair = generateQnAPair('how are you?', 'fine.');
+    const qnaFile = parse(fileId1, content2);
+    const updatedQnAFile1 = insertSection(qnaFile, 0, emptyQnAPair);
+    const question1 = 'How are you?';
+    const updatedQnAFile2 = updateQnAQuestion(
+      updatedQnAFile1,
+      updatedQnAFile1.qnaSections[0].sectionId,
+      updatedQnAFile1.qnaSections[0].Questions[0].id,
+      question1
+    );
+    const updatedSection = updatedQnAFile2.qnaSections[0];
+    const expectedUpdatedSectionBody = generateQnAPair(question1, '');
+
+    expect(updatedSection.Body).toEqual(expectedUpdatedSectionBody);
+    expect(updatedQnAFile2.diagnostics.length).toEqual(0);
+    expect(updatedQnAFile2.qnaSections.length).toEqual(3);
+    expect(updatedQnAFile2.qnaSections[0].Questions.length).toEqual(1);
+    expect(updatedQnAFile2.qnaSections[0].Questions[0]).toMatchObject({
+      content: question1,
+    });
+    expect(updatedQnAFile2.qnaSections[0].Answer).toEqual('');
   });
 });
