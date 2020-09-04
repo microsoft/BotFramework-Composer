@@ -14,8 +14,6 @@ import { ExtensionBundle, PackageJSON, ExtensionMetadata, ExtensionSearchResult 
 
 const log = logger.extend('plugins');
 
-let manager: PluginManager;
-
 /**
  * Used to safely execute commands that include user input
  */
@@ -60,25 +58,9 @@ function getExtensionMetadata(extensionPath: string, packageJson: PackageJSON): 
   };
 }
 
-export class PluginManager {
-  private builtinPluginsDir;
-  private remotePluginsDir;
+class PluginManager {
   private searchCache = new Map<string, ExtensionSearchResult>();
-  private manifest: ExtensionManifestStore;
-
-  public static getInstance() {
-    if (!manager) {
-      manager = new PluginManager();
-    }
-    return manager;
-  }
-
-  // singleton
-  private constructor() {
-    this.manifest = new ExtensionManifestStore();
-    this.builtinPluginsDir = process.env.COMPOSER_BUILTIN_PLUGINS_DIR;
-    this.remotePluginsDir = process.env.COMPOSER_REMOTE_PLUGINS_DIR;
-  }
+  private _manifest: ExtensionManifestStore | undefined;
 
   /**
    * Returns all extensions currently in the extension manifest
@@ -293,4 +275,33 @@ export class PluginManager {
       console.error(err);
     }
   }
+
+  private get manifest() {
+    if (this._manifest) {
+      return this._manifest;
+    }
+
+    this._manifest = new ExtensionManifestStore();
+    return this._manifest;
+  }
+
+  private get builtinPluginsDir() {
+    if (!process.env.COMPOSER_BUILTIN_PLUGINS_DIR) {
+      throw new Error('COMPOSER_BUILTIN_PLUGINS_DIR must be set.');
+    }
+
+    return process.env.COMPOSER_BUILTIN_PLUGINS_DIR;
+  }
+
+  private get remotePluginsDir() {
+    if (!process.env.COMPOSER_REMOTE_PLUGINS_DIR) {
+      throw new Error('COMPOSER_REMOTE_PLUGINS_DIR must be set.');
+    }
+
+    return process.env.COMPOSER_REMOTE_PLUGINS_DIR;
+  }
 }
+
+const manager = new PluginManager();
+
+export { manager as PluginManager };

@@ -45,7 +45,7 @@ interface PluginFetchRequest extends Request {
 }
 
 export async function listPlugins(req: Request, res: Response) {
-  res.json(PluginManager.getInstance().getAll()); // might need to have this list all enabled plugins ?
+  res.json(PluginManager.getAll()); // might need to have this list all enabled plugins ?
 }
 
 export async function addPlugin(req: AddPluginRequest, res: Response) {
@@ -56,9 +56,9 @@ export async function addPlugin(req: AddPluginRequest, res: Response) {
     return;
   }
 
-  await PluginManager.getInstance().installRemote(name, version);
-  await PluginManager.getInstance().load(name);
-  res.json(PluginManager.getInstance().find(name));
+  await PluginManager.installRemote(name, version);
+  await PluginManager.load(name);
+  res.json(PluginManager.find(name));
 }
 
 export async function togglePlugin(req: TogglePluginRequest, res: Response) {
@@ -69,18 +69,18 @@ export async function togglePlugin(req: TogglePluginRequest, res: Response) {
     return;
   }
 
-  if (!PluginManager.getInstance().find(id)) {
+  if (!PluginManager.find(id)) {
     res.status(404).json({ error: `plugin \`${id}\` not found` });
     return;
   }
 
   if (enabled === true) {
-    await PluginManager.getInstance().enable(id);
+    await PluginManager.enable(id);
   } else {
-    await PluginManager.getInstance().disable(id);
+    await PluginManager.disable(id);
   }
 
-  res.json(PluginManager.getInstance().find(id));
+  res.json(PluginManager.find(id));
 }
 
 export async function removePlugin(req: RemovePluginRequest, res: Response) {
@@ -91,27 +91,27 @@ export async function removePlugin(req: RemovePluginRequest, res: Response) {
     return;
   }
 
-  if (!PluginManager.getInstance().find(id)) {
+  if (!PluginManager.find(id)) {
     res.status(404).json({ error: `plugin \`${id}\` not found` });
     return;
   }
 
-  await PluginManager.getInstance().remove(id);
-  res.json(PluginManager.getInstance().getAll());
+  await PluginManager.remove(id);
+  res.json(PluginManager.getAll());
 }
 
 export async function searchPlugins(req: SearchPluginsRequest, res: Response) {
   const { q } = req.query;
 
-  const results = await PluginManager.getInstance().search(q ?? '');
+  const results = await PluginManager.search(q ?? '');
   res.json(results);
 }
 
 export async function getBundleForView(req: PluginViewBundleRequest, res: Response) {
   const { id, view } = req.params;
-  const plugin = PluginManager.getInstance().find(id);
+  const plugin = PluginManager.find(id);
   const bundleId = plugin.contributes.views?.[view].bundleId as string;
-  const bundle = PluginManager.getInstance().getBundle(id, bundleId);
+  const bundle = PluginManager.getBundle(id, bundleId);
   if (bundle) {
     res.sendFile(bundle);
   } else {
