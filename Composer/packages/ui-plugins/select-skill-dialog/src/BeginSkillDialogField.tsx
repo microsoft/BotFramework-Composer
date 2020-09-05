@@ -16,12 +16,7 @@ export const BeginSkillDialogField: React.FC<FieldProps> = (props) => {
   const { displayManifestModal, skillsInSettings } = shellApi;
 
   const manifest: Skill | undefined = useMemo(
-    () =>
-      skills.find(({ manifestUrl }) => {
-        debugger;
-        console.log(manifestUrl);
-        return manifestUrl === skillsInSettings.get(value.id);
-      }),
+    () => skills.find(({ manifestUrl }) => manifestUrl === skillsInSettings.get(value.id)),
     [skills, value.id]
   );
 
@@ -51,7 +46,7 @@ export const BeginSkillDialogField: React.FC<FieldProps> = (props) => {
   };
 
   const handleShowManifestClick = () => {
-    value.id && displayManifestModal(value.id);
+    value.id && displayManifestModal(skillsInSettings.get(value.id));
   };
 
   const skillEndpointUiSchema = uiOptions.properties?.skillEndpoint || {};
@@ -77,7 +72,7 @@ export const BeginSkillDialogField: React.FC<FieldProps> = (props) => {
         rawErrors={{}}
         schema={(schema?.properties?.id as JSONSchema7) || {}}
         uiOptions={uiOptions.properties?.id || {}}
-        value={value?.id}
+        value={skillsInSettings.get(value?.id)}
         onChange={handleIdChange}
       />
       <Link

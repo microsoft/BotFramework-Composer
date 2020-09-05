@@ -13,13 +13,13 @@ const ADD_DIALOG = 'ADD_DIALOG';
 export const SelectSkillDialog: React.FC<FieldProps> = (props) => {
   const { value, onChange } = props;
   const { shellApi, skills = [] } = useShellApi();
-  const { addSkillDialog } = shellApi;
+  const { addSkillDialog, skillsInSettings } = shellApi;
   const [comboboxTitle, setComboboxTitle] = useState<string | null>(null);
 
   const options: IComboBoxOption[] = skills.map(({ name, manifestUrl }) => ({
     key: manifestUrl,
     text: name,
-    isSelected: value === manifestUrl,
+    isSelected: skillsInSettings.get(value) === manifestUrl,
   }));
 
   options.push(
