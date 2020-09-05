@@ -25,6 +25,7 @@ import languageStorage from '../../utils/languageStorage';
 import { projectIdCache } from '../../utils/projectCache';
 import { designPageLocationState } from '../atoms/botState';
 import { QnABotTemplateId } from '../../constants';
+import { convertSkillsToDictionary } from '../../utils/backwardCompatibilityHandler';
 
 import {
   skillManifestsState,
@@ -193,6 +194,9 @@ export const projectDispatcher = () => {
         set(projectIdState, projectId);
         refreshLocalStorage(projectId, settings);
         const mergedSettings = mergeLocalStorage(projectId, settings);
+        if (isArray(mergedSettings.skill)) {
+          mergedSettings.skill = convertSkillsToDictionary(mergedSettings.skill);
+        }
         set(settingsState, mergedSettings);
       });
       gotoSnapshot(newSnapshot);

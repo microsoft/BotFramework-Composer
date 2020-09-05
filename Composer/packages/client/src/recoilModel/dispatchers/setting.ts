@@ -3,7 +3,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
-import { SensitiveProperties, DialogSetting, PublishTarget } from '@bfc/shared';
+import { SensitiveProperties, DialogSetting, PublishTarget, Skill } from '@bfc/shared';
 import get from 'lodash/get';
 import has from 'lodash/has';
 
@@ -89,6 +89,25 @@ export const settingsDispatcher = () => {
     }
   );
 
+  const updateSkillsInSetting = useRecoilCallback(
+    ({ set, snapshot }: CallbackInterface) => async (skillName: string, skillInfo: Partial<Skill>) => {
+      const currentSettings: DialogSetting = await snapshot.getPromise(settingsState);
+      const matchedSkill = get(currentSettings, `skill[${skillName}]`, {});
+      if (matchedSkill) {
+        set(settingsState, {
+          ...currentSettings,
+          skill: {
+            ...currentSettings.skill,
+            [skillName]: {
+              ...matchedSkill,
+              ...skillInfo,
+            },
+          },
+        });
+      }
+    }
+  );
+
   return {
     setSettings,
     setRuntimeSettings,
@@ -96,5 +115,6 @@ export const settingsDispatcher = () => {
     setRuntimeField,
     setCustomRuntime,
     setQnASettings,
+    updateSkillsInSetting,
   };
 };

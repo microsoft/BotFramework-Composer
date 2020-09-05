@@ -205,10 +205,17 @@ export class BotProject implements IBotProject {
   public updateSkill = async (config: any[]) => {
     const settings = await this.getEnvSettings(false);
     const { skillsParsed } = await extractSkillManifestUrl(config);
-
-    settings.skill = keyBy(skillsParsed, 'name');
-    await this.settingManager.set(settings);
-
+    const trimmedSkillsForSettings = skillsParsed.map((skill) => {
+      const { msAppId, endpointUrl, manifestUrl, name } = skill;
+      return {
+        msAppId,
+        endpointUrl,
+        manifestUrl,
+        name,
+      };
+    });
+    const mapped = keyBy(trimmedSkillsForSettings, 'name');
+    settings.skill = await this.settingManager.set(mapped);
     this.skills = skillsParsed;
     return skillsParsed;
   };

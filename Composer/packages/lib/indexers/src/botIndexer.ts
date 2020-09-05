@@ -40,7 +40,7 @@ const checkSkillSetting = (assets: BotAssets): Diagnostic[] => {
     // used skill not existed in setting
     dialog.skills.forEach((skillId) => {
       const manifestUrlCollection = map(skill, ({ manifestUrl }) => manifestUrl);
-      if (manifestUrlCollection.findIndex(({ manifestUrl }) => manifestUrl === skillId) === -1) {
+      if (manifestUrlCollection.findIndex((manifestUrl) => manifestUrl === skillId) === -1) {
         diagnostics.push(
           new Diagnostic(`skill '${skillId}' is not existed in appsettings.json`, dialog.id, DiagnosticSeverity.Error)
         );
@@ -63,13 +63,6 @@ const checkSkillSetting = (assets: BotAssets): Diagnostic[] => {
   return diagnostics;
 };
 
-const filterLUISFilesToPublish = (luFiles: LuFile[]): LuFile[] => {
-  return luFiles.filter((file) => {
-    const locale = getLocale(file.id);
-    return locale && LUISLocales.includes(locale);
-  });
-};
-
 const index = (name: string, assets: BotAssets): BotInfo => {
   const diagnostics: Diagnostic[] = [];
   diagnostics.push(...checkLUISLocales(assets), ...checkSkillSetting(assets));
@@ -79,6 +72,13 @@ const index = (name: string, assets: BotAssets): BotInfo => {
     assets,
     diagnostics,
   };
+};
+
+const filterLUISFilesToPublish = (luFiles: LuFile[]): LuFile[] => {
+  return luFiles.filter((file) => {
+    const locale = getLocale(file.id);
+    return locale && LUISLocales.includes(locale);
+  });
 };
 
 export const BotIndexer = {

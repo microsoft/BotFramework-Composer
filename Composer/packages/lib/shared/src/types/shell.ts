@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { DialogInfo, LuFile, LgFile, QnAFile, LuIntentSection, LgTemplate, DialogSchemaFile } from './indexers';
+import { DialogInfo, LuFile, LgFile, QnAFile, LuIntentSection, LgTemplate, DialogSchemaFile, Skill } from './indexers';
 import { UserSettings } from './settings';
 import { OBISchema } from './schema';
 
@@ -57,7 +57,7 @@ export interface ShellData {
   luFiles: LuFile[];
   qnaFiles: QnAFile[];
   userSettings: UserSettings;
-  skills: any[];
+  skills: Skill[];
   // TODO: remove
   schemas: BotSchemas;
 }
@@ -100,7 +100,10 @@ export interface ShellApi {
   displayManifestModal: (manifestId: string) => void;
   updateDialogSchema: (_: DialogSchemaFile) => Promise<void>;
   createTrigger: (id: string, formData, url?: string) => void;
-  updateSkillsInSetting: (skillName: string, skillsData: { msAppId: string; endpointUrl: string }) => void;
+  skillsInSettings: {
+    get: (path: string) => any;
+    set: (skillName: string, skillsData: Partial<Skill>) => Promise<void>;
+  };
 }
 
 export interface Shell {

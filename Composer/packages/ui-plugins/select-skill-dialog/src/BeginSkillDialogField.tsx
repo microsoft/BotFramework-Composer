@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { FieldProps, JSONSchema7, useShellApi } from '@bfc/extension';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { ObjectField, SchemaField } from '@bfc/adaptive-form';
@@ -13,32 +13,40 @@ import { SkillEndpointField } from './SkillEndpointField';
 export const BeginSkillDialogField: React.FC<FieldProps> = (props) => {
   const { depth, id, schema, uiOptions, value, onChange, definitions } = props;
   const { projectId, shellApi, skills = [] } = useShellApi();
-  const { displayManifestModal, updateSkillsInSetting } = shellApi;
+  const { displayManifestModal, skillsInSettings } = shellApi;
 
-  const manifest: Skill = useMemo(() => skills.find(({ manifestUrl }) => manifestUrl === value.id), [skills, value.id]);
-  const endpointOptions = useMemo(() => (manifest?.endpoints || []).map(({ name }) => name), [manifest]);
+  const manifest: Skill | undefined = useMemo(() => skills.find(({ manifestUrl }) => manifestUrl === value.id), [
+    skills,
+    value.id,
+  ]);
 
-  const handleIdChange = ({ key }) => {
-    if (!manifest || key !== manifest.manifestUrl) {
-      console.log(manifest);
+  const endpointOptions = useMemo(() => {
+    return (manifest?.endpoints || []).map(({ name }) => name);
+  }, [manifest]);
+
+  const handleIdChange = (props) => {
+    if (!manifest || props.key !== manifest.manifestUrl) {
       const { skillEndpoint, skillAppId, ...rest } = value;
-      onChange({ ...rest, id: `=settings.skill[${manifest.manifestUrl}].msAppId` });
+      onChange({ ...rest, id: props.key });
     }
   };
 
   const handleEndpointChange = async (skillEndpoint) => {
-    console.log(manifest);
-    console.log(skills);
     const { msAppId, endpointUrl } =
-      (manifest?.endpoints || []).find(({ endpointUrl }) => endpointUrl === skillEndpoint) || ({} as any);
-
-    updateSkillsInSetting(manifest.name, { endpointUrl, msAppId });
-    onChange({
-      ...value,
-      skillEndpoint: `=settings.skill[${manifest.name}].endpointUrl`,
-      ...(msAppId ? { skillAppId: `=settings.skill[${manifest.name}].msAppId` } : {}),
-    });
+      (manifest?.endpoints || []).find(({ name }) => name === skillEndpoint) || ({} as any);
+    if (manifest?.name) {
+      skillsInSettings.set(manifest.name, { endpointUrl, msAppId });
+      onChange({
+        ...value,
+        skillEndpoint: `=settings.skill['${manifest?.name}'].endpointUrl`,
+        ...(msAppId ? { skillAppId: `=settings.skill['${manifest.name}'].msAppId` } : {}),
+      });
+    }
   };
+
+  useEffect(() => {
+    handleEndpointChange(manifest?.endpoints[0].name);
+  }, [endpointOptions]);
 
   const handleShowManifestClick = () => {
     value.id && displayManifestModal(value.id);
@@ -47,7 +55,8 @@ export const BeginSkillDialogField: React.FC<FieldProps> = (props) => {
   const skillEndpointUiSchema = uiOptions.properties?.skillEndpoint || {};
   skillEndpointUiSchema.serializer = {
     get: (value) => {
-      const endpoint = (manifest?.endpoints || []).find(({ endpointUrl }) => endpointUrl === value);
+      const url: any = skillsInSettings.get(value);
+      const endpoint = (manifest?.endpoints || []).find(({ endpointUrl }) => endpointUrl === url);
       return endpoint?.name;
     },
     set: (value) => {

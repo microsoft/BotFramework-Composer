@@ -5,6 +5,7 @@ import { useMemo, useRef } from 'react';
 import { ShellApi, ShellData, Shell } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
+import lodashGet from 'lodash/get';
 
 import { updateRegExIntent, renameRegExIntent, updateIntentTrigger } from '../utils/dialogUtil';
 import { getDialogData, setDialogData } from '../utils/dialogUtil';
@@ -26,6 +27,7 @@ import {
   focusPathState,
   userSettingsState,
   clipboardActionsState,
+  settingsState,
 } from '../recoilModel';
 import { validatedDialogsSelector } from '../recoilModel/selectors/validatedDialogs';
 
@@ -56,6 +58,7 @@ export function useShell(source: EventSource): Shell {
   const userSettings = useRecoilValue(userSettingsState);
   const clipboardActions = useRecoilValue(clipboardActionsState);
   const { undo, redo, commitChanges } = useRecoilValue(undoFunctionState);
+  const settings = useRecoilValue(settingsState);
   const {
     updateDialog,
     updateDialogSchema,
@@ -191,7 +194,16 @@ export function useShell(source: EventSource): Shell {
     announce: setMessage,
     displayManifestModal: displayManifestModal,
     updateDialogSchema,
-    updateSkillsInSetting,
+    skillsInSettings: {
+      get: (path: string) => {
+        if (path) {
+          const trimmed = path.replace(/=settings.(.*?)/gi, '');
+          return lodashGet(settings, trimmed, '');
+        }
+        return '';
+      },
+      set: updateSkillsInSetting,
+    },
   };
 
   const currentDialog = useMemo(() => dialogs.find((d) => d.id === dialogId), [dialogs, dialogId]);
