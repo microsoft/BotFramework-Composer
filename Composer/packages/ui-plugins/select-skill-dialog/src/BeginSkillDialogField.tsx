@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import { FieldProps, JSONSchema7, useShellApi } from '@bfc/extension';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { ObjectField, SchemaField } from '@bfc/adaptive-form';
@@ -15,19 +15,25 @@ export const BeginSkillDialogField: React.FC<FieldProps> = (props) => {
   const { projectId, shellApi, skills = [] } = useShellApi();
   const { displayManifestModal, skillsInSettings } = shellApi;
 
-  const manifest: Skill | undefined = useMemo(() => skills.find(({ manifestUrl }) => manifestUrl === value.id), [
-    skills,
-    value.id,
-  ]);
+  const manifest: Skill | undefined = useMemo(
+    () =>
+      skills.find(({ manifestUrl }) => {
+        debugger;
+        console.log(manifestUrl);
+        return manifestUrl === skillsInSettings.get(value.id);
+      }),
+    [skills, value.id]
+  );
 
   const endpointOptions = useMemo(() => {
     return (manifest?.endpoints || []).map(({ name }) => name);
   }, [manifest]);
 
-  const handleIdChange = (props) => {
-    if (!manifest || props.key !== manifest.manifestUrl) {
+  const handleIdChange = ({ key, text }) => {
+    if (!manifest || key !== manifest.manifestUrl) {
       const { skillEndpoint, skillAppId, ...rest } = value;
-      onChange({ ...rest, id: props.key });
+
+      onChange({ ...rest, id: `=settings.skill['${text}'].manifestUrl` });
     }
   };
 
@@ -43,10 +49,6 @@ export const BeginSkillDialogField: React.FC<FieldProps> = (props) => {
       });
     }
   };
-
-  useEffect(() => {
-    handleEndpointChange(manifest?.endpoints[0].name);
-  }, [endpointOptions]);
 
   const handleShowManifestClick = () => {
     value.id && displayManifestModal(value.id);

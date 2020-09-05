@@ -67,6 +67,7 @@ const SchemaField: React.FC<FieldProps> = (props) => {
   );
 
   const deserializedValue = typeof uiOptions?.serializer?.get === 'function' ? uiOptions.serializer.get(value) : value;
+  debugger;
 
   const FieldWidget = resolveFieldWidget(schema, uiOptions, formUIOptions);
   const fieldProps: FieldProps = {
