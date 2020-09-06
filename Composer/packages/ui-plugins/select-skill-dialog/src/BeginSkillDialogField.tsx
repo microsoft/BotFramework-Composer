@@ -19,7 +19,6 @@ export const BeginSkillDialogField: React.FC<FieldProps> = (props) => {
     () => skills.find(({ manifestUrl }) => manifestUrl === skillsInSettings.get(value.id)),
     [skills, value.id]
   );
-
   const endpointOptions = useMemo(() => {
     return (manifest?.endpoints || []).map(({ name }) => name);
   }, [manifest]);
@@ -27,7 +26,6 @@ export const BeginSkillDialogField: React.FC<FieldProps> = (props) => {
   const handleIdChange = ({ key, text }) => {
     if (!manifest || key !== manifest.manifestUrl) {
       const { skillEndpoint, skillAppId, ...rest } = value;
-
       onChange({ ...rest, id: `=settings.skill['${text}'].manifestUrl` });
     }
   };

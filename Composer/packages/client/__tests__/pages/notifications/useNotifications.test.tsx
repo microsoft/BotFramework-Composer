@@ -26,7 +26,7 @@ const state = {
       content: 'test',
       luFile: 'test',
       referredLuIntents: [],
-      skills: ['https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json'],
+      skills: [`=settings.skill['Email-Skill'].manifestUrl`],
     },
   ],
   luFiles: [
@@ -86,12 +86,10 @@ const state = {
     },
   ],
   settings: {
-    skill: [
-      {
-        manifestUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json',
-        name: 'Email Skill',
-      },
-    ],
+    skill: {
+      manifestUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json',
+      name: 'Email-Skill',
+    },
   },
 };
 

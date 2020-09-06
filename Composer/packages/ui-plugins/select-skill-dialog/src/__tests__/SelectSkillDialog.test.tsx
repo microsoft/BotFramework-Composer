@@ -6,6 +6,7 @@
 import React from 'react';
 import { fireEvent, getAllByRole, render, act } from '@bfc/test-utils';
 import { Extension } from '@bfc/extension';
+import { fetchFromSettings, convertSkillsToDictionary } from '@bfc/shared';
 
 import { SelectSkillDialog } from '../SelectSkillDialogField';
 
@@ -48,6 +49,13 @@ const renderSelectSkillDialog = ({ addSkillDialog, onChange } = {}) => {
 
   const shell = {
     addSkillDialog,
+    skillsInSettings: {
+      get: (path: string) =>
+        fetchFromSettings(path, {
+          skill: convertSkillsToDictionary(skills),
+        }),
+      set: () => {},
+    },
   };
 
   const shellData = {

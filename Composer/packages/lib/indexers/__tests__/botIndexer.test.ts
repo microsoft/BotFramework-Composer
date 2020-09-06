@@ -33,8 +33,8 @@ const botAssets: BotAssets = {
     botId: '',
     skillHostEndpoint: '',
     skill: {
-      'Email Skill': {
-        name: 'Email Skill',
+      'Email-Skill': {
+        name: 'Email-Skill',
         manifestUrl: 'skill1',
       },
     },
