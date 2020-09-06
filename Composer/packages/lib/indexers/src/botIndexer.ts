@@ -4,7 +4,15 @@
  * Verify bot settings, files meet LUIS/QnA requirments.
  */
 
-import { BotAssets, BotInfo, LUISLocales, Diagnostic, DiagnosticSeverity, LuFile } from '@bfc/shared';
+import {
+  BotAssets,
+  BotInfo,
+  LUISLocales,
+  Diagnostic,
+  DiagnosticSeverity,
+  LuFile,
+  fetchFromSettings,
+} from '@bfc/shared';
 import difference from 'lodash/difference';
 import map from 'lodash/map';
 
@@ -40,7 +48,10 @@ const checkSkillSetting = (assets: BotAssets): Diagnostic[] => {
     // used skill not existed in setting
     dialog.skills.forEach((skillId) => {
       const manifestUrlCollection = map(skill, ({ manifestUrl }) => manifestUrl);
-      if (manifestUrlCollection.findIndex((manifestUrl) => manifestUrl === skillId) === -1) {
+      if (
+        manifestUrlCollection.findIndex((manifestUrl) => manifestUrl === fetchFromSettings(skillId, assets.setting)) ===
+        -1
+      ) {
         diagnostics.push(
           new Diagnostic(`skill '${skillId}' is not existed in appsettings.json`, dialog.id, DiagnosticSeverity.Error)
         );

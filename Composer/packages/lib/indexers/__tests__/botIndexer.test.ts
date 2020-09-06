@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { BotAssets, DialogSetting, DialogInfo, DiagnosticSeverity, LuFile } from '@bfc/shared';
+import { BotAssets, DialogSetting, DialogInfo, DiagnosticSeverity, LuFile, ILuisConfig, IQnAConfig } from '@bfc/shared';
 
 import { BotIndexer } from '../src/botIndexer';
 const { checkSkillSetting, checkLUISLocales, filterLUISFilesToPublish } = BotIndexer;
@@ -32,12 +32,15 @@ const botAssets: BotAssets = {
     defaultLanguage: 'en-us',
     botId: '',
     skillHostEndpoint: '',
-    skill: [
-      {
+    skill: {
+      'Email Skill': {
         name: 'Email Skill',
         manifestUrl: 'skill1',
       },
-    ],
+    },
+    luis: {} as ILuisConfig,
+    qna: {} as IQnAConfig,
+    runtime: {} as any,
   } as DialogSetting,
 };
 

@@ -2,10 +2,9 @@
 // Licensed under the MIT License.
 
 import { useMemo, useRef } from 'react';
-import { ShellApi, ShellData, Shell } from '@bfc/shared';
+import { ShellApi, ShellData, Shell, fetchFromSettings } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
-import lodashGet from 'lodash/get';
 
 import { updateRegExIntent, renameRegExIntent, updateIntentTrigger } from '../utils/dialogUtil';
 import { getDialogData, setDialogData } from '../utils/dialogUtil';
@@ -195,13 +194,7 @@ export function useShell(source: EventSource): Shell {
     displayManifestModal: displayManifestModal,
     updateDialogSchema,
     skillsInSettings: {
-      get: (path: string) => {
-        if (path) {
-          const trimmed = path.replace(/=settings.(.*?)/gi, '');
-          return lodashGet(settings, trimmed, '');
-        }
-        return '';
-      },
+      get: (path: string) => fetchFromSettings(path, settings),
       set: updateSkillsInSetting,
     },
   };

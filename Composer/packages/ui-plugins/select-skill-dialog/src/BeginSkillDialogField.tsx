@@ -62,6 +62,12 @@ export const BeginSkillDialogField: React.FC<FieldProps> = (props) => {
     },
   };
 
+  const skillIdUiSchema = uiOptions.properties?.id || {};
+  skillIdUiSchema.serializer = {
+    get: (value) => skillsInSettings.get(value),
+    set: (value) => value,
+  };
+
   return (
     <React.Fragment>
       <SchemaField
@@ -71,8 +77,8 @@ export const BeginSkillDialogField: React.FC<FieldProps> = (props) => {
         name="id"
         rawErrors={{}}
         schema={(schema?.properties?.id as JSONSchema7) || {}}
-        uiOptions={uiOptions.properties?.id || {}}
-        value={skillsInSettings.get(value?.id)}
+        uiOptions={skillIdUiSchema}
+        value={value?.id}
         onChange={handleIdChange}
       />
       <Link

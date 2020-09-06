@@ -2,7 +2,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { useRecoilCallback, CallbackInterface } from 'recoil';
-import { dereferenceDefinitions, LuFile, QnAFile, DialogInfo, SensitiveProperties, DialogSetting } from '@bfc/shared';
+import {
+  dereferenceDefinitions,
+  LuFile,
+  QnAFile,
+  DialogInfo,
+  SensitiveProperties,
+  DialogSetting,
+  convertSkillsToDictionary,
+} from '@bfc/shared';
 import { indexer, validateDialog } from '@bfc/indexers';
 import objectGet from 'lodash/get';
 import objectSet from 'lodash/set';
@@ -25,7 +33,6 @@ import languageStorage from '../../utils/languageStorage';
 import { projectIdCache } from '../../utils/projectCache';
 import { designPageLocationState } from '../atoms/botState';
 import { QnABotTemplateId } from '../../constants';
-import { convertSkillsToDictionary } from '../../utils/backwardCompatibilityHandler';
 
 import {
   skillManifestsState,

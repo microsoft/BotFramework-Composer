@@ -3,10 +3,9 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
-import { SkillManifest } from '@bfc/shared';
+import { SkillManifest, convertSkillsToDictionary } from '@bfc/shared';
 
 import httpClient from '../../utils/httpUtil';
-import { convertSkillsToDictionary } from '../../utils/backwardCompatibilityHandler';
 
 import {
   skillManifestsState,

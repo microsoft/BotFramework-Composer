@@ -9,7 +9,6 @@ import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
 import { getNewDesigner, FileInfo, Skill, Diagnostic, IBotProject, DialogSetting, FileExtensions } from '@bfc/shared';
 import { UserIdentity, pluginLoader } from '@bfc/plugin-loader';
-import keyBy from 'lodash/keyBy';
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
@@ -205,16 +204,7 @@ export class BotProject implements IBotProject {
   public updateSkill = async (config: any[]) => {
     const settings = await this.getEnvSettings(false);
     const { skillsParsed } = await extractSkillManifestUrl(config);
-    const trimmedSkillsForSettings = skillsParsed.map((skill) => {
-      const { msAppId, endpointUrl, manifestUrl, name } = skill;
-      return {
-        msAppId,
-        endpointUrl,
-        manifestUrl,
-        name,
-      };
-    });
-    const mapped = keyBy(trimmedSkillsForSettings, 'name');
+    const mapped = convertSkillsToDictionary(skillsParsed);
     settings.skill = await this.settingManager.set(mapped);
     this.skills = skillsParsed;
     return skillsParsed;
