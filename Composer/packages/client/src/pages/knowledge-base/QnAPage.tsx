@@ -68,25 +68,6 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
     return newDialogLinks;
   }, [dialogs]);
 
-  const sourceQnAFiles = qnaFiles.filter(({ id }) => id.endsWith('.source'));
-
-  const sourceQnANavLinks: INavTreeItem[] = sourceQnAFiles.map(({ id }) => {
-    return {
-      id,
-      name: getBaseName(id),
-      ariaLabel: formatMessage('qna file'),
-      url: `/bot/${projectId}/knowledge-base/${id}`,
-    };
-  });
-
-  sourceQnANavLinks.unshift({
-    id: 'source',
-    name: '--- Imported From Urls ----',
-    ariaLabel: formatMessage('Imported From Urls'),
-    disabled: true,
-    url: `/bot/${projectId}/knowledge-base/source`,
-  });
-
   useEffect(() => {
     const activeDialog = dialogs.find(({ id }) => id === dialogId);
     if (!activeDialog && dialogs.length && dialogId !== 'all') {
@@ -162,7 +143,7 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
     <Page
       data-testid="QnAPage"
       mainRegionName={formatMessage('QnA editor')}
-      navLinks={[...navLinks, ...sourceQnANavLinks]}
+      navLinks={navLinks}
       navRegionName={formatMessage('Qna Navigation Pane')}
       title={formatMessage('QnA')}
       toolbarItems={toolbarItems}

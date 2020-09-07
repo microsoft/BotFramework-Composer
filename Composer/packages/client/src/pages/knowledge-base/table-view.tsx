@@ -83,8 +83,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const { languages, defaultLanguage } = settings;
 
   const { dialogId } = props;
-  const activeDialog = dialogs.find(({ id }) => id === dialogId);
-
   const targetFileId = dialogId.endsWith('.source') ? dialogId : `${dialogId}.${locale}`;
   const qnaFile = qnaFiles.find(({ id }) => id === targetFileId);
   const limitedNumber = 1;
@@ -116,7 +114,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     if (dialogId === 'all') {
       setQnASections(allSections);
     } else {
-      const dialogSections = allSections.filter((t) => t.fileId === dialogId);
+      const dialogSections = allSections.filter((t) => t.dialogId === dialogId);
       setQnASections(dialogSections);
     }
   }, [qnaFiles, dialogId, projectId]);
