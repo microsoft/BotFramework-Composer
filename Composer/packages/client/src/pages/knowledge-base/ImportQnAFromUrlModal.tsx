@@ -8,6 +8,7 @@ import formatMessage from 'format-message';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { PrimaryButton, DefaultButton, ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { FontWeights } from '@uifabric/styling';
@@ -116,6 +117,7 @@ const DialogTitle = () => {
 export interface ImportQnAFormData {
   urls: string[];
   name: string;
+  multiTurn: boolean;
 }
 
 const validateUrls = (urls: string[]) => {
@@ -166,6 +168,10 @@ const formConfig: FieldConfig<ImportQnAFormData> = {
     required: true,
     defaultValue: '',
   },
+  multiTurn: {
+    required: false,
+    defaultValue: false,
+  },
 };
 
 export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (props) => {
@@ -179,6 +185,9 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
 
   const updateName = (name = '') => {
     updateField('name', name);
+  };
+  const updateMultiTurn = (val) => {
+    updateField('multiTurn', val);
   };
 
   const addNewUrl = () => {
@@ -263,6 +272,12 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
             <div css={warning}> {formatMessage('please select a specific qna file to import QnA')}</div>
           )}
         </Stack>
+        <Stack>
+          <Checkbox
+            label={formatMessage('Enable multi-turn extraction')}
+            onChange={(_e, val) => updateMultiTurn(val)}
+          />
+        </Stack>
       </div>
       <DialogFooter>
         <DefaultButton
@@ -273,7 +288,7 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
             if (hasErrors) {
               return;
             }
-            onSubmit([]);
+            onSubmit({} as ImportQnAFormData);
           }}
         />
         <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />

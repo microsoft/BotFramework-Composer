@@ -560,7 +560,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     setImportQnAModalVisibility(false);
   };
 
-  const handleCreateQnA = async ({ name, urls }) => {
+  const handleCreateQnA = async ({ name, urls, multiTurn }) => {
     cancelImportQnAModal();
     const formData = {
       $kind: qnaMatcherKey,
@@ -575,7 +575,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       createTrigger(dialogId, formData, url);
       // import qna from urls
       if (urls.length > 0) {
-        await importQnAFromUrls({ id: `${dialogId}.${locale}`, name, urls });
+        await importQnAFromUrls({ id: `${dialogId}.${locale}`, name, urls, multiTurn });
       }
     }
   };

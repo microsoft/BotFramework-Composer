@@ -136,10 +136,12 @@ export const qnaDispatcher = () => {
       id,
       name,
       urls,
+      multiTurn,
     }: {
       id: string; // dialogId.locale
       name: string;
       urls: string[];
+      multiTurn: boolean;
     }) => {
       const { set } = callbackHelpers;
 
@@ -148,7 +150,7 @@ export const qnaDispatcher = () => {
       let response;
       try {
         response = await httpClient.get(`/utilities/qna/parse`, {
-          params: { urls: encodeURIComponent(urls.join(',')) },
+          params: { urls: encodeURIComponent(urls.join(',')), multiTurn },
         });
       } catch (err) {
         setError(callbackHelpers, err);

@@ -18,7 +18,6 @@ import { Page } from '../../components/Page';
 import { dialogsState, projectIdState, qnaAllUpViewStatusState, qnaFilesState } from '../../recoilModel/atoms/botState';
 import { dispatcherState } from '../../recoilModel';
 import { QnAAllUpViewStatus } from '../../recoilModel/types';
-import { getBaseName } from '../../utils/fileUtil';
 
 import TableView from './table-view';
 import { ImportQnAFromUrlModal, ImportQnAFormData } from './ImportQnAFromUrlModal';
@@ -134,9 +133,9 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
     setImportQnAFromUrlModalVisiability(false);
   };
 
-  const onSubmit = async ({ name, urls }: ImportQnAFormData) => {
+  const onSubmit = async ({ name, urls, multiTurn }: ImportQnAFormData) => {
     onDismiss();
-    await actions.importQnAFromUrls({ id: `${dialogId}.${locale}`, name, urls });
+    await actions.importQnAFromUrls({ id: `${dialogId}.${locale}`, name, urls, multiTurn });
   };
 
   return (
