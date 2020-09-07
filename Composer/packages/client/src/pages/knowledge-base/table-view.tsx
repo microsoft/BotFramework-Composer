@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
-import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import {
   DetailsList,
   DetailsRow,
@@ -12,7 +12,6 @@ import {
   SelectionMode,
   CheckboxVisibility,
 } from 'office-ui-fabric-react/lib/DetailsList';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { IconButton, ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
@@ -22,8 +21,8 @@ import { RouteComponentProps } from '@reach/router';
 import isEmpty from 'lodash/isEmpty';
 import { QnAFile } from '@bfc/shared/src/types';
 import { QnASection } from '@bfc/shared';
+import { qnaUtil } from '@bfc/indexers';
 
-import { generateQnAPair } from '../../utils/qnaUtil';
 import {
   dialogsState,
   qnaFilesState,
@@ -38,16 +37,12 @@ import { EditableField } from '../../components/EditableField';
 import {
   formCell,
   content,
-  textFieldQuestion,
-  textFieldAnswer,
-  contentAnswer,
   addIcon,
   divider,
   rowDetails,
   icon,
   addButtonContainer,
   addAlternative,
-  inlineContainer,
   addQnAPair,
 } from './styles';
 
@@ -70,17 +65,18 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const locale = useRecoilValue(localeState);
   const settings = useRecoilValue(settingsState);
   const {
-    setMessage,
+    // setMessage,
     addQnAPairs,
     removeQnAPairs,
     addQnAQuestion,
-    removeQnAQuestion,
+    // removeQnAQuestion,
     updateQnAAnswer,
     updateQnAQuestion,
-    updateQnAFile,
+    // updateQnAFile,
   } = useRecoilValue(dispatcherState);
 
-  const { languages, defaultLanguage } = settings;
+  // const { languages, defaultLanguage } = settings;
+  console.log(settings);
 
   const { dialogId } = props;
   const targetFileId = dialogId.endsWith('.source') ? dialogId : `${dialogId}.${locale}`;
@@ -122,9 +118,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const importedFiles = useMemo(() => {
     const results: QnAFile[] = [];
     if (qnaFile && qnaFile.imports) {
-      qnaFile.imports.forEach((path) => {
-        const fileName = getFileName(path);
-        const fileId = getBaseName(fileName);
+      qnaFile.imports.forEach(({ id }) => {
+        const fileId = getBaseName(id);
         const target = qnaFiles.find(({ id }) => id === fileId);
         if (target) results.push(target);
       });
@@ -164,7 +159,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
   };
 
   const onCreateNewQnAPairs = (fileId: string) => {
-    const newQnAPair = generateQnAPair();
+    const newQnAPair = qnaUtil.generateQnAPair();
     addQnAPairs({ id: fileId, content: newQnAPair });
   };
 

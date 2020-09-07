@@ -10,6 +10,8 @@ import {
   updateQnASection,
   generateQnAPair,
   updateQnAQuestion,
+  addImport,
+  removeImport,
 } from '../src/utils/qnaUtil';
 
 const content1 = `# ? who is the ceo?
@@ -24,14 +26,9 @@ const content1 = `# ? who is the ceo?
 	You can use our REST apis to manage your KB.
 	\`\`\`
 `;
-const content2 = `> !# @source.urls = https://download
-${generateQnAPair()}
-${content1}
-${generateQnAPair()}`;
 
 describe('QnA file parse', () => {
   const fileId1 = 'a.qna';
-
   it('parse qna file', () => {
     const qnaFile = parse(fileId1, content1);
     const { qnaSections, content, id, diagnostics } = qnaFile;
@@ -48,36 +45,6 @@ describe('QnA file parse', () => {
       content: 'How do I programmatically update my KB?',
     });
     expect(qnaSections[1].Answer).toContain('You can use our REST apis to manage your KB.');
-  });
-
-  it('parse qna file with options', () => {
-    const qnaFile = parse(fileId1, content2);
-    const { qnaSections, content, id, diagnostics } = qnaFile;
-
-    expect(id).toEqual(fileId1);
-    expect(content).toEqual(content2);
-    expect(diagnostics.length).toEqual(0);
-    expect(qnaSections.length).toEqual(4);
-    expect(qnaSections[0].Body).toEqual(generateQnAPair());
-    expect(qnaSections[0].Questions[0]).toMatchObject({
-      content: '',
-    });
-    expect(qnaSections[0].Answer).toEqual('');
-
-    expect(qnaSections[1].Questions[0]).toMatchObject({
-      content: 'who is the ceo?',
-    });
-    expect(qnaSections[1].Answer).toContain("Sorry, I don't know.");
-    expect(qnaSections[2].Questions[0]).toMatchObject({
-      content: 'How do I programmatically update my KB?',
-    });
-    expect(qnaSections[2].Answer).toContain('You can use our REST apis to manage your KB.');
-
-    expect(qnaSections[3].Body).toEqual(generateQnAPair());
-    expect(qnaSections[3].Questions[0]).toMatchObject({
-      content: '',
-    });
-    expect(qnaSections[3].Answer).toEqual('');
   });
 });
 
@@ -304,6 +271,89 @@ describe('QnA Questions/Answer CRUD', () => {
       content: question1,
     });
     expect(updatedQnAFile2.qnaSections[0].Answer).toEqual('');
+  });
+});
+
+describe('QnA File Imports CRUD', () => {
+  const fileId = 'a.qna';
+  const content3 = `[import](../common/help.qna)
+[import](windows.source.qna)
+${content1}
+`;
+
+  it('parse qna file with imports', () => {
+    const qnaFile = parse(fileId, content3);
+    const { qnaSections, content, id, diagnostics, imports } = qnaFile;
+
+    expect(id).toEqual(fileId);
+    expect(content).toEqual(content3);
+    expect(diagnostics.length).toEqual(0);
+    expect(qnaSections.length).toEqual(2);
+    expect(imports).toEqual([
+      {
+        id: 'help.qna',
+        path: '../common/help.qna',
+      },
+      {
+        id: 'windows.source.qna',
+        path: 'windows.source.qna',
+      },
+    ]);
+  });
+
+  it('add import', () => {
+    const qnaFile = parse(fileId, content3);
+    const { qnaSections, diagnostics, imports } = addImport(qnaFile, 'chitchat.qna');
+
+    expect(diagnostics.length).toEqual(0);
+    expect(qnaSections.length).toEqual(2);
+    expect(imports).toEqual([
+      {
+        id: 'chitchat.qna',
+        path: 'chitchat.qna',
+      },
+      {
+        id: 'help.qna',
+        path: '../common/help.qna',
+      },
+      {
+        id: 'windows.source.qna',
+        path: 'windows.source.qna',
+      },
+    ]);
+  });
+
+  it('remove import', () => {
+    const qnaFile = parse(fileId, content3);
+    const { qnaSections, diagnostics, imports } = removeImport(qnaFile, 'windows.source.qna');
+
+    expect(diagnostics.length).toEqual(0);
+    expect(qnaSections.length).toEqual(2);
+    expect(imports).toEqual([
+      {
+        id: 'help.qna',
+        path: '../common/help.qna',
+      },
+    ]);
+  });
+});
+
+describe('QnA File Options CRUD', () => {
+  const fileId1 = 'a.qna';
+  const content2 = `> !# @source.urls = https://download
+  ${generateQnAPair()}
+  ${content1}
+  ${generateQnAPair()}`;
+
+  it('parse qna file with options', () => {
+    const qnaFile = parse(fileId1, content2);
+    const { qnaSections, content, id, diagnostics, options } = qnaFile;
+
+    expect(id).toEqual(fileId1);
+    expect(content).toEqual(content2);
+    expect(diagnostics.length).toEqual(0);
+    expect(qnaSections.length).toEqual(4);
+    expect(options.length).toEqual(1);
   });
 
   it('update question in qna pair (with model info section in head)', () => {

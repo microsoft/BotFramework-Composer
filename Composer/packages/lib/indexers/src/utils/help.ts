@@ -5,7 +5,9 @@ export function getBaseName(filename: string, sep?: string): string {
   if (sep) return filename.substr(0, filename.lastIndexOf(sep));
   return filename.substring(0, filename.lastIndexOf('.')) || filename;
 }
-
+export function getFileName(path: string): string {
+  return path.split('/').pop() || path;
+}
 export function getExtension(filename: string): string | undefined {
   const re = /\.[^.]+$/;
   return re.exec(filename)?.[0];
@@ -18,6 +20,11 @@ export function getLocale(fileId: string): string | undefined {
 // split text to lines
 export function splitNewlineText(text: string): string[] {
   return text.split('\n');
+}
+
+// substring text file by lines
+export function substringTextByLine(text: string, start?: number, end?: number): string {
+  return text.split('\n').slice(start, end).join('\n');
 }
 
 // convert lines to \r\n text

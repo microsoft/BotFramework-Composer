@@ -9,7 +9,6 @@
 import { QnAFile, DialogInfo } from '@bfc/shared';
 
 import { getBaseName, getExtension } from './fileUtil';
-export * from '@bfc/indexers/lib/utils/qnaUtil';
 
 export function getFileLocale(fileName: string) {
   //file name = 'a.en-us.qna'

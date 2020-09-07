@@ -126,8 +126,8 @@ export interface QnAFile {
   content: string;
   diagnostics: Diagnostic[];
   qnaSections: QnASection[];
-  imports: string[];
-  headers: string; // options, imports, avoid be wiped when do rebuild text
+  imports: { id: string; path: string }[];
+  options: { name: string; value: string }[];
   resource: LuParseResource;
   [key: string]: any;
 }

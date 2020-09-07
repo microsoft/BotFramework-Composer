@@ -13,6 +13,8 @@ import isEmpty from 'lodash/isEmpty';
 import { Diagnostic, Position, Range, DiagnosticSeverity, LuParseResource } from '@bfc/shared';
 import { nanoid } from 'nanoid';
 
+import { getFileName, substringTextByLine } from './help';
+
 const { luParser, sectionOperator } = sectionHandler;
 
 const NEWLINE = '\n';
@@ -110,15 +112,22 @@ export function convertQnAParseResultToQnAFile(id = '', resource: LuParseResourc
     };
   });
 
-  const imports = Sections.filter(({ SectionType }) => SectionType === SectionTypes.ImportSection).map(
-    ({ Path }) => Path
-  );
+  const imports = Sections.filter(({ SectionType }) => SectionType === SectionTypes.ImportSection).map(({ Path }) => {
+    return {
+      id: getFileName(Path),
+      path: Path,
+    };
+  });
 
-  const infos = Sections.filter(({ SectionType }) => SectionType === SectionTypes.LUModelInfo).map(
-    ({ ModelInfo }) => ModelInfo
+  // TODO: use regexp match "> !# @source.urls = https://download"
+  const options = Sections.filter(({ SectionType }) => SectionType === SectionTypes.LUModelInfo).map(
+    ({ ModelInfo, Id }) => {
+      return {
+        name: Id,
+        value: ModelInfo,
+      };
+    }
   );
-
-  const headers = qnaSections.length ? Content.substring(0, Content.indexOf(qnaSections[0].Body)) : Content;
 
   const diagnostics = Errors.map((e) => convertQnADiagnostic(e, id));
   return {
@@ -128,9 +137,8 @@ export function convertQnAParseResultToQnAFile(id = '', resource: LuParseResourc
     qnaSections,
     diagnostics,
     resource: { Sections, Errors, Content },
-    headers,
     imports,
-    infos,
+    options,
   };
 }
 
@@ -209,8 +217,7 @@ interface QnASectionChanges {
  * }
  */
 export function updateQnASection(qnaFile: QnAFile, sectionId: string, changes: QnASectionChanges): QnAFile {
-  const { resource, qnaSections } = qnaFile;
-  const { Sections } = resource;
+  const { qnaSections } = qnaFile;
 
   const orginSection = qnaSections.find((item) => item.sectionId === sectionId);
 
@@ -304,6 +311,31 @@ export function updateQnAAnswer(qnaFile: QnAFile, sectionId: string, answerConte
     Answer: answerContent,
   };
   return updateQnASection(qnaFile, sectionId, changes);
+}
+
+export function addImport(qnaFile: QnAFile, path: string) {
+  const importContent = `[imports](${path})`;
+  const newContent = [importContent, qnaFile.content].join(NEWLINE);
+  const result = luParser.parse(newContent);
+  return convertQnAParseResultToQnAFile(qnaFile.id, result);
+}
+
+export function removeImport(qnaFile: QnAFile, id: string) {
+  const targetImport = qnaFile.imports.find((item) => item.id === id);
+  if (!targetImport) return qnaFile;
+  const targetImportSection = qnaFile.resource.Sections.filter(
+    ({ SectionType }) => SectionType === SectionTypes.ImportSection
+  ).find(({ Path }) => Path === targetImport.path);
+  if (!targetImportSection) return qnaFile;
+
+  const start = targetImportSection.Range.Start.Line;
+  const end = targetImportSection.Range.End.Line;
+
+  const part1 = substringTextByLine(qnaFile.content, 0, start - 1); // qnaParser start from 1
+  const part2 = substringTextByLine(qnaFile.content, end);
+  const newContent = [part1, part2].join(NEWLINE);
+  const result = luParser.parse(newContent);
+  return convertQnAParseResultToQnAFile(id, result);
 }
 
 export function parse(id: string, content: string): QnAFile {
