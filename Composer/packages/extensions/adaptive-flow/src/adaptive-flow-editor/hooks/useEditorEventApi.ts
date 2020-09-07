@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { DialogUtils, SDKKinds, ShellApi } from '@bfc/shared';
+import { DialogUtils, SDKKinds, ShellApi, registerEditorAPI } from '@bfc/shared';
 import get from 'lodash/get';
 import { useDialogEditApi, useDialogApi, useActionApi } from '@bfc/extension';
 
@@ -149,8 +149,8 @@ export const useEditorEventApi = (
         };
         break;
       case NodeEventTypes.OpenDialog:
-        handler = ({ caller, callee }) => {
-          onOpen(callee, caller);
+        handler = ({ callee }) => {
+          onOpen(callee);
           announce(ScreenReaderMessage.DialogOpened);
         };
         break;
@@ -170,6 +170,7 @@ export const useEditorEventApi = (
               onChange(dialog);
               onFocusSteps([`${e.id}[${e.position || 0}]`]);
             });
+
             announce(ScreenReaderMessage.ActionCreated);
           };
         } else {
@@ -311,13 +312,14 @@ export const useEditorEventApi = (
     return handler(eventData);
   };
 
-  // HACK: use global handler before we solve iframe state sync problem
-  (window as any).copySelection = () => handleEditorEvent(NodeEventTypes.CopySelection);
-  (window as any).cutSelection = () => handleEditorEvent(NodeEventTypes.CutSelection);
-  (window as any).moveSelection = () => handleEditorEvent(NodeEventTypes.MoveSelection);
-  (window as any).deleteSelection = () => handleEditorEvent(NodeEventTypes.DeleteSelection);
-  (window as any).disableSelection = () => handleEditorEvent(NodeEventTypes.DisableSelection);
-  (window as any).enableSelection = () => handleEditorEvent(NodeEventTypes.EnableSelection);
+  registerEditorAPI('Actions', {
+    CopySelection: () => handleEditorEvent(NodeEventTypes.CopySelection),
+    CutSelection: () => handleEditorEvent(NodeEventTypes.CutSelection),
+    MoveSelection: () => handleEditorEvent(NodeEventTypes.MoveSelection),
+    DeleteSelection: () => handleEditorEvent(NodeEventTypes.DeleteSelection),
+    DisableSelection: () => handleEditorEvent(NodeEventTypes.DisableSelection),
+    EnableSelection: () => handleEditorEvent(NodeEventTypes.EnableSelection),
+  });
 
   return {
     handleEditorEvent,

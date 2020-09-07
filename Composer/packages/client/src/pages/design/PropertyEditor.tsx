@@ -4,8 +4,8 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import AdaptiveForm, { resolveRef, getUIOptions, mergePluginConfigs } from '@bfc/adaptive-form';
-import Extension, { FormErrors, JSONSchema7 } from '@bfc/extension';
+import AdaptiveForm, { resolveRef, getUIOptions } from '@bfc/adaptive-form';
+import { FormErrors, JSONSchema7, useFormConfig } from '@bfc/extension';
 import formatMessage from 'format-message';
 import isEqual from 'lodash/isEqual';
 import debounce from 'lodash/debounce';
@@ -13,7 +13,6 @@ import { Resizable, ResizeCallback } from 're-resizable';
 import { MicrosoftAdaptiveDialog } from '@bfc/shared';
 
 import { useShell } from '../../shell';
-import plugins from '../../plugins';
 
 import { formEditor } from './styles';
 
@@ -56,19 +55,17 @@ const PropertyEditor: React.FC = () => {
     };
   }, [formData]);
 
+  const formUIOptions = useFormConfig();
+
   const $schema = useMemo(() => {
     if (schemas?.sdk?.content && localData) {
       return resolveBaseSchema(schemas.sdk.content, localData.$kind);
     }
   }, [schemas?.sdk?.content, localData.$kind]);
 
-  const pluginConfig = useMemo(() => {
-    return mergePluginConfigs(...plugins);
-  }, []);
-
-  const $uiSchema = useMemo(() => {
-    return getUIOptions($schema, pluginConfig.formSchema, pluginConfig.roleSchema);
-  }, [$schema, pluginConfig]);
+  const $uiOptions = useMemo(() => {
+    return getUIOptions($schema, formUIOptions);
+  }, [$schema, formUIOptions]);
 
   const errors = useMemo(() => {
     const diagnostics = currentDialog?.diagnostics;
@@ -105,6 +102,8 @@ const PropertyEditor: React.FC = () => {
     const id = setTimeout(() => {
       if (!isEqual(formData, localData)) {
         shellApi.saveData(localData, focusedSteps[0]);
+      } else {
+        shellApi.commitChanges();
       }
     }, 300);
 
@@ -129,16 +128,13 @@ const PropertyEditor: React.FC = () => {
       onResizeStop={handleResize}
     >
       <div aria-label={formatMessage('form editor')} css={formEditor} data-testid="PropertyEditor" role="region">
-        <Extension plugins={plugins} shell={shellApi} shellData={shellData}>
-          <AdaptiveForm
-            errors={errors}
-            formData={localData}
-            pluginConfig={pluginConfig}
-            schema={$schema}
-            uiOptions={$uiSchema}
-            onChange={handleDataChange}
-          />
-        </Extension>
+        <AdaptiveForm
+          errors={errors}
+          formData={localData}
+          schema={$schema}
+          uiOptions={$uiOptions}
+          onChange={handleDataChange}
+        />
       </div>
     </Resizable>
   );

@@ -17,7 +17,6 @@ import { AdaptiveDialog } from '../adaptive-flow-renderer/adaptive/AdaptiveDialo
 
 import { NodeRendererContext, NodeRendererContextValue } from './contexts/NodeRendererContext';
 import { SelfHostContext } from './contexts/SelfHostContext';
-import { mergePluginConfig } from './utils/mergePluginConfig';
 import { getCustomSchema } from './utils/getCustomSchema';
 import { SelectionContext } from './contexts/SelectionContext';
 import { enableKeyboardCommandAttributes, KeyboardCommandHandler } from './components/KeyboardZone';
@@ -30,6 +29,7 @@ import {
   VisualEditorNodeWrapper,
   VisualEditorElementWrapper,
 } from './renderers';
+import { useFlowUIOptions } from './hooks/useFlowUIOptions';
 
 formatMessage.setup({
   missingTranslation: 'ignore',
@@ -58,10 +58,13 @@ const styles = css`
 `;
 
 export interface VisualDesignerProps {
+  onFocus?: (event: React.FocusEvent<HTMLDivElement>) => void;
+  onBlur?: (event: React.FocusEvent<HTMLDivElement>) => void;
   schema?: JSONSchema7;
 }
-const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element => {
-  const { shellApi, plugins, ...shellData } = useShellApi();
+const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema }): JSX.Element => {
+  const { shellApi, ...shellData } = useShellApi();
+  const { schema: schemaFromPlugins, widgets: widgetsFromPlugins } = useFlowUIOptions();
   const {
     dialogId,
     focusedEvent,
@@ -88,7 +91,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
   const focusedId = Array.isArray(focusedActions) && focusedActions[0] ? focusedActions[0] : '';
 
   // Compute schema diff
-  const customSchema = useMemo(() => getCustomSchema(schemas?.default, schemas?.sdk?.content), [
+  const customActionSchema = useMemo(() => getCustomSchema(schemas?.default, schemas?.sdk?.content).actions, [
     schemas?.sdk?.content,
     schemas?.default,
   ]);
@@ -99,10 +102,9 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
     focusedTab,
     clipboardActions: clipboardActions || [],
     dialogFactory: new DialogFactory(schema),
-    customSchemas: customSchema ? [customSchema] : [],
+    customSchemas: customActionSchema ? [customActionSchema] : [],
   };
 
-  const { schema: schemaFromPlugins, widgets: widgetsFromPlugins } = mergePluginConfig(...plugins);
   const customFlowSchema: FlowSchema = nodeContext.customSchemas.reduce((result, s) => {
     const definitionKeys: string[] = Object.keys(s.definitions);
     definitionKeys.forEach(($kind) => {
@@ -137,6 +139,8 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
             ref={divRef}
             css={styles}
             tabIndex={0}
+            onBlur={onBlur}
+            onFocus={onFocus}
             {...enableKeyboardCommandAttributes(handleCommand)}
             data-testid="visualdesigner-container"
           >

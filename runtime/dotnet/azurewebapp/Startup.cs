@@ -16,6 +16,7 @@ using Microsoft.Bot.Builder.Azure;
 using Microsoft.Bot.Builder.BotFramework;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Adaptive;
+using Microsoft.Bot.Builder.Dialogs.Adaptive.Conditions;
 using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
 using Microsoft.Bot.Builder.Integration.ApplicationInsights.Core;
@@ -43,18 +44,18 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
         public IWebHostEnvironment HostingEnvironment { get; }
 
         public IConfiguration Configuration { get; }
-        
+
         public void ConfigureTranscriptLoggerMiddleware(BotFrameworkHttpAdapter adapter, BotSettings settings)
         {
-            if (ConfigSectionValid(settings.BlobStorage.ConnectionString) && ConfigSectionValid(settings.BlobStorage.Container))
+            if (ConfigSectionValid(settings?.BlobStorage?.ConnectionString) && ConfigSectionValid(settings?.BlobStorage?.Container))
             {
-                adapter.Use(new TranscriptLoggerMiddleware(new AzureBlobTranscriptStore(settings.BlobStorage.ConnectionString, settings.BlobStorage.Container)));
+                adapter.Use(new TranscriptLoggerMiddleware(new AzureBlobTranscriptStore(settings?.BlobStorage?.ConnectionString, settings?.BlobStorage?.Container)));
             }
         }
 
         public void ConfigureShowTypingMiddleWare(BotFrameworkAdapter adapter, BotSettings settings)
         {
-            if (settings.Feature.UseShowTypingMiddleware)
+            if (settings?.Feature?.UseShowTypingMiddleware == true)
             {
                 adapter.Use(new ShowTypingMiddleware());
             }
@@ -62,7 +63,7 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
 
         public void ConfigureInspectionMiddleWare(BotFrameworkAdapter adapter, BotSettings settings, IStorage storage)
         {
-            if (settings.Feature.UseInspectionMiddleware)
+            if (settings?.Feature?.UseInspectionMiddleware == true)
             {
                 adapter.Use(new InspectionMiddleware(new InspectionState(storage)));
             }
@@ -71,9 +72,9 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
         public IStorage ConfigureStorage(BotSettings settings)
         {
             IStorage storage;
-            if (ConfigSectionValid(settings.CosmosDb.AuthKey))
+            if (ConfigSectionValid(settings?.CosmosDb?.AuthKey))
             {
-                storage = new CosmosDbPartitionedStorage(settings.CosmosDb);
+                storage = new CosmosDbPartitionedStorage(settings?.CosmosDb);
             }
             else
             {
@@ -132,7 +133,7 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             ComponentRegistration.Add(new LanguageGenerationComponentRegistration());
             ComponentRegistration.Add(new QnAMakerComponentRegistration());
             ComponentRegistration.Add(new LuisComponentRegistration());
-            
+
             // This is for custom action component registration.
             //ComponentRegistration.Add(new CustomActionComponentRegistration());
 
@@ -142,20 +143,21 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             services.AddSingleton<ChannelServiceHandler, SkillHandler>();
 
             // Register telemetry client, initializers and middleware
-            services.AddApplicationInsightsTelemetry(settings.ApplicationInsights.InstrumentationKey);
+            services.AddApplicationInsightsTelemetry(settings?.ApplicationInsights?.InstrumentationKey ?? string.Empty);
+
             services.AddSingleton<ITelemetryInitializer, OperationCorrelationTelemetryInitializer>();
             services.AddSingleton<ITelemetryInitializer, TelemetryBotIdInitializer>();
             services.AddSingleton<IBotTelemetryClient, BotTelemetryClient>();
             services.AddSingleton<TelemetryLoggerMiddleware>(sp =>
             {
                 var telemetryClient = sp.GetService<IBotTelemetryClient>();
-                return new TelemetryLoggerMiddleware(telemetryClient, logPersonalInformation: settings.Telemetry.LogPersonalInformation);
+                return new TelemetryLoggerMiddleware(telemetryClient, logPersonalInformation: settings?.Telemetry?.LogPersonalInformation ?? false);
             });
             services.AddSingleton<TelemetryInitializerMiddleware>(sp =>
             {
                 var httpContextAccessor = sp.GetService<IHttpContextAccessor>();
                 var telemetryLoggerMiddleware = sp.GetService<TelemetryLoggerMiddleware>();
-                return new TelemetryInitializerMiddleware(httpContextAccessor, telemetryLoggerMiddleware, settings.Telemetry.LogActivities);
+                return new TelemetryInitializerMiddleware(httpContextAccessor, telemetryLoggerMiddleware, settings?.Telemetry?.LogActivities ?? false);
             });
 
             var storage = ConfigureStorage(settings);
@@ -171,9 +173,11 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             var resourceExplorer = new ResourceExplorer().AddFolder(botDir);
             var rootDialog = GetRootDialog(botDir);
 
-            var defaultLocale = Configuration.GetValue<string>("defaultLocale") ?? "en-us";
+            var defaultLocale = Configuration.GetValue<string>("defaultLanguage") ?? "en-us";
 
             services.AddSingleton(resourceExplorer);
+
+            resourceExplorer.RegisterType<OnQnAMatch>("Microsoft.OnQnAMatch");
 
             services.AddSingleton<IBotFrameworkHttpAdapter, BotFrameworkHttpAdapter>((s) => GetBotAdapter(storage, settings, userState, conversationState, s, s.GetService<TelemetryInitializerMiddleware>()));
 

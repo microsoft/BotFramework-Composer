@@ -1,33 +1,25 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import path from 'path';
-
 import merge from 'lodash/merge';
 import { pluginLoader, PluginLoader } from '@bfc/plugin-loader';
+import { defaultPublishConfig } from '@bfc/shared';
 
 import { BotProjectService } from '../services/project';
-import { runtimeFolder } from '../settings/env';
 
-const defaultPublishConfig = {
-  name: 'default',
-  type: 'localpublish',
-  configuration: JSON.stringify({}),
-};
-const DEFAULT_RUNTIME = 'dotnet';
 export const PublishController = {
   getTypes: async (req, res) => {
     res.json(
       Object.values(pluginLoader.extensions.publish)
         .filter((extension) => extension.plugin.name !== defaultPublishConfig.type)
         .map((extension) => {
-          const { plugin, methods, schema, instructions } = extension;
+          const { plugin, methods } = extension;
 
           return {
             name: plugin.name,
             description: plugin.description,
-            instructions: instructions,
-            schema,
+            instructions: plugin.instructions,
+            schema: plugin.schema,
             features: {
               history: typeof methods.history === 'function',
               publish: typeof methods.publish === 'function',
@@ -51,14 +43,13 @@ export const PublishController = {
 
     const profiles = allTargets.filter((t) => t.name === target);
     const profile = profiles.length ? profiles[0] : undefined;
-    const method = profile ? profile.type : undefined;
+    const method = profile ? profile.type : undefined; // get the publish plugin key
 
-    if (profile && pluginLoader?.extensions?.publish[method]?.methods?.publish) {
+    if (profile && method && pluginLoader?.extensions?.publish[method]?.methods?.publish) {
       // append config from client(like sensitive settings)
       const configuration = {
         profileName: profile.name,
         fullSettings: merge({}, currentProject.settings, sensitiveSettings),
-        templatePath: path.resolve(runtimeFolder, DEFAULT_RUNTIME),
         ...JSON.parse(profile.configuration),
       };
 
@@ -101,10 +92,11 @@ export const PublishController = {
 
     const profiles = allTargets.filter((t) => t.name === target);
     const profile = profiles.length ? profiles[0] : undefined;
-
+    // get the publish plugin key
     const method = profile ? profile.type : undefined;
     if (
       profile &&
+      method &&
       pluginLoader.extensions.publish[method] &&
       pluginLoader.extensions.publish[method].methods &&
       pluginLoader.extensions.publish[method].methods.getStatus
@@ -147,11 +139,12 @@ export const PublishController = {
 
     const profiles = allTargets.filter((t) => t.name === target);
     const profile = profiles.length ? profiles[0] : undefined;
-
+    // get the publish plugin key
     const method = profile ? profile.type : undefined;
 
     if (
       profile &&
+      method &&
       pluginLoader.extensions.publish[method] &&
       pluginLoader.extensions.publish[method].methods &&
       pluginLoader.extensions.publish[method].methods.history
@@ -190,22 +183,22 @@ export const PublishController = {
 
     const profiles = allTargets.filter((t) => t.name === target);
     const profile = profiles.length ? profiles[0] : undefined;
+    // get the publish plugin key
     const method = profile ? profile.type : undefined;
-
-    // append config from client(like sensitive settings)
-    const configuration = {
-      profileName: profile.name,
-      fullSettings: merge({}, currentProject.settings, sensitiveSettings),
-      templatePath: path.resolve(runtimeFolder, DEFAULT_RUNTIME),
-      ...JSON.parse(profile.configuration),
-    };
 
     if (
       profile &&
+      method &&
       pluginLoader.extensions.publish[method] &&
       pluginLoader.extensions.publish[method].methods &&
       pluginLoader.extensions.publish[method].methods.rollback
     ) {
+      // append config from client(like sensitive settings)
+      const configuration = {
+        profileName: profile.name,
+        fullSettings: merge({}, currentProject.settings, sensitiveSettings),
+        ...JSON.parse(profile.configuration),
+      };
       // get the externally defined method
       const pluginMethod = pluginLoader.extensions.publish[method].methods.rollback;
       if (typeof pluginMethod === 'function') {
@@ -241,6 +234,7 @@ export const PublishController = {
     const method = profile.type;
     if (
       profile &&
+      method &&
       pluginLoader.extensions.publish[method] &&
       pluginLoader.extensions.publish[method].methods &&
       pluginLoader.extensions.publish[method].methods.stopBot
@@ -271,6 +265,36 @@ export const PublishController = {
         } catch (err) {
           return res.status(400).json({
             statusCode: '400',
+            message: err.message,
+          });
+        }
+      }
+    }
+    res.status(400).json({
+      statusCode: '400',
+      message: `${method} is not a valid publishing target type. There may be a missing plugin.`,
+    });
+  },
+
+  stopBot: async (req, res) => {
+    const projectId = req.params.projectId;
+    const profile = defaultPublishConfig;
+    const method = profile.type;
+    if (
+      profile &&
+      method &&
+      pluginLoader.extensions.publish[method] &&
+      pluginLoader.extensions.publish[method].methods &&
+      pluginLoader.extensions.publish[method].methods.stopBot
+    ) {
+      const pluginMethod = pluginLoader.extensions.publish[method].methods.stopBot;
+      if (typeof pluginMethod === 'function') {
+        try {
+          await pluginMethod.call(null, projectId);
+          return res.status(200).json({ message: 'stop bot success' });
+        } catch (err) {
+          return res.status(500).json({
+            statusCode: '500',
             message: err.message,
           });
         }

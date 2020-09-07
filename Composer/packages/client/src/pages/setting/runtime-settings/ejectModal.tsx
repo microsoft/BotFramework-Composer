@@ -2,30 +2,32 @@
 // Licensed under the MIT License.
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useEffect, useMemo, useState, useContext } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
+import { useRecoilValue } from 'recoil';
 
-import { StoreContext } from '../../../store';
+import { runtimeTemplatesState, dispatcherState } from '../../../recoilModel';
 
 import { modalControlGroup } from './style';
 
 export interface EjectModalProps {
-  ejectRuntime: (templateKey: string) => void;
+  ejectRuntime: (templateKey: string) => Promise<void>;
   hidden: boolean;
   closeModal: () => void;
 }
 
 export const EjectModal: React.FC<EjectModalProps> = (props) => {
   const [selectedTemplate, setSelectedTemplate] = useState<string | undefined>();
-  const { state, actions } = useContext(StoreContext);
-  const { runtimeTemplates } = state;
+
+  const runtimeTemplates = useRecoilValue(runtimeTemplatesState);
+  const { fetchRuntimeTemplates } = useRecoilValue(dispatcherState);
 
   useEffect(() => {
-    actions.getRuntimeTemplates();
+    fetchRuntimeTemplates();
   }, []);
 
   const availableRuntimeTemplates = useMemo(() => {
@@ -43,9 +45,9 @@ export const EjectModal: React.FC<EjectModalProps> = (props) => {
     }
   };
 
-  const doEject = () => {
+  const doEject = async () => {
     if (selectedTemplate) {
-      props.ejectRuntime(selectedTemplate);
+      await props.ejectRuntime(selectedTemplate);
     }
   };
 

@@ -136,6 +136,9 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     title: formatMessage('Dialog cancelled'),
     subtitle: formatMessage('Cancel dialog event'),
   },
+  [SDKKinds.OnChooseIntent]: {
+    title: formatMessage('Duplicated intents recognized'),
+  },
   [SDKKinds.OnCondition]: {
     title: formatMessage('Handle a Condition'),
   },
@@ -189,6 +192,17 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     title: formatMessage('Message updated'),
     subtitle: formatMessage('Message updated activity'),
   },
+  [SDKKinds.UpdateActivity]: {
+    title: formatMessage('Update activity'),
+    subtitle: formatMessage('Update a an activity previously sent during the conversation'),
+  },
+  [SDKKinds.DeleteActivity]: {
+    title: formatMessage('Delete activity'),
+  },
+  [SDKKinds.OnMessageUpdateActivity]: {
+    title: formatMessage('Message updated'),
+    subtitle: formatMessage('Message updated activity'),
+  },
   [SDKKinds.OnRepromptDialog]: {
     title: formatMessage('Re-prompt for input'),
     subtitle: formatMessage('Reprompt dialog event'),
@@ -200,6 +214,9 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
   [SDKKinds.OnUnknownIntent]: {
     title: formatMessage('Unknown intent'),
     subtitle: formatMessage('Unknown intent recognized'),
+  },
+  [SDKKinds.OnQnAMatch]: {
+    title: formatMessage('QnA Intent recognized'),
   },
   [SDKKinds.QnAMakerDialog]: {
     title: formatMessage('Connect to QnA Knowledgebase'),

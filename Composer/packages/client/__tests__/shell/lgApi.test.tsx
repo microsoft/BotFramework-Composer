@@ -2,13 +2,12 @@
 // Licensed under the MIT License.
 
 import { renderHook } from '@bfc/test-utils/lib/hooks';
+import * as React from 'react';
+import { RecoilRoot } from 'recoil';
 
 import { useLgApi } from '../../src/shell/lgApi';
-import { useStoreContext } from '../../src/hooks/useStoreContext';
-
-jest.mock('../../src/hooks/useStoreContext', () => ({
-  useStoreContext: jest.fn(),
-}));
+import { lgFilesState, localeState, projectIdState, dispatcherState } from '../../src/recoilModel';
+import { Dispatcher } from '../../src/recoilModel/dispatchers';
 
 const state = {
   lgFiles: [
@@ -28,25 +27,41 @@ const state = {
   projectId: 'test',
 };
 
-const resolvers = { lgFileResolver: jest.fn((id) => state.lgFiles.find((file) => file.id === id)) };
-
-const actions = {
-  updateLgTemplate: jest.fn(),
-  copyLgTemplate: jest.fn(),
-  removeLgTemplate: jest.fn(),
-  removeLgTemplates: jest.fn(),
-};
-
-(useStoreContext as jest.Mock).mockReturnValue({
-  state,
-  resolvers,
-  actions,
-});
+// const resolvers = { lgFileResolver: jest.fn((id) => state.lgFiles.find((file) => file.id === id)) };
 
 describe('use lgApi hooks', () => {
-  it('should get lg template by id', () => {
-    const { result } = renderHook(() => useLgApi());
+  let removeLgTemplatesMock, initRecoilState, copyLgTemplateMock, updateLgTemplateMock, removeLgTemplateMock, result;
 
+  beforeEach(() => {
+    updateLgTemplateMock = jest.fn();
+    copyLgTemplateMock = jest.fn();
+    removeLgTemplatesMock = jest.fn();
+    removeLgTemplateMock = jest.fn();
+
+    initRecoilState = ({ set }) => {
+      set(projectIdState, state.projectId);
+      set(localeState, 'en-us');
+      set(lgFilesState, state.lgFiles);
+      set(dispatcherState, (current: Dispatcher) => ({
+        ...current,
+        updateLgTemplate: updateLgTemplateMock,
+        copyLgTemplate: copyLgTemplateMock,
+        removeLgTemplates: removeLgTemplatesMock,
+        removeLgTemplate: removeLgTemplateMock,
+      }));
+    };
+
+    const wrapper = (props: { children?: React.ReactNode }) => {
+      const { children } = props;
+      return <RecoilRoot initializeState={initRecoilState}>{children}</RecoilRoot>;
+    };
+    const rendered = renderHook(() => useLgApi(), {
+      wrapper,
+    });
+    result = rendered.result;
+  });
+
+  it('should get lg template by id', () => {
     const templates = result.current.getLgTemplates('test.en-us');
     expect(templates[0].name).toBe('bar');
 
@@ -57,18 +72,10 @@ describe('use lgApi hooks', () => {
   });
 
   it('should call update lg template action', () => {
-    const { result } = renderHook(() => useLgApi());
-
     result.current.updateLgTemplate('test.en-us', 'bar', 'update');
-    result.current.updateLgTemplate.flush();
-    expect(actions.updateLgTemplate).toBeCalledTimes(1);
+    expect(updateLgTemplateMock).toBeCalledTimes(1);
     const arg = {
-      file: {
-        content: 'test',
-        id: 'test.en-us',
-        templates: [{ body: '- ${add(1,2)}', name: 'bar' }],
-      },
-      projectId: 'test',
+      id: 'test.en-us',
       template: {
         body: 'update',
         name: 'bar',
@@ -76,62 +83,41 @@ describe('use lgApi hooks', () => {
       },
       templateName: 'bar',
     };
-    expect(actions.updateLgTemplate).toBeCalledWith(arg);
+    expect(updateLgTemplateMock).toBeCalledWith(arg);
   });
 
   it('should call copy lg template action', () => {
-    const { result } = renderHook(() => useLgApi());
-
     result.current.copyLgTemplate('test.en-us', 'from', 'to');
 
-    expect(actions.copyLgTemplate).toBeCalledTimes(1);
+    expect(copyLgTemplateMock).toBeCalledTimes(1);
     const arg = {
-      file: {
-        content: 'test',
-        id: 'test.en-us',
-        templates: [{ body: '- ${add(1,2)}', name: 'bar' }],
-      },
+      id: 'test.en-us',
       fromTemplateName: 'from',
-      projectId: 'test',
       toTemplateName: 'to',
     };
-    expect(actions.copyLgTemplate).toBeCalledWith(arg);
+    expect(copyLgTemplateMock).toBeCalledWith(arg);
   });
 
   it('should call remove lg template action', () => {
-    const { result } = renderHook(() => useLgApi());
-
     result.current.removeLgTemplate('test.en-us', 'bar');
 
-    expect(actions.removeLgTemplate).toBeCalledTimes(1);
+    expect(removeLgTemplateMock).toBeCalledTimes(1);
 
     const arg = {
-      file: {
-        content: 'test',
-        id: 'test.en-us',
-        templates: [{ body: '- ${add(1,2)}', name: 'bar' }],
-      },
-      projectId: 'test',
+      id: 'test.en-us',
       templateName: 'bar',
     };
-    expect(actions.removeLgTemplate).toBeCalledWith(arg);
+    expect(removeLgTemplateMock).toBeCalledWith(arg);
   });
 
   it('should call remove lg templates action', () => {
-    const { result } = renderHook(() => useLgApi());
-
     result.current.removeLgTemplates('test.en-us', ['bar']);
 
-    expect(actions.removeLgTemplates).toBeCalledTimes(1);
+    expect(removeLgTemplatesMock).toBeCalledTimes(1);
     const arg = {
-      file: {
-        content: 'test',
-        id: 'test.en-us',
-        templates: [{ body: '- ${add(1,2)}', name: 'bar' }],
-      },
-      projectId: 'test',
+      id: 'test.en-us',
       templateNames: ['bar'],
     };
-    expect(actions.removeLgTemplates).toBeCalledWith(arg);
+    expect(removeLgTemplatesMock).toBeCalledWith(arg);
   });
 });

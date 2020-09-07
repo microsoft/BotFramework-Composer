@@ -20,6 +20,9 @@ const prQuery = `
   query PRInfo($owner: String!, $repo: String!, $prNumber: Int!) {
     repository(owner: $owner, name: $repo) {
       pullRequest(number: $prNumber) {
+        author {
+          login
+        }
         title
         body
         baseRefName
@@ -48,6 +51,11 @@ async function run() {
 
     if (!pr) {
       core.setFailed('Not in a Pull Request context.');
+      return;
+    }
+
+    if (pr.author?.login === 'dependabot') {
+      core.info('This is a Dependabot PR; no verification needed.')
       return;
     }
 

@@ -3,41 +3,69 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, useContext, Fragment, useEffect } from 'react';
+import { useState, Fragment, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { RouteComponentProps } from '@reach/router';
+import { useRecoilValue } from 'recoil';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 
+import {
+  botNameState,
+  settingsState,
+  projectIdState,
+  dispatcherState,
+  ejectRuntimeSelector,
+  boilerplateVersionState,
+  isEjectRuntimeExistState,
+} from '../../../recoilModel';
 import { OpenConfirmModal } from '../../../components/Modal/ConfirmDialog';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
-import { StoreContext } from '../../../store';
 
 import { EjectModal } from './ejectModal';
 import { WorkingModal } from './workingModal';
 import { breathingSpace, runtimeSettingsStyle, runtimeControls, runtimeToggle, controlGroup } from './style';
 
 export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
-  const { state, actions } = useContext(StoreContext);
-  const { setCustomRuntime, setRuntimeField, ejectRuntime, updateBoilerplate, getBoilerplateVersion } = actions;
-  const { botName, settings, projectId, boilerplateVersion } = state;
+  const botName = useRecoilValue(botNameState);
+  const settings = useRecoilValue(settingsState);
+  const projectId = useRecoilValue(projectIdState);
+  const boilerplateVersion = useRecoilValue(boilerplateVersionState);
+  const isEjectRuntimeExist = useRecoilValue(isEjectRuntimeExistState);
+  const {
+    setCustomRuntime,
+    setRuntimeField,
+    getBoilerplateVersion,
+    updateBoilerplate,
+    stopPublishBot,
+  } = useRecoilValue(dispatcherState);
+  const runtimeEjection = useRecoilValue(ejectRuntimeSelector);
+
   const [formDataErrors, setFormDataErrors] = useState({ command: '', path: '' });
   const [ejectModalVisible, setEjectModalVisible] = useState(false);
   const [working, setWorking] = useState(false);
   const [ejecting, setEjecting] = useState(false);
   const [needsUpdate, setNeedsUpdate] = useState(false);
+  const [templateKey, setTemplateKey] = useState('');
 
   useEffect(() => {
     // check the status of the boilerplate material and see if it requires an update
-    getBoilerplateVersion(projectId);
+    if (projectId) getBoilerplateVersion(projectId);
   }, []);
 
   useEffect(() => {
     setNeedsUpdate(boilerplateVersion.updateRequired || false);
   }, [boilerplateVersion.updateRequired]);
+
+  useEffect(() => {
+    if (isEjectRuntimeExist && templateKey) {
+      confirmReplaceEject(templateKey);
+      setTemplateKey('');
+    }
+  }, [isEjectRuntimeExist, templateKey]);
 
   const handleChangeToggle = (_, isOn = false) => {
     setCustomRuntime(projectId, isOn);
@@ -45,10 +73,10 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
 
   const updateSetting = (field) => (e, newValue) => {
     let valid = true;
-    let error = 'There was an error';
+    let error = formatMessage('There was an error');
     if (newValue === '') {
       valid = false;
-      error = 'This is a required field.';
+      error = formatMessage('This is a required field.');
     }
 
     setRuntimeField(projectId, field, newValue);
@@ -87,23 +115,41 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
   const callEjectRuntime = async (templateKey: string) => {
     setEjecting(true);
     closeEjectModal();
-    await ejectRuntime(projectId, templateKey);
+    await runtimeEjection?.onAction(projectId, templateKey);
     setEjecting(false);
+    setTemplateKey(templateKey);
   };
 
   const callUpdateBoilerplate = async () => {
     const title = formatMessage('Update Scripts');
     const msg = formatMessage(
-      'Existing files in scripts/ folder will be overwritten. Are you sure you want to continue?'
+      'Existing files in scripts/folder will be overwritten. Are you sure you want to continue?'
     );
     const res = await OpenConfirmModal(title, msg);
     if (res) {
       setWorking(true);
       await updateBoilerplate(projectId);
       // add a slight delay, so the working indicator is visible for a moment at least!
-      setTimeout(() => {
-        setWorking(false);
-      }, 500);
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          setWorking(false);
+          resolve();
+        }, 500);
+      });
+    }
+  };
+
+  const confirmReplaceEject = async (templateKey: string) => {
+    const title = formatMessage('Runtime already exists');
+    const msg = formatMessage('Are you sure you want to stop current runtime and replace them?');
+    const res = await OpenConfirmModal(title, msg);
+    if (res) {
+      setEjecting(true);
+      // stop runtime
+      await stopPublishBot(projectId);
+      // replace the runtime
+      await runtimeEjection?.onAction(projectId, templateKey, true);
+      setEjecting(false);
     }
   };
 

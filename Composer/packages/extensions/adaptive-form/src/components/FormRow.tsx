@@ -2,11 +2,11 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
+import { FieldProps, UIOptions } from '@bfc/extension';
 import { css, jsx } from '@emotion/core';
 import React from 'react';
-import { FieldProps, UIOptions } from '@bfc/extension';
 
-import { resolvePropSchema } from '../utils';
+import { isPropertyHidden, resolvePropSchema } from '../utils';
 
 import { SchemaField } from './SchemaField';
 
@@ -35,14 +35,23 @@ export const getRowProps = (rowProps: FormRowProps, field: string) => {
   const { required = [] } = schema;
   const fieldSchema = resolvePropSchema(schema, field, definitions);
 
+  const intellisenseScopes: string[] = [];
+  if (field === 'property') {
+    intellisenseScopes.push('variable-scopes');
+  }
+
+  const newUiOptions = (uiOptions.properties?.[field] as UIOptions) ?? {};
+  newUiOptions.intellisenseScopes = intellisenseScopes;
+
   return {
     id: `${id}.${field}`,
     schema: fieldSchema ?? {},
+    hidden: isPropertyHidden(uiOptions, value, field),
     label: (label === false ? false : undefined) as false | undefined,
     name: field,
     rawErrors: rawErrors?.[field],
     required: required.includes(field),
-    uiOptions: (uiOptions.properties?.[field] as UIOptions) ?? {},
+    uiOptions: newUiOptions,
     value: value && value[field],
     onChange: onChange(field),
     depth,
@@ -57,7 +66,6 @@ export const getRowProps = (rowProps: FormRowProps, field: string) => {
 const formRow = {
   row: css`
     display: flex;
-    margin: 10px 18px;
 
     label: FormRowContainer;
   `,

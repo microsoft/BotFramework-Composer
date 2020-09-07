@@ -15,10 +15,15 @@ const container = css`
   justify-content: center;
 `;
 
-export const LoadingSpinner: React.FC = () => {
+interface LoadingSpinnerProps {
+  message?: string;
+}
+
+export const LoadingSpinner: React.FC<LoadingSpinnerProps> = (props) => {
+  const { message } = props;
   return (
     <div css={container}>
-      <Spinner label={formatMessage('Loading')} />
+      <Spinner label={message || formatMessage('Loading')} />
     </div>
   );
 };

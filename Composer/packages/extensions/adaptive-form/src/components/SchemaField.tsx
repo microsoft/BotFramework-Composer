@@ -3,10 +3,9 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import React, { useEffect } from 'react';
-import { FieldProps, UIOptions } from '@bfc/extension';
+import { FieldProps, UIOptions, useFormConfig } from '@bfc/extension';
 
 import { getUIOptions, resolveFieldWidget, resolveRef, getUiLabel, getUiPlaceholder, getUiDescription } from '../utils';
-import { usePluginConfig } from '../hooks';
 
 import { ErrorMessage } from './ErrorMessage';
 
@@ -30,28 +29,36 @@ const SchemaField: React.FC<FieldProps> = (props) => {
     value,
     rawErrors,
     hideError,
+    hidden,
     onChange,
     ...rest
   } = props;
-  const pluginConfig = usePluginConfig();
+  const formUIOptions = useFormConfig();
 
   const schema = resolveRef(baseSchema, definitions);
   const uiOptions: UIOptions = {
-    ...getUIOptions(schema, pluginConfig.formSchema, pluginConfig.roleSchema),
+    ...getUIOptions(schema, formUIOptions),
     ...baseUIOptions,
+  };
+
+  const handleChange = (newValue: any) => {
+    const serializedValue =
+      typeof uiOptions?.serializer?.set === 'function' ? uiOptions.serializer.set(newValue) : newValue;
+
+    onChange(serializedValue);
   };
 
   useEffect(() => {
     if (typeof value === 'undefined') {
-      if (schema?.const) {
-        onChange(schema.const);
-      } else if (schema?.default) {
-        onChange(schema.default);
+      if (schema.const) {
+        handleChange(schema.const);
+      } else if (schema.default) {
+        handleChange(schema.default);
       }
     }
   }, []);
 
-  if (name.startsWith('$')) {
+  if (name.startsWith('$') || hidden) {
     return null;
   }
 
@@ -59,15 +66,9 @@ const SchemaField: React.FC<FieldProps> = (props) => {
     <ErrorMessage error={rawErrors} helpLink={uiOptions.helpLink} label={getUiLabel(props)} />
   );
 
-  const handleChange = (newValue: any) => {
-    const serializedValue =
-      typeof uiOptions?.serializer?.set === 'function' ? uiOptions.serializer.set(newValue) : newValue;
-    onChange(serializedValue);
-  };
-
   const deserializedValue = typeof uiOptions?.serializer?.get === 'function' ? uiOptions.serializer.get(value) : value;
 
-  const FieldWidget = resolveFieldWidget(schema, uiOptions, pluginConfig);
+  const FieldWidget = resolveFieldWidget(schema, uiOptions, formUIOptions);
   const fieldProps: FieldProps = {
     ...rest,
     definitions,

@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
 import { FieldProps, useShellApi } from '@bfc/extension';
 import { filterSectionDiagnostics } from '@bfc/indexers';
@@ -20,12 +20,15 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = (props) => {
     $kind.const && (intentName = new LuMetaData(new LuType($kind.const).toString(), designerId).toString());
   }
 
-  const luIntent =
-    (luFile && luFile.intents.find((intent) => intent.Name === intentName)) ||
-    ({
-      Name: intentName,
-      Body: '',
-    } as LuIntentSection);
+  const luIntent = useMemo(() => {
+    return (
+      (luFile && luFile.intents.find((intent) => intent.Name === intentName)) ||
+      ({
+        Name: intentName,
+        Body: '',
+      } as LuIntentSection)
+    );
+  }, [intentName]);
 
   if (!luFile || !intentName) {
     return null;
@@ -37,7 +40,7 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = (props) => {
     }
 
     const newIntent = { Name: intentName, Body: newValue };
-    shellApi.updateLuIntent(luFile.id, intentName, newIntent);
+    shellApi.deboucedUpdateLuIntent(luFile.id, intentName, newIntent);
     onChange(intentName);
   };
 

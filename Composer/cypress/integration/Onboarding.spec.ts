@@ -5,11 +5,13 @@ context('Onboarding', () => {
   beforeEach(() => {
     cy.visit('/home');
     cy.createBot('TodoSample', 'Onboarding');
-
+    cy.visitPage('Design');
     //enable onboarding setting
     cy.visitPage('Settings');
-    cy.findByText('Application Settings').click();
-    cy.findByLabelText('Onboarding').click();
+    cy.findByTestId('ProjectTree').within(() => {
+      cy.findByText('Application Settings').click();
+    });
+    cy.findByTestId('onboardingToggle').click();
     cy.visitPage('Design');
   });
 

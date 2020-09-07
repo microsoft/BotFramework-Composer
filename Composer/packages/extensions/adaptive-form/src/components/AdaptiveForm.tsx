@@ -2,15 +2,11 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
-import { css } from '@emotion/core';
-import React, { useMemo } from 'react';
-import { FormErrors, JSONSchema7, UIOptions, PluginConfig } from '@bfc/extension';
+import { jsx, css } from '@emotion/core';
+import React from 'react';
+import { FormErrors, JSONSchema7, UIOptions } from '@bfc/extension';
 import ErrorBoundary from 'react-error-boundary';
 import formatMessage from 'format-message';
-
-import PluginContext from '../PluginContext';
-import { mergePluginConfigs } from '../utils/mergePluginConfigs';
 
 import { SchemaField } from './SchemaField';
 import FormTitle from './FormTitle';
@@ -28,17 +24,12 @@ export interface AdaptiveFormProps {
   schema?: JSONSchema7;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   formData?: any;
-  pluginConfig?: Required<PluginConfig>;
   uiOptions: UIOptions;
   onChange: (value: any) => void;
 }
 
 export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(props) {
-  const { errors, formData, pluginConfig, schema, uiOptions, onChange } = props;
-
-  const $pluginConfig = useMemo(() => {
-    return pluginConfig || mergePluginConfigs();
-  }, [pluginConfig]);
+  const { errors, formData, schema, uiOptions, onChange } = props;
 
   if (!formData || !schema) {
     return (
@@ -54,26 +45,24 @@ export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(p
 
   return (
     <ErrorBoundary FallbackComponent={ErrorInfo}>
-      <PluginContext.Provider value={$pluginConfig}>
-        <FormTitle
-          formData={formData}
-          id={formData.$designer?.id || 'unknown'}
-          schema={schema}
-          uiOptions={uiOptions}
-          onChange={($designer) => onChange({ ...formData, $designer })}
-        />
-        <SchemaField
-          definitions={schema?.definitions}
-          depth={-1}
-          id="root"
-          name="root"
-          rawErrors={errors}
-          schema={schema}
-          uiOptions={uiOptions}
-          value={formData}
-          onChange={onChange}
-        />
-      </PluginContext.Provider>
+      <FormTitle
+        formData={formData}
+        id={formData.$designer?.id || 'unknown'}
+        schema={schema}
+        uiOptions={uiOptions}
+        onChange={(newData) => onChange({ ...formData, ...newData })}
+      />
+      <SchemaField
+        definitions={schema?.definitions}
+        depth={-1}
+        id="root"
+        name="root"
+        rawErrors={errors}
+        schema={schema}
+        uiOptions={uiOptions}
+        value={formData}
+        onChange={onChange}
+      />
     </ErrorBoundary>
   );
 };

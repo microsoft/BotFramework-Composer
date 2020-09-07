@@ -1,14 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useState, useEffect, useContext, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { globalHistory } from '@reach/router';
 import replace from 'lodash/replace';
 import find from 'lodash/find';
+import { useRecoilValue } from 'recoil';
 
+import { projectIdState, designPageLocationState } from './../recoilModel';
 import { bottomLinks, topLinks } from './pageLinks';
-import { StoreContext } from './../store';
 import routerCache from './routerCache';
+import { projectIdCache } from './projectCache';
 
 export const useLocation = () => {
   const { location, navigate } = globalHistory;
@@ -20,9 +22,9 @@ export const useLocation = () => {
 };
 
 export const useLinks = () => {
-  const { state } = useContext(StoreContext);
-  const { projectId, dialogs, designPageLocation } = state;
-  const openedDialogId = designPageLocation.dialogId || dialogs.find(({ isRoot }) => isRoot === true)?.id || 'Main';
+  const projectId = useRecoilValue(projectIdState);
+  const designPageLocation = useRecoilValue(designPageLocationState);
+  const openedDialogId = designPageLocation.dialogId || 'Main';
 
   return { topLinks: topLinks(projectId, openedDialogId), bottomLinks };
 };
@@ -46,4 +48,13 @@ export const useRouterCache = (to: string) => {
   }, []);
 
   return state[to] || to;
+};
+
+export const useProjectIdCache = () => {
+  const [projectId, setProjectId] = useState(projectIdCache.get());
+  useEffect(() => {
+    setProjectId(projectIdCache.get());
+  }, []);
+
+  return projectId;
 };

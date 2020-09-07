@@ -56,7 +56,7 @@ describe('<OpenObjectField />', () => {
     fireEvent.blur(fooName as HTMLInputElement);
     expect(onChange).toHaveBeenCalledWith(
       expect.objectContaining({
-        newFoo: 'foo value',
+        newFoo: 'new foo value',
       })
     );
 
