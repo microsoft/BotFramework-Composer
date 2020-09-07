@@ -240,7 +240,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 return (
                   <EditableField
                     key={question.id}
-                    multiline
                     ariaLabel={formatMessage(`Question is {content}`, { content: question.content })}
                     depth={0}
                     disabled={isAllowEdit}
@@ -371,7 +370,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
       const lastGroup = groups[groups.length - 1];
       const startIndex = lastGroup.startIndex + lastGroup.count;
       const { id, qnaSections } = currentFile;
-      groups.push({ key: `grouped-${id}`, name: id, startIndex, count: qnaSections.length, level: 0 });
+      const name = getBaseName(id);
+      groups.push({ key: `grouped-${id}`, name: `Source: ${name}`, startIndex, count: qnaSections.length, level: 0 });
     });
 
     return groups;
