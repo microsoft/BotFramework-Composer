@@ -284,7 +284,7 @@ export default async (composer: any): Promise<void> => {
     };
 
     private getLoadingStatus = (botId: string, profileName: string, jobId = '') => {
-      if (this.publishingBots[botId] && this.publishingBots[botId][profileName].length > 0) {
+      if (this.publishingBots[botId] && this.publishingBots[botId][profileName]?.length > 0) {
         // get current status
         if (jobId) {
           return this.publishingBots[botId][profileName].find((item) => item.result.id === jobId);
@@ -295,7 +295,7 @@ export default async (composer: any): Promise<void> => {
     };
 
     private updateLoadingStatus = (botId: string, profileName: string, jobId = '', newStatus) => {
-      if (this.publishingBots[botId] && this.publishingBots[botId][profileName].length > 0) {
+      if (this.publishingBots[botId] && this.publishingBots[botId][profileName]?.length > 0) {
         // get current status
         if (jobId) {
           for (let x = 0; x < this.publishingBots[botId][profileName].length; x++) {

@@ -229,7 +229,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
       // we still poll for the results IF we see that a publish has happened previously
       getPublishStatus(projectId, selectedTarget);
     }
-  }, [thisPublishHistory, selectedTargetName]);
+  }, [thisPublishHistory]);
 
   const savePublishTarget = useCallback(
     async (name: string, type: string, configuration: string) => {
