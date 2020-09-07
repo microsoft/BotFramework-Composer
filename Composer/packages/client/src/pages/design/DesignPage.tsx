@@ -23,13 +23,14 @@ import {
   getbreadcrumbLabel,
   qnaMatcherKey,
   TriggerFormData,
+  getDialogData,
 } from '../../utils/dialogUtil';
 import { Conversation } from '../../components/Conversation';
 import { dialogStyle } from '../../components/Modal/dialogStyle';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { ProjectTree } from '../../components/ProjectTree/ProjectTree';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
-import { clearBreadcrumb } from '../../utils/navigation';
+import { clearBreadcrumb, getFocusPath } from '../../utils/navigation';
 import { navigateTo } from '../../utils/navigation';
 import { useShell } from '../../shell';
 import { undoFunctionState, undoVersionState } from '../../recoilModel/undo/history';
@@ -42,7 +43,6 @@ import {
   breadcrumbState,
   visualEditorSelectionState,
   focusPathState,
-  designPageLocationState,
   showAddSkillDialogModalState,
   skillsState,
   actionsSeedState,
@@ -118,7 +118,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const breadcrumb = useRecoilValue(breadcrumbState);
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
   const focusPath = useRecoilValue(focusPathState);
-  const designPageLocation = useRecoilValue(designPageLocationState);
   const showCreateDialogModal = useRecoilValue(showCreateDialogModalState);
   const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState);
   const { undo, redo, canRedo, canUndo, commitChanges, clearUndo } = useRecoilValue(undoFunctionState);
@@ -161,12 +160,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const shellForPropertyEditor = useShell('PropertyEditor');
   const triggerApi = useTriggerApi(shell.api);
   const { createTrigger } = shell.api;
+
   useEffect(() => {
     const currentDialog = dialogs.find(({ id }) => id === dialogId);
     if (currentDialog) {
       setCurrentDialog(currentDialog);
     }
-    const rootDialog = dialogs.find(({ isRoot }) => isRoot === true);
+    const rootDialog = dialogs.find(({ isRoot }) => isRoot);
     if (!currentDialog && rootDialog) {
       const { search } = location || {};
       navigateTo(`/bot/${projectId}/dialogs/${rootDialog.id}${search}`);
@@ -196,22 +196,35 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   }, [dialogs]);
 
   useEffect(() => {
-    const index = currentDialog.triggers.findIndex(({ type }) => type === SDKKinds.OnBeginDialog);
-    if (index >= 0 && !designPageLocation.selected && designPageLocation.projectId === projectId) {
-      selectTo(createSelectedPath(index));
-    }
-  }, [currentDialog?.id]);
-
-  useEffect(() => {
     if (location && props.dialogId && props.projectId) {
       const { dialogId, projectId } = props;
       const params = new URLSearchParams(location.search);
+      const dialogMap = dialogs.reduce((acc, { content, id }) => ({ ...acc, [id]: content }), {});
+      const selected = params.get('selected') ?? '';
+      const focused = params.get('focused') ?? '';
+
+      //make sure focusPath always valid
+      const data = getDialogData(dialogMap, dialogId, getFocusPath(selected, focused));
+      if (typeof data === 'undefined') {
+        const { id } = dialogs.find(({ id }) => id === dialogId) || dialogs.find(({ isRoot }) => isRoot) || {};
+        /**
+         * It's improper to fallback to `dialogId` directly:
+         *   - If 'action' not exists at `focused` path, fallback to trigger path;
+         *   - If 'trigger' not exists at `selected` path, fallback to dialog Id;
+         *   - If 'dialog' not exists at `dialogId` path, fallback to main dialog.
+         */
+        if (id) {
+          navTo(id);
+        }
+        return;
+      }
+
       setDesignPageLocation({
         dialogId: dialogId,
         projectId: projectId,
-        selected: params.get('selected') ?? '',
-        focused: params.get('focused') ?? '',
-        breadcrumb: location.state ? location.state.breadcrumb || [] : [],
+        selected,
+        focused,
+        breadcrumb: location.state?.breadcrumb || [],
         promptTab: getTabFromFragment(),
       });
       /* eslint-disable no-underscore-dangle */

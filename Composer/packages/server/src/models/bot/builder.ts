@@ -190,11 +190,13 @@ export class Builder {
     if (!(await this.storage.exists(this.interruptionFolderPath))) {
       await this.storage.mkDir(this.interruptionFolderPath);
     }
-    for (const key of crossTrainResult.keys()) {
-      const fileName = Path.basename(key);
-      const newFileId = Path.join(this.interruptionFolderPath, fileName);
-      await this.storage.writeFile(newFileId, crossTrainResult.get(key).Content);
-    }
+    await Promise.all(
+      [...crossTrainResult.keys()].map(async (key: string) => {
+        const fileName = Path.basename(key);
+        const newFileId = Path.join(this.interruptionFolderPath, fileName);
+        await this.storage.writeFile(newFileId, crossTrainResult.get(key).Content);
+      })
+    );
   }
 
   private async runLuBuild(files: FileInfo[], allFiles: FileInfo[]) {

@@ -156,20 +156,35 @@ export class BotProject implements IBotProject {
 
   public getEnvSettings = async (obfuscate: boolean) => {
     const settings = await this.settingManager.get(obfuscate);
-    if (settings && oauthInput().MicrosoftAppId && oauthInput().MicrosoftAppId !== OBFUSCATED_VALUE) {
-      settings.MicrosoftAppId = oauthInput().MicrosoftAppId;
-    }
-    if (settings && oauthInput().MicrosoftAppPassword && oauthInput().MicrosoftAppPassword !== OBFUSCATED_VALUE) {
-      settings.MicrosoftAppPassword = oauthInput().MicrosoftAppPassword;
-    }
 
     // fix old bot have no language settings
     if (!settings?.defaultLanguage) {
       settings.defaultLanguage = defaultLanguage;
     }
+
     if (!settings?.languages) {
       settings.languages = [defaultLanguage];
     }
+
+    // migrate to qna.endpointKey
+    if (settings?.qna && typeof settings.qna.endpointkey === 'string') {
+      // if endpointKey has not been set, migrate old key to new key
+      if (!settings.qna.endpointKey) {
+        settings.qna.endpointKey = settings.qna.endpointkey;
+      }
+      delete settings.qna.endpointkey;
+      await this.updateEnvSettings(settings);
+    }
+
+    // set these after migrating qna settings to not write them to storage
+    if (settings && oauthInput().MicrosoftAppId && oauthInput().MicrosoftAppId !== OBFUSCATED_VALUE) {
+      settings.MicrosoftAppId = oauthInput().MicrosoftAppId;
+    }
+
+    if (settings && oauthInput().MicrosoftAppPassword && oauthInput().MicrosoftAppPassword !== OBFUSCATED_VALUE) {
+      settings.MicrosoftAppPassword = oauthInput().MicrosoftAppPassword;
+    }
+
     return settings;
   };
 

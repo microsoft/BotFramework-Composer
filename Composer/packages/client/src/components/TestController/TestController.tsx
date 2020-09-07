@@ -50,12 +50,13 @@ export const botButton = css`
   margin-left: 5px;
 `;
 
+let botStatusInterval: NodeJS.Timeout | undefined = undefined;
+
 // -------------------- TestController -------------------- //
 const POLLING_INTERVAL = 2500;
 export const TestController: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [calloutVisible, setCalloutVisible] = useState(false);
-  const [botStatusInterval, setBotStatusInterval] = useState<NodeJS.Timeout | undefined>(undefined);
 
   const botActionRef = useRef(null);
   const notifications = useNotifications();
@@ -83,7 +84,7 @@ export const TestController: React.FC = () => {
   const addRef = useCallback((startBot) => onboardingAddCoachMarkRef({ startBot }), []);
   const errorLength = notifications.filter((n) => n.severity === 'Error').length;
   const showError = errorLength > 0;
-  const publishDialogConfig = { subscriptionKey: settings.qna.subscriptionKey, ...settings.luis } as IConfig;
+  const publishDialogConfig = { subscriptionKey: settings.qna?.subscriptionKey, ...settings.luis } as IConfig;
   const warningLength = notifications.filter((n) => n.severity === 'Warning').length;
   const showWarning = !showError && warningLength > 0;
 
@@ -112,7 +113,6 @@ export const TestController: React.FC = () => {
         stopPollingRuntime();
         break;
     }
-    // return the stoppolling function so the component will clean up
     return () => {
       stopPollingRuntime();
       return;
@@ -141,14 +141,14 @@ export const TestController: React.FC = () => {
         // get publish status
         getPublishStatus(projectId, defaultPublishConfig);
       }, POLLING_INTERVAL);
-      setBotStatusInterval(cancelInterval);
+      botStatusInterval = cancelInterval;
     }
   }
 
   function stopPollingRuntime() {
     if (botStatusInterval) {
       clearInterval(botStatusInterval);
-      setBotStatusInterval(undefined);
+      botStatusInterval = undefined;
     }
   }
 
@@ -156,10 +156,11 @@ export const TestController: React.FC = () => {
     setBotStatus(BotStatus.publishing);
     dismissDialog();
     const { luis, qna } = config;
+    const endpointKey = settings.qna?.endpointKey;
     await setSettings(projectId, {
       ...settings,
       luis: luis,
-      qna: Object.assign({}, settings.qna, qna),
+      qna: Object.assign({}, settings.qna, qna, { endpointKey }),
     });
     await build(luis, qna, projectId);
   }
@@ -204,9 +205,9 @@ export const TestController: React.FC = () => {
       {
         luis: settings.luis,
         qna: {
-          subscriptionKey: settings.qna.subscriptionKey,
-          qnaRegion: settings.qna.qnaRegion,
-          endpointKey: '',
+          subscriptionKey: settings.qna?.subscriptionKey,
+          qnaRegion: settings.qna?.qnaRegion,
+          endpointKey: settings.qna?.endpointKey,
         },
       }
     );

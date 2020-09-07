@@ -32,5 +32,8 @@
     "adaptive-expressions": "4.10.0-preview-147186",
     "botbuilder-lg": "^4.10.0-preview-150886",
     "lodash": "^4.17.19"
+  },
+  "peerDependencies": {
+    "@bfc/shared": "*"
   }
 }
