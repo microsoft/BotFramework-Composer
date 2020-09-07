@@ -13,7 +13,6 @@ import {
   botLoadErrorState,
   isEjectRuntimeExistState,
 } from '../atoms/botState';
-import filePersistence from '../persistence/FilePersistence';
 import { botEndpointsState } from '../atoms';
 
 import { BotStatus, Text } from './../../constants';
@@ -180,15 +179,15 @@ export const publisherDispatcher = () => {
     }
   );
 
-  const getPublishHistory = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (projectId: string, target: any) => {
+  // update publish history after create a new profile
+  const setPublishHistory = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async (projectId: string, targetName: string) => {
       const { set } = callbackHelpers;
       try {
-        await filePersistence.flush();
-        const response = await httpClient.get(`/publish/${projectId}/history/${target.name}`);
+        // sync to server
         set(publishHistoryState, (publishHistory) => ({
           ...publishHistory,
-          [target.name]: response.data,
+          [targetName]: [],
         }));
       } catch (err) {
         //TODO: error
@@ -218,9 +217,9 @@ export const publisherDispatcher = () => {
     getPublishTargetTypes,
     publishToTarget,
     stopPublishBot,
+    setPublishHistory,
     rollbackToVersion,
     getPublishStatus,
-    getPublishHistory,
     setEjectRuntimeExist,
   };
 };

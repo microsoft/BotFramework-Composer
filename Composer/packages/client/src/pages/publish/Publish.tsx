@@ -46,7 +46,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
   const {
     getPublishStatus,
     getPublishTargetTypes,
-    getPublishHistory,
+    setPublishHistory,
     setPublishTargets,
     publishToTarget,
     setQnASettings,
@@ -181,14 +181,6 @@ const Publish: React.FC<PublishPageProps> = (props) => {
     if (settings.publishTargets && settings.publishTargets.length > 0) {
       const selected = settings.publishTargets.find((item) => item.name === selectedTargetName);
       setSelectedTarget(selected);
-      // load publish histories
-      if (selectedTargetName === 'all') {
-        for (const target of settings.publishTargets) {
-          getPublishHistory(projectId, target);
-        }
-      } else if (selected) {
-        getPublishHistory(projectId, selected);
-      }
     }
   }, [projectId, selectedTargetName]);
 
@@ -249,6 +241,8 @@ const Publish: React.FC<PublishPageProps> = (props) => {
         },
       ]);
       await setPublishTargets(targets);
+      // initialize the publish history
+      await setPublishHistory(projectId, name);
       onSelectTarget(name);
     },
     [settings.publishTargets, projectId, botName]

@@ -23,7 +23,7 @@ import filePersistence from '../persistence/FilePersistence';
 import { navigateTo } from '../../utils/navigation';
 import languageStorage from '../../utils/languageStorage';
 import { projectIdCache } from '../../utils/projectCache';
-import { designPageLocationState } from '../atoms/botState';
+import { designPageLocationState, publishHistoryState } from '../atoms/botState';
 import { QnABotTemplateId } from '../../constants';
 
 import {
@@ -171,6 +171,8 @@ export const projectDispatcher = () => {
 
       await lgWorker.addProject(projectId, lgFiles);
 
+      const publishHistory = await initPublishHistory(projectId, settings);
+
       // Important: gotoSnapshot will wipe all states.
       const newSnapshot = snapshot.map(({ set }) => {
         set(skillManifestsState, skillManifestFiles);
@@ -194,6 +196,7 @@ export const projectDispatcher = () => {
         refreshLocalStorage(projectId, settings);
         const mergedSettings = mergeLocalStorage(projectId, settings);
         set(settingsState, mergedSettings);
+        set(publishHistoryState, publishHistory);
       });
       gotoSnapshot(newSnapshot);
       if (jump && projectId) {
@@ -208,6 +211,17 @@ export const projectDispatcher = () => {
       setError(callbackHelpers, err);
       navigateTo('/home');
     }
+  };
+
+  const initPublishHistory = async (projectId, settings) => {
+    const publishHistory = {};
+    await Promise.all(
+      settings.publishTargets.map(async (target) => {
+        const response = await httpClient.get(`/publish/${projectId}/history/${target.name}`);
+        publishHistory[target.name] = response.data;
+      })
+    );
+    return publishHistory;
   };
 
   const removeRecentProject = async (callbackHelpers: CallbackInterface, path: string) => {
