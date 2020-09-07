@@ -2,17 +2,19 @@
 // Licensed under the MIT License.
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useContext, Fragment, useMemo, Suspense, useCallback, useEffect } from 'react';
+import React, { Fragment, useMemo, Suspense, useCallback, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { RouteComponentProps, Router } from '@reach/router';
+import { useRecoilValue } from 'recoil';
 
-import { StoreContext } from '../../store';
 import { navigateTo } from '../../utils/navigation';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TestController } from '../../components/TestController/TestController';
+import { projectIdState } from '../../recoilModel/atoms/botState';
 import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
+import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 
 import TableView from './table-view';
 import { actionButton } from './styles';
@@ -24,8 +26,9 @@ interface LUPageProps extends RouteComponentProps<{}> {
 }
 
 const LUPage: React.FC<LUPageProps> = (props) => {
-  const { state } = useContext(StoreContext);
-  const { dialogs, projectId } = state;
+  const dialogs = useRecoilValue(validatedDialogsSelector);
+  const projectId = useRecoilValue(projectIdState);
+
   const path = props.location?.pathname ?? '';
   const { dialogId = '' } = props;
   const edit = /\/edit(\/)?$/.test(path);
@@ -33,9 +36,13 @@ const LUPage: React.FC<LUPageProps> = (props) => {
 
   const navLinks: INavTreeItem[] = useMemo(() => {
     const newDialogLinks: INavTreeItem[] = dialogs.map((dialog) => {
+      let url = `/bot/${projectId}/language-understanding/${dialog.id}`;
+      if (edit) {
+        url += `/edit`;
+      }
       return {
         id: dialog.id,
-        url: `/bot/${projectId}/language-understanding/${dialog.id}`,
+        url: url,
         name: dialog.displayName,
         ariaLabel: formatMessage('language understanding file'),
       };
@@ -53,7 +60,7 @@ const LUPage: React.FC<LUPageProps> = (props) => {
       url: `/bot/${projectId}/language-understanding/all`,
     });
     return newDialogLinks;
-  }, [dialogs]);
+  }, [dialogs, edit]);
 
   useEffect(() => {
     const activeDialog = dialogs.find(({ id }) => id === dialogId);
@@ -86,7 +93,6 @@ const LUPage: React.FC<LUPageProps> = (props) => {
           checked={!!edit}
           className={'toggleEditMode'}
           css={actionButton}
-          defaultChecked={false}
           offText={formatMessage('Edit mode')}
           onChange={onToggleEditMode}
           onText={formatMessage('Edit mode')}

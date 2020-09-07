@@ -13,12 +13,14 @@
     "build:ts": "tsc --build ./tsconfig.build.json",
     "clean": "rimraf lib demo/dist",
     "lint": "eslint --quiet src",
+    "lint:fix": "yarn lint --fix",
     "prepare": "yarn build"
   },
   "license": "MIT",
   "peerDependencies": {
     "@bfc/code-editor": "*",
     "@bfc/extension": "*",
+    "@bfc/intellisense": "*",
     "@uifabric/fluent-theme": "^7.1.4",
     "@uifabric/icons": "^7.3.0",
     "@uifabric/styling": "^7.7.4",
@@ -30,6 +32,7 @@
   "devDependencies": {
     "@bfc/code-editor": "*",
     "@bfc/extension": "*",
+    "@bfc/intellisense": "*",
     "@bfc/test-utils": "*",
     "@types/lodash": "^4.14.149",
     "@types/react": "16.9.23",
@@ -39,7 +42,7 @@
   },
   "dependencies": {
     "@emotion/core": "^10.0.27",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "react-error-boundary": "^1.2.5"
   }
 }

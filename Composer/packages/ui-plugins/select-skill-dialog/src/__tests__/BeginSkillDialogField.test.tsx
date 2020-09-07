@@ -1,40 +1,41 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
-// @ts-nocheck
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import React from 'react';
 import { fireEvent, getAllByRole, render } from '@bfc/test-utils';
-import { Extension } from '@bfc/extension';
+import { Extension, JSONSchema7 } from '@bfc/extension';
 import { SDKKinds } from '@bfc/shared';
 
 import { BeginSkillDialogField } from '../BeginSkillDialogField';
-import formSchema from '../formSchema';
+import pluginConfig from '..';
 
 import { schema, skills } from './constants';
 
-const renderBeginSkillDialog = ({ value = {}, onChange } = {}) => {
+const renderBeginSkillDialog = ({ value = {}, onChange = jest.fn() } = {}) => {
   const addSkillDialog = jest.fn().mockResolvedValue({ manifestUrl: 'https://' });
 
   const props = {
     depth: 1,
     id: 'select.skillDialog',
-    schema: schema?.[SDKKinds.BeginSkill] || {},
-    uiOptions: formSchema?.[SDKKinds.BeginSkill] || {},
+    schema: (schema?.[SDKKinds.BeginSkill] || {}) as JSONSchema7,
+    uiOptions: pluginConfig.uiSchema?.[SDKKinds.BeginSkill]?.form || {},
     value,
     onChange,
+    definitions: {},
+    name: 'select.skillDialog',
   };
 
-  const shell = {
+  const shell: any = {
     addSkillDialog,
   };
 
-  const shellData = {
+  const shellData: any = {
     skills,
   };
 
   return render(
-    <Extension shell={shell} shellData={shellData}>
+    <Extension plugins={{}} shell={{ api: shell, data: shellData }}>
       <BeginSkillDialogField {...props} />
     </Extension>
   );

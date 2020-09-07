@@ -6,6 +6,7 @@ import { listen, MessageConnection } from 'vscode-ws-jsonrpc';
 import get from 'lodash/get';
 import { MonacoServices, MonacoLanguageClient } from 'monaco-languageclient';
 import { EditorDidMount, Monaco } from '@monaco-editor/react';
+import formatMessage from 'format-message';
 
 import { registerLULanguage } from './languages';
 import { createUrl, createWebSocket, createLanguageClient, SendRequestWithRetry } from './utils/lspUtil';
@@ -15,6 +16,7 @@ import { LUOption } from './utils';
 
 export interface LULSPEditorProps extends BaseEditorProps {
   luOption?: LUOption;
+  helpURL?: string;
   languageServer?:
     | {
         host?: string;
@@ -69,7 +71,14 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
     ...props.options,
   };
 
-  const { luOption, languageServer, onInit: onInitProp, placeholder = defaultPlaceholder, ...restProps } = props;
+  const {
+    luOption,
+    languageServer,
+    onInit: onInitProp,
+    placeholder = defaultPlaceholder,
+    helpURL = LU_HELP,
+    ...restProps
+  } = props;
   const luServer = languageServer || defaultLUServer;
 
   let editorId = '';
@@ -95,7 +104,7 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
       listen({
         webSocket,
         onConnection: (connection: MessageConnection) => {
-          const languageClient = createLanguageClient('LU Language Client', ['lu'], connection);
+          const languageClient = createLanguageClient(formatMessage('LU Language Client'), ['lu'], connection);
 
           const m = monacoRef.current;
           if (m) {

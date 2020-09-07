@@ -8,7 +8,7 @@ import { PluginConfig } from '../types';
 
 interface ShellContext extends ShellData {
   shellApi: ShellApi;
-  plugins: PluginConfig[];
+  plugins: PluginConfig;
 }
 
 export function useShellApi(): ShellContext {

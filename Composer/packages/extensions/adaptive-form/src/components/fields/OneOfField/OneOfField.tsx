@@ -4,20 +4,19 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useState, useMemo } from 'react';
-import { FieldProps } from '@bfc/extension';
+import { FieldProps, useFormConfig } from '@bfc/extension';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 import formatMessage from 'format-message';
 
 import { FieldLabel } from '../../FieldLabel';
 import { resolveFieldWidget } from '../../../utils';
-import { usePluginConfig } from '../../../hooks';
 import { oneOfField } from '../styles';
 
 import { getOptions, getSelectedOption, getFieldProps } from './utils';
 
 const OneOfField: React.FC<FieldProps> = (props) => {
   const { definitions, description, id, label, schema, required, uiOptions, value } = props;
-  const pluginConfig = usePluginConfig();
+  const formUIOptions = useFormConfig();
   const options = useMemo(() => getOptions(schema, definitions), [schema, definitions]);
   const initialSelectedOption = useMemo(
     () => getSelectedOption(value, options) || ({ key: '', data: { schema: undefined } } as IDropdownOption),
@@ -39,7 +38,7 @@ const OneOfField: React.FC<FieldProps> = (props) => {
     }
   };
 
-  const Field = resolveFieldWidget(selectedSchema || {}, props.uiOptions, pluginConfig);
+  const Field = resolveFieldWidget(selectedSchema || {}, props.uiOptions, formUIOptions);
 
   return (
     <div css={oneOfField.container}>

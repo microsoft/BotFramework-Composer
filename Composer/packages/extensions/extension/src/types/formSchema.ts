@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 import { SDKKinds, SDKRoles, ShellApi, ShellData } from '@bfc/shared';
 
-import { FieldWidget, FieldProps } from './form';
+import { FieldProps, FieldWidget } from './form';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type UIOptionValue<R = string, D = any> = R | UIOptionFunc<R, D>;
@@ -47,10 +47,11 @@ export interface UIOptions {
   };
   /** subtitle rendered in form title, defaults to schema.$kind */
   subtitle?: UIOptionValue<string>;
+  intellisenseScopes?: string[];
 }
 
 export type RoleSchema = { [key in SDKRoles]?: Omit<UIOptions, 'properties'> };
-export type UISchema = { [key in SDKKinds]?: UIOptions };
+export type FormUISchema = { [key in SDKKinds]?: UIOptions };
 export type RecognizerSchema = {
   /** Unique id to identify recognizer (SDK $kind) */
   id: string;
@@ -62,4 +63,11 @@ export type RecognizerSchema = {
   isSelected: (data: any) => boolean;
   /** Invoked when changing the recognizer type */
   handleRecognizerChange: (fieldProps: FieldProps, shellData: ShellData, shellApi: ShellApi) => void;
+  /** Function to rename an intent */
+  renameIntent: (
+    intentName: string,
+    newIntentName: string,
+    shellData: ShellData,
+    shellApi: ShellApi
+  ) => Promise<void> | void;
 };

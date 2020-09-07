@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { jsx, css } from '@emotion/core';
-import React, { useCallback, useContext, useMemo, useRef, useState } from 'react';
 import {
   GroupedList,
   IGroup,
@@ -18,11 +18,13 @@ import formatMessage from 'format-message';
 import { DialogInfo, ITrigger } from '@bfc/shared';
 import { Resizable, ResizeCallback } from 're-resizable';
 import debounce from 'lodash/debounce';
+import { useRecoilValue } from 'recoil';
 import { IGroupedListStyles } from 'office-ui-fabric-react/lib/GroupedList';
 import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 
-import { StoreContext } from '../../store';
+import { dispatcherState, userSettingsState } from '../../recoilModel';
 import { createSelectedPath, getFriendlyName } from '../../utils/dialogUtil';
+import { containUnsupportedTriggers, triggerNotSupported } from '../../utils/dialogValidator';
 
 import { TreeItem } from './treeItem';
 
@@ -57,7 +59,7 @@ const root = css`
 
 // -------------------- ProjectTree -------------------- //
 
-function createGroupItem(dialog: DialogInfo, currentId: string, position: number) {
+function createGroupItem(dialog: DialogInfo, currentId: string, position: number, warningContent: string): IGroup {
   return {
     key: dialog.id,
     name: dialog.displayName,
@@ -66,14 +68,15 @@ function createGroupItem(dialog: DialogInfo, currentId: string, position: number
     count: dialog.triggers.length,
     hasMoreData: true,
     isCollapsed: dialog.id !== currentId,
-    data: dialog,
+    data: { ...dialog, warningContent },
   };
 }
 
-function createItem(trigger: ITrigger, index: number) {
+function createItem(trigger: ITrigger, index: number, warningContent: string) {
   return {
     ...trigger,
     index,
+    warningContent,
     displayName: trigger.displayName || getFriendlyName({ $kind: trigger.type }),
   };
 }
@@ -103,10 +106,12 @@ function createItemsAndGroups(
     })
     .reduce(
       (result: { items: any[]; groups: IGroup[] }, dialog) => {
-        result.groups.push(createGroupItem(dialog, dialogId, position));
+        const warningContent = containUnsupportedTriggers(dialog);
+        result.groups.push(createGroupItem(dialog, dialogId, position, warningContent));
         position += dialog.triggers.length;
         dialog.triggers.forEach((item, index) => {
-          result.items.push(createItem(item, index));
+          const warningContent = triggerNotSupported(dialog, item);
+          result.items.push(createItem(item, index, warningContent));
         });
         return result;
       },
@@ -125,12 +130,9 @@ interface IProjectTreeProps {
 }
 
 export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
-  const {
-    actions: { onboardingAddCoachMarkRef, updateUserSettings },
-    state: {
-      userSettings: { dialogNavWidth: currentWidth },
-    },
-  } = useContext(StoreContext);
+  const { onboardingAddCoachMarkRef, updateUserSettings } = useRecoilValue(dispatcherState);
+  const { dialogNavWidth: currentWidth } = useRecoilValue(userSettingsState);
+
   const groupRef: React.RefObject<IGroupedList> = useRef(null);
   const { dialogs, dialogId, selected, onSelect, onDeleteTrigger, onDeleteDialog } = props;
   const [filter, setFilter] = useState('');

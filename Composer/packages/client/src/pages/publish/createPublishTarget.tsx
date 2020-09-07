@@ -10,9 +10,11 @@ import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { Fragment, useState, useMemo } from 'react';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
+import { useRecoilValue } from 'recoil';
+import { PublishTarget } from '@bfc/shared';
 
-import { PublishTarget, PublishType } from '../../store/types';
-import { useStoreContext } from '../../hooks/useStoreContext';
+import { PublishType } from '../../recoilModel/types';
+import { userSettingsState } from '../../recoilModel';
 
 import { label } from './styles';
 
@@ -29,9 +31,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
   const [name, setName] = useState(props.current ? props.current.name : '');
   const [config, setConfig] = useState(props.current ? JSON.parse(props.current.configuration) : undefined);
   const [errorMessage, setErrorMsg] = useState('');
-  const {
-    state: { userSettings },
-  } = useStoreContext();
+  const userSettings = useRecoilValue(userSettingsState);
 
   const targetTypes = useMemo(() => {
     return props.types.map((t) => ({ key: t.name, text: t.description }));
@@ -53,7 +53,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
     if (!newName || newName.trim() === '') {
       setErrorMsg(formatMessage('Must have a name'));
     } else {
-      const exists = !!props.targets?.find((t) => t.name.toLowerCase() === newName?.toLowerCase);
+      const exists = !!props.targets?.find((t) => t.name.toLowerCase() === newName?.toLowerCase());
 
       if (exists) {
         setErrorMsg(formatMessage('A profile with that name already exists.'));
@@ -98,6 +98,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
           errorMessage={errorMessage}
           label={formatMessage('Name')}
           placeholder={formatMessage('My Publish Profile')}
+          readOnly={props.current ? true : false}
           onChange={updateName}
         />
         <Dropdown

@@ -55,7 +55,7 @@ const builtinVisualSDKSchema: FlowSchema = {
       body: (data) => {
         const pageSizeString = get(data, 'pageSize', '?');
         const propString = get(data, 'itemsProperty', '?');
-        return `${formatMessage('Each page of')} ${pageSizeString} ${formatMessage('in')} {${propString}}`;
+        return formatMessage('Each page of {pageSizeString} in {propString}', { pageSizeString, propString });
       },
     },
   },
@@ -76,14 +76,14 @@ const builtinVisualSDKSchema: FlowSchema = {
       dialog: (data) => data.dialog,
       getRefContent: (data) => (dialogRef) => (
         <>
-          {dialogRef || '?'} <FixedInfo>(Dialog)</FixedInfo>
+          {dialogRef || '?'} <FixedInfo>{formatMessage('(Dialog)')}</FixedInfo>
         </>
       ),
     },
     footer: (data) =>
       data.property ? (
         <>
-          {data.property} <FixedInfo>= Return value</FixedInfo>
+          {data.property} <FixedInfo>{formatMessage('= Return value')}</FixedInfo>
         </>
       ) : null,
   },
@@ -93,7 +93,7 @@ const builtinVisualSDKSchema: FlowSchema = {
     icon: 'Library',
     body: (data) => (
       <SingleLineDiv>
-        <FixedInfo>Host </FixedInfo>
+        <FixedInfo>{formatMessage('Host ')}</FixedInfo>
         {data.skillEndpoint || '?'}
       </SingleLineDiv>
     ),
@@ -101,7 +101,7 @@ const builtinVisualSDKSchema: FlowSchema = {
       data.resultProperty ? (
         <>
           {data.resultProperty}
-          <FixedInfo> = Result</FixedInfo>
+          <FixedInfo>{formatMessage(' = Result')}</FixedInfo>
         </>
       ) : null,
   },
@@ -112,7 +112,7 @@ const builtinVisualSDKSchema: FlowSchema = {
       dialog: (data) => data.dialog,
       getRefContent: (data) => (dialogRef) => (
         <>
-          {dialogRef || '?'} <FixedInfo>(Dialog)</FixedInfo>
+          {dialogRef || '?'} <FixedInfo>{formatMessage('(Dialog)')}</FixedInfo>
         </>
       ),
     },
@@ -128,7 +128,7 @@ const builtinVisualSDKSchema: FlowSchema = {
       data.resultProperty ? (
         <>
           {data.resultProperty}
-          <FixedInfo> = Result</FixedInfo>
+          <FixedInfo>{formatMessage(' = Result')}</FixedInfo>
         </>
       ) : null,
   },
@@ -145,6 +145,26 @@ const builtinVisualSDKSchema: FlowSchema = {
         renderItem={({ property, value }) => <PropertyAssignment property={property} value={value} />}
       />
     ),
+  },
+  [SDKKinds.DeleteActivity]: {
+    widget: 'ActionCard',
+    header: {
+      widget: 'ActionHeader',
+      title: 'Delete activity',
+    },
+    body: (data) => (
+      <>
+        <FixedInfo>{data.activityId || '?'}</FixedInfo>
+      </>
+    ),
+  },
+  [SDKKinds.UpdateActivity]: {
+    widget: 'ActionCard',
+    header: {
+      widget: 'ActionHeader',
+      title: 'Update activity',
+    },
+    body: (data) => data.activity,
   },
   [SDKKinds.DeleteProperty]: {
     widget: 'ActionCard',
@@ -170,7 +190,7 @@ const builtinVisualSDKSchema: FlowSchema = {
       data.eventName ? (
         <>
           {data.eventName || '?'}
-          <FixedInfo> (Event)</FixedInfo>
+          <FixedInfo>{formatMessage(' (Event)')}</FixedInfo>
         </>
       ) : null,
   },
@@ -179,7 +199,7 @@ const builtinVisualSDKSchema: FlowSchema = {
     body: (data) => (
       <>
         {data.eventName || '?'}
-        <FixedInfo> (Event)</FixedInfo>
+        <FixedInfo>{formatMessage(' (Event)')}</FixedInfo>
       </>
     ),
   },
@@ -195,7 +215,7 @@ const builtinVisualSDKSchema: FlowSchema = {
       data.resultProperty ? (
         <>
           {data.resultProperty}
-          <FixedInfo> = Result property</FixedInfo>
+          <FixedInfo>{formatMessage(' = Result property')}</FixedInfo>
         </>
       ) : null,
   },
@@ -214,9 +234,22 @@ const builtinVisualSDKSchema: FlowSchema = {
       data.tokenProperty ? (
         <>
           {data.tokenProperty}
-          <FixedInfo> = Token Property</FixedInfo>
+          <FixedInfo>{formatMessage(' = Token Property')}</FixedInfo>
         </>
       ) : null,
+  },
+  [SDKKinds.TelemetryTrackEvent]: {
+    widget: 'ActionCard',
+    header: {
+      widget: 'ActionHeader',
+      title: 'Telemetry - Trace Event',
+    },
+    body: (data) => (
+      <>
+        {data.eventName || '?'}
+        <FixedInfo>{formatMessage(' (Event)')}</FixedInfo>
+      </>
+    ),
   },
 };
 

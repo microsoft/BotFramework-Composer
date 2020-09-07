@@ -14,9 +14,9 @@ import { publishDialogText } from './styles';
 export const PublishDialog = (props) => {
   const [comment, setComment] = useState('');
   const publishDialogProps = {
-    title: 'Publish',
+    title: formatMessage('Publish'),
     type: DialogType.normal,
-    subText: 'You are about to publish your bot to the profile below. Do you want to proceed?',
+    subText: formatMessage('You are about to publish your bot to the profile below. Do you want to proceed?'),
   };
   const submit = async () => {
     props.onDismiss();
@@ -36,7 +36,7 @@ export const PublishDialog = (props) => {
             multiline
             label={formatMessage('Comment')}
             // styles={styles.textarea}
-            placeholder="Provide a brief description of this publish. It will appear on the publish history list"
+            placeholder={formatMessage('Provide a brief description. It will appear on the publish history list.')}
             onChange={(e, newvalue) => setComment(newvalue || '')}
           />
         </form>

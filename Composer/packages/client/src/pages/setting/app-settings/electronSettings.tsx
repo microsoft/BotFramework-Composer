@@ -3,22 +3,20 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useContext } from 'react';
 import formatMessage from 'format-message';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { RouteComponentProps } from '@reach/router';
+import { useRecoilValue } from 'recoil';
 
-import { StoreContext } from '../../../store';
+import { userSettingsState, dispatcherState } from '../../../recoilModel';
 
 import { link, section } from './styles';
 import { SettingToggle } from './SettingToggle';
 import * as images from './images';
 
 export const ElectronSettings: React.FC<RouteComponentProps> = () => {
-  const {
-    actions: { updateUserSettings },
-    state: { userSettings },
-  } = useContext(StoreContext);
+  const userSettings = useRecoilValue(userSettingsState);
+  const { updateUserSettings } = useRecoilValue(dispatcherState);
 
   const onAppUpdatesChange = (key: string) => (checked: boolean) => {
     updateUserSettings({ appUpdater: { [key]: checked } });
@@ -29,7 +27,7 @@ export const ElectronSettings: React.FC<RouteComponentProps> = () => {
       <h2>{formatMessage('Application Updates')}</h2>
       <SettingToggle
         checked={userSettings.appUpdater.autoDownload}
-        description={formatMessage('Check for updates and installs them automatically.')}
+        description={formatMessage('Check for updates and install them automatically.')}
         image={images.autoUpdate}
         title={formatMessage('Auto update')}
         onToggle={onAppUpdatesChange('autoDownload')}

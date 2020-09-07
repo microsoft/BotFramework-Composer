@@ -15,20 +15,21 @@ export const hostedSettings = css`
   box-sizing: border-box;
 `;
 
-export const hostedControls = css`
-  margin-bottom: 18px;
-
-  & > h1 {
-    margin-top: 0;
-  }
-`;
-
 export const settingsEditor = css`
   flex: 1;
-  max-height: 70%;
+  height: 500px;
 `;
 
 export const hostedControlsTitle = css`
   font-size: ${FontSizes.xLarge};
   font-weight: ${FontWeights.semibold};
+`;
+
+export const toolbar = css`
+  margin-bottom: 10px;
+  display: flex;
+  > button {
+    margin-left: 20px;
+    margin-top: 20px;
+  }
 `;

@@ -4,7 +4,7 @@
 import cloneDeep from 'lodash/cloneDeep';
 import { navigate, NavigateOptions } from '@reach/router';
 
-import { BreadcrumbItem, DesignPageLocation } from '../store/types';
+import { BreadcrumbItem, DesignPageLocation } from '../recoilModel/types';
 import { BASEPATH } from '../constants';
 
 import { parsePathToFocused } from './convertUtils/parsePathToFocused';
@@ -82,7 +82,7 @@ interface NavigationState {
 }
 
 export function convertPathToUrl(projectId: string, dialogId: string, path?: string): string {
-  //path is like main.trigers[0].actions[0]
+  //path is like main.triggers[0].actions[0]
   //uri = id?selected=triggers[0]&focused=triggers[0].actions[0]
 
   let uri = `/bot/${projectId}/dialogs/${dialogId}`;

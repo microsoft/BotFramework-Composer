@@ -4,9 +4,9 @@
 context('Luis Deploy', () => {
   beforeEach(() => {
     cy.server();
-    cy.route('POST', '/api/publish/*/publish/default', { endpointURL: 'anything' });
+    cy.route('POST', '/api/publish/*/publish/default', { endpointURL: 'anything', status: 202 });
     cy.route('POST', '/api/projects/*/settings', 'OK');
-    cy.route('GET', '/api/publish/*/status/default', { endpointURL: 'anything' });
+    cy.route('GET', '/api/publish/*/status/default', { endpointURL: 'anything', status: 200 });
     cy.visit('/home');
     cy.createBot('ToDoBotWithLuisSample');
   });
@@ -16,7 +16,7 @@ context('Luis Deploy', () => {
     cy.url().should('contain', 'language-understanding/all');
     cy.route({
       method: 'POST',
-      url: 'api/projects/*/luFiles/publish',
+      url: 'api/projects/*/build',
       status: 200,
       response: 'fixture:luPublish/success',
     });
@@ -33,7 +33,7 @@ context('Luis Deploy', () => {
 
     cy.route({
       method: 'POST',
-      url: 'api/projects/*/luFiles/publish',
+      url: 'api/projects/*/build',
       status: 400,
       response: 'fixture:luPublish/error',
     });

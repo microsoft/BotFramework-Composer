@@ -14,7 +14,6 @@ import {
   getActivityTypes,
   getFriendlyName,
   getbreadcrumbLabel,
-  sanitizeDialogData,
   getSelected,
 } from '../../src/utils/dialogUtil';
 
@@ -187,9 +186,11 @@ describe('getTriggerTypes', () => {
     const triggerTypes = getTriggerTypes();
     expect(triggerTypes).toEqual([
       { key: 'Microsoft.OnIntent', text: 'Intent recognized' },
+      { key: 'Microsoft.OnQnAMatch', text: 'QnA Intent recognized' },
       { key: 'Microsoft.OnUnknownIntent', text: 'Unknown intent' },
       { key: 'Microsoft.OnDialogEvent', text: 'Dialog events' },
       { key: 'Microsoft.OnActivity', text: 'Activities' },
+      { key: 'Microsoft.OnChooseIntent', text: 'Duplicated intents recognized' },
       { key: 'OnCustomEvent', text: 'Custom events' },
     ]);
   });
@@ -237,25 +238,6 @@ describe('getbreadcrumbLabel', () => {
   it('return breadcrumb label', () => {
     const name = getbreadcrumbLabel(dialogs, 'id1', null, null);
     expect(name).toBe('MainDialog');
-  });
-});
-
-describe('sanitizeDialogData', () => {
-  it('return undefined', () => {
-    const res = sanitizeDialogData();
-    expect(res).toEqual(undefined);
-  });
-
-  it('return cleaned data', () => {
-    const res = sanitizeDialogData(dialogs[2].content);
-    expect(res).toEqual({
-      $kind: 'kind3',
-      action: {
-        action: {
-          property: true,
-        },
-      },
-    });
   });
 });
 

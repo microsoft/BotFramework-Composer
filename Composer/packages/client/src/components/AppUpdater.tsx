@@ -3,20 +3,30 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React, { useContext, useEffect, useMemo, useState, useCallback } from 'react';
-import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
+import React, { useEffect, useMemo, useState, useCallback } from 'react';
+import {
+  Dialog,
+  DialogFooter,
+  DialogType,
+  IDialogContentStyles,
+  IDialogFooterStyles,
+} from 'office-ui-fabric-react/lib/Dialog';
 import { DefaultButton, PrimaryButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
 import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import formatMessage from 'format-message';
-import { IDialogContentStyles, IDialogFooterStyles } from 'office-ui-fabric-react/lib/Dialog';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+import { useRecoilValue } from 'recoil';
+import { SharedColors, NeutralColors } from '@uifabric/fluent-theme';
 
 import { AppUpdaterStatus } from '../constants';
-import { StoreContext } from '../store';
+import { appUpdateState, dispatcherState } from '../recoilModel';
 
-// -------------------- Styles -------------------- //
+const updateAvailableDismissBtn: Partial<IButtonStyles> = {
+  root: {
+    marginRight: '6px;',
+  },
+};
 
 const optionIcon = (checked) => css`
   vertical-align: text-bottom;
@@ -35,21 +45,15 @@ const dialogCopy = css`
   color: #000;
 `;
 
-const dialogContent: Partial<IDialogContentStyles> = {
-  subText: { color: NeutralColors.black },
-  header: { paddingBottom: '6px' },
-};
-
 const dialogFooter: Partial<IDialogFooterStyles> = {
   actions: {
     marginTop: '46px',
   },
 };
 
-const updateAvailableDismissBtn: Partial<IButtonStyles> = {
-  root: {
-    marginRight: '6px;',
-  },
+const dialogContent: Partial<IDialogContentStyles> = {
+  subText: { color: NeutralColors.black },
+  header: { paddingBottom: '6px' },
 };
 
 // -------------------- Helpers -------------------- //
@@ -74,23 +78,22 @@ const downloadOptions = {
 // -------------------- AppUpdater -------------------- //
 
 export const AppUpdater: React.FC<{}> = () => {
-  const {
-    actions: { setAppUpdateError, setAppUpdateProgress, setAppUpdateShowing, setAppUpdateStatus },
-    state: { appUpdate },
-  } = useContext(StoreContext);
-  const { downloadSizeInBytes, error, progressPercent, showing, status, version } = appUpdate;
+  const { setAppUpdateError, setAppUpdateProgress, setAppUpdateShowing, setAppUpdateStatus } = useRecoilValue(
+    dispatcherState
+  );
+  const { downloadSizeInBytes, error, progressPercent, showing, status, version } = useRecoilValue(appUpdateState);
   const [downloadOption, setDownloadOption] = useState(downloadOptions.installAndUpdate);
 
   const handleDismiss = useCallback(() => {
     setAppUpdateShowing(false);
     if (status === AppUpdaterStatus.UPDATE_UNAVAILABLE || status === AppUpdaterStatus.UPDATE_FAILED) {
-      setAppUpdateStatus({ status: AppUpdaterStatus.IDLE, version: undefined });
+      setAppUpdateStatus(AppUpdaterStatus.IDLE, undefined);
     }
   }, [showing, status]);
 
   const handlePreDownloadOkay = useCallback(() => {
     // notify main to download the update
-    setAppUpdateStatus({ status: AppUpdaterStatus.UPDATE_IN_PROGRESS });
+    setAppUpdateStatus(AppUpdaterStatus.UPDATE_IN_PROGRESS, undefined);
     ipcRenderer.send('app-update', 'start-download');
   }, []);
 
@@ -110,13 +113,13 @@ export const AppUpdater: React.FC<{}> = () => {
     ipcRenderer.on('app-update', (_event, name, payload) => {
       switch (name) {
         case 'update-available':
-          setAppUpdateStatus({ status: AppUpdaterStatus.UPDATE_AVAILABLE, version: payload.version });
+          setAppUpdateStatus(AppUpdaterStatus.UPDATE_AVAILABLE, payload.version);
           setAppUpdateShowing(true);
           break;
 
         case 'progress': {
-          const progress = (payload.percent as number).toFixed(2);
-          setAppUpdateProgress({ progressPercent: progress, downloadSizeInBytes: payload.total });
+          const progress = +(payload.percent as number).toFixed(2);
+          setAppUpdateProgress(progress, payload.total);
           break;
         }
 
@@ -125,19 +128,19 @@ export const AppUpdater: React.FC<{}> = () => {
           if (explicit) {
             // the user has explicitly checked for an update via the Help menu;
             // we should display some UI feedback if there are no updates available
-            setAppUpdateStatus({ status: AppUpdaterStatus.UPDATE_UNAVAILABLE });
+            setAppUpdateStatus(AppUpdaterStatus.UPDATE_UNAVAILABLE, undefined);
             setAppUpdateShowing(true);
           }
           break;
         }
 
         case 'update-downloaded':
-          setAppUpdateStatus({ status: AppUpdaterStatus.UPDATE_SUCCEEDED });
+          setAppUpdateStatus(AppUpdaterStatus.UPDATE_SUCCEEDED, undefined);
           setAppUpdateShowing(true);
           break;
 
         case 'error':
-          setAppUpdateStatus({ status: AppUpdaterStatus.UPDATE_FAILED });
+          setAppUpdateStatus(AppUpdaterStatus.UPDATE_FAILED, undefined);
           setAppUpdateError(payload);
           setAppUpdateShowing(true);
           break;
@@ -202,9 +205,11 @@ export const AppUpdater: React.FC<{}> = () => {
       case AppUpdaterStatus.UPDATE_IN_PROGRESS: {
         let trimmedTotalInMB;
         if (downloadSizeInBytes === undefined) {
-          trimmedTotalInMB = 'Calculating...';
+          trimmedTotalInMB = formatMessage('Calculating...');
         } else {
-          trimmedTotalInMB = `${(downloadSizeInBytes / 1000000).toFixed(2)}MB`;
+          trimmedTotalInMB = formatMessage('{total}MB', {
+            total: (downloadSizeInBytes / 1000000).toFixed(2),
+          });
         }
         const progressInHundredths = (progressPercent ?? 0) / 100;
         return (

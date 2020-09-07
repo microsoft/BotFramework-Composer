@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { UIOptions, FieldWidget, PluginConfig, JSONSchema7 } from '@bfc/extension';
+import { FieldWidget, FormUISchema, JSONSchema7, UIOptions } from '@bfc/extension';
 
 import * as DefaultFields from '../components/fields';
 
@@ -13,7 +13,7 @@ import * as DefaultFields from '../components/fields';
 export function resolveFieldWidget(
   schema?: JSONSchema7,
   uiOptions?: UIOptions,
-  globalConfig?: Required<PluginConfig>
+  globalUIOptions?: FormUISchema
 ): FieldWidget {
   const FieldOverride = uiOptions?.field;
 
@@ -22,14 +22,15 @@ export function resolveFieldWidget(
   }
 
   if (schema) {
-    if (globalConfig) {
-      const RoleOverride = schema.$role && globalConfig?.roleSchema[schema.$role]?.field;
-
-      if (RoleOverride) {
-        return RoleOverride;
+    if (schema.$role) {
+      switch (schema.$role) {
+        case 'expression':
+          return DefaultFields.ExpressionField;
       }
+    }
 
-      const KindOverride = schema.$kind && globalConfig?.formSchema[schema.$kind]?.field;
+    if (globalUIOptions) {
+      const KindOverride = schema.$kind && globalUIOptions[schema.$kind]?.field;
 
       if (KindOverride) {
         return KindOverride;
@@ -42,6 +43,10 @@ export function resolveFieldWidget(
 
     if (Array.isArray(schema.enum)) {
       return DefaultFields.SelectField;
+    }
+
+    if (uiOptions?.intellisenseScopes?.length) {
+      return DefaultFields.IntellisenseField;
     }
 
     switch (schema.type) {
@@ -58,7 +63,7 @@ export function resolveFieldWidget(
 
         if (Array.isArray(items) && typeof items[0] === 'object' && items[0].type === 'object') {
           return DefaultFields.ObjectArrayField;
-        } else if (!Array.isArray(items) && typeof items === 'object' && items?.type === 'object') {
+        } else if (!Array.isArray(items) && typeof items === 'object' && items.type === 'object') {
           return DefaultFields.ObjectArrayField;
         }
 

@@ -39,13 +39,10 @@ export class BotProjectService {
     BotProjectService.initialize();
     const project = BotProjectService.getIndexedProjectById(projectId);
     if (!project) throw new Error('project not found');
-    const resources = project.files.reduce((result: ResolverResource[], file) => {
+    const resources = project.lgFiles.map((file) => {
       const { name, content } = file;
-      if (name.endsWith('.lg')) {
-        result.push({ id: Path.basename(name, '.lg'), content });
-      }
-      return result;
-    }, []);
+      return { id: Path.basename(name, '.lg'), content };
+    });
     return resources;
   }
 
@@ -53,13 +50,10 @@ export class BotProjectService {
     BotProjectService.initialize();
     const project = BotProjectService.getIndexedProjectById(projectId);
     if (!project) throw new Error('project not found');
-    const resource = project.files.reduce((result: ResolverResource[], file) => {
+    const resource = project.luFiles.map((file) => {
       const { name, content } = file;
-      if (name.endsWith('.lu')) {
-        result.push({ id: Path.basename(name, '.lu'), content });
-      }
-      return result;
-    }, []);
+      return { id: Path.basename(name, '.lu'), content };
+    });
     const resolver = importResolverGenerator(resource, '.lu');
     return resolver(source, id);
   }
@@ -90,12 +84,10 @@ export class BotProjectService {
       'turn.activityProcessed',
     ];
     const projectVariables =
-      BotProjectService.getIndexedProjectById(projectId)
-        ?.files.filter((file) => file.name.endsWith('.dialog'))
-        .map(({ content }) => {
-          const dialogJson = JSON.parse(content);
-          return extractMemoryPaths(dialogJson);
-        }) || [];
+      BotProjectService.getIndexedProjectById(projectId)?.dialogFiles.map(({ content }) => {
+        const dialogJson = JSON.parse(content);
+        return extractMemoryPaths(dialogJson);
+      }) || [];
 
     const userDefined: string[] = flatten(projectVariables);
     return [...defaultProperties, ...userDefined];
