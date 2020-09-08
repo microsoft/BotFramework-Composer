@@ -42,7 +42,7 @@ export const DefaultFlowSchema: FlowUISchema = {
     footer: {
       widget: 'PropertyDescription',
       property: '=action.resultProperty',
-      description: '=string("= Return value")',
+      description: '= Return value',
     },
     hideFooter: '=!action.resultProperty',
   },
@@ -59,7 +59,7 @@ export const DefaultFlowSchema: FlowUISchema = {
     footer: {
       widget: 'PropertyDescription',
       property: '=action.resultProperty',
-      description: '=string("= Result")',
+      description: '= Result',
     },
     hideFooter: '!action.resultProperty',
   },
@@ -115,7 +115,7 @@ export const DefaultFlowSchema: FlowUISchema = {
     body: {
       widget: 'PropertyDescription',
       property: '=coalesce(action.activityId, "?")',
-      description: '=string("= ActivityId")',
+      description: '= ActivityId',
     },
   },
   [SDKKinds.UpdateActivity]: {
@@ -176,7 +176,7 @@ export const DefaultFlowSchema: FlowUISchema = {
     footer: {
       widget: 'PropertyDescription',
       property: '=action.property',
-      description: '=string("= Token property")',
+      description: '= Token property',
     },
     hideFooter: '=!action.property',
   },
