@@ -1,15 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { evaluateWidgetExpression } from '../../../src/adaptive-flow-renderer/utils/expression/widgetExpressionEvaluator';
+import {
+  evaluateWidgetExpression,
+  ActionContextKey,
+} from '../../../src/adaptive-flow-renderer/utils/expression/widgetExpressionEvaluator';
 
 const evaluate = evaluateWidgetExpression;
 describe('evaluateWidgetExpression()', () => {
   it('return origin input when input non-expression string.', () => {
-    ['${action.x}', 'hello', 'action.x', '= Result Value'].forEach((x) => {
-      expect(evaluate(x, {})).toEqual(x);
+    ['${action.x}', 'hello', 'action.x', '= Result Value', '= ActivityId'].forEach((x) => {
+      expect(evaluate(x, {}, ActionContextKey)).toEqual(x);
     });
-    expect(evaluate('= Result', {})).toEqual(undefined);
   });
 
   it('can evaluate basic value access pattern.', () => {

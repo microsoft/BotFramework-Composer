@@ -12,10 +12,12 @@ const evaluateAsValueExpression = (propValue: string, scope: any): any => {
   }
 };
 
-export const evaluateWidgetExpression = (input: string, context: any): any => {
+export const ActionContextKey = 'action';
+
+export const evaluateWidgetExpression = (input: string, context: any, requiredContextKey = ''): any => {
   if (typeof input !== 'string') return input;
 
-  if (input.startsWith('=')) {
+  if (input.startsWith('=') && input.indexOf(requiredContextKey) > -1) {
     return evaluateAsValueExpression(input, context);
   }
   return input;
