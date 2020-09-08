@@ -11,4 +11,9 @@ interface Window {
    * Flag that is set on the window object when the client is embedded within Electron.
    */
   __IS_ELECTRON__?: boolean;
+
+  /**
+   * Composer UI Extension API
+   */
+  Composer: any;
 }

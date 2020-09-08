@@ -3,6 +3,7 @@
 
 export { JSONSchema7 } from 'json-schema';
 
-export * from './composerPluginRegistration';
-export * from './pluginLoader';
-export * from './types';
+export * from './loader';
+export * from './manager';
+export * from './storage';
+export * from './types/types';
