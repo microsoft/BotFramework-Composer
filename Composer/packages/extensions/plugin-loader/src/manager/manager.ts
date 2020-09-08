@@ -17,13 +17,14 @@ const log = logger.extend('plugins');
 /**
  * Used to safely execute commands that include user input
  */
-async function runCommand(command: string): Promise<{ stdout: string; stderr: string }> {
+async function runNpm(command: string): Promise<{ stdout: string; stderr: string }> {
   return new Promise((resolve) => {
-    const [cmd, ...cmdArgs] = command.split(' ');
+    log('npm %s', command);
+    const cmdArgs = command.split(' ');
     let stdout = '';
     let stderr = '';
 
-    const proc = spawn(cmd, cmdArgs);
+    const proc = spawn('npm', cmdArgs);
 
     proc.stdout.on('data', (data) => {
       stdout += data;
@@ -85,11 +86,10 @@ class PluginManager {
    */
   public async installRemote(name: string, version?: string) {
     const packageNameAndVersion = version ? `${name}@${version}` : name;
-    const cmd = `npm install --no-audit --prefix ${this.remotePluginsDir} ${packageNameAndVersion}`;
+    const cmd = `install --no-audit --prefix ${this.remotePluginsDir} ${packageNameAndVersion}`;
     log('Installing %s@%s to %s', name, version, this.remotePluginsDir);
-    log(cmd);
 
-    const { stdout } = await runCommand(cmd);
+    const { stdout } = await runNpm(cmd);
 
     log('%s', stdout);
 
@@ -184,11 +184,10 @@ class PluginManager {
    * @param id Id of the plugin to be removed
    */
   public async remove(id: string) {
-    const cmd = `npm uninstall --no-audit --prefix ${this.remotePluginsDir} ${id}`;
+    const cmd = `uninstall --no-audit --prefix ${this.remotePluginsDir} ${id}`;
     log('Removing %s', id);
-    log(cmd);
 
-    const { stdout } = await runCommand(cmd);
+    const { stdout } = await runNpm(cmd);
 
     log('%s', stdout);
 
@@ -200,10 +199,9 @@ class PluginManager {
    * @param query The search query
    */
   public async search(query: string) {
-    const cmd = `npm search --json keywords:botframework-composer ${query}`;
-    log(cmd);
+    const cmd = `search --json keywords:botframework-composer ${query}`;
 
-    const { stdout } = await runCommand(cmd);
+    const { stdout } = await runNpm(cmd);
 
     try {
       const result = JSON.parse(stdout);
