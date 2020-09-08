@@ -73,6 +73,7 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
     botSettings: formatMessage('Bot Settings'),
     appSettings: formatMessage('Application Settings'),
     runtime: formatMessage('Runtime Config'),
+    plugins: formatMessage('Plugins'),
     about: formatMessage('About'),
   };
 
@@ -85,12 +86,8 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
     },
     { id: 'application', name: settingLabels.appSettings, url: getProjectLink('application') },
     { id: 'runtime', name: settingLabels.runtime, url: getProjectLink('runtime', projectId), disabled: !projectId },
+    // { id: 'plugins', name: settingLabels.plugins, url: getProjectLink('plugins') },
     { id: 'about', name: settingLabels.about, url: getProjectLink('about') },
-
-    // { key: '/settings/publish', name: settingLabels.publish, url: '' },
-
-    // { key: 'services', name: formatMessage('Services') },
-    // { key: 'publishing-staging', name: formatMessage('Publishing and staging'), disabled: true },
   ];
 
   const openDeleteBotModal = async () => {
