@@ -332,7 +332,8 @@ export function addImport(qnaFile: QnAFile, path: string) {
 }
 
 export function removeImport(qnaFile: QnAFile, id: string) {
-  const targetImport = qnaFile.imports.find((item) => item.id === id);
+  const targetImport =
+    qnaFile.imports.find((item) => item.id === id) || qnaFile.imports.find((item) => item.id === `${id}.qna`);
   if (!targetImport) return qnaFile;
   const targetImportSection = qnaFile.resource.Sections.filter(
     ({ SectionType }) => SectionType === SectionTypes.ImportSection

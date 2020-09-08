@@ -298,7 +298,37 @@ ${response.data}
     }
   );
 
+  const addQnAImport = useRecoilCallback(
+    ({ set, snapshot }: CallbackInterface) => async ({ id, sourceId }: { id: string; sourceId: string }) => {
+      const qnaFiles = await snapshot.getPromise(qnaFilesState);
+      const qnaFile = qnaFiles.find((temp) => temp.id === id);
+      if (!qnaFile) return qnaFiles;
+
+      const updatedFile = qnaUtil.addImport(qnaFile, sourceId);
+      set(qnaFilesState, (qnaFiles) => {
+        return qnaFiles.map((file) => {
+          return file.id === id ? updatedFile : file;
+        });
+      });
+    }
+  );
+  const removeQnAImport = useRecoilCallback(
+    ({ set, snapshot }: CallbackInterface) => async ({ id, sourceId }: { id: string; sourceId: string }) => {
+      const qnaFiles = await snapshot.getPromise(qnaFilesState);
+      const qnaFile = qnaFiles.find((temp) => temp.id === id);
+      if (!qnaFile) return qnaFiles;
+
+      const updatedFile = qnaUtil.removeImport(qnaFile, sourceId);
+      set(qnaFilesState, (qnaFiles) => {
+        return qnaFiles.map((file) => {
+          return file.id === id ? updatedFile : file;
+        });
+      });
+    }
+  );
   return {
+    addQnAImport,
+    removeQnAImport,
     addQnAPairs,
     removeQnAPairs,
     addQnAQuestion,

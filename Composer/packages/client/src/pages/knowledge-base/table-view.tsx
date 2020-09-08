@@ -4,14 +4,19 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import React, { useEffect, useState, useCallback, useMemo, Fragment } from 'react';
 import {
   DetailsList,
   DetailsRow,
   DetailsListLayoutMode,
   SelectionMode,
   CheckboxVisibility,
+  IDetailsGroupRenderProps,
+  IGroup,
 } from 'office-ui-fabric-react/lib/DetailsList';
+import { GroupHeader } from 'office-ui-fabric-react/lib/GroupedList';
+import { IOverflowSetItemProps, OverflowSet } from 'office-ui-fabric-react/lib/OverflowSet';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { IconButton, ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
@@ -31,8 +36,9 @@ import {
   settingsState,
 } from '../../recoilModel/atoms/botState';
 import { dispatcherState } from '../../recoilModel';
-import { getBaseName, getFileName } from '../../utils/fileUtil';
+import { getBaseName } from '../../utils/fileUtil';
 import { EditableField } from '../../components/EditableField';
+import { classNames } from '../../components/AllupviewComponets/styles';
 
 import {
   formCell,
@@ -45,6 +51,8 @@ import {
   addAlternative,
   addQnAPair,
 } from './styles';
+
+const noOp = () => undefined;
 
 interface QnASectionItem extends QnASection {
   fileId: string;
@@ -65,6 +73,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const locale = useRecoilValue(localeState);
   const settings = useRecoilValue(settingsState);
   const {
+    // addQnAImport,
+    removeQnAImport,
     // setMessage,
     addQnAPairs,
     removeQnAPairs,
@@ -79,6 +89,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
   console.log(settings);
 
   const { dialogId } = props;
+  const activeDialog = dialogs.find(({ id }) => id === dialogId);
   const targetFileId = dialogId.endsWith('.source') ? dialogId : `${dialogId}.${locale}`;
   const qnaFile = qnaFiles.find(({ id }) => id === targetFileId);
   const limitedNumber = 1;
@@ -177,6 +188,72 @@ const TableView: React.FC<TableViewProps> = (props) => {
     },
     [qnaFile]
   );
+
+  const onRenderGroupHeader: IDetailsGroupRenderProps['onRenderHeader'] = (props) => {
+    const groupName = props?.group?.name || '';
+    const groupFileId = props?.group?.key || '';
+    const isImportedSource = groupFileId !== dialogId;
+
+    const onRenderItem = (item: IOverflowSetItemProps): JSX.Element => {
+      return <IconButton menuIconProps={{ iconName: 'Edit' }} onClick={item.onClick} />;
+    };
+
+    const onRenderOverflowButton = (overflowItems: any[] | undefined): JSX.Element => {
+      return (
+        <IconButton
+          menuIconProps={{ iconName: 'More' }}
+          menuProps={{ items: overflowItems || [] }}
+          role="menuitem"
+          title="More options"
+        />
+      );
+    };
+
+    const onRenderTitle = () => {
+      return (
+        <div className={classNames.groupHeader}>
+          {isImportedSource && (
+            <Fragment>
+              <div>Source: </div>
+              <Link className={classNames.groupHeaderSourceName} onClick={noOp}>
+                {groupName}
+              </Link>
+              <OverflowSet
+                aria-label={formatMessage('Edit source')}
+                items={[
+                  {
+                    key: 'edit',
+                    name: 'edit',
+                    onClick: noOp,
+                  },
+                ]}
+                overflowItems={[
+                  {
+                    key: 'delete',
+                    // eslint-disable-next-line format-message/literal-pattern
+                    name: formatMessage(`Remove from ${dialogId}`),
+                    onClick: () => {
+                      if (!qnaFile) return;
+                      removeQnAImport({ id: qnaFile.id, sourceId: groupFileId });
+                    },
+                  },
+                ]}
+                role="menubar"
+                onRenderItem={onRenderItem}
+                onRenderOverflowButton={onRenderOverflowButton}
+              />
+            </Fragment>
+          )}
+          {!isImportedSource && <div>{groupName}</div>}
+        </div>
+      );
+    };
+    if (props) {
+      return <GroupHeader {...props} onRenderTitle={onRenderTitle}></GroupHeader>;
+    }
+
+    return null;
+  };
 
   const getKeyCallback = useCallback((item) => item.uuid, []);
 
@@ -354,17 +431,25 @@ const TableView: React.FC<TableViewProps> = (props) => {
     return tableColums;
   };
 
-  const getGroups = () => {
+  const getGroups = (): IGroup[] | undefined => {
     if (dialogId === 'all' || dialogId.endsWith('.source') || !qnaFile) {
       return undefined;
     }
-    const groups = [{ key: 'groupred0', name: 'In Dialog', startIndex: 0, count: qnaSections.length, level: 0 }];
+    const groups: IGroup[] = [
+      {
+        key: dialogId,
+        name: activeDialog?.displayName || dialogId,
+        startIndex: 0,
+        count: qnaSections.length,
+        level: 0,
+      },
+    ];
     importedSourceFiles.forEach((currentFile) => {
       const lastGroup = groups[groups.length - 1];
       const startIndex = lastGroup.startIndex + lastGroup.count;
       const { id, qnaSections } = currentFile;
       const name = getBaseName(id);
-      groups.push({ key: `grouped-${id}`, name: `Source: ${name}`, startIndex, count: qnaSections.length, level: 0 });
+      groups.push({ key: id, name, startIndex, count: qnaSections.length, level: 0 });
     });
 
     return groups;
@@ -418,6 +503,9 @@ const TableView: React.FC<TableViewProps> = (props) => {
           checkboxVisibility={CheckboxVisibility.hidden}
           columns={getTableColums()}
           getKey={getKeyCallback}
+          groupProps={{
+            onRenderHeader: onRenderGroupHeader,
+          }}
           groups={getGroups()}
           initialFocusedIndex={focusedIndex}
           items={[...qnaSections, ...importedSourceFileSections]}
