@@ -202,7 +202,15 @@ export const projectDispatcher = () => {
         refreshLocalStorage(projectId, settings);
         const mergedSettings = mergeLocalStorage(projectId, settings);
         if (isArray(mergedSettings.skill)) {
-          mergedSettings.skill = convertSkillsToDictionary(mergedSettings.skill);
+          const skillsArr = mergedSettings.skill.map((skillData) => {
+            const matchedSkill = skills.find((currentSkill) => currentSkill.name === skillData.name);
+            return {
+              ...skillData,
+              msAppId: matchedSkill.msAppId,
+              endpointUrl: matchedSkill.endpointUrl,
+            };
+          });
+          mergedSettings.skill = convertSkillsToDictionary(skillsArr);
         }
         set(settingsState, mergedSettings);
       });

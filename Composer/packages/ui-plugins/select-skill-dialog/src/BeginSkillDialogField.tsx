@@ -10,15 +10,51 @@ import { Skill } from '@bfc/shared';
 
 import { SkillEndpointField } from './SkillEndpointField';
 
+const referBySettings = (skillName: string, property: string) => {
+  return `=settings.skill['${skillName}'].${property}`;
+};
+
+const handleBackwardCompat = (skills: Skill[], value): { name: string; referredUpdates: any } | undefined => {
+  const { skillEndpoint } = value;
+  const foundSkill = skills.find(({ manifestUrl }) => manifestUrl === value.id);
+  let updates: any = {};
+  if (foundSkill) {
+    updates = {
+      id: referBySettings(foundSkill.name, 'manifestUrl'),
+    };
+    const matchedEndpoint: any = foundSkill.endpoints.find(({ endpointUrl }) => endpointUrl === skillEndpoint);
+    if (matchedEndpoint) {
+      updates.skillEndpoint = referBySettings(foundSkill.name, 'endpointUrl');
+      updates.skillAppId = referBySettings(foundSkill.name, 'msAppId');
+    }
+
+    return {
+      name: foundSkill?.name,
+      referredUpdates: updates,
+    };
+  }
+};
+
 export const BeginSkillDialogField: React.FC<FieldProps> = (props) => {
   const { depth, id, schema, uiOptions, value, onChange, definitions } = props;
   const { projectId, shellApi, skills = [] } = useShellApi();
   const { displayManifestModal, skillsInSettings } = shellApi;
 
-  const manifest: Skill | undefined = useMemo(
-    () => skills.find(({ manifestUrl }) => manifestUrl === skillsInSettings.get(value.id)),
-    [skills, value.id]
-  );
+  const manifest: Skill | undefined = useMemo(() => {
+    const matchedSkill = skills.find(({ manifestUrl }) => {
+      return manifestUrl === skillsInSettings.get(value.id);
+    });
+    // Handle backward compatibility
+    if (!matchedSkill) {
+      const { id, skillEndpoint, skillAppId, ...rest } = value;
+      const result = handleBackwardCompat(skills, value);
+      if (result) {
+        onChange({ ...rest, ...result.referredUpdates });
+      }
+    }
+    return matchedSkill;
+  }, [skills, value.id]);
+
   const endpointOptions = useMemo(() => {
     return (manifest?.endpoints || []).map(({ name }) => name);
   }, [manifest]);
@@ -26,7 +62,7 @@ export const BeginSkillDialogField: React.FC<FieldProps> = (props) => {
   const handleIdChange = ({ key, text }) => {
     if (!manifest || key !== manifest.manifestUrl) {
       const { skillEndpoint, skillAppId, ...rest } = value;
-      onChange({ ...rest, id: `=settings.skill['${text}'].manifestUrl` });
+      onChange({ ...rest, id: referBySettings(text, 'manifestUrl') });
     }
   };
 
@@ -37,8 +73,8 @@ export const BeginSkillDialogField: React.FC<FieldProps> = (props) => {
       skillsInSettings.set(manifest.name, { endpointUrl, msAppId });
       onChange({
         ...value,
-        skillEndpoint: `=settings.skill['${manifest?.name}'].endpointUrl`,
-        ...(msAppId ? { skillAppId: `=settings.skill['${manifest.name}'].msAppId` } : {}),
+        skillEndpoint: referBySettings(manifest?.name, 'endpointUrl'),
+        ...(msAppId ? { skillAppId: referBySettings(manifest?.name, 'msAppId') } : {}),
       });
     }
   };

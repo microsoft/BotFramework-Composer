@@ -5,7 +5,7 @@
 import React from 'react';
 import { fireEvent, getAllByRole, render, act } from '@bfc/test-utils';
 import { Extension, JSONSchema7 } from '@bfc/extension';
-import { SDKKinds, fetchFromSettings, convertSkillsToDictionary, Skill } from '@bfc/shared';
+import { SDKKinds, fetchFromSettings, convertSkillsToDictionary } from '@bfc/shared';
 
 import { BeginSkillDialogField } from '../BeginSkillDialogField';
 import pluginConfig from '..';
@@ -69,7 +69,7 @@ describe('Begin Skill Dialog', () => {
     jest.useFakeTimers();
   });
 
-  fit('should add a new skill', async () => {
+  it('should add a new skill', async () => {
     const onChange = jest.fn();
     const value = { id: `=settings.skill['yuesuemailskill0207'].manifestUrl` };
     const { baseElement, findByRole } = renderBeginSkillDialog({ value, onChange });
@@ -81,6 +81,21 @@ describe('Begin Skill Dialog', () => {
     act(() => {
       fireEvent.click(endpoints[endpoints.length - 1]);
     });
+
+    expect(onChange).toHaveBeenCalledWith({
+      id: "=settings.skill['yuesuemailskill0207'].manifestUrl",
+      skillAppId: "=settings.skill['yuesuemailskill0207'].msAppId",
+      skillEndpoint: "=settings.skill['yuesuemailskill0207'].endpointUrl",
+    });
+  });
+
+  fit('should be backwards compatible', async () => {
+    const onChange = jest.fn();
+    const value = {
+      id: `https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json`,
+      skillEndpoint: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/api/messages',
+    };
+    renderBeginSkillDialog({ value, onChange });
 
     expect(onChange).toHaveBeenCalledWith({
       id: "=settings.skill['yuesuemailskill0207'].manifestUrl",
