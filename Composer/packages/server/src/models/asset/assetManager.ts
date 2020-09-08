@@ -51,11 +51,15 @@ export class AssetManager {
     }
     // copy Composer data files
     await copyDir(template.path, this.templateStorage, dstDir, dstStorage);
-    // if we have a locale override, copy that over too
+    // if we have a locale override, copy those files over too
     if (locale != null) {
-      const localePath = path.join(__dirname, '..', '..', '..', 'schemas', `sdk.${locale}.uischema`);
+      const localePath = path.join(__dirname, '..', '..', '..', 'schemas', `sdk.${locale}.schema`);
       const content = await this.templateStorage.readFile(localePath);
-      await dstStorage.writeFile(path.join(dstDir, `sdk.override.uischema`), content);
+      await dstStorage.writeFile(path.join(dstDir, `sdk.override.schema`), content);
+
+      const uiLocalePath = path.join(__dirname, '..', '..', '..', 'schemas', `sdk.${locale}.uischema`);
+      const uiContent = await this.templateStorage.readFile(uiLocalePath);
+      await dstStorage.writeFile(path.join(dstDir, `sdk.override.uischema`), uiContent);
     }
   }
 

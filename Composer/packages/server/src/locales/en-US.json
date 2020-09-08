@@ -137,6 +137,9 @@
   "add_new_knowledge_base_on_displayname_7f44609c": {
     "message": " Add new knowledge base on { displayName }"
   },
+  "add_new_plugin_ae50ed3f": {
+    "message": "Add new plugin"
+  },
   "add_new_profile_47b225e6": {
     "message": "Add new profile"
   },
@@ -763,6 +766,9 @@
   },
   "enable_line_numbers_to_refer_to_code_lines_by_numb_e5ba66ea": {
     "message": "Enable line numbers to refer to code lines by number."
+  },
+  "enabled_ba7cab66": {
+    "message": "Enabled"
   },
   "end_dialog_8f562a4c": {
     "message": "End Dialog"
@@ -1481,6 +1487,12 @@
   "please_select_an_activity_type_92f4a8a1": {
     "message": "Please select an activity type"
   },
+  "plugin_name_829ac92a": {
+    "message": "Plugin name"
+  },
+  "plugins_600e693": {
+    "message": "Plugins"
+  },
   "populate_your_knowledge_base_bb2d3605": {
     "message": "Populate your Knowledge Base"
   },
@@ -1705,6 +1717,9 @@
   },
   "search_280d00bd": {
     "message": "Search"
+  },
+  "search_for_plugins_9feaecd1": {
+    "message": "Search for plugins"
   },
   "see_log_4b833bf7": {
     "message": "See Log"
@@ -2108,6 +2123,9 @@
   "url_22a5f3b8": {
     "message": "URL"
   },
+  "url_8c4ff7d2": {
+    "message": "Url"
+  },
   "url_should_start_with_http_s_9ca55d94": {
     "message": "Url should start with http[s]://"
   },
@@ -2137,6 +2155,9 @@
   },
   "value_d842f16d": {
     "message": "Value"
+  },
+  "version_5599c321": {
+    "message": "Version"
   },
   "version_version_a051e218": {
     "message": "Version { version }"

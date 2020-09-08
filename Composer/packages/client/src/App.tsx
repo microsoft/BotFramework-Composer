@@ -16,7 +16,9 @@ initializeIcons(undefined, { disableWarnings: true });
 
 export const App: React.FC = () => {
   const { appLocale } = useRecoilValue(userSettingsState);
-  loadLocale(appLocale);
+  useEffect(() => {
+    loadLocale(appLocale);
+  }, [appLocale]);
 
   const { fetchPlugins } = useRecoilValue(dispatcherState);
   useEffect(() => {

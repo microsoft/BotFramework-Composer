@@ -26,11 +26,18 @@ try {
 
 const output = keep(schema, L10N_FIELDS);
 const uiOutput = keep(uiSchema, L10N_FIELDS);
-const outputTransformed = keep(merge(output, uiOutput), L10N_FIELDS, transFn);
-const outputFn = path.join(schemaDir, 'sdk.en-US.uischema');
-const outputFnTrans = path.join(schemaDir, 'sdk.en-US-pseudo.uischema');
+const outputTransformed = keep(output, L10N_FIELDS, transFn);
+const uiOutputTransformed = keep(uiOutput, L10N_FIELDS, transFn);
+const outputFilename = path.join(schemaDir, 'sdk.en-US.schema');
+const outputFilenameTrans = path.join(schemaDir, 'sdk.en-US-pseudo.schema');
+const uiOutputFilename = path.join(schemaDir, 'sdk.en-US.uischema');
+const uiOutputFilenameTrans = path.join(schemaDir, 'sdk.en-US-pseudo.uischema');
 
-console.log('writing', outputFn);
-fs.writeFileSync(outputFn, JSON.stringify(keep(merge(output, uiOutput), L10N_FIELDS), null, 4));
-console.log('writing', outputFnTrans);
-fs.writeFileSync(outputFnTrans, JSON.stringify(outputTransformed, null, 4));
+console.log('writing', outputFilename);
+fs.writeFileSync(outputFilename, JSON.stringify(output, null, 4));
+console.log('writing', outputFilenameTrans);
+fs.writeFileSync(outputFilenameTrans, JSON.stringify(outputTransformed, null, 4));
+console.log('writing', uiOutputFilename);
+fs.writeFileSync(uiOutputFilename, JSON.stringify(uiOutput, null, 4));
+console.log('writing', uiOutputFilenameTrans);
+fs.writeFileSync(uiOutputFilenameTrans, JSON.stringify(uiOutputTransformed, null, 4));

@@ -126,6 +126,10 @@ export class BotProject implements IBotProject {
     return this.files.get('sdk.override.uischema');
   }
 
+  public get schemaOverrides() {
+    return this.files.get('sdk.override.schema');
+  }
+
   public getFile(id: string) {
     return this.files.get(id);
   }
@@ -225,6 +229,7 @@ export class BotProject implements IBotProject {
     let sdkSchema = this.defaultSDKSchema;
     let uiSchema = this.defaultUISchema;
     let uiSchemaOverrides = {};
+    let schemaOverrides = {};
     const diagnostics: string[] = [];
 
     const userSDKSchemaFile = this.schema;
@@ -251,6 +256,18 @@ export class BotProject implements IBotProject {
       }
     }
 
+    const schemaOverridesFile = this.schemaOverrides;
+
+    if (schemaOverridesFile !== undefined) {
+      debug('Schema overrides found.');
+      try {
+        schemaOverrides = JSON.parse(schemaOverridesFile.content);
+      } catch (err) {
+        debug('Attempt to parse schema as JSON failed.\nError: %s', err.messagee);
+        diagnostics.push(`Error in sdk.override.schema, ${err.message}`);
+      }
+    }
+
     const uiSchemaOverridesFile = this.uiSchemaOverrides;
 
     if (uiSchemaOverridesFile !== undefined) {
@@ -265,7 +282,7 @@ export class BotProject implements IBotProject {
 
     return {
       sdk: {
-        content: merge(sdkSchema, uiSchemaOverrides),
+        content: merge(sdkSchema, schemaOverrides),
       },
       ui: {
         content: uiSchema,
@@ -616,6 +633,7 @@ export class BotProject implements IBotProject {
       '**/*.lu',
       '**/*.qna',
       'manifests/*.json',
+      'sdk.override.schema',
       'sdk.override.uischema',
       'sdk.schema',
       'sdk.uischema',
@@ -636,6 +654,7 @@ export class BotProject implements IBotProject {
           fileList.set(fileInfo.name, fileInfo);
         }
       }
+      console.log(fileList.keys());
     }
 
     const schemas = await this._getSchemas();
