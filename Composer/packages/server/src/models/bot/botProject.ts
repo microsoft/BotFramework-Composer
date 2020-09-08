@@ -232,7 +232,7 @@ export class BotProject implements IBotProject {
     if (userSDKSchemaFile !== undefined) {
       debug('Customized SDK schema found');
       try {
-        sdkSchema = merge(sdkSchema, JSON.parse(userSDKSchemaFile.content));
+        sdkSchema = JSON.parse(userSDKSchemaFile.content);
       } catch (err) {
         debug('Attempt to parse sdk schema as JSON failed.\nError: %s', err.messagee);
         diagnostics.push(`Error in sdk.schema, ${err.message}`);
