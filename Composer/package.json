@@ -11,7 +11,8 @@
     "kind-of": "^6.0.3",
     "elliptic": "^6.5.3",
     "@babel/parser": "^7.11.3",
-    "bl": "^2.2.1"
+    "bl": "^2.2.1",
+    "node-forge": "^0.10.0"
   },
   "engines": {
     "node": ">=12"
