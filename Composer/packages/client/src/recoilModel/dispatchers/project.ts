@@ -206,8 +206,8 @@ export const projectDispatcher = () => {
             const matchedSkill = skills.find((currentSkill) => currentSkill.name === skillData.name);
             return {
               ...skillData,
-              msAppId: matchedSkill.msAppId,
-              endpointUrl: matchedSkill.endpointUrl,
+              msAppId: matchedSkill?.msAppId,
+              endpointUrl: matchedSkill?.endpointUrl,
             };
           });
           mergedSettings.skill = convertSkillsToDictionary(skillsArr);
