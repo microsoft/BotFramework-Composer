@@ -8,12 +8,13 @@
 
 //import isEmpty from 'lodash/isEmpty';
 import { QnAFile } from '@bfc/shared';
-import { sectionHandler } from '@microsoft/bf-lu/lib/parser/composerindex';
+// import { sectionHandler } from '@microsoft/bf-lu/lib/parser/composerindex';
+import { sectionHandler } from '@bfcomposer/bf-lu/lib/parser/composerindex';
 import isEmpty from 'lodash/isEmpty';
 import { Diagnostic, Position, Range, DiagnosticSeverity, LuParseResource } from '@bfc/shared';
 import { nanoid } from 'nanoid';
 
-import { getFileName, substringTextByLine } from './help';
+import { getFileName } from './help';
 
 const { luParser, sectionOperator } = sectionHandler;
 
@@ -171,9 +172,9 @@ export function updateSection(qnaFile: QnAFile, sectionId: string, sectionConten
 
 export function removeSection(qnaFile: QnAFile, sectionId: string): QnAFile {
   const { resource } = qnaFile;
-  const targetSectionIndex = resource.Sections.findIndex((item) => item.sectionId === sectionId);
-  if (targetSectionIndex > -1) {
-    const result = new sectionOperator(resource).deleteSection(targetSectionIndex);
+  const targetSection = resource.Sections.find((item) => item.sectionId === sectionId);
+  if (targetSection) {
+    const result = new sectionOperator(resource).deleteSection(targetSection.Id);
     return convertQnAParseResultToQnAFile(qnaFile.id, result);
   } else {
     return qnaFile;
@@ -316,8 +317,7 @@ export function updateQnAAnswer(qnaFile: QnAFile, sectionId: string, answerConte
 export function addImport(qnaFile: QnAFile, path: string) {
   const importContent = `[imports](${path})`;
   const newContent = [importContent, qnaFile.content].join(NEWLINE);
-  const result = luParser.parse(newContent);
-  return convertQnAParseResultToQnAFile(qnaFile.id, result);
+  return insertSection(qnaFile, -1, newContent);
 }
 
 export function removeImport(qnaFile: QnAFile, id: string) {
@@ -328,14 +328,7 @@ export function removeImport(qnaFile: QnAFile, id: string) {
   ).find(({ Path }) => Path === targetImport.path);
   if (!targetImportSection) return qnaFile;
 
-  const start = targetImportSection.Range.Start.Line;
-  const end = targetImportSection.Range.End.Line;
-
-  const part1 = substringTextByLine(qnaFile.content, 0, start - 1); // qnaParser start from 1
-  const part2 = substringTextByLine(qnaFile.content, end);
-  const newContent = [part1, part2].join(NEWLINE);
-  const result = luParser.parse(newContent);
-  return convertQnAParseResultToQnAFile(id, result);
+  return removeSection(qnaFile, targetImportSection.sectionId);
 }
 
 export function parse(id: string, content: string): QnAFile {

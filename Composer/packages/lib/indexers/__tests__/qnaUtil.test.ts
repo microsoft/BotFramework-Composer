@@ -336,6 +336,17 @@ ${content1}
       },
     ]);
   });
+
+  it('remove section', () => {
+    const qnaFile = parse(fileId, content3);
+    const { qnaSections, diagnostics } = removeSection(qnaFile, qnaFile.qnaSections[0].sectionId);
+
+    expect(diagnostics.length).toEqual(0);
+    expect(qnaSections.length).toEqual(1);
+    expect(qnaSections[0].Questions[0]).toMatchObject({
+      content: 'How do I programmatically update my KB?',
+    });
+  });
 });
 
 describe('QnA File Options CRUD', () => {
