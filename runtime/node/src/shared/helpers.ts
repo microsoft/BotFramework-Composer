@@ -67,8 +67,8 @@ export const getSettings = (projectRoot = getProjectRoot()): BotSettings => {
     const generatedFiles = fs.readdirSync(generatedPath);
     for (const file of generatedFiles) {
       if (file.endsWith('.json')) {
-        const items = JSON.parse(fs.readFileSync(path.join(generatedPath, file), 'utf8'));
-        settings.luis = merge({}, settings.luis, items.luis); // merge luis settings
+        const generatedSettings = JSON.parse(fs.readFileSync(path.join(generatedPath, file), 'utf8'));
+        merge(settings, generatedSettings);
       }
     }
   }
