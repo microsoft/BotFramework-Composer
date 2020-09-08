@@ -87,8 +87,10 @@ const state = {
   ],
   settings: {
     skill: {
-      manifestUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json',
-      name: 'Email-Skill',
+      'Email-Skill': {
+        manifestUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json',
+        name: 'Email-Skill',
+      },
     },
   },
 };
