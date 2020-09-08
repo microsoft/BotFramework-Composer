@@ -31,6 +31,7 @@ if (os.platform() === 'win32') {
     console.log(err);
   }
 }
+
 export const diskNames = names;
 export const platform = os.platform();
 export const environment = process.env.NODE_ENV || 'development';
