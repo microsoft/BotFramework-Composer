@@ -44,11 +44,13 @@
       "type": "node",
       "request": "launch",
       "name": "Server: Launch",
-      "args": ["./build/server.js"],
-      "preLaunchTask": "server: build",
+      "args": ["./build/init.js"],
+      "env": {
+        "DEBUG": ""
+      },
       "restart": true,
       "outFiles": ["./build/*"],
-      "envFile": "${workspaceFolder}/Composer/packages/server/.env",
+      "preLaunchTask": "server: build",
       "outputCapture": "std",
       "cwd": "${workspaceFolder}/Composer/packages/server"
     },
@@ -77,9 +79,13 @@
       "request": "launch",
       "name": "Electron Main Process",
       "runtimeExecutable": "${workspaceRoot}/Composer/node_modules/.bin/electron",
+      "windows": {
+        "runtimeExecutable": "${workspaceRoot}/Composer/node_modules/.bin/electron.cmd"
+      },
       "args": ["${workspaceRoot}/Composer/packages/electron-server"],
       "env": {
-        "NODE_ENV": "development"
+        "NODE_ENV": "development",
+        "DEBUG": "composer*"
       },
       "outputCapture": "std"
     },
@@ -92,9 +98,7 @@
         "${workspaceRoot}/Composer/node_modules/jest/bin/jest",
         "--runInBand"
       ],
-      "args": [
-        "${fileBasename}",
-      ],
+      "args": ["${fileBasename}"],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "port": 9229
