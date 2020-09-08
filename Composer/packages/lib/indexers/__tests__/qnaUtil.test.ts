@@ -323,6 +323,21 @@ ${content1}
     ]);
   });
 
+  it('add import in empty qna file', () => {
+    const qnaFile = parse(fileId, '');
+    const { qnaSections, diagnostics, imports, content } = addImport(qnaFile, 'chitchat.qna');
+
+    expect(content).toEqual('[import](chitchat.qna)');
+    expect(diagnostics.length).toEqual(0);
+    expect(qnaSections.length).toEqual(0);
+    expect(imports).toEqual([
+      {
+        id: 'chitchat.qna',
+        path: 'chitchat.qna',
+      },
+    ]);
+  });
+
   it('remove import', () => {
     const qnaFile = parse(fileId, content3);
     const { qnaSections, diagnostics, imports } = removeImport(qnaFile, 'windows.source.qna');

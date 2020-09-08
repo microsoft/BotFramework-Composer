@@ -181,7 +181,15 @@ export function removeSection(qnaFile: QnAFile, sectionId: string): QnAFile {
   }
 }
 
-export function insertSection(qnaFile: QnAFile, position: number, sectionContent: string): QnAFile {
+/**
+ * insert before position (Id)
+ * for importSections, Id is string/path
+ * for qnaSections, Id is number start from 0
+ * @param qnaFile
+ * @param position
+ * @param sectionContent
+ */
+export function insertSection(qnaFile: QnAFile, position: number | string, sectionContent: string): QnAFile {
   if (position < 0) return qnaFile;
   const { resource } = qnaFile;
 
@@ -315,9 +323,12 @@ export function updateQnAAnswer(qnaFile: QnAFile, sectionId: string, answerConte
 }
 
 export function addImport(qnaFile: QnAFile, path: string) {
-  const importContent = `[imports](${path})`;
-  const newContent = [importContent, qnaFile.content].join(NEWLINE);
-  return insertSection(qnaFile, -1, newContent);
+  const importContent = `[import](${path})`;
+  const firstImportSection = qnaFile.resource.Sections.find(
+    ({ SectionType }) => SectionType === SectionTypes.ImportSection
+  );
+  const position = firstImportSection ? firstImportSection.Id : 0;
+  return insertSection(qnaFile, position, importContent);
 }
 
 export function removeImport(qnaFile: QnAFile, id: string) {
