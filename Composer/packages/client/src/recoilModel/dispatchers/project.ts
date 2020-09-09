@@ -1,9 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { useRecoilCallback, CallbackInterface } from 'recoil';
+import { useRecoilCallback, CallbackInterface, RecoilState } from 'recoil';
 import { dereferenceDefinitions, LuFile, QnAFile, DialogInfo, SensitiveProperties, DialogSetting } from '@bfc/shared';
-import queryString from 'query-string';
 import { indexer, validateDialog } from '@bfc/indexers';
 import objectGet from 'lodash/get';
 import objectSet from 'lodash/set';
@@ -27,11 +26,15 @@ import { projectIdCache } from '../../utils/projectCache';
 import {
   designPageLocationState,
   botDiagnosticsState,
-  botProjectsState,
+  botProjectsSpaceState,
   projectMetaDataState,
   currentProjectIdState,
+  filePersistenceState,
 } from '../atoms';
 import { QnABotTemplateId } from '../../constants';
+import FilePersistence from '../persistence/FilePersistence';
+import UndoHistory from '../undo/undoHistory';
+import { undoHistoryState } from '../undo/history';
 
 import {
   skillManifestsState,
@@ -64,10 +67,11 @@ const handleProjectFailure = (callbackHelpers: CallbackInterface, ex) => {
   setError(callbackHelpers, ex);
 };
 
-const checkProjectUpdates = async () => {
-  const workers = [filePersistence, lgWorker, luWorker, qnaWorker];
-
-  return Promise.all(workers.map((w) => w.flush()));
+const addToBotProject = ({ set }: CallbackInterface, projectId: string, isRootBot: boolean) => {
+  set(botProjectsSpaceState, (current) => [...current, projectId]);
+  set(projectMetaDataState(projectId), {
+    isRootBot,
+  });
 };
 
 const processSchema = (projectId: string, schema: any) => ({
@@ -202,10 +206,14 @@ export const projectDispatcher = () => {
         set(projectMetaDataState(projectId), {
           isRootBot: true,
         });
+        set(filePersistenceState(projectId), new FilePersistence(projectId));
+        set(undoHistoryState(projectId), new UndoHistory(projectId));
       });
 
       gotoSnapshot(newSnapshot);
-      callbackHelpers.set(botProjectsState, [projectId]);
+      //TODO: Botprojects space will be populated for now with just the rootbot. Once, BotProjects UI is hookedup this will be refactored to use addToBotProject
+      addToBotProject(callbackHelpers, projectId, true);
+
       if (jump && projectId) {
         let url = `/bot/${projectId}/dialogs/${mainDialog}`;
         if (templateId === QnABotTemplateId) {
@@ -235,31 +243,16 @@ export const projectDispatcher = () => {
   };
 
   const setBotOpeningStatus = async (callbackHelpers: CallbackInterface) => {
-    const { set } = callbackHelpers;
+    const { set, snapshot } = callbackHelpers;
     set(botOpeningState, true);
-    await checkProjectUpdates();
-  };
-
-  const checkIfBotProject = async (path: string, storageId: string) => {
-    try {
-      const qs: any = {
-        path,
-        storageId,
-      };
-      const stringified = queryString.stringify(qs, {
-        encode: true,
-      });
-      const response = await httpClient.get(`/projects/checkBotProject?${stringified}`);
-      if (response.data) {
-        const { isBotProject, botProjectData } = response.data;
-        return {
-          isBotProject,
-          botProjectData,
-        };
-      }
-    } catch (ex) {
-      return false;
+    const botProjectSpace = await snapshot.getPromise(botProjectsSpaceState);
+    const filePersistenceHandlers: filePersistence[] = [];
+    for (const projectId of botProjectSpace) {
+      const fp = await snapshot.getPromise(filePersistenceState(projectId));
+      filePersistenceHandlers.push(fp);
     }
+    const workers = [lgWorker, luWorker, qnaWorker, ...filePersistenceHandlers];
+    return Promise.all(workers.map((w) => w.flush()));
   };
 
   const openProject = useRecoilCallback(
@@ -461,15 +454,6 @@ export const projectDispatcher = () => {
     }
   });
 
-  const addToBotProject = useRecoilCallback(
-    ({ set }: CallbackInterface) => async (projectId: string, isRootBot: boolean) => {
-      set(botProjectsState, (current) => [...current, projectId]);
-      set(projectMetaDataState(projectId), {
-        isRootBot,
-      });
-    }
-  );
-
   return {
     openProject,
     createProject,
@@ -486,6 +470,5 @@ export const projectDispatcher = () => {
     updateBoilerplate,
     getBoilerplateVersion,
     addToBotProject,
-    checkIfBotProject,
   };
 };

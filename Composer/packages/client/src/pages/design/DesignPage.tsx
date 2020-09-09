@@ -54,7 +54,7 @@ import {
 import { getBaseName } from '../../utils/fileUtil';
 import ImportQnAFromUrlModal from '../knowledge-base/ImportQnAFromUrlModal';
 import { triggerNotSupported } from '../../utils/dialogValidator';
-import { undoFunctionState } from '../../recoilModel/undo/history';
+import { undoFunctionState, undoVersionState } from '../../recoilModel/undo/history';
 
 import { WarningMessage } from './WarningMessage';
 import {
@@ -123,9 +123,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const skills = useRecoilValue(skillsState(projectId));
   const actionsSeed = useRecoilValue(actionsSeedState(projectId));
   const locale = useRecoilValue(localeState(projectId));
-  const undoVersion = useRecoilValue(undoFunctionState(projectId));
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   const undoFunction = useRecoilValue(undoFunctionState(projectId));
+  const undoVersion = useRecoilValue(undoVersionState(projectId));
+
   const { undo, redo, canRedo, canUndo, commitChanges, clearUndo } = undoFunction;
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
   const {

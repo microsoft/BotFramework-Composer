@@ -42,6 +42,7 @@ import {
   projectMetaDataState,
   isEjectRuntimeExistState,
   qnaFilesState,
+  filePersistenceState,
 } from '../atoms';
 import { undoFunctionState, undoVersionState } from '../undo/history';
 import { dispatcherState } from '../DispatcherWrapper';
@@ -257,5 +258,19 @@ export const loadBotProjectFileSelector = selector({
       return undefined;
     }
     return loadBotProjects(dispatcher);
+  },
+});
+
+export const undoHistorySelector = selectorFamily({
+  key: 'undoHistorySelector',
+  get: (projectId: string) => ({ get }) => {
+    return get(undoVersionState(projectId));
+  },
+});
+
+export const filePersistenceSelector = selectorFamily({
+  key: 'filePersistenceSelector',
+  get: (projectId: string) => ({ get }) => {
+    return get(filePersistenceState(projectId));
   },
 });

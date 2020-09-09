@@ -9,6 +9,14 @@ import { AtomAssetsMap } from './trackedAtoms';
 const MAX_STACK_LENGTH = 30;
 
 export default class {
+  private _projectId = '';
+  /**
+   *
+   */
+  constructor(projectId) {
+    this._projectId = projectId;
+  }
+
   public stack: AtomAssetsMap[] = [];
   public present = -1;
 

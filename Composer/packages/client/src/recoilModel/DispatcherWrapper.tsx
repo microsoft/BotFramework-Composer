@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import { useRef, useEffect, useState, Fragment } from 'react';
-
 // eslint-disable-next-line @typescript-eslint/camelcase
 import { atom, useRecoilTransactionObserver_UNSTABLE, Snapshot, useRecoilState } from 'recoil';
 import once from 'lodash/once';
@@ -10,13 +9,11 @@ import React from 'react';
 import { BotAssets } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
-import UndoHistory from './undo/undoHistory';
 import { UndoRoot } from './undo/history';
 import { prepareAxios } from './../utils/auth';
-import filePersistence from './persistence/FilePersistence';
 import createDispatchers, { Dispatcher } from './dispatchers';
 import {
-  botProjectsState,
+  botProjectsSpaceState,
   dialogsState,
   luFilesState,
   qnaFilesState,
@@ -24,6 +21,7 @@ import {
   skillManifestsState,
   dialogSchemasState,
   settingsState,
+  filePersistenceState,
 } from './atoms';
 
 const getBotAssets = async (projectId, snapshot: Snapshot): Promise<BotAssets> => {
@@ -84,11 +82,13 @@ const InitDispatcher = ({ onLoad }) => {
 
 export const DispatcherWrapper = ({ children }) => {
   const [loaded, setLoaded] = useState(false);
-  const botProjects = useRecoilValue(botProjectsState);
+  const botProjects = useRecoilValue(botProjectsSpaceState);
+
   useRecoilTransactionObserver_UNSTABLE(async ({ snapshot, previousSnapshot }) => {
     for (const projectId of botProjects) {
       const assets = await getBotAssets(projectId, snapshot);
       const previousAssets = await getBotAssets(projectId, previousSnapshot);
+      const filePersistence = await snapshot.getPromise(filePersistenceState(projectId));
       filePersistence.notify(assets, previousAssets);
     }
   });
@@ -96,7 +96,7 @@ export const DispatcherWrapper = ({ children }) => {
   return (
     <Fragment>
       {botProjects.map((projectId) => (
-        <UndoRoot key={projectId} projectId={projectId} undoHistory={new UndoHistory()} />
+        <UndoRoot key={projectId} projectId={projectId} />
       ))}
       <InitDispatcher onLoad={setLoaded} />
       {loaded ? children : null}

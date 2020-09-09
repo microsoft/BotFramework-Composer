@@ -415,27 +415,6 @@ async function updateBoilerplate(req: Request, res: Response) {
   }
 }
 
-async function handleBotProject(req: Request, res: Response) {
-  const projectId = req.params.projectId;
-  const { path, storageId } = req.query;
-  if (!path || !storageId) {
-    res.status(400).json({
-      message: 'parameters not provided, require stoarge id and path',
-    });
-    return;
-  }
-  const location: LocationRef = {
-    storageId,
-    path,
-  };
-
-  try {
-    const id = await BotProjectService.checkIfBotProject(location, user);
-  } catch (ex) {
-    return {};
-  }
-}
-
 export const ProjectController = {
   getProjectById,
   openProject,
@@ -454,5 +433,4 @@ export const ProjectController = {
   getRecentProjects,
   updateBoilerplate,
   checkBoilerplateVersion,
-  handleBotProject,
 };

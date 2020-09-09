@@ -21,6 +21,13 @@ class FilePersistence {
     [ChangeType.DELETE]: this.delete,
   };
 
+  /**
+   *
+   */
+  constructor(projectId: string) {
+    this._projectId = projectId;
+  }
+
   public get projectId(): string {
     return this._projectId;
   }
@@ -30,11 +37,11 @@ class FilePersistence {
   }
 
   public async notify(currentAssets: BotAssets, previousAssets: BotAssets) {
-    if (!currentAssets.projectId) return;
-    if (currentAssets.projectId !== previousAssets.projectId) {
-      this.init(currentAssets.projectId);
-      return;
-    }
+    // if (!currentAssets.projectId) return;
+    // if (currentAssets.projectId !== previousAssets.projectId) {
+    //   this.init(currentAssets.projectId);
+    //   return;
+    // }
 
     const fileChanges: IFileChange[] = this.getAssetsChanges(currentAssets, previousAssets);
 
@@ -61,11 +68,11 @@ class FilePersistence {
   //   };
   // }
 
-  private init(projectId: string) {
-    if (projectId) {
-      this._projectId = projectId;
-    }
-  }
+  // private init(projectId: string) {
+  //   if (projectId) {
+  //     this._projectId = projectId;
+  //   }
+  // }
 
   public async flush(): Promise<boolean> {
     try {
@@ -243,6 +250,6 @@ class FilePersistence {
   }
 }
 
-const filePersistence = new FilePersistence();
+// const filePersistence = new FilePersistence();
 
-export default filePersistence;
+export default FilePersistence;
