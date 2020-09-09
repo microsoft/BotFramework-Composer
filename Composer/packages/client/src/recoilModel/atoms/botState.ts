@@ -15,6 +15,8 @@ import {
 } from '@bfc/shared';
 
 import { BotLoadError, DesignPageLocation, QnAAllUpViewStatus } from '../../recoilModel/types';
+import FilePersistence from '../persistence/FilePersistence';
+import UndoHistory from '../undo/undoHistory';
 
 import { PublishType, BreadcrumbItem } from './../../recoilModel/types';
 import { BotStatus } from './../../constants';
@@ -246,4 +248,10 @@ export const isEjectRuntimeExistState = atomFamily<boolean, string>({
 export const qnaFilesState = atomFamily<QnAFile[], string>({
   key: getFullyQualifiedKey('qnaFiles'),
   default: [],
+});
+
+export const filePersistenceState = atomFamily<FilePersistence, string>({
+  key: getFullyQualifiedKey('filePersistence'),
+  default: {} as FilePersistence,
+  dangerouslyAllowMutability: true,
 });

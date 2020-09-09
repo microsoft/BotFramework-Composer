@@ -157,8 +157,8 @@ export const botOpeningState = atom<boolean>({
   default: false,
 });
 
-export const botProjectsState = atom<string[]>({
-  key: getFullyQualifiedKey('botProjects'),
+export const botProjectsSpaceState = atom<string[]>({
+  key: getFullyQualifiedKey('botProjectsSpace'),
   default: [],
 });
 
