@@ -46,7 +46,7 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
-"@bfc/extension-client@file:../../packages/extensions/extension-client":
+"@bfc/extension-client@file:../../packages/extension-client":
   version "1.0.0"
   dependencies:
     debug "^4.1.1"
