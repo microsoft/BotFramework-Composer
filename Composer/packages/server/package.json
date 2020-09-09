@@ -22,7 +22,7 @@
   },
   "author": "",
   "nodemonConfig": {
-    "exec": "cross-env TS_NODE_FILES=true node --inspect=9228 -r ts-node/register src/init.ts",
+    "exec": "cross-env TS_NODE_FILES=true node -r ts-node/register src/init.ts",
     "watch": [
       "src"
     ],
@@ -95,5 +95,8 @@
     "vscode-languageserver": "^5.3.0-next",
     "vscode-ws-jsonrpc": "^0.1.1",
     "ws": "^5.0.0"
+  },
+  "resolutions": {
+    "bl": "^2.2.1"
   }
 }

@@ -20,6 +20,7 @@ export const PublishController = {
             description: plugin.description,
             instructions: plugin.instructions,
             schema: plugin.schema,
+            hasView: plugin.hasView,
             features: {
               history: typeof methods.history === 'function',
               publish: typeof methods.publish === 'function',

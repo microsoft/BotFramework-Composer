@@ -1,9 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+
 import { RequestHandler } from 'express-serve-static-core';
 import { JSONSchema7 } from 'json-schema';
 import { DialogSetting } from '@bfc/shared';
 import { IBotProject } from '@bfc/shared';
+
 // TODO: this will be possible when ifilestorage is in a shared module
 
 export interface PublishResult {
@@ -51,6 +53,7 @@ export interface PublishPlugin<Config = any> {
   instructions?: string;
   customName?: string;
   customDescription?: string;
+  hasView: boolean;
   [key: string]: any;
 }
 
@@ -113,6 +116,8 @@ export interface ExtensionCollection {
         instructions?: string;
         /** (Optional) Schema for publishing configuration. */
         schema?: JSONSchema7;
+        /** Whether or not the plugin has custom UI to host in the publish surface */
+        hasView: boolean;
       };
       methods: PublishPlugin;
     };

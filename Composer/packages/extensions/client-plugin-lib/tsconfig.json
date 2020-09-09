@@ -1,0 +1,9 @@
+{
+  "extends": "../../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./lib/",
+    "sourceMap": true,
+    "target": "es6"
+  },
+  "include": ["src/**/*.ts"]
+}

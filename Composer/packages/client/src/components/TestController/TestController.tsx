@@ -85,7 +85,7 @@ export const TestController: React.FC<{ projectId: string }> = (props) => {
   const addRef = useCallback((startBot) => onboardingAddCoachMarkRef({ startBot }), []);
   const errorLength = notifications.filter((n) => n.severity === 'Error').length;
   const showError = errorLength > 0;
-  const publishDialogConfig = { subscriptionKey: settings.qna.subscriptionKey, ...settings.luis } as IConfig;
+  const publishDialogConfig = { subscriptionKey: settings.qna?.subscriptionKey, ...settings.luis } as IConfig;
   const warningLength = notifications.filter((n) => n.severity === 'Warning').length;
   const showWarning = !showError && warningLength > 0;
 
@@ -157,7 +157,7 @@ export const TestController: React.FC<{ projectId: string }> = (props) => {
     setBotStatus(BotStatus.publishing, projectId);
     dismissDialog();
     const { luis, qna } = config;
-    const endpointKey = settings.qna.endpointKey;
+    const endpointKey = settings.qna?.endpointKey;
     await setSettings(projectId, {
       ...settings,
       luis: luis,
@@ -206,9 +206,9 @@ export const TestController: React.FC<{ projectId: string }> = (props) => {
       {
         luis: settings.luis,
         qna: {
-          subscriptionKey: settings.qna.subscriptionKey,
-          qnaRegion: settings.qna.qnaRegion,
-          endpointKey: settings.qna.endpointKey,
+          subscriptionKey: settings.qna?.subscriptionKey,
+          qnaRegion: settings.qna?.qnaRegion,
+          endpointKey: settings.qna?.endpointKey,
         },
       }
     );

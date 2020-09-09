@@ -7,7 +7,7 @@ import replace from 'lodash/replace';
 import find from 'lodash/find';
 import { useRecoilValue } from 'recoil';
 
-import { botProjectsState, designPageLocationState } from '../recoilModel';
+import { botProjectsState, designPageLocationState, pluginsState } from '../recoilModel';
 
 import { bottomLinks, topLinks } from './pageLinks';
 import routerCache from './routerCache';
@@ -27,8 +27,18 @@ export const useLinks = () => {
   const rootBotProjectId = botProjects[0];
   const designPageLocation = useRecoilValue(designPageLocationState(rootBotProjectId));
   const openedDialogId: string = designPageLocation.dialogId || 'Main';
+  const plugins = useRecoilValue(pluginsState);
 
-  return { topLinks: topLinks(rootBotProjectId, openedDialogId), bottomLinks };
+  // add page-contributing plugins
+  const pluginPages = plugins.reduce((pages, p) => {
+    const pageConfig = p.contributes?.views?.page;
+    if (pageConfig) {
+      pages.push({ ...pageConfig, id: p.id });
+    }
+    return pages;
+  }, [] as any[]);
+
+  return { topLinks: topLinks(rootBotProjectId, openedDialogId, pluginPages), bottomLinks };
 };
 
 export const useRouterCache = (to: string) => {
