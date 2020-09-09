@@ -41,7 +41,7 @@ function createTriggerApi(
     const index = get(newDialog, 'content.triggers', []).length - 1;
     if (formData.$kind === intentTypeKey && formData.triggerPhrases) {
       const intent = { Name: formData.intent, Body: formData.triggerPhrases };
-      luFile && createLuIntent({ id: luFile.id, intent, projectId });
+      luFile && (await createLuIntent({ id: luFile.id, intent, projectId }));
     } else if (formData.$kind === qnaMatcherKey) {
       const designerId1 = getDesignerIdFromDialogPath(
         newDialog,

@@ -486,5 +486,6 @@ export const projectDispatcher = () => {
     updateBoilerplate,
     getBoilerplateVersion,
     addToBotProject,
+    checkIfBotProject,
   };
 };

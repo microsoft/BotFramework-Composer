@@ -114,3 +114,7 @@ export const targetSelected = css`
   font-weight: ${FontWeights.bold};
   font-size: ${FontSizes.small};
 `;
+
+export const customPublishUISurface = css`
+  min-height: 300px;
+`;
