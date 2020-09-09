@@ -14,7 +14,7 @@
     "uuid": "^7.0.1"
   },
   "devDependencies": {
-    "@bfc/plugin-loader": "file:../../packages/plugin-loader",
+    "@bfc/extension": "file:../../packages/extension",
     "@types/uuid": "^7.0.2"
   }
 }

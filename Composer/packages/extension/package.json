@@ -1,5 +1,5 @@
 {
-  "name": "@bfc/plugin-loader",
+  "name": "@bfc/extension",
   "version": "1.0.0",
   "description": "Exposes interfaces used by the Composer plugin system.",
   "main": "lib/index.js",

@@ -7,7 +7,7 @@ import fs from 'fs';
 import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
 import { getNewDesigner, FileInfo, Skill, Diagnostic, IBotProject, DialogSetting } from '@bfc/shared';
-import { UserIdentity, pluginLoader } from '@bfc/plugin-loader';
+import { UserIdentity, pluginLoader } from '@bfc/extension';
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';

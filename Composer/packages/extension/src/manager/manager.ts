@@ -59,7 +59,7 @@ function getExtensionMetadata(extensionPath: string, packageJson: PackageJSON): 
   };
 }
 
-class PluginManager {
+class ExtensionManager {
   private searchCache = new Map<string, ExtensionSearchResult>();
   private _manifest: ExtensionManifestStore | undefined;
 
@@ -300,6 +300,6 @@ class PluginManager {
   }
 }
 
-const manager = new PluginManager();
+const manager = new ExtensionManager();
 
-export { manager as PluginManager };
+export { manager as ExtensionManager };

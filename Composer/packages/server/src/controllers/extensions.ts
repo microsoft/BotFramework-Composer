@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { Request, Response } from 'express';
-import { PluginManager } from '@bfc/plugin-loader';
+import { ExtensionManager } from '@bfc/extension';
 
 interface AddExtensionRequest extends Request {
   body: {
@@ -45,7 +45,7 @@ interface ExtensionFetchRequest extends Request {
 }
 
 export async function listExtensions(req: Request, res: Response) {
-  res.json(PluginManager.getAll()); // might need to have this list all enabled extensions ?
+  res.json(ExtensionManager.getAll()); // might need to have this list all enabled extensions ?
 }
 
 export async function addExtension(req: AddExtensionRequest, res: Response) {
@@ -56,9 +56,9 @@ export async function addExtension(req: AddExtensionRequest, res: Response) {
     return;
   }
 
-  await PluginManager.installRemote(name, version);
-  await PluginManager.load(name);
-  res.json(PluginManager.find(name));
+  await ExtensionManager.installRemote(name, version);
+  await ExtensionManager.load(name);
+  res.json(ExtensionManager.find(name));
 }
 
 export async function toggleExtension(req: ToggleExtensionRequest, res: Response) {
@@ -69,18 +69,18 @@ export async function toggleExtension(req: ToggleExtensionRequest, res: Response
     return;
   }
 
-  if (!PluginManager.find(id)) {
+  if (!ExtensionManager.find(id)) {
     res.status(404).json({ error: `extension \`${id}\` not found` });
     return;
   }
 
   if (enabled === true) {
-    await PluginManager.enable(id);
+    await ExtensionManager.enable(id);
   } else {
-    await PluginManager.disable(id);
+    await ExtensionManager.disable(id);
   }
 
-  res.json(PluginManager.find(id));
+  res.json(ExtensionManager.find(id));
 }
 
 export async function removeExtension(req: RemoveExtensionRequest, res: Response) {
@@ -91,27 +91,27 @@ export async function removeExtension(req: RemoveExtensionRequest, res: Response
     return;
   }
 
-  if (!PluginManager.find(id)) {
+  if (!ExtensionManager.find(id)) {
     res.status(404).json({ error: `extension \`${id}\` not found` });
     return;
   }
 
-  await PluginManager.remove(id);
-  res.json(PluginManager.getAll());
+  await ExtensionManager.remove(id);
+  res.json(ExtensionManager.getAll());
 }
 
 export async function searchExtensions(req: SearchExtensionsRequest, res: Response) {
   const { q } = req.query;
 
-  const results = await PluginManager.search(q ?? '');
+  const results = await ExtensionManager.search(q ?? '');
   res.json(results);
 }
 
 export async function getBundleForView(req: ExtensionViewBundleRequest, res: Response) {
   const { id, view } = req.params;
-  const extension = PluginManager.find(id);
+  const extension = ExtensionManager.find(id);
   const bundleId = extension.contributes.views?.[view].bundleId as string;
-  const bundle = PluginManager.getBundle(id, bundleId);
+  const bundle = ExtensionManager.getBundle(id, bundleId);
   if (bundle) {
     res.sendFile(bundle);
   } else {
