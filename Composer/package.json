@@ -16,12 +16,16 @@
     "node": ">=12"
   },
   "workspaces": [
+    "packages/adaptive-flow",
+    "packages/adaptive-form",
     "packages/client",
     "packages/electron-server",
-    "packages/extensions",
-    "packages/extensions/*",
+    "packages/extension-client",
+    "packages/extension",
+    "packages/intellisense",
     "packages/lib",
     "packages/lib/*",
+    "packages/plugin-loader",
     "packages/server",
     "packages/test-utils",
     "packages/tools",
