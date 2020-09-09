@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { FlowWidget, PluginConfig, UIOptions } from '@bfc/extension';
+import { FlowWidget, PluginConfig, UIOptions } from '@bfc/editor-extension';
 import { SDKKinds, getInputType, PromptTab, PropmtTabTitles } from '@bfc/shared';
 import { VisualEditorColors as Colors, ListOverview, BorderedDiv, FixedInfo } from '@bfc/ui-shared';
 import formatMessage from 'format-message';

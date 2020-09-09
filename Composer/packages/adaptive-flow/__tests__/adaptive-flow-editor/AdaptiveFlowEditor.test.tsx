@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { render } from '@bfc/test-utils';
-import { ExtensionContext } from '@bfc/extension';
+import { ExtensionContext } from '@bfc/editor-extension';
 
 import AdaptiveFlowEditor from '../../src/adaptive-flow-editor/AdaptiveFlowEditor';
 

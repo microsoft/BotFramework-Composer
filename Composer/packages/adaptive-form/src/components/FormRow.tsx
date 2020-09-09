@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { FieldProps, UIOptions } from '@bfc/extension';
+import { FieldProps, UIOptions } from '@bfc/editor-extension';
 import { css, jsx } from '@emotion/core';
 import React from 'react';
 

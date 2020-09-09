@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { FieldProps } from '@bfc/extension';
+import { FieldProps } from '@bfc/editor-extension';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import formatMessage from 'format-message';

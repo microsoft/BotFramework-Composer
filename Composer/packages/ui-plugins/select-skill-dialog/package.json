@@ -21,7 +21,7 @@
   "author": "v-thdurn@microsoft.com",
   "license": "MIT",
   "peerDependencies": {
-    "@bfc/extension": "*",
+    "@bfc/editor-extension": "*",
     "@bfc/adaptive-form": "*",
     "@uifabric/fluent-theme": "^7.1.4",
     "@uifabric/icons": "^7.3.0",
@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@bfc/adaptive-form": "*",
-    "@bfc/extension": "*",
+    "@bfc/editor-extension": "*",
     "@bfc/test-utils": "*",
     "@types/react": "16.9.23",
     "@types/react-dom": "16.9.5",

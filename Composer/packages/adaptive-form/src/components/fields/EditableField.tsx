@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { TextField, ITextFieldStyles } from 'office-ui-fabric-react/lib/TextField';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { mergeStyleSets } from '@uifabric/styling';
-import { FieldProps } from '@bfc/extension';
+import { FieldProps } from '@bfc/editor-extension';
 
 interface EditableFieldProps extends Omit<FieldProps, 'definitions'> {
   fontSize?: string;

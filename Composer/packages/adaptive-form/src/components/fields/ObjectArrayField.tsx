@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useState, useMemo, useRef } from 'react';
-import { FieldProps, useShellApi } from '@bfc/extension';
+import { FieldProps, useShellApi } from '@bfc/editor-extension';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { JSONSchema7 } from 'json-schema';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';

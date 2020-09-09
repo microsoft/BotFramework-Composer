@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import { FC, Fragment } from 'react';
 import get from 'lodash/get';
-import { FlowEditorWidgetMap as NodeWidgetMap } from '@bfc/extension';
+import { FlowEditorWidgetMap as NodeWidgetMap } from '@bfc/editor-extension';
 
 import { FlowSchema } from '../types/flowRenderer.types';
 import { EditorEventHandler } from '../constants/NodeEventTypes';

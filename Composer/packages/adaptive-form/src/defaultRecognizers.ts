@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { RecognizerSchema } from '@bfc/extension';
+import { RecognizerSchema } from '@bfc/editor-extension';
 import { SDKKinds } from '@bfc/shared';
 import formatMessage from 'format-message';
 

@@ -3,7 +3,7 @@
 
 import { DialogUtils, SDKKinds, ShellApi, registerEditorAPI } from '@bfc/shared';
 import get from 'lodash/get';
-import { useDialogEditApi, useDialogApi, useActionApi } from '@bfc/extension';
+import { useDialogEditApi, useDialogApi, useActionApi } from '@bfc/editor-extension';
 
 // TODO: leak of visual-sdk domain (designerCache)
 import { designerCache } from '../../adaptive-flow-renderer/utils/visual/DesignerCache';

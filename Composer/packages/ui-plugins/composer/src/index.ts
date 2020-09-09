@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { PluginConfig, FormUISchema, RecognizerSchema, UISchema, MenuUISchema } from '@bfc/extension';
+import { PluginConfig, FormUISchema, RecognizerSchema, UISchema, MenuUISchema } from '@bfc/editor-extension';
 import { SDKKinds } from '@bfc/shared';
 import formatMessage from 'format-message';
 import mapValues from 'lodash/mapValues';

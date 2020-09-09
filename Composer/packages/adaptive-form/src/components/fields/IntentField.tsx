@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { FieldProps, useShellApi, useRecognizerConfig, FieldWidget } from '@bfc/extension';
+import { FieldProps, useShellApi, useRecognizerConfig, FieldWidget } from '@bfc/editor-extension';
 import formatMessage from 'format-message';
 import { SDKKinds } from '@bfc/shared';
 

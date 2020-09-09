@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { render } from '@bfc/test-utils';
-import { WidgetComponent, FlowEditorWidgetMap } from '@bfc/extension';
+import { WidgetComponent, FlowEditorWidgetMap } from '@bfc/editor-extension';
 
 import { renderUIWidget, UIWidgetContext } from '../../../src/adaptive-flow-renderer/utils/visual/widgetRenderer';
 import { FlowWidget } from '../../../src/adaptive-flow-renderer/types/flowRenderer.types';

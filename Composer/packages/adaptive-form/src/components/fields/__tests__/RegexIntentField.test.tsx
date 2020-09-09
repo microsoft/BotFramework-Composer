@@ -4,13 +4,13 @@
 import React from 'react';
 import { render, fireEvent } from '@bfc/test-utils';
 import assign from 'lodash/assign';
-import { useShellApi } from '@bfc/extension';
+import { useShellApi } from '@bfc/editor-extension';
 
 import { RegexIntentField } from '../RegexIntentField';
 
 import { fieldProps } from './testUtils';
 
-jest.mock('@bfc/extension', () => ({
+jest.mock('@bfc/editor-extension', () => ({
   useShellApi: jest.fn(),
 }));
 

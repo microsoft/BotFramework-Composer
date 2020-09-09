@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import formatMessage from 'format-message';
-import { MenuUISchema } from '@bfc/extension';
+import { MenuUISchema } from '@bfc/editor-extension';
 import { SDKKinds } from '@bfc/shared';
 
 const SubmenuNames = {

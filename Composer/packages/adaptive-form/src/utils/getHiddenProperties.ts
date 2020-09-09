@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { UIOptions } from '@bfc/extension';
+import { UIOptions } from '@bfc/editor-extension';
 
 export const globalHiddenProperties = ['$kind', '$id', '$copy', '$designer', 'id', 'disabled'];
 

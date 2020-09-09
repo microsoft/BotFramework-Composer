@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { JsonEditor } from '@bfc/code-editor';
-import { FieldProps, useFormConfig, useShellApi } from '@bfc/extension';
+import { FieldProps, useFormConfig, useShellApi } from '@bfc/editor-extension';
 import { css, jsx } from '@emotion/core';
 import formatMessage from 'format-message';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';

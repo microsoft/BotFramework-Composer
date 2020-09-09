@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FieldProps, JSONSchema7 } from '@bfc/extension';
+import { FieldProps, JSONSchema7 } from '@bfc/editor-extension';
 import { MicrosoftInputDialog, ChoiceInput, ConfirmInput } from '@bfc/shared';
 
 export type InputDialogKeys = keyof MicrosoftInputDialog | keyof ChoiceInput | keyof ConfirmInput;

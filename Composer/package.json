@@ -21,7 +21,7 @@
     "packages/client",
     "packages/electron-server",
     "packages/extension-client",
-    "packages/extension",
+    "packages/editor-extension",
     "packages/intellisense",
     "packages/lib",
     "packages/lib/*",

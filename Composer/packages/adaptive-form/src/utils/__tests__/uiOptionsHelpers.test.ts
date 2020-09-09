@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FieldProps, UIOptions } from '@bfc/extension';
+import { FieldProps, UIOptions } from '@bfc/editor-extension';
 
 import { getUiLabel, getUiDescription, getUiPlaceholder } from '../uiOptionsHelpers';
 

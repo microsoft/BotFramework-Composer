@@ -4,7 +4,7 @@
 import React from 'react';
 import { render, fireEvent } from '@bfc/test-utils';
 import assign from 'lodash/assign';
-import { useShellApi } from '@bfc/extension';
+import { useShellApi } from '@bfc/editor-extension';
 
 import { ObjectArrayField } from '../ObjectArrayField';
 
@@ -25,7 +25,7 @@ const testSchema = (moreItems: object = {}) => ({
 jest.mock('../ArrayFieldItem', () => ({
   ArrayFieldItem: ({ stackArrayItems }) => <div>{stackArrayItems ? 'stacked' : 'not stacked'}</div>,
 }));
-jest.mock('@bfc/extension', () => ({
+jest.mock('@bfc/editor-extension', () => ({
   useShellApi: jest.fn(),
 }));
 

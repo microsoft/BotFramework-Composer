@@ -3,7 +3,7 @@
 
 import React from 'react';
 import get from 'lodash/get';
-import { WidgetContainerProps } from '@bfc/extension';
+import { WidgetContainerProps } from '@bfc/editor-extension';
 import { MultilineTextWithEllipsis } from '@bfc/ui-shared';
 
 import { useLgTemplate } from './useLgTemplate';

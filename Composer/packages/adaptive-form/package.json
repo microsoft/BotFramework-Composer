@@ -19,7 +19,7 @@
   "license": "MIT",
   "peerDependencies": {
     "@bfc/code-editor": "*",
-    "@bfc/extension": "*",
+    "@bfc/editor-extension": "*",
     "@bfc/intellisense": "*",
     "@uifabric/fluent-theme": "^7.1.4",
     "@uifabric/icons": "^7.3.0",
@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@bfc/code-editor": "*",
-    "@bfc/extension": "*",
+    "@bfc/editor-extension": "*",
     "@bfc/intellisense": "*",
     "@bfc/test-utils": "*",
     "@types/lodash": "^4.14.149",

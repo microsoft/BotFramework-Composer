@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import React from 'react';
-import { FieldProps } from '@bfc/extension';
+import { FieldProps } from '@bfc/editor-extension';
 
 import { getOrderedProperties } from '../../utils';
 import { FormRow } from '../FormRow';

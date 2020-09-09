@@ -3,7 +3,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React from 'react';
-import { FieldProps } from '@bfc/extension';
+import { FieldProps } from '@bfc/editor-extension';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { FontSizes } from '@uifabric/styling';

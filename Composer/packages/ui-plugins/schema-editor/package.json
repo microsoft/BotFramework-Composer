@@ -20,7 +20,7 @@
   "author": "tj.durnford@microsoft.com",
   "license": "MIT",
   "peerDependencies": {
-    "@bfc/extension": "*",
+    "@bfc/editor-extension": "*",
     "@bfc/adaptive-form": "*",
     "@bfc/code-editor": "*",
     "format-message": "^6.2.3",
@@ -28,7 +28,7 @@
     "react-dom": "16.13.0"
   },
   "devDependencies": {
-    "@bfc/extension": "*",
+    "@bfc/editor-extension": "*",
     "@bfc/adaptive-form": "*",
     "@bfc/test-utils": "*",
     "@types/react": "16.9.23",

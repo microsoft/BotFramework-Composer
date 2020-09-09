@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { fireEvent, getAllByRole, render } from '@bfc/test-utils';
-import { Extension } from '@bfc/extension';
+import { Extension } from '@bfc/editor-extension';
 
 import { SelectDialog } from '../SelectDialog';
 

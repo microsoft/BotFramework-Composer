@@ -5,7 +5,7 @@
 import { jsx, css } from '@emotion/core';
 import { FC, useContext, useCallback } from 'react';
 import { generateSDKTitle, PromptTab } from '@bfc/shared';
-import { useShellApi } from '@bfc/extension';
+import { useShellApi } from '@bfc/editor-extension';
 
 import { AttrNames } from '../constants/ElementAttributes';
 import { NodeRendererContext } from '../contexts/NodeRendererContext';

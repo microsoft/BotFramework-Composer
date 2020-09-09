@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FieldProps } from '@bfc/extension';
+import { FieldProps } from '@bfc/editor-extension';
 import startCase from 'lodash/startCase';
 
 export function getUiLabel(props: FieldProps): string | false | undefined {

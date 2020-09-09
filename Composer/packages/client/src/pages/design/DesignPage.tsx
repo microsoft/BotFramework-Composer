@@ -11,7 +11,7 @@ import get from 'lodash/get';
 import { DialogFactory, SDKKinds, DialogInfo, PromptTab, getEditorAPI, registerEditorAPI } from '@bfc/shared';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
-import Extension, { useTriggerApi, PluginConfig } from '@bfc/extension';
+import Extension, { useTriggerApi, PluginConfig } from '@bfc/editor-extension';
 import { useRecoilValue } from 'recoil';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';

@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { fireEvent, getAllByRole, render } from '@bfc/test-utils';
-import { Extension, JSONSchema7 } from '@bfc/extension';
+import { Extension, JSONSchema7 } from '@bfc/editor-extension';
 import { SDKKinds } from '@bfc/shared';
 
 import { BeginSkillDialogField } from '../BeginSkillDialogField';

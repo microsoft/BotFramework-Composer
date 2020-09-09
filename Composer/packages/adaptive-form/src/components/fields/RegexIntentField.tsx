@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useState, useEffect } from 'react';
-import { FieldProps, useShellApi } from '@bfc/extension';
+import { FieldProps, useShellApi } from '@bfc/editor-extension';
 import { DialogInfo, RegexRecognizer } from '@bfc/shared';
 
 import { StringField } from './StringField';

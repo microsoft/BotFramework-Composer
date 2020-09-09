@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { JSONSchema7, JSONSchema7Definition } from '@bfc/extension';
+import { JSONSchema7, JSONSchema7Definition } from '@bfc/editor-extension';
 
 import { resolveRef } from './resolveRef';
 

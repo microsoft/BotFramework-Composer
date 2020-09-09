@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import assign from 'lodash/assign';
-import { FieldProps } from '@bfc/extension';
+import { FieldProps } from '@bfc/editor-extension';
 
 const defaults: FieldProps = {
   depth: 0,

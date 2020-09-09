@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import React from 'react';
-import Extension from '@bfc/extension';
+import Extension from '@bfc/editor-extension';
 import { render, fireEvent, findAllByRole } from '@bfc/test-utils';
 
 import { SchemaEditorField } from '../Fields/SchemaEditorField';

@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { FieldWidget, FormUISchema, JSONSchema7, UIOptions } from '@bfc/extension';
+import { FieldWidget, FormUISchema, JSONSchema7, UIOptions } from '@bfc/editor-extension';
 
 import * as DefaultFields from '../components/fields';
 

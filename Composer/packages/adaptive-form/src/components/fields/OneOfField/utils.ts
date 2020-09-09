@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FieldProps, JSONSchema7, JSONSchema7Definition } from '@bfc/extension';
+import { FieldProps, JSONSchema7, JSONSchema7Definition } from '@bfc/editor-extension';
 import merge from 'lodash/merge';
 import omit from 'lodash/omit';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';

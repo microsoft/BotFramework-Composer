@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { render, waitFor, fireEvent } from '@bfc/test-utils';
-import { FieldProps, useFormConfig } from '@bfc/extension';
+import { FieldProps, useFormConfig } from '@bfc/editor-extension';
 import assign from 'lodash/assign';
 
 import { SchemaField } from '../SchemaField';
@@ -18,7 +18,7 @@ jest.mock('../../utils/resolveFieldWidget', () => ({
   resolveFieldWidget: jest.fn(),
 }));
 
-jest.mock('@bfc/extension', () => ({
+jest.mock('@bfc/editor-extension', () => ({
   useFormConfig: jest.fn(),
 }));
 

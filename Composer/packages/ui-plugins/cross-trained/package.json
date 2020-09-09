@@ -21,13 +21,13 @@
   "license": "MIT",
   "peerDependencies": {
     "@bfc/adaptive-form": "*",
-    "@bfc/extension": "*",
+    "@bfc/editor-extension": "*",
     "react": "16.13.0",
     "react-dom": "16.13.0"
   },
   "devDependencies": {
     "@bfc/adaptive-form": "*",
-    "@bfc/extension": "*",
+    "@bfc/editor-extension": "*",
     "@types/react": "16.9.23",
     "@types/react-dom": "16.9.5",
     "react": "16.13.0",

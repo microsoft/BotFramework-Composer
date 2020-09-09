@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import formatMessage from 'format-message';
-import { JSONSchema7 } from '@bfc/extension';
+import { JSONSchema7 } from '@bfc/editor-extension';
 import { resolveRef } from '@bfc/adaptive-form';
 import { SkillManifest } from '@bfc/shared';
 import startCase from 'lodash/startCase';

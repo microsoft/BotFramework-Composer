@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useState, useMemo } from 'react';
-import { FieldProps, useFormConfig } from '@bfc/extension';
+import { FieldProps, useFormConfig } from '@bfc/editor-extension';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 import formatMessage from 'format-message';
 

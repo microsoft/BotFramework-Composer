@@ -3,7 +3,7 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import React, { useEffect } from 'react';
-import { FieldProps, UIOptions, useFormConfig } from '@bfc/extension';
+import { FieldProps, UIOptions, useFormConfig } from '@bfc/editor-extension';
 
 import { getUIOptions, resolveFieldWidget, resolveRef, getUiLabel, getUiPlaceholder, getUiDescription } from '../utils';
 

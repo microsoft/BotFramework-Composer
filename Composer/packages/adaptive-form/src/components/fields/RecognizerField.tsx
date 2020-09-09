@@ -3,7 +3,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useMemo, useState, useEffect } from 'react';
-import { FieldProps, useShellApi, useRecognizerConfig } from '@bfc/extension';
+import { FieldProps, useShellApi, useRecognizerConfig } from '@bfc/editor-extension';
 import { MicrosoftIRecognizer, SDKKinds } from '@bfc/shared';
 import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import formatMessage from 'format-message';

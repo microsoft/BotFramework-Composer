@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { PluginConfig } from '@bfc/extension';
+import { PluginConfig } from '@bfc/editor-extension';
 import { SDKKinds } from '@bfc/shared';
 import { VisualEditorColors as Colors } from '@bfc/ui-shared';
 
