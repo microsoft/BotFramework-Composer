@@ -39,8 +39,13 @@ const SkillSettings: React.FC<ISkillFormProps> = (props) => {
       ...skillSettings,
       [event.target.id]: event.target.value,
     };
+
+    // auto fill `botId` with `MicrosoftAppId`
+    if (event.target.id === 'MicrosoftAppId') {
+      localSettings.botId = event.target.value;
+    }
+
     setSkillSettings({ ...localSettings });
-    console.log('ehh', localSettings);
     props.setSettings(props.projectId, { ...props.settings, ...localSettings });
   };
 
