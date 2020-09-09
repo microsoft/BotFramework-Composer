@@ -45,7 +45,7 @@ const generate = async (req: Request, res: Response) => {
     res.status(200).json({ id: projectId, ...updatedProject.getProject() });
   } else {
     res.status(404).json({
-      message: 'No such bot project opened',
+      message: `Could not generate form dialog. Project ${projectId} not found.`,
     });
   }
 };
