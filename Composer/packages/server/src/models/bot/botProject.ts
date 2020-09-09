@@ -654,7 +654,6 @@ export class BotProject implements IBotProject {
           fileList.set(fileInfo.name, fileInfo);
         }
       }
-      console.log(fileList.keys());
     }
 
     const schemas = await this._getSchemas();
