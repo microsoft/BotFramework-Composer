@@ -38,19 +38,9 @@ import {
 import { dispatcherState } from '../../recoilModel';
 import { getBaseName } from '../../utils/fileUtil';
 import { EditableField } from '../../components/EditableField';
-import { classNames } from '../../components/AllupviewComponets/styles';
+import { classNames, AddTemplateButton } from '../../components/AllupviewComponets/styles';
 
-import {
-  formCell,
-  content,
-  addIcon,
-  divider,
-  rowDetails,
-  icon,
-  addButtonContainer,
-  addAlternative,
-  addQnAPair,
-} from './styles';
+import { formCell, content, addIcon, divider, rowDetails, icon, addAlternative } from './styles';
 
 const noOp = () => undefined;
 
@@ -249,7 +239,26 @@ const TableView: React.FC<TableViewProps> = (props) => {
       );
     };
     if (props) {
-      return <GroupHeader {...props} onRenderTitle={onRenderTitle}></GroupHeader>;
+      return (
+        <Fragment>
+          <GroupHeader {...props} selectionMode={SelectionMode.none} onRenderTitle={onRenderTitle}></GroupHeader>
+          <div className={classNames.groupHeaderAddPair}>
+            <ActionButton
+              data-testid={'addQnAPairButton'}
+              iconProps={{ iconName: 'Add' }}
+              styles={AddTemplateButton}
+              onClick={() => {
+                if (!qnaFile) return;
+                onCreateNewQnAPairs(qnaFile.id);
+                actions.setMessage('item added');
+              }}
+            >
+              {formatMessage('Add QnA Pair')}
+            </ActionButton>
+          </div>
+          <div css={divider}> </div>
+        </Fragment>
+      );
     }
 
     return null;
@@ -464,24 +473,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
               ...props,
               onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
             })}
-
-            {dialogId !== 'all' && (
-              <div css={addButtonContainer}>
-                <ActionButton
-                  data-testid={'addQnAPairButton'}
-                  iconProps={{ iconName: 'Add' }}
-                  styles={addQnAPair}
-                  onClick={() => {
-                    if (!qnaFile) return;
-                    onCreateNewQnAPairs(qnaFile.id);
-                    actions.setMessage('item added');
-                  }}
-                >
-                  {formatMessage('Add QnA Pair')}
-                </ActionButton>
-              </div>
-            )}
-            <div css={divider}> </div>
           </Sticky>
         </div>
       );

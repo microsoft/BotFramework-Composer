@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@bfc/shared": "*",
-    "@bfcomposer/bf-lu": "^1.4.6",
+    "@bfcomposer/bf-lu": "^1.4.7",
     "@microsoft/bf-lu": "^4.11.0-dev.20200824.de66343",
     "adaptive-expressions": "4.10.0-preview-147186",
     "botbuilder-lg": "^4.10.0-preview-150886",
