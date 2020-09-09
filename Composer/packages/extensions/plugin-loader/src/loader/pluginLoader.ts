@@ -10,22 +10,19 @@ import { pathToRegexp } from 'path-to-regexp';
 import glob from 'globby';
 import formatMessage from 'format-message';
 
+import { UserIdentity, ExtensionCollection, RuntimeTemplate, DEFAULT_RUNTIME } from '../types/types';
+import log from '../logger';
+
 import { ComposerPluginRegistration } from './composerPluginRegistration';
-import { UserIdentity, ExtensionCollection, RuntimeTemplate, DEFAULT_RUNTIME } from './types';
-import log from './logger';
 
 export class PluginLoader {
   private _passport: passport.PassportStatic;
   private _webserver: Express | undefined;
-  public loginUri: string;
+  public loginUri = '/login';
 
   public extensions: ExtensionCollection;
 
   constructor() {
-    // load any plugins present in the default folder
-    // noop for now
-    this.loginUri = '/login';
-
     this.extensions = {
       storage: {},
       publish: {},
