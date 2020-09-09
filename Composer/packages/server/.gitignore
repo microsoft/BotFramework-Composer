@@ -1,3 +1,5 @@
 build/
 data.json
 __tests__/__data__.json
+.composer
+extensions.json
