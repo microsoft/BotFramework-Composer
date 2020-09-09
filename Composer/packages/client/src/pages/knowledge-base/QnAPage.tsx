@@ -151,6 +151,8 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
       <Suspense fallback={<LoadingSpinner />}>
         <Router component={Fragment} primary={false}>
           <CodeEditor dialogId={dialogId} path="/edit" />
+          <CodeEditor dialogId={dialogId} path="/:containerId/edit" />
+
           {qnaAllUpViewStatus !== QnAAllUpViewStatus.Loading && <TableView dialogId={dialogId} path="/" />}
         </Router>
         {qnaAllUpViewStatus === QnAAllUpViewStatus.Loading && (

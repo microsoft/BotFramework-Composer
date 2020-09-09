@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 import { css } from '@emotion/core';
 import { FontWeights } from '@uifabric/styling';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+import { NeutralColors, SharedColors, FontSizes } from '@uifabric/fluent-theme';
 import { IIconStyles } from 'office-ui-fabric-react/lib/Icon';
 export const content = css`
   min-height: 28px;
@@ -152,7 +152,7 @@ export const addQnAPair = {
 
 export const addIcon = {
   root: {
-    fontSize: '16px',
+    fontSize: FontSizes.size12,
     color: SharedColors.cyanBlue10,
   },
 };

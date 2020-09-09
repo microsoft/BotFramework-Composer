@@ -28,6 +28,7 @@ import { QnAFile } from '@bfc/shared/src/types';
 import { QnASection } from '@bfc/shared';
 import { qnaUtil } from '@bfc/indexers';
 
+import { navigateTo } from '../../utils/navigation';
 import {
   dialogsState,
   qnaFilesState,
@@ -46,7 +47,7 @@ const noOp = () => undefined;
 
 interface QnASectionItem extends QnASection {
   fileId: string;
-  dialogId: string;
+  dialogId: string | undefined;
   used: boolean;
   expand: boolean;
 }
@@ -89,10 +90,10 @@ const TableView: React.FC<TableViewProps> = (props) => {
           const qnaDialog = dialogs.find((dialog) => file.id === `${dialog.id}.${locale}`);
           return {
             fileId: file.id,
-            dialogId: qnaDialog?.id || '',
+            dialogId: qnaDialog?.id,
             used: !!qnaDialog,
             expand: false,
-            key: qnaSection.Body,
+            key: qnaSection.sectionId,
             ...qnaSection,
           };
         })
@@ -100,6 +101,11 @@ const TableView: React.FC<TableViewProps> = (props) => {
   };
   const [focusedIndex, setFocusedIndex] = useState(0);
   const [qnaSections, setQnASections] = useState<QnASectionItem[]>([]);
+
+  const importedFileIds = qnaFile?.imports.map(({ id }) => getBaseName(id)) || [];
+  const importedFiles = qnaFiles.filter(({ id }) => importedFileIds.includes(id));
+  const importedSourceFiles = importedFiles.filter(({ id }) => id.endsWith('.source'));
+
   useEffect(() => {
     if (isEmpty(qnaFiles)) return;
 
@@ -111,29 +117,10 @@ const TableView: React.FC<TableViewProps> = (props) => {
     if (dialogId === 'all') {
       setQnASections(allSections);
     } else {
-      const dialogSections = allSections.filter((t) => t.dialogId === dialogId);
+      const dialogSections = allSections.filter((t) => t.dialogId === dialogId || importedFileIds.includes(t.fileId));
       setQnASections(dialogSections);
     }
   }, [qnaFiles, dialogId, projectId]);
-
-  const importedFiles = useMemo(() => {
-    const results: QnAFile[] = [];
-    if (qnaFile && qnaFile.imports) {
-      qnaFile.imports.forEach(({ id }) => {
-        const fileId = getBaseName(id);
-        const target = qnaFiles.find(({ id }) => id === fileId);
-        if (target) results.push(target);
-      });
-    }
-
-    return results;
-  }, [qnaFile, qnaFiles]);
-  const importedSourceFiles = importedFiles.filter(({ id }) => id.endsWith('.source'));
-
-  const importedSourceFileSections = importedSourceFiles.reduce((result: any[], qnaFile) => {
-    const res = generateQnASections(qnaFile);
-    return result.concat(res);
-  }, []);
 
   const toggleExpandRow = (sectionId: string, expand?: boolean) => {
     const newSections = qnaSections.map((item) => {
@@ -159,7 +146,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
     }
   };
 
-  const onCreateNewQnAPairs = (fileId: string) => {
+  const onCreateNewQnAPairs = (fileId: string | undefined) => {
+    if (!fileId) return;
     const newQnAPair = qnaUtil.generateQnAPair();
     addQnAPairs({ id: fileId, content: newQnAPair });
   };
@@ -219,9 +207,19 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 ]}
                 overflowItems={[
                   {
-                    key: 'delete',
+                    key: 'edit',
                     // eslint-disable-next-line format-message/literal-pattern
-                    name: formatMessage(`Remove from ${dialogId}`),
+                    name: formatMessage(`Show code`),
+                    onClick: () => {
+                      if (!qnaFile) return;
+                      navigateTo(`/bot/${projectId}/knowledge-base/${dialogId}/${groupFileId}/edit`);
+                    },
+                  },
+                  {
+                    key: 'delete',
+                    name: formatMessage('Delete knowledge base'),
+                    // eslint-disable-next-line format-message/literal-pattern
+                    // name: formatMessage(`Remove from ${dialogId}`),
                     onClick: () => {
                       if (!qnaFile) return;
                       removeQnAImport({ id: qnaFile.id, sourceId: groupFileId });
@@ -242,14 +240,14 @@ const TableView: React.FC<TableViewProps> = (props) => {
       return (
         <Fragment>
           <GroupHeader {...props} selectionMode={SelectionMode.none} onRenderTitle={onRenderTitle}></GroupHeader>
-          <div className={classNames.groupHeaderAddPair}>
+          <div>
             <ActionButton
               data-testid={'addQnAPairButton'}
-              iconProps={{ iconName: 'Add' }}
+              iconProps={{ iconName: 'Add', styles: addIcon }}
               styles={AddTemplateButton}
               onClick={() => {
                 if (!qnaFile) return;
-                onCreateNewQnAPairs(qnaFile.id);
+                onCreateNewQnAPairs(props.group?.key);
                 actions.setMessage('item added');
               }}
             >
@@ -441,27 +439,35 @@ const TableView: React.FC<TableViewProps> = (props) => {
   };
 
   const getGroups = (): IGroup[] | undefined => {
-    if (dialogId === 'all' || dialogId.endsWith('.source') || !qnaFile) {
-      return undefined;
+    if (dialogId === 'all') {
+      const groups: IGroup[] = [];
+      qnaFiles.forEach((currentFile) => {
+        const lastGroup = groups[groups.length - 1];
+        const startIndex = lastGroup ? lastGroup.startIndex + lastGroup.count : 0;
+        const { id, qnaSections } = currentFile;
+        groups.push({ key: id, name: getBaseName(id), startIndex, count: qnaSections.length, level: 0 });
+      });
+      return groups;
+    } else {
+      if (!qnaFile) return undefined;
+      const groups: IGroup[] = [
+        {
+          key: qnaFile.id,
+          name: activeDialog?.displayName || dialogId,
+          startIndex: 0,
+          count: qnaFile.qnaSections.length,
+          level: 0,
+        },
+      ];
+      importedSourceFiles.forEach((currentFile) => {
+        const lastGroup = groups[groups.length - 1];
+        const startIndex = lastGroup.startIndex + lastGroup.count;
+        const { id, qnaSections } = currentFile;
+        const name = getBaseName(id);
+        groups.push({ key: id, name, startIndex, count: qnaSections.length, level: 0 });
+      });
+      return groups;
     }
-    const groups: IGroup[] = [
-      {
-        key: dialogId,
-        name: activeDialog?.displayName || dialogId,
-        startIndex: 0,
-        count: qnaSections.length,
-        level: 0,
-      },
-    ];
-    importedSourceFiles.forEach((currentFile) => {
-      const lastGroup = groups[groups.length - 1];
-      const startIndex = lastGroup.startIndex + lastGroup.count;
-      const { id, qnaSections } = currentFile;
-      const name = getBaseName(id);
-      groups.push({ key: id, name, startIndex, count: qnaSections.length, level: 0 });
-    });
-
-    return groups;
   };
 
   const onRenderDetailsHeader = useCallback(
@@ -499,7 +505,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           }}
           groups={getGroups()}
           initialFocusedIndex={focusedIndex}
-          items={[...qnaSections, ...importedSourceFileSections]}
+          items={qnaSections}
           layoutMode={DetailsListLayoutMode.justified}
           selectionMode={SelectionMode.single}
           onRenderDetailsHeader={onRenderDetailsHeader}

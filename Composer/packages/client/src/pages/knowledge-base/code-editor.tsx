@@ -18,6 +18,7 @@ import { dispatcherState } from '../../recoilModel';
 import { userSettingsState } from '../../recoilModel';
 interface CodeEditorProps extends RouteComponentProps<{}> {
   dialogId: string;
+  containerId?: string;
 }
 
 const lspServerPath = '/lu-language-server';
@@ -30,7 +31,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   const projectId = useRecoilValue(projectIdState);
   const userSettings = useRecoilValue(userSettingsState);
   const { dialogId } = props;
-  const targetFileId = dialogId.endsWith('.source') ? dialogId : `${dialogId}.${locale}`;
+  const targetFileId = props.containerId ? props.containerId : `${dialogId}.${locale}`;
   const file = qnaFiles.find(({ id }) => id === targetFileId);
   const hash = props.location?.hash ?? '';
   const hashLine = querystring.parse(hash).L;
