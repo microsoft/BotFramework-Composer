@@ -145,7 +145,7 @@ const initQnaFilesStatus = (projectId: string, qnaFiles: QnAFile[], dialogs: Dia
 };
 export const projectDispatcher = () => {
   const initBotState = async (callbackHelpers: CallbackInterface, data: any, jump: boolean, templateId: string) => {
-    const { snapshot, gotoSnapshot } = callbackHelpers;
+    const { snapshot, gotoSnapshot, set } = callbackHelpers;
     const { files, botName, botEnvironment, location, schemas, settings, id: projectId, diagnostics, skills } = data;
     const curLocation = await snapshot.getPromise(locationState(projectId));
     const storedLocale = languageStorage.get(botName)?.locale;
@@ -212,6 +212,7 @@ export const projectDispatcher = () => {
 
       gotoSnapshot(newSnapshot);
       //TODO: Botprojects space will be populated for now with just the rootbot. Once, BotProjects UI is hookedup this will be refactored to use addToBotProject
+      set(botProjectsSpaceState, []);
       addToBotProject(callbackHelpers, projectId, true);
 
       if (jump && projectId) {
