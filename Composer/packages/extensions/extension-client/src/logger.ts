@@ -3,4 +3,4 @@
 
 import debug from 'debug';
 
-export default debug('composer:client-plugin-lib');
+export default debug('composer:extension-client');

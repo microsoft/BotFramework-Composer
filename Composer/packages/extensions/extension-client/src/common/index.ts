@@ -8,9 +8,9 @@ export function render(component: React.ReactElement) {
   window[ComposerGlobalName].render(component);
 }
 
-/** Allows plugin client bundles to make AJAX calls from the server -- avoiding the issue of CORS */
+/** Allows extension client bundles to make AJAX calls from the server -- avoiding the issue of CORS */
 function fetchProxy(url: string, options: RequestInit) {
-  return fetch(`/api/plugins/proxy/${encodeURIComponent(url)}`, {
+  return fetch(`/api/extensions/proxy/${encodeURIComponent(url)}`, {
     method: 'POST',
     body: JSON.stringify(options),
     headers: {

@@ -19,33 +19,33 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import axios from 'axios';
 import { useRecoilValue } from 'recoil';
 
-import { PluginConfig } from '../../../recoilModel/types';
+import { ExtensionConfig } from '../../../recoilModel/types';
 import { Toolbar, IToolbarItem } from '../../../components/Toolbar';
 import httpClient from '../../../utils/httpUtil';
-import { dispatcherState, pluginsState } from '../../../recoilModel';
+import { dispatcherState, extensionsState } from '../../../recoilModel';
 
-const Plugins: React.FC<RouteComponentProps> = () => {
-  const { fetchPlugins, togglePlugin, addPlugin, removePlugin } = useRecoilValue(dispatcherState);
-  const plugins = useRecoilValue(pluginsState);
+const Extensions: React.FC<RouteComponentProps> = () => {
+  const { fetchExtensions, toggleExtension, addExtension, removeExtension } = useRecoilValue(dispatcherState);
+  const extensions = useRecoilValue(extensionsState);
   const [showNewModal, setShowNewModal] = useState(false);
-  const [pluginName, setPluginName] = useState<string | null>(null);
-  const [pluginVersion, setPluginVersion] = useState<string | null>(null);
-  const [matchingPlugins, setMatchingPlugins] = useState<PluginConfig[]>([]);
-  const [selectedPlugin, setSelectedPlugin] = useState<any>();
+  const [extensionName, setExtensionName] = useState<string | null>(null);
+  const [extensionVersion, setExtensionVersion] = useState<string | null>(null);
+  const [matchingExtensions, setMatchingExtensions] = useState<ExtensionConfig[]>([]);
+  const [selectedExtension, setSelectedExtension] = useState<any>();
 
   useEffect(() => {
-    fetchPlugins();
+    fetchExtensions();
   }, []);
 
   useEffect(() => {
-    if (pluginName !== null) {
+    if (extensionName !== null) {
       const source = axios.CancelToken.source();
 
       const timer = setTimeout(() => {
         httpClient
-          .get(`/plugins/search?q=${pluginName}`, { cancelToken: source.token })
+          .get(`/extensions/search?q=${extensionName}`, { cancelToken: source.token })
           .then((res) => {
-            setMatchingPlugins(res.data);
+            setMatchingExtensions(res.data);
           })
           .catch((err) => {
             if (!axios.isCancel(err)) {
@@ -59,7 +59,7 @@ const Plugins: React.FC<RouteComponentProps> = () => {
         clearTimeout(timer);
       };
     }
-  }, [pluginName]);
+  }, [extensionName]);
 
   const installedColumns: IColumn[] = [
     {
@@ -67,7 +67,7 @@ const Plugins: React.FC<RouteComponentProps> = () => {
       name: formatMessage('Name'),
       minWidth: 100,
       maxWidth: 150,
-      onRender: (item: PluginConfig) => {
+      onRender: (item: ExtensionConfig) => {
         return <span>{item.id}</span>;
       },
     },
@@ -76,7 +76,7 @@ const Plugins: React.FC<RouteComponentProps> = () => {
       name: formatMessage('Version'),
       minWidth: 30,
       maxWidth: 100,
-      onRender: (item: PluginConfig) => {
+      onRender: (item: ExtensionConfig) => {
         return <span>{item.version}</span>;
       },
     },
@@ -85,10 +85,10 @@ const Plugins: React.FC<RouteComponentProps> = () => {
       name: formatMessage('Enabled'),
       minWidth: 30,
       maxWidth: 150,
-      onRender: (item: PluginConfig) => {
+      onRender: (item: ExtensionConfig) => {
         const text = item.enabled ? formatMessage('Disable') : formatMessage('Enable');
         return (
-          <DefaultButton disabled={item.builtIn} onClick={() => togglePlugin(item.id, !item.enabled)}>
+          <DefaultButton disabled={item.builtIn} onClick={() => toggleExtension(item.id, !item.enabled)}>
             {text}
           </DefaultButton>
         );
@@ -99,9 +99,9 @@ const Plugins: React.FC<RouteComponentProps> = () => {
       name: formatMessage('Remove'),
       minWidth: 30,
       maxWidth: 150,
-      onRender: (item: PluginConfig) => {
+      onRender: (item: ExtensionConfig) => {
         return (
-          <DefaultButton disabled={item.builtIn} onClick={() => removePlugin(item.id)}>
+          <DefaultButton disabled={item.builtIn} onClick={() => removeExtension(item.id)}>
             {formatMessage('Remove')}
           </DefaultButton>
         );
@@ -154,7 +154,7 @@ const Plugins: React.FC<RouteComponentProps> = () => {
   ];
 
   const toolbarItems: IToolbarItem[] = [
-    // TODO (toanzian / abrown): re-enable once remote plugins are supported
+    // TODO (toanzian / abrown): re-enable once remote extensions are supported
     /*{
       type: 'action',
       text: formatMessage('Add'),
@@ -171,14 +171,14 @@ const Plugins: React.FC<RouteComponentProps> = () => {
   ];
 
   const submit = useCallback(() => {
-    if (selectedPlugin && pluginVersion) {
-      addPlugin(selectedPlugin.id, pluginVersion);
+    if (selectedExtension && extensionVersion) {
+      addExtension(selectedExtension.id, extensionVersion);
       setShowNewModal(false);
-      setPluginName(null);
-      setPluginVersion(null);
-      setSelectedPlugin(null);
+      setExtensionName(null);
+      setExtensionVersion(null);
+      setSelectedExtension(null);
     }
-  }, [selectedPlugin, pluginVersion]);
+  }, [selectedExtension, extensionVersion]);
 
   return (
     <div>
@@ -186,15 +186,15 @@ const Plugins: React.FC<RouteComponentProps> = () => {
       <DetailsList
         checkboxVisibility={CheckboxVisibility.hidden}
         columns={installedColumns}
-        items={plugins}
+        items={extensions}
         layoutMode={DetailsListLayoutMode.justified}
         selectionMode={SelectionMode.single}
       />
       <Dialog
         dialogContentProps={{
           type: DialogType.close,
-          title: formatMessage('Add new plugin'),
-          subText: formatMessage('Search for plugins'),
+          title: formatMessage('Add new extension'),
+          subText: formatMessage('Search for extensions'),
         }}
         hidden={!showNewModal}
         minWidth="600px"
@@ -202,17 +202,17 @@ const Plugins: React.FC<RouteComponentProps> = () => {
       >
         <div>
           <TextField
-            label={formatMessage('Plugin name')}
-            value={pluginName ?? ''}
-            onChange={(_e, val) => setPluginName(val ?? null)}
+            label={formatMessage('Extension name')}
+            value={extensionName ?? ''}
+            onChange={(_e, val) => setExtensionName(val ?? null)}
           />
           <DetailsList
             checkboxVisibility={CheckboxVisibility.always}
             columns={matchingColumns}
-            items={matchingPlugins}
+            items={matchingExtensions}
             layoutMode={DetailsListLayoutMode.justified}
             selectionMode={SelectionMode.single}
-            onActiveItemChanged={(item) => setSelectedPlugin(item)}
+            onActiveItemChanged={(item) => setSelectedExtension(item)}
           />
         </div>
         <DialogFooter>
@@ -226,4 +226,4 @@ const Plugins: React.FC<RouteComponentProps> = () => {
   );
 };
 
-export { Plugins };
+export { Extensions };

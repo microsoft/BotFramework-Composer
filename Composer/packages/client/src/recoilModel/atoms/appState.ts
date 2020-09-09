@@ -152,7 +152,7 @@ export const boilerplateVersionState = atom<BoilerplateVersion>({
   },
 });
 
-export const pluginsState = atom<PluginConfig[]>({
-  key: getFullyQualifiedKey('plugins'),
+export const extensionsState = atom<PluginConfig[]>({
+  key: getFullyQualifiedKey('extensions'),
   default: [],
 });

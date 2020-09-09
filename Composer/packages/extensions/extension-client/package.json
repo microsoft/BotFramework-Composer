@@ -1,7 +1,7 @@
 {
-  "name": "@bfc/client-plugin-lib",
+  "name": "@bfc/extension-client",
   "version": "1.0.0",
-  "description": "Composer plugin library to be consumed by the client bundle of a Composer plugin.",
+  "description": "Composer extension library to be consumed by the client bundle of a Composer extension.",
   "main": "lib/index.js",
   "license": "MIT",
   "private": true,

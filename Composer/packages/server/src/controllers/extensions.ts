@@ -4,51 +4,51 @@
 import { Request, Response } from 'express';
 import { PluginManager } from '@bfc/plugin-loader';
 
-interface AddPluginRequest extends Request {
+interface AddExtensionRequest extends Request {
   body: {
     name?: string;
     version?: string;
   };
 }
 
-interface TogglePluginRequest extends Request {
+interface ToggleExtensionRequest extends Request {
   body: {
     id?: string;
     enabled?: boolean;
   };
 }
 
-interface RemovePluginRequest extends Request {
+interface RemoveExtensionRequest extends Request {
   body: {
     id?: string;
   };
 }
 
-interface SearchPluginsRequest extends Request {
+interface SearchExtensionsRequest extends Request {
   query: {
     q?: string;
   };
 }
 
-interface PluginViewBundleRequest extends Request {
+interface ExtensionViewBundleRequest extends Request {
   params: {
     id: string;
     view: string;
   };
 }
 
-interface PluginFetchRequest extends Request {
+interface ExtensionFetchRequest extends Request {
   body: RequestInit;
   params: {
     url: string;
   };
 }
 
-export async function listPlugins(req: Request, res: Response) {
-  res.json(PluginManager.getAll()); // might need to have this list all enabled plugins ?
+export async function listExtensions(req: Request, res: Response) {
+  res.json(PluginManager.getAll()); // might need to have this list all enabled extensions ?
 }
 
-export async function addPlugin(req: AddPluginRequest, res: Response) {
+export async function addExtension(req: AddExtensionRequest, res: Response) {
   const { name, version } = req.body;
 
   if (!name) {
@@ -61,7 +61,7 @@ export async function addPlugin(req: AddPluginRequest, res: Response) {
   res.json(PluginManager.find(name));
 }
 
-export async function togglePlugin(req: TogglePluginRequest, res: Response) {
+export async function toggleExtension(req: ToggleExtensionRequest, res: Response) {
   const { id, enabled } = req.body;
 
   if (!id) {
@@ -70,7 +70,7 @@ export async function togglePlugin(req: TogglePluginRequest, res: Response) {
   }
 
   if (!PluginManager.find(id)) {
-    res.status(404).json({ error: `plugin \`${id}\` not found` });
+    res.status(404).json({ error: `extension \`${id}\` not found` });
     return;
   }
 
@@ -83,7 +83,7 @@ export async function togglePlugin(req: TogglePluginRequest, res: Response) {
   res.json(PluginManager.find(id));
 }
 
-export async function removePlugin(req: RemovePluginRequest, res: Response) {
+export async function removeExtension(req: RemoveExtensionRequest, res: Response) {
   const { id } = req.body;
 
   if (!id) {
@@ -92,7 +92,7 @@ export async function removePlugin(req: RemovePluginRequest, res: Response) {
   }
 
   if (!PluginManager.find(id)) {
-    res.status(404).json({ error: `plugin \`${id}\` not found` });
+    res.status(404).json({ error: `extension \`${id}\` not found` });
     return;
   }
 
@@ -100,17 +100,17 @@ export async function removePlugin(req: RemovePluginRequest, res: Response) {
   res.json(PluginManager.getAll());
 }
 
-export async function searchPlugins(req: SearchPluginsRequest, res: Response) {
+export async function searchExtensions(req: SearchExtensionsRequest, res: Response) {
   const { q } = req.query;
 
   const results = await PluginManager.search(q ?? '');
   res.json(results);
 }
 
-export async function getBundleForView(req: PluginViewBundleRequest, res: Response) {
+export async function getBundleForView(req: ExtensionViewBundleRequest, res: Response) {
   const { id, view } = req.params;
-  const plugin = PluginManager.find(id);
-  const bundleId = plugin.contributes.views?.[view].bundleId as string;
+  const extension = PluginManager.find(id);
+  const bundleId = extension.contributes.views?.[view].bundleId as string;
   const bundle = PluginManager.getBundle(id, bundleId);
   if (bundle) {
     res.sendFile(bundle);
@@ -119,7 +119,7 @@ export async function getBundleForView(req: PluginViewBundleRequest, res: Respon
   }
 }
 
-export async function performPluginFetch(req: PluginFetchRequest, res: Response) {
+export async function performExtensionFetch(req: ExtensionFetchRequest, res: Response) {
   const { url } = req.params;
   const options = req.body;
   if (!url || !options) {
