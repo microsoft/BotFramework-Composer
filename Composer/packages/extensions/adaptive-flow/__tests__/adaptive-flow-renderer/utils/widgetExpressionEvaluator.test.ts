@@ -2,14 +2,18 @@
 // Licensed under the MIT License.
 
 import {
-  evaluateWidgetExpression,
+  evaluateWidgetProp,
   ActionContextKey,
 } from '../../../src/adaptive-flow-renderer/utils/expression/widgetExpressionEvaluator';
 
-const evaluate = evaluateWidgetExpression;
-describe('evaluateWidgetExpression()', () => {
+const evaluate = evaluateWidgetProp;
+describe('evaluateWidgetProp()', () => {
+  it('can evaluate string interpolation pattern.', () => {
+    expect(evaluate('${a}, ${b}', { a: 1, b: 2 })).toEqual('1, 2');
+  });
+
   it('return origin input when input non-expression string.', () => {
-    ['${action.x}', 'hello', 'action.x', '= Result Value', '= ActivityId'].forEach((x) => {
+    ['hello', 'action.x', '= Result Value', '= ActivityId'].forEach((x) => {
       expect(evaluate(x, {}, ActionContextKey)).toEqual(x);
     });
   });

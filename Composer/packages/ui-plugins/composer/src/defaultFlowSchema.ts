@@ -61,7 +61,7 @@ export const DefaultFlowSchema: FlowUISchema = {
       property: '=action.resultProperty',
       description: '= Result',
     },
-    hideFooter: '!action.resultProperty',
+    hideFooter: '=!action.resultProperty',
   },
   [SDKKinds.ReplaceDialog]: {
     widget: 'ActionCard',
@@ -86,7 +86,7 @@ export const DefaultFlowSchema: FlowUISchema = {
   },
   [SDKKinds.SetProperty]: {
     widget: 'ActionCard',
-    body: '=concat(coalesce(action.property, "?"), " : ", coalesce(action.value, "?"))',
+    body: '${coalesce(action.property, "?")} : ${coalesce(action.value, "?")}',
   },
   [SDKKinds.SetProperties]: {
     widget: 'ActionCard',
