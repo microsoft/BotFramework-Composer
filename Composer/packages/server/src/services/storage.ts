@@ -138,6 +138,11 @@ class StorageService {
     }
   };
 
+  public checkIsBotFolder = async (storageId: string, path: string, user?: UserIdentity) => {
+    const storageClient = this.getStorageClient(storageId, user);
+    return await this.isBotFolder(storageClient, path);
+  };
+
   private ensureDefaultBotFoldersExist = () => {
     this.storageConnections.forEach((s) => {
       this.createFolderRecurively(s.defaultPath);

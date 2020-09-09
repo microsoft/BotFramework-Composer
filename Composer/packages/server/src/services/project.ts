@@ -147,6 +147,10 @@ export class BotProjectService {
       throw new Error(`file ${locationRef.path} does not exist`);
     }
 
+    if (!(await StorageService.checkIsBotFolder(locationRef.storageId, locationRef.path, user))) {
+      throw new Error(`${locationRef.path} is not a bot project folder`);
+    }
+
     for (const key in BotProjectService.projectLocationMap) {
       if (BotProjectService.projectLocationMap[key] === locationRef.path) {
         // TODO: this should probably move to getProjectById
