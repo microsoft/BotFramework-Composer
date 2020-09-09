@@ -6,10 +6,11 @@ import { jsx } from '@emotion/core';
 import { useState, useEffect, Fragment, useCallback, useMemo } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
-import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
+import { Dialog } from 'office-ui-fabric-react/lib/Dialog';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { PublishTarget } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
+import { ProvisionType } from '@bfc/shared';
 
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { projectContainer } from '../design/styles';
@@ -30,6 +31,8 @@ import { PublishDialog } from './publishDialog';
 import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor, overflowSet, targetSelected } from './styles';
 import { CreatePublishTarget } from './createPublishTarget';
 import { PublishStatusList, IStatus } from './publishStatusList';
+import { ProvisionDialog } from './provisionDialog';
+import { ProvisionDetailPanel } from './provisionDetail';
 
 interface PublishPageProps extends RouteComponentProps<{}> {
   targetName?: string;
