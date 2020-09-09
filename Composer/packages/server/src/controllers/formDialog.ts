@@ -27,7 +27,7 @@ const getTemplateSchemas = async (req: Request, res: Response) => {
     res.status(200).json(result);
   } else {
     res.status(404).json({
-      message: 'Failed to get form dialog schemas.',
+      message: 'Failed to retrieve form dialog template schemas.',
     });
   }
 };

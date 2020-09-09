@@ -494,7 +494,8 @@ export class BotProject implements IBotProject {
     const relativePath = defaultFilePath(this.name, defaultLocale, `${name}${FileExtensions.FormDialogSchema}`);
     const schemaPath = Path.resolve(this.dir, relativePath);
 
-    const outDir = Path.resolve(this.dir, `dialogs/${name}`);
+    const dialogPath = defaultFilePath(this.name, defaultLocale, `${name}${FileExtensions.Dialog}`);
+    const outDir = Path.dirname(Path.resolve(this.dir, dialogPath));
 
     const feedback = (type: FeedbackType, message: string): void => {
       // eslint-disable-next-line no-console
