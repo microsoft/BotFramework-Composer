@@ -5,7 +5,7 @@ import React from 'react';
 import { renderHook } from '@bfc/test-utils/lib/hooks';
 
 import { useRecognizerConfig } from '../useRecognizerConfig';
-import ExtensionContext from '../../extensionContext';
+import EditorExtensionContext from '../../EditorExtensionContext';
 
 const plugins = {
   uiSchema: {
@@ -23,7 +23,7 @@ const plugins = {
 
 const wrapper: React.FC = ({ children }) => (
   // @ts-expect-error
-  <ExtensionContext.Provider value={{ plugins }}>{children}</ExtensionContext.Provider>
+  <EditorExtensionContext.Provider value={{ plugins }}>{children}</EditorExtensionContext.Provider>
 );
 
 describe('useRecognizerConfig', () => {

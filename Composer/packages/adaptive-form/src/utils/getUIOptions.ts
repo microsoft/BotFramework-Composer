@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { FormUISchema, UIOptions, JSONSchema7 } from '@bfc/editor-extension';
+import { FormUISchema, UIOptions, JSONSchema7 } from '@bfc/extension-client';
 /**
  * Merges overrides and plugins into default ui schema and returns the UIOptions
  */

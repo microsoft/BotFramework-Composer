@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 import React, { useMemo } from 'react';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
-import { FieldProps } from '@bfc/editor-extension';
+import { FieldProps } from '@bfc/extension-client';
 import formatMessage from 'format-message';
 
 import { FieldLabel } from '../FieldLabel';

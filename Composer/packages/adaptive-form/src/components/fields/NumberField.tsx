@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FieldProps } from '@bfc/editor-extension';
+import { FieldProps } from '@bfc/extension-client';
 import formatMessage from 'format-message';
 import { SpinButton } from 'office-ui-fabric-react/lib/SpinButton';
 import React from 'react';

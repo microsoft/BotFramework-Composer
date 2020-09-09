@@ -23,7 +23,7 @@
     "@bfc/adaptive-flow": "*",
     "@bfc/adaptive-form": "*",
     "@bfc/code-editor": "*",
-    "@bfc/editor-extension": "*",
+    "@bfc/extension-client": "*",
     "@bfc/indexers": "*",
     "@bfc/shared": "*",
     "@bfc/ui-plugin-composer": "*",

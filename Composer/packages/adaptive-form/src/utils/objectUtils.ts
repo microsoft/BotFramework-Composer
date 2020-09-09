@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { generateUniqueId } from '@bfc/shared';
-import { ChangeHandler } from '@bfc/editor-extension';
+import { ChangeHandler } from '@bfc/extension-client';
 import { useState } from 'react';
 
 type ItemType<ValueType = unknown> = { [key: string]: ValueType };

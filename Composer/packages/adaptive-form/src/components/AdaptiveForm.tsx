@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import React from 'react';
-import { FormErrors, JSONSchema7, UIOptions } from '@bfc/editor-extension';
+import { FormErrors, JSONSchema7, UIOptions } from '@bfc/extension-client';
 import ErrorBoundary from 'react-error-boundary';
 import formatMessage from 'format-message';
 

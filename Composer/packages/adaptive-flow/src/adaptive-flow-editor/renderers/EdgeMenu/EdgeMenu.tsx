@@ -7,7 +7,7 @@ import { useContext, useState } from 'react';
 import formatMessage from 'format-message';
 import { DefinitionSummary } from '@bfc/shared';
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
-import { useMenuConfig, MenuUISchema } from '@bfc/editor-extension';
+import { useMenuConfig, MenuUISchema } from '@bfc/extension-client';
 
 // TODO: leak of visual-sdk domain (EdgeAddButtonSize)
 import { EdgeAddButtonSize } from '../../../adaptive-flow-renderer/constants/ElementSizes';

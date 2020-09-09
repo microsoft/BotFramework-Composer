@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { UIOptions, JSONSchema7 } from '@bfc/editor-extension';
+import { UIOptions, JSONSchema7 } from '@bfc/extension-client';
 import cloneDeep from 'lodash/cloneDeep';
 import formatMessage from 'format-message';
 

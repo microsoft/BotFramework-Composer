@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { BaseSchema } from '@bfc/shared';
-import { FlowEditorWidgetMap } from '@bfc/editor-extension';
+import { FlowEditorWidgetMap } from '@bfc/extension-client';
 
 import { FlowWidget, FlowWidgetProp, WidgetEventHandler } from '../../types/flowRenderer.types';
 import { Boundary } from '../../models/Boundary';

@@ -1,3 +1,4 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-export * from './Extension';
+
+export * from './EditorExtension';

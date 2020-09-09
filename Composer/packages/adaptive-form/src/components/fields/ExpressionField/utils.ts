@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { JSONSchema7, JSONSchema7Definition, SchemaDefinitions } from '@bfc/editor-extension';
+import { JSONSchema7, JSONSchema7Definition, SchemaDefinitions } from '@bfc/extension-client';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
 import { resolveRef, getValueType } from '../../../utils';

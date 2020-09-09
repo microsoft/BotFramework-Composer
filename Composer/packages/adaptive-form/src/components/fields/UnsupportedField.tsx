@@ -4,7 +4,7 @@
 import { jsx } from '@emotion/core';
 import React, { useState } from 'react';
 import { Link } from 'office-ui-fabric-react/lib/Link';
-import { FieldProps } from '@bfc/editor-extension';
+import { FieldProps } from '@bfc/extension-client';
 import omit from 'lodash/omit';
 
 import { unsupportedField } from './styles';

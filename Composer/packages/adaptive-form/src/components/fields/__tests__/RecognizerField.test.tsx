@@ -3,14 +3,14 @@
 
 import React from 'react';
 import { render, fireEvent, screen } from '@bfc/test-utils';
-import { useRecognizerConfig, useShellApi } from '@bfc/editor-extension';
+import { useRecognizerConfig, useShellApi } from '@bfc/extension-client';
 import assign from 'lodash/assign';
 
 import { RecognizerField } from '../RecognizerField';
 
 import { fieldProps } from './testUtils';
 
-jest.mock('@bfc/editor-extension', () => ({
+jest.mock('@bfc/extension-client', () => ({
   useShellApi: jest.fn(),
   useRecognizerConfig: jest.fn(),
 }));

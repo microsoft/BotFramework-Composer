@@ -18,7 +18,7 @@
   "license": "MIT",
   "peerDependencies": {
     "@bfc/adaptive-form": "*",
-    "@bfc/editor-extension": "*",
+    "@bfc/extension-client": "*",
     "@bfc/intellisense": "*",
     "@emotion/core": "^10.0.27",
     "@uifabric/fluent-theme": "^7.1.4",
@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@bfc/adaptive-form": "*",
-    "@bfc/editor-extension": "*",
+    "@bfc/extension-client": "*",
     "@bfc/intellisense": "*",
     "@bfc/test-utils": "*",
     "@emotion/core": "^10.0.27",

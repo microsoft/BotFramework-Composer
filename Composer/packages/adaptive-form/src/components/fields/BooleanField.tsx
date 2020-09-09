@@ -3,7 +3,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React from 'react';
-import { FieldProps } from '@bfc/editor-extension';
+import { FieldProps } from '@bfc/extension-client';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 import formatMessage from 'format-message';
 

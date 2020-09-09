@@ -23,7 +23,7 @@
     "lint:fix": "yarn lint --fix"
   },
   "dependencies": {
-    "@bfc/editor-extension": "*",
+    "@bfc/extension-client": "*",
     "@bfc/shared": "*",
     "@bfc/ui-shared": "*",
     "@emotion/core": "^10.0.27",

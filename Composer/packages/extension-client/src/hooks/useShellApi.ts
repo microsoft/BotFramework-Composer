@@ -3,7 +3,7 @@
 import { useContext } from 'react';
 import { ShellApi, ShellData } from '@bfc/shared';
 
-import ExtensionContext from '../extensionContext';
+import { EditorExtensionContext } from '../EditorExtensionContext';
 import { PluginConfig } from '../types';
 
 interface ShellContext extends ShellData {
@@ -12,7 +12,7 @@ interface ShellContext extends ShellData {
 }
 
 export function useShellApi(): ShellContext {
-  const { shellApi, shellData, plugins } = useContext(ExtensionContext);
+  const { shellApi, shellData, plugins } = useContext(EditorExtensionContext);
 
   if (!shellApi) {
     // eslint-disable-next-line no-console

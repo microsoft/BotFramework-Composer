@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { SchemaField } from '@bfc/adaptive-form';
-import { FieldProps } from '@bfc/editor-extension';
+import { FieldProps } from '@bfc/extension-client';
 
 import { SchemaEditorField } from './SchemaEditorField';
 

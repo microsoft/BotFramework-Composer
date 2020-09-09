@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react';
 import { IComboBoxOption, SelectableOptionMenuItemType } from 'office-ui-fabric-react/lib/ComboBox';
-import { FieldProps, useShellApi } from '@bfc/editor-extension';
+import { FieldProps, useShellApi } from '@bfc/extension-client';
 import formatMessage from 'format-message';
 
 import { ComboBoxField } from './ComboBoxField';

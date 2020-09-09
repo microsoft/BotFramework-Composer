@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { UISchema, JSONSchema7, RoleSchema } from '@bfc/editor-extension';
+import { UISchema, JSONSchema7, RoleSchema } from '@bfc/extension-client';
 import { SDKKinds } from '@bfc/shared';
 
 import { getUIOptions } from '../getUIOptions';

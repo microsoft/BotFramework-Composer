@@ -3,10 +3,10 @@
 
 import { useContext } from 'react';
 
-import ExtensionContext from '../extensionContext';
+import { EditorExtensionContext } from '../EditorExtensionContext';
 
 export function useRecognizerConfig() {
-  const { plugins } = useContext(ExtensionContext);
+  const { plugins } = useContext(EditorExtensionContext);
 
   return plugins.recognizers ?? [];
 }

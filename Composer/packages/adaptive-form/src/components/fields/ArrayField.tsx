@@ -7,7 +7,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { SharedColors, NeutralColors, FontSizes } from '@uifabric/fluent-theme';
-import { FieldProps } from '@bfc/editor-extension';
+import { FieldProps } from '@bfc/extension-client';
 import formatMessage from 'format-message';
 
 import { getArrayItemProps, useArrayItems } from '../../utils';

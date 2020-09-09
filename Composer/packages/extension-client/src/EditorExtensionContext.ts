@@ -5,16 +5,14 @@ import { ShellApi, ShellData } from '@bfc/shared';
 
 import { PluginConfig } from './types';
 
-interface ExtensionContext {
+interface EditorExtensionContext {
   shellApi: ShellApi;
   shellData: ShellData;
   plugins: PluginConfig;
 }
 
-const ExtensionContext = React.createContext<ExtensionContext>({
+export const EditorExtensionContext = React.createContext<EditorExtensionContext>({
   shellApi: {},
   shellData: {},
   plugins: {},
-} as ExtensionContext);
-
-export default ExtensionContext;
+} as EditorExtensionContext);

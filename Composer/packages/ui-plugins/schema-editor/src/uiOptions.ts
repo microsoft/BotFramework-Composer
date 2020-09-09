@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { UIOptions } from '@bfc/editor-extension';
+import { UIOptions } from '@bfc/extension-client';
 import startCase from 'lodash/startCase';
 
 import { CollapsedField } from './Fields/CollapsedField';

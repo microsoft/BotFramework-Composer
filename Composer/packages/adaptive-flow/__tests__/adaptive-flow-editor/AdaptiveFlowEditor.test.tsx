@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { render } from '@bfc/test-utils';
-import { ExtensionContext } from '@bfc/editor-extension';
+import { EditorExtensionContext } from '@bfc/extension-client';
 
 import AdaptiveFlowEditor from '../../src/adaptive-flow-editor/AdaptiveFlowEditor';
 
@@ -12,7 +12,7 @@ import { ShellApiStub } from './stubs/ShellApiStub';
 describe('<VisualDesigner/>', () => {
   it('can render.', () => {
     const visualDesigner = render(
-      <ExtensionContext.Provider
+      <EditorExtensionContext.Provider
         value={{
           shellApi: ShellApiStub,
           shellData: {} as any,
@@ -20,7 +20,7 @@ describe('<VisualDesigner/>', () => {
         }}
       >
         <AdaptiveFlowEditor />
-      </ExtensionContext.Provider>
+      </EditorExtensionContext.Provider>
     );
     expect(visualDesigner).toBeTruthy();
   });

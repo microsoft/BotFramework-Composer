@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { PluginConfig } from '@bfc/editor-extension';
+import { PluginConfig } from '@bfc/extension-client';
 import { SDKKinds } from '@bfc/shared';
 
 import { LuisIntentEditor } from './LuisIntentEditor';

@@ -10,7 +10,7 @@ import {
 import { SDKKinds, DefinitionSummary } from '@bfc/shared';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
-import { MenuUISchema, MenuOptions } from '@bfc/editor-extension';
+import { MenuUISchema, MenuOptions } from '@bfc/extension-client';
 import set from 'lodash/set';
 
 import { MenuEventTypes } from '../../constants/MenuTypes';

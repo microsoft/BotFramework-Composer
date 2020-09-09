@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import React from 'react';
-import Extension from '@bfc/editor-extension';
+import { EditorExtension } from '@bfc/extension-client';
 import { render, fireEvent, findAllByRole } from '@bfc/test-utils';
 
 import { SchemaEditorField } from '../Fields/SchemaEditorField';
@@ -25,9 +25,9 @@ const renderSchemaEditor = ({ updateDialogSchema = jest.fn() } = {}) => {
   };
 
   return render(
-    <Extension plugins={{}} shell={shell}>
+    <EditorExtension plugins={{}} shell={shell}>
       <SchemaEditorField />
-    </Extension>
+    </EditorExtension>
   );
 };
 

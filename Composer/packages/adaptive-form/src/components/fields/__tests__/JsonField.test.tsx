@@ -9,7 +9,7 @@ import { JsonField } from '../JsonField';
 
 import { fieldProps } from './testUtils';
 
-jest.mock('@bfc/editor-extension', () => ({
+jest.mock('@bfc/extension-client', () => ({
   useShellApi: () => ({
     userSettings: {},
   }),

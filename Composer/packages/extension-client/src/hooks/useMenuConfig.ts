@@ -4,11 +4,11 @@
 import { useContext, useMemo } from 'react';
 import mapValues from 'lodash/mapValues';
 
-import ExtensionContext from '../extensionContext';
+import { EditorExtensionContext } from '../EditorExtensionContext';
 import { MenuUISchema } from '../types';
 
 export function useMenuConfig(): MenuUISchema {
-  const { plugins } = useContext(ExtensionContext);
+  const { plugins } = useContext(EditorExtensionContext);
 
   return useMemo(() => mapValues(plugins.uiSchema, 'menu'), [plugins.uiSchema]);
 }

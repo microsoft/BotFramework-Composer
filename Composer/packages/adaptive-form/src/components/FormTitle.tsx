@@ -7,7 +7,7 @@ import React, { useMemo, useRef } from 'react';
 import { FontWeights } from '@uifabric/styling';
 import { FontSizes } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
-import { UIOptions, JSONSchema7, useShellApi, useRecognizerConfig } from '@bfc/editor-extension';
+import { UIOptions, JSONSchema7, useShellApi, useRecognizerConfig } from '@bfc/extension-client';
 import { css } from '@emotion/core';
 import { SDKKinds } from '@bfc/shared';
 import debounce from 'lodash/debounce';

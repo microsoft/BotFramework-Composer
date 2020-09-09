@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FlowEditorWidgetMap } from '@bfc/editor-extension';
+import { FlowEditorWidgetMap } from '@bfc/extension-client';
 
 import {
   ActionCard,

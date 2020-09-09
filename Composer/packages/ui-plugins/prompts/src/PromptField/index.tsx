@@ -4,7 +4,7 @@
 import React from 'react';
 import { Pivot, PivotLinkSize, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 import get from 'lodash/get';
-import { FieldProps, useShellApi } from '@bfc/editor-extension';
+import { FieldProps, useShellApi } from '@bfc/extension-client';
 import { SchemaField } from '@bfc/adaptive-form';
 import { PromptTab, PropmtTabTitles } from '@bfc/shared';
 

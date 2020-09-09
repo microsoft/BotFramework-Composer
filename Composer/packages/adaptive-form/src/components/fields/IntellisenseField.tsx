@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FieldProps } from '@bfc/editor-extension';
+import { FieldProps } from '@bfc/extension-client';
 import { IntellisenseTextField } from '@bfc/intellisense';
 import React from 'react';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';

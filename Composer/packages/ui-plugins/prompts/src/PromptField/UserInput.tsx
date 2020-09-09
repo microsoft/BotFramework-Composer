@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import React, { Fragment } from 'react';
 import { SDKKinds, MicrosoftInputDialog, ChoiceInput, ConfirmInput, LuMetaData, LuType } from '@bfc/shared';
 import { FieldLabel, SchemaField } from '@bfc/adaptive-form';
-import { JSONSchema7, useShellApi, useRecognizerConfig } from '@bfc/editor-extension';
+import { JSONSchema7, useShellApi, useRecognizerConfig } from '@bfc/extension-client';
 import formatMessage from 'format-message';
 
 import { PromptFieldProps } from './types';

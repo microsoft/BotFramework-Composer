@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { LgTemplateRef, LgFile, LgTemplate } from '@bfc/shared';
-import { useShellApi } from '@bfc/editor-extension';
+import { useShellApi } from '@bfc/extension-client';
 
 export const queryLgTemplate = (templateId: string, lgFileId: string, lgFiles: LgFile[]): LgTemplate | undefined => {
   return lgFiles.find(({ id }) => id === lgFileId)?.templates?.find(({ name }) => name === templateId);
