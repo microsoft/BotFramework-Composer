@@ -57,5 +57,5 @@ export const optionStyles = {
 export const warningIconStyles = {
   marginLeft: 5,
   color: '#BE880A',
-  fontSize: 5,
+  fontSize: 15,
 };
