@@ -8,7 +8,7 @@ import { DialogInfo } from '@bfc/shared';
 import { renderWithRecoil } from '../testUtils';
 import { dialogs } from '../constants.json';
 import { ProjectTree } from '../../src/components/ProjectTree/ProjectTree';
-import { TriggerCreationModal } from '../../src/components/ProjectTree/TriggerCreationModal';
+import { TriggerCreationModal } from '../../src/components/TriggerCreationModal';
 import { CreateDialogModal } from '../../src/pages/design/createDialogModal';
 
 jest.mock('@bfc/code-editor', () => {
