@@ -5,9 +5,11 @@
   "tasks": [
     {
       "label": "server: build",
-      "type": "npm",
-      "script": "build",
-      "path": "Composer/packages/server/",
+      "type": "shell",
+      "command": "yarn build",
+      "options": {
+        "cwd": "Composer/packages/server"
+      },
       "problemMatcher": []
     }
   ]
