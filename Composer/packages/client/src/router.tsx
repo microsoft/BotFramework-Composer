@@ -12,7 +12,13 @@ import { resolveToBasePath } from './utils/fileUtil';
 import { data } from './styles';
 import { NotFound } from './components/NotFound';
 import { BASEPATH } from './constants';
-import { botOpeningState, dispatcherState, schemasState, botProjectsSpaceState } from './recoilModel';
+import {
+  botOpeningState,
+  dispatcherState,
+  schemasState,
+  botProjectsSpaceState,
+  botProjectSpaceLoadedSelector,
+} from './recoilModel';
 import { openAlertModal } from './components/Modal/AlertDialog';
 import { dialogStyle } from './components/Modal/dialogStyle';
 import { LoadingSpinner } from './components/LoadingSpinner';
@@ -88,9 +94,10 @@ const projectStyle = css`
 const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
   const { projectId = '' } = props;
   const schemas = useRecoilValue(schemasState(projectId));
-  const botOpening = useRecoilValue(botOpeningState);
-  const { fetchProjectById } = useRecoilValue(dispatcherState);
+
+  const { fetchProjectById, setBotProjectSpaceLoaded } = useRecoilValue(dispatcherState);
   const botProjects = useRecoilValue(botProjectsSpaceState);
+  const projectNames = useRecoilValue(botProjectSpaceLoadedSelector);
 
   useEffect(() => {
     if (botProjects[0] !== props.projectId && props.projectId) {
@@ -107,11 +114,11 @@ const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string }>> = (pro
     }
   }, [schemas, projectId]);
 
-  if (botOpening || botProjects.length === 0) {
-    return <LoadingSpinner />;
+  if (botProjects.length && botProjects.length === projectNames.length) {
+    setBotProjectSpaceLoaded(true);
+    return <div css={projectStyle}>{props.children}</div>;
   }
-
-  return <div css={projectStyle}>{props.children}</div>;
+  return <LoadingSpinner />;
 };
 
 export default Routes;

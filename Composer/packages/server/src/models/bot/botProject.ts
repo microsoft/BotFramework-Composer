@@ -69,6 +69,22 @@ export class BotProject implements IBotProject {
     this.builder = new Builder(this.dir, this.fileStorage, defaultLanguage);
   }
 
+  public async isBotProjectSpace() {
+    const paths: string[] = await this.fileStorage.glob('*.botproj', this.dir);
+    let isBotProjectSpace = false;
+    let contents: string | undefined;
+    if (paths.length > 0) {
+      isBotProjectSpace = true;
+      const realFilePath: string = Path.join(this.dataDir, paths[0]);
+      const fileInfo = await this._getFileInfo(realFilePath);
+      contents = JSON.parse(fileInfo ? fileInfo.content : '');
+    }
+    return {
+      isBotProjectSpace,
+      contents,
+    };
+  }
+
   public get dialogFiles() {
     const files: FileInfo[] = [];
     this.files.forEach((file) => {

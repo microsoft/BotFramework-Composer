@@ -76,16 +76,6 @@ const checkAtomChanged = (current: AtomAssetsMap, previous: AtomAssetsMap, atom:
   return false;
 };
 
-const checkIfProjectIsReloaded = (current: AtomAssetsMap, previous: AtomAssetsMap, botProjects: RecoilState<any>) => {
-  const currVal = current.get(botProjects);
-  const prevVal = previous.get(botProjects);
-  if (isArray(prevVal) && isArray(currVal) && prevVal[0] !== currVal[0]) {
-    return true;
-  }
-
-  return false;
-};
-
 const checkAtomsChanged = (current: AtomAssetsMap, previous: AtomAssetsMap, atoms: RecoilState<any>[]) => {
   return atoms.some((atom) => checkAtomChanged(current, previous, atom));
 };
