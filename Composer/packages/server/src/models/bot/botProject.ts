@@ -515,6 +515,16 @@ export class BotProject implements IBotProject {
       feedback,
     };
 
+    // schema path = path to the JSON schema file defining the form data
+    // prefix - the dialog name to prefix on generated assets
+    // outDir - the directory where the dialog assets will be saved
+    // metaSchema - deprecated
+    // allLocales - the additional locales for which to generate assets
+    // templateDirs - paths to directories containing customized templates
+    // force - if assets are overwritten causing any user customizations to be lost
+    // merge - if generated assets should be merged with any user customized assets
+    // singleton - if the generated assets should be merged into a single dialog
+    // feeback - a callback for status and progress and generation happens
     await generate(
       generateParams.schemaPath,
       generateParams.prefix,
