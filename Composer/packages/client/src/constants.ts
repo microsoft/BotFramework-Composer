@@ -102,6 +102,12 @@ export const DialogCreationCopy = {
     title: formatMessage('Create bot from template or scratch?'),
     subText: formatMessage('You can create a new bot from scratch with Composer, or start with a template.'),
   },
+  DEFINE_CONVERSATION_OBJECTIVE: {
+    title: formatMessage('Define conversation objective'),
+    subText: formatMessage(
+      `What can the user accomplish through this conversation? For example, BookATable, OrderACoffee etc.`
+    ),
+  },
   DEFINE_BOT_PROJECT: {
     title: formatMessage('Create a bot project'),
     subText: formatMessage(`Specify a name, description, and location for your new bot project.`),
