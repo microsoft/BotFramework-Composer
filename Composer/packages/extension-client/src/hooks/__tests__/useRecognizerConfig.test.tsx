@@ -5,7 +5,7 @@ import React from 'react';
 import { renderHook } from '@bfc/test-utils/lib/hooks';
 
 import { useRecognizerConfig } from '../useRecognizerConfig';
-import EditorExtensionContext from '../../EditorExtensionContext';
+import { EditorExtensionContext } from '../../EditorExtensionContext';
 
 const plugins = {
   uiSchema: {

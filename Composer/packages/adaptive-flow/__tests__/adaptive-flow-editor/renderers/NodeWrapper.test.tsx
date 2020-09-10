@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { render, fireEvent } from '@bfc/test-utils';
-import EditorExtensionContext from '@bfc/extension-client';
+import { EditorExtensionContext } from '@bfc/extension-client';
 
 import { ActionNodeWrapper } from '../../../src/adaptive-flow-editor/renderers/NodeWrapper';
 import { ShellApiStub } from '../stubs/ShellApiStub';
