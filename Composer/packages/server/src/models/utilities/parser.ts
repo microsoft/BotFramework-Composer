@@ -11,7 +11,9 @@ import log from './../../logger';
 import { DOC_EXTENSIONS, QNA_SUBSCRIPTION_KEY, COGNITIVE_SERVICES_ENDPOINTS } from './../../constants';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const qnaBuild = require('@microsoft/bf-lu/lib/parser/qnabuild/builder.js');
+// const qnaBuild = require('@microsoft/bf-lu/lib/parser/qnabuild/builder.js');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const qnaBuild = require('@bfcomposer/bf-lu/lib/parser/qnabuild/builder.js');
 
 const debug = log.extend('helper-parser');
 
@@ -25,7 +27,7 @@ function getBuildEnvironment() {
   return {};
 }
 
-async function importQnAFromUrl(builder: any, url: string, subscriptionKey: string) {
+async function importQnAFromUrl(builder: any, url: string, subscriptionKey: string, multiTurn = false) {
   url = url.trim();
   let onlineQnAContent = '';
   if (DOC_EXTENSIONS.some((e) => url.endsWith(e))) {
@@ -36,17 +38,24 @@ async function importQnAFromUrl(builder: any, url: string, subscriptionKey: stri
       url,
       subscriptionKey,
       COGNITIVE_SERVICES_ENDPOINTS,
-      uuid()
+      uuid(),
+      multiTurn
     );
   } else {
-    onlineQnAContent = await builder.importUrlReference(url, subscriptionKey, COGNITIVE_SERVICES_ENDPOINTS, uuid());
+    onlineQnAContent = await builder.importUrlReference(
+      url,
+      subscriptionKey,
+      COGNITIVE_SERVICES_ENDPOINTS,
+      uuid(),
+      multiTurn
+    );
   }
   return onlineQnAContent;
 }
 
 //https://azure.microsoft.com/en-us/pricing/details/cognitive-services/qna-maker/
 //limited to 3 transactions per second
-export async function parseQnAContent(urls: string[]) {
+export async function parseQnAContent(urls: string[], multiTurn: boolean) {
   const builder = new qnaBuild.Builder((message: string) => debug(message));
 
   let qnaContent = '';
@@ -64,7 +73,7 @@ export async function parseQnAContent(urls: string[]) {
     const batchUrls = urls.slice(i, i + limitedNumInBatch);
     const contents = await Promise.all(
       batchUrls.map(async (url) => {
-        return await importQnAFromUrl(builder, url, subscriptionKey);
+        return await importQnAFromUrl(builder, url, subscriptionKey, multiTurn);
       })
     );
     contents.forEach((content) => {

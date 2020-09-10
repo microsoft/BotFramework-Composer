@@ -61,6 +61,7 @@
     "@bfc/lu-languageserver": "*",
     "@bfc/plugin-loader": "*",
     "@bfc/shared": "*",
+    "@bfcomposer/bf-lu": "^1.4.8",
     "@microsoft/bf-dispatcher": "^4.10.0-preview.141651",
     "@microsoft/bf-lu": "^4.11.0-dev.20200824.de66343",
     "archiver": "^3.0.0",

@@ -158,7 +158,8 @@ export const qnaDispatcher = () => {
         return;
       }
 
-      const contentForSourceQnA = `> !# @source.urls = ${urls}
+      const contentForSourceQnA = `> !# @source.urls=${urls}
+> !# @source.multiTurn=${multiTurn}
 ${response.data}
 `;
 

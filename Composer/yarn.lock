@@ -2332,10 +2332,10 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bfcomposer/bf-lu@^1.4.7":
-  version "1.4.7"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/bf-lu/-/@bfcomposer/bf-lu-1.4.7.tgz#27b0cf4bc1a56f369b5ec3b971c86e7badf45c74"
-  integrity sha1-J7DPS8GlbzabXsO5cchue630XHQ=
+"@bfcomposer/bf-lu@^1.4.8":
+  version "1.4.8"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/bf-lu/-/@bfcomposer/bf-lu-1.4.8.tgz#dbb68cc54b2f70c558623952f38567e65d49b5de"
+  integrity sha1-27aMxUsvcMVYYjlS84Vn5l1Jtd4=
   dependencies:
     "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
     "@azure/ms-rest-azure-js" "2.0.1"
@@ -5465,10 +5465,10 @@ binary-extensions@^2.0.0:
   resolved "https://registry.yarnpkg.com/binary-extensions/-/binary-extensions-2.0.0.tgz#23c0df14f6a88077f5f986c0d167ec03c3d5537c"
   integrity sha512-Phlt0plgpIIBOGTT/ehfFnbNlfsDEiqmzE2KRXoX1bLIlir4X/MR+zSyBEkL05ffWgnRSf/DXv+WrUAVr93/ow==
 
-bl@^1.0.0:
-  version "1.2.3"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/bl/-/bl-1.2.3.tgz#1e8dd80142eac80d7158c9dccc047fb620e035e7"
-  integrity sha1-Ho3YAULqyA1xWMnczAR/tiDgNec=
+bl@^1.0.0, bl@^2.2.1:
+  version "2.2.1"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/bl/-/bl-2.2.1.tgz#8c11a7b730655c5d56898cdc871224f40fd901d5"
+  integrity sha1-jBGntzBlXF1WiYzchxIk9A/ZAdU=
   dependencies:
     readable-stream "^2.3.5"
     safe-buffer "^5.1.1"
