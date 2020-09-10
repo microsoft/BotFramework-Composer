@@ -150,11 +150,11 @@ export const UndoRoot = React.memo((props: UndoRootProps) => {
 
     if (checkAtomChanged(currentAssets, previousAssets, botProjectsSpaceState)) {
       //switch project should clean the undo history when the root bot has been changed
-      debugger;
-      undoHistory.clear();
+      // debugger;
+      history.clear();
       const assetMap = getAtomAssetsMap(snapshot, projectId);
 
-      undoHistory.add(assetMap);
+      history.add(assetMap);
     } else if (!assetsChanged.current) {
       if (checkAtomsChanged(currentAssets, previousAssets, trackedAtoms(projectId))) {
         assetsChanged.current = true;
