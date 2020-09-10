@@ -170,3 +170,8 @@ export const pluginsState = atom<PluginConfig[]>({
   key: getFullyQualifiedKey('plugins'),
   default: [],
 });
+
+export const botProjectSpaceLoadedState = atom<boolean>({
+  key: getFullyQualifiedKey('botProjectSpaceLoaded'),
+  default: false,
+});

@@ -20,7 +20,7 @@ import { DialogDeleting } from '../../constants';
 import {
   createSelectedPath,
   deleteTrigger,
-  getBreadcrumbLabel,
+  getbreadcrumbLabel,
   qnaMatcherKey,
   TriggerFormData,
   getDialogData,
@@ -263,7 +263,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       // maybe navigate to overall bot settings?
       return;
     } else if (selected != null) {
-      selectTo(projectId, dialogId, selected);
+      selectTo(projectId, selected);
     } else {
       navTo(projectId, dialogId, []);
     }
@@ -463,7 +463,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       dialogs.length > 0
         ? breadcrumb.reduce((result, item, index) => {
             const { dialogId, selected, focused } = item;
-            const text = getBreadcrumbLabel(dialogs, dialogId, selected, focused);
+            const text = getbreadcrumbLabel(dialogs, dialogId, selected, focused);
             if (text) {
               result.push({
                 // @ts-ignore
@@ -556,14 +556,14 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       if (index === currentIdx) {
         if (currentIdx - 1 >= 0) {
           //if the deleted node is selected and the selected one is not the first one, navTo the previous trigger;
-          selectTo(projectId, dialogId, createSelectedPath(currentIdx - 1));
+          selectTo(projectId, createSelectedPath(currentIdx - 1));
         } else {
           //if the deleted node is selected and the selected one is the first one, navTo the first trigger;
           navTo(projectId, dialogId, []);
         }
       } else if (index < currentIdx) {
         //if the deleted node is at the front, navTo the current one;
-        selectTo(projectId, dialogId, createSelectedPath(currentIdx - 1));
+        selectTo(projectId, createSelectedPath(currentIdx - 1));
       }
     }
   }

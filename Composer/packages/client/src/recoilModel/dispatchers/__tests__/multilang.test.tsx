@@ -40,7 +40,6 @@ describe('Multilang dispatcher', () => {
   let renderedComponent, dispatcher: Dispatcher;
   beforeEach(() => {
     const useRecoilTestHook = () => {
-      console.log('HIT ME');
       const {
         actionsSeed,
         dialogs,
@@ -53,7 +52,6 @@ describe('Multilang dispatcher', () => {
       } = useRecoilValue(botStateByProjectIdSelector);
 
       const currentDispatcher = useRecoilValue(dispatcherState);
-      console.log('HIT before');
       return {
         dialogs,
         locale,
@@ -66,7 +64,6 @@ describe('Multilang dispatcher', () => {
         onDelLanguageDialogComplete,
       };
     };
-    console.log('HIT befordsfsdfsdfsdfsdfsdfsdfse');
     const { result } = renderRecoilHook(useRecoilTestHook, {
       states: [
         { recoilState: currentProjectIdState, initialValue: state.projectId },
@@ -83,14 +80,11 @@ describe('Multilang dispatcher', () => {
         },
       },
     });
-    console.log('HIT after');
     renderedComponent = result;
-    console.log('sdfsdfsdfsdfsdfsdfs sdfsdfsdfsdf', renderedComponent);
     dispatcher = renderedComponent.current.currentDispatcher;
   });
 
-  fit('add language', async () => {
-    console.log('DISPATCHER', dispatcher);
+  it('add language', async () => {
     await act(async () => {
       await dispatcher.addLanguages({
         languages: ['zh-cn'],

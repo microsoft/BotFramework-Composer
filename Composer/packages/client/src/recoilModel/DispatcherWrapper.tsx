@@ -93,6 +93,11 @@ export const DispatcherWrapper = ({ children }) => {
     }
   });
 
+  // TODO: Handle Undo/Redo
+  // {botProjects.map((projectId) => (
+  //   <UndoRoot key={projectId} projectId={projectId} undoHistory={new UndoHistory()} />
+  // ))}
+
   return (
     <Fragment>
       {botProjects.map((projectId) => (

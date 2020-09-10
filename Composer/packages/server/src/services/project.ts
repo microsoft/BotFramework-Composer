@@ -277,4 +277,9 @@ export class BotProjectService {
       return '';
     }
   };
+
+  public static checkIfBotProjectSpace = async (location: LocationRef, user?: UserIdentity) => {
+    const project = new BotProject(location, user);
+    return project.isBotProjectSpace();
+  };
 }
