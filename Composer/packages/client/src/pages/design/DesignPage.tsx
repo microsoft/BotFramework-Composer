@@ -74,7 +74,7 @@ const CreateSkillModal = React.lazy(() => import('../../components/CreateSkillMo
 const CreateDialogModal = React.lazy(() => import('./createDialogModal'));
 const DisplayManifestModal = React.lazy(() => import('../../components/Modal/DisplayManifestModal'));
 const ExportSkillModal = React.lazy(() => import('./exportSkillModal'));
-const TriggerCreationModal = React.lazy(() => import('../../components/ProjectTree/TriggerCreationModal'));
+const TriggerCreationModal = React.lazy(() => import('../../components/TriggerCreationModal'));
 
 function onRenderContent(subTitle, style) {
   return (

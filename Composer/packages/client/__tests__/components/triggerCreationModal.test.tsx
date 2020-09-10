@@ -4,7 +4,7 @@
 import * as React from 'react';
 import { fireEvent, waitFor } from '@bfc/test-utils';
 
-import { TriggerCreationModal } from '../../src/components/ProjectTree/TriggerCreationModal';
+import { TriggerCreationModal } from '../../src/components/TriggerCreationModal';
 import { renderWithRecoil } from '../testUtils';
 
 describe('<TriggerCreationModal/>', () => {
