@@ -36,16 +36,6 @@ export function getDialog(dialogs: DialogInfo[], dialogId: string) {
   return cloneDeep(dialog);
 }
 
-export const eventTypeKey: string = SDKKinds.OnDialogEvent;
-export const intentTypeKey: string = SDKKinds.OnIntent;
-export const qnaTypeKey: string = SDKKinds.OnQnAMatch;
-export const activityTypeKey: string = SDKKinds.OnActivity;
-export const regexRecognizerKey: string = SDKKinds.RegexRecognizer;
-export const crossTrainedRecognizerSetKey: string = SDKKinds.CrossTrainedRecognizerSet;
-export const customEventKey = 'OnCustomEvent';
-export const qnaMatcherKey: string = SDKKinds.OnQnAMatch;
-export const onChooseIntentKey: string = SDKKinds.OnChooseIntent;
-
 function insert(content, path: string, position: number | undefined, data: any) {
   const current = get(content, path, []);
   const insertAt = typeof position === 'undefined' ? current.length : position;
@@ -170,7 +160,7 @@ export function deleteTrigger(
 ) {
   let dialogCopy = getDialog(dialogs, dialogId);
   if (!dialogCopy) return null;
-  const isRegEx = get(dialogCopy, 'content.recognizer.$kind', '') === regexRecognizerKey;
+  const isRegEx = get(dialogCopy, 'content.recognizer.$kind', '') === SDKKinds.RegexRecognizer;
   if (isRegEx) {
     const regExIntent = get(dialogCopy, `content.triggers[${index}].intent`, '');
     dialogCopy = deleteRegExIntent(dialogCopy, regExIntent);

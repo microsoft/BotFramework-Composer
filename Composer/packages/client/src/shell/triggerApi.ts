@@ -2,14 +2,14 @@
 // Licensed under the MIT License.
 
 import { useEffect, useState } from 'react';
-import { LuFile, LgFile, DialogInfo, LgTemplateSamples } from '@bfc/shared';
+import { LuFile, LgFile, DialogInfo, LgTemplateSamples, SDKKinds } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import { LgTemplate } from '@bfc/shared';
 import get from 'lodash/get';
 
 import { useResolvers } from '../hooks/useResolver';
 import { projectIdState, schemasState, dialogsState, localeState, lgFilesState } from '../recoilModel/atoms';
-import { onChooseIntentKey, generateNewDialog, intentTypeKey, qnaMatcherKey } from '../utils/dialogUtil';
+import { generateNewDialog } from '../utils/dialogUtil';
 import { navigateTo } from '../utils/navigation';
 
 import { dispatcherState } from './../recoilModel/DispatcherWrapper';
@@ -39,10 +39,10 @@ function createTriggerApi(
     if (!dialog) throw new Error(`dialog ${id} not found`);
     const newDialog = generateNewDialog(dialogs, dialog.id, formData, schemas.sdk?.content);
     const index = get(newDialog, 'content.triggers', []).length - 1;
-    if (formData.$kind === intentTypeKey && formData.triggerPhrases) {
+    if (formData.$kind === SDKKinds.OnIntent && formData.triggerPhrases) {
       const intent = { Name: formData.intent, Body: formData.triggerPhrases };
       luFile && (await createLuIntent({ id: luFile.id, intent, projectId }));
-    } else if (formData.$kind === qnaMatcherKey) {
+    } else if (formData.$kind === SDKKinds.OnQnAMatch) {
       const designerId1 = getDesignerIdFromDialogPath(
         newDialog,
         `content.triggers[${index}].actions[0].actions[1].prompt`
@@ -56,7 +56,7 @@ function createTriggerApi(
         LgTemplateSamples.SendActivityForQnAMatcher(designerId2) as LgTemplate,
       ];
       await createLgTemplates({ id: lgFile.id, templates: lgTemplates });
-    } else if (formData.$kind === onChooseIntentKey) {
+    } else if (formData.$kind === SDKKinds.OnChooseIntent) {
       const designerId1 = getDesignerIdFromDialogPath(newDialog, `content.triggers[${index}].actions[4].prompt`);
       const designerId2 = getDesignerIdFromDialogPath(
         newDialog,

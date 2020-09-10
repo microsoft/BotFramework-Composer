@@ -7,6 +7,8 @@ import { SDKKinds } from '@bfc/shared';
 export const eventTypeKey = SDKKinds.OnDialogEvent;
 export const intentTypeKey = SDKKinds.OnIntent;
 export const activityTypeKey = SDKKinds.OnActivity;
+export const qnaMatcherKey = SDKKinds.OnQnAMatch;
+export const onChooseIntentKey = SDKKinds.OnChooseIntent;
 export const customEventKey = 'CustomEvents';
 
 export const TriggerOptions: IDropdownOption[] = [
