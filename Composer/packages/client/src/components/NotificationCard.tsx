@@ -92,6 +92,7 @@ const linkButton = css`
   float: right;
   font-size: 12px;
   height: auto;
+  margin-right: 8px;
 `;
 
 const getShimmerStyles = {
@@ -217,6 +218,7 @@ export const NotificationCard = (props: INotificationProps) => {
   }, []);
 
   const handleMouseOver = () => {
+    // if mouse over stop the time and record the remaining time
     if (timer) {
       timer.pause();
     }

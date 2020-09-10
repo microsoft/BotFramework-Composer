@@ -16,7 +16,7 @@ export const getQnASuccess = (callback: () => void): ICardProps => {
   return {
     title: formatMessage('Your knowledge base Surface go FAQ is ready!'),
     description: '',
-    type: NotificationType.info,
+    type: NotificationType.success,
     retentionTime: 5000,
     link: {
       label: formatMessage('View KB'),
