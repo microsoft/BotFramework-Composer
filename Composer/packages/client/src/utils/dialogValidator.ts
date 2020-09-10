@@ -5,6 +5,20 @@ import { DialogInfo, ITrigger, SDKKinds } from '@bfc/shared';
 
 import { triggerNotSupportedWarning } from '../constants';
 
+export const resolveRecognizer$kind = (dialog: DialogInfo | undefined): SDKKinds | undefined => {
+  if (!dialog) return undefined;
+
+  const recognizer = get(dialog, 'content.recognizer');
+  const $kind = get(recognizer, '$kind', undefined);
+
+  if ($kind) return $kind;
+
+  if (typeof recognizer === 'string') {
+    return recognizer.endsWith('.lu.qna') ? SDKKinds.LuisRecognizer : undefined;
+  }
+  return;
+};
+
 export const isRegExRecognizerType = (dialog: DialogInfo | undefined) => {
   if (!dialog) return false;
   return get(dialog, 'content.recognizer.$kind', '') === SDKKinds.RegexRecognizer;
