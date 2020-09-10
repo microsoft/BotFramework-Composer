@@ -173,8 +173,9 @@ export const botProjectSpaceTreeSelector = selector({
     const botProjects = get(botProjectsSpaceState);
     const result = botProjects.map((botProjectId: string) => {
       const dialogs = get(dialogsState(botProjectId));
+      const name = get(botNameState(botProjectId));
       const projectId = botProjectId;
-      return { dialogs, projectId };
+      return { dialogs, projectId, name };
     });
     return result;
   },
