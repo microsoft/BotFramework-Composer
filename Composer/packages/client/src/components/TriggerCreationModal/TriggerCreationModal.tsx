@@ -16,19 +16,15 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
 import { SDKKinds } from '@bfc/shared';
 import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
-import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
 import { useRecoilValue } from 'recoil';
 
 import {
-  getTriggerTypes,
   TriggerFormData,
   TriggerFormDataErrors,
   eventTypeKey,
   customEventKey,
   intentTypeKey,
   activityTypeKey,
-  getEventTypes,
-  getActivityTypes,
   qnaMatcherKey,
   onChooseIntentKey,
 } from '../../utils/dialogUtil';
@@ -54,6 +50,7 @@ import {
   getLuDiagnostics,
   validateRegExPattern,
 } from './validators';
+import { getEventOptions, getActivityOptions, getTriggerOptions } from './getDropdownOptions';
 
 const initialFormDataErrors = {
   $kind: '',
@@ -97,9 +94,9 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const showEventDropDown = selectedType === eventTypeKey;
   const showActivityDropDown = selectedType === activityTypeKey;
   const showCustomEvent = selectedType === customEventKey;
-  const eventTypes: IComboBoxOption[] = getEventTypes();
-  const activityTypes: IDropdownOption[] = getActivityTypes();
-  const triggerTypeOptions: IDropdownOption[] = getTriggerTypes();
+  const eventTypes: IDropdownOption[] = getEventOptions();
+  const activityTypes: IDropdownOption[] = getActivityOptions();
+  const triggerTypeOptions: IDropdownOption[] = getTriggerOptions();
 
   if (isRegEx) {
     const qnaMatcherOption = triggerTypeOptions.find((t) => t.key === qnaMatcherKey);
