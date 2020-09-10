@@ -118,19 +118,21 @@ if ($luisAuthoringKey -and $luisAuthoringRegion) {
 
 	$luconfigjson | ConvertTo-Json -Depth 100 | Out-File $(Join-Path $remoteBotPath luconfig.json)
 
-	# Execute bf luis:build command
-	if (Get-Command bf -errorAction SilentlyContinue) {
-		# create generated folder if not
-		if (!(Test-Path generated)) {
-			$null = New-Item -ItemType Directory -Force -Path generated
-		}
-		bf luis:build --luConfig $(Join-Path $remoteBotPath luconfig.json)  --botName $name --authoringKey $luisAuthoringKey --dialog crosstrained  --out ./generated --suffix $environment -f --region $luisAuthoringRegion
+	# create generated folder if not
+	if (!(Test-Path generated)) {
+		$null = New-Item -ItemType Directory -Force -Path generated
 	}
+
+	# ensure bot cli is installed
+	if (Get-Command bf -errorAction SilentlyContinue) {}
 	else {
-		Write-Host "bf luis:build does not exist, use the following command to install:"
-		Write-Host "npm install -g @microsoft/botframework-cli"
-		Break
+		Write-Host "bf luis:build does not exist. Start installation..."
+		npm i -g @microsoft/botframework-cli
+		Write-Host "successfully"
 	}
+
+	# Execute bf luis:build command
+	bf luis:build --luConfig $(Join-Path $remoteBotPath luconfig.json)  --botName $name --authoringKey $luisAuthoringKey --dialog crosstrained  --out ./generated --suffix $environment -f --region $luisAuthoringRegion
 
 	if ($?) {
 		Write-Host "lubuild succeeded"
@@ -142,7 +144,6 @@ if ($luisAuthoringKey -and $luisAuthoringRegion) {
 
 	Set-Location -Path $projFolder
 
-	# clear the settings; we don't want to unintentionally copy secrets to the remote web app
 	$settings = New-Object PSObject
 
 	$luisConfigFiles = Get-ChildItem -Path $publishFolder -Include "luis.settings*" -Recurse -Force
