@@ -202,7 +202,6 @@ export const projectDispatcher = () => {
         const mergedSettings = mergeLocalStorage(projectId, settings);
         if (Array.isArray(mergedSettings.skill)) {
           const skillsArr = mergedSettings.skill.map((skillData) => {
-            // const matchedSkill = skills.find((currentSkill) => currentSkill.name === skillData.name);
             return {
               ...skillData,
             };
