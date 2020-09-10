@@ -4,11 +4,21 @@
 import { promisify } from 'util';
 import fs from 'fs';
 
-import values from 'lodash/values';
 import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
-import { getNewDesigner, FileInfo, Skill, Diagnostic, IBotProject, DialogSetting, FileExtensions } from '@bfc/shared';
+import {
+  getNewDesigner,
+  FileInfo,
+  Skill,
+  Diagnostic,
+  IBotProject,
+  DialogSetting,
+  FileExtensions,
+  convertSkillsToDictionary,
+} from '@bfc/shared';
 import { UserIdentity, pluginLoader } from '@bfc/plugin-loader';
+import { FeedbackType, generate } from '@microsoft/bf-generate-library';
+import values from 'lodash/values';
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
