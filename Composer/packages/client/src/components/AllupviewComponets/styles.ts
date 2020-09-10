@@ -3,7 +3,7 @@
 // Licensed under the MIT License.
 
 import { mergeStyleSets, FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+import { SharedColors } from '@uifabric/fluent-theme';
 
 // import { getTheme } from 'office-ui-fabric-react/lib/Styling';
 // const theme = getTheme();
@@ -11,11 +11,8 @@ import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 export const AddTemplateButton = {
   root: {
     fontSize: FontSizes.smallPlus,
-    margin: '0 1em',
+    marginLeft: '28px',
     color: SharedColors.cyanBlue10,
-  },
-  icon: {
-    fontSize: FontSizes.xSmall,
   },
 };
 
@@ -27,7 +24,6 @@ export const classNames = mergeStyleSets({
     alignItems: 'center',
   },
   groupHeaderSourceName: {
-    display: 'flex',
-    margin: '0 1em',
+    marginLeft: '5px',
   },
 });

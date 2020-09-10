@@ -14,7 +14,7 @@ import {
   IDetailsGroupRenderProps,
   IGroup,
 } from 'office-ui-fabric-react/lib/DetailsList';
-import { GroupHeader } from 'office-ui-fabric-react/lib/GroupedList';
+import { GroupHeader, CollapseAllVisibility } from 'office-ui-fabric-react/lib/GroupedList';
 import { IOverflowSetItemProps, OverflowSet } from 'office-ui-fabric-react/lib/OverflowSet';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
@@ -66,6 +66,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const {
     // addQnAImport,
     removeQnAImport,
+    removeQnAFile,
     // setMessage,
     addQnAPairs,
     removeQnAPairs,
@@ -136,14 +137,14 @@ const TableView: React.FC<TableViewProps> = (props) => {
     setQnASections(newSections);
   };
 
-  const deleteQnASection = (sectionId: string) => {
+  const deleteQnASection = (fileId: string, sectionId: string) => {
+    if (!fileId) return;
     actions.setMessage('item deleted');
-    if (qnaFile) {
-      removeQnAPairs({
-        id: qnaFile.id,
-        sectionId,
-      });
-    }
+
+    removeQnAPairs({
+      id: fileId,
+      sectionId,
+    });
   };
 
   const onCreateNewQnAPairs = (fileId: string | undefined) => {
@@ -152,25 +153,21 @@ const TableView: React.FC<TableViewProps> = (props) => {
     addQnAPairs({ id: fileId, content: newQnAPair });
   };
 
-  const onCreateNewQuestion = useCallback(
-    (fileId, sectionId) => {
-      if (qnaFile) {
-        const payload = {
-          id: fileId,
-          sectionId,
-          content: 'Add new question',
-        };
-        addQnAQuestion(payload);
-        setFocusedIndex(qnaSections.length);
-      }
-    },
-    [qnaFile]
-  );
+  const onCreateNewQuestion = (fileId, sectionId) => {
+    if (qnaFile) {
+      const payload = {
+        id: fileId,
+        sectionId,
+        content: 'Add new question',
+      };
+      addQnAQuestion(payload);
+    }
+  };
 
   const onRenderGroupHeader: IDetailsGroupRenderProps['onRenderHeader'] = (props) => {
     const groupName = props?.group?.name || '';
     const groupFileId = props?.group?.key || '';
-    const isImportedSource = groupFileId !== dialogId;
+    const isImportedSource = groupFileId.endsWith('.source');
 
     const onRenderItem = (item: IOverflowSetItemProps): JSX.Element => {
       return <IconButton menuIconProps={{ iconName: 'Edit' }} onClick={item.onClick} />;
@@ -192,7 +189,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         <div className={classNames.groupHeader}>
           {isImportedSource && (
             <Fragment>
-              <div>Source: </div>
+              <span>Source: </span>
               <Link className={classNames.groupHeaderSourceName} onClick={noOp}>
                 {groupName}
               </Link>
@@ -208,8 +205,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 overflowItems={[
                   {
                     key: 'edit',
-                    // eslint-disable-next-line format-message/literal-pattern
-                    name: formatMessage(`Show code`),
+                    name: formatMessage('Show code'),
                     onClick: () => {
                       if (!qnaFile) return;
                       navigateTo(`/bot/${projectId}/knowledge-base/${dialogId}/${groupFileId}/edit`);
@@ -218,11 +214,10 @@ const TableView: React.FC<TableViewProps> = (props) => {
                   {
                     key: 'delete',
                     name: formatMessage('Delete knowledge base'),
-                    // eslint-disable-next-line format-message/literal-pattern
-                    // name: formatMessage(`Remove from ${dialogId}`),
-                    onClick: () => {
+                    onClick: async () => {
                       if (!qnaFile) return;
-                      removeQnAImport({ id: qnaFile.id, sourceId: groupFileId });
+                      await removeQnAImport({ id: qnaFile.id, sourceId: groupFileId });
+                      await removeQnAFile({ id: groupFileId });
                     },
                   },
                 ]}
@@ -391,19 +386,14 @@ const TableView: React.FC<TableViewProps> = (props) => {
         fieldName: 'buttons',
         data: 'string',
         onRender: (item) => {
-          const isSourceSectionInDialog = item.fileId.endsWith('.source') && !dialogId.endsWith('.source');
-          const isAllowEdit = dialogId !== 'all' && !isSourceSectionInDialog;
-
           return (
             <IconButton
               ariaLabel="Delete"
-              hidden={!isAllowEdit}
               iconProps={{ iconName: 'Delete' }}
-              style={{ visibility: isAllowEdit ? 'visible' : 'hidden' }}
               styles={icon}
               title="Delete"
               onClick={() => {
-                deleteQnASection(item.sectionId);
+                deleteQnASection(item.fileId, item.sectionId);
               }}
             />
           );
@@ -477,6 +467,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
           <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
             {defaultRender({
               ...props,
+              isCollapsable: false,
+
               onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
             })}
           </Sticky>
@@ -502,12 +494,13 @@ const TableView: React.FC<TableViewProps> = (props) => {
           getKey={getKeyCallback}
           groupProps={{
             onRenderHeader: onRenderGroupHeader,
+            collapseAllVisibility: CollapseAllVisibility.hidden,
           }}
           groups={getGroups()}
           initialFocusedIndex={focusedIndex}
           items={qnaSections}
           layoutMode={DetailsListLayoutMode.justified}
-          selectionMode={SelectionMode.single}
+          selectionMode={SelectionMode.none}
           onRenderDetailsHeader={onRenderDetailsHeader}
           onRenderRow={onRenderRow}
         />

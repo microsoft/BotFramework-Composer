@@ -152,7 +152,7 @@ export const addQnAPair = {
 
 export const addIcon = {
   root: {
-    fontSize: FontSizes.size12,
+    fontSize: FontSizes.size10,
     color: SharedColors.cyanBlue10,
   },
 };
