@@ -60,18 +60,31 @@ export const createQnAFileState = async (
   set(qnaFilesState, [...qnaFiles, ...changes]);
 };
 
+/**
+ * id can be
+ * 1. dialogId, no locale
+ * 2. qna file id, with locale
+ * 3. source qna file id, no locale
+ */
 export const removeQnAFileState = async (callbackHelpers: CallbackInterface, { id }: { id: string }) => {
   const { set, snapshot } = callbackHelpers;
   let qnaFiles = await snapshot.getPromise(qnaFilesState);
   const projectId = await snapshot.getPromise(projectIdState);
+  const locale = await snapshot.getPromise(localeState);
+
+  const targetQnAFile =
+    qnaFiles.find((item) => item.id === id) || qnaFiles.find((item) => item.id === `${id}.${locale}`);
+  if (!targetQnAFile) {
+    throw new Error(`remove qna file ${id} not exist`);
+  }
 
   qnaFiles.forEach((file) => {
-    if (getBaseName(file.id) === getBaseName(id)) {
-      qnaFileStatusStorage.removeFileStatus(projectId, id);
+    if (file.id === targetQnAFile.id) {
+      qnaFileStatusStorage.removeFileStatus(projectId, targetQnAFile.id);
     }
   });
 
-  qnaFiles = qnaFiles.filter((file) => getBaseName(file.id) !== id);
+  qnaFiles = qnaFiles.filter((file) => file.id !== targetQnAFile.id);
   set(qnaFilesState, qnaFiles);
 };
 
@@ -130,6 +143,10 @@ export const qnaDispatcher = () => {
       await createQnAFileState(callbackHelpers, { id, content });
     }
   );
+
+  const removeQnAFile = useRecoilCallback((callbackHelpers: CallbackInterface) => async ({ id }: { id: string }) => {
+    await removeQnAFileState(callbackHelpers, { id });
+  });
 
   const importQnAFromUrls = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async ({
@@ -337,6 +354,7 @@ ${response.data}
     updateQnAQuestion,
     updateQnAAnswer,
     createQnAFile,
+    removeQnAFile,
     updateQnAFile,
     importQnAFromUrls,
   };

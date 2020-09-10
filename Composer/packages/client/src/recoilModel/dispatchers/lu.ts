@@ -102,14 +102,20 @@ export const removeLuFileState = async (callbackHelpers: CallbackInterface, { id
   const { set, snapshot } = callbackHelpers;
   let luFiles = await snapshot.getPromise(luFilesState);
   const projectId = await snapshot.getPromise(projectIdState);
+  const locale = await snapshot.getPromise(localeState);
+
+  const targetLuFile = luFiles.find((item) => item.id === id) || luFiles.find((item) => item.id === `${id}.${locale}`);
+  if (!targetLuFile) {
+    throw new Error(`remove lu file ${id} not exist`);
+  }
 
   luFiles.forEach((file) => {
-    if (getBaseName(file.id) === getBaseName(id)) {
-      luFileStatusStorage.removeFileStatus(projectId, id);
+    if (file.id === targetLuFile.id) {
+      luFileStatusStorage.removeFileStatus(projectId, targetLuFile.id);
     }
   });
 
-  luFiles = luFiles.filter((file) => getBaseName(file.id) !== id);
+  luFiles = luFiles.filter((file) => file.id !== targetLuFile.id);
   set(luFilesState, luFiles);
 };
 
