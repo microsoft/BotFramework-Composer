@@ -344,6 +344,7 @@ export class BotProject implements IBotProject {
     }
 
     const relativePath = file.relativePath;
+    this._validateFileContent(name, content);
     const lastModified = await this._updateFile(relativePath, content);
     return lastModified;
   };
@@ -388,6 +389,7 @@ export class BotProject implements IBotProject {
   public createFile = async (name: string, content = '') => {
     const filename = name.trim();
     this.validateFileName(filename);
+    this._validateFileContent(name, content);
     const botName = this.name;
     const defaultLocale = this.settings?.defaultLanguage || defaultLanguage;
     const relativePath = defaultFilePath(botName, defaultLocale, filename);
@@ -534,6 +536,9 @@ export class BotProject implements IBotProject {
   // to root dir instead of dataDir dataDir is not aware at this layer
   private _createFile = async (relativePath: string, content: string) => {
     const absolutePath = Path.resolve(this.dir, relativePath);
+    if (!absolutePath.startsWith(this.dir)) {
+      throw new Error('Cannot create file outside of current project folder');
+    }
     await this.ensureDirExists(Path.dirname(absolutePath));
     debug('Creating file: %s', absolutePath);
     await this.fileStorage.writeFile(absolutePath, content);
@@ -564,7 +569,9 @@ export class BotProject implements IBotProject {
     }
 
     const absolutePath = `${this.dir}/${relativePath}`;
-
+    if (!absolutePath.startsWith(this.dir)) {
+      throw new Error('Cannot update file outside of current project folder');
+    }
     // only write if the file has actually changed
     if (file.content !== content) {
       file.content = content;
@@ -590,7 +597,6 @@ export class BotProject implements IBotProject {
     const absolutePath = `${this.dir}/${relativePath}`;
     await this.fileStorage.removeFile(absolutePath);
   };
-
   // ensure dir exist, dir is a absolute dir path
   private ensureDirExists = async (dir: string) => {
     if (!dir || dir === '.') {
@@ -675,6 +681,20 @@ export class BotProject implements IBotProject {
         relativePath: Path.relative(this.dir, path),
         lastModified: stats.lastModified,
       };
+    }
+  };
+
+  private _validateFileContent = (name: string, content: string) => {
+    const extension = Path.extname(name);
+    if (extension === '.dialog' || name === 'appsettings.json') {
+      try {
+        const parsedContent = JSON.parse(content);
+        if (typeof parsedContent !== 'object' || Array.isArray(parsedContent)) {
+          throw new Error('Invalid file content');
+        }
+      } catch (e) {
+        throw new Error('Invalid file content');
+      }
     }
   };
 }
