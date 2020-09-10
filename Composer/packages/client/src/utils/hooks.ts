@@ -7,7 +7,7 @@ import replace from 'lodash/replace';
 import find from 'lodash/find';
 import { useRecoilValue } from 'recoil';
 
-import { projectIdState, designPageLocationState } from './../recoilModel';
+import { projectIdState, designPageLocationState, pluginsState } from './../recoilModel';
 import { bottomLinks, topLinks } from './pageLinks';
 import routerCache from './routerCache';
 import { projectIdCache } from './projectCache';
@@ -24,9 +24,19 @@ export const useLocation = () => {
 export const useLinks = () => {
   const projectId = useRecoilValue(projectIdState);
   const designPageLocation = useRecoilValue(designPageLocationState);
+  const plugins = useRecoilValue(pluginsState);
   const openedDialogId = designPageLocation.dialogId || 'Main';
 
-  return { topLinks: topLinks(projectId, openedDialogId), bottomLinks };
+  // add page-contributing plugins
+  const pluginPages = plugins.reduce((pages, p) => {
+    const pageConfig = p.contributes?.views?.page;
+    if (pageConfig) {
+      pages.push({ ...pageConfig, id: p.id });
+    }
+    return pages;
+  }, [] as any[]);
+
+  return { topLinks: topLinks(projectId, openedDialogId, pluginPages), bottomLinks };
 };
 
 export const useRouterCache = (to: string) => {

@@ -11,6 +11,7 @@ import {
   AppUpdateState,
   BoilerplateVersion,
   Notification,
+  PluginConfig,
 } from '../../recoilModel/types';
 import { getUserSettings } from '../utils';
 import onboardingStorage from '../../utils/onboardingStorage';
@@ -153,6 +154,11 @@ export const boilerplateVersionState = atom<BoilerplateVersion>({
 });
 
 export const notificationsState = atom<Notification[]>({
-  key: getFullyQualifiedKey('boilerplateVersion'),
+  key: getFullyQualifiedKey('notification'),
+  default: [],
+});
+
+export const pluginsState = atom<PluginConfig[]>({
+  key: getFullyQualifiedKey('plugins'),
   default: [],
 });

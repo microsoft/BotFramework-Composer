@@ -19,6 +19,7 @@ import { skillDispatcher } from './skill';
 import { userDispatcher } from './user';
 import { multilangDispatcher } from './multilang';
 import { notificationDispatcher } from './notification';
+import { pluginsDispatcher } from './plugins';
 
 const createDispatchers = () => {
   return {
@@ -40,6 +41,7 @@ const createDispatchers = () => {
     ...userDispatcher(),
     ...multilangDispatcher(),
     ...notificationDispatcher(),
+    ...pluginsDispatcher(),
   };
 };
 
