@@ -114,11 +114,24 @@ const TableView: React.FC<TableViewProps> = (props) => {
       const res = generateQnASections(qnaFile);
       return result.concat(res);
     }, []);
-
     if (dialogId === 'all') {
-      setQnASections(allSections);
+      setQnASections(
+        allSections.map((item, index) => {
+          return {
+            ...item,
+            expand: index === focusedIndex,
+          };
+        })
+      );
     } else {
-      const dialogSections = allSections.filter((t) => t.dialogId === dialogId || importedFileIds.includes(t.fileId));
+      const dialogSections = allSections
+        .filter((t) => t.dialogId === dialogId || importedFileIds.includes(t.fileId))
+        .map((item, index) => {
+          return {
+            ...item,
+            expand: index === focusedIndex,
+          };
+        });
       setQnASections(dialogSections);
     }
   }, [qnaFiles, dialogId, projectId]);
@@ -140,6 +153,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const deleteQnASection = (fileId: string, sectionId: string) => {
     if (!fileId) return;
     actions.setMessage('item deleted');
+    const sectionIndex = qnaSections.findIndex((item) => item.fileId === fileId);
+    setFocusedIndex(sectionIndex);
 
     removeQnAPairs({
       id: fileId,
@@ -150,11 +165,17 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const onCreateNewQnAPairs = (fileId: string | undefined) => {
     if (!fileId) return;
     const newQnAPair = qnaUtil.generateQnAPair();
+    const sectionIndex = qnaSections.findIndex((item) => item.fileId === fileId);
+    setFocusedIndex(sectionIndex + 1);
     addQnAPairs({ id: fileId, content: newQnAPair });
   };
 
+  console.log(focusedIndex);
   const onCreateNewQuestion = (fileId, sectionId) => {
     if (qnaFile) {
+      const sectionIndex = qnaSections.findIndex((item) => item.sectionId === sectionId);
+      setFocusedIndex(sectionIndex);
+
       const payload = {
         id: fileId,
         sectionId,
@@ -320,7 +341,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
                     value={question.content}
                     onBlur={(_id, value) => {
                       const newValue = value?.trim().replace(/^#/, '');
-                      if (newValue) {
+                      const isChanged = question.content !== newValue;
+                      if (newValue && isChanged) {
                         updateQnAQuestion({
                           id: item.fileId,
                           sectionId: item.sectionId,
@@ -361,7 +383,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 value={item.Answer}
                 onBlur={(_id, value) => {
                   const newValue = value?.trim().replace(/^#/, '');
-                  if (newValue) {
+                  const isChanged = item.Answer !== newValue;
+                  if (newValue && isChanged) {
                     updateQnAAnswer({
                       id: item.fileId,
                       sectionId: item.sectionId,
