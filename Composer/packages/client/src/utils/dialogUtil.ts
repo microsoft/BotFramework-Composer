@@ -1,21 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  ConceptLabels,
-  DialogGroup,
-  SDKKinds,
-  dialogGroups,
-  DialogInfo,
-  DialogFactory,
-  ITriggerCondition,
-} from '@bfc/shared';
+import { ConceptLabels, SDKKinds, DialogInfo, DialogFactory, ITriggerCondition } from '@bfc/shared';
 import get from 'lodash/get';
 import set from 'lodash/set';
 import cloneDeep from 'lodash/cloneDeep';
-import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
-import formatMessage from 'format-message';
 
 import { getFocusPath } from './navigation';
 import { upperCaseName } from './fileUtil';
@@ -192,66 +181,6 @@ export function deleteTrigger(
     callbackOnDeletedTrigger(removedTriggers[0]);
   }
   return dialogCopy.content;
-}
-
-export function getTriggerTypes(): IDropdownOption[] {
-  const triggerTypes: IDropdownOption[] = [
-    ...dialogGroups[DialogGroup.EVENTS].types.map((t) => {
-      let name = t as string;
-      const labelOverrides = ConceptLabels[t];
-
-      if (labelOverrides && labelOverrides.title) {
-        name = labelOverrides.title;
-      }
-
-      return { key: t, text: name || t };
-    }),
-    {
-      key: customEventKey,
-      text: formatMessage('Custom events'),
-    },
-  ];
-  return triggerTypes;
-}
-
-export function getEventTypes(): IComboBoxOption[] {
-  const eventTypes: IComboBoxOption[] = [
-    ...dialogGroups[DialogGroup.DIALOG_EVENT_TYPES].types.map((t) => {
-      let name = t as string;
-      const labelOverrides = ConceptLabels[t];
-
-      if (labelOverrides && labelOverrides.title) {
-        if (labelOverrides.subtitle) {
-          name = `${labelOverrides.title} (${labelOverrides.subtitle})`;
-        } else {
-          name = labelOverrides.title;
-        }
-      }
-
-      return { key: t, text: name || t };
-    }),
-  ];
-  return eventTypes;
-}
-
-export function getActivityTypes(): IDropdownOption[] {
-  const activityTypes: IDropdownOption[] = [
-    ...dialogGroups[DialogGroup.ADVANCED_EVENTS].types.map((t) => {
-      let name = t as string;
-      const labelOverrides = ConceptLabels[t];
-
-      if (labelOverrides && labelOverrides.title) {
-        if (labelOverrides.subtitle) {
-          name = `${labelOverrides.title} (${labelOverrides.subtitle})`;
-        } else {
-          name = labelOverrides.title;
-        }
-      }
-
-      return { key: t, text: name || t };
-    }),
-  ];
-  return activityTypes;
 }
 
 function getDialogsMap(dialogs: DialogInfo[]): DialogsMap {
