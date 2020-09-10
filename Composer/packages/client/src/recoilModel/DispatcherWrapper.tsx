@@ -55,7 +55,7 @@ const wrapDispatcher = (dispatchers, forceUpdate) => {
   return Object.keys(dispatchers).reduce((boundDispatchers, dispatcherName) => {
     const dispatcher = async (...args) => {
       forceUpdate([]); //gurarantee the snapshot get the latset state
-      await dispatchers[dispatcherName](...args);
+      return await dispatchers[dispatcherName](...args);
     };
     boundDispatchers[dispatcherName] = dispatcher;
     return boundDispatchers;
