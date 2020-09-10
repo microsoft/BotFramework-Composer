@@ -357,7 +357,11 @@ export const projectDispatcher = () => {
         const { protocol, origin } = new URL(skill.workspace);
         if (protocol === 'file:') {
           const relativeSkillPath = skill.workspace.replace(origin, '');
-          const skillPath = path.resolve(rootBotPath, relativeSkillPath);
+          let skillPath = path.resolve(rootBotPath, relativeSkillPath);
+          if (skillPath.match(/^(\/||\\)[A-Z]:/)) {
+            // if the path comes out like "/C:/Users", remove the leading slash or backslash
+            skillPath = skillPath.slice(1);
+          }
           promises.push(httpClient.put(`/projects/open`, { path: skillPath, storageId }));
         }
       } else {
