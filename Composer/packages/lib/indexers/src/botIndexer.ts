@@ -47,11 +47,8 @@ const checkSkillSetting = (assets: BotAssets): Diagnostic[] => {
   dialogs.forEach((dialog) => {
     // used skill not existed in setting
     dialog.skills.forEach((skillId) => {
-      const manifestUrlCollection = map(skill, ({ manifestUrl }) => manifestUrl);
-      if (
-        manifestUrlCollection.findIndex((manifestUrl) => manifestUrl === fetchFromSettings(skillId, assets.setting)) ===
-        -1
-      ) {
+      const endpointUrlCollection = map(skill, ({ endpointUrl }) => endpointUrl);
+      if (!endpointUrlCollection.includes(fetchFromSettings(skillId, assets.setting))) {
         diagnostics.push(
           new Diagnostic(`skill '${skillId}' is not existed in appsettings.json`, dialog.id, DiagnosticSeverity.Error)
         );

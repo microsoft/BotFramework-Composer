@@ -14,7 +14,6 @@ import {
 import { indexer, validateDialog } from '@bfc/indexers';
 import objectGet from 'lodash/get';
 import objectSet from 'lodash/set';
-import isArray from 'lodash/isArray';
 import formatMessage from 'format-message';
 
 import lgWorker from '../parsers/lgWorker';
@@ -201,13 +200,11 @@ export const projectDispatcher = () => {
         set(projectIdState, projectId);
         refreshLocalStorage(projectId, settings);
         const mergedSettings = mergeLocalStorage(projectId, settings);
-        if (isArray(mergedSettings.skill)) {
+        if (Array.isArray(mergedSettings.skill)) {
           const skillsArr = mergedSettings.skill.map((skillData) => {
-            const matchedSkill = skills.find((currentSkill) => currentSkill.name === skillData.name);
+            // const matchedSkill = skills.find((currentSkill) => currentSkill.name === skillData.name);
             return {
               ...skillData,
-              msAppId: matchedSkill?.msAppId,
-              endpointUrl: matchedSkill?.endpointUrl,
             };
           });
           mergedSettings.skill = convertSkillsToDictionary(skillsArr);
@@ -366,7 +363,7 @@ export const projectDispatcher = () => {
       const { set } = callbackHelpers;
       try {
         const response = await httpClient.get(`/runtime/templates`);
-        if (isArray(response.data)) {
+        if (Array.isArray(response.data)) {
           set(runtimeTemplatesState, [...response.data]);
         }
       } catch (ex) {

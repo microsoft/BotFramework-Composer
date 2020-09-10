@@ -74,7 +74,7 @@ describe('Select Skill Dialog', () => {
     const addSkillDialog = jest.fn().mockImplementation(() => {
       return {
         then: (cb) => {
-          cb({ manifestUrl: 'https://' });
+          cb({ manifestUrl: 'https://', name: 'test-skill' });
         },
       };
     });
@@ -88,7 +88,7 @@ describe('Select Skill Dialog', () => {
     fireEvent.click(dialogs[dialogs.length - 1]);
 
     expect(addSkillDialog).toHaveBeenCalled();
-    expect(onChange).toHaveBeenCalledWith({ key: 'https://' });
+    expect(onChange).toHaveBeenCalledWith({ key: 'https://', text: 'test-skill' });
   });
 
   it('should select skill', async () => {
@@ -104,7 +104,7 @@ describe('Select Skill Dialog', () => {
     expect(onChange).toHaveBeenCalledWith({
       index: 0,
       isSelected: false,
-      key: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json',
+      key: 'Email Skill',
       text: 'Email Skill',
     });
   });

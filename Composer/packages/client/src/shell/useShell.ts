@@ -180,7 +180,7 @@ export function useShell(source: EventSource): Shell {
     },
     addSkillDialog: () => {
       return new Promise((resolve) => {
-        addSkillDialogBegin((newSkill: { manifestUrl: string } | null) => {
+        addSkillDialogBegin((newSkill: { manifestUrl: string; name: string } | null) => {
           resolve(newSkill);
         });
       });

@@ -24,6 +24,5 @@ export const convertSkillsToDictionary = (skills: Skill[]) => {
     };
   });
 
-  const mapped = keyBy(mappedSkills, 'name');
-  return mapped;
+  return keyBy(mappedSkills, 'name');
 };

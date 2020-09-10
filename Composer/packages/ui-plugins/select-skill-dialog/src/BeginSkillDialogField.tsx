@@ -1,36 +1,38 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { FieldProps, JSONSchema7, useShellApi } from '@bfc/extension';
+import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
 import { Link } from 'office-ui-fabric-react/lib/Link';
-import { ObjectField, SchemaField } from '@bfc/adaptive-form';
+import { ObjectField } from '@bfc/adaptive-form';
 import formatMessage from 'format-message';
 import { Skill } from '@bfc/shared';
 
+import { SelectSkillDialog } from './SelectSkillDialogField';
 import { SkillEndpointField } from './SkillEndpointField';
+
+const getNameFromSetting = (value: string) => {
+  const nameRegexp = new RegExp(/\['(.*?)'\]/g);
+  const matched = nameRegexp.exec(value);
+  if (matched && matched.length > 1) {
+    return matched[1];
+  }
+  return '';
+};
 
 const referBySettings = (skillName: string, property: string) => {
   return `=settings.skill['${skillName}'].${property}`;
 };
 
-const handleBackwardCompat = (skills: Skill[], value): { name: string; referredUpdates: any } | undefined => {
+const handleBackwardCompatibility = (skills: Skill[], value): { name: string; endpointName: string } | undefined => {
   const { skillEndpoint } = value;
   const foundSkill = skills.find(({ manifestUrl }) => manifestUrl === value.id);
-  let updates: any = {};
   if (foundSkill) {
-    updates = {
-      id: referBySettings(foundSkill.name, 'manifestUrl'),
-    };
     const matchedEndpoint: any = foundSkill.endpoints.find(({ endpointUrl }) => endpointUrl === skillEndpoint);
-    if (matchedEndpoint) {
-      updates.skillEndpoint = referBySettings(foundSkill.name, 'endpointUrl');
-      updates.skillAppId = referBySettings(foundSkill.name, 'msAppId');
-    }
-
     return {
       name: foundSkill?.name,
-      referredUpdates: updates,
+      endpointName: matchedEndpoint ? matchedEndpoint.name : '',
     };
   }
 };
@@ -39,84 +41,92 @@ export const BeginSkillDialogField: React.FC<FieldProps> = (props) => {
   const { depth, id, schema, uiOptions, value, onChange, definitions } = props;
   const { projectId, shellApi, skills = [] } = useShellApi();
   const { displayManifestModal, skillsInSettings } = shellApi;
+  const [selectedSkill, setSelectedSkill] = useState<string>('');
+  const [oldEndpoint, loadEndpointForOldBots] = useState<string>('');
 
-  const manifest: Skill | undefined = useMemo(() => {
-    const matchedSkill = skills.find(({ manifestUrl }) => {
-      return manifestUrl === skillsInSettings.get(value.id);
-    });
-    // Handle backward compatibility
-    if (!matchedSkill) {
-      const { id, skillEndpoint, skillAppId, ...rest } = value;
-      const result = handleBackwardCompat(skills, value);
+  useEffect(() => {
+    const { skillEndpoint } = value;
+    const skill = skills.find(({ name }) => name === getNameFromSetting(skillEndpoint));
+
+    if (skill) {
+      setSelectedSkill(skill.name);
+    } else {
+      const result = handleBackwardCompatibility(skills, value);
       if (result) {
-        onChange({ ...rest, ...result.referredUpdates });
+        setSelectedSkill(result.name);
+        if (result.endpointName) {
+          loadEndpointForOldBots(result.endpointName);
+        }
       }
     }
-    return matchedSkill;
-  }, [skills, value.id]);
+  }, []);
+
+  const matchedSkill: Skill | undefined = useMemo(() => {
+    const skill = skills.find(({ name }) => name === selectedSkill);
+    return skill;
+  }, [skills, selectedSkill]);
 
   const endpointOptions = useMemo(() => {
-    return (manifest?.endpoints || []).map(({ name }) => name);
-  }, [manifest]);
-
-  const handleIdChange = ({ key, text }) => {
-    if (!manifest || key !== manifest.manifestUrl) {
-      const { skillEndpoint, skillAppId, ...rest } = value;
-      onChange({ ...rest, id: referBySettings(text, 'manifestUrl') });
-    }
-  };
+    return (matchedSkill?.endpoints || []).map(({ name }) => name);
+  }, [matchedSkill]);
 
   const handleEndpointChange = async (skillEndpoint) => {
-    const { msAppId, endpointUrl } =
-      (manifest?.endpoints || []).find(({ name }) => name === skillEndpoint) || ({} as any);
-    if (manifest?.name) {
-      skillsInSettings.set(manifest.name, { endpointUrl, msAppId });
+    if (matchedSkill) {
+      const { msAppId, endpointUrl } =
+        (matchedSkill.endpoints || []).find(({ name }) => name === skillEndpoint) || ({} as any);
+      const schemaUpdate: any = {};
+      const settingsUpdate: any = {};
+      if (endpointUrl) {
+        skillsInSettings.set(matchedSkill.name, { endpointUrl });
+        schemaUpdate.skillEndpoint = referBySettings(matchedSkill?.name, 'endpointUrl');
+        settingsUpdate.endpointUrl = endpointUrl;
+      }
+      if (msAppId) {
+        schemaUpdate.skillAppId = referBySettings(matchedSkill?.name, 'msAppId');
+        settingsUpdate.msAppId = msAppId;
+      }
+      skillsInSettings.set(matchedSkill.name, { ...settingsUpdate });
       onChange({
         ...value,
-        skillEndpoint: referBySettings(manifest?.name, 'endpointUrl'),
-        ...(msAppId ? { skillAppId: referBySettings(manifest?.name, 'msAppId') } : {}),
+        ...schemaUpdate,
       });
     }
   };
 
+  useEffect(() => {
+    if (oldEndpoint) {
+      handleEndpointChange(oldEndpoint);
+    }
+  }, [oldEndpoint]);
+
   const handleShowManifestClick = () => {
-    value.id && displayManifestModal(skillsInSettings.get(value.id));
+    matchedSkill && displayManifestModal(matchedSkill.manifestUrl);
   };
 
   const skillEndpointUiSchema = uiOptions.properties?.skillEndpoint || {};
   skillEndpointUiSchema.serializer = {
     get: (value) => {
       const url: any = skillsInSettings.get(value);
-      const endpoint = (manifest?.endpoints || []).find(({ endpointUrl }) => endpointUrl === url);
+      const endpoint = (matchedSkill?.endpoints || []).find(({ endpointUrl }) => endpointUrl === url);
       return endpoint?.name;
     },
     set: (value) => {
-      const endpoint = (manifest?.endpoints || []).find(({ name }) => name === value);
+      const endpoint = (matchedSkill?.endpoints || []).find(({ name }) => name === value);
       return endpoint?.endpointUrl;
     },
   };
 
-  const skillIdUiSchema = uiOptions.properties?.id || {};
-  skillIdUiSchema.serializer = {
-    get: (value) => skillsInSettings.get(value),
-    set: (value) => value,
+  const onSkillSelectionChange = (option: IComboBoxOption | null) => {
+    if (option) {
+      setSelectedSkill(option?.text);
+    }
   };
 
   return (
     <React.Fragment>
-      <SchemaField
-        definitions={definitions}
-        depth={depth + 1}
-        id={`${id}.id`}
-        name="id"
-        rawErrors={{}}
-        schema={(schema?.properties?.id as JSONSchema7) || {}}
-        uiOptions={skillIdUiSchema}
-        value={value?.id}
-        onChange={handleIdChange}
-      />
+      <SelectSkillDialog depth={depth + 1} value={selectedSkill} onChange={onSkillSelectionChange} />
       <Link
-        disabled={!manifest || !manifest.body || !manifest.name}
+        disabled={!matchedSkill || !matchedSkill.body || !matchedSkill.name}
         styles={{ root: { fontSize: '12px', padding: '0 16px' } }}
         onClick={handleShowManifestClick}
       >

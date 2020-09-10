@@ -71,7 +71,7 @@ describe('Begin Skill Dialog', () => {
 
   it('should add a new skill', async () => {
     const onChange = jest.fn();
-    const value = { id: `=settings.skill['yuesuemailskill0207'].manifestUrl` };
+    const value = { skillEndpoint: `=settings.skill['yuesuemailskill0207'].endpointUrl` };
     const { baseElement, findByRole } = renderBeginSkillDialog({ value, onChange });
 
     const listbox = await findByRole('listbox');
@@ -83,13 +83,12 @@ describe('Begin Skill Dialog', () => {
     });
 
     expect(onChange).toHaveBeenCalledWith({
-      id: "=settings.skill['yuesuemailskill0207'].manifestUrl",
       skillAppId: "=settings.skill['yuesuemailskill0207'].msAppId",
       skillEndpoint: "=settings.skill['yuesuemailskill0207'].endpointUrl",
     });
   });
 
-  fit('should be backwards compatible', async () => {
+  it('should be backwards compatible', async () => {
     const onChange = jest.fn();
     const value = {
       id: `https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json`,
@@ -98,7 +97,7 @@ describe('Begin Skill Dialog', () => {
     renderBeginSkillDialog({ value, onChange });
 
     expect(onChange).toHaveBeenCalledWith({
-      id: "=settings.skill['yuesuemailskill0207'].manifestUrl",
+      id: `https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json`,
       skillAppId: "=settings.skill['yuesuemailskill0207'].msAppId",
       skillEndpoint: "=settings.skill['yuesuemailskill0207'].endpointUrl",
     });

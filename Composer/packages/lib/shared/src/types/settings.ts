@@ -34,10 +34,10 @@ export interface DialogSetting {
   languages: string[];
   skill?: {
     [skillName: string]: {
-      name?: string;
+      name: string;
       manifestUrl: string;
       msAppId?: string;
-      endpoint?: string;
+      endpointUrl: string;
     };
   };
   botId?: string;
