@@ -10,6 +10,7 @@ import { StorageController } from '../controllers/storage';
 import { PublishController } from '../controllers/publisher';
 import { AssetController } from '../controllers/asset';
 import { EjectController } from '../controllers/eject';
+import { FormDialogController } from '../controllers/formDialog';
 import * as PluginsController from '../controllers/plugins';
 
 import { UtilitiesController } from './../controllers/utilities';
@@ -32,6 +33,11 @@ router.post('/projects/:projectId/build', ProjectController.build);
 router.post('/projects/:projectId/qnaSettings/set', ProjectController.setQnASettings);
 router.post('/projects/:projectId/project/saveAs', ProjectController.saveProjectAs);
 router.get('/projects/:projectId/export', ProjectController.exportProject);
+
+// form dialog generation apis
+router.post('/formDialogs/expandJsonSchemaProperty', FormDialogController.expandJsonSchemaProperty);
+router.get('/formDialogs/templateSchemas', FormDialogController.getTemplateSchemas);
+router.post('/formDialogs/:projectId/generate', FormDialogController.generate);
 
 // update the boilerplate content
 router.get('/projects/:projectId/boilerplateVersion', ProjectController.checkBoilerplateVersion);
