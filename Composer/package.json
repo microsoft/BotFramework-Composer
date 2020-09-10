@@ -115,8 +115,8 @@
     "lint-staged": "^8.1.0",
     "prettier": "2.0.5",
     "rimraf": "^2.6.3",
-    "tslib": "^2.0.0",
     "ts-loader": "7.0.4",
+    "tslib": "^2.0.0",
     "typescript": "3.9.2",
     "wsrun": "^5.2.0"
   },
