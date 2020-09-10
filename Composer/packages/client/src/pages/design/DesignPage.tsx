@@ -20,7 +20,7 @@ import { DialogDeleting } from '../../constants';
 import {
   createSelectedPath,
   deleteTrigger,
-  getbreadcrumbLabel,
+  getBreadcrumbLabel,
   qnaMatcherKey,
   TriggerFormData,
   getDialogData,
@@ -54,7 +54,7 @@ import {
 import { getBaseName } from '../../utils/fileUtil';
 import ImportQnAFromUrlModal from '../knowledge-base/ImportQnAFromUrlModal';
 import { triggerNotSupported } from '../../utils/dialogValidator';
-import { undoFunctionState, undoVersionState } from '../../recoilModel/undo/history';
+import { undoFunctionState } from '../../recoilModel/undo/history';
 
 import { WarningMessage } from './WarningMessage';
 import {
@@ -123,10 +123,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const skills = useRecoilValue(skillsState(projectId));
   const actionsSeed = useRecoilValue(actionsSeedState(projectId));
   const locale = useRecoilValue(localeState(projectId));
+  const undoVersion = useRecoilValue(undoFunctionState(projectId));
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   const undoFunction = useRecoilValue(undoFunctionState(projectId));
-  const undoVersion = useRecoilValue(undoVersionState(projectId));
-
   const { undo, redo, canRedo, canUndo, commitChanges, clearUndo } = undoFunction;
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
   const {
@@ -259,11 +258,14 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     createTrigger(dialogId, formData);
   };
 
-  function handleSelect(projectId, id, selected = '') {
-    if (selected) {
-      selectTo(projectId, selected);
+  function handleSelect(projectId: string, dialogId: string | undefined, selected: string | undefined) {
+    if (dialogId == null) {
+      // maybe navigate to overall bot settings?
+      return;
+    } else if (selected != null) {
+      selectTo(projectId, dialogId, selected);
     } else {
-      navTo(projectId, id, []);
+      navTo(projectId, dialogId, []);
     }
   }
 
@@ -461,7 +463,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       dialogs.length > 0
         ? breadcrumb.reduce((result, item, index) => {
             const { dialogId, selected, focused } = item;
-            const text = getbreadcrumbLabel(dialogs, dialogId, selected, focused);
+            const text = getBreadcrumbLabel(dialogs, dialogId, selected, focused);
             if (text) {
               result.push({
                 // @ts-ignore
@@ -516,7 +518,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     commitChanges();
   }
 
-  async function handleDeleteDialog(id) {
+  async function handleDeleteDialog(projectId, id) {
     const refs = getAllRef(id, dialogs);
     let setting: any = {
       confirmBtnText: formatMessage('Yes'),
@@ -542,11 +544,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     }
   }
 
-  async function handleDeleteTrigger(id, index) {
-    const content = deleteTrigger(dialogs, id, index, (trigger) => triggerApi.deleteTrigger(id, trigger));
+  async function handleDeleteTrigger(projectId, dialogId, index) {
+    const content = deleteTrigger(dialogs, dialogId, index, (trigger) => triggerApi.deleteTrigger(dialogId, trigger));
 
     if (content) {
-      updateDialog({ id, content, projectId });
+      updateDialog({ id: dialogId, content, projectId });
       const match = /\[(\d+)\]/g.exec(selected);
       const current = match && match[1];
       if (!current) return;
@@ -554,17 +556,27 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       if (index === currentIdx) {
         if (currentIdx - 1 >= 0) {
           //if the deleted node is selected and the selected one is not the first one, navTo the previous trigger;
-          selectTo(projectId, createSelectedPath(currentIdx - 1));
+          selectTo(projectId, dialogId, createSelectedPath(currentIdx - 1));
         } else {
           //if the deleted node is selected and the selected one is the first one, navTo the first trigger;
-          navTo(projectId, id, []);
+          navTo(projectId, dialogId, []);
         }
       } else if (index < currentIdx) {
         //if the deleted node is at the front, navTo the current one;
-        selectTo(projectId, createSelectedPath(currentIdx - 1));
+        selectTo(projectId, dialogId, createSelectedPath(currentIdx - 1));
       }
     }
   }
+
+  async function handleDelete(link: { projectId: string; dialogName?: string; trigger?: number }) {
+    const { projectId, dialogName, trigger } = link;
+    if (trigger == null) {
+      handleDeleteDialog(projectId, dialogName);
+    } else {
+      handleDeleteTrigger(projectId, dialogName, trigger);
+    }
+  }
+
   const addNewBtnRef = useCallback((addNew) => {
     onboardingAddCoachMarkRef({ addNew });
   }, []);
@@ -611,11 +623,12 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       <div css={pageRoot}>
         <ProjectTree
           dialogId={dialogId}
-          dialogs={dialogs}
           selected={selected}
-          onDeleteDialog={handleDeleteDialog}
-          onDeleteTrigger={handleDeleteTrigger}
-          onSelect={(...props) => handleSelect(projectId, ...props)}
+          onDelete={handleDelete}
+          onSelect={(link) => {
+            const { projectId, dialogName: dialogId, trigger: selected } = link;
+            handleSelect(projectId, dialogId, selected == null ? '' : `triggers[${selected.toString()}]`);
+          }}
         />
         <div css={contentWrapper} role="main">
           <div css={{ position: 'relative' }} data-testid="DesignPage-ToolBar">
