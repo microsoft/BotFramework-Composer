@@ -18,21 +18,20 @@ import { SDKKinds } from '@bfc/shared';
 import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
 import { useRecoilValue } from 'recoil';
 
+import { TriggerFormData, TriggerFormDataErrors } from '../../utils/dialogUtil';
+import { projectIdState } from '../../recoilModel/atoms/botState';
+import { userSettingsState } from '../../recoilModel';
+import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
+import { isRegExRecognizerType, isLUISnQnARecognizerType } from '../../utils/dialogValidator';
+
 import {
-  TriggerFormData,
-  TriggerFormDataErrors,
   eventTypeKey,
   customEventKey,
   intentTypeKey,
   activityTypeKey,
   qnaMatcherKey,
   onChooseIntentKey,
-} from '../../utils/dialogUtil';
-import { projectIdState } from '../../recoilModel/atoms/botState';
-import { userSettingsState } from '../../recoilModel';
-import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
-import { isRegExRecognizerType, isLUISnQnARecognizerType } from '../../utils/dialogValidator';
-
+} from './constants';
 import {
   optionStyles,
   dialogContentStyles,
@@ -87,7 +86,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     regEx: '',
   };
   const [formData, setFormData] = useState(initialFormData);
-  const [selectedType, setSelectedType] = useState(intentTypeKey);
+  const [selectedType, setSelectedType] = useState<string>(intentTypeKey);
   const showIntentName = selectedType === intentTypeKey;
   const showRegExDropDown = selectedType === intentTypeKey && isRegEx;
   const showTriggerPhrase = selectedType === intentTypeKey && isLUISnQnA;

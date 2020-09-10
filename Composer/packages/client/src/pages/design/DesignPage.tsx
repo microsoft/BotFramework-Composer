@@ -21,7 +21,6 @@ import {
   createSelectedPath,
   deleteTrigger,
   getbreadcrumbLabel,
-  qnaMatcherKey,
   TriggerFormData,
   getDialogData,
 } from '../../utils/dialogUtil';
@@ -576,7 +575,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const handleCreateQnA = async (urls: string[]) => {
     cancelImportQnAModal();
     const formData = {
-      $kind: qnaMatcherKey,
+      $kind: SDKKinds.OnQnAMatch,
       errors: { $kind: '', intent: '', event: '', triggerPhrases: '', regEx: '', activity: '' },
       event: '',
       intent: '',

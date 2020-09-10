@@ -1,14 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import get from 'lodash/get';
-import { DialogInfo, ITrigger } from '@bfc/shared';
+import { DialogInfo, ITrigger, SDKKinds } from '@bfc/shared';
 
-import { regexRecognizerKey, onChooseIntentKey, qnaMatcherKey } from '../utils/dialogUtil';
 import { triggerNotSupportedWarning } from '../constants';
 
 export const isRegExRecognizerType = (dialog: DialogInfo | undefined) => {
   if (!dialog) return false;
-  return get(dialog, 'content.recognizer.$kind', '') === regexRecognizerKey;
+  return get(dialog, 'content.recognizer.$kind', '') === SDKKinds.RegexRecognizer;
 };
 
 export const isLUISnQnARecognizerType = (dialog: DialogInfo | undefined) => {
@@ -22,7 +21,7 @@ export const containUnsupportedTriggers = (dialog: DialogInfo | undefined) => {
 
   if (
     isRegExRecognizerType(dialog) &&
-    dialog.triggers.some((t) => t.type === qnaMatcherKey || t.type === onChooseIntentKey)
+    dialog.triggers.some((t) => t.type === SDKKinds.OnQnAMatch || t.type === SDKKinds.OnChooseIntent)
   ) {
     return triggerNotSupportedWarning;
   }
@@ -31,7 +30,10 @@ export const containUnsupportedTriggers = (dialog: DialogInfo | undefined) => {
 
 export const triggerNotSupported = (dialog: DialogInfo | undefined, trigger: ITrigger | undefined) => {
   if (!dialog || !trigger) return '';
-  if (isRegExRecognizerType(dialog) && (trigger.type === qnaMatcherKey || trigger.type === onChooseIntentKey)) {
+  if (
+    isRegExRecognizerType(dialog) &&
+    (trigger.type === SDKKinds.OnQnAMatch || trigger.type === SDKKinds.OnChooseIntent)
+  ) {
     return triggerNotSupportedWarning;
   }
   return '';
