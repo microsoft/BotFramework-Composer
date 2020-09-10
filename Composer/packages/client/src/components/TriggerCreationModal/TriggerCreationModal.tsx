@@ -22,16 +22,9 @@ import { TriggerFormData, TriggerFormDataErrors } from '../../utils/dialogUtil';
 import { projectIdState } from '../../recoilModel/atoms/botState';
 import { userSettingsState } from '../../recoilModel';
 import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
-import { isRegExRecognizerType, isLUISnQnARecognizerType } from '../../utils/dialogValidator';
+import { isRegExRecognizerType, isLUISnQnARecognizerType, resolveRecognizer$kind } from '../../utils/dialogValidator';
 
-import {
-  eventTypeKey,
-  customEventKey,
-  intentTypeKey,
-  activityTypeKey,
-  qnaMatcherKey,
-  onChooseIntentKey,
-} from './constants';
+import { eventTypeKey, customEventKey, intentTypeKey, activityTypeKey } from './constants';
 import {
   optionStyles,
   dialogContentStyles,
@@ -65,6 +58,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const projectId = useRecoilValue(projectIdState);
   const userSettings = useRecoilValue(userSettingsState);
   const dialogFile = dialogs.find((dialog) => dialog.id === dialogId);
+  const recognizer$kind = resolveRecognizer$kind(dialogFile);
   const isRegEx = isRegExRecognizerType(dialogFile);
   const isLUISnQnA = isLUISnQnARecognizerType(dialogFile);
   const regexIntents = dialogFile?.content?.recognizer?.intents ?? [];
@@ -86,18 +80,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const showCustomEvent = selectedType === customEventKey;
   const eventTypes: IDropdownOption[] = getEventOptions();
   const activityTypes: IDropdownOption[] = getActivityOptions();
-  const triggerTypeOptions: IDropdownOption[] = getTriggerOptions();
-
-  if (isRegEx) {
-    const qnaMatcherOption = triggerTypeOptions.find((t) => t.key === qnaMatcherKey);
-    if (qnaMatcherOption) {
-      qnaMatcherOption.data = { icon: 'Warning' };
-    }
-    const onChooseIntentOption = triggerTypeOptions.find((t) => t.key === onChooseIntentKey);
-    if (onChooseIntentOption) {
-      onChooseIntentOption.data = { icon: 'Warning' };
-    }
-  }
+  const triggerTypeOptions: IDropdownOption[] = getTriggerOptions(recognizer$kind);
 
   const onRenderOption = (option?: IDropdownOption) => {
     if (!option) return null;
