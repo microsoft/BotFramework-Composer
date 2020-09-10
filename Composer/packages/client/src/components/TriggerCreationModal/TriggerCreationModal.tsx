@@ -51,15 +51,6 @@ import {
 } from './validators';
 import { getEventOptions, getActivityOptions, getTriggerOptions } from './getDropdownOptions';
 
-const initialFormDataErrors = {
-  $kind: '',
-  intent: '',
-  event: '',
-  triggerPhrases: '',
-  regEx: '',
-  activity: '',
-};
-
 interface TriggerCreationModalProps {
   dialogId: string;
   isOpen: boolean;
@@ -78,7 +69,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const isLUISnQnA = isLUISnQnARecognizerType(dialogFile);
   const regexIntents = dialogFile?.content?.recognizer?.intents ?? [];
   const initialFormData: TriggerFormData = {
-    errors: initialFormDataErrors,
+    errors: {},
     $kind: intentTypeKey,
     event: '',
     intent: '',
@@ -108,7 +99,8 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     }
   }
 
-  const onRenderOption = (option: IDropdownOption) => {
+  const onRenderOption = (option?: IDropdownOption) => {
+    if (!option) return null;
     return (
       <div css={optionStyles}>
         {option.text}
@@ -149,7 +141,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     } else {
       newFormData = { ...newFormData, $kind: option.key === customEventKey ? SDKKinds.OnDialogEvent : option.key };
     }
-    setFormData({ ...newFormData, errors: initialFormDataErrors });
+    setFormData({ ...newFormData, errors: {} });
   };
 
   const handleEventNameChange = (event: React.FormEvent, value?: string) => {
@@ -223,7 +215,6 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
             options={triggerTypeOptions}
             styles={dropdownStyles}
             onChange={onSelectTriggerType}
-            //@ts-ignore：
             onRenderOption={onRenderOption}
           />
           {showEventDropDown && (
