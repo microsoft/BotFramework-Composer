@@ -104,9 +104,12 @@ export const qnaDispatcher = () => {
         const content = qnaFile ? qnaFile.content + '\n' + response.data : response.data;
 
         await updateQnAFileState(callbackHelpers, { id, content });
-        addNotificationInternal(
+        const notificationId = addNotificationInternal(
           callbackHelpers,
-          getQnASuccess(() => navigateTo(`/bot/${projectId}/knowledge-base/${getBaseName(id)}`))
+          getQnASuccess(() => {
+            navigateTo(`/bot/${projectId}/knowledge-base/${getBaseName(id)}`);
+            deleteNotificationInternal(callbackHelpers, notificationId);
+          })
         );
       } catch (err) {
         addNotificationInternal(callbackHelpers, getQnAFailed(err.response?.data?.message));

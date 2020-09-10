@@ -63,9 +63,14 @@ const cardDetail = css`
   flex-grow: 1;
 `;
 
-const cardType = css`
+const errorType = css`
   margin-top: 4px;
   color: #a80000;
+`;
+
+const successType = css`
+  margin-top: 4px;
+  color: greenyellow;
 `;
 
 const cardTitle = css`
@@ -92,6 +97,7 @@ const linkButton = css`
 const getShimmerStyles = {
   root: {
     marginTop: '12px',
+    marginBottom: '8px',
   },
   shimmerWrapper: [
     {
@@ -111,6 +117,7 @@ export enum NotificationType {
   warning,
   error,
   loading,
+  success,
 }
 
 export interface ILink {
@@ -171,7 +178,8 @@ const renderCardContent = (props: ICardProps) => {
   const { title, description, type, link } = props;
   return (
     <div css={cardContent}>
-      {type === NotificationType.error && <Icon css={cardType} iconName="ErrorBadge" />}
+      {type === NotificationType.error && <Icon css={errorType} iconName="ErrorBadge" />}
+      {type === NotificationType.success && <Icon css={successType} iconName="Completed" />}
       <div css={cardDetail}>
         <div css={cardTitle}>{title}</div>
         <div css={cardDescription}>{description}</div>
