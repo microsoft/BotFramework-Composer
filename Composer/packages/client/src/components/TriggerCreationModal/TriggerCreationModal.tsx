@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import React, { useState } from 'react';
 import formatMessage from 'format-message';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
@@ -19,8 +19,6 @@ import { SDKKinds } from '@bfc/shared';
 import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
 import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
 import { useRecoilValue } from 'recoil';
-import { FontWeights } from '@uifabric/styling';
-import { FontSizes } from '@uifabric/fluent-theme';
 
 import {
   getTriggerTypes,
@@ -40,64 +38,16 @@ import { userSettingsState } from '../../recoilModel';
 import { nameRegex } from '../../constants';
 import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 import { isRegExRecognizerType, isLUISnQnARecognizerType } from '../../utils/dialogValidator';
-// -------------------- Styles -------------------- //
 
-const styles = {
-  dialog: {
-    title: {
-      fontWeight: FontWeights.bold,
-      fontSize: FontSizes.size20,
-      paddingTop: '14px',
-      paddingBottom: '11px',
-    },
-    subText: {
-      fontSize: FontSizes.size14,
-    },
-  },
-  modal: {
-    main: {
-      maxWidth: '600px !important',
-    },
-  },
-};
-
-const dropdownStyles = {
-  label: {
-    fontWeight: FontWeights.semibold,
-  },
-  dropdown: {
-    width: '400px',
-  },
-  root: {
-    marginBottom: '20px',
-  },
-};
-
-const dialogWindow = css`
-  display: flex;
-  flex-direction: column;
-  width: 400px;
-  min-height: 300px;
-`;
-
-const intent = {
-  root: {
-    width: '400px',
-    paddingBottom: '20px',
-  },
-};
-
-const optionRow = {
-  display: 'flex',
-  height: 15,
-  fontSize: 15,
-};
-
-export const warningIcon = {
-  marginLeft: 5,
-  color: '#BE880A',
-  fontSize: 5,
-};
+import {
+  optionStyles,
+  dialogContentStyles,
+  modalStyles,
+  dialogWindowStyles,
+  dropdownStyles,
+  intentStyles,
+  warningIconStyles,
+} from './styles';
 
 // -------------------- Validation Helpers -------------------- //
 
@@ -250,9 +200,9 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
 
   const onRenderOption = (option: IDropdownOption) => {
     return (
-      <div css={optionRow}>
+      <div css={optionStyles}>
         {option.text}
-        {option.data && option.data.icon && <Icon iconName={option.data.icon} style={warningIcon} />}
+        {option.data && option.data.icon && <Icon iconName={option.data.icon} style={warningIconStyles} />}
       </div>
     );
   };
@@ -344,16 +294,16 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
       dialogContentProps={{
         type: DialogType.normal,
         title: formatMessage('Create a trigger'),
-        styles: styles.dialog,
+        styles: dialogContentStyles,
       }}
       hidden={!isOpen}
       modalProps={{
         isBlocking: false,
-        styles: styles.modal,
+        styles: modalStyles,
       }}
       onDismiss={onDismiss}
     >
-      <div css={dialogWindow}>
+      <div css={dialogWindowStyles}>
         <Stack>
           <Dropdown
             data-testid={'triggerTypeDropDown'}
@@ -383,7 +333,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
               data-testid="CustomEventName"
               errorMessage={formData.errors.event}
               label={formatMessage('What is the name of the custom event?')}
-              styles={intent}
+              styles={intentStyles}
               onChange={handleEventNameChange}
             />
           )}
@@ -409,7 +359,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
                   ? formatMessage('What is the name of this trigger (LUIS)')
                   : formatMessage('What is the name of this trigger')
               }
-              styles={intent}
+              styles={intentStyles}
               onChange={onNameChange}
             />
           )}
