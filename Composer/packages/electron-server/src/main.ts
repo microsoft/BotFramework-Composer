@@ -57,7 +57,7 @@ async function createAppDataDir() {
   const azurePublishPath: string = join(composerAppDataPath, 'publishBots');
   process.env.COMPOSER_APP_DATA = join(composerAppDataPath, 'data.json'); // path to the actual data file
   process.env.COMPOSER_EXTENSION_DATA = join(composerAppDataPath, 'extensions.json');
-  process.env.COMPOSER_REMOTE_PLUGINS_DIR = join(composerAppDataPath, 'extensions');
+  process.env.COMPOSER_REMOTE_PLUGINS_DIR = join(composerAppDataPath, '.composer');
 
   log('creating composer app data path at: ', composerAppDataPath);
 
