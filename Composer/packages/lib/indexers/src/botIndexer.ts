@@ -12,6 +12,7 @@ import {
   DiagnosticSeverity,
   LuFile,
   fetchFromSettings,
+  getSkillNameFromSetting,
 } from '@bfc/shared';
 import difference from 'lodash/difference';
 import map from 'lodash/map';
@@ -49,8 +50,13 @@ const checkSkillSetting = (assets: BotAssets): Diagnostic[] => {
     dialog.skills.forEach((skillId) => {
       const endpointUrlCollection = map(skill, ({ endpointUrl }) => endpointUrl);
       if (!endpointUrlCollection.includes(fetchFromSettings(skillId, assets.setting))) {
+        const skillName = getSkillNameFromSetting(skillId) || skillId;
         diagnostics.push(
-          new Diagnostic(`skill '${skillId}' is not existed in appsettings.json`, dialog.id, DiagnosticSeverity.Error)
+          new Diagnostic(
+            `The skill '${skillName}' does not exist in in appsettings.json`,
+            dialog.id,
+            DiagnosticSeverity.Error
+          )
         );
       }
     });

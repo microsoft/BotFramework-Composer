@@ -7,19 +7,10 @@ import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { ObjectField } from '@bfc/adaptive-form';
 import formatMessage from 'format-message';
-import { Skill } from '@bfc/shared';
+import { Skill, getSkillNameFromSetting } from '@bfc/shared';
 
 import { SelectSkillDialog } from './SelectSkillDialogField';
 import { SkillEndpointField } from './SkillEndpointField';
-
-const getNameFromSetting = (value: string) => {
-  const nameRegexp = new RegExp(/\['(.*?)'\]/g);
-  const matched = nameRegexp.exec(value);
-  if (matched && matched.length > 1) {
-    return matched[1];
-  }
-  return '';
-};
 
 const referBySettings = (skillName: string, property: string) => {
   return `=settings.skill['${skillName}'].${property}`;
@@ -46,7 +37,7 @@ export const BeginSkillDialogField: React.FC<FieldProps> = (props) => {
 
   useEffect(() => {
     const { skillEndpoint } = value;
-    const skill = skills.find(({ name }) => name === getNameFromSetting(skillEndpoint));
+    const skill = skills.find(({ name }) => name === getSkillNameFromSetting(skillEndpoint));
 
     if (skill) {
       setSelectedSkill(skill.name);
@@ -124,7 +115,7 @@ export const BeginSkillDialogField: React.FC<FieldProps> = (props) => {
 
   return (
     <React.Fragment>
-      <SelectSkillDialog depth={depth + 1} value={selectedSkill} onChange={onSkillSelectionChange} />
+      <SelectSkillDialog value={selectedSkill} onChange={onSkillSelectionChange} />
       <Link
         disabled={!matchedSkill || !matchedSkill.body || !matchedSkill.name}
         styles={{ root: { fontSize: '12px', padding: '0 16px' } }}

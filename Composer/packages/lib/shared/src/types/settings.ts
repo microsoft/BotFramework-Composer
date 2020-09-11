@@ -36,7 +36,7 @@ export interface DialogSetting {
     [skillName: string]: {
       name: string;
       manifestUrl: string;
-      msAppId?: string;
+      msAppId: string;
       endpointUrl: string;
     };
   };

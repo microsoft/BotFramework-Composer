@@ -15,10 +15,9 @@ const ADD_DIALOG = 'ADD_DIALOG';
 
 export const SelectSkillDialog: React.FC<{
   value: string;
-  depth: number;
   onChange: (option: IComboBoxOption | null) => void;
 }> = (props) => {
-  const { value, onChange, depth } = props;
+  const { value, onChange } = props;
   const { shellApi, skills = [] } = useShellApi();
   const { addSkillDialog } = shellApi;
   const [comboboxTitle, setComboboxTitle] = useState<string | null>(null);
@@ -61,7 +60,7 @@ export const SelectSkillDialog: React.FC<{
   };
 
   return (
-    <div css={schemaField.container(depth)}>
+    <div css={schemaField.container(1)}>
       <ComboBoxField
         comboboxTitle={comboboxTitle}
         description={formatMessage('Name of skill dialog to call')}
