@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { fireEvent, getAllByRole, render } from '@bfc/test-utils';
-import { Extension, JSONSchema7 } from '@bfc/extension';
+import { EditorExtension, JSONSchema7 } from '@bfc/extension-client';
 import { SDKKinds } from '@bfc/shared';
 
 import { BeginSkillDialogField } from '../BeginSkillDialogField';
@@ -35,9 +35,9 @@ const renderBeginSkillDialog = ({ value = {}, onChange = jest.fn() } = {}) => {
   };
 
   return render(
-    <Extension plugins={{}} shell={{ api: shell, data: shellData }}>
+    <EditorExtension plugins={{}} shell={{ api: shell, data: shellData }}>
       <BeginSkillDialogField {...props} />
-    </Extension>
+    </EditorExtension>
   );
 };
 

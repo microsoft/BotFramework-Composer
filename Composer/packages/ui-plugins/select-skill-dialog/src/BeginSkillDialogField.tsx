@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React, { useMemo } from 'react';
-import { FieldProps, JSONSchema7, useShellApi } from '@bfc/extension';
+import { FieldProps, JSONSchema7, useShellApi } from '@bfc/extension-client';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { ObjectField, SchemaField } from '@bfc/adaptive-form';
 import formatMessage from 'format-message';

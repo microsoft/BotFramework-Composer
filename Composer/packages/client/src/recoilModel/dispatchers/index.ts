@@ -20,6 +20,7 @@ import { userDispatcher } from './user';
 import { multilangDispatcher } from './multilang';
 import { notificationDispatcher } from './notification';
 import { pluginsDispatcher } from './plugins';
+import { extensionsDispatcher } from './extensions';
 
 const createDispatchers = () => {
   return {
@@ -42,6 +43,7 @@ const createDispatchers = () => {
     ...multilangDispatcher(),
     ...notificationDispatcher(),
     ...pluginsDispatcher(),
+    ...extensionsDispatcher(),
   };
 };
 
