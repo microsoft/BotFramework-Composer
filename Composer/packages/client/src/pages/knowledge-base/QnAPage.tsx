@@ -50,6 +50,28 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
         name: dialog.displayName,
         ariaLabel: formatMessage('qna file'),
         url: `/bot/${projectId}/knowledge-base/${dialog.id}`,
+        menuItems: [
+          {
+            name: formatMessage('Create KB from scratch'),
+            key: 'Create KB from scratch',
+            iconProps: {
+              iconName: 'Add',
+            },
+            onClick: () => {
+              setCreateQnAModalVisiability(true);
+            },
+          },
+          {
+            name: formatMessage('Create KB from URL or file'),
+            key: 'Create KB from URL or file',
+            iconProps: {
+              iconName: 'Add',
+            },
+            onClick: () => {
+              setCreateQnAModalVisiability(true);
+            },
+          },
+        ],
       };
     });
     const mainDialogIndex = newDialogLinks.findIndex((link) => link.id === 'Main');
@@ -84,27 +106,6 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
   );
 
   const toolbarItems = [
-    {
-      type: 'dropdown',
-      text: formatMessage('Add'),
-      align: 'left',
-      dataTestid: 'AddFlyout',
-      buttonProps: {
-        iconProps: { iconName: 'Add' },
-      },
-      menuProps: {
-        items: [
-          {
-            'data-testid': 'FlyoutNewDialog',
-            key: 'addQnAKBFromUrl',
-            text: formatMessage('Import QnA From Url'),
-            onClick: () => {
-              setCreateQnAModalVisiability(true);
-            },
-          },
-        ],
-      },
-    },
     {
       type: 'element',
       element: <TestController />,
