@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { FlowWidget, PluginConfig, UIOptions } from '@bfc/extension-client';
-import { SDKKinds, getInputType, PromptTab, PropmtTabTitles } from '@bfc/shared';
+import { SDKKinds, getInputType, PromptTab, PromptTabTitles } from '@bfc/shared';
 import { VisualEditorColors as Colors, ListOverview, BorderedDiv, FixedInfo } from '@bfc/ui-shared';
 import formatMessage from 'format-message';
 import { StringField, JsonField } from '@bfc/adaptive-form';
