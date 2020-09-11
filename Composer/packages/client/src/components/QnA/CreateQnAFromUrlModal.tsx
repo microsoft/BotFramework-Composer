@@ -2,84 +2,24 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
-import React, { useState } from 'react';
+import { jsx } from '@emotion/core';
+import React from 'react';
 import formatMessage from 'format-message';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
-import { PrimaryButton, DefaultButton, ActionButton } from 'office-ui-fabric-react/lib/Button';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { FontWeights } from '@uifabric/styling';
-import { FontSizes, SharedColors, NeutralColors } from '@uifabric/fluent-theme';
+import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { RouteComponentProps } from '@reach/router';
 import { QnAFile } from '@bfc/shared';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 
-import { QnAMakerLearningUrl, knowledgeBaseSourceUrl } from '../constants';
-import { FieldConfig, useForm, FieldValidator } from '../hooks/useForm';
+import { FieldConfig, useForm } from '../../hooks/useForm';
 
-const styles = {
-  dialog: {
-    title: {
-      fontWeight: FontWeights.bold,
-      fontSize: FontSizes.size20,
-      paddingTop: '14px',
-      paddingBottom: '11px',
-    },
-    subText: {
-      fontSize: FontSizes.size14,
-    },
-  },
-  modal: {
-    main: {
-      maxWidth: '800px !important',
-    },
-  },
-};
+import { knowledgeBaseSourceUrl, QnAMakerLearningUrl, validateUrl, validateName } from './constants';
+import { subText, styles, dialogWindow, textField, warning } from './styles';
 
-const dialogWindow = css`
-  display: flex;
-  flex-direction: column;
-  width: 400px;
-  min-height: 200px;
-`;
-
-const textField = {
-  root: {
-    width: '400px',
-    paddingBottom: '20px',
-  },
-};
-
-const warning = {
-  color: SharedColors.red10,
-  fontSize: FontSizes.size10,
-};
-
-const actionButton = css`
-  font-size: 16px;
-  padding-left: 0px;
-  margin-left: -5px;
-`;
-
-const urlContainer = css`
-  display: flex;
-  width: 444px;
-`;
-
-const cancel = css`
-  margin-top: -3px;
-  margin-left: 10px;
-`;
-
-const subText = css`
-  color: ${NeutralColors.gray130};
-  font-size: 14px;
-  font-weight: 400;
-`;
-
-interface CreateQnAModalProps
+interface CreateQnAFromUrlModalProps
   extends RouteComponentProps<{
     location: string;
   }> {
@@ -87,8 +27,29 @@ interface CreateQnAModalProps
   qnaFiles: QnAFile[];
   subscriptionKey?: string;
   onDismiss: () => void;
-  onSubmit: (formData: CreateQnAFormData) => void;
+  onSubmit: (formData: CreateQnAFromUrlFormData) => void;
 }
+
+export interface CreateQnAFromUrlFormData {
+  url: string;
+  name: string;
+  multiTurn: boolean;
+}
+
+const formConfig: FieldConfig<CreateQnAFromUrlFormData> = {
+  url: {
+    required: true,
+    defaultValue: '',
+  },
+  name: {
+    required: true,
+    defaultValue: '',
+  },
+  multiTurn: {
+    required: false,
+    defaultValue: false,
+  },
+};
 
 const DialogTitle = () => {
   return (
@@ -114,57 +75,7 @@ const DialogTitle = () => {
   );
 };
 
-export interface CreateQnAFormData {
-  url: string;
-  name: string;
-  multiTurn: boolean;
-}
-
-const validateUrl: FieldValidator = (url: string): string => {
-  let error = '';
-
-  if (url && !url.startsWith('http://') && !url.startsWith('https://')) {
-    error = formatMessage('A valid url should start with http:// or https://');
-  }
-
-  return error;
-};
-
-const QnANameRegex = /^\w[-\w]*$/;
-
-const validateName = (sources: QnAFile[]): FieldValidator => {
-  return (name: string) => {
-    let currentError = '';
-    if (name) {
-      if (!QnANameRegex.test(name)) {
-        currentError = formatMessage('Name contains invalid charactors');
-      }
-
-      const duplicatedItemIndex = sources.findIndex((item) => item.name === name);
-      if (duplicatedItemIndex > -1) {
-        currentError = formatMessage('Duplicate imported QnA name');
-      }
-    }
-    return currentError;
-  };
-};
-
-const formConfig: FieldConfig<CreateQnAFormData> = {
-  url: {
-    required: true,
-    defaultValue: '',
-  },
-  name: {
-    required: true,
-    defaultValue: '',
-  },
-  multiTurn: {
-    required: false,
-    defaultValue: false,
-  },
-};
-
-export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
+export const CreateQnAFromUrlModal: React.FC<CreateQnAFromUrlModalProps> = (props) => {
   const { onDismiss, onSubmit, dialogId, qnaFiles } = props;
 
   formConfig.name.validate = validateName(qnaFiles);
@@ -235,13 +146,13 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
         {window.location.href.indexOf('/knowledge-base/') == -1 && (
           <DefaultButton
             data-testid={'createKnowledgeBaseFromScratch'}
-            styles={{ root: { marginRight: 155 } }}
+            styles={{ root: { float: 'left' } }}
             text={formatMessage('Create knowledge base from scratch')}
             onClick={() => {
               if (hasErrors) {
                 return;
               }
-              onSubmit({} as CreateQnAFormData);
+              onSubmit({} as CreateQnAFromUrlFormData);
             }}
           />
         )}
@@ -249,7 +160,7 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
         <PrimaryButton
           data-testid={'createKnowledgeBase'}
           disabled={disabled}
-          text={formatMessage('Create knowledge base')}
+          text={formatMessage('Create KB')}
           onClick={() => {
             if (hasErrors) {
               return;
@@ -262,4 +173,4 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
   );
 };
 
-export default CreateQnAModal;
+export default CreateQnAFromUrlModal;

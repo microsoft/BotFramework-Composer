@@ -22,7 +22,7 @@ import {
 import Home from '../../pages/home/Home';
 import { QnABotTemplateId } from '../../constants';
 import { useProjectIdCache } from '../../utils/hooks';
-import CreateQnAModal from '../CreateQnAModal';
+import CreateQnAFromUrlModal from '../QnA/CreateQnAFromUrlModal';
 
 import { CreateOptions } from './CreateOptions';
 import { OpenProject } from './OpenProject';
@@ -177,7 +177,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
           onDismiss={handleDismiss}
           onOpen={openBot}
         />
-        <CreateQnAModal
+        <CreateQnAFromUrlModal
           dialogId={formData.name.toLowerCase()}
           path="create/QnASample/importQnA"
           qnaFiles={qnaFiles}

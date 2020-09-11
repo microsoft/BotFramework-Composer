@@ -54,7 +54,7 @@ import { getBaseName } from '../../utils/fileUtil';
 import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 import plugins, { mergePluginConfigs } from '../../plugins';
 import { useElectronFeatures } from '../../hooks/useElectronFeatures';
-import CreateQnAModal from '../../components/CreateQnAModal';
+import CreateQnAFromUrlModal from '../../components/QnA/CreateQnAFromUrlModal';
 import { triggerNotSupported } from '../../utils/dialogValidator';
 
 import { WarningMessage } from './WarningMessage';
@@ -700,7 +700,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           />
         )}
         {importQnAModalVisibility && (
-          <CreateQnAModal
+          <CreateQnAFromUrlModal
             dialogId={dialogId}
             qnaFiles={qnaFiles}
             onDismiss={cancelImportQnAModal}

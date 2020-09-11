@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
-import React, { useEffect, useState, useCallback, useMemo, Fragment } from 'react';
+import React, { useEffect, useState, useCallback, Fragment } from 'react';
 import {
   DetailsList,
   DetailsRow,
@@ -150,7 +150,34 @@ const TableView: React.FC<TableViewProps> = (props) => {
     setQnASections(newSections);
   };
 
-  const deleteQnASection = (fileId: string, sectionId: string) => {
+  const onUpdateQnAQuestion = (fileId: string, sectionId: string, questionId: string, content: string) => {
+    if (!fileId) return;
+    actions.setMessage('item deleted');
+    const sectionIndex = qnaSections.findIndex((item) => item.fileId === fileId);
+    setFocusedIndex(sectionIndex);
+
+    updateQnAQuestion({
+      id: fileId,
+      sectionId,
+      questionId,
+      content,
+    });
+  };
+
+  const onUpdateQnAAnswer = (fileId: string, sectionId: string, content: string) => {
+    if (!fileId) return;
+    actions.setMessage('item deleted');
+    const sectionIndex = qnaSections.findIndex((item) => item.fileId === fileId);
+    setFocusedIndex(sectionIndex);
+
+    updateQnAAnswer({
+      id: fileId,
+      sectionId,
+      content,
+    });
+  };
+
+  const onRemoveQnAPairs = (fileId: string, sectionId: string) => {
     if (!fileId) return;
     actions.setMessage('item deleted');
     const sectionIndex = qnaSections.findIndex((item) => item.fileId === fileId);
@@ -170,7 +197,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
     createQnAPairs({ id: fileId, content: newQnAPair });
   };
 
-  console.log(focusedIndex);
   const onCreateNewQuestion = (fileId, sectionId) => {
     if (qnaFile) {
       const sectionIndex = qnaSections.findIndex((item) => item.sectionId === sectionId);
@@ -278,8 +304,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
     return null;
   };
 
-  const getKeyCallback = useCallback((item) => item.uuid, []);
-
   const getTableColums = () => {
     const tableColums = [
       {
@@ -343,12 +367,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                       const newValue = value?.trim().replace(/^#/, '');
                       const isChanged = question.content !== newValue;
                       if (newValue && isChanged) {
-                        updateQnAQuestion({
-                          id: item.fileId,
-                          sectionId: item.sectionId,
-                          questionId: question.id,
-                          content: newValue,
-                        });
+                        onUpdateQnAQuestion(item.fileId, item.sectionId, question.id, newValue);
                       }
                     }}
                     onChange={() => {}}
@@ -386,11 +405,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                   const newValue = value?.trim().replace(/^#/, '');
                   const isChanged = item.Answer !== newValue;
                   if (newValue && isChanged) {
-                    updateQnAAnswer({
-                      id: item.fileId,
-                      sectionId: item.sectionId,
-                      content: newValue,
-                    });
+                    onUpdateQnAAnswer(item.fileId, item.sectionId, newValue);
                   }
                 }}
                 onChange={() => {}}
@@ -417,7 +432,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
               styles={icon}
               title="Delete"
               onClick={() => {
-                deleteQnASection(item.fileId, item.sectionId);
+                onRemoveQnAPairs(item.fileId, item.sectionId);
               }}
             />
           );
@@ -480,6 +495,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         const name = getBaseName(id);
         groups.push({ key: id, name, startIndex, count: qnaSections.length, level: 0 });
       });
+
       return groups;
     }
   };
@@ -515,7 +531,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
         <DetailsList
           checkboxVisibility={CheckboxVisibility.hidden}
           columns={getTableColums()}
-          getKey={getKeyCallback}
           groupProps={{
             onRenderHeader: onRenderGroupHeader,
             collapseAllVisibility: CollapseAllVisibility.hidden,

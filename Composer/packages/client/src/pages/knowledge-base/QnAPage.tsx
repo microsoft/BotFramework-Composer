@@ -18,7 +18,12 @@ import { Page } from '../../components/Page';
 import { dialogsState, projectIdState, qnaAllUpViewStatusState, qnaFilesState } from '../../recoilModel/atoms/botState';
 import { dispatcherState } from '../../recoilModel';
 import { QnAAllUpViewStatus } from '../../recoilModel/types';
-import { CreateQnAModal, CreateQnAFormData } from '../../components/CreateQnAModal';
+import {
+  CreateQnAFromUrlModal,
+  CreateQnAFromUrlFormData,
+  CreateQnAFromScratchModal,
+  CreateQnAFromScratchFormData,
+} from '../../components/QnA';
 
 import TableView from './table-view';
 
@@ -37,7 +42,8 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
   const locale = 'en-us';
   //const locale = useRecoilValue(localeState);
   const qnaAllUpViewStatus = useRecoilValue(qnaAllUpViewStatusState);
-  const [createQnAModalVisiability, setCreateQnAModalVisiability] = useState(false);
+  const [createQnAModalFromUrlVisiability, setCreateQnAModalFromUrlVisiability] = useState(false);
+  const [createQnAModalFromScratchVisiability, setCreateQnAModalFromScratchVisiability] = useState(false);
 
   const path = props.location?.pathname ?? '';
   const { dialogId = '' } = props;
@@ -55,14 +61,14 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
             name: formatMessage('Create KB from scratch'),
             key: 'Create KB from scratch',
             onClick: () => {
-              setCreateQnAModalVisiability(true);
+              setCreateQnAModalFromScratchVisiability(true);
             },
           },
           {
             name: formatMessage('Create KB from URL or file'),
             key: 'Create KB from URL or file',
             onClick: () => {
-              setCreateQnAModalVisiability(true);
+              setCreateQnAModalFromUrlVisiability(true);
             },
           },
         ],
@@ -124,15 +130,6 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
     return null;
   };
 
-  const onDismiss = () => {
-    setCreateQnAModalVisiability(false);
-  };
-
-  const onSubmit = async ({ name, url, multiTurn }: CreateQnAFormData) => {
-    onDismiss();
-    await actions.createQnAKBFromUrl({ id: `${dialogId}.${locale}`, name, url, multiTurn });
-  };
-
   return (
     <Page
       data-testid="QnAPage"
@@ -153,8 +150,32 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
         {qnaAllUpViewStatus === QnAAllUpViewStatus.Loading && (
           <LoadingSpinner message={'Extracting QnA pairs. This could take a moment.'} />
         )}
-        {createQnAModalVisiability && (
-          <CreateQnAModal dialogId={dialogId} qnaFiles={qnaFiles} onDismiss={onDismiss} onSubmit={onSubmit} />
+        {createQnAModalFromUrlVisiability && (
+          <CreateQnAFromUrlModal
+            dialogId={dialogId}
+            qnaFiles={qnaFiles}
+            onDismiss={() => {
+              setCreateQnAModalFromUrlVisiability(false);
+            }}
+            onSubmit={async ({ name, url, multiTurn }: CreateQnAFromUrlFormData) => {
+              setCreateQnAModalFromUrlVisiability(false);
+              await actions.createQnAKBFromUrl({ id: `${dialogId}.${locale}`, name, url, multiTurn });
+            }}
+          />
+        )}
+
+        {createQnAModalFromScratchVisiability && (
+          <CreateQnAFromScratchModal
+            dialogId={dialogId}
+            qnaFiles={qnaFiles}
+            onDismiss={() => {
+              setCreateQnAModalFromScratchVisiability(false);
+            }}
+            onSubmit={async ({ name }: CreateQnAFromUrlFormData) => {
+              setCreateQnAModalFromScratchVisiability(false);
+              // await actions.createQnAKBFromUrl({ id: `${dialogId}.${locale}`, name, url, multiTurn });
+            }}
+          />
         )}
       </Suspense>
     </Page>

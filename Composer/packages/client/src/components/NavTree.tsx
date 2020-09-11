@@ -133,7 +133,7 @@ const NavTree: React.FC<INavTreeProps> = (props) => {
               />
               {item.menuItems && !item.disabled && (
                 <OverflowSet
-                  key={item.id}
+                  key={item.id + 'menu'}
                   items={[]}
                   overflowItems={item.menuItems as IOverflowSetItemProps[]}
                   role="menubar"
