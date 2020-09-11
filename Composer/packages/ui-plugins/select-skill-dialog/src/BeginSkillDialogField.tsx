@@ -8,6 +8,7 @@ import { ObjectField } from '@bfc/adaptive-form';
 import formatMessage from 'format-message';
 import { Skill, getSkillNameFromSetting } from '@bfc/shared';
 import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
+
 import { SelectSkillDialog } from './SelectSkillDialogField';
 import { SkillEndpointField } from './SkillEndpointField';
 
