@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { Request, Response } from 'express';
-import { PluginLoader } from '@bfc/plugin-loader';
+import { PluginLoader } from '@bfc/extension';
 import { schemas, expandPropertyDefinition } from '@microsoft/bf-generate-library';
 
 import { BotProjectService } from '../services/project';

@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"@bfc/plugin-loader@file:../../packages/extensions/plugin-loader":
+"@bfc/extension@file:../../packages/extension":
   version "1.0.0"
   dependencies:
     debug "^4.1.1"

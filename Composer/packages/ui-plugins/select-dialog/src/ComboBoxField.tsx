@@ -4,7 +4,7 @@
 import React from 'react';
 import { ComboBox, IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
 import { FieldLabel } from '@bfc/adaptive-form';
-import { FieldProps } from '@bfc/extension';
+import { FieldProps } from '@bfc/extension-client';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { ISelectableOption } from 'office-ui-fabric-react/lib/utilities/selectableOption';
 import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
