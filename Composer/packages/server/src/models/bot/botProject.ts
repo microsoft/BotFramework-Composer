@@ -6,9 +6,19 @@ import fs from 'fs';
 
 import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
-import { getNewDesigner, FileInfo, Skill, Diagnostic, IBotProject, DialogSetting, FileExtensions } from '@bfc/shared';
+import {
+  getNewDesigner,
+  FileInfo,
+  Skill,
+  Diagnostic,
+  convertSkillsToDictionary,
+  IBotProject,
+  DialogSetting,
+  FileExtensions,
+} from '@bfc/shared';
 import { UserIdentity, pluginLoader } from '@bfc/extension';
 import { FeedbackType, generate } from '@microsoft/bf-generate-library';
+import values from 'lodash/values';
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
@@ -133,7 +143,8 @@ export class BotProject implements IBotProject {
   public init = async () => {
     this.diagnostics = [];
     this.settings = await this.getEnvSettings(false);
-    const { skillsParsed, diagnostics } = await extractSkillManifestUrl(this.settings?.skill || ([] as any));
+    const skillsCollection = values(this.settings?.skill);
+    const { skillsParsed, diagnostics } = await extractSkillManifestUrl(skillsCollection || ([] as any));
     this.skills = skillsParsed;
     this.diagnostics.push(...diagnostics);
     this.files = await this._getFiles();
@@ -200,15 +211,11 @@ export class BotProject implements IBotProject {
   };
 
   // update skill in settings
-  public updateSkill = async (config: Skill[]) => {
+  public updateSkill = async (config: any[]) => {
     const settings = await this.getEnvSettings(false);
     const { skillsParsed } = await extractSkillManifestUrl(config);
-
-    settings.skill = skillsParsed.map(({ manifestUrl, name }) => {
-      return { manifestUrl, name };
-    });
-    await this.settingManager.set(settings);
-
+    const mapped = convertSkillsToDictionary(skillsParsed);
+    settings.skill = await this.settingManager.set(mapped);
     this.skills = skillsParsed;
     return skillsParsed;
   };
