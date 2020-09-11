@@ -119,8 +119,8 @@ export async function loginPopup(url = '', callbackUrl = ''): Promise<string | u
   const armToken = await authClient.getToken([arm]);
   const graphToken = await authClient.getToken([graph]);
 
-  // setAccessToken(armToken);
-  // setGraphToken(graphToken);
+  setAccessToken(armToken);
+  setGraphToken(graphToken);
   // Test code: Graph - get my user profile
   // let headers = new Headers();
   // let bearer = 'Bearer ' + graphToken;

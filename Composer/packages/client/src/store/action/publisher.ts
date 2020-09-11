@@ -235,22 +235,21 @@ export const provision: ActionCreator = async ({ dispatch }, config, type, proje
       }
     );
     console.log(result.data);
-    // dispatch({
-    //   type: ActionTypes.PROVISION_SUCCESS,
-    //   payload: result.data,
-    // });
+    dispatch({
+      type: ActionTypes.PROVISION_SUCCESS,
+      payload: result.data,
+    });
   } catch (error) {
-    if (error.response.data.redirectUri) {
-      await loginPopup(error.response.data.redirectUri, 'https://dev.botframework.com/cb');
-    }
+    console.log(error.response.data);
   }
 };
 
 // get bot status from target publisher
 export const getProvisionStatus: ActionCreator = async (store, projectId, target) => {
   let timer;
-  try {
-    timer = setInterval(async () => {
+
+  timer = setInterval(async () => {
+    try {
       const response = await httpClient.get(`/publish/${projectId}/provisionStatus/${target.name}`);
       console.log(response.data);
       if (response.data.config && response.data.config != {}) {
@@ -296,22 +295,19 @@ export const getProvisionStatus: ActionCreator = async (store, projectId, target
           },
         });
       }
-    }, 10000);
-  } catch (err) {
-    console.log(err);
-    // remove that publishTarget
-    const targets = store.getState().settings.publishTargets;
-    const newTargets = targets?.map((item) => {
-      if (item.name !== target.name) {
-        return item;
-      }
-    });
-    store.dispatch({
-      type: ActionTypes.SET_PUBLISH_TARGETS,
-      payload: {
-        publishTarget: newTargets,
-      },
-    });
-    clearInterval(timer);
-  }
+    } catch (err) {
+      console.log(err.response.data);
+      // remove that publishTarget
+      const targets = store.getState().settings.publishTargets;
+      const newTargets = targets?.filter((item) => item.name !== target.name);
+
+      store.dispatch({
+        type: ActionTypes.SET_PUBLISH_TARGETS,
+        payload: {
+          publishTarget: newTargets,
+        },
+      });
+      clearInterval(timer);
+    }
+  }, 10000);
 };

@@ -400,7 +400,7 @@ class AzurePublisher {
   };
 
   private asyncProvision = async (config: ProvisionConfig, project, user) => {
-    const { hostname, password, subscription, accessToken, graphToken, location } = config;
+    const { hostname, subscription, accessToken, graphToken, location } = config;
     const botproj = new BotProjectDeploy({
       subId: subscription.subscriptionId,
       logger: (msg: any) => {
@@ -424,17 +424,28 @@ class AzurePublisher {
       }
     }, 10000);
 
-    const result = await botproj.create(hostname, location.name, '', password);
+    try {
+      const result = await botproj.create(hostname, location.name, '');
+      const previous = this.provisionStatus[project.id][config.name];
+      previous.status = 200;
+      previous.config = result;
+      previous.details = botproj.getProvisionStatus();
+      this.setProvisionStatus(project.id, config.name, previous);
+      console.log(result);
+      return result;
+    } catch (error) {
+      console.log(error);
 
-    clearInterval(updatetimer);
+      const previous = this.provisionStatus[project.id][config.name];
+      previous.status = 500;
+      previous.config = {};
+      previous.details = botproj.getProvisionStatus();
+      previous.error = JSON.parse(JSON.stringify(error, Object.getOwnPropertyNames(error)));
 
-    const previous = this.provisionStatus[project.id][config.name];
-    previous.status = 200;
-    previous.config = result;
-    previous.details = botproj.getProvisionStatus();
-    this.setProvisionStatus(project.id, config.name, previous);
-    console.log(result);
-    return result;
+      this.setProvisionStatus(project.id, config.name, previous);
+    } finally {
+      clearInterval(updatetimer);
+    }
   };
 
   provision = async (config: ProvisionConfig, project, user) => {

@@ -699,6 +699,7 @@ export class BotProjectDeploy {
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
         message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
       });
+      throw err;
     }
   }
 

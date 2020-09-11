@@ -83,10 +83,7 @@ export const ProvisionController = {
         // call the method
         const result = await pluginMethod.call(null, req.body, currentProject, user);
         // set status and return value as json
-        res.status(result.status).json({
-          config: result.config,
-          details: result.details,
-        });
+        res.status(result.status).json(result);
       } catch (err) {
         console.log(err);
         res.status(400).json({
@@ -208,6 +205,7 @@ export const ProvisionController = {
         const result = await pluginMethod.call(null, JSON.parse(provisionConfig), currentProject, user);
         // set status and return value as json
         res.status(result.status).json({
+          ...result,
           config: result.config || null,
           details: result.details || {},
         });

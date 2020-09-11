@@ -302,6 +302,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
           type,
           provisionConfig,
           configuration: '{}',
+          provisionStatus: '{}',
         },
       ]);
       await actions.setPublishTargets(targets);
