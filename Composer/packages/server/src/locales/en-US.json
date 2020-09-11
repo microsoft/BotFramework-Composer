@@ -134,6 +134,9 @@
   "add_new_dialog_25f12c9": {
     "message": "Add new dialog"
   },
+  "add_new_extension_19b82b77": {
+    "message": "Add new extension"
+  },
   "add_new_knowledge_base_on_displayname_7f44609c": {
     "message": " Add new knowledge base on { displayName }"
   },
@@ -872,6 +875,12 @@
   "expression_7f906a13": {
     "message": "Expression"
   },
+  "extension_name_e21a5e25": {
+    "message": "Extension name"
+  },
+  "extensions_7250a0bb": {
+    "message": "Extensions"
+  },
   "external_resources_will_not_be_changed_c08b0009": {
     "message": "External resources will not be changed."
   },
@@ -1490,9 +1499,6 @@
   "plugin_name_829ac92a": {
     "message": "Plugin name"
   },
-  "plugins_600e693": {
-    "message": "Plugins"
-  },
   "populate_your_knowledge_base_bb2d3605": {
     "message": "Populate your Knowledge Base"
   },
@@ -1717,6 +1723,9 @@
   },
   "search_280d00bd": {
     "message": "Search"
+  },
+  "search_for_extensions_a27c4772": {
+    "message": "Search for extensions"
   },
   "search_for_plugins_9feaecd1": {
     "message": "Search for plugins"

@@ -2,11 +2,18 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { useRecoilCallback, CallbackInterface } from 'recoil';
-import { dereferenceDefinitions, LuFile, QnAFile, DialogInfo, SensitiveProperties, DialogSetting } from '@bfc/shared';
+import {
+  dereferenceDefinitions,
+  LuFile,
+  QnAFile,
+  DialogInfo,
+  SensitiveProperties,
+  DialogSetting,
+  convertSkillsToDictionary,
+} from '@bfc/shared';
 import { indexer, validateDialog } from '@bfc/indexers';
 import objectGet from 'lodash/get';
 import objectSet from 'lodash/set';
-import isArray from 'lodash/isArray';
 import formatMessage from 'format-message';
 
 import lgWorker from '../parsers/lgWorker';
@@ -193,6 +200,14 @@ export const projectDispatcher = () => {
         set(projectIdState, projectId);
         refreshLocalStorage(projectId, settings);
         const mergedSettings = mergeLocalStorage(projectId, settings);
+        if (Array.isArray(mergedSettings.skill)) {
+          const skillsArr = mergedSettings.skill.map((skillData) => {
+            return {
+              ...skillData,
+            };
+          });
+          mergedSettings.skill = convertSkillsToDictionary(skillsArr);
+        }
         set(settingsState, mergedSettings);
       });
       gotoSnapshot(newSnapshot);
@@ -349,7 +364,7 @@ export const projectDispatcher = () => {
       const { set } = callbackHelpers;
       try {
         const response = await httpClient.get(`/runtime/templates`);
-        if (isArray(response.data)) {
+        if (Array.isArray(response.data)) {
           set(runtimeTemplatesState, [...response.data]);
         }
       } catch (ex) {

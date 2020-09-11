@@ -20,9 +20,9 @@ export const App: React.FC = () => {
     loadLocale(appLocale);
   }, [appLocale]);
 
-  const { fetchPlugins } = useRecoilValue(dispatcherState);
+  const { fetchExtensions } = useRecoilValue(dispatcherState);
   useEffect(() => {
-    fetchPlugins();
+    fetchExtensions();
   });
 
   return (

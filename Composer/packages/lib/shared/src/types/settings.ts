@@ -34,9 +34,13 @@ export interface DialogSetting {
   defaultLanguage: string;
   languages: string[];
   skill?: {
-    name: string;
-    manifestUrl: string;
-  }[];
+    [skillName: string]: {
+      name: string;
+      manifestUrl: string;
+      msAppId: string;
+      endpointUrl: string;
+    };
+  };
   botId?: string;
   skillHostEndpoint?: string;
   [key: string]: any;

@@ -1,0 +1,1 @@
+{"version":3,"file":"AdaptiveFieldNames.js","sourceRoot":"","sources":["../../../src/adaptive-flow-renderer/constants/AdaptiveFieldNames.ts"],"names":[],"mappings":"AAAA,uCAAuC;AACvC,kCAAkC;AAElC,MAAM,CAAC,IAAM,kBAAkB,GAAG;IAChC,MAAM,EAAE,UAAU;IAClB,OAAO,EAAE,SAAS;IAClB,WAAW,EAAE,aAAa;IAC1B,SAAS,EAAE,WAAW;IACtB,WAAW,EAAE,SAAS;IACtB,KAAK,EAAE,OAAO;CACf,CAAC"}
