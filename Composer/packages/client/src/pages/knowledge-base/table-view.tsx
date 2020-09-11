@@ -64,13 +64,13 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const locale = useRecoilValue(localeState);
   const settings = useRecoilValue(settingsState);
   const {
-    // addQnAImport,
+    // createQnAImport,
     removeQnAImport,
     removeQnAFile,
     // setMessage,
-    addQnAPairs,
+    createQnAPairs,
     removeQnAPairs,
-    addQnAQuestion,
+    createQnAQuestion,
     // removeQnAQuestion,
     updateQnAAnswer,
     updateQnAQuestion,
@@ -167,7 +167,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     const newQnAPair = qnaUtil.generateQnAPair();
     const sectionIndex = qnaSections.findIndex((item) => item.fileId === fileId);
     setFocusedIndex(sectionIndex + 1);
-    addQnAPairs({ id: fileId, content: newQnAPair });
+    createQnAPairs({ id: fileId, content: newQnAPair });
   };
 
   console.log(focusedIndex);
@@ -181,7 +181,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         sectionId,
         content: 'Add new question',
       };
-      addQnAQuestion(payload);
+      createQnAQuestion(payload);
     }
   };
 

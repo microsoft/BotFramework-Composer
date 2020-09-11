@@ -54,9 +54,6 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
           {
             name: formatMessage('Create KB from scratch'),
             key: 'Create KB from scratch',
-            iconProps: {
-              iconName: 'Add',
-            },
             onClick: () => {
               setCreateQnAModalVisiability(true);
             },
@@ -64,9 +61,6 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
           {
             name: formatMessage('Create KB from URL or file'),
             key: 'Create KB from URL or file',
-            iconProps: {
-              iconName: 'Add',
-            },
             onClick: () => {
               setCreateQnAModalVisiability(true);
             },
@@ -136,7 +130,7 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
 
   const onSubmit = async ({ name, url, multiTurn }: CreateQnAFormData) => {
     onDismiss();
-    await actions.addQnAKBFromUrl({ id: `${dialogId}.${locale}`, name, url, multiTurn });
+    await actions.createQnAKBFromUrl({ id: `${dialogId}.${locale}`, name, url, multiTurn });
   };
 
   return (

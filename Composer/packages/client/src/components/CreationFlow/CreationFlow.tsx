@@ -43,7 +43,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     updateCurrentPathForStorage,
     updateFolder,
     saveTemplateId,
-    addQnAKBFromUrl,
+    createQnAKBFromUrl,
     fetchProjectById,
     fetchRecentProjects,
   } = useRecoilValue(dispatcherState);
@@ -117,7 +117,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     handleDismiss();
     await handleCreateNew(formData, QnABotTemplateId);
     // import qna from url
-    await addQnAKBFromUrl({ id: `${formData.name.toLocaleLowerCase()}.${locale}`, name, url, multiTurn });
+    await createQnAKBFromUrl({ id: `${formData.name.toLocaleLowerCase()}.${locale}`, name, url, multiTurn });
   };
 
   const handleSubmitOrImportQnA = async (formData, templateId: string) => {

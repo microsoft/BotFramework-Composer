@@ -148,7 +148,7 @@ export const qnaDispatcher = () => {
     await removeQnAFileState(callbackHelpers, { id });
   });
 
-  const addQnAKBFromUrl = useRecoilCallback(
+  const createQnAKBFromUrl = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async ({
       id,
       name,
@@ -239,7 +239,7 @@ ${response.data}
     }
   );
 
-  const addQnAQuestion = useRecoilCallback(
+  const createQnAQuestion = useRecoilCallback(
     ({ set, snapshot }: CallbackInterface) => async ({
       id,
       sectionId,
@@ -253,7 +253,7 @@ ${response.data}
       const qnaFile = qnaFiles.find((temp) => temp.id === id);
       if (!qnaFile) return qnaFiles;
 
-      const updatedFile = qnaUtil.addQnAQuestion(qnaFile, sectionId, content);
+      const updatedFile = qnaUtil.createQnAQuestion(qnaFile, sectionId, content);
       set(qnaFilesState, (qnaFiles) => {
         return qnaFiles.map((file) => {
           return file.id === id ? updatedFile : file;
@@ -285,7 +285,7 @@ ${response.data}
     }
   );
 
-  const addQnAPairs = useRecoilCallback(
+  const createQnAPairs = useRecoilCallback(
     ({ set, snapshot }: CallbackInterface) => async ({ id, content }: { id: string; content: string }) => {
       const qnaFiles = await snapshot.getPromise(qnaFilesState);
       const qnaFile = qnaFiles.find((temp) => temp.id === id);
@@ -316,7 +316,7 @@ ${response.data}
     }
   );
 
-  const addQnAImport = useRecoilCallback(
+  const createQnAImport = useRecoilCallback(
     ({ set, snapshot }: CallbackInterface) => async ({ id, sourceId }: { id: string; sourceId: string }) => {
       const qnaFiles = await snapshot.getPromise(qnaFilesState);
       const qnaFile = qnaFiles.find((temp) => temp.id === id);
@@ -345,17 +345,17 @@ ${response.data}
     }
   );
   return {
-    addQnAImport,
+    createQnAImport,
     removeQnAImport,
-    addQnAPairs,
+    createQnAPairs,
     removeQnAPairs,
-    addQnAQuestion,
+    createQnAQuestion,
     removeQnAQuestion,
     updateQnAQuestion,
     updateQnAAnswer,
     createQnAFile,
     removeQnAFile,
     updateQnAFile,
-    addQnAKBFromUrl,
+    createQnAKBFromUrl,
   };
 };

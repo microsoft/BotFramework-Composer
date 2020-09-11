@@ -281,7 +281,7 @@ export function updateQnASection(qnaFile: QnAFile, sectionId: string, changes: Q
   return updateSection(qnaFile, sectionId, targetSectionContent);
 }
 
-export function addQnAQuestion(qnaFile: QnAFile, sectionId: string, questionContent: string) {
+export function createQnAQuestion(qnaFile: QnAFile, sectionId: string, questionContent: string) {
   const changes: QnASectionChanges = {
     Questions: [
       {

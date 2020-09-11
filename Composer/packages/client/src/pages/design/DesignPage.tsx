@@ -143,7 +143,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     updateSkill,
     exportToZip,
     onboardingAddCoachMarkRef,
-    addQnAKBFromUrl,
+    createQnAKBFromUrl,
   } = useRecoilValue(dispatcherState);
 
   const { location, dialogId } = props;
@@ -587,7 +587,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       const url = `/bot/${projectId}/knowledge-base/${dialogId}`;
       createTrigger(dialogId, formData, url);
       // import qna from url
-      await addQnAKBFromUrl({ id: `${dialogId}.${locale}`, name, url, multiTurn });
+      await createQnAKBFromUrl({ id: `${dialogId}.${locale}`, name, url, multiTurn });
     }
   };
 
