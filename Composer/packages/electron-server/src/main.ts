@@ -205,7 +205,7 @@ async function run() {
     const { startApp, updateStatus } = initSplashScreen({
       getMainWindow,
       color: 'rgb(0, 120, 212)',
-      logo: resolve(microsoftLogoPath),
+      logo: `file://${microsoftLogoPath}`,
       productName: 'Bot Framework Composer',
       productFamily: 'Microsoft Azure',
       status: 'Initializing...',
