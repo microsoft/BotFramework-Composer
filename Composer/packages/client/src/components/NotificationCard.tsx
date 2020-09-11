@@ -70,7 +70,7 @@ const errorType = css`
 
 const successType = css`
   margin-top: 4px;
-  color: greenyellow;
+  color: #27ae60;
 `;
 
 const cardTitle = css`
