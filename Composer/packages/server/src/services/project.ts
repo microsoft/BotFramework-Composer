@@ -18,12 +18,39 @@ import { Path } from './../utility/path';
 
 const MAX_RECENT_BOTS = 7;
 
+/** Metadata stored by Composer and associated by internal bot project id */
+type BotProjectMetadata = {
+  path: string;
+  eTag?: string;
+};
+
+type BotProjectLocationMap = {
+  [key: string]: BotProjectMetadata;
+};
+
+/** Converts old bot project location maps to the new shape */
+function fixOldBotProjectMapEntries(
+  projectMap: BotProjectLocationMap | { [key: string]: string }
+): BotProjectLocationMap {
+  const map: BotProjectLocationMap = {};
+  for (const botId in projectMap) {
+    const entry = projectMap[botId];
+    if (typeof entry === 'string') {
+      map[botId] = {
+        path: entry,
+        eTag: '',
+      };
+    } else {
+      map[botId] = entry;
+    }
+  }
+  return map;
+}
+
 export class BotProjectService {
   private static currentBotProjects: BotProject[] = [];
   private static recentBotProjects: LocationRef[] = [];
-  private static projectLocationMap: {
-    [key: string]: string;
-  };
+  private static projectLocationMap: BotProjectLocationMap;
 
   private static initialize() {
     if (!BotProjectService.recentBotProjects || BotProjectService.recentBotProjects.length === 0) {
@@ -31,7 +58,7 @@ export class BotProjectService {
     }
 
     if (!BotProjectService.projectLocationMap || Object.keys(BotProjectService.projectLocationMap).length === 0) {
-      BotProjectService.projectLocationMap = Store.get('projectLocationMap', {});
+      BotProjectService.projectLocationMap = fixOldBotProjectMapEntries(Store.get('projectLocationMap', {}));
     }
   }
 
@@ -133,7 +160,7 @@ export class BotProjectService {
   };
 
   public static deleteProject = async (projectId: string): Promise<string> => {
-    const path = BotProjectService.projectLocationMap[projectId];
+    const { path = '' } = BotProjectService.projectLocationMap[projectId];
     BotProjectService.removeProjectIdFromCache(projectId);
     return path;
   };
@@ -152,7 +179,8 @@ export class BotProjectService {
     }
 
     for (const key in BotProjectService.projectLocationMap) {
-      if (BotProjectService.projectLocationMap[key] === locationRef.path) {
+      const projectLoc = BotProjectService.projectLocationMap[key];
+      if (projectLoc && projectLoc.path === locationRef.path) {
         // TODO: this should probably move to getProjectById
         BotProjectService.addRecentProject(locationRef.path);
         return key;
@@ -169,7 +197,8 @@ export class BotProjectService {
   // clean project registry based on path to avoid reuseing the same id
   public static cleanProject = async (location: LocationRef): Promise<void> => {
     for (const key in BotProjectService.projectLocationMap) {
-      if (BotProjectService.projectLocationMap[key] === location.path) {
+      const projectLoc = BotProjectService.projectLocationMap[key];
+      if (projectLoc && projectLoc.path === location.path) {
         delete BotProjectService.projectLocationMap[key];
       }
     }
@@ -178,7 +207,7 @@ export class BotProjectService {
 
   public static generateProjectId = async (path: string): Promise<string> => {
     const projectId = (Math.random() * 100000).toString();
-    BotProjectService.projectLocationMap[projectId] = path;
+    BotProjectService.projectLocationMap[projectId] = { eTag: '', path };
     return projectId;
   };
 
@@ -195,7 +224,8 @@ export class BotProjectService {
 
   public static getProjectIdByPath = async (path: string) => {
     for (const key in BotProjectService.projectLocationMap) {
-      if (BotProjectService.projectLocationMap[key] === path) {
+      const projectLoc = BotProjectService.projectLocationMap[key];
+      if (projectLoc && projectLoc.path === path) {
         return key;
       }
     }
@@ -205,7 +235,7 @@ export class BotProjectService {
   public static getProjectById = async (projectId: string, user?: UserIdentity): Promise<BotProject> => {
     BotProjectService.initialize();
 
-    const path = BotProjectService.projectLocationMap[projectId];
+    const { eTag, path } = BotProjectService.projectLocationMap[projectId];
 
     if (path == null) {
       throw new Error(`project ${projectId} not found in cache`);
@@ -216,12 +246,19 @@ export class BotProjectService {
         BotProjectService.removeProjectIdFromCache(projectId);
         throw new Error(`file ${path} does not exist`);
       }
-      const project = new BotProject({ storageId: 'default', path: path }, user);
+      const project = new BotProject({ storageId: 'default', path: path }, user, eTag);
       await project.init();
       project.id = projectId;
       // update current indexed bot projects
       BotProjectService.updateCurrentProjects(project);
       return project;
+    }
+  };
+
+  public static setETagForProject = (eTag: string, projectId: string): void => {
+    const projectLoc = BotProjectService.projectLocationMap[projectId];
+    if (projectLoc) {
+      projectLoc.eTag = eTag;
     }
   };
 
