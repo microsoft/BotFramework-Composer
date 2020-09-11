@@ -93,7 +93,7 @@ interface CreateQnAModalProps
 const DialogTitle = () => {
   return (
     <div>
-      {formatMessage('Populate your Knowledge Base')}
+      {formatMessage('Create new knowledge base')}
       <p>
         <span css={subText}>
           {formatMessage(
@@ -115,31 +115,19 @@ const DialogTitle = () => {
 };
 
 export interface CreateQnAFormData {
-  urls: string[];
+  url: string;
   name: string;
   multiTurn: boolean;
 }
 
-const validateUrls = (urls: string[]) => {
-  const errors = Array(urls.length).fill('');
+const validateUrl: FieldValidator = (url: string): string => {
+  let error = '';
 
-  for (let i = 0; i < urls.length; i++) {
-    const baseUrl = urls[i].replace(/\/$/, '');
-    for (let j = 0; j < urls.length; j++) {
-      const candidateUrl = urls[j].replace(/\/$/, '');
-      if (baseUrl && candidateUrl && baseUrl === candidateUrl && i !== j) {
-        errors[i] = errors[j] = formatMessage('This url is duplicated');
-      }
-    }
+  if (url && !url.startsWith('http://') && !url.startsWith('https://')) {
+    error = formatMessage('A valid url should start with http:// or https://');
   }
 
-  for (let i = 0; i < urls.length; i++) {
-    if (urls[i] && !urls[i].startsWith('http://') && !urls[i].startsWith('https://')) {
-      errors[i] = formatMessage('A valid url should start with http:// or https://');
-    }
-  }
-
-  return errors;
+  return error;
 };
 
 const QnANameRegex = /^\w[-\w]*$/;
@@ -162,9 +150,9 @@ const validateName = (sources: QnAFile[]): FieldValidator => {
 };
 
 const formConfig: FieldConfig<CreateQnAFormData> = {
-  urls: {
+  url: {
     required: true,
-    defaultValue: [''],
+    defaultValue: '',
   },
   name: {
     required: true,
@@ -178,12 +166,12 @@ const formConfig: FieldConfig<CreateQnAFormData> = {
 
 export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
   const { onDismiss, onSubmit, dialogId, qnaFiles } = props;
-  const [urlErrors, setUrlErrors] = useState(['']);
 
   formConfig.name.validate = validateName(qnaFiles);
+  formConfig.url.validate = validateUrl;
   const { formData, updateField, hasErrors, formErrors } = useForm(formConfig);
   const isQnAFileselected = !(dialogId === 'all');
-  const disabled = hasErrors || urlErrors.some((e) => !!e) || formData.urls.some((url) => !url);
+  const disabled = hasErrors;
 
   const updateName = (name = '') => {
     updateField('name', name);
@@ -191,25 +179,8 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
   const updateMultiTurn = (val) => {
     updateField('multiTurn', val);
   };
-
-  const addNewUrl = () => {
-    const urls = [...formData.urls, ''];
-    updateField('urls', urls);
-    setUrlErrors(validateUrls(urls));
-  };
-
-  const updateUrl = (index: number, url = '') => {
-    const urls = [...formData.urls];
-    urls[index] = url;
-    updateField('urls', urls);
-    setUrlErrors(validateUrls(urls));
-  };
-
-  const removeUrl = (index: number) => {
-    const urls = [...formData.urls];
-    urls.splice(index, 1);
-    updateField('urls', urls);
-    setUrlErrors(validateUrls(urls));
+  const updateUrl = (url = '') => {
+    updateField('url', url);
   };
 
   return (
@@ -231,45 +202,24 @@ export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
           <TextField
             data-testid={`knowledgeLocationTextField-name`}
             errorMessage={formErrors.name}
-            label={formatMessage('Name')}
+            label={formatMessage('Knowledge base name')}
+            placeholder={formatMessage('Type a name that describes this content')}
             styles={textField}
             value={formData.name}
             onChange={(e, name) => updateName(name)}
           />
         </Stack>
         <Stack>
-          {formData.urls.map((l, index) => {
-            return (
-              <div key={index} css={urlContainer}>
-                <TextField
-                  data-testid={`knowledgeLocationTextField-${index}`}
-                  errorMessage={urlErrors[index]}
-                  label={index === 0 ? formatMessage('URL') : ''}
-                  placeholder={'http://'}
-                  styles={textField}
-                  value={l}
-                  onChange={(e, url) => updateUrl(index, url)}
-                />
-                {index !== 0 && (
-                  <ActionButton
-                    css={cancel}
-                    data-testid={`deleteImportQnAUrl-${index}`}
-                    hidden={index === 0}
-                    iconProps={{ iconName: 'Cancel' }}
-                    onClick={(e) => removeUrl(index)}
-                  />
-                )}
-              </div>
-            );
-          })}
-          <ActionButton
-            css={actionButton}
-            data-testid={'addQnAImportUrl'}
-            iconProps={{ iconName: 'Add' }}
-            onClick={addNewUrl}
-          >
-            {formatMessage('Add additional URL')}
-          </ActionButton>
+          <TextField
+            data-testid={`knowledgeLocationTextField-url`}
+            errorMessage={formErrors.url}
+            label={formatMessage('Knowledge source')}
+            placeholder={formatMessage('Enter a URL or browse to upload a file ')}
+            styles={textField}
+            value={formData.url}
+            onChange={(e, url) => updateUrl(url)}
+          />
+
           {!isQnAFileselected && (
             <div css={warning}> {formatMessage('Please select a specific qna file to import QnA')}</div>
           )}

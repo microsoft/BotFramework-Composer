@@ -143,7 +143,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     updateSkill,
     exportToZip,
     onboardingAddCoachMarkRef,
-    importQnAFromUrls,
+    addQnAKBFromUrl,
   } = useRecoilValue(dispatcherState);
 
   const { location, dialogId } = props;
@@ -573,7 +573,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     setImportQnAModalVisibility(false);
   };
 
-  const handleCreateQnA = async ({ name, urls, multiTurn }) => {
+  const handleCreateQnA = async ({ name, url, multiTurn }) => {
     cancelImportQnAModal();
     const formData = {
       $kind: qnaMatcherKey,
@@ -586,10 +586,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     if (dialogId) {
       const url = `/bot/${projectId}/knowledge-base/${dialogId}`;
       createTrigger(dialogId, formData, url);
-      // import qna from urls
-      if (urls.length > 0) {
-        await importQnAFromUrls({ id: `${dialogId}.${locale}`, name, urls, multiTurn });
-      }
+      // import qna from url
+      await addQnAKBFromUrl({ id: `${dialogId}.${locale}`, name, url, multiTurn });
     }
   };
 

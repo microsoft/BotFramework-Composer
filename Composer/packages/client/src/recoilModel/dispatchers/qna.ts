@@ -148,16 +148,16 @@ export const qnaDispatcher = () => {
     await removeQnAFileState(callbackHelpers, { id });
   });
 
-  const importQnAFromUrls = useRecoilCallback(
+  const addQnAKBFromUrl = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async ({
       id,
       name,
-      urls,
+      url,
       multiTurn,
     }: {
       id: string; // dialogId.locale
       name: string;
-      urls: string[];
+      url: string;
       multiTurn: boolean;
     }) => {
       const { set } = callbackHelpers;
@@ -167,7 +167,7 @@ export const qnaDispatcher = () => {
       let response;
       try {
         response = await httpClient.get(`/utilities/qna/parse`, {
-          params: { urls: encodeURIComponent(urls.join(',')), multiTurn },
+          params: { url: encodeURIComponent(url), multiTurn },
         });
       } catch (err) {
         setError(callbackHelpers, err);
@@ -175,7 +175,7 @@ export const qnaDispatcher = () => {
         return;
       }
 
-      const contentForSourceQnA = `> !# @source.urls=${urls}
+      const contentForSourceQnA = `> !# @source.url=${url}
 > !# @source.multiTurn=${multiTurn}
 ${response.data}
 `;
@@ -356,6 +356,6 @@ ${response.data}
     createQnAFile,
     removeQnAFile,
     updateQnAFile,
-    importQnAFromUrls,
+    addQnAKBFromUrl,
   };
 };

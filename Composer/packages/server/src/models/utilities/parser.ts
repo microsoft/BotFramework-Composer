@@ -55,10 +55,8 @@ async function importQnAFromUrl(builder: any, url: string, subscriptionKey: stri
 
 //https://azure.microsoft.com/en-us/pricing/details/cognitive-services/qna-maker/
 //limited to 3 transactions per second
-export async function parseQnAContent(urls: string[], multiTurn: boolean) {
+export async function parseQnAContent(url: string, multiTurn: boolean) {
   const builder = new qnaBuild.Builder((message: string) => debug(message));
-
-  let qnaContent = '';
 
   const subscriptionKey = QNA_SUBSCRIPTION_KEY || getBuildEnvironment()?.QNA_SUBSCRIPTION_KEY;
 
@@ -66,20 +64,5 @@ export async function parseQnAContent(urls: string[], multiTurn: boolean) {
     throw new Error('Missing subscription key for QnAMaker');
   }
 
-  const limitedNumInBatch = 3;
-  let i = 0;
-
-  while (i < urls.length) {
-    const batchUrls = urls.slice(i, i + limitedNumInBatch);
-    const contents = await Promise.all(
-      batchUrls.map(async (url) => {
-        return await importQnAFromUrl(builder, url, subscriptionKey, multiTurn);
-      })
-    );
-    contents.forEach((content) => {
-      qnaContent += content;
-    });
-    i = i + limitedNumInBatch;
-  }
-  return qnaContent;
+  return await importQnAFromUrl(builder, url, subscriptionKey, multiTurn);
 }
