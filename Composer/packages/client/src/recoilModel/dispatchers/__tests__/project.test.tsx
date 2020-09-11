@@ -17,11 +17,23 @@ import {
   templateProjectsState,
   runtimeTemplatesState,
   currentProjectIdState,
+  skillManifestsState,
+  luFilesState,
+  lgFilesState,
+  settingsState,
+  dialogsState,
+  botEnvironmentState,
+  botDiagnosticsState,
+  localeState,
+  schemasState,
+  locationState,
+  skillsState,
+  botOpeningState,
+  botStatusState,
 } from '../../atoms';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
 import { BotStatus } from '../../../constants';
-import { botStateByProjectIdSelector } from '../../selectors';
 
 import mockProjectResponse from './mocks/mockProjectResponse.json';
 
@@ -61,24 +73,21 @@ jest.mock('../../persistence/FilePersistence', () => {
 
 describe('Project dispatcher', () => {
   const useRecoilTestHook = () => {
-    const {
-      schemas,
-      location,
-      skills,
-      botStatus,
-      botName,
-      skillManifests,
-      luFiles,
-      lgFiles,
-      dialogSetting: settings,
-      dialogs,
-      botEnvironment,
-      diagnostics,
-      projectId,
-      locale,
-      projectMetaData: { botOpening },
-    } = useRecoilValue(botStateByProjectIdSelector);
+    const schemas = useRecoilValue(schemasState(projectId));
+    const location = useRecoilValue(locationState(projectId));
+    const skills = useRecoilValue(skillsState(projectId));
+    const botName = useRecoilValue(dialogsState(projectId));
+    const skillManifests = useRecoilValue(skillManifestsState(projectId));
+    const luFiles = useRecoilValue(luFilesState(projectId));
+    const lgFiles = useRecoilValue(lgFilesState(projectId));
+    const settings = useRecoilValue(settingsState(projectId));
+    const dialogs = useRecoilValue(dialogsState(projectId));
+    const botEnvironment = useRecoilValue(botEnvironmentState(projectId));
+    const diagnostics = useRecoilValue(botDiagnosticsState(projectId));
+    const locale = useRecoilValue(localeState(projectId));
+    const botStatus = useRecoilValue(botStatusState(projectId));
 
+    const botOpening = useRecoilValue(botOpeningState);
     const currentDispatcher = useRecoilValue(dispatcherState);
     const [recentProjects, setRecentProjects] = useRecoilState(recentProjectsState);
     const appError = useRecoilValue(applicationErrorState);

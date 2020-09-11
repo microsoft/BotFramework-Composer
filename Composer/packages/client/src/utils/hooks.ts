@@ -24,6 +24,7 @@ export const useLocation = () => {
 
 export const useLinks = () => {
   const botProjects = useRecoilValue(botProjectsSpaceState);
+  // TODO: Refactor to support multi bot. Currently, always set to root bot's projectID
   const rootBotProjectId = botProjects[0];
   const designPageLocation = useRecoilValue(designPageLocationState(rootBotProjectId));
   const openedDialogId: string = designPageLocation.dialogId || 'Main';

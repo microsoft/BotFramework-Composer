@@ -9,8 +9,7 @@ import { exportDispatcher } from '../export';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import { botNameState, currentProjectIdState } from '../../atoms';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
-import { Dispatcher } from '..';
-import { botStateByProjectIdSelector } from '../../selectors';
+import { Dispatcher } from '../../../recoilModel/dispatchers';
 
 jest.mock('../../../utils/httpUtil');
 const projectId = '2345.32324';
@@ -23,7 +22,7 @@ describe('Export dispatcher', () => {
     prevAppendChild = document.body.appendChild;
 
     const useRecoilTestHook = () => {
-      const { botName } = useRecoilValue(botStateByProjectIdSelector);
+      const botName = useRecoilValue(botNameState(projectId));
       const currentDispatcher = useRecoilValue(dispatcherState);
       return {
         botName,
