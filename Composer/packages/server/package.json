@@ -22,7 +22,7 @@
   },
   "author": "",
   "nodemonConfig": {
-    "exec": "cross-env TS_NODE_FILES=true node --inspect=9228 -r ts-node/register src/init.ts",
+    "exec": "cross-env TS_NODE_FILES=true node -r ts-node/register src/init.ts",
     "watch": [
       "src"
     ],
@@ -59,9 +59,10 @@
     "@bfc/intellisense-languageserver": "*",
     "@bfc/lg-languageserver": "*",
     "@bfc/lu-languageserver": "*",
-    "@bfc/plugin-loader": "*",
+    "@bfc/extension": "*",
     "@bfc/shared": "*",
     "@microsoft/bf-dispatcher": "^4.10.0-preview.141651",
+    "@microsoft/bf-generate-library": "^4.10.0-daily.20200827.161452",
     "@microsoft/bf-lu": "^4.10.0-dev.20200808.5a7c973",
     "archiver": "^3.0.0",
     "axios": "^0.19.2",
@@ -95,5 +96,8 @@
     "vscode-languageserver": "^5.3.0-next",
     "vscode-ws-jsonrpc": "^0.1.1",
     "ws": "^5.0.0"
+  },
+  "resolutions": {
+    "bl": "^2.2.1"
   }
 }

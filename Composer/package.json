@@ -9,19 +9,22 @@
     "lodash": "^4.17.12",
     "set-value": "^3.0.2",
     "kind-of": "^6.0.3",
-    "elliptic": "^6.5.3"
+    "elliptic": "^6.5.3",
+    "bl": "^2.2.1"
   },
   "engines": {
     "node": ">=12"
   },
   "workspaces": [
+    "packages/adaptive-flow",
+    "packages/adaptive-form",
     "packages/client",
     "packages/electron-server",
-    "packages/extensions",
-    "packages/extensions/*",
+    "packages/extension",
+    "packages/extension-client",
+    "packages/intellisense",
     "packages/lib",
     "packages/lib/*",
-    "packages/plugin-loader",
     "packages/server",
     "packages/test-utils",
     "packages/tools",
@@ -37,7 +40,7 @@
     "build:test": "yarn workspace @bfc/test-utils build",
     "build:lib": "yarn workspace @bfc/libs build:all",
     "build:electron": "yarn workspace @bfc/electron-server build",
-    "build:extensions": "wsrun -lt -p @bfc/plugin-loader @bfc/intellisense @bfc/extension @bfc/adaptive-form @bfc/adaptive-flow @bfc/ui-plugin-* -c build",
+    "build:extensions": "wsrun -lt -p @bfc/extension @bfc/intellisense @bfc/extension-client @bfc/adaptive-form @bfc/adaptive-flow @bfc/ui-plugin-*  -c build",
     "build:server": "yarn workspace @bfc/server build",
     "build:client": "yarn workspace @bfc/client build",
     "build:tools": "yarn workspace @bfc/tools build:all",
@@ -115,8 +118,8 @@
     "lint-staged": "^8.1.0",
     "prettier": "2.0.5",
     "rimraf": "^2.6.3",
-    "tslib": "^2.0.0",
     "ts-loader": "7.0.4",
+    "tslib": "^2.0.0",
     "typescript": "3.9.2",
     "wsrun": "^5.2.0"
   },

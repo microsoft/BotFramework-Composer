@@ -25,7 +25,11 @@ WORKDIR /app/Composer
 COPY --from=build /src/Composer/yarn.lock .
 COPY --from=build /src/Composer/package.json .
 COPY --from=build /src/Composer/packages/client ./packages/client
-COPY --from=build /src/Composer/packages/extensions ./packages/extensions
+COPY --from=build /src/Composer/packages/adaptive-flow ./packages/adaptive-flow
+COPY --from=build /src/Composer/packages/adaptive-form ./packages/adaptive-form
+COPY --from=build /src/Composer/packages/extension ./packages/extension
+COPY --from=build /src/Composer/packages/extension-client ./packages/extension-client
+COPY --from=build /src/Composer/packages/intellisense ./packages/intellisense
 COPY --from=build /src/Composer/packages/server ./packages/server
 COPY --from=build /src/Composer/packages/lib ./packages/lib
 COPY --from=build /src/Composer/packages/tools ./packages/tools

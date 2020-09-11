@@ -6,8 +6,19 @@ import fs from 'fs';
 
 import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
-import { getNewDesigner, FileInfo, Skill, Diagnostic, IBotProject, DialogSetting } from '@bfc/shared';
-import { UserIdentity, pluginLoader } from '@bfc/plugin-loader';
+import {
+  getNewDesigner,
+  FileInfo,
+  Skill,
+  Diagnostic,
+  convertSkillsToDictionary,
+  IBotProject,
+  DialogSetting,
+  FileExtensions,
+} from '@bfc/shared';
+import { UserIdentity, pluginLoader } from '@bfc/extension';
+import { FeedbackType, generate } from '@microsoft/bf-generate-library';
+import values from 'lodash/values';
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
@@ -132,7 +143,8 @@ export class BotProject implements IBotProject {
   public init = async () => {
     this.diagnostics = [];
     this.settings = await this.getEnvSettings(false);
-    const { skillsParsed, diagnostics } = await extractSkillManifestUrl(this.settings?.skill || ([] as any));
+    const skillsCollection = values(this.settings?.skill);
+    const { skillsParsed, diagnostics } = await extractSkillManifestUrl(skillsCollection || ([] as any));
     this.skills = skillsParsed;
     this.diagnostics.push(...diagnostics);
     this.files = await this._getFiles();
@@ -199,15 +211,11 @@ export class BotProject implements IBotProject {
   };
 
   // update skill in settings
-  public updateSkill = async (config: Skill[]) => {
+  public updateSkill = async (config: any[]) => {
     const settings = await this.getEnvSettings(false);
     const { skillsParsed } = await extractSkillManifestUrl(config);
-
-    settings.skill = skillsParsed.map(({ manifestUrl, name }) => {
-      return { manifestUrl, name };
-    });
-    await this.settingManager.set(settings);
-
+    const mapped = convertSkillsToDictionary(skillsParsed);
+    settings.skill = await this.settingManager.set(mapped);
     this.skills = skillsParsed;
     return skillsParsed;
   };
@@ -487,6 +495,56 @@ export class BotProject implements IBotProject {
     });
     return qnaEndpointKey;
   };
+
+  public async generateDialog(name: string) {
+    const defaultLocale = this.settings?.defaultLanguage || defaultLanguage;
+    const relativePath = defaultFilePath(this.name, defaultLocale, `${name}${FileExtensions.FormDialogSchema}`);
+    const schemaPath = Path.resolve(this.dir, relativePath);
+
+    const dialogPath = defaultFilePath(this.name, defaultLocale, `${name}${FileExtensions.Dialog}`);
+    const outDir = Path.dirname(Path.resolve(this.dir, dialogPath));
+
+    const feedback = (type: FeedbackType, message: string): void => {
+      // eslint-disable-next-line no-console
+      console.log(`${type} - ${message}`);
+    };
+
+    const generateParams = {
+      schemaPath,
+      prefix: name,
+      outDir,
+      metaSchema: undefined,
+      allLocales: undefined,
+      templateDirs: [],
+      force: false,
+      merge: true,
+      singleton: true,
+      feedback,
+    };
+
+    // schema path = path to the JSON schema file defining the form data
+    // prefix - the dialog name to prefix on generated assets
+    // outDir - the directory where the dialog assets will be saved
+    // metaSchema - deprecated
+    // allLocales - the additional locales for which to generate assets
+    // templateDirs - paths to directories containing customized templates
+    // force - if assets are overwritten causing any user customizations to be lost
+    // merge - if generated assets should be merged with any user customized assets
+    // singleton - if the generated assets should be merged into a single dialog
+    // feeback - a callback for status and progress and generation happens
+    await generate(
+      generateParams.schemaPath,
+      generateParams.prefix,
+      generateParams.outDir,
+      generateParams.metaSchema,
+      generateParams.allLocales,
+      generateParams.templateDirs,
+      generateParams.force,
+      generateParams.merge,
+      generateParams.singleton,
+      generateParams.feedback
+    );
+  }
 
   private async removeLocalRuntimeData(projectId) {
     const method = 'localpublish';

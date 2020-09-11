@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useMemo, useRef } from 'react';
-import { ShellApi, ShellData, Shell } from '@bfc/shared';
+import { ShellApi, ShellData, Shell, fetchFromSettings } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
@@ -26,6 +26,7 @@ import {
   focusPathState,
   userSettingsState,
   clipboardActionsState,
+  settingsState,
 } from '../recoilModel';
 import { validatedDialogsSelector } from '../recoilModel/selectors/validatedDialogs';
 
@@ -56,6 +57,7 @@ export function useShell(source: EventSource): Shell {
   const userSettings = useRecoilValue(userSettingsState);
   const clipboardActions = useRecoilValue(clipboardActionsState);
   const { undo, redo, commitChanges } = useRecoilValue(undoFunctionState);
+  const settings = useRecoilValue(settingsState);
   const {
     updateDialog,
     updateDialogSchema,
@@ -70,6 +72,7 @@ export function useShell(source: EventSource): Shell {
     updateUserSettings,
     setMessage,
     displayManifestModal,
+    updateSkillsInSetting,
   } = useRecoilValue(dispatcherState);
   const lgApi = useLgApi();
   const luApi = useLuApi();
@@ -177,7 +180,7 @@ export function useShell(source: EventSource): Shell {
     },
     addSkillDialog: () => {
       return new Promise((resolve) => {
-        addSkillDialogBegin((newSkill: { manifestUrl: string } | null) => {
+        addSkillDialogBegin((newSkill: { manifestUrl: string; name: string } | null) => {
           resolve(newSkill);
         });
       });
@@ -190,6 +193,10 @@ export function useShell(source: EventSource): Shell {
     announce: setMessage,
     displayManifestModal: displayManifestModal,
     updateDialogSchema,
+    skillsInSettings: {
+      get: (path: string) => fetchFromSettings(path, settings),
+      set: updateSkillsInSetting,
+    },
   };
 
   const currentDialog = useMemo(() => dialogs.find((d) => d.id === dialogId), [dialogs, dialogId]);

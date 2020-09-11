@@ -3,13 +3,13 @@
 
 import { Request, Response } from 'express';
 import rimraf from 'rimraf';
-import { pluginLoader } from '@bfc/plugin-loader';
+import { pluginLoader } from '@bfc/extension';
 
 import { BotProjectService } from '../../src/services/project';
 import { ProjectController } from '../../src/controllers/project';
 import { Path } from '../../src/utility/path';
 
-jest.mock('@bfc/plugin-loader', () => {
+jest.mock('@bfc/extension', () => {
   return {
     pluginLoader: {
       extensions: {

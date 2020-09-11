@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { fireEvent, getAllByRole, render } from '@bfc/test-utils';
-import { Extension } from '@bfc/extension';
+import { EditorExtension } from '@bfc/extension-client';
 
 import { SelectDialog } from '../SelectDialog';
 
@@ -33,9 +33,9 @@ const renderSelectDialog = ({ createDialog, navTo, onChange } = {}) => {
     ],
   };
   return render(
-    <Extension shell={{ api: shell, data: shellData }}>
+    <EditorExtension shell={{ api: shell, data: shellData }}>
       <SelectDialog {...props} />
-    </Extension>
+    </EditorExtension>
   );
 };
 

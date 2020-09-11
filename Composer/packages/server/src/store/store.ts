@@ -31,7 +31,7 @@ class JsonStore implements KVStore {
   private data: any;
   private filePath: string;
 
-  get = (key: string, defaultValue?: any): any => {
+  public get<T = unknown>(key: string, defaultValue?: T): T {
     this.readStore();
 
     if (key in this.data) {
@@ -43,12 +43,12 @@ class JsonStore implements KVStore {
     } else {
       throw Error(`no such key ${key} in store`);
     }
-  };
+  }
 
-  set = (key: string, value: any): void => {
+  public set<T = unknown>(key: string, value: T): void {
     this.data[key] = value;
     this.flush();
-  };
+  }
 
   flush = () => {
     fs.writeFileSync(this.filePath, JSON.stringify(this.data, null, 2) + '\n');

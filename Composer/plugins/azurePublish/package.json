@@ -20,7 +20,7 @@
     "@azure/ms-rest-browserauth": "0.1.4",
     "@azure/ms-rest-nodeauth": "3.0.3",
     "@bfc/indexers": "../../packages/lib/indexers",
-    "@bfc/plugin-loader": "../../packages/extensions/plugin-loader",
+    "@bfc/extension": "../../packages/extension",
     "@bfc/shared": "../../packages/lib/shared",
     "@microsoft/bf-lu": "^4.10.0-dev.20200728.930f45e",
     "@microsoft/bf-luis-cli": "^4.10.0-dev.20200721.8bb21ac",
@@ -37,5 +37,8 @@
     "request": "2.88.2",
     "request-promise": "4.2.5",
     "uuid": "7.0.3"
+  },
+  "resolutions": {
+    "bl": "^4.0.3"
   }
 }
