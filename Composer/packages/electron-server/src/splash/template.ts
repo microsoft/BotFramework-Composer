@@ -17,7 +17,7 @@ export const getSplashScreenContent = ({
 <head>
   <style>
     html,
-    body,
+    body
     {
       margin: 0;
       overflow: hidden;
