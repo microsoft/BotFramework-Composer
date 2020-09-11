@@ -36,6 +36,7 @@ export interface PublishType {
     publish: boolean;
     rollback: boolean;
     status: boolean;
+    provision: boolean;
   };
 }
 
