@@ -20,9 +20,9 @@ import {
   qnaFilesState,
 } from '../../recoilModel';
 import Home from '../../pages/home/Home';
-import ImportQnAFromUrlModal from '../../pages/knowledge-base/ImportQnAFromUrlModal';
 import { QnABotTemplateId } from '../../constants';
 import { useProjectIdCache } from '../../utils/hooks';
+import CreateQnAModal from '../CreateQnAModal';
 
 import { CreateOptions } from './CreateOptions';
 import { OpenProject } from './OpenProject';
@@ -179,7 +179,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
           onDismiss={handleDismiss}
           onOpen={openBot}
         />
-        <ImportQnAFromUrlModal
+        <CreateQnAModal
           dialogId={formData.name.toLowerCase()}
           path="create/QnASample/importQnA"
           qnaFiles={qnaFiles}

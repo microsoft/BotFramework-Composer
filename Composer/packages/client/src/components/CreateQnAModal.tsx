@@ -16,8 +16,8 @@ import { FontSizes, SharedColors, NeutralColors } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
 import { QnAFile } from '@bfc/shared';
 
-import { QnAMakerLearningUrl, knowledgeBaseSourceUrl } from '../../constants';
-import { FieldConfig, useForm, FieldValidator } from '../../hooks/useForm';
+import { QnAMakerLearningUrl, knowledgeBaseSourceUrl } from '../constants';
+import { FieldConfig, useForm, FieldValidator } from '../hooks/useForm';
 
 const styles = {
   dialog: {
@@ -79,7 +79,7 @@ const subText = css`
   font-weight: 400;
 `;
 
-interface ImportQnAFromUrlModalProps
+interface CreateQnAModalProps
   extends RouteComponentProps<{
     location: string;
   }> {
@@ -87,7 +87,7 @@ interface ImportQnAFromUrlModalProps
   qnaFiles: QnAFile[];
   subscriptionKey?: string;
   onDismiss: () => void;
-  onSubmit: (formData: ImportQnAFormData) => void;
+  onSubmit: (formData: CreateQnAFormData) => void;
 }
 
 const DialogTitle = () => {
@@ -114,7 +114,7 @@ const DialogTitle = () => {
   );
 };
 
-export interface ImportQnAFormData {
+export interface CreateQnAFormData {
   urls: string[];
   name: string;
   multiTurn: boolean;
@@ -161,7 +161,7 @@ const validateName = (sources: QnAFile[]): FieldValidator => {
   };
 };
 
-const formConfig: FieldConfig<ImportQnAFormData> = {
+const formConfig: FieldConfig<CreateQnAFormData> = {
   urls: {
     required: true,
     defaultValue: [''],
@@ -176,7 +176,7 @@ const formConfig: FieldConfig<ImportQnAFormData> = {
   },
 };
 
-export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (props) => {
+export const CreateQnAModal: React.FC<CreateQnAModalProps> = (props) => {
   const { onDismiss, onSubmit, dialogId, qnaFiles } = props;
   const [urlErrors, setUrlErrors] = useState(['']);
 
@@ -291,7 +291,7 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
               if (hasErrors) {
                 return;
               }
-              onSubmit({} as ImportQnAFormData);
+              onSubmit({} as CreateQnAFormData);
             }}
           />
         )}
@@ -312,4 +312,4 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
   );
 };
 
-export default ImportQnAFromUrlModal;
+export default CreateQnAModal;

@@ -4,21 +4,21 @@
 import React from 'react';
 import { fireEvent } from '@bfc/test-utils';
 
-import { renderWithRecoil } from './../../../../__tests__/testUtils/renderWithRecoil';
-import { ImportQnAFromUrlModal } from './../ImportQnAFromUrlModal';
+import { renderWithRecoil } from '../testUtils/renderWithRecoil';
+import CreateQnAModal from '../../src/components/CreateQnAModal';
 
-describe('<ImportQnAFromUrlModal />', () => {
+describe('<CreateQnAModal />', () => {
   const onDismiss = jest.fn(() => {});
   const onSubmit = jest.fn(() => {});
   let container;
   beforeEach(() => {
     container = renderWithRecoil(
-      <ImportQnAFromUrlModal dialogId="test" onDismiss={onDismiss} onSubmit={onSubmit} />,
+      <CreateQnAModal dialogId="test" qnaFiles={[]} onDismiss={onDismiss} onSubmit={onSubmit} />,
       () => {}
     );
   });
 
-  it('renders <ImportQnAFromUrlModal /> and create from scratch', () => {
+  it('renders <CreateQnAModal /> and create from scratch', () => {
     const { getByText } = container;
     expect(getByText('Populate your Knowledge Base')).not.toBeNull();
     const createFromScratchButton = getByText('Create knowledge base from scratch');

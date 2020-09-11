@@ -18,9 +18,9 @@ import { Page } from '../../components/Page';
 import { dialogsState, projectIdState, qnaAllUpViewStatusState, qnaFilesState } from '../../recoilModel/atoms/botState';
 import { dispatcherState } from '../../recoilModel';
 import { QnAAllUpViewStatus } from '../../recoilModel/types';
+import { CreateQnAModal, CreateQnAFormData } from '../../components/CreateQnAModal';
 
 import TableView from './table-view';
-import { ImportQnAFromUrlModal, ImportQnAFormData } from './ImportQnAFromUrlModal';
 
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
@@ -37,7 +37,7 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
   const locale = 'en-us';
   //const locale = useRecoilValue(localeState);
   const qnaAllUpViewStatus = useRecoilValue(qnaAllUpViewStatusState);
-  const [importQnAFromUrlModalVisiability, setImportQnAFromUrlModalVisiability] = useState(false);
+  const [createQnAModalVisiability, setCreateQnAModalVisiability] = useState(false);
 
   const path = props.location?.pathname ?? '';
   const { dialogId = '' } = props;
@@ -99,7 +99,7 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
             key: 'importQnAFromUrls',
             text: formatMessage('Import QnA From Url'),
             onClick: () => {
-              setImportQnAFromUrlModalVisiability(true);
+              setCreateQnAModalVisiability(true);
             },
           },
         ],
@@ -130,10 +130,10 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
   };
 
   const onDismiss = () => {
-    setImportQnAFromUrlModalVisiability(false);
+    setCreateQnAModalVisiability(false);
   };
 
-  const onSubmit = async ({ name, urls, multiTurn }: ImportQnAFormData) => {
+  const onSubmit = async ({ name, urls, multiTurn }: CreateQnAFormData) => {
     onDismiss();
     await actions.importQnAFromUrls({ id: `${dialogId}.${locale}`, name, urls, multiTurn });
   };
@@ -158,8 +158,8 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
         {qnaAllUpViewStatus === QnAAllUpViewStatus.Loading && (
           <LoadingSpinner message={'Extracting QnA pairs. This could take a moment.'} />
         )}
-        {importQnAFromUrlModalVisiability && (
-          <ImportQnAFromUrlModal dialogId={dialogId} qnaFiles={qnaFiles} onDismiss={onDismiss} onSubmit={onSubmit} />
+        {createQnAModalVisiability && (
+          <CreateQnAModal dialogId={dialogId} qnaFiles={qnaFiles} onDismiss={onDismiss} onSubmit={onSubmit} />
         )}
       </Suspense>
     </Page>

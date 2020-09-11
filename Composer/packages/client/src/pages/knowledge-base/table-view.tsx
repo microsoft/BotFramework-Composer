@@ -355,6 +355,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                   />
                 );
               })}
+              {!item.expand && <span> ({questions.length})</span>}
               {addQuestionButton}
             </div>
           );
