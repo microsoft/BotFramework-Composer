@@ -6,6 +6,7 @@ import { ExtensionContext } from '@bfc/extension';
 import { defaultPublishConfig } from '@bfc/shared';
 
 import { BotProjectService } from '../services/project';
+import { useElectronContext } from '../utility/electronContext';
 
 export const PublishController = {
   getTypes: async (req, res) => {
@@ -60,7 +61,11 @@ export const PublishController = {
 
       try {
         // call the method
-        const results = await pluginMethod.call(null, configuration, currentProject, metadata, user);
+        const { getAccessToken, loginAndGetIdToken } = useElectronContext();
+        const results = await pluginMethod.call(null, configuration, currentProject, metadata, user, {
+          getAccessToken,
+          loginAndGetIdToken,
+        });
 
         // copy status into payload for ease of access in client
         const response = {
@@ -107,7 +112,15 @@ export const PublishController = {
         };
 
         // call the method
-        const results = await pluginMethod.call(null, configuration, currentProject, user);
+        const { getAccessToken, loginAndGetIdToken } = useElectronContext();
+        const results = await pluginMethod.call(null, configuration, currentProject, user, {
+          getAccessToken,
+          loginAndGetIdToken,
+        });
+        // update the eTag if the publish was completed and an eTag is provided
+        if (results.status === 200 && results.result?.eTag) {
+          BotProjectService.setETagForProject(results.result.eTag, projectId);
+        }
         // copy status into payload for ease of access in client
         const response = {
           ...results.result,
@@ -148,7 +161,11 @@ export const PublishController = {
         };
 
         // call the method
-        const results = await pluginMethod.call(null, configuration, currentProject, user);
+        const { getAccessToken, loginAndGetIdToken } = useElectronContext();
+        const results = await pluginMethod.call(null, configuration, currentProject, user, {
+          getAccessToken,
+          loginAndGetIdToken,
+        });
 
         // set status and return value as json
         return res.status(200).json(results);

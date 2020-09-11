@@ -35,6 +35,38 @@ export class AssetManager {
     return ExtensionContext.extensions.botTemplates;
   }
 
+  public async copyProjectTemplateDirTo(
+    templateDir: string,
+    ref: LocationRef,
+    user?: UserIdentity,
+    locale?: string
+  ): Promise<LocationRef> {
+    // user storage maybe diff from template storage
+    const dstStorage = StorageService.getStorageClient(ref.storageId, user);
+    const dstDir = Path.resolve(ref.path);
+    if (await dstStorage.exists(dstDir)) {
+      log('Failed copying template to %s', dstDir);
+      throw new Error('already have this folder, please give another name');
+    }
+    await this.copyTemplateDirTo(templateDir, dstDir, dstStorage, locale);
+    return ref;
+  }
+
+  private async copyTemplateDirTo(templateDir: string, dstDir: string, dstStorage: IFileStorage, locale?: string) {
+    // copy Composer data files
+    await copyDir(templateDir, this.templateStorage, dstDir, dstStorage);
+    // if we have a locale override, copy those files over too
+    if (locale != null) {
+      const localePath = path.join(__dirname, '..', '..', '..', 'schemas', `sdk.${locale}.schema`);
+      const content = await this.templateStorage.readFile(localePath);
+      await dstStorage.writeFile(path.join(dstDir, `sdk.override.schema`), content);
+
+      const uiLocalePath = path.join(__dirname, '..', '..', '..', 'schemas', `sdk.${locale}.uischema`);
+      const uiContent = await this.templateStorage.readFile(uiLocalePath);
+      await dstStorage.writeFile(path.join(dstDir, `sdk.override.uischema`), uiContent);
+    }
+  }
+
   public async copyProjectTemplateTo(
     templateId: string,
     ref: LocationRef,

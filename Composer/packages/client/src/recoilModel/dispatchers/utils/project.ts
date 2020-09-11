@@ -401,7 +401,9 @@ export const createNewBotFromTemplate = async (
   description: string,
   location: string,
   schemaUrl?: string,
-  locale?: string
+  locale?: string,
+  templateDir?: string,
+  eTag?: string
 ) => {
   const { set } = callbackHelpers;
   const response = await httpClient.post(`/projects`, {
@@ -412,6 +414,8 @@ export const createNewBotFromTemplate = async (
     location,
     schemaUrl,
     locale,
+    templateDir,
+    eTag,
   });
   const { botFiles, projectData } = loadProjectData(response);
   const projectId = response.data.id;

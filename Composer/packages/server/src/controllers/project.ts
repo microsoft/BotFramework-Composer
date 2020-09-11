@@ -16,10 +16,11 @@ import StorageService from '../services/storage';
 import settings from '../settings';
 
 import { Path } from './../utility/path';
+import { remove } from 'fs-extra';
 
 async function createProject(req: Request, res: Response) {
   let { templateId } = req.body;
-  const { name, description, storageId, location, schemaUrl, locale, preserveRoot } = req.body;
+  const { name, description, storageId, location, schemaUrl, locale, preserveRoot, templateDir, eTag } = req.body;
   const user = await ExtensionContext.getUserFromRequest(req);
   if (templateId === '') {
     templateId = 'EmptyBot';
@@ -44,34 +45,63 @@ async function createProject(req: Request, res: Response) {
 
   log('Attempting to create project at %s', path);
 
-  try {
-    await BotProjectService.cleanProject(locationRef);
-    const newProjRef = await AssetService.manager.copyProjectTemplateTo(templateId, locationRef, user, locale);
-    const id = await BotProjectService.openProject(newProjRef, user);
-    const currentProject = await BotProjectService.getProjectById(id, user);
+  if (templateDir) {
+    // we want to create the bot project from the specified template directory (template was downloaded remotely)
+    try {
+      await BotProjectService.cleanProject(locationRef);
+      const newProjRef = await AssetService.manager.copyProjectTemplateDirTo(templateDir, locationRef, user, locale);
+      // clean up the temporary template directory -- fire and forget
+      remove(templateDir);
+      const id = await BotProjectService.openProject(newProjRef, user);
+      BotProjectService.setETagForProject(eTag, id);
+      const currentProject = await BotProjectService.getProjectById(id, user);
 
-    // inject shared content into every new project.  this comes from assets/shared
-    await AssetService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage);
+      if (currentProject !== undefined) {
+        await currentProject.updateBotInfo(name, description);
+        await currentProject.init();
 
-    if (currentProject !== undefined) {
-      await currentProject.updateBotInfo(name, description, preserveRoot);
-      if (schemaUrl) {
-        await currentProject.saveSchemaToProject(schemaUrl, locationRef.path);
+        const project = currentProject.getProject();
+        log('Project created successfully.');
+        res.status(200).json({
+          id,
+          ...project,
+        });
       }
-      await currentProject.init();
-
-      const project = currentProject.getProject();
-      log('Project created successfully.');
-      res.status(200).json({
-        id,
-        ...project,
+    } catch (err) {
+      res.status(404).json({
+        message: err instanceof Error ? err.message : err,
       });
     }
-  } catch (err) {
-    res.status(404).json({
-      message: err instanceof Error ? err.message : err,
-    });
-  }
+  } else {
+    try {
+      await BotProjectService.cleanProject(locationRef);
+      const newProjRef = await AssetService.manager.copyProjectTemplateTo(templateId, locationRef, user, locale);
+      const id = await BotProjectService.openProject(newProjRef, user);
+      const currentProject = await BotProjectService.getProjectById(id, user);
+
+      // inject shared content into every new project.  this comes from assets/shared
+      await AssetService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage);
+
+      if (currentProject !== undefined) {
+        await currentProject.updateBotInfo(name, description, preserveRoot);
+        if (schemaUrl) {
+          await currentProject.saveSchemaToProject(schemaUrl, locationRef.path);
+        }
+        await currentProject.init();
+
+        const project = currentProject.getProject();
+        log('Project created successfully.');
+        res.status(200).json({
+          id,
+          ...project,
+        });
+      }
+    } catch (err) {
+      res.status(404).json({
+        message: err instanceof Error ? err.message : err,
+      });
+    }
+  } // end of if
 }
 
 async function getProjectById(req: Request, res: Response) {

@@ -66,6 +66,9 @@ interface DefineConversationFormData {
   description: string;
   schemaUrl: string;
   location?: string;
+
+  templateDir?: string; // location of the imported template
+  eTag?: string; // e tag used for content sync between composer and imported bot content
 }
 
 interface DefineConversationProps
@@ -189,9 +192,23 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
         return;
       }
 
+      // handle extra properties in the case of an imported bot project
+      const dataToSubmit = {
+        ...formData,
+      };
+      if (props.location?.search) {
+        const decoded = decodeURIComponent(props.location.search);
+        const { eTag, imported, templateDir } = querystring.parse(decoded);
+
+        if (imported && templateDir) {
+          dataToSubmit.templateDir = templateDir as string;
+        }
+        dataToSubmit.eTag = eTag as string;
+      }
+
       onSubmit(
         {
-          ...formData,
+          ...dataToSubmit,
         },
         templateId || ''
       );

@@ -87,7 +87,12 @@
         "NODE_ENV": "development",
         "DEBUG": "composer*"
       },
-      "outputCapture": "std"
+      "outputCapture": "std",
+      "outFiles": [
+        "${workspaceRoot}/Composer/packages/electron-server/build/**/*.js",
+        "${workspaceRoot}/Composer/plugins/**/*.js",
+        "${workspaceRoot}/Composer/packages/server/build/**/*.js"
+      ]
     },
     {
       "name": "Debug current jest test",

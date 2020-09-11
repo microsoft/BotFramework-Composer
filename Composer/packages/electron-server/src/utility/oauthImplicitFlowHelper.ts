@@ -5,6 +5,8 @@ import { randomBytes } from 'crypto';
 
 import { BrowserWindow } from 'electron';
 
+import ElectronWindow from '../electronWindow';
+
 const composerRedirectUri = 'bfcomposer://oauth';
 const baseUrl = 'https://login.microsoftonline.com/organizations/';
 const implicitEndpoint = 'oauth2/v2.0/authorize';
@@ -39,7 +41,7 @@ export interface OAuthTokenOptions extends OAuthLoginOptions {
 }
 
 function getLoginUrl(options: OAuthLoginOptions): string {
-  const { clientId, redirectUri, scopes = [] } = options;
+  const { clientId, redirectUri = composerRedirectUri, scopes = [] } = options;
   if (scopes.indexOf('openid') === -1) {
     scopes.push('openid');
   }
@@ -61,7 +63,7 @@ function getLoginUrl(options: OAuthLoginOptions): string {
 }
 
 export function getAccessTokenUrl(options: OAuthTokenOptions): string {
-  const { clientId, idToken, redirectUri, scopes = [] } = options;
+  const { clientId, idToken, redirectUri = composerRedirectUri, scopes = [] } = options;
   const params = [
     `client_id=${encodeURIComponent(clientId)}`,
     `response_type=token`,
@@ -89,7 +91,14 @@ async function createAccessTokenWindow(url: string): Promise<string> {
 }
 
 async function createLoginWindow(url: string): Promise<string> {
-  const loginWindow = new BrowserWindow({ width: 400, height: 600, show: true });
+  const loginWindow = new BrowserWindow({
+    width: 400,
+    height: 600,
+    show: true,
+    title: 'Login',
+    parent: ElectronWindow.getInstance().browserWindow, // always show login window on top of main app window
+  });
+  loginWindow.setMenu(null);
   const waitingForIdToken = monitorWindowForQueryParam(loginWindow, 'id_token');
   loginWindow.loadURL(url);
   return waitingForIdToken;
@@ -103,6 +112,10 @@ async function createLoginWindow(url: string): Promise<string> {
  */
 async function monitorWindowForQueryParam(window: BrowserWindow, queryParam: string): Promise<string> {
   return new Promise((resolve, reject) => {
+    const prematureCloseListener = () => {
+      reject({ error: 'The window was closed before authentication was complete.' });
+    };
+    window.addListener('closed', prematureCloseListener);
     window.webContents.on('will-redirect', (event, redirectUrl) => {
       if (redirectUrl.startsWith(composerRedirectUri)) {
         // We have reached the end of the oauth flow; don't actually complete the redirect.
@@ -111,12 +124,14 @@ async function monitorWindowForQueryParam(window: BrowserWindow, queryParam: str
         const parsedUrl = new URL(redirectUrl.replace('#', '?'));
         const param = parsedUrl.searchParams.get(queryParam);
         if (param) {
+          window.removeListener('closed', prematureCloseListener);
           window.close();
           resolve(param);
         }
         const error = parsedUrl.searchParams.get('error');
         const errorDescription = parsedUrl.searchParams.get('error_description');
         if (error || errorDescription) {
+          window.removeListener('closed', prematureCloseListener);
           window.close();
           reject({ error, errorDescription });
         }
@@ -133,9 +148,13 @@ async function monitorWindowForQueryParam(window: BrowserWindow, queryParam: str
  * @returns An object containing the id token and the id of the OAuth client that originated the request
  */
 export async function loginAndGetIdToken(options: OAuthLoginOptions): Promise<string> {
-  const loginUrl = getLoginUrl(options);
-  const res = await createLoginWindow(loginUrl);
-  return res;
+  try {
+    const loginUrl = getLoginUrl(options);
+    const res = await createLoginWindow(loginUrl);
+    return res;
+  } catch (e) {
+    return Promise.reject(`Error getting ID token: ${e}`);
+  }
 }
 
 /**
@@ -145,7 +164,11 @@ export async function loginAndGetIdToken(options: OAuthLoginOptions): Promise<st
  * @returns An object containing the access token and the id of the OAuth client that originated the request
  */
 export async function getAccessToken(options: OAuthTokenOptions): Promise<string> {
-  const tokenUrl = getAccessTokenUrl(options);
-  const res = await createAccessTokenWindow(tokenUrl);
-  return res;
+  try {
+    const tokenUrl = getAccessTokenUrl(options);
+    const res = await createAccessTokenWindow(tokenUrl);
+    return res;
+  } catch (e) {
+    return Promise.reject(`Error getting access token: ${e}`);
+  }
 }
