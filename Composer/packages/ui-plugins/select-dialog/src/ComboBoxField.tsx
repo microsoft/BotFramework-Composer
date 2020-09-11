@@ -17,19 +17,20 @@ interface ComboBoxFieldProps extends FieldProps {
   onChange: any;
 }
 
-export const ComboBoxField: React.FC<ComboBoxFieldProps> = ({
-  comboboxTitle,
-  description,
-  id,
-  label,
-  options,
-  value = '',
-  required,
-  uiOptions,
-  onBlur,
-  onChange,
-  onFocus,
-}) => {
+export const ComboBoxField: React.FC<ComboBoxFieldProps> = (props) => {
+  const {
+    comboboxTitle,
+    description,
+    id,
+    label,
+    options,
+    value = '',
+    required,
+    uiOptions,
+    onBlur,
+    onChange,
+    onFocus,
+  } = props;
   const onRenderOption: IRenderFunction<ISelectableOption> = (option) =>
     option ? (
       <div>
