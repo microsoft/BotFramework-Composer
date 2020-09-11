@@ -9,7 +9,7 @@ import { PublishController } from '../controllers/publisher';
 import { AssetController } from '../controllers/asset';
 import { EjectController } from '../controllers/eject';
 import { FormDialogController } from '../controllers/formDialog';
-import * as PluginsController from '../controllers/plugins';
+import * as ExtensionsController from '../controllers/extensions';
 
 import { UtilitiesController } from './../controllers/utilities';
 
@@ -68,15 +68,15 @@ router.get('/assets/projectTemplates', AssetController.getProjTemplates);
 
 //help api
 router.get('/utilities/qna/parse', UtilitiesController.getQnaContent);
-// plugins
-router.get('/plugins', PluginsController.listPlugins);
-router.post('/plugins', PluginsController.addPlugin);
-router.delete('/plugins', PluginsController.removePlugin);
-router.patch('/plugins/toggle', PluginsController.togglePlugin);
-router.get('/plugins/search', PluginsController.searchPlugins);
-router.get('/plugins/:id/view/:view', PluginsController.getBundleForView);
-// proxy route for plugins (allows plugin client code to make fetch calls using the Composer server as a proxy -- avoids browser blocking request due to CORS)
-router.post('/plugins/proxy/:url', PluginsController.performPluginFetch);
+// extensions
+router.get('/extensions', ExtensionsController.listExtensions);
+router.post('/extensions', ExtensionsController.addExtension);
+router.delete('/extensions', ExtensionsController.removeExtension);
+router.patch('/extensions/toggle', ExtensionsController.toggleExtension);
+router.get('/extensions/search', ExtensionsController.searchExtensions);
+router.get('/extensions/:id/view/:view', ExtensionsController.getBundleForView);
+// proxy route for extensions (allows extension client code to make fetch calls using the Composer server as a proxy -- avoids browser blocking request due to CORS)
+router.post('/extensions/proxy/:url', ExtensionsController.performExtensionFetch);
 
 const ErrorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
   Promise.resolve(handler(req, res, next)).catch(next);

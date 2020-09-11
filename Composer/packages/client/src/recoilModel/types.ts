@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { JSONSchema7 } from '@bfc/extension';
+import { JSONSchema7 } from '@bfc/extension-client';
 import { AppUpdaterSettings, CodeEditorSettings, PromptTab } from '@bfc/shared';
 
 import { AppUpdaterStatus } from '../constants';
@@ -40,14 +40,13 @@ export interface PublishType {
 }
 
 // TODO: move this definition to a shared spot
-export interface PluginConfig {
+export interface ExtensionConfig {
   id: string;
   name: string;
   enabled: boolean;
   version: string;
-  /** Special property only used in the in-memory representation of plugins to flag as a built-in. Not written to disk. */
+  /** Special property only used in the in-memory representation of extensions to flag as a built-in. Not written to disk. */
   builtIn?: boolean;
-  configuration: object;
   /** Path where module is installed */
   path: string;
   bundles: any; // TODO: needed?

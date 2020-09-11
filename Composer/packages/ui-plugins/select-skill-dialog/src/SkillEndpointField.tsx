@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React from 'react';
-import { FieldProps, useFormConfig } from '@bfc/extension';
+import { FieldProps, useFormConfig } from '@bfc/extension-client';
 import {
   getUiLabel,
   getUIOptions,

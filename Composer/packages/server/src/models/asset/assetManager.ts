@@ -4,7 +4,7 @@
 import fs from 'fs';
 
 import find from 'lodash/find';
-import { UserIdentity, pluginLoader } from '@bfc/plugin-loader';
+import { UserIdentity, pluginLoader } from '@bfc/extension';
 
 import log from '../../logger';
 import { LocalDiskStorage } from '../storage/localDiskStorage';

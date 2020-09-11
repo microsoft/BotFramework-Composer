@@ -5,7 +5,7 @@ import * as fs from 'fs';
 
 import { Request, Response } from 'express';
 import { Archiver } from 'archiver';
-import { PluginLoader } from '@bfc/plugin-loader';
+import { PluginLoader } from '@bfc/extension';
 
 import log from '../logger';
 import { BotProjectService } from '../services/project';
