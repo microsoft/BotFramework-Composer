@@ -8,7 +8,7 @@ import { StorageController } from '../controllers/storage';
 import { PublishController } from '../controllers/publisher';
 import { AssetController } from '../controllers/asset';
 import { EjectController } from '../controllers/eject';
-
+import { ProvisionController } from '../controllers/provision';
 import { UtilitiesController } from './../controllers/utilities';
 
 const router: Router = express.Router({});
@@ -41,6 +41,14 @@ router.post('/storages', StorageController.createStorageConnection);
 router.get('/storages/:storageId/blobs', StorageController.getBlob);
 router.post('/storages/folder', StorageController.createFolder);
 router.put('/storages/folder', StorageController.updateFolder);
+
+// provision
+router.get('/publish/subscriptions', ProvisionController.getSubscriptions);
+router.get('/publish/resourceGroups/:subscriptionId', ProvisionController.getResourceGroups);
+router.get('/publish/resources/:subscriptionId/:resourceGroup', ProvisionController.getResourceByResourceGroup);
+router.get('/publish/:subscriptionId/locations', ProvisionController.getDeployLocations);
+router.post('/publish/:projectId/provision/:type', ProvisionController.provision);
+router.get('/publish/:projectId/provisionStatus/:target', ProvisionController.getProvisionStatus);
 
 // publishing
 router.get('/publish/types', PublishController.getTypes);

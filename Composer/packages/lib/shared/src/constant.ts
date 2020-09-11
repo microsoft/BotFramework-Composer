@@ -16,6 +16,12 @@ export const FieldNames = {
   DefaultCase: 'default',
   Cases: 'cases',
 };
+
+export enum ProvisionType {
+  createNew = 'createNew',
+  selectExisted = 'selectExisted',
+}
+
 export const defaultPublishConfig = {
   name: 'default',
   type: 'localpublish',
