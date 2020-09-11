@@ -70,4 +70,8 @@ export default class {
   public canRedo = () => this.stack.length > 0 && this.present < this.stack.length - 1;
   public isEmpty = () => this.stack.length === 0;
   public getPresentAssets = () => (this.present > -1 ? this.stack[this.present] : null);
+
+  public get projectId() {
+    return this._projectId;
+  }
 }

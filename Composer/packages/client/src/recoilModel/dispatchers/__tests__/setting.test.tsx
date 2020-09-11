@@ -9,7 +9,6 @@ import { settingsState, currentProjectIdState } from '../../atoms';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
 import { settingsDispatcher } from '../setting';
-import { botStateByProjectIdSelector } from '../../selectors';
 
 const projectId = '1235a.2341';
 
@@ -72,7 +71,7 @@ describe('setting dispatcher', () => {
   let renderedComponent, dispatcher: Dispatcher;
   beforeEach(() => {
     const useRecoilTestHook = () => {
-      const { dialogSetting: settings } = useRecoilValue(botStateByProjectIdSelector);
+      const settings = useRecoilValue(settingsState(projectId));
       const currentDispatcher = useRecoilValue(dispatcherState);
 
       return {

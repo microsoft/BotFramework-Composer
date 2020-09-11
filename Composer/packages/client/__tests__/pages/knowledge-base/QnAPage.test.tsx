@@ -51,11 +51,11 @@ const updateQnAFileMock = jest.fn();
 
 const initRecoilState = ({ set }) => {
   set(currentProjectIdState, state.projectId);
-  set(localeState, state.locale);
-  set(dialogsState, state.dialogs);
-  set(qnaFilesState, state.qnaFiles);
-  set(settingsState, state.settings);
-  set(schemasState, mockProjectResponse.schemas);
+  set(localeState(state.projectId), state.locale);
+  set(dialogsState(state.projectId), state.dialogs);
+  set(qnaFilesState(state.projectId), state.qnaFiles);
+  set(settingsState(state.projectId), state.settings);
+  set(schemasState(state.projectId), mockProjectResponse.schemas);
   set(dispatcherState, {
     updateQnAFile: updateQnAFileMock,
   });

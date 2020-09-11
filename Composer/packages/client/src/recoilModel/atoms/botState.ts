@@ -16,7 +16,6 @@ import {
 
 import { BotLoadError, DesignPageLocation, QnAAllUpViewStatus } from '../../recoilModel/types';
 import FilePersistence from '../persistence/FilePersistence';
-import UndoHistory from '../undo/undoHistory';
 
 import { PublishType, BreadcrumbItem } from './../../recoilModel/types';
 import { BotStatus } from './../../constants';

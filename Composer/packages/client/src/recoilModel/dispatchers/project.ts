@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { useRecoilCallback, CallbackInterface, RecoilState } from 'recoil';
+import { useRecoilCallback, CallbackInterface } from 'recoil';
 import { dereferenceDefinitions, LuFile, QnAFile, DialogInfo, SensitiveProperties, DialogSetting } from '@bfc/shared';
 import { indexer, validateDialog } from '@bfc/indexers';
 import objectGet from 'lodash/get';
@@ -28,7 +28,6 @@ import {
   botDiagnosticsState,
   botProjectsSpaceState,
   projectMetaDataState,
-  currentProjectIdState,
   filePersistenceState,
 } from '../atoms';
 import { QnABotTemplateId } from '../../constants';
@@ -65,13 +64,6 @@ import { logMessage, setError } from './../dispatchers/shared';
 const handleProjectFailure = (callbackHelpers: CallbackInterface, ex) => {
   callbackHelpers.set(botOpeningState, false);
   setError(callbackHelpers, ex);
-};
-
-const addToBotProject = ({ set }: CallbackInterface, projectId: string, isRootBot: boolean) => {
-  set(botProjectsSpaceState, (current) => [...current, projectId]);
-  set(projectMetaDataState(projectId), {
-    isRootBot,
-  });
 };
 
 const processSchema = (projectId: string, schema: any) => ({
@@ -145,6 +137,7 @@ const initQnaFilesStatus = (projectId: string, qnaFiles: QnAFile[], dialogs: Dia
 };
 export const projectDispatcher = () => {
   const initBotState = async (callbackHelpers: CallbackInterface, data: any, jump: boolean, templateId: string) => {
+    debugger;
     const { snapshot, gotoSnapshot, set } = callbackHelpers;
     const { files, botName, botEnvironment, location, schemas, settings, id: projectId, diagnostics, skills } = data;
     const curLocation = await snapshot.getPromise(locationState(projectId));
@@ -179,10 +172,10 @@ export const projectDispatcher = () => {
       });
 
       await lgWorker.addProject(projectId, lgFiles);
+      set(botProjectsSpaceState, []);
 
       // Important: gotoSnapshot will wipe all states.
       const newSnapshot = snapshot.map(({ set }) => {
-        set(currentProjectIdState, projectId);
         set(skillManifestsState(projectId), skillManifestFiles);
         set(luFilesState(projectId), initLuFilesStatus(botName, luFiles, dialogs));
         set(lgFilesState(projectId), lgFiles);
@@ -208,12 +201,15 @@ export const projectDispatcher = () => {
         });
         set(filePersistenceState(projectId), new FilePersistence(projectId));
         set(undoHistoryState(projectId), new UndoHistory(projectId));
+        //TODO: Botprojects space will be populated for now with just the rootbot. Once, BotProjects UI is hookedup this will be refactored to use addToBotProject
+        set(botProjectsSpaceState, (current) => [...current, projectId]);
+        set(projectMetaDataState(projectId), {
+          isRootBot: true,
+        });
+        set(botOpeningState, false);
       });
 
       gotoSnapshot(newSnapshot);
-      //TODO: Botprojects space will be populated for now with just the rootbot. Once, BotProjects UI is hookedup this will be refactored to use addToBotProject
-      set(botProjectsSpaceState, []);
-      addToBotProject(callbackHelpers, projectId, true);
 
       if (jump && projectId) {
         let url = `/bot/${projectId}/dialogs/${mainDialog}`;
@@ -331,6 +327,8 @@ export const projectDispatcher = () => {
       reset(localeState(projectId));
       reset(skillManifestsState(projectId));
       reset(designPageLocationState(projectId));
+      reset(filePersistenceState(projectId));
+      reset(undoHistoryState(projectId));
     } catch (e) {
       logMessage(callbackHelpers, e.message);
     }
@@ -470,6 +468,5 @@ export const projectDispatcher = () => {
     saveTemplateId,
     updateBoilerplate,
     getBoilerplateVersion,
-    addToBotProject,
   };
 };

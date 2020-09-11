@@ -12,8 +12,8 @@ import {
   publishHistoryState,
   botLoadErrorState,
   isEjectRuntimeExistState,
+  filePersistenceState,
 } from '../atoms/botState';
-import filePersistence from '../persistence/FilePersistence';
 import { botEndpointsState } from '../atoms';
 
 import { BotStatus, Text } from './../../constants';
@@ -182,9 +182,10 @@ export const publisherDispatcher = () => {
 
   const getPublishHistory = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (projectId: string, target: any) => {
-      const { set } = callbackHelpers;
+      const { set, snapshot } = callbackHelpers;
       try {
-        await filePersistence.flush();
+        const filePersistence = await snapshot.getPromise(filePersistenceState(projectId));
+        filePersistence.flush();
         const response = await httpClient.get(`/publish/${projectId}/history/${target.name}`);
         set(publishHistoryState(projectId), (publishHistory) => ({
           ...publishHistory,

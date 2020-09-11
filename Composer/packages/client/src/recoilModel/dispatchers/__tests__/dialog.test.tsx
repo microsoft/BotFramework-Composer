@@ -13,10 +13,12 @@ import {
   luFilesState,
   schemasState,
   dialogSchemasState,
-  currentProjectIdState,
+  actionsSeedState,
+  onCreateDialogCompleteState,
+  showCreateDialogModalState,
+  qnaFilesState,
 } from '../../atoms';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
-import { botStateByProjectIdSelector } from '../../selectors';
 import { Dispatcher } from '..';
 
 const projectId = '42345.23432';
@@ -91,16 +93,14 @@ describe('dialog dispatcher', () => {
   let renderedComponent, dispatcher: Dispatcher;
   beforeEach(() => {
     const useRecoilTestHook = () => {
-      const {
-        dialogs,
-        dialogSchemas,
-        luFiles,
-        lgFiles,
-        actionsSeed,
-        onCreateDialogComplete,
-        showCreateDialogModal,
-        qnaFiles,
-      } = useRecoilValue(botStateByProjectIdSelector);
+      const dialogs = useRecoilValue(dialogsState(projectId));
+      const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
+      const luFiles = useRecoilValue(luFilesState(projectId));
+      const lgFiles = useRecoilValue(lgFilesState(projectId));
+      const actionsSeed = useRecoilValue(actionsSeedState(projectId));
+      const onCreateDialogComplete = useRecoilValue(onCreateDialogCompleteState(projectId));
+      const showCreateDialogModal = useRecoilValue(showCreateDialogModalState(projectId));
+      const qnaFiles = useRecoilValue(qnaFilesState(projectId));
       const currentDispatcher = useRecoilValue(dispatcherState);
 
       return {
@@ -118,7 +118,6 @@ describe('dialog dispatcher', () => {
 
     const { result } = renderRecoilHook(useRecoilTestHook, {
       states: [
-        { recoilState: currentProjectIdState, initialValue: projectId },
         { recoilState: dialogsState(projectId), initialValue: [{ id: '1' }, { id: '2' }] },
         { recoilState: dialogSchemasState(projectId), initialValue: [{ id: '1' }, { id: '2' }] },
         { recoilState: lgFilesState(projectId), initialValue: [{ id: '1.lg' }, { id: '2' }] },

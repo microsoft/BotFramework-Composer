@@ -22,7 +22,7 @@ describe('<UndoRoot/>', () => {
   let renderedComponent;
 
   beforeEach(() => {
-    const undoHistory = new UndoHistory();
+    const undoHistory = new UndoHistory(projectId);
     const useRecoilTestHook = () => {
       const { undo, redo, canRedo, canUndo, commitChanges, clearUndo } = useRecoilValue(undoFunctionState(projectId));
       const [dialogs, setDialogs] = useRecoilState(dialogsState(projectId));
@@ -45,7 +45,7 @@ describe('<UndoRoot/>', () => {
     const { result } = renderRecoilHook(useRecoilTestHook, {
       wrapper: ({ children }) => (
         <div>
-          <UndoRoot projectId={projectId} undoHistory={undoHistory} />
+          <UndoRoot projectId={projectId} />
           {children}
         </div>
       ),

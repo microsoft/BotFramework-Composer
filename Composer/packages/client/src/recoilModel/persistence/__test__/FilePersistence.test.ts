@@ -2,7 +2,8 @@
 // Licensed under the MIT License.
 import { DialogInfo, DialogSchemaFile, LgFile, LuFile, BotAssets } from '@bfc/shared';
 
-import filePersistence from '../FilePersistence';
+import FilePersistence from '../FilePersistence';
+const projectId = '2123.2234as';
 
 jest.mock('axios', () => {
   return {
@@ -17,18 +18,12 @@ jest.mock('axios', () => {
 });
 
 describe('test persistence layer', () => {
-  it('test init persistence', async () => {
-    expect(filePersistence.projectId).toBe('');
-    const current = { projectId: '' } as BotAssets;
-    const previous = { projectId: '' } as BotAssets;
-    await filePersistence.notify(current, previous);
-    expect(filePersistence.projectId).toBe('');
-    current.projectId = 'test';
-    await filePersistence.notify(current, previous);
-    expect(filePersistence.projectId).toBe('test');
+  let filePersistence: FilePersistence;
+  beforeEach(() => {
+    filePersistence = new FilePersistence(projectId);
   });
 
-  it('test notify update', async () => {
+  it.only('test notify update', async () => {
     const previous = {
       projectId: 'test',
       dialogs: [{ id: 'a', content: { a: 'old' } }] as DialogInfo[],
