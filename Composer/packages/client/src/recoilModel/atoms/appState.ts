@@ -11,7 +11,6 @@ import {
   AppUpdateState,
   BoilerplateVersion,
   Notification,
-  PluginConfig,
   ExtensionConfig,
 } from '../../recoilModel/types';
 import { getUserSettings } from '../utils';
@@ -156,11 +155,6 @@ export const boilerplateVersionState = atom<BoilerplateVersion>({
 
 export const notificationsState = atom<Notification[]>({
   key: getFullyQualifiedKey('notification'),
-  default: [],
-});
-
-export const pluginsState = atom<PluginConfig[]>({
-  key: getFullyQualifiedKey('plugins'),
   default: [],
 });
 
