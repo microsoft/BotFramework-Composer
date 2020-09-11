@@ -10,6 +10,7 @@ import type { ILuisConfig, IQnAConfig } from './settings';
 export type PublishResult = {
   message: string;
   comment?: string;
+  eTag?: string;
   log?: string;
   id?: string;
   time?: Date;
@@ -22,14 +23,34 @@ export type PublishResponse = {
   result: PublishResult;
 };
 
+export type PullResponse = {
+  error?: { message: string };
+  eTag?: string;
+  status: number;
+  /** Path to the pulled .zip containing updated bot content */
+  zipPath?: string;
+};
+
 // TODO: Add types for project, metadata
 export type PublishPlugin<Config = any> = {
   name: string;
   description: string;
 
   // methods plugins should support
-  publish: (config: Config, project: IBotProject, metadata: any, user?: UserIdentity) => Promise<PublishResponse>;
-  getStatus?: (config: Config, project: IBotProject, user?: UserIdentity) => Promise<PublishResponse>;
+  // methods plugins should support
+  publish: (
+    config: Config,
+    project: IBotProject,
+    metadata: any,
+    user?: UserIdentity,
+    getAccessToken?: (options) => Promise<string>
+  ) => Promise<PublishResponse>;
+  getStatus?: (
+    config: Config,
+    project: IBotProject,
+    user?: UserIdentity,
+    getAccessToken?: (options) => Promise<string>
+  ) => Promise<PublishResponse>;
   getHistory?: (config: Config, project: IBotProject, user?: UserIdentity) => Promise<PublishResult[]>;
   rollback?: (
     config: Config,
@@ -37,6 +58,12 @@ export type PublishPlugin<Config = any> = {
     rollbackToVersion: string,
     user?: UserIdentity
   ) => Promise<PublishResponse>;
+  pull?: (
+    config: Config,
+    project: IBotProject,
+    user?: UserIdentity,
+    getAccessToken?: (options) => Promise<string>
+  ) => Promise<PullResponse>;
 
   // other properties
   schema?: JSONSchema7;

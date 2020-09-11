@@ -47,6 +47,16 @@ if (app.isPackaged) {
 log(`${process.env.NODE_ENV} environment detected.`);
 
 function processArgsForWindows(args: string[]): string {
+  const envId = '40c6f77b-8fc6-4bbd-9bdc-2d4a941ef0b8';
+  const botId = '8e2f2bff-7534-45b2-9343-2aa12e12af98';
+  const payload = {
+    botId,
+    description: 'A bot that reports the current weather.',
+    envId,
+    name: 'toanzian-test-bot1',
+    tenantId: '72f988bf-86f1-41af-91ab-2d7cd011db47',
+  };
+  args.push(`bfcomposer://import?source=pva&payload=${encodeURIComponent(JSON.stringify(payload))}`);
   const deepLinkUrl = args.find((arg) => arg.startsWith(composerProtocol));
   if (deepLinkUrl) {
     return parseDeepLinkUrl(deepLinkUrl);
@@ -65,6 +75,8 @@ async function createAppDataDir() {
   process.env.COMPOSER_EXTENSION_MANIFEST = join(composerAppDataPath, 'extensions.json');
   process.env.COMPOSER_EXTENSION_DATA_DIR = join(composerAppDataPath, 'extension-data');
   process.env.COMPOSER_REMOTE_EXTENSIONS_DIR = join(composerAppDataPath, 'extensions');
+  process.env.COMPOSER_REMOTE_TEMPLATE_DIR = join(composerAppDataPath, 'remoteTemplates');
+  process.env.COMPOSER_TEMP_DIR = join(composerAppDataPath, 'temp');
 
   log('creating composer app data path at: ', composerAppDataPath);
 
