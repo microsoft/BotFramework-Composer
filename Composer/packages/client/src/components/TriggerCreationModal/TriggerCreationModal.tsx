@@ -44,6 +44,27 @@ import {
 } from './validators';
 import { getEventOptions, getActivityOptions, getTriggerOptions } from './getDropdownOptions';
 
+const renderDropdownOption = (option?: IDropdownOption) => {
+  if (!option) return null;
+  return (
+    <div css={optionStyles}>
+      {option.text}
+      {option.data && option.data.icon && <Icon iconName={option.data.icon} style={warningIconStyles} />}
+    </div>
+  );
+};
+
+const hasError = (errors: TriggerFormDataErrors) => Object.values(errors).some((msg) => !!msg);
+
+const initialFormData: TriggerFormData = {
+  errors: {},
+  $kind: SDKKinds.OnIntent,
+  event: '',
+  intent: '',
+  triggerPhrases: '',
+  regEx: '',
+};
+
 interface TriggerCreationModalProps {
   dialogId: string;
   isOpen: boolean;
@@ -62,14 +83,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const isRegEx = isRegExRecognizerType(dialogFile);
   const isLUISnQnA = isLUISnQnARecognizerType(dialogFile);
   const regexIntents = dialogFile?.content?.recognizer?.intents ?? [];
-  const initialFormData: TriggerFormData = {
-    errors: {},
-    $kind: intentTypeKey,
-    event: '',
-    intent: '',
-    triggerPhrases: '',
-    regEx: '',
-  };
+
   const [formData, setFormData] = useState(initialFormData);
   const [selectedType, setSelectedType] = useState<string>(intentTypeKey);
   const showIntentName = selectedType === intentTypeKey;
@@ -82,31 +96,12 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const activityTypes: IDropdownOption[] = getActivityOptions();
   const triggerTypeOptions: IDropdownOption[] = getTriggerOptions(recognizer$kind);
 
-  const onRenderOption = (option?: IDropdownOption) => {
-    if (!option) return null;
-    return (
-      <div css={optionStyles}>
-        {option.text}
-        {option.data && option.data.icon && <Icon iconName={option.data.icon} style={warningIconStyles} />}
-      </div>
-    );
-  };
-
-  const shouldDisable = (errors: TriggerFormDataErrors) => {
-    for (const key in errors) {
-      if (errors[key]) {
-        return true;
-      }
-    }
-    return false;
-  };
-
   const onClickSubmitButton = (e) => {
     e.preventDefault();
 
     //If still have some errors here, it is a bug.
     const errors = validateForm(selectedType, formData, isRegEx, regexIntents);
-    if (shouldDisable(errors)) {
+    if (hasError(errors)) {
       setFormData({ ...formData, errors });
       return;
     }
@@ -172,7 +167,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     setFormData({ ...formData, triggerPhrases: body, errors: { ...formData.errors, ...errors } });
   };
   const errors = validateForm(selectedType, formData, isRegEx, regexIntents);
-  const disable = shouldDisable(errors);
+  const disable = hasError(errors);
 
   return (
     <Dialog
@@ -198,7 +193,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
             options={triggerTypeOptions}
             styles={dropdownStyles}
             onChange={onSelectTriggerType}
-            onRenderOption={onRenderOption}
+            onRenderOption={renderDropdownOption}
           />
           {showEventDropDown && (
             <Dropdown
