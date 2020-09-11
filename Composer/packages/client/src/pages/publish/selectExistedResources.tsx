@@ -4,16 +4,13 @@
 import { jsx } from '@emotion/core';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import { useState, useMemo, useContext, Fragment } from 'react';
+import { useState, useMemo, Fragment } from 'react';
 import formatMessage from 'format-message';
 import { Dropdown, IDropdownOption, DropdownMenuItemType } from 'office-ui-fabric-react/lib/Dropdown';
-// import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
-// import { List } from 'office-ui-fabric-react/lib/List';
 
-import { StoreContext } from '../../store';
-import { Subscription, ResourceGroups } from '../../store/types';
-
-// import { resourcesListCell, resourcesListCellContent } from './styles';
+import { Subscription, ResourceGroups } from '@bfc/shared';
+import { useRecoilValue } from 'recoil';
+import { subscriptionsState, resourceGroupsState, resourcesState, dispatcherState } from '../../recoilModel';
 
 interface SelectExistedResourcesProps {
   onDismiss: () => void;
@@ -27,8 +24,11 @@ const selectedType = [
   'Microsoft.Insights/components',
 ];
 export const SelectExistedResources: React.FC<SelectExistedResourcesProps> = (props) => {
-  const { state, actions } = useContext(StoreContext);
-  const { subscriptions, resourceGroups, resources } = state;
+  const subscriptions = useRecoilValue(subscriptionsState);
+  const resourceGroups = useRecoilValue(resourceGroupsState);
+  const resources = useRecoilValue(resourcesState);
+  const { getResourceGroups, getResources } = useRecoilValue(dispatcherState);
+
   const [currentSubscription, setSubscription] = useState<Subscription>();
   const [currentResourceGroup, setResourceGroup] = useState<ResourceGroups>();
   const [selectedResources, setExternalResources] = useState<string[]>([]);
@@ -62,7 +62,7 @@ export const SelectExistedResources: React.FC<SelectExistedResourcesProps> = (pr
 
       if (sub) {
         setSubscription(sub);
-        actions.getResourceGroups(sub.subscriptionId);
+        getResourceGroups(sub.subscriptionId);
       }
     },
     [subscriptions]
@@ -72,9 +72,9 @@ export const SelectExistedResources: React.FC<SelectExistedResourcesProps> = (pr
     () => (_e, option?: IDropdownOption) => {
       const group = resourceGroups.find((t) => t.id === option?.key);
 
-      if (group) {
+      if (group && currentSubscription) {
         setResourceGroup(group);
-        actions.getResourcesByResourceGroup(currentSubscription?.subscriptionId, group.name);
+        getResources(currentSubscription.subscriptionId, group.name);
       }
     },
     [resourceGroups]
@@ -91,16 +91,6 @@ export const SelectExistedResources: React.FC<SelectExistedResourcesProps> = (pr
     },
     [selectedResources]
   );
-
-  // const onRenderCell = (item: Resource): JSX.Element => {
-  //   return (
-  //     <div data-is-focusable css={resourcesListCell}>
-  //       <div css={resourcesListCellContent}>
-  //         {item.name} - {item.type}
-  //       </div>
-  //     </div>
-  //   );
-  // };
 
   return (
     <Fragment>
@@ -125,11 +115,6 @@ export const SelectExistedResources: React.FC<SelectExistedResourcesProps> = (pr
           selectedKeys={selectedResources}
           onChange={onSelectedResource}
         />
-        {/* <div css={resourcesListContainer} data-is-scrollable="true">
-          <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
-            <List items={resources} onRenderCell={onRenderCell} />
-          </ScrollablePane>
-        </div> */}
       </form>
       <DialogFooter>
         <DefaultButton text={formatMessage('Cancel')} onClick={props.onDismiss} />

@@ -4,13 +4,13 @@
 import { jsx } from '@emotion/core';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import { useState, useMemo, useContext, useEffect, Fragment } from 'react';
+import { useState, useMemo, useEffect, Fragment } from 'react';
 import formatMessage from 'format-message';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-
-import { StoreContext } from '../../store';
-import { Subscription, DeployLocation } from '../../store/types';
+import { useRecoilValue } from 'recoil';
+import { Subscription, DeployLocation } from '@bfc/shared';
+import { subscriptionsState, resourceGroupsState, deployLocationsState, dispatcherState } from '../../recoilModel';
 
 interface CreateNewResourceProps {
   onDismiss: () => void;
@@ -26,13 +26,14 @@ const extenstionResourceOptions = [
 ];
 
 export const CreateNewResource: React.FC<CreateNewResourceProps> = (props) => {
-  const { state, actions } = useContext(StoreContext);
-  const { subscriptions, resourceGroups, deployLocations } = state;
+  const subscriptions = useRecoilValue(subscriptionsState);
+  const resourceGroups = useRecoilValue(resourceGroupsState);
+  const deployLocations = useRecoilValue(deployLocationsState);
+
+  const { getResourceGroups, getDeployLocations } = useRecoilValue(dispatcherState);
   const [currentSubscription, setSubscription] = useState<Subscription>();
   const [currentHostName, setHostName] = useState('');
-  // const [password, setPassword] = useState('');
   const [errorHostName, setErrorHostName] = useState('');
-  // const [errorPassword, setErrorPassword] = useState('');
   const [currentLocation, setLocation] = useState<DeployLocation>();
   const [selectedResources, setExternalResources] = useState<string[]>([]);
 
@@ -80,20 +81,6 @@ export const CreateNewResource: React.FC<CreateNewResourceProps> = (props) => {
     [resourceGroups]
   );
 
-  // const updatePassword = useMemo(
-  //   () => (e, newValue) => {
-  //     const patt = /^(?![0-9]+$)(?![a-zA-Z]+$)(?![a-zA-Z0-9]+$)[\w$&~!*@#%^{}|]{16,}$/;
-  //     if (newValue.length <= 16 && !patt.test(newValue)) {
-  //       setPassword(newValue);
-  //       setErrorPassword('Password need to include characters, number and special-characters, 16 characters length');
-  //     } else if (newValue.length === 16) {
-  //       setErrorPassword('');
-  //       setPassword(newValue);
-  //     }
-  //   },
-  //   []
-  // );
-
   const updateCurrentLocation = useMemo(
     () => (_e, option?: IDropdownOption) => {
       const location = deployLocations.find((t) => t.id === option?.key);
@@ -121,8 +108,8 @@ export const CreateNewResource: React.FC<CreateNewResourceProps> = (props) => {
   useEffect(() => {
     if (currentSubscription) {
       // get resource group under subscription
-      actions.getResourceGroups(currentSubscription.subscriptionId);
-      actions.getDeployLocations(currentSubscription.subscriptionId);
+      getResourceGroups(currentSubscription.subscriptionId);
+      getDeployLocations(currentSubscription.subscriptionId);
     }
   }, [currentSubscription]);
 
@@ -143,14 +130,6 @@ export const CreateNewResource: React.FC<CreateNewResourceProps> = (props) => {
           placeholder={formatMessage('Name of your new resource group')}
           onChange={newResourceGroup}
         />
-        {/* <TextField
-          required
-          errorMessage={errorPassword}
-          label={formatMessage('Password')}
-          placeholder={formatMessage('Password to assess resources')}
-          value={password}
-          onChange={updatePassword}
-        /> */}
         <Dropdown
           required
           label={formatMessage('Locations')}

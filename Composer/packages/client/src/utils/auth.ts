@@ -215,3 +215,19 @@ export async function refreshToken(): Promise<string> {
     }, 1);
   });
 }
+
+export const getAccessTokenInCache = () => {
+  return window.localStorage.getItem('access_token');
+};
+
+export const setAccessToken = (value: any) => {
+  window.localStorage.setItem('access_token', value);
+};
+
+export const setGraphToken = (value: any) => {
+  window.localStorage.setItem('graph_token', value);
+};
+
+export const getGraphTokenInCache = () => {
+  return window.localStorage.getItem('graph_token');
+};
