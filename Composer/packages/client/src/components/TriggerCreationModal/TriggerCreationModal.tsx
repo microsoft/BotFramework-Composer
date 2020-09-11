@@ -7,22 +7,18 @@ import React, { useState } from 'react';
 import formatMessage from 'format-message';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { Label } from 'office-ui-fabric-react/lib/Label';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
 import { SDKKinds } from '@bfc/shared';
-import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
 import { useRecoilValue } from 'recoil';
 
 import { TriggerFormData, TriggerFormDataErrors } from '../../utils/dialogUtil';
 import { projectIdState } from '../../recoilModel/atoms/botState';
 import { userSettingsState } from '../../recoilModel';
 import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
-import { isRegExRecognizerType, isLUISnQnARecognizerType, resolveRecognizer$kind } from '../../utils/dialogValidator';
+import { isRegExRecognizerType, resolveRecognizer$kind } from '../../utils/dialogValidator';
 
 import { eventTypeKey, customEventKey, intentTypeKey, activityTypeKey } from './constants';
 import {
@@ -31,18 +27,11 @@ import {
   modalStyles,
   dialogWindowStyles,
   dropdownStyles,
-  intentStyles,
   warningIconStyles,
 } from './styles';
-import {
-  validateForm,
-  validateEventName,
-  validateEventKind,
-  validateIntentName,
-  getLuDiagnostics,
-  validateRegExPattern,
-} from './validators';
+import { validateForm, validateEventKind } from './validators';
 import { getEventOptions, getActivityOptions, getTriggerOptions } from './getDropdownOptions';
+import { resolveTriggerWidget } from './resolveTriggerWidget';
 
 const renderDropdownOption = (option?: IDropdownOption) => {
   if (!option) return null;
@@ -81,17 +70,12 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const dialogFile = dialogs.find((dialog) => dialog.id === dialogId);
   const recognizer$kind = resolveRecognizer$kind(dialogFile);
   const isRegEx = isRegExRecognizerType(dialogFile);
-  const isLUISnQnA = isLUISnQnARecognizerType(dialogFile);
   const regexIntents = dialogFile?.content?.recognizer?.intents ?? [];
 
   const [formData, setFormData] = useState(initialFormData);
   const [selectedType, setSelectedType] = useState<string>(intentTypeKey);
-  const showIntentName = selectedType === intentTypeKey;
-  const showRegExDropDown = selectedType === intentTypeKey && isRegEx;
-  const showTriggerPhrase = selectedType === intentTypeKey && isLUISnQnA;
   const showEventDropDown = selectedType === eventTypeKey;
   const showActivityDropDown = selectedType === activityTypeKey;
-  const showCustomEvent = selectedType === customEventKey;
   const eventTypes: IDropdownOption[] = getEventOptions();
   const activityTypes: IDropdownOption[] = getActivityOptions();
   const triggerTypeOptions: IDropdownOption[] = getTriggerOptions(recognizer$kind);
@@ -99,7 +83,6 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const onClickSubmitButton = (e) => {
     e.preventDefault();
 
-    //If still have some errors here, it is a bug.
     const errors = validateForm(selectedType, formData, isRegEx, regexIntents);
     if (hasError(errors)) {
       setFormData({ ...formData, errors });
@@ -122,17 +105,6 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     setFormData({ ...newFormData, errors: {} });
   };
 
-  const handleEventNameChange = (event: React.FormEvent, value?: string) => {
-    const errors: TriggerFormDataErrors = {};
-    errors.event = validateEventName(selectedType, SDKKinds.OnDialogEvent, value || '');
-    setFormData({
-      ...formData,
-      $kind: SDKKinds.OnDialogEvent,
-      event: value || '',
-      errors: { ...formData.errors, ...errors },
-    });
-  };
-
   const handleEventTypeChange = (e: React.FormEvent, option?: IDropdownOption) => {
     if (option) {
       const errors: TriggerFormDataErrors = {};
@@ -141,33 +113,18 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     }
   };
 
-  const onNameChange = (e, name) => {
-    const errors: TriggerFormDataErrors = {};
-    errors.intent = validateIntentName(selectedType, name);
-    if (showTriggerPhrase && formData.triggerPhrases) {
-      errors.triggerPhrases = getLuDiagnostics(name, formData.triggerPhrases);
-    }
-    setFormData({ ...formData, intent: name, errors: { ...formData.errors, ...errors } });
-  };
-
-  const onChangeRegEx = (e, pattern) => {
-    const errors: TriggerFormDataErrors = {};
-    errors.regEx = validateRegExPattern(selectedType, isRegEx, pattern);
-    setFormData({ ...formData, regEx: pattern, errors: { ...formData.errors, ...errors } });
-  };
-
-  //Trigger phrase is optional
-  const onTriggerPhrasesChange = (body: string) => {
-    const errors: TriggerFormDataErrors = {};
-    if (body) {
-      errors.triggerPhrases = getLuDiagnostics(formData.intent, body);
-    } else {
-      errors.triggerPhrases = '';
-    }
-    setFormData({ ...formData, triggerPhrases: body, errors: { ...formData.errors, ...errors } });
-  };
   const errors = validateForm(selectedType, formData, isRegEx, regexIntents);
   const disable = hasError(errors);
+
+  const triggerWidget = resolveTriggerWidget(
+    selectedType,
+    dialogFile,
+    formData,
+    setFormData,
+    userSettings,
+    projectId,
+    dialogId
+  );
 
   return (
     <Dialog
@@ -206,16 +163,6 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
               onChange={handleEventTypeChange}
             />
           )}
-          {showCustomEvent && (
-            <TextField
-              required
-              data-testid="CustomEventName"
-              errorMessage={formData.errors.event}
-              label={formatMessage('What is the name of the custom event?')}
-              styles={intentStyles}
-              onChange={handleEventNameChange}
-            />
-          )}
           {showActivityDropDown && (
             <Dropdown
               data-testid={'activityTypeDropDown'}
@@ -227,48 +174,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
               onChange={handleEventTypeChange}
             />
           )}
-          {showIntentName && (
-            <TextField
-              data-testid="TriggerName"
-              errorMessage={formData.errors.intent}
-              label={
-                isRegEx
-                  ? formatMessage('What is the name of this trigger (RegEx)')
-                  : isLUISnQnA
-                  ? formatMessage('What is the name of this trigger (LUIS)')
-                  : formatMessage('What is the name of this trigger')
-              }
-              styles={intentStyles}
-              onChange={onNameChange}
-            />
-          )}
-
-          {showRegExDropDown && (
-            <TextField
-              data-testid="RegExField"
-              errorMessage={formData.errors.regEx}
-              label={formatMessage('Please input regEx pattern')}
-              onChange={onChangeRegEx}
-            />
-          )}
-          {showTriggerPhrase && (
-            <React.Fragment>
-              <Label>{formatMessage('Trigger phrases')}</Label>
-              <LuEditor
-                editorSettings={userSettings.codeEditor}
-                errorMessage={formData.errors.triggerPhrases}
-                height={225}
-                luOption={{
-                  projectId,
-                  fileId: dialogId,
-                  sectionId: PlaceHolderSectionName,
-                }}
-                placeholder={inlineModePlaceholder}
-                value={formData.triggerPhrases}
-                onChange={onTriggerPhrasesChange}
-              />
-            </React.Fragment>
-          )}
+          {triggerWidget}
         </Stack>
       </div>
       <DialogFooter>
