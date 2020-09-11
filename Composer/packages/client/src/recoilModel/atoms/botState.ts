@@ -12,6 +12,10 @@ import {
   BotSchemas,
   Skill,
   DialogSetting,
+  Subscription,
+  ResourceGroups,
+  Resource,
+  DeployLocation,
 } from '@bfc/shared';
 
 import { BotLoadError, DesignPageLocation, QnAAllUpViewStatus } from '../../recoilModel/types';
@@ -218,4 +222,25 @@ export const qnaAllUpViewStatusState = atom<any>({
 export const isEjectRuntimeExistState = atom<boolean>({
   key: getFullyQualifiedKey('isEjectRuntimeExist'),
   default: false,
+});
+
+// values used in in-app provision
+export const subscriptionsState = atom<Subscription[]>({
+  key: getFullyQualifiedKey('subscriptions'),
+  default: [],
+});
+
+export const resourceGroupsState = atom<ResourceGroups[]>({
+  key: getFullyQualifiedKey('resourceGroups'),
+  default: [],
+});
+
+export const resourcesState = atom<Resource[]>({
+  key: getFullyQualifiedKey('resources'),
+  default: [],
+});
+
+export const deployLocationsState = atom<DeployLocation[]>({
+  key: getFullyQualifiedKey('deployLocations'),
+  default: [],
 });
