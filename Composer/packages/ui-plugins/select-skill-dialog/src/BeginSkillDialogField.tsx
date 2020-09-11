@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { FieldProps, JSONSchema7, useShellApi } from '@bfc/extension-client';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { ObjectField } from '@bfc/adaptive-form';
 import formatMessage from 'format-message';
 import { Skill, getSkillNameFromSetting } from '@bfc/shared';
-
+import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
 import { SelectSkillDialog } from './SelectSkillDialogField';
 import { SkillEndpointField } from './SkillEndpointField';
 
