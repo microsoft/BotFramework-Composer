@@ -5,19 +5,22 @@
 import { jsx } from '@emotion/core';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import { useState, Fragment, useMemo, useContext } from 'react';
+import { useState, Fragment, useMemo } from 'react';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import formatMessage from 'format-message';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { JsonEditor } from '@bfc/code-editor';
 
-import { PublishTarget, PublishType } from '../../store/types';
+import { PublishTarget } from '@bfc/shared';
+import { PublishType } from '../../recoilModel/types';
+
 import { DialogWrapper, DialogTypes } from '../../components/DialogWrapper';
-import { StoreContext } from '../../store';
 
 import { CreateNewResource } from './createNewResources';
 import { SelectExistedResources } from './selectExistedResources';
+import { useRecoilValue } from 'recoil';
+import { dispatcherState, userSettingsState, settingsState } from '../../recoilModel';
 
 // import { getAccessTokenInCache } from '../../utils/auth';
 interface ProvisionDialogProps {
@@ -36,7 +39,10 @@ const choiceOptions: IChoiceGroupOption[] = [
 ];
 
 export const ProvisionDialog: React.FC<ProvisionDialogProps> = (props) => {
-  const { state, actions } = useContext(StoreContext);
+  const { getSubscriptions, setPublishTargets } = useRecoilValue(dispatcherState);
+
+  const { userSettings } = useRecoilValue(userSettingsState);
+  const { settings } = useRecoilValue(settingsState);
 
   const [name, setName] = useState(props.current?.name || '');
   const [targetType, setTargetType] = useState<string | undefined>(props.current?.type);
@@ -128,7 +134,7 @@ export const ProvisionDialog: React.FC<ProvisionDialogProps> = (props) => {
             {editInJson ? (
               <JsonEditor
                 key={targetType}
-                editorSettings={state.userSettings.codeEditor}
+                editorSettings={userSettings.codeEditor}
                 height={200}
                 value={config}
                 onChange={updateConfig}
@@ -157,7 +163,7 @@ export const ProvisionDialog: React.FC<ProvisionDialogProps> = (props) => {
                     } else if (choice === choiceOptions[1].key) {
                       setCurrentStep(2);
                     }
-                    await actions.getSubscriptions();
+                    await getSubscriptions();
                     // await props.onSubmit({ name: name, type: targetType, choice: choice });
                   }}
                 />
@@ -169,7 +175,7 @@ export const ProvisionDialog: React.FC<ProvisionDialogProps> = (props) => {
                   disabled={isDisable()}
                   text={formatMessage('Submit')}
                   onClick={() => {
-                    const newTargets = state.settings.publishTargets?.map((item) => {
+                    const newTargets = settings.publishTargets?.map((item) => {
                       if (item.name === props.current?.name) {
                         return {
                           ...item,
@@ -179,7 +185,7 @@ export const ProvisionDialog: React.FC<ProvisionDialogProps> = (props) => {
                         return item;
                       }
                     });
-                    actions.setPublishTargets(newTargets);
+                    setPublishTargets(newTargets);
                     props.onDismiss();
                   }}
                 />

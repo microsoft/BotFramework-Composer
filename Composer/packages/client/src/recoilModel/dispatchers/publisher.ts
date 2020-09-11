@@ -5,8 +5,8 @@
 import formatMessage from 'format-message';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 import { defaultPublishConfig } from '@bfc/shared';
+import { getAccessTokenInCache } from '../../utils/auth';
 
-import { getAccessTokenInCache, loginPopup, getGraphTokenInCache } from '../../utils/auth';
 import {
   publishTypesState,
   botStatusState,
@@ -124,10 +124,16 @@ export const publisherDispatcher = () => {
     (callbackHelpers: CallbackInterface) => async (projectId: string, target: any, metadata, sensitiveSettings) => {
       try {
         const token = getAccessTokenInCache();
-        const response = await httpClient.post(`/publish/${projectId}/publish/${target.name}`, {
-          metadata,
-          sensitiveSettings,
-        });
+        const response = await httpClient.post(
+          `/publish/${projectId}/publish/${target.name}`,
+          {
+            metadata,
+            sensitiveSettings,
+          },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         await publishSuccess(callbackHelpers, projectId, response.data, target);
       } catch (err) {
         // special case to handle dotnet issues
