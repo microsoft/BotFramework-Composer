@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import React, { useState } from 'react';
 import { IComboBoxOption, SelectableOptionMenuItemType } from 'office-ui-fabric-react/lib/ComboBox';
-import { useShellApi } from '@bfc/extension';
+import { useShellApi } from '@bfc/extension-client';
 import formatMessage from 'format-message';
 import { schemaField } from '@bfc/adaptive-form';
 

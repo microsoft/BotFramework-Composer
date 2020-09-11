@@ -11,12 +11,12 @@ import {
   FileInfo,
   Skill,
   Diagnostic,
+  convertSkillsToDictionary,
   IBotProject,
   DialogSetting,
   FileExtensions,
-  convertSkillsToDictionary,
 } from '@bfc/shared';
-import { UserIdentity, pluginLoader } from '@bfc/plugin-loader';
+import { UserIdentity, pluginLoader } from '@bfc/extension';
 import { FeedbackType, generate } from '@microsoft/bf-generate-library';
 import values from 'lodash/values';
 

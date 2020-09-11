@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { JSONSchema7, JSONSchema7Definition } from '@bfc/extension';
+import { JSONSchema7, JSONSchema7Definition } from '@bfc/extension-client';
 
 export const getDefinitions = (expressions: JSONSchema7[] = [], definitions: { [key: string]: JSONSchema7 }) =>
   expressions.reduce((acc: { [key: string]: JSONSchema7Definition }, schema: any) => {

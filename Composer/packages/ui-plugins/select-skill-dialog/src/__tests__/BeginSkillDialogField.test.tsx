@@ -3,9 +3,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import React from 'react';
-import { fireEvent, getAllByRole, render, act } from '@bfc/test-utils';
-import { Extension, JSONSchema7 } from '@bfc/extension';
-import { SDKKinds, fetchFromSettings, convertSkillsToDictionary } from '@bfc/shared';
+import { fireEvent, getAllByRole, render } from '@bfc/test-utils';
+import { EditorExtension, JSONSchema7 } from '@bfc/extension-client';
+import { SDKKinds, convertSkillsToDictionary } from '@bfc/shared';
+import { act } from '@bfc/test-utils/lib/hooks';
 
 import { BeginSkillDialogField } from '../BeginSkillDialogField';
 import pluginConfig from '..';
@@ -58,9 +59,9 @@ const renderBeginSkillDialog = ({ value = {}, onChange = jest.fn() } = {}) => {
   };
 
   return render(
-    <Extension plugins={{}} shell={{ api: shell, data: shellData }}>
+    <EditorExtension plugins={{}} shell={{ api: shell, data: shellData }}>
       <BeginSkillDialogField {...props} />
-    </Extension>
+    </EditorExtension>
   );
 };
 

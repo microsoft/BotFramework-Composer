@@ -164,7 +164,7 @@
     botbuilder-lg "^4.10.0-preview-150886"
     lodash "^4.17.19"
 
-"@bfc/plugin-loader@../../packages/extensions/plugin-loader":
+"@bfc/extension@../../packages/extension":
   version "1.0.0"
   dependencies:
     debug "^4.1.1"

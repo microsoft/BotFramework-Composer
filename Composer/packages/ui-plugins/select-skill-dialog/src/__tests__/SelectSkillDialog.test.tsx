@@ -4,8 +4,8 @@
 // @ts-nocheck
 
 import React from 'react';
-import { fireEvent, getAllByRole, render, act } from '@bfc/test-utils';
-import { Extension } from '@bfc/extension';
+import { fireEvent, getAllByRole, render } from '@bfc/test-utils';
+import { EditorExtension } from '@bfc/extension-client';
 import { fetchFromSettings, convertSkillsToDictionary } from '@bfc/shared';
 
 import { SelectSkillDialog } from '../SelectSkillDialogField';
@@ -63,9 +63,9 @@ const renderSelectSkillDialog = ({ addSkillDialog, onChange } = {}) => {
   };
 
   return render(
-    <Extension shell={{ api: shell, data: shellData }}>
+    <EditorExtension shell={{ api: shell, data: shellData }}>
       <SelectSkillDialog {...props} />
-    </Extension>
+    </EditorExtension>
   );
 };
 

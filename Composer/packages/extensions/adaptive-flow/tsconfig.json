@@ -1,8 +1,0 @@
-{
-  "extends": "../../../tsconfig.base.json",
-  "compilerOptions": {
-    "outDir": "./lib/",
-    "module": "esnext",
-  },
-  "include": ["./src/**/*", "./__tests__/**/*"]
-}
