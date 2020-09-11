@@ -11,7 +11,7 @@ import get from 'lodash/get';
 import { DialogFactory, SDKKinds, DialogInfo, PromptTab, getEditorAPI, registerEditorAPI } from '@bfc/shared';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
-import Extension, { useTriggerApi, PluginConfig } from '@bfc/extension';
+import { EditorExtension, useTriggerApi, PluginConfig } from '@bfc/extension-client';
 import { useRecoilValue } from 'recoil';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
@@ -652,18 +652,18 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                     />
                   )
                 ) : (
-                  <Extension plugins={pluginConfig} shell={shellForFlowEditor}>
+                  <EditorExtension plugins={pluginConfig} shell={shellForFlowEditor}>
                     <VisualEditor
                       openNewTriggerModal={openNewTriggerModal}
                       onBlur={() => setFlowEditorFocused(false)}
                       onFocus={() => setFlowEditorFocused(true)}
                     />
-                  </Extension>
+                  </EditorExtension>
                 )}
               </div>
-              <Extension plugins={pluginConfig} shell={shellForPropertyEditor}>
+              <EditorExtension plugins={pluginConfig} shell={shellForPropertyEditor}>
                 <PropertyEditor key={focusPath + undoVersion} />
-              </Extension>
+              </EditorExtension>
             </div>
           </Conversation>
         </div>

@@ -26,6 +26,7 @@ const BotStructureTemplate = {
     sourceQnA: 'dialogs/${DIALOGNAME}/knowledge-base/source/${FILENAME}.source.qna',
     dialogSchema: 'dialogs/${DIALOGNAME}/${DIALOGNAME}.dialog.schema',
   },
+  formDialogs: 'form-dialogs/${FORMDIALOGNAME}',
   skillManifests: 'manifests/${MANIFESTFILENAME}',
 };
 
@@ -77,10 +78,16 @@ export const defaultFilePath = (botName: string, defaultLocale: string, filename
   const LOCALE = locale;
 
   // 1. Even appsettings.json hit FileExtensions.Manifest, but it never use this do created.
-  // 2. When exprot bot as a skill, name is `EchoBot-4-2-1-preview-1-manifest.json`
+  // 2. When export bot as a skill, name is `EchoBot-4-2-1-preview-1-manifest.json`
   if (fileType === FileExtensions.Manifest) {
     return templateInterpolate(BotStructureTemplate.skillManifests, {
       MANIFESTFILENAME: filename,
+    });
+  }
+
+  if (fileType === FileExtensions.FormDialogSchema) {
+    return templateInterpolate(BotStructureTemplate.formDialogs, {
+      FORMDIALOGNAME: filename,
     });
   }
 
