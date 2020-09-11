@@ -33,7 +33,7 @@ export const PublishController = {
   publish: async (req, res) => {
     const target = req.params.target;
     const user = await PluginLoader.getUserFromRequest(req);
-    const { metadata, sensitiveSettings } = req.body;
+    const { metadata, sensitiveSettings, accessToken } = req.body;
     const projectId = req.params.projectId;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
 
@@ -51,6 +51,7 @@ export const PublishController = {
         profileName: profile.name,
         fullSettings: merge({}, currentProject.settings, sensitiveSettings),
         ...JSON.parse(profile.configuration),
+        accessToken,
       };
 
       // get the externally defined method
