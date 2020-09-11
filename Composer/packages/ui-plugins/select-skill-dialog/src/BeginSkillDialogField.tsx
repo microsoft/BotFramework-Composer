@@ -53,8 +53,7 @@ export const BeginSkillDialogField: React.FC<FieldProps> = (props) => {
   }, []);
 
   const matchedSkill: Skill | undefined = useMemo(() => {
-   return skills.find(({ name }) => name === selectedSkill);
-    return skill;
+    return skills.find(({ name }) => name === selectedSkill);
   }, [skills, selectedSkill]);
 
   const endpointOptions = useMemo(() => {

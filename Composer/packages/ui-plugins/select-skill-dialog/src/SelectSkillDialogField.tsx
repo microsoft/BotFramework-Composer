@@ -60,7 +60,7 @@ export const SelectSkillDialog: React.FC<{
   };
 
   return (
-    <div css={schemaField.container(1)}>
+    <div css={schemaField.container(0)}>
       <ComboBoxField
         comboboxTitle={comboboxTitle}
         description={formatMessage('Name of skill dialog to call')}
