@@ -202,7 +202,7 @@ async function run() {
   app.on('ready', async () => {
     log('App ready');
     const getMainWindow = () => ElectronWindow.getInstance().browserWindow;
-    const { startApp, updateStatus } = initSplashScreen({
+    const { startApp, updateStatus } = await initSplashScreen({
       getMainWindow,
       color: 'rgb(0, 120, 212)',
       logo: `file://${microsoftLogoPath}`,

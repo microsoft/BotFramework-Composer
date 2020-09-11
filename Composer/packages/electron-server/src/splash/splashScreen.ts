@@ -18,7 +18,7 @@ export type SplashScreenProps = {
   status?: string;
 };
 
-export const initSplashScreen = ({
+export const initSplashScreen = async ({
   getMainWindow,
   color: initColor,
   icon,
@@ -62,7 +62,7 @@ export const initSplashScreen = ({
   };
 
   const file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(getSplashScreenContent(args));
-  splashScreenWindow.loadURL(file);
+  await splashScreenWindow.loadURL(file);
   splashScreenWindow.show();
 
   const startApp = () => {
