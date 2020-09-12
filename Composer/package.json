@@ -10,7 +10,9 @@
     "set-value": "^3.0.2",
     "kind-of": "^6.0.3",
     "elliptic": "^6.5.3",
-    "bl": "^2.2.1"
+    "@babel/parser": "^7.11.3",
+    "bl": "^2.2.1",
+    "node-forge": "^0.10.0"
   },
   "engines": {
     "node": ">=12"
@@ -36,7 +38,7 @@
   "scripts": {
     "build": "node scripts/begin.js && yarn build:prod",
     "build:prod": "yarn build:dev && yarn build:server && yarn build:client && yarn build:electron",
-    "build:dev": "yarn build:test && yarn build:lib && yarn build:tools && yarn build:extensions && yarn build:plugins",
+    "build:dev": "yarn build:test && yarn build:lib && yarn build:tools && yarn build:extensions && yarn build:plugins && yarn l10n",
     "build:test": "yarn workspace @bfc/test-utils build",
     "build:lib": "yarn workspace @bfc/libs build:all",
     "build:electron": "yarn workspace @bfc/electron-server build",
@@ -68,7 +70,12 @@
     "typecheck": "concurrently --kill-others-on-fail \"npm:typecheck:*\"",
     "typecheck:server": "yarn workspace @bfc/server typecheck",
     "typecheck:client": "yarn workspace @bfc/client typecheck",
-    "tableflip": "rimraf node_modules/ **/node_modules && yarn && yarn build"
+    "tableflip": "rimraf node_modules/ **/node_modules && yarn && yarn build",
+    "l10n:extract": "cross-env NODE_ENV=production format-message extract -g underscored_crc32 -o packages/server/src/locales/en-US.json l10ntemp/**/*.js",
+    "l10n:extractJson": "node scripts/l10n-extractJson.js",
+    "l10n:transform": "node scripts/l10n-transform.js",
+    "l10n:babel": "babel ./packages --extensions \".ts,.tsx,.jsx,.js\" --out-dir l10ntemp --presets=@babel/react,@babel/typescript --plugins=@babel/plugin-proposal-class-properties --ignore \"packages/**/__tests__\",\"packages/**/node_modules\",\"packages/**/build/**/*.js\"",
+    "l10n": "yarn l10n:babel && yarn l10n:extract && yarn l10n:transform packages/server/src/locales/en-US.json && yarn l10n:extractJson packages/server/schemas"
   },
   "husky": {
     "hooks": {

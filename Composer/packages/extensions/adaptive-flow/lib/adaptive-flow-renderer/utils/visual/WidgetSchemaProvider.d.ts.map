@@ -1,0 +1,1 @@
+{"version":3,"file":"WidgetSchemaProvider.d.ts","sourceRoot":"","sources":["../../../../src/adaptive-flow-renderer/utils/visual/WidgetSchemaProvider.ts"],"names":[],"mappings":"AAMA,OAAO,EAAE,UAAU,EAAE,UAAU,EAAE,MAAM,gCAAgC,CAAC;AAExE,qBAAa,oBAAoB;IAC/B,MAAM,EAAE,UAAU,CAAC;IAEnB;;OAEG;gBACS,GAAG,OAAO,EAAE,UAAU,EAAE;IAIpC,OAAO,CAAC,YAAY;IAKpB,GAAG,UAAW,MAAM,KAAG,UAAU,CAE/B;CACH"}

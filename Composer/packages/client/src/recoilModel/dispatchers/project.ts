@@ -276,7 +276,8 @@ export const projectDispatcher = () => {
       name: string,
       description: string,
       location: string,
-      schemaUrl?: string
+      schemaUrl?: string,
+      locale?: string
     ) => {
       try {
         await setBotOpeningStatus(callbackHelpers);
@@ -287,6 +288,7 @@ export const projectDispatcher = () => {
           description,
           location,
           schemaUrl,
+          locale,
         });
         const projectId = response.data.id;
         if (settingStorage.get(projectId)) {

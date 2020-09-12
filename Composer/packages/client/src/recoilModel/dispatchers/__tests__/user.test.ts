@@ -158,6 +158,7 @@ describe('user dispatcher', () => {
       },
       propertyEditorWidth: 400,
       dialogNavWidth: 555,
+      appLocale: 'en-US',
     });
   });
 

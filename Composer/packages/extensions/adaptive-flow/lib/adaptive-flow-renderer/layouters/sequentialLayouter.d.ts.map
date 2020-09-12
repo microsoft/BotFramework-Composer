@@ -1,0 +1,1 @@
+{"version":3,"file":"sequentialLayouter.d.ts","sourceRoot":"","sources":["../../../src/adaptive-flow-renderer/layouters/sequentialLayouter.ts"],"names":[],"mappings":"AAGA,OAAO,EAAE,SAAS,EAAE,MAAM,qBAAqB,CAAC;AAEhD,OAAO,EAAE,WAAW,EAAE,MAAM,uBAAuB,CAAC;AAQpD,wBAAgB,kBAAkB,CAAC,KAAK,EAAE,SAAS,EAAE,EAAE,YAAY,UAAO,EAAE,gBAAgB,UAAO,GAAG,WAAW,CA2DhH"}

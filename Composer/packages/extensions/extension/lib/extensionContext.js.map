@@ -1,0 +1,1 @@
+{"version":3,"file":"extensionContext.js","sourceRoot":"","sources":["../src/extensionContext.ts"],"names":[],"mappings":";;;AAAA,uCAAuC;AACvC,kCAAkC;AAClC,wDAA0B;AAW1B,IAAM,gBAAgB,GAAG,eAAK,CAAC,aAAa,CAAmB;IAC7D,QAAQ,EAAE,EAAE;IACZ,SAAS,EAAE,EAAE;IACb,OAAO,EAAE,EAAE;CACQ,CAAC,CAAC;AAEvB,kBAAe,gBAAgB,CAAC"}
