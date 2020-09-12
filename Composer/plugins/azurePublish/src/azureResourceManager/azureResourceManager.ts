@@ -53,7 +53,7 @@ export class AzureResourceMananger {
   private logger: any;
 
   // Credentials
-  private creds: any;
+  private credentials: any;
 
   // Subscription id
   private subId: string;
@@ -67,7 +67,7 @@ export class AzureResourceMananger {
   constructor(config: AzureResourceManangerConfig) {
     this.config = config;
     this.logger = config.logger;
-    this.creds = config.creds;
+    this.credentials = config.credentials;
     this.subId = config.subId;
     this.deploymentOutput = {
       applicationInsights: {},
@@ -372,7 +372,7 @@ export class AzureResourceMananger {
       }
 
       this.deployStatus.resourceGroupStatus = DeploymentStatus.DEPLOYING;
-      const resourceManagementClient = new ResourceManagementClient(this.creds, this.subId);
+      const resourceManagementClient = new ResourceManagementClient(this.credentials, this.subId);
 
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_INFO,
@@ -449,7 +449,7 @@ export class AzureResourceMananger {
         message: 'Deploying Luis Authoring Resource ...',
       });
       this.deployStatus.luisAuthoringStatus = DeploymentStatus.DEPLOYING;
-      const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(this.creds, this.subId);
+      const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(this.credentials, this.subId);
       const deployResult = await cognitiveServicesManagementClient.accounts.create(
         config.resourceGroupName,
         config.accountName,
@@ -495,7 +495,7 @@ export class AzureResourceMananger {
         message: 'Deploying Luis Resource ...',
       });
       this.deployStatus.luisStatus = DeploymentStatus.DEPLOYING;
-      const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(this.creds, this.subId);
+      const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(this.credentials, this.subId);
       const deployResult = await cognitiveServicesManagementClient.accounts.create(
         config.resourceGroupName,
         config.accountName,
@@ -542,7 +542,7 @@ export class AzureResourceMananger {
         message: 'Deploying Application Insights Resource ...',
       });
       this.deployStatus.appInsightsStatus = DeploymentStatus.DEPLOYING;
-      const applicationInsightsManagementClient = new ApplicationInsightsManagementClient(this.creds, this.subId);
+      const applicationInsightsManagementClient = new ApplicationInsightsManagementClient(this.credentials, this.subId);
       const deployResult = await applicationInsightsManagementClient.components.createOrUpdate(
         config.resourceGroupName,
         config.name,
@@ -582,7 +582,7 @@ export class AzureResourceMananger {
       this.deployStatus.cosmosDBStatus = DeploymentStatus.DEPLOYING;
 
       // Create DB accounts
-      let cosmosDBManagementClient = new CosmosDBManagementClient(this.creds, this.subId);
+      let cosmosDBManagementClient = new CosmosDBManagementClient(this.credentials, this.subId);
       const dbAccountDeployResult = await cosmosDBManagementClient.databaseAccounts.createOrUpdate(
         config.resourceGroupName,
         config.name,
@@ -711,7 +711,7 @@ export class AzureResourceMananger {
         message: 'Deploying Blob Storage Resource ...',
       });
       this.deployStatus.blobStorageStatus = DeploymentStatus.DEPLOYING;
-      const storageManagementClient = new StorageManagementClient(this.creds, this.subId);
+      const storageManagementClient = new StorageManagementClient(this.credentials, this.subId);
       const deployResult = await storageManagementClient.storageAccounts.create(config.resourceGroupName, config.name, {
         location: config.location,
         kind: 'StorageV2',
@@ -753,7 +753,7 @@ export class AzureResourceMananger {
         message: 'Deploying Web App Resource ...',
       });
       this.deployStatus.webAppStatus = DeploymentStatus.DEPLOYING;
-      const webSiteManagementClient = new WebSiteManagementClient(this.creds, this.subId);
+      const webSiteManagementClient = new WebSiteManagementClient(this.credentials, this.subId);
 
       // Create new Service Plan
       const servicePlanResult = await webSiteManagementClient.appServicePlans.createOrUpdate(
@@ -843,7 +843,7 @@ export class AzureResourceMananger {
       });
       this.deployStatus.botStatus = DeploymentStatus.DEPLOYING;
 
-      const azureBotSerivce = new AzureBotService(this.creds, this.subId);
+      const azureBotSerivce = new AzureBotService(this.credentials, this.subId);
 
       const botResult = await azureBotSerivce.bots.create(config.resourceGroupName, config.name, {
         properties: {
@@ -892,7 +892,7 @@ export class AzureResourceMananger {
       const qnaMakerWebAppName = `${config.accountName}-qnahost`.toLowerCase().replace('_', '');
       const qnaMakerServiceName = `${config.accountName}-qna`;
       // deploy search service
-      const searchManagementClient = new SearchManagementClient(this.creds, this.subId);
+      const searchManagementClient = new SearchManagementClient(this.credentials, this.subId);
       const searchServiceDeployResult = await searchManagementClient.services.createOrUpdate(config.resourceGroupName, qnaMakerSearchName, {
         location: config.location,
         sku: {
@@ -914,7 +914,7 @@ export class AzureResourceMananger {
 
       // deploy websites
       // Create new Service Plan or update the exisiting service plan created before
-      const webSiteManagementClient = new WebSiteManagementClient(this.creds, this.subId);
+      const webSiteManagementClient = new WebSiteManagementClient(this.credentials, this.subId);
       const servicePlanName = config.resourceGroupName;
       const servicePlanResult = await webSiteManagementClient.appServicePlans.createOrUpdate(
         config.resourceGroupName,
@@ -941,7 +941,7 @@ export class AzureResourceMananger {
       }
 
       // deploy or update exisiting app insights component
-      const applicationInsightsManagementClient = new ApplicationInsightsManagementClient(this.creds, this.subId);
+      const applicationInsightsManagementClient = new ApplicationInsightsManagementClient(this.credentials, this.subId);
       const appinsightsName = config.resourceGroupName;
       const appinsightsDeployResult = await applicationInsightsManagementClient.components.createOrUpdate(
         config.resourceGroupName,
@@ -1044,7 +1044,7 @@ export class AzureResourceMananger {
       }
 
       // Create qna account
-      const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(this.creds, this.subId);
+      const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(this.credentials, this.subId);
       const deployResult = await cognitiveServicesManagementClient.accounts.create(
         config.resourceGroupName,
         qnaMakerServiceName,
@@ -1097,7 +1097,7 @@ export class AzureResourceMananger {
       });
       this.deployStatus.counterStatus = DeploymentStatus.DEPLOYING;
 
-      const resourceClient = new ResourceManagementClient(this.creds, this.subId);
+      const resourceClient = new ResourceManagementClient(this.credentials, this.subId);
 
       const counterResult = await resourceClient.deployments.createOrUpdate(config.resourceGroupName, config.name, {
         properties: {

@@ -5,7 +5,7 @@ import { SkuName } from '@azure/arm-storage/esm/models';
 
 export interface AzureResourceManangerConfig {
   // The credentials of user
-  creds: any;
+  credentials: any;
 
   // The logger
   logger: any;
@@ -13,7 +13,7 @@ export interface AzureResourceManangerConfig {
   // The subscription id of user
   subId: string;
 
-  // Create Resource Group config
+  // Create resource group config
   resourceGroup: ResourceGroupConfig;
 
   // Create luis authoring resource config

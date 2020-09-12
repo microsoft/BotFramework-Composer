@@ -216,6 +216,7 @@ export default async (composer: any): Promise<void> => {
             this.updateLoadingStatus(botId, profileName, jobId, status);
           },
           accessToken: accessToken,
+          graphToken: "",
           projPath: this.getProjectFolder(resourcekey, this.mode),
           runtime: runtime,
         });
