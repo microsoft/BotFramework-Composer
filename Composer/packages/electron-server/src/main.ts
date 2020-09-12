@@ -153,7 +153,7 @@ async function loadServer() {
   log(`Server started at port: ${serverPort}`);
 }
 
-async function main() {
+async function main(show = false) {
   log('Rendering application...');
   const mainWindow = ElectronWindow.getInstance().browserWindow;
   initAppMenu(mainWindow);
@@ -167,6 +167,10 @@ async function main() {
       deeplinkUrl = processArgsForWindows(process.argv);
     }
     await mainWindow.webContents.loadURL(getBaseUrl() + deeplinkUrl);
+
+    if (show) {
+      mainWindow.show();
+    }
 
     mainWindow.on('closed', () => {
       ElectronWindow.destroy();
@@ -240,7 +244,7 @@ async function run() {
     // On OS X it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (!ElectronWindow.isBrowserWindowCreated) {
-      main();
+      main(true);
     }
   });
 
