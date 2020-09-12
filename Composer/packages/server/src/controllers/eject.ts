@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { pluginLoader, PluginLoader } from '@bfc/plugin-loader';
+import { pluginLoader, PluginLoader } from '@bfc/extension';
 
 import { BotProjectService } from '../services/project';
 import { LocalDiskStorage } from '../models/storage/localDiskStorage';

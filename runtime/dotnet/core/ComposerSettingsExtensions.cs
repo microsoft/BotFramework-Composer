@@ -28,7 +28,12 @@ namespace Microsoft.BotFramework.Composer.Core
             var qnaRegion = configuration.GetValue<string>("qna:qnaRegion") ?? "westus";
             var environment = configuration.GetValue<string>("luis:environment") ?? Environment.UserName;
             var settings = new Dictionary<string, string>();
-            settings["luis:endpoint"] = configuration.GetValue<string>("luis:endpoint") ?? $"https://{luisRegion}.api.cognitive.microsoft.com";
+            var luisEndpoint = configuration.GetValue<string>("luis:endpoint");
+            if (String.IsNullOrWhiteSpace(luisEndpoint))
+            {
+                luisEndpoint = $"https://{luisRegion}.api.cognitive.microsoft.com";
+            }
+            settings["luis:endpoint"] = luisEndpoint;
             settings["BotRoot"] = botRoot;
             builder.AddInMemoryCollection(settings);
             if (environment == "Development")

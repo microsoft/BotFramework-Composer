@@ -13,7 +13,7 @@ import {
   getEventTypes,
   getActivityTypes,
   getFriendlyName,
-  getbreadcrumbLabel,
+  getBreadcrumbLabel,
   getSelected,
 } from '../../src/utils/dialogUtil';
 
@@ -234,9 +234,9 @@ describe('getFriendlyName', () => {
   });
 });
 
-describe('getbreadcrumbLabel', () => {
+describe('getBreadcrumbLabel', () => {
   it('return breadcrumb label', () => {
-    const name = getbreadcrumbLabel(dialogs, 'id1', null, null);
+    const name = getBreadcrumbLabel(dialogs, 'id1', null, null);
     expect(name).toBe('MainDialog');
   });
 });

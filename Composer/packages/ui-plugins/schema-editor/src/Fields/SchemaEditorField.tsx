@@ -3,7 +3,7 @@
 
 import React, { useMemo } from 'react';
 import AdaptiveForm from '@bfc/adaptive-form';
-import { useShellApi, JSONSchema7 } from '@bfc/extension';
+import { useShellApi, JSONSchema7 } from '@bfc/extension-client';
 
 import { getDefaultDialogSchema } from '../utils/getDefaultDialogSchema';
 import { getDefinitions } from '../utils/getDefinitions';
