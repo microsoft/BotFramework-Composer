@@ -3,7 +3,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
-import { SkillManifest } from '@bfc/shared';
+import { SkillManifest, convertSkillsToDictionary } from '@bfc/shared';
 
 import httpClient from '../../utils/httpUtil';
 
@@ -78,9 +78,7 @@ export const skillDispatcher = () => {
         set(onAddSkillDialogCompleteState(projectId), { func: undefined });
         set(settingsState(projectId), (settings) => ({
           ...settings,
-          skill: skills.map(({ manifestUrl, name }) => {
-            return { manifestUrl, name };
-          }),
+          skill: convertSkillsToDictionary(skills),
         }));
         set(skillsState(projectId), skills);
       } catch (err) {

@@ -2,11 +2,18 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { useRecoilCallback, CallbackInterface } from 'recoil';
-import { dereferenceDefinitions, LuFile, QnAFile, DialogInfo, SensitiveProperties, DialogSetting } from '@bfc/shared';
+import {
+  dereferenceDefinitions,
+  LuFile,
+  QnAFile,
+  DialogInfo,
+  SensitiveProperties,
+  DialogSetting,
+  convertSkillsToDictionary,
+} from '@bfc/shared';
 import { indexer, validateDialog } from '@bfc/indexers';
 import objectGet from 'lodash/get';
 import objectSet from 'lodash/set';
-import isArray from 'lodash/isArray';
 import formatMessage from 'format-message';
 
 import lgWorker from '../parsers/lgWorker';
@@ -137,7 +144,6 @@ const initQnaFilesStatus = (projectId: string, qnaFiles: QnAFile[], dialogs: Dia
 };
 export const projectDispatcher = () => {
   const initBotState = async (callbackHelpers: CallbackInterface, data: any, jump: boolean, templateId: string) => {
-    debugger;
     const { snapshot, gotoSnapshot, set } = callbackHelpers;
     const { files, botName, botEnvironment, location, schemas, settings, id: projectId, diagnostics, skills } = data;
     const curLocation = await snapshot.getPromise(locationState(projectId));
@@ -192,10 +198,8 @@ export const projectDispatcher = () => {
         set(schemasState(projectId), schemas);
         set(localeState(projectId), locale);
         set(botDiagnosticsState(projectId), diagnostics);
-
         refreshLocalStorage(projectId, settings);
-        const mergedSettings = mergeLocalStorage(projectId, settings);
-        set(settingsState(projectId), mergedSettings);
+
         set(projectMetaDataState(projectId), {
           isRootBot: true,
         });
@@ -207,6 +211,16 @@ export const projectDispatcher = () => {
           isRootBot: true,
         });
         set(botOpeningState, false);
+        const mergedSettings = mergeLocalStorage(projectId, settings);
+        if (Array.isArray(mergedSettings.skill)) {
+          const skillsArr = mergedSettings.skill.map((skillData) => {
+            return {
+              ...skillData,
+            };
+          });
+          mergedSettings.skill = convertSkillsToDictionary(skillsArr);
+        }
+        set(settingsState(projectId), mergedSettings);
       });
 
       gotoSnapshot(newSnapshot);
@@ -282,7 +296,8 @@ export const projectDispatcher = () => {
       name: string,
       description: string,
       location: string,
-      schemaUrl?: string
+      schemaUrl?: string,
+      locale?: string
     ) => {
       try {
         await setBotOpeningStatus(callbackHelpers);
@@ -293,6 +308,7 @@ export const projectDispatcher = () => {
           description,
           location,
           schemaUrl,
+          locale,
         });
         const projectId = response.data.id;
         if (settingStorage.get(projectId)) {
@@ -369,7 +385,7 @@ export const projectDispatcher = () => {
       const { set } = callbackHelpers;
       try {
         const response = await httpClient.get(`/runtime/templates`);
-        if (isArray(response.data)) {
+        if (Array.isArray(response.data)) {
           set(runtimeTemplatesState, [...response.data]);
         }
       } catch (ex) {

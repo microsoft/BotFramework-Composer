@@ -3,7 +3,7 @@
 
 import get from 'lodash/get';
 import { DialogInfo, DialogSchemaFile, ITrigger, SDKKinds, SkillManifest, LuFile } from '@bfc/shared';
-import { JSONSchema7 } from '@bfc/extension';
+import { JSONSchema7 } from '@bfc/extension-client';
 
 import { Activities, Activity, activityHandlerMap, ActivityTypes, DispatchModels } from './constants';
 

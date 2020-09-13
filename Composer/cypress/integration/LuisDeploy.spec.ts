@@ -20,7 +20,7 @@ context('Luis Deploy', () => {
       status: 200,
       response: 'fixture:luPublish/success',
     });
-    cy.findByText('Start Bot').click();
+    cy.findByText(/^(Start|Restart) Bot$/).click();
 
     // clear its settings before
     cy.enterTextAndSubmit('ProjectNameInput', 'MyProject');
