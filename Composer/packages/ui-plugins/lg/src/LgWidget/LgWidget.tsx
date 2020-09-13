@@ -3,14 +3,14 @@
 
 import React from 'react';
 import get from 'lodash/get';
-import { WidgetContainerProps } from '@bfc/extension';
+import { WidgetContainerProps } from '@bfc/extension-client';
 import { MultilineTextWithEllipsis } from '@bfc/ui-shared';
 
 import { useLgTemplate } from './useLgTemplate';
 import { normalizeLgText, isActivityString } from './normalizeLgText';
 
 export interface LgWidgetProps extends WidgetContainerProps {
-  /** indicates which field contains lg activity. ('activity', 'prompt', 'invalidPropmt'...) */
+  /** indicates which field contains lg activity. ('activity', 'prompt', 'invalidPrompt'...) */
   field: string;
   defaultContent?: string;
 }

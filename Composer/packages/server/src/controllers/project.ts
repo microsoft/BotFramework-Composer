@@ -5,7 +5,7 @@ import * as fs from 'fs';
 
 import { Request, Response } from 'express';
 import { Archiver } from 'archiver';
-import { PluginLoader } from '@bfc/plugin-loader';
+import { PluginLoader } from '@bfc/extension';
 
 import log from '../logger';
 import { BotProjectService } from '../services/project';
@@ -19,7 +19,7 @@ import { Path } from './../utility/path';
 
 async function createProject(req: Request, res: Response) {
   let { templateId } = req.body;
-  const { name, description, storageId, location, schemaUrl } = req.body;
+  const { name, description, storageId, location, schemaUrl, locale } = req.body;
   const user = await PluginLoader.getUserFromRequest(req);
   if (templateId === '') {
     templateId = 'EmptyBot';
@@ -46,7 +46,7 @@ async function createProject(req: Request, res: Response) {
 
   try {
     await BotProjectService.cleanProject(locationRef);
-    const newProjRef = await AssetService.manager.copyProjectTemplateTo(templateId, locationRef, user);
+    const newProjRef = await AssetService.manager.copyProjectTemplateTo(templateId, locationRef, user, locale);
     const id = await BotProjectService.openProject(newProjRef, user);
     const currentProject = await BotProjectService.getProjectById(id, user);
 

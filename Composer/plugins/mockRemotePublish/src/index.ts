@@ -8,7 +8,7 @@
  */
 
 import { v4 as uuid } from 'uuid';
-import { ComposerPluginRegistration, PublishResponse, PublishPlugin, JSONSchema7 } from '@bfc/plugin-loader';
+import { ComposerPluginRegistration, PublishResponse, PublishPlugin, JSONSchema7 } from '@bfc/extension';
 
 import schema from './schema';
 

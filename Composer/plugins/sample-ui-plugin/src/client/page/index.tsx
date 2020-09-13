@@ -3,7 +3,7 @@
 
 import * as React from 'react';
 import { useCallback, useState } from 'react';
-import { render } from '@bfc/client-plugin-lib';
+import { render } from '@bfc/extension-client';
 import { cx } from 'emotion';
 
 import { label, output, pageRoot, shortTextField, textField } from '../styles';

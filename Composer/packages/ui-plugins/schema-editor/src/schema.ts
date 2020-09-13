@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { JSONSchema7 } from '@bfc/extension';
+import { JSONSchema7 } from '@bfc/extension-client';
 import formatMessage from 'format-message';
 
 export const schema = (): JSONSchema7 => ({
