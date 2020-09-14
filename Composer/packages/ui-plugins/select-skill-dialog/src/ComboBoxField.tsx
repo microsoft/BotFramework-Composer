@@ -4,18 +4,21 @@
 import React from 'react';
 import { ComboBox, IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
 import { FieldLabel } from '@bfc/adaptive-form';
-import { FieldProps } from '@bfc/extension';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { ISelectableOption } from 'office-ui-fabric-react/lib/utilities/selectableOption';
 import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
 
 export const ADD_DIALOG = 'ADD_DIALOG';
 
-interface ComboBoxFieldProps extends FieldProps {
+interface ComboBoxFieldProps {
   comboboxTitle: string | null;
   options: IComboBoxOption[];
   onChange: any;
   required?: boolean;
+  description: string;
+  id: string;
+  label: string;
+  value: string;
 }
 
 export const ComboBoxField: React.FC<ComboBoxFieldProps> = ({
@@ -26,10 +29,7 @@ export const ComboBoxField: React.FC<ComboBoxFieldProps> = ({
   options,
   value = '',
   required,
-  uiOptions,
-  onBlur,
   onChange,
-  onFocus,
 }) => {
   const onRenderOption: IRenderFunction<ISelectableOption> = (option) =>
     option ? (
@@ -45,15 +45,13 @@ export const ComboBoxField: React.FC<ComboBoxFieldProps> = ({
 
   return (
     <React.Fragment>
-      <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
+      <FieldLabel description={description} id={id} label={label} required={required} />
       <ComboBox
         useComboBoxAsMenuWidth
         autoComplete="off"
         id={id}
         options={options}
         selectedKey={comboboxTitle ? 'customTitle' : value}
-        onBlur={() => onBlur && onBlur(id, value)}
-        onFocus={() => onFocus && onFocus(id, value)}
         onItemClick={onChange}
         onRenderOption={onRenderOption}
       />
