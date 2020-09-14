@@ -78,5 +78,36 @@ export interface PublishTarget {
   name: string;
   type: string;
   configuration: string;
+  provisionConfig: string;
+  provisionStatus: string;
   lastPublished?: Date;
+}
+
+export interface Subscription {
+  subscriptionId: string;
+  tenantId: string;
+  displayName: string;
+}
+
+export interface ResourceGroups {
+  name: string;
+  type: string;
+  location: string;
+  id: string;
+  properties: any;
+}
+
+export interface Resource {
+  name: string;
+  id: string;
+  type: string;
+  location: string;
+  kind?: string;
+  [key: string]: any;
+}
+
+export interface DeployLocation {
+  id: string;
+  name: string;
+  displayName: string;
 }
