@@ -190,6 +190,22 @@ ${response.data}
     }
   );
 
+  const createQnAKBFromScratch = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async ({
+      id,
+      name,
+    }: {
+      id: string; // dialogId.locale
+      name: string;
+    }) => {
+      await createSourceQnAFileState(callbackHelpers, {
+        id,
+        name,
+        content: '',
+      });
+    }
+  );
+
   const updateQnAQuestion = useRecoilCallback(
     ({ set, snapshot }: CallbackInterface) => async ({
       id,
@@ -357,5 +373,6 @@ ${response.data}
     removeQnAFile,
     updateQnAFile,
     createQnAKBFromUrl,
+    createQnAKBFromScratch,
   };
 };

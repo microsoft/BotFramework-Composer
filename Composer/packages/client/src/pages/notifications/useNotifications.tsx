@@ -70,25 +70,25 @@ export default function useNotifications(filter?: string) {
     });
 
     dialogs.forEach((dialog) => {
-      dialog.diagnostics.map((diagnostic) => {
+      dialog.diagnostics.forEach((diagnostic) => {
         const location = `${dialog.id}.dialog`;
         notifications.push(new DialogNotification(projectId, dialog.id, location, diagnostic));
       });
     });
     getReferredLuFiles(luFiles, dialogs).forEach((lufile) => {
-      lufile.diagnostics.map((diagnostic) => {
+      lufile.diagnostics.forEach((diagnostic) => {
         const location = `${lufile.id}.lu`;
         notifications.push(new LuNotification(projectId, lufile.id, location, diagnostic, lufile, dialogs));
       });
     });
     lgFiles.forEach((lgFile) => {
-      lgFile.diagnostics.map((diagnostic) => {
+      lgFile.diagnostics.forEach((diagnostic) => {
         const location = `${lgFile.id}.lg`;
         notifications.push(new LgNotification(projectId, lgFile.id, location, diagnostic, lgFile, dialogs));
       });
     });
     qnaFiles.forEach((qnaFile) => {
-      get(qnaFile, 'diagnostics', []).map((diagnostic) => {
+      get(qnaFile, 'diagnostics', []).forEach((diagnostic) => {
         const location = `${qnaFile.id}.qna`;
         notifications.push(new QnANotification(projectId, qnaFile.id, location, diagnostic));
       });

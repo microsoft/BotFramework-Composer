@@ -8,16 +8,14 @@ import formatMessage from 'format-message';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { RouteComponentProps } from '@reach/router';
 import { QnAFile } from '@bfc/shared';
-import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { FieldConfig, useForm } from '../../hooks/useForm';
 
-import { knowledgeBaseSourceUrl, QnAMakerLearningUrl, validateUrl, validateName } from './constants';
-import { subText, styles, dialogWindow, textField, warning } from './styles';
+import { validateName } from './constants';
+import { subText, styles, dialogWindow, textField } from './styles';
 
 interface CreateQnAFromScratchModalProps
   extends RouteComponentProps<{

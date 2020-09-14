@@ -254,7 +254,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
                     key: 'edit',
                     name: formatMessage('Show code'),
                     onClick: () => {
-                      if (!qnaFile) return;
                       navigateTo(`/bot/${projectId}/knowledge-base/${dialogId}/${groupFileId}/edit`);
                     },
                   },
@@ -288,7 +287,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
               iconProps={{ iconName: 'Add', styles: addIcon }}
               styles={AddTemplateButton}
               onClick={() => {
-                if (!qnaFile) return;
                 onCreateNewQnAPairs(props.group?.key);
                 actions.setMessage('item added');
               }}
@@ -337,7 +335,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           const questions = item.Questions;
           const showingQuestions = item.expand ? questions : questions.slice(0, limitedNumber);
           //This question content of this qna Section is '#?'
-          const isQuestionEmpty = showingQuestions.length === 1 && showingQuestions[0].content === '';
+          // const isQuestionEmpty = showingQuestions.length === 1 && showingQuestions[0].content === '';
           const isSourceSectionInDialog = item.fileId.endsWith('.source') && !dialogId.endsWith('.source');
           const isAllowEdit = dialogId !== 'all' && !isSourceSectionInDialog;
 

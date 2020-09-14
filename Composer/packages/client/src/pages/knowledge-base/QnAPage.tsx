@@ -171,8 +171,9 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
             onDismiss={() => {
               setCreateQnAModalFromScratchVisiability(false);
             }}
-            onSubmit={async ({ name }: CreateQnAFromUrlFormData) => {
+            onSubmit={async ({ name }: CreateQnAFromScratchFormData) => {
               setCreateQnAModalFromScratchVisiability(false);
+              console.log(name);
               // await actions.createQnAKBFromUrl({ id: `${dialogId}.${locale}`, name, url, multiTurn });
             }}
           />

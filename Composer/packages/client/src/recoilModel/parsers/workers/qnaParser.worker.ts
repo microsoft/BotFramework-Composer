@@ -7,7 +7,7 @@ import { QnAActionType } from './../types';
 const ctx: Worker = self as any;
 
 const parse = (content: string, id: string) => {
-  return { id, content, ...qnaIndexer.parse(content, id) };
+  return qnaIndexer.parse(content, id);
 };
 
 ctx.onmessage = function (msg) {
