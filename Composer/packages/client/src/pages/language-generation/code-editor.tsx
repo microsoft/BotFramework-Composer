@@ -15,7 +15,7 @@ import { CodeEditorSettings } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import { LgFile } from '@bfc/shared/src/types/indexers';
 
-import { localeState, lgFilesState, projectIdState, settingsState } from '../../recoilModel/atoms/botState';
+import { localeState, lgFilesState, settingsState } from '../../recoilModel/atoms/botState';
 import { userSettingsState, dispatcherState } from '../../recoilModel';
 import { DiffCodeEditor } from '../language-understanding/diff-editor';
 
@@ -23,14 +23,15 @@ const lspServerPath = '/lg-language-server';
 
 interface CodeEditorProps extends RouteComponentProps<{}> {
   dialogId: string;
+  projectId: string;
 }
 
 const CodeEditor: React.FC<CodeEditorProps> = (props) => {
+  const { dialogId, projectId } = props;
   const userSettings = useRecoilValue(userSettingsState);
-  const projectId = useRecoilValue(projectIdState);
-  const locale = useRecoilValue(localeState);
-  const lgFiles = useRecoilValue(lgFilesState);
-  const settings = useRecoilValue(settingsState);
+  const locale = useRecoilValue(localeState(projectId));
+  const lgFiles = useRecoilValue(lgFilesState(projectId));
+  const settings = useRecoilValue(settingsState(projectId));
 
   const { languages, defaultLanguage } = settings;
 
@@ -40,7 +41,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
     updateUserSettings,
     setLocale,
   } = useRecoilValue(dispatcherState);
-  const { dialogId } = props;
+
   const file: LgFile | undefined = lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const defaultLangFile = lgFiles.find(({ id }) => id === `${dialogId}.${defaultLanguage}`);
 
@@ -192,7 +193,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
           left={currentLanguageFileEditor}
           locale={locale}
           right={defaultLanguageFileEditor}
-          onLanguageChange={setLocale}
+          onLanguageChange={(locale) => setLocale(locale, projectId)}
         ></DiffCodeEditor>
       )}
     </Fragment>

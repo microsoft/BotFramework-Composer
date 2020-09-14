@@ -11,15 +11,15 @@ import { useRecoilValue } from 'recoil';
 import { IConfig, IPublishConfig, defaultPublishConfig } from '@bfc/shared';
 
 import {
-  botNameState,
+  botEndpointsState,
+  dispatcherState,
+  validateDialogSelectorFamily,
   botStatusState,
+  botNameState,
   luFilesState,
   qnaFilesState,
   settingsState,
-  projectIdState,
   botLoadErrorState,
-  botEndpointsState,
-  dispatcherState,
 } from '../../recoilModel';
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { QnaConfig, BotStatus, LuisConfig } from '../../constants';
@@ -27,7 +27,6 @@ import { isAbsHosted } from '../../utils/envUtil';
 import useNotifications from '../../pages/notifications/useNotifications';
 import { navigateTo, openInEmulator } from '../../utils/navigation';
 import { getReferredQnaFiles } from '../../utils/qnaUtil';
-import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 
 import { getReferredLuFiles } from './../../utils/luUtil';
 import { PublishDialog } from './publishDialog';
@@ -54,20 +53,22 @@ let botStatusInterval: NodeJS.Timeout | undefined = undefined;
 
 // -------------------- TestController -------------------- //
 const POLLING_INTERVAL = 2500;
-export const TestController: React.FC = () => {
+export const TestController: React.FC<{ projectId: string }> = (props) => {
+  const { projectId = '' } = props;
   const [modalOpen, setModalOpen] = useState(false);
   const [calloutVisible, setCalloutVisible] = useState(false);
 
   const botActionRef = useRef(null);
-  const notifications = useNotifications();
-  const botName = useRecoilValue(botNameState);
-  const botStatus = useRecoilValue(botStatusState);
-  const dialogs = useRecoilValue(validatedDialogsSelector);
-  const luFiles = useRecoilValue(luFilesState);
-  const qnaFiles = useRecoilValue(qnaFilesState);
-  const settings = useRecoilValue(settingsState);
-  const projectId = useRecoilValue(projectIdState);
-  const botLoadErrorMsg = useRecoilValue(botLoadErrorState);
+  const notifications = useNotifications(projectId);
+
+  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const botStatus = useRecoilValue(botStatusState(projectId));
+  const botName = useRecoilValue(botNameState(projectId));
+  const luFiles = useRecoilValue(luFilesState(projectId));
+  const settings = useRecoilValue(settingsState(projectId));
+  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
+  const botLoadErrorMsg = useRecoilValue(botLoadErrorState(projectId));
+
   const botEndpoints = useRecoilValue(botEndpointsState);
   const {
     publishToTarget,
@@ -99,7 +100,7 @@ export const TestController: React.FC = () => {
       case BotStatus.failed:
         openCallout();
         stopPollingRuntime();
-        setBotStatus(BotStatus.pending);
+        setBotStatus(BotStatus.pending, projectId);
         break;
       case BotStatus.published:
         stopPollingRuntime();
@@ -153,7 +154,7 @@ export const TestController: React.FC = () => {
   }
 
   async function handlePublish(config: IPublishConfig) {
-    setBotStatus(BotStatus.publishing);
+    setBotStatus(BotStatus.publishing, projectId);
     dismissDialog();
     const { luis, qna } = config;
     const endpointKey = settings.qna?.endpointKey;
@@ -166,7 +167,7 @@ export const TestController: React.FC = () => {
   }
 
   async function handleLoadBot() {
-    setBotStatus(BotStatus.reloading);
+    setBotStatus(BotStatus.reloading, projectId);
     if (settings.qna && settings.qna.subscriptionKey) {
       await setQnASettings(projectId, settings.qna.subscriptionKey);
     }
@@ -275,6 +276,7 @@ export const TestController: React.FC = () => {
           botName={botName}
           config={publishDialogConfig}
           isOpen={modalOpen}
+          projectId={projectId}
           onDismiss={dismissDialog}
           onPublish={handlePublish}
         />

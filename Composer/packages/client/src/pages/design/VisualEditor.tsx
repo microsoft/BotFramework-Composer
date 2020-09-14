@@ -9,10 +9,15 @@ import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import get from 'lodash/get';
 import VisualDesigner from '@bfc/adaptive-flow';
 import { useRecoilValue } from 'recoil';
+import { useShellApi } from '@bfc/extension';
 
 import grayComposerIcon from '../../images/grayComposerIcon.svg';
-import { schemasState, designPageLocationState, dispatcherState } from '../../recoilModel';
-import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
+import {
+  dispatcherState,
+  validateDialogSelectorFamily,
+  schemasState,
+  designPageLocationState,
+} from '../../recoilModel';
 
 import { middleTriggerContainer, middleTriggerElements, triggerButton, visualEditor } from './styles';
 
@@ -55,12 +60,14 @@ interface VisualEditorProps {
 }
 
 const VisualEditor: React.FC<VisualEditorProps> = (props) => {
+  const { ...shellData } = useShellApi();
+  const { projectId } = shellData;
   const { openNewTriggerModal, onFocus, onBlur } = props;
   const [triggerButtonVisible, setTriggerButtonVisibility] = useState(false);
-  const designPageLocation = useRecoilValue(designPageLocationState);
   const { onboardingAddCoachMarkRef } = useRecoilValue(dispatcherState);
-  const dialogs = useRecoilValue(validatedDialogsSelector);
-  const schemas = useRecoilValue(schemasState);
+  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const schemas = useRecoilValue(schemasState(projectId));
+  const designPageLocation = useRecoilValue(designPageLocationState(projectId));
   const { dialogId, selected } = designPageLocation;
 
   const addRef = useCallback((visualEditor) => onboardingAddCoachMarkRef({ visualEditor }), []);

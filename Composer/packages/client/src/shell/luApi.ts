@@ -7,18 +7,18 @@ import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 import debounce from 'lodash/debounce';
 
-import { projectIdState } from '../recoilModel/atoms/botState';
 import { useResolvers } from '../hooks/useResolver';
+import { focusPathState } from '../recoilModel';
+import { Dispatcher } from '../recoilModel/dispatchers';
 
 import { dispatcherState } from './../recoilModel/DispatcherWrapper';
-import { focusPathState } from './../recoilModel/atoms/botState';
 
 const fileNotFound = (id: string) => formatMessage(`LU file {id} not found`, { id });
 const INTENT_ERROR = formatMessage('intentName is missing or empty');
 
 function createLuApi(
   state: { focusPath: string; projectId: string },
-  dispatchers: any, //TODO
+  dispatchers: Dispatcher,
   luFileResolver: (id: string) => LuFile | undefined
 ) {
   const addLuIntent = async (id: string, intentName: string, intent: LuIntentSection) => {
@@ -47,7 +47,7 @@ function createLuApi(
 
     const newIntent = { ...oldIntent, Name: newIntentName };
 
-    return await dispatchers.updateLuIntent({ id: file.id, intentName, intent: newIntent });
+    return await dispatchers.updateLuIntent({ id: file.id, intentName, intent: newIntent, projectId: state.projectId });
   };
 
   const removeLuIntent = async (id: string, intentName: string) => {
@@ -83,11 +83,10 @@ function createLuApi(
   };
 }
 
-export function useLuApi() {
-  const focusPath = useRecoilValue(focusPathState);
-  const projectId = useRecoilValue(projectIdState);
+export function useLuApi(projectId: string) {
+  const focusPath = useRecoilValue(focusPathState(projectId));
   const dispatchers = useRecoilValue(dispatcherState);
-  const { luFileResolver } = useResolvers();
+  const { luFileResolver } = useResolvers(projectId);
   const [api, setApi] = useState(createLuApi({ focusPath, projectId }, dispatchers, luFileResolver));
 
   useEffect(() => {

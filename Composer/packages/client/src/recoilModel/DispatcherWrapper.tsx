@@ -7,42 +7,42 @@ import { atom, useRecoilTransactionObserver_UNSTABLE, Snapshot, useRecoilState }
 import once from 'lodash/once';
 import React from 'react';
 import { BotAssets } from '@bfc/shared';
+import { useRecoilValue } from 'recoil';
 
+import { UndoRoot } from './undo/history';
 import { prepareAxios } from './../utils/auth';
-import filePersistence from './persistence/FilePersistence';
 import createDispatchers, { Dispatcher } from './dispatchers';
 import {
+  botProjectsSpaceState,
   dialogsState,
-  dialogSchemasState,
-  projectIdState,
   luFilesState,
   qnaFilesState,
-  skillManifestsState,
-  settingsState,
   lgFilesState,
+  skillManifestsState,
+  dialogSchemasState,
+  settingsState,
+  filePersistenceState,
 } from './atoms';
-import { UndoRoot } from './undo/history';
 
-const getBotAssets = async (snapshot: Snapshot): Promise<BotAssets> => {
+const getBotAssets = async (projectId, snapshot: Snapshot): Promise<BotAssets> => {
   const result = await Promise.all([
-    snapshot.getPromise(projectIdState),
-    snapshot.getPromise(dialogsState),
-    snapshot.getPromise(luFilesState),
-    snapshot.getPromise(qnaFilesState),
-    snapshot.getPromise(lgFilesState),
-    snapshot.getPromise(skillManifestsState),
-    snapshot.getPromise(settingsState),
-    snapshot.getPromise(dialogSchemasState),
+    snapshot.getPromise(dialogsState(projectId)),
+    snapshot.getPromise(luFilesState(projectId)),
+    snapshot.getPromise(qnaFilesState(projectId)),
+    snapshot.getPromise(lgFilesState(projectId)),
+    snapshot.getPromise(skillManifestsState(projectId)),
+    snapshot.getPromise(settingsState(projectId)),
+    snapshot.getPromise(dialogSchemasState(projectId)),
   ]);
   return {
-    projectId: result[0],
-    dialogs: result[1],
-    luFiles: result[2],
-    qnaFiles: result[3],
-    lgFiles: result[4],
-    skillManifests: result[5],
-    setting: result[6],
-    dialogSchemas: result[7],
+    projectId,
+    dialogs: result[0],
+    luFiles: result[1],
+    qnaFiles: result[2],
+    lgFiles: result[3],
+    skillManifests: result[4],
+    setting: result[5],
+    dialogSchemas: result[6],
   };
 };
 
@@ -82,16 +82,22 @@ const InitDispatcher = ({ onLoad }) => {
 
 export const DispatcherWrapper = ({ children }) => {
   const [loaded, setLoaded] = useState(false);
+  const botProjects = useRecoilValue(botProjectsSpaceState);
 
   useRecoilTransactionObserver_UNSTABLE(async ({ snapshot, previousSnapshot }) => {
-    const assets = await getBotAssets(snapshot);
-    const previousAssets = await getBotAssets(previousSnapshot);
-    filePersistence.notify(assets, previousAssets);
+    for (const projectId of botProjects) {
+      const assets = await getBotAssets(projectId, snapshot);
+      const previousAssets = await getBotAssets(projectId, previousSnapshot);
+      const filePersistence = await snapshot.getPromise(filePersistenceState(projectId));
+      filePersistence.notify(assets, previousAssets);
+    }
   });
 
   return (
     <Fragment>
-      <UndoRoot />
+      {botProjects.map((projectId) => (
+        <UndoRoot key={projectId} projectId={projectId} />
+      ))}
       <InitDispatcher onLoad={setLoaded} />
       {loaded ? children : null}
     </Fragment>

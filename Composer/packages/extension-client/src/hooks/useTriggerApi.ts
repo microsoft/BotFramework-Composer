@@ -7,9 +7,9 @@ import get from 'lodash/get';
 import { useActionApi } from './useActionApi';
 import { useLuApi } from './useLuApi';
 
-export const useTriggerApi = (shellAPi: ShellApi) => {
-  const { deleteActions } = useActionApi(shellAPi);
-  const { deleteLuIntent } = useLuApi(shellAPi);
+export const useTriggerApi = (shellApi: ShellApi) => {
+  const { deleteActions } = useActionApi(shellApi);
+  const { deleteLuIntent } = useLuApi(shellApi);
 
   const deleteTrigger = (dialogId: string, trigger: ITriggerCondition) => {
     if (!trigger) return;

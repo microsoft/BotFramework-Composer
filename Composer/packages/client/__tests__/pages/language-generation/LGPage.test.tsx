@@ -7,13 +7,13 @@ import { renderWithRecoil } from '../../testUtils';
 import TableView from '../../../src/pages/language-generation/table-view';
 import CodeEditor from '../../../src/pages/language-generation/code-editor';
 import {
-  projectIdState,
   localeState,
   luFilesState,
   lgFilesState,
   settingsState,
   schemasState,
   dialogsState,
+  currentProjectIdState,
 } from '../../../src/recoilModel';
 import mockProjectResponse from '../../../src/recoilModel/dispatchers/__tests__/mocks/mockProjectResponse.json';
 
@@ -48,23 +48,26 @@ const state = {
 };
 
 const initRecoilState = ({ set }) => {
-  set(projectIdState, state.projectId);
-  set(localeState, state.locale);
-  set(dialogsState, state.dialogs);
-  set(luFilesState, state.luFiles);
-  set(lgFilesState, state.lgFiles);
-  set(settingsState, state.settings);
-  set(schemasState, mockProjectResponse.schemas);
+  set(currentProjectIdState, state.projectId);
+  set(localeState(state.projectId), state.locale);
+  set(dialogsState(state.projectId), state.dialogs);
+  set(luFilesState(state.projectId), state.luFiles);
+  set(lgFilesState(state.projectId), state.lgFiles);
+  set(settingsState(state.projectId), state.settings);
+  set(schemasState(state.projectId), mockProjectResponse.schemas);
 };
 
 describe('LG page all up view', () => {
   it('should render lg page table view', () => {
-    const { getByText, getByTestId } = renderWithRecoil(<TableView dialogId={'a'} />, initRecoilState);
+    const { getByText, getByTestId } = renderWithRecoil(
+      <TableView dialogId={'a'} projectId={state.projectId} />,
+      initRecoilState
+    );
     getByTestId('table-view');
     getByText('Name');
   });
 
   it('should render lg page code editor', () => {
-    renderWithRecoil(<CodeEditor dialogId={'a'} />, initRecoilState);
+    renderWithRecoil(<CodeEditor dialogId={'a'} projectId={state.projectId} />, initRecoilState);
   });
 });

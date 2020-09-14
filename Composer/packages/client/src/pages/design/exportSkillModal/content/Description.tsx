@@ -11,7 +11,7 @@ import { useRecoilValue } from 'recoil';
 import { v4 as uuid } from 'uuid';
 
 import { ContentProps } from '../constants';
-import { botNameState } from '../../../../recoilModel/atoms/botState';
+import { botNameState } from '../../../../recoilModel';
 
 const styles = {
   row: css`
@@ -50,8 +50,8 @@ const InlineLabelField: React.FC<FieldProps> = (props) => {
   );
 };
 
-export const Description: React.FC<ContentProps> = ({ errors, value, schema, onChange }) => {
-  const botName = useRecoilValue(botNameState);
+export const Description: React.FC<ContentProps> = ({ errors, value, schema, onChange, projectId }) => {
+  const botName = useRecoilValue(botNameState(projectId));
   const { $schema, ...rest } = value;
 
   const { hidden, properties } = useMemo(
