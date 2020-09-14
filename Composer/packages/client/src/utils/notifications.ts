@@ -29,7 +29,6 @@ export const getQnAFailed = (error: string) => {
   return {
     title: formatMessage('There was error creating your KB'),
     description: error,
-    retentionTime: 5000,
     type: NotificationType.error,
   };
 };
