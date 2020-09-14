@@ -1,0 +1,1 @@
+{"version":3,"file":"MenuTypes.js","sourceRoot":"","sources":["../../../src/adaptive-flow-editor/constants/MenuTypes.ts"],"names":[],"mappings":"AAAA,uCAAuC;AACvC,kCAAkC;AAElC,MAAM,CAAC,IAAM,SAAS,GAAG;IACvB,QAAQ,EAAE,KAAK;IACf,QAAQ,EAAE,GAAG;CACd,CAAC;AAEF,MAAM,CAAC,IAAM,cAAc,GAAG;IAC5B,KAAK,EAAE,OAAO;CACf,CAAC"}

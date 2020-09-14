@@ -7,8 +7,7 @@
   "scripts": {
     "start": "tsc --watch --preserveWatchOutput",
     "build": "tsc --build ./tsconfig.build.json",
-    "lint": "eslint --quiet src",
-    "extract": "cross-env NODE_ENV=production format-message extract -g underscored_crc32 -o locales/en-US.json src/**/*.ts src/**/*.tsx"
+    "lint": "eslint --quiet src"
   },
   "keywords": [
     "botframework",
@@ -18,7 +17,7 @@
   "license": "MIT",
   "peerDependencies": {
     "@bfc/adaptive-form": "*",
-    "@bfc/extension": "*",
+    "@bfc/extension-client": "*",
     "@bfc/intellisense": "*",
     "@emotion/core": "^10.0.27",
     "@uifabric/fluent-theme": "^7.1.4",
@@ -30,7 +29,7 @@
   },
   "devDependencies": {
     "@bfc/adaptive-form": "*",
-    "@bfc/extension": "*",
+    "@bfc/extension-client": "*",
     "@bfc/intellisense": "*",
     "@bfc/test-utils": "*",
     "@emotion/core": "^10.0.27",

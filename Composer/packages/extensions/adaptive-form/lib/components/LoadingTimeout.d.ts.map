@@ -1,0 +1,1 @@
+{"version":3,"file":"LoadingTimeout.d.ts","sourceRoot":"","sources":["../../src/components/LoadingTimeout.tsx"],"names":[],"mappings":"AAKA,OAAO,KAA8B,MAAM,OAAO,CAAC;AAanD,aAAK,mBAAmB,GAAG;IACzB,OAAO,CAAC,EAAE,MAAM,CAAC;IACjB,QAAQ,EAAE,KAAK,CAAC,UAAU,CAAC;CAC5B,CAAC;AAEF,QAAA,MAAM,cAAc,EAAE,KAAK,CAAC,EAAE,CAAC,mBAAmB,CAqBjD,CAAC;AAEF,OAAO,EAAE,cAAc,EAAE,CAAC"}
