@@ -108,6 +108,14 @@ export const DialogCreationCopy = {
       `What can the user accomplish through this conversation? For example, BookATable, OrderACoffee etc.`
     ),
   },
+  DEFINE_BOT_PROJECT: {
+    title: formatMessage('Create a bot project'),
+    subText: formatMessage(`Specify a name, description, and location for your new bot project.`),
+  },
+  DEFINE_DIALOG: {
+    title: formatMessage('Create a dialog'),
+    subText: formatMessage(`Specify a name and description for your new dialog.`),
+  },
   SELECT_LOCATION: {
     title: formatMessage('Select a Bot'),
     subText: formatMessage('Which bot do you want to open?'),
