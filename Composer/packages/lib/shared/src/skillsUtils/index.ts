@@ -28,6 +28,7 @@ export const convertSkillsToDictionary = (skills: Skill[]) => {
 };
 
 export const getSkillNameFromSetting = (value: string) => {
+  if (value == null) return '';
   const matched = value.match(/\['(.*?)'\]/);
   if (matched && matched.length > 1) {
     return matched[1];
