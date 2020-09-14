@@ -3,6 +3,7 @@
 import { css } from '@emotion/core';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { NeutralColors } from '@uifabric/fluent-theme';
+import { ITheme, getTheme } from 'office-ui-fabric-react/lib/Styling';
 
 export const ContentHeaderStyle = css`
   padding: 5px 20px;
@@ -94,6 +95,7 @@ export const overflowSet = css`
   justify-content: space-between;
   line-height: 36px;
   padding-left: 16px;
+  padding-right: 5px;
   background: ${NeutralColors.white};
   font-weight: ${FontWeights.semibold};
   font-size: ${FontSizes.small};
@@ -113,6 +115,37 @@ export const targetSelected = css`
   background: ${NeutralColors.gray20};
   font-weight: ${FontWeights.bold};
   font-size: ${FontSizes.small};
+  padding-right: 5px;
+`;
+
+export const resourcesListContainer = css`
+  border: 1px solid #979797;
+  margin-top: 20px;
+  position: relative;
+  min-width: 260px;
+  flex: 1;
+  min-height: 582px;
+`;
+
+const theme: ITheme = getTheme();
+const { palette } = theme;
+export const resourcesListCell = css`
+  min-height: 54px;
+  padding: 16px;
+  box-sizing: border-box;
+  display: flex;
+  &:focus {
+    outline: rgb(102, 102, 102) solid 1px;
+  }
+  &:hover {
+    background: ${palette.neutralLight};
+  }
+`;
+
+export const resourcesListCellContent = css`
+  margin-left: 16px;
+  overflow: hidden;
+  flex: 1;
 `;
 
 export const customPublishUISurface = css`
