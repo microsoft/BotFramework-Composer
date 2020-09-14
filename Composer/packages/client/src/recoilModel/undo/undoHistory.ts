@@ -45,6 +45,7 @@ export default class {
     }
 
     this.stack.push(assets);
+
     this.present++;
   }
 
@@ -66,7 +67,9 @@ export default class {
     }
   }
 
-  public canUndo = () => this.stack.length > 0 && this.present > 0;
+  public canUndo = () => {
+    return this.stack.length > 0 && this.present > 0;
+  };
   public canRedo = () => this.stack.length > 0 && this.present < this.stack.length - 1;
   public isEmpty = () => this.stack.length === 0;
   public getPresentAssets = () => (this.present > -1 ? this.stack[this.present] : null);

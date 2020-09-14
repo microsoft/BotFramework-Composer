@@ -30,9 +30,10 @@ import {
   skillsState,
   botOpeningState,
   botStatusState,
+  botNameState,
 } from '../../atoms';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
-import { Dispatcher } from '..';
+import { Dispatcher } from '../../dispatchers';
 import { BotStatus } from '../../../constants';
 
 import mockProjectResponse from './mocks/mockProjectResponse.json';
@@ -66,9 +67,9 @@ jest.mock('../../parsers/luWorker', () => {
 });
 
 jest.mock('../../persistence/FilePersistence', () => {
-  return {
-    flush: () => new Promise((resolve) => resolve()),
-  };
+  return jest.fn().mockImplementation(() => {
+    return { flush: () => new Promise((resolve) => resolve()) };
+  });
 });
 
 describe('Project dispatcher', () => {
@@ -76,7 +77,7 @@ describe('Project dispatcher', () => {
     const schemas = useRecoilValue(schemasState(projectId));
     const location = useRecoilValue(locationState(projectId));
     const skills = useRecoilValue(skillsState(projectId));
-    const botName = useRecoilValue(dialogsState(projectId));
+    const botName = useRecoilValue(botNameState(projectId));
     const skillManifests = useRecoilValue(skillManifestsState(projectId));
     const luFiles = useRecoilValue(luFilesState(projectId));
     const lgFiles = useRecoilValue(lgFilesState(projectId));
@@ -153,6 +154,7 @@ describe('Project dispatcher', () => {
     await act(async () => {
       result = await dispatcher.openProject('../test/empty-bot', 'default');
     });
+
     expect(renderedComponent.current.projectId).toBe(mockProjectResponse.id);
     expect(renderedComponent.current.botName).toBe(mockProjectResponse.botName);
     expect(renderedComponent.current.settings).toStrictEqual(mockProjectResponse.settings);

@@ -130,7 +130,7 @@ describe('useNotification hooks', () => {
       return <RecoilRoot initializeState={initRecoilState}>{children}</RecoilRoot>;
     };
 
-    const { result } = renderHook(() => useNotifications('Error'), {
+    const { result } = renderHook(() => useNotifications(state.projectId, 'Error'), {
       wrapper,
     });
 
