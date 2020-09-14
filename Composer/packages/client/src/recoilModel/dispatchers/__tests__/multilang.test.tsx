@@ -82,14 +82,11 @@ describe('Multilang dispatcher', () => {
         },
       },
     });
-    console.log('HIT after');
     renderedComponent = result;
-    console.log('sdfsdfsdfsdfsdfsdfs sdfsdfsdfsdf', renderedComponent);
     dispatcher = renderedComponent.current.currentDispatcher;
   });
 
   fit('add language', async () => {
-    console.log('DISPATCHER', dispatcher);
     await act(async () => {
       await dispatcher.addLanguages({
         languages: ['zh-cn'],
