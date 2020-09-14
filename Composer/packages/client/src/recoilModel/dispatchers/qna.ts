@@ -103,8 +103,6 @@ export const createSourceQnAFileState = async (
 
   const createdQnAFile = (await qnaWorker.parse(createdSourceQnAId, content)) as QnAFile;
 
-  const contentForDialogQnA = `[import](${createdSourceQnAId}.qna)\n`;
-
   let newQnAFiles = [...qnaFiles];
 
   // if created on a dialog, need update this dialog's all locale qna ref
@@ -116,10 +114,7 @@ export const createSourceQnAFileState = async (
 
     newQnAFiles = qnaFiles.map((file) => {
       if (!file.id.endsWith('.source') && getBaseName(file.id) === getBaseName(updatedQnAId)) {
-        return {
-          ...file,
-          content: contentForDialogQnA + file.content,
-        };
+        return qnaUtil.addImport(file, `${createdSourceQnAId}.qna`);
       }
       return file;
     });

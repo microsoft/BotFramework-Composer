@@ -584,8 +584,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       triggerPhrases: '',
     };
     if (dialogId) {
-      const url = `/bot/${projectId}/knowledge-base/${dialogId}`;
-      createTrigger(dialogId, formData, url);
+      const navUrl = `/bot/${projectId}/knowledge-base/${dialogId}`;
+      createTrigger(dialogId, formData, navUrl);
       // import qna from url
       await createQnAKBFromUrl({ id: `${dialogId}.${locale}`, name, url, multiTurn });
     }
