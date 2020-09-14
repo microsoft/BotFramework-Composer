@@ -3,7 +3,7 @@
 
 import * as React from 'react';
 import { useEffect, useCallback, useState } from 'react';
-import { setConfigIsValid, setPublishConfig, useConfigBeingEdited } from '@bfc/client-plugin-lib';
+import { setConfigIsValid, setPublishConfig, useConfigBeingEdited } from '@bfc/extension-client';
 
 import { column, label, publishRoot, textField } from '../styles';
 

@@ -4,7 +4,7 @@
 import React, { useMemo } from 'react';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 import { FieldLabel } from '@bfc/adaptive-form';
-import { FieldProps } from '@bfc/extension';
+import { FieldProps } from '@bfc/extension-client';
 import startCase from 'lodash/startCase';
 
 import { valueTypeDefinitions } from '../schema';
