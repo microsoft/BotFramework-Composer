@@ -13,7 +13,12 @@ import { useRecoilValue } from 'recoil';
 
 import { CreationFlowStatus } from '../../constants';
 import { dispatcherState, botNameState } from '../../recoilModel';
-import { recentProjectsState, templateProjectsState, templateIdState } from '../../recoilModel/atoms/appState';
+import {
+  recentProjectsState,
+  templateProjectsState,
+  templateIdState,
+  currentProjectIdState,
+} from '../../recoilModel/atoms/appState';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 
 import * as home from './styles';
@@ -55,8 +60,9 @@ const tutorials = [
   },
 ];
 
-const Home: React.FC<RouteComponentProps<{ projectId: string }>> = ({ projectId = '' }) => {
+const Home: React.FC<RouteComponentProps> = () => {
   const templateProjects = useRecoilValue(templateProjectsState);
+  const projectId = useRecoilValue(currentProjectIdState);
   const botName = useRecoilValue(botNameState(projectId));
   const recentProjects = useRecoilValue(recentProjectsState);
   const templateId = useRecoilValue(templateIdState);
@@ -173,7 +179,7 @@ const Home: React.FC<RouteComponentProps<{ projectId: string }>> = ({ projectId 
                 styles={home.latestBotItem}
                 title={''}
                 onClick={() => {
-                  onClickTemplate('ToDoBotWithLuisSample');
+                  onClickTemplate('ToDoBotWithLuisSamplesdfsdf');
                 }}
               />
             )}

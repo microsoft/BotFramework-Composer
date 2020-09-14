@@ -10,7 +10,7 @@ import {
   RuntimeTemplate,
   AppUpdateState,
   BoilerplateVersion,
-  PluginConfig,
+  ExtensionConfig,
 } from '../../recoilModel/types';
 import { getUserSettings } from '../utils';
 import onboardingStorage from '../../utils/onboardingStorage';
@@ -152,6 +152,11 @@ export const boilerplateVersionState = atom<BoilerplateVersion>({
   },
 });
 
+export const extensionsState = atom<ExtensionConfig[]>({
+  key: getFullyQualifiedKey('extensions'),
+  default: [],
+});
+
 export const botOpeningState = atom<boolean>({
   key: getFullyQualifiedKey('botOpening'),
   default: false,
@@ -165,13 +170,4 @@ export const botProjectsSpaceState = atom<string[]>({
 export const currentProjectIdState = atom<string>({
   key: getFullyQualifiedKey('currentProjectId'),
   default: '',
-});
-export const pluginsState = atom<PluginConfig[]>({
-  key: getFullyQualifiedKey('plugins'),
-  default: [],
-});
-
-export const botProjectSpaceLoadedState = atom<boolean>({
-  key: getFullyQualifiedKey('botProjectSpaceLoaded'),
-  default: false,
 });

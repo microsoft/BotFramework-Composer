@@ -1,15 +1,19 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import path from 'path';
-
 import { useRecoilCallback, CallbackInterface } from 'recoil';
-import { dereferenceDefinitions, LuFile, QnAFile, DialogInfo, SensitiveProperties, DialogSetting } from '@bfc/shared';
-import queryString from 'query-string';
+import {
+  dereferenceDefinitions,
+  LuFile,
+  QnAFile,
+  DialogInfo,
+  SensitiveProperties,
+  DialogSetting,
+  convertSkillsToDictionary,
+} from '@bfc/shared';
 import { indexer, validateDialog } from '@bfc/indexers';
 import objectGet from 'lodash/get';
 import objectSet from 'lodash/set';
-import isArray from 'lodash/isArray';
 import formatMessage from 'format-message';
 
 import lgWorker from '../parsers/lgWorker';
@@ -31,7 +35,6 @@ import {
   botDiagnosticsState,
   botProjectsSpaceState,
   projectMetaDataState,
-  currentProjectIdState,
   filePersistenceState,
   botProjectSpaceLoadedState,
 } from '../atoms';
@@ -69,13 +72,6 @@ import { logMessage, setError } from './../dispatchers/shared';
 const handleProjectFailure = (callbackHelpers: CallbackInterface, ex) => {
   callbackHelpers.set(botOpeningState, false);
   setError(callbackHelpers, ex);
-};
-
-const addToBotProject = ({ set }: CallbackInterface, projectId: string, isRootBot: boolean) => {
-  set(botProjectsSpaceState, (current) => [...current, projectId]);
-  set(projectMetaDataState(projectId), {
-    isRootBot,
-  });
 };
 
 const processSchema = (projectId: string, schema: any) => ({
@@ -183,10 +179,10 @@ export const projectDispatcher = () => {
       });
 
       await lgWorker.addProject(projectId, lgFiles);
+      set(botProjectsSpaceState, []);
 
       // Important: gotoSnapshot will wipe all states.
       const newSnapshot = snapshot.map(({ set }) => {
-        set(currentProjectIdState, projectId);
         set(skillManifestsState(projectId), skillManifestFiles);
         set(luFilesState(projectId), initLuFilesStatus(botName, luFiles, dialogs));
         set(lgFilesState(projectId), lgFiles);
@@ -203,20 +199,39 @@ export const projectDispatcher = () => {
         set(schemasState(projectId), schemas);
         set(localeState(projectId), locale);
         set(botDiagnosticsState(projectId), diagnostics);
-
         refreshLocalStorage(projectId, settings);
-        const mergedSettings = mergeLocalStorage(projectId, settings);
-        set(settingsState(projectId), mergedSettings);
+
         set(projectMetaDataState(projectId), {
           isRootBot: true,
         });
         set(filePersistenceState(projectId), new FilePersistence(projectId));
         set(undoHistoryState(projectId), new UndoHistory(projectId));
+        //TODO: Botprojects space will be populated for now with just the rootbot. Once, BotProjects UI is hookedup this will be refactored to use addToBotProject
+        set(botProjectsSpaceState, (current) => [...current, projectId]);
+        set(projectMetaDataState(projectId), {
+          isRootBot: true,
+        });
+        set(botOpeningState, false);
+        const mergedSettings = mergeLocalStorage(projectId, settings);
+        if (Array.isArray(mergedSettings.skill)) {
+          const skillsArr = mergedSettings.skill.map((skillData) => {
+            return {
+              ...skillData,
+            };
+          });
+          mergedSettings.skill = convertSkillsToDictionary(skillsArr);
+        }
+        set(settingsState(projectId), mergedSettings);
+        set(filePersistenceState(projectId), new FilePersistence(projectId));
+        set(undoHistoryState(projectId), new UndoHistory(projectId));
+        //TODO: Botprojects space will be populated for now with just the rootbot. Once, BotProjects UI is hookedup this will be refactored to use addToBotProject
+        set(botProjectsSpaceState, (current) => [...current, projectId]);
+        set(projectMetaDataState(projectId), {
+          isRootBot: true,
+        });
+        set(botOpeningState, false);
       });
       gotoSnapshot(newSnapshot);
-      //TODO: Botprojects space will be populated for now with just the rootbot. Once, BotProjects UI is hookedup this will be refactored to use addToBotProject
-      set(botProjectsSpaceState, []);
-      addToBotProject(callbackHelpers, projectId, true);
 
       if (jump && projectId) {
         let url = `/bot/${projectId}/dialogs/${mainDialog}`;
@@ -490,7 +505,8 @@ export const projectDispatcher = () => {
       name: string,
       description: string,
       location: string,
-      schemaUrl?: string
+      schemaUrl?: string,
+      locale?: string
     ) => {
       try {
         await setBotOpeningStatus(callbackHelpers);
@@ -501,6 +517,7 @@ export const projectDispatcher = () => {
           description,
           location,
           schemaUrl,
+          locale,
         });
         const projectId = response.data.id;
         if (settingStorage.get(projectId)) {
@@ -535,6 +552,8 @@ export const projectDispatcher = () => {
       reset(localeState(projectId));
       reset(skillManifestsState(projectId));
       reset(designPageLocationState(projectId));
+      reset(filePersistenceState(projectId));
+      reset(undoHistoryState(projectId));
     } catch (e) {
       logMessage(callbackHelpers, e.message);
     }
@@ -575,7 +594,7 @@ export const projectDispatcher = () => {
       const { set } = callbackHelpers;
       try {
         const response = await httpClient.get(`/runtime/templates`);
-        if (isArray(response.data)) {
+        if (Array.isArray(response.data)) {
           set(runtimeTemplatesState, [...response.data]);
         }
       } catch (ex) {
@@ -678,6 +697,5 @@ export const projectDispatcher = () => {
     saveTemplateId,
     updateBoilerplate,
     getBoilerplateVersion,
-    setBotProjectSpaceLoaded,
   };
 };

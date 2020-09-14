@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useMemo, useRef } from 'react';
-import { ShellApi, ShellData, Shell, DialogSchemaFile } from '@bfc/shared';
+import { ShellApi, ShellData, Shell, fetchFromSettings, DialogSchemaFile, Skill } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
@@ -12,6 +12,7 @@ import { isAbsHosted } from '../utils/envUtil';
 import {
   dispatcherState,
   userSettingsState,
+  settingsState,
   clipboardActionsState,
   schemasState,
   validateDialogSelectorFamily,
@@ -22,9 +23,9 @@ import {
   qnaFilesState,
   designPageLocationState,
   botNameState,
-  luFilesState,
-  lgFilesState,
   dialogSchemasState,
+  lgFilesState,
+  luFilesState,
 } from '../recoilModel';
 import { undoFunctionState } from '../recoilModel/undo/history';
 
@@ -54,6 +55,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
   const lgFiles = useRecoilValue(lgFilesState(projectId));
   const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
   const botName = useRecoilValue(botNameState(projectId));
+  const settings = useRecoilValue(settingsState(projectId));
 
   const userSettings = useRecoilValue(userSettingsState);
   const clipboardActions = useRecoilValue(clipboardActionsState);
@@ -71,6 +73,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     updateUserSettings,
     setMessage,
     displayManifestModal,
+    updateSkillsInSetting,
   } = useRecoilValue(dispatcherState);
 
   const lgApi = useLgApi(projectId);
@@ -185,7 +188,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     },
     addSkillDialog: () => {
       return new Promise((resolve) => {
-        addSkillDialogBegin((newSkill: { manifestUrl: string } | null) => {
+        addSkillDialogBegin((newSkill: { manifestUrl: string; name: string } | null) => {
           resolve(newSkill);
         }, projectId);
       });
@@ -199,6 +202,10 @@ export function useShell(source: EventSource, projectId: string): Shell {
     displayManifestModal: (skillId) => displayManifestModal(skillId, projectId),
     updateDialogSchema: async (dialogSchema: DialogSchemaFile) => {
       updateDialogSchema(dialogSchema, projectId);
+    },
+    skillsInSettings: {
+      get: (path: string) => fetchFromSettings(path, settings),
+      set: (skillName: string, skillInfo: Partial<Skill>) => updateSkillsInSetting(skillName, skillInfo, projectId),
     },
   };
 

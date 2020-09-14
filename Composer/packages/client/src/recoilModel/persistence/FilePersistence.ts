@@ -21,9 +21,6 @@ class FilePersistence {
     [ChangeType.DELETE]: this.delete,
   };
 
-  /**
-   *
-   */
   constructor(projectId: string) {
     this._projectId = projectId;
   }
@@ -37,12 +34,6 @@ class FilePersistence {
   }
 
   public async notify(currentAssets: BotAssets, previousAssets: BotAssets) {
-    // if (!currentAssets.projectId) return;
-    // if (currentAssets.projectId !== previousAssets.projectId) {
-    //   this.init(currentAssets.projectId);
-    //   return;
-    // }
-
     const fileChanges: IFileChange[] = this.getAssetsChanges(currentAssets, previousAssets);
 
     for (const change of fileChanges) {
@@ -54,25 +45,6 @@ class FilePersistence {
 
     await this.flush();
   }
-
-  // public registerHandleError(store: Store) {
-  //   const curStore = store;
-  //   this._handleError = (name) => (err) => {
-  //     //TODO: error handling now if sync file error, do a full refresh.
-  //     const fileName = name;
-  //     setError(curStore, {
-  //       message: err.response && err.response.data.message ? err.response.data.message : err,
-  //       summary: `HANDLE ${fileName} ERROR`,
-  //     });
-  //     fetchProject(curStore);
-  //   };
-  // }
-
-  // private init(projectId: string) {
-  //   if (projectId) {
-  //     this._projectId = projectId;
-  //   }
-  // }
 
   public async flush(): Promise<boolean> {
     try {
@@ -249,7 +221,5 @@ class FilePersistence {
     return fileChanges;
   }
 }
-
-// const filePersistence = new FilePersistence();
 
 export default FilePersistence;

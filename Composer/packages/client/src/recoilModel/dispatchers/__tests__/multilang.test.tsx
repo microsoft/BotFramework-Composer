@@ -11,12 +11,14 @@ import {
   settingsState,
   dialogsState,
   localeState,
+  actionsSeedState,
+  onAddLanguageDialogCompleteState,
+  onDelLanguageDialogCompleteState,
   currentProjectIdState,
 } from '../../atoms';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
 import { multilangDispatcher } from '../multilang';
-import { botStateByProjectIdSelector } from '../../selectors';
 
 const state = {
   dialogs: [{ id: '1' }, { id: '2' }],
@@ -40,18 +42,17 @@ describe('Multilang dispatcher', () => {
   let renderedComponent, dispatcher: Dispatcher;
   beforeEach(() => {
     const useRecoilTestHook = () => {
-      const {
-        actionsSeed,
-        dialogs,
-        locale,
-        dialogSetting: settings,
-        luFiles,
-        lgFiles,
-        onAddLanguageDialogComplete,
-        onDelLanguageDialogComplete,
-      } = useRecoilValue(botStateByProjectIdSelector);
+      const actionsSeed = useRecoilValue(actionsSeedState(state.projectId));
+      const dialogs = useRecoilValue(dialogsState(state.projectId));
+      const locale = useRecoilValue(localeState(state.projectId));
+      const settings = useRecoilValue(settingsState(state.projectId));
+      const luFiles = useRecoilValue(luFilesState(state.projectId));
+      const lgFiles = useRecoilValue(lgFilesState(state.projectId));
+      const onAddLanguageDialogComplete = useRecoilValue(onAddLanguageDialogCompleteState(state.projectId));
+      const onDelLanguageDialogComplete = useRecoilValue(onDelLanguageDialogCompleteState(state.projectId));
 
       const currentDispatcher = useRecoilValue(dispatcherState);
+
       return {
         dialogs,
         locale,

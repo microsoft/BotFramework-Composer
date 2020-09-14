@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { DialogInfo, LuFile, LgFile, QnAFile, LuIntentSection, LgTemplate, DialogSchemaFile } from './indexers';
+import { DialogInfo, LuFile, LgFile, QnAFile, LuIntentSection, LgTemplate, DialogSchemaFile, Skill } from './indexers';
 import { UserSettings } from './settings';
 import { OBISchema } from './schema';
 
@@ -95,11 +95,15 @@ export interface ShellApi {
   redo: () => void;
   commitChanges: () => void;
   updateUserSettings: (settings: AllPartial<UserSettings>) => void;
-  addSkillDialog: () => Promise<{ manifestUrl: string } | null>;
+  addSkillDialog: () => Promise<{ manifestUrl: string; name: string } | null>;
   announce: (message: string) => void;
   displayManifestModal: (manifestId: string) => void;
   updateDialogSchema: (_: DialogSchemaFile) => Promise<void>;
   createTrigger: (id: string, formData, url?: string) => void;
+  skillsInSettings: {
+    get: (path: string) => any;
+    set: (skillName: string, skillsData: Partial<Skill>) => Promise<void>;
+  };
 }
 
 export interface Shell {
