@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useMemo, useRef } from 'react';
-import { ShellApi, ShellData, Shell, DialogSchemaFile, fetchFromSettings, Skill } from '@bfc/shared';
+import { ShellApi, ShellData, Shell, fetchFromSettings, DialogSchemaFile, Skill } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
@@ -11,21 +11,21 @@ import { getDialogData, setDialogData } from '../utils/dialogUtil';
 import { isAbsHosted } from '../utils/envUtil';
 import {
   dispatcherState,
+  userSettingsState,
+  settingsState,
+  clipboardActionsState,
   schemasState,
   validateDialogSelectorFamily,
   breadcrumbState,
+  focusPathState,
   skillsState,
   localeState,
   qnaFilesState,
   designPageLocationState,
   botNameState,
-  luFilesState,
-  lgFilesState,
   dialogSchemasState,
-  focusPathState,
-  userSettingsState,
-  clipboardActionsState,
-  settingsState,
+  lgFilesState,
+  luFilesState,
 } from '../recoilModel';
 import { undoFunctionState } from '../recoilModel/undo/history';
 
@@ -205,7 +205,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     },
     skillsInSettings: {
       get: (path: string) => fetchFromSettings(path, settings),
-      set: (skillName: string, skillInfo: Partial<Skill>) => updateSkillsInSetting(projectId, skillName, skillInfo),
+      set: (skillName: string, skillInfo: Partial<Skill>) => updateSkillsInSetting(skillName, skillInfo, projectId),
     },
   };
 

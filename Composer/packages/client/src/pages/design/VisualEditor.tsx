@@ -9,7 +9,7 @@ import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import get from 'lodash/get';
 import VisualDesigner from '@bfc/adaptive-flow';
 import { useRecoilValue } from 'recoil';
-import { useShellApi } from '@bfc/extension-client';
+import { useShellApi } from '@bfc/extension';
 
 import grayComposerIcon from '../../images/grayComposerIcon.svg';
 import {
