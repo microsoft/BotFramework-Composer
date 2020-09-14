@@ -61,9 +61,12 @@ export const initSplashScreen = async ({
     status,
   };
 
+  splashScreenWindow.on('ready-to-show', () => {
+    splashScreenWindow.show();
+  });
+
   const file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(getSplashScreenContent(args));
   await splashScreenWindow.loadURL(file);
-  splashScreenWindow.show();
 
   const startApp = () => {
     setTimeout(() => splashScreenWindow.destroy(), 500);
