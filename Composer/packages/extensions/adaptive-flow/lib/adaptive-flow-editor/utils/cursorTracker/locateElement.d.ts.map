@@ -1,0 +1,1 @@
+{"version":3,"file":"locateElement.d.ts","sourceRoot":"","sources":["../../../../src/adaptive-flow-editor/utils/cursorTracker/locateElement.ts"],"names":[],"mappings":"AAGA,OAAO,EAAE,eAAe,EAAE,SAAS,EAAE,MAAM,QAAQ,CAAC;AAGpD;;;;;;;GAOG;AACH,wBAAgB,oBAAoB,CAClC,cAAc,EAAE,eAAe,EAC/B,QAAQ,EAAE,eAAe,EAAE,EAC3B,SAAS,EAAE,SAAS,EACpB,WAAW,CAAC,EAAE,MAAM,EAAE,GACrB,eAAe,CAYjB"}

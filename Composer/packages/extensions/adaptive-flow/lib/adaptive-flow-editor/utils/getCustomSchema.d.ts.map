@@ -1,0 +1,1 @@
+{"version":3,"file":"getCustomSchema.d.ts","sourceRoot":"","sources":["../../../src/adaptive-flow-editor/utils/getCustomSchema.ts"],"names":[],"mappings":"AAGA,OAAO,EAAE,SAAS,EAAY,MAAM,aAAa,CAAC;AAGlD,UAAU,eAAe;IACvB,OAAO,CAAC,EAAE,SAAS,CAAC;IACpB,QAAQ,CAAC,EAAE,SAAS,CAAC;IACrB,WAAW,CAAC,EAAE,SAAS,CAAC;CACzB;AA6CD,eAAO,MAAM,eAAe,iFAAwD,eA4BnF,CAAC"}

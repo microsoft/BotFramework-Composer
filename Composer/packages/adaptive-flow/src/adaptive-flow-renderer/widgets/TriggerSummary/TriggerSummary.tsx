@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 
-import { ConceptLabels } from '@bfc/shared';
+import { conceptLabels } from '@bfc/shared';
 import { jsx } from '@emotion/core';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import get from 'lodash/get';
@@ -18,7 +18,7 @@ import {
 } from './triggerStyles';
 
 function getLabel(data: any): string {
-  const labelOverrides = ConceptLabels[data.$kind];
+  const labelOverrides = conceptLabels()[data.$kind];
   if (labelOverrides) {
     return labelOverrides.subtitle || labelOverrides.title;
   }
@@ -27,7 +27,8 @@ function getLabel(data: any): string {
 
 function getName(data: any): string {
   return (
-    data.intent || get(data, '$designer.name', ConceptLabels[data.$kind] ? ConceptLabels[data.$kind].title : data.$kind)
+    data.intent ||
+    get(data, '$designer.name', conceptLabels()[data.$kind] ? conceptLabels()[data.$kind].title : data.$kind)
   );
 }
 

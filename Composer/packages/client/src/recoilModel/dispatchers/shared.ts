@@ -48,5 +48,5 @@ export const setError = (callbackHelpers: CallbackInterface, payload) => {
       callbackHelpers.set(applicationErrorState, payload);
     }
   }
-  logMessage(callbackHelpers, `Error: ${JSON.stringify(payload)}`);
+  if (payload != null) logMessage(callbackHelpers, `Error: ${JSON.stringify(payload)}`);
 };

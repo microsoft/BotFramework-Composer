@@ -116,6 +116,7 @@ export type UserSettingsPayload = {
   codeEditor: Partial<CodeEditorSettings>;
   propertyEditorWidth: number;
   dialogNavWidth: number;
+  appLocale: string;
 };
 
 export type BoilerplateVersion = {
