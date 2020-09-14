@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import AdaptiveForm, { resolveRef, getUIOptions } from '@bfc/adaptive-form';
-import { FormErrors, JSONSchema7, useFormConfig } from '@bfc/extension-client';
+import { FormErrors, JSONSchema7, useFormConfig, useShellApi } from '@bfc/extension-client';
 import formatMessage from 'format-message';
 import isEqual from 'lodash/isEqual';
 import debounce from 'lodash/debounce';
