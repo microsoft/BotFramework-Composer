@@ -56,22 +56,17 @@ if (Test-Path $zipPath) {
 	Remove-Item $zipPath -Force | Out-Null
 }
 
-# Init user secret id
-dotnet user-secrets init
-
 # Perform dotnet publish step ahead of zipping up
 $publishFolder = $(Join-Path $projFolder 'bin\Release\netcoreapp3.1')
 dotnet publish -c release -o $publishFolder -v q > $logFile
-
 
 # Copy bot files to running folder
 $remoteBotPath = $(Join-Path $publishFolder "ComposerDialogs")
 Remove-Item $remoteBotPath -Recurse -ErrorAction Ignore
 
-
 if (-not $botPath) {
 	# If don't provide bot path, then try to copy all dialogs except the runtime folder in parent folder to the publishing folder (bin\Realse\ Folder)
-	$botPath = '..'
+	$botPath = '../..'
 }
 
 $botPath = $(Join-Path $botPath '*')
@@ -79,85 +74,77 @@ Write-Host "Publishing dialogs from external bot project: $($botPath)"
 Copy-Item -Path (Get-Item -Path $botPath -Exclude ('runtime', 'generated')).FullName -Destination $remoteBotPath -Recurse -Force -Container
 
 # Try to get luis config from appsettings
-$settings = Get-Content $(Join-Path $projFolder appsettings.deployment.json) | ConvertFrom-Json
+$settingsPath = $(Join-Path $remoteBotPath settings appsettings.json)
+$settings = Get-Content $settingsPath | ConvertFrom-Json
 $luisSettings = $settings.luis
 
 if (-not $luisAuthoringKey) {
 	$luisAuthoringKey = $luisSettings.authoringKey
 }
 
-if (-not $luisEndpointKey) {
-	$luisEndpointKey = $luisSettings.endpointKey
-}
-
 if (-not $luisAuthoringRegion) {
 	$luisAuthoringRegion = $luisSettings.region
 }
 
+# set feature configuration
+$featureConfig = @{ }
+if ($settings.feature) {
+	$featureConfig = $settings.feature
+}
+else {
+	# Enable all features to true by default
+	$featureConfig["UseTelementryLoggerMiddleware"] = $true
+	$featureConfig["UseTranscriptLoggerMiddleware"] = $true
+	$featureConfig["UseShowTypingMiddleware"] = $true
+	$featureConfig["UseInspectionMiddleware"] = $true
+	$featureConfig["UseCosmosDb"] = $true
+}
+
 # Add Luis Config to appsettings
 if ($luisAuthoringKey -and $luisAuthoringRegion) {
-
 	Set-Location -Path $remoteBotPath
+
 	$models = Get-ChildItem $remoteBotPath -Recurse -Filter "*.lu" | Resolve-Path -Relative
-
-	$noneEmptyModels = [System.Collections.ArrayList]@()
-
-	foreach ($model in $models) {
-		$stringContent = Get-Content $model | Out-String
-		if ($stringContent.Length -gt 0) {
-			$noneEmptyModels.Add($model)
-		}
-	}
 
 	# Generate Luconfig.json file
 	$luconfigjson = @{
 		"name"            = $name;
 		"defaultLanguage" = $language;
-		"models"          = $noneEmptyModels
+		"models"          = $models
 	}
-	
-	$luString = $noneEmptyModels | Out-String
+
+	$luString = $models | Out-String
 	Write-Host $luString
 
 	$luconfigjson | ConvertTo-Json -Depth 100 | Out-File $(Join-Path $remoteBotPath luconfig.json)
 
-	# Execute bf luis:build command
-	if (Get-Command bf -errorAction SilentlyContinue) {
-		$customizedSettings = Get-Content $(Join-Path $remoteBotPath settings appsettings.json) | ConvertFrom-Json
-		$customizedEnv = $customizedSettings.luis.environment
-		
-		# create generated folder if not exists
-		if (!(Test-Path generated)) {
-			New-Item -ItemType Directory -Force -Path generated
-		}
-		
-		bf luis:build --luConfig $(Join-Path $remoteBotPath luconfig.json) --botName $name --authoringKey $luisAuthoringKey --dialog --out .\generated --suffix $customizedEnv -f --region $luisAuthoringRegion
+	# create generated folder if not
+	if (!(Test-Path generated)) {
+		$null = New-Item -ItemType Directory -Force -Path generated
 	}
+
+	# ensure bot cli is installed
+	if (Get-Command bf -errorAction SilentlyContinue) {}
 	else {
-		Write-Host "bf luis:build does not exist, use the following command to install:"
-		Write-Host "1. npm config set registry https://botbuilder.myget.org/F/botframework-cli/npm/"
-		Write-Host "2. npm install -g @microsoft/botframework-cli/4.9.0-preview.121555"
-		Write-Host "3. npm config set registry http://registry.npmjs.org"
-		Break
+		Write-Host "bf luis:build does not exist. Start installation..."
+		npm i -g @microsoft/botframework-cli
+		Write-Host "successfully"
 	}
-	
+
+	# Execute bf luis:build command
+	bf luis:build --luConfig $(Join-Path $remoteBotPath luconfig.json)  --botName $name --authoringKey $luisAuthoringKey --dialog crosstrained  --out ./generated --suffix $environment -f --region $luisAuthoringRegion
+
 	if ($?) {
 		Write-Host "lubuild succeeded"
 	}
 	else {
 		Write-Host "lubuild failed, please verify your luis models."
-		Break	
+		Break
 	}
 
 	Set-Location -Path $projFolder
 
-	# change setting file in publish folder
-	if (Test-Path $(Join-Path $publishFolder appsettings.deployment.json)) {
-		$settings = Get-Content $(Join-Path $publishFolder appsettings.deployment.json) | ConvertFrom-Json
-	}
-	else {
-		$settings = New-Object PSObject
-	}
+	$settings = New-Object PSObject
 
 	$luisConfigFiles = Get-ChildItem -Path $publishFolder -Include "luis.settings*" -Recurse -Force
 
@@ -172,15 +159,12 @@ if ($luisAuthoringKey -and $luisAuthoringRegion) {
 	$luisEndpoint = "https://$luisAuthoringRegion.api.cognitive.microsoft.com"
 
 	$luisConfig = @{ }
-	
+
 	$luisConfig["endpoint"] = $luisEndpoint
-	$luisConfig["endpointKey"] = $luisEndpointKey
 
 	foreach ($key in $luisAppIds.Keys) { $luisConfig[$key] = $luisAppIds[$key] }
 
 	$settings | Add-Member -Type NoteProperty -Force -Name 'luis' -Value $luisConfig
-
-	$settings | ConvertTo-Json -depth 100 | Out-File $(Join-Path $publishFolder appsettings.deployment.json)
 
 	$tokenResponse = (az account get-access-token) | ConvertFrom-Json
 	$token = $tokenResponse.accessToken
@@ -226,27 +210,12 @@ if ($luisAuthoringKey -and $luisAuthoringRegion) {
 	}
 }
 
-# Enable all features to true by default
-$featureConfig = @{ }
-$featureConfig["UseTelementryLoggerMiddleware"] = $true
-$featureConfig["UseTranscriptLoggerMiddleware"] = $true
-$featureConfig["UseShowTypingMiddleware"] = $true
-$featureConfig["UseInspectionMiddleware"] = $true
-$featureConfig["UseCosmosDb"] = $true
-
-if (Test-Path $(Join-Path $publishFolder appsettings.deployment.json)) {
-	$settings = Get-Content $(Join-Path $publishFolder appsettings.deployment.json) | ConvertFrom-Json
-}
-else {
-	$settings = New-Object PSObject
-}
-
 $settings | Add-Member -Type NoteProperty -Force -Name 'feature' -Value $featureConfig
-$settings | ConvertTo-Json -depth 100 | Out-File $(Join-Path $publishFolder appsettings.deployment.json)
+$settings | ConvertTo-Json -depth 100 | Out-File $settingsPath
 
 $resourceGroup = "$name-$environment"
 
-if ($?) {     
+if ($?) {
 	# Compress source code
 	Get-ChildItem -Path "$($publishFolder)" | Compress-Archive -DestinationPath "$($zipPath)" -Force | Out-Null
 
@@ -257,7 +226,7 @@ if ($?) {
 			--name "$name-$environment" `
 			--src $zipPath `
 			--output json) 2>> $logFile
-		
+
 	if ($deployment) {
 		Write-Host "Publish Success"
 	}
@@ -265,8 +234,8 @@ if ($?) {
 		Write-Host "! Deploy failed. Review the log for more information." -ForegroundColor DarkRed
 		Write-Host "! Log: $($logFile)" -ForegroundColor DarkRed
 	}
-} 
-else {       
+}
+else {
 	Write-Host "! Could not deploy automatically to Azure. Review the log for more information." -ForegroundColor DarkRed
-	Write-Host "! Log: $($logFile)" -ForegroundColor DarkRed    
-}       
+	Write-Host "! Log: $($logFile)" -ForegroundColor DarkRed
+}

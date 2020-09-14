@@ -1,25 +1,31 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React, { useState } from 'react';
 import { IComboBoxOption, SelectableOptionMenuItemType } from 'office-ui-fabric-react/lib/ComboBox';
-import { FieldProps, useShellApi } from '@bfc/extension';
+import { useShellApi } from '@bfc/extension-client';
 import formatMessage from 'format-message';
+import { schemaField } from '@bfc/adaptive-form';
 
 import { ComboBoxField } from './ComboBoxField';
 
 const ADD_DIALOG = 'ADD_DIALOG';
 
-export const SelectSkillDialog: React.FC<FieldProps> = (props) => {
+export const SelectSkillDialog: React.FC<{
+  value: string;
+  onChange: (option: IComboBoxOption | null) => void;
+}> = (props) => {
   const { value, onChange } = props;
   const { shellApi, skills = [] } = useShellApi();
   const { addSkillDialog } = shellApi;
   const [comboboxTitle, setComboboxTitle] = useState<string | null>(null);
 
-  const options: IComboBoxOption[] = skills.map(({ name, manifestUrl }) => ({
-    key: manifestUrl,
+  const options: IComboBoxOption[] = skills.map(({ name }) => ({
+    key: name,
     text: name,
-    isSelected: value === manifestUrl,
+    isSelected: value === name,
   }));
 
   options.push(
@@ -39,9 +45,9 @@ export const SelectSkillDialog: React.FC<FieldProps> = (props) => {
     if (option) {
       if (option.key === ADD_DIALOG) {
         setComboboxTitle(formatMessage('Add a new Skill Dialog'));
-        addSkillDialog().then((newSkill) => {
-          if (newSkill && newSkill?.manifestUrl) {
-            onChange({ key: newSkill.manifestUrl });
+        addSkillDialog().then((skill) => {
+          if (skill?.manifestUrl && skill?.name) {
+            onChange({ key: skill?.manifestUrl, text: skill?.name });
           }
           setComboboxTitle(null);
         });
@@ -53,5 +59,17 @@ export const SelectSkillDialog: React.FC<FieldProps> = (props) => {
     }
   };
 
-  return <ComboBoxField {...props} comboboxTitle={comboboxTitle} options={options} onChange={handleChange} />;
+  return (
+    <div css={schemaField.container(0)}>
+      <ComboBoxField
+        comboboxTitle={comboboxTitle}
+        description={formatMessage('Name of skill dialog to call')}
+        id={'SkillDialogName'}
+        label={formatMessage('Skill Dialog Name')}
+        options={options}
+        value={value}
+        onChange={handleChange}
+      />
+    </div>
+  );
 };

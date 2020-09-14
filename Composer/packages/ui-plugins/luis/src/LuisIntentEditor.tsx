@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import React, { useMemo } from 'react';
 import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
-import { FieldProps, useShellApi } from '@bfc/extension';
+import { FieldProps, useShellApi } from '@bfc/extension-client';
 import { filterSectionDiagnostics } from '@bfc/indexers';
 import { LuIntentSection, CodeEditorSettings, LuMetaData, LuType } from '@bfc/shared';
 
