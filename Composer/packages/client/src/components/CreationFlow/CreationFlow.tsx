@@ -16,6 +16,7 @@ import {
   templateProjectsState,
   storagesState,
   focusedStorageFolderState,
+  userSettingsState,
   localeState,
 } from '../../recoilModel';
 import Home from '../../pages/home/Home';
@@ -51,6 +52,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   const templateProjects = useRecoilValue(templateProjectsState);
   const storages = useRecoilValue(storagesState);
   const focusedStorageFolder = useRecoilValue(focusedStorageFolderState);
+  const { appLocale } = useRecoilValue(userSettingsState);
   const locale = useRecoilValue(localeState);
   const cachedProjectId = useProjectIdCache();
   const currentStorageIndex = useRef(0);
@@ -103,7 +105,14 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   };
 
   const handleCreateNew = async (formData, templateId: string) => {
-    await createProject(templateId || '', formData.name, formData.description, formData.location, formData.schemaUrl);
+    await createProject(
+      templateId || '',
+      formData.name,
+      formData.description,
+      formData.location,
+      formData.schemaUrl,
+      appLocale
+    );
   };
 
   const handleSaveAs = (formData) => {

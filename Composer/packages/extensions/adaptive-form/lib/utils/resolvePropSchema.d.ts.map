@@ -1,0 +1,1 @@
+{"version":3,"file":"resolvePropSchema.d.ts","sourceRoot":"","sources":["../../src/utils/resolvePropSchema.ts"],"names":[],"mappings":"AAEA,OAAO,EAAE,WAAW,EAAE,qBAAqB,EAAE,MAAM,gBAAgB,CAAC;AAIpE,wBAAgB,iBAAiB,CAC/B,MAAM,EAAE,WAAW,EACnB,IAAI,EAAE,MAAM,EACZ,WAAW,GAAE;IACX,CAAC,CAAC,EAAE,MAAM,GAAG,qBAAqB,CAAC;CAC/B,GACL,WAAW,GAAG,SAAS,CAQzB"}
