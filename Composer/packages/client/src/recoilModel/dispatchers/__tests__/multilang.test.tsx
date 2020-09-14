@@ -11,9 +11,10 @@ import {
   settingsState,
   dialogsState,
   localeState,
+  actionsSeedState,
   onAddLanguageDialogCompleteState,
   onDelLanguageDialogCompleteState,
-  actionsSeedState,
+  currentProjectIdState,
 } from '../../atoms';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
@@ -34,21 +35,23 @@ const state = {
     defaultLanguage: 'en-us',
     languages: ['en-us', 'fr-fr'],
   },
+  projectId: '1234-abcd',
 };
 
 describe('Multilang dispatcher', () => {
   let renderedComponent, dispatcher: Dispatcher;
   beforeEach(() => {
     const useRecoilTestHook = () => {
-      const dialogs = useRecoilValue(dialogsState);
-      const locale = useRecoilValue(localeState);
-      const settings = useRecoilValue(settingsState);
-      const luFiles = useRecoilValue(luFilesState);
-      const lgFiles = useRecoilValue(lgFilesState);
+      const actionsSeed = useRecoilValue(actionsSeedState(state.projectId));
+      const dialogs = useRecoilValue(dialogsState(state.projectId));
+      const locale = useRecoilValue(localeState(state.projectId));
+      const settings = useRecoilValue(settingsState(state.projectId));
+      const luFiles = useRecoilValue(luFilesState(state.projectId));
+      const lgFiles = useRecoilValue(lgFilesState(state.projectId));
+      const onAddLanguageDialogComplete = useRecoilValue(onAddLanguageDialogCompleteState(state.projectId));
+      const onDelLanguageDialogComplete = useRecoilValue(onDelLanguageDialogCompleteState(state.projectId));
+
       const currentDispatcher = useRecoilValue(dispatcherState);
-      const actionsSeed = useRecoilValue(actionsSeedState);
-      const onAddLanguageDialogComplete = useRecoilValue(onAddLanguageDialogCompleteState);
-      const onDelLanguageDialogComplete = useRecoilValue(onDelLanguageDialogCompleteState);
 
       return {
         dialogs,
@@ -65,11 +68,12 @@ describe('Multilang dispatcher', () => {
 
     const { result } = renderRecoilHook(useRecoilTestHook, {
       states: [
-        { recoilState: dialogsState, initialValue: state.dialogs },
-        { recoilState: localeState, initialValue: state.locale },
-        { recoilState: lgFilesState, initialValue: state.lgFiles },
-        { recoilState: luFilesState, initialValue: state.luFiles },
-        { recoilState: settingsState, initialValue: state.settings },
+        { recoilState: currentProjectIdState, initialValue: state.projectId },
+        { recoilState: dialogsState(state.projectId), initialValue: state.dialogs },
+        { recoilState: localeState(state.projectId), initialValue: state.locale },
+        { recoilState: lgFilesState(state.projectId), initialValue: state.lgFiles },
+        { recoilState: luFilesState(state.projectId), initialValue: state.luFiles },
+        { recoilState: settingsState(state.projectId), initialValue: state.settings },
       ],
       dispatcher: {
         recoilState: dispatcherState,
@@ -78,16 +82,20 @@ describe('Multilang dispatcher', () => {
         },
       },
     });
+    console.log('HIT after');
     renderedComponent = result;
+    console.log('sdfsdfsdfsdfsdfsdfs sdfsdfsdfsdf', renderedComponent);
     dispatcher = renderedComponent.current.currentDispatcher;
   });
 
-  it('add language', async () => {
+  fit('add language', async () => {
+    console.log('DISPATCHER', dispatcher);
     await act(async () => {
       await dispatcher.addLanguages({
         languages: ['zh-cn'],
         defaultLang: 'en-us',
         switchTo: true,
+        projectId: state.projectId,
       });
     });
     expect(renderedComponent.current.settings.languages).toEqual(['en-us', 'fr-fr', 'zh-cn']);
@@ -102,6 +110,7 @@ describe('Multilang dispatcher', () => {
     await act(async () => {
       await dispatcher.deleteLanguages({
         languages: ['fr-fr'],
+        projectId: state.projectId,
       });
     });
     expect(renderedComponent.current.settings.languages).toEqual(['en-us']);
@@ -111,7 +120,7 @@ describe('Multilang dispatcher', () => {
 
   it('set locale', async () => {
     await act(async () => {
-      await dispatcher.setLocale('fr-fr');
+      await dispatcher.setLocale('fr-fr', state.projectId);
     });
     expect(renderedComponent.current.locale).toEqual('fr-fr');
   });

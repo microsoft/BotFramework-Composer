@@ -12,10 +12,10 @@ import { CreationFlowStatus } from '../../constants';
 import {
   dispatcherState,
   creationFlowStatusState,
-  projectIdState,
   templateProjectsState,
   storagesState,
   focusedStorageFolderState,
+  currentProjectIdState,
   userSettingsState,
   localeState,
 } from '../../recoilModel';
@@ -33,7 +33,7 @@ type CreationFlowProps = RouteComponentProps<{}>;
 const CreationFlow: React.FC<CreationFlowProps> = () => {
   const {
     fetchTemplates,
-    openBotProject,
+    openProject,
     createProject,
     saveProjectAs,
     fetchStorages,
@@ -48,12 +48,12 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     fetchRecentProjects,
   } = useRecoilValue(dispatcherState);
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
-  const projectId = useRecoilValue(projectIdState);
+  const projectId = useRecoilValue(currentProjectIdState);
   const templateProjects = useRecoilValue(templateProjectsState);
   const storages = useRecoilValue(storagesState);
   const focusedStorageFolder = useRecoilValue(focusedStorageFolderState);
+  const locale = useRecoilValue(localeState(projectId));
   const { appLocale } = useRecoilValue(userSettingsState);
-  const locale = useRecoilValue(localeState);
   const cachedProjectId = useProjectIdCache();
   const currentStorageIndex = useRef(0);
   const storage = storages[currentStorageIndex.current];
@@ -101,7 +101,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
 
   const openBot = async (botFolder) => {
     setCreationFlowStatus(CreationFlowStatus.CLOSE);
-    openBotProject(botFolder);
+    openProject(botFolder);
   };
 
   const handleCreateNew = async (formData, templateId: string) => {
@@ -125,7 +125,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     await handleCreateNew(formData, QnABotTemplateId);
     // import qna from urls
     if (urls.length > 0) {
-      await importQnAFromUrls({ id: `${formData.name.toLocaleLowerCase()}.${locale}`, urls });
+      await importQnAFromUrls({ id: `${formData.name.toLocaleLowerCase()}.${locale}`, urls, projectId });
     }
   };
 

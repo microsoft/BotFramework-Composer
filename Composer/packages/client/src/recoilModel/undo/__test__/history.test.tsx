@@ -1,23 +1,32 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useRef } from 'react';
+import React from 'react';
 import { act } from 'react-test-renderer';
 import { useRecoilValue, useSetRecoilState, useRecoilState } from 'recoil';
 
 import { UndoRoot, undoFunctionState } from '../history';
-import { dialogsState, lgFilesState, luFilesState, projectIdState } from '../../atoms';
+import {
+  dialogsState,
+  lgFilesState,
+  luFilesState,
+  projectMetaDataState,
+  currentProjectIdState,
+  botProjectsSpaceState,
+} from '../../atoms';
 import { renderRecoilHook } from '../../../../__tests__/testUtils/react-recoil-hooks-testing-library';
-import undoHistory from '../undoHistory';
+import UndoHistory from '../undoHistory';
+const projectId = '123-asd';
 
 describe('<UndoRoot/>', () => {
   let renderedComponent;
+
   beforeEach(() => {
+    const undoHistory = new UndoHistory(projectId);
     const useRecoilTestHook = () => {
-      const { undo, redo, canRedo, canUndo, commitChanges, clearUndo } = useRecoilValue(undoFunctionState);
-      const [dialogs, setDialogs] = useRecoilState(dialogsState);
-      const setProjectIdState = useSetRecoilState(projectIdState);
-      const history = useRef(undoHistory).current;
+      const { undo, redo, canRedo, canUndo, commitChanges, clearUndo } = useRecoilValue(undoFunctionState(projectId));
+      const [dialogs, setDialogs] = useRecoilState(dialogsState(projectId));
+      const setProjectIdState = useSetRecoilState(currentProjectIdState);
 
       return {
         undo,
@@ -28,25 +37,26 @@ describe('<UndoRoot/>', () => {
         clearUndo,
         setProjectIdState,
         setDialogs,
-        history,
         dialogs,
+        history: undoHistory,
       };
     };
 
     const { result } = renderRecoilHook(useRecoilTestHook, {
       wrapper: ({ children }) => (
         <div>
-          <UndoRoot />
+          <UndoRoot projectId={projectId} />
           {children}
         </div>
       ),
       states: [
-        { recoilState: dialogsState, initialValue: [{ id: '1' }] },
-        { recoilState: lgFilesState, initialValue: [{ id: '1.lg' }, { id: '2' }] },
-        { recoilState: luFilesState, initialValue: [{ id: '1.lu' }, { id: '2' }] },
-        { recoilState: projectIdState, initialValue: '' },
+        { recoilState: botProjectsSpaceState, initialValue: [projectId] },
+        { recoilState: dialogsState(projectId), initialValue: [{ id: '1' }] },
+        { recoilState: lgFilesState(projectId), initialValue: [{ id: '1.lg' }, { id: '2' }] },
+        { recoilState: luFilesState(projectId), initialValue: [{ id: '1.lu' }, { id: '2' }] },
+        { recoilState: currentProjectIdState, initialValue: projectId },
         {
-          recoilState: undoFunctionState,
+          recoilState: undoFunctionState(projectId),
           initialValue: {
             undo: jest.fn(),
             redo: jest.fn(),
@@ -56,6 +66,7 @@ describe('<UndoRoot/>', () => {
             clearUndo: jest.fn(),
           },
         },
+        { recoilState: projectMetaDataState(projectId), initialValue: { isRootBot: true } },
       ],
     });
     renderedComponent = result;
@@ -63,7 +74,7 @@ describe('<UndoRoot/>', () => {
 
   it('should add first snapshot', () => {
     act(() => {
-      renderedComponent.current.setProjectIdState('test');
+      renderedComponent.current.setProjectIdState(projectId);
     });
 
     expect(renderedComponent.current.history.stack.length).toBe(1);

@@ -7,7 +7,7 @@ import replace from 'lodash/replace';
 import find from 'lodash/find';
 import { useRecoilValue } from 'recoil';
 
-import { projectIdState, designPageLocationState, extensionsState } from './../recoilModel';
+import { designPageLocationState, extensionsState, botProjectsSpaceState } from './../recoilModel';
 import { bottomLinks, topLinks } from './pageLinks';
 import routerCache from './routerCache';
 import { projectIdCache } from './projectCache';
@@ -22,8 +22,10 @@ export const useLocation = () => {
 };
 
 export const useLinks = () => {
-  const projectId = useRecoilValue(projectIdState);
-  const designPageLocation = useRecoilValue(designPageLocationState);
+  const botProjects = useRecoilValue(botProjectsSpaceState);
+  // TODO: Refactor to support multi bot. Currently, always set to root bot's projectID
+  const rootBotProjectId = botProjects[0];
+  const designPageLocation = useRecoilValue(designPageLocationState(rootBotProjectId));
   const extensions = useRecoilValue(extensionsState);
   const openedDialogId = designPageLocation.dialogId || 'Main';
 
@@ -36,7 +38,7 @@ export const useLinks = () => {
     return pages;
   }, [] as any[]);
 
-  return { topLinks: topLinks(projectId, openedDialogId, pluginPages), bottomLinks };
+  return { topLinks: topLinks(rootBotProjectId, openedDialogId, pluginPages), bottomLinks };
 };
 
 export const useRouterCache = (to: string) => {
