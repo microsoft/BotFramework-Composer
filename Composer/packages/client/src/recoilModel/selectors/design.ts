@@ -3,7 +3,7 @@
 
 import { selector, selectorFamily } from 'recoil';
 
-import { botNameState, botProjectsSpaceState, filePersistenceState } from '../atoms';
+import { botNameState, botProjectsSpaceState, filePersistenceState, dialogsState } from '../atoms';
 
 export const filePersistenceSelector = selectorFamily({
   key: 'filePersistenceSelector',

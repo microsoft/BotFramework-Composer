@@ -52,7 +52,6 @@ export const navigationDispatcher = () => {
       dialogId: string,
       breadcrumb: BreadcrumbItem[] = []
     ) => {
-      const isLoaded = await snapshot.getPromise(botProjectSpaceLoadedState);
       const dialogs = await snapshot.getPromise(dialogsState(projectId));
       const designPageLocation = await snapshot.getPromise(designPageLocationState(projectId));
       const updatedBreadcrumb = cloneDeep(breadcrumb);
