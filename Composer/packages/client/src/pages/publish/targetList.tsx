@@ -7,6 +7,7 @@ import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Fragment } from 'react';
 import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
 import formatMessage from 'format-message';
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 
 import { overflowSet, targetSelected } from './styles';
 
@@ -21,6 +22,11 @@ export const TargetList = (props) => {
       />
     );
   };
+
+  const onRenderSpinner = () => {
+    return <Spinner size={SpinnerSize.small} />;
+  };
+
   const onRenderItem = (item: IOverflowSetItemProps) => {
     const { name, key } = item;
     return <div key={key}>{name}</div>;
@@ -52,7 +58,9 @@ export const TargetList = (props) => {
                 },
               ]}
               onRenderItem={onRenderItem}
-              onRenderOverflowButton={onRenderOverflowButton}
+              onRenderOverflowButton={
+                target.configuration && target.configuration != '{}' ? onRenderOverflowButton : onRenderSpinner
+              }
             />
           </div>
         );
