@@ -57,7 +57,7 @@ export interface ShellData {
   luFiles: LuFile[];
   qnaFiles: QnAFile[];
   userSettings: UserSettings;
-  skills: Skill[];
+  skills: any[];
   // TODO: remove
   schemas: BotSchemas;
 }

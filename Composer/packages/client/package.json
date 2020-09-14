@@ -42,7 +42,6 @@
     "axios": "^0.19.2",
     "babel-plugin-extract-format-message": "^6.2.3",
     "format-message": "^6.2.3",
-    "format-message-generate-id": "^6.2.3",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.19",
     "office-ui-fabric-react": "^7.121.11",

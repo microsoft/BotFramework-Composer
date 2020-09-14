@@ -91,9 +91,9 @@ export const settingsDispatcher = () => {
 
   const updateSkillsInSetting = useRecoilCallback(
     ({ set, snapshot }: CallbackInterface) => async (
-      projectId: string,
       skillName: string,
-      skillInfo: Partial<Skill>
+      skillInfo: Partial<Skill>,
+      projectId: string
     ) => {
       const currentSettings: DialogSetting = await snapshot.getPromise(settingsState(projectId));
       const matchedSkill = get(currentSettings, `skill[${skillName}]`, undefined);
