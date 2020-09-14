@@ -216,7 +216,7 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
     <Fragment>
       <DialogWrapper
         isOpen
-        {...DialogCreationCopy.DEFINE_CONVERSATION_OBJECTIVE}
+        {...DialogCreationCopy.DEFINE_BOT_PROJECT}
         dialogType={DialogTypes.CreateFlow}
         onDismiss={onDismiss}
       >
