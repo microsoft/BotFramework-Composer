@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React from 'react';
-import { FieldProps, useFormConfig } from '@bfc/extension';
+import { FieldProps, useFormConfig } from '@bfc/extension-client';
 import {
   getUiLabel,
   getUIOptions,
@@ -26,8 +26,10 @@ export const SkillEndpointField: React.FC<FieldProps> = (props) => {
   const deserializedValue = typeof uiOptions?.serializer?.get === 'function' ? uiOptions.serializer.get(value) : value;
 
   const handleChange = (newValue: any) => {
-    const serializedValue =
-      typeof uiOptions?.serializer?.set === 'function' ? uiOptions.serializer.set(newValue) : newValue;
+    const serializedValue = newValue;
+    if (typeof uiOptions?.serializer?.set === 'function') {
+      uiOptions.serializer.set(newValue);
+    }
     onChange(serializedValue);
   };
 

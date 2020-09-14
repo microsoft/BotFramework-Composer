@@ -1,0 +1,1 @@
+{"version":3,"file":"ForeachWidget.d.ts","sourceRoot":"","sources":["../../../src/adaptive-flow-renderer/widgets/ForeachWidget.tsx"],"names":[],"mappings":"AAKA,OAAO,EAAW,iBAAiB,EAAc,MAAM,OAAO,CAAC;AAE/D,OAAO,EAAE,oBAAoB,EAAE,MAAM,6BAA6B,CAAC;AA+CnE,MAAM,WAAW,kBAAmB,SAAQ,oBAAoB;IAC9D,IAAI,EAAE,GAAG,CAAC,OAAO,CAAC;CACnB;AAED,eAAO,MAAM,aAAa,EAAE,iBAAiB,CAAC,kBAAkB,CAgD/D,CAAC"}

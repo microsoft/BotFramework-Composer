@@ -2,9 +2,10 @@
 // Licensed under the MIT License.
 
 import fs from 'fs';
+import path from 'path';
 
 import find from 'lodash/find';
-import { UserIdentity, pluginLoader } from '@bfc/plugin-loader';
+import { UserIdentity, pluginLoader } from '@bfc/extension';
 
 import log from '../../logger';
 import { LocalDiskStorage } from '../storage/localDiskStorage';
@@ -26,7 +27,12 @@ export class AssetManager {
     return pluginLoader.extensions.botTemplates;
   }
 
-  public async copyProjectTemplateTo(templateId: string, ref: LocationRef, user?: UserIdentity): Promise<LocationRef> {
+  public async copyProjectTemplateTo(
+    templateId: string,
+    ref: LocationRef,
+    user?: UserIdentity,
+    locale?: string
+  ): Promise<LocationRef> {
     // user storage maybe diff from template storage
     const dstStorage = StorageService.getStorageClient(ref.storageId, user);
     const dstDir = Path.resolve(ref.path);
@@ -34,17 +40,27 @@ export class AssetManager {
       log('Failed copying template to %s', dstDir);
       throw new Error('already have this folder, please give another name');
     }
-    await this.copyDataFilesTo(templateId, dstDir, dstStorage);
+    await this.copyDataFilesTo(templateId, dstDir, dstStorage, locale);
     return ref;
   }
 
-  private async copyDataFilesTo(templateId: string, dstDir: string, dstStorage: IFileStorage) {
+  private async copyDataFilesTo(templateId: string, dstDir: string, dstStorage: IFileStorage, locale?: string) {
     const template = find(pluginLoader.extensions.botTemplates, { id: templateId });
     if (template === undefined || template.path === undefined) {
       throw new Error(`no such template with id ${templateId}`);
     }
     // copy Composer data files
     await copyDir(template.path, this.templateStorage, dstDir, dstStorage);
+    // if we have a locale override, copy those files over too
+    if (locale != null) {
+      const localePath = path.join(__dirname, '..', '..', '..', 'schemas', `sdk.${locale}.schema`);
+      const content = await this.templateStorage.readFile(localePath);
+      await dstStorage.writeFile(path.join(dstDir, `sdk.override.schema`), content);
+
+      const uiLocalePath = path.join(__dirname, '..', '..', '..', 'schemas', `sdk.${locale}.uischema`);
+      const uiContent = await this.templateStorage.readFile(uiLocalePath);
+      await dstStorage.writeFile(path.join(dstDir, `sdk.override.uischema`), uiContent);
+    }
   }
 
   // Copy material from the boilerplate into the project

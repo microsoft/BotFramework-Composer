@@ -16,7 +16,6 @@ import {
   displaySkillManifestState,
 } from '../../atoms/botState';
 import { dispatcherState } from '../../DispatcherWrapper';
-import { botStateByProjectIdSelector } from '../../selectors';
 import { currentProjectIdState } from '../../atoms';
 import { Dispatcher } from '..';
 
@@ -52,14 +51,12 @@ describe('skill dispatcher', () => {
     mockDialogComplete.mockClear();
 
     const useRecoilTestHook = () => {
-      const {
-        skillManifests,
-        onAddSkillDialogComplete,
-        skills,
-        dialogSetting: settings,
-        showAddSkillDialogModal,
-        displaySkillManifest,
-      } = useRecoilValue(botStateByProjectIdSelector);
+      const skillManifests = useRecoilValue(skillManifestsState(projectId));
+      const onAddSkillDialogComplete = useRecoilValue(onAddSkillDialogCompleteState(projectId));
+      const skills = useRecoilValue(skillsState(projectId));
+      const settings = useRecoilValue(settingsState(projectId));
+      const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState(projectId));
+      const displaySkillManifest = useRecoilValue(displaySkillManifestState(projectId));
 
       const currentDispatcher = useRecoilValue(dispatcherState);
 
@@ -144,10 +141,6 @@ describe('skill dispatcher', () => {
       });
       expect(renderedComponent.current.showAddSkillDialogModal).toBe(false);
       expect(renderedComponent.current.onAddSkillDialogComplete.func).toBeUndefined();
-      //   expect(renderedComponent.current.settingsState.skill).toContain({
-      //     manifestUrl: 'url',
-      //     name: 'skill3',
-      //   });
       expect(renderedComponent.current.skills).toContainEqual(makeTestSkill(3));
     });
     it('modifies a skill', async () => {
@@ -160,10 +153,6 @@ describe('skill dispatcher', () => {
       });
       expect(renderedComponent.current.showAddSkillDialogModal).toBe(false);
       expect(renderedComponent.current.onAddSkillDialogComplete.func).toBeUndefined();
-      //   expect(renderedComponent.current.settingsState.skill).toContain({
-      //     manifestUrl: 'url',
-      //     name: 'skill100',
-      //   });
       expect(renderedComponent.current.skills).not.toContain(makeTestSkill(1));
       expect(renderedComponent.current.skills).toContainEqual(makeTestSkill(100));
     });

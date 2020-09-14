@@ -9,6 +9,7 @@ import { navigationDispatcher } from '../navigation';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import { focusPathState, breadcrumbState, designPageLocationState, dialogsState } from '../../atoms/botState';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
+import { Dispatcher } from '../../../recoilModel/dispatchers';
 import {
   convertPathToUrl,
   navigateTo,
@@ -19,8 +20,6 @@ import {
 } from '../../../utils/navigation';
 import { createSelectedPath, getSelected } from '../../../utils/dialogUtil';
 import { BreadcrumbItem } from '../../../recoilModel/types';
-import { botStateByProjectIdSelector } from '../../selectors';
-import { Dispatcher } from '..';
 import { currentProjectIdState } from '../../atoms';
 
 jest.mock('../../../utils/navigation');
@@ -52,9 +51,10 @@ describe('navigation dispatcher', () => {
     mockCheckUrl.mockReturnValue(false);
 
     const useRecoilTestHook = () => {
-      const { focusPath, breadcrumb, designPageLocation, dialogs, projectId } = useRecoilValue(
-        botStateByProjectIdSelector
-      );
+      const focusPath = useRecoilValue(focusPathState(projectId));
+      const breadcrumb = useRecoilValue(breadcrumbState(projectId));
+      const designPageLocation = useRecoilValue(designPageLocationState(projectId));
+      const dialogs = useRecoilValue(dialogsState(projectId));
       const currentDispatcher = useRecoilValue(dispatcherState);
 
       return {

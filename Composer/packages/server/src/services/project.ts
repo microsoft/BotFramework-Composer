@@ -6,7 +6,7 @@ import find from 'lodash/find';
 import flatten from 'lodash/flatten';
 import { importResolverGenerator, ResolverResource } from '@bfc/shared';
 import extractMemoryPaths from '@bfc/indexers/lib/dialogUtils/extractMemoryPaths';
-import { UserIdentity } from '@bfc/plugin-loader';
+import { UserIdentity } from '@bfc/extension';
 
 import { BotProject } from '../models/bot/botProject';
 import { LocationRef } from '../models/bot/interface';
