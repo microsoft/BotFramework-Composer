@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import merge from 'lodash/merge';
-import { pluginLoader, PluginLoader } from '@bfc/plugin-loader';
+import { pluginLoader, PluginLoader } from '@bfc/extension';
 import { defaultPublishConfig } from '@bfc/shared';
 
 import { BotProjectService } from '../services/project';

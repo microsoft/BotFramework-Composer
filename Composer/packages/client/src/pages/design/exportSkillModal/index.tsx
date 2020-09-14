@@ -7,7 +7,7 @@ import React, { useState } from 'react';
 import formatMessage from 'format-message';
 import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import { JSONSchema7 } from '@bfc/extension';
+import { JSONSchema7 } from '@bfc/extension-client';
 import { Link } from 'office-ui-fabric-react/lib/components/Link';
 import { useRecoilValue } from 'recoil';
 import { SkillManifest } from '@bfc/shared';
