@@ -215,7 +215,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
             handleCreateNew={handleCreateNew}
             formData={formData}
             onDismiss={handleDismiss}
-            path="create/va-core/customize/*"
+            path="create/va-core/*"
           />
         </Router>
       </Extension>

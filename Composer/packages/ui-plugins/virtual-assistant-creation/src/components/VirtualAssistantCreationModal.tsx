@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React, { Fragment, useState } from 'react';
-import { RouteComponentProps, Router } from '@reach/router';
+import { RouteComponentProps, Router, NavigateFn } from '@reach/router';
 import NewBotPage from './newBotPage';
 import CustomizeBotPage from './customizeBotPage';
 import PreProvisionPage, { ConfigSummaryPage } from './configSummaryPage';
@@ -13,6 +13,7 @@ import axios from 'axios';
 import { updatePersonalityQnaFile } from '../shared/utils/util';
 import ProvisionSummaryPage from './provisionSummaryPage';
 import { RouterPaths } from '../shared/constants';
+import { navigate } from '@reach/router';
 
 interface VirtualAssistantCreationModalProps
   extends RouteComponentProps<{
@@ -35,6 +36,7 @@ export const VirtualAssistantCreationModal: React.FC<VirtualAssistantCreationMod
     await handleCreateNew(formData, 'va-core');
     await updateBotResponses();
     await updateQnaFiles();
+    navigate('./');
   };
 
   const updateBotResponses = async () => {
@@ -65,15 +67,20 @@ export const VirtualAssistantCreationModal: React.FC<VirtualAssistantCreationMod
     return '- ' + text;
   };
 
+  const onModalDismiss = () => {
+    navigate('./');
+    onDismiss();
+  };
+
   return (
     <Fragment>
       <AppContext.Provider value={{ state, setState }}>
         <Router>
-          <NewBotPage onDismiss={onDismiss} path={RouterPaths.newBotPage} />
-          <CustomizeBotPage onDismiss={onDismiss} path={RouterPaths.customizeBotPage} />
-          <ConfigSummaryPage onDismiss={onDismiss} path={RouterPaths.configSummaryPage} />
+          <NewBotPage onDismiss={onModalDismiss} path={RouterPaths.newBotPage} default />
+          <CustomizeBotPage onDismiss={onModalDismiss} path={RouterPaths.customizeBotPage} />
+          <ConfigSummaryPage onDismiss={onModalDismiss} path={RouterPaths.configSummaryPage} />
           <ProvisionSummaryPage
-            onDismiss={onDismiss}
+            onDismiss={onModalDismiss}
             onSubmit={createAndConfigureBot}
             path={RouterPaths.provisionSummaryPage}
           />
