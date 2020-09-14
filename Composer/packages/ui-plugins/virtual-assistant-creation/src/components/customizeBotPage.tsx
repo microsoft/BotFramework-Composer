@@ -58,7 +58,7 @@ export const CustomizeBotPage: React.FC<CustomizeBotPageProps> = (props) => {
     <Fragment>
       <DialogWrapper
         isOpen={true}
-        // onDismiss={null}
+        onDismiss={props.onDismiss}
         title={'Customize your assistant'}
         subText={
           'Give your bot personality, multi-language capabilities and more. You can edit this later in Bot Settings.'

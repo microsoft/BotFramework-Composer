@@ -83,7 +83,7 @@ export const ConfigSummaryPage: React.FC<ConfigSummaryPageProps> = (props) => {
     <Fragment>
       <DialogWrapper
         isOpen={true}
-        // onDismiss={null}
+        onDismiss={props.onDismiss}
         title={'Configuration Summary'}
         subText={'The following customizations will be applied to your bot'}
         dialogType={DialogTypes.CreateFlow}

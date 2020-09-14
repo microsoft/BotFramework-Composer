@@ -121,7 +121,7 @@ export const ProvisionSummaryPage: React.FC<ProvisionSummaryPageProps> = (props)
     <Fragment>
       <DialogWrapper
         isOpen={true}
-        // onDismiss={null}
+        onDismiss={props.onDismiss}
         title={'Provisioning Summary'}
         subText={'The following will be provisioned to enable your bot'}
         dialogType={DialogTypes.CreateFlow}

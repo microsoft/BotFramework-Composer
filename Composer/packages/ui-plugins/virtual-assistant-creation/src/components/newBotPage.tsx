@@ -100,25 +100,11 @@ export const NewBotPage: React.FC<NewBotPageProps> = (props) => {
     );
   };
 
-  let onDismiss = () => {
-    const imageClassName = mergeStyles({
-      display: 'inline-block',
-      position: 'relative',
-    });
-  };
-
-  let handleSubmit = () => {
-    const imageClassName = mergeStyles({
-      display: 'inline-block',
-      position: 'relative',
-    });
-  };
-
   return (
     <Fragment>
       <DialogWrapper
         isOpen={true}
-        // onDismiss={null}
+        onDismiss={props.onDismiss}
         title={'Choose Your Assistant'}
         subText={'Create a new bot or choose from Virtual assistant templates. Learn More'}
         dialogType={DialogTypes.CreateFlow}
