@@ -98,6 +98,7 @@ const FormRow: React.FC<FormRowProps> = (props) => {
       </div>
     );
   }
+
   return <SchemaField key={`${id}.${row}`} css={formRow.full} {...getRowProps(props, row)} />;
 };
 

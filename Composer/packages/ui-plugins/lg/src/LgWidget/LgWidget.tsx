@@ -10,7 +10,7 @@ import { useLgTemplate } from './useLgTemplate';
 import { normalizeLgText, isActivityString } from './normalizeLgText';
 
 export interface LgWidgetProps extends WidgetContainerProps {
-  /** indicates which field contains lg activity. ('activity', 'prompt', 'invalidPropmt'...) */
+  /** indicates which field contains lg activity. ('activity', 'prompt', 'invalidPrompt'...) */
   field: string;
   defaultContent?: string;
 }

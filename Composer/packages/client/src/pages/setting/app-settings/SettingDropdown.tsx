@@ -7,22 +7,22 @@ import React from 'react';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { useId } from '@uifabric/react-hooks';
 import kebabCase from 'lodash/kebabCase';
-import formatMessage from 'format-message';
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
+import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 
 import * as styles from './styles';
 
 interface ISettingToggleProps {
-  checked?: boolean;
   description: React.ReactChild;
   id?: string;
   image: string;
-  onToggle: (checked: boolean) => void;
+  onChange: (key: string) => void;
   title: string;
+  options: { key: string; text: string }[];
+  selected?: string;
 }
 
-const SettingToggle: React.FC<ISettingToggleProps> = (props) => {
-  const { id, title, description, image, checked, onToggle } = props;
+const SettingDropdown: React.FC<ISettingToggleProps> = (props) => {
+  const { id, title, description, image, onChange, options, selected } = props;
   const uniqueId = useId(kebabCase(title));
 
   return (
@@ -37,17 +37,15 @@ const SettingToggle: React.FC<ISettingToggleProps> = (props) => {
         <p css={styles.settingsDescription}>{description}</p>
       </div>
       <div>
-        <Toggle
-          checked={!!checked}
-          data-testid={id}
+        <Dropdown
           id={id || uniqueId}
-          offText={formatMessage('Off')}
-          onChange={(_e, checked) => onToggle(!!checked)}
-          onText={formatMessage('On')}
+          options={options}
+          selectedKey={selected}
+          onChange={(_e, option) => onChange(option?.key?.toString() ?? '')}
         />
       </div>
     </div>
   );
 };
 
-export { SettingToggle };
+export { SettingDropdown };
