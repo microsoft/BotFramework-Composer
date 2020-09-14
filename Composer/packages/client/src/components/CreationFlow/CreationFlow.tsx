@@ -139,7 +139,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     }
     if (templateId === 'va-core') {
       setFormData(formData);
-      navigate(`./va-core/customize/`);
+      navigate(`./va-core/customize`);
       return;
     }
     handleSubmit(formData, templateId);

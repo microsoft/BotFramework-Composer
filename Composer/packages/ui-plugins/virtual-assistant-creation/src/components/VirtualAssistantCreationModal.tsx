@@ -69,7 +69,7 @@ export const VirtualAssistantCreationModal: React.FC<VirtualAssistantCreationMod
     <Fragment>
       <AppContext.Provider value={{ state, setState }}>
         <Router>
-          <NewBotPage onDismiss={onDismiss} path={RouterPaths.newBotPage} default />
+          <NewBotPage onDismiss={onDismiss} path={RouterPaths.newBotPage} />
           <CustomizeBotPage onDismiss={onDismiss} path={RouterPaths.customizeBotPage} />
           <ConfigSummaryPage onDismiss={onDismiss} path={RouterPaths.configSummaryPage} />
           <ProvisionSummaryPage
