@@ -33,7 +33,7 @@ export const undoFunctionState = atomFamily<IUndoRedo, string>({
 });
 
 export const undoHistoryState = atomFamily<UndoHistory, string>({
-  key: 'undoFunction',
+  key: 'undoHistory',
   default: {} as UndoHistory,
   dangerouslyAllowMutability: true,
 });

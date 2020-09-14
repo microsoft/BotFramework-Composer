@@ -1,1 +1,0 @@
-{"version":3,"file":"editorConfig.js","sourceRoot":"","sources":["../../../src/adaptive-flow-editor/constants/editorConfig.ts"],"names":[],"mappings":"AAAA,uCAAuC;AACvC,kCAAkC;AAElC,MAAM,CAAC,IAAM,YAAY,GAAG;IAC1B,QAAQ,EAAE;QACR,UAAU,EAAE,KAAK;QACjB,eAAe,EAAE,IAAI;QACrB,aAAa,EAAE,IAAI;QACnB,mBAAmB,EAAE,IAAI;QACzB,wBAAwB,EAAE,IAAI;KAC/B;CACF,CAAC"}
