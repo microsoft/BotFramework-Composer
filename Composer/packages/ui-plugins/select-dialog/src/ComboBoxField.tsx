@@ -4,7 +4,7 @@
 import React from 'react';
 import { ComboBox, IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
 import { FieldLabel } from '@bfc/adaptive-form';
-import { FieldProps } from '@bfc/extension';
+import { FieldProps } from '@bfc/extension-client';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { ISelectableOption } from 'office-ui-fabric-react/lib/utilities/selectableOption';
 import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
@@ -17,19 +17,20 @@ interface ComboBoxFieldProps extends FieldProps {
   onChange: any;
 }
 
-export const ComboBoxField: React.FC<ComboBoxFieldProps> = ({
-  comboboxTitle,
-  description,
-  id,
-  label,
-  options,
-  value = '',
-  required,
-  uiOptions,
-  onBlur,
-  onChange,
-  onFocus,
-}) => {
+export const ComboBoxField: React.FC<ComboBoxFieldProps> = (props) => {
+  const {
+    comboboxTitle,
+    description,
+    id,
+    label,
+    options,
+    value = '',
+    required,
+    uiOptions,
+    onBlur,
+    onChange,
+    onFocus,
+  } = props;
   const onRenderOption: IRenderFunction<ISelectableOption> = (option) =>
     option ? (
       <div>

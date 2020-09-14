@@ -73,7 +73,7 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
     botSettings: formatMessage('Bot Settings'),
     appSettings: formatMessage('Application Settings'),
     runtime: formatMessage('Runtime Config'),
-    plugins: formatMessage('Plugins'),
+    extensions: formatMessage('Extensions'),
     about: formatMessage('About'),
   };
 
@@ -86,7 +86,7 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
     },
     { id: 'application', name: settingLabels.appSettings, url: getProjectLink('application') },
     { id: 'runtime', name: settingLabels.runtime, url: getProjectLink('runtime', projectId), disabled: !projectId },
-    // { id: 'plugins', name: settingLabels.plugins, url: getProjectLink('plugins') },
+    // { id: 'extensions', name: settingLabels.extensions, url: getProjectLink('extensions') },
     { id: 'about', name: settingLabels.about, url: getProjectLink('about') },
   ];
 

@@ -5,7 +5,7 @@ import path from 'path';
 
 import { Request, Response } from 'express';
 import rimraf from 'rimraf';
-import { pluginLoader } from '@bfc/plugin-loader';
+import { pluginLoader } from '@bfc/extension';
 
 import { BotProjectService } from '../../src/services/project';
 import { Path } from '../../src/utility/path';
