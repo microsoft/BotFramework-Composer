@@ -9,17 +9,20 @@
 
 FROM node:12-alpine as build
 
+ARG YARN_ARGS
+
 WORKDIR /src/Composer
 COPY . .
 # run yarn install as a distinct layer
-RUN yarn install --frozen-lock-file --verbose
+RUN yarn install --frozen-lock-file $YARN_ARGS
 ENV NODE_OPTIONS "--max-old-space-size=4096"
 ENV NODE_ENV "production"
-RUN yarn build:prod --verbose
+RUN yarn build:prod $YARN_ARGS
 
 
 
 FROM node:12-alpine as composerbasic
+ARG YARN_ARGS
 
 WORKDIR /app/Composer
 COPY --from=build /src/Composer/yarn.lock .
@@ -37,7 +40,7 @@ COPY --from=build /src/Composer/packages/ui-plugins ./packages/ui-plugins
 COPY --from=build /src/Composer/plugins ./plugins
 
 ENV NODE_ENV "production"
-RUN yarn --production --frozen-lockfile --force --verbose && yarn cache clean
+RUN yarn --production --frozen-lockfile --force $YARN_ARGS && yarn cache clean
 WORKDIR /app/Composer
 
 FROM composerbasic
