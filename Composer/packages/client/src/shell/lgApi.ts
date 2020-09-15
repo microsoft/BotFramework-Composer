@@ -5,12 +5,16 @@ import { useEffect, useState } from 'react';
 import { LgFile } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import debounce from 'lodash/debounce';
+import formatMessage from 'format-message';
 
 import { useResolvers } from '../hooks/useResolver';
 import { Dispatcher } from '../recoilModel/dispatchers';
 
 import { focusPathState } from './../recoilModel';
 import { dispatcherState } from './../recoilModel/DispatcherWrapper';
+
+const fileNotFound = (id: string) => formatMessage('LG file {id} not found', { id });
+const TEMPLATE_ERROR = formatMessage('templateName is missing or empty');
 
 function createLgApi(
   state: { focusPath: string; projectId: string },
@@ -66,8 +70,8 @@ function createLgApi(
 
   const removeLgTemplates = async (id, templateNames) => {
     const file = lgFileResolver(id);
-    if (!file) throw new Error(`lg file ${id} not found`);
-    if (!templateNames) throw new Error(`templateName is missing or empty`);
+    if (!file) throw new Error(fileNotFound(id));
+    if (!templateNames) throw new Error(TEMPLATE_ERROR);
 
     return await actions.removeLgTemplates({
       id: file.id,

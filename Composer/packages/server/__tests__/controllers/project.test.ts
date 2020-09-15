@@ -187,7 +187,7 @@ describe('dialog operation', () => {
     const mockReq = {
       params: { projectId },
       query: {},
-      body: { name: 'bot1.dialog', content: '' },
+      body: { name: 'bot1.dialog', content: JSON.stringify({ $kind: 'aaa' }) },
     } as Request;
     await ProjectController.updateFile(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -196,7 +196,7 @@ describe('dialog operation', () => {
     const mockReq = {
       params: { projectId },
       query: {},
-      body: { name: 'test2.dialog', content: '' },
+      body: { name: 'test2.dialog', content: JSON.stringify({ $kind: 'aaa' }) },
     } as Request;
     await ProjectController.createFile(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);

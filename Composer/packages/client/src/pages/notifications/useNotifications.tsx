@@ -34,7 +34,7 @@ export default function useNotifications(projectId: string, filter?: string) {
   const luFiles = useRecoilValue(luFilesState(projectId));
   const lgFiles = useRecoilValue(lgFilesState(projectId));
   const diagnostics = useRecoilValue(botDiagnosticsState(projectId));
-  const dialogSetting = useRecoilValue(settingsState(projectId));
+  const setting = useRecoilValue(settingsState(projectId));
   const skillManifests = useRecoilValue(skillManifestsState(projectId));
   const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
@@ -46,7 +46,7 @@ export default function useNotifications(projectId: string, filter?: string) {
     qnaFiles,
     lgFiles,
     skillManifests,
-    setting: dialogSetting,
+    setting,
     dialogSchemas,
   };
 
