@@ -6,6 +6,7 @@ import { IntellisenseTextField } from '@bfc/intellisense';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import React from 'react';
+
 import { getIntellisenseUrl } from '../../../utils/getIntellisenseUrl';
 
 const ExpressionEditor: React.FC<FieldProps> = (props) => {
@@ -24,6 +25,7 @@ const ExpressionEditor: React.FC<FieldProps> = (props) => {
     >
       {(textFieldValue, onValueChanged, onKeyDownTextField, onKeyUpTextField, onClickTextField) => (
         <TextField
+          autoComplete="off"
           disabled={disabled}
           errorMessage={error}
           id={id}
@@ -41,7 +43,6 @@ const ExpressionEditor: React.FC<FieldProps> = (props) => {
           onRenderPrefix={() => {
             return <Icon iconName="Variable" />;
           }}
-          autoComplete="off"
         />
       )}
     </IntellisenseTextField>
