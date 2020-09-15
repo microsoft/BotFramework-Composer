@@ -76,7 +76,8 @@ describe('<CreationFlow/>', () => {
       '',
       expect.stringMatching(/(\/|\\)test-folder(\/|\\)Desktop/),
       '',
-      'en-US'
+      'en-US',
+      undefined
     );
   });
 });
