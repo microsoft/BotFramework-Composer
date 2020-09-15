@@ -19,7 +19,7 @@ export interface BaseSchema {
   /** Extra information for the Bot Framework Composer. */
   $designer?: DesignerData;
   /** If 'disabled' set to true, runtime will skip this action. */
-  disabled: any;
+  disabled?: any;
 }
 
 /* Union of components which implement the IActivityTemplate interface */

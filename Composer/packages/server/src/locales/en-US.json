@@ -140,9 +140,6 @@
   "add_new_knowledge_base_on_displayname_7f44609c": {
     "message": " Add new knowledge base on { displayName }"
   },
-  "add_new_plugin_ae50ed3f": {
-    "message": "Add new plugin"
-  },
   "add_new_profile_47b225e6": {
     "message": "Add new profile"
   },
@@ -482,8 +479,14 @@
   "create_132b3be1": {
     "message": "Create"
   },
+  "create_a_bot_project_73e6ce33": {
+    "message": "Create a bot project"
+  },
   "create_a_condition_8686fd5": {
     "message": "Create a condition"
+  },
+  "create_a_dialog_9f6c8618": {
+    "message": "Create a dialog"
   },
   "create_a_name_for_the_project_which_will_be_used_t_57e9b690": {
     "message": "Create a name for the project which will be used to name the application: (projectname-environment-LUfilename)"
@@ -1496,9 +1499,6 @@
   "please_select_an_activity_type_92f4a8a1": {
     "message": "Please select an activity type"
   },
-  "plugin_name_829ac92a": {
-    "message": "Plugin name"
-  },
   "populate_your_knowledge_base_bb2d3605": {
     "message": "Populate your Knowledge Base"
   },
@@ -1727,9 +1727,6 @@
   "search_for_extensions_a27c4772": {
     "message": "Search for extensions"
   },
-  "search_for_plugins_9feaecd1": {
-    "message": "Search for plugins"
-  },
   "see_log_4b833bf7": {
     "message": "See Log"
   },
@@ -1870,6 +1867,12 @@
   },
   "spaces_and_special_characters_are_not_allowed_use__48acec3c": {
     "message": "Spaces and special characters are not allowed. Use letters, numbers, -, or _."
+  },
+  "specify_a_name_and_description_for_your_new_dialog_86eb3130": {
+    "message": "Specify a name and description for your new dialog."
+  },
+  "specify_a_name_description_and_location_for_your_n_667f1438": {
+    "message": "Specify a name, description, and location for your new bot project."
   },
   "start_bot_25ecad14": {
     "message": "Start Bot"

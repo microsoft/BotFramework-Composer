@@ -26,10 +26,15 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (prop
   const RecognizerEditor = currentRecognizerDef?.recognizerEditor;
   const widget = RecognizerEditor ? <RecognizerEditor {...props} /> : null;
 
-  const handleChangeRecognizerType = (_, option?: IDropdownOption): void => {
+  const submit = (_, option?: IDropdownOption): void => {
     if (!option) return;
     const submitChange = recognizerConfigs.find((r) => r.id === option.key)?.handleRecognizerChange;
-    submitChange && submitChange(props, shellData, shellApi);
+    if (typeof submitChange === 'function') {
+      submitChange(props, shellData, shellApi);
+    } else {
+      // fallback to default submit logic
+      onChange({ $kind: option.key as string, intents: [] });
+    }
   };
 
   return (
@@ -41,7 +46,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (prop
         options={dropdownOptions}
         responsiveMode={ResponsiveMode.large}
         selectedKey={currentRecognizerDef?.id}
-        onChange={handleChangeRecognizerType}
+        onChange={submit}
       />
       {widget}
     </React.Fragment>

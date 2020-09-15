@@ -14,9 +14,6 @@ export const DefaultRecognizers: RecognizerSchema[] = [
     isSelected: (data) => {
       return typeof data === 'object' && data.$kind === SDKKinds.RegexRecognizer;
     },
-    handleRecognizerChange: (props) => {
-      props.onChange({ $kind: SDKKinds.RegexRecognizer, intents: [] });
-    },
     renameIntent: (intentName, newIntentName, shellData, shellApi) => {
       const { currentDialog } = shellData;
       shellApi.renameRegExIntent(currentDialog.id, intentName, newIntentName);
