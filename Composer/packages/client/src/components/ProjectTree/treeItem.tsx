@@ -46,11 +46,6 @@ const content = css`
   label: ProjectTreeItem;
 `;
 
-const leftIndent = (extraSpace: number) => css`
-  height: 100%;
-  width: ${extraSpace + 8}px;
-`;
-
 const moreMenu: Partial<ICalloutContentStyles> = {
   root: {
     marginTop: '-7px',
@@ -117,7 +112,7 @@ const navItem = (isActive: boolean) => css`
 export const overflowSet = (depth: number) => css`
   width: 100%;
   height: 100%;
-  padding-left: ${depth * 12}px;
+  padding-left: ${depth * 16}px;
   padding-right: 12px;
   box-sizing: border-box;
   line-height: 24px;
@@ -130,6 +125,7 @@ const warningIcon = {
   width: '24px',
   color: '#BE880A',
   fontSize: 16,
+  marginLeft: 6,
 };
 
 // -------------------- TreeItem -------------------- //
@@ -138,16 +134,15 @@ interface ITreeItemProps {
   link: TreeLink;
   isActive?: boolean;
   isSubItemActive?: boolean;
-  depth: number | undefined;
+  depth: number;
   onDelete?: (link: TreeLink) => void;
   onSelect: (link: TreeLink) => void;
   icon?: string;
   dialogName?: string;
   showProps?: boolean;
-  extraSpace?: number;
 }
 
-const onRenderItem = (extraSpace: number) => (item: IOverflowSetItemProps) => {
+const onRenderItem = (depth: number) => (item: IOverflowSetItemProps) => {
   const warningContent = formatMessage(
     'This trigger type is not supported by the RegEx recognizer and will not be fired.'
   );
@@ -155,23 +150,14 @@ const onRenderItem = (extraSpace: number) => (item: IOverflowSetItemProps) => {
     <div
       data-is-focusable
       aria-label={warningContent}
-      css={itemText(item.depth)}
+      css={itemText(depth)}
       role="cell"
       tabIndex={0}
       onBlur={item.onBlur}
       onFocus={item.onFocus}
     >
       <div css={content} role="presentation" tabIndex={-1}>
-        {item.warningContent ? (
-          <TooltipHost content={warningContent} directionalHint={DirectionalHint.bottomLeftEdge}>
-            <Icon iconName={'Warning'} style={warningIcon} />
-          </TooltipHost>
-        ) : (
-          <div css={leftIndent(extraSpace)} />
-        )}
-        {item.icon == null ? (
-          <div css={{ width: '12px' }} />
-        ) : (
+        {item.icon != null && (
           <Icon
             iconName={item.icon}
             styles={{
@@ -185,6 +171,11 @@ const onRenderItem = (extraSpace: number) => (item: IOverflowSetItemProps) => {
           />
         )}
         {item.displayName}
+        {item.warningContent && (
+          <TooltipHost content={warningContent} directionalHint={DirectionalHint.bottomLeftEdge}>
+            <Icon iconName={'Warning'} style={warningIcon} />
+          </TooltipHost>
+        )}
       </div>
     </div>
   );
@@ -273,7 +264,7 @@ export const TreeItem: React.FC<ITreeItemProps> = (props) => {
         overflowItems={overflowMenu}
         role="row"
         styles={{ item: { flex: 1 } }}
-        onRenderItem={onRenderItem(props.extraSpace ?? 0)}
+        onRenderItem={onRenderItem(depth)}
         onRenderOverflowButton={onRenderOverflowButton(!link.isRoot, !!isActive)}
       />
     </div>
