@@ -9,9 +9,9 @@ import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-reac
 import formatMessage from 'format-message';
 import { JsonEditor } from '@bfc/code-editor';
 
-import { FieldLabel } from '../FieldLabel';
+import { FieldLabel } from '../../FieldLabel';
 
-const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
+export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
   const { value, id, label, description, uiOptions, required, onChange } = props;
   const { shellApi, ...shellData } = useShellApi();
   const recognizers = useRecognizerConfig();
@@ -125,5 +125,3 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
     </React.Fragment>
   );
 };
-
-export { RecognizerField };
