@@ -139,7 +139,7 @@ interface ITreeItemProps {
   icon?: string;
   dialogName?: string;
   showProps?: boolean;
-  shiftOut?: number;
+  shiftOut?: number; // needed to make an outline look right; should be the size of the "details" reveal arrow
 }
 
 const onRenderItem = (depth: number) => (item: IOverflowSetItemProps) => {
