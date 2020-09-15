@@ -5,26 +5,6 @@ import { selector, selectorFamily } from 'recoil';
 
 import { botNameState, botProjectsSpaceState, filePersistenceState, dialogsState } from '../atoms';
 
-export const filePersistenceSelector = selectorFamily({
-  key: 'filePersistenceSelector',
-  get: (projectId: string) => ({ get }) => {
-    return get(filePersistenceState(projectId));
-  },
-});
-
-//TODO: This selector will be used
-export const botProjectSpaceSelector = selector({
-  key: 'botProjectSpaceSelector',
-  get: ({ get }) => {
-    const botProjects = get(botProjectsSpaceState);
-    const result = botProjects.map((botProjectId: string) => {
-      const name = get(botNameState(botProjectId));
-      return { projectId: botProjectId, name };
-    });
-    return result;
-  },
-});
-
 export const botProjectSpaceTreeSelector = selector({
   key: 'botProjectSpaceTreeSelector',
   get: ({ get }) => {
