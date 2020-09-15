@@ -18,7 +18,7 @@ import { ICalloutContentStyles } from 'office-ui-fabric-react/lib/Callout';
 import { TreeLink } from './ProjectTree';
 
 // -------------------- Styles -------------------- //
-const indent = 12;
+const indent = 16;
 const itemText = (depth: number) => css`
   outline: none;
   :focus {
