@@ -55,7 +55,7 @@ context('Notification Page', () => {
     cy.withinEditor('PropertyEditor', () => {
       cy.findByText('Condition').should('exist');
       cy.findByTestId('expression-type-dropdown-Condition').focus().should('contain.text', 'expression');
-      cy.get('#root\\.condition').click().type('foo = bar', { delay: 200 });
+      cy.get('#root\\.condition').click().type('=foo = bar', { delay: 200 });
       cy.findByTestId('FieldErrorMessage').should('exist');
     });
 
