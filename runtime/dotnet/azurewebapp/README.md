@@ -1,21 +1,19 @@
 ## Bot Project
+
 Bot project is the launcher project for the bots written in declarative form (JSON), using the Composer, for the Bot Framework SDK.
 
-## Instructions for setting up the Bot Project runtime
-The Bot Project is a regular Bot Framework SDK V4 project. Before you can launch it from the emulator, you need to make sure you can run the bot. 
+### CI/CD Deployment
 
-### Prerequisite:
-* Install .Netcore 3.1
+You can deploy your bot to an Azure Web App with the following script from an Azure pipeline or GitHub workflow using an [Azure CLI task](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/deploy/azure-cli).
 
-### Commands:
+```bash
+./scripts/deploy.ps1 -name my-bot -environment prod -luisAuthoringKey XXXXXXXXX -luisAuthoringRegion westeurope
+```
 
-* from root folder 
-* cd templates/dotnet/Microsoft.BotFramework.Composer.WebAppTemplate
-* dotnet user-secrets init // init the user secret id
-* dotnet build // build
-* dotnet run // start the bot
-* It will start a web server and listening at http://localhost:3979.
+The Azure CLI task needs contribution permission to the corresponding resource group. Follow this [article](https://docs.microsoft.com/en-us/azure/devops/pipelines/library/connect-to-azure) to setup a service connection between Azure DevOps and your Azure Subscription.
 
-### Test bot
-* You can set you emulator to connect to http://localhost:3979/api/messages.
+Initially you can provision the resources with the provisionComposer.js script, which you can find in the boot root folder under scripts.
 
+The environment, bot name and authoring region must match the arguments, that you used for for the provisioning with the provisionComposer.js script.
+
+For security reasons we don't deploy any settings or secrets from the bot project. Please ensure that required settings for your bit are configured in the [Azure Web App configuration](https://docs.microsoft.com/en-us/azure/app-service/configure-common), for example "MicrosoftAppPassword", "luis\_\_endpointKey", "cosmosDB\_\_authKey", ...
