@@ -43,7 +43,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const locale = useRecoilValue(localeState(projectId));
   const settings = useRecoilValue(settingsState(projectId));
   const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
-
   const { createLgTemplate, copyLgTemplate, removeLgTemplate, setMessage, updateLgTemplate } = useRecoilValue(
     dispatcherState
   );
