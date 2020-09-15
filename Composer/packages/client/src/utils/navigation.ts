@@ -78,8 +78,9 @@ export function checkUrl(
   return lastUri === currentUri;
 }
 
-interface NavigationState {
-  breadcrumb: BreadcrumbItem[];
+export interface NavigationState {
+  breadcrumb?: BreadcrumbItem[];
+  qnaKbUrls?: string[];
 }
 
 export function convertPathToUrl(projectId: string, dialogId: string, path?: string): string {

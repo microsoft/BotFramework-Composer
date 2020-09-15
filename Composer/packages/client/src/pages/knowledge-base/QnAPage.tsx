@@ -15,7 +15,7 @@ import { navigateTo } from '../../utils/navigation';
 import { TestController } from '../../components/TestController/TestController';
 import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
-import { dialogsState, qnaAllUpViewStatusState } from '../../recoilModel/atoms/botState';
+import { botNameState, dialogsState, qnaAllUpViewStatusState } from '../../recoilModel/atoms/botState';
 import { dispatcherState } from '../../recoilModel';
 import { QnAAllUpViewStatus } from '../../recoilModel/types';
 
@@ -33,6 +33,7 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
   const { dialogId = '', projectId = '' } = props;
   const actions = useRecoilValue(dispatcherState);
   const dialogs = useRecoilValue(dialogsState(projectId));
+  const botName = useRecoilValue(botNameState(projectId));
   //To do: support other languages
   const locale = 'en-us';
   //const locale = useRecoilValue(localeState);
@@ -66,6 +67,13 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
     });
     return newDialogLinks;
   }, [dialogs]);
+
+  useEffect(() => {
+    const qnaKbUrls: string[] | undefined = props.location?.state?.qnaKbUrls;
+    if (qnaKbUrls && qnaKbUrls.length > 0) {
+      actions.importQnAFromUrls({ id: `${botName.toLocaleLowerCase()}.${locale}`, urls: qnaKbUrls, projectId });
+    }
+  }, []);
 
   useEffect(() => {
     const activeDialog = dialogs.find(({ id }) => id === dialogId);
