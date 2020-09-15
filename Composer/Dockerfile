@@ -9,23 +9,30 @@
 
 FROM node:12-alpine as build
 
+ARG YARN_ARGS
+
 WORKDIR /src/Composer
 COPY . .
 # run yarn install as a distinct layer
-RUN yarn install --frozen-lock-file --verbose
+RUN yarn install --frozen-lock-file $YARN_ARGS
 ENV NODE_OPTIONS "--max-old-space-size=4096"
 ENV NODE_ENV "production"
-RUN yarn build:prod --verbose
+RUN yarn build:prod $YARN_ARGS
 
 
 
 FROM node:12-alpine as composerbasic
+ARG YARN_ARGS
 
 WORKDIR /app/Composer
 COPY --from=build /src/Composer/yarn.lock .
 COPY --from=build /src/Composer/package.json .
 COPY --from=build /src/Composer/packages/client ./packages/client
-COPY --from=build /src/Composer/packages/extensions ./packages/extensions
+COPY --from=build /src/Composer/packages/adaptive-flow ./packages/adaptive-flow
+COPY --from=build /src/Composer/packages/adaptive-form ./packages/adaptive-form
+COPY --from=build /src/Composer/packages/extension ./packages/extension
+COPY --from=build /src/Composer/packages/extension-client ./packages/extension-client
+COPY --from=build /src/Composer/packages/intellisense ./packages/intellisense
 COPY --from=build /src/Composer/packages/server ./packages/server
 COPY --from=build /src/Composer/packages/lib ./packages/lib
 COPY --from=build /src/Composer/packages/tools ./packages/tools
@@ -33,7 +40,7 @@ COPY --from=build /src/Composer/packages/ui-plugins ./packages/ui-plugins
 COPY --from=build /src/Composer/plugins ./plugins
 
 ENV NODE_ENV "production"
-RUN yarn --production --frozen-lockfile --force --verbose && yarn cache clean
+RUN yarn --production --frozen-lockfile --force $YARN_ARGS && yarn cache clean
 WORKDIR /app/Composer
 
 FROM composerbasic

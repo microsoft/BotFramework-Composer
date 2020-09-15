@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { JSONSchema7 } from '@bfc/plugin-loader';
+import { JSONSchema7 } from '@bfc/extension';
 const schema: JSONSchema7 = {
   type: 'object',
   properties: {

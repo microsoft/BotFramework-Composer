@@ -279,6 +279,15 @@ class LocalPublisher {
       if (!settings.runtime || settings.runtime.customRuntime !== true) {
         this.composer.log('Updating bot assets');
         await this.restoreBot(botId, version);
+      } else {
+        // if a port (e.g. --port 5000) is configured in the custom runtime command try to parse and set this port
+        if (settings.runtime.command && settings.runtime.command.includes('--port')) {
+          try {
+            port = /--port (\d+)/.exec(settings.runtime.command)[1];
+          } catch (err) {
+            console.warn(`Custom runtime command has an invalid port argument.`);
+          }
+        }
       }
 
       // start the bot process
