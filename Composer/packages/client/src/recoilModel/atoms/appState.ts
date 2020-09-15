@@ -10,6 +10,7 @@ import {
   RuntimeTemplate,
   AppUpdateState,
   BoilerplateVersion,
+  ExtensionConfig,
 } from '../../recoilModel/types';
 import { getUserSettings } from '../utils';
 import onboardingStorage from '../../utils/onboardingStorage';
@@ -149,4 +150,9 @@ export const boilerplateVersionState = atom<BoilerplateVersion>({
   default: {
     updateRequired: false,
   },
+});
+
+export const extensionsState = atom<ExtensionConfig[]>({
+  key: getFullyQualifiedKey('extensions'),
+  default: [],
 });
