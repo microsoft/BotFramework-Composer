@@ -21,10 +21,9 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (prop
 
   useMigrationEffect(value, onChange);
 
-  const options = useMemo(() => {
-    // filter luisRecognizer for dropdown options
+  const dropdownOptions = useMemo(() => {
     return recognizerConfigs
-      .filter((r) => r.id !== SDKKinds.LuisRecognizer)
+      .filter((r) => !r.disabled)
       .map((r) => ({
         key: r.id,
         text: typeof r.displayName === 'function' ? r.displayName(value) : r.displayName,
@@ -45,7 +44,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (prop
       <Dropdown
         data-testid="recognizerTypeDropdown"
         label={formatMessage('Recognizer Type')}
-        options={options}
+        options={dropdownOptions}
         responsiveMode={ResponsiveMode.large}
         selectedKey={currentRecognizerDef?.id}
         onChange={handleChangeRecognizerType}
