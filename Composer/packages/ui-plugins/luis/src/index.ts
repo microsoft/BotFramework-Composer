@@ -10,6 +10,7 @@ const config: PluginConfig = {
   recognizers: [
     {
       id: SDKKinds.LuisRecognizer,
+      disabled: true,
       displayName: 'LUIS',
       editor: LuisIntentEditor,
       isSelected: (data) => {

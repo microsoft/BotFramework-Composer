@@ -8,6 +8,7 @@ const config: PluginConfig = {
   recognizers: [
     {
       id: SDKKinds.CrossTrainedRecognizerSet,
+      default: true,
       displayName: 'Default recognizer',
       isSelected: (data) => {
         return typeof data === 'string';
