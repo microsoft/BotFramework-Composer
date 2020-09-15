@@ -76,11 +76,12 @@ const moreButton = (isActive: boolean): IButtonStyles => {
   };
 };
 
-const navItem = (isActive: boolean) => css`
+const navItem = (isActive: boolean, shift: number) => css`
   width: 100%;
   position: relative;
   height: 24px;
   font-size: 12px;
+  margin-left: ${shift}px;
   color: ${isActive ? '#ffffff' : '#545454'};
   background: ${isActive ? '#0078d4' : 'transparent'};
   font-weight: ${isActive ? FontWeights.semibold : FontWeights.regular};
@@ -109,16 +110,14 @@ const navItem = (isActive: boolean) => css`
   }
 `;
 
-export const overflowSet = (depth: number) => css`
+export const overflowSet = css`
   width: 100%;
   height: 100%;
-  padding-left: ${depth * 16}px;
   padding-right: 12px;
   box-sizing: border-box;
-  line-height: 24px;
+  line-height: 20px;
   justify-content: space-between;
   display: flex;
-  justify-content: space-between;
 `;
 
 const warningIcon = {
@@ -140,6 +139,7 @@ interface ITreeItemProps {
   icon?: string;
   dialogName?: string;
   showProps?: boolean;
+  shiftOut?: number;
 }
 
 const onRenderItem = (depth: number) => (item: IOverflowSetItemProps) => {
@@ -207,7 +207,7 @@ const onRenderOverflowButton = (showIcon: boolean, isActive: boolean) => {
 };
 
 export const TreeItem: React.FC<ITreeItemProps> = (props) => {
-  const { link, isActive, depth, onDelete, onSelect, icon, dialogName } = props;
+  const { link, isActive, depth, onDelete, onSelect, icon, dialogName, shiftOut } = props;
 
   const a11yLabel = `${dialogName ?? '$Root'}_${link.displayName}`;
 
@@ -234,7 +234,7 @@ export const TreeItem: React.FC<ITreeItemProps> = (props) => {
   return (
     <div
       aria-label={a11yLabel}
-      css={navItem(!!isActive)}
+      css={navItem(!!isActive, shiftOut ?? 0)}
       data-testid={a11yLabel}
       role="gridcell"
       tabIndex={0}
@@ -251,7 +251,7 @@ export const TreeItem: React.FC<ITreeItemProps> = (props) => {
         //In 8.0 the OverflowSet will no longer be wrapped in a FocusZone
         //remove this at that time
         doNotContainWithinFocusZone
-        css={overflowSet(depth ?? 0)}
+        css={overflowSet}
         data-testid={linkString}
         items={[
           {
