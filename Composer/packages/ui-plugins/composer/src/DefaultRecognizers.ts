@@ -9,7 +9,7 @@ import { RegexIntentField, CustomRecognizerField } from '@bfc/adaptive-form';
 export const DefaultRecognizers: RecognizerSchema[] = [
   {
     id: SDKKinds.RegexRecognizer,
-    displayName: () => formatMessage('Regular Expression'),
+    displayName: formatMessage('Regular Expression'),
     intentEditor: RegexIntentField,
     isSelected: (data) => {
       return typeof data === 'object' && data.$kind === SDKKinds.RegexRecognizer;
@@ -24,7 +24,7 @@ export const DefaultRecognizers: RecognizerSchema[] = [
   },
   {
     id: SDKKinds.CustomRecognizer,
-    displayName: () => formatMessage('Custom recognizer'),
+    displayName: formatMessage('Custom recognizer'),
     isSelected: (data) => typeof data === 'object',
     handleRecognizerChange: (props) =>
       props.onChange({
@@ -59,6 +59,5 @@ export const DefaultRecognizers: RecognizerSchema[] = [
         },
       }),
     recognizerEditor: CustomRecognizerField,
-    renameIntent: () => {},
   },
 ];

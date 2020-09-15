@@ -70,7 +70,7 @@ export type RecognizerSchema = {
   /** An inline editor to edit recognizer value. If none provided, users will not be able to edit its value. */
   recognizerEditor?: FieldWidget;
   /** Function to rename an intent */
-  renameIntent: (
+  renameIntent?: (
     intentName: string,
     newIntentName: string,
     shellData: ShellData,

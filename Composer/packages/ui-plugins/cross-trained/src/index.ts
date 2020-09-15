@@ -26,7 +26,6 @@ const config: PluginConfig = {
           alert(`NO LU OR QNA FILE WITH NAME ${currentDialog.id}`);
         }
       },
-      renameIntent: () => {},
     },
   ],
 };

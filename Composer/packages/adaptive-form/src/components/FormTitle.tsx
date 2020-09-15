@@ -69,12 +69,13 @@ const FormTitle: React.FC<FormTitleProps> = (props) => {
       debounce(async (newIntentName?: string, data?: any) => {
         if (newIntentName && selectedRecognizer) {
           const normalizedIntentName = newIntentName?.replace(/[^a-zA-Z0-9-_]+/g, '');
-          await selectedRecognizer.renameIntent(
-            data?.intent,
-            normalizedIntentName,
-            shell.current.data,
-            shell.current.api
-          );
+          typeof selectedRecognizer.renameIntent === 'function' &&
+            (await selectedRecognizer.renameIntent(
+              data?.intent,
+              normalizedIntentName,
+              shell.current.data,
+              shell.current.api
+            ));
         }
       }, 400),
     []
