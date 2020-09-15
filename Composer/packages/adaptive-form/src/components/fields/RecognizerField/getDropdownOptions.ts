@@ -4,6 +4,7 @@
 import { RecognizerSchema } from '@bfc/extension-client';
 
 import { recognizerOrderMap } from './defaultRecognizerOrder';
+import { mapRecognizerSchemaToDropdownOption } from './mappers';
 
 const getRankScore = (r: RecognizerSchema) => {
   if (r.default) return 0;
@@ -17,8 +18,5 @@ export const getDropdownOptions = (recognizerConfigs: RecognizerSchema[]) => {
     .sort((r1, r2) => {
       return getRankScore(r1) - getRankScore(r2);
     })
-    .map((r) => ({
-      key: r.id,
-      text: typeof r.displayName === 'function' ? r.displayName({}) : r.displayName,
-    }));
+    .map(mapRecognizerSchemaToDropdownOption);
 };
