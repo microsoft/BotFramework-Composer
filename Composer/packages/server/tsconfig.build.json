@@ -2,7 +2,7 @@
   /* Options used for building production code (tests excluded) */
   "extends": "./tsconfig.json",
   "exclude": [
-    "__tests__",
+    "**/__tests__/**",
     "**/__mocks__/**"
   ]
 }

@@ -7,16 +7,16 @@ import { Request, Response } from 'express';
 import rimraf from 'rimraf';
 import { pluginLoader } from '@bfc/extension';
 
-import { BotProjectService } from '../../src/services/project';
-import { Path } from '../../src/utility/path';
-import { PublishController } from '../../src/controllers/publisher';
+import { BotProjectService } from '../../services/project';
+import { Path } from '../../utility/path';
+import { PublishController } from '../../controllers/publisher';
 
 const pluginDir = path.resolve(__dirname, '../../../../plugins');
 
 let mockRes: Response;
 
-const useFortest = Path.resolve(__dirname, '../mocks/samplebots/testPublish');
-const bot1 = Path.resolve(__dirname, '../mocks/samplebots/bot1');
+const useFortest = Path.resolve(__dirname, '../../__mocks__/samplebots/testPublish');
+const bot1 = Path.resolve(__dirname, '../../__mocks__/samplebots/bot1');
 
 const location1 = {
   storageId: 'default',
@@ -28,22 +28,23 @@ const location2 = {
   path: useFortest,
 };
 
-beforeEach(() => {
+beforeEach(async () => {
   mockRes = {
     status: jest.fn().mockReturnThis(),
     json: jest.fn().mockReturnThis(),
     send: jest.fn().mockReturnThis(),
   } as any;
-});
 
-beforeAll(async () => {
   const currentProjectId = await BotProjectService.openProject(location1);
   const currentProject = await BotProjectService.getProjectById(currentProjectId);
   await BotProjectService.saveProjectAs(currentProject, location2);
+});
+
+beforeAll(async () => {
   await pluginLoader.loadPluginsFromFolder(pluginDir);
 });
 
-afterAll(() => {
+afterEach(() => {
   // remove the new bot files
   try {
     rimraf.sync(useFortest);
@@ -65,13 +66,11 @@ describe('get types', () => {
 });
 
 describe('status', () => {
-  let projectId = '';
   const target = 'default';
-  beforeEach(async () => {
-    projectId = await BotProjectService.openProject(location2);
-  });
 
   it('should get status', async () => {
+    const projectId = await BotProjectService.openProject(location2);
+
     const mockReq = {
       params: { projectId, target },
       query: {},

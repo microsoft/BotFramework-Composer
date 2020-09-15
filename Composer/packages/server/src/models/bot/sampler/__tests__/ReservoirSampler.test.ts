@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ComposerReservoirSampler } from './../../../../src/models/bot/sampler/ReservoirSampler';
+import { ComposerReservoirSampler } from './../../../../models/bot/sampler/ReservoirSampler';
 
 describe('BootstrapSampler', () => {
   it('down size the number of utterances reservoir sampling', async () => {

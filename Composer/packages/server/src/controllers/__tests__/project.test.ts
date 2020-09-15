@@ -5,9 +5,9 @@ import { Request, Response } from 'express';
 import rimraf from 'rimraf';
 import { pluginLoader } from '@bfc/extension';
 
-import { BotProjectService } from '../../src/services/project';
-import { ProjectController } from '../../src/controllers/project';
-import { Path } from '../../src/utility/path';
+import { BotProjectService } from '../../services/project';
+import { ProjectController } from '../../controllers/project';
+import { Path } from '../../utility/path';
 
 jest.mock('@bfc/extension', () => {
   return {
@@ -24,14 +24,14 @@ jest.mock('@bfc/extension', () => {
   };
 });
 
-const mockSampleBotPath = Path.join(__dirname, '../mocks/asset/projects/SampleBot');
+const mockSampleBotPath = Path.join(__dirname, '../../__mocks__/asset/projects/SampleBot');
 
 let mockRes: Response;
 
-const newBot = Path.resolve(__dirname, '../mocks/samplebots/newBot');
-const saveAsDir = Path.resolve(__dirname, '../mocks/samplebots/saveAsBot');
-const useFortest = Path.resolve(__dirname, '../mocks/samplebots/test');
-const bot1 = Path.resolve(__dirname, '../mocks/samplebots/bot1');
+const newBot = Path.resolve(__dirname, '../../__mocks__/samplebots/newBot');
+const saveAsDir = Path.resolve(__dirname, '../../__mocks__/samplebots/saveAsBot');
+const useFortest = Path.resolve(__dirname, '../../__mocks__/samplebots/test');
+const bot1 = Path.resolve(__dirname, '../../__mocks__/samplebots/bot1');
 
 const location1 = {
   storageId: 'default',
@@ -92,7 +92,7 @@ describe('get bot project', () => {
     const mockReq = {
       params: {},
       query: {},
-      body: { storageId: 'default', path: Path.resolve(__dirname, '../mocks/samplebots/bot1') },
+      body: { storageId: 'default', path: Path.resolve(__dirname, '../../__mocks__/samplebots/bot1') },
     } as Request;
     await ProjectController.openProject(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -104,7 +104,7 @@ describe('get all projects', () => {
     const mockReq = {
       params: {},
       query: {},
-      body: { storageId: 'default', path: Path.resolve(__dirname, '../mocks/samplebots') },
+      body: { storageId: 'default', path: Path.resolve(__dirname, '../../__mocks__/samplebots') },
     } as Request;
     await ProjectController.getAllProjects(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -129,7 +129,7 @@ describe('open bot operation', () => {
     const mockReq = {
       params: {},
       query: {},
-      body: { storageId: 'default', path: Path.resolve(__dirname, '../mocks/samplebots/bot1') },
+      body: { storageId: 'default', path: Path.resolve(__dirname, '../../__mocks__/samplebots/bot1') },
     } as Request;
     await ProjectController.openProject(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -137,7 +137,7 @@ describe('open bot operation', () => {
 });
 
 describe('should save as bot', () => {
-  const saveAsDir = Path.resolve(__dirname, '../mocks/samplebots/');
+  const saveAsDir = Path.resolve(__dirname, '../../__mocks__/samplebots/');
   it('saveProjectAs', async () => {
     const projectId = await BotProjectService.openProject(location1);
     const schemaUrl = 'http://json-schema.org/draft-07/schema#';
@@ -166,7 +166,7 @@ describe('should get recent projects', () => {
 
 describe('create a Empty Bot project', () => {
   it('should create a new project', async () => {
-    const newBotDir = Path.resolve(__dirname, '../mocks/samplebots/');
+    const newBotDir = Path.resolve(__dirname, '../../__mocks__/samplebots/');
     const name = 'newBot';
     const mockReq = {
       params: {},

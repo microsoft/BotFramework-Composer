@@ -5,9 +5,9 @@ import { Request, Response } from 'express';
 import rimraf from 'rimraf';
 import { pluginLoader } from '@bfc/extension';
 
-import { BotProjectService } from '../../src/services/project';
-import { Path } from '../../src/utility/path';
-import { EjectController } from '../../src/controllers/eject';
+import { BotProjectService } from '../../services/project';
+import { Path } from '../../utility/path';
+import { EjectController } from '../eject';
 
 jest.mock('@bfc/extension', () => {
   return {
@@ -26,8 +26,8 @@ jest.mock('@bfc/extension', () => {
 
 let mockRes: Response;
 
-const useFortest = Path.resolve(__dirname, '../mocks/samplebots/testEject');
-const bot1 = Path.resolve(__dirname, '../mocks/samplebots/bot1');
+const useFortest = Path.resolve(__dirname, '../../__mocks__/samplebots/testEject');
+const bot1 = Path.resolve(__dirname, '../../__mocks__/samplebots/bot1');
 
 const location1 = {
   storageId: 'default',

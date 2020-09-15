@@ -95,13 +95,7 @@ export const PublishController = {
     const profile = profiles.length ? profiles[0] : undefined;
     // get the publish plugin key
     const method = profile ? profile.type : undefined;
-    if (
-      profile &&
-      method &&
-      pluginLoader.extensions.publish[method] &&
-      pluginLoader.extensions.publish[method].methods &&
-      pluginLoader.extensions.publish[method].methods.getStatus
-    ) {
+    if (profile && method && pluginLoader.extensions.publish[method]?.methods?.getStatus) {
       // get the externally defined method
       const pluginMethod = pluginLoader.extensions.publish[method].methods.getStatus;
 
