@@ -4,7 +4,7 @@
 import { RecognizerSchema } from '@bfc/extension-client';
 import { SDKKinds } from '@bfc/shared';
 import formatMessage from 'format-message';
-import { RegexIntentField } from '@bfc/adaptive-form';
+import { RegexIntentField, CustomRecognizerField } from '@bfc/adaptive-form';
 
 export const DefaultRecognizers: RecognizerSchema[] = [
   {
@@ -58,6 +58,7 @@ export const DefaultRecognizers: RecognizerSchema[] = [
           },
         },
       }),
+    recognizerEditor: CustomRecognizerField,
     renameIntent: () => {},
   },
 ];

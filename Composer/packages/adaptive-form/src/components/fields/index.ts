@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 export * from './ArrayField';
 export * from './BooleanField';
+export * from './CustomRecognizerField';
 export * from './EditableField';
 export * from './ExpressionField/ExpressionField';
 export * from './IntentField';

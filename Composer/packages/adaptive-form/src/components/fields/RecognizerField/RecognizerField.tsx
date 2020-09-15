@@ -7,7 +7,6 @@ import { FieldProps, useShellApi, useRecognizerConfig } from '@bfc/extension-cli
 import { MicrosoftIRecognizer, SDKKinds } from '@bfc/shared';
 import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import formatMessage from 'format-message';
-import { JsonEditor } from '@bfc/code-editor';
 
 import { FieldLabel } from '../../FieldLabel';
 
@@ -37,6 +36,9 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (prop
     handleRecognizerChange && handleRecognizerChange(props, shellData, shellApi);
   };
 
+  const RecognizerEditor = currentRecognizerDef?.recognizerEditor;
+  const widget = RecognizerEditor ? <RecognizerEditor {...props} /> : null;
+
   return (
     <React.Fragment>
       <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
@@ -48,15 +50,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (prop
         selectedKey={currentRecognizerDef?.id}
         onChange={handleChangeRecognizerType}
       />
-      {currentRecognizerDef?.id === SDKKinds.CustomRecognizer && (
-        <JsonEditor
-          key={'customRecognizer'}
-          height={200}
-          id={'customRecog'}
-          value={value as object}
-          onChange={onChange}
-        />
-      )}
+      {widget}
     </React.Fragment>
   );
 };

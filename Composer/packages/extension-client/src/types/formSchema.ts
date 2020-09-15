@@ -67,6 +67,8 @@ export type RecognizerSchema = {
   isSelected: (data: any) => boolean;
   /** Invoked when changing the recognizer type */
   handleRecognizerChange: (fieldProps: FieldProps, shellData: ShellData, shellApi: ShellApi) => void;
+  /** An inline editor to edit recognizer value. If none provided, users will not be able to edit its value. */
+  recognizerEditor?: FieldWidget;
   /** Function to rename an intent */
   renameIntent: (
     intentName: string,
