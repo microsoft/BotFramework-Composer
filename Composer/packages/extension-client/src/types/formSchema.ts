@@ -55,6 +55,10 @@ export type FormUISchema = { [key in SDKKinds]?: UIOptions };
 export type RecognizerSchema = {
   /** Unique id to identify recognizer (SDK $kind) */
   id: string;
+  /** If is default, will be used as dropdown's default selection */
+  default?: boolean;
+  /** If disabled, cannot be selected from dropdown */
+  disabled?: boolean;
   /** Display name used in the UI */
   displayName: UIOptionValue<string>;
   /** An inline editor to edit an intent. If none provided, users will not be able to edit. */
