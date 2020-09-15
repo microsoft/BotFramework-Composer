@@ -6,10 +6,21 @@ import { useRecoilCallback, CallbackInterface } from 'recoil';
 import { qnaUtil } from '@bfc/indexers';
 
 import qnaWorker from '../parsers/qnaWorker';
-import { qnaFilesState, qnaAllUpViewStatusState, projectIdState, localeState, settingsState } from '../atoms/botState';
+import {
+  qnaFilesState,
+  qnaAllUpViewStatusState,
+  projectIdState,
+  localeState,
+  settingsState,
+  showCreateQnAFromScratchDialogState,
+  showCreateQnAFromUrlDialogState,
+  onCreateQnAFromScratchDialogCompleteState,
+  onCreateQnAFromUrlDialogCompleteState,
+} from '../atoms/botState';
 import { QnAAllUpViewStatus } from '../types';
 import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
 import { getBaseName } from '../../utils/fileUtil';
+import { navigateTo } from '../../utils/navigation';
 
 import httpClient from './../../utils/httpUtil';
 import { setError } from './shared';
@@ -127,6 +138,45 @@ export const createSourceQnAFileState = async (
 };
 
 export const qnaDispatcher = () => {
+  const createQnAFromUrlDialogBegin = useRecoilCallback(({ set }: CallbackInterface) => (onComplete) => {
+    set(showCreateQnAFromUrlDialogState, true);
+    set(onCreateQnAFromUrlDialogCompleteState, { func: onComplete });
+  });
+
+  const createQnAFromUrlDialogCancel = useRecoilCallback(({ set }: CallbackInterface) => () => {
+    set(showCreateQnAFromUrlDialogState, false);
+    set(onCreateQnAFromUrlDialogCompleteState, { func: undefined });
+  });
+
+  const createQnAFromScratchDialogBegin = useRecoilCallback(({ set }: CallbackInterface) => (onComplete) => {
+    set(showCreateQnAFromScratchDialogState, true);
+    set(onCreateQnAFromScratchDialogCompleteState, { func: onComplete });
+  });
+
+  const createQnAFromScratchDialogCancel = useRecoilCallback(({ set }: CallbackInterface) => () => {
+    set(showCreateQnAFromScratchDialogState, false);
+    set(onCreateQnAFromScratchDialogCompleteState, { func: undefined });
+  });
+
+  const createQnAFromUrlDialogSuccess = useRecoilCallback(({ set, snapshot }: CallbackInterface) => async () => {
+    const onCreateQnAFromUrlDialogComplete = (await snapshot.getPromise(onCreateQnAFromUrlDialogCompleteState)).func;
+    if (typeof onCreateQnAFromUrlDialogComplete === 'function') {
+      onCreateQnAFromUrlDialogComplete(null);
+    }
+    set(showCreateQnAFromUrlDialogState, false);
+    set(onCreateQnAFromUrlDialogCompleteState, { func: undefined });
+  });
+
+  const createQnAFromScratchDialogSuccess = useRecoilCallback(({ set, snapshot }: CallbackInterface) => async () => {
+    const onCreateQnAFromScratchDialogComplete = (await snapshot.getPromise(onCreateQnAFromScratchDialogCompleteState))
+      .func;
+    if (typeof onCreateQnAFromScratchDialogComplete === 'function') {
+      onCreateQnAFromScratchDialogComplete(null);
+    }
+    set(showCreateQnAFromScratchDialogState, false);
+    set(onCreateQnAFromScratchDialogCompleteState, { func: undefined });
+  });
+
   const updateQnAFile = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async ({ id, content }: { id: string; content: string }) => {
       await updateQnAFileState(callbackHelpers, { id, content });
@@ -181,6 +231,7 @@ ${response.data}
         content: contentForSourceQnA,
       });
 
+      await createQnAFromUrlDialogSuccess();
       set(qnaAllUpViewStatusState, QnAAllUpViewStatus.Success);
     }
   );
@@ -193,11 +244,18 @@ ${response.data}
       id: string; // dialogId.locale
       name: string;
     }) => {
+      const projectId = await callbackHelpers.snapshot.getPromise(projectIdState);
+      // const dialogs = await callbackHelpers.snapshot.getPromise(dialogsState);
+
+      const content = qnaUtil.generateQnAPair();
       await createSourceQnAFileState(callbackHelpers, {
         id,
         name,
-        content: '',
+        content,
       });
+      await createQnAFromScratchDialogSuccess();
+
+      navigateTo(`/bot/${projectId}/knowledge-base/${getBaseName(id)}?C=${encodeURIComponent(name)}.source`);
     }
   );
 
@@ -355,6 +413,7 @@ ${response.data}
       });
     }
   );
+
   return {
     createQnAImport,
     removeQnAImport,
@@ -369,5 +428,9 @@ ${response.data}
     updateQnAFile,
     createQnAKBFromUrl,
     createQnAKBFromScratch,
+    createQnAFromScratchDialogBegin,
+    createQnAFromScratchDialogCancel,
+    createQnAFromUrlDialogBegin,
+    createQnAFromUrlDialogCancel,
   };
 };

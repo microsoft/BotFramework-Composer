@@ -26,4 +26,18 @@ export const classNames = mergeStyleSets({
   groupHeaderSourceName: {
     marginLeft: '5px',
   },
+  emptyTableList: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%',
+  },
+  emptyTableListCenter: {
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'column',
+    width: '50%',
+    textAlign: 'center',
+    marginTop: '-20%',
+  },
 });
