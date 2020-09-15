@@ -1,1 +1,0 @@
-{"version":3,"file":"getOrderedProperties.d.ts","sourceRoot":"","sources":["../../src/utils/getOrderedProperties.ts"],"names":[],"mappings":"AAEA,OAAO,EAAE,SAAS,EAAE,WAAW,EAAE,MAAM,gBAAgB,CAAC;AAMxD,aAAK,WAAW,GAAG,CAAC,MAAM,GAAG,CAAC,MAAM,EAAE,MAAM,CAAC,CAAC,EAAE,CAAC;AAEjD,wBAAgB,oBAAoB,CAClC,MAAM,EAAE,WAAW,EACnB,aAAa,EAAE,SAAS,EAExB,IAAI,EAAE,GAAG,GACR,WAAW,CA0Eb"}
