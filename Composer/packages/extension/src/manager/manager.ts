@@ -76,7 +76,7 @@ class ExtensionManager {
    * @param id Id of the extension to search for
    */
   public find(id: string) {
-    return this.manifest.getExtensions()[id];
+    return this.manifest.getExtensionConfig(id);
   }
 
   /**
