@@ -51,7 +51,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
   const activeDialog = dialogs.find(({ id }) => id === dialogId);
 
-  const [focusedIndex, setFocusedIndex] = useState(0);
+  //const [focusedIndex, setFocusedIndex] = useState(0);
 
   useEffect(() => {
     if (!file || isEmpty(file)) return;
@@ -79,7 +79,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         } as LgTemplate,
       };
       createLgTemplate(payload);
-      setFocusedIndex(file.templates.length);
+      //setFocusedIndex(file.templates.length);
     }
   }, [file]);
 
@@ -91,7 +91,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           templateName: name,
         };
         removeLgTemplate(payload);
-        setFocusedIndex(file.templates.findIndex((item) => item.name === name));
+        //setFocusedIndex(file.templates.findIndex((item) => item.name === name));
       }
     },
     [file]
@@ -107,7 +107,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           toTemplateName: resolvedName,
         };
         copyLgTemplate(payload);
-        setFocusedIndex(file.templates.length);
+        //setFocusedIndex(file.templates.length);
       }
     },
     [file]
@@ -425,7 +425,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           columns={getTableColums()}
           componentRef={listRef}
           getKey={getKeyCallback}
-          initialFocusedIndex={focusedIndex}
+          //initialFocusedIndex={focusedIndex}
           items={templatesToRender}
           // getKey={item => item.name}
           layoutMode={DetailsListLayoutMode.justified}

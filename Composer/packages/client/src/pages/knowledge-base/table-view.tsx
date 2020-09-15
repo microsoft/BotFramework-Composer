@@ -101,7 +101,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
   };
   const [focusedIndex, setFocusedIndex] = useState(0);
   const [qnaSections, setQnASections] = useState<QnASectionItem[]>([]);
-
+  const [kthSectionIsCreatingQuestion, setCreatingQuestionInKthSection] = useState<number>(-1);
   const importedFileIds = qnaFile?.imports.map(({ id }) => getBaseName(id)) || [];
   const importedFiles = qnaFiles.filter(({ id }) => importedFileIds.includes(id));
   const importedSourceFiles = importedFiles.filter(({ id }) => id.endsWith('.source'));
@@ -204,12 +204,12 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const onCreateNewQnAPairs = (fileId: string | undefined) => {
     if (!fileId) return;
     const newQnAPair = qnaUtil.generateQnAPair();
-    const sectionIndex = qnaSections.findIndex((item) => item.fileId === fileId);
-    setFocusedIndex(sectionIndex + 1);
+    //const sectionIndex = qnaSections.findIndex((item) => item.fileId === fileId);
+    //setFocusedIndex(sectionIndex + 1);
     createQnAPairs({ id: fileId, content: newQnAPair });
   };
 
-  const onCreateNewQuestion = (fileId, sectionId) => {
+  const onCreateNewQuestion = (fileId, sectionId, content?: string) => {
     if (qnaFile) {
       const sectionIndex = qnaSections.findIndex((item) => item.sectionId === sectionId);
       setFocusedIndex(sectionIndex);
@@ -217,7 +217,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
       const payload = {
         id: fileId,
         sectionId,
-        content: 'Add new question',
+        content: content || 'Add new question',
       };
       createQnAQuestion(payload);
     }
@@ -343,11 +343,11 @@ const TableView: React.FC<TableViewProps> = (props) => {
         maxWidth: 450,
         isResizable: true,
         data: 'string',
-        onRender: (item: QnASectionItem) => {
+        onRender: (item: QnASectionItem, index: number) => {
           const questions = item.Questions;
           const showingQuestions = item.expand ? questions : questions.slice(0, limitedNumber);
           //This question content of this qna Section is '#?'
-          // const isQuestionEmpty = showingQuestions.length === 1 && showingQuestions[0].content === '';
+          const isQuestionEmpty = showingQuestions.length === 1 && showingQuestions[0].content === '';
           const isSourceSectionInDialog = item.fileId.endsWith('.source') && !dialogId.endsWith('.source');
           const isAllowEdit = dialogId !== 'all' && !isSourceSectionInDialog;
 
@@ -355,7 +355,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
             <ActionButton
               iconProps={{ iconName: 'Add', styles: addIcon }}
               styles={addAlternative}
-              onClick={(e) => onCreateNewQuestion(item.fileId, item.sectionId)}
+              onClick={(e) => setCreatingQuestionInKthSection(index)}
             >
               {formatMessage('add alternative phrasing')}
             </ActionButton>
@@ -372,6 +372,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                     disabled={isAllowEdit}
                     id={question.id}
                     name={question.content}
+                    placeholder={'add new question'}
                     value={question.content}
                     onBlur={(_id, value) => {
                       const newValue = value?.trim().replace(/^#/, '');
@@ -384,8 +385,30 @@ const TableView: React.FC<TableViewProps> = (props) => {
                   />
                 );
               })}
-              {!item.expand && <span> ({questions.length})</span>}
-              {addQuestionButton}
+              {!item.expand && !isQuestionEmpty && <span> ({questions.length})</span>}
+              {kthSectionIsCreatingQuestion === index ? (
+                <EditableField
+                  key={''}
+                  ariaLabel={formatMessage('Question is empty now')}
+                  depth={0}
+                  disabled={isAllowEdit}
+                  id={'New Question'}
+                  name={'New Question'}
+                  placeholder={'add new question'}
+                  styles={editableField}
+                  value={''}
+                  onBlur={(_id, value) => {
+                    const newValue = value?.trim().replace(/^#/, '');
+                    if (newValue) {
+                      onCreateNewQuestion(item.fileId, item.sectionId, newValue);
+                    }
+                    setCreatingQuestionInKthSection(-1);
+                  }}
+                  onChange={() => {}}
+                />
+              ) : (
+                addQuestionButton
+              )}
             </div>
           );
         },
@@ -410,6 +433,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 disabled={isAllowEdit}
                 id={item.sectionId}
                 name={item.Answer}
+                placeholder={'add new answer'}
                 resizable={false}
                 styles={editableField}
                 value={item.Answer}

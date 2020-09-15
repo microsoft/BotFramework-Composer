@@ -181,5 +181,6 @@ export const editableField = {
   },
   fieldGroup: {
     height: '100%',
+    border: '0',
   },
 };
