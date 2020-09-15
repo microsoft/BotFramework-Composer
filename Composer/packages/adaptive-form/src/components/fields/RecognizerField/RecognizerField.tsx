@@ -11,7 +11,7 @@ import formatMessage from 'format-message';
 import { FieldLabel } from '../../FieldLabel';
 
 import { useMigrationEffect } from './useMigrationEffect';
-import { mapRecognizerValueToSchema, mapDropdownOptionToRecognizerSchema } from './mappers';
+import { FallbackRecognizerId, mapDropdownOptionToRecognizerSchema } from './mappers';
 import { getDropdownOptions } from './getDropdownOptions';
 
 export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
@@ -19,10 +19,10 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (prop
   const { shellApi, ...shellData } = useShellApi();
 
   useMigrationEffect(value, onChange);
-  const { recognizers: recognizerConfigs } = useRecognizerConfig();
+  const { recognizers: recognizerConfigs, findRecognizer } = useRecognizerConfig();
   const dropdownOptions = useMemo(() => getDropdownOptions(recognizerConfigs), [recognizerConfigs]);
 
-  const currentRecognizerDef = mapRecognizerValueToSchema(value, recognizerConfigs);
+  const currentRecognizerDef = findRecognizer(value) ?? recognizerConfigs.find((r) => r.id === FallbackRecognizerId);
   const RecognizerEditor = currentRecognizerDef?.recognizerEditor;
   const widget = RecognizerEditor ? <RecognizerEditor {...props} /> : null;
 

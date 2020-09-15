@@ -11,7 +11,7 @@ export function useRecognizerConfig() {
   const { plugins } = useContext(EditorExtensionContext);
 
   const recognizers = plugins.recognizers ?? [];
-  const findConfigByValue = (recognizerValue: MicrosoftIRecognizer) => {
+  const findConfigByValue = (recognizerValue?: MicrosoftIRecognizer) => {
     return recognizers.find((r) => {
       if (typeof r.isSelected === 'function') {
         return r.isSelected(recognizerValue);
