@@ -16,13 +16,13 @@ import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZ
 import cloneDeep from 'lodash/cloneDeep';
 import formatMessage from 'format-message';
 import { DialogInfo, ITrigger } from '@bfc/shared';
-import { Resizable, ResizeCallback } from 're-resizable';
+// import { Resizable, ResizeCallback } from 're-resizable';
 import debounce from 'lodash/debounce';
 import { useRecoilValue } from 'recoil';
 import { IGroupedListStyles } from 'office-ui-fabric-react/lib/GroupedList';
 import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 
-import { dispatcherState, userSettingsState } from '../../recoilModel';
+import { dispatcherState } from '../../recoilModel';
 import { createSelectedPath, getFriendlyName } from '../../utils/dialogUtil';
 import { containUnsupportedTriggers, triggerNotSupported } from '../../utils/dialogValidator';
 
@@ -130,8 +130,7 @@ interface IProjectTreeProps {
 }
 
 export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
-  const { onboardingAddCoachMarkRef, updateUserSettings } = useRecoilValue(dispatcherState);
-  const { dialogNavWidth: currentWidth } = useRecoilValue(userSettingsState);
+  const { onboardingAddCoachMarkRef } = useRecoilValue(dispatcherState);
 
   const groupRef: React.RefObject<IGroupedList> = useRef(null);
   const { dialogs, dialogId, selected, onSelect, onDeleteTrigger, onDeleteDialog } = props;
@@ -185,41 +184,43 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
     }
   };
 
-  const handleResize: ResizeCallback = (_e, _dir, _ref, d) => {
-    updateUserSettings({ dialogNavWidth: currentWidth + d.width });
-  };
+  // const handleResize: ResizeCallback = (_e, _dir, _ref, d) => {
+  //   updateUserSettings({ dialogNavWidth: currentWidth + d.width });
+  // };
 
   const itemsAndGroups: { items: any[]; groups: IGroup[] } = createItemsAndGroups(sortedDialogs, dialogId, filter);
 
+  //   <Resizable
+  //   enable={{
+  //     right: true,
+  //   }}
+  //   maxWidth={500}
+  //   minWidth={180}
+  //   size={{ width: currentWidth, height: 'auto' }}
+  //   onResizeStop={handleResize}
+  // >
+  // </Resizable>
+
   return (
-    <Resizable
-      enable={{
-        right: true,
-      }}
-      maxWidth={500}
-      minWidth={180}
-      size={{ width: currentWidth, height: 'auto' }}
-      onResizeStop={handleResize}
+    <div
+      aria-label={formatMessage('Navigation pane')}
+      className="ProjectTree"
+      css={root}
+      data-testid="ProjectTree"
+      role="region"
     >
-      <div
-        aria-label={formatMessage('Navigation pane')}
-        className="ProjectTree"
-        css={root}
-        data-testid="ProjectTree"
-        role="region"
-      >
-        <FocusZone isCircularNavigation direction={FocusZoneDirection.vertical}>
-          <SearchBox
-            underlined
-            ariaLabel={formatMessage('Type dialog name')}
-            iconProps={{ iconName: 'Filter' }}
-            placeholder={formatMessage('Filter Dialog')}
-            styles={searchBox}
-            onChange={onFilter}
-          />
-          <div
-            aria-label={formatMessage(
-              `{
+      <FocusZone isCircularNavigation direction={FocusZoneDirection.vertical}>
+        <SearchBox
+          underlined
+          ariaLabel={formatMessage('Type dialog name')}
+          iconProps={{ iconName: 'Filter' }}
+          placeholder={formatMessage('Filter Dialog')}
+          styles={searchBox}
+          onChange={onFilter}
+        />
+        <div
+          aria-label={formatMessage(
+            `{
             dialogNum, plural,
                 =0 {No dialogs}
                 =1 {One dialog}
@@ -230,27 +231,26 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
                   0 {}
                 other {Press down arrow key to navigate the search results}
             }`,
-              { dialogNum: itemsAndGroups.groups.length }
-            )}
-            aria-live={'polite'}
-          />
-          <GroupedList
-            {...itemsAndGroups}
-            componentRef={groupRef}
-            groupProps={
-              {
-                onRenderHeader: onRenderHeader,
-                onRenderShowAll: onRenderShowAll,
-                showEmptyGroups: true,
-                showAllProps: false,
-                isAllGroupsCollapsed: true,
-              } as Partial<IGroupRenderProps>
-            }
-            styles={groupListStyle}
-            onRenderCell={onRenderCell}
-          />
-        </FocusZone>
-      </div>
-    </Resizable>
+            { dialogNum: itemsAndGroups.groups.length }
+          )}
+          aria-live={'polite'}
+        />
+        <GroupedList
+          {...itemsAndGroups}
+          componentRef={groupRef}
+          groupProps={
+            {
+              onRenderHeader: onRenderHeader,
+              onRenderShowAll: onRenderShowAll,
+              showEmptyGroups: true,
+              showAllProps: false,
+              isAllGroupsCollapsed: true,
+            } as Partial<IGroupRenderProps>
+          }
+          styles={groupListStyle}
+          onRenderCell={onRenderCell}
+        />
+      </FocusZone>
+    </div>
   );
 };

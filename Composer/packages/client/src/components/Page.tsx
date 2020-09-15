@@ -5,6 +5,7 @@
 import { jsx, css } from '@emotion/core';
 import React from 'react';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
+import { LeftRightSplit } from '@geoffcox/react-splitter';
 
 import { Toolbar, IToolbarItem } from './Toolbar';
 import { NavTree, INavTreeItem } from './NavTree';
@@ -101,10 +102,12 @@ const Page: React.FC<IPageProps> = (props) => {
           {onRenderHeaderContent && <div css={headerContent}>{onRenderHeaderContent()}</div>}
         </div>
         <div css={main} role="main">
-          <NavTree navLinks={navLinks} regionName={navRegionName} />
-          <div aria-label={mainRegionName} css={content} data-testid="PageContent" role="region">
-            {children}
-          </div>
+          <LeftRightSplit initialLeftGridWidth="25%" minLeftPixels={180}>
+            <NavTree navLinks={navLinks} regionName={navRegionName} />
+            <div aria-label={mainRegionName} css={content} data-testid="PageContent" role="region">
+              {children}
+            </div>
+          </LeftRightSplit>
         </div>
       </div>
     </div>
