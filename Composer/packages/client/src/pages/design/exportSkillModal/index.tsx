@@ -15,9 +15,10 @@ import { SkillManifest } from '@bfc/shared';
 import {
   dispatcherState,
   skillManifestsState,
-  luFilesState,
+  qnaFilesState,
   dialogsState,
   dialogSchemasState,
+  luFilesState,
 } from '../../../recoilModel';
 
 import { editorSteps, ManifestEditorSteps, order } from './constants';
@@ -32,10 +33,11 @@ interface ExportSkillModalProps {
 }
 
 const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss: handleDismiss, projectId }) => {
-  const skillManifests = useRecoilValue(skillManifestsState(projectId));
-  const luFiles = useRecoilValue(luFilesState(projectId));
-  const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
   const dialogs = useRecoilValue(dialogsState(projectId));
+  const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
+  const luFiles = useRecoilValue(luFilesState(projectId));
+  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
+  const skillManifests = useRecoilValue(skillManifestsState(projectId));
   const { updateSkillManifest } = useRecoilValue(dispatcherState);
 
   const [editingId, setEditingId] = useState<string>();
@@ -60,6 +62,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
       dialogs,
       dialogSchemas,
       luFiles,
+      qnaFiles,
       selectedTriggers,
       selectedDialogs
     );
