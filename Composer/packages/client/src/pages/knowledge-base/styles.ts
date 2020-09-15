@@ -25,6 +25,7 @@ export const formCell = css`
   white-space: pre-wrap;
   font-size: 14px;
   line-height: 28px;
+  height: 100%;
 `;
 
 export const inlineContainer = (isBold) => css`
@@ -102,18 +103,30 @@ export const rowDetails = {
     selectors: {
       '&:hover': {
         background: NeutralColors.gray30,
+        selectors: {
+          '.ms-TextField-fieldGroup': {
+            background: NeutralColors.gray30,
+          },
+          '.ms-Button--icon': {
+            visibility: 'visible',
+          },
+          '.ms-Button': {
+            visibility: 'visible',
+          },
+        },
       },
-      '&:hover .ms-Button--icon': {
-        visibility: 'visible',
-      },
-      '&.is-selected .ms-Button--icon': {
-        visibility: 'visible',
-      },
-      '&:hover .ms-Button': {
-        visibility: 'visible',
-      },
-      '&.is-selected .ms-Button': {
-        visibility: 'visible',
+      '&.is-selected': {
+        selectors: {
+          '.ms-Button--icon': {
+            visibility: 'visible',
+          },
+          '.ms-Button': {
+            visibility: 'visible',
+          },
+          '.ms-TextField-fieldGroup': {
+            background: NeutralColors.gray30,
+          },
+        },
       },
     },
   },
@@ -154,5 +167,19 @@ export const addIcon = {
   root: {
     fontSize: FontSizes.size10,
     color: SharedColors.cyanBlue10,
+  },
+};
+
+export const editableField = {
+  root: {
+    height: '100%',
+    selectors: {
+      '.ms-TextField-wrapper': {
+        height: '100%',
+      },
+    },
+  },
+  fieldGroup: {
+    height: '100%',
   },
 };

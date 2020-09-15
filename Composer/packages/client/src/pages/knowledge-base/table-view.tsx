@@ -34,14 +34,14 @@ import {
   qnaFilesState,
   projectIdState,
   localeState,
-  settingsState,
+  //settingsState,
 } from '../../recoilModel/atoms/botState';
 import { dispatcherState } from '../../recoilModel';
 import { getBaseName } from '../../utils/fileUtil';
 import { EditableField } from '../../components/EditableField';
 import { classNames, AddTemplateButton } from '../../components/AllupviewComponets/styles';
 
-import { formCell, content, addIcon, divider, rowDetails, icon, addAlternative } from './styles';
+import { formCell, content, addIcon, divider, rowDetails, icon, addAlternative, editableField } from './styles';
 
 const noOp = () => undefined;
 
@@ -62,7 +62,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const qnaFiles = useRecoilValue(qnaFilesState);
   const projectId = useRecoilValue(projectIdState);
   const locale = useRecoilValue(localeState);
-  const settings = useRecoilValue(settingsState);
+  //const settings = useRecoilValue(settingsState);
   const {
     // createQnAImport,
     removeQnAImport,
@@ -78,7 +78,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
   } = useRecoilValue(dispatcherState);
 
   // const { languages, defaultLanguage } = settings;
-  console.log(settings);
 
   const { dialogId } = props;
   const activeDialog = dialogs.find(({ id }) => id === dialogId);
@@ -115,14 +114,13 @@ const TableView: React.FC<TableViewProps> = (props) => {
       return result.concat(res);
     }, []);
     if (dialogId === 'all') {
-      setQnASections(
-        allSections.map((item, index) => {
-          return {
-            ...item,
-            expand: index === focusedIndex,
-          };
-        })
-      );
+      const sections = allSections.map((item, index) => {
+        return {
+          ...item,
+          expand: index === focusedIndex,
+        };
+      });
+      setQnASections(sections);
     } else {
       const dialogSections = allSections
         .filter((t) => t.dialogId === dialogId || importedFileIds.includes(t.fileId))
@@ -149,6 +147,20 @@ const TableView: React.FC<TableViewProps> = (props) => {
     });
     setQnASections(newSections);
   };
+
+  // const expandRow = (sectionId: string) => {
+  //   const newSections = qnaSections.map((item) => {
+  //     if (item.sectionId === sectionId) {
+  //       return {
+  //         ...item,
+  //         expand: true,
+  //       };
+  //     } else {
+  //       return item;
+  //     }
+  //   });
+  //   setQnASections(newSections);
+  // };
 
   const onUpdateQnAQuestion = (fileId: string, sectionId: string, questionId: string, content: string) => {
     if (!fileId) return;
@@ -398,6 +410,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 disabled={isAllowEdit}
                 id={item.sectionId}
                 name={item.Answer}
+                resizable={false}
+                styles={editableField}
                 value={item.Answer}
                 onBlur={(_id, value) => {
                   const newValue = value?.trim().replace(/^#/, '');
@@ -518,7 +532,14 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
   const onRenderRow = (props) => {
     if (props) {
-      return <DetailsRow {...props} styles={rowDetails} tabIndex={props.itemIndex} />;
+      return (
+        <DetailsRow
+          {...props}
+          styles={rowDetails}
+          tabIndex={props.itemIndex}
+          //onClick={() => expandRow(props.item.sectionId)}
+        />
+      );
     }
     return null;
   };
@@ -534,10 +555,10 @@ const TableView: React.FC<TableViewProps> = (props) => {
             collapseAllVisibility: CollapseAllVisibility.hidden,
           }}
           groups={getGroups()}
-          initialFocusedIndex={focusedIndex}
+          //initialFocusedIndex={focusedIndex}
           items={qnaSections}
           layoutMode={DetailsListLayoutMode.justified}
-          selectionMode={SelectionMode.none}
+          selectionMode={SelectionMode.single}
           onRenderDetailsHeader={onRenderDetailsHeader}
           onRenderRow={onRenderRow}
         />

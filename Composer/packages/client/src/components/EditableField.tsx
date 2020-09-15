@@ -17,6 +17,7 @@ interface EditableFieldProps extends Omit<ITextFieldProps, 'onChange' | 'onFocus
   depth: number;
   description?: string;
   disabled?: boolean;
+  resizable?: boolean;
   id: string;
   name: string;
   placeholder?: string;
@@ -38,6 +39,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
     multiline = false,
     onChange,
     onBlur,
+    resizable = true,
     value,
     id,
     error,
@@ -75,48 +77,49 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
   }
 
   return (
-    <div
+    <TextField
+      ariaLabel={ariaLabel}
+      autoComplete="off"
       className={className}
-      onMouseEnter={() => setEditing(true)}
-      onMouseLeave={() => !hasFocus && setEditing(false)}
-    >
-      <TextField
-        ariaLabel={ariaLabel}
-        autoComplete="off"
-        errorMessage={error as string}
-        multiline={multiline}
-        placeholder={placeholder || value}
-        styles={
-          mergeStyleSets(
-            {
-              root: { margin: '0', width: '100%' },
-              field: {
-                fontSize: fontSize,
-                selectors: {
-                  '::placeholder': {
-                    fontSize: fontSize,
-                  },
-                },
-              },
-              fieldGroup: {
-                borderColor,
-                transition: 'border-color 0.1s linear',
-                selectors: {
-                  ':hover': {
-                    borderColor: hasFocus ? undefined : NeutralColors.gray30,
-                  },
+      errorMessage={error as string}
+      multiline={multiline}
+      placeholder={placeholder || value}
+      resizable={resizable}
+      styles={
+        mergeStyleSets(
+          {
+            root: { margin: '0', width: '100%' },
+            field: {
+              fontSize: fontSize,
+              selectors: {
+                '::placeholder': {
+                  fontSize: fontSize,
                 },
               },
             },
-            styles
-          ) as Partial<ITextFieldStyles>
-        }
-        value={localValue}
-        onBlur={handleCommit}
-        onChange={handleChange}
-        onFocus={() => setHasFocus(true)}
-      />
-    </div>
+            fieldGroup: {
+              borderColor,
+              transition: 'border-color 0.1s linear',
+              selectors: {
+                ':hover': {
+                  borderColor: hasFocus ? undefined : NeutralColors.gray30,
+                },
+                '.ms-TextField-field': {
+                  background: hasFocus ? NeutralColors.white : 'inherit',
+                },
+              },
+            },
+          },
+          styles
+        ) as Partial<ITextFieldStyles>
+      }
+      value={localValue}
+      onBlur={handleCommit}
+      onChange={handleChange}
+      onFocus={() => setHasFocus(true)}
+      onMouseEnter={() => setEditing(true)}
+      onMouseLeave={() => !hasFocus && setEditing(false)}
+    />
   );
 };
 
