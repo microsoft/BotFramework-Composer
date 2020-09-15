@@ -11,12 +11,13 @@ import { useResolvers } from '../hooks/useResolver';
 import { onChooseIntentKey, generateNewDialog, intentTypeKey, qnaMatcherKey } from '../utils/dialogUtil';
 import { navigateTo } from '../utils/navigation';
 import { schemasState, lgFilesState, dialogsState, localeState } from '../recoilModel';
+import { Dispatcher } from '../recoilModel/dispatchers';
 
 import { dispatcherState } from './../recoilModel/DispatcherWrapper';
 
 function createTriggerApi(
   state: { projectId; schemas; dialogs; locale; lgFiles },
-  dispatchers: any, //TODO
+  dispatchers: Dispatcher, //TODO
   luFileResolver: (id: string) => LuFile | undefined,
   lgFileResolver: (id: string) => LgFile | undefined,
   dialogResolver: (id: string) => DialogInfo | undefined
@@ -55,7 +56,7 @@ function createTriggerApi(
         LgTemplateSamples.TextInputPromptForQnAMatcher(designerId1) as LgTemplate,
         LgTemplateSamples.SendActivityForQnAMatcher(designerId2) as LgTemplate,
       ];
-      await createLgTemplates({ id: lgFile.id, templates: lgTemplates });
+      await createLgTemplates({ id: lgFile.id, templates: lgTemplates, projectId });
     } else if (formData.$kind === onChooseIntentKey) {
       const designerId1 = getDesignerIdFromDialogPath(newDialog, `content.triggers[${index}].actions[4].prompt`);
       const designerId2 = getDesignerIdFromDialogPath(
@@ -80,8 +81,8 @@ function createTriggerApi(
         (t) => commonlgFile?.templates.findIndex((clft) => clft.name === t.name) === -1
       );
 
-      await createLgTemplates({ id: `common.${locale}`, templates: lgTemplates2 });
-      await createLgTemplates({ id: lgFile.id, templates: lgTemplates1 });
+      await createLgTemplates({ id: `common.${locale}`, templates: lgTemplates2, projectId });
+      await createLgTemplates({ id: lgFile.id, templates: lgTemplates1, projectId });
     }
     const dialogPayload = {
       id: newDialog.id,
@@ -92,7 +93,7 @@ function createTriggerApi(
     if (url) {
       navigateTo(url);
     } else {
-      selectTo(`triggers[${index}]`);
+      selectTo(projectId, `triggers[${index}]`);
     }
   };
   return {
