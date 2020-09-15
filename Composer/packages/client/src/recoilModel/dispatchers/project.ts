@@ -219,7 +219,7 @@ export const projectDispatcher = () => {
         set(filePersistenceState(projectId), new FilePersistence(projectId));
         set(undoHistoryState(projectId), new UndoHistory(projectId));
         //TODO: Botprojects space will be populated for now with just the rootbot. Once, BotProjects UI is hookedup this will be refactored to use addToBotProject
-        set(botProjectsSpaceState, [projectId]);
+        set(botProjectsSpaceState, (current) => [...current, projectId]);
         set(projectMetaDataState(projectId), {
           isRootBot: true,
         });
