@@ -1,1 +1,0 @@
-{"version":3,"file":"useShellApi.d.ts","sourceRoot":"","sources":["../../src/hooks/useShellApi.ts"],"names":[],"mappings":"AAGA,OAAO,EAAE,QAAQ,EAAE,SAAS,EAAE,MAAM,aAAa,CAAC;AAGlD,OAAO,EAAE,YAAY,EAAE,MAAM,UAAU,CAAC;AAExC,UAAU,YAAa,SAAQ,SAAS;IACtC,QAAQ,EAAE,QAAQ,CAAC;IACnB,OAAO,EAAE,YAAY,CAAC;CACvB;AAED,wBAAgB,WAAW,IAAI,YAAY,CAgB1C"}
