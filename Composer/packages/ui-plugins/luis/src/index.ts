@@ -12,7 +12,7 @@ const config: PluginConfig = {
       id: SDKKinds.LuisRecognizer,
       disabled: true,
       displayName: 'LUIS',
-      editor: LuisIntentEditor,
+      intentEditor: LuisIntentEditor,
       isSelected: (data) => {
         return typeof data === 'string' && data.endsWith('.lu');
       },

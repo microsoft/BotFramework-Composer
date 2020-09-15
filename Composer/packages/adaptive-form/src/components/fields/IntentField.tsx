@@ -20,9 +20,9 @@ const IntentField: React.FC<FieldProps> = (props) => {
   const recognizer = recognizers.find((r) => r.isSelected(currentDialog?.content?.recognizer));
   let Editor: FieldWidget | undefined;
   if (recognizer && recognizer.id === SDKKinds.CrossTrainedRecognizerSet) {
-    Editor = recognizers.find((r) => r.id === SDKKinds.LuisRecognizer)?.editor;
+    Editor = recognizers.find((r) => r.id === SDKKinds.LuisRecognizer)?.intentEditor;
   } else {
-    Editor = recognizer?.editor;
+    Editor = recognizer?.intentEditor;
   }
   const label = formatMessage('Trigger phrases (intent: #{intentName})', { intentName: value });
 

@@ -26,7 +26,7 @@ describe('<IntentField />', () => {
       {
         id: 'TestRecognizer',
         isSelected: (data) => data?.$kind === 'TestRecognizer',
-        editor: ({ id, onChange }) => (
+        intentEditor: ({ id, onChange }) => (
           <div id={id}>
             Test Recognizer <button onClick={onChange}>Update</button>
           </div>

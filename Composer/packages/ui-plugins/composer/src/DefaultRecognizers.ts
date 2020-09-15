@@ -10,7 +10,7 @@ export const DefaultRecognizers: RecognizerSchema[] = [
   {
     id: SDKKinds.RegexRecognizer,
     displayName: () => formatMessage('Regular Expression'),
-    editor: RegexIntentField,
+    intentEditor: RegexIntentField,
     isSelected: (data) => {
       return typeof data === 'object' && data.$kind === SDKKinds.RegexRecognizer;
     },
