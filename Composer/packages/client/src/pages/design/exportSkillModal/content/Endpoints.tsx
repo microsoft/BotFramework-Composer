@@ -5,7 +5,7 @@
 import { css, jsx } from '@emotion/core';
 import React, { useMemo } from 'react';
 import AdaptiveForm from '@bfc/adaptive-form';
-import { JSONSchema7, UIOptions } from '@bfc/extension';
+import { JSONSchema7, UIOptions } from '@bfc/extension-client';
 
 import { ContentProps } from '../constants';
 

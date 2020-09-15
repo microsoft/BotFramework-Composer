@@ -5,7 +5,7 @@
 import { css, jsx } from '@emotion/core';
 import React from 'react';
 import { CollapseField as Collapse, SchemaField } from '@bfc/adaptive-form';
-import { FieldProps } from '@bfc/extension';
+import { FieldProps } from '@bfc/extension-client';
 import formatMessage from 'format-message';
 
 const style = {

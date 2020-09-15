@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import rimraf from 'rimraf';
-import { pluginLoader } from '@bfc/plugin-loader';
+import { pluginLoader } from '@bfc/extension';
 
 import { Path } from '../../../src/utility/path';
 import { AssetManager } from '../../../src/models/asset/assetManager';
@@ -10,7 +10,7 @@ jest.mock('azure-storage', () => {
   return {};
 });
 
-jest.mock('@bfc/plugin-loader', () => {
+jest.mock('@bfc/extension', () => {
   //const p = require('path');
   return {
     pluginLoader: {
