@@ -22,14 +22,13 @@ import {
   dispatcherState,
 } from '../../recoilModel';
 import settingsStorage from '../../utils/dialogSettingStorage';
-import { QnaConfig, BotStatus, LuisConfig } from '../../constants';
+import { BotStatus } from '../../constants';
 import { isAbsHosted } from '../../utils/envUtil';
 import useNotifications from '../../pages/notifications/useNotifications';
 import { navigateTo, openInEmulator } from '../../utils/navigation';
-import { getReferredQnaFiles } from '../../utils/qnaUtil';
 import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 
-import { getReferredLuFiles } from './../../utils/luUtil';
+import { isConfigComplete, needsPublish } from './../../utils/buildUtil';
 import { PublishDialog } from './publishDialog';
 import { ErrorCallout } from './errorCallout';
 import { EmulatorOpenButton } from './emulatorOpenButton';
@@ -174,30 +173,6 @@ export const TestController: React.FC = () => {
     await publishToTarget(projectId, defaultPublishConfig, { comment: '' }, sensitiveSettings);
   }
 
-  function isConfigComplete(config) {
-    let complete = true;
-    if (getReferredLuFiles(luFiles, dialogs).length > 0) {
-      if (Object.values(LuisConfig).some((luisConfigKey) => config.luis[luisConfigKey] === '')) {
-        complete = false;
-      }
-    }
-    if (getReferredQnaFiles(qnaFiles, dialogs).length > 0) {
-      if (Object.values(QnaConfig).some((qnaConfigKey) => config.qna[qnaConfigKey] === '')) {
-        complete = false;
-      }
-    }
-    return complete;
-  }
-
-  // return true if dialogs have one with default recognizer.
-  function needsPublish(dialogs) {
-    let isDefaultRecognizer = false;
-    if (dialogs.some((dialog) => typeof dialog.content.recognizer === 'string')) {
-      isDefaultRecognizer = true;
-    }
-    return isDefaultRecognizer;
-  }
-
   async function handleStart() {
     dismissCallout();
     const config = Object.assign(
@@ -212,7 +187,11 @@ export const TestController: React.FC = () => {
       }
     );
     if (!isAbsHosted() && needsPublish(dialogs)) {
-      if (botStatus === BotStatus.failed || botStatus === BotStatus.pending || !isConfigComplete(config)) {
+      if (
+        botStatus === BotStatus.failed ||
+        botStatus === BotStatus.pending ||
+        !isConfigComplete(config, dialogs, luFiles, qnaFiles)
+      ) {
         openDialog();
       } else {
         await handlePublish(config);
