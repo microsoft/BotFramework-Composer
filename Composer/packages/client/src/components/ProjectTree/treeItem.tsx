@@ -18,7 +18,7 @@ import { ICalloutContentStyles } from 'office-ui-fabric-react/lib/Callout';
 import { TreeLink } from './ProjectTree';
 
 // -------------------- Styles -------------------- //
-const indent = 8;
+const indent = 12;
 const itemText = (depth: number) => css`
   outline: none;
   :focus {
@@ -127,9 +127,9 @@ export const overflowSet = (depth: number) => css`
 `;
 
 const warningIcon = {
-  marginRight: 5,
+  width: '24px',
   color: '#BE880A',
-  fontSize: 9,
+  fontSize: 16,
 };
 
 // -------------------- TreeItem -------------------- //
@@ -169,11 +169,14 @@ const onRenderItem = (extraSpace: number) => (item: IOverflowSetItemProps) => {
         ) : (
           <div css={leftIndent(extraSpace)} />
         )}
-        {item.icon != null && (
+        {item.icon == null ? (
+          <div css={{ width: '12px' }} />
+        ) : (
           <Icon
             iconName={item.icon}
             styles={{
               root: {
+                width: '12px',
                 marginRight: '8px',
                 outline: 'none',
               },

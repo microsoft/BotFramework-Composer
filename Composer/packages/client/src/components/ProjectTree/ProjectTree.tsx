@@ -41,12 +41,14 @@ const root = css`
   .ms-List-cell {
     min-height: 24px;
   }
+  label: root;
 `;
 
 const summaryStyle = css`
+  label: summary;
   display: flex;
   padding-left: 12px;
-  padding-top: 12px;
+  padding-top: 6px;
 `;
 
 // -------------------- ProjectTree -------------------- //
@@ -117,6 +119,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
         css={css`
           margin-top: -6px;
           width: 100%;
+          label: bot-header;
         `}
         role="grid"
       >
@@ -125,7 +128,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
     );
   };
 
-  const renderDialogHeader = (projectId: string, dialog: DialogInfo, warningContent: string) => {
+  const renderDialogHeader = (projectId: string, dialog: DialogInfo, warningContent: string, depth: number) => {
     const link: TreeLink = {
       dialogName: dialog.id,
       displayName: dialog.displayName,
@@ -139,12 +142,13 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
         css={css`
           margin-top: -6px;
           width: 100%;
+          label: dialog-header;
         `}
         role="grid"
       >
         <TreeItem
           showProps
-          depth={1}
+          depth={depth}
           icon={'CannedChat'}
           isSubItemActive={!!selected}
           link={link}
@@ -155,7 +159,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
     );
   };
 
-  function renderTrigger(projectId: string, item: any, dialog: DialogInfo): React.ReactNode {
+  function renderTrigger(projectId: string, item: any, dialog: DialogInfo, depth: number): React.ReactNode {
     const link: TreeLink = {
       displayName: item.displayName,
       warningContent: item.warningContent,
@@ -168,9 +172,8 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
     return (
       <TreeItem
         key={`${item.id}_${item.index}`}
-        depth={2}
+        depth={depth}
         dialogName={dialog.displayName}
-        extraSpace={32}
         icon={TYPE_TO_ICON_MAP[item.type] || 'Flow'}
         isActive={dialog.id === props.dialogId && createSelectedPath(item.index) === selected}
         link={link}
@@ -194,7 +197,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
     return scope.toLowerCase().includes(filter.toLowerCase());
   }
 
-  function createDetailsTree(bot: BotInProject) {
+  function createDetailsTree(bot: BotInProject, startDepth: number) {
     const { projectId } = bot;
     const dialogs = sortDialog(bot.dialogs);
 
@@ -213,13 +216,14 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
           renderTrigger(
             projectId,
             { ...tr, index, displayName: getTriggerName(tr), warningContent: triggerNotSupported(dialog, tr) },
-            dialog
+            dialog,
+            startDepth + 1
           )
         );
       return (
         <details key={dialog.id} ref={dialog.isRoot ? addMainDialogRef : undefined}>
           <summary css={summaryStyle}>
-            {renderDialogHeader(projectId, dialog, containUnsupportedTriggers(dialog))}
+            {renderDialogHeader(projectId, dialog, containUnsupportedTriggers(dialog), startDepth)}
           </summary>
           {triggerList}
         </details>
@@ -231,13 +235,15 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
     return (
       <details key={bot.projectId}>
         <summary css={summaryStyle}>{renderBotHeader(bot, false)}</summary>
-        {createDetailsTree(bot)}
+        {createDetailsTree(bot, 1)}
       </details>
     );
   }
 
   const projectTree =
-    projectCollection.length === 1 ? createDetailsTree(projectCollection[0]) : projectCollection.map(createBotSubtree);
+    projectCollection.length === 1
+      ? createDetailsTree(projectCollection[0], 0)
+      : projectCollection.map(createBotSubtree);
 
   return (
     <Fragment>
