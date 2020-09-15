@@ -48,6 +48,7 @@ export const initSplashScreen = async ({
     movable: false,
     icon,
     webPreferences: {
+      // This is necessary to enable loading local images in the url protocol (window.loadURL)
       webSecurity: false,
     },
   });
@@ -61,6 +62,7 @@ export const initSplashScreen = async ({
     status,
   };
 
+  // This prevents window visual flash
   splashScreenWindow.on('ready-to-show', () => {
     splashScreenWindow.show();
   });
@@ -68,11 +70,18 @@ export const initSplashScreen = async ({
   const file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(getSplashScreenContent(args));
   await splashScreenWindow.loadURL(file);
 
+  /**
+   * Displays the main windows of the app and destroys the splash screen.
+   */
   const startApp = () => {
     setTimeout(() => splashScreenWindow.destroy(), 500);
     getMainWindow()?.show();
   };
 
+  /**
+   * Updates the loading status on the splash screen.
+   * @param status New status text.
+   */
   const updateStatus = async (status: string) => {
     await splashScreenWindow.webContents.executeJavaScript(
       `document.querySelector('#${statusElmId}').textContent = '${status}';`
