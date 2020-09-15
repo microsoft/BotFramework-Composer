@@ -4,7 +4,7 @@
 import values from 'lodash/values';
 import { FieldNames } from '@bfc/shared';
 
-import { ExpressionType } from './types';
+import { StringMapExpressionType } from './types';
 
 export const createPath = (path: string, type: string): string => {
   let list = path.split('.');
@@ -41,18 +41,23 @@ export function findRequiredProperties(schema: any): { [key: string]: boolean } 
   return required;
 }
 
-export function findTypes(schema: any): string[] {
+export function findTypes(schema: any): number[] {
   if (!schema) return [];
-  let types: string[] = [];
+  let types: number[] = [];
   if (schema.type) {
     if (Array.isArray(schema.type)) {
-      types = [...types, ...schema.type];
+      types = schema.type.map((item: string) => StringMapExpressionType[item]);
     } else {
-      types.push(schema.type);
+      types.push(StringMapExpressionType[schema.type]);
     }
-  } else {
-    types = schema.oneOf?.filter((item) => !!ExpressionType[item.type]).map((item) => item.type);
+  } else if (schema.oneOf) {
+    types = schema.oneOf.reduce((result: string[], item) => {
+      if (StringMapExpressionType[item.type]) {
+        result.push(StringMapExpressionType[item.type]);
+      }
+      return result;
+    }, []);
   }
 
-  return Array.from(new Set<string>(types));
+  return Array.from(new Set<number>(types));
 }
