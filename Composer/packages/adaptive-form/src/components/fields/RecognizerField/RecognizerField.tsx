@@ -17,7 +17,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (prop
   const { value, id, label, description, uiOptions, required, onChange } = props;
   const { shellApi, ...shellData } = useShellApi();
   const recognizerConfigs = useRecognizerConfig();
-  const [isCustomType, setIsCustomType] = useState(false);
+  const [dropdownOption, setDropdownOption] = useState(getSelectedType(value, recognizerConfigs));
 
   useMigrationEffect(value, onChange);
 
@@ -31,50 +31,31 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (prop
       }));
   }, [recognizerConfigs]);
 
-  const selectedType = getSelectedType(isCustomType, value, recognizerConfigs);
-
   const handleChangeRecognizerType = (_, option?: IDropdownOption): void => {
-    if (option) {
-      if (option.key === SDKKinds.CustomRecognizer) {
-        setIsCustomType(true);
-        return;
-      }
+    setDropdownOption(option?.key as string);
 
-      setIsCustomType(false);
-      const handler = recognizerConfigs.find((r) => r.id === option.key)?.handleRecognizerChange;
-
-      if (handler) {
-        handler(props, shellData, shellApi);
-      }
-    }
+    const handleRecognizerChange = recognizerConfigs.find((r) => r.id === option?.key)?.handleRecognizerChange;
+    handleRecognizerChange && handleRecognizerChange(props, shellData, shellApi);
   };
 
-  const handleCustomChange = (value: string): void => {
-    setIsCustomType(true);
-    onChange(value);
-  };
   return (
     <React.Fragment>
       <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
-      {selectedType ? (
-        <Dropdown
-          data-testid="recognizerTypeDropdown"
-          label={formatMessage('Recognizer Type')}
-          options={options}
-          responsiveMode={ResponsiveMode.large}
-          selectedKey={selectedType}
-          onChange={handleChangeRecognizerType}
-        />
-      ) : (
-        formatMessage('Unable to determine recognizer type from data: {value}', { value })
-      )}
-      {selectedType === SDKKinds.CustomRecognizer && (
+      <Dropdown
+        data-testid="recognizerTypeDropdown"
+        label={formatMessage('Recognizer Type')}
+        options={options}
+        responsiveMode={ResponsiveMode.large}
+        selectedKey={dropdownOption}
+        onChange={handleChangeRecognizerType}
+      />
+      {dropdownOption === SDKKinds.CustomRecognizer && (
         <JsonEditor
           key={'customRecognizer'}
           height={200}
           id={'customRecog'}
           value={value as object}
-          onChange={handleCustomChange}
+          onChange={onChange}
         />
       )}
     </React.Fragment>
@@ -82,13 +63,9 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (prop
 };
 
 const getSelectedType = (
-  isCustomType: boolean,
   value: MicrosoftIRecognizer | undefined,
   recognizers: RecognizerSchema[]
 ): string | undefined => {
-  if (isCustomType) {
-    return SDKKinds.CustomRecognizer;
-  }
   const selected =
     value === undefined
       ? recognizers.length > 0
