@@ -4,39 +4,33 @@
 import { jsx } from '@emotion/core';
 import React, { useMemo } from 'react';
 import { FieldProps, useShellApi, useRecognizerConfig } from '@bfc/extension-client';
-import { MicrosoftIRecognizer, SDKKinds } from '@bfc/shared';
+import { MicrosoftIRecognizer } from '@bfc/shared';
 import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import formatMessage from 'format-message';
 
 import { FieldLabel } from '../../FieldLabel';
 
 import { useMigrationEffect } from './useMigrationEffect';
-import { getRecognizerDefinition } from './getRecognizerDefinition';
+import { getRecognizerDefinition as findRecognizerDefinition } from './findRecognizerDefinition';
+import { getDropdownOptions } from './getDropdownOptions';
 
 export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
   const { value, id, label, description, uiOptions, required, onChange } = props;
   const { shellApi, ...shellData } = useShellApi();
-  const recognizerConfigs = useRecognizerConfig();
-  const currentRecognizerDef = getRecognizerDefinition(value, recognizerConfigs);
 
   useMigrationEffect(value, onChange);
+  const recognizerConfigs = useRecognizerConfig();
+  const dropdownOptions = useMemo(() => getDropdownOptions(recognizerConfigs), [recognizerConfigs]);
 
-  const dropdownOptions = useMemo(() => {
-    return recognizerConfigs
-      .filter((r) => !r.disabled)
-      .map((r) => ({
-        key: r.id,
-        text: typeof r.displayName === 'function' ? r.displayName(value) : r.displayName,
-      }));
-  }, [recognizerConfigs]);
-
-  const handleChangeRecognizerType = (_, option?: IDropdownOption): void => {
-    const handleRecognizerChange = recognizerConfigs.find((r) => r.id === option?.key)?.handleRecognizerChange;
-    handleRecognizerChange && handleRecognizerChange(props, shellData, shellApi);
-  };
-
+  const currentRecognizerDef = findRecognizerDefinition(value, recognizerConfigs);
   const RecognizerEditor = currentRecognizerDef?.recognizerEditor;
   const widget = RecognizerEditor ? <RecognizerEditor {...props} /> : null;
+
+  const handleChangeRecognizerType = (_, option?: IDropdownOption): void => {
+    if (!option) return;
+    const submitChange = recognizerConfigs.find((r) => r.id === option.key)?.handleRecognizerChange;
+    submitChange && submitChange(props, shellData, shellApi);
+  };
 
   return (
     <React.Fragment>
