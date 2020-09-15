@@ -41,7 +41,19 @@ import { getBaseName } from '../../utils/fileUtil';
 import { EditableField } from '../../components/EditableField';
 import { classNames, AddTemplateButton } from '../../components/AllupviewComponets/styles';
 
-import { formCell, content, addIcon, divider, rowDetails, icon, addAlternative, editableField } from './styles';
+import {
+  formCell,
+  content,
+  addIcon,
+  divider,
+  rowDetails,
+  icon,
+  addAlternative,
+  editableFieldAnswer,
+  editableFieldQuestion,
+  questionNumber,
+  firstQuestion,
+} from './styles';
 
 const noOp = () => undefined;
 
@@ -343,7 +355,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         maxWidth: 450,
         isResizable: true,
         data: 'string',
-        onRender: (item: QnASectionItem, index: number) => {
+        onRender: (item: QnASectionItem, index) => {
           const questions = item.Questions;
           const showingQuestions = item.expand ? questions : questions.slice(0, limitedNumber);
           //This question content of this qna Section is '#?'
@@ -363,29 +375,53 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
           return (
             <div data-is-focusable css={formCell}>
-              {showingQuestions.map((question) => {
-                return (
-                  <EditableField
-                    key={question.id}
-                    ariaLabel={formatMessage(`Question is {content}`, { content: question.content })}
-                    depth={0}
-                    disabled={isAllowEdit}
-                    id={question.id}
-                    name={question.content}
-                    placeholder={'add new question'}
-                    value={question.content}
-                    onBlur={(_id, value) => {
-                      const newValue = value?.trim().replace(/^#/, '');
-                      const isChanged = question.content !== newValue;
-                      if (newValue && isChanged) {
-                        onUpdateQnAQuestion(item.fileId, item.sectionId, question.id, newValue);
-                      }
-                    }}
-                    onChange={() => {}}
-                  />
-                );
-              })}
-              {!item.expand && !isQuestionEmpty && <span> ({questions.length})</span>}
+              <div css={firstQuestion}>
+                <EditableField
+                  key={showingQuestions[0].id}
+                  ariaLabel={formatMessage(`Question is {content}`, { content: showingQuestions[0].content })}
+                  depth={0}
+                  disabled={isAllowEdit}
+                  id={showingQuestions[0].id}
+                  name={showingQuestions[0].content}
+                  placeholder={'add new question'}
+                  styles={editableFieldQuestion}
+                  value={showingQuestions[0].content}
+                  onBlur={(_id, value) => {
+                    const newValue = value?.trim().replace(/^#/, '');
+                    const isChanged = showingQuestions[0].content !== newValue;
+                    if (newValue && isChanged) {
+                      onUpdateQnAQuestion(item.fileId, item.sectionId, showingQuestions[0].id, newValue);
+                    }
+                  }}
+                  onChange={() => {}}
+                />
+                {!item.expand && !isQuestionEmpty && <div css={questionNumber}> ({questions.length})</div>}
+              </div>
+              {showingQuestions.length > 1 &&
+                showingQuestions.slice(1).map((question) => {
+                  return (
+                    <EditableField
+                      key={question.id}
+                      ariaLabel={formatMessage(`Question is {content}`, { content: question.content })}
+                      depth={0}
+                      disabled={isAllowEdit}
+                      id={question.id}
+                      name={question.content}
+                      placeholder={'add new question'}
+                      styles={editableFieldQuestion}
+                      value={question.content}
+                      onBlur={(_id, value) => {
+                        const newValue = value?.trim().replace(/^#/, '');
+                        const isChanged = question.content !== newValue;
+                        if (newValue && isChanged) {
+                          onUpdateQnAQuestion(item.fileId, item.sectionId, question.id, newValue);
+                        }
+                      }}
+                      onChange={() => {}}
+                    />
+                  );
+                })}
+
               {kthSectionIsCreatingQuestion === index ? (
                 <EditableField
                   key={''}
@@ -395,7 +431,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                   id={'New Question'}
                   name={'New Question'}
                   placeholder={'add new question'}
-                  styles={editableField}
+                  styles={editableFieldQuestion}
                   value={''}
                   onBlur={(_id, value) => {
                     const newValue = value?.trim().replace(/^#/, '');
@@ -435,7 +471,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 name={item.Answer}
                 placeholder={'add new answer'}
                 resizable={false}
-                styles={editableField}
+                styles={editableFieldAnswer}
                 value={item.Answer}
                 onBlur={(_id, value) => {
                   const newValue = value?.trim().replace(/^#/, '');

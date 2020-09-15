@@ -3,7 +3,7 @@
 import { css } from '@emotion/core';
 import { FontWeights } from '@uifabric/styling';
 import { NeutralColors, SharedColors, FontSizes } from '@uifabric/fluent-theme';
-import { IIconStyles } from 'office-ui-fabric-react/lib/Icon';
+
 export const content = css`
   min-height: 28px;
   outline: none;
@@ -72,26 +72,6 @@ export const addQnAPairLink = {
   },
 };
 
-export const actionButton = css`
-  font-size: 16px;
-  margin: 0;
-  margin-left: 15px;
-`;
-
-export const QnAIconStyle = {
-  root: {
-    padding: '8px',
-    boxSizing: 'border-box',
-    width: '40px',
-    height: '32px',
-  },
-} as IIconStyles;
-
-export const firstLine = css`
-  display: flex;
-  flex-direction: row;
-`;
-
 export const divider = css`
   height: 1px;
   background: ${NeutralColors.gray30};
@@ -113,6 +93,13 @@ export const rowDetails = {
           '.ms-Button': {
             visibility: 'visible',
           },
+          // '&.is-selected': {
+          //   selectors: {
+          //     '.ms-DetailsRowy': {
+          //       background: NeutralColors.gray30,
+          //     },
+          //   },
+          // },
         },
       },
       '&.is-selected': {
@@ -128,6 +115,9 @@ export const rowDetails = {
           },
         },
       },
+      '&.is-selected:hover': {
+        background: NeutralColors.gray30,
+      },
     },
   },
 };
@@ -138,11 +128,6 @@ export const icon = {
     visibility: 'hidden',
   },
 };
-
-export const addButtonContainer = css`
-  z-index: 1;
-  background: ${NeutralColors.white};
-`;
 
 export const addAlternative = {
   root: {
@@ -170,7 +155,7 @@ export const addIcon = {
   },
 };
 
-export const editableField = {
+export const editableFieldAnswer = {
   root: {
     height: '100%',
     selectors: {
@@ -184,3 +169,22 @@ export const editableField = {
     border: '0',
   },
 };
+
+export const editableFieldQuestion = {
+  root: {
+    width: '90%',
+  },
+  fieldGroup: {
+    border: '0',
+    marginBottom: 1,
+  },
+};
+
+export const questionNumber = {
+  height: 32,
+};
+
+export const firstQuestion = css`
+  display: flex;
+}
+`;
