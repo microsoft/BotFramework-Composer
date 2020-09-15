@@ -27,12 +27,12 @@ export const convertSkillsToDictionary = (skills: Skill[]) => {
   return keyBy(mappedSkills, 'name');
 };
 
-export const getSkillNameFromSetting = (value: string) => {
-  if (value) {
-    const matched = value.match(/\['(.*?)'\]/);
-    if (matched && matched.length > 1) {
-      return matched[1];
-    }
+export const getSkillNameFromSetting = (value?: string) => {
+  if (!value) return '';
+
+  const matched = value.match(/\['(.*?)'\]/);
+  if (matched && matched.length > 1) {
+    return matched[1];
   }
   return '';
 };
