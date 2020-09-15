@@ -17,7 +17,6 @@ import {
   focusedStorageFolderState,
   currentProjectIdState,
   userSettingsState,
-  localeState,
 } from '../../recoilModel';
 import Home from '../../pages/home/Home';
 import ImportQnAFromUrlModal from '../../pages/knowledge-base/ImportQnAFromUrlModal';
@@ -43,7 +42,6 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     updateCurrentPathForStorage,
     updateFolder,
     saveTemplateId,
-    importQnAFromUrls,
     fetchProjectById,
     fetchRecentProjects,
   } = useRecoilValue(dispatcherState);
@@ -52,7 +50,6 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   const templateProjects = useRecoilValue(templateProjectsState);
   const storages = useRecoilValue(storagesState);
   const focusedStorageFolder = useRecoilValue(focusedStorageFolderState);
-  const locale = useRecoilValue(localeState(projectId));
   const { appLocale } = useRecoilValue(userSettingsState);
   const cachedProjectId = useProjectIdCache();
   const currentStorageIndex = useRef(0);
@@ -104,14 +101,15 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     openProject(botFolder);
   };
 
-  const handleCreateNew = async (formData, templateId: string) => {
-    await createProject(
+  const handleCreateNew = async (formData, templateId: string, qnaKbUrls?: string[]) => {
+    createProject(
       templateId || '',
       formData.name,
       formData.description,
       formData.location,
       formData.schemaUrl,
-      appLocale
+      appLocale,
+      qnaKbUrls
     );
   };
 
@@ -122,11 +120,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   const handleCreateQnA = async (urls: string[]) => {
     saveTemplateId(QnABotTemplateId);
     handleDismiss();
-    await handleCreateNew(formData, QnABotTemplateId);
-    // import qna from urls
-    if (urls.length > 0) {
-      await importQnAFromUrls({ id: `${formData.name.toLocaleLowerCase()}.${locale}`, urls, projectId });
-    }
+    handleCreateNew(formData, QnABotTemplateId, urls);
   };
 
   const handleSubmitOrImportQnA = async (formData, templateId: string) => {

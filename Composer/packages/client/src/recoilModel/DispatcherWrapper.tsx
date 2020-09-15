@@ -8,6 +8,7 @@ import once from 'lodash/once';
 import React from 'react';
 import { BotAssets } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
+import isEmpty from 'lodash/isEmpty';
 
 import { UndoRoot } from './undo/history';
 import { prepareAxios } from './../utils/auth';
@@ -89,7 +90,9 @@ export const DispatcherWrapper = ({ children }) => {
       const assets = await getBotAssets(projectId, snapshot);
       const previousAssets = await getBotAssets(projectId, previousSnapshot);
       const filePersistence = await snapshot.getPromise(filePersistenceState(projectId));
-      filePersistence.notify(assets, previousAssets);
+      if (!isEmpty(filePersistence)) {
+        filePersistence.notify(assets, previousAssets);
+      }
     }
   });
 

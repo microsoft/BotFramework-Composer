@@ -16,6 +16,7 @@ import {
   showDelLanguageModalState,
   showAddLanguageModalState,
   settingsState,
+  currentProjectIdState,
 } from '../../recoilModel';
 import { TestController } from '../../components/TestController/TestController';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
@@ -33,8 +34,8 @@ const getProjectLink = (path: string, id?: string) => {
   return id ? `/settings/bot/${id}/${path}` : `/settings/${path}`;
 };
 
-const SettingPage: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
-  const { projectId = '' } = props;
+const SettingPage: React.FC<RouteComponentProps> = () => {
+  const projectId = useRecoilValue(currentProjectIdState);
   const {
     deleteBotProject,
     addLanguageDialogBegin,

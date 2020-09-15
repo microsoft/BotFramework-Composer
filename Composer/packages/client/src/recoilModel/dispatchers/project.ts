@@ -143,7 +143,13 @@ const initQnaFilesStatus = (projectId: string, qnaFiles: QnAFile[], dialogs: Dia
   return updateQnaFilesStatus(projectId, qnaFiles);
 };
 export const projectDispatcher = () => {
-  const initBotState = async (callbackHelpers: CallbackInterface, data: any, jump: boolean, templateId: string) => {
+  const initBotState = async (
+    callbackHelpers: CallbackInterface,
+    data: any,
+    jump: boolean,
+    templateId: string,
+    qnaKbUrls?: string[]
+  ) => {
     const { snapshot, gotoSnapshot, set } = callbackHelpers;
     const { files, botName, botEnvironment, location, schemas, settings, id: projectId, diagnostics, skills } = data;
     const curLocation = await snapshot.getPromise(locationState(projectId));
@@ -226,6 +232,8 @@ export const projectDispatcher = () => {
         let url = `/bot/${projectId}/dialogs/${mainDialog}`;
         if (templateId === QnABotTemplateId) {
           url = `/bot/${projectId}/knowledge-base/${mainDialog}`;
+          navigateTo(url, { state: { qnaKbUrls } });
+          return;
         }
         navigateTo(url);
       }
@@ -294,7 +302,8 @@ export const projectDispatcher = () => {
       description: string,
       location: string,
       schemaUrl?: string,
-      locale?: string
+      locale?: string,
+      qnaKbUrls?: string[]
     ) => {
       try {
         await setBotOpeningStatus(callbackHelpers);
@@ -311,7 +320,7 @@ export const projectDispatcher = () => {
         if (settingStorage.get(projectId)) {
           settingStorage.remove(projectId);
         }
-        await initBotState(callbackHelpers, response.data, true, templateId);
+        await initBotState(callbackHelpers, response.data, true, templateId, qnaKbUrls);
         return projectId;
       } catch (ex) {
         handleProjectFailure(callbackHelpers, ex);
@@ -342,6 +351,7 @@ export const projectDispatcher = () => {
       reset(designPageLocationState(projectId));
       reset(filePersistenceState(projectId));
       reset(undoHistoryState(projectId));
+      reset(botProjectsSpaceState);
     } catch (e) {
       logMessage(callbackHelpers, e.message);
     }
