@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState } from 'react';
 import { FieldProps, useShellApi, useRecognizerConfig } from '@bfc/extension-client';
 import { MicrosoftIRecognizer, SDKKinds } from '@bfc/shared';
 import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
@@ -11,28 +11,15 @@ import { JsonEditor } from '@bfc/code-editor';
 
 import { FieldLabel } from '../../FieldLabel';
 
+import { useMigrationEffect } from './useMigrationEffect';
+
 export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
   const { value, id, label, description, uiOptions, required, onChange } = props;
   const { shellApi, ...shellData } = useShellApi();
   const recognizers = useRecognizerConfig();
-  const { qnaFiles, luFiles, currentDialog, locale } = shellData;
   const [isCustomType, setIsCustomType] = useState(false);
 
-  useEffect(() => {
-    // this logic is for handling old bot with `recognizer = undefined'
-    if (value === undefined) {
-      const qnaFile = qnaFiles.find((f) => f.id === `${currentDialog.id}.${locale}`);
-      const luFile = luFiles.find((f) => f.id === `${currentDialog.id}.${locale}`);
-      if (qnaFile && luFile) {
-        onChange(`${currentDialog.id}.lu.qna`);
-      }
-    }
-
-    // transform lu recognizer to crosstrained for old bot
-    if (value === `${currentDialog.id}.lu`) {
-      onChange(`${currentDialog.id}.lu.qna`);
-    }
-  }, [value]);
+  useMigrationEffect(value, onChange);
 
   const options = useMemo(() => {
     // filter luisRecognizer for dropdown options
