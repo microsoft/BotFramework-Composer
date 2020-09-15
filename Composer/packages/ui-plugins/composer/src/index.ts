@@ -1,69 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { PluginConfig, FormUISchema, RecognizerSchema, UISchema, MenuUISchema } from '@bfc/extension-client';
+import { PluginConfig, FormUISchema, UISchema, MenuUISchema } from '@bfc/extension-client';
 import { SDKKinds } from '@bfc/shared';
 import formatMessage from 'format-message';
 import mapValues from 'lodash/mapValues';
-import { IntentField, RecognizerField, RegexIntentField, QnAActionsField } from '@bfc/adaptive-form';
+import { IntentField, RecognizerField, QnAActionsField } from '@bfc/adaptive-form';
 
 import { DefaultMenuSchema } from './defaultMenuSchema';
-
-const DefaultRecognizers: RecognizerSchema[] = [
-  {
-    id: SDKKinds.RegexRecognizer,
-    displayName: () => formatMessage('Regular Expression'),
-    editor: RegexIntentField,
-    isSelected: (data) => {
-      return typeof data === 'object' && data.$kind === SDKKinds.RegexRecognizer;
-    },
-    handleRecognizerChange: (props) => {
-      props.onChange({ $kind: SDKKinds.RegexRecognizer, intents: [] });
-    },
-    renameIntent: (intentName, newIntentName, shellData, shellApi) => {
-      const { currentDialog } = shellData;
-      shellApi.renameRegExIntent(currentDialog.id, intentName, newIntentName);
-    },
-  },
-  {
-    id: SDKKinds.CustomRecognizer,
-    displayName: () => formatMessage('Custom recognizer'),
-    isSelected: (data) => typeof data === 'object',
-    handleRecognizerChange: (props) =>
-      props.onChange({
-        $kind: 'Microsoft.MultiLanguageRecognizer',
-        recognizers: {
-          'en-us': {
-            $kind: 'Microsoft.RegexRecognizer',
-            intents: [
-              {
-                intent: 'greeting',
-                pattern: 'hello',
-              },
-              {
-                intent: 'test',
-                pattern: 'test',
-              },
-            ],
-          },
-          'zh-cn': {
-            $kind: 'Microsoft.RegexRecognizer',
-            intents: [
-              {
-                intent: 'greeting',
-                pattern: '你好',
-              },
-              {
-                intent: 'test',
-                pattern: '测试',
-              },
-            ],
-          },
-        },
-      }),
-    renameIntent: () => {},
-  },
-];
+import { DefaultRecognizers } from './DefaultRecognizers';
 
 const DefaultFormSchema: FormUISchema = {
   [SDKKinds.AdaptiveDialog]: {
