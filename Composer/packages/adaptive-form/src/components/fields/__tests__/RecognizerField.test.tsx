@@ -8,7 +8,7 @@ import assign from 'lodash/assign';
 
 import { RecognizerField } from '../RecognizerField';
 
-import { fieldProps } from './testUtils';
+import { fieldProps, mockRecognizerConfig } from './testUtils';
 
 jest.mock('@bfc/extension-client', () => ({
   useShellApi: jest.fn(),
@@ -31,28 +31,24 @@ describe('<RecognizerField />', () => {
     });
   });
 
-  it('renders error message when no recognizer matched', () => {
-    (useRecognizerConfig as jest.Mock).mockReturnValue([]);
-    const { container } = renderSubject();
-    expect(container).toHaveTextContent(/Unable to determine recognizer type from data:/);
-  });
-
   it('renders a dropdown when recognizer matches', () => {
     const handleChange = jest.fn();
-    (useRecognizerConfig as jest.Mock).mockReturnValue([
-      {
-        id: 'one',
-        displayName: 'One Recognizer',
-        isSelected: () => false,
-        handleRecognizerChange: handleChange,
-      },
-      {
-        id: 'two',
-        displayName: 'Two Recognizer',
-        isSelected: () => true,
-        handleRecognizerChange: jest.fn(),
-      },
-    ]);
+    (useRecognizerConfig as jest.Mock).mockReturnValue(
+      mockRecognizerConfig([
+        {
+          id: 'one',
+          displayName: 'One Recognizer',
+          isSelected: () => false,
+          handleRecognizerChange: handleChange,
+        },
+        {
+          id: 'two',
+          displayName: 'Two Recognizer',
+          isSelected: () => true,
+          handleRecognizerChange: jest.fn(),
+        },
+      ])
+    );
     const { getByTestId } = renderSubject({ value: 'one' });
     const dropdown = getByTestId('recognizerTypeDropdown');
     expect(dropdown).toHaveTextContent('Two Recognizer');

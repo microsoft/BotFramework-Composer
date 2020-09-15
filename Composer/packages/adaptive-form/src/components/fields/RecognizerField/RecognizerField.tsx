@@ -19,7 +19,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (prop
   const { shellApi, ...shellData } = useShellApi();
 
   useMigrationEffect(value, onChange);
-  const recognizerConfigs = useRecognizerConfig();
+  const { recognizers: recognizerConfigs } = useRecognizerConfig();
   const dropdownOptions = useMemo(() => getDropdownOptions(recognizerConfigs), [recognizerConfigs]);
 
   const currentRecognizerDef = mapRecognizerValueToSchema(value, recognizerConfigs);

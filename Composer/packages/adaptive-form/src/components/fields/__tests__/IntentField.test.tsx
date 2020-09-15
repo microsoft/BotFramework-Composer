@@ -8,7 +8,7 @@ import { useShellApi, useRecognizerConfig } from '@bfc/extension-client';
 
 import { IntentField } from '../IntentField';
 
-import { fieldProps } from './testUtils';
+import { fieldProps, mockRecognizerConfig } from './testUtils';
 
 jest.mock('@bfc/extension-client', () => ({
   useShellApi: jest.fn(),
@@ -22,21 +22,23 @@ function renderSubject(overrides = {}) {
 
 describe('<IntentField />', () => {
   beforeEach(() => {
-    (useRecognizerConfig as jest.Mock).mockReturnValue([
-      {
-        id: 'TestRecognizer',
-        isSelected: (data) => data?.$kind === 'TestRecognizer',
-        intentEditor: ({ id, onChange }) => (
-          <div id={id}>
-            Test Recognizer <button onClick={onChange}>Update</button>
-          </div>
-        ),
-      },
-      {
-        id: 'OtherRecognizer',
-        isSelected: (data) => data?.$kind === 'OtherRecognizer',
-      },
-    ]);
+    (useRecognizerConfig as jest.Mock).mockReturnValue(
+      mockRecognizerConfig([
+        {
+          id: 'TestRecognizer',
+          displayName: 'TestRecognizer',
+          intentEditor: ({ id, onChange }) => (
+            <div id={id}>
+              Test Recognizer <button onClick={onChange}>Update</button>
+            </div>
+          ),
+        },
+        {
+          id: 'OtherRecognizer',
+          displayName: 'OtherRecognizer',
+        },
+      ])
+    );
   });
 
   it('uses a custom label', () => {

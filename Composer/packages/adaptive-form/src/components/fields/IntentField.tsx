@@ -11,13 +11,11 @@ import { FieldLabel } from '../FieldLabel';
 const IntentField: React.FC<FieldProps> = (props) => {
   const { id, description, uiOptions, value, required, onChange } = props;
   const { currentDialog } = useShellApi();
-  const recognizers = useRecognizerConfig();
 
-  const handleChange = () => {
-    onChange(value);
-  };
+  const { recognizers, findRecognizer } = useRecognizerConfig();
+  const recognizer = findRecognizer(currentDialog?.content?.recognizer);
 
-  const recognizer = recognizers.find((r) => r.isSelected(currentDialog?.content?.recognizer));
+  // leak
   let Editor: FieldWidget | undefined;
   if (recognizer && recognizer.id === SDKKinds.CrossTrainedRecognizerSet) {
     Editor = recognizers.find((r) => r.id === SDKKinds.LuisRecognizer)?.intentEditor;
@@ -25,6 +23,10 @@ const IntentField: React.FC<FieldProps> = (props) => {
     Editor = recognizer?.intentEditor;
   }
   const label = formatMessage('Trigger phrases (intent: #{intentName})', { intentName: value });
+
+  const handleChange = () => {
+    onChange(value);
+  };
 
   return (
     <React.Fragment>

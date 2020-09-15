@@ -30,6 +30,6 @@ describe('useRecognizerConfig', () => {
   it('returns the configured recognizers', () => {
     const { result } = renderHook(() => useRecognizerConfig(), { wrapper });
 
-    expect(result.current).toEqual(['recognizer 1', 'recognizer 2']);
+    expect(result.current.recognizers).toEqual(['recognizer 1', 'recognizer 2']);
   });
 });
