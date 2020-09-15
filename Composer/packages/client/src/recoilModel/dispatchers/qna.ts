@@ -99,7 +99,7 @@ export const removeQnAFileState = async (callbackHelpers: CallbackInterface, { i
   set(qnaFilesState, qnaFiles);
 };
 
-export const createSourceQnAFileState = async (
+export const createKBFileState = async (
   callbackHelpers: CallbackInterface,
   { id, name, content }: { id: string; name: string; content: string }
 ) => {
@@ -135,6 +135,63 @@ export const createSourceQnAFileState = async (
 
   qnaFileStatusStorage.updateFileStatus(projectId, createdSourceQnAId);
   set(qnaFilesState, [...newQnAFiles, createdQnAFile]);
+};
+
+export const removeKBFileState = async (callbackHelpers: CallbackInterface, { id }: { id: string }) => {
+  const { set, snapshot } = callbackHelpers;
+  let qnaFiles = await snapshot.getPromise(qnaFilesState);
+  const projectId = await snapshot.getPromise(projectIdState);
+  const locale = await snapshot.getPromise(localeState);
+
+  const targetQnAFile =
+    qnaFiles.find((item) => item.id === id) || qnaFiles.find((item) => item.id === `${id}.${locale}`);
+  if (!targetQnAFile) {
+    throw new Error(`remove qna container file ${id} not exist`);
+  }
+
+  qnaFiles.forEach((file) => {
+    if (file.id === targetQnAFile.id) {
+      qnaFileStatusStorage.removeFileStatus(projectId, targetQnAFile.id);
+    }
+  });
+
+  qnaFiles = qnaFiles.filter((file) => file.id !== targetQnAFile.id);
+  set(qnaFilesState, qnaFiles);
+};
+
+export const renameKBFileState = async (
+  callbackHelpers: CallbackInterface,
+  { id, name }: { id: string; name: string }
+) => {
+  const { set, snapshot } = callbackHelpers;
+  const qnaFiles = await snapshot.getPromise(qnaFilesState);
+  const projectId = await snapshot.getPromise(projectIdState);
+  const locale = await snapshot.getPromise(localeState);
+
+  const targetQnAFile =
+    qnaFiles.find((item) => item.id === id) || qnaFiles.find((item) => item.id === `${id}.${locale}`);
+  if (!targetQnAFile) {
+    throw new Error(`rename qna container file ${id} not exist`);
+  }
+
+  const existQnAFile =
+    qnaFiles.find((item) => item.id === name) || qnaFiles.find((item) => item.id === `${name}.${locale}`);
+  if (existQnAFile) {
+    throw new Error(`rename qna container file to ${name} already exist`);
+  }
+  qnaFileStatusStorage.removeFileStatus(projectId, targetQnAFile.id);
+
+  const newQnAFiles = qnaFiles.map((file) => {
+    if (file.id === targetQnAFile.id) {
+      return {
+        ...file,
+        id: name,
+      };
+    }
+    return file;
+  });
+
+  set(qnaFilesState, newQnAFiles);
 };
 
 export const qnaDispatcher = () => {
@@ -225,7 +282,7 @@ export const qnaDispatcher = () => {
 ${response.data}
 `;
 
-      await createSourceQnAFileState(callbackHelpers, {
+      await createKBFileState(callbackHelpers, {
         id,
         name,
         content: contentForSourceQnA,
@@ -248,7 +305,7 @@ ${response.data}
       // const dialogs = await callbackHelpers.snapshot.getPromise(dialogsState);
 
       const content = qnaUtil.generateQnAPair();
-      await createSourceQnAFileState(callbackHelpers, {
+      await createKBFileState(callbackHelpers, {
         id,
         name,
         content,
@@ -391,7 +448,7 @@ ${response.data}
       const qnaFile = qnaFiles.find((temp) => temp.id === id);
       if (!qnaFile) return qnaFiles;
 
-      const updatedFile = qnaUtil.addImport(qnaFile, sourceId);
+      const updatedFile = qnaUtil.addImport(qnaFile, `${sourceId}.qna`);
       set(qnaFilesState, (qnaFiles) => {
         return qnaFiles.map((file) => {
           return file.id === id ? updatedFile : file;
@@ -405,12 +462,20 @@ ${response.data}
       const qnaFile = qnaFiles.find((temp) => temp.id === id);
       if (!qnaFile) return qnaFiles;
 
-      const updatedFile = qnaUtil.removeImport(qnaFile, sourceId);
+      const updatedFile = qnaUtil.removeImport(qnaFile, `${sourceId}.qna`);
       set(qnaFilesState, (qnaFiles) => {
         return qnaFiles.map((file) => {
           return file.id === id ? updatedFile : file;
         });
       });
+    }
+  );
+  const removeQnAKB = useRecoilCallback((callbackHelpers: CallbackInterface) => async ({ id }: { id: string }) => {
+    await removeKBFileState(callbackHelpers, { id });
+  });
+  const renameQnAKB = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async ({ id, name }: { id: string; name: string }) => {
+      await renameKBFileState(callbackHelpers, { id, name });
     }
   );
 
@@ -426,6 +491,8 @@ ${response.data}
     createQnAFile,
     removeQnAFile,
     updateQnAFile,
+    removeQnAKB,
+    renameQnAKB,
     createQnAKBFromUrl,
     createQnAKBFromScratch,
     createQnAFromScratchDialogBegin,

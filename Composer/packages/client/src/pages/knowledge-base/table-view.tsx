@@ -43,6 +43,7 @@ import { dispatcherState } from '../../recoilModel';
 import { getBaseName } from '../../utils/fileUtil';
 import { EditableField } from '../../components/EditableField';
 import { classNames, AddTemplateButton } from '../../components/AllupviewComponets/styles';
+import { EditQnAFromScratchModal } from '../../components/QnA';
 
 import { formCell, content, addIcon, divider, rowDetails, icon, addAlternative } from './styles';
 
@@ -106,6 +107,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         })
       : [];
   };
+  const [editQnAFile, setEditQnAFile] = useState<QnAFile | undefined>(undefined);
   const [focusedIndex, setFocusedIndex] = useState(-1);
   const [qnaSections, setQnASections] = useState<QnASectionItem[]>([]);
 
@@ -221,6 +223,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const onRenderGroupHeader: IDetailsGroupRenderProps['onRenderHeader'] = (props) => {
     const groupName = props?.group?.name || '';
     const containerId = props?.group?.key || '';
+    const containerQnAFile = qnaFiles.find(({ id }) => id === containerId);
     const isImportedSource = containerId.endsWith('.source');
 
     const onRenderItem = (item: IOverflowSetItemProps): JSX.Element => {
@@ -253,7 +256,9 @@ const TableView: React.FC<TableViewProps> = (props) => {
                   {
                     key: 'edit',
                     name: 'edit',
-                    onClick: noOp,
+                    onClick: () => {
+                      setEditQnAFile(containerQnAFile);
+                    },
                   },
                 ]}
                 overflowItems={[
@@ -587,6 +592,23 @@ const TableView: React.FC<TableViewProps> = (props) => {
           onRenderRow={onRenderRow}
         />
       </ScrollablePane>
+      {editQnAFile && (
+        <EditQnAFromScratchModal
+          qnaFile={editQnAFile}
+          qnaFiles={qnaFiles}
+          onDismiss={() => {
+            setEditQnAFile(undefined);
+          }}
+          onSubmit={async ({ name }) => {
+            const newId = `${name}.source`;
+            await actions.renameQnAKB({ id: editQnAFile.id, name: newId });
+            if (!qnaFile) return;
+            await actions.removeQnAImport({ id: qnaFile.id, sourceId: editQnAFile.id });
+            await actions.createQnAImport({ id: qnaFile.id, sourceId: newId });
+            setEditQnAFile(undefined);
+          }}
+        ></EditQnAFromScratchModal>
+      )}
     </div>
   );
 };
