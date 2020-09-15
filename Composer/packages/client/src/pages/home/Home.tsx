@@ -179,7 +179,7 @@ const Home: React.FC<RouteComponentProps> = () => {
                 styles={home.latestBotItem}
                 title={''}
                 onClick={() => {
-                  onClickTemplate('ToDoBotWithLuisSamplesdfsdf');
+                  onClickTemplate('ToDoBotWithLuisSample');
                 }}
               />
             )}
