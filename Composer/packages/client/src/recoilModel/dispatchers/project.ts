@@ -351,6 +351,7 @@ export const projectDispatcher = () => {
       reset(designPageLocationState(projectId));
       reset(filePersistenceState(projectId));
       reset(undoHistoryState(projectId));
+      reset(botProjectsSpaceState);
     } catch (e) {
       logMessage(callbackHelpers, e.message);
     }
