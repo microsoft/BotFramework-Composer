@@ -177,16 +177,19 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
     };
 
     return (
-      <TreeItem
-        key={`${item.id}_${item.index}`}
-        depth={depth}
-        dialogName={dialog.displayName}
-        icon={TYPE_TO_ICON_MAP[item.type] || 'Flow'}
-        isActive={dialog.id === props.dialogId && createSelectedPath(item.index) === selected}
-        link={link}
-        onDelete={onDelete}
-        onSelect={onSelect}
-      />
+      <React.Fragment>
+        <TreeItem
+          key={`${item.id}_${item.index}`}
+          depth={depth}
+          dialogName={dialog.displayName}
+          icon={TYPE_TO_ICON_MAP[item.type] || 'Flow'}
+          isActive={dialog.id === props.dialogId && createSelectedPath(item.index) === selected}
+          link={link}
+          shiftOut={32}
+          onDelete={onDelete}
+          onSelect={onSelect}
+        />
+      </React.Fragment>
     );
   }
 
