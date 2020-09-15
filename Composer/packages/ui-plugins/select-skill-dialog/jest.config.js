@@ -5,5 +5,5 @@
 const { createConfig } = require('@bfc/test-utils');
 
 module.exports = createConfig('ui-plugin/select-skill-dialog', 'react', {
-  testPathIgnorePatterns: ['__tests__/constants.ts'],
+  testPathIgnorePatterns: ['__tests__/constants.ts', 'lib'],
 });

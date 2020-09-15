@@ -7,7 +7,7 @@ import formatMessage from 'format-message';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { Fragment, useState, useMemo } from 'react';
+import { Fragment, useState, useMemo, useEffect } from 'react';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import { useRecoilValue } from 'recoil';
@@ -15,8 +15,10 @@ import { PublishTarget } from '@bfc/shared';
 
 import { PublishType } from '../../recoilModel/types';
 import { userSettingsState } from '../../recoilModel';
+import { PluginHost } from '../../components/PluginHost/PluginHost';
+import { PluginAPI } from '../../plugins/api';
 
-import { label } from './styles';
+import { label, customPublishUISurface } from './styles';
 
 interface CreatePublishTargetProps {
   closeDialog: () => void;
@@ -27,10 +29,12 @@ interface CreatePublishTargetProps {
 }
 
 const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
-  const [targetType, setTargetType] = useState<string | undefined>(props.current?.type);
-  const [name, setName] = useState(props.current ? props.current.name : '');
-  const [config, setConfig] = useState(props.current ? JSON.parse(props.current.configuration) : undefined);
+  const { current } = props;
+  const [targetType, setTargetType] = useState<string | undefined>(current?.type);
+  const [name, setName] = useState(current ? current.name : '');
+  const [config, setConfig] = useState(current ? JSON.parse(current.configuration) : undefined);
   const [errorMessage, setErrorMsg] = useState('');
+  const [pluginConfigIsValid, setPluginConfigIsValid] = useState(false);
   const userSettings = useRecoilValue(userSettingsState);
 
   const targetTypes = useMemo(() => {
@@ -69,26 +73,67 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
     return targetType ? props.types.find((t) => t.name === targetType)?.schema : undefined;
   }, [props.targets, targetType]);
 
+  const hasView = useMemo(() => {
+    return targetType ? props.types.find((t) => t.name === targetType)?.hasView : undefined;
+  }, [props.targets, targetType]);
+
   const updateName = (e, newName) => {
     setErrorMsg('');
     setName(newName);
     isNameValid(newName);
   };
 
-  const isDisable = () => {
-    if (!targetType || !name || errorMessage) {
-      return true;
-    } else {
-      return false;
+  const saveDisabled = useMemo(() => {
+    const disabled = !targetType || !name || !!errorMessage;
+    if (hasView) {
+      // plugin config must also be valid
+      return disabled || !pluginConfigIsValid;
     }
-  };
+    return disabled;
+  }, [errorMessage, name, pluginConfigIsValid, targetType]);
 
-  const submit = async () => {
+  // setup plugin APIs
+  useEffect(() => {
+    PluginAPI.publish.setPublishConfig = (config) => updateConfig(config);
+    PluginAPI.publish.setConfigIsValid = (valid) => setPluginConfigIsValid(valid);
+    PluginAPI.publish.useConfigBeingEdited = () => [current ? JSON.parse(current.configuration) : undefined];
+  }, [current, targetType, name]);
+
+  const submit = async (_e) => {
     if (targetType) {
       await props.updateSettings(name, targetType, JSON.stringify(config) || '{}');
       props.closeDialog();
     }
   };
+
+  const publishTargetContent = useMemo(() => {
+    if (hasView && targetType) {
+      // render custom plugin view
+      return (
+        <PluginHost
+          extraIframeStyles={[customPublishUISurface]}
+          pluginName={targetType}
+          pluginType={'publish'}
+        ></PluginHost>
+      );
+    }
+    // render default instruction / schema editor view
+    return (
+      <Fragment>
+        {instructions && <p>{instructions}</p>}
+        <div css={label}>{formatMessage('Publish Configuration')}</div>
+        <JsonEditor
+          key={targetType}
+          editorSettings={userSettings.codeEditor}
+          height={200}
+          schema={schema}
+          value={config}
+          onChange={updateConfig}
+        />
+        <button hidden disabled={saveDisabled} type="submit" />
+      </Fragment>
+    );
+  }, [targetType, instructions, schema, hasView, saveDisabled]);
 
   return (
     <Fragment>
@@ -108,21 +153,11 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
           placeholder={formatMessage('Choose One')}
           onChange={updateType}
         />
-        {instructions && <p>{instructions}</p>}
-        <div css={label}>{formatMessage('Publish Configuration')}</div>
-        <JsonEditor
-          key={targetType}
-          editorSettings={userSettings.codeEditor}
-          height={200}
-          schema={schema}
-          value={config}
-          onChange={updateConfig}
-        />
-        <button hidden disabled={isDisable()} type="submit" />
+        {publishTargetContent}
       </form>
       <DialogFooter>
         <DefaultButton text={formatMessage('Cancel')} onClick={props.closeDialog} />
-        <PrimaryButton disabled={isDisable()} text={formatMessage('Save')} onClick={submit} />
+        <PrimaryButton disabled={saveDisabled} text={formatMessage('Save')} onClick={submit} />
       </DialogFooter>
     </Fragment>
   );

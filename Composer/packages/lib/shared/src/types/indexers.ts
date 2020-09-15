@@ -14,6 +14,7 @@ export enum FileExtensions {
   Lg = '.lg',
   Qna = '.qna',
   Setting = 'appsettings.json',
+  FormDialogSchema = '.form-dialog',
 }
 
 export interface FileInfo {
