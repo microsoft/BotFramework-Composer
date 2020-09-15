@@ -2,10 +2,8 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-
 import { useLanguageServer } from '../hooks/useLanguageServer';
 import { checkIsOutside } from '../utils/uiUtils';
-
 import { CompletionList } from './CompletionList';
 
 export const IntellisenseTextField = React.memo(
@@ -42,7 +40,7 @@ export const IntellisenseTextField = React.memo(
       if (value !== undefined && value !== textFieldValue) {
         setTextFieldValue(value);
       }
-    }, [value]);
+    }, [value, textFieldValue]);
 
     // Show the completion list again every time the results are different (unless something was just selected from the list)
     React.useEffect(() => {
