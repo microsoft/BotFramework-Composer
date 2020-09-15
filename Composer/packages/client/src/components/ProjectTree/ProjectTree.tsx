@@ -104,14 +104,21 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
   const [filter, setFilter] = useState('');
   const delayedSetFilter = debounce((newValue) => setFilter(newValue), 1000);
   const addMainDialogRef = useCallback((mainDialog) => onboardingAddCoachMarkRef({ mainDialog }), []);
-  const projectCollection = useRecoilValue<BotInProject[]>(botProjectSpaceTreeSelector);
+  const projectCollection = useRecoilValue<BotInProject[]>(botProjectSpaceTreeSelector).map((bot) => ({
+    ...bot,
+    hasWarnings: false,
+  }));
 
-  const renderBotHeader = (bot: BotInProject, hasWarnings: boolean) => {
+  const botHasWarnings = (bot: BotInProject) => {
+    return bot.dialogs.some((dialog) => dialog.triggers.some((tr) => triggerNotSupported(dialog, tr)));
+  };
+
+  const renderBotHeader = (bot: BotInProject) => {
     const link: TreeLink = {
       displayName: bot.name,
       projectId: bot.projectId,
       isRoot: true,
-      warningContent: hasWarnings ? formatMessage('This bot has warnings') : undefined,
+      warningContent: botHasWarnings(bot) ? formatMessage('This bot has warnings') : undefined,
     };
 
     return (
@@ -212,14 +219,15 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
     return filteredDialogs.map((dialog: DialogInfo) => {
       const triggerList = dialog.triggers
         .filter((tr) => filterMatch(dialog.displayName) || filterMatch(getTriggerName(tr)))
-        .map((tr, index) =>
-          renderTrigger(
+        .map((tr, index) => {
+          const warningContent = triggerNotSupported(dialog, tr);
+          return renderTrigger(
             projectId,
-            { ...tr, index, displayName: getTriggerName(tr), warningContent: triggerNotSupported(dialog, tr) },
+            { ...tr, index, displayName: getTriggerName(tr), warningContent },
             dialog,
             startDepth + 1
-          )
-        );
+          );
+        });
       return (
         <details key={dialog.id} ref={dialog.isRoot ? addMainDialogRef : undefined}>
           <summary css={summaryStyle}>
@@ -231,10 +239,10 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
     });
   }
 
-  function createBotSubtree(bot: BotInProject) {
+  function createBotSubtree(bot: BotInProject & { hasWarnings: boolean }) {
     return (
       <details key={bot.projectId}>
-        <summary css={summaryStyle}>{renderBotHeader(bot, false)}</summary>
+        <summary css={summaryStyle}>{renderBotHeader(bot)}</summary>
         {createDetailsTree(bot, 1)}
       </details>
     );
