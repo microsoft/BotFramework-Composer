@@ -64,7 +64,7 @@ export type RecognizerSchema = {
   /** An inline editor to edit an intent. If none provided, users will not be able to edit. */
   intentEditor?: FieldWidget;
   /** A function invoked with the form data to determine if this is the currently selected recognizer */
-  isSelected: (data: any) => boolean;
+  isSelected?: (data: any) => boolean;
   /** Invoked when changing the recognizer type */
   handleRecognizerChange?: (fieldProps: FieldProps, shellData: ShellData, shellApi: ShellApi) => void;
   /** An inline editor to edit recognizer value. If none provided, users will not be able to edit its value. */
