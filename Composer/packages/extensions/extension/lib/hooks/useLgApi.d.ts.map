@@ -1,1 +1,0 @@
-{"version":3,"file":"useLgApi.d.ts","sourceRoot":"","sources":["../../src/hooks/useLgApi.ts"],"names":[],"mappings":"AAGA,OAAO,EAA6B,UAAU,EAAU,QAAQ,EAAE,MAAM,aAAa,CAAC;AAEtF;;GAEG;AACH,eAAO,MAAM,QAAQ,aAAc,QAAQ;iCA2B7B,MAAM,UACR,MAAM,gBACA,MAAM,kBACJ,UAAU,iBACX,MAAM,KACpB,OAAO,CAAC,MAAM,CAAC;+BAnBgB,MAAM,UAAU,MAAM;iCA+BzB,MAAM,cAAc,MAAM;kCAzCpB,MAAM,eAAe,MAAM,EAAE;CA4CnE,CAAC"}

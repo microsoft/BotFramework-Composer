@@ -1,1 +1,0 @@
-{"version":3,"file":"SchemaField.d.ts","sourceRoot":"","sources":["../../src/components/SchemaField.tsx"],"names":[],"mappings":"AAIA,OAAO,KAAoB,MAAM,OAAO,CAAC;AACzC,OAAO,EAAE,UAAU,EAA4B,MAAM,gBAAgB,CAAC;AAMtE,QAAA,MAAM,WAAW;;CAQhB,CAAC;AAEF,QAAA,MAAM,WAAW,EAAE,KAAK,CAAC,EAAE,CAAC,UAAU,CAwErC,CAAC;AAEF,OAAO,EAAE,WAAW,EAAE,WAAW,EAAE,CAAC;AACpC,eAAe,WAAW,CAAC"}
