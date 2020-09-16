@@ -9,9 +9,11 @@
     "build": "yarn build:clean && yarn build:ts",
     "build:ts": "tsc",
     "build:clean": "rimraf lib && rimraf build",
-    "lint": "eslint --quiet ./src"
+    "lint": "eslint --quiet ./src",
+    "test": "jest"
   },
   "devDependencies": {
+    "@bfc/test-utils": "*",
     "@types/express": "^4.17.6",
     "@types/passport": "^1.0.3",
     "@types/path-to-regexp": "^1.7.0",
