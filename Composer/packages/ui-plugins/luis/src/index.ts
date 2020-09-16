@@ -3,6 +3,7 @@
 
 import { PluginConfig } from '@bfc/extension-client';
 import { SDKKinds } from '@bfc/shared';
+import formatMessage from 'format-message';
 
 import { LuisIntentEditor } from './LuisIntentEditor';
 
@@ -11,7 +12,7 @@ const config: PluginConfig = {
     {
       id: SDKKinds.LuisRecognizer,
       disabled: true,
-      displayName: 'LUIS',
+      displayName: formatMessage('LUIS'),
       intentEditor: LuisIntentEditor,
       isSelected: (data) => {
         return typeof data === 'string' && data.endsWith('.lu');
@@ -25,7 +26,7 @@ const config: PluginConfig = {
           // into the .dialog file
           props.onChange(`${luFile.id.split('.')[0]}.lu`);
         } else {
-          alert(`NO LU FILE WITH NAME ${currentDialog.id}`);
+          alert(formatMessage(`NO LU FILE WITH NAME {id}`, { id: currentDialog.id }));
         }
       },
       renameIntent: async (intentName, newIntentName, shellData, shellApi) => {
