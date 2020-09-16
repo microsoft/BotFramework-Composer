@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import path from 'path';
-import { spawn } from 'child_process';
 
 import glob from 'globby';
 import { readJson } from 'fs-extra';
@@ -11,34 +10,9 @@ import { pluginLoader } from '../loader';
 import logger from '../logger';
 import { ExtensionManifestStore } from '../storage/extensionManifestStore';
 import { ExtensionBundle, PackageJSON, ExtensionMetadata, ExtensionSearchResult } from '../types/extension';
+import { npm } from '../utils/npm';
 
-const log = logger.extend('plugins');
-
-/**
- * Used to safely execute commands that include user input
- */
-async function runNpm(command: string): Promise<{ stdout: string; stderr: string }> {
-  return new Promise((resolve) => {
-    log('npm %s', command);
-    const cmdArgs = command.split(' ');
-    let stdout = '';
-    let stderr = '';
-
-    const proc = spawn('npm', cmdArgs);
-
-    proc.stdout.on('data', (data) => {
-      stdout += data;
-    });
-
-    proc.stderr.on('data', (data) => {
-      stderr += data;
-    });
-
-    proc.on('close', () => {
-      resolve({ stdout, stderr });
-    });
-  });
-}
+const log = logger.extend('manager');
 
 function processBundles(pluginPath: string, bundles: ExtensionBundle[]) {
   return bundles.map((b) => ({
@@ -89,7 +63,7 @@ class ExtensionManager {
     const cmd = `install --no-audit --prefix ${this.remotePluginsDir} ${packageNameAndVersion}`;
     log('Installing %s@%s to %s', name, version, this.remotePluginsDir);
 
-    const { stdout } = await runNpm(cmd);
+    const { stdout } = await npm(cmd);
 
     log('%s', stdout);
 
@@ -187,7 +161,7 @@ class ExtensionManager {
     const cmd = `uninstall --no-audit --prefix ${this.remotePluginsDir} ${id}`;
     log('Removing %s', id);
 
-    const { stdout } = await runNpm(cmd);
+    const { stdout } = await npm(cmd);
 
     log('%s', stdout);
 
@@ -201,7 +175,7 @@ class ExtensionManager {
   public async search(query: string) {
     const cmd = `search --json keywords:botframework-composer ${query}`;
 
-    const { stdout } = await runNpm(cmd);
+    const { stdout } = await npm(cmd);
 
     try {
       const result = JSON.parse(stdout);
