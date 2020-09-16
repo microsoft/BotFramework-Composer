@@ -38,6 +38,7 @@ export const CreateNewResource: React.FC<CreateNewResourceProps> = (props) => {
   const [selectedResources, setExternalResources] = useState<string[]>([]);
 
   const subscriptionOption = useMemo(() => {
+    console.log(subscriptions);
     return subscriptions.map((t) => ({ key: t.subscriptionId, text: t.displayName }));
   }, [subscriptions]);
 
