@@ -194,6 +194,20 @@ const checkAppLocale = (newAppLocale: string) => {
   }
 };
 
+const initSettingsListeners = () => {
+  ipcMain.once('init-user-settings', (_ev, settings: UserSettings) => {
+    // Check app locale for changes
+    checkAppLocale(settings.appLocale);
+    // we can't synchronously call the main process (due to deadlocks)
+    // so we wait for the initial settings to be loaded from the client
+    initializeAppUpdater(settings.appUpdater);
+  });
+
+  ipcMain.on('update-user-settings', (_ev, settings: UserSettings) => {
+    checkAppLocale(settings.appLocale);
+  });
+};
+
 async function run() {
   fixPath(); // required PATH fix for Mac (https://github.com/electron/electron/issues/5626)
 
@@ -239,19 +253,9 @@ async function run() {
 
     updateStatus(formatMessage('Starting server...'));
     await loadServer();
+
+    initSettingsListeners();
     await main();
-
-    ipcMain.once('init-user-settings', (_ev, settings: UserSettings) => {
-      // Check app locale for changes
-      checkAppLocale(settings.appLocale);
-      // we can't synchronously call the main process (due to deadlocks)
-      // so we wait for the initial settings to be loaded from the client
-      initializeAppUpdater(settings.appUpdater);
-    });
-
-    ipcMain.on('update-user-settings', (_ev, settings: UserSettings) => {
-      checkAppLocale(settings.appLocale);
-    });
 
     setTimeout(startApp, 500);
   });
