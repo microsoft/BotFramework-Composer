@@ -3,16 +3,9 @@
 
 import { selector, selectorFamily } from 'recoil';
 
-import { botNameState, botProjectsSpaceState, filePersistenceState } from '../atoms';
+import { botNameState, botProjectsSpaceState } from '../atoms';
 
-export const filePersistenceSelector = selectorFamily({
-  key: 'filePersistenceSelector',
-  get: (projectId: string) => ({ get }) => {
-    return get(filePersistenceState(projectId));
-  },
-});
-
-//TODO: This selector will be used
+//TODO: This selector will be used when BotProjects is implemented
 export const botProjectSpaceSelector = selector({
   key: 'botProjectSpaceSelector',
   get: ({ get }) => {
