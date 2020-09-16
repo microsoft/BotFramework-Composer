@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { RecognizerSchema } from '@bfc/extension-client';
+import { RecognizerSchema, FallbackRecognizerKey } from '@bfc/extension-client';
 
 import { recognizerOrderMap } from './defaultRecognizerOrder';
 import { mapRecognizerSchemaToDropdownOption } from './mappers';
@@ -11,6 +11,8 @@ const getRankScore = (r: RecognizerSchema) => {
   if (r.disabled) return Number.MAX_VALUE;
   // Always put default recognzier ahead.
   if (r.default) return -1;
+  // Put fallback recognizer behind.
+  if (r.id === FallbackRecognizerKey) return Number.MAX_VALUE - 1;
   return recognizerOrderMap[r.id] ?? Number.MAX_VALUE - 1;
 };
 

@@ -3,11 +3,7 @@
 
 import { SDKKinds } from '@bfc/shared';
 
-export const defaultRecognizerOrder = [
-  SDKKinds.CrossTrainedRecognizerSet,
-  SDKKinds.RegexRecognizer,
-  SDKKinds.CustomRecognizer,
-];
+export const defaultRecognizerOrder = [SDKKinds.CrossTrainedRecognizerSet, SDKKinds.RegexRecognizer];
 
 export const recognizerOrderMap: { [$kind: string]: number } = defaultRecognizerOrder.reduce((result, $kind, index) => {
   result[$kind] = index;

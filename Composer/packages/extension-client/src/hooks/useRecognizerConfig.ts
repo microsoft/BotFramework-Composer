@@ -8,6 +8,8 @@ import get from 'lodash/get';
 import { EditorExtensionContext } from '../EditorExtensionContext';
 import { RecognizerOptions, RecognizerSchema } from '../types';
 
+export const FallbackRecognizerKey = 'fallback';
+
 export function useRecognizerConfig() {
   const { plugins } = useContext(EditorExtensionContext);
 
@@ -25,13 +27,17 @@ export function useRecognizerConfig() {
       });
   }, [plugins.uiSchema]);
 
+  // Use the JSON editor as fallback recognizer config.
+  const fallbackRecognizer = recognizers.find((x) => x.id === 'fallback');
+
   const findConfigByValue = (recognizerValue?: MicrosoftIRecognizer) => {
-    return recognizers.find((r) => {
+    const matchedRecognizer = recognizers.find((r) => {
       if (typeof r.isSelected === 'function') {
         return r.isSelected(recognizerValue);
       }
       return r.id === get(recognizerValue, '$kind');
     });
+    return matchedRecognizer ?? fallbackRecognizer;
   };
 
   return {

@@ -3,7 +3,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useMemo } from 'react';
-import { FieldProps, useShellApi, useRecognizerConfig } from '@bfc/extension-client';
+import { FieldProps, useShellApi, useRecognizerConfig, FallbackRecognizerKey } from '@bfc/extension-client';
 import { MicrosoftIRecognizer } from '@bfc/shared';
 import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import formatMessage from 'format-message';
@@ -11,7 +11,7 @@ import formatMessage from 'format-message';
 import { FieldLabel } from '../../FieldLabel';
 
 import { useMigrationEffect } from './useMigrationEffect';
-import { FallbackRecognizerId, mapDropdownOptionToRecognizerSchema } from './mappers';
+import { mapDropdownOptionToRecognizerSchema } from './mappers';
 import { getDropdownOptions } from './getDropdownOptions';
 
 export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
@@ -22,7 +22,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (prop
   const { recognizers: recognizerConfigs, findRecognizer } = useRecognizerConfig();
   const dropdownOptions = useMemo(() => getDropdownOptions(recognizerConfigs), [recognizerConfigs]);
 
-  const currentRecognizerDef = findRecognizer(value) ?? recognizerConfigs.find((r) => r.id === FallbackRecognizerId);
+  const currentRecognizerDef = findRecognizer(value) ?? recognizerConfigs.find((r) => r.id === FallbackRecognizerKey);
   const RecognizerEditor = currentRecognizerDef?.recognizerEditor;
   const widget = RecognizerEditor ? <RecognizerEditor {...props} /> : null;
 
