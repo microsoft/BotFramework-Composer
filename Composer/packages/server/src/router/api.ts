@@ -68,7 +68,7 @@ router.post('/runtime/eject/:projectId/:template', EjectController.eject);
 //assets
 router.get('/assets/projectTemplates', AssetController.getProjTemplates);
 
-router.use('/assets/locales/', express.static(path.join(__dirname, '../../src/locales')));
+router.use('/assets/locales/', express.static(path.join(__dirname, '..', '..', 'src', 'locales')));
 
 //help api
 router.get('/utilities/qna/parse', UtilitiesController.getQnaContent);
