@@ -1,0 +1,13 @@
+{
+  "name": "@bfc/plugins-libs",
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=12"
+  },
+  "scripts": {
+    "build:botservice": "cd arm-botservice && yarn build",
+    "build:appinsight": "cd arm-appinsights && yarn build"
+  },
+  "author": "",
+  "license": "ISC"
+}
