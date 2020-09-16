@@ -50,15 +50,21 @@ describe('mergePluginConfigs', () => {
 
   it('adds recognizers', () => {
     const config1 = {
-      recognizers: ['recognizer 1'],
+      uiSchema: {
+        recognizer1: { displayName: 'recognizer1' },
+      },
     };
 
     const config2 = {
-      recognizers: ['recognizer 2'],
+      uiSchema: {
+        recognizer2: { displayName: 'recognizer2' },
+      },
     };
 
-    // @ts-expect-error
-    expect(mergePluginConfigs(config1, config2).recognizers).toEqual(['recognizer 2', 'recognizer 1']);
+    expect(mergePluginConfigs(config1, config2).uiSchema).toEqual({
+      recognizer1: { displayName: 'recognizer1' },
+      recognizer2: { displayName: 'recognizer2' },
+    });
   });
 
   it('replaces other arrays', () => {

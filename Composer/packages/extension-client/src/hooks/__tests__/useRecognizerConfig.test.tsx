@@ -12,13 +12,14 @@ const plugins = {
     foo: {
       form: {},
       menu: {},
+      recognizer: { displayName: 'recognizer 1' },
     },
     bar: {
       form: {},
       menu: {},
+      recognizer: { displayName: 'recognizer 2' },
     },
   },
-  recognizers: ['recognizer 1', 'recognizer 2'],
 };
 
 const wrapper: React.FC = ({ children }) => (
@@ -30,6 +31,15 @@ describe('useRecognizerConfig', () => {
   it('returns the configured recognizers', () => {
     const { result } = renderHook(() => useRecognizerConfig(), { wrapper });
 
-    expect(result.current.recognizers).toEqual(['recognizer 1', 'recognizer 2']);
+    expect(result.current.recognizers).toEqual([
+      {
+        id: 'foo',
+        displayName: 'recognizer 1',
+      },
+      {
+        id: 'bar',
+        displayName: 'recognizer 2',
+      },
+    ]);
   });
 });

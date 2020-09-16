@@ -175,8 +175,6 @@ const synthesizeUISchema = (formSchema: FormUISchema, menuSchema: MenuUISchema):
 
 const config: PluginConfig = {
   uiSchema: synthesizeUISchema(DefaultFormSchema, DefaultMenuSchema),
-  // TODO: merge this with uischema
-  recognizers: DefaultRecognizers,
 };
 
 export default config;

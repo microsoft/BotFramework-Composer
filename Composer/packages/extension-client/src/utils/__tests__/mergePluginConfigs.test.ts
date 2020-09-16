@@ -56,23 +56,25 @@ describe('mergePluginConfigs', () => {
   it('merges recognizers into single list', () => {
     const plugins: Partial<PluginConfig>[] = [
       {
-        recognizers: [
-          {
-            id: 'default',
-            displayName: 'Default',
-            isSelected: () => false,
-            handleRecognizerChange: jest.fn(),
+        uiSchema: {
+          [SDKKinds.LuisRecognizer]: {
+            recognizer: {
+              displayName: 'Default',
+              isSelected: () => false,
+              handleRecognizerChange: jest.fn(),
+            },
           },
-          {
-            id: 'new',
-            displayName: 'New Recognizer',
-            isSelected: () => false,
-            handleRecognizerChange: jest.fn(),
+          [SDKKinds.RegexRecognizer]: {
+            recognizer: {
+              displayName: 'New Recognizer',
+              isSelected: () => false,
+              handleRecognizerChange: jest.fn(),
+            },
           },
-        ],
+        },
       },
     ];
 
-    expect(mergePluginConfigs(...plugins).recognizers).toHaveLength(2);
+    expect(Object.keys(mergePluginConfigs(...plugins).uiSchema)).toHaveLength(2);
   });
 });
