@@ -12,6 +12,8 @@ import { Debugger } from 'debug';
 
 import { mergeDeep } from './mergeDeep';
 import { BotProjectDeploy } from './deploy';
+import { BotProjectProvision } from './provision';
+
 import schema from './schema';
 
 // This option controls whether the history is serialized to a file between sessions with Composer
@@ -21,7 +23,7 @@ const PERSIST_HISTORY = false;
 
 const instructions = `To create a publish configuration, follow the instructions in the README file in your bot project folder.`;
 
-interface CreateAndDeployResources {
+interface DeployResources {
   name: string;
   environment: string;
   accessToken: string;
@@ -37,10 +39,24 @@ interface PublishConfig {
   [key: string]: any;
 }
 
+interface ProvisionConfig {
+  name: string; // profile name
+  type: string; // webapp or function
+  subscription: { subscriptionId: string; tenantId: string; displayName: string };
+  hostname: string; // for previous bot, it's ${name}-${environment}
+  location: { id: string; name: string; displayName: string };
+  externalResources: string[];
+  choice: string;
+  accessToken: string;
+  graphToken: string;
+  [key: string]: any;
+}
+
 // Wrap the entire class definition in the export so the composer object can be available to it
 export default async (composer: any): Promise<void> => {
   class AzurePublisher {
     private publishingBots: { [key: string]: any };
+    private provisionStatus: { [key: string]: any };
     private historyFilePath: string;
     private histories: any;
     private logMessages: any[];
@@ -58,6 +74,7 @@ export default async (composer: any): Promise<void> => {
         this.loadHistoryFromFile();
       }
       this.publishingBots = {};
+      this.provisionStatus = {};
       this.logMessages = [];
       this.mode = mode || 'azurewebapp';
       this.schema = schema;
@@ -190,7 +207,7 @@ export default async (composer: any): Promise<void> => {
       profileName: string,
       jobId: string,
       resourcekey: string,
-      customizeConfiguration: CreateAndDeployResources
+      customizeConfiguration: DeployResources
     ) => {
       const {
         subscriptionID,
@@ -309,6 +326,68 @@ export default async (composer: any): Promise<void> => {
       }
     };
 
+    /*******************************************************************************************************************************/
+    /* These methods help to track the process of the provision (create azure resources for deploy) */
+    /*******************************************************************************************************************************/
+    private setProvisionStatus = (botId: string, profileName: string, newStatus) => {
+      if (!this.provisionStatus[botId]) {
+        this.provisionStatus[botId] = {};
+      }
+      this.provisionStatus[botId][profileName] = newStatus;
+    };
+
+    private asyncProvision = async (config: ProvisionConfig, project, user) => {
+      const { hostname, subscription, accessToken, graphToken, location } = config;
+      const botproj = new BotProjectProvision({
+        subId: subscription.subscriptionId,
+        logger: (msg: any) => {
+          console.log(msg);
+          this.logMessages.push(JSON.stringify(msg, null, 2));
+        },
+        accessToken: accessToken,
+        graphToken: graphToken,
+        projPath: '../../plugins/samples/assets/shared/scripts',
+        tenantId: subscription.tenantId,
+      });
+      // set interval to update status
+      const updatetimer = setInterval(() => {
+        if (this.provisionStatus[project.id][config.name]) {
+          this.provisionStatus[project.id][config.name].details = botproj.getProvisionStatus();
+        } else {
+          this.provisionStatus[project.id][config.name] = {
+            status: 202,
+            details: botproj.getProvisionStatus(),
+          };
+        }
+      }, 10000);
+
+      try {
+        const result = await botproj.create(hostname, location.name, '');
+        const previous = this.provisionStatus[project.id][config.name];
+        previous.status = 200;
+        previous.config = result;
+        previous.details = botproj.getProvisionStatus();
+        this.setProvisionStatus(project.id, config.name, previous);
+        console.log(result);
+        return result;
+      } catch (error) {
+        console.log(error);
+
+        const previous = this.provisionStatus[project.id][config.name];
+        previous.status = 500;
+        previous.config = {};
+        previous.details = botproj.getProvisionStatus();
+        previous.error = JSON.parse(JSON.stringify(error, Object.getOwnPropertyNames(error)));
+
+        this.setProvisionStatus(project.id, config.name, previous);
+      } finally {
+        clearInterval(updatetimer);
+      }
+    };
+
+    /*******************************************************************************************************************************/
+    /* These methods deploy bot to azure async */
+    /*******************************************************************************************************************************/
     // move the init folder and publsih together and not wait in publish method. because init folder take a long time
     private asyncPublish = async (config: PublishConfig, project, resourcekey, jobId) => {
       const {
@@ -353,7 +432,7 @@ export default async (composer: any): Promise<void> => {
       const mergedSettings = mergeDeep(fullSettings, settings);
 
       // Prepare parameters and then perform the actual deployment action
-      const customizeConfiguration: CreateAndDeployResources = {
+      const customizeConfiguration: DeployResources = {
         accessToken,
         subscriptionID,
         name,
@@ -470,6 +549,25 @@ export default async (composer: any): Promise<void> => {
       const botId = project.id;
       return await this.getHistory(botId, profileName);
     };
+
+    provision = async (config: ProvisionConfig, project: IBotProject, user) => {
+      const response = { status: 202 };
+
+      // set in provision status
+      this.setProvisionStatus(project.id, config.name, response);
+      this.asyncProvision(config, project, user);
+      return response;
+    };
+
+    getProvisionStatus = async (config: ProvisionConfig, project: IBotProject, user) => {
+      // update provision status then return
+      if (this.provisionStatus[project.id] && this.provisionStatus[project.id][config.name]) {
+        return this.provisionStatus[project.id][config.name];
+      } else {
+        return {};
+      }
+    };
+
   }
 
   const azurePublish = new AzurePublisher();
