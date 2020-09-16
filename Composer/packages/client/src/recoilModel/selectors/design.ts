@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { selector, selectorFamily } from 'recoil';
+import { selector } from 'recoil';
 
 import { botNameState, botProjectsSpaceState } from '../atoms';
 
