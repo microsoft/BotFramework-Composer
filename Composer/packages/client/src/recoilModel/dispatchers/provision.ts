@@ -36,7 +36,7 @@ export const provisionDispatcher = () => {
       console.log(error.response.data);
       // popup window to login
       if (error.response.data.redirectUri) {
-        await loginPopup(error.response.data.redirectUri, 'https://dev.botframework.com/cb');
+        await loginPopup(error.response.data.redirectUri);
       }
       // save token in localStorage
     }
