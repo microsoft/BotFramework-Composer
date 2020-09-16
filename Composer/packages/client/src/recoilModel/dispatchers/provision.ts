@@ -12,6 +12,7 @@ import {
 } from '../atoms/botState';
 import { getAccessTokenInCache, loginPopup, getGraphTokenInCache } from '../../utils/auth';
 import httpClient from './../../utils/httpUtil';
+import { Subscription } from '@bfc/shared';
 
 export const provisionDispatcher = () => {
   const getSubscriptions = useRecoilCallback(({ set }: CallbackInterface) => async () => {
@@ -22,7 +23,8 @@ export const provisionDispatcher = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log(result.data);
-      set(subscriptionsState, (subscriptions: any) => {
+      set(subscriptionsState, () => {
+        const subscriptions: Subscription[] = [];
         result.data.value?.map((item) => {
           subscriptions.push({
             subscriptionId: item.subscriptionId,
@@ -30,6 +32,7 @@ export const provisionDispatcher = () => {
             displayName: item.displayName,
           });
         });
+        console.log(subscriptions);
         return subscriptions;
       });
     } catch (error) {
@@ -163,7 +166,7 @@ export const provisionDispatcher = () => {
             });
           }
         } catch (err) {
-          console.log(err.response.data);
+          console.log(err.response);
           // remove that publishTarget
           set(settingsState, (settings) => {
             settings.publishTargets = settings.publishTargets?.filter((item) => item.name !== target.name);
