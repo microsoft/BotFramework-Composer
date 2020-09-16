@@ -50,7 +50,7 @@ interface EditableFieldProps extends Omit<ITextFieldProps, 'onChange' | 'onFocus
   enableIcon?: boolean;
   onBlur?: (id: string, value?: string) => void;
   onChange: (newValue?: string) => void;
-  onFocus?: (id: string, value?: string) => void;
+  onFocus?: () => void;
 }
 
 const EditableField: React.FC<EditableFieldProps> = (props) => {
@@ -65,6 +65,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
     autoAdjustHeight = false,
     multiline = false,
     onChange,
+    onFocus,
     onBlur,
     resizable = true,
     value,
@@ -78,6 +79,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
   const [editing, setEditing] = useState<boolean>(false);
   const [hasFocus, setHasFocus] = useState<boolean>(false);
   const [localValue, setLocalValue] = useState<string | undefined>(value);
+  const [initialValue, setInitialValue] = useState<string | undefined>('');
   const [hasBeenEdited, setHasBeenEdited] = useState<boolean>(false);
   const fieldRef = useRef<ITextField>(null);
   useEffect(() => {
@@ -85,6 +87,12 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
       setLocalValue(value);
     }
   }, [value]);
+
+  useEffect(() => {
+    if (hasFocus) {
+      setInitialValue(localValue);
+    }
+  }, [hasFocus]);
 
   const resetValue = () => {
     setLocalValue('');
@@ -103,6 +111,27 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
     onBlur && onBlur(id, localValue);
   };
 
+  const handleOnFocus = () => {
+    setHasFocus(true);
+    onFocus && onFocus();
+  };
+
+  const cancel = () => {
+    setHasFocus(false);
+    setEditing(false);
+    setLocalValue(initialValue);
+    fieldRef.current?.blur();
+  };
+
+  const handleOnKeyDown = (e) => {
+    if (e.key === 'Enter' && !multiline) {
+      handleCommit();
+    }
+    if (e.key === 'Escape') {
+      cancel();
+    }
+  };
+
   let borderColor: string | undefined = undefined;
 
   if (!editing && !error) {
@@ -111,6 +140,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
   return (
     <div className={'EditableField-container'} css={[defaultContainerStyle(hasFocus), containerStyles]}>
       <TextField
+        key={`${id}${autoAdjustHeight}`}
         ariaLabel={ariaLabel}
         autoAdjustHeight={autoAdjustHeight}
         autoComplete="off"
@@ -151,7 +181,8 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
         value={hasFocus ? localValue : localValue + extraContent}
         onBlur={handleCommit}
         onChange={handleChange}
-        onFocus={() => setHasFocus(true)}
+        onFocus={handleOnFocus}
+        onKeyDown={handleOnKeyDown}
         onMouseEnter={() => setEditing(true)}
         onMouseLeave={() => !hasFocus && setEditing(false)}
       />
