@@ -182,6 +182,18 @@ async function main(show = false) {
   }
 }
 
+const checkAppLocale = (newAppLocale: string) => {
+  // If the app locale changes, load the new locale, re-create the menu and persist the new value.
+  if (currentAppLocale !== newAppLocale) {
+    log('Reloading locale');
+    loadLocale(newAppLocale);
+    initAppMenu(ElectronWindow.getInstance().browserWindow);
+
+    updateAppLocale(newAppLocale);
+    currentAppLocale = newAppLocale;
+  }
+};
+
 async function run() {
   fixPath(); // required PATH fix for Mac (https://github.com/electron/electron/issues/5626)
 
@@ -230,23 +242,15 @@ async function run() {
     await main();
 
     ipcMain.once('init-user-settings', (_ev, settings: UserSettings) => {
-      // Update user settings
-      updateAppLocale(settings.appLocale);
+      // Check app locale for changes
+      checkAppLocale(settings.appLocale);
       // we can't synchronously call the main process (due to deadlocks)
       // so we wait for the initial settings to be loaded from the client
       initializeAppUpdater(settings.appUpdater);
     });
 
     ipcMain.on('update-user-settings', async (_ev, settings: UserSettings) => {
-      // If the app locale changes, load the new locale, re-create the menu and persist the new value.
-      if (currentAppLocale !== settings.appLocale) {
-        log('Reloading locale');
-        loadLocale(settings.appLocale);
-        initAppMenu(ElectronWindow.getInstance().browserWindow);
-
-        updateAppLocale(settings.appLocale);
-        currentAppLocale = settings.appLocale;
-      }
+      checkAppLocale(settings.appLocale);
     });
 
     setTimeout(startApp, 500);
