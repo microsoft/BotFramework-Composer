@@ -1,12 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import * as path from 'path';
-
 import { ApplicationInsightsManagementClient } from '@azure/arm-appinsights';
 import { AzureBotService } from '@azure/arm-botservice';
 import { TokenCredentials } from '@azure/ms-rest-js';
-import * as fs from 'fs-extra';
 import * as rp from 'request-promise';
 
 import { BotProjectDeployConfig } from './botProjectDeployConfig';
@@ -18,7 +15,6 @@ export class BotProjectProvision {
   private subId: string;
   private accessToken: string;
   private graphToken: string;
-  private projPath: string;
   private logger: (string) => any;
   private azureResourceManagementClient?: AzureResourceMananger;
   // Will be assigned by create or deploy
@@ -30,8 +26,6 @@ export class BotProjectProvision {
     this.logger = config.logger;
     this.accessToken = config.accessToken;
     this.graphToken = config.graphToken;
-    this.projPath = config.projPath;
-
   }
 
   /*******************************************************************************************************************************/

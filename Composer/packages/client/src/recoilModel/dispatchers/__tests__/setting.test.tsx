@@ -112,6 +112,8 @@ describe('setting dispatcher', () => {
           type: 'type',
           configuration: '',
           lastPublished: new Date(),
+          provisionConfig: '',
+          provisionStatus: '',
         },
       ]);
     });

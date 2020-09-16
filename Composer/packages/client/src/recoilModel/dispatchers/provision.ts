@@ -36,7 +36,7 @@ export const provisionDispatcher = () => {
       console.log(error.response.data);
       // popup window to login
       if (error.response.data.redirectUri) {
-        await loginPopup(error.response.data.redirectUri);
+        await loginPopup();
       }
       // save token in localStorage
     }
@@ -55,7 +55,7 @@ export const provisionDispatcher = () => {
       console.log(error.response.data);
       // popup window to login
       if (error.response.data.redirectUri) {
-        await loginPopup(error.response.data.redirectUri, 'https://dev.botframework.com/cb');
+        await loginPopup();
       }
     }
   });
@@ -75,7 +75,7 @@ export const provisionDispatcher = () => {
         console.log(error.response.data);
         // popup window to login
         if (error.response.data.redirectUri) {
-          await loginPopup(error.response.data.redirectUri, 'https://dev.botframework.com/cb');
+          await loginPopup();
         }
       }
     }
@@ -94,7 +94,7 @@ export const provisionDispatcher = () => {
       console.log(error.response.data);
       // popup window to login
       if (error.response.data.redirectUri) {
-        await loginPopup(error.response.data.redirectUri, 'https://dev.botframework.com/cb');
+        await loginPopup();
       }
     }
   });
@@ -133,7 +133,7 @@ export const provisionDispatcher = () => {
             clearInterval(timer);
             // update publishConfig
             set(settingsState, (settings) => {
-              return settings.publishTargets?.map((item) => {
+              settings.publishTargets = settings.publishTargets?.map((item) => {
                 if (item.name === target.name) {
                   return {
                     ...item,
@@ -144,11 +144,12 @@ export const provisionDispatcher = () => {
                   return item;
                 }
               });
+              return settings;
             });
           } else {
             // update provision status
             set(settingsState, (settings) => {
-              return settings.publishTargets?.map((item) => {
+              settings.publishTargets = settings.publishTargets?.map((item) => {
                 if (item.name === target.name) {
                   return {
                     ...item,
@@ -158,13 +159,15 @@ export const provisionDispatcher = () => {
                   return item;
                 }
               });
+              return settings;
             });
           }
         } catch (err) {
           console.log(err.response.data);
           // remove that publishTarget
           set(settingsState, (settings) => {
-            return settings.publishTargets?.filter((item) => item.name !== target.name);
+            settings.publishTargets = settings.publishTargets?.filter((item) => item.name !== target.name);
+            return settings;
           });
           clearInterval(timer);
         }
@@ -178,5 +181,6 @@ export const provisionDispatcher = () => {
     getResourceGroups,
     getDeployLocations,
     getProvisionStatus,
+    provisionToTarget,
   };
 };

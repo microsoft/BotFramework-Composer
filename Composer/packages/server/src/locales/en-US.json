@@ -140,9 +140,6 @@
   "add_new_knowledge_base_on_displayname_7f44609c": {
     "message": " Add new knowledge base on { displayName }"
   },
-  "add_new_profile_47b225e6": {
-    "message": "Add new profile"
-  },
   "add_new_propertyname_bedf7dc6": {
     "message": "Add new { propertyName }"
   },
@@ -548,6 +545,9 @@
   "create_folder_error_38aa86f5": {
     "message": "Create Folder Error"
   },
+  "create_from_6db143f6": {
+    "message": "Create from"
+  },
   "create_from_knowledge_base_qna_maker_7422486": {
     "message": "Create from knowledge base (QnA Maker)"
   },
@@ -559,6 +559,9 @@
   },
   "create_from_template_87e12c94": {
     "message": "Create from template"
+  },
+  "create_hosting_environment_88319693": {
+    "message": "Create Hosting Environment"
   },
   "create_knowledge_base_db6d66c4": {
     "message": "Create knowledge base"
@@ -1043,6 +1046,9 @@
   "host_ef9acfae": {
     "message": "Host "
   },
+  "hostname_fa8632e6": {
+    "message": "HostName"
+  },
   "http_request_79847109": {
     "message": "HTTP Request"
   },
@@ -1247,14 +1253,14 @@
   "location_is_location_8c17b5de": {
     "message": "location is { location }"
   },
+  "locations_346f0a33": {
+    "message": "Locations"
+  },
   "log_to_console_4fc23e34": {
     "message": "Log to console"
   },
   "login_6f3d6249": {
     "message": "Login"
-  },
-  "login_to_composer_eb42b41": {
-    "message": "Login to Composer"
   },
   "loop_for_each_item_53eb7c5b": {
     "message": "Loop: for each item"
@@ -1408,6 +1414,9 @@
   },
   "name_of_skill_dialog_to_call_201707f3": {
     "message": "Name of skill dialog to call"
+  },
+  "name_of_your_new_resource_group_1b7a34e4": {
+    "message": "Name of your new resource group"
   },
   "navigation_control_94f2649e": {
     "message": "navigation control"
@@ -1670,14 +1679,14 @@
   "provide_a_brief_description_it_will_appear_on_the__f962eb38": {
     "message": "Provide a brief description. It will appear on the publish history list."
   },
+  "provision_detail_6174032": {
+    "message": "Provision Detail"
+  },
   "pseudo_1a319287": {
     "message": "Pseudo"
   },
   "publish_5211dca3": {
     "message": "Publish"
-  },
-  "publish_configuration_d759a4e3": {
-    "message": "Publish Configuration"
   },
   "publish_destination_type_5f8c200a": {
     "message": "Publish Destination Type"
@@ -1771,6 +1780,9 @@
   },
   "reprompt_dialog_event_c42d2c33": {
     "message": "Reprompt dialog event"
+  },
+  "resource_group_59eac426": {
+    "message": "Resource group"
   },
   "response_is_response_3cd62f8f": {
     "message": "Response is { response }"
@@ -1876,6 +1888,15 @@
   },
   "select_which_tasks_this_skill_can_perform_172b0eae": {
     "message": "Select which tasks this skill can perform"
+  },
+  "select_your_location_1d5c501": {
+    "message": "Select your location"
+  },
+  "select_your_resource_group_bf36b186": {
+    "message": "Select your resource group"
+  },
+  "select_your_subscription_17b5260": {
+    "message": "Select your subscription"
   },
   "selection_field_86d1dc94": {
     "message": "selection field"
@@ -2011,6 +2032,9 @@
   },
   "submit_a3cc6859": {
     "message": "Submit"
+  },
+  "subscription_15330b8a": {
+    "message": "Subscription"
   },
   "synonyms_optional_afe5cdb1": {
     "message": "Synonyms (Optional)"
