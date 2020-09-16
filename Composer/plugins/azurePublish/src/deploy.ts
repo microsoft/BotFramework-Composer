@@ -55,8 +55,9 @@ export class BotProjectDeploy {
 
       // STEP 2: UPDATE LUIS
       // Do the LUIS build if LUIS settings are present
-      if (!language) {
-        language = 'en-us';
+      let luisLanguage = language || settings.luis.defaultLanguage;
+      if (!luisLanguage) {
+        luisLanguage = 'en-us';
       }
       const publisher = new LuisAndQnaPublish({ logger: this.logger, projPath: this.projPath });
 
@@ -66,7 +67,7 @@ export class BotProjectDeploy {
         name,
         environment,
         this.accessToken,
-        language,
+        luisLanguage,
         settings.luis,
         settings.qna,
         luisResource
