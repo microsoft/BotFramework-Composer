@@ -21,7 +21,7 @@ import { lgUtil } from '@bfc/indexers';
 
 import { EditableField } from '../../components/EditableField';
 import { navigateTo } from '../../utils/navigation';
-import { actionButton, formCell } from '../language-understanding/styles';
+import { actionButton, formCell, editableFieldContainer } from '../language-understanding/styles';
 import { dispatcherState, lgFilesState, projectIdState, localeState, settingsState } from '../../recoilModel';
 import { languageListTemplates } from '../../components/MultiLanguage';
 import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
@@ -198,6 +198,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
             <div data-is-focusable css={formCell}>
               <EditableField
                 ariaLabel={formatMessage(`Name is {name}`, { name: displayName })}
+                containerStyles={editableFieldContainer}
                 depth={0}
                 id={displayName}
                 name={displayName}
@@ -228,6 +229,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
               <EditableField
                 multiline
                 ariaLabel={formatMessage(`Response is {response}`, { response: text })}
+                containerStyles={editableFieldContainer}
                 depth={0}
                 id={text}
                 name={text}
@@ -259,6 +261,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
               <EditableField
                 multiline
                 ariaLabel={formatMessage(`Response is {response}`, { response: text })}
+                containerStyles={editableFieldContainer}
                 depth={0}
                 id={text}
                 name={text}
@@ -286,6 +289,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
               <EditableField
                 multiline
                 ariaLabel={formatMessage(`Response is {response}`, { response: text })}
+                containerStyles={editableFieldContainer}
                 depth={0}
                 id={text}
                 name={text}

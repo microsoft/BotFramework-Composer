@@ -160,20 +160,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
     setQnASections(newSections);
   };
 
-  // const expandRow = (sectionId: string) => {
-  //   const newSections = qnaSections.map((item) => {
-  //     if (item.sectionId === sectionId) {
-  //       return {
-  //         ...item,
-  //         expand: true,
-  //       };
-  //     } else {
-  //       return item;
-  //     }
-  //   });
-  //   setQnASections(newSections);
-  // };
-
   const onUpdateQnAQuestion = (fileId: string, sectionId: string, questionId: string, content: string) => {
     if (!fileId) return;
     actions.setMessage('item deleted');
@@ -375,52 +361,35 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
           return (
             <div data-is-focusable css={formCell}>
-              <div css={firstQuestion}>
-                <EditableField
-                  key={showingQuestions[0].id}
-                  ariaLabel={formatMessage(`Question is {content}`, { content: showingQuestions[0].content })}
-                  depth={0}
-                  disabled={isAllowEdit}
-                  id={showingQuestions[0].id}
-                  name={showingQuestions[0].content}
-                  placeholder={'add new question'}
-                  styles={editableFieldQuestion}
-                  value={showingQuestions[0].content}
-                  onBlur={(_id, value) => {
-                    const newValue = value?.trim().replace(/^#/, '');
-                    const isChanged = showingQuestions[0].content !== newValue;
-                    if (newValue && isChanged) {
-                      onUpdateQnAQuestion(item.fileId, item.sectionId, showingQuestions[0].id, newValue);
-                    }
-                  }}
-                  onChange={() => {}}
-                />
-                {!item.expand && !isQuestionEmpty && <div css={questionNumber}> ({questions.length})</div>}
-              </div>
-              {showingQuestions.length > 1 &&
-                showingQuestions.slice(1).map((question) => {
-                  return (
-                    <EditableField
-                      key={question.id}
-                      ariaLabel={formatMessage(`Question is {content}`, { content: question.content })}
-                      depth={0}
-                      disabled={isAllowEdit}
-                      id={question.id}
-                      name={question.content}
-                      placeholder={'add new question'}
-                      styles={editableFieldQuestion}
-                      value={question.content}
-                      onBlur={(_id, value) => {
-                        const newValue = value?.trim().replace(/^#/, '');
-                        const isChanged = question.content !== newValue;
-                        if (newValue && isChanged) {
-                          onUpdateQnAQuestion(item.fileId, item.sectionId, question.id, newValue);
-                        }
-                      }}
-                      onChange={() => {}}
-                    />
-                  );
-                })}
+              {showingQuestions.map((question, qIndex: number) => {
+                console.log(editableFieldQuestion(qIndex));
+                return (
+                  <EditableField
+                    key={question.id}
+                    enableIcon
+                    ariaLabel={formatMessage(`Question is {content}`, { content: question.content })}
+                    depth={0}
+                    disabled={isAllowEdit}
+                    extraContent={qIndex === 0 && !item.expand && !isQuestionEmpty ? ` (${questions.length})` : ''}
+                    iconProps={{
+                      iconName: 'Cancel',
+                    }}
+                    id={question.id}
+                    name={question.content}
+                    placeholder={'add new question'}
+                    styles={editableFieldQuestion(qIndex)}
+                    value={question.content}
+                    onBlur={(_id, value) => {
+                      const newValue = value?.trim().replace(/^#/, '');
+                      const isChanged = question.content !== newValue;
+                      if (newValue && isChanged) {
+                        onUpdateQnAQuestion(item.fileId, item.sectionId, question.id, newValue);
+                      }
+                    }}
+                    onChange={() => {}}
+                  />
+                );
+              })}
 
               {kthSectionIsCreatingQuestion === index ? (
                 <EditableField
@@ -453,8 +422,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
         key: 'Answer',
         name: formatMessage('Answer'),
         fieldName: 'answer',
-        minWidth: 250,
-        maxWidth: 450,
+        minWidth: 350,
+        maxWidth: 550,
         isResizable: true,
         data: 'string',
         onRender: (item) => {
@@ -463,15 +432,20 @@ const TableView: React.FC<TableViewProps> = (props) => {
           return (
             <div data-is-focusable css={formCell}>
               <EditableField
+                enableIcon
                 multiline
                 ariaLabel={formatMessage(`Answer is {content}`, { content: item.Answer })}
+                autoAdjustHeight={item.expand}
                 depth={0}
                 disabled={isAllowEdit}
+                iconProps={{
+                  iconName: 'Cancel',
+                }}
                 id={item.sectionId}
                 name={item.Answer}
                 placeholder={'add new answer'}
                 resizable={false}
-                styles={editableFieldAnswer}
+                styles={editableFieldAnswer(item.expand)}
                 value={item.Answer}
                 onBlur={(_id, value) => {
                   const newValue = value?.trim().replace(/^#/, '');

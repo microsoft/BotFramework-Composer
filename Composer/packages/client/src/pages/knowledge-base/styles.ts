@@ -93,13 +93,6 @@ export const rowDetails = {
           '.ms-Button': {
             visibility: 'visible',
           },
-          // '&.is-selected': {
-          //   selectors: {
-          //     '.ms-DetailsRowy': {
-          //       background: NeutralColors.gray30,
-          //     },
-          //   },
-          // },
         },
       },
       '&.is-selected': {
@@ -155,29 +148,55 @@ export const addIcon = {
   },
 };
 
-export const editableFieldAnswer = {
-  root: {
-    height: '100%',
-    selectors: {
-      '.ms-TextField-wrapper': {
-        height: '100%',
+export const editableFieldAnswer = (isExpand) => {
+  return {
+    root: {
+      height: '100%',
+      selectors: {
+        '.ms-TextField-wrapper': {
+          height: '100%',
+        },
       },
     },
-  },
-  fieldGroup: {
-    height: '100%',
-    border: '0',
-  },
+    fieldGroup: {
+      height: '100%',
+      border: '0',
+      selectors: {
+        '&.ms-TextField-fieldGroup': {
+          selectors: {
+            '::after': {
+              border: 'none !important',
+            },
+          },
+        },
+      },
+    },
+    field: {
+      height: isExpand ? undefined : '80px !important',
+      overflowY: 'auto' as 'auto',
+      maxHeight: 500,
+    },
+  };
 };
 
-export const editableFieldQuestion = {
-  root: {
-    width: '90%',
-  },
-  fieldGroup: {
-    border: '0',
-    marginBottom: 1,
-  },
+export const editableFieldQuestion = (index) => {
+  return {
+    fieldGroup: {
+      border: '0',
+      selectors: {
+        '&.ms-TextField-fieldGroup': {
+          selectors: {
+            '::after': {
+              border: 'none !important',
+            },
+          },
+        },
+      },
+    },
+    field: {
+      fontWeight: index === 0 ? FontWeights.semibold : FontWeights.regular,
+    },
+  };
 };
 
 export const questionNumber = {
@@ -186,5 +205,4 @@ export const questionNumber = {
 
 export const firstQuestion = css`
   display: flex;
-}
-`;
+}`;

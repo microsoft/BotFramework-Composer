@@ -1,18 +1,40 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
-import React, { useState, useEffect } from 'react';
-import { TextField, ITextFieldStyles, ITextFieldProps } from 'office-ui-fabric-react/lib/TextField';
-import { NeutralColors } from '@uifabric/fluent-theme';
+/** @jsx jsx */
+import { jsx, css } from '@emotion/core';
+import React, { useState, useEffect, useRef } from 'react';
+import { TextField, ITextFieldStyles, ITextFieldProps, ITextField } from 'office-ui-fabric-react/lib/TextField';
+import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { mergeStyleSets } from '@uifabric/styling';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
+//------------------------
+const defaultContainerStyle = (isHovered) => css`
+  display: flex;
+  width: 100%;
+  outline: ${isHovered ? `2px solid ${SharedColors.cyanBlue10}` : undefined};
+  margin-top: 2px;
+  :hover .ms-Button-icon {
+    visibility: visible;
+  }
+`;
+
+//------------------------
+interface IconProps {
+  iconStyles?: Partial<IIconProps>;
+  iconName: string;
+  onClick?: () => void;
+}
 
 interface EditableFieldProps extends Omit<ITextFieldProps, 'onChange' | 'onFocus' | 'onBlur'> {
+  autoAdjustHeight?: boolean;
   fontSize?: string;
   styles?: Partial<ITextFieldStyles>;
   transparentBorder?: boolean;
   ariaLabel?: string;
   error?: string | JSX.Element;
-
+  extraContent?: string;
+  containerStyles?: any;
   className?: string;
   depth: number;
   description?: string;
@@ -24,16 +46,20 @@ interface EditableFieldProps extends Omit<ITextFieldProps, 'onChange' | 'onFocus
   readonly?: boolean;
   required?: boolean;
   value?: string;
-
+  iconProps?: IconProps;
+  enableIcon?: boolean;
+  onBlur?: (id: string, value?: string) => void;
   onChange: (newValue?: string) => void;
   onFocus?: (id: string, value?: string) => void;
-  onBlur?: (id: string, value?: string) => void;
 }
 
 const EditableField: React.FC<EditableFieldProps> = (props) => {
   const {
+    containerStyles,
     depth,
+    extraContent = '',
     styles = {},
+    iconProps,
     placeholder,
     fontSize,
     autoAdjustHeight = false,
@@ -47,17 +73,23 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
     className,
     transparentBorder,
     ariaLabel,
+    enableIcon = false,
   } = props;
   const [editing, setEditing] = useState<boolean>(false);
   const [hasFocus, setHasFocus] = useState<boolean>(false);
   const [localValue, setLocalValue] = useState<string | undefined>(value);
   const [hasBeenEdited, setHasBeenEdited] = useState<boolean>(false);
-
+  const fieldRef = useRef<ITextField>(null);
   useEffect(() => {
     if (!hasBeenEdited || value !== localValue) {
       setLocalValue(value);
     }
   }, [value]);
+
+  const resetValue = () => {
+    setLocalValue('');
+    fieldRef.current?.focus();
+  };
 
   const handleChange = (_e: any, newValue?: string) => {
     setLocalValue(newValue);
@@ -76,14 +108,14 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
   if (!editing && !error) {
     borderColor = localValue || transparentBorder || depth > 1 ? 'transparent' : NeutralColors.gray30;
   }
-
   return (
-    <>
+    <div className={'EditableField-container'} css={[defaultContainerStyle(hasFocus), containerStyles]}>
       <TextField
         ariaLabel={ariaLabel}
         autoAdjustHeight={autoAdjustHeight}
         autoComplete="off"
         className={className}
+        componentRef={fieldRef}
         errorMessage={error as string}
         multiline={multiline}
         placeholder={placeholder || value}
@@ -116,14 +148,36 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
             styles
           ) as Partial<ITextFieldStyles>
         }
-        value={localValue}
+        value={hasFocus ? localValue : localValue + extraContent}
         onBlur={handleCommit}
         onChange={handleChange}
         onFocus={() => setHasFocus(true)}
         onMouseEnter={() => setEditing(true)}
         onMouseLeave={() => !hasFocus && setEditing(false)}
       />
-    </>
+      {enableIcon && (
+        <IconButton
+          iconProps={{
+            iconName: iconProps?.iconName,
+            styles: mergeStyleSets(
+              {
+                root: {
+                  color: NeutralColors.black,
+                  visibility: 'hidden',
+                },
+              },
+              iconProps?.iconStyles
+            ),
+          }}
+          styles={{
+            root: {
+              background: hasFocus ? NeutralColors.white : 'inherit',
+            },
+          }}
+          onClick={iconProps?.onClick || resetValue}
+        />
+      )}
+    </div>
   );
 };
 
