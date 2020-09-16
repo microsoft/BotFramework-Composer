@@ -68,6 +68,7 @@ router.post('/runtime/eject/:projectId/:template', EjectController.eject);
 //assets
 router.get('/assets/projectTemplates', AssetController.getProjTemplates);
 
+console.log(path.join(__dirname, '..', '/locales'));
 router.use('/assets/locales/', express.static(path.join(__dirname, '..', '/locales')));
 
 //help api

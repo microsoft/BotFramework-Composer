@@ -242,6 +242,9 @@
   "available_skills_95c114ac": {
     "message": "Available Skills"
   },
+  "back_2900f52a": {
+    "message": "Back"
+  },
   "been_used_5daccdb2": {
     "message": "Been used"
   },
@@ -1067,6 +1070,9 @@
   "is_missing_or_empty_a551462e": {
     "message": "is missing or empty"
   },
+  "it_s_not_a_built_in_function_or_a_custom_function_1527ed83": {
+    "message": "it''s not a built-in function or a custom function."
+  },
   "item_actions_22d0242": {
     "message": "Item Actions"
   },
@@ -1301,8 +1307,8 @@
   "multiple_wildcards_26f50b6c": {
     "message": "multiple wildcards"
   },
-  "must_be_an_expression_774c49d": {
-    "message": "must be an expression:"
+  "must_be_an_expression_error_477cbda6": {
+    "message": "must be an expression: { error }"
   },
   "must_have_a_name_d5c5c464": {
     "message": "Must have a name"

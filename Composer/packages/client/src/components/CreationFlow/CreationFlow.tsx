@@ -4,7 +4,7 @@
 // TODO: Remove path module
 import Path from 'path';
 
-import React, { useEffect, useRef, Fragment, useState } from 'react';
+import React, { useEffect, useRef, Fragment, useState, useMemo } from 'react';
 import { RouteComponentProps, Router, navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 
@@ -19,7 +19,6 @@ import {
   userSettingsState,
   localeState,
 } from '../../recoilModel';
-import Home from '../../pages/home/Home';
 import ImportQnAFromUrlModal from '../../pages/knowledge-base/ImportQnAFromUrlModal';
 import { QnABotTemplateId } from '../../constants';
 import { useProjectIdCache } from '../../utils/hooks';
@@ -27,6 +26,10 @@ import { useProjectIdCache } from '../../utils/hooks';
 import { CreateOptions } from './CreateOptions';
 import { OpenProject } from './OpenProject';
 import DefineConversation from './DefineConversation';
+import { VirtualAssistantCreationModal } from '@bfc/ui-plugin-va-creation';
+import { useShell } from '../../shell';
+import { PluginConfig, mergePluginConfigs, EditorExtension } from '@bfc/extension-client';
+import plugins from '../../plugins';
 
 type CreationFlowProps = RouteComponentProps<{}>;
 
@@ -58,8 +61,8 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   const currentStorageIndex = useRef(0);
   const storage = storages[currentStorageIndex.current];
   const currentStorageId = storage ? storage.id : 'default';
-  const [formData, setFormData] = useState({ name: '' });
-
+  const [formData, setFormData] = useState({ name: '', description: '', location: '' });
+  // const shellForCreation = useShell('VaCreation');
   useEffect(() => {
     if (storages && storages.length) {
       const storageId = storage.id;
@@ -135,6 +138,11 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
       navigate(`./QnASample/importQnA`);
       return;
     }
+    if (templateId === 'va-core') {
+      setFormData(formData);
+      navigate(`./va-core/customize`);
+      return;
+    }
     handleSubmit(formData, templateId);
   };
 
@@ -156,9 +164,14 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     navigate(`./create/${data}`);
   };
 
+  const pluginConfig: PluginConfig = useMemo(() => {
+    const sdkUISchema = {};
+    const userUISchema = {};
+    return mergePluginConfigs({ uiSchema: sdkUISchema }, plugins, { uiSchema: userUISchema });
+  }, []);
   return (
     <Fragment>
-      <Home />
+      {/* <EditorExtension plugins={pluginConfig} shell={shellForCreation}> */}
       <Router>
         <DefineConversation
           createFolder={createFolder}
@@ -192,7 +205,14 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
           onDismiss={handleDismiss}
           onSubmit={handleCreateQnA}
         />
+        {/* <VirtualAssistantCreationModal
+            handleCreateNew={handleCreateNew}
+            formData={formData}
+            onDismiss={handleDismiss}
+            path="create/va-core/*"
+          /> */}
       </Router>
+      {/* </EditorExtension> */}
     </Fragment>
   );
 };

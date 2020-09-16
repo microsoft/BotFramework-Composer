@@ -11,7 +11,7 @@ import { RouteComponentProps } from '@reach/router';
 
 import { StorageFolder } from '../../recoilModel/types';
 import { DialogCreationCopy } from '../../constants';
-import { DialogWrapper, DialogTypes } from '../DialogWrapper';
+import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
 import { LocationSelectContent } from './LocationSelectContent';
 interface OpenProjectProps extends RouteComponentProps<{}> {
