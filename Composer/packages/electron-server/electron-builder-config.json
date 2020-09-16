@@ -18,6 +18,7 @@
   ],
   "files": [
     "build",
+    "locales",
     "resources/composerIcon_1024x1024.png",
     "resources/ms_logo.svg"
   ],
