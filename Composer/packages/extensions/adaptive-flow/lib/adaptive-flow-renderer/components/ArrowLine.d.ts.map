@@ -1,1 +1,0 @@
-{"version":3,"file":"ArrowLine.d.ts","sourceRoot":"","sources":["../../../src/adaptive-flow-renderer/components/ArrowLine.tsx"],"names":[],"mappings":";AAMA,MAAM,WAAW,cAAc;IAC7B,KAAK,EAAE,MAAM,CAAC;IACd,SAAS,EAAE,MAAM,CAAC;IAClB,eAAe,CAAC,EAAE,MAAM,CAAC;IACzB,KAAK,CAAC,EAAE,MAAM,CAAC;CAChB;AACD,eAAO,MAAM,SAAS,EAAE,KAAK,CAAC,EAAE,CAAC,cAAc,CAc9C,CAAC"}
