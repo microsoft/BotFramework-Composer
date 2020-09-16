@@ -249,7 +249,7 @@ async function run() {
       initializeAppUpdater(settings.appUpdater);
     });
 
-    ipcMain.on('update-user-settings', async (_ev, settings: UserSettings) => {
+    ipcMain.on('update-user-settings', (_ev, settings: UserSettings) => {
       checkAppLocale(settings.appLocale);
     });
 
