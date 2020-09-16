@@ -11,7 +11,8 @@ export const mapDropdownOptionToRecognizerSchema = (option: IDropdownOption, rec
 
 export const mapRecognizerSchemaToDropdownOption = (recognizerSchema: RecognizerSchema): IDropdownOption => {
   const { id, displayName } = recognizerSchema;
-  return { key: id, text: typeof displayName === 'function' ? displayName({}) : displayName };
+  const recognizerName = typeof displayName === 'function' ? displayName({}) : displayName;
+  return { key: id, text: recognizerName || id };
 };
 
 export const FallbackRecognizerId = SDKKinds.CustomRecognizer;

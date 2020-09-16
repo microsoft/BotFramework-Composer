@@ -4,22 +4,25 @@
 import { useContext, useMemo } from 'react';
 import { MicrosoftIRecognizer } from '@bfc/shared';
 import get from 'lodash/get';
-import mapValues from 'lodash/mapValues';
 
 import { EditorExtensionContext } from '../EditorExtensionContext';
-import { RecognizerSchema } from '../types';
-import { RecognizerOptions } from '../types/recognizerSchema';
+import { RecognizerOptions, RecognizerSchema } from '../types';
 
 export function useRecognizerConfig() {
   const { plugins } = useContext(EditorExtensionContext);
 
   const recognizers: RecognizerSchema[] = useMemo(() => {
-    const recognizerOptionMap: { [key: string]: RecognizerOptions } = mapValues(plugins.uiSchema, 'recognizer');
-    // recover the id field as required from map's key.
-    return Object.entries(recognizerOptionMap).map(([$kind, options]) => ({
-      id: $kind,
-      ...options,
-    }));
+    if (!plugins.uiSchema) return [];
+
+    return Object.entries(plugins.uiSchema)
+      .filter(([_, uiOptions]) => uiOptions && uiOptions.recognizer)
+      .map(([$kind, uiOptions]) => {
+        const recognizerOptions = uiOptions?.recognizer as RecognizerOptions;
+        return {
+          id: $kind,
+          ...recognizerOptions,
+        } as RecognizerSchema;
+      });
   }, [plugins.uiSchema]);
 
   const findConfigByValue = (recognizerValue?: MicrosoftIRecognizer) => {
