@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import axios from 'axios';
-import { pluginLoader, PluginLoader } from '@bfc/plugin-loader';
+import { pluginLoader, PluginLoader } from '@bfc/extension';
 
 import { BotProjectService } from '../services/project';
 

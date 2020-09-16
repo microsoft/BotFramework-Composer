@@ -41,8 +41,8 @@ const choiceOptions: IChoiceGroupOption[] = [
 export const ProvisionDialog: React.FC<ProvisionDialogProps> = (props) => {
   const { getSubscriptions, setPublishTargets } = useRecoilValue(dispatcherState);
 
-  const { userSettings } = useRecoilValue(userSettingsState);
-  const { settings } = useRecoilValue(settingsState);
+  const userSettings = useRecoilValue(userSettingsState);
+  const settings = useRecoilValue(settingsState);
 
   const [name, setName] = useState(props.current?.name || '');
   const [targetType, setTargetType] = useState<string | undefined>(props.current?.type);
@@ -175,16 +175,18 @@ export const ProvisionDialog: React.FC<ProvisionDialogProps> = (props) => {
                   disabled={isDisable()}
                   text={formatMessage('Submit')}
                   onClick={() => {
-                    const newTargets = settings.publishTargets?.map((item) => {
-                      if (item.name === props.current?.name) {
-                        return {
-                          ...item,
-                          configuration: JSON.stringify(config, null, 2),
-                        };
-                      } else {
-                        return item;
-                      }
-                    });
+                    const newTargets = settings.publishTargets
+                      ? settings.publishTargets.map((item) => {
+                          if (item.name === props.current?.name) {
+                            return {
+                              ...item,
+                              configuration: JSON.stringify(config, null, 2),
+                            };
+                          } else {
+                            return item;
+                          }
+                        })
+                      : [];
                     setPublishTargets(newTargets);
                     props.onDismiss();
                   }}

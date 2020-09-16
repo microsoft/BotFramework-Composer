@@ -52,6 +52,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
     publishToTarget,
     setQnASettings,
     getProvisionStatus,
+    provisionToTarget,
     rollbackToVersion: rollbackToVersionDispatcher,
   } = useRecoilValue(dispatcherState);
 
@@ -341,14 +342,14 @@ const Publish: React.FC<PublishPageProps> = (props) => {
         <ProvisionDialog
           createNew={(value) => {
             console.log(value);
-            actions.provision(value, ProvisionType.createNew, projectId);
+            provisionToTarget(value, ProvisionType.createNew, projectId);
             savePublishTarget(value.name, value.type, JSON.stringify(value));
             getProvisionStatus(projectId, value);
           }}
           current={editTarget ? editTarget.item : null}
           selectedExist={(value) => {
             console.log(value);
-            actions.provision(value, ProvisionType.selectExisted, projectId);
+            provisionToTarget(value, ProvisionType.selectExisted, projectId);
             savePublishTarget(value.name, value.type, JSON.stringify(value));
             getProvisionStatus(projectId, value);
           }}
