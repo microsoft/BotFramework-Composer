@@ -13,40 +13,73 @@ import {
   LgRemoveTemplatePayload,
   LgRemoveAllTemplatesPayload,
   LgCopyTemplatePayload,
+  LgNewCachePayload,
+  LgCleanCachePayload,
 } from './types';
 
 // Wrapper class
 class LgWorker extends BaseWorker<LgActionType> {
-  parse(id: string, content: string, lgFiles: LgFile[]) {
-    return this.sendMsg<LgParsePayload>(LgActionType.Parse, { id, content, lgFiles: lgFiles });
+  addProject(projectId: string, lgFiles: LgFile[]) {
+    return this.sendMsg<LgNewCachePayload>(LgActionType.NewCache, { projectId, lgFiles });
   }
 
-  addTemplate(id: string, content: string, template: LgTemplate) {
-    return this.sendMsg<LgCreateTemplatePayload>(LgActionType.AddTemplate, { id, content, template });
+  removeProject(projectId: string) {
+    return this.sendMsg<LgCleanCachePayload>(LgActionType.CleanCache, { projectId });
   }
 
-  addTemplates(id: string, content: string, templates: LgTemplate[]) {
-    return this.sendMsg<LgCreateTemplatesPayload>(LgActionType.AddTemplates, { id, content, templates });
+  parse(projectId: string, id: string, content: string, lgFiles: LgFile[]) {
+    return this.sendMsg<LgParsePayload>(LgActionType.Parse, { id, content, lgFiles, projectId });
   }
 
-  updateTemplate(id: string, content: string, templateName: string, template: LgTemplate) {
-    return this.sendMsg<LgUpdateTemplatePayload>(LgActionType.UpdateTemplate, { id, content, templateName, template });
+  addTemplate(projectId: string, lgFile: LgFile, template: LgTemplate, lgFiles: LgFile[]) {
+    return this.sendMsg<LgCreateTemplatePayload>(LgActionType.AddTemplate, { lgFile, template, lgFiles, projectId });
   }
 
-  removeTemplate(id: string, content: string, templateName: string) {
-    return this.sendMsg<LgRemoveTemplatePayload>(LgActionType.RemoveTemplate, { id, content, templateName });
+  addTemplates(projectId: string, lgFile: LgFile, templates: LgTemplate[], lgFiles: LgFile[]) {
+    return this.sendMsg<LgCreateTemplatesPayload>(LgActionType.AddTemplates, { lgFile, templates, lgFiles, projectId });
   }
 
-  removeTemplates(id: string, content: string, templateNames: string[]) {
-    return this.sendMsg<LgRemoveAllTemplatesPayload>(LgActionType.RemoveAllTemplates, { id, content, templateNames });
+  updateTemplate(
+    projectId: string,
+    lgFile: LgFile,
+    templateName: string,
+    template: { name?: string; parameters?: string[]; body?: string },
+    lgFiles: LgFile[]
+  ) {
+    return this.sendMsg<LgUpdateTemplatePayload>(LgActionType.UpdateTemplate, {
+      lgFile,
+      templateName,
+      template,
+      lgFiles,
+      projectId,
+    });
   }
 
-  copyTemplate(id: string, content: string, fromTemplateName: string, toTemplateName: string) {
+  removeTemplate(projectId: string, lgFile: LgFile, templateName: string, lgFiles: LgFile[]) {
+    return this.sendMsg<LgRemoveTemplatePayload>(LgActionType.RemoveTemplate, {
+      lgFile,
+      templateName,
+      lgFiles,
+      projectId,
+    });
+  }
+
+  removeTemplates(projectId: string, lgFile: LgFile, templateNames: string[], lgFiles: LgFile[]) {
+    return this.sendMsg<LgRemoveAllTemplatesPayload>(LgActionType.RemoveAllTemplates, {
+      lgFile,
+      templateNames,
+      lgFiles,
+      projectId,
+    });
+  }
+
+  copyTemplate(projectId: string, lgFile: LgFile, fromTemplateName: string, toTemplateName: string, lgFiles: LgFile[]) {
     return this.sendMsg<LgCopyTemplatePayload>(LgActionType.CopyTemplate, {
-      id,
-      content,
+      lgFile,
       fromTemplateName,
       toTemplateName,
+      lgFiles,
+      projectId,
     });
   }
 }

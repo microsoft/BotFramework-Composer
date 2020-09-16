@@ -3,13 +3,13 @@
 
 import { Request, Response } from 'express';
 import rimraf from 'rimraf';
-import { pluginLoader } from '@bfc/plugin-loader';
+import { pluginLoader } from '@bfc/extension';
 
 import { BotProjectService } from '../../src/services/project';
 import { Path } from '../../src/utility/path';
 import { EjectController } from '../../src/controllers/eject';
 
-jest.mock('@bfc/plugin-loader', () => {
+jest.mock('@bfc/extension', () => {
   return {
     pluginLoader: {
       extensions: {
@@ -52,7 +52,12 @@ beforeAll(async () => {
     key: 'azurewebapp',
     name: 'C#',
     startCommand: 'dotnet run --project azurewebapp',
+    path: './',
     eject: jest.fn(),
+    build: jest.fn(),
+    run: jest.fn(),
+    buildDeploy: jest.fn(),
+    setSkillManifest: jest.fn(),
   });
   const currentProjectId = await BotProjectService.openProject(location1);
   const currentProject = await BotProjectService.getProjectById(currentProjectId);

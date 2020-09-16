@@ -2,7 +2,11 @@
 // Licensed under the MIT License.
 import formatMessage from 'format-message';
 
-export const topLinks = (projectId: string, openedDialogId: string) => {
+export const topLinks = (
+  projectId: string,
+  openedDialogId: string,
+  pluginPages: { id: string; label: string; icon?: string; when?: string }[]
+) => {
   const botLoaded = !!projectId;
   let links = [
     {
@@ -34,6 +38,13 @@ export const topLinks = (projectId: string, openedDialogId: string) => {
       disabled: !botLoaded,
     },
     {
+      to: `/bot/${projectId}/knowledge-base`,
+      iconName: 'QnAIcon',
+      labelName: formatMessage('QnA'),
+      exact: true,
+      disabled: !botLoaded,
+    },
+    {
       to: `/bot/${projectId}/notifications`,
       iconName: 'Warning',
       labelName: formatMessage('Notifications'),
@@ -58,6 +69,18 @@ export const topLinks = (projectId: string, openedDialogId: string) => {
 
   if (process.env.COMPOSER_AUTH_PROVIDER === 'abs-h') {
     links = links.filter((link) => link.to !== '/home');
+  }
+
+  if (pluginPages.length > 0) {
+    pluginPages.forEach((p) => {
+      links.push({
+        to: `page/${p.id}`,
+        iconName: p.icon ?? 'StatusCircleQuestionMark',
+        labelName: p.label,
+        exact: true,
+        disabled: false,
+      });
+    });
   }
 
   return links;

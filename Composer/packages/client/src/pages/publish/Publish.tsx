@@ -8,8 +8,8 @@ import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { useRecoilValue } from 'recoil';
 import { PublishTarget } from '@bfc/shared';
+import { useRecoilValue } from 'recoil';
 
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { projectContainer } from '../design/styles';
@@ -49,6 +49,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
     getPublishHistory,
     setPublishTargets,
     publishToTarget,
+    setQnASettings,
     rollbackToVersion: rollbackToVersionDispatcher,
   } = useRecoilValue(dispatcherState);
 
@@ -224,7 +225,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
         },
       ]);
     }
-  }, [publishHistory, selectedTargetName]);
+  }, [publishHistory, selectedTargetName, settings.publishTargets]);
 
   // check history to see if a 202 is found
   useEffect(() => {
@@ -318,6 +319,9 @@ const Publish: React.FC<PublishPageProps> = (props) => {
     () => async (comment) => {
       // publish to remote
       if (selectedTarget && settings.publishTargets) {
+        if (settings.qna && Object(settings.qna).subscriptionKey) {
+          await setQnASettings(projectId, Object(settings.qna).subscriptionKey);
+        }
         const sensitiveSettings = settingsStorage.get(projectId);
         await publishToTarget(projectId, selectedTarget, { comment: comment }, sensitiveSettings);
 
@@ -398,7 +402,12 @@ const Publish: React.FC<PublishPageProps> = (props) => {
         <h1 css={HeaderText}>{selectedTarget ? selectedTargetName : formatMessage('Publish Profiles')}</h1>
       </div>
       <div css={ContentStyle} data-testid="Publish" role="main">
-        <div aria-label={formatMessage('Navigation panel')} css={projectContainer} role="region">
+        <div
+          aria-label={formatMessage('Navigation panel')}
+          css={projectContainer}
+          data-testid="target-list"
+          role="region"
+        >
           <div
             key={'_all'}
             css={selectedTargetName === 'all' ? targetSelected : overflowSet}

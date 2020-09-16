@@ -4,8 +4,18 @@
  * Verify bot settings, files meet LUIS/QnA requirments.
  */
 
-import { BotAssets, BotInfo, LUISLocales, Diagnostic, DiagnosticSeverity, LuFile } from '@bfc/shared';
+import {
+  BotAssets,
+  BotInfo,
+  LUISLocales,
+  Diagnostic,
+  DiagnosticSeverity,
+  LuFile,
+  fetchFromSettings,
+  getSkillNameFromSetting,
+} from '@bfc/shared';
 import difference from 'lodash/difference';
+import map from 'lodash/map';
 
 import { getLocale } from './utils/help';
 
@@ -29,7 +39,7 @@ const checkLUISLocales = (assets: BotAssets): Diagnostic[] => {
 // Verify bot skill setting.
 const checkSkillSetting = (assets: BotAssets): Diagnostic[] => {
   const {
-    setting: { skill = [], botId, skillHostEndpoint },
+    setting: { skill = {}, botId, skillHostEndpoint },
     dialogs,
   } = assets;
   const diagnostics: Diagnostic[] = [];
@@ -38,9 +48,15 @@ const checkSkillSetting = (assets: BotAssets): Diagnostic[] => {
   dialogs.forEach((dialog) => {
     // used skill not existed in setting
     dialog.skills.forEach((skillId) => {
-      if (skill.findIndex(({ manifestUrl }) => manifestUrl === skillId) === -1) {
+      const endpointUrlCollection = map(skill, ({ endpointUrl }) => endpointUrl);
+      if (!endpointUrlCollection.includes(fetchFromSettings(skillId, assets.setting))) {
+        const skillName = getSkillNameFromSetting(skillId) || skillId;
         diagnostics.push(
-          new Diagnostic(`skill '${skillId}' is not existed in appsettings.json`, dialog.id, DiagnosticSeverity.Error)
+          new Diagnostic(
+            `The skill '${skillName}' does not exist in in appsettings.json`,
+            dialog.id,
+            DiagnosticSeverity.Error
+          )
         );
       }
     });
@@ -61,13 +77,6 @@ const checkSkillSetting = (assets: BotAssets): Diagnostic[] => {
   return diagnostics;
 };
 
-const filterLUISFilesToPublish = (luFiles: LuFile[]): LuFile[] => {
-  return luFiles.filter((file) => {
-    const locale = getLocale(file.id);
-    return locale && LUISLocales.includes(locale);
-  });
-};
-
 const index = (name: string, assets: BotAssets): BotInfo => {
   const diagnostics: Diagnostic[] = [];
   diagnostics.push(...checkLUISLocales(assets), ...checkSkillSetting(assets));
@@ -77,6 +86,13 @@ const index = (name: string, assets: BotAssets): BotInfo => {
     assets,
     diagnostics,
   };
+};
+
+const filterLUISFilesToPublish = (luFiles: LuFile[]): LuFile[] => {
+  return luFiles.filter((file) => {
+    const locale = getLocale(file.id);
+    return locale && LUISLocales.includes(locale);
+  });
 };
 
 export const BotIndexer = {

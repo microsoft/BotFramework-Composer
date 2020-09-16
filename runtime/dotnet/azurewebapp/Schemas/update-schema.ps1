@@ -4,7 +4,7 @@ param (
 $SCHEMA_FILE="sdk.schema"
 $UISCHEMA_FILE="sdk.uischema"
 $BACKUP_SCHEMA_FILE="sdk-backup.schema"
-$BACKUP_UISCHEMA_FILE="sdk-backup.schema"
+$BACKUP_UISCHEMA_FILE="sdk-backup.uischema"
 
 Write-Host "Running schema merge on $runtime runtime."
 

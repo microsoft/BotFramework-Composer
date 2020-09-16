@@ -48,7 +48,7 @@ describe('#copySwitchCondition', () => {
       ],
     };
 
-    expect(copySwitchCondition(switchCondition, externalApi)).toEqual({
+    expect(await copySwitchCondition(switchCondition, externalApi)).toEqual({
       $kind: 'Microsoft.SwitchCondition',
       $designer: {
         id: '5678',

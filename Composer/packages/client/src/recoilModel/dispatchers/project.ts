@@ -2,24 +2,36 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { useRecoilCallback, CallbackInterface } from 'recoil';
-import { dereferenceDefinitions, LuFile, DialogInfo, SensitiveProperties, DialogSetting } from '@bfc/shared';
+import {
+  dereferenceDefinitions,
+  LuFile,
+  QnAFile,
+  DialogInfo,
+  SensitiveProperties,
+  DialogSetting,
+  convertSkillsToDictionary,
+} from '@bfc/shared';
 import { indexer, validateDialog } from '@bfc/indexers';
 import objectGet from 'lodash/get';
 import objectSet from 'lodash/set';
-import isArray from 'lodash/isArray';
 import formatMessage from 'format-message';
 
 import lgWorker from '../parsers/lgWorker';
 import luWorker from '../parsers/luWorker';
+import qnaWorker from '../parsers/qnaWorker';
 import httpClient from '../../utils/httpUtil';
 import { BotStatus } from '../../constants';
-import { getReferredFiles } from '../../utils/luUtil';
+import { getReferredLuFiles } from '../../utils/luUtil';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
+import { getReferredQnaFiles } from '../../utils/qnaUtil';
+import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
 import settingStorage from '../../utils/dialogSettingStorage';
 import filePersistence from '../persistence/FilePersistence';
 import { navigateTo } from '../../utils/navigation';
 import languageStorage from '../../utils/languageStorage';
+import { projectIdCache } from '../../utils/projectCache';
 import { designPageLocationState } from '../atoms/botState';
+import { QnABotTemplateId } from '../../constants';
 
 import {
   skillManifestsState,
@@ -27,6 +39,7 @@ import {
   settingsState,
   localeState,
   luFilesState,
+  qnaFilesState,
   skillsState,
   schemasState,
   lgFilesState,
@@ -54,7 +67,7 @@ const handleProjectFailure = (callbackHelpers: CallbackInterface, ex) => {
 };
 
 const checkProjectUpdates = async () => {
-  const workers = [filePersistence, lgWorker, luWorker];
+  const workers = [filePersistence, lgWorker, luWorker, qnaWorker];
 
   return Promise.all(workers.map((w) => w.flush()));
 };
@@ -105,18 +118,39 @@ const updateLuFilesStatus = (projectId: string, luFiles: LuFile[]) => {
 const initLuFilesStatus = (projectId: string, luFiles: LuFile[], dialogs: DialogInfo[]) => {
   luFileStatusStorage.checkFileStatus(
     projectId,
-    getReferredFiles(luFiles, dialogs).map((file) => file.id)
+    getReferredLuFiles(luFiles, dialogs).map((file) => file.id)
   );
   return updateLuFilesStatus(projectId, luFiles);
 };
 
+const updateQnaFilesStatus = (projectId: string, qnaFiles: QnAFile[]) => {
+  const status = qnaFileStatusStorage.get(projectId);
+  return qnaFiles.map((qnaFile) => {
+    if (typeof status[qnaFile.id] === 'boolean') {
+      return { ...qnaFile, published: status[qnaFile.id] };
+    } else {
+      return { ...qnaFile, published: false };
+    }
+  });
+};
+
+const initQnaFilesStatus = (projectId: string, qnaFiles: QnAFile[], dialogs: DialogInfo[]) => {
+  qnaFileStatusStorage.checkFileStatus(
+    projectId,
+    getReferredQnaFiles(qnaFiles, dialogs).map((file) => file.id)
+  );
+  return updateQnaFilesStatus(projectId, qnaFiles);
+};
 export const projectDispatcher = () => {
-  const initBotState = async (callbackHelpers: CallbackInterface, data: any, jumpToMain: boolean) => {
+  const initBotState = async (callbackHelpers: CallbackInterface, data: any, jump: boolean, templateId: string) => {
     const { snapshot, gotoSnapshot } = callbackHelpers;
     const curLocation = await snapshot.getPromise(locationState);
     const { files, botName, botEnvironment, location, schemas, settings, id: projectId, diagnostics, skills } = data;
     const storedLocale = languageStorage.get(botName)?.locale;
     const locale = settings.languages.includes(storedLocale) ? storedLocale : settings.defaultLanguage;
+
+    // cache current projectId in session, resolve page refresh caused state lost.
+    projectIdCache.set(projectId);
 
     try {
       schemas.sdk.content = processSchema(projectId, schemas.sdk.content);
@@ -127,7 +161,12 @@ export const projectDispatcher = () => {
     }
 
     try {
-      const { dialogs, dialogSchemas, luFiles, lgFiles, skillManifestFiles } = indexer.index(files, botName, locale);
+      const { dialogs, dialogSchemas, luFiles, lgFiles, qnaFiles, skillManifestFiles } = indexer.index(
+        files,
+        botName,
+        locale
+      );
+
       let mainDialog = '';
       const verifiedDialogs = dialogs.map((dialog) => {
         if (dialog.isRoot) {
@@ -137,9 +176,13 @@ export const projectDispatcher = () => {
         return dialog;
       });
 
+      await lgWorker.addProject(projectId, lgFiles);
+
+      // Important: gotoSnapshot will wipe all states.
       const newSnapshot = snapshot.map(({ set }) => {
         set(skillManifestsState, skillManifestFiles);
         set(luFilesState, initLuFilesStatus(botName, luFiles, dialogs));
+        set(qnaFilesState, initQnaFilesStatus(botName, qnaFiles, dialogs));
         set(lgFilesState, lgFiles);
         set(dialogsState, verifiedDialogs);
         set(dialogSchemasState, dialogSchemas);
@@ -157,12 +200,23 @@ export const projectDispatcher = () => {
         set(projectIdState, projectId);
         refreshLocalStorage(projectId, settings);
         const mergedSettings = mergeLocalStorage(projectId, settings);
+        if (Array.isArray(mergedSettings.skill)) {
+          const skillsArr = mergedSettings.skill.map((skillData) => {
+            return {
+              ...skillData,
+            };
+          });
+          mergedSettings.skill = convertSkillsToDictionary(skillsArr);
+        }
         set(settingsState, mergedSettings);
       });
       gotoSnapshot(newSnapshot);
-      if (jumpToMain && projectId) {
-        const mainUrl = `/bot/${projectId}/dialogs/${mainDialog}`;
-        navigateTo(mainUrl);
+      if (jump && projectId) {
+        let url = `/bot/${projectId}/dialogs/${mainDialog}`;
+        if (templateId === QnABotTemplateId) {
+          url = `/bot/${projectId}/knowledge-base/${mainDialog}`;
+        }
+        navigateTo(url);
       }
     } catch (err) {
       callbackHelpers.set(botOpeningState, false);
@@ -196,7 +250,8 @@ export const projectDispatcher = () => {
       try {
         await setBotOpeningStatus(callbackHelpers);
         const response = await httpClient.put(`/projects/open`, { path, storageId });
-        await initBotState(callbackHelpers, response.data, true);
+        await initBotState(callbackHelpers, response.data, true, '');
+
         return response.data.id;
       } catch (ex) {
         removeRecentProject(callbackHelpers, path);
@@ -208,7 +263,7 @@ export const projectDispatcher = () => {
   const fetchProjectById = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
     try {
       const response = await httpClient.get(`/projects/${projectId}`);
-      await initBotState(callbackHelpers, response.data, false);
+      await initBotState(callbackHelpers, response.data, false, '');
     } catch (ex) {
       handleProjectFailure(callbackHelpers, ex);
       navigateTo('/home');
@@ -221,7 +276,8 @@ export const projectDispatcher = () => {
       name: string,
       description: string,
       location: string,
-      schemaUrl?: string
+      schemaUrl?: string,
+      locale?: string
     ) => {
       try {
         await setBotOpeningStatus(callbackHelpers);
@@ -232,12 +288,13 @@ export const projectDispatcher = () => {
           description,
           location,
           schemaUrl,
+          locale,
         });
         const projectId = response.data.id;
         if (settingStorage.get(projectId)) {
           settingStorage.remove(projectId);
         }
-        await initBotState(callbackHelpers, response.data, true);
+        await initBotState(callbackHelpers, response.data, true, templateId);
         return projectId;
       } catch (ex) {
         handleProjectFailure(callbackHelpers, ex);
@@ -250,7 +307,9 @@ export const projectDispatcher = () => {
     try {
       await httpClient.delete(`/projects/${projectId}`);
       luFileStatusStorage.removeAllStatuses(projectId);
+      qnaFileStatusStorage.removeAllStatuses(projectId);
       settingStorage.remove(projectId);
+      projectIdCache.clear();
       reset(projectIdState);
       reset(dialogsState);
       reset(botEnvironmentState);
@@ -280,7 +339,7 @@ export const projectDispatcher = () => {
           description,
           location,
         });
-        await initBotState(callbackHelpers, response.data, true);
+        await initBotState(callbackHelpers, response.data, true, '');
         return response.data.id;
       } catch (ex) {
         handleProjectFailure(callbackHelpers, ex);
@@ -305,7 +364,7 @@ export const projectDispatcher = () => {
       const { set } = callbackHelpers;
       try {
         const response = await httpClient.get(`/runtime/templates`);
-        if (isArray(response.data)) {
+        if (Array.isArray(response.data)) {
           set(runtimeTemplatesState, [...response.data]);
         }
       } catch (ex) {

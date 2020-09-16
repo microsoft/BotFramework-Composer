@@ -2,9 +2,11 @@
 // Licensed under the MIT License.
 
 context('ToDo Bot', () => {
-  beforeEach(() => {
+  before(() => {
     cy.visit('/home');
     cy.createBot('TodoSample');
+    cy.findByTestId('WelcomeModalCloseIcon').click();
+    cy.findByText('Yes').click();
   });
 
   it('can open the main dialog', () => {
@@ -19,7 +21,6 @@ context('ToDo Bot', () => {
   it('can open the AddToDo dialog', () => {
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('addtodo').click();
-      cy.findByText('addtodo').click();
     });
 
     cy.url().should('contain', 'addtodo');
@@ -27,7 +28,6 @@ context('ToDo Bot', () => {
 
   it('can open the ClearToDos dialog', () => {
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('cleartodos').click();
       cy.findByText('cleartodos').click();
     });
 
@@ -37,7 +37,6 @@ context('ToDo Bot', () => {
   it('can open the DeleteToDo dialog', () => {
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('deletetodo').click();
-      cy.findByText('deletetodo').click();
     });
 
     cy.url().should('contain', 'deletetodo');
@@ -45,7 +44,6 @@ context('ToDo Bot', () => {
 
   it('can open the ShowToDos dialog', () => {
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('showtodos').click();
       cy.findByText('showtodos').click();
     });
 

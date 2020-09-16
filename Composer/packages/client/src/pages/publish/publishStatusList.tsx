@@ -176,7 +176,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
   }, [selectIndex, items]);
 
   return (
-    <div css={listRoot}>
+    <div css={listRoot} data-testid={'publish-status-list'}>
       <div css={tableView}>
         <DetailsList
           isHeaderVisible
@@ -197,6 +197,9 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
           selection={selection}
           selectionMode={SelectionMode.single}
           setKey="none"
+          onActiveItemChanged={(item, index) => {
+            setSelectedIndex(index);
+          }}
           onColumnHeaderClick={(_, clickedCol) => {
             if (!clickedCol) return;
             if (clickedCol.key === currentSort.key) {

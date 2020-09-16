@@ -23,7 +23,7 @@ import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { ProjectTemplate } from '@bfc/shared';
 import { NeutralColors } from '@uifabric/fluent-theme';
 
-import { DialogCreationCopy, EmptyBotTemplateId } from '../../constants';
+import { DialogCreationCopy, EmptyBotTemplateId, QnABotTemplateId } from '../../constants';
 import { DialogWrapper, DialogTypes } from '../DialogWrapper';
 
 // -------------------- Styles -------------------- //
@@ -98,6 +98,7 @@ const content = css`
 
 const optionKeys = {
   createFromScratch: 'createFromScratch',
+  createFromQnA: 'createFromQnA',
   createFromTemplate: 'createFromTemplate',
 };
 
@@ -144,6 +145,10 @@ export function CreateOptions(props) {
     let routeToTemplate = emptyBotKey;
     if (option === optionKeys.createFromTemplate) {
       routeToTemplate = currentTemplate;
+    }
+
+    if (option === optionKeys.createFromQnA) {
+      routeToTemplate = QnABotTemplateId;
     }
 
     if (props.location && props.location.search) {
@@ -224,6 +229,13 @@ export function CreateOptions(props) {
       key: optionKeys.createFromScratch,
       'data-testid': 'Create from scratch',
       text: formatMessage('Create from scratch'),
+      onRenderField: SelectOption,
+    },
+    {
+      ariaLabel: formatMessage('Create from QnA') + (option === optionKeys.createFromQnA ? ' selected' : ''),
+      key: optionKeys.createFromQnA,
+      'data-testid': 'Create from QnA',
+      text: formatMessage('Create from knowledge base (QnA Maker)'),
       onRenderField: SelectOption,
     },
     {

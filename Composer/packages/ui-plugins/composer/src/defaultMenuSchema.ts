@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import formatMessage from 'format-message';
-import { MenuUISchema } from '@bfc/extension';
+import { MenuUISchema } from '@bfc/extension-client';
 import { SDKKinds } from '@bfc/shared';
 
 const SubmenuNames = {
@@ -158,5 +158,17 @@ export const DefaultMenuSchema: MenuUISchema = {
   [SDKKinds.TraceActivity]: {
     label: formatMessage('Emit a trace event'),
     submenu: [SubmenuNames.Debugging],
+  },
+  [SDKKinds.TelemetryTrackEvent]: {
+    label: formatMessage('Emit a telemetry track event'),
+    submenu: [SubmenuNames.Debugging],
+  },
+  [SDKKinds.UpdateActivity]: {
+    label: formatMessage('Update activity'),
+    submenu: [SubmenuNames.PropertyManagement],
+  },
+  [SDKKinds.DeleteActivity]: {
+    label: formatMessage('Delete activity'),
+    submenu: [SubmenuNames.PropertyManagement],
   },
 };

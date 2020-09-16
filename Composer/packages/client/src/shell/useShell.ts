@@ -2,13 +2,12 @@
 // Licensed under the MIT License.
 
 import { useMemo, useRef } from 'react';
-import { ShellApi, ShellData, Shell } from '@bfc/shared';
+import { ShellApi, ShellData, Shell, fetchFromSettings } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
 import { updateRegExIntent, renameRegExIntent, updateIntentTrigger } from '../utils/dialogUtil';
 import { getDialogData, setDialogData } from '../utils/dialogUtil';
-import { getFocusPath } from '../utils/navigation';
 import { isAbsHosted } from '../utils/envUtil';
 import { undoFunctionState } from '../recoilModel/undo/history';
 import {
@@ -20,17 +19,21 @@ import {
   projectIdState,
   localeState,
   luFilesState,
+  qnaFilesState,
   dispatcherState,
   breadcrumbState,
   designPageLocationState,
   focusPathState,
   userSettingsState,
   clipboardActionsState,
+  settingsState,
 } from '../recoilModel';
 import { validatedDialogsSelector } from '../recoilModel/selectors/validatedDialogs';
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
+import { useQnaApi } from './qnaApi';
+import { useTriggerApi } from './triggerApi';
 
 const FORM_EDITOR = 'PropertyEditor';
 
@@ -42,17 +45,19 @@ export function useShell(source: EventSource): Shell {
   const dialogs = useRecoilValue(validatedDialogsSelector);
   const dialogSchemas = useRecoilValue(dialogSchemasState);
   const luFiles = useRecoilValue(luFilesState);
+  const qnaFiles = useRecoilValue(qnaFilesState);
   const projectId = useRecoilValue(projectIdState);
   const locale = useRecoilValue(localeState);
   const lgFiles = useRecoilValue(lgFilesState);
   const skills = useRecoilValue(skillsState);
   const schemas = useRecoilValue(schemasState);
-  const breadcrumb = useRecoilValue(breadcrumbState);
   const designPageLocation = useRecoilValue(designPageLocationState);
+  const breadcrumb = useRecoilValue(breadcrumbState);
   const focusPath = useRecoilValue(focusPathState);
   const userSettings = useRecoilValue(userSettingsState);
   const clipboardActions = useRecoilValue(clipboardActionsState);
   const { undo, redo, commitChanges } = useRecoilValue(undoFunctionState);
+  const settings = useRecoilValue(settingsState);
   const {
     updateDialog,
     updateDialogSchema,
@@ -67,10 +72,12 @@ export function useShell(source: EventSource): Shell {
     updateUserSettings,
     setMessage,
     displayManifestModal,
+    updateSkillsInSetting,
   } = useRecoilValue(dispatcherState);
   const lgApi = useLgApi();
   const luApi = useLuApi();
-
+  const qnaApi = useQnaApi();
+  const triggerApi = useTriggerApi();
   const { dialogId, selected, focused, promptTab } = designPageLocation;
 
   const dialogsMap = useMemo(() => {
@@ -150,22 +157,12 @@ export function useShell(source: EventSource): Shell {
       };
       dialogMapRef.current[dialogId] = updatedDialog;
       updateDialog(payload);
-
-      //make sure focusPath always valid
-      const data = getDialogData(dialogMapRef.current, dialogId, getFocusPath(selected, focused));
-      if (typeof data === 'undefined') {
-        /**
-         * It's improper to fallback to `dialogId` directly:
-         *   - If 'action' not exists at `focused` path, fallback to trigger path;
-         *   - If 'trigger' not exists at `selected` path, fallback to dialog Id;
-         *   - If 'dialog' not exists at `dialogId` path, fallback to main dialog.
-         */
-        navTo(dialogId, []);
-      }
       commitChanges();
     },
     ...lgApi,
     ...luApi,
+    ...qnaApi,
+    ...triggerApi,
     updateRegExIntent: updateRegExIntentHandler,
     renameRegExIntent: renameRegExIntentHandler,
     updateIntentTrigger: updateIntentTriggerHandler,
@@ -183,7 +180,7 @@ export function useShell(source: EventSource): Shell {
     },
     addSkillDialog: () => {
       return new Promise((resolve) => {
-        addSkillDialogBegin((newSkill: { manifestUrl: string } | null) => {
+        addSkillDialogBegin((newSkill: { manifestUrl: string; name: string } | null) => {
           resolve(newSkill);
         });
       });
@@ -196,6 +193,10 @@ export function useShell(source: EventSource): Shell {
     announce: setMessage,
     displayManifestModal: displayManifestModal,
     updateDialogSchema,
+    skillsInSettings: {
+      get: (path: string) => fetchFromSettings(path, settings),
+      set: updateSkillsInSetting,
+    },
   };
 
   const currentDialog = useMemo(() => dialogs.find((d) => d.id === dialogId), [dialogs, dialogId]);
@@ -218,6 +219,7 @@ export function useShell(source: EventSource): Shell {
         schemas,
         lgFiles,
         luFiles,
+        qnaFiles,
         currentDialog,
         userSettings,
         designerId: editorData?.$designer?.id,

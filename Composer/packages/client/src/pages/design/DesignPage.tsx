@@ -8,30 +8,29 @@ import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcru
 import formatMessage from 'format-message';
 import { globalHistory, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
-import {
-  DialogFactory,
-  SDKKinds,
-  DialogInfo,
-  PromptTab,
-  LuIntentSection,
-  getEditorAPI,
-  registerEditorAPI,
-} from '@bfc/shared';
+import { DialogFactory, SDKKinds, DialogInfo, PromptTab, getEditorAPI, registerEditorAPI } from '@bfc/shared';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
-import Extension, { useTriggerApi, PluginConfig } from '@bfc/extension';
+import { EditorExtension, useTriggerApi, PluginConfig } from '@bfc/extension-client';
 import { useRecoilValue } from 'recoil';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TestController } from '../../components/TestController/TestController';
 import { DialogDeleting } from '../../constants';
-import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils/dialogUtil';
+import {
+  createSelectedPath,
+  deleteTrigger,
+  getBreadcrumbLabel,
+  qnaMatcherKey,
+  TriggerFormData,
+  getDialogData,
+} from '../../utils/dialogUtil';
 import { Conversation } from '../../components/Conversation';
 import { dialogStyle } from '../../components/Modal/dialogStyle';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { ProjectTree } from '../../components/ProjectTree/ProjectTree';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
-import { clearBreadcrumb } from '../../utils/navigation';
+import { clearBreadcrumb, getFocusPath } from '../../utils/navigation';
 import { navigateTo } from '../../utils/navigation';
 import { useShell } from '../../shell';
 import { undoFunctionState, undoVersionState } from '../../recoilModel/undo/history';
@@ -44,18 +43,21 @@ import {
   breadcrumbState,
   visualEditorSelectionState,
   focusPathState,
-  designPageLocationState,
   showAddSkillDialogModalState,
   skillsState,
   actionsSeedState,
   userSettingsState,
-  luFilesState,
   localeState,
+  qnaFilesState,
 } from '../../recoilModel';
+import { getBaseName } from '../../utils/fileUtil';
 import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 import plugins, { mergePluginConfigs } from '../../plugins';
 import { useElectronFeatures } from '../../hooks/useElectronFeatures';
+import ImportQnAFromUrlModal from '../knowledge-base/ImportQnAFromUrlModal';
+import { triggerNotSupported } from '../../utils/dialogValidator';
 
+import { WarningMessage } from './WarningMessage';
 import {
   breadcrumbClass,
   contentWrapper,
@@ -116,14 +118,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const breadcrumb = useRecoilValue(breadcrumbState);
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
   const focusPath = useRecoilValue(focusPathState);
-  const designPageLocation = useRecoilValue(designPageLocationState);
   const showCreateDialogModal = useRecoilValue(showCreateDialogModalState);
   const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState);
   const { undo, redo, canRedo, canUndo, commitChanges, clearUndo } = useRecoilValue(undoFunctionState);
   const skills = useRecoilValue(skillsState);
   const actionsSeed = useRecoilValue(actionsSeedState);
   const userSettings = useRecoilValue(userSettingsState);
-  const luFiles = useRecoilValue(luFilesState);
+  const qnaFiles = useRecoilValue(qnaFilesState);
   const locale = useRecoilValue(localeState);
   const undoVersion = useRecoilValue(undoVersionState);
   const {
@@ -138,55 +139,92 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     selectTo,
     selectAndFocus,
     addSkillDialogCancel,
-    createLuIntent,
+    createQnAFile,
     updateSkill,
     exportToZip,
     onboardingAddCoachMarkRef,
+    importQnAFromUrls,
   } = useRecoilValue(dispatcherState);
 
   const { location, dialogId } = props;
-  const luFile = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const params = new URLSearchParams(location?.search);
   const selected = params.get('selected') || '';
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
   const [dialogJsonVisible, setDialogJsonVisibility] = useState(false);
+  const [importQnAModalVisibility, setImportQnAModalVisibility] = useState(false);
   const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0]);
   const [exportSkillModalVisible, setExportSkillModalVisible] = useState(false);
+  const [warningIsVisible, setWarningIsVisible] = useState(true);
   const shell = useShell('DesignPage');
   const shellForFlowEditor = useShell('FlowEditor');
   const shellForPropertyEditor = useShell('PropertyEditor');
   const triggerApi = useTriggerApi(shell.api);
+  const { createTrigger } = shell.api;
 
   useEffect(() => {
     const currentDialog = dialogs.find(({ id }) => id === dialogId);
     if (currentDialog) {
       setCurrentDialog(currentDialog);
     }
-    const rootDialog = dialogs.find(({ isRoot }) => isRoot === true);
+    const rootDialog = dialogs.find(({ isRoot }) => isRoot);
     if (!currentDialog && rootDialog) {
       const { search } = location || {};
       navigateTo(`/bot/${projectId}/dialogs/${rootDialog.id}${search}`);
       return;
     }
+    setWarningIsVisible(true);
   }, [dialogId, dialogs, location]);
 
+  // migration: add id to dialog when dialog doesn't have id
   useEffect(() => {
-    const index = currentDialog.triggers.findIndex(({ type }) => type === SDKKinds.OnBeginDialog);
-    if (index >= 0 && !designPageLocation.selected) {
-      selectTo(createSelectedPath(index));
+    const currentDialog = dialogs.find(({ id }) => id === dialogId);
+
+    const dialogContent = currentDialog?.content ? Object.assign({}, currentDialog.content) : { emptyDialog: true };
+    if (!dialogContent.emptyDialog && !dialogContent.id) {
+      dialogContent.id = dialogId;
+      updateDialog({ id: dialogId, content: dialogContent });
     }
-  }, [currentDialog?.id]);
+  }, [dialogId]);
+
+  // migration: add qna file for dialog
+  useEffect(() => {
+    dialogs.forEach(async (dialog) => {
+      if (!qnaFiles || qnaFiles.length === 0 || !qnaFiles.find((qnaFile) => getBaseName(qnaFile.id) === dialog.id)) {
+        await createQnAFile({ id: dialog.id, content: '' });
+      }
+    });
+  }, [dialogs]);
 
   useEffect(() => {
     if (location && props.dialogId && props.projectId) {
       const { dialogId, projectId } = props;
       const params = new URLSearchParams(location.search);
+      const dialogMap = dialogs.reduce((acc, { content, id }) => ({ ...acc, [id]: content }), {});
+      const selected = params.get('selected') ?? '';
+      const focused = params.get('focused') ?? '';
+
+      //make sure focusPath always valid
+      const data = getDialogData(dialogMap, dialogId, getFocusPath(selected, focused));
+      if (typeof data === 'undefined') {
+        const { id } = dialogs.find(({ id }) => id === dialogId) || dialogs.find(({ isRoot }) => isRoot) || {};
+        /**
+         * It's improper to fallback to `dialogId` directly:
+         *   - If 'action' not exists at `focused` path, fallback to trigger path;
+         *   - If 'trigger' not exists at `selected` path, fallback to dialog Id;
+         *   - If 'dialog' not exists at `dialogId` path, fallback to main dialog.
+         */
+        if (id) {
+          navTo(id);
+        }
+        return;
+      }
+
       setDesignPageLocation({
         dialogId: dialogId,
         projectId: projectId,
-        selected: params.get('selected') ?? '',
-        focused: params.get('focused') ?? '',
-        breadcrumb: location.state ? location.state.breadcrumb || [] : [],
+        selected,
+        focused,
+        breadcrumb: location.state?.breadcrumb || [],
         promptTab: getTabFromFragment(),
       });
       /* eslint-disable no-underscore-dangle */
@@ -205,6 +243,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     return clearUndo;
   }, []);
 
+  const openImportQnAModal = () => {
+    setImportQnAModalVisibility(true);
+  };
+
   const onTriggerCreationDismiss = () => {
     setTriggerModalVisibility(false);
   };
@@ -213,19 +255,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     setTriggerModalVisibility(true);
   };
 
-  const onTriggerCreationSubmit = (dialog: DialogInfo, intent?: LuIntentSection) => {
-    const dialogPayload = {
-      id: dialog.id,
-      projectId,
-      content: dialog.content,
-    };
-    if (luFile && intent) {
-      createLuIntent({ id: luFile.id, intent, projectId });
-    }
-
-    const index = get(dialog, 'content.triggers', []).length - 1;
-    selectTo(`triggers[${index}]`);
-    updateDialog(dialogPayload);
+  const onTriggerCreationSubmit = async (dialogId: string, formData: TriggerFormData) => {
+    createTrigger(dialogId, formData);
   };
 
   function handleSelect(id, selected = '') {
@@ -242,6 +273,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     }
   };
 
+  const [flowEditorFocused, setFlowEditorFocused] = useState(false);
   const { actionSelected, showDisableBtn, showEnableBtn } = useMemo(() => {
     const actionSelected = Array.isArray(visualEditorSelection) && visualEditorSelection.length > 0;
     if (!actionSelected) {
@@ -253,7 +285,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     return { actionSelected, showDisableBtn, showEnableBtn };
   }, [visualEditorSelection]);
 
-  useElectronFeatures(actionSelected, canUndo(), canRedo());
+  useElectronFeatures(actionSelected, flowEditorFocused, canUndo(), canRedo());
 
   const EditorAPI = getEditorAPI();
   const toolbarItems: IToolbarItem[] = [
@@ -283,6 +315,16 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             }),
             onClick: () => {
               openNewTriggerModal();
+            },
+          },
+          {
+            'data-testid': 'AddNewKnowledgebase',
+            key: 'addKnowledge',
+            text: formatMessage(` Add new knowledge base on {displayName}`, {
+              displayName: currentDialog?.displayName ?? '',
+            }),
+            onClick: () => {
+              openImportQnAModal();
             },
           },
         ],
@@ -419,7 +461,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       dialogs.length > 0
         ? breadcrumb.reduce((result, item, index) => {
             const { dialogId, selected, focused } = item;
-            const text = getbreadcrumbLabel(dialogs, dialogId, selected, focused);
+            const text = getBreadcrumbLabel(dialogs, dialogId, selected, focused);
             if (text) {
               result.push({
                 // @ts-ignore
@@ -465,6 +507,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     const seededContent = new DialogFactory(schemas.sdk?.content).create(SDKKinds.AdaptiveDialog, {
       $designer: { name: data.name, description: data.description },
       generator: `${data.name}.lg`,
+      recognizer: `${data.name}.lu.qna`,
     });
     if (seededContent.triggers?.[0]) {
       seededContent.triggers[0].actions = actionsSeed;
@@ -526,6 +569,30 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     onboardingAddCoachMarkRef({ addNew });
   }, []);
 
+  const cancelImportQnAModal = () => {
+    setImportQnAModalVisibility(false);
+  };
+
+  const handleCreateQnA = async (urls: string[]) => {
+    cancelImportQnAModal();
+    const formData = {
+      $kind: qnaMatcherKey,
+      errors: { $kind: '', intent: '', event: '', triggerPhrases: '', regEx: '', activity: '' },
+      event: '',
+      intent: '',
+      regEx: '',
+      triggerPhrases: '',
+    };
+    if (dialogId) {
+      const url = `/bot/${projectId}/knowledge-base/${dialogId}`;
+      createTrigger(dialogId, formData, url);
+      // import qna from urls
+      if (urls.length > 0) {
+        await importQnAFromUrls({ id: `${dialogId}.${locale}`, urls });
+      }
+    }
+  };
+
   const pluginConfig: PluginConfig = useMemo(() => {
     const sdkUISchema = schemas?.ui?.content ?? {};
     const userUISchema = schemas?.uiOverrides?.content ?? {};
@@ -535,6 +602,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   if (!dialogId) {
     return <LoadingSpinner />;
   }
+
+  const selectedTrigger = currentDialog.triggers.find((t) => t.id === selected);
+  const withWarning = triggerNotSupported(currentDialog, selectedTrigger);
 
   return (
     <React.Fragment>
@@ -571,15 +641,29 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                       updateDialog({ id: currentDialog.id, content: data });
                     }}
                   />
+                ) : withWarning ? (
+                  warningIsVisible && (
+                    <WarningMessage
+                      okText={formatMessage('Change Recognizer')}
+                      onCancel={() => {
+                        setWarningIsVisible(false);
+                      }}
+                      onOk={() => navTo(`/bot/${projectId}/knowledge-base/all`)}
+                    />
+                  )
                 ) : (
-                  <Extension plugins={pluginConfig} shell={shellForFlowEditor}>
-                    <VisualEditor openNewTriggerModal={openNewTriggerModal} />
-                  </Extension>
+                  <EditorExtension plugins={pluginConfig} shell={shellForFlowEditor}>
+                    <VisualEditor
+                      openNewTriggerModal={openNewTriggerModal}
+                      onBlur={() => setFlowEditorFocused(false)}
+                      onFocus={() => setFlowEditorFocused(true)}
+                    />
+                  </EditorExtension>
                 )}
               </div>
-              <Extension plugins={pluginConfig} shell={shellForPropertyEditor}>
+              <EditorExtension plugins={pluginConfig} shell={shellForPropertyEditor}>
                 <PropertyEditor key={focusPath + undoVersion} />
-              </Extension>
+              </EditorExtension>
             </div>
           </Conversation>
         </div>
@@ -616,6 +700,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             onDismiss={onTriggerCreationDismiss}
             onSubmit={onTriggerCreationSubmit}
           />
+        )}
+        {importQnAModalVisibility && (
+          <ImportQnAFromUrlModal dialogId={dialogId} onDismiss={cancelImportQnAModal} onSubmit={handleCreateQnA} />
         )}
         {displaySkillManifest && (
           <DisplayManifestModal manifestId={displaySkillManifest} onDismiss={dismissManifestModal} />

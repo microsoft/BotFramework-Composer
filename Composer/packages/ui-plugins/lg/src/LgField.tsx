@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import React, { useCallback } from 'react';
 import { LgEditor } from '@bfc/code-editor';
-import { FieldProps, useShellApi } from '@bfc/extension';
+import { FieldProps, useShellApi } from '@bfc/extension-client';
 import { FieldLabel } from '@bfc/adaptive-form';
 import { LgMetaData, LgTemplateRef, LgType, CodeEditorSettings } from '@bfc/shared';
 import { filterTemplateDiagnostics } from '@bfc/indexers';
@@ -49,7 +49,7 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
 
   const updateLgTemplate = useCallback(
     (body: string) => {
-      shellApi.updateLgTemplate(lgFileId, lgName, body);
+      shellApi.deboucedUpdateLgTemplate(lgFileId, lgName, body);
     },
     [lgName, lgFileId]
   );

@@ -503,7 +503,7 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
         {operationMode.write && (
           <StackItem align={'end'} styles={{ root: { marginBottom: 5 } }}>
             <Link disabled={editMode !== EditMode.NONE} onClick={onCreateNewFolder}>
-              {formatMessage('create new folder')}
+              {formatMessage('Create new folder')}
             </Link>
           </StackItem>
         )}

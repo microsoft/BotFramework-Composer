@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { FlowWidget, PluginConfig, UIOptions } from '@bfc/extension';
-import { SDKKinds, getInputType, PromptTab, PropmtTabTitles } from '@bfc/shared';
+import { FlowWidget, PluginConfig, UIOptions } from '@bfc/extension-client';
+import { SDKKinds, getInputType, PromptTab, PromptTabTitles } from '@bfc/shared';
 import { VisualEditorColors as Colors, ListOverview, BorderedDiv, FixedInfo } from '@bfc/ui-shared';
 import formatMessage from 'format-message';
 import { StringField, JsonField } from '@bfc/adaptive-form';
@@ -38,7 +38,7 @@ const generateInputSchema = (inputBody?, inputFooter?): FlowWidget => ({
     widget: 'ActionCard',
     header: {
       widget: 'ActionHeader',
-      title: (data) => `${PropmtTabTitles[PromptTab.BOT_ASKS]} (${getInputType(data.$kind)})`,
+      title: (data) => `${PromptTabTitles[PromptTab.BOT_ASKS]()} (${getInputType(data.$kind)})`,
       icon: 'MessageBot',
       colors: {
         theme: Colors.BlueMagenta20,
@@ -55,7 +55,7 @@ const generateInputSchema = (inputBody?, inputFooter?): FlowWidget => ({
     widget: 'ActionCard',
     header: {
       widget: 'ActionHeader',
-      title: (data) => `${PropmtTabTitles[PromptTab.USER_INPUT]} (${getInputType(data.$kind)})`,
+      title: (data) => `${PromptTabTitles[PromptTab.USER_INPUT]()} (${getInputType(data.$kind)})`,
       disableSDKTitle: true,
       icon: 'User',
       menu: 'none',
@@ -108,6 +108,7 @@ const config: PluginConfig = {
           },
           validations: {
             label: () => formatMessage('Validation Rules'),
+            helpLink: 'https://aka.ms/bf-composer-docs-ask-input#prompt-settings-and-validation',
             placeholder: () => formatMessage('Add new validation rule here'),
           },
         },
@@ -124,6 +125,7 @@ const config: PluginConfig = {
           },
           validations: {
             label: () => formatMessage('Validation Rules'),
+            helpLink: 'https://aka.ms/bf-composer-docs-ask-input#prompt-settings-and-validation',
             placeholder: () => formatMessage('Add new validation rule here'),
           },
           choices: {
@@ -144,6 +146,7 @@ const config: PluginConfig = {
           },
           validations: {
             label: () => formatMessage('Validation Rules'),
+            helpLink: 'https://aka.ms/bf-composer-docs-ask-input#prompt-settings-and-validation',
             placeholder: () => formatMessage('Add new validation rule here'),
           },
           confirmChoices: {
@@ -164,6 +167,7 @@ const config: PluginConfig = {
           },
           validations: {
             label: () => formatMessage('Validation Rules'),
+            helpLink: 'https://aka.ms/bf-composer-docs-ask-input#prompt-settings-and-validation',
             placeholder: () => formatMessage('Add new validation rule here'),
           },
         },
@@ -180,6 +184,7 @@ const config: PluginConfig = {
           },
           validations: {
             label: () => formatMessage('Validation Rules'),
+            helpLink: 'https://aka.ms/bf-composer-docs-ask-input#prompt-settings-and-validation',
             placeholder: () => formatMessage('Add new validation rule here'),
           },
         },
@@ -196,6 +201,7 @@ const config: PluginConfig = {
           },
           validations: {
             label: () => formatMessage('Validation Rules'),
+            helpLink: 'https://aka.ms/bf-composer-docs-ask-input#prompt-settings-and-validation',
             placeholder: () => formatMessage('Add new validation rule here'),
           },
         },

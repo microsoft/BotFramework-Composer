@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import React, { useMemo } from 'react';
 import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
-import { FieldProps, useShellApi } from '@bfc/extension';
+import { FieldProps, useShellApi } from '@bfc/extension-client';
 import { filterSectionDiagnostics } from '@bfc/indexers';
 import { LuIntentSection, CodeEditorSettings, LuMetaData, LuType } from '@bfc/shared';
 
@@ -40,7 +40,7 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = (props) => {
     }
 
     const newIntent = { Name: intentName, Body: newValue };
-    shellApi.updateLuIntent(luFile.id, intentName, newIntent);
+    shellApi.deboucedUpdateLuIntent(luFile.id, intentName, newIntent);
     onChange(intentName);
   };
 

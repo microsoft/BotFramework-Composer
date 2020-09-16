@@ -18,3 +18,10 @@ export const defaultPlaceholder = formatMessage(
 );
 
 export const LG_HELP = 'https://aka.ms/lg-file-format';
+
+export const QNA_HELP = 'https://aka.ms/qna-file-format';
+export const defaultQnAPlaceholder = formatMessage(
+  `> To learn more about the QnA file format, read the documentation at
+> {QNA_HELP}`,
+  { QNA_HELP }
+);

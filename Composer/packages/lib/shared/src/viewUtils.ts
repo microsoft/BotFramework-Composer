@@ -5,8 +5,8 @@ import get from 'lodash/get';
 import formatMessage from 'format-message';
 
 import { SDKKinds } from './types';
-import { ConceptLabels } from './labelMap';
-import { PromptTab, PropmtTabTitles } from './promptTabs';
+import { conceptLabels as conceptLabelsFn } from './labelMap';
+import { PromptTab, PromptTabTitles } from './promptTabs';
 
 export const PROMPT_TYPES = [
   SDKKinds.AttachmentInput,
@@ -104,7 +104,14 @@ export const dialogGroups: DialogGroupsMap = {
   },
   [DialogGroup.EVENTS]: {
     label: formatMessage('Events'),
-    types: [SDKKinds.OnIntent, SDKKinds.OnUnknownIntent, SDKKinds.OnDialogEvent, SDKKinds.OnActivity],
+    types: [
+      SDKKinds.OnIntent,
+      SDKKinds.OnQnAMatch,
+      SDKKinds.OnUnknownIntent,
+      SDKKinds.OnDialogEvent,
+      SDKKinds.OnActivity,
+      SDKKinds.OnChooseIntent,
+    ],
   },
   [DialogGroup.DIALOG_EVENT_TYPES]: {
     label: formatMessage('OnDialogEvents Types'),
@@ -183,13 +190,13 @@ const truncateSDKType = ($kind) => (typeof $kind === 'string' ? $kind.replace('M
  */
 export function generateSDKTitle(data, customizedTitle?: string, tab?: PromptTab) {
   const $kind = get(data, '$kind');
+  const titleFromShared = get(conceptLabelsFn(), [$kind, 'title']);
   const titleFrom$designer = get(data, '$designer.name');
-  const titleFromShared = get(ConceptLabels, [$kind, 'title']);
   const titleFrom$kind = truncateSDKType($kind);
 
-  const title = titleFrom$designer || customizedTitle || titleFromShared || titleFrom$kind;
+  const title = titleFromShared || titleFrom$designer || customizedTitle || titleFrom$kind;
   if (tab) {
-    return `${PropmtTabTitles} (${title})`;
+    return `${PromptTabTitles} (${title})`;
   }
   return title;
 }

@@ -26,6 +26,7 @@ import { INavTreeItem } from '../../components/NavTree';
 import { useLocation } from '../../utils/hooks';
 import { IToolbarItem } from '../../components/Toolbar';
 import { AddLanguageModal, DeleteLanguageModal } from '../../components/MultiLanguage/index';
+import { useProjectIdCache } from '../../utils/hooks';
 
 import { SettingsRoutes } from './router';
 
@@ -42,6 +43,7 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
     delLanguageDialogCancel,
     addLanguages,
     deleteLanguages,
+    fetchProjectById,
   } = useRecoilValue(dispatcherState);
   const projectId = useRecoilValue(projectIdState);
   const locale = useRecoilValue(localeState);
@@ -49,6 +51,15 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
   const showDelLanguageModal = useRecoilValue(showDelLanguageModalState);
   const { defaultLanguage, languages } = useRecoilValue(settingsState);
   const { navigate } = useLocation();
+
+  // when fresh page, projectId in store are empty, no project are opened at client
+  // use cached projectId do fetch.
+  const cachedProjectId = useProjectIdCache();
+  useEffect(() => {
+    if (!projectId && cachedProjectId) {
+      fetchProjectById(cachedProjectId);
+    }
+  }, []);
 
   // If no project is open and user tries to access a bot-scoped settings (e.g., browser history, deep link)
   // Redirect them to the default settings route that is not bot-scoped
@@ -62,6 +73,7 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
     botSettings: formatMessage('Bot Settings'),
     appSettings: formatMessage('Application Settings'),
     runtime: formatMessage('Runtime Config'),
+    extensions: formatMessage('Extensions'),
     about: formatMessage('About'),
   };
 
@@ -74,12 +86,8 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
     },
     { id: 'application', name: settingLabels.appSettings, url: getProjectLink('application') },
     { id: 'runtime', name: settingLabels.runtime, url: getProjectLink('runtime', projectId), disabled: !projectId },
+    // { id: 'extensions', name: settingLabels.extensions, url: getProjectLink('extensions') },
     { id: 'about', name: settingLabels.about, url: getProjectLink('about') },
-
-    // { key: '/settings/publish', name: settingLabels.publish, url: '' },
-
-    // { key: 'services', name: formatMessage('Services') },
-    // { key: 'publishing-staging', name: formatMessage('Publishing and staging'), disabled: true },
   ];
 
   const openDeleteBotModal = async () => {

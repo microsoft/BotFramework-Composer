@@ -6,6 +6,7 @@ import { dialogIndexer } from './dialogIndexer';
 import { dialogSchemaIndexer } from './dialogSchemaIndexer';
 import { lgIndexer } from './lgIndexer';
 import { luIndexer } from './luIndexer';
+import { qnaIndexer } from './qnaIndexer';
 import { skillManifestIndexer } from './skillManifestIndexer';
 import { FileExtensions } from './utils/fileExtensions';
 import { getExtension, getBaseName } from './utils/help';
@@ -23,6 +24,7 @@ class Indexer {
       {
         [FileExtensions.lg]: [],
         [FileExtensions.Lu]: [],
+        [FileExtensions.QnA]: [],
         [FileExtensions.Dialog]: [],
         [FileExtensions.DialogSchema]: [],
         [FileExtensions.Manifest]: [],
@@ -48,6 +50,7 @@ class Indexer {
       dialogSchemas: dialogSchemaIndexer.index(result[FileExtensions.DialogSchema]),
       lgFiles: lgIndexer.index(result[FileExtensions.lg], this.getLgImportResolver(result[FileExtensions.lg], locale)),
       luFiles: luIndexer.index(result[FileExtensions.Lu]),
+      qnaFiles: qnaIndexer.index(result[FileExtensions.QnA]),
       skillManifestFiles: skillManifestIndexer.index(result[FileExtensions.Manifest]),
     };
   }
@@ -60,5 +63,6 @@ export * from './dialogIndexer';
 export * from './dialogSchemaIndexer';
 export * from './lgIndexer';
 export * from './luIndexer';
+export * from './qnaIndexer';
 export * from './utils';
 export * from './validations';

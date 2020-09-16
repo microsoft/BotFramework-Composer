@@ -3,13 +3,12 @@
 
 import set from 'lodash/set';
 import { SensitiveProperties } from '@bfc/shared';
-import { UserIdentity } from '@bfc/plugin-loader';
+import { UserIdentity } from '@bfc/extension';
 
 import { Path } from '../../utility/path';
 import log from '../../logger';
 
 import { FileSettingManager } from './fileSettingManager';
-
 const debug = log.extend('default-settings-manager');
 
 export class DefaultSettingManager extends FileSettingManager {
@@ -51,9 +50,11 @@ export class DefaultSettingManager extends FileSettingManager {
       },
       publishTargets: [],
       qna: {
+        subscriptionKey: '',
         knowledgebaseid: '',
-        endpointkey: '',
+        endpointKey: '',
         hostname: '',
+        qnaRegion: 'westus',
       },
       telemetry: {
         logPersonalInformation: false,

@@ -5,9 +5,10 @@
 import { css, jsx } from '@emotion/core';
 import React, { useMemo, useEffect } from 'react';
 import AdaptiveForm, { FieldLabel } from '@bfc/adaptive-form';
-import { FieldProps, JSONSchema7, UIOptions } from '@bfc/extension';
+import { FieldProps, JSONSchema7, UIOptions } from '@bfc/extension-client';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { useRecoilValue } from 'recoil';
+import { v4 as uuid } from 'uuid';
 
 import { ContentProps } from '../constants';
 import { botNameState } from '../../../../recoilModel/atoms/botState';
@@ -82,7 +83,7 @@ export const Description: React.FC<ContentProps> = ({ errors, value, schema, onC
 
   useEffect(() => {
     if (!value.$id) {
-      onChange({ $schema, $id: botName, name: botName, ...rest });
+      onChange({ $schema, $id: `${botName}-${uuid()}`, endpoints: [{}], name: botName, ...rest });
     }
   }, []);
 

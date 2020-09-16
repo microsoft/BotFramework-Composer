@@ -16,14 +16,14 @@ import { IContextualMenuStyles } from 'office-ui-fabric-react/lib/ContextualMenu
 import { ICalloutContentStyles } from 'office-ui-fabric-react/lib/Callout';
 
 // -------------------- Styles -------------------- //
-
+const indent = 16;
 const itemText = (depth: number) => css`
   outline: none;
   :focus {
     outline: rgb(102, 102, 102) solid 1px;
     z-index: 1;
   }
-  padding-left: ${depth * 16}px;
+  padding-left: ${depth * indent}px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
@@ -40,6 +40,11 @@ const content = css`
   align-items: center;
 
   label: ProjectTreeItem;
+`;
+
+const leftIndent = css`
+  height: 100%;
+  width: ${indent}px;
 `;
 
 const moreMenu: Partial<ICalloutContentStyles> = {
@@ -117,6 +122,12 @@ export const overflowSet = css`
   justify-content: space-between;
 `;
 
+const warningIcon = {
+  marginRight: 5,
+  color: '#BE880A',
+  fontSize: 9,
+};
+
 // -------------------- TreeItem -------------------- //
 
 interface ITreeItemProps {
@@ -129,6 +140,9 @@ interface ITreeItemProps {
 }
 
 const onRenderItem = (item: IOverflowSetItemProps) => {
+  const warningContent = formatMessage(
+    'This trigger type is not supported by the RegEx recognizer and will not be fired.'
+  );
   return (
     <div
       data-is-focusable
@@ -139,6 +153,13 @@ const onRenderItem = (item: IOverflowSetItemProps) => {
       onFocus={item.onFocus}
     >
       <div css={content} tabIndex={-1}>
+        {item.warningContent ? (
+          <TooltipHost content={warningContent} directionalHint={DirectionalHint.bottomLeftEdge}>
+            <Icon iconName={'Warning'} style={warningIcon} />
+          </TooltipHost>
+        ) : (
+          <div css={leftIndent} />
+        )}
         {item.depth !== 0 && (
           <Icon
             iconName="Flow"

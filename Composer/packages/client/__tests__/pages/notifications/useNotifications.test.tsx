@@ -4,6 +4,7 @@
 import * as React from 'react';
 import { RecoilRoot } from 'recoil';
 import { renderHook } from '@bfc/test-utils/lib/hooks';
+import { Range, Position } from '@bfc/shared';
 
 import useNotifications from '../../../src/pages/notifications/useNotifications';
 import {
@@ -25,7 +26,7 @@ const state = {
       content: 'test',
       luFile: 'test',
       referredLuIntents: [],
-      skills: ['https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json'],
+      skills: [`=settings.skill['Email-Skill'].endpointUrl`],
     },
   ],
   luFiles: [
@@ -37,10 +38,7 @@ const state = {
           Body: '- test12345 ss',
           Entities: [],
           Name: 'test',
-          range: {
-            endLineNumber: 7,
-            startLineNumber: 4,
-          },
+          range: new Range(new Position(4, 0), new Position(7, 14)),
         },
       ],
       diagnostics: [
@@ -64,7 +62,7 @@ const state = {
         {
           body: '- ${add(1,2)}',
           name: 'bar',
-          range: { endLineNumber: 0, startLineNumber: 0 },
+          range: new Range(new Position(0, 0), new Position(2, 14)),
         },
       ],
       diagnostics: [
@@ -88,12 +86,13 @@ const state = {
     },
   ],
   settings: {
-    skill: [
-      {
+    skill: {
+      'Email-Skill': {
         manifestUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json',
-        name: 'Email Skill',
+        endpointUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/api/messages',
+        name: 'Email-Skill',
       },
-    ],
+    },
   },
 };
 

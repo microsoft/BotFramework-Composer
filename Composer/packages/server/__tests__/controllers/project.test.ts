@@ -3,13 +3,13 @@
 
 import { Request, Response } from 'express';
 import rimraf from 'rimraf';
-import { pluginLoader } from '@bfc/plugin-loader';
+import { pluginLoader } from '@bfc/extension';
 
 import { BotProjectService } from '../../src/services/project';
 import { ProjectController } from '../../src/controllers/project';
 import { Path } from '../../src/utility/path';
 
-jest.mock('@bfc/plugin-loader', () => {
+jest.mock('@bfc/extension', () => {
   return {
     pluginLoader: {
       extensions: {
@@ -187,7 +187,7 @@ describe('dialog operation', () => {
     const mockReq = {
       params: { projectId },
       query: {},
-      body: { name: 'bot1.dialog', content: '' },
+      body: { name: 'bot1.dialog', content: JSON.stringify({ $kind: 'aaa' }) },
     } as Request;
     await ProjectController.updateFile(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -196,7 +196,7 @@ describe('dialog operation', () => {
     const mockReq = {
       params: { projectId },
       query: {},
-      body: { name: 'test2.dialog', content: '' },
+      body: { name: 'test2.dialog', content: JSON.stringify({ $kind: 'aaa' }) },
     } as Request;
     await ProjectController.createFile(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -341,7 +341,7 @@ describe('skill operation', () => {
     } as Request;
     await ProjectController.getSkill(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
-  }, 5000);
+  }, 10000);
 
   it('should update skill', async () => {
     const mockReq = {
@@ -379,7 +379,7 @@ describe('publish luis files', () => {
     projectId = await BotProjectService.openProject(location1);
   });
 
-  it('should publish all luis files', async () => {
+  it('should publish all luis & qna files', async () => {
     const mockReq = {
       params: { projectId },
       query: {},
@@ -395,7 +395,7 @@ describe('publish luis files', () => {
         luFiles: [],
       },
     } as Request;
-    await ProjectController.publishLuis(mockReq, mockRes);
+    await ProjectController.build(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
   });
 });

@@ -58,7 +58,7 @@ describe('mergePluginConfigs', () => {
     };
 
     // @ts-expect-error
-    expect(mergePluginConfigs(config1, config2).recognizers).toEqual(['recognizer 1', 'recognizer 2']);
+    expect(mergePluginConfigs(config1, config2).recognizers).toEqual(['recognizer 2', 'recognizer 1']);
   });
 
   it('replaces other arrays', () => {

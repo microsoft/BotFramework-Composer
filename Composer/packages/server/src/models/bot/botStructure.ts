@@ -10,6 +10,7 @@ const BotStructureTemplate = {
   entry: '${BOTNAME}.dialog',
   lg: 'language-generation/${LOCALE}/${BOTNAME}.${LOCALE}.lg',
   lu: 'language-understanding/${LOCALE}/${BOTNAME}.${LOCALE}.lu',
+  qna: 'knowledge-base/en-us/${BOTNAME}.en-us.qna',
   dialogSchema: '${BOTNAME}.dialog.schema',
   schema: '${FILENAME}',
   settings: 'settings/${FILENAME}',
@@ -20,8 +21,10 @@ const BotStructureTemplate = {
     entry: 'dialogs/${DIALOGNAME}/${DIALOGNAME}.dialog',
     lg: 'dialogs/${DIALOGNAME}/language-generation/${LOCALE}/${DIALOGNAME}.${LOCALE}.lg',
     lu: 'dialogs/${DIALOGNAME}/language-understanding/${LOCALE}/${DIALOGNAME}.${LOCALE}.lu',
+    qna: 'dialogs/${DIALOGNAME}/knowledge-base/en-us/${DIALOGNAME}.en-us.qna',
     dialogSchema: 'dialogs/${DIALOGNAME}/${DIALOGNAME}.dialog.schema',
   },
+  formDialogs: 'form-dialogs/${FORMDIALOGNAME}',
   skillManifests: 'manifests/${MANIFESTFILENAME}',
 };
 
@@ -50,10 +53,16 @@ export const defaultFilePath = (botName: string, defaultLocale: string, filename
   const LOCALE = locale;
 
   // 1. Even appsettings.json hit FileExtensions.Manifest, but it never use this do created.
-  // 2. When exprot bot as a skill, name is `EchoBot-4-2-1-preview-1-manifest.json`
+  // 2. When export bot as a skill, name is `EchoBot-4-2-1-preview-1-manifest.json`
   if (fileType === FileExtensions.Manifest) {
     return templateInterpolate(BotStructureTemplate.skillManifests, {
       MANIFESTFILENAME: filename,
+    });
+  }
+
+  if (fileType === FileExtensions.FormDialogSchema) {
+    return templateInterpolate(BotStructureTemplate.formDialogs, {
+      FORMDIALOGNAME: filename,
     });
   }
 
@@ -64,8 +73,8 @@ export const defaultFilePath = (botName: string, defaultLocale: string, filename
     });
   }
 
-  const DIALOGNAME = fileId.toLowerCase();
-  const isRootFile = BOTNAME === DIALOGNAME;
+  const DIALOGNAME = fileId;
+  const isRootFile = BOTNAME === DIALOGNAME.toLowerCase();
 
   let TemplatePath = '';
   if (fileType === FileExtensions.Dialog) {
@@ -75,6 +84,9 @@ export const defaultFilePath = (botName: string, defaultLocale: string, filename
   }
   if (fileType === FileExtensions.Lu) {
     TemplatePath = isRootFile ? BotStructureTemplate.lu : BotStructureTemplate.dialogs.lu;
+  }
+  if (fileType === FileExtensions.Qna) {
+    TemplatePath = isRootFile ? BotStructureTemplate.qna : BotStructureTemplate.dialogs.qna;
   }
   if (fileType === FileExtensions.DialogSchema) {
     TemplatePath = isRootFile ? BotStructureTemplate.dialogSchema : BotStructureTemplate.dialogs.dialogSchema;
@@ -92,6 +104,7 @@ export const serializeFiles = async (fileStorage, rootPath, botName) => {
     templateInterpolate(BotStructureTemplate.entry, { BOTNAME: '*' }),
     templateInterpolate(BotStructureTemplate.lg, { LOCALE: '*', BOTNAME: '*' }),
     templateInterpolate(BotStructureTemplate.lu, { LOCALE: '*', BOTNAME: '*' }),
+    templateInterpolate(BotStructureTemplate.qna, { LOCALE: '*', BOTNAME: '*' }),
     templateInterpolate(BotStructureTemplate.dialogSchema, { BOTNAME: '*' }),
   ];
   for (const pattern of entryPatterns) {
