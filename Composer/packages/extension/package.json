@@ -7,7 +7,7 @@
   "private": true,
   "scripts": {
     "build": "yarn build:clean && yarn build:ts",
-    "build:ts": "tsc",
+    "build:ts": "tsc -p tsconfig.build.json",
     "build:clean": "rimraf lib && rimraf build",
     "lint": "eslint --quiet ./src",
     "test": "jest"
