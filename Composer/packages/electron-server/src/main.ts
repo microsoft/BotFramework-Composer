@@ -3,22 +3,25 @@
 
 import { join, resolve } from 'path';
 
-import { mkdirp } from 'fs-extra';
-import { app, ipcMain } from 'electron';
-import fixPath from 'fix-path';
-import { UpdateInfo } from 'electron-updater';
 import { AppUpdaterSettings, UserSettings } from '@bfc/shared';
+import { app, ipcMain } from 'electron';
+import { UpdateInfo } from 'electron-updater';
+import fixPath from 'fix-path';
+import { mkdirp } from 'fs-extra';
 
-import { isDevelopment } from './utility/env';
-import { isWindows, isMac } from './utility/platform';
-import { getUnpackedAsarPath } from './utility/getUnpackedAsarPath';
-import ElectronWindow from './electronWindow';
-import log from './utility/logger';
-import { AppUpdater } from './appUpdater';
-import { parseDeepLinkUrl } from './utility/url';
-import { composerProtocol } from './constants';
 import { initAppMenu } from './appMenu';
+import { AppUpdater } from './appUpdater';
+import { composerProtocol } from './constants';
+import ElectronWindow from './electronWindow';
+import { initSplashScreen } from './splash/splashScreen';
+import { isDevelopment } from './utility/env';
+import { getUnpackedAsarPath } from './utility/getUnpackedAsarPath';
+import log from './utility/logger';
 import { getAccessToken, loginAndGetIdToken, OAuthLoginOptions } from './utility/oauthImplicitFlowHelper';
+import { isMac, isWindows } from './utility/platform';
+import { parseDeepLinkUrl } from './utility/url';
+
+const microsoftLogoPath = join(__dirname, '../resources/ms_logo.svg');
 
 const error = log.extend('error');
 let deeplinkUrl = '';
@@ -150,7 +153,7 @@ async function loadServer() {
   log(`Server started at port: ${serverPort}`);
 }
 
-async function main() {
+async function main(show = false) {
   log('Rendering application...');
   const mainWindow = ElectronWindow.getInstance().browserWindow;
   initAppMenu(mainWindow);
@@ -165,7 +168,9 @@ async function main() {
     }
     await mainWindow.webContents.loadURL(getBaseUrl() + deeplinkUrl);
 
-    mainWindow.show();
+    if (show) {
+      mainWindow.show();
+    }
 
     mainWindow.on('closed', () => {
       ElectronWindow.destroy();
@@ -200,13 +205,30 @@ async function run() {
 
   app.on('ready', async () => {
     log('App ready');
+    const getMainWindow = () => ElectronWindow.getInstance().browserWindow;
+    const { startApp, updateStatus } = await initSplashScreen({
+      getMainWindow,
+      color: 'rgb(0, 120, 212)',
+      logo: `file://${microsoftLogoPath}`,
+      productName: 'Bot Framework Composer',
+      productFamily: 'Microsoft Azure',
+      status: 'Initializing...',
+      website: 'www.botframework.com',
+      width: 500,
+      height: 300,
+    });
+
+    updateStatus('Starting server...');
+    await loadServer();
+    await main();
+
+    setTimeout(startApp, 500);
+
     ipcMain.once('init-user-settings', (_ev, settings: UserSettings) => {
       // we can't synchronously call the main process (due to deadlocks)
       // so we wait for the initial settings to be loaded from the client
       initializeAppUpdater(settings.appUpdater);
     });
-    await loadServer();
-    await main();
   });
 
   // Quit when all windows are closed.
@@ -222,7 +244,7 @@ async function run() {
     // On OS X it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (!ElectronWindow.isBrowserWindowCreated) {
-      main();
+      main(true);
     }
   });
 
