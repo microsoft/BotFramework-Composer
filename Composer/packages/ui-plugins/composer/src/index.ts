@@ -1,14 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { PluginConfig, FormUISchema, UISchema, MenuUISchema } from '@bfc/extension-client';
+import { PluginConfig, FormUISchema, UISchema, MenuUISchema, RecognizerUISchema } from '@bfc/extension-client';
 import { SDKKinds } from '@bfc/shared';
 import formatMessage from 'format-message';
-import mapValues from 'lodash/mapValues';
+import mergeWith from 'lodash/mergeWith';
 import { IntentField, RecognizerField, QnAActionsField } from '@bfc/adaptive-form';
 
 import { DefaultMenuSchema } from './defaultMenuSchema';
-import { DefaultRecognizers } from './DefaultRecognizers';
+import { DefaultRecognizerSchema } from './defaultRecognizerSchema';
 
 const DefaultFormSchema: FormUISchema = {
   [SDKKinds.AdaptiveDialog]: {
@@ -161,20 +161,20 @@ const DefaultFormSchema: FormUISchema = {
   },
 };
 
-const synthesizeUISchema = (formSchema: FormUISchema, menuSchema: MenuUISchema): UISchema => {
-  const uiSchema: UISchema = mapValues(formSchema, (val) => ({ form: val }));
-  for (const [$kind, menuConfig] of Object.entries(menuSchema)) {
-    if (uiSchema[$kind]) {
-      uiSchema[$kind].menu = menuConfig;
-    } else {
-      uiSchema[$kind] = { menu: menuConfig };
-    }
-  }
-  return uiSchema;
+const synthesizeUISchema = (
+  formSchema: FormUISchema,
+  menuSchema: MenuUISchema,
+  recognizerSchema: RecognizerUISchema
+): UISchema => {
+  let uischema: UISchema = {};
+  uischema = mergeWith(uischema, formSchema, (origin, formOption) => ({ ...origin, form: formOption }));
+  uischema = mergeWith(uischema, menuSchema, (origin, menuOption) => ({ ...origin, menu: menuOption }));
+  uischema = mergeWith(uischema, recognizerSchema, (origin, opt) => ({ ...origin, recognizer: opt }));
+  return uischema;
 };
 
 const config: PluginConfig = {
-  uiSchema: synthesizeUISchema(DefaultFormSchema, DefaultMenuSchema),
+  uiSchema: synthesizeUISchema(DefaultFormSchema, DefaultMenuSchema, DefaultRecognizerSchema),
 };
 
 export default config;

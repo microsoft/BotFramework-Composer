@@ -1,14 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { RecognizerSchema } from '@bfc/extension-client';
+import { RecognizerUISchema } from '@bfc/extension-client';
 import { SDKKinds } from '@bfc/shared';
 import formatMessage from 'format-message';
 import { RegexIntentField, CustomRecognizerField } from '@bfc/adaptive-form';
 
-export const DefaultRecognizers: RecognizerSchema[] = [
-  {
-    id: SDKKinds.RegexRecognizer,
+export const DefaultRecognizerSchema: RecognizerUISchema = {
+  [SDKKinds.RegexRecognizer]: {
     displayName: formatMessage('Regular Expression'),
     intentEditor: RegexIntentField,
     isSelected: (data) => {
@@ -19,8 +18,7 @@ export const DefaultRecognizers: RecognizerSchema[] = [
       shellApi.renameRegExIntent(currentDialog.id, intentName, newIntentName);
     },
   },
-  {
-    id: SDKKinds.CustomRecognizer,
+  [SDKKinds.CustomRecognizer]: {
     displayName: formatMessage('Custom recognizer'),
     isSelected: (data) => typeof data === 'object',
     handleRecognizerChange: (props) =>
@@ -57,4 +55,4 @@ export const DefaultRecognizers: RecognizerSchema[] = [
       }),
     recognizerEditor: CustomRecognizerField,
   },
-];
+};
