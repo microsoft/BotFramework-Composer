@@ -125,8 +125,6 @@ export class BotProjectProvision {
    * Provision a set of Azure resources for use with a bot
    */
   public async create(
-    name: string,
-    environment: string,
     hostname: string,
     location: string,
     appId: string,

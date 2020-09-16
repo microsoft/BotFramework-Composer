@@ -9,9 +9,10 @@
   },
   "extendsComposer": true,
   "dependencies": {
-    "@azure/arm-appinsights": "../../packages/lib/arm-appinsights",
+    "@azure/arm-appinsights": "../lib/arm-appinsights",
+    "@azure/arm-appservice": "^6.0.0",
     "@azure/arm-appservice-profile-2019-03-01-hybrid": "1.0.0",
-    "@azure/arm-botservice": "../../packages/lib/arm-botservice",
+    "@azure/arm-botservice": "../lib/arm-botservice",
     "@azure/arm-deploymentmanager": "3.0.0",
     "@azure/arm-resources": "2.1.0",
     "@azure/arm-subscriptions": "2.0.0",

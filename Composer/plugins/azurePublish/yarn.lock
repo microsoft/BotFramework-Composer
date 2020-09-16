@@ -2,13 +2,11 @@
 # yarn lockfile v1
 
 
-"@azure/arm-appinsights@2.1.0":
+"@azure/arm-appinsights@../lib/arm-appinsights":
   version "2.1.0"
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@azure/arm-appinsights/-/@azure/arm-appinsights-2.1.0.tgz#a14238e5fa1e0ae949d6f65d49020459116f16fd"
-  integrity sha1-oUI45foeCulJ1vZdSQIEWRFvFv0=
   dependencies:
-    "@azure/ms-rest-azure-js" "^1.1.0"
-    "@azure/ms-rest-js" "^1.1.0"
+    "@azure/ms-rest-azure-js" "2.0.1"
+    "@azure/ms-rest-js" "2.0.7"
     tslib "^1.9.3"
 
 "@azure/arm-appservice-profile-2019-03-01-hybrid@1.0.0":
@@ -20,13 +18,20 @@
     "@azure/ms-rest-js" "^1.8.1"
     tslib "^1.9.3"
 
-"@azure/arm-botservice@1.0.0":
-  version "1.0.0"
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@azure/arm-botservice/-/@azure/arm-botservice-1.0.0.tgz#439140b234831895dd3c9fdec524fef5fc94c5e3"
-  integrity sha1-Q5FAsjSDGJXdPJ/exST+9fyUxeM=
+"@azure/arm-appservice@^6.0.0":
+  version "6.0.0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@azure/arm-appservice/-/@azure/arm-appservice-6.0.0.tgz#208c27b79bdd8a296249a4ac2714a2246af3df88"
+  integrity sha1-IIwnt5vdiiliSaSsJxSiJGrz34g=
   dependencies:
-    "@azure/ms-rest-azure-js" "^1.3.2"
-    "@azure/ms-rest-js" "^1.8.1"
+    "@azure/ms-rest-azure-js" "^2.0.1"
+    "@azure/ms-rest-js" "^2.0.4"
+    tslib "^1.10.0"
+
+"@azure/arm-botservice@../lib/arm-botservice":
+  version "1.0.0"
+  dependencies:
+    "@azure/ms-rest-azure-js" "2.0.1"
+    "@azure/ms-rest-js" "2.0.7"
     tslib "^1.9.3"
 
 "@azure/arm-cognitiveservices@^5.2.0":
@@ -143,7 +148,7 @@
     "@azure/ms-rest-js" "^2.0.4"
     tslib "^1.10.0"
 
-"@azure/ms-rest-azure-js@^1.1.0", "@azure/ms-rest-azure-js@^1.3.2":
+"@azure/ms-rest-azure-js@^1.3.2":
   version "1.3.8"
   resolved "https://registry.yarnpkg.com/@azure/ms-rest-azure-js/-/ms-rest-azure-js-1.3.8.tgz#96b518223d3baa2496b2981bc07288b3d887486e"
   integrity sha512-AHLfDTCyIH6wBK6+CpImI6sc9mLZ17ZgUrTx3Rhwv+3Mb3Z73BxormkarfR6Stb6scrBYitxJ27FXyndXlGAYg==
@@ -161,21 +166,7 @@
     adal-angular "^1.0.17"
     tslib "^1.9.3"
 
-"@azure/ms-rest-js@^1.1.0", "@azure/ms-rest-js@^1.8.1", "@azure/ms-rest-js@^1.8.10":
-  version "1.8.15"
-  resolved "https://registry.yarnpkg.com/@azure/ms-rest-js/-/ms-rest-js-1.8.15.tgz#4267b6b8c00d85301791fe0cf347e0455a807338"
-  integrity sha512-kIB71V3DcrA4iysBbOsYcxd4WWlOE7OFtCUYNfflPODM0lbIR23A236QeTn5iAeYwcHmMjR/TAKp5KQQh/WqoQ==
-  dependencies:
-    "@types/tunnel" "0.0.0"
-    axios "^0.19.0"
-    form-data "^2.3.2"
-    tough-cookie "^2.4.3"
-    tslib "^1.9.2"
-    tunnel "0.0.6"
-    uuid "^3.2.1"
-    xml2js "^0.4.19"
-
-"@azure/ms-rest-js@^2.0.3", "@azure/ms-rest-js@^2.0.4":
+"@azure/ms-rest-js@2.0.7", "@azure/ms-rest-js@^2.0.3", "@azure/ms-rest-js@^2.0.4":
   version "2.0.7"
   resolved "https://registry.yarnpkg.com/@azure/ms-rest-js/-/ms-rest-js-2.0.7.tgz#3165bb7068387bf36c4c43db85d3662c916fd581"
   integrity sha512-rQpNxDhyOIyS4E+4sUCBMvjrtbNwB32wH06cC2SFoQM4TR29bIKaTlIC1tMe0K07w9c5tNk/2uUHs6/ld/Z3+A==
@@ -189,6 +180,20 @@
     tslib "^1.10.0"
     tunnel "0.0.6"
     uuid "^3.3.2"
+    xml2js "^0.4.19"
+
+"@azure/ms-rest-js@^1.8.1", "@azure/ms-rest-js@^1.8.10":
+  version "1.8.15"
+  resolved "https://registry.yarnpkg.com/@azure/ms-rest-js/-/ms-rest-js-1.8.15.tgz#4267b6b8c00d85301791fe0cf347e0455a807338"
+  integrity sha512-kIB71V3DcrA4iysBbOsYcxd4WWlOE7OFtCUYNfflPODM0lbIR23A236QeTn5iAeYwcHmMjR/TAKp5KQQh/WqoQ==
+  dependencies:
+    "@types/tunnel" "0.0.0"
+    axios "^0.19.0"
+    form-data "^2.3.2"
+    tough-cookie "^2.4.3"
+    tslib "^1.9.2"
+    tunnel "0.0.6"
+    uuid "^3.2.1"
     xml2js "^0.4.19"
 
 "@azure/ms-rest-js@^2.0.7":
