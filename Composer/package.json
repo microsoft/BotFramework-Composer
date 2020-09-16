@@ -41,7 +41,7 @@
     "build:dev": "yarn build:test && yarn build:lib && yarn build:tools && yarn build:extensions && yarn build:plugins && yarn l10n",
     "build:test": "yarn workspace @bfc/test-utils build",
     "build:lib": "yarn workspace @bfc/libs build:all",
-    "build:electron": "yarn workspace @bfc/electron-server build",
+    "build:electron": "yarn workspace @bfc/electron-server build && yarn workspace @bfc/electron-server l10n",
     "build:extensions": "wsrun -lt -p @bfc/extension @bfc/intellisense @bfc/extension-client @bfc/adaptive-form @bfc/adaptive-flow @bfc/ui-plugin-*  -c build",
     "build:server": "yarn workspace @bfc/server build",
     "build:client": "yarn workspace @bfc/client build",
@@ -74,7 +74,7 @@
     "l10n:extract": "cross-env NODE_ENV=production format-message extract -g underscored_crc32 -o packages/server/src/locales/en-US.json l10ntemp/**/*.js",
     "l10n:extractJson": "node scripts/l10n-extractJson.js",
     "l10n:transform": "node scripts/l10n-transform.js",
-    "l10n:babel": "babel ./packages --extensions \".ts,.tsx,.jsx,.js\" --out-dir l10ntemp --presets=@babel/react,@babel/typescript --plugins=@babel/plugin-proposal-class-properties --ignore \"packages/**/__tests__\",\"packages/**/node_modules\",\"packages/**/build/**/*.js\"",
+    "l10n:babel": "babel ./packages --extensions \".ts,.tsx,.jsx,.js\" --out-dir l10ntemp --presets=@babel/react,@babel/typescript --plugins=@babel/plugin-proposal-class-properties --ignore \"packages/electron-server\",\"packages/**/__tests__\",\"packages/**/node_modules\",\"packages/**/build/**/*.js\"",
     "l10n": "yarn l10n:babel && yarn l10n:extract && yarn l10n:transform packages/server/src/locales/en-US.json && yarn l10n:extractJson packages/server/schemas"
   },
   "husky": {
