@@ -10,6 +10,7 @@ import { getUserTokenFromCache, loginPopup, refreshToken } from '../../utils/aut
 import storage from '../../utils/storage';
 import { loadLocale } from '../../utils/fileUtil';
 import { UserSettingsPayload } from '../types';
+import { isElectron } from '../../utils/electronUtil';
 
 enum ClaimNames {
   upn = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn',
@@ -89,6 +90,12 @@ export const userDispatcher = () => {
           }
         }
         storage.set('userSettings', newSettings);
+
+        if (isElectron()) {
+          // push the settings to the electron main process
+          window.ipcRenderer.send('update-user-settings', newSettings);
+        }
+
         return newSettings;
       });
     }

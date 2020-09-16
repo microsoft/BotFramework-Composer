@@ -1,0 +1,125 @@
+{
+  "about_70c18bba": {
+    "message": "About"
+  },
+  "actual_zoom_211ec99": {
+    "message": "Actual Zoom"
+  },
+  "bring_all_to_front_207a7ad1": {
+    "message": "Bring All to Front"
+  },
+  "check_for_updates_12a70061": {
+    "message": "Check for Updates"
+  },
+  "close_d634289d": {
+    "message": "Close"
+  },
+  "close_window_4bdc79d7": {
+    "message": "Close Window"
+  },
+  "composer_on_github_1e3782ef": {
+    "message": "Composer on GitHub"
+  },
+  "copy_9748f9f": {
+    "message": "Copy"
+  },
+  "cut_c8c92681": {
+    "message": "Cut"
+  },
+  "delete_a6efa79d": {
+    "message": "Delete"
+  },
+  "documentation_d82f6eec": {
+    "message": "Documentation"
+  },
+  "edit_c5fbea07": {
+    "message": "Edit"
+  },
+  "exit_d0c7b013": {
+    "message": "Exit"
+  },
+  "file_c851020d": {
+    "message": "File"
+  },
+  "help_4c4968b1": {
+    "message": "Help"
+  },
+  "hide_bot_framework_composer_eeba3ea8": {
+    "message": "Hide Bot Framework Composer"
+  },
+  "hide_others_4204b552": {
+    "message": "Hide Others"
+  },
+  "initializing_4e34f7d": {
+    "message": "Initializing..."
+  },
+  "learn_more_about_bot_framework_2daca065": {
+    "message": "Learn More About Bot Framework"
+  },
+  "minimize_4f999e30": {
+    "message": "Minimize"
+  },
+  "paste_5963d1c1": {
+    "message": "Paste"
+  },
+  "privacy_statement_58986965": {
+    "message": "Privacy Statement"
+  },
+  "quit_bot_framework_composer_455ceb74": {
+    "message": "Quit Bot Framework Composer"
+  },
+  "redo_363c58b7": {
+    "message": "Redo"
+  },
+  "report_an_issue_f33f3ba5": {
+    "message": "Report an Issue"
+  },
+  "select_all_cf7e0248": {
+    "message": "Select All"
+  },
+  "services_ccd7bca0": {
+    "message": "Services"
+  },
+  "show_all_ae37d610": {
+    "message": "Show All"
+  },
+  "speech_16063aed": {
+    "message": "Speech"
+  },
+  "start_speaking_f8d406ff": {
+    "message": "Start Speaking"
+  },
+  "starting_server_721c37fd": {
+    "message": "Starting server..."
+  },
+  "stop_speaking_7b4b9834": {
+    "message": "Stop Speaking"
+  },
+  "toggle_developer_tools_d2ef8ea7": {
+    "message": "Toggle Developer Tools"
+  },
+  "toggle_full_screen_272a0c5": {
+    "message": "Toggle Full Screen"
+  },
+  "undo_a7be8fef": {
+    "message": "Undo"
+  },
+  "view_ba339f93": {
+    "message": "View"
+  },
+  "view_license_720d341a": {
+    "message": "View License"
+  },
+  "window_171922c7": {
+    "message": "Window"
+  },
+  "zoom_f3e54d69": {
+    "message": "Zoom"
+  },
+  "zoom_in_a781ccc7": {
+    "message": "Zoom In"
+  },
+  "zoom_out_dc7d60d2": {
+    "message": "Zoom Out"
+  }
+}
