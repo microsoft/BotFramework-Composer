@@ -279,7 +279,7 @@ class ExtensionManager {
       return this._manifest;
     }
 
-    this._manifest = new ExtensionManifestStore();
+    this._manifest = new ExtensionManifestStore(process.env.COMPOSER_EXTENSION_DATA as string);
     return this._manifest;
   }
 
