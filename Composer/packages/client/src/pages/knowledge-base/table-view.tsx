@@ -118,10 +118,12 @@ const TableView: React.FC<TableViewProps> = (props) => {
   useEffect(() => {
     if (isEmpty(qnaFiles)) return;
 
-    const allSections = qnaFiles.reduce((result: any[], qnaFile) => {
-      const res = generateQnASections(qnaFile);
-      return result.concat(res);
-    }, []);
+    const allSections = qnaFiles
+      .filter(({ id }) => id.endsWith('.source'))
+      .reduce((result: any[], qnaFile) => {
+        const res = generateQnASections(qnaFile);
+        return result.concat(res);
+      }, []);
     if (dialogId === 'all') {
       setQnASections(
         allSections.map((item, index) => {
@@ -132,7 +134,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         })
       );
     } else {
-      const dialogSections = allSections.filter((t) => t.dialogId === dialogId || importedFileIds.includes(t.fileId));
+      const dialogSections = allSections.filter((t) => importedFileIds.includes(t.fileId));
 
       setQnASections(
         dialogSections.map((item, index) => {
@@ -207,17 +209,16 @@ const TableView: React.FC<TableViewProps> = (props) => {
   };
 
   const onCreateNewQuestion = (fileId, sectionId) => {
-    if (qnaFile) {
-      const sectionIndex = qnaSections.findIndex((item) => item.sectionId === sectionId);
-      setFocusedIndex(sectionIndex);
+    if (!fileId || !sectionId) return;
+    const sectionIndex = qnaSections.findIndex((item) => item.sectionId === sectionId);
+    setFocusedIndex(sectionIndex);
 
-      const payload = {
-        id: fileId,
-        sectionId,
-        content: 'Add new question',
-      };
-      createQnAQuestion(payload);
-    }
+    const payload = {
+      id: fileId,
+      sectionId,
+      content: 'Add new question',
+    };
+    createQnAQuestion(payload);
   };
 
   const onRenderGroupHeader: IDetailsGroupRenderProps['onRenderHeader'] = (props) => {

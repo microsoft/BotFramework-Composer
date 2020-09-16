@@ -15,6 +15,7 @@ import qnaWorker from '../parsers/qnaWorker';
 import httpClient from '../../utils/httpUtil';
 import { BotStatus } from '../../constants';
 import { getReferredLuFiles } from '../../utils/luUtil';
+import { reformQnAToContainerKB } from '../../utils/qnaUtil';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { getReferredQnaFiles } from '../../utils/qnaUtil';
 import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
@@ -170,12 +171,13 @@ export const projectDispatcher = () => {
       });
 
       await lgWorker.addProject(projectId, lgFiles);
+      const updateQnAFiles = reformQnAToContainerKB(projectId, qnaFiles);
 
       // Important: gotoSnapshot will wipe all states.
       const newSnapshot = snapshot.map(({ set }) => {
         set(skillManifestsState, skillManifestFiles);
         set(luFilesState, initLuFilesStatus(botName, luFiles, dialogs));
-        set(qnaFilesState, initQnaFilesStatus(botName, qnaFiles, dialogs));
+        set(qnaFilesState, initQnaFilesStatus(botName, updateQnAFiles, dialogs));
         set(lgFilesState, lgFiles);
         set(dialogsState, verifiedDialogs);
         set(dialogSchemasState, dialogSchemas);

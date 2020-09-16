@@ -42,7 +42,7 @@ const DialogTitle = () => {
 export const EditQnAFromScratchModal: React.FC<EditQnAFromScratchModalProps> = (props) => {
   const { onDismiss, onSubmit, qnaFiles, qnaFile } = props;
 
-  formConfig.name.validate = validateName(qnaFiles);
+  formConfig.name.validate = validateName(qnaFiles.filter(({ id }) => qnaFile.id !== id));
   formConfig.name.defaultValue = getBaseName(qnaFile.id);
   const { formData, updateField, hasErrors, formErrors } = useForm(formConfig);
   const disabled = hasErrors;
