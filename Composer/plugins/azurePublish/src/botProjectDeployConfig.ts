@@ -7,9 +7,6 @@ export interface BotProjectDeployConfig {
   // Subscription Id of Azure Account
   subId: string;
 
-  // credential
-  creds?: any;
-
   // access token to access azure
   accessToken: string;
 
