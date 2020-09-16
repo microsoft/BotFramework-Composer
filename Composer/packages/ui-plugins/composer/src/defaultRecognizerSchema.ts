@@ -47,9 +47,6 @@ export const DefaultRecognizerSchema: RecognizerUISchema = {
   [SDKKinds.RegexRecognizer]: {
     displayName: formatMessage('Regular Expression'),
     intentEditor: RegexIntentField,
-    isSelected: (data) => {
-      return typeof data === 'object' && data.$kind === SDKKinds.RegexRecognizer;
-    },
     renameIntent: (intentName, newIntentName, shellData, shellApi) => {
       const { currentDialog } = shellData;
       shellApi.renameRegExIntent(currentDialog.id, intentName, newIntentName);
