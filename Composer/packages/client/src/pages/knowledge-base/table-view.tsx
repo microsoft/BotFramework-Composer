@@ -43,7 +43,7 @@ import { dispatcherState } from '../../recoilModel';
 import { getBaseName } from '../../utils/fileUtil';
 import { EditableField } from '../../components/EditableField';
 import { classNames, AddTemplateButton } from '../../components/AllupviewComponets/styles';
-import { EditQnAFromScratchModal } from '../../components/QnA';
+import { EditQnAModal } from '../../components/QnA/EditQnAFrom';
 
 import { formCell, content, addIcon, divider, rowDetails, icon, addAlternative } from './styles';
 
@@ -594,7 +594,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         />
       </ScrollablePane>
       {editQnAFile && (
-        <EditQnAFromScratchModal
+        <EditQnAModal
           qnaFile={editQnAFile}
           qnaFiles={qnaFiles}
           onDismiss={() => {
@@ -608,7 +608,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
             await actions.createQnAImport({ id: qnaFile.id, sourceId: newId });
             setEditQnAFile(undefined);
           }}
-        ></EditQnAFromScratchModal>
+        ></EditQnAModal>
       )}
     </div>
   );

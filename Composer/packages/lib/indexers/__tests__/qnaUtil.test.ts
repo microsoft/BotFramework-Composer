@@ -366,7 +366,7 @@ ${content1}
 
 describe('QnA File Options CRUD', () => {
   const fileId1 = 'a.qna';
-  const content2 = `> !# @source.urls = https://download
+  const content2 = `> !# @source.url = https://download
   ${generateQnAPair()}
   ${content1}
   ${generateQnAPair()}`;
@@ -376,10 +376,13 @@ describe('QnA File Options CRUD', () => {
     const { qnaSections, content, id, diagnostics, options } = qnaFile;
 
     expect(id).toEqual(fileId1);
+    expect(qnaFile.empty).toEqual(false);
     expect(content).toEqual(content2);
     expect(diagnostics.length).toEqual(0);
     expect(qnaSections.length).toEqual(4);
     expect(options.length).toEqual(1);
+    expect(options[0].name).toEqual('url');
+    expect(options[0].value).toEqual('https://download');
   });
 
   it('update question in qna pair (with model info section in head)', () => {

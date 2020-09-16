@@ -121,14 +121,18 @@ export function convertQnAParseResultToQnAFile(id = '', resource: LuParseResourc
   });
 
   // TODO: use regexp match "> !# @source.urls = https://download"
-  const options = Sections.filter(({ SectionType }) => SectionType === SectionTypes.LUModelInfo).map(
-    ({ ModelInfo, Id }) => {
-      return {
-        name: Id,
-        value: ModelInfo,
-      };
+  const optionRegExp = new RegExp(/@source\.(\w+)\s*=\s*(.*)/);
+  const options: { id: string; name: string; value: string }[] = [];
+  Sections.filter(({ SectionType }) => SectionType === SectionTypes.LUModelInfo).forEach(({ ModelInfo, Id }) => {
+    const match = ModelInfo.match(optionRegExp);
+    if (match) {
+      options.push({
+        id: Id,
+        name: match[1],
+        value: match[2],
+      });
     }
-  );
+  });
 
   const diagnostics = Errors.map((e) => convertQnADiagnostic(e, id));
   return {

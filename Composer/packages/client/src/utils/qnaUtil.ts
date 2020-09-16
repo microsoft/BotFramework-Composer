@@ -70,3 +70,7 @@ export const reformQnAToContainerKB = (projectId: string, qnaFiles: QnAFile[]): 
   newQnAfiles.push(...createdFiles);
   return newQnAfiles;
 };
+
+export const getQnAFileUrlOption = (file: QnAFile): string | undefined => {
+  return file.options.find((opt) => opt.name === 'url')?.value;
+};
