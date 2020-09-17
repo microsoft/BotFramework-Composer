@@ -17,8 +17,6 @@ jest.mock('@bfc/extension', () => {
         baseTemplates: [],
         runtimeTemplates: [],
       },
-    },
-    ExtensionContext: {
       getUserFromRequest: jest.fn(),
     },
   };
