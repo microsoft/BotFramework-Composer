@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { SDKKinds } from '@bfc/shared';
-import { FlowUISchema } from '@bfc/extension';
+import { FlowUISchema } from '@bfc/extension-client';
 
 export const DefaultFlowSchema: FlowUISchema = {
   [SDKKinds.SendActivity]: {

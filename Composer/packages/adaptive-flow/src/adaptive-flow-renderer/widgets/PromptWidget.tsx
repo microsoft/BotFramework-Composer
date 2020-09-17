@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import { FC, useMemo, useContext } from 'react';
 import { PromptTab } from '@bfc/shared';
-import { WidgetContainerProps } from '@bfc/extension';
+import { WidgetContainerProps } from '@bfc/extension-client';
 
 import { baseInputLayouter } from '../layouters/baseInputLayouter';
 import { transformBaseInput } from '../transformers/transformBaseInput';

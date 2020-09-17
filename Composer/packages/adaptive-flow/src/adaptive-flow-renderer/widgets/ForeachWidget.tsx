@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useMemo, FunctionComponent, useContext } from 'react';
-import { WidgetContainerProps } from '@bfc/extension';
+import { WidgetContainerProps } from '@bfc/extension-client';
 
 import { transformForeach } from '../transformers/transformForeach';
 import { foreachLayouter } from '../layouters/foreachLayouter';

@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { FunctionComponent, useMemo, useContext } from 'react';
-import { WidgetContainerProps } from '@bfc/extension';
+import { WidgetContainerProps } from '@bfc/extension-client';
 
 import { transformIfCondtion } from '../transformers/transformIfCondition';
 import { ifElseLayouter } from '../layouters/ifelseLayouter';

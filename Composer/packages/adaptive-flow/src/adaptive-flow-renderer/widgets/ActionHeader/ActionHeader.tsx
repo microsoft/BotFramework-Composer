@@ -5,7 +5,7 @@
 import { useContext } from 'react';
 import { jsx } from '@emotion/core';
 import { generateSDKTitle } from '@bfc/shared';
-import { WidgetComponent, WidgetContainerProps } from '@bfc/extension';
+import { WidgetComponent, WidgetContainerProps } from '@bfc/extension-client';
 
 import { DefaultColors } from '../../constants/ElementColors';
 import { RendererContext } from '../../contexts/RendererContext';

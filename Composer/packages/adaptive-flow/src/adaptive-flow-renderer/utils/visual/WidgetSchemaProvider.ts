@@ -3,7 +3,7 @@
 
 import get from 'lodash/get';
 import merge from 'lodash/merge';
-import { FlowWidget, FlowUISchema } from '@bfc/extension';
+import { FlowWidget, FlowUISchema } from '@bfc/extension-client';
 
 export class WidgetSchemaProvider {
   schema: FlowUISchema;
