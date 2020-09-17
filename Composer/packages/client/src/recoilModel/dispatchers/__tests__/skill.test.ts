@@ -35,7 +35,7 @@ const mockDialogComplete = jest.fn();
 const projectId = '42345.23432';
 
 const makeTestSkill: (number) => Skill = (n) => ({
-  manifestUrl: 'url',
+  manifestUrl: 'url' + n,
   name: 'skill' + n,
   protocol: 'GET',
   description: 'test skill' + n,
@@ -51,9 +51,10 @@ describe('skill dispatcher', () => {
     mockDialogComplete.mockClear();
 
     const useRecoilTestHook = () => {
+      const projectId = useRecoilValue(currentProjectIdState);
       const skillManifests = useRecoilValue(skillManifestsState(projectId));
       const onAddSkillDialogComplete = useRecoilValue(onAddSkillDialogCompleteState(projectId));
-      const skills = useRecoilValue(skillsState(projectId));
+      const skills: Skill[] = useRecoilValue(skillsState(projectId));
       const settings = useRecoilValue(settingsState(projectId));
       const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState(projectId));
       const displaySkillManifest = useRecoilValue(displaySkillManifestState(projectId));
@@ -61,6 +62,7 @@ describe('skill dispatcher', () => {
       const currentDispatcher = useRecoilValue(dispatcherState);
 
       return {
+        projectId,
         skillManifests,
         onAddSkillDialogComplete,
         skills,
@@ -130,44 +132,32 @@ describe('skill dispatcher', () => {
     ]);
   });
 
-  describe('updateSkill', () => {
-    it('adds a skill', async () => {
-      await act(async () => {
-        dispatcher.updateSkill({
-          projectId,
-          targetId: -1,
-          skillData: makeTestSkill(3),
-        });
-      });
-      expect(renderedComponent.current.showAddSkillDialogModal).toBe(false);
-      expect(renderedComponent.current.onAddSkillDialogComplete.func).toBeUndefined();
-      expect(renderedComponent.current.skills).toContainEqual(makeTestSkill(3));
+  it('addsSkill', async () => {
+    await act(async () => {
+      dispatcher.addSkill('123', makeTestSkill(3));
     });
-    it('modifies a skill', async () => {
-      await act(async () => {
-        dispatcher.updateSkill({
-          projectId,
-          targetId: 0,
-          skillData: makeTestSkill(100),
-        });
+    expect(renderedComponent.current.showAddSkillDialogModal).toBe(false);
+    expect(renderedComponent.current.onAddSkillDialogComplete.func).toBeUndefined();
+    expect(renderedComponent.current.skills).toContainEqual(makeTestSkill(3));
+  });
+
+  it('updateSkill', async () => {
+    await act(async () => {
+      dispatcher.updateSkill('123', {
+        targetId: 0,
+        skillData: makeTestSkill(100),
       });
-      expect(renderedComponent.current.showAddSkillDialogModal).toBe(false);
-      expect(renderedComponent.current.onAddSkillDialogComplete.func).toBeUndefined();
-      expect(renderedComponent.current.skills).not.toContain(makeTestSkill(1));
-      expect(renderedComponent.current.skills).toContainEqual(makeTestSkill(100));
     });
-    it('deletes a skill', async () => {
-      await act(async () => {
-        dispatcher.updateSkill({
-          projectId,
-          targetId: 0,
-          skillData: {},
-        });
-      });
-      expect(renderedComponent.current.showAddSkillDialogModal).toBe(false);
-      expect(renderedComponent.current.onAddSkillDialogComplete.func).toBeUndefined();
-      expect(renderedComponent.current.skills).not.toContain(makeTestSkill(1));
+
+    expect(renderedComponent.current.skills).not.toContain(makeTestSkill(1));
+    expect(renderedComponent.current.skills).toContainEqual(makeTestSkill(100));
+  });
+
+  it('removeSkill', async () => {
+    await act(async () => {
+      dispatcher.removeSkill('123', makeTestSkill(1).manifestUrl);
     });
+    expect(renderedComponent.current.skills).not.toContain(makeTestSkill(1));
   });
 
   it('addSkillDialogBegin', async () => {
