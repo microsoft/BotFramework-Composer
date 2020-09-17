@@ -24,8 +24,6 @@ export function fieldProps(overrides: Partial<FieldProps> = {}): FieldProps {
 export function mockRecognizerConfig(recognizerConfigs: RecognizerSchema[]) {
   return {
     recognizers: recognizerConfigs,
-    findRecognizer: (recognizerValue) => {
-      recognizerConfigs.find((x) => x.id === get(recognizerValue, '$kind'));
-    },
+    findRecognizer: (recognizerValue) => recognizerConfigs.find((x) => x.id === get(recognizerValue, '$kind')),
   };
 }

@@ -43,7 +43,6 @@ describe('mergePluginConfigs', () => {
           },
         },
       },
-      recognizers: [],
       flowWidgets: {},
     });
   });
