@@ -121,7 +121,7 @@ interface SkillListProps {
 
 const SkillList: React.FC<SkillListProps> = ({ projectId }) => {
   const { removeSkill, updateSkill } = useRecoilValue(dispatcherState);
-  const skills = useRecoilValue(skillsState);
+  const skills = useRecoilValue(skillsState(projectId));
 
   const [selectedSkillUrl, setSelectedSkillUrl] = useState<string | null>(null);
 

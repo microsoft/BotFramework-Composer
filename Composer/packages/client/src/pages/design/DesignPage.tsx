@@ -49,7 +49,6 @@ import {
   actionsSeedState,
   localeState,
   qnaFilesState,
-  skillsState,
 } from '../../recoilModel';
 import { getBaseName } from '../../utils/fileUtil';
 import ImportQnAFromUrlModal from '../knowledge-base/ImportQnAFromUrlModal';
@@ -675,7 +674,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         {showAddSkillDialogModal && (
           <CreateSkillModal
             projectId={projectId}
-            onDismiss={addSkillDialogCancel}
+            onDismiss={() => addSkillDialogCancel(projectId)}
             onSubmit={(skill) => addSkill(projectId, skill)}
           />
         )}
