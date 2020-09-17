@@ -12,7 +12,7 @@ import { navigateTo } from '../../utils/navigation';
 
 import { getQnAFailed, getQnASuccess, getQnAPending } from './../../utils/notifications';
 import httpClient from './../../utils/httpUtil';
-import { addNotificationInternal, deleteNotificationInternal } from './notification';
+import { addNotificationInternal, deleteNotificationInternal, createNotifiction } from './notification';
 
 export const updateQnAFileState = async (
   callbackHelpers: CallbackInterface,
@@ -95,7 +95,8 @@ export const qnaDispatcher = () => {
       const projectId = await snapshot.getPromise(projectIdState);
       const qnaFile = qnaFiles.find((f) => f.id === id);
 
-      const notificationId = await addNotificationInternal(callbackHelpers, getQnAPending(urls));
+      const notification = createNotifiction(getQnAPending(urls));
+      addNotificationInternal(callbackHelpers, notification);
 
       try {
         const response = await httpClient.get(`/utilities/qna/parse`, {
@@ -104,17 +105,17 @@ export const qnaDispatcher = () => {
         const content = qnaFile ? qnaFile.content + '\n' + response.data : response.data;
 
         await updateQnAFileState(callbackHelpers, { id, content });
-        const notificationId = addNotificationInternal(
-          callbackHelpers,
+        const notification = createNotifiction(
           getQnASuccess(() => {
             navigateTo(`/bot/${projectId}/knowledge-base/${getBaseName(id)}`);
-            deleteNotificationInternal(callbackHelpers, notificationId);
+            deleteNotificationInternal(callbackHelpers, notification.id);
           })
         );
+        addNotificationInternal(callbackHelpers, notification);
       } catch (err) {
-        addNotificationInternal(callbackHelpers, getQnAFailed(err.response?.data?.message));
+        addNotificationInternal(callbackHelpers, createNotifiction(getQnAFailed(err.response?.data?.message)));
       } finally {
-        deleteNotificationInternal(callbackHelpers, notificationId);
+        deleteNotificationInternal(callbackHelpers, notification.id);
       }
     }
   );
