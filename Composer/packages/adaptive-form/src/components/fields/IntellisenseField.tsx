@@ -5,8 +5,8 @@ import { FieldProps } from '@bfc/extension-client';
 import { IntellisenseTextField } from '@bfc/intellisense';
 import React from 'react';
 
-import { FieldLabel } from '../FieldLabel';
 import { getIntellisenseUrl } from '../../utils/getIntellisenseUrl';
+import { FieldLabel } from '../FieldLabel';
 
 import { TextField } from './TextField/TextField';
 
@@ -26,6 +26,7 @@ export const IntellisenseField: React.FC<FieldProps<string>> = function Intellis
       >
         {(textFieldValue, onValueChanged, onKeyDownTextField, onKeyUpTextField, onClickTextField) => (
           <TextField
+            autoComplete="off"
             defaultValue={textFieldValue}
             id={id}
             onChange={(_e, newValue) => onValueChanged(newValue || '')}

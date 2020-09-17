@@ -25,6 +25,7 @@ const ExpressionEditor: React.FC<FieldProps> = (props) => {
     >
       {(textFieldValue, onValueChanged, onKeyDownTextField, onKeyUpTextField, onClickTextField) => (
         <TextField
+          autoComplete="off"
           defaultValue={textFieldValue}
           disabled={disabled}
           errorMessage={error}
