@@ -2,8 +2,10 @@
 // Licensed under the MIT License.
 
 import React from 'react';
+
 import { useLanguageServer } from '../hooks/useLanguageServer';
 import { checkIsOutside } from '../utils/uiUtils';
+
 import { CompletionList } from './CompletionList';
 
 export const IntellisenseTextField = React.memo(
@@ -24,7 +26,7 @@ export const IntellisenseTextField = React.memo(
   }) => {
     const { url, scopes, projectId, id, value, onChange, children } = props;
 
-    const [textFieldValue, setTextFieldValue] = React.useState('');
+    const [textFieldValue, setTextFieldValue] = React.useState(value ?? '');
     const [showCompletionList, setShowCompletionList] = React.useState(false);
     const [selectedCompletionItem, setSelectedCompletionItem] = React.useState(0);
     const [cursorPosition, setCursorPosition] = React.useState(0);

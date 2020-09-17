@@ -4,10 +4,11 @@
 import { FieldProps } from '@bfc/extension-client';
 import { IntellisenseTextField } from '@bfc/intellisense';
 import React from 'react';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
 import { FieldLabel } from '../FieldLabel';
 import { getIntellisenseUrl } from '../../utils/getIntellisenseUrl';
+
+import { TextField } from './TextField/TextField';
 
 export const IntellisenseField: React.FC<FieldProps<string>> = function IntellisenseField(props) {
   const { id, value = '', onChange, label, description, uiOptions, required } = props;
@@ -25,8 +26,8 @@ export const IntellisenseField: React.FC<FieldProps<string>> = function Intellis
       >
         {(textFieldValue, onValueChanged, onKeyDownTextField, onKeyUpTextField, onClickTextField) => (
           <TextField
+            defaultValue={textFieldValue}
             id={id}
-            value={textFieldValue}
             onChange={(_e, newValue) => onValueChanged(newValue || '')}
             onClick={onClickTextField}
             onKeyDown={onKeyDownTextField}
