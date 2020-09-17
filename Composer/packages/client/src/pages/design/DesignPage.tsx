@@ -507,6 +507,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     const seededContent = new DialogFactory(schemas.sdk?.content).create(SDKKinds.AdaptiveDialog, {
       $designer: { name: data.name, description: data.description },
       generator: `${data.name}.lg`,
+      // TODO: (ze) respect default recognizer.
       recognizer: `${data.name}.lu.qna`,
     });
     if (seededContent.triggers?.[0]) {

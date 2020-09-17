@@ -19,6 +19,29 @@ const reuseLuisIntentEditor = (recognizers: RecognizerSchema[]) => {
   }
 };
 
+const getDefaultRecognizer = (recognizers: RecognizerSchema[]) => {
+  const defaultRecognizer = recognizers.find((r) => r.default && !r.disabled);
+  if (defaultRecognizer) return defaultRecognizer;
+
+  const crosstrainRecognizer = recognizers.find((r) => r.id === SDKKinds.CrossTrainedRecognizerSet);
+  if (crosstrainRecognizer) return crosstrainRecognizer;
+
+  const firstAvailableRecognizer = recognizers.find((r) => !r.disabled);
+  return firstAvailableRecognizer;
+};
+
+// Use the JSON editor as fallback recognizer config.
+
+const findRecognizerByValue = (recognizers: RecognizerSchema[], recognizerValue?: MicrosoftIRecognizer) => {
+  const matchedRecognizer = recognizers.find((r) => {
+    if (typeof r.isSelected === 'function') {
+      return r.isSelected(recognizerValue);
+    }
+    return r.id === get(recognizerValue, '$kind');
+  });
+  return matchedRecognizer;
+};
+
 export function useRecognizerConfig() {
   const { plugins } = useContext(EditorExtensionContext);
 
@@ -38,21 +61,11 @@ export function useRecognizerConfig() {
     return schemas;
   }, [plugins.uiSchema]);
 
-  // Use the JSON editor as fallback recognizer config.
   const fallbackRecognizer = recognizers.find((x) => x.id === 'fallback');
-
-  const findConfigByValue = (recognizerValue?: MicrosoftIRecognizer) => {
-    const matchedRecognizer = recognizers.find((r) => {
-      if (typeof r.isSelected === 'function') {
-        return r.isSelected(recognizerValue);
-      }
-      return r.id === get(recognizerValue, '$kind');
-    });
-    return matchedRecognizer ?? fallbackRecognizer;
-  };
 
   return {
     recognizers,
-    findRecognizer: findConfigByValue,
+    findRecognizer: (val: MicrosoftIRecognizer) => findRecognizerByValue(recognizers, val) ?? fallbackRecognizer,
+    getDefaultRecognizer: () => getDefaultRecognizer(recognizers),
   };
 }
