@@ -41,7 +41,7 @@ const builtinVisualSDKSchema: FlowUISchema = {
     nowrap: true,
     loop: {
       widget: 'ActionCard',
-      body: '=concat("Each page of ", coalesce(action.pageSize, "?"), " in ", coalesce(action.propString, "?"))',
+      body: '=concat("Each page of ", coalesce(action.pageSize, "?"), " in ", coalesce(action.page, "?"))',
     },
   },
 };
