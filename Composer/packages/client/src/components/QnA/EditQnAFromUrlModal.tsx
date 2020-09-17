@@ -91,6 +91,7 @@ export const EditQnAFromUrlModal: React.FC<EditQnAFromUrlModalProps> = (props) =
         </Stack>
         <Stack>
           <TextField
+            disabled
             data-testid={`knowledgeLocationTextField-url`}
             errorMessage={formErrors.url}
             label={formatMessage('Knowledge source')}

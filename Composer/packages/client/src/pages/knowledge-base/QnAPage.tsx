@@ -20,7 +20,6 @@ import {
   projectIdState,
   qnaAllUpViewStatusState,
   qnaFilesState,
-  showCreateDialogModalState,
   showCreateQnAFromScratchDialogState,
   showCreateQnAFromUrlDialogState,
 } from '../../recoilModel/atoms/botState';

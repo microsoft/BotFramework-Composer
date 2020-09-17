@@ -33,7 +33,8 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   const search = props.location?.search ?? '';
   const searchContainerId = querystring.parse(search).C;
 
-  const targetFileId = searchContainerId ? searchContainerId : `${dialogId}.${locale}`;
+  const targetFileId =
+    searchContainerId && typeof searchContainerId === 'string' ? searchContainerId : `${dialogId}.${locale}`;
   const file = qnaFiles.find(({ id }) => id === targetFileId);
   const hash = props.location?.hash ?? '';
   const hashLine = querystring.parse(hash).L;

@@ -117,7 +117,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
       : [];
   };
   const [editQnAFile, setEditQnAFile] = useState<QnAFile | undefined>(undefined);
-  const [focusedIndex, setFocusedIndex] = useState(-1);
   const [qnaSections, setQnASections] = useState<QnASectionItem[]>([]);
   const [kthSectionIsCreatingQuestion, setCreatingQuestionInKthSection] = useState<number>(-1);
   const importedFileIds = qnaFile?.imports.map(({ id }) => getBaseName(id)) || [];
@@ -149,24 +148,11 @@ const TableView: React.FC<TableViewProps> = (props) => {
         return result.concat(res);
       }, []);
     if (dialogId === 'all') {
-      const sections = allSections.map((item, index) => {
-        return {
-          ...item,
-          expand: index === focusedIndex,
-        };
-      });
-      setQnASections(sections);
+      setQnASections(allSections);
     } else {
       const dialogSections = allSections.filter((t) => importedFileIds.includes(t.fileId));
 
-      setQnASections(
-        dialogSections.map((item, index) => {
-          return {
-            ...item,
-            expand: index === focusedIndex,
-          };
-        })
-      );
+      setQnASections(dialogSections);
     }
   }, [qnaFiles, dialogId, projectId]);
 
@@ -187,9 +173,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const onUpdateQnAQuestion = (fileId: string, sectionId: string, questionId: string, content: string) => {
     if (!fileId) return;
     actions.setMessage('item deleted');
-    const sectionIndex = qnaSections.findIndex((item) => item.fileId === fileId);
-    setFocusedIndex(sectionIndex);
-
     updateQnAQuestion({
       id: fileId,
       sectionId,
@@ -201,9 +184,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const onUpdateQnAAnswer = (fileId: string, sectionId: string, content: string) => {
     if (!fileId) return;
     actions.setMessage('item deleted');
-    const sectionIndex = qnaSections.findIndex((item) => item.fileId === fileId);
-    setFocusedIndex(sectionIndex);
-
     updateQnAAnswer({
       id: fileId,
       sectionId,
@@ -215,7 +195,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
     if (!fileId) return;
     actions.setMessage('item deleted');
     const sectionIndex = qnaSections.findIndex((item) => item.fileId === fileId);
-    setFocusedIndex(sectionIndex);
     removeQnAPairs({
       id: fileId,
       sectionId,
@@ -228,24 +207,31 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const onCreateNewQnAPairs = (fileId: string | undefined) => {
     if (!fileId) return;
     const newQnAPair = qnaUtil.generateQnAPair();
-    //const sectionIndex = qnaSections.findIndex((item) => item.fileId === fileId);
-    //setFocusedIndex(sectionIndex + 1);
+    const sectionIndex = qnaSections.findIndex((item) => item.fileId === fileId);
     createQnAPairs({ id: fileId, content: newQnAPair });
-    const newArray = [false, ...isQnASectionsExpanded];
+    const newArray = [...isQnASectionsExpanded];
+    newArray.splice(sectionIndex, 0, false);
     setIsQnASectionsExpanded(newArray);
   };
 
   const onCreateNewQuestion = (fileId, sectionId, content?: string) => {
     if (!fileId || !sectionId) return;
-    const sectionIndex = qnaSections.findIndex((item) => item.sectionId === sectionId);
-    setFocusedIndex(sectionIndex);
-
     const payload = {
       id: fileId,
       sectionId,
       content: content || 'Add new question',
     };
     createQnAQuestion(payload);
+  };
+
+  const onSubmitEditKB = async ({ name }: { name: string }) => {
+    if (!editQnAFile) return;
+    const newId = `${name}.source`;
+    await actions.renameQnAKB({ id: editQnAFile.id, name: newId });
+    if (!qnaFile) return;
+    await actions.removeQnAImport({ id: qnaFile.id, sourceId: editQnAFile.id });
+    await actions.createQnAImport({ id: qnaFile.id, sourceId: newId });
+    setEditQnAFile(undefined);
   };
 
   const onRenderGroupHeader: IDetailsGroupRenderProps['onRenderHeader'] = (props) => {
@@ -555,14 +541,14 @@ const TableView: React.FC<TableViewProps> = (props) => {
         const startIndex = lastGroup ? lastGroup.startIndex + lastGroup.count : 0;
         const { id, qnaSections } = currentFile;
         const count = qnaSections.length;
-        const shouldExpand = inRange(focusedIndex, startIndex, startIndex + count) || searchContainerId === id;
+        // const shouldExpand = inRange(focusedIndex, startIndex, startIndex + count) || searchContainerId === id;
         groups.push({
           key: id,
           name: getBaseName(id),
           startIndex,
           count,
           level: 0,
-          isCollapsed: !shouldExpand,
+          // isCollapsed: !shouldExpand,
         });
       });
       return groups;
@@ -575,7 +561,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           startIndex: 0,
           count: qnaFile.qnaSections.length,
           level: 0,
-          isCollapsed: !inRange(focusedIndex, 0, qnaFile.qnaSections.length),
+          // isCollapsed: !inRange(focusedIndex, 0, qnaFile.qnaSections.length),
         },
       ];
       importedSourceFiles.forEach((currentFile) => {
@@ -583,9 +569,9 @@ const TableView: React.FC<TableViewProps> = (props) => {
         const startIndex = lastGroup.startIndex + lastGroup.count;
         const { id, qnaSections } = currentFile;
         const count = qnaSections.length;
-        const shouldExpand = inRange(focusedIndex, startIndex, startIndex + count) || searchContainerId === id;
+        // const shouldExpand = inRange(focusedIndex, startIndex, startIndex + count) || searchContainerId === id;
         const name = getBaseName(id);
-        groups.push({ key: id, name, startIndex, count, level: 0, isCollapsed: !shouldExpand });
+        groups.push({ key: id, name, startIndex, count, level: 0 });
       });
 
       return groups;
@@ -669,14 +655,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           onDismiss={() => {
             setEditQnAFile(undefined);
           }}
-          onSubmit={async ({ name }) => {
-            const newId = `${name}.source`;
-            await actions.renameQnAKB({ id: editQnAFile.id, name: newId });
-            if (!qnaFile) return;
-            await actions.removeQnAImport({ id: qnaFile.id, sourceId: editQnAFile.id });
-            await actions.createQnAImport({ id: qnaFile.id, sourceId: newId });
-            setEditQnAFile(undefined);
-          }}
+          onSubmit={onSubmitEditKB}
         ></EditQnAModal>
       )}
     </div>
