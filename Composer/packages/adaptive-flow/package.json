@@ -1,0 +1,65 @@
+{
+  "name": "@bfc/adaptive-flow",
+  "version": "1.0.0",
+  "description": "BotFramework Adaptive Form",
+  "main": "lib/index.js",
+  "engines": {
+    "node": ">=12"
+  },
+  "files": [
+    "css",
+    "es",
+    "lib",
+    "umd"
+  ],
+  "scripts": {
+    "build": "yarn clean && yarn build:ts",
+    "build:ts": "tsc --build tsconfig.build.json",
+    "clean": "rimraf lib demo/dist",
+    "prepublishOnly": "npm run build",
+    "start": "webpack-dev-server --config demo/webpack.config.demo.js --port 3002",
+    "test": "jest --no-cache",
+    "lint": "eslint --quiet ./src ./__tests__",
+    "lint:fix": "yarn lint --fix"
+  },
+  "dependencies": {
+    "@bfc/extension-client": "*",
+    "@bfc/shared": "*",
+    "@bfc/ui-shared": "*",
+    "@emotion/core": "^10.0.27",
+    "@emotion/styled": "^10.0.27",
+    "adaptive-expressions": "4.10.0-preview-147186",
+    "botbuilder-lg": "^4.10.0-preview-150886",
+    "create-react-class": "^15.6.3",
+    "d3": "^5.9.1",
+    "dagre": "^0.8.4",
+    "dagre-d3": "^0.6.3",
+    "lodash": "^4.17.19",
+    "office-ui-fabric-react": "^7.88.1",
+    "prop-types": "^15.7.2",
+    "react-measure": "^2.3.0",
+    "source-map-loader": "^0.2.4"
+  },
+  "peerDependencies": {
+    "format-message": "^6.2.3",
+    "react": "16.13.0"
+  },
+  "devDependencies": {
+    "@bfc/test-utils": "*",
+    "@types/lodash": "^4.14.146",
+    "@types/react": "16.9.23",
+    "format-message": "^6.2.3",
+    "json-loader": "^0.5.7",
+    "react": "16.13.0",
+    "react-dom": "16.13.0",
+    "ts-loader": "7.0.4",
+    "tsconfig-paths-webpack-plugin": "^3.2.0"
+  },
+  "author": "",
+  "homepage": "",
+  "license": "MIT",
+  "repository": "",
+  "keywords": [
+    "react-component"
+  ]
+}

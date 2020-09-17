@@ -8,7 +8,9 @@ import jwtDecode from 'jwt-decode';
 import { userSettingsState, currentUserState, CurrentUser } from '../atoms/appState';
 import { getUserTokenFromCache, loginPopup, refreshToken } from '../../utils/auth';
 import storage from '../../utils/storage';
+import { loadLocale } from '../../utils/fileUtil';
 import { UserSettingsPayload } from '../types';
+import { isElectron } from '../../utils/electronUtil';
 
 enum ClaimNames {
   upn = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn',
@@ -71,6 +73,9 @@ export const userDispatcher = () => {
 
   const updateUserSettings = useRecoilCallback(
     ({ set }: CallbackInterface) => async (settings: Partial<UserSettingsPayload>) => {
+      if (settings.appLocale != null) {
+        await loadLocale(settings.appLocale);
+      }
       set(userSettingsState, (currentSettings) => {
         const newSettings = {
           ...currentSettings,
@@ -85,6 +90,12 @@ export const userDispatcher = () => {
           }
         }
         storage.set('userSettings', newSettings);
+
+        if (isElectron()) {
+          // push the settings to the electron main process
+          window.ipcRenderer.send('update-user-settings', newSettings);
+        }
+
         return newSettings;
       });
     }

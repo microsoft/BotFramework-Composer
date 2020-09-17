@@ -2,7 +2,14 @@
 // Licensed under the MIT License.
 
 import mergeWith from 'lodash/mergeWith';
-import { PluginConfig, FormUISchema, RecognizerSchema, UISchema, MenuUISchema, FlowUISchema } from '@bfc/extension';
+import {
+  PluginConfig,
+  FormUISchema,
+  RecognizerSchema,
+  UISchema,
+  MenuUISchema,
+  FlowUISchema,
+} from '@bfc/extension-client';
 import { SDKKinds } from '@bfc/shared';
 import formatMessage from 'format-message';
 import { IntentField, RecognizerField, RegexIntentField, QnAActionsField } from '@bfc/adaptive-form';

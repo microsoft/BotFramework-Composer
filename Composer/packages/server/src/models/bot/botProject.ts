@@ -6,8 +6,20 @@ import fs from 'fs';
 
 import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
-import { getNewDesigner, FileInfo, Skill, Diagnostic, IBotProject, DialogSetting } from '@bfc/shared';
-import { UserIdentity, pluginLoader } from '@bfc/plugin-loader';
+import {
+  getNewDesigner,
+  FileInfo,
+  Skill,
+  Diagnostic,
+  convertSkillsToDictionary,
+  IBotProject,
+  DialogSetting,
+  FileExtensions,
+} from '@bfc/shared';
+import merge from 'lodash/merge';
+import { UserIdentity, pluginLoader } from '@bfc/extension';
+import { FeedbackType, generate } from '@microsoft/bf-generate-library';
+import values from 'lodash/values';
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
@@ -125,6 +137,10 @@ export class BotProject implements IBotProject {
     return this.files.get('sdk.override.uischema');
   }
 
+  public get schemaOverrides() {
+    return this.files.get('sdk.override.schema');
+  }
+
   public getFile(id: string) {
     return this.files.get(id);
   }
@@ -132,7 +148,8 @@ export class BotProject implements IBotProject {
   public init = async () => {
     this.diagnostics = [];
     this.settings = await this.getEnvSettings(false);
-    const { skillsParsed, diagnostics } = await extractSkillManifestUrl(this.settings?.skill || ([] as any));
+    const skillsCollection = values(this.settings?.skill);
+    const { skillsParsed, diagnostics } = await extractSkillManifestUrl(skillsCollection || ([] as any));
     this.skills = skillsParsed;
     this.diagnostics.push(...diagnostics);
     this.files = await this._getFiles();
@@ -199,15 +216,11 @@ export class BotProject implements IBotProject {
   };
 
   // update skill in settings
-  public updateSkill = async (config: Skill[]) => {
+  public updateSkill = async (config: any[]) => {
     const settings = await this.getEnvSettings(false);
     const { skillsParsed } = await extractSkillManifestUrl(config);
-
-    settings.skill = skillsParsed.map(({ manifestUrl, name }) => {
-      return { manifestUrl, name };
-    });
-    await this.settingManager.set(settings);
-
+    const mapped = convertSkillsToDictionary(skillsParsed);
+    settings.skill = await this.settingManager.set(mapped);
     this.skills = skillsParsed;
     return skillsParsed;
   };
@@ -224,6 +237,7 @@ export class BotProject implements IBotProject {
     let sdkSchema = this.defaultSDKSchema;
     let uiSchema = this.defaultUISchema;
     let uiSchemaOverrides = {};
+    let schemaOverrides = {};
     const diagnostics: string[] = [];
 
     const userSDKSchemaFile = this.schema;
@@ -243,10 +257,22 @@ export class BotProject implements IBotProject {
     if (uiSchemaFile !== undefined) {
       debug('UI Schema found.');
       try {
-        uiSchema = JSON.parse(uiSchemaFile.content);
+        uiSchema = merge(uiSchema, JSON.parse(uiSchemaFile.content));
       } catch (err) {
         debug('Attempt to parse ui schema as JSON failed.\nError: %s', err.messagee);
         diagnostics.push(`Error in sdk.uischema, ${err.message}`);
+      }
+    }
+
+    const schemaOverridesFile = this.schemaOverrides;
+
+    if (schemaOverridesFile !== undefined) {
+      debug('Schema overrides found.');
+      try {
+        schemaOverrides = JSON.parse(schemaOverridesFile.content);
+      } catch (err) {
+        debug('Attempt to parse schema as JSON failed.\nError: %s', err.messagee);
+        diagnostics.push(`Error in sdk.override.schema, ${err.message}`);
       }
     }
 
@@ -264,7 +290,7 @@ export class BotProject implements IBotProject {
 
     return {
       sdk: {
-        content: sdkSchema,
+        content: merge(sdkSchema, schemaOverrides),
       },
       ui: {
         content: uiSchema,
@@ -344,6 +370,7 @@ export class BotProject implements IBotProject {
     }
 
     const relativePath = file.relativePath;
+    this._validateFileContent(name, content);
     const lastModified = await this._updateFile(relativePath, content);
     return lastModified;
   };
@@ -388,6 +415,7 @@ export class BotProject implements IBotProject {
   public createFile = async (name: string, content = '') => {
     const filename = name.trim();
     this.validateFileName(filename);
+    this._validateFileContent(name, content);
     const botName = this.name;
     const defaultLocale = this.settings?.defaultLanguage || defaultLanguage;
     const relativePath = defaultFilePath(botName, defaultLocale, filename);
@@ -488,6 +516,56 @@ export class BotProject implements IBotProject {
     return qnaEndpointKey;
   };
 
+  public async generateDialog(name: string) {
+    const defaultLocale = this.settings?.defaultLanguage || defaultLanguage;
+    const relativePath = defaultFilePath(this.name, defaultLocale, `${name}${FileExtensions.FormDialogSchema}`);
+    const schemaPath = Path.resolve(this.dir, relativePath);
+
+    const dialogPath = defaultFilePath(this.name, defaultLocale, `${name}${FileExtensions.Dialog}`);
+    const outDir = Path.dirname(Path.resolve(this.dir, dialogPath));
+
+    const feedback = (type: FeedbackType, message: string): void => {
+      // eslint-disable-next-line no-console
+      console.log(`${type} - ${message}`);
+    };
+
+    const generateParams = {
+      schemaPath,
+      prefix: name,
+      outDir,
+      metaSchema: undefined,
+      allLocales: undefined,
+      templateDirs: [],
+      force: false,
+      merge: true,
+      singleton: true,
+      feedback,
+    };
+
+    // schema path = path to the JSON schema file defining the form data
+    // prefix - the dialog name to prefix on generated assets
+    // outDir - the directory where the dialog assets will be saved
+    // metaSchema - deprecated
+    // allLocales - the additional locales for which to generate assets
+    // templateDirs - paths to directories containing customized templates
+    // force - if assets are overwritten causing any user customizations to be lost
+    // merge - if generated assets should be merged with any user customized assets
+    // singleton - if the generated assets should be merged into a single dialog
+    // feeback - a callback for status and progress and generation happens
+    await generate(
+      generateParams.schemaPath,
+      generateParams.prefix,
+      generateParams.outDir,
+      generateParams.metaSchema,
+      generateParams.allLocales,
+      generateParams.templateDirs,
+      generateParams.force,
+      generateParams.merge,
+      generateParams.singleton,
+      generateParams.feedback
+    );
+  }
+
   private async removeLocalRuntimeData(projectId) {
     const method = 'localpublish';
     if (pluginLoader.extensions.publish[method]?.methods?.stopBot) {
@@ -534,6 +612,9 @@ export class BotProject implements IBotProject {
   // to root dir instead of dataDir dataDir is not aware at this layer
   private _createFile = async (relativePath: string, content: string) => {
     const absolutePath = Path.resolve(this.dir, relativePath);
+    if (!absolutePath.startsWith(this.dir)) {
+      throw new Error('Cannot create file outside of current project folder');
+    }
     await this.ensureDirExists(Path.dirname(absolutePath));
     debug('Creating file: %s', absolutePath);
     await this.fileStorage.writeFile(absolutePath, content);
@@ -564,7 +645,9 @@ export class BotProject implements IBotProject {
     }
 
     const absolutePath = `${this.dir}/${relativePath}`;
-
+    if (!absolutePath.startsWith(this.dir)) {
+      throw new Error('Cannot update file outside of current project folder');
+    }
     // only write if the file has actually changed
     if (file.content !== content) {
       file.content = content;
@@ -590,7 +673,6 @@ export class BotProject implements IBotProject {
     const absolutePath = `${this.dir}/${relativePath}`;
     await this.fileStorage.removeFile(absolutePath);
   };
-
   // ensure dir exist, dir is a absolute dir path
   private ensureDirExists = async (dir: string) => {
     if (!dir || dir === '.') {
@@ -608,7 +690,18 @@ export class BotProject implements IBotProject {
     }
 
     const fileList = new Map<string, FileInfo>();
-    const patterns = ['**/*.dialog', '**/*.dialog.schema', '**/*.lg', '**/*.lu', '**/*.qna', 'manifests/*.json'];
+    const patterns = [
+      '**/*.dialog',
+      '**/*.dialog.schema',
+      '**/*.lg',
+      '**/*.lu',
+      '**/*.qna',
+      'manifests/*.json',
+      'sdk.override.schema',
+      'sdk.override.uischema',
+      'sdk.schema',
+      'sdk.uischema',
+    ];
     for (const pattern of patterns) {
       // load only from the data dir, otherwise may get "build" versions from
       // deployment process
@@ -675,6 +768,20 @@ export class BotProject implements IBotProject {
         relativePath: Path.relative(this.dir, path),
         lastModified: stats.lastModified,
       };
+    }
+  };
+
+  private _validateFileContent = (name: string, content: string) => {
+    const extension = Path.extname(name);
+    if (extension === '.dialog' || name === 'appsettings.json') {
+      try {
+        const parsedContent = JSON.parse(content);
+        if (typeof parsedContent !== 'object' || Array.isArray(parsedContent)) {
+          throw new Error('Invalid file content');
+        }
+      } catch (e) {
+        throw new Error('Invalid file content');
+      }
     }
   };
 }

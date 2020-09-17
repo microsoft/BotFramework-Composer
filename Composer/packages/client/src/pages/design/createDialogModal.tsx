@@ -71,7 +71,7 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
     <DialogWrapper
       isOpen={isOpen}
       onDismiss={onDismiss}
-      {...DialogCreationCopy.DEFINE_CONVERSATION_OBJECTIVE}
+      {...DialogCreationCopy.DEFINE_DIALOG}
       dialogType={DialogTypes.DesignFlow}
     >
       <form onSubmit={handleSubmit}>

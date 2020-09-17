@@ -7,5 +7,6 @@ import lineNumbers from './line-numbers.svg';
 import wordWrap from './word-wrap.svg';
 import autoUpdate from './auto-update.svg';
 import earlyAdopters from './early-adopters.svg';
+import language from './language.svg';
 
-export { minimap, onboarding, lineNumbers, wordWrap, autoUpdate, earlyAdopters };
+export { minimap, onboarding, lineNumbers, wordWrap, autoUpdate, earlyAdopters, language };
