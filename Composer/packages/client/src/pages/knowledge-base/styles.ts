@@ -3,7 +3,7 @@
 import { css } from '@emotion/core';
 import { FontWeights } from '@uifabric/styling';
 import { NeutralColors, SharedColors, FontSizes } from '@uifabric/fluent-theme';
-import { IIconStyles } from 'office-ui-fabric-react/lib/Icon';
+
 export const content = css`
   min-height: 28px;
   outline: none;
@@ -25,6 +25,7 @@ export const formCell = css`
   white-space: pre-wrap;
   font-size: 14px;
   line-height: 28px;
+  height: 100%;
 `;
 
 export const inlineContainer = (isBold) => css`
@@ -71,26 +72,6 @@ export const addQnAPairLink = {
   },
 };
 
-export const actionButton = css`
-  font-size: 16px;
-  margin: 0;
-  margin-left: 15px;
-`;
-
-export const QnAIconStyle = {
-  root: {
-    padding: '8px',
-    boxSizing: 'border-box',
-    width: '40px',
-    height: '32px',
-  },
-} as IIconStyles;
-
-export const firstLine = css`
-  display: flex;
-  flex-direction: row;
-`;
-
 export const divider = css`
   height: 1px;
   background: ${NeutralColors.gray30};
@@ -102,18 +83,33 @@ export const rowDetails = {
     selectors: {
       '&:hover': {
         background: NeutralColors.gray30,
+        selectors: {
+          '.ms-TextField-fieldGroup': {
+            background: NeutralColors.gray30,
+          },
+          '.ms-Button--icon': {
+            visibility: 'visible',
+          },
+          '.ms-Button': {
+            visibility: 'visible',
+          },
+        },
       },
-      '&:hover .ms-Button--icon': {
-        visibility: 'visible',
+      '&.is-selected': {
+        selectors: {
+          '.ms-Button--icon': {
+            visibility: 'visible',
+          },
+          '.ms-Button': {
+            visibility: 'visible',
+          },
+          '.ms-TextField-fieldGroup': {
+            background: NeutralColors.gray30,
+          },
+        },
       },
-      '&.is-selected .ms-Button--icon': {
-        visibility: 'visible',
-      },
-      '&:hover .ms-Button': {
-        visibility: 'visible',
-      },
-      '&.is-selected .ms-Button': {
-        visibility: 'visible',
+      '&.is-selected:hover': {
+        background: NeutralColors.gray30,
       },
     },
   },
@@ -125,11 +121,6 @@ export const icon = {
     visibility: 'hidden',
   },
 };
-
-export const addButtonContainer = css`
-  z-index: 1;
-  background: ${NeutralColors.white};
-`;
 
 export const addAlternative = {
   root: {
@@ -156,3 +147,62 @@ export const addIcon = {
     color: SharedColors.cyanBlue10,
   },
 };
+
+export const editableFieldAnswer = (isExpand) => {
+  return {
+    root: {
+      height: '100%',
+      selectors: {
+        '.ms-TextField-wrapper': {
+          height: '100%',
+        },
+      },
+    },
+    fieldGroup: {
+      height: '100%',
+      border: '0',
+      selectors: {
+        '&.ms-TextField-fieldGroup': {
+          selectors: {
+            '::after': {
+              border: 'none !important',
+            },
+          },
+        },
+      },
+    },
+    field: {
+      height: isExpand ? undefined : '80px !important',
+      overflowY: 'auto' as 'auto',
+      maxHeight: 500,
+    },
+  };
+};
+
+export const editableFieldQuestion = (index) => {
+  return {
+    fieldGroup: {
+      border: '0',
+      selectors: {
+        '&.ms-TextField-fieldGroup': {
+          selectors: {
+            '::after': {
+              border: 'none !important',
+            },
+          },
+        },
+      },
+    },
+    field: {
+      fontWeight: index === 0 ? FontWeights.semibold : FontWeights.regular,
+    },
+  };
+};
+
+export const questionNumber = {
+  height: 32,
+};
+
+export const firstQuestion = css`
+  display: flex;
+}`;

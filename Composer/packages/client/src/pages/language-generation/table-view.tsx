@@ -21,7 +21,7 @@ import { lgUtil } from '@bfc/indexers';
 
 import { EditableField } from '../../components/EditableField';
 import { navigateTo } from '../../utils/navigation';
-import { actionButton, formCell } from '../language-understanding/styles';
+import { actionButton, formCell, editableFieldContainer } from '../language-understanding/styles';
 import { dispatcherState, lgFilesState, projectIdState, localeState, settingsState } from '../../recoilModel';
 import { languageListTemplates } from '../../components/MultiLanguage';
 import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
@@ -51,7 +51,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
   const activeDialog = dialogs.find(({ id }) => id === dialogId);
 
-  const [focusedIndex, setFocusedIndex] = useState(0);
+  //const [focusedIndex, setFocusedIndex] = useState(0);
 
   useEffect(() => {
     if (!file || isEmpty(file)) return;
@@ -79,7 +79,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         } as LgTemplate,
       };
       createLgTemplate(payload);
-      setFocusedIndex(file.templates.length);
+      //setFocusedIndex(file.templates.length);
     }
   }, [file]);
 
@@ -91,7 +91,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           templateName: name,
         };
         removeLgTemplate(payload);
-        setFocusedIndex(file.templates.findIndex((item) => item.name === name));
+        //setFocusedIndex(file.templates.findIndex((item) => item.name === name));
       }
     },
     [file]
@@ -107,7 +107,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           toTemplateName: resolvedName,
         };
         copyLgTemplate(payload);
-        setFocusedIndex(file.templates.length);
+        //setFocusedIndex(file.templates.length);
       }
     },
     [file]
@@ -198,6 +198,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
             <div data-is-focusable css={formCell}>
               <EditableField
                 ariaLabel={formatMessage(`Name is {name}`, { name: displayName })}
+                containerStyles={editableFieldContainer}
                 depth={0}
                 id={displayName}
                 name={displayName}
@@ -228,6 +229,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
               <EditableField
                 multiline
                 ariaLabel={formatMessage(`Response is {response}`, { response: text })}
+                containerStyles={editableFieldContainer}
                 depth={0}
                 id={text}
                 name={text}
@@ -259,6 +261,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
               <EditableField
                 multiline
                 ariaLabel={formatMessage(`Response is {response}`, { response: text })}
+                containerStyles={editableFieldContainer}
                 depth={0}
                 id={text}
                 name={text}
@@ -286,6 +289,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
               <EditableField
                 multiline
                 ariaLabel={formatMessage(`Response is {response}`, { response: text })}
+                containerStyles={editableFieldContainer}
                 depth={0}
                 id={text}
                 name={text}
@@ -425,7 +429,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           columns={getTableColums()}
           componentRef={listRef}
           getKey={getKeyCallback}
-          initialFocusedIndex={focusedIndex}
+          //initialFocusedIndex={focusedIndex}
           items={templatesToRender}
           // getKey={item => item.name}
           layoutMode={DetailsListLayoutMode.justified}

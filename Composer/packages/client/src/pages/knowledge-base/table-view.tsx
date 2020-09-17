@@ -37,7 +37,7 @@ import {
   qnaFilesState,
   projectIdState,
   localeState,
-  settingsState,
+  //settingsState,
 } from '../../recoilModel/atoms/botState';
 import { dispatcherState } from '../../recoilModel';
 import { getBaseName } from '../../utils/fileUtil';
@@ -45,7 +45,17 @@ import { EditableField } from '../../components/EditableField';
 import { classNames, AddTemplateButton } from '../../components/AllupviewComponets/styles';
 import { EditQnAModal } from '../../components/QnA/EditQnAFrom';
 
-import { formCell, content, addIcon, divider, rowDetails, icon, addAlternative } from './styles';
+import {
+  formCell,
+  content,
+  addIcon,
+  divider,
+  rowDetails,
+  icon,
+  addAlternative,
+  editableFieldAnswer,
+  editableFieldQuestion,
+} from './styles';
 
 const noOp = () => undefined;
 
@@ -66,7 +76,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const qnaFiles = useRecoilValue(qnaFilesState);
   const projectId = useRecoilValue(projectIdState);
   const locale = useRecoilValue(localeState);
-  const settings = useRecoilValue(settingsState);
+  //const settings = useRecoilValue(settingsState);
   const {
     // createQnAImport,
     removeQnAImport,
@@ -82,7 +92,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
   } = useRecoilValue(dispatcherState);
 
   // const { languages, defaultLanguage } = settings;
-  console.log(settings);
 
   const { dialogId } = props;
   const search = props.location?.search ?? '';
@@ -110,10 +119,25 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const [editQnAFile, setEditQnAFile] = useState<QnAFile | undefined>(undefined);
   const [focusedIndex, setFocusedIndex] = useState(-1);
   const [qnaSections, setQnASections] = useState<QnASectionItem[]>([]);
-
+  const [kthSectionIsCreatingQuestion, setCreatingQuestionInKthSection] = useState<number>(-1);
   const importedFileIds = qnaFile?.imports.map(({ id }) => getBaseName(id)) || [];
   const importedFiles = qnaFiles.filter(({ id }) => importedFileIds.includes(id));
   const importedSourceFiles = importedFiles.filter(({ id }) => id.endsWith('.source'));
+  const [isQnASectionsExpanded, setIsQnASectionsExpanded] = useState<boolean[]>([]);
+
+  useEffect(() => {
+    if (isEmpty(qnaFiles)) return;
+    const allSections = qnaFiles.reduce((result: any[], qnaFile) => {
+      const res = generateQnASections(qnaFile);
+      return result.concat(res);
+    }, []);
+    if (dialogId === 'all') {
+      setIsQnASectionsExpanded(Array(allSections.length).fill(false));
+    } else {
+      const dialogSections = allSections.filter((t) => t.dialogId === dialogId || importedFileIds.includes(t.fileId));
+      setIsQnASectionsExpanded(Array(dialogSections.length).fill(false));
+    }
+  }, [dialogId, projectId]);
 
   useEffect(() => {
     if (isEmpty(qnaFiles)) return;
@@ -125,14 +149,13 @@ const TableView: React.FC<TableViewProps> = (props) => {
         return result.concat(res);
       }, []);
     if (dialogId === 'all') {
-      setQnASections(
-        allSections.map((item, index) => {
-          return {
-            ...item,
-            expand: index === focusedIndex,
-          };
-        })
-      );
+      const sections = allSections.map((item, index) => {
+        return {
+          ...item,
+          expand: index === focusedIndex,
+        };
+      });
+      setQnASections(sections);
     } else {
       const dialogSections = allSections.filter((t) => importedFileIds.includes(t.fileId));
 
@@ -147,18 +170,18 @@ const TableView: React.FC<TableViewProps> = (props) => {
     }
   }, [qnaFiles, dialogId, projectId]);
 
-  const toggleExpandRow = (sectionId: string, expand?: boolean) => {
-    const newSections = qnaSections.map((item) => {
-      if (item.sectionId === sectionId) {
-        return {
-          ...item,
-          expand: expand === undefined ? !item.expand : expand,
-        };
-      } else {
-        return item;
-      }
-    });
-    setQnASections(newSections);
+  const toggleExpandRow = (index) => {
+    const newArray = [...isQnASectionsExpanded];
+    newArray[index] = !newArray[index];
+    setIsQnASectionsExpanded(newArray);
+  };
+
+  const expandRow = (index) => {
+    if (!isQnASectionsExpanded[index]) {
+      const newArray = [...isQnASectionsExpanded];
+      newArray[index] = true;
+      setIsQnASectionsExpanded(newArray);
+    }
   };
 
   const onUpdateQnAQuestion = (fileId: string, sectionId: string, questionId: string, content: string) => {
@@ -193,22 +216,26 @@ const TableView: React.FC<TableViewProps> = (props) => {
     actions.setMessage('item deleted');
     const sectionIndex = qnaSections.findIndex((item) => item.fileId === fileId);
     setFocusedIndex(sectionIndex);
-
     removeQnAPairs({
       id: fileId,
       sectionId,
     });
+    const newArray = [...isQnASectionsExpanded];
+    newArray.splice(sectionIndex, 1);
+    setIsQnASectionsExpanded(newArray);
   };
 
   const onCreateNewQnAPairs = (fileId: string | undefined) => {
     if (!fileId) return;
     const newQnAPair = qnaUtil.generateQnAPair();
-    const sectionIndex = qnaSections.findIndex((item) => item.fileId === fileId);
-    setFocusedIndex(sectionIndex + 1);
+    //const sectionIndex = qnaSections.findIndex((item) => item.fileId === fileId);
+    //setFocusedIndex(sectionIndex + 1);
     createQnAPairs({ id: fileId, content: newQnAPair });
+    const newArray = [false, ...isQnASectionsExpanded];
+    setIsQnASectionsExpanded(newArray);
   };
 
-  const onCreateNewQuestion = (fileId, sectionId) => {
+  const onCreateNewQuestion = (fileId, sectionId, content?: string) => {
     if (!fileId || !sectionId) return;
     const sectionIndex = qnaSections.findIndex((item) => item.sectionId === sectionId);
     setFocusedIndex(sectionIndex);
@@ -216,7 +243,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     const payload = {
       id: fileId,
       sectionId,
-      content: 'Add new question',
+      content: content || 'Add new question',
     };
     createQnAQuestion(payload);
   };
@@ -324,14 +351,14 @@ const TableView: React.FC<TableViewProps> = (props) => {
         minWidth: 40,
         maxWidth: 40,
         isResizable: true,
-        onRender: (item) => {
+        onRender: (item, index) => {
           return (
             <IconButton
               ariaLabel="ChevronDown"
-              iconProps={{ iconName: item.expand ? 'ChevronDown' : 'ChevronRight' }}
+              iconProps={{ iconName: isQnASectionsExpanded[index] ? 'ChevronDown' : 'ChevronRight' }}
               styles={icon}
               title="ChevronDown"
-              onClick={() => toggleExpandRow(item.sectionId)}
+              onClick={() => toggleExpandRow(index)}
             />
           );
         },
@@ -344,11 +371,11 @@ const TableView: React.FC<TableViewProps> = (props) => {
         maxWidth: 450,
         isResizable: true,
         data: 'string',
-        onRender: (item: QnASectionItem) => {
+        onRender: (item: QnASectionItem, index) => {
           const questions = item.Questions;
-          const showingQuestions = item.expand ? questions : questions.slice(0, limitedNumber);
+          const showingQuestions = isQnASectionsExpanded[index] ? questions : questions.slice(0, limitedNumber);
           //This question content of this qna Section is '#?'
-          // const isQuestionEmpty = showingQuestions.length === 1 && showingQuestions[0].content === '';
+          const isQuestionEmpty = showingQuestions.length === 1 && showingQuestions[0].content === '';
           const isSourceSectionInDialog = item.fileId.endsWith('.source') && !dialogId.endsWith('.source');
           const isAllowEdit = dialogId !== 'all' && !isSourceSectionInDialog;
 
@@ -356,7 +383,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
             <ActionButton
               iconProps={{ iconName: 'Add', styles: addIcon }}
               styles={addAlternative}
-              onClick={(e) => onCreateNewQuestion(item.fileId, item.sectionId)}
+              onClick={(e) => setCreatingQuestionInKthSection(index)}
             >
               {formatMessage('add alternative phrasing')}
             </ActionButton>
@@ -364,15 +391,24 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
           return (
             <div data-is-focusable css={formCell}>
-              {showingQuestions.map((question) => {
+              {showingQuestions.map((question, qIndex: number) => {
                 return (
                   <EditableField
                     key={question.id}
+                    enableIcon
                     ariaLabel={formatMessage(`Question is {content}`, { content: question.content })}
                     depth={0}
                     disabled={isAllowEdit}
+                    extraContent={
+                      qIndex === 0 && !isQnASectionsExpanded[index] && !isQuestionEmpty ? ` (${questions.length})` : ''
+                    }
+                    iconProps={{
+                      iconName: 'Cancel',
+                    }}
                     id={question.id}
                     name={question.content}
+                    placeholder={'add new question'}
+                    styles={editableFieldQuestion(qIndex)}
                     value={question.content}
                     onBlur={(_id, value) => {
                       const newValue = value?.trim().replace(/^#/, '');
@@ -382,11 +418,35 @@ const TableView: React.FC<TableViewProps> = (props) => {
                       }
                     }}
                     onChange={() => {}}
+                    onFocus={() => expandRow(index)}
                   />
                 );
               })}
-              {!item.expand && <span> ({questions.length})</span>}
-              {addQuestionButton}
+
+              {kthSectionIsCreatingQuestion === index ? (
+                <EditableField
+                  key={''}
+                  ariaLabel={formatMessage('Question is empty now')}
+                  depth={0}
+                  disabled={isAllowEdit}
+                  id={'New Question'}
+                  name={'New Question'}
+                  placeholder={'add new question'}
+                  styles={editableFieldQuestion(-1)}
+                  value={''}
+                  onBlur={(_id, value) => {
+                    const newValue = value?.trim().replace(/^#/, '');
+                    if (newValue) {
+                      onCreateNewQuestion(item.fileId, item.sectionId, newValue);
+                    }
+                    setCreatingQuestionInKthSection(-1);
+                  }}
+                  onChange={() => {}}
+                  onFocus={() => expandRow(index)}
+                />
+              ) : (
+                addQuestionButton
+              )}
             </div>
           );
         },
@@ -395,22 +455,30 @@ const TableView: React.FC<TableViewProps> = (props) => {
         key: 'Answer',
         name: formatMessage('Answer'),
         fieldName: 'answer',
-        minWidth: 250,
-        maxWidth: 450,
+        minWidth: 350,
+        maxWidth: 550,
         isResizable: true,
         data: 'string',
-        onRender: (item) => {
+        onRender: (item, index) => {
           const isSourceSectionInDialog = item.fileId.endsWith('.source') && !dialogId.endsWith('.source');
           const isAllowEdit = dialogId !== 'all' && !isSourceSectionInDialog;
           return (
             <div data-is-focusable css={formCell}>
               <EditableField
+                enableIcon
                 multiline
                 ariaLabel={formatMessage(`Answer is {content}`, { content: item.Answer })}
+                autoAdjustHeight={isQnASectionsExpanded[index]}
                 depth={0}
                 disabled={isAllowEdit}
+                iconProps={{
+                  iconName: 'Cancel',
+                }}
                 id={item.sectionId}
                 name={item.Answer}
+                placeholder={'add new answer'}
+                resizable={false}
+                styles={editableFieldAnswer(isQnASectionsExpanded[index])}
                 value={item.Answer}
                 onBlur={(_id, value) => {
                   const newValue = value?.trim().replace(/^#/, '');
@@ -420,6 +488,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                   }
                 }}
                 onChange={() => {}}
+                onFocus={() => expandRow(index)}
               />
             </div>
           );
@@ -585,10 +654,10 @@ const TableView: React.FC<TableViewProps> = (props) => {
             collapseAllVisibility: CollapseAllVisibility.hidden,
           }}
           groups={getGroups()}
-          initialFocusedIndex={focusedIndex}
+          //initialFocusedIndex={focusedIndex}
           items={qnaSections}
           layoutMode={DetailsListLayoutMode.justified}
-          selectionMode={SelectionMode.none}
+          selectionMode={SelectionMode.single}
           onRenderDetailsHeader={onRenderDetailsHeader}
           onRenderRow={onRenderRow}
         />

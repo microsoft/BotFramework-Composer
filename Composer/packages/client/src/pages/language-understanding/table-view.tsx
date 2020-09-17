@@ -27,7 +27,7 @@ import { dispatcherState, luFilesState, projectIdState, localeState, settingsSta
 import { navigateTo } from '../../utils/navigation';
 import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 
-import { formCell, luPhraseCell, tableCell } from './styles';
+import { formCell, luPhraseCell, tableCell, editableFieldContainer } from './styles';
 interface TableViewProps extends RouteComponentProps<{}> {
   dialogId: string;
 }
@@ -168,6 +168,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
               <EditableField
                 multiline
                 ariaLabel={formatMessage(`Name is {name}`, { name: displayName })}
+                containerStyles={editableFieldContainer}
                 depth={0}
                 id={displayName}
                 name={displayName}
@@ -198,6 +199,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
               <EditableField
                 multiline
                 ariaLabel={formatMessage(`Sample Phrases are {phrases}`, { phrases: text })}
+                containerStyles={editableFieldContainer}
                 depth={0}
                 id={text}
                 name={text}
@@ -229,6 +231,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
               <EditableField
                 multiline
                 ariaLabel={formatMessage(`Sample Phrases are {phrases}`, { phrases: text })}
+                containerStyles={editableFieldContainer}
                 depth={0}
                 id={text}
                 name={text}
@@ -259,6 +262,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
               <EditableField
                 multiline
                 ariaLabel={formatMessage(`Sample Phrases are {phrases}`, { phrases: text })}
+                containerStyles={editableFieldContainer}
                 depth={0}
                 id={text}
                 name={text}
