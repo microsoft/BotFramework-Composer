@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+
 import fs from 'fs';
+import path from 'path';
 
 import { existsSync, writeJsonSync, readJsonSync } from 'fs-extra';
 
@@ -12,7 +14,7 @@ jest.mock('fs-extra', () => ({
   writeJsonSync: jest.fn(),
 }));
 
-const manifestPath = './__extensions__.json';
+const manifestPath = path.resolve(__dirname, '../../../__manifest__.json');
 
 afterAll(() => {
   if (fs.existsSync(manifestPath)) {
