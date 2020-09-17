@@ -28,7 +28,7 @@ import useNotifications from '../../pages/notifications/useNotifications';
 import { navigateTo, openInEmulator } from '../../utils/navigation';
 import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 
-import { isConfigComplete, needsPublish } from './../../utils/buildUtil';
+import { isBuildConfigComplete, needsBuild } from './../../utils/buildUtil';
 import { PublishDialog } from './publishDialog';
 import { ErrorCallout } from './errorCallout';
 import { EmulatorOpenButton } from './emulatorOpenButton';
@@ -151,15 +151,14 @@ export const TestController: React.FC = () => {
     }
   }
 
-  async function handlePublish(config: IPublishConfig) {
+  async function handleBuild(config: IPublishConfig) {
     setBotStatus(BotStatus.publishing);
     dismissDialog();
     const { luis, qna } = config;
-    const endpointKey = settings.qna?.endpointKey;
     await setSettings(projectId, {
       ...settings,
       luis: luis,
-      qna: Object.assign({}, settings.qna, qna, { endpointKey }),
+      qna: Object.assign({}, settings.qna, qna),
     });
     await build(luis, qna, projectId);
   }
@@ -179,22 +178,18 @@ export const TestController: React.FC = () => {
       {},
       {
         luis: settings.luis,
-        qna: {
-          subscriptionKey: settings.qna?.subscriptionKey,
-          qnaRegion: settings.qna?.qnaRegion,
-          endpointKey: settings.qna?.endpointKey,
-        },
+        qna: settings.qna,
       }
     );
-    if (!isAbsHosted() && needsPublish(dialogs)) {
+    if (!isAbsHosted() && needsBuild(dialogs)) {
       if (
         botStatus === BotStatus.failed ||
         botStatus === BotStatus.pending ||
-        !isConfigComplete(config, dialogs, luFiles, qnaFiles)
+        !isBuildConfigComplete(config, dialogs, luFiles, qnaFiles)
       ) {
         openDialog();
       } else {
-        await handlePublish(config);
+        await handleBuild(config);
       }
     } else {
       await handleLoadBot();
@@ -255,7 +250,7 @@ export const TestController: React.FC = () => {
           config={publishDialogConfig}
           isOpen={modalOpen}
           onDismiss={dismissDialog}
-          onPublish={handlePublish}
+          onPublish={handleBuild}
         />
       )}
     </Fragment>
