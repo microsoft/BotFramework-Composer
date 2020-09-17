@@ -230,6 +230,8 @@ export const projectDispatcher = () => {
       gotoSnapshot(newSnapshot);
 
       if (jump && projectId) {
+        // TODO: Refactor to set it always on init to the root bot
+        set(currentProjectIdState, projectId);
         let url = `/bot/${projectId}/dialogs/${mainDialog}`;
         if (templateId === QnABotTemplateId) {
           url = `/bot/${projectId}/knowledge-base/${mainDialog}`;
