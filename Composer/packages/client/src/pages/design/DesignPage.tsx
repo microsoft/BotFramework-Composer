@@ -48,9 +48,7 @@ import {
   showAddSkillDialogModalState,
   actionsSeedState,
   localeState,
-  qnaFilesState,
 } from '../../recoilModel';
-import { getBaseName } from '../../utils/fileUtil';
 import ImportQnAFromUrlModal from '../knowledge-base/ImportQnAFromUrlModal';
 import { triggerNotSupported } from '../../utils/dialogValidator';
 import { undoFunctionState, undoVersionState } from '../../recoilModel/undo/history';
@@ -121,7 +119,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState(projectId));
   const actionsSeed = useRecoilValue(actionsSeedState(projectId));
   const locale = useRecoilValue(localeState(projectId));
-  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   const undoFunction = useRecoilValue(undoFunctionState(projectId));
   const undoVersion = useRecoilValue(undoVersionState(projectId));
 
@@ -139,7 +136,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     selectTo,
     selectAndFocus,
     addSkillDialogCancel,
-    createQnAFile,
     exportToZip,
     onboardingAddCoachMarkRef,
     importQnAFromUrls,
@@ -184,15 +180,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       updateDialog({ id: dialogId, content: dialogContent, projectId });
     }
   }, [dialogId]);
-
-  // migration: add qna file for dialog
-  useEffect(() => {
-    dialogs.forEach(async (dialog) => {
-      if (!qnaFiles || qnaFiles.length === 0 || !qnaFiles.find((qnaFile) => getBaseName(qnaFile.id) === dialog.id)) {
-        await createQnAFile({ id: dialog.id, content: '', projectId });
-      }
-    });
-  }, [dialogs]);
 
   useEffect(() => {
     if (location && props.dialogId && props.projectId) {
@@ -458,20 +445,20 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     const items =
       dialogs.length > 0
         ? breadcrumb.reduce((result, item, index) => {
-            const { dialogId, selected, focused } = item;
-            const text = getBreadcrumbLabel(dialogs, dialogId, selected, focused);
-            if (text) {
-              result.push({
-                // @ts-ignore
-                index,
-                isRoot: !selected && !focused,
-                text,
-                ...item,
-                onClick: handleBreadcrumbItemClick,
-              });
-            }
-            return result;
-          }, [] as IBreadcrumbItem[])
+          const { dialogId, selected, focused } = item;
+          const text = getBreadcrumbLabel(dialogs, dialogId, selected, focused);
+          if (text) {
+            result.push({
+              // @ts-ignore
+              index,
+              isRoot: !selected && !focused,
+              text,
+              ...item,
+              onClick: handleBreadcrumbItemClick,
+            });
+          }
+          return result;
+        }, [] as IBreadcrumbItem[])
         : [];
     return (
       <div style={{ display: 'flex', justifyContent: 'space-between', height: '65px' }}>
@@ -646,14 +633,14 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                     />
                   )
                 ) : (
-                  <EditorExtension plugins={pluginConfig} projectId={projectId} shell={shellForFlowEditor}>
-                    <VisualEditor
-                      openNewTriggerModal={openNewTriggerModal}
-                      onBlur={() => setFlowEditorFocused(false)}
-                      onFocus={() => setFlowEditorFocused(true)}
-                    />
-                  </EditorExtension>
-                )}
+                      <EditorExtension plugins={pluginConfig} projectId={projectId} shell={shellForFlowEditor}>
+                        <VisualEditor
+                          openNewTriggerModal={openNewTriggerModal}
+                          onBlur={() => setFlowEditorFocused(false)}
+                          onFocus={() => setFlowEditorFocused(true)}
+                        />
+                      </EditorExtension>
+                    )}
               </div>
               <EditorExtension plugins={pluginConfig} projectId={projectId} shell={shellForPropertyEditor}>
                 <PropertyEditor key={focusPath + undoVersion} />
