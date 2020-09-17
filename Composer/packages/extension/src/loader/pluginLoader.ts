@@ -82,12 +82,12 @@ export class PluginLoader {
     }
   }
 
-  public async loadPluginFromFile(path: string) {
-    const packageJSON = fs.readFileSync(path, 'utf8');
+  public async loadPluginFromFile(packageJsonPath: string) {
+    const packageJSON = fs.readFileSync(packageJsonPath, 'utf8');
     const json = JSON.parse(packageJSON);
 
     if (json.extendsComposer) {
-      const modulePath = path.replace(/package\.json$/, '');
+      const modulePath = path.dirname(packageJsonPath);
       try {
         // eslint-disable-next-line security/detect-non-literal-require, @typescript-eslint/no-var-requires
         const thisPlugin = require(modulePath);
