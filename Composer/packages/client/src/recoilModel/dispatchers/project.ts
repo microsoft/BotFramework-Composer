@@ -145,12 +145,28 @@ export const projectDispatcher = () => {
   const initBotState = async (callbackHelpers: CallbackInterface, data: any, jump: boolean, templateId: string) => {
     const { snapshot, gotoSnapshot } = callbackHelpers;
     const curLocation = await snapshot.getPromise(locationState);
-    const { files, botName, botEnvironment, location, schemas, settings, id: projectId, diagnostics, skills } = data;
+    const {
+      files,
+      botName,
+      botEnvironment,
+      location,
+      schemas,
+      settings,
+      id: projectId,
+      diagnostics,
+      skills: skillContent,
+    } = data;
     const storedLocale = languageStorage.get(botName)?.locale;
     const locale = settings.languages.includes(storedLocale) ? storedLocale : settings.defaultLanguage;
 
     // cache current projectId in session, resolve page refresh caused state lost.
     projectIdCache.set(projectId);
+
+    const mergedSettings = mergeLocalStorage(projectId, settings);
+    if (Array.isArray(mergedSettings.skill)) {
+      const skillsArr = mergedSettings.skill.map((skillData) => ({ ...skillData }));
+      mergedSettings.skill = convertSkillsToDictionary(skillsArr);
+    }
 
     try {
       schemas.sdk.content = processSchema(projectId, schemas.sdk.content);
@@ -161,10 +177,12 @@ export const projectDispatcher = () => {
     }
 
     try {
-      const { dialogs, dialogSchemas, luFiles, lgFiles, qnaFiles, skillManifestFiles } = indexer.index(
+      const { dialogs, dialogSchemas, luFiles, lgFiles, qnaFiles, skillManifestFiles, skills } = indexer.index(
         files,
         botName,
-        locale
+        locale,
+        skillContent,
+        mergedSettings
       );
 
       let mainDialog = '';
@@ -199,15 +217,6 @@ export const projectDispatcher = () => {
         set(botOpeningState, false);
         set(projectIdState, projectId);
         refreshLocalStorage(projectId, settings);
-        const mergedSettings = mergeLocalStorage(projectId, settings);
-        if (Array.isArray(mergedSettings.skill)) {
-          const skillsArr = mergedSettings.skill.map((skillData) => {
-            return {
-              ...skillData,
-            };
-          });
-          mergedSettings.skill = convertSkillsToDictionary(skillsArr);
-        }
         set(settingsState, mergedSettings);
       });
       gotoSnapshot(newSnapshot);

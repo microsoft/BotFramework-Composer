@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useMemo, useRef } from 'react';
-import { ShellApi, ShellData, Shell, fetchFromSettings } from '@bfc/shared';
+import { ShellApi, ShellData, Shell, fetchFromSettings, SkillSetting } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
@@ -72,7 +72,7 @@ export function useShell(source: EventSource): Shell {
     updateUserSettings,
     setMessage,
     displayManifestModal,
-    updateSkillsInSetting,
+    updateSkill,
   } = useRecoilValue(dispatcherState);
   const lgApi = useLgApi();
   const luApi = useLuApi();
@@ -189,13 +189,13 @@ export function useShell(source: EventSource): Shell {
     redo,
     commitChanges,
     addCoachMarkRef: onboardingAddCoachMarkRef,
-    updateUserSettings: updateUserSettings,
+    updateUserSettings,
     announce: setMessage,
-    displayManifestModal: displayManifestModal,
+    displayManifestModal,
     updateDialogSchema,
-    skillsInSettings: {
+    skillsSettings: {
       get: (path: string) => fetchFromSettings(path, settings),
-      set: updateSkillsInSetting,
+      set: (id: string, skill: SkillSetting) => updateSkill(projectId, id, skill),
     },
   };
 

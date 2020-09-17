@@ -22,24 +22,24 @@ jest.mock('../../src/components/Modal/dialogStyle', () => ({}));
 
 const skills: Skill[] = [
   {
+    id: 'email-skill',
+    content: {},
     manifestUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json',
     name: 'Email-Skill',
     description: 'The Email skill provides email related capabilities and supports Office and Google calendars.',
     endpointUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/api/messages',
     msAppId: '79432da8-0f7e-4a16-8c23-ddbba30ae85d',
-    protocol: '',
     endpoints: [],
-    body: '',
   },
   {
+    id: 'point-of-interest-skill',
+    content: {},
     manifestUrl: 'https://hualxielearn2-snskill.azurewebsites.net/manifest/manifest-1.0.json',
     name: 'Point Of Interest Skill',
     description: 'The Point of Interest skill provides PoI search capabilities leveraging Azure Maps and Foursquare.',
     endpointUrl: 'https://hualxielearn2-snskill.azurewebsites.net/api/messages',
     msAppId: 'e2852590-ea71-4a69-9e44-e74b5b6cbe89',
-    protocol: '',
     endpoints: [],
-    body: '',
   },
 ];
 
@@ -225,7 +225,9 @@ describe('<SkillForm />', () => {
           manifestUrl: 'Validating',
         })
       );
-      expect(httpClient.post).toBeCalledWith('/projects/123/skill/check', { url: formData.manifestUrl });
+      expect(httpClient.post).toBeCalledWith('/projects/123/skill/retrieve-skill-manifest', {
+        url: formData.manifestUrl,
+      });
       expect(setSkillManifest).toBeCalledWith('skill manifest');
       expect(setValidationState).toBeCalledWith(
         expect.objectContaining({
@@ -259,7 +261,9 @@ describe('<SkillForm />', () => {
           manifestUrl: 'Validating',
         })
       );
-      expect(httpClient.post).toBeCalledWith('/projects/123/skill/check', { url: formData.manifestUrl });
+      expect(httpClient.post).toBeCalledWith('/projects/123/skill//retrieve-skill-manifest', {
+        url: formData.manifestUrl,
+      });
       expect(setSkillManifest).not.toBeCalled();
       expect(setValidationState).toBeCalledWith(
         expect.objectContaining({
