@@ -39,6 +39,7 @@ import {
   botProjectsSpaceState,
   projectMetaDataState,
   filePersistenceState,
+  currentProjectIdState,
 } from '../atoms';
 import { QnABotTemplateId } from '../../constants';
 import FilePersistence from '../persistence/FilePersistence';
@@ -360,6 +361,7 @@ export const projectDispatcher = () => {
       reset(filePersistenceState(projectId));
       reset(undoHistoryState(projectId));
       reset(botProjectsSpaceState);
+      reset(currentProjectIdState);
     } catch (e) {
       logMessage(callbackHelpers, e.message);
     }
