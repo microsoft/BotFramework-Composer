@@ -131,15 +131,25 @@ describe('<SkillForm />', () => {
     expect(onSubmit).not.toBeCalled();
   });
 
+  let formDataErrors;
+  let projectId;
+  let validationState;
+  let setFormDataErrors;
+  let setSkillManifest;
+  let setValidationState;
+
+  beforeEach(() => {
+    formDataErrors = {};
+    projectId = '123';
+    validationState = {};
+    setFormDataErrors = jest.fn();
+    setSkillManifest = jest.fn();
+    setValidationState = jest.fn();
+  });
+
   describe('validateManifestUrl', () => {
     it('should set the error for an invalid url', async () => {
       const formData = { manifestUrl: 'invalid url' };
-      const formDataErrors = {};
-      const projectId = '123';
-      const validationState = {};
-      const setFormDataErrors = jest.fn();
-      const setSkillManifest = jest.fn();
-      const setValidationState = jest.fn();
 
       await validateManifestUrl({
         formData,
@@ -162,13 +172,9 @@ describe('<SkillForm />', () => {
 
   describe('validateManifestUrl', () => {
     it('should set an error for duplicate skill manifest url', () => {
-      const formData = { manifestUrl: skills[0].manifestUrl };
-      const formDataErrors = {};
-      const projectId = '123';
-      const validationState = {};
-      const setFormDataErrors = jest.fn();
-      const setSkillManifest = jest.fn();
-      const setValidationState = jest.fn();
+      const formData = {
+        manifestUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/MANIFEST/MANIFEST-1.0.json',
+      };
 
       validateManifestUrl({
         formData,
@@ -190,12 +196,6 @@ describe('<SkillForm />', () => {
 
     it('should set an error for a missing manifest url', () => {
       const formData = {};
-      const formDataErrors = {};
-      const projectId = '123';
-      const validationState = {};
-      const setFormDataErrors = jest.fn();
-      const setSkillManifest = jest.fn();
-      const setValidationState = jest.fn();
 
       validateManifestUrl({
         formData,
@@ -216,11 +216,6 @@ describe('<SkillForm />', () => {
 
       const formData = { manifestUrl: 'https://skill' };
       const formDataErrors = { manifestUrl: 'error' };
-      const projectId = '123';
-      const validationState = {};
-      const setFormDataErrors = jest.fn();
-      const setSkillManifest = jest.fn();
-      const setValidationState = jest.fn();
 
       await validateManifestUrl({
         formData,
@@ -255,12 +250,6 @@ describe('<SkillForm />', () => {
       (httpClient.post as jest.Mock) = jest.fn().mockRejectedValue({ message: 'skill manifest' });
 
       const formData = { manifestUrl: 'https://skill' };
-      const formDataErrors = {};
-      const projectId = '123';
-      const validationState = {};
-      const setFormDataErrors = jest.fn();
-      const setSkillManifest = jest.fn();
-      const setValidationState = jest.fn();
 
       await validateManifestUrl({
         formData,
@@ -295,10 +284,6 @@ describe('<SkillForm />', () => {
   describe('validateName', () => {
     it('should set error for invalid name', () => {
       const formData = { name: 'Email Skill' };
-      const formDataErrors = {};
-      const setFormDataErrors = jest.fn();
-      const setValidationState = jest.fn();
-      const validationState = {};
 
       validateName({
         formData,
@@ -315,11 +300,7 @@ describe('<SkillForm />', () => {
     });
 
     it('should set error for duplicate name', () => {
-      const formData = { name: 'Email-Skill' };
-      const formDataErrors = {};
-      const setFormDataErrors = jest.fn();
-      const setValidationState = jest.fn();
-      const validationState = {};
+      const formData = { name: 'email-skill' };
 
       validateName({
         formData,
@@ -337,10 +318,6 @@ describe('<SkillForm />', () => {
   describe('validateEndpoint', () => {
     it('should set an error for missing msAppId', () => {
       const formData = { endpointUrl: 'https://skill/api/messages' };
-      const formDataErrors = {};
-      const setFormDataErrors = jest.fn();
-      const setValidationState = jest.fn();
-      const validationState = {};
 
       validateEndpoint({
         formData,
@@ -360,10 +337,6 @@ describe('<SkillForm />', () => {
 
     it('should set an error for missing endpointUrl', () => {
       const formData = { msAppId: '00000000-0000-0000-0000-000000000000' };
-      const formDataErrors = {};
-      const setFormDataErrors = jest.fn();
-      const setValidationState = jest.fn();
-      const validationState = {};
 
       validateEndpoint({
         formData,
@@ -383,10 +356,6 @@ describe('<SkillForm />', () => {
 
     it('should set an error for malformed msAppId', () => {
       const formData = { endpointUrl: 'https://skill/api/messages', msAppId: 'malformed app id' };
-      const formDataErrors = {};
-      const setFormDataErrors = jest.fn();
-      const setValidationState = jest.fn();
-      const validationState = {};
 
       validateEndpoint({
         formData,
@@ -406,10 +375,6 @@ describe('<SkillForm />', () => {
 
     it('should set an error for malformed endpointUrl', () => {
       const formData = { endpointUrl: 'malformed endpoint', msAppId: '00000000-0000-0000-0000-000000000000' };
-      const formDataErrors = {};
-      const setFormDataErrors = jest.fn();
-      const setValidationState = jest.fn();
-      const validationState = {};
 
       validateEndpoint({
         formData,
@@ -429,10 +394,6 @@ describe('<SkillForm />', () => {
 
     it('should not set an error', () => {
       const formData = { endpointUrl: 'https://skill/api/messages', msAppId: '00000000-0000-0000-0000-000000000000' };
-      const formDataErrors = {};
-      const setFormDataErrors = jest.fn();
-      const setValidationState = jest.fn();
-      const validationState = {};
 
       validateEndpoint({
         formData,

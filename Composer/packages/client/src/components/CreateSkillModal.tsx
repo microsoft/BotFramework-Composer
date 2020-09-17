@@ -77,7 +77,7 @@ export const validateManifestUrl = async ({
     setFormDataErrors({ ...errors, manifestUrl: formatMessage('Please input a manifest Url') });
   } else if (!urlRegex.test(manifestUrl)) {
     setFormDataErrors({ ...errors, manifestUrl: formatMessage('Url should start with http[s]://') });
-  } else if (skills.some((skill) => skill.manifestUrl === manifestUrl)) {
+  } else if (skills.some((skill) => skill.manifestUrl.toLowerCase() === manifestUrl.toLowerCase())) {
     setFormDataErrors({ ...errors, manifestUrl: formatMessage('Duplicate skill manifest Url') });
   } else {
     try {
@@ -106,7 +106,7 @@ export const validateName = ({
 
   if (name && !skillNameRegex.test(name)) {
     setFormDataErrors({ ...errors, name: formatMessage('Name cannot include special characters or spaces') });
-  } else if (name && skills.some((skill) => skill.name === name)) {
+  } else if (name && skills.some((skill) => skill.name.toLowerCase() === name.toLowerCase())) {
     setFormDataErrors({ ...errors, name: formatMessage('Duplicate skill name') });
   } else {
     setFormDataErrors(errors);
