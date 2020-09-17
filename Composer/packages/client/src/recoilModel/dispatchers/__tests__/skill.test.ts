@@ -146,7 +146,12 @@ describe('skill dispatcher', () => {
 
   it('updateSkill', async () => {
     await act(async () => {
-      dispatcher.updateSkill(projectId, 'id1', { msAppId: 'test', manifestUrl: 'test', endpointUrl: 'test', name: 'test' });
+      dispatcher.updateSkill(projectId, 'id1', {
+        msAppId: 'test',
+        manifestUrl: 'test',
+        endpointUrl: 'test',
+        name: 'test',
+      });
     });
 
     expect(renderedComponent.current.skills[0]).toEqual(

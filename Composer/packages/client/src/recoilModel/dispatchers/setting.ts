@@ -22,10 +22,10 @@ export const setSettingState = async (
   settings: DialogSetting
 ) => {
   const { set, snapshot } = callbackHelpers;
-  const previousSettings = await snapshot.getPromise(settingsState);
+  const previousSettings = await snapshot.getPromise(settingsState(projectId));
 
   if (!isEqual(settings.skill, previousSettings.skill)) {
-    const skills = await snapshot.getPromise(skillsState);
+    const skills = await snapshot.getPromise(skillsState(projectId));
     const skillContent = await Promise.all(
       keys(settings.skill).map(async (id) => {
         if (settings?.skill?.[id]?.manifestUrl !== previousSettings?.skill?.[id]?.manifestUrl) {
@@ -45,7 +45,7 @@ export const setSettingState = async (
       })
     );
 
-    set(skillsState, skillIndexer.index(skillContent, settings.skill));
+    set(skillsState(projectId), skillIndexer.index(skillContent, settings.skill));
   }
 
   // set value in local storage

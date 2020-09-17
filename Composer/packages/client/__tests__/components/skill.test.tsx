@@ -223,7 +223,7 @@ describe('<SkillForm />', () => {
           manifestUrl: 'Validating',
         })
       );
-      expect(httpClient.post).toBeCalledWith('/projects/123/skill/retrieve-skill-manifest', {
+      expect(httpClient.post).toBeCalledWith(`/projects/${projectId}/skill/retrieve-skill-manifest`, {
         url: formData.manifestUrl,
       });
       expect(setSkillManifest).toBeCalledWith('skill manifest');
@@ -259,7 +259,7 @@ describe('<SkillForm />', () => {
           manifestUrl: 'Validating',
         })
       );
-      expect(httpClient.post).toBeCalledWith('/projects/123/skill/retrieve-skill-manifest', {
+      expect(httpClient.post).toBeCalledWith(`/projects/${projectId}/skill/retrieve-skill-manifest`, {
         url: formData.manifestUrl,
       });
       expect(setSkillManifest).not.toBeCalled();

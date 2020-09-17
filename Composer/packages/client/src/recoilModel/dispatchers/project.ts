@@ -143,6 +143,7 @@ const initQnaFilesStatus = (projectId: string, qnaFiles: QnAFile[], dialogs: Dia
   );
   return updateQnaFilesStatus(projectId, qnaFiles);
 };
+
 export const projectDispatcher = () => {
   const initBotState = async (
     callbackHelpers: CallbackInterface,
@@ -152,7 +153,6 @@ export const projectDispatcher = () => {
     qnaKbUrls?: string[]
   ) => {
     const { snapshot, gotoSnapshot, set } = callbackHelpers;
-    const curLocation = await snapshot.getPromise(locationState(projectId));
     const {
       files,
       botName,
@@ -164,6 +164,7 @@ export const projectDispatcher = () => {
       diagnostics,
       skills: skillContent,
     } = data;
+    const curLocation = await snapshot.getPromise(locationState(projectId));
     const storedLocale = languageStorage.get(botName)?.locale;
     const locale = settings.languages.includes(storedLocale) ? storedLocale : settings.defaultLanguage;
 
