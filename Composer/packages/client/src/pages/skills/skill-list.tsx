@@ -115,7 +115,11 @@ const columns: IColumn[] = [
   },
 ];
 
-const SkillList: React.FC = () => {
+interface SkillListProps {
+  projectId: string;
+}
+
+const SkillList: React.FC<SkillListProps> = ({ projectId }) => {
   const { removeSkill, updateSkill } = useRecoilValue(dispatcherState);
   const skills = useRecoilValue(skillsState);
 
@@ -128,18 +132,18 @@ const SkillList: React.FC = () => {
   };
 
   const handleEditSkill = (targetId) => (skillData) => {
-    updateSkill({ skillData, targetId });
+    updateSkill(projectId, { skillData, targetId });
   };
 
   const items = useMemo(
     () =>
       skills.map((skill, index) => ({
         skill,
-        onDelete: () => removeSkill(skill.manifestUrl),
+        onDelete: () => removeSkill(projectId, skill.manifestUrl),
         onViewManifest: () => handleViewManifest(skill),
         onEditSkill: handleEditSkill(index),
       })),
-    [skills]
+    [skills, projectId]
   );
 
   const onDismissManifest = () => {

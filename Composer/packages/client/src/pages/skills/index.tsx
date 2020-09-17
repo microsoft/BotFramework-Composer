@@ -49,7 +49,7 @@ const Skills: React.FC<RouteComponentProps> = () => {
 
   const onSubmitForm = useCallback(
     (skill: Skill) => {
-      addSkill(skill);
+      addSkill(projectId, skill);
       setShowAddSkillDialogModal(false);
     },
     [projectId]
@@ -76,7 +76,7 @@ const Skills: React.FC<RouteComponentProps> = () => {
           skillHostEndpoint={settings.skillHostEndpoint as string | undefined}
         />
       </div>
-      <SkillList />
+      <SkillList projectId={projectId} />
       {showAddSkillDialogModal && (
         <CreateSkillModal projectId={projectId} onDismiss={onDismissForm} onSubmit={onSubmitForm} />
       )}

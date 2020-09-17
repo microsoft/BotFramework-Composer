@@ -132,7 +132,7 @@ describe('skill dispatcher', () => {
 
   it('addsSkill', async () => {
     await act(async () => {
-      dispatcher.addSkill(makeTestSkill(3));
+      dispatcher.addSkill('123', makeTestSkill(3));
     });
     expect(renderedComponent.current.showAddSkillDialogModal).toBe(false);
     expect(renderedComponent.current.onAddSkillDialogComplete.func).toBeUndefined();
@@ -141,7 +141,7 @@ describe('skill dispatcher', () => {
 
   it('updateSkill', async () => {
     await act(async () => {
-      dispatcher.updateSkill({
+      dispatcher.updateSkill('123', {
         targetId: 0,
         skillData: makeTestSkill(100),
       });
@@ -153,7 +153,7 @@ describe('skill dispatcher', () => {
 
   it('removeSkill', async () => {
     await act(async () => {
-      dispatcher.removeSkill(makeTestSkill(1).manifestUrl);
+      dispatcher.removeSkill('123', makeTestSkill(1).manifestUrl);
     });
     expect(renderedComponent.current.skills).not.toContain(makeTestSkill(1));
   });

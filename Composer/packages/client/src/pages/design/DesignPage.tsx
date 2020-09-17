@@ -671,7 +671,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           />
         )}
         {showAddSkillDialogModal && (
-          <CreateSkillModal projectId={projectId} onDismiss={addSkillDialogCancel} onSubmit={addSkill} />
+          <CreateSkillModal
+            projectId={projectId}
+            onDismiss={addSkillDialogCancel}
+            onSubmit={(skill) => addSkill(projectId, skill)}
+          />
         )}
         {exportSkillModalVisible && (
           <ExportSkillModal
