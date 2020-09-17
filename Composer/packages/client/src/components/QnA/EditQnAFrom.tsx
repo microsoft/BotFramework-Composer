@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import React from 'react';
 import { QnAFile } from '@bfc/shared';
 
-import { getQnAFileUrlOption } from '../../utils/qnaUtil';
+import { isQnAFileCreatedFromUrl } from '../../utils/qnaUtil';
 
 import EditQnAFromScratchModal, { EditQnAFromScratchFormData } from './EditQnAFromScratchModal';
 import EditQnAFromUrlModal, { EditQnAFromUrlFormData } from './EditQnAFromUrlModal';
@@ -19,9 +19,7 @@ interface EditQnAModalProps {
 }
 
 export const EditQnAModal: React.FC<EditQnAModalProps> = (props) => {
-  const url = getQnAFileUrlOption(props.qnaFile);
-
-  if (url) {
+  if (isQnAFileCreatedFromUrl(props.qnaFile)) {
     return <EditQnAFromUrlModal {...props}></EditQnAFromUrlModal>;
   } else {
     return <EditQnAFromScratchModal {...props}></EditQnAFromScratchModal>;

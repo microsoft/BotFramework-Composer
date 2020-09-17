@@ -45,10 +45,16 @@ export const reformQnAToContainerKB = (projectId: string, qnaFiles: QnAFile[]): 
     const content2 = substringTextByLine(content, qnaSectionStartLine - 1);
     let file1 = qnaUtil.parse(id, content1);
     const file2Id = `${getBaseName(id)}.source`;
-    file1 = qnaUtil.addImport(file1, `${file2Id}.qna`);
+    const file2FullId = `${file2Id}.qna`;
+
+    // if container file not be imported, do import
+    if (!file1.imports.find(({ id }) => file2FullId === id)) {
+      file1 = qnaUtil.addImport(file1, file2FullId);
+    }
     updateFile(projectId, `${file1.id}.qna`, file1.content);
     updatedFiles.push(file1);
 
+    // if container file not exist, create it. if exist, update it
     const existedFile2 = qnaFiles.find((item) => item.id === file2Id);
     if (existedFile2) {
       const file2Content = existedFile2.content + '\n' + content2;
@@ -73,4 +79,8 @@ export const reformQnAToContainerKB = (projectId: string, qnaFiles: QnAFile[]): 
 
 export const getQnAFileUrlOption = (file: QnAFile): string | undefined => {
   return file.options.find((opt) => opt.name === 'url')?.value;
+};
+
+export const isQnAFileCreatedFromUrl = (file: QnAFile): boolean => {
+  return getQnAFileUrlOption(file) ? true : false;
 };

@@ -119,7 +119,6 @@ export function convertQnAParseResultToQnAFile(id = '', resource: LuParseResourc
     };
   });
 
-  // TODO: use regexp match "> !# @source.urls = https://download"
   const optionRegExp = new RegExp(/@source\.(\w+)\s*=\s*(.*)/);
   const options: { id: string; name: string; value: string }[] = [];
   Sections.filter(({ SectionType }) => SectionType === SectionTypes.LUModelInfo).forEach(({ ModelInfo, Id }) => {
