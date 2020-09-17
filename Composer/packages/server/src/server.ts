@@ -50,6 +50,7 @@ export async function start(): Promise<number | string> {
   setEnvDefault('COMPOSER_EXTENSION_DATA', path.resolve(__dirname, '../extensions.json'));
   setEnvDefault('COMPOSER_BUILTIN_EXTENSIONS_DIR', path.resolve(__dirname, '../../../plugins'));
   setEnvDefault('COMPOSER_REMOTE_EXTENSIONS_DIR', path.resolve(__dirname, '../../../.composer'));
+  await ExtensionManager.loadAll();
   // TODO (toanzian / abrown): load 3P plugins
 
   const { login, authorize } = getAuthProvider();

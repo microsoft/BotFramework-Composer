@@ -54,6 +54,14 @@ class ExtensionManager {
   }
 
   /**
+   * Loads all builtin extensions and remote extensions.
+   */
+  public async loadAll() {
+    await this.loadBuiltinExtensions();
+    await this.loadRemoteExtensions();
+  }
+
+  /**
    * Installs a remote plugin via NPM
    * @param name The name of the plugin to install
    * @param version The version of the plugin to install
@@ -78,11 +86,9 @@ class ExtensionManager {
   }
 
   /**
-   * Loads all the plugins that are checked into the Composer project (1P plugins)
+   * Loads all the extensions that are checked into the Composer project (1P extensions)
    */
-  public async loadBuiltinPlugins() {
-    log('Loading inherent plugins from: ', this.builtinPluginsDir);
-
+  private async loadBuiltinExtensions() {
     // get all plugins with a package.json in the plugins dir
     const plugins = await glob('*/package.json', { cwd: this.builtinPluginsDir, dot: true });
     for (const p in plugins) {
@@ -106,7 +112,7 @@ class ExtensionManager {
    * Loads all installed remote plugins
    * TODO (toanzian / abrown): Needs to be implemented
    */
-  public async loadRemotePlugins() {
+  private async loadRemoteExtensions() {
     // should perform the same function as loadBuiltInPlugins but from the
     // location that remote / 3P plugins are installed
   }
