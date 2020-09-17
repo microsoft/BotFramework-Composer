@@ -10,12 +10,11 @@ import { pathToRegexp } from 'path-to-regexp';
 import glob from 'globby';
 import formatMessage from 'format-message';
 
-import { UserIdentity, ExtensionCollection, RuntimeTemplate, DEFAULT_RUNTIME } from '../types/types';
-import log from '../logger';
+import { UserIdentity, ExtensionCollection, RuntimeTemplate, DEFAULT_RUNTIME } from './types/types';
+import log from './logger';
+import { ExtensionRegistration } from './extensionRegistration';
 
-import { ComposerPluginRegistration } from './composerPluginRegistration';
-
-export class PluginLoader {
+class ExtensionContext {
   private _passport: passport.PassportStatic;
   private _webserver: Express | undefined;
   public loginUri = '/login';
@@ -67,7 +66,7 @@ export class PluginLoader {
   }
 
   public async loadPlugin(name: string, description: string, thisPlugin: any) {
-    const pluginRegistration = new ComposerPluginRegistration(this, name, description);
+    const pluginRegistration = new ExtensionRegistration(this, name, description);
     if (typeof thisPlugin.default === 'function') {
       // the module exported just an init function
       thisPlugin.default.call(null, pluginRegistration);
@@ -131,10 +130,10 @@ export class PluginLoader {
     }
   }
 
-  static async getUserFromRequest(req): Promise<UserIdentity | undefined> {
+  public async getUserFromRequest(req): Promise<UserIdentity | undefined> {
     return req.user || undefined;
   }
 }
 
-export const pluginLoader = new PluginLoader();
-export default pluginLoader;
+const context = new ExtensionContext();
+export { context as ExtensionContext };

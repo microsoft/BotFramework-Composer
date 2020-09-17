@@ -24,7 +24,8 @@
   "nodemonConfig": {
     "exec": "cross-env TS_NODE_FILES=true node -r ts-node/register src/init.ts",
     "watch": [
-      "src"
+      "src",
+      "../extension/lib"
     ],
     "ext": "ts",
     "delay": 2

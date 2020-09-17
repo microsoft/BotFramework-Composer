@@ -3,7 +3,7 @@
 
 import { Request, Response } from 'express';
 import rimraf from 'rimraf';
-import { pluginLoader } from '@bfc/extension';
+import { ExtensionContext } from '@bfc/extension';
 
 import { BotProjectService } from '../../services/project';
 import { Path } from '../../utility/path';
@@ -11,14 +11,14 @@ import { EjectController } from '../eject';
 
 jest.mock('@bfc/extension', () => {
   return {
-    pluginLoader: {
+    ExtensionContext: {
       extensions: {
         botTemplates: [],
         baseTemplates: [],
         runtimeTemplates: [],
       },
     },
-    PluginLoader: {
+    ExtensionContext: {
       getUserFromRequest: jest.fn(),
     },
   };
@@ -48,7 +48,7 @@ beforeEach(() => {
 });
 
 beforeAll(async () => {
-  pluginLoader.extensions.runtimeTemplates.push({
+  ExtensionContext.extensions.runtimeTemplates.push({
     key: 'azurewebapp',
     name: 'C#',
     startCommand: 'dotnet run --project azurewebapp',

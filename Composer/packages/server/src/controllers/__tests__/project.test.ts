@@ -3,7 +3,7 @@
 
 import { Request, Response } from 'express';
 import rimraf from 'rimraf';
-import { pluginLoader } from '@bfc/extension';
+import { ExtensionContext } from '@bfc/extension';
 
 import { BotProjectService } from '../../services/project';
 import { ProjectController } from '../../controllers/project';
@@ -11,14 +11,14 @@ import { Path } from '../../utility/path';
 
 jest.mock('@bfc/extension', () => {
   return {
-    pluginLoader: {
+    ExtensionContext: {
       extensions: {
         botTemplates: [],
         baseTemplates: [],
         publish: [],
       },
     },
-    PluginLoader: {
+    ExtensionContext: {
       getUserFromRequest: jest.fn(),
     },
   };
@@ -52,7 +52,7 @@ beforeEach(() => {
 });
 
 beforeAll(async () => {
-  pluginLoader.extensions.botTemplates.push({
+  ExtensionContext.extensions.botTemplates.push({
     id: 'SampleBot',
     name: 'Sample Bot',
     description: 'Sample Bot',

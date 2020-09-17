@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import rimraf from 'rimraf';
-import { pluginLoader } from '@bfc/extension';
+import { ExtensionContext } from '@bfc/extension';
 
 import { Path } from '../../../utility/path';
 import { AssetManager } from '../assetManager';
@@ -13,7 +13,7 @@ jest.mock('azure-storage', () => {
 jest.mock('@bfc/extension', () => {
   //const p = require('path');
   return {
-    pluginLoader: {
+    ExtensionContext: {
       extensions: {
         botTemplates: [],
       },
@@ -29,7 +29,7 @@ const locationRef = {
 };
 
 beforeAll(() => {
-  pluginLoader.extensions.botTemplates.push({
+  ExtensionContext.extensions.botTemplates.push({
     id: 'SampleBot',
     name: 'Sample Bot',
     description: 'Sample Bot',
