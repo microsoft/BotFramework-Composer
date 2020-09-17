@@ -8,8 +8,7 @@
 
 //import isEmpty from 'lodash/isEmpty';
 import { QnAFile } from '@bfc/shared';
-// import { sectionHandler } from '@microsoft/bf-lu/lib/parser/composerindex';
-import { sectionHandler } from '@bfcomposer/bf-lu/lib/parser/composerindex';
+import { sectionHandler } from '@microsoft/bf-lu/lib/parser/composerindex';
 import isEmpty from 'lodash/isEmpty';
 import { Diagnostic, Position, Range, DiagnosticSeverity, LuParseResource } from '@bfc/shared';
 import { nanoid } from 'nanoid';

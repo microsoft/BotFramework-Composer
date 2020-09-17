@@ -11,9 +11,7 @@ import log from './../../logger';
 import { DOC_EXTENSIONS, QNA_SUBSCRIPTION_KEY, COGNITIVE_SERVICES_ENDPOINTS } from './../../constants';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-// const qnaBuild = require('@microsoft/bf-lu/lib/parser/qnabuild/builder.js');
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const qnaBuild = require('@bfcomposer/bf-lu/lib/parser/qnabuild/builder.js');
+const qnaBuild = require('@microsoft/bf-lu/lib/parser/qnabuild/builder.js');
 
 const debug = log.extend('helper-parser');
 
