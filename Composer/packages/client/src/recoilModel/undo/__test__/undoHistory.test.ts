@@ -1,5 +1,5 @@
-// // Copyright (c) Microsoft Corporation.
-// // Licensed under the MIT License.
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
 import undoHistoryImpl from '../undoHistory';
 
