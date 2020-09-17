@@ -26,6 +26,8 @@ import {
   ITextFieldStyleProps,
   ITextFieldStyles,
 } from 'office-ui-fabric-react/lib/TextField';
+import debounce from 'lodash/debounce';
+import isEqual from 'lodash/isEqual';
 
 const getClassNames = classNamesFunction<ITextFieldStyleProps, ITextFieldStyles>();
 
@@ -74,6 +76,8 @@ export class TextFieldBase extends React.Component<ITextFieldProps, ITextFieldSt
   /** Most recent value from a change or input event, to help avoid processing events twice */
   private _lastChangeValue: string | undefined;
 
+  private _syncData;
+
   public constructor(props: ITextFieldProps) {
     super(props);
 
@@ -104,6 +108,16 @@ export class TextFieldBase extends React.Component<ITextFieldProps, ITextFieldSt
 
     this._delayedValidate = this._async.debounce(this._validate, this.props.deferredValidationTime);
     this._lastValidation = 0;
+
+    this._syncData = debounce((defaultValue: string | undefined) => {
+      if (
+        this._textElement.current &&
+        defaultValue !== undefined &&
+        !isEqual(defaultValue, this._textElement.current.value)
+      ) {
+        this._textElement.current.value = defaultValue;
+      }
+    }, 300);
   }
 
   /**
@@ -149,6 +163,7 @@ export class TextFieldBase extends React.Component<ITextFieldProps, ITextFieldSt
       }
     }
 
+    !this.isComponentControlled && this._syncData(this.props.defaultValue);
     const prevValue = getValue(prevProps);
     const value = this.value;
     if (prevValue !== value) {
@@ -449,20 +464,25 @@ export class TextFieldBase extends React.Component<ITextFieldProps, ITextFieldSt
   private _renderTextArea = (): React.ReactElement<React.HTMLAttributes<HTMLAreaElement>> => {
     const textAreaProps = getNativeProps<React.TextareaHTMLAttributes<HTMLTextAreaElement>>(
       this.props,
-      textAreaProperties,
-      ['defaultValue']
+      textAreaProperties
     );
+
     const ariaLabelledBy = this.props['aria-labelledby'] || (this.props.label ? this._labelId : undefined);
+    const valueProps = this.isComponentControlled
+      ? { value: this.props.value }
+      : { defaultValue: this.props.defaultValue };
     return (
       <textarea
         id={this.componentId}
         {...textAreaProps}
+        {...valueProps}
         ref={this._textElement as React.RefObject<HTMLTextAreaElement>}
         aria-describedby={this.isDescriptionAvailable ? this._descriptionId : this.props['aria-describedby']}
         aria-invalid={!!this.errorComponentMessage}
         aria-label={this.props.ariaLabel}
         aria-labelledby={ariaLabelledBy}
         className={this.componentClassNames.field}
+        defaultValue={this.props.defaultValue ?? ''}
         readOnly={this.props.readOnly}
         onBlur={this._onBlur}
         onChange={this._onInputChange}
@@ -473,16 +493,19 @@ export class TextFieldBase extends React.Component<ITextFieldProps, ITextFieldSt
   };
 
   private _renderInput = (): React.ReactElement<React.HTMLAttributes<HTMLInputElement>> => {
-    const inputProps = getNativeProps<React.HTMLAttributes<HTMLInputElement>>(this.props, inputProperties, [
-      'defaultValue',
-    ]);
+    const inputProps = getNativeProps<React.HTMLAttributes<HTMLInputElement>>(this.props, inputProperties);
     const ariaLabelledBy = this.props['aria-labelledby'] || (this.props.label ? this._labelId : undefined);
+    const valueProps = this.isComponentControlled
+      ? { value: this.props.value }
+      : { defaultValue: this.props.defaultValue };
     return (
       <input
         aria-labelledby={ariaLabelledBy}
+        defaultValue={this.props.defaultValue ?? ''}
         id={this.componentId}
         type={'text'}
         {...inputProps}
+        {...valueProps}
         ref={this._textElement as React.RefObject<HTMLInputElement>}
         aria-describedby={this.isDescriptionAvailable ? this._descriptionId : this.props['aria-describedby']}
         aria-invalid={!!this.errorComponentMessage}
