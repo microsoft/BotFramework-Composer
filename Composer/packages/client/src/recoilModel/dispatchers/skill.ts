@@ -86,9 +86,8 @@ export const skillDispatcher = () => {
   const removeSkill = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (projectId: string, manifestUrl?: string) => {
       const { snapshot } = callbackHelpers;
-      const skills = [...(await snapshot.getPromise(skillsState(projectId)))].filter(
-        (skill) => skill.manifestUrl !== manifestUrl
-      );
+      const currentSkills = await snapshot.getPromise(skillsState(projectId));
+      const skills = currentSkills.filter((skill) => skill.manifestUrl !== manifestUrl);
       await updateSkillState(callbackHelpers, projectId, skills);
     }
   );
