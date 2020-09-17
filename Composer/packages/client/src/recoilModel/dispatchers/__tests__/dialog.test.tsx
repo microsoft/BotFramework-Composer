@@ -135,7 +135,7 @@ describe('dialog dispatcher', () => {
     dispatcher = renderedComponent.current.currentDispatcher;
   });
 
-  fit('removes a dialog file', async () => {
+  it('removes a dialog file', async () => {
     await act(async () => {
       await dispatcher.createDialog({ id: '1', content: 'abcde', projectId });
     });
