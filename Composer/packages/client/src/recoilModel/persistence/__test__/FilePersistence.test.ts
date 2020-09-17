@@ -23,7 +23,7 @@ describe('test persistence layer', () => {
     filePersistence = new FilePersistence(projectId);
   });
 
-  it.only('test notify update', async () => {
+  it('test notify update', async () => {
     const previous = {
       projectId: 'test',
       dialogs: [{ id: 'a', content: { a: 'old' } }] as DialogInfo[],

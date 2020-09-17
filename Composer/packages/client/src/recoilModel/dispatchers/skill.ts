@@ -3,7 +3,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
-import { SkillManifest, convertSkillsToDictionary } from '@bfc/shared';
+import { SkillManifest, convertSkillsToDictionary, Skill } from '@bfc/shared';
 
 import httpClient from '../../utils/httpUtil';
 
@@ -41,50 +41,73 @@ export const skillDispatcher = () => {
     }
   );
 
-  const updateSkill = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({ projectId, targetId, skillData }) => {
+  const updateSkillState = async (
+    callbackHelpers: CallbackInterface,
+    projectId: string,
+    updatedSkills: Skill[]
+  ): Promise<Skill[] | undefined> => {
+    try {
+      const { set } = callbackHelpers;
+
+      const { data: skills } = await httpClient.post(`/projects/${projectId}/skills/`, { skills: updatedSkills });
+
+      set(settingsState(projectId), (settings) => ({
+        ...settings,
+        skill: convertSkillsToDictionary(skills),
+      }));
+      set(skillsState(projectId), skills);
+
+      return skills;
+    } catch (error) {
+      logMessage(callbackHelpers, error.message);
+    }
+  };
+
+  const addSkill = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async (projectId: string, skillData: Skill) => {
       const { set, snapshot } = callbackHelpers;
-      const onAddSkillDialogComplete = (await snapshot.getPromise(onAddSkillDialogCompleteState(projectId))).func;
+      const { func: onAddSkillDialogComplete } = await snapshot.getPromise(onAddSkillDialogCompleteState(projectId));
+      const skills = await updateSkillState(callbackHelpers, projectId, [
+        ...(await snapshot.getPromise(skillsState(projectId))),
+        skillData,
+      ]);
+
+      const skill = (skills || []).find(({ manifestUrl }) => manifestUrl === skillData.manifestUrl);
+
+      if (typeof onAddSkillDialogComplete === 'function') {
+        onAddSkillDialogComplete(skill || null);
+      }
+
+      set(showAddSkillDialogModalState(projectId), false);
+      set(onAddSkillDialogCompleteState(projectId), {});
+    }
+  );
+
+  const removeSkill = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async (projectId: string, manifestUrl?: string) => {
+      const { snapshot } = callbackHelpers;
+      const skills = [...(await snapshot.getPromise(skillsState(projectId)))].filter(
+        (skill) => skill.manifestUrl !== manifestUrl
+      );
+      await updateSkillState(callbackHelpers, projectId, skills);
+    }
+  );
+
+  const updateSkill = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async (
+      projectId: string,
+      { targetId, skillData }: { targetId: number; skillData?: any }
+    ) => {
+      const { snapshot } = callbackHelpers;
       const originSkills = [...(await snapshot.getPromise(skillsState(projectId)))];
 
-      // add
-      if (targetId === -1 && skillData) {
-        originSkills.push(skillData);
-      } else if (targetId >= 0 && targetId < originSkills.length) {
-        // modify
-        if (skillData) {
-          originSkills.splice(targetId, 1, skillData);
-
-          // delete
-        } else {
-          originSkills.splice(targetId, 1);
-        }
-        // error
+      if (targetId >= 0 && targetId < originSkills.length && skillData) {
+        originSkills.splice(targetId, 1, skillData);
       } else {
         throw new Error(`update out of range, skill not found`);
       }
 
-      try {
-        const response = await httpClient.post(`/projects/${projectId}/skills/`, { skills: originSkills });
-
-        if (typeof onAddSkillDialogComplete === 'function') {
-          const skill = response.data.find(({ manifestUrl }) => manifestUrl === skillData.manifestUrl);
-          onAddSkillDialogComplete(skill ? skill : null);
-        }
-
-        const skills = response.data;
-
-        set(showAddSkillDialogModalState(projectId), false);
-        set(onAddSkillDialogCompleteState(projectId), { func: undefined });
-        set(settingsState(projectId), (settings) => ({
-          ...settings,
-          skill: convertSkillsToDictionary(skills),
-        }));
-        set(skillsState(projectId), skills);
-      } catch (err) {
-        //TODO: error
-        logMessage(callbackHelpers, err.message);
-      }
+      updateSkillState(callbackHelpers, projectId, originSkills);
     }
   );
 
@@ -119,6 +142,7 @@ export const skillDispatcher = () => {
   });
 
   return {
+    addSkill,
     createSkillManifest,
     removeSkillManifest,
     updateSkillManifest,
@@ -128,5 +152,6 @@ export const skillDispatcher = () => {
     addSkillDialogSuccess,
     displayManifestModal,
     dismissManifestModal,
+    removeSkill,
   };
 };

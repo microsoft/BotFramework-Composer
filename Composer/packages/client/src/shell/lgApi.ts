@@ -25,14 +25,14 @@ function createLgApi(
     if (id === undefined) throw new Error('must have a file id');
     const focusedDialogId = state.focusPath.split('#').shift() || id;
     const file = lgFileResolver(focusedDialogId);
-    if (!file) throw new Error(`lg file ${id} not found`);
+    if (!file) throw new Error(fileNotFound(id));
     return file.templates;
   };
 
   const updateLgTemplate = async (id: string, templateName: string, templateBody: string) => {
     const file = lgFileResolver(id);
-    if (!file) throw new Error(`lg file ${id} not found`);
-    if (!templateName) throw new Error(`templateName is missing or empty`);
+    if (!file) throw new Error(fileNotFound(id));
+    if (!templateName) throw new Error(TEMPLATE_ERROR);
     const template = { name: templateName, body: templateBody, parameters: [] };
 
     return await actions.updateLgTemplate({
@@ -45,7 +45,7 @@ function createLgApi(
 
   const copyLgTemplate = async (id, fromTemplateName, toTemplateName) => {
     const file = lgFileResolver(id);
-    if (!file) throw new Error(`lg file ${id} not found`);
+    if (!file) throw new Error(fileNotFound(id));
     if (!fromTemplateName || !toTemplateName) throw new Error(`templateName is missing or empty`);
 
     return await actions.copyLgTemplate({
@@ -58,8 +58,8 @@ function createLgApi(
 
   const removeLgTemplate = async (id, templateName) => {
     const file = lgFileResolver(id);
-    if (!file) throw new Error(`lg file ${id} not found`);
-    if (!templateName) throw new Error(`templateName is missing or empty`);
+    if (!file) throw new Error(fileNotFound(id));
+    if (!templateName) throw new Error(TEMPLATE_ERROR);
 
     return await actions.removeLgTemplate({
       id: file.id,
