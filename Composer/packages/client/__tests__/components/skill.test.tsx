@@ -13,7 +13,7 @@ import CreateSkillModal, {
   validateManifestUrl,
   validateName,
 } from '../../src/components/CreateSkillModal';
-import { settingsState, projectIdState, skillsState, dispatcherState } from '../../src/recoilModel';
+import { settingsState, projectIdState, skillsState } from '../../src/recoilModel';
 import Skills from '../../src/pages/skills';
 
 jest.mock('../../src//utils/httpUtil');
@@ -67,13 +67,6 @@ describe('Skill page', () => {
             endpointKey: '',
           },
         });
-      set(dispatcherState, {
-        skillDispatcher: {
-          addSkill: jest.fn(),
-          removeSkill: jest.fn(),
-          updateSkill: jest.fn(),
-        },
-      });
     };
   });
 
@@ -97,7 +90,7 @@ describe('Skill page', () => {
 
 describe('<SkillList />', () => {
   it('should render the SkillList', () => {
-    const { container } = renderWithRecoil(<SkillList />, recoilInitState);
+    const { container } = renderWithRecoil(<SkillList projectId={'123'} />, recoilInitState);
     expect(container).toHaveTextContent('Email-Skill');
     expect(container).toHaveTextContent('Point Of Interest Skill');
   });
