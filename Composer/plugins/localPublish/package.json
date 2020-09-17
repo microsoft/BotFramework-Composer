@@ -12,7 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "adm-zip": "^0.4.14",
-    "archiver": "^3.1.1",
+    "archiver": "^5.0.2",
     "globby": "^11.0.0",
     "path": "^0.12.7",
     "portfinder": "^1.0.26",
