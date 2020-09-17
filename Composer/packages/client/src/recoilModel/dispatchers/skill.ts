@@ -18,22 +18,24 @@ import {
 import { logMessage } from './shared';
 
 export const skillDispatcher = () => {
-  const createSkillManifest = useRecoilCallback(({ set }: CallbackInterface) => async ({ id, content }) => {
-    set(skillManifestsState, (skillManifests) => [...skillManifests, { content, id }]);
-  });
+  const createSkillManifest = ({ set }, { id, content, projectId }) => {
+    set(skillManifestsState(projectId), (skillManifests) => [...skillManifests, { content, id }]);
+  };
 
-  const removeSkillManifest = useRecoilCallback(({ set }: CallbackInterface) => async (id: string) => {
-    set(skillManifestsState, (skillManifests) => skillManifests.filter((manifest) => manifest.id !== id));
-  });
+  const removeSkillManifest = useRecoilCallback(
+    ({ set }: CallbackInterface) => async (id: string, projectId: string) => {
+      set(skillManifestsState(projectId), (skillManifests) => skillManifests.filter((manifest) => manifest.id !== id));
+    }
+  );
 
   const updateSkillManifest = useRecoilCallback(
-    ({ set, snapshot }: CallbackInterface) => async ({ id, content }: SkillManifest) => {
-      const manifests = await snapshot.getPromise(skillManifestsState);
+    ({ set, snapshot }: CallbackInterface) => async ({ id, content }: SkillManifest, projectId: string) => {
+      const manifests = await snapshot.getPromise(skillManifestsState(projectId));
       if (!manifests.some((manifest) => manifest.id === id)) {
-        createSkillManifest({ id, content });
+        createSkillManifest({ set }, { id, content, projectId });
       }
 
-      set(skillManifestsState, (skillManifests) =>
+      set(skillManifestsState(projectId), (skillManifests) =>
         skillManifests.map((manifest) => (manifest.id === id ? { id, content } : manifest))
       );
     }
@@ -49,11 +51,11 @@ export const skillDispatcher = () => {
 
       const { data: skills } = await httpClient.post(`/projects/${projectId}/skills/`, { skills: updatedSkills });
 
-      set(settingsState, (settings) => ({
+      set(settingsState(projectId), (settings) => ({
         ...settings,
         skill: convertSkillsToDictionary(skills),
       }));
-      set(skillsState, skills);
+      set(skillsState(projectId), skills);
 
       return skills;
     } catch (error) {
@@ -64,9 +66,9 @@ export const skillDispatcher = () => {
   const addSkill = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (projectId: string, skillData: Skill) => {
       const { set, snapshot } = callbackHelpers;
-      const { func: onAddSkillDialogComplete } = await snapshot.getPromise(onAddSkillDialogCompleteState);
+      const { func: onAddSkillDialogComplete } = await snapshot.getPromise(onAddSkillDialogCompleteState(projectId));
       const skills = await updateSkillState(callbackHelpers, projectId, [
-        ...(await snapshot.getPromise(skillsState)),
+        ...(await snapshot.getPromise(skillsState(projectId))),
         skillData,
       ]);
 
@@ -76,15 +78,16 @@ export const skillDispatcher = () => {
         onAddSkillDialogComplete(skill || null);
       }
 
-      set(showAddSkillDialogModalState, false);
-      set(onAddSkillDialogCompleteState, {});
+      set(showAddSkillDialogModalState(projectId), false);
+      set(onAddSkillDialogCompleteState(projectId), {});
     }
   );
 
   const removeSkill = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (projectId: string, manifestUrl?: string) => {
       const { snapshot } = callbackHelpers;
-      const skills = [...(await snapshot.getPromise(skillsState))].filter((skill) => skill.manifestUrl !== manifestUrl);
+      const currentSkills = await snapshot.getPromise(skillsState(projectId));
+      const skills = currentSkills.filter((skill) => skill.manifestUrl !== manifestUrl);
       await updateSkillState(callbackHelpers, projectId, skills);
     }
   );
@@ -95,7 +98,7 @@ export const skillDispatcher = () => {
       { targetId, skillData }: { targetId: number; skillData?: any }
     ) => {
       const { snapshot } = callbackHelpers;
-      const originSkills = [...(await snapshot.getPromise(skillsState))];
+      const originSkills = [...(await snapshot.getPromise(skillsState(projectId)))];
 
       if (targetId >= 0 && targetId < originSkills.length && skillData) {
         originSkills.splice(targetId, 1, skillData);
@@ -107,32 +110,34 @@ export const skillDispatcher = () => {
     }
   );
 
-  const addSkillDialogBegin = useRecoilCallback(({ set }: CallbackInterface) => (onComplete) => {
-    set(showAddSkillDialogModalState, true);
-    set(onAddSkillDialogCompleteState, { func: onComplete });
+  const addSkillDialogBegin = useRecoilCallback(({ set }: CallbackInterface) => (onComplete, projectId: string) => {
+    set(showAddSkillDialogModalState(projectId), true);
+    set(onAddSkillDialogCompleteState(projectId), { func: onComplete });
   });
 
-  const addSkillDialogCancel = useRecoilCallback(({ set }: CallbackInterface) => () => {
-    set(showAddSkillDialogModalState, false);
-    set(onAddSkillDialogCompleteState, { func: undefined });
+  const addSkillDialogCancel = useRecoilCallback(({ set }: CallbackInterface) => (projectId: string) => {
+    set(showAddSkillDialogModalState(projectId), false);
+    set(onAddSkillDialogCompleteState(projectId), { func: undefined });
   });
 
-  const addSkillDialogSuccess = useRecoilCallback(({ set, snapshot }: CallbackInterface) => async () => {
-    const onAddSkillDialogComplete = (await snapshot.getPromise(onAddSkillDialogCompleteState)).func;
-    if (typeof onAddSkillDialogComplete === 'function') {
-      onAddSkillDialogComplete(null);
+  const addSkillDialogSuccess = useRecoilCallback(
+    ({ set, snapshot }: CallbackInterface) => async (projectId: string) => {
+      const onAddSkillDialogComplete = (await snapshot.getPromise(onAddSkillDialogCompleteState(projectId))).func;
+      if (typeof onAddSkillDialogComplete === 'function') {
+        onAddSkillDialogComplete(null);
+      }
+
+      set(showAddSkillDialogModalState(projectId), false);
+      set(onAddSkillDialogCompleteState(projectId), { func: undefined });
     }
+  );
 
-    set(showAddSkillDialogModalState, false);
-    set(onAddSkillDialogCompleteState, { func: undefined });
+  const displayManifestModal = useRecoilCallback(({ set }: CallbackInterface) => (id: string, projectId: string) => {
+    set(displaySkillManifestState(projectId), id);
   });
 
-  const displayManifestModal = useRecoilCallback(({ set }: CallbackInterface) => (id: string) => {
-    set(displaySkillManifestState, id);
-  });
-
-  const dismissManifestModal = useRecoilCallback(({ set }: CallbackInterface) => () => {
-    set(displaySkillManifestState, undefined);
+  const dismissManifestModal = useRecoilCallback(({ set }: CallbackInterface) => (projectId: string) => {
+    set(displaySkillManifestState(projectId), undefined);
   });
 
   return {

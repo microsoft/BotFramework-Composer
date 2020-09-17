@@ -12,8 +12,8 @@ import {
   publishHistoryState,
   botLoadErrorState,
   isEjectRuntimeExistState,
+  filePersistenceState,
 } from '../atoms/botState';
-import filePersistence from '../persistence/FilePersistence';
 import { botEndpointsState } from '../atoms';
 
 import { BotStatus, Text } from './../../constants';
@@ -25,14 +25,14 @@ const PUBLISH_PENDING = 202;
 const PUBLISH_FAILED = 500;
 
 export const publisherDispatcher = () => {
-  const publishFailure = async ({ set }: CallbackInterface, title: string, error, target) => {
+  const publishFailure = async ({ set }: CallbackInterface, title: string, error, target, projectId: string) => {
     if (target.name === defaultPublishConfig.name) {
-      set(botStatusState, BotStatus.failed);
-      set(botLoadErrorState, { ...error, title });
+      set(botStatusState(projectId), BotStatus.failed);
+      set(botLoadErrorState(projectId), { ...error, title });
     }
     // prepend the latest publish results to the history
 
-    set(publishHistoryState, (publishHistory) => {
+    set(publishHistoryState(projectId), (publishHistory) => {
       const targetHistory = publishHistory[target.name] ?? [];
       return {
         ...publishHistory,
@@ -45,14 +45,14 @@ export const publisherDispatcher = () => {
     const { endpointURL, status } = data;
     if (target.name === defaultPublishConfig.name) {
       if (status === PUBLISH_SUCCESS && endpointURL) {
-        set(botStatusState, BotStatus.connected);
+        set(botStatusState(projectId), BotStatus.connected);
         set(botEndpointsState, (botEndpoints) => ({ ...botEndpoints, [projectId]: `${endpointURL}/api/messages` }));
       } else {
-        set(botStatusState, BotStatus.reloading);
+        set(botStatusState(projectId), BotStatus.reloading);
       }
     }
 
-    set(publishHistoryState, (publishHistory) => {
+    set(publishHistoryState(projectId), (publishHistory) => {
       const targetHistory = publishHistory[target.name] ?? [];
       return {
         ...publishHistory,
@@ -73,21 +73,21 @@ export const publisherDispatcher = () => {
     // a check should be added to this that ensures this ONLY applies to the "default" profile.
     if (target.name === defaultPublishConfig.name) {
       if (status === PUBLISH_SUCCESS && endpointURL) {
-        set(botStatusState, BotStatus.connected);
+        set(botStatusState(projectId), BotStatus.connected);
         set(botEndpointsState, (botEndpoints) => ({
           ...botEndpoints,
           [projectId]: `${endpointURL}/api/messages`,
         }));
       } else if (status === PUBLISH_PENDING) {
-        set(botStatusState, BotStatus.reloading);
+        set(botStatusState(projectId), BotStatus.reloading);
       } else if (status === PUBLISH_FAILED) {
-        set(botStatusState, BotStatus.failed);
-        set(botLoadErrorState, { ...data, title: formatMessage('Start bot failed') });
+        set(botStatusState(projectId), BotStatus.failed);
+        set(botLoadErrorState(projectId), { ...data, title: formatMessage('Start bot failed') });
       }
     }
 
     if (status !== 404) {
-      set(publishHistoryState, (publishHistory) => {
+      set(publishHistoryState(projectId), (publishHistory) => {
         const currentHistory = { ...data, target: target };
         let targetHistories = publishHistory[target.name] ? [...publishHistory[target.name]] : [];
         // if no history exists, create one with the latest status
@@ -108,11 +108,11 @@ export const publisherDispatcher = () => {
     }
   };
 
-  const getPublishTargetTypes = useRecoilCallback((callbackHelpers: CallbackInterface) => async () => {
+  const getPublishTargetTypes = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
     const { set } = callbackHelpers;
     try {
       const response = await httpClient.get(`/publish/types`);
-      set(publishTypesState, response.data);
+      set(publishTypesState(projectId), response.data);
     } catch (err) {
       //TODO: error
       logMessage(callbackHelpers, err.message);
@@ -146,9 +146,9 @@ export const publisherDispatcher = () => {
             },
           };
 
-          await publishFailure(callbackHelpers, Text.DOTNETFAILURE, error, target);
+          await publishFailure(callbackHelpers, Text.DOTNETFAILURE, error, target, projectId);
         } else {
-          await publishFailure(callbackHelpers, Text.CONNECTBOTFAILURE, err.response?.data, target);
+          await publishFailure(callbackHelpers, Text.CONNECTBOTFAILURE, err.response?.data, target, projectId);
         }
       }
     }
@@ -163,7 +163,7 @@ export const publisherDispatcher = () => {
         });
         await publishSuccess(callbackHelpers, projectId, response.data, target);
       } catch (err) {
-        await publishFailure(callbackHelpers, Text.CONNECTBOTFAILURE, err.response.data, target);
+        await publishFailure(callbackHelpers, Text.CONNECTBOTFAILURE, err.response.data, target, projectId);
       }
     }
   );
@@ -182,11 +182,12 @@ export const publisherDispatcher = () => {
 
   const getPublishHistory = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (projectId: string, target: any) => {
-      const { set } = callbackHelpers;
+      const { set, snapshot } = callbackHelpers;
       try {
-        await filePersistence.flush();
+        const filePersistence = await snapshot.getPromise(filePersistenceState(projectId));
+        filePersistence.flush();
         const response = await httpClient.get(`/publish/${projectId}/history/${target.name}`);
-        set(publishHistoryState, (publishHistory) => ({
+        set(publishHistoryState(projectId), (publishHistory) => ({
           ...publishHistory,
           [target.name]: response.data,
         }));
@@ -197,9 +198,11 @@ export const publisherDispatcher = () => {
     }
   );
 
-  const setEjectRuntimeExist = useRecoilCallback(({ set }: CallbackInterface) => async (isExist: boolean) => {
-    set(isEjectRuntimeExistState, isExist);
-  });
+  const setEjectRuntimeExist = useRecoilCallback(
+    ({ set }: CallbackInterface) => async (isExist: boolean, projectId: string) => {
+      set(isEjectRuntimeExistState(projectId), isExist);
+    }
+  );
 
   // only support local publish
   const stopPublishBot = useRecoilCallback(
@@ -207,7 +210,7 @@ export const publisherDispatcher = () => {
       const { set } = callbackHelpers;
       try {
         await httpClient.post(`/publish/${projectId}/stopPublish/${target.name}`);
-        set(botStatusState, BotStatus.unConnected);
+        set(botStatusState(projectId), BotStatus.unConnected);
       } catch (err) {
         setError(callbackHelpers, err);
         logMessage(callbackHelpers, err.message);

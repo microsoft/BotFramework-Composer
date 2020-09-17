@@ -15,7 +15,7 @@ import { navigateTo } from '../../utils/navigation';
 import { TestController } from '../../components/TestController/TestController';
 import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
-import { dialogsState, projectIdState, qnaAllUpViewStatusState } from '../../recoilModel/atoms/botState';
+import { botNameState, dialogsState, qnaAllUpViewStatusState } from '../../recoilModel/atoms/botState';
 import { dispatcherState } from '../../recoilModel';
 import { QnAAllUpViewStatus } from '../../recoilModel/types';
 
@@ -25,21 +25,23 @@ import { ImportQnAFromUrlModal } from './ImportQnAFromUrlModal';
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
 interface QnAPageProps extends RouteComponentProps<{}> {
+  projectId?: string;
   dialogId?: string;
 }
 
 const QnAPage: React.FC<QnAPageProps> = (props) => {
+  const { dialogId = '', projectId = '' } = props;
   const actions = useRecoilValue(dispatcherState);
-  const dialogs = useRecoilValue(dialogsState);
-  const projectId = useRecoilValue(projectIdState);
+  const dialogs = useRecoilValue(dialogsState(projectId));
+  const botName = useRecoilValue(botNameState(projectId));
   //To do: support other languages
   const locale = 'en-us';
   //const locale = useRecoilValue(localeState);
-  const qnaAllUpViewStatus = useRecoilValue(qnaAllUpViewStatusState);
+  const qnaAllUpViewStatus = useRecoilValue(qnaAllUpViewStatusState(projectId));
   const [importQnAFromUrlModalVisiability, setImportQnAFromUrlModalVisiability] = useState(false);
 
   const path = props.location?.pathname ?? '';
-  const { dialogId = '' } = props;
+
   const edit = /\/edit(\/)?$/.test(path);
   const isRoot = dialogId === 'all';
   const navLinks: INavTreeItem[] = useMemo(() => {
@@ -65,6 +67,13 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
     });
     return newDialogLinks;
   }, [dialogs]);
+
+  useEffect(() => {
+    const qnaKbUrls: string[] | undefined = props.location?.state?.qnaKbUrls;
+    if (qnaKbUrls && qnaKbUrls.length > 0) {
+      actions.importQnAFromUrls({ id: `${botName.toLocaleLowerCase()}.${locale}`, urls: qnaKbUrls, projectId });
+    }
+  }, []);
 
   useEffect(() => {
     const activeDialog = dialogs.find(({ id }) => id === dialogId);
@@ -106,7 +115,7 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
     },
     {
       type: 'element',
-      element: <TestController />,
+      element: <TestController projectId={projectId} />,
       align: 'right',
     },
   ];
@@ -134,7 +143,7 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
 
   const onSubmit = async (urls: string[]) => {
     onDismiss();
-    await actions.importQnAFromUrls({ id: `${dialogId}.${locale}`, urls });
+    await actions.importQnAFromUrls({ id: `${dialogId}.${locale}`, urls, projectId });
   };
 
   return (
@@ -149,8 +158,10 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
     >
       <Suspense fallback={<LoadingSpinner />}>
         <Router component={Fragment} primary={false}>
-          <CodeEditor dialogId={dialogId} path="/edit" />
-          {qnaAllUpViewStatus !== QnAAllUpViewStatus.Loading && <TableView dialogId={dialogId} path="/" />}
+          <CodeEditor dialogId={dialogId} path="/edit" projectId={projectId} />
+          {qnaAllUpViewStatus !== QnAAllUpViewStatus.Loading && (
+            <TableView dialogId={dialogId} path="/" projectId={projectId} />
+          )}
         </Router>
         {qnaAllUpViewStatus === QnAAllUpViewStatus.Loading && (
           <LoadingSpinner message={'Extracting QnA pairs. This could take a moment.'} />
