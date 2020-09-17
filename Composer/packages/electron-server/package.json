@@ -10,7 +10,7 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json && ncp src/preload.js build/preload.js",
-    "clean": "rimraf build && rimraf dist",
+    "clean": "rimraf build && rimraf dist && rimraf l10ntemp",
     "copy-plugins": "node scripts/copy-plugins.js",
     "copy-runtime": "node scripts/copy-runtime.js",
     "dist": "node scripts/electronBuilderDist.js",
@@ -22,7 +22,12 @@
     "start:electron": "./node_modules/.bin/electron --inspect=7777 --remote-debugging-port=7778 .",
     "start:electron:dev": "cross-env NODE_ENV=development ELECTRON_TARGET_URL=http://localhost:3000/ npm run start:electron",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "l10n:extract": "cross-env NODE_ENV=production format-message extract -g underscored_crc32 -o locales/en-US.json l10ntemp/**/*.js",
+    "l10n:extractJson": "node ../../scripts/l10n-extractJson.js",
+    "l10n:transform": "node ../../scripts/l10n-transform.js",
+    "l10n:babel": "babel . --extensions \".ts,.tsx,.jsx,.js\" --out-dir l10ntemp --presets=@babel/typescript --plugins=@babel/plugin-proposal-class-properties --ignore \"**/__tests__\",\"**/node_modules\",\"**/build/**/*.js\"",
+    "l10n": "yarn l10n:babel && yarn l10n:extract && yarn l10n:transform locales/en-US.json && rimraf l10ntemp"
   },
   "devDependencies": {
     "@types/archiver": "^3.1.0",
@@ -59,6 +64,8 @@
     "debug": "4.1.1",
     "electron-updater": "4.2.5",
     "fix-path": "^3.0.0",
+    "format-message": "^6.2.3",
+    "format-message-generate-id": "^6.2.3",
     "fs-extra": "^9.0.0",
     "lodash": "^4.17.19",
     "semver": "7.3.2"
