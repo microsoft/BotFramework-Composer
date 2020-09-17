@@ -118,7 +118,7 @@ export const validateName = ({
 };
 
 export const CreateSkillModal: React.FC<CreateSkillModalProps> = ({ projectId, onSubmit, onDismiss }) => {
-  const skills = useRecoilValue(skillsState);
+  const skills = useRecoilValue(skillsState(projectId));
 
   const [formData, setFormData] = useState<Partial<SkillSetting>>({});
   const [formDataErrors, setFormDataErrors] = useState<SkillFormDataErrors>({});

@@ -13,12 +13,12 @@ import { useRecoilValue } from 'recoil';
 import { SkillManifest } from '@bfc/shared';
 
 import {
-  dialogSchemasState,
-  dialogsState,
   dispatcherState,
-  luFilesState,
   skillManifestsState,
   qnaFilesState,
+  dialogsState,
+  dialogSchemasState,
+  luFilesState,
 } from '../../../recoilModel';
 
 import { editorSteps, ManifestEditorSteps, order } from './constants';
@@ -29,14 +29,15 @@ interface ExportSkillModalProps {
   isOpen: boolean;
   onDismiss: () => void;
   onSubmit: () => void;
+  projectId: string;
 }
 
-const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss: handleDismiss }) => {
-  const dialogs = useRecoilValue(dialogsState);
-  const dialogSchemas = useRecoilValue(dialogSchemasState);
-  const luFiles = useRecoilValue(luFilesState);
-  const qnaFiles = useRecoilValue(qnaFilesState);
-  const skillManifests = useRecoilValue(skillManifestsState);
+const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss: handleDismiss, projectId }) => {
+  const dialogs = useRecoilValue(dialogsState(projectId));
+  const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
+  const luFiles = useRecoilValue(luFilesState(projectId));
+  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
+  const skillManifests = useRecoilValue(skillManifestsState(projectId));
   const { updateSkillManifest } = useRecoilValue(dispatcherState);
 
   const [editingId, setEditingId] = useState<string>();
@@ -78,7 +79,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
 
   const handleSave = () => {
     if (skillManifest.content && skillManifest.id) {
-      updateSkillManifest(skillManifest as SkillManifest);
+      updateSkillManifest(skillManifest as SkillManifest, projectId);
     }
   };
 
@@ -129,6 +130,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
             editJson={handleEditJson}
             errors={errors}
             manifest={skillManifest}
+            projectId={projectId}
             schema={schema}
             setErrors={setErrors}
             setSchema={setSchema}

@@ -10,11 +10,12 @@ import { PluginConfig } from '../types';
 interface EditorExtensionProps {
   shell: Shell;
   plugins: PluginConfig;
+  projectId: string;
 }
 
-export const EditorExtension: React.FC<EditorExtensionProps> = ({ shell, plugins, children }) => {
+export const EditorExtension: React.FC<EditorExtensionProps> = ({ shell, plugins, children, projectId }) => {
   const context = useMemo(() => {
-    return { shellApi: shell.api, shellData: shell.data, plugins };
+    return { shellApi: shell.api, shellData: shell.data, plugins, projectId };
   }, [shell.api, shell.data, plugins]);
 
   return <EditorExtensionContext.Provider value={context}>{children}</EditorExtensionContext.Provider>;

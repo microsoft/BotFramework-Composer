@@ -55,7 +55,7 @@ export const setSettingState = async (
       settingStorage.setField(projectId, property, propertyValue);
     }
   }
-  set(settingsState, settings);
+  set(settingsState(projectId), settings);
 };
 
 export const settingsDispatcher = () => {
@@ -66,8 +66,8 @@ export const settingsDispatcher = () => {
   );
 
   const setPublishTargets = useRecoilCallback(
-    ({ set }: CallbackInterface) => async (publishTargets: PublishTarget[]) => {
-      set(settingsState, (settings) => ({
+    ({ set }: CallbackInterface) => async (publishTargets: PublishTarget[], projectId: string) => {
+      set(settingsState(projectId), (settings) => ({
         ...settings,
         publishTargets,
       }));
@@ -76,10 +76,10 @@ export const settingsDispatcher = () => {
 
   const setRuntimeSettings = useRecoilCallback(
     ({ set }: CallbackInterface) => async (
-      _,
+      projectId: string,
       runtime: { path: string; command: string; key: string; name: string }
     ) => {
-      set(settingsState, (currentSettingsState) => ({
+      set(settingsState(projectId), (currentSettingsState) => ({
         ...currentSettingsState,
         runtime: {
           ...runtime,
@@ -90,8 +90,8 @@ export const settingsDispatcher = () => {
   );
 
   const setRuntimeField = useRecoilCallback(
-    ({ set }: CallbackInterface) => async (_, field: string, newValue: boolean) => {
-      set(settingsState, (currentValue) => ({
+    ({ set }: CallbackInterface) => async (projectId: string, field: string, newValue: boolean) => {
+      set(settingsState(projectId), (currentValue) => ({
         ...currentValue,
         runtime: {
           ...currentValue.runtime,
@@ -101,8 +101,8 @@ export const settingsDispatcher = () => {
     }
   );
 
-  const setCustomRuntime = useRecoilCallback(() => async (_, isOn: boolean) => {
-    setRuntimeField('', 'customRuntime', isOn);
+  const setCustomRuntime = useRecoilCallback(() => async (projectId: string, isOn: boolean) => {
+    setRuntimeField(projectId, 'customRuntime', isOn);
   });
 
   const setQnASettings = useRecoilCallback(
@@ -114,7 +114,7 @@ export const settingsDispatcher = () => {
           subscriptionKey,
         });
         settingStorage.setField(projectId, 'qna.endpointKey', response.data);
-        set(settingsState, (currentValue) => ({
+        set(settingsState(projectId), (currentValue) => ({
           ...currentValue,
           qna: {
             ...currentValue.qna,
