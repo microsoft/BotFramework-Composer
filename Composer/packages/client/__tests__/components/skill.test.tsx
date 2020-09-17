@@ -112,7 +112,7 @@ describe('<SkillForm />', () => {
     const onDismiss = jest.fn();
     const onSubmit = jest.fn();
     const { getByLabelText, getByText } = renderWithRecoil(
-      <CreateSkillModal onDismiss={onDismiss} onSubmit={onSubmit} />,
+      <CreateSkillModal projectId={'123'} onDismiss={onDismiss} onSubmit={onSubmit} />,
       recoilInitState
     );
 

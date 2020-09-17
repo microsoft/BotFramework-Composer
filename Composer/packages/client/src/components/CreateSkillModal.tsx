@@ -15,7 +15,7 @@ import { Skill } from '@bfc/shared';
 
 import { addSkillDialog } from '../constants';
 import httpClient from '../utils/httpUtil';
-import { skillsState, projectIdState } from '../recoilModel';
+import { skillsState } from '../recoilModel';
 
 import { DialogWrapper, DialogTypes } from './DialogWrapper';
 
@@ -30,6 +30,7 @@ export const skillNameRegex = /^\w[-\w]*$/;
 export const msAppIdRegex = /^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$/;
 
 export interface CreateSkillModalProps {
+  projectId: string;
   onSubmit: (data: Skill) => void;
   onDismiss: () => void;
 }
@@ -114,10 +115,7 @@ export const validateName = ({
   }
 };
 
-export const CreateSkillModal: React.FC<CreateSkillModalProps> = (props) => {
-  const { onSubmit, onDismiss } = props;
-
-  const projectId = useRecoilValue(projectIdState);
+export const CreateSkillModal: React.FC<CreateSkillModalProps> = ({ projectId, onSubmit, onDismiss }) => {
   const skills = useRecoilValue(skillsState);
 
   const [formData, setFormData] = useState<Partial<Skill>>({});

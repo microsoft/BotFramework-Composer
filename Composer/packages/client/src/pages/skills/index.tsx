@@ -77,7 +77,9 @@ const Skills: React.FC<RouteComponentProps> = () => {
         />
       </div>
       <SkillList />
-      {showAddSkillDialogModal && <CreateSkillModal onDismiss={onDismissForm} onSubmit={onSubmitForm} />}
+      {showAddSkillDialogModal && (
+        <CreateSkillModal projectId={projectId} onDismiss={onDismissForm} onSubmit={onSubmitForm} />
+      )}
     </div>
   );
 };
