@@ -110,6 +110,13 @@ export default async (composer: any): Promise<void> => {
       if (!this.histories[botId][profileName]) {
         this.histories[botId][profileName] = [];
       }
+      const previous =
+        this.histories[botId][profileName].length > 0 ? this.histories[botId][profileName][0] : undefined;
+      console.log(previous);
+      if (previous?.status === 202) {
+        this.histories[botId][profileName].shift();
+      }
+      console.log(this.histories[botId][profileName]);
       this.histories[botId][profileName].unshift(newHistory);
       if (PERSIST_HISTORY) {
         await writeJson(this.historyFilePath, this.histories);
@@ -167,9 +174,13 @@ export default async (composer: any): Promise<void> => {
      * @param resourcekey
      */
     private async cleanup(resourcekey: string) {
-      const projFolder = this.getRuntimeFolder(resourcekey);
-      await emptyDir(projFolder);
-      await rmdir(projFolder);
+      try {
+        const projFolder = this.getRuntimeFolder(resourcekey);
+        await emptyDir(projFolder);
+        await rmdir(projFolder);
+      } catch (error) {
+        console.log(error);
+      }
     }
 
     /**
@@ -412,6 +423,8 @@ export default async (composer: any): Promise<void> => {
         },
       };
       this.addLoadingStatus(botId, profileName, response);
+      // save in history
+      this.updateHistory(botId, profileName, { status: response.status, ...response.result });
 
       try {
         // test creds, if not valid, return 500

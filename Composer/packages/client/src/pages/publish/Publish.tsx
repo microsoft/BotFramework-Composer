@@ -241,7 +241,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
         },
       ]);
       await setPublishTargets(targets);
-      // initialize the publish history
+      // initialize the publish history for the new profile
       await setPublishHistory(projectId, name);
       onSelectTarget(name);
     },

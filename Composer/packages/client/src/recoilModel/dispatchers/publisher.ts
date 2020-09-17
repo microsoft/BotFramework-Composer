@@ -184,7 +184,6 @@ export const publisherDispatcher = () => {
     (callbackHelpers: CallbackInterface) => async (projectId: string, targetName: string) => {
       const { set } = callbackHelpers;
       try {
-        // sync to server
         set(publishHistoryState, (publishHistory) => ({
           ...publishHistory,
           [targetName]: [],
