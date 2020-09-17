@@ -42,7 +42,6 @@ export class BotProjectDeploy {
     profileName: string,
     name: string,
     environment: string,
-    language?: string,
     hostname?: string,
     luisResource?: string
   ) {
@@ -55,9 +54,9 @@ export class BotProjectDeploy {
 
       // STEP 2: UPDATE LUIS
       // Do the LUIS build if LUIS settings are present
-      let luisLanguage = language || settings.luis.defaultLanguage;
-      if (!luisLanguage) {
-        luisLanguage = 'en-us';
+      let language = settings.defaultLanguage || settings.luis.defaultLanguage;
+      if (!language) {
+        language = 'en-us';
       }
       const publisher = new LuisAndQnaPublish({ logger: this.logger, projPath: this.projPath });
 
@@ -67,7 +66,7 @@ export class BotProjectDeploy {
         name,
         environment,
         this.accessToken,
-        luisLanguage,
+        language,
         settings.luis,
         settings.qna,
         luisResource
