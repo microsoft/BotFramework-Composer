@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { Dispatch, SetStateAction } from 'react';
 import { AvailablePersonalities } from './creationOptions';
 
@@ -27,11 +30,7 @@ export interface IAssistant {
   name: string;
   description: string;
   imgName: string;
-  templateConfig?: ITemplateConfig;
 }
-
-// TODO create obj to be outputted from creation experience and used for provisioning and creation of botSchema
-export interface ITemplateConfig {}
 
 export interface IAvailableHostedSkill {
   name: string;
@@ -91,8 +90,6 @@ export const initialAppState: IAppState = {
   selectedSkills: [],
   selectedQnaFile: '',
 };
-
-//////////////////////
 
 export const AppContextDefaultValue: AppContextValue = {
   state: initialAppState,

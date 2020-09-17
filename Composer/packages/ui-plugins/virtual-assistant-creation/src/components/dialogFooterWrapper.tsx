@@ -1,3 +1,8 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+/** @jsx jsx */
+import { jsx, css } from '@emotion/core';
 import { Fragment } from 'react';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
@@ -5,6 +10,7 @@ import React from 'react';
 import formatMessage from 'format-message';
 import { navigate } from '@reach/router';
 
+// -------------------- DialogFooter -------------------- //
 interface DialogFooterWrapperProps {
   onDismiss: () => void;
   onSubmit?: () => void;

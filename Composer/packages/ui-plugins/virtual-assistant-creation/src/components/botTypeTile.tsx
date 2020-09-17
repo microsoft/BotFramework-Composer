@@ -1,21 +1,27 @@
-import React from 'react';
-import { mergeStyles } from '@uifabric/merge-styles';
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
-interface IColorFormProps {
+/** @jsx jsx */
+import { jsx, css } from '@emotion/core';
+import formatMessage from 'format-message';
+import React from 'react';
+
+// -------------------- Styles -------------------- //
+
+const descriptionWrapper = css`
+  display: inline-block;
+  height: 59px;
+  width: 50%;
+  paddingleft: 30px;
+`;
+
+// -------------------- BotTypeTile -------------------- //
+
+interface IBotTypeTileProps {
   botName: string;
   botDescription: string;
 }
 
-export const BotTypeTile: React.StatelessComponent<IColorFormProps> = (props: IColorFormProps) => {
-  const descriptionFieldClassName = mergeStyles({
-    display: 'inline-block',
-    height: '59px',
-    width: '50%',
-    paddingLeft: '30px',
-  });
-
-  return (
-    // <p>{props.botName}</p>
-    <div className={descriptionFieldClassName}>{props.botDescription}</div>
-  );
+export const BotTypeTile: React.FC<IBotTypeTileProps> = (props: IBotTypeTileProps) => {
+  return <div css={descriptionWrapper}>{formatMessage(props.botDescription)}</div>;
 };

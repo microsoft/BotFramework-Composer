@@ -1,18 +1,23 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+/** @jsx jsx */
+import { jsx, css } from '@emotion/core';
+import formatMessage from 'format-message';
 import React, { Fragment, useState } from 'react';
 import { RouteComponentProps, Router } from '@reach/router';
-import NewBotPage from './newBotPage';
-import CustomizeBotPage from './customizeBotPage';
+import { NewBotPage } from './newBotPage';
+import { CustomizeBotPage } from './customizeBotPage';
 import { ConfigSummaryPage } from './configSummaryPage';
 import { AppContextDefaultValue } from '../models/stateModels';
 import { useShellApi } from '@bfc/extension-client';
-import { updatePersonalityQnaFile } from '../shared/utils/util';
+import { updatePersonalityQnaFile } from '../shared/util';
 import ProvisionSummaryPage from './provisionSummaryPage';
 import { RouterPaths } from '../shared/constants';
 import { navigate } from '@reach/router';
+// -------------------- Styles -------------------- //
 
+// -------------------- BotTypeTile -------------------- //
 interface VirtualAssistantCreationModalProps
   extends RouteComponentProps<{
     location: string;

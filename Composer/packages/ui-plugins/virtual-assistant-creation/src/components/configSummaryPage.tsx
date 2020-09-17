@@ -1,21 +1,37 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+/** @jsx jsx */
+import { jsx, css } from '@emotion/core';
+import formatMessage from 'format-message';
 import React, { Fragment, useContext } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
 import { Text } from 'office-ui-fabric-react/lib/Text';
-import { mergeStyles } from '@uifabric/merge-styles';
 import { Separator, ISeparatorStyles } from 'office-ui-fabric-react/lib/Separator';
 import { AppContext } from './VirtualAssistantCreationModal';
 import { DialogFooterWrapper } from './dialogFooterWrapper';
 import { RouterPaths } from '../shared/constants';
 
-interface ConfigSummaryPageProps
-  extends RouteComponentProps<{
-    location: string;
-  }> {
+// -------------------- Styles -------------------- //
+
+const categoryTextStyling = css`
+  display: block;
+  margin-top: 10px;
+`;
+
+const entryText = (bold: boolean) => css`
+  display: inline;
+  font-weight: ${bold ? 'bold' : 'initial'};
+`;
+
+const separatorStyles: Partial<ISeparatorStyles> = {
+  root: { color: 'black' },
+};
+
+// -------------------- ConfigSummaryPage -------------------- //
+interface ConfigSummaryPageProps extends RouteComponentProps {
   onDismiss: () => void;
 }
 
@@ -23,47 +39,21 @@ export const ConfigSummaryPage: React.FC<ConfigSummaryPageProps> = (props) => {
   const { state } = useContext(AppContext);
   const { onDismiss } = props;
 
-  let KeyValueClassName = mergeStyles({
-    display: 'block',
-  });
-  let categoryText = (text: string) => {
-    let className = mergeStyles({
-      display: 'block',
-    });
-    const separatorStyles: Partial<ISeparatorStyles> = {
-      root: { color: 'black' },
-    };
+  const categoryText = (text: string) => {
     return (
-      <div>
-        <br />
-        <Text className={className} variant="xLarge">
-          {text}
-        </Text>
+      <div css={categoryTextStyling}>
+        <Text variant="xLarge">{text}</Text>
         <Separator styles={separatorStyles} />
       </div>
     );
   };
 
-  let keyText = (text: string) => {
-    let className = mergeStyles({
-      fontWeight: 'bold',
-    });
-
+  const configEntry = (name: string, value: string) => {
     return (
-      <Text className={className} variant="mediumPlus">
-        {text}
-      </Text>
-    );
-  };
-
-  let valueText = (text: string) => {
-    let className = mergeStyles({
-      // display: 'inline'
-    });
-    return (
-      <Text className={className} variant="mediumPlus">
-        {text}
-      </Text>
+      <div>
+        <Text css={entryText(true)}>{formatMessage(name)} : </Text>
+        <Text css={entryText(false)}>{formatMessage(value)}</Text>
+      </div>
     );
   };
 
@@ -72,48 +62,20 @@ export const ConfigSummaryPage: React.FC<ConfigSummaryPageProps> = (props) => {
       <DialogWrapper
         isOpen={true}
         onDismiss={props.onDismiss}
-        title={'Configuration Summary'}
-        subText={'The following customizations will be applied to your bot'}
+        title={formatMessage('Configuration Summary')}
+        subText={formatMessage('The following customizations will be applied to your bot')}
         dialogType={DialogTypes.CreateFlow}
       >
-        <div>
-          {categoryText('General')}
-          <div className={KeyValueClassName}>
-            {keyText('Selected Assistant Type: ')}
-            {valueText(state.selectedAssistant.name)}
-          </div>
-          <div className={KeyValueClassName}>
-            {keyText('Bot Name: ')}
-            {valueText(state.selectedBotName)}
-          </div>
-          <div className={KeyValueClassName}>
-            {keyText('Personality Choice: ')}
-            {valueText(state.selectedPersonality)}
-          </div>
-          <div className={KeyValueClassName}>
-            {keyText('Bot configured for Text: ')}
-            {valueText(state.isTextEnabled.toString())}
-          </div>
-          <div className={KeyValueClassName}>
-            {keyText('Bot configured for Speech: ')}
-            {valueText(state.isSpeechEnabled.toString())}
-          </div>
-          {/* <div className={KeyValueClassName}>
-            {keyText('Supported User Languages: ')}
-            {valueText(state.selectedLanguages.toString())}
-          </div> */}
-          {/* {categoryText('Skills')}
-          {renderSkillsList()} */}
-          {categoryText('Content')}
-          <div className={KeyValueClassName}>
-            {keyText('Greeting Message: ')}
-            {valueText(state.selectedGreetingMessage)}
-          </div>
-          <div className={KeyValueClassName}>
-            {keyText('Fallback Text: ')}
-            {valueText(state.selectedFallbackText)}
-          </div>
-        </div>
+        {categoryText('General')}
+        {configEntry('Selected Assistant Type', state.selectedAssistant.name)}
+        {configEntry('Bot Name', state.selectedBotName)}
+        {configEntry('Personality Choice', state.selectedPersonality)}
+        {configEntry('Bot Configured for Text', state.isTextEnabled.toString())}
+        {configEntry('Bot Configured for Speech', state.isSpeechEnabled.toString())}
+        {configEntry('Selected Assistant Type', state.selectedAssistant.name)}
+        {categoryText('Content')}
+        {configEntry('Greeting Message', state.selectedGreetingMessage)}
+        {configEntry('Fallback Text', state.selectedFallbackText)}
         <DialogFooterWrapper
           prevPath={RouterPaths.customizeBotPage}
           nextPath={RouterPaths.provisionSummaryPage}
@@ -123,5 +85,3 @@ export const ConfigSummaryPage: React.FC<ConfigSummaryPageProps> = (props) => {
     </Fragment>
   );
 };
-
-export default ConfigSummaryPage;

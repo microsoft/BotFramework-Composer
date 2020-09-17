@@ -1,9 +1,11 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import axios from 'axios';
 import { ShellApi } from '@bfc/shared';
-import { AvailablePersonalities } from '../../models/creationOptions';
+import { AvailablePersonalities } from '../models/creationOptions';
 
 // GitHub API Utility Functions
-
 export const updatePersonalityQnaFile = async (shellApi: ShellApi, selectedPersonality: AvailablePersonalities) => {
   const GitHubRepoApiRootUrl =
     'https://api.github.com/repos/microsoft/BotBuilder-PersonalityChat/contents/CSharp/Datasets/qnaFormat/';

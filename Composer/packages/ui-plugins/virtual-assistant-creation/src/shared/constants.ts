@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 export enum RouterPaths {
   defineConversationPage = '',
   newBotPage = '/projects/create/va-core/customize',

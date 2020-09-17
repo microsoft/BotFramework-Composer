@@ -1,6 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+/** @jsx jsx */
+import { jsx, css } from '@emotion/core';
+import formatMessage from 'format-message';
 import React, { Fragment, useContext } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
@@ -10,89 +13,83 @@ import { Label } from 'office-ui-fabric-react/lib/Label';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { mergeStyles } from '@uifabric/merge-styles';
 import { AppContext } from './VirtualAssistantCreationModal';
 import { DialogFooterWrapper } from './dialogFooterWrapper';
 import { RouterPaths } from '../shared/constants';
 import { AvailablePersonalities } from '../models/creationOptions';
 
-interface CustomizeBotPageProps
-  extends RouteComponentProps<{
-    location: string;
-  }> {
+// -------------------- Styles -------------------- //
+const textFieldStyling = css`
+  width: 400px !important;
+`;
+
+const horizontalStackTokens = { childrenGap: 10 };
+const verticalStackTokens = { childrenGap: 15 };
+
+const dropdownStyles: Partial<IDropdownStyles> = {
+  dropdown: { width: 300 },
+};
+
+// -------------------- CustomizeBotPage -------------------- //
+interface CustomizeBotPageProps extends RouteComponentProps {
   onDismiss: () => void;
 }
 
 export const CustomizeBotPage: React.FC<CustomizeBotPageProps> = (props) => {
   const { state, setState } = useContext(AppContext);
 
-  let textFieldId = 'botNameTextField';
-  let textFieldClassName = mergeStyles({
-    width: '400px !important',
-  });
-
-  const personalityOptions: IDropdownOption[] = [
-    { key: AvailablePersonalities.professional, text: AvailablePersonalities.professional },
-    { key: AvailablePersonalities.enthusiastic, text: AvailablePersonalities.enthusiastic },
-    { key: AvailablePersonalities.friendly, text: AvailablePersonalities.friendly },
-    { key: AvailablePersonalities.witty, text: AvailablePersonalities.witty },
-    { key: AvailablePersonalities.caring, text: AvailablePersonalities.caring },
-  ];
-
-  const dropdownStyles: Partial<IDropdownStyles> = {
-    dropdown: { width: 300 },
+  const personalityOptions = (): IDropdownOption[] => {
+    return Object.values(AvailablePersonalities).map((personality) => {
+      return { key: personality, text: formatMessage(personality) };
+    });
   };
-  const stackTokens = { childrenGap: 10 };
-  const verticalStackTokens = { childrenGap: 15 };
 
   return (
     <Fragment>
       <DialogWrapper
         isOpen={true}
         onDismiss={props.onDismiss}
-        title={'Customize your assistant'}
-        subText={
+        title={formatMessage('Customize your assistant')}
+        subText={formatMessage(
           'Give your bot personality, multi-language capabilities and more. You can edit this later in Bot Settings.'
-        }
+        )}
         dialogType={DialogTypes.CreateFlow}
       >
         <Stack tokens={verticalStackTokens}>
           <Stack.Item>
-            <Label htmlFor={textFieldId}>Bot Name</Label>
+            <Label>{formatMessage('Bot Name')}</Label>
             <TextField
               onChange={(event: any, newValue?: string) => {
                 setState({ ...state, selectedBotName: newValue as string });
               }}
-              value={state.selectedBotName}
-              className={textFieldClassName}
-              id={textFieldId}
+              value={formatMessage(state.selectedBotName)}
+              css={textFieldStyling}
             />
           </Stack.Item>
           <Stack.Item>
-            <Label>User Input</Label>
-            <Stack horizontal={true} tokens={stackTokens}>
+            <Label>{formatMessage('User Input')}</Label>
+            <Stack horizontal={true} tokens={horizontalStackTokens}>
               <Checkbox
-                label="Text"
+                label={formatMessage('Text')}
                 onChange={() => {
                   setState({ ...state, isTextEnabled: !state.isTextEnabled });
                 }}
                 checked={state.isTextEnabled}
               />
               <Checkbox
-                label="Speech"
+                label={formatMessage('Speech')}
                 onChange={() => {
                   setState({ ...state, isSpeechEnabled: !state.isSpeechEnabled });
                 }}
                 checked={state.isSpeechEnabled}
               />
-            </Stack>{' '}
+            </Stack>
           </Stack.Item>
           <Stack.Item>
-            {/* <Stack tokens={stackTokens}> */}
             <Dropdown
-              placeholder="Select an option"
-              label="Personality"
-              options={personalityOptions}
+              placeholder={formatMessage('Select an option')}
+              label={formatMessage('Personality')}
+              options={personalityOptions()}
               styles={dropdownStyles}
               selectedKey={state.selectedPersonality}
               onChange={(ev: any, option?: IDropdownOption) => {
@@ -102,24 +99,20 @@ export const CustomizeBotPage: React.FC<CustomizeBotPageProps> = (props) => {
             />
           </Stack.Item>
           <Stack.Item>
-            <Label htmlFor={textFieldId}>Greeting Message</Label>
+            <Label>{formatMessage('Greeting Message')}</Label>
             <TextField
-              className={textFieldClassName}
-              id={textFieldId}
-              value={state.selectedGreetingMessage}
+              css={textFieldStyling}
+              value={formatMessage(state.selectedGreetingMessage)}
               onChange={(ev?: any, newValue?: string) => {
                 setState({ ...state, selectedGreetingMessage: newValue as string });
               }}
             />
           </Stack.Item>
           <Stack.Item>
-            <Label htmlFor={textFieldId}>
-              What will your Virtual Assistant say if it does not understand the user?
-            </Label>
+            <Label>{formatMessage('What will your Virtual Assistant say if it does not understand the user?')}</Label>
             <TextField
-              className={textFieldClassName}
-              id={textFieldId}
-              value={state.selectedFallbackText}
+              css={textFieldStyling}
+              value={formatMessage(state.selectedFallbackText)}
               onChange={(ev?: any, newValue?: string) => {
                 setState({ ...state, selectedFallbackText: newValue as string });
               }}
@@ -135,5 +128,3 @@ export const CustomizeBotPage: React.FC<CustomizeBotPageProps> = (props) => {
     </Fragment>
   );
 };
-
-export default CustomizeBotPage;
