@@ -28,6 +28,7 @@ import { QnAFile } from '@bfc/shared/src/types';
 import { QnASection } from '@bfc/shared';
 import { qnaUtil } from '@bfc/indexers';
 // import querystring from 'query-string';
+import { NeutralColors } from '@uifabric/fluent-theme';
 
 import emptyQnAIcon from '../../images/emptyQnAIcon.svg';
 import { navigateTo } from '../../utils/navigation';
@@ -63,6 +64,7 @@ interface QnASectionItem extends QnASection {
   fileId: string;
   dialogId: string | undefined;
   used: boolean;
+  usedIn: { id: string; displayName: string }[];
 }
 
 interface TableViewProps extends RouteComponentProps<{}> {
@@ -96,23 +98,37 @@ const TableView: React.FC<TableViewProps> = (props) => {
   // const search = props.location?.search ?? '';
   // const searchContainerId = querystring.parse(search).C;
 
-  const activeDialog = dialogs.find(({ id }) => id === dialogId);
+  // const activeDialog = dialogs.find(({ id }) => id === dialogId);
   const targetFileId = dialogId.endsWith('.source') ? dialogId : `${dialogId}.${locale}`;
   const qnaFile = qnaFiles.find(({ id }) => id === targetFileId);
   const limitedNumber = 1;
   const generateQnASections = (file: QnAFile): QnASectionItem[] => {
-    return file
-      ? file.qnaSections.map((qnaSection) => {
-          const qnaDialog = dialogs.find((dialog) => file.id === `${dialog.id}.${locale}`);
-          return {
-            fileId: file.id,
-            dialogId: qnaDialog?.id,
-            used: !!qnaDialog,
-            key: qnaSection.sectionId,
-            ...qnaSection,
-          };
-        })
-      : [];
+    if (!file) return [];
+    const usedInDialog: any[] = [];
+    dialogs.forEach((dialog) => {
+      const dialogQnAFile =
+        qnaFiles.find(({ id }) => id === dialog.qnaFile) ||
+        qnaFiles.find(({ id }) => id === `${dialog.qnaFile}.${locale}`);
+      if (dialogQnAFile) {
+        dialogQnAFile.imports.forEach(({ id }) => {
+          if (id === `${file.id}.qna`) {
+            usedInDialog.push({ id: dialog.id, displayName: dialog.displayName });
+          }
+        });
+      }
+    });
+
+    return file.qnaSections.map((qnaSection) => {
+      const qnaDialog = dialogs.find((dialog) => file.id === `${dialog.id}.${locale}`);
+      return {
+        fileId: file.id,
+        dialogId: qnaDialog?.id,
+        used: !!qnaDialog,
+        usedIn: usedInDialog,
+        key: qnaSection.sectionId,
+        ...qnaSection,
+      };
+    });
   };
   const [editQnAFile, setEditQnAFile] = useState<QnAFile | undefined>(undefined);
   const [qnaSections, setQnASections] = useState<QnASectionItem[]>([]);
@@ -236,10 +252,16 @@ const TableView: React.FC<TableViewProps> = (props) => {
     const containerId = props?.group?.key || '';
     const containerQnAFile = qnaFiles.find(({ id }) => id === containerId);
     const isImportedSource = containerId.endsWith('.source');
-    const isSourceFromUrl = isImportedSource && isQnAFileCreatedFromUrl(containerQnAFile);
+    const isSourceFromUrl = isImportedSource && containerQnAFile && isQnAFileCreatedFromUrl(containerQnAFile);
 
     const onRenderItem = (item: IOverflowSetItemProps): JSX.Element => {
-      return <IconButton menuIconProps={{ iconName: 'Edit' }} onClick={item.onClick} />;
+      return (
+        <IconButton
+          menuIconProps={{ iconName: 'Edit' }}
+          styles={{ root: { color: NeutralColors.black } }}
+          onClick={item.onClick}
+        />
+      );
     };
 
     const onRenderOverflowButton = (overflowItems: any[] | undefined): JSX.Element => {
@@ -248,6 +270,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           menuIconProps={{ iconName: 'More' }}
           menuProps={{ items: overflowItems || [] }}
           role="menuitem"
+          styles={{ root: { color: NeutralColors.black } }}
           title="More options"
         />
       );
@@ -279,24 +302,28 @@ const TableView: React.FC<TableViewProps> = (props) => {
                     },
                   },
                 ]}
-                overflowItems={[
-                  {
-                    key: 'edit',
-                    name: formatMessage('Show code'),
-                    onClick: () => {
-                      navigateTo(`/bot/${projectId}/knowledge-base/${dialogId}/edit?C=${containerId}`);
+                overflowItems={
+                  [
+                    {
+                      key: 'edit',
+                      name: formatMessage('Show code'),
+                      iconProps: { iconName: 'CodeEdit' },
+                      onClick: () => {
+                        navigateTo(`/bot/${projectId}/knowledge-base/${dialogId}/edit?C=${containerId}`);
+                      },
                     },
-                  },
-                  {
-                    key: 'delete',
-                    name: formatMessage('Delete knowledge base'),
-                    onClick: async () => {
-                      if (!qnaFile) return;
-                      await removeQnAImport({ id: qnaFile.id, sourceId: containerId });
-                      await removeQnAFile({ id: containerId });
+                    {
+                      key: 'delete',
+                      iconProps: { iconName: 'Delete' },
+                      name: formatMessage('Delete knowledge base'),
+                      onClick: async () => {
+                        if (!qnaFile) return;
+                        await removeQnAImport({ id: qnaFile.id, sourceId: containerId });
+                        await removeQnAFile({ id: containerId });
+                      },
                     },
-                  },
-                ]}
+                  ] as IOverflowSetItemProps[]
+                }
                 role="menubar"
                 onRenderItem={onRenderItem}
                 onRenderOverflowButton={onRenderOverflowButton}
@@ -346,7 +373,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
             <IconButton
               ariaLabel="ChevronDown"
               iconProps={{ iconName: isQnASectionsExpanded[index] ? 'ChevronDown' : 'ChevronRight' }}
-              styles={icon}
+              styles={{ root: { ...icon.root, marginTop: '2px' } }}
               title="ChevronDown"
               onClick={() => toggleExpandRow(index)}
             />
@@ -446,14 +473,13 @@ const TableView: React.FC<TableViewProps> = (props) => {
         name: formatMessage('Answer'),
         fieldName: 'answer',
         minWidth: 350,
-        maxWidth: 550,
         isResizable: true,
         data: 'string',
         onRender: (item, index) => {
           const isSourceSectionInDialog = item.fileId.endsWith('.source') && !dialogId.endsWith('.source');
           const isAllowEdit = dialogId !== 'all' && !isSourceSectionInDialog;
           return (
-            <div data-is-focusable css={formCell}>
+            <div data-is-focusable css={formCell} style={{ marginTop: '2px' }}>
               <EditableField
                 enableIcon
                 multiline
@@ -484,6 +510,24 @@ const TableView: React.FC<TableViewProps> = (props) => {
           );
         },
       },
+      {
+        key: 'UsedIn',
+        name: formatMessage('Used In'),
+        fieldName: 'UsedIn',
+        minWidth: 100,
+        maxWidth: 100,
+        isResizable: false,
+        data: 'string',
+        onRender: (item) => {
+          return (
+            <div data-is-focusable css={formCell} style={{ marginTop: '10px' }}>
+              {item.usedIn.map(({ id, displayName }) => {
+                return <Link key={id}>{displayName}</Link>;
+              })}
+            </div>
+          );
+        },
+      },
     ];
     if (dialogId !== 'all') {
       const extraOperations = {
@@ -499,7 +543,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
             <IconButton
               ariaLabel="Delete"
               iconProps={{ iconName: 'Delete' }}
-              styles={icon}
+              styles={{ root: { ...icon.root, marginTop: '4px' } }}
               title="Delete"
               onClick={() => {
                 onRemoveQnAPairs(item.fileId, item.sectionId);
@@ -508,7 +552,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           );
         },
       };
-      tableColums.splice(3, 0, extraOperations);
+      tableColums.push(extraOperations);
     }
 
     // all view, show used in column
@@ -524,7 +568,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         data: 'string',
         onRender: (item) => {
           return (
-            <div data-is-focusable css={formCell}>
+            <div data-is-focusable css={formCell} style={{ marginTop: '4px' }}>
               <div aria-label={formatMessage(`id is {id}`, { id: item.dialogId })} css={content} tabIndex={-1}>
                 {item.dialogId}
               </div>

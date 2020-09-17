@@ -23,12 +23,12 @@ export const validateName = (sources: QnAFile[]): FieldValidator => {
     let currentError = '';
     if (name) {
       if (!FileNameRegex.test(name)) {
-        currentError = formatMessage('Name contains invalid charactors');
+        currentError = formatMessage('KB name cannot contain speacial characters.');
       }
 
       const duplicatedItemIndex = sources.findIndex((item) => item.id.toLowerCase() === `${name.toLowerCase()}.source`);
       if (duplicatedItemIndex > -1) {
-        currentError = formatMessage('Duplicate imported QnA name');
+        currentError = formatMessage('You already have a KB with that name.Choose another name and try again.');
       }
     }
     return currentError;

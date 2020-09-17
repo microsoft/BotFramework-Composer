@@ -11,6 +11,7 @@ import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/O
 import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { useRecoilValue } from 'recoil';
+import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
 
 import { navigateTo } from '../utils/navigation';
 import { dispatcherState, userSettingsState } from '../recoilModel';
@@ -67,6 +68,7 @@ export interface INavTreeItem {
   ariaLabel?: string;
   url: string;
   menuItems?: IContextualMenuItem[];
+  menuIconProps?: IIconProps;
   disabled?: boolean;
 }
 
@@ -110,7 +112,7 @@ const NavTree: React.FC<INavTreeProps> = (props) => {
             return (
               <CommandBarButton
                 ariaLabel="Menu items"
-                menuIconProps={{ iconName: 'More' }}
+                menuIconProps={item.menuIconProps as IIconProps}
                 menuProps={{ items: menuItems as IContextualMenuItem[] }}
                 role="menuitem"
                 styles={buttonStyles}

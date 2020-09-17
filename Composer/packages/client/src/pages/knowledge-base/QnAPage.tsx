@@ -65,6 +65,9 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
         name: dialog.displayName,
         ariaLabel: formatMessage('qna file'),
         url: `/bot/${projectId}/knowledge-base/${dialog.id}`,
+        menuIconProps: {
+          iconName: 'Add',
+        },
         menuItems: [
           {
             name: formatMessage('Create KB from scratch'),

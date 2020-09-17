@@ -16,7 +16,7 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { FieldConfig, useForm } from '../../hooks/useForm';
 
-import { knowledgeBaseSourceUrl, QnAMakerLearningUrl, validateUrl, validateName } from './constants';
+import { knowledgeBaseSourceUrl, validateUrl, validateName } from './constants';
 import { subText, styles, dialogWindow, textField, warning } from './styles';
 
 interface CreateQnAFromUrlModalProps
@@ -62,12 +62,6 @@ const DialogTitle = () => {
           )}
           <Link href={knowledgeBaseSourceUrl} target={'_blank'}>
             {formatMessage('Learn more about knowledge base sources. ')}
-          </Link>
-          {formatMessage(
-            'Skip this step to add questions and answers manually after creation. The number of sources and file size you can add depends on the QnA service SKU you choose. '
-          )}
-          <Link href={QnAMakerLearningUrl} target={'_blank'}>
-            {formatMessage('Learn more about QnA Maker SKUs.')}
           </Link>
         </span>
       </p>
