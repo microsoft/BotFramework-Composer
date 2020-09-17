@@ -215,6 +215,24 @@ export const qnaAllUpViewStatusState = atom<any>({
   default: QnAAllUpViewStatus.Success,
 });
 
+export const showCreateQnAFromUrlDialogState = atom<boolean>({
+  key: getFullyQualifiedKey('showCreateQnAFromUrlDialog'),
+  default: false,
+});
+
+export const showCreateQnAFromScratchDialogState = atom<boolean>({
+  key: getFullyQualifiedKey('showCreateQnAFromScratchDialog'),
+  default: false,
+});
+export const onCreateQnAFromUrlDialogCompleteState = atom<any>({
+  key: getFullyQualifiedKey('onCreateQnAFromUrlDialogCompleteState'),
+  default: { func: undefined },
+});
+export const onCreateQnAFromScratchDialogCompleteState = atom<any>({
+  key: getFullyQualifiedKey('onCreateQnAFromScratchDialogCompleteState'),
+  default: { func: undefined },
+});
+
 export const isEjectRuntimeExistState = atom<boolean>({
   key: getFullyQualifiedKey('isEjectRuntimeExist'),
   default: false,

@@ -3,3 +3,4 @@
 
 export * from './CreateQnAFromScratchModal';
 export * from './CreateQnAFromUrlModal';
+export * from './EditQnAFromScratchModal';

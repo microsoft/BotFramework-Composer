@@ -128,7 +128,8 @@ export interface QnAFile {
   diagnostics: Diagnostic[];
   qnaSections: QnASection[];
   imports: { id: string; path: string }[];
-  options: { name: string; value: string }[];
+  options: { id: string; name: string; value: string }[];
+  empty: boolean;
   resource: LuParseResource;
   [key: string]: any;
 }

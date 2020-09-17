@@ -16,17 +16,17 @@ export const validateUrl: FieldValidator = (url: string): string => {
   return error;
 };
 
-export const QnANameRegex = /^\w[-\w]*$/;
+export const FileNameRegex = /^[a-zA-Z0-9-_]+$/;
 
 export const validateName = (sources: QnAFile[]): FieldValidator => {
   return (name: string) => {
     let currentError = '';
     if (name) {
-      if (!QnANameRegex.test(name)) {
+      if (!FileNameRegex.test(name)) {
         currentError = formatMessage('Name contains invalid charactors');
       }
 
-      const duplicatedItemIndex = sources.findIndex((item) => item.name === name);
+      const duplicatedItemIndex = sources.findIndex((item) => item.id.toLowerCase() === `${name.toLowerCase()}.source`);
       if (duplicatedItemIndex > -1) {
         currentError = formatMessage('Duplicate imported QnA name');
       }

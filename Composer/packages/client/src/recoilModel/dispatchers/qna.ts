@@ -6,10 +6,21 @@ import { useRecoilCallback, CallbackInterface } from 'recoil';
 import { qnaUtil } from '@bfc/indexers';
 
 import qnaWorker from '../parsers/qnaWorker';
-import { qnaFilesState, qnaAllUpViewStatusState, projectIdState, localeState, settingsState } from '../atoms/botState';
+import {
+  qnaFilesState,
+  qnaAllUpViewStatusState,
+  projectIdState,
+  localeState,
+  settingsState,
+  showCreateQnAFromScratchDialogState,
+  showCreateQnAFromUrlDialogState,
+  onCreateQnAFromScratchDialogCompleteState,
+  onCreateQnAFromUrlDialogCompleteState,
+} from '../atoms/botState';
 import { QnAAllUpViewStatus } from '../types';
 import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
 import { getBaseName } from '../../utils/fileUtil';
+import { navigateTo } from '../../utils/navigation';
 
 import httpClient from './../../utils/httpUtil';
 import { setError } from './shared';
@@ -88,7 +99,7 @@ export const removeQnAFileState = async (callbackHelpers: CallbackInterface, { i
   set(qnaFilesState, qnaFiles);
 };
 
-export const createSourceQnAFileState = async (
+export const createKBFileState = async (
   callbackHelpers: CallbackInterface,
   { id, name, content }: { id: string; name: string; content: string }
 ) => {
@@ -126,7 +137,103 @@ export const createSourceQnAFileState = async (
   set(qnaFilesState, [...newQnAFiles, createdQnAFile]);
 };
 
+export const removeKBFileState = async (callbackHelpers: CallbackInterface, { id }: { id: string }) => {
+  const { set, snapshot } = callbackHelpers;
+  let qnaFiles = await snapshot.getPromise(qnaFilesState);
+  const projectId = await snapshot.getPromise(projectIdState);
+  const locale = await snapshot.getPromise(localeState);
+
+  const targetQnAFile =
+    qnaFiles.find((item) => item.id === id) || qnaFiles.find((item) => item.id === `${id}.${locale}`);
+  if (!targetQnAFile) {
+    throw new Error(`remove qna container file ${id} not exist`);
+  }
+
+  qnaFiles.forEach((file) => {
+    if (file.id === targetQnAFile.id) {
+      qnaFileStatusStorage.removeFileStatus(projectId, targetQnAFile.id);
+    }
+  });
+
+  qnaFiles = qnaFiles.filter((file) => file.id !== targetQnAFile.id);
+  set(qnaFilesState, qnaFiles);
+};
+
+export const renameKBFileState = async (
+  callbackHelpers: CallbackInterface,
+  { id, name }: { id: string; name: string }
+) => {
+  const { set, snapshot } = callbackHelpers;
+  const qnaFiles = await snapshot.getPromise(qnaFilesState);
+  const projectId = await snapshot.getPromise(projectIdState);
+  const locale = await snapshot.getPromise(localeState);
+
+  const targetQnAFile =
+    qnaFiles.find((item) => item.id === id) || qnaFiles.find((item) => item.id === `${id}.${locale}`);
+  if (!targetQnAFile) {
+    throw new Error(`rename qna container file ${id} not exist`);
+  }
+
+  const existQnAFile =
+    qnaFiles.find((item) => item.id === name) || qnaFiles.find((item) => item.id === `${name}.${locale}`);
+  if (existQnAFile) {
+    throw new Error(`rename qna container file to ${name} already exist`);
+  }
+  qnaFileStatusStorage.removeFileStatus(projectId, targetQnAFile.id);
+
+  const newQnAFiles = qnaFiles.map((file) => {
+    if (file.id === targetQnAFile.id) {
+      return {
+        ...file,
+        id: name,
+      };
+    }
+    return file;
+  });
+
+  set(qnaFilesState, newQnAFiles);
+};
+
 export const qnaDispatcher = () => {
+  const createQnAFromUrlDialogBegin = useRecoilCallback(({ set }: CallbackInterface) => (onComplete) => {
+    set(showCreateQnAFromUrlDialogState, true);
+    set(onCreateQnAFromUrlDialogCompleteState, { func: onComplete });
+  });
+
+  const createQnAFromUrlDialogCancel = useRecoilCallback(({ set }: CallbackInterface) => () => {
+    set(showCreateQnAFromUrlDialogState, false);
+    set(onCreateQnAFromUrlDialogCompleteState, { func: undefined });
+  });
+
+  const createQnAFromScratchDialogBegin = useRecoilCallback(({ set }: CallbackInterface) => (onComplete) => {
+    set(showCreateQnAFromScratchDialogState, true);
+    set(onCreateQnAFromScratchDialogCompleteState, { func: onComplete });
+  });
+
+  const createQnAFromScratchDialogCancel = useRecoilCallback(({ set }: CallbackInterface) => () => {
+    set(showCreateQnAFromScratchDialogState, false);
+    set(onCreateQnAFromScratchDialogCompleteState, { func: undefined });
+  });
+
+  const createQnAFromUrlDialogSuccess = useRecoilCallback(({ set, snapshot }: CallbackInterface) => async () => {
+    const onCreateQnAFromUrlDialogComplete = (await snapshot.getPromise(onCreateQnAFromUrlDialogCompleteState)).func;
+    if (typeof onCreateQnAFromUrlDialogComplete === 'function') {
+      onCreateQnAFromUrlDialogComplete(null);
+    }
+    set(showCreateQnAFromUrlDialogState, false);
+    set(onCreateQnAFromUrlDialogCompleteState, { func: undefined });
+  });
+
+  const createQnAFromScratchDialogSuccess = useRecoilCallback(({ set, snapshot }: CallbackInterface) => async () => {
+    const onCreateQnAFromScratchDialogComplete = (await snapshot.getPromise(onCreateQnAFromScratchDialogCompleteState))
+      .func;
+    if (typeof onCreateQnAFromScratchDialogComplete === 'function') {
+      onCreateQnAFromScratchDialogComplete(null);
+    }
+    set(showCreateQnAFromScratchDialogState, false);
+    set(onCreateQnAFromScratchDialogCompleteState, { func: undefined });
+  });
+
   const updateQnAFile = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async ({ id, content }: { id: string; content: string }) => {
       await updateQnAFileState(callbackHelpers, { id, content });
@@ -175,12 +282,13 @@ export const qnaDispatcher = () => {
 ${response.data}
 `;
 
-      await createSourceQnAFileState(callbackHelpers, {
+      await createKBFileState(callbackHelpers, {
         id,
         name,
         content: contentForSourceQnA,
       });
 
+      await createQnAFromUrlDialogSuccess();
       set(qnaAllUpViewStatusState, QnAAllUpViewStatus.Success);
     }
   );
@@ -193,11 +301,18 @@ ${response.data}
       id: string; // dialogId.locale
       name: string;
     }) => {
-      await createSourceQnAFileState(callbackHelpers, {
+      const projectId = await callbackHelpers.snapshot.getPromise(projectIdState);
+      // const dialogs = await callbackHelpers.snapshot.getPromise(dialogsState);
+
+      const content = qnaUtil.generateQnAPair();
+      await createKBFileState(callbackHelpers, {
         id,
         name,
-        content: '',
+        content,
       });
+      await createQnAFromScratchDialogSuccess();
+
+      navigateTo(`/bot/${projectId}/knowledge-base/${getBaseName(id)}?C=${encodeURIComponent(name)}.source`);
     }
   );
 
@@ -333,7 +448,7 @@ ${response.data}
       const qnaFile = qnaFiles.find((temp) => temp.id === id);
       if (!qnaFile) return qnaFiles;
 
-      const updatedFile = qnaUtil.addImport(qnaFile, sourceId);
+      const updatedFile = qnaUtil.addImport(qnaFile, `${sourceId}.qna`);
       set(qnaFilesState, (qnaFiles) => {
         return qnaFiles.map((file) => {
           return file.id === id ? updatedFile : file;
@@ -347,7 +462,7 @@ ${response.data}
       const qnaFile = qnaFiles.find((temp) => temp.id === id);
       if (!qnaFile) return qnaFiles;
 
-      const updatedFile = qnaUtil.removeImport(qnaFile, sourceId);
+      const updatedFile = qnaUtil.removeImport(qnaFile, `${sourceId}.qna`);
       set(qnaFilesState, (qnaFiles) => {
         return qnaFiles.map((file) => {
           return file.id === id ? updatedFile : file;
@@ -355,6 +470,15 @@ ${response.data}
       });
     }
   );
+  const removeQnAKB = useRecoilCallback((callbackHelpers: CallbackInterface) => async ({ id }: { id: string }) => {
+    await removeKBFileState(callbackHelpers, { id });
+  });
+  const renameQnAKB = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async ({ id, name }: { id: string; name: string }) => {
+      await renameKBFileState(callbackHelpers, { id, name });
+    }
+  );
+
   return {
     createQnAImport,
     removeQnAImport,
@@ -367,7 +491,13 @@ ${response.data}
     createQnAFile,
     removeQnAFile,
     updateQnAFile,
+    removeQnAKB,
+    renameQnAKB,
     createQnAKBFromUrl,
     createQnAKBFromScratch,
+    createQnAFromScratchDialogBegin,
+    createQnAFromScratchDialogCancel,
+    createQnAFromUrlDialogBegin,
+    createQnAFromUrlDialogCancel,
   };
 };
