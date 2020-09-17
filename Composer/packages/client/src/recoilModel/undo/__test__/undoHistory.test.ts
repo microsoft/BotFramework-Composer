@@ -50,7 +50,7 @@ describe('undoHistory class', () => {
     expect(undoHistory.stack.length).toBe(0);
   });
 
-  it('should only support 40 actions in history', () => {
+  it('should only support 30 actions in history', () => {
     for (let i = 0; i < 40; i++) {
       undoHistory.add(new Map().set(dialogsState(projectId), `${i}`));
     }
