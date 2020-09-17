@@ -49,7 +49,7 @@ const projectId = '123a.234';
 describe('Skill page', () => {
   beforeEach(() => {
     recoilInitState = ({ set }) => {
-      set(currentProjectIdState, '243245');
+      set(currentProjectIdState, projectId);
       set(skillsState(projectId), skills),
         set(settingsState(projectId), {
           luis: {
@@ -91,7 +91,7 @@ describe('Skill page', () => {
 
 describe('<SkillList />', () => {
   it('should render the SkillList', () => {
-    const { container } = renderWithRecoil(<SkillList projectId={'123'} />, recoilInitState);
+    const { container } = renderWithRecoil(<SkillList projectId={projectId} />, recoilInitState);
     expect(container).toHaveTextContent('Email-Skill');
     expect(container).toHaveTextContent('Point Of Interest Skill');
   });
@@ -106,7 +106,7 @@ describe('<SkillForm />', () => {
     const onDismiss = jest.fn();
     const onSubmit = jest.fn();
     const { getByLabelText, getByText } = renderWithRecoil(
-      <CreateSkillModal projectId={'123'} onDismiss={onDismiss} onSubmit={onSubmit} />,
+      <CreateSkillModal projectId={projectId} onDismiss={onDismiss} onSubmit={onSubmit} />,
       recoilInitState
     );
 
@@ -125,7 +125,6 @@ describe('<SkillForm />', () => {
   });
 
   let formDataErrors;
-  let projectId;
   let validationState;
   let setFormDataErrors;
   let setSkillManifest;
@@ -133,7 +132,6 @@ describe('<SkillForm />', () => {
 
   beforeEach(() => {
     formDataErrors = {};
-    projectId = '123';
     validationState = {};
     setFormDataErrors = jest.fn();
     setSkillManifest = jest.fn();
@@ -225,7 +223,7 @@ describe('<SkillForm />', () => {
           manifestUrl: 'Validating',
         })
       );
-      expect(httpClient.post).toBeCalledWith('/projects/123/skill/check', { url: formData.manifestUrl });
+      expect(httpClient.post).toBeCalledWith(`/projects/${projectId}/skill/check`, { url: formData.manifestUrl });
       expect(setSkillManifest).toBeCalledWith('skill manifest');
       expect(setValidationState).toBeCalledWith(
         expect.objectContaining({
@@ -259,7 +257,7 @@ describe('<SkillForm />', () => {
           manifestUrl: 'Validating',
         })
       );
-      expect(httpClient.post).toBeCalledWith('/projects/123/skill/check', { url: formData.manifestUrl });
+      expect(httpClient.post).toBeCalledWith(`/projects/${projectId}/skill/check`, { url: formData.manifestUrl });
       expect(setSkillManifest).not.toBeCalled();
       expect(setValidationState).toBeCalledWith(
         expect.objectContaining({
