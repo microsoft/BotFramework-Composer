@@ -19,6 +19,7 @@ import {
   userSettingsState,
   localeState,
 } from '../../recoilModel';
+import Home from '../../pages/home/Home';
 import ImportQnAFromUrlModal from '../../pages/knowledge-base/ImportQnAFromUrlModal';
 import { QnABotTemplateId } from '../../constants';
 import { useProjectIdCache } from '../../utils/hooks';
@@ -62,7 +63,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   const storage = storages[currentStorageIndex.current];
   const currentStorageId = storage ? storage.id : 'default';
   const [formData, setFormData] = useState({ name: '', description: '', location: '' });
-  // const shellForCreation = useShell('VaCreation');
+  const shellForCreation = useShell('VaCreation');
   useEffect(() => {
     if (storages && storages.length) {
       const storageId = storage.id;
@@ -171,48 +172,54 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   }, []);
   return (
     <Fragment>
-      {/* <EditorExtension plugins={pluginConfig} shell={shellForCreation}> */}
-      <Router>
-        <DefineConversation
-          createFolder={createFolder}
-          focusedStorageFolder={focusedStorageFolder}
-          path="create/:templateId"
-          updateFolder={updateFolder}
-          onCurrentPathUpdate={updateCurrentPath}
-          onDismiss={handleDismiss}
-          onSubmit={handleSubmitOrImportQnA}
-        />
-        <CreateOptions path="create" templates={templateProjects} onDismiss={handleDismiss} onNext={handleCreateNext} />
-        <DefineConversation
-          createFolder={createFolder}
-          focusedStorageFolder={focusedStorageFolder}
-          path=":projectId/:templateId/save"
-          updateFolder={updateFolder}
-          onCurrentPathUpdate={updateCurrentPath}
-          onDismiss={handleDismiss}
-          onSubmit={handleSubmitOrImportQnA}
-        />
-        <OpenProject
-          focusedStorageFolder={focusedStorageFolder}
-          path="open"
-          onCurrentPathUpdate={updateCurrentPath}
-          onDismiss={handleDismiss}
-          onOpen={openBot}
-        />
-        <ImportQnAFromUrlModal
-          dialogId={formData.name.toLowerCase()}
-          path="create/QnASample/importQnA"
-          onDismiss={handleDismiss}
-          onSubmit={handleCreateQnA}
-        />
-        {/* <VirtualAssistantCreationModal
+      <Home />
+      <EditorExtension plugins={pluginConfig} shell={shellForCreation}>
+        <Router>
+          <DefineConversation
+            createFolder={createFolder}
+            focusedStorageFolder={focusedStorageFolder}
+            path="create/:templateId"
+            updateFolder={updateFolder}
+            onCurrentPathUpdate={updateCurrentPath}
+            onDismiss={handleDismiss}
+            onSubmit={handleSubmitOrImportQnA}
+          />
+          <CreateOptions
+            path="create"
+            templates={templateProjects}
+            onDismiss={handleDismiss}
+            onNext={handleCreateNext}
+          />
+          <DefineConversation
+            createFolder={createFolder}
+            focusedStorageFolder={focusedStorageFolder}
+            path=":projectId/:templateId/save"
+            updateFolder={updateFolder}
+            onCurrentPathUpdate={updateCurrentPath}
+            onDismiss={handleDismiss}
+            onSubmit={handleSubmitOrImportQnA}
+          />
+          <OpenProject
+            focusedStorageFolder={focusedStorageFolder}
+            path="open"
+            onCurrentPathUpdate={updateCurrentPath}
+            onDismiss={handleDismiss}
+            onOpen={openBot}
+          />
+          <ImportQnAFromUrlModal
+            dialogId={formData.name.toLowerCase()}
+            path="create/QnASample/importQnA"
+            onDismiss={handleDismiss}
+            onSubmit={handleCreateQnA}
+          />
+          <VirtualAssistantCreationModal
             handleCreateNew={handleCreateNew}
             formData={formData}
             onDismiss={handleDismiss}
             path="create/va-core/*"
-          /> */}
-      </Router>
-      {/* </EditorExtension> */}
+          />
+        </Router>
+      </EditorExtension>
     </Fragment>
   );
 };

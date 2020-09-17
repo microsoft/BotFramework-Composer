@@ -116,7 +116,12 @@ export const ProvisionSummaryPage: React.FC<ProvisionSummaryPageProps> = (props)
             />
           </PivotItem>
           <PivotItem headerText="ARM Template">
-            <TextField value={'TODO: ADD ARM TEMPLATE'} multiline rows={40} disabled />
+            <TextField
+              value={'Hold off on development until Composer provisioning spec is locked down'}
+              multiline
+              rows={40}
+              disabled
+            />
           </PivotItem>
         </Pivot>
         <DialogFooterWrapper prevPath={RouterPaths.configSummaryPage} onSubmit={onSubmit} onDismiss={onDismiss} />

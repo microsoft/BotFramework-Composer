@@ -109,27 +109,20 @@ export const NewBotPage: React.FC<NewBotPageProps> = (props) => {
         subText={'Create a new bot or choose from Virtual assistant templates. Learn More'}
         dialogType={DialogTypes.CreateFlow}
       >
-        <div className="ms-Grid" dir="ltr">
-          <div className="ms-Grid-row">
-            <div className="ms-Grid-col ms-sm6 ms-md6 ms-lg8">
-              <Label>Choose one:</Label>
-              <ChoiceGroup
-                required={true}
-                onChange={(event: any, option?: IChoiceGroupOption) => {
-                  assistantSelectionChanged(event, option);
-                }}
-                styles={{
-                  root: {
-                    width: '100%',
-                  },
-                }}
-                defaultSelectedKey={state.selectedAssistant.name}
-                options={getAssistantsToRender()}
-              />
-            </div>
-            <div className="ms-Grid-col ms-sm6 ms-md6 ms-lg4">{renderImage()}</div>
-          </div>
-        </div>
+        <Label>Choose one:</Label>
+        <ChoiceGroup
+          required={true}
+          onChange={(event: any, option?: IChoiceGroupOption) => {
+            assistantSelectionChanged(event, option);
+          }}
+          styles={{
+            root: {
+              width: '100%',
+            },
+          }}
+          defaultSelectedKey={state.selectedAssistant.name}
+          options={getAssistantsToRender()}
+        />
         <DialogFooterWrapper
           prevPath={RouterPaths.defineConversationPage}
           nextPath={RouterPaths.customizeBotPage}
