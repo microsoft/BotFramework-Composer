@@ -20,9 +20,9 @@ import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-reac
 
 import { Text, Tips, Links, nameRegex } from '../../constants';
 import { FieldConfig, useForm } from '../../hooks/useForm';
-import { dialogsState, luFilesState, qnaFilesState } from '../../recoilModel/atoms/botState';
 import { getReferredQnaFiles } from '../../utils/qnaUtil';
 import { getReferredLuFiles } from '../../utils/luUtil';
+import { dialogsState, luFilesState, qnaFilesState } from '../../recoilModel';
 
 // -------------------- Styles -------------------- //
 const textFieldLabel = css`
@@ -100,13 +100,14 @@ interface IPublishDialogProps {
   config: IConfig;
   onDismiss: () => void;
   onPublish: (data: IPublishConfig) => void;
+  projectId: string;
 }
 
 export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
-  const { isOpen, onDismiss, onPublish, botName, config } = props;
-  const dialogs = useRecoilValue(dialogsState);
-  const luFiles = useRecoilValue(luFilesState);
-  const qnaFiles = useRecoilValue(qnaFilesState);
+  const { isOpen, onDismiss, onPublish, botName, config, projectId } = props;
+  const dialogs = useRecoilValue(dialogsState(projectId));
+  const luFiles = useRecoilValue(luFilesState(projectId));
+  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   const qnaConfigShow = getReferredQnaFiles(qnaFiles, dialogs).length > 0;
   const luConfigShow = getReferredLuFiles(luFiles, dialogs).length > 0;
 

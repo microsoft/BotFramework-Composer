@@ -16,6 +16,11 @@ const referBySettings = (skillName: string, property: string) => {
   return `=settings.skill['${skillName}'].${property}`;
 };
 
+const settingReferences = (skillName: string) => ({
+  skillEndpoint: referBySettings(skillName, 'endpointUrl'),
+  skillAppId: referBySettings(skillName, 'msAppId'),
+});
+
 const handleBackwardCompatibility = (skills: Skill[], value): { name: string; endpointName: string } | undefined => {
   const { skillEndpoint } = value;
   const foundSkill = skills.find(({ manifestUrl }) => manifestUrl === value.id);
@@ -107,8 +112,9 @@ export const BeginSkillDialogField: React.FC<FieldProps> = (props) => {
   };
 
   const onSkillSelectionChange = (option: IComboBoxOption | null) => {
-    if (option) {
-      setSelectedSkill(option?.text);
+    if (option?.text) {
+      setSelectedSkill(option.text);
+      onChange({ ...value, ...settingReferences(option.text) });
     }
   };
 

@@ -4,10 +4,11 @@ import * as React from 'react';
 import { fireEvent } from '@bfc/test-utils';
 
 import { PublishDialog } from '../../../src/components/TestController/publishDialog';
-import { projectIdState, botNameState, settingsState, dispatcherState } from '../../../src/recoilModel';
+import { botNameState, settingsState, dispatcherState, currentProjectIdState } from '../../../src/recoilModel';
 import { renderWithRecoil } from '../../testUtils';
 jest.useFakeTimers();
 
+const projectId = '12abvc.as324';
 const luisConfig = {
   name: '',
   authoringKey: '12345',
@@ -29,15 +30,22 @@ describe('<PublishDialog />', () => {
       set(dispatcherState, {
         setSettings: setSettingsMock,
       });
-      set(projectIdState, '12345');
-      set(botNameState, 'sampleBot0');
-      set(settingsState, {
+      set(currentProjectIdState, projectId);
+      set(botNameState(projectId), 'sampleBot0');
+      set(settingsState(projectId), {
         luis: luisConfig,
         qna: qnaConfig,
       });
     };
     const { getByText } = renderWithRecoil(
-      <PublishDialog isOpen botName={'sampleBot0'} config={config} onDismiss={onDismiss} onPublish={onPublish} />,
+      <PublishDialog
+        isOpen
+        botName={'sampleBot0'}
+        config={config}
+        projectId={projectId}
+        onDismiss={onDismiss}
+        onPublish={onPublish}
+      />,
       recoilInitState
     );
 
