@@ -44,7 +44,6 @@ import {
   visualEditorSelectionState,
   focusPathState,
   showAddSkillDialogModalState,
-  skillsState,
   actionsSeedState,
   userSettingsState,
   localeState,
@@ -121,13 +120,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const showCreateDialogModal = useRecoilValue(showCreateDialogModalState);
   const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState);
   const { undo, redo, canRedo, canUndo, commitChanges, clearUndo } = useRecoilValue(undoFunctionState);
-  const skills = useRecoilValue(skillsState);
   const actionsSeed = useRecoilValue(actionsSeedState);
   const userSettings = useRecoilValue(userSettingsState);
   const qnaFiles = useRecoilValue(qnaFilesState);
   const locale = useRecoilValue(localeState);
   const undoVersion = useRecoilValue(undoVersionState);
   const {
+    addSkill,
     removeDialog,
     updateDialog,
     createDialogCancel,
@@ -140,7 +139,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     selectAndFocus,
     addSkillDialogCancel,
     createQnAFile,
-    updateSkill,
     exportToZip,
     onboardingAddCoachMarkRef,
     importQnAFromUrls,
@@ -499,10 +497,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     );
   }, [dialogs, breadcrumb, dialogJsonVisible]);
 
-  function handleAddSkillDialogSubmit(skillData: { manifestUrl: string }) {
-    updateSkill({ projectId, targetId: -1, skillData });
-  }
-
   async function handleCreateDialogSubmit(data: { name: string; description: string }) {
     const seededContent = new DialogFactory(schemas.sdk?.content).create(SDKKinds.AdaptiveDialog, {
       $designer: { name: data.name, description: data.description },
@@ -678,12 +672,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         )}
         {showAddSkillDialogModal && (
           <CreateSkillModal
-            editIndex={-1}
-            isOpen={showAddSkillDialogModal}
             projectId={projectId}
-            skills={skills}
-            onDismiss={() => addSkillDialogCancel()}
-            onSubmit={handleAddSkillDialogSubmit}
+            onDismiss={addSkillDialogCancel}
+            onSubmit={(skill) => addSkill(projectId, skill)}
           />
         )}
         {exportSkillModalVisible && (
