@@ -17,7 +17,12 @@ const token = process.env.ACCESS_TOKEN || 'token';
 const creds = new msRest.TokenCredentials(token);
 const client = new msRest.ServiceClient(creds, clientOptions);
 
-export const getSkillByUrl = async (url: string, name?: string): Promise<Skill> => {
+export const getSkillByUrl = async (
+  url: string,
+  name?: string,
+  msAppId?: string,
+  endpointUrl?: string
+): Promise<Skill> => {
   try {
     const req: msRest.RequestPrepareOptions = {
       url,
@@ -36,9 +41,9 @@ export const getSkillByUrl = async (url: string, name?: string): Promise<Skill> 
       name: name || resBody?.name || '',
       description: resBody?.description || '',
       endpoints: get(resBody, 'endpoints', []),
-      endpointUrl: get(resBody, 'endpoints[0].endpointUrl', ''), // needs more invesment on endpoint
+      endpointUrl: endpointUrl || get(resBody, 'endpoints[0].endpointUrl', ''), // needs more investment on endpoint
       protocol: get(resBody, 'endpoints[0].protocol', ''),
-      msAppId: get(resBody, 'endpoints[0].msAppId', ''),
+      msAppId: msAppId || get(resBody, 'endpoints[0].msAppId', ''),
       body: res.bodyAsText,
     };
   } catch (error) {
@@ -52,9 +57,9 @@ export const extractSkillManifestUrl = async (
   const skillsParsed: Skill[] = [];
   const diagnostics: Diagnostic[] = [];
   for (const skill of skills) {
-    const { manifestUrl, name } = skill;
+    const { manifestUrl, name, msAppId, endpointUrl } = skill;
     try {
-      const parsedSkill = await getSkillByUrl(manifestUrl, name);
+      const parsedSkill = await getSkillByUrl(manifestUrl, name, msAppId, endpointUrl);
       skillsParsed.push(parsedSkill);
     } catch (error) {
       const notify = new Diagnostic(
