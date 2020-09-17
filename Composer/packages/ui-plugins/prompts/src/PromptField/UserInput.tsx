@@ -33,21 +33,14 @@ const expectedResponsesPlaceholder = () =>
 const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = (props) => {
   const { onChange, getSchema, value, id, uiOptions, getError, definitions, depth, schema = {} } = props;
   const { currentDialog, designerId } = useShellApi();
-  const { recognizers, findRecognizer } = useRecognizerConfig();
+  const { findRecognizer } = useRecognizerConfig();
   const recognizer = findRecognizer(currentDialog?.content?.recognizer);
 
-  // leak
   const { const: $kind } = (schema?.properties?.$kind as { const: string }) || {};
   const intentName = new LuMetaData(new LuType($kind).toString(), designerId).toString();
-
-  let Editor;
-  // leak
-  if (recognizer && recognizer.id === SDKKinds.CrossTrainedRecognizerSet) {
-    Editor = recognizers.find((r) => r.id === SDKKinds.LuisRecognizer)?.intentEditor;
-  } else {
-    Editor = recognizer?.intentEditor;
-  }
   const intentLabel = formatMessage('Expected responses (intent: #{intentName})', { intentName });
+
+  const Editor = recognizer?.intentEditor;
 
   return (
     <Fragment>

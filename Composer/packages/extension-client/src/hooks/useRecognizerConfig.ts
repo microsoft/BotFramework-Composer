@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useContext, useMemo } from 'react';
-import { MicrosoftIRecognizer } from '@bfc/shared';
+import { MicrosoftIRecognizer, SDKKinds } from '@bfc/shared';
 import get from 'lodash/get';
 
 import { EditorExtensionContext } from '../EditorExtensionContext';
@@ -10,13 +10,22 @@ import { RecognizerOptions, RecognizerSchema } from '../types';
 
 export const FallbackRecognizerKey = 'fallback';
 
+// TODO: (ze) remove this logic after the ui widget PR.
+const reuseLuisIntentEditor = (recognizers: RecognizerSchema[]) => {
+  const crosstrainRecognizer = recognizers.find((x) => x.id === SDKKinds.CrossTrainedRecognizerSet);
+  const luisRecognizer = recognizers.find((x) => x.id === SDKKinds.LuisRecognizer);
+  if (crosstrainRecognizer && luisRecognizer) {
+    crosstrainRecognizer.intentEditor = luisRecognizer.intentEditor;
+  }
+};
+
 export function useRecognizerConfig() {
   const { plugins } = useContext(EditorExtensionContext);
 
   const recognizers: RecognizerSchema[] = useMemo(() => {
     if (!plugins.uiSchema) return [];
 
-    return Object.entries(plugins.uiSchema)
+    const schemas = Object.entries(plugins.uiSchema)
       .filter(([_, uiOptions]) => uiOptions && uiOptions.recognizer)
       .map(([$kind, uiOptions]) => {
         const recognizerOptions = uiOptions?.recognizer as RecognizerOptions;
@@ -25,6 +34,8 @@ export function useRecognizerConfig() {
           ...recognizerOptions,
         } as RecognizerSchema;
       });
+    reuseLuisIntentEditor(schemas);
+    return schemas;
   }, [plugins.uiSchema]);
 
   // Use the JSON editor as fallback recognizer config.
