@@ -2,33 +2,32 @@
 // Licensed under the MIT License.
 
 import { useMemo, useRef } from 'react';
-import { ShellApi, ShellData, Shell, fetchFromSettings } from '@bfc/shared';
+import { ShellApi, ShellData, Shell, fetchFromSettings, DialogSchemaFile, Skill } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
 import { updateRegExIntent, renameRegExIntent, updateIntentTrigger } from '../utils/dialogUtil';
 import { getDialogData, setDialogData } from '../utils/dialogUtil';
 import { isAbsHosted } from '../utils/envUtil';
-import { undoFunctionState } from '../recoilModel/undo/history';
 import {
-  botNameState,
-  schemasState,
-  skillsState,
-  lgFilesState,
-  dialogSchemasState,
-  projectIdState,
-  localeState,
-  luFilesState,
-  qnaFilesState,
   dispatcherState,
-  breadcrumbState,
-  designPageLocationState,
-  focusPathState,
   userSettingsState,
-  clipboardActionsState,
   settingsState,
+  clipboardActionsState,
+  schemasState,
+  validateDialogSelectorFamily,
+  breadcrumbState,
+  focusPathState,
+  skillsState,
+  localeState,
+  qnaFilesState,
+  designPageLocationState,
+  botNameState,
+  dialogSchemasState,
+  lgFilesState,
+  luFilesState,
 } from '../recoilModel';
-import { validatedDialogsSelector } from '../recoilModel/selectors/validatedDialogs';
+import { undoFunctionState } from '../recoilModel/undo/history';
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
@@ -39,25 +38,27 @@ const FORM_EDITOR = 'PropertyEditor';
 
 type EventSource = 'FlowEditor' | 'PropertyEditor' | 'DesignPage' | 'VaCreation';
 
-export function useShell(source: EventSource): Shell {
+export function useShell(source: EventSource, projectId: string): Shell {
   const dialogMapRef = useRef({});
-  const botName = useRecoilValue(botNameState);
-  const dialogs = useRecoilValue(validatedDialogsSelector);
-  const dialogSchemas = useRecoilValue(dialogSchemasState);
-  const luFiles = useRecoilValue(luFilesState);
-  const qnaFiles = useRecoilValue(qnaFilesState);
-  const projectId = useRecoilValue(projectIdState);
-  const locale = useRecoilValue(localeState);
-  const lgFiles = useRecoilValue(lgFilesState);
-  const skills = useRecoilValue(skillsState);
-  const schemas = useRecoilValue(schemasState);
-  const designPageLocation = useRecoilValue(designPageLocationState);
-  const breadcrumb = useRecoilValue(breadcrumbState);
-  const focusPath = useRecoilValue(focusPathState);
+
+  const schemas = useRecoilValue(schemasState(projectId));
+  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const breadcrumb = useRecoilValue(breadcrumbState(projectId));
+  const focusPath = useRecoilValue(focusPathState(projectId));
+  const skills = useRecoilValue(skillsState(projectId));
+  const locale = useRecoilValue(localeState(projectId));
+  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
+  const undoFunction = useRecoilValue(undoFunctionState(projectId));
+  const designPageLocation = useRecoilValue(designPageLocationState(projectId));
+  const { undo, redo, commitChanges } = undoFunction;
+  const luFiles = useRecoilValue(luFilesState(projectId));
+  const lgFiles = useRecoilValue(lgFilesState(projectId));
+  const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
+  const botName = useRecoilValue(botNameState(projectId));
+  const settings = useRecoilValue(settingsState(projectId));
+
   const userSettings = useRecoilValue(userSettingsState);
   const clipboardActions = useRecoilValue(clipboardActionsState);
-  const { undo, redo, commitChanges } = useRecoilValue(undoFunctionState);
-  const settings = useRecoilValue(settingsState);
   const {
     updateDialog,
     updateDialogSchema,
@@ -74,10 +75,11 @@ export function useShell(source: EventSource): Shell {
     displayManifestModal,
     updateSkillsInSetting,
   } = useRecoilValue(dispatcherState);
-  const lgApi = useLgApi();
-  const luApi = useLuApi();
-  const qnaApi = useQnaApi();
-  const triggerApi = useTriggerApi();
+
+  const lgApi = useLgApi(projectId);
+  const luApi = useLuApi(projectId);
+  const qnaApi = useQnaApi(projectId);
+  const triggerApi = useTriggerApi(projectId);
   const { dialogId, selected, focused, promptTab } = designPageLocation;
 
   const dialogsMap = useMemo(() => {
@@ -91,29 +93,29 @@ export function useShell(source: EventSource): Shell {
     const dialog = dialogs.find((dialog) => dialog.id === id);
     if (!dialog) throw new Error(formatMessage(`dialog {dialogId} not found`, { dialogId }));
     const newDialog = updateRegExIntent(dialog, intentName, pattern);
-    return updateDialog({ id, content: newDialog.content });
+    updateDialog({ id, content: newDialog.content, projectId });
   }
 
   function renameRegExIntentHandler(id: string, intentName: string, newIntentName: string) {
     const dialog = dialogs.find((dialog) => dialog.id === id);
     if (!dialog) throw new Error(`dialog ${dialogId} not found`);
     const newDialog = renameRegExIntent(dialog, intentName, newIntentName);
-    updateDialog({ id, content: newDialog.content });
+    updateDialog({ id, content: newDialog.content, projectId });
   }
 
   function updateIntentTriggerHandler(id: string, intentName: string, newIntentName: string) {
     const dialog = dialogs.find((dialog) => dialog.id === id);
     if (!dialog) throw new Error(`dialog ${dialogId} not found`);
     const newDialog = updateIntentTrigger(dialog, intentName, newIntentName);
-    updateDialog({ id, content: newDialog.content });
+    updateDialog({ id, content: newDialog.content, projectId });
   }
 
   function navigationTo(path) {
-    navTo(path, breadcrumb);
+    navTo(projectId, path, breadcrumb);
   }
 
   function focusEvent(subPath) {
-    selectTo(subPath);
+    selectTo(projectId, subPath);
   }
 
   function focusSteps(subPaths: string[] = [], fragment?: string) {
@@ -128,7 +130,7 @@ export function useShell(source: EventSource): Shell {
       }
     }
 
-    focusTo(dataPath, fragment ?? '');
+    focusTo(projectId, dataPath, fragment ?? '');
   }
 
   dialogMapRef.current = dialogsMap;
@@ -142,6 +144,7 @@ export function useShell(source: EventSource): Shell {
       updateDialog({
         id: dialogId,
         content: newDialogData,
+        projectId,
       });
     },
     saveData: (newData, updatePath) => {
@@ -154,6 +157,7 @@ export function useShell(source: EventSource): Shell {
       const payload = {
         id: dialogId,
         content: updatedDialog,
+        projectId,
       };
       dialogMapRef.current[dialogId] = updatedDialog;
       updateDialog(payload);
@@ -173,16 +177,20 @@ export function useShell(source: EventSource): Shell {
     onCopy: setVisualEditorClipboard,
     createDialog: (actionsSeed) => {
       return new Promise((resolve) => {
-        createDialogBegin(actionsSeed, (newDialog: string | null) => {
-          resolve(newDialog);
-        });
+        createDialogBegin(
+          actionsSeed,
+          (newDialog: string | null) => {
+            resolve(newDialog);
+          },
+          projectId
+        );
       });
     },
     addSkillDialog: () => {
       return new Promise((resolve) => {
         addSkillDialogBegin((newSkill: { manifestUrl: string; name: string } | null) => {
           resolve(newSkill);
-        });
+        }, projectId);
       });
     },
     undo,
@@ -191,11 +199,13 @@ export function useShell(source: EventSource): Shell {
     addCoachMarkRef: onboardingAddCoachMarkRef,
     updateUserSettings: updateUserSettings,
     announce: setMessage,
-    displayManifestModal: displayManifestModal,
-    updateDialogSchema,
+    displayManifestModal: (skillId) => displayManifestModal(skillId, projectId),
+    updateDialogSchema: async (dialogSchema: DialogSchemaFile) => {
+      updateDialogSchema(dialogSchema, projectId);
+    },
     skillsInSettings: {
       get: (path: string) => fetchFromSettings(path, settings),
-      set: updateSkillsInSetting,
+      set: (skillName: string, skillInfo: Partial<Skill>) => updateSkillsInSetting(skillName, skillInfo, projectId),
     },
   };
 

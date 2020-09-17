@@ -13,7 +13,7 @@ import { StorageFolder } from '../../recoilModel/types';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
 import { FieldConfig, useForm } from '../../hooks/useForm';
-import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
+import { validateDialogSelectorFamily } from '../../recoilModel';
 
 import { name, description, styles as wizardStyles } from './styles';
 
@@ -28,11 +28,12 @@ interface CreateDialogModalProps {
   onCurrentPathUpdate?: (newPath?: string, storageId?: string) => void;
   focusedStorageFolder?: StorageFolder;
   isOpen: boolean;
+  projectId: string;
 }
 
 export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
-  const dialogs = useRecoilValue(validatedDialogsSelector);
-  const { onSubmit, onDismiss, isOpen } = props;
+  const { onSubmit, onDismiss, isOpen, projectId } = props;
+  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
   const formConfig: FieldConfig<DialogFormData> = {
     name: {
       required: true,

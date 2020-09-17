@@ -9,28 +9,28 @@ import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { RouteComponentProps, Router } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 
-import { projectIdState } from '../../recoilModel/atoms/botState';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { actionButton } from '../language-understanding/styles';
 import { navigateTo } from '../../utils/navigation';
 import { TestController } from '../../components/TestController/TestController';
 import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
-import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
+import { validateDialogSelectorFamily } from '../../recoilModel';
 
 import TableView from './table-view';
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
-interface LGPageProps extends RouteComponentProps<{}> {
-  dialogId?: string;
+interface LGPageProps {
+  dialogId: string;
+  projectId: string;
 }
 
-const LGPage: React.FC<LGPageProps> = (props) => {
-  const dialogs = useRecoilValue(validatedDialogsSelector);
-  const projectId = useRecoilValue(projectIdState);
+const LGPage: React.FC<RouteComponentProps<LGPageProps>> = (props: RouteComponentProps<LGPageProps>) => {
+  const { dialogId = '', projectId = '' } = props;
+  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
 
   const path = props.location?.pathname ?? '';
-  const { dialogId = '' } = props;
+
   const edit = /\/edit(\/)?$/.test(path);
 
   const navLinks: INavTreeItem[] = useMemo(() => {
@@ -85,7 +85,7 @@ const LGPage: React.FC<LGPageProps> = (props) => {
   const toolbarItems = [
     {
       type: 'element',
-      element: <TestController />,
+      element: <TestController projectId={projectId} />,
       align: 'right',
     },
   ];
@@ -115,8 +115,8 @@ const LGPage: React.FC<LGPageProps> = (props) => {
     >
       <Suspense fallback={<LoadingSpinner />}>
         <Router component={Fragment} primary={false}>
-          <CodeEditor dialogId={dialogId} path="/edit/*" />
-          <TableView dialogId={dialogId} path="/" />
+          <CodeEditor dialogId={dialogId} path="/edit/*" projectId={projectId} />
+          <TableView dialogId={dialogId} path="/" projectId={projectId} />
         </Router>
       </Suspense>
     </Page>
