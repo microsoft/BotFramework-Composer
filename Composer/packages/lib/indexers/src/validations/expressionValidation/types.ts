@@ -2,14 +2,16 @@
 // Licensed under the MIT License.
 
 import { Diagnostic, LgFile, LuFile } from '@bfc/shared';
+import { ReturnType } from 'adaptive-expressions';
 
-export enum ExpressionType {
-  number = 'number',
-  integer = 'integer',
-  boolean = 'boolean',
-  string = 'string',
-  array = 'array',
-}
+export const StringMapExpressionType = {
+  number: ReturnType.Number,
+  string: ReturnType.String,
+  boolean: ReturnType.Boolean,
+  object: ReturnType.Object,
+  array: ReturnType.Array,
+  integer: ReturnType.Number,
+};
 
 export type ValidateFunc = (
   path: string,
@@ -21,8 +23,8 @@ export type ValidateFunc = (
 ) => Diagnostic[] | null; // error msg
 
 export type ExpressionProperty = {
-  value: string | boolean | number;
+  value: any;
   required: boolean; //=true, the value is required in dialog
   path: string; //the json path of the value
-  types: string[]; //supported expression type of the value
+  types: number[]; //supported expression type of the value
 };

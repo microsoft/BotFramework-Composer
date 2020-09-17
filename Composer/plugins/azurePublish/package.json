@@ -29,7 +29,7 @@
     "@types/request": "2.48.4",
     "@types/request-promise": "4.1.45",
     "adal-node": "0.2.1",
-    "archiver": "3.1.1",
+    "archiver": "^5.0.2",
     "fs-extra": "8.1.0",
     "lodash": "^4.17.20",
     "md5": "2.2.1",

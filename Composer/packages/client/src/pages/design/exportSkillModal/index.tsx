@@ -18,6 +18,7 @@ import {
   dispatcherState,
   luFilesState,
   skillManifestsState,
+  qnaFilesState,
 } from '../../../recoilModel';
 
 import { editorSteps, ManifestEditorSteps, order } from './constants';
@@ -34,6 +35,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
   const dialogs = useRecoilValue(dialogsState);
   const dialogSchemas = useRecoilValue(dialogSchemasState);
   const luFiles = useRecoilValue(luFilesState);
+  const qnaFiles = useRecoilValue(qnaFilesState);
   const skillManifests = useRecoilValue(skillManifestsState);
   const { updateSkillManifest } = useRecoilValue(dispatcherState);
 
@@ -59,6 +61,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
       dialogs,
       dialogSchemas,
       luFiles,
+      qnaFiles,
       selectedTriggers,
       selectedDialogs
     );

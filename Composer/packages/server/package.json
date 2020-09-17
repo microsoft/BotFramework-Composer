@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@bfc/test-utils": "*",
-    "@types/archiver": "^3.0.0",
+    "@types/archiver": "^3.1.0",
     "@types/body-parser": "^1.17.0",
     "@types/compression": "^1.0.1",
     "@types/cookie-parser": "^1.4.1",
@@ -65,7 +65,7 @@
     "@microsoft/bf-dispatcher": "^4.10.0-preview.141651",
     "@microsoft/bf-lu": "^4.11.0-dev.20200824.de66343",
     "@microsoft/bf-generate-library": "^4.10.0-daily.20200827.161452",
-    "archiver": "^3.0.0",
+    "archiver": "^5.0.2",
     "axios": "^0.19.2",
     "azure-storage": "^2.10.3",
     "body-parser": "^1.18.3",
