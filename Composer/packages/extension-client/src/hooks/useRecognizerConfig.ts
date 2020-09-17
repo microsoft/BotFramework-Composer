@@ -65,7 +65,7 @@ export function useRecognizerConfig() {
 
   return {
     recognizers,
-    findRecognizer: (val: MicrosoftIRecognizer) => findRecognizerByValue(recognizers, val) ?? fallbackRecognizer,
+    findRecognizer: (recognizerValue) => findRecognizerByValue(recognizers, recognizerValue) ?? fallbackRecognizer,
     getDefaultRecognizer: () => getDefaultRecognizer(recognizers),
   };
 }

@@ -8,7 +8,7 @@ import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcru
 import formatMessage from 'format-message';
 import { globalHistory, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
-import { DialogFactory, SDKKinds, DialogInfo, PromptTab, getEditorAPI, registerEditorAPI } from '@bfc/shared';
+import { DialogInfo, PromptTab, getEditorAPI, registerEditorAPI } from '@bfc/shared';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import { EditorExtension, useTriggerApi, PluginConfig } from '@bfc/extension-client';
@@ -122,7 +122,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState);
   const { undo, redo, canRedo, canUndo, commitChanges, clearUndo } = useRecoilValue(undoFunctionState);
   const skills = useRecoilValue(skillsState);
-  const actionsSeed = useRecoilValue(actionsSeedState);
   const userSettings = useRecoilValue(userSettingsState);
   const qnaFiles = useRecoilValue(qnaFilesState);
   const locale = useRecoilValue(localeState);
@@ -503,17 +502,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     updateSkill({ projectId, targetId: -1, skillData });
   }
 
-  async function handleCreateDialogSubmit(data: { name: string; description: string }) {
-    const seededContent = new DialogFactory(schemas.sdk?.content).create(SDKKinds.AdaptiveDialog, {
-      $designer: { name: data.name, description: data.description },
-      generator: `${data.name}.lg`,
-      // TODO: (ze) respect default recognizer.
-      recognizer: `${data.name}.lu.qna`,
-    });
-    if (seededContent.triggers?.[0]) {
-      seededContent.triggers[0].actions = actionsSeed;
-    }
-    await createDialog({ id: data.name, content: seededContent });
+  async function handleCreateDialogSubmit(dialogData) {
+    await createDialog(dialogData);
     commitChanges();
   }
 
@@ -671,11 +661,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       </div>
       <Suspense fallback={<LoadingSpinner />}>
         {showCreateDialogModal && (
-          <CreateDialogModal
-            isOpen={showCreateDialogModal}
-            onDismiss={createDialogCancel}
-            onSubmit={handleCreateDialogSubmit}
-          />
+          <EditorExtension plugins={pluginConfig} shell={shell}>
+            <CreateDialogModal
+              isOpen={showCreateDialogModal}
+              onDismiss={createDialogCancel}
+              onSubmit={handleCreateDialogSubmit}
+            />
+          </EditorExtension>
         )}
         {showAddSkillDialogModal && (
           <CreateSkillModal
