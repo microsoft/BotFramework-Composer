@@ -86,7 +86,7 @@ describe('Multilang dispatcher', () => {
     dispatcher = renderedComponent.current.currentDispatcher;
   });
 
-  fit('add language', async () => {
+  it('add language', async () => {
     await act(async () => {
       await dispatcher.addLanguages({
         languages: ['zh-cn'],
