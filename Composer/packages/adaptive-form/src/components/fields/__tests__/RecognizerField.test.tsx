@@ -48,11 +48,10 @@ describe('<RecognizerField />', () => {
       },
     ]);
     (useRecognizerConfig as jest.Mock).mockReturnValue(config);
-    // TODO (ze): wrong value
-    const { getByTestId } = renderSubject({ value: 'one' });
+    const { getByTestId } = renderSubject({ value: { $kind: 'two' } });
     const dropdown = getByTestId('recognizerTypeDropdown');
-    // expect(dropdown).toHaveTextContent('Two Recognizer');
-    // fireEvent.click(dropdown);
+    expect(dropdown).toHaveTextContent('Two Recognizer');
+    fireEvent.click(dropdown);
 
     fireEvent.click(screen.getByText('One Recognizer'));
     expect(handleChange).toHaveBeenCalled();
