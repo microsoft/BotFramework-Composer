@@ -5,8 +5,9 @@
     "node": ">=12"
   },
   "scripts": {
-    "build:botservice": "cd arm-botservice && yarn build",
-    "build:appinsight": "cd arm-appinsights && yarn build"
+    "build:botservice": "cd arm-botservice && yarn && yarn build",
+    "build:appinsight": "cd arm-appinsights && yarn && yarn build",
+    "build:all": "yarn build:botservice && yarn build:appinsight"
   },
   "author": "",
   "license": "ISC"

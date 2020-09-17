@@ -5,7 +5,8 @@
   "main": "lib/index.js",
   "license": "MIT",
   "scripts": {
-    "build": "tsc"
+    "build:lib": "cd ../lib && yarn && yarn build:all",
+    "build": "yarn build:lib && tsc"
   },
   "extendsComposer": true,
   "dependencies": {
