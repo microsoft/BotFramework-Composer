@@ -1,12 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { selector, selectorFamily } from 'recoil';
+import { selector } from 'recoil';
 
-import { botNameState, botProjectsSpaceState, filePersistenceState, dialogsState } from '../atoms';
+import { botNameState, botProjectsSpaceState, dialogsState } from '../atoms';
 
-export const botProjectSpaceTreeSelector = selector({
-  key: 'botProjectSpaceTreeSelector',
+//TODO: This selector will be used when BotProjects is implemented
+export const botProjectSpaceSelector = selector({
+  key: 'botProjectSpaceSelector',
   get: ({ get }) => {
     const botProjects = get(botProjectsSpaceState);
     const result = botProjects.map((botProjectId: string) => {

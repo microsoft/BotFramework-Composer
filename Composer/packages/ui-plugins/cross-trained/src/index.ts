@@ -3,12 +3,13 @@
 
 import { PluginConfig } from '@bfc/extension-client';
 import { SDKKinds } from '@bfc/shared';
+import formatMessage from 'format-message';
 
 const config: PluginConfig = {
   recognizers: [
     {
       id: SDKKinds.CrossTrainedRecognizerSet,
-      displayName: 'Default recognizer',
+      displayName: formatMessage('Default recognizer'),
       isSelected: (data) => {
         return typeof data === 'string';
       },
@@ -22,7 +23,7 @@ const config: PluginConfig = {
           // into the .dialog file
           props.onChange(`${currentDialog.id}.lu.qna`);
         } else {
-          alert(`NO LU OR QNA FILE WITH NAME ${currentDialog.id}`);
+          alert(formatMessage(`NO LU OR QNA FILE WITH NAME { id }`, { id: currentDialog.id }));
         }
       },
       renameIntent: () => {},
