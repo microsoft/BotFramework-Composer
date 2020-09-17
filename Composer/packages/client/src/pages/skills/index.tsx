@@ -7,7 +7,7 @@ import { RouteComponentProps } from '@reach/router';
 import React, { useCallback, useState } from 'react';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
-import { Skill } from '@bfc/shared';
+import { SkillSetting } from '@bfc/shared';
 
 import { botNameState, settingsState, projectIdState, dispatcherState } from '../../recoilModel';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
@@ -48,7 +48,7 @@ const Skills: React.FC<RouteComponentProps> = () => {
   ];
 
   const onSubmitForm = useCallback(
-    (skill: Skill) => {
+    (skill: SkillSetting) => {
       addSkill(projectId, skill);
       setShowAddSkillDialogModal(false);
     },

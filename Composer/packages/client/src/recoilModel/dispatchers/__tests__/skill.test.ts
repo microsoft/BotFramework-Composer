@@ -155,7 +155,7 @@ describe('skill dispatcher', () => {
       dispatcher.updateSkill('123', 'id1', { msAppId: 'test', manifestUrl: 'test', endpointUrl: 'test', name: 'test' });
     });
 
-    expect(renderedComponent.current.skills[0]).toBe(
+    expect(renderedComponent.current.skills[0]).toEqual(
       expect.objectContaining({
         id: 'id1',
         content: {},
