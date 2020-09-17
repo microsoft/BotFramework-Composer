@@ -3,7 +3,7 @@
 
 import { selector } from 'recoil';
 
-import { botNameState, botProjectsSpaceState } from '../atoms';
+import { botNameState, botProjectsSpaceState, dialogsState } from '../atoms';
 
 //TODO: This selector will be used when BotProjects is implemented
 export const botProjectSpaceSelector = selector({
@@ -11,8 +11,10 @@ export const botProjectSpaceSelector = selector({
   get: ({ get }) => {
     const botProjects = get(botProjectsSpaceState);
     const result = botProjects.map((botProjectId: string) => {
+      const dialogs = get(dialogsState(botProjectId));
       const name = get(botNameState(botProjectId));
-      return { projectId: botProjectId, name };
+      const projectId = botProjectId;
+      return { dialogs, projectId, name };
     });
     return result;
   },
