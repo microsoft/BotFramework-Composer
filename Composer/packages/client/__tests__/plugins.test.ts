@@ -1,3 +1,4 @@
+import { SDKKinds } from '@bfc/shared';
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
@@ -50,19 +51,27 @@ describe('mergePluginConfigs', () => {
   it('adds recognizers', () => {
     const config1 = {
       uiSchema: {
-        recognizer1: { displayName: 'recognizer1' },
+        [SDKKinds.RegexRecognizer]: {
+          recognizer: { displayName: 'recognizer1' },
+        },
       },
     };
 
     const config2 = {
       uiSchema: {
-        recognizer2: { displayName: 'recognizer2' },
+        [SDKKinds.LuisRecognizer]: {
+          recognizer: { displayName: 'recognizer2' },
+        },
       },
     };
 
     expect(mergePluginConfigs(config1, config2).uiSchema).toEqual({
-      recognizer1: { displayName: 'recognizer1' },
-      recognizer2: { displayName: 'recognizer2' },
+      [SDKKinds.RegexRecognizer]: {
+        recognizer: { displayName: 'recognizer1' },
+      },
+      [SDKKinds.LuisRecognizer]: {
+        recognizer: { displayName: 'recognizer2' },
+      },
     });
   });
 
