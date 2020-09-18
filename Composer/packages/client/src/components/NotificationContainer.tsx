@@ -4,8 +4,10 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
+import React from 'react';
 
-import { notificationsState, dispatcherState } from '../recoilModel';
+import { dispatcherState } from '../recoilModel';
+import { notificationsSelector } from '../recoilModel/selectors/notificationsSelector';
 
 import { NotificationCard } from './NotificationCard';
 
@@ -20,16 +22,15 @@ const container = css`
 
 // -------------------- NotificationContainer -------------------- //
 
-export const NotificationContainer = () => {
-  const notifications = useRecoilValue(notificationsState);
+export const NotificationContainer = React.memo(() => {
+  const notifications = useRecoilValue(notificationsSelector);
   const { deleteNotification } = useRecoilValue(dispatcherState);
 
   return (
     <div css={container} role="presentation">
       {notifications.map((item) => {
-        const { id, ...rest } = item;
-        return <NotificationCard key={item.id} cardProps={rest} id={id} onDismiss={deleteNotification} />;
+        return <NotificationCard key={item.id} cardProps={item} id={item.id} onDismiss={deleteNotification} />;
       })}
     </div>
   );
-};
+});

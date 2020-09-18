@@ -5,7 +5,7 @@
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 import { v4 as uuid } from 'uuid';
 
-import { notificationsState } from '../atoms/appState';
+import { notificationsState, notificationIdsState } from '../atoms/appState';
 import { CardProps } from '../../components/NotificationCard';
 import { Notification } from '../../recoilModel/types';
 
@@ -15,17 +15,14 @@ export const createNotifiction = (notificationCard: CardProps): Notification => 
 };
 
 export const addNotificationInternal = ({ set }: CallbackInterface, notification: Notification) => {
-  set(notificationsState, (notifications) => [...notifications, notification]);
+  set(notificationsState(notification.id), notification);
+  set(notificationIdsState, (ids) => [...ids, notification.id]);
 };
 
-export const deleteNotificationInternal = ({ set }: CallbackInterface, id: string) => {
-  set(notificationsState, (items) => {
-    const notifications = [...items];
-    const index = notifications.findIndex((item) => item.id === id);
-    if (index > -1) {
-      notifications.splice(index, 1);
-    }
-    return notifications;
+export const deleteNotificationInternal = ({ reset, set }: CallbackInterface, id: string) => {
+  reset(notificationsState(id));
+  set(notificationIdsState, (items) => {
+    return [...items].filter((item) => item !== id);
   });
 };
 
