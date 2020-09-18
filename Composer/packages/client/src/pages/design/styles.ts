@@ -17,7 +17,7 @@ export const contentWrapper = css`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-
+  height: 100%;
   label: DesignPageContent;
 `;
 
@@ -26,10 +26,9 @@ export const projectContainer = css`
   flex-direction: column;
   flex-grow: 0;
   flex-shrink: 0;
-  width: 255px;
+  width: 100%;
   overflow: auto;
   border-right: 1px solid #c4c4c4;
-
   label: DesignPageProjectContent;
 `;
 
@@ -73,6 +72,7 @@ export const editorWrapper = css`
   flex-direction: row;
   flex-grow: 1;
   overflow: hidden;
+  height: 100%;
 `;
 
 export const visualPanel = css`
@@ -80,7 +80,7 @@ export const visualPanel = css`
   flex-direction: column;
   flex: 1;
   border-right: 1px solid #c4c4c4;
-
+  height: 100%;
   label: DesignPageVisualPanel;
 `;
 

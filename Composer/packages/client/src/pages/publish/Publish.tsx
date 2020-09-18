@@ -10,6 +10,7 @@ import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { PublishTarget } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
+import { LeftRightSplit } from '@geoffcox/react-splitter';
 
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { projectContainer } from '../design/styles';
@@ -402,52 +403,54 @@ const Publish: React.FC<PublishPageProps> = (props) => {
         <h1 css={HeaderText}>{selectedTarget ? selectedTargetName : formatMessage('Publish Profiles')}</h1>
       </div>
       <div css={ContentStyle} data-testid="Publish" role="main">
-        <div
-          aria-label={formatMessage('Navigation panel')}
-          css={projectContainer}
-          data-testid="target-list"
-          role="region"
-        >
+        <LeftRightSplit>
           <div
-            key={'_all'}
-            css={selectedTargetName === 'all' ? targetSelected : overflowSet}
-            style={{
-              height: '36px',
-              cursor: 'pointer',
-            }}
-            onClick={() => {
-              setSelectedTarget(undefined);
-              onSelectTarget('all');
-            }}
+            aria-label={formatMessage('Navigation panel')}
+            css={projectContainer}
+            data-testid="target-list"
+            role="region"
           >
-            {formatMessage('All profiles')}
-          </div>
-          {settings && settings.publishTargets && (
-            <TargetList
-              list={settings.publishTargets}
-              selectedTarget={selectedTargetName}
-              onDelete={async (index) => await onDelete(index)}
-              onEdit={async (item, target) => await onEdit(item, target)}
-              onSelect={(item) => {
-                setSelectedTarget(item);
-                onSelectTarget(item.name);
+            <div
+              key={'_all'}
+              css={selectedTargetName === 'all' ? targetSelected : overflowSet}
+              style={{
+                height: '36px',
+                cursor: 'pointer',
               }}
-            />
-          )}
-        </div>
-        <div aria-label={formatMessage('List view')} css={contentEditor} role="region">
-          <Fragment>
-            <PublishStatusList
-              groups={groups}
-              items={thisPublishHistory}
-              updateItems={setThisPublishHistory}
-              onItemClick={setSelectedVersion}
-            />
-            {!thisPublishHistory || thisPublishHistory.length === 0 ? (
-              <div style={{ marginLeft: '50px', fontSize: 'smaller', marginTop: '20px' }}>No publish history</div>
-            ) : null}
-          </Fragment>
-        </div>
+              onClick={() => {
+                setSelectedTarget(undefined);
+                onSelectTarget('all');
+              }}
+            >
+              {formatMessage('All profiles')}
+            </div>
+            {settings && settings.publishTargets && (
+              <TargetList
+                list={settings.publishTargets}
+                selectedTarget={selectedTargetName}
+                onDelete={async (index) => await onDelete(index)}
+                onEdit={async (item, target) => await onEdit(item, target)}
+                onSelect={(item) => {
+                  setSelectedTarget(item);
+                  onSelectTarget(item.name);
+                }}
+              />
+            )}
+          </div>
+          <div aria-label={formatMessage('List view')} css={contentEditor} role="region">
+            <Fragment>
+              <PublishStatusList
+                groups={groups}
+                items={thisPublishHistory}
+                updateItems={setThisPublishHistory}
+                onItemClick={setSelectedVersion}
+              />
+              {!thisPublishHistory || thisPublishHistory.length === 0 ? (
+                <div style={{ marginLeft: '50px', fontSize: 'smaller', marginTop: '20px' }}>No publish history</div>
+              ) : null}
+            </Fragment>
+          </div>
+        </LeftRightSplit>
       </div>
     </Fragment>
   );

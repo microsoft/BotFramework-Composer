@@ -630,42 +630,44 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             </div>
             <Conversation css={editorContainer}>
               <div css={editorWrapper}>
-                <div aria-label={formatMessage('Authoring canvas')} css={visualPanel} role="region">
-                  {breadcrumbItems}
-                  {dialogJsonVisible ? (
-                    <JsonEditor
-                      key={'dialogjson'}
-                      editorSettings={userSettings.codeEditor}
-                      id={currentDialog.id}
-                      schema={schemas.sdk.content}
-                      value={currentDialog.content || undefined}
-                      onChange={(data) => {
-                        updateDialog({ id: currentDialog.id, content: data });
-                      }}
-                    />
-                  ) : withWarning ? (
-                    warningIsVisible && (
-                      <WarningMessage
-                        okText={formatMessage('Change Recognizer')}
-                        onCancel={() => {
-                          setWarningIsVisible(false);
+                <LeftRightSplit initialLeftGridWidth="75%" minLeftPixels={550} minRightPixels={230}>
+                  <div aria-label={formatMessage('Authoring canvas')} css={visualPanel} role="region">
+                    {breadcrumbItems}
+                    {dialogJsonVisible ? (
+                      <JsonEditor
+                        key={'dialogjson'}
+                        editorSettings={userSettings.codeEditor}
+                        id={currentDialog.id}
+                        schema={schemas.sdk.content}
+                        value={currentDialog.content || undefined}
+                        onChange={(data) => {
+                          updateDialog({ id: currentDialog.id, content: data });
                         }}
-                        onOk={() => navTo(`/bot/${projectId}/knowledge-base/all`)}
                       />
-                    )
-                  ) : (
-                    <EditorExtension plugins={pluginConfig} shell={shellForFlowEditor}>
-                      <VisualEditor
-                        openNewTriggerModal={openNewTriggerModal}
-                        onBlur={() => setFlowEditorFocused(false)}
-                        onFocus={() => setFlowEditorFocused(true)}
-                      />
-                    </EditorExtension>
-                  )}
-                </div>
-                <EditorExtension plugins={pluginConfig} shell={shellForPropertyEditor}>
-                  <PropertyEditor key={focusPath + undoVersion} />
-                </EditorExtension>
+                    ) : withWarning ? (
+                      warningIsVisible && (
+                        <WarningMessage
+                          okText={formatMessage('Change Recognizer')}
+                          onCancel={() => {
+                            setWarningIsVisible(false);
+                          }}
+                          onOk={() => navTo(`/bot/${projectId}/knowledge-base/all`)}
+                        />
+                      )
+                    ) : (
+                      <EditorExtension plugins={pluginConfig} shell={shellForFlowEditor}>
+                        <VisualEditor
+                          openNewTriggerModal={openNewTriggerModal}
+                          onBlur={() => setFlowEditorFocused(false)}
+                          onFocus={() => setFlowEditorFocused(true)}
+                        />
+                      </EditorExtension>
+                    )}
+                  </div>
+                  <EditorExtension plugins={pluginConfig} shell={shellForPropertyEditor}>
+                    <PropertyEditor key={focusPath + undoVersion} />
+                  </EditorExtension>
+                </LeftRightSplit>
               </div>
             </Conversation>
           </div>

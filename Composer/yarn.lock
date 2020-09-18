@@ -2693,10 +2693,10 @@
     "@uifabric/utilities" "^7.23.0"
     tslib "^1.10.0"
 
-"@geoffcox/react-splitter@^1.0.2":
-  version "1.0.2"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@geoffcox/react-splitter/-/@geoffcox/react-splitter-1.0.2.tgz#a496625efbcc293640c2dd66489f3a2b28945f73"
-  integrity sha1-pJZiXvvMKTZAwt1mSJ86KyiUX3M=
+"@geoffcox/react-splitter@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@geoffcox/react-splitter/-/react-splitter-1.0.3.tgz#1032eabfa670fdded05b5457cf94aa364233df6e"
+  integrity sha512-sw69e8q4QNq1eAVhHKFLuIIhO8re8iPVp1g8tWLMkw5T9zVyG/UAbUV9XIh1KOtboSH2KkijeOBU8LTtJRRJDw==
   dependencies:
     "@types/react-measure" "^2.0.6"
     "@types/styled-components" "4.1.8"
