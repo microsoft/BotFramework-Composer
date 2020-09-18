@@ -24,9 +24,9 @@ export const builderDispatcher = () => {
       qnaConfig: IQnAConfig,
       projectId: string
     ) => {
-      const dialogs = await snapshot.getPromise(dialogsState);
-      const luFiles = await snapshot.getPromise(luFilesState);
-      const qnaFiles = await snapshot.getPromise(qnaFilesState);
+      const dialogs = await snapshot.getPromise(dialogsState(projectId));
+      const luFiles = await snapshot.getPromise(luFilesState(projectId));
+      const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
       const referredLuFiles = luUtil.checkLuisBuild(luFiles, dialogs);
 
       const errorMsg = qnaFiles.reduce(
@@ -43,8 +43,8 @@ export const builderDispatcher = () => {
         { title: Text.LUISDEPLOYFAILURE, message: '' }
       );
       if (errorMsg.message) {
-        set(botLoadErrorState, errorMsg);
-        set(botStatusState, BotStatus.failed);
+        set(botLoadErrorState(projectId), errorMsg);
+        set(botStatusState(projectId), BotStatus.failed);
         return;
       }
       try {
@@ -60,10 +60,13 @@ export const builderDispatcher = () => {
         });
         luFileStatusStorage.publishAll(projectId);
         qnaFileStatusStorage.publishAll(projectId);
-        set(botStatusState, BotStatus.published);
+        set(botStatusState(projectId), BotStatus.published);
       } catch (err) {
-        set(botStatusState, BotStatus.failed);
-        set(botLoadErrorState, { title: Text.LUISDEPLOYFAILURE, message: err.response?.data?.message || err.message });
+        set(botStatusState(projectId), BotStatus.failed);
+        set(botLoadErrorState(projectId), {
+          title: Text.LUISDEPLOYFAILURE,
+          message: err.response?.data?.message || err.message,
+        });
       }
     }
   );

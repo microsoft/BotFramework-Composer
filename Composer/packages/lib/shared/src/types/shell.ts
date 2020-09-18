@@ -57,7 +57,7 @@ export interface ShellData {
   luFiles: LuFile[];
   qnaFiles: QnAFile[];
   userSettings: UserSettings;
-  skills: Skill[];
+  skills: any[];
   // TODO: remove
   schemas: BotSchemas;
 }
@@ -71,18 +71,18 @@ export interface ShellApi {
   onFocusEvent: (eventId: string) => void;
   onSelect: (ids: string[]) => void;
   getLgTemplates: (id: string) => LgTemplate[];
-  copyLgTemplate: (id: string, fromTemplateName: string, toTemplateName?: string) => Promise<void>;
-  addLgTemplate: (id: string, templateName: string, templateStr: string) => Promise<void>;
-  updateLgTemplate: (id: string, templateName: string, templateStr: string) => Promise<void>;
-  deboucedUpdateLgTemplate: (id: string, templateName: string, templateStr: string) => Promise<void>;
-  removeLgTemplate: (id: string, templateName: string) => Promise<void>;
-  removeLgTemplates: (id: string, templateNames: string[]) => Promise<void>;
+  copyLgTemplate: (id: string, fromTemplateName: string, toTemplateName?: string) => Promise<LgFile[] | undefined>;
+  addLgTemplate: (id: string, templateName: string, templateStr: string) => Promise<LgFile[] | undefined>;
+  updateLgTemplate: (id: string, templateName: string, templateStr: string) => Promise<LgFile[] | undefined>;
+  deboucedUpdateLgTemplate: (id: string, templateName: string, templateStr: string) => Promise<LgFile[] | undefined>;
+  removeLgTemplate: (id: string, templateName: string) => Promise<LgFile[] | undefined>;
+  removeLgTemplates: (id: string, templateNames: string[]) => Promise<LgFile[] | undefined>;
   getLuIntent: (id: string, intentName: string) => LuIntentSection | undefined;
   getLuIntents: (id: string) => LuIntentSection[];
-  addLuIntent: (id: string, intentName: string, intent: LuIntentSection) => Promise<void>;
-  updateLuIntent: (id: string, intentName: string, intent: LuIntentSection) => Promise<void>;
-  deboucedUpdateLuIntent: (id: string, intentName: string, intent: LuIntentSection) => Promise<void>;
-  renameLuIntent: (id: string, intentName: string, newIntentName: string) => Promise<void>;
+  addLuIntent: (id: string, intentName: string, intent: LuIntentSection) => Promise<LuFile[] | undefined>;
+  updateLuIntent: (id: string, intentName: string, intent: LuIntentSection) => Promise<LuFile[] | undefined>;
+  deboucedUpdateLuIntent: (id: string, intentName: string, intent: LuIntentSection) => Promise<LuFile[] | undefined>;
+  renameLuIntent: (id: string, intentName: string, newIntentName: string) => Promise<LuFile[] | undefined>;
   removeLuIntent: (id: string, intentName: string) => void;
   updateQnaContent: (id: string, content: string) => void;
   updateRegExIntent: (id: string, intentName: string, pattern: string) => void;
