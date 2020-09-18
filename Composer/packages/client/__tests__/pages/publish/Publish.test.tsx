@@ -7,8 +7,8 @@ import {
   settingsState,
   botNameState,
   publishTypesState,
-  projectIdState,
   publishHistoryState,
+  currentProjectIdState,
 } from '../../../src/recoilModel';
 import { CreatePublishTarget } from '../../../src/pages/publish/createPublishTarget';
 import { PublishStatusList } from '../../../src/pages/publish/publishStatusList';
@@ -52,11 +52,11 @@ const state = {
 };
 
 const initRecoilState = ({ set }) => {
-  set(projectIdState, state.projectId);
-  set(botNameState, state.botName);
-  set(publishTypesState, state.publishTypes);
-  set(publishHistoryState, state.publishHistory);
-  set(settingsState, state.settings);
+  set(currentProjectIdState, state.projectId);
+  set(botNameState(state.projectId), state.botName);
+  set(publishTypesState(state.projectId), state.publishTypes);
+  set(publishHistoryState(state.projectId), state.publishHistory);
+  set(settingsState(state.projectId), state.settings);
 };
 
 describe('publish page', () => {

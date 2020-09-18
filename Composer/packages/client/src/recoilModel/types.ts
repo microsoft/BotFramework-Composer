@@ -74,7 +74,6 @@ export interface BotLoadError {
 }
 
 export interface DesignPageLocation {
-  projectId: string;
   dialogId: string;
   selected: string;
   focused: string;

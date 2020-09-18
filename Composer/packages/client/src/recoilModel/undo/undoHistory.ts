@@ -8,19 +8,27 @@ import { AtomAssetsMap } from './trackedAtoms';
 // use number to limit the stack size first
 const MAX_STACK_LENGTH = 30;
 
-export class UndoHistory {
+export default class {
+  private _projectId = '';
+  /**
+   *
+   */
+  constructor(projectId) {
+    this._projectId = projectId;
+  }
+
   public stack: AtomAssetsMap[] = [];
   public present = -1;
 
   public undo() {
-    if (!this.canUndo()) throw new Error(formatMessage('Undo is not support'));
+    if (!this.canUndo()) throw new Error(formatMessage('Undo is not supported'));
 
     this.present = this.present - 1;
     return this.stack[this.present];
   }
 
   public redo() {
-    if (!this.canRedo()) throw new Error(formatMessage('Redo is not support'));
+    if (!this.canRedo()) throw new Error(formatMessage('Redo is not supported'));
 
     this.present = this.present + 1;
     return this.stack[this.present];
@@ -37,6 +45,7 @@ export class UndoHistory {
     }
 
     this.stack.push(assets);
+
     this.present++;
   }
 
@@ -58,11 +67,14 @@ export class UndoHistory {
     }
   }
 
-  public canUndo = () => this.stack.length > 0 && this.present > 0;
+  public canUndo = () => {
+    return this.stack.length > 0 && this.present > 0;
+  };
   public canRedo = () => this.stack.length > 0 && this.present < this.stack.length - 1;
   public isEmpty = () => this.stack.length === 0;
   public getPresentAssets = () => (this.present > -1 ? this.stack[this.present] : null);
-}
 
-const undoHistory = new UndoHistory();
-export default undoHistory;
+  public get projectId() {
+    return this._projectId;
+  }
+}
