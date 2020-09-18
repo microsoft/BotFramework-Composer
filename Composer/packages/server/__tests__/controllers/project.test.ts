@@ -334,10 +334,10 @@ describe('skill operation', () => {
   it('should retrieve skill manifest', async () => {
     const mockReq = {
       params: { projectId },
-      query: {},
-      body: {
+      query: {
         url: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json',
       },
+      body: {},
     } as Request;
     await ProjectController.getSkill(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
