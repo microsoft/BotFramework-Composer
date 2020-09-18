@@ -5,7 +5,6 @@
 import { jsx } from '@emotion/core';
 import { Panel } from 'office-ui-fabric-react/lib/Panel';
 import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
-
 import { PublishTarget } from '@bfc/shared';
 
 interface ProvisionDetailProps {

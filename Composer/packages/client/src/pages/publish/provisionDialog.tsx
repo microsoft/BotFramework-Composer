@@ -11,16 +11,15 @@ import formatMessage from 'format-message';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { JsonEditor } from '@bfc/code-editor';
-
 import { PublishTarget } from '@bfc/shared';
-import { PublishType } from '../../recoilModel/types';
+import { useRecoilValue } from 'recoil';
 
+import { PublishType } from '../../recoilModel/types';
 import { DialogWrapper, DialogTypes } from '../../components/DialogWrapper';
+import { dispatcherState, userSettingsState, settingsState } from '../../recoilModel';
 
 import { CreateNewResource } from './createNewResources';
 import { SelectExistedResources } from './selectExistedResources';
-import { useRecoilValue } from 'recoil';
-import { dispatcherState, userSettingsState, settingsState } from '../../recoilModel';
 
 // import { getAccessTokenInCache } from '../../utils/auth';
 interface ProvisionDialogProps {
