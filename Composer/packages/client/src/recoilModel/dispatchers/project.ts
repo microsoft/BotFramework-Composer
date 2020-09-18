@@ -40,6 +40,7 @@ import {
   projectMetaDataState,
   filePersistenceState,
   currentProjectIdState,
+  botOpeningState,
 } from '../atoms';
 import { QnABotTemplateId } from '../../constants';
 import FilePersistence from '../persistence/FilePersistence';
@@ -70,6 +71,13 @@ import {
   dialogSchemasState,
 } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
+import {
+  fetchProjectDataById,
+  fetchProjectDataByPath,
+  flushExistingTasks,
+  navigateToBot,
+  parseSkillPaths,
+} from './utils/project';
 
 const handleProjectFailure = (callbackHelpers: CallbackInterface, ex) => {
   callbackHelpers.set(botOpeningState, false);
@@ -147,37 +155,16 @@ const initQnaFilesStatus = (projectId: string, qnaFiles: QnAFile[], dialogs: Dia
 };
 
 export const projectDispatcher = () => {
-  const initBotState = async (
-    callbackHelpers: CallbackInterface,
-    data: any,
-    jump: boolean,
-    templateId: string,
-    qnaKbUrls?: string[]
-  ) => {
-    const { snapshot, gotoSnapshot, set } = callbackHelpers;
-    const {
-      files,
-      botName,
-      botEnvironment,
-      location,
-      schemas,
-      settings,
-      id: projectId,
-      diagnostics,
-      skills: skillContent,
-    } = data;
+  const initBotState = async (callbackHelpers, data: any, botFiles, isRootBot = false) => {
+    const { snapshot, set } = callbackHelpers;
+    const { botName, botEnvironment, location, schemas, settings, id: projectId, diagnostics } = data;
+    const { dialogs, dialogSchemas, luFiles, lgFiles, qnaFiles, skillManifestFiles, skills, mergedSettings } = botFiles;
     const curLocation = await snapshot.getPromise(locationState(projectId));
     const storedLocale = languageStorage.get(botName)?.locale;
     const locale = settings.languages.includes(storedLocale) ? storedLocale : settings.defaultLanguage;
 
     // cache current projectId in session, resolve page refresh caused state lost.
     projectIdCache.set(projectId);
-
-    const mergedSettings = mergeLocalStorage(projectId, settings);
-    if (Array.isArray(mergedSettings.skill)) {
-      const skillsArr = mergedSettings.skill.map((skillData) => ({ ...skillData }));
-      mergedSettings.skill = convertSkillsToDictionary(skillsArr);
-    }
 
     try {
       schemas.sdk.content = processSchema(projectId, schemas.sdk.content);
@@ -188,14 +175,6 @@ export const projectDispatcher = () => {
     }
 
     try {
-      const { dialogs, dialogSchemas, luFiles, lgFiles, qnaFiles, skillManifestFiles, skills } = indexer.index(
-        files,
-        botName,
-        locale,
-        skillContent,
-        mergedSettings
-      );
-
       let mainDialog = '';
       const verifiedDialogs = dialogs.map((dialog) => {
         if (dialog.isRoot) {
@@ -206,56 +185,37 @@ export const projectDispatcher = () => {
       });
 
       await lgWorker.addProject(projectId, lgFiles);
-      set(botProjectsSpaceState, []);
 
-      // Important: gotoSnapshot will wipe all states.
-      const newSnapshot = snapshot.map(({ set }) => {
-        set(skillManifestsState(projectId), skillManifestFiles);
-        set(luFilesState(projectId), initLuFilesStatus(botName, luFiles, dialogs));
-        set(lgFilesState(projectId), lgFiles);
-        set(dialogsState(projectId), verifiedDialogs);
-        set(dialogSchemasState(projectId), dialogSchemas);
-        set(botEnvironmentState(projectId), botEnvironment);
-        set(botNameState(projectId), botName);
-        set(qnaFilesState(projectId), initQnaFilesStatus(botName, qnaFiles, dialogs));
-        if (location !== curLocation) {
-          set(botStatusState(projectId), BotStatus.unConnected);
-          set(locationState(projectId), location);
-        }
-        set(skillsState(projectId), skills);
-        set(schemasState(projectId), schemas);
-        set(localeState(projectId), locale);
-        set(botDiagnosticsState(projectId), diagnostics);
-
-        refreshLocalStorage(projectId, settings);
-        set(settingsState(projectId), mergedSettings);
-        set(filePersistenceState(projectId), new FilePersistence(projectId));
-        set(undoHistoryState(projectId), new UndoHistory(projectId));
-        //TODO: Botprojects space will be populated for now with just the rootbot. Once, BotProjects UI is hookedup this will be refactored to use addToBotProject
-        set(botProjectsSpaceState, (current) => [...current, projectId]);
-        set(projectMetaDataState(projectId), {
-          isRootBot: true,
-        });
-        set(botOpeningState, false);
-      });
-
-      gotoSnapshot(newSnapshot);
-
-      if (jump && projectId) {
-        // TODO: Refactor to set it always on init to the root bot
-        set(currentProjectIdState, projectId);
-        let url = `/bot/${projectId}/dialogs/${mainDialog}`;
-        if (templateId === QnABotTemplateId) {
-          url = `/bot/${projectId}/knowledge-base/${mainDialog}`;
-          navigateTo(url, { state: { qnaKbUrls } });
-          return;
-        }
-        navigateTo(url);
+      set(skillManifestsState(projectId), skillManifestFiles);
+      set(luFilesState(projectId), initLuFilesStatus(botName, luFiles, dialogs));
+      set(lgFilesState(projectId), lgFiles);
+      set(dialogsState(projectId), verifiedDialogs);
+      set(dialogSchemasState(projectId), dialogSchemas);
+      set(botEnvironmentState(projectId), botEnvironment);
+      set(botNameState(projectId), botName);
+      set(qnaFilesState(projectId), initQnaFilesStatus(botName, qnaFiles, dialogs));
+      if (location !== curLocation) {
+        set(botStatusState(projectId), BotStatus.unConnected);
+        set(locationState(projectId), location);
       }
+      set(skillsState(projectId), skills);
+      set(schemasState(projectId), schemas);
+      set(localeState(projectId), locale);
+      set(botDiagnosticsState(projectId), diagnostics);
+
+      refreshLocalStorage(projectId, settings);
+      set(settingsState(projectId), mergedSettings);
+      set(filePersistenceState(projectId), new FilePersistence(projectId));
+      set(undoHistoryState(projectId), new UndoHistory(projectId));
+      set(projectMetaDataState(projectId), {
+        isRootBot,
+      });
+      return mainDialog;
     } catch (err) {
       callbackHelpers.set(botOpeningState, false);
       setError(callbackHelpers, err);
       navigateTo('/home');
+      return '';
     }
   };
 
@@ -275,6 +235,7 @@ export const projectDispatcher = () => {
 
   const setBotOpeningStatus = async (callbackHelpers: CallbackInterface) => {
     const { set, snapshot } = callbackHelpers;
+    set(botOpeningState, true);
     const botProjectSpace = await snapshot.getPromise(botProjectsSpaceState);
     const filePersistenceHandlers: filePersistence[] = [];
     for (const projectId of botProjectSpace) {
@@ -285,37 +246,42 @@ export const projectDispatcher = () => {
     return Promise.all(workers.map((w) => w.flush()));
   };
 
+  const openSkill = async (callbackHelpers, skill: { path: string; remote: boolean }, storageId) => {
+    const { set } = callbackHelpers;
+    try {
+      if (!skill.remote) {
+        const { projectData, botFiles } = await fetchProjectDataByPath(skill.path, storageId);
+        await initBotState(callbackHelpers, projectData, botFiles);
+        set(botProjectsSpaceState, (current) => [...current, projectData.id]);
+      }
+    } catch (ex) {
+      // Handle exception in opening a skill
+    }
+  };
+
+  const handleBotOpening = async (callbackHelpers, projectData, botFiles, storageId) => {
+    const { set } = callbackHelpers;
+    const mainDialog = await initBotState(callbackHelpers, projectData, botFiles, true);
+    set(botProjectsSpaceState, []);
+    if (botFiles.botProjectSpaceFiles.length) {
+      // Handle botproject space code here. CUrrently always fetching the first BotProject file received. In future, there would be a file for each environment
+      const skillsInBotProject = parseSkillPaths(botFiles.botProjectSpaceFiles[0]);
+      skillsInBotProject.forEach((skillInBotProject) => {
+        openSkill(callbackHelpers, skillInBotProject, storageId);
+      });
+    }
+    //TODO: Botprojects space will be populated for now with just the rootbot. Once, BotProjects UI is hookedup this will be refactored to use addToBotProject
+    set(botProjectsSpaceState, [projectData.id]);
+    set(currentProjectIdState, projectData.id);
+    navigateToBot(projectData.id, mainDialog);
+  };
+
   const openProject = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (path: string, storageId = 'default') => {
       try {
-        await setBotOpeningStatus(callbackHelpers);
-        const result = await checkIfBotProject(path, storageId);
-        if (!result.isBotProjectSpace) {
-          const response = await httpClient.put(`/projects/open`, { path, storageId });
-          await initBotState(callbackHelpers, response.data, true, '');
-          return response.data.id;
-        } else {
-          handleBotProjectSpace(callbackHelpers, path, storageId, result.contents);
-        }
-      } catch (ex) {
-        removeRecentProject(callbackHelpers, path);
-        handleProjectFailure(callbackHelpers, ex);
-      }
-    }
-  );
-
-  const openProjectTest = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (path: string, storageId = 'default') => {
-      try {
-        await setBotOpeningStatus(callbackHelpers);
-        const result = await checkIfBotProject(path, storageId);
-        if (!result.isBotProjectSpace) {
-          const response = await httpClient.put(`/projects/open`, { path, storageId });
-          await initBotState(callbackHelpers, response.data, true, '');
-          return response.data.id;
-        } else {
-          handleBotProjectSpace(callbackHelpers, path, storageId, result.contents);
-        }
+        await flushExistingTasks(callbackHelpers);
+        const { projectData, botFiles } = await fetchProjectDataByPath(path, storageId);
+        handleBotOpening(callbackHelpers, projectData, botFiles, storageId);
       } catch (ex) {
         removeRecentProject(callbackHelpers, path);
         handleProjectFailure(callbackHelpers, ex);
@@ -325,8 +291,11 @@ export const projectDispatcher = () => {
 
   const fetchProjectById = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
     try {
-      const response = await httpClient.get(`/projects/${projectId}`);
-      await initBotState(callbackHelpers, response.data, false, '');
+      const { set } = callbackHelpers;
+      await flushExistingTasks(callbackHelpers);
+      set(botProjectsSpaceState, []);
+      const { projectData, botFiles } = await fetchProjectDataById(projectId);
+      handleBotOpening(callbackHelpers, projectData, botFiles, 'default');
     } catch (ex) {
       handleProjectFailure(callbackHelpers, ex);
       navigateTo('/home');
@@ -514,200 +483,6 @@ export const projectDispatcher = () => {
       setError(callbackHelpers, ex);
     }
   });
-
-  const checkIfBotProject = async (path: string, storageId): Promise<{ isBotProjectSpace: boolean; contents: any }> => {
-    try {
-      const qs: any = {
-        path,
-        storageId,
-      };
-      const stringified = queryString.stringify(qs, {
-        encode: true,
-      });
-      const response = await httpClient.get(`/projects/checkIfBotProjectSpace?${stringified}`);
-      return response.data;
-    } catch (ex) {
-      return {
-        isBotProjectSpace: false,
-        contents: undefined,
-      };
-    }
-  };
-
-  const handleBotProjectSpace = async (
-    callbackHelpers: CallbackInterface,
-    rootBotPath: string,
-    storageId,
-    botProjectFileContents: any
-  ) => {
-    const rootBotPromise = httpClient.put(`/projects/open`, { path: rootBotPath, storageId });
-    const promises = [rootBotPromise];
-    for (const skill of botProjectFileContents.skills) {
-      if (skill.workspace) {
-        const { protocol } = new URL(skill.workspace);
-        if (protocol === 'file:') {
-          const relativeSkillPath = skill.workspace.replace('file://', '');
-          let skillPath = path.resolve(rootBotPath, relativeSkillPath);
-          if (skillPath.match(/^(\/||\\)[A-Z]:/)) {
-            // if the path comes out like "/C:/Users", remove the leading slash or backslash
-            skillPath = skillPath.slice(1);
-          }
-          promises.push(httpClient.put(`/projects/open`, { path: path.normalize(skillPath), storageId }));
-        }
-      } else {
-        //Handle remote skill
-      }
-    }
-    const responses = await Promise.all(promises);
-    const projectIds: string[] = [];
-
-    let rootBotData = {
-      projectId: '',
-      mainDialog: '',
-    };
-
-    const botDataCollection: any[] = [];
-    for (const projectData of responses) {
-      const projectId = projectData.data.id;
-      projectIds.push(projectId);
-
-      const botData = await fetchData(callbackHelpers, projectData.data, projectIds.length === 1);
-
-      botDataCollection.push(botData);
-    }
-    // Important: gotoSnapshot will wipe all states.
-    const { snapshot, gotoSnapshot } = callbackHelpers;
-    const newSnapshot = snapshot.map(({ set }) => {
-      botDataCollection.map((projectData, index) => {
-        const projectId = projectIds[index];
-        const {
-          skillManifestFiles,
-          botName,
-          luFiles,
-          dialogs,
-          lgFiles,
-          verifiedDialogs,
-          dialogSchemas,
-          botEnvironment,
-          qnaFiles,
-          curLocation,
-          location,
-          skills,
-          schemas,
-          diagnostics,
-          mainDialog,
-          locale,
-          isRootBot,
-          settings,
-        } = projectData;
-
-        if (index === 0) {
-          rootBotData = {
-            projectId,
-            mainDialog,
-          };
-        }
-
-        set(skillManifestsState(projectId), skillManifestFiles);
-        set(luFilesState(projectId), initLuFilesStatus(botName, luFiles, dialogs));
-        set(lgFilesState(projectId), lgFiles);
-        set(dialogsState(projectId), verifiedDialogs);
-        set(dialogSchemasState(projectId), dialogSchemas);
-        set(botEnvironmentState(projectId), botEnvironment);
-        set(botNameState(projectId), botName);
-        set(qnaFilesState(projectId), initQnaFilesStatus(botName, qnaFiles, dialogs));
-        if (location !== curLocation) {
-          set(botStatusState(projectId), BotStatus.unConnected);
-          set(locationState(projectId), location);
-        }
-        set(skillsState(projectId), skills);
-        set(schemasState(projectId), schemas);
-        set(localeState(projectId), locale);
-        set(botDiagnosticsState(projectId), diagnostics);
-
-        refreshLocalStorage(projectId, settings);
-        const mergedSettings = mergeLocalStorage(projectId, settings);
-        set(settingsState(projectId), mergedSettings);
-        set(filePersistenceState(projectId), new FilePersistence(projectId));
-        set(undoHistoryState(projectId), new UndoHistory(projectId));
-        set(projectMetaDataState(projectId), {
-          isRootBot,
-        });
-      });
-      set(botProjectsSpaceState, [...projectIds]);
-    });
-    gotoSnapshot(newSnapshot);
-
-    if (rootBotData.projectId) {
-      const url = `/bot/${rootBotData.projectId}/dialogs/${rootBotData.mainDialog}`;
-      navigateTo(url);
-    }
-  };
-
-  const fetchData = async (callbackHelpers: CallbackInterface, data: any, isRootBot = false) => {
-    const { snapshot } = callbackHelpers;
-    const { files, botName, botEnvironment, location, schemas, settings, id: projectId, diagnostics, skills } = data;
-    const curLocation = await snapshot.getPromise(locationState(projectId));
-    const storedLocale = languageStorage.get(botName)?.locale;
-    const locale = settings.languages.includes(storedLocale) ? storedLocale : settings.defaultLanguage;
-
-    // cache current projectId in session, resolve page refresh caused state lost.
-    if (isRootBot) {
-      projectIdCache.set(projectId);
-    }
-
-    try {
-      schemas.sdk.content = processSchema(projectId, schemas.sdk.content);
-    } catch (err) {
-      const diagnostics = schemas.diagnostics ?? [];
-      diagnostics.push(err.message);
-      schemas.diagnostics = diagnostics;
-    }
-
-    try {
-      const { dialogs, dialogSchemas, luFiles, lgFiles, qnaFiles, skillManifestFiles } = indexer.index(
-        files,
-        botName,
-        locale
-      );
-
-      let mainDialog = '';
-      const verifiedDialogs = dialogs.map((dialog) => {
-        if (dialog.isRoot) {
-          mainDialog = dialog.id;
-        }
-        dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles);
-        return dialog;
-      });
-
-      await lgWorker.addProject(projectId, lgFiles);
-
-      return {
-        skillManifestFiles,
-        botName,
-        luFiles,
-        dialogs,
-        lgFiles,
-        verifiedDialogs,
-        dialogSchemas,
-        botEnvironment,
-        qnaFiles,
-        curLocation,
-        location,
-        skills,
-        schemas,
-        diagnostics,
-        mainDialog,
-        settings,
-        locale,
-        isRootBot,
-      };
-    } catch (err) {
-      setError(callbackHelpers, err);
-      navigateTo('/home');
-      return '';
-    }
-  };
 
   return {
     openProject,

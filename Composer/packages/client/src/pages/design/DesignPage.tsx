@@ -48,6 +48,7 @@ import {
   showAddSkillDialogModalState,
   actionsSeedState,
   localeState,
+  botProjectSpaceSelector,
 } from '../../recoilModel';
 import ImportQnAFromUrlModal from '../knowledge-base/ImportQnAFromUrlModal';
 import { triggerNotSupported } from '../../utils/dialogValidator';
@@ -109,6 +110,7 @@ const getTabFromFragment = () => {
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = (props) => {
   const { location, dialogId, projectId = '' } = props;
   const userSettings = useRecoilValue(userSettingsState);
+  const botProjectsSpace = useRecoilValue(botProjectSpaceSelector);
 
   const schemas = useRecoilValue(schemasState(projectId));
   const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
@@ -155,6 +157,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const shellForPropertyEditor = useShell('PropertyEditor', projectId);
   const triggerApi = useTriggerApi(shell.api);
   const { createTrigger } = shell.api;
+
+  useEffect(() => {
+    console.log(botProjectsSpace);
+  }, [botProjectsSpace]);
 
   useEffect(() => {
     const currentDialog = dialogs.find(({ id }) => id === dialogId);

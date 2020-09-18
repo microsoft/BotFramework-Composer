@@ -189,3 +189,16 @@ export interface BotInfo {
   diagnostics: Diagnostic[];
   name: string;
 }
+
+export interface BotProjectSpaceSkill {
+  workspace: string;
+  manifest: string;
+  remote: boolean;
+  endpointName: string;
+}
+
+export interface BotProjectSpace {
+  workspace: string;
+  name: string;
+  skills: BotProjectSpaceSkill[];
+}
