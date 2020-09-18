@@ -31,7 +31,7 @@ import filePersistence from '../persistence/FilePersistence';
 import { navigateTo } from '../../utils/navigation';
 import languageStorage from '../../utils/languageStorage';
 import { projectIdCache } from '../../utils/projectCache';
-import { designPageLocationState } from '../atoms/botState';
+import { designPageLocationState, showCreateQnAFromUrlDialogState } from '../atoms/botState';
 import { QnABotTemplateId } from '../../constants';
 
 import {
@@ -194,6 +194,10 @@ export const projectDispatcher = () => {
           set(botStatusState, BotStatus.unConnected);
           set(locationState, location);
         }
+        // if create from QnATemplate, continue creation flow.
+        if (templateId === QnABotTemplateId) {
+          set(showCreateQnAFromUrlDialogState, true);
+        }
         set(skillsState, skills);
         set(schemasState, schemas);
         set(localeState, locale);
@@ -214,10 +218,10 @@ export const projectDispatcher = () => {
       });
       gotoSnapshot(newSnapshot);
       if (jump && projectId) {
-        let url = `/bot/${projectId}/dialogs/${mainDialog}`;
-        if (templateId === QnABotTemplateId) {
-          url = `/bot/${projectId}/knowledge-base/${mainDialog}`;
-        }
+        const url = `/bot/${projectId}/dialogs/${mainDialog}`;
+        // if (templateId === QnABotTemplateId) {
+        //   url = `/bot/${projectId}/knowledge-base/${mainDialog}`;
+        // }
         navigateTo(url);
       }
     } catch (err) {

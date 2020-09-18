@@ -349,7 +349,7 @@ ${response.data}
       });
       await createQnAFromScratchDialogSuccess();
 
-      navigateTo(`/bot/${projectId}/knowledge-base/${getBaseName(id)}?C=${encodeURIComponent(name)}.source`);
+      navigateTo(`/bot/${projectId}/knowledge-base/${getBaseName(id)}`);
     }
   );
 
