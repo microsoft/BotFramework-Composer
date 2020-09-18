@@ -30,8 +30,10 @@ export const setSettingState = async (
       keys(settings.skill).map(async (id) => {
         if (settings?.skill?.[id]?.manifestUrl !== previousSettings?.skill?.[id]?.manifestUrl) {
           try {
-            const { data: content } = await httpClient.post(`/projects/${projectId}/skill/retrieve-skill-manifest`, {
-              url: settings?.skill?.[id]?.manifestUrl,
+            const { data: content } = await httpClient.get(`/projects/${projectId}/skill/retrieve-skill-manifest`, {
+              params: {
+                url: settings?.skill?.[id]?.manifestUrl,
+              },
             });
             return { id, content };
           } catch (error) {

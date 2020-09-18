@@ -101,7 +101,7 @@ describe('<SkillForm />', () => {
   it('should render the skill form, and update skill manifest url', () => {
     jest.useFakeTimers();
 
-    (httpClient.post as jest.Mock).mockResolvedValue({ endpoints: [] });
+    (httpClient.get as jest.Mock).mockResolvedValue({ endpoints: [] });
 
     const onDismiss = jest.fn();
     const onSubmit = jest.fn();
@@ -203,7 +203,7 @@ describe('<SkillForm />', () => {
     });
 
     it('should try and retrieve manifest if manifest url meets other criteria', async () => {
-      (httpClient.post as jest.Mock) = jest.fn().mockResolvedValue({ data: 'skill manifest' });
+      (httpClient.get as jest.Mock) = jest.fn().mockResolvedValue({ data: 'skill manifest' });
 
       const formData = { manifestUrl: 'https://skill' };
       const formDataErrors = { manifestUrl: 'error' };
@@ -223,8 +223,10 @@ describe('<SkillForm />', () => {
           manifestUrl: 'Validating',
         })
       );
-      expect(httpClient.post).toBeCalledWith(`/projects/${projectId}/skill/retrieve-skill-manifest`, {
-        url: formData.manifestUrl,
+      expect(httpClient.get).toBeCalledWith(`/projects/${projectId}/skill/retrieve-skill-manifest`, {
+        params: {
+          url: formData.manifestUrl,
+        },
       });
       expect(setSkillManifest).toBeCalledWith('skill manifest');
       expect(setValidationState).toBeCalledWith(
@@ -240,7 +242,7 @@ describe('<SkillForm />', () => {
     });
 
     it('should show error when it could not retrieve skill manifest', async () => {
-      (httpClient.post as jest.Mock) = jest.fn().mockRejectedValue({ message: 'skill manifest' });
+      (httpClient.get as jest.Mock) = jest.fn().mockRejectedValue({ message: 'skill manifest' });
 
       const formData = { manifestUrl: 'https://skill' };
 
@@ -259,8 +261,10 @@ describe('<SkillForm />', () => {
           manifestUrl: 'Validating',
         })
       );
-      expect(httpClient.post).toBeCalledWith(`/projects/${projectId}/skill/retrieve-skill-manifest`, {
-        url: formData.manifestUrl,
+      expect(httpClient.get).toBeCalledWith(`/projects/${projectId}/skill/retrieve-skill-manifest`, {
+        params: {
+          url: formData.manifestUrl,
+        },
       });
       expect(setSkillManifest).not.toBeCalled();
       expect(setValidationState).toBeCalledWith(

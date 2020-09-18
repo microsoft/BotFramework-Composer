@@ -259,7 +259,7 @@ async function getSkill(req: Request, res: Response) {
   const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
     try {
-      const content = await getSkillManifest(req.body.url);
+      const content = await getSkillManifest(req.query.url);
       res.status(200).json(content);
     } catch (err) {
       res.status(404).json({

@@ -83,8 +83,10 @@ export const validateManifestUrl = async ({
   } else {
     try {
       setValidationState({ ...validationState, manifestUrl: ValidationState.Validating });
-      const { data } = await httpClient.post(`/projects/${projectId}/skill/retrieve-skill-manifest`, {
-        url: manifestUrl,
+      const { data } = await httpClient.get(`/projects/${projectId}/skill/retrieve-skill-manifest`, {
+        params: {
+          url: manifestUrl,
+        },
       });
       setFormDataErrors(errors);
       setSkillManifest(data);
