@@ -108,8 +108,10 @@ const getTabFromFragment = () => {
   }
 };
 
-const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = (props) => {
-  const { location, dialogId, projectId = '' } = props;
+const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string; skillId?: string }>> = (
+  props
+) => {
+  const { location, dialogId, skillId, projectId = '' } = props;
   const userSettings = useRecoilValue(userSettingsState);
 
   const schemas = useRecoilValue(schemasState(projectId));
@@ -167,7 +169,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     const rootDialog = dialogs.find(({ isRoot }) => isRoot);
     if (!currentDialog && rootDialog) {
       const { search } = location || {};
-      navigateTo(`/bot/${projectId}/dialogs/${rootDialog.id}${search}`);
+      navigateTo(`/bot/${projectId}/skill/${skillId}/dialogs/${rootDialog.id}${search}`);
       return;
     }
     setWarningIsVisible(true);
@@ -195,7 +197,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
   useEffect(() => {
     if (location && props.dialogId && props.projectId) {
-      const { dialogId, projectId } = props;
+      const { skillId, dialogId, projectId } = props;
       const params = new URLSearchParams(location.search);
       const dialogMap = dialogs.reduce((acc, { content, id }) => ({ ...acc, [id]: content }), {});
       const selected = params.get('selected') ?? '';
@@ -212,12 +214,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
          *   - If 'dialog' not exists at `dialogId` path, fallback to main dialog.
          */
         if (id) {
-          navTo(projectId, id);
+          navTo(projectId, skillId ?? projectId, id);
         }
         return;
       }
 
       setDesignPageLocation(projectId, {
+        skillId: skillId ?? projectId,
         dialogId,
         selected,
         focused,
@@ -256,20 +259,25 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     createTrigger(dialogId, formData);
   };
 
-  function handleSelect(projectId: string, dialogId: string | undefined, selected: string | undefined) {
-    if (dialogId == null) {
+  function handleSelect(
+    nextProjectId: string,
+    nextSkillId: string | undefined,
+    nextDialogId: string | undefined,
+    nextSelected: string | undefined
+  ) {
+    if (nextDialogId == null) {
       // maybe navigate to overall bot settings?
       return;
-    } else if (selected != null) {
-      selectTo(projectId, selected);
+    } else if (nextSelected != null) {
+      selectTo(nextProjectId, nextSkillId ?? nextProjectId, nextDialogId, nextSelected);
     } else {
-      navTo(projectId, dialogId, []);
+      navTo(nextProjectId, nextSkillId ?? nextProjectId, nextDialogId, []);
     }
   }
 
   const onCreateDialogComplete = (newDialog) => {
     if (newDialog) {
-      navTo(projectId, newDialog, []);
+      navTo(projectId, skillId ?? projectId, newDialog, []);
     }
   };
 
@@ -451,8 +459,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
   function handleBreadcrumbItemClick(_event, item) {
     if (item) {
-      const { dialogId, selected, focused, index } = item;
-      selectAndFocus(projectId, dialogId, selected, focused, clearBreadcrumb(breadcrumb, index));
+      const { skillId, dialogId, selected, focused, index } = item;
+      selectAndFocus(projectId, skillId, dialogId, selected, focused, clearBreadcrumb(breadcrumb, index));
     }
   }
 
@@ -512,8 +520,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     commitChanges();
   }
 
-  async function handleDeleteDialog(projectId, id) {
-    const refs = getAllRef(id, dialogs);
+  async function handleDeleteDialog(projectId, skillId, dialogId) {
+    const refs = getAllRef(dialogId, dialogs);
     let setting: any = {
       confirmBtnText: formatMessage('Yes'),
       cancelBtnText: formatMessage('Cancel'),
@@ -533,12 +541,12 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     const result = await OpenConfirmModal(title, subTitle, setting);
 
     if (result) {
-      await removeDialog(id, projectId);
+      await removeDialog(dialogId, projectId);
       commitChanges();
     }
   }
 
-  async function handleDeleteTrigger(projectId, dialogId, index) {
+  async function handleDeleteTrigger(projectId, skillId, dialogId, index) {
     const content = deleteTrigger(dialogs, dialogId, index, (trigger) => triggerApi.deleteTrigger(dialogId, trigger));
 
     if (content) {
@@ -550,24 +558,24 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       if (index === currentIdx) {
         if (currentIdx - 1 >= 0) {
           //if the deleted node is selected and the selected one is not the first one, navTo the previous trigger;
-          selectTo(projectId, createSelectedPath(currentIdx - 1));
+          selectTo(projectId, skillId, dialogId, createSelectedPath(currentIdx - 1));
         } else {
           //if the deleted node is selected and the selected one is the first one, navTo the first trigger;
-          navTo(projectId, dialogId, []);
+          navTo(projectId, skillId, dialogId, []);
         }
       } else if (index < currentIdx) {
         //if the deleted node is at the front, navTo the current one;
-        selectTo(projectId, createSelectedPath(currentIdx - 1));
+        selectTo(projectId, skillId, dialogId, createSelectedPath(currentIdx - 1));
       }
     }
   }
 
-  async function handleDelete(link: { projectId: string; dialogName?: string; trigger?: number }) {
-    const { projectId, dialogName, trigger } = link;
+  async function handleDelete(link: { projectId: string; dialogName?: string; trigger?: number; skillId?: string }) {
+    const { projectId, dialogName, trigger, skillId } = link;
     if (trigger == null) {
-      handleDeleteDialog(projectId, dialogName);
+      handleDeleteDialog(projectId, skillId, dialogName);
     } else {
-      handleDeleteTrigger(projectId, dialogName, trigger);
+      handleDeleteTrigger(projectId, skillId, dialogName, trigger);
     }
   }
 
@@ -620,8 +628,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           selected={selected}
           onDelete={handleDelete}
           onSelect={(link) => {
-            const { projectId, dialogName: dialogId, trigger: selected } = link;
-            handleSelect(projectId, dialogId, selected == null ? '' : `triggers[${selected.toString()}]`);
+            const { projectId, skillId, dialogName: dialogId, trigger: selected } = link;
+            handleSelect(projectId, skillId, dialogId, selected == null ? '' : `triggers[${selected.toString()}]`);
           }}
         />
         <div css={contentWrapper} role="main">

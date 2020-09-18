@@ -46,8 +46,8 @@ const Routes = (props) => {
           />
           <Redirect noThrow from="/bot/:projectId/knowledge-base" to="/bot/:projectId/knowledge-base/all" />
           <Redirect noThrow from="/bot/:projectId/publish" to="/bot/:projectId/publish/all" />
-          <Redirect noThrow from="/" to={resolveToBasePath(BASEPATH, 'home')} />
           <ProjectRouter path="/bot/:projectId">
+            <DesignPage path="skill/:skillId/dialogs/:dialogId/*" />
             <DesignPage path="dialogs/:dialogId/*" />
             <LUPage path="language-understanding/:dialogId/*" />
             <LGPage path="language-generation/:dialogId/*" />
@@ -57,6 +57,7 @@ const Routes = (props) => {
             <Skills path="skills/*" />
             <DesignPage path="*" />
           </ProjectRouter>
+          <Redirect noThrow from="/" to={resolveToBasePath(BASEPATH, 'home')} />
           <SettingPage path="settings/*" />
           <BotCreationFlowRouter path="projects/*" />
           <BotCreationFlowRouter path="home" />

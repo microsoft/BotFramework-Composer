@@ -83,11 +83,14 @@ export interface NavigationState {
   qnaKbUrls?: string[];
 }
 
-export function convertPathToUrl(projectId: string, dialogId: string, path?: string): string {
+export function convertPathToUrl(projectId: string, skillId: string, dialogId: string, path?: string): string {
   //path is like main.triggers[0].actions[0]
   //uri = id?selected=triggers[0]&focused=triggers[0].actions[0]
 
-  let uri = `/bot/${projectId}/dialogs/${dialogId}`;
+  let uri =
+    projectId === skillId
+      ? `/bot/${projectId}/dialogs/${dialogId}`
+      : `/bot/${projectId}/skill/${skillId}/dialogs/${dialogId}`;
   if (!path) return uri;
 
   const items = path.split('#');
@@ -113,6 +116,7 @@ export function convertPathToUrl(projectId: string, dialogId: string, path?: str
 
 export function navigateTo(to: string, navigateOpts: NavigateOptions<NavigationState> = {}) {
   const mapNavPath = resolveToBasePath(BASEPATH, to);
+  console.log(mapNavPath);
   navigate(mapNavPath, navigateOpts);
 }
 

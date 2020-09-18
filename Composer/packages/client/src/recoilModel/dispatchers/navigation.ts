@@ -25,7 +25,7 @@ export const navigationDispatcher = () => {
   const setDesignPageLocation = useRecoilCallback(
     ({ set }: CallbackInterface) => async (
       projectId: string,
-      { dialogId = '', selected = '', focused = '', breadcrumb = [], promptTab }
+      { skillId = '', dialogId = '', selected = '', focused = '', breadcrumb = [], promptTab }
     ) => {
       let focusPath = dialogId + '#';
       if (focused) {
@@ -49,6 +49,7 @@ export const navigationDispatcher = () => {
   const navTo = useRecoilCallback(
     ({ snapshot, set }: CallbackInterface) => async (
       projectId: string,
+      skillId: string,
       dialogId: string,
       breadcrumb: BreadcrumbItem[] = []
     ) => {
@@ -77,18 +78,21 @@ export const navigationDispatcher = () => {
   );
 
   const selectTo = useRecoilCallback(
-    ({ snapshot, set }: CallbackInterface) => async (projectId: string, selectPath: string) => {
+    ({ snapshot, set }: CallbackInterface) => async (
+      projectId: string,
+      skillId: string,
+      destDialogId: string,
+      selectPath: string
+    ) => {
       if (!selectPath) return;
       set(currentProjectIdState, projectId);
       const designPageLocation = await snapshot.getPromise(designPageLocationState(projectId));
       const breadcrumb = await snapshot.getPromise(breadcrumbState(projectId));
 
       // initial dialogId, projectId maybe empty string  ""
-      let { dialogId } = designPageLocation;
+      const dialogId = destDialogId ?? designPageLocation.dialogId ?? 'Main';
 
-      if (!dialogId) dialogId = 'Main';
-
-      const currentUri = convertPathToUrl(projectId, dialogId, selectPath);
+      const currentUri = convertPathToUrl(projectId, skillId, dialogId, selectPath);
 
       if (checkUrl(currentUri, projectId, designPageLocation)) return;
       navigateTo(currentUri, { state: { breadcrumb: updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Selected) } });
@@ -129,6 +133,7 @@ export const navigationDispatcher = () => {
   const selectAndFocus = useRecoilCallback(
     ({ snapshot, set }: CallbackInterface) => async (
       projectId: string,
+      skillId: string,
       dialogId: string,
       selectPath: string,
       focusPath: string,
@@ -143,7 +148,7 @@ export const navigationDispatcher = () => {
         if (checkUrl(currentUri, projectId, designPageLocation)) return;
         navigateTo(currentUri, { state: { breadcrumb } });
       } else {
-        navTo(projectId, dialogId, breadcrumb);
+        navTo(projectId, skillId, dialogId, breadcrumb);
       }
     }
   );
