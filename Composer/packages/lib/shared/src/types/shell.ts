@@ -58,7 +58,7 @@ export interface ShellData {
   qnaFiles: QnAFile[];
   userSettings: UserSettings;
   skills: any[];
-  skillsSettings: { [name: string]: SkillSetting };
+  skillsSettings: Record<string, SkillSetting>;
   // TODO: remove
   schemas: BotSchemas;
 }

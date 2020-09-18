@@ -67,7 +67,7 @@ export const SelectSkillDialog: React.FC<{
           setComboboxTitle(null);
         });
       } else {
-        onChange({ ...value, ...option?.data });
+        onChange({ ...value, ...option.data });
       }
     }
   };
