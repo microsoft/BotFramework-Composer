@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 import { MicrosoftIRecognizer, SDKKinds, SDKRoles, ShellApi, ShellData } from '@bfc/shared';
 
-import { FieldProps, FieldWidget } from './form';
+import { FieldWidget } from './form';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type UIOptionValue<R = string, D = any> = R | UIOptionFunc<R, D>;
@@ -68,7 +68,7 @@ export type RecognizerSchema = {
   /** Invoked when constructing a new recognizer instance.
    *  Make sure the instance can be recognized either by $kind or isSelected().
    */
-  seedNewRecognizer?: (fieldProps: FieldProps, shellData: ShellData, shellApi: ShellApi) => MicrosoftIRecognizer | any;
+  seedNewRecognizer?: (shellData: ShellData, shellApi: ShellApi) => MicrosoftIRecognizer | any;
   /** An inline editor to edit recognizer value. If none provided, users will not be able to edit its value. */
   recognizerEditor?: FieldWidget;
   /** Function to rename an intent */

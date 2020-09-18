@@ -7,7 +7,7 @@ import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { useRecoilValue } from 'recoil';
-import { useRecognizerConfig } from '@bfc/extension-client';
+import { RecognizerSchema, useRecognizerConfig, useShellApi } from '@bfc/extension-client';
 import { DialogFactory, SDKKinds } from '@bfc/shared';
 
 import { DialogCreationCopy, nameRegex } from '../../constants';
@@ -39,6 +39,7 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
   const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
   const actionsSeed = useRecoilValue(actionsSeedState(projectId));
 
+  const { shellApi, ...shellData } = useShellApi();
   const { getDefaultRecognizer } = useRecognizerConfig();
 
   const formConfig: FieldConfig<DialogFormData> = {
@@ -62,11 +63,11 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
 
   const { formData, formErrors, hasErrors, updateField } = useForm(formConfig);
 
-  const seedNewRecognizer = ($kind) => {
-    if ($kind === SDKKinds.CrossTrainedRecognizerSet) return `${formData.name}.lu.qna`;
-    return {
-      $kind,
-    };
+  const seedNewRecognizer = (recognizerSchema?: RecognizerSchema) => {
+    if (recognizerSchema && typeof recognizerSchema.seedNewRecognizer === 'function') {
+      return recognizerSchema.seedNewRecognizer(shellData, shellApi);
+    }
+    return { $kind: recognizerSchema?.id, intents: [] };
   };
 
   const seedNewDialog = (formData: DialogFormData) => {
@@ -74,7 +75,7 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
     const seededContent = new DialogFactory(schemas.sdk?.content).create(SDKKinds.AdaptiveDialog, {
       $designer: { name: formData.name, description: formData.description },
       generator: `${formData.name}.lg`,
-      recognizer: seedNewRecognizer(defaultRecognizer?.id),
+      recognizer: seedNewRecognizer(defaultRecognizer),
     });
     if (seededContent.triggers?.[0]) {
       seededContent.triggers[0].actions = actionsSeed;

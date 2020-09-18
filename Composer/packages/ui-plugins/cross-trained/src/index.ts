@@ -13,7 +13,7 @@ const config: PluginConfig = {
         isSelected: (data) => {
           return typeof data === 'string';
         },
-        seedNewRecognizer: (props, shellData, _) => {
+        seedNewRecognizer: (shellData) => {
           const { qnaFiles, luFiles, currentDialog, locale } = shellData;
           const qnaFile = qnaFiles.find((f) => f.id === `${currentDialog.id}.${locale}`);
           const luFile = luFiles.find((f) => f.id === `${currentDialog.id}.${locale}`);

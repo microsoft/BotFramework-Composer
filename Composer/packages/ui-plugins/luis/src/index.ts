@@ -17,7 +17,7 @@ const config: PluginConfig = {
         isSelected: (data) => {
           return typeof data === 'string' && data.endsWith('.lu');
         },
-        seedNewRecognizer: (props, shellData) => {
+        seedNewRecognizer: (shellData) => {
           const { luFiles, currentDialog, locale } = shellData;
           const luFile = luFiles.find((f) => f.id === `${currentDialog.id}.${locale}`);
 

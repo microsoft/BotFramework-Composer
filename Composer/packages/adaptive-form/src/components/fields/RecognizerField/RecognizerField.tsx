@@ -34,7 +34,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (prop
     const seedNewRecognizer = recognizerDefinition?.seedNewRecognizer;
     const recognizerInstance =
       typeof seedNewRecognizer === 'function'
-        ? seedNewRecognizer(props, shellData, shellApi)
+        ? seedNewRecognizer(shellData, shellApi)
         : { $kind: option.key as string, intents: [] }; // fallback to default Recognizer instance;
     onChange(recognizerInstance);
   };
