@@ -8,9 +8,11 @@ import { act } from '@bfc/test-utils/lib/hooks';
 
 import { lgDispatcher } from '../lg';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
-import { lgFilesState, projectIdState } from '../../atoms';
+import { lgFilesState, currentProjectIdState } from '../../atoms';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
+
+const projectId = '123asad.123sad';
 
 jest.mock('../../parsers/lgWorker', () => {
   const filterParseResult = (lgFile: LgFile) => {
@@ -53,7 +55,7 @@ describe('Lg dispatcher', () => {
   let renderedComponent, dispatcher: Dispatcher;
   beforeEach(() => {
     const useRecoilTestHook = () => {
-      const [lgFiles, setLgFiles] = useRecoilState(lgFilesState);
+      const [lgFiles, setLgFiles] = useRecoilState(lgFilesState(projectId));
       const currentDispatcher = useRecoilValue(dispatcherState);
 
       return {
@@ -65,8 +67,8 @@ describe('Lg dispatcher', () => {
 
     const { result } = renderRecoilHook(useRecoilTestHook, {
       states: [
-        { recoilState: lgFilesState, initialValue: lgFiles },
-        { recoilState: projectIdState, initialValue: 'test' },
+        { recoilState: lgFilesState(projectId), initialValue: lgFiles },
+        { recoilState: currentProjectIdState, initialValue: projectId },
       ],
       dispatcher: {
         recoilState: dispatcherState,
@@ -84,6 +86,7 @@ describe('Lg dispatcher', () => {
       await dispatcher.createLgTemplate({
         id: 'common.en-us',
         template: getLgTemplate('Test', '-add'),
+        projectId,
       });
     });
 
@@ -92,7 +95,7 @@ describe('Lg dispatcher', () => {
 
   it('should update a lg file', async () => {
     await act(async () => {
-      await dispatcher.updateLgFile({ id: 'common.en-us', content: `test` });
+      await dispatcher.updateLgFile({ id: 'common.en-us', content: `test`, projectId });
     });
 
     expect(renderedComponent.current.lgFiles[0].content).toBe(`test`);
@@ -104,6 +107,7 @@ describe('Lg dispatcher', () => {
         id: 'common.en-us',
         templateName: 'Hello',
         template: getLgTemplate('Hello', '-TemplateValue'),
+        projectId,
       });
     });
 
@@ -115,6 +119,7 @@ describe('Lg dispatcher', () => {
       await dispatcher.removeLgTemplate({
         id: 'common.en-us',
         templateName: 'Hello',
+        projectId,
       });
     });
 
@@ -126,6 +131,7 @@ describe('Lg dispatcher', () => {
       await dispatcher.removeLgTemplates({
         id: 'common.en-us',
         templateNames: ['Hello'],
+        projectId,
       });
     });
 
