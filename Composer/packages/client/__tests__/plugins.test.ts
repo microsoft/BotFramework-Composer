@@ -1,6 +1,7 @@
-import { SDKKinds } from '@bfc/shared';
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+
+import { SDKKinds } from '@bfc/shared';
 
 import { mergePluginConfigs } from '../src/plugins';
 
