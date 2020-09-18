@@ -7,15 +7,14 @@ import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { useRecoilValue } from 'recoil';
-import { DialogFactory, SDKKinds } from '@bfc/shared';
 import { useRecognizerConfig } from '@bfc/extension-client';
+import { DialogFactory, SDKKinds } from '@bfc/shared';
 
 import { DialogCreationCopy, nameRegex } from '../../constants';
 import { StorageFolder } from '../../recoilModel/types';
 import { DialogWrapper, DialogTypes } from '../../components/DialogWrapper';
 import { FieldConfig, useForm } from '../../hooks/useForm';
-import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
-import { actionsSeedState, schemasState } from '../../recoilModel';
+import { actionsSeedState, schemasState, validateDialogSelectorFamily } from '../../recoilModel';
 
 import { name, description, styles as wizardStyles } from './styles';
 
@@ -25,19 +24,20 @@ interface DialogFormData {
 }
 
 interface CreateDialogModalProps {
-  onSubmit: ({ id, content }) => void;
+  onSubmit: (dialogName: string, dialogContent) => void;
   onDismiss: () => void;
   onCurrentPathUpdate?: (newPath?: string, storageId?: string) => void;
   focusedStorageFolder?: StorageFolder;
   isOpen: boolean;
+  projectId: string;
 }
 
 export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
-  const { onSubmit, onDismiss, isOpen } = props;
+  const { onSubmit, onDismiss, isOpen, projectId } = props;
 
-  const dialogs = useRecoilValue(validatedDialogsSelector);
-  const schemas = useRecoilValue(schemasState);
-  const actionsSeed = useRecoilValue(actionsSeedState);
+  const schemas = useRecoilValue(schemasState(projectId));
+  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const actionsSeed = useRecoilValue(actionsSeedState(projectId));
 
   const { getDefaultRecognizer } = useRecognizerConfig();
 
@@ -79,8 +79,8 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
     if (seededContent.triggers?.[0]) {
       seededContent.triggers[0].actions = actionsSeed;
     }
-    const dialogData = { id: formData.name, content: seededContent };
-    return dialogData;
+
+    return seededContent;
   };
 
   const handleSubmit = useCallback(
@@ -89,9 +89,10 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
       if (hasErrors) {
         return;
       }
+
       const dialogData = seedNewDialog(formData);
 
-      onSubmit(dialogData);
+      onSubmit(formData.name, dialogData);
     },
     [hasErrors, formData]
   );

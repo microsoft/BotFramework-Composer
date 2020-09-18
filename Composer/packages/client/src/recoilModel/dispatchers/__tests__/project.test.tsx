@@ -9,21 +9,6 @@ import httpClient from '../../../utils/httpUtil';
 import { projectDispatcher } from '../project';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import {
-  skillManifestsState,
-  luFilesState,
-  lgFilesState,
-  settingsState,
-  dialogsState,
-  botEnvironmentState,
-  botNameState,
-  botStatusState,
-  locationState,
-  skillsState,
-  schemasState,
-  localeState,
-  BotDiagnosticsState,
-  botOpeningState,
-  projectIdState,
   recentProjectsState,
   applicationErrorState,
   templateIdState,
@@ -31,15 +16,32 @@ import {
   boilerplateVersionState,
   templateProjectsState,
   runtimeTemplatesState,
+  currentProjectIdState,
+  skillManifestsState,
+  luFilesState,
+  lgFilesState,
+  settingsState,
+  dialogsState,
+  botEnvironmentState,
+  botDiagnosticsState,
+  localeState,
+  schemasState,
+  locationState,
+  skillsState,
+  botOpeningState,
+  botStatusState,
+  botNameState,
 } from '../../atoms';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
-import { Dispatcher } from '..';
+import { Dispatcher } from '../../dispatchers';
 import { BotStatus } from '../../../constants';
 
 import mockProjectResponse from './mocks/mockProjectResponse.json';
 
 // let httpMocks;
 let navigateTo;
+
+const projectId = '30876.502871204648';
 
 jest.mock('../../../utils/navigation', () => {
   const navigateMock = jest.fn();
@@ -65,28 +67,28 @@ jest.mock('../../parsers/luWorker', () => {
 });
 
 jest.mock('../../persistence/FilePersistence', () => {
-  return {
-    flush: () => new Promise((resolve) => resolve()),
-  };
+  return jest.fn().mockImplementation(() => {
+    return { flush: () => new Promise((resolve) => resolve()) };
+  });
 });
 
 describe('Project dispatcher', () => {
   const useRecoilTestHook = () => {
+    const schemas = useRecoilValue(schemasState(projectId));
+    const location = useRecoilValue(locationState(projectId));
+    const skills = useRecoilValue(skillsState(projectId));
+    const botName = useRecoilValue(botNameState(projectId));
+    const skillManifests = useRecoilValue(skillManifestsState(projectId));
+    const luFiles = useRecoilValue(luFilesState(projectId));
+    const lgFiles = useRecoilValue(lgFilesState(projectId));
+    const settings = useRecoilValue(settingsState(projectId));
+    const dialogs = useRecoilValue(dialogsState(projectId));
+    const botEnvironment = useRecoilValue(botEnvironmentState(projectId));
+    const diagnostics = useRecoilValue(botDiagnosticsState(projectId));
+    const locale = useRecoilValue(localeState(projectId));
+    const botStatus = useRecoilValue(botStatusState(projectId));
+
     const botOpening = useRecoilValue(botOpeningState);
-    const skillManifests = useRecoilValue(skillManifestsState);
-    const luFiles = useRecoilValue(luFilesState);
-    const lgFiles = useRecoilValue(lgFilesState);
-    const settings = useRecoilValue(settingsState);
-    const dialogs = useRecoilValue(dialogsState);
-    const botEnvironment = useRecoilValue(botEnvironmentState);
-    const botName = useRecoilValue(botNameState);
-    const botStatus = useRecoilValue(botStatusState);
-    const skills = useRecoilValue(skillsState);
-    const location = useRecoilValue(locationState);
-    const schemas = useRecoilValue(schemasState);
-    const diagnostics = useRecoilValue(BotDiagnosticsState);
-    const projectId = useRecoilValue(projectIdState);
-    const locale = useRecoilValue(localeState);
     const currentDispatcher = useRecoilValue(dispatcherState);
     const [recentProjects, setRecentProjects] = useRecoilState(recentProjectsState);
     const appError = useRecoilValue(applicationErrorState);
@@ -131,7 +133,7 @@ describe('Project dispatcher', () => {
     const rendered: RenderHookResult<unknown, ReturnType<typeof useRecoilTestHook>> = renderRecoilHook(
       useRecoilTestHook,
       {
-        states: [],
+        states: [{ recoilState: currentProjectIdState, initialValue: projectId }],
         dispatcher: {
           recoilState: dispatcherState,
           initialValue: {
@@ -150,8 +152,9 @@ describe('Project dispatcher', () => {
       data: mockProjectResponse,
     });
     await act(async () => {
-      result = await dispatcher.openBotProject('../test/empty-bot', 'default');
+      result = await dispatcher.openProject('../test/empty-bot', 'default');
     });
+
     expect(renderedComponent.current.projectId).toBe(mockProjectResponse.id);
     expect(renderedComponent.current.botName).toBe(mockProjectResponse.botName);
     expect(renderedComponent.current.settings).toStrictEqual(mockProjectResponse.settings);
@@ -163,7 +166,7 @@ describe('Project dispatcher', () => {
     expect(renderedComponent.current.schemas.sdk).toBeDefined();
     expect(renderedComponent.current.schemas.default).toBeDefined();
     expect(renderedComponent.current.schemas.diagnostics?.length).toBe(0);
-    expect(navigateTo).toHaveBeenLastCalledWith('/bot/30876.502871204648/dialogs/');
+    expect(navigateTo).toHaveBeenLastCalledWith(`/bot/${projectId}/dialogs/`);
     expect(result).toBe(renderedComponent.current.projectId);
   });
 
@@ -179,7 +182,7 @@ describe('Project dispatcher', () => {
           path: '../test/empty-bot',
         },
       ]);
-      await dispatcher.openBotProject('../test/empty-bot', 'default');
+      await dispatcher.openProject('../test/empty-bot', 'default');
     });
     expect(renderedComponent.current.botOpening).toBeFalsy();
     expect(renderedComponent.current.appError).toEqual(errorObj);
@@ -233,13 +236,11 @@ describe('Project dispatcher', () => {
       data: mockProjectResponse,
     });
     await act(async () => {
-      await dispatcher.openBotProject('../test/empty-bot', 'default');
-      await dispatcher.deleteBotProject('30876.502871204648');
+      await dispatcher.openProject('../test/empty-bot', 'default');
+      await dispatcher.deleteBotProject(projectId);
     });
 
     expect(renderedComponent.current.botName).toEqual('');
-    expect(renderedComponent.current.projectId).toBe('');
-    7;
     expect(renderedComponent.current.locale).toBe('en-us');
     expect(renderedComponent.current.lgFiles.length).toBe(0);
     expect(renderedComponent.current.luFiles.length).toBe(0);
@@ -253,7 +254,7 @@ describe('Project dispatcher', () => {
 
   it('should set bot status', async () => {
     await act(async () => {
-      await dispatcher.setBotStatus(BotStatus.pending);
+      await dispatcher.setBotStatus(BotStatus.pending, projectId);
     });
 
     expect(renderedComponent.current.botStatus).toEqual(BotStatus.pending);
@@ -267,10 +268,10 @@ describe('Project dispatcher', () => {
     expect(renderedComponent.current.templateId).toEqual('EchoBot');
   });
 
-  it('should update bolierplate', async () => {
+  it('should update boilerplate', async () => {
     httpClient.get as jest.Mock;
     await act(async () => {
-      await dispatcher.updateBoilerplate('30876.502871204648');
+      await dispatcher.updateBoilerplate(projectId);
     });
 
     expect(renderedComponent.current.announcement).toEqual('Scripts successfully updated.');
@@ -282,7 +283,7 @@ describe('Project dispatcher', () => {
       data: version,
     });
     await act(async () => {
-      await dispatcher.getBoilerplateVersion('30876.502871204648');
+      await dispatcher.getBoilerplateVersion(projectId);
     });
 
     expect(renderedComponent.current.boilerplateVersion).toEqual(version);
