@@ -13,7 +13,7 @@ const outPath = path.join(path.dirname(inPath), 'en-US.tsv');
 
 // eslint-disable-next-line security/detect-non-literal-fs-filename
 const outTSV = fs.openSync(outPath, 'w');
-fs.writeSync(outTSV, 'Key,Message\n');
+fs.writeSync(outTSV, 'Key\tMessage\n');
 
 for (const key in inJson) {
   fs.writeSync(outTSV, key + '\t' + inJson[key].message.replace(/(\r\n|\r|\n)/g, '\\n') + '\n');
