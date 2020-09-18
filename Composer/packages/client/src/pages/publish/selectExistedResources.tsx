@@ -7,9 +7,9 @@ import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
 import { useState, useMemo, Fragment } from 'react';
 import formatMessage from 'format-message';
 import { Dropdown, IDropdownOption, DropdownMenuItemType } from 'office-ui-fabric-react/lib/Dropdown';
-
 import { Subscription, ResourceGroups } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
+
 import { subscriptionsState, resourceGroupsState, resourcesState, dispatcherState } from '../../recoilModel';
 
 interface SelectExistedResourcesProps {

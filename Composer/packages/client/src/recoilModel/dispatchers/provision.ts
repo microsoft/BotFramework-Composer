@@ -3,6 +3,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
+import { Subscription } from '@bfc/shared';
+
 import {
   subscriptionsState,
   resourceGroupsState,
@@ -11,8 +13,8 @@ import {
   settingsState,
 } from '../atoms/botState';
 import { getAccessTokenInCache, loginPopup, getGraphTokenInCache } from '../../utils/auth';
+
 import httpClient from './../../utils/httpUtil';
-import { Subscription } from '@bfc/shared';
 
 export const provisionDispatcher = () => {
   const getSubscriptions = useRecoilCallback(({ set }: CallbackInterface) => async () => {
@@ -126,9 +128,7 @@ export const provisionDispatcher = () => {
 
   const getProvisionStatus = useRecoilCallback(
     ({ set }: CallbackInterface) => async (projectId: string, target: any) => {
-      let timer;
-
-      timer = setInterval(async () => {
+      const timer = setInterval(async () => {
         try {
           const response = await httpClient.get(`/publish/${projectId}/provisionStatus/${target.name}`);
           console.log(response.data);

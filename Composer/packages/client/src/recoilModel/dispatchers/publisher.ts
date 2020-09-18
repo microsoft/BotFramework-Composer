@@ -5,8 +5,8 @@
 import formatMessage from 'format-message';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 import { defaultPublishConfig } from '@bfc/shared';
-import { getAccessTokenInCache } from '../../utils/auth';
 
+import { getAccessTokenInCache } from '../../utils/auth';
 import {
   publishTypesState,
   botStatusState,
