@@ -134,7 +134,7 @@ export const createKBFileState = async (
   }
 
   qnaFileStatusStorage.updateFileStatus(projectId, createdSourceQnAId);
-  set(qnaFilesState, [...newQnAFiles, createdQnAFile]);
+  set(qnaFilesState, [createdQnAFile, ...newQnAFiles]);
 };
 
 export const removeKBFileState = async (callbackHelpers: CallbackInterface, { id }: { id: string }) => {

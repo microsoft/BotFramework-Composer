@@ -565,7 +565,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     onboardingAddCoachMarkRef({ addNew });
   }, []);
 
-  const handleCreateQnA = async ({ name, url, multiTurn }) => {
+  const handleCreateQnA = async (data) => {
     const formData = {
       $kind: qnaMatcherKey,
       errors: { $kind: '', intent: '', event: '', triggerPhrases: '', regEx: '', activity: '' },
@@ -575,8 +575,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       triggerPhrases: '',
     };
     if (dialogId) {
-      const navUrl = `/bot/${projectId}/knowledge-base/${dialogId}`;
-      createTrigger(dialogId, formData, navUrl);
+      const { name, url, multiTurn } = data;
+      createTrigger(dialogId, formData);
       // import qna from url
       await createQnAKBFromUrl({ id: `${dialogId}.${locale}`, name, url, multiTurn });
     }

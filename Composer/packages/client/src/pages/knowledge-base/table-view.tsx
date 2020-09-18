@@ -26,11 +26,9 @@ import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
 import isEqual from 'lodash/isEqual';
 import isEmpty from 'lodash/isEmpty';
-// import inRange from 'lodash/inRange';
 import { QnAFile } from '@bfc/shared/src/types';
 import { QnASection } from '@bfc/shared';
 import { qnaUtil } from '@bfc/indexers';
-import querystring from 'query-string';
 import { NeutralColors } from '@uifabric/fluent-theme';
 
 import emptyQnAIcon from '../../images/emptyQnAIcon.svg';
@@ -82,26 +80,17 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const locale = useRecoilValue(localeState);
   //const settings = useRecoilValue(settingsState);
   const {
-    // createQnAImport,
     removeQnAImport,
     removeQnAFile,
-    // setMessage,
     createQnAPairs,
     removeQnAPairs,
     createQnAQuestion,
-    // removeQnAQuestion,
     updateQnAAnswer,
     updateQnAQuestion,
-    // updateQnAFile,
   } = useRecoilValue(dispatcherState);
 
-  // const { languages, defaultLanguage } = settings;
-
   const { dialogId } = props;
-  const search = props.location?.search ?? '';
-  const searchContainerId = querystring.parse(search).C;
-
-  // const activeDialog = dialogs.find(({ id }) => id === dialogId);
+  // const { languages, defaultLanguage } = settings;
   const targetFileId = dialogId.endsWith('.source') ? dialogId : `${dialogId}.${locale}`;
   const qnaFile = qnaFiles.find(({ id }) => id === targetFileId);
   const limitedNumber = 1;
@@ -604,8 +593,16 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
       // restore last group collapse state
       const prevGroup = groups?.find(({ key }) => key === id);
-      const newGroup = prevGroup || {};
-      newGroups.push({ ...newGroup, key: id, name, startIndex, count, level: 0 });
+      const newGroup = prevGroup || { isCollapsed: true };
+      newGroups.push({
+        ...newGroup,
+        key: id,
+        name,
+        startIndex,
+        count,
+        level: 0,
+        // isCollapsed: prevGroup.isCollapsed !== undefined ? prevGroup.isCollapsed : true,
+      });
     });
     return newGroups;
   };
@@ -614,31 +611,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
     const isChanged = !isEqual(groups, newGroups);
     if (isChanged) setGroups(newGroups);
   }, [dialogId, qnaFiles]);
-
-  useEffect(() => {
-    // set focus to target container.
-    console.log(searchContainerId, groups);
-    if (searchContainerId && groups && detailListRef.current) {
-      const targetGroup = groups.find(({ key }) => key === searchContainerId);
-      if (targetGroup) {
-        detailListRef.current.focusIndex(targetGroup.startIndex);
-      }
-      // if (targetGroup) {
-      //   const newGroups = groups.map((item) => {
-      //     if (item.key === targetGroup.key) {
-      //       return {
-      //         ...item,
-      //         isCollapsed: false,
-      //       };
-      //     }
-      //     return item;
-      //   });
-      //   const isChanged = !isEqual(groups, newGroups);
-      //   if (isChanged) setGroups(newGroups);
-
-      // }
-    }
-  }, [searchContainerId, groups]);
 
   const onRenderDetailsHeader = useCallback(
     (props, defaultRender) => {

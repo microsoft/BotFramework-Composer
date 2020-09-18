@@ -14,12 +14,7 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { FieldConfig, useForm } from '../../hooks/useForm';
-import {
-  actionsSeedState,
-  dispatcherState,
-  showCreateQnAFromScratchDialogState,
-  showCreateQnAFromUrlDialogState,
-} from '../../recoilModel';
+import { dispatcherState } from '../../recoilModel';
 
 import {
   knowledgeBaseSourceUrl,

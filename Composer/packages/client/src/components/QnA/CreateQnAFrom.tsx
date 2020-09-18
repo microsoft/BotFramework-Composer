@@ -6,18 +6,13 @@ import { jsx } from '@emotion/core';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 
-import {
-  dispatcherState,
-  showCreateQnAFromScratchDialogState,
-  showCreateQnAFromUrlDialogState,
-} from '../../recoilModel';
+import { showCreateQnAFromScratchDialogState, showCreateQnAFromUrlDialogState } from '../../recoilModel';
 
 import CreateQnAFromScratchModal from './CreateQnAFromScratchModal';
 import CreateQnAFromUrlModal from './CreateQnAFromUrlModal';
 import { CreateQnAFromModalProps } from './constants';
 
 export const CreateQnAModal: React.FC<CreateQnAFromModalProps> = (props) => {
-  const { createQnAFromScratchDialogBegin } = useRecoilValue(dispatcherState);
   const showCreateQnAFromScratchDialog = useRecoilValue(showCreateQnAFromScratchDialogState);
   const showCreateQnAFromUrlDialog = useRecoilValue(showCreateQnAFromUrlDialogState);
 

@@ -140,7 +140,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
   return (
     <div className={'EditableField-container'} css={[defaultContainerStyle(hasFocus), containerStyles]}>
       <TextField
-        key={`${id}${autoAdjustHeight}`}
+        key={`${id}${autoAdjustHeight}`} // force update component
         ariaLabel={ariaLabel}
         autoAdjustHeight={autoAdjustHeight}
         autoComplete="off"

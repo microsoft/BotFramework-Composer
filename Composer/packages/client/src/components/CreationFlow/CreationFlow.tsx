@@ -121,9 +121,10 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     saveProjectAs(projectId, formData.name, formData.description, formData.location);
   };
 
-  const handleCreateQnA = async ({ name, url, multiTurn }) => {
+  const handleCreateQnA = async (data) => {
     saveTemplateId(QnABotTemplateId);
     handleDismiss();
+    const { name, url, multiTurn } = data;
     await handleCreateNew(formData, QnABotTemplateId);
     // import qna from url
     await createQnAKBFromUrl({ id: `${formData.name.toLocaleLowerCase()}.${locale}`, name, url, multiTurn });
@@ -188,7 +189,6 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
         />
         <CreateQnAFromUrlModal
           dialogId={formData.name.toLowerCase()}
-          path="create/QnASample/importQnA"
           qnaFiles={qnaFiles}
           onDismiss={handleDismiss}
           onSubmit={handleCreateQnA}
