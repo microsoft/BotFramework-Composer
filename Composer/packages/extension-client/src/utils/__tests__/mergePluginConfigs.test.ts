@@ -61,14 +61,14 @@ describe('mergePluginConfigs', () => {
             recognizer: {
               displayName: 'Default',
               isSelected: () => false,
-              handleRecognizerChange: jest.fn(),
+              seedNewRecognizer: jest.fn(),
             },
           },
           [SDKKinds.RegexRecognizer]: {
             recognizer: {
               displayName: 'New Recognizer',
               isSelected: () => false,
-              handleRecognizerChange: jest.fn(),
+              seedNewRecognizer: jest.fn(),
             },
           },
         },

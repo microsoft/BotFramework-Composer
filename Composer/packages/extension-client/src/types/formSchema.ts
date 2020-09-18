@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { SDKKinds, SDKRoles, ShellApi, ShellData } from '@bfc/shared';
+import { MicrosoftIRecognizer, SDKKinds, SDKRoles, ShellApi, ShellData } from '@bfc/shared';
 
 import { FieldProps, FieldWidget } from './form';
 
@@ -65,8 +65,10 @@ export type RecognizerSchema = {
   intentEditor?: FieldWidget;
   /** A function invoked with the form data to determine if this is the currently selected recognizer */
   isSelected?: (data: any) => boolean;
-  /** Invoked when changing the recognizer type */
-  handleRecognizerChange?: (fieldProps: FieldProps, shellData: ShellData, shellApi: ShellApi) => void;
+  /** Invoked when constructing a new recognizer instance.
+   *  Make sure the instance can be recognized either by $kind or isSelected().
+   */
+  seedNewRecognizer?: (fieldProps: FieldProps, shellData: ShellData, shellApi: ShellApi) => MicrosoftIRecognizer | any;
   /** An inline editor to edit recognizer value. If none provided, users will not be able to edit its value. */
   recognizerEditor?: FieldWidget;
   /** Function to rename an intent */

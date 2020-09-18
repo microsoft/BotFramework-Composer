@@ -8,38 +8,37 @@ import { RegexIntentField, CustomRecognizerField } from '@bfc/adaptive-form';
 
 const FallbackRecognizerJsonEditor: RecognizerOptions = {
   displayName: formatMessage('Custom recognizer'),
-  handleRecognizerChange: (props) =>
-    props.onChange({
-      $kind: 'Microsoft.MultiLanguageRecognizer',
-      recognizers: {
-        'en-us': {
-          $kind: 'Microsoft.RegexRecognizer',
-          intents: [
-            {
-              intent: 'greeting',
-              pattern: 'hello',
-            },
-            {
-              intent: 'test',
-              pattern: 'test',
-            },
-          ],
-        },
-        'zh-cn': {
-          $kind: 'Microsoft.RegexRecognizer',
-          intents: [
-            {
-              intent: 'greeting',
-              pattern: '你好',
-            },
-            {
-              intent: 'test',
-              pattern: '测试',
-            },
-          ],
-        },
+  seedNewRecognizer: () => ({
+    $kind: 'Microsoft.MultiLanguageRecognizer',
+    recognizers: {
+      'en-us': {
+        $kind: 'Microsoft.RegexRecognizer',
+        intents: [
+          {
+            intent: 'greeting',
+            pattern: 'hello',
+          },
+          {
+            intent: 'test',
+            pattern: 'test',
+          },
+        ],
       },
-    }),
+      'zh-cn': {
+        $kind: 'Microsoft.RegexRecognizer',
+        intents: [
+          {
+            intent: 'greeting',
+            pattern: '你好',
+          },
+          {
+            intent: 'test',
+            pattern: '测试',
+          },
+        ],
+      },
+    },
+  }),
   recognizerEditor: CustomRecognizerField,
 };
 

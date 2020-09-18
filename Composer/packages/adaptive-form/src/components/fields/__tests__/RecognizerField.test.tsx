@@ -38,13 +38,13 @@ describe('<RecognizerField />', () => {
         id: 'one',
         displayName: 'One Recognizer',
         isSelected: () => false,
-        handleRecognizerChange: handleChange,
+        seedNewRecognizer: handleChange,
       },
       {
         id: 'two',
         displayName: 'Two Recognizer',
         isSelected: () => true,
-        handleRecognizerChange: jest.fn(),
+        seedNewRecognizer: jest.fn(),
       },
     ]);
     (useRecognizerConfig as jest.Mock).mockReturnValue(config);

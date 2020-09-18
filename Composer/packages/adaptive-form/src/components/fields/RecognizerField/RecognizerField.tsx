@@ -31,13 +31,12 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (prop
 
     const recognizerDefinition = mapDropdownOptionToRecognizerSchema(option, recognizerConfigs);
 
-    const handleChange = recognizerDefinition?.handleRecognizerChange;
-    if (typeof handleChange === 'function') {
-      handleChange(props, shellData, shellApi);
-    } else {
-      // fallback to default submit logic
-      onChange({ $kind: option.key as string, intents: [] });
-    }
+    const seedNewRecognizer = recognizerDefinition?.seedNewRecognizer;
+    const recognizerInstance =
+      typeof seedNewRecognizer === 'function'
+        ? seedNewRecognizer(props, shellData, shellApi)
+        : { $kind: option.key as string, intents: [] }; // fallback to default Recognizer instance;
+    onChange(recognizerInstance);
   };
 
   return (

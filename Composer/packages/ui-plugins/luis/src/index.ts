@@ -17,16 +17,19 @@ const config: PluginConfig = {
         isSelected: (data) => {
           return typeof data === 'string' && data.endsWith('.lu');
         },
-        handleRecognizerChange: (props, shellData) => {
+        seedNewRecognizer: (props, shellData) => {
           const { luFiles, currentDialog, locale } = shellData;
           const luFile = luFiles.find((f) => f.id === `${currentDialog.id}.${locale}`);
 
-          if (luFile) {
-            // strip locale out of id so it doesn't get serialized
-            // into the .dialog file
-            props.onChange(`${luFile.id.split('.')[0]}.lu`);
-          } else {
+          if (!luFile) {
             alert(formatMessage(`NO LU FILE WITH NAME {id}`, { id: currentDialog.id }));
+            return '';
+          }
+
+          try {
+            return `${luFile.id.split('.')[0]}.lu`;
+          } catch (err) {
+            return '';
           }
         },
         renameIntent: async (intentName, newIntentName, shellData, shellApi) => {
