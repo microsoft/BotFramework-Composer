@@ -14,12 +14,11 @@ import { useRecoilValue } from 'recoil';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 
 import {
-  botNameState,
-  settingsState,
-  projectIdState,
   dispatcherState,
   ejectRuntimeSelector,
   boilerplateVersionState,
+  botNameState,
+  settingsState,
   isEjectRuntimeExistState,
 } from '../../../recoilModel';
 import { OpenConfirmModal } from '../../../components/Modal/ConfirmDialog';
@@ -29,12 +28,13 @@ import { EjectModal } from './ejectModal';
 import { WorkingModal } from './workingModal';
 import { breathingSpace, runtimeSettingsStyle, runtimeControls, runtimeToggle, controlGroup } from './style';
 
-export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
-  const botName = useRecoilValue(botNameState);
-  const settings = useRecoilValue(settingsState);
-  const projectId = useRecoilValue(projectIdState);
+export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
+  const { projectId = '' } = props;
+  const botName = useRecoilValue(botNameState(projectId));
+  const settings = useRecoilValue(settingsState(projectId));
+  const ejectedRuntimeExists = useRecoilValue(isEjectRuntimeExistState(projectId));
+
   const boilerplateVersion = useRecoilValue(boilerplateVersionState);
-  const isEjectRuntimeExist = useRecoilValue(isEjectRuntimeExistState);
   const {
     setCustomRuntime,
     setRuntimeField,
@@ -61,11 +61,11 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
   }, [boilerplateVersion.updateRequired]);
 
   useEffect(() => {
-    if (isEjectRuntimeExist && templateKey) {
+    if (ejectedRuntimeExists && templateKey) {
       confirmReplaceEject(templateKey);
       setTemplateKey('');
     }
-  }, [isEjectRuntimeExist, templateKey]);
+  }, [ejectedRuntimeExists, templateKey]);
 
   const handleChangeToggle = (_, isOn = false) => {
     setCustomRuntime(projectId, isOn);
