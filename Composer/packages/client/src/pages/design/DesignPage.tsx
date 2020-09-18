@@ -47,9 +47,7 @@ import {
   showCreateDialogModalState,
   showAddSkillDialogModalState,
   localeState,
-  qnaFilesState,
 } from '../../recoilModel';
-import { getBaseName } from '../../utils/fileUtil';
 import ImportQnAFromUrlModal from '../knowledge-base/ImportQnAFromUrlModal';
 import { triggerNotSupported } from '../../utils/dialogValidator';
 import { undoFunctionState, undoVersionState } from '../../recoilModel/undo/history';
@@ -119,7 +117,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const showCreateDialogModal = useRecoilValue(showCreateDialogModalState(projectId));
   const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState(projectId));
   const locale = useRecoilValue(localeState(projectId));
-  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   const undoFunction = useRecoilValue(undoFunctionState(projectId));
   const undoVersion = useRecoilValue(undoVersionState(projectId));
 
@@ -137,7 +134,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     selectTo,
     selectAndFocus,
     addSkillDialogCancel,
-    createQnAFile,
     exportToZip,
     onboardingAddCoachMarkRef,
     importQnAFromUrls,
@@ -182,15 +178,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       updateDialog({ id: dialogId, content: dialogContent, projectId });
     }
   }, [dialogId]);
-
-  // migration: add qna file for dialog
-  useEffect(() => {
-    dialogs.forEach(async (dialog) => {
-      if (!qnaFiles || qnaFiles.length === 0 || !qnaFiles.find((qnaFile) => getBaseName(qnaFile.id) === dialog.id)) {
-        await createQnAFile({ id: dialog.id, content: '', projectId });
-      }
-    });
-  }, [dialogs]);
 
   useEffect(() => {
     if (location && props.dialogId && props.projectId) {
