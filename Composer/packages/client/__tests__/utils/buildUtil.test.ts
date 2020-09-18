@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { DialogInfo, LuFile } from '@bfc/shared';
+
 import { createCrossTrainConfig } from '../../src/utils/buildUtil';
 
 describe('createCrossTrainConfig', () => {
