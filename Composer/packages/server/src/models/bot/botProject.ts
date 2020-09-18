@@ -681,6 +681,7 @@ export class BotProject implements IBotProject {
       'sdk.override.uischema',
       'sdk.schema',
       'sdk.uischema',
+      '*.botproj',
     ];
     for (const pattern of patterns) {
       // load only from the data dir, otherwise may get "build" versions from
