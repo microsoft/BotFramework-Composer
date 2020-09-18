@@ -14,6 +14,7 @@ import { FeedbackType, generate } from '@microsoft/bf-generate-library';
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
+import { getDialogNameFromFile } from '../utilities/util';
 import { ISettingManager, OBFUSCATED_VALUE } from '../settings';
 import { DefaultSettingManager } from '../settings/defaultSettingManager';
 import log from '../../logger';
@@ -707,6 +708,46 @@ export class BotProject implements IBotProject {
       fileList.set(file.name, file);
     });
 
+    const migrationFiles = await this._createQnAFilesForOldBot(fileList);
+
+    return new Map<string, FileInfo>([...fileList, ...migrationFiles]);
+  };
+
+  // migration: create qna files for old bots
+  private _createQnAFilesForOldBot = async (files: Map<string, FileInfo>) => {
+    const dialogFiles: FileInfo[] = [];
+    const qnaFiles: FileInfo[] = [];
+    files.forEach((file) => {
+      if (file.name.endsWith('.dialog')) {
+        dialogFiles.push(file);
+      }
+      if (file.name.endsWith('.qna')) {
+        qnaFiles.push(file);
+      }
+    });
+
+    const dialogNames = dialogFiles.map((file) => getDialogNameFromFile(file.name));
+    const qnaNames = qnaFiles.map((file) => getDialogNameFromFile(file.name));
+    const fileList = new Map<string, FileInfo>();
+    for (let i = 0; i < dialogNames.length; i++) {
+      if (!qnaNames || qnaNames.length === 0 || !qnaNames.find((qn) => qn === dialogNames[i])) {
+        await this.createFile(`${dialogNames[i]}.qna`, '');
+      }
+    }
+
+    const pattern = '**/*.qna';
+    // load only from the data dir, otherwise may get "build" versions from
+    // deployment process
+    const root = this.dataDir;
+    const paths = await this.fileStorage.glob([pattern, '!(generated/**)', '!(runtime/**)'], root);
+
+    for (const filePath of paths.sort()) {
+      const realFilePath: string = Path.join(root, filePath);
+      const fileInfo = await this._getFileInfo(realFilePath);
+      if (fileInfo) {
+        fileList.set(fileInfo.name, fileInfo);
+      }
+    }
     return fileList;
   };
 
