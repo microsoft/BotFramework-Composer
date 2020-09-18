@@ -23,14 +23,13 @@ const getDefaultRecognizer = (recognizers: RecognizerSchema[]) => {
   const defaultRecognizer = recognizers.find((r) => r.default && !r.disabled);
   if (defaultRecognizer) return defaultRecognizer;
 
+  // TODO: (ze) remove this logic after recognizer config is port to SDK component schema.
   const crosstrainRecognizer = recognizers.find((r) => r.id === SDKKinds.CrossTrainedRecognizerSet);
   if (crosstrainRecognizer) return crosstrainRecognizer;
 
   const firstAvailableRecognizer = recognizers.find((r) => !r.disabled);
   return firstAvailableRecognizer;
 };
-
-// Use the JSON editor as fallback recognizer config.
 
 const findRecognizerByValue = (recognizers: RecognizerSchema[], recognizerValue?: MicrosoftIRecognizer) => {
   const matchedRecognizer = recognizers.find((r) => {
