@@ -445,20 +445,20 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     const items =
       dialogs.length > 0
         ? breadcrumb.reduce((result, item, index) => {
-          const { dialogId, selected, focused } = item;
-          const text = getBreadcrumbLabel(dialogs, dialogId, selected, focused);
-          if (text) {
-            result.push({
-              // @ts-ignore
-              index,
-              isRoot: !selected && !focused,
-              text,
-              ...item,
-              onClick: handleBreadcrumbItemClick,
-            });
-          }
-          return result;
-        }, [] as IBreadcrumbItem[])
+            const { dialogId, selected, focused } = item;
+            const text = getBreadcrumbLabel(dialogs, dialogId, selected, focused);
+            if (text) {
+              result.push({
+                // @ts-ignore
+                index,
+                isRoot: !selected && !focused,
+                text,
+                ...item,
+                onClick: handleBreadcrumbItemClick,
+              });
+            }
+            return result;
+          }, [] as IBreadcrumbItem[])
         : [];
     return (
       <div style={{ display: 'flex', justifyContent: 'space-between', height: '65px' }}>
@@ -633,14 +633,14 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                     />
                   )
                 ) : (
-                      <EditorExtension plugins={pluginConfig} projectId={projectId} shell={shellForFlowEditor}>
-                        <VisualEditor
-                          openNewTriggerModal={openNewTriggerModal}
-                          onBlur={() => setFlowEditorFocused(false)}
-                          onFocus={() => setFlowEditorFocused(true)}
-                        />
-                      </EditorExtension>
-                    )}
+                  <EditorExtension plugins={pluginConfig} projectId={projectId} shell={shellForFlowEditor}>
+                    <VisualEditor
+                      openNewTriggerModal={openNewTriggerModal}
+                      onBlur={() => setFlowEditorFocused(false)}
+                      onFocus={() => setFlowEditorFocused(true)}
+                    />
+                  </EditorExtension>
+                )}
               </div>
               <EditorExtension plugins={pluginConfig} projectId={projectId} shell={shellForPropertyEditor}>
                 <PropertyEditor key={focusPath + undoVersion} />
