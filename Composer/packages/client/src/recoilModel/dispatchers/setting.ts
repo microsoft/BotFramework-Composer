@@ -4,26 +4,66 @@
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 import { SensitiveProperties, DialogSetting, PublishTarget, Skill } from '@bfc/shared';
+import { skillIndexer } from '@bfc/indexers';
 import get from 'lodash/get';
 import has from 'lodash/has';
+import isEqual from 'lodash/isEqual';
+import keys from 'lodash/keys';
 
 import settingStorage from '../../utils/dialogSettingStorage';
-import { settingsState } from '../atoms/botState';
+import { settingsState, skillsState } from '../atoms/botState';
 
 import httpClient from './../../utils/httpUtil';
 import { setError } from './shared';
 
+export const setSettingState = async (
+  callbackHelpers: CallbackInterface,
+  projectId: string,
+  settings: DialogSetting
+) => {
+  const { set, snapshot } = callbackHelpers;
+  const previousSettings = await snapshot.getPromise(settingsState(projectId));
+
+  if (!isEqual(settings.skill, previousSettings.skill)) {
+    const skills = await snapshot.getPromise(skillsState(projectId));
+    const skillContent = await Promise.all(
+      keys(settings.skill).map(async (id) => {
+        if (settings?.skill?.[id]?.manifestUrl !== previousSettings?.skill?.[id]?.manifestUrl) {
+          try {
+            const { data: content } = await httpClient.get(`/projects/${projectId}/skill/retrieve-skill-manifest`, {
+              params: {
+                url: settings?.skill?.[id]?.manifestUrl,
+              },
+            });
+            return { id, content };
+          } catch (error) {
+            return { id };
+          }
+        }
+
+        const { content = {} } = skills.find(({ id: key }) => id === key) || ({} as Skill);
+
+        return { id, content };
+      })
+    );
+
+    set(skillsState(projectId), skillIndexer.index(skillContent, settings.skill));
+  }
+
+  // set value in local storage
+  for (const property of SensitiveProperties) {
+    if (has(settings, property)) {
+      const propertyValue = get(settings, property, '');
+      settingStorage.setField(projectId, property, propertyValue);
+    }
+  }
+  set(settingsState(projectId), settings);
+};
+
 export const settingsDispatcher = () => {
   const setSettings = useRecoilCallback<[string, DialogSetting], Promise<void>>(
-    ({ set }: CallbackInterface) => async (projectId: string, settings: DialogSetting) => {
-      // set value in local storage
-      for (const property of SensitiveProperties) {
-        if (has(settings, property)) {
-          const propertyValue = get(settings, property, '');
-          settingStorage.setField(projectId, property, propertyValue);
-        }
-      }
-      set(settingsState(projectId), settings);
+    (callbackHelpers: CallbackInterface) => async (projectId: string, settings: DialogSetting) => {
+      setSettingState(callbackHelpers, projectId, settings);
     }
   );
 
@@ -89,29 +129,6 @@ export const settingsDispatcher = () => {
     }
   );
 
-  const updateSkillsInSetting = useRecoilCallback(
-    ({ set, snapshot }: CallbackInterface) => async (
-      skillName: string,
-      skillInfo: Partial<Skill>,
-      projectId: string
-    ) => {
-      const currentSettings: DialogSetting = await snapshot.getPromise(settingsState(projectId));
-      const matchedSkill = get(currentSettings, `skill[${skillName}]`, undefined);
-      if (matchedSkill) {
-        set(settingsState(projectId), {
-          ...currentSettings,
-          skill: {
-            ...currentSettings.skill,
-            [skillName]: {
-              ...matchedSkill,
-              ...skillInfo,
-            },
-          },
-        });
-      }
-    }
-  );
-
   return {
     setSettings,
     setRuntimeSettings,
@@ -119,6 +136,5 @@ export const settingsDispatcher = () => {
     setRuntimeField,
     setCustomRuntime,
     setQnASettings,
-    updateSkillsInSetting,
   };
 };
