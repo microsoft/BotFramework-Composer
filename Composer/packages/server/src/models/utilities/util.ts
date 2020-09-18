@@ -1,16 +1,20 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export const getDialogFileName = (file: string) => {
-  if (file.endsWith('.dialog')) {
-    const lastDotIndex = file.lastIndexOf('.');
-    return file.substring(0, lastDotIndex);
+export const getDialogNameFromFile = (file: string) => {
+  const tokens = file.split('.');
+  const length = tokens.length;
+  let dialogName = '';
+  if (length > 1) {
+    const extension = tokens[length - 1];
+    switch (extension) {
+      case 'dialog':
+      case 'lu':
+      case 'lg':
+      case 'qna':
+        dialogName = tokens[0];
+        break;
+    }
   }
-};
-
-export const getQnAFileName = (file: string) => {
-  if (file.endsWith('.qna')) {
-    const firstDotIndex = file.indexOf('.');
-    return file.substring(0, firstDotIndex);
-  }
+  return dialogName;
 };

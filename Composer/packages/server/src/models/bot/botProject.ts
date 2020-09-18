@@ -24,7 +24,7 @@ import values from 'lodash/values';
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
-import { getDialogFileName, getQnAFileName } from '../utilities/util';
+import { getDialogNameFromFile } from '../utilities/util';
 import { ISettingManager, OBFUSCATED_VALUE } from '../settings';
 import { DefaultSettingManager } from '../settings/defaultSettingManager';
 import log from '../../logger';
@@ -747,8 +747,8 @@ export class BotProject implements IBotProject {
       }
     });
 
-    const dialogNames = dialogFiles.map((file) => getDialogFileName(file.name));
-    const qnaNames = qnaFiles.map((file) => getQnAFileName(file.name));
+    const dialogNames = dialogFiles.map((file) => getDialogNameFromFile(file.name));
+    const qnaNames = qnaFiles.map((file) => getDialogNameFromFile(file.name));
     const fileList = new Map<string, FileInfo>();
     for (let i = 0; i < dialogNames.length; i++) {
       if (!qnaNames || qnaNames.length === 0 || !qnaNames.find((qn) => qn === dialogNames[i])) {
