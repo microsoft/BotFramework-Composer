@@ -2,10 +2,11 @@
 // Licensed under the MIT License.
 
 import React, { useState, useEffect } from 'react';
-import { TextField, ITextFieldStyles } from 'office-ui-fabric-react/lib/TextField';
+import { ITextFieldStyles } from 'office-ui-fabric-react/lib/TextField';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { mergeStyleSets } from '@uifabric/styling';
 import { FieldProps } from '@bfc/extension-client';
+import { TextField } from './TextField/TextField';
 
 interface EditableFieldProps extends Omit<FieldProps, 'definitions'> {
   fontSize?: string;
@@ -94,7 +95,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
             styles
           ) as Partial<ITextFieldStyles>
         }
-        value={localValue}
+        defaultValue={localValue}
         onBlur={handleCommit}
         onChange={handleChange}
         onFocus={() => setHasFocus(true)}

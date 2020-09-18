@@ -4,10 +4,10 @@
 import React from 'react';
 import { FieldProps } from '@bfc/extension-client';
 import { NeutralColors } from '@uifabric/fluent-theme';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import formatMessage from 'format-message';
 
 import { FieldLabel } from '../FieldLabel';
+import { TextField } from './TextField/TextField';
 
 export const borderStyles = (transparentBorder: boolean, error: boolean) =>
   transparentBorder
@@ -75,7 +75,7 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
           root: { width: '100%' },
           errorMessage: { display: 'none' },
         }}
-        value={value}
+        defaultValue={value}
         onBlur={handleBlur}
         onChange={handleChange}
         onFocus={handleFocus}

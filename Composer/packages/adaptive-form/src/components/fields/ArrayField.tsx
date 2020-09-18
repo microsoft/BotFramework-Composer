@@ -3,7 +3,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useState } from 'react';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { SharedColors, NeutralColors, FontSizes } from '@uifabric/fluent-theme';
@@ -16,6 +15,7 @@ import { FieldLabel } from '../FieldLabel';
 import { arrayField } from './styles';
 import { ArrayFieldItem } from './ArrayFieldItem';
 import { UnsupportedField } from './UnsupportedField';
+import { TextField } from './TextField/TextField';
 
 const ArrayField: React.FC<FieldProps<unknown[]>> = (props) => {
   const {
@@ -87,7 +87,7 @@ const ArrayField: React.FC<FieldProps<unknown[]>> = (props) => {
               style: { color: SharedColors.cyanBlue10, opacity: 0.6 },
             }}
             styles={{ root: { width: '100%' } }}
-            value={newValue}
+            defaultValue={newValue}
             onChange={handleNewChange}
             onKeyDown={handleKeyDown}
           />

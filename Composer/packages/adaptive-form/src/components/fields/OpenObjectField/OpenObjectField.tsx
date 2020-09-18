@@ -6,13 +6,14 @@ import React, { useState, useRef } from 'react';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { FontSizes, NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { TextField, ITextField } from 'office-ui-fabric-react/lib/TextField';
+import { ITextField } from 'office-ui-fabric-react/lib/TextField';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { FieldProps } from '@bfc/extension-client';
 import formatMessage from 'format-message';
 
 import { FieldLabel } from '../../FieldLabel';
 import { getPropertyItemProps, useObjectItems } from '../../../utils/objectUtils';
+import { TextField } from '../TextField/TextField';
 
 import * as styles from './styles';
 import { ObjectItem } from './ObjectItem';
@@ -103,7 +104,7 @@ const OpenObjectField: React.FC<FieldProps<{
                 styles={{
                   root: { margin: '7px 0 7px 0' },
                 }}
-                value={name}
+                defaultValue={name}
                 onChange={(_, newValue) => setName(newValue || '')}
                 onKeyDown={handleKeyDown}
               />
@@ -120,7 +121,7 @@ const OpenObjectField: React.FC<FieldProps<{
                 styles={{
                   root: { margin: '7px 0 7px 0' },
                 }}
-                value={newValue}
+                defaultValue={newValue}
                 onChange={(_, newValue) => setNewValue(newValue || '')}
                 onKeyDown={handleKeyDown}
               />
