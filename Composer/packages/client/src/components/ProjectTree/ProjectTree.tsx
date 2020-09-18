@@ -14,8 +14,8 @@ import debounce from 'lodash/debounce';
 import { useRecoilValue } from 'recoil';
 import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 
-import { dispatcherState, userSettingsState } from '../../recoilModel';
-import { botProjectSpaceTreeSelector } from '../../recoilModel/selectors';
+import { dispatcherState, userSettingsState, currentProjectIdState } from '../../recoilModel';
+import { botProjectSpaceSelector } from '../../recoilModel/selectors';
 import { createSelectedPath, getFriendlyName } from '../../utils/dialogUtil';
 import { containUnsupportedTriggers, triggerNotSupported } from '../../utils/dialogValidator';
 
@@ -58,6 +58,7 @@ export type TreeLink = {
   isRoot: boolean;
   warningContent?: string;
   projectId: string;
+  skillId?: string;
   dialogName?: string;
   trigger?: number;
 };
@@ -104,10 +105,11 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
   const [filter, setFilter] = useState('');
   const delayedSetFilter = debounce((newValue) => setFilter(newValue), 1000);
   const addMainDialogRef = useCallback((mainDialog) => onboardingAddCoachMarkRef({ mainDialog }), []);
-  const projectCollection = useRecoilValue<BotInProject[]>(botProjectSpaceTreeSelector).map((bot) => ({
+  const projectCollection = useRecoilValue<BotInProject[]>(botProjectSpaceSelector).map((bot) => ({
     ...bot,
     hasWarnings: false,
   }));
+  const currentProjectId = useRecoilValue(currentProjectIdState);
 
   const botHasWarnings = (bot: BotInProject) => {
     return bot.dialogs.some((dialog) => dialog.triggers.some((tr) => triggerNotSupported(dialog, tr)));
@@ -116,7 +118,8 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
   const renderBotHeader = (bot: BotInProject) => {
     const link: TreeLink = {
       displayName: bot.name,
-      projectId: bot.projectId,
+      projectId: currentProjectId,
+      skillId: bot.projectId,
       isRoot: true,
       warningContent: botHasWarnings(bot) ? formatMessage('This bot has warnings') : undefined,
     };
@@ -135,12 +138,13 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
     );
   };
 
-  const renderDialogHeader = (projectId: string, dialog: DialogInfo, warningContent: string, depth: number) => {
+  const renderDialogHeader = (botId: string, dialog: DialogInfo, warningContent: string, depth: number) => {
     const link: TreeLink = {
       dialogName: dialog.id,
       displayName: dialog.displayName,
       isRoot: dialog.isRoot,
-      projectId: projectId,
+      projectId: currentProjectId,
+      skillId: botId,
       warningContent,
     };
     return (
@@ -173,7 +177,8 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
       trigger: item.index,
       dialogName: dialog.id,
       isRoot: false,
-      projectId: projectId,
+      projectId: currentProjectId,
+      skillId: projectId,
     };
 
     return (
