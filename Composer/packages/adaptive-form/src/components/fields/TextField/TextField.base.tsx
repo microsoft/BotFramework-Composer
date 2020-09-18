@@ -27,7 +27,6 @@ import {
   ITextFieldStyles,
 } from 'office-ui-fabric-react/lib/TextField';
 import debounce from 'lodash/debounce';
-import isEqual from 'lodash/isEqual';
 
 const getClassNames = classNamesFunction<ITextFieldStyleProps, ITextFieldStyles>();
 
@@ -110,11 +109,7 @@ export class TextFieldBase extends React.Component<ITextFieldProps, ITextFieldSt
     this._lastValidation = 0;
 
     this._syncData = debounce((defaultValue: string | undefined) => {
-      if (
-        this._textElement.current &&
-        defaultValue !== undefined &&
-        !isEqual(defaultValue, this._textElement.current.value)
-      ) {
+      if (this._textElement.current && defaultValue !== undefined && defaultValue !== this._textElement.current.value) {
         this._textElement.current.value = defaultValue;
       }
     }, 300);
