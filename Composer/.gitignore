@@ -11,7 +11,6 @@ l10ntemp/
 
 packages/server/schemas/*.schema
 packages/server/schemas/*.uischema
-packages/server/src/locales/en-US.json
 packages/server/src/locales/en-US.tsv
 !packages/server/schemas/sdk.schema
 !packages/server/schemas/sdk.uischema

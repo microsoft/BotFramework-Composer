@@ -1,3 +1,4 @@
+Key	Message
 0_bytes_a1e1cdb3	0 Bytes
 5_minute_intro_7ea06d2b	5 Minute Intro
 ErrorInfo_part1	An error occured in the form editor!
@@ -64,7 +65,6 @@ answer_4620913f	Answer
 answer_is_answer_799483f0	Answer is { answer }
 any_constant_or_expression_to_evaluate_ba2017b1	Any constant or expression to evaluate.
 any_or_expression_acad7d37	Any or expression
-app_id_2f53f1f8	App Id
 append_choices_35c45a2d	Append choices
 application_language_87691b6	Application Language
 application_language_f100f3e0	Application language
@@ -313,7 +313,7 @@ extension_name_e21a5e25	Extension name
 extensions_7250a0bb	Extensions
 external_resources_will_not_be_changed_c08b0009	External resources will not be changed.
 extract_question_and_answer_pairs_from_an_online_f_7316548e	Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence. Learn more about knowledge base sources. Skip this step to add questions and answers manually after creation. The number of sources and file size you can add depends on the QnA service SKU you choose. Learn more about QnA Maker SKUs.
-extract_question_and_answer_pairs_from_an_online_f_c1e12724	Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence.
+extract_question_and_answer_pairs_from_an_online_f_c1e12724	Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence. 
 false_2f39ee6d	false
 false_eef8c169	False
 field_set_6e7d7f67	Field Set
@@ -345,7 +345,7 @@ handover_to_human_1a619574	Handover to human
 here_s_what_we_know_4e9c1731	Here’s what we know…
 hide_code_5dcffa94	Hide code
 home_351838cd	Home
-host_ef9acfae	Host
+host_ef9acfae	Host 
 http_request_79847109	HTTP Request
 i_want_to_delete_this_bot_f81a4735	I want to delete this bot
 icon_name_is_file_c80dacae	{ icon } name is { file }
@@ -387,7 +387,7 @@ kb_d9c53902	KB
 key_cannot_be_blank_dccc1b46	Key cannot be blank
 key_f2a919d5	Key
 keys_must_be_unique_2028cef3	Keys must be unique
-l_startline_startcharacter_l_endline_endcharacter_72bc2e5d	L{ startLine }:{ startCharacter } - L{ endLine }:{ endCharacter }
+l_startline_startcharacter_l_endline_endcharacter_72bc2e5d	L{ startLine }:{ startCharacter } - L{ endLine }:{ endCharacter } 
 language_generation_1876f6d6	Language Generation
 language_generation_file_80c08efe	language generation file
 language_understanding_9ae3f1f6	Language Understanding
@@ -395,7 +395,7 @@ language_understanding_file_a65abc2c	language understanding file
 languagepolicy_e754ad28	LanguagePolicy
 last_modified_time_is_time_b1497d3	Last modified time is { time }
 learn_more_a79a7918	Learn more
-learn_more_about_knowledge_base_sources_24369b09	Learn more about knowledge base sources.
+learn_more_about_knowledge_base_sources_24369b09	Learn more about knowledge base sources. 
 learn_more_about_qna_maker_skus_998c567	Learn more about QnA Maker SKUs.
 learn_more_about_title_d1d3edbe	Learn more about { title }
 learn_more_c08939e8	Learn more.
@@ -432,6 +432,7 @@ main_dialog_eed5c847	Main dialog
 make_a_copy_77d1233	Make a copy
 manage_properties_c9fa4456	Manage properties
 manifest_url_30824e88	Manifest url
+manifest_url_can_not_be_accessed_a7f147b2	Manifest url can not be accessed
 manifest_version_1edc004a	Manifest Version
 mb_8f9f9e84	MB
 message_5c38209d	Message
@@ -463,7 +464,7 @@ must_have_a_name_d5c5c464	Must have a name
 my_publish_profile_2ed56828	My Publish Profile
 name_1aed4a1b	Name
 name_and_save_your_skill_manifest_cfd672b7	Name and save your skill manifest.
-name_contains_invalid_charactors_d1780987	Name contains invalid charactors
+name_cannot_include_special_characters_or_spaces_59a1950b	Name cannot include special characters or spaces
 name_copy_55d27c1a	{ name }_Copy
 name_is_name_abc564f9	Name is { name }
 name_is_required_29d28f8d	{ name } is required
@@ -513,7 +514,7 @@ ondialogevents_types_3dc569b5	OnDialogEvents Types
 open_e0beb7b9	Open
 open_inline_editor_a5aabcfa	Open inline editor
 open_skills_page_for_configuration_details_a2a484ea	Open Skills page for configuration details
-or_4f7d4edb	Or:
+or_4f7d4edb	Or: 
 origin_lg_file_not_found_in_store_d194cdbc	origin lg file not found in store
 origin_lu_file_not_found_in_store_19e5cc8f	origin lu file not found in store
 original_ce7b7e64	 - Original
@@ -525,13 +526,14 @@ paste_5963d1c1	Paste
 please_add_at_least_minitems_endpoint_5439fd74	Please add at least { minItems } endpoint
 please_enter_a_value_for_key_77cfc097	Please enter a value for { key }
 please_enter_an_event_name_a148275a	Please enter an event name
-please_input_a_manifest_url_ef6bab5f	Please input a manifest url
+please_input_a_manifest_url_d726edbf	Please input a manifest Url
 please_input_regex_pattern_5cd659a2	Please input regEx pattern
 please_log_in_before_continuing_b6eace13	Please log in before continuing.
 please_return_to_design_view_to_start_the_onboardi_a561af9d	Please return to Design View to start the Onboarding tutorial.
 please_select_a_event_type_200c4c9f	Please select a event type
 please_select_a_specific_qna_file_to_import_qna_d71d871	Please select a specific qna file to import QnA
 please_select_a_trigger_type_67417abb	Please select a trigger type
+please_select_a_valid_endpoint_bf608af1	Please select a valid endpoint
 please_select_a_version_of_the_manifest_schema_4a3efbb1	Please select a version of the manifest schema
 please_select_an_activity_type_92f4a8a1	Please select an activity type
 populate_your_knowledge_base_bb2d3605	Populate your Knowledge Base
@@ -579,11 +581,11 @@ recent_bots_53585911	Recent Bots
 recognizer_type_dc591e16	Recognizer Type
 recognizers_cefce9d1	Recognizers
 redo_363c58b7	Redo
-redo_is_not_support_1595aaa4	Redo is not support
+redo_is_not_supported_b743e4dc	Redo is not supported
 refer_to_the_syntax_documentation_here_df8dc9b4	Refer to the syntax documentation here.
 regex_intent_is_already_defined_df095c1f	RegEx { intent } is already defined
 regular_expression_855557bf	Regular Expression
-release_1af20f26	Release:
+release_1af20f26	Release: 
 reloading_49d2f661	Reloading
 remove_f47dc62a	Remove
 repeat_this_dialog_83ca994e	Repeat this dialog
@@ -648,9 +650,10 @@ skill_dialog_name_1bbf0eff	Skill Dialog Name
 skill_endpoint_b563491e	Skill Endpoint
 skill_endpoints_e4e3d8c1	Skill endpoints
 skill_host_endpoint_b1088d0	Skill Host Endpoint
+skill_manifest_endpoint_is_configured_improperly_e083731d	Skill manifest endpoint is configured improperly
 skillname_manifest_ef3d9fed	{ skillName } Manifest
 skills_49cccd6a	Skills
-skip_this_step_to_add_questions_and_answers_manual_ed1b9f80	Skip this step to add questions and answers manually after creation. The number of sources and file size you can add depends on the QnA service SKU you choose.
+skip_this_step_to_add_questions_and_answers_manual_ed1b9f80	Skip this step to add questions and answers manually after creation. The number of sources and file size you can add depends on the QnA service SKU you choose. 
 sorry_something_went_wrong_with_connecting_bot_run_7d6785e3	Sorry, something went wrong with connecting bot runtime
 sorry_something_went_wrong_with_publishing_try_aga_306a48f5	Sorry, something went wrong with publishing. Try again or exit out of this task.
 sorted_a_to_z_915b2ed3	Sorted A to Z
@@ -732,7 +735,7 @@ type_dialog_name_14a50769	Type dialog name
 typing_activity_6b634ae	Typing activity
 unable_to_determine_recognizer_type_from_data_valu_2960f526	Unable to determine recognizer type from data: { value }
 undo_a7be8fef	Undo
-undo_is_not_support_a27c5281	Undo is not support
+undo_is_not_supported_ecd6f9fc	Undo is not supported
 unknown_intent_44b962ba	Unknown intent
 unknown_intent_recognized_1953f9be	Unknown intent recognized
 unknown_state_23f73afb	Unknown State
@@ -746,7 +749,7 @@ update_folder_name_error_24563bf6	Update Folder Name Error
 update_in_progress_f65e6b29	Update in progress
 update_scripts_a3a483e	Update scripts
 update_scripts_c58771a2	Update Scripts
-updating_scripts_e17a5722	Updating scripts...
+updating_scripts_e17a5722	Updating scripts... 
 url_22a5f3b8	URL
 url_8c4ff7d2	Url
 url_should_start_with_http_s_9ca55d94	Url should start with http[s]://
