@@ -11,7 +11,7 @@ import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { useRecoilValue } from 'recoil';
 import debounce from 'lodash/debounce';
-import { Skill } from '@bfc/shared';
+import { SkillSetting } from '@bfc/shared';
 
 import { addSkillDialog } from '../constants';
 import httpClient from '../utils/httpUtil';
@@ -31,7 +31,7 @@ export const msAppIdRegex = /^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A
 
 export interface CreateSkillModalProps {
   projectId: string;
-  onSubmit: (data: Skill) => void;
+  onSubmit: (data: SkillSetting) => void;
   onDismiss: () => void;
 }
 
@@ -83,7 +83,11 @@ export const validateManifestUrl = async ({
   } else {
     try {
       setValidationState({ ...validationState, manifestUrl: ValidationState.Validating });
-      const { data } = await httpClient.post(`/projects/${projectId}/skill/check`, { url: manifestUrl });
+      const { data } = await httpClient.get(`/projects/${projectId}/skill/retrieve-skill-manifest`, {
+        params: {
+          url: manifestUrl,
+        },
+      });
       setFormDataErrors(errors);
       setSkillManifest(data);
       setValidationState({ ...validationState, manifestUrl: ValidationState.Validated });
@@ -116,9 +120,9 @@ export const validateName = ({
 };
 
 export const CreateSkillModal: React.FC<CreateSkillModalProps> = ({ projectId, onSubmit, onDismiss }) => {
-  const skills = useRecoilValue(skillsState);
+  const skills = useRecoilValue(skillsState(projectId));
 
-  const [formData, setFormData] = useState<Partial<Skill>>({});
+  const [formData, setFormData] = useState<Partial<SkillSetting>>({});
   const [formDataErrors, setFormDataErrors] = useState<SkillFormDataErrors>({});
   const [validationState, setValidationState] = useState({
     endpoint: ValidationState.NotValidated,
@@ -208,7 +212,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = ({ projectId, o
       Object.values(validationState).every((validation) => validation === ValidationState.Validated) &&
       !Object.values(formDataErrors).some(Boolean)
     ) {
-      onSubmit(formData as Skill);
+      onSubmit({ name: skillManifest.name, ...formData } as SkillSetting);
     }
   };
 

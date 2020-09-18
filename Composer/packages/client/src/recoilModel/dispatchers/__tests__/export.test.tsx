@@ -7,11 +7,12 @@ import { act } from '@bfc/test-utils/lib/hooks';
 import httpClient from '../../../utils/httpUtil';
 import { exportDispatcher } from '../export';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
-import { botNameState } from '../../atoms';
+import { botNameState, currentProjectIdState } from '../../atoms';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
-import { Dispatcher } from '..';
+import { Dispatcher } from '../../../recoilModel/dispatchers';
 
 jest.mock('../../../utils/httpUtil');
+const projectId = '2345.32324';
 
 describe('Export dispatcher', () => {
   let renderedComponent, dispatcher: Dispatcher, prevDocumentCreateElement, prevCreateObjectURL, prevAppendChild;
@@ -21,7 +22,7 @@ describe('Export dispatcher', () => {
     prevAppendChild = document.body.appendChild;
 
     const useRecoilTestHook = () => {
-      const botName = useRecoilValue(botNameState);
+      const botName = useRecoilValue(botNameState(projectId));
       const currentDispatcher = useRecoilValue(dispatcherState);
       return {
         botName,
@@ -30,7 +31,10 @@ describe('Export dispatcher', () => {
     };
 
     const { result } = renderRecoilHook(useRecoilTestHook, {
-      states: [{ recoilState: botNameState, initialValue: 'emptybot-1' }],
+      states: [
+        { recoilState: currentProjectIdState, initialValue: projectId },
+        { recoilState: botNameState(projectId), initialValue: 'emptybot-1' },
+      ],
       dispatcher: {
         recoilState: dispatcherState,
         initialValue: {
@@ -62,7 +66,7 @@ describe('Export dispatcher', () => {
       return '';
     });
 
-    const createElement = (element) => {
+    const createElement = () => {
       return {
         click: elementClick,
         setAttribute: setAttributeMock,
@@ -75,7 +79,7 @@ describe('Export dispatcher', () => {
     });
 
     act(() => {
-      dispatcher.exportToZip({ projectId: '1234-232' });
+      dispatcher.exportToZip(projectId);
     });
   });
 });
