@@ -98,7 +98,7 @@ export const DisplayManifestModal: React.FC<DisplayManifestModalProps> = ({
           height={'100%'}
           id={'modaljsonview'}
           options={{ readOnly: true }}
-          value={JSON.parse(selectedSkill.body ?? '')}
+          value={selectedSkill.content}
           onChange={() => {}}
         />
       </div>

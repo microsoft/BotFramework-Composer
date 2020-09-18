@@ -143,6 +143,7 @@ const initQnaFilesStatus = (projectId: string, qnaFiles: QnAFile[], dialogs: Dia
   );
   return updateQnaFilesStatus(projectId, qnaFiles);
 };
+
 export const projectDispatcher = () => {
   const initBotState = async (
     callbackHelpers: CallbackInterface,
@@ -152,13 +153,29 @@ export const projectDispatcher = () => {
     qnaKbUrls?: string[]
   ) => {
     const { snapshot, gotoSnapshot, set } = callbackHelpers;
-    const { files, botName, botEnvironment, location, schemas, settings, id: projectId, diagnostics, skills } = data;
+    const {
+      files,
+      botName,
+      botEnvironment,
+      location,
+      schemas,
+      settings,
+      id: projectId,
+      diagnostics,
+      skills: skillContent,
+    } = data;
     const curLocation = await snapshot.getPromise(locationState(projectId));
     const storedLocale = languageStorage.get(botName)?.locale;
     const locale = settings.languages.includes(storedLocale) ? storedLocale : settings.defaultLanguage;
 
     // cache current projectId in session, resolve page refresh caused state lost.
     projectIdCache.set(projectId);
+
+    const mergedSettings = mergeLocalStorage(projectId, settings);
+    if (Array.isArray(mergedSettings.skill)) {
+      const skillsArr = mergedSettings.skill.map((skillData) => ({ ...skillData }));
+      mergedSettings.skill = convertSkillsToDictionary(skillsArr);
+    }
 
     try {
       schemas.sdk.content = processSchema(projectId, schemas.sdk.content);
@@ -169,10 +186,12 @@ export const projectDispatcher = () => {
     }
 
     try {
-      const { dialogs, dialogSchemas, luFiles, lgFiles, qnaFiles, skillManifestFiles } = indexer.index(
+      const { dialogs, dialogSchemas, luFiles, lgFiles, qnaFiles, skillManifestFiles, skills } = indexer.index(
         files,
         botName,
-        locale
+        locale,
+        skillContent,
+        mergedSettings
       );
 
       let mainDialog = '';
@@ -207,15 +226,6 @@ export const projectDispatcher = () => {
         set(botDiagnosticsState(projectId), diagnostics);
 
         refreshLocalStorage(projectId, settings);
-        const mergedSettings = mergeLocalStorage(projectId, settings);
-        if (Array.isArray(mergedSettings.skill)) {
-          const skillsArr = mergedSettings.skill.map((skillData) => {
-            return {
-              ...skillData,
-            };
-          });
-          mergedSettings.skill = convertSkillsToDictionary(skillsArr);
-        }
         set(settingsState(projectId), mergedSettings);
         set(filePersistenceState(projectId), new FilePersistence(projectId));
         set(undoHistoryState(projectId), new UndoHistory(projectId));
