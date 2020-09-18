@@ -157,6 +157,7 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = (props) => {
                           ariaLabel={lastField ? END_OF_ROW_LABEL : INSIDE_ROW_LABEL}
                           autoComplete="off"
                           componentRef={index === 0 ? firstNewFieldRef : undefined}
+                          defaultValue={newObject[property] || ''}
                           iconProps={{
                             ...(lastField
                               ? {
@@ -170,7 +171,6 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = (props) => {
                           }}
                           placeholder={getNewPlaceholder(props, property)}
                           styles={{ field: { padding: '0 24px 0 8px' } }}
-                          defaultValue={newObject[property] || ''}
                           onChange={handleNewObjectChange(property)}
                           onKeyDown={handleKeyDown}
                         />

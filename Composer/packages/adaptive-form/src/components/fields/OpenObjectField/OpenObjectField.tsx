@@ -100,11 +100,11 @@ const OpenObjectField: React.FC<FieldProps<{
                 ariaLabel={keyLabel}
                 autoComplete="off"
                 componentRef={fieldRef}
+                defaultValue={name}
                 placeholder={formatMessage('Add a new key')}
                 styles={{
                   root: { margin: '7px 0 7px 0' },
                 }}
-                defaultValue={name}
                 onChange={(_, newValue) => setName(newValue || '')}
                 onKeyDown={handleKeyDown}
               />
@@ -113,6 +113,7 @@ const OpenObjectField: React.FC<FieldProps<{
               <TextField
                 ariaLabel={valueLabel}
                 autoComplete="off"
+                defaultValue={newValue}
                 iconProps={{
                   iconName: 'ReturnKey',
                   style: { color: SharedColors.cyanBlue10, opacity: 0.6 },
@@ -121,7 +122,6 @@ const OpenObjectField: React.FC<FieldProps<{
                 styles={{
                   root: { margin: '7px 0 7px 0' },
                 }}
-                defaultValue={newValue}
                 onChange={(_, newValue) => setNewValue(newValue || '')}
                 onKeyDown={handleKeyDown}
               />

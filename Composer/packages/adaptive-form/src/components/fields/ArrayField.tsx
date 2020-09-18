@@ -82,12 +82,12 @@ const ArrayField: React.FC<FieldProps<unknown[]>> = (props) => {
           <TextField
             ariaLabel={formatMessage('New value')}
             data-testid="string-array-text-input"
+            defaultValue={newValue}
             iconProps={{
               iconName: 'ReturnKey',
               style: { color: SharedColors.cyanBlue10, opacity: 0.6 },
             }}
             styles={{ root: { width: '100%' } }}
-            defaultValue={newValue}
             onChange={handleNewChange}
             onKeyDown={handleKeyDown}
           />
