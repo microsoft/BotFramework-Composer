@@ -4,6 +4,7 @@
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 import { SkillManifest, SkillSetting } from '@bfc/shared';
+import produce from 'immer';
 
 import {
   skillManifestsState,
@@ -13,7 +14,6 @@ import {
   settingsState,
 } from './../atoms/botState';
 import { setSettingState } from './setting';
-import produce from 'immer';
 
 export const skillDispatcher = () => {
   const createSkillManifest = ({ set }, { id, content, projectId }) => {

@@ -9,7 +9,6 @@ import { settingsState, currentProjectIdState, skillsState } from '../../atoms';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
 import { settingsDispatcher } from '../setting';
-
 import httpClient from '../../../utils/httpUtil';
 
 jest.mock('../../../utils/httpUtil');
