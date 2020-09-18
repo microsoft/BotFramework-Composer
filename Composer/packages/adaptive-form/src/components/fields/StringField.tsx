@@ -7,6 +7,7 @@ import { NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 
 import { FieldLabel } from '../FieldLabel';
+
 import { TextField } from './TextField/TextField';
 
 export const borderStyles = (transparentBorder: boolean, error: boolean) =>
@@ -65,6 +66,7 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
       <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
       <TextField
         ariaLabel={label || formatMessage('string field')}
+        defaultValue={value}
         disabled={disabled}
         errorMessage={error}
         id={id}
@@ -75,7 +77,6 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
           root: { width: '100%' },
           errorMessage: { display: 'none' },
         }}
-        defaultValue={value}
         onBlur={handleBlur}
         onChange={handleChange}
         onFocus={handleFocus}

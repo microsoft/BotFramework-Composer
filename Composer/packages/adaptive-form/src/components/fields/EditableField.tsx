@@ -6,6 +6,7 @@ import { ITextFieldStyles } from 'office-ui-fabric-react/lib/TextField';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { mergeStyleSets } from '@uifabric/styling';
 import { FieldProps } from '@bfc/extension-client';
+
 import { TextField } from './TextField/TextField';
 
 interface EditableFieldProps extends Omit<FieldProps, 'definitions'> {
@@ -68,6 +69,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
       <TextField
         ariaLabel={ariaLabel}
         autoComplete="off"
+        defaultValue={localValue}
         errorMessage={error as string}
         placeholder={placeholder || value}
         styles={
@@ -95,7 +97,6 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
             styles
           ) as Partial<ITextFieldStyles>
         }
-        defaultValue={localValue}
         onBlur={handleCommit}
         onChange={handleChange}
         onFocus={() => setHasFocus(true)}
