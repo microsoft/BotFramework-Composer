@@ -4,7 +4,6 @@
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 import { SkillManifest, SkillSetting } from '@bfc/shared';
-import cloneDeep from 'lodash/cloneDeep';
 
 import {
   skillManifestsState,
@@ -14,6 +13,7 @@ import {
   settingsState,
 } from './../atoms/botState';
 import { setSettingState } from './setting';
+import produce from 'immer';
 
 export const skillDispatcher = () => {
   const createSkillManifest = ({ set }, { id, content, projectId }) => {
@@ -45,13 +45,13 @@ export const skillDispatcher = () => {
       const { func: onAddSkillDialogComplete } = await snapshot.getPromise(onAddSkillDialogCompleteState(projectId));
       const settings = await snapshot.getPromise(settingsState(projectId));
 
-      setSettingState(callbackHelpers, projectId, {
-        ...settings,
-        skill: {
-          ...settings.skill,
-          [skill.name]: skill,
-        },
-      });
+      setSettingState(
+        callbackHelpers,
+        projectId,
+        produce(settings, (updateSettings) => {
+          updateSettings.skill = { ...(updateSettings.skill || {}), [skill.name]: skill };
+        })
+      );
 
       if (typeof onAddSkillDialogComplete === 'function') {
         onAddSkillDialogComplete(skill || null);
@@ -66,10 +66,14 @@ export const skillDispatcher = () => {
     (callbackHelpers: CallbackInterface) => async (projectId: string, key: string) => {
       const { snapshot } = callbackHelpers;
       const settings = await snapshot.getPromise(settingsState(projectId));
-      const newSettings = cloneDeep(settings);
-      delete newSettings.skill?.[key];
 
-      setSettingState(callbackHelpers, projectId, newSettings);
+      setSettingState(
+        callbackHelpers,
+        projectId,
+        produce(settings, (updateSettings) => {
+          delete updateSettings.skill?.[key];
+        })
+      );
     }
   );
 
@@ -81,19 +85,22 @@ export const skillDispatcher = () => {
     ) => {
       const { snapshot } = callbackHelpers;
       const settings = await snapshot.getPromise(settingsState(projectId));
-      const newSettings = cloneDeep(settings);
-      setSettingState(callbackHelpers, projectId, {
-        ...newSettings,
-        skill: {
-          ...newSettings?.skill,
-          [key]: {
-            endpointUrl,
-            manifestUrl,
-            msAppId,
-            name,
-          },
-        },
-      });
+
+      setSettingState(
+        callbackHelpers,
+        projectId,
+        produce(settings, (updateSettings) => {
+          updateSettings.skill = {
+            ...(updateSettings.skill || {}),
+            [key]: {
+              endpointUrl,
+              manifestUrl,
+              msAppId,
+              name,
+            },
+          };
+        })
+      );
     }
   );
 
