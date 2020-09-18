@@ -9,7 +9,6 @@ const config: PluginConfig = {
   uiSchema: {
     [SDKKinds.CrossTrainedRecognizerSet]: {
       recognizer: {
-        default: true,
         displayName: formatMessage('Default recognizer'),
         isSelected: (data) => {
           return typeof data === 'string';
