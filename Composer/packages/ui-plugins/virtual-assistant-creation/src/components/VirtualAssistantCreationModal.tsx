@@ -2,8 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
-import formatMessage from 'format-message';
+import { jsx } from '@emotion/core';
 import React, { Fragment, useState } from 'react';
 import { RouteComponentProps, Router } from '@reach/router';
 import { NewBotPage } from './newBotPage';

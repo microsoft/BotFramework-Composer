@@ -12,12 +12,11 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { useRecoilValue } from 'recoil';
 import debounce from 'lodash/debounce';
 import { Skill } from '@bfc/shared';
+import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
 import { addSkillDialog } from '../constants';
 import httpClient from '../utils/httpUtil';
 import { skillsState } from '../recoilModel';
-
-import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
 export interface SkillFormDataErrors {
   endpoint?: string;

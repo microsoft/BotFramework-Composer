@@ -60,7 +60,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   const storage = storages[currentStorageIndex.current];
   const currentStorageId = storage ? storage.id : 'default';
   const [formData, setFormData] = useState({ name: '', description: '', location: '' });
-  const shellForCreation = useShell('VaCreation');
+  const shellForCreation = useShell('VaCreation', projectId);
   useEffect(() => {
     if (storages && storages.length) {
       const storageId = storage.id;
@@ -167,7 +167,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   return (
     <Fragment>
       <Home />
-      <EditorExtension plugins={pluginConfig} shell={shellForCreation}>
+      <EditorExtension projectId={projectId} plugins={pluginConfig} shell={shellForCreation}>
         <Router>
           <DefineConversation
             createFolder={createFolder}

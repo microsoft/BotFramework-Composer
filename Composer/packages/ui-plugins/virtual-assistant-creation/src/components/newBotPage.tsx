@@ -2,13 +2,12 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
 import React, { Fragment, useContext } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
-import { BotTypeTile } from './botTypeTile';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { IAssistant } from '../models/stateModels';
 import { AppContext } from './VirtualAssistantCreationModal';
@@ -37,19 +36,7 @@ export const NewBotPage: React.FC<NewBotPageProps> = (props) => {
     state.availableAssistantTemplates.forEach((assistant: IAssistant) => {
       result.push({
         key: assistant.name,
-        text: assistant.name,
-        styles: {
-          labelWrapper: { width: '30%' },
-          field: { width: '30%' },
-        },
-        onRenderField: (props, render) => {
-          return (
-            <div>
-              {render!(props)}
-              <BotTypeTile botName={assistant.name} botDescription={assistant.description} />
-            </div>
-          );
-        },
+        text: assistant.name + ' : ' + assistant.description,
       });
     });
     return result;
@@ -61,7 +48,7 @@ export const NewBotPage: React.FC<NewBotPageProps> = (props) => {
         isOpen={true}
         onDismiss={props.onDismiss}
         title={formatMessage('Choose Your Assistant')}
-        subText={formatMessage('Create a new bot or choose from Virtual assistant templates. Learn More')}
+        subText={formatMessage('Create a new bot or choose from Virtual assistant templates.')}
         dialogType={DialogTypes.CreateFlow}
       >
         <Label>{formatMessage('Choose one:')}</Label>

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
 import React, { Fragment } from 'react';
 import { RouteComponentProps } from '@reach/router';
