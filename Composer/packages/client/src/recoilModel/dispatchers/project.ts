@@ -60,7 +60,6 @@ import {
   botNameState,
   botEnvironmentState,
   dialogsState,
-  botOpeningState,
   recentProjectsState,
   templateProjectsState,
   runtimeTemplatesState,
@@ -266,7 +265,6 @@ export const projectDispatcher = () => {
 
   const setBotOpeningStatus = async (callbackHelpers: CallbackInterface) => {
     const { set, snapshot } = callbackHelpers;
-    set(botOpeningState, true);
     const botProjectSpace = await snapshot.getPromise(botProjectsSpaceState);
     const filePersistenceHandlers: filePersistence[] = [];
     for (const projectId of botProjectSpace) {
@@ -278,6 +276,25 @@ export const projectDispatcher = () => {
   };
 
   const openProject = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async (path: string, storageId = 'default') => {
+      try {
+        await setBotOpeningStatus(callbackHelpers);
+        const result = await checkIfBotProject(path, storageId);
+        if (!result.isBotProjectSpace) {
+          const response = await httpClient.put(`/projects/open`, { path, storageId });
+          await initBotState(callbackHelpers, response.data, true, '');
+          return response.data.id;
+        } else {
+          handleBotProjectSpace(callbackHelpers, path, storageId, result.contents);
+        }
+      } catch (ex) {
+        removeRecentProject(callbackHelpers, path);
+        handleProjectFailure(callbackHelpers, ex);
+      }
+    }
+  );
+
+  const openProjectTest = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (path: string, storageId = 'default') => {
       try {
         await setBotOpeningStatus(callbackHelpers);
@@ -544,7 +561,7 @@ export const projectDispatcher = () => {
       const projectId = projectData.data.id;
       projectIds.push(projectId);
 
-      const botData = await initBotProjectSpaceState(callbackHelpers, projectData.data, projectIds.length === 1);
+      const botData = await fetchData(callbackHelpers, projectData.data, projectIds.length === 1);
 
       botDataCollection.push(botData);
     }
@@ -617,7 +634,7 @@ export const projectDispatcher = () => {
     }
   };
 
-  const initBotProjectSpaceState = async (callbackHelpers: CallbackInterface, data: any, isRootBot = false) => {
+  const fetchData = async (callbackHelpers: CallbackInterface, data: any, isRootBot = false) => {
     const { snapshot } = callbackHelpers;
     const { files, botName, botEnvironment, location, schemas, settings, id: projectId, diagnostics, skills } = data;
     const curLocation = await snapshot.getPromise(locationState(projectId));
