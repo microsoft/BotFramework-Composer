@@ -3,12 +3,15 @@
 
 /** @jsx jsx */
 import { jsx, css, keyframes } from '@emotion/core';
+import React from 'react';
 import { IconButton, ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { useEffect, useRef, useState } from 'react';
 import { FontSizes } from '@uifabric/fluent-theme';
 import { Shimmer, ShimmerElementType } from 'office-ui-fabric-react/lib/Shimmer';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
+
+import Timer from '../utils/timer';
 
 // -------------------- Styles -------------------- //
 
@@ -113,83 +116,43 @@ const getShimmerStyles = {
 };
 // -------------------- NotificationCard -------------------- //
 
-export enum NotificationType {
-  info = 1,
-  warning,
-  error,
-  loading,
-  success,
-}
+export type NotificationType = 'info' | 'warning' | 'error' | 'pending' | 'success';
 
-export interface ILink {
+export type Link = {
   label: string;
   onClick: () => void;
-}
+};
 
-export interface ICardProps {
-  title: string;
-  description: string;
+export type CardProps = {
   type: NotificationType;
+  title: string;
+  description?: string;
   retentionTime?: number;
-  link?: ILink;
-  onRenderCardContent?: (props: ICardProps) => JSX.Element;
-}
+  link?: Link;
+  onRenderCardContent?: (props: CardProps) => JSX.Element;
+};
 
-export interface INotificationProps {
+export type NotificationProps = {
   id: string;
-  cardProps: ICardProps;
+  cardProps: CardProps;
   onDismiss: (id: string) => void;
-}
+};
 
-export class Timer {
-  timerId: NodeJS.Timeout;
-  start: number;
-  remaining: number;
-  pausing = false;
-  callback: () => void;
-
-  constructor(callback: () => void, delay: number) {
-    this.remaining = delay;
-    this.callback = callback;
-    this.start = Date.now();
-    this.timerId = setTimeout(callback, this.remaining);
-  }
-
-  pause() {
-    if (!this.pausing) {
-      clearTimeout(this.timerId);
-      this.remaining -= Date.now() - this.start;
-      this.pausing = true;
-    }
-  }
-
-  resume() {
-    this.pausing = false;
-    this.start = Date.now();
-    clearTimeout(this.timerId);
-    this.timerId = setTimeout(this.callback, this.remaining);
-  }
-
-  clear() {
-    clearTimeout(this.timerId);
-  }
-}
-
-const renderCardContent = (props: ICardProps) => {
+const defaultCardContentRenderer = (props: CardProps) => {
   const { title, description, type, link } = props;
   return (
     <div css={cardContent}>
-      {type === NotificationType.error && <Icon css={errorType} iconName="ErrorBadge" />}
-      {type === NotificationType.success && <Icon css={successType} iconName="Completed" />}
+      {type === 'error' && <Icon css={errorType} iconName="ErrorBadge" />}
+      {type === 'success' && <Icon css={successType} iconName="Completed" />}
       <div css={cardDetail}>
         <div css={cardTitle}>{title}</div>
-        <div css={cardDescription}>{description}</div>
+        {description && <div css={cardDescription}>{description}</div>}
         {link && (
           <ActionButton css={linkButton} onClick={link.onClick}>
             {link.label}
           </ActionButton>
         )}
-        {type === NotificationType.loading && (
+        {type === 'pending' && (
           <Shimmer shimmerElements={[{ type: ShimmerElementType.line, height: 2 }]} styles={getShimmerStyles} />
         )}
       </div>
@@ -197,10 +160,10 @@ const renderCardContent = (props: ICardProps) => {
   );
 };
 
-export const NotificationCard = (props: INotificationProps) => {
+export const NotificationCard = React.memo((props: NotificationProps) => {
   const { cardProps, id, onDismiss } = props;
   const [show, setShow] = useState(true);
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const removeNotification = () => {
     setShow(false);
@@ -234,8 +197,7 @@ export const NotificationCard = (props: INotificationProps) => {
     if (!show) onDismiss(id);
   };
 
-  let renderCard = renderCardContent;
-  if (cardProps.onRenderCardContent) renderCard = cardProps.onRenderCardContent;
+  const renderCard = cardProps.onRenderCardContent || defaultCardContentRenderer;
 
   return (
     <div
@@ -243,7 +205,7 @@ export const NotificationCard = (props: INotificationProps) => {
       css={cardContainer(show, containerRef.current)}
       role="presentation"
       onAnimationEnd={handleAnimationEnd}
-      onFocus={() => {}}
+      onFocus={() => void 0}
       onMouseLeave={handleMouseLeave}
       onMouseOver={handleMouseOver}
     >
@@ -256,4 +218,4 @@ export const NotificationCard = (props: INotificationProps) => {
       {renderCard(cardProps)}
     </div>
   );
-};
+});

@@ -4,17 +4,18 @@
 import * as React from 'react';
 
 import { renderWithRecoil } from '../../../__tests__/testUtils/renderWithRecoil';
-import { NotificationCard, NotificationType, Timer } from '../NotificationCard';
+import { NotificationCard, CardProps } from '../NotificationCard';
+import Timer from '../../utils/timer';
 
 jest.useFakeTimers();
 
 describe('<NotificationCard />', () => {
   it('should render the NotificationCard', () => {
-    const cardProps = {
+    const cardProps: CardProps = {
       title: 'There was error creating your KB',
       description: 'error',
       retentionTime: 1,
-      type: NotificationType.error,
+      type: 'error',
     };
     const onDismiss = jest.fn();
     const { container } = renderWithRecoil(<NotificationCard cardProps={cardProps} id="test" onDismiss={onDismiss} />);
@@ -23,11 +24,11 @@ describe('<NotificationCard />', () => {
   });
 
   it('should render the customized card', () => {
-    const cardProps = {
+    const cardProps: CardProps = {
       title: 'There was error creating your KB',
       description: 'error',
       retentionTime: 5000,
-      type: NotificationType.error,
+      type: 'error',
       onRenderCardContent: () => <div>customized</div>,
     };
     const onDismiss = jest.fn();

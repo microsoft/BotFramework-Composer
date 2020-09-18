@@ -27,7 +27,8 @@ export const NotificationContainer = () => {
   return (
     <div css={container} role="presentation">
       {notifications.map((item) => {
-        return <NotificationCard key={item.id} {...item} onDismiss={deleteNotification} />;
+        const { id, ...rest } = item;
+        return <NotificationCard key={item.id} cardProps={rest} id={id} onDismiss={deleteNotification} />;
       })}
     </div>
   );

@@ -9,9 +9,13 @@ import { qnaFilesState, projectIdState, localeState, settingsState } from '../at
 import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
 import { getBaseName } from '../../utils/fileUtil';
 import { navigateTo } from '../../utils/navigation';
+import {
+  getQnaFailedNotification,
+  getQnaSuccessNotification,
+  getQnaPendingNotification,
+} from '../../utils/notifications';
+import httpClient from '../../utils/httpUtil';
 
-import { getQnAFailed, getQnASuccess, getQnAPending } from './../../utils/notifications';
-import httpClient from './../../utils/httpUtil';
 import { addNotificationInternal, deleteNotificationInternal, createNotifiction } from './notification';
 
 export const updateQnAFileState = async (
@@ -95,28 +99,31 @@ export const qnaDispatcher = () => {
       const projectId = await snapshot.getPromise(projectIdState);
       const qnaFile = qnaFiles.find((f) => f.id === id);
 
-      const notification = createNotifiction(getQnAPending(urls));
+      const notification = createNotifiction(getQnaPendingNotification(urls));
       addNotificationInternal(callbackHelpers, notification);
 
-      try {
-        const response = await httpClient.get(`/utilities/qna/parse`, {
-          params: { urls: encodeURIComponent(urls.join(',')) },
-        });
-        const content = qnaFile ? qnaFile.content + '\n' + response.data : response.data;
+      // try {
+      //   const response = await httpClient.get(`/utilities/qna/parse`, {
+      //     params: { urls: encodeURIComponent(urls.join(',')) },
+      //   });
+      //   const content = qnaFile ? qnaFile.content + '\n' + response.data : response.data;
 
-        await updateQnAFileState(callbackHelpers, { id, content });
-        const notification = createNotifiction(
-          getQnASuccess(() => {
-            navigateTo(`/bot/${projectId}/knowledge-base/${getBaseName(id)}`);
-            deleteNotificationInternal(callbackHelpers, notification.id);
-          })
-        );
-        addNotificationInternal(callbackHelpers, notification);
-      } catch (err) {
-        addNotificationInternal(callbackHelpers, createNotifiction(getQnAFailed(err.response?.data?.message)));
-      } finally {
-        deleteNotificationInternal(callbackHelpers, notification.id);
-      }
+      //   await updateQnAFileState(callbackHelpers, { id, content });
+      //   const notification = createNotifiction(
+      //     getQnaSuccessNotification(() => {
+      //       navigateTo(`/bot/${projectId}/knowledge-base/${getBaseName(id)}`);
+      //       deleteNotificationInternal(callbackHelpers, notification.id);
+      //     })
+      //   );
+      //   addNotificationInternal(callbackHelpers, notification);
+      // } catch (err) {
+      //   addNotificationInternal(
+      //     callbackHelpers,
+      //     createNotifiction(getQnaFailedNotification(err.response?.data?.message))
+      //   );
+      // } finally {
+      //   deleteNotificationInternal(callbackHelpers, notification.id);
+      // }
     }
   );
 

@@ -6,12 +6,12 @@ import { CallbackInterface, useRecoilCallback } from 'recoil';
 import { v4 as uuid } from 'uuid';
 
 import { notificationsState } from '../atoms/appState';
-import { ICardProps } from '../../components/NotificationCard';
+import { CardProps } from '../../components/NotificationCard';
 import { Notification } from '../../recoilModel/types';
 
-export const createNotifiction = (notificationCard: ICardProps) => {
-  const id = uuid(6);
-  return { id, cardProps: notificationCard };
+export const createNotifiction = (notificationCard: CardProps): Notification => {
+  const id = uuid(6) + '';
+  return { id, ...notificationCard };
 };
 
 export const addNotificationInternal = ({ set }: CallbackInterface, notification: Notification) => {
