@@ -72,10 +72,11 @@
     "typecheck:client": "yarn workspace @bfc/client typecheck",
     "tableflip": "rimraf node_modules/ **/node_modules && yarn && yarn build",
     "l10n:extract": "cross-env NODE_ENV=production format-message extract -g underscored_crc32 -o packages/server/src/locales/en-US.json l10ntemp/**/*.js",
+    "l10n:makeTSV": "node scripts/l10n-makeTSV.js packages/server/src/locales/en-US.json",
     "l10n:extractJson": "node scripts/l10n-extractJson.js",
     "l10n:transform": "node scripts/l10n-transform.js",
     "l10n:babel": "babel ./packages --extensions \".ts,.tsx,.jsx,.js\" --out-dir l10ntemp --presets=@babel/react,@babel/typescript --plugins=@babel/plugin-proposal-class-properties --ignore \"packages/electron-server\",\"packages/**/__tests__\",\"packages/**/node_modules\",\"packages/**/build/**/*.js\"",
-    "l10n": "yarn l10n:babel && yarn l10n:extract && yarn l10n:transform packages/server/src/locales/en-US.json && yarn l10n:extractJson packages/server/schemas"
+    "l10n": "yarn l10n:babel && yarn l10n:extract && yarn l10n:makeTSV && yarn l10n:transform packages/server/src/locales/en-US.json && yarn l10n:extractJson packages/server/schemas"
   },
   "husky": {
     "hooks": {
