@@ -4,37 +4,31 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React from 'react';
+import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { RouteComponentProps } from '@reach/router';
-import { QnAFile } from '@bfc/shared';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { FieldConfig, useForm } from '../../hooks/useForm';
+import {
+  actionsSeedState,
+  dispatcherState,
+  showCreateQnAFromScratchDialogState,
+  showCreateQnAFromUrlDialogState,
+} from '../../recoilModel';
 
-import { knowledgeBaseSourceUrl, validateUrl, validateName } from './constants';
+import {
+  knowledgeBaseSourceUrl,
+  validateUrl,
+  validateName,
+  CreateQnAFromModalProps,
+  CreateQnAFromUrlFormData,
+} from './constants';
 import { subText, styles, dialogWindow, textField, warning } from './styles';
-
-interface CreateQnAFromUrlModalProps
-  extends RouteComponentProps<{
-    location: string;
-  }> {
-  dialogId: string;
-  qnaFiles: QnAFile[];
-  subscriptionKey?: string;
-  onDismiss: () => void;
-  onSubmit: (formData: CreateQnAFromUrlFormData) => void;
-}
-
-export interface CreateQnAFromUrlFormData {
-  url: string;
-  name: string;
-  multiTurn: boolean;
-}
 
 const formConfig: FieldConfig<CreateQnAFromUrlFormData> = {
   url: {
@@ -69,8 +63,9 @@ const DialogTitle = () => {
   );
 };
 
-export const CreateQnAFromUrlModal: React.FC<CreateQnAFromUrlModalProps> = (props) => {
+export const CreateQnAFromUrlModal: React.FC<CreateQnAFromModalProps> = (props) => {
   const { onDismiss, onSubmit, dialogId, qnaFiles } = props;
+  const actions = useRecoilValue(dispatcherState);
 
   formConfig.name.validate = validateName(qnaFiles);
   formConfig.url.validate = validateUrl;
@@ -143,14 +138,17 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromUrlModalProps> = (prop
             styles={{ root: { float: 'left' } }}
             text={formatMessage('Create knowledge base from scratch')}
             onClick={() => {
-              if (hasErrors) {
-                return;
-              }
-              onSubmit({} as CreateQnAFromUrlFormData);
+              actions.createQnAFromScratchDialogBegin({ dialogId });
             }}
           />
         )}
-        <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
+        <DefaultButton
+          text={formatMessage('Cancel')}
+          onClick={() => {
+            actions.createQnAFromUrlDialogCancel();
+            onDismiss && onDismiss();
+          }}
+        />
         <PrimaryButton
           data-testid={'createKnowledgeBase'}
           disabled={disabled}

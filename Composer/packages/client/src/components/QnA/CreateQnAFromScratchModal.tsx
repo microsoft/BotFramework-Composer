@@ -4,33 +4,18 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React from 'react';
+import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { RouteComponentProps } from '@reach/router';
-import { QnAFile } from '@bfc/shared';
 
 import { FieldConfig, useForm } from '../../hooks/useForm';
+import { dispatcherState, showCreateQnAFromUrlDialogState } from '../../recoilModel';
 
-import { validateName } from './constants';
+import { validateName, CreateQnAFromModalProps, CreateQnAFromScratchFormData } from './constants';
 import { subText, styles, dialogWindow, textField } from './styles';
-
-interface CreateQnAFromScratchModalProps
-  extends RouteComponentProps<{
-    location: string;
-  }> {
-  dialogId: string;
-  qnaFiles: QnAFile[];
-  subscriptionKey?: string;
-  onDismiss: () => void;
-  onSubmit: (formData: CreateQnAFromScratchFormData) => void;
-}
-
-export interface CreateQnAFromScratchFormData {
-  name: string;
-}
 
 const formConfig: FieldConfig<CreateQnAFromScratchFormData> = {
   name: {
@@ -50,8 +35,10 @@ const DialogTitle = () => {
   );
 };
 
-export const CreateQnAFromScratchModal: React.FC<CreateQnAFromScratchModalProps> = (props) => {
-  const { onDismiss, onSubmit, qnaFiles } = props;
+export const CreateQnAFromScratchModal: React.FC<CreateQnAFromModalProps> = (props) => {
+  const { onDismiss, onSubmit, qnaFiles, dialogId } = props;
+  const actions = useRecoilValue(dispatcherState);
+  const showCreateQnAFromUrlDialog = useRecoilValue(showCreateQnAFromUrlDialogState);
 
   formConfig.name.validate = validateName(qnaFiles);
   const { formData, updateField, hasErrors, formErrors } = useForm(formConfig);
@@ -89,7 +76,21 @@ export const CreateQnAFromScratchModal: React.FC<CreateQnAFromScratchModalProps>
         </Stack>
       </div>
       <DialogFooter>
-        <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
+        {showCreateQnAFromUrlDialog && (
+          <DefaultButton
+            text={formatMessage('Back')}
+            onClick={() => {
+              actions.createQnAFromScratchDialogCancel(dialogId);
+            }}
+          />
+        )}
+        <DefaultButton
+          text={formatMessage('Cancel')}
+          onClick={() => {
+            actions.createQnAFromScratchDialogCancel();
+            onDismiss && onDismiss();
+          }}
+        />
         <PrimaryButton
           data-testid={'createKnowledgeBase'}
           disabled={disabled}

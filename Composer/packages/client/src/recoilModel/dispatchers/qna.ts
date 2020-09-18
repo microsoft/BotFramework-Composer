@@ -195,25 +195,58 @@ export const renameKBFileState = async (
 };
 
 export const qnaDispatcher = () => {
-  const createQnAFromUrlDialogBegin = useRecoilCallback(({ set }: CallbackInterface) => (onComplete) => {
-    set(showCreateQnAFromUrlDialogState, true);
-    set(onCreateQnAFromUrlDialogCompleteState, { func: onComplete });
-  });
+  const createQnAFromUrlDialogBegin = useRecoilCallback(
+    ({ set, snapshot }: CallbackInterface) => async ({
+      dialogId,
+      onComplete,
+    }: {
+      dialogId?: string;
+      onComplete?: Function;
+    }) => {
+      if (dialogId) {
+        const projectId = await snapshot.getPromise(projectIdState);
+        navigateTo(`/bot/${projectId}/knowledge-base/${dialogId}`);
+      }
+      set(showCreateQnAFromUrlDialogState, true);
+      set(onCreateQnAFromUrlDialogCompleteState, { func: onComplete });
+    }
+  );
 
   const createQnAFromUrlDialogCancel = useRecoilCallback(({ set }: CallbackInterface) => () => {
     set(showCreateQnAFromUrlDialogState, false);
     set(onCreateQnAFromUrlDialogCompleteState, { func: undefined });
   });
 
-  const createQnAFromScratchDialogBegin = useRecoilCallback(({ set }: CallbackInterface) => (onComplete) => {
-    set(showCreateQnAFromScratchDialogState, true);
-    set(onCreateQnAFromScratchDialogCompleteState, { func: onComplete });
-  });
+  const createQnAFromScratchDialogBegin = useRecoilCallback(
+    ({ set, snapshot }: CallbackInterface) => async ({
+      dialogId,
+      onComplete,
+    }: {
+      dialogId?: string;
+      onComplete?: Function;
+    }) => {
+      // navigate to all up view scratch.
+      if (dialogId) {
+        const projectId = await snapshot.getPromise(projectIdState);
+        navigateTo(`/bot/${projectId}/knowledge-base/${dialogId}`);
+      }
 
-  const createQnAFromScratchDialogCancel = useRecoilCallback(({ set }: CallbackInterface) => () => {
-    set(showCreateQnAFromScratchDialogState, false);
-    set(onCreateQnAFromScratchDialogCompleteState, { func: undefined });
-  });
+      set(showCreateQnAFromScratchDialogState, true);
+      set(onCreateQnAFromScratchDialogCompleteState, { func: onComplete });
+    }
+  );
+
+  const createQnAFromScratchDialogCancel = useRecoilCallback(
+    ({ set, snapshot }: CallbackInterface) => async (dialogId?: string) => {
+      // navigate back to design page. if click `Back`
+      if (dialogId) {
+        const projectId = await snapshot.getPromise(projectIdState);
+        navigateTo(`/bot/${projectId}/dialogs/${dialogId}`);
+      }
+      set(showCreateQnAFromScratchDialogState, false);
+      set(onCreateQnAFromScratchDialogCompleteState, { func: undefined });
+    }
+  );
 
   const createQnAFromUrlDialogSuccess = useRecoilCallback(({ set, snapshot }: CallbackInterface) => async () => {
     const onCreateQnAFromUrlDialogComplete = (await snapshot.getPromise(onCreateQnAFromUrlDialogCompleteState)).func;
@@ -250,6 +283,11 @@ export const qnaDispatcher = () => {
     await removeQnAFileState(callbackHelpers, { id });
   });
 
+  const dismissCreateQnAModal = useRecoilCallback(({ set }: CallbackInterface) => async () => {
+    set(showCreateQnAFromUrlDialogState, false);
+    set(showCreateQnAFromScratchDialogState, false);
+  });
+
   const createQnAKBFromUrl = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async ({
       id,
@@ -263,9 +301,8 @@ export const qnaDispatcher = () => {
       multiTurn: boolean;
     }) => {
       const { set } = callbackHelpers;
-
+      await dismissCreateQnAModal();
       set(qnaAllUpViewStatusState, QnAAllUpViewStatus.Loading);
-
       let response;
       try {
         response = await httpClient.get(`/utilities/qna/parse`, {
@@ -301,9 +338,9 @@ ${response.data}
       id: string; // dialogId.locale
       name: string;
     }) => {
-      const projectId = await callbackHelpers.snapshot.getPromise(projectIdState);
-      // const dialogs = await callbackHelpers.snapshot.getPromise(dialogsState);
+      await dismissCreateQnAModal();
 
+      const projectId = await callbackHelpers.snapshot.getPromise(projectIdState);
       const content = qnaUtil.generateQnAPair();
       await createKBFileState(callbackHelpers, {
         id,

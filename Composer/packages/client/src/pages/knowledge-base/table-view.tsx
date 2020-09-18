@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
-import React, { useEffect, useState, useCallback, Fragment } from 'react';
+import React, { useEffect, useState, useCallback, Fragment, useRef } from 'react';
 import {
   DetailsList,
   DetailsRow,
@@ -13,6 +13,7 @@ import {
   CheckboxVisibility,
   IDetailsGroupRenderProps,
   IGroup,
+  IDetailsList,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { GroupHeader, CollapseAllVisibility } from 'office-ui-fabric-react/lib/GroupedList';
 import { IOverflowSetItemProps, OverflowSet } from 'office-ui-fabric-react/lib/OverflowSet';
@@ -23,11 +24,13 @@ import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
+import isEqual from 'lodash/isEqual';
 import isEmpty from 'lodash/isEmpty';
+// import inRange from 'lodash/inRange';
 import { QnAFile } from '@bfc/shared/src/types';
 import { QnASection } from '@bfc/shared';
 import { qnaUtil } from '@bfc/indexers';
-// import querystring from 'query-string';
+import querystring from 'query-string';
 import { NeutralColors } from '@uifabric/fluent-theme';
 
 import emptyQnAIcon from '../../images/emptyQnAIcon.svg';
@@ -95,8 +98,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
   // const { languages, defaultLanguage } = settings;
 
   const { dialogId } = props;
-  // const search = props.location?.search ?? '';
-  // const searchContainerId = querystring.parse(search).C;
+  const search = props.location?.search ?? '';
+  const searchContainerId = querystring.parse(search).C;
 
   // const activeDialog = dialogs.find(({ id }) => id === dialogId);
   const targetFileId = dialogId.endsWith('.source') ? dialogId : `${dialogId}.${locale}`;
@@ -130,6 +133,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
       };
     });
   };
+  const detailListRef = useRef<IDetailsList | null>(null);
   const [editQnAFile, setEditQnAFile] = useState<QnAFile | undefined>(undefined);
   const [qnaSections, setQnASections] = useState<QnASectionItem[]>([]);
   const [kthSectionIsCreatingQuestion, setCreatingQuestionInKthSection] = useState<number>(-1);
@@ -581,39 +585,60 @@ const TableView: React.FC<TableViewProps> = (props) => {
     return tableColums;
   };
 
+  const [groups, setGroups] = useState<IGroup[] | undefined>(undefined);
   const getGroups = (): IGroup[] | undefined => {
+    let currentFiles = importedSourceFiles;
     if (dialogId === 'all') {
-      const groups: IGroup[] = [];
-      qnaFiles.forEach((currentFile) => {
-        const lastGroup = groups[groups.length - 1];
-        const startIndex = lastGroup ? lastGroup.startIndex + lastGroup.count : 0;
-        const { id, qnaSections } = currentFile;
-        const count = qnaSections.length;
-        // const shouldExpand = inRange(focusedIndex, startIndex, startIndex + count) || searchContainerId === id;
-        groups.push({
-          key: id,
-          name: getBaseName(id),
-          startIndex,
-          count,
-          level: 0,
-          // isCollapsed: !shouldExpand,
-        });
-      });
-      return groups;
+      currentFiles = qnaFiles;
     } else {
       if (!qnaFile) return undefined;
-      const groups: IGroup[] = [];
-      importedSourceFiles.forEach((currentFile) => {
-        const lastGroup = groups[groups.length - 1];
-        const startIndex = lastGroup ? lastGroup.startIndex + lastGroup.count : 0;
-        const { id, qnaSections } = currentFile;
-        const count = qnaSections.length;
-        const name = getBaseName(id);
-        groups.push({ key: id, name, startIndex, count, level: 0 });
-      });
-      return groups;
     }
+
+    const newGroups: IGroup[] = [];
+    currentFiles.forEach((currentFile) => {
+      const lastGroup = newGroups[newGroups.length - 1];
+      const startIndex = lastGroup ? lastGroup.startIndex + lastGroup.count : 0;
+      const { id, qnaSections } = currentFile;
+      const count = qnaSections.length;
+      const name = getBaseName(id);
+
+      // restore last group collapse state
+      const prevGroup = groups?.find(({ key }) => key === id);
+      const newGroup = prevGroup || {};
+      newGroups.push({ ...newGroup, key: id, name, startIndex, count, level: 0 });
+    });
+    return newGroups;
   };
+  useEffect(() => {
+    const newGroups = getGroups();
+    const isChanged = !isEqual(groups, newGroups);
+    if (isChanged) setGroups(newGroups);
+  }, [dialogId, qnaFiles]);
+
+  useEffect(() => {
+    // set focus to target container.
+    console.log(searchContainerId, groups);
+    if (searchContainerId && groups && detailListRef.current) {
+      const targetGroup = groups.find(({ key }) => key === searchContainerId);
+      if (targetGroup) {
+        detailListRef.current.focusIndex(targetGroup.startIndex);
+      }
+      // if (targetGroup) {
+      //   const newGroups = groups.map((item) => {
+      //     if (item.key === targetGroup.key) {
+      //       return {
+      //         ...item,
+      //         isCollapsed: false,
+      //       };
+      //     }
+      //     return item;
+      //   });
+      //   const isChanged = !isEqual(groups, newGroups);
+      //   if (isChanged) setGroups(newGroups);
+
+      // }
+    }
+  }, [searchContainerId, groups]);
 
   const onRenderDetailsHeader = useCallback(
     (props, defaultRender) => {
@@ -658,14 +683,13 @@ const TableView: React.FC<TableViewProps> = (props) => {
             data-testid={'createKnowledgeBase'}
             text={formatMessage('Create new KB')}
             onClick={() => {
-              actions.createQnAFromScratchDialogBegin(() => undefined);
+              actions.createQnAFromScratchDialogBegin({});
             }}
           />
         </div>
       </div>
     );
   }
-  console.log(qnaSections);
 
   return (
     <div data-testid={'table-view'}>
@@ -673,12 +697,13 @@ const TableView: React.FC<TableViewProps> = (props) => {
         <DetailsList
           checkboxVisibility={CheckboxVisibility.hidden}
           columns={getTableColums()}
+          componentRef={detailListRef}
           groupProps={{
             onRenderHeader: onRenderGroupHeader,
             collapseAllVisibility: CollapseAllVisibility.hidden,
+            showEmptyGroups: true,
           }}
-          groups={getGroups()}
-          //initialFocusedIndex={focusedIndex}
+          groups={groups}
           items={qnaSections}
           layoutMode={DetailsListLayoutMode.justified}
           selectionMode={SelectionMode.single}

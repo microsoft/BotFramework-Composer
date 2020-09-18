@@ -54,7 +54,7 @@ import { getBaseName } from '../../utils/fileUtil';
 import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 import plugins, { mergePluginConfigs } from '../../plugins';
 import { useElectronFeatures } from '../../hooks/useElectronFeatures';
-import CreateQnAFromUrlModal from '../../components/QnA/CreateQnAFromUrlModal';
+import { CreateQnAModal } from '../../components/QnA';
 import { triggerNotSupported } from '../../utils/dialogValidator';
 
 import { WarningMessage } from './WarningMessage';
@@ -144,6 +144,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     exportToZip,
     onboardingAddCoachMarkRef,
     createQnAKBFromUrl,
+    createQnAFromUrlDialogBegin,
   } = useRecoilValue(dispatcherState);
 
   const { location, dialogId } = props;
@@ -151,7 +152,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const selected = params.get('selected') || '';
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
   const [dialogJsonVisible, setDialogJsonVisibility] = useState(false);
-  const [importQnAModalVisibility, setImportQnAModalVisibility] = useState(false);
   const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0]);
   const [exportSkillModalVisible, setExportSkillModalVisible] = useState(false);
   const [warningIsVisible, setWarningIsVisible] = useState(true);
@@ -243,10 +243,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     return clearUndo;
   }, []);
 
-  const openImportQnAModal = () => {
-    setImportQnAModalVisibility(true);
-  };
-
   const onTriggerCreationDismiss = () => {
     setTriggerModalVisibility(false);
   };
@@ -324,7 +320,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
               displayName: currentDialog?.displayName ?? '',
             }),
             onClick: () => {
-              openImportQnAModal();
+              createQnAFromUrlDialogBegin({});
             },
           },
         ],
@@ -569,12 +565,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     onboardingAddCoachMarkRef({ addNew });
   }, []);
 
-  const cancelImportQnAModal = () => {
-    setImportQnAModalVisibility(false);
-  };
-
   const handleCreateQnA = async ({ name, url, multiTurn }) => {
-    cancelImportQnAModal();
     const formData = {
       $kind: qnaMatcherKey,
       errors: { $kind: '', intent: '', event: '', triggerPhrases: '', regEx: '', activity: '' },
@@ -699,14 +690,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             onSubmit={onTriggerCreationSubmit}
           />
         )}
-        {importQnAModalVisibility && (
-          <CreateQnAFromUrlModal
-            dialogId={dialogId}
-            qnaFiles={qnaFiles}
-            onDismiss={cancelImportQnAModal}
-            onSubmit={handleCreateQnA}
-          />
-        )}
+        <CreateQnAModal dialogId={dialogId} qnaFiles={qnaFiles} onSubmit={handleCreateQnA} />)
         {displaySkillManifest && (
           <DisplayManifestModal manifestId={displaySkillManifest} onDismiss={dismissManifestModal} />
         )}

@@ -3,4 +3,6 @@
 
 export * from './CreateQnAFromScratchModal';
 export * from './CreateQnAFromUrlModal';
-export * from './EditQnAFromScratchModal';
+export * from './CreateQnAFrom';
+export * from './EditQnAFrom';
+export * from './constants';
