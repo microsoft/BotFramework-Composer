@@ -69,7 +69,7 @@ export const navigationDispatcher = () => {
         }
       }
 
-      const currentUri = convertPathToUrl(projectId, dialogId, path);
+      const currentUri = convertPathToUrl(projectId, skillId, dialogId, path);
 
       if (checkUrl(currentUri, projectId, designPageLocation)) return;
 
