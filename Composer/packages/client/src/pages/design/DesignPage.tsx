@@ -166,12 +166,12 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     if (currentDialog) {
       setCurrentDialog(currentDialog);
     }
-    const rootDialog = dialogs.find(({ isRoot }) => isRoot);
-    if (!currentDialog && rootDialog) {
-      const { search } = location || {};
-      navigateTo(`/bot/${projectId}/skill/${skillId}/dialogs/${rootDialog.id}${search}`);
-      return;
-    }
+    // const rootDialog = dialogs.find(({ isRoot }) => isRoot);
+    // if (!currentDialog && rootDialog) {
+    //   const { search } = location || {};
+    //   navigateTo(`/bot/${projectId}/skill/${skillId}/dialogs/${rootDialog.id}${search}`);
+    //   return;
+    // }
     setWarningIsVisible(true);
   }, [dialogId, dialogs, location]);
 

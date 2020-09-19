@@ -93,7 +93,7 @@ function createTriggerApi(
     if (url) {
       navigateTo(url);
     } else {
-      selectTo(projectId, `triggers[${index}]`);
+      selectTo(projectId, skillId, dialog.id, `triggers[${index}]`);
     }
   };
   return {
