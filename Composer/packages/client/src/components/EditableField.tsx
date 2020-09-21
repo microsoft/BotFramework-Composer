@@ -9,10 +9,11 @@ import { mergeStyleSets } from '@uifabric/styling';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
 //------------------------
-const defaultContainerStyle = (isHovered) => css`
+const defaultContainerStyle = (hasFocus) => css`
   display: flex;
   width: 100%;
-  outline: ${isHovered ? `2px solid ${SharedColors.cyanBlue10}` : undefined};
+  outline: ${hasFocus ? `2px solid ${SharedColors.cyanBlue10}` : undefined};
+  background: ${hasFocus ? NeutralColors.white : 'inherit'};
   margin-top: 2px;
   :hover .ms-Button-icon {
     visibility: visible;
