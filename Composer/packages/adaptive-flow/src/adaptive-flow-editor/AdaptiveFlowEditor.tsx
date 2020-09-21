@@ -118,17 +118,15 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
 
   const divRef = useRef<HTMLDivElement>(null);
   const containerId = 'container-div';
+  const onWheel = (event: WheelEvent) => {
+    handleMouseWheel(event, containerId);
+  };
 
   // send focus to the keyboard area when navigating to a new trigger
   useEffect(() => {
     divRef.current?.focus();
-    divRef.current?.addEventListener(
-      'wheel',
-      function (event: WheelEvent) {
-        handleMouseWheel(event, containerId);
-      },
-      { passive: false }
-    );
+    divRef.current?.addEventListener('wheel', onWheel, { passive: false });
+    return () => divRef.current?.removeEventListener('wheel', onWheel);
   }, [focusedEvent]);
 
   const { selection, ...selectionContext } = useSelectionEffect({ data, nodeContext }, shellApi);
