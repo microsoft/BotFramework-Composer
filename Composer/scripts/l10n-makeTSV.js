@@ -5,6 +5,8 @@
 const fs = require('fs');
 const path = require('path');
 
+const csv = require('@fast-csv/format');
+
 const inPath = process.argv[2];
 
 // eslint-disable-next-line security/detect-non-literal-fs-filename
@@ -12,11 +14,14 @@ const inJson = JSON.parse(fs.readFileSync(inPath));
 const outPath = path.join(path.dirname(inPath), 'en-US.tsv');
 
 // eslint-disable-next-line security/detect-non-literal-fs-filename
-const outTSV = fs.openSync(outPath, 'w');
-fs.writeSync(outTSV, 'Key\tMessage\n');
+const outTSV = fs.createWriteStream(outPath);
+
+const array = [{ Key: 'Key', Message: 'Message' }];
 
 for (const key in inJson) {
-  fs.writeSync(outTSV, key + '\t' + inJson[key].message.replace(/(\r\n|\r|\n)/g, '\\n') + '\n');
+  array.push({ Key: key, Message: inJson[key].message.replace(/(\r\n|\r|\n)/g, '\\n') });
 }
 
-fs.closeSync(outTSV);
+csv.writeToStream(outTSV, array, {
+  delimiter: '\t',
+});

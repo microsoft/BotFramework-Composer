@@ -51,8 +51,8 @@ add_new_propertyname_bedf7dc6	Add new { propertyName }
 add_new_trigger_on_displayname_2aaf6e4c	Add new trigger on { displayName }
 add_new_validation_rule_here_eb675ccf	Add new validation rule here
 add_qna_pair_bcb1624	Add QnA Pair
-add_some_example_phrases_to_trigger_this_intent_pl_568eaf51	> add some example phrases to trigger this intent:\n> - please tell me the weather\n> - what is the weather like in '{'city=Seattle'}'\n\n> entity definitions:\n> @ ml city
-add_some_expected_user_responses_please_remind_me__31dc5c07	> add some expected user responses:\n> - Please remind me to '{'itemTitle=buy milk'}'\n> - remind me to '{'itemTitle'}'\n> - add '{'itemTitle'}' to my todo list\n>\n> entity definitions:\n> @ ml itemTitle\n
+add_some_example_phrases_to_trigger_this_intent_pl_568eaf51	"> add some example phrases to trigger this intent:\n> - please tell me the weather\n> - what is the weather like in '{'city=Seattle'}'\n\n> entity definitions:\n> @ ml city"
+add_some_expected_user_responses_please_remind_me__31dc5c07	"> add some expected user responses:\n> - Please remind me to '{'itemTitle=buy milk'}'\n> - remind me to '{'itemTitle'}'\n> - add '{'itemTitle'}' to my todo list\n>\n> entity definitions:\n> @ ml itemTitle\n"
 add_welcome_message_49d9ded9	Add welcome message
 advanced_events_2cbfa47d	Advanced Events
 all_4321c3a1	All
@@ -169,7 +169,7 @@ copy_9748f9f	Copy
 copy_content_for_translation_7affbcbb	Copy content for translation
 could_not_connect_to_storage_50411de0	Could not connect to storage.
 could_not_init_plugin_1f1c29cd	Could not init plugin
-couldn_t_complete_the_update_a337a359	Couldn''t complete the update:
+couldn_t_complete_the_update_a337a359	"Couldn''t complete the update:"
 create_132b3be1	Create
 create_a_bot_project_73e6ce33	Create a bot project
 create_a_condition_8686fd5	Create a condition
@@ -285,7 +285,7 @@ equals_expression_47199f4e	Equals Expression
 error_98e81528	Error
 error_afac7133	Error:
 error_event_c079b608	Error event
-error_func_does_not_have_an_evaluator_it_s_not_a_b_8c660980	Error: { func } does not have an evaluator, it''s not a built-in function or a custom function
+error_func_does_not_have_an_evaluator_it_s_not_a_b_8c660980	"Error: { func } does not have an evaluator, it''s not a built-in function or a custom function"
 error_in_ui_schema_for_title_errormsg_options_7f3c22f2	Error in UI schema for { title }: { errorMsg }\n{ options }
 error_occured_ejecting_runtime_76bb48e7	Error occured ejecting runtime!
 error_occurred_5549a6b4	Error occurred
@@ -378,7 +378,7 @@ interpolated_string_or_expression_to_evaluate_ba0b0ba	Interpolated string or exp
 introduction_of_key_concepts_and_user_experience_e_971b32e9	Introduction of key concepts and user experience elements for Composer.
 invoke_activity_87df4903	Invoke activity
 is_missing_or_empty_a551462e	is missing or empty
-it_s_not_a_built_in_function_or_a_custom_function_1527ed83	it''s not a built-in function or a custom function.
+it_s_not_a_built_in_function_or_a_custom_function_1527ed83	"it''s not a built-in function or a custom function."
 item_actions_22d0242	Item Actions
 item_actions_cd903bde	Item actions
 item_added_f3910bed	item added
@@ -686,11 +686,11 @@ the_main_dialog_is_named_after_your_bot_it_is_the__3d9864f	The main dialog is na
 the_manifest_can_be_edited_and_refined_manually_if_9269e3f2	The manifest can be edited and refined manually if and where needed.
 the_microsoft_app_id_that_will_be_calling_the_skil_955424de	The Microsoft App Id that will be calling the skill.
 the_microsoft_app_password_that_will_be_calling_th_acf9e1ea	The Microsoft App Password that will be calling the skill.
-the_page_you_are_looking_for_can_t_be_found_a3b75795	The page you are looking for can''t be found.
+the_page_you_are_looking_for_can_t_be_found_a3b75795	"The page you are looking for can''t be found."
 the_return_type_does_not_match_2ae72548	the return type does not match
 the_welcome_message_is_triggered_by_the_i_conversa_a3ff58f8	The welcome message is triggered by the <i>ConversationUpdate</i> event. To add a new <i>ConversationUpdate</i> trigger:
 there_was_an_error_74ed3c58	There was an error
-these_examples_bring_together_all_of_the_best_prac_ca1b89c7	These examples bring together all of the best practices and supporting components we''ve identified through building of conversational experiences.
+these_examples_bring_together_all_of_the_best_prac_ca1b89c7	"These examples bring together all of the best practices and supporting components we''ve identified through building of conversational experiences."
 these_tasks_will_be_used_to_generate_the_manifest__2791be0e	These tasks will be used to generate the manifest and describe the capabilities of this skill to those who may want to use it.
 this_configures_a_data_driven_dialog_via_a_collect_c7fa4389	This configures a data driven dialog via a collection of events and actions.
 this_dialog_has_no_trigger_yet_d1f1d173	This dialog has no trigger yet.
@@ -704,20 +704,20 @@ this_url_is_duplicated_a0768f44	This url is duplicated
 this_version_of_the_content_is_out_of_date_and_you_5e878f29	This version of the content is out of date, and your last change was rejected. The content will be automatically refreshed.
 this_will_delete_the_dialog_and_its_contents_do_yo_9b48fa3c	This will delete the Dialog and its contents. Do you wish to continue?
 this_will_delete_the_profile_do_you_wish_to_contin_61b54894	This will delete the profile. Do you wish to continue?
-this_will_open_your_emulator_application_if_you_do_ba277151	This will open your Emulator application. If you don''t yet have the Bot Framework Emulator installed, you can download it <a>here</a>.
+this_will_open_your_emulator_application_if_you_do_ba277151	"This will open your Emulator application. If you don''t yet have the Bot Framework Emulator installed, you can download it <a>here</a>."
 time_2b5aac58	Time
 tip_8f74cd0	tip
 tips_80d0da2b	tips
 title_ee03d132	Title
 title_msg_ee91458d	{ title }. { msg }
-to_customize_the_welcome_message_select_the_i_send_9b4bf4f	To customize the welcome message, select the <i>Send a response</i> action in the Visual Editor. Then in the Form Editor on the right, you can edit the bot''s welcome message in the <b>Language Generation</b> field.
+to_customize_the_welcome_message_select_the_i_send_9b4bf4f	"To customize the welcome message, select the <i>Send a response</i> action in the Visual Editor. Then in the Form Editor on the right, you can edit the bot''s welcome message in the <b>Language Generation</b> field."
 to_learn_more_about_the_lg_file_format_read_the_do_ef6e083d	> To learn more about the LG file format, read the documentation at\n> { lgHelp }
 to_learn_more_about_the_lu_file_format_read_the_do_cac5ffc9	> To learn more about the LU file format, read the documentation at\n> { LU_HELP }
 to_learn_more_about_the_qna_file_format_read_the_d_1ce18259	> To learn more about the QnA file format, read the documentation at\n> { QNA_HELP }
 to_make_your_bot_available_for_others_as_a_skill_w_f2c19b9c	To make your bot available for others as a skill, we need to generate a manifest.
 to_run_this_bot_composer_needs_net_core_sdk_d1551038	To run this bot, Composer needs .NET Core SDK.
-to_understand_what_the_user_says_your_dialog_needs_4e791611	To understand what the user says, your dialog needs a "Recognizer"; that includes example words and sentences that users may use.
-to_understand_what_the_user_says_your_dialog_needs_957034cc	To understand what the user says, your dialog needs an ''IRecognizer'' that includes example words and sentences that users may use.
+to_understand_what_the_user_says_your_dialog_needs_4e791611	"To understand what the user says, your dialog needs a ""Recognizer""; that includes example words and sentences that users may use."
+to_understand_what_the_user_says_your_dialog_needs_957034cc	"To understand what the user says, your dialog needs an ''IRecognizer'' that includes example words and sentences that users may use."
 to_which_language_will_you_be_translating_your_bot_77219d69	To which language will you be translating your bot?
 token_property_e53a19d9	 = Token Property
 toolbar_bafd4228	toolbar
@@ -785,7 +785,7 @@ what_is_the_name_of_this_trigger_regex_f77376d7	What is the name of this trigger
 what_is_the_name_of_your_bot_a571c565	What is the name of your bot?
 what_is_the_type_of_this_trigger_d2701744	What is the type of this trigger?
 what_your_bot_says_to_the_user_this_is_a_template__a8d2266d	What your bot says to the user. This is a template used to create the outgoing message. It can include language generation rules, properties from memory, and other features.\n\nFor example, to define variations that will be chosen at random, write:\n- hello\n- hi
-what_your_bot_says_to_the_user_visit_a_target_blan_7735479	What your Bot says to the user. Visit <a target="_blank" href="https://aka.ms/bf-composer-docs-lg"> the documentation</a> a reference of capabilities.
+what_your_bot_says_to_the_user_visit_a_target_blan_7735479	"What your Bot says to the user. Visit <a target=""_blank"" href=""https://aka.ms/bf-composer-docs-lg""> the documentation</a> a reference of capabilities."
 when_deleting_a_language_only_the_content_will_be__8f7f8dee	When deleting a language, only the content will be removed. The flow and logic of the conversation and dialog will remain functional.
 when_done_switch_to_the_newly_created_language_and_862b7dd9	When done, switch to the newly created language and start the (manual) translation process.
 when_multiple_people_are_working_with_models_you_w_32b48099	When multiple people are working with models you want to be able to work with models independently from each other tied to the source control.
