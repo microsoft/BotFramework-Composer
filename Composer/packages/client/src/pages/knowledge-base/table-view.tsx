@@ -49,7 +49,6 @@ import { isQnAFileCreatedFromUrl } from '../../utils/qnaUtil';
 
 import {
   formCell,
-  content,
   addIcon,
   divider,
   rowDetails,
@@ -126,9 +125,10 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const [editQnAFile, setEditQnAFile] = useState<QnAFile | undefined>(undefined);
   const [qnaSections, setQnASections] = useState<QnASectionItem[]>([]);
   const [kthSectionIsCreatingQuestion, setCreatingQuestionInKthSection] = useState<number>(-1);
-  const importedFileIds = qnaFile?.imports.map(({ id }) => getBaseName(id)) || [];
-  const importedFiles = qnaFiles.filter(({ id }) => importedFileIds.includes(id));
-  const importedSourceFiles = importedFiles.filter(({ id }) => id.endsWith('.source'));
+  const currentDialogImportedFileIds = qnaFile?.imports.map(({ id }) => getBaseName(id)) || [];
+  const currentDialogImportedFiles = qnaFiles.filter(({ id }) => currentDialogImportedFileIds.includes(id));
+  const currentDialogImportedSourceFiles = currentDialogImportedFiles.filter(({ id }) => id.endsWith('.source'));
+  const allSourceFiles = qnaFiles.filter(({ id }) => id.endsWith('.source'));
   const [isQnASectionsExpanded, setIsQnASectionsExpanded] = useState<boolean[]>([]);
 
   useEffect(() => {
@@ -140,7 +140,9 @@ const TableView: React.FC<TableViewProps> = (props) => {
     if (dialogId === 'all') {
       setIsQnASectionsExpanded(Array(allSections.length).fill(false));
     } else {
-      const dialogSections = allSections.filter((t) => t.dialogId === dialogId || importedFileIds.includes(t.fileId));
+      const dialogSections = allSections.filter(
+        (t) => t.dialogId === dialogId || currentDialogImportedFileIds.includes(t.fileId)
+      );
       setIsQnASectionsExpanded(Array(dialogSections.length).fill(false));
     }
   }, [dialogId, projectId]);
@@ -157,7 +159,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     if (dialogId === 'all') {
       setQnASections(allSections);
     } else {
-      const dialogSections = allSections.filter((t) => importedFileIds.includes(t.fileId));
+      const dialogSections = allSections.filter((t) => currentDialogImportedFileIds.includes(t.fileId));
 
       setQnASections(dialogSections);
     }
@@ -240,117 +242,122 @@ const TableView: React.FC<TableViewProps> = (props) => {
     setEditQnAFile(undefined);
   };
 
-  const onRenderGroupHeader: IDetailsGroupRenderProps['onRenderHeader'] = (props) => {
-    const groupName = props?.group?.name || '';
-    const containerId = props?.group?.key || '';
-    const containerQnAFile = qnaFiles.find(({ id }) => id === containerId);
-    const isImportedSource = containerId.endsWith('.source');
-    const isSourceFromUrl = isImportedSource && containerQnAFile && isQnAFileCreatedFromUrl(containerQnAFile);
+  const onRenderGroupHeader: IDetailsGroupRenderProps['onRenderHeader'] = useCallback(
+    (props) => {
+      const groupName = props?.group?.name || '';
+      const containerId = props?.group?.key || '';
+      const containerQnAFile = qnaFiles.find(({ id }) => id === containerId);
+      const isImportedSource = containerId.endsWith('.source');
+      const isSourceFromUrl = isImportedSource && containerQnAFile && isQnAFileCreatedFromUrl(containerQnAFile);
+      const isAllTab = dialogId === 'all';
+      const onRenderItem = (item: IOverflowSetItemProps): JSX.Element => {
+        return (
+          <IconButton
+            menuIconProps={{ iconName: 'Edit' }}
+            styles={{ root: { color: NeutralColors.black, visibility: isAllTab ? 'hidden' : 'visiable' } }}
+            onClick={item.onClick}
+          />
+        );
+      };
 
-    const onRenderItem = (item: IOverflowSetItemProps): JSX.Element => {
-      return (
-        <IconButton
-          menuIconProps={{ iconName: 'Edit' }}
-          styles={{ root: { color: NeutralColors.black } }}
-          onClick={item.onClick}
-        />
-      );
-    };
+      const onRenderOverflowButton = (overflowItems: any[] | undefined): JSX.Element => {
+        return (
+          <IconButton
+            hidden
+            menuIconProps={{ iconName: 'More' }}
+            menuProps={{ items: overflowItems || [] }}
+            role="menuitem"
+            styles={{ root: { color: NeutralColors.black, visibility: isAllTab ? 'hidden' : 'visiable' } }}
+            title="More options"
+          />
+        );
+      };
 
-    const onRenderOverflowButton = (overflowItems: any[] | undefined): JSX.Element => {
-      return (
-        <IconButton
-          menuIconProps={{ iconName: 'More' }}
-          menuProps={{ items: overflowItems || [] }}
-          role="menuitem"
-          styles={{ root: { color: NeutralColors.black } }}
-          title="More options"
-        />
-      );
-    };
+      const onRenderTitle = () => {
+        return (
+          <div className={classNames.groupHeader}>
+            {isImportedSource && (
+              <Fragment>
+                {isSourceFromUrl && (
+                  <Fragment>
+                    <span>Source: </span>
+                    <Link className={classNames.groupHeaderSourceName} onClick={noOp}>
+                      {groupName}
+                    </Link>
+                  </Fragment>
+                )}
+                {!isSourceFromUrl && <div>{groupName}</div>}
 
-    const onRenderTitle = () => {
-      return (
-        <div className={classNames.groupHeader}>
-          {isImportedSource && (
-            <Fragment>
-              {isSourceFromUrl && (
-                <Fragment>
-                  <span>Source: </span>
-                  <Link className={classNames.groupHeaderSourceName} onClick={noOp}>
-                    {groupName}
-                  </Link>
-                </Fragment>
-              )}
-              {!isSourceFromUrl && <div>{groupName}</div>}
-
-              <OverflowSet
-                aria-label={formatMessage('Edit source')}
-                items={[
-                  {
-                    key: 'edit',
-                    name: 'edit',
-                    onClick: () => {
-                      setEditQnAFile(containerQnAFile);
-                    },
-                  },
-                ]}
-                overflowItems={
-                  [
+                <OverflowSet
+                  aria-label={formatMessage('Edit source')}
+                  items={[
                     {
                       key: 'edit',
-                      name: formatMessage('Show code'),
-                      iconProps: { iconName: 'CodeEdit' },
+                      name: 'edit',
                       onClick: () => {
-                        navigateTo(`/bot/${projectId}/knowledge-base/${dialogId}/edit?C=${containerId}`);
+                        setEditQnAFile(containerQnAFile);
                       },
                     },
-                    {
-                      key: 'delete',
-                      iconProps: { iconName: 'Delete' },
-                      name: formatMessage('Delete knowledge base'),
-                      onClick: async () => {
-                        if (!qnaFile) return;
-                        await removeQnAImport({ id: qnaFile.id, sourceId: containerId });
-                        await removeQnAFile({ id: containerId });
+                  ]}
+                  overflowItems={
+                    [
+                      {
+                        key: 'edit',
+                        name: formatMessage('Show code'),
+                        iconProps: { iconName: 'CodeEdit' },
+                        onClick: () => {
+                          navigateTo(`/bot/${projectId}/knowledge-base/${dialogId}/edit?C=${containerId}`);
+                        },
                       },
-                    },
-                  ] as IOverflowSetItemProps[]
-                }
-                role="menubar"
-                onRenderItem={onRenderItem}
-                onRenderOverflowButton={onRenderOverflowButton}
-              />
-            </Fragment>
-          )}
-          {!isImportedSource && <div>{groupName}</div>}
-        </div>
-      );
-    };
-    if (props) {
-      return (
-        <Fragment>
-          <GroupHeader {...props} selectionMode={SelectionMode.none} onRenderTitle={onRenderTitle}></GroupHeader>
-          <div>
-            <ActionButton
-              data-testid={'addQnAPairButton'}
-              iconProps={{ iconName: 'Add', styles: addIcon }}
-              styles={AddTemplateButton}
-              onClick={() => {
-                onCreateNewQnAPairs(props.group?.key);
-                actions.setMessage('item added');
-              }}
-            >
-              {formatMessage('Add QnA Pair')}
-            </ActionButton>
+                      {
+                        key: 'delete',
+                        iconProps: { iconName: 'Delete' },
+                        name: formatMessage('Delete knowledge base'),
+                        disabled: dialogId === 'all',
+                        onClick: async () => {
+                          if (!qnaFile) return;
+                          await removeQnAImport({ id: qnaFile.id, sourceId: containerId });
+                          await removeQnAFile({ id: containerId });
+                        },
+                      },
+                    ] as IOverflowSetItemProps[]
+                  }
+                  role="menubar"
+                  onRenderItem={onRenderItem}
+                  onRenderOverflowButton={onRenderOverflowButton}
+                />
+              </Fragment>
+            )}
+            {!isImportedSource && <div>{groupName}</div>}
           </div>
-          <div css={divider}> </div>
-        </Fragment>
-      );
-    }
+        );
+      };
+      if (props) {
+        return (
+          <Fragment>
+            <GroupHeader {...props} selectionMode={SelectionMode.none} onRenderTitle={onRenderTitle}></GroupHeader>
+            <div>
+              <ActionButton
+                data-testid={'addQnAPairButton'}
+                iconProps={{ iconName: 'Add', styles: addIcon }}
+                styles={AddTemplateButton}
+                onClick={() => {
+                  onCreateNewQnAPairs(props.group?.key);
+                  actions.setMessage('item added');
+                }}
+              >
+                {formatMessage('Add QnA Pair')}
+              </ActionButton>
+            </div>
+            <div css={divider}> </div>
+          </Fragment>
+        );
+      }
 
-    return null;
-  };
+      return null;
+    },
+    [dialogId]
+  );
 
   const getTableColums = () => {
     const tableColums = [
@@ -515,15 +522,22 @@ const TableView: React.FC<TableViewProps> = (props) => {
           return (
             <div data-is-focusable css={formCell} style={{ marginTop: '10px' }}>
               {item.usedIn.map(({ id, displayName }) => {
-                return <Link key={id}>{displayName}</Link>;
+                return (
+                  <Link
+                    key={id}
+                    onClick={() => {
+                      navigateTo(`/bot/${projectId}/knowledge-base/${id}`);
+                    }}
+                  >
+                    {displayName}
+                  </Link>
+                );
               })}
             </div>
           );
         },
       },
-    ];
-    if (dialogId !== 'all') {
-      const extraOperations = {
+      {
         key: 'buttons',
         name: '',
         minWidth: 50,
@@ -544,47 +558,26 @@ const TableView: React.FC<TableViewProps> = (props) => {
             />
           );
         },
-      };
-      tableColums.push(extraOperations);
+      },
+    ];
+    if (dialogId !== 'all') {
+      tableColums.splice(3, 1);
     }
 
-    // all view, show used in column
-    if (dialogId === 'all') {
-      const beenUsedColumn = {
-        key: 'usedIn',
-        name: formatMessage('Used In'),
-        fieldName: 'usedIn',
-        minWidth: 100,
-        maxWidth: 100,
-        isResizable: true,
-        isCollapsable: true,
-        data: 'string',
-        onRender: (item) => {
-          return (
-            <div data-is-focusable css={formCell} style={{ marginTop: '4px' }}>
-              <div aria-label={formatMessage(`id is {id}`, { id: item.dialogId })} css={content} tabIndex={-1}>
-                {item.dialogId}
-              </div>
-            </div>
-          );
-        },
-      };
-      tableColums.splice(3, 0, beenUsedColumn);
-    }
     return tableColums;
   };
 
   const [groups, setGroups] = useState<IGroup[] | undefined>(undefined);
   const getGroups = (): IGroup[] | undefined => {
-    let currentFiles = importedSourceFiles;
+    let containerFiles = currentDialogImportedSourceFiles;
     if (dialogId === 'all') {
-      currentFiles = qnaFiles;
+      containerFiles = allSourceFiles;
     } else {
       if (!qnaFile) return undefined;
     }
 
     const newGroups: IGroup[] = [];
-    currentFiles.forEach((currentFile) => {
+    containerFiles.forEach((currentFile) => {
       const lastGroup = newGroups[newGroups.length - 1];
       const startIndex = lastGroup ? lastGroup.startIndex + lastGroup.count : 0;
       const { id, qnaSections } = currentFile;
