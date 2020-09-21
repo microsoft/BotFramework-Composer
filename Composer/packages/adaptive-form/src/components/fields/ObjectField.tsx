@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import React, { useRef } from 'react';
+import React from 'react';
 import { FieldProps } from '@bfc/extension-client';
 
 import { getOrderedProperties } from '../../utils';
@@ -8,8 +8,6 @@ import { FormRow } from '../FormRow';
 
 const ObjectField: React.FC<FieldProps<object>> = function ObjectField(props) {
   const { schema, uiOptions, depth, value, label, ...rest } = props;
-  const valueRef = useRef(value);
-  valueRef.current = value;
 
   if (!schema) {
     return null;
@@ -18,7 +16,7 @@ const ObjectField: React.FC<FieldProps<object>> = function ObjectField(props) {
   const newDepth = depth + 1;
 
   const handleChange = (field: string) => (data: any) => {
-    const newData = { ...valueRef.current };
+    const newData = { ...value };
 
     if (typeof data === 'undefined' || (typeof data === 'string' && data.length === 0)) {
       delete newData[field];
