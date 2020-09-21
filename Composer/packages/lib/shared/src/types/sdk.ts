@@ -18,8 +18,8 @@ export interface BaseSchema {
   $copy?: string;
   /** Extra information for the Bot Framework Composer. */
   $designer?: DesignerData;
-  /** If 'disabled' set to true, runtime will skip this action. */
-  disabled?: any;
+  /** If 'disabled' equals to or be evaluated as 'true', runtime will skip this action. */
+  disabled?: boolean | string;
 }
 
 /* Union of components which implement the IActivityTemplate interface */
