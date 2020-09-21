@@ -11,7 +11,7 @@ const inPath = process.argv[2];
 
 // eslint-disable-next-line security/detect-non-literal-fs-filename
 const inJson = JSON.parse(fs.readFileSync(inPath));
-const outPath = path.join(path.dirname(inPath), 'en-US.tsv');
+const outPath = path.join(path.dirname(inPath), 'en-US.csv');
 
 // eslint-disable-next-line security/detect-non-literal-fs-filename
 const outTSV = fs.createWriteStream(outPath);
@@ -22,6 +22,4 @@ for (const key in inJson) {
   array.push({ Key: key, Message: inJson[key].message.replace(/(\r\n|\r|\n)/g, '\\n') });
 }
 
-csv.writeToStream(outTSV, array, {
-  delimiter: '\t',
-});
+csv.writeToStream(outTSV, array);

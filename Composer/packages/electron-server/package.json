@@ -26,9 +26,9 @@
     "l10n:extract": "cross-env NODE_ENV=production format-message extract -g underscored_crc32 -o locales/en-US.json l10ntemp/**/*.js",
     "l10n:extractJson": "node ../../scripts/l10n-extractJson.js",
     "l10n:transform": "node ../../scripts/l10n-transform.js",
-    "l10n:makeTSV": "node ../../scripts/l10n-makeTSV.js locales/en-US.json",
+    "l10n:makeCSV": "node ../../scripts/l10n-makeCSV.js locales/en-US.json",
     "l10n:babel": "babel . --extensions \".ts,.tsx,.jsx,.js\" --out-dir l10ntemp --presets=@babel/typescript --plugins=@babel/plugin-proposal-class-properties --ignore \"**/__tests__\",\"**/node_modules\",\"**/build/**/*.js\"",
-    "l10n": "yarn l10n:babel && yarn l10n:extract && yarn l10n:transform locales/en-US.json && yarn l10n:makeTSV && rimraf l10ntemp"
+    "l10n": "yarn l10n:babel && yarn l10n:extract && yarn l10n:transform locales/en-US.json && yarn l10n:makeCSV && rimraf l10ntemp"
   },
   "devDependencies": {
     "@types/archiver": "^3.1.0",
