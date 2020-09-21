@@ -14,3 +14,5 @@ packages/server/schemas/*.uischema
 packages/server/src/locales/en-US.tsv
 !packages/server/schemas/sdk.schema
 !packages/server/schemas/sdk.uischema
+
+packages/electron-server/locales/en-US.tsv
