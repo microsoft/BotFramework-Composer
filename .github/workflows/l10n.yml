@@ -1,0 +1,20 @@
+name: daily l10n run
+
+on:
+  schedule:
+    - cron: "0 0 * * 1-5"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Runs a set of commands using the runners shell
+      - name: cd into Composer and run l10n scripts
+        run: |
+          cd Composer
+          yarn l10n
+          
