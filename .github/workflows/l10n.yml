@@ -11,10 +11,17 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
 
       # Runs a set of commands using the runners shell
-      - name: cd into Composer and run l10n scripts
+      - name: run l10n scripts
         run: |
           cd Composer
           yarn l10n
-          
+
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: find and localize new strings
+          commit_author: Localization Bot c/o Ben Yackley <beyackle@microsoft.com>
+
