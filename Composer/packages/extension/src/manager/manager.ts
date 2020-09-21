@@ -163,14 +163,14 @@ class ExtensionManager {
    * @param query The search query
    */
   public async search(query: string) {
-    const { stdout } = await npm('search', `keywords:botframework-composer ${query}`, { '--json': '' });
+    const { stdout } = await npm('search', `keywords:botframework-composer extension ${query}`, { '--json': '' });
 
     try {
       const result = JSON.parse(stdout);
       if (Array.isArray(result)) {
         result.forEach((searchResult) => {
           const { name, keywords = [], version, description, links } = searchResult;
-          if (keywords.includes('botframework-composer')) {
+          if (keywords.includes('botframework-composer') && keywords.includes('extension')) {
             const url = links?.npm ?? '';
             this.searchCache.set(name, {
               id: name,
