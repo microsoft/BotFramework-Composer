@@ -59,7 +59,7 @@ const DialogTitle = () => {
 };
 
 export const CreateQnAFromUrlModal: React.FC<CreateQnAFromModalProps> = (props) => {
-  const { onDismiss, onSubmit, dialogId, qnaFiles } = props;
+  const { onDismiss, onSubmit, dialogId, projectId, qnaFiles } = props;
   const actions = useRecoilValue(dispatcherState);
 
   formConfig.name.validate = validateName(qnaFiles);
@@ -133,14 +133,14 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromModalProps> = (props) 
             styles={{ root: { float: 'left' } }}
             text={formatMessage('Create knowledge base from scratch')}
             onClick={() => {
-              actions.createQnAFromScratchDialogBegin({ dialogId });
+              actions.createQnAFromScratchDialogBegin({ dialogId, projectId });
             }}
           />
         )}
         <DefaultButton
           text={formatMessage('Cancel')}
           onClick={() => {
-            actions.createQnAFromUrlDialogCancel();
+            actions.createQnAFromUrlDialogCancel({ projectId });
             onDismiss && onDismiss();
           }}
         />

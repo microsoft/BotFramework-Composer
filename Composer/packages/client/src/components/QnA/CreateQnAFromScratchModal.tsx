@@ -36,9 +36,9 @@ const DialogTitle = () => {
 };
 
 export const CreateQnAFromScratchModal: React.FC<CreateQnAFromModalProps> = (props) => {
-  const { onDismiss, onSubmit, qnaFiles, dialogId } = props;
+  const { onDismiss, onSubmit, qnaFiles, dialogId, projectId } = props;
   const actions = useRecoilValue(dispatcherState);
-  const showCreateQnAFromUrlDialog = useRecoilValue(showCreateQnAFromUrlDialogState);
+  const showCreateQnAFromUrlDialog = useRecoilValue(showCreateQnAFromUrlDialogState(projectId));
 
   formConfig.name.validate = validateName(qnaFiles);
   const { formData, updateField, hasErrors, formErrors } = useForm(formConfig);
@@ -80,14 +80,14 @@ export const CreateQnAFromScratchModal: React.FC<CreateQnAFromModalProps> = (pro
           <DefaultButton
             text={formatMessage('Back')}
             onClick={() => {
-              actions.createQnAFromScratchDialogCancel(dialogId);
+              actions.createQnAFromScratchDialogCancel({ dialogId, projectId });
             }}
           />
         )}
         <DefaultButton
           text={formatMessage('Cancel')}
           onClick={() => {
-            actions.createQnAFromScratchDialogCancel();
+            actions.createQnAFromScratchDialogCancel({ projectId });
             onDismiss && onDismiss();
           }}
         />

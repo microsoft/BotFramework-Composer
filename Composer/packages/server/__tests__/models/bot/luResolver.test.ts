@@ -205,12 +205,6 @@ describe('QnA Resolver', () => {
     language: 'en-us',
   };
 
-  const resultOfGuide = {
-    content: '> guide.source.qna',
-    id: '/users/foo/mybot/knowledge-base/source/guide.source.qna',
-    language: 'en-us',
-  };
-
   it('should resolve ./*', async () => {
     const case1 = resolver('a.en-us.qna', [{ filePath: './*', includeInCollate: true }]);
     expect(case1.length).toEqual(1);

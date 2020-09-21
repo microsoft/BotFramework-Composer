@@ -13,8 +13,9 @@ import CreateQnAFromUrlModal from './CreateQnAFromUrlModal';
 import { CreateQnAFromModalProps } from './constants';
 
 export const CreateQnAModal: React.FC<CreateQnAFromModalProps> = (props) => {
-  const showCreateQnAFromScratchDialog = useRecoilValue(showCreateQnAFromScratchDialogState);
-  const showCreateQnAFromUrlDialog = useRecoilValue(showCreateQnAFromUrlDialogState);
+  const { projectId } = props;
+  const showCreateQnAFromScratchDialog = useRecoilValue(showCreateQnAFromScratchDialogState(projectId));
+  const showCreateQnAFromUrlDialog = useRecoilValue(showCreateQnAFromUrlDialogState(projectId));
 
   if (showCreateQnAFromScratchDialog) {
     return <CreateQnAFromScratchModal {...props}></CreateQnAFromScratchModal>;

@@ -152,6 +152,7 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
         )}
         <CreateQnAModal
           dialogId={createOnDialogId || dialogId}
+          projectId={projectId}
           qnaFiles={qnaFiles}
           onDismiss={() => {
             actions.createQnAFromUrlDialogCancel({ projectId });

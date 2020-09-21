@@ -45,6 +45,12 @@ jest.mock('@bfc/indexers', () => {
         content,
       }),
     },
+    qnaIndexer: {
+      parse: (content, id) => ({
+        id,
+        content,
+      }),
+    },
     lgUtil: {
       parse: (id, content) => ({
         id,
@@ -52,6 +58,12 @@ jest.mock('@bfc/indexers', () => {
       }),
     },
     luUtil: {
+      parse: (id, content) => ({
+        id,
+        content,
+      }),
+    },
+    qnaUtil: {
       parse: (id, content) => ({
         id,
         content,
@@ -120,9 +132,9 @@ describe('dialog dispatcher', () => {
       states: [
         { recoilState: dialogsState(projectId), initialValue: [{ id: '1' }, { id: '2' }] },
         { recoilState: dialogSchemasState(projectId), initialValue: [{ id: '1' }, { id: '2' }] },
-        { recoilState: lgFilesState(projectId), initialValue: [{ id: '1' }, { id: '2' }] },
-        { recoilState: luFilesState(projectId), initialValue: [{ id: '1' }, { id: '2' }] },
-        { recoilState: qnaFilesState(projectId), initialValue: [{ id: '1' }, { id: '2' }] },
+        { recoilState: lgFilesState(projectId), initialValue: [{ id: '1.en-us' }, { id: '2.en-us' }] },
+        { recoilState: luFilesState(projectId), initialValue: [{ id: '1.en-us' }, { id: '2.en-us' }] },
+        { recoilState: qnaFilesState(projectId), initialValue: [{ id: '1.en-us' }, { id: '2.en-us' }] },
         { recoilState: schemasState(projectId), initialValue: { sdk: { content: '' } } },
       ],
       dispatcher: {
@@ -138,17 +150,17 @@ describe('dialog dispatcher', () => {
 
   it('removes a dialog file', async () => {
     await act(async () => {
-      await dispatcher.createDialog({ id: '1', content: 'abcde', projectId });
+      await dispatcher.createDialog({ id: '3', content: 'abcde', projectId });
     });
     await act(async () => {
-      await dispatcher.removeDialog('1', projectId);
+      await dispatcher.removeDialog('3', projectId);
     });
 
-    expect(renderedComponent.current.dialogs).toEqual([{ id: '2' }]);
-    expect(renderedComponent.current.dialogSchemas).toEqual([{ id: '2' }]);
-    expect(renderedComponent.current.lgFiles).toEqual([{ id: '2' }]);
-    expect(renderedComponent.current.luFiles).toEqual([{ id: '2' }]);
-    expect(renderedComponent.current.qnaFiles).toEqual([{ id: '2' }]);
+    expect(renderedComponent.current.dialogs).toEqual([{ id: '1' }, { id: '2' }]);
+    expect(renderedComponent.current.dialogSchemas).toEqual([{ id: '1' }, { id: '2' }]);
+    expect(renderedComponent.current.lgFiles).toEqual([{ id: '1.en-us' }, { id: '2.en-us' }]);
+    expect(renderedComponent.current.luFiles).toEqual([{ id: '1.en-us' }, { id: '2.en-us' }]);
+    expect(renderedComponent.current.qnaFiles).toEqual([{ id: '1.en-us' }, { id: '2.en-us' }]);
   });
 
   it('updates a dialog file', async () => {

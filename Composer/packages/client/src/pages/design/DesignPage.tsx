@@ -48,6 +48,7 @@ import {
   showAddSkillDialogModalState,
   actionsSeedState,
   localeState,
+  qnaFilesState,
 } from '../../recoilModel';
 import { CreateQnAModal } from '../../components/QnA';
 import { triggerNotSupported } from '../../utils/dialogValidator';
@@ -110,6 +111,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const { location, dialogId, projectId = '' } = props;
   const userSettings = useRecoilValue(userSettingsState);
 
+  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   const schemas = useRecoilValue(schemasState(projectId));
   const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
   const displaySkillManifest = useRecoilValue(displaySkillManifestState(projectId));
@@ -305,7 +307,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
               displayName: currentDialog?.displayName ?? '',
             }),
             onClick: () => {
-              createQnAFromUrlDialogBegin({});
+              createQnAFromUrlDialogBegin({ projectId });
             },
           },
         ],
@@ -671,7 +673,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             onSubmit={onTriggerCreationSubmit}
           />
         )}
-        <CreateQnAModal dialogId={dialogId} qnaFiles={qnaFiles} onSubmit={handleCreateQnA} />)
+        <CreateQnAModal dialogId={dialogId} projectId={projectId} qnaFiles={qnaFiles} onSubmit={handleCreateQnA} />)
         {displaySkillManifest && (
           <DisplayManifestModal
             manifestId={displaySkillManifest}

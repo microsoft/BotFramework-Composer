@@ -22,6 +22,7 @@ export interface CreateQnAFormData {
 }
 
 export interface CreateQnAFromModalProps {
+  projectId: string;
   dialogId: string;
   qnaFiles: QnAFile[];
   subscriptionKey?: string;

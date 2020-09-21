@@ -11,12 +11,19 @@ import { showCreateQnAFromUrlDialogState } from '../../src/recoilModel';
 describe('<CreateQnAFromUrlModal />', () => {
   const onDismiss = jest.fn(() => {});
   const onSubmit = jest.fn(() => {});
+  const projectId = 'test-create-qna';
 
   it('renders <CreateQnAFromUrlModal /> and create from scratch', () => {
     const container = renderWithRecoil(
-      <CreateQnAFromUrlModal dialogId="test" qnaFiles={[]} onDismiss={onDismiss} onSubmit={onSubmit} />,
+      <CreateQnAFromUrlModal
+        dialogId="test"
+        projectId={projectId}
+        qnaFiles={[]}
+        onDismiss={onDismiss}
+        onSubmit={onSubmit}
+      />,
       ({ set }) => {
-        set(showCreateQnAFromUrlDialogState, true);
+        set(showCreateQnAFromUrlDialogState(projectId), true);
       }
     );
 
@@ -29,7 +36,13 @@ describe('<CreateQnAFromUrlModal />', () => {
 
   it('create with name/url and validate the value', () => {
     const container = renderWithRecoil(
-      <CreateQnAFromUrlModal dialogId="test" qnaFiles={[]} onDismiss={onDismiss} onSubmit={onSubmit} />,
+      <CreateQnAFromUrlModal
+        dialogId="test"
+        projectId={projectId}
+        qnaFiles={[]}
+        onDismiss={onDismiss}
+        onSubmit={onSubmit}
+      />,
       () => {}
     );
 
