@@ -207,6 +207,18 @@ async function getRecentProjects(req: Request, res: Response) {
   return res.status(200).json(projects);
 }
 
+async function generateProjectId(req: Request, res: Response) {
+  try {
+    const location = req.query.location;
+    const projectId = await BotProjectService.generateProjectId(location);
+    res.status(200).json(projectId);
+  } catch (ex) {
+    res.status(404).json({
+      message: 'Cannot generate project id',
+    });
+  }
+}
+
 async function updateFile(req: Request, res: Response) {
   const projectId = req.params.projectId;
   const user = await PluginLoader.getUserFromRequest(req);
@@ -253,22 +265,12 @@ async function removeFile(req: Request, res: Response) {
 }
 
 async function getSkill(req: Request, res: Response) {
-  const projectId = req.params.projectId;
-  const user = await PluginLoader.getUserFromRequest(req);
-
-  const currentProject = await BotProjectService.getProjectById(projectId, user);
-  if (currentProject !== undefined) {
-    try {
-      const content = await getSkillManifest(req.query.url);
-      res.status(200).json(content);
-    } catch (err) {
-      res.status(404).json({
-        message: err.message,
-      });
-    }
-  } else {
+  try {
+    const content = await getSkillManifest(req.query.url);
+    res.status(200).json(content);
+  } catch (err) {
     res.status(404).json({
-      message: 'No such bot project opened',
+      message: err.message,
     });
   }
 }
@@ -411,4 +413,5 @@ export const ProjectController = {
   getRecentProjects,
   updateBoilerplate,
   checkBoilerplateVersion,
+  generateProjectId,
 };

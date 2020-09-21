@@ -191,10 +191,10 @@ export interface BotInfo {
 }
 
 export interface BotProjectSpaceSkill {
-  workspace: string;
-  manifest: string;
+  workspace?: string;
+  manifest?: string;
   remote: boolean;
-  endpointName: string;
+  endpointName?: string;
 }
 
 export interface BotProjectSpace {

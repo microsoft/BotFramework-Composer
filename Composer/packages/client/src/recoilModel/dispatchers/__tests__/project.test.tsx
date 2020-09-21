@@ -28,7 +28,6 @@ import {
   schemasState,
   locationState,
   skillsState,
-  botOpeningState,
   botStatusState,
   botNameState,
 } from '../../atoms';

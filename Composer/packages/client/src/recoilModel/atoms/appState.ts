@@ -157,7 +157,7 @@ export const extensionsState = atom<ExtensionConfig[]>({
   default: [],
 });
 
-export const botProjectsSpaceState = atom<string[]>({
+export const botProjectSpaceProjectIds = atom<string[]>({
   key: getFullyQualifiedKey('botProjectsSpace'),
   default: [],
 });
@@ -167,7 +167,12 @@ export const currentProjectIdState = atom<string>({
   default: '',
 });
 
+export const botProjectSpaceLoadedState = atom<boolean>({
+  key: getFullyQualifiedKey('botProjectSpaceLoadedState'),
+  default: false,
+});
+
 export const botOpeningState = atom<boolean>({
-  key: getFullyQualifiedKey('botOpening'),
+  key: getFullyQualifiedKey('botOpeningState'),
   default: false,
 });
