@@ -19,7 +19,7 @@ import { NodeRendererContext, NodeRendererContextValue } from './contexts/NodeRe
 import { SelfHostContext } from './contexts/SelfHostContext';
 import { getCustomSchema } from './utils/getCustomSchema';
 import { SelectionContext } from './contexts/SelectionContext';
-import { enableKeyboardCommandAttributes, KeyboardCommandHandler } from './components/KeyboardZone';
+import { enableKeyboardCommandAttributes, handleMouseWheel, KeyboardCommandHandler } from './components/KeyboardZone';
 import { mapKeyboardCommandToEditorEvent } from './utils/mapKeyboardCommandToEditorEvent';
 import { useSelectionEffect } from './hooks/useSelectionEffect';
 import { useEditorEventApi } from './hooks/useEditorEventApi';
@@ -117,10 +117,18 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
   }, {} as FlowSchema);
 
   const divRef = useRef<HTMLDivElement>(null);
+  const containerId = 'container-div';
 
   // send focus to the keyboard area when navigating to a new trigger
   useEffect(() => {
     divRef.current?.focus();
+    divRef.current?.addEventListener(
+      'wheel',
+      function (event: WheelEvent) {
+        handleMouseWheel(event, containerId);
+      },
+      { passive: false }
+    );
   }, [focusedEvent]);
 
   const { selection, ...selectionContext } = useSelectionEffect({ data, nodeContext }, shellApi);
@@ -138,6 +146,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
           <div
             ref={divRef}
             css={styles}
+            id={containerId}
             tabIndex={0}
             onBlur={onBlur}
             onFocus={onFocus}
