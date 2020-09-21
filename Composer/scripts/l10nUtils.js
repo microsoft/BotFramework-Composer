@@ -1,16 +1,25 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-function keep(obj, keptFields, transform = (x) => x) {
+function keep(obj, keptFields, transform = (x) => x, outputArray = null) {
   const out = {};
   for (const key of Object.keys(obj)) {
     if (keptFields.includes(key) && typeof obj[key] === 'string') {
       out[key] = transform(obj[key]);
     }
     if (typeof obj[key] === 'object') {
-      const value = keep(obj[key], keptFields, transform);
+      const value = keep(obj[key], keptFields, transform, outputArray);
       if (Object.keys(value).length === 0) continue;
       out[key] = value;
+    }
+  }
+  if (outputArray != null) {
+    const tempObj = {};
+    for (const field of keptFields) {
+      if (field in obj) tempObj[field] = obj[field];
+    }
+    if (Object.keys(tempObj).length > 0) {
+      outputArray.push(tempObj);
     }
   }
   return out;
