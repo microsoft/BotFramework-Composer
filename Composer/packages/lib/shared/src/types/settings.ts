@@ -20,6 +20,13 @@ export interface AppUpdaterSettings {
   useNightly: boolean;
 }
 
+export interface SkillSetting {
+  name: string;
+  manifestUrl: string;
+  msAppId: string;
+  endpointUrl: string;
+}
+
 export interface DialogSetting {
   MicrosoftAppId?: string;
   MicrosoftAppPassword?: string;
@@ -34,12 +41,7 @@ export interface DialogSetting {
   defaultLanguage: string;
   languages: string[];
   skill?: {
-    [skillName: string]: {
-      name: string;
-      manifestUrl: string;
-      msAppId: string;
-      endpointUrl: string;
-    };
+    [skillName: string]: SkillSetting;
   };
   botId?: string;
   skillHostEndpoint?: string;
