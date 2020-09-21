@@ -1,0 +1,1124 @@
+title,description
+Tooling property,Open ended property for tooling.
+Template,Language Generator template to use to create the activity
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Microsoft ActivityTemplate,
+Tooling property,Open ended property for tooling.
+Id,Optional dialog ID.
+Auto end dialog,"If set to true the dialog will automatically end when there are no further actions.  If set to false, remember to manually end the dialog using EndDialog action."
+Default result property,Value that will be passed back to the parent dialog.
+Recognizer,Input recognizer that interprets user input into intent and entities.
+Language Generator,Language generator that generates bot responses.
+Selector,"Policy to determine which trigger is executed. Defaults to a 'best match' selector (optional)."
+Event triggers,Event triggers for handling events.
+Triggers,List of triggers defined for this dialog.
+Reference to JSON schema,Reference to JSON schema .dialog file.
+Schema,Schema to fill in.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Adaptive Dialog,"Flexible, data driven dialog that can adapt to the conversation."
+Tooling property,Open ended property for tooling.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Age Entity Recognizer,Recognizer which recognizes age.
+Tooling property,Open ended property for tooling.
+Name,Name of the property
+Expected Properties,Properties expected from the user.
+Default Operation,Sets the default operation that will be used when no operation is recognized in the response to this Ask.
+Id,Optional id for the dialog
+Disabled,Optional condition which if true will disable this action.
+Activity,Activity to send.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Send Activity to Ask a question,This is an action which sends an activity to the user when a response is expected
+Tooling property,Open ended property for tooling.
+Object,Attachment object.
+Default value,"'Property' will be set to the object or the result of this expression when max turn count is exceeded."
+Object,Attachment object.
+Value,"'Property' will be set to the object or the result of this expression unless it evaluates to null."
+Standard format,Standard output formats.
+Output format,Attachment output format.
+Id,Optional id for the dialog
+Disabled,Optional condition which if true will disable this action.
+Initial prompt,Message to send to collect information.
+Unrecognized prompt,Message to send when max turn count (if specified) has been exceeded and the default value is selected as the value.
+Invalid prompt,Message to send when the user input does not meet any validation expression.
+Default value response,Message to send when max turn count (if specified) has been exceeded and the default value is selected as the value.
+Max turn count,Maximum number of re-prompt attempts to collect information.
+Condition,Expression which needs to met for the input to be considered valid
+Validation expressions,Expression to validate user input.
+Property,"Property to store collected information. Input will be skipped if property has value (unless 'Always prompt' is true)."
+Always prompt,"Collect information even if the specified 'property' is not empty."
+Allow Interruptions,A boolean expression that determines whether the parent should be allowed to interrupt the input.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Attachment input dialog,Collect information - Ask for a file or image.
+Tooling property,Open ended property for tooling.
+Id,Optional id for the dialog
+Disabled,Optional condition which if true will disable this action.
+Dialog,
+Dialog name,Name of the dialog to call.
+Options,Options for dialog.
+Options,One or more options that are passed to the dialog that is called.
+Activity Processed,"When set to false, the dialog that is called can process the current activity."
+Property,Property to store any value returned by the dialog that is called.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Begin a dialog,Begin another dialog.
+Tooling property,Open ended property for tooling.
+Id,Optional id for the skill dialog
+Disabled,Optional condition which if true will disable this action.
+Activity Processed,"When set to false, the skill will be started using the activity in the current turn context instead of the activity in the Activity property."
+Property,Property to store any value returned by the dialog that is called.
+Skill host bot ID,The Microsoft App ID that will be calling the skill.
+Skill host,The callback Url for the skill host.
+OAuth Connection Name (SSO),"The OAuth Connection Name, that would be used to perform Single SignOn with a skill."
+Skill App ID,The Microsoft App ID for the skill.
+Skill endpoint ,The /api/messages endpoint for the skill.
+Activity,The activity to send to the skill.
+Allow Interruptions,A boolean expression that determines whether the parent should be allowed to interrupt the skill.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Begin a skill,Begin a remote skill.
+Tooling property,Open ended property for tooling.
+Id,Optional id for the dialog
+Disabled,Optional condition which if true will disable this action.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Break Loop,Stop executing this loop
+Tooling property,Open ended property for tooling.
+Id,Optional id for the dialog
+Disabled,Optional condition which if true will disable this action.
+Activity Processed,"When set to false, the caller dialog is told it should process the current activity."
+Event name,Name of the event to emit.
+Event value,Value to emit with the event (optional).
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Cancel all dialogs,Cancel all active dialogs. All dialogs in the dialog chain will need a trigger to capture the event configured in this action.
+Tooling property,Open ended property for tooling.
+Id,Optional id for the dialog
+Disabled,Optional condition which if true will disable this action.
+Activity Processed,"When set to false, the caller dialog is told it should process the current activity."
+Event name,Name of the event to emit.
+Event value,Value to emit with the event (optional).
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Cancel all dialogs,Cancel all active dialogs. All dialogs in the dialog chain will need a trigger to capture the event configured in this action.
+Tooling property,Open ended property for tooling.
+Default value,"'Property' will be set to the value of this expression when max turn count is exceeded."
+Value,"'Property' will be set to the value of this expression unless it evaluates to null."
+Standard,Standard output format.
+Output format,Sets the desired choice output format (either value or index into choices).
+Simple choice,One choice for choice input.
+Simple choices,Simple choices to choose from.
+Value,Value to return when this choice is selected.
+Action,Card action for the choice.
+Synonym,Synonym for value.
+Synonyms,List of synonyms to recognize in addition to the value (optional).
+Structured choice,Structured choice to choose from.
+Structured choices,Choices that allow full control.
+Array of choices,Choices to choose from.
+Default locale,The default locale to use to parse confirmation choices if there is not one passed by the caller.
+List style,Standard list style.
+List style,Sets the ListStyle to control how choices are rendered.
+Inline separator,Character used to separate individual choices when there are more than 2 choices
+Inline or,Separator inserted between the choices when there are only 2 choices
+Inline or more,Separator inserted between the last 2 choices when their are more than 2 choices.
+Include numbers,"If true, 'inline' and 'list' list style will be prefixed with the index of the choice."
+Object,Choice options object.
+Choice options,Sets the choice options used for controlling how choices are combined.
+No value,"If true, the choices value field will NOT be search over"
+No action,"If true, the choices action.title field will NOT be searched over"
+Recognize numbers,"If true, the number recognizer will be used to recognize an index response (1,2,3...) to the prompt."
+Recognize ordinals,"If true, the ordinal recognizer will be used to recognize ordinal response (first/second/...) to the prompt."
+Object,Options for recognizer.
+Recognizer options,Sets how to recognize choices in the response
+Id,Optional id for the dialog
+Disabled,Optional condition which if true will disable this action.
+Initial prompt,Message to send to collect information.
+Unrecognized prompt,Message to send when max turn count (if specified) has been exceeded and the default value is selected as the value.
+Invalid prompt,Message to send when the user input does not meet any validation expression.
+Default value response,Message to send when max turn count (if specified) has been exceeded and the default value is selected as the value.
+Max turn count,Maximum number of re-prompt attempts to collect information.
+Condition,Expression which needs to met for the input to be considered valid
+Validation expressions,Expression to validate user input.
+Property,"Property to store collected information. Input will be skipped if property has value (unless 'Always prompt' is true)."
+Always prompt,"Collect information even if the specified 'property' is not empty."
+Allow Interruptions,A boolean expression that determines whether the parent should be allowed to interrupt the input.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Choice input dialog,Collect information - Pick from a list of choices
+Tooling property,Open ended property for tooling.
+Condition,Expression to evaluate
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Conditional Trigger Selector,Use a rule selector based on a condition
+Tooling property,Open ended property for tooling.
+Output format,Optional expression to use to format the output.
+Default locale,The Default locale or an expression which provides the default locale to use as default if not found in the activity.
+Standard style,Standard style for rendering choices.
+List style,Sets the ListStyle to control how choices are rendered.
+Inline separator,Text to separate individual choices when there are more than 2 choices
+Inline or,Text to be inserted between the choices when their are only 2 choices
+Inline or more,Text to be inserted between the last 2 choices when their are more than 2 choices.
+Include numbers,"If true, inline and list style choices will be prefixed with the index of the choice."
+Choice options,Choice options.
+Choice Options,Choice Options or expression which provides Choice Options to control display choices to the user.
+Default value,"'Property' will be set to the value of this expression when max turn count is exceeded."
+Value,"'Property' will be set to the value of this expression unless it evaluates to null."
+Simple choice,Simple choice to confirm.
+Simple choices,Simple choices to confirm from.
+Value,Value to return when this choice is selected.
+Action,Card action for the choice.
+Synonym,Synonym for choice.
+Synonyms,List of synonyms to recognize in addition to the value (optional).
+Choice,Choice to confirm.
+Structured choices,Structured choices for confirmations.
+Array of choice objects,Array of simple or structured choices.
+Id,Optional id for the dialog
+Disabled,Optional condition which if true will disable this action.
+Initial prompt,Message to send to collect information.
+Unrecognized prompt,Message to send when max turn count (if specified) has been exceeded and the default value is selected as the value.
+Invalid prompt,Message to send when the user input does not meet any validation expression.
+Default value response,Message to send when max turn count (if specified) has been exceeded and the default value is selected as the value.
+Max turn count,Maximum number of re-prompt attempts to collect information.
+Condition,Expression which needs to met for the input to be considered valid
+Validation expressions,Expression to validate user input.
+Property,"Property to store collected information. Input will be skipped if property has value (unless 'Always prompt' is true)."
+Always prompt,"Collect information even if the specified 'property' is not empty."
+Allow Interruptions,A boolean expression that determines whether the parent should be allowed to interrupt the input.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Confirm input dialog,Collect information - Ask for confirmation (yes or no).
+Tooling property,Open ended property for tooling.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Confirmation Entity Recognizer,Recognizer which recognizes confirmation choices (yes/no).
+Tooling property,Open ended property for tooling.
+Id,Optional id for the dialog
+Disabled,Optional condition which if true will disable this action.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Continue Loop,Stop executing this template and continue with the next iteration of the loop.
+Tooling property,Open ended property for tooling.
+Id,Optional unique id using with RecognizerSet.
+Recognizers,List of Recognizers defined for this set.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Cross-trained Recognizer Set,Recognizer for selecting between cross trained recognizers.
+Tooling property,Open ended property for tooling.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Currency Entity Recognizer,Recognizer which recognizes currency.
+Tooling property,Open ended property for tooling.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+DateTime Entity Recognizer,Recognizer which recognizes dates and time fragments.
+Default locale,Default locale.
+Tooling property,Open ended property for tooling.
+Default Date,"'Property' will be set to the value or the result of the expression when max turn count is exceeded."
+Value,"'Property' will be set to the value or the result of the expression unless it evaluates to null."
+Output format,Expression to use for formatting the output.
+Id,Optional id for the dialog
+Disabled,Optional condition which if true will disable this action.
+Initial prompt,Message to send to collect information.
+Unrecognized prompt,Message to send when max turn count (if specified) has been exceeded and the default value is selected as the value.
+Invalid prompt,Message to send when the user input does not meet any validation expression.
+Default value response,Message to send when max turn count (if specified) has been exceeded and the default value is selected as the value.
+Max turn count,Maximum number of re-prompt attempts to collect information.
+Condition,Expression which needs to met for the input to be considered valid
+Validation expressions,Expression to validate user input.
+Property,"Property to store collected information. Input will be skipped if property has value (unless 'Always prompt' is true)."
+Always prompt,"Collect information even if the specified 'property' is not empty."
+Allow Interruptions,A boolean expression that determines whether the parent should be allowed to interrupt the input.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Date/time input dialog,Collect information - Ask for date and/ or time
+Tooling property,Open ended property for tooling.
+Id,Optional id for the dialog
+Disabled,Optional condition which if true will disable this action.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Debugger break,"If debugger is attached, stop the execution at this point in the conversation."
+Tooling property,Open ended property for tooling.
+Id,Optional id for the dialog
+ActivityId,expression to an activityId to delete
+Disabled,Optional condition which if true will disable this action.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Delete Activity,Delete an activity that was previously sent.
+Tooling property,Open ended property for tooling.
+Id,Optional id for the dialog
+Disabled,Optional condition which if true will disable this action.
+Property,Property to delete.
+Properties,Properties to delete.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Delete Properties,Delete multiple properties and any value it holds.
+Tooling property,Open ended property for tooling.
+Id,Optional id for the dialog
+Disabled,Optional condition which if true will disable this action.
+Property,Property to delete.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Delete Property,Delete a property and any value it holds.
+Tooling property,Open ended property for tooling.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Dimension Entity Recognizer,Recognizer which recognizes dimension.
+Tooling property,Open ended property for tooling.
+Id,Optional id for the dialog
+Disabled,Optional condition which if true will disable this action.
+Standard change,Standard change types.
+Type of change,Type of change to apply to the current actions.
+Actions,Actions to apply.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Edit actions.,Edit the current list of actions.
+Tooling property,Open ended property for tooling.
+Id,Optional id for the dialog
+Enum,Standard change type.
+Type of change,Type of change to the array in memory.
+Disabled,Optional condition which if true will disable this action.
+Items property,Property that holds the array to update.
+Result Property,Property to store the result of this action.
+Value,New value or expression.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Edit array,Modify an array in memory
+Tooling property,Open ended property for tooling.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Email Entity Recognizer,Recognizer which recognizes email.
+Tooling property,Open ended property for tooling.
+Id,Optional id for the dialog
+Disabled,Optional condition which if true will disable this action.
+Built-in event,Standard event type.
+Custom event,Custom event type
+Event name,Name of the event to emit.
+Event value,Value to emit with the event (optional).
+Bubble event,If true this event is passed on to parent dialogs.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Emit a custom event,Emit an event. Capture this event with a trigger.
+Tooling property,Open ended property for tooling.
+Id,Optional id for the dialog
+Disabled,Optional condition which if true will disable this action.
+Value,Result value returned to the parent dialog.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+End dialog,End this dialog.
+Tooling property,Open ended property for tooling.
+Id,Optional id for the dialog
+Disabled,Optional condition which if true will disable this action.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+End turn,End the current turn without ending the dialog.
+Tooling property,Open ended property for tooling.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+First Trigger Selector,Selector for first true rule
+Tooling property,Open ended property for tooling.
+Id,Optional id for the dialog
+Disabled,Optional condition which if true will disable this action.
+Items property,Property that holds the array.
+Index property,Property that holds the index of the item.
+Value property,Property that holds the value of the item.
+Actions,"Actions to execute for each item. Use '$foreach.value' to access the value of each item. Use '$foreach.index' to access the index of each item."
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+For each item,Execute actions on each item in an a collection.
+Tooling property,Open ended property for tooling.
+Id,Optional id for the dialog
+Disabled,Optional condition which if true will disable this action.
+Items property,Property that holds the array.
+Actions,"Actions to execute for each page. Use '$foreach.page' to access each page."
+Index property,Property that holds the index of the page.
+Page property,Property that holds the value of the page.
+Page size,Number of items in each page.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+For each page,Execute actions on each page (collection of items) in an array.
+Tooling property,Open ended property for tooling.
+Id,Optional id for the dialog
+Property,Property (named location to store information).
+ActivityId,Activity ID or expression to an activityId to use to get the members. If none is defined then the current activity id will be used.
+Disabled,Optional condition which if true will disable this action.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Get Activity Members,Get the members who are participating in an activity. (BotFrameworkAdapter only)
+Tooling property,Open ended property for tooling.
+Id,Optional id for the dialog
+Property,Property (named location to store information).
+Disabled,Optional condition which if true will disable this action.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Get Converation Members,Get the members who are participating in an conversation. (BotFrameworkAdapter only)
+Tooling property,Open ended property for tooling.
+Id,Optional id for the dialog
+Disabled,Optional condition which if true will disable this action.
+Action Id,Action Id to execute next
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Go to Action,Go to an an action by id.
+Tooling property,Open ended property for tooling.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Guid Entity Recognizer,Recognizer which recognizes guids.
+Tooling property,Open ended property for tooling.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Hashtag Entity Recognizer,Recognizer which recognizes Hashtags.
+Tooling property,Open ended property for tooling.
+Id,Optional id for the dialog
+Disabled,Optional condition which if true will disable this action.
+HTTP method,HTTP method to use.
+Url,URL to call (supports data binding).
+Body,Body to include in the HTTP call (supports data binding).
+Result property,"A property to store the result of this action. The result can include any of the 4 properties from the HTTP response: statusCode, reasonPhrase, content, and headers. If the content is JSON it will be a deserialized object. The values can be accessed via .content for example."
+Content type,Content media type for the body.
+Headers,One or more headers to include in the request (supports data binding).
+Standard response,Standard response type.
+Response type,"Defines the type of HTTP response. Automatically calls the 'Send a response' action if set to 'Activity' or 'Activities'."
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+HTTP request,Make a HTTP request.
+Microsoft ActivityTemplates,"Components which are ActivityTemplate, which is string template, an activity, or a implementation of ActivityTemplate"
+Microsoft Dialogs,Components which derive from Dialog
+Reference to Microsoft.IEntityRecognizer,Reference to Microsoft.IEntityRecognizer .dialog file.
+Entity Recognizers,Components which derive from EntityRecognizer.
+Microsoft LanguageGenerator,Components which dervie from the LanguageGenerator class
+Microsoft Recognizer,Components which derive from Recognizer class
+Microsoft TextTemplate,Components which derive from TextTemplate class
+Reference to Microsoft.ITrigger,Reference to Microsoft.ITrigger .dialog file.
+Microsoft Triggers,Components which derive from OnCondition class.
+Reference to Microsoft.ITriggerSelector,Reference to Microsoft.ITriggerSelector .dialog file.
+Selectors,Components which derive from TriggerSelector class.
+Tooling property,Open ended property for tooling.
+Id,Optional id for the dialog
+Condition,Expression to evaluate.
+Disabled,Optional condition which if true will disable this action.
+Actions,Actions to execute if condition is true.
+Else,Actions to execute if condition is false.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+If condition,Two-way branch the conversation flow based on a condition.
+Tooling property,Open ended property for tooling.
+Id,Optional id for the dialog
+Disabled,Optional condition which if true will disable this action.
+Initial prompt,Message to send to collect information.
+Unrecognized prompt,Message to send when max turn count (if specified) has been exceeded and the default value is selected as the value.
+Invalid prompt,Message to send when the user input does not meet any validation expression.
+Default value response,Message to send when max turn count (if specified) has been exceeded and the default value is selected as the value.
+Max turn count,Maximum number of re-prompt attempts to collect information.
+Condition,Expression which needs to met for the input to be considered valid
+Validation expressions,Expression to validate user input.
+Property,"Property to store collected information. Input will be skipped if property has value (unless 'Always prompt' is true)."
+Always prompt,"Collect information even if the specified 'property' is not empty."
+Allow Interruptions,A boolean expression that determines whether the parent should be allowed to interrupt the input.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Tooling property,Open ended property for tooling.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Ip Entity Recognizer,Recognizer which recognizes internet IP patterns (like 192.1.1.1).
+Locale,Locale like en-us.
+Per-locale policy,Language policy per locale.
+Tooling property,Open ended property for tooling.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Language Policy,This represents a policy map for locales lookups to use for language
+Tooling property,Open ended property for tooling.
+Id,Optional id for the dialog
+Disabled,Optional condition which if true will disable this action.
+Text,Information to log.
+Label,Label for the trace activity (used to identify it in a list of trace activities.)
+Send Trace Activity,"If true, automatically sends a TraceActivity (view in Bot Framework Emulator)."
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Log to console,Log a message to the host application. Send a TraceActivity to Bot Framework Emulator (optional).
+Tooling property,Open ended property for tooling.
+Id,"Optional unique id using with RecognizerSet.  Other recognizers should return 'DeferToRecognizer_{Id}' intent when cross training data for this recognizer."
+LUIS Application ID,Application ID for your model from the LUIS service.
+LUIS Endpoint,Endpoint to use for LUIS service like https://westus.api.cognitive.microsoft.com.
+LUIS prediction key,LUIS prediction key used to call endpoint.
+External Entity Recognizer,Entities recognized by this recognizer will be passed to LUIS as external entities.
+Entity,Entity to extend with a dynamic list.
+Canonical form,Resolution if any synonym matches.
+Synonym,Synonym for canonical form.
+Synonyms,List of synonyms for a canonical form.
+List entry,Canonical form and synonynms.
+Dynamic list,List of canonical forms and synonyms.
+Entity list,Lists of canonical values and synonyms for an entity.
+Dynamic lists,Runtime defined entity lists.
+Include all intents,"True for all intents, false for only top intent."
+Include $instance,True to include $instance metadata in the LUIS response.
+Log utterances,True to log utterances on LUIS service.
+Prefer External Entities,True to prefer external entities to those generated by LUIS models.
+Slot,Slot to use for talking to LUIS service like production or staging.
+Version,LUIS application version to use.
+Prediction options,Options to control LUIS prediction behavior.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+LUIS Recognizer,LUIS recognizer.
+Tooling property,Open ended property for tooling.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Mentions Entity Recognizer,Recognizer which recognizes @Mentions
+Tooling property,Open ended property for tooling.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Most Specific Trigger Selector,Select most specific true events with optional additional selector
+Tooling property,Open ended property for tooling.
+Id,"Optional unique id using with RecognizerSet.  Other recognizers should return 'DeferToRecognizer_{Id}' intent when cross training data for this recognizer."
+Language policy,Defines fall back languages to try per user input language.
+Recognizers,Map of language -> Recognizer
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Multi-language recognizer,Configure one recognizer per language and the specify the language fallback policy.
+Tooling property,Open ended property for tooling.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Number Entity Recognizer,Recognizer which recognizes numbers.
+Tooling property,Open ended property for tooling.
+Default value,"'Property' will be set to the value of this expression when max turn count is exceeded."
+Value,"'Property' will be set to the value of this expression unless it evaluates to null."
+Output format,Expression to format the number output.
+Default locale,Default locale to use if there is no locale available..
+Id,Optional id for the dialog
+Disabled,Optional condition which if true will disable this action.
+Initial prompt,Message to send to collect information.
+Unrecognized prompt,Message to send when max turn count (if specified) has been exceeded and the default value is selected as the value.
+Invalid prompt,Message to send when the user input does not meet any validation expression.
+Default value response,Message to send when max turn count (if specified) has been exceeded and the default value is selected as the value.
+Max turn count,Maximum number of re-prompt attempts to collect information.
+Condition,Expression which needs to met for the input to be considered valid
+Validation expressions,Expression to validate user input.
+Property,"Property to store collected information. Input will be skipped if property has value (unless 'Always prompt' is true)."
+Always prompt,"Collect information even if the specified 'property' is not empty."
+Allow Interruptions,A boolean expression that determines whether the parent should be allowed to interrupt the input.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Number input dialog,Collect information - Ask for a number.
+Tooling property,Open ended property for tooling.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+NumberRange Entity Recognizer,Recognizer which recognizes ranges of numbers (Example:2 to 5).
+Tooling property,Open ended property for tooling.
+Connection name,The connection name configured in Azure Web App Bot OAuth settings.
+Disabled,Optional condition which if true will disable this action.
+Text,Text shown in the OAuth signin card.
+Title,Title shown in the OAuth signin card.
+Timeout,Time out setting for the OAuth signin card.
+Token property,Property to store the OAuth token result.
+Invalid prompt,Message to send if user response is invalid.
+Default value response,Message to send when max turn count (if specified) has been exceeded and the default value is selected as the value.
+Max turn count,Maximum number of re-prompt attempts to collect information.
+Default value,Expression to examine on each turn of the conversation as possible value to the property.
+Allow Interruptions,A boolean expression that determines whether the parent should be allowed to interrupt the input.
+Always prompt,"Collect information even if the specified 'property' is not empty."
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+[object Object],
+OAuthInput Dialog,Collect login information.
+Tooling property,Open ended property for tooling.
+Activity type,The Activity.Type to match
+Condition,Condition (expression).
+Actions,Sequence of actions to execute.
+Priority,Priority for trigger with 0 being the highest and < 0 ignored.
+Run Once,True if rule should run once per unique conditions
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+On activity,Actions to perform on receipt of a generic activity.
+Tooling property,Open ended property for tooling.
+Property,Property that will be set after entity is selected.
+Entity,Entity being put into property
+Operation,Operation for assigning entity.
+Condition,Condition (expression).
+Actions,Sequence of actions to execute.
+Priority,Priority for trigger with 0 being the highest and < 0 ignored.
+Run Once,True if rule should run once per unique conditions
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+On entity assignment,Actions to take when an entity should be assigned to a property.
+Tooling property,Open ended property for tooling.
+Condition,Condition (expression).
+Actions,Sequence of actions to execute.
+Priority,Priority for trigger with 0 being the highest and < 0 ignored.
+Run Once,True if rule should run once per unique conditions
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+On begin dialog,Actions to perform when this dialog begins.
+Tooling property,Open ended property for tooling.
+Condition,Condition (expression).
+Actions,Sequence of actions to execute.
+Priority,Priority for trigger with 0 being the highest and < 0 ignored.
+Run Once,True if rule should run once per unique conditions
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+On cancel dialog,Actions to perform on cancel dialog event.
+Tooling property,Open ended property for tooling.
+Property to be set,Property that will be set after entity is selected.
+Ambiguous entity,Ambiguous entity
+Condition,Condition (expression).
+Actions,Sequence of actions to execute.
+Priority,Priority for trigger with 0 being the highest and < 0 ignored.
+Run Once,True if rule should run once per unique conditions
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+On choose entity,Actions to be performed when an entity value needs to be resolved.
+Tooling property,Open ended property for tooling.
+Intent,Intent name to trigger on.
+Intents,Intents that must be in the ChooseIntent result for this condition to trigger.
+Condition,Condition (expression).
+Actions,Sequence of actions to execute.
+Priority,Priority for trigger with 0 being the highest and < 0 ignored.
+Run Once,True if rule should run once per unique conditions
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+On ambigious intent,Actions to perform on when an intent is ambigious.
+Tooling property,Open ended property for tooling.
+Entity being assigned,Entity being assigned to property choice
+Property name,Possible property to choose.
+Possible properties,Properties to be chosen between.
+Entity name,Entity name being chosen between.
+Entities,Ambiguous entity names.
+Condition,Condition (expression).
+Actions,Sequence of actions to execute.
+Priority,Priority for trigger with 0 being the highest and < 0 ignored.
+Run Once,True if rule should run once per unique conditions
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+On choose property,Actions to take when there are multiple possible mappings of entities to properties.
+Tooling property,Open ended property for tooling.
+Condition,Condition (expression).
+Actions,Sequence of actions to execute.
+Priority,Priority for trigger with 0 being the highest and < 0 ignored.
+Run Once,True if rule should run once per unique conditions
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+On condition,Actions to perform when specified condition is true.
+Tooling property,Open ended property for tooling.
+Condition,Condition (expression).
+Actions,Sequence of actions to execute.
+Priority,Priority for trigger with 0 being the highest and < 0 ignored.
+Run Once,True if rule should run once per unique conditions
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+On Continue Conversation,Actions to perform when a conversation is started up again from a ContinueConversationLater action.
+Tooling property,Open ended property for tooling.
+Condition,Condition (expression).
+Actions,Sequence of actions to execute.
+Priority,Priority for trigger with 0 being the highest and < 0 ignored.
+Run Once,True if rule should run once per unique conditions
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+On ConversationUpdate activity,"Actions to perform on receipt of an activity with type 'ConversationUpdate'."
+Tooling property,Open ended property for tooling.
+Dialog event name,Name of dialog event.
+Condition,Condition (expression).
+Actions,Sequence of actions to execute.
+Priority,Priority for trigger with 0 being the highest and < 0 ignored.
+Run Once,True if rule should run once per unique conditions
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+On dialog event,Actions to perform when a specific dialog event occurs.
+Tooling property,Open ended property for tooling.
+Condition,Condition (expression).
+Actions,Sequence of actions to execute.
+Priority,Priority for trigger with 0 being the highest and < 0 ignored.
+Run Once,True if rule should run once per unique conditions
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+On end of actions,Actions to take when there are no more actions in the current dialog.
+Tooling property,Open ended property for tooling.
+Condition,Condition (expression).
+Actions,Sequence of actions to execute.
+Priority,Priority for trigger with 0 being the highest and < 0 ignored.
+Run Once,True if rule should run once per unique conditions
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+On EndOfConversation activity,"Actions to perform on receipt of an activity with type 'EndOfConversation'."
+Tooling property,Open ended property for tooling.
+Condition,Condition (expression).
+Actions,Sequence of actions to execute.
+Priority,Priority for trigger with 0 being the highest and < 0 ignored.
+Run Once,True if rule should run once per unique conditions
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+On Error,"Action to perform when an 'Error' dialog event occurs."
+Tooling property,Open ended property for tooling.
+Condition,Condition (expression).
+Actions,Sequence of actions to execute.
+Priority,Priority for trigger with 0 being the highest and < 0 ignored.
+Run Once,True if rule should run once per unique conditions
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+On Event activity,"Actions to perform on receipt of an activity with type 'Event'."
+Tooling property,Open ended property for tooling.
+Condition,Condition (expression).
+Actions,Sequence of actions to execute.
+Priority,Priority for trigger with 0 being the highest and < 0 ignored.
+Run Once,True if rule should run once per unique conditions
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+On Handoff activity,"Actions to perform on receipt of an activity with type 'HandOff'."
+Tooling property,Open ended property for tooling.
+Intent,Name of intent.
+Entity,Entity that must be present.
+Entities,Required entities.
+Condition,Condition (expression).
+Actions,Sequence of actions to execute.
+Priority,Priority for trigger with 0 being the highest and < 0 ignored.
+Run Once,True if rule should run once per unique conditions
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+On intent recognition,Actions to perform when specified intent is recognized.
+Tooling property,Open ended property for tooling.
+Condition,Condition (expression).
+Actions,Sequence of actions to execute.
+Priority,Priority for trigger with 0 being the highest and < 0 ignored.
+Run Once,True if rule should run once per unique conditions
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+On Invoke activity,"Actions to perform on receipt of an activity with type 'Invoke'."
+Tooling property,Open ended property for tooling.
+Condition,Condition (expression).
+Actions,Sequence of actions to execute.
+Priority,Priority for trigger with 0 being the highest and < 0 ignored.
+Run Once,True if rule should run once per unique conditions
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+On Message activity,"Actions to perform on receipt of an activity with type 'Message'. Overrides Intent trigger."
+Tooling property,Open ended property for tooling.
+Condition,Condition (expression).
+Actions,Sequence of actions to execute.
+Priority,Priority for trigger with 0 being the highest and < 0 ignored.
+Run Once,True if rule should run once per unique conditions
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+On MessageDelete activity,"Actions to perform on receipt of an activity with type 'MessageDelete'."
+Tooling property,Open ended property for tooling.
+Condition,Condition (expression).
+Actions,Sequence of actions to execute.
+Priority,Priority for trigger with 0 being the highest and < 0 ignored.
+Run Once,True if rule should run once per unique conditions
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+On MessageReaction activity,"Actions to perform on receipt of an activity with type 'MessageReaction'."
+Tooling property,Open ended property for tooling.
+Condition,Condition (expression).
+Actions,Sequence of actions to execute.
+Priority,Priority for trigger with 0 being the highest and < 0 ignored.
+Run Once,True if rule should run once per unique conditions
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+On MessageUpdate activity,"Actions to perform on receipt of an activity with type 'MessageUpdate'."
+Tooling property,Open ended property for tooling.
+Condition,Condition (expression).
+Actions,Sequence of actions to execute.
+Priority,Priority for trigger with 0 being the highest and < 0 ignored.
+Run Once,True if rule should run once per unique conditions
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+On QnAMaker Match,Actions to perform on when an match from QnAMaker is found.
+Tooling property,Open ended property for tooling.
+Condition,Condition (expression).
+Actions,Sequence of actions to execute.
+Priority,Priority for trigger with 0 being the highest and < 0 ignored.
+Run Once,True if rule should run once per unique conditions
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+On RepromptDialog,"Actions to perform when 'RepromptDialog' event occurs."
+Tooling property,Open ended property for tooling.
+Condition,Condition (expression).
+Actions,Sequence of actions to execute.
+Priority,Priority for trigger with 0 being the highest and < 0 ignored.
+Run Once,True if rule should run once per unique conditions
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+On Typing activity,"Actions to perform on receipt of an activity with type 'Typing'."
+Tooling property,Open ended property for tooling.
+Condition,Condition (expression).
+Actions,Sequence of actions to execute.
+Priority,Priority for trigger with 0 being the highest and < 0 ignored.
+Run Once,True if rule should run once per unique conditions
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+On unknown intent,"Action to perform when user input is unrecognized or if none of the 'on intent recognition' triggers match recognized intent."
+Tooling property,Open ended property for tooling.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Ordinal Entity Recognizer,"Recognizer which recognizes ordinals (example: first, second, 3rd)."
+Tooling property,Open ended property for tooling.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Percentage Entity Recognizer,Recognizer which recognizes percentages.
+Tooling property,Open ended property for tooling.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Phone Number Entity Recognizer,Recognizer which recognizes phone numbers.
+Tooling property,Open ended property for tooling.
+KnowledgeBase Id,KnowledgeBase Id of your QnA Maker KnowledgeBase.
+Endpoint Key,Endpoint key for the QnA Maker KB.
+Hostname,Hostname for your QnA Maker service.
+Fallback answer,Default answer to return when none found in KB.
+Threshold,Threshold score to filter results.
+Active learning card title,Title for active learning suggestions card.
+Card no match text,Text for no match option.
+Card no match response,Custom response when no match option was selected.
+Name,Name of filter property.
+Value,Value to filter on.
+Metadata filter,Metadata filter.
+Strict Filters,Metadata filters to use when calling the QnA Maker KB.
+Top,The number of answers you want to retrieve.
+IsTest,"True, if pointing to Test environment, else false."
+Standard ranker,Standard ranker types.
+Ranker Type,Type of Ranker.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+QnAMaker Dialog,Dialog which uses QnAMAker knowledge base to answer questions.
+Tooling property,Open ended property for tooling.
+Id,Optional unique id using with RecognizerSet.
+KnowledgeBase Id,KnowledgeBase Id of your QnA Maker KnowledgeBase.
+Endpoint Key,Endpoint key for the QnA Maker KB.
+Hostname,Hostname for your QnA Maker service.
+Threshold,Threshold score to filter results.
+Name,Name to filter on.
+Value,Value to restrict filter.
+Metadata filters,Metadata filters to use when querying QnA Maker KB.
+Strict Filters,Metadata filters to use when calling the QnA Maker KB.
+Top,The number of answers you want to retrieve.
+IsTest,"True, if pointing to Test environment, else false."
+Ranker type,Type of Ranker.
+Ranker Type,Type of Ranker.
+Include Dialog Name,"When set to false, the dialog name will not be passed to QnAMaker. (default) is true"
+Name,Name of value to test.
+Value,Value to filter against.
+Metadata filter,Metadata filter to use when calling the QnA Maker KB.
+Metadata filters,Metadata filters to use when calling the QnA Maker KB.
+QnARequestContext,Context to use for ranking.
+QnAId,A number or expression which is the QnAId to paass to QnAMaker API.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+QnAMaker Recognizer,Recognizer for generating QnAMatch intents from a KB.
+Tooling property,Open ended property for tooling.
+Random seed,Random seed to start random number generation.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Random rule selector,Select most specific true rule.
+Tooling property,Open ended property for tooling.
+Id,"Optional unique id using with RecognizerSet.  Other recognizers should return 'DeferToRecognizer_{Id}' intent when cross training data for this recognizer."
+Recognizers,List of Recognizers defined for this set.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Recognizer Set,Creates the union of the intents and entities of the recognizers in the set.
+Tooling property,Open ended property for tooling.
+Name,Name of the entity
+Pattern,Pattern expressed as regular expression.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Regex Entity Recognizer,Recognizer which recognizes patterns of input based on regex.
+Tooling property,Open ended property for tooling.
+Id,"Optional unique id using with RecognizerSet.  Other recognizers should return 'DeferToRecognizer_{Id}' intent when cross training data for this recognizer."
+Intent,The intent name.
+Pattern,The regular expression pattern.
+Pattern,Intent and regex pattern.
+RegEx patterns to intents,Collection of patterns to match for an intent.
+Entity recognizers,Collection of entity recognizers to use.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Regex recognizer,Use regular expressions to recognize intents and entities from user input.
+Tooling property,Open ended property for tooling.
+Id,Optional id for the dialog
+AllowLoop,Optional condition which if true will allow loop of the repeated dialog.
+Disabled,Optional condition which if true will disable this action.
+Options,Options for repeating dialog.
+Options,One or more options that are passed to the dialog that is called.
+Activity Processed,"When set to false, the dialog that is called can process the current activity."
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Repeat dialog,Repeat current dialog.
+Tooling property,Open ended property for tooling.
+Id,Optional id for the dialog
+Disabled,Optional condition which if true will disable this action.
+Dialog,
+Dialog name,Name of the dialog to call.
+Options,Options for replacing dialog.
+Options,One or more options that are passed to the dialog that is called.
+Activity Processed,"When set to false, the dialog that is called can process the current activity."
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Replace dialog,Replace current dialog with another dialog.
+Tooling property,Open ended property for tooling.
+Id,Optional generator ID.
+Resource Id,Resource which is the root language generator.  Other generaters with the same name and language suffix will be loaded into this generator and used based on the Language Policy.
+Language Policy,"Set alternate language policy for this generator.  If not set, the global language policy will be used."
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Resource Multi-Language Generator,MultiLanguage Generator which is bound to resource by resource Id.
+Tooling property,Open ended property for tooling.
+Id,Optional id for the dialog
+Disabled,Optional condition which if true will disable this action.
+Activity,Activity to send.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Send an activity,Respond with an activity.
+Tooling property,Open ended property for tooling.
+Id,Optional id for the dialog
+Disabled,Optional condition which if true will disable this action.
+Property,Property (named location to store information).
+Value,New value or expression.
+Assignment,Property assignment.
+Assignments,Property value assignments to set.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Set property,Set one or more property values.
+Tooling property,Open ended property for tooling.
+Id,Optional id for the dialog
+Disabled,Optional condition which if true will disable this action.
+Property,Property (named location to store information).
+Value,New value or expression.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Set property,Set property to a value.
+Tooling property,Open ended property for tooling.
+Id,Optional id for the dialog
+UserId,Expression to an user to signout. Default is user.id.
+Connection Name,Connection name that was used with OAuthInput to log a user in.
+Disabled,Optional condition which if true will disable this action.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Sign Out User,Sign a user out that was logged in previously using OAuthInput.
+Tooling property,Open ended property for tooling.
+Activity,A static Activity to used.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Microsoft Static Activity Template,This allows you to define a static Activity object
+Tooling property,Open ended property for tooling.
+Id,Optional id for the dialog
+Condition,Property to evaluate.
+Disabled,Optional condition which if true will disable this action.
+Value,The value to compare the condition with.
+Actions,Actions to execute.
+Case,Case and actions.
+Cases,Actions for each possible condition.
+Default,Actions to execute if none of the cases meet the condition.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Switch condition,Execute different actions based on the value of a property.
+Tooling property,Open ended property for tooling.
+Id,Optional id for the dialog
+Disabled,Optional condition which if true will disable this action.
+Event Name,The name of the event to track.
+Properties,One or more properties to attach to the event being tracked.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Telemetry - Track Event,Track a custom event using the registered Telemetry Client.
+Tooling property,Open ended property for tooling.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Temperature Recognizer,Recognizer which recognizes temperatures.
+Tooling property,Open ended property for tooling.
+Id,Optional generator ID.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Template Multi-Language Generator,Template Generator which allows only inline evaluation of templates.
+Tooling property,Open ended property for tooling.
+Default value,"'Property' will be set to the value of this expression when max turn count is exceeded."
+Value,"'Property' will be set to the value of this expression unless it evaluates to null."
+Output format,Expression to format the output.
+Id,Optional id for the dialog
+Disabled,Optional condition which if true will disable this action.
+Initial prompt,Message to send to collect information.
+Unrecognized prompt,Message to send when max turn count (if specified) has been exceeded and the default value is selected as the value.
+Invalid prompt,Message to send when the user input does not meet any validation expression.
+Default value response,Message to send when max turn count (if specified) has been exceeded and the default value is selected as the value.
+Max turn count,Maximum number of re-prompt attempts to collect information.
+Condition,Expression which needs to met for the input to be considered valid
+Validation expressions,Expression to validate user input.
+Property,"Property to store collected information. Input will be skipped if property has value (unless 'Always prompt' is true)."
+Always prompt,"Collect information even if the specified 'property' is not empty."
+Allow Interruptions,A boolean expression that determines whether the parent should be allowed to interrupt the input.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Text input dialog,Collection information - Ask for a word or sentence.
+Tooling property,Open ended property for tooling.
+Template,Language Generator template to evaluate to create the text.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Microsoft TextTemplate,Use LG Templates to create text
+Tooling property,Open ended property for tooling.
+Id,Optional id for the dialog
+Disabled,Optional condition which if true will disable this action.
+Name,Name of the trace activity
+Label,Label for the trace activity (used to identify it in a list of trace activities.)
+Value type,Type of value
+Value,Property that holds the value to send as trace activity.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Send a TraceActivity,Send a trace activity to the transcript logger and/ or Bot Framework Emulator.
+Tooling property,Open ended property for tooling.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+True Trigger Selector,Selector for all true events
+Tooling property,Open ended property for tooling.
+Id,Optional id for the dialog
+Disabled,Optional condition which if true will disable this action.
+Activity Id,An string expression with the activity id to update.
+Activity,Activity to send.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Send an activity,Respond with an activity.
+Tooling property,Open ended property for tooling.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Confirmation Url Recognizer,Recognizer which recognizes urls.
+Array,Array constant.
+Array or expression,Array or expression to evaluate.
+Boolean,Boolean constant.
+Boolean or expression,Boolean constant or expression to evaluate.
+Tooling property,Open ended property for tooling.
+Kind of dialog object,Defines the valid properties for the component you are configuring (from a dialog .schema file)
+Designer information,Extra information for the Bot Framework Composer.
+Boolean,Boolean value.
+Boolean condition,Boolean constant or expression to evaluate.
+Expression,Expression starting with =.
+Expression,Expression to evaluate.
+Integer,Integer constant.
+Integer or expression,Integer constant or expression to evaluate.
+Number,Number constant.
+Number or expression,Number constant or expression to evaluate.
+Object,Object constant.
+Object or expression,Object or expression to evaluate.
+$role,"Defines the role played in the dialog schema from [expression|interface|implements($kind)|extends($kind)]."
+String,Interpolated string
+String or expression,Interpolated string or expression to evaluate.
+Object,Object constant.
+Array,Array constant.
+String,Interpolated string.
+Boolean,Boolean constant
+Number,Number constant.
+Any or expression,Any constant or expression to evaluate.
+[object Object],[object Object]
+Core schema meta-schema,
+id,"Channel id for the user or bot on this channel (Example: joe@smith.com, or @joesmith or
+123456)"
+name,Display friendly name
+aadObjectId,"This account's object ID within Azure Active Directory (AAD)"
+role,"Role of the entity behind the account (Example: User, Bot, etc.). Possible values include:
+'user', 'bot'"
+ChannelAccount,Channel account information needed to route a message
+isGroup,"Indicates whether the conversation contains more than two participants at the time the
+activity was generated"
+conversationType,Indicates the type of the conversation in channels that distinguish between conversation types
+id,"Channel id for the user or bot on this channel (Example: joe@smith.com, or @joesmith or
+123456)"
+name,Display friendly name
+aadObjectId,"This account's object ID within Azure Active Directory (AAD)"
+role,"Role of the entity behind the account (Example: User, Bot, etc.). Possible values include:
+'user', 'bot'"
+ConversationAccount,Channel account information for a conversation
+type,"Message reaction type. Possible values include: 'like', 'plusOne'"
+MessageReaction,Message reaction object
+type,"The type of action implemented by this button. Possible values include: 'openUrl', 'imBack',
+'postBack', 'playAudio', 'playVideo', 'showImage', 'downloadFile', 'signin', 'call',
+'payment', 'messageBack'"
+title,Text description which appears on the button
+image,"Image URL which will appear on the button, next to text label"
+text,Text for this action
+displayText,(Optional) text to display in the chat feed if the button is clicked
+value,Supplementary parameter for action. Content of this property depends on the ActionType
+channelData,Channel-specific data associated with this action
+[object Object],
+CardAction,A clickable action
+Id,Id of recipient.
+to,"Ids of the recipients that the actions should be shown to.  These Ids are relative to the
+channelId and a subset of all recipients of the activity"
+actions,Actions that can be shown to the user
+SuggestedActions,SuggestedActions that can be performed
+contentType,mimetype/Contenttype for the file
+contentUrl,Content Url
+content,Embedded content
+name,(OPTIONAL) The name of the attachment
+thumbnailUrl,(OPTIONAL) Thumbnail associated with attachment
+Attachment,An attachment within an activity
+type,Type of this entity (RFC 3987 IRI)
+Entity,Metadata object pertaining to an activity
+activityId,(Optional) ID of the activity to refer to
+user,(Optional) User participating in this conversation
+bot,Bot participating in this conversation
+conversation,Conversation reference
+channelId,Channel ID
+serviceUrl,Service endpoint where operations concerning the referenced conversation may be performed
+ConversationReference,An object relating to a particular point in a conversation
+text,Defines the snippet of text to highlight
+occurrence,"Occurrence of the text field within the referenced text, if multiple exist."
+TextHighlight,Refers to a substring of content within another field
+id,ID of this action
+entities,Entities associated with this action
+SemanticAction,Represents a reference to a programmatic action
+type,"Contains the activity type. Possible values include: 'message', 'contactRelationUpdate',
+'conversationUpdate', 'typing', 'endOfConversation', 'event', 'invoke', 'deleteUserData',
+'messageUpdate', 'messageDelete', 'installationUpdate', 'messageReaction', 'suggestion',
+'trace', 'handoff'"
+id,Contains an ID that uniquely identifies the activity on the channel.
+timestamp,"Contains the date and time that the message was sent, in UTC, expressed in ISO-8601 format."
+localTimestamp,"Contains the date and time that the message was sent, in local time, expressed in ISO-8601
+format.
+For example, 2016-09-23T13:07:49.4714686-07:00."
+localTimezone,"Contains the name of the timezone in which the message, in local time, expressed in IANA Time
+Zone database format.
+For example, America/Los_Angeles."
+serviceUrl,"Contains the URL that specifies the channel's service endpoint. Set by the channel."
+channelId,Contains an ID that uniquely identifies the channel. Set by the channel.
+from,Identifies the sender of the message.
+conversation,Identifies the conversation to which the activity belongs.
+recipient,Identifies the recipient of the message.
+textFormat,"Format of text fields Default:markdown. Possible values include: 'markdown', 'plain', 'xml'"
+attachmentLayout,"The layout hint for multiple attachments. Default: list. Possible values include: 'list',
+'carousel'"
+membersAdded,The collection of members added to the conversation.
+membersRemoved,The collection of members removed from the conversation.
+reactionsAdded,The collection of reactions added to the conversation.
+reactionsRemoved,The collection of reactions removed from the conversation.
+topicName,The updated topic name of the conversation.
+historyDisclosed,Indicates whether the prior history of the channel is disclosed.
+locale,"A locale name for the contents of the text field.
+The locale name is a combination of an ISO 639 two- or three-letter culture code associated
+with a language
+and an ISO 3166 two-letter subculture code associated with a country or region.
+The locale name can also correspond to a valid BCP-47 language tag."
+text,The text content of the message.
+speak,The text to speak.
+inputHint,"Indicates whether your bot is accepting,
+expecting, or ignoring user input after the message is delivered to the client. Possible
+values include: 'acceptingInput', 'ignoringInput', 'expectingInput'"
+summary,The text to display if the channel cannot render cards.
+suggestedActions,The suggested actions for the activity.
+attachments,Attachments
+entities,Represents the entities that were mentioned in the message.
+channelData,Contains channel-specific content.
+action,"Indicates whether the recipient of a contactRelationUpdate was added or removed from the
+sender's contact list."
+replyToId,Contains the ID of the message to which this message is a reply.
+label,A descriptive label for the activity.
+valueType,"The type of the activity's value object."
+value,A value that is associated with the activity.
+name,The name of the operation associated with an invoke or event activity.
+relatesTo,A reference to another conversation or activity.
+code,"The a code for endOfConversation activities that indicates why the conversation ended.
+Possible values include: 'unknown', 'completedSuccessfully', 'userCancelled', 'botTimedOut',
+'botIssuedInvalidMessage', 'channelFailed'"
+expiration,"The time at which the activity should be considered to be ""expired"" and should not be
+presented to the recipient."
+importance,"The importance of the activity. Possible values include: 'low', 'normal', 'high'"
+deliveryMode,"A delivery hint to signal to the recipient alternate delivery paths for the activity.
+The default delivery mode is ""default"". Possible values include: 'normal', 'notification'"
+Phrase,Phrase to listen for.
+listenFor,List of phrases and references that speech and language priming systems should listen for
+textHighlights,The collection of text fragments to highlight when the activity contains a ReplyToId value.
+semanticAction,An optional programmatic action accompanying this request
+Activity,An Activity is the basic communication type for the Bot Framework 3.0 protocol.
+Component kinds,These are all of the kinds that can be created by the loader.
