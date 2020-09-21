@@ -4,8 +4,8 @@
 import { TextField, ITextFieldProps } from 'office-ui-fabric-react/lib/TextField';
 import React from 'react';
 
-export class TestTextField extends React.Component<ITextFieldProps> {
-  shouldComponentUpdate(nextProps: ITextFieldProps, nextState) {
+export class WrappedTextField extends React.Component<ITextFieldProps> {
+  shouldComponentUpdate(nextProps: ITextFieldProps) {
     if (this.props.value !== nextProps.value) {
       return true;
     }

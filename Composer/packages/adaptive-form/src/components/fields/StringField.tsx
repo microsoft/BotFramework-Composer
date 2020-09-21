@@ -4,10 +4,11 @@
 import React from 'react';
 import { FieldProps } from '@bfc/extension-client';
 import { NeutralColors } from '@uifabric/fluent-theme';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import formatMessage from 'format-message';
 
 import { FieldLabel } from '../FieldLabel';
+
+import { WrappedTextField } from './WrappedTextField';
 
 export const borderStyles = (transparentBorder: boolean, error: boolean) =>
   transparentBorder
@@ -63,7 +64,7 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
   return (
     <>
       <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
-      <TextField
+      <WrappedTextField
         ariaLabel={label || formatMessage('string field')}
         disabled={disabled}
         errorMessage={error}

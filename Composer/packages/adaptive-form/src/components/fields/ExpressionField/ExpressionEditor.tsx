@@ -4,11 +4,10 @@
 import { FieldProps, useShellApi } from '@bfc/extension-client';
 import { IntellisenseTextField } from '@bfc/intellisense';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-// import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import React from 'react';
 
 import { getIntellisenseUrl } from '../../../utils/getIntellisenseUrl';
-import { TestTextField } from '../TestTextField';
+import { WrappedTextField } from '../WrappedTextField';
 
 const ExpressionEditor: React.FC<FieldProps> = (props) => {
   const { id, value = '', onChange, disabled, placeholder, readonly, error } = props;
@@ -25,7 +24,7 @@ const ExpressionEditor: React.FC<FieldProps> = (props) => {
       onChange={onChange}
     >
       {(textFieldValue, onValueChanged, onKeyDownTextField, onKeyUpTextField, onClickTextField) => (
-        <TestTextField
+        <WrappedTextField
           autoComplete="off"
           disabled={disabled}
           errorMessage={error}

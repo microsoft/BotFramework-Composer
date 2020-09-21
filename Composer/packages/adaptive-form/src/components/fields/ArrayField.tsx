@@ -3,7 +3,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useState } from 'react';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { SharedColors, NeutralColors, FontSizes } from '@uifabric/fluent-theme';
@@ -16,6 +15,7 @@ import { FieldLabel } from '../FieldLabel';
 import { arrayField } from './styles';
 import { ArrayFieldItem } from './ArrayFieldItem';
 import { UnsupportedField } from './UnsupportedField';
+import { WrappedTextField } from './WrappedTextField';
 
 const ArrayField: React.FC<FieldProps<unknown[]>> = (props) => {
   const {
@@ -79,7 +79,7 @@ const ArrayField: React.FC<FieldProps<unknown[]>> = (props) => {
       </div>
       <div css={arrayField.inputFieldContainer}>
         <div css={arrayField.field}>
-          <TextField
+          <WrappedTextField
             ariaLabel={formatMessage('New value')}
             data-testid="string-array-text-input"
             iconProps={{

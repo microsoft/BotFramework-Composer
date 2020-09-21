@@ -8,7 +8,7 @@ import { FieldProps, useShellApi } from '@bfc/extension-client';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { JSONSchema7 } from 'json-schema';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { TextField, ITextField } from 'office-ui-fabric-react/lib/TextField';
+import { ITextField } from 'office-ui-fabric-react/lib/TextField';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { FontSizes, NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
@@ -20,6 +20,7 @@ import { FieldLabel } from '../FieldLabel';
 import { objectArrayField } from './styles';
 import { ArrayFieldItem } from './ArrayFieldItem';
 import { UnsupportedField } from './UnsupportedField';
+import { WrappedTextField } from './WrappedTextField';
 
 const getNewPlaceholder = (props: FieldProps<any[]>, propertyName: string): string | undefined => {
   const { uiOptions } = props;
@@ -152,7 +153,7 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = (props) => {
                   if (typeof property === 'string') {
                     return (
                       <div key={index} css={objectArrayField.objectItemInputField}>
-                        <TextField
+                        <WrappedTextField
                           ariaLabel={lastField ? END_OF_ROW_LABEL : INSIDE_ROW_LABEL}
                           autoComplete="off"
                           componentRef={index === 0 ? firstNewFieldRef : undefined}

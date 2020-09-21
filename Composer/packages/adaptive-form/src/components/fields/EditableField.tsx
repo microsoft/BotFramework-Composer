@@ -2,10 +2,12 @@
 // Licensed under the MIT License.
 
 import React, { useState, useEffect } from 'react';
-import { TextField, ITextFieldStyles } from 'office-ui-fabric-react/lib/TextField';
+import { ITextFieldStyles } from 'office-ui-fabric-react/lib/TextField';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { mergeStyleSets } from '@uifabric/styling';
 import { FieldProps } from '@bfc/extension-client';
+
+import { WrappedTextField } from './WrappedTextField';
 
 interface EditableFieldProps extends Omit<FieldProps, 'definitions'> {
   fontSize?: string;
@@ -64,7 +66,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
       onMouseEnter={() => setEditing(true)}
       onMouseLeave={() => !hasFocus && setEditing(false)}
     >
-      <TextField
+      <WrappedTextField
         ariaLabel={ariaLabel}
         autoComplete="off"
         errorMessage={error as string}
