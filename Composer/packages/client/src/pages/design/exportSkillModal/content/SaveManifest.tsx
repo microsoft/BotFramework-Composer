@@ -41,9 +41,9 @@ export const getManifestId = (
   return fileId;
 };
 
-export const SaveManifest: React.FC<ContentProps> = ({ errors, manifest, setSkillManifest }) => {
-  const botName = useRecoilValue(botNameState);
-  const skillManifests = useRecoilValue(skillManifestsState);
+export const SaveManifest: React.FC<ContentProps> = ({ errors, manifest, setSkillManifest, projectId }) => {
+  const botName = useRecoilValue(botNameState(projectId));
+  const skillManifests = useRecoilValue(skillManifestsState(projectId));
 
   const { id } = manifest;
 

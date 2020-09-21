@@ -6,7 +6,7 @@ import * as React from 'react';
 import { RecoilRoot } from 'recoil';
 
 import { useLgApi } from '../../src/shell/lgApi';
-import { lgFilesState, localeState, projectIdState, dispatcherState } from '../../src/recoilModel';
+import { lgFilesState, localeState, dispatcherState, currentProjectIdState } from '../../src/recoilModel';
 import { Dispatcher } from '../../src/recoilModel/dispatchers';
 
 const state = {
@@ -39,9 +39,9 @@ describe('use lgApi hooks', () => {
     removeLgTemplateMock = jest.fn();
 
     initRecoilState = ({ set }) => {
-      set(projectIdState, state.projectId);
-      set(localeState, 'en-us');
-      set(lgFilesState, state.lgFiles);
+      set(currentProjectIdState, state.projectId);
+      set(localeState(state.projectId), 'en-us');
+      set(lgFilesState(state.projectId), state.lgFiles);
       set(dispatcherState, (current: Dispatcher) => ({
         ...current,
         updateLgTemplate: updateLgTemplateMock,
@@ -55,7 +55,7 @@ describe('use lgApi hooks', () => {
       const { children } = props;
       return <RecoilRoot initializeState={initRecoilState}>{children}</RecoilRoot>;
     };
-    const rendered = renderHook(() => useLgApi(), {
+    const rendered = renderHook(() => useLgApi(state.projectId), {
       wrapper,
     });
     result = rendered.result;
@@ -76,6 +76,7 @@ describe('use lgApi hooks', () => {
     expect(updateLgTemplateMock).toBeCalledTimes(1);
     const arg = {
       id: 'test.en-us',
+      projectId: state.projectId,
       template: {
         body: 'update',
         name: 'bar',
@@ -94,6 +95,7 @@ describe('use lgApi hooks', () => {
       id: 'test.en-us',
       fromTemplateName: 'from',
       toTemplateName: 'to',
+      projectId: state.projectId,
     };
     expect(copyLgTemplateMock).toBeCalledWith(arg);
   });
@@ -106,6 +108,7 @@ describe('use lgApi hooks', () => {
     const arg = {
       id: 'test.en-us',
       templateName: 'bar',
+      projectId: state.projectId,
     };
     expect(removeLgTemplateMock).toBeCalledWith(arg);
   });
@@ -117,6 +120,7 @@ describe('use lgApi hooks', () => {
     const arg = {
       id: 'test.en-us',
       templateNames: ['bar'],
+      projectId: state.projectId,
     };
     expect(removeLgTemplatesMock).toBeCalledWith(arg);
   });

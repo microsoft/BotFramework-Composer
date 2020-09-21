@@ -23,13 +23,19 @@ import { LuFile, LuIntentSection } from '@bfc/shared';
 import { EditableField } from '../../components/EditableField';
 import { getExtension } from '../../utils/fileUtil';
 import { languageListTemplates } from '../../components/MultiLanguage';
-import { dispatcherState, luFilesState, projectIdState, localeState, settingsState } from '../../recoilModel';
 import { navigateTo } from '../../utils/navigation';
-import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
+import {
+  dispatcherState,
+  luFilesState,
+  localeState,
+  settingsState,
+  validateDialogSelectorFamily,
+} from '../../recoilModel';
 
 import { formCell, luPhraseCell, tableCell } from './styles';
-interface TableViewProps extends RouteComponentProps<{}> {
+interface TableViewProps extends RouteComponentProps<{ dialogId: string; projectId: string }> {
   dialogId: string;
+  projectId: string;
 }
 
 interface Intent {
@@ -42,15 +48,16 @@ interface Intent {
 }
 
 const TableView: React.FC<TableViewProps> = (props) => {
-  const dialogs = useRecoilValue(validatedDialogsSelector);
-  const luFiles = useRecoilValue(luFilesState);
-  const projectId = useRecoilValue(projectIdState);
-  const locale = useRecoilValue(localeState);
-  const settings = useRecoilValue(settingsState);
+  const { dialogId, projectId } = props;
   const { updateLuIntent } = useRecoilValue(dispatcherState);
 
+  const luFiles = useRecoilValue(luFilesState(projectId));
+  const locale = useRecoilValue(localeState(projectId));
+  const settings = useRecoilValue(settingsState(projectId));
+  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+
   const { languages, defaultLanguage } = settings;
-  const { dialogId } = props;
+
   const activeDialog = dialogs.find(({ id }) => id === dialogId);
 
   const file = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
@@ -109,6 +116,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         id: fileId,
         intentName,
         intent,
+        projectId,
       };
       updateLuIntent(payload);
     },
@@ -122,6 +130,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           id: defaultLangFile.id,
           intentName,
           intent,
+          projectId,
         };
         updateLuIntent(payload);
       }

@@ -7,9 +7,9 @@ import { RouteComponentProps } from '@reach/router';
 import React, { useCallback, useState } from 'react';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
-import { Skill } from '@bfc/shared';
+import { SkillSetting } from '@bfc/shared';
 
-import { botNameState, settingsState, projectIdState, dispatcherState } from '../../recoilModel';
+import { dispatcherState, settingsState, botNameState } from '../../recoilModel';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { TestController } from '../../components/TestController/TestController';
 import { CreateSkillModal } from '../../components/CreateSkillModal';
@@ -18,12 +18,12 @@ import { ContainerStyle, ContentHeaderStyle, HeaderText } from './styles';
 import SkillSettings from './skill-settings';
 import SkillList from './skill-list';
 
-const Skills: React.FC<RouteComponentProps> = () => {
+const Skills: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
+  const { projectId = '' } = props;
   const [showAddSkillDialogModal, setShowAddSkillDialogModal] = useState(false);
 
-  const botName = useRecoilValue(botNameState);
-  const settings = useRecoilValue(settingsState);
-  const projectId = useRecoilValue(projectIdState);
+  const botName = useRecoilValue(botNameState(projectId));
+  const settings = useRecoilValue(settingsState(projectId));
   const { addSkill, setSettings } = useRecoilValue(dispatcherState);
 
   const toolbarItems: IToolbarItem[] = [
@@ -42,13 +42,13 @@ const Skills: React.FC<RouteComponentProps> = () => {
     },
     {
       type: 'element',
-      element: <TestController />,
+      element: <TestController projectId={projectId} />,
       align: 'right',
     },
   ];
 
   const onSubmitForm = useCallback(
-    (skill: Skill) => {
+    (skill: SkillSetting) => {
       addSkill(projectId, skill);
       setShowAddSkillDialogModal(false);
     },

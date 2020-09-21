@@ -7,13 +7,13 @@ import { RecoilRoot } from 'recoil';
 
 import { useTriggerApi } from '../../src/shell/triggerApi';
 import {
-  projectIdState,
   localeState,
   luFilesState,
   lgFilesState,
   dialogsState,
   schemasState,
   dispatcherState,
+  currentProjectIdState,
 } from '../../src/recoilModel';
 import { Dispatcher } from '../../src/recoilModel/dispatchers';
 
@@ -53,12 +53,12 @@ describe('use triggerApi hooks', () => {
     createLuIntentMock = jest.fn();
 
     const initRecoilState = ({ set }) => {
-      set(projectIdState, state.projectId);
-      set(localeState, 'en-us');
-      set(luFilesState, state.luFiles);
-      set(lgFilesState, state.lgFiles);
-      set(dialogsState, state.dialogs);
-      set(schemasState, state.schemas);
+      set(currentProjectIdState, state.projectId);
+      set(localeState(state.projectId), 'en-us');
+      set(luFilesState(state.projectId), state.luFiles);
+      set(lgFilesState(state.projectId), state.lgFiles);
+      set(dialogsState(state.projectId), state.dialogs);
+      set(schemasState(state.projectId), state.schemas);
       set(dispatcherState, (current: Dispatcher) => ({
         ...current,
         selectTo: selectToMock,
@@ -72,7 +72,7 @@ describe('use triggerApi hooks', () => {
       const { children } = props;
       return <RecoilRoot initializeState={initRecoilState}>{children}</RecoilRoot>;
     };
-    const rendered = renderHook(() => useTriggerApi(), {
+    const rendered = renderHook(() => useTriggerApi(state.projectId), {
       wrapper,
     });
     result = rendered.result;

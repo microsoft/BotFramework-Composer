@@ -121,27 +121,27 @@ interface SkillListProps {
 
 const SkillList: React.FC<SkillListProps> = ({ projectId }) => {
   const { removeSkill, updateSkill } = useRecoilValue(dispatcherState);
-  const skills = useRecoilValue(skillsState);
+  const skills = useRecoilValue(skillsState(projectId));
 
   const [selectedSkillUrl, setSelectedSkillUrl] = useState<string | null>(null);
 
   const handleViewManifest = (item) => {
-    if (item && item.name && item.body) {
+    if (item && item.name && item.content) {
       setSelectedSkillUrl(item.manifestUrl);
     }
   };
 
-  const handleEditSkill = (targetId) => (skillData) => {
-    updateSkill(projectId, { skillData, targetId });
+  const handleEditSkill = (projectId, skillId) => (skillData) => {
+    updateSkill(projectId, skillId, skillData);
   };
 
   const items = useMemo(
     () =>
-      skills.map((skill, index) => ({
+      skills.map((skill) => ({
         skill,
-        onDelete: () => removeSkill(projectId, skill.manifestUrl),
+        onDelete: () => removeSkill(projectId, skill.id),
         onViewManifest: () => handleViewManifest(skill),
-        onEditSkill: handleEditSkill(index),
+        onEditSkill: handleEditSkill(projectId, skill.id),
       })),
     [skills, projectId]
   );
@@ -183,6 +183,7 @@ const SkillList: React.FC<SkillListProps> = ({ projectId }) => {
         isDraggable={false}
         isModeless={false}
         manifestId={selectedSkillUrl}
+        projectId={projectId}
         onDismiss={onDismissManifest}
       />
     </React.Fragment>
