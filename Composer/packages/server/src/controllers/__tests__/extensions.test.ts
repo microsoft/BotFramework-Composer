@@ -41,32 +41,32 @@ describe('listing all extensions', () => {
 });
 
 describe('adding an extension', () => {
-  const name = 'new-extension';
+  const id = 'new-extension';
 
-  it('validates name parameter', async () => {
-    await ExtensionsController.addExtension({ body: { name: '' } } as Request, res);
+  it('validates id parameter', async () => {
+    await ExtensionsController.addExtension({ body: { id: '' } } as Request, res);
 
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith({ error: expect.any(String) });
   });
 
   it('installs a remote extension', async () => {
-    await ExtensionsController.addExtension({ body: { name, version: 'some-version' } } as Request, res);
+    await ExtensionsController.addExtension({ body: { id, version: 'some-version' } } as Request, res);
 
-    expect(ExtensionManager.installRemote).toHaveBeenCalledWith(name, 'some-version');
+    expect(ExtensionManager.installRemote).toHaveBeenCalledWith(id, 'some-version');
   });
 
   it('loads the extension', async () => {
-    await ExtensionsController.addExtension({ body: { name } } as Request, res);
+    await ExtensionsController.addExtension({ body: { id } } as Request, res);
 
-    expect(ExtensionManager.load).toHaveBeenCalledWith(name);
+    expect(ExtensionManager.load).toHaveBeenCalledWith(id);
   });
 
   it('returns the extension', async () => {
     (ExtensionManager.find as jest.Mock).mockReturnValue('installed extension');
-    await ExtensionsController.addExtension({ body: { name } } as Request, res);
+    await ExtensionsController.addExtension({ body: { id } } as Request, res);
 
-    expect(ExtensionManager.find).toHaveBeenCalledWith(name);
+    expect(ExtensionManager.find).toHaveBeenCalledWith(id);
     expect(res.json).toHaveBeenCalledWith('installed extension');
   });
 });

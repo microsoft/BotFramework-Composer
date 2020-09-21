@@ -4,9 +4,11 @@
 import { RequestHandler } from 'express-serve-static-core';
 import { Debugger } from 'debug';
 
-import log from './logger';
+import logger from './logger';
 import { PublishPlugin, RuntimeTemplate, BotTemplate } from './types/types';
 import { ExtensionContext } from './extensionContext';
+
+const log = logger.extend('extension-registration');
 
 export class ExtensionRegistration {
   public context: typeof ExtensionContext;

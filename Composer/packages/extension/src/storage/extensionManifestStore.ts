@@ -12,13 +12,6 @@ export type ExtensionManifest = ExtensionMap;
 
 const DEFAULT_MANIFEST: ExtensionManifest = {};
 
-function omitBuiltinProperty(key: string, value: string) {
-  if (key && key === 'builtIn') {
-    return undefined;
-  }
-  return value;
-}
-
 /** In-memory representation of extensions.json as well as reads / writes data to disk. */
 export class ExtensionManifestStore {
   private manifest: ExtensionManifest = DEFAULT_MANIFEST;
@@ -69,6 +62,10 @@ export class ExtensionManifestStore {
     this.writeManifestToDisk();
   }
 
+  public reload() {
+    this.readManifestFromDisk();
+  }
+
   // load manifest into memory
   private readManifestFromDisk() {
     try {
@@ -82,7 +79,7 @@ export class ExtensionManifestStore {
   // write manifest from memory to disk
   private writeManifestToDisk() {
     try {
-      writeJsonSync(this.manifestPath, this.manifest, { replacer: omitBuiltinProperty, spaces: 2 });
+      writeJsonSync(this.manifestPath, this.manifest, { spaces: 2 });
     } catch (e) {
       log('Error writing %s: %s', this.manifestPath, e);
     }

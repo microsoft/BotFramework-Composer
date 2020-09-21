@@ -6,7 +6,7 @@ import { ExtensionManager } from '@bfc/extension';
 
 interface AddExtensionRequest extends Request {
   body: {
-    name?: string;
+    id?: string;
     version?: string;
   };
 }
@@ -49,16 +49,16 @@ export async function listExtensions(req: Request, res: Response) {
 }
 
 export async function addExtension(req: AddExtensionRequest, res: Response) {
-  const { name, version } = req.body;
+  const { id, version } = req.body;
 
-  if (!name) {
-    res.status(400).json({ error: '`name` is missing from body' });
+  if (!id) {
+    res.status(400).json({ error: '`id` is missing from body' });
     return;
   }
 
-  await ExtensionManager.installRemote(name, version);
-  await ExtensionManager.load(name);
-  res.json(ExtensionManager.find(name));
+  await ExtensionManager.installRemote(id, version);
+  await ExtensionManager.load(id);
+  res.json(ExtensionManager.find(id));
 }
 
 export async function toggleExtension(req: ToggleExtensionRequest, res: Response) {

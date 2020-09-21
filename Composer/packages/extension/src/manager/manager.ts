@@ -57,8 +57,15 @@ class ExtensionManager {
    * Loads all builtin extensions and remote extensions.
    */
   public async loadAll() {
-    await this.loadBuiltinExtensions();
-    await this.loadRemoteExtensions();
+    await this.seedBuiltinExtensions();
+
+    const extensions = Object.entries(this.manifest.getExtensions());
+
+    for (const [id, metadata] of extensions) {
+      if (metadata?.enabled) {
+        await this.load(id);
+      }
+    }
   }
 
   /**
@@ -67,74 +74,48 @@ class ExtensionManager {
    * @param version The version of the extension to install
    */
   public async installRemote(name: string, version?: string) {
-    const packageNameAndVersion = version ? `${name}@${version}` : name;
+    const packageNameAndVersion = version ? `${name}@${version}` : `${name}@latest`;
     const cmd = `install --no-audit --prefix ${this.remoteDir} ${packageNameAndVersion}`;
-    log('Installing %s@%s to %s', name, version, this.remoteDir);
+    log('Installing %s@%s to %s', name, version ?? 'latest', this.remoteDir);
 
-    const { stdout } = await npm(cmd);
+    try {
+      const { stdout } = await npm(cmd);
 
-    log('%s', stdout);
+      log('%s', stdout);
 
-    const packageJson = await this.getPackageJson(name, this.remoteDir);
+      const packageJson = await this.getPackageJson(name, this.remoteDir);
 
-    if (packageJson) {
-      const extensionPath = path.resolve(this.remoteDir, 'node_modules', name);
-      this.manifest.updateExtensionConfig(name, getExtensionMetadata(extensionPath, packageJson));
-    } else {
+      if (packageJson) {
+        const extensionPath = path.resolve(this.remoteDir, 'node_modules', name);
+        this.manifest.updateExtensionConfig(name, getExtensionMetadata(extensionPath, packageJson));
+      } else {
+        throw new Error(`Unable to install ${packageNameAndVersion}`);
+      }
+    } catch (err) {
+      if (err?.stderr) {
+        log('%s', err.stderr);
+      }
       throw new Error(`Unable to install ${packageNameAndVersion}`);
     }
   }
 
-  /**
-   * Loads all the extensions that are checked into the Composer project (1P extensions)
-   */
-  public async loadBuiltinExtensions() {
-    log('Loading inherent extensions from: ', this.builtinDir);
-    // get all extensions with a package.json in the extensions dir
-    const extensions = await glob('*/package.json', { cwd: this.builtinDir, dot: true });
-    for (const extensionPackageJsonPath of extensions) {
-      // go through each extension, make sure to add it to the manager store then load it as usual
-      const fullPath = path.join(this.builtinDir, extensionPackageJsonPath);
-      const extensionInstallPath = path.dirname(fullPath);
-      const packageJson = (await readJson(fullPath)) as PackageJSON;
-      if (packageJson && (!!packageJson.composer || !!packageJson.extendsComposer)) {
-        const metadata = getExtensionMetadata(extensionInstallPath, packageJson);
-        this.manifest.updateExtensionConfig(packageJson.name, {
-          ...metadata,
-          builtIn: true,
-        });
-        await ExtensionContext.loadPluginFromFile(fullPath);
-      }
-    }
-  }
-
-  /**
-   * Loads all installed remote extensions
-   * TODO (toanzian / abrown): Needs to be implemented
-   */
-  public async loadRemoteExtensions() {
-    // should perform the same function as loadBuiltInExtensions but from the
-    // location that remote / 3P extensions are installed
-  }
-
   public async load(id: string) {
+    const metadata = this.manifest.getExtensionConfig(id);
     try {
-      const modulePath = require.resolve(id, {
-        paths: [`${this.remoteDir}/node_modules`],
-      });
       // eslint-disable-next-line @typescript-eslint/no-var-requires, security/detect-non-literal-require
-      const extension = require(modulePath);
-      log('got extension: ', extension);
+      const extension = metadata?.path && require(metadata.path);
 
       if (!extension) {
-        throw new Error('Extension not found');
+        throw new Error(`Extension not found: ${id}`);
       }
 
       await ExtensionContext.loadPlugin(id, '', extension);
     } catch (err) {
       log('Unable to load extension `%s`', id);
       log('%O', err);
-      await this.remove(id);
+      if (!metadata?.builtIn) {
+        await this.remove(id);
+      }
       throw err;
     }
   }
@@ -250,8 +231,31 @@ class ExtensionManager {
       return packageJson as PackageJSON;
     } catch (err) {
       log('Error getting package json for %s', id);
+      // eslint-disable-next-line no-console
       console.error(err);
     }
+  }
+
+  public async seedBuiltinExtensions() {
+    const extensions = await glob('*/package.json', { cwd: this.builtinDir, dot: true });
+    for (const extensionPackageJsonPath of extensions) {
+      // go through each extension, make sure to add it to the manager store then load it as usual
+      const fullPath = path.join(this.builtinDir, extensionPackageJsonPath);
+      const extensionInstallPath = path.dirname(fullPath);
+      const packageJson = (await readJson(fullPath)) as PackageJSON;
+      const isEnabled = packageJson?.composer && packageJson.composer.enabled !== false;
+      if (packageJson && (isEnabled || packageJson.extendsComposer === true)) {
+        const metadata = getExtensionMetadata(extensionInstallPath, packageJson);
+        this.manifest.updateExtensionConfig(packageJson.name, {
+          ...metadata,
+          builtIn: true,
+        });
+      }
+    }
+  }
+
+  public reloadManifest() {
+    this._manifest = undefined;
   }
 
   private get manifest() {

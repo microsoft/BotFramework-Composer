@@ -11,8 +11,10 @@ import glob from 'globby';
 import formatMessage from 'format-message';
 
 import { UserIdentity, ExtensionCollection, RuntimeTemplate, DEFAULT_RUNTIME } from './types/types';
-import log from './logger';
+import logger from './logger';
 import { ExtensionRegistration } from './extensionRegistration';
+
+const log = logger.extend('extension-context');
 
 class ExtensionContext {
   private _passport: passport.PassportStatic;
@@ -66,6 +68,7 @@ class ExtensionContext {
   }
 
   public async loadPlugin(name: string, description: string, thisPlugin: any) {
+    log('Loading extension: %s', name);
     const pluginRegistration = new ExtensionRegistration(this, name, description);
     if (typeof thisPlugin.default === 'function') {
       // the module exported just an init function

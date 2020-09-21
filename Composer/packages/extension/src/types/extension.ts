@@ -58,6 +58,7 @@ export interface PackageJSON {
   extendsComposer: boolean;
   composer?: {
     name?: string;
+    enabled?: boolean;
     contributes?: ExtensionContribution;
     bundles?: ExtensionBundle[];
   };
