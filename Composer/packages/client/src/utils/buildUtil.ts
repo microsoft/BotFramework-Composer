@@ -152,9 +152,5 @@ export function isBuildConfigComplete(config, dialogs, luFiles, qnaFiles) {
 
 // return true if dialogs have one with default recognizer.
 export function needsBuild(dialogs) {
-  let isDefaultRecognizer = false;
-  if (dialogs.some((dialog) => typeof dialog.content.recognizer === 'string')) {
-    isDefaultRecognizer = true;
-  }
-  return isDefaultRecognizer;
+  return dialogs.some((dialog) => typeof dialog.content.recognizer === 'string');
 }
