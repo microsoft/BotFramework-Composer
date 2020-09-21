@@ -67,7 +67,7 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
     if (recognizerSchema && typeof recognizerSchema.seedNewRecognizer === 'function') {
       return recognizerSchema.seedNewRecognizer(shellData, shellApi);
     }
-    return { $kind: recognizerSchema?.id, intents: [] };
+    return { $kind: recognizerSchema?.id };
   };
 
   const seedNewDialog = (formData: DialogFormData) => {
