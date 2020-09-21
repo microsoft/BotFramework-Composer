@@ -75,11 +75,10 @@ class ExtensionManager {
    */
   public async installRemote(name: string, version?: string) {
     const packageNameAndVersion = version ? `${name}@${version}` : `${name}@latest`;
-    const cmd = `install --no-audit --prefix ${this.remoteDir} ${packageNameAndVersion}`;
-    log('Installing %s@%s to %s', name, version ?? 'latest', this.remoteDir);
+    log('Installing %s to %s', packageNameAndVersion, this.remoteDir);
 
     try {
-      const { stdout } = await npm(cmd);
+      const { stdout } = await npm('install', packageNameAndVersion, { '--prefix': this.remoteDir });
 
       log('%s', stdout);
 
@@ -145,14 +144,18 @@ class ExtensionManager {
    * @param id Id of the extension to be removed
    */
   public async remove(id: string) {
-    const cmd = `uninstall --no-audit --prefix ${this.remoteDir} ${id}`;
     log('Removing %s', id);
 
-    const { stdout } = await npm(cmd);
+    try {
+      const { stdout } = await npm('uninstall', id, { '--prefix': this.remoteDir });
 
-    log('%s', stdout);
+      log('%s', stdout);
 
-    this.manifest.removeExtension(id);
+      this.manifest.removeExtension(id);
+    } catch (err) {
+      log('%s', err);
+      throw new Error(`Unable to remove extension: ${id}`);
+    }
   }
 
   /**
@@ -160,9 +163,7 @@ class ExtensionManager {
    * @param query The search query
    */
   public async search(query: string) {
-    const cmd = `search --json keywords:botframework-composer ${query}`;
-
-    const { stdout } = await npm(cmd);
+    const { stdout } = await npm('search', `keywords:botframework-composer ${query}`, { '--json': '' });
 
     try {
       const result = JSON.parse(stdout);

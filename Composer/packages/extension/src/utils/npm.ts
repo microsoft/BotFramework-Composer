@@ -12,20 +12,33 @@ type NpmOutput = {
   stderr: string;
   code: number;
 };
+type NpmCommand = 'install' | 'uninstall' | 'search';
+type NpmOptions = {
+  [key: string]: string;
+};
+
+function processOptions(opts: NpmOptions) {
+  return Object.entries({ '--no-fund': '', '--no-audit': '', ...opts }).map(([flag, value]) => {
+    return value ? `${flag}=${value}` : flag;
+  });
+}
 
 /**
  * Executes npm commands that include user input safely
- * @param command npm command to execute including command line arguments
- * @returns Object with stdout and stderr from command
+ * @param `command` npm command to execute.
+ * @param `args` cli arguments
+ * @param `opts` cli flags
+ * @returns Object with stdout, stderr, and exit code from command
  */
-export async function npm(command: string): Promise<NpmOutput> {
+export async function npm(command: NpmCommand, args: string, opts: NpmOptions = {}): Promise<NpmOutput> {
   return new Promise((resolve, reject) => {
-    log('npm %s', command);
-    const cmdArgs = command.split(' ');
+    const cmdOptions = processOptions(opts);
+    const spawnArgs = [command, ...cmdOptions, args];
+    log('npm %s', spawnArgs.join(' '));
     let stdout = '';
     let stderr = '';
 
-    const proc = spawn('npm', cmdArgs);
+    const proc = spawn('npm', spawnArgs);
 
     proc.stdout.on('data', (data) => {
       stdout += data;
