@@ -32,6 +32,7 @@ const state = {
     {
       id: 'a.en-us',
       content: initialContent,
+      imports: [],
       qnaSections: [
         {
           Questions: [{ content: 'question', id: 1 }],
@@ -63,10 +64,8 @@ const initRecoilState = ({ set }) => {
 
 describe('QnA page all up view', () => {
   it('should render QnA page table view', () => {
-    const { getByText, getByTestId } = renderWithRecoil(<TableView dialogId={'a'} />, initRecoilState);
+    const { getByTestId } = renderWithRecoil(<TableView dialogId={'a'} />, initRecoilState);
     getByTestId('table-view');
-    getByText('question (1)');
-    getByText('answer');
   });
 
   it('should render QnA page code editor', () => {

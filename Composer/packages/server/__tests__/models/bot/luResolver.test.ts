@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FileInfo, FileExtensions } from '@bfc/shared';
+import { FileInfo } from '@bfc/shared';
 
-import { luImportResolverGenerator } from '../../../src/models/bot/luResolver';
+import { luImportResolverGenerator, getLUFiles, getQnAFiles } from '../../../src/models/bot/luResolver';
 
 const files = [
   {
@@ -36,10 +36,34 @@ const files = [
     path: '/users/foo/mybot/dialogs/b/language-understanding/en-us/b.en-us.lu',
     relativePath: 'dialogs/b/language-understanding/en-us/b.en-us.lu',
   },
+  {
+    name: 'common.en-us.qna',
+    content: '> common.en-us.qna',
+    path: '/users/foo/mybot/knowledge-base/en-us/common.en-us.qna',
+    relativePath: 'knowledge-base/en-us/common.en-us.qna',
+  },
+  {
+    name: 'guide.source.qna',
+    content: '> guide.source.qna',
+    path: '/users/foo/mybot/knowledge-base/source/guide.source.qna',
+    relativePath: 'knowledge-base/source/guide.source.qna',
+  },
+  {
+    name: 'a.en-us.qna',
+    content: '> a.en-us.qna',
+    path: '/users/foo/mybot/dialogs/a/knowledge-base/en-us/a.en-us.qna',
+    relativePath: 'dialogs/a/knowledge-base/en-us/a.en-us.qna',
+  },
+  {
+    name: 'aa.en-us.qna',
+    content: '> aa.en-us.qna',
+    path: '/users/foo/mybot/dialogs/a/knowledge-base/en-us/source/aa.en-us.qna',
+    relativePath: 'knowledge-base/source/aa.en-us.qna',
+  },
 ] as FileInfo[];
 
 describe('Lu Resolver', () => {
-  const resolver = luImportResolverGenerator(files, FileExtensions.Lu);
+  const resolver = luImportResolverGenerator(getLUFiles(files));
 
   const resultOfA = {
     content: '> a.en-us.lu',
@@ -65,20 +89,20 @@ describe('Lu Resolver', () => {
   };
 
   it('should resolve ./*', async () => {
-    const case1 = resolver('a.en-us', [{ filePath: './*', includeInCollate: true }]);
+    const case1 = resolver('a.en-us.lu', [{ filePath: './*', includeInCollate: true }]);
     expect(case1.length).toEqual(1);
     expect(case1[0]).toMatchObject(resultOfA);
   });
 
   it('should resolve ./**', async () => {
-    const case1 = resolver('a.en-us', [{ filePath: './**', includeInCollate: true }]);
+    const case1 = resolver('a.en-us.lu', [{ filePath: './**', includeInCollate: true }]);
     expect(case1.length).toEqual(2);
     expect(case1[0]).toMatchObject(resultOfA);
     expect(case1[1]).toMatchObject(resultOfAA);
   });
 
   it('should resolve <.lu file path>/*', async () => {
-    const case1 = resolver('a.en-us', [
+    const case1 = resolver('a.en-us.lu', [
       { filePath: '../../../../language-understanding/en-us/*', includeInCollate: true },
     ]);
     expect(case1.length).toEqual(2);
@@ -87,7 +111,7 @@ describe('Lu Resolver', () => {
   });
 
   it('should resolve <.lu file path>/**', async () => {
-    const case1 = resolver('a.en-us', [
+    const case1 = resolver('a.en-us.lu', [
       { filePath: '../../../../language-understanding/en-us/**', includeInCollate: true },
     ]);
     expect(case1.length).toEqual(2);
@@ -96,19 +120,19 @@ describe('Lu Resolver', () => {
   });
 
   it('should resolve <.lu file id> no locale', async () => {
-    const case1 = resolver('a.en-us', [{ filePath: 'common.lu', includeInCollate: true }]);
+    const case1 = resolver('a.en-us.lu', [{ filePath: 'common.lu', includeInCollate: true }]);
     expect(case1.length).toEqual(1);
     expect(case1[0]).toMatchObject(resultOfCommon);
   });
 
   it('should resolve <.lu file id> with locale', async () => {
-    const case1 = resolver('a.en-us', [{ filePath: 'common.en-us.lu', includeInCollate: true }]);
+    const case1 = resolver('a.en-us.lu', [{ filePath: 'common.en-us.lu', includeInCollate: true }]);
     expect(case1.length).toEqual(1);
     expect(case1[0]).toMatchObject(resultOfCommon);
   });
 
   it('should resolve <.lu file path> no locale', async () => {
-    const case1 = resolver('a.en-us', [
+    const case1 = resolver('a.en-us.lu', [
       { filePath: '../../../../language-understanding/en-us/common.lu', includeInCollate: true },
     ]);
     expect(case1.length).toEqual(1);
@@ -116,7 +140,7 @@ describe('Lu Resolver', () => {
   });
 
   it('should resolve <.lu file path> with locale', async () => {
-    const case1 = resolver('a.en-us', [
+    const case1 = resolver('a.en-us.lu', [
       { filePath: '../../../../language-understanding/en-us/common.en-us.lu', includeInCollate: true },
     ]);
     expect(case1.length).toEqual(1);
@@ -124,37 +148,120 @@ describe('Lu Resolver', () => {
   });
 
   it('should resolve <.lu file path>#*utterances*', async () => {
-    const case1 = resolver('a.en-us', [{ filePath: 'common.lu#*utterances*', includeInCollate: true }]);
+    const case1 = resolver('a.en-us.lu', [{ filePath: 'common.lu#*utterances*', includeInCollate: true }]);
     expect(case1.length).toEqual(1);
     expect(case1[0]).toMatchObject(resultOfCommon);
   });
 
   it('should resolve <.lu file path>#*patterns*', async () => {
-    const case1 = resolver('a.en-us', [{ filePath: 'common.lu#*patterns*', includeInCollate: true }]);
+    const case1 = resolver('a.en-us.lu', [{ filePath: 'common.lu#*patterns*', includeInCollate: true }]);
     expect(case1.length).toEqual(1);
     expect(case1[0]).toMatchObject(resultOfCommon);
   });
 
   it('should resolve <.lu file path>#*utterancesAndPatterns*', async () => {
-    const case1 = resolver('a.en-us', [{ filePath: 'common.lu#*utterancesAndPatterns*', includeInCollate: true }]);
+    const case1 = resolver('a.en-us.lu', [{ filePath: 'common.lu#*utterancesAndPatterns*', includeInCollate: true }]);
     expect(case1.length).toEqual(1);
     expect(case1[0]).toMatchObject(resultOfCommon);
   });
 
   it('should resolve <.lu file path>#<INTENT-NAME>', async () => {
-    const case1 = resolver('a.en-us', [{ filePath: 'common.lu#Help', includeInCollate: true }]);
+    const case1 = resolver('a.en-us.lu', [{ filePath: 'common.lu#Help', includeInCollate: true }]);
     expect(case1.length).toEqual(1);
     expect(case1[0]).toMatchObject(resultOfCommon);
   });
 
   it('should resolve <.lu file path>#<INTENT-NAME>*utterances*', async () => {
-    const case1 = resolver('a.en-us', [{ filePath: 'common.lu#Help*utterances*', includeInCollate: true }]);
+    const case1 = resolver('a.en-us.lu', [{ filePath: 'common.lu#Help*utterances*', includeInCollate: true }]);
     expect(case1.length).toEqual(1);
     expect(case1[0]).toMatchObject(resultOfCommon);
   });
 
   it('should resolve <.lu file path>#<INTENT-NAME>*patterns*', async () => {
-    const case1 = resolver('a.en-us', [{ filePath: 'common.lu#Help*patterns*', includeInCollate: true }]);
+    const case1 = resolver('a.en-us.lu', [{ filePath: 'common.lu#Help*patterns*', includeInCollate: true }]);
+    expect(case1.length).toEqual(1);
+    expect(case1[0]).toMatchObject(resultOfCommon);
+  });
+});
+
+describe('QnA Resolver', () => {
+  const resolver = luImportResolverGenerator(getQnAFiles(files));
+
+  const resultOfA = {
+    content: '> a.en-us.qna',
+    id: '/users/foo/mybot/dialogs/a/knowledge-base/en-us/a.en-us.qna',
+    language: 'en-us',
+  };
+
+  const resultOfAA = {
+    content: '> aa.en-us.qna',
+    id: '/users/foo/mybot/dialogs/a/knowledge-base/en-us/source/aa.en-us.qna',
+    language: 'en-us',
+  };
+
+  const resultOfCommon = {
+    content: '> common.en-us.qna',
+    id: '/users/foo/mybot/knowledge-base/en-us/common.en-us.qna',
+    language: 'en-us',
+  };
+
+  const resultOfGuide = {
+    content: '> guide.source.qna',
+    id: '/users/foo/mybot/knowledge-base/source/guide.source.qna',
+    language: 'en-us',
+  };
+
+  it('should resolve ./*', async () => {
+    const case1 = resolver('a.en-us.qna', [{ filePath: './*', includeInCollate: true }]);
+    expect(case1.length).toEqual(1);
+    expect(case1[0]).toMatchObject(resultOfA);
+  });
+
+  it('should resolve ./**', async () => {
+    const case1 = resolver('a.en-us.qna', [{ filePath: './**', includeInCollate: true }]);
+    expect(case1.length).toEqual(2);
+    expect(case1[0]).toMatchObject(resultOfA);
+    expect(case1[1]).toMatchObject(resultOfAA);
+  });
+
+  it('should resolve <.qna file path>/*', async () => {
+    const case1 = resolver('a.en-us.qna', [{ filePath: '../../../../knowledge-base/en-us/*', includeInCollate: true }]);
+    expect(case1.length).toEqual(1);
+    expect(case1[0]).toMatchObject(resultOfCommon);
+  });
+
+  it('should resolve <.qna file path>/**', async () => {
+    const case1 = resolver('a.en-us.qna', [
+      { filePath: '../../../../knowledge-base/en-us/**', includeInCollate: true },
+    ]);
+    expect(case1.length).toEqual(1);
+    expect(case1[0]).toMatchObject(resultOfCommon);
+  });
+
+  it('should resolve <.qna file id> no locale', async () => {
+    const case1 = resolver('a.en-us.qna', [{ filePath: 'common.qna', includeInCollate: true }]);
+    expect(case1.length).toEqual(1);
+    expect(case1[0]).toMatchObject(resultOfCommon);
+  });
+
+  it('should resolve <.qna file id> with locale', async () => {
+    const case1 = resolver('a.en-us.qna', [{ filePath: 'common.en-us.qna', includeInCollate: true }]);
+    expect(case1.length).toEqual(1);
+    expect(case1[0]).toMatchObject(resultOfCommon);
+  });
+
+  it('should resolve <.qna file path> no locale', async () => {
+    const case1 = resolver('a.en-us.qna', [
+      { filePath: '../../../../knowledge-base/en-us/common.qna', includeInCollate: true },
+    ]);
+    expect(case1.length).toEqual(1);
+    expect(case1[0]).toMatchObject(resultOfCommon);
+  });
+
+  it('should resolve <.qna file path> with locale', async () => {
+    const case1 = resolver('a.en-us.qna', [
+      { filePath: '../../../../knowledge-base/en-us/common.en-us.qna', includeInCollate: true },
+    ]);
     expect(case1.length).toEqual(1);
     expect(case1[0]).toMatchObject(resultOfCommon);
   });

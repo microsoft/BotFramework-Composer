@@ -116,8 +116,9 @@ describe('dialog dispatcher', () => {
       states: [
         { recoilState: dialogsState, initialValue: [{ id: '1' }, { id: '2' }] },
         { recoilState: dialogSchemasState, initialValue: [{ id: '1' }, { id: '2' }] },
-        { recoilState: lgFilesState, initialValue: [{ id: '1.lg' }, { id: '2' }] },
-        { recoilState: luFilesState, initialValue: [{ id: '1.lu' }, { id: '2' }] },
+        { recoilState: lgFilesState, initialValue: [{ id: '1' }, { id: '2' }] },
+        { recoilState: luFilesState, initialValue: [{ id: '1' }, { id: '2' }] },
+        { recoilState: qnaFilesState, initialValue: [{ id: '1' }, { id: '2' }] },
         { recoilState: schemasState, initialValue: { sdk: { content: '' } } },
       ],
       dispatcher: {
@@ -139,6 +140,7 @@ describe('dialog dispatcher', () => {
     expect(renderedComponent.current.dialogSchemas).toEqual([{ id: '2' }]);
     expect(renderedComponent.current.lgFiles).toEqual([{ id: '2' }]);
     expect(renderedComponent.current.luFiles).toEqual([{ id: '2' }]);
+    expect(renderedComponent.current.qnaFiles).toEqual([{ id: '2' }]);
   });
 
   it('updates a dialog file', async () => {

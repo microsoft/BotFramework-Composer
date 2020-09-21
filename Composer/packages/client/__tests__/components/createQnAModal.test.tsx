@@ -6,64 +6,48 @@ import { fireEvent } from '@bfc/test-utils';
 
 import { renderWithRecoil } from '../testUtils/renderWithRecoil';
 import CreateQnAFromUrlModal from '../../src/components/QnA/CreateQnAFromUrlModal';
+import { showCreateQnAFromUrlDialogState } from '../../src/recoilModel';
 
 describe('<CreateQnAFromUrlModal />', () => {
   const onDismiss = jest.fn(() => {});
   const onSubmit = jest.fn(() => {});
-  let container;
-  beforeEach(() => {
-    container = renderWithRecoil(
+
+  it('renders <CreateQnAFromUrlModal /> and create from scratch', () => {
+    const container = renderWithRecoil(
+      <CreateQnAFromUrlModal dialogId="test" qnaFiles={[]} onDismiss={onDismiss} onSubmit={onSubmit} />,
+      ({ set }) => {
+        set(showCreateQnAFromUrlDialogState, true);
+      }
+    );
+
+    const { getByTestId } = container;
+    const createFromScratchButton = getByTestId('createKnowledgeBaseFromScratch');
+    expect(createFromScratchButton).not.toBeNull();
+    fireEvent.click(createFromScratchButton);
+    // actions tobe called
+  });
+
+  it('create with name/url and validate the value', () => {
+    const container = renderWithRecoil(
       <CreateQnAFromUrlModal dialogId="test" qnaFiles={[]} onDismiss={onDismiss} onSubmit={onSubmit} />,
       () => {}
     );
-  });
 
-  it('renders <CreateQnAFromUrlModal /> and create from scratch', () => {
-    const { getByText } = container;
-    expect(getByText('Populate your Knowledge Base')).not.toBeNull();
-    const createFromScratchButton = getByText('Create knowledge base from scratch');
-    expect(createFromScratchButton).not.toBeNull();
-    fireEvent.click(createFromScratchButton);
-    expect(onSubmit).toBeCalled();
-    expect(onSubmit).toBeCalledWith([]);
-  });
+    const { findByText, getByTestId } = container;
+    const inputName = getByTestId('knowledgeLocationTextField-name') as HTMLInputElement;
+    fireEvent.change(inputName, { target: { value: 'test' } });
 
-  it('click cancel', () => {
-    const { getByText } = container;
-    const cancelButton = getByText('Cancel');
-    expect(cancelButton).not.toBeNull();
-    fireEvent.click(cancelButton);
-    expect(onDismiss).toBeCalled();
-  });
+    const inputUrl = getByTestId('knowledgeLocationTextField-url') as HTMLInputElement;
+    fireEvent.change(inputUrl, { target: { value: 'test' } });
 
-  it('add new url and validate the value', () => {
-    const { findByText, getByTestId, getByText } = container;
-    const input0 = getByTestId('knowledgeLocationTextField-0');
-    fireEvent.change(input0, { target: { value: 'test' } });
-
-    expect(input0.value).toBe('test');
+    expect(inputUrl.value).toBe('test');
     expect(findByText(/A valid url should start with/)).not.toBeNull();
+    fireEvent.change(inputUrl, { target: { value: 'http://test' } });
 
-    const addButton = getByText(/Add additional URL/);
-    fireEvent.change(input0, { target: { value: 'http://test' } });
-    fireEvent.click(addButton);
-    expect(getByTestId('knowledgeLocationTextField-1')).not.toBeNull();
-
-    const input1 = getByTestId('knowledgeLocationTextField-1');
-    fireEvent.change(input1, { target: { value: 'http://test' } });
-    expect(findByText(/This url is duplicated/)).not.toBeNull();
-    fireEvent.change(input1, { target: { value: 'http://test1' } });
-
-    const createKnowledgeButton = getByText('Create knowledge base');
+    const createKnowledgeButton = getByTestId('createKnowledgeBase');
     expect(createKnowledgeButton).not.toBeNull();
     fireEvent.click(createKnowledgeButton);
     expect(onSubmit).toBeCalled();
-    expect(onSubmit).toBeCalledWith(['http://test', 'http://test1']);
-
-    const deletebutton = getByTestId('deleteImportQnAUrl-1');
-    fireEvent.click(deletebutton);
-    fireEvent.click(createKnowledgeButton);
-    expect(onSubmit).toBeCalled();
-    expect(onSubmit).toBeCalledWith(['http://test']);
+    expect(onSubmit).toBeCalledWith({ url: 'http://test', name: 'test', multiTurn: false });
   });
 });
