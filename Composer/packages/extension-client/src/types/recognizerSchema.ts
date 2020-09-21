@@ -5,7 +5,7 @@ import { SDKKinds } from '@bfc/shared';
 
 import { RecognizerSchema } from './formSchema';
 
-// Omit the 'id' field because it can be get from $kind.
+// Omit the 'id' field because it can be inferred from $kind.
 export type RecognizerOptions = Omit<RecognizerSchema, 'id'>;
 
 export type RecognizerUISchema = { [key in SDKKinds]?: RecognizerOptions };
