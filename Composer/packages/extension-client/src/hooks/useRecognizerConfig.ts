@@ -10,7 +10,7 @@ import { RecognizerOptions, RecognizerSchema } from '../types';
 
 export const FallbackRecognizerKey = 'fallback';
 
-// TODO: (ze) remove this logic after the ui widget PR.
+// TODO: (ze) remove this logic after the ui widget PR. [issue #4167]
 const reuseLuisIntentEditor = (recognizers: RecognizerSchema[]) => {
   const crosstrainRecognizer = recognizers.find((x) => x.id === SDKKinds.CrossTrainedRecognizerSet);
   const luisRecognizer = recognizers.find((x) => x.id === SDKKinds.LuisRecognizer);
@@ -60,7 +60,7 @@ export function useRecognizerConfig() {
     return schemas;
   }, [plugins.uiSchema]);
 
-  const fallbackRecognizer = recognizers.find((x) => x.id === 'fallback');
+  const fallbackRecognizer = recognizers.find((x) => x.id === FallbackRecognizerKey);
 
   return {
     recognizers,
