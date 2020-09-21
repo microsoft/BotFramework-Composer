@@ -11,7 +11,7 @@ const config: PluginConfig = {
   uiSchema: {
     [SDKKinds.BeginSkill]: {
       form: {
-        order: ['skillAppId', 'skillEndpoint', 'skillAppId', '*', 'resultProperty', 'activityProcessed'],
+        order: ['skillEndpoint', '*', 'resultProperty', 'activityProcessed'],
         hidden: ['botId', 'skillAppId', 'skillHostEndpoint'],
         field: BeginSkillDialogField,
         properties: {
