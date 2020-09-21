@@ -22,6 +22,7 @@ import Home from '../../pages/home/Home';
 import ImportQnAFromUrlModal from '../../pages/knowledge-base/ImportQnAFromUrlModal';
 import { QnABotTemplateId } from '../../constants';
 import { useProjectIdCache } from '../../utils/hooks';
+import { projectLoadSelector } from '../../recoilModel/selectors/project';
 
 import { CreateOptions } from './CreateOptions';
 import { OpenProject } from './OpenProject';
@@ -32,9 +33,6 @@ type CreationFlowProps = RouteComponentProps<{}>;
 const CreationFlow: React.FC<CreationFlowProps> = () => {
   const {
     fetchTemplates,
-    openProject,
-    createProject,
-    saveProjectAs,
     fetchStorages,
     fetchFolderItemsByPath,
     setCreationFlowStatus,
@@ -42,9 +40,10 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     updateCurrentPathForStorage,
     updateFolder,
     saveTemplateId,
-    fetchProjectById,
     fetchRecentProjects,
   } = useRecoilValue(dispatcherState);
+
+  const projectLoader = useRecoilValue(projectLoadSelector);
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
   const projectId = useRecoilValue(currentProjectIdState);
   const templateProjects = useRecoilValue(templateProjectsState);
@@ -70,7 +69,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     // fetchProject use `gotoSnapshot` which will wipe out all state value.
     // so here make those methods call in sequence.
     if (!projectId && cachedProjectId) {
-      await fetchProjectById(cachedProjectId);
+      await projectLoader.fetchProjectById(cachedProjectId);
     }
     await fetchStorages();
     fetchTemplates();
@@ -98,11 +97,11 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
 
   const openBot = async (botFolder) => {
     setCreationFlowStatus(CreationFlowStatus.CLOSE);
-    openProject(botFolder);
+    projectLoader.openProject(botFolder);
   };
 
   const handleCreateNew = async (formData, templateId: string, qnaKbUrls?: string[]) => {
-    createProject(
+    projectLoader.createProject(
       templateId || '',
       formData.name,
       formData.description,
@@ -114,7 +113,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   };
 
   const handleSaveAs = (formData) => {
-    saveProjectAs(projectId, formData.name, formData.description, formData.location);
+    projectLoader.saveProjectAs(projectId, formData.name, formData.description, formData.location);
   };
 
   const handleCreateQnA = async (urls: string[]) => {

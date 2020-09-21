@@ -103,3 +103,11 @@ export async function loadLocale(locale: string) {
     });
   }
 }
+
+export const trimFileProtocol = (path: string) => {
+  return path.replace('file://', '');
+};
+
+export const convertPathToFileProtocol = (path: string) => {
+  return `file://${path}`;
+};

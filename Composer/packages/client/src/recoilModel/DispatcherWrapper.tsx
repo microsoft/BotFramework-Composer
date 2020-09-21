@@ -14,7 +14,6 @@ import { UndoRoot } from './undo/history';
 import { prepareAxios } from './../utils/auth';
 import createDispatchers, { Dispatcher } from './dispatchers';
 import {
-  botProjectsSpaceState,
   dialogsState,
   luFilesState,
   qnaFilesState,
@@ -23,7 +22,10 @@ import {
   dialogSchemasState,
   settingsState,
   filePersistenceState,
+  projectMetaDataState,
+  botProjectSpaceLoadedState,
 } from './atoms';
+import { projectMetaDataSelector } from './selectors/project';
 
 const getBotAssets = async (projectId, snapshot: Snapshot): Promise<BotAssets> => {
   const result = await Promise.all([
@@ -83,24 +85,32 @@ const InitDispatcher = ({ onLoad }) => {
 
 export const DispatcherWrapper = ({ children }) => {
   const [loaded, setLoaded] = useState(false);
-  const botProjects = useRecoilValue(botProjectsSpaceState);
+  const botProjects = useRecoilValue(projectMetaDataSelector);
+  const botProjectLoaded = useRecoilValue(botProjectSpaceLoadedState);
 
   useRecoilTransactionObserver_UNSTABLE(async ({ snapshot, previousSnapshot }) => {
-    for (const projectId of botProjects) {
-      const assets = await getBotAssets(projectId, snapshot);
-      const previousAssets = await getBotAssets(projectId, previousSnapshot);
-      const filePersistence = await snapshot.getPromise(filePersistenceState(projectId));
-      if (!isEmpty(filePersistence)) {
-        filePersistence.notify(assets, previousAssets);
+    if (botProjectLoaded) {
+      for (const { projectId } of botProjects) {
+        const metaData = await snapshot.getPromise(projectMetaDataState(projectId));
+        if (!metaData.isRemote) {
+          const assets = await getBotAssets(projectId, snapshot);
+          const previousAssets = await getBotAssets(projectId, previousSnapshot);
+          const filePersistence = await snapshot.getPromise(filePersistenceState(projectId));
+          if (!isEmpty(filePersistence)) {
+            filePersistence.notify(assets, previousAssets);
+          }
+        }
       }
     }
   });
 
   return (
     <Fragment>
-      {botProjects.map((projectId) => (
-        <UndoRoot key={projectId} projectId={projectId} />
-      ))}
+      {botProjects
+        .filter(({ isRemote }) => !isRemote)
+        .map(({ projectId }) => (
+          <UndoRoot key={projectId} projectId={projectId} />
+        ))}
       <InitDispatcher onLoad={setLoaded} />
       {loaded ? children : null}
     </Fragment>
