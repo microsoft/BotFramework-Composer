@@ -21,8 +21,8 @@ export const addNotificationInternal = ({ set }: CallbackInterface, notification
 
 export const deleteNotificationInternal = ({ reset, set }: CallbackInterface, id: string) => {
   reset(notificationsState(id));
-  set(notificationIdsState, (items) => {
-    return [...items].filter((item) => item !== id);
+  set(notificationIdsState, (notifications) => {
+    return notifications.filter((notification) => notification !== id);
   });
 };
 
