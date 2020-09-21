@@ -6,15 +6,11 @@ import React from 'react';
 
 export class WrappedTextField extends React.Component<ITextFieldProps> {
   shouldComponentUpdate(nextProps: ITextFieldProps) {
-    if (this.props.value !== nextProps.value) {
-      return true;
+    if (this.props.value === nextProps.value) {
+      return false;
     }
 
-    if (typeof nextProps.errorMessage === 'string' && this.props.errorMessage !== nextProps.errorMessage) {
-      return true;
-    }
-
-    return false;
+    return true;
   }
 
   render() {
