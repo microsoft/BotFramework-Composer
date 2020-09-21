@@ -11,7 +11,7 @@ import { SharedColors } from '@uifabric/fluent-theme';
 export const AddTemplateButton = {
   root: {
     fontSize: FontSizes.smallPlus,
-    marginLeft: '28px',
+    marginLeft: 70,
     color: SharedColors.cyanBlue10,
   },
 };

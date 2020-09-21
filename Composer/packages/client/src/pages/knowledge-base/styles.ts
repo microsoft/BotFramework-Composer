@@ -57,13 +57,6 @@ export const textFieldAnswer = {
   },
 };
 
-export const link = {
-  root: {
-    fontSize: 14,
-    lineHeight: 28,
-  },
-};
-
 export const addQnAPairLink = {
   root: {
     fontSize: 14,
@@ -126,7 +119,7 @@ export const addAlternative = {
   root: {
     fontSize: 16,
     paddingLeft: 0,
-    marginLeft: -5,
+    marginLeft: 2,
     color: SharedColors.cyanBlue10,
     visibility: 'hidden',
   },
@@ -172,7 +165,7 @@ export const editableFieldAnswer = (isExpand) => {
       },
     },
     field: {
-      height: isExpand ? undefined : '80px !important',
+      height: isExpand ? undefined : '60px !important',
       overflowY: 'auto' as 'auto',
       maxHeight: 500,
     },
@@ -199,10 +192,17 @@ export const editableFieldQuestion = (index) => {
   };
 };
 
-export const questionNumber = {
-  height: 32,
+export const groupHeader = {
+  root: {
+    selectors: {
+      //eslint-disable-next-line
+      button: {
+        fontSize: 16,
+      },
+    },
+  },
 };
 
-export const firstQuestion = css`
-  display: flex;
-}`;
+export const groupNameStyle = css`
+  margin-top: -5px;
+`;

@@ -29,6 +29,7 @@ interface IconProps {
 
 interface EditableFieldProps extends Omit<ITextFieldProps, 'onChange' | 'onFocus' | 'onBlur'> {
   autoAdjustHeight?: boolean;
+  componentFocusOnmount?: boolean;
   fontSize?: string;
   styles?: Partial<ITextFieldStyles>;
   transparentBorder?: boolean;
@@ -42,7 +43,7 @@ interface EditableFieldProps extends Omit<ITextFieldProps, 'onChange' | 'onFocus
   disabled?: boolean;
   resizable?: boolean;
   id: string;
-  name: string;
+  name?: string;
   placeholder?: string;
   readonly?: boolean;
   required?: boolean;
@@ -56,6 +57,7 @@ interface EditableFieldProps extends Omit<ITextFieldProps, 'onChange' | 'onFocus
 
 const EditableField: React.FC<EditableFieldProps> = (props) => {
   const {
+    componentFocusOnmount = false,
     containerStyles,
     depth,
     extraContent = '',
@@ -83,6 +85,11 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
   const [initialValue, setInitialValue] = useState<string | undefined>('');
   const [hasBeenEdited, setHasBeenEdited] = useState<boolean>(false);
   const fieldRef = useRef<ITextField>(null);
+  useEffect(() => {
+    if (componentFocusOnmount) {
+      fieldRef.current?.focus();
+    }
+  }, []);
   useEffect(() => {
     if (!hasBeenEdited || value !== localValue) {
       setLocalValue(value);

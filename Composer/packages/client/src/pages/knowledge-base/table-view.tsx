@@ -55,6 +55,8 @@ import {
   addAlternative,
   editableFieldAnswer,
   editableFieldQuestion,
+  groupHeader,
+  groupNameStyle,
 } from './styles';
 
 const noOp = () => undefined;
@@ -120,15 +122,40 @@ const TableView: React.FC<TableViewProps> = (props) => {
       };
     });
   };
+
   const detailListRef = useRef<IDetailsList | null>(null);
   const [editQnAFile, setEditQnAFile] = useState<QnAFile | undefined>(undefined);
-  const [qnaSections, setQnASections] = useState<QnASectionItem[]>([]);
   const [kthSectionIsCreatingQuestion, setCreatingQuestionInKthSection] = useState<number>(-1);
   const currentDialogImportedFileIds = qnaFile?.imports.map(({ id }) => getBaseName(id)) || [];
   const currentDialogImportedFiles = qnaFiles.filter(({ id }) => currentDialogImportedFileIds.includes(id));
   const currentDialogImportedSourceFiles = currentDialogImportedFiles.filter(({ id }) => id.endsWith('.source'));
   const allSourceFiles = qnaFiles.filter(({ id }) => id.endsWith('.source'));
   const [isQnASectionsExpanded, setIsQnASectionsExpanded] = useState<boolean[]>([]);
+  const [creatQnAPairSettings, setCreatQnAPairSettings] = useState<{
+    groupKey: string;
+    sectionIndex: number;
+  }>({
+    groupKey: '',
+    sectionIndex: -1,
+  });
+  const initializeQnASections = (qnaFiles, dialogId) => {
+    if (isEmpty(qnaFiles)) return;
+
+    const allSections = qnaFiles
+      .filter(({ id }) => id.endsWith('.source'))
+      .reduce((result: any[], qnaFile) => {
+        const res = generateQnASections(qnaFile);
+        return result.concat(res);
+      }, []);
+    if (dialogId === 'all') {
+      return allSections;
+    } else {
+      const dialogSections = allSections.filter((t) => currentDialogImportedFileIds.includes(t.fileId));
+      return dialogSections;
+    }
+  };
+
+  const [qnaSections, setQnASections] = useState<QnASectionItem[]>(initializeQnASections(qnaFiles, dialogId));
 
   useEffect(() => {
     if (isEmpty(qnaFiles)) return;
@@ -217,8 +244,11 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const onCreateNewQnAPairs = (fileId: string | undefined) => {
     if (!fileId) return;
     const newQnAPair = qnaUtil.generateQnAPair();
+    console.log(qnaSections);
     const sectionIndex = qnaSections.findIndex((item) => item.fileId === fileId);
     createQnAPairs({ id: fileId, content: newQnAPair, projectId });
+    console.log(sectionIndex);
+    setCreatQnAPairSettings({ groupKey: fileId, sectionIndex });
     const newArray = [...isQnASectionsExpanded];
     newArray.splice(sectionIndex, 0, false);
     setIsQnASectionsExpanded(newArray);
@@ -289,7 +319,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                     </Link>
                   </Fragment>
                 )}
-                {!isSourceFromUrl && <div>{groupName}</div>}
+                {!isSourceFromUrl && <div css={groupNameStyle}>{groupName}</div>}
 
                 <OverflowSet
                   aria-label={formatMessage('Edit source')}
@@ -338,7 +368,12 @@ const TableView: React.FC<TableViewProps> = (props) => {
       if (props) {
         return (
           <Fragment>
-            <GroupHeader {...props} selectionMode={SelectionMode.none} onRenderTitle={onRenderTitle}></GroupHeader>
+            <GroupHeader
+              {...props}
+              selectionMode={SelectionMode.none}
+              styles={groupHeader}
+              onRenderTitle={onRenderTitle}
+            />
             <div>
               <ActionButton
                 data-testid={'addQnAPairButton'}
@@ -376,7 +411,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
             <IconButton
               ariaLabel="ChevronDown"
               iconProps={{ iconName: isQnASectionsExpanded[index] ? 'ChevronDown' : 'ChevronRight' }}
-              styles={{ root: { ...icon.root, marginTop: '2px' } }}
+              styles={{ root: { ...icon.root, marginTop: 2, marginLeft: 15 } }}
               title="ChevronDown"
               onClick={() => toggleExpandRow(index)}
             />
@@ -408,15 +443,21 @@ const TableView: React.FC<TableViewProps> = (props) => {
               {formatMessage('add alternative phrasing')}
             </ActionButton>
           );
-
           return (
             <div data-is-focusable css={formCell}>
               {showingQuestions.map((question, qIndex: number) => {
+                const shouldFocusOnMount =
+                  item.fileId === creatQnAPairSettings.groupKey &&
+                  index === creatQnAPairSettings.sectionIndex &&
+                  qIndex === 0;
+                console.log(item.fileId, creatQnAPairSettings.groupKey, index, creatQnAPairSettings.sectionIndex);
+                console.log(shouldFocusOnMount);
                 return (
                   <EditableField
                     key={question.id}
                     enableIcon
                     ariaLabel={formatMessage(`Question is {content}`, { content: question.content })}
+                    componentFocusOnmount={shouldFocusOnMount}
                     depth={0}
                     disabled={isAllowEdit}
                     extraContent={
@@ -435,6 +476,9 @@ const TableView: React.FC<TableViewProps> = (props) => {
                       const isChanged = question.content !== newValue;
                       if (newValue && isChanged) {
                         onUpdateQnAQuestion(item.fileId, item.sectionId, question.id, newValue);
+                      }
+                      if (shouldFocusOnMount) {
+                        setCreatQnAPairSettings({ groupKey: '', sectionIndex: -1 });
                       }
                     }}
                     onChange={() => {}}
@@ -608,6 +652,17 @@ const TableView: React.FC<TableViewProps> = (props) => {
     if (isChanged) setGroups(newGroups);
   }, [dialogId, qnaFiles]);
 
+  useEffect(() => {
+    if (groups) {
+      const newGroup = [...groups];
+      const toExpandGroup = groups.find((g) => g.key === creatQnAPairSettings.groupKey);
+      if (toExpandGroup) {
+        toExpandGroup.isCollapsed = false;
+        setGroups(newGroup);
+      }
+    }
+  }, [creatQnAPairSettings]);
+
   const onRenderDetailsHeader = useCallback(
     (props, defaultRender) => {
       return (
@@ -658,7 +713,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
       </div>
     );
   }
-
   return (
     <div data-testid={'table-view'}>
       <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
