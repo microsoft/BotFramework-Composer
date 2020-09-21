@@ -15,7 +15,7 @@ import { navigateTo } from '../../utils/navigation';
 import { TestController } from '../../components/TestController/TestController';
 import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
-import { dialogsState, projectIdState, qnaAllUpViewStatusState, qnaFilesState } from '../../recoilModel/atoms/botState';
+import { dialogsState, qnaAllUpViewStatusState, qnaFilesState } from '../../recoilModel/atoms/botState';
 import { dispatcherState } from '../../recoilModel';
 import { QnAAllUpViewStatus } from '../../recoilModel/types';
 import { CreateQnAModal } from '../../components/QnA';
@@ -25,22 +25,23 @@ import TableView from './table-view';
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
 interface QnAPageProps extends RouteComponentProps<{}> {
+  projectId?: string;
   dialogId?: string;
 }
 
 const QnAPage: React.FC<QnAPageProps> = (props) => {
+  const { dialogId = '', projectId = '' } = props;
   const actions = useRecoilValue(dispatcherState);
-  const dialogs = useRecoilValue(dialogsState);
-  const qnaFiles = useRecoilValue(qnaFilesState);
-  const projectId = useRecoilValue(projectIdState);
+  const dialogs = useRecoilValue(dialogsState(projectId));
+  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   //To do: support other languages
   const locale = 'en-us';
   //const locale = useRecoilValue(localeState);
-  const qnaAllUpViewStatus = useRecoilValue(qnaAllUpViewStatusState);
+  const qnaAllUpViewStatus = useRecoilValue(qnaAllUpViewStatusState(projectId));
   const [createOnDialogId, setCreateOnDialogId] = useState('');
 
   const path = props.location?.pathname ?? '';
-  const { dialogId = '' } = props;
+
   const edit = /\/edit(\/)?$/.test(path);
   const isRoot = dialogId === 'all';
   const navLinks: INavTreeItem[] = useMemo(() => {
@@ -59,7 +60,7 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
             key: 'Create KB from scratch',
             onClick: () => {
               setCreateOnDialogId(dialog.id);
-              actions.createQnAFromScratchDialogBegin({ dialogId: dialog.id });
+              actions.createQnAFromScratchDialogBegin({ dialogId: dialog.id, projectId });
             },
           },
           {
@@ -67,7 +68,7 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
             key: 'Create KB from URL or file',
             onClick: () => {
               setCreateOnDialogId(dialog.id);
-              actions.createQnAFromUrlDialogBegin({ dialogId: dialog.id });
+              actions.createQnAFromUrlDialogBegin({ dialogId: dialog.id, projectId });
             },
           },
         ],
@@ -107,7 +108,7 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
   const toolbarItems = [
     {
       type: 'element',
-      element: <TestController />,
+      element: <TestController projectId={projectId} />,
       align: 'right',
     },
   ];
@@ -141,8 +142,10 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
     >
       <Suspense fallback={<LoadingSpinner />}>
         <Router component={Fragment} primary={false}>
-          <CodeEditor dialogId={dialogId} path="/edit" />
-          {qnaAllUpViewStatus !== QnAAllUpViewStatus.Loading && <TableView dialogId={dialogId} path="/" />}
+          <CodeEditor dialogId={dialogId} path="/edit" projectId={projectId} />
+          {qnaAllUpViewStatus !== QnAAllUpViewStatus.Loading && (
+            <TableView dialogId={dialogId} path="/" projectId={projectId} />
+          )}
         </Router>
         {qnaAllUpViewStatus === QnAAllUpViewStatus.Loading && (
           <LoadingSpinner message={'Extracting QnA pairs. This could take a moment.'} />
@@ -151,7 +154,7 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
           dialogId={createOnDialogId || dialogId}
           qnaFiles={qnaFiles}
           onDismiss={() => {
-            actions.createQnAFromUrlDialogCancel();
+            actions.createQnAFromUrlDialogCancel({ projectId });
           }}
           onSubmit={async ({ name, url, multiTurn = false }) => {
             if (url) {
@@ -160,9 +163,14 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
                 name,
                 url,
                 multiTurn,
+                projectId,
               });
             } else {
-              await actions.createQnAKBFromScratch({ id: `${createOnDialogId || dialogId}.${locale}`, name });
+              await actions.createQnAKBFromScratch({
+                id: `${createOnDialogId || dialogId}.${locale}`,
+                name,
+                projectId,
+              });
             }
           }}
         ></CreateQnAModal>

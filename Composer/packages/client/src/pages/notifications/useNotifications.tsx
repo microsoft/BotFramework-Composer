@@ -7,16 +7,15 @@ import get from 'lodash/get';
 import { BotIndexer } from '@bfc/indexers';
 
 import {
+  validateDialogSelectorFamily,
   luFilesState,
-  qnaFilesState,
   lgFilesState,
-  projectIdState,
-  BotDiagnosticsState,
+  botDiagnosticsState,
   settingsState,
   skillManifestsState,
   dialogSchemasState,
-} from '../../recoilModel/atoms/botState';
-import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
+  qnaFilesState,
+} from '../../recoilModel';
 
 import {
   Notification,
@@ -30,16 +29,16 @@ import {
 } from './types';
 import { getReferredLuFiles } from './../../utils/luUtil';
 
-export default function useNotifications(filter?: string) {
-  const dialogs = useRecoilValue(validatedDialogsSelector);
-  const luFiles = useRecoilValue(luFilesState);
-  const qnaFiles = useRecoilValue(qnaFilesState);
-  const projectId = useRecoilValue(projectIdState);
-  const lgFiles = useRecoilValue(lgFilesState);
-  const diagnostics = useRecoilValue(BotDiagnosticsState);
-  const setting = useRecoilValue(settingsState);
-  const skillManifests = useRecoilValue(skillManifestsState);
-  const dialogSchemas = useRecoilValue(dialogSchemasState);
+export default function useNotifications(projectId: string, filter?: string) {
+  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const luFiles = useRecoilValue(luFilesState(projectId));
+  const lgFiles = useRecoilValue(lgFilesState(projectId));
+  const diagnostics = useRecoilValue(botDiagnosticsState(projectId));
+  const setting = useRecoilValue(settingsState(projectId));
+  const skillManifests = useRecoilValue(skillManifestsState(projectId));
+  const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
+  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
+
   const botAssets = {
     projectId,
     dialogs,
@@ -50,6 +49,7 @@ export default function useNotifications(filter?: string) {
     setting,
     dialogSchemas,
   };
+
   const memoized = useMemo(() => {
     const notifications: Notification[] = [];
     diagnostics.forEach((d) => {

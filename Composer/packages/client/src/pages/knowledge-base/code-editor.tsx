@@ -13,23 +13,24 @@ import get from 'lodash/get';
 import { CodeEditorSettings } from '@bfc/shared';
 import { QnAEditor } from '@bfc/code-editor';
 
-import { qnaFilesState, projectIdState } from '../../recoilModel/atoms/botState';
+import { qnaFilesState } from '../../recoilModel/atoms/botState';
 import { dispatcherState } from '../../recoilModel';
 import { userSettingsState } from '../../recoilModel';
 interface CodeEditorProps extends RouteComponentProps<{}> {
   dialogId: string;
+  projectId: string;
 }
 
 const lspServerPath = '/lu-language-server';
 const CodeEditor: React.FC<CodeEditorProps> = (props) => {
+  const { projectId = '', dialogId = '' } = props;
   const actions = useRecoilValue(dispatcherState);
-  const qnaFiles = useRecoilValue(qnaFilesState);
+  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   //To do: support other languages
   const locale = 'en-us';
   //const locale = useRecoilValue(localeState);
-  const projectId = useRecoilValue(projectIdState);
   const userSettings = useRecoilValue(userSettingsState);
-  const { dialogId } = props;
+
   const search = props.location?.search ?? '';
   const searchContainerId = querystring.parse(search).C;
 
@@ -71,7 +72,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   const onChangeContent = useMemo(
     () =>
       debounce((newContent: string) => {
-        actions.updateQnAFile({ id: targetFileId, content: newContent });
+        actions.updateQnAFile({ id: targetFileId, content: newContent, projectId });
       }, 500),
     [projectId]
   );

@@ -22,27 +22,33 @@ import { lgUtil } from '@bfc/indexers';
 import { EditableField } from '../../components/EditableField';
 import { navigateTo } from '../../utils/navigation';
 import { actionButton, formCell, editableFieldContainer } from '../language-understanding/styles';
-import { dispatcherState, lgFilesState, projectIdState, localeState, settingsState } from '../../recoilModel';
+import {
+  dispatcherState,
+  lgFilesState,
+  localeState,
+  settingsState,
+  validateDialogSelectorFamily,
+} from '../../recoilModel';
 import { languageListTemplates } from '../../components/MultiLanguage';
-import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 
-interface TableViewProps extends RouteComponentProps<{}> {
+interface TableViewProps extends RouteComponentProps<{ dialogId: string; projectId: string }> {
   dialogId: string;
+  projectId: string;
 }
 
 const TableView: React.FC<TableViewProps> = (props) => {
-  const dialogs = useRecoilValue(validatedDialogsSelector);
-  const lgFiles = useRecoilValue(lgFilesState);
-  const projectId = useRecoilValue(projectIdState);
-  const locale = useRecoilValue(localeState);
-  const settings = useRecoilValue(settingsState);
-  const { createLgTemplate, copyLgTemplate, removeLgTemplate, updateLgTemplate, setMessage } = useRecoilValue(
+  const { dialogId, projectId } = props;
+
+  const lgFiles = useRecoilValue(lgFilesState(projectId));
+  const locale = useRecoilValue(localeState(projectId));
+  const settings = useRecoilValue(settingsState(projectId));
+  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const { createLgTemplate, copyLgTemplate, removeLgTemplate, setMessage, updateLgTemplate } = useRecoilValue(
     dispatcherState
   );
 
   const { languages, defaultLanguage } = settings;
 
-  const { dialogId } = props;
   const file = lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const defaultLangFile = lgFiles.find(({ id }) => id === `${dialogId}.${defaultLanguage}`);
 
@@ -72,6 +78,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     if (file) {
       const newName = lgUtil.increaseNameUtilNotExist(file.templates, 'TemplateName');
       const payload = {
+        projectId,
         id: file.id,
         template: {
           name: newName,
@@ -89,6 +96,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         const payload = {
           id: file.id,
           templateName: name,
+          projectId,
         };
         removeLgTemplate(payload);
         //setFocusedIndex(file.templates.findIndex((item) => item.name === name));
@@ -105,6 +113,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           id: file.id,
           fromTemplateName: name,
           toTemplateName: resolvedName,
+          projectId,
         };
         copyLgTemplate(payload);
         //setFocusedIndex(file.templates.length);
@@ -120,6 +129,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           id: file.id,
           templateName,
           template,
+          projectId,
         };
         updateLgTemplate(payload);
       }
@@ -134,6 +144,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           id: defaultLangFile.id,
           templateName,
           template,
+          projectId,
         };
         updateLgTemplate(payload);
       }

@@ -157,14 +157,14 @@ export interface LgFile {
 }
 
 export interface Skill {
-  manifestUrl: string;
-  name: string;
-  protocol: string;
-  description: string;
-  endpoints: { [key: string]: any }[];
+  id: string;
+  content: any;
+  description?: string;
+  endpoints: any[];
   endpointUrl: string;
+  manifestUrl: string;
   msAppId: string;
-  body: string | null | undefined;
+  name: string;
 }
 
 export interface TextFile {
