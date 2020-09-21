@@ -42,7 +42,6 @@ export class BotProjectDeploy {
     profileName: string,
     name: string,
     environment: string,
-    language?: string,
     hostname?: string,
     luisResource?: string
   ) {
@@ -55,6 +54,7 @@ export class BotProjectDeploy {
 
       // STEP 2: UPDATE LUIS
       // Do the LUIS build if LUIS settings are present
+      let language = settings.defaultLanguage || settings.luis.defaultLanguage;
       if (!language) {
         language = 'en-us';
       }
