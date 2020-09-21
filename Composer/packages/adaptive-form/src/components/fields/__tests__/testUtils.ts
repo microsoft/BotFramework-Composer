@@ -2,8 +2,7 @@
 // Licensed under the MIT License.
 
 import assign from 'lodash/assign';
-import get from 'lodash/get';
-import { FieldProps, RecognizerSchema } from '@bfc/extension-client';
+import { FieldProps } from '@bfc/extension-client';
 
 const defaults: FieldProps = {
   depth: 0,
@@ -19,11 +18,4 @@ const defaults: FieldProps = {
 
 export function fieldProps(overrides: Partial<FieldProps> = {}): FieldProps {
   return assign({}, defaults, overrides);
-}
-
-export function mockRecognizerConfig(recognizerConfigs: RecognizerSchema[]) {
-  return {
-    recognizers: recognizerConfigs,
-    findRecognizer: (recognizerValue) => recognizerConfigs.find((x) => x.id === get(recognizerValue, '$kind')),
-  };
 }

@@ -8,7 +8,7 @@ import assign from 'lodash/assign';
 
 import { RecognizerField } from '../RecognizerField';
 
-import { fieldProps, mockRecognizerConfig } from './testUtils';
+import { fieldProps } from './testUtils';
 
 jest.mock('@bfc/extension-client', () => ({
   useShellApi: jest.fn(),
@@ -33,7 +33,7 @@ describe('<RecognizerField />', () => {
 
   it('renders a dropdown when recognizer matches', () => {
     const handleChange = jest.fn();
-    const config = mockRecognizerConfig([
+    const recognizers = [
       {
         id: 'one',
         displayName: 'One Recognizer',
@@ -46,8 +46,11 @@ describe('<RecognizerField />', () => {
         isSelected: () => true,
         seedNewRecognizer: jest.fn(),
       },
-    ]);
-    (useRecognizerConfig as jest.Mock).mockReturnValue(config);
+    ];
+    (useRecognizerConfig as jest.Mock).mockReturnValue({
+      recognizers,
+      currentRecognizer: recognizers[1],
+    });
     const { getByTestId } = renderSubject({ value: { $kind: 'two' } });
     const dropdown = getByTestId('recognizerTypeDropdown');
     expect(dropdown).toHaveTextContent('Two Recognizer');

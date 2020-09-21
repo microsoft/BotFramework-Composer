@@ -7,6 +7,7 @@ import { renderHook } from '@bfc/test-utils/lib/hooks';
 import { useRecognizerConfig } from '../useRecognizerConfig';
 import { EditorExtensionContext } from '../../EditorExtensionContext';
 
+const shellData = { currentDialog: { content: {} } };
 const plugins = {
   uiSchema: {
     foo: {
@@ -24,7 +25,7 @@ const plugins = {
 
 const wrapper: React.FC = ({ children }) => (
   // @ts-expect-error
-  <EditorExtensionContext.Provider value={{ plugins }}>{children}</EditorExtensionContext.Provider>
+  <EditorExtensionContext.Provider value={{ plugins, shellData }}>{children}</EditorExtensionContext.Provider>
 );
 
 describe('useRecognizerConfig', () => {

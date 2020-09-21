@@ -4,11 +4,11 @@
 import React from 'react';
 import { render, fireEvent } from '@bfc/test-utils';
 import assign from 'lodash/assign';
-import { useShellApi, useRecognizerConfig } from '@bfc/extension-client';
+import { useRecognizerConfig } from '@bfc/extension-client';
 
 import { IntentField } from '../IntentField';
 
-import { fieldProps, mockRecognizerConfig } from './testUtils';
+import { fieldProps } from './testUtils';
 
 jest.mock('@bfc/extension-client', () => ({
   useShellApi: jest.fn(),
@@ -20,30 +20,27 @@ function renderSubject(overrides = {}) {
   return render(<IntentField {...props} />);
 }
 
-describe('<IntentField />', () => {
-  beforeEach(() => {
-    (useRecognizerConfig as jest.Mock).mockReturnValue(
-      mockRecognizerConfig([
-        {
-          id: 'TestRecognizer',
-          displayName: 'TestRecognizer',
-          intentEditor: ({ id, onChange }) => (
-            <div id={id}>
-              Test Recognizer <button onClick={onChange}>Update</button>
-            </div>
-          ),
-        },
-        {
-          id: 'OtherRecognizer',
-          displayName: 'OtherRecognizer',
-        },
-      ])
-    );
-  });
+const recognizers = [
+  {
+    id: 'TestRecognizer',
+    displayName: 'TestRecognizer',
+    intentEditor: ({ id, onChange }) => (
+      <div id={id}>
+        Test Recognizer <button onClick={onChange}>Update</button>
+      </div>
+    ),
+  },
+  {
+    id: 'OtherRecognizer',
+    displayName: 'OtherRecognizer',
+  },
+];
 
+describe('<IntentField />', () => {
   it('uses a custom label', () => {
-    (useShellApi as jest.Mock).mockReturnValue({
-      currentDialog: { content: { recognizer: { $kind: 'TestRecognizer' } } },
+    (useRecognizerConfig as jest.Mock).mockReturnValue({
+      recognizers,
+      currentRecognizer: recognizers[0],
     });
 
     const { getByLabelText } = renderSubject({ value: 'MyIntent' });
@@ -51,9 +48,11 @@ describe('<IntentField />', () => {
   });
 
   it('invokes change handler with intent name', () => {
-    (useShellApi as jest.Mock).mockReturnValue({
-      currentDialog: { content: { recognizer: { $kind: 'TestRecognizer' } } },
+    (useRecognizerConfig as jest.Mock).mockReturnValue({
+      recognizers,
+      currentRecognizer: recognizers[0],
     });
+
     const onChange = jest.fn();
 
     const { getByText } = renderSubject({ onChange, value: 'MyIntent' });
@@ -62,8 +61,9 @@ describe('<IntentField />', () => {
   });
 
   it('renders message when editor not defined', () => {
-    (useShellApi as jest.Mock).mockReturnValue({
-      currentDialog: { content: { recognizer: { $kind: 'OtherRecognizer' } } },
+    (useRecognizerConfig as jest.Mock).mockReturnValue({
+      recognizers,
+      currentRecognizer: recognizers[1],
     });
 
     const { container } = renderSubject({ value: 'MyIntent' });
