@@ -1,34 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import path from 'path';
-
-import { writeJsonSync } from 'fs-extra';
-
-import { npm } from '../../utils/npm';
 import { ExtensionManager } from '../manager';
-
-jest.mock('../../utils/npm', () => ({
-  npm: jest.fn(),
-}));
-
-const mockManifest = {
-  extension1: {
-    id: 'extension1',
-  },
-  extension2: {
-    id: 'extension2',
-  },
-};
-
-beforeEach(() => {
-  process.env.COMPOSER_EXTENSION_DATA = path.resolve(__dirname, '../../../__manifest__.json');
-  writeJsonSync(process.env.COMPOSER_EXTENSION_DATA, mockManifest);
-});
-
-afterEach(() => {
-  delete process.env.COMPOSER_EXTENSION_DATA;
-});
 
 describe('#getAll', () => {
   it('return an array of all extensions', () => {
@@ -50,16 +23,26 @@ describe('#find', () => {
   });
 });
 
+describe('#loadAll', () => {
+  it('loads built-in extensions and remote extensions', async () => {
+    const builtinSpy = jest.spyOn(ExtensionManager, 'loadBuiltinExtensions');
+    const remoteSpy = jest.spyOn(ExtensionManager, 'loadRemoteExtensions');
+
+    builtinSpy.mockReturnValue(Promise.resolve());
+    remoteSpy.mockReturnValue(Promise.resolve());
+
+    await ExtensionManager.loadAll();
+
+    expect(builtinSpy).toHaveBeenCalled();
+    expect(remoteSpy).toHaveBeenCalled();
+  });
+});
+
 // describe('#installRemote', () => {});
-
 // describe('#loadBuiltinExtensions', () => {});
-
 // describe('#loadRemotePlugins', () => {});
-
 // describe('#load', () => {});
-
 // describe('#enable', () => {});
-
 // describe('#disable', () => {});
 // describe('#remove', () => {});
 // describe('#search', () => {});

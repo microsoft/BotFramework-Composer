@@ -88,7 +88,7 @@ class ExtensionManager {
   /**
    * Loads all the extensions that are checked into the Composer project (1P extensions)
    */
-  private async loadBuiltinExtensions() {
+  public async loadBuiltinExtensions() {
     log('Loading inherent extensions from: ', this.builtinDir);
     // get all extensions with a package.json in the extensions dir
     const extensions = await glob('*/package.json', { cwd: this.builtinDir, dot: true });
@@ -112,7 +112,7 @@ class ExtensionManager {
    * Loads all installed remote extensions
    * TODO (toanzian / abrown): Needs to be implemented
    */
-  private async loadRemoteExtensions() {
+  public async loadRemoteExtensions() {
     // should perform the same function as loadBuiltInExtensions but from the
     // location that remote / 3P extensions are installed
   }
@@ -146,7 +146,7 @@ class ExtensionManager {
   public async enable(id: string) {
     this.manifest.updateExtensionConfig(id, { enabled: true });
 
-    // re-load extension
+    await this.load(id);
   }
 
   /**
@@ -156,7 +156,7 @@ class ExtensionManager {
   public async disable(id: string) {
     this.manifest.updateExtensionConfig(id, { enabled: false });
 
-    // tear down extension?
+    // TODO: tear down extension?
   }
 
   /**
