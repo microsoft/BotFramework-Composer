@@ -15,6 +15,8 @@ import { schema } from './constants';
 
 const skills: any = [
   {
+    id: 'yuesuemailskill0207',
+    content: {},
     manifestUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json',
     name: 'yuesuemailskill0207',
     endpoints: [
@@ -52,7 +54,7 @@ const renderBeginSkillDialog = ({ value = {}, onChange = jest.fn() } = {}) => {
 
   const shell: any = {
     addSkillDialog,
-    skillsInSettings: {
+    skillsSettings: {
       get: (path: string) => fetchFromSettings(path, setting),
       set: () => {},
     },

@@ -30,7 +30,7 @@ beforeEach(async () => {
 describe('init', () => {
   it('should get project successfully', () => {
     const project: { [key: string]: any } = proj.getProject();
-    expect(project.files.length).toBe(10);
+    expect(project.files.length).toBe(13);
   });
 });
 
@@ -103,7 +103,7 @@ describe('copyTo', () => {
     const newBotProject = await proj.copyTo(locationRef);
     await newBotProject.init();
     const project: { [key: string]: any } = newBotProject.getProject();
-    expect(project.files.length).toBe(10);
+    expect(project.files.length).toBe(13);
   });
 });
 
@@ -380,7 +380,7 @@ describe('deleteAllFiles', () => {
     const newBotProject = await proj.copyTo(locationRef);
     await newBotProject.init();
     const project: { [key: string]: any } = newBotProject.getProject();
-    expect(project.files.length).toBe(10);
+    expect(project.files.length).toBe(14);
     await newBotProject.deleteAllFiles();
     expect(fs.existsSync(copyDir)).toBe(false);
   });
