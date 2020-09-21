@@ -11,7 +11,7 @@ const config: PluginConfig = {
       recognizer: {
         displayName: formatMessage('Default recognizer'),
         isSelected: (data) => {
-          return typeof data === 'string';
+          return typeof data === 'string' && data.endsWith('.lu.qna');
         },
         seedNewRecognizer: (shellData) => {
           const { qnaFiles, luFiles, currentDialog, locale } = shellData;
