@@ -31,6 +31,10 @@ const getDefaultRecognizer = (recognizers: RecognizerSchema[]) => {
   return firstAvailableRecognizer;
 };
 
+const getFallbackRecognizer = (recognizers: RecognizerSchema[]) => {
+  return recognizers.find((r) => r.id === FallbackRecognizerKey);
+};
+
 const findRecognizerByValue = (recognizers: RecognizerSchema[], recognizerValue?: MicrosoftIRecognizer) => {
   const matchedRecognizer = recognizers.find((r) => {
     if (typeof r.isSelected === 'function') {
@@ -41,8 +45,17 @@ const findRecognizerByValue = (recognizers: RecognizerSchema[], recognizerValue?
   return matchedRecognizer;
 };
 
-export function useRecognizerConfig() {
-  const { plugins } = useContext(EditorExtensionContext);
+export interface RecognizerSchemaConfig {
+  /** All recognizer definitions from uischema. */
+  recognizers: RecognizerSchema[];
+  /** Current dialog's in-use recognizer definition. */
+  currentRecognizer?: RecognizerSchema;
+  /** Default recognizer's definition, used when creating new dialog. */
+  defaultRecognizer?: RecognizerSchema;
+}
+
+export function useRecognizerConfig(): RecognizerSchemaConfig {
+  const { plugins, shellData } = useContext(EditorExtensionContext);
 
   const recognizers: RecognizerSchema[] = useMemo(() => {
     if (!plugins.uiSchema) return [];
@@ -60,11 +73,15 @@ export function useRecognizerConfig() {
     return schemas;
   }, [plugins.uiSchema]);
 
-  const fallbackRecognizer = recognizers.find((x) => x.id === FallbackRecognizerKey);
+  const defaultRecognizer = getDefaultRecognizer(recognizers);
+  const fallbackRecognizer = getFallbackRecognizer(recognizers);
+
+  const currentRecognizerValue = shellData.currentDialog?.content?.recognizer;
+  const currentRecognizer = findRecognizerByValue(recognizers, currentRecognizerValue) ?? fallbackRecognizer;
 
   return {
     recognizers,
-    findRecognizer: (recognizerValue) => findRecognizerByValue(recognizers, recognizerValue) ?? fallbackRecognizer,
-    getDefaultRecognizer: () => getDefaultRecognizer(recognizers),
+    currentRecognizer,
+    defaultRecognizer,
   };
 }

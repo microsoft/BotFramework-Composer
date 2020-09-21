@@ -3,7 +3,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useMemo } from 'react';
-import { FieldProps, useShellApi, useRecognizerConfig, FallbackRecognizerKey } from '@bfc/extension-client';
+import { FieldProps, useShellApi, useRecognizerConfig } from '@bfc/extension-client';
 import { MicrosoftIRecognizer } from '@bfc/shared';
 import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import formatMessage from 'format-message';
@@ -19,11 +19,10 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (prop
   const { shellApi, ...shellData } = useShellApi();
 
   useMigrationEffect(value, onChange);
-  const { recognizers: recognizerConfigs, findRecognizer } = useRecognizerConfig();
+  const { recognizers: recognizerConfigs, currentRecognizer } = useRecognizerConfig();
   const dropdownOptions = useMemo(() => getDropdownOptions(recognizerConfigs), [recognizerConfigs]);
 
-  const currentRecognizerDef = findRecognizer(value) ?? recognizerConfigs.find((r) => r.id === FallbackRecognizerKey);
-  const RecognizerEditor = currentRecognizerDef?.recognizerEditor;
+  const RecognizerEditor = currentRecognizer?.recognizerEditor;
   const widget = RecognizerEditor ? <RecognizerEditor {...props} /> : null;
 
   const submit = (_, option?: IDropdownOption): void => {
@@ -47,7 +46,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (prop
         label={formatMessage('Recognizer Type')}
         options={dropdownOptions}
         responsiveMode={ResponsiveMode.large}
-        selectedKey={currentRecognizerDef?.id}
+        selectedKey={currentRecognizer?.id}
         onChange={submit}
       />
       {widget}

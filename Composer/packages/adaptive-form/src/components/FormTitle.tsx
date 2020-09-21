@@ -52,9 +52,7 @@ interface FormTitleProps {
 const FormTitle: React.FC<FormTitleProps> = (props) => {
   const { description, schema, formData, uiOptions = {} } = props;
   const { shellApi, ...shellData } = useShellApi();
-  const { currentDialog } = shellData;
-  const { findRecognizer } = useRecognizerConfig();
-  const selectedRecognizer = findRecognizer(currentDialog?.content?.recognizer);
+  const { currentRecognizer: selectedRecognizer } = useRecognizerConfig();
   // use a ref because the syncIntentName is debounced and we need the most current version to invoke the api
   const shell = useRef({
     data: shellData,

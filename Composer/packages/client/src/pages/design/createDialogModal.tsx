@@ -40,7 +40,7 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
   const actionsSeed = useRecoilValue(actionsSeedState(projectId));
 
   const { shellApi, ...shellData } = useShellApi();
-  const { getDefaultRecognizer } = useRecognizerConfig();
+  const { defaultRecognizer } = useRecognizerConfig();
 
   const formConfig: FieldConfig<DialogFormData> = {
     name: {
@@ -71,7 +71,6 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
   };
 
   const seedNewDialog = (formData: DialogFormData) => {
-    const defaultRecognizer = getDefaultRecognizer();
     const seededContent = new DialogFactory(schemas.sdk?.content).create(SDKKinds.AdaptiveDialog, {
       $designer: { name: formData.name, description: formData.description },
       generator: `${formData.name}.lg`,

@@ -2,19 +2,16 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { FieldProps, useShellApi, useRecognizerConfig } from '@bfc/extension-client';
+import { FieldProps, useRecognizerConfig } from '@bfc/extension-client';
 import formatMessage from 'format-message';
 
 import { FieldLabel } from '../FieldLabel';
 
 const IntentField: React.FC<FieldProps> = (props) => {
   const { id, description, uiOptions, value, required, onChange } = props;
-  const { currentDialog } = useShellApi();
+  const { currentRecognizer } = useRecognizerConfig();
 
-  const { findRecognizer } = useRecognizerConfig();
-  const recognizer = findRecognizer(currentDialog?.content?.recognizer);
-
-  const Editor = recognizer?.intentEditor;
+  const Editor = currentRecognizer?.intentEditor;
   const label = formatMessage('Trigger phrases (intent: #{intentName})', { intentName: value });
 
   const handleChange = () => {
@@ -27,7 +24,7 @@ const IntentField: React.FC<FieldProps> = (props) => {
       {Editor ? (
         <Editor {...props} onChange={handleChange} />
       ) : (
-        formatMessage('No Editor for {type}', { type: recognizer?.id })
+        formatMessage('No Editor for {type}', { type: currentRecognizer?.id })
       )}
     </React.Fragment>
   );
