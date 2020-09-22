@@ -12,6 +12,7 @@ import { useRecoilValue } from 'recoil';
 import { Subscription, DeployLocation } from '@bfc/shared';
 
 import { subscriptionsState, resourceGroupsState, deployLocationsState, dispatcherState } from '../../recoilModel';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 
 interface CreateNewResourceProps {
   onDismiss: () => void;
@@ -37,6 +38,12 @@ export const CreateNewResource: React.FC<CreateNewResourceProps> = (props) => {
   const [errorHostName, setErrorHostName] = useState('');
   const [currentLocation, setLocation] = useState<DeployLocation>();
   const [selectedResources, setExternalResources] = useState<string[]>([]);
+  const { getSubscriptions } = useRecoilValue(dispatcherState);
+
+  useEffect(() => {
+    // Load the list of subscriptions for the dropdown....
+    getSubscriptions();
+  }, []);
 
   const subscriptionOption = useMemo(() => {
     console.log(subscriptions);
@@ -117,37 +124,40 @@ export const CreateNewResource: React.FC<CreateNewResourceProps> = (props) => {
 
   return (
     <Fragment>
-      <form>
-        <Dropdown
-          required
-          label={formatMessage('Subscription')}
-          options={subscriptionOption}
-          placeholder={formatMessage('Select your subscription')}
-          onChange={updateCurrentSubscription}
-        />
-        <TextField
-          required
-          errorMessage={errorHostName}
-          label={formatMessage('HostName')}
-          placeholder={formatMessage('Name of your new resource group')}
-          onChange={newResourceGroup}
-        />
-        <Dropdown
-          required
-          label={formatMessage('Locations')}
-          options={deployLocationsOption}
-          placeholder={formatMessage('Select your location')}
-          onChange={updateCurrentLocation}
-        />
-        <Dropdown
-          multiSelect
-          label="Add more external resources"
-          options={extenstionResourceOptions}
-          placeholder="Select options"
-          selectedKeys={selectedResources}
-          onChange={onSelectedResource}
-        />
-      </form>
+      {subscriptionOption && subscriptionOption.length && (
+        <form>
+          <Dropdown
+            required
+            label={formatMessage('Subscription')}
+            options={subscriptionOption}
+            placeholder={formatMessage('Select your subscription')}
+            onChange={updateCurrentSubscription}
+          />
+          <TextField
+            required
+            errorMessage={errorHostName}
+            label={formatMessage('HostName')}
+            placeholder={formatMessage('Name of your new resource group')}
+            onChange={newResourceGroup}
+          />
+          <Dropdown
+            required
+            label={formatMessage('Locations')}
+            options={deployLocationsOption}
+            placeholder={formatMessage('Select your location')}
+            onChange={updateCurrentLocation}
+          />
+          <Dropdown
+            multiSelect
+            label="Add more external resources"
+            options={extenstionResourceOptions}
+            placeholder="Select options"
+            selectedKeys={selectedResources}
+            onChange={onSelectedResource}
+          />
+        </form>
+      )}
+      {(!subscriptionOption || !subscriptionOption.length) && <LoadingSpinner />}
       <DialogFooter>
         <DefaultButton text={formatMessage('Cancel')} onClick={props.onDismiss} />
         <PrimaryButton
