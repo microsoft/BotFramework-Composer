@@ -76,16 +76,25 @@ export class AzureResourceMananger {
     };
   }
 
+  /**
+   * Get the provision status
+   */
   public getStatus() {
     return this.deployStatus;
   }
 
+  /**
+   * Get the provision output (publishing profile)
+   */
   public getOutput() {
     console.log(this.deploymentOutput);
     console.log(this.deployStatus);
     return this.deploymentOutput;
   }
 
+  /**
+   * Deploy all resources based on the configuration
+   */
   public async deployResources() {
     if (!this.config) {
       throw new Error('The configuration for AzureResourceMananger is invalid.');
@@ -333,6 +342,10 @@ export class AzureResourceMananger {
     }
   }
 
+  /**
+   * Create resource group
+   * @param config 
+   */
   private async createResourceGroup(config: ResourceGroupConfig) {
     try {
       if (!config.name) {
@@ -414,6 +427,10 @@ export class AzureResourceMananger {
     }
   }
 
+  /**
+   * Deploy luis authoring resource
+   * @param config 
+   */
   private async deployLuisAuthoringResource(config: LuisAuthoringResourceConfig) {
     try {
       this.logger({
@@ -460,6 +477,10 @@ export class AzureResourceMananger {
     }
   }
 
+  /**
+   * Deploy luis resource
+   * @param config 
+   */
   private async deployLuisResource(config: LuisResourceConfig) {
     try {
       this.logger({
@@ -507,6 +528,10 @@ export class AzureResourceMananger {
     }
   }
 
+  /**
+   * Deploy application insights
+   * @param config 
+   */
   private async deployAppInsightsResource(config: ApplicationInsightsConfig) {
     try {
       this.logger({
@@ -545,6 +570,10 @@ export class AzureResourceMananger {
     }
   }
 
+  /**
+   * Deploy cosmos db
+   * @param config 
+   */
   private async deployCosmosDBResource(config: CosmosDBConfig) {
     try {
       this.logger({
@@ -676,6 +705,10 @@ export class AzureResourceMananger {
     }
   }
 
+  /**
+   * Deploy blob storage
+   * @param config 
+   */
   private async deployBlobStorageResource(config: BlobStorageConfig) {
     try {
       this.logger({
@@ -718,6 +751,10 @@ export class AzureResourceMananger {
     }
   }
 
+  /**
+   * Deploy web app
+   * @param config 
+   */
   private async deployWebAppResource(config: WebAppConfig) {
     try {
       this.logger({
@@ -807,6 +844,10 @@ export class AzureResourceMananger {
     }
   }
 
+  /**
+   * Deploy bot channel registration
+   * @param config 
+   */
   private async deployBotResource(config: BotConfig) {
     try {
       this.logger({
@@ -850,6 +891,10 @@ export class AzureResourceMananger {
     }
   }
 
+  /**
+   * Deploy guid deployment counter, indicates how many deployments have been made
+   * @param config 
+   */
   private async deployDeploymentCounter(config: DeploymentsConfig) {
     try {
       this.logger({
@@ -888,6 +933,5 @@ export class AzureResourceMananger {
         message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
       });
     }
-
   }
 }
