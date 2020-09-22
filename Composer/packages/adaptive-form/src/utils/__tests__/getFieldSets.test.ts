@@ -29,7 +29,17 @@ describe('getFieldSets', () => {
     expect(result).toEqual([
       expect.objectContaining({
         fields: ['one', 'two', 'three', 'four', 'five', 'six', 'seven'],
-        schema,
+        schema: {
+          properties: {
+            one: { type: 'string' },
+            two: { type: 'string' },
+            three: { type: 'number' },
+            four: { type: 'object' },
+            five: { type: 'object' },
+            six: { type: 'object' },
+            seven: { type: 'boolean' },
+          },
+        },
         title: 'set1',
       }),
     ]);
