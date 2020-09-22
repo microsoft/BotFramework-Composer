@@ -18,7 +18,7 @@ const oldWarn = console.warn;
 const oldError = console.error;
 
 console.warn = (...args) => {
-  if (args.some((msg) => msg.startsWith('Translation for'))) {
+  if (args.some((msg) => typeof msg === 'string' && msg.startsWith('Translation for'))) {
     return;
   }
 
@@ -26,7 +26,7 @@ console.warn = (...args) => {
 };
 
 console.error = (...args) => {
-  if (args.some((msg) => msg.startsWith('Warning: Cannot update a component'))) {
+  if (args.some((msg) => typeof msg === 'string' && msg.startsWith('Warning: Cannot update a component'))) {
     return;
   }
 
