@@ -120,7 +120,7 @@ class ExtensionManager {
   }
 
   /**
-   * Enables a extension
+   * Enables an extension
    * @param id Id of the extension to be enabled
    */
   public async enable(id: string) {
@@ -130,7 +130,7 @@ class ExtensionManager {
   }
 
   /**
-   * Disables a extension
+   * Disables an extension
    * @param id Id of the extension to be disabled
    */
   public async disable(id: string) {
@@ -159,7 +159,7 @@ class ExtensionManager {
   }
 
   /**
-   * Searches for a extension via NPM's search function
+   * Searches for an extension via NPM's search function
    * @param query The search query
    */
   public async search(query: string) {

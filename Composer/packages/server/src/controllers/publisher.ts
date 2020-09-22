@@ -137,13 +137,7 @@ export const PublishController = {
     // get the publish plugin key
     const method = profile ? profile.type : undefined;
 
-    if (
-      profile &&
-      method &&
-      ExtensionContext.extensions.publish[method] &&
-      ExtensionContext.extensions.publish[method].methods &&
-      ExtensionContext.extensions.publish[method].methods.history
-    ) {
+    if (profile && method && ExtensionContext.extensions.publish[method]?.methods?.history) {
       // get the externally defined method
       const pluginMethod = ExtensionContext.extensions.publish[method].methods.history;
       if (typeof pluginMethod === 'function') {
@@ -181,13 +175,7 @@ export const PublishController = {
     // get the publish plugin key
     const method = profile ? profile.type : undefined;
 
-    if (
-      profile &&
-      method &&
-      ExtensionContext.extensions.publish[method] &&
-      ExtensionContext.extensions.publish[method].methods &&
-      ExtensionContext.extensions.publish[method].methods.rollback
-    ) {
+    if (profile && method && ExtensionContext.extensions.publish[method]?.methods?.rollback) {
       // append config from client(like sensitive settings)
       const configuration = {
         profileName: profile.name,
@@ -227,13 +215,7 @@ export const PublishController = {
     const projectId = req.params.projectId;
     const profile = defaultPublishConfig;
     const method = profile.type;
-    if (
-      profile &&
-      method &&
-      ExtensionContext.extensions.publish[method] &&
-      ExtensionContext.extensions.publish[method].methods &&
-      ExtensionContext.extensions.publish[method].methods.stopBot
-    ) {
+    if (profile && method && ExtensionContext.extensions.publish[method]?.methods?.stopBot) {
       const pluginMethod = ExtensionContext.extensions.publish[method].methods.stopBot;
       if (typeof pluginMethod === 'function') {
         try {
@@ -246,12 +228,7 @@ export const PublishController = {
         }
       }
     }
-    if (
-      profile &&
-      ExtensionContext.extensions.publish[method] &&
-      ExtensionContext.extensions.publish[method].methods &&
-      ExtensionContext.extensions.publish[method].methods.removeRuntimeData
-    ) {
+    if (profile && ExtensionContext.extensions.publish[method]?.methods?.removeRuntimeData) {
       const pluginMethod = ExtensionContext.extensions.publish[method].methods.removeRuntimeData;
       if (typeof pluginMethod === 'function') {
         try {
@@ -275,13 +252,7 @@ export const PublishController = {
     const projectId = req.params.projectId;
     const profile = defaultPublishConfig;
     const method = profile.type;
-    if (
-      profile &&
-      method &&
-      ExtensionContext.extensions.publish[method] &&
-      ExtensionContext.extensions.publish[method].methods &&
-      ExtensionContext.extensions.publish[method].methods.stopBot
-    ) {
+    if (profile && method && ExtensionContext.extensions.publish[method]?.methods?.stopBot) {
       const pluginMethod = ExtensionContext.extensions.publish[method].methods.stopBot;
       if (typeof pluginMethod === 'function') {
         try {
