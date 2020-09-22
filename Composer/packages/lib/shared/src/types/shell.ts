@@ -58,6 +58,7 @@ export interface ShellData {
   qnaFiles: QnAFile[];
   userSettings: UserSettings;
   skills: any[];
+  skillsSettings: Record<string, SkillSetting>;
   // TODO: remove
   schemas: BotSchemas;
 }
@@ -100,10 +101,7 @@ export interface ShellApi {
   displayManifestModal: (manifestId: string) => void;
   updateDialogSchema: (_: DialogSchemaFile) => Promise<void>;
   createTrigger: (id: string, formData, url?: string) => void;
-  skillsSettings: {
-    get: (path: string) => any;
-    set: (skillId: string, skillsData: SkillSetting) => Promise<void>;
-  };
+  updateSkillSetting: (skillId: string, skillsData: SkillSetting) => Promise<void>;
 }
 
 export interface Shell {
