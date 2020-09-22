@@ -244,10 +244,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const onCreateNewQnAPairs = (fileId: string | undefined) => {
     if (!fileId) return;
     const newQnAPair = qnaUtil.generateQnAPair();
-    console.log(qnaSections);
     const sectionIndex = qnaSections.findIndex((item) => item.fileId === fileId);
     createQnAPairs({ id: fileId, content: newQnAPair, projectId });
-    console.log(sectionIndex);
     setCreatQnAPairSettings({ groupKey: fileId, sectionIndex });
     const newArray = [...isQnASectionsExpanded];
     newArray.splice(sectionIndex, 0, false);
@@ -394,7 +392,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
       return null;
     },
-    [dialogId]
+    [dialogId, qnaSections]
   );
 
   const getTableColums = () => {
@@ -450,8 +448,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
                   item.fileId === creatQnAPairSettings.groupKey &&
                   index === creatQnAPairSettings.sectionIndex &&
                   qIndex === 0;
-                console.log(item.fileId, creatQnAPairSettings.groupKey, index, creatQnAPairSettings.sectionIndex);
-                console.log(shouldFocusOnMount);
                 return (
                   <EditableField
                     key={question.id}

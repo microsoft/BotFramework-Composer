@@ -66,7 +66,7 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromModalProps> = (props) 
   formConfig.url.validate = validateUrl;
   const { formData, updateField, hasErrors, formErrors } = useForm(formConfig);
   const isQnAFileselected = !(dialogId === 'all');
-  const disabled = hasErrors;
+  const disabled = hasErrors || !formData.url || !formData.name;
 
   const updateName = (name = '') => {
     updateField('name', name);
