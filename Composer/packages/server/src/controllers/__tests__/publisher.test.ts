@@ -11,7 +11,7 @@ import { BotProjectService } from '../../services/project';
 import { Path } from '../../utility/path';
 import { PublishController } from '../../controllers/publisher';
 
-const pluginDir = path.resolve(__dirname, '../../../../plugins');
+const pluginDir = path.resolve(__dirname, '../../../../../plugins');
 
 let mockRes: Response;
 
@@ -68,7 +68,7 @@ describe('get types', () => {
 describe('status', () => {
   const target = 'default';
 
-  it('should get status', async () => {
+  it.only('should get status', async () => {
     const projectId = await BotProjectService.openProject(location2);
 
     const mockReq = {
