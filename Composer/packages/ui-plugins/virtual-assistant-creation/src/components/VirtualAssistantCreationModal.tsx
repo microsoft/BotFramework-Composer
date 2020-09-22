@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import { RouteComponentProps, Router } from '@reach/router';
 import { NewBotPage } from './newBotPage';
 import { CustomizeBotPage } from './customizeBotPage';
@@ -14,28 +14,28 @@ import { updatePersonalityQnaFile } from '../shared/util';
 import ProvisionSummaryPage from './provisionSummaryPage';
 import { RouterPaths } from '../shared/constants';
 import { navigate } from '@reach/router';
-// -------------------- Styles -------------------- //
+import { formData } from '../shared/types';
 
-// -------------------- BotTypeTile -------------------- //
-interface VirtualAssistantCreationModalProps
-  extends RouteComponentProps<{
-    location: string;
-  }> {
-  // handleCreateNew: (formData: any, );
+// -------------------- VirtualAssistantCreationModal -------------------- //
+type VirtualAssistantCreationModalProps = RouteComponentProps<{
   onDismiss: () => void;
-  handleCreateNew: (formData: any, templateId: string) => Promise<void>;
-  formData: any;
-}
+  handleCreateNew: (formData: formData, templateId: string) => Promise<void>;
+  formData: formData;
+}>;
 
 export const AppContext = React.createContext(AppContextDefaultValue);
 
 export const VirtualAssistantCreationModal: React.FC<VirtualAssistantCreationModalProps> = (props) => {
   const { onDismiss, handleCreateNew, formData } = props;
+  if (onDismiss === undefined || handleCreateNew === undefined || formData === undefined) {
+    console.log('invalid props passed to VirtualAssistantCreationModal');
+    return null;
+  }
   const [state, setState] = useState(AppContextDefaultValue.state);
   const { shellApi } = useShellApi();
 
   const createAndConfigureBot = async () => {
-    await handleCreateNew(formData, 'va-core');
+    await handleCreateNew(formData, 'vaCore');
     await updateBotResponses();
     await updateQnaFiles();
     navigate('./');
@@ -75,20 +75,18 @@ export const VirtualAssistantCreationModal: React.FC<VirtualAssistantCreationMod
   };
 
   return (
-    <Fragment>
-      <AppContext.Provider value={{ state, setState }}>
-        <Router>
-          <NewBotPage onDismiss={onModalDismiss} path={RouterPaths.newBotPage} default />
-          <CustomizeBotPage onDismiss={onModalDismiss} path={RouterPaths.customizeBotPage} />
-          <ConfigSummaryPage onDismiss={onModalDismiss} path={RouterPaths.configSummaryPage} />
-          <ProvisionSummaryPage
-            onDismiss={onModalDismiss}
-            onSubmit={createAndConfigureBot}
-            path={RouterPaths.provisionSummaryPage}
-          />
-        </Router>
-      </AppContext.Provider>
-    </Fragment>
+    <AppContext.Provider value={{ state, setState }}>
+      <Router>
+        <NewBotPage onDismiss={onModalDismiss} path={RouterPaths.newBotPage} default />
+        <CustomizeBotPage onDismiss={onModalDismiss} path={RouterPaths.customizeBotPage} />
+        <ConfigSummaryPage onDismiss={onModalDismiss} path={RouterPaths.configSummaryPage} />
+        <ProvisionSummaryPage
+          onDismiss={onModalDismiss}
+          onSubmit={createAndConfigureBot}
+          path={RouterPaths.provisionSummaryPage}
+        />
+      </Router>
+    </AppContext.Provider>
   );
 };
 

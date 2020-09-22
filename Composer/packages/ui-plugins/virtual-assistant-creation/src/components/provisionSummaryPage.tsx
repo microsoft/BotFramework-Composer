@@ -14,42 +14,15 @@ import { RouterPaths } from '../shared/constants';
 import { DetailsList, DetailsListLayoutMode, IColumn, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
-// -------------------- BotTypeTile -------------------- //
-interface ProvisionSummaryPageProps extends RouteComponentProps {
-  onDismiss: () => void;
-  onSubmit: () => void;
-}
-
-export const ProvisionSummaryPage: React.FC<ProvisionSummaryPageProps> = (props) => {
-  const { onDismiss, onSubmit } = props;
-
-  const columns: IColumn[] = [
-    {
-      key: 'column1',
-      name: formatMessage('Resource'),
-      fieldName: 'Resource',
-      minWidth: 50,
-      maxWidth: 200,
-      isResizable: false,
-      isMultiline: false,
-    },
-    {
-      key: 'column2',
-      name: formatMessage('Notes'),
-      fieldName: 'Notes',
-      minWidth: 300,
-      maxWidth: 500,
-      isResizable: false,
-      isMultiline: true,
-    },
-  ];
-
-  const items = [
+// Content Data
+const provisioningDetailItems = () => {
+  return [
     {
       key: '0',
       Resource: formatMessage('Azure Bot Service'),
-      Notes:
-        'The Azure Bot Service resource stores configuration information that allows your Virtual Assistant to be accessed on the supported Channels and provide OAuth authentication.',
+      Notes: formatMessage(
+        'The Azure Bot Service resource stores configuration information that allows your Virtual Assistant to be accessed on the supported Channels and provide OAuth authentication.'
+      ),
     },
     {
       key: '1',
@@ -99,6 +72,42 @@ export const ProvisionSummaryPage: React.FC<ProvisionSummaryPageProps> = (props)
       Notes: formatMessage('Search index for your QnA Maker knowledgebases.'),
     },
   ];
+};
+
+// -------------------- ProvisionSummaryPage -------------------- //
+type ProvisionSummaryPageProps = RouteComponentProps<{
+  onDismiss: () => void;
+  onSubmit: () => void;
+}>;
+
+export const ProvisionSummaryPage: React.FC<ProvisionSummaryPageProps> = (props) => {
+  const { onDismiss, onSubmit } = props;
+
+  if (onDismiss === undefined || onSubmit === undefined) {
+    console.log('invalid props passed to ProvisionSummaryPage');
+    return null;
+  }
+
+  const columns: IColumn[] = [
+    {
+      key: 'column1',
+      name: formatMessage('Resource'),
+      fieldName: 'Resource',
+      minWidth: 50,
+      maxWidth: 200,
+      isResizable: false,
+      isMultiline: false,
+    },
+    {
+      key: 'column2',
+      name: formatMessage('Notes'),
+      fieldName: 'Notes',
+      minWidth: 300,
+      maxWidth: 500,
+      isResizable: false,
+      isMultiline: true,
+    },
+  ];
 
   return (
     <Fragment>
@@ -112,7 +121,7 @@ export const ProvisionSummaryPage: React.FC<ProvisionSummaryPageProps> = (props)
         <Pivot aria-label="Basic Pivot Example">
           <PivotItem headerText={formatMessage('Summary')}>
             <DetailsList
-              items={items}
+              items={provisioningDetailItems()}
               columns={columns}
               layoutMode={DetailsListLayoutMode.justified}
               selectionMode={SelectionMode.none}

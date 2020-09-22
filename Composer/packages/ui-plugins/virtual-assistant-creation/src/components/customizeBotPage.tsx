@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import formatMessage from 'format-message';
-import React, { Fragment, useContext } from 'react';
+import React, { useContext } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
@@ -31,12 +31,17 @@ const dropdownStyles: Partial<IDropdownStyles> = {
 };
 
 // -------------------- CustomizeBotPage -------------------- //
-interface CustomizeBotPageProps extends RouteComponentProps {
+type CustomizeBotPageProps = RouteComponentProps<{
   onDismiss: () => void;
-}
+}>;
 
 export const CustomizeBotPage: React.FC<CustomizeBotPageProps> = (props) => {
   const { state, setState } = useContext(AppContext);
+  const onDismiss = props.onDismiss;
+  if (onDismiss === undefined) {
+    console.log('invalid props passed to CustomizeBotPage');
+    return null;
+  }
 
   const personalityOptions = (): IDropdownOption[] => {
     return Object.values(AvailablePersonalities).map((personality) => {
@@ -45,86 +50,84 @@ export const CustomizeBotPage: React.FC<CustomizeBotPageProps> = (props) => {
   };
 
   return (
-    <Fragment>
-      <DialogWrapper
-        isOpen={true}
-        onDismiss={props.onDismiss}
-        title={formatMessage('Customize your assistant')}
-        subText={formatMessage(
-          'Give your bot personality, multi-language capabilities and more. You can edit this later in Bot Settings.'
-        )}
-        dialogType={DialogTypes.CreateFlow}
-      >
-        <Stack tokens={verticalStackTokens}>
-          <Stack.Item>
-            <Label>{formatMessage('Bot Name')}</Label>
-            <TextField
-              onChange={(event: any, newValue?: string) => {
-                setState({ ...state, selectedBotName: newValue as string });
-              }}
-              value={formatMessage(state.selectedBotName)}
-              css={textFieldStyling}
-            />
-          </Stack.Item>
-          <Stack.Item>
-            <Label>{formatMessage('User Input')}</Label>
-            <Stack horizontal={true} tokens={horizontalStackTokens}>
-              <Checkbox
-                label={formatMessage('Text')}
-                onChange={() => {
-                  setState({ ...state, isTextEnabled: !state.isTextEnabled });
-                }}
-                checked={state.isTextEnabled}
-              />
-              <Checkbox
-                label={formatMessage('Speech')}
-                onChange={() => {
-                  setState({ ...state, isSpeechEnabled: !state.isSpeechEnabled });
-                }}
-                checked={state.isSpeechEnabled}
-              />
-            </Stack>
-          </Stack.Item>
-          <Stack.Item>
-            <Dropdown
-              placeholder={formatMessage('Select an option')}
-              label={formatMessage('Personality')}
-              options={personalityOptions()}
-              styles={dropdownStyles}
-              selectedKey={state.selectedPersonality}
-              onChange={(ev: any, option?: IDropdownOption) => {
-                setState({ ...state, selectedPersonality: AvailablePersonalities[option?.text as string] });
-                console.log(state.selectedPersonality);
-              }}
-            />
-          </Stack.Item>
-          <Stack.Item>
-            <Label>{formatMessage('Greeting Message')}</Label>
-            <TextField
-              css={textFieldStyling}
-              value={formatMessage(state.selectedGreetingMessage)}
-              onChange={(ev?: any, newValue?: string) => {
-                setState({ ...state, selectedGreetingMessage: newValue as string });
-              }}
-            />
-          </Stack.Item>
-          <Stack.Item>
-            <Label>{formatMessage('What will your Virtual Assistant say if it does not understand the user?')}</Label>
-            <TextField
-              css={textFieldStyling}
-              value={formatMessage(state.selectedFallbackText)}
-              onChange={(ev?: any, newValue?: string) => {
-                setState({ ...state, selectedFallbackText: newValue as string });
-              }}
-            />
-          </Stack.Item>
-          <DialogFooterWrapper
-            prevPath={RouterPaths.newBotPage}
-            nextPath={RouterPaths.configSummaryPage}
-            onDismiss={props.onDismiss}
+    <DialogWrapper
+      isOpen={true}
+      onDismiss={props.onDismiss}
+      title={formatMessage('Customize your assistant')}
+      subText={formatMessage(
+        'Give your bot personality, multi-language capabilities and more. You can edit this later in Bot Settings.'
+      )}
+      dialogType={DialogTypes.CreateFlow}
+    >
+      <Stack tokens={verticalStackTokens}>
+        <Stack.Item>
+          <Label>{formatMessage('Bot Name')}</Label>
+          <TextField
+            onChange={(event: any, newValue?: string) => {
+              setState({ ...state, selectedBotName: newValue as string });
+            }}
+            value={formatMessage(state.selectedBotName)}
+            css={textFieldStyling}
           />
-        </Stack>
-      </DialogWrapper>
-    </Fragment>
+        </Stack.Item>
+        <Stack.Item>
+          <Label>{formatMessage('User Input')}</Label>
+          <Stack horizontal={true} tokens={horizontalStackTokens}>
+            <Checkbox
+              label={formatMessage('Text')}
+              onChange={() => {
+                setState({ ...state, isTextEnabled: !state.isTextEnabled });
+              }}
+              checked={state.isTextEnabled}
+            />
+            <Checkbox
+              label={formatMessage('Speech')}
+              onChange={() => {
+                setState({ ...state, isSpeechEnabled: !state.isSpeechEnabled });
+              }}
+              checked={state.isSpeechEnabled}
+            />
+          </Stack>
+        </Stack.Item>
+        <Stack.Item>
+          <Dropdown
+            placeholder={formatMessage('Select an option')}
+            label={formatMessage('Personality')}
+            options={personalityOptions()}
+            styles={dropdownStyles}
+            selectedKey={state.selectedPersonality}
+            onChange={(ev: any, option?: IDropdownOption) => {
+              setState({ ...state, selectedPersonality: AvailablePersonalities[option?.text as string] });
+              console.log(state.selectedPersonality);
+            }}
+          />
+        </Stack.Item>
+        <Stack.Item>
+          <Label>{formatMessage('Greeting Message')}</Label>
+          <TextField
+            css={textFieldStyling}
+            value={formatMessage(state.selectedGreetingMessage)}
+            onChange={(ev?: any, newValue?: string) => {
+              setState({ ...state, selectedGreetingMessage: newValue as string });
+            }}
+          />
+        </Stack.Item>
+        <Stack.Item>
+          <Label>{formatMessage('What will your Virtual Assistant say if it does not understand the user?')}</Label>
+          <TextField
+            css={textFieldStyling}
+            value={formatMessage(state.selectedFallbackText)}
+            onChange={(ev?: any, newValue?: string) => {
+              setState({ ...state, selectedFallbackText: newValue as string });
+            }}
+          />
+        </Stack.Item>
+        <DialogFooterWrapper
+          prevPath={RouterPaths.newBotPage}
+          nextPath={RouterPaths.configSummaryPage}
+          onDismiss={onDismiss}
+        />
+      </Stack>
+    </DialogWrapper>
   );
 };

@@ -31,13 +31,17 @@ const separatorStyles: Partial<ISeparatorStyles> = {
 };
 
 // -------------------- ConfigSummaryPage -------------------- //
-interface ConfigSummaryPageProps extends RouteComponentProps {
+type ConfigSummaryPageProps = RouteComponentProps<{
   onDismiss: () => void;
-}
+}>;
 
 export const ConfigSummaryPage: React.FC<ConfigSummaryPageProps> = (props) => {
   const { state } = useContext(AppContext);
-  const { onDismiss } = props;
+  const onDismiss = props.onDismiss;
+  if (onDismiss === undefined) {
+    console.log('invalid props passed to ConfigSummaryPage');
+    return null;
+  }
 
   const categoryText = (text: string) => {
     return (

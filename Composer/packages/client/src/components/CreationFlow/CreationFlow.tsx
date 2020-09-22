@@ -70,6 +70,13 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     }
   }, [storages]);
 
+  // Plugin config for VA creation plug in
+  const pluginConfig: PluginConfig = useMemo(() => {
+    const sdkUISchema = {};
+    const userUISchema = {};
+    return mergePluginConfigs({ uiSchema: sdkUISchema }, plugins, { uiSchema: userUISchema });
+  }, []);
+
   const fetchResources = async () => {
     // fetchProject use `gotoSnapshot` which will wipe out all state value.
     // so here make those methods call in sequence.
@@ -127,17 +134,20 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     handleCreateNew(formData, QnABotTemplateId, urls);
   };
 
-  const handleSubmitOrImportQnA = async (formData, templateId: string) => {
+  const handleDefineConversationSubmit = async (formData, templateId: string) => {
+    // If selected template is qnaSample then route to QNA import modal
     if (templateId === 'QnASample') {
       setFormData(formData);
       navigate(`./QnASample/importQnA`);
       return;
     }
-    if (templateId === 'va-core') {
+    // If selected template is vaCore then route to VA Customization modal
+    if (templateId === 'vaCore') {
       setFormData(formData);
-      navigate(`./va-core/customize`);
+      navigate(`./vaCore/customize`);
       return;
     }
+
     handleSubmit(formData, templateId);
   };
 
@@ -159,11 +169,6 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     navigate(`./create/${data}`);
   };
 
-  const pluginConfig: PluginConfig = useMemo(() => {
-    const sdkUISchema = {};
-    const userUISchema = {};
-    return mergePluginConfigs({ uiSchema: sdkUISchema }, plugins, { uiSchema: userUISchema });
-  }, []);
   return (
     <Fragment>
       <Home />
@@ -176,7 +181,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
             updateFolder={updateFolder}
             onCurrentPathUpdate={updateCurrentPath}
             onDismiss={handleDismiss}
-            onSubmit={handleSubmitOrImportQnA}
+            onSubmit={handleDefineConversationSubmit}
           />
           <CreateOptions
             path="create"
@@ -191,7 +196,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
             updateFolder={updateFolder}
             onCurrentPathUpdate={updateCurrentPath}
             onDismiss={handleDismiss}
-            onSubmit={handleSubmitOrImportQnA}
+            onSubmit={handleDefineConversationSubmit}
           />
           <OpenProject
             focusedStorageFolder={focusedStorageFolder}
@@ -210,7 +215,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
             handleCreateNew={handleCreateNew}
             formData={formData}
             onDismiss={handleDismiss}
-            path="create/va-core/*"
+            path="create/vaCore/*"
           />
         </Router>
       </EditorExtension>
