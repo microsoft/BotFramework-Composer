@@ -23,7 +23,7 @@ function renderSubject(overrides = {}) {
 }
 
 describe('<FieldSets />', () => {
-  it('renders a dropdown with true / false', async () => {
+  it('renders an object with two field sets', async () => {
     const onChange = jest.fn();
     const uiOptions = {
       fieldSets: [
