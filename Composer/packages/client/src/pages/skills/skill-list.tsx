@@ -10,26 +10,21 @@ import {
   CheckboxVisibility,
   IColumn,
 } from 'office-ui-fabric-react/lib/DetailsList';
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
+import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { FontSizes } from '@uifabric/fluent-theme';
+import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
-import { Skill } from '@bfc/shared';
 
 import { DisplayManifestModal } from '../../components/Modal/DisplayManifestModal';
+import { dispatcherState, skillsState } from '../../recoilModel';
 
 import { TableView, TableCell } from './styles';
-
-export interface ISkillListProps {
-  skills: Skill[];
-  projectId: string;
-  onEdit: (index?: number) => void;
-  onDelete: (index?: number) => void;
-}
 
 const columns: IColumn[] = [
   {
@@ -40,20 +35,8 @@ const columns: IColumn[] = [
     maxWidth: 150,
     isResizable: true,
     data: 'string',
-    onRender: (item: Skill) => {
-      return <div css={TableCell}>{item.name}</div>;
-    },
-  },
-  {
-    key: 'msAppId',
-    name: formatMessage('App Id'),
-    fieldName: 'msAppId',
-    minWidth: 150,
-    maxWidth: 280,
-    isResizable: true,
-    data: 'string',
-    onRender: (item: Skill) => {
-      return <div css={TableCell}>{item.msAppId}</div>;
+    onRender: ({ skill: { name } }) => {
+      return <div css={TableCell}>{name}</div>;
     },
   },
   {
@@ -64,8 +47,26 @@ const columns: IColumn[] = [
     maxWidth: 400,
     isResizable: true,
     data: 'string',
-    onRender: (item: Skill) => {
-      return <div css={TableCell}>{item.endpointUrl}</div>;
+    onRender: ({ skill, onEditSkill }) => {
+      const { endpoints, endpointUrl: selectedEndpointUrl } = skill;
+
+      const options = (endpoints || []).map(({ name, endpointUrl, msAppId }, key) => ({
+        key,
+        text: name,
+        data: {
+          endpointUrl,
+          msAppId,
+        },
+        selected: endpointUrl === selectedEndpointUrl,
+      }));
+
+      const handleChange = (_, option?: IDropdownOption) => {
+        if (option) {
+          onEditSkill({ ...skill, ...option.data });
+        }
+      };
+
+      return <Dropdown options={options} onChange={handleChange} />;
     },
   },
   {
@@ -76,70 +77,78 @@ const columns: IColumn[] = [
     maxWidth: 400,
     isResizable: true,
     data: 'string',
-    onRender: (item: Skill) => {
-      return <div css={TableCell}>{item.description}</div>;
+    onRender: ({ skill: { description } }) => {
+      return <div css={TableCell}>{description}</div>;
+    },
+  },
+  {
+    key: 'buttons',
+    name: '',
+    minWidth: 120,
+    maxWidth: 120,
+    fieldName: 'buttons',
+    data: 'string',
+    onRender: ({ onDelete, onViewManifest }) => {
+      return (
+        <div>
+          <Stack horizontal tokens={{ childrenGap: 8 }}>
+            <IconButton
+              ariaLabel={formatMessage('Delete')}
+              data-testid="DeleteSkill"
+              iconProps={{
+                iconName: 'Delete',
+              }}
+              title={formatMessage('Delete')}
+              onClick={() => onDelete()}
+            />
+            <IconButton
+              ariaLabel={formatMessage('View')}
+              data-testid="ViewManifest"
+              iconProps={{ iconName: 'ContextMenu' }}
+              title={formatMessage('View')}
+              onClick={() => onViewManifest()}
+            />
+          </Stack>
+        </div>
+      );
     },
   },
 ];
 
-const SkillList: React.FC<ISkillListProps> = (props) => {
-  const { skills, projectId, onEdit, onDelete } = props;
+interface SkillListProps {
+  projectId: string;
+}
+
+const SkillList: React.FC<SkillListProps> = ({ projectId }) => {
+  const { removeSkill, updateSkill } = useRecoilValue(dispatcherState);
+  const skills = useRecoilValue(skillsState(projectId));
 
   const [selectedSkillUrl, setSelectedSkillUrl] = useState<string | null>(null);
 
-  const onViewManifest = (item) => {
-    if (item && item.name && item.body) {
+  const handleViewManifest = (item) => {
+    if (item && item.name && item.content) {
       setSelectedSkillUrl(item.manifestUrl);
     }
   };
 
+  const handleEditSkill = (projectId, skillId) => (skillData) => {
+    updateSkill(projectId, skillId, skillData);
+  };
+
+  const items = useMemo(
+    () =>
+      skills.map((skill) => ({
+        skill,
+        onDelete: () => removeSkill(projectId, skill.id),
+        onViewManifest: () => handleViewManifest(skill),
+        onEditSkill: handleEditSkill(projectId, skill.id),
+      })),
+    [skills, projectId]
+  );
+
   const onDismissManifest = () => {
     setSelectedSkillUrl(null);
   };
-
-  const getColumns = useCallback(() => {
-    return columns.concat({
-      key: 'buttons',
-      name: '',
-      minWidth: 120,
-      maxWidth: 120,
-      fieldName: 'buttons',
-      data: 'string',
-      onRender: (item, index) => {
-        return (
-          <div>
-            <Stack horizontal tokens={{ childrenGap: 8 }}>
-              <IconButton
-                ariaLabel={formatMessage('Edit')}
-                data-testid="EditSkill"
-                iconProps={{
-                  iconName: 'Edit',
-                }}
-                title={formatMessage('Edit')}
-                onClick={() => onEdit(index)}
-              />
-              <IconButton
-                ariaLabel={formatMessage('Delete')}
-                data-testid="DeleteSkill"
-                iconProps={{
-                  iconName: 'Delete',
-                }}
-                title={formatMessage('Delete')}
-                onClick={() => onDelete(index)}
-              />
-              <IconButton
-                ariaLabel={formatMessage('View')}
-                data-testid="ViewManifest"
-                iconProps={{ iconName: 'ContextMenu' }}
-                title={formatMessage('View')}
-                onClick={() => onViewManifest(item)}
-              />
-            </Stack>
-          </div>
-        );
-      },
-    });
-  }, [projectId]);
 
   const onRenderDetailsHeader = useCallback((props, defaultRender) => {
     return (
@@ -161,8 +170,8 @@ const SkillList: React.FC<ISkillListProps> = (props) => {
           <DetailsList
             isHeaderVisible
             checkboxVisibility={CheckboxVisibility.hidden}
-            columns={getColumns()}
-            items={skills}
+            columns={columns}
+            items={items}
             layoutMode={DetailsListLayoutMode.justified}
             selectionMode={SelectionMode.single}
             styles={{ contentWrapper: { fontSize: FontSizes.size16 } }}

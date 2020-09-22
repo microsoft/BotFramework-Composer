@@ -11,7 +11,7 @@ import log from '../logger';
 import { BotProjectService } from '../services/project';
 import AssetService from '../services/asset';
 import { LocationRef } from '../models/bot/interface';
-import { getSkillByUrl } from '../models/bot/skillManager';
+import { getSkillManifest } from '../models/bot/skillManager';
 import StorageService from '../services/storage';
 import settings from '../settings';
 
@@ -252,27 +252,6 @@ async function removeFile(req: Request, res: Response) {
   }
 }
 
-async function updateSkill(req: Request, res: Response) {
-  const projectId = req.params.projectId;
-  const user = await PluginLoader.getUserFromRequest(req);
-
-  const currentProject = await BotProjectService.getProjectById(projectId, user);
-  if (currentProject !== undefined) {
-    try {
-      const skills = await currentProject.updateSkill(req.body.skills);
-      res.status(200).json(skills);
-    } catch (err) {
-      res.status(404).json({
-        message: err.message,
-      });
-    }
-  } else {
-    res.status(404).json({
-      message: 'No such bot project opened',
-    });
-  }
-}
-
 async function getSkill(req: Request, res: Response) {
   const projectId = req.params.projectId;
   const user = await PluginLoader.getUserFromRequest(req);
@@ -280,8 +259,8 @@ async function getSkill(req: Request, res: Response) {
   const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
     try {
-      const skill = await getSkillByUrl(req.body.url);
-      res.status(200).json(skill);
+      const content = await getSkillManifest(req.query.url);
+      res.status(200).json(content);
     } catch (err) {
       res.status(404).json({
         message: err.message,
@@ -446,7 +425,6 @@ export const ProjectController = {
   updateFile,
   createFile,
   removeFile,
-  updateSkill,
   getSkill,
   build,
   setQnASettings,

@@ -39,6 +39,7 @@ import {
   botProjectsSpaceState,
   projectMetaDataState,
   filePersistenceState,
+  currentProjectIdState,
 } from '../atoms';
 import { QnABotTemplateId } from '../../constants';
 import FilePersistence from '../persistence/FilePersistence';
@@ -145,6 +146,7 @@ const initQnaFilesStatus = (projectId: string, qnaFiles: QnAFile[], dialogs: Dia
   );
   return updateQnaFilesStatus(projectId, qnaFiles);
 };
+
 export const projectDispatcher = () => {
   const initBotState = async (
     callbackHelpers: CallbackInterface,
@@ -154,13 +156,29 @@ export const projectDispatcher = () => {
     qnaKbUrls?: string[]
   ) => {
     const { snapshot, gotoSnapshot, set } = callbackHelpers;
-    const { files, botName, botEnvironment, location, schemas, settings, id: projectId, diagnostics, skills } = data;
+    const {
+      files,
+      botName,
+      botEnvironment,
+      location,
+      schemas,
+      settings,
+      id: projectId,
+      diagnostics,
+      skills: skillContent,
+    } = data;
     const curLocation = await snapshot.getPromise(locationState(projectId));
     const storedLocale = languageStorage.get(botName)?.locale;
     const locale = settings.languages.includes(storedLocale) ? storedLocale : settings.defaultLanguage;
 
     // cache current projectId in session, resolve page refresh caused state lost.
     projectIdCache.set(projectId);
+
+    const mergedSettings = mergeLocalStorage(projectId, settings);
+    if (Array.isArray(mergedSettings.skill)) {
+      const skillsArr = mergedSettings.skill.map((skillData) => ({ ...skillData }));
+      mergedSettings.skill = convertSkillsToDictionary(skillsArr);
+    }
 
     try {
       schemas.sdk.content = processSchema(projectId, schemas.sdk.content);
@@ -171,10 +189,12 @@ export const projectDispatcher = () => {
     }
 
     try {
-      const { dialogs, dialogSchemas, luFiles, lgFiles, qnaFiles, skillManifestFiles } = indexer.index(
+      const { dialogs, dialogSchemas, luFiles, lgFiles, qnaFiles, skillManifestFiles, skills } = indexer.index(
         files,
         botName,
-        locale
+        locale,
+        skillContent,
+        mergedSettings
       );
 
       let mainDialog = '';
@@ -209,15 +229,6 @@ export const projectDispatcher = () => {
         set(botDiagnosticsState(projectId), diagnostics);
 
         refreshLocalStorage(projectId, settings);
-        const mergedSettings = mergeLocalStorage(projectId, settings);
-        if (Array.isArray(mergedSettings.skill)) {
-          const skillsArr = mergedSettings.skill.map((skillData) => {
-            return {
-              ...skillData,
-            };
-          });
-          mergedSettings.skill = convertSkillsToDictionary(skillsArr);
-        }
         set(settingsState(projectId), mergedSettings);
         set(filePersistenceState(projectId), new FilePersistence(projectId));
         set(undoHistoryState(projectId), new UndoHistory(projectId));
@@ -232,6 +243,8 @@ export const projectDispatcher = () => {
       gotoSnapshot(newSnapshot);
 
       if (jump && projectId) {
+        // TODO: Refactor to set it always on init to the root bot
+        set(currentProjectIdState, projectId);
         let url = `/bot/${projectId}/dialogs/${mainDialog}`;
         if (templateId === QnABotTemplateId) {
           url = `/bot/${projectId}/knowledge-base/${mainDialog}`;
@@ -278,14 +291,9 @@ export const projectDispatcher = () => {
     (callbackHelpers: CallbackInterface) => async (path: string, storageId = 'default') => {
       try {
         await setBotOpeningStatus(callbackHelpers);
-        const result = await checkIfBotProject(path, storageId);
-        if (!result.isBotProjectSpace) {
-          const response = await httpClient.put(`/projects/open`, { path, storageId });
-          await initBotState(callbackHelpers, response.data, true, '');
-          return response.data.id;
-        } else {
-          handleBotProjectSpace(callbackHelpers, path, storageId, result.contents);
-        }
+        const response = await httpClient.put(`/projects/open`, { path, storageId });
+        await initBotState(callbackHelpers, response.data, true, '');
+        return response.data.id;
       } catch (ex) {
         removeRecentProject(callbackHelpers, path);
         handleProjectFailure(callbackHelpers, ex);
@@ -360,6 +368,7 @@ export const projectDispatcher = () => {
       reset(filePersistenceState(projectId));
       reset(undoHistoryState(projectId));
       reset(botProjectsSpaceState);
+      reset(currentProjectIdState);
     } catch (e) {
       logMessage(callbackHelpers, e.message);
     }

@@ -16,6 +16,11 @@ const referBySettings = (skillName: string, property: string) => {
   return `=settings.skill['${skillName}'].${property}`;
 };
 
+const settingReferences = (skillName: string) => ({
+  skillEndpoint: referBySettings(skillName, 'endpointUrl'),
+  skillAppId: referBySettings(skillName, 'msAppId'),
+});
+
 const handleBackwardCompatibility = (skills: Skill[], value): { name: string; endpointName: string } | undefined => {
   const { skillEndpoint } = value;
   const foundSkill = skills.find(({ manifestUrl }) => manifestUrl === value.id);
@@ -31,7 +36,7 @@ const handleBackwardCompatibility = (skills: Skill[], value): { name: string; en
 export const BeginSkillDialogField: React.FC<FieldProps> = (props) => {
   const { depth, id, schema, uiOptions, value, onChange, definitions } = props;
   const { projectId, shellApi, skills = [] } = useShellApi();
-  const { displayManifestModal, skillsInSettings } = shellApi;
+  const { displayManifestModal, skillsSettings } = shellApi;
   const [selectedSkill, setSelectedSkill] = useState<string>('');
   const [oldEndpoint, loadEndpointForOldBots] = useState<string>('');
 
@@ -52,30 +57,29 @@ export const BeginSkillDialogField: React.FC<FieldProps> = (props) => {
     }
   }, []);
 
-  const matchedSkill: Skill | undefined = useMemo(() => {
-    return skills.find(({ name }) => name === selectedSkill);
+  const matchedSkill = useMemo(() => {
+    return skills.find(({ id }) => id === selectedSkill) || ({} as Skill);
   }, [skills, selectedSkill]);
 
   const endpointOptions = useMemo(() => {
-    return (matchedSkill?.endpoints || []).map(({ name }) => name);
+    return (matchedSkill.endpoints || []).map(({ name }) => name);
   }, [matchedSkill]);
 
   const handleEndpointChange = async (skillEndpoint) => {
-    if (matchedSkill) {
+    if (matchedSkill.id) {
       const { msAppId, endpointUrl } =
         (matchedSkill.endpoints || []).find(({ name }) => name === skillEndpoint) || ({} as any);
       const schemaUpdate: any = {};
-      const settingsUpdate: any = {};
+      const settingsUpdate: any = { ...matchedSkill };
       if (endpointUrl) {
-        skillsInSettings.set(matchedSkill.name, { endpointUrl });
-        schemaUpdate.skillEndpoint = referBySettings(matchedSkill?.name, 'endpointUrl');
+        schemaUpdate.skillEndpoint = referBySettings(matchedSkill.name, 'endpointUrl');
         settingsUpdate.endpointUrl = endpointUrl;
       }
       if (msAppId) {
-        schemaUpdate.skillAppId = referBySettings(matchedSkill?.name, 'msAppId');
+        schemaUpdate.skillAppId = referBySettings(matchedSkill.name, 'msAppId');
         settingsUpdate.msAppId = msAppId;
       }
-      skillsInSettings.set(matchedSkill.name, { ...settingsUpdate });
+      skillsSettings.set(matchedSkill.id, { ...settingsUpdate });
       onChange({
         ...value,
         ...schemaUpdate,
@@ -96,7 +100,7 @@ export const BeginSkillDialogField: React.FC<FieldProps> = (props) => {
   const skillEndpointUiSchema = uiOptions.properties?.skillEndpoint || {};
   skillEndpointUiSchema.serializer = {
     get: (value) => {
-      const url: any = skillsInSettings.get(value);
+      const url: any = skillsSettings.get(value);
       const endpoint = (matchedSkill?.endpoints || []).find(({ endpointUrl }) => endpointUrl === url);
       return endpoint?.name;
     },
@@ -107,8 +111,9 @@ export const BeginSkillDialogField: React.FC<FieldProps> = (props) => {
   };
 
   const onSkillSelectionChange = (option: IComboBoxOption | null) => {
-    if (option) {
-      setSelectedSkill(option?.text);
+    if (option?.text) {
+      setSelectedSkill(option.text);
+      onChange({ ...value, ...settingReferences(option.text) });
     }
   };
 
@@ -116,7 +121,7 @@ export const BeginSkillDialogField: React.FC<FieldProps> = (props) => {
     <React.Fragment>
       <SelectSkillDialog value={selectedSkill} onChange={onSkillSelectionChange} />
       <Link
-        disabled={!matchedSkill || !matchedSkill.body || !matchedSkill.name}
+        disabled={!matchedSkill || !matchedSkill.content || !matchedSkill.name}
         styles={{ root: { fontSize: '12px', padding: '0 16px' } }}
         onClick={handleShowManifestClick}
       >

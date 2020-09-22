@@ -6,24 +6,15 @@ import fs from 'fs';
 
 import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
-import {
-  getNewDesigner,
-  FileInfo,
-  Skill,
-  Diagnostic,
-  convertSkillsToDictionary,
-  IBotProject,
-  DialogSetting,
-  FileExtensions,
-} from '@bfc/shared';
+import { getNewDesigner, FileInfo, Skill, Diagnostic, IBotProject, DialogSetting, FileExtensions } from '@bfc/shared';
 import merge from 'lodash/merge';
 import { UserIdentity, pluginLoader } from '@bfc/extension';
 import { FeedbackType, generate } from '@microsoft/bf-generate-library';
-import values from 'lodash/values';
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
+import { getDialogNameFromFile } from '../utilities/util';
 import { ISettingManager, OBFUSCATED_VALUE } from '../settings';
 import { DefaultSettingManager } from '../settings/defaultSettingManager';
 import log from '../../logger';
@@ -32,7 +23,7 @@ import { BotProjectService } from '../../services/project';
 import { Builder } from './builder';
 import { IFileStorage } from './../storage/interface';
 import { LocationRef, IBuildConfig } from './interface';
-import { extractSkillManifestUrl } from './skillManager';
+import { retrieveSkillManifests } from './skillManager';
 import { defaultFilePath, serializeFiles, parseFileName } from './botStructure';
 
 const debug = log.extend('bot-project');
@@ -164,9 +155,8 @@ export class BotProject implements IBotProject {
   public init = async () => {
     this.diagnostics = [];
     this.settings = await this.getEnvSettings(false);
-    const skillsCollection = values(this.settings?.skill);
-    const { skillsParsed, diagnostics } = await extractSkillManifestUrl(skillsCollection || ([] as any));
-    this.skills = skillsParsed;
+    const { skillManifests, diagnostics } = await retrieveSkillManifests(this.settings?.skill);
+    this.skills = skillManifests;
     this.diagnostics.push(...diagnostics);
     this.files = await this._getFiles();
   };
@@ -229,16 +219,6 @@ export class BotProject implements IBotProject {
   public updateEnvSettings = async (config: DialogSetting) => {
     await this.settingManager.set(config);
     this.settings = config;
-  };
-
-  // update skill in settings
-  public updateSkill = async (config: any[]) => {
-    const settings = await this.getEnvSettings(false);
-    const { skillsParsed } = await extractSkillManifestUrl(config);
-    const mapped = convertSkillsToDictionary(skillsParsed);
-    settings.skill = await this.settingManager.set(mapped);
-    this.skills = skillsParsed;
-    return skillsParsed;
   };
 
   public exportToZip = (cb) => {
@@ -744,6 +724,46 @@ export class BotProject implements IBotProject {
       fileList.set(file.name, file);
     });
 
+    const migrationFiles = await this._createQnAFilesForOldBot(fileList);
+
+    return new Map<string, FileInfo>([...fileList, ...migrationFiles]);
+  };
+
+  // migration: create qna files for old bots
+  private _createQnAFilesForOldBot = async (files: Map<string, FileInfo>) => {
+    const dialogFiles: FileInfo[] = [];
+    const qnaFiles: FileInfo[] = [];
+    files.forEach((file) => {
+      if (file.name.endsWith('.dialog')) {
+        dialogFiles.push(file);
+      }
+      if (file.name.endsWith('.qna')) {
+        qnaFiles.push(file);
+      }
+    });
+
+    const dialogNames = dialogFiles.map((file) => getDialogNameFromFile(file.name));
+    const qnaNames = qnaFiles.map((file) => getDialogNameFromFile(file.name));
+    const fileList = new Map<string, FileInfo>();
+    for (let i = 0; i < dialogNames.length; i++) {
+      if (!qnaNames || qnaNames.length === 0 || !qnaNames.find((qn) => qn === dialogNames[i])) {
+        await this.createFile(`${dialogNames[i]}.qna`, '');
+      }
+    }
+
+    const pattern = '**/*.qna';
+    // load only from the data dir, otherwise may get "build" versions from
+    // deployment process
+    const root = this.dataDir;
+    const paths = await this.fileStorage.glob([pattern, '!(generated/**)', '!(runtime/**)'], root);
+
+    for (const filePath of paths.sort()) {
+      const realFilePath: string = Path.join(root, filePath);
+      const fileInfo = await this._getFileInfo(realFilePath);
+      if (fileInfo) {
+        fileList.set(fileInfo.name, fileInfo);
+      }
+    }
     return fileList;
   };
 

@@ -45,7 +45,7 @@ function createLgApi(
 
   const copyLgTemplate = async (id, fromTemplateName, toTemplateName) => {
     const file = lgFileResolver(id);
-    if (!file) throw new Error(`lg file ${id} not found`);
+    if (!file) throw new Error(fileNotFound(id));
     if (!fromTemplateName || !toTemplateName) throw new Error(`templateName is missing or empty`);
 
     return await actions.copyLgTemplate({

@@ -46,15 +46,13 @@ import {
   focusPathState,
   showCreateDialogModalState,
   showAddSkillDialogModalState,
-  skillsState,
   actionsSeedState,
   localeState,
-  qnaFilesState,
 } from '../../recoilModel';
 import { getBaseName } from '../../utils/fileUtil';
 import ImportQnAFromUrlModal from '../knowledge-base/ImportQnAFromUrlModal';
 import { triggerNotSupported } from '../../utils/dialogValidator';
-import { undoFunctionState } from '../../recoilModel/undo/history';
+import { undoFunctionState, undoVersionState } from '../../recoilModel/undo/history';
 
 import { WarningMessage } from './WarningMessage';
 import {
@@ -120,12 +118,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const focusPath = useRecoilValue(focusPathState(projectId));
   const showCreateDialogModal = useRecoilValue(showCreateDialogModalState(projectId));
   const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState(projectId));
-  const skills = useRecoilValue(skillsState(projectId));
   const actionsSeed = useRecoilValue(actionsSeedState(projectId));
   const locale = useRecoilValue(localeState(projectId));
-  const undoVersion = useRecoilValue(undoFunctionState(projectId));
-  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   const undoFunction = useRecoilValue(undoFunctionState(projectId));
+  const undoVersion = useRecoilValue(undoVersionState(projectId));
+
   const { undo, redo, canRedo, canUndo, commitChanges, clearUndo } = undoFunction;
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
   const {
@@ -140,11 +137,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     selectTo,
     selectAndFocus,
     addSkillDialogCancel,
-    createQnAFile,
-    updateSkill,
     exportToZip,
     onboardingAddCoachMarkRef,
     importQnAFromUrls,
+    addSkill,
   } = useRecoilValue(dispatcherState);
 
   const params = new URLSearchParams(location?.search);
@@ -501,10 +497,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     );
   }, [dialogs, breadcrumb, dialogJsonVisible]);
 
-  function handleAddSkillDialogSubmit(skillData: { manifestUrl: string }) {
-    updateSkill({ projectId, targetId: -1, skillData });
-  }
-
   async function handleCreateDialogSubmit(data: { name: string; description: string }) {
     const seededContent = new DialogFactory(schemas.sdk?.content).create(SDKKinds.AdaptiveDialog, {
       $designer: { name: data.name, description: data.description },
@@ -692,12 +684,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         )}
         {showAddSkillDialogModal && (
           <CreateSkillModal
-            editIndex={-1}
-            isOpen={showAddSkillDialogModal}
             projectId={projectId}
-            skills={skills}
             onDismiss={() => addSkillDialogCancel(projectId)}
-            onSubmit={handleAddSkillDialogSubmit}
+            onSubmit={(skill) => addSkill(projectId, skill)}
           />
         )}
         {exportSkillModalVisible && (

@@ -331,45 +331,17 @@ describe('skill operation', () => {
     projectId = await BotProjectService.openProject(location2);
   });
 
-  it('should check skill url', async () => {
+  it('should retrieve skill manifest', async () => {
     const mockReq = {
       params: { projectId },
-      query: {},
-      body: {
+      query: {
         url: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json',
       },
+      body: {},
     } as Request;
     await ProjectController.getSkill(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
   }, 10000);
-
-  it('should update skill', async () => {
-    const mockReq = {
-      params: { projectId },
-      query: {},
-      body: {
-        skills: [
-          {
-            manifestUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json',
-          },
-        ],
-      },
-    } as Request;
-    await ProjectController.updateSkill(mockReq, mockRes);
-    expect(mockRes.status).toHaveBeenCalledWith(200);
-  }, 5000);
-
-  it('should update skill, remove', async () => {
-    const mockReq = {
-      params: { projectId },
-      query: {},
-      body: {
-        skills: [],
-      },
-    } as Request;
-    await ProjectController.updateSkill(mockReq, mockRes);
-    expect(mockRes.status).toHaveBeenCalledWith(200);
-  });
 });
 
 // TODO: add a success publish test.

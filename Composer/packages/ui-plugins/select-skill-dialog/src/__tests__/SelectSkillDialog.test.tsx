@@ -49,7 +49,7 @@ const renderSelectSkillDialog = ({ addSkillDialog, onChange } = {}) => {
 
   const shell = {
     addSkillDialog,
-    skillsInSettings: {
+    skillsSettings: {
       get: (path: string) =>
         fetchFromSettings(path, {
           skill: convertSkillsToDictionary(skills),

@@ -7,11 +7,12 @@ import { RouteComponentProps } from '@reach/router';
 import React, { useCallback, useState } from 'react';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
+import { SkillSetting } from '@bfc/shared';
 
-import { dispatcherState, settingsState, botNameState, skillsState } from '../../recoilModel';
+import { dispatcherState, settingsState, botNameState } from '../../recoilModel';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { TestController } from '../../components/TestController/TestController';
-import { CreateSkillModal, ISkillFormData } from '../../components/CreateSkillModal';
+import { CreateSkillModal } from '../../components/CreateSkillModal';
 
 import { ContainerStyle, ContentHeaderStyle, HeaderText } from './styles';
 import SkillSettings from './skill-settings';
@@ -19,11 +20,11 @@ import SkillList from './skill-list';
 
 const Skills: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
   const { projectId = '' } = props;
-  const [editIndex, setEditIndex] = useState<number | undefined>();
-  const skills = useRecoilValue(skillsState(projectId));
-  const settings = useRecoilValue(settingsState(projectId));
+  const [showAddSkillDialogModal, setShowAddSkillDialogModal] = useState(false);
+
   const botName = useRecoilValue(botNameState(projectId));
-  const { setSettings, updateSkill } = useRecoilValue(dispatcherState);
+  const settings = useRecoilValue(settingsState(projectId));
+  const { addSkill, setSettings } = useRecoilValue(dispatcherState);
 
   const toolbarItems: IToolbarItem[] = [
     {
@@ -34,7 +35,7 @@ const Skills: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => 
           iconName: 'Add',
         },
         onClick: () => {
-          setEditIndex(-1);
+          setShowAddSkillDialogModal(true);
         },
       },
       align: 'left',
@@ -46,33 +47,16 @@ const Skills: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => 
     },
   ];
 
-  const onItemDelete = useCallback(
-    (index) => {
-      const payload = {
-        projectId,
-        targetId: index,
-        skillData: null,
-      };
-      updateSkill(payload);
-    },
-    [projectId]
-  );
-
   const onSubmitForm = useCallback(
-    (submitFormData: ISkillFormData, editIndex: number) => {
-      const payload = {
-        projectId,
-        targetId: editIndex,
-        skillData: submitFormData,
-      };
-      updateSkill(payload);
-      setEditIndex(undefined);
+    (skill: SkillSetting) => {
+      addSkill(projectId, skill);
+      setShowAddSkillDialogModal(false);
     },
     [projectId]
   );
 
   const onDismissForm = useCallback(() => {
-    setEditIndex(undefined);
+    setShowAddSkillDialogModal(false);
   }, []);
 
   return (
@@ -92,15 +76,10 @@ const Skills: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => 
           skillHostEndpoint={settings.skillHostEndpoint as string | undefined}
         />
       </div>
-      <SkillList projectId={projectId} skills={skills} onDelete={onItemDelete} onEdit={(idx) => setEditIndex(idx)} />
-      <CreateSkillModal
-        editIndex={editIndex}
-        isOpen={typeof editIndex === 'number'}
-        projectId={projectId}
-        skills={skills}
-        onDismiss={onDismissForm}
-        onSubmit={onSubmitForm}
-      />
+      <SkillList projectId={projectId} />
+      {showAddSkillDialogModal && (
+        <CreateSkillModal projectId={projectId} onDismiss={onDismissForm} onSubmit={onSubmitForm} />
+      )}
     </div>
   );
 };

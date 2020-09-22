@@ -27,8 +27,7 @@ router.delete('/projects/:projectId', ProjectController.removeProject);
 router.put('/projects/:projectId/files/:name', ProjectController.updateFile);
 router.delete('/projects/:projectId/files/:name', ProjectController.removeFile);
 router.post('/projects/:projectId/files', ProjectController.createFile);
-router.post('/projects/:projectId/skills', ProjectController.updateSkill);
-router.post('/projects/:projectId/skill/check', ProjectController.getSkill);
+router.get('/projects/:projectId/skill/retrieve-skill-manifest', ProjectController.getSkill);
 router.post('/projects/:projectId/build', ProjectController.build);
 router.post('/projects/:projectId/qnaSettings/set', ProjectController.setQnASettings);
 router.post('/projects/:projectId/project/saveAs', ProjectController.saveProjectAs);
@@ -68,7 +67,7 @@ router.post('/runtime/eject/:projectId/:template', EjectController.eject);
 //assets
 router.get('/assets/projectTemplates', AssetController.getProjTemplates);
 
-router.use('/assets/locales/', express.static(path.join(__dirname, '..', '/locales')));
+router.use('/assets/locales/', express.static(path.join(__dirname, '..', '..', 'src', 'locales')));
 
 //help api
 router.get('/utilities/qna/parse', UtilitiesController.getQnaContent);
