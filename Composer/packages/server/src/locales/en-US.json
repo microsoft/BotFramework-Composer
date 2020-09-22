@@ -197,9 +197,6 @@
   "any_or_expression_acad7d37": {
     "message": "Any or expression"
   },
-  "app_id_2f53f1f8": {
-    "message": "App Id"
-  },
   "append_choices_35c45a2d": {
     "message": "Append choices"
   },
@@ -742,6 +739,9 @@
   },
   "duplicate_dialog_name_824f9fce": {
     "message": "Duplicate dialog name"
+  },
+  "duplicate_fields_9fd0d3c2": {
+    "message": "duplicate fields"
   },
   "duplicate_name_d295a09d": {
     "message": "Duplicate name"
@@ -1301,6 +1301,9 @@
   "manifest_url_30824e88": {
     "message": "Manifest url"
   },
+  "manifest_url_can_not_be_accessed_a7f147b2": {
+    "message": "Manifest url can not be accessed"
+  },
   "manifest_version_1edc004a": {
     "message": "Manifest Version"
   },
@@ -1345,6 +1348,9 @@
   },
   "missing_definition_for_defname_33f2b594": {
     "message": "Missing definition for { defName }"
+  },
+  "missing_fields_1c88ab71": {
+    "message": "missing fields"
   },
   "modification_rejected_6a6e8322": {
     "message": "Modification Rejected"
@@ -1394,8 +1400,8 @@
   "name_and_save_your_skill_manifest_cfd672b7": {
     "message": "Name and save your skill manifest."
   },
-  "name_contains_invalid_charactors_d1780987": {
-    "message": "Name contains invalid charactors"
+  "name_cannot_include_special_characters_or_spaces_59a1950b": {
+    "message": "Name cannot include special characters or spaces"
   },
   "name_copy_55d27c1a": {
     "message": "{ name }_Copy"
@@ -1580,8 +1586,8 @@
   "please_enter_an_event_name_a148275a": {
     "message": "Please enter an event name"
   },
-  "please_input_a_manifest_url_ef6bab5f": {
-    "message": "Please input a manifest url"
+  "please_input_a_manifest_url_d726edbf": {
+    "message": "Please input a manifest Url"
   },
   "please_input_regex_pattern_5cd659a2": {
     "message": "Please input regEx pattern"
@@ -1600,6 +1606,9 @@
   },
   "please_select_a_trigger_type_67417abb": {
     "message": "Please select a trigger type"
+  },
+  "please_select_a_valid_endpoint_bf608af1": {
+    "message": "Please select a valid endpoint"
   },
   "please_select_a_version_of_the_manifest_schema_4a3efbb1": {
     "message": "Please select a version of the manifest schema"
@@ -1951,6 +1960,9 @@
   },
   "skill_host_endpoint_b1088d0": {
     "message": "Skill Host Endpoint"
+  },
+  "skill_manifest_endpoint_is_configured_improperly_e083731d": {
+    "message": "Skill manifest endpoint is configured improperly"
   },
   "skillname_manifest_ef3d9fed": {
     "message": "{ skillName } Manifest"

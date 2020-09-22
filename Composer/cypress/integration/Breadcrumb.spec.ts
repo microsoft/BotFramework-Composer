@@ -41,27 +41,27 @@ context('breadcrumb', () => {
     hasBreadcrumbItems(cy, ['__TestTodoSample']);
   });
 
-  // it('can show event name in breadcrumb', () => {
-  //   cy.findByTestId('ProjectTree').within(() => {
-  //     cy.findByText('addtodo').click();
-  //     cy.findByText('Dialog started').click();
-  //   });
+  it('can show event name in breadcrumb', () => {
+    cy.findByTestId('ProjectTree').within(() => {
+      cy.findByText('addtodo').click();
+      cy.findByText('Dialog started').click();
+    });
 
-  //   hasBreadcrumbItems(cy, ['Addtodo', 'Dialog started']);
-  // });
+    hasBreadcrumbItems(cy, ['Addtodo', 'Dialog started']);
+  });
 
-  // it('can show action name in breadcrumb', () => {
-  //   cy.findByTestId('ProjectTree').within(() => {
-  //     cy.findByText('Greeting').click();
-  //   });
+  it('can show action name in breadcrumb', () => {
+    cy.findByTestId('ProjectTree').within(() => {
+      cy.findByText('Greeting').click();
+    });
 
-  //   // Click on an action
-  //   cy.withinEditor('VisualEditor', () => {
-  //     cy.findByTestId('RuleEditor').within(() => {
-  //       cy.findByText('Send a response').click();
-  //     });
-  //   });
+    // Click on an action
+    cy.withinEditor('VisualEditor', () => {
+      cy.findByTestId('RuleEditor').within(() => {
+        cy.findByText('Send a response').click();
+      });
+    });
 
-  //   hasBreadcrumbItems(cy, ['__TestTodoSample', 'Greeting', 'Send a response']);
-  // });
+    hasBreadcrumbItems(cy, ['__TestTodoSample', 'Greeting', 'Send a response']);
+  });
 });

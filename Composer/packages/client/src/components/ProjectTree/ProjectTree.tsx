@@ -15,7 +15,7 @@ import { useRecoilValue } from 'recoil';
 import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 
 import { dispatcherState, userSettingsState } from '../../recoilModel';
-import { botProjectSpaceTreeSelector } from '../../recoilModel/selectors';
+import { botProjectSpaceSelector } from '../../recoilModel/selectors';
 import { createSelectedPath, getFriendlyName } from '../../utils/dialogUtil';
 import { containUnsupportedTriggers, triggerNotSupported } from '../../utils/dialogValidator';
 
@@ -104,7 +104,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
   const [filter, setFilter] = useState('');
   const delayedSetFilter = debounce((newValue) => setFilter(newValue), 1000);
   const addMainDialogRef = useCallback((mainDialog) => onboardingAddCoachMarkRef({ mainDialog }), []);
-  const projectCollection = useRecoilValue<BotInProject[]>(botProjectSpaceTreeSelector).map((bot) => ({
+  const projectCollection = useRecoilValue<BotInProject[]>(botProjectSpaceSelector).map((bot) => ({
     ...bot,
     hasWarnings: false,
   }));
