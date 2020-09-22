@@ -10,7 +10,7 @@ import { Dialog } from 'office-ui-fabric-react/lib/Dialog';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { PublishTarget, ProvisionType } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
-
+import { setAccessToken, setGraphToken } from '../../utils/auth';
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { projectContainer } from '../design/styles';
 import {
@@ -333,6 +333,19 @@ const Publish: React.FC<PublishPageProps> = (props) => {
     [settings.publishTargets, projectId, botName]
   );
 
+  const updateAccessToken = useMemo(
+    () => (e, token) => {
+      setAccessToken(token);
+    },
+    []
+  );
+
+  const updateGraphToken = useMemo(
+    () => (e, token) => {
+      setGraphToken(token);
+    },
+    []
+  );
   return (
     <Fragment>
       {!publishDialogHidden && (
@@ -366,6 +379,13 @@ const Publish: React.FC<PublishPageProps> = (props) => {
         <ProvisionDetailPanel target={settings.publishTargets} onDismiss={() => setShowProvisionDetail(false)} />
       )}
       <Toolbar toolbarItems={toolbarItems} />
+      <div>
+        <form>
+          <h1>Set Tokens Here</h1>
+          <TextField placeholder="access token" onChange={updateAccessToken} />
+          <TextField placeholder="graph token" onChange={updateGraphToken} />
+        </form>
+      </div>
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{selectedTarget ? selectedTargetName : formatMessage('Publish Profiles')}</h1>
       </div>
