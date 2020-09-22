@@ -21,7 +21,7 @@ export const provisionDispatcher = () => {
     try {
       const token = getAccessTokenInCache();
       console.log(token);
-      const result = await httpClient.get('/publish/subscriptions', {
+      const result = await httpClient.get('/azure/subscriptions', {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log(result.data);
@@ -51,7 +51,7 @@ export const provisionDispatcher = () => {
     try {
       const token = getAccessTokenInCache();
       console.log(token);
-      const result = await httpClient.get(`/publish/resourceGroups/${subscriptionId}`, {
+      const result = await httpClient.get(`/azure/resourceGroups/${subscriptionId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log(result.data);
@@ -71,7 +71,7 @@ export const provisionDispatcher = () => {
       try {
         const token = getAccessTokenInCache();
         console.log(token);
-        const result = await httpClient.get(`/publish/resources/${subscriptionId}/${resourceGroup}`, {
+        const result = await httpClient.get(`/azure/resources/${subscriptionId}/${resourceGroup}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         console.log(result.data);
@@ -90,7 +90,7 @@ export const provisionDispatcher = () => {
     try {
       const token = getAccessTokenInCache();
       console.log(token);
-      const result = await httpClient.get(`/publish/${subscriptionId}/locations`, {
+      const result = await httpClient.get(`/azure/locations/${subscriptionId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log(result.data);
@@ -109,8 +109,9 @@ export const provisionDispatcher = () => {
       try {
         const token = getAccessTokenInCache();
         const result = await httpClient.post(
-          `/publish/${projectId}/provision/${type}`,
-          { ...config, graphToken: getGraphTokenInCache() },
+          `/azure/provision/${projectId}/${type}`,
+          // TODO: do not send access token as part of body if sending as part of header
+          { ...config, accessToken: token, graphToken: getGraphTokenInCache() },
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -130,7 +131,7 @@ export const provisionDispatcher = () => {
     ({ set }: CallbackInterface) => async (projectId: string, target: any) => {
       const timer = setInterval(async () => {
         try {
-          const response = await httpClient.get(`/publish/${projectId}/provisionStatus/${target.name}`);
+          const response = await httpClient.get(`/azure/provisionStatus/${projectId}/${target.name}`);
           console.log(response.data);
           if (response.data.config && response.data.config != {}) {
             clearInterval(timer);

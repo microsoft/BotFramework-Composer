@@ -53,12 +53,12 @@ router.post('/storages/folder', StorageController.createFolder);
 router.put('/storages/folder', StorageController.updateFolder);
 
 // provision
-router.get('/publish/subscriptions', ProvisionController.getSubscriptions);
-router.get('/publish/resourceGroups/:subscriptionId', ProvisionController.getResourceGroups);
-router.get('/publish/resources/:subscriptionId/:resourceGroup', ProvisionController.getResourceByResourceGroup);
-router.get('/publish/:subscriptionId/locations', ProvisionController.getDeployLocations);
-router.post('/publish/:projectId/provision/:type', ProvisionController.provision);
-router.get('/publish/:projectId/provisionStatus/:target', ProvisionController.getProvisionStatus);
+router.get('/azure/subscriptions', ProvisionController.getSubscriptions);
+router.get('/azure/resourceGroups/:subscriptionId', ProvisionController.getResourceGroups);
+router.get('/azure/resources/:subscriptionId/:resourceGroup', ProvisionController.getResourceByResourceGroup);
+router.get('/azure/locations/:subscriptionId', ProvisionController.getDeployLocations);
+router.post('/azure/provision/:projectId/:type', ProvisionController.provision);
+router.get('/azure/provisionStatus/:projectId/:target', ProvisionController.getProvisionStatus);
 
 // publishing
 router.get('/publish/types', PublishController.getTypes);
