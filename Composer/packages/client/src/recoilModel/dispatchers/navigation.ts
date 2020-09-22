@@ -25,7 +25,7 @@ export const navigationDispatcher = () => {
   const setDesignPageLocation = useRecoilCallback(
     ({ set }: CallbackInterface) => async (
       projectId: string,
-      { skillId = '', dialogId = '', selected = '', focused = '', breadcrumb = [], promptTab }
+      { dialogId = '', selected = '', focused = '', breadcrumb = [], promptTab }
     ) => {
       let focusPath = dialogId + '#';
       if (focused) {
