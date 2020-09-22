@@ -105,6 +105,9 @@ export class TextFieldBase extends React.Component<ITextFieldProps, ITextFieldSt
       errorMessage: '',
     };
 
+    /*-----updated by composer-----*/
+    // this is only use to sync the data from the other data source
+    // we want to use uncontrolled feature but we still need to sync data.
     this._delayedValidate = this._async.debounce(this._validate, this.props.deferredValidationTime);
     this._lastValidation = 0;
 
@@ -113,6 +116,7 @@ export class TextFieldBase extends React.Component<ITextFieldProps, ITextFieldSt
         this._textElement.current.value = defaultValue;
       }
     }, 300);
+    /*-----updated by composer-----*/
   }
 
   /**
@@ -463,9 +467,12 @@ export class TextFieldBase extends React.Component<ITextFieldProps, ITextFieldSt
     );
 
     const ariaLabelledBy = this.props['aria-labelledby'] || (this.props.label ? this._labelId : undefined);
+    /*-----added by composer-----*/
+    // use the default value to replace the state value
     const valueProps = this.isComponentControlled
       ? { value: this.props.value }
       : { defaultValue: this.props.defaultValue };
+    /*-----added by composer-----*/
     return (
       <textarea
         id={this.componentId}
@@ -490,9 +497,12 @@ export class TextFieldBase extends React.Component<ITextFieldProps, ITextFieldSt
   private _renderInput = (): React.ReactElement<React.HTMLAttributes<HTMLInputElement>> => {
     const inputProps = getNativeProps<React.HTMLAttributes<HTMLInputElement>>(this.props, inputProperties);
     const ariaLabelledBy = this.props['aria-labelledby'] || (this.props.label ? this._labelId : undefined);
+    /*-----added by composer-----*/
+    // use the default value to replace the state value
     const valueProps = this.isComponentControlled
       ? { value: this.props.value }
       : { defaultValue: this.props.defaultValue };
+    /*-----added by composer-----*/
     return (
       <input
         aria-labelledby={ariaLabelledBy}
@@ -500,7 +510,9 @@ export class TextFieldBase extends React.Component<ITextFieldProps, ITextFieldSt
         id={this.componentId}
         type={'text'}
         {...inputProps}
+        /*-----added by composer-----*/
         {...valueProps}
+        /*-----added by composer-----*/
         ref={this._textElement as React.RefObject<HTMLInputElement>}
         aria-describedby={this.isDescriptionAvailable ? this._descriptionId : this.props['aria-describedby']}
         aria-invalid={!!this.errorComponentMessage}
@@ -536,6 +548,7 @@ export class TextFieldBase extends React.Component<ITextFieldProps, ITextFieldSt
     // https://reactjs.org/docs/events.html#event-pooling
     event.persist();
 
+    /*-----updated by composer-----*/
     if (this.isComponentControlled && this.props.value === value) {
       // Avoid doing unnecessary work when the value has not changed.
       return;
@@ -545,6 +558,7 @@ export class TextFieldBase extends React.Component<ITextFieldProps, ITextFieldSt
     if (onChange) {
       onChange(event, value);
     }
+    /*-----updated by composer-----*/
   };
 
   private _validate = (value: string | undefined): void => {
