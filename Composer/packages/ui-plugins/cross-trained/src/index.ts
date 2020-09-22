@@ -9,7 +9,7 @@ const config: PluginConfig = {
   uiSchema: {
     [SDKKinds.CrossTrainedRecognizerSet]: {
       recognizer: {
-        displayName: formatMessage('Default recognizer'),
+        displayName: () => formatMessage('Default recognizer'),
         isSelected: (data) => {
           return typeof data === 'string' && data.endsWith('.lu.qna');
         },
