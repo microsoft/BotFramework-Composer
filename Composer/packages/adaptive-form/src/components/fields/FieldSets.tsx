@@ -17,7 +17,7 @@ export const Fieldsets: React.FC<FieldProps<object>> = (props) => {
   return (
     <React.Fragment>
       {fieldsets.map(({ schema, uiOptions, title, defaultExpanded }, key) => (
-        <CollapseField key={key} title={title} defaultExpanded={defaultExpanded}>
+        <CollapseField key={key} defaultExpanded={defaultExpanded} title={title}>
           <ObjectField {...props} schema={schema} uiOptions={uiOptions} />
         </CollapseField>
       ))}
