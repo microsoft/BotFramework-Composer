@@ -8,7 +8,7 @@ import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
 import { getNewDesigner, FileInfo, Skill, Diagnostic, IBotProject, DialogSetting, FileExtensions } from '@bfc/shared';
 import merge from 'lodash/merge';
-import { UserIdentity, pluginLoader } from '@bfc/extension';
+import { UserIdentity, ExtensionContext } from '@bfc/extension';
 import { FeedbackType, generate } from '@microsoft/bf-generate-library';
 
 import { Path } from '../../utility/path';
@@ -550,14 +550,14 @@ export class BotProject implements IBotProject {
 
   private async removeLocalRuntimeData(projectId) {
     const method = 'localpublish';
-    if (pluginLoader.extensions.publish[method]?.methods?.stopBot) {
-      const pluginMethod = pluginLoader.extensions.publish[method].methods.stopBot;
+    if (ExtensionContext.extensions.publish[method]?.methods?.stopBot) {
+      const pluginMethod = ExtensionContext.extensions.publish[method].methods.stopBot;
       if (typeof pluginMethod === 'function') {
         await pluginMethod.call(null, projectId);
       }
     }
-    if (pluginLoader.extensions.publish[method]?.methods?.removeRuntimeData) {
-      const pluginMethod = pluginLoader.extensions.publish[method].methods.removeRuntimeData;
+    if (ExtensionContext.extensions.publish[method]?.methods?.removeRuntimeData) {
+      const pluginMethod = ExtensionContext.extensions.publish[method].methods.removeRuntimeData;
       if (typeof pluginMethod === 'function') {
         await pluginMethod.call(null, projectId);
       }
