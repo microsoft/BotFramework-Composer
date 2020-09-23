@@ -20,7 +20,7 @@ const router: Router = express.Router({});
 router.post('/projects', ProjectController.createProject);
 router.get('/projects', ProjectController.getAllProjects);
 router.get('/projects/recent', ProjectController.getRecentProjects);
-router.get('/projects/checkIfBotProjectSpace', ProjectController.checkIfBotProjectSpace);
+
 router.get('/projects/:projectId', ProjectController.getProjectById);
 router.put('/projects/open', ProjectController.openProject);
 router.delete('/projects/:projectId', ProjectController.removeProject);
