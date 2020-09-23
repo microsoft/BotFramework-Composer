@@ -10,6 +10,7 @@ import { BotProjectDeployConfig } from './botProjectDeployConfig';
 import { BotProjectDeployLoggerType } from './botProjectLoggerType';
 import { LuisAndQnaPublish } from './luisAndQnA';
 import archiver = require('archiver');
+import fetch from 'node-fetch';
 
 export class BotProjectDeploy {
   private accessToken: string;
@@ -147,20 +148,28 @@ export class BotProjectDeploy {
     });
 
     const publishEndpoint = `https://${
-      hostname ? hostname : name + '-' + env
-    }.scm.azurewebsites.net/zipdeploy/?isAsync=true`;
+      hostname ? hostname : (name + '-' + env)
+      }.scm.azurewebsites.net/zipdeploy/?isAsync=true`;
     try {
-      const response = await rp.post({
-        uri: publishEndpoint,
-        auth: {
-          bearer: token,
-        },
-        body: fs.createReadStream(zipPath),
-      });
+      const response = await fetch(
+        publishEndpoint,
+        {
+          method: 'post',
+          body: fs.createReadStream(zipPath),
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      );
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: response,
+        message: response.statusText,
       });
+      if (response.status == 403) {
+        throw new Error(
+          `Token expired, please run az account get-access-token, then replace the accessToken in your configuration`
+        );
+      }
     } catch (err) {
       if (err.statusCode === 403) {
         throw new Error(

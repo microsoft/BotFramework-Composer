@@ -28,14 +28,15 @@
     "@types/fs-extra": "8.1.0",
     "@types/request": "2.48.4",
     "@types/request-promise": "4.1.45",
+    "@types/node-fetch": "2.5.7",
     "adal-node": "0.2.1",
     "archiver": "^5.0.2",
     "fs-extra": "8.1.0",
     "lodash": "^4.17.20",
     "md5": "2.2.1",
     "minimist": "1.2.5",
+    "node-fetch": "^2.6.1",
     "request": "2.88.2",
-    "request-promise": "4.2.5",
     "uuid": "7.0.3"
   },
   "resolutions": {

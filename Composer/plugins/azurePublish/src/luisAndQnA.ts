@@ -5,7 +5,7 @@ import * as path from 'path';
 import { promisify } from 'util';
 
 import * as fs from 'fs-extra';
-import * as rp from 'request-promise';
+import fetch from 'node-fetch';
 import { ILuisConfig, FileInfo, IQnAConfig } from '@bfc/shared';
 
 import { ICrossTrainConfig, createCrossTrainConfig } from './utils/crossTrainUtil';
@@ -202,13 +202,19 @@ export class LuisAndQnaPublish {
       // DOCS HERE: https://westus.dev.cognitive.microsoft.com/docs/services/5890b47c39e2bb17b84a55ff/operations/5be313cec181ae720aa2b26c
       // This returns a list of azure account information objects with AzureSubscriptionID, ResourceGroup, AccountName for each.
       const getAccountUri = `${luisEndpoint}/luis/api/v2.0/azureaccounts`;
-      const options = {
-        headers: { Authorization: `Bearer ${accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
-      } as rp.RequestPromiseOptions;
-      const response = await rp.get(getAccountUri, options);
 
-      // this should include an array of account info objects
-      accountList = JSON.parse(response);
+      const response = await fetch(
+        getAccountUri,
+        {
+          method: 'get',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Ocp-Apim-Subscription-Key': luisAuthoringKey
+          },
+        }
+      );
+
+      accountList = await response.json();
     } catch (err) {
       // handle the token invalid
       const error = JSON.parse(err.error);
@@ -234,18 +240,23 @@ export class LuisAndQnaPublish {
       });
 
       const luisAssignEndpoint = `${luisEndpoint}/luis/api/v2.0/apps/${luisAppId}/azureaccounts`;
-      const options = {
-        body: account,
-        json: true,
-        headers: { Authorization: `Bearer ${accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
-      } as rp.RequestPromiseOptions;
-      const response = await rp.post(luisAssignEndpoint, options);
+      const response = await fetch(
+        luisAssignEndpoint,
+        {
+          method: 'post',
+          body: JSON.stringify(account),
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Ocp-Apim-Subscription-Key': luisAuthoringKey,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
 
       // TODO: Add some error handling on this API call. As it is, errors will just throw by default and be caught by the catch all try/catch in the deploy method
-
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: response,
+        message: response.statusText,
       });
     }
 
