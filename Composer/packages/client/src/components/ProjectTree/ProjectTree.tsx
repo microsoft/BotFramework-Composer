@@ -85,6 +85,7 @@ interface IProjectTreeProps {
   selected: string;
   onSelect: (link: TreeLink) => void;
   onDelete: (link: TreeLink) => void;
+  showTriggers: boolean;
 }
 
 const TYPE_TO_ICON_MAP = {
@@ -101,7 +102,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
   const { onboardingAddCoachMarkRef, updateUserSettings } = useRecoilValue(dispatcherState);
   const { dialogNavWidth: currentWidth } = useRecoilValue(userSettingsState);
 
-  const { selected, onSelect, onDelete } = props;
+  const { selected, onSelect, onDelete, showTriggers } = props;
   const [filter, setFilter] = useState('');
   const delayedSetFilter = debounce((newValue) => setFilter(newValue), 1000);
   const addMainDialogRef = useCallback((mainDialog) => onboardingAddCoachMarkRef({ mainDialog }), []);
@@ -224,27 +225,36 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
               filterMatch(dialog.displayName) || dialog.triggers.some((trigger) => filterMatch(getTriggerName(trigger)))
           );
 
-    return filteredDialogs.map((dialog: DialogInfo) => {
-      const triggerList = dialog.triggers
-        .filter((tr) => filterMatch(dialog.displayName) || filterMatch(getTriggerName(tr)))
-        .map((tr, index) => {
-          const warningContent = triggerNotSupported(dialog, tr);
-          return renderTrigger(
-            projectId,
-            { ...tr, index, displayName: getTriggerName(tr), warningContent },
-            dialog,
-            startDepth + 1
-          );
-        });
-      return (
-        <details key={dialog.id} ref={dialog.isRoot ? addMainDialogRef : undefined}>
-          <summary css={summaryStyle}>
-            {renderDialogHeader(projectId, dialog, containUnsupportedTriggers(dialog), startDepth)}
-          </summary>
-          {triggerList}
-        </details>
+    {
+      renderDialogHeader(projectId, dialog, containUnsupportedTriggers(dialog), startDepth);
+    }
+    if (showTriggers) {
+      return filteredDialogs.map((dialog: DialogInfo) => {
+        const triggerList = dialog.triggers
+          .filter((tr) => filterMatch(dialog.displayName) || filterMatch(getTriggerName(tr)))
+          .map((tr, index) => {
+            const warningContent = triggerNotSupported(dialog, tr);
+            return renderTrigger(
+              projectId,
+              { ...tr, index, displayName: getTriggerName(tr), warningContent },
+              dialog,
+              startDepth + 1
+            );
+          });
+        return (
+          <details key={dialog.id} ref={dialog.isRoot ? addMainDialogRef : undefined}>
+            <summary css={summaryStyle}>
+              {renderDialogHeader(projectId, dialog, containUnsupportedTriggers(dialog), startDepth)}
+            </summary>
+            {triggerList}
+          </details>
+        );
+      });
+    } else {
+      return filteredDialogs.map((dialog: DialogInfo) =>
+        renderDialogHeader(projectId, dialog, containUnsupportedTriggers(dialog), startDepth)
       );
-    });
+    }
   }
 
   function createBotSubtree(bot: BotInProject & { hasWarnings: boolean }) {

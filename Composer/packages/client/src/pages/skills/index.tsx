@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { RouteComponentProps } from '@reach/router';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 import { SkillSetting } from '@bfc/shared';
@@ -24,7 +24,7 @@ const Skills: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => 
 
   const botName = useRecoilValue(botNameState(projectId));
   const settings = useRecoilValue(settingsState(projectId));
-  const { addSkill, setSettings } = useRecoilValue(dispatcherState);
+  const { addSkill, setSettings, setCurrentMode } = useRecoilValue(dispatcherState);
 
   const toolbarItems: IToolbarItem[] = [
     {
@@ -58,6 +58,8 @@ const Skills: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => 
   const onDismissForm = useCallback(() => {
     setShowAddSkillDialogModal(false);
   }, []);
+
+  useEffect(() => setCurrentMode('skills'), []);
 
   return (
     <div css={ContainerStyle} data-testid="skills-page">

@@ -28,7 +28,6 @@ import {
 import { Conversation } from '../../components/Conversation';
 import { dialogStyle } from '../../components/Modal/dialogStyle';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
-import { ProjectTree } from '../../components/ProjectTree/ProjectTree';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { clearBreadcrumb, getFocusPath } from '../../utils/navigation';
 import { navigateTo } from '../../utils/navigation';
@@ -140,6 +139,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     onboardingAddCoachMarkRef,
     importQnAFromUrls,
     addSkill,
+    setCurrentMode,
   } = useRecoilValue(dispatcherState);
 
   const params = new URLSearchParams(location?.search);
@@ -155,6 +155,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const shellForPropertyEditor = useShell('PropertyEditor', projectId);
   const triggerApi = useTriggerApi(shell.api);
   const { createTrigger } = shell.api;
+
+  useEffect(() => setCurrentMode('design'), []);
 
   useEffect(() => {
     const currentDialog = dialogs.find(({ id }) => id === dialogId);
@@ -183,7 +185,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
   useEffect(() => {
     if (location && props.dialogId && props.projectId) {
-      const { skillId, dialogId, projectId } = props;
+      const { dialogId, projectId } = props;
       const params = new URLSearchParams(location.search);
       const dialogMap = dialogs.reduce((acc, { content, id }) => ({ ...acc, [id]: content }), {});
       const selected = params.get('selected') ?? '';
@@ -523,8 +525,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     }
   }
 
-  async function handleDeleteTrigger(projectId, dialogId, index) {
-    const content = deleteTrigger(dialogs, dialogId, index, (trigger) => triggerApi.deleteTrigger(dialogId, trigger));
+  async function handleDeleteTrigger(projectId, id, index) {
+    const content = deleteTrigger(dialogs, id, index, (trigger) => triggerApi.deleteTrigger(id, trigger));
 
     if (content) {
       updateDialog({ id, content, projectId });
@@ -600,14 +602,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   return (
     <React.Fragment>
       <div css={pageRoot}>
-        <ProjectTree
-          dialogId={dialogId}
-          dialogs={dialogs}
-          selected={selected}
-          onDeleteDialog={handleDeleteDialog}
-          onDeleteTrigger={handleDeleteTrigger}
-          onSelect={(...props) => handleSelect(projectId, ...props)}
-        />
         <div css={contentWrapper} role="main">
           <div css={{ position: 'relative' }} data-testid="DesignPage-ToolBar">
             <span

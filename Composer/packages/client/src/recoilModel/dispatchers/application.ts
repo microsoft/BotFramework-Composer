@@ -5,7 +5,14 @@
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 import debounce from 'lodash/debounce';
 
-import { appUpdateState, announcementState, onboardingState, creationFlowStatusState } from '../atoms/appState';
+import {
+  appUpdateState,
+  announcementState,
+  onboardingState,
+  creationFlowStatusState,
+  currentModeState,
+  PageMode,
+} from '../atoms/appState';
 import { AppUpdaterStatus, CreationFlowStatus } from '../../constants';
 import OnboardingState from '../../utils/onboardingStorage';
 import { StateError, AppUpdateState } from '../../recoilModel/types';
@@ -68,6 +75,10 @@ export const applicationDispatcher = () => {
     set(announcementState, message);
   });
 
+  const setCurrentMode = useRecoilCallback(({ set }: CallbackInterface) => (mode: PageMode) => {
+    set(currentModeState, mode);
+  });
+
   const onboardingAddCoachMarkRef = useRecoilCallback(
     ({ set }: CallbackInterface) => (coachMarkRef: { [key: string]: any }) => {
       set(onboardingState, (onboardingObj) => ({
@@ -108,5 +119,6 @@ export const applicationDispatcher = () => {
     onboardingAddCoachMarkRef,
     setCreationFlowStatus,
     setApplicationLevelError,
+    setCurrentMode,
   };
 };

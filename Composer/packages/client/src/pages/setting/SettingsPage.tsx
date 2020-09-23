@@ -45,6 +45,7 @@ const SettingPage: React.FC<RouteComponentProps> = () => {
     addLanguages,
     deleteLanguages,
     fetchProjectById,
+    setCurrentMode,
   } = useRecoilValue(dispatcherState);
   const locale = useRecoilValue(localeState(projectId));
   const showDelLanguageModal = useRecoilValue(showDelLanguageModalState(projectId));
@@ -61,6 +62,7 @@ const SettingPage: React.FC<RouteComponentProps> = () => {
     if (!projectId && cachedProjectId) {
       fetchProjectById(cachedProjectId);
     }
+    setCurrentMode('settings');
   }, []);
 
   const settingLabels = {
