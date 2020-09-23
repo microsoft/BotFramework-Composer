@@ -1,7 +1,6 @@
 build/
 data.json
-__tests__/__data__.json
+src/__tests__/__data__.json
 schemas/locales/en-US-pseudo/
 src/locales/en-US-pseudo.json
-.composer
 extensions.json

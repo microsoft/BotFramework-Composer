@@ -3,4 +3,4 @@
 
 import debug from 'debug';
 
-export default debug('composer:plugins');
+export default debug('composer:extensions');
