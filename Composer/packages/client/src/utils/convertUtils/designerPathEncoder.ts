@@ -21,7 +21,9 @@ const parseArrayPath = (subpath: string) => {
  * @param dialog Current active Adaptive dialog json
  * @param path Current focus path in index format
  */
-export const encodeArrayPathToDesignerPath = (dialog, path: string): string | null => {
+export const encodeArrayPathToDesignerPath = (dialog, path: string): string => {
+  if (!path || !dialog) return path;
+
   const subpaths = path.split('.');
   const transformedSubpaths: string[] = [];
 
@@ -29,20 +31,20 @@ export const encodeArrayPathToDesignerPath = (dialog, path: string): string | nu
   for (const p of subpaths) {
     const pathInfo = parseArrayPath(p);
     if (!pathInfo) {
-      // For invalid input, fallback to null to avoid silent failure.
-      return null;
+      // For invalid input, fallback to origin array path.
+      return path;
     }
 
     const subData = get(rootData, p);
     if (!subData) {
-      // For invalid data, fallback to null.
-      return null;
+      // For invalid data, fallback to origin array path.
+      return path;
     }
 
     const { prefix, index } = pathInfo;
     // For subdata without designer.id, fallback to array index.
     const designerId: string | number = get(subData, '$designer.id', index);
-    const designerIdStr = typeof designerId === 'string' ? `'${designerId}'` : designerId;
+    const designerIdStr = typeof designerId === 'string' ? `"${designerId}"` : designerId;
 
     const designerSubpath = `${prefix}[${designerIdStr}]`;
     transformedSubpaths.push(designerSubpath);
@@ -55,7 +57,7 @@ export const encodeArrayPathToDesignerPath = (dialog, path: string): string | nu
   return designerPath;
 };
 
-const DesignerPathPattern = /^(\w+)\['(\w+)'\]$/;
+const DesignerPathPattern = /^(\w+)\["(\w+)"\]$/;
 
 const parseDesignerPath = (subpath: string) => {
   const matchResults = DesignerPathPattern.exec(subpath);
@@ -73,7 +75,9 @@ const parseDesignerPath = (subpath: string) => {
  * @param dialog Current active Adaptive dialog json
  * @param path Current focus path in designer format
  */
-export const decodeDesignerPathToArrayPath = (dialog, path: string): string | null => {
+export const decodeDesignerPathToArrayPath = (dialog, path: string): string => {
+  if (!path || !dialog) return path;
+
   const subpaths = path.split('.');
   const transformedSubpaths: string[] = [];
 
@@ -90,13 +94,13 @@ export const decodeDesignerPathToArrayPath = (dialog, path: string): string | nu
     const arrayData = get(rootData, arrayName);
     if (!Array.isArray(arrayData)) {
       // For invalid data, fallback to origin designer path
-      return null;
+      return path;
     }
 
     const arrayIndex = arrayData.findIndex((x) => get(x, '$designer.id') === designerId);
     if (arrayIndex === -1) {
       // Can't find given designer id, fallback to input path.
-      return null;
+      return path;
     }
 
     const arraySubpath = `${arrayName}[${arrayIndex}]`;
