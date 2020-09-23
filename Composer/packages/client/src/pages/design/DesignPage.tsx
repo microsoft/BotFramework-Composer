@@ -194,7 +194,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       const selected = decodeDesignerPathToArrayPath(dialogData, params.get('selected') ?? '');
       const focused = decodeDesignerPathToArrayPath(dialogData, params.get('focused') ?? '');
 
-      // contribution point
       //make sure focusPath always valid
       const focusPath = getFocusPath(selected, focused);
       const data = getDialogData(dialogMap, dialogId, focusPath);
