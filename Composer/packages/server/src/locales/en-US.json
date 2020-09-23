@@ -740,6 +740,9 @@
   "duplicate_dialog_name_824f9fce": {
     "message": "Duplicate dialog name"
   },
+  "duplicate_fields_9fd0d3c2": {
+    "message": "duplicate fields"
+  },
   "duplicate_name_d295a09d": {
     "message": "Duplicate name"
   },
@@ -1345,6 +1348,9 @@
   },
   "missing_definition_for_defname_33f2b594": {
     "message": "Missing definition for { defName }"
+  },
+  "missing_fields_1c88ab71": {
+    "message": "missing fields"
   },
   "modification_rejected_6a6e8322": {
     "message": "Modification Rejected"

@@ -38,7 +38,7 @@ const FORM_EDITOR = 'PropertyEditor';
 
 type EventSource = 'FlowEditor' | 'PropertyEditor' | 'DesignPage';
 
-export function useShell(source: EventSource, projectId: string, skillId: string): Shell {
+export function useShell(source: EventSource, projectId: string): Shell {
   const dialogMapRef = useRef({});
 
   const schemas = useRecoilValue(schemasState(projectId));
@@ -111,11 +111,11 @@ export function useShell(source: EventSource, projectId: string, skillId: string
   }
 
   function navigationTo(path) {
-    navTo(projectId, skillId, path, breadcrumb);
+    navTo(projectId, path, breadcrumb);
   }
 
   function focusEvent(subPath) {
-    selectTo(projectId, skillId, '', subPath);
+    selectTo(projectId, subPath);
   }
 
   function focusSteps(subPaths: string[] = [], fragment?: string) {

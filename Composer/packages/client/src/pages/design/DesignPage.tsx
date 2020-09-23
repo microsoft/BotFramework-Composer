@@ -214,13 +214,12 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
          *   - If 'dialog' not exists at `dialogId` path, fallback to main dialog.
          */
         if (id) {
-          navTo(projectId, skillId ?? projectId, id);
+          navTo(projectId, id);
         }
         return;
       }
 
       setDesignPageLocation(projectId, {
-        skillId: skillId ?? projectId,
         dialogId,
         selected,
         focused,
@@ -269,15 +268,15 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       // maybe navigate to overall bot settings?
       return;
     } else if (nextSelected != null) {
-      selectTo(nextProjectId, nextSkillId ?? nextProjectId, nextDialogId, nextSelected);
+      selectTo(nextProjectId, nextSelected);
     } else {
-      navTo(nextProjectId, nextSkillId ?? nextProjectId, nextDialogId, []);
+      navTo(nextProjectId, nextDialogId);
     }
   }
 
   const onCreateDialogComplete = (newDialog) => {
     if (newDialog) {
-      navTo(projectId, skillId ?? projectId, newDialog, []);
+      navTo(projectId, newDialog, []);
     }
   };
 
@@ -459,8 +458,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
   function handleBreadcrumbItemClick(_event, item) {
     if (item) {
-      const { skillId, dialogId, selected, focused, index } = item;
-      selectAndFocus(projectId, skillId, dialogId, selected, focused, clearBreadcrumb(breadcrumb, index));
+      const { dialogId, selected, focused, index } = item;
+      selectAndFocus(projectId, dialogId, selected, focused, clearBreadcrumb(breadcrumb, index));
     }
   }
 
@@ -558,14 +557,14 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       if (index === currentIdx) {
         if (currentIdx - 1 >= 0) {
           //if the deleted node is selected and the selected one is not the first one, navTo the previous trigger;
-          selectTo(projectId, skillId, dialogId, createSelectedPath(currentIdx - 1));
+          selectTo(projectId, createSelectedPath(currentIdx - 1));
         } else {
           //if the deleted node is selected and the selected one is the first one, navTo the first trigger;
-          navTo(projectId, skillId, dialogId, []);
+          navTo(projectId, dialogId, []);
         }
       } else if (index < currentIdx) {
         //if the deleted node is at the front, navTo the current one;
-        selectTo(projectId, skillId, dialogId, createSelectedPath(currentIdx - 1));
+        selectTo(projectId, createSelectedPath(currentIdx - 1));
       }
     }
   }
@@ -623,15 +622,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   return (
     <React.Fragment>
       <div css={pageRoot}>
-        <ProjectTree
-          dialogId={dialogId}
-          selected={selected}
-          onDelete={handleDelete}
-          onSelect={(link) => {
-            const { projectId, skillId, dialogName: dialogId, trigger: selected } = link;
-            handleSelect(projectId, skillId, dialogId, selected == null ? '' : `triggers[${selected.toString()}]`);
-          }}
-        />
         <div css={contentWrapper} role="main">
           <div css={{ position: 'relative' }} data-testid="DesignPage-ToolBar">
             <span
