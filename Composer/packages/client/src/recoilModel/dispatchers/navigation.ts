@@ -76,6 +76,7 @@ export const navigationDispatcher = () => {
     }
   );
 
+  // contribution point
   const selectTo = useRecoilCallback(
     ({ snapshot, set }: CallbackInterface) => async (projectId: string, selectPath: string) => {
       if (!selectPath) return;
@@ -95,6 +96,7 @@ export const navigationDispatcher = () => {
     }
   );
 
+  // contribution point
   const focusTo = useRecoilCallback(
     ({ snapshot, set }: CallbackInterface) => async (projectId: string, focusPath: string, fragment: string) => {
       set(currentProjectIdState, projectId);

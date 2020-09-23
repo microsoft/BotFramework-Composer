@@ -202,6 +202,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       const selected = params.get('selected') ?? '';
       const focused = params.get('focused') ?? '';
 
+      // contribution point
       //make sure focusPath always valid
       const data = getDialogData(dialogMap, dialogId, getFocusPath(selected, focused));
       if (typeof data === 'undefined') {
