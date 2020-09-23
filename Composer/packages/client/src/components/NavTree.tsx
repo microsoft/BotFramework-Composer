@@ -19,7 +19,6 @@ import { navigateTo } from '../utils/navigation';
 const root = css`
   width: 100%;
   height: 100%;
-  border-right: 1px solid #c4c4c4;
   box-sizing: border-box;
   overflow-y: auto;
   overflow-x: hidden;

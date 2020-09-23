@@ -102,7 +102,7 @@ const Page: React.FC<IPageProps> = (props) => {
           {onRenderHeaderContent && <div css={headerContent}>{onRenderHeaderContent()}</div>}
         </div>
         <div css={main} role="main">
-          <LeftRightSplit initialLeftGridWidth="25%" minLeftPixels={180}>
+          <LeftRightSplit initialLeftGridWidth="20%">
             <NavTree navLinks={navLinks} regionName={navRegionName} />
             <div aria-label={mainRegionName} css={content} data-testid="PageContent" role="region">
               {children}

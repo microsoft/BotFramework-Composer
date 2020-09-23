@@ -403,7 +403,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
         <h1 css={HeaderText}>{selectedTarget ? selectedTargetName : formatMessage('Publish Profiles')}</h1>
       </div>
       <div css={ContentStyle} data-testid="Publish" role="main">
-        <LeftRightSplit>
+        <LeftRightSplit initialLeftGridWidth="20%">
           <div
             aria-label={formatMessage('Navigation panel')}
             css={projectContainer}
