@@ -17,25 +17,21 @@ import { navigate } from '@reach/router';
 import { formData } from '../shared/types';
 
 // -------------------- VirtualAssistantCreationModal -------------------- //
-type VirtualAssistantCreationModalProps = RouteComponentProps<{
+type VirtualAssistantCreationModalProps = {
   onDismiss: () => void;
   handleCreateNew: (formData: formData, templateId: string) => Promise<void>;
   formData: formData;
-}>;
+} & RouteComponentProps<{}>;
 
 export const AppContext = React.createContext(AppContextDefaultValue);
 
 export const VirtualAssistantCreationModal: React.FC<VirtualAssistantCreationModalProps> = (props) => {
   const { onDismiss, handleCreateNew, formData } = props;
-  if (onDismiss === undefined || handleCreateNew === undefined || formData === undefined) {
-    console.log('invalid props passed to VirtualAssistantCreationModal');
-    return null;
-  }
   const [state, setState] = useState(AppContextDefaultValue.state);
   const { shellApi } = useShellApi();
 
-  const createAndConfigureBot = async () => {
-    await handleCreateNew(formData, 'vaCore');
+  var createAndConfigureBot = async () => {
+    await handleCreateNew(formData, 'vacore');
     await updateBotResponses();
     await updateQnaFiles();
     navigate('./');

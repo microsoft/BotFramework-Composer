@@ -13,19 +13,16 @@ import { IAssistant } from '../models/stateModels';
 import { AppContext } from './VirtualAssistantCreationModal';
 import { DialogFooterWrapper } from './dialogFooterWrapper';
 import { RouterPaths } from '../shared/constants';
-// -------------------- NewBotPage -------------------- //
 
-type NewBotPageProps = RouteComponentProps<{
+// -------------------- NewBotPage -------------------- //
+type NewBotPageProps = {
   onDismiss: () => void;
-}>;
+} & RouteComponentProps<{}>;
 
 export const NewBotPage: React.FC<NewBotPageProps> = (props) => {
   const { state, setState } = useContext(AppContext);
   const onDismiss = props.onDismiss;
-  if (onDismiss === undefined) {
-    console.log('invalid props passed to NewBotPage.tsx');
-    return null;
-  }
+
   const assistantSelectionChanged = (event: any, option?: IChoiceGroupOption) => {
     var selectedAssistant = state.availableAssistantTemplates.find((assistant: IAssistant) => {
       return assistant.name.toLowerCase() == option?.key.toLowerCase();

@@ -74,40 +74,35 @@ const provisioningDetailItems = () => {
   ];
 };
 
+const columns: IColumn[] = [
+  {
+    key: 'column1',
+    name: formatMessage('Resource'),
+    fieldName: 'Resource',
+    minWidth: 50,
+    maxWidth: 200,
+    isResizable: false,
+    isMultiline: false,
+  },
+  {
+    key: 'column2',
+    name: formatMessage('Notes'),
+    fieldName: 'Notes',
+    minWidth: 300,
+    maxWidth: 500,
+    isResizable: false,
+    isMultiline: true,
+  },
+];
+
 // -------------------- ProvisionSummaryPage -------------------- //
-type ProvisionSummaryPageProps = RouteComponentProps<{
+type ProvisionSummaryPageProps = {
   onDismiss: () => void;
-  onSubmit: () => void;
-}>;
+  onSubmit: () => Promise<void>;
+} & RouteComponentProps<{}>;
 
 export const ProvisionSummaryPage: React.FC<ProvisionSummaryPageProps> = (props) => {
   const { onDismiss, onSubmit } = props;
-
-  if (onDismiss === undefined || onSubmit === undefined) {
-    console.log('invalid props passed to ProvisionSummaryPage');
-    return null;
-  }
-
-  const columns: IColumn[] = [
-    {
-      key: 'column1',
-      name: formatMessage('Resource'),
-      fieldName: 'Resource',
-      minWidth: 50,
-      maxWidth: 200,
-      isResizable: false,
-      isMultiline: false,
-    },
-    {
-      key: 'column2',
-      name: formatMessage('Notes'),
-      fieldName: 'Notes',
-      minWidth: 300,
-      maxWidth: 500,
-      isResizable: false,
-      isMultiline: true,
-    },
-  ];
 
   return (
     <Fragment>
@@ -118,7 +113,7 @@ export const ProvisionSummaryPage: React.FC<ProvisionSummaryPageProps> = (props)
         subText={formatMessage('The following will be provisioned to enable your bot')}
         dialogType={DialogTypes.CreateFlow}
       >
-        <Pivot aria-label="Basic Pivot Example">
+        <Pivot>
           <PivotItem headerText={formatMessage('Summary')}>
             <DetailsList
               items={provisioningDetailItems()}

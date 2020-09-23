@@ -31,17 +31,13 @@ const dropdownStyles: Partial<IDropdownStyles> = {
 };
 
 // -------------------- CustomizeBotPage -------------------- //
-type CustomizeBotPageProps = RouteComponentProps<{
+type CustomizeBotPageProps = {
   onDismiss: () => void;
-}>;
+} & RouteComponentProps<{}>;
 
 export const CustomizeBotPage: React.FC<CustomizeBotPageProps> = (props) => {
   const { state, setState } = useContext(AppContext);
   const onDismiss = props.onDismiss;
-  if (onDismiss === undefined) {
-    console.log('invalid props passed to CustomizeBotPage');
-    return null;
-  }
 
   const personalityOptions = (): IDropdownOption[] => {
     return Object.values(AvailablePersonalities).map((personality) => {
