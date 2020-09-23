@@ -2,8 +2,25 @@
 // Licensed under the MIT License.
 import { css } from '@emotion/core';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
+
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { ITheme, getTheme } from 'office-ui-fabric-react/lib/Styling';
+
+export const settingsContainer = css`
+  display: flex;
+  border-top: 1px solid ${NeutralColors.gray20};
+  padding: 20px 0px;
+`;
+
+export const settingsContent = css`
+  width: 245px;
+  font-size: ${FontSizes.medium};
+`;
+
+export const settingsDescription = css`
+  margin: 0;
+  margin-top: 8px;
+`;
 
 export const ContentHeaderStyle = css`
   padding: 5px 20px;
