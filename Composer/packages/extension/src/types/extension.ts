@@ -20,7 +20,7 @@ export type ExtensionBundle = {
   path: string;
 };
 
-export interface ExtensionMetadata {
+export type ExtensionMetadata = {
   /** name field from package.json */
   id: string;
   /** name field from composer object in package.json, defaults to id */
@@ -35,10 +35,10 @@ export interface ExtensionMetadata {
   builtIn?: boolean;
   bundles: ExtensionBundle[];
   contributes: ExtensionContribution;
-}
+};
 
 export interface ExtensionMap {
-  [id: string]: ExtensionMetadata;
+  [id: string]: ExtensionMetadata | undefined;
 }
 
 /** Info about a plugin returned from an NPM search query */
@@ -58,6 +58,7 @@ export interface PackageJSON {
   extendsComposer: boolean;
   composer?: {
     name?: string;
+    enabled?: boolean;
     contributes?: ExtensionContribution;
     bundles?: ExtensionBundle[];
   };

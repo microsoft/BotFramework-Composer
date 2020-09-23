@@ -6,15 +6,15 @@ import fs from 'fs';
 import rimraf from 'rimraf';
 import { DialogFactory, SDKKinds } from '@bfc/shared';
 
-import { Path } from '../../../src/utility/path';
-import { BotProject } from '../../../src/models/bot/botProject';
-import { LocationRef } from '../../../src/models/bot/interface';
+import { Path } from '../../../utility/path';
+import { BotProject } from '../botProject';
+import { LocationRef } from '../interface';
 
 jest.mock('azure-storage', () => {
   return {};
 });
 
-const botDir = '../../mocks/samplebots/bot1';
+const botDir = '../../../__mocks__/samplebots/bot1';
 
 const mockLocationRef: LocationRef = {
   storageId: 'default',

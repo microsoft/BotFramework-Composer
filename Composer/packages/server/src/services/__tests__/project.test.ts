@@ -3,11 +3,11 @@
 
 import rimraf from 'rimraf';
 
-import { Path } from '../../src/utility/path';
-import { BotProjectService } from '../../src/services/project';
+import { Path } from '../../utility/path';
+import { BotProjectService } from '../project';
 
 // offer a bot project ref which to open
-jest.mock('../../src/store/store', () => {
+jest.mock('../../store/store', () => {
   const data = {
     storageConnections: [
       {
@@ -35,9 +35,9 @@ jest.mock('../../src/store/store', () => {
 
 jest.mock('azure-storage', () => {});
 
-const projPath = Path.resolve(__dirname, '../mocks/samplebots/bot1');
+const projPath = Path.resolve(__dirname, '../../__mocks__/samplebots/bot1');
 
-const saveAsDir = Path.resolve(__dirname, '../mocks/samplebots/saveas');
+const saveAsDir = Path.resolve(__dirname, '../../__mocks__/samplebots/saveas');
 
 const location1 = {
   storageId: 'default',
