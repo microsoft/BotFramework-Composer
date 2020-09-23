@@ -5,7 +5,7 @@ import formatMessage from 'format-message';
 export const topLinks = (
   projectId: string,
   openedDialogId: string,
-  pluginPages: { id: string; label: string; icon?: string; when?: string }[]
+  pluginPages: { id: string; label: string; icon?: string }[]
 ) => {
   const botLoaded = !!projectId;
   let links = [

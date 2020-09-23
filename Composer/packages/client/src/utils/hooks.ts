@@ -29,9 +29,9 @@ export const useLinks = () => {
 
   // add page-contributing extensions
   const pluginPages = extensions.reduce((pages, p) => {
-    const pageConfig = p.contributes?.views?.page;
-    if (pageConfig) {
-      pages.push({ ...pageConfig, id: p.id });
+    const pagesConfig = p.contributes?.views?.pages;
+    if (Array.isArray(pagesConfig) && pagesConfig.length > 0) {
+      pages.push(...pagesConfig);
     }
     return pages;
   }, [] as any[]);
