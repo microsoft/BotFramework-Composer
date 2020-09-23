@@ -48,12 +48,10 @@ import {
   showAddSkillDialogModalState,
   actionsSeedState,
   localeState,
-  qnaFilesState,
 } from '../../recoilModel';
-import { getBaseName } from '../../utils/fileUtil';
 import ImportQnAFromUrlModal from '../knowledge-base/ImportQnAFromUrlModal';
 import { triggerNotSupported } from '../../utils/dialogValidator';
-import { undoFunctionState } from '../../recoilModel/undo/history';
+import { undoFunctionState, undoVersionState } from '../../recoilModel/undo/history';
 
 import { WarningMessage } from './WarningMessage';
 import {
@@ -108,10 +106,8 @@ const getTabFromFragment = () => {
   }
 };
 
-const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string; skillId?: string }>> = (
-  props
-) => {
-  const { location, dialogId, skillId, projectId = '' } = props;
+const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = (props) => {
+  const { location, dialogId, projectId = '' } = props;
   const userSettings = useRecoilValue(userSettingsState);
 
   const schemas = useRecoilValue(schemasState(projectId));
@@ -123,9 +119,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState(projectId));
   const actionsSeed = useRecoilValue(actionsSeedState(projectId));
   const locale = useRecoilValue(localeState(projectId));
-  const undoVersion = useRecoilValue(undoFunctionState(projectId));
-  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   const undoFunction = useRecoilValue(undoFunctionState(projectId));
+  const undoVersion = useRecoilValue(undoVersionState(projectId));
+
   const { undo, redo, canRedo, canUndo, commitChanges, clearUndo } = undoFunction;
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
   const {
@@ -140,7 +136,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     selectTo,
     selectAndFocus,
     addSkillDialogCancel,
-    createQnAFile,
     exportToZip,
     onboardingAddCoachMarkRef,
     importQnAFromUrls,
@@ -185,15 +180,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       updateDialog({ id: dialogId, content: dialogContent, projectId });
     }
   }, [dialogId]);
-
-  // migration: add qna file for dialog
-  useEffect(() => {
-    dialogs.forEach(async (dialog) => {
-      if (!qnaFiles || qnaFiles.length === 0 || !qnaFiles.find((qnaFile) => getBaseName(qnaFile.id) === dialog.id)) {
-        await createQnAFile({ id: dialog.id, content: '', projectId });
-      }
-    });
-  }, [dialogs]);
 
   useEffect(() => {
     if (location && props.dialogId && props.projectId) {
@@ -258,19 +244,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     createTrigger(dialogId, formData);
   };
 
-  function handleSelect(
-    nextProjectId: string,
-    nextSkillId: string | undefined,
-    nextDialogId: string | undefined,
-    nextSelected: string | undefined
-  ) {
-    if (nextDialogId == null) {
-      // maybe navigate to overall bot settings?
-      return;
-    } else if (nextSelected != null) {
-      selectTo(nextProjectId, nextSelected);
+  function handleSelect(projectId, id, selected = '') {
+    if (selected) {
+      selectTo(projectId, selected);
     } else {
-      navTo(nextProjectId, nextDialogId);
+      navTo(projectId, id, []);
     }
   }
 
@@ -519,7 +497,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     commitChanges();
   }
 
-  async function handleDeleteDialog(projectId, skillId, dialogId) {
+  async function handleDeleteDialog(projectId, dialogId) {
     const refs = getAllRef(dialogId, dialogs);
     let setting: any = {
       confirmBtnText: formatMessage('Yes'),
@@ -545,11 +523,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     }
   }
 
-  async function handleDeleteTrigger(projectId, skillId, dialogId, index) {
+  async function handleDeleteTrigger(projectId, dialogId, index) {
     const content = deleteTrigger(dialogs, dialogId, index, (trigger) => triggerApi.deleteTrigger(dialogId, trigger));
 
     if (content) {
-      updateDialog({ id: dialogId, content, projectId });
+      updateDialog({ id, content, projectId });
       const match = /\[(\d+)\]/g.exec(selected);
       const current = match && match[1];
       if (!current) return;
@@ -560,7 +538,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           selectTo(projectId, createSelectedPath(currentIdx - 1));
         } else {
           //if the deleted node is selected and the selected one is the first one, navTo the first trigger;
-          navTo(projectId, dialogId, []);
+          navTo(projectId, id, []);
         }
       } else if (index < currentIdx) {
         //if the deleted node is at the front, navTo the current one;
@@ -569,12 +547,12 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     }
   }
 
-  async function handleDelete(link: { projectId: string; dialogName?: string; trigger?: number; skillId?: string }) {
-    const { projectId, dialogName, trigger, skillId } = link;
+  async function handleDelete(link: { projectId: string; dialogName?: string; trigger?: number }) {
+    const { projectId, dialogName, trigger } = link;
     if (trigger == null) {
-      handleDeleteDialog(projectId, skillId, dialogName);
+      handleDeleteDialog(projectId, dialogName);
     } else {
-      handleDeleteTrigger(projectId, skillId, dialogName, trigger);
+      handleDeleteTrigger(projectId, dialogName, trigger);
     }
   }
 
@@ -622,6 +600,14 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   return (
     <React.Fragment>
       <div css={pageRoot}>
+        <ProjectTree
+          dialogId={dialogId}
+          dialogs={dialogs}
+          selected={selected}
+          onDeleteDialog={handleDeleteDialog}
+          onDeleteTrigger={handleDeleteTrigger}
+          onSelect={(...props) => handleSelect(projectId, ...props)}
+        />
         <div css={contentWrapper} role="main">
           <div css={{ position: 'relative' }} data-testid="DesignPage-ToolBar">
             <span

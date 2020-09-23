@@ -84,7 +84,9 @@ export const navigationDispatcher = () => {
       const breadcrumb = await snapshot.getPromise(breadcrumbState(projectId));
 
       // initial dialogId, projectId maybe empty string  ""
-      const dialogId = 'Main';
+      let { dialogId } = designPageLocation;
+
+      if (!dialogId) dialogId = 'Main';
 
       const currentUri = convertPathToUrl(projectId, dialogId, selectPath);
 

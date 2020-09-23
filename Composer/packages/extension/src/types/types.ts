@@ -53,7 +53,7 @@ export interface PublishPlugin<Config = any> {
   instructions?: string;
   customName?: string;
   customDescription?: string;
-  hasView: boolean;
+  hasView?: boolean;
   [key: string]: any;
 }
 
@@ -117,7 +117,7 @@ export interface ExtensionCollection {
         /** (Optional) Schema for publishing configuration. */
         schema?: JSONSchema7;
         /** Whether or not the plugin has custom UI to host in the publish surface */
-        hasView: boolean;
+        hasView?: boolean;
       };
       methods: PublishPlugin;
     };

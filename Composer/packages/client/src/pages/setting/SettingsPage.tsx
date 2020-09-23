@@ -63,14 +63,6 @@ const SettingPage: React.FC<RouteComponentProps> = () => {
     }
   }, []);
 
-  // If no project is open and user tries to access a bot-scoped settings (e.g., browser history, deep link)
-  // Redirect them to the default settings route that is not bot-scoped
-  useEffect(() => {
-    if (!projectId && location.pathname.indexOf('/settings/bot/') !== -1) {
-      navigate('/settings/application');
-    }
-  }, [projectId]);
-
   const settingLabels = {
     botSettings: formatMessage('Bot Settings'),
     appSettings: formatMessage('Application Settings'),
@@ -91,6 +83,16 @@ const SettingPage: React.FC<RouteComponentProps> = () => {
     // { id: 'extensions', name: settingLabels.extensions, url: getProjectLink('extensions') },
     { id: 'about', name: settingLabels.about, url: getProjectLink('about') },
   ];
+
+  // If no project is open and user tries to access a bot-scoped settings (e.g., browser history, deep link)
+  // Redirect them to the default settings route that is not bot-scoped
+  useEffect(() => {
+    if (!projectId && location.pathname.indexOf('/settings/bot/') !== -1) {
+      navigate('/settings/application');
+    } else {
+      navigate(links[0].url);
+    }
+  }, [projectId]);
 
   const openDeleteBotModal = async () => {
     const boldWarningText = formatMessage(
