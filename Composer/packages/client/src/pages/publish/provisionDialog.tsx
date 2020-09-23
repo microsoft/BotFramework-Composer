@@ -18,7 +18,6 @@ import { DialogWrapper, DialogTypes } from '../../components/DialogWrapper';
 import { dispatcherState, userSettingsState, settingsState } from '../../recoilModel';
 
 import { CreateNewResource } from './createNewResources';
-import { SelectExistedResources } from './selectExistedResources';
 
 // import { getAccessTokenInCache } from '../../utils/auth';
 interface ProvisionDialogProps {
@@ -32,6 +31,8 @@ interface ProvisionDialogProps {
 }
 
 export const ProvisionDialog: React.FC<ProvisionDialogProps> = (props) => {
+  const { setPublishTargets } = useRecoilValue(dispatcherState);
+
   const userSettings = useRecoilValue(userSettingsState);
   const settings = useRecoilValue(settingsState);
 

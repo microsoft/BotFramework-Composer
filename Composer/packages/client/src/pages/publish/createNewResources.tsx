@@ -14,17 +14,22 @@ import { Subscription, DeployLocation } from '@bfc/shared';
 import { subscriptionsState, resourceGroupsState, deployLocationsState, dispatcherState } from '../../recoilModel';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 
+import { SettingToggle } from './SettingToggle';
+
 interface CreateNewResourceProps {
   onDismiss: () => void;
   onSubmit: (value) => void;
 }
-
-const extenstionResourceOptions = [
-  { key: 'cosmoDb', text: 'CosmoDb' },
-  { key: 'applicationInsight', text: 'ApplicationInsight' },
-  { key: 'luisAuthoring', text: 'Luis Authoring Resource' },
-  { key: 'luisPrediction', text: 'Luis Prediction Resource' },
-  { key: 'blobStorage', text: 'BlobStorage' },
+const extensionResourceOptions = [
+  { key: 'cosmoDb', text: 'CosmoDb', description: 'Use CosmoDB to store your bot state' },
+  {
+    key: 'applicationInsight',
+    text: 'ApplicationInsight',
+    description: 'Track the performance of your app with app insights',
+  },
+  { key: 'luisAuthoring', text: 'Luis Authoring Resource', description: 'Author LUIS applications' },
+  { key: 'luisPrediction', text: 'Luis Prediction Resource', description: 'Use LUIS in your bot' },
+  { key: 'blobStorage', text: 'BlobStorage', description: 'Capture transcripts into Blob Storage' },
 ];
 
 export const CreateNewResource: React.FC<CreateNewResourceProps> = (props) => {
@@ -37,11 +42,19 @@ export const CreateNewResource: React.FC<CreateNewResourceProps> = (props) => {
   const [currentHostName, setHostName] = useState('');
   const [errorHostName, setErrorHostName] = useState('');
   const [currentLocation, setLocation] = useState<DeployLocation>();
-  const [selectedResources, setExternalResources] = useState<string[]>([]);
+  // const [selectedResources, setExternalResources] = useState<string[]>([]);
   const { getSubscriptions } = useRecoilValue(dispatcherState);
+  const [enabledResources, setEnabledResources] = useState({});
 
   useEffect(() => {
     // Load the list of subscriptions for the dropdown....
+    const enabled = {};
+    extensionResourceOptions.forEach((resourceType) => {
+      enabled[resourceType.key] = {
+        enabled: true,
+      };
+    });
+    setEnabledResources(enabled);
     getSubscriptions();
   }, []);
 
@@ -101,18 +114,18 @@ export const CreateNewResource: React.FC<CreateNewResourceProps> = (props) => {
     [deployLocations]
   );
 
-  const onSelectedResource = useMemo(
-    () => (event, item?: IDropdownOption) => {
-      if (item) {
-        const newselected = item.selected
-          ? [...selectedResources, item.key as string]
-          : selectedResources.filter((key) => key !== item.key);
-        setExternalResources(newselected);
-        console.log(newselected);
-      }
-    },
-    [selectedResources]
-  );
+  // const onSelectedResource = useMemo(
+  //   () => (event, item?: IDropdownOption) => {
+  //     if (item) {
+  //       const newselected = item.selected
+  //         ? [...selectedResources, item.key as string]
+  //         : selectedResources.filter((key) => key !== item.key);
+  //       setExternalResources(newselected);
+  //       console.log(newselected);
+  //     }
+  //   },
+  //   [selectedResources]
+  // );
 
   useEffect(() => {
     if (currentSubscription) {
@@ -121,6 +134,13 @@ export const CreateNewResource: React.FC<CreateNewResourceProps> = (props) => {
       getDeployLocations(currentSubscription.subscriptionId);
     }
   }, [currentSubscription]);
+
+  const toggleResource = (opt: string) => {
+    return (enabled: boolean) => {
+      enabledResources[opt].enabled = enabled;
+      setEnabledResources(enabledResources);
+    };
+  };
 
   return (
     <Fragment>
@@ -147,14 +167,18 @@ export const CreateNewResource: React.FC<CreateNewResourceProps> = (props) => {
             placeholder={formatMessage('Select your location')}
             onChange={updateCurrentLocation}
           />
-          <Dropdown
-            multiSelect
-            label="Add more external resources"
-            options={extenstionResourceOptions}
-            placeholder="Select options"
-            selectedKeys={selectedResources}
-            onChange={onSelectedResource}
-          />
+
+          {extensionResourceOptions.map((resource) => {
+            return (
+              <SettingToggle
+                key={resource.key}
+                checked={enabledResources[resource.key].enabled}
+                description={formatMessage(resource.description)}
+                title={formatMessage(resource.text)}
+                onToggle={toggleResource(resource.key)}
+              />
+            );
+          })}
         </form>
       )}
       {(!subscriptionOption || !subscriptionOption.length) && <LoadingSpinner />}
@@ -168,7 +192,7 @@ export const CreateNewResource: React.FC<CreateNewResourceProps> = (props) => {
               subscription: currentSubscription,
               hostname: currentHostName,
               location: currentLocation,
-              externalResources: selectedResources,
+              externalResources: enabledResources,
             });
           }}
         />
