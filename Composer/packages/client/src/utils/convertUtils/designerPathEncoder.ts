@@ -63,7 +63,7 @@ const parseDesignerPath = (subpath: string) => {
   const matchResults = DesignerPathPattern.exec(subpath);
   if (matchResults?.length !== 3) return null;
 
-  const [_, prefix, designerId] = matchResults;
+  const [, prefix, designerId] = matchResults;
   return {
     prefix,
     designerId,
