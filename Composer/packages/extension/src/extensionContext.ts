@@ -10,12 +10,13 @@ import { pathToRegexp } from 'path-to-regexp';
 import glob from 'globby';
 import formatMessage from 'format-message';
 
-import { UserIdentity, ExtensionCollection, RuntimeTemplate, DEFAULT_RUNTIME } from '../types/types';
-import log from '../logger';
+import { UserIdentity, ExtensionCollection, RuntimeTemplate, DEFAULT_RUNTIME } from './types/types';
+import logger from './logger';
+import { ExtensionRegistration } from './extensionRegistration';
 
-import { ComposerPluginRegistration } from './composerPluginRegistration';
+const log = logger.extend('extension-context');
 
-export class PluginLoader {
+class ExtensionContext {
   private _passport: passport.PassportStatic;
   private _webserver: Express | undefined;
   public loginUri = '/login';
@@ -67,7 +68,8 @@ export class PluginLoader {
   }
 
   public async loadPlugin(name: string, description: string, thisPlugin: any) {
-    const pluginRegistration = new ComposerPluginRegistration(this, name, description);
+    log('Loading extension: %s', name);
+    const pluginRegistration = new ExtensionRegistration(this, name, description);
     if (typeof thisPlugin.default === 'function') {
       // the module exported just an init function
       thisPlugin.default.call(null, pluginRegistration);
@@ -82,12 +84,12 @@ export class PluginLoader {
     }
   }
 
-  public async loadPluginFromFile(path: string) {
-    const packageJSON = fs.readFileSync(path, 'utf8');
+  public async loadPluginFromFile(packageJsonPath: string) {
+    const packageJSON = fs.readFileSync(packageJsonPath, 'utf8');
     const json = JSON.parse(packageJSON);
 
     if (json.extendsComposer) {
-      const modulePath = path.replace(/package\.json$/, '');
+      const modulePath = path.dirname(packageJsonPath);
       try {
         // eslint-disable-next-line security/detect-non-literal-require, @typescript-eslint/no-var-requires
         const thisPlugin = require(modulePath);
@@ -131,10 +133,10 @@ export class PluginLoader {
     }
   }
 
-  static async getUserFromRequest(req): Promise<UserIdentity | undefined> {
+  public async getUserFromRequest(req): Promise<UserIdentity | undefined> {
     return req.user || undefined;
   }
 }
 
-export const pluginLoader = new PluginLoader();
-export default pluginLoader;
+const context = new ExtensionContext();
+export { context as ExtensionContext };

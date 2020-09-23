@@ -3,10 +3,10 @@
 
 import { Request, Response } from 'express';
 
-import StorageService from '../../src/services/storage';
-import { StorageController } from '../../src/controllers/storage';
+import StorageService from '../../services/storage';
+import { StorageController } from '../../controllers/storage';
 
-jest.mock('../../src/services/storage', () => ({
+jest.mock('../../services/storage', () => ({
   getBlob: jest.fn(),
 }));
 
