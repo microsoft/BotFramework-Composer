@@ -3,7 +3,7 @@
 
 import { Request, Response } from 'express';
 
-import { AssetController } from '../../src/controllers/asset';
+import { AssetController } from '../asset';
 
 let mockRes: Response;
 

@@ -2,10 +2,10 @@
 // Licensed under the MIT License.
 
 import rimraf from 'rimraf';
-import { pluginLoader } from '@bfc/extension';
+import { ExtensionContext } from '@bfc/extension';
 
-import { Path } from '../../../src/utility/path';
-import { AssetManager } from '../../../src/models/asset/assetManager';
+import { Path } from '../../../utility/path';
+import { AssetManager } from '../assetManager';
 jest.mock('azure-storage', () => {
   return {};
 });
@@ -13,7 +13,7 @@ jest.mock('azure-storage', () => {
 jest.mock('@bfc/extension', () => {
   //const p = require('path');
   return {
-    pluginLoader: {
+    ExtensionContext: {
       extensions: {
         botTemplates: [],
       },
@@ -21,15 +21,15 @@ jest.mock('@bfc/extension', () => {
   };
 });
 
-const mockSampleBotPath = Path.join(__dirname, '../../mocks/asset/projects/SampleBot');
-const mockCopyToPath = Path.join(__dirname, '../../mocks/new');
+const mockSampleBotPath = Path.join(__dirname, '../../../__mocks__/asset/projects/SampleBot');
+const mockCopyToPath = Path.join(__dirname, '../../../__mocks__/new');
 const locationRef = {
   storageId: 'default',
   path: mockCopyToPath,
 };
 
 beforeAll(() => {
-  pluginLoader.extensions.botTemplates.push({
+  ExtensionContext.extensions.botTemplates.push({
     id: 'SampleBot',
     name: 'Sample Bot',
     description: 'Sample Bot',

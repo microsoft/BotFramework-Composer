@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { defaultFilePath, parseFileName } from '../../../src/models/bot/botStructure';
+import { defaultFilePath, parseFileName } from '../../../models/bot/botStructure';
 
 const botName = 'Mybot';
 const defaultLocale = 'en-us';

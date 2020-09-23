@@ -9,6 +9,7 @@
     "clean": "rimraf dist"
   },
   "composer": {
+    "enabled": false,
     "bundles": [
       {
         "id": "publish",
@@ -31,7 +32,6 @@
       }
     }
   },
-  "extendsComposer": false,
   "main": "dist/index.js",
   "dependencies": {
     "@bfc/extension-client": "file:../../packages/extension-client",

@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FileSettingManager } from '../../../src/models/settings/fileSettingManager';
-import { Path } from '../../../src/utility/path';
+import { FileSettingManager } from '../../../models/settings/fileSettingManager';
+import { Path } from '../../../utility/path';
 
 const dir = './mocks';
 const defaultDir = Path.join(__dirname, dir);
