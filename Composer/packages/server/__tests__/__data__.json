@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "storageConnections": [
+    {
+      "id": "default",
+      "name": "This PC",
+      "type": "LocalDisk",
+      "path": "",
+      "platform": "win32",
+      "defaultPath": "C:\\Users\\beyackle"
+    }
+  ],
+  "recentBotProjects": [
+    {
+      "storageId": "default",
+      "path": "C:/Users/beyackle/GitHub/BotFramework-Composer/Composer/packages/server/__tests__/mocks/samplebots/testPublish"
+    },
+    {
+      "storageId": "default",
+      "path": "C:/Users/beyackle/GitHub/BotFramework-Composer/Composer/packages/server/__tests__/mocks/samplebots/bot1"
+    }
+  ],
+  "projectLocationMap": {
+    "28790.49498149233": "C:/Users/beyackle/GitHub/BotFramework-Composer/Composer/packages/server/__tests__/mocks/samplebots/bot1",
+    "78914.28845412323": "C:/Users/beyackle/GitHub/BotFramework-Composer/Composer/packages/server/__tests__/mocks/samplebots/testPublish"
+  }
+}

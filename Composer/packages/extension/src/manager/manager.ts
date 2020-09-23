@@ -2,48 +2,22 @@
 // Licensed under the MIT License.
 
 import path from 'path';
-import { spawn } from 'child_process';
 
 import glob from 'globby';
 import { readJson } from 'fs-extra';
 
-import { pluginLoader } from '../loader';
+import { ExtensionContext } from '../extensionContext';
 import logger from '../logger';
 import { ExtensionManifestStore } from '../storage/extensionManifestStore';
 import { ExtensionBundle, PackageJSON, ExtensionMetadata, ExtensionSearchResult } from '../types/extension';
+import { npm } from '../utils/npm';
 
-const log = logger.extend('plugins');
+const log = logger.extend('manager');
 
-/**
- * Used to safely execute commands that include user input
- */
-async function runNpm(command: string): Promise<{ stdout: string; stderr: string }> {
-  return new Promise((resolve) => {
-    log('npm %s', command);
-    const cmdArgs = command.split(' ');
-    let stdout = '';
-    let stderr = '';
-
-    const proc = spawn('npm', cmdArgs);
-
-    proc.stdout.on('data', (data) => {
-      stdout += data;
-    });
-
-    proc.stderr.on('data', (data) => {
-      stderr += data;
-    });
-
-    proc.on('close', () => {
-      resolve({ stdout, stderr });
-    });
-  });
-}
-
-function processBundles(pluginPath: string, bundles: ExtensionBundle[]) {
+function processBundles(extensionPath: string, bundles: ExtensionBundle[]) {
   return bundles.map((b) => ({
     ...b,
-    path: path.resolve(pluginPath, b.path),
+    path: path.resolve(extensionPath, b.path),
   }));
 }
 
@@ -68,7 +42,7 @@ class ExtensionManager {
    */
   public getAll() {
     const extensions = this.manifest.getExtensions();
-    return Object.keys(extensions).map((extId) => extensions[extId]);
+    return Object.values(extensions);
   }
 
   /**
@@ -76,139 +50,127 @@ class ExtensionManager {
    * @param id Id of the extension to search for
    */
   public find(id: string) {
-    return this.manifest.getExtensions()[id];
+    return this.manifest.getExtensionConfig(id);
   }
 
   /**
-   * Installs a remote plugin via NPM
-   * @param name The name of the plugin to install
-   * @param version The version of the plugin to install
+   * Loads all builtin extensions and remote extensions.
+   */
+  public async loadAll() {
+    await this.seedBuiltinExtensions();
+
+    const extensions = Object.entries(this.manifest.getExtensions());
+
+    for (const [id, metadata] of extensions) {
+      if (metadata?.enabled) {
+        await this.load(id);
+      }
+    }
+  }
+
+  /**
+   * Installs a remote extension via NPM
+   * @param name The name of the extension to install
+   * @param version The version of the extension to install
    */
   public async installRemote(name: string, version?: string) {
-    const packageNameAndVersion = version ? `${name}@${version}` : name;
-    const cmd = `install --no-audit --prefix ${this.remotePluginsDir} ${packageNameAndVersion}`;
-    log('Installing %s@%s to %s', name, version, this.remotePluginsDir);
+    const packageNameAndVersion = version ? `${name}@${version}` : `${name}@latest`;
+    log('Installing %s to %s', packageNameAndVersion, this.remoteDir);
 
-    const { stdout } = await runNpm(cmd);
+    try {
+      const { stdout } = await npm('install', packageNameAndVersion, { '--prefix': this.remoteDir });
 
-    log('%s', stdout);
+      log('%s', stdout);
 
-    const packageJson = await this.getPackageJson(name);
+      const packageJson = await this.getPackageJson(name, this.remoteDir);
 
-    if (packageJson) {
-      const pluginPath = path.resolve(this.remotePluginsDir, 'node_modules', name);
-      this.manifest.updateExtensionConfig(name, getExtensionMetadata(pluginPath, packageJson));
-    } else {
+      if (packageJson) {
+        const extensionPath = path.resolve(this.remoteDir, 'node_modules', name);
+        this.manifest.updateExtensionConfig(name, getExtensionMetadata(extensionPath, packageJson));
+      } else {
+        throw new Error(`Unable to install ${packageNameAndVersion}`);
+      }
+    } catch (err) {
+      if (err?.stderr) {
+        log('%s', err.stderr);
+      }
       throw new Error(`Unable to install ${packageNameAndVersion}`);
     }
   }
 
-  /**
-   * Loads all the plugins that are checked into the Composer project (1P plugins)
-   */
-  public async loadBuiltinPlugins() {
-    log('Loading inherent plugins from: ', this.builtinPluginsDir);
-
-    // get all plugins with a package.json in the plugins dir
-    const plugins = await glob('*/package.json', { cwd: this.builtinPluginsDir, dot: true });
-    for (const p in plugins) {
-      // go through each plugin, make sure to add it to the manager store then load it as usual
-      const pluginPackageJsonPath = plugins[p];
-      const fullPath = path.join(this.builtinPluginsDir, pluginPackageJsonPath);
-      const pluginInstallPath = path.dirname(fullPath);
-      const packageJson = (await readJson(fullPath)) as PackageJSON;
-      if (packageJson && (!!packageJson.composer || !!packageJson.extendsComposer)) {
-        const metadata = getExtensionMetadata(pluginInstallPath, packageJson);
-        this.manifest.updateExtensionConfig(packageJson.name, {
-          ...metadata,
-          builtIn: true,
-        });
-        await pluginLoader.loadPluginFromFile(fullPath);
-      }
-    }
-  }
-
-  /**
-   * Loads all installed remote plugins
-   * TODO (toanzian / abrown): Needs to be implemented
-   */
-  public async loadRemotePlugins() {
-    // should perform the same function as loadBuiltInPlugins but from the
-    // location that remote / 3P plugins are installed
-  }
-
   public async load(id: string) {
+    const metadata = this.manifest.getExtensionConfig(id);
     try {
-      const modulePath = require.resolve(id, {
-        paths: [`${this.remotePluginsDir}/node_modules`],
-      });
       // eslint-disable-next-line @typescript-eslint/no-var-requires, security/detect-non-literal-require
-      const plugin = require(modulePath);
-      log('got plugin: ', plugin);
+      const extension = metadata?.path && require(metadata.path);
 
-      if (!plugin) {
-        throw new Error('Plugin not found');
+      if (!extension) {
+        throw new Error(`Extension not found: ${id}`);
       }
 
-      await pluginLoader.loadPlugin(id, '', plugin);
+      await ExtensionContext.loadPlugin(id, '', extension);
     } catch (err) {
-      log('Unable to load plugin `%s`', id);
+      log('Unable to load extension `%s`', id);
       log('%O', err);
-      await this.remove(id);
+      if (!metadata?.builtIn) {
+        await this.remove(id);
+      }
       throw err;
     }
   }
 
   /**
-   * Enables a plugin
-   * @param id Id of the plugin to be enabled
+   * Enables an extension
+   * @param id Id of the extension to be enabled
    */
   public async enable(id: string) {
     this.manifest.updateExtensionConfig(id, { enabled: true });
 
-    // re-load plugin
+    await this.load(id);
   }
 
   /**
-   * Disables a plugin
-   * @param id Id of the plugin to be disabled
+   * Disables an extension
+   * @param id Id of the extension to be disabled
    */
   public async disable(id: string) {
     this.manifest.updateExtensionConfig(id, { enabled: false });
 
-    // tear down plugin?
+    // TODO: tear down extension?
   }
 
   /**
-   * Removes a remote plugin via NPM
-   * @param id Id of the plugin to be removed
+   * Removes a remote extension via NPM
+   * @param id Id of the extension to be removed
    */
   public async remove(id: string) {
-    const cmd = `uninstall --no-audit --prefix ${this.remotePluginsDir} ${id}`;
     log('Removing %s', id);
 
-    const { stdout } = await runNpm(cmd);
+    try {
+      const { stdout } = await npm('uninstall', id, { '--prefix': this.remoteDir });
 
-    log('%s', stdout);
+      log('%s', stdout);
 
-    this.manifest.removeExtension(id);
+      this.manifest.removeExtension(id);
+    } catch (err) {
+      log('%s', err);
+      throw new Error(`Unable to remove extension: ${id}`);
+    }
   }
 
   /**
-   * Searches for a plugin via NPM's search function
+   * Searches for an extension via NPM's search function
    * @param query The search query
    */
   public async search(query: string) {
-    const cmd = `search --json keywords:botframework-composer ${query}`;
-
-    const { stdout } = await runNpm(cmd);
+    const { stdout } = await npm('search', `keywords:botframework-composer extension ${query}`, { '--json': '' });
 
     try {
       const result = JSON.parse(stdout);
       if (Array.isArray(result)) {
         result.forEach((searchResult) => {
           const { name, keywords = [], version, description, links } = searchResult;
-          if (keywords.includes('botframework-composer')) {
+          if (keywords.includes('botframework-composer') && keywords.includes('extension')) {
             const url = links?.npm ?? '';
             this.searchCache.set(name, {
               id: name,
@@ -235,7 +197,7 @@ class ExtensionManager {
     const info = this.find(id);
 
     if (!info) {
-      throw new Error('plugin not found');
+      throw new Error('extension not found');
     }
 
     return info.bundles ?? [];
@@ -250,7 +212,7 @@ class ExtensionManager {
     const info = this.find(id);
 
     if (!info) {
-      throw new Error('plugin not found');
+      throw new Error('extension not found');
     }
 
     const bundle = info.bundles.find((b) => b.id === bundleId);
@@ -262,16 +224,39 @@ class ExtensionManager {
     return bundle.path;
   }
 
-  private async getPackageJson(id: string): Promise<PackageJSON | undefined> {
+  private async getPackageJson(id: string, dir: string): Promise<PackageJSON | undefined> {
     try {
-      const pluginPackagePath = path.resolve(this.remotePluginsDir, 'node_modules', id, 'package.json');
-      log('fetching package.json for %s at %s', id, pluginPackagePath);
-      const packageJson = await readJson(pluginPackagePath);
+      const extensionPackagePath = path.resolve(dir, 'node_modules', id, 'package.json');
+      log('fetching package.json for %s at %s', id, extensionPackagePath);
+      const packageJson = await readJson(extensionPackagePath);
       return packageJson as PackageJSON;
     } catch (err) {
       log('Error getting package json for %s', id);
+      // eslint-disable-next-line no-console
       console.error(err);
     }
+  }
+
+  public async seedBuiltinExtensions() {
+    const extensions = await glob('*/package.json', { cwd: this.builtinDir, dot: true });
+    for (const extensionPackageJsonPath of extensions) {
+      // go through each extension, make sure to add it to the manager store then load it as usual
+      const fullPath = path.join(this.builtinDir, extensionPackageJsonPath);
+      const extensionInstallPath = path.dirname(fullPath);
+      const packageJson = (await readJson(fullPath)) as PackageJSON;
+      const isEnabled = packageJson?.composer && packageJson.composer.enabled !== false;
+      if (packageJson && (isEnabled || packageJson.extendsComposer === true)) {
+        const metadata = getExtensionMetadata(extensionInstallPath, packageJson);
+        this.manifest.updateExtensionConfig(packageJson.name, {
+          ...metadata,
+          builtIn: true,
+        });
+      }
+    }
+  }
+
+  public reloadManifest() {
+    this._manifest = undefined;
   }
 
   private get manifest() {
@@ -279,24 +264,24 @@ class ExtensionManager {
       return this._manifest;
     }
 
-    this._manifest = new ExtensionManifestStore();
+    this._manifest = new ExtensionManifestStore(process.env.COMPOSER_EXTENSION_DATA as string);
     return this._manifest;
   }
 
-  private get builtinPluginsDir() {
-    if (!process.env.COMPOSER_BUILTIN_PLUGINS_DIR) {
-      throw new Error('COMPOSER_BUILTIN_PLUGINS_DIR must be set.');
+  private get builtinDir() {
+    if (!process.env.COMPOSER_BUILTIN_EXTENSIONS_DIR) {
+      throw new Error('COMPOSER_BUILTIN_EXTENSIONS_DIR must be set.');
     }
 
-    return process.env.COMPOSER_BUILTIN_PLUGINS_DIR;
+    return process.env.COMPOSER_BUILTIN_EXTENSIONS_DIR;
   }
 
-  private get remotePluginsDir() {
-    if (!process.env.COMPOSER_REMOTE_PLUGINS_DIR) {
-      throw new Error('COMPOSER_REMOTE_PLUGINS_DIR must be set.');
+  private get remoteDir() {
+    if (!process.env.COMPOSER_REMOTE_EXTENSIONS_DIR) {
+      throw new Error('COMPOSER_REMOTE_EXTENSIONS_DIR must be set.');
     }
 
-    return process.env.COMPOSER_REMOTE_PLUGINS_DIR;
+    return process.env.COMPOSER_REMOTE_EXTENSIONS_DIR;
   }
 }
 

@@ -40,6 +40,9 @@ const lgFiles = [
   {
     id: 'common.en-us',
     content: `\r\n# Hello\r\n-hi`,
+    templates: [{ name: 'Hello', body: '-hi', parameters: [] }],
+    diagnostics: [],
+    allTemplates: [{ name: 'Hello', body: '-hi', parameters: [] }],
   },
 ] as LgFile[];
 

@@ -5,7 +5,7 @@ import fs from 'fs';
 import path from 'path';
 
 import find from 'lodash/find';
-import { UserIdentity, pluginLoader } from '@bfc/extension';
+import { UserIdentity, ExtensionContext } from '@bfc/extension';
 
 import log from '../../logger';
 import { LocalDiskStorage } from '../storage/localDiskStorage';
@@ -24,7 +24,7 @@ export class AssetManager {
   }
 
   public async getProjectTemplates() {
-    return pluginLoader.extensions.botTemplates;
+    return ExtensionContext.extensions.botTemplates;
   }
 
   public async copyProjectTemplateTo(
@@ -45,7 +45,7 @@ export class AssetManager {
   }
 
   private async copyDataFilesTo(templateId: string, dstDir: string, dstStorage: IFileStorage, locale?: string) {
-    const template = find(pluginLoader.extensions.botTemplates, { id: templateId });
+    const template = find(ExtensionContext.extensions.botTemplates, { id: templateId });
     if (template === undefined || template.path === undefined) {
       throw new Error(`no such template with id ${templateId}`);
     }
@@ -66,7 +66,7 @@ export class AssetManager {
   // Copy material from the boilerplate into the project
   // This is used to copy shared content into every new project
   public async copyBoilerplate(dstDir: string, dstStorage: IFileStorage) {
-    for (const boilerplate of pluginLoader.extensions.baseTemplates) {
+    for (const boilerplate of ExtensionContext.extensions.baseTemplates) {
       const boilerplatePath = boilerplate.path;
       if (await this.templateStorage.exists(boilerplatePath)) {
         await copyDir(boilerplatePath, this.templateStorage, dstDir, dstStorage);
@@ -97,10 +97,10 @@ export class AssetManager {
   // return the current version of the boilerplate content, if one exists so specified
   // this is based off of the first boilerplate template added to the app.
   public getBoilerplateCurrentVersion(): string | undefined {
-    if (!pluginLoader.extensions.baseTemplates.length) {
+    if (!ExtensionContext.extensions.baseTemplates.length) {
       return undefined;
     }
-    const boilerplate = pluginLoader.extensions.baseTemplates[0];
+    const boilerplate = ExtensionContext.extensions.baseTemplates[0];
     const location = Path.join(boilerplate.path, 'scripts', 'package.json');
     try {
       if (fs.existsSync(location)) {
