@@ -8,6 +8,7 @@ import { app, ipcMain } from 'electron';
 import { UpdateInfo } from 'electron-updater';
 import fixPath from 'fix-path';
 import { mkdirp } from 'fs-extra';
+import formatMessage from 'format-message';
 
 import { initAppMenu } from './appMenu';
 import { AppUpdater } from './appUpdater';
@@ -16,12 +17,14 @@ import ElectronWindow from './electronWindow';
 import { initSplashScreen } from './splash/splashScreen';
 import { isDevelopment } from './utility/env';
 import { getUnpackedAsarPath } from './utility/getUnpackedAsarPath';
+import { loadLocale, getAppLocale, updateAppLocale } from './utility/locale';
 import log from './utility/logger';
 import { getAccessToken, loginAndGetIdToken, OAuthLoginOptions } from './utility/oauthImplicitFlowHelper';
 import { isMac, isWindows } from './utility/platform';
 import { parseDeepLinkUrl } from './utility/url';
 
 const microsoftLogoPath = join(__dirname, '../resources/ms_logo.svg');
+let currentAppLocale = getAppLocale().appLocale;
 
 const error = log.extend('error');
 let deeplinkUrl = '';
@@ -60,7 +63,7 @@ async function createAppDataDir() {
   const azurePublishPath: string = join(composerAppDataPath, 'publishBots');
   process.env.COMPOSER_APP_DATA = join(composerAppDataPath, 'data.json'); // path to the actual data file
   process.env.COMPOSER_EXTENSION_DATA = join(composerAppDataPath, 'extensions.json');
-  process.env.COMPOSER_REMOTE_PLUGINS_DIR = join(composerAppDataPath, '.composer');
+  process.env.COMPOSER_REMOTE_EXTENSIONS_DIR = join(composerAppDataPath, '.composer');
 
   log('creating composer app data path at: ', composerAppDataPath);
 
@@ -100,7 +103,7 @@ function initializeAppUpdater(settings: AppUpdaterSettings) {
         appUpdater.quitAndInstall();
       }
     });
-    ipcMain.on('update-user-settings', (_ev, settings: UserSettings) => {
+    ipcMain.on('update-user-settings', async (_ev, settings: UserSettings) => {
       appUpdater.setSettings(settings.appUpdater);
     });
     app.once('quit', () => {
@@ -139,7 +142,7 @@ async function loadServer() {
     // only change paths if packaged electron app
     const unpackedDir = getUnpackedAsarPath();
     process.env.COMPOSER_RUNTIME_FOLDER = join(unpackedDir, 'runtime');
-    process.env.COMPOSER_BUILTIN_PLUGINS_DIR = join(unpackedDir, 'build', 'plugins');
+    process.env.COMPOSER_BUILTIN_EXTENSIONS_DIR = join(unpackedDir, 'build', 'plugins');
   }
 
   // only create a new data directory if packaged electron app
@@ -179,6 +182,32 @@ async function main(show = false) {
   }
 }
 
+const checkAppLocale = (newAppLocale: string) => {
+  // If the app locale changes, load the new locale, re-create the menu and persist the new value.
+  if (currentAppLocale !== newAppLocale) {
+    log('Reloading locale');
+    loadLocale(newAppLocale);
+    initAppMenu(ElectronWindow.getInstance().browserWindow);
+
+    updateAppLocale(newAppLocale);
+    currentAppLocale = newAppLocale;
+  }
+};
+
+const initSettingsListeners = () => {
+  ipcMain.once('init-user-settings', (_ev, settings: UserSettings) => {
+    // Check app locale for changes
+    checkAppLocale(settings.appLocale);
+    // we can't synchronously call the main process (due to deadlocks)
+    // so we wait for the initial settings to be loaded from the client
+    initializeAppUpdater(settings.appUpdater);
+  });
+
+  ipcMain.on('update-user-settings', (_ev, settings: UserSettings) => {
+    checkAppLocale(settings.appLocale);
+  });
+};
+
 async function run() {
   fixPath(); // required PATH fix for Mac (https://github.com/electron/electron/issues/5626)
 
@@ -205,6 +234,10 @@ async function run() {
 
   app.on('ready', async () => {
     log('App ready');
+
+    log('Loading latest known locale');
+    loadLocale(currentAppLocale);
+
     const getMainWindow = () => ElectronWindow.getInstance().browserWindow;
     const { startApp, updateStatus } = await initSplashScreen({
       getMainWindow,
@@ -212,23 +245,19 @@ async function run() {
       logo: `file://${microsoftLogoPath}`,
       productName: 'Bot Framework Composer',
       productFamily: 'Microsoft Azure',
-      status: 'Initializing...',
+      status: formatMessage('Initializing...'),
       website: 'www.botframework.com',
       width: 500,
       height: 300,
     });
 
-    updateStatus('Starting server...');
+    updateStatus(formatMessage('Starting server...'));
     await loadServer();
+
+    initSettingsListeners();
     await main();
 
     setTimeout(startApp, 500);
-
-    ipcMain.once('init-user-settings', (_ev, settings: UserSettings) => {
-      // we can't synchronously call the main process (due to deadlocks)
-      // so we wait for the initial settings to be loaded from the client
-      initializeAppUpdater(settings.appUpdater);
-    });
   });
 
   // Quit when all windows are closed.
