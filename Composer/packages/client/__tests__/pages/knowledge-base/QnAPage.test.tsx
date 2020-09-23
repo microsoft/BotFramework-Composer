@@ -3,6 +3,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React from 'react';
 
+import QnAPage from '../../../src/pages/knowledge-base/QnAPage';
 import TableView from '../../../src/pages/knowledge-base/table-view';
 import CodeEditor from '../../../src/pages/knowledge-base/code-editor';
 import { renderWithRecoil } from '../../testUtils';
@@ -26,7 +27,10 @@ answer
 
 const state = {
   projectId: 'test',
-  dialogs: [{ id: '1' }, { id: '2' }],
+  dialogs: [
+    { id: '1', content: '', skills: [] },
+    { id: '2', content: '', skills: [] },
+  ],
   locale: 'en-us',
   qnaFiles: [
     {
@@ -64,11 +68,20 @@ const initRecoilState = ({ set }) => {
 
 describe('QnA page all up view', () => {
   it('should render QnA page table view', () => {
-    const { getByTestId } = renderWithRecoil(<TableView dialogId={'a'} projectId={state.projectId} />, initRecoilState);
+    const { getByTestId, getByText } = renderWithRecoil(
+      <TableView dialogId={'a'} projectId={state.projectId} />,
+      initRecoilState
+    );
     getByTestId('table-view');
+    getByText('Question');
   });
 
   it('should render QnA page code editor', () => {
     renderWithRecoil(<CodeEditor dialogId={'a'} projectId={state.projectId} />, initRecoilState);
+  });
+
+  it('should render QnA page', () => {
+    const { getByTestId } = renderWithRecoil(<QnAPage dialogId={'a'} projectId={state.projectId} />, initRecoilState);
+    getByTestId('QnAPage');
   });
 });
