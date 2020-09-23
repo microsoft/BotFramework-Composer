@@ -1,21 +1,21 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { pluginLoader, PluginLoader } from '@bfc/extension';
+import { ExtensionContext } from '@bfc/extension';
 
 import { BotProjectService } from '../services/project';
 import { LocalDiskStorage } from '../models/storage/localDiskStorage';
 
 export const EjectController = {
   getTemplates: async (req, res) => {
-    res.json(pluginLoader.extensions.runtimeTemplates);
+    res.json(ExtensionContext.extensions.runtimeTemplates);
   },
   eject: async (req, res) => {
-    const user = await PluginLoader.getUserFromRequest(req);
+    const user = await ExtensionContext.getUserFromRequest(req);
     const projectId = req.params.projectId;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
 
-    const template = pluginLoader.extensions.runtimeTemplates.find((i) => i.key === req.params.template);
+    const template = ExtensionContext.extensions.runtimeTemplates.find((i) => i.key === req.params.template);
     if (template) {
       let runtimePath;
       try {
