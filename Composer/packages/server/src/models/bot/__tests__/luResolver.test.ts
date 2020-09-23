@@ -3,7 +3,7 @@
 
 import { FileInfo } from '@bfc/shared';
 
-import { luImportResolverGenerator, getLUFiles, getQnAFiles } from '../../../src/models/bot/luResolver';
+import { luImportResolverGenerator, getLUFiles, getQnAFiles } from '../luResolver';
 
 const files = [
   {
