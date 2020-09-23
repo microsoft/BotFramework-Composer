@@ -4,12 +4,12 @@
 import { UISchema } from '@bfc/extension-client';
 import { SDKKinds } from '@bfc/shared';
 
-import { AdaptiveDialogField } from './Fields/AdaptiveDialogField';
+import { SchemaEditorField } from './Fields/SchemaEditorField';
 
 const uiSchema: UISchema = {
   [SDKKinds.AdaptiveDialog]: {
     form: {
-      field: AdaptiveDialogField,
+      additionalFields: [{ field: SchemaEditorField, name: 'schemaEditor' }],
     },
   },
 };

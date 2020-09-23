@@ -5,7 +5,7 @@ import React from 'react';
 import { act, fireEvent, getAllByRole, render } from '@bfc/test-utils';
 import { EditorExtension } from '@bfc/extension-client';
 
-import { SelectSkillDialog, settingReferences } from '../SelectSkillDialogField';
+import { SelectSkillDialogField, settingReferences } from '../SelectSkillDialogField';
 
 import { skills } from './constants';
 
@@ -13,7 +13,7 @@ const renderSelectSkillDialog = ({ addSkillDialog = jest.fn(), onChange = jest.f
   const props = {
     value: {},
     onChange,
-  };
+  } as any;
 
   const shell = {
     addSkillDialog,
@@ -25,7 +25,7 @@ const renderSelectSkillDialog = ({ addSkillDialog = jest.fn(), onChange = jest.f
 
   return render(
     <EditorExtension shell={{ api: shell, data: shellData }}>
-      <SelectSkillDialog {...props} />
+      <SelectSkillDialogField {...props} />
     </EditorExtension>
   );
 };
@@ -59,10 +59,5 @@ describe('Select Skill Dialog', () => {
 
     expect(addSkillDialog).toHaveBeenCalled();
     expect(onChange).toHaveBeenCalledWith({ ...settingReferences('test-skill') });
-  });
-
-  it('should display label', async () => {
-    const { findByText } = renderSelectSkillDialog();
-    await findByText('Skill Dialog Name');
   });
 });

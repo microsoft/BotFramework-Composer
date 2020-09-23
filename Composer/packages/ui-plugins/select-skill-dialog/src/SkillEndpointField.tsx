@@ -6,15 +6,13 @@ import { jsx } from '@emotion/core';
 import React, { useMemo } from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { FieldProps, useShellApi } from '@bfc/extension-client';
-import { FieldLabel } from '@bfc/adaptive-form';
 import { getSkillNameFromSetting, Skill } from '@bfc/shared';
 
-export const SkillEndpointField: React.FC<FieldProps> = (props) => {
-  const { description, label, required, uiOptions, value } = props;
+export const SkillEndpointField: React.FC<FieldProps> = ({ value }) => {
   const { shellApi, skillsSettings, skills = [] } = useShellApi();
   const { updateSkillSetting } = shellApi;
 
-  const id = getSkillNameFromSetting(value);
+  const id = getSkillNameFromSetting(value.skillEndpoint);
   const skill = skills.find(({ id: skillId }) => skillId === id) || ({} as Skill);
   const { endpointUrl, msAppId } = skillsSettings[id] || {};
 
@@ -41,10 +39,5 @@ export const SkillEndpointField: React.FC<FieldProps> = (props) => {
     }
   };
 
-  return (
-    <React.Fragment>
-      <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
-      <Dropdown options={options} selectedKey={key} onChange={handleChange} />
-    </React.Fragment>
-  );
+  return <Dropdown options={options} selectedKey={key} onChange={handleChange} />;
 };

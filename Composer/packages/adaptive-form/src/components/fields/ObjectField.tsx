@@ -6,8 +6,10 @@ import { FieldProps } from '@bfc/extension-client';
 import { getOrderedProperties } from '../../utils';
 import { FormRow } from '../FormRow';
 
+import { AdditionalField } from './AdditionalField';
+
 const ObjectField: React.FC<FieldProps<object>> = function ObjectField(props) {
-  const { schema, uiOptions, depth, value, label, ...rest } = props;
+  const { definitions, schema, uiOptions, depth, value, label, onChange, ...rest } = props;
 
   if (!schema) {
     return null;
@@ -31,18 +33,37 @@ const ObjectField: React.FC<FieldProps<object>> = function ObjectField(props) {
 
   return (
     <React.Fragment>
-      {orderedProperties.map((row) => (
-        <FormRow
-          key={`${props.id}.${typeof row === 'string' ? row : row.join('_')}`}
-          {...rest}
-          depth={newDepth}
-          row={row}
-          schema={schema}
-          uiOptions={uiOptions}
-          value={value}
-          onChange={handleChange}
-        />
-      ))}
+      {orderedProperties.map((row) => {
+        if (typeof row === 'string' || Array.isArray(row)) {
+          return (
+            <FormRow
+              key={`${props.id}.${typeof row === 'string' ? row : row.join('_')}`}
+              {...rest}
+              definitions={definitions}
+              depth={newDepth}
+              row={row}
+              schema={schema}
+              uiOptions={uiOptions}
+              value={value}
+              onChange={handleChange}
+            />
+          );
+        } else {
+          return (
+            <AdditionalField
+              key={`${props.id}.${row.name}`}
+              id={`${props.id}.${row.name}`}
+              {...row}
+              definitions={definitions}
+              depth={newDepth}
+              schema={schema}
+              uiOptions={uiOptions}
+              value={value}
+              onChange={onChange}
+            />
+          );
+        }
+      })}
     </React.Fragment>
   );
 };

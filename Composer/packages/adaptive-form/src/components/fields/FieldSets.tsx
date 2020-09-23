@@ -5,25 +5,22 @@ import React from 'react';
 import { FieldProps } from '@bfc/extension-client';
 
 import { CollapseField } from '../CollapseField';
-import { getFieldSets } from '../../utils';
+import { getFieldsets } from '../../utils';
 
 import { ObjectField } from './ObjectField';
 
-export const FieldSets: React.FC<FieldProps<object>> = (props) => {
+export const Fieldsets: React.FC<FieldProps<object>> = (props) => {
   const { schema, uiOptions: baseUiOptions, value } = props;
-  const { fieldSets: _, ...uiOptions } = baseUiOptions;
 
-  const fieldSets = getFieldSets(schema, baseUiOptions, value);
+  const fieldsets = getFieldsets(schema, baseUiOptions, value);
 
   return (
     <React.Fragment>
-      {fieldSets.map(({ fields, schema, ...rest }, key) => (
-        <CollapseField key={key} {...rest}>
+      {fieldsets.map(({ schema, uiOptions, title, defaultExpanded }, key) => (
+        <CollapseField key={key} title={title} defaultExpanded={defaultExpanded}>
           <ObjectField {...props} schema={schema} uiOptions={uiOptions} />
         </CollapseField>
       ))}
     </React.Fragment>
   );
 };
-
-export default FieldSets;

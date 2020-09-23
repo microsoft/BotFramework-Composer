@@ -78,4 +78,36 @@ describe('getOrderedProperties', () => {
       'multiple wildcards'
     );
   });
+
+  it('throws an exception if additional field name already exists in the schema', () => {
+    const uiOptions = { additionalFields: [{ name: 'one', field: 'field' }] };
+    expect(() => getOrderedProperties(schema, uiOptions, data)).toThrow(
+      'additional field name already exists in schema'
+    );
+  });
+
+  it('includes additional fields', () => {
+    const uiOptions = { additionalFields: [{ name: 'additionalField', field: 'field' }] };
+    expect(getOrderedProperties(schema, uiOptions, data)).toEqual(
+      expect.arrayContaining([{ name: 'additionalField', field: 'field' }])
+    );
+  });
+
+  it('can include additional fields in the order', () => {
+    const uiOptions = {
+      additionalFields: [{ name: 'additionalField', field: 'field' }],
+      order: ['one', 'two', 'additionalField', '*'],
+    };
+
+    expect(getOrderedProperties(schema, uiOptions, data)).toEqual([
+      'one',
+      'two',
+      { name: 'additionalField', field: 'field' },
+      'three',
+      'four',
+      'five',
+      'six',
+      'seven',
+    ]);
+  });
 });
