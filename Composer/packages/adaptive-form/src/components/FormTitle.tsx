@@ -52,9 +52,7 @@ interface FormTitleProps {
 const FormTitle: React.FC<FormTitleProps> = (props) => {
   const { description, schema, formData, uiOptions = {} } = props;
   const { shellApi, ...shellData } = useShellApi();
-  const { currentDialog } = shellData;
-  const recognizers = useRecognizerConfig();
-  const selectedRecognizer = recognizers.find((r) => r.isSelected(currentDialog?.content?.recognizer));
+  const { currentRecognizer: selectedRecognizer } = useRecognizerConfig();
   // use a ref because the syncIntentName is debounced and we need the most current version to invoke the api
   const shell = useRef({
     data: shellData,
@@ -69,12 +67,13 @@ const FormTitle: React.FC<FormTitleProps> = (props) => {
       debounce(async (newIntentName?: string, data?: any) => {
         if (newIntentName && selectedRecognizer) {
           const normalizedIntentName = newIntentName?.replace(/[^a-zA-Z0-9-_]+/g, '');
-          await selectedRecognizer.renameIntent(
-            data?.intent,
-            normalizedIntentName,
-            shell.current.data,
-            shell.current.api
-          );
+          typeof selectedRecognizer.renameIntent === 'function' &&
+            (await selectedRecognizer.renameIntent(
+              data?.intent,
+              normalizedIntentName,
+              shell.current.data,
+              shell.current.api
+            ));
         }
       }, 400),
     []
