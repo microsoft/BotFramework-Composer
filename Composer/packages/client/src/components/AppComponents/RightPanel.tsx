@@ -11,7 +11,7 @@ import { ErrorBoundary } from '../ErrorBoundary';
 import { ProjectTree } from '../ProjectTree/ProjectTree';
 
 import Routes from './../../router';
-import { applicationErrorState, dispatcherState, currentProjectIdState } from './../../recoilModel';
+import { applicationErrorState, dispatcherState, currentProjectIdState, currentModeState } from './../../recoilModel';
 
 // -------------------- Styles -------------------- //
 
@@ -38,6 +38,10 @@ export const RightPanel = () => {
   const applicationError = useRecoilValue(applicationErrorState);
   const { setApplicationLevelError, fetchProjectById } = useRecoilValue(dispatcherState);
   const projectId = useRecoilValue(currentProjectIdState);
+  const currentMode = useRecoilValue(currentModeState);
+
+  console.log(currentMode);
+
   return (
     <div css={rightPanel}>
       <ErrorBoundary
@@ -47,16 +51,19 @@ export const RightPanel = () => {
       >
         <RequireAuth>
           <div css={{ display: 'flex', flexDirection: 'row' }}>
-            <ProjectTree
-              dialogId={'test'}
-              selected={'testg'}
-              onDelete={(link) => {
-                console.log(link);
-              }}
-              onSelect={(link) => {
-                console.log(link);
-              }}
-            />
+            {currentMode !== 'home' && currentMode !== 'about' && (
+              <ProjectTree
+                dialogId={'test'}
+                selected={'testg'}
+                showTriggers={currentMode === 'design'}
+                onDelete={(link) => {
+                  console.log(link);
+                }}
+                onSelect={(link) => {
+                  console.log(link);
+                }}
+              />
+            )}
             <Routes component={Content} />
           </div>
         </RequireAuth>

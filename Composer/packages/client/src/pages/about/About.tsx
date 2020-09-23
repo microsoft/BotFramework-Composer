@@ -7,10 +7,18 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
+import { useRecoilValue } from 'recoil';
+import { useEffect } from 'react';
+
+import { dispatcherState } from '../../recoilModel';
 
 import * as about from './styles';
 
 export const About: React.FC<RouteComponentProps> = () => {
+  const { setCurrentMode } = useRecoilValue(dispatcherState);
+
+  useEffect(() => setCurrentMode('about'), []);
+
   return (
     <div css={about.outline} role="main">
       <div css={about.content}>

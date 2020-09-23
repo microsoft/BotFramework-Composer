@@ -15,7 +15,7 @@ import { navigateTo } from '../../utils/navigation';
 import { TestController } from '../../components/TestController/TestController';
 import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
-import { validateDialogSelectorFamily } from '../../recoilModel';
+import { validateDialogSelectorFamily, dispatcherState } from '../../recoilModel';
 
 import TableView from './table-view';
 const CodeEditor = React.lazy(() => import('./code-editor'));
@@ -27,6 +27,7 @@ interface LGPageProps {
 
 const LGPage: React.FC<RouteComponentProps<LGPageProps>> = (props: RouteComponentProps<LGPageProps>) => {
   const { dialogId = '', projectId = '' } = props;
+  const { setCurrentMode } = useRecoilValue(dispatcherState);
   const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
 
   const path = props.location?.pathname ?? '';
@@ -72,6 +73,8 @@ const LGPage: React.FC<RouteComponentProps<LGPageProps>> = (props: RouteComponen
       navigateTo(`/bot/${projectId}/language-generation/common`);
     }
   }, [dialogId, dialogs, projectId]);
+
+  useEffect(() => setCurrentMode('lg'), []);
 
   const onToggleEditMode = useCallback(
     (_e, checked) => {

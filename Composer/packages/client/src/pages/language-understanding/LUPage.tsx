@@ -13,7 +13,7 @@ import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TestController } from '../../components/TestController/TestController';
 import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
-import { validateDialogSelectorFamily } from '../../recoilModel';
+import { validateDialogSelectorFamily, dispatcherState } from '../../recoilModel';
 
 import TableView from './table-view';
 import { actionButton } from './styles';
@@ -25,6 +25,7 @@ const LUPage: React.FC<RouteComponentProps<{
 }>> = (props) => {
   const { dialogId = '', projectId = '' } = props;
   const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const { setCurrentMode } = useRecoilValue(dispatcherState);
 
   const path = props.location?.pathname ?? '';
   const edit = /\/edit(\/)?$/.test(path);
@@ -64,6 +65,8 @@ const LUPage: React.FC<RouteComponentProps<{
       navigateTo(`/bot/${projectId}/language-understanding/all`);
     }
   }, [dialogId, dialogs, projectId]);
+
+  useEffect(() => setCurrentMode('lu'), []);
 
   const onToggleEditMode = useCallback(
     (_e, checked) => {

@@ -3,12 +3,14 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import { useState, useEffect } from 'react';
 import { RouteComponentProps } from '@reach/router';
 
 import { Toolbar } from '../../components/Toolbar';
 import { navigateTo } from '../../utils/navigation';
 import { convertPathToUrl } from '../../utils/navigation';
+import { dispatcherState } from '../../recoilModel';
 
 import useNotifications from './useNotifications';
 import { NotificationList } from './NotificationList';
@@ -19,6 +21,8 @@ import { INotification, NotificationType } from './types';
 const Notifications: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
   const { projectId = '' } = props;
   const [filter, setFilter] = useState('');
+  const { setCurrentMode } = useRecoilValue(dispatcherState);
+
   const notifications = useNotifications(projectId, filter);
   const navigations = {
     [NotificationType.LG]: (item: INotification) => {
@@ -47,7 +51,7 @@ const Notifications: React.FC<RouteComponentProps<{ projectId: string }>> = (pro
       //path is like main.trigers[0].actions[0]
       //uri = id?selected=triggers[0]&focused=triggers[0].actions[0]
       const { projectId, id, dialogPath } = item;
-      const uri = convertPathToUrl(projectId, id, dialogPath);
+      const uri = convertPathToUrl(projectId, id, dialogPath ?? '');
       navigateTo(uri);
     },
     [NotificationType.SKILL]: (item: INotification) => {
@@ -62,6 +66,9 @@ const Notifications: React.FC<RouteComponentProps<{ projectId: string }>> = (pro
   const handleItemClick = (item: INotification) => {
     navigations[item.type](item);
   };
+
+  useEffect(() => setCurrentMode('notifications'), []);
+
   return (
     <div css={root} data-testid="notifications-page">
       <Toolbar />

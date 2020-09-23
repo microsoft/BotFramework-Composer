@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
@@ -66,9 +66,13 @@ const Home: React.FC<RouteComponentProps> = () => {
   const botName = useRecoilValue(botNameState(projectId));
   const recentProjects = useRecoilValue(recentProjectsState);
   const templateId = useRecoilValue(templateIdState);
-  const { openProject, setCreationFlowStatus, onboardingAddCoachMarkRef, saveTemplateId } = useRecoilValue(
-    dispatcherState
-  );
+  const {
+    openProject,
+    setCreationFlowStatus,
+    onboardingAddCoachMarkRef,
+    saveTemplateId,
+    setCurrentMode,
+  } = useRecoilValue(dispatcherState);
 
   const onItemChosen = async (item) => {
     if (item && item.path) {
@@ -135,6 +139,10 @@ const Home: React.FC<RouteComponentProps> = () => {
       disabled: botName ? false : true,
     },
   ];
+
+  useEffect(() => {
+    setCurrentMode('home');
+  }, []);
 
   return (
     <div css={home.outline}>
