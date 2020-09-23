@@ -225,9 +225,6 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
               filterMatch(dialog.displayName) || dialog.triggers.some((trigger) => filterMatch(getTriggerName(trigger)))
           );
 
-    {
-      renderDialogHeader(projectId, dialog, containUnsupportedTriggers(dialog), startDepth);
-    }
     if (showTriggers) {
       return filteredDialogs.map((dialog: DialogInfo) => {
         const triggerList = dialog.triggers
