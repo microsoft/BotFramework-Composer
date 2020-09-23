@@ -24,19 +24,19 @@ const styles = {
 };
 
 interface CollapseField {
-  defaultCollapsed?: boolean;
-  label?: string | boolean;
+  defaultExpanded?: boolean;
+  title?: string | boolean;
 }
 
-export const CollapseField: React.FC<CollapseField> = ({ children, defaultCollapsed, label }) => {
-  const [isOpen, setIsOpen] = useState(!!defaultCollapsed);
+export const CollapseField: React.FC<CollapseField> = ({ children, defaultExpanded, title }) => {
+  const [isOpen, setIsOpen] = useState(!!defaultExpanded);
 
   return (
     <Fragment>
       <div
         data-is-focusable
         aria-expanded={isOpen}
-        aria-label={typeof label === 'string' ? label : formatMessage('Field Set')}
+        aria-label={typeof title === 'string' ? title : formatMessage('Field Set')}
         css={styles.header}
         role="presentation"
         onClick={() => {
@@ -47,7 +47,7 @@ export const CollapseField: React.FC<CollapseField> = ({ children, defaultCollap
           iconProps={{ iconName: isOpen ? 'ChevronDown' : 'ChevronRight' }}
           styles={{ root: { color: NeutralColors.gray150 } }}
         />
-        {label && <Label styles={{ root: { fontWeight: FontWeights.semibold } }}>{label}</Label>}
+        {title && <Label styles={{ root: { fontWeight: FontWeights.semibold } }}>{title}</Label>}
       </div>
       <Separator styles={{ root: { height: 0 } }} />
       <div>

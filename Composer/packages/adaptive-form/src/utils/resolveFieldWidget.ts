@@ -70,7 +70,11 @@ export function resolveFieldWidget(
         return DefaultFields.ArrayField;
       }
       case 'object':
-        return schema.additionalProperties ? DefaultFields.OpenObjectField : DefaultFields.ObjectField;
+        if (schema.additionalProperties) {
+          return DefaultFields.OpenObjectField;
+        } else {
+          return uiOptions?.fieldSets ? DefaultFields.FieldSets : DefaultFields.ObjectField;
+        }
     }
   }
 

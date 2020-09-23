@@ -35,14 +35,17 @@ const mockDialogComplete = jest.fn();
 const projectId = '42345.23432';
 
 const makeTestSkill: (number) => Skill = (n) => ({
+  id: 'id' + n,
   manifestUrl: 'url' + n,
   name: 'skill' + n,
-  protocol: 'GET',
   description: 'test skill' + n,
   endpointUrl: 'url',
   endpoints: [{ test: 'foo' }],
   msAppId: 'ID',
-  body: 'body',
+  content: {
+    description: 'test skill' + n,
+    endpoints: [{ test: 'foo' }],
+  },
 });
 
 describe('skill dispatcher', () => {
@@ -143,19 +146,30 @@ describe('skill dispatcher', () => {
 
   it('updateSkill', async () => {
     await act(async () => {
-      dispatcher.updateSkill(projectId, {
-        targetId: 0,
-        skillData: makeTestSkill(100),
+      dispatcher.updateSkill(projectId, 'id1', {
+        msAppId: 'test',
+        manifestUrl: 'test',
+        endpointUrl: 'test',
+        name: 'test',
       });
     });
 
-    expect(renderedComponent.current.skills).not.toContain(makeTestSkill(1));
-    expect(renderedComponent.current.skills).toContainEqual(makeTestSkill(100));
+    expect(renderedComponent.current.skills[0]).toEqual(
+      expect.objectContaining({
+        id: 'id1',
+        content: {},
+        name: 'test',
+        msAppId: 'test',
+        manifestUrl: 'test',
+        endpointUrl: 'test',
+        endpoints: [],
+      })
+    );
   });
 
   it('removeSkill', async () => {
     await act(async () => {
-      dispatcher.removeSkill(projectId, makeTestSkill(1).manifestUrl);
+      dispatcher.removeSkill(projectId, makeTestSkill(1).id);
     });
     expect(renderedComponent.current.skills).not.toContain(makeTestSkill(1));
   });
@@ -174,32 +188,6 @@ describe('skill dispatcher', () => {
     });
     expect(renderedComponent.current.showAddSkillDialogModal).toBe(false);
     expect(renderedComponent.current.onAddSkillDialogComplete.func).toBe(undefined);
-  });
-
-  describe('addSkillDialogSuccess', () => {
-    it('with a function in onAddSkillDialogComplete', async () => {
-      await act(async () => {
-        dispatcher.addSkillDialogBegin(mockDialogComplete, projectId);
-      });
-      await act(async () => {
-        dispatcher.addSkillDialogSuccess(projectId);
-      });
-      expect(mockDialogComplete).toHaveBeenCalledWith(null);
-      expect(renderedComponent.current.showAddSkillDialogModal).toBe(false);
-      expect(renderedComponent.current.onAddSkillDialogComplete.func).toBe(undefined);
-    });
-
-    it('with nothing in onAddSkillDialogComplete', async () => {
-      await act(async () => {
-        dispatcher.addSkillDialogCancel(projectId);
-      });
-      await act(async () => {
-        dispatcher.addSkillDialogSuccess(projectId);
-      });
-      expect(mockDialogComplete).not.toHaveBeenCalled();
-      expect(renderedComponent.current.showAddSkillDialogModal).toBe(false);
-      expect(renderedComponent.current.onAddSkillDialogComplete.func).toBe(undefined);
-    });
   });
 
   it('displayManifestModal', async () => {

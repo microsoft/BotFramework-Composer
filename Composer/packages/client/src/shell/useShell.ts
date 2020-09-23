@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useMemo, useRef } from 'react';
-import { ShellApi, ShellData, Shell, fetchFromSettings, DialogSchemaFile, Skill } from '@bfc/shared';
+import { ShellApi, ShellData, Shell, DialogSchemaFile } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
@@ -73,7 +73,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     updateUserSettings,
     setMessage,
     displayManifestModal,
-    updateSkillsInSetting,
+    updateSkill,
   } = useRecoilValue(dispatcherState);
 
   const lgApi = useLgApi(projectId);
@@ -197,16 +197,13 @@ export function useShell(source: EventSource, projectId: string): Shell {
     redo,
     commitChanges,
     addCoachMarkRef: onboardingAddCoachMarkRef,
-    updateUserSettings: updateUserSettings,
+    updateUserSettings,
     announce: setMessage,
     displayManifestModal: (skillId) => displayManifestModal(skillId, projectId),
     updateDialogSchema: async (dialogSchema: DialogSchemaFile) => {
       updateDialogSchema(dialogSchema, projectId);
     },
-    skillsInSettings: {
-      get: (path: string) => fetchFromSettings(path, settings),
-      set: (skillName: string, skillInfo: Partial<Skill>) => updateSkillsInSetting(skillName, skillInfo, projectId),
-    },
+    updateSkillSetting: (...params) => updateSkill(projectId, ...params),
   };
 
   const currentDialog = useMemo(() => dialogs.find((d) => d.id === dialogId), [dialogs, dialogId]);
@@ -240,6 +237,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
         clipboardActions,
         hosted: !!isAbsHosted(),
         skills,
+        skillsSettings: settings.skill || {},
       }
     : ({} as ShellData);
 

@@ -187,6 +187,13 @@ export const lgDispatcher = () => {
       if (!lgFile) return lgFiles;
       const sameIdOtherLocaleFiles = lgFiles.filter((file) => getBaseName(file.id) === getBaseName(id));
 
+      // create need sync to multi locale file.
+      const originTemplate = lgFile.templates.find(({ name }) => name === templateName);
+      if (!originTemplate) {
+        await createLgTemplate({ id, template, projectId });
+        return;
+      }
+
       try {
         if (template.name !== templateName) {
           // name change, need update cross multi locale file.
