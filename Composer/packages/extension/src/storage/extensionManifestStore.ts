@@ -33,6 +33,13 @@ export class ExtensionManifestStore {
       this.manifest = (this.manifest.extensions as unknown) as ExtensionMap;
       this.writeManifestToDisk();
     }
+
+    // fix for sample-ui-plugin
+    // TODO: remove in the future
+    /* istanbul ignore next */
+    if (this.getExtensionConfig('sample-ui-plugin')) {
+      this.removeExtension('sample-ui-plugin');
+    }
   }
 
   public getExtensionConfig(id: string) {
