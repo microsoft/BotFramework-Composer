@@ -13,6 +13,8 @@ import {
   convertPathToUrl,
 } from './../../src/utils/navigation';
 
+const projectId = '123a-sdf123';
+
 describe('getFocusPath', () => {
   it('return focus path', () => {
     const result1 = getFocusPath('selected', 'focused');
@@ -71,17 +73,19 @@ describe('composer url util', () => {
   });
 
   it('check url', () => {
-    const result1 = checkUrl(`/bot/1/dialogs/a?selected=triggers[0]&focused=triggers[0].actions[0]#botAsks`, {
-      dialogId: 'a',
-      projectId: '1',
-      selected: 'triggers[0]',
-      focused: 'triggers[0].actions[0]',
-      promptTab: PromptTab.BOT_ASKS,
-    });
+    const result1 = checkUrl(
+      `/bot/${projectId}/dialogs/a?selected=triggers[0]&focused=triggers[0].actions[0]#botAsks`,
+      projectId,
+      {
+        dialogId: 'a',
+        selected: 'triggers[0]',
+        focused: 'triggers[0].actions[0]',
+        promptTab: PromptTab.BOT_ASKS,
+      }
+    );
     expect(result1).toEqual(true);
-    const result2 = checkUrl(`test`, {
+    const result2 = checkUrl(`test`, projectId, {
       dialogId: 'a',
-      projectId: '1',
       selected: 'triggers[0]',
       focused: 'triggers[0].actions[0]',
       promptTab: PromptTab.BOT_ASKS,
@@ -90,11 +94,13 @@ describe('composer url util', () => {
   });
 
   it('convert path to url', () => {
-    const result1 = convertPathToUrl('1', 'main');
-    expect(result1).toEqual('/bot/1/dialogs/main');
-    const result2 = convertPathToUrl('1', 'main', 'main.triggers[0].actions[0]');
-    expect(result2).toEqual('/bot/1/dialogs/main?selected=triggers[0]&focused=triggers[0].actions[0]');
-    const result3 = convertPathToUrl('1', 'main', 'main.triggers[0].actions[0]#Microsoft.TextInput#prompt');
-    expect(result3).toEqual('/bot/1/dialogs/main?selected=triggers[0]&focused=triggers[0].actions[0]#botAsks');
+    const result1 = convertPathToUrl(projectId, 'main');
+    expect(result1).toEqual(`/bot/${projectId}/dialogs/main`);
+    const result2 = convertPathToUrl(projectId, 'main', 'main.triggers[0].actions[0]');
+    expect(result2).toEqual(`/bot/${projectId}/dialogs/main?selected=triggers[0]&focused=triggers[0].actions[0]`);
+    const result3 = convertPathToUrl(projectId, 'main', 'main.triggers[0].actions[0]#Microsoft.TextInput#prompt');
+    expect(result3).toEqual(
+      `/bot/${projectId}/dialogs/main?selected=triggers[0]&focused=triggers[0].actions[0]#botAsks`
+    );
   });
 });

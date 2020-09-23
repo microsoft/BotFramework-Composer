@@ -1,264 +1,280 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-/** @jsx jsx */
-import { jsx, css } from '@emotion/core';
-import React, { useState, FormEvent, useEffect, useCallback, useRef } from 'react';
+import React, { useRef, useState, useMemo } from 'react';
 import formatMessage from 'format-message';
+import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { Label } from 'office-ui-fabric-react/lib/Label';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { assignDefined, Skill } from '@bfc/shared';
+import { useRecoilValue } from 'recoil';
 import debounce from 'lodash/debounce';
-import { FontSizes } from 'office-ui-fabric-react/lib/Styling';
+import { SkillSetting } from '@bfc/shared';
 
 import { addSkillDialog } from '../constants';
 import httpClient from '../utils/httpUtil';
+import { skillsState } from '../recoilModel';
 
 import { DialogWrapper, DialogTypes } from './DialogWrapper';
 
-// -------------------- Styles -------------------- //
-
-const FormModalBody = css`
-  padding: 24px;
-`;
-
-const FormFieldManifestUrl = css`
-  width: 40rem;
-`;
-
-const FormFieldEditName = css`
-  width: 20rem;
-`;
-
-const MarginLeftSmall = css`
-  margin-left: ${FontSizes.small};
-`;
-
-const SpinnerLabel = css`
-  justify-content: left;
-  margin-top: 0.4rem;
-`;
-
-// -------------------- CreateSkillModal -------------------- //
-
-async function validateManifestUrl(projectId: string, manifestUrl: string): Promise<string | undefined> {
-  // skip validation if there are other local errors.
-  if (manifestUrl == null || manifestUrl === '') {
-    return;
-  }
-
-  try {
-    await httpClient.post(`/projects/${projectId}/skill/check`, { url: manifestUrl });
-  } catch (err) {
-    return err.response?.data.message ?? err;
-  }
-}
-
-export interface ISkillFormData {
-  manifestUrl: string;
-  name?: string;
-}
-
-export interface ISkillFormDataErrors {
+export interface SkillFormDataErrors {
+  endpoint?: string;
   manifestUrl?: string;
-  manifestUrlFetch?: string;
   name?: string;
 }
 
-export const skillUrlRegex = /^http[s]?:\/\/\w+/;
+export const urlRegex = /^http[s]?:\/\/\w+/;
 export const skillNameRegex = /^\w[-\w]*$/;
+export const msAppIdRegex = /^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$/;
 
-export interface ICreateSkillModalProps {
-  isOpen: boolean;
-  editIndex?: number;
-  skills: Skill[];
+export interface CreateSkillModalProps {
   projectId: string;
-  onSubmit: (skillFormData: ISkillFormData, editIndex: number) => void;
+  onSubmit: (data: SkillSetting) => void;
   onDismiss: () => void;
 }
 
-const defaultFormData = {
-  manifestUrl: '',
+enum ValidationState {
+  NotValidated = 'NotValidated',
+  Validating = 'Validating',
+  Validated = 'Validated',
+}
+
+export const validateEndpoint = ({
+  formData,
+  formDataErrors,
+  setFormDataErrors,
+  setValidationState,
+  validationState,
+}) => {
+  const { msAppId, endpointUrl } = formData;
+  const { endpoint: _, ...errors } = formDataErrors;
+
+  if (!msAppId || !endpointUrl) {
+    setFormDataErrors({ ...errors, endpoint: formatMessage('Please select a valid endpoint') });
+  } else if (!urlRegex.test(endpointUrl) || !msAppIdRegex.test(msAppId)) {
+    setFormDataErrors({ ...errors, endpoint: formatMessage('Skill manifest endpoint is configured improperly') });
+  } else {
+    setFormDataErrors(errors);
+    setValidationState({ ...validationState, endpoint: ValidationState.Validated });
+  }
 };
 
-export const CreateSkillModal: React.FC<ICreateSkillModalProps> = (props) => {
-  const { editIndex = -1, skills, onSubmit, onDismiss, isOpen, projectId } = props;
-  const originFormData = skills[editIndex];
-  const initialFormData = originFormData
-    ? assignDefined(defaultFormData, { manifestUrl: originFormData.manifestUrl, name: originFormData.name })
-    : { ...defaultFormData };
-  const [formData, setFormData] = useState<ISkillFormData>(initialFormData);
-  const [formDataErrors, setFormDataErrors] = useState<ISkillFormDataErrors>({});
-  const [isValidating, setIsValidating] = useState(false);
+export const validateManifestUrl = async ({
+  formData,
+  formDataErrors,
+  projectId,
+  skills,
+  setFormDataErrors,
+  setValidationState,
+  setSkillManifest,
+  validationState,
+}) => {
+  const { manifestUrl } = formData;
+  const { manifestUrl: _, ...errors } = formDataErrors;
 
-  const isModify = editIndex >= 0 && editIndex < skills.length;
-  useEffect(() => {
-    setFormData(initialFormData);
-  }, [editIndex]);
-
-  const asyncManifestUrlValidation = async (projectId: string, manifestUrl: string) => {
-    const err = await validateManifestUrl(projectId, manifestUrl);
-    if (err) {
-      setFormDataErrors((current) => ({ ...current, manifestUrl: err }));
-    }
-    setIsValidating(false);
-  };
-
-  const debouncedManifestValidation = useRef(debounce(asyncManifestUrlValidation, 300)).current;
-
-  const validateForm = (newData: ISkillFormData): ISkillFormDataErrors => {
-    const errors: ISkillFormDataErrors = { ...formDataErrors };
-
-    if (newData.manifestUrl != null) {
-      const { manifestUrl } = newData;
-
-      let currentError = '';
-      if (manifestUrl) {
-        if (!skillUrlRegex.test(manifestUrl)) {
-          currentError = formatMessage('Url should start with http[s]://');
-        }
-
-        const duplicatedItemIndex = skills.findIndex((item) => item.manifestUrl === manifestUrl);
-        if (duplicatedItemIndex !== -1 && (!isModify || (isModify && duplicatedItemIndex !== editIndex))) {
-          currentError = formatMessage('Duplicate skill manifest Url');
-        }
-      } else {
-        currentError = formatMessage('Please input a manifest url');
-      }
-
-      if (currentError) {
-        errors.manifestUrl = currentError;
-      } else {
-        delete errors.manifestUrl;
-      }
-    }
-
-    if (newData.name != null) {
-      const { name } = newData;
-      let currentError = '';
-      if (name) {
-        if (!skillNameRegex.test(name)) {
-          currentError = formatMessage('Name contains invalid charactors');
-        }
-
-        const duplicatedItemIndex = skills.findIndex((item) => item.name === name);
-        if (duplicatedItemIndex !== -1 && (!isModify || (isModify && duplicatedItemIndex !== editIndex))) {
-          currentError = formatMessage('Duplicate skill name');
-        }
-      }
-
-      if (currentError) {
-        errors.name = currentError;
-      } else {
-        delete errors.name;
-      }
-    }
-
-    return errors;
-  };
-
-  // fetch manifest url
-  useEffect(() => {
-    if (!formDataErrors.manifestUrl) {
-      setIsValidating(true);
-      debouncedManifestValidation(projectId, formData.manifestUrl);
-    }
-
-    () => {
-      debouncedManifestValidation.cancel();
-    };
-  }, [formData.manifestUrl, formDataErrors.manifestUrl]);
-
-  const updateForm = (field: string) => (e: FormEvent, newValue: string | undefined) => {
-    const newData: ISkillFormData = {
-      ...formData,
-      [field]: newValue,
-    };
-    setFormData(newData);
-    const errors = validateForm(newData);
-    setFormDataErrors(errors);
-  };
-
-  const handleSubmit = useCallback(
-    (e) => {
-      e.preventDefault();
-      if (isValidating) return;
-      setIsValidating(true);
-
-      const errors = validateForm(formData);
-      setFormDataErrors(errors);
-      if (Object.keys(errors).length > 0) {
-        setIsValidating(false);
-        return;
-      }
-
-      // do async validation
-      validateManifestUrl(projectId, formData.manifestUrl).then((error) => {
-        if (error) {
-          setFormDataErrors((current) => ({ ...current, manifestUrl: error }));
-          setIsValidating(false);
-          return;
-        }
-        const newFormData = { ...formData };
-        onSubmit(newFormData, editIndex);
-        setIsValidating(false);
+  if (!manifestUrl) {
+    setFormDataErrors({ ...errors, manifestUrl: formatMessage('Please input a manifest Url') });
+  } else if (!urlRegex.test(manifestUrl)) {
+    setFormDataErrors({ ...errors, manifestUrl: formatMessage('Url should start with http[s]://') });
+  } else if (skills.some((skill) => skill.manifestUrl.toLowerCase() === manifestUrl.toLowerCase())) {
+    setFormDataErrors({ ...errors, manifestUrl: formatMessage('Duplicate skill manifest Url') });
+  } else {
+    try {
+      setValidationState({ ...validationState, manifestUrl: ValidationState.Validating });
+      const { data } = await httpClient.get(`/projects/${projectId}/skill/retrieve-skill-manifest`, {
+        params: {
+          url: manifestUrl,
+        },
       });
-    },
-    [formData, formDataErrors]
-  );
+      setFormDataErrors(errors);
+      setSkillManifest(data);
+      setValidationState({ ...validationState, manifestUrl: ValidationState.Validated });
+    } catch (error) {
+      setFormDataErrors({ ...errors, manifestUrl: formatMessage('Manifest url can not be accessed') });
+      setValidationState({ ...validationState, manifestUrl: ValidationState.NotValidated });
+    }
+  }
+};
 
-  const formTitles =
-    editIndex === -1 ? { ...addSkillDialog.SKILL_MANIFEST_FORM } : { ...addSkillDialog.SKILL_MANIFEST_FORM_EDIT };
+export const validateName = ({
+  formData,
+  formDataErrors,
+  skills,
+  setFormDataErrors,
+  setValidationState,
+  validationState,
+}) => {
+  const { name } = formData;
+  const { name: _, ...errors } = formDataErrors;
 
-  const isDisabled = !Object.values(formData).some(Boolean) || Object.values(formDataErrors).some(Boolean);
+  if (name && !skillNameRegex.test(name)) {
+    setFormDataErrors({ ...errors, name: formatMessage('Name cannot include special characters or spaces') });
+  } else if (name && skills.some((skill) => skill.name.toLowerCase() === name.toLowerCase())) {
+    setFormDataErrors({ ...errors, name: formatMessage('Duplicate skill name') });
+  } else {
+    setFormDataErrors(errors);
+    setValidationState({ ...validationState, name: ValidationState.Validated });
+  }
+};
+
+export const CreateSkillModal: React.FC<CreateSkillModalProps> = ({ projectId, onSubmit, onDismiss }) => {
+  const skills = useRecoilValue(skillsState(projectId));
+
+  const [formData, setFormData] = useState<Partial<SkillSetting>>({});
+  const [formDataErrors, setFormDataErrors] = useState<SkillFormDataErrors>({});
+  const [validationState, setValidationState] = useState({
+    endpoint: ValidationState.NotValidated,
+    manifestUrl: ValidationState.NotValidated,
+    name: ValidationState.Validated,
+  });
+  const [selectedEndpointKey, setSelectedEndpointKey] = useState<number | null>(null);
+  const [skillManifest, setSkillManifest] = useState<any | null>(null);
+
+  const endpointOptions = useMemo<IDropdownOption[]>(() => {
+    return (skillManifest?.endpoints || [])?.map(({ name, endpointUrl, msAppId }, key) => ({
+      key,
+      text: name,
+      data: {
+        endpointUrl,
+        msAppId,
+      },
+    }));
+  }, [skillManifest]);
+
+  const debouncedValidateName = useRef(debounce(validateName, 500)).current;
+  const debouncedValidateManifestURl = useRef(debounce(validateManifestUrl, 500)).current;
+
+  const validationHelpers = {
+    formDataErrors,
+    skills,
+    setFormDataErrors,
+    setValidationState,
+    setSkillManifest,
+    validationState,
+  };
+
+  const handleManifestUrlChange = (_, manifestUrl = '') => {
+    const { msAppId, endpointUrl, ...rest } = formData;
+    setValidationState((validationState) => ({
+      ...validationState,
+      manifestUrl: ValidationState.NotValidated,
+      endpoint: ValidationState.NotValidated,
+    }));
+    debouncedValidateManifestURl({
+      formData: { ...rest, manifestUrl },
+      projectId,
+      ...validationHelpers,
+    });
+    setFormData({
+      ...rest,
+      manifestUrl,
+    });
+    setSkillManifest(null);
+    setSelectedEndpointKey(null);
+  };
+
+  const handleNameChange = (_, name = '') => {
+    setValidationState((validationState) => ({ ...validationState, name: ValidationState.NotValidated }));
+    debouncedValidateName({
+      formData: { ...formData, name },
+      ...validationHelpers,
+    });
+    setFormData({
+      ...formData,
+      name,
+    });
+  };
+
+  const handleEndpointUrlChange = (_, option?: IDropdownOption) => {
+    if (option) {
+      const { data, key } = option;
+      validateEndpoint({
+        formData: {
+          ...data,
+          ...formData,
+        },
+        ...validationHelpers,
+      });
+      setFormData({
+        ...data,
+        ...formData,
+      });
+      setSelectedEndpointKey(key as number);
+    }
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    if (
+      Object.values(validationState).every((validation) => validation === ValidationState.Validated) &&
+      !Object.values(formDataErrors).some(Boolean)
+    ) {
+      onSubmit({ name: skillManifest.name, ...formData } as SkillSetting);
+    }
+  };
+
+  const isDisabled =
+    !formData.manifestUrl ||
+    Object.values(formDataErrors).some(Boolean) ||
+    !Object.values(validationState).every((validation) => validation === ValidationState.Validated);
 
   return (
-    <DialogWrapper isOpen={isOpen} onDismiss={onDismiss} {...formTitles} dialogType={DialogTypes.CreateFlow}>
-      <form css={FormModalBody} onSubmit={handleSubmit}>
+    <DialogWrapper
+      isOpen
+      onDismiss={onDismiss}
+      {...addSkillDialog.SKILL_MANIFEST_FORM}
+      dialogType={DialogTypes.CreateFlow}
+    >
+      <form onSubmit={handleSubmit}>
         <input style={{ display: 'none' }} type="submit" />
         <Stack tokens={{ childrenGap: '3rem' }}>
           <StackItem grow={0}>
             <TextField
-              autoFocus
               required
-              css={FormFieldManifestUrl}
-              data-testid="NewSkillManifestUrl"
               errorMessage={formDataErrors.manifestUrl}
               label={formatMessage('Manifest url')}
-              value={formData.manifestUrl}
-              onChange={updateForm('manifestUrl')}
+              value={formData.manifestUrl || ''}
+              onChange={handleManifestUrlChange}
             />
-            {isValidating && (
+            {validationState.manifestUrl === ValidationState.Validating && (
               <Spinner
-                css={SpinnerLabel}
                 label={formatMessage('Validating...')}
                 labelPosition="right"
                 size={SpinnerSize.medium}
+                styles={{
+                  root: {
+                    justifyContent: 'flex-start',
+                    marginTop: '2px',
+                  },
+                }}
               />
             )}
             <TextField
-              css={FormFieldEditName}
-              data-testid="NewSkillName"
               errorMessage={formDataErrors.name}
               label={formatMessage('Custom name (optional)')}
-              value={formData.name}
-              onChange={updateForm('name')}
+              value={formData.name || ''}
+              onChange={handleNameChange}
+            />
+            <Label required>{formatMessage('Skill Endpoint')}</Label>
+            <Dropdown
+              disabled={!endpointOptions.length}
+              errorMessage={formDataErrors.endpoint}
+              options={endpointOptions}
+              selectedKey={selectedEndpointKey}
+              onChange={handleEndpointUrlChange}
             />
           </StackItem>
 
-          <StackItem>
+          <StackItem align={'end'}>
+            <DefaultButton data-testid="SkillFormCancel" text={formatMessage('Cancel')} onClick={onDismiss} />
             <PrimaryButton
-              disabled={isDisabled || isValidating}
+              disabled={isDisabled}
+              styles={{ root: { marginLeft: '8px' } }}
               text={formatMessage('Confirm')}
               onClick={handleSubmit}
-            />
-            <DefaultButton
-              css={MarginLeftSmall}
-              data-testid="SkillFormCancel"
-              text={formatMessage('Cancel')}
-              onClick={onDismiss}
             />
           </StackItem>
         </Stack>

@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 import { UIOptions } from '@bfc/extension-client';
+import formatMessage from 'format-message';
 import startCase from 'lodash/startCase';
 
-import { CollapsedField } from './Fields/CollapsedField';
 import { ValueRefField } from './Fields/ValueRefField';
 
 const objectSerializer = {
@@ -17,7 +17,7 @@ const objectSerializer = {
 
 export const uiOptions: UIOptions = {
   label: false,
-  field: CollapsedField,
+  fieldSets: [{ title: formatMessage('Dialog Interface') }],
   properties: {
     dialogValue: {
       serializer: objectSerializer,

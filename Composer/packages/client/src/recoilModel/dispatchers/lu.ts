@@ -9,7 +9,7 @@ import formatMessage from 'format-message';
 import luWorker from '../parsers/luWorker';
 import { getBaseName, getExtension } from '../../utils/fileUtil';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
-import { luFilesState, projectIdState, localeState, settingsState } from '../atoms/botState';
+import { luFilesState, localeState, settingsState } from '../atoms/botState';
 
 import { setError } from './shared';
 
@@ -71,13 +71,12 @@ export const updateLuFileState = async (luFiles: LuFile[], updatedLuFile: LuFile
 
 export const createLuFileState = async (
   callbackHelpers: CallbackInterface,
-  { id, content }: { id: string; content: string }
+  { id, content, projectId }: { id: string; content: string; projectId: string }
 ) => {
   const { set, snapshot } = callbackHelpers;
-  const luFiles = await snapshot.getPromise(luFilesState);
-  const projectId = await snapshot.getPromise(projectIdState);
-  const locale = await snapshot.getPromise(localeState);
-  const { languages } = await snapshot.getPromise(settingsState);
+  const luFiles = await snapshot.getPromise(luFilesState(projectId));
+  const locale = await snapshot.getPromise(localeState(projectId));
+  const { languages } = await snapshot.getPromise(settingsState(projectId));
   const createdLuId = `${id}.${locale}`;
   const createdLuFile = (await luWorker.parse(id, content)) as LuFile;
   if (luFiles.find((lu) => lu.id === createdLuId)) {
@@ -95,13 +94,15 @@ export const createLuFileState = async (
     });
   });
 
-  set(luFilesState, [...luFiles, ...changes]);
+  set(luFilesState(projectId), [...luFiles, ...changes]);
 };
 
-export const removeLuFileState = async (callbackHelpers: CallbackInterface, { id }: { id: string }) => {
+export const removeLuFileState = async (
+  callbackHelpers: CallbackInterface,
+  { id, projectId }: { id: string; projectId: string }
+) => {
   const { set, snapshot } = callbackHelpers;
-  let luFiles = await snapshot.getPromise(luFilesState);
-  const projectId = await snapshot.getPromise(projectIdState);
+  let luFiles = await snapshot.getPromise(luFilesState(projectId));
 
   luFiles.forEach((file) => {
     if (getBaseName(file.id) === getBaseName(id)) {
@@ -110,7 +111,7 @@ export const removeLuFileState = async (callbackHelpers: CallbackInterface, { id
   });
 
   luFiles = luFiles.filter((file) => getBaseName(file.id) !== id);
-  set(luFilesState, luFiles);
+  set(luFilesState(projectId), luFiles);
 };
 
 export const luDispatcher = () => {
@@ -125,11 +126,11 @@ export const luDispatcher = () => {
       projectId: string;
     }) => {
       const { set, snapshot } = callbackHelpers;
-      const luFiles = await snapshot.getPromise(luFilesState);
+      const luFiles = await snapshot.getPromise(luFilesState(projectId));
       try {
         const updatedFile = (await luWorker.parse(id, content)) as LuFile;
         const result = await updateLuFileState(luFiles, updatedFile, projectId);
-        set(luFilesState, result);
+        set(luFilesState(projectId), result);
       } catch (error) {
         setError(callbackHelpers, error);
       }
@@ -141,15 +142,25 @@ export const luDispatcher = () => {
       id,
       intentName,
       intent,
+      projectId,
     }: {
       id: string;
       intentName: string;
       intent: LuIntentSection;
+      projectId: string;
     }) => {
       const { set, snapshot } = callbackHelpers;
-      const luFiles = await snapshot.getPromise(luFilesState);
+      const luFiles = await snapshot.getPromise(luFilesState(projectId));
       const luFile = luFiles.find((temp) => temp.id === id);
       if (!luFile) return luFiles;
+
+      // create need sync to multi locale file.
+      const originIntent = luFile.intents.find(({ Name }) => Name === intentName);
+      if (!originIntent) {
+        await createLuIntent({ id, intent, projectId });
+        return;
+      }
+
       try {
         const sameIdOtherLocaleFiles = luFiles.filter((file) => getBaseName(file.id) === getBaseName(id));
 
@@ -161,7 +172,7 @@ export const luDispatcher = () => {
             changes.push(updatedFile);
           }
 
-          set(luFilesState, (luFiles) => {
+          set(luFilesState(projectId), (luFiles) => {
             return luFiles.map((file) => {
               const changedFile = changes.find(({ id }) => id === file.id);
               return changedFile ? changedFile : file;
@@ -170,7 +181,7 @@ export const luDispatcher = () => {
           // body change, only update current locale file
         } else {
           const updatedFile = (await luWorker.updateIntent(luFile, intentName, { Body: intent.Body })) as LuFile;
-          set(luFilesState, (luFiles) => {
+          set(luFilesState(projectId), (luFiles) => {
             return luFiles.map((file) => {
               return file.id === id ? updatedFile : file;
             });
@@ -193,13 +204,13 @@ export const luDispatcher = () => {
       projectId: string;
     }) => {
       const { set, snapshot } = callbackHelpers;
-      const luFiles = await snapshot.getPromise(luFilesState);
+      const luFiles = await snapshot.getPromise(luFilesState(projectId));
       const file = luFiles.find((temp) => temp.id === id);
       if (!file) return luFiles;
       try {
         const updatedFile = (await luWorker.addIntent(file, intent)) as LuFile;
         const result = await updateLuFileState(luFiles, updatedFile, projectId);
-        set(luFilesState, result);
+        set(luFilesState(projectId), result);
       } catch (error) {
         setError(callbackHelpers, error);
       }
@@ -217,13 +228,13 @@ export const luDispatcher = () => {
       projectId: string;
     }) => {
       const { set, snapshot } = callbackHelpers;
-      const luFiles = await snapshot.getPromise(luFilesState);
+      const luFiles = await snapshot.getPromise(luFilesState(projectId));
       const file = luFiles.find((temp) => temp.id === id);
       if (!file) return luFiles;
       try {
         const updatedFile = (await luWorker.removeIntent(file, intentName)) as LuFile;
         const result = await updateLuFileState(luFiles, updatedFile, projectId);
-        set(luFilesState, result);
+        set(luFilesState(projectId), result);
       } catch (error) {
         setError(callbackHelpers, error);
       }

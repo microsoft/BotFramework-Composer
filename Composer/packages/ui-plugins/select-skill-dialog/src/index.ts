@@ -5,14 +5,20 @@ import { PluginConfig } from '@bfc/extension-client';
 import { SDKKinds } from '@bfc/shared';
 
 import { BeginSkillDialogField } from './BeginSkillDialogField';
+import { SkillEndpointField } from './SkillEndpointField';
 
 const config: PluginConfig = {
   uiSchema: {
     [SDKKinds.BeginSkill]: {
       form: {
-        order: ['skillAppId', '*', 'resultProperty', 'disabled', 'activityProcessed'],
-        hidden: ['botId', 'skillEndpoint', 'skillAppId', 'skillHostEndpoint'],
+        order: ['skillEndpoint', '*', 'resultProperty', 'activityProcessed'],
+        hidden: ['botId', 'skillAppId', 'skillHostEndpoint'],
         field: BeginSkillDialogField,
+        properties: {
+          skillEndpoint: {
+            field: SkillEndpointField,
+          },
+        },
       },
     },
   },
