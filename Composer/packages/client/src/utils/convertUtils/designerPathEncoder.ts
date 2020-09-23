@@ -9,7 +9,7 @@ const parseArrayPath = (subpath: string) => {
   const matchResults = ArrayPathPattern.exec(subpath);
   if (matchResults?.length !== 3) return null;
 
-  const [_, prefix, indexStr] = matchResults;
+  const [, prefix, indexStr] = matchResults;
   return {
     prefix,
     index: parseInt(indexStr),
