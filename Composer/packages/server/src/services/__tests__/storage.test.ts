@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Path } from '../../src/utility/path';
-import StorageService from '../../src/services/storage';
+import { Path } from '../../utility/path';
+import StorageService from '../../services/storage';
 jest.mock('azure-storage', () => {
   return {
     createBlobService: (_account: string, _key: string) => {
@@ -17,7 +17,7 @@ jest.mock('azure-storage', () => {
     },
   };
 });
-jest.mock('../../src/store/store', () => {
+jest.mock('../../store/store', () => {
   const data = [
     {
       id: 'default',

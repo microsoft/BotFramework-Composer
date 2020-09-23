@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { ComposerBootstrapSampler } from './../../../../src/models/bot/sampler/BootstrapSampler';
+import { ComposerBootstrapSampler } from '../BootstrapSampler';
 
 describe('BootstrapSampler', () => {
   it('balence the utterances ratio in intents after bootstrap sampling', async () => {
