@@ -5,7 +5,7 @@ import React from 'react';
 import { render, fireEvent, act } from '@bfc/test-utils';
 import assign from 'lodash/assign';
 
-import { Fieldsets } from '../Fieldsets';
+import { Fieldsets } from '../FieldSets';
 
 import { fieldProps } from './testUtils';
 
