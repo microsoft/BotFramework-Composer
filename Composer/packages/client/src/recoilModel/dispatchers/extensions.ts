@@ -21,10 +21,10 @@ export const extensionsDispatcher = () => {
   });
 
   const addExtension = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (extensionName: string, version: string) => {
+    (callbackHelpers: CallbackInterface) => async (extensionName: string, version?: string) => {
       const { set } = callbackHelpers;
       try {
-        const res = await httpClient.post('/extensions', { name: extensionName, version });
+        const res = await httpClient.post('/extensions', { id: extensionName, version });
         const addedExtension: ExtensionConfig = res.data;
 
         set(extensionsState, (extensions) => {

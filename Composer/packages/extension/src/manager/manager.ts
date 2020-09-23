@@ -78,7 +78,12 @@ class ExtensionManager {
     log('Installing %s to %s', packageNameAndVersion, this.remoteDir);
 
     try {
-      const { stdout } = await npm('install', packageNameAndVersion, { '--prefix': this.remoteDir });
+      const { stdout } = await npm(
+        'install',
+        packageNameAndVersion,
+        { '--prefix': this.remoteDir },
+        { cwd: this.remoteDir }
+      );
 
       log('%s', stdout);
 
@@ -147,7 +152,7 @@ class ExtensionManager {
     log('Removing %s', id);
 
     try {
-      const { stdout } = await npm('uninstall', id, { '--prefix': this.remoteDir });
+      const { stdout } = await npm('uninstall', id, { '--prefix': this.remoteDir }, { cwd: this.remoteDir });
 
       log('%s', stdout);
 

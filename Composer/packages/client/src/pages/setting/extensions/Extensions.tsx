@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import {
   DetailsList,
@@ -12,54 +12,26 @@ import {
   IColumn,
   CheckboxVisibility,
 } from 'office-ui-fabric-react/lib/DetailsList';
-import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
-import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import axios from 'axios';
 import { useRecoilValue } from 'recoil';
 
 import { ExtensionConfig } from '../../../recoilModel/types';
 import { Toolbar, IToolbarItem } from '../../../components/Toolbar';
-import httpClient from '../../../utils/httpUtil';
 import { dispatcherState, extensionsState } from '../../../recoilModel';
+
+import { InstallExtensionDialog } from './InstallExtensionDialog';
 
 const Extensions: React.FC<RouteComponentProps> = () => {
   const { fetchExtensions, toggleExtension, addExtension, removeExtension } = useRecoilValue(dispatcherState);
   const extensions = useRecoilValue(extensionsState);
   const [showNewModal, setShowNewModal] = useState(false);
-  const [extensionName, setExtensionName] = useState<string | null>(null);
-  const [extensionVersion, setExtensionVersion] = useState<string | null>(null);
-  const [matchingExtensions, setMatchingExtensions] = useState<ExtensionConfig[]>([]);
-  const [selectedExtension, setSelectedExtension] = useState<any>();
+
+  const remoteExtensions = useMemo(() => extensions.filter((e) => !e.builtIn), [extensions]);
 
   useEffect(() => {
     fetchExtensions();
   }, []);
-
-  useEffect(() => {
-    if (extensionName !== null) {
-      const source = axios.CancelToken.source();
-
-      const timer = setTimeout(() => {
-        httpClient
-          .get(`/extensions/search?q=${extensionName}`, { cancelToken: source.token })
-          .then((res) => {
-            setMatchingExtensions(res.data);
-          })
-          .catch((err) => {
-            if (!axios.isCancel(err)) {
-              console.error(err);
-            }
-          });
-      }, 200);
-
-      return () => {
-        source.cancel('User interruption');
-        clearTimeout(timer);
-      };
-    }
-  }, [extensionName]);
 
   const installedColumns: IColumn[] = [
     {
@@ -109,53 +81,8 @@ const Extensions: React.FC<RouteComponentProps> = () => {
     },
   ];
 
-  const matchingColumns: IColumn[] = [
-    {
-      key: 'name',
-      name: formatMessage('Name'),
-      minWidth: 100,
-      maxWidth: 150,
-      onRender: (item: any) => {
-        return <span>{item.id}</span>;
-      },
-    },
-    {
-      key: 'description',
-      name: formatMessage('Description'),
-      minWidth: 100,
-      maxWidth: 300,
-      isMultiline: true,
-      onRender: (item: any) => {
-        return <div css={{ overflowWrap: 'break-word' }}>{item.description}</div>;
-      },
-    },
-    {
-      key: 'version',
-      name: formatMessage('Version'),
-      minWidth: 30,
-      maxWidth: 100,
-      onRender: (item: any) => {
-        return <span>{item.version}</span>;
-      },
-    },
-    {
-      key: 'url',
-      name: formatMessage('Url'),
-      minWidth: 100,
-      maxWidth: 100,
-      onRender: (item: any) => {
-        return item.url ? (
-          <a href={item.url} rel="noopener noreferrer" target="_blank">
-            View on npm
-          </a>
-        ) : null;
-      },
-    },
-  ];
-
   const toolbarItems: IToolbarItem[] = [
-    // TODO (toanzian / abrown): re-enable once remote extensions are supported
-    /*{
+    {
       type: 'action',
       text: formatMessage('Add'),
       buttonProps: {
@@ -167,61 +94,28 @@ const Extensions: React.FC<RouteComponentProps> = () => {
         },
       },
       align: 'left',
-    },*/
+    },
   ];
 
-  const submit = useCallback(() => {
-    if (selectedExtension && extensionVersion) {
-      addExtension(selectedExtension.id, extensionVersion);
+  const submit = async (selectedExtension) => {
+    if (selectedExtension) {
+      await addExtension(selectedExtension.id);
       setShowNewModal(false);
-      setExtensionName(null);
-      setExtensionVersion(null);
-      setSelectedExtension(null);
     }
-  }, [selectedExtension, extensionVersion]);
+  };
 
   return (
     <div>
       <Toolbar toolbarItems={toolbarItems} />
+      {/* only show when extensions are installed */}
       <DetailsList
         checkboxVisibility={CheckboxVisibility.hidden}
         columns={installedColumns}
-        items={extensions}
+        items={remoteExtensions}
         layoutMode={DetailsListLayoutMode.justified}
         selectionMode={SelectionMode.single}
       />
-      <Dialog
-        dialogContentProps={{
-          type: DialogType.close,
-          title: formatMessage('Add new extension'),
-          subText: formatMessage('Search for extensions'),
-        }}
-        hidden={!showNewModal}
-        minWidth="600px"
-        onDismiss={() => setShowNewModal(false)}
-      >
-        <div>
-          <TextField
-            label={formatMessage('Extension name')}
-            value={extensionName ?? ''}
-            onChange={(_e, val) => setExtensionName(val ?? null)}
-          />
-          <DetailsList
-            checkboxVisibility={CheckboxVisibility.always}
-            columns={matchingColumns}
-            items={matchingExtensions}
-            layoutMode={DetailsListLayoutMode.justified}
-            selectionMode={SelectionMode.single}
-            onActiveItemChanged={(item) => setSelectedExtension(item)}
-          />
-        </div>
-        <DialogFooter>
-          <DefaultButton onClick={() => setShowNewModal(false)}>Cancel</DefaultButton>
-          <PrimaryButton disabled={false} onClick={submit}>
-            {formatMessage('Add')}
-          </PrimaryButton>
-        </DialogFooter>
-      </Dialog>
+      <InstallExtensionDialog isOpen={showNewModal} onDismiss={() => setShowNewModal(false)} onInstall={submit} />
     </div>
   );
 };
