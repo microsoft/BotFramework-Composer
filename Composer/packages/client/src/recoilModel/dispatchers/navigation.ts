@@ -8,6 +8,7 @@ import { PromptTab, SDKKinds } from '@bfc/shared';
 import cloneDeep from 'lodash/cloneDeep';
 
 import { currentProjectIdState } from '../atoms';
+import { encodeArrayPathToDesignerPath } from '../../utils/convertUtils/designerPathEncoder';
 
 import { createSelectedPath, getSelected } from './../../utils/dialogUtil';
 import { BreadcrumbItem } from './../../recoilModel/types';
@@ -64,6 +65,7 @@ export const navigationDispatcher = () => {
 
         if (typeof beginDialogIndex !== 'undefined' && beginDialogIndex >= 0) {
           path = createSelectedPath(beginDialogIndex);
+          path = encodeArrayPathToDesignerPath(currentDialog?.content, path) ?? path;
           updatedBreadcrumb.push({ dialogId, selected: '', focused: '' });
         }
       }
@@ -89,7 +91,10 @@ export const navigationDispatcher = () => {
 
       if (!dialogId) dialogId = 'Main';
 
-      const currentUri = convertPathToUrl(projectId, dialogId, selectPath);
+      const dialogs = await snapshot.getPromise(dialogsState(projectId));
+      const currentDialog = dialogs.find(({ id }) => id === dialogId);
+      const encodedSelectPath = encodeArrayPathToDesignerPath(currentDialog?.content, selectPath) ?? selectPath;
+      const currentUri = convertPathToUrl(projectId, dialogId, encodedSelectPath);
 
       if (checkUrl(currentUri, projectId, designPageLocation)) return;
       navigateTo(currentUri, { state: { breadcrumb: updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Selected) } });
@@ -108,12 +113,16 @@ export const navigationDispatcher = () => {
       let currentUri = `/bot/${projectId}/dialogs/${dialogId}`;
 
       if (focusPath) {
-        const targetSelected = getSelected(focusPath);
+        const dialogs = await snapshot.getPromise(dialogsState(projectId));
+        const currentDialog = dialogs.find(({ id }) => id === dialogId);
+        const encodedFocusPath = encodeArrayPathToDesignerPath(currentDialog?.content, focusPath);
+
+        const targetSelected = getSelected(encodedFocusPath);
         if (targetSelected !== selected) {
           updatedBreadcrumb = updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Selected);
           updatedBreadcrumb.push({ dialogId, selected: targetSelected, focused: '' });
         }
-        currentUri = `${currentUri}?selected=${targetSelected}&focused=${focusPath}`;
+        currentUri = `${currentUri}?selected=${targetSelected}&focused=${encodedFocusPath}`;
         updatedBreadcrumb = updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Focused);
       } else {
         currentUri = `${currentUri}?selected=${selected}`;
