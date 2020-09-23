@@ -49,7 +49,6 @@ export const navigationDispatcher = () => {
   const navTo = useRecoilCallback(
     ({ snapshot, set }: CallbackInterface) => async (
       projectId: string,
-      skillId: string,
       dialogId: string,
       breadcrumb: BreadcrumbItem[] = []
     ) => {
@@ -69,7 +68,7 @@ export const navigationDispatcher = () => {
         }
       }
 
-      const currentUri = convertPathToUrl(projectId, skillId, dialogId, path);
+      const currentUri = convertPathToUrl(projectId, dialogId, path);
 
       if (checkUrl(currentUri, projectId, designPageLocation)) return;
 
@@ -78,21 +77,16 @@ export const navigationDispatcher = () => {
   );
 
   const selectTo = useRecoilCallback(
-    ({ snapshot, set }: CallbackInterface) => async (
-      projectId: string,
-      skillId: string,
-      destDialogId: string,
-      selectPath: string
-    ) => {
+    ({ snapshot, set }: CallbackInterface) => async (projectId: string, selectPath: string) => {
       if (!selectPath) return;
       set(currentProjectIdState, projectId);
       const designPageLocation = await snapshot.getPromise(designPageLocationState(projectId));
       const breadcrumb = await snapshot.getPromise(breadcrumbState(projectId));
 
       // initial dialogId, projectId maybe empty string  ""
-      const dialogId = destDialogId ?? designPageLocation.dialogId ?? 'Main';
+      const dialogId = 'Main';
 
-      const currentUri = convertPathToUrl(projectId, skillId, dialogId, selectPath);
+      const currentUri = convertPathToUrl(projectId, dialogId, selectPath);
 
       if (checkUrl(currentUri, projectId, designPageLocation)) return;
       navigateTo(currentUri, { state: { breadcrumb: updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Selected) } });
@@ -133,7 +127,6 @@ export const navigationDispatcher = () => {
   const selectAndFocus = useRecoilCallback(
     ({ snapshot, set }: CallbackInterface) => async (
       projectId: string,
-      skillId: string,
       dialogId: string,
       selectPath: string,
       focusPath: string,
@@ -148,7 +141,7 @@ export const navigationDispatcher = () => {
         if (checkUrl(currentUri, projectId, designPageLocation)) return;
         navigateTo(currentUri, { state: { breadcrumb } });
       } else {
-        navTo(projectId, skillId, dialogId, breadcrumb);
+        navTo(projectId, dialogId, breadcrumb);
       }
     }
   );

@@ -8,6 +8,7 @@ import { forwardRef } from 'react';
 
 import { RequireAuth } from '../RequireAuth';
 import { ErrorBoundary } from '../ErrorBoundary';
+import { ProjectTree } from '../ProjectTree/ProjectTree';
 
 import Routes from './../../router';
 import { applicationErrorState, dispatcherState, currentProjectIdState } from './../../recoilModel';
@@ -45,7 +46,19 @@ export const RightPanel = () => {
         setApplicationLevelError={setApplicationLevelError}
       >
         <RequireAuth>
-          <Routes component={Content} />
+          <div css={{ display: 'flex', flexDirection: 'row' }}>
+            <ProjectTree
+              dialogId={'test'}
+              selected={'testg'}
+              onDelete={(link) => {
+                console.log(link);
+              }}
+              onSelect={(link) => {
+                console.log(link);
+              }}
+            />
+            <Routes component={Content} />
+          </div>
         </RequireAuth>
       </ErrorBoundary>
     </div>
