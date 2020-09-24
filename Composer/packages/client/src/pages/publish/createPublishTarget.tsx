@@ -141,14 +141,14 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
         <TextField
           defaultValue={props.current ? props.current.name : ''}
           errorMessage={errorMessage}
-          label={formatMessage('Name')}
-          placeholder={formatMessage('My Publish Profile')}
+          label={formatMessage('Create profile name')}
+          placeholder={formatMessage('My Staging Environment')}
           readOnly={props.current ? true : false}
           onChange={updateName}
         />
         <Dropdown
           defaultSelectedKey={props.current ? props.current.type : null}
-          label={formatMessage('Publish Destination Type')}
+          label={formatMessage('Select your publish target')}
           options={targetTypes}
           placeholder={formatMessage('Choose One')}
           onChange={updateType}
