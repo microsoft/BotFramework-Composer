@@ -4,7 +4,7 @@
 import path from 'path';
 
 import glob from 'globby';
-import { readJson } from 'fs-extra';
+import { readJson, existsSync, mkdir } from 'fs-extra';
 
 import { ExtensionContext } from '../extensionContext';
 import logger from '../logger';
@@ -61,6 +61,7 @@ class ExtensionManager {
    */
   public async loadAll() {
     await this.seedBuiltinExtensions();
+    await this.ensureRemoteDir();
 
     const extensions = Object.entries(this.manifest.getExtensions());
 
@@ -309,6 +310,12 @@ class ExtensionManager {
       } catch (err) {
         log('%O', err);
       }
+    }
+  }
+
+  private async ensureRemoteDir() {
+    if (!existsSync(this.remoteDir)) {
+      await mkdir(this.remoteDir);
     }
   }
 }
