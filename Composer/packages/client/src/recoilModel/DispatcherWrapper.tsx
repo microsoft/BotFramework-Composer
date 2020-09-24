@@ -25,7 +25,7 @@ import {
   projectMetaDataState,
   botProjectSpaceLoadedState,
 } from './atoms';
-import { projectMetaDataSelector } from './selectors/project';
+import { botProjectsWithoutErrorsSelector } from './selectors';
 
 const getBotAssets = async (projectId, snapshot: Snapshot): Promise<BotAssets> => {
   const result = await Promise.all([
@@ -85,7 +85,7 @@ const InitDispatcher = ({ onLoad }) => {
 
 export const DispatcherWrapper = ({ children }) => {
   const [loaded, setLoaded] = useState(false);
-  const botProjects = useRecoilValue(projectMetaDataSelector);
+  const botProjects = useRecoilValue(botProjectsWithoutErrorsSelector);
   const botProjectLoaded = useRecoilValue(botProjectSpaceLoadedState);
 
   useRecoilTransactionObserver_UNSTABLE(async ({ snapshot, previousSnapshot }) => {
