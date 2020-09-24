@@ -9,7 +9,7 @@ import { getFieldsets } from '../../utils';
 
 import { ObjectField } from './ObjectField';
 
-export const Fieldsets: React.FC<FieldProps<object>> = (props) => {
+const Fieldsets: React.FC<FieldProps<object>> = (props) => {
   const { schema, uiOptions: baseUiOptions, value } = props;
 
   const fieldsets = getFieldsets(schema, baseUiOptions, value);
@@ -24,3 +24,5 @@ export const Fieldsets: React.FC<FieldProps<object>> = (props) => {
     </React.Fragment>
   );
 };
+
+export { Fieldsets };

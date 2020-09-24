@@ -3,6 +3,7 @@
 export * from './arrayUtils';
 export * from './getFieldsets';
 export * from './getHiddenProperties';
+export * from './getSchemaWithAdditionalFields';
 export * from './getOrderedProperties';
 export * from './getUIOptions';
 export * from './getValueType';

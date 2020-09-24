@@ -80,10 +80,7 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = (props) => {
     itemSchema && typeof itemSchema !== 'boolean' ? itemSchema : {},
     uiOptions,
     value
-  ).filter(
-    (property) =>
-      Array.isArray(property) || (typeof property !== 'object' && !isPropertyHidden(uiOptions, value, property))
-  ) as (string | string[])[];
+  ).filter((property) => Array.isArray(property) || !isPropertyHidden(uiOptions, value, property));
 
   const stackArrayItems = useMemo(() => {
     const allOrderProps = orderedProperties.reduce((all: string[], prop: string | string[]) => {

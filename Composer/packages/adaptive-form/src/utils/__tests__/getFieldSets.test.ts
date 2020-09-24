@@ -20,7 +20,7 @@ const schema = {
 
 describe('getFieldsets', () => {
   it('should return a single field set containing all the properties', () => {
-    const uiOptions = {
+    const uiOptions: any = {
       fieldsets: [{ title: 'set1' }],
     };
 
@@ -46,7 +46,7 @@ describe('getFieldsets', () => {
   });
 
   it('should return two sets', () => {
-    const uiOptions = {
+    const uiOptions: any = {
       fieldsets: [
         {
           title: 'set1',
@@ -90,7 +90,6 @@ describe('getFieldsets', () => {
 
   it('should include additional fields', () => {
     const uiOptions: any = {
-      additionalFields: [{ name: 'additionalField', field: 'field' }],
       fieldsets: [
         {
           title: 'set1',
@@ -101,6 +100,11 @@ describe('getFieldsets', () => {
           fields: ['*', 'additionalField'],
         },
       ],
+      properties: {
+        additionalField: {
+          field: 'field',
+        },
+      },
     };
 
     const result = getFieldsets(schema, uiOptions, {});
@@ -116,7 +120,10 @@ describe('getFieldsets', () => {
             six: { type: 'object' },
           },
         },
-        uiOptions: { additionalFields: [] },
+        uiOptions: {
+          order: ['two', 'four', 'six'],
+          properties: {},
+        },
       }),
       expect.objectContaining({
         fields: ['one', 'three', 'five', 'seven', 'additionalField'],
@@ -130,14 +137,15 @@ describe('getFieldsets', () => {
           },
         },
         uiOptions: {
-          additionalFields: [{ name: 'additionalField', field: 'field' }],
+          order: ['one', 'three', 'five', 'seven', 'additionalField'],
+          properties: { additionalField: { field: 'field' } },
         },
       }),
     ]);
   });
 
   it('should throw an error for multiple wildcards', () => {
-    const uiOptions = {
+    const uiOptions: any = {
       fieldsets: [{ title: 'set1', fields: ['two', '*', 'six'] }, { title: 'set2' }],
     };
 

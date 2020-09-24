@@ -9,15 +9,6 @@ type UIOptionValue<R = string, D = any> = R | UIOptionFunc<R, D>;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type UIOptionFunc<R, D> = (data: D) => R;
 
-export interface AdditionalField {
-  name: string;
-  field: FieldWidget;
-  label?: string | false;
-  description?: string;
-  helpLink?: string;
-  required?: boolean;
-}
-
 export interface Fieldset {
   title: string;
   fields?: string[];
@@ -25,8 +16,6 @@ export interface Fieldset {
 }
 
 export interface UIOptions {
-  /** Array of custom fields that are added to the form */
-  additionalFields?: AdditionalField[];
   /** Description override. */
   description?: UIOptionValue<string | undefined>;
   /** Field widget override. */

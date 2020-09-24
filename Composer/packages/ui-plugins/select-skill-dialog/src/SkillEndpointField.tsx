@@ -12,7 +12,7 @@ export const SkillEndpointField: React.FC<FieldProps> = ({ value }) => {
   const { shellApi, skillsSettings, skills = [] } = useShellApi();
   const { updateSkillSetting } = shellApi;
 
-  const id = getSkillNameFromSetting(value.skillEndpoint);
+  const id = getSkillNameFromSetting(value?.skillEndpoint);
   const skill = skills.find(({ id: skillId }) => skillId === id) || ({} as Skill);
   const { endpointUrl, msAppId } = skillsSettings[id] || {};
 

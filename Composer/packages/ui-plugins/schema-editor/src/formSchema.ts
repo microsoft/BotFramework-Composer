@@ -9,7 +9,11 @@ import { SchemaEditorField } from './Fields/SchemaEditorField';
 const uiSchema: UISchema = {
   [SDKKinds.AdaptiveDialog]: {
     form: {
-      additionalFields: [{ field: SchemaEditorField, name: 'schemaEditor' }],
+      properties: {
+        schemaEditor: {
+          field: SchemaEditorField,
+        },
+      },
     },
   },
 };

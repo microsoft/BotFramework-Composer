@@ -1,12 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { UIOptions, JSONSchema7, AdditionalField } from '@bfc/extension-client';
+import { UIOptions, JSONSchema7 } from '@bfc/extension-client';
 import cloneDeep from 'lodash/cloneDeep';
 import formatMessage from 'format-message';
 
 import { getHiddenProperties } from './getHiddenProperties';
 
-type OrderConfig = (string | [string, string] | AdditionalField)[];
+type OrderConfig = (string | [string, string])[];
 
 export function getOrderedProperties(
   schema: JSONSchema7,
@@ -15,11 +15,9 @@ export function getOrderedProperties(
   data: any
 ): OrderConfig {
   const uiOptions = cloneDeep(baseUiOptions);
-  const { additionalFields = [], order = ['*'] } = uiOptions;
+  const { order = ['*'] } = uiOptions;
   const hiddenFieldSet = getHiddenProperties(uiOptions, data);
 
-  const additionalFieldsNames = additionalFields.map(({ name }) => name);
-  const additionalFieldsNamesSet = new Set(additionalFieldsNames);
   const uiOrder = typeof order === 'function' ? order(data) : order || [];
   const orderedFieldSet = new Set<string>();
   const orderedFields = uiOrder.reduce((allFields, field) => {
@@ -44,7 +42,7 @@ export function getOrderedProperties(
         allFields.push(...fieldTuple);
       }
     } else {
-      if (!hiddenFieldSet.has(field) && (schema.properties?.[field] || additionalFieldsNamesSet.has(field))) {
+      if (!hiddenFieldSet.has(field) && schema.properties?.[field]) {
         orderedFieldSet.add(field);
         allFields.push(field);
       }
@@ -65,8 +63,6 @@ export function getOrderedProperties(
       errorMsg = formatMessage('no wildcard');
     } else if (restIdx !== orderedFields.lastIndexOf('*')) {
       errorMsg = formatMessage('multiple wildcards');
-    } else if (allProperties.some((property) => additionalFieldsNamesSet.has(property))) {
-      errorMsg = formatMessage('additional field name already exists in schema');
     }
 
     if (errorMsg) {
@@ -80,7 +76,7 @@ export function getOrderedProperties(
     }
   }
 
-  const restFields = [...Object.keys(schema.properties || {}), ...additionalFieldsNames].filter((p) => {
+  const restFields = Object.keys(schema.properties || {}).filter((p) => {
     return !orderedFieldSet.has(p) && !p.startsWith('$');
   });
 
@@ -90,10 +86,5 @@ export function getOrderedProperties(
     orderedFields.splice(restIdx, 1, ...restFields);
   }
 
-  return orderedFields.map((field) => {
-    if (!Array.isArray(field) && additionalFieldsNamesSet.has(field)) {
-      return additionalFields.find(({ name }) => name === field) || field;
-    }
-    return field;
-  });
+  return orderedFields;
 }

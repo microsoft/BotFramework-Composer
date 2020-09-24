@@ -59,9 +59,9 @@ describe('<Fieldsets />', () => {
 
   it('renders additional fields', async () => {
     const uiOptions = {
-      additionalFields: [
-        { name: 'additionalField', field: () => <div>Additional Field</div>, label: 'Additional Field Label' },
-      ],
+      properties: {
+        additionalField: { field: () => <div>Additional Field</div>, label: 'Additional Field Label' },
+      },
       fieldsets: [
         {
           title: 'set 1',

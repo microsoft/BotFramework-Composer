@@ -26,7 +26,7 @@ export const SelectSkillDialogField: React.FC<FieldProps> = ({ value, onChange }
   const { addSkillDialog, displayManifestModal } = shellApi;
   const [comboboxTitle, setComboboxTitle] = useState<string | null>(null);
 
-  const skillId = getSkillNameFromSetting(value.skillEndpoint);
+  const skillId = getSkillNameFromSetting(value?.skillEndpoint);
   const { content, manifestUrl, name } = skills.find(({ id }) => id === skillId) || ({} as Skill);
 
   const options: IComboBoxOption[] = skills.map(({ id, name }) => ({

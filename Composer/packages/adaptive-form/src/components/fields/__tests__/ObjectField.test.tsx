@@ -16,9 +16,9 @@ jest.mock('../../FormRow', () => ({
         <input
           onChange={(e) => {
             try {
-              onChange(row)(JSON.parse(e.target.value));
+              onChange(JSON.parse(e.target.value));
             } catch {
-              onChange(row)(e.target.value);
+              onChange(e.target.value);
             }
           }}
         />
@@ -56,17 +56,6 @@ describe.only('<ObjectField />', () => {
     expect(getAllByTestId('FormRow')).toHaveLength(3);
   });
 
-  it('renders additional fields', () => {
-    const uiOptions = {
-      additionalFields: [
-        { name: 'additionalField', field: () => <div>Additional Field</div>, label: 'Additional Field Label' },
-      ],
-    };
-    const { getByText } = renderSubject({ uiOptions, schema });
-    getByText('Additional Field');
-    getByText('Additional Field Label');
-  });
-
   it('can edit a specific property', () => {
     const onChange = jest.fn();
     const value = {
@@ -77,6 +66,6 @@ describe.only('<ObjectField />', () => {
     const { container } = renderSubject({ onChange, schema, value });
     const input = container.querySelectorAll('input')[0];
     fireEvent.change(input, { target: { value: 'new name' } });
-    expect(onChange).toHaveBeenCalledWith({ name: 'new name', age: 21 });
+    expect(onChange).toHaveBeenCalledWith('new name');
   });
 });

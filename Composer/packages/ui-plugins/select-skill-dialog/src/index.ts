@@ -12,22 +12,20 @@ const config: PluginConfig = {
   uiSchema: {
     [SDKKinds.BeginSkill]: {
       form: {
-        additionalFields: [
-          {
+        order: ['selectSkillDialog', 'selectSkillEndpoint', '*', 'resultProperty', 'activityProcessed'],
+        hidden: ['skillEndpoint', 'botId', 'skillAppId', 'skillHostEndpoint'],
+        properties: {
+          selectSkillDialog: {
             field: SelectSkillDialogField,
-            name: 'selectSkillDialog',
             label: formatMessage('Skill Dialog Name'),
             description: formatMessage('Name of skill dialog to call'),
           },
-          {
+          selectSkillEndpoint: {
             field: SkillEndpointField,
-            name: 'selectSkillEndpoint',
             label: formatMessage('Skill Endpoint'),
             description: formatMessage('The /api/messages endpoint for the skill.'),
           },
-        ],
-        order: ['selectSkillDialog', 'selectSkillEndpoint', '*', 'resultProperty', 'activityProcessed'],
-        hidden: ['skillEndpoint', 'botId', 'skillAppId', 'skillHostEndpoint'],
+        },
       },
     },
   },

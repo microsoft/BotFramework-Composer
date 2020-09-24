@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+export * from './AdditionalField';
 export * from './ArrayField';
 export * from './BooleanField';
 export * from './CustomRecognizerField';
