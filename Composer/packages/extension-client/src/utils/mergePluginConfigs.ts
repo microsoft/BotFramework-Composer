@@ -22,7 +22,6 @@ const mergeArrays: MergeWithCustomizer = (objValue, srcValue, key) => {
 
 const defaultPlugin: Required<PluginConfig> = {
   uiSchema: {},
-  recognizers: [],
   flowWidgets: {},
 };
 
