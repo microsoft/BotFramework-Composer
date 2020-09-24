@@ -31,29 +31,27 @@ describe('<RecognizerField />', () => {
     });
   });
 
-  it('renders error message when no recognizer matched', () => {
-    (useRecognizerConfig as jest.Mock).mockReturnValue([]);
-    const { container } = renderSubject();
-    expect(container).toHaveTextContent(/Unable to determine recognizer type from data:/);
-  });
-
   it('renders a dropdown when recognizer matches', () => {
     const handleChange = jest.fn();
-    (useRecognizerConfig as jest.Mock).mockReturnValue([
+    const recognizers = [
       {
         id: 'one',
         displayName: 'One Recognizer',
         isSelected: () => false,
-        handleRecognizerChange: handleChange,
+        seedNewRecognizer: handleChange,
       },
       {
         id: 'two',
         displayName: 'Two Recognizer',
         isSelected: () => true,
-        handleRecognizerChange: jest.fn(),
+        seedNewRecognizer: jest.fn(),
       },
-    ]);
-    const { getByTestId } = renderSubject({ value: 'one' });
+    ];
+    (useRecognizerConfig as jest.Mock).mockReturnValue({
+      recognizers,
+      currentRecognizer: recognizers[1],
+    });
+    const { getByTestId } = renderSubject({ value: { $kind: 'two' } });
     const dropdown = getByTestId('recognizerTypeDropdown');
     expect(dropdown).toHaveTextContent('Two Recognizer');
     fireEvent.click(dropdown);

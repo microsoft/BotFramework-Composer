@@ -6,7 +6,7 @@ import { ExtensionManager } from '@bfc/extension';
 
 interface AddExtensionRequest extends Request {
   body: {
-    name?: string;
+    id?: string;
     version?: string;
   };
 }
@@ -49,16 +49,16 @@ export async function listExtensions(req: Request, res: Response) {
 }
 
 export async function addExtension(req: AddExtensionRequest, res: Response) {
-  const { name, version } = req.body;
+  const { id, version } = req.body;
 
-  if (!name) {
-    res.status(400).send({ error: '`name` is missing from body' });
+  if (!id) {
+    res.status(400).json({ error: '`id` is missing from body' });
     return;
   }
 
-  await ExtensionManager.installRemote(name, version);
-  await ExtensionManager.load(name);
-  res.json(ExtensionManager.find(name));
+  await ExtensionManager.installRemote(id, version);
+  await ExtensionManager.load(id);
+  res.json(ExtensionManager.find(id));
 }
 
 export async function toggleExtension(req: ToggleExtensionRequest, res: Response) {
@@ -87,7 +87,7 @@ export async function removeExtension(req: RemoveExtensionRequest, res: Response
   const { id } = req.body;
 
   if (!id) {
-    res.status(400).send({ error: '`id` is missing from body' });
+    res.status(400).json({ error: '`id` is missing from body' });
     return;
   }
 
@@ -109,14 +109,29 @@ export async function searchExtensions(req: SearchExtensionsRequest, res: Respon
 
 export async function getBundleForView(req: ExtensionViewBundleRequest, res: Response) {
   const { id, view } = req.params;
-  const extension = ExtensionManager.find(id);
-  const bundleId = extension.contributes.views?.[view].bundleId as string;
-  const bundle = ExtensionManager.getBundle(id, bundleId);
-  if (bundle) {
-    res.sendFile(bundle);
-  } else {
-    res.status(404);
+
+  if (!id) {
+    res.status(400).json({ error: '`id` is missing from body' });
+    return;
   }
+
+  if (!view) {
+    res.status(400).json({ error: '`view` is missing from body' });
+    return;
+  }
+
+  const extension = ExtensionManager.find(id);
+
+  if (extension) {
+    const bundleId = extension.contributes.views?.[view].bundleId as string;
+    const bundle = ExtensionManager.getBundle(id, bundleId);
+    if (bundle) {
+      res.sendFile(bundle);
+      return;
+    }
+  }
+
+  res.status(404).json({ error: 'extension or bundle not found' });
 }
 
 export async function performExtensionFetch(req: ExtensionFetchRequest, res: Response) {
