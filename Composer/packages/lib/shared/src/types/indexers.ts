@@ -195,6 +195,7 @@ export interface BotProjectSpaceSkill {
   manifest?: string;
   remote: boolean;
   endpointName?: string;
+  name: string;
 }
 
 export interface BotProjectSpace {

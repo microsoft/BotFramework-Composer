@@ -13,6 +13,7 @@ export const botProjectFileDispatcher = () => {
   const addSkillToBotProject = useRecoilCallback(
     ({ set, snapshot }: CallbackInterface) => async (projectId: string) => {
       const skillLocation = await snapshot.getPromise(locationState(projectId));
+      const botName = await snapshot.getPromise(botNameState(projectId));
       const manifests: { id: string; content: string; lastModified: string }[] = await snapshot.getPromise(
         skillManifestsState(projectId)
       );
@@ -25,6 +26,7 @@ export const botProjectFileDispatcher = () => {
             manifest: currentManifest.id,
             workspace: convertPathToFileProtocol(skillLocation),
             remote: false,
+            name: botName,
           };
           draftState.skills.push(skill);
         });

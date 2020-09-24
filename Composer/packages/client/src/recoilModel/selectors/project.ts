@@ -5,7 +5,7 @@ import { selector } from 'recoil';
 
 import { dispatcherState } from '../DispatcherWrapper';
 import { Dispatcher } from '../dispatchers';
-import { botProjectSpaceProjectIds, projectMetaDataState } from '../atoms';
+import { botErrorState, botProjectSpaceProjectIds, projectMetaDataState } from '../atoms';
 
 // Actions
 const projectLoadAction = (dispatcher: Dispatcher) => {
@@ -63,8 +63,24 @@ export const projectLoadSelector = selector({
   },
 });
 
-export const projectMetaDataSelector = selector({
-  key: 'projectMetaDataSelector',
+export const botProjectsWithoutErrorsSelector = selector({
+  key: 'botProjectsWithoutErrorsSelector',
+  get: ({ get }) => {
+    const botProjectIds = get(botProjectSpaceProjectIds);
+    return botProjectIds
+      .filter((projectId) => !get(botErrorState(projectId)))
+      .map((projectId: string) => {
+        const metaData = get(projectMetaDataState(projectId));
+        return {
+          projectId,
+          ...metaData,
+        };
+      });
+  },
+});
+
+export const botProjectsDataSelector = selector({
+  key: 'botProjectsDataSelector',
   get: ({ get }) => {
     const botProjectIds = get(botProjectSpaceProjectIds);
     return botProjectIds.map((projectId: string) => {

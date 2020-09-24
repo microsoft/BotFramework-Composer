@@ -45,19 +45,14 @@ export const projectDispatcher = () => {
 
   const addExistingSkillToBotProject = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (path: string, storageId = 'default') => {
-      const { set } = callbackHelpers;
       const projectId = await openLocalSkill(callbackHelpers, path, storageId);
-      set(botProjectSpaceProjectIds, (current) => [...current, projectId]);
+      return projectId;
     }
   );
 
   const addRemoteSkillToBotProject = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (manifestUrl: string, name: string, endpointName: string) => {
-      try {
-        openRemoteSkill(callbackHelpers, manifestUrl, name, endpointName);
-      } catch (ex) {
-        // Handle exception
-      }
+      openRemoteSkill(callbackHelpers, manifestUrl, name);
     }
   );
 
@@ -71,8 +66,8 @@ export const projectDispatcher = () => {
       locale?: string,
       qnaKbUrls?: string[]
     ) => {
+      const { set } = callbackHelpers;
       try {
-        const { set } = callbackHelpers;
         const { projectId, mainDialog } = await createNewBotFromTemplate(
           callbackHelpers,
           templateId,
@@ -84,8 +79,10 @@ export const projectDispatcher = () => {
         );
         set(botProjectSpaceProjectIds, (current) => [...current, projectId]);
         navigateToBot(projectId, mainDialog, qnaKbUrls, templateId);
+        return projectId;
       } catch (ex) {
-        // Handle exception in opening a skill
+        set(botProjectSpaceProjectIds, []);
+        handleProjectFailure(callbackHelpers, ex);
       }
     }
   );
@@ -146,7 +143,7 @@ export const projectDispatcher = () => {
         return projectId;
       } catch (ex) {
         set(botProjectSpaceProjectIds, []);
-        removeRecentProject(callbackHelpers, path);
+        removeRecentProject(callbackHelpers, location);
         handleProjectFailure(callbackHelpers, ex);
         navigateTo('/home');
       }
