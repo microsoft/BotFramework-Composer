@@ -44,7 +44,7 @@ export async function npm(
     let stdout = '';
     let stderr = '';
 
-    const proc = spawn('npm', spawnArgs, spawnOpts);
+    const proc = spawn('npm', spawnArgs, { ...spawnOpts, shell: process.platform === 'win32' });
 
     proc.stdout.on('data', (data) => {
       stdout += data;
