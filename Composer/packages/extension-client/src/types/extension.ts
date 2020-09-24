@@ -3,12 +3,12 @@
 
 import { SDKKinds } from '@bfc/shared';
 
-import { RecognizerSchema, UIOptions } from './formSchema';
+import { UIOptions } from './formSchema';
 import { FlowEditorWidgetMap, FlowWidget } from './flowSchema';
 import { MenuOptions } from './menuSchema';
+import { RecognizerOptions } from './recognizerSchema';
 
 export interface PluginConfig {
-  recognizers?: RecognizerSchema[];
   uiSchema?: UISchema;
   flowWidgets?: FlowEditorWidgetMap;
 }
@@ -18,5 +18,6 @@ export type UISchema = {
     flow?: FlowWidget;
     form?: UIOptions;
     menu?: MenuOptions | MenuOptions[];
+    recognizer?: RecognizerOptions;
   };
 };

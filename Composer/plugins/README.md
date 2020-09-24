@@ -42,7 +42,7 @@ Plugin modules must come in one of the following forms:
 
 Currently, plugins can be loaded into Composer using 1 of 2 methods:
 * The plugin is placed in the /plugins/ folder, and contains a package.json file with `extendsComposer` set to `true`
-* The plugin is loaded directly via changes to Composer code, using `pluginLoader.loadPlugin(name, plugin)`
+* The plugin is loaded directly via changes to Composer code, using `ExtensionContext.loadPlugin(name, plugin)`
 
 The simplest form of a plugin module is below:
 
@@ -122,9 +122,9 @@ This value is used by the built-in authentication middleware to redirect the use
 
 Note that if you specify an alternate URI for the login page, you must use `addAllowedUrl` to whitelist it.
 
-#### PluginLoader.getUserFromRequest(req)`
+#### ExtensionContext.getUserFromRequest(req)`
 
-This is a static method on the PluginLoader class that extracts the user identity information provided by Passport.
+This is a static method on the ExtensionContext class that extracts the user identity information provided by Passport.
 This is for use in the web route implementations to get user and provide it to other components of Composer.
 
 For example:
@@ -132,7 +132,7 @@ For example:
 ```ts
 const RequestHandlerX = async (req, res) => {
 
-  const user = await PluginLoader.getUserFromRequest(req);
+  const user = await ExtensionContext.getUserFromRequest(req);
 
   // ... do some stuff
 
