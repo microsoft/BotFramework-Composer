@@ -158,6 +158,15 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const triggerApi = useTriggerApi(shell.api);
   const { createTrigger } = shell.api;
 
+  const defaultQnATriggerData = {
+    $kind: qnaMatcherKey,
+    errors: { $kind: '', intent: '', event: '', triggerPhrases: '', regEx: '', activity: '' },
+    event: '',
+    intent: '',
+    regEx: '',
+    triggerPhrases: '',
+  };
+
   useEffect(() => {
     const currentDialog = dialogs.find(({ id }) => id === dialogId);
     if (currentDialog) {
@@ -307,7 +316,14 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
               displayName: currentDialog?.displayName ?? '',
             }),
             onClick: () => {
-              createQnAFromUrlDialogBegin({ projectId });
+              createQnAFromUrlDialogBegin({
+                projectId,
+                onComplete: () => {
+                  // when click create from scratch, page navigated to all up view. also insert trigger in dialog.
+                  if (!dialogId || window.location.pathname.includes('/dialogs/')) return;
+                  createTrigger(dialogId, defaultQnATriggerData, false);
+                },
+              });
             },
           },
         ],
@@ -549,20 +565,12 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   }, []);
 
   const handleCreateQnA = async (data) => {
-    const formData = {
-      $kind: qnaMatcherKey,
-      errors: { $kind: '', intent: '', event: '', triggerPhrases: '', regEx: '', activity: '' },
-      event: '',
-      intent: '',
-      regEx: '',
-      triggerPhrases: '',
-    };
-    if (dialogId) {
-      const { name, url, multiTurn } = data;
-      createTrigger(dialogId, formData);
-      // import qna from url
-      await createQnAKBFromUrl({ id: `${dialogId}.${locale}`, name, url, multiTurn, projectId });
-    }
+    if (!dialogId) return;
+    createTrigger(dialogId, defaultQnATriggerData);
+
+    const { name, url, multiTurn } = data;
+    // import qna from url
+    await createQnAKBFromUrl({ id: `${dialogId}.${locale}`, name, url, multiTurn, projectId });
   };
 
   const pluginConfig: PluginConfig = useMemo(() => {

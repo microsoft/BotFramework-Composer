@@ -100,7 +100,7 @@ export interface ShellApi {
   announce: (message: string) => void;
   displayManifestModal: (manifestId: string) => void;
   updateDialogSchema: (_: DialogSchemaFile) => Promise<void>;
-  createTrigger: (id: string, formData, url?: string) => void;
+  createTrigger: (id: string, formData, autoSelected?: boolean) => void;
   updateSkillSetting: (skillId: string, skillsData: SkillSetting) => Promise<void>;
 }
 

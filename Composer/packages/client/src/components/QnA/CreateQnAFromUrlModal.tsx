@@ -14,7 +14,7 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { FieldConfig, useForm } from '../../hooks/useForm';
-import { dispatcherState } from '../../recoilModel';
+import { dispatcherState, onCreateQnAFromUrlDialogCompleteState } from '../../recoilModel';
 
 import {
   knowledgeBaseSourceUrl,
@@ -61,6 +61,7 @@ const DialogTitle = () => {
 export const CreateQnAFromUrlModal: React.FC<CreateQnAFromModalProps> = (props) => {
   const { onDismiss, onSubmit, dialogId, projectId, qnaFiles } = props;
   const actions = useRecoilValue(dispatcherState);
+  const onComplete = useRecoilValue(onCreateQnAFromUrlDialogCompleteState(projectId));
 
   formConfig.name.validate = validateName(qnaFiles);
   formConfig.url.validate = validateUrl;
@@ -133,7 +134,8 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromModalProps> = (props) 
             styles={{ root: { float: 'left' } }}
             text={formatMessage('Create knowledge base from scratch')}
             onClick={() => {
-              actions.createQnAFromScratchDialogBegin({ dialogId, projectId });
+              // switch to create from scratch flow, pass onComplete callback.
+              actions.createQnAFromScratchDialogBegin({ dialogId, projectId, onComplete: onComplete?.func });
             }}
           />
         )}
