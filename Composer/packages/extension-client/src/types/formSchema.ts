@@ -16,6 +16,8 @@ export interface Fieldset {
 }
 
 export interface UIOptions {
+  /** Specifies if the property is an additional field */
+  additionalField?: true;
   /** Description override. */
   description?: UIOptionValue<string | undefined>;
   /** Field widget override. */

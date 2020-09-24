@@ -16,11 +16,13 @@ const config: PluginConfig = {
         hidden: ['skillEndpoint', 'botId', 'skillAppId', 'skillHostEndpoint'],
         properties: {
           selectSkillDialog: {
+            additionalField: true,
             field: SelectSkillDialogField,
             label: formatMessage('Skill Dialog Name'),
             description: formatMessage('Name of skill dialog to call'),
           },
           selectSkillEndpoint: {
+            additionalField: true,
             field: SkillEndpointField,
             label: formatMessage('Skill Endpoint'),
             description: formatMessage('The /api/messages endpoint for the skill.'),

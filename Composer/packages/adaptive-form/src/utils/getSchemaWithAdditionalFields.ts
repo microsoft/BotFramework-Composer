@@ -2,13 +2,12 @@
 // Licensed under the MIT License.
 
 import { JSONSchema7, UIOptions } from '@bfc/extension-client';
-import difference from 'lodash/difference';
+import entries from 'lodash/entries';
 import fromPairs from 'lodash/fromPairs';
-import keys from 'lodash/keys';
 
 const getSchemaWithAdditionalFields = (baseSchema: JSONSchema7, uiOptions: UIOptions): JSONSchema7 => {
-  const additionalFields = difference(keys(uiOptions.properties), keys(baseSchema.properties));
-  const additionalPropertySchema = fromPairs(additionalFields.map((field) => [field, { $role: 'additionalField' }]));
+  const additionalFields = entries(uiOptions.properties).filter(([, { additionalField }]) => additionalField);
+  const additionalPropertySchema = fromPairs(additionalFields.map(([field]) => [field, {}]));
 
   const properties = { ...additionalPropertySchema, ...baseSchema.properties };
   return { ...baseSchema, properties };

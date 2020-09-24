@@ -60,7 +60,10 @@ describe('<Fieldsets />', () => {
   it('renders additional fields', async () => {
     const uiOptions = {
       properties: {
-        additionalField: { field: () => <div>Additional Field</div> },
+        additionalField: {
+          additionalField: true,
+          field: () => <div>Additional Field</div>,
+        },
       },
       fieldsets: [
         {

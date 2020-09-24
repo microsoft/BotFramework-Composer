@@ -102,6 +102,7 @@ describe('getFieldsets', () => {
       ],
       properties: {
         additionalField: {
+          additionalField: true,
           field: 'field',
         },
       },
@@ -138,7 +139,7 @@ describe('getFieldsets', () => {
         },
         uiOptions: {
           order: ['one', 'three', 'five', 'seven', 'additionalField'],
-          properties: { additionalField: { field: 'field' } },
+          properties: { additionalField: { additionalField: true, field: 'field' } },
         },
       }),
     ]);
