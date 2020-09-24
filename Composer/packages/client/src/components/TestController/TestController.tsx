@@ -11,25 +11,23 @@ import { useRecoilValue } from 'recoil';
 import { IConfig, IPublishConfig, defaultPublishConfig } from '@bfc/shared';
 
 import {
-  botNameState,
+  botEndpointsState,
+  dispatcherState,
+  validateDialogSelectorFamily,
   botStatusState,
+  botNameState,
   luFilesState,
   qnaFilesState,
   settingsState,
-  projectIdState,
   botLoadErrorState,
-  botEndpointsState,
-  dispatcherState,
 } from '../../recoilModel';
 import settingsStorage from '../../utils/dialogSettingStorage';
-import { QnaConfig, BotStatus, LuisConfig } from '../../constants';
+import { BotStatus } from '../../constants';
 import { isAbsHosted } from '../../utils/envUtil';
 import useNotifications from '../../pages/notifications/useNotifications';
 import { navigateTo, openInEmulator } from '../../utils/navigation';
-import { getReferredQnaFiles } from '../../utils/qnaUtil';
-import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 
-import { getReferredLuFiles } from './../../utils/luUtil';
+import { isBuildConfigComplete, needsBuild } from './../../utils/buildUtil';
 import { PublishDialog } from './publishDialog';
 import { ErrorCallout } from './errorCallout';
 import { EmulatorOpenButton } from './emulatorOpenButton';
@@ -54,20 +52,22 @@ let botStatusInterval: NodeJS.Timeout | undefined = undefined;
 
 // -------------------- TestController -------------------- //
 const POLLING_INTERVAL = 2500;
-export const TestController: React.FC = () => {
+export const TestController: React.FC<{ projectId: string }> = (props) => {
+  const { projectId = '' } = props;
   const [modalOpen, setModalOpen] = useState(false);
   const [calloutVisible, setCalloutVisible] = useState(false);
 
   const botActionRef = useRef(null);
-  const notifications = useNotifications();
-  const botName = useRecoilValue(botNameState);
-  const botStatus = useRecoilValue(botStatusState);
-  const dialogs = useRecoilValue(validatedDialogsSelector);
-  const luFiles = useRecoilValue(luFilesState);
-  const qnaFiles = useRecoilValue(qnaFilesState);
-  const settings = useRecoilValue(settingsState);
-  const projectId = useRecoilValue(projectIdState);
-  const botLoadErrorMsg = useRecoilValue(botLoadErrorState);
+  const notifications = useNotifications(projectId);
+
+  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const botStatus = useRecoilValue(botStatusState(projectId));
+  const botName = useRecoilValue(botNameState(projectId));
+  const luFiles = useRecoilValue(luFilesState(projectId));
+  const settings = useRecoilValue(settingsState(projectId));
+  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
+  const botLoadErrorMsg = useRecoilValue(botLoadErrorState(projectId));
+
   const botEndpoints = useRecoilValue(botEndpointsState);
   const {
     publishToTarget,
@@ -99,7 +99,7 @@ export const TestController: React.FC = () => {
       case BotStatus.failed:
         openCallout();
         stopPollingRuntime();
-        setBotStatus(BotStatus.pending);
+        setBotStatus(BotStatus.pending, projectId);
         break;
       case BotStatus.published:
         stopPollingRuntime();
@@ -152,50 +152,25 @@ export const TestController: React.FC = () => {
     }
   }
 
-  async function handlePublish(config: IPublishConfig) {
-    setBotStatus(BotStatus.publishing);
+  async function handleBuild(config: IPublishConfig) {
+    setBotStatus(BotStatus.publishing, projectId);
     dismissDialog();
     const { luis, qna } = config;
-    const endpointKey = settings.qna?.endpointKey;
     await setSettings(projectId, {
       ...settings,
       luis: luis,
-      qna: Object.assign({}, settings.qna, qna, { endpointKey }),
+      qna: Object.assign({}, settings.qna, qna),
     });
     await build(luis, qna, projectId);
   }
 
   async function handleLoadBot() {
-    setBotStatus(BotStatus.reloading);
+    setBotStatus(BotStatus.reloading, projectId);
     if (settings.qna && settings.qna.subscriptionKey) {
       await setQnASettings(projectId, settings.qna.subscriptionKey);
     }
     const sensitiveSettings = settingsStorage.get(projectId);
     await publishToTarget(projectId, defaultPublishConfig, { comment: '' }, sensitiveSettings);
-  }
-
-  function isConfigComplete(config) {
-    let complete = true;
-    if (getReferredLuFiles(luFiles, dialogs).length > 0) {
-      if (Object.values(LuisConfig).some((luisConfigKey) => config.luis[luisConfigKey] === '')) {
-        complete = false;
-      }
-    }
-    if (getReferredQnaFiles(qnaFiles, dialogs).length > 0) {
-      if (Object.values(QnaConfig).some((qnaConfigKey) => config.qna[qnaConfigKey] === '')) {
-        complete = false;
-      }
-    }
-    return complete;
-  }
-
-  // return true if dialogs have one with default recognizer.
-  function needsPublish(dialogs) {
-    let isDefaultRecognizer = false;
-    if (dialogs.some((dialog) => typeof dialog.content.recognizer === 'string')) {
-      isDefaultRecognizer = true;
-    }
-    return isDefaultRecognizer;
   }
 
   async function handleStart() {
@@ -204,18 +179,18 @@ export const TestController: React.FC = () => {
       {},
       {
         luis: settings.luis,
-        qna: {
-          subscriptionKey: settings.qna?.subscriptionKey,
-          qnaRegion: settings.qna?.qnaRegion,
-          endpointKey: settings.qna?.endpointKey,
-        },
+        qna: settings.qna,
       }
     );
-    if (!isAbsHosted() && needsPublish(dialogs)) {
-      if (botStatus === BotStatus.failed || botStatus === BotStatus.pending || !isConfigComplete(config)) {
+    if (!isAbsHosted() && needsBuild(dialogs)) {
+      if (
+        botStatus === BotStatus.failed ||
+        botStatus === BotStatus.pending ||
+        !isBuildConfigComplete(config, dialogs, luFiles, qnaFiles)
+      ) {
         openDialog();
       } else {
-        await handlePublish(config);
+        await handleBuild(config);
       }
     } else {
       await handleLoadBot();
@@ -275,8 +250,9 @@ export const TestController: React.FC = () => {
           botName={botName}
           config={publishDialogConfig}
           isOpen={modalOpen}
+          projectId={projectId}
           onDismiss={dismissDialog}
-          onPublish={handlePublish}
+          onPublish={handleBuild}
         />
       )}
     </Fragment>

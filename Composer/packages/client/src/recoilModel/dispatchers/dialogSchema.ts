@@ -6,25 +6,28 @@ import { DialogSchemaFile } from '@bfc/shared';
 
 import { dialogSchemasState } from '../atoms/botState';
 
-const createDialogSchema = ({ set }: CallbackInterface, dialogSchema: DialogSchemaFile) => {
-  set(dialogSchemasState, (dialogSchemas) => [...dialogSchemas, dialogSchema]);
+const createDialogSchema = ({ set }: CallbackInterface, dialogSchema: DialogSchemaFile, projectId: string) => {
+  set(dialogSchemasState(projectId), (dialogSchemas) => [...dialogSchemas, dialogSchema]);
 };
 
-export const removeDialogSchema = ({ set }: CallbackInterface, id: string) => {
-  set(dialogSchemasState, (dialogSchemas) => dialogSchemas.filter((dialogSchema) => dialogSchema.id !== id));
+export const removeDialogSchema = (
+  { set }: CallbackInterface,
+  { id, projectId }: { id: string; projectId: string }
+) => {
+  set(dialogSchemasState(projectId), (dialogSchemas) => dialogSchemas.filter((dialogSchema) => dialogSchema.id !== id));
 };
 
 export const dialogSchemaDispatcher = () => {
   const updateDialogSchema = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (dialogSchema: DialogSchemaFile) => {
+    (callbackHelpers: CallbackInterface) => async (dialogSchema: DialogSchemaFile, projectId: string) => {
       const { set, snapshot } = callbackHelpers;
-      const dialogSchemas = await snapshot.getPromise(dialogSchemasState);
+      const dialogSchemas = await snapshot.getPromise(dialogSchemasState(projectId));
 
       if (!dialogSchemas.some((dialog) => dialog.id === dialogSchema.id)) {
-        return createDialogSchema(callbackHelpers, dialogSchema);
+        return createDialogSchema(callbackHelpers, dialogSchema, projectId);
       }
 
-      set(dialogSchemasState, (dialogSchemas) =>
+      set(dialogSchemasState(projectId), (dialogSchemas) =>
         dialogSchemas.map((schema) => (schema.id === dialogSchema.id ? dialogSchema : schema))
       );
     }

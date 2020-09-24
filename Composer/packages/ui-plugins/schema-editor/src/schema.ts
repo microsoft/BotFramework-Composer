@@ -55,31 +55,31 @@ export const valueTypeDefinitions: { [key: string]: JSONSchema7 } = {
   expression: {
     $role: 'expression',
     type: 'string',
-    title: 'Expression',
-    description: 'Expression to evaluate.',
+    title: formatMessage('Expression'),
+    description: formatMessage('Expression to evaluate.'),
     pattern: '^.*\\S.*',
     examples: ['user.age > 13'],
   },
   equalsExpression: {
     $role: 'expression',
     type: 'string',
-    title: 'Equals Expression',
-    description: 'Expression starting with =.',
+    title: formatMessage('Equals Expression'),
+    description: formatMessage('Expression starting with =.'),
     pattern: '^=.*\\S.*',
     examples: ['=user.name'],
   },
   condition: {
     $role: 'expression',
-    title: 'Boolean condition',
-    description: 'Boolean constant or expression to evaluate.',
+    title: formatMessage('Boolean condition'),
+    description: formatMessage('Boolean constant or expression to evaluate.'),
     oneOf: [
       {
         $ref: '#/definitions/expression',
       },
       {
         type: 'boolean',
-        title: 'Boolean',
-        description: 'Boolean value.',
+        title: formatMessage('Boolean'),
+        description: formatMessage('Boolean value.'),
         default: true,
         examples: [false],
       },
@@ -87,13 +87,13 @@ export const valueTypeDefinitions: { [key: string]: JSONSchema7 } = {
   },
   booleanExpression: {
     $role: 'expression',
-    title: 'Boolean or expression',
-    description: 'Boolean constant or expression to evaluate.',
+    title: formatMessage('Boolean or expression'),
+    description: formatMessage('Boolean constant or expression to evaluate.'),
     oneOf: [
       {
         type: 'boolean',
-        title: 'Boolean',
-        description: 'Boolean constant.',
+        title: formatMessage('Boolean'),
+        description: formatMessage('Boolean constant.'),
         default: false,
         examples: [false],
       },
@@ -105,13 +105,13 @@ export const valueTypeDefinitions: { [key: string]: JSONSchema7 } = {
   },
   numberExpression: {
     $role: 'expression',
-    title: 'Number or expression',
-    description: 'Number constant or expression to evaluate.',
+    title: formatMessage('Number or expression'),
+    description: formatMessage('Number constant or expression to evaluate.'),
     oneOf: [
       {
         type: 'number',
-        title: 'Number',
-        description: 'Number constant.',
+        title: formatMessage('Number'),
+        description: formatMessage('Number constant.'),
         default: 0,
         examples: [15.5],
       },
@@ -123,13 +123,13 @@ export const valueTypeDefinitions: { [key: string]: JSONSchema7 } = {
   },
   integerExpression: {
     $role: 'expression',
-    title: 'Integer or expression',
-    description: 'Integer constant or expression to evaluate.',
+    title: formatMessage('Integer or expression'),
+    description: formatMessage('Integer constant or expression to evaluate.'),
     oneOf: [
       {
         type: 'integer',
-        title: 'Integer',
-        description: 'Integer constant.',
+        title: formatMessage('Integer'),
+        description: formatMessage('Integer constant.'),
         default: 0,
         examples: [15],
       },
@@ -141,13 +141,13 @@ export const valueTypeDefinitions: { [key: string]: JSONSchema7 } = {
   },
   stringExpression: {
     $role: 'expression',
-    title: 'String or expression',
-    description: 'Interpolated string or expression to evaluate.',
+    title: formatMessage('String or expression'),
+    description: formatMessage('Interpolated string or expression to evaluate.'),
     oneOf: [
       {
         type: 'string',
-        title: 'String',
-        description: 'Interpolated string',
+        title: formatMessage('String'),
+        description: formatMessage('Interpolated string'),
         pattern: '^(?!(=)).*',
         examples: ['Hello ${user.name}'],
       },
@@ -159,13 +159,13 @@ export const valueTypeDefinitions: { [key: string]: JSONSchema7 } = {
   },
   arrayExpression: {
     $role: 'expression',
-    title: 'Array or expression',
-    description: 'Array or expression to evaluate.',
+    title: formatMessage('Array or expression'),
+    description: formatMessage('Array or expression to evaluate.'),
     oneOf: [
       {
         type: 'array',
-        title: 'Array',
-        description: 'Array constant.',
+        title: formatMessage('Array'),
+        description: formatMessage('Array constant.'),
       },
       {
         $ref: '#/definitions/equalsExpression',
@@ -174,13 +174,13 @@ export const valueTypeDefinitions: { [key: string]: JSONSchema7 } = {
   },
   objectExpression: {
     $role: 'expression',
-    title: 'Object or expression',
-    description: 'Object or expression to evaluate.',
+    title: formatMessage('Object or expression'),
+    description: formatMessage('Object or expression to evaluate.'),
     oneOf: [
       {
         type: 'object',
-        title: 'Object',
-        description: 'Object constant.',
+        title: formatMessage('Object'),
+        description: formatMessage('Object constant.'),
       },
       {
         $ref: '#/definitions/equalsExpression',
@@ -189,36 +189,36 @@ export const valueTypeDefinitions: { [key: string]: JSONSchema7 } = {
   },
   valueExpression: {
     $role: 'expression',
-    title: 'Any or expression',
-    description: 'Any constant or expression to evaluate.',
+    title: formatMessage('Any or expression'),
+    description: formatMessage('Any constant or expression to evaluate.'),
     oneOf: [
       {
         type: 'object',
-        title: 'Object',
-        description: 'Object constant.',
+        title: formatMessage('Object'),
+        description: formatMessage('Object constant.'),
       },
       {
         type: 'array',
-        title: 'Array',
-        description: 'Array constant.',
+        title: formatMessage('Array'),
+        description: formatMessage('Array constant.'),
       },
       {
         type: 'string',
-        title: 'String',
-        description: 'Interpolated string.',
+        title: formatMessage('String'),
+        description: formatMessage('Interpolated string.'),
         pattern: '^(?!(=)).*',
         examples: ['Hello ${user.name}'],
       },
       {
         type: 'boolean',
-        title: 'Boolean',
-        description: 'Boolean constant',
+        title: formatMessage('Boolean'),
+        description: formatMessage('Boolean constant'),
         examples: [false],
       },
       {
         type: 'number',
-        title: 'Number',
-        description: 'Number constant.',
+        title: formatMessage('Number'),
+        description: formatMessage('Number constant.'),
         examples: [15.5],
       },
       {

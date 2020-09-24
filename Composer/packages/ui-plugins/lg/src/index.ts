@@ -4,6 +4,7 @@
 import { PluginConfig } from '@bfc/extension-client';
 import { SDKKinds } from '@bfc/shared';
 import { VisualEditorColors as Colors } from '@bfc/ui-shared';
+import formatMessage from 'format-message';
 
 import { LgField } from './LgField';
 import { LgWidget } from './LgWidget';
@@ -14,9 +15,10 @@ const config: PluginConfig = {
       form: {
         properties: {
           activity: {
-            label: 'Language Generation',
-            description:
-              'What your bot says to the user. This is a template used to create the outgoing message. It can include language generation rules, properties from memory, and other features.\n\nFor example, to define variations that will be chosen at random, write:\n- hello\n- hi',
+            label: formatMessage('Language Generation'),
+            description: formatMessage(
+              'What your bot says to the user. This is a template used to create the outgoing message. It can include language generation rules, properties from memory, and other features.\n\nFor example, to define variations that will be chosen at random, write:\n- hello\n- hi'
+            ),
             helpLink: 'https://aka.ms/lg-file-format',
           },
         },
