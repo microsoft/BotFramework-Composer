@@ -5,7 +5,7 @@ import * as React from 'react';
 import styled from '@emotion/styled';
 import { default as Measure, ContentRect } from 'react-measure';
 
-const defaultSplitterWidth = 5;
+const defaultSplitterHeight = 5;
 
 const MeasureDiv = styled.div`
   width: 100%;
@@ -15,68 +15,68 @@ const MeasureDiv = styled.div`
   overflow: hidden;
 `;
 
-const Root = styled.div(({ leftColWidth, splitterWidth }: { leftColWidth: string; splitterWidth: number }) => ({
+const Root = styled.div(({ topRowHeight, splitterHeight }: { topRowHeight: string; splitterHeight: number }) => ({
   width: '100%',
   height: '100%',
   boxSizing: 'border-box',
   outline: 'none',
   overflow: 'hidden',
   display: 'grid',
-  gridTemplateRows: '1fr',
-  gridTemplateAreas: `'left split right'`,
-  gridTemplateColumns: `${leftColWidth} ${splitterWidth}px 1fr`,
+  gridTemplateColumns: '1fr',
+  gridTemplateAreas: `'top' 'split' 'bottom'`,
+  gridTemplateRows: `${topRowHeight} ${splitterHeight}px 1fr`,
 }));
 
-const Left = styled.div`
-  height: 100%;
+const Top = styled.div`
+  width: 100%;
   box-sizing: border-box;
   outline: none;
   overflow: hidden;
-  grid-area: left;
+  grid-area: top;
 `;
 
 const Split = styled.div`
-  height: 100%;
+  width: 100%;
   box-sizing: border-box;
   outline: none;
   overflow: hidden;
   grid-area: split;
-  cursor: col-resize;
+  cursor: row-resize;
   background: transparent;
   &:hover .default-split-visual {
     background: gray;
   }
 `;
 
-const DefaultSplitVisual = styled.div(({ splitterWidth }: { splitterWidth: number }) => ({
-  height: '100%',
-  width: '1px',
+const DefaultSplitVisual = styled.div(({ splitterHeight }: { splitterHeight: number }) => ({
+  width: '100%',
+  height: '1px',
   boxSizing: 'border-box',
   outline: 'none',
   overflow: 'hidden',
   background: 'silver',
-  cursor: 'col-resize',
-  marginLeft: `${splitterWidth / 2}px`,
+  cursor: 'row-resize',
+  marginTop: `${splitterHeight / 2}px`,
 }));
 
-const Right = styled.div`
-  height: 100%;
+const Bottom = styled.div`
+  width: 100%;
   box-sizing: border-box;
   outline: none;
   overflow: hidden;
-  grid-area: right;
+  grid-area: bottom;
 `;
 
 // ensures a value can be used in gridTemplateColumns
-// defaults to 'auto'
-const toGridWidth = (value?: string | number) => {
+// defaults to '1fr'
+const toGridExtent = (value?: string | number) => {
   if (value === undefined || value === null) {
-    return 'auto';
+    return '1fr';
   }
 
   if (typeof value === 'string') {
     if (value.trim().length === 0) {
-      return 'auto';
+      return '1fr';
     }
 
     if (value.endsWith('px') || value.endsWith('%') || value.endsWith('fr')) {
@@ -118,69 +118,69 @@ const constrainPaneExtent = (
 };
 
 type Props = {
-  initialLeftGridWidth?: string | number;
-  minLeftPixels?: number;
-  minRightPixels?: number;
-  splitterWidth?: number;
+  initialTopGridHeight?: string | number;
+  minTopPixels?: number;
+  minBottomPixels?: number;
+  splitterHeight?: number;
   renderSplitter?: () => JSX.Element;
 };
 
-export const LeftRightSplit = (props: React.PropsWithChildren<Props>): JSX.Element => {
+export const TopBottomSplit = (props: React.PropsWithChildren<Props>): JSX.Element => {
   const {
-    initialLeftGridWidth: defaultLeftWidth,
-    minRightPixels,
-    minLeftPixels,
-    splitterWidth = defaultSplitterWidth,
+    initialTopGridHeight,
+    minBottomPixels,
+    minTopPixels,
+    splitterHeight = defaultSplitterHeight,
     renderSplitter,
   } = props;
 
-  const [currentContentWidth, setCurrentContentWidth] = React.useState<number>(0);
-  const [currentLeftWidth, setCurrentLeftWidth] = React.useState<number>(0);
+  const [currentContentHeight, setCurrentContentHeight] = React.useState<number>(0);
+  const [currentTopHeight, setCurrentTopHeight] = React.useState<number>(0);
 
-  const [leftWidth, setLeftWidth] = React.useState(() => {
-    // If the default is a number, then use it or the left minimum as a value.
-    const numericValue = Number(defaultLeftWidth);
-    return isNaN(numericValue) ? -1 : Math.max(numericValue, minLeftPixels ?? numericValue);
+  const [topHeight, setTopHeight] = React.useState(() => {
+    // If the default is a number, then use it or the top minimum as a value.
+    const numericValue = Number(initialTopGridHeight);
+    return isNaN(numericValue) ? -1 : Math.max(numericValue, minTopPixels ?? numericValue);
   });
 
-  const [leftStart, setLeftStart] = React.useState(0);
+  const [topStart, setTopStart] = React.useState(0);
   const [screenStart, setScreenStart] = React.useState(0);
 
-  const constrainLeft = (value: number): number => {
+  const constrainTop = (value: number): number => {
     return constrainPaneExtent(value, {
-      total: currentContentWidth,
-      splitter: splitterWidth,
-      minPrimary: minLeftPixels,
-      minSecondary: minRightPixels,
+      total: currentContentHeight,
+      splitter: splitterHeight,
+      minPrimary: minTopPixels,
+      minSecondary: minBottomPixels,
     });
   };
 
   React.useEffect(() => {
-    if (leftWidth !== -1) {
-      const newLeft = constrainLeft(leftWidth);
-      setLeftWidth(newLeft);
+    if (topHeight != -1) {
+      const newTop = constrainTop(topHeight);
+      setTopHeight(newTop);
     }
-  }, [currentContentWidth, splitterWidth]);
+  }, [currentContentHeight, splitterHeight]);
 
   const onContentMeasure = (contentRect: ContentRect) => {
-    contentRect.bounds && setCurrentContentWidth(contentRect.bounds.width);
+    contentRect.bounds && setCurrentContentHeight(contentRect.bounds.height);
   };
 
-  const onLeftMeasure = (contentRect: ContentRect) => {
-    contentRect.bounds && setCurrentLeftWidth(contentRect.bounds.width);
+  const onTopMeasure = (contentRect: ContentRect) => {
+    contentRect.bounds && setCurrentTopHeight(contentRect.bounds.height);
   };
 
   const onSplitMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
     event.currentTarget.setPointerCapture(1);
-    setScreenStart(event.screenX);
-    setLeftStart(currentLeftWidth);
+    setScreenStart(event.screenY);
+    setTopStart(currentTopHeight);
   };
 
   const onSplitMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     if (event.currentTarget.hasPointerCapture(1)) {
-      // calculate candidate left
-      const newLeft = constrainLeft(leftStart + (event.screenX - screenStart));
-      setLeftWidth(newLeft);
+      // calculate candidate top
+      const newTop = constrainTop(topStart + (event.screenY - screenStart));
+      setTopHeight(newTop);
     }
   };
 
@@ -188,33 +188,33 @@ export const LeftRightSplit = (props: React.PropsWithChildren<Props>): JSX.Eleme
     event.currentTarget.releasePointerCapture(1);
   };
 
-  // If the left width has never been set
+  // If the top height has never been set
   // try using the default as a number and constraining it
-  let renderLeftWidth = `${leftWidth}px`;
-  if (leftWidth < 0) {
-    renderLeftWidth = toGridWidth(defaultLeftWidth);
+  let renderTopHeight = `${topHeight}px`;
+  if (topHeight < 0) {
+    renderTopHeight = toGridExtent(initialTopGridHeight);
   }
 
   const children = React.Children.toArray(props.children);
-  const leftChild = children.length > 0 ? children[0] : <div />;
-  const rightChild = children.length > 1 ? children[1] : <div />;
+  const topChild = children.length > 0 ? children[0] : <div />;
+  const bottomChild = children.length > 1 ? children[1] : <div />;
 
   const renderSplitVisual =
     renderSplitter ??
     (() => {
-      return <DefaultSplitVisual className="default-split-visual" splitterWidth={splitterWidth} />;
+      return <DefaultSplitVisual className="default-split-visual" splitterHeight={splitterHeight} />;
     });
 
   return (
     <Measure bounds onResize={onContentMeasure}>
       {({ measureRef }) => (
         <MeasureDiv ref={measureRef}>
-          <Root leftColWidth={renderLeftWidth} splitterWidth={splitterWidth}>
-            <Left>
-              <Measure bounds onResize={onLeftMeasure}>
-                {({ measureRef: leftRef }) => <MeasureDiv ref={leftRef}>{leftChild}</MeasureDiv>}
+          <Root splitterHeight={splitterHeight} topRowHeight={renderTopHeight}>
+            <Top>
+              <Measure bounds onResize={onTopMeasure}>
+                {({ measureRef: topRef }) => <MeasureDiv ref={topRef}>{topChild}</MeasureDiv>}
               </Measure>
-            </Left>
+            </Top>
             <Split
               tabIndex={-1}
               onMouseDown={onSplitMouseDown}
@@ -223,7 +223,7 @@ export const LeftRightSplit = (props: React.PropsWithChildren<Props>): JSX.Eleme
             >
               {renderSplitVisual()}
             </Split>
-            <Right>{rightChild}</Right>
+            <Bottom>{bottomChild}</Bottom>
           </Root>
         </MeasureDiv>
       )}
