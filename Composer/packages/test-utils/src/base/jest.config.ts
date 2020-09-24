@@ -20,7 +20,7 @@ const base: Partial<JestOverrides> = {
 
   transformIgnorePatterns: ['/node_modules/'],
 
-  setupFilesAfterEnv: [path.resolve(__dirname, 'setup.js')],
+  setupFiles: [path.resolve(__dirname, 'setupEnv.js')],
 };
 
 export default base;

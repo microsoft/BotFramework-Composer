@@ -10,7 +10,7 @@ import { RequireAuth } from '../RequireAuth';
 import { ErrorBoundary } from '../ErrorBoundary';
 
 import Routes from './../../router';
-import { applicationErrorState, dispatcherState, projectIdState } from './../../recoilModel';
+import { applicationErrorState, dispatcherState, currentProjectIdState } from './../../recoilModel';
 
 // -------------------- Styles -------------------- //
 
@@ -36,7 +36,7 @@ const Content = forwardRef<HTMLDivElement>((props, ref) => <div css={content} {.
 export const RightPanel = () => {
   const applicationError = useRecoilValue(applicationErrorState);
   const { setApplicationLevelError, fetchProjectById } = useRecoilValue(dispatcherState);
-  const projectId = useRecoilValue(projectIdState);
+  const projectId = useRecoilValue(currentProjectIdState);
   return (
     <div css={rightPanel}>
       <ErrorBoundary

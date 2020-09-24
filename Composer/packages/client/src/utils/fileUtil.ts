@@ -3,9 +3,12 @@
 
 import moment from 'moment';
 import formatMessage from 'format-message';
+import generate from 'format-message-generate-id';
 
 import { FileTypes, SupportedFileTypes } from '../constants';
 import { File } from '../recoilModel/types';
+
+import httpClient from './httpUtil';
 
 export function getExtension(filename?: string): string | any {
   if (typeof filename !== 'string') return filename;
@@ -79,3 +82,24 @@ export function formatBytes(bytes?: number, decimals?: number) {
 export const calculateTimeDiff = (time: any) => {
   return moment(time).fromNow();
 };
+
+export async function loadLocale(locale: string) {
+  // we're changing the locale, which might fail if we can't load it
+  const resp = await httpClient.get(`/assets/locales/${locale}.json`);
+  const data = resp?.data;
+  if (data == null || typeof data === 'string') {
+    // this is an invalid locale, so don't set anything
+    console.error('Tried to read an invalid locale');
+    return null;
+  } else {
+    // We don't care about the return value except in our unit tests
+    return formatMessage.setup({
+      locale: locale,
+      generateId: generate.underscored_crc32,
+      missingTranslation: process.env.NODE_ENV === 'development' ? 'warning' : 'ignore',
+      translations: {
+        [locale]: data,
+      },
+    });
+  }
+}

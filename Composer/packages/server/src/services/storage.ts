@@ -3,7 +3,7 @@
 
 import * as fs from 'fs';
 
-import { UserIdentity } from '@bfc/plugin-loader';
+import { UserIdentity } from '@bfc/extension';
 
 import { Path } from '../utility/path';
 import { StorageConnection, IFileStorage } from '../models/storage/interface';
@@ -136,6 +136,11 @@ class StorageService {
     } else {
       throw new Error(`The folder ${currentPath} does not exist`);
     }
+  };
+
+  public checkIsBotFolder = async (storageId: string, path: string, user?: UserIdentity) => {
+    const storageClient = this.getStorageClient(storageId, user);
+    return await this.isBotFolder(storageClient, path);
   };
 
   private ensureDefaultBotFoldersExist = () => {

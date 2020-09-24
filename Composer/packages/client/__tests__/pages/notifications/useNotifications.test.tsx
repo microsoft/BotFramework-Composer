@@ -8,13 +8,13 @@ import { Range, Position } from '@bfc/shared';
 
 import useNotifications from '../../../src/pages/notifications/useNotifications';
 import {
-  projectIdState,
   dialogsState,
   luFilesState,
   lgFilesState,
-  BotDiagnosticsState,
   settingsState,
   schemasState,
+  currentProjectIdState,
+  botDiagnosticsState,
 } from '../../../src/recoilModel';
 import mockProjectResponse from '../../../src/recoilModel/dispatchers/__tests__/mocks/mockProjectResponse.json';
 
@@ -26,7 +26,7 @@ const state = {
       content: 'test',
       luFile: 'test',
       referredLuIntents: [],
-      skills: ['https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json'],
+      skills: [`=settings.skill['Email-Skill'].endpointUrl`],
     },
   ],
   luFiles: [
@@ -86,23 +86,24 @@ const state = {
     },
   ],
   settings: {
-    skill: [
-      {
+    skill: {
+      'Email-Skill': {
         manifestUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json',
-        name: 'Email Skill',
+        endpointUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/api/messages',
+        name: 'Email-Skill',
       },
-    ],
+    },
   },
 };
 
 const initRecoilState = ({ set }) => {
-  set(projectIdState, state.projectId);
-  set(dialogsState, state.dialogs);
-  set(luFilesState, state.luFiles);
-  set(lgFilesState, state.lgFiles);
-  set(BotDiagnosticsState, state.diagnostics);
-  set(settingsState, state.settings);
-  set(schemasState, mockProjectResponse.schemas);
+  set(currentProjectIdState, state.projectId);
+  set(dialogsState(state.projectId), state.dialogs);
+  set(luFilesState(state.projectId), state.luFiles);
+  set(lgFilesState(state.projectId), state.lgFiles);
+  set(botDiagnosticsState(state.projectId), state.diagnostics);
+  set(settingsState(state.projectId), state.settings);
+  set(schemasState(state.projectId), mockProjectResponse.schemas);
 };
 
 describe('useNotification hooks', () => {
@@ -113,7 +114,7 @@ describe('useNotification hooks', () => {
       return <RecoilRoot initializeState={initRecoilState}>{children}</RecoilRoot>;
     };
 
-    const { result } = renderHook(() => useNotifications(), {
+    const { result } = renderHook(() => useNotifications(state.projectId), {
       wrapper,
     });
     renderedResult = result;
@@ -129,7 +130,7 @@ describe('useNotification hooks', () => {
       return <RecoilRoot initializeState={initRecoilState}>{children}</RecoilRoot>;
     };
 
-    const { result } = renderHook(() => useNotifications('Error'), {
+    const { result } = renderHook(() => useNotifications(state.projectId, 'Error'), {
       wrapper,
     });
 

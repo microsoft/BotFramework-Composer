@@ -3,7 +3,7 @@
 
 import set from 'lodash/set';
 import { SensitiveProperties } from '@bfc/shared';
-import { UserIdentity } from '@bfc/plugin-loader';
+import { UserIdentity } from '@bfc/extension';
 
 import { Path } from '../../utility/path';
 import log from '../../logger';
