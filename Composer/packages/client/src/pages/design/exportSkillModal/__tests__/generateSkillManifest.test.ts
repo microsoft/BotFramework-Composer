@@ -187,16 +187,21 @@ describe('generateDispatchModels', () => {
     const dialogs: any = [{ id: 'test', content: { recognizer: 'test.lu' } }];
     const selectedTriggers = [];
     const luFiles = [];
-    const result = generateDispatchModels(schema, dialogs, selectedTriggers, luFiles);
+    const qnaFiles = [];
+    const result = generateDispatchModels(schema, dialogs, selectedTriggers, luFiles, qnaFiles);
     expect(result).toEqual({});
   });
 
   it("should return empty object if the schema doesn't include dispatchModels", () => {
     const schema = { properties: {} };
-    const dialogs: any = [{ id: 'test', content: { recognizer: 'test.lu' } }];
+    const dialogs: any = [{ id: 'test', content: { recognizer: 'test.lu.qna' } }];
     const selectedTriggers = [{ $kind: SDKKinds.OnIntent, intent: 'testIntent' }];
-    const luFiles: any = [{ id: 'test.en-us' }, { id: 'test.fr-FR' }];
-    const result = generateDispatchModels(schema, dialogs, selectedTriggers, luFiles);
+    const luFiles: any = [
+      { id: 'test.en-us', empty: false },
+      { id: 'test.fr-FR', empty: false },
+    ];
+    const qnaFiles = [];
+    const result = generateDispatchModels(schema, dialogs, selectedTriggers, luFiles, qnaFiles);
     expect(result).toEqual({});
   });
 
@@ -204,17 +209,25 @@ describe('generateDispatchModels', () => {
     const schema = { properties: {} };
     const dialogs: any = [{ id: 'test', content: {} }];
     const selectedTriggers = [{ $kind: SDKKinds.OnIntent, intent: 'testIntent' }];
-    const luFiles: any = [{ id: 'test.en-us' }, { id: 'test.fr-FR' }];
-    const result = generateDispatchModels(schema, dialogs, selectedTriggers, luFiles);
+    const luFiles: any = [
+      { id: 'test.en-us', empty: false },
+      { id: 'test.fr-FR', empty: false },
+    ];
+    const qnaFiles = [];
+    const result = generateDispatchModels(schema, dialogs, selectedTriggers, luFiles, qnaFiles);
     expect(result).toEqual({});
   });
 
   it('should return dispatch models', () => {
     const schema = { properties: { dispatchModels: {} } };
-    const dialogs: any = [{ id: 'test', content: { recognizer: 'test.lu' }, isRoot: true }];
+    const dialogs: any = [{ id: 'test', content: { recognizer: 'test.lu.qna' }, isRoot: true }];
     const selectedTriggers = [{ $kind: SDKKinds.OnIntent, intent: 'testIntent' }];
-    const luFiles: any = [{ id: 'test.en-us' }, { id: 'test.fr-FR' }];
-    const result = generateDispatchModels(schema, dialogs, selectedTriggers, luFiles);
+    const luFiles: any = [
+      { id: 'test.en-us', empty: false },
+      { id: 'test.fr-FR', empty: false },
+    ];
+    const qnaFiles: any = [{ id: 'test.es-es', empty: false }];
+    const result = generateDispatchModels(schema, dialogs, selectedTriggers, luFiles, qnaFiles);
     expect(result).toEqual(
       expect.objectContaining({
         dispatchModels: {
@@ -223,7 +236,7 @@ describe('generateDispatchModels', () => {
               {
                 name: 'test',
                 contentType: 'application/lu',
-                url: `<test.en-us url>`,
+                url: `<test.en-us.lu url>`,
                 description: '<description>',
               },
             ],
@@ -231,7 +244,15 @@ describe('generateDispatchModels', () => {
               {
                 name: 'test',
                 contentType: 'application/lu',
-                url: `<test.fr-FR url>`,
+                url: `<test.fr-FR.lu url>`,
+                description: '<description>',
+              },
+            ],
+            'es-es': [
+              {
+                name: 'test',
+                contentType: 'application/qna',
+                url: `<test.es-es.qna url>`,
                 description: '<description>',
               },
             ],

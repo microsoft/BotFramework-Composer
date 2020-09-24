@@ -13,11 +13,14 @@
   "asarUnpack": [
     "build/assets",
     "build/templates",
-    "resources/composerIcon_1024x1024.png"
+    "resources/composerIcon_1024x1024.png",
+    "resources/ms_logo.svg"
   ],
   "files": [
     "build",
-    "resources/composerIcon_1024x1024.png"
+    "locales",
+    "resources/composerIcon_1024x1024.png",
+    "resources/ms_logo.svg"
   ],
   "extraResources": [
     {

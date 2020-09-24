@@ -17,21 +17,22 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint --quiet ./src ./__tests__",
+    "lint": "eslint --quiet ./src",
     "lint:fix": "yarn lint --fix"
   },
   "author": "",
   "nodemonConfig": {
-    "exec": "cross-env TS_NODE_FILES=true node --inspect=9228 -r ts-node/register src/init.ts",
+    "exec": "cross-env TS_NODE_FILES=true node -r ts-node/register src/init.ts",
     "watch": [
-      "src"
+      "src",
+      "../extension/lib"
     ],
     "ext": "ts",
     "delay": 2
   },
   "devDependencies": {
     "@bfc/test-utils": "*",
-    "@types/archiver": "^3.0.0",
+    "@types/archiver": "^3.1.0",
     "@types/body-parser": "^1.17.0",
     "@types/compression": "^1.0.1",
     "@types/cookie-parser": "^1.4.1",
@@ -59,11 +60,12 @@
     "@bfc/intellisense-languageserver": "*",
     "@bfc/lg-languageserver": "*",
     "@bfc/lu-languageserver": "*",
-    "@bfc/plugin-loader": "*",
+    "@bfc/extension": "*",
     "@bfc/shared": "*",
     "@microsoft/bf-dispatcher": "^4.10.0-preview.141651",
+    "@microsoft/bf-generate-library": "^4.10.0-daily.20200827.161452",
     "@microsoft/bf-lu": "^4.10.0-dev.20200808.5a7c973",
-    "archiver": "^3.0.0",
+    "archiver": "^5.0.2",
     "axios": "^0.19.2",
     "azure-storage": "^2.10.3",
     "body-parser": "^1.18.3",
@@ -95,5 +97,8 @@
     "vscode-languageserver": "^5.3.0-next",
     "vscode-ws-jsonrpc": "^0.1.1",
     "ws": "^5.0.0"
+  },
+  "resolutions": {
+    "bl": "^2.2.1"
   }
 }

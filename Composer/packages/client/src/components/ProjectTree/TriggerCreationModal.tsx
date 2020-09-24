@@ -35,11 +35,10 @@ import {
   qnaMatcherKey,
   onChooseIntentKey,
 } from '../../utils/dialogUtil';
-import { projectIdState } from '../../recoilModel/atoms/botState';
-import { userSettingsState } from '../../recoilModel';
+import { userSettingsState } from '../../recoilModel/atoms';
 import { nameRegex } from '../../constants';
-import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 import { isRegExRecognizerType, isLUISnQnARecognizerType } from '../../utils/dialogValidator';
+import { validateDialogSelectorFamily } from '../../recoilModel';
 // -------------------- Styles -------------------- //
 
 const styles = {
@@ -201,6 +200,7 @@ const validateForm = (
 // -------------------- TriggerCreationModal -------------------- //
 
 interface TriggerCreationModalProps {
+  projectId: string;
   dialogId: string;
   isOpen: boolean;
   onDismiss: () => void;
@@ -208,10 +208,8 @@ interface TriggerCreationModalProps {
 }
 
 export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props) => {
-  const { isOpen, onDismiss, onSubmit, dialogId } = props;
-  const dialogs = useRecoilValue(validatedDialogsSelector);
-
-  const projectId = useRecoilValue(projectIdState);
+  const { isOpen, onDismiss, onSubmit, dialogId, projectId } = props;
+  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
   const userSettings = useRecoilValue(userSettingsState);
   const dialogFile = dialogs.find((dialog) => dialog.id === dialogId);
   const isRegEx = isRegExRecognizerType(dialogFile);

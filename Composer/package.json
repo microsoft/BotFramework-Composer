@@ -3,25 +3,30 @@
   "license": "MIT",
   "private": true,
   "resolutions": {
+    "@babel/parser": "^7.11.3",
     "@types/react": "16.9.23",
-    "mkdirp": "^0.5.2",
-    "serialize-javascript": "^3.1.0",
-    "lodash": "^4.17.12",
-    "set-value": "^3.0.2",
+    "bl": "^2.2.1",
+    "elliptic": "^6.5.3",
     "kind-of": "^6.0.3",
-    "elliptic": "^6.5.3"
+    "lodash": "^4.17.12",
+    "mkdirp": "^0.5.2",
+    "selfsigned": "1.10.8",
+    "serialize-javascript": "^3.1.0",
+    "set-value": "^3.0.2"
   },
   "engines": {
     "node": ">=12"
   },
   "workspaces": [
+    "packages/adaptive-flow",
+    "packages/adaptive-form",
     "packages/client",
     "packages/electron-server",
-    "packages/extensions",
-    "packages/extensions/*",
+    "packages/extension",
+    "packages/extension-client",
+    "packages/intellisense",
     "packages/lib",
     "packages/lib/*",
-    "packages/plugin-loader",
     "packages/server",
     "packages/test-utils",
     "packages/tools",
@@ -33,11 +38,11 @@
   "scripts": {
     "build": "node scripts/begin.js && yarn build:prod",
     "build:prod": "yarn build:dev && yarn build:server && yarn build:client && yarn build:electron",
-    "build:dev": "yarn build:test && yarn build:lib && yarn build:tools && yarn build:extensions && yarn build:plugins",
+    "build:dev": "yarn build:test && yarn build:lib && yarn build:tools && yarn build:extensions && yarn build:plugins && yarn l10n",
     "build:test": "yarn workspace @bfc/test-utils build",
     "build:lib": "yarn workspace @bfc/libs build:all",
-    "build:electron": "yarn workspace @bfc/electron-server build",
-    "build:extensions": "wsrun -lt -p @bfc/plugin-loader @bfc/intellisense @bfc/extension @bfc/adaptive-form @bfc/adaptive-flow @bfc/ui-plugin-* -c build",
+    "build:electron": "yarn workspace @bfc/electron-server build && yarn workspace @bfc/electron-server l10n",
+    "build:extensions": "wsrun -lt -p @bfc/extension @bfc/intellisense @bfc/extension-client @bfc/adaptive-form @bfc/adaptive-flow @bfc/ui-plugin-*  -c build",
     "build:server": "yarn workspace @bfc/server build",
     "build:client": "yarn workspace @bfc/client build",
     "build:tools": "yarn workspace @bfc/tools build:all",
@@ -65,7 +70,12 @@
     "typecheck": "concurrently --kill-others-on-fail \"npm:typecheck:*\"",
     "typecheck:server": "yarn workspace @bfc/server typecheck",
     "typecheck:client": "yarn workspace @bfc/client typecheck",
-    "tableflip": "rimraf node_modules/ **/node_modules && yarn && yarn build"
+    "tableflip": "rimraf node_modules/ **/node_modules && yarn && yarn build",
+    "l10n:extract": "cross-env NODE_ENV=production format-message extract -g underscored_crc32 -o packages/server/src/locales/en-US.json l10ntemp/**/*.js",
+    "l10n:extractJson": "node scripts/l10n-extractJson.js",
+    "l10n:transform": "node scripts/l10n-transform.js",
+    "l10n:babel": "babel ./packages --extensions \".ts,.tsx,.jsx,.js\" --out-dir l10ntemp --presets=@babel/react,@babel/typescript --plugins=@babel/plugin-proposal-class-properties --ignore \"packages/electron-server\",\"packages/**/__tests__\",\"packages/**/node_modules\",\"packages/**/build/**/*.js\"",
+    "l10n": "yarn l10n:babel && yarn l10n:extract && yarn l10n:transform packages/server/src/locales/en-US.json && yarn l10n:extractJson packages/server/schemas"
   },
   "husky": {
     "hooks": {
@@ -115,8 +125,8 @@
     "lint-staged": "^8.1.0",
     "prettier": "2.0.5",
     "rimraf": "^2.6.3",
-    "tslib": "^2.0.0",
     "ts-loader": "7.0.4",
+    "tslib": "^2.0.0",
     "typescript": "3.9.2",
     "wsrun": "^5.2.0"
   },

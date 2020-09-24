@@ -5,13 +5,13 @@ import * as fs from 'fs';
 
 import { Request, Response } from 'express';
 import { Archiver } from 'archiver';
-import { PluginLoader } from '@bfc/plugin-loader';
+import { ExtensionContext } from '@bfc/extension';
 
 import log from '../logger';
 import { BotProjectService } from '../services/project';
 import AssetService from '../services/asset';
 import { LocationRef } from '../models/bot/interface';
-import { getSkillByUrl } from '../models/bot/skillManager';
+import { getSkillManifest } from '../models/bot/skillManager';
 import StorageService from '../services/storage';
 import settings from '../settings';
 
@@ -19,8 +19,8 @@ import { Path } from './../utility/path';
 
 async function createProject(req: Request, res: Response) {
   let { templateId } = req.body;
-  const { name, description, storageId, location, schemaUrl } = req.body;
-  const user = await PluginLoader.getUserFromRequest(req);
+  const { name, description, storageId, location, schemaUrl, locale } = req.body;
+  const user = await ExtensionContext.getUserFromRequest(req);
   if (templateId === '') {
     templateId = 'EmptyBot';
   }
@@ -46,7 +46,7 @@ async function createProject(req: Request, res: Response) {
 
   try {
     await BotProjectService.cleanProject(locationRef);
-    const newProjRef = await AssetService.manager.copyProjectTemplateTo(templateId, locationRef, user);
+    const newProjRef = await AssetService.manager.copyProjectTemplateTo(templateId, locationRef, user, locale);
     const id = await BotProjectService.openProject(newProjRef, user);
     const currentProject = await BotProjectService.getProjectById(id, user);
 
@@ -76,7 +76,7 @@ async function createProject(req: Request, res: Response) {
 
 async function getProjectById(req: Request, res: Response) {
   const projectId = req.params.projectId;
-  const user = await PluginLoader.getUserFromRequest(req);
+  const user = await ExtensionContext.getUserFromRequest(req);
   try {
     const currentProject = await BotProjectService.getProjectById(projectId, user);
 
@@ -129,7 +129,7 @@ async function openProject(req: Request, res: Response) {
     return;
   }
 
-  const user = await PluginLoader.getUserFromRequest(req);
+  const user = await ExtensionContext.getUserFromRequest(req);
 
   const location: LocationRef = {
     storageId: req.body.storageId,
@@ -167,7 +167,7 @@ async function saveProjectAs(req: Request, res: Response) {
   }
 
   const projectId = req.params.projectId;
-  const user = await PluginLoader.getUserFromRequest(req);
+  const user = await ExtensionContext.getUserFromRequest(req);
   const originalProject = await BotProjectService.getProjectById(projectId, user);
 
   const { name, description, location, storageId } = req.body;
@@ -201,7 +201,7 @@ async function saveProjectAs(req: Request, res: Response) {
 }
 
 async function getRecentProjects(req: Request, res: Response) {
-  const user = await PluginLoader.getUserFromRequest(req);
+  const user = await ExtensionContext.getUserFromRequest(req);
 
   const projects = await BotProjectService.getRecentBotProjects(user);
   return res.status(200).json(projects);
@@ -209,7 +209,7 @@ async function getRecentProjects(req: Request, res: Response) {
 
 async function updateFile(req: Request, res: Response) {
   const projectId = req.params.projectId;
-  const user = await PluginLoader.getUserFromRequest(req);
+  const user = await ExtensionContext.getUserFromRequest(req);
   const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
     const lastModified = await currentProject.updateFile(req.body.name, req.body.content);
@@ -223,7 +223,7 @@ async function updateFile(req: Request, res: Response) {
 
 async function createFile(req: Request, res: Response) {
   const projectId = req.params.projectId;
-  const user = await PluginLoader.getUserFromRequest(req);
+  const user = await ExtensionContext.getUserFromRequest(req);
 
   const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
@@ -241,7 +241,7 @@ async function createFile(req: Request, res: Response) {
 
 async function removeFile(req: Request, res: Response) {
   const projectId = req.params.projectId;
-  const user = await PluginLoader.getUserFromRequest(req);
+  const user = await ExtensionContext.getUserFromRequest(req);
 
   const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
@@ -252,36 +252,15 @@ async function removeFile(req: Request, res: Response) {
   }
 }
 
-async function updateSkill(req: Request, res: Response) {
-  const projectId = req.params.projectId;
-  const user = await PluginLoader.getUserFromRequest(req);
-
-  const currentProject = await BotProjectService.getProjectById(projectId, user);
-  if (currentProject !== undefined) {
-    try {
-      const skills = await currentProject.updateSkill(req.body.skills);
-      res.status(200).json(skills);
-    } catch (err) {
-      res.status(404).json({
-        message: err.message,
-      });
-    }
-  } else {
-    res.status(404).json({
-      message: 'No such bot project opened',
-    });
-  }
-}
-
 async function getSkill(req: Request, res: Response) {
   const projectId = req.params.projectId;
-  const user = await PluginLoader.getUserFromRequest(req);
+  const user = await ExtensionContext.getUserFromRequest(req);
 
   const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
     try {
-      const skill = await getSkillByUrl(req.body.url);
-      res.status(200).json(skill);
+      const content = await getSkillManifest(req.query.url);
+      res.status(200).json(content);
     } catch (err) {
       res.status(404).json({
         message: err.message,
@@ -309,7 +288,7 @@ async function exportProject(req: Request, res: Response) {
 
 async function setQnASettings(req: Request, res: Response) {
   const projectId = req.params.projectId;
-  const user = await PluginLoader.getUserFromRequest(req);
+  const user = await ExtensionContext.getUserFromRequest(req);
 
   const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
@@ -330,7 +309,7 @@ async function setQnASettings(req: Request, res: Response) {
 
 async function build(req: Request, res: Response) {
   const projectId = req.params.projectId;
-  const user = await PluginLoader.getUserFromRequest(req);
+  const user = await ExtensionContext.getUserFromRequest(req);
 
   const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
@@ -359,7 +338,7 @@ async function build(req: Request, res: Response) {
 async function getAllProjects(req: Request, res: Response) {
   const storageId = 'default';
   const folderPath = Path.resolve(settings.botsFolder);
-  const user = await PluginLoader.getUserFromRequest(req);
+  const user = await ExtensionContext.getUserFromRequest(req);
 
   try {
     res.status(200).json(await StorageService.getBlob(storageId, folderPath, user));
@@ -372,7 +351,7 @@ async function getAllProjects(req: Request, res: Response) {
 
 async function checkBoilerplateVersion(req: Request, res: Response) {
   const projectId = req.params.projectId;
-  const user = await PluginLoader.getUserFromRequest(req);
+  const user = await ExtensionContext.getUserFromRequest(req);
 
   const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
@@ -396,7 +375,7 @@ async function checkBoilerplateVersion(req: Request, res: Response) {
 
 async function updateBoilerplate(req: Request, res: Response) {
   const projectId = req.params.projectId;
-  const user = await PluginLoader.getUserFromRequest(req);
+  const user = await ExtensionContext.getUserFromRequest(req);
 
   const currentProject = await BotProjectService.getProjectById(projectId, user);
 
@@ -422,7 +401,6 @@ export const ProjectController = {
   updateFile,
   createFile,
   removeFile,
-  updateSkill,
   getSkill,
   build,
   setQnASettings,

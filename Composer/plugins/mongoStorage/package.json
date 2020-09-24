@@ -12,10 +12,13 @@
   "license": "MIT",
   "dependencies": {
     "glob-to-regexp": "^0.4.1",
-    "mongoose": "^5.9.10"
+    "mongoose": "^5.10.3"
   },
   "devDependencies": {
     "@types/mongodb": "^3.5.14",
     "@types/mongoose": "^5.7.14"
+  },
+  "resolutions": {
+    "bl": "^2.2.1"
   }
 }
