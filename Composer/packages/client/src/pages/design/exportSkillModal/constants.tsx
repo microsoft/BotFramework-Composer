@@ -98,6 +98,7 @@ export interface ContentProps {
   skillManifests: SkillManifest[];
   value: { [key: string]: any };
   onChange: (_: any) => void;
+  projectId: string;
 }
 
 interface Button {

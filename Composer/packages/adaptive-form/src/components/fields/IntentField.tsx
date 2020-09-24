@@ -2,29 +2,21 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { FieldProps, useShellApi, useRecognizerConfig, FieldWidget } from '@bfc/extension-client';
+import { FieldProps, useRecognizerConfig } from '@bfc/extension-client';
 import formatMessage from 'format-message';
-import { SDKKinds } from '@bfc/shared';
 
 import { FieldLabel } from '../FieldLabel';
 
 const IntentField: React.FC<FieldProps> = (props) => {
   const { id, description, uiOptions, value, required, onChange } = props;
-  const { currentDialog } = useShellApi();
-  const recognizers = useRecognizerConfig();
+  const { currentRecognizer } = useRecognizerConfig();
+
+  const Editor = currentRecognizer?.intentEditor;
+  const label = formatMessage('Trigger phrases (intent: #{intentName})', { intentName: value });
 
   const handleChange = () => {
     onChange(value);
   };
-
-  const recognizer = recognizers.find((r) => r.isSelected(currentDialog?.content?.recognizer));
-  let Editor: FieldWidget | undefined;
-  if (recognizer && recognizer.id === SDKKinds.CrossTrainedRecognizerSet) {
-    Editor = recognizers.find((r) => r.id === SDKKinds.LuisRecognizer)?.editor;
-  } else {
-    Editor = recognizer?.editor;
-  }
-  const label = formatMessage('Trigger phrases (intent: #{intentName})', { intentName: value });
 
   return (
     <React.Fragment>
@@ -32,7 +24,7 @@ const IntentField: React.FC<FieldProps> = (props) => {
       {Editor ? (
         <Editor {...props} onChange={handleChange} />
       ) : (
-        formatMessage('No Editor for {type}', { type: recognizer?.id })
+        formatMessage('No Editor for {type}', { type: currentRecognizer?.id })
       )}
     </React.Fragment>
   );
