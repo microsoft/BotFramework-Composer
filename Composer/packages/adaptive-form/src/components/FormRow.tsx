@@ -5,7 +5,9 @@
 import { FieldProps, UIOptions } from '@bfc/extension-client';
 import { css, jsx } from '@emotion/core';
 import React from 'react';
+
 import { isPropertyHidden, resolvePropSchema } from '../utils';
+
 import { SchemaField } from './SchemaField';
 
 export interface FormRowProps extends Omit<FieldProps, 'onChange'> {

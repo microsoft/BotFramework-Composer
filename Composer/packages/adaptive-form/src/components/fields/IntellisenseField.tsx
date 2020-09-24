@@ -5,6 +5,7 @@ import { FieldProps, useShellApi } from '@bfc/extension-client';
 import { IntellisenseTextField } from '@bfc/intellisense';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import React from 'react';
+
 import { getIntellisenseUrl } from '../../utils/getIntellisenseUrl';
 import { FieldLabel } from '../FieldLabel';
 
