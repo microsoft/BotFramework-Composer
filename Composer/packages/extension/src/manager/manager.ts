@@ -40,9 +40,9 @@ class ExtensionManager {
   /**
    * Returns all extensions currently in the extension manifest
    */
-  public getAll() {
+  public getAll(): ExtensionMetadata[] {
     const extensions = this.manifest.getExtensions();
-    return Object.values(extensions);
+    return Object.values(extensions).filter(Boolean) as ExtensionMetadata[];
   }
 
   /**

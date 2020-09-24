@@ -3,6 +3,7 @@
 
 import { Request, Response } from 'express';
 import { ExtensionManager } from '@bfc/extension';
+import { ExtensionMetadata } from '@bfc/extension/lib/types/extension';
 
 import * as ExtensionsController from '../extensions';
 
@@ -31,12 +32,113 @@ beforeEach(() => {
   } as unknown) as Response;
 });
 
+const mockExtension1 = {
+  id: 'remoteExtension1',
+  name: 'Extension 1',
+  version: '1.0.0',
+  enabled: true,
+  path: '/some/path/extension1',
+  bundles: [
+    {
+      id: 'page1',
+      path: 'some/path',
+    },
+  ],
+  contributes: {
+    views: {
+      publish: {
+        bundleId: '',
+      },
+      pages: [
+        {
+          bundleId: 'page1',
+          label: 'Page 1',
+          icon: 'SomeIcon',
+        },
+      ],
+    },
+  },
+};
+
+const allExtensions: ExtensionMetadata[] = [
+  mockExtension1,
+  {
+    id: 'builtinExtension2',
+    name: 'Extension 2',
+    version: '1.0.0',
+    path: '/some/path/extension2',
+    enabled: true,
+    builtIn: true,
+    bundles: [
+      {
+        id: 'page2',
+        path: 'some/path',
+      },
+    ],
+    contributes: {
+      views: {
+        publish: {
+          bundleId: '',
+        },
+        pages: [
+          {
+            bundleId: 'page2',
+            label: 'Page 2',
+            icon: 'SomeOtherIcon',
+          },
+        ],
+      },
+    },
+  },
+];
 describe('listing all extensions', () => {
-  it('returns all extensions', () => {
-    (ExtensionManager.getAll as jest.Mock).mockReturnValue(['list', 'of', 'extensions']);
+  it('returns all extensions with sensitive properties removed', () => {
+    (ExtensionManager.getAll as jest.Mock).mockReturnValue(allExtensions);
 
     ExtensionsController.listExtensions(req, res);
-    expect(res.json).toHaveBeenCalledWith(['list', 'of', 'extensions']);
+    expect(res.json).toHaveBeenCalledWith([
+      {
+        id: 'remoteExtension1',
+        name: 'Extension 1',
+        version: '1.0.0',
+        enabled: true,
+        contributes: {
+          views: {
+            publish: {
+              bundleId: '',
+            },
+            pages: [
+              {
+                bundleId: 'page1',
+                label: 'Page 1',
+                icon: 'SomeIcon',
+              },
+            ],
+          },
+        },
+      },
+      {
+        id: 'builtinExtension2',
+        name: 'Extension 2',
+        version: '1.0.0',
+        enabled: true,
+        builtIn: true,
+        contributes: {
+          views: {
+            publish: {
+              bundleId: '',
+            },
+            pages: [
+              {
+                bundleId: 'page2',
+                label: 'Page 2',
+                icon: 'SomeOtherIcon',
+              },
+            ],
+          },
+        },
+      },
+    ]);
   });
 });
 
@@ -63,11 +165,15 @@ describe('adding an extension', () => {
   });
 
   it('returns the extension', async () => {
-    (ExtensionManager.find as jest.Mock).mockReturnValue('installed extension');
+    (ExtensionManager.find as jest.Mock).mockReturnValue(mockExtension1);
     await ExtensionsController.addExtension({ body: { id } } as Request, res);
 
     expect(ExtensionManager.find).toHaveBeenCalledWith(id);
-    expect(res.json).toHaveBeenCalledWith('installed extension');
+    expect(res.json).toHaveBeenCalledWith({
+      ...mockExtension1,
+      bundles: undefined,
+      path: undefined,
+    });
   });
 });
 
@@ -91,7 +197,7 @@ describe('toggling an extension', () => {
     const id = 'extension-id';
 
     beforeEach(() => {
-      (ExtensionManager.find as jest.Mock).mockReturnValue('found extension');
+      (ExtensionManager.find as jest.Mock).mockReturnValue(mockExtension1);
     });
 
     it('can enable an extension', async () => {
@@ -110,7 +216,11 @@ describe('toggling an extension', () => {
     it('returns the updated extension', async () => {
       await ExtensionsController.toggleExtension({ body: { id, enabled: true } } as Request, res);
 
-      expect(res.json).toBeCalledWith('found extension');
+      expect(res.json).toHaveBeenCalledWith({
+        ...mockExtension1,
+        bundles: undefined,
+        path: undefined,
+      });
     });
   });
 });
@@ -135,7 +245,7 @@ describe('removing an extension', () => {
     const id = 'extension-id';
 
     beforeEach(() => {
-      (ExtensionManager.find as jest.Mock).mockReturnValue('found extension');
+      (ExtensionManager.find as jest.Mock).mockReturnValue(mockExtension1);
     });
 
     it('removes the extension', async () => {
@@ -144,10 +254,16 @@ describe('removing an extension', () => {
     });
 
     it('returns the list of extensions', async () => {
-      (ExtensionManager.getAll as jest.Mock).mockReturnValue(['list', 'of', 'extensions']);
+      (ExtensionManager.getAll as jest.Mock).mockReturnValue([mockExtension1]);
 
       await ExtensionsController.removeExtension({ body: { id } } as Request, res);
-      expect(res.json).toHaveBeenCalledWith(['list', 'of', 'extensions']);
+      expect(res.json).toHaveBeenCalledWith([
+        {
+          ...mockExtension1,
+          bundles: undefined,
+          path: undefined,
+        },
+      ]);
     });
   });
 });
