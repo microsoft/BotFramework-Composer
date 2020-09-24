@@ -5,7 +5,8 @@
 import { jsx, css } from '@emotion/core';
 import React from 'react';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
-import { LeftRightSplit } from '@geoffcox/react-splitter';
+
+import { LeftRightSplit } from '../components/Split/LeftRightSplit';
 
 import { Toolbar, IToolbarItem } from './Toolbar';
 import { NavTree, INavTreeItem } from './NavTree';
