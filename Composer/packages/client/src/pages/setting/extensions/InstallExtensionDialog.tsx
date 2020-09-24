@@ -3,17 +3,17 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import {
-  DetailsList,
   DetailsListLayoutMode,
   SelectionMode,
   IColumn,
   CheckboxVisibility,
 } from 'office-ui-fabric-react/lib/DetailsList';
+import { ShimmeredDetailsList } from 'office-ui-fabric-react/lib/ShimmeredDetailsList';
 import axios from 'axios';
 import formatMessage from 'format-message';
 
@@ -39,18 +39,22 @@ const InstallExtensionDialog: React.FC<InstallExtensionDialogProps> = (props) =>
   const [searchQuery, setSearchQuery] = useState<string | null>(null);
   const [matchingExtensions, setMatchingExtensions] = useState<ExtensionSearchResult[]>([]);
   const [selectedExtension, setSelectedExtension] = useState<ExtensionSearchResult | null>(null);
+  const [isSearching, setIsSearching] = useState(false);
 
   useEffect(() => {
     if (searchQuery !== null) {
       const source = axios.CancelToken.source();
 
       const timer = setTimeout(() => {
+        setIsSearching(true);
         httpClient
           .get(`/extensions/search?q=${searchQuery}`, { cancelToken: source.token })
           .then((res) => {
             setMatchingExtensions(res.data);
+            setIsSearching(false);
           })
           .catch((err) => {
+            setIsSearching(false);
             if (!axios.isCancel(err)) {
               // TODO: abrown - what to do on error?
               // eslint-disable-next-line no-console
@@ -135,13 +139,15 @@ const InstallExtensionDialog: React.FC<InstallExtensionDialogProps> = (props) =>
           value={searchQuery ?? ''}
           onChange={(_e, val) => setSearchQuery(val ?? null)}
         />
-        {matchingExtensions.length > 0 && (
-          <DetailsList
+        {(matchingExtensions.length > 0 || isSearching) && (
+          <ShimmeredDetailsList
             checkboxVisibility={CheckboxVisibility.always}
             columns={matchingColumns}
+            enableShimmer={isSearching}
             items={matchingExtensions}
             layoutMode={DetailsListLayoutMode.justified}
             selectionMode={SelectionMode.single}
+            shimmerLines={5}
             onActiveItemChanged={(item) => setSelectedExtension(item)}
           />
         )}

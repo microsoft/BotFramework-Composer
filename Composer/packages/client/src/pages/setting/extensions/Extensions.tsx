@@ -3,18 +3,18 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import {
-  DetailsList,
   DetailsListLayoutMode,
   SelectionMode,
   IColumn,
   CheckboxVisibility,
 } from 'office-ui-fabric-react/lib/DetailsList';
+import { ShimmeredDetailsList } from 'office-ui-fabric-react/lib/ShimmeredDetailsList';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, selector } from 'recoil';
 
 import { ExtensionConfig } from '../../../recoilModel/types';
 import { Toolbar, IToolbarItem } from '../../../components/Toolbar';
@@ -22,12 +22,16 @@ import { dispatcherState, extensionsState } from '../../../recoilModel';
 
 import { InstallExtensionDialog } from './InstallExtensionDialog';
 
+const remoteExtensionsState = selector({
+  key: 'remoteExtensions',
+  get: ({ get }) => get(extensionsState).filter((e) => !e.builtIn),
+});
+
 const Extensions: React.FC<RouteComponentProps> = () => {
   const { fetchExtensions, toggleExtension, addExtension, removeExtension } = useRecoilValue(dispatcherState);
-  const extensions = useRecoilValue(extensionsState);
+  const extensions = useRecoilValue(remoteExtensionsState);
+  const [isAdding, setIsAdding] = useState(false);
   const [showNewModal, setShowNewModal] = useState(false);
-
-  const remoteExtensions = useMemo(() => extensions.filter((e) => !e.builtIn), [extensions]);
 
   useEffect(() => {
     fetchExtensions();
@@ -99,22 +103,26 @@ const Extensions: React.FC<RouteComponentProps> = () => {
 
   const submit = async (selectedExtension) => {
     if (selectedExtension) {
-      await addExtension(selectedExtension.id);
+      setIsAdding(true);
       setShowNewModal(false);
+      await addExtension(selectedExtension.id);
+      setIsAdding(false);
     }
   };
 
   return (
     <div>
       <Toolbar toolbarItems={toolbarItems} />
-      {/* only show when extensions are installed */}
-      <DetailsList
-        checkboxVisibility={CheckboxVisibility.hidden}
-        columns={installedColumns}
-        items={remoteExtensions}
-        layoutMode={DetailsListLayoutMode.justified}
-        selectionMode={SelectionMode.single}
-      />
+      {(isAdding || extensions.length > 0) && (
+        <ShimmeredDetailsList
+          checkboxVisibility={CheckboxVisibility.hidden}
+          columns={installedColumns}
+          items={isAdding ? [...extensions, null] : extensions}
+          layoutMode={DetailsListLayoutMode.justified}
+          selectionMode={SelectionMode.single}
+          shimmerLines={1}
+        />
+      )}
       <InstallExtensionDialog isOpen={showNewModal} onDismiss={() => setShowNewModal(false)} onInstall={submit} />
     </div>
   );
