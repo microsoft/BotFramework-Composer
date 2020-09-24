@@ -38,7 +38,7 @@ export async function npm(command: NpmCommand, args: string, opts: NpmOptions = 
     let stdout = '';
     let stderr = '';
 
-    const proc = spawn('npm', spawnArgs);
+    const proc = spawn(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', spawnArgs);
 
     proc.stdout.on('data', (data) => {
       stdout += data;
