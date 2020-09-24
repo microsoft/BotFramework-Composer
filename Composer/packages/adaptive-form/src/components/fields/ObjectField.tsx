@@ -7,7 +7,7 @@ import { getOrderedProperties, getSchemaWithAdditionalFields } from '../../utils
 import { FormRow } from '../FormRow';
 
 const ObjectField: React.FC<FieldProps<object>> = function ObjectField(props) {
-  const { definitions, schema: baseSchema, uiOptions, depth, value, label, onChange, ...rest } = props;
+  const { schema: baseSchema, uiOptions, depth, value, label, ...rest } = props;
 
   if (!baseSchema) {
     return null;
@@ -22,13 +22,11 @@ const ObjectField: React.FC<FieldProps<object>> = function ObjectField(props) {
         <FormRow
           key={`${props.id}.${typeof row === 'string' ? row : row.join('_')}`}
           {...rest}
-          definitions={definitions}
           depth={depth + 1}
           row={row}
           schema={schema}
           uiOptions={uiOptions}
           value={value}
-          onChange={onChange}
         />
       ))}
     </React.Fragment>
