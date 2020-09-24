@@ -52,7 +52,8 @@ export const projectDispatcher = () => {
 
   const addRemoteSkillToBotProject = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (manifestUrl: string, name: string, endpointName: string) => {
-      openRemoteSkill(callbackHelpers, manifestUrl, name);
+      const projectId = await openRemoteSkill(callbackHelpers, manifestUrl, name);
+      return projectId;
     }
   );
 

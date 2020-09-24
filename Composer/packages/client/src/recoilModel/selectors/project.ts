@@ -5,7 +5,7 @@ import { selector } from 'recoil';
 
 import { dispatcherState } from '../DispatcherWrapper';
 import { Dispatcher } from '../dispatchers';
-import { botErrorState, botProjectSpaceProjectIds, projectMetaDataState } from '../atoms';
+import { botErrorState, botNameState, botProjectSpaceProjectIds, dialogsState, projectMetaDataState } from '../atoms';
 
 // Actions
 const projectLoadAction = (dispatcher: Dispatcher) => {
@@ -30,12 +30,12 @@ const projectLoadAction = (dispatcher: Dispatcher) => {
     fetchProjectById: async (projectId: string) => {
       await dispatcher.fetchProjectById(projectId);
     },
-    addExistingSkillToBotProject: async (path: string, storageId = 'default') => {
-      const projectId: string = await dispatcher.addExistingSkillToBotProject(path, storageId);
-
-      await dispatcher.addSkillToBotProject(projectId);
+    addExistingSkillToBotProject: async (rootBotId: string, path: string, storageId = 'default') => {
+      const skillId: string = await dispatcher.addExistingSkillToBotProject(path, storageId);
+      await dispatcher.addSkillToBotProject(rootBotId, skillId, false);
     },
     addNewSkillToBotProject: async (
+      rootBotId: string,
       templateId: string,
       name: string,
       description: string,
@@ -44,10 +44,20 @@ const projectLoadAction = (dispatcher: Dispatcher) => {
       locale?: string,
       qnaKbUrls?: string[]
     ) => {
-      await dispatcher.addNewSkillToBotProject(templateId, name, description, location, schemaUrl, locale, qnaKbUrls);
+      const skillId: string = await dispatcher.addNewSkillToBotProject(
+        templateId,
+        name,
+        description,
+        location,
+        schemaUrl,
+        locale,
+        qnaKbUrls
+      );
+      await dispatcher.addSkillToBotProject(rootBotId, skillId, false);
     },
-    addRemoteSkillToBotProject: async (manifestUrl: string, name: string, endpointName: string) => {
-      await dispatcher.addRemoteSkillToBotProject(manifestUrl, name, endpointName);
+    addRemoteSkillToBotProject: async (rootBotId: string, manifestUrl: string, name: string, endpointName: string) => {
+      const skillId = await dispatcher.addRemoteSkillToBotProject(manifestUrl, name, endpointName);
+      await dispatcher.addSkillToBotProject(rootBotId, skillId, true);
     },
   };
 };
@@ -79,16 +89,17 @@ export const botProjectsWithoutErrorsSelector = selector({
   },
 });
 
-export const botProjectsDataSelector = selector({
-  key: 'botProjectsDataSelector',
+export const botProjectSpaceSelector = selector({
+  key: 'botProjectSpaceSelector',
   get: ({ get }) => {
-    const botProjectIds = get(botProjectSpaceProjectIds);
-    return botProjectIds.map((projectId: string) => {
+    const botProjects = get(botProjectSpaceProjectIds);
+    const result = botProjects.map((projectId: string) => {
+      const dialogs = get(dialogsState(projectId));
       const metaData = get(projectMetaDataState(projectId));
-      return {
-        projectId,
-        ...metaData,
-      };
+      const botError = get(botErrorState(projectId));
+      const name = get(botNameState(projectId));
+      return { dialogs, projectId, name, ...metaData, error: botError };
     });
+    return result;
   },
 });

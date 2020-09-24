@@ -11,23 +11,25 @@ import { convertPathToFileProtocol, trimFileProtocol } from '../../utils/fileUti
 
 export const botProjectFileDispatcher = () => {
   const addSkillToBotProject = useRecoilCallback(
-    ({ set, snapshot }: CallbackInterface) => async (projectId: string) => {
-      const skillLocation = await snapshot.getPromise(locationState(projectId));
-      const botName = await snapshot.getPromise(botNameState(projectId));
+    ({ set, snapshot }: CallbackInterface) => async (rootBotProjectId: string, skillId: string, remote: boolean) => {
+      const skillLocation = await snapshot.getPromise(locationState(skillId));
+      const botName = await snapshot.getPromise(botNameState(skillId));
       const manifests: { id: string; content: string; lastModified: string }[] = await snapshot.getPromise(
-        skillManifestsState(projectId)
+        skillManifestsState(skillId)
       );
       // TODO:// We would support only 1 manifest per skill. It will always be the first manifest. We would need UI in future to set the default manifest file
       const currentManifest = manifests[0];
 
-      set(botProjectFileState(projectId), (current: BotProjectSpace) => {
+      set(botProjectFileState(rootBotProjectId), (current: BotProjectSpace) => {
         const result = produce(current, (draftState: BotProjectSpace) => {
           const skill: BotProjectSpaceSkill = {
-            manifest: currentManifest.id,
             workspace: convertPathToFileProtocol(skillLocation),
-            remote: false,
+            remote,
             name: botName,
           };
+          if (currentManifest) {
+            skill.manifest = currentManifest.id;
+          }
           draftState.skills.push(skill);
         });
         return result;
@@ -36,11 +38,11 @@ export const botProjectFileDispatcher = () => {
   );
 
   const removeLocalSkillFromBotProject = useRecoilCallback(
-    ({ set, snapshot }: CallbackInterface) => async (projectId: string) => {
-      const skillLocation = await snapshot.getPromise(locationState(projectId));
-      snapshot.getPromise(skillManifestsState(projectId));
+    ({ set, snapshot }: CallbackInterface) => async (rootBotProjectId: string, skillId: string) => {
+      const skillLocation = await snapshot.getPromise(locationState(skillId));
+      snapshot.getPromise(skillManifestsState(skillId));
 
-      set(botProjectFileState(projectId), (current: BotProjectSpace) => {
+      set(botProjectFileState(rootBotProjectId), (current: BotProjectSpace) => {
         const result = produce(current, (draftState: BotProjectSpace) => {
           draftState.skills = draftState.skills.filter(({ workspace }) => {
             if (workspace) {
@@ -55,9 +57,9 @@ export const botProjectFileDispatcher = () => {
   );
 
   const removeRemoteSkillFromBotProject = useRecoilCallback(
-    ({ set, snapshot }: CallbackInterface) => async (projectId: string) => {
+    ({ set, snapshot }: CallbackInterface) => async (rootBotProjectId: string, projectId: string) => {
       const manifestLocation = await snapshot.getPromise(locationState(projectId));
-      set(botProjectFileState(projectId), (current: BotProjectSpace) => {
+      set(botProjectFileState(rootBotProjectId), (current: BotProjectSpace) => {
         const result = produce(current, (draftState: BotProjectSpace) => {
           draftState.skills = draftState.skills.filter(({ manifest, remote }) => {
             if (remote) {

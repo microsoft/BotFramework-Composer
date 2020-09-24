@@ -77,6 +77,16 @@ export const resetBotStates = async ({ snapshot, gotoSnapshot }: CallbackInterfa
   gotoSnapshot(newSnapshot);
 };
 
+export const setErrorBotProject = async (callbackHelpers: CallbackInterface, projectId, botName, payload) => {
+  const { set } = callbackHelpers;
+  if (payload?.response?.data?.message) {
+    set(botErrorState(projectId), payload.response.data);
+  } else {
+    set(botErrorState(projectId), payload);
+  }
+  if (payload != null) logMessage(callbackHelpers, `Error loading ${botName}: ${JSON.stringify(payload)}`);
+};
+
 export const flushExistingTasks = async (callbackHelpers) => {
   const { snapshot, reset } = callbackHelpers;
   const projectIds = await snapshot.getPromise(botProjectSpaceProjectIds);
@@ -347,7 +357,7 @@ export const openRemoteSkill = async (callbackHelpers: CallbackInterface, manife
   } catch (ex) {
     const tempProjectId = uuid();
     set(botNameState(tempProjectId), name);
-    set(botErrorState(tempProjectId), ex);
+    setErrorBotProject(callbackHelpers, tempProjectId, name, ex);
     return tempProjectId;
   }
 };
@@ -365,7 +375,7 @@ export const openLocalSkill = async (callbackHelpers, pathToBot: string, storage
   } else {
     const tempProjectId = uuid();
     set(botNameState(tempProjectId), name);
-    set(botErrorState(tempProjectId), error);
+    setErrorBotProject(callbackHelpers, tempProjectId, name, error);
     return tempProjectId;
   }
 };
