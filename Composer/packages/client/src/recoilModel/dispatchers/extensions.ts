@@ -29,16 +29,15 @@ export const extensionsDispatcher = () => {
 
         set(extensionsState, (extensions) => {
           if (extensions.find((p) => p.id === addedExtension.id)) {
-            extensions = extensions.map((p) => {
+            return extensions.map((p) => {
               if (p.id === addedExtension.id) {
                 return addedExtension;
               }
               return p;
             });
           } else {
-            extensions.push(addedExtension);
+            return [...extensions, addedExtension];
           }
-          return extensions;
         });
       } catch (err) {
         console.error(err);
