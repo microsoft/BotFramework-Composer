@@ -59,10 +59,10 @@ const SettingPage: React.FC<RouteComponentProps> = () => {
   // use cached projectId do fetch.
   const cachedProjectId = useProjectIdCache();
   useEffect(() => {
+    setCurrentMode('settings');
     if (!projectId && cachedProjectId) {
       fetchProjectById(cachedProjectId);
     }
-    setCurrentMode('settings');
   }, []);
 
   const settingLabels = {

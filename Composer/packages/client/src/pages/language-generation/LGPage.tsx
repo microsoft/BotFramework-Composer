@@ -74,7 +74,9 @@ const LGPage: React.FC<RouteComponentProps<LGPageProps>> = (props: RouteComponen
     }
   }, [dialogId, dialogs, projectId]);
 
-  useEffect(() => setCurrentMode('lg'), []);
+  useEffect(() => {
+    setCurrentMode('lg');
+  }, []);
 
   const onToggleEditMode = useCallback(
     (_e, checked) => {

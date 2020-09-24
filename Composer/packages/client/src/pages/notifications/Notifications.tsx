@@ -67,7 +67,9 @@ const Notifications: React.FC<RouteComponentProps<{ projectId: string }>> = (pro
     navigations[item.type](item);
   };
 
-  useEffect(() => setCurrentMode('notifications'), []);
+  useEffect(() => {
+    setCurrentMode('notifications');
+  }, []);
 
   return (
     <div css={root} data-testid="notifications-page">

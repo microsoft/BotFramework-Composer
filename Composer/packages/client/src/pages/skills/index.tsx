@@ -59,7 +59,9 @@ const Skills: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => 
     setShowAddSkillDialogModal(false);
   }, []);
 
-  useEffect(() => setCurrentMode('skills'), []);
+  useEffect(() => {
+    setCurrentMode('skills');
+  }, []);
 
   return (
     <div css={ContainerStyle} data-testid="skills-page">
