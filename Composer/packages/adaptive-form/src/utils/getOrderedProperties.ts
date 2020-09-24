@@ -49,7 +49,7 @@ export function getOrderedProperties(
     }
 
     return allFields;
-  }, [] as (string | [string, string])[]);
+  }, [] as OrderConfig);
 
   const allProperties = Object.keys(schema.properties ?? {}).filter(
     (p) => !p.startsWith('$') && !hiddenFieldSet.has(p)

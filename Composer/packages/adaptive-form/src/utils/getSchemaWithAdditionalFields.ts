@@ -10,7 +10,7 @@ const getSchemaWithAdditionalFields = (baseSchema: JSONSchema7, uiOptions: UIOpt
   const additionalFields = difference(keys(uiOptions.properties), keys(baseSchema.properties));
   const additionalPropertySchema = fromPairs(additionalFields.map((field) => [field, { $role: 'additionalField' }]));
 
-  const properties = { ...baseSchema.properties, ...additionalPropertySchema };
+  const properties = { ...additionalPropertySchema, ...baseSchema.properties };
   return { ...baseSchema, properties };
 };
 

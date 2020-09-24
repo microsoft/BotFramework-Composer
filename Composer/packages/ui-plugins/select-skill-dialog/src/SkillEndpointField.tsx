@@ -1,14 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
 import React, { useMemo } from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { FieldProps, useShellApi } from '@bfc/extension-client';
+import { FieldLabel } from '@bfc/adaptive-form';
 import { getSkillNameFromSetting, Skill } from '@bfc/shared';
 
-export const SkillEndpointField: React.FC<FieldProps> = ({ value }) => {
+export const SkillEndpointField: React.FC<FieldProps> = (props) => {
+  const { description, label, required, uiOptions, value } = props;
   const { shellApi, skillsSettings, skills = [] } = useShellApi();
   const { updateSkillSetting } = shellApi;
 
@@ -39,5 +39,10 @@ export const SkillEndpointField: React.FC<FieldProps> = ({ value }) => {
     }
   };
 
-  return <Dropdown options={options} selectedKey={key} onChange={handleChange} />;
+  return (
+    <React.Fragment>
+      <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
+      <Dropdown options={options} selectedKey={key} onChange={handleChange} />
+    </React.Fragment>
+  );
 };

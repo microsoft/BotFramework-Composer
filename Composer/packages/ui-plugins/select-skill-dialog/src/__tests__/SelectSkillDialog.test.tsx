@@ -60,4 +60,9 @@ describe('Select Skill Dialog', () => {
     expect(addSkillDialog).toHaveBeenCalled();
     expect(onChange).toHaveBeenCalledWith({ ...settingReferences('test-skill') });
   });
+
+  it('should display label', async () => {
+    const { findByText } = renderSelectSkillDialog();
+    await findByText('Skill Dialog Name');
+  });
 });

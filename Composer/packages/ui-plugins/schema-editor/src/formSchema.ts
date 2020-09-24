@@ -9,8 +9,9 @@ import { SchemaEditorField } from './Fields/SchemaEditorField';
 const uiSchema: UISchema = {
   [SDKKinds.AdaptiveDialog]: {
     form: {
+      order: ['recognizer', '*', 'schema'],
       properties: {
-        schemaEditor: {
+        schema: {
           field: SchemaEditorField,
         },
       },

@@ -17,10 +17,6 @@ export function resolveFieldWidget(
 ): FieldWidget {
   const FieldOverride = uiOptions?.field;
 
-  if (schema?.$role === 'additionalField') {
-    return DefaultFields.AdditionalField;
-  }
-
   if (typeof FieldOverride === 'function') {
     return FieldOverride;
   }

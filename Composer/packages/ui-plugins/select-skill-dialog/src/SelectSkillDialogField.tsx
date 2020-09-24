@@ -21,7 +21,8 @@ export const settingReferences = (skillName: string) => ({
   skillAppId: referBySettings(skillName, 'msAppId'),
 });
 
-export const SelectSkillDialogField: React.FC<FieldProps> = ({ value, onChange }) => {
+export const SelectSkillDialogField: React.FC<FieldProps> = (props) => {
+  const { value, onChange } = props;
   const { shellApi, skills = [] } = useShellApi();
   const { addSkillDialog, displayManifestModal } = shellApi;
   const [comboboxTitle, setComboboxTitle] = useState<string | null>(null);
@@ -69,7 +70,9 @@ export const SelectSkillDialogField: React.FC<FieldProps> = ({ value, onChange }
     <React.Fragment>
       <ComboBoxField
         comboboxTitle={comboboxTitle}
+        description={formatMessage('Name of skill dialog to call')}
         id={'SkillDialogName'}
+        label={formatMessage('Skill Dialog Name')}
         options={options}
         value={skillId}
         onChange={handleChange}

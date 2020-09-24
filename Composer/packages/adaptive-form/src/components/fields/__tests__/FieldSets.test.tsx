@@ -60,7 +60,7 @@ describe('<Fieldsets />', () => {
   it('renders additional fields', async () => {
     const uiOptions = {
       properties: {
-        additionalField: { field: () => <div>Additional Field</div>, label: 'Additional Field Label' },
+        additionalField: { field: () => <div>Additional Field</div> },
       },
       fieldsets: [
         {
@@ -76,6 +76,5 @@ describe('<Fieldsets />', () => {
     const { findByText } = renderSubject({ schema, uiOptions, value: {} });
 
     await findByText('Additional Field');
-    await findByText('Additional Field Label');
   });
 });
