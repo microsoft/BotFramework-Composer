@@ -2,7 +2,8 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import styled, { css } from 'styled-components';
+import styled from '@emotion/styled';
+import { css } from '@emotion/core';
 import { default as Measure, ContentRect } from 'react-measure';
 
 // -------------------- STYLE --------------------
@@ -21,18 +22,17 @@ const MeasureDiv = styled.div`
   ${fullDivCss}
 `;
 
-const Root = styled.div.attrs(
-  ({ leftColWidth, splitterWidth }: { leftColWidth: string; splitterWidth: number }): any => ({
-    style: {
-      gridTemplateColumns: `${leftColWidth} ${splitterWidth}px 1fr`,
-    },
-  })
-)`
-  ${fullDivCss}
-  display: grid;
-  grid-template-rows: 1fr;
-  grid-template-areas: 'left split right';
-`;
+const Root = styled.div(({ leftColWidth, splitterWidth }: { leftColWidth: string; splitterWidth: number }) => ({
+  width: '100%',
+  height: '100%',
+  boxSizing: 'border-box',
+  outline: 'none',
+  overflow: 'hidden',
+  display: 'grid',
+  gridTemplateRows: '1fr',
+  gridTemplateAreas: `'left split right'`,
+  gridTemplateColumns: `${leftColWidth} ${splitterWidth}px 1fr`,
+}));
 
 const Left = styled.div`
   height: 100%;
@@ -55,18 +55,16 @@ const Split = styled.div`
   }
 `;
 
-const DefaultSplitVisual = styled.div.attrs(({ splitterWidth }: { splitterWidth: number }): any => ({
-  halfWidth: `${splitterWidth / 2}px`,
-}))`
-  height: 100%;
-  width: 1px;
-  box-sizing: border-box;
-  outline: none;
-  overflow: hidden;
-  background: silver;
-  cursor: col-resize;
-  margin-left: ${(props) => props.halfWidth};
-`;
+const DefaultSplitVisual = styled.div(({ splitterWidth }: { splitterWidth: number }) => ({
+  height: '100%',
+  width: '1px',
+  boxSizing: 'border-box',
+  outline: 'none',
+  overflow: 'hidden',
+  background: 'silver',
+  cursor: 'col-resize',
+  marginLeft: `${splitterWidth / 2}px`,
+}));
 
 const Right = styled.div`
   height: 100%;
