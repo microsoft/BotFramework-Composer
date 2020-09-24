@@ -6,9 +6,8 @@ import formatMessage from 'format-message';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
-import { UserSettings } from '@bfc/shared';
+import { UserSettings, DialogInfo, SDKKinds } from '@bfc/shared';
 import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
-import { DialogInfo, SDKKinds } from '@bfc/shared/src/types';
 
 import { TriggerFormData, TriggerFormDataErrors } from '../../utils/dialogUtil';
 import { isRegExRecognizerType, isLUISnQnARecognizerType } from '../../utils/dialogValidator';
