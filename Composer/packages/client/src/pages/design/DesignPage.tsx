@@ -581,7 +581,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   return (
     <React.Fragment>
       <div css={pageRoot}>
-        <LeftRightSplit initialLeftGridWidth="20%">
+        <LeftRightSplit initialLeftGridWidth="20%" minLeftPixels="200" minRightPixels="800">
           <ProjectTree
             dialogId={dialogId}
             dialogs={dialogs}
@@ -601,7 +601,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             </div>
             <Conversation css={editorContainer}>
               <div css={editorWrapper}>
-                <LeftRightSplit initialLeftGridWidth="75%">
+                <LeftRightSplit initialLeftGridWidth="75%" minLeftPixels="500" minRightPixels="300">
                   <div aria-label={formatMessage('Authoring canvas')} css={visualPanel} role="region">
                     {breadcrumbItems}
                     {dialogJsonVisible ? (
