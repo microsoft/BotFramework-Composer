@@ -7,6 +7,8 @@ import replace from 'lodash/replace';
 import find from 'lodash/find';
 import { useRecoilValue } from 'recoil';
 
+import { ExtensionPageContribution } from '../recoilModel/types';
+
 import { designPageLocationState, extensionsState, currentProjectIdState } from './../recoilModel';
 import { bottomLinks, topLinks } from './pageLinks';
 import routerCache from './routerCache';
@@ -34,7 +36,7 @@ export const useLinks = () => {
       pages.push(...pagesConfig);
     }
     return pages;
-  }, [] as any[]);
+  }, [] as ExtensionPageContribution[]);
 
   return { topLinks: topLinks(projectId, openedDialogId, pluginPages), bottomLinks };
 };

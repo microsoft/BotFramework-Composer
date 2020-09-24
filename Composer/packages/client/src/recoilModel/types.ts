@@ -39,6 +39,16 @@ export interface PublishType {
   };
 }
 
+type ExtensionPublishContribution = {
+  bundleId: string;
+};
+
+export type ExtensionPageContribution = {
+  bundleId: string;
+  label: string;
+  icon?: string;
+};
+
 // TODO: move this definition to a shared spot
 export interface ExtensionConfig {
   id: string;
@@ -50,7 +60,12 @@ export interface ExtensionConfig {
   /** Path where module is installed */
   path: string;
   bundles: any; // TODO: needed?
-  contributes: any; // TODO: define this type
+  contributes?: {
+    views?: {
+      publish?: ExtensionPublishContribution;
+      pages?: ExtensionPageContribution[];
+    };
+  };
 }
 
 export interface RuntimeTemplate {

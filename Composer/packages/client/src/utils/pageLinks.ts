@@ -2,11 +2,9 @@
 // Licensed under the MIT License.
 import formatMessage from 'format-message';
 
-export const topLinks = (
-  projectId: string,
-  openedDialogId: string,
-  pluginPages: { id: string; label: string; icon?: string }[]
-) => {
+import { ExtensionPageContribution } from '../recoilModel/types';
+
+export const topLinks = (projectId: string, openedDialogId: string, pluginPages: ExtensionPageContribution[]) => {
   const botLoaded = !!projectId;
   let links = [
     {
@@ -74,7 +72,7 @@ export const topLinks = (
   if (pluginPages.length > 0) {
     pluginPages.forEach((p) => {
       links.push({
-        to: `page/${p.id}`,
+        to: `page/${p.bundleId}`,
         iconName: p.icon ?? 'StatusCircleQuestionMark',
         labelName: p.label,
         exact: true,

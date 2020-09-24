@@ -88,7 +88,7 @@ The current valid contribution points are: `pages` and `publish`. More will be a
 }
 ```
 
-Each `view.<contribution-point>` property will specify an `id` property that correlates to the `id` property of the desired React app bundle to display at that contribution point as specified in the `composer.bundles` array.
+Each `view.<contribution-point>` property will specify an `bundleId` property that correlates to the `id` property of the desired React app bundle to display at that contribution point as specified in the `composer.bundles` array.
 
 Adding on to the example that we used in the `composer.bundles` section:
 
@@ -110,7 +110,7 @@ Adding on to the example that we used in the `composer.bundles` section:
 
         // telling Composer to display bundled React app at ./dist/bundle.js
         // inside of the publish contribution point surface
-        "id": "my-bundle"
+        "bundleId": "my-bundle"
       }
     }
   }
@@ -125,9 +125,9 @@ Depending on the contribution point, the `view.<contribution-point>` property mi
 
 **`composer.contributes.views.pages`** -- array
 
-This is an array containing your extension's page contributions. Composer will add a link to the left nav with the route `/page/<page-id>`.
+This is an array containing your extension's page contributions. Composer will add a link to the left nav with the route `/page/<bundle-id>`.
 
-Each page must define an `id` and `label` and can optionally define `icon`. Available icons can be found [here](https://developer.microsoft.com/en-us/fluentui#/styles/web/icons).
+Each page must define an `bundleId` and `label` and can optionally define `icon`. Available icons can be found [here](https://developer.microsoft.com/en-us/fluentui#/styles/web/icons).
 
 ```json
 {
@@ -139,7 +139,7 @@ Each page must define an `id` and `label` and can optionally define `icon`. Avai
     "contributes": {
       "views": {
         "pages": [{
-          "id": "page-id",
+          "bundleId": "page-id",
           "label": "My Page",
           "icon": "Airplane"
         }]
