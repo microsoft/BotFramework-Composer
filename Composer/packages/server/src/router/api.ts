@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import path from 'path';
+
 import express, { Router, Request, Response, NextFunction, RequestHandler } from 'express';
 
 import { ProjectController } from '../controllers/project';
@@ -8,7 +10,8 @@ import { StorageController } from '../controllers/storage';
 import { PublishController } from '../controllers/publisher';
 import { AssetController } from '../controllers/asset';
 import { EjectController } from '../controllers/eject';
-import * as PluginsController from '../controllers/plugins';
+import { FormDialogController } from '../controllers/formDialog';
+import * as ExtensionsController from '../controllers/extensions';
 
 import { UtilitiesController } from './../controllers/utilities';
 
@@ -24,12 +27,16 @@ router.delete('/projects/:projectId', ProjectController.removeProject);
 router.put('/projects/:projectId/files/:name', ProjectController.updateFile);
 router.delete('/projects/:projectId/files/:name', ProjectController.removeFile);
 router.post('/projects/:projectId/files', ProjectController.createFile);
-router.post('/projects/:projectId/skills', ProjectController.updateSkill);
-router.post('/projects/:projectId/skill/check', ProjectController.getSkill);
+router.get('/projects/:projectId/skill/retrieve-skill-manifest', ProjectController.getSkill);
 router.post('/projects/:projectId/build', ProjectController.build);
 router.post('/projects/:projectId/qnaSettings/set', ProjectController.setQnASettings);
 router.post('/projects/:projectId/project/saveAs', ProjectController.saveProjectAs);
 router.get('/projects/:projectId/export', ProjectController.exportProject);
+
+// form dialog generation apis
+router.post('/formDialogs/expandJsonSchemaProperty', FormDialogController.expandJsonSchemaProperty);
+router.get('/formDialogs/templateSchemas', FormDialogController.getTemplateSchemas);
+router.post('/formDialogs/:projectId/generate', FormDialogController.generate);
 
 // update the boilerplate content
 router.get('/projects/:projectId/boilerplateVersion', ProjectController.checkBoilerplateVersion);
@@ -60,25 +67,28 @@ router.post('/runtime/eject/:projectId/:template', EjectController.eject);
 //assets
 router.get('/assets/projectTemplates', AssetController.getProjTemplates);
 
+router.use('/assets/locales/', express.static(path.join(__dirname, '..', '..', 'src', 'locales')));
+
 //help api
 router.get('/utilities/qna/parse', UtilitiesController.getQnaContent);
-// plugins
-router.get('/plugins', PluginsController.listPlugins);
-router.post('/plugins', PluginsController.addPlugin);
-router.delete('/plugins', PluginsController.removePlugin);
-router.patch('/plugins/toggle', PluginsController.togglePlugin);
-router.get('/plugins/search', PluginsController.searchPlugins);
-router.get('/plugins/:id/view/:view', PluginsController.getBundleForView);
-// proxy route for plugins (allows plugin client code to make fetch calls using the Composer server as a proxy -- avoids browser blocking request due to CORS)
-router.post('/plugins/proxy/:url', PluginsController.performPluginFetch);
+// extensions
+router.get('/extensions', ExtensionsController.listExtensions);
+router.post('/extensions', ExtensionsController.addExtension);
+router.delete('/extensions', ExtensionsController.removeExtension);
+router.patch('/extensions/toggle', ExtensionsController.toggleExtension);
+router.get('/extensions/search', ExtensionsController.searchExtensions);
+router.get('/extensions/:id/view/:view', ExtensionsController.getBundleForView);
+// proxy route for extensions (allows extension client code to make fetch calls using the Composer server as a proxy -- avoids browser blocking request due to CORS)
+router.post('/extensions/proxy/:url', ExtensionsController.performExtensionFetch);
 
-const ErrorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
+const errorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
   Promise.resolve(handler(req, res, next)).catch(next);
 };
 
-router.stack.map((layer) => {
+router.stack.forEach((layer) => {
+  if (layer.route == null) return;
   const fn: RequestHandler = layer.route.stack[0].handle;
-  layer.route.stack[0].handle = ErrorHandler(fn);
+  layer.route.stack[0].handle = errorHandler(fn);
 });
 
 export const apiRouter = router;

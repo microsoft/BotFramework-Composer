@@ -12,7 +12,7 @@ import { resolveToBasePath } from './utils/fileUtil';
 import { data } from './styles';
 import { NotFound } from './components/NotFound';
 import { BASEPATH } from './constants';
-import { botOpeningState, projectIdState, dispatcherState, schemasState } from './recoilModel';
+import { dispatcherState, schemasState, botProjectsSpaceState, botOpeningState } from './recoilModel';
 import { openAlertModal } from './components/Modal/AlertDialog';
 import { dialogStyle } from './components/Modal/dialogStyle';
 import { LoadingSpinner } from './components/LoadingSpinner';
@@ -86,13 +86,14 @@ const projectStyle = css`
 `;
 
 const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
-  const botOpening = useRecoilValue(botOpeningState);
-  const projectId = useRecoilValue(projectIdState);
-  const schemas = useRecoilValue(schemasState);
+  const { projectId = '' } = props;
+  const schemas = useRecoilValue(schemasState(projectId));
   const { fetchProjectById } = useRecoilValue(dispatcherState);
+  const botProjects = useRecoilValue(botProjectsSpaceState);
+  const botOpening = useRecoilValue(botOpeningState);
 
   useEffect(() => {
-    if (projectId !== props.projectId && props.projectId) {
+    if (props.projectId && !botProjects.includes(props.projectId)) {
       fetchProjectById(props.projectId);
     }
   }, [props.projectId]);
@@ -106,11 +107,10 @@ const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string }>> = (pro
     }
   }, [schemas, projectId]);
 
-  if (botOpening || props.projectId !== projectId) {
-    return <LoadingSpinner />;
+  if (props.projectId && !botOpening && botProjects.includes(props.projectId)) {
+    return <div css={projectStyle}>{props.children}</div>;
   }
-
-  return <div css={projectStyle}>{props.children}</div>;
+  return <LoadingSpinner />;
 };
 
 export default Routes;

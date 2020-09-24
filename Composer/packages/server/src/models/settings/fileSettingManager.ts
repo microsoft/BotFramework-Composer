@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { UserIdentity } from '@bfc/plugin-loader';
+import { UserIdentity } from '@bfc/extension';
 
 import { Path } from '../../utility/path';
 import { IFileStorage } from '../storage/interface';

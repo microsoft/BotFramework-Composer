@@ -9,6 +9,7 @@
     "clean": "rimraf dist"
   },
   "composer": {
+    "enabled": false,
     "bundles": [
       {
         "id": "publish",
@@ -31,10 +32,9 @@
       }
     }
   },
-  "extendsComposer": false,
   "main": "dist/index.js",
   "dependencies": {
-    "@bfc/client-plugin-lib": "file:../../packages/extensions/client-plugin-lib",
+    "@bfc/extension-client": "file:../../packages/extension-client",
     "emotion": "^10.0.27",
     "react": "^16.13.0",
     "react-dom": "^16.13.0"

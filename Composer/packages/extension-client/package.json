@@ -1,0 +1,30 @@
+{
+  "name": "@bfc/extension-client",
+  "version": "1.0.0",
+  "description": "Composer extension library to be consumed by the client bundle of a Composer extension.",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "yarn clean && yarn build:ts",
+    "build:ts": "tsc --build tsconfig.build.json",
+    "clean": "rimraf lib"
+  },
+  "peerDependencies": {
+    "react": "16.13.0",
+    "react-dom": "16.13.0"
+  },
+  "devDependencies": {
+    "@bfc/test-utils": "*",
+    "@types/react": "16.9.23",
+    "react": "16.13.0",
+    "react-dom": "16.13.0",
+    "rimraf": "^3.0.2",
+    "typescript": "3.9.2"
+  },
+  "dependencies": {
+    "@bfc/shared": "*",
+    "debug": "^4.1.1",
+    "lodash": "^4.17.19"
+  }
+}

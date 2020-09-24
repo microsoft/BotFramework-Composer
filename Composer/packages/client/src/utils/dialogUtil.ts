@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ConceptLabels, SDKKinds, DialogInfo, DialogFactory, ITriggerCondition } from '@bfc/shared';
+import { conceptLabels as conceptLabelsFn, SDKKinds, DialogInfo, DialogFactory, ITriggerCondition } from '@bfc/shared';
 import get from 'lodash/get';
 import set from 'lodash/set';
 import cloneDeep from 'lodash/cloneDeep';
@@ -181,6 +181,7 @@ function getDialogsMap(dialogs: DialogInfo[]): DialogsMap {
 }
 
 export function getFriendlyName(data) {
+  const conceptLabels = conceptLabelsFn();
   if (get(data, '$designer.name')) {
     return get(data, '$designer.name');
   }
@@ -189,8 +190,8 @@ export function getFriendlyName(data) {
     return `${get(data, 'intent')}`;
   }
 
-  if (ConceptLabels[data.$kind] && ConceptLabels[data.$kind].title) {
-    return ConceptLabels[data.$kind].title;
+  if (conceptLabels[data.$kind] && conceptLabels[data.$kind].title) {
+    return conceptLabels[data.$kind].title;
   }
 
   return data.$kind;
@@ -202,7 +203,7 @@ const getLabel = (dialog: DialogInfo, dataPath: string) => {
   return getFriendlyName(data);
 };
 
-export function getbreadcrumbLabel(dialogs: DialogInfo[], dialogId: string, selected: string, focused: string) {
+export function getBreadcrumbLabel(dialogs: DialogInfo[], dialogId: string, selected: string, focused: string) {
   let label = '';
   const dataPath = getFocusPath(selected, focused);
   if (!dataPath) {
@@ -219,6 +220,7 @@ export function getbreadcrumbLabel(dialogs: DialogInfo[], dialogId: string, sele
 }
 
 export function getDialogData(dialogsMap: DialogsMap, dialogId: string, dataPath = '') {
+  const conceptLabels = conceptLabelsFn();
   if (!dialogId) return '';
   const dialog = dialogsMap[dialogId];
 
@@ -226,7 +228,7 @@ export function getDialogData(dialogsMap: DialogsMap, dialogId: string, dataPath
     return dialog;
   }
 
-  return ConceptLabels[get(dialog, dataPath)] ? ConceptLabels[get(dialog, dataPath)].title : get(dialog, dataPath);
+  return conceptLabels[get(dialog, dataPath)] ? conceptLabels[get(dialog, dataPath)].title : get(dialog, dataPath);
 }
 
 export function setDialogData(dialogsMap: DialogsMap, dialogId: string, dataPath: string, data: any) {
@@ -244,10 +246,11 @@ export function getSelected(focused: string): string {
 }
 
 export function replaceDialogDiagnosticLabel(path?: string): string {
+  const conceptLabels = conceptLabelsFn();
   if (!path) return '';
   let list = path.split('#');
   list = list.map((item) => {
-    return ConceptLabels[item]?.title || item;
+    return conceptLabels[item]?.title || item;
   });
   return list.join(': ');
 }

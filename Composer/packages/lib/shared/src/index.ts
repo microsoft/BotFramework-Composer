@@ -21,4 +21,5 @@ export * from './schemaUtils';
 export * from './types';
 export * from './viewUtils';
 export * from './walkerUtils';
+export * from './skillsUtils';
 export const DialogUtils = dialogUtils;
