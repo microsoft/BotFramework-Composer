@@ -44,7 +44,7 @@ const Extensions: React.FC<RouteComponentProps> = () => {
       minWidth: 100,
       maxWidth: 150,
       onRender: (item: ExtensionConfig) => {
-        return <span>{item.id}</span>;
+        return <span>{item.name}</span>;
       },
     },
     {
