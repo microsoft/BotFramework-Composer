@@ -93,14 +93,14 @@ export class AppUpdater extends EventEmitter {
   private onUpdateAvailable(updateInfo: UpdateInfo) {
     log('Update available: %O', updateInfo);
     this.checkingForUpdate = false;
-    if (!this.settings.autoDownload) {
+    if (this.explicitCheck || !this.settings.autoDownload) {
       this.emit('update-available', updateInfo);
     }
   }
 
   private onUpdateNotAvailable(updateInfo: UpdateInfo) {
     log('Update not available: %O', updateInfo);
-    if (!this.settings.autoDownload) {
+    if (this.explicitCheck || !this.settings.autoDownload) {
       this.emit('update-not-available', this.explicitCheck);
     }
     this.resetToIdle();
@@ -108,7 +108,7 @@ export class AppUpdater extends EventEmitter {
 
   private onDownloadProgress(progress: any) {
     log('Got update progress: %O', progress);
-    if (!this.settings.autoDownload) {
+    if (this.explicitCheck || !this.settings.autoDownload) {
       this.emit('progress', progress);
     }
   }
@@ -117,7 +117,7 @@ export class AppUpdater extends EventEmitter {
     log('Update downloaded: %O', updateInfo);
     this._downloadedUpdate = true;
     this.resetToIdle();
-    if (!this.settings.autoDownload) {
+    if (this.explicitCheck || !this.settings.autoDownload) {
       this.emit('update-downloaded', updateInfo);
     }
   }

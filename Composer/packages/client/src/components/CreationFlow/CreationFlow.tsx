@@ -12,11 +12,11 @@ import { CreationFlowStatus } from '../../constants';
 import {
   dispatcherState,
   creationFlowStatusState,
-  projectIdState,
   templateProjectsState,
   storagesState,
   focusedStorageFolderState,
-  localeState,
+  currentProjectIdState,
+  userSettingsState,
 } from '../../recoilModel';
 import Home from '../../pages/home/Home';
 import ImportQnAFromUrlModal from '../../pages/knowledge-base/ImportQnAFromUrlModal';
@@ -32,7 +32,7 @@ type CreationFlowProps = RouteComponentProps<{}>;
 const CreationFlow: React.FC<CreationFlowProps> = () => {
   const {
     fetchTemplates,
-    openBotProject,
+    openProject,
     createProject,
     saveProjectAs,
     fetchStorages,
@@ -42,16 +42,15 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     updateCurrentPathForStorage,
     updateFolder,
     saveTemplateId,
-    importQnAFromUrls,
     fetchProjectById,
     fetchRecentProjects,
   } = useRecoilValue(dispatcherState);
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
-  const projectId = useRecoilValue(projectIdState);
+  const projectId = useRecoilValue(currentProjectIdState);
   const templateProjects = useRecoilValue(templateProjectsState);
   const storages = useRecoilValue(storagesState);
   const focusedStorageFolder = useRecoilValue(focusedStorageFolderState);
-  const locale = useRecoilValue(localeState);
+  const { appLocale } = useRecoilValue(userSettingsState);
   const cachedProjectId = useProjectIdCache();
   const currentStorageIndex = useRef(0);
   const storage = storages[currentStorageIndex.current];
@@ -99,11 +98,19 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
 
   const openBot = async (botFolder) => {
     setCreationFlowStatus(CreationFlowStatus.CLOSE);
-    openBotProject(botFolder);
+    openProject(botFolder);
   };
 
-  const handleCreateNew = async (formData, templateId: string) => {
-    await createProject(templateId || '', formData.name, formData.description, formData.location, formData.schemaUrl);
+  const handleCreateNew = async (formData, templateId: string, qnaKbUrls?: string[]) => {
+    createProject(
+      templateId || '',
+      formData.name,
+      formData.description,
+      formData.location,
+      formData.schemaUrl,
+      appLocale,
+      qnaKbUrls
+    );
   };
 
   const handleSaveAs = (formData) => {
@@ -113,11 +120,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   const handleCreateQnA = async (urls: string[]) => {
     saveTemplateId(QnABotTemplateId);
     handleDismiss();
-    await handleCreateNew(formData, QnABotTemplateId);
-    // import qna from urls
-    if (urls.length > 0) {
-      await importQnAFromUrls({ id: `${formData.name.toLocaleLowerCase()}.${locale}`, urls });
-    }
+    handleCreateNew(formData, QnABotTemplateId, urls);
   };
 
   const handleSubmitOrImportQnA = async (formData, templateId: string) => {

@@ -5,7 +5,7 @@ import isArray from 'lodash/isArray';
 // this is just a type import
 // eslint-disable-next-line lodash/import-scope
 import type { MergeWithCustomizer } from 'lodash';
-import type { PluginConfig } from '@bfc/extension';
+import type { PluginConfig } from '@bfc/extension-client';
 import composer from '@bfc/ui-plugin-composer';
 import prompts from '@bfc/ui-plugin-prompts';
 import schemaEditor from '@bfc/ui-plugin-dialog-schema-editor';
@@ -29,7 +29,6 @@ const mergeArrays: MergeWithCustomizer = (objValue, srcValue, key) => {
 
 const defaultPlugin: Required<PluginConfig> = {
   uiSchema: {},
-  recognizers: [],
   flowWidgets: {},
 };
 

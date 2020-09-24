@@ -166,8 +166,7 @@ function extractReferredSkills(dialog): string[] {
   const visitor: VisitorFunc = (path: string, value: any): boolean => {
     // it's a valid schema dialog node.
     if (has(value, '$kind') && value.$kind === SDKKinds.BeginSkill) {
-      const skillId = value.id;
-      skills.push(skillId);
+      skills.push(value.skillEndpoint);
     }
     return false;
   };

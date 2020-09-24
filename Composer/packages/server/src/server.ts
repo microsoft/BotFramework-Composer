@@ -16,8 +16,8 @@ import { IConnection, createConnection } from 'vscode-languageserver';
 import { IntellisenseServer } from '@bfc/intellisense-languageserver';
 import { LGServer } from '@bfc/lg-languageserver';
 import { LUServer } from '@bfc/lu-languageserver';
-import { pluginLoader, PluginManager } from '@bfc/plugin-loader';
 import chalk from 'chalk';
+import { ExtensionContext, ExtensionManager } from '@bfc/extension';
 
 import { BotProjectService } from './services/project';
 import { getAuthProvider } from './router/auth';
@@ -40,18 +40,17 @@ export async function start(): Promise<number | string> {
   app.use(bodyParser.json({ limit: '50mb' }));
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(session({ secret: 'bot-framework-composer' }));
-  app.use(pluginLoader.passport.initialize());
-  app.use(pluginLoader.passport.session());
+  app.use(ExtensionContext.passport.initialize());
+  app.use(ExtensionContext.passport.session());
 
   // make sure plugin has access to our express...
-  pluginLoader.useExpress(app);
+  ExtensionContext.useExpress(app);
 
   // load all installed plugins
   setEnvDefault('COMPOSER_EXTENSION_DATA', path.resolve(__dirname, '../extensions.json'));
-  setEnvDefault('COMPOSER_BUILTIN_PLUGINS_DIR', path.resolve(__dirname, '../../../plugins'));
-  setEnvDefault('COMPOSER_REMOTE_PLUGINS_DIR', path.resolve(__dirname, '../../../.composer'));
-  await PluginManager.loadBuiltinPlugins();
-  // TODO (toanzian / abrown): load 3P plugins
+  setEnvDefault('COMPOSER_BUILTIN_EXTENSIONS_DIR', path.resolve(__dirname, '../../../plugins'));
+  setEnvDefault('COMPOSER_REMOTE_EXTENSIONS_DIR', path.resolve(__dirname, '../../../.composer'));
+  await ExtensionManager.loadAll();
 
   const { login, authorize } = getAuthProvider();
 

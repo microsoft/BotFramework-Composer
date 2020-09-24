@@ -1,12 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { FileInfo, importResolverGenerator } from '@bfc/shared';
+import { DialogSetting, FileInfo, importResolverGenerator } from '@bfc/shared';
 
 import { dialogIndexer } from './dialogIndexer';
 import { dialogSchemaIndexer } from './dialogSchemaIndexer';
 import { lgIndexer } from './lgIndexer';
 import { luIndexer } from './luIndexer';
 import { qnaIndexer } from './qnaIndexer';
+import { skillIndexer } from './skillIndexer';
 import { skillManifestIndexer } from './skillManifestIndexer';
 import { FileExtensions } from './utils/fileExtensions';
 import { getExtension, getBaseName } from './utils/help';
@@ -43,7 +44,7 @@ class Indexer {
     return importResolverGenerator(lgFiles, '.lg', locale);
   };
 
-  public index(files: FileInfo[], botName: string, locale: string) {
+  public index(files: FileInfo[], botName: string, locale: string, skillContent: any, settings: DialogSetting) {
     const result = this.classifyFile(files);
     return {
       dialogs: dialogIndexer.index(result[FileExtensions.Dialog], botName),
@@ -52,6 +53,7 @@ class Indexer {
       luFiles: luIndexer.index(result[FileExtensions.Lu]),
       qnaFiles: qnaIndexer.index(result[FileExtensions.QnA]),
       skillManifestFiles: skillManifestIndexer.index(result[FileExtensions.Manifest]),
+      skills: skillIndexer.index(skillContent, settings.skill),
     };
   }
 }
@@ -66,3 +68,4 @@ export * from './luIndexer';
 export * from './qnaIndexer';
 export * from './utils';
 export * from './validations';
+export * from './skillIndexer';

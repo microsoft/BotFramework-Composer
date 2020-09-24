@@ -135,7 +135,7 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
 
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
-  const [editor, setEditor] = useState<any>();
+  const [editor, setEditor] = useState<any>(undefined);
 
   // initialValue is designed to imporve local performance
   // it should be force updated if id change, or previous value is empty.

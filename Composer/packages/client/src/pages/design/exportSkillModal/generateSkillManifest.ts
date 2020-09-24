@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 import get from 'lodash/get';
-import { DialogInfo, DialogSchemaFile, ITrigger, SDKKinds, SkillManifest, LuFile } from '@bfc/shared';
-import { JSONSchema7 } from '@bfc/extension';
+import { DialogInfo, DialogSchemaFile, ITrigger, SDKKinds, SkillManifest, LuFile, QnAFile } from '@bfc/shared';
+import { JSONSchema7 } from '@bfc/extension-client';
 
 import { Activities, Activity, activityHandlerMap, ActivityTypes, DispatchModels } from './constants';
 
@@ -17,6 +17,7 @@ export const generateSkillManifest = (
   dialogs: DialogInfo[],
   dialogSchemas: DialogSchemaFile[],
   luFiles: LuFile[],
+  qnaFiles: QnAFile[],
   selectedTriggers: ITrigger[],
   selectedDialogs: Partial<DialogInfo>[]
 ) => {
@@ -41,7 +42,7 @@ export const generateSkillManifest = (
   }, []);
 
   const activities = generateActivities(dialogSchemas, triggers, resolvedDialogs);
-  const dispatchModels = generateDispatchModels(schema, dialogs, triggers, luFiles);
+  const dispatchModels = generateDispatchModels(schema, dialogs, triggers, luFiles, qnaFiles);
   const definitions = getDefinitions(dialogSchemas, resolvedDialogs);
 
   return {
@@ -104,7 +105,8 @@ export const generateDispatchModels = (
   schema: JSONSchema7,
   dialogs: DialogInfo[],
   selectedTriggers: any[],
-  luFiles: LuFile[]
+  luFiles: LuFile[],
+  qnaFiles: QnAFile[]
 ): { dispatchModels?: DispatchModels } => {
   const intents = selectedTriggers.filter(({ $kind }) => $kind === SDKKinds.OnIntent).map(({ intent }) => intent);
   const { id: rootId } = dialogs.find((dialog) => dialog?.isRoot) || {};
@@ -114,16 +116,46 @@ export const generateDispatchModels = (
     return luId === rootId;
   });
 
-  if (!intents.length || !schema.properties?.dispatchModels) {
+  const rootQnAFiles = qnaFiles.filter(({ id: qnaFileId }) => {
+    const [qnaId] = qnaFileId.split('.');
+    return qnaId === rootId;
+  });
+
+  if (!schema.properties?.dispatchModels) {
     return {};
   }
 
-  const languages = rootLuFiles.reduce((acc, { id }) => {
+  const luLanguages = intents.length
+    ? rootLuFiles.reduce((acc, { empty, id }) => {
+        const [name, locale] = id.split('.');
+        const { content = {} } = dialogs.find(({ id }) => id === name) || {};
+        const { recognizer = '' } = content;
+
+        if (!recognizer.includes('.lu') || empty) {
+          return acc;
+        }
+
+        return {
+          ...acc,
+          [locale]: [
+            ...(acc[locale] ?? []),
+            {
+              name,
+              contentType: 'application/lu',
+              url: `<${id}.lu url>`,
+              description: '<description>',
+            },
+          ],
+        };
+      }, {})
+    : {};
+
+  const languages = rootQnAFiles.reduce((acc, { empty, id }) => {
     const [name, locale] = id.split('.');
     const { content = {} } = dialogs.find(({ id }) => id === name) || {};
     const { recognizer = '' } = content;
 
-    if (!''.endsWith.call(recognizer, '.lu')) {
+    if (!recognizer.includes('.qna') || empty) {
       return acc;
     }
 
@@ -133,19 +165,21 @@ export const generateDispatchModels = (
         ...(acc[locale] ?? []),
         {
           name,
-          contentType: 'application/lu',
-          url: `<${id} url>`,
+          contentType: 'application/qna',
+          url: `<${id}.qna url>`,
           description: '<description>',
         },
       ],
     };
-  }, {});
+  }, luLanguages);
+
+  const dispatchModels = {
+    ...(Object.keys(languages).length ? { languages } : {}),
+    ...(intents.length ? { intents } : {}),
+  };
 
   return {
-    dispatchModels: {
-      ...(Object.keys(languages).length ? { languages } : {}),
-      ...(intents.length ? { intents } : {}),
-    },
+    ...(Object.keys(dispatchModels).length ? { dispatchModels } : {}),
   };
 };
 

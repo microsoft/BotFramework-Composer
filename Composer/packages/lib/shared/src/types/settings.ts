@@ -12,11 +12,19 @@ export interface UserSettings {
   codeEditor: CodeEditorSettings;
   propertyEditorWidth: number;
   dialogNavWidth: number;
+  appLocale: string;
 }
 
 export interface AppUpdaterSettings {
   autoDownload: boolean;
   useNightly: boolean;
+}
+
+export interface SkillSetting {
+  name: string;
+  manifestUrl: string;
+  msAppId: string;
+  endpointUrl: string;
 }
 
 export interface DialogSetting {
@@ -33,9 +41,8 @@ export interface DialogSetting {
   defaultLanguage: string;
   languages: string[];
   skill?: {
-    name: string;
-    manifestUrl: string;
-  }[];
+    [skillName: string]: SkillSetting;
+  };
   botId?: string;
   skillHostEndpoint?: string;
   [key: string]: any;

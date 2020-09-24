@@ -7,7 +7,7 @@ import { v4 as uuid } from 'uuid';
 import md5 from 'md5';
 import { copy, rmdir, emptyDir, readJson, pathExists, writeJson, mkdirSync, writeFileSync } from 'fs-extra';
 import { IBotProject } from '@bfc/shared';
-import { JSONSchema7 } from '@bfc/plugin-loader';
+import { JSONSchema7 } from '@bfc/extension';
 import { Debugger } from 'debug';
 
 import { mergeDeep } from './mergeDeep';
@@ -28,7 +28,6 @@ interface CreateAndDeployResources {
   hostname?: string;
   luisResource?: string;
   subscriptionID: string;
-  language?: string;
 }
 
 interface PublishConfig {
@@ -192,15 +191,7 @@ export default async (composer: any): Promise<void> => {
       resourcekey: string,
       customizeConfiguration: CreateAndDeployResources
     ) => {
-      const {
-        subscriptionID,
-        accessToken,
-        name,
-        environment,
-        hostname,
-        luisResource,
-        language,
-      } = customizeConfiguration;
+      const { subscriptionID, accessToken, name, environment, hostname, luisResource } = customizeConfiguration;
       try {
         // Create the BotProjectDeploy object, which is used to carry out the deploy action.
         const azDeployer = new BotProjectDeploy({
@@ -221,7 +212,7 @@ export default async (composer: any): Promise<void> => {
         });
 
         // Perform the deploy
-        await azDeployer.deploy(project, settings, profileName, name, environment, language, hostname, luisResource);
+        await azDeployer.deploy(project, settings, profileName, name, environment, hostname, luisResource);
 
         // update status and history
         const status = this.getLoadingStatus(botId, profileName, jobId);
@@ -322,7 +313,7 @@ export default async (composer: any): Promise<void> => {
         environment,
         hostname,
         luisResource,
-        language,
+        defaultLanguage,
         settings,
         accessToken,
       } = config;
@@ -360,7 +351,6 @@ export default async (composer: any): Promise<void> => {
         environment,
         hostname,
         luisResource,
-        language,
       };
       await this.performDeploymentAction(
         project,

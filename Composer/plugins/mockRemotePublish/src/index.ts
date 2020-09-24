@@ -8,7 +8,7 @@
  */
 
 import { v4 as uuid } from 'uuid';
-import { ComposerPluginRegistration, PublishResponse, PublishPlugin, JSONSchema7 } from '@bfc/plugin-loader';
+import { ExtensionRegistration, PublishResponse, PublishPlugin, JSONSchema7 } from '@bfc/extension';
 
 import schema from './schema';
 
@@ -23,9 +23,9 @@ interface PublishConfig {
 
 class LocalPublisher implements PublishPlugin<PublishConfig> {
   private data: { [botId: string]: LocalPublishData };
-  private composer: ComposerPluginRegistration;
+  private composer: ExtensionRegistration;
   public schema: JSONSchema7;
-  constructor(composer: ComposerPluginRegistration) {
+  constructor(composer: ExtensionRegistration) {
     this.data = {};
     this.composer = composer;
     this.schema = schema;
@@ -134,7 +134,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
   };
 }
 
-export default async (composer: ComposerPluginRegistration): Promise<void> => {
+export default async (composer: ExtensionRegistration): Promise<void> => {
   const publisher = new LocalPublisher(composer);
   // pass in the custom storage class that will override the default
   await composer.addPublishMethod(publisher);
