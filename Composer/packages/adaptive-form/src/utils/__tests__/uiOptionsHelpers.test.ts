@@ -3,7 +3,7 @@
 
 import { FieldProps, UIOptions } from '@bfc/extension-client';
 
-import { getUiLabel, getUiDescription, getUiPlaceholder } from '../uiOptionsHelpers';
+import { getUiDescription, getUiLabel, getUiPlaceholder } from '../uiOptionsHelpers';
 
 let props;
 
@@ -89,5 +89,11 @@ describe('getUiPlaceholder', () => {
     expect(getUiPlaceholder({ ...props, placeholder: undefined, schema: { examples: ['one', 'two'] } })).toEqual(
       'ex. one, two'
     );
+  });
+
+  it('correctly display examples for non string types', () => {
+    expect(
+      getUiPlaceholder({ ...props, placeholder: undefined, schema: { examples: [true, 5, { arg1: 'test' }] } })
+    ).toEqual('ex. true, 5, {"arg1":"test"}');
   });
 });
