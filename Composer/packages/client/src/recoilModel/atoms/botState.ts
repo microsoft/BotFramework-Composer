@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { atomFamily } from 'recoil';
+import { atom, atomFamily } from 'recoil';
 import {
   DialogInfo,
   DialogSchemaFile,
