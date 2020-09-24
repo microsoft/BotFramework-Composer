@@ -22,13 +22,12 @@ import {
   botLoadErrorState,
 } from '../../recoilModel';
 import settingsStorage from '../../utils/dialogSettingStorage';
-import { QnaConfig, BotStatus, LuisConfig } from '../../constants';
+import { BotStatus } from '../../constants';
 import { isAbsHosted } from '../../utils/envUtil';
 import useNotifications from '../../pages/notifications/useNotifications';
 import { navigateTo, openInEmulator } from '../../utils/navigation';
-import { getReferredQnaFiles } from '../../utils/qnaUtil';
 
-import { getReferredLuFiles } from './../../utils/luUtil';
+import { isBuildConfigComplete, needsBuild } from './../../utils/buildUtil';
 import { PublishDialog } from './publishDialog';
 import { ErrorCallout } from './errorCallout';
 import { EmulatorOpenButton } from './emulatorOpenButton';
@@ -153,15 +152,14 @@ export const TestController: React.FC<{ projectId: string }> = (props) => {
     }
   }
 
-  async function handlePublish(config: IPublishConfig) {
+  async function handleBuild(config: IPublishConfig) {
     setBotStatus(BotStatus.publishing, projectId);
     dismissDialog();
     const { luis, qna } = config;
-    const endpointKey = settings.qna?.endpointKey;
     await setSettings(projectId, {
       ...settings,
       luis: luis,
-      qna: Object.assign({}, settings.qna, qna, { endpointKey }),
+      qna: Object.assign({}, settings.qna, qna),
     });
     await build(luis, qna, projectId);
   }
@@ -175,48 +173,24 @@ export const TestController: React.FC<{ projectId: string }> = (props) => {
     await publishToTarget(projectId, defaultPublishConfig, { comment: '' }, sensitiveSettings);
   }
 
-  function isConfigComplete(config) {
-    let complete = true;
-    if (getReferredLuFiles(luFiles, dialogs).length > 0) {
-      if (Object.values(LuisConfig).some((luisConfigKey) => config.luis[luisConfigKey] === '')) {
-        complete = false;
-      }
-    }
-    if (getReferredQnaFiles(qnaFiles, dialogs).length > 0) {
-      if (Object.values(QnaConfig).some((qnaConfigKey) => config.qna[qnaConfigKey] === '')) {
-        complete = false;
-      }
-    }
-    return complete;
-  }
-
-  // return true if dialogs have one with default recognizer.
-  function needsPublish(dialogs) {
-    let isDefaultRecognizer = false;
-    if (dialogs.some((dialog) => typeof dialog.content.recognizer === 'string')) {
-      isDefaultRecognizer = true;
-    }
-    return isDefaultRecognizer;
-  }
-
   async function handleStart() {
     dismissCallout();
     const config = Object.assign(
       {},
       {
         luis: settings.luis,
-        qna: {
-          subscriptionKey: settings.qna?.subscriptionKey,
-          qnaRegion: settings.qna?.qnaRegion,
-          endpointKey: settings.qna?.endpointKey,
-        },
+        qna: settings.qna,
       }
     );
-    if (!isAbsHosted() && needsPublish(dialogs)) {
-      if (botStatus === BotStatus.failed || botStatus === BotStatus.pending || !isConfigComplete(config)) {
+    if (!isAbsHosted() && needsBuild(dialogs)) {
+      if (
+        botStatus === BotStatus.failed ||
+        botStatus === BotStatus.pending ||
+        !isBuildConfigComplete(config, dialogs, luFiles, qnaFiles)
+      ) {
         openDialog();
       } else {
-        await handlePublish(config);
+        await handleBuild(config);
       }
     } else {
       await handleLoadBot();
@@ -278,7 +252,7 @@ export const TestController: React.FC<{ projectId: string }> = (props) => {
           isOpen={modalOpen}
           projectId={projectId}
           onDismiss={dismissDialog}
-          onPublish={handlePublish}
+          onPublish={handleBuild}
         />
       )}
     </Fragment>
