@@ -5,5 +5,5 @@
     "sourceMap": true,
     "target": "es6"
   },
-  "include": ["src/**/*.ts", "__tests__/**/*"]
+  "include": ["src/**/*.ts"]
 }
