@@ -17,7 +17,9 @@ import * as about from './styles';
 export const About: React.FC<RouteComponentProps> = () => {
   const { setCurrentMode } = useRecoilValue(dispatcherState);
 
-  useEffect(() => setCurrentMode('about'), []);
+  useEffect(() => {
+    setCurrentMode('about');
+  }, []);
 
   return (
     <div css={about.outline} role="main">

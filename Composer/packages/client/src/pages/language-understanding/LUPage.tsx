@@ -66,7 +66,9 @@ const LUPage: React.FC<RouteComponentProps<{
     }
   }, [dialogId, dialogs, projectId]);
 
-  useEffect(() => setCurrentMode('lu'), []);
+  useEffect(() => {
+    setCurrentMode('lu');
+  }, []);
 
   const onToggleEditMode = useCallback(
     (_e, checked) => {

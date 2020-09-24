@@ -140,9 +140,7 @@ const Home: React.FC<RouteComponentProps> = () => {
     },
   ];
 
-  useEffect(() => {
-    setCurrentMode('home');
-  }, []);
+  useEffect(() => setCurrentMode('home'), []);
 
   return (
     <div css={home.outline}>
