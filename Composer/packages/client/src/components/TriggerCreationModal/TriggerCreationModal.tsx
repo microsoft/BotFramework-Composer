@@ -15,9 +15,8 @@ import { SDKKinds } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
 import { TriggerFormData, TriggerFormDataErrors } from '../../utils/dialogUtil';
-import { projectIdState } from '../../recoilModel/atoms/botState';
-import { userSettingsState } from '../../recoilModel';
-import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
+import { userSettingsState } from '../../recoilModel/atoms';
+import { validateDialogSelectorFamily } from '../../recoilModel';
 import { isRegExRecognizerType, resolveRecognizer$kind } from '../../utils/dialogValidator';
 
 import { eventTypeKey, customEventKey, intentTypeKey, activityTypeKey } from './constants';
@@ -55,6 +54,7 @@ const initialFormData: TriggerFormData = {
 };
 
 interface TriggerCreationModalProps {
+  projectId: string;
   dialogId: string;
   isOpen: boolean;
   onDismiss: () => void;
@@ -62,10 +62,9 @@ interface TriggerCreationModalProps {
 }
 
 export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props) => {
-  const { isOpen, onDismiss, onSubmit, dialogId } = props;
-  const dialogs = useRecoilValue(validatedDialogsSelector);
+  const { isOpen, onDismiss, onSubmit, dialogId, projectId } = props;
+  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
 
-  const projectId = useRecoilValue(projectIdState);
   const userSettings = useRecoilValue(userSettingsState);
   const dialogFile = dialogs.find((dialog) => dialog.id === dialogId);
   const recognizer$kind = resolveRecognizer$kind(dialogFile);
