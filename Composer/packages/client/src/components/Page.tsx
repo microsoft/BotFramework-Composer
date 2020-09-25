@@ -115,6 +115,7 @@ const Page: React.FC<IPageProps> = ({
           <ProjectTree
             showDialogs={showDialogs}
             showTriggers={false}
+            onDelete={(item) => console.log('deleting', item)}
             onSelect={(item) => console.log('selected', item)}
           />
           <div aria-label={mainRegionName} css={content} data-testid="PageContent" role="region">

@@ -120,11 +120,20 @@ export const overflowSet = css`
   display: flex;
 `;
 
-const warningIcon = {
+const statusIcon = {
   width: '24px',
-  color: '#BE880A',
   fontSize: 16,
   marginLeft: 6,
+};
+
+const warningIcon = {
+  ...statusIcon,
+  color: '#BE880A',
+};
+
+const errorIcon = {
+  ...statusIcon,
+  color: '#CC3F3F',
 };
 
 // -------------------- TreeItem -------------------- //
@@ -134,7 +143,7 @@ interface ITreeItemProps {
   isActive?: boolean;
   isSubItemActive?: boolean;
   depth: number;
-  onDelete: (link: TreeLink) => void | undefined;
+  onDelete?: (link: TreeLink) => void;
   onSelect: (link: TreeLink) => void;
   icon?: string;
   dialogName?: string;
@@ -146,6 +155,7 @@ const onRenderItem = (depth: number) => (item: IOverflowSetItemProps) => {
   const warningContent = formatMessage(
     'This trigger type is not supported by the RegEx recognizer and will not be fired.'
   );
+  const errorContent = 'stub for error content'; // TODO: get actual warning and error messages from link
   return (
     <div
       data-is-focusable
@@ -171,9 +181,14 @@ const onRenderItem = (depth: number) => (item: IOverflowSetItemProps) => {
           />
         )}
         {item.displayName}
+        {item.errorContent && (
+          <TooltipHost content={errorContent} directionalHint={DirectionalHint.bottomLeftEdge}>
+            <Icon iconName={'Warning'} style={warningIcon} />
+          </TooltipHost>
+        )}
         {item.warningContent && (
           <TooltipHost content={warningContent} directionalHint={DirectionalHint.bottomLeftEdge}>
-            <Icon iconName={'Warning'} style={warningIcon} />
+            <Icon iconName={'ErrorBadge'} style={errorIcon} />
           </TooltipHost>
         )}
       </div>

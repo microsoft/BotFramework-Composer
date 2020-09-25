@@ -39,7 +39,7 @@ const root = css`
   overflow-y: auto;
   overflow-x: hidden;
   .ms-List-cell {
-    min-height: 24px;
+    min-height: 16px;
   }
   label: root;
 `;
@@ -57,6 +57,7 @@ export type TreeLink = {
   displayName: string;
   isRoot: boolean;
   warningContent?: string;
+  errorContent?: string;
   projectId: string;
   skillId?: string;
   dialogName?: string;
@@ -123,6 +124,11 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
     return bot.dialogs.some((dialog) => dialog.triggers.some((tr) => triggerNotSupported(dialog, tr)));
   };
 
+  const botHasErrors = (bot: BotInProject) => {
+    // TODO: this is just a stub for now
+    return false;
+  };
+
   const renderBotHeader = (bot: BotInProject) => {
     const link: TreeLink = {
       displayName: bot.name,
@@ -130,6 +136,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
       skillId: bot.projectId,
       isRoot: true,
       warningContent: botHasWarnings(bot) ? formatMessage('This bot has warnings') : undefined,
+      errorContent: botHasErrors(bot) ? formatMessage('This bot has errors') : undefined,
     };
 
     return (
@@ -183,6 +190,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
     const link: TreeLink = {
       displayName: item.displayName,
       warningContent: item.warningContent,
+      errorContent: item.errorContent,
       trigger: item.index,
       dialogName: dialog.id,
       isRoot: false,
