@@ -16,6 +16,16 @@ export enum AzureAPIStatus {
     ERROR = "ERROR"
 }
 
+export enum AzureResourceProviderType {
+    QnA = 'Microsoft.CognitiveServices',
+    Luis = 'Microsoft.CognitiveServices',
+    CosmosDB = 'Microsoft.DocumentDB',
+    BlobStorage = 'Microsoft.Storage',
+    ApplicationInsights = 'Microsoft.Insights',
+    WebApp = 'Microsoft.Web',
+    Bot = 'Microsoft.BotService',
+}
+
 export class AzureProvisionUtil {
 
     /**
@@ -60,28 +70,60 @@ export class AzureProvisionUtil {
     /**
      * Get supported regions for differernt resource type
      */
-    public async GetSupportedRegionsByType(resourceType: string) {
+    public async GetSupportedRegionsByType(subscriptionId: string, resourceType: AzureResourceProviderType): Promise<Array<string>> {
         try {
-            // todo
-        }
-        catch (err) {
-            // todo
-        }
-    }
-
-    /**
-     * Get all resource groups under a subscription
-     */
-    public async GetResourceGroupBySubscription(subscription: Subscription): Promise<Array<ResourceGroup>> {
-        try {
-            if (!subscription || !subscription.id) {
+            if (!subscriptionId) {
                 this.logger({
                     status: AzureAPIStatus.PARAM_ERROR,
                     message: 'Need subscription or subscription id as a parameter.'
                 });
                 return []
             }
-            const resourceManagementClient = new ResourceManagementClient(this.credentials, subscription.id);
+
+            if (!resourceType) {
+                this.logger({
+                    status: AzureAPIStatus.PARAM_ERROR,
+                    message: 'Need resourceType or as a parameter.'
+                });
+                return []
+            }
+            const resourceManagementClient = new ResourceManagementClient(this.credentials, subscriptionId);
+            const resourceProviderResult = await resourceManagementClient.providers.get(resourceType);
+            if (resourceProviderResult._response.status >= 300) {
+                this.logger({
+                    status: AzureAPIStatus.ERROR,
+                    message: resourceProviderResult._response.bodyAsText
+                });
+                return []
+            }
+            const resourceTypes = resourceProviderResult._response.parsedBody.resourceTypes;
+            if (resourceTypes.length == 0) {
+                return []
+            }
+            return resourceTypes[0].locations;
+        }
+        catch (err) {
+            this.logger({
+                status: AzureAPIStatus.ERROR,
+                message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
+            });
+            return []
+        }
+    }
+
+    /**
+     * Get all resource groups under a subscription
+     */
+    public async GetResourceGroupBySubscription(subscriptionId: string): Promise<Array<ResourceGroup>> {
+        try {
+            if (subscriptionId) {
+                this.logger({
+                    status: AzureAPIStatus.PARAM_ERROR,
+                    message: 'Need subscription or subscription id as a parameter.'
+                });
+                return []
+            }
+            const resourceManagementClient = new ResourceManagementClient(this.credentials, subscriptionId);
             const resourceGroupsResult = await resourceManagementClient.resourceGroups.list();
             if (resourceGroupsResult._response.status >= 300) {
                 this.logger({
@@ -100,7 +142,7 @@ export class AzureProvisionUtil {
             return []
         }
     }
-    
+
     /**
      * Get all resource groups under a subscription id
      */
@@ -213,7 +255,7 @@ export class AzureProvisionUtil {
                     message: 'Invalid param: subscription id'
                 } as ResourceNameAvailability;
             }
-            
+
             const webSiteManagementClient = new WebSiteManagementClient(this.credentials, subscriptionId);
             const getCheckNameAvailabilityResult = await webSiteManagementClient.checkNameAvailability(name, 'Microsoft.Web/sites');
             if (getCheckNameAvailabilityResult._response.status >= 300) {
