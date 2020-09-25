@@ -5,6 +5,8 @@ import { AppUpdaterSettings, CodeEditorSettings, PromptTab } from '@bfc/shared';
 
 import { AppUpdaterStatus } from '../constants';
 
+import { CardProps } from './../components/NotificationCard';
+
 export interface StateError {
   status?: number;
   summary: string;
@@ -127,3 +129,5 @@ export enum QnAAllUpViewStatus {
   Success,
   Failed,
 }
+
+export type Notification = CardProps & { id: string };
