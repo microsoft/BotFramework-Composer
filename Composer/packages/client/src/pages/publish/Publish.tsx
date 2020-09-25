@@ -404,7 +404,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         <h1 css={HeaderText}>{selectedTarget ? selectedTargetName : formatMessage('Publish Profiles')}</h1>
       </div>
       <div css={ContentStyle} data-testid="Publish" role="main">
-        <LeftRightSplit initialLeftGridWidth="20%" minLeftPixels="200" minRightPixels="800">
+        <LeftRightSplit initialLeftGridWidth="20%" minLeftPixels={200} minRightPixels={800}>
           <div
             aria-label={formatMessage('Navigation panel')}
             css={projectContainer}
