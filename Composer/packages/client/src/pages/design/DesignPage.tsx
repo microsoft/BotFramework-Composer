@@ -156,9 +156,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const triggerApi = useTriggerApi(shell.api);
   const { createTrigger } = shell.api;
 
-  // useEffect(() => {
-  //   setCurrentMode('design');
-  // }, []);
+  useEffect(() => {
+    setCurrentMode('design');
+  }, []);
 
   useEffect(() => {
     const currentDialog = dialogs.find(({ id }) => id === dialogId);

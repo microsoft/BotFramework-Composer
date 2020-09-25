@@ -8,6 +8,7 @@ import { forwardRef } from 'react';
 
 import { RequireAuth } from '../RequireAuth';
 import { ErrorBoundary } from '../ErrorBoundary';
+import { Conversation } from '../Conversation';
 import { ProjectTree } from '../ProjectTree/ProjectTree';
 
 import Routes from './../../router';
@@ -34,6 +35,8 @@ const content = css`
 
 const Content = forwardRef<HTMLDivElement>((props, ref) => <div css={content} {...props} ref={ref} />);
 
+const SHOW_TREE = ['design'];
+
 export const RightPanel = () => {
   const applicationError = useRecoilValue(applicationErrorState);
   const { setApplicationLevelError, fetchProjectById } = useRecoilValue(dispatcherState);
@@ -51,10 +54,10 @@ export const RightPanel = () => {
       >
         <RequireAuth>
           <div css={{ display: 'flex', flexDirection: 'row' }}>
-            {currentMode !== 'home' && currentMode !== 'about' && (
+            {SHOW_TREE.includes(currentMode) && (
               <ProjectTree
-                dialogId={'test'}
                 selected={'testg'}
+                selectedDialog={'test'}
                 showTriggers={currentMode === 'design'}
                 onDelete={(link) => {
                   console.log(link);
@@ -64,7 +67,9 @@ export const RightPanel = () => {
                 }}
               />
             )}
-            <Routes component={Content} />
+            <Conversation>
+              <Routes component={Content} />
+            </Conversation>
           </div>
         </RequireAuth>
       </ErrorBoundary>

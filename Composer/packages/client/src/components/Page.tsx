@@ -8,6 +8,7 @@ import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 
 import { Toolbar, IToolbarItem } from './Toolbar';
 import { NavTree, INavTreeItem } from './NavTree';
+import { ProjectTree } from './ProjectTree/ProjectTree';
 
 // -------------------- Styles -------------------- //
 
@@ -87,13 +88,22 @@ interface IPageProps {
   mainRegionName: string;
   onRenderHeaderContent?: () => string | JSX.Element | null;
   'data-testid'?: string;
+  showDialogs?: boolean;
 }
 
-const Page: React.FC<IPageProps> = (props) => {
-  const { title, navLinks, toolbarItems, onRenderHeaderContent, children, navRegionName, mainRegionName } = props;
-
+const Page: React.FC<IPageProps> = ({
+  title,
+  navLinks,
+  toolbarItems,
+  onRenderHeaderContent,
+  children,
+  navRegionName,
+  mainRegionName,
+  showDialogs = true,
+  'data-testid': testId,
+}) => {
   return (
-    <div css={root} data-testid={props['data-testid']}>
+    <div css={root} data-testid={testId}>
       <div css={pageWrapper}>
         <Toolbar toolbarItems={toolbarItems} />
         <div css={header}>
@@ -101,7 +111,12 @@ const Page: React.FC<IPageProps> = (props) => {
           {onRenderHeaderContent && <div css={headerContent}>{onRenderHeaderContent()}</div>}
         </div>
         <div css={main} role="main">
-          <NavTree navLinks={navLinks} regionName={navRegionName} />
+          {/* <NavTree navLinks={navLinks} regionName={navRegionName} /> */}
+          <ProjectTree
+            showDialogs={showDialogs}
+            showTriggers={false}
+            onSelect={(item) => console.log('selected', item)}
+          />
           <div aria-label={mainRegionName} css={content} data-testid="PageContent" role="region">
             {children}
           </div>

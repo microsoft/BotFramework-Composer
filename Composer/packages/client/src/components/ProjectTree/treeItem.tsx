@@ -134,7 +134,7 @@ interface ITreeItemProps {
   isActive?: boolean;
   isSubItemActive?: boolean;
   depth: number;
-  onDelete?: (link: TreeLink) => void;
+  onDelete: (link: TreeLink) => void | undefined;
   onSelect: (link: TreeLink) => void;
   icon?: string;
   dialogName?: string;
@@ -206,9 +206,17 @@ const onRenderOverflowButton = (showIcon: boolean, isActive: boolean) => {
   };
 };
 
-export const TreeItem: React.FC<ITreeItemProps> = (props) => {
-  const { link, isActive, depth, onDelete, onSelect, icon, dialogName, shiftOut } = props;
-
+export const TreeItem: React.FC<ITreeItemProps> = ({
+  link,
+  isActive,
+  depth,
+  onDelete = undefined,
+  onSelect,
+  icon,
+  dialogName,
+  shiftOut,
+  showProps,
+}) => {
   const a11yLabel = `${dialogName ?? '$Root'}_${link.displayName}`;
 
   const overflowMenu: { key: string; name: string; onClick: () => void }[] = [];
@@ -221,7 +229,7 @@ export const TreeItem: React.FC<ITreeItemProps> = (props) => {
     });
   }
 
-  if (props.showProps) {
+  if (showProps) {
     overflowMenu.push({
       key: 'props',
       name: formatMessage('Properties'),

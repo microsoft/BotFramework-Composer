@@ -81,11 +81,12 @@ function sortDialog(dialogs: DialogInfo[]) {
 }
 
 interface IProjectTreeProps {
-  dialogId: string;
+  selectedDialog: string;
   selected: string;
   onSelect: (link: TreeLink) => void;
-  onDelete: (link: TreeLink) => void;
-  showTriggers: boolean;
+  onDelete: (link: TreeLink) => void | void;
+  showTriggers?: boolean;
+  showDialogs?: boolean;
 }
 
 const TYPE_TO_ICON_MAP = {
@@ -98,11 +99,17 @@ type BotInProject = {
   name: string;
 };
 
-export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
+export const ProjectTree: React.FC<IProjectTreeProps> = ({
+  selectedDialog,
+  selected,
+  onSelect,
+  onDelete = undefined,
+  showTriggers = true,
+  showDialogs = true,
+}) => {
   const { onboardingAddCoachMarkRef, updateUserSettings } = useRecoilValue(dispatcherState);
   const { dialogNavWidth: currentWidth } = useRecoilValue(userSettingsState);
 
-  const { selected, onSelect, onDelete, showTriggers } = props;
   const [filter, setFilter] = useState('');
   const delayedSetFilter = debounce((newValue) => setFilter(newValue), 1000);
   const addMainDialogRef = useCallback((mainDialog) => onboardingAddCoachMarkRef({ mainDialog }), []);
@@ -164,6 +171,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
           icon={'CannedChat'}
           isSubItemActive={!!selected}
           link={link}
+          shiftOut={showTriggers ? 0 : 28}
           onDelete={onDelete}
           onSelect={onSelect}
         />
@@ -189,7 +197,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
           depth={depth}
           dialogName={dialog.displayName}
           icon={TYPE_TO_ICON_MAP[item.type] || 'Flow'}
-          isActive={dialog.id === props.dialogId && createSelectedPath(item.index) === selected}
+          isActive={dialog.id === selectedDialog && createSelectedPath(item.index) === selected}
           link={link}
           shiftOut={32}
           onDelete={onDelete}
@@ -255,12 +263,16 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
   }
 
   function createBotSubtree(bot: BotInProject & { hasWarnings: boolean }) {
-    return (
-      <details key={bot.projectId}>
-        <summary css={summaryStyle}>{renderBotHeader(bot)}</summary>
-        {createDetailsTree(bot, 1)}
-      </details>
-    );
+    if (showDialogs) {
+      return (
+        <details key={bot.projectId}>
+          <summary css={summaryStyle}>{renderBotHeader(bot)}</summary>
+          {createDetailsTree(bot, 1)}
+        </details>
+      );
+    } else {
+      return renderBotHeader(bot);
+    }
   }
 
   const projectTree =
