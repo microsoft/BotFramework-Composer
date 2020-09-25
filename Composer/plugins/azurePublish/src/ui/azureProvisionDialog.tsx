@@ -2,24 +2,18 @@
 // Licensed under the MIT License.
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+// import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
+// import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import * as React from 'react';
 import { useState, useMemo, useEffect, Fragment } from 'react';
-import formatMessage from 'format-message';
+// import formatMessage from 'format-message';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { useRecoilValue } from 'recoil';
-import { Subscription, DeployLocation } from '@bfc/shared';
+import { getAccessTokensFromStorage } from '@bfc/extension-client';
+import { Subscription, ResourceGroups, DeployLocation } from '@bfc/shared';
 
-import { subscriptionsState, resourceGroupsState, deployLocationsState, dispatcherState } from '../../recoilModel';
-import { LoadingSpinner } from '../../components/LoadingSpinner';
+import { getSubscriptions, getResourceGroups, getDeployLocations } from './api';
 
-import { SettingToggle } from './SettingToggle';
-
-interface CreateNewResourceProps {
-  onDismiss: () => void;
-  onSubmit: (value) => void;
-}
 const extensionResourceOptions = [
   { key: 'cosmoDb', text: 'CosmoDb', description: 'Use CosmoDB to store your bot state' },
   {
@@ -32,18 +26,18 @@ const extensionResourceOptions = [
   { key: 'blobStorage', text: 'BlobStorage', description: 'Capture transcripts into Blob Storage' },
 ];
 
-export const CreateNewResource: React.FC<CreateNewResourceProps> = (props) => {
-  const subscriptions = useRecoilValue(subscriptionsState);
-  const resourceGroups = useRecoilValue(resourceGroupsState);
-  const deployLocations = useRecoilValue(deployLocationsState);
+export const AzureProvisionDialog: React.FC = () => {
+  const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
+  const [resourceGroups, setResourceGroups] = useState<ResourceGroups[]>([]);
+  const [deployLocations, setDeployLocations] = useState<DeployLocation[]>([]);
 
-  const { getResourceGroups, getDeployLocations } = useRecoilValue(dispatcherState);
+  const [token, setToken] = useState<string>();
+
   const [currentSubscription, setSubscription] = useState<Subscription>();
   const [currentHostName, setHostName] = useState('');
   const [errorHostName, setErrorHostName] = useState('');
   const [currentLocation, setLocation] = useState<DeployLocation>();
   // const [selectedResources, setExternalResources] = useState<string[]>([]);
-  const { getSubscriptions } = useRecoilValue(dispatcherState);
   const [enabledResources, setEnabledResources] = useState({});
 
   useEffect(() => {
@@ -55,11 +49,15 @@ export const CreateNewResource: React.FC<CreateNewResourceProps> = (props) => {
       };
     });
     setEnabledResources(enabled);
-    getSubscriptions();
+
+    const {access_token, graph_token} = getAccessTokensFromStorage();
+    console.log('RECEIVED ACCeSS TOKENS FROM STORAGE', access_token, graph_token);
+    setToken(access_token);
+    getSubscriptions(access_token).then(setSubscriptions);
   }, []);
 
   const subscriptionOption = useMemo(() => {
-    console.log(subscriptions);
+    console.log('GOT SUBSCRIPTIONS', subscriptions);
     return subscriptions.map((t) => ({ key: t.subscriptionId, text: t.displayName }));
   }, [subscriptions]);
 
@@ -77,17 +75,6 @@ export const CreateNewResource: React.FC<CreateNewResourceProps> = (props) => {
     },
     [subscriptions]
   );
-
-  // const updateCurrentResoruceGroup = useMemo(
-  //   () => (_e, option?: IDropdownOption) => {
-  //     const group = resourceGroups.find((t) => t.id === option?.key);
-
-  //     if (group) {
-  //       setResourceGroup(group.name);
-  //     }
-  //   },
-  //   [resourceGroups]
-  // );
 
   const newResourceGroup = useMemo(
     () => (e, newName) => {
@@ -114,24 +101,11 @@ export const CreateNewResource: React.FC<CreateNewResourceProps> = (props) => {
     [deployLocations]
   );
 
-  // const onSelectedResource = useMemo(
-  //   () => (event, item?: IDropdownOption) => {
-  //     if (item) {
-  //       const newselected = item.selected
-  //         ? [...selectedResources, item.key as string]
-  //         : selectedResources.filter((key) => key !== item.key);
-  //       setExternalResources(newselected);
-  //       console.log(newselected);
-  //     }
-  //   },
-  //   [selectedResources]
-  // );
-
   useEffect(() => {
     if (currentSubscription) {
       // get resource group under subscription
-      getResourceGroups(currentSubscription.subscriptionId);
-      getDeployLocations(currentSubscription.subscriptionId);
+      getResourceGroups(token, currentSubscription.subscriptionId).then(setResourceGroups);
+      getDeployLocations(token, currentSubscription.subscriptionId).then(setDeployLocations);
     }
   }, [currentSubscription]);
 
@@ -148,41 +122,44 @@ export const CreateNewResource: React.FC<CreateNewResourceProps> = (props) => {
         <form>
           <Dropdown
             required
-            label={formatMessage('Subscription')}
+            label={'Subscription'}
             options={subscriptionOption}
-            placeholder={formatMessage('Select your subscription')}
+            placeholder={'Select your subscription'}
             onChange={updateCurrentSubscription}
           />
           <TextField
             required
             errorMessage={errorHostName}
-            label={formatMessage('HostName')}
-            placeholder={formatMessage('Name of your new resource group')}
+            label={'HostName'}
+            placeholder={'Name of your new resource group'}
             onChange={newResourceGroup}
           />
           <Dropdown
             required
-            label={formatMessage('Locations')}
+            label={'Locations'}
             options={deployLocationsOption}
-            placeholder={formatMessage('Select your location')}
+            placeholder={'Select your location'}
             onChange={updateCurrentLocation}
           />
 
           {extensionResourceOptions.map((resource) => {
             return (
-              <SettingToggle
-                key={resource.key}
-                checked={enabledResources[resource.key].enabled}
-                description={formatMessage(resource.description)}
-                title={formatMessage(resource.text)}
-                onToggle={toggleResource(resource.key)}
-              />
+              <Fragment>
+                {resource.key} = {resource.description}
+              </Fragment>
+              // <SettingToggle
+              //   key={resource.key}
+              //   checked={enabledResources[resource.key].enabled}
+              //   description={resource.description}
+              //   title={resource.text}
+              //   onToggle={toggleResource(resource.key)}
+              // />
             );
           })}
         </form>
       )}
-      {(!subscriptionOption || !subscriptionOption.length) && <LoadingSpinner />}
-      <DialogFooter>
+      {(!subscriptionOption || !subscriptionOption.length) && <Fragment>LOADING</Fragment>}
+      {/* <DialogFooter>
         <DefaultButton text={formatMessage('Cancel')} onClick={props.onDismiss} />
         <PrimaryButton
           disabled={!currentSubscription || !currentHostName || errorHostName !== ''}
@@ -196,7 +173,7 @@ export const CreateNewResource: React.FC<CreateNewResourceProps> = (props) => {
             });
           }}
         />
-      </DialogFooter>
+        </DialogFooter> */}
     </Fragment>
   );
 };
