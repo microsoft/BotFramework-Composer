@@ -575,6 +575,9 @@
   "create_or_edit_skill_manifest_8ad98da9": {
     "message": "Create or edit skill manifest"
   },
+  "creating_your_knowledge_base_ef4f9872": {
+    "message": "Creating your knowledge base"
+  },
   "current_40c0812f": {
     "message": " - Current"
   },
@@ -893,9 +896,6 @@
   "events_cf7a8c50": {
     "message": "Events"
   },
-  "ex_example_d5c7a406": {
-    "message": "ex. { example }"
-  },
   "example_bot_list_9be1d563": {
     "message": "Example bot list"
   },
@@ -946,6 +946,9 @@
   },
   "extract_question_and_answer_pairs_from_an_online_f_c1e12724": {
     "message": "Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence. "
+  },
+  "extracting_qna_pairs_from_urls_eaed1b1c": {
+    "message": "Extracting QNA pairs from { urls }"
   },
   "false_2f39ee6d": {
     "message": "false"
@@ -2075,6 +2078,9 @@
   "there_was_an_error_74ed3c58": {
     "message": "There was an error"
   },
+  "there_was_error_creating_your_kb_53b31ff3": {
+    "message": "There was error creating your KB"
+  },
   "these_examples_bring_together_all_of_the_best_prac_ca1b89c7": {
     "message": "These examples bring together all of the best practices and supporting components we''ve identified through building of conversational experiences."
   },
@@ -2303,6 +2309,9 @@
   "view_ba339f93": {
     "message": "View"
   },
+  "view_kb_c382e495": {
+    "message": "View KB"
+  },
   "vishwac_sena_45910bf0": {
     "message": "Vishwac Sena"
   },
@@ -2404,5 +2413,8 @@
   },
   "your_bot_is_using_luis_and_qna_for_natural_languag_53830684": {
     "message": "Your bot is using LUIS and QNA for natural language understanding."
+  },
+  "your_knowledge_base_surface_go_faq_is_ready_db5d220a": {
+    "message": "Your knowledge base Surface go FAQ is ready!"
   }
 }
