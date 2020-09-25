@@ -27,6 +27,7 @@ function getExtensionMetadata(extensionPath: string, packageJson: PackageJSON): 
   return {
     id: packageJson.name,
     name: packageJson.composer?.name ?? packageJson.name,
+    description: packageJson.description,
     version: packageJson.version,
     enabled: true,
     path: extensionPath,

@@ -30,6 +30,8 @@ export type ExtensionMetadata = {
   id: string;
   /** name field from composer object in package.json, defaults to id */
   name: string;
+  /** description field from package.json */
+  description: string;
   /** currently installed version */
   version: string;
   /** enabled or disabled */
