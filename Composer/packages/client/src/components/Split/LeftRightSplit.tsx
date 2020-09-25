@@ -89,11 +89,26 @@ const toGridWidth = (value?: string | number) => {
 
 // constrains the extend of a pane given split constraints
 const constrainPaneExtent = (
+  /**
+   * the requested extend of the primary pane
+   */
   primary: number,
   constraints: {
+    /**
+     * the total extent available for primary, splitter, and secondary
+     */
     total: number;
+    /**
+     *  the extent of the splitter
+     */
     splitter: number;
+    /**
+     * the minimum extend of the primary pane
+     */
     minPrimary?: number;
+    /**
+     * the minimum extend of the secondary pane
+     */
     minSecondary?: number;
   }
 ): number => {
@@ -122,10 +137,10 @@ type Props = {
   minLeftPixels?: number;
   minRightPixels?: number;
   splitterWidth?: number;
-  renderSplitter?: () => JSX.Element;
+  renderSplitter?: () => React.ReactNode;
 };
 
-export const LeftRightSplit = (props: React.PropsWithChildren<Props>): JSX.Element => {
+export const LeftRightSplit = (props: React.PropsWithChildren<Props>) => {
   const {
     initialLeftGridWidth: defaultLeftWidth,
     minRightPixels,
