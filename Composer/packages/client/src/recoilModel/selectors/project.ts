@@ -5,7 +5,7 @@ import { selector } from 'recoil';
 
 import { dispatcherState } from '../DispatcherWrapper';
 import { Dispatcher } from '../dispatchers';
-import { botErrorState, botNameState, botProjectSpaceProjectIds, dialogsState, projectMetaDataState } from '../atoms';
+import { botErrorState, botNameState, botProjectIdsState, dialogsState, projectMetaDataState } from '../atoms';
 
 // Actions
 const projectLoadAction = (dispatcher: Dispatcher) => {
@@ -59,6 +59,10 @@ const projectLoadAction = (dispatcher: Dispatcher) => {
       const skillId = await dispatcher.addRemoteSkillToBotProject(manifestUrl, name, endpointName);
       await dispatcher.addSkillToBotProject(rootBotId, skillId, true);
     },
+    replaceSkillAtIndex: async (projectId: string, index: number, newPath: string, storageId = 'default') => {
+      await dispatcher.removeSkillFromBotProject(projectId);
+      await dispatcher.addExistingSkillToBotProject(newPath, storageId, index);
+    },
   };
 };
 
@@ -76,8 +80,8 @@ export const projectLoadSelector = selector({
 export const botProjectsWithoutErrorsSelector = selector({
   key: 'botProjectsWithoutErrorsSelector',
   get: ({ get }) => {
-    const botProjectIds = get(botProjectSpaceProjectIds);
-    return botProjectIds
+    const botProjectIds = get(botProjectIdsState);
+    const projectsWithoutErrors = botProjectIds
       .filter((projectId) => !get(botErrorState(projectId)))
       .map((projectId: string) => {
         const metaData = get(projectMetaDataState(projectId));
@@ -86,13 +90,14 @@ export const botProjectsWithoutErrorsSelector = selector({
           ...metaData,
         };
       });
+    return projectsWithoutErrors;
   },
 });
 
 export const botProjectSpaceSelector = selector({
   key: 'botProjectSpaceSelector',
   get: ({ get }) => {
-    const botProjects = get(botProjectSpaceProjectIds);
+    const botProjects = get(botProjectIdsState);
     const result = botProjects.map((projectId: string) => {
       const dialogs = get(dialogsState(projectId));
       const metaData = get(projectMetaDataState(projectId));

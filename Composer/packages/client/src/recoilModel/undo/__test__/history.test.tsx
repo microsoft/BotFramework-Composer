@@ -13,14 +13,14 @@ import {
   luFilesState,
   projectMetaDataState,
   currentProjectIdState,
-  botProjectSpaceProjectIds,
+  botProjectIdsState,
 } from '../../atoms';
 import { renderRecoilHook } from '../../../../__tests__/testUtils/react-recoil-hooks-testing-library';
 import UndoHistory from '../undoHistory';
 const projectId = '123-asd';
 
 export const UndoRedoWrapper = () => {
-  const botProjects = useRecoilValue(botProjectSpaceProjectIds);
+  const botProjects = useRecoilValue(botProjectIdsState);
 
   return botProjects.length > 0 ? <UndoRoot projectId={projectId} /> : null;
 };
@@ -59,7 +59,7 @@ describe('<UndoRoot/>', () => {
         );
       },
       states: [
-        { recoilState: botProjectSpaceProjectIds, initialValue: [projectId] },
+        { recoilState: botProjectIdsState, initialValue: [projectId] },
         { recoilState: dialogsState(projectId), initialValue: [{ id: '1' }] },
         { recoilState: lgFilesState(projectId), initialValue: [{ id: '1.lg' }, { id: '2' }] },
         { recoilState: luFilesState(projectId), initialValue: [{ id: '1.lu' }, { id: '2' }] },

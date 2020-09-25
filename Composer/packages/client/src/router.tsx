@@ -15,7 +15,7 @@ import { BASEPATH } from './constants';
 import {
   dispatcherState,
   schemasState,
-  botProjectSpaceProjectIds,
+  botProjectIdsState,
   botProjectSpaceLoadedState,
   botOpeningState,
 } from './recoilModel';
@@ -95,7 +95,7 @@ const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string }>> = (pro
   const { projectId = '' } = props;
   const schemas = useRecoilValue(schemasState(projectId));
   const { fetchProjectById } = useRecoilValue(dispatcherState);
-  const botProjects = useRecoilValue(botProjectSpaceProjectIds);
+  const botProjects = useRecoilValue(botProjectIdsState);
   const botsLoaded = useRecoilValue(botProjectSpaceLoadedState);
 
   useEffect(() => {
