@@ -9,12 +9,7 @@ import { useRecoilValue } from 'recoil';
 import onboardingStorage from '../utils/onboardingStorage';
 import { OpenConfirmModal } from '../components/Modal/ConfirmDialog';
 import { useLocation } from '../utils/hooks';
-import {
-  dispatcherState,
-  onboardingState,
-  botProjectSpaceProjectIds,
-  validateDialogSelectorFamily,
-} from '../recoilModel';
+import { dispatcherState, onboardingState, botProjectIdsState, validateDialogSelectorFamily } from '../recoilModel';
 
 import OnboardingContext from './OnboardingContext';
 import TeachingBubbles from './TeachingBubbles/TeachingBubbles';
@@ -25,7 +20,7 @@ const getCurrentSet = (stepSets) => stepSets.findIndex(({ id }) => id === onboar
 
 const Onboarding: React.FC = () => {
   const didMount = useRef(false);
-  const botProjects = useRecoilValue(botProjectSpaceProjectIds);
+  const botProjects = useRecoilValue(botProjectIdsState);
   const rootBotProjectId = botProjects[0];
   const dialogs = useRecoilValue(validateDialogSelectorFamily(rootBotProjectId));
   const { onboardingSetComplete } = useRecoilValue(dispatcherState);

@@ -1,6 +1,5 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
 import path from 'path';
 
 import { v4 as uuid } from 'uuid';
@@ -28,7 +27,7 @@ import {
   botDiagnosticsState,
   botProjectFileState,
   botProjectSpaceLoadedState,
-  botProjectSpaceProjectIds,
+  botProjectIdsState,
   currentProjectIdState,
   filePersistenceState,
   projectMetaDataState,
@@ -77,7 +76,12 @@ export const resetBotStates = async ({ snapshot, gotoSnapshot }: CallbackInterfa
   gotoSnapshot(newSnapshot);
 };
 
-export const setErrorBotProject = async (callbackHelpers: CallbackInterface, projectId, botName, payload) => {
+export const setErrorOnBotProject = async (
+  callbackHelpers: CallbackInterface,
+  projectId: string,
+  botName: string,
+  payload: any
+) => {
   const { set } = callbackHelpers;
   if (payload?.response?.data?.message) {
     set(botErrorState(projectId), payload.response.data);
@@ -89,13 +93,13 @@ export const setErrorBotProject = async (callbackHelpers: CallbackInterface, pro
 
 export const flushExistingTasks = async (callbackHelpers) => {
   const { snapshot, reset } = callbackHelpers;
-  const projectIds = await snapshot.getPromise(botProjectSpaceProjectIds);
+  const projectIds = await snapshot.getPromise(botProjectIdsState);
   const recoilTasks: any[] = [];
   for (const projectId of projectIds) {
     const resetStates = await resetBotStates(callbackHelpers, projectId);
     recoilTasks.push(resetStates);
   }
-  reset(botProjectSpaceProjectIds);
+  reset(botProjectIdsState);
   const workers = [lgWorker, luWorker, qnaWorker];
 
   return Promise.all([workers.map((w) => w.flush()), ...recoilTasks]);
@@ -172,21 +176,7 @@ export const fetchProjectDataByPath = async (
 export const fetchProjectDataById = async (projectId): Promise<{ botFiles: any; projectData: any; error: any }> => {
   try {
     const response = await httpClient.get(`/projects/${projectId}`);
-    const projectData = loadProjectData(response);
-    return projectData;
-  } catch (ex) {
-    return {
-      botFiles: undefined,
-      projectData: undefined,
-      error: ex,
-    };
-  }
-};
-
-export const createNewProject = async (projectId): Promise<{ botFiles: any; projectData: any; error: any }> => {
-  try {
-    const response = await httpClient.get(`/projects/${projectId}`);
-    const projectData = loadProjectData(response);
+    const { botFiles, projectData } = loadProjectData(response);
     return projectData;
   } catch (ex) {
     return {
@@ -268,7 +258,7 @@ export const initQnaFilesStatus = (projectId: string, qnaFiles: QnAFile[], dialo
   return updateQnaFilesStatus(projectId, qnaFiles);
 };
 
-export const initBotState = async (callbackHelpers, data: any, botFiles, isRootBot = false) => {
+export const initBotState = async (callbackHelpers: CallbackInterface, data: any, botFiles: any) => {
   const { snapshot, set } = callbackHelpers;
   const { botName, botEnvironment, location, schemas, settings, id: projectId, diagnostics } = data;
   const { dialogs, dialogSchemas, luFiles, lgFiles, qnaFiles, skillManifestFiles, skills, mergedSettings } = botFiles;
@@ -316,9 +306,6 @@ export const initBotState = async (callbackHelpers, data: any, botFiles, isRootB
   set(settingsState(projectId), mergedSettings);
   set(filePersistenceState(projectId), new FilePersistence(projectId));
   set(undoHistoryState(projectId), new UndoHistory(projectId));
-  set(projectMetaDataState(projectId), {
-    isRootBot,
-  });
   return mainDialog;
 };
 
@@ -353,12 +340,12 @@ export const openRemoteSkill = async (callbackHelpers: CallbackInterface, manife
     });
     set(botNameState(projectId), manifestResponse.data.name);
     set(locationState(projectId), manifestUrl);
-    return projectId;
+    return { projectId };
   } catch (ex) {
     const tempProjectId = uuid();
     set(botNameState(tempProjectId), name);
-    setErrorBotProject(callbackHelpers, tempProjectId, name, ex);
-    return tempProjectId;
+    setErrorOnBotProject(callbackHelpers, tempProjectId, name, ex);
+    return { projectId: tempProjectId };
   }
 };
 
@@ -366,16 +353,19 @@ export const openLocalSkill = async (callbackHelpers, pathToBot: string, storage
   const { set } = callbackHelpers;
   const { projectData, botFiles, error } = await fetchProjectDataByPath(pathToBot, storageId);
   if (!error) {
-    await initBotState(callbackHelpers, projectData, botFiles);
+    const mainDialog = await initBotState(callbackHelpers, projectData, botFiles);
     set(projectMetaDataState(projectData.id), {
       isRootBot: false,
       isRemote: false,
     });
-    return projectData.id;
+    return {
+      projectId: projectData.id,
+      mainDialog,
+    };
   } else {
     const tempProjectId = uuid();
     set(botNameState(tempProjectId), name);
-    setErrorBotProject(callbackHelpers, tempProjectId, name, error);
+    setErrorOnBotProject(callbackHelpers, tempProjectId, name, error);
     return tempProjectId;
   }
 };
@@ -398,18 +388,17 @@ export const createNewBotFromTemplate = async (
     schemaUrl,
     locale,
   });
-  const { set } = callbackHelpers;
+  const { botFiles, projectData } = loadProjectData(response);
   const projectId = response.data.id;
   if (settingStorage.get(projectId)) {
     settingStorage.remove(projectId);
   }
-  const mainDialog = await initBotState(callbackHelpers, response.data, true);
-  set(botProjectSpaceLoadedState, true);
+  const mainDialog = await initBotState(callbackHelpers, projectData, botFiles);
   return { projectId, mainDialog };
 };
 
 const addProjectToBotProjectSpace = (set, projectId: string, skillCt: number) => {
-  set(botProjectSpaceProjectIds, (current: string[]) => {
+  set(botProjectIdsState, (current: string[]) => {
     const botProjectIDs = [...current, projectId];
     if (botProjectIDs.length === skillCt) {
       set(botProjectSpaceLoadedState, true);
@@ -418,11 +407,13 @@ const addProjectToBotProjectSpace = (set, projectId: string, skillCt: number) =>
   });
 };
 
-export const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, projectData, botFiles, storageId) => {
+const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, storageId = 'default') => {
+  const { projectData, botFiles } = data;
   const { set } = callbackHelpers;
-  set(botOpeningState, true);
+
   const mainDialog = await initBotState(callbackHelpers, projectData, botFiles, true);
   const rootBotProjectId = projectData.id;
+
   if (botFiles.botProjectSpaceFiles.length) {
     const currentBotProjectFile: BotProjectSpace = botFiles.botProjectSpaceFiles[0];
     set(botProjectFileState(rootBotProjectId), currentBotProjectFile);
@@ -433,17 +424,14 @@ export const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, p
         if (!skillInBotProject.remote) {
           const path = parseFileProtocolPaths(currentBotProjectFile.workspace, skillInBotProject.workspace);
           //TODO handle exception
-          openLocalSkill(callbackHelpers, path, skillInBotProject.name, storageId).then((projectId: string) =>
-            addProjectToBotProjectSpace(set, projectId, skillsInBotProject.length)
+          openLocalSkill(callbackHelpers, path, storageId, skillInBotProject.name).then((result) =>
+            addProjectToBotProjectSpace(set, result.projectId, skillsInBotProject.length)
           );
         } else {
-          //TODO handle exception
           if (skillInBotProject.manifest) {
-            openRemoteSkill(
-              callbackHelpers,
-              skillInBotProject.manifest,
-              skillInBotProject.name
-            ).then((projectId: string) => addProjectToBotProjectSpace(set, projectId, skillsInBotProject.length));
+            openRemoteSkill(callbackHelpers, skillInBotProject.manifest, skillInBotProject.name).then((result) =>
+              addProjectToBotProjectSpace(set, result.projectId, skillsInBotProject.length)
+            );
           }
         }
       }
@@ -451,9 +439,23 @@ export const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, p
   } else {
     set(botProjectSpaceLoadedState, true);
   }
-  //TODO: Botprojects space will be populated for now with just the rootbot. Once, BotProjects UI is hookedup this will be refactored to use addToBotProject
-  set(botProjectSpaceProjectIds, [rootBotProjectId]);
+  set(botProjectIdsState, [rootBotProjectId]);
   set(botOpeningState, false);
   set(currentProjectIdState, rootBotProjectId);
-  navigateToBot(rootBotProjectId, mainDialog);
+  return {
+    mainDialog,
+    projectId: rootBotProjectId,
+  };
+};
+
+export const openRootBotAndSkillsByPath = async (callbackHelpers: CallbackInterface, path: string, storageId) => {
+  const data = await fetchProjectDataByPath(path, storageId);
+  const result = await openRootBotAndSkills(callbackHelpers, data, storageId);
+  return result;
+};
+
+export const openRootBotAndSkillsByProjectId = async (callbackHelpers: CallbackInterface, projectId: string) => {
+  const data = await fetchProjectDataById(projectId);
+  const result = await openRootBotAndSkills(callbackHelpers, data);
+  return result;
 };
