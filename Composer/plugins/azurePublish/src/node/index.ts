@@ -65,6 +65,7 @@ export default async (composer: any): Promise<void> => {
     public customName: string;
     public customDescription: string;
     public logger: Debugger;
+    public hasView = true;
 
     constructor(mode?: string, customName?: string, customDescription?: string) {
       this.histories = {};
@@ -560,7 +561,11 @@ export default async (composer: any): Promise<void> => {
 
   }
 
-  const azurePublish = new AzurePublisher();
+  const azurePublish = new AzurePublisher(
+    'azurewebapp',
+    'azurePublish',
+    'Publish bot to Azure Web App (Preview)'
+  );
   const azureFunctionsPublish = new AzurePublisher(
     'azurefunctions',
     'azureFunctionsPublish',
