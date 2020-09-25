@@ -24,8 +24,8 @@
     "@uifabric/icons": "^7.3.0",
     "@uifabric/styling": "^7.7.4",
     "office-ui-fabric-react": "^7.71.0",
-    "react": "16.13.0",
-    "react-dom": "16.13.0"
+    "react": "16.13.1",
+    "react-dom": "16.13.1"
   },
   "devDependencies": {
     "@bfc/adaptive-form": "*",
@@ -36,8 +36,8 @@
     "@types/react": "16.9.23",
     "@types/react-dom": "16.9.5",
     "format-message-cli": "^6.2.3",
-    "react": "16.13.0",
-    "react-dom": "16.13.0"
+    "react": "16.13.1",
+    "react-dom": "16.13.1"
   },
   "dependencies": {
     "lodash": "^4.17.19"
