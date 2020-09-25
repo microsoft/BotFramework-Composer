@@ -5,28 +5,14 @@
 import { jsx } from '@emotion/core';
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import {
-  DetailsListLayoutMode,
-  SelectionMode,
-  IColumn,
-  CheckboxVisibility,
-} from 'office-ui-fabric-react/lib/DetailsList';
-import { ShimmeredDetailsList } from 'office-ui-fabric-react/lib/ShimmeredDetailsList';
-import axios from 'axios';
+import axios, { CancelToken } from 'axios';
 import formatMessage from 'format-message';
 
 import httpClient from '../../../utils/httpUtil';
 
-// TODO: extract to shared?
-type ExtensionSearchResult = {
-  id: string;
-  keywords: string[];
-  version: string;
-  description: string;
-  url: string;
-};
+import { ExtensionSearchResult, ExtensionSearchResults } from './ExtensionSearchResults';
 
 type InstallExtensionDialogProps = {
   isOpen: boolean;
@@ -37,30 +23,39 @@ type InstallExtensionDialogProps = {
 const InstallExtensionDialog: React.FC<InstallExtensionDialogProps> = (props) => {
   const { isOpen, onDismiss, onInstall } = props;
   const [searchQuery, setSearchQuery] = useState<string | null>(null);
-  const [matchingExtensions, setMatchingExtensions] = useState<ExtensionSearchResult[]>([]);
   const [selectedExtension, setSelectedExtension] = useState<ExtensionSearchResult | null>(null);
+  const [matchingExtensions, setMatchingExtensions] = useState<ExtensionSearchResult[]>([]);
+
   const [isSearching, setIsSearching] = useState(false);
+
+  const performSearch = (query: string, cancelToken?: CancelToken) => {
+    setIsSearching(true);
+    httpClient
+      .get(`/extensions/search?q=${query}`, { cancelToken })
+      .then((res) => {
+        setMatchingExtensions(res.data);
+        setIsSearching(false);
+      })
+      .catch((err) => {
+        setIsSearching(false);
+        if (!axios.isCancel(err)) {
+          // TODO: abrown - what to do on error?
+          // eslint-disable-next-line no-console
+          console.error(err);
+        }
+      });
+  };
+
+  useEffect(() => {
+    performSearch('');
+  }, []);
 
   useEffect(() => {
     if (searchQuery !== null) {
       const source = axios.CancelToken.source();
 
       const timer = setTimeout(() => {
-        setIsSearching(true);
-        httpClient
-          .get(`/extensions/search?q=${searchQuery}`, { cancelToken: source.token })
-          .then((res) => {
-            setMatchingExtensions(res.data);
-            setIsSearching(false);
-          })
-          .catch((err) => {
-            setIsSearching(false);
-            if (!axios.isCancel(err)) {
-              // TODO: abrown - what to do on error?
-              // eslint-disable-next-line no-console
-              console.error(err);
-            }
-          });
+        performSearch(searchQuery, source.token);
       }, 200);
 
       return () => {
@@ -70,56 +65,10 @@ const InstallExtensionDialog: React.FC<InstallExtensionDialogProps> = (props) =>
     }
   }, [searchQuery]);
 
-  const matchingColumns: IColumn[] = [
-    {
-      key: 'name',
-      name: formatMessage('Name'),
-      minWidth: 100,
-      maxWidth: 150,
-      onRender: (item: ExtensionSearchResult) => {
-        return <span>{item.id}</span>;
-      },
-    },
-    {
-      key: 'description',
-      name: formatMessage('Description'),
-      minWidth: 100,
-      maxWidth: 300,
-      isMultiline: true,
-      onRender: (item: ExtensionSearchResult) => {
-        return <div css={{ overflowWrap: 'break-word' }}>{item.description}</div>;
-      },
-    },
-    {
-      key: 'version',
-      name: formatMessage('Version'),
-      minWidth: 30,
-      maxWidth: 100,
-      onRender: (item: ExtensionSearchResult) => {
-        return <span>{item.version}</span>;
-      },
-    },
-    {
-      key: 'url',
-      name: formatMessage('Url'),
-      minWidth: 100,
-      maxWidth: 100,
-      onRender: (item: ExtensionSearchResult) => {
-        return item.url ? (
-          <a href={item.url} rel="noopener noreferrer" target="_blank">
-            View on npm
-          </a>
-        ) : null;
-      },
-    },
-  ];
-
   const onSubmit = async () => {
     if (selectedExtension) {
       await onInstall(selectedExtension);
-      setSearchQuery(null);
-      setMatchingExtensions([]);
-      setSelectedExtension(null);
+      performSearch(searchQuery ?? '');
     }
   };
 
@@ -134,23 +83,16 @@ const InstallExtensionDialog: React.FC<InstallExtensionDialogProps> = (props) =>
       onDismiss={onDismiss}
     >
       <div>
-        <TextField
-          label={formatMessage('Search for extensions on npm')}
+        <SearchBox
+          placeholder={formatMessage('Search for extensions on npm')}
           value={searchQuery ?? ''}
           onChange={(_e, val) => setSearchQuery(val ?? null)}
         />
-        {(matchingExtensions.length > 0 || isSearching) && (
-          <ShimmeredDetailsList
-            checkboxVisibility={CheckboxVisibility.always}
-            columns={matchingColumns}
-            enableShimmer={isSearching}
-            items={matchingExtensions}
-            layoutMode={DetailsListLayoutMode.justified}
-            selectionMode={SelectionMode.single}
-            shimmerLines={5}
-            onActiveItemChanged={(item) => setSelectedExtension(item)}
-          />
-        )}
+        <ExtensionSearchResults
+          isSearching={isSearching}
+          results={matchingExtensions}
+          onSelect={(e) => setSelectedExtension(e)}
+        />
       </div>
       <DialogFooter>
         <DefaultButton onClick={onDismiss}>Cancel</DefaultButton>
