@@ -23,15 +23,13 @@ describe('<ProjectTree/>', () => {
     const dialogId = 'todobot';
     const selected = 'triggers[0]';
     const handleSelect = jest.fn(() => {});
-    const handleDeleteDialog = jest.fn(() => {});
-    const handleDeleteTrigger = jest.fn(() => {});
+    const handleDelete = jest.fn(() => {});
     const { findByText } = renderWithRecoil(
       <ProjectTree
-        dialogId={dialogId}
-        dialogs={dialogs as DialogInfo[]}
+        showTriggers
         selected={selected}
-        onDeleteDialog={handleDeleteDialog}
-        onDeleteTrigger={handleDeleteTrigger}
+        selectedDialog={dialogId}
+        onDelete={handleDelete}
         onSelect={handleSelect}
       />
     );
