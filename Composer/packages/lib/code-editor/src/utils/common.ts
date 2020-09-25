@@ -6,6 +6,5 @@ export function processSize(size) {
 }
 
 export function isElectron(): boolean {
-  // eslint-disable-next-line no-prototype-builtins
-  return window.hasOwnProperty('__IS_ELECTRON__');
+  return !window.__IS_ELECTRON__;
 }
