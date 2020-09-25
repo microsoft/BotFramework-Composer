@@ -5,13 +5,18 @@ import { QnAFile } from '@bfc/shared';
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 
 import qnaWorker from '../parsers/qnaWorker';
-import { qnaFilesState, qnaAllUpViewStatusState, localeState, settingsState } from '../atoms/botState';
-import { QnAAllUpViewStatus } from '../types';
+import { qnaFilesState, localeState, settingsState } from '../atoms/botState';
 import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
 import { getBaseName } from '../../utils/fileUtil';
+import { navigateTo } from '../../utils/navigation';
+import {
+  getQnaFailedNotification,
+  getQnaSuccessNotification,
+  getQnaPendingNotification,
+} from '../../utils/notifications';
+import httpClient from '../../utils/httpUtil';
 
-import httpClient from './../../utils/httpUtil';
-import { setError } from './shared';
+import { addNotificationInternal, deleteNotificationInternal, createNotifiction } from './notification';
 
 export const updateQnAFileState = async (
   callbackHelpers: CallbackInterface,
@@ -114,10 +119,13 @@ export const qnaDispatcher = () => {
       urls: string[];
       projectId: string;
     }) => {
-      const { set, snapshot } = callbackHelpers;
+      const { snapshot } = callbackHelpers;
       const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
       const qnaFile = qnaFiles.find((f) => f.id === id);
-      set(qnaAllUpViewStatusState(projectId), QnAAllUpViewStatus.Loading);
+
+      const notification = createNotifiction(getQnaPendingNotification(urls));
+      addNotificationInternal(callbackHelpers, notification);
+
       try {
         const response = await httpClient.get(`/utilities/qna/parse`, {
           params: { urls: encodeURIComponent(urls.join(',')) },
@@ -125,11 +133,20 @@ export const qnaDispatcher = () => {
         const content = qnaFile ? qnaFile.content + '\n' + response.data : response.data;
 
         await updateQnAFileState(callbackHelpers, { id, content, projectId });
-        set(qnaAllUpViewStatusState(projectId), QnAAllUpViewStatus.Success);
+        const notification = createNotifiction(
+          getQnaSuccessNotification(() => {
+            navigateTo(`/bot/${projectId}/knowledge-base/${getBaseName(id)}`);
+            deleteNotificationInternal(callbackHelpers, notification.id);
+          })
+        );
+        addNotificationInternal(callbackHelpers, notification);
       } catch (err) {
-        setError(callbackHelpers, err);
+        addNotificationInternal(
+          callbackHelpers,
+          createNotifiction(getQnaFailedNotification(err.response?.data?.message))
+        );
       } finally {
-        set(qnaAllUpViewStatusState(projectId), QnAAllUpViewStatus.Success);
+        deleteNotificationInternal(callbackHelpers, notification.id);
       }
     }
   );

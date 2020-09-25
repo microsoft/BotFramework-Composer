@@ -6,6 +6,7 @@ import { useRecoilCallback, CallbackInterface } from 'recoil';
 import { ILuisConfig, IQnAConfig } from '@bfc/shared';
 
 import * as luUtil from '../../utils/luUtil';
+import * as buildUtil from '../../utils/buildUtil';
 import { Text, BotStatus } from '../../constants';
 import httpClient from '../../utils/httpUtil';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
@@ -48,7 +49,7 @@ export const builderDispatcher = () => {
       }
       try {
         //TODO crosstrain should add locale
-        const crossTrainConfig = luUtil.createCrossTrainConfig(dialogs, referredLuFiles);
+        const crossTrainConfig = buildUtil.createCrossTrainConfig(dialogs, referredLuFiles);
         await httpClient.post(`/projects/${projectId}/build`, {
           luisConfig,
           qnaConfig,
