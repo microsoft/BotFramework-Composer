@@ -15,9 +15,22 @@ export interface Fieldset {
   defaultExpanded?: boolean;
 }
 
+export interface AdditionalField {
+  /** Specifies if the property is an additional field. */
+  additionalField: true;
+  /** Field widget. */
+  field: FieldWidget;
+  /** Description. */
+  description?: UIOptionValue<string | undefined>;
+  /** Url to docs. Rendered below field description. */
+  helpLink?: string;
+  /** Label. */
+  label?: UIOptionValue<string | false | undefined>;
+  /** Placeholder. */
+  placeholder?: UIOptionValue<string, undefined>;
+}
+
 export interface UIOptions {
-  /** Specifies if the property is an additional field */
-  additionalField?: true;
   /** Description override. */
   description?: UIOptionValue<string | undefined>;
   /** Field widget override. */
@@ -46,7 +59,7 @@ export interface UIOptions {
   placeholder?: UIOptionValue<string, undefined>;
   /** Define ui options on fields that are children of this field. */
   properties?: {
-    [key: string]: UIOptions;
+    [key: string]: UIOptions | AdditionalField;
   };
   /** Use the serializer to apply additional data processing.
    * `get` is called to retrieve the value that is passed to SchemaField
