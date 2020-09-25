@@ -10,6 +10,7 @@ import {
   SelectionMode,
   IColumn,
   CheckboxVisibility,
+  ConstrainMode,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { ScrollablePane } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky } from 'office-ui-fabric-react/lib/Sticky';
@@ -96,6 +97,7 @@ const ExtensionSearchResults: React.FC<ExtensionSearchResultsProps> = (props) =>
         <ShimmeredDetailsList
           checkboxVisibility={CheckboxVisibility.always}
           columns={searchColumns}
+          constrainMode={ConstrainMode.horizontalConstrained}
           enableShimmer={isSearching}
           items={noResultsFound ? [{}] : results}
           layoutMode={DetailsListLayoutMode.justified}

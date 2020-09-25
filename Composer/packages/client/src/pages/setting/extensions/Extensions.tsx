@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx, css } from '@emotion/core';
 import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import {
@@ -10,9 +10,11 @@ import {
   SelectionMode,
   IColumn,
   CheckboxVisibility,
+  ConstrainMode,
 } from 'office-ui-fabric-react/lib/DetailsList';
+import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { ShimmeredDetailsList } from 'office-ui-fabric-react/lib/ShimmeredDetailsList';
-import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 import { useRecoilValue, selector } from 'recoil';
 
@@ -27,10 +29,17 @@ const remoteExtensionsState = selector({
   get: ({ get }) => get(extensionsState).filter((e) => !e.builtIn),
 });
 
+const noExtensionsStyles = css`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 const Extensions: React.FC<RouteComponentProps> = () => {
   const { fetchExtensions, toggleExtension, addExtension, removeExtension } = useRecoilValue(dispatcherState);
   const extensions = useRecoilValue(remoteExtensionsState);
-  const [isAdding, setIsAdding] = useState(false);
+  // if a string, its the id of the extension being updated
+  const [isUpdating, setIsUpdating] = useState<string | boolean>(false);
   const [showNewModal, setShowNewModal] = useState(false);
 
   useEffect(() => {
@@ -42,44 +51,65 @@ const Extensions: React.FC<RouteComponentProps> = () => {
       key: 'name',
       name: formatMessage('Name'),
       minWidth: 100,
-      maxWidth: 150,
-      onRender: (item: ExtensionConfig) => {
-        return <span>{item.name}</span>;
-      },
+      maxWidth: 250,
+      isResizable: true,
+      isRowHeader: true,
+      fieldName: 'name',
+    },
+    {
+      key: 'description',
+      name: formatMessage('Description'),
+      minWidth: 150,
+      maxWidth: 500,
+      isResizable: true,
+      isCollapsible: true,
+      isMultiline: true,
+      fieldName: 'description',
     },
     {
       key: 'version',
       name: formatMessage('Version'),
-      minWidth: 30,
+      minWidth: 100,
       maxWidth: 100,
-      onRender: (item: ExtensionConfig) => {
-        return <span>{item.version}</span>;
-      },
+      isResizable: true,
+      fieldName: 'version',
     },
     {
       key: 'enabled',
       name: formatMessage('Enabled'),
-      minWidth: 30,
+      minWidth: 100,
       maxWidth: 150,
+      isResizable: true,
       onRender: (item: ExtensionConfig) => {
-        const text = item.enabled ? formatMessage('Disable') : formatMessage('Enable');
         return (
-          <DefaultButton disabled={item.builtIn} onClick={() => toggleExtension(item.id, !item.enabled)}>
-            {text}
-          </DefaultButton>
+          <Toggle
+            ariaLabel={formatMessage('Toggle extension')}
+            checked={item.enabled}
+            onChange={() => toggleExtension(item.id, !item.enabled)}
+          />
         );
       },
     },
     {
       key: 'remove',
       name: formatMessage('Remove'),
-      minWidth: 30,
+      minWidth: 100,
       maxWidth: 150,
+      isResizable: true,
       onRender: (item: ExtensionConfig) => {
         return (
-          <DefaultButton disabled={item.builtIn} onClick={() => removeExtension(item.id)}>
-            {formatMessage('Remove')}
-          </DefaultButton>
+          <IconButton
+            ariaLabel={formatMessage('Uninstall {extension}', { extension: item.name })}
+            disabled={item.builtIn}
+            iconProps={{ iconName: 'Trash' }}
+            onClick={async () => {
+              if (confirm(formatMessage('Are you sure you want to uninstall {extension}?', { extension: item.name }))) {
+                setIsUpdating(item.id);
+                await removeExtension(item.id);
+                setIsUpdating(false);
+              }
+            }}
+          />
         );
       },
     },
@@ -103,26 +133,54 @@ const Extensions: React.FC<RouteComponentProps> = () => {
 
   const submit = async (selectedExtension) => {
     if (selectedExtension) {
-      setIsAdding(true);
+      setIsUpdating(true);
       setShowNewModal(false);
       await addExtension(selectedExtension.id);
-      setIsAdding(false);
+      setIsUpdating(false);
+    }
+  };
+
+  const shownItems = () => {
+    if (extensions.length === 0) {
+      // render no installed message
+      return [{}];
+    } else if (isUpdating === true) {
+      // extension is being added, render a shimmer row at end of list
+      return [...extensions, null];
+    } else if (typeof isUpdating === 'string') {
+      // extension is being removed or updated, show shimmer for that row
+      return extensions.map((e) => (e.id === isUpdating ? null : e));
+    } else {
+      return extensions;
     }
   };
 
   return (
-    <div>
+    <div style={{ maxWidth: '100%' }}>
       <Toolbar toolbarItems={toolbarItems} />
-      {(isAdding || extensions.length > 0) && (
-        <ShimmeredDetailsList
-          checkboxVisibility={CheckboxVisibility.hidden}
-          columns={installedColumns}
-          items={isAdding ? [...extensions, null] : extensions}
-          layoutMode={DetailsListLayoutMode.justified}
-          selectionMode={SelectionMode.single}
-          shimmerLines={1}
-        />
-      )}
+      <ShimmeredDetailsList
+        checkboxVisibility={CheckboxVisibility.hidden}
+        columns={installedColumns}
+        constrainMode={ConstrainMode.horizontalConstrained}
+        items={shownItems()}
+        layoutMode={DetailsListLayoutMode.justified}
+        selectionMode={SelectionMode.none}
+        onRenderRow={(rowProps, defaultRender) => {
+          if (extensions.length === 0) {
+            return (
+              <div css={noExtensionsStyles}>
+                <p>No extensions installed</p>
+              </div>
+            );
+          }
+
+          if (defaultRender) {
+            return defaultRender(rowProps);
+          }
+
+          return null;
+        }}
+      />
       <InstallExtensionDialog isOpen={showNewModal} onDismiss={() => setShowNewModal(false)} onInstall={submit} />
     </div>
   );

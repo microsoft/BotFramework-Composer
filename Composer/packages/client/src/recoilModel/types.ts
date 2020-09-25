@@ -55,6 +55,7 @@ export type ExtensionPageContribution = {
 export interface ExtensionConfig {
   id: string;
   name: string;
+  description: string;
   enabled: boolean;
   version: string;
   /** Special property only used in the in-memory representation of extensions to flag as a built-in. Not written to disk. */
