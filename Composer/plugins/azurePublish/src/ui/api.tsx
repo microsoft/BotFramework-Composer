@@ -48,21 +48,21 @@ export default httpClient;
 
 export const getSubscriptions = async (token: string) => {
   try {
-    console.log(token);
     const result = await httpClient.get('/azure/subscriptions', {
       headers: { Authorization: `Bearer ${token}` },
     });
-    console.log(result.data);
+    console.log('successfully loaded subscriptions');
     // TODO: have to do error handling because Azure api could return non-success
     return result.data.value;
   } catch (error) {
     console.log(error.response.data);
-    // popup window to login
-    if (error.response.data.redirectUri) {
-      // await loginPopup();
-      // TODO: Fix this
-      alert('NOT LOGGED IN');
-    }
+    alert(error.response.data.error.message);
+    // // popup window to login
+    // if (error.response.data.redirectUri) {
+    //   // await loginPopup();
+    //   // TODO: Fix this
+    //   alert('NOT LOGGED IN');
+    // }
     // save token in localStorage
   }
 };

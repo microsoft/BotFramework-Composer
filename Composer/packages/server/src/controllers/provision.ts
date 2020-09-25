@@ -23,10 +23,14 @@ export const ProvisionController = {
     // we pass this directly on to Azure.
     const authHeader = req.headers.authorization;
 
-    const result = await axios.get('https://management.azure.com/subscriptions?api-version=2020-01-01', {
-      headers: { Authorization: authHeader },
-    });
-    res.status(200).json(result.data);
+    try {
+      const result = await axios.get('https://management.azure.com/subscriptions?api-version=2020-01-01', {
+        headers: { Authorization: authHeader },
+      });
+      res.status(result.status).json(result.data);
+    } catch (err) {
+      res.status(err.response.status).json(err.response.data);
+    }
   },
   getResourceGroups: async (req, res) => {
     if (!req.headers || !req.headers.authorization) {
