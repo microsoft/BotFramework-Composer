@@ -16,7 +16,6 @@ import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZ
 import cloneDeep from 'lodash/cloneDeep';
 import formatMessage from 'format-message';
 import { DialogInfo, ITrigger } from '@bfc/shared';
-// import { Resizable, ResizeCallback } from 're-resizable';
 import debounce from 'lodash/debounce';
 import { useRecoilValue } from 'recoil';
 import { IGroupedListStyles } from 'office-ui-fabric-react/lib/GroupedList';
@@ -183,22 +182,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
     }
   };
 
-  // const handleResize: ResizeCallback = (_e, _dir, _ref, d) => {
-  //   updateUserSettings({ dialogNavWidth: currentWidth + d.width });
-  // };
-
   const itemsAndGroups: { items: any[]; groups: IGroup[] } = createItemsAndGroups(sortedDialogs, dialogId, filter);
-
-  //   <Resizable
-  //   enable={{
-  //     right: true,
-  //   }}
-  //   maxWidth={500}
-  //   minWidth={180}
-  //   size={{ width: currentWidth, height: 'auto' }}
-  //   onResizeStop={handleResize}
-  // >
-  // </Resizable>
 
   return (
     <div
