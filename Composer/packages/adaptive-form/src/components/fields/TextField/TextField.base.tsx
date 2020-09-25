@@ -463,15 +463,14 @@ export class TextFieldBase extends React.Component<ITextFieldProps, ITextFieldSt
   private _renderTextArea = (): React.ReactElement<React.HTMLAttributes<HTMLAreaElement>> => {
     const textAreaProps = getNativeProps<React.TextareaHTMLAttributes<HTMLTextAreaElement>>(
       this.props,
-      textAreaProperties
+      textAreaProperties,
+      ['value']
     );
 
     const ariaLabelledBy = this.props['aria-labelledby'] || (this.props.label ? this._labelId : undefined);
     /*-----added by composer-----*/
     // use the default value to replace the state value
-    const valueProps = this.isComponentControlled
-      ? { value: this.props.value }
-      : { defaultValue: this.props.defaultValue };
+    const valueProps = this.isComponentControlled ? { value: this.props.value } : {};
     /*-----added by composer-----*/
     return (
       <textarea
@@ -484,7 +483,6 @@ export class TextFieldBase extends React.Component<ITextFieldProps, ITextFieldSt
         aria-label={this.props.ariaLabel}
         aria-labelledby={ariaLabelledBy}
         className={this.componentClassNames.field}
-        defaultValue={this.props.defaultValue ?? ''}
         readOnly={this.props.readOnly}
         onBlur={this._onBlur}
         onChange={this._onInputChange}
@@ -495,13 +493,11 @@ export class TextFieldBase extends React.Component<ITextFieldProps, ITextFieldSt
   };
 
   private _renderInput = (): React.ReactElement<React.HTMLAttributes<HTMLInputElement>> => {
-    const inputProps = getNativeProps<React.HTMLAttributes<HTMLInputElement>>(this.props, inputProperties);
+    const inputProps = getNativeProps<React.HTMLAttributes<HTMLInputElement>>(this.props, inputProperties, ['value']);
     const ariaLabelledBy = this.props['aria-labelledby'] || (this.props.label ? this._labelId : undefined);
     /*-----added by composer-----*/
     // use the default value to replace the state value
-    const valueProps = this.isComponentControlled
-      ? { value: this.props.value }
-      : { defaultValue: this.props.defaultValue };
+    const valueProps = this.isComponentControlled ? { value: this.props.value } : {};
     /*-----added by composer-----*/
     return (
       <input
