@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useState, useMemo, useRef } from 'react';
-import { FieldProps, useShellApi } from '@bfc/extension-client';
+import { isAdditionalField, FieldProps, useShellApi } from '@bfc/extension-client';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { JSONSchema7 } from 'json-schema';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
@@ -58,10 +58,14 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = (props) => {
     if (event.key.toLowerCase() === 'enter') {
       event.preventDefault();
 
-      if (Object.keys(newObject).length > 0) {
+      if (Object.keys(newObject).length > 0 && !isAdditionalField(uiOptions)) {
         const formattedData = Object.entries(newObject).reduce((obj, [key, value]) => {
-          const serializeValue = uiOptions?.properties?.[key]?.serializer?.set;
-          return { ...obj, [key]: typeof serializeValue === 'function' ? serializeValue(value) : value };
+          const propertyUIOptions = uiOptions?.properties?.[key];
+          if (!isAdditionalField(propertyUIOptions)) {
+            const serializeValue = propertyUIOptions?.serializer?.set;
+            return { ...obj, [key]: typeof serializeValue === 'function' ? serializeValue(value) : value };
+          }
+          return obj;
         }, {});
 
         announce(INSIDE_ROW_LABEL);

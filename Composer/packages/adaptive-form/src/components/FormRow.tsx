@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { FieldProps, UIOptions } from '@bfc/extension-client';
+import { AdditionalField, isAdditionalField, FieldProps, UIOptions } from '@bfc/extension-client';
 import { css, jsx } from '@emotion/core';
 import React from 'react';
 
@@ -40,8 +40,11 @@ export const getRowProps = (rowProps: FormRowProps, field: string) => {
     intellisenseScopes.push('variable-scopes');
   }
 
-  const newUiOptions = (uiOptions.properties?.[field] as UIOptions) ?? {};
-  newUiOptions.intellisenseScopes = intellisenseScopes;
+  const newUiOptions: UIOptions | AdditionalField = uiOptions.properties?.[field] ?? {};
+
+  if (!isAdditionalField(newUiOptions)) {
+    newUiOptions.intellisenseScopes = intellisenseScopes;
+  }
 
   const handleChange = (data: any) => {
     const newData = { ...value };
@@ -64,8 +67,8 @@ export const getRowProps = (rowProps: FormRowProps, field: string) => {
     rawErrors: rawErrors?.[field],
     required: required.includes(field),
     uiOptions: newUiOptions,
-    value: newUiOptions?.additionalField ? value : value && value[field],
-    onChange: newUiOptions?.additionalField ? onChange : handleChange,
+    value: isAdditionalField(newUiOptions) ? value : value && value[field],
+    onChange: isAdditionalField(newUiOptions) ? onChange : handleChange,
     depth,
     definitions,
     transparentBorder,
