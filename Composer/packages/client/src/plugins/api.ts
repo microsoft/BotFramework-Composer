@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { OAuthClient, OAuthOptions } from '../utils/oauthClient';
+import { getAccessTokenInCache, getGraphTokenInCache } from '../utils/auth';
 
 interface IAPI {
   auth: AuthAPI;
@@ -14,9 +15,15 @@ interface PublishConfig {
   [key: string]: any;
 }
 
+interface TokenPair {
+  access_token: string | null;
+  graph_token: string | null;
+}
+
 interface AuthAPI {
   login: (options: OAuthOptions) => Promise<string>; // returns an id token
   getAccessToken: (options: OAuthOptions) => Promise<string>; // returns an access token
+  getAccessTokensFromStorage: () => TokenPair;
 }
 
 interface PublishAPI {
@@ -38,6 +45,16 @@ class API implements IAPI {
       getAccessToken: (options: OAuthOptions) => {
         const client = new OAuthClient(options);
         return client.getTokenSilently();
+      },
+      // TODO: deprecate this when we are using real login
+      getAccessTokensFromStorage: () => {
+        console.log('GET ACCeSS TOKENS FROM STORAGE!', getAccessTokenInCache(), getGraphTokenInCache());
+        return {
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          access_token: getAccessTokenInCache(),
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          graph_token: getGraphTokenInCache(),
+        };
       },
     };
     this.publish = {

@@ -6,9 +6,26 @@
   "license": "MIT",
   "scripts": {
     "build:lib": "cd ../lib && yarn && yarn build:all",
-    "build": "yarn build:lib && tsc"
+    "build:ui": "webpack --config webpack.config.js",
+    "build:node": "tsc --project tsconfig.node.json",
+    "build": "yarn build:lib && yarn build:node && yarn build:ui"
   },
   "extendsComposer": true,
+  "composer": {
+    "bundles": [
+      {
+        "id": "publish",
+        "path": "lib/publish.js"
+      }
+    ],
+    "contributes": {
+      "views": {
+        "publish": {
+          "bundleId": "publish"
+        }
+      }
+    }
+  },
   "dependencies": {
     "@azure/arm-appinsights": "../lib/arm-appinsights",
     "@azure/arm-appservice": "^6.0.0",
@@ -26,6 +43,7 @@
     "@azure/arm-storage": "^15.0.0",
     "@azure/cosmos": "^3.7.4",
     "@azure/ms-rest-js": "^2.0.7",
+    "axios": "^0.19.2",
     "@bfc/indexers": "../../packages/lib/indexers",
     "@bfc/extension": "../../packages/extension",
     "@bfc/shared": "../../packages/lib/shared",
@@ -44,6 +62,14 @@
     "request": "2.88.2",
     "request-promise": "4.2.5",
     "uuid": "7.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^14.11.2",
+    "html-webpack-plugin": "^4.3.0",
+    "ts-loader": "^8.0.0",
+    "typescript": "^3.9.6",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.12"
   },
   "resolutions": {
     "bl": "^4.0.3"

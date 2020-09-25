@@ -7,12 +7,14 @@ import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { useRecoilValue } from 'recoil';
+import { RecognizerSchema, useRecognizerConfig, useShellApi } from '@bfc/extension-client';
+import { DialogFactory, SDKKinds } from '@bfc/shared';
 
 import { DialogCreationCopy, nameRegex } from '../../constants';
 import { StorageFolder } from '../../recoilModel/types';
 import { DialogWrapper, DialogTypes } from '../../components/DialogWrapper';
 import { FieldConfig, useForm } from '../../hooks/useForm';
-import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
+import { actionsSeedState, schemasState, validateDialogSelectorFamily } from '../../recoilModel';
 
 import { name, description, styles as wizardStyles } from './styles';
 
@@ -22,16 +24,24 @@ interface DialogFormData {
 }
 
 interface CreateDialogModalProps {
-  onSubmit: (dialogFormData: DialogFormData) => void;
+  onSubmit: (dialogName: string, dialogContent) => void;
   onDismiss: () => void;
   onCurrentPathUpdate?: (newPath?: string, storageId?: string) => void;
   focusedStorageFolder?: StorageFolder;
   isOpen: boolean;
+  projectId: string;
 }
 
 export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
-  const dialogs = useRecoilValue(validatedDialogsSelector);
-  const { onSubmit, onDismiss, isOpen } = props;
+  const { onSubmit, onDismiss, isOpen, projectId } = props;
+
+  const schemas = useRecoilValue(schemasState(projectId));
+  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const actionsSeed = useRecoilValue(actionsSeedState(projectId));
+
+  const { shellApi, ...shellData } = useShellApi();
+  const { defaultRecognizer } = useRecognizerConfig();
+
   const formConfig: FieldConfig<DialogFormData> = {
     name: {
       required: true,
@@ -53,6 +63,26 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
 
   const { formData, formErrors, hasErrors, updateField } = useForm(formConfig);
 
+  const seedNewRecognizer = (recognizerSchema?: RecognizerSchema) => {
+    if (recognizerSchema && typeof recognizerSchema.seedNewRecognizer === 'function') {
+      return recognizerSchema.seedNewRecognizer(shellData, shellApi);
+    }
+    return { $kind: recognizerSchema?.id };
+  };
+
+  const seedNewDialog = (formData: DialogFormData) => {
+    const seededContent = new DialogFactory(schemas.sdk?.content).create(SDKKinds.AdaptiveDialog, {
+      $designer: { name: formData.name, description: formData.description },
+      generator: `${formData.name}.lg`,
+      recognizer: seedNewRecognizer(defaultRecognizer),
+    });
+    if (seededContent.triggers?.[0]) {
+      seededContent.triggers[0].actions = actionsSeed;
+    }
+
+    return seededContent;
+  };
+
   const handleSubmit = useCallback(
     (e) => {
       e.preventDefault();
@@ -60,9 +90,9 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
         return;
       }
 
-      onSubmit({
-        ...formData,
-      });
+      const dialogData = seedNewDialog(formData);
+
+      onSubmit(formData.name, dialogData);
     },
     [hasErrors, formData]
   );
