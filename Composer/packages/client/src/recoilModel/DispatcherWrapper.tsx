@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useRef, useEffect, useState, Fragment, useLayoutEffect } from 'react';
+import { useRef, useState, Fragment, useLayoutEffect } from 'react';
 // eslint-disable-next-line @typescript-eslint/camelcase
 import { atom, useRecoilTransactionObserver_UNSTABLE, Snapshot, useRecoilState } from 'recoil';
 import once from 'lodash/once';
