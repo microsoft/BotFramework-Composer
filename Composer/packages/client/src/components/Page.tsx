@@ -113,6 +113,8 @@ const Page: React.FC<IPageProps> = ({
         <div css={main} role="main">
           {/* <NavTree navLinks={navLinks} regionName={navRegionName} /> */}
           <ProjectTree
+            selected=""
+            selectedDialog=""
             showDialogs={showDialogs}
             showTriggers={false}
             onDelete={(item) => console.log('deleting', item)}
