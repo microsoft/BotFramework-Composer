@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { atom, atomFamily } from 'recoil';
+import { atomFamily } from 'recoil';
 import {
   DialogInfo,
   DialogSchemaFile,
@@ -12,10 +12,10 @@ import {
   BotSchemas,
   Skill,
   DialogSetting,
-  Subscription,
-  ResourceGroups,
-  Resource,
-  DeployLocation,
+  // Subscription,
+  // ResourceGroups,
+  // Resource,
+  // DeployLocation,
 } from '@bfc/shared';
 
 import { BotLoadError, DesignPageLocation, QnAAllUpViewStatus } from '../../recoilModel/types';
@@ -248,26 +248,31 @@ export const isEjectRuntimeExistState = atomFamily<boolean, string>({
   default: false,
 });
 
+/* NOTE
+    On 9/25 Ben is marking these as deprecated since the required functionality has moved into the azurePublish ui plugin.
+    However I'm leaving it here just in case that was the wrong decision, and also to leave the structure of this in place
+    so that we can use it for possible near term intergrations between the Composer core and the azurepublish provisioning component.
+*/
 // values used in in-app provision
-export const subscriptionsState = atom<Subscription[]>({
-  key: getFullyQualifiedKey('subscriptions'),
-  default: [],
-});
+// export const subscriptionsState = atom<Subscription[]>({
+//   key: getFullyQualifiedKey('subscriptions'),
+//   default: [],
+// });
 
-export const resourceGroupsState = atom<ResourceGroups[]>({
-  key: getFullyQualifiedKey('resourceGroups'),
-  default: [],
-});
+// export const resourceGroupsState = atom<ResourceGroups[]>({
+//   key: getFullyQualifiedKey('resourceGroups'),
+//   default: [],
+// });
 
-export const resourcesState = atom<Resource[]>({
-  key: getFullyQualifiedKey('resources'),
-  default: [],
-});
+// export const resourcesState = atom<Resource[]>({
+//   key: getFullyQualifiedKey('resources'),
+//   default: [],
+// });
 
-export const deployLocationsState = atom<DeployLocation[]>({
-  key: getFullyQualifiedKey('deployLocations'),
-  default: [],
-});
+// export const deployLocationsState = atom<DeployLocation[]>({
+//   key: getFullyQualifiedKey('deployLocations'),
+//   default: [],
+// });
 
 export const qnaFilesState = atomFamily<QnAFile[], string>({
   key: getFullyQualifiedKey('qnaFiles'),
