@@ -6,5 +6,5 @@ export function processSize(size) {
 }
 
 export function isElectron(): boolean {
-  return !window.__IS_ELECTRON__;
+  return !(window as any).__IS_ELECTRON__;
 }
