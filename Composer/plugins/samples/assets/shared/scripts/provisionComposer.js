@@ -43,6 +43,10 @@ const usage = () => {
       'customArmTemplate',
       'Path to runtime ARM template. By default it will use an Azure WebApp template. Pass `DeploymentTemplates/function-template-with-preexisting-rg.json` for Azure Functions or your own template for a custom deployment.',
     ],
+    [
+      'qnaTemplate',
+      'Path to qna template. By default it will use `DeploymentTemplates/qna-template.json`'
+    ]
   ];
 
   const instructions = [
@@ -53,11 +57,11 @@ const usage = () => {
     ``,
     chalk.bold(`Basic Usage:`),
     chalk.greenBright(`node provisionComposer --subscriptionId=`) +
-      chalk.yellow('<Azure Subscription Id>') +
-      chalk.greenBright(' --name=') +
-      chalk.yellow('<Name for your environment>') +
-      chalk.greenBright(' --appPassword=') +
-      chalk.yellow('<16 character password>'),
+    chalk.yellow('<Azure Subscription Id>') +
+    chalk.greenBright(' --name=') +
+    chalk.yellow('<Name for your environment>') +
+    chalk.greenBright(' --appPassword=') +
+    chalk.yellow('<16 character password>'),
     ``,
     chalk.bold(`All options:`),
     ...options.map((option) => {
@@ -98,6 +102,8 @@ var tenantId = argv.tenantId ? argv.tenantId : '';
 
 const templatePath =
   argv.customArmTemplate || path.join(__dirname, 'DeploymentTemplates', 'template-with-preexisting-rg.json');
+const qnaTemplatePath =
+  argv.qnaTemplate || path.join(__dirname, 'DeploymentTemplates', 'qna-template.json');
 
 const BotProjectDeployLoggerType = {
   // Logger Type for Provision
@@ -206,6 +212,18 @@ const getTenantId = async (accessToken) => {
   }
 };
 
+/**
+ * 
+ * @param {*} appId the appId of application registration
+ * @param {*} appPwd the app password of application registration
+ * @param {*} location the locaiton of all resources
+ * @param {*} name the name of resource group
+ * @param {*} shouldCreateAuthoringResource
+ * @param {*} shouldCreateLuisResource 
+ * @param {*} useAppInsights 
+ * @param {*} useCosmosDb 
+ * @param {*} useStorage 
+ */
 const getDeploymentTemplateParam = (
   appId,
   appPwd,
@@ -213,7 +231,6 @@ const getDeploymentTemplateParam = (
   name,
   shouldCreateAuthoringResource,
   shouldCreateLuisResource,
-  shouldCreateQnAResource,
   useAppInsights,
   useCosmosDb,
   useStorage
@@ -225,11 +242,63 @@ const getDeploymentTemplateParam = (
     botId: pack(name),
     shouldCreateAuthoringResource: pack(shouldCreateAuthoringResource),
     shouldCreateLuisResource: pack(shouldCreateLuisResource),
-    shouldCreateQnAResource: pack(shouldCreateQnAResource),
     useAppInsights: pack(useAppInsights),
     useCosmosDb: pack(useCosmosDb),
     useStorage: pack(useStorage),
   };
+};
+
+/**
+ * Get QnA template param
+ */
+const getQnaTemplateParam = (
+  location,
+  name
+) => {
+  return {
+    appServicePlanLocation: pack(location),
+    name: pack(name)
+  };
+};
+
+/**
+ * Validate the qna template and the qna template param
+ */
+const validateQnADeployment = async (client, resourceGroupName, deployName, templateParam) => {
+  logger({
+    status: BotProjectDeployLoggerType.PROVISION_INFO,
+    message: '> Validating QnA deployment ...',
+  });
+
+  const templateFile = await readFile(qnaTemplatePath, { encoding: 'utf-8' });
+  const deployParam = {
+    properties: {
+      template: JSON.parse(templateFile),
+      parameters: templateParam,
+      mode: 'Incremental',
+    },
+  };
+  return await client.deployments.validate(resourceGroupName, deployName, deployParam);
+};
+
+/**
+ * Create a QnA resource deployment
+ * @param {*} client 
+ * @param {*} resourceGroupName 
+ * @param {*} deployName 
+ * @param {*} templateParam 
+ */
+const createQnADeployment = async (client, resourceGroupName, deployName, templateParam) => {
+  const templateFile = await readFile(qnaTemplatePath, { encoding: 'utf-8' });
+  const deployParam = {
+    properties: {
+      template: JSON.parse(templateFile),
+      parameters: templateParam,
+      mode: 'Incremental',
+    },
+  };
+
+  return await client.deployments.createOrUpdate(resourceGroupName, deployName, deployParam);
 };
 
 /**
@@ -347,6 +416,12 @@ const create = async (
   createStorage = true,
   createAppInsights = true
 ) => {
+  
+  // App insights is a dependency of QnA
+  if (createQnAResource) {
+    createAppInsights = true;
+  }
+
   // If tenantId is empty string, get tenanId from API
   if (!tenantId) {
     const token = await creds.getToken();
@@ -422,7 +497,6 @@ const create = async (
     location,
     name,
     createLuisAuthoringResource,
-    createQnAResource,
     createLuisResource,
     createAppInsights,
     createCosmosDb,
@@ -484,6 +558,75 @@ const create = async (
       message: getErrorMesssage(err),
     });
     return provisionFailed();
+  }
+
+  var qnaResult = null;
+
+  // Create qna resources, the reason why seperate the qna resources from others: https://github.com/Azure/azure-sdk-for-js/issues/10186 
+  if (createQnAResource) {
+    const qnaDeployName = new Date().getTime().toString();
+    const qnaDeploymentTemplateParam = getQnaTemplateParam(
+      location,
+      name
+    );
+    const qnaValidation = await validateQnADeployment(client, resourceGroupName, qnaDeployName, qnaDeploymentTemplateParam);
+    if (qnaValidation.error) {
+      logger({
+        status: BotProjectDeployLoggerType.PROVISION_ERROR,
+        message: `! Error: ${qnaValidation.error.message}`,
+      });
+      if (qnaValidation.error.details) {
+        logger({
+          status: BotProjectDeployLoggerType.PROVISION_ERROR_DETAILS,
+          message: JSON.stringify(qnaValidation.error.details, null, 2),
+        });
+      }
+      logger({
+        status: BotProjectDeployLoggerType.PROVISION_ERROR,
+        message: `+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`,
+      });
+      return provisionFailed();
+    }
+
+    // Create qna deloyment
+    logger({
+      status: BotProjectDeployLoggerType.PROVISION_INFO,
+      message: `> Deploying QnA Resources (this could take a while)...`,
+    });
+    const spinner = ora().start();
+    try {
+      const qnaDeployment = await createQnADeployment(client, resourceGroupName, qnaDeployName, qnaDeploymentTemplateParam);
+      // Handle errors
+      if (qnaDeployment._response.status != 200) {
+        spinner.fail();
+        logger({
+          status: BotProjectDeployLoggerType.PROVISION_ERROR,
+          message: `! QnA Template is not valid with provided parameters. Review the log for more information.`,
+        });
+        logger({
+          status: BotProjectDeployLoggerType.PROVISION_ERROR,
+          message: `! Error: ${qnaValidation.error}`,
+        });
+        logger({
+          status: BotProjectDeployLoggerType.PROVISION_ERROR,
+          message: `+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`,
+        });
+        return provisionFailed();
+      }
+    } catch (err) {
+      spinner.fail();
+      logger({
+        status: BotProjectDeployLoggerType.PROVISION_ERROR,
+        message: getErrorMesssage(err),
+      });
+      return provisionFailed();
+    }
+
+    const qnaDeploymentOutput = await client.deployments.get(resourceGroupName, qnaDeployName);
+    if (qnaDeploymentOutput && qnaDeploymentOutput.properties && qnaDeploymentOutput.properties.outputs) {
+      const qnaOutputResult = qnaDeploymentOutput.properties.outputs;
+      qnaResult = unpackObject(qnaOutputResult);
+    }
   }
 
   // If application insights created, update the application insights settings in azure bot service
@@ -574,10 +717,10 @@ const create = async (
       if (failedOperations) {
         failedOperations.forEach((operation) => {
           switch (
-            operation &&
-            operation.properties &&
-            operation.properties.statusMessage.error.code &&
-            operation.properties.targetResource
+          operation &&
+          operation.properties &&
+          operation.properties.statusMessage.error.code &&
+          operation.properties.targetResource
           ) {
             case 'MissingRegistrationForLocation':
               logger({
@@ -609,6 +752,14 @@ const create = async (
       });
     }
   }
+
+  // Merge qna outputs with other resources' outputs
+  if (createQnAResource) {
+    if (qnaResult) {
+      Object.assign(updateResult, qnaResult);
+    }
+  }
+
   return updateResult;
 };
 
