@@ -7,13 +7,13 @@ import TableView from '../../../src/pages/knowledge-base/table-view';
 import CodeEditor from '../../../src/pages/knowledge-base/code-editor';
 import { renderWithRecoil } from '../../testUtils';
 import {
-  projectIdState,
   localeState,
   dialogsState,
   qnaFilesState,
   settingsState,
   schemasState,
   dispatcherState,
+  currentProjectIdState,
 } from '../../../src/recoilModel';
 import mockProjectResponse from '../../../src/recoilModel/dispatchers/__tests__/mocks/mockProjectResponse.json';
 
@@ -50,12 +50,12 @@ const state = {
 const updateQnAFileMock = jest.fn();
 
 const initRecoilState = ({ set }) => {
-  set(projectIdState, state.projectId);
-  set(localeState, state.locale);
-  set(dialogsState, state.dialogs);
-  set(qnaFilesState, state.qnaFiles);
-  set(settingsState, state.settings);
-  set(schemasState, mockProjectResponse.schemas);
+  set(currentProjectIdState, state.projectId);
+  set(localeState(state.projectId), state.locale);
+  set(dialogsState(state.projectId), state.dialogs);
+  set(qnaFilesState(state.projectId), state.qnaFiles);
+  set(settingsState(state.projectId), state.settings);
+  set(schemasState(state.projectId), mockProjectResponse.schemas);
   set(dispatcherState, {
     updateQnAFile: updateQnAFileMock,
   });
@@ -63,13 +63,16 @@ const initRecoilState = ({ set }) => {
 
 describe('QnA page all up view', () => {
   it('should render QnA page table view', () => {
-    const { getByText, getByTestId } = renderWithRecoil(<TableView dialogId={'a'} />, initRecoilState);
+    const { getByText, getByTestId } = renderWithRecoil(
+      <TableView dialogId={'a'} projectId={state.projectId} />,
+      initRecoilState
+    );
     getByTestId('table-view');
     getByText('question (1)');
     getByText('answer');
   });
 
   it('should render QnA page code editor', () => {
-    renderWithRecoil(<CodeEditor dialogId={'a'} />, initRecoilState);
+    renderWithRecoil(<CodeEditor dialogId={'a'} projectId={state.projectId} />, initRecoilState);
   });
 });

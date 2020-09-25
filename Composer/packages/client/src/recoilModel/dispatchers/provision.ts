@@ -117,7 +117,7 @@ export const provisionDispatcher = () => {
           }
         );
         console.log(result.data);
-        set(settingsState, (settings) => ({
+        set(settingsState(projectId), (settings) => ({
           ...settings,
           provisionConfig: result.data,
         }));
@@ -136,7 +136,7 @@ export const provisionDispatcher = () => {
           if (response.data.config && response.data.config != {}) {
             clearInterval(timer);
             // update publishConfig
-            set(settingsState, (settings) => {
+            set(settingsState(projectId), (settings) => {
               settings.publishTargets = settings.publishTargets?.map((item) => {
                 if (item.name === target.name) {
                   return {
@@ -152,7 +152,7 @@ export const provisionDispatcher = () => {
             });
           } else {
             // update provision status
-            set(settingsState, (settings) => {
+            set(settingsState(projectId), (settings) => {
               settings.publishTargets = settings.publishTargets?.map((item) => {
                 if (item.name === target.name) {
                   return {
@@ -169,7 +169,7 @@ export const provisionDispatcher = () => {
         } catch (err) {
           console.log(err.response);
           // remove that publishTarget
-          set(settingsState, (settings) => {
+          set(settingsState(projectId), (settings) => {
             settings.publishTargets = settings.publishTargets?.filter((item) => item.name !== target.name);
             return settings;
           });

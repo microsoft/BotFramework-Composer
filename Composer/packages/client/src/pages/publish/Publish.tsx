@@ -6,20 +6,20 @@ import { jsx } from '@emotion/core';
 import { useState, useEffect, Fragment, useCallback, useMemo } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
-import { Dialog } from 'office-ui-fabric-react/lib/Dialog';
+import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { PublishTarget, ProvisionType } from '@bfc/shared';
+import { PublishTarget } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
+
 import { setAccessToken, setGraphToken } from '../../utils/auth';
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { projectContainer } from '../design/styles';
 import {
+  dispatcherState,
   settingsState,
   botNameState,
   publishTypesState,
-  projectIdState,
   publishHistoryState,
-  dispatcherState,
 } from '../../recoilModel';
 import { navigateTo } from '../../utils/navigation';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
@@ -28,22 +28,18 @@ import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { TargetList } from './targetList';
 import { PublishDialog } from './publishDialog';
 import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor, overflowSet, targetSelected } from './styles';
+import { CreatePublishTarget } from './createPublishTarget';
 import { PublishStatusList, IStatus } from './publishStatusList';
-import { ProvisionDialog } from './provisionDialog';
-import { ProvisionDetailPanel } from './provisionDetail';
 
-interface PublishPageProps extends RouteComponentProps<{}> {
-  targetName?: string;
-}
-
-const Publish: React.FC<PublishPageProps> = (props) => {
+const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: string }>> = (props) => {
   const selectedTargetName = props.targetName;
+  const { projectId = '' } = props;
   const [selectedTarget, setSelectedTarget] = useState<PublishTarget | undefined>();
-  const settings = useRecoilValue(settingsState);
-  const botName = useRecoilValue(botNameState);
-  const publishTypes = useRecoilValue(publishTypesState);
-  const projectId = useRecoilValue(projectIdState);
-  const publishHistory = useRecoilValue(publishHistoryState);
+  const settings = useRecoilValue(settingsState(projectId));
+  const botName = useRecoilValue(botNameState(projectId));
+  const publishTypes = useRecoilValue(publishTypesState(projectId));
+  const publishHistory = useRecoilValue(publishHistoryState(projectId));
+
   const {
     getPublishStatus,
     getPublishTargetTypes,
@@ -51,21 +47,30 @@ const Publish: React.FC<PublishPageProps> = (props) => {
     setPublishTargets,
     publishToTarget,
     setQnASettings,
-    getProvisionStatus,
-    provisionToTarget,
     rollbackToVersion: rollbackToVersionDispatcher,
   } = useRecoilValue(dispatcherState);
 
+  const [addDialogHidden, setAddDialogHidden] = useState(true);
+  const [editDialogHidden, setEditDialogHidden] = useState(true);
+
   const [showLog, setShowLog] = useState(false);
   const [publishDialogHidden, setPublishDialogHidden] = useState(true);
-  const [provisionDialogHidden, setProvisionDialogHidden] = useState(true);
 
   // items to show in the list
   const [thisPublishHistory, setThisPublishHistory] = useState<IStatus[]>([]);
   const [groups, setGroups] = useState<any[]>([]);
   const [selectedVersion, setSelectedVersion] = useState<IStatus | null>(null);
+  const [dialogProps, setDialogProps] = useState({
+    title: formatMessage('Title'),
+    type: DialogType.normal,
+    children: {},
+  });
+  const [editDialogProps, setEditDialogProps] = useState({
+    title: formatMessage('Title'),
+    type: DialogType.normal,
+    children: {},
+  });
   const [editTarget, setEditTarget] = useState<{ index: number; item: PublishTarget } | null>(null);
-  const [showProvisionDetail, setShowProvisionDetail] = useState(false);
 
   const isRollbackSupported = useMemo(
     () => (target, version): boolean => {
@@ -83,12 +88,12 @@ const Publish: React.FC<PublishPageProps> = (props) => {
   const toolbarItems: IToolbarItem[] = [
     {
       type: 'action',
-      text: formatMessage('Create Hosting Environment'),
+      text: formatMessage('Add new profile'),
       buttonProps: {
         iconProps: {
-          iconName: 'ClipboardList',
+          iconName: 'Add',
         },
-        onClick: () => openProvisionDialog(),
+        onClick: () => setAddDialogHidden(false),
       },
       align: 'left',
       dataTestid: 'publishPage-Toolbar-Add',
@@ -133,19 +138,6 @@ const Publish: React.FC<PublishPageProps> = (props) => {
       disabled: selectedTarget && selectedVersion ? !isRollbackSupported(selectedTarget, selectedVersion) : true,
       dataTestid: 'publishPage-Toolbar-Log',
     },
-    {
-      type: 'action',
-      text: formatMessage('Provision Detail'),
-      buttonProps: {
-        iconProps: {
-          iconName: 'ClipboardList',
-        },
-        onClick: () => setShowProvisionDetail(true),
-      },
-      align: 'left',
-      // disabled: selectedVersion ? false : true,
-      dataTestid: 'publishPage-ToolBar-Log',
-    },
   ];
 
   const onSelectTarget = useCallback(
@@ -166,12 +158,6 @@ const Publish: React.FC<PublishPageProps> = (props) => {
     }
   };
 
-  const openProvisionDialog = async () => {
-    // get all subscriptions for select
-    // await actions.getSubscriptions();
-    setProvisionDialogHidden(false);
-  };
-
   useEffect(() => {
     // if url was wrong, redirect to all profiles page
     const activeDialog = settings.publishTargets?.find(({ name }) => name === selectedTargetName);
@@ -182,7 +168,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
 
   useEffect(() => {
     if (projectId) {
-      getPublishTargetTypes();
+      getPublishTargetTypes(projectId);
       // init selected status
       setSelectedVersion(null);
     }
@@ -251,21 +237,76 @@ const Publish: React.FC<PublishPageProps> = (props) => {
   }, [thisPublishHistory, selectedTargetName]);
 
   const savePublishTarget = useCallback(
-    async (name: string, type: string, provisionConfig: string) => {
+    async (name: string, type: string, configuration: string) => {
       const targets = (settings.publishTargets || []).concat([
         {
           name,
           type,
-          provisionConfig,
-          configuration: '{}',
+          configuration,
+          provisionConfig: '{}',
           provisionStatus: '{}',
         },
       ]);
-      await setPublishTargets(targets);
-      // onSelectTarget(name);
+      await setPublishTargets(targets, projectId);
+      onSelectTarget(name);
     },
     [settings.publishTargets, projectId, botName]
   );
+
+  const updatePublishTarget = useCallback(
+    async (name: string, type: string, configuration: string) => {
+      if (!editTarget) {
+        return;
+      }
+
+      const targets = settings.publishTargets ? [...settings.publishTargets] : [];
+
+      targets[editTarget.index] = {
+        name,
+        type,
+        configuration,
+        provisionConfig: '{}',
+        provisionStatus: '{}',
+      };
+
+      await setPublishTargets(targets, projectId);
+
+      onSelectTarget(name);
+    },
+    [settings.publishTargets, projectId, botName, editTarget]
+  );
+
+  useEffect(() => {
+    setDialogProps({
+      title: formatMessage('Add a publish profile'),
+      type: DialogType.normal,
+      children: (
+        <CreatePublishTarget
+          closeDialog={() => setAddDialogHidden(true)}
+          current={null}
+          targets={settings.publishTargets || []}
+          types={publishTypes}
+          updateSettings={savePublishTarget}
+        />
+      ),
+    });
+  }, [publishTypes, savePublishTarget, settings.publishTargets]);
+
+  useEffect(() => {
+    setEditDialogProps({
+      title: formatMessage('Edit a publish profile'),
+      type: DialogType.normal,
+      children: (
+        <CreatePublishTarget
+          closeDialog={() => setEditDialogHidden(true)}
+          current={editTarget ? editTarget.item : null}
+          targets={(settings.publishTargets || []).filter((item) => editTarget && item.name != editTarget.item.name)}
+          types={publishTypes}
+          updateSettings={updatePublishTarget}
+        />
+      ),
+    });
+  }, [editTarget, publishTypes, updatePublishTarget]);
 
   const rollbackToVersion = useMemo(
     () => async (version) => {
@@ -297,7 +338,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
           }
         });
 
-        await setPublishTargets(updatedPublishTargets);
+        await setPublishTargets(updatedPublishTargets, projectId);
       }
     },
     [projectId, selectedTarget, settings.publishTargets]
@@ -306,7 +347,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
   const onEdit = async (index: number, item: PublishTarget) => {
     const newItem = { item: item, index: index };
     setEditTarget(newItem);
-    openProvisionDialog();
+    setEditDialogHidden(false);
   };
 
   const onDelete = useMemo(
@@ -323,7 +364,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
       if (result) {
         if (settings.publishTargets && settings.publishTargets.length > index) {
           const targets = settings.publishTargets.slice(0, index).concat(settings.publishTargets.slice(index + 1));
-          await setPublishTargets(targets);
+          await setPublishTargets(targets, projectId);
           // redirect to all profiles
           setSelectedTarget(undefined);
           onSelectTarget('all');
@@ -346,38 +387,36 @@ const Publish: React.FC<PublishPageProps> = (props) => {
     },
     []
   );
+
   return (
     <Fragment>
+      <Dialog
+        dialogContentProps={dialogProps}
+        hidden={addDialogHidden}
+        minWidth={450}
+        modalProps={{ isBlocking: true }}
+        onDismiss={() => setAddDialogHidden(true)}
+      >
+        {dialogProps.children}
+      </Dialog>
+      <Dialog
+        dialogContentProps={editDialogProps}
+        hidden={editDialogHidden}
+        minWidth={450}
+        modalProps={{ isBlocking: true }}
+        onDismiss={() => setEditDialogHidden(true)}
+      >
+        {editDialogProps.children}
+      </Dialog>
       {!publishDialogHidden && (
-        <PublishDialog target={selectedTarget} onDismiss={() => setPublishDialogHidden(true)} onSubmit={publish} />
-      )}
-      {!provisionDialogHidden && (
-        <ProvisionDialog
-          createNew={(value) => {
-            console.log(value);
-            provisionToTarget(value, ProvisionType.createNew, projectId);
-            savePublishTarget(value.name, value.type, JSON.stringify(value));
-            getProvisionStatus(projectId, value);
-          }}
-          current={editTarget ? editTarget.item : null}
-          selectedExist={(value) => {
-            console.log(value);
-            provisionToTarget(value, ProvisionType.selectExisted, projectId);
-            savePublishTarget(value.name, value.type, JSON.stringify(value));
-            getProvisionStatus(projectId, value);
-          }}
-          targets={settings.publishTargets || []}
-          types={publishTypes}
-          onDismiss={() => {
-            setProvisionDialogHidden(true);
-            setEditTarget(null);
-          }}
+        <PublishDialog
+          projectId={projectId}
+          target={selectedTarget}
+          onDismiss={() => setPublishDialogHidden(true)}
+          onSubmit={publish}
         />
       )}
       {showLog && <LogDialog version={selectedVersion} onDismiss={() => setShowLog(false)} />}
-      {showProvisionDetail && (
-        <ProvisionDetailPanel target={settings.publishTargets} onDismiss={() => setShowProvisionDetail(false)} />
-      )}
       <Toolbar toolbarItems={toolbarItems} />
       <div>
         <form>
