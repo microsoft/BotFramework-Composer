@@ -3,7 +3,7 @@
 
 import { useId } from '@uifabric/react-hooks';
 import formatMessage from 'format-message';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { Dropdown, DropdownMenuItemType, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import * as React from 'react';
 import { useRecoilValue } from 'recoil';
 import { formDialogTemplatesAtom } from 'src/atoms/appState';
@@ -73,7 +73,7 @@ export const PropertyTypeSelector = React.memo((props: Props) => {
   const { isArray, kind, payload, onChange } = props;
 
   const propertyTypeTooltipId = useId('propertyType');
-  const isEnumList = kind === 'string' && (payload as StringPropertyPayload).enums;
+  const isEnumList = kind === 'string' && !!(payload as StringPropertyPayload).enums;
 
   const templates = useRecoilValue(formDialogTemplatesAtom);
   const templateOptions = React.useMemo(
@@ -98,20 +98,35 @@ export const PropertyTypeSelector = React.memo((props: Props) => {
     [payload, kind]
   );
 
+  const dynamicOptions = React.useMemo(
+    () =>
+      [
+        { key: 'number', text: formatMessage('number'), selected: kind === 'number', data: 'number' },
+        { key: 'string', text: formatMessage('any string'), selected: kind === 'string', data: 'string' },
+        ...stringOptions,
+        ...templateOptions,
+      ].sort((a, b) => a.text.localeCompare(b.text)) as IDropdownOption[],
+    [kind, stringOptions, templateOptions]
+  );
+
   const options = React.useMemo(() => {
     return [
-      { key: 'number', text: formatMessage('Number'), selected: kind === 'number', data: 'number' },
-      { key: 'string', text: formatMessage('String'), selected: kind === 'string', data: 'string' },
-      ...stringOptions,
       {
         key: 'enums',
-        text: formatMessage('enum (list)'),
+        text: formatMessage('list'),
         selected: isEnumList,
         data: 'string',
-      },
-      ...templateOptions,
-    ].sort((a, b) => a.text.localeCompare(b.text)) as IDropdownOption[];
-  }, [kind, isEnumList, stringOptions, templateOptions]);
+      } as IDropdownOption,
+      {
+        itemType: DropdownMenuItemType.Divider,
+      } as IDropdownOption,
+      {
+        itemType: DropdownMenuItemType.Header,
+        text: formatMessage('Define by value type'),
+      } as IDropdownOption,
+      ...dynamicOptions,
+    ];
+  }, [isEnumList, dynamicOptions]);
 
   const selectedKey = React.useMemo(() => options.find((o) => o.selected).key, [options]);
 
@@ -138,7 +153,7 @@ export const PropertyTypeSelector = React.memo((props: Props) => {
     <Dropdown
       aria-describedby={propertyTypeTooltipId}
       calloutProps={{ calloutMaxHeight: 400 }}
-      label={formatMessage('Type')}
+      label={formatMessage('Property Type')}
       options={options}
       selectedKey={selectedKey}
       styles={{ root: { minWidth: 200 } }}

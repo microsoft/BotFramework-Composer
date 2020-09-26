@@ -3,10 +3,10 @@
 
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 
-export function generateId() {
+export const generateId = () => {
   const arr = crypto.getRandomValues(new Uint32Array(1));
   return `${arr[0]}`;
-}
+};
 
 type Disposable = {
   dispose: () => void;

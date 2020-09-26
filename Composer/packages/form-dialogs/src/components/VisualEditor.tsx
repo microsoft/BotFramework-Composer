@@ -2,16 +2,25 @@
 // Licensed under the MIT License.
 
 import styled from '@emotion/styled';
-import { FluentTheme } from '@uifabric/fluent-theme';
+import { NeutralColors, FluentTheme } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
+import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { Text } from 'office-ui-fabric-react/lib/Text';
 import * as React from 'react';
 import { useRecoilValue } from 'recoil';
-import { formDialogSchemaAtom, formDialogSchemaJsonSelector, formDialogSchemaValidSelector } from 'src/atoms/appState';
+import {
+  allFormDialogPropertyIdsSelector,
+  formDialogSchemaAtom,
+  formDialogSchemaJsonSelector,
+  formDialogSchemaValidSelector,
+} from 'src/atoms/appState';
 import { useHandlers } from 'src/atoms/handlers';
 import { CommandBarUploadButton } from 'src/components/common/CommandBarUpload';
-import { PropertyCardList } from 'src/components/property/PropertyCardList';
+import { FormDialogSchemaDetails } from 'src/components/property/FormDialogSchemaDetails';
+import { Lifetime } from 'src/utils/base';
+import { jsPropertyListClassName } from 'src/utils/constants';
 import { useUndoKeyBinding } from 'src/utils/hooks/useUndoKeyBinding';
 
 const downloadFile = async (fileName: string, schemaExtension: string, content: string) => {
@@ -25,25 +34,33 @@ const downloadFile = async (fileName: string, schemaExtension: string, content: 
   document.body.removeChild(link);
 };
 
+const Root = styled(Stack)({
+  backgroundColor: NeutralColors.gray20,
+});
+
 const EditorRoot = styled.div({
-  backgroundColor: FluentTheme.palette.neutralLighter,
   display: 'flex',
   flex: 1,
   justifyContent: 'center',
   overflowY: 'auto',
 });
 
-const ListCommandBar = styled(CommandBar)('CommandBar', {
+const ListCommandBar = styled(CommandBar)({
   position: 'relative',
   zIndex: 1,
-  padding: '0 12px',
-  borderBottom: `1px solid ${FluentTheme.palette.neutralTertiary}`,
+  margin: '0 0 1px 0',
   '& .ms-CommandBar': {
-    padding: 0,
+    padding: '0 12px',
   },
   '& .ms-OverflowSet-item': {
     alignItems: 'center',
   },
+});
+
+const SchemaName = styled(Stack)({
+  height: 44,
+  padding: '0 24px',
+  backgroundColor: FluentTheme.palette.white,
 });
 
 type Props = {
@@ -57,38 +74,47 @@ export const VisualEditor = React.memo((props: Props) => {
   const { onReset, onGenerateDialog, schemaExtension } = props;
 
   const schema = useRecoilValue(formDialogSchemaAtom);
+  const propertyIds = useRecoilValue(allFormDialogPropertyIdsSelector);
   const schemaValid = useRecoilValue(formDialogSchemaValidSelector);
   const schemaJson = useRecoilValue(formDialogSchemaJsonSelector);
-  const { importSchema, addProperty } = useHandlers();
+  const { importSchema, addProperty, activatePropertyId } = useHandlers();
 
   const schemaIdRef = React.useRef<string>(schema.id);
-  const propertyLengthRef = React.useRef(schema.propertyIds.length);
 
   const containerRef = React.useRef<HTMLDivElement>();
   useUndoKeyBinding();
-
-  React.useEffect(() => {
-    if (
-      containerRef.current &&
-      schema.propertyIds.length &&
-      schema.id === schemaIdRef.current &&
-      schema.propertyIds.length === propertyLengthRef.current + 1
-    ) {
-      containerRef.current.scrollTop = containerRef.current.scrollHeight - containerRef.current.clientHeight;
-    } else {
-      containerRef.current.scrollTop = 0;
-    }
-  }, [schema.propertyIds.length, schema.id]);
 
   React.useEffect(() => {
     schemaIdRef.current = schema.id;
   }, [schema.id]);
 
   React.useEffect(() => {
-    if (schema.id === schemaIdRef.current) {
-      propertyLengthRef.current = schema.propertyIds.length;
+    const lifetime = new Lifetime();
+
+    const clickOutsideLists = (e: MouseEvent) => {
+      const { x, y } = e;
+      const elms = Array.prototype.slice.call(
+        containerRef.current.querySelectorAll(`.${jsPropertyListClassName}`) || []
+      ) as HTMLDivElement[];
+      if (
+        !elms.some((elm) => {
+          const { left, right, top, bottom } = elm.getBoundingClientRect();
+          return x <= right && x >= left && y <= bottom && y >= top;
+        })
+      ) {
+        activatePropertyId({ id: '' });
+      }
+    };
+
+    if (containerRef.current) {
+      containerRef.current.addEventListener('click', clickOutsideLists);
+      lifetime.add(() => {
+        containerRef.current.removeEventListener('click', clickOutsideLists);
+      });
     }
-  }, [schema.propertyIds.length]);
+
+    return () => lifetime.dispose();
+  }, []);
 
   const upload = (file: File) => {
     importSchema({ id: schema.id, file });
@@ -115,7 +141,7 @@ export const VisualEditor = React.memo((props: Props) => {
       text: formatMessage('Export JSON'),
       title: formatMessage('Export JSON'),
       ariaLabel: formatMessage('Export JSON'),
-      disabled: !schema.propertyIds.length || !schemaValid,
+      disabled: !propertyIds.length || !schemaValid,
       onClick: () => {
         downloadFile(schema.name, schemaExtension, schemaJson);
       },
@@ -144,7 +170,7 @@ export const VisualEditor = React.memo((props: Props) => {
       onRender: () => (
         <DefaultButton
           ariaLabel={formatMessage('Generate dialog')}
-          disabled={!schema.propertyIds.length || !schemaValid}
+          disabled={!propertyIds.length || !schemaValid}
           text={formatMessage('Generate dialog')}
           title={formatMessage('Generate dialog')}
           onClick={generateDialog}
@@ -154,11 +180,14 @@ export const VisualEditor = React.memo((props: Props) => {
   ];
 
   return (
-    <>
+    <Root verticalFill>
       <ListCommandBar farItems={farItems} items={menuItems} />
+      <SchemaName verticalAlign="center">
+        <Text>{schema.name}</Text>
+      </SchemaName>
       <EditorRoot ref={containerRef}>
-        <PropertyCardList />
+        <FormDialogSchemaDetails />
       </EditorRoot>
-    </>
+    </Root>
   );
 });

@@ -6,9 +6,11 @@
 import * as React from 'react';
 import { useRecoilCallback } from 'recoil';
 import {
-  formDialogSchemaPropertyNamesSelector,
+  activePropertyIdAtom,
+  allFormDialogPropertyIdsSelector,
   formDialogPropertyAtom,
   formDialogSchemaAtom,
+  formDialogSchemaPropertyNamesSelector,
   formDialogTemplatesAtom,
 } from 'src/atoms/appState';
 import { FormDialogPropertyPayload, SchemaPropertyKind } from 'src/atoms/types';
@@ -20,7 +22,12 @@ const getHandlers = () => {
   const importSchemaString = useRecoilCallback(({ set }) => ({ id, content }: { id: string; content: string }) => {
     const schema = createSchemaStoreFromJson(id, content);
 
-    set(formDialogSchemaAtom, { id: schema.name, name: schema.name, propertyIds: schema.properties.map((p) => p.id) });
+    set(formDialogSchemaAtom, {
+      id: schema.name,
+      name: schema.name,
+      requiredPropertyIds: schema.properties.filter((p) => p.required).map((p) => p.id),
+      optionalPropertyIds: schema.properties.filter((p) => !p.required).map((p) => p.id),
+    });
     schema.properties.forEach((property) => set(formDialogPropertyAtom(property.id), property));
   });
 
@@ -29,10 +36,14 @@ const getHandlers = () => {
     importSchemaString({ id, content });
   });
 
+  const activatePropertyId = useRecoilCallback(({ set }) => ({ id }: { id: string }) => {
+    set(activePropertyIdAtom, id);
+  });
+
   const addProperty = useRecoilCallback(({ set }) => () => {
     const newPropertyId = generateId();
     set(formDialogSchemaAtom, (currentSchema) => {
-      return { ...currentSchema, propertyIds: [...currentSchema.propertyIds, newPropertyId] };
+      return { ...currentSchema, requiredPropertyIds: [newPropertyId, ...currentSchema.requiredPropertyIds] };
     });
     set(formDialogPropertyAtom(newPropertyId), {
       id: newPropertyId,
@@ -40,9 +51,10 @@ const getHandlers = () => {
       name: '',
       payload: { kind: 'string' },
       examples: [],
-      required: false,
+      required: true,
       array: false,
     });
+    activatePropertyId({ id: newPropertyId });
   });
 
   const changePropertyKind = useRecoilCallback(
@@ -90,41 +102,102 @@ const getHandlers = () => {
   });
 
   const moveProperty = useRecoilCallback(
-    ({ set }) => ({ fromIndex, toIndex }: { fromIndex: number; toIndex: number }) => {
-      set(formDialogSchemaAtom, (currentSchema) => {
-        const propertyIds = currentSchema.propertyIds.slice();
-        const newId = propertyIds[fromIndex];
-        propertyIds.splice(fromIndex, 1);
-        propertyIds.splice(toIndex, 0, newId);
+    ({ set }) => ({
+      id,
+      source,
+      destination,
+      fromIndex,
+      toIndex,
+    }: {
+      id: string;
+      source: 'required' | 'optional';
+      destination: 'required' | 'optional';
+      fromIndex: number;
+      toIndex: number;
+    }) => {
+      const toggleRequired = source !== destination;
 
-        return { ...currentSchema, propertyIds };
+      if (toggleRequired) {
+        changePropertyRequired({ id, required: source === 'optional' });
+      }
+
+      set(formDialogSchemaAtom, (currentSchema) => {
+        if (toggleRequired) {
+          //Move between two lists
+          const requiredPropertyIds = currentSchema.requiredPropertyIds.slice();
+          const optionalPropertyIds = currentSchema.optionalPropertyIds.slice();
+
+          if (source === 'required') {
+            requiredPropertyIds.splice(fromIndex, 1);
+            optionalPropertyIds.splice(toIndex, 0, id);
+          } else {
+            optionalPropertyIds.splice(fromIndex, 1);
+            requiredPropertyIds.splice(toIndex, 0, id);
+          }
+
+          return { ...currentSchema, requiredPropertyIds, optionalPropertyIds };
+        } else {
+          // Move within a list
+          const propertyIds = (source === 'required'
+            ? currentSchema.requiredPropertyIds
+            : currentSchema.optionalPropertyIds
+          ).slice();
+
+          propertyIds.splice(fromIndex, 1);
+          propertyIds.splice(toIndex, 0, id);
+
+          return source === 'required'
+            ? { ...currentSchema, requiredPropertyIds: propertyIds }
+            : { ...currentSchema, optionalPropertyIds: propertyIds };
+        }
       });
     }
   );
 
-  const removeProperty = useRecoilCallback(({ set, reset }) => ({ id }: { id: string }) => {
+  const removeProperty = useRecoilCallback(({ set, reset, snapshot }) => async ({ id }: { id: string }) => {
+    const property = await snapshot.getPromise(formDialogPropertyAtom(id));
+
     set(formDialogSchemaAtom, (currentSchema) => ({
       ...currentSchema,
-      propertyIds: currentSchema.propertyIds.filter((pId) => pId !== id),
+      requiredPropertyIds: property.required
+        ? currentSchema.requiredPropertyIds.filter((pId) => pId !== id)
+        : currentSchema.requiredPropertyIds,
+      optionalPropertyIds: !property.required
+        ? currentSchema.optionalPropertyIds.filter((pId) => pId !== id)
+        : currentSchema.optionalPropertyIds,
     }));
 
     reset(formDialogPropertyAtom(id));
+
+    const activePropertyId = await snapshot.getPromise(activePropertyIdAtom);
+
+    if (activePropertyId === id) {
+      activatePropertyId({ id: '' });
+    }
   });
 
   const duplicateProperty = useRecoilCallback(({ set, snapshot }) => async ({ id }: { id: string }) => {
     const newId = generateId();
 
-    const propertyName = (await snapshot.getPromise(formDialogPropertyAtom(id))).name;
+    const property = await snapshot.getPromise(formDialogPropertyAtom(id));
     const propertyNames = await snapshot.getPromise(formDialogSchemaPropertyNamesSelector);
-    const name = getDuplicateName(propertyName, propertyNames);
+    const name = getDuplicateName(property.name, propertyNames);
 
     set(formDialogSchemaAtom, (currentSchema) => {
-      const propertyIds = currentSchema.propertyIds.slice();
-      return { ...currentSchema, propertyIds: [...propertyIds, newId] };
+      const propertyIds = (property.required
+        ? currentSchema.requiredPropertyIds
+        : currentSchema.optionalPropertyIds
+      ).slice();
+
+      if (property.required) {
+        return { ...currentSchema, requiredPropertyIds: [...propertyIds, newId] };
+      } else {
+        return { ...currentSchema, optionalPropertyIds: [...propertyIds, newId] };
+      }
     });
 
-    const property = await snapshot.getPromise(formDialogPropertyAtom(id));
     set(formDialogPropertyAtom(newId), { ...property, name, id: newId });
+    activatePropertyId({ id: newId });
   });
 
   const changePropertyExamples = useRecoilCallback(
@@ -136,9 +209,9 @@ const getHandlers = () => {
   );
 
   const reset = useRecoilCallback(({ reset, set, snapshot }) => async ({ name }: { name: string }) => {
-    const schema = await snapshot.getPromise(formDialogSchemaAtom);
-    schema.propertyIds.forEach((pId) => reset(formDialogPropertyAtom(pId)));
-    set(formDialogSchemaAtom, { id: name, name, propertyIds: [] });
+    const propertyIds = await snapshot.getPromise(allFormDialogPropertyIdsSelector);
+    propertyIds.forEach((pId) => reset(formDialogPropertyAtom(pId)));
+    set(formDialogSchemaAtom, { id: name, name, requiredPropertyIds: [], optionalPropertyIds: [] });
   });
 
   const setTemplates = useRecoilCallback(({ set }) => ({ templates }: { templates: string[] }) => {
@@ -146,13 +219,13 @@ const getHandlers = () => {
   });
 
   return {
+    activatePropertyId,
     addProperty,
     changePropertyExamples,
     changePropertyKind,
     changePropertyName,
     changePropertyPayload,
     changePropertyArray,
-    changePropertyRequired,
     reset,
     setTemplates,
     removeProperty,

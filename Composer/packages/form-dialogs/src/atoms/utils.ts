@@ -1,14 +1,15 @@
+import formatMessage from 'format-message';
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
 import {
-  NumberPropertyPayload,
+  builtInStringFormats,
+  FormDialogProperty,
   FormDialogPropertyPayload,
+  NumberPropertyPayload,
   RefPropertyPayload,
   SchemaPropertyKind,
   StringPropertyPayload,
-  FormDialogProperty,
   TypedPropertyPayload,
 } from 'src/atoms/types';
 import { generateId } from 'src/utils/base';
@@ -233,4 +234,26 @@ export const validateSchemaPropertyStore = (property: FormDialogProperty) => {
   }
 
   return !!(payloadValid && property.name);
+};
+
+export const getPropertyTypeDisplayName = (property: FormDialogProperty) => {
+  switch (property.kind) {
+    default:
+    case 'string': {
+      const stringPayload = property.payload as StringPropertyPayload;
+      if (stringPayload.enums) {
+        return formatMessage('list - {count} values', { count: stringPayload.enums.length });
+      }
+
+      return stringPayload.format
+        ? builtInStringFormats.find((f) => f.value === stringPayload.format).displayName
+        : formatMessage('any string');
+    }
+    case 'number':
+      return formatMessage('number');
+    case 'ref': {
+      const refPayload = property.payload as RefPropertyPayload;
+      return refPayload.ref.split('.')[0];
+    }
+  }
 };

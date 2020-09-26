@@ -29,6 +29,7 @@
     "format-message": "^6.2.3",
     "office-ui-fabric-react": "^7.121.11",
     "@emotion/core": "^10.0.27",
+    "@emotion/styled": "^10.0.27",
     "@uifabric/fluent-theme": "^7.1.107",
     "@uifabric/react-hooks": "^7.4.12"
   },

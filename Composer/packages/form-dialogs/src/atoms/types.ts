@@ -69,5 +69,6 @@ export type FormDialogProperty = {
 export type FormDialogSchema = {
   id: string;
   name: string;
-  propertyIds: string[];
+  requiredPropertyIds: string[];
+  optionalPropertyIds: string[];
 };

@@ -16,7 +16,8 @@ export const formDialogSchemaAtom = atom<FormDialogSchema>({
   default: {
     id: '',
     name: '',
-    propertyIds: [],
+    requiredPropertyIds: [],
+    optionalPropertyIds: [],
   },
 });
 
@@ -37,12 +38,23 @@ export const formDialogPropertyAtom = atomFamily<FormDialogProperty, string>({
 });
 
 /**
+ * This selector separates required and optional properties within a form dialog schema.
+ */
+export const allFormDialogPropertyIdsSelector = selector<string[]>({
+  key: 'RequiredFormDialogPropertyIdsSelector',
+  get: ({ get }) => {
+    const { requiredPropertyIds, optionalPropertyIds } = get(formDialogSchemaAtom);
+    return [...requiredPropertyIds, ...optionalPropertyIds];
+  },
+});
+
+/**
  * This selector computes the names of all properties within a form dialog schema.
  */
 export const formDialogSchemaPropertyNamesSelector = selector<string[]>({
   key: 'FormDialogSchemaPropertyNamesSelector',
   get: ({ get }) => {
-    const { propertyIds } = get(formDialogSchemaAtom);
+    const propertyIds = get(allFormDialogPropertyIdsSelector);
     return propertyIds.map((pId) => get(formDialogPropertyAtom(pId)).name);
   },
 });
@@ -75,8 +87,8 @@ export const formDialogPropertyValidSelector = selectorFamily<boolean, string>({
 export const formDialogSchemaValidSelector = selector({
   key: 'FormDialogSchemaValidSelector',
   get: ({ get }) => {
-    const schemaStore = get(formDialogSchemaAtom);
-    return schemaStore.propertyIds.every((pId) => get(formDialogPropertyValidSelector(pId)));
+    const propertyIds = get(allFormDialogPropertyIdsSelector);
+    return propertyIds.every((pId) => get(formDialogPropertyValidSelector(pId)));
   },
 });
 
@@ -86,8 +98,8 @@ export const formDialogSchemaValidSelector = selector({
 export const formDialogSchemaJsonSelector = selector({
   key: 'FormDialogSchemaJsonSelector',
   get: ({ get }) => {
-    const schemaStore = get(formDialogSchemaAtom);
-    const schemaPropertyStores = schemaStore.propertyIds.map((pId) => get(formDialogPropertyAtom(pId)));
+    const propertyIds = get(allFormDialogPropertyIdsSelector);
+    const schemaPropertyStores = propertyIds.map((pId) => get(formDialogPropertyAtom(pId)));
 
     let jsonObject: object = {
       schema: schemaDraftUrl,
@@ -98,7 +110,7 @@ export const formDialogSchemaJsonSelector = selector({
     if (schemaPropertyStores.length) {
       jsonObject = {
         ...jsonObject,
-        properties: schemaStore.propertyIds.reduce<Record<string, object>>((acc, propId, idx) => {
+        properties: propertyIds.reduce<Record<string, object>>((acc, propId, idx) => {
           const property = schemaPropertyStores[idx];
           acc[property.name] = get(formDialogPropertyJsonSelector(propId));
           return acc;
@@ -132,4 +144,9 @@ export const formDialogSchemaJsonSelector = selector({
 export const formDialogTemplatesAtom = atom<string[]>({
   key: 'FormDialogTemplatesAtom',
   default: [],
+});
+
+export const activePropertyIdAtom = atom<string>({
+  key: 'ActivePropertyIdAtom',
+  default: '',
 });
