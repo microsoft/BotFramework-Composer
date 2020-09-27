@@ -48,6 +48,7 @@ import {
   showAddSkillDialogModalState,
   localeState,
   botProjectSpaceSelector,
+  projectLoadSelector,
 } from '../../recoilModel';
 import ImportQnAFromUrlModal from '../knowledge-base/ImportQnAFromUrlModal';
 import { triggerNotSupported } from '../../utils/dialogValidator';
@@ -110,7 +111,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const { location, dialogId, projectId = '' } = props;
   const userSettings = useRecoilValue(userSettingsState);
   const botProjectsSpace = useRecoilValue(botProjectSpaceSelector);
-
+  const projectLoader = useRecoilValue(projectLoadSelector);
   const schemas = useRecoilValue(schemasState(projectId));
   const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
   const displaySkillManifest = useRecoilValue(displaySkillManifestState(projectId));
@@ -121,6 +122,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const locale = useRecoilValue(localeState(projectId));
   const undoFunction = useRecoilValue(undoFunctionState(projectId));
   const undoVersion = useRecoilValue(undoVersionState(projectId));
+  const { appLocale } = useRecoilValue(userSettingsState);
 
   const { undo, redo, canRedo, canUndo, commitChanges, clearUndo } = undoFunction;
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
@@ -155,9 +157,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const shellForPropertyEditor = useShell('PropertyEditor', projectId);
   const triggerApi = useTriggerApi(shell.api);
   const { createTrigger } = shell.api;
+  const [rootBotProjectId, setRootBotProjectId] = useState('');
 
   useEffect(() => {
-    console.log(botProjectsSpace);
+    const rootBotId = botProjectsSpace[0].projectId;
+    setRootBotProjectId(rootBotId);
   }, [botProjectsSpace]);
 
   useEffect(() => {
@@ -314,6 +318,52 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             }),
             onClick: () => {
               openImportQnAModal();
+            },
+          },
+          {
+            'data-testid': 'AddRemoteSkill',
+            key: 'addRemoteSkill',
+            text: formatMessage(`Add remote skill`, {
+              displayName: currentDialog?.displayName ?? '',
+            }),
+            onClick: () => {
+              projectLoader.addRemoteSkillToBotProject(
+                rootBotProjectId,
+                'https://onenote-dev.azurewebsites.net/manifests/OneNoteSync-2-1-preview-1-manifest.json',
+                'OneNoteSyncer',
+                ''
+              );
+            },
+          },
+          {
+            'data-testid': 'AddLocalSkill',
+            key: 'addLocalSkill',
+            text: formatMessage(`Add local skill from path`, {
+              displayName: currentDialog?.displayName ?? '',
+            }),
+            onClick: () => {
+              projectLoader.addExistingSkillToBotProject(
+                rootBotProjectId,
+                '/Users/srravich/Desktop/Archive/GoogleKeepSync'
+              );
+            },
+          },
+          {
+            'data-testid': 'createNewSkill',
+            key: 'createNewSkill',
+            text: formatMessage(`Create new Skill`, {
+              displayName: currentDialog?.displayName ?? '',
+            }),
+            onClick: () => {
+              projectLoader.addNewSkillToBotProject(rootBotProjectId, {
+                name: 'testerBot',
+                description: '',
+                schemaUrl: '',
+                location: '/Users/srravich/Desktop/samples',
+                templateId: 'Echo-bot',
+                locale: appLocale,
+                qnaKbUrls: [],
+              });
             },
           },
         ],
