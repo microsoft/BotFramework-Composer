@@ -234,7 +234,7 @@ describe('Project dispatcher', () => {
     });
     await act(async () => {
       await dispatcher.openProject('../test/empty-bot', 'default');
-      await dispatcher.deleteBotProject(projectId);
+      await dispatcher.deleteBot(projectId);
     });
 
     expect(renderedComponent.current.botName).toEqual('');

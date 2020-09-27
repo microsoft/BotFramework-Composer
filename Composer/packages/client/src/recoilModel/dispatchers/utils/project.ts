@@ -10,7 +10,6 @@ import {
   dereferenceDefinitions,
   DialogInfo,
   LuFile,
-  BotProjectSpace,
   QnAFile,
 } from '@bfc/shared';
 import objectGet from 'lodash/get';
@@ -18,6 +17,7 @@ import objectSet from 'lodash/set';
 import { indexer, validateDialog } from '@bfc/indexers';
 import { CallbackInterface } from 'recoil';
 import { stringify } from 'query-string';
+import formatMessage from 'format-message';
 
 import * as botstates from '../../atoms/botState';
 import UndoHistory from '../../undo/undoHistory';
@@ -33,7 +33,6 @@ import {
   projectMetaDataState,
   qnaFilesState,
   recentProjectsState,
-  botOpeningState,
   botErrorState,
 } from '../../atoms';
 import lgWorker from '../../parsers/lgWorker';
@@ -64,16 +63,15 @@ import {
   dialogSchemasState,
 } from '../../atoms';
 import { undoHistoryState } from '../../undo/history';
+import { rootBotProjectIdSelector } from '../../selectors';
+import { trimFileProtocol } from '../../../utils/fileUtil';
 
-export const resetBotStates = async ({ snapshot, gotoSnapshot }: CallbackInterface, projectId: string) => {
+export const resetBotStates = async ({ reset }: CallbackInterface, projectId: string) => {
   const botStates = Object.keys(botstates);
-  const newSnapshot = snapshot.map(({ reset }) => {
-    botStates.forEach((state) => {
-      const currentRecoilAtom: any = botstates[state];
-      reset(currentRecoilAtom(projectId));
-    });
+  botStates.forEach((state) => {
+    const currentRecoilAtom: any = botstates[state];
+    reset(currentRecoilAtom(projectId));
   });
-  gotoSnapshot(newSnapshot);
 };
 
 export const setErrorOnBotProject = async (
@@ -94,15 +92,13 @@ export const setErrorOnBotProject = async (
 export const flushExistingTasks = async (callbackHelpers) => {
   const { snapshot, reset } = callbackHelpers;
   const projectIds = await snapshot.getPromise(botProjectIdsState);
-  const recoilTasks: any[] = [];
   for (const projectId of projectIds) {
-    const resetStates = await resetBotStates(callbackHelpers, projectId);
-    recoilTasks.push(resetStates);
+    resetBotStates(callbackHelpers, projectId);
   }
   reset(botProjectIdsState);
   const workers = [lgWorker, luWorker, qnaWorker];
 
-  return Promise.all([workers.map((w) => w.flush()), ...recoilTasks]);
+  return Promise.all([workers.map((w) => w.flush())]);
 };
 
 // merge sensitive values in localStorage
@@ -131,8 +127,16 @@ export const getMergedSettings = (projectId, settings): DialogSetting => {
   return mergedSettings;
 };
 
-export const navigateToBot = (projectId: string, mainDialog: string, qnaKbUrls?: string[], templateId?: string) => {
+export const navigateToBot = (
+  callbackHelpers: CallbackInterface,
+  projectId: string,
+  mainDialog: string,
+  qnaKbUrls?: string[],
+  templateId?: string
+) => {
   if (projectId) {
+    const { set } = callbackHelpers;
+    set(currentProjectIdState, projectId);
     let url = `/bot/${projectId}/dialogs/${mainDialog}`;
     if (templateId === QnABotTemplateId) {
       url = `/bot/${projectId}/knowledge-base/${mainDialog}`;
@@ -157,7 +161,7 @@ const loadProjectData = (response) => {
 };
 
 export const fetchProjectDataByPath = async (
-  path,
+  path: string,
   storageId
 ): Promise<{ botFiles: any; projectData: any; error: any }> => {
   try {
@@ -176,7 +180,7 @@ export const fetchProjectDataByPath = async (
 export const fetchProjectDataById = async (projectId): Promise<{ botFiles: any; projectData: any; error: any }> => {
   try {
     const response = await httpClient.get(`/projects/${projectId}`);
-    const { botFiles, projectData } = loadProjectData(response);
+    const projectData = loadProjectData(response);
     return projectData;
   } catch (ex) {
     return {
@@ -189,8 +193,8 @@ export const fetchProjectDataById = async (projectId): Promise<{ botFiles: any; 
 
 export const parseFileProtocolPaths = (rootPath: string, relativePath): string => {
   try {
-    const rootPathWithoutProtocol = rootPath.replace('file://', '');
-    let skillPath = relativePath.replace('file://', '');
+    const rootPathWithoutProtocol = trimFileProtocol(rootPath);
+    let skillPath = trimFileProtocol(relativePath);
     if (skillPath) {
       skillPath = path.resolve(rootPathWithoutProtocol, skillPath);
     }
@@ -201,7 +205,6 @@ export const parseFileProtocolPaths = (rootPath: string, relativePath): string =
 };
 
 export const handleProjectFailure = (callbackHelpers: CallbackInterface, ex) => {
-  callbackHelpers.set(botProjectSpaceLoadedState, false);
   setError(callbackHelpers, ex);
 };
 
@@ -365,8 +368,13 @@ export const openLocalSkill = async (callbackHelpers, pathToBot: string, storage
   } else {
     const tempProjectId = uuid();
     set(botNameState(tempProjectId), name);
-    setErrorOnBotProject(callbackHelpers, tempProjectId, name, error);
-    return tempProjectId;
+    if (name) {
+      setErrorOnBotProject(callbackHelpers, tempProjectId, name, error);
+    }
+    return {
+      projectId: tempProjectId,
+      mainDialog: undefined,
+    };
   }
 };
 
@@ -398,25 +406,30 @@ export const createNewBotFromTemplate = async (
 };
 
 const addProjectToBotProjectSpace = (set, projectId: string, skillCt: number) => {
+  let isBotProjectLoaded = false;
   set(botProjectIdsState, (current: string[]) => {
     const botProjectIDs = [...current, projectId];
     if (botProjectIDs.length === skillCt) {
-      set(botProjectSpaceLoadedState, true);
+      isBotProjectLoaded = true;
     }
     return botProjectIDs;
   });
+  if (isBotProjectLoaded) {
+    set(botProjectSpaceLoadedState, true);
+  }
 };
 
 const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, storageId = 'default') => {
   const { projectData, botFiles } = data;
   const { set } = callbackHelpers;
 
-  const mainDialog = await initBotState(callbackHelpers, projectData, botFiles, true);
+  const mainDialog = await initBotState(callbackHelpers, projectData, botFiles);
   const rootBotProjectId = projectData.id;
 
-  if (botFiles.botProjectSpaceFiles.length) {
-    const currentBotProjectFile: BotProjectSpace = botFiles.botProjectSpaceFiles[0];
-    set(botProjectFileState(rootBotProjectId), currentBotProjectFile);
+  if (botFiles.botProjectSpaceFiles && botFiles.botProjectSpaceFiles.length) {
+    const currentBotProjectFileIndexed = botFiles.botProjectSpaceFiles[0];
+    set(botProjectFileState(rootBotProjectId), currentBotProjectFileIndexed);
+    const currentBotProjectFile = currentBotProjectFileIndexed.content;
 
     const skillsInBotProject = currentBotProjectFile.skills;
     if (skillsInBotProject.length) {
@@ -437,10 +450,10 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
       }
     }
   } else {
+    // BotProject space loaded when skills are present
     set(botProjectSpaceLoadedState, true);
   }
   set(botProjectIdsState, [rootBotProjectId]);
-  set(botOpeningState, false);
   set(currentProjectIdState, rootBotProjectId);
   return {
     mainDialog,
@@ -450,12 +463,57 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
 
 export const openRootBotAndSkillsByPath = async (callbackHelpers: CallbackInterface, path: string, storageId) => {
   const data = await fetchProjectDataByPath(path, storageId);
-  const result = await openRootBotAndSkills(callbackHelpers, data, storageId);
-  return result;
+  if (data.error) {
+    throw data.error;
+  }
+  return await openRootBotAndSkills(callbackHelpers, data, storageId);
 };
 
 export const openRootBotAndSkillsByProjectId = async (callbackHelpers: CallbackInterface, projectId: string) => {
   const data = await fetchProjectDataById(projectId);
-  const result = await openRootBotAndSkills(callbackHelpers, data);
+  if (data.error) {
+    throw data.error;
+  }
+  return await openRootBotAndSkills(callbackHelpers, data);
+};
+
+export const saveProject = async (callbackHelpers, oldProjectData) => {
+  const { oldProjectId, name, description, location } = oldProjectData;
+  const response = await httpClient.post(`/projects/${oldProjectId}/project/saveAs`, {
+    storageId: 'default',
+    name,
+    description,
+    location,
+  });
+  const data = loadProjectData(response);
+  if (data.error) {
+    throw data.error;
+  }
+  const result = openRootBotAndSkills(callbackHelpers, data);
   return result;
+};
+
+export const checkIfBotExistsInBotProjectFile = async (
+  callbackHelpers: CallbackInterface,
+  pathOrManifest: string,
+  remote?: boolean
+) => {
+  const { snapshot } = callbackHelpers;
+  const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
+  if (!rootBotProjectId) {
+    throw new Error(formatMessage('The root bot is not a bot project'));
+  }
+  const { content: botProjectFile } = await snapshot.getPromise(botProjectFileState(rootBotProjectId));
+
+  if (remote) {
+    return botProjectFile.skills.find(({ manifest }) => pathOrManifest === manifest);
+  } else {
+    return botProjectFile.skills.find(({ workspace }) => {
+      if (workspace) {
+        const resolvedPath = path.resolve(trimFileProtocol(botProjectFile.workspace), trimFileProtocol(workspace));
+        return pathOrManifest === resolvedPath;
+      }
+      return false;
+    });
+  }
 };

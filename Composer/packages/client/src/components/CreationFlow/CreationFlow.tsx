@@ -22,7 +22,6 @@ import Home from '../../pages/home/Home';
 import ImportQnAFromUrlModal from '../../pages/knowledge-base/ImportQnAFromUrlModal';
 import { QnABotTemplateId } from '../../constants';
 import { useProjectIdCache } from '../../utils/hooks';
-import { projectLoadSelector } from '../../recoilModel/selectors/project';
 
 import { CreateOptions } from './CreateOptions';
 import { OpenProject } from './OpenProject';
@@ -41,9 +40,12 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     updateFolder,
     saveTemplateId,
     fetchRecentProjects,
+    openProject,
+    createNewBot,
+    saveProjectAs,
+    fetchProjectById,
   } = useRecoilValue(dispatcherState);
 
-  const projectLoader = useRecoilValue(projectLoadSelector);
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
   const projectId = useRecoilValue(currentProjectIdState);
   const templateProjects = useRecoilValue(templateProjectsState);
@@ -69,7 +71,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     // fetchProject use `gotoSnapshot` which will wipe out all state value.
     // so here make those methods call in sequence.
     if (!projectId && cachedProjectId) {
-      await projectLoader.fetchProjectById(cachedProjectId);
+      await fetchProjectById(cachedProjectId);
     }
     await fetchStorages();
     fetchTemplates();
@@ -97,23 +99,24 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
 
   const openBot = async (botFolder) => {
     setCreationFlowStatus(CreationFlowStatus.CLOSE);
-    projectLoader.openProject(botFolder);
+    openProject(botFolder);
   };
 
   const handleCreateNew = async (formData, templateId: string, qnaKbUrls?: string[]) => {
-    projectLoader.createProject(
-      templateId || '',
-      formData.name,
-      formData.description,
-      formData.location,
-      formData.schemaUrl,
+    const newBotData = {
+      templateId: templateId || '',
+      name: formData.name,
+      description: formData.description,
+      location: formData.location,
+      schemaUrl: formData.schemaUrl,
       appLocale,
-      qnaKbUrls
-    );
+      qnaKbUrls,
+    };
+    createNewBot(newBotData);
   };
 
   const handleSaveAs = (formData) => {
-    projectLoader.saveProjectAs(projectId, formData.name, formData.description, formData.location);
+    saveProjectAs(projectId, formData.name, formData.description, formData.location);
   };
 
   const handleCreateQnA = async (urls: string[]) => {

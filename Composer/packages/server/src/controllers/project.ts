@@ -122,13 +122,6 @@ async function removeProject(req: Request, res: Response) {
 }
 
 async function openProject(req: Request, res: Response) {
-  if (!req.body.storageId || !req.body.path) {
-    res.status(400).json({
-      message: 'parameters not provided, require stoarge id and path',
-    });
-    return;
-  }
-
   const user = await ExtensionContext.getUserFromRequest(req);
 
   const location: LocationRef = {

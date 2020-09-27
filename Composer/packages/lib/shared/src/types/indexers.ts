@@ -182,6 +182,7 @@ export type BotAssets = {
   skillManifests: SkillManifest[];
   setting: DialogSetting;
   dialogSchemas: DialogSchemaFile[];
+  botProjectFile: BotProjectFile;
 };
 
 export interface BotInfo {
@@ -202,4 +203,10 @@ export interface BotProjectSpace {
   workspace: string;
   name: string;
   skills: BotProjectSpaceSkill[];
+}
+
+export interface BotProjectFile {
+  id: string;
+  content: BotProjectSpace;
+  lastModified: string;
 }

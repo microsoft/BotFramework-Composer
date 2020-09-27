@@ -79,9 +79,11 @@ function sortDialog(dialogs: DialogInfo[]) {
 
 interface IProjectTreeProps {
   dialogId: string;
-  selected: string;
+  selected: any;
+  dialogs: DialogInfo[];
+  onDeleteDialog: any;
+  onDeleteTrigger: any;
   onSelect: (link: TreeLink) => void;
-  onDelete: (link: TreeLink) => void;
 }
 
 const TYPE_TO_ICON_MAP = {
@@ -89,7 +91,7 @@ const TYPE_TO_ICON_MAP = {
 };
 
 type BotInProject = {
-  dialogs: DialogInfo[];
+  dialogs: any;
   projectId: string;
   name: string;
 };
@@ -98,7 +100,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
   const { onboardingAddCoachMarkRef, updateUserSettings } = useRecoilValue(dispatcherState);
   const { dialogNavWidth: currentWidth } = useRecoilValue(userSettingsState);
 
-  const { selected, onSelect, onDelete } = props;
+  const { selected, onSelect, onDeleteDialog: onDelete } = props;
   const [filter, setFilter] = useState('');
   const delayedSetFilter = debounce((newValue) => setFilter(newValue), 1000);
   const addMainDialogRef = useCallback((mainDialog) => onboardingAddCoachMarkRef({ mainDialog }), []);
