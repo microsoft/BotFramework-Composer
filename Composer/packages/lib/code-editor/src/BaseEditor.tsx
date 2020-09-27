@@ -13,6 +13,8 @@ import { Diagnostic } from '@bfc/shared';
 import { findErrors, combineSimpleMessage, findWarnings } from '@bfc/indexers';
 import { CodeEditorSettings, assignDefined } from '@bfc/shared';
 
+import { isElectron } from './utils';
+
 const defaultOptions = {
   scrollBeyondLastLine: false,
   wordWrap: 'off',
@@ -32,6 +34,7 @@ const defaultOptions = {
   renderLineHighlight: 'none',
   formatOnType: true,
   fixedOverflowWidgets: true,
+  links: isElectron() ? false : true, // disable in electron@8.2.4 before monaco editor can set target '_blank'
 };
 
 const styles = {
