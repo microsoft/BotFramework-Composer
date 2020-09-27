@@ -56,21 +56,23 @@ const deleteLanguageResources = (
 };
 
 export const multilangDispatcher = () => {
-  const setLocale = useRecoilCallback(({ set, snapshot }: CallbackInterface) => async (locale: string) => {
-    const botName = await snapshot.getPromise(botNameState);
+  const setLocale = useRecoilCallback(
+    ({ set, snapshot }: CallbackInterface) => async (locale: string, projectId: string) => {
+      const botName = await snapshot.getPromise(botNameState(projectId));
 
-    set(localeState, locale);
-    languageStorage.setLocale(botName, locale);
-  });
+      set(localeState(projectId), locale);
+      languageStorage.setLocale(botName, locale);
+    }
+  );
 
   const addLanguages = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({ languages, defaultLang, switchTo = false }) => {
+    (callbackHelpers: CallbackInterface) => async ({ languages, defaultLang, switchTo = false, projectId }) => {
       const { set, snapshot } = callbackHelpers;
-      const botName = await snapshot.getPromise(botNameState);
-      const prevlgFiles = await snapshot.getPromise(lgFilesState);
-      const prevluFiles = await snapshot.getPromise(luFilesState);
-      const prevSettings = await snapshot.getPromise(settingsState);
-      const onAddLanguageDialogComplete = (await snapshot.getPromise(onAddLanguageDialogCompleteState)).func;
+      const botName = await snapshot.getPromise(botNameState(projectId));
+      const prevlgFiles = await snapshot.getPromise(lgFilesState(projectId));
+      const prevluFiles = await snapshot.getPromise(luFilesState(projectId));
+      const prevSettings = await snapshot.getPromise(settingsState(projectId));
+      const onAddLanguageDialogComplete = (await snapshot.getPromise(onAddLanguageDialogCompleteState(projectId))).func;
 
       // copy files from default language
       const lgFiles = copyLanguageResources(prevlgFiles, defaultLang, languages);
@@ -85,69 +87,75 @@ export const multilangDispatcher = () => {
 
       if (switchTo) {
         const switchToLocale = languages[0];
-        set(localeState, switchToLocale);
+        set(localeState(projectId), switchToLocale);
         languageStorage.setLocale(botName, switchToLocale);
       }
 
-      set(lgFilesState, [...prevlgFiles, ...lgFiles]);
-      set(luFilesState, [...prevluFiles, ...luFiles]);
-      set(settingsState, settings);
+      set(lgFilesState(projectId), [...prevlgFiles, ...lgFiles]);
+      set(luFilesState(projectId), [...prevluFiles, ...luFiles]);
+      set(settingsState(projectId), settings);
 
       if (typeof onAddLanguageDialogComplete === 'function') {
         onAddLanguageDialogComplete(languages);
       }
 
-      set(showAddLanguageModalState, false);
-      set(onAddLanguageDialogCompleteState, { func: undefined });
+      set(showAddLanguageModalState(projectId), false);
+      set(onAddLanguageDialogCompleteState(projectId), { func: undefined });
     }
   );
 
-  const deleteLanguages = useRecoilCallback((callbackHelpers: CallbackInterface) => async ({ languages }) => {
-    const { set, snapshot } = callbackHelpers;
-    const prevlgFiles = await snapshot.getPromise(lgFilesState);
-    const prevluFiles = await snapshot.getPromise(luFilesState);
-    const prevSettings = await snapshot.getPromise(settingsState);
-    const onDelLanguageDialogComplete = (await snapshot.getPromise(onDelLanguageDialogCompleteState)).func;
+  const deleteLanguages = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async ({ languages, projectId }) => {
+      const { set, snapshot } = callbackHelpers;
+      const prevlgFiles = await snapshot.getPromise(lgFilesState(projectId));
+      const prevluFiles = await snapshot.getPromise(luFilesState(projectId));
+      const prevSettings = await snapshot.getPromise(settingsState(projectId));
+      const onDelLanguageDialogComplete = (await snapshot.getPromise(onDelLanguageDialogCompleteState(projectId))).func;
 
-    // copy files from default language
-    const { left: leftLgFiles } = deleteLanguageResources(prevlgFiles, languages);
-    const { left: leftLuFiles } = deleteLanguageResources(prevluFiles, languages);
+      // copy files from default language
+      const { left: leftLgFiles } = deleteLanguageResources(prevlgFiles, languages);
+      const { left: leftLuFiles } = deleteLanguageResources(prevluFiles, languages);
 
-    const settings: any = cloneDeep(prevSettings);
+      const settings: any = cloneDeep(prevSettings);
 
-    const leftLanguages = difference(settings.languages, languages);
-    settings.languages = leftLanguages;
+      const leftLanguages = difference(settings.languages, languages);
+      settings.languages = leftLanguages;
 
-    set(lgFilesState, leftLgFiles);
-    set(luFilesState, leftLuFiles);
-    set(settingsState, settings);
+      set(lgFilesState(projectId), leftLgFiles);
+      set(luFilesState(projectId), leftLuFiles);
+      set(settingsState(projectId), settings);
 
-    if (typeof onDelLanguageDialogComplete === 'function') {
-      onDelLanguageDialogComplete(leftLanguages);
+      if (typeof onDelLanguageDialogComplete === 'function') {
+        onDelLanguageDialogComplete(leftLanguages);
+      }
+
+      set(showDelLanguageModalState(projectId), false);
+      set(onDelLanguageDialogCompleteState(projectId), { func: undefined });
     }
+  );
 
-    set(showDelLanguageModalState, false);
-    set(onDelLanguageDialogCompleteState, { func: undefined });
+  const addLanguageDialogBegin = useRecoilCallback(
+    ({ set }: CallbackInterface) => async (projectId: string, onComplete) => {
+      set(showAddLanguageModalState(projectId), true);
+      set(onAddLanguageDialogCompleteState(projectId), { func: onComplete });
+    }
+  );
+
+  const addLanguageDialogCancel = useRecoilCallback(({ set }: CallbackInterface) => async (projectId: string) => {
+    set(showAddLanguageModalState(projectId), false);
+    set(onAddLanguageDialogCompleteState(projectId), { func: undefined });
   });
 
-  const addLanguageDialogBegin = useRecoilCallback(({ set }: CallbackInterface) => async (onComplete) => {
-    set(showAddLanguageModalState, true);
-    set(onAddLanguageDialogCompleteState, { func: onComplete });
-  });
+  const delLanguageDialogBegin = useRecoilCallback(
+    ({ set }: CallbackInterface) => async (projectId: string, onComplete) => {
+      set(showDelLanguageModalState(projectId), true);
+      set(onDelLanguageDialogCompleteState(projectId), { func: onComplete });
+    }
+  );
 
-  const addLanguageDialogCancel = useRecoilCallback(({ set }: CallbackInterface) => async () => {
-    set(showAddLanguageModalState, false);
-    set(onAddLanguageDialogCompleteState, { func: undefined });
-  });
-
-  const delLanguageDialogBegin = useRecoilCallback(({ set }: CallbackInterface) => async (onComplete) => {
-    set(showDelLanguageModalState, true);
-    set(onDelLanguageDialogCompleteState, { func: onComplete });
-  });
-
-  const delLanguageDialogCancel = useRecoilCallback(({ set }: CallbackInterface) => async () => {
-    set(showDelLanguageModalState, false);
-    set(onDelLanguageDialogCompleteState, { func: undefined });
+  const delLanguageDialogCancel = useRecoilCallback(({ set }: CallbackInterface) => async (projectId: string) => {
+    set(showDelLanguageModalState(projectId), false);
+    set(onDelLanguageDialogCompleteState(projectId), { func: undefined });
   });
 
   return {

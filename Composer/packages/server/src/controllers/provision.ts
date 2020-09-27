@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import axios from 'axios';
-import { pluginLoader, PluginLoader } from '@bfc/extension';
+import { ExtensionContext } from '@bfc/extension';
 
 import { BotProjectService } from '../services/project';
 
@@ -23,10 +23,14 @@ export const ProvisionController = {
     // we pass this directly on to Azure.
     const authHeader = req.headers.authorization;
 
-    const result = await axios.get('https://management.azure.com/subscriptions?api-version=2020-01-01', {
-      headers: { Authorization: authHeader },
-    });
-    res.status(200).json(result.data);
+    try {
+      const result = await axios.get('https://management.azure.com/subscriptions?api-version=2020-01-01', {
+        headers: { Authorization: authHeader },
+      });
+      res.status(result.status).json(result.data);
+    } catch (err) {
+      res.status(err.response.status).json(err.response.data);
+    }
   },
   getResourceGroups: async (req, res) => {
     if (!req.headers || !req.headers.authorization) {
@@ -84,16 +88,16 @@ export const ProvisionController = {
       res.status(401).json({ message: 'Unauthorized' });
       return;
     }
-    const user = await PluginLoader.getUserFromRequest(req);
+    const user = await ExtensionContext.getUserFromRequest(req);
     const { type } = req.body; // type is webapp or functions
     const projectId = req.params.projectId;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
     // deal with publishTargets not exist in settings
     // const publishTargets = currentProject.settings?.publishTargets || [];
 
-    if (pluginLoader?.extensions?.publish[type]?.methods?.provision) {
+    if (ExtensionContext?.extensions?.publish[type]?.methods?.provision) {
       // get the externally provision method
-      const pluginMethod = pluginLoader.extensions.publish[type].methods.provision;
+      const pluginMethod = ExtensionContext.extensions.publish[type].methods.provision;
 
       try {
         // call the method
@@ -149,7 +153,7 @@ export const ProvisionController = {
 
   getProvisionStatus: async (req, res) => {
     const target = req.params.target;
-    const user = await PluginLoader.getUserFromRequest(req);
+    const user = await ExtensionContext.getUserFromRequest(req);
     const projectId = req.params.projectId;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
 
@@ -161,9 +165,9 @@ export const ProvisionController = {
 
     const method = profile ? profile.type : undefined;
 
-    if (profile && method && pluginLoader?.extensions?.publish[method]?.methods?.getProvisionStatus) {
+    if (profile && method && ExtensionContext?.extensions?.publish[method]?.methods?.getProvisionStatus) {
       // get the externally defined method
-      const pluginMethod = pluginLoader.extensions.publish[method].methods.getProvisionStatus;
+      const pluginMethod = ExtensionContext.extensions.publish[method].methods.getProvisionStatus;
       const provisionConfig = profile.provisionConfig || '{}';
       try {
         // call the method

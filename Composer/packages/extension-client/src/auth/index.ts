@@ -16,3 +16,10 @@ export function login(options: OAuthOptions): Promise<string> {
 export function getAccessToken(options: OAuthOptions): Promise<string> {
   return window[ComposerGlobalName].getAccessToken(options);
 }
+
+/** Return an access token held in the localstorage.
+ * TODO: deprecate this when we have azure login working
+ */
+export function getAccessTokensFromStorage(): { access_token: string; graph_token: string } {
+  return window[ComposerGlobalName].getAccessTokensFromStorage();
+}

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import merge from 'lodash/merge';
-import { pluginLoader, PluginLoader } from '@bfc/extension';
+import { ExtensionContext } from '@bfc/extension';
 import { defaultPublishConfig } from '@bfc/shared';
 
 import { BotProjectService } from '../services/project';
@@ -10,7 +10,7 @@ import { BotProjectService } from '../services/project';
 export const PublishController = {
   getTypes: async (req, res) => {
     res.json(
-      Object.values(pluginLoader.extensions.publish)
+      Object.values(ExtensionContext.extensions.publish)
         .filter((extension) => extension.plugin.name !== defaultPublishConfig.type)
         .map((extension) => {
           const { plugin, methods } = extension;
@@ -33,7 +33,7 @@ export const PublishController = {
   },
   publish: async (req, res) => {
     const target = req.params.target;
-    const user = await PluginLoader.getUserFromRequest(req);
+    const user = await ExtensionContext.getUserFromRequest(req);
     const { metadata, sensitiveSettings, accessToken } = req.body;
     const projectId = req.params.projectId;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
@@ -46,7 +46,7 @@ export const PublishController = {
     const profile = profiles.length ? profiles[0] : undefined;
     const method = profile ? profile.type : undefined; // get the publish plugin key
 
-    if (profile && method && pluginLoader?.extensions?.publish[method]?.methods?.publish) {
+    if (profile && method && ExtensionContext?.extensions?.publish[method]?.methods?.publish) {
       // append config from client(like sensitive settings)
       const configuration = {
         profileName: profile.name,
@@ -56,7 +56,7 @@ export const PublishController = {
       };
 
       // get the externally defined method
-      const pluginMethod = pluginLoader.extensions.publish[method].methods.publish;
+      const pluginMethod = ExtensionContext.extensions.publish[method].methods.publish;
 
       try {
         // call the method
@@ -85,7 +85,7 @@ export const PublishController = {
   },
   status: async (req, res) => {
     const target = req.params.target;
-    const user = await PluginLoader.getUserFromRequest(req);
+    const user = await ExtensionContext.getUserFromRequest(req);
     const projectId = req.params.projectId;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
 
@@ -96,15 +96,9 @@ export const PublishController = {
     const profile = profiles.length ? profiles[0] : undefined;
     // get the publish plugin key
     const method = profile ? profile.type : undefined;
-    if (
-      profile &&
-      method &&
-      pluginLoader.extensions.publish[method] &&
-      pluginLoader.extensions.publish[method].methods &&
-      pluginLoader.extensions.publish[method].methods.getStatus
-    ) {
+    if (profile && method && ExtensionContext.extensions.publish[method]?.methods?.getStatus) {
       // get the externally defined method
-      const pluginMethod = pluginLoader.extensions.publish[method].methods.getStatus;
+      const pluginMethod = ExtensionContext.extensions.publish[method].methods.getStatus;
 
       if (typeof pluginMethod === 'function') {
         const configuration = {
@@ -132,7 +126,7 @@ export const PublishController = {
   },
   history: async (req, res) => {
     const target = req.params.target;
-    const user = await PluginLoader.getUserFromRequest(req);
+    const user = await ExtensionContext.getUserFromRequest(req);
     const projectId = req.params.projectId;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
 
@@ -144,15 +138,9 @@ export const PublishController = {
     // get the publish plugin key
     const method = profile ? profile.type : undefined;
 
-    if (
-      profile &&
-      method &&
-      pluginLoader.extensions.publish[method] &&
-      pluginLoader.extensions.publish[method].methods &&
-      pluginLoader.extensions.publish[method].methods.history
-    ) {
+    if (profile && method && ExtensionContext.extensions.publish[method]?.methods?.history) {
       // get the externally defined method
-      const pluginMethod = pluginLoader.extensions.publish[method].methods.history;
+      const pluginMethod = ExtensionContext.extensions.publish[method].methods.history;
       if (typeof pluginMethod === 'function') {
         const configuration = {
           profileName: profile.name,
@@ -174,7 +162,7 @@ export const PublishController = {
   },
   rollback: async (req, res) => {
     const target = req.params.target;
-    const user = await PluginLoader.getUserFromRequest(req);
+    const user = await ExtensionContext.getUserFromRequest(req);
     const { version, sensitiveSettings } = req.body;
     const projectId = req.params.projectId;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
@@ -188,13 +176,7 @@ export const PublishController = {
     // get the publish plugin key
     const method = profile ? profile.type : undefined;
 
-    if (
-      profile &&
-      method &&
-      pluginLoader.extensions.publish[method] &&
-      pluginLoader.extensions.publish[method].methods &&
-      pluginLoader.extensions.publish[method].methods.rollback
-    ) {
+    if (profile && method && ExtensionContext.extensions.publish[method]?.methods?.rollback) {
       // append config from client(like sensitive settings)
       const configuration = {
         profileName: profile.name,
@@ -202,7 +184,7 @@ export const PublishController = {
         ...JSON.parse(profile.configuration),
       };
       // get the externally defined method
-      const pluginMethod = pluginLoader.extensions.publish[method].methods.rollback;
+      const pluginMethod = ExtensionContext.extensions.publish[method].methods.rollback;
       if (typeof pluginMethod === 'function') {
         try {
           // call the method
@@ -234,14 +216,8 @@ export const PublishController = {
     const projectId = req.params.projectId;
     const profile = defaultPublishConfig;
     const method = profile.type;
-    if (
-      profile &&
-      method &&
-      pluginLoader.extensions.publish[method] &&
-      pluginLoader.extensions.publish[method].methods &&
-      pluginLoader.extensions.publish[method].methods.stopBot
-    ) {
-      const pluginMethod = pluginLoader.extensions.publish[method].methods.stopBot;
+    if (profile && method && ExtensionContext.extensions.publish[method]?.methods?.stopBot) {
+      const pluginMethod = ExtensionContext.extensions.publish[method].methods.stopBot;
       if (typeof pluginMethod === 'function') {
         try {
           await pluginMethod.call(null, projectId);
@@ -253,13 +229,8 @@ export const PublishController = {
         }
       }
     }
-    if (
-      profile &&
-      pluginLoader.extensions.publish[method] &&
-      pluginLoader.extensions.publish[method].methods &&
-      pluginLoader.extensions.publish[method].methods.removeRuntimeData
-    ) {
-      const pluginMethod = pluginLoader.extensions.publish[method].methods.removeRuntimeData;
+    if (profile && ExtensionContext.extensions.publish[method]?.methods?.removeRuntimeData) {
+      const pluginMethod = ExtensionContext.extensions.publish[method].methods.removeRuntimeData;
       if (typeof pluginMethod === 'function') {
         try {
           const result = await pluginMethod.call(null, projectId);
@@ -282,14 +253,8 @@ export const PublishController = {
     const projectId = req.params.projectId;
     const profile = defaultPublishConfig;
     const method = profile.type;
-    if (
-      profile &&
-      method &&
-      pluginLoader.extensions.publish[method] &&
-      pluginLoader.extensions.publish[method].methods &&
-      pluginLoader.extensions.publish[method].methods.stopBot
-    ) {
-      const pluginMethod = pluginLoader.extensions.publish[method].methods.stopBot;
+    if (profile && method && ExtensionContext.extensions.publish[method]?.methods?.stopBot) {
+      const pluginMethod = ExtensionContext.extensions.publish[method].methods.stopBot;
       if (typeof pluginMethod === 'function') {
         try {
           await pluginMethod.call(null, projectId);
