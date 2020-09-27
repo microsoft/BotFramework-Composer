@@ -51,24 +51,21 @@ export const projectDispatcher = () => {
   );
 
   const addExistingSkillToBotProject = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (path: string, storageId = 'default', pushIndex: number) => {
+    (callbackHelpers: CallbackInterface) => async (path: string, storageId, pushIndex?: number): Promise<string> => {
       const { set } = callbackHelpers;
-      try {
-        set(botOpeningState, true);
-        const { projectId } = await openLocalSkill(callbackHelpers, path, storageId);
-        if (isNumber(pushIndex)) {
-          set(botProjectIdsState, (current: string[]) => {
-            const mutated = [...current];
-            mutated.splice(pushIndex, 0, projectId);
-            return mutated;
-          });
-        } else {
-          set(botProjectIdsState, (current) => [...current, projectId]);
-        }
-        return projectId;
-      } finally {
-        set(botOpeningState, false);
+
+      set(botOpeningState, true);
+      const { projectId } = await openLocalSkill(callbackHelpers, path, storageId);
+      if (isNumber(pushIndex)) {
+        set(botProjectIdsState, (current: string[]) => {
+          const mutated = [...current];
+          mutated.splice(pushIndex, 0, projectId);
+          return mutated;
+        });
+      } else {
+        set(botProjectIdsState, (current) => [...current, projectId]);
       }
+      return projectId;
     }
   );
 
@@ -129,10 +126,10 @@ export const projectDispatcher = () => {
       try {
         await flushExistingTasks(callbackHelpers);
         set(botOpeningState, true);
-        set(botProjectIdsState, []);
         const { projectId, mainDialog } = await openRootBotAndSkillsByPath(callbackHelpers, path, storageId);
         projectIdCache.set(projectId);
         navigateToBot(projectId, mainDialog);
+        set(botOpeningState, false);
       } catch (ex) {
         set(botProjectIdsState, []);
         projectIdCache.clear();
@@ -149,7 +146,6 @@ export const projectDispatcher = () => {
     try {
       await flushExistingTasks(callbackHelpers);
       set(botOpeningState, true);
-      set(botProjectIdsState, []);
       await openRootBotAndSkillsByProjectId(callbackHelpers, projectId);
     } catch (ex) {
       set(botProjectIdsState, []);
@@ -175,7 +171,6 @@ export const projectDispatcher = () => {
       try {
         await flushExistingTasks(callbackHelpers);
         set(botOpeningState, true);
-        set(botProjectIdsState, []);
         const { projectId, mainDialog } = await createNewBotFromTemplate(
           callbackHelpers,
           templateId,

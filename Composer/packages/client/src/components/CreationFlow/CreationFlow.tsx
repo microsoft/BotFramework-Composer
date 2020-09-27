@@ -41,6 +41,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     updateFolder,
     saveTemplateId,
     fetchRecentProjects,
+    openProject: openDispatcherProject,
   } = useRecoilValue(dispatcherState);
 
   const projectLoader = useRecoilValue(projectLoadSelector);
@@ -97,7 +98,9 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
 
   const openBot = async (botFolder) => {
     setCreationFlowStatus(CreationFlowStatus.CLOSE);
-    projectLoader.openProject(botFolder);
+    // projectLoader.openProject(botFolder);
+    const result = await openDispatcherProject(botFolder);
+    console.log('RESULT', result);
   };
 
   const handleCreateNew = async (formData, templateId: string, qnaKbUrls?: string[]) => {

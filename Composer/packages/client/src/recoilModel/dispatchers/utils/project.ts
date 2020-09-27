@@ -33,7 +33,6 @@ import {
   projectMetaDataState,
   qnaFilesState,
   recentProjectsState,
-  botOpeningState,
   botErrorState,
 } from '../../atoms';
 import lgWorker from '../../parsers/lgWorker';
@@ -157,7 +156,7 @@ const loadProjectData = (response) => {
 };
 
 export const fetchProjectDataByPath = async (
-  path,
+  path: string,
   storageId
 ): Promise<{ botFiles: any; projectData: any; error: any }> => {
   try {
@@ -176,7 +175,7 @@ export const fetchProjectDataByPath = async (
 export const fetchProjectDataById = async (projectId): Promise<{ botFiles: any; projectData: any; error: any }> => {
   try {
     const response = await httpClient.get(`/projects/${projectId}`);
-    const { botFiles, projectData } = loadProjectData(response);
+    const projectData = loadProjectData(response);
     return projectData;
   } catch (ex) {
     return {
@@ -365,8 +364,13 @@ export const openLocalSkill = async (callbackHelpers, pathToBot: string, storage
   } else {
     const tempProjectId = uuid();
     set(botNameState(tempProjectId), name);
-    setErrorOnBotProject(callbackHelpers, tempProjectId, name, error);
-    return tempProjectId;
+    if (name) {
+      setErrorOnBotProject(callbackHelpers, tempProjectId, name, error);
+    }
+    return {
+      projectId: tempProjectId,
+      mainDialog: undefined,
+    };
   }
 };
 
@@ -398,20 +402,24 @@ export const createNewBotFromTemplate = async (
 };
 
 const addProjectToBotProjectSpace = (set, projectId: string, skillCt: number) => {
+  let isBotProjectLoaded = false;
   set(botProjectIdsState, (current: string[]) => {
     const botProjectIDs = [...current, projectId];
     if (botProjectIDs.length === skillCt) {
-      set(botProjectSpaceLoadedState, true);
+      isBotProjectLoaded = true;
     }
     return botProjectIDs;
   });
+  if (isBotProjectLoaded) {
+    set(botProjectSpaceLoadedState, true);
+  }
 };
 
 const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, storageId = 'default') => {
   const { projectData, botFiles } = data;
   const { set } = callbackHelpers;
 
-  const mainDialog = await initBotState(callbackHelpers, projectData, botFiles, true);
+  const mainDialog = await initBotState(callbackHelpers, projectData, botFiles);
   const rootBotProjectId = projectData.id;
 
   if (botFiles.botProjectSpaceFiles.length) {
@@ -440,7 +448,6 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
     set(botProjectSpaceLoadedState, true);
   }
   set(botProjectIdsState, [rootBotProjectId]);
-  set(botOpeningState, false);
   set(currentProjectIdState, rootBotProjectId);
   return {
     mainDialog,

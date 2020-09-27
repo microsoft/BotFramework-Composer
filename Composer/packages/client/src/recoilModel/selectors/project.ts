@@ -8,6 +8,7 @@ import { Dispatcher } from '../dispatchers';
 import { botErrorState, botNameState, botProjectIdsState, dialogsState, projectMetaDataState } from '../atoms';
 
 // Actions
+
 const projectLoadAction = (dispatcher: Dispatcher) => {
   return {
     createProject: async (
@@ -31,19 +32,11 @@ const projectLoadAction = (dispatcher: Dispatcher) => {
       await dispatcher.fetchProjectById(projectId);
     },
     addExistingSkillToBotProject: async (rootBotId: string, path: string, storageId = 'default') => {
-      const skillId: string = await dispatcher.addExistingSkillToBotProject(path, storageId);
+      const skillId = dispatcher.addExistingSkillToBotProject(path, storageId);
       await dispatcher.addSkillToBotProject(rootBotId, skillId, false);
     },
-    addNewSkillToBotProject: async (
-      rootBotId: string,
-      templateId: string,
-      name: string,
-      description: string,
-      location: string,
-      schemaUrl?: string,
-      locale?: string,
-      qnaKbUrls?: string[]
-    ) => {
+    addNewSkillToBotProject: async (rootBotId: string, newProjectData) => {
+      const { templateId, name, description, location, schemaUrl, locale, qnaKbUrls } = newProjectData;
       const skillId: string = await dispatcher.addNewSkillToBotProject(
         templateId,
         name,
@@ -73,6 +66,7 @@ export const projectLoadSelector = selector({
     if (!dispatcher) {
       return {} as Dispatcher;
     }
+
     return projectLoadAction(dispatcher);
   },
 });

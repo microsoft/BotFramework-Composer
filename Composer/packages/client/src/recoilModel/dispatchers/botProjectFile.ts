@@ -21,6 +21,7 @@ export const botProjectFileDispatcher = () => {
       const currentManifest = manifests[0];
 
       set(botProjectFileState(rootBotProjectId), (current: BotProjectSpace) => {
+        debugger;
         const result = produce(current, (draftState: BotProjectSpace) => {
           const skill: BotProjectSpaceSkill = {
             workspace: convertPathToFileProtocol(skillLocation),
