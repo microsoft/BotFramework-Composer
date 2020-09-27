@@ -3,7 +3,6 @@
 
 import { FieldProps } from '@bfc/extension-client';
 import startCase from 'lodash/startCase';
-import formatMessage from 'format-message';
 
 export function getUiLabel(props: FieldProps): string | false | undefined {
   const { uiOptions, schema, name, value, label } = props;
@@ -47,7 +46,13 @@ export function getUiPlaceholder(props: FieldProps): string | undefined {
   } else if (placeholder) {
     fieldUIPlaceholder = placeholder;
   } else if (schema && Array.isArray(schema.examples) && schema.examples.length > 0) {
-    fieldUIPlaceholder = formatMessage('ex. { example }', { example: schema.examples.join(', ') });
+    const examplesStrings = schema.examples.map((example) => {
+      if (typeof example === 'object') {
+        return JSON.stringify(example);
+      }
+      return example;
+    });
+    fieldUIPlaceholder = `ex. ${examplesStrings.join(', ')}`;
   }
 
   if (fieldUIPlaceholder && schema.pattern) {
