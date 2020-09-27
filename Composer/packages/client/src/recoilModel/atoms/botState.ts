@@ -13,6 +13,7 @@ import {
   Skill,
   DialogSetting,
   BotProjectSpace,
+  BotProjectFile,
 } from '@bfc/shared';
 
 import { BotLoadError, DesignPageLocation, QnAAllUpViewStatus } from '../../recoilModel/types';
@@ -43,8 +44,8 @@ export const dialogSchemasState = atomFamily<DialogSchemaFile[], string>({
   default: [],
 });
 
-export const botNameState = atomFamily<string, string>({
-  key: getFullyQualifiedKey('botName'),
+export const botDisplayNameState = atomFamily<string, string>({
+  key: getFullyQualifiedKey('botDisplayName'),
   default: (id) => {
     return '';
   },
@@ -259,9 +260,13 @@ export const filePersistenceState = atomFamily<FilePersistence, string>({
   dangerouslyAllowMutability: true,
 });
 
-export const botProjectFileState = atomFamily<BotProjectSpace, string>({
+export const botProjectFileState = atomFamily<BotProjectFile, string>({
   key: getFullyQualifiedKey('botProjectFileState'),
-  default: {} as BotProjectSpace,
+  default: {
+    content: {} as BotProjectSpace,
+    id: '',
+    lastModified: '',
+  },
 });
 
 // Always using the first manifest file for now. We dont have the need to support multiple manifest for a skill
@@ -273,4 +278,9 @@ export const currentManifestIndexState = atomFamily<number, string>({
 export const botErrorState = atomFamily<any, string>({
   key: getFullyQualifiedKey('botError'),
   default: undefined,
+});
+
+export const botNameIdentifierState = atomFamily<string, string>({
+  key: getFullyQualifiedKey('botNameIdentifierState'),
+  default: '',
 });

@@ -3,12 +3,14 @@
 
 import { BotProjectSpace, FileInfo } from '@bfc/shared';
 
+import { getBaseName } from './utils/help';
+
 const index = (botProjectSpaceFiles: FileInfo[]) => {
   // Handle botproject files for multiple env when Composer brings in Env
   return botProjectSpaceFiles.map((file) => {
-    const { content } = file;
+    const { content, lastModified, name } = file;
     const jsonContent: BotProjectSpace = JSON.parse(content);
-    return jsonContent;
+    return { content: jsonContent, id: getBaseName(name, '.botproj'), lastModified };
   });
 };
 

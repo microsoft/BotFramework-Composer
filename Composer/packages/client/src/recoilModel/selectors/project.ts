@@ -2,95 +2,28 @@
 // Licensed under the MIT License.
 
 import { selector } from 'recoil';
+import isEmpty from 'lodash/isEmpty';
 
-import { dispatcherState } from '../DispatcherWrapper';
-import { Dispatcher } from '../dispatchers';
-import { botErrorState, botNameState, botProjectIdsState, dialogsState, projectMetaDataState } from '../atoms';
+import {
+  botErrorState,
+  botDisplayNameState,
+  botProjectFileState,
+  botProjectIdsState,
+  dialogsState,
+  projectMetaDataState,
+  botNameIdentifierState,
+} from '../atoms';
 
 // Actions
-const projectLoadAction = (dispatcher: Dispatcher) => {
-  return {
-    createProject: async (
-      templateId: string,
-      name: string,
-      description: string,
-      location: string,
-      schemaUrl?: string,
-      locale?: string,
-      qnaKbUrls?: string[]
-    ) => {
-      await dispatcher.createProject(templateId, name, description, location, schemaUrl, locale, qnaKbUrls);
-    },
-    openProject: async (path: string, storageId = 'default') => {
-      await dispatcher.openProject(path, storageId);
-    },
-    saveProjectAs: async (projectId: string, name: string, description: string, location: string) => {
-      await dispatcher.saveProjectAs(projectId, name, description, location);
-    },
-    fetchProjectById: async (projectId: string) => {
-      await dispatcher.fetchProjectById(projectId);
-    },
-    addExistingSkillToBotProject: async (rootBotId: string, path: string, storageId = 'default') => {
-      const skillId: string = await dispatcher.addExistingSkillToBotProject(path, storageId);
-      await dispatcher.addSkillToBotProject(rootBotId, skillId, false);
-    },
-    addNewSkillToBotProject: async (
-      rootBotId: string,
-      templateId: string,
-      name: string,
-      description: string,
-      location: string,
-      schemaUrl?: string,
-      locale?: string,
-      qnaKbUrls?: string[]
-    ) => {
-      const skillId: string = await dispatcher.addNewSkillToBotProject(
-        templateId,
-        name,
-        description,
-        location,
-        schemaUrl,
-        locale,
-        qnaKbUrls
-      );
-      await dispatcher.addSkillToBotProject(rootBotId, skillId, false);
-    },
-    addRemoteSkillToBotProject: async (rootBotId: string, manifestUrl: string, name: string, endpointName: string) => {
-      const skillId = await dispatcher.addRemoteSkillToBotProject(manifestUrl, name, endpointName);
-      await dispatcher.addSkillToBotProject(rootBotId, skillId, true);
-    },
-    replaceSkillAtIndex: async (projectId: string, index: number, newPath: string, storageId = 'default') => {
-      await dispatcher.removeSkillFromBotProject(projectId);
-      await dispatcher.addExistingSkillToBotProject(newPath, storageId, index);
-    },
-  };
-};
-
-export const projectLoadSelector = selector({
-  key: 'projectLoadSelector',
-  get: ({ get }) => {
-    const dispatcher = get(dispatcherState);
-    if (!dispatcher) {
-      return {} as Dispatcher;
-    }
-    return projectLoadAction(dispatcher);
-  },
-});
-
-export const botProjectsWithoutErrorsSelector = selector({
-  key: 'botProjectsWithoutErrorsSelector',
+export const botsForFilePersistenceSelector = selector({
+  key: 'botsForFilePersistenceSelector',
   get: ({ get }) => {
     const botProjectIds = get(botProjectIdsState);
-    const projectsWithoutErrors = botProjectIds
-      .filter((projectId) => !get(botErrorState(projectId)))
-      .map((projectId: string) => {
-        const metaData = get(projectMetaDataState(projectId));
-        return {
-          projectId,
-          ...metaData,
-        };
-      });
-    return projectsWithoutErrors;
+    return botProjectIds.filter((projectId: string) => {
+      const { isRemote } = get(projectMetaDataState(projectId));
+      const botError = get(botErrorState(projectId));
+      return !botError && !isRemote;
+    });
   },
 });
 
@@ -102,9 +35,35 @@ export const botProjectSpaceSelector = selector({
       const dialogs = get(dialogsState(projectId));
       const metaData = get(projectMetaDataState(projectId));
       const botError = get(botErrorState(projectId));
-      const name = get(botNameState(projectId));
-      return { dialogs, projectId, name, ...metaData, error: botError };
+      const name = get(botDisplayNameState(projectId));
+      const botNameId = get(botNameIdentifierState(projectId));
+      return { dialogs, projectId, name, ...metaData, error: botError, botNameId };
     });
+    console.log(result);
     return result;
+  },
+});
+
+export const isBotProjectSpaceSelector = selector({
+  key: 'isBotProjectSpaceSelector',
+  get: ({ get }) => {
+    const projectIds = get(botProjectIdsState);
+    const rootBotId = projectIds[0];
+    const metaData = get(projectMetaDataState(rootBotId));
+    const botProjectFile = get(botProjectFileState(rootBotId));
+    return metaData.isRootBot && !isEmpty(botProjectFile);
+  },
+});
+
+export const rootBotProjectIdSelector = selector({
+  key: 'rootBotProjectIdSelector',
+  get: ({ get }) => {
+    const projectIds = get(botProjectIdsState);
+    const rootBotId = projectIds[0];
+
+    const metaData = get(projectMetaDataState(rootBotId));
+    if (metaData.isRootBot) {
+      return rootBotId;
+    }
   },
 });

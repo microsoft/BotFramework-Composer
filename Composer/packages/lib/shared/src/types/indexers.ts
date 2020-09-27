@@ -15,6 +15,7 @@ export enum FileExtensions {
   Qna = '.qna',
   Setting = 'appsettings.json',
   FormDialogSchema = '.form-dialog',
+  BotProject = '.botproj',
 }
 
 export interface FileInfo {
@@ -182,6 +183,7 @@ export type BotAssets = {
   skillManifests: SkillManifest[];
   setting: DialogSetting;
   dialogSchemas: DialogSchemaFile[];
+  botProjectFile: BotProjectFile;
 };
 
 export interface BotInfo {
@@ -195,11 +197,18 @@ export interface BotProjectSpaceSkill {
   manifest?: string;
   remote: boolean;
   endpointName?: string;
-  name: string;
 }
 
 export interface BotProjectSpace {
   workspace: string;
   name: string;
-  skills: BotProjectSpaceSkill[];
+  skills: {
+    [skillId: string]: BotProjectSpaceSkill;
+  };
+}
+
+export interface BotProjectFile {
+  id: string;
+  content: BotProjectSpace;
+  lastModified: string;
 }
