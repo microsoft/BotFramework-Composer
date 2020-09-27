@@ -7,8 +7,10 @@ import { ResourceManagementClient } from '@azure/arm-resources';
 import { ResourceGroup, GenericResource } from '@azure/arm-resources/esm/models';
 import { AzureBotService } from '@azure/arm-botservice';
 import { WebSiteManagementClient } from '@azure/arm-appservice';
-import { ResourceNameAvailability } from '@azure/arm-appservice/esm/models';
+import { ResourceNameAvailability, GlobalCsmSkuDescription } from '@azure/arm-appservice/esm/models';
 import { CheckNameAvailabilityResponseBody } from '@azure/arm-botservice/esm/models';
+import { CognitiveServicesManagementClient } from '@azure/arm-cognitiveservices';
+import { CognitiveServicesResourceAndSku } from '@azure/arm-cognitiveservices/esm/models';
 
 export enum AzureAPIStatus {
     INFO = 'INFO',
@@ -283,6 +285,173 @@ export class AzureProvisionUtil {
     }
 
     /**
+     * Check sku availability for cognitive resources
+     */
+    public async CheckCognitiveResourceSku(subscriptionId: string, location: string, sku: string, kind: string, type: string): Promise<boolean> {
+        try {
+            if (!subscriptionId) {
+                this.logger({
+                    status: AzureAPIStatus.PARAM_ERROR,
+                    message: 'Need subscription or subscription id as a parameter.'
+                });
+                return false;
+            }
+            if (!location) {
+                this.logger({
+                    status: AzureAPIStatus.PARAM_ERROR,
+                    message: 'Need location as a parameter.'
+                });
+                return false;
+            }
+            if (!sku) {
+                this.logger({
+                    status: AzureAPIStatus.PARAM_ERROR,
+                    message: 'Need sku as a parameter.'
+                });
+                return false;
+            }
+            if (!kind) {
+                this.logger({
+                    status: AzureAPIStatus.PARAM_ERROR,
+                    message: 'Need subscription or subscription id as a parameter.'
+                });
+                return false;
+            }
+            if (!type) {
+                type = 'Microsoft.CognitiveServices/accounts';
+            }
+
+            const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(this.credentials, subscriptionId);
+            const checkSkuResuilt = await cognitiveServicesManagementClient.checkSkuAvailability(location, [sku], kind, type);
+            if (checkSkuResuilt._response.status >= 300) {
+                this.logger({
+                    status: AzureAPIStatus.ERROR,
+                    message: checkSkuResuilt._response.bodyAsText
+                });
+                return false;
+            }
+            if (checkSkuResuilt._response.parsedBody.value.length === 0) {
+                this.logger({
+                    status: AzureAPIStatus.ERROR,
+                    message: 'Check cognitive resource sku result array is empty.'
+                });
+                return false;
+            }
+            return checkSkuResuilt._response.parsedBody.value[0].skuAvailable;
+        }
+        catch (err) {
+            this.logger({
+                status: AzureAPIStatus.ERROR,
+                message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
+            });
+            return false;
+        }
+    }
+
+    /**
+     * List all skus for a cognitive service account 
+     */
+    public async ListCognitiveResourceSkus(subscriptionId: string, resourceGroup: string, accountName: string): Promise<Array<CognitiveServicesResourceAndSku>> {
+        try {
+            if (!subscriptionId) {
+                this.logger({
+                    status: AzureAPIStatus.PARAM_ERROR,
+                    message: 'Need subscription or subscription id as a parameter.'
+                });
+                return [];
+            }
+            if (!resourceGroup) {
+                this.logger({
+                    status: AzureAPIStatus.PARAM_ERROR,
+                    message: 'Need resource group as a parameter.'
+                });
+                return [];
+            }
+            if (!accountName) {
+                this.logger({
+                    status: AzureAPIStatus.PARAM_ERROR,
+                    message: 'Need account name as a parameter.'
+                });
+                return [];
+            }
+
+            const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(this.credentials, subscriptionId);
+            const listSkuResuilt = await cognitiveServicesManagementClient.accounts.listSkus(resourceGroup, accountName);
+            if (listSkuResuilt._response.status >= 300) {
+                this.logger({
+                    status: AzureAPIStatus.ERROR,
+                    message: listSkuResuilt._response.bodyAsText
+                });
+                return [];
+            }
+            if (listSkuResuilt._response.parsedBody.value.length === 0) {
+                this.logger({
+                    status: AzureAPIStatus.ERROR,
+                    message: 'Check cognitive resource sku result array is empty.'
+                });
+                return [];
+            }
+            return listSkuResuilt._response.parsedBody.value;
+        }
+        catch (err) {
+            this.logger({
+                status: AzureAPIStatus.ERROR,
+                message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
+            });
+            return [];
+        }
+    }
+
+    /**
+     * List all skus for the service plan
+     */
+    public async ListServicePlanSkus(subscriptionId: string): Promise<Array<GlobalCsmSkuDescription>> {
+        try {
+            if (!subscriptionId) {
+                this.logger({
+                    status: AzureAPIStatus.PARAM_ERROR,
+                    message: 'Need subscription id as a parameter.'
+                });
+                return [];
+            }
+
+            const webSiteManagementClient = new WebSiteManagementClient(this.credentials, subscriptionId);
+            const listSkusResult = await webSiteManagementClient.listSkus();
+            if (listSkusResult._response.status >= 300) {
+                this.logger({
+                    status: AzureAPIStatus.ERROR,
+                    message: listSkusResult._response.bodyAsText
+                });
+                return [];
+            }
+            return listSkusResult._response.parsedBody.skus;
+        }
+        catch (err) {
+            this.logger({
+                status: AzureAPIStatus.ERROR,
+                message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
+            });
+            return [];
+        }
+    }
+
+    /**
+     * List all skus for bot service
+     */
+    public async ListBotSkus(): Promise<Array<string>> {
+        try {
+            return ['F0','S1'];
+        }
+        catch (err) {
+            this.logger({
+                status: AzureAPIStatus.ERROR,
+                message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
+            });
+            return [];
+        }
+    }
+
+    /**
      * Get all resources under a resource group
      */
     public async GetAllResourcesInResourceGroup(resourceGroupName: string, subscriptionId: string): Promise<Array<GenericResource>> {
@@ -320,4 +489,7 @@ export class AzureProvisionUtil {
             return []
         }
     }
+
+    //ToDo: Name checking for : application insights, cosmosdb account, storage account, cognitive service account
+    //ToDo: Quota checking for: application insights, cosmosdb account, storage account
 }
