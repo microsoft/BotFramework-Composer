@@ -1,10 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { app, dialog, Menu, MenuItemConstructorOptions, shell, ipcMain } from 'electron';
+import { app, dialog, ipcMain, Menu, MenuItemConstructorOptions, shell } from 'electron';
+import formatMessage from 'format-message';
 
-import { isMac } from './utility/platform';
 import { AppUpdater } from './appUpdater';
+import { isMac } from './utility/platform';
 
 function getAppMenu(): MenuItemConstructorOptions[] {
   if (isMac()) {
@@ -12,13 +13,13 @@ function getAppMenu(): MenuItemConstructorOptions[] {
       {
         label: 'Bot Framework Composer',
         submenu: [
-          { role: 'services' },
+          { role: 'services', label: formatMessage('Services') },
           { type: 'separator' },
-          { label: 'Hide Bot Framework Composer', role: 'hide' },
-          { role: 'hideOthers' },
-          { role: 'unhide' },
+          { role: 'hide', label: formatMessage('Hide Bot Framework Composer') },
+          { role: 'hideOthers', label: formatMessage('Hide Others') },
+          { role: 'unhide', label: formatMessage('Show All') },
           { type: 'separator' },
-          { label: 'Quit Bot Framework Composer', role: 'quit' },
+          { label: formatMessage('Quit Bot Framework Composer'), role: 'quit' },
         ],
       },
     ];
@@ -31,19 +32,27 @@ function getRestOfEditMenu(): MenuItemConstructorOptions[] {
     return [
       { type: 'separator' },
       {
-        label: 'Speech',
-        submenu: [{ role: 'startSpeaking' }, { role: 'stopSpeaking' }],
+        label: formatMessage('Speech'),
+        submenu: [
+          { role: 'startSpeaking', label: formatMessage('Start Speaking') },
+          { role: 'stopSpeaking', label: formatMessage('Stop Speaking') },
+        ],
       },
     ];
   }
-  return [{ type: 'separator' }, { role: 'selectAll' }];
+  return [{ type: 'separator' }, { role: 'selectAll', label: formatMessage('Select All') }];
 }
 
 function getRestOfWindowMenu(): MenuItemConstructorOptions[] {
   if (isMac()) {
-    return [{ type: 'separator' }, { role: 'front' }, { type: 'separator' }, { role: 'window' }];
+    return [
+      { type: 'separator' },
+      { role: 'front', label: formatMessage('Bring All to Front') },
+      { type: 'separator' },
+      { role: 'window', label: formatMessage('Window') },
+    ];
   }
-  return [{ role: 'close' }];
+  return [{ role: 'close', label: formatMessage('Close') }];
 }
 
 export function initAppMenu(win?: Electron.BrowserWindow) {
@@ -59,53 +68,57 @@ export function initAppMenu(win?: Electron.BrowserWindow) {
     ...getAppMenu(),
     // File
     {
-      label: 'File',
-      submenu: [isMac() ? { role: 'close' } : { role: 'quit' }],
+      label: formatMessage('File'),
+      submenu: [
+        isMac()
+          ? { role: 'close', label: formatMessage('Close Window') }
+          : { role: 'quit', label: formatMessage('Exit') },
+      ],
     },
     // Edit
     {
-      label: 'Edit',
+      label: formatMessage('Edit'),
       submenu: [
         {
           id: 'Undo',
-          label: 'Undo',
+          label: formatMessage('Undo'),
           enabled: false,
           accelerator: 'CmdOrCtrl+Z',
           click: () => handleMenuEvents('undo'),
         },
         {
           id: 'Redo',
-          label: 'Redo',
+          label: formatMessage('Redo'),
           enabled: false,
           accelerator: 'CmdOrCtrl+Shift+Z',
           click: () => handleMenuEvents('redo'),
         },
         { type: 'separator' },
-        // Native mode shorcuts
+        // Native mode shortcuts
         {
           id: 'Cut-native',
-          label: 'Cut',
+          label: formatMessage('Cut'),
           role: 'cut',
         },
         {
           id: 'Copy-native',
-          label: 'Copy',
+          label: formatMessage('Copy'),
           role: 'copy',
         },
         {
           id: 'Paste-native',
-          label: 'Paste',
+          label: formatMessage('Paste'),
           role: 'paste',
         },
         {
           id: 'Delete-native',
-          label: 'Delete',
+          label: formatMessage('Delete'),
           role: 'delete',
         },
         // Action editing mode shortcuts
         {
           id: 'Cut',
-          label: 'Cut',
+          label: formatMessage('Cut'),
           enabled: false,
           visible: false,
           accelerator: 'CmdOrCtrl+X',
@@ -113,7 +126,7 @@ export function initAppMenu(win?: Electron.BrowserWindow) {
         },
         {
           id: 'Copy',
-          label: 'Copy',
+          label: formatMessage('Copy'),
           enabled: false,
           visible: false,
           accelerator: 'CmdOrCtrl+C',
@@ -121,7 +134,7 @@ export function initAppMenu(win?: Electron.BrowserWindow) {
         },
         {
           id: 'Delete',
-          label: 'Delete',
+          label: formatMessage('Delete'),
           enabled: false,
           visible: false,
           accelerator: 'Delete',
@@ -132,73 +145,77 @@ export function initAppMenu(win?: Electron.BrowserWindow) {
     },
     // View
     {
-      label: 'View',
+      label: formatMessage('View'),
       submenu: [
-        { role: 'toggleDevTools' },
+        { role: 'toggleDevTools', label: formatMessage('Toggle Developer Tools') },
         { type: 'separator' },
-        { role: 'resetZoom' },
-        { role: 'zoomIn' },
-        { role: 'zoomOut' },
+        { role: 'resetZoom', label: formatMessage('Actual Zoom') },
+        { role: 'zoomIn', label: formatMessage('Zoom In') },
+        { role: 'zoomOut', label: formatMessage('Zoom Out') },
         { type: 'separator' },
-        { role: 'togglefullscreen' },
+        { role: 'togglefullscreen', label: formatMessage('Toggle Full Screen') },
       ],
     },
     // Window
     {
-      label: 'Window',
-      submenu: [{ role: 'minimize' }, { role: 'zoom' }, ...getRestOfWindowMenu()],
+      label: formatMessage('Window'),
+      submenu: [
+        { role: 'minimize', label: formatMessage('Minimize') },
+        { role: 'zoom', label: formatMessage('Zoom') },
+        ...getRestOfWindowMenu(),
+      ],
     },
     {
-      label: 'Help',
+      label: formatMessage('Help'),
       submenu: [
         {
-          label: 'Documentation',
+          label: formatMessage('Documentation'),
           click: async () => {
             await shell.openExternal('https://docs.microsoft.com/en-us/composer/');
           },
         },
         {
-          label: 'Composer on GitHub',
+          label: formatMessage('Composer on GitHub'),
           click: async () => {
             await shell.openExternal('https://aka.ms/BotFrameworkComposer');
           },
         },
         {
-          label: 'Learn More About Bot Framework',
+          label: formatMessage('Learn More About Bot Framework'),
           click: async () => {
             await shell.openExternal('https://dev.botframework.com/');
           },
         },
         { type: 'separator' },
         {
-          label: 'Report an Issue',
+          label: formatMessage('Report an Issue'),
           click: async () => {
             await shell.openExternal('https://github.com/microsoft/BotFramework-Composer/issues/new/choose');
           },
         },
         { type: 'separator' },
         {
-          label: 'View License',
+          label: formatMessage('View License'),
           click: async () => {
             await shell.openExternal('https://aka.ms/bfcomposer-license');
           },
         },
         {
-          label: 'Privacy Statement',
+          label: formatMessage('Privacy Statement'),
           click: async () => {
             await shell.openExternal('https://aka.ms/bfcomposer-privacy');
           },
         },
         { type: 'separator' },
         {
-          label: 'Check for Updates',
+          label: formatMessage('Check for Updates'),
           click: () => {
             AppUpdater.getInstance().checkForUpdates(true);
           },
         },
         { type: 'separator' },
         {
-          label: 'About',
+          label: formatMessage('About'),
           click: async () => {
             // show dialog with name and version
             dialog.showMessageBox({
