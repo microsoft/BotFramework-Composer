@@ -9,7 +9,7 @@ import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 import { SkillSetting } from '@bfc/shared';
 
-import { dispatcherState, settingsState, botNameState } from '../../recoilModel';
+import { dispatcherState, settingsState, botDisplayNameState } from '../../recoilModel';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { TestController } from '../../components/TestController/TestController';
 import { CreateSkillModal } from '../../components/CreateSkillModal';
@@ -22,7 +22,7 @@ const Skills: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => 
   const { projectId = '' } = props;
   const [showAddSkillDialogModal, setShowAddSkillDialogModal] = useState(false);
 
-  const botName = useRecoilValue(botNameState(projectId));
+  const botName = useRecoilValue(botDisplayNameState(projectId));
   const settings = useRecoilValue(settingsState(projectId));
   const { addSkill, setSettings } = useRecoilValue(dispatcherState);
 

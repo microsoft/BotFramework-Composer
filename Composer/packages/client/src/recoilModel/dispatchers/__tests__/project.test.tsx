@@ -7,6 +7,7 @@ import { useRecoilState } from 'recoil';
 
 import httpClient from '../../../utils/httpUtil';
 import { projectDispatcher } from '../project';
+import { botProjectFileDispatcher } from '../botProjectFile';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import {
   recentProjectsState,
@@ -29,7 +30,9 @@ import {
   locationState,
   skillsState,
   botStatusState,
-  botNameState,
+  botDisplayNameState,
+  botOpeningState,
+  botProjectFileState,
 } from '../../atoms';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '../../dispatchers';
@@ -76,7 +79,7 @@ describe('Project dispatcher', () => {
     const schemas = useRecoilValue(schemasState(projectId));
     const location = useRecoilValue(locationState(projectId));
     const skills = useRecoilValue(skillsState(projectId));
-    const botName = useRecoilValue(botNameState(projectId));
+    const botName = useRecoilValue(botDisplayNameState(projectId));
     const skillManifests = useRecoilValue(skillManifestsState(projectId));
     const luFiles = useRecoilValue(luFilesState(projectId));
     const lgFiles = useRecoilValue(lgFilesState(projectId));
@@ -95,6 +98,8 @@ describe('Project dispatcher', () => {
     const boilerplateVersion = useRecoilValue(boilerplateVersionState);
     const templates = useRecoilValue(templateProjectsState);
     const runtimeTemplates = useRecoilValue(runtimeTemplatesState);
+    const botOpening = useRecoilValue(botOpeningState);
+    const [botProjectFile, setBotProjectFile] = useRecoilState(botProjectFileState(projectId));
 
     return {
       skillManifests,
@@ -114,12 +119,15 @@ describe('Project dispatcher', () => {
       currentDispatcher,
       recentProjects,
       appError,
-      setRecentProjects,
       templateId,
       announcement,
       boilerplateVersion,
       templates,
       runtimeTemplates,
+      botOpening,
+      botProjectFile,
+      setBotProjectFile,
+      setRecentProjects,
     };
   };
 
@@ -135,6 +143,7 @@ describe('Project dispatcher', () => {
           recoilState: dispatcherState,
           initialValue: {
             projectDispatcher,
+            botProjectFileDispatcher,
           },
         },
       }
@@ -143,13 +152,23 @@ describe('Project dispatcher', () => {
     dispatcher = renderedComponent.current.currentDispatcher;
   });
 
-  it('should open bot project', async () => {
-    let result;
+  it('should throw an error if no bot project file is present in the bot', async () => {
     (httpClient.put as jest.Mock).mockResolvedValueOnce({
       data: mockProjectResponse,
     });
     await act(async () => {
-      result = await dispatcher.openProject('../test/empty-bot', 'default');
+      await dispatcher.openProject('../test/empty-bot', 'default');
+    });
+    expect(navigateTo).toHaveBeenLastCalledWith(`/home`);
+    expect(renderedComponent.current.appError).toBeUndefined();
+  });
+
+  fit('should open bot project', async () => {
+    (httpClient.put as jest.Mock).mockResolvedValueOnce({
+      data: mockProjectResponse,
+    });
+    await act(async () => {
+      await dispatcher.openProject('../test/empty-bot', 'default');
     });
 
     expect(renderedComponent.current.projectId).toBe(mockProjectResponse.id);
@@ -159,12 +178,11 @@ describe('Project dispatcher', () => {
     expect(renderedComponent.current.luFiles.length).toBe(1);
     expect(renderedComponent.current.botEnvironment).toBe(mockProjectResponse.botEnvironment);
     expect(renderedComponent.current.skills.length).toBe(0);
-    // expect(renderedComponent.current.botOpening).toBeFalsy();
+    expect(renderedComponent.current.botOpening).toBeFalsy();
     expect(renderedComponent.current.schemas.sdk).toBeDefined();
     expect(renderedComponent.current.schemas.default).toBeDefined();
     expect(renderedComponent.current.schemas.diagnostics?.length).toBe(0);
     expect(navigateTo).toHaveBeenLastCalledWith(`/bot/${projectId}/dialogs/`);
-    expect(result).toBe(renderedComponent.current.projectId);
   });
 
   it('should handle project failure if project does not exist', async () => {
@@ -234,7 +252,7 @@ describe('Project dispatcher', () => {
     });
     await act(async () => {
       await dispatcher.openProject('../test/empty-bot', 'default');
-      await dispatcher.deleteBotProject(projectId);
+      await dispatcher.deleteBot(projectId);
     });
 
     expect(renderedComponent.current.botName).toEqual('');
@@ -243,7 +261,7 @@ describe('Project dispatcher', () => {
     expect(renderedComponent.current.luFiles.length).toBe(0);
     expect(renderedComponent.current.botEnvironment).toBe('production');
     expect(renderedComponent.current.skills.length).toBe(0);
-    // expect(renderedComponent.current.botOpening).toBeFalsy();
+    expect(renderedComponent.current.botOpening).toBeFalsy();
     expect(renderedComponent.current.schemas.sdk).toBeUndefined();
     expect(renderedComponent.current.schemas.default).toBeUndefined();
     expect(renderedComponent.current.schemas.diagnostics?.length).toBeUndefined();

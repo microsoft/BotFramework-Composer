@@ -18,7 +18,7 @@ import {
   onAddLanguageDialogCompleteState,
   onDelLanguageDialogCompleteState,
   showDelLanguageModalState,
-  botNameState,
+  botDisplayNameState,
 } from './../atoms/botState';
 
 const copyLanguageResources = (files: any[], fromLanguage: string, toLanguages: string[]): any[] => {
@@ -58,7 +58,7 @@ const deleteLanguageResources = (
 export const multilangDispatcher = () => {
   const setLocale = useRecoilCallback(
     ({ set, snapshot }: CallbackInterface) => async (locale: string, projectId: string) => {
-      const botName = await snapshot.getPromise(botNameState(projectId));
+      const botName = await snapshot.getPromise(botDisplayNameState(projectId));
 
       set(localeState(projectId), locale);
       languageStorage.setLocale(botName, locale);
@@ -68,7 +68,7 @@ export const multilangDispatcher = () => {
   const addLanguages = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async ({ languages, defaultLang, switchTo = false, projectId }) => {
       const { set, snapshot } = callbackHelpers;
-      const botName = await snapshot.getPromise(botNameState(projectId));
+      const botName = await snapshot.getPromise(botDisplayNameState(projectId));
       const prevlgFiles = await snapshot.getPromise(lgFilesState(projectId));
       const prevluFiles = await snapshot.getPromise(luFilesState(projectId));
       const prevSettings = await snapshot.getPromise(settingsState(projectId));

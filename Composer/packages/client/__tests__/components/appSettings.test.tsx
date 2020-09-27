@@ -21,6 +21,7 @@ describe('<AppSettings /> & <ElectronSettings />', () => {
     const { getByText, getAllByText } = renderWithRecoil(<AppSettings />, ({ set }) => {
       set(onboardingState, {
         complete: false,
+        coachMarkRefs: {},
       });
     });
     // there are 2 onboarding texts
@@ -43,6 +44,7 @@ describe('<AppSettings /> & <ElectronSettings />', () => {
         },
         propertyEditorWidth: 400,
         dialogNavWidth: 180,
+        appLocale: 'en-us',
       });
     });
     getByText('Application Updates');

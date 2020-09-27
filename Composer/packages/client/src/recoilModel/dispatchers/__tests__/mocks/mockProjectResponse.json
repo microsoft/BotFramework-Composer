@@ -23,6 +23,12 @@
       "path": "/Users/tester/Desktop/EmptyBot-1/dialogs/additem/language-understanding/en-us/additem.en-us.lu",
       "relativePath": "dialogs/additem/language-understanding/en-us/additem.en-us.lu",
       "lastModified": "Thu Jul 09 2020 10:19:09 GMT-0700 (Pacific Daylight Time)"
+    },{
+      "name": "EmptyBot-1.botproj",
+      "content": "{\"$schema\":\"https:\/\/schemas.botframework.com\/schemas\/botprojects\/v0.1\/botproject-schema.json\",\"name\":\"echobot-0\",\"workspace\":\"\/Users\/srravich\/Desktop\/samples\/EchoBot-0\",\"skills\":{}}",
+      "path": "/Users/tester/Desktop/EmptyBot-1/EmptyBot-1.botproj",
+      "relativePath": "dialogs/additem/language-understanding/en-us/additem.en-us.lu",
+      "lastModified": "Thu Jul 09 2020 10:19:09 GMT-0700 (Pacific Daylight Time)"
     }
   ],
   "location": "/Users/tester/Desktop/EmptyBot-1",

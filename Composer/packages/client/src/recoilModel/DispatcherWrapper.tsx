@@ -22,10 +22,9 @@ import {
   dialogSchemasState,
   settingsState,
   filePersistenceState,
-  projectMetaDataState,
-  botProjectSpaceLoadedState,
+  botProjectFileState,
 } from './atoms';
-import { botProjectsWithoutErrorsSelector } from './selectors';
+import { botsForFilePersistenceSelector } from './selectors';
 
 const getBotAssets = async (projectId, snapshot: Snapshot): Promise<BotAssets> => {
   const result = await Promise.all([
@@ -36,6 +35,7 @@ const getBotAssets = async (projectId, snapshot: Snapshot): Promise<BotAssets> =
     snapshot.getPromise(skillManifestsState(projectId)),
     snapshot.getPromise(settingsState(projectId)),
     snapshot.getPromise(dialogSchemasState(projectId)),
+    snapshot.getPromise(botProjectFileState(projectId)),
   ]);
   return {
     projectId,
@@ -46,6 +46,7 @@ const getBotAssets = async (projectId, snapshot: Snapshot): Promise<BotAssets> =
     skillManifests: result[4],
     setting: result[5],
     dialogSchemas: result[6],
+    botProjectFile: result[7],
   };
 };
 
@@ -87,32 +88,25 @@ const InitDispatcher = ({ onLoad }) => {
 
 export const DispatcherWrapper = ({ children }) => {
   const [loaded, setLoaded] = useState(false);
-  const botProjects = useRecoilValue(botProjectsWithoutErrorsSelector);
-  const botProjectLoaded = useRecoilValue(botProjectSpaceLoadedState);
+  const botProjects = useRecoilValue(botsForFilePersistenceSelector);
 
   useRecoilTransactionObserver_UNSTABLE(async ({ snapshot, previousSnapshot }) => {
-    if (botProjectLoaded) {
-      for (const { projectId } of botProjects) {
-        const metaData = await snapshot.getPromise(projectMetaDataState(projectId));
-        if (!metaData.isRemote) {
-          const assets = await getBotAssets(projectId, snapshot);
-          const previousAssets = await getBotAssets(projectId, previousSnapshot);
-          const filePersistence = await snapshot.getPromise(filePersistenceState(projectId));
-          if (!isEmpty(filePersistence)) {
-            filePersistence.notify(assets, previousAssets);
-          }
-        }
+    const botsForFilePersistence = await snapshot.getPromise(botsForFilePersistenceSelector);
+    for (const projectId of botsForFilePersistence) {
+      const assets = await getBotAssets(projectId, snapshot);
+      const previousAssets = await getBotAssets(projectId, previousSnapshot);
+      const filePersistence = await snapshot.getPromise(filePersistenceState(projectId));
+      if (!isEmpty(filePersistence)) {
+        filePersistence.notify(assets, previousAssets);
       }
     }
   });
 
   return (
     <Fragment>
-      {botProjects
-        .filter(({ isRemote }) => !isRemote)
-        .map(({ projectId }) => (
-          <UndoRoot key={projectId} projectId={projectId} />
-        ))}
+      {botProjects.map((projectId) => (
+        <UndoRoot key={projectId} projectId={projectId} />
+      ))}
       <InitDispatcher onLoad={setLoaded} />
       {loaded ? children : null}
     </Fragment>
