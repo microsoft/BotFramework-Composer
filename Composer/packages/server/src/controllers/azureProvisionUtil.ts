@@ -99,10 +99,10 @@ export class AzureProvisionUtil {
                 return []
             }
             const resourceTypes = resourceProviderResult._response.parsedBody.resourceTypes;
-            if (resourceTypes.length == 0) {
+            if (!resourceTypes || resourceTypes.length == 0) {
                 return []
             }
-            return resourceTypes[0].locations;
+            return resourceTypes[0].locations ?? [];
         }
         catch (err) {
             this.logger({
@@ -330,14 +330,14 @@ export class AzureProvisionUtil {
                 });
                 return false;
             }
-            if (checkSkuResuilt._response.parsedBody.value.length === 0) {
+            if (!checkSkuResuilt._response.parsedBody.value || checkSkuResuilt._response.parsedBody.value.length === 0) {
                 this.logger({
                     status: AzureAPIStatus.ERROR,
                     message: 'Check cognitive resource sku result array is empty.'
                 });
                 return false;
             }
-            return checkSkuResuilt._response.parsedBody.value[0].skuAvailable;
+            return checkSkuResuilt._response.parsedBody.value[0].skuAvailable ?? false;
         }
         catch (err) {
             this.logger({
@@ -384,14 +384,14 @@ export class AzureProvisionUtil {
                 });
                 return [];
             }
-            if (listSkuResuilt._response.parsedBody.value.length === 0) {
+            if (!listSkuResuilt._response.parsedBody.value || listSkuResuilt._response.parsedBody.value.length === 0) {
                 this.logger({
                     status: AzureAPIStatus.ERROR,
                     message: 'Check cognitive resource sku result array is empty.'
                 });
                 return [];
             }
-            return listSkuResuilt._response.parsedBody.value;
+            return listSkuResuilt._response.parsedBody.value ?? [];
         }
         catch (err) {
             this.logger({
@@ -424,7 +424,7 @@ export class AzureProvisionUtil {
                 });
                 return [];
             }
-            return listSkusResult._response.parsedBody.skus;
+            return listSkusResult._response.parsedBody.skus ?? [];
         }
         catch (err) {
             this.logger({
