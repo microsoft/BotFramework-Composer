@@ -102,7 +102,3 @@ export type RecognizerSchema = {
     shellApi: ShellApi
   ) => Promise<void> | void;
 };
-
-export const isAdditionalField = (uiOptions?: UIOptions | AdditionalField): uiOptions is AdditionalField => {
-  return typeof uiOptions !== 'undefined' && 'additionalField' in uiOptions && uiOptions?.additionalField;
-};

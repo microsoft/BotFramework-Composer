@@ -27,6 +27,7 @@ jest.mock('../ArrayFieldItem', () => ({
 }));
 jest.mock('@bfc/extension-client', () => ({
   useShellApi: jest.fn(),
+  isAdditionalField: jest.fn().mockReturnValue(false),
 }));
 
 function renderSubject(overrides = {}) {

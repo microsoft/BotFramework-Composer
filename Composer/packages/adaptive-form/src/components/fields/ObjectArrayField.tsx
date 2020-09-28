@@ -58,12 +58,14 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = (props) => {
     if (event.key.toLowerCase() === 'enter') {
       event.preventDefault();
 
-      if (Object.keys(newObject).length > 0 && !isAdditionalField(uiOptions)) {
+      if (Object.keys(newObject).length > 0) {
         const formattedData = Object.entries(newObject).reduce((obj, [key, value]) => {
-          const propertyUIOptions = uiOptions?.properties?.[key];
-          if (!isAdditionalField(propertyUIOptions)) {
-            const serializeValue = propertyUIOptions?.serializer?.set;
-            return { ...obj, [key]: typeof serializeValue === 'function' ? serializeValue(value) : value };
+          if (!isAdditionalField(uiOptions)) {
+            const propertyUIOptions = uiOptions?.properties?.[key];
+            if (!isAdditionalField(propertyUIOptions)) {
+              const serializeValue = propertyUIOptions?.serializer?.set;
+              return { ...obj, [key]: typeof serializeValue === 'function' ? serializeValue(value) : value };
+            }
           }
           return obj;
         }, {});
