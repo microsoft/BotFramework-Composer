@@ -52,12 +52,6 @@ const summaryStyle = css`
   padding-top: 6px;
 `;
 
-const summaryStyle = css`
-  display: flex;
-  padding-left: 12px;
-  padding-top: 12px;
-`;
-
 // -------------------- ProjectTree -------------------- //
 
 export type TreeLink = {

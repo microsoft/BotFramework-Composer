@@ -139,6 +139,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     onboardingAddCoachMarkRef,
     importQnAFromUrls,
     addSkill,
+    addNewSkillToBotProject,
+    addExistingSkillToBotProject,
+    addRemoteSkillToBotProject,
+    removeSkillFromBotProject,
     setCurrentMode,
   } = useRecoilValue(dispatcherState);
 
