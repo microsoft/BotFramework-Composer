@@ -282,10 +282,13 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
   function createBotSubtree(bot: BotInProject & { hasWarnings: boolean }) {
     if (showDialogs) {
       return (
-        <details key={bot.projectId}>
-          <summary css={summaryStyle}>{renderBotHeader(bot)}</summary>
-          {createDetailsTree(bot, 1)}
-        </details>
+        // <details key={bot.projectId}>
+        //   <summary css={summaryStyle}>{renderBotHeader(bot)}</summary>
+        //   {createDetailsTree(bot, 1)}
+        // </details>
+        <ExpandableNode key={bot.projectId} summary={renderBotHeader(bot)} summaryCSS={summaryStyle}>
+          <div>{createDetailsTree(bot, 1)}</div>
+        </ExpandableNode>
       );
     } else {
       return renderBotHeader(bot);

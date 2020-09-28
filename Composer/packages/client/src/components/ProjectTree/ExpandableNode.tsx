@@ -2,23 +2,25 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx, SerializedStyles } from '@emotion/core';
 import { useState, MouseEvent, KeyboardEvent } from 'react';
 
 type Props = {
   children: JSX.Element;
   summary: JSX.Element;
-  summaryCSS: any;
-  ref?: any;
+  summaryCSS: SerializedStyles;
+  ref?: (el: HTMLElement | null) => void;
 };
 
 export const ExpandableNode = ({ children, summary, ref, summaryCSS }: Props) => {
   const [isOpen, setOpen] = useState(true);
 
   function handleClick(ev: MouseEvent) {
+    console.log((ev.target as Element)?.tagName);
     if ((ev.target as Element)?.tagName.toLowerCase() === 'summary') {
       setOpen(!isOpen);
     }
+    ev.preventDefault();
   }
 
   function handleKey(ev: KeyboardEvent) {
@@ -26,8 +28,11 @@ export const ExpandableNode = ({ children, summary, ref, summaryCSS }: Props) =>
   }
 
   return (
-    <details ref={ref} open={isOpen} tabIndex={0} onClick={handleClick} onKeyUp={handleKey}>
-      <summary css={summaryCSS}>{summary}</summary>
+    <details ref={ref} open={isOpen}>
+      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */}
+      <summary css={summaryCSS} tabIndex={0} onClick={handleClick} onKeyUp={handleKey}>
+        {summary}
+      </summary>
       {children}
     </details>
   );
