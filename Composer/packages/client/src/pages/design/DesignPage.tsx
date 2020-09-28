@@ -8,7 +8,7 @@ import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcru
 import formatMessage from 'format-message';
 import { globalHistory, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
-import { DialogFactory, SDKKinds, DialogInfo, PromptTab, getEditorAPI, registerEditorAPI } from '@bfc/shared';
+import { DialogInfo, PromptTab, getEditorAPI, registerEditorAPI, FieldNames } from '@bfc/shared';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import { EditorExtension, useTriggerApi, PluginConfig } from '@bfc/extension-client';
@@ -45,7 +45,6 @@ import {
   focusPathState,
   showCreateDialogModalState,
   showAddSkillDialogModalState,
-  actionsSeedState,
   localeState,
 } from '../../recoilModel';
 import ImportQnAFromUrlModal from '../knowledge-base/ImportQnAFromUrlModal';
@@ -116,7 +115,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const focusPath = useRecoilValue(focusPathState(projectId));
   const showCreateDialogModal = useRecoilValue(showCreateDialogModalState(projectId));
   const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState(projectId));
-  const actionsSeed = useRecoilValue(actionsSeedState(projectId));
   const locale = useRecoilValue(localeState(projectId));
   const undoFunction = useRecoilValue(undoFunctionState(projectId));
   const undoVersion = useRecoilValue(undoVersionState(projectId));
@@ -488,16 +486,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     );
   }, [dialogs, breadcrumb, dialogJsonVisible]);
 
-  async function handleCreateDialogSubmit(data: { name: string; description: string }) {
-    const seededContent = new DialogFactory(schemas.sdk?.content).create(SDKKinds.AdaptiveDialog, {
-      $designer: { name: data.name, description: data.description },
-      generator: `${data.name}.lg`,
-      recognizer: `${data.name}.lu.qna`,
-    });
-    if (seededContent.triggers?.[0]) {
-      seededContent.triggers[0].actions = actionsSeed;
-    }
-    await createDialog({ id: data.name, content: seededContent, projectId });
+  async function handleCreateDialogSubmit(dialogName, dialogData) {
+    await createDialog({ id: dialogName, content: dialogData, projectId });
     commitChanges();
   }
 
@@ -578,9 +568,15 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       regEx: '',
       triggerPhrases: '',
     };
-    if (dialogId) {
+    const dialog = dialogs.find((d) => d.id === dialogId);
+    if (dialogId && dialog) {
       const url = `/bot/${projectId}/knowledge-base/${dialogId}`;
-      createTrigger(dialogId, formData, url);
+      const triggers = get(dialog, FieldNames.Events, []);
+      if (triggers.some((t) => t.type === qnaMatcherKey)) {
+        navigateTo(url);
+      } else {
+        createTrigger(dialogId, formData, url);
+      }
       // import qna from urls
       if (urls.length > 0) {
         await importQnAFromUrls({ id: `${dialogId}.${locale}`, urls, projectId });
@@ -657,12 +653,14 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       </div>
       <Suspense fallback={<LoadingSpinner />}>
         {showCreateDialogModal && (
-          <CreateDialogModal
-            isOpen={showCreateDialogModal}
-            projectId={projectId}
-            onDismiss={() => createDialogCancel(projectId)}
-            onSubmit={handleCreateDialogSubmit}
-          />
+          <EditorExtension plugins={pluginConfig} projectId={projectId} shell={shell}>
+            <CreateDialogModal
+              isOpen={showCreateDialogModal}
+              projectId={projectId}
+              onDismiss={() => createDialogCancel(projectId)}
+              onSubmit={handleCreateDialogSubmit}
+            />
+          </EditorExtension>
         )}
         {showAddSkillDialogModal && (
           <CreateSkillModal
