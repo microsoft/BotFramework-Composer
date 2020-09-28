@@ -1,69 +1,22 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { PluginConfig, FormUISchema, RecognizerSchema, UISchema, MenuUISchema } from '@bfc/extension-client';
+import mergeWith from 'lodash/mergeWith';
+import {
+  PluginConfig,
+  FormUISchema,
+  UISchema,
+  MenuUISchema,
+  FlowUISchema,
+  RecognizerUISchema,
+} from '@bfc/extension-client';
 import { SDKKinds } from '@bfc/shared';
 import formatMessage from 'format-message';
-import mapValues from 'lodash/mapValues';
-import { IntentField, RecognizerField, RegexIntentField, QnAActionsField } from '@bfc/adaptive-form';
+import { IntentField, RecognizerField, QnAActionsField } from '@bfc/adaptive-form';
 
 import { DefaultMenuSchema } from './defaultMenuSchema';
-
-const DefaultRecognizers: RecognizerSchema[] = [
-  {
-    id: SDKKinds.RegexRecognizer,
-    displayName: () => formatMessage('Regular Expression'),
-    editor: RegexIntentField,
-    isSelected: (data) => {
-      return typeof data === 'object' && data.$kind === SDKKinds.RegexRecognizer;
-    },
-    handleRecognizerChange: (props) => {
-      props.onChange({ $kind: SDKKinds.RegexRecognizer, intents: [] });
-    },
-    renameIntent: (intentName, newIntentName, shellData, shellApi) => {
-      const { currentDialog } = shellData;
-      shellApi.renameRegExIntent(currentDialog.id, intentName, newIntentName);
-    },
-  },
-  {
-    id: SDKKinds.CustomRecognizer,
-    displayName: () => formatMessage('Custom recognizer'),
-    isSelected: (data) => typeof data === 'object',
-    handleRecognizerChange: (props) =>
-      props.onChange({
-        $kind: 'Microsoft.MultiLanguageRecognizer',
-        recognizers: {
-          'en-us': {
-            $kind: 'Microsoft.RegexRecognizer',
-            intents: [
-              {
-                intent: 'greeting',
-                pattern: 'hello',
-              },
-              {
-                intent: 'test',
-                pattern: 'test',
-              },
-            ],
-          },
-          'zh-cn': {
-            $kind: 'Microsoft.RegexRecognizer',
-            intents: [
-              {
-                intent: 'greeting',
-                pattern: '你好',
-              },
-              {
-                intent: 'test',
-                pattern: '测试',
-              },
-            ],
-          },
-        },
-      }),
-    renameIntent: () => {},
-  },
-];
+import { DefaultFlowSchema } from './defaultFlowSchema';
+import { DefaultRecognizerSchema } from './defaultRecognizerSchema';
 
 const DefaultFormSchema: FormUISchema = {
   [SDKKinds.AdaptiveDialog]: {
@@ -216,21 +169,22 @@ const DefaultFormSchema: FormUISchema = {
   },
 };
 
-const synthesizeUISchema = (formSchema: FormUISchema, menuSchema: MenuUISchema): UISchema => {
-  const uiSchema: UISchema = mapValues(formSchema, (val) => ({ form: val }));
-  for (const [$kind, menuConfig] of Object.entries(menuSchema)) {
-    if (uiSchema[$kind]) {
-      uiSchema[$kind].menu = menuConfig;
-    } else {
-      uiSchema[$kind] = { menu: menuConfig };
-    }
-  }
-  return uiSchema;
+const synthesizeUISchema = (
+  formSchema: FormUISchema,
+  menuSchema: MenuUISchema,
+  flowSchema: FlowUISchema,
+  recognizerSchema: RecognizerUISchema
+): UISchema => {
+  let uischema: UISchema = {};
+  uischema = mergeWith(uischema, formSchema, (origin, formOption) => ({ ...origin, form: formOption }));
+  uischema = mergeWith(uischema, menuSchema, (origin, menuOption) => ({ ...origin, menu: menuOption }));
+  uischema = mergeWith(uischema, flowSchema, (origin, flowOption) => ({ ...origin, flow: flowOption }));
+  uischema = mergeWith(uischema, recognizerSchema, (origin, opt) => ({ ...origin, recognizer: opt }));
+  return uischema;
 };
 
 const config: PluginConfig = {
-  uiSchema: synthesizeUISchema(DefaultFormSchema, DefaultMenuSchema),
-  recognizers: DefaultRecognizers,
+  uiSchema: synthesizeUISchema(DefaultFormSchema, DefaultMenuSchema, DefaultFlowSchema, DefaultRecognizerSchema),
 };
 
 export default config;
