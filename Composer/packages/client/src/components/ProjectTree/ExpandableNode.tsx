@@ -16,7 +16,6 @@ export const ExpandableNode = ({ children, summary, ref, summaryCSS }: Props) =>
   const [isOpen, setOpen] = useState(true);
 
   function handleClick(ev: MouseEvent) {
-    console.log((ev.target as Element)?.tagName);
     if ((ev.target as Element)?.tagName.toLowerCase() === 'summary') {
       setOpen(!isOpen);
     }
@@ -30,7 +29,7 @@ export const ExpandableNode = ({ children, summary, ref, summaryCSS }: Props) =>
   return (
     <details ref={ref} open={isOpen}>
       {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */}
-      <summary css={summaryCSS} tabIndex={0} onClick={handleClick} onKeyUp={handleKey}>
+      <summary css={summaryCSS} role="button" tabIndex={0} onClick={handleClick} onKeyUp={handleKey}>
         {summary}
       </summary>
       {children}
