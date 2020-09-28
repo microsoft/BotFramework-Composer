@@ -12,13 +12,14 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { JsonEditor } from '@bfc/code-editor';
 import { useRecoilValue } from 'recoil';
 import { PublishTarget } from '@bfc/shared';
+import { Separator } from 'office-ui-fabric-react/lib/Separator';
 
 import { PublishType } from '../../recoilModel/types';
 import { userSettingsState } from '../../recoilModel';
 import { PluginHost } from '../../components/PluginHost/PluginHost';
 import { PluginAPI } from '../../plugins/api';
 
-import { label, customPublishUISurface } from './styles';
+import { label, customPublishUISurface, separator } from './styles';
 
 interface CreatePublishTargetProps {
   closeDialog: () => void;
@@ -155,6 +156,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
         />
         {publishTargetContent}
       </form>
+      <Separator css={separator} />
       <DialogFooter>
         <DefaultButton text={formatMessage('Cancel')} onClick={props.closeDialog} />
         <PrimaryButton disabled={saveDisabled} text={formatMessage('Save')} onClick={submit} />

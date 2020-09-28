@@ -24,6 +24,7 @@ import {
 import { navigateTo } from '../../utils/navigation';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
+import { PublishProfileDialog } from '../../constants';
 
 import { TargetList } from './targetList';
 import { PublishDialog } from './publishDialog';
@@ -278,7 +279,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   useEffect(() => {
     setDialogProps({
-      title: formatMessage('Add a publish profile'),
+      ...PublishProfileDialog.ADD_PROFILE,
       type: DialogType.normal,
       children: (
         <CreatePublishTarget
@@ -294,7 +295,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   useEffect(() => {
     setEditDialogProps({
-      title: formatMessage('Edit a publish profile'),
+      ...PublishProfileDialog.EDIT_PROFILE,
       type: DialogType.normal,
       children: (
         <CreatePublishTarget
@@ -393,7 +394,8 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       <Dialog
         dialogContentProps={dialogProps}
         hidden={addDialogHidden}
-        minWidth={450}
+        maxWidth={'fit-content'}
+        minWidth={'fit-content'}
         modalProps={{ isBlocking: true }}
         onDismiss={() => setAddDialogHidden(true)}
       >
@@ -402,7 +404,8 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       <Dialog
         dialogContentProps={editDialogProps}
         hidden={editDialogHidden}
-        minWidth={450}
+        maxWidth={'fit-content'}
+        minWidth={'fit-content'}
         modalProps={{ isBlocking: true }}
         onDismiss={() => setEditDialogHidden(true)}
       >
