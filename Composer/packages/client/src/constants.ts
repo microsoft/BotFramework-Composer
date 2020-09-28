@@ -175,6 +175,18 @@ export const addSkillDialog = {
   },
 };
 
+export const PublishProfileDialog = {
+  ADD_PROFILE: {
+    title: formatMessage('Add a publish profile'),
+    subText: formatMessage(
+      'Publish profile informs your bot where to use resources from. The resoruces you provision for your bot will live within this profile'
+    ),
+  },
+  EDIT_PROFILE: {
+    title: formatMessage('Edit a publish profile'),
+  },
+};
+
 export const SupportedFileTypes = [
   'accdb',
   'csv',
