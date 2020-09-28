@@ -48,7 +48,6 @@ import {
   showAddSkillDialogModalState,
   localeState,
   botProjectSpaceSelector,
-  projectLoadSelector,
 } from '../../recoilModel';
 import ImportQnAFromUrlModal from '../knowledge-base/ImportQnAFromUrlModal';
 import { triggerNotSupported } from '../../utils/dialogValidator';
@@ -111,7 +110,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const { location, dialogId, projectId = '' } = props;
   const userSettings = useRecoilValue(userSettingsState);
   const botProjectsSpace = useRecoilValue(botProjectSpaceSelector);
-  const projectLoader = useRecoilValue(projectLoadSelector);
   const schemas = useRecoilValue(schemasState(projectId));
   const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
   const displaySkillManifest = useRecoilValue(displaySkillManifestState(projectId));
@@ -142,6 +140,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     onboardingAddCoachMarkRef,
     importQnAFromUrls,
     addSkill,
+    addNewSkillToBotProject,
+    addExistingSkillToBotProject,
+    addRemoteSkillToBotProject,
   } = useRecoilValue(dispatcherState);
 
   const params = new URLSearchParams(location?.search);
@@ -157,12 +158,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const shellForPropertyEditor = useShell('PropertyEditor', projectId);
   const triggerApi = useTriggerApi(shell.api);
   const { createTrigger } = shell.api;
-  const [rootBotProjectId, setRootBotProjectId] = useState('');
-
-  useEffect(() => {
-    const rootBotId = botProjectsSpace[0].projectId;
-    setRootBotProjectId(rootBotId);
-  }, [botProjectsSpace]);
 
   useEffect(() => {
     const currentDialog = dialogs.find(({ id }) => id === dialogId);
@@ -327,8 +322,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
               displayName: currentDialog?.displayName ?? '',
             }),
             onClick: () => {
-              projectLoader.addRemoteSkillToBotProject(
-                rootBotProjectId,
+              addRemoteSkillToBotProject(
                 'https://onenote-dev.azurewebsites.net/manifests/OneNoteSync-2-1-preview-1-manifest.json',
                 'OneNoteSyncer',
                 ''
@@ -342,10 +336,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
               displayName: currentDialog?.displayName ?? '',
             }),
             onClick: () => {
-              projectLoader.addExistingSkillToBotProject(
-                rootBotProjectId,
-                '/Users/srravich/Desktop/Archive/GoogleKeepSync'
-              );
+              addExistingSkillToBotProject('/Users/srravich/Desktop/Archive/GoogleKeepSync');
             },
           },
           {
@@ -355,12 +346,12 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
               displayName: currentDialog?.displayName ?? '',
             }),
             onClick: () => {
-              projectLoader.addNewSkillToBotProject(rootBotProjectId, {
-                name: 'testerBot',
+              addNewSkillToBotProject({
+                name: 'newer-bot',
                 description: '',
                 schemaUrl: '',
                 location: '/Users/srravich/Desktop/samples',
-                templateId: 'Echo-bot',
+                templateId: 'InterruptionSample',
                 locale: appLocale,
                 qnaKbUrls: [],
               });

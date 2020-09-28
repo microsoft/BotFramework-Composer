@@ -20,6 +20,7 @@ import {
   botOpeningState,
   projectMetaDataState,
 } from '../atoms';
+import { dispatcherState } from '../DispatcherWrapper';
 
 import { recentProjectsState, templateIdState, announcementState, boilerplateVersionState } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
@@ -28,7 +29,7 @@ import {
   handleProjectFailure,
   navigateToBot,
   openLocalSkill,
-  initBotState,
+  saveProject,
   removeRecentProject,
   createNewBotFromTemplate,
   resetBotStates,
@@ -51,9 +52,13 @@ export const projectDispatcher = () => {
   );
 
   const addExistingSkillToBotProject = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (path: string, storageId, pushIndex?: number): Promise<string> => {
-      const { set } = callbackHelpers;
-
+    (callbackHelpers: CallbackInterface) => async (
+      path: string,
+      storageId = 'default',
+      pushIndex?: number
+    ): Promise<string> => {
+      const { set, snapshot } = callbackHelpers;
+      const dispatcher = await snapshot.getPromise(dispatcherState);
       set(botOpeningState, true);
       const { projectId } = await openLocalSkill(callbackHelpers, path, storageId);
       if (isNumber(pushIndex)) {
@@ -65,35 +70,44 @@ export const projectDispatcher = () => {
       } else {
         set(botProjectIdsState, (current) => [...current, projectId]);
       }
+      await dispatcher.addSkillToBotProjectFile(projectId);
+      set(botOpeningState, false);
       return projectId;
     }
   );
 
   const addRemoteSkillToBotProject = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (manifestUrl: string, name: string, endpointName: string) => {
-      const { set } = callbackHelpers;
-      try {
-        set(botOpeningState, true);
-        const { projectId } = await openRemoteSkill(callbackHelpers, manifestUrl, name);
-        return projectId;
-      } finally {
-        set(botOpeningState, false);
+    (callbackHelpers: CallbackInterface) => async (
+      manifestUrl: string,
+      name: string,
+      endpointName: string,
+      pushIndex?: number
+    ) => {
+      const { set, snapshot } = callbackHelpers;
+      const dispatcher = await snapshot.getPromise(dispatcherState);
+
+      set(botOpeningState, true);
+      const { projectId } = await openRemoteSkill(callbackHelpers, manifestUrl, name);
+      if (isNumber(pushIndex)) {
+        set(botProjectIdsState, (current: string[]) => {
+          const mutated = [...current];
+          mutated.splice(pushIndex, 0, projectId);
+          return mutated;
+        });
+      } else {
+        set(botProjectIdsState, (current) => [...current, projectId]);
       }
+      await dispatcher.addSkillToBotProjectFile(projectId);
+      set(botOpeningState, false);
     }
   );
 
   const addNewSkillToBotProject = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (
-      templateId: string,
-      name: string,
-      description: string,
-      location: string,
-      schemaUrl?: string,
-      locale?: string,
-      qnaKbUrls?: string[]
-    ) => {
-      const { set } = callbackHelpers;
+    (callbackHelpers: CallbackInterface) => async (newProjectData: any) => {
+      const { set, snapshot } = callbackHelpers;
+      const dispatcher = await snapshot.getPromise(dispatcherState);
       try {
+        const { templateId, name, description, location, schemaUrl, locale, qnaKbUrls } = newProjectData;
         set(botOpeningState, true);
         const { projectId, mainDialog } = await createNewBotFromTemplate(
           callbackHelpers,
@@ -109,6 +123,7 @@ export const projectDispatcher = () => {
           isRootBot: false,
         });
         set(botProjectIdsState, (current) => [...current, projectId]);
+        await dispatcher.addSkillToBotProjectFile(projectId);
         navigateToBot(projectId, mainDialog, qnaKbUrls, templateId);
         return projectId;
       } catch (ex) {
@@ -127,9 +142,12 @@ export const projectDispatcher = () => {
         await flushExistingTasks(callbackHelpers);
         set(botOpeningState, true);
         const { projectId, mainDialog } = await openRootBotAndSkillsByPath(callbackHelpers, path, storageId);
+        set(projectMetaDataState(projectId), {
+          isRootBot: true,
+          isRemote: false,
+        });
         projectIdCache.set(projectId);
         navigateToBot(projectId, mainDialog);
-        set(botOpeningState, false);
       } catch (ex) {
         set(botProjectIdsState, []);
         projectIdCache.clear();
@@ -147,6 +165,10 @@ export const projectDispatcher = () => {
       await flushExistingTasks(callbackHelpers);
       set(botOpeningState, true);
       await openRootBotAndSkillsByProjectId(callbackHelpers, projectId);
+      set(projectMetaDataState(projectId), {
+        isRootBot: true,
+        isRemote: false,
+      });
     } catch (ex) {
       set(botProjectIdsState, []);
       projectIdCache.clear();
@@ -157,47 +179,41 @@ export const projectDispatcher = () => {
     }
   });
 
-  const createProject = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (
-      templateId: string,
-      name: string,
-      description: string,
-      location: string,
-      schemaUrl?: string,
-      locale?: string,
-      qnaKbUrls?: string[]
-    ) => {
-      const { set } = callbackHelpers;
-      try {
-        await flushExistingTasks(callbackHelpers);
-        set(botOpeningState, true);
-        const { projectId, mainDialog } = await createNewBotFromTemplate(
-          callbackHelpers,
-          templateId,
-          name,
-          description,
-          location,
-          schemaUrl,
-          locale
-        );
-        projectIdCache.set(projectId);
-        set(botProjectIdsState, [projectId]);
-        set(currentProjectIdState, projectId);
-        navigateToBot(projectId, mainDialog, qnaKbUrls, templateId);
-        return projectId;
-      } catch (ex) {
-        set(botProjectIdsState, []);
-        projectIdCache.clear();
-        removeRecentProject(callbackHelpers, location);
-        handleProjectFailure(callbackHelpers, ex);
-        navigateTo('/home');
-      } finally {
-        set(botOpeningState, false);
-      }
+  const createNewBot = useRecoilCallback((callbackHelpers: CallbackInterface) => async (newProjectData: any) => {
+    const { set } = callbackHelpers;
+    try {
+      await flushExistingTasks(callbackHelpers);
+      set(botOpeningState, true);
+      const { templateId, name, description, location, schemaUrl, locale, qnaKbUrls } = newProjectData;
+      const { projectId, mainDialog } = await createNewBotFromTemplate(
+        callbackHelpers,
+        templateId,
+        name,
+        description,
+        location,
+        schemaUrl,
+        locale
+      );
+      projectIdCache.set(projectId);
+      set(projectMetaDataState(projectId), {
+        isRootBot: true,
+        isRemote: false,
+      });
+      set(botProjectIdsState, [projectId]);
+      set(currentProjectIdState, projectId);
+      navigateToBot(projectId, mainDialog, qnaKbUrls, templateId);
+      return projectId;
+    } catch (ex) {
+      set(botProjectIdsState, []);
+      projectIdCache.clear();
+      handleProjectFailure(callbackHelpers, ex);
+      navigateTo('/home');
+    } finally {
+      set(botOpeningState, false);
     }
-  );
+  });
 
-  const deleteBotProject = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
+  const deleteBot = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
     try {
       await httpClient.delete(`/projects/${projectId}`);
       luFileStatusStorage.removeAllStatuses(projectId);
@@ -211,17 +227,27 @@ export const projectDispatcher = () => {
   });
 
   const saveProjectAs = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (projectId, name, description, location) => {
+    (callbackHelpers: CallbackInterface) => async (oldProjectId, name, description, location) => {
       try {
+        const { set } = callbackHelpers;
+        set(botOpeningState, true);
         await flushExistingTasks(callbackHelpers);
-        const response = await httpClient.post(`/projects/${projectId}/project/saveAs`, {
-          storageId: 'default',
+        const { projectId, mainDialog } = await saveProject(callbackHelpers, {
+          oldProjectId,
           name,
           description,
           location,
         });
-        await initBotState(callbackHelpers, response.data, true);
-        return response.data.id;
+        projectIdCache.set(projectId);
+        set(projectMetaDataState(projectId), {
+          isRootBot: true,
+          isRemote: false,
+        });
+        set(botProjectIdsState, [projectId]);
+        set(currentProjectIdState, projectId);
+        navigateToBot(projectId, mainDialog);
+        set(botOpeningState, false);
+        return projectId;
       } catch (ex) {
         handleProjectFailure(callbackHelpers, ex);
         logMessage(callbackHelpers, ex.message);
@@ -273,8 +299,8 @@ export const projectDispatcher = () => {
 
   return {
     openProject,
-    createProject,
-    deleteBotProject,
+    createNewBot,
+    deleteBot,
     saveProjectAs,
     fetchProjectById,
     fetchRecentProjects,
