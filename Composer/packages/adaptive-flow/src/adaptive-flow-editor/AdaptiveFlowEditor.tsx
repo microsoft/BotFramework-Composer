@@ -19,7 +19,7 @@ import { NodeRendererContext, NodeRendererContextValue } from './contexts/NodeRe
 import { SelfHostContext } from './contexts/SelfHostContext';
 import { getCustomSchema } from './utils/getCustomSchema';
 import { SelectionContext } from './contexts/SelectionContext';
-import { enableKeyboardCommandAttributes, handleMouseWheel, KeyboardCommandHandler } from './components/KeyboardZone';
+import { enableKeyboardCommandAttributes, KeyboardCommandHandler } from './components/KeyboardZone';
 import { mapKeyboardCommandToEditorEvent } from './utils/mapKeyboardCommandToEditorEvent';
 import { useSelectionEffect } from './hooks/useSelectionEffect';
 import { useEditorEventApi } from './hooks/useEditorEventApi';
@@ -30,6 +30,7 @@ import {
   VisualEditorElementWrapper,
 } from './renderers';
 import { useFlowUIOptions } from './hooks/useFlowUIOptions';
+import { ZoomZone } from './components/ZoomZone';
 
 formatMessage.setup({
   missingTranslation: 'ignore',
@@ -74,7 +75,10 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
     data: inputData,
     hosted,
     schemas,
+    zoomRateInfo,
   } = shellData;
+
+  const { updateZoomRate } = shellApi;
 
   const dataCache = useRef({});
 
@@ -117,16 +121,9 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
   }, {} as FlowSchema);
 
   const divRef = useRef<HTMLDivElement>(null);
-  const containerId = 'container-div';
-  const onWheel = (event: WheelEvent) => {
-    handleMouseWheel(event, containerId);
-  };
-
   // send focus to the keyboard area when navigating to a new trigger
   useEffect(() => {
     divRef.current?.focus();
-    divRef.current?.addEventListener('wheel', onWheel, { passive: false });
-    return () => divRef.current?.removeEventListener('wheel', onWheel);
   }, [focusedEvent]);
 
   const { selection, ...selectionContext } = useSelectionEffect({ data, nodeContext }, shellApi);
@@ -137,6 +134,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
     editorEvent && handleEditorEvent(editorEvent.type, editorEvent.payload);
   };
 
+  console.log('zoom' + zoomRateInfo);
   return (
     <CacheProvider value={emotionCache}>
       <NodeRendererContext.Provider value={nodeContext}>
@@ -144,49 +142,50 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
           <div
             ref={divRef}
             css={styles}
-            id={containerId}
             tabIndex={0}
             onBlur={onBlur}
             onFocus={onFocus}
             {...enableKeyboardCommandAttributes(handleCommand)}
             data-testid="visualdesigner-container"
           >
-            <SelectionContext.Provider value={selectionContext}>
-              <MarqueeSelection css={{ width: '100%', height: '100%' }} selection={selection}>
-                <div
-                  className="flow-editor-container"
-                  css={{
-                    width: '100%',
-                    height: '100%',
-                    padding: '48px 20px',
-                    boxSizing: 'border-box',
-                  }}
-                  data-testid="flow-editor-container"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleEditorEvent(NodeEventTypes.Focus, { id: '' });
-                  }}
-                >
-                  <AdaptiveDialog
-                    activeTrigger={focusedEvent}
-                    dialogData={data}
-                    dialogId={dialogId}
-                    renderers={{
-                      EdgeMenu: VisualEditorEdgeMenu,
-                      NodeMenu: VisualEditorNodeMenu,
-                      NodeWrapper: VisualEditorNodeWrapper,
-                      ElementWrapper: VisualEditorElementWrapper,
+            <ZoomZone updateZoomRate={updateZoomRate} zoomRateInfo={zoomRateInfo}>
+              <SelectionContext.Provider value={selectionContext}>
+                <MarqueeSelection css={{ width: '100%', height: '100%' }} selection={selection}>
+                  <div
+                    className="flow-editor-container"
+                    css={{
+                      width: '100%',
+                      height: '100%',
+                      padding: '48px 20px',
+                      boxSizing: 'border-box',
                     }}
-                    schema={{ ...schemaFromPlugins, ...customFlowSchema }}
-                    widgets={widgetsFromPlugins}
-                    onEvent={(eventName, eventData) => {
-                      divRef.current?.focus({ preventScroll: true });
-                      handleEditorEvent(eventName, eventData);
+                    data-testid="flow-editor-container"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleEditorEvent(NodeEventTypes.Focus, { id: '' });
                     }}
-                  />
-                </div>
-              </MarqueeSelection>
-            </SelectionContext.Provider>
+                  >
+                    <AdaptiveDialog
+                      activeTrigger={focusedEvent}
+                      dialogData={data}
+                      dialogId={dialogId}
+                      renderers={{
+                        EdgeMenu: VisualEditorEdgeMenu,
+                        NodeMenu: VisualEditorNodeMenu,
+                        NodeWrapper: VisualEditorNodeWrapper,
+                        ElementWrapper: VisualEditorElementWrapper,
+                      }}
+                      schema={{ ...schemaFromPlugins, ...customFlowSchema }}
+                      widgets={widgetsFromPlugins}
+                      onEvent={(eventName, eventData) => {
+                        divRef.current?.focus({ preventScroll: true });
+                        handleEditorEvent(eventName, eventData);
+                      }}
+                    />
+                  </div>
+                </MarqueeSelection>
+              </SelectionContext.Provider>
+            </ZoomZone>
           </div>
         </SelfHostContext.Provider>
       </NodeRendererContext.Provider>

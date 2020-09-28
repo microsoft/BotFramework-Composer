@@ -11,6 +11,13 @@ type AllPartial<T> = {
   [P in keyof T]?: T[P] extends (infer U)[] ? AllPartial<U>[] : T[P] extends object ? AllPartial<T[P]> : T[P];
 };
 
+export type ZoomInfo = {
+  rateList: number[];
+  maxRate: number;
+  minRate: number;
+  currentRate: number;
+};
+
 export interface EditorSchema {
   content?: {
     fieldTemplateOverrides: any;
@@ -61,6 +68,7 @@ export interface ShellData {
   skillsSettings: Record<string, SkillSetting>;
   // TODO: remove
   schemas: BotSchemas;
+  zoomRateInfo: ZoomInfo;
 }
 
 export interface ShellApi {
@@ -102,6 +110,7 @@ export interface ShellApi {
   updateDialogSchema: (_: DialogSchemaFile) => Promise<void>;
   createTrigger: (id: string, formData, url?: string) => void;
   updateSkillSetting: (skillId: string, skillsData: SkillSetting) => Promise<void>;
+  updateZoomRate: (currentRate: number) => void;
 }
 
 export interface Shell {
