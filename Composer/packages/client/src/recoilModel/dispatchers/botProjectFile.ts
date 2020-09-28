@@ -4,9 +4,9 @@
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 import { produce } from 'immer';
-import { BotProjectSpace, BotProjectSpaceSkill } from '@bfc/shared';
+import { BotProjectSpaceSkill } from '@bfc/shared';
 
-import { botNameState, botProjectFileState, locationState, skillManifestsState } from '../atoms';
+import { botNameState, botProjectFileState, locationState, projectMetaDataState } from '../atoms';
 import { isBotProjectSpaceSelector, rootBotProjectIdSelector } from '../selectors';
 import { convertPathToFileProtocol, trimFileProtocol } from '../../utils/fileUtil';
 
@@ -60,24 +60,33 @@ export const botProjectFileDispatcher = () => {
     }
   );
 
-  // const removeLocalSkillFromBotProjectFile = useRecoilCallback(
-  //   ({ set, snapshot }: CallbackInterface) => async (rootBotProjectId: string, skillId: string) => {
-  //     const skillLocation = await snapshot.getPromise(locationState(skillId));
-  //     snapshot.getPromise(skillManifestsState(skillId));
-
-  //     set(botProjectFileState(rootBotProjectId), (current: BotProjectSpace) => {
-  //       const result = produce(current, (draftState: BotProjectSpace) => {
-  //         draftState.skills = draftState.skills.filter(({ workspace }) => {
-  //           if (workspace) {
-  //             return trimFileProtocol(workspace) !== skillLocation;
-  //           }
-  //           return true;
-  //         });
-  //       });
-  //       return result;
-  //     });
-  //   }
-  // );
+  const removeSkillFromBotProjectFile = useRecoilCallback(
+    ({ set, snapshot }: CallbackInterface) => async (projectId: string) => {
+      const isBotProjectSpace = await snapshot.getPromise(isBotProjectSpaceSelector);
+      const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
+      if (!isBotProjectSpace || !rootBotProjectId) {
+        return;
+      }
+      const location = await snapshot.getPromise(locationState(projectId));
+      const { isRemote } = await snapshot.getPromise(projectMetaDataState(projectId));
+      set(botProjectFileState(rootBotProjectId), (current) => {
+        const result = produce(current, (draftState) => {
+          draftState.content.skills = draftState.content.skills.filter((skill: BotProjectSpaceSkill) => {
+            if (isRemote) {
+              return skill.manifest !== location;
+            } else {
+              if (skill.workspace) {
+                const trimmed = trimFileProtocol(skill.workspace);
+                return trimmed !== location;
+              }
+            }
+            return true;
+          });
+        });
+        return result;
+      });
+    }
+  );
 
   // const removeRemoteSkillFromBotProjectFile = useRecoilCallback(
   //   ({ set, snapshot }: CallbackInterface) => async (rootBotProjectId: string, projectId: string) => {
@@ -112,9 +121,7 @@ export const botProjectFileDispatcher = () => {
 
   return {
     addLocalSkillToBotProjectFile,
-    // removeLocalSkillFromBotProjectFile,
-    // removeRemoteSkillFromBotProjectFile,
-    // renameRootBotInBotProjectFile,
+    removeSkillFromBotProjectFile,
     addRemoteSkillToBotProjectFile,
   };
 };

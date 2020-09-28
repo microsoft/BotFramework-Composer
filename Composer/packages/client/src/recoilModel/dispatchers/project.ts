@@ -5,6 +5,7 @@
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 import formatMessage from 'format-message';
 import isNumber from 'lodash/isNumber';
+import findIndex from 'lodash/findIndex';
 
 import httpClient from '../../utils/httpUtil';
 import { BotStatus } from '../../constants';
@@ -35,26 +36,35 @@ import {
 
 export const projectDispatcher = () => {
   const removeSkillFromBotProject = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (projectId: string) => {
+    (callbackHelpers: CallbackInterface) => async (projectIdToRemove: string) => {
       try {
-        const { set } = callbackHelpers;
-        set(botProjectIdsState, (currentProjects) => currentProjects.filter((id) => id !== projectId));
-        resetBotStates(callbackHelpers, projectId);
+        const { set, snapshot } = callbackHelpers;
+        const dispatcher = await snapshot.getPromise(dispatcherState);
+        await dispatcher.removeSkillFromBotProjectFile(projectIdToRemove);
+
+        set(botProjectIdsState, (currentProjects) => {
+          const filtered = currentProjects.filter((id) => id !== projectIdToRemove);
+          return filtered;
+        });
+        resetBotStates(callbackHelpers, projectIdToRemove);
       } catch (ex) {
         setError(callbackHelpers, ex);
       }
     }
   );
 
-  const addExistingSkillToBotProject = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (
-      path: string,
-      storageId = 'default',
-      pushIndex?: number
-    ): Promise<void> => {
-      const { set, snapshot } = callbackHelpers;
+  const replaceSkillInBotProject = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async (projectIdToRemove: string, path: string, storageId = 'default') => {
       try {
+        const { set, snapshot } = callbackHelpers;
         const dispatcher = await snapshot.getPromise(dispatcherState);
+        const projectIds = await snapshot.getPromise(botProjectIdsState);
+        const indexToReplace = findIndex(projectIds, (id) => id === projectIdToRemove);
+        if (indexToReplace === -1) {
+          return;
+        }
+        await dispatcher.removeSkillFromBotProject(projectIdToRemove);
+
         const botExists = await checkIfBotExistsInBotProjectFile(callbackHelpers, path);
         if (botExists) {
           throw {
@@ -67,14 +77,37 @@ export const projectDispatcher = () => {
           return;
         }
 
-        if (isNumber(pushIndex)) {
-          set(botProjectIdsState, (current: string[]) => {
-            const mutated = [...current].splice(pushIndex, 0, projectId);
-            return mutated;
-          });
-        } else {
-          set(botProjectIdsState, (current) => [...current, projectId]);
+        set(botProjectIdsState, (current: string[]) => {
+          const mutated = [...current].splice(indexToReplace, 0, projectId);
+          return mutated;
+        });
+        await dispatcher.addLocalSkillToBotProjectFile(projectId);
+        navigateToBot(callbackHelpers, projectId, mainDialog);
+      } catch (ex) {
+        setError(callbackHelpers, ex);
+      }
+    }
+  );
+
+  const addExistingSkillToBotProject = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async (path: string, storageId = 'default'): Promise<void> => {
+      const { set, snapshot } = callbackHelpers;
+      try {
+        const dispatcher = await snapshot.getPromise(dispatcherState);
+
+        const botExists = await checkIfBotExistsInBotProjectFile(callbackHelpers, path);
+        if (botExists) {
+          throw {
+            message: formatMessage('This operation cannot be completed. The skill is already part of the Bot Project'),
+          };
         }
+        set(botOpeningState, true);
+        const { projectId, mainDialog } = await openLocalSkill(callbackHelpers, path, storageId);
+        if (!mainDialog) {
+          return;
+        }
+
+        set(botProjectIdsState, (current) => [...current, projectId]);
         await dispatcher.addLocalSkillToBotProjectFile(projectId);
         navigateToBot(callbackHelpers, projectId, mainDialog);
       } catch (ex) {
@@ -336,5 +369,6 @@ export const projectDispatcher = () => {
     addNewSkillToBotProject,
     addExistingSkillToBotProject,
     addRemoteSkillToBotProject,
+    replaceSkillInBotProject,
   };
 };

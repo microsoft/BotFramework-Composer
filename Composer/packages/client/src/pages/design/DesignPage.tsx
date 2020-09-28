@@ -143,6 +143,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     addNewSkillToBotProject,
     addExistingSkillToBotProject,
     addRemoteSkillToBotProject,
+    removeSkillFromBotProject,
   } = useRecoilValue(dispatcherState);
 
   const params = new URLSearchParams(location?.search);
@@ -359,6 +360,17 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                 locale: appLocale,
                 qnaKbUrls: [],
               });
+            },
+          },
+          {
+            'data-testid': 'removeSkillAtIndex',
+            key: 'removeSkillAtIndex',
+            text: formatMessage(`Remove a skill`, {
+              displayName: currentDialog?.displayName ?? '',
+            }),
+            onClick: () => {
+              const matchedProject: any = botProjectsSpace[botProjectsSpace.length - 1];
+              removeSkillFromBotProject(matchedProject.projectId);
             },
           },
         ],

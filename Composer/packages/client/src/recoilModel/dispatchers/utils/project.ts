@@ -66,15 +66,12 @@ import { undoHistoryState } from '../../undo/history';
 import { rootBotProjectIdSelector } from '../../selectors';
 import { trimFileProtocol } from '../../../utils/fileUtil';
 
-export const resetBotStates = async ({ snapshot, gotoSnapshot }: CallbackInterface, projectId: string) => {
+export const resetBotStates = async ({ reset }: CallbackInterface, projectId: string) => {
   const botStates = Object.keys(botstates);
-  const newSnapshot = snapshot.map(({ reset }) => {
-    botStates.forEach((state) => {
-      const currentRecoilAtom: any = botstates[state];
-      reset(currentRecoilAtom(projectId));
-    });
+  botStates.forEach((state) => {
+    const currentRecoilAtom: any = botstates[state];
+    reset(currentRecoilAtom(projectId));
   });
-  gotoSnapshot(newSnapshot);
 };
 
 export const setErrorOnBotProject = async (
@@ -95,15 +92,13 @@ export const setErrorOnBotProject = async (
 export const flushExistingTasks = async (callbackHelpers) => {
   const { snapshot, reset } = callbackHelpers;
   const projectIds = await snapshot.getPromise(botProjectIdsState);
-  const recoilTasks: any[] = [];
   for (const projectId of projectIds) {
-    const resetStates = await resetBotStates(callbackHelpers, projectId);
-    recoilTasks.push(resetStates);
+    resetBotStates(callbackHelpers, projectId);
   }
   reset(botProjectIdsState);
   const workers = [lgWorker, luWorker, qnaWorker];
 
-  return Promise.all([workers.map((w) => w.flush()), ...recoilTasks]);
+  return Promise.all([workers.map((w) => w.flush())]);
 };
 
 // merge sensitive values in localStorage
@@ -198,8 +193,8 @@ export const fetchProjectDataById = async (projectId): Promise<{ botFiles: any; 
 
 export const parseFileProtocolPaths = (rootPath: string, relativePath): string => {
   try {
-    const rootPathWithoutProtocol = rootPath.replace('file://', '');
-    let skillPath = relativePath.replace('file://', '');
+    const rootPathWithoutProtocol = trimFileProtocol(rootPath);
+    let skillPath = trimFileProtocol(relativePath);
     if (skillPath) {
       skillPath = path.resolve(rootPathWithoutProtocol, skillPath);
     }
