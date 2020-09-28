@@ -160,6 +160,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const { createTrigger } = shell.api;
 
   useEffect(() => {
+    console.log(botProjectsSpace);
+  }, [botProjectsSpace]);
+
+  useEffect(() => {
     const currentDialog = dialogs.find(({ id }) => id === dialogId);
     if (currentDialog) {
       setCurrentDialog(currentDialog);
@@ -347,7 +351,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             }),
             onClick: () => {
               addNewSkillToBotProject({
-                name: 'newer-bot',
+                name: 'newers-bot',
                 description: '',
                 schemaUrl: '',
                 location: '/Users/srravich/Desktop/samples',
