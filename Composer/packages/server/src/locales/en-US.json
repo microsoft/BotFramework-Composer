@@ -128,6 +128,9 @@
   "add_language_75dee49e": {
     "message": "Add language"
   },
+  "add_local_skill_from_path_b6114c5e": {
+    "message": "Add local skill from path"
+  },
   "add_multiple_comma_separated_synonyms_2639283f": {
     "message": "Add multiple comma-separated synonyms"
   },
@@ -154,6 +157,9 @@
   },
   "add_qna_pair_bcb1624": {
     "message": "Add QnA Pair"
+  },
+  "add_remote_skill_262aa6": {
+    "message": "Add remote skill"
   },
   "add_some_example_phrases_to_trigger_this_intent_pl_568eaf51": {
     "message": "> add some example phrases to trigger this intent:\n> - please tell me the weather\n> - what is the weather like in '{'city=Seattle'}'\n\n> entity definitions:\n> @ ml city"
@@ -571,6 +577,9 @@
   },
   "create_new_knowledge_base_e14d07a5": {
     "message": "Create New Knowledge Base"
+  },
+  "create_new_skill_e9943c5": {
+    "message": "Create new Skill"
   },
   "create_or_edit_skill_manifest_8ad98da9": {
     "message": "Create or edit skill manifest"
@@ -1772,6 +1781,9 @@
   "reloading_49d2f661": {
     "message": "Reloading"
   },
+  "remove_a_skill_fff52fd0": {
+    "message": "Remove a skill"
+  },
   "remove_f47dc62a": {
     "message": "Remove"
   },
@@ -2075,6 +2087,9 @@
   "the_return_type_does_not_match_2ae72548": {
     "message": "the return type does not match"
   },
+  "the_root_bot_is_not_a_bot_project_d1495cf6": {
+    "message": "The root bot is not a bot project"
+  },
   "the_welcome_message_is_triggered_by_the_i_conversa_a3ff58f8": {
     "message": "The welcome message is triggered by the <i>ConversationUpdate</i> event. To add a new <i>ConversationUpdate</i> trigger:"
   },
@@ -2113,6 +2128,9 @@
   },
   "this_language_will_be_copied_and_used_as_the_basis_573515e4": {
     "message": "This language will be copied and used as the basis (and fallback language) for the translation."
+  },
+  "this_operation_cannot_be_completed_the_skill_is_al_4886d311": {
+    "message": "This operation cannot be completed. The skill is already part of the Bot Project"
   },
   "this_trigger_type_is_not_supported_by_the_regex_re_2c3b7c46": {
     "message": "This trigger type is not supported by the RegEx recognizer and will not be fired."
