@@ -11,6 +11,7 @@ import { Shimmer, ShimmerElementType } from 'office-ui-fabric-react/lib/Shimmer'
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 
+import { NotificationCardTypes } from '../recoilModel/types';
 import Timer from '../utils/timer';
 
 // -------------------- Styles -------------------- //
@@ -116,15 +117,13 @@ const getShimmerStyles = {
 };
 // -------------------- NotificationCard -------------------- //
 
-export type NotificationType = 'info' | 'warning' | 'error' | 'pending' | 'success';
-
 export type Link = {
   label: string;
   onClick: () => void;
 };
 
 export type CardProps = {
-  type: NotificationType;
+  type: NotificationCardTypes;
   title: string;
   description?: string;
   retentionTime?: number;

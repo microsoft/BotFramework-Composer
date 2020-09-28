@@ -14,7 +14,7 @@ import {
   DialogSetting,
 } from '@bfc/shared';
 
-import { BotLoadError, DesignPageLocation, QnAAllUpViewStatus } from '../../recoilModel/types';
+import { BotLoadError, DesignPageLocation } from '../../recoilModel/types';
 import FilePersistence from '../persistence/FilePersistence';
 
 import { PublishType, BreadcrumbItem } from './../../recoilModel/types';
@@ -232,11 +232,6 @@ export const designPageLocationState = atomFamily<DesignPageLocation, string>({
     focused: '',
     selected: '',
   },
-});
-
-export const qnaAllUpViewStatusState = atomFamily<any, string>({
-  key: getFullyQualifiedKey('qnaAllUpViewStatusState'),
-  default: QnAAllUpViewStatus.Success,
 });
 
 export const showCreateQnAFromUrlDialogState = atomFamily<boolean, string>({

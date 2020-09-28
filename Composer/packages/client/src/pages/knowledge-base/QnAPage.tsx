@@ -15,9 +15,8 @@ import { navigateTo } from '../../utils/navigation';
 import { TestController } from '../../components/TestController/TestController';
 import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
-import { dialogsState, qnaAllUpViewStatusState, qnaFilesState } from '../../recoilModel/atoms/botState';
+import { dialogsState, qnaFilesState } from '../../recoilModel/atoms/botState';
 import { dispatcherState } from '../../recoilModel';
-import { QnAAllUpViewStatus } from '../../recoilModel/types';
 import { CreateQnAModal } from '../../components/QnA';
 
 import TableView from './table-view';
@@ -37,7 +36,6 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
   //To do: support other languages
   const locale = 'en-us';
   //const locale = useRecoilValue(localeState);
-  const qnaAllUpViewStatus = useRecoilValue(qnaAllUpViewStatusState(projectId));
   const [createOnDialogId, setCreateOnDialogId] = useState('');
 
   const path = props.location?.pathname ?? '';
@@ -143,13 +141,8 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
       <Suspense fallback={<LoadingSpinner />}>
         <Router component={Fragment} primary={false}>
           <CodeEditor dialogId={dialogId} path="/edit" projectId={projectId} />
-          {qnaAllUpViewStatus !== QnAAllUpViewStatus.Loading && (
-            <TableView dialogId={dialogId} path="/" projectId={projectId} />
-          )}
+          <TableView dialogId={dialogId} path="/" projectId={projectId} />
         </Router>
-        {qnaAllUpViewStatus === QnAAllUpViewStatus.Loading && (
-          <LoadingSpinner message={'Extracting QnA pairs. This could take a moment.'} />
-        )}
         <CreateQnAModal
           dialogId={createOnDialogId || dialogId}
           projectId={projectId}

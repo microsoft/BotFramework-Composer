@@ -8,7 +8,6 @@ import { qnaUtil } from '@bfc/indexers';
 import qnaWorker from '../parsers/qnaWorker';
 import {
   qnaFilesState,
-  qnaAllUpViewStatusState,
   localeState,
   settingsState,
   showCreateQnAFromScratchDialogState,
@@ -16,7 +15,6 @@ import {
   onCreateQnAFromScratchDialogCompleteState,
   onCreateQnAFromUrlDialogCompleteState,
 } from '../atoms/botState';
-import { QnAAllUpViewStatus } from '../types';
 import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
 import { getBaseName } from '../../utils/fileUtil';
 import { navigateTo } from '../../utils/navigation';
@@ -337,9 +335,8 @@ export const qnaDispatcher = () => {
       multiTurn: boolean;
       projectId: string;
     }) => {
-      const { set } = callbackHelpers;
       await dismissCreateQnAModal({ projectId });
-      const notification = createNotifiction(getQnaPendingNotification(urls));
+      const notification = createNotifiction(getQnaPendingNotification(url));
       addNotificationInternal(callbackHelpers, notification);
 
       let response;
@@ -347,7 +344,7 @@ export const qnaDispatcher = () => {
         response = await httpClient.get(`/utilities/qna/parse`, {
           params: { url: encodeURIComponent(url), multiTurn },
         });
-        const content = qnaFile ? qnaFile.content + '\n' + response.data : response.data;
+        const content = response.data;
 
         await updateQnAFileState(callbackHelpers, { id, content, projectId });
         const notification = createNotifiction(
@@ -362,6 +359,8 @@ export const qnaDispatcher = () => {
           callbackHelpers,
           createNotifiction(getQnaFailedNotification(err.response?.data?.message))
         );
+        createQnAFromUrlDialogCancel({ projectId });
+        return;
       } finally {
         deleteNotificationInternal(callbackHelpers, notification.id);
       }
@@ -379,7 +378,6 @@ ${response.data}
       });
 
       await createQnAFromUrlDialogSuccess({ projectId });
-      set(qnaAllUpViewStatusState(projectId), QnAAllUpViewStatus.Success);
     }
   );
 
