@@ -122,13 +122,6 @@ async function removeProject(req: Request, res: Response) {
 }
 
 async function openProject(req: Request, res: Response) {
-  if (!req.body.storageId || !req.body.path) {
-    res.status(400).json({
-      message: 'parameters not provided, require stoarge id and path',
-    });
-    return;
-  }
-
   const user = await ExtensionContext.getUserFromRequest(req);
 
   const location: LocationRef = {
@@ -207,6 +200,18 @@ async function getRecentProjects(req: Request, res: Response) {
   return res.status(200).json(projects);
 }
 
+async function generateProjectId(req: Request, res: Response) {
+  try {
+    const location = req.query.location;
+    const projectId = await BotProjectService.generateProjectId(location);
+    res.status(200).json(projectId);
+  } catch (ex) {
+    res.status(404).json({
+      message: 'Cannot generate project id',
+    });
+  }
+}
+
 async function updateFile(req: Request, res: Response) {
   const projectId = req.params.projectId;
   const user = await ExtensionContext.getUserFromRequest(req);
@@ -253,24 +258,8 @@ async function removeFile(req: Request, res: Response) {
 }
 
 async function getSkill(req: Request, res: Response) {
-  const projectId = req.params.projectId;
-  const user = await ExtensionContext.getUserFromRequest(req);
-
-  const currentProject = await BotProjectService.getProjectById(projectId, user);
-  if (currentProject !== undefined) {
-    try {
-      const content = await getSkillManifest(req.query.url);
-      res.status(200).json(content);
-    } catch (err) {
-      res.status(404).json({
-        message: err.message,
-      });
-    }
-  } else {
-    res.status(404).json({
-      message: 'No such bot project opened',
-    });
-  }
+  const content = await getSkillManifest(req.query.url);
+  res.status(200).json(content);
 }
 
 async function exportProject(req: Request, res: Response) {
@@ -411,4 +400,5 @@ export const ProjectController = {
   getRecentProjects,
   updateBoilerplate,
   checkBoilerplateVersion,
+  generateProjectId,
 };

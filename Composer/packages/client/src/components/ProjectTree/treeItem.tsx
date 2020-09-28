@@ -18,7 +18,7 @@ import { ICalloutContentStyles } from 'office-ui-fabric-react/lib/Callout';
 import { TreeLink } from './ProjectTree';
 
 // -------------------- Styles -------------------- //
-const indent = 16;
+const indent = 8;
 const itemText = (depth: number) => css`
   outline: none;
   :focus {
@@ -110,7 +110,7 @@ const navItem = (isActive: boolean, shift: number) => css`
   }
 `;
 
-export const overflowSet = css`
+export const overflowSet = (depth: number) => css`
   width: 100%;
   height: 100%;
   padding-right: 12px;
