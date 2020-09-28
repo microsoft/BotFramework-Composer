@@ -76,7 +76,7 @@ export const projectDispatcher = () => {
           set(botProjectIdsState, (current) => [...current, projectId]);
         }
         await dispatcher.addLocalSkillToBotProjectFile(projectId);
-        navigateToBot(projectId, mainDialog);
+        navigateToBot(callbackHelpers, projectId, mainDialog);
       } catch (ex) {
         handleProjectFailure(callbackHelpers, ex);
       } finally {
@@ -144,7 +144,7 @@ export const projectDispatcher = () => {
         });
         set(botProjectIdsState, (current) => [...current, projectId]);
         await dispatcher.addLocalSkillToBotProjectFile(projectId);
-        navigateToBot(projectId, mainDialog, qnaKbUrls, templateId);
+        navigateToBot(callbackHelpers, projectId, mainDialog, qnaKbUrls, templateId);
         return projectId;
       } catch (ex) {
         handleProjectFailure(callbackHelpers, ex);
@@ -168,7 +168,7 @@ export const projectDispatcher = () => {
           isRemote: false,
         });
         projectIdCache.set(projectId);
-        navigateToBot(projectId, mainDialog);
+        navigateToBot(callbackHelpers, projectId, mainDialog);
       } catch (ex) {
         set(botProjectIdsState, []);
         removeRecentProject(callbackHelpers, path);
@@ -193,7 +193,7 @@ export const projectDispatcher = () => {
         isRemote: false,
       });
       projectIdCache.set(projectId);
-      navigateToBot(projectId, mainDialog);
+      navigateToBot(callbackHelpers, projectId, mainDialog);
     } catch (ex) {
       set(botProjectIdsState, []);
       handleProjectFailure(callbackHelpers, ex);
@@ -226,7 +226,7 @@ export const projectDispatcher = () => {
         isRemote: false,
       });
       projectIdCache.set(projectId);
-      navigateToBot(projectId, mainDialog, qnaKbUrls);
+      navigateToBot(callbackHelpers, projectId, mainDialog, qnaKbUrls);
     } catch (ex) {
       set(botProjectIdsState, []);
       handleProjectFailure(callbackHelpers, ex);
@@ -255,7 +255,7 @@ export const projectDispatcher = () => {
           isRemote: false,
         });
         projectIdCache.set(projectId);
-        navigateToBot(projectId, mainDialog);
+        navigateToBot(callbackHelpers, projectId, mainDialog);
       } catch (ex) {
         set(botProjectIdsState, []);
         handleProjectFailure(callbackHelpers, ex);

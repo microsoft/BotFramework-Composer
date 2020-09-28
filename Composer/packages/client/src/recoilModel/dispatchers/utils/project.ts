@@ -10,7 +10,6 @@ import {
   dereferenceDefinitions,
   DialogInfo,
   LuFile,
-  BotProjectSpace,
   QnAFile,
 } from '@bfc/shared';
 import objectGet from 'lodash/get';
@@ -133,8 +132,16 @@ export const getMergedSettings = (projectId, settings): DialogSetting => {
   return mergedSettings;
 };
 
-export const navigateToBot = (projectId: string, mainDialog: string, qnaKbUrls?: string[], templateId?: string) => {
+export const navigateToBot = (
+  callbackHelpers: CallbackInterface,
+  projectId: string,
+  mainDialog: string,
+  qnaKbUrls?: string[],
+  templateId?: string
+) => {
   if (projectId) {
+    const { set } = callbackHelpers;
+    set(currentProjectIdState, projectId);
     let url = `/bot/${projectId}/dialogs/${mainDialog}`;
     if (templateId === QnABotTemplateId) {
       url = `/bot/${projectId}/knowledge-base/${mainDialog}`;
@@ -425,8 +432,9 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
   const rootBotProjectId = projectData.id;
 
   if (botFiles.botProjectSpaceFiles && botFiles.botProjectSpaceFiles.length) {
-    const currentBotProjectFile: BotProjectSpace = botFiles.botProjectSpaceFiles[0];
-    set(botProjectFileState(rootBotProjectId), currentBotProjectFile);
+    const currentBotProjectFileIndexed = botFiles.botProjectSpaceFiles[0];
+    set(botProjectFileState(rootBotProjectId), currentBotProjectFileIndexed);
+    const currentBotProjectFile = currentBotProjectFileIndexed.content;
 
     const skillsInBotProject = currentBotProjectFile.skills;
     if (skillsInBotProject.length) {
@@ -500,7 +508,7 @@ export const checkIfBotExistsInBotProjectFile = async (
   if (!rootBotProjectId) {
     throw new Error(formatMessage('The root bot is not a bot project'));
   }
-  const botProjectFile = await snapshot.getPromise(botProjectFileState(rootBotProjectId));
+  const { content: botProjectFile } = await snapshot.getPromise(botProjectFileState(rootBotProjectId));
 
   if (remote) {
     return botProjectFile.skills.find(({ manifest }) => pathOrManifest === manifest);

@@ -24,6 +24,7 @@ import {
   filePersistenceState,
   projectMetaDataState,
   botProjectSpaceLoadedState,
+  botProjectFileState,
 } from './atoms';
 import { botProjectsWithoutErrorsSelector } from './selectors';
 
@@ -36,6 +37,7 @@ const getBotAssets = async (projectId, snapshot: Snapshot): Promise<BotAssets> =
     snapshot.getPromise(skillManifestsState(projectId)),
     snapshot.getPromise(settingsState(projectId)),
     snapshot.getPromise(dialogSchemasState(projectId)),
+    snapshot.getPromise(botProjectFileState(projectId)),
   ]);
   return {
     projectId,
@@ -46,6 +48,7 @@ const getBotAssets = async (projectId, snapshot: Snapshot): Promise<BotAssets> =
     skillManifests: result[4],
     setting: result[5],
     dialogSchemas: result[6],
+    botProjectFile: result[7],
   };
 };
 
