@@ -2,49 +2,60 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import path from 'path';
+
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 import { produce } from 'immer';
 import { BotProjectSpace, BotProjectSpaceSkill } from '@bfc/shared';
+import formatMessage from 'format-message';
 
-import {
-  botNameState,
-  botProjectFileState,
-  botProjectIdsState,
-  locationState,
-  projectMetaDataState,
-  skillManifestsState,
-} from '../atoms';
-import { isBotProjectSpaceSelector } from '../selectors';
+import { botNameState, botProjectFileState, locationState, skillManifestsState } from '../atoms';
+import { isBotProjectSpaceSelector, rootBotProjectIdSelector } from '../selectors';
 import { convertPathToFileProtocol, trimFileProtocol } from '../../utils/fileUtil';
 
 export const botProjectFileDispatcher = () => {
-  const addSkillToBotProjectFile = useRecoilCallback(
+  const addLocalSkillToBotProjectFile = useRecoilCallback(
     ({ set, snapshot }: CallbackInterface) => async (skillId: string) => {
       const isBotProjectSpace = await snapshot.getPromise(isBotProjectSpaceSelector);
-      if (!isBotProjectSpace) {
+      const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
+      if (!isBotProjectSpace || !rootBotProjectId) {
         return;
       }
-      const projectIds = await snapshot.getPromise(botProjectIdsState);
-      const rootBotProjectId = projectIds[0];
-      const { isRemote } = await snapshot.getPromise(projectMetaDataState(skillId));
-
       const skillLocation = await snapshot.getPromise(locationState(skillId));
       const botName = await snapshot.getPromise(botNameState(skillId));
-      const manifests: { id: string; content: string; lastModified: string }[] = await snapshot.getPromise(
-        skillManifestsState(skillId)
-      );
-      // TODO:// We would support only 1 manifest per skill. It will always be the first manifest. We would need UI in future to set the default manifest file
-      const currentManifest = manifests[0];
+
       set(botProjectFileState(rootBotProjectId), (current: BotProjectSpace) => {
         const result = produce(current, (draftState: BotProjectSpace) => {
           const skill: BotProjectSpaceSkill = {
             workspace: convertPathToFileProtocol(skillLocation),
-            remote: isRemote,
+            remote: false,
             name: botName,
           };
-          if (currentManifest) {
-            skill.manifest = currentManifest.id;
-          }
+          draftState.skills.push(skill);
+        });
+        return result;
+      });
+    }
+  );
+
+  const addRemoteSkillToBotProjectFile = useRecoilCallback(
+    ({ set, snapshot }: CallbackInterface) => async (skillId: string, manifestUrl: string, endpointName: string) => {
+      const isBotProjectSpace = await snapshot.getPromise(isBotProjectSpaceSelector);
+      const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
+      if (!isBotProjectSpace || !rootBotProjectId) {
+        return;
+      }
+      const botName = await snapshot.getPromise(botNameState(skillId));
+
+      set(botProjectFileState(rootBotProjectId), (current: BotProjectSpace) => {
+        const result = produce(current, (draftState: BotProjectSpace) => {
+          const skill: BotProjectSpaceSkill = {
+            manifest: manifestUrl,
+            remote: true,
+            name: botName,
+            endpointName,
+          };
+
           draftState.skills.push(skill);
         });
         return result;
@@ -103,9 +114,10 @@ export const botProjectFileDispatcher = () => {
   );
 
   return {
-    addSkillToBotProjectFile,
+    addLocalSkillToBotProjectFile,
     removeLocalSkillFromBotProjectFile,
     removeRemoteSkillFromBotProjectFile,
     renameRootBotInBotProjectFile,
+    addRemoteSkillToBotProjectFile,
   };
 };

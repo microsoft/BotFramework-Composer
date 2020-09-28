@@ -96,7 +96,6 @@ const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string }>> = (pro
   const schemas = useRecoilValue(schemasState(projectId));
   const { fetchProjectById } = useRecoilValue(dispatcherState);
   const botProjects = useRecoilValue(botProjectIdsState);
-  const botsLoaded = useRecoilValue(botProjectSpaceLoadedState);
 
   useEffect(() => {
     if (props.projectId && !botProjects.includes(props.projectId)) {
@@ -113,7 +112,7 @@ const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string }>> = (pro
     }
   }, [schemas, projectId]);
 
-  if (props.projectId && botsLoaded && botProjects.includes(props.projectId)) {
+  if (props.projectId && botProjects.includes(props.projectId)) {
     return <div css={projectStyle}>{props.children}</div>;
   }
   return <LoadingSpinner />;

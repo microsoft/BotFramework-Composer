@@ -56,3 +56,15 @@ export const isBotProjectSpaceSelector = selector({
     return metaData.isRootBot && !isEmpty(botProjectFile);
   },
 });
+
+export const rootBotProjectIdSelector = selector({
+  key: 'rootBotProjectIdSelector',
+  get: ({ get }) => {
+    const projectIds = get(botProjectIdsState);
+    const rootBotId = projectIds[0];
+    const metaData = get(projectMetaDataState(rootBotId));
+    if (metaData.isRootBot) {
+      return rootBotId;
+    }
+  },
+});
