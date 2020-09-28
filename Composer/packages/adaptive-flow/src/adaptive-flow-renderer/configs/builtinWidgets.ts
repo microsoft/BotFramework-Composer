@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { FlowEditorWidgetMap } from '@bfc/extension-client';
+import { ListOverview } from '@bfc/ui-shared';
 
 import {
   ActionCard,
@@ -11,6 +12,8 @@ import {
   SwitchConditionWidget,
   ForeachWidget,
   ActionHeader,
+  PropertyDescription,
+  ResourceOperation,
 } from '../widgets';
 
 const builtinActionWidgets: FlowEditorWidgetMap = {
@@ -21,6 +24,9 @@ const builtinActionWidgets: FlowEditorWidgetMap = {
   SwitchConditionWidget,
   ForeachWidget,
   ActionHeader,
+  PropertyDescription,
+  ResourceOperation,
+  ListOverview,
 };
 
 export default builtinActionWidgets;

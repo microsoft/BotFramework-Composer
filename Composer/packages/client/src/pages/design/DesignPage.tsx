@@ -8,7 +8,7 @@ import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcru
 import formatMessage from 'format-message';
 import { globalHistory, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
-import { DialogInfo, PromptTab, getEditorAPI, registerEditorAPI } from '@bfc/shared';
+import { DialogInfo, PromptTab, getEditorAPI, registerEditorAPI, FieldNames } from '@bfc/shared';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import { EditorExtension, useTriggerApi, PluginConfig } from '@bfc/extension-client';
@@ -554,8 +554,15 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       regEx: '',
       triggerPhrases: '',
     };
-    if (dialogId) {
-      createTrigger(dialogId, formData);
+    const dialog = dialogs.find((d) => d.id === dialogId);
+    if (dialogId && dialog) {
+      const url = `/bot/${projectId}/knowledge-base/${dialogId}`;
+      const triggers = get(dialog, FieldNames.Events, []);
+      if (triggers.some((t) => t.type === qnaMatcherKey)) {
+        navigateTo(url);
+      } else {
+        createTrigger(dialogId, formData, url);
+      }
       // import qna from urls
       if (urls.length > 0) {
         await importQnAFromUrls({ id: `${dialogId}.${locale}`, urls, projectId });
