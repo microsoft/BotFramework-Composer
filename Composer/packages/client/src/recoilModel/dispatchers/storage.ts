@@ -76,7 +76,7 @@ export const storageDispatcher = () => {
     (callbackHelpers: CallbackInterface) => async (id: string, path: string) => {
       const { set } = callbackHelpers;
       try {
-        const response = await httpClient.get(`/storages/${id}/blobs`, { params: { path } });
+        const response = await httpClient.get(`/storages/${id}/blobs`, { params: { path: encodeURIComponent(path) } });
         const fetchedFocusStorage = response.data;
         fetchedFocusStorage.children = fetchedFocusStorage.children.reduce((files, file) => {
           if (file.type === FileTypes.FOLDER) {

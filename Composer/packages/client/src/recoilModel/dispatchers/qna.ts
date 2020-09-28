@@ -20,9 +20,14 @@ import { QnAAllUpViewStatus } from '../types';
 import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
 import { getBaseName } from '../../utils/fileUtil';
 import { navigateTo } from '../../utils/navigation';
+import {
+  getQnaFailedNotification,
+  getQnaSuccessNotification,
+  getQnaPendingNotification,
+} from '../../utils/notifications';
+import httpClient from '../../utils/httpUtil';
 
-import httpClient from './../../utils/httpUtil';
-import { setError } from './shared';
+import { addNotificationInternal, deleteNotificationInternal, createNotifiction } from './notification';
 
 export const updateQnAFileState = async (
   callbackHelpers: CallbackInterface,
@@ -334,16 +339,31 @@ export const qnaDispatcher = () => {
     }) => {
       const { set } = callbackHelpers;
       await dismissCreateQnAModal({ projectId });
-      set(qnaAllUpViewStatusState(projectId), QnAAllUpViewStatus.Loading);
+      const notification = createNotifiction(getQnaPendingNotification(urls));
+      addNotificationInternal(callbackHelpers, notification);
+
       let response;
       try {
         response = await httpClient.get(`/utilities/qna/parse`, {
           params: { url: encodeURIComponent(url), multiTurn },
         });
+        const content = qnaFile ? qnaFile.content + '\n' + response.data : response.data;
+
+        await updateQnAFileState(callbackHelpers, { id, content, projectId });
+        const notification = createNotifiction(
+          getQnaSuccessNotification(() => {
+            navigateTo(`/bot/${projectId}/knowledge-base/${getBaseName(id)}`);
+            deleteNotificationInternal(callbackHelpers, notification.id);
+          })
+        );
+        addNotificationInternal(callbackHelpers, notification);
       } catch (err) {
-        setError(callbackHelpers, err);
-        set(qnaAllUpViewStatusState(projectId), QnAAllUpViewStatus.Success);
-        return;
+        addNotificationInternal(
+          callbackHelpers,
+          createNotifiction(getQnaFailedNotification(err.response?.data?.message))
+        );
+      } finally {
+        deleteNotificationInternal(callbackHelpers, notification.id);
       }
 
       const contentForSourceQnA = `> !# @source.url=${url}
