@@ -20,6 +20,7 @@ import { createSelectedPath, getFriendlyName } from '../../utils/dialogUtil';
 import { containUnsupportedTriggers, triggerNotSupported } from '../../utils/dialogValidator';
 
 import { TreeItem } from './treeItem';
+import { ExpandableNode } from './ExpandableNode';
 
 // -------------------- Styles -------------------- //
 
@@ -255,12 +256,20 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
             );
           });
         return (
-          <details key={dialog.id} ref={dialog.isRoot ? addMainDialogRef : undefined}>
-            <summary css={summaryStyle}>
-              {renderDialogHeader(projectId, dialog, containUnsupportedTriggers(dialog), startDepth)}
-            </summary>
-            {triggerList}
-          </details>
+          // <details key={dialog.id} ref={dialog.isRoot ? addMainDialogRef : undefined}>
+          //   <summary css={summaryStyle}>
+          //     {renderDialogHeader(projectId, dialog, containUnsupportedTriggers(dialog), startDepth)}
+          //   </summary>
+          //   {triggerList}
+          // </details>
+          <ExpandableNode
+            key={dialog.id}
+            ref={dialog.isRoot ? addMainDialogRef : undefined}
+            summary={renderDialogHeader(projectId, dialog, containUnsupportedTriggers(dialog), startDepth)}
+            summaryCSS={summaryStyle}
+          >
+            <div>{triggerList}</div>
+          </ExpandableNode>
         );
       });
     } else {
