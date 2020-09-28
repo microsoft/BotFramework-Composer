@@ -16,7 +16,7 @@ export function useMenuConfig(): MenuUISchema {
   return useMemo(() => {
     const menuSchema = mapValues(uiSchema, 'menu') as MenuUISchema;
     const implementedMenuSchema = Object.entries(menuSchema).reduce((result, [$kind, menuOpt]) => {
-      // Filter out those $kinds implemented in both sdk.schema and uischema
+      // Take those $kinds implemented in both sdk.schema and uischema
       if (sdkDefinitions[$kind] && menuOpt) {
         result[$kind] = menuOpt;
       }
