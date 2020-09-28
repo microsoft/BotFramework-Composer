@@ -422,7 +422,7 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
   const mainDialog = await initBotState(callbackHelpers, projectData, botFiles);
   const rootBotProjectId = projectData.id;
 
-  if (botFiles.botProjectSpaceFiles.length) {
+  if (botFiles.botProjectSpaceFiles && botFiles.botProjectSpaceFiles.length) {
     const currentBotProjectFile: BotProjectSpace = botFiles.botProjectSpaceFiles[0];
     set(botProjectFileState(rootBotProjectId), currentBotProjectFile);
 
@@ -445,6 +445,7 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
       }
     }
   } else {
+    // BotProject space loaded when skills are present
     set(botProjectSpaceLoadedState, true);
   }
   set(botProjectIdsState, [rootBotProjectId]);
@@ -464,5 +465,18 @@ export const openRootBotAndSkillsByPath = async (callbackHelpers: CallbackInterf
 export const openRootBotAndSkillsByProjectId = async (callbackHelpers: CallbackInterface, projectId: string) => {
   const data = await fetchProjectDataById(projectId);
   const result = await openRootBotAndSkills(callbackHelpers, data);
+  return result;
+};
+
+export const saveProject = async (callbackHelpers, oldProjectData) => {
+  const { oldProjectId, name, description, location } = oldProjectData;
+  const response = await httpClient.post(`/projects/${oldProjectId}/project/saveAs`, {
+    storageId: 'default',
+    name,
+    description,
+    location,
+  });
+  const data = loadProjectData(response);
+  const result = openRootBotAndSkills(callbackHelpers, data);
   return result;
 };
