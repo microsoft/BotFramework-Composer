@@ -28,7 +28,6 @@ import {
   schemasState,
   locationState,
   skillsState,
-  botOpeningState,
   botStatusState,
   botNameState,
 } from '../../atoms';
@@ -88,7 +87,6 @@ describe('Project dispatcher', () => {
     const locale = useRecoilValue(localeState(projectId));
     const botStatus = useRecoilValue(botStatusState(projectId));
 
-    const botOpening = useRecoilValue(botOpeningState);
     const currentDispatcher = useRecoilValue(dispatcherState);
     const [recentProjects, setRecentProjects] = useRecoilState(recentProjectsState);
     const appError = useRecoilValue(applicationErrorState);
@@ -99,7 +97,6 @@ describe('Project dispatcher', () => {
     const runtimeTemplates = useRecoilValue(runtimeTemplatesState);
 
     return {
-      botOpening,
       skillManifests,
       luFiles,
       lgFiles,
@@ -162,7 +159,7 @@ describe('Project dispatcher', () => {
     expect(renderedComponent.current.luFiles.length).toBe(1);
     expect(renderedComponent.current.botEnvironment).toBe(mockProjectResponse.botEnvironment);
     expect(renderedComponent.current.skills.length).toBe(0);
-    expect(renderedComponent.current.botOpening).toBeFalsy();
+    // expect(renderedComponent.current.botOpening).toBeFalsy();
     expect(renderedComponent.current.schemas.sdk).toBeDefined();
     expect(renderedComponent.current.schemas.default).toBeDefined();
     expect(renderedComponent.current.schemas.diagnostics?.length).toBe(0);
@@ -184,7 +181,7 @@ describe('Project dispatcher', () => {
       ]);
       await dispatcher.openProject('../test/empty-bot', 'default');
     });
-    expect(renderedComponent.current.botOpening).toBeFalsy();
+    // expect(renderedComponent.current.botOpening).toBeFalsy();
     expect(renderedComponent.current.appError).toEqual(errorObj);
     expect(renderedComponent.current.recentProjects.length).toBe(0);
     expect(navigateTo).not.toHaveBeenCalled();
@@ -237,7 +234,7 @@ describe('Project dispatcher', () => {
     });
     await act(async () => {
       await dispatcher.openProject('../test/empty-bot', 'default');
-      await dispatcher.deleteBotProject(projectId);
+      await dispatcher.deleteBot(projectId);
     });
 
     expect(renderedComponent.current.botName).toEqual('');
@@ -246,7 +243,7 @@ describe('Project dispatcher', () => {
     expect(renderedComponent.current.luFiles.length).toBe(0);
     expect(renderedComponent.current.botEnvironment).toBe('production');
     expect(renderedComponent.current.skills.length).toBe(0);
-    expect(renderedComponent.current.botOpening).toBeFalsy();
+    // expect(renderedComponent.current.botOpening).toBeFalsy();
     expect(renderedComponent.current.schemas.sdk).toBeUndefined();
     expect(renderedComponent.current.schemas.default).toBeUndefined();
     expect(renderedComponent.current.schemas.diagnostics?.length).toBeUndefined();

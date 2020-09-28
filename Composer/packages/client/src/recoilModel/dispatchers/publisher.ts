@@ -14,7 +14,7 @@ import {
   isEjectRuntimeExistState,
   filePersistenceState,
 } from '../atoms/botState';
-import { botEndpointsState } from '../atoms';
+import { botEndpointsState, runtimeTemplatesState } from '../atoms';
 
 import { BotStatus, Text } from './../../constants';
 import httpClient from './../../utils/httpUtil';
@@ -217,6 +217,21 @@ export const publisherDispatcher = () => {
       }
     }
   );
+
+  const fetchRuntimeTemplates = useRecoilCallback<[], Promise<void>>(
+    (callbackHelpers: CallbackInterface) => async () => {
+      const { set } = callbackHelpers;
+      try {
+        const response = await httpClient.get(`/runtime/templates`);
+        if (Array.isArray(response.data)) {
+          set(runtimeTemplatesState, [...response.data]);
+        }
+      } catch (ex) {
+        // TODO: Handle exceptions
+        logMessage(callbackHelpers, `Error fetching runtime templates: ${ex}`);
+      }
+    }
+  );
   return {
     getPublishTargetTypes,
     publishToTarget,
@@ -225,5 +240,6 @@ export const publisherDispatcher = () => {
     getPublishStatus,
     getPublishHistory,
     setEjectRuntimeExist,
+    fetchRuntimeTemplates,
   };
 };

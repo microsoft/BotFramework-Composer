@@ -52,6 +52,12 @@ const summaryStyle = css`
   padding-top: 6px;
 `;
 
+const summaryStyle = css`
+  display: flex;
+  padding-left: 12px;
+  padding-top: 12px;
+`;
+
 // -------------------- ProjectTree -------------------- //
 
 export type TreeLink = {
@@ -200,19 +206,17 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
     };
 
     return (
-      <React.Fragment>
-        <TreeItem
-          key={`${item.id}_${item.index}`}
-          depth={depth}
-          dialogName={dialog.displayName}
-          icon={TYPE_TO_ICON_MAP[item.type] || 'Flow'}
-          isActive={dialog.id === selectedDialog && createSelectedPath(item.index) === selected}
-          link={link}
-          shiftOut={32}
-          onDelete={onDelete}
-          onSelect={onSelect}
-        />
-      </React.Fragment>
+      <TreeItem
+        key={`${item.id}_${item.index}`}
+        depth={depth}
+        dialogName={dialog.displayName}
+        icon={TYPE_TO_ICON_MAP[item.type] || 'Flow'}
+        isActive={dialog.id === selectedDialog && createSelectedPath(item.index) === selected}
+        link={link}
+        shiftOut={32}
+        onDelete={onDelete}
+        onSelect={onSelect}
+      />
     );
   }
 

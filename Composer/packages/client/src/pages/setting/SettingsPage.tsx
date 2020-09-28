@@ -37,7 +37,7 @@ const getProjectLink = (path: string, id?: string) => {
 const SettingPage: React.FC<RouteComponentProps> = () => {
   const projectId = useRecoilValue(currentProjectIdState);
   const {
-    deleteBotProject,
+    deleteBot: deleteBotProject,
     addLanguageDialogBegin,
     addLanguageDialogCancel,
     delLanguageDialogBegin,

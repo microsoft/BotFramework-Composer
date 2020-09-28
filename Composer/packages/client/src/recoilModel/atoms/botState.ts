@@ -12,6 +12,8 @@ import {
   BotSchemas,
   Skill,
   DialogSetting,
+  BotProjectSpace,
+  BotProjectFile,
 } from '@bfc/shared';
 
 import { BotLoadError, DesignPageLocation, QnAAllUpViewStatus } from '../../recoilModel/types';
@@ -218,10 +220,13 @@ export const onDelLanguageDialogCompleteState = atomFamily<any, string>({
   default: { func: undefined },
 });
 
-export const projectMetaDataState = atomFamily<any, string>({
+export const projectMetaDataState = atomFamily<{ isRootBot: boolean; isRemote: boolean }, string>({
   key: getFullyQualifiedKey('projectsMetaDataState'),
-  default: (id) => {
-    return {};
+  default: () => {
+    return {
+      isRootBot: false,
+      isRemote: false,
+    };
   },
 });
 
@@ -253,4 +258,24 @@ export const filePersistenceState = atomFamily<FilePersistence, string>({
   key: getFullyQualifiedKey('filePersistence'),
   default: {} as FilePersistence,
   dangerouslyAllowMutability: true,
+});
+
+export const botProjectFileState = atomFamily<BotProjectFile, string>({
+  key: getFullyQualifiedKey('botProjectFileState'),
+  default: {
+    content: {} as BotProjectSpace,
+    id: '',
+    lastModified: '',
+  },
+});
+
+// Always using the first manifest file for now. We dont have the need to support multiple manifest for a skill
+export const currentManifestIndexState = atomFamily<number, string>({
+  key: getFullyQualifiedKey('currentManifestIndexState'),
+  default: 0,
+});
+
+export const botErrorState = atomFamily<any, string>({
+  key: getFullyQualifiedKey('botError'),
+  default: undefined,
 });
