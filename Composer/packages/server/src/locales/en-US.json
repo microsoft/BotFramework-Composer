@@ -575,6 +575,9 @@
   "create_or_edit_skill_manifest_8ad98da9": {
     "message": "Create or edit skill manifest"
   },
+  "creating_your_knowledge_base_ef4f9872": {
+    "message": "Creating your knowledge base"
+  },
   "current_40c0812f": {
     "message": " - Current"
   },
@@ -946,6 +949,9 @@
   },
   "extract_question_and_answer_pairs_from_an_online_f_c1e12724": {
     "message": "Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence. "
+  },
+  "extracting_qna_pairs_from_urls_eaed1b1c": {
+    "message": "Extracting QNA pairs from { urls }"
   },
   "false_2f39ee6d": {
     "message": "false"
@@ -2078,11 +2084,17 @@
   "there_was_an_error_74ed3c58": {
     "message": "There was an error"
   },
+  "there_was_error_creating_your_kb_53b31ff3": {
+    "message": "There was error creating your KB"
+  },
   "these_examples_bring_together_all_of_the_best_prac_ca1b89c7": {
     "message": "These examples bring together all of the best practices and supporting components we''ve identified through building of conversational experiences."
   },
   "these_tasks_will_be_used_to_generate_the_manifest__2791be0e": {
     "message": "These tasks will be used to generate the manifest and describe the capabilities of this skill to those who may want to use it."
+  },
+  "this_bot_has_errors_72fb40d5": {
+    "message": "This bot has errors"
   },
   "this_bot_has_warnings_b6735e2e": {
     "message": "This bot has warnings"
@@ -2309,6 +2321,9 @@
   "view_ba339f93": {
     "message": "View"
   },
+  "view_kb_c382e495": {
+    "message": "View KB"
+  },
   "vishwac_sena_45910bf0": {
     "message": "Vishwac Sena"
   },
@@ -2410,5 +2425,8 @@
   },
   "your_bot_is_using_luis_and_qna_for_natural_languag_53830684": {
     "message": "Your bot is using LUIS and QNA for natural language understanding."
+  },
+  "your_knowledge_base_is_ready_6ecc1871": {
+    "message": "Your knowledge base is ready!"
   }
 }
