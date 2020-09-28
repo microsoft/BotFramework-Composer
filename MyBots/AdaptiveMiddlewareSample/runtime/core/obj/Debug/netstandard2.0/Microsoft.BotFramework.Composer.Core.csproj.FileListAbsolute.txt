@@ -1,0 +1,9 @@
+C:\source\BotFramework-Composer\MyBots\AdaptiveMiddlewareSample\runtime\core\bin\Debug\netstandard2.0\Microsoft.BotFramework.Composer.Core.deps.json
+C:\source\BotFramework-Composer\MyBots\AdaptiveMiddlewareSample\runtime\core\bin\Debug\netstandard2.0\Microsoft.BotFramework.Composer.Core.dll
+C:\source\BotFramework-Composer\MyBots\AdaptiveMiddlewareSample\runtime\core\bin\Debug\netstandard2.0\Microsoft.BotFramework.Composer.Core.pdb
+C:\source\BotFramework-Composer\MyBots\AdaptiveMiddlewareSample\runtime\core\obj\Debug\netstandard2.0\Microsoft.BotFramework.Composer.Core.csprojAssemblyReference.cache
+C:\source\BotFramework-Composer\MyBots\AdaptiveMiddlewareSample\runtime\core\obj\Debug\netstandard2.0\Microsoft.BotFramework.Composer.Core.AssemblyInfoInputs.cache
+C:\source\BotFramework-Composer\MyBots\AdaptiveMiddlewareSample\runtime\core\obj\Debug\netstandard2.0\Microsoft.BotFramework.Composer.Core.AssemblyInfo.cs
+C:\source\BotFramework-Composer\MyBots\AdaptiveMiddlewareSample\runtime\core\obj\Debug\netstandard2.0\Microsoft.BotFramework.Composer.Core.csproj.CoreCompileInputs.cache
+C:\source\BotFramework-Composer\MyBots\AdaptiveMiddlewareSample\runtime\core\obj\Debug\netstandard2.0\Microsoft.BotFramework.Composer.Core.dll
+C:\source\BotFramework-Composer\MyBots\AdaptiveMiddlewareSample\runtime\core\obj\Debug\netstandard2.0\Microsoft.BotFramework.Composer.Core.pdb

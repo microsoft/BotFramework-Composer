@@ -1,0 +1,8 @@
+[import](common.lg)
+
+# ConfirmInput_Prompt_FsUEIc()
+- Here are my Terms Of Use (TOU). Do you accept them?
+# ConfirmInput_InvalidPrompt_FsUEIc()
+- Please answer yes or no.
+# SendActivity_jBMt0C()
+- I'm sorry. You can't talk to me until you accept my terms.

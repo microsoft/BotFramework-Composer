@@ -1,0 +1,5 @@
+{
+  "extensions":[
+    { "name": "Startup", "typeName":"Microsoft.BotFramework.Composer.Functions.Startup, Microsoft.BotFramework.Composer.Functions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"}
+  ]
+}

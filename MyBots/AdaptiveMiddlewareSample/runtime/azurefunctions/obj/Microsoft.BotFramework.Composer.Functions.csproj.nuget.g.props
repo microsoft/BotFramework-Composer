@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <RestoreSuccess Condition=" '$(RestoreSuccess)' == '' ">True</RestoreSuccess>
+    <RestoreTool Condition=" '$(RestoreTool)' == '' ">NuGet</RestoreTool>
+    <ProjectAssetsFile Condition=" '$(ProjectAssetsFile)' == '' ">$(MSBuildThisFileDirectory)project.assets.json</ProjectAssetsFile>
+    <NuGetPackageRoot Condition=" '$(NuGetPackageRoot)' == '' ">$(UserProfile)\.nuget\packages\</NuGetPackageRoot>
+    <NuGetPackageFolders Condition=" '$(NuGetPackageFolders)' == '' ">C:\Users\stevenic\.nuget\packages\;C:\Program Files\dotnet\sdk\NuGetFallbackFolder</NuGetPackageFolders>
+    <NuGetProjectStyle Condition=" '$(NuGetProjectStyle)' == '' ">PackageReference</NuGetProjectStyle>
+    <NuGetToolVersion Condition=" '$(NuGetToolVersion)' == '' ">5.7.0</NuGetToolVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+  </PropertyGroup>
+  <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <Import Project="$(NuGetPackageRoot)microsoft.net.sdk.functions\3.0.3\build\Microsoft.NET.Sdk.Functions.props" Condition="Exists('$(NuGetPackageRoot)microsoft.net.sdk.functions\3.0.3\build\Microsoft.NET.Sdk.Functions.props')" />
+    <Import Project="$(NuGetPackageRoot)microsoft.extensions.configuration.usersecrets\3.1.3\build\netstandard2.0\Microsoft.Extensions.Configuration.UserSecrets.props" Condition="Exists('$(NuGetPackageRoot)microsoft.extensions.configuration.usersecrets\3.1.3\build\netstandard2.0\Microsoft.Extensions.Configuration.UserSecrets.props')" />
+  </ImportGroup>
+  <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <PkgMicrosoft_Azure_WebJobs_Script_ExtensionsMetadataGenerator Condition=" '$(PkgMicrosoft_Azure_WebJobs_Script_ExtensionsMetadataGenerator)' == '' ">C:\Users\stevenic\.nuget\packages\microsoft.azure.webjobs.script.extensionsmetadatagenerator\1.1.3</PkgMicrosoft_Azure_WebJobs_Script_ExtensionsMetadataGenerator>
+    <PkgMicrosoft_NET_Sdk_Functions Condition=" '$(PkgMicrosoft_NET_Sdk_Functions)' == '' ">C:\Users\stevenic\.nuget\packages\microsoft.net.sdk.functions\3.0.3</PkgMicrosoft_NET_Sdk_Functions>
+  </PropertyGroup>
+</Project>

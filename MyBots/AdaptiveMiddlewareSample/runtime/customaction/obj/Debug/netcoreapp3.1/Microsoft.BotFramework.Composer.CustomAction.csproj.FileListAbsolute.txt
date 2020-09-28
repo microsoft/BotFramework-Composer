@@ -1,0 +1,9 @@
+C:\source\BotFramework-Composer\MyBots\AdaptiveMiddlewareSample\runtime\customaction\bin\Debug\netcoreapp3.1\Microsoft.BotFramework.Composer.CustomAction.deps.json
+C:\source\BotFramework-Composer\MyBots\AdaptiveMiddlewareSample\runtime\customaction\bin\Debug\netcoreapp3.1\Microsoft.BotFramework.Composer.CustomAction.dll
+C:\source\BotFramework-Composer\MyBots\AdaptiveMiddlewareSample\runtime\customaction\bin\Debug\netcoreapp3.1\Microsoft.BotFramework.Composer.CustomAction.pdb
+C:\source\BotFramework-Composer\MyBots\AdaptiveMiddlewareSample\runtime\customaction\obj\Debug\netcoreapp3.1\Microsoft.BotFramework.Composer.CustomAction.csprojAssemblyReference.cache
+C:\source\BotFramework-Composer\MyBots\AdaptiveMiddlewareSample\runtime\customaction\obj\Debug\netcoreapp3.1\Microsoft.BotFramework.Composer.CustomAction.AssemblyInfoInputs.cache
+C:\source\BotFramework-Composer\MyBots\AdaptiveMiddlewareSample\runtime\customaction\obj\Debug\netcoreapp3.1\Microsoft.BotFramework.Composer.CustomAction.AssemblyInfo.cs
+C:\source\BotFramework-Composer\MyBots\AdaptiveMiddlewareSample\runtime\customaction\obj\Debug\netcoreapp3.1\Microsoft.BotFramework.Composer.CustomAction.csproj.CoreCompileInputs.cache
+C:\source\BotFramework-Composer\MyBots\AdaptiveMiddlewareSample\runtime\customaction\obj\Debug\netcoreapp3.1\Microsoft.BotFramework.Composer.CustomAction.dll
+C:\source\BotFramework-Composer\MyBots\AdaptiveMiddlewareSample\runtime\customaction\obj\Debug\netcoreapp3.1\Microsoft.BotFramework.Composer.CustomAction.pdb

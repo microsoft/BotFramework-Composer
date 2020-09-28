@@ -1,0 +1,123 @@
+{
+  "$kind": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "sfQln5",
+    "name": "TermsOfUseMiddleware",
+    "description": ""
+  },
+  "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
+  "triggers": [
+    {
+      "$kind": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "name": "BeginDialog",
+        "description": "",
+        "id": "uIVIYG"
+      },
+      "actions": [
+        {
+          "$kind": "Microsoft.EmitEvent",
+          "$designer": {
+            "id": "HYh2Ny"
+          },
+          "eventName": "=dialog.name",
+          "eventValue": "=dialog.value",
+          "bubbleEvent": false
+        }
+      ]
+    },
+    {
+      "$kind": "Microsoft.OnDialogEvent",
+      "$designer": {
+        "id": "cijOaU",
+        "name": "OnBeforeTurn"
+      },
+      "event": "OnBeforeTurn",
+      "actions": [
+        {
+          "$kind": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "aTWEmw",
+            "name": "Has user accepted TOU?"
+          },
+          "condition": "turn.activity.type == \"message\" && user.acceptedTOU != true",
+          "actions": [
+            {
+              "$kind": "Microsoft.SetProperty",
+              "$designer": {
+                "id": "qxFoA9"
+              },
+              "property": "dialog.utterance",
+              "value": "=turn.activity.text"
+            },
+            {
+              "$kind": "Microsoft.ConfirmInput",
+              "$designer": {
+                "id": "FsUEIc",
+                "name": "Ask user to accept TOU"
+              },
+              "defaultLocale": "en-us",
+              "disabled": false,
+              "maxTurnCount": 3,
+              "alwaysPrompt": true,
+              "allowInterruptions": false,
+              "prompt": "${ConfirmInput_Prompt_FsUEIc()}",
+              "unrecognizedPrompt": "",
+              "invalidPrompt": "${ConfirmInput_InvalidPrompt_FsUEIc()}",
+              "defaultValueResponse": "",
+              "choiceOptions": {
+                "includeNumbers": true,
+                "inlineOrMore": ", or ",
+                "inlineOr": " or ",
+                "inlineSeparator": ", "
+              },
+              "property": "user.acceptedTOU",
+              "defaultValue": false
+            },
+            {
+              "$kind": "Microsoft.IfCondition",
+              "$designer": {
+                "id": "6vm6LX",
+                "name": "Did they accept?"
+              },
+              "condition": "user.acceptedTOU",
+              "actions": [
+                {
+                  "$kind": "Microsoft.SetProperty",
+                  "$designer": {
+                    "id": "VruBQx",
+                    "name": "Return activity changes"
+                  },
+                  "property": "dialog.result",
+                  "value": "={text: dialog.utterance}"
+                }
+              ],
+              "elseActions": [
+                {
+                  "$kind": "Microsoft.SendActivity",
+                  "$designer": {
+                    "id": "jBMt0C"
+                  },
+                  "activity": "${SendActivity_jBMt0C()}"
+                },
+                {
+                  "$kind": "Microsoft.SetProperty",
+                  "$designer": {
+                    "id": "Yfham5",
+                    "name": "Block access"
+                  },
+                  "property": "dialog.result",
+                  "value": "=true"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "generator": "TermsOfUseMiddleware.lg",
+  "recognizer": "TermsOfUseMiddleware.lu.qna",
+  "id": "TermsOfUseMiddleware"
+}

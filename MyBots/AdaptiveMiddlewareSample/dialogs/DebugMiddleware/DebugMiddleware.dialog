@@ -1,0 +1,77 @@
+{
+  "$kind": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "06zvN7",
+    "name": "DebugMiddleware",
+    "description": ""
+  },
+  "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
+  "triggers": [
+    {
+      "$kind": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "mMfLBg",
+        "name": "ShowUserState"
+      },
+      "intent": "ShowUserState",
+      "actions": [
+        {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "YB0PlB"
+          },
+          "activity": "${SendActivity_YB0PlB()}"
+        },
+        {
+          "$kind": "Microsoft.SetProperty",
+          "$designer": {
+            "id": "B0QLQN"
+          },
+          "property": "dialog.result",
+          "value": "=true"
+        }
+      ]
+    },
+    {
+      "$kind": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "fBxiwS",
+        "name": "ShowConversationState"
+      },
+      "intent": "ShowConversationState",
+      "actions": [
+        {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "YthOzr"
+          },
+          "activity": "${SendActivity_YthOzr()}"
+        },
+        {
+          "$kind": "Microsoft.SetProperty",
+          "$designer": {
+            "id": "AyYij5"
+          },
+          "property": "dialog.result",
+          "value": "=true"
+        }
+      ]
+    }
+  ],
+  "generator": "DebugMiddleware.lg",
+  "recognizer": {
+    "$kind": "Microsoft.RegexRecognizer",
+    "intents": [
+      {
+        "intent": "ShowUserState",
+        "pattern": "^show user"
+      },
+      {
+        "intent": "ShowConversationState",
+        "pattern": "^show conversation"
+      }
+    ]
+  },
+  "id": "DebugMiddleware"
+}

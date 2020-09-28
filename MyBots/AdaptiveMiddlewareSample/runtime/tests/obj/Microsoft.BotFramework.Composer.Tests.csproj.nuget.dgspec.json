@@ -1,0 +1,325 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\source\\BotFramework-Composer\\MyBots\\AdaptiveMiddlewareSample\\runtime\\tests\\Microsoft.BotFramework.Composer.Tests.csproj": {}
+  },
+  "projects": {
+    "C:\\source\\BotFramework-Composer\\MyBots\\AdaptiveMiddlewareSample\\runtime\\azurewebapp\\Microsoft.BotFramework.Composer.WebApp.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\source\\BotFramework-Composer\\MyBots\\AdaptiveMiddlewareSample\\runtime\\azurewebapp\\Microsoft.BotFramework.Composer.WebApp.csproj",
+        "projectName": "Microsoft.BotFramework.Composer.WebApp",
+        "projectPath": "C:\\source\\BotFramework-Composer\\MyBots\\AdaptiveMiddlewareSample\\runtime\\azurewebapp\\Microsoft.BotFramework.Composer.WebApp.csproj",
+        "packagesPath": "C:\\Users\\stevenic\\.nuget\\packages\\",
+        "outputPath": "C:\\source\\BotFramework-Composer\\MyBots\\AdaptiveMiddlewareSample\\runtime\\azurewebapp\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\source\\BotFramework-Composer\\MyBots\\AdaptiveMiddlewareSample\\runtime\\NuGet.Config",
+          "C:\\Users\\stevenic\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://botbuilder.myget.org/F/botbuilder-v4-dotnet-daily/api/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "projectReferences": {
+              "C:\\source\\BotFramework-Composer\\MyBots\\AdaptiveMiddlewareSample\\runtime\\core\\Microsoft.BotFramework.Composer.Core.csproj": {
+                "projectPath": "C:\\source\\BotFramework-Composer\\MyBots\\AdaptiveMiddlewareSample\\runtime\\core\\Microsoft.BotFramework.Composer.Core.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "dependencies": {
+            "MSTest.TestFramework": {
+              "target": "Package",
+              "version": "[1.4.0, )"
+            },
+            "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
+              "target": "Package",
+              "version": "[3.1.2, )"
+            },
+            "Microsoft.Bot.Builder": {
+              "target": "Package",
+              "version": "[4.10.2, )"
+            },
+            "Microsoft.Bot.Builder.AI.Luis": {
+              "target": "Package",
+              "version": "[4.10.2, )"
+            },
+            "Microsoft.Bot.Builder.AI.QnA": {
+              "target": "Package",
+              "version": "[4.10.2, )"
+            },
+            "Microsoft.Bot.Builder.ApplicationInsights": {
+              "target": "Package",
+              "version": "[4.10.2, )"
+            },
+            "Microsoft.Bot.Builder.Azure": {
+              "target": "Package",
+              "version": "[4.10.2, )"
+            },
+            "Microsoft.Bot.Builder.Dialogs": {
+              "target": "Package",
+              "version": "[4.10.2, )"
+            },
+            "Microsoft.Bot.Builder.Dialogs.Adaptive": {
+              "target": "Package",
+              "version": "[4.10.2, )"
+            },
+            "Microsoft.Bot.Builder.Dialogs.Debugging": {
+              "target": "Package",
+              "version": "[4.10.2-preview, )"
+            },
+            "Microsoft.Bot.Builder.Dialogs.Declarative": {
+              "target": "Package",
+              "version": "[4.10.2, )"
+            },
+            "Microsoft.Bot.Builder.Integration.ApplicationInsights.Core": {
+              "target": "Package",
+              "version": "[4.10.2, )"
+            },
+            "Microsoft.Bot.Builder.Integration.AspNet.Core": {
+              "target": "Package",
+              "version": "[4.10.2, )"
+            },
+            "Microsoft.Bot.Connector": {
+              "target": "Package",
+              "version": "[4.10.2, )"
+            },
+            "StyleCop.Analyzers": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[1.2.0-beta.66, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.400-preview-015151\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\source\\BotFramework-Composer\\MyBots\\AdaptiveMiddlewareSample\\runtime\\core\\Microsoft.BotFramework.Composer.Core.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\source\\BotFramework-Composer\\MyBots\\AdaptiveMiddlewareSample\\runtime\\core\\Microsoft.BotFramework.Composer.Core.csproj",
+        "projectName": "Microsoft.BotFramework.Composer.Core",
+        "projectPath": "C:\\source\\BotFramework-Composer\\MyBots\\AdaptiveMiddlewareSample\\runtime\\core\\Microsoft.BotFramework.Composer.Core.csproj",
+        "packagesPath": "C:\\Users\\stevenic\\.nuget\\packages\\",
+        "outputPath": "C:\\source\\BotFramework-Composer\\MyBots\\AdaptiveMiddlewareSample\\runtime\\core\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\source\\BotFramework-Composer\\MyBots\\AdaptiveMiddlewareSample\\runtime\\NuGet.Config",
+          "C:\\Users\\stevenic\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://botbuilder.myget.org/F/botbuilder-v4-dotnet-daily/api/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "dependencies": {
+            "Microsoft.Bot.Builder": {
+              "target": "Package",
+              "version": "[4.10.2, )"
+            },
+            "Microsoft.Bot.Builder.AI.Luis": {
+              "target": "Package",
+              "version": "[4.10.2, )"
+            },
+            "Microsoft.Bot.Builder.AI.QnA": {
+              "target": "Package",
+              "version": "[4.10.2, )"
+            },
+            "Microsoft.Bot.Builder.ApplicationInsights": {
+              "target": "Package",
+              "version": "[4.10.2, )"
+            },
+            "Microsoft.Bot.Builder.Azure": {
+              "target": "Package",
+              "version": "[4.10.2, )"
+            },
+            "Microsoft.Bot.Builder.Dialogs": {
+              "target": "Package",
+              "version": "[4.10.2, )"
+            },
+            "Microsoft.Bot.Builder.Dialogs.Adaptive": {
+              "target": "Package",
+              "version": "[4.10.2, )"
+            },
+            "Microsoft.Bot.Builder.Dialogs.Debugging": {
+              "target": "Package",
+              "version": "[4.10.2-preview, )"
+            },
+            "Microsoft.Bot.Builder.Dialogs.Declarative": {
+              "target": "Package",
+              "version": "[4.10.2, )"
+            },
+            "Microsoft.Bot.Builder.Integration.ApplicationInsights.Core": {
+              "target": "Package",
+              "version": "[4.10.2, )"
+            },
+            "Microsoft.Bot.Builder.Integration.AspNet.Core": {
+              "target": "Package",
+              "version": "[4.10.2, )"
+            },
+            "Microsoft.Bot.Connector": {
+              "target": "Package",
+              "version": "[4.10.2, )"
+            },
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.400-preview-015151\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\source\\BotFramework-Composer\\MyBots\\AdaptiveMiddlewareSample\\runtime\\tests\\Microsoft.BotFramework.Composer.Tests.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\source\\BotFramework-Composer\\MyBots\\AdaptiveMiddlewareSample\\runtime\\tests\\Microsoft.BotFramework.Composer.Tests.csproj",
+        "projectName": "Microsoft.BotFramework.Composer.Tests",
+        "projectPath": "C:\\source\\BotFramework-Composer\\MyBots\\AdaptiveMiddlewareSample\\runtime\\tests\\Microsoft.BotFramework.Composer.Tests.csproj",
+        "packagesPath": "C:\\Users\\stevenic\\.nuget\\packages\\",
+        "outputPath": "C:\\source\\BotFramework-Composer\\MyBots\\AdaptiveMiddlewareSample\\runtime\\tests\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\source\\BotFramework-Composer\\MyBots\\AdaptiveMiddlewareSample\\runtime\\NuGet.Config",
+          "C:\\Users\\stevenic\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://botbuilder.myget.org/F/botbuilder-v4-dotnet-daily/api/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "projectReferences": {
+              "C:\\source\\BotFramework-Composer\\MyBots\\AdaptiveMiddlewareSample\\runtime\\azurewebapp\\Microsoft.BotFramework.Composer.WebApp.csproj": {
+                "projectPath": "C:\\source\\BotFramework-Composer\\MyBots\\AdaptiveMiddlewareSample\\runtime\\azurewebapp\\Microsoft.BotFramework.Composer.WebApp.csproj"
+              },
+              "C:\\source\\BotFramework-Composer\\MyBots\\AdaptiveMiddlewareSample\\runtime\\core\\Microsoft.BotFramework.Composer.Core.csproj": {
+                "projectPath": "C:\\source\\BotFramework-Composer\\MyBots\\AdaptiveMiddlewareSample\\runtime\\core\\Microsoft.BotFramework.Composer.Core.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "dependencies": {
+            "MSTest.TestAdapter": {
+              "target": "Package",
+              "version": "[1.4.0, )"
+            },
+            "MSTest.TestFramework": {
+              "target": "Package",
+              "version": "[1.4.0, )"
+            },
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[16.0.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.400-preview-015151\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
