@@ -33,34 +33,7 @@ const buildModifierKeyPrefix = (e: React.KeyboardEvent): string => {
   return prefix;
 };
 
-let scale = 1;
-function ScrollZoom(containerId: string, delta: number, maxScale: number, minScale: number, factor: number) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-  const target = container.children[0] as HTMLElement;
-
-  if (delta < 0) {
-    // Zoom in
-    scale += -delta * factor * 0.01;
-    scale = Math.min(maxScale, scale);
-  } else {
-    // Zoom out
-    scale -= delta * factor * 0.01;
-    scale = Math.max(minScale, scale);
-  }
-
-  target.style.transform = `scale(${scale})`;
-}
-
 export type KeyboardCommandHandler = (action: KeyboardCommand, e: React.KeyboardEvent) => object | void;
-
-export const handleMouseWheel = (e: WheelEvent, containerId: string) => {
-  e.preventDefault();
-  e.stopPropagation();
-  if (e.ctrlKey) {
-    ScrollZoom(containerId, e.deltaY, 5, 0.2, 0.1);
-  }
-};
 
 export const enableKeyboardCommandAttributes = (onCommand: KeyboardCommandHandler): DOMAttributes<HTMLDivElement> => {
   const handleKeyDown = (e: React.KeyboardEvent) => {
