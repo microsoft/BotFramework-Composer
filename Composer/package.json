@@ -53,7 +53,7 @@
     "build:plugins:runtimes": "cd plugins/runtimes && yarn install && yarn build",
     "start": "cross-env NODE_ENV=production PORT=3000 yarn start:server",
     "startall": "yarn start",
-    "start:dev": "concurrently  \"npm:start:client\" \"npm:start:server\"",
+    "start:dev": "concurrently  \"npm:start:client\" \"npm:start:server:dev\"",
     "start:client": "yarn workspace @bfc/client start",
     "start:server": "yarn workspace @bfc/server start",
     "start:server:dev": "yarn workspace @bfc/server start:dev",
