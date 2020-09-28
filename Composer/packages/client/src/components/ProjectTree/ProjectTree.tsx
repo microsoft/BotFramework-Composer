@@ -2,8 +2,15 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import React, { useCallback, useState, Fragment } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { jsx, css } from '@emotion/core';
+import {
+  GroupedList,
+  IGroup,
+  IGroupHeaderProps,
+  IGroupRenderProps,
+  IGroupedList,
+} from 'office-ui-fabric-react/lib/GroupedList';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
 import cloneDeep from 'lodash/cloneDeep';
@@ -12,16 +19,23 @@ import { DialogInfo, ITrigger } from '@bfc/shared';
 import { Resizable, ResizeCallback } from 're-resizable';
 import debounce from 'lodash/debounce';
 import { useRecoilValue } from 'recoil';
+import { IGroupedListStyles } from 'office-ui-fabric-react/lib/GroupedList';
 import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 
 import { dispatcherState, userSettingsState } from '../../recoilModel';
-import { botProjectSpaceSelector } from '../../recoilModel/selectors';
 import { createSelectedPath, getFriendlyName } from '../../utils/dialogUtil';
 import { containUnsupportedTriggers, triggerNotSupported } from '../../utils/dialogValidator';
 
 import { TreeItem } from './treeItem';
 
 // -------------------- Styles -------------------- //
+
+const groupListStyle: Partial<IGroupedListStyles> = {
+  root: {
+    width: '100%',
+    boxSizing: 'border-box',
+  },
+};
 
 const searchBox: ISearchBoxStyles = {
   root: {
@@ -39,29 +53,32 @@ const root = css`
   overflow-y: auto;
   overflow-x: hidden;
   .ms-List-cell {
-    min-height: 24px;
+    min-height: 36px;
   }
-`;
-
-const summaryStyle = css`
-  display: flex;
-  padding-left: 12px;
-  padding-top: 12px;
 `;
 
 // -------------------- ProjectTree -------------------- //
 
-export type TreeLink = {
-  displayName: string;
-  isRoot: boolean;
-  warningContent?: string;
-  projectId: string;
-  dialogName?: string;
-  trigger?: number;
-};
+function createGroupItem(dialog: DialogInfo, currentId: string, position: number, warningContent: string): IGroup {
+  return {
+    key: dialog.id,
+    name: dialog.displayName,
+    level: 1,
+    startIndex: position,
+    count: dialog.triggers.length,
+    hasMoreData: true,
+    isCollapsed: dialog.id !== currentId,
+    data: { ...dialog, warningContent },
+  };
+}
 
-function getTriggerName(trigger: ITrigger) {
-  return trigger.displayName || getFriendlyName({ $kind: trigger.type });
+function createItem(trigger: ITrigger, index: number, warningContent: string) {
+  return {
+    ...trigger,
+    index,
+    warningContent,
+    displayName: trigger.displayName || getFriendlyName({ $kind: trigger.type }),
+  };
 }
 
 function sortDialog(dialogs: DialogInfo[]) {
@@ -77,110 +94,90 @@ function sortDialog(dialogs: DialogInfo[]) {
   });
 }
 
-interface IProjectTreeProps {
-  dialogId: string;
-  selected: any;
-  dialogs: DialogInfo[];
-  onDeleteDialog: any;
-  onDeleteTrigger: any;
-  onSelect: (link: TreeLink) => void;
+function createItemsAndGroups(
+  dialogs: DialogInfo[],
+  dialogId: string,
+  filter: string
+): { items: any[]; groups: IGroup[] } {
+  let position = 0;
+  const result = dialogs
+    .filter((dialog) => {
+      return dialog.displayName.toLowerCase().includes(filter.toLowerCase());
+    })
+    .reduce(
+      (result: { items: any[]; groups: IGroup[] }, dialog) => {
+        const warningContent = containUnsupportedTriggers(dialog);
+        result.groups.push(createGroupItem(dialog, dialogId, position, warningContent));
+        position += dialog.triggers.length;
+        dialog.triggers.forEach((item, index) => {
+          const warningContent = triggerNotSupported(dialog, item);
+          result.items.push(createItem(item, index, warningContent));
+        });
+        return result;
+      },
+      { items: [], groups: [] }
+    );
+  return result;
 }
 
-const TYPE_TO_ICON_MAP = {
-  'Microsoft.OnUnknownIntent': '',
-};
-
-type BotInProject = {
-  dialogs: any;
-  projectId: string;
-  name: string;
-};
+interface IProjectTreeProps {
+  dialogs: DialogInfo[];
+  dialogId: string;
+  selected: string;
+  onSelect: (id: string, selected?: string) => void;
+  onDeleteTrigger: (id: string, index: number) => void;
+  onDeleteDialog: (id: string) => void;
+}
 
 export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
   const { onboardingAddCoachMarkRef, updateUserSettings } = useRecoilValue(dispatcherState);
   const { dialogNavWidth: currentWidth } = useRecoilValue(userSettingsState);
 
-  const { selected, onSelect, onDeleteDialog: onDelete } = props;
+  const groupRef: React.RefObject<IGroupedList> = useRef(null);
+  const { dialogs, dialogId, selected, onSelect, onDeleteTrigger, onDeleteDialog } = props;
   const [filter, setFilter] = useState('');
   const delayedSetFilter = debounce((newValue) => setFilter(newValue), 1000);
   const addMainDialogRef = useCallback((mainDialog) => onboardingAddCoachMarkRef({ mainDialog }), []);
-  const projectCollection = useRecoilValue<BotInProject[]>(botProjectSpaceSelector);
 
-  const renderBotHeader = (bot: BotInProject, hasWarnings: boolean) => {
-    const link: TreeLink = {
-      displayName: bot.name,
-      projectId: bot.projectId,
-      isRoot: true,
-      warningContent: hasWarnings ? formatMessage('This bot has warnings') : undefined,
-    };
+  const sortedDialogs = useMemo(() => {
+    return sortDialog(dialogs);
+  }, [dialogs]);
 
-    return (
-      <span
-        css={css`
-          margin-top: -6px;
-          width: 100%;
-        `}
-        role="grid"
-      >
-        <TreeItem showProps depth={0} icon={'ChatBot'} isSubItemActive={!!selected} link={link} onSelect={onSelect} />
-      </span>
-    );
-  };
-
-  const renderDialogHeader = (projectId: string, dialog: DialogInfo, warningContent: string) => {
-    const link: TreeLink = {
-      dialogName: dialog.id,
-      displayName: dialog.displayName,
-      isRoot: dialog.isRoot,
-      projectId: projectId,
-      warningContent,
+  const onRenderHeader = (props: IGroupHeaderProps) => {
+    const toggleCollapse = (): void => {
+      groupRef.current?.toggleCollapseAll(true);
+      props.onToggleCollapse?.(props.group!);
+      onSelect(props.group!.key);
     };
     return (
-      <span
-        ref={dialog.isRoot ? addMainDialogRef : null}
-        css={css`
-          margin-top: -6px;
-          width: 100%;
-        `}
-        role="grid"
-      >
+      <span ref={props.group?.data.isRoot && addMainDialogRef} role="grid">
         <TreeItem
-          showProps
-          depth={1}
-          icon={'CannedChat'}
+          depth={0}
+          isActive={!props.group!.isCollapsed}
           isSubItemActive={!!selected}
-          link={link}
-          onDelete={onDelete}
-          onSelect={onSelect}
+          link={props.group!.data}
+          onDelete={onDeleteDialog}
+          onSelect={toggleCollapse}
         />
       </span>
     );
   };
 
-  function renderTrigger(projectId: string, item: any, dialog: DialogInfo): React.ReactNode {
-    const link: TreeLink = {
-      displayName: item.displayName,
-      warningContent: item.warningContent,
-      trigger: item.index,
-      dialogName: dialog.id,
-      isRoot: false,
-      projectId: projectId,
-    };
-
+  function onRenderCell(nestingDepth?: number, item?: any): React.ReactNode {
     return (
       <TreeItem
-        key={`${item.id}_${item.index}`}
-        depth={2}
-        dialogName={dialog.displayName}
-        extraSpace={32}
-        icon={TYPE_TO_ICON_MAP[item.type] || 'Flow'}
-        isActive={dialog.id === props.dialogId && createSelectedPath(item.index) === selected}
-        link={link}
-        onDelete={onDelete}
-        onSelect={onSelect}
+        depth={nestingDepth}
+        isActive={createSelectedPath(item.index) === selected}
+        link={item}
+        onDelete={() => onDeleteTrigger(dialogId, item.index)}
+        onSelect={() => onSelect(dialogId, createSelectedPath(item.index))}
       />
     );
   }
+
+  const onRenderShowAll = () => {
+    return null;
+  };
 
   const onFilter = (_e?: any, newValue?: string): void => {
     if (typeof newValue === 'string') {
@@ -192,103 +189,68 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
     updateUserSettings({ dialogNavWidth: currentWidth + d.width });
   };
 
-  function filterMatch(scope: string) {
-    return scope.toLowerCase().includes(filter.toLowerCase());
-  }
-
-  function createDetailsTree(bot: BotInProject) {
-    const { projectId } = bot;
-    const dialogs = sortDialog(bot.dialogs);
-
-    const filteredDialogs =
-      filter == null || filter.length === 0
-        ? dialogs
-        : dialogs.filter(
-            (dialog) =>
-              filterMatch(dialog.displayName) || dialog.triggers.some((trigger) => filterMatch(getTriggerName(trigger)))
-          );
-
-    return filteredDialogs.map((dialog: DialogInfo) => {
-      const triggerList = dialog.triggers
-        .filter((tr) => filterMatch(dialog.displayName) || filterMatch(getTriggerName(tr)))
-        .map((tr, index) =>
-          renderTrigger(
-            projectId,
-            { ...tr, index, displayName: getTriggerName(tr), warningContent: triggerNotSupported(dialog, tr) },
-            dialog
-          )
-        );
-      return (
-        <details key={dialog.id} ref={dialog.isRoot ? addMainDialogRef : undefined}>
-          <summary css={summaryStyle}>
-            {renderDialogHeader(projectId, dialog, containUnsupportedTriggers(dialog))}
-          </summary>
-          {triggerList}
-        </details>
-      );
-    });
-  }
-
-  function createBotSubtree(bot: BotInProject) {
-    return (
-      <details key={bot.projectId}>
-        <summary css={summaryStyle}>{renderBotHeader(bot, false)}</summary>
-        {createDetailsTree(bot)}
-      </details>
-    );
-  }
-
-  const projectTree =
-    projectCollection.length === 1 ? createDetailsTree(projectCollection[0]) : projectCollection.map(createBotSubtree);
+  const itemsAndGroups: { items: any[]; groups: IGroup[] } = createItemsAndGroups(sortedDialogs, dialogId, filter);
 
   return (
-    <Fragment>
-      <Resizable
-        enable={{
-          right: true,
-        }}
-        maxWidth={500}
-        minWidth={180}
-        size={{ width: currentWidth, height: 'auto' }}
-        onResizeStop={handleResize}
+    <Resizable
+      enable={{
+        right: true,
+      }}
+      maxWidth={500}
+      minWidth={180}
+      size={{ width: currentWidth, height: 'auto' }}
+      onResizeStop={handleResize}
+    >
+      <div
+        aria-label={formatMessage('Navigation pane')}
+        className="ProjectTree"
+        css={root}
+        data-testid="ProjectTree"
+        role="region"
       >
-        <div
-          aria-label={formatMessage('Navigation pane')}
-          className="ProjectTree"
-          css={root}
-          data-testid="ProjectTree"
-          role="region"
-        >
-          <FocusZone isCircularNavigation direction={FocusZoneDirection.vertical}>
-            <SearchBox
-              underlined
-              ariaLabel={formatMessage('Type dialog name')}
-              iconProps={{ iconName: 'Filter' }}
-              placeholder={formatMessage('Filter Dialog')}
-              styles={searchBox}
-              onChange={onFilter}
-            />
-            <div
-              aria-label={formatMessage(
-                `{
+        <FocusZone isCircularNavigation direction={FocusZoneDirection.vertical}>
+          <SearchBox
+            underlined
+            ariaLabel={formatMessage('Type dialog name')}
+            iconProps={{ iconName: 'Filter' }}
+            placeholder={formatMessage('Filter Dialog')}
+            styles={searchBox}
+            onChange={onFilter}
+          />
+          <div
+            aria-label={formatMessage(
+              `{
             dialogNum, plural,
-                =0 {No bots}
-                =1 {One bot}
-              other {# bots}
+                =0 {No dialogs}
+                =1 {One dialog}
+              other {# dialogs}
             } have been found.
             {
               dialogNum, select,
                   0 {}
                 other {Press down arrow key to navigate the search results}
             }`,
-                { dialogNum: projectCollection.length }
-              )}
-              aria-live={'polite'}
-            />
-            {projectTree}
-          </FocusZone>
-        </div>
-      </Resizable>
-    </Fragment>
+              { dialogNum: itemsAndGroups.groups.length }
+            )}
+            aria-live={'polite'}
+          />
+          <GroupedList
+            {...itemsAndGroups}
+            componentRef={groupRef}
+            groupProps={
+              {
+                onRenderHeader: onRenderHeader,
+                onRenderShowAll: onRenderShowAll,
+                showEmptyGroups: true,
+                showAllProps: false,
+                isAllGroupsCollapsed: true,
+              } as Partial<IGroupRenderProps>
+            }
+            styles={groupListStyle}
+            onRenderCell={onRenderCell}
+          />
+        </FocusZone>
+      </div>
+    </Resizable>
   );
 };

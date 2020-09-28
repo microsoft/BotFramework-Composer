@@ -88,23 +88,6 @@ export const botProjectFileDispatcher = () => {
     }
   );
 
-  // const removeRemoteSkillFromBotProjectFile = useRecoilCallback(
-  //   ({ set, snapshot }: CallbackInterface) => async (rootBotProjectId: string, projectId: string) => {
-  //     const manifestLocation = await snapshot.getPromise(locationState(projectId));
-  //     set(botProjectFileState(rootBotProjectId), (current: BotProjectSpace) => {
-  //       const result = produce(current, (draftState: BotProjectSpace) => {
-  //         draftState.skills = draftState.skills.filter(({ manifest, remote }) => {
-  //           if (remote) {
-  //             return manifestLocation !== manifest;
-  //           }
-  //           return true;
-  //         });
-  //       });
-  //       return result;
-  //     });
-  //   }
-  // );
-
   // const renameRootBotInBotProjectFile = useRecoilCallback(
   //   ({ set, snapshot }: CallbackInterface) => async (projectId: string) => {
   //     const location = await snapshot.getPromise(locationState(projectId));
