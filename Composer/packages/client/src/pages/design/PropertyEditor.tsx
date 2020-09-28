@@ -9,7 +9,6 @@ import { FormErrors, JSONSchema7, useFormConfig, useShellApi } from '@bfc/extens
 import formatMessage from 'format-message';
 import isEqual from 'lodash/isEqual';
 import debounce from 'lodash/debounce';
-// import { Resizable, ResizeCallback } from 're-resizable';
 import { MicrosoftAdaptiveDialog } from '@bfc/shared';
 
 import { formEditor } from './styles';
@@ -27,12 +26,6 @@ function resolveBaseSchema(schema: JSONSchema7, $kind: string): JSONSchema7 | un
 const PropertyEditor: React.FC = () => {
   const { shellApi, ...shellData } = useShellApi();
   const { currentDialog, data: formData = {}, focusPath, focusedSteps, schemas } = shellData;
-
-  // const currentWidth = shellData?.userSettings?.propertyEditorWidth || 400;
-
-  // const handleResize: ResizeCallback = (_e, _dir, _ref, d) => {
-  //   shellApi.updateUserSettings({ propertyEditorWidth: currentWidth + d.width });
-  // };
 
   const [localData, setLocalData] = useState(formData as MicrosoftAdaptiveDialog);
 
@@ -114,17 +107,6 @@ const PropertyEditor: React.FC = () => {
   const handleDataChange = (newData?: any) => {
     setLocalData(newData);
   };
-
-  // <Resizable
-  //     enable={{
-  //       left: true,
-  //     }}
-  //     maxWidth={800}
-  //     minWidth={400}
-  //     size={{ width: currentWidth, height: 'auto' }}
-  //     onResizeStop={handleResize}
-  //   >
-  //     </Resizable>
 
   return (
     <div aria-label={formatMessage('form editor')} css={formEditor} data-testid="PropertyEditor" role="region">
