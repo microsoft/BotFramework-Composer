@@ -4,8 +4,8 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useMemo, FunctionComponent, useContext } from 'react';
+import { WidgetContainerProps } from '@bfc/extension-client';
 
-import { WidgetContainerProps } from '../types/flowRenderer.types';
 import { transformForeach } from '../transformers/transformForeach';
 import { foreachLayouter } from '../layouters/foreachLayouter';
 import { GraphNode } from '../models/GraphNode';

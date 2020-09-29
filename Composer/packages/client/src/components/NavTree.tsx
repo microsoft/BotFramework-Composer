@@ -3,25 +3,21 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { Resizable, ResizeCallback } from 're-resizable';
 import { DefaultButton, CommandBarButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
 import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 import { NeutralColors } from '@uifabric/fluent-theme';
-import { useRecoilValue } from 'recoil';
 import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
 
 import { navigateTo } from '../utils/navigation';
-import { dispatcherState, userSettingsState } from '../recoilModel';
 
 // -------------------- Styles -------------------- //
 
 const root = css`
   width: 100%;
   height: 100%;
-  border-right: 1px solid #c4c4c4;
   box-sizing: border-box;
   overflow-y: auto;
   overflow-x: hidden;
@@ -79,75 +75,59 @@ interface INavTreeProps {
 
 const NavTree: React.FC<INavTreeProps> = (props) => {
   const { navLinks, regionName } = props;
-  const { updateUserSettings } = useRecoilValue(dispatcherState);
-  const { dialogNavWidth: currentWidth } = useRecoilValue(userSettingsState);
-
-  const handleResize: ResizeCallback = (_e, _dir, _ref, d) => {
-    updateUserSettings({ dialogNavWidth: currentWidth + d.width });
-  };
 
   return (
-    <Resizable
-      enable={{
-        right: true,
-      }}
-      maxWidth={500}
-      minWidth={180}
-      size={{ width: currentWidth, height: 'auto' }}
-      onResizeStop={handleResize}
-    >
-      <div aria-label={regionName} className="ProjectTree" css={root} data-testid="ProjectTree" role="region">
-        {navLinks.map((item) => {
-          const isSelected = location.pathname.includes(item.url);
-          const onRenderOverflowButton = (menuItems: IOverflowSetItemProps[] | undefined): JSX.Element => {
-            const buttonStyles: Partial<IButtonStyles> = {
-              root: {
-                minWidth: 0,
-                padding: '0 4px',
-                alignSelf: 'stretch',
-                height: 'auto',
-                background: isSelected ? NeutralColors.gray20 : NeutralColors.white,
-              },
-            };
-            return (
-              <CommandBarButton
-                ariaLabel="Menu items"
-                menuIconProps={item.menuIconProps as IIconProps}
-                menuProps={{ items: menuItems as IContextualMenuItem[] }}
-                role="menuitem"
-                styles={buttonStyles}
-              />
-            );
+    <div aria-label={regionName} className="ProjectTree" css={root} data-testid="ProjectTree" role="region">
+      {navLinks.map((item) => {
+        const isSelected = location.pathname.includes(item.url);
+        const onRenderOverflowButton = (menuItems: IOverflowSetItemProps[] | undefined): JSX.Element => {
+          const buttonStyles: Partial<IButtonStyles> = {
+            root: {
+              minWidth: 0,
+              padding: '0 4px',
+              alignSelf: 'stretch',
+              height: 'auto',
+              background: isSelected ? NeutralColors.gray20 : NeutralColors.white,
+            },
           };
-
           return (
-            <div key={item.id} style={{ display: 'flex' }}>
-              <DefaultButton
-                key={item.id}
-                disabled={item.disabled}
-                href={item.url}
-                styles={isSelected ? itemSelected : itemNotSelected}
-                text={item.name}
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigateTo(item.url);
-                }}
-              />
-              {item.menuItems && !item.disabled && (
-                <OverflowSet
-                  key={item.id + 'menu'}
-                  items={[]}
-                  overflowItems={item.menuItems as IOverflowSetItemProps[]}
-                  role="menubar"
-                  onRenderItem={() => undefined}
-                  onRenderOverflowButton={onRenderOverflowButton}
-                />
-              )}
-            </div>
+            <CommandBarButton
+              ariaLabel="Menu items"
+              menuIconProps={item.menuIconProps as IIconProps}
+              menuProps={{ items: menuItems as IContextualMenuItem[] }}
+              role="menuitem"
+              styles={buttonStyles}
+            />
           );
-        })}
-      </div>
-    </Resizable>
+        };
+
+        return (
+          <div key={item.id} style={{ display: 'flex' }}>
+            <DefaultButton
+              key={item.id}
+              disabled={item.disabled}
+              href={item.url}
+              styles={isSelected ? itemSelected : itemNotSelected}
+              text={item.name}
+              onClick={(e) => {
+                e.preventDefault();
+                navigateTo(item.url);
+              }}
+            />
+            {item.menuItems && !item.disabled && (
+              <OverflowSet
+                key={item.id + 'menu'}
+                items={[]}
+                overflowItems={item.menuItems as IOverflowSetItemProps[]}
+                role="menubar"
+                onRenderItem={() => undefined}
+                onRenderOverflowButton={onRenderOverflowButton}
+              />
+            )}
+          </div>
+        );
+      })}
+    </div>
   );
 };
 
