@@ -3,16 +3,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
-// import { Subscription } from '@bfc/shared';
 
-import {
-  // subscriptionsState,
-  // resourceGroupsState,
-  // resourcesState,
-  // deployLocationsState,
-  settingsState,
-} from '../atoms/botState';
-// import { getAccessTokenInCache, loginPopup, getGraphTokenInCache } from '../../utils/auth';
+import { settingsState } from '../atoms/botState';
 
 import httpClient from './../../utils/httpUtil';
 
@@ -22,94 +14,6 @@ export const provisionDispatcher = () => {
      However I'm leaving it here just in case that was the wrong decision, and also to leave the structure of this in place
      so that we can use it for possible near term intergrations between the Composer core and the azurepublish provisioning component.
   */
-
-  // const getSubscriptions = useRecoilCallback(({ set }: CallbackInterface) => async () => {
-  //   try {
-  //     const token = getAccessTokenInCache();
-  //     console.log(token);
-  //     const result = await httpClient.get('/azure/subscriptions', {
-  //       headers: { Authorization: `Bearer ${token}` },
-  //     });
-  //     console.log(result.data);
-  //     set(subscriptionsState, () => {
-  //       const subscriptions: Subscription[] = [];
-  //       result.data.value?.map((item) => {
-  //         subscriptions.push({
-  //           subscriptionId: item.subscriptionId,
-  //           tenantId: item.tenantId,
-  //           displayName: item.displayName,
-  //         });
-  //       });
-  //       console.log(subscriptions);
-  //       return subscriptions;
-  //     });
-  //   } catch (error) {
-  //     console.log(error.response.data);
-  //     // popup window to login
-  //     if (error.response.data.redirectUri) {
-  //       await loginPopup();
-  //     }
-  //     // save token in localStorage
-  //   }
-  // });
-
-  // const getResourceGroups = useRecoilCallback(({ set }: CallbackInterface) => async (subscriptionId: string) => {
-  //   try {
-  //     const token = getAccessTokenInCache();
-  //     console.log(token);
-  //     const result = await httpClient.get(`/azure/resourceGroups/${subscriptionId}`, {
-  //       headers: { Authorization: `Bearer ${token}` },
-  //     });
-  //     console.log(result.data);
-  //     set(resourceGroupsState, result.data.value);
-  //   } catch (error) {
-  //     console.log(error.response.data);
-  //     // popup window to login
-  //     if (error.response.data.redirectUri) {
-  //       await loginPopup();
-  //     }
-  //   }
-  // });
-
-  // // get resources by resource group
-  // const getResources = useRecoilCallback(
-  //   ({ set }: CallbackInterface) => async (subscriptionId: string, resourceGroup: string) => {
-  //     try {
-  //       const token = getAccessTokenInCache();
-  //       console.log(token);
-  //       const result = await httpClient.get(`/azure/resources/${subscriptionId}/${resourceGroup}`, {
-  //         headers: { Authorization: `Bearer ${token}` },
-  //       });
-  //       console.log(result.data);
-  //       set(resourcesState, result.data.value);
-  //     } catch (error) {
-  //       console.log(error.response.data);
-  //       // popup window to login
-  //       if (error.response.data.redirectUri) {
-  //         await loginPopup();
-  //       }
-  //     }
-  //   }
-  // );
-
-  // const getDeployLocations = useRecoilCallback(({ set }: CallbackInterface) => async (subscriptionId: string) => {
-  //   try {
-  //     const token = getAccessTokenInCache();
-  //     console.log(token);
-  //     const result = await httpClient.get(`/azure/locations/${subscriptionId}`, {
-  //       headers: { Authorization: `Bearer ${token}` },
-  //     });
-  //     console.log(result.data);
-  //     set(deployLocationsState, result.data.value);
-  //   } catch (error) {
-  //     console.log(error.response.data);
-  //     // popup window to login
-  //     if (error.response.data.redirectUri) {
-  //       await loginPopup();
-  //     }
-  //   }
-  // });
-
   // const provisionToTarget = useRecoilCallback(
   //   ({ set }: CallbackInterface) => async (config: any, type: string, projectId: string) => {
   //     try {
@@ -186,10 +90,6 @@ export const provisionDispatcher = () => {
   );
 
   return {
-    // getSubscriptions,
-    // getResources,
-    // getResourceGroups,
-    // getDeployLocations,
     getProvisionStatus,
     // provisionToTarget,
   };
