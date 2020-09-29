@@ -189,7 +189,7 @@ const Extensions: React.FC<RouteComponentProps> = () => {
           if (extensions.length === 0) {
             return (
               <div css={noExtensionsStyles}>
-                <p>No extensions installed</p>
+                <p>{formatMessage('No extensions installed')}</p>
               </div>
             );
           }

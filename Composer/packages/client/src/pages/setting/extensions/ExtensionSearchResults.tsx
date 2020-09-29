@@ -116,7 +116,7 @@ const ExtensionSearchResults: React.FC<ExtensionSearchResultsProps> = (props) =>
             if (!isSearching && results.length === 0) {
               return (
                 <div css={noResultsStyles}>
-                  <p>No search results</p>
+                  <p>{formatMessage('No search results')}</p>
                 </div>
               );
             }
