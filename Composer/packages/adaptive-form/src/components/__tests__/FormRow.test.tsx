@@ -8,9 +8,8 @@ import { FormRow, FormRowProps, getRowProps } from '../FormRow';
 
 jest.mock('../SchemaField', () => ({ SchemaField: () => <div data-testid="SchemaField" /> }));
 
-const fieldChangeMock = jest.fn();
 const field: FormRowProps = {
-  onChange: jest.fn().mockReturnValue(fieldChangeMock),
+  onChange: jest.fn(),
   row: '',
   definitions: {},
   depth: 0,
@@ -78,7 +77,7 @@ describe('getRowProps', () => {
   });
 
   it('binds the onChange to the field', () => {
-    expect(getRowProps(field, 'single').onChange).toEqual(fieldChangeMock);
-    expect(field.onChange).toHaveBeenCalledWith('single');
+    expect(getRowProps(field, 'single').onChange('test'));
+    expect(field.onChange).toHaveBeenCalledWith({ single: 'test' });
   });
 });
