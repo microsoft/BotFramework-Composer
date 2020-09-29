@@ -1,8 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 export * from './arrayUtils';
-export * from './getFieldSets';
+export * from './getFieldsets';
 export * from './getHiddenProperties';
+export * from './getSchemaWithAdditionalFields';
 export * from './getOrderedProperties';
 export * from './getUIOptions';
 export * from './getValueType';
