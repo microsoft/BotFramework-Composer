@@ -12,17 +12,18 @@ import {
   BuiltInStringFormat,
   builtInStringFormats,
   FormDialogPropertyPayload,
+  IntegerPropertyPayload,
   NumberPropertyPayload,
   RefPropertyPayload,
-  SchemaPropertyKind,
+  FormDialogPropertyKind,
   StringPropertyPayload,
 } from 'src/atoms/types';
 import { FieldLabel } from 'src/components/common/FieldLabel';
 
 const processSelection = (
   isArray: boolean,
-  oldKind: SchemaPropertyKind,
-  newKind: SchemaPropertyKind,
+  oldKind: FormDialogPropertyKind,
+  newKind: FormDialogPropertyKind,
   selectedKey: string,
   payload: FormDialogPropertyPayload
 ): FormDialogPropertyPayload => {
@@ -41,21 +42,30 @@ const processSelection = (
       case 'string':
         return {
           ...payload,
-          enums: selectedKey === 'enums' ? [] : undefined,
           format:
             selectedKey !== 'string' && selectedKey !== 'enums' ? (selectedKey as BuiltInStringFormat) : undefined,
+          enums: selectedKey === 'enums' ? [] : undefined,
         } as StringPropertyPayload;
       case 'number':
         return { kind: 'number' } as NumberPropertyPayload;
+      case 'integer':
+        return { kind: 'integer' } as IntegerPropertyPayload;
       case 'ref':
         return { ...payload, ref: selectedKey } as RefPropertyPayload;
     }
   } else {
     switch (newKind) {
       case 'string':
-        return { kind: newKind, format: selectedKey as BuiltInStringFormat } as StringPropertyPayload;
+        return {
+          kind: newKind,
+          format:
+            selectedKey !== 'string' && selectedKey !== 'enums' ? (selectedKey as BuiltInStringFormat) : undefined,
+          enums: selectedKey === 'enums' ? [] : undefined,
+        } as StringPropertyPayload;
       case 'number':
         return { kind: newKind } as NumberPropertyPayload;
+      case 'integer':
+        return { kind: newKind } as IntegerPropertyPayload;
       case 'ref':
         return { kind: newKind, ref: selectedKey } as RefPropertyPayload;
     }
@@ -64,9 +74,9 @@ const processSelection = (
 
 type Props = {
   isArray: boolean;
-  kind: SchemaPropertyKind;
+  kind: FormDialogPropertyKind;
   payload: FormDialogPropertyPayload;
-  onChange: (kind: SchemaPropertyKind, payload?: FormDialogPropertyPayload) => void;
+  onChange: (kind: FormDialogPropertyKind, payload?: FormDialogPropertyPayload) => void;
 };
 
 export const PropertyTypeSelector = React.memo((props: Props) => {
@@ -102,7 +112,13 @@ export const PropertyTypeSelector = React.memo((props: Props) => {
     () =>
       [
         { key: 'number', text: formatMessage('number'), selected: kind === 'number', data: 'number' },
-        { key: 'string', text: formatMessage('any string'), selected: kind === 'string', data: 'string' },
+        { key: 'integer', text: formatMessage('integer'), selected: kind === 'integer', data: 'integer' },
+        {
+          key: 'string',
+          text: formatMessage('any string'),
+          selected: kind === 'string' && !(payload as StringPropertyPayload).format,
+          data: 'string',
+        },
         ...stringOptions,
         ...templateOptions,
       ].sort((a, b) => a.text.localeCompare(b.text)) as IDropdownOption[],
@@ -118,9 +134,11 @@ export const PropertyTypeSelector = React.memo((props: Props) => {
         data: 'string',
       } as IDropdownOption,
       {
+        key: 'divider1',
         itemType: DropdownMenuItemType.Divider,
       } as IDropdownOption,
       {
+        key: 'header1',
         itemType: DropdownMenuItemType.Header,
         text: formatMessage('Define by value type'),
       } as IDropdownOption,
@@ -132,7 +150,7 @@ export const PropertyTypeSelector = React.memo((props: Props) => {
 
   const change = React.useCallback(
     (_: React.FormEvent<HTMLDivElement>, option: IDropdownOption) => {
-      const newKind = option.data as SchemaPropertyKind;
+      const newKind = option.data as FormDialogPropertyKind;
       const selectedKey = option.key as string;
       const newPayload = processSelection(isArray, kind, newKind, selectedKey, payload);
       onChange(newKind, newPayload);

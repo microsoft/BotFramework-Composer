@@ -1,15 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import styled from '@emotion/styled';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import * as React from 'react';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { useRecoilValue } from 'recoil';
-import { useHandlers } from 'src/atoms/handlers';
-import { PropertyList } from 'src/components/property/PropertyList';
-import styled from '@emotion/styled';
 import { formDialogSchemaAtom } from 'src/atoms/appState';
+import { useHandlers } from 'src/atoms/handlers';
+import { PropertyRequiredKind } from 'src/atoms/types';
+import { PropertyList } from 'src/components/property/PropertyList';
 
 const Separator = styled.div({
   background: NeutralColors.gray60,
@@ -32,8 +33,8 @@ export const FormDialogSchemaDetails = () => {
 
       moveProperty({
         id: draggableId,
-        source: source.droppableId as 'required' | 'optional',
-        destination: destination.droppableId as 'required' | 'optional',
+        source: source.droppableId as PropertyRequiredKind,
+        destination: destination.droppableId as PropertyRequiredKind,
         fromIndex: source.index,
         toIndex: destination.index,
       });

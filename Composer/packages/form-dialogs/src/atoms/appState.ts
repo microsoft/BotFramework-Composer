@@ -1,6 +1,7 @@
-/* eslint-disable @typescript-eslint/consistent-type-assertions */
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+
+/* eslint-disable @typescript-eslint/consistent-type-assertions */
 
 import { atom, atomFamily, selector, selectorFamily } from 'recoil';
 import { FormDialogProperty, FormDialogSchema } from 'src/atoms/types';

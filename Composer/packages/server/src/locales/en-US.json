@@ -209,6 +209,9 @@
   "any_or_expression_acad7d37": {
     "message": "Any or expression"
   },
+  "any_string_f22dc2e1": {
+    "message": "any string"
+  },
   "append_choices_35c45a2d": {
     "message": "Append choices"
   },
@@ -229,6 +232,9 @@
   },
   "are_you_sure_you_want_to_exit_the_onboarding_produ_c2de1b23": {
     "message": "Are you sure you want to exit the Onboarding Product Tour? You can restart the tour in the onboarding settings."
+  },
+  "are_you_sure_you_want_to_remove_propertyname_8a793e4f": {
+    "message": "Are you sure you want to remove \"{ propertyName }\"?"
   },
   "are_you_sure_you_want_to_start_over_your_progress__3b7cde9b": {
     "message": "Are you sure you want to start over? Your progress will be lost."
@@ -650,6 +656,9 @@
   "default_recognizer_9c06c1a3": {
     "message": "Default recognizer"
   },
+  "define_by_value_type_3cd3d1a8": {
+    "message": "Define by value type"
+  },
   "define_conversation_objective_146d1cc6": {
     "message": "Define conversation objective"
   },
@@ -871,9 +880,6 @@
   },
   "enum_help_text_434bd44f": {
     "message": "Enum help text"
-  },
-  "enum_list_bd1c6516": {
-    "message": "enum (list)"
   },
   "environment_68aed6d3": {
     "message": "Environment"
@@ -1139,6 +1145,9 @@
   "install_the_update_and_restart_composer_fac30a61": {
     "message": "Install the update and restart Composer."
   },
+  "integer_7f378275": {
+    "message": "integer"
+  },
   "integer_b08abbe9": {
     "message": "Integer"
   },
@@ -1270,6 +1279,12 @@
   },
   "link_to_where_this_luis_intent_is_defined_9be25fb7": {
     "message": "link to where this LUIS intent is defined"
+  },
+  "list_a034633b": {
+    "message": "list"
+  },
+  "list_count_values_33ea7088": {
+    "message": "list - { count } values"
   },
   "list_view_e33843f0": {
     "message": "List view"
@@ -1511,6 +1526,9 @@
   "no_lu_or_qna_file_with_name_id_21cfe9dc": {
     "message": "NO LU OR QNA FILE WITH NAME { id }"
   },
+  "no_name_e082310e": {
+    "message": "[no name]"
+  },
   "no_updates_available_cecd904d": {
     "message": "No updates available"
   },
@@ -1604,8 +1622,14 @@
   "open_skills_page_for_configuration_details_a2a484ea": {
     "message": "Open Skills page for configuration details"
   },
+  "optional_221bcc9d": {
+    "message": "Optional"
+  },
   "optional_db6daecb": {
     "message": "optional"
+  },
+  "optional_properties_2c23c7c6": {
+    "message": "Optional properties"
   },
   "or_4f7d4edb": {
     "message": "Or: "
@@ -1730,11 +1754,17 @@
   "property_editor_preferences_ad7a4b62": {
     "message": "Property editor preferences"
   },
+  "property_has_error_s_please_fix_the_error_s_for_th_e994c143": {
+    "message": "Property has error(s), please fix the error(s) for this property."
+  },
   "property_name_914371f5": {
     "message": "Property name"
   },
   "property_name_help_text_421a5f7f": {
     "message": "Property name help text"
+  },
+  "property_quick_actions_d3498f14": {
+    "message": "Property quick actions"
   },
   "property_required_help_text_57f027ad": {
     "message": "Property required help text"
@@ -1744,6 +1774,9 @@
   },
   "property_type_95689fa5": {
     "message": "Property type."
+  },
+  "property_type_e38cf7e4": {
+    "message": "Property Type"
   },
   "property_type_help_text_8a2c202d": {
     "message": "Property type help text"
@@ -1855,6 +1888,18 @@
   },
   "required_5f7ef8c0": {
     "message": "Required"
+  },
+  "required_a6089a96": {
+    "message": "required"
+  },
+  "required_properties_dfb0350d": {
+    "message": "Required properties"
+  },
+  "requiredtext_ff8f722f": {
+    "message": "{ requiredText }"
+  },
+  "requiredtext_priority_priority_4293288f": {
+    "message": "{ requiredText } | Priority: { priority }"
   },
   "response_is_response_3cd62f8f": {
     "message": "Response is { response }"
@@ -2090,9 +2135,6 @@
   "string_24369b3": {
     "message": "String"
   },
-  "string_5ef6c85": {
-    "message": "string"
-  },
   "string_field_db491570": {
     "message": "string field"
   },
@@ -2152,6 +2194,9 @@
   },
   "the_welcome_message_is_triggered_by_the_i_conversa_a3ff58f8": {
     "message": "The welcome message is triggered by the <i>ConversationUpdate</i> event. To add a new <i>ConversationUpdate</i> trigger:"
+  },
+  "there_are_no_kind_properties_e299287e": {
+    "message": "There are no { kind } properties."
   },
   "there_was_an_error_74ed3c58": {
     "message": "There was an error"

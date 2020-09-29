@@ -6,12 +6,12 @@ import formatMessage from 'format-message';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import * as React from 'react';
-import { FormDialogPropertyPayload, NumberPropertyPayload } from 'src/atoms/types';
+import { IntegerPropertyPayload, NumberPropertyPayload } from 'src/atoms/types';
 import { FieldLabel } from 'src/components/common/FieldLabel';
 
 type Props = {
-  payload: NumberPropertyPayload;
-  onChangePayload: (payload: FormDialogPropertyPayload) => void;
+  payload: NumberPropertyPayload | IntegerPropertyPayload;
+  onChangePayload: (payload: NumberPropertyPayload | IntegerPropertyPayload) => void;
 };
 
 export const NumberPropertyContent = React.memo((props: Props) => {
@@ -38,9 +38,12 @@ export const NumberPropertyContent = React.memo((props: Props) => {
           placeholder={formatMessage('Enter a min value')}
           styles={{ root: { flex: 1 } }}
           type="number"
-          value={`${payload.minimum || ''}`}
+          value={`${payload.minimum ?? ''}`}
           onChange={(_e, value) =>
-            onChangePayload({ ...payload, minimum: parseInt(value, 10) } as NumberPropertyPayload)
+            onChangePayload({
+              ...payload,
+              minimum: payload.kind === 'integer' ? parseInt(value, 10) : parseFloat(value),
+            })
           }
           onRenderLabel={onRenderLabel(formatMessage('Minimum help text'), minTooltipId)}
         />
@@ -50,9 +53,12 @@ export const NumberPropertyContent = React.memo((props: Props) => {
           placeholder={formatMessage('Enter a max value')}
           styles={{ root: { flex: 1 } }}
           type="number"
-          value={`${payload.maximum || ''}`}
+          value={`${payload.maximum ?? ''}`}
           onChange={(_e, value) =>
-            onChangePayload({ ...payload, maximum: parseInt(value, 10) } as NumberPropertyPayload)
+            onChangePayload({
+              ...payload,
+              maximum: payload.kind === 'integer' ? parseInt(value, 10) : parseFloat(value),
+            })
           }
           onRenderLabel={onRenderLabel(formatMessage('Maximum help text'), maxTooltipId)}
         />

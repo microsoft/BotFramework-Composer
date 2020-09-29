@@ -8,7 +8,7 @@ import { formDialogSchemaJsonSelector } from 'src/atoms/appState';
 import { useHandlers } from 'src/atoms/handlers';
 import { VisualEditor } from 'src/components/VisualEditor';
 
-export type FormDialogEditorProps = {
+export type FormDialogSchemaEditorProps = {
   /**
    * Unique id for the visual editor.
    */
@@ -39,7 +39,7 @@ export type FormDialogEditorProps = {
   onGenerateDialog: (formDialogSchemaJson: string) => void;
 };
 
-const InternalFormDialogEditor = React.memo((props: FormDialogEditorProps) => {
+const InternalFormDialogSchemaEditor = React.memo((props: FormDialogSchemaEditorProps) => {
   const {
     editorId,
     schema,
@@ -83,10 +83,10 @@ const InternalFormDialogEditor = React.memo((props: FormDialogEditorProps) => {
   );
 });
 
-export const FormDialogEditor = (props: FormDialogEditorProps) => {
+export const FormDialogSchemaEditor = (props: FormDialogSchemaEditorProps) => {
   return (
     <RecoilRoot>
-      <InternalFormDialogEditor {...props}></InternalFormDialogEditor>
+      <InternalFormDialogSchemaEditor {...props}></InternalFormDialogSchemaEditor>
     </RecoilRoot>
   );
 };

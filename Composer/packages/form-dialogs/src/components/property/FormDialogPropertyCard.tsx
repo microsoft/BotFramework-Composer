@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import styled from '@emotion/styled';
-import { FluentTheme } from '@uifabric/fluent-theme';
+import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
 import { useId } from '@uifabric/react-hooks';
 import formatMessage from 'format-message';
 import { CommandBarButton, IconButton } from 'office-ui-fabric-react/lib/Button';
@@ -10,7 +10,6 @@ import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { FocusZone } from 'office-ui-fabric-react/lib/FocusZone';
 import { IOverflowSetItemProps, OverflowSet } from 'office-ui-fabric-react/lib/OverflowSet';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { Text } from 'office-ui-fabric-react/lib/Text';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import * as React from 'react';
 import { DraggableProvidedDragHandleProps } from 'react-beautiful-dnd';
@@ -18,30 +17,29 @@ import {
   ArrayPropertyPayload,
   FormDialogProperty,
   FormDialogPropertyPayload,
+  IntegerPropertyPayload,
   NumberPropertyPayload,
-  SchemaPropertyKind,
+  FormDialogPropertyKind,
   StringPropertyPayload,
 } from 'src/atoms/types';
 import { FieldLabel } from 'src/components/common/FieldLabel';
 import { NumberPropertyContent } from 'src/components/property/NumberPropertyContent';
 import { PropertyTypeSelector } from 'src/components/property/PropertyTypeSelector';
+import { RequiredPriorityIndicator } from 'src/components/property/RequiredPriorityIndicator';
 import { StringPropertyContent } from 'src/components/property/StringPropertyContent';
 
-const ContentRoot = styled.div(({ isValid, isDragging }: { isValid: boolean; isDragging: boolean }) => ({
+const ContentRoot = styled.div(({ isValid }: { isValid: boolean }) => ({
   width: 720,
   position: 'relative',
   display: 'flex',
   flexDirection: 'column',
   background: FluentTheme.palette.white,
-  padding: 24,
-  boxShadow: isDragging
-    ? '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)'
-    : '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
+  padding: '14px 24px 24px 24px',
   transition: 'box-shadow 0.25s cubic-bezier(.25,.8,.25,1)',
-  margin: '6px 0 10px 0',
+  boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
+  margin: '8px 0 10px 0',
   transform: 'scale(1.025)',
   transformOrigin: 'center',
-  zIndex: 1,
   '& > *:not(:last-of-type)': {
     marginBottom: 16,
   },
@@ -55,12 +53,20 @@ const ContentRoot = styled.div(({ isValid, isDragging }: { isValid: boolean; isD
     bottom: -1,
     pointerEvents: 'none',
     border: `2px solid ${FluentTheme.palette.red}`,
-    zIndex: 2,
+    zIndex: 1,
   },
 }));
 
+const ArrayCheckbox = styled(Checkbox)({
+  flex: 1,
+  marginTop: 28,
+  justifyContent: 'flex-end',
+});
+
+const isNumerical = (kind: FormDialogPropertyKind) => kind === 'integer' || kind === 'number';
+
 const renderProperty = (
-  kind: SchemaPropertyKind,
+  kind: FormDialogPropertyKind,
   payload: FormDialogPropertyPayload,
   onChangePayload: (payload: FormDialogPropertyPayload) => void
 ): React.ReactNode => {
@@ -69,6 +75,8 @@ const renderProperty = (
       return <StringPropertyContent payload={payload as StringPropertyPayload} onChangePayload={onChangePayload} />;
     case 'number':
       return <NumberPropertyContent payload={payload as NumberPropertyPayload} onChangePayload={onChangePayload} />;
+    case 'integer':
+      return <NumberPropertyContent payload={payload as IntegerPropertyPayload} onChangePayload={onChangePayload} />;
     case 'ref':
       return null;
     default:
@@ -77,12 +85,10 @@ const renderProperty = (
 };
 
 export type FormDialogPropertyCardProps = {
-  index: number;
   valid: boolean;
   property: FormDialogProperty;
-  isDragging: boolean;
   dragHandleProps: DraggableProvidedDragHandleProps;
-  onChangeKind: (kind: SchemaPropertyKind, payload: FormDialogPropertyPayload) => void;
+  onChangeKind: (kind: FormDialogPropertyKind, payload: FormDialogPropertyPayload) => void;
   onChangeName: (name: string) => void;
   onChangeArray: (isArray: boolean) => void;
   onChangePayload: (payload: FormDialogPropertyPayload) => void;
@@ -93,10 +99,8 @@ export type FormDialogPropertyCardProps = {
 
 export const FormDialogPropertyCard = React.memo((props: FormDialogPropertyCardProps) => {
   const {
-    index,
     valid,
     property,
-    isDragging,
     dragHandleProps,
     onChangeKind,
     onChangeName,
@@ -107,7 +111,7 @@ export const FormDialogPropertyCard = React.memo((props: FormDialogPropertyCardP
     onDuplicate,
   } = props;
 
-  const { array, kind, name, payload, required } = property;
+  const { id: propertyId, array, kind, name, payload, required } = property;
 
   const rootElmRef = React.useRef<HTMLDivElement>();
   const propertyNameTooltipId = useId('propertyName');
@@ -148,10 +152,12 @@ export const FormDialogPropertyCard = React.memo((props: FormDialogPropertyCardP
   const renderOverflowButton = React.useCallback(
     (overflowItems: IOverflowSetItemProps[]) => (
       <IconButton
-        menuIconProps={{ iconName: 'MoreVertical' }}
+        menuIconProps={{
+          iconName: 'MoreVertical',
+          style: { color: NeutralColors.gray130, fontSize: 16 },
+        }}
         menuProps={{ items: overflowItems }}
         role="menuitem"
-        styles={{ icon: { fontSize: 16 } }}
       />
     ),
     []
@@ -159,7 +165,7 @@ export const FormDialogPropertyCard = React.memo((props: FormDialogPropertyCardP
 
   return (
     <FocusZone>
-      <ContentRoot {...dragHandleProps} ref={rootElmRef} data-is-root isDragging={isDragging} isValid={valid}>
+      <ContentRoot {...dragHandleProps} ref={rootElmRef} isValid={valid}>
         <Stack horizontal tokens={{ childrenGap: 16 }} verticalAlign="center">
           <TextField
             aria-describedby={propertyNameTooltipId}
@@ -178,20 +184,14 @@ export const FormDialogPropertyCard = React.memo((props: FormDialogPropertyCardP
             tokens={{ childrenGap: 8 }}
             verticalAlign="center"
           >
-            <Text>{required ? formatMessage('Required') : formatMessage('Optional')}</Text>
-            {required && (
-              <>
-                <Text>|</Text>
-                <Text>{formatMessage('Priority: {priority}', { priority: index + 1 })}</Text>
-              </>
-            )}
+            <RequiredPriorityIndicator propertyId={propertyId} required={required} />
 
             <OverflowSet
               aria-label={formatMessage('Property quick actions')}
               overflowItems={[
                 {
-                  key: 'dismissItem',
-                  name: 'Dismiss',
+                  key: 'collapseItem',
+                  name: 'Collapse',
                   onClick: deactivateItem,
                 },
                 { key: 'duplicateItem', name: 'Duplicate', onClick: onDuplicate, iconProps: { iconName: 'Copy' } },
@@ -218,27 +218,20 @@ export const FormDialogPropertyCard = React.memo((props: FormDialogPropertyCardP
               onChange={onChangeKind}
             />
           </Stack>
-          <Stack styles={{ root: { flex: 1 } }}>
-            {kind === 'number' ? renderProperty(kind, payload, onChangePayload) : null}
-            <Stack
-              horizontal
-              verticalFill
-              horizontalAlign="end"
-              styles={{ root: { flex: 1, marginTop: 28 } }}
-              tokens={{ childrenGap: 24 }}
-              verticalAlign="center"
-            >
-              <Checkbox
-                aria-describedby={propertyArrayTooltipId}
-                checked={array}
-                label={formatMessage('Accepts multiple values')}
-                onChange={changeArray}
-                onRenderLabel={onRenderLabel(formatMessage('Property array help text'), propertyArrayTooltipId)}
-              />
-            </Stack>
+          <Stack horizontal styles={{ root: { flex: 3 } }} tokens={{ childrenGap: 16 }} verticalAlign="center">
+            <Stack.Item styles={{ root: { flex: 1 } }}>
+              {isNumerical(kind) ? renderProperty(kind, payload, onChangePayload) : null}
+            </Stack.Item>
+            <ArrayCheckbox
+              aria-describedby={propertyArrayTooltipId}
+              checked={array}
+              label={formatMessage('Accepts multiple values')}
+              onChange={changeArray}
+              onRenderLabel={onRenderLabel(formatMessage('Property array help text'), propertyArrayTooltipId)}
+            />
           </Stack>
         </Stack>
-        {kind !== 'number' ? renderProperty(kind, payload, onChangePayload) : null}
+        {!isNumerical(kind) ? renderProperty(kind, payload, onChangePayload) : null}
       </ContentRoot>
     </FocusZone>
   );

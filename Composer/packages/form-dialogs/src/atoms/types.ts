@@ -1,16 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export type ThemeName = 'light' | 'dark';
+export type PropertyRequiredKind = 'required' | 'optional';
 
-export type SchemaPropertyKind = 'ref' | 'number' | 'string' | 'array';
+export type FormDialogPropertyKind = 'ref' | 'number' | 'integer' | 'string' | 'array';
 
 export type RefPropertyPayload = TypedPropertyPayload & {
   ref: string;
 };
 
 export type TypedPropertyPayload = {
-  kind: SchemaPropertyKind;
+  kind: FormDialogPropertyKind;
   entities?: string[];
 };
 
@@ -21,12 +21,12 @@ export type BuiltInStringFormat = typeof builtInFormats[number];
 export type StringFormatItem = { displayName: string; value: BuiltInStringFormat };
 
 export const builtInStringFormats: readonly StringFormatItem[] = [
-  { displayName: 'Date time', value: 'data-time' },
-  { displayName: 'Date', value: 'date' },
-  { displayName: 'Time', value: 'time' },
-  { displayName: 'Email', value: 'email' },
-  { displayName: 'URI', value: 'uri' },
-  { displayName: 'IRI', value: 'iri' },
+  { displayName: 'date-time', value: 'data-time' },
+  { displayName: 'date', value: 'date' },
+  { displayName: 'time', value: 'time' },
+  { displayName: 'email', value: 'email' },
+  { displayName: 'uri', value: 'uri' },
+  { displayName: 'iri', value: 'iri' },
 ];
 
 export type StringPropertyPayload = TypedPropertyPayload & {
@@ -42,9 +42,16 @@ export type NumberPropertyPayload = TypedPropertyPayload & {
   maximum: number;
 };
 
+export type IntegerPropertyPayload = TypedPropertyPayload & {
+  kind: 'integer';
+  minimum: number;
+  maximum: number;
+};
+
 export type ArrayPropertyPayload = Pick<TypedPropertyPayload, 'kind'> & {
   kind: 'array';
   items:
+    | (IntegerPropertyPayload & { maxItems?: number })
     | (NumberPropertyPayload & { maxItems?: number })
     | (StringPropertyPayload & { maxItems?: number })
     | RefPropertyPayload;
@@ -54,11 +61,12 @@ export type FormDialogPropertyPayload =
   | RefPropertyPayload
   | StringPropertyPayload
   | NumberPropertyPayload
+  | IntegerPropertyPayload
   | ArrayPropertyPayload;
 
 export type FormDialogProperty = {
   id: string;
-  kind: SchemaPropertyKind;
+  kind: FormDialogPropertyKind;
   name: string;
   payload: FormDialogPropertyPayload;
   required: boolean;

@@ -19,6 +19,7 @@ const Root = styled.div({
   flexDirection: 'row',
   alignItems: 'stretch',
   background: FluentTheme.palette.white,
+  padding: '0px 4px 4px 0',
   border: `1px solid ${FluentTheme.palette.neutralTertiary}`,
   '&:focus-within ': {
     borderColor: FluentTheme.palette.neutralTertiary,
@@ -38,9 +39,8 @@ const Root = styled.div({
   '& *': {
     boxSizing: 'border-box',
   },
-
   '& > *:not(input)': {
-    margin: '2px',
+    margin: '4px 0 0 4px',
   },
 });
 

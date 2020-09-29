@@ -7,7 +7,7 @@ import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import * as React from 'react';
 import { atom, atomFamily, RecoilRoot, selector, useRecoilCallback, useRecoilValue } from 'recoil';
-import { FormDialogEditor } from 'src/index';
+import { FormDialogSchemaEditor } from 'src/index';
 
 initializeIcons();
 
@@ -244,7 +244,7 @@ const InternalDemoApp = () => {
             },
           }}
         >
-          <FormDialogEditor
+          <FormDialogSchemaEditor
             showThemePicker
             editorId={selectedItemId}
             schema={selectedItem}

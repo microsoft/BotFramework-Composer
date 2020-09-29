@@ -13,7 +13,7 @@ import {
   formDialogSchemaPropertyNamesSelector,
   formDialogTemplatesAtom,
 } from 'src/atoms/appState';
-import { FormDialogPropertyPayload, SchemaPropertyKind } from 'src/atoms/types';
+import { FormDialogPropertyPayload, PropertyRequiredKind, FormDialogPropertyKind } from 'src/atoms/types';
 import { createSchemaStoreFromJson, getDefaultPayload, getDuplicateName } from 'src/atoms/utils';
 import { generateId } from 'src/utils/base';
 import { readFileContent } from 'src/utils/file';
@@ -64,7 +64,7 @@ const getHandlers = () => {
       payload,
     }: {
       id: string;
-      kind: SchemaPropertyKind;
+      kind: FormDialogPropertyKind;
       payload: FormDialogPropertyPayload;
     }) => {
       set(formDialogPropertyAtom(id), (currentProperty) => {
@@ -110,8 +110,8 @@ const getHandlers = () => {
       toIndex,
     }: {
       id: string;
-      source: 'required' | 'optional';
-      destination: 'required' | 'optional';
+      source: PropertyRequiredKind;
+      destination: PropertyRequiredKind;
       fromIndex: number;
       toIndex: number;
     }) => {

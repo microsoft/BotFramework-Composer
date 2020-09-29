@@ -8,6 +8,7 @@ import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import * as React from 'react';
 import { Droppable } from 'react-beautiful-dnd';
+import { PropertyRequiredKind } from 'src/atoms/types';
 import { PropertyListItem } from 'src/components/property/PropertyListItem';
 import { jsPropertyListClassName } from 'src/utils/constants';
 
@@ -15,7 +16,7 @@ const Root = styled(Stack)({
   position: 'relative',
 });
 
-const InternalListRoot = styled(Stack)(({ isDraggingOver }: { isDraggingOver: boolean }) => ({
+const List = styled.div(({ isDraggingOver }: { isDraggingOver: boolean }) => ({
   margin: '24px 0',
   backgroundColor: isDraggingOver ? NeutralColors.gray40 : 'transparent',
 }));
@@ -34,12 +35,12 @@ const EmptyMessage = styled(Stack)({
 });
 
 type Props = {
-  kind: 'required' | 'optional';
+  kind: PropertyRequiredKind;
   propertyIds: string[];
 };
 
-const InternalPropertyList = React.memo((props: Props & { isDraggingOver: boolean }) => (
-  <InternalListRoot className={jsPropertyListClassName} isDraggingOver={props.isDraggingOver}>
+const InternalPropertyList = React.memo((props: Props) => (
+  <div className={jsPropertyListClassName}>
     {props.propertyIds.length ? (
       props.propertyIds.map((propertyId, index) => (
         <PropertyListItem key={propertyId} index={index} propertyId={propertyId} />
@@ -53,31 +54,24 @@ const InternalPropertyList = React.memo((props: Props & { isDraggingOver: boolea
         </Text>
       </EmptyMessage>
     )}
-  </InternalListRoot>
+  </div>
 ));
 
 export const PropertyList = (props: Props) => {
   const { kind } = props;
 
   return (
-    <Root>
+    <Root horizontalAlign="center">
       <Header>
         {kind === 'required' ? formatMessage('Required properties') : formatMessage('Optional properties')}
       </Header>
       <Droppable direction="vertical" droppableId={kind}>
-        {(provided, snapshot) => (
-          <div
-            ref={provided.innerRef}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              flexDirection: 'column',
-              width: '100%',
-            }}
-            {...provided.droppableProps}
-          >
-            <InternalPropertyList {...props} isDraggingOver={snapshot.isDraggingOver} />
-            {provided.placeholder}
+        {(provided, { isDraggingOver }) => (
+          <div ref={provided.innerRef} {...provided.droppableProps}>
+            <List isDraggingOver={isDraggingOver}>
+              <InternalPropertyList {...props} />
+              {provided.placeholder}
+            </List>
           </div>
         )}
       </Droppable>

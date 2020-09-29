@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import styled from '@emotion/styled';
-import { NeutralColors, FluentTheme } from '@uifabric/fluent-theme';
+import { FluentTheme, NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';

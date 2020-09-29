@@ -24,7 +24,6 @@ const Root = styled.div({
   lineHeight: 1,
   background: FluentTheme.palette.neutralLight,
   color: FluentTheme.palette.neutralDark,
-  border: `1px solid ${FluentTheme.palette.neutralTertiary}`,
 });
 
 type TagProps = {

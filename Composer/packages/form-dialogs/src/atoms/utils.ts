@@ -1,20 +1,23 @@
-import formatMessage from 'format-message';
-/* eslint-disable @typescript-eslint/consistent-type-assertions */
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+
+/* eslint-disable @typescript-eslint/consistent-type-assertions */
+
+import formatMessage from 'format-message';
 import {
   builtInStringFormats,
   FormDialogProperty,
   FormDialogPropertyPayload,
+  IntegerPropertyPayload,
   NumberPropertyPayload,
   RefPropertyPayload,
-  SchemaPropertyKind,
+  FormDialogPropertyKind,
   StringPropertyPayload,
   TypedPropertyPayload,
 } from 'src/atoms/types';
 import { generateId } from 'src/utils/base';
 
-export const getDefaultPayload = (kind: SchemaPropertyKind) => {
+export const getDefaultPayload = (kind: FormDialogPropertyKind) => {
   switch (kind) {
     case 'ref':
       return <RefPropertyPayload>{ kind: 'ref' };
@@ -22,6 +25,8 @@ export const getDefaultPayload = (kind: SchemaPropertyKind) => {
       return <StringPropertyPayload>{ kind: 'string', entities: [] };
     case 'number':
       return <NumberPropertyPayload>{ kind: 'number', entities: [] };
+    case 'integer':
+      return <IntegerPropertyPayload>{ kind: 'integer', entities: [] };
     default:
       throw new Error(`Property type: "${kind}" is not supported!`);
   }
@@ -33,7 +38,7 @@ const $refToRef = ($ref: string) => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const retrievePayload = (kind: SchemaPropertyKind, payloadData: any, array = false): FormDialogPropertyPayload => {
+const retrievePayload = (kind: FormDialogPropertyKind, payloadData: any, array = false): FormDialogPropertyPayload => {
   if (array) {
     return retrievePayload(payloadData.items.type || 'ref', payloadData.items);
   }
@@ -45,6 +50,12 @@ const retrievePayload = (kind: SchemaPropertyKind, payloadData: any, array = fal
     case 'number':
       return <NumberPropertyPayload>{
         kind: 'number',
+        minimum: payloadData.minimum,
+        maximum: payloadData.maximum,
+      };
+    case 'integer':
+      return <IntegerPropertyPayload>{
+        kind: 'integer',
         minimum: payloadData.minimum,
         maximum: payloadData.maximum,
       };
@@ -66,7 +77,7 @@ export const createSchemaStoreFromJson = (schemaName: string, jsonString: string
     const propertyType = propertyData?.type || 'ref';
     const array = propertyType === 'array';
     const payload = retrievePayload(propertyType, propertyData, array);
-    const kind = <SchemaPropertyKind>(propertyType === 'array' ? payload.kind : propertyType);
+    const kind = <FormDialogPropertyKind>(propertyType === 'array' ? payload.kind : propertyType);
     const required = requiredArray.indexOf(name) !== -1;
     const examples = examplesRecord[name] || [];
 
@@ -157,7 +168,7 @@ const spreadStringSchemaProperty = (payload: StringPropertyPayload) => {
   return payloadJson;
 };
 
-const spreadNumberSchemaProperty = (payload: NumberPropertyPayload) => {
+const spreadNumberSchemaProperty = (payload: NumberPropertyPayload | IntegerPropertyPayload) => {
   return { minimum: payload.minimum, maximum: payload.maximum };
 };
 
@@ -176,6 +187,12 @@ const spreadArraySchemaProperty = (payload: FormDialogPropertyPayload) => {
         return {
           type: 'number',
           ...spreadNumberSchemaProperty(<NumberPropertyPayload>payload),
+        };
+      }
+      case 'integer': {
+        return {
+          type: 'integer',
+          ...spreadNumberSchemaProperty(<IntegerPropertyPayload>payload),
         };
       }
       default:
@@ -208,6 +225,12 @@ export const spreadSchemaPropertyStore = (property: FormDialogProperty) => {
         ...spreadEntities(<TypedPropertyPayload>property.payload),
         ...spreadNumberSchemaProperty(<NumberPropertyPayload>property.payload),
       };
+    case 'integer':
+      return {
+        type: property.kind,
+        ...spreadEntities(<TypedPropertyPayload>property.payload),
+        ...spreadNumberSchemaProperty(<IntegerPropertyPayload>property.payload),
+      };
     default:
       throw new Error(`Property type: "${property.kind}" is not supported!`);
   }
@@ -231,6 +254,11 @@ export const validateSchemaPropertyStore = (property: FormDialogProperty) => {
       payloadValid = !numberPayload.minimum || !numberPayload.maximum || numberPayload.minimum <= numberPayload.maximum;
       break;
     }
+    case 'integer': {
+      const numberPayload = <IntegerPropertyPayload>property.payload;
+      payloadValid = !numberPayload.minimum || !numberPayload.maximum || numberPayload.minimum <= numberPayload.maximum;
+      break;
+    }
   }
 
   return !!(payloadValid && property.name);
@@ -238,6 +266,14 @@ export const validateSchemaPropertyStore = (property: FormDialogProperty) => {
 
 export const getPropertyTypeDisplayName = (property: FormDialogProperty) => {
   switch (property.kind) {
+    case 'number':
+      return formatMessage('number');
+    case 'integer':
+      return formatMessage('integer');
+    case 'ref': {
+      const refPayload = property.payload as RefPropertyPayload;
+      return refPayload.ref.split('.')[0];
+    }
     default:
     case 'string': {
       const stringPayload = property.payload as StringPropertyPayload;
@@ -248,12 +284,6 @@ export const getPropertyTypeDisplayName = (property: FormDialogProperty) => {
       return stringPayload.format
         ? builtInStringFormats.find((f) => f.value === stringPayload.format).displayName
         : formatMessage('any string');
-    }
-    case 'number':
-      return formatMessage('number');
-    case 'ref': {
-      const refPayload = property.payload as RefPropertyPayload;
-      return refPayload.ref.split('.')[0];
     }
   }
 };
