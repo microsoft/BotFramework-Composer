@@ -45,7 +45,7 @@ describe('<DefineConversation/>', () => {
         onSubmit={onSubmitMock}
       />,
       ({ set }) => {
-        set(focusedStorageFolderState, '');
+        set(focusedStorageFolderState, {} as StorageFolder);
         set(storagesState, [{ id: 'default' }]);
       }
     );

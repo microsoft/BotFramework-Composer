@@ -11,14 +11,14 @@
     "clean": "rimraf lib"
   },
   "peerDependencies": {
-    "react": "16.13.0",
-    "react-dom": "16.13.0"
+    "react": "16.13.1",
+    "react-dom": "16.13.1"
   },
   "devDependencies": {
     "@bfc/test-utils": "*",
     "@types/react": "16.9.23",
-    "react": "16.13.0",
-    "react-dom": "16.13.0",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
     "rimraf": "^3.0.2",
     "typescript": "3.9.2"
   },
