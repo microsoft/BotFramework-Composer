@@ -1,7 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { css } from '@emotion/core';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React from 'react';
 import { FlowWidget, PluginConfig, UIOptions } from '@bfc/extension-client';
 import { SDKKinds, getInputType, PromptTab, PromptTabTitles } from '@bfc/shared';
@@ -10,8 +11,6 @@ import formatMessage from 'format-message';
 import { StringField, JsonField } from '@bfc/adaptive-form';
 
 import { ExpectedResponsesField } from './ExpectedResponsesField';
-
-css``;
 
 const PROMPTS_ORDER = [
   '*',
@@ -93,9 +92,9 @@ const generateInputSchema = (inputBody?, inputFooter?): FlowWidget => ({
 
 const PropertyInfo = (data) =>
   data.property ? (
-    <>
+    <React.Fragment>
       {data.property} <FixedInfo>= Input({getInputType(data.$kind)})</FixedInfo>
-    </>
+    </React.Fragment>
   ) : null;
 
 const ChoiceInputBody = (data) =>
@@ -113,7 +112,7 @@ const ChoiceInputBody = (data) =>
       }}
     />
   ) : (
-    <>{data.choices}</>
+    <React.Fragment>{data.choices}</React.Fragment>
   );
 
 const ChoiceInputSchema = generateInputSchema(ChoiceInputBody, PropertyInfo);
