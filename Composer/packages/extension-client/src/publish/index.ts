@@ -15,3 +15,7 @@ export function setConfigIsValid(valid: boolean) {
 export function useConfigBeingEdited(): PublishConfig[] | undefined[] {
   return window[ComposerGlobalName].useConfigBeingEdited();
 }
+
+export function startProvision(config: any): void {
+  return window[ComposerGlobalName].startProvision(config);
+}

@@ -30,6 +30,7 @@ interface PublishAPI {
   setConfigIsValid?: (valid: boolean) => void;
   setPublishConfig?: (config: PublishConfig) => void;
   useConfigBeingEdited?: (() => PublishConfig[]) | (() => void);
+  startProvision?: (config: any) => void;
 }
 
 class API implements IAPI {
@@ -61,6 +62,7 @@ class API implements IAPI {
       setConfigIsValid: undefined,
       setPublishConfig: undefined,
       useConfigBeingEdited: undefined,
+      startProvision: undefined,
     };
   }
 }

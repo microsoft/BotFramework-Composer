@@ -14,7 +14,7 @@ export const getQnaPendingNotification = (urls: string[]): CardProps => {
 
 export const getQnaSuccessNotification = (callback: () => void): CardProps => {
   return {
-    title: formatMessage('Your knowledge base Surface go FAQ is ready!'),
+    title: formatMessage('Your knowledge base is ready!'),
     type: 'success',
     retentionTime: 5000,
     link: {

@@ -5,13 +5,15 @@ import { jsx } from '@emotion/core';
 import * as React from 'react';
 import { useState, useMemo, useEffect, Fragment } from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
+import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { getAccessTokensFromStorage } from '@bfc/extension-client';
+import { getAccessTokensFromStorage, startProvision } from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { ResourceGroup } from '@azure/arm-resources/esm/models';
 import { DeployLocation } from '@bfc/shared';
 
-import { getSubscriptions, getResourceGroups, getDeployLocations } from './api';
+import {  getSubscriptions, getResourceGroups, getDeployLocations } from './api';
 
 const extensionResourceOptions = [
   { key: 'cosmoDb', text: 'CosmoDb', description: 'Use CosmoDB to store your bot state' },
@@ -108,12 +110,21 @@ export const AzureProvisionDialog: React.FC = () => {
     }
   }, [currentSubscription]);
 
-  const toggleResource = (opt: string) => {
-    return (enabled: boolean) => {
-      enabledResources[opt].enabled = enabled;
-      setEnabledResources(enabledResources);
-    };
-  };
+  // const toggleResource = (opt: string) => {
+  //   return (enabled: boolean) => {
+  //     enabledResources[opt].enabled = enabled;
+  //     setEnabledResources(enabledResources);
+  //   };
+  // };
+
+  const onSubmit = useMemo(
+    () => async (options) => {
+      console.log('Call the provision API with options', options);
+      const provisionRequestStatus = await startProvision(options);
+      console.log('GOT HTTP RESPONSE', provisionRequestStatus);
+    },
+    []
+  );
 
   return (
     <Fragment>
@@ -158,21 +169,22 @@ export const AzureProvisionDialog: React.FC = () => {
         </form>
       )}
       {(!subscriptionOption || !subscriptionOption.length) && <Fragment>LOADING</Fragment>}
-      {/* <DialogFooter>
-        <DefaultButton text={formatMessage('Cancel')} onClick={props.onDismiss} />
+      <DialogFooter>
+        {/* <DefaultButton text={formatMessage('Cancel')} onClick={props.onDismiss} /> */}
         <PrimaryButton
           disabled={!currentSubscription || !currentHostName || errorHostName !== ''}
-          text={formatMessage('Ok')}
+          text={'Ok'}
           onClick={async () => {
-            await props.onSubmit({
+            await onSubmit({
               subscription: currentSubscription,
               hostname: currentHostName,
               location: currentLocation,
-              externalResources: enabledResources,
+              type: 'azurePublish', // todo: this should be dynamic
+              externalResources: extensionResourceOptions,
             });
           }}
         />
-        </DialogFooter> */}
+      </DialogFooter>
     </Fragment>
   );
 };
