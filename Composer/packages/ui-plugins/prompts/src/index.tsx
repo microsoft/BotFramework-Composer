@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { css } from '@emotion/core';
 import React from 'react';
 import { FlowWidget, PluginConfig, UIOptions } from '@bfc/extension-client';
 import { SDKKinds, getInputType, PromptTab, PromptTabTitles } from '@bfc/shared';
@@ -8,7 +9,28 @@ import { VisualEditorColors as Colors, ListOverview, BorderedDiv, FixedInfo } fr
 import formatMessage from 'format-message';
 import { StringField, JsonField } from '@bfc/adaptive-form';
 
-import { PromptField } from './PromptField';
+import { ExpectedResponsesField } from './ExpectedResponsesField';
+
+css``;
+
+const PROMPTS_ORDER = [
+  '*',
+  'unrecognizedPrompt',
+  'validations',
+  'invalidPrompt',
+  'defaultValueResponse',
+  'maxTurnCount',
+  'defaultValue',
+  'allowInterruptions',
+  'alwaysPrompt',
+  'recognizerOptions',
+];
+
+const createPromptFieldSet = (userAskFields: string[]) => [
+  { title: PromptTabTitles[PromptTab.BOT_ASKS], itemKey: PromptTab.BOT_ASKS, fields: ['prompt'] },
+  { title: PromptTabTitles[PromptTab.USER_INPUT], itemKey: PromptTab.USER_INPUT, fields: userAskFields },
+  { title: PromptTabTitles[PromptTab.OTHER], itemKey: PromptTab.OTHER },
+];
 
 const choiceSchema: UIOptions = {
   order: ['value', 'synonyms', 'actions', '*'],
@@ -101,8 +123,10 @@ const config: PluginConfig = {
   uiSchema: {
     [SDKKinds.AttachmentInput]: {
       form: {
-        field: PromptField,
+        fieldsets: createPromptFieldSet(['property', 'outputFormat', 'value']),
         helpLink: 'https://aka.ms/bfc-ask-for-user-input',
+        order: PROMPTS_ORDER,
+        pivotFieldsets: true,
         properties: {
           prompt: {
             label: () => formatMessage('Prompt for Attachment'),
@@ -118,8 +142,19 @@ const config: PluginConfig = {
     },
     [SDKKinds.ChoiceInput]: {
       form: {
-        field: PromptField,
+        fieldsets: createPromptFieldSet([
+          'property',
+          'outputFormat',
+          'value',
+          'expectedResponses',
+          'defaultLocale',
+          'style',
+          'choices',
+          'choiceOptions',
+        ]),
         helpLink: 'https://aka.ms/bfc-ask-for-user-input',
+        order: PROMPTS_ORDER,
+        pivotFieldsets: true,
         properties: {
           prompt: {
             label: () => formatMessage('Prompt with multi-choice'),
@@ -133,14 +168,29 @@ const config: PluginConfig = {
             placeholder: () => formatMessage('Expression'),
             ...choiceSchema,
           },
+          expectedResponses: {
+            additionalField: true,
+            field: ExpectedResponsesField,
+          },
         },
       },
       flow: ChoiceInputSchema,
     },
     [SDKKinds.ConfirmInput]: {
       form: {
-        field: PromptField,
+        fieldsets: createPromptFieldSet([
+          'property',
+          'outputFormat',
+          'value',
+          'expectedResponses',
+          'defaultLocale',
+          'style',
+          'confirmChoices',
+          'choiceOptions',
+        ]),
         helpLink: 'https://aka.ms/bfc-ask-for-user-input',
+        order: PROMPTS_ORDER,
+        pivotFieldsets: true,
         properties: {
           prompt: {
             label: () => formatMessage('Prompt for confirmation'),
@@ -154,14 +204,20 @@ const config: PluginConfig = {
             label: () => formatMessage('Confirm Choices'),
             ...choiceSchema,
           },
+          expectedResponses: {
+            additionalField: true,
+            field: ExpectedResponsesField,
+          },
         },
       },
       flow: BaseInputSchema,
     },
     [SDKKinds.DateTimeInput]: {
       form: {
-        field: PromptField,
+        fieldsets: createPromptFieldSet(['property', 'outputFormat', 'value', 'expectedResponses']),
         helpLink: 'https://aka.ms/bfc-ask-for-user-input',
+        order: PROMPTS_ORDER,
+        pivotFieldsets: true,
         properties: {
           prompt: {
             label: () => formatMessage('Prompt for a date'),
@@ -171,14 +227,20 @@ const config: PluginConfig = {
             helpLink: 'https://aka.ms/bf-composer-docs-ask-input#prompt-settings-and-validation',
             placeholder: () => formatMessage('Add new validation rule here'),
           },
+          expectedResponses: {
+            additionalField: true,
+            field: ExpectedResponsesField,
+          },
         },
       },
       flow: BaseInputSchema,
     },
     [SDKKinds.NumberInput]: {
       form: {
-        field: PromptField,
+        fieldsets: createPromptFieldSet(['property', 'outputFormat', 'value', 'expectedResponses', 'defaultLocale']),
         helpLink: 'https://aka.ms/bfc-ask-for-user-input',
+        order: PROMPTS_ORDER,
+        pivotFieldsets: true,
         properties: {
           prompt: {
             label: () => formatMessage('Prompt for a number'),
@@ -188,14 +250,20 @@ const config: PluginConfig = {
             helpLink: 'https://aka.ms/bf-composer-docs-ask-input#prompt-settings-and-validation',
             placeholder: () => formatMessage('Add new validation rule here'),
           },
+          expectedResponses: {
+            additionalField: true,
+            field: ExpectedResponsesField,
+          },
         },
       },
       flow: BaseInputSchema,
     },
     [SDKKinds.TextInput]: {
       form: {
-        field: PromptField,
+        fieldsets: createPromptFieldSet(['property', 'outputFormat', 'value', 'expectedResponses']),
         helpLink: 'https://aka.ms/bfc-ask-for-user-input',
+        order: PROMPTS_ORDER,
+        pivotFieldsets: true,
         properties: {
           prompt: {
             label: () => formatMessage('Prompt for text'),
@@ -204,6 +272,10 @@ const config: PluginConfig = {
             label: () => formatMessage('Validation Rules'),
             helpLink: 'https://aka.ms/bf-composer-docs-ask-input#prompt-settings-and-validation',
             placeholder: () => formatMessage('Add new validation rule here'),
+          },
+          expectedResponses: {
+            additionalField: true,
+            field: ExpectedResponsesField,
           },
         },
       },
