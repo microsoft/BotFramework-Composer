@@ -10,7 +10,7 @@ context('Creating a new trigger', () => {
   it('can create different kinds of triggers ', () => {
     cy.visitPage('Design');
     cy.findByTestId('recognizerTypeDropdown').click();
-    cy.findByText('Regular Expression').click();
+    cy.findByText('Regular expressions recognizer').click();
 
     //onintent trigger
     cy.findByTestId('AddFlyout').click();
