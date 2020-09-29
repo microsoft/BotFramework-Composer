@@ -141,6 +141,20 @@ export const addIcon = {
   },
 };
 
+export const backIcon = {
+  root: {
+    fontSize: FontSizes.size16,
+    color: NeutralColors.black,
+    marginTop: -10,
+    marginBottom: 10,
+  },
+  icon: {
+    fontSize: FontSizes.size12,
+    marginTop: 2,
+    color: NeutralColors.black,
+  },
+};
+
 export const editableFieldAnswer = (isExpand) => {
   return {
     root: {

@@ -44,7 +44,7 @@ import { getBaseName } from '../../utils/fileUtil';
 import { EditableField } from '../../components/EditableField';
 import { classNames, AddTemplateButton } from '../../components/AllupviewComponets/styles';
 import { EditQnAModal } from '../../components/QnA/EditQnAFrom';
-import { isQnAFileCreatedFromUrl } from '../../utils/qnaUtil';
+import { getQnAFileUrlOption } from '../../utils/qnaUtil';
 
 import {
   formCell,
@@ -279,7 +279,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
       const containerId = props?.group?.key || '';
       const containerQnAFile = qnaFiles.find(({ id }) => id === containerId);
       const isImportedSource = containerId.endsWith('.source');
-      const isSourceFromUrl = isImportedSource && containerQnAFile && isQnAFileCreatedFromUrl(containerQnAFile);
+      const sourceUrl = isImportedSource && containerQnAFile && getQnAFileUrlOption(containerQnAFile);
       const isAllTab = dialogId === 'all';
       const onRenderItem = (item: IOverflowSetItemProps): JSX.Element => {
         return (
@@ -309,15 +309,19 @@ const TableView: React.FC<TableViewProps> = (props) => {
           <div className={classNames.groupHeader}>
             {isImportedSource && (
               <Fragment>
-                {isSourceFromUrl && (
+                {sourceUrl && (
                   <Fragment>
-                    <span>Source: </span>
-                    <Link className={classNames.groupHeaderSourceName} onClick={noOp}>
+                    <Link
+                      className={classNames.groupHeaderSourceName}
+                      href={sourceUrl}
+                      target={'_blank'}
+                      onClick={noOp}
+                    >
                       {groupName}
                     </Link>
                   </Fragment>
                 )}
-                {!isSourceFromUrl && <div css={groupNameStyle}>{groupName}</div>}
+                {!sourceUrl && <div css={groupNameStyle}>{groupName}</div>}
 
                 <OverflowSet
                   aria-label={formatMessage('Edit source')}
