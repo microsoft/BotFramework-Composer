@@ -28,8 +28,8 @@
     "@uifabric/styling": "^7.7.4",
     "format-message": "^6.2.3",
     "office-ui-fabric-react": "^7.71.0",
-    "react": "16.13.0",
-    "react-dom": "16.13.0"
+    "react": "16.13.1",
+    "react-dom": "16.13.1"
   },
   "devDependencies": {
     "@bfc/extension-client": "*",
@@ -39,8 +39,8 @@
     "@types/react-dom": "16.9.5",
     "format-message": "^6.2.3",
     "format-message-cli": "6.2.3",
-    "react": "16.13.0",
-    "react-dom": "16.13.0"
+    "react": "16.13.1",
+    "react-dom": "16.13.1"
   },
   "dependencies": {
     "@emotion/core": "^10.0.27"
