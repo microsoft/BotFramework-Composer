@@ -93,7 +93,7 @@ export const flushExistingTasks = async (callbackHelpers) => {
   const { snapshot, reset } = callbackHelpers;
   const projectIds = await snapshot.getPromise(botProjectIdsState);
   for (const projectId of projectIds) {
-    resetBotStates(callbackHelpers, projectId);
+    //resetBotStates(callbackHelpers, projectId);
   }
   reset(botProjectIdsState);
   const workers = [lgWorker, luWorker, qnaWorker];
@@ -304,7 +304,6 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
   set(schemasState(projectId), schemas);
   set(localeState(projectId), locale);
   set(botDiagnosticsState(projectId), diagnostics);
-
   refreshLocalStorage(projectId, settings);
   set(settingsState(projectId), mergedSettings);
   set(filePersistenceState(projectId), new FilePersistence(projectId));
@@ -426,7 +425,7 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
   const mainDialog = await initBotState(callbackHelpers, projectData, botFiles);
   const rootBotProjectId = projectData.id;
 
-  if (botFiles.botProjectSpaceFiles && botFiles.botProjectSpaceFiles.length) {
+  if (botFiles.botProjectSpaceFiles?.length > 0) {
     const currentBotProjectFileIndexed = botFiles.botProjectSpaceFiles[0];
     set(botProjectFileState(rootBotProjectId), currentBotProjectFileIndexed);
     const currentBotProjectFile = currentBotProjectFileIndexed.content;
@@ -435,7 +434,10 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
     if (skillsInBotProject.length) {
       for (const skillInBotProject of skillsInBotProject) {
         if (!skillInBotProject.remote) {
-          const path = parseFileProtocolPaths(currentBotProjectFile.workspace, skillInBotProject.workspace);
+          const path = parseFileProtocolPaths(currentBotProjectFile.workspace, skillInBotProject.workspace).replace(
+            /^\//,
+            ''
+          );
           //TODO handle exception
           openLocalSkill(callbackHelpers, path, storageId, skillInBotProject.name).then((result) =>
             addProjectToBotProjectSpace(set, result.projectId, skillsInBotProject.length)

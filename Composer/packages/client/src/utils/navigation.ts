@@ -116,7 +116,6 @@ export function convertPathToUrl(projectId: string, skillId: string, dialogId: s
 
 export function navigateTo(to: string, navigateOpts: NavigateOptions<NavigationState> = {}) {
   const mapNavPath = resolveToBasePath(BASEPATH, to);
-  console.log(mapNavPath);
   navigate(mapNavPath, navigateOpts);
 }
 

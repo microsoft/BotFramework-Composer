@@ -43,8 +43,6 @@ export const RightPanel = () => {
   const projectId = useRecoilValue(currentProjectIdState);
   const currentMode = useRecoilValue(currentModeState);
 
-  console.log(currentMode);
-
   return (
     <div css={rightPanel}>
       <ErrorBoundary
@@ -59,12 +57,8 @@ export const RightPanel = () => {
                 selected={'testg'}
                 selectedDialog={'test'}
                 showTriggers={currentMode === 'design'}
-                onDelete={(link) => {
-                  console.log(link);
-                }}
-                onSelect={(link) => {
-                  console.log(link);
-                }}
+                onDelete={(item) => console.log('deleting', item)}
+                onSelect={(item) => console.log('selected', item)}
               />
             )}
             <Conversation>
