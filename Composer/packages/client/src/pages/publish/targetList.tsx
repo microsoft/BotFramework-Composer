@@ -58,9 +58,7 @@ export const TargetList = (props) => {
                 },
               ]}
               onRenderItem={onRenderItem}
-              onRenderOverflowButton={
-                target.configuration && target.configuration != '{}' ? onRenderOverflowButton : onRenderSpinner
-              }
+              onRenderOverflowButton={target.configuration ? onRenderOverflowButton : onRenderSpinner}
             />
           </div>
         );

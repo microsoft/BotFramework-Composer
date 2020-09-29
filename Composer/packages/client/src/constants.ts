@@ -185,6 +185,18 @@ export const PublishProfileDialog = {
   EDIT_PROFILE: {
     title: formatMessage('Edit a publish profile'),
   },
+  CONFIG_RESOURCES: {
+    title: formatMessage('Configure resources'),
+    subText: formatMessage(
+      'Composer will create your bot resources in this Azure destination. If you already have assets created then select import'
+    ),
+  },
+  REVIEW: {
+    title: formatMessage('title'),
+    subText: formatMessage(
+      'Please review the resources that will be created for your bot. Once these resources are provisioned, your resources will be available in your Azure profile'
+    ),
+  },
 };
 
 export const SupportedFileTypes = [
