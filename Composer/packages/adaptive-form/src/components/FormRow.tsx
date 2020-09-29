@@ -35,16 +35,7 @@ export const getRowProps = (rowProps: FormRowProps, field: string) => {
   const { required = [] } = schema;
   const fieldSchema = resolvePropSchema(schema, field, definitions);
 
-  const intellisenseScopes: string[] = [];
-  if (field === 'property') {
-    intellisenseScopes.push('variable-scopes');
-  }
-
-  const newUiOptions: UIOptions | AdditionalField = uiOptions.properties?.[field] ?? {};
-
-  if (!isAdditionalField(newUiOptions)) {
-    newUiOptions.intellisenseScopes = intellisenseScopes;
-  }
+  const newUiOptions = (uiOptions.properties?.[field] as UIOptions) ?? {};
 
   const handleChange = (data: any) => {
     const newData = { ...value };

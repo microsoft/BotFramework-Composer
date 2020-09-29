@@ -79,6 +79,7 @@ const PropertyInfo = (data) =>
 const ChoiceInputBody = (data) =>
   Array.isArray(data.choices) && data.choices.length ? (
     <ListOverview
+      itemInterval={4}
       items={data.choices}
       renderItem={(item) => {
         const value = typeof item === 'object' ? item.value : item;

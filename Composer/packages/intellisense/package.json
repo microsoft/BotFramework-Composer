@@ -10,8 +10,8 @@
   },
   "peerDependencies": {
     "office-ui-fabric-react": "^7.71.0",
-    "react": "16.13.0",
-    "react-dom": "16.13.0"
+    "react": "16.13.1",
+    "react-dom": "16.13.1"
   },
   "dependencies": {
     "websocket": "^1.0.31",
