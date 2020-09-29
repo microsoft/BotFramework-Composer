@@ -57,13 +57,13 @@ export const textFieldAnswer = {
   },
 };
 
-export const addQnAPairLink = {
-  root: {
-    fontSize: 14,
-    lineHeight: 28,
-    marginLeft: 72,
-  },
-};
+// export const addQnAPairLink = {
+//   root: {
+//     fontSize: 14,
+//     lineHeight: 28,
+//     marginLeft: 72,
+//   },
+// };
 
 export const divider = css`
   height: 1px;
@@ -117,9 +117,9 @@ export const icon = {
 
 export const addAlternative = {
   root: {
-    fontSize: 16,
+    fontSize: 12,
     paddingLeft: 0,
-    marginLeft: 2,
+    marginLeft: 3,
     color: SharedColors.cyanBlue10,
     visibility: 'hidden',
   },
@@ -127,9 +127,10 @@ export const addAlternative = {
 
 export const addQnAPair = {
   root: {
-    fontSize: 16,
+    fontSize: 12,
     paddingLeft: 0,
-    marginLeft: 68,
+    marginLeft: 65,
+    marginTop: -10,
     color: SharedColors.cyanBlue10,
   },
 };
@@ -137,6 +138,7 @@ export const addQnAPair = {
 export const addIcon = {
   root: {
     fontSize: FontSizes.size10,
+    margin: 0,
     color: SharedColors.cyanBlue10,
   },
 };
@@ -181,37 +183,36 @@ export const editableFieldAnswer = (isExpand) => {
     field: {
       height: isExpand ? undefined : '60px !important',
       overflowY: 'auto' as 'auto',
+      fontSize: FontSizes.size12,
       maxHeight: 500,
     },
   };
 };
 
-export const editableFieldQuestion = (index) => {
-  return {
-    fieldGroup: {
-      border: '0',
-      selectors: {
-        '&.ms-TextField-fieldGroup': {
-          selectors: {
-            '::after': {
-              border: 'none !important',
-            },
+export const editableFieldQuestion = {
+  fieldGroup: {
+    border: '0',
+    selectors: {
+      '&.ms-TextField-fieldGroup': {
+        selectors: {
+          '::after': {
+            border: 'none !important',
           },
         },
       },
     },
-    field: {
-      fontWeight: index === 0 ? FontWeights.semibold : FontWeights.regular,
-    },
-  };
+  },
+  field: {
+    fontSize: FontSizes.size12,
+  },
 };
 
 export const groupHeader = {
   root: {
     selectors: {
-      //eslint-disable-next-line
-      button: {
-        fontSize: 16,
+      '.ms-GroupHeader-expand': {
+        fontSize: 12,
+        marginLeft: 16,
       },
     },
   },
@@ -219,4 +220,21 @@ export const groupHeader = {
 
 export const groupNameStyle = css`
   margin-top: -5px;
+  margin-left: 16px;
+  font-size: ${FontSizes.size16};
+`;
+
+export const detailsHeaderStyle = css`
+  .ms-DetailsHeader-cellName {
+    margin-left: 7px;
+  }
+  .ms-TooltipHost {
+    background: ${NeutralColors.white};
+  }
+`;
+
+export const sourceStyle = css`
+  margin-left: 16px;
+  font-weight: ${FontWeights.semibold};
+  font-size: ${FontSizes.size16};
 `;

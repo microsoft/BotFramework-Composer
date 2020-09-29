@@ -42,13 +42,13 @@ import {
 import { dispatcherState } from '../../recoilModel';
 import { getBaseName } from '../../utils/fileUtil';
 import { EditableField } from '../../components/EditableField';
-import { classNames, AddTemplateButton } from '../../components/AllupviewComponets/styles';
+import { classNames } from '../../components/AllupviewComponets/styles';
 import { EditQnAModal } from '../../components/QnA/EditQnAFrom';
 import { getQnAFileUrlOption } from '../../utils/qnaUtil';
 
 import {
   formCell,
-  addIcon,
+  addQnAPair,
   divider,
   rowDetails,
   icon,
@@ -57,6 +57,7 @@ import {
   editableFieldQuestion,
   groupHeader,
   groupNameStyle,
+  detailsHeaderStyle,
 } from './styles';
 
 const noOp = () => undefined;
@@ -197,13 +198,20 @@ const TableView: React.FC<TableViewProps> = (props) => {
     setIsQnASectionsExpanded(newArray);
   };
 
+  // const expandRow = (index) => {
+  //   if (!isQnASectionsExpanded[index]) {
+  //     const newArray = [...isQnASectionsExpanded];
+  //     newArray[index] = true;
+  //     setIsQnASectionsExpanded(newArray);
+  //   }
+  // };
+
   const expandRow = (index) => {
-    if (!isQnASectionsExpanded[index]) {
-      const newArray = [...isQnASectionsExpanded];
-      newArray[index] = true;
-      setIsQnASectionsExpanded(newArray);
-    }
+    const expandedRow = new Array(isQnASectionsExpanded.length).fill(false);
+    expandedRow[index] = true;
+    setIsQnASectionsExpanded(expandedRow);
   };
+
   const onUpdateQnAQuestion = (fileId: string, sectionId: string, questionId: string, content: string) => {
     if (!fileId) return;
     actions.setMessage('item deleted');
@@ -285,7 +293,13 @@ const TableView: React.FC<TableViewProps> = (props) => {
         return (
           <IconButton
             menuIconProps={{ iconName: 'Edit' }}
-            styles={{ root: { color: NeutralColors.black, visibility: isAllTab ? 'hidden' : 'visiable' } }}
+            styles={{
+              root: {
+                //marginTop: 3,
+                color: NeutralColors.black,
+                visibility: isAllTab ? 'hidden' : 'visiable',
+              },
+            }}
             onClick={item.onClick}
           />
         );
@@ -298,7 +312,14 @@ const TableView: React.FC<TableViewProps> = (props) => {
             menuIconProps={{ iconName: 'More' }}
             menuProps={{ items: overflowItems || [] }}
             role="menuitem"
-            styles={{ root: { color: NeutralColors.black, visibility: isAllTab ? 'hidden' : 'visiable' } }}
+            styles={{
+              root: {
+                //marginTop: 3,
+                padding: 0,
+                color: NeutralColors.black,
+                visibility: isAllTab ? 'hidden' : 'visiable',
+              },
+            }}
             title="More options"
           />
         );
@@ -376,19 +397,18 @@ const TableView: React.FC<TableViewProps> = (props) => {
               styles={groupHeader}
               onRenderTitle={onRenderTitle}
             />
-            <div>
-              <ActionButton
-                data-testid={'addQnAPairButton'}
-                iconProps={{ iconName: 'Add', styles: addIcon }}
-                styles={AddTemplateButton}
-                onClick={() => {
-                  onCreateNewQnAPairs(props.group?.key);
-                  actions.setMessage('item added');
-                }}
-              >
-                {formatMessage('Add QnA Pair')}
-              </ActionButton>
-            </div>
+            <ActionButton
+              data-testid={'addQnAPairButton'}
+              //iconProps={{ iconName: 'Add', styles: addIcon }}
+              styles={addQnAPair}
+              onClick={() => {
+                onCreateNewQnAPairs(props.group?.key);
+                actions.setMessage('item added');
+              }}
+            >
+              {formatMessage('+ Add QnA Pair')}
+            </ActionButton>
+
             <div css={divider}> </div>
           </Fragment>
         );
@@ -405,15 +425,18 @@ const TableView: React.FC<TableViewProps> = (props) => {
         key: 'ToggleShowAll',
         name: '',
         fieldName: 'Chevron',
-        minWidth: 40,
-        maxWidth: 40,
+        minWidth: 30,
+        maxWidth: 30,
         isResizable: true,
         onRender: (item, index) => {
           return (
             <IconButton
               ariaLabel="ChevronDown"
               iconProps={{ iconName: isQnASectionsExpanded[index] ? 'ChevronDown' : 'ChevronRight' }}
-              styles={{ root: { ...icon.root, marginTop: 2, marginLeft: 15 } }}
+              styles={{
+                root: { ...icon.root, marginTop: 2, marginLeft: 7, fontSize: 12 },
+                icon: { fontSize: 13, color: NeutralColors.black },
+              }}
               title="ChevronDown"
               onClick={() => toggleExpandRow(index)}
             />
@@ -438,13 +461,14 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
           const addQuestionButton = (
             <ActionButton
-              iconProps={{ iconName: 'Add', styles: addIcon }}
+              //iconProps={{ iconName: 'Add', styles: addIcon }}
               styles={addAlternative}
               onClick={(e) => setCreatingQuestionInKthSection(index)}
             >
-              {formatMessage('add alternative phrasing')}
+              {formatMessage('+ Add alternative phrasing')}
             </ActionButton>
           );
+
           return (
             <div data-is-focusable css={formCell}>
               {showingQuestions.map((question, qIndex: number) => {
@@ -468,8 +492,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
                     }}
                     id={question.id}
                     name={question.content}
-                    placeholder={'add new question'}
-                    styles={editableFieldQuestion(qIndex)}
+                    placeholder={'Add new question'}
+                    styles={editableFieldQuestion}
                     value={question.content}
                     onBlur={(_id, value) => {
                       const newValue = value?.trim().replace(/^#/, '');
@@ -496,7 +520,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                   id={'New Question'}
                   name={'New Question'}
                   placeholder={'add new question'}
-                  styles={editableFieldQuestion(-1)}
+                  styles={editableFieldQuestion}
                   value={''}
                   onBlur={(_id, value) => {
                     const newValue = value?.trim().replace(/^#/, '');
@@ -539,7 +563,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 }}
                 id={item.sectionId}
                 name={item.Answer}
-                placeholder={'add new answer'}
+                placeholder={'Add new answer'}
                 resizable={false}
                 styles={editableFieldAnswer(isQnASectionsExpanded[index])}
                 value={item.Answer}
@@ -567,7 +591,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         data: 'string',
         onRender: (item) => {
           return (
-            <div data-is-focusable css={formCell} style={{ marginTop: '10px' }}>
+            <div data-is-focusable css={formCell} style={{ marginTop: 10, marginLeft: 13 }}>
               {item.usedIn.map(({ id, displayName }) => {
                 return (
                   <Link
@@ -633,7 +657,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
       // restore last group collapse state
       const prevGroup = groups?.find(({ key }) => key === id);
-      const newGroup = prevGroup || { isCollapsed: true };
+      const newGroup = prevGroup || { isCollapsed: false };
       newGroups.push({
         ...newGroup,
         key: id,
@@ -666,7 +690,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const onRenderDetailsHeader = useCallback(
     (props, defaultRender) => {
       return (
-        <div data-testid="tableHeader">
+        <div css={detailsHeaderStyle} data-testid="tableHeader">
           <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
             {defaultRender({
               ...props,

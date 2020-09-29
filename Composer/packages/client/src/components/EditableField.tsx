@@ -18,6 +18,9 @@ const defaultContainerStyle = (hasFocus) => css`
   :hover .ms-Button-icon {
     visibility: visible;
   }
+  :hover {
+    outline: ${hasFocus ? `2px solid ${SharedColors.cyanBlue10}` : `1px solid ${SharedColors.cyanBlue10}`};
+  }
 `;
 
 //------------------------

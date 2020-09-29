@@ -11,7 +11,7 @@ import { SharedColors } from '@uifabric/fluent-theme';
 export const AddTemplateButton = {
   root: {
     fontSize: FontSizes.smallPlus,
-    marginLeft: 70,
+    marginLeft: 64,
     color: SharedColors.cyanBlue10,
   },
 };
@@ -24,7 +24,8 @@ export const classNames = mergeStyleSets({
     alignItems: 'center',
   },
   groupHeaderSourceName: {
-    marginLeft: '5px',
+    marginLeft: '18px',
+    fontSize: '16px',
   },
   emptyTableList: {
     display: 'flex',
