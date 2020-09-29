@@ -3,7 +3,7 @@
 
 import { JSONSchema7 } from 'json-schema';
 
-import { getFieldSets } from '../getFieldSets';
+import { getFieldsets } from '../getFieldsets';
 
 const schema = {
   properties: {
@@ -18,13 +18,13 @@ const schema = {
   },
 } as JSONSchema7;
 
-describe('getFieldSets', () => {
+describe('getFieldsets', () => {
   it('should return a single field set containing all the properties', () => {
-    const uiOptions = {
-      fieldSets: [{ title: 'set1' }],
+    const uiOptions: any = {
+      fieldsets: [{ title: 'set1' }],
     };
 
-    const result = getFieldSets(schema, uiOptions, {});
+    const result = getFieldsets(schema, uiOptions, {});
 
     expect(result).toEqual([
       expect.objectContaining({
@@ -46,8 +46,8 @@ describe('getFieldSets', () => {
   });
 
   it('should return two sets', () => {
-    const uiOptions = {
-      fieldSets: [
+    const uiOptions: any = {
+      fieldsets: [
         {
           title: 'set1',
           fields: ['two', 'four', 'six'],
@@ -59,7 +59,7 @@ describe('getFieldSets', () => {
       ],
     };
 
-    const result = getFieldSets(schema, uiOptions, {});
+    const result = getFieldsets(schema, uiOptions, {});
 
     expect(result).toEqual([
       expect.objectContaining({
@@ -88,33 +88,90 @@ describe('getFieldSets', () => {
     ]);
   });
 
-  it('should throw an error for multiple wildcards', () => {
-    const uiOptions = {
-      fieldSets: [{ title: 'set1', fields: ['two', '*', 'six'] }, { title: 'set2' }],
+  it('should include additional fields', () => {
+    const uiOptions: any = {
+      fieldsets: [
+        {
+          title: 'set1',
+          fields: ['two', 'four', 'six'],
+        },
+        {
+          title: 'set2',
+          fields: ['*', 'additionalField'],
+        },
+      ],
+      properties: {
+        additionalField: {
+          additionalField: true,
+          field: 'field',
+        },
+      },
     };
 
-    expect(() => getFieldSets(schema, uiOptions, {})).toThrow('multiple wildcards');
+    const result = getFieldsets(schema, uiOptions, {});
+
+    expect(result).toEqual([
+      expect.objectContaining({
+        fields: ['two', 'four', 'six'],
+        title: 'set1',
+        schema: {
+          properties: {
+            two: { type: 'string' },
+            four: { type: 'object' },
+            six: { type: 'object' },
+          },
+        },
+        uiOptions: {
+          order: ['two', 'four', 'six'],
+          properties: {},
+        },
+      }),
+      expect.objectContaining({
+        fields: ['one', 'three', 'five', 'seven', 'additionalField'],
+        title: 'set2',
+        schema: {
+          properties: {
+            one: { type: 'string' },
+            three: { type: 'number' },
+            five: { type: 'object' },
+            seven: { type: 'boolean' },
+          },
+        },
+        uiOptions: {
+          order: ['one', 'three', 'five', 'seven', 'additionalField'],
+          properties: { additionalField: { additionalField: true, field: 'field' } },
+        },
+      }),
+    ]);
+  });
+
+  it('should throw an error for multiple wildcards', () => {
+    const uiOptions: any = {
+      fieldsets: [{ title: 'set1', fields: ['two', '*', 'six'] }, { title: 'set2' }],
+    };
+
+    expect(() => getFieldsets(schema, uiOptions, {})).toThrow('multiple wildcards');
   });
 
   it('should throw an error for missing fields', () => {
     const uiOptions = {
-      fieldSets: [
+      fieldsets: [
         { title: 'set1', fields: ['two', 'four', 'six'] },
         { title: 'set2', fields: ['one'] },
       ],
     };
 
-    expect(() => getFieldSets(schema, uiOptions, {})).toThrow('missing fields');
+    expect(() => getFieldsets(schema, uiOptions, {})).toThrow('missing fields');
   });
 
   it('should throw an error for duplicate fields', () => {
     const uiOptions = {
-      fieldSets: [
+      fieldsets: [
         { title: 'set1', fields: ['two', 'four', 'six'] },
         { title: 'set2', fields: ['two', '*'] },
       ],
     };
 
-    expect(() => getFieldSets(schema, uiOptions, {})).toThrow('duplicate fields');
+    expect(() => getFieldsets(schema, uiOptions, {})).toThrow('duplicate fields');
   });
 });

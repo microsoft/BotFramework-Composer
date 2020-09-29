@@ -9,13 +9,15 @@ type UIOptionValue<R = string, D = any> = R | UIOptionFunc<R, D>;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type UIOptionFunc<R, D> = (data: D) => R;
 
-interface FieldSet {
+export interface Fieldset {
   title: string;
   fields?: string[];
   defaultExpanded?: boolean;
 }
 
 export interface UIOptions {
+  /** Specifies if the property is an additional field */
+  additionalField?: true;
   /** Description override. */
   description?: UIOptionValue<string | undefined>;
   /** Field widget override. */
@@ -35,7 +37,7 @@ export interface UIOptions {
    */
   hidden?: UIOptionValue<string[]>;
   /** Organizes fields into collapsible sets */
-  fieldSets?: FieldSet[];
+  fieldsets?: Fieldset[];
   /** Label override. */
   label?: UIOptionValue<string | false | undefined>;
   /** Set order of fields. Use * for all other fields. */
