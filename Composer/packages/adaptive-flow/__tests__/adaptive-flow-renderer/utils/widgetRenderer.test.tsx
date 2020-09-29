@@ -3,10 +3,9 @@
 
 import React from 'react';
 import { render } from '@bfc/test-utils';
-import { WidgetComponent, FlowEditorWidgetMap } from '@bfc/extension-client';
+import { WidgetComponent, FlowEditorWidgetMap, FlowWidget } from '@bfc/extension-client';
 
 import { renderUIWidget, UIWidgetContext } from '../../../src/adaptive-flow-renderer/utils/visual/widgetRenderer';
-import { FlowWidget } from '../../../src/adaptive-flow-renderer/types/flowRenderer.types';
 
 const renderWidget = (schema: FlowWidget, widgetsMap: FlowEditorWidgetMap, context: UIWidgetContext) => {
   const TestResult = () => renderUIWidget(schema, widgetsMap, context);
