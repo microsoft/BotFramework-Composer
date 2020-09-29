@@ -239,6 +239,11 @@ export const showCreateQnAFromUrlDialogState = atomFamily<boolean, string>({
   default: false,
 });
 
+export const showCreateQnAFromUrlDialogWithScratchState = atomFamily<boolean, string>({
+  key: getFullyQualifiedKey('showCreateQnAFromUrlDialogWithScratch'),
+  default: false,
+});
+
 export const showCreateQnAFromScratchDialogState = atomFamily<boolean, string>({
   key: getFullyQualifiedKey('showCreateQnAFromScratchDialog'),
   default: false,

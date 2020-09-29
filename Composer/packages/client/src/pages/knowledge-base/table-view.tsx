@@ -702,7 +702,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
             data-testid={'createKnowledgeBase'}
             text={formatMessage('Create new KB')}
             onClick={() => {
-              actions.createQnAFromScratchDialogBegin({ projectId });
+              actions.createQnAFromUrlDialogBegin({ projectId, showFromScratch: true });
             }}
           />
         </div>

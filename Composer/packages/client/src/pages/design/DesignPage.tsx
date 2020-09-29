@@ -316,6 +316,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             onClick: () => {
               createQnAFromUrlDialogBegin({
                 projectId,
+                showFromScratch: true,
                 onComplete: () => {
                   // when click create from scratch, page navigated to all up view. also insert trigger in dialog.
                   if (!dialogId || window.location.pathname.includes('/dialogs/')) return;

@@ -14,7 +14,11 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { FieldConfig, useForm } from '../../hooks/useForm';
-import { dispatcherState, onCreateQnAFromUrlDialogCompleteState } from '../../recoilModel';
+import {
+  dispatcherState,
+  onCreateQnAFromUrlDialogCompleteState,
+  showCreateQnAFromUrlDialogWithScratchState,
+} from '../../recoilModel';
 
 import {
   knowledgeBaseSourceUrl,
@@ -62,6 +66,7 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromModalProps> = (props) 
   const { onDismiss, onSubmit, dialogId, projectId, qnaFiles } = props;
   const actions = useRecoilValue(dispatcherState);
   const onComplete = useRecoilValue(onCreateQnAFromUrlDialogCompleteState(projectId));
+  const showWithScratch = useRecoilValue(showCreateQnAFromUrlDialogWithScratchState(projectId));
 
   formConfig.name.validate = validateName(qnaFiles);
   formConfig.url.validate = validateUrl;
@@ -128,7 +133,7 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromModalProps> = (props) 
         </Stack>
       </div>
       <DialogFooter>
-        {window.location.href.indexOf('/knowledge-base/') == -1 && (
+        {showWithScratch && (
           <DefaultButton
             data-testid={'createKnowledgeBaseFromScratch'}
             styles={{ root: { float: 'left' } }}

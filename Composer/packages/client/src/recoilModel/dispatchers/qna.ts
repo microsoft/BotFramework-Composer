@@ -12,6 +12,7 @@ import {
   settingsState,
   showCreateQnAFromScratchDialogState,
   showCreateQnAFromUrlDialogState,
+  showCreateQnAFromUrlDialogWithScratchState,
   onCreateQnAFromScratchDialogCompleteState,
   onCreateQnAFromUrlDialogCompleteState,
 } from '../atoms/botState';
@@ -203,15 +204,22 @@ export const qnaDispatcher = () => {
       dialogId,
       onComplete,
       projectId,
+      showFromScratch,
     }: {
       dialogId?: string;
       onComplete?: Function;
+      showFromScratch: boolean;
       projectId: string;
     }) => {
       if (dialogId) {
         navigateTo(`/bot/${projectId}/knowledge-base/${dialogId}`);
       }
       set(showCreateQnAFromUrlDialogState(projectId), true);
+      if (showFromScratch) {
+        set(showCreateQnAFromUrlDialogWithScratchState(projectId), true);
+      } else {
+        set(showCreateQnAFromUrlDialogWithScratchState(projectId), false);
+      }
       set(onCreateQnAFromUrlDialogCompleteState(projectId), { func: onComplete });
     }
   );
@@ -244,11 +252,7 @@ export const qnaDispatcher = () => {
   );
 
   const createQnAFromScratchDialogCancel = useRecoilCallback(
-    ({ set }: CallbackInterface) => async ({ dialogId, projectId }: { dialogId?: string; projectId: string }) => {
-      // navigate back to design page. if click `Back`
-      if (dialogId) {
-        navigateTo(`/bot/${projectId}/dialogs/${dialogId}`);
-      }
+    ({ set }: CallbackInterface) => async ({ projectId }: { projectId: string }) => {
       set(showCreateQnAFromScratchDialogState(projectId), false);
       set(onCreateQnAFromScratchDialogCompleteState(projectId), { func: undefined });
     }

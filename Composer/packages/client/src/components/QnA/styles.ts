@@ -30,6 +30,13 @@ export const dialogWindow = css`
   min-height: 200px;
 `;
 
+export const dialogWindowMini = css`
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  min-height: 100px;
+`;
+
 export const textField = {
   root: {
     width: '400px',
