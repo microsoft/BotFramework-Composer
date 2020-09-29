@@ -28,7 +28,7 @@ export function substringTextByLine(text: string, start?: number, end?: number):
   return text.split('\n').slice(start, end).join('\n');
 }
 /**
- * Move qna pair in *.qna to container KB *.source.qna file.
+ * Migrate qna pair in <dialog>.qna to container KB <dialog>-munual.source.qna file.
  * @param qnaFiles
  */
 export const reformQnAToContainerKB = (projectId: string, qnaFiles: QnAFile[]): QnAFile[] => {
@@ -41,31 +41,31 @@ export const reformQnAToContainerKB = (projectId: string, qnaFiles: QnAFile[]): 
   qnaFilesNeedMigrate.forEach((file) => {
     const { id, content } = file;
     const qnaSectionStartLine = file.qnaSections[0].range?.start.line || 0;
-    const content1 = substringTextByLine(content, 0, qnaSectionStartLine - 1);
-    const content2 = substringTextByLine(content, qnaSectionStartLine - 1);
-    let file1 = qnaUtil.parse(id, content1);
-    const file2Id = `${getBaseName(id)}.source`;
-    const file2FullId = `${file2Id}.qna`;
+    const originQnAFileContent = substringTextByLine(content, 0, qnaSectionStartLine - 1);
+    const manualContainerContent = substringTextByLine(content, qnaSectionStartLine - 1);
+    let originQnAFile = qnaUtil.parse(id, originQnAFileContent);
+
+    const manualContainerFileId = `${getBaseName(id)}-manual.source`;
+    const manualContainerFullFileId = `${manualContainerFileId}.qna`;
 
     // if container file not be imported, do import
-    if (!file1.imports.find(({ id }) => file2FullId === id)) {
-      file1 = qnaUtil.addImport(file1, file2FullId);
+    if (!originQnAFile.imports.find(({ id }) => manualContainerFullFileId === id)) {
+      originQnAFile = qnaUtil.addImport(originQnAFile, manualContainerFullFileId);
     }
-    updateFile(projectId, `${file1.id}.qna`, file1.content);
-    updatedFiles.push(file1);
+    updateFile(projectId, `${originQnAFile.id}.qna`, originQnAFile.content);
+    updatedFiles.push(originQnAFile);
 
     // if container file not exist, create it. if exist, update it
-    const existedFile2 = qnaFiles.find((item) => item.id === file2Id);
-    if (existedFile2) {
-      const file2Content = existedFile2.content + '\n' + content2;
-      const file2 = qnaUtil.parse(file2Id, file2Content);
-      updateFile(projectId, `${file2.id}.qna`, file2.content);
-      updatedFiles.push(file2);
+    const originManualContainerFile = qnaFiles.find((item) => item.id === manualContainerFileId);
+    if (originManualContainerFile) {
+      const updatedContent = originManualContainerFile.content + '\n' + manualContainerContent;
+      const updatedFile = qnaUtil.parse(manualContainerFileId, updatedContent);
+      updateFile(projectId, `${updatedFile.id}.qna`, updatedFile.content);
+      updatedFiles.push(updatedFile);
     } else {
-      const file2Content = content2;
-      const file2 = qnaUtil.parse(file2Id, file2Content);
-      createFile(projectId, `${file2.id}.qna`, file2.content);
-      createdFiles.push(file2);
+      const createdFile = qnaUtil.parse(manualContainerFileId, manualContainerContent);
+      createFile(projectId, `${createdFile.id}.qna`, createdFile.content);
+      createdFiles.push(createdFile);
     }
   });
 
