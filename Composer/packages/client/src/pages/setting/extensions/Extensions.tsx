@@ -3,20 +3,23 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import {
   DetailsListLayoutMode,
+  Selection,
   SelectionMode,
   IColumn,
   CheckboxVisibility,
   ConstrainMode,
+  DetailsRow,
+  IDetailsRowStyles,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { ShimmeredDetailsList } from 'office-ui-fabric-react/lib/ShimmeredDetailsList';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 import { useRecoilValue, selector } from 'recoil';
+import { NeutralColors } from '@uifabric/fluent-theme';
 
 import { ExtensionConfig } from '../../../recoilModel/types';
 import { Toolbar, IToolbarItem } from '../../../components/Toolbar';
@@ -41,6 +44,14 @@ const Extensions: React.FC<RouteComponentProps> = () => {
   // if a string, its the id of the extension being updated
   const [isUpdating, setIsUpdating] = useState<string | boolean>(false);
   const [showNewModal, setShowNewModal] = useState(false);
+  const [selectedExtensions, setSelectedExtensions] = useState<ExtensionConfig[]>([]);
+  const selection = useRef(
+    new Selection({
+      onSelectionChanged: () => {
+        setSelectedExtensions(selection.getSelection() as ExtensionConfig[]);
+      },
+    })
+  ).current;
 
   useEffect(() => {
     fetchExtensions();
@@ -53,7 +64,6 @@ const Extensions: React.FC<RouteComponentProps> = () => {
       minWidth: 100,
       maxWidth: 250,
       isResizable: true,
-      isRowHeader: true,
       fieldName: 'name',
     },
     {
@@ -85,29 +95,12 @@ const Extensions: React.FC<RouteComponentProps> = () => {
           <Toggle
             ariaLabel={formatMessage('Toggle extension')}
             checked={item.enabled}
-            onChange={() => toggleExtension(item.id, !item.enabled)}
-          />
-        );
-      },
-    },
-    {
-      key: 'remove',
-      name: formatMessage('Remove'),
-      minWidth: 100,
-      maxWidth: 150,
-      isResizable: true,
-      onRender: (item: ExtensionConfig) => {
-        return (
-          <IconButton
-            ariaLabel={formatMessage('Uninstall {extension}', { extension: item.name })}
-            disabled={item.builtIn}
-            iconProps={{ iconName: 'Trash' }}
-            onClick={async () => {
-              if (confirm(formatMessage('Are you sure you want to uninstall {extension}?', { extension: item.name }))) {
-                setIsUpdating(item.id);
-                await removeExtension(item.id);
-                setIsUpdating(false);
-              }
+            styles={{ root: { marginBottom: 0 } }}
+            onChange={async () => {
+              const timeout = setTimeout(() => setIsUpdating(item.id), 200);
+              await toggleExtension(item.id, !item.enabled);
+              clearTimeout(timeout);
+              setIsUpdating(false);
             }}
           />
         );
@@ -127,6 +120,29 @@ const Extensions: React.FC<RouteComponentProps> = () => {
           setShowNewModal(true);
         },
       },
+      align: 'left',
+    },
+    {
+      type: 'action',
+      text: formatMessage('Uninstall'),
+      buttonProps: {
+        iconProps: {
+          iconName: 'Trash',
+        },
+        onClick: async () => {
+          const names = selectedExtensions.map((e) => e.name).join('\n');
+          const message = formatMessage('Are you sure you want to uninstall these extensions?');
+          if (confirm(`${message}\n\n${names}`)) {
+            for (const ext of selectedExtensions) {
+              const timeout = setTimeout(() => setIsUpdating(ext.id), 200);
+              await removeExtension(ext.id);
+              clearTimeout(timeout);
+              setIsUpdating(false);
+            }
+          }
+        },
+      },
+      disabled: selectedExtensions.length === 0,
       align: 'left',
     },
   ];
@@ -159,12 +175,13 @@ const Extensions: React.FC<RouteComponentProps> = () => {
     <div style={{ maxWidth: '100%' }}>
       <Toolbar toolbarItems={toolbarItems} />
       <ShimmeredDetailsList
-        checkboxVisibility={CheckboxVisibility.hidden}
+        checkboxVisibility={CheckboxVisibility.onHover}
         columns={installedColumns}
         constrainMode={ConstrainMode.horizontalConstrained}
         items={shownItems()}
         layoutMode={DetailsListLayoutMode.justified}
-        selectionMode={SelectionMode.none}
+        selection={selection}
+        selectionMode={SelectionMode.multiple}
         onRenderRow={(rowProps, defaultRender) => {
           if (extensions.length === 0) {
             return (
@@ -174,8 +191,13 @@ const Extensions: React.FC<RouteComponentProps> = () => {
             );
           }
 
-          if (defaultRender) {
-            return defaultRender(rowProps);
+          if (defaultRender && rowProps) {
+            const customStyles: Partial<IDetailsRowStyles> = {
+              root: {
+                color: rowProps?.item?.enabled ? undefined : NeutralColors.gray90,
+              },
+            };
+            return <DetailsRow {...rowProps} styles={customStyles} />;
           }
 
           return null;
