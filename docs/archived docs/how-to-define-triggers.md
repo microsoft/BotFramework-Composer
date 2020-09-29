@@ -15,7 +15,7 @@ The table below lists the six different types of triggers in Composer and their 
 
 ## Intent recognized
 
-This trigger type is used to define the actions to execute when an [intent](concept-language-understanding.md#intents) is found in a message sent from the user. The **Intent recognized** trigger works in conjunction with **recognizers**. There are two [recognizers](concept-dialog.md#recognizer) in Composer, one for [LUIS](#luis-recognizer) and the other for [Regular Expression](#regular-expression-recognizer). You define which recognizer is used, if any, at the dialog level.
+This trigger type is used to define the actions to execute when an [intent](concept-language-understanding.md#intents) is found in a message sent from the user. The **Intent recognized** trigger works in conjunction with **recognizers**. There are two [recognizers](concept-dialog.md#recognizer) in Composer, one for [LUIS](#luis-recognizer) and the other for [regular expressions](#regular-expression-recognizer). You define which recognizer is used, if any, at the dialog level.
 
 To create the **Intent recognized** trigger, select **New Trigger** in the navigation pane then **Intent recognized** from the drop-down list. You will see the intent trigger menu as follows:
 
@@ -73,15 +73,15 @@ Follow the steps to define an **Intent recognized** trigger with a LUIS recogniz
 
 This definition means that the **Greeting** intent trigger will only fire when the confidence score returned by LUIS is equal to or greater than 0.8.
 
-### Regular Expression recognizer
+### Regular expressions recognizer
 
-A [regular expression](https://regexr.com/) is a special text string for describing a search pattern that can be used to match simple or sophisticated patterns in a string. Composer exposes the ability to define intents using regular expressions and also allows regular expressions to extract simple entity values. While LUIS offers the flexibility of a more fully featured language understanding technology, the [regular expression recognizer](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/recognizers-rules-steps-reference.md#regex-recognizer) works well when you need to match a narrow set of highly structured commands or keywords.
+A [regular expression](https://regexr.com/) is a special text string for describing a search pattern that can be used to match simple or sophisticated patterns in a string. Composer exposes the ability to define intents using regular expressions and also allows regular expressions to extract simple entity values. While LUIS offers the flexibility of a more fully featured language understanding technology, the [regular expressions recognizer](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/recognizers-rules-steps-reference.md#regex-recognizer) works well when you need to match a narrow set of highly structured commands or keywords.
 
 In the example below, a similar book-flight intent is defined. However, this will _only_ match the very narrow pattern "book flight to [somewhere]", whereas the LUIS recognizer will be able to match a much wider variety of messages.
 
-Follow the steps to define **Intent recognized** trigger with [Regular Expression](https://regexr.com/) recognizer:
+Follow the steps to define **Intent recognized** trigger with [regular expressions](https://regexr.com/) recognizer:
 
-1. In the properties panel of your selected dialog, choose **Regular Expression** as recognizer type for your dialog.
+1. In the properties panel of your selected dialog, choose **Regular expressions recognizer** as recognizer type for your dialog.
 
    ![regex recognizer](./media/events-triggers/regex-recognizer.png)
 
@@ -92,7 +92,7 @@ Follow the steps to define **Intent recognized** trigger with [Regular Expressio
 3. You can then create an **Intent recognized** trigger to handle each intent you define as instructed in the [LUIS recognizer](how-to-define-triggers.md#LUIS-recognizer) section.
 
 > [!NOTE]
-> For more information on how to write regular expression, read [here](https://regexr.com/).
+> For more information on how to write regular expressions, read [here](https://regexr.com/).
 
 ## Unknown intent
 

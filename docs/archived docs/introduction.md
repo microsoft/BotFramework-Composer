@@ -13,17 +13,17 @@ Under the hood, Composer harnesses the power of many of the components from the 
 
 **Adaptive dialogs**
 
-Dialogs provide a way for the bot to manage conversations with the user. The new [Adaptive dialog](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog) and the event model simplify sophisticated conversation modelling and helps you focus on the model of the conversation rather than the mechanics of dialog management. 
+Dialogs provide a way for the bot to manage conversations with the user. The new [Adaptive dialog](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog) and the event model simplify sophisticated conversation modelling and helps you focus on the model of the conversation rather than the mechanics of dialog management.
 
 **Language Understanding (LU)**
 
-LU is a core component of Composer, allowing developers and conversation designers to train language understanding directly in the context of editing a dialog. As dialogs are edited in Composer, developers can continuously add to their bots' natural language capabilities using the [lu file format](https://aka.ms/lu-file-format), a simple markdown-like format that makes it easy to define new [intents](concept-language-understanding.md#intents) and provide sample [utterances](concept-language-understanding.md#utterances). In Composer, you can use both regular expression or [LUIS](https://docs.microsoft.com/azure/cognitive-services/luis/what-is-luis) service. 
+LU is a core component of Composer, allowing developers and conversation designers to train language understanding directly in the context of editing a dialog. As dialogs are edited in Composer, developers can continuously add to their bots' natural language capabilities using the [lu file format](https://aka.ms/lu-file-format), a simple markdown-like format that makes it easy to define new [intents](concept-language-understanding.md#intents) and provide sample [utterances](concept-language-understanding.md#utterances). In Composer, you can use both regular expressions or [LUIS](https://docs.microsoft.com/azure/cognitive-services/luis/what-is-luis) service.
 
   ![BF Composer NLU](./media/introduction/intro-nlu.png)
 
 Composer detects changes and updates the bot's cloud-based natural-language understanding (NLU) model automatically so it is always up to date.
 
-**Language Generation (LG)** 
+**Language Generation (LG)**
 
 Creating grammatically correct, data-driven responses that have a consistent tone and convey a clear brand voice has always been a challenge for bot developers. Composer's integrated [Language Generation](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation) system allows developers to create bot replies with a great deal of flexibility.
 

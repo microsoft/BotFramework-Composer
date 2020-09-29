@@ -13,7 +13,7 @@ Language Understanding Intelligent Service ([LUIS](https://www.luis.ai/home)) is
 
 To determine user's intent, in Composer you define the **Intent recognized** trigger, and then specify the actions to take when an intent is recognized (and optionally **entities**). For more details please read the [events and triggers](./concept-events-and-triggers.md) article.
 
-Composer currently supports two types of recognizers: LUIS recognizer (default) and Regular expression recognizer. You can only choose one type of recognizer for each dialog. Besides the recognizer, each dialog may contain a set of Language Understanding data authored in [.lu format](https://aka.ms/lu-file-format).
+Composer currently supports two types of recognizers: LUIS recognizer (default) and regular expressions recognizer. You can only choose one type of recognizer for each dialog. Besides the recognizer, each dialog may contain a set of Language Understanding data authored in [.lu format](https://aka.ms/lu-file-format).
 
 In this section, we will cover the steps to use LUIS as recognizer in your bot. These steps include the following: set a recognizer type for each dialog, author Language Understanding training data, publish your Language Understanding (LU) data, and test them in emulator.
 
