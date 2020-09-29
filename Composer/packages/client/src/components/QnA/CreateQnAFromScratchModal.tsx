@@ -36,7 +36,7 @@ const DialogTitle = () => {
 };
 
 export const CreateQnAFromScratchModal: React.FC<CreateQnAFromModalProps> = (props) => {
-  const { onDismiss, onSubmit, qnaFiles, dialogId, projectId } = props;
+  const { onDismiss, onSubmit, qnaFiles, projectId } = props;
   const actions = useRecoilValue(dispatcherState);
   const showCreateQnAFromUrlDialog = useRecoilValue(showCreateQnAFromUrlDialogState(projectId));
 

@@ -6,7 +6,7 @@ import { fireEvent } from '@bfc/test-utils';
 
 import { renderWithRecoil } from '../testUtils/renderWithRecoil';
 import CreateQnAFromUrlModal from '../../src/components/QnA/CreateQnAFromUrlModal';
-import { showCreateQnAFromUrlDialogState } from '../../src/recoilModel';
+import { showCreateQnAFromUrlDialogState, showCreateQnAFromUrlDialogWithScratchState } from '../../src/recoilModel';
 
 describe('<CreateQnAFromUrlModal />', () => {
   const onDismiss = jest.fn(() => {});
@@ -24,6 +24,7 @@ describe('<CreateQnAFromUrlModal />', () => {
       />,
       ({ set }) => {
         set(showCreateQnAFromUrlDialogState(projectId), true);
+        set(showCreateQnAFromUrlDialogWithScratchState(projectId), true);
       }
     );
 

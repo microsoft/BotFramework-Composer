@@ -8,7 +8,7 @@ import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcru
 import formatMessage from 'format-message';
 import { globalHistory, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
-import { DialogInfo, PromptTab, getEditorAPI, registerEditorAPI, FieldNames } from '@bfc/shared';
+import { DialogInfo, PromptTab, getEditorAPI, registerEditorAPI } from '@bfc/shared';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import { EditorExtension, useTriggerApi, PluginConfig } from '@bfc/extension-client';
