@@ -311,6 +311,11 @@ async function build(req: Request, res: Response) {
   const projectId = req.params.projectId;
   const user = await ExtensionContext.getUserFromRequest(req);
 
+  // Disable Express' built in 2 minute timeout for requests. Otherwise, large models may fail to build.
+  req.setTimeout(0, () => {
+    throw new Error('LUIS publish process timed out.');
+  });
+
   const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
     try {
