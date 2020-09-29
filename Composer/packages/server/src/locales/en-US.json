@@ -209,6 +209,9 @@
   "any_or_expression_acad7d37": {
     "message": "Any or expression"
   },
+  "any_string_f22dc2e1": {
+    "message": "any string"
+  },
   "append_choices_35c45a2d": {
     "message": "Append choices"
   },
@@ -782,12 +785,6 @@
   "duplicated_intents_recognized_d3908424": {
     "message": "Duplicated intents recognized"
   },
-  "each_page_of_pagesizestring_in_propstring_a7e23b00": {
-    "message": "Each page of { pageSizeString } in { propString }"
-  },
-  "each_value_in_ae285cd9": {
-    "message": "Each value in"
-  },
   "early_adopters_e8db7999": {
     "message": "Early adopters"
   },
@@ -913,9 +910,6 @@
   },
   "error_processing_schema_2c707cf3": {
     "message": "Error Processing Schema"
-  },
-  "event_48c2be6e": {
-    "message": " (Event)"
   },
   "event_activity_2067a94b": {
     "message": "Event activity"
@@ -1084,9 +1078,6 @@
   },
   "home_351838cd": {
     "message": "Home"
-  },
-  "host_ef9acfae": {
-    "message": "Host "
   },
   "http_request_79847109": {
     "message": "HTTP Request"
@@ -1625,6 +1616,15 @@
   "open_inline_editor_a5aabcfa": {
     "message": "Open inline editor"
   },
+  "optional_221bcc9d": {
+    "message": "Optional"
+  },
+  "optional_db6daecb": {
+    "message": "optional"
+  },
+  "optional_properties_2c23c7c6": {
+    "message": "Optional properties"
+  },
   "or_4f7d4edb": {
     "message": "Or: "
   },
@@ -1903,15 +1903,6 @@
   },
   "restart_bot_34e36428": {
     "message": "Restart Bot"
-  },
-  "result_b1f14e91": {
-    "message": " = Result"
-  },
-  "result_property_100ef34f": {
-    "message": " = Result property"
-  },
-  "return_value_b386d1b": {
-    "message": "= Return value"
   },
   "review_and_generate_63dec712": {
     "message": "Review and generate"
@@ -2284,9 +2275,6 @@
   },
   "to_which_language_will_you_be_translating_your_bot_77219d69": {
     "message": "To which language will you be translating your bot?"
-  },
-  "token_property_e53a19d9": {
-    "message": " = Token Property"
   },
   "toolbar_bafd4228": {
     "message": "toolbar"

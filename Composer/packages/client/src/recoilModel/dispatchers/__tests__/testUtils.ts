@@ -15,7 +15,6 @@ export const mockCallback: CallbackInterface = {
     getPromise: jest.fn(),
     map: jest.fn(),
     asyncMap: jest.fn(),
-    getID: jest.fn(),
   },
 };
 
