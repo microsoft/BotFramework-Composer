@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { AdditionalField, isAdditionalField, FieldProps, UIOptions } from '@bfc/extension-client';
+import { isAdditionalField, FieldProps, UIOptions } from '@bfc/extension-client';
 import { css, jsx } from '@emotion/core';
 import React from 'react';
 
