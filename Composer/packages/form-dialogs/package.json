@@ -23,8 +23,8 @@
   },
   "peerDependencies": {
     "recoil": "^0.0.13",
-    "react": "16.13.0",
-    "react-dom": "16.13.0",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
     "lodash": "^4.17.19",
     "format-message": "^6.2.3",
     "office-ui-fabric-react": "^7.121.11",

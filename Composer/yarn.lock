@@ -9090,7 +9090,7 @@ eslint-scope@^5.0.0:
     esrecurse "^4.1.0"
     estraverse "^4.1.1"
 
-eslint-scope@^5.1.0:
+eslint-scope@^5.1.1:
   version "5.1.1"
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/eslint-scope/-/eslint-scope-5.1.1.tgz#e786e59a66cb92b3f6c1fb0d508aab174848f48c"
   integrity sha1-54blmmbLkrP2wfsNUIqrF0hI9Iw=
@@ -9211,9 +9211,9 @@ eslint@^3.19.0:
     user-home "^2.0.0"
 
 eslint@^7.5.0:
-  version "7.9.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/eslint/-/eslint-7.9.0.tgz#522aeccc5c3a19017cf0cb46ebfd660a79acf337"
-  integrity sha1-UirszFw6GQF88MtG6/1mCnms8zc=
+  version "7.10.0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/eslint/-/eslint-7.10.0.tgz#494edb3e4750fb791133ca379e786a8f648c72b9"
+  integrity sha1-SU7bPkdQ+3kRM8o3nnhqj2SMcrk=
   dependencies:
     "@babel/code-frame" "^7.0.0"
     "@eslint/eslintrc" "^0.1.3"
@@ -9223,7 +9223,7 @@ eslint@^7.5.0:
     debug "^4.0.1"
     doctrine "^3.0.0"
     enquirer "^2.3.5"
-    eslint-scope "^5.1.0"
+    eslint-scope "^5.1.1"
     eslint-utils "^2.1.0"
     eslint-visitor-keys "^1.3.0"
     espree "^7.3.0"
