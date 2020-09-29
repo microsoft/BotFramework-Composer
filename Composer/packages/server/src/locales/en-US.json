@@ -2027,8 +2027,8 @@
   "regex_intent_is_already_defined_df095c1f": {
     "message": "RegEx { intent } is already defined"
   },
-  "regular_expression_855557bf": {
-    "message": "Regular Expression"
+  "regular_expressions_recognizer_c11bbdda": {
+    "message": "Regular expressions recognizer"
   },
   "release_1af20f26": {
     "message": "Release: "
