@@ -3,6 +3,6 @@
 import * as React from 'react';
 import { render } from '@bfc/extension-client';
 
-import { AzureProvisionDialog } from './azureProvisionDialog'
+import { AzureProvisionDialog } from './azureProvisionDialog';
 
 render(<AzureProvisionDialog />);

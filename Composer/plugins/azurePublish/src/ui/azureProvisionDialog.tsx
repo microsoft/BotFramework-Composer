@@ -2,15 +2,14 @@
 // Licensed under the MIT License.
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-// import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-// import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import * as React from 'react';
 import { useState, useMemo, useEffect, Fragment } from 'react';
-// import formatMessage from 'format-message';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { getAccessTokensFromStorage } from '@bfc/extension-client';
-import { Subscription, ResourceGroups, DeployLocation } from '@bfc/shared';
+import { Subscription } from '@azure/arm-subscriptions/esm/models';
+import { ResourceGroup } from '@azure/arm-resources/esm/models';
+import { DeployLocation } from '@bfc/shared';
 
 import { getSubscriptions, getResourceGroups, getDeployLocations } from './api';
 
@@ -28,7 +27,7 @@ const extensionResourceOptions = [
 
 export const AzureProvisionDialog: React.FC = () => {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
-  const [resourceGroups, setResourceGroups] = useState<ResourceGroups[]>([]);
+  const [resourceGroups, setResourceGroups] = useState<ResourceGroup[]>([]);
   const [deployLocations, setDeployLocations] = useState<DeployLocation[]>([]);
 
   const [token, setToken] = useState<string>();
@@ -50,7 +49,7 @@ export const AzureProvisionDialog: React.FC = () => {
     });
     setEnabledResources(enabled);
 
-    const {access_token, graph_token} = getAccessTokensFromStorage();
+    const { access_token, graph_token } = getAccessTokensFromStorage();
     console.log('RECEIVED ACCeSS TOKENS FROM STORAGE', access_token, graph_token);
     setToken(access_token);
     getSubscriptions(access_token).then(setSubscriptions);

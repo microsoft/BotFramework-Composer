@@ -16,11 +16,10 @@ import { Separator } from 'office-ui-fabric-react/lib/Separator';
 
 import { PublishType } from '../../recoilModel/types';
 import { userSettingsState } from '../../recoilModel';
-import { PluginHost } from '../../components/PluginHost/PluginHost';
 import { PluginAPI } from '../../plugins/api';
+import { PluginHost } from '../../components/PluginHost/PluginHost';
 
-import { label, customPublishUISurface, separator } from './styles';
-
+import { label, separator, customPublishUISurface } from './styles';
 interface CreatePublishTargetProps {
   closeDialog: () => void;
   current: PublishTarget | null;
@@ -84,7 +83,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
     isNameValid(newName);
   };
 
-  const saveDisabled = useMemo(() => {
+  const nextDisabled = useMemo(() => {
     const disabled = !targetType || !name || !!errorMessage;
     if (hasView) {
       // plugin config must also be valid
@@ -92,6 +91,10 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
     }
     return disabled;
   }, [errorMessage, name, pluginConfigIsValid, targetType]);
+
+  const saveDisabled = useMemo(() => {
+    return !targetType || !name || !!errorMessage;
+  }, [errorMessage, name, targetType]);
 
   // setup plugin APIs
   useEffect(() => {
@@ -119,26 +122,28 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
       );
     }
     // render default instruction / schema editor view
-    return (
-      <Fragment>
-        {instructions && <p>{instructions}</p>}
-        <div css={label}>{formatMessage('Publish Configuration')}</div>
-        <JsonEditor
-          key={targetType}
-          editorSettings={userSettings.codeEditor}
-          height={200}
-          schema={schema}
-          value={config}
-          onChange={updateConfig}
-        />
-        <button hidden disabled={saveDisabled} type="submit" />
-      </Fragment>
-    );
+    if (current) {
+      return (
+        <Fragment>
+          {instructions && <p>{instructions}</p>}
+          <div css={label}>{formatMessage('Publish Configuration')}</div>
+          <JsonEditor
+            key={targetType}
+            editorSettings={userSettings.codeEditor}
+            height={200}
+            schema={schema}
+            value={config}
+            onChange={updateConfig}
+          />
+          <button hidden disabled={saveDisabled} type="submit" />
+        </Fragment>
+      );
+    }
   }, [targetType, instructions, schema, hasView, saveDisabled]);
 
   return (
     <Fragment>
-      <form onSubmit={submit}>
+      <form style={{ minHeight: '400px' }} onSubmit={submit}>
         <TextField
           defaultValue={props.current ? props.current.name : ''}
           errorMessage={errorMessage}
@@ -159,7 +164,17 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
       <Separator css={separator} />
       <DialogFooter>
         <DefaultButton text={formatMessage('Cancel')} onClick={props.closeDialog} />
-        <PrimaryButton disabled={saveDisabled} text={formatMessage('Save')} onClick={submit} />
+        {current ? (
+          <PrimaryButton disabled={saveDisabled} text={formatMessage('Save')} onClick={submit} />
+        ) : (
+          <PrimaryButton
+            disabled={nextDisabled}
+            text={formatMessage('Next')}
+            onClick={() => {
+              console.log('test');
+            }}
+          />
+        )}
       </DialogFooter>
     </Fragment>
   );

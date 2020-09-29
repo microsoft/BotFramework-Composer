@@ -52,10 +52,6 @@ router.post('/storages/folder', StorageController.createFolder);
 router.put('/storages/folder', StorageController.updateFolder);
 
 // provision
-router.get('/azure/subscriptions', ProvisionController.getSubscriptions);
-router.get('/azure/resourceGroups/:subscriptionId', ProvisionController.getResourceGroups);
-router.get('/azure/resources/:subscriptionId/:resourceGroup', ProvisionController.getResourceByResourceGroup);
-router.get('/azure/locations/:subscriptionId', ProvisionController.getDeployLocations);
 router.post('/azure/provision/:projectId/:type', ProvisionController.provision);
 router.get('/azure/provisionStatus/:projectId/:target', ProvisionController.getProvisionStatus);
 
