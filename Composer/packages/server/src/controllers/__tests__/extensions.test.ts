@@ -38,6 +38,7 @@ const mockExtension1 = {
   version: '1.0.0',
   enabled: true,
   path: '/some/path/extension1',
+  description: 'description text',
   bundles: [
     {
       id: 'page1',
@@ -67,6 +68,7 @@ const allExtensions: ExtensionMetadata[] = [
     name: 'Extension 2',
     version: '1.0.0',
     path: '/some/path/extension2',
+    description: 'description text',
     enabled: true,
     builtIn: true,
     bundles: [
@@ -102,6 +104,7 @@ describe('listing all extensions', () => {
         name: 'Extension 1',
         version: '1.0.0',
         enabled: true,
+        description: 'description text',
         contributes: {
           views: {
             publish: {
