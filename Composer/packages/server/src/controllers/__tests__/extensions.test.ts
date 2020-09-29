@@ -119,6 +119,8 @@ describe('listing all extensions', () => {
             ],
           },
         },
+        bundles: undefined,
+        path: undefined,
       },
       {
         id: 'builtinExtension2',
@@ -126,6 +128,7 @@ describe('listing all extensions', () => {
         version: '1.0.0',
         enabled: true,
         builtIn: true,
+        description: 'description text',
         contributes: {
           views: {
             publish: {
@@ -140,6 +143,8 @@ describe('listing all extensions', () => {
             ],
           },
         },
+        bundles: undefined,
+        path: undefined,
       },
     ]);
   });
