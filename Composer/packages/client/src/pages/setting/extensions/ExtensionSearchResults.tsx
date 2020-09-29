@@ -82,7 +82,7 @@ const ExtensionSearchResults: React.FC<ExtensionSearchResultsProps> = (props) =>
       onRender: (item: ExtensionSearchResult) => {
         return item.url ? (
           <a href={item.url} rel="noopener noreferrer" target="_blank">
-            View on npm
+            {formatMessage('View on npm')}
           </a>
         ) : null;
       },

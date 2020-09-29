@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import {
   DetailsListLayoutMode,
@@ -26,6 +26,7 @@ import { Toolbar, IToolbarItem } from '../../../components/Toolbar';
 import { dispatcherState, extensionsState } from '../../../recoilModel';
 
 import { InstallExtensionDialog } from './InstallExtensionDialog';
+import { ExtensionSearchResult } from './ExtensionSearchResults';
 
 const remoteExtensionsState = selector({
   key: 'remoteExtensions',
@@ -147,14 +148,14 @@ const Extensions: React.FC<RouteComponentProps> = () => {
     },
   ];
 
-  const submit = async (selectedExtension) => {
+  const submit = useCallback(async (selectedExtension?: ExtensionSearchResult) => {
     if (selectedExtension) {
       setIsUpdating(true);
       setShowNewModal(false);
       await addExtension(selectedExtension.id);
       setIsUpdating(false);
     }
-  };
+  }, []);
 
   const shownItems = () => {
     if (extensions.length === 0) {
@@ -170,6 +171,8 @@ const Extensions: React.FC<RouteComponentProps> = () => {
       return extensions;
     }
   };
+
+  const dismissInstallDialog = useCallback(() => setShowNewModal(false), []);
 
   return (
     <div style={{ maxWidth: '100%' }}>
@@ -203,7 +206,7 @@ const Extensions: React.FC<RouteComponentProps> = () => {
           return null;
         }}
       />
-      <InstallExtensionDialog isOpen={showNewModal} onDismiss={() => setShowNewModal(false)} onInstall={submit} />
+      <InstallExtensionDialog isOpen={showNewModal} onDismiss={dismissInstallDialog} onInstall={submit} />
     </div>
   );
 };
