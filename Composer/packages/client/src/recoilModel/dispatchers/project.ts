@@ -46,7 +46,7 @@ export const projectDispatcher = () => {
           const filtered = currentProjects.filter((id) => id !== projectIdToRemove);
           return filtered;
         });
-        resetBotStates(callbackHelpers, projectIdToRemove);
+        //resetBotStates(callbackHelpers, projectIdToRemove);
       } catch (ex) {
         setError(callbackHelpers, ex);
       }
@@ -306,7 +306,7 @@ export const projectDispatcher = () => {
       qnaFileStatusStorage.removeAllStatuses(projectId);
       settingStorage.remove(projectId);
       projectIdCache.clear();
-      resetBotStates(callbackHelpers, projectId);
+      //(callbackHelpers, projectId);
     } catch (e) {
       logMessage(callbackHelpers, e.message);
     }

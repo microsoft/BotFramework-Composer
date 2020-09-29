@@ -145,6 +145,7 @@ async function openProject(req: Request, res: Response) {
       });
     }
   } catch (e) {
+    console.log(e);
     res.status(400).json({
       message: e.message,
     });

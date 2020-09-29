@@ -105,7 +105,7 @@ export async function loadLocale(locale: string) {
 }
 
 export const trimFileProtocol = (path: string) => {
-  return path.replace('file://', '');
+  return path.replace(/file:(\/)*/, '');
 };
 
 export const convertPathToFileProtocol = (path: string) => {
