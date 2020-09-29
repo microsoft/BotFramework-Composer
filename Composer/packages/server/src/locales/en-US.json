@@ -209,9 +209,6 @@
   "any_or_expression_acad7d37": {
     "message": "Any or expression"
   },
-  "any_string_f22dc2e1": {
-    "message": "any string"
-  },
   "append_choices_35c45a2d": {
     "message": "Append choices"
   },
@@ -599,6 +596,9 @@
   "create_or_edit_skill_manifest_8ad98da9": {
     "message": "Create or edit skill manifest"
   },
+  "creating_your_knowledge_base_ef4f9872": {
+    "message": "Creating your knowledge base"
+  },
   "current_40c0812f": {
     "message": " - Current"
   },
@@ -767,6 +767,9 @@
   "duplicate_dialog_name_824f9fce": {
     "message": "Duplicate dialog name"
   },
+  "duplicate_fields_9fd0d3c2": {
+    "message": "duplicate fields"
+  },
   "duplicate_name_d295a09d": {
     "message": "Duplicate name"
   },
@@ -929,9 +932,6 @@
   "events_cf7a8c50": {
     "message": "Events"
   },
-  "ex_example_d5c7a406": {
-    "message": "ex. { example }"
-  },
   "example_bot_list_9be1d563": {
     "message": "Example bot list"
   },
@@ -985,6 +985,9 @@
   },
   "extract_question_and_answer_pairs_from_an_online_f_c1e12724": {
     "message": "Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence. "
+  },
+  "extracting_qna_pairs_from_urls_eaed1b1c": {
+    "message": "Extracting QNA pairs from { urls }"
   },
   "false_2f39ee6d": {
     "message": "false"
@@ -1415,6 +1418,9 @@
   "missing_definition_for_defname_33f2b594": {
     "message": "Missing definition for { defName }"
   },
+  "missing_fields_1c88ab71": {
+    "message": "missing fields"
+  },
   "modification_rejected_6a6e8322": {
     "message": "Modification Rejected"
   },
@@ -1618,18 +1624,6 @@
   },
   "open_inline_editor_a5aabcfa": {
     "message": "Open inline editor"
-  },
-  "open_skills_page_for_configuration_details_a2a484ea": {
-    "message": "Open Skills page for configuration details"
-  },
-  "optional_221bcc9d": {
-    "message": "Optional"
-  },
-  "optional_db6daecb": {
-    "message": "optional"
-  },
-  "optional_properties_2c23c7c6": {
-    "message": "Optional properties"
   },
   "or_4f7d4edb": {
     "message": "Or: "
@@ -2201,6 +2195,9 @@
   "there_was_an_error_74ed3c58": {
     "message": "There was an error"
   },
+  "there_was_error_creating_your_kb_53b31ff3": {
+    "message": "There was error creating your KB"
+  },
   "these_examples_bring_together_all_of_the_best_prac_ca1b89c7": {
     "message": "These examples bring together all of the best practices and supporting components we''ve identified through building of conversational experiences."
   },
@@ -2432,6 +2429,9 @@
   "view_ba339f93": {
     "message": "View"
   },
+  "view_kb_c382e495": {
+    "message": "View KB"
+  },
   "vishwac_sena_45910bf0": {
     "message": "Vishwac Sena"
   },
@@ -2533,5 +2533,8 @@
   },
   "your_bot_is_using_luis_and_qna_for_natural_languag_53830684": {
     "message": "Your bot is using LUIS and QNA for natural language understanding."
+  },
+  "your_knowledge_base_is_ready_6ecc1871": {
+    "message": "Your knowledge base is ready!"
   }
 }

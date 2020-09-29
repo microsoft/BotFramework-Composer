@@ -153,6 +153,14 @@ export const luDispatcher = () => {
       const luFiles = await snapshot.getPromise(luFilesState(projectId));
       const luFile = luFiles.find((temp) => temp.id === id);
       if (!luFile) return luFiles;
+
+      // create need sync to multi locale file.
+      const originIntent = luFile.intents.find(({ Name }) => Name === intentName);
+      if (!originIntent) {
+        await createLuIntent({ id, intent, projectId });
+        return;
+      }
+
       try {
         const sameIdOtherLocaleFiles = luFiles.filter((file) => getBaseName(file.id) === getBaseName(id));
 

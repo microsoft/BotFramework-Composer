@@ -5,8 +5,8 @@
 import { jsx } from '@emotion/core';
 import { FC, useMemo, useContext } from 'react';
 import { PromptTab } from '@bfc/shared';
+import { WidgetContainerProps } from '@bfc/extension-client';
 
-import { WidgetContainerProps } from '../types/flowRenderer.types';
 import { baseInputLayouter } from '../layouters/baseInputLayouter';
 import { transformBaseInput } from '../transformers/transformBaseInput';
 import { GraphNode } from '../models/GraphNode';

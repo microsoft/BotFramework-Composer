@@ -10,6 +10,7 @@ export const mockCallback: CallbackInterface = {
   reset: jest.fn(),
   gotoSnapshot: jest.fn(),
   snapshot: {
+    getID: jest.fn(),
     getLoadable: jest.fn(),
     getPromise: jest.fn(),
     map: jest.fn(),
