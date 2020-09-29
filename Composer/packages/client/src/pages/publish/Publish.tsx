@@ -394,7 +394,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       <Dialog
         dialogContentProps={dialogProps}
         hidden={addDialogHidden}
-        maxWidth={'fit-content'}
         minWidth={'fit-content'}
         modalProps={{ isBlocking: true }}
         onDismiss={() => setAddDialogHidden(true)}
@@ -404,7 +403,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       <Dialog
         dialogContentProps={editDialogProps}
         hidden={editDialogHidden}
-        maxWidth={'fit-content'}
         minWidth={'fit-content'}
         modalProps={{ isBlocking: true }}
         onDismiss={() => setEditDialogHidden(true)}
