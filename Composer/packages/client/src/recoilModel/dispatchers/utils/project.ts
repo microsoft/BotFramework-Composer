@@ -19,7 +19,6 @@ import { CallbackInterface } from 'recoil';
 import { stringify } from 'query-string';
 import formatMessage from 'format-message';
 
-import * as botstates from '../../atoms/botState';
 import UndoHistory from '../../undo/undoHistory';
 import languageStorage from '../../../utils/languageStorage';
 import settingStorage from '../../../utils/dialogSettingStorage';
@@ -34,6 +33,7 @@ import {
   qnaFilesState,
   recentProjectsState,
   botErrorState,
+  designPageLocationState,
 } from '../../atoms';
 import lgWorker from '../../parsers/lgWorker';
 import luWorker from '../../parsers/luWorker';
@@ -67,11 +67,21 @@ import { rootBotProjectIdSelector } from '../../selectors';
 import { trimFileProtocol } from '../../../utils/fileUtil';
 
 export const resetBotStates = async ({ reset }: CallbackInterface, projectId: string) => {
-  const botStates = Object.keys(botstates);
-  botStates.forEach((state) => {
-    const currentRecoilAtom: any = botstates[state];
-    reset(currentRecoilAtom(projectId));
-  });
+  reset(dialogsState(projectId));
+  reset(botEnvironmentState(projectId));
+  reset(botNameState(projectId));
+  reset(botStatusState(projectId));
+  reset(locationState(projectId));
+  reset(lgFilesState(projectId));
+  reset(skillsState(projectId));
+  reset(schemasState(projectId));
+  reset(luFilesState(projectId));
+  reset(settingsState(projectId));
+  reset(localeState(projectId));
+  reset(skillManifestsState(projectId));
+  reset(designPageLocationState(projectId));
+  reset(filePersistenceState(projectId));
+  reset(undoHistoryState(projectId));
 };
 
 export const setErrorOnBotProject = async (

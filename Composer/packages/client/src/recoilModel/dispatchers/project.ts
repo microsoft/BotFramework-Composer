@@ -14,7 +14,13 @@ import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
 import settingStorage from '../../utils/dialogSettingStorage';
 import { navigateTo } from '../../utils/navigation';
 import { projectIdCache } from '../../utils/projectCache';
-import { botProjectIdsState, botStatusState, botOpeningState, projectMetaDataState } from '../atoms';
+import {
+  botProjectIdsState,
+  botStatusState,
+  botOpeningState,
+  projectMetaDataState,
+  currentProjectIdState,
+} from '../atoms';
 import { dispatcherState } from '../DispatcherWrapper';
 
 import { recentProjectsState, templateIdState, announcementState, boilerplateVersionState } from './../atoms';
@@ -301,12 +307,15 @@ export const projectDispatcher = () => {
 
   const deleteBot = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
     try {
+      const { reset } = callbackHelpers;
       await httpClient.delete(`/projects/${projectId}`);
       luFileStatusStorage.removeAllStatuses(projectId);
       qnaFileStatusStorage.removeAllStatuses(projectId);
       settingStorage.remove(projectId);
       projectIdCache.clear();
       resetBotStates(callbackHelpers, projectId);
+      reset(botProjectIdsState);
+      reset(currentProjectIdState);
     } catch (e) {
       logMessage(callbackHelpers, e.message);
     }
