@@ -5,8 +5,8 @@
 import { useContext } from 'react';
 import { jsx } from '@emotion/core';
 import { generateSDKTitle } from '@bfc/shared';
+import { WidgetComponent, WidgetContainerProps } from '@bfc/extension-client';
 
-import { WidgetComponent, WidgetContainerProps } from '../../types/flowRenderer.types';
 import { DefaultColors } from '../../constants/ElementColors';
 import { RendererContext } from '../../contexts/RendererContext';
 import { DisabledIconColor } from '../styles/DisabledStyle';
