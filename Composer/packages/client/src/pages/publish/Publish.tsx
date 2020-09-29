@@ -8,18 +8,18 @@ import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { PublishTarget } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
+import { LeftRightSplit } from '../../components/Split/LeftRightSplit';
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { projectContainer } from '../design/styles';
-import { PublishTarget } from '../../recoilModel/types';
 import {
+  dispatcherState,
   settingsState,
   botNameState,
   publishTypesState,
-  projectIdState,
   publishHistoryState,
-  dispatcherState,
 } from '../../recoilModel';
 import { navigateTo } from '../../utils/navigation';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
@@ -31,24 +31,22 @@ import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor, overflowSe
 import { CreatePublishTarget } from './createPublishTarget';
 import { PublishStatusList, IStatus } from './publishStatusList';
 
-interface PublishPageProps extends RouteComponentProps<{}> {
-  targetName?: string;
-}
-
-const Publish: React.FC<PublishPageProps> = (props) => {
+const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: string }>> = (props) => {
   const selectedTargetName = props.targetName;
+  const { projectId = '' } = props;
   const [selectedTarget, setSelectedTarget] = useState<PublishTarget | undefined>();
-  const settings = useRecoilValue(settingsState);
-  const botName = useRecoilValue(botNameState);
-  const publishTypes = useRecoilValue(publishTypesState);
-  const projectId = useRecoilValue(projectIdState);
-  const publishHistory = useRecoilValue(publishHistoryState);
+  const settings = useRecoilValue(settingsState(projectId));
+  const botName = useRecoilValue(botNameState(projectId));
+  const publishTypes = useRecoilValue(publishTypesState(projectId));
+  const publishHistory = useRecoilValue(publishHistoryState(projectId));
+
   const {
     getPublishStatus,
     getPublishTargetTypes,
     getPublishHistory,
     setPublishTargets,
     publishToTarget,
+    setQnASettings,
     rollbackToVersion: rollbackToVersionDispatcher,
   } = useRecoilValue(dispatcherState);
 
@@ -63,12 +61,12 @@ const Publish: React.FC<PublishPageProps> = (props) => {
   const [groups, setGroups] = useState<any[]>([]);
   const [selectedVersion, setSelectedVersion] = useState<IStatus | null>(null);
   const [dialogProps, setDialogProps] = useState({
-    title: 'Title',
+    title: formatMessage('Title'),
     type: DialogType.normal,
     children: {},
   });
   const [editDialogProps, setEditDialogProps] = useState({
-    title: 'Title',
+    title: formatMessage('Title'),
     type: DialogType.normal,
     children: {},
   });
@@ -170,7 +168,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
 
   useEffect(() => {
     if (projectId) {
-      getPublishTargetTypes();
+      getPublishTargetTypes(projectId);
       // init selected status
       setSelectedVersion(null);
     }
@@ -224,7 +222,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
         },
       ]);
     }
-  }, [publishHistory, selectedTargetName]);
+  }, [publishHistory, selectedTargetName, settings.publishTargets]);
 
   // check history to see if a 202 is found
   useEffect(() => {
@@ -247,7 +245,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
           configuration,
         },
       ]);
-      await setPublishTargets(targets);
+      await setPublishTargets(targets, projectId);
       onSelectTarget(name);
     },
     [settings.publishTargets, projectId, botName]
@@ -267,7 +265,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
         configuration,
       };
 
-      await setPublishTargets(targets);
+      await setPublishTargets(targets, projectId);
 
       onSelectTarget(name);
     },
@@ -318,6 +316,9 @@ const Publish: React.FC<PublishPageProps> = (props) => {
     () => async (comment) => {
       // publish to remote
       if (selectedTarget && settings.publishTargets) {
+        if (settings.qna && Object(settings.qna).subscriptionKey) {
+          await setQnASettings(projectId, Object(settings.qna).subscriptionKey);
+        }
         const sensitiveSettings = settingsStorage.get(projectId);
         await publishToTarget(projectId, selectedTarget, { comment: comment }, sensitiveSettings);
 
@@ -333,7 +334,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
           }
         });
 
-        await setPublishTargets(updatedPublishTargets);
+        await setPublishTargets(updatedPublishTargets, projectId);
       }
     },
     [projectId, selectedTarget, settings.publishTargets]
@@ -359,7 +360,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
       if (result) {
         if (settings.publishTargets && settings.publishTargets.length > index) {
           const targets = settings.publishTargets.slice(0, index).concat(settings.publishTargets.slice(index + 1));
-          await setPublishTargets(targets);
+          await setPublishTargets(targets, projectId);
           // redirect to all profiles
           setSelectedTarget(undefined);
           onSelectTarget('all');
@@ -390,7 +391,12 @@ const Publish: React.FC<PublishPageProps> = (props) => {
         {editDialogProps.children}
       </Dialog>
       {!publishDialogHidden && (
-        <PublishDialog target={selectedTarget} onDismiss={() => setPublishDialogHidden(true)} onSubmit={publish} />
+        <PublishDialog
+          projectId={projectId}
+          target={selectedTarget}
+          onDismiss={() => setPublishDialogHidden(true)}
+          onSubmit={publish}
+        />
       )}
       {showLog && <LogDialog version={selectedVersion} onDismiss={() => setShowLog(false)} />}
       <Toolbar toolbarItems={toolbarItems} />
@@ -398,47 +404,54 @@ const Publish: React.FC<PublishPageProps> = (props) => {
         <h1 css={HeaderText}>{selectedTarget ? selectedTargetName : formatMessage('Publish Profiles')}</h1>
       </div>
       <div css={ContentStyle} data-testid="Publish" role="main">
-        <div aria-label={formatMessage('Navigation panel')} css={projectContainer} role="region">
+        <LeftRightSplit initialLeftGridWidth="20%" minLeftPixels={200} minRightPixels={800}>
           <div
-            key={'_all'}
-            css={selectedTargetName === 'all' ? targetSelected : overflowSet}
-            style={{
-              height: '36px',
-              cursor: 'pointer',
-            }}
-            onClick={() => {
-              setSelectedTarget(undefined);
-              onSelectTarget('all');
-            }}
+            aria-label={formatMessage('Navigation panel')}
+            css={projectContainer}
+            data-testid="target-list"
+            role="region"
           >
-            {formatMessage('All profiles')}
-          </div>
-          {settings && settings.publishTargets && (
-            <TargetList
-              list={settings.publishTargets}
-              selectedTarget={selectedTargetName}
-              onDelete={async (index) => await onDelete(index)}
-              onEdit={async (item, target) => await onEdit(item, target)}
-              onSelect={(item) => {
-                setSelectedTarget(item);
-                onSelectTarget(item.name);
+            <div
+              key={'_all'}
+              css={selectedTargetName === 'all' ? targetSelected : overflowSet}
+              style={{
+                height: '36px',
+                cursor: 'pointer',
               }}
-            />
-          )}
-        </div>
-        <div aria-label={formatMessage('List view')} css={contentEditor} role="region">
-          <Fragment>
-            <PublishStatusList
-              groups={groups}
-              items={thisPublishHistory}
-              updateItems={setThisPublishHistory}
-              onItemClick={setSelectedVersion}
-            />
-            {!thisPublishHistory || thisPublishHistory.length === 0 ? (
-              <div style={{ marginLeft: '50px', fontSize: 'smaller', marginTop: '20px' }}>No publish history</div>
-            ) : null}
-          </Fragment>
-        </div>
+              onClick={() => {
+                setSelectedTarget(undefined);
+                onSelectTarget('all');
+              }}
+            >
+              {formatMessage('All profiles')}
+            </div>
+            {settings && settings.publishTargets && (
+              <TargetList
+                list={settings.publishTargets}
+                selectedTarget={selectedTargetName}
+                onDelete={async (index) => await onDelete(index)}
+                onEdit={async (item, target) => await onEdit(item, target)}
+                onSelect={(item) => {
+                  setSelectedTarget(item);
+                  onSelectTarget(item.name);
+                }}
+              />
+            )}
+          </div>
+          <div aria-label={formatMessage('List view')} css={contentEditor} role="region">
+            <Fragment>
+              <PublishStatusList
+                groups={groups}
+                items={thisPublishHistory}
+                updateItems={setThisPublishHistory}
+                onItemClick={setSelectedVersion}
+              />
+              {!thisPublishHistory || thisPublishHistory.length === 0 ? (
+                <div style={{ marginLeft: '50px', fontSize: 'smaller', marginTop: '20px' }}>No publish history</div>
+              ) : null}
+            </Fragment>
+          </div>
+        </LeftRightSplit>
       </div>
     </Fragment>
   );

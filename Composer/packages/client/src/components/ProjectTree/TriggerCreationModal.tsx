@@ -10,11 +10,12 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { luIndexer, combineMessage } from '@bfc/indexers';
 import { PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
-import { DialogInfo, SDKKinds } from '@bfc/shared';
+import { SDKKinds } from '@bfc/shared';
 import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
 import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
 import { useRecoilValue } from 'recoil';
@@ -22,7 +23,6 @@ import { FontWeights } from '@uifabric/styling';
 import { FontSizes } from '@uifabric/fluent-theme';
 
 import {
-  generateNewDialog,
   getTriggerTypes,
   TriggerFormData,
   TriggerFormDataErrors,
@@ -32,19 +32,13 @@ import {
   activityTypeKey,
   getEventTypes,
   getActivityTypes,
-  regexRecognizerKey,
+  qnaMatcherKey,
+  onChooseIntentKey,
 } from '../../utils/dialogUtil';
-import { addIntent } from '../../utils/luUtil';
-import {
-  dialogsState,
-  luFilesState,
-  localeState,
-  projectIdState,
-  schemasState,
-} from '../../recoilModel/atoms/botState';
-import { userSettingsState } from '../../recoilModel';
+import { userSettingsState } from '../../recoilModel/atoms';
 import { nameRegex } from '../../constants';
-
+import { isRegExRecognizerType, isLUISnQnARecognizerType } from '../../utils/dialogValidator';
+import { validateDialogSelectorFamily } from '../../recoilModel';
 // -------------------- Styles -------------------- //
 
 const styles = {
@@ -92,6 +86,18 @@ const intent = {
   },
 };
 
+const optionRow = {
+  display: 'flex',
+  height: 15,
+  fontSize: 15,
+};
+
+export const warningIcon = {
+  marginLeft: 5,
+  color: '#BE880A',
+  fontSize: 5,
+};
+
 // -------------------- Validation Helpers -------------------- //
 
 const initialFormDataErrors = {
@@ -123,7 +129,7 @@ const validateDupRegExIntent = (
   regExIntents: [{ intent: string; pattern: string }]
 ): string | undefined => {
   if (selectedType === intentTypeKey && isRegEx && regExIntents.find((ri) => ri.intent === intent)) {
-    return `regEx ${intent} is already defined`;
+    return formatMessage(`RegEx {intent} is already defined`, { intent });
   }
   return undefined;
 };
@@ -166,12 +172,8 @@ const validateTriggerPhrases = (
   intent: string,
   triggerPhrases: string
 ): string | undefined => {
-  if (selectedType === intentTypeKey && !isRegEx) {
-    if (triggerPhrases) {
-      return getLuDiagnostics(intent, triggerPhrases);
-    } else {
-      return formatMessage('Please input trigger phrases');
-    }
+  if (selectedType === intentTypeKey && !isRegEx && triggerPhrases) {
+    return getLuDiagnostics(intent, triggerPhrases);
   }
   return undefined;
 };
@@ -195,57 +197,63 @@ const validateForm = (
   return errors;
 };
 
-export interface LuFilePayload {
-  id: string;
-  content: string;
-}
-
 // -------------------- TriggerCreationModal -------------------- //
 
 interface TriggerCreationModalProps {
+  projectId: string;
   dialogId: string;
   isOpen: boolean;
   onDismiss: () => void;
-  onSubmit: (dialog: DialogInfo, luFilePayload?: LuFilePayload) => void;
+  onSubmit: (dialogId: string, formData: TriggerFormData) => void;
 }
 
 export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props) => {
-  const { isOpen, onDismiss, onSubmit, dialogId } = props;
-  const dialogs = useRecoilValue(dialogsState);
-  const luFiles = useRecoilValue(luFilesState);
-  const locale = useRecoilValue(localeState);
-  const projectId = useRecoilValue(projectIdState);
-  const schemas = useRecoilValue(schemasState);
+  const { isOpen, onDismiss, onSubmit, dialogId, projectId } = props;
+  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
   const userSettings = useRecoilValue(userSettingsState);
-  const luFile = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const dialogFile = dialogs.find((dialog) => dialog.id === dialogId);
-  const isRegEx = (dialogFile?.content?.recognizer?.$kind ?? '') === regexRecognizerKey;
+  const isRegEx = isRegExRecognizerType(dialogFile);
+  const isLUISnQnA = isLUISnQnARecognizerType(dialogFile);
   const regexIntents = dialogFile?.content?.recognizer?.intents ?? [];
-  const isNone = !dialogFile?.content?.recognizer;
   const initialFormData: TriggerFormData = {
     errors: initialFormDataErrors,
-    $kind: isNone ? '' : intentTypeKey,
+    $kind: intentTypeKey,
     event: '',
     intent: '',
     triggerPhrases: '',
     regEx: '',
   };
   const [formData, setFormData] = useState(initialFormData);
-  const [selectedType, setSelectedType] = useState(isNone ? '' : intentTypeKey);
+  const [selectedType, setSelectedType] = useState(intentTypeKey);
   const showIntentName = selectedType === intentTypeKey;
   const showRegExDropDown = selectedType === intentTypeKey && isRegEx;
-  const showTriggerPhrase = selectedType === intentTypeKey && !isRegEx;
+  const showTriggerPhrase = selectedType === intentTypeKey && isLUISnQnA;
   const showEventDropDown = selectedType === eventTypeKey;
   const showActivityDropDown = selectedType === activityTypeKey;
   const showCustomEvent = selectedType === customEventKey;
-
   const eventTypes: IComboBoxOption[] = getEventTypes();
   const activityTypes: IDropdownOption[] = getActivityTypes();
-  let triggerTypeOptions: IDropdownOption[] = getTriggerTypes();
+  const triggerTypeOptions: IDropdownOption[] = getTriggerTypes();
 
-  if (isNone) {
-    triggerTypeOptions = triggerTypeOptions.filter((t) => t.key !== intentTypeKey);
+  if (isRegEx) {
+    const qnaMatcherOption = triggerTypeOptions.find((t) => t.key === qnaMatcherKey);
+    if (qnaMatcherOption) {
+      qnaMatcherOption.data = { icon: 'Warning' };
+    }
+    const onChooseIntentOption = triggerTypeOptions.find((t) => t.key === onChooseIntentKey);
+    if (onChooseIntentOption) {
+      onChooseIntentOption.data = { icon: 'Warning' };
+    }
   }
+
+  const onRenderOption = (option: IDropdownOption) => {
+    return (
+      <div css={optionRow}>
+        {option.text}
+        {option.data && option.data.icon && <Icon iconName={option.data.icon} style={warningIcon} />}
+      </div>
+    );
+  };
 
   const shouldDisable = (errors: TriggerFormDataErrors) => {
     for (const key in errors) {
@@ -262,26 +270,11 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     //If still have some errors here, it is a bug.
     const errors = validateForm(selectedType, formData, isRegEx, regexIntents);
     if (shouldDisable(errors)) {
-      setFormData({
-        ...formData,
-        errors,
-      });
+      setFormData({ ...formData, errors });
       return;
     }
-    const content = luFile?.content ?? '';
-    const luFileId = luFile?.id || `${dialogId}.${locale}`;
-    const newDialog = generateNewDialog(dialogs, dialogId, formData, schemas.sdk?.content);
-    if (formData.$kind === intentTypeKey && !isRegEx) {
-      const newContent = addIntent(content, { Name: formData.intent, Body: formData.triggerPhrases });
-      const updateLuFile = {
-        id: luFileId,
-        content: newContent,
-      };
-      onSubmit(newDialog, updateLuFile);
-    } else {
-      onSubmit(newDialog);
-    }
     onDismiss();
+    onSubmit(dialogId, formData);
   };
 
   const onSelectTriggerType = (e, option) => {
@@ -319,7 +312,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const onNameChange = (e, name) => {
     const errors: TriggerFormDataErrors = {};
     errors.intent = validateIntentName(selectedType, name);
-    if (showTriggerPhrase) {
+    if (showTriggerPhrase && formData.triggerPhrases) {
       errors.triggerPhrases = getLuDiagnostics(name, formData.triggerPhrases);
     }
     setFormData({ ...formData, intent: name, errors: { ...formData.errors, ...errors } });
@@ -331,9 +324,14 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     setFormData({ ...formData, regEx: pattern, errors: { ...formData.errors, ...errors } });
   };
 
+  //Trigger phrase is optional
   const onTriggerPhrasesChange = (body: string) => {
     const errors: TriggerFormDataErrors = {};
-    errors.triggerPhrases = getLuDiagnostics(formData.intent, body);
+    if (body) {
+      errors.triggerPhrases = getLuDiagnostics(formData.intent, body);
+    } else {
+      errors.triggerPhrases = '';
+    }
     setFormData({ ...formData, triggerPhrases: body, errors: { ...formData.errors, ...errors } });
   };
   const errors = validateForm(selectedType, formData, isRegEx, regexIntents);
@@ -363,6 +361,8 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
             options={triggerTypeOptions}
             styles={dropdownStyles}
             onChange={onSelectTriggerType}
+            //@ts-ignore：
+            onRenderOption={onRenderOption}
           />
           {showEventDropDown && (
             <Dropdown
@@ -377,6 +377,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
           )}
           {showCustomEvent && (
             <TextField
+              required
               data-testid="CustomEventName"
               errorMessage={formData.errors.event}
               label={formatMessage('What is the name of the custom event?')}
@@ -402,7 +403,9 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
               label={
                 isRegEx
                   ? formatMessage('What is the name of this trigger (RegEx)')
-                  : formatMessage('What is the name of this trigger (LUIS)')
+                  : isLUISnQnA
+                  ? formatMessage('What is the name of this trigger (LUIS)')
+                  : formatMessage('What is the name of this trigger')
               }
               styles={intent}
               onChange={onNameChange}
@@ -413,7 +416,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
             <TextField
               data-testid="RegExField"
               errorMessage={formData.errors.regEx}
-              label={formatMessage('Please input regex pattern')}
+              label={formatMessage('Please input regEx pattern')}
               onChange={onChangeRegEx}
             />
           )}
@@ -427,7 +430,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
                 luOption={{
                   projectId,
                   fileId: dialogId,
-                  sectionId: formData.intent || PlaceHolderSectionName,
+                  sectionId: PlaceHolderSectionName,
                 }}
                 placeholder={inlineModePlaceholder}
                 value={formData.triggerPhrases}

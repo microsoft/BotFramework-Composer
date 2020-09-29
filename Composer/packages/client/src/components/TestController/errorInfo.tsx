@@ -5,6 +5,7 @@
 import { jsx, css } from '@emotion/core';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { SharedColors } from '@uifabric/fluent-theme';
+import formatMessage from 'format-message';
 
 // -------------------- Styles -------------------- //
 
@@ -44,7 +45,12 @@ export const ErrorInfo: React.FC<IErrorInfoProps> = (props) => {
   return (
     <div css={errorInfo} data-testid="notifications-info-button" onClick={onClick}>
       <span css={errorCount}>{count}</span>
-      <IconButton ariaLabel="Error" css={errorButton} iconProps={{ iconName: 'ErrorBadge' }} title="Error" />
+      <IconButton
+        ariaLabel={formatMessage('Error')}
+        css={errorButton}
+        iconProps={{ iconName: 'ErrorBadge' }}
+        title={formatMessage('Error')}
+      />
     </div>
   );
 };

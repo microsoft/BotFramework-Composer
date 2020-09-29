@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import {
-  ConceptLabels,
+  conceptLabels as conceptLabelsFn,
   DialogGroup,
   SDKKinds,
   dialogGroups,
@@ -49,9 +49,12 @@ export function getDialog(dialogs: DialogInfo[], dialogId: string) {
 
 export const eventTypeKey: string = SDKKinds.OnDialogEvent;
 export const intentTypeKey: string = SDKKinds.OnIntent;
+export const qnaTypeKey: string = SDKKinds.OnQnAMatch;
 export const activityTypeKey: string = SDKKinds.OnActivity;
 export const regexRecognizerKey: string = SDKKinds.RegexRecognizer;
 export const customEventKey = 'OnCustomEvent';
+export const qnaMatcherKey: string = SDKKinds.OnQnAMatch;
+export const onChooseIntentKey: string = SDKKinds.OnChooseIntent;
 
 function insert(content, path: string, position: number | undefined, data: any) {
   const current = get(content, path, []);
@@ -73,8 +76,8 @@ function generateNewTrigger(data: TriggerFormData, factory: DialogFactory) {
 
   if (data.intent) {
     optionalAttributes.intent = data.intent;
+    optionalAttributes.$designer.name = data.intent;
   }
-
   const newStep = factory.create(data.$kind as SDKKinds, optionalAttributes);
   return newStep;
 }
@@ -90,11 +93,37 @@ function createTrigger(dialog: DialogInfo, data: TriggerFormData, factory: Dialo
   return dialogCopy;
 }
 
+export function updateIntentTrigger(dialog: DialogInfo, intentName: string, newIntentName: string): DialogInfo {
+  const dialogCopy = cloneDeep(dialog);
+  const trigger = (dialogCopy.content?.triggers ?? []).find(
+    (t) => t.$kind === SDKKinds.OnIntent && t.intent === intentName
+  );
+
+  if (trigger) {
+    trigger.intent = newIntentName;
+  }
+
+  return dialogCopy;
+}
+
 function createRegExIntent(dialog: DialogInfo, intent: string, pattern: string): DialogInfo {
   const regex = generateRegexExpression(intent, pattern);
   const dialogCopy = cloneDeep(dialog);
   insert(dialogCopy.content, 'recognizer.intents', undefined, regex);
   return dialogCopy;
+}
+
+export function renameRegExIntent(dialog: DialogInfo, intentName: string, newIntentName: string): DialogInfo {
+  const dialogCopy = cloneDeep(dialog);
+  const regexIntents = get(dialogCopy, 'content.recognizer.intents', []);
+  const targetIntent = regexIntents.find((ri) => ri.intent === intentName);
+  if (!targetIntent || !newIntentName) {
+    return dialogCopy;
+  }
+
+  targetIntent.intent = newIntentName;
+
+  return updateIntentTrigger(dialogCopy, intentName, newIntentName);
 }
 
 export function updateRegExIntent(dialog: DialogInfo, intent: string, pattern: string): DialogInfo {
@@ -165,10 +194,11 @@ export function deleteTrigger(
 }
 
 export function getTriggerTypes(): IDropdownOption[] {
+  const conceptLabels = conceptLabelsFn();
   const triggerTypes: IDropdownOption[] = [
     ...dialogGroups[DialogGroup.EVENTS].types.map((t) => {
       let name = t as string;
-      const labelOverrides = ConceptLabels[t];
+      const labelOverrides = conceptLabels[t];
 
       if (labelOverrides && labelOverrides.title) {
         name = labelOverrides.title;
@@ -185,10 +215,11 @@ export function getTriggerTypes(): IDropdownOption[] {
 }
 
 export function getEventTypes(): IComboBoxOption[] {
+  const conceptLabels = conceptLabelsFn();
   const eventTypes: IComboBoxOption[] = [
     ...dialogGroups[DialogGroup.DIALOG_EVENT_TYPES].types.map((t) => {
       let name = t as string;
-      const labelOverrides = ConceptLabels[t];
+      const labelOverrides = conceptLabels[t];
 
       if (labelOverrides && labelOverrides.title) {
         if (labelOverrides.subtitle) {
@@ -205,10 +236,11 @@ export function getEventTypes(): IComboBoxOption[] {
 }
 
 export function getActivityTypes(): IDropdownOption[] {
+  const conceptLabels = conceptLabelsFn();
   const activityTypes: IDropdownOption[] = [
     ...dialogGroups[DialogGroup.ADVANCED_EVENTS].types.map((t) => {
       let name = t as string;
-      const labelOverrides = ConceptLabels[t];
+      const labelOverrides = conceptLabels[t];
 
       if (labelOverrides && labelOverrides.title) {
         if (labelOverrides.subtitle) {
@@ -232,6 +264,7 @@ function getDialogsMap(dialogs: DialogInfo[]): DialogsMap {
 }
 
 export function getFriendlyName(data) {
+  const conceptLabels = conceptLabelsFn();
   if (get(data, '$designer.name')) {
     return get(data, '$designer.name');
   }
@@ -240,8 +273,8 @@ export function getFriendlyName(data) {
     return `${get(data, 'intent')}`;
   }
 
-  if (ConceptLabels[data.$kind] && ConceptLabels[data.$kind].title) {
-    return ConceptLabels[data.$kind].title;
+  if (conceptLabels[data.$kind] && conceptLabels[data.$kind].title) {
+    return conceptLabels[data.$kind].title;
   }
 
   return data.$kind;
@@ -253,7 +286,7 @@ const getLabel = (dialog: DialogInfo, dataPath: string) => {
   return getFriendlyName(data);
 };
 
-export function getbreadcrumbLabel(dialogs: DialogInfo[], dialogId: string, selected: string, focused: string) {
+export function getBreadcrumbLabel(dialogs: DialogInfo[], dialogId: string, selected: string, focused: string) {
   let label = '';
   const dataPath = getFocusPath(selected, focused);
   if (!dataPath) {
@@ -270,6 +303,7 @@ export function getbreadcrumbLabel(dialogs: DialogInfo[], dialogId: string, sele
 }
 
 export function getDialogData(dialogsMap: DialogsMap, dialogId: string, dataPath = '') {
+  const conceptLabels = conceptLabelsFn();
   if (!dialogId) return '';
   const dialog = dialogsMap[dialogId];
 
@@ -277,7 +311,7 @@ export function getDialogData(dialogsMap: DialogsMap, dialogId: string, dataPath
     return dialog;
   }
 
-  return ConceptLabels[get(dialog, dataPath)] ? ConceptLabels[get(dialog, dataPath)].title : get(dialog, dataPath);
+  return conceptLabels[get(dialog, dataPath)] ? conceptLabels[get(dialog, dataPath)].title : get(dialog, dataPath);
 }
 
 export function setDialogData(dialogsMap: DialogsMap, dialogId: string, dataPath: string, data: any) {
@@ -289,64 +323,17 @@ export function setDialogData(dialogsMap: DialogsMap, dialogId: string, dataPath
   return set(dialog, dataPath, data);
 }
 
-export function sanitizeDialogData(dialogData: any) {
-  if (dialogData === null || dialogData === '') {
-    return undefined;
-  }
-
-  if (Array.isArray(dialogData)) {
-    return dialogData.length > 0 ? dialogData.map(sanitizeDialogData).filter(Boolean) : undefined;
-  }
-
-  if (typeof dialogData === 'object') {
-    const obj = cloneDeep(dialogData); // Prevent mutation of source object.
-
-    for (const key in obj) {
-      if (obj[key] === undefined || obj[key] === null || obj[key] === '') {
-        delete obj[key];
-        continue;
-      }
-
-      const result = sanitizeDialogData(obj[key]);
-      switch (typeof result) {
-        case 'undefined':
-          delete obj[key];
-          break;
-        case 'boolean':
-          obj[key] = result;
-          break;
-        case 'object':
-          if (Object.keys(result).length === 0) {
-            delete obj[key];
-          } else {
-            obj[key] = result;
-          }
-          break;
-        default:
-          obj[key] = result;
-      }
-    }
-
-    if (Object.keys(obj).length === 0) {
-      return undefined;
-    }
-
-    return obj;
-  }
-
-  return dialogData;
-}
-
 export function getSelected(focused: string): string {
   if (!focused) return '';
   return focused.split('.')[0];
 }
 
 export function replaceDialogDiagnosticLabel(path?: string): string {
+  const conceptLabels = conceptLabelsFn();
   if (!path) return '';
   let list = path.split('#');
   list = list.map((item) => {
-    return ConceptLabels[item]?.title || item;
+    return conceptLabels[item]?.title || item;
   });
   return list.join(': ');
 }

@@ -3,7 +3,7 @@
 
 import * as fs from 'fs';
 
-import { UserIdentity } from '@bfc/plugin-loader';
+import { UserIdentity } from '@bfc/extension';
 
 import { Path } from '../utility/path';
 import { StorageConnection, IFileStorage } from '../models/storage/interface';
@@ -95,17 +95,11 @@ class StorageService {
       // TODO: fix this behavior and the upper layer interface accordingly
       return JSON.parse(await storageClient.readFile(filePath));
     } else {
-      let writable = true;
-      try {
-        fs.accessSync(filePath, fs.constants.W_OK);
-      } catch (err) {
-        writable = false;
-      }
       return {
         name: Path.basename(filePath),
         parent: Path.dirname(filePath),
         children: await this.getChildren(storageClient, filePath),
-        writable: writable,
+        writable: stat.isWritable,
       };
     }
   };
@@ -142,6 +136,11 @@ class StorageService {
     } else {
       throw new Error(`The folder ${currentPath} does not exist`);
     }
+  };
+
+  public checkIsBotFolder = async (storageId: string, path: string, user?: UserIdentity) => {
+    const storageClient = this.getStorageClient(storageId, user);
+    return await this.isBotFolder(storageClient, path);
   };
 
   private ensureDefaultBotFoldersExist = () => {

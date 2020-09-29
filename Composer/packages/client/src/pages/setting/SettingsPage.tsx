@@ -11,13 +11,13 @@ import { Text } from 'office-ui-fabric-react/lib/Text';
 import { useRecoilValue } from 'recoil';
 
 import {
-  projectIdState,
+  dispatcherState,
   localeState,
-  showAddLanguageModalState,
   showDelLanguageModalState,
+  showAddLanguageModalState,
   settingsState,
-} from '../../recoilModel/atoms/botState';
-import { dispatcherState } from '../../recoilModel';
+  currentProjectIdState,
+} from '../../recoilModel';
 import { TestController } from '../../components/TestController/TestController';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { navigateTo } from '../../utils/navigation';
@@ -26,6 +26,7 @@ import { INavTreeItem } from '../../components/NavTree';
 import { useLocation } from '../../utils/hooks';
 import { IToolbarItem } from '../../components/Toolbar';
 import { AddLanguageModal, DeleteLanguageModal } from '../../components/MultiLanguage/index';
+import { useProjectIdCache } from '../../utils/hooks';
 
 import { SettingsRoutes } from './router';
 
@@ -33,7 +34,8 @@ const getProjectLink = (path: string, id?: string) => {
   return id ? `/settings/bot/${id}/${path}` : `/settings/${path}`;
 };
 
-const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
+const SettingPage: React.FC<RouteComponentProps> = () => {
+  const projectId = useRecoilValue(currentProjectIdState);
   const {
     deleteBotProject,
     addLanguageDialogBegin,
@@ -42,26 +44,30 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
     delLanguageDialogCancel,
     addLanguages,
     deleteLanguages,
+    fetchProjectById,
   } = useRecoilValue(dispatcherState);
-  const projectId = useRecoilValue(projectIdState);
-  const locale = useRecoilValue(localeState);
-  const showAddLanguageModal = useRecoilValue(showAddLanguageModalState);
-  const showDelLanguageModal = useRecoilValue(showDelLanguageModalState);
-  const { defaultLanguage, languages } = useRecoilValue(settingsState);
+  const locale = useRecoilValue(localeState(projectId));
+  const showDelLanguageModal = useRecoilValue(showDelLanguageModalState(projectId));
+  const showAddLanguageModal = useRecoilValue(showAddLanguageModalState(projectId));
+  const settings = useRecoilValue(settingsState(projectId));
+  const { defaultLanguage, languages } = settings;
+
   const { navigate } = useLocation();
 
-  // If no project is open and user tries to access a bot-scoped settings (e.g., browser history, deep link)
-  // Redirect them to the default settings route that is not bot-scoped
+  // when fresh page, projectId in store are empty, no project are opened at client
+  // use cached projectId do fetch.
+  const cachedProjectId = useProjectIdCache();
   useEffect(() => {
-    if (!projectId && location.pathname.indexOf('/settings/bot/') !== -1) {
-      navigate('/settings/application');
+    if (!projectId && cachedProjectId) {
+      fetchProjectById(cachedProjectId);
     }
-  }, [projectId]);
+  }, []);
 
   const settingLabels = {
     botSettings: formatMessage('Bot Settings'),
     appSettings: formatMessage('Application Settings'),
     runtime: formatMessage('Runtime Config'),
+    extensions: formatMessage('Extensions'),
     about: formatMessage('About'),
   };
 
@@ -74,13 +80,19 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
     },
     { id: 'application', name: settingLabels.appSettings, url: getProjectLink('application') },
     { id: 'runtime', name: settingLabels.runtime, url: getProjectLink('runtime', projectId), disabled: !projectId },
+    // { id: 'extensions', name: settingLabels.extensions, url: getProjectLink('extensions') },
     { id: 'about', name: settingLabels.about, url: getProjectLink('about') },
-
-    // { key: '/settings/publish', name: settingLabels.publish, url: '' },
-
-    // { key: 'services', name: formatMessage('Services') },
-    // { key: 'publishing-staging', name: formatMessage('Publishing and staging'), disabled: true },
   ];
+
+  // If no project is open and user tries to access a bot-scoped settings (e.g., browser history, deep link)
+  // Redirect them to the default settings route that is not bot-scoped
+  useEffect(() => {
+    if (!projectId && location.pathname.indexOf('/settings/bot/') !== -1) {
+      navigate('/settings/application');
+    } else {
+      navigate(links[0].url);
+    }
+  }, [projectId]);
 
   const openDeleteBotModal = async () => {
     const boldWarningText = formatMessage(
@@ -180,17 +192,10 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
             onClick: openDeleteBotModal,
           },
           {
-            key: 'edit.addLanguage',
-            text: formatMessage('Add language'),
-            onClick: () => {
-              addLanguageDialogBegin(() => {});
-            },
-          },
-          {
             key: 'edit.deleteLanguage',
             text: formatMessage('Delete language'),
             onClick: () => {
-              delLanguageDialogBegin(() => {});
+              delLanguageDialogBegin(projectId, () => {});
             },
           },
         ],
@@ -198,8 +203,24 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
     },
 
     {
+      type: 'action',
+      text: formatMessage('Add language'),
+      buttonProps: {
+        iconProps: {
+          iconName: 'CirclePlus',
+        },
+        onClick: () => {
+          addLanguageDialogBegin(projectId, () => {});
+        },
+      },
+      align: 'left',
+      dataTestid: 'AddLanguageFlyout',
+      disabled: false,
+    },
+
+    {
       type: 'element',
-      element: <TestController />,
+      element: <TestController projectId={projectId} />,
       align: 'right',
     },
   ];
@@ -226,7 +247,7 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
         isOpen={showAddLanguageModal}
         languages={languages}
         locale={locale}
-        onDismiss={addLanguageDialogCancel}
+        onDismiss={() => addLanguageDialogCancel(projectId)}
         onSubmit={onAddLangModalSubmit}
       ></AddLanguageModal>
       <DeleteLanguageModal
@@ -234,7 +255,7 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
         isOpen={showDelLanguageModal}
         languages={languages}
         locale={locale}
-        onDismiss={delLanguageDialogCancel}
+        onDismiss={() => delLanguageDialogCancel(projectId)}
         onSubmit={onDeleteLangModalSubmit}
       ></DeleteLanguageModal>
       <SettingsRoutes projectId={projectId} />

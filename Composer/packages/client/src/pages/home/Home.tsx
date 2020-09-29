@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import formatMessage from 'format-message';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
@@ -12,9 +12,13 @@ import { navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 
 import { CreationFlowStatus } from '../../constants';
-import { dispatcherState } from '../../recoilModel';
-import { botNameState, projectIdState } from '../../recoilModel/atoms/botState';
-import { recentProjectsState, templateProjectsState, templateIdState } from '../../recoilModel/atoms/appState';
+import { dispatcherState, botNameState } from '../../recoilModel';
+import {
+  recentProjectsState,
+  templateProjectsState,
+  templateIdState,
+  currentProjectIdState,
+} from '../../recoilModel/atoms/appState';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 
 import * as home from './styles';
@@ -58,21 +62,17 @@ const tutorials = [
 
 const Home: React.FC<RouteComponentProps> = () => {
   const templateProjects = useRecoilValue(templateProjectsState);
-  const botName = useRecoilValue(botNameState);
+  const projectId = useRecoilValue(currentProjectIdState);
+  const botName = useRecoilValue(botNameState(projectId));
   const recentProjects = useRecoilValue(recentProjectsState);
-  const projectId = useRecoilValue(projectIdState);
   const templateId = useRecoilValue(templateIdState);
-  const {
-    openBotProject,
-    fetchRecentProjects,
-    setCreationFlowStatus,
-    onboardingAddCoachMarkRef,
-    saveTemplateId,
-  } = useRecoilValue(dispatcherState);
+  const { openProject, setCreationFlowStatus, onboardingAddCoachMarkRef, saveTemplateId } = useRecoilValue(
+    dispatcherState
+  );
 
   const onItemChosen = async (item) => {
     if (item && item.path) {
-      openBotProject(item.path);
+      openProject(item.path);
     }
   };
 
@@ -136,10 +136,6 @@ const Home: React.FC<RouteComponentProps> = () => {
     },
   ];
 
-  useEffect(() => {
-    fetchRecentProjects();
-  }, []);
-
   return (
     <div css={home.outline}>
       <Toolbar toolbarItems={toolbarItems} />
@@ -172,7 +168,7 @@ const Home: React.FC<RouteComponentProps> = () => {
                 styles={home.latestBotItem}
                 title={''}
                 onClick={async () => {
-                  openBotProject(recentProjects[0].path);
+                  openProject(recentProjects[0].path);
                 }}
               />
             ) : (

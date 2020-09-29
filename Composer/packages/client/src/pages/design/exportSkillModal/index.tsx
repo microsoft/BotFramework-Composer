@@ -3,42 +3,71 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import formatMessage from 'format-message';
 import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import { JSONSchema7 } from '@bfc/extension';
+import { JSONSchema7 } from '@bfc/extension-client';
 import { Link } from 'office-ui-fabric-react/lib/components/Link';
 import { useRecoilValue } from 'recoil';
+import { SkillManifest } from '@bfc/shared';
 
-import { skillManifestsState, dispatcherState } from '../../../recoilModel';
+import {
+  dispatcherState,
+  skillManifestsState,
+  qnaFilesState,
+  dialogsState,
+  dialogSchemasState,
+  luFilesState,
+} from '../../../recoilModel';
 
-import { editorSteps, ManifestEditorSteps, order, SkillManifest } from './constants';
+import { editorSteps, ManifestEditorSteps, order } from './constants';
+import { generateSkillManifest } from './generateSkillManifest';
 import { styles } from './styles';
 
 interface ExportSkillModalProps {
   isOpen: boolean;
   onDismiss: () => void;
   onSubmit: () => void;
+  projectId: string;
 }
 
-const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss }) => {
-  const skillManifests = useRecoilValue(skillManifestsState);
+const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss: handleDismiss, projectId }) => {
+  const dialogs = useRecoilValue(dialogsState(projectId));
+  const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
+  const luFiles = useRecoilValue(luFilesState(projectId));
+  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
+  const skillManifests = useRecoilValue(skillManifestsState(projectId));
   const { updateSkillManifest } = useRecoilValue(dispatcherState);
 
+  const [editingId, setEditingId] = useState<string>();
   const [currentStep, setCurrentStep] = useState(0);
   const [errors, setErrors] = useState({});
   const [schema, setSchema] = useState<JSONSchema7>({});
 
-  const [selectedManifest, setSelectedManifest] = useState<string>('');
-  const skillManifest = useMemo(() => skillManifests.find(({ id }) => id === selectedManifest), [
-    selectedManifest,
-    skillManifests,
-  ]);
-  const { content = {} } = skillManifest || {};
+  const [skillManifest, setSkillManifest] = useState<Partial<SkillManifest>>({});
+
+  const { content = {}, id } = skillManifest;
+
+  const [selectedDialogs, setSelectedDialogs] = useState<any[]>([]);
+  const [selectedTriggers, setSelectedTriggers] = useState<any[]>([]);
 
   const editorStep = order[currentStep];
   const { buttons = [], content: Content, editJson, helpLink, subText, title, validate } = editorSteps[editorStep];
+
+  const handleGenerateManifest = () => {
+    const manifest = generateSkillManifest(
+      schema,
+      skillManifest,
+      dialogs,
+      dialogSchemas,
+      luFiles,
+      qnaFiles,
+      selectedTriggers,
+      selectedDialogs
+    );
+    setSkillManifest(manifest);
+  };
 
   const handleEditJson = () => {
     const step = order.findIndex((step) => step === ManifestEditorSteps.MANIFEST_REVIEW);
@@ -48,23 +77,25 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
     }
   };
 
-  const handleNext = () => {
-    const validated = typeof validate === 'function' ? validate(content, schema) : errors;
+  const handleSave = () => {
+    if (skillManifest.content && skillManifest.id) {
+      updateSkillManifest(skillManifest as SkillManifest, projectId);
+    }
+  };
+
+  const handleNext = (options?: { dismiss?: boolean; id?: string; save?: boolean }) => {
+    const validated =
+      typeof validate === 'function' ? validate({ content, editingId, id, schema, skillManifests }) : errors;
 
     if (!Object.keys(validated).length) {
       setCurrentStep((current) => (current + 1 < order.length ? current + 1 : current));
+      options?.save && handleSave();
+      options?.id && setEditingId(options.id);
+      options?.dismiss && handleDismiss();
       setErrors({});
     } else {
       setErrors(validated);
     }
-  };
-
-  const handleSave = (manifest?: SkillManifest) => {
-    updateSkillManifest(manifest || content);
-  };
-
-  const handleSelectManifest = (manifest) => {
-    setSelectedManifest(manifest);
   };
 
   return (
@@ -79,7 +110,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
         isBlocking: false,
         styles: styles.modal,
       }}
-      onDismiss={onDismiss}
+      onDismiss={handleDismiss}
     >
       <div css={styles.container}>
         <p>
@@ -88,7 +119,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
             <React.Fragment>
               {!!subText && <React.Fragment>&nbsp;</React.Fragment>}
               <Link href={helpLink} rel="noopener noreferrer" target="_blank">
-                {formatMessage('Learn More')}
+                {formatMessage('Learn more')}
               </Link>
             </React.Fragment>
           )}
@@ -98,13 +129,17 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
             completeStep={handleNext}
             editJson={handleEditJson}
             errors={errors}
+            manifest={skillManifest}
+            projectId={projectId}
             schema={schema}
             setErrors={setErrors}
             setSchema={setSchema}
-            setSkillManifest={handleSelectManifest}
-            skillManifests={skillManifests as SkillManifest[]}
+            setSelectedDialogs={setSelectedDialogs}
+            setSelectedTriggers={setSelectedTriggers}
+            setSkillManifest={setSkillManifest}
+            skillManifests={skillManifests}
             value={content}
-            onChange={(manifestContent) => updateSkillManifest({ ...skillManifest, content: manifestContent })}
+            onChange={(manifestContent) => setSkillManifest({ ...skillManifest, content: manifestContent })}
           />
         </div>
         <DialogFooter>
@@ -112,7 +147,6 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
             <div>
               {buttons.map(({ disabled, primary, text, onClick }, index) => {
                 const Button = primary ? PrimaryButton : DefaultButton;
-                const buttonText = text();
                 const isDisabled = typeof disabled === 'function' ? disabled({ manifest: skillManifest }) : !!disabled;
 
                 return (
@@ -120,10 +154,12 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
                     key={index}
                     disabled={isDisabled}
                     styles={{ root: { marginLeft: '8px' } }}
-                    text={buttonText}
+                    text={text()}
                     onClick={onClick({
+                      generateManifest: handleGenerateManifest,
                       setCurrentStep,
-                      onDismiss,
+                      manifest: skillManifest,
+                      onDismiss: handleDismiss,
                       onNext: handleNext,
                       onSave: handleSave,
                       onSubmit,

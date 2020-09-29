@@ -166,8 +166,7 @@ function extractReferredSkills(dialog): string[] {
   const visitor: VisitorFunc = (path: string, value: any): boolean => {
     // it's a valid schema dialog node.
     if (has(value, '$kind') && value.$kind === SDKKinds.BeginSkill) {
-      const skillId = value.id;
-      skills.push(skillId);
+      skills.push(value.skillEndpoint);
     }
     return false;
   };
@@ -177,6 +176,7 @@ function extractReferredSkills(dialog): string[] {
 
 function parse(id: string, content: any) {
   const luFile = typeof content.recognizer === 'string' ? content.recognizer : '';
+  const qnaFile = typeof content.recognizer === 'string' ? content.recognizer : '';
   const lgFile = typeof content.generator === 'string' ? content.generator : '';
   const diagnostics: Diagnostic[] = [];
   return {
@@ -187,6 +187,7 @@ function parse(id: string, content: any) {
     lgTemplates: extractLgTemplates(id, content),
     referredLuIntents: extractLuIntents(content, id),
     luFile: getBaseName(luFile, '.lu'),
+    qnaFile: getBaseName(qnaFile, '.lu.qna') || getBaseName(qnaFile, '.lu'),
     lgFile: getBaseName(lgFile, '.lg'),
     triggers: extractTriggers(content),
     intentTriggers: extractIntentTriggers(content),
@@ -215,7 +216,7 @@ function index(files: FileInfo[], botName: string): DialogInfo[] {
           dialogs.push(dialog);
         }
       } catch (e) {
-        throw new Error(`Parse failed at ${file.name}: ${e}`);
+        throw new Error(formatMessage(`Parse failed at {name}: {error}`, { name: file.name, error: e }));
       }
     }
   }

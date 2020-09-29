@@ -1,9 +1,21 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ILuisConfig, IQnAConfig } from '@bfc/shared';
+
+import { ICrossTrainConfig } from './builder';
+
 export interface LocationRef {
   storageId: string;
   path: string;
+}
+
+export interface IBuildConfig {
+  luisConfig: ILuisConfig;
+  qnaConfig: IQnAConfig;
+  luFileIds: string[];
+  qnaFileIds: string[];
+  crossTrainConfig: ICrossTrainConfig;
 }
 
 export interface ILuisSettings {
@@ -21,17 +33,6 @@ export enum FileUpdateType {
   DELETE = 'delete',
 }
 
-export interface ILuisConfig {
-  name: string;
-  endpoint: string;
-  authoringKey: string;
-  endpointKey: string;
-  authoringEndpoint: string;
-  authoringRegion: string | 'westus';
-  defaultLanguage: string | 'en-us';
-  environment: string | 'composer';
-}
-
 export interface IOperationLUFile {
   diagnostics?: any[]; // ludown parser output
   relativePath?: string;
@@ -42,14 +43,4 @@ export interface IOperationLUFile {
 
 export interface ILuisStatusOperation {
   [key: string]: IOperationLUFile;
-}
-
-export interface DialogSetting {
-  MicrosoftAppId: string;
-  MicrosoftAppPassword: string;
-  luis: ILuisConfig;
-  skill: { manifestUrl: string; name: string }[];
-  defaultLanguage: string;
-  languages: string[];
-  [key: string]: any;
 }

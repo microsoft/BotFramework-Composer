@@ -8,27 +8,27 @@ import { jsx, css } from '@emotion/core';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
+import { IConfig, IPublishConfig, defaultPublishConfig } from '@bfc/shared';
 
-import { DefaultPublishConfig } from '../../constants';
 import {
-  botNameState,
-  botStatusState,
-  dialogsState,
-  luFilesState,
-  settingsState,
-  projectIdState,
-  botLoadErrorState,
   botEndpointsState,
   dispatcherState,
+  validateDialogSelectorFamily,
+  botStatusState,
+  botNameState,
+  luFilesState,
+  qnaFilesState,
+  settingsState,
+  botLoadErrorState,
 } from '../../recoilModel';
 import settingsStorage from '../../utils/dialogSettingStorage';
-import { BotStatus, LuisConfig } from '../../constants';
+import { BotStatus } from '../../constants';
 import { isAbsHosted } from '../../utils/envUtil';
 import useNotifications from '../../pages/notifications/useNotifications';
 import { navigateTo, openInEmulator } from '../../utils/navigation';
 
-import { getReferredFiles } from './../../utils/luUtil';
-import { PublishLuisDialog } from './publishDialog';
+import { isBuildConfigComplete, needsBuild } from './../../utils/buildUtil';
+import { PublishDialog } from './publishDialog';
 import { ErrorCallout } from './errorCallout';
 import { EmulatorOpenButton } from './emulatorOpenButton';
 import { Loading } from './loading';
@@ -48,28 +48,35 @@ export const botButton = css`
   margin-left: 5px;
 `;
 
-// -------------------- TestController -------------------- //
+let botStatusInterval: NodeJS.Timeout | undefined = undefined;
 
-export const TestController: React.FC = () => {
+// -------------------- TestController -------------------- //
+const POLLING_INTERVAL = 2500;
+export const TestController: React.FC<{ projectId: string }> = (props) => {
+  const { projectId = '' } = props;
   const [modalOpen, setModalOpen] = useState(false);
   const [calloutVisible, setCalloutVisible] = useState(false);
+
   const botActionRef = useRef(null);
-  const notifications = useNotifications();
-  const botName = useRecoilValue(botNameState);
-  const botStatus = useRecoilValue(botStatusState);
-  const dialogs = useRecoilValue(dialogsState);
-  const luFiles = useRecoilValue(luFilesState);
-  const settings = useRecoilValue(settingsState);
-  const projectId = useRecoilValue(projectIdState);
-  const botLoadErrorMsg = useRecoilValue(botLoadErrorState);
+  const notifications = useNotifications(projectId);
+
+  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const botStatus = useRecoilValue(botStatusState(projectId));
+  const botName = useRecoilValue(botNameState(projectId));
+  const luFiles = useRecoilValue(luFilesState(projectId));
+  const settings = useRecoilValue(settingsState(projectId));
+  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
+  const botLoadErrorMsg = useRecoilValue(botLoadErrorState(projectId));
+
   const botEndpoints = useRecoilValue(botEndpointsState);
   const {
     publishToTarget,
     onboardingAddCoachMarkRef,
-    publishLuis,
+    build,
     getPublishStatus,
     setBotStatus,
     setSettings,
+    setQnASettings,
   } = useRecoilValue(dispatcherState);
   const connected = botStatus === BotStatus.connected;
   const publishing = botStatus === BotStatus.publishing;
@@ -77,12 +84,13 @@ export const TestController: React.FC = () => {
   const addRef = useCallback((startBot) => onboardingAddCoachMarkRef({ startBot }), []);
   const errorLength = notifications.filter((n) => n.severity === 'Error').length;
   const showError = errorLength > 0;
+  const publishDialogConfig = { subscriptionKey: settings.qna?.subscriptionKey, ...settings.luis } as IConfig;
   const warningLength = notifications.filter((n) => n.severity === 'Warning').length;
   const showWarning = !showError && warningLength > 0;
 
   useEffect(() => {
     if (projectId) {
-      getPublishStatus(projectId, DefaultPublishConfig);
+      getPublishStatus(projectId, defaultPublishConfig);
     }
   }, [projectId]);
 
@@ -90,12 +98,25 @@ export const TestController: React.FC = () => {
     switch (botStatus) {
       case BotStatus.failed:
         openCallout();
-        setBotStatus(BotStatus.pending);
+        stopPollingRuntime();
+        setBotStatus(BotStatus.pending, projectId);
         break;
       case BotStatus.published:
+        stopPollingRuntime();
         handleLoadBot();
         break;
+      case BotStatus.reloading:
+        startPollingRuntime();
+        break;
+      default:
+      case BotStatus.connected:
+        stopPollingRuntime();
+        break;
     }
+    return () => {
+      stopPollingRuntime();
+      return;
+    };
   }, [botStatus]);
 
   function dismissDialog() {
@@ -114,39 +135,62 @@ export const TestController: React.FC = () => {
     setCalloutVisible(true);
   }
 
-  async function handlePublishLuis(luisConfig) {
-    setBotStatus(BotStatus.publishing);
+  function startPollingRuntime() {
+    if (!botStatusInterval) {
+      const cancelInterval = setInterval(() => {
+        // get publish status
+        getPublishStatus(projectId, defaultPublishConfig);
+      }, POLLING_INTERVAL);
+      botStatusInterval = cancelInterval;
+    }
+  }
+
+  function stopPollingRuntime() {
+    if (botStatusInterval) {
+      clearInterval(botStatusInterval);
+      botStatusInterval = undefined;
+    }
+  }
+
+  async function handleBuild(config: IPublishConfig) {
+    setBotStatus(BotStatus.publishing, projectId);
     dismissDialog();
-    await setSettings(projectId, { ...settings, luis: luisConfig });
-    await publishLuis(luisConfig, projectId);
+    const { luis, qna } = config;
+    await setSettings(projectId, {
+      ...settings,
+      luis: luis,
+      qna: Object.assign({}, settings.qna, qna),
+    });
+    await build(luis, qna, projectId);
   }
 
   async function handleLoadBot() {
-    setBotStatus(BotStatus.reloading);
-    const sensitiveSettings = settingsStorage.get(projectId);
-    await publishToTarget(projectId, DefaultPublishConfig, { comment: '' }, sensitiveSettings);
-  }
-
-  function isLuisConfigComplete(config) {
-    let complete = true;
-    for (const key in LuisConfig) {
-      if (config?.[LuisConfig[key]] === '') {
-        complete = false;
-        break;
-      }
+    setBotStatus(BotStatus.reloading, projectId);
+    if (settings.qna && settings.qna.subscriptionKey) {
+      await setQnASettings(projectId, settings.qna.subscriptionKey);
     }
-    return complete;
+    const sensitiveSettings = settingsStorage.get(projectId);
+    await publishToTarget(projectId, defaultPublishConfig, { comment: '' }, sensitiveSettings);
   }
 
   async function handleStart() {
     dismissCallout();
-    const config = settings.luis;
-
-    if (!isAbsHosted() && getReferredFiles(luFiles, dialogs).length > 0) {
-      if (botStatus === BotStatus.failed || botStatus === BotStatus.pending || !isLuisConfigComplete(config)) {
+    const config = Object.assign(
+      {},
+      {
+        luis: settings.luis,
+        qna: settings.qna,
+      }
+    );
+    if (!isAbsHosted() && needsBuild(dialogs)) {
+      if (
+        botStatus === BotStatus.failed ||
+        botStatus === BotStatus.pending ||
+        !isBuildConfigComplete(config, dialogs, luFiles, qnaFiles)
+      ) {
         openDialog();
       } else {
-        await handlePublishLuis(config);
+        await handleBuild(config);
       }
     } else {
       await handleLoadBot();
@@ -201,13 +245,14 @@ export const TestController: React.FC = () => {
         onDismiss={dismissCallout}
         onTry={handleStart}
       />
-      {settings.luis && (
-        <PublishLuisDialog
+      {settings.luis && modalOpen && (
+        <PublishDialog
           botName={botName}
-          config={settings.luis}
+          config={publishDialogConfig}
           isOpen={modalOpen}
+          projectId={projectId}
           onDismiss={dismissDialog}
-          onPublish={handlePublishLuis}
+          onPublish={handleBuild}
         />
       )}
     </Fragment>

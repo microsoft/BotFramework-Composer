@@ -2,10 +2,11 @@
 // Licensed under the MIT License.
 
 import get from 'lodash/get';
+import formatMessage from 'format-message';
 
 import { SDKKinds } from './types';
-import { ConceptLabels } from './labelMap';
-import { PromptTab, PropmtTabTitles } from './promptTabs';
+import { conceptLabels as conceptLabelsFn } from './labelMap';
+import { PromptTab, PromptTabTitles } from './promptTabs';
 
 export const PROMPT_TYPES = [
   SDKKinds.AttachmentInput,
@@ -41,11 +42,11 @@ export type DialogGroupsMap = { [key in DialogGroup]: DialogGroupItem };
 
 export const dialogGroups: DialogGroupsMap = {
   [DialogGroup.RESPONSE]: {
-    label: 'Send Messages',
+    label: formatMessage('Send Messages'),
     types: [SDKKinds.SendActivity],
   },
   [DialogGroup.INPUT]: {
-    label: 'Ask a question',
+    label: formatMessage('Ask a question'),
     types: [
       SDKKinds.TextInput,
       SDKKinds.NumberInput,
@@ -57,15 +58,15 @@ export const dialogGroups: DialogGroupsMap = {
     ],
   },
   [DialogGroup.BRANCHING]: {
-    label: 'Create a condition',
+    label: formatMessage('Create a condition'),
     types: [SDKKinds.IfCondition, SDKKinds.SwitchCondition],
   },
   [DialogGroup.LOOPING]: {
-    label: 'Looping',
+    label: formatMessage('Looping'),
     types: [SDKKinds.Foreach, SDKKinds.ForeachPage, SDKKinds.ContinueLoop, SDKKinds.BreakLoop],
   },
   [DialogGroup.MEMORY]: {
-    label: 'Manage properties',
+    label: formatMessage('Manage properties'),
     types: [
       SDKKinds.SetProperty,
       SDKKinds.SetProperties,
@@ -75,7 +76,7 @@ export const dialogGroups: DialogGroupsMap = {
     ],
   },
   [DialogGroup.STEP]: {
-    label: 'Dialog management',
+    label: formatMessage('Dialog management'),
     types: [
       SDKKinds.BeginDialog,
       SDKKinds.EndDialog,
@@ -86,7 +87,7 @@ export const dialogGroups: DialogGroupsMap = {
     ],
   },
   [DialogGroup.CODE]: {
-    label: 'Access external resources',
+    label: formatMessage('Access external resources'),
     types: [
       SDKKinds.BeginSkill,
       SDKKinds.HttpRequest,
@@ -98,19 +99,26 @@ export const dialogGroups: DialogGroupsMap = {
     ],
   },
   [DialogGroup.LOG]: {
-    label: 'Debugging options',
+    label: formatMessage('Debugging options'),
     types: [/* SDKKinds.DebugBreak, */ SDKKinds.LogAction, SDKKinds.TraceActivity],
   },
   [DialogGroup.EVENTS]: {
-    label: 'Events',
-    types: [SDKKinds.OnIntent, SDKKinds.OnUnknownIntent, SDKKinds.OnDialogEvent, SDKKinds.OnActivity],
+    label: formatMessage('Events'),
+    types: [
+      SDKKinds.OnIntent,
+      SDKKinds.OnQnAMatch,
+      SDKKinds.OnUnknownIntent,
+      SDKKinds.OnDialogEvent,
+      SDKKinds.OnActivity,
+      SDKKinds.OnChooseIntent,
+    ],
   },
   [DialogGroup.DIALOG_EVENT_TYPES]: {
-    label: 'OnDialogEvents Types',
+    label: formatMessage('OnDialogEvents Types'),
     types: [SDKKinds.OnBeginDialog, SDKKinds.OnCancelDialog, SDKKinds.OnError, SDKKinds.OnRepromptDialog],
   },
   [DialogGroup.ADVANCED_EVENTS]: {
-    label: 'Advanced Events',
+    label: formatMessage('Advanced Events'),
     types: [
       SDKKinds.OnActivity,
       SDKKinds.OnConversationUpdateActivity,
@@ -126,11 +134,11 @@ export const dialogGroups: DialogGroupsMap = {
     ],
   },
   [DialogGroup.RECOGNIZER]: {
-    label: 'Recognizers',
+    label: formatMessage('Recognizers'),
     types: [SDKKinds.LuisRecognizer, /* SDKKinds.MultiLanguageRecognizers, */ SDKKinds.RegexRecognizer],
   },
   [DialogGroup.SELECTOR]: {
-    label: 'Selectors',
+    label: formatMessage('Selectors'),
     types: [
       SDKKinds.ConditionalSelector,
       SDKKinds.FirstSelector,
@@ -140,7 +148,7 @@ export const dialogGroups: DialogGroupsMap = {
     ],
   },
   [DialogGroup.OTHER]: {
-    label: 'Other',
+    label: formatMessage('Other'),
     types: [SDKKinds.AdaptiveDialog],
   },
 };
@@ -182,13 +190,13 @@ const truncateSDKType = ($kind) => (typeof $kind === 'string' ? $kind.replace('M
  */
 export function generateSDKTitle(data, customizedTitle?: string, tab?: PromptTab) {
   const $kind = get(data, '$kind');
+  const titleFromShared = get(conceptLabelsFn(), [$kind, 'title']);
   const titleFrom$designer = get(data, '$designer.name');
-  const titleFromShared = get(ConceptLabels, [$kind, 'title']);
   const titleFrom$kind = truncateSDKType($kind);
 
-  const title = titleFrom$designer || customizedTitle || titleFromShared || titleFrom$kind;
+  const title = titleFromShared || titleFrom$designer || customizedTitle || titleFrom$kind;
   if (tab) {
-    return `${PropmtTabTitles} (${title})`;
+    return `${PromptTabTitles} (${title})`;
   }
   return title;
 }

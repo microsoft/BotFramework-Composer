@@ -21,7 +21,9 @@ function index(files: FileInfo[], importResolver?: ImportResolverDelegate): LgFi
     const { name, content } = file;
     if (name.endsWith('.lg')) {
       const id = getBaseName(name, '.lg');
-      lgFiles.push(parse(content, id, importResolver));
+      const result = parse(content, id, importResolver);
+      delete result.parseResult;
+      lgFiles.push(result);
     }
   }
   return lgFiles;

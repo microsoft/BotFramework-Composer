@@ -12,7 +12,9 @@ export enum NotificationType {
   DIALOG,
   LG,
   LU,
+  QNA,
   SKILL,
+  SETTING,
   GENERAL,
 }
 
@@ -74,6 +76,15 @@ export class SkillNotification extends Notification {
   }
 }
 
+export class SettingNotification extends Notification {
+  type = NotificationType.SETTING;
+  constructor(projectId: string, id: string, location: string, diagnostic: Diagnostic) {
+    super(projectId, id, location, diagnostic);
+    this.message = `${replaceDialogDiagnosticLabel(diagnostic.path)} ${diagnostic.message}`;
+    this.dialogPath = diagnostic.path;
+  }
+}
+
 export class LgNotification extends Notification {
   type = NotificationType.LG;
   constructor(
@@ -91,8 +102,8 @@ export class LgNotification extends Notification {
   private findDialogPath(lgFile: LgFile, dialogs: DialogInfo[], diagnostic: Diagnostic) {
     const mappedTemplate = lgFile.templates.find(
       (t) =>
-        get(diagnostic, 'range.start.line') >= get(t, 'range.startLineNumber') &&
-        get(diagnostic, 'range.end.line') <= get(t, 'range.endLineNumber')
+        get(diagnostic, 'range.start.line') >= get(t, 'range.start.line') &&
+        get(diagnostic, 'range.end.line') <= get(t, 'range.end.line')
     );
     if (mappedTemplate && mappedTemplate.name.match(LgNamePattern)) {
       //should navigate to design page
@@ -130,5 +141,14 @@ export class LuNotification extends Notification {
     return dialogs
       .find((dialog) => dialog.id === this.resourceId)
       ?.referredLuIntents.find((lu) => lu.name === intentName)?.path;
+  }
+}
+
+export class QnANotification extends Notification {
+  type = NotificationType.QNA;
+  constructor(projectId: string, id: string, location: string, diagnostic: Diagnostic) {
+    super(projectId, id, location, diagnostic);
+    this.dialogPath = '';
+    this.message = createSingleMessage(diagnostic);
   }
 }

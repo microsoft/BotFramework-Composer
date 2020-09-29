@@ -4,23 +4,14 @@
 import { LuFile, LuIntentSection } from '@bfc/shared';
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 import differenceBy from 'lodash/differenceBy';
+import formatMessage from 'format-message';
 
-import { getBaseName, getExtension } from '../../utils/fileUtil';
-import * as luUtil from '../../utils/luUtil';
-import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import luWorker from '../parsers/luWorker';
-import {
-  luFilesState,
-  botLoadErrorState,
-  projectIdState,
-  botStatusState,
-  dialogsState,
-  localeState,
-  settingsState,
-} from '../atoms/botState';
+import { getBaseName, getExtension } from '../../utils/fileUtil';
+import luFileStatusStorage from '../../utils/luFileStatusStorage';
+import { luFilesState, localeState, settingsState } from '../atoms/botState';
 
-import httpClient from './../../utils/httpUtil';
-import { Text, BotStatus } from './../../constants';
+import { setError } from './shared';
 
 const intentIsNotEmpty = ({ Name, Body }) => {
   return !!Name && !!Body;
@@ -28,17 +19,10 @@ const intentIsNotEmpty = ({ Name, Body }) => {
 // fill other locale luFile new added intent with '- '
 const initialBody = '- ';
 
-export const updateLuFileState = async (
-  callbackHelpers: CallbackInterface,
-  { id, content }: { id: string; content: string }
-) => {
-  const { set, snapshot } = callbackHelpers;
-  const luFiles = await snapshot.getPromise(luFilesState);
-  const projectId = await snapshot.getPromise(projectIdState);
-
+export const updateLuFileState = async (luFiles: LuFile[], updatedLuFile: LuFile, projectId: string) => {
+  const { id } = updatedLuFile;
   const dialogId = getBaseName(id);
   const locale = getExtension(id);
-  const updatedLuFile = (await luWorker.parse(id, content)) as LuFile;
   const originLuFile = luFiles.find((file) => id === file.id);
   const sameIdOtherLocaleFiles = luFiles.filter((file) => {
     const fileDialogId = getBaseName(file.id);
@@ -47,7 +31,7 @@ export const updateLuFileState = async (
   });
 
   if (!originLuFile) {
-    throw new Error('origin lu file not found in store');
+    throw new Error(formatMessage('origin lu file not found in store'));
   }
 
   const changes: LuFile[] = [updatedLuFile];
@@ -65,13 +49,12 @@ export const updateLuFileState = async (
   const onlyDeletes = !addedIntents.length && deletedIntents.length;
   // sync add/remove intents
   if (onlyAdds || onlyDeletes) {
-    for (const { id, content } of sameIdOtherLocaleFiles) {
-      let newContent: string = (await luWorker.addIntents(content, addedIntents)) as string;
-      newContent = (await luWorker.removeIntents(
-        newContent,
+    for (const item of sameIdOtherLocaleFiles) {
+      let newLuFile = (await luWorker.addIntents(item, addedIntents)) as LuFile;
+      newLuFile = (await luWorker.removeIntents(
+        newLuFile,
         deletedIntents.map(({ Name }) => Name)
-      )) as string;
-      const newLuFile = (await luWorker.parse(id, newContent)) as LuFile;
+      )) as LuFile;
       changes.push(newLuFile);
     }
   }
@@ -80,29 +63,23 @@ export const updateLuFileState = async (
     luFileStatusStorage.updateFileStatus(projectId, id);
   });
 
-  const newluFiles = luFiles.map((file) => {
+  return luFiles.map((file) => {
     const changedFile = changes.find(({ id }) => id === file.id);
-    if (changedFile) {
-      return changedFile;
-    }
-    return file;
+    return changedFile ? changedFile : file;
   });
-
-  set(luFilesState, newluFiles);
 };
 
 export const createLuFileState = async (
   callbackHelpers: CallbackInterface,
-  { id, content }: { id: string; content: string }
+  { id, content, projectId }: { id: string; content: string; projectId: string }
 ) => {
   const { set, snapshot } = callbackHelpers;
-  const luFiles = await snapshot.getPromise(luFilesState);
-  const projectId = await snapshot.getPromise(projectIdState);
-  const locale = await snapshot.getPromise(localeState);
-  const { languages } = await snapshot.getPromise(settingsState);
+  const luFiles = await snapshot.getPromise(luFilesState(projectId));
+  const locale = await snapshot.getPromise(localeState(projectId));
+  const { languages } = await snapshot.getPromise(settingsState(projectId));
   const createdLuId = `${id}.${locale}`;
   const createdLuFile = (await luWorker.parse(id, content)) as LuFile;
-  if (luFiles.find((lg) => lg.id === createdLuId)) {
+  if (luFiles.find((lu) => lu.id === createdLuId)) {
     throw new Error('lu file already exist');
   }
   const changes: LuFile[] = [];
@@ -117,13 +94,15 @@ export const createLuFileState = async (
     });
   });
 
-  set(luFilesState, [...luFiles, ...changes]);
+  set(luFilesState(projectId), [...luFiles, ...changes]);
 };
 
-export const removeLuFileState = async (callbackHelpers: CallbackInterface, { id }: { id: string }) => {
+export const removeLuFileState = async (
+  callbackHelpers: CallbackInterface,
+  { id, projectId }: { id: string; projectId: string }
+) => {
   const { set, snapshot } = callbackHelpers;
-  let luFiles = await snapshot.getPromise(luFilesState);
-  const projectId = await snapshot.getPromise(projectIdState);
+  let luFiles = await snapshot.getPromise(luFilesState(projectId));
 
   luFiles.forEach((file) => {
     if (getBaseName(file.id) === getBaseName(id)) {
@@ -132,7 +111,7 @@ export const removeLuFileState = async (callbackHelpers: CallbackInterface, { id
   });
 
   luFiles = luFiles.filter((file) => getBaseName(file.id) !== id);
-  set(luFilesState, luFiles);
+  set(luFilesState(projectId), luFiles);
 };
 
 export const luDispatcher = () => {
@@ -140,12 +119,21 @@ export const luDispatcher = () => {
     (callbackHelpers: CallbackInterface) => async ({
       id,
       content,
+      projectId,
     }: {
       id: string;
       content: string;
       projectId: string;
     }) => {
-      await updateLuFileState(callbackHelpers, { id, content });
+      const { set, snapshot } = callbackHelpers;
+      const luFiles = await snapshot.getPromise(luFilesState(projectId));
+      try {
+        const updatedFile = (await luWorker.parse(id, content)) as LuFile;
+        const result = await updateLuFileState(luFiles, updatedFile, projectId);
+        set(luFilesState(projectId), result);
+      } catch (error) {
+        setError(callbackHelpers, error);
+      }
     }
   );
 
@@ -154,58 +142,101 @@ export const luDispatcher = () => {
       id,
       intentName,
       intent,
+      projectId,
     }: {
       id: string;
       intentName: string;
       intent: LuIntentSection;
+      projectId: string;
     }) => {
-      const luFiles = await callbackHelpers.snapshot.getPromise(luFilesState);
-      const file = luFiles.find((temp) => temp.id === id);
-      if (!file) return;
-      const content = (await luWorker.updateIntent(file.content, intentName, intent)) as string;
-      await updateLuFileState(callbackHelpers, { id: file.id, content });
+      const { set, snapshot } = callbackHelpers;
+      const luFiles = await snapshot.getPromise(luFilesState(projectId));
+      const luFile = luFiles.find((temp) => temp.id === id);
+      if (!luFile) return luFiles;
+
+      // create need sync to multi locale file.
+      const originIntent = luFile.intents.find(({ Name }) => Name === intentName);
+      if (!originIntent) {
+        await createLuIntent({ id, intent, projectId });
+        return;
+      }
+
+      try {
+        const sameIdOtherLocaleFiles = luFiles.filter((file) => getBaseName(file.id) === getBaseName(id));
+
+        // name change, need update cross multi locale file.
+        if (intent.Name !== intentName) {
+          const changes: LuFile[] = [];
+          for (const item of sameIdOtherLocaleFiles) {
+            const updatedFile = (await luWorker.updateIntent(item, intentName, { Name: intent.Name })) as LuFile;
+            changes.push(updatedFile);
+          }
+
+          set(luFilesState(projectId), (luFiles) => {
+            return luFiles.map((file) => {
+              const changedFile = changes.find(({ id }) => id === file.id);
+              return changedFile ? changedFile : file;
+            });
+          });
+          // body change, only update current locale file
+        } else {
+          const updatedFile = (await luWorker.updateIntent(luFile, intentName, { Body: intent.Body })) as LuFile;
+          set(luFilesState(projectId), (luFiles) => {
+            return luFiles.map((file) => {
+              return file.id === id ? updatedFile : file;
+            });
+          });
+        }
+      } catch (error) {
+        setError(callbackHelpers, error);
+      }
     }
   );
 
   const createLuIntent = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({ id, intent }: { id: string; intent: LuIntentSection }) => {
-      const luFiles = await callbackHelpers.snapshot.getPromise(luFilesState);
+    (callbackHelpers: CallbackInterface) => async ({
+      id,
+      intent,
+      projectId,
+    }: {
+      id: string;
+      intent: LuIntentSection;
+      projectId: string;
+    }) => {
+      const { set, snapshot } = callbackHelpers;
+      const luFiles = await snapshot.getPromise(luFilesState(projectId));
       const file = luFiles.find((temp) => temp.id === id);
-      if (!file) return;
-      const content = (await luWorker.addIntent(file.content, intent)) as string;
-      await updateLuFileState(callbackHelpers, { id: file.id, content });
+      if (!file) return luFiles;
+      try {
+        const updatedFile = (await luWorker.addIntent(file, intent)) as LuFile;
+        const result = await updateLuFileState(luFiles, updatedFile, projectId);
+        set(luFilesState(projectId), result);
+      } catch (error) {
+        setError(callbackHelpers, error);
+      }
     }
   );
 
   const removeLuIntent = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({ id, intentName }: { id: string; intentName: string }) => {
-      const luFiles = await callbackHelpers.snapshot.getPromise(luFilesState);
+    (callbackHelpers: CallbackInterface) => async ({
+      id,
+      intentName,
+      projectId,
+    }: {
+      id: string;
+      intentName: string;
+      projectId: string;
+    }) => {
+      const { set, snapshot } = callbackHelpers;
+      const luFiles = await snapshot.getPromise(luFilesState(projectId));
       const file = luFiles.find((temp) => temp.id === id);
-      if (!file) return;
-      const content = (await luWorker.removeIntent(file.content, intentName)) as string;
-      await updateLuFileState(callbackHelpers, { id: file.id, content });
-    }
-  );
-
-  const publishLuis = useRecoilCallback(
-    ({ set, snapshot }: CallbackInterface) => async (luisConfig, projectId: string) => {
-      const dialogs = await snapshot.getPromise(dialogsState);
+      if (!file) return luFiles;
       try {
-        const luFiles = await snapshot.getPromise(luFilesState);
-        const referred = luUtil.checkLuisPublish(luFiles, dialogs);
-        //TODO crosstrain should add locale
-        const crossTrainConfig = luUtil.createCrossTrainConfig(dialogs, referred);
-        await httpClient.post(`/projects/${projectId}/luFiles/publish`, {
-          luisConfig,
-          projectId,
-          crossTrainConfig,
-          luFiles: referred.map((file) => file.id),
-        });
-        luFileStatusStorage.publishAll(projectId);
-        set(botStatusState, BotStatus.published);
-      } catch (err) {
-        set(botStatusState, BotStatus.failed);
-        set(botLoadErrorState, { title: Text.LUISDEPLOYFAILURE, message: err.response?.data?.message || err.message });
+        const updatedFile = (await luWorker.removeIntent(file, intentName)) as LuFile;
+        const result = await updateLuFileState(luFiles, updatedFile, projectId);
+        set(luFilesState(projectId), result);
+      } catch (error) {
+        setError(callbackHelpers, error);
       }
     }
   );
@@ -215,6 +246,5 @@ export const luDispatcher = () => {
     updateLuIntent,
     createLuIntent,
     removeLuIntent,
-    publishLuis,
   };
 };

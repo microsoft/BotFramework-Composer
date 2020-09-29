@@ -8,38 +8,27 @@ import formatMessage from 'format-message';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import cloneDeep from 'lodash/cloneDeep';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 
-import {
-  botNameState,
-  settingsState,
-  projectIdState,
-  dispatcherState,
-  userSettingsState,
-  localeState,
-} from '../../../recoilModel';
+import { dispatcherState, userSettingsState, botNameState, localeState, settingsState } from '../../../recoilModel';
 import { languageListTemplates } from '../../../components/MultiLanguage';
-import { navigateTo } from '../../../utils/navigation';
 
-import { hostedControls, settingsEditor, toolbar } from './style';
+import { settingsEditor, toolbar } from './style';
 import { BotSettings } from './constants';
 
-export const DialogSettings: React.FC<RouteComponentProps> = () => {
-  const botName = useRecoilValue(botNameState);
-  const locale = useRecoilValue(localeState);
-  const settings = useRecoilValue(settingsState);
-  const projectId = useRecoilValue(projectIdState);
+export const DialogSettings: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
+  const { projectId = '' } = props;
+  const botName = useRecoilValue(botNameState(projectId));
+  const locale = useRecoilValue(localeState(projectId));
+  const settings = useRecoilValue(settingsState(projectId));
   const userSettings = useRecoilValue(userSettingsState);
   const { setSettings, setLocale, addLanguageDialogBegin } = useRecoilValue(dispatcherState);
 
   const { languages, defaultLanguage } = settings;
-  useEffect(() => {
-    if (!botName) navigateTo('/home');
-  }, [botName]);
 
   const saveChangeResult = (result) => {
     try {
@@ -64,7 +53,7 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
   ) => {
     const selectedLang = option?.key as string;
     if (selectedLang && selectedLang !== defaultLanguage) {
-      setLocale(selectedLang);
+      setLocale(selectedLang, projectId);
       const updatedSetting = { ...cloneDeep(settings), defaultLanguage: selectedLang };
       if (updatedSetting?.luis?.defaultLanguage) {
         updatedSetting.luis.defaultLanguage = selectedLang;
@@ -76,7 +65,7 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
   const onLanguageChange = (_event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption, _index?: number) => {
     const selectedLang = option?.key as string;
     if (selectedLang && selectedLang !== locale) {
-      setLocale(selectedLang);
+      setLocale(selectedLang, projectId);
     }
   };
 
@@ -96,22 +85,20 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
   const editorId = [defaultLanguage, ...languages].join('-');
 
   return botName ? (
-    <Stack tokens={{ childrenGap: '3rem' }}>
+    <Stack tokens={{ childrenGap: '1rem' }}>
       <StackItem grow={0}>
-        <div css={hostedControls}>
-          <Label>{BotSettings.generalTitle}</Label>
-          <p>
-            {BotSettings.botSettingDescription}
-            &nbsp;
-            <Link href={'https://aka.ms/bf-composer-docs-publish-bot'} target="_blank">
-              {BotSettings.learnMore}
-            </Link>
-          </p>
-        </div>
+        <Label>{BotSettings.generalTitle}</Label>
+        <section>
+          {BotSettings.botSettingDescription}
+          &nbsp;
+          <Link href={'https://aka.ms/bf-composer-docs-publish-bot'} target="_blank">
+            {BotSettings.learnMore}
+          </Link>
+        </section>
       </StackItem>
       <StackItem>
         <Label>{BotSettings.languageTitle}</Label>
-        <p>{BotSettings.languagesubTitle}</p>
+        <section>{BotSettings.languagesubTitle}</section>
         <section style={{ padding: '0 50px' }}>
           <div css={toolbar}>
             <Dropdown
@@ -124,13 +111,7 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
               onChange={onLanguageChange}
             />
 
-            <Link
-              onClick={() => {
-                addLanguageDialogBegin(() => {});
-              }}
-            >
-              {BotSettings.languageAddLanauge}
-            </Link>
+            <Link onClick={() => addLanguageDialogBegin(projectId, () => {})}>{BotSettings.languageAddLanauge}</Link>
           </div>
 
           <Dropdown

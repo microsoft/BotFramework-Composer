@@ -6,7 +6,7 @@ import * as React from 'react';
 import { RecoilRoot } from 'recoil';
 
 import { useLuApi } from '../../src/shell/luApi';
-import { projectIdState, localeState, luFilesState, dispatcherState } from '../../src/recoilModel';
+import { localeState, luFilesState, dispatcherState, currentProjectIdState } from '../../src/recoilModel';
 import { Dispatcher } from '../../src/recoilModel/dispatchers';
 
 jest.mock('../../src/recoilModel/parsers/luWorker', () => {
@@ -32,9 +32,9 @@ describe('use luApi hooks', () => {
     updateLuFileMockMock = jest.fn();
 
     const initRecoilState = ({ set }) => {
-      set(projectIdState, state.projectId);
-      set(localeState, 'en-us');
-      set(luFilesState, state.luFiles);
+      set(currentProjectIdState, state.projectId);
+      set(localeState(state.projectId), 'en-us');
+      set(luFilesState(state.projectId), state.luFiles);
       set(dispatcherState, (current: Dispatcher) => ({
         ...current,
         updateLuFile: updateLuFileMockMock,
@@ -48,7 +48,7 @@ describe('use luApi hooks', () => {
       const { children } = props;
       return <RecoilRoot initializeState={initRecoilState}>{children}</RecoilRoot>;
     };
-    const rendered = renderHook(() => useLuApi(), {
+    const rendered = renderHook(() => useLuApi(state.projectId), {
       wrapper,
     });
     result = rendered.result;
@@ -63,6 +63,7 @@ describe('use luApi hooks', () => {
         Body: '- test add',
         Name: 'add',
       },
+      projectId: 'test',
     };
     expect(updateLuFileMockMock).toBeCalledWith(arg);
   });
@@ -79,6 +80,7 @@ describe('use luApi hooks', () => {
         Name: 'update',
       },
       intentName: 'test',
+      projectId: 'test',
     };
     expect(updateLuFileMockMock).toBeCalledWith(arg);
   });
@@ -88,7 +90,7 @@ describe('use luApi hooks', () => {
     await result.current.updateLuIntent('test.en-us', 'test', { Body: '- test update', Name: 'update' });
     await result.current.removeLuIntent('test.en-us', 'test', 'remove');
     expect(updateLuFileMockMock).toBeCalledTimes(3);
-    const arg = { intentName: 'test', id: 'test.en-us' };
+    const arg = { intentName: 'test', id: 'test.en-us', projectId: 'test' };
     expect(updateLuFileMockMock).toBeCalledWith(arg);
   });
 

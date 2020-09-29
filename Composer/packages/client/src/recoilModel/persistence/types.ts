@@ -9,9 +9,11 @@ export enum ChangeType {
 
 export enum FileExtensions {
   Dialog = '.dialog',
+  DialogSchema = '.dialog.schema',
   Manifest = '.json',
   Lu = '.lu',
   Lg = '.lg',
+  QnA = '.qna',
   Setting = 'appsettings.json',
 }
 

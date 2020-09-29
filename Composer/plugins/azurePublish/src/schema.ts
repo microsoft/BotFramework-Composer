@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { JSONSchema7 } from '@bfc/plugin-loader';
+import { JSONSchema7 } from '@bfc/extension';
 const schema: JSONSchema7 = {
   type: 'object',
   properties: {
@@ -125,9 +125,9 @@ const schema: JSONSchema7 = {
       },
       luis: {
         authoringKey: '<authoring key>',
-        authoringEndpoint: '<luis authoring endpoint>',
+        authoringEndpoint: '',
         endpointKey: '<endpoint key>',
-        endpoint: '<luis prediction endpoint>',
+        endpoint: '',
         region: 'westus',
       },
       MicrosoftAppId: '<app id from Bot Framework registration>',

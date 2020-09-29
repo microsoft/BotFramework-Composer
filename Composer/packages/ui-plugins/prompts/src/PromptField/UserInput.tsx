@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import React, { Fragment } from 'react';
 import { SDKKinds, MicrosoftInputDialog, ChoiceInput, ConfirmInput, LuMetaData, LuType } from '@bfc/shared';
 import { FieldLabel, SchemaField } from '@bfc/adaptive-form';
-import { JSONSchema7, useShellApi, useRecognizerConfig } from '@bfc/extension';
+import { JSONSchema7, useShellApi, useRecognizerConfig } from '@bfc/extension-client';
 import formatMessage from 'format-message';
 
 import { PromptFieldProps } from './types';
@@ -32,15 +32,14 @@ const expectedResponsesPlaceholder = () =>
 
 const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = (props) => {
   const { onChange, getSchema, value, id, uiOptions, getError, definitions, depth, schema = {} } = props;
-  const { currentDialog, designerId } = useShellApi();
-  const recognizers = useRecognizerConfig();
+  const { designerId } = useShellApi();
+  const { currentRecognizer } = useRecognizerConfig();
 
   const { const: $kind } = (schema?.properties?.$kind as { const: string }) || {};
   const intentName = new LuMetaData(new LuType($kind).toString(), designerId).toString();
-
-  const recognizer = recognizers.find((r) => r.isSelected(currentDialog?.content?.recognizer));
-  const Editor = recognizer?.id === SDKKinds.LuisRecognizer && recognizer?.editor;
   const intentLabel = formatMessage('Expected responses (intent: #{intentName})', { intentName });
+
+  const Editor = currentRecognizer?.intentEditor;
 
   return (
     <Fragment>

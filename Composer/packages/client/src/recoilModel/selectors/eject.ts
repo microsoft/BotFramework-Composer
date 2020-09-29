@@ -13,22 +13,32 @@ import { StateError } from '../../recoilModel/types';
 // Actions
 const ejectRuntimeAction = (dispatcher: Dispatcher) => {
   return {
-    onAction: async (projectId: string, name: string) => {
+    onAction: async (projectId: string, name: string, replace = false) => {
       try {
-        const response = await httpClient.post(`/runtime/eject/${projectId}/${name}`);
+        dispatcher.setEjectRuntimeExist(false, projectId);
+        const response = await httpClient.post(`/runtime/eject/${projectId}/${name}`, { isReplace: replace });
         if (!lodashGet(response, 'data.settings.path', '') || !lodashGet(response, 'data.settings.startCommand', '')) {
           throw new Error('Runtime cannot be ejected');
         }
-        const path = response.data.settings.path;
-        const command = response.data.settings.startCommand;
-        dispatcher.setRuntimeSettings(projectId, path, command);
+        const runtimeSetting = response.data.settings;
+        runtimeSetting.command = response.data.settings.startCommand;
+        delete runtimeSetting.startCommand;
+        dispatcher.setRuntimeSettings(projectId, runtimeSetting);
       } catch (ex) {
-        const errorToShow: StateError = {
-          message: ex.message,
-          summary: formatMessage('Error occured ejecting runtime!'),
-          status: ex.status,
-        };
-        dispatcher.setApplicationLevelError(errorToShow);
+        if (
+          ex.response?.data?.message &&
+          typeof ex.response.data.message === 'string' &&
+          ex.response.data.message.includes('Runtime already exists')
+        ) {
+          dispatcher.setEjectRuntimeExist(true, projectId);
+        } else {
+          const errorToShow: StateError = {
+            message: ex.response?.data?.message || ex.response?.data || ex.message,
+            summary: formatMessage('Error occured ejecting runtime!'),
+            status: ex.response?.data?.status || ex.status,
+          };
+          dispatcher.setApplicationLevelError(errorToShow);
+        }
       }
     },
   };

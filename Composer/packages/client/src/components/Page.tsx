@@ -6,6 +6,8 @@ import { jsx, css } from '@emotion/core';
 import React from 'react';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 
+import { LeftRightSplit } from '../components/Split/LeftRightSplit';
+
 import { Toolbar, IToolbarItem } from './Toolbar';
 import { NavTree, INavTreeItem } from './NavTree';
 
@@ -71,8 +73,8 @@ export const content = css`
   flex: 4;
   padding: 20px;
   position: relative;
-  overflow: scroll;
-
+  overflow: auto;
+  height: 100%;
   label: PageContent;
 `;
 
@@ -101,10 +103,12 @@ const Page: React.FC<IPageProps> = (props) => {
           {onRenderHeaderContent && <div css={headerContent}>{onRenderHeaderContent()}</div>}
         </div>
         <div css={main} role="main">
-          <NavTree navLinks={navLinks} regionName={navRegionName} />
-          <div aria-label={mainRegionName} css={content} data-testid="PageContent" role="region">
-            {children}
-          </div>
+          <LeftRightSplit initialLeftGridWidth="20%" minLeftPixels={200} minRightPixels={800}>
+            <NavTree navLinks={navLinks} regionName={navRegionName} />
+            <div aria-label={mainRegionName} css={content} data-testid="PageContent" role="region">
+              {children}
+            </div>
+          </LeftRightSplit>
         </div>
       </div>
     </div>

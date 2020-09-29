@@ -75,7 +75,9 @@ describe('<CreationFlow/>', () => {
       'EchoBot-1',
       '',
       expect.stringMatching(/(\/|\\)test-folder(\/|\\)Desktop/),
-      ''
+      '',
+      'en-US',
+      undefined
     );
   });
 });

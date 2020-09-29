@@ -13,10 +13,11 @@ import compression from 'compression';
 import * as ws from 'ws';
 import * as rpc from 'vscode-ws-jsonrpc';
 import { IConnection, createConnection } from 'vscode-languageserver';
+import { IntellisenseServer } from '@bfc/intellisense-languageserver';
 import { LGServer } from '@bfc/lg-languageserver';
 import { LUServer } from '@bfc/lu-languageserver';
-import { pluginLoader } from '@bfc/plugin-loader';
 import chalk from 'chalk';
+import { ExtensionContext, ExtensionManager } from '@bfc/extension';
 
 import { BotProjectService } from './services/project';
 import { getAuthProvider } from './router/auth';
@@ -24,11 +25,12 @@ import { apiRouter } from './router/api';
 import { BASEURL } from './constants';
 import { attachLSPServer } from './utility/attachLSP';
 import log from './logger';
+import { setEnvDefault } from './utility/setEnvDefault';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const session = require('express-session');
 
-export async function start(pluginDir?: string): Promise<number | string> {
+export async function start(): Promise<number | string> {
   const clientDirectory = path.resolve(require.resolve('@bfc/client'), '..');
   const app: Express = express();
   app.set('view engine', 'ejs');
@@ -38,15 +40,17 @@ export async function start(pluginDir?: string): Promise<number | string> {
   app.use(bodyParser.json({ limit: '50mb' }));
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(session({ secret: 'bot-framework-composer' }));
-  app.use(pluginLoader.passport.initialize());
-  app.use(pluginLoader.passport.session());
+  app.use(ExtensionContext.passport.initialize());
+  app.use(ExtensionContext.passport.session());
 
   // make sure plugin has access to our express...
-  pluginLoader.useExpress(app);
+  ExtensionContext.useExpress(app);
 
-  // load all the plugins that exist in the folder
-  pluginDir = pluginDir || path.resolve(__dirname, '../../../plugins');
-  await pluginLoader.loadPluginsFromFolder(pluginDir);
+  // load all installed plugins
+  setEnvDefault('COMPOSER_EXTENSION_DATA', path.resolve(__dirname, '../extensions.json'));
+  setEnvDefault('COMPOSER_BUILTIN_EXTENSIONS_DIR', path.resolve(__dirname, '../../../plugins'));
+  setEnvDefault('COMPOSER_REMOTE_EXTENSIONS_DIR', path.resolve(__dirname, '../../../.composer'));
+  await ExtensionManager.loadAll();
 
   const { login, authorize } = getAuthProvider();
 
@@ -157,6 +161,14 @@ export async function start(pluginDir?: string): Promise<number | string> {
     server.start();
   }
 
+  const launchIntellisenseLanguageServer = (socket: rpc.IWebSocket) => {
+    const reader = new rpc.WebSocketMessageReader(socket);
+    const writer = new rpc.WebSocketMessageWriter(socket);
+    const connection: IConnection = createConnection(reader, writer);
+    const server = new IntellisenseServer(connection, staticMemoryResolver);
+    server.start();
+  };
+
   attachLSPServer(wss, server, '/lg-language-server', (webSocket) => {
     // launch language server when the web socket is opened
     if (webSocket.readyState === webSocket.OPEN) {
@@ -175,6 +187,16 @@ export async function start(pluginDir?: string): Promise<number | string> {
     } else {
       webSocket.on('open', () => {
         launchLuLanguageServer(webSocket);
+      });
+    }
+  });
+
+  attachLSPServer(wss, server, '/intellisense-language-server', (webSocket) => {
+    if (webSocket.readyState === webSocket.OPEN) {
+      launchIntellisenseLanguageServer(webSocket);
+    } else {
+      webSocket.on('open', () => {
+        launchIntellisenseLanguageServer(webSocket);
       });
     }
   });

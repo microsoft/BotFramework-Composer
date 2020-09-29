@@ -4,7 +4,7 @@
 // TODO: Remove path module
 import Path from 'path';
 
-import React, { useEffect, useRef, Fragment } from 'react';
+import React, { useEffect, useRef, Fragment, useState } from 'react';
 import { RouteComponentProps, Router, navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 
@@ -12,12 +12,16 @@ import { CreationFlowStatus } from '../../constants';
 import {
   dispatcherState,
   creationFlowStatusState,
-  projectIdState,
   templateProjectsState,
   storagesState,
   focusedStorageFolderState,
+  currentProjectIdState,
+  userSettingsState,
 } from '../../recoilModel';
 import Home from '../../pages/home/Home';
+import ImportQnAFromUrlModal from '../../pages/knowledge-base/ImportQnAFromUrlModal';
+import { QnABotTemplateId } from '../../constants';
+import { useProjectIdCache } from '../../utils/hooks';
 
 import { CreateOptions } from './CreateOptions';
 import { OpenProject } from './OpenProject';
@@ -28,7 +32,7 @@ type CreationFlowProps = RouteComponentProps<{}>;
 const CreationFlow: React.FC<CreationFlowProps> = () => {
   const {
     fetchTemplates,
-    openBotProject,
+    openProject,
     createProject,
     saveProjectAs,
     fetchStorages,
@@ -38,15 +42,20 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     updateCurrentPathForStorage,
     updateFolder,
     saveTemplateId,
+    fetchProjectById,
+    fetchRecentProjects,
   } = useRecoilValue(dispatcherState);
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
-  const projectId = useRecoilValue(projectIdState);
+  const projectId = useRecoilValue(currentProjectIdState);
   const templateProjects = useRecoilValue(templateProjectsState);
   const storages = useRecoilValue(storagesState);
   const focusedStorageFolder = useRecoilValue(focusedStorageFolderState);
+  const { appLocale } = useRecoilValue(userSettingsState);
+  const cachedProjectId = useProjectIdCache();
   const currentStorageIndex = useRef(0);
   const storage = storages[currentStorageIndex.current];
   const currentStorageId = storage ? storage.id : 'default';
+  const [formData, setFormData] = useState({ name: '' });
 
   useEffect(() => {
     if (storages && storages.length) {
@@ -57,9 +66,19 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     }
   }, [storages]);
 
-  useEffect(() => {
-    fetchStorages();
+  const fetchResources = async () => {
+    // fetchProject use `gotoSnapshot` which will wipe out all state value.
+    // so here make those methods call in sequence.
+    if (!projectId && cachedProjectId) {
+      await fetchProjectById(cachedProjectId);
+    }
+    await fetchStorages();
     fetchTemplates();
+    fetchRecentProjects();
+  };
+
+  useEffect(() => {
+    fetchResources();
   }, []);
 
   const updateCurrentPath = async (newPath, storageId) => {
@@ -79,15 +98,38 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
 
   const openBot = async (botFolder) => {
     setCreationFlowStatus(CreationFlowStatus.CLOSE);
-    openBotProject(botFolder);
+    openProject(botFolder);
   };
 
-  const handleCreateNew = async (formData, templateId: string) => {
-    createProject(templateId || '', formData.name, formData.description, formData.location, formData.schemaUrl);
+  const handleCreateNew = async (formData, templateId: string, qnaKbUrls?: string[]) => {
+    createProject(
+      templateId || '',
+      formData.name,
+      formData.description,
+      formData.location,
+      formData.schemaUrl,
+      appLocale,
+      qnaKbUrls
+    );
   };
 
   const handleSaveAs = (formData) => {
     saveProjectAs(projectId, formData.name, formData.description, formData.location);
+  };
+
+  const handleCreateQnA = async (urls: string[]) => {
+    saveTemplateId(QnABotTemplateId);
+    handleDismiss();
+    handleCreateNew(formData, QnABotTemplateId, urls);
+  };
+
+  const handleSubmitOrImportQnA = async (formData, templateId: string) => {
+    if (templateId === 'QnASample') {
+      setFormData(formData);
+      navigate(`./QnASample/importQnA`);
+      return;
+    }
+    handleSubmit(formData, templateId);
   };
 
   const handleSubmit = async (formData, templateId: string) => {
@@ -99,7 +141,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
 
       default:
         saveTemplateId(templateId);
-        handleCreateNew(formData, templateId);
+        await handleCreateNew(formData, templateId);
     }
   };
 
@@ -119,7 +161,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
           updateFolder={updateFolder}
           onCurrentPathUpdate={updateCurrentPath}
           onDismiss={handleDismiss}
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmitOrImportQnA}
         />
         <CreateOptions path="create" templates={templateProjects} onDismiss={handleDismiss} onNext={handleCreateNext} />
         <DefineConversation
@@ -129,7 +171,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
           updateFolder={updateFolder}
           onCurrentPathUpdate={updateCurrentPath}
           onDismiss={handleDismiss}
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmitOrImportQnA}
         />
         <OpenProject
           focusedStorageFolder={focusedStorageFolder}
@@ -137,6 +179,12 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
           onCurrentPathUpdate={updateCurrentPath}
           onDismiss={handleDismiss}
           onOpen={openBot}
+        />
+        <ImportQnAFromUrlModal
+          dialogId={formData.name.toLowerCase()}
+          path="create/QnASample/importQnA"
+          onDismiss={handleDismiss}
+          onSubmit={handleCreateQnA}
         />
       </Router>
     </Fragment>
