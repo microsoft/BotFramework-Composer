@@ -19,8 +19,6 @@ import {
 import { useHandlers } from 'src/atoms/handlers';
 import { CommandBarUploadButton } from 'src/components/common/CommandBarUpload';
 import { FormDialogSchemaDetails } from 'src/components/property/FormDialogSchemaDetails';
-import { Lifetime } from 'src/utils/base';
-import { jsPropertyListClassName } from 'src/utils/constants';
 import { useUndoKeyBinding } from 'src/utils/hooks/useUndoKeyBinding';
 
 const downloadFile = async (fileName: string, schemaExtension: string, content: string) => {
@@ -77,44 +75,15 @@ export const VisualEditor = React.memo((props: Props) => {
   const propertyIds = useRecoilValue(allFormDialogPropertyIdsSelector);
   const schemaValid = useRecoilValue(formDialogSchemaValidSelector);
   const schemaJson = useRecoilValue(formDialogSchemaJsonSelector);
-  const { importSchema, addProperty, activatePropertyId } = useHandlers();
+  const { importSchema, addProperty } = useHandlers();
 
   const schemaIdRef = React.useRef<string>(schema.id);
 
-  const containerRef = React.useRef<HTMLDivElement>();
   useUndoKeyBinding();
 
   React.useEffect(() => {
     schemaIdRef.current = schema.id;
   }, [schema.id]);
-
-  React.useEffect(() => {
-    const lifetime = new Lifetime();
-
-    const clickOutsideLists = (e: MouseEvent) => {
-      const { x, y } = e;
-      const elms = Array.prototype.slice.call(
-        containerRef.current.querySelectorAll(`.${jsPropertyListClassName}`) || []
-      ) as HTMLDivElement[];
-      if (
-        !elms.some((elm) => {
-          const { left, right, top, bottom } = elm.getBoundingClientRect();
-          return x <= right && x >= left && y <= bottom && y >= top;
-        })
-      ) {
-        activatePropertyId({ id: '' });
-      }
-    };
-
-    if (containerRef.current) {
-      containerRef.current.addEventListener('click', clickOutsideLists);
-      lifetime.add(() => {
-        containerRef.current.removeEventListener('click', clickOutsideLists);
-      });
-    }
-
-    return () => lifetime.dispose();
-  }, []);
 
   const upload = (file: File) => {
     importSchema({ id: schema.id, file });
@@ -185,7 +154,7 @@ export const VisualEditor = React.memo((props: Props) => {
       <SchemaName verticalAlign="center">
         <Text>{schema.name}</Text>
       </SchemaName>
-      <EditorRoot ref={containerRef}>
+      <EditorRoot>
         <FormDialogSchemaDetails />
       </EditorRoot>
     </Root>
