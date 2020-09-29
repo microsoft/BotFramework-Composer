@@ -2,17 +2,28 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, SerializedStyles } from '@emotion/core';
+import { jsx, css } from '@emotion/core';
 import { useState, MouseEvent, KeyboardEvent } from 'react';
 
 type Props = {
   children: JSX.Element;
   summary: JSX.Element;
-  summaryCSS: SerializedStyles;
+  depth?: number;
   ref?: (el: HTMLElement | null) => void;
 };
 
-export const ExpandableNode = ({ children, summary, ref, summaryCSS }: Props) => {
+const summaryStyle = css`
+  label: summary;
+  display: flex;
+  padding-left: 12px;
+  padding-top: 6px;
+`;
+
+const nodeStyle = (depth: number) => css`
+  margin-left: ${depth * 16}px;
+`;
+
+export const ExpandableNode = ({ children, summary, ref, depth = 0 }: Props) => {
   const [isOpen, setOpen] = useState(true);
 
   function handleClick(ev: MouseEvent) {
@@ -27,12 +38,14 @@ export const ExpandableNode = ({ children, summary, ref, summaryCSS }: Props) =>
   }
 
   return (
-    <details ref={ref} open={isOpen}>
-      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */}
-      <summary css={summaryCSS} role="button" tabIndex={0} onClick={handleClick} onKeyUp={handleKey}>
-        {summary}
-      </summary>
-      {children}
-    </details>
+    <div css={nodeStyle(depth)}>
+      <details ref={ref} open={isOpen}>
+        {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */}
+        <summary css={summaryStyle} role="button" tabIndex={0} onClick={handleClick} onKeyUp={handleKey}>
+          {summary}
+        </summary>
+        {children}
+      </details>
+    </div>
   );
 };

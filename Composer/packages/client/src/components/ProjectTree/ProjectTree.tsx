@@ -45,13 +45,6 @@ const root = css`
   label: root;
 `;
 
-const summaryStyle = css`
-  label: summary;
-  display: flex;
-  padding-left: 12px;
-  padding-top: 6px;
-`;
-
 // -------------------- ProjectTree -------------------- //
 
 export type TreeLink = {
@@ -99,6 +92,7 @@ type BotInProject = {
   dialogs: DialogInfo[];
   projectId: string;
   name: string;
+  isRemote: boolean;
 };
 
 export const ProjectTree: React.FC<IProjectTreeProps> = ({
@@ -149,12 +143,19 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
         `}
         role="grid"
       >
-        <TreeItem showProps depth={0} icon={'ChatBot'} isSubItemActive={!!selected} link={link} onSelect={onSelect} />
+        <TreeItem
+          showProps
+          icon={bot.isRemote ? 'Globe' : 'ChatBot'}
+          isSubItemActive={!!selected}
+          link={link}
+          shiftOut={bot.isRemote ? 28 : 0}
+          onSelect={onSelect}
+        />
       </span>
     );
   };
 
-  const renderDialogHeader = (botId: string, dialog: DialogInfo, warningContent: string, depth: number) => {
+  const renderDialogHeader = (botId: string, dialog: DialogInfo, warningContent: string) => {
     const link: TreeLink = {
       dialogName: dialog.id,
       displayName: dialog.displayName,
@@ -175,7 +176,6 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
       >
         <TreeItem
           showProps
-          depth={depth}
           icon={'CannedChat'}
           isSubItemActive={!!selected}
           link={link}
@@ -187,7 +187,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
     );
   };
 
-  function renderTrigger(projectId: string, item: any, dialog: DialogInfo, depth: number): React.ReactNode {
+  function renderTrigger(projectId: string, item: any, dialog: DialogInfo): React.ReactNode {
     const link: TreeLink = {
       displayName: item.displayName,
       warningContent: item.warningContent,
@@ -202,12 +202,11 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
     return (
       <TreeItem
         key={`${item.id}_${item.index}`}
-        depth={depth}
         dialogName={dialog.displayName}
         icon={TYPE_TO_ICON_MAP[item.type] || 'Flow'}
         isActive={dialog.id === selectedDialog && createSelectedPath(item.index) === selected}
         link={link}
-        shiftOut={32}
+        shiftOut={48}
         onDelete={onDelete}
         onSelect={onSelect}
       />
@@ -246,25 +245,14 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
           .filter((tr) => filterMatch(dialog.displayName) || filterMatch(getTriggerName(tr)))
           .map((tr, index) => {
             const warningContent = triggerNotSupported(dialog, tr);
-            return renderTrigger(
-              projectId,
-              { ...tr, index, displayName: getTriggerName(tr), warningContent },
-              dialog,
-              startDepth + 1
-            );
+            return renderTrigger(projectId, { ...tr, index, displayName: getTriggerName(tr), warningContent }, dialog);
           });
         return (
-          // <details key={dialog.id} ref={dialog.isRoot ? addMainDialogRef : undefined}>
-          //   <summary css={summaryStyle}>
-          //     {renderDialogHeader(projectId, dialog, containUnsupportedTriggers(dialog), startDepth)}
-          //   </summary>
-          //   {triggerList}
-          // </details>
           <ExpandableNode
             key={dialog.id}
             ref={dialog.isRoot ? addMainDialogRef : undefined}
-            summary={renderDialogHeader(projectId, dialog, containUnsupportedTriggers(dialog), startDepth)}
-            summaryCSS={summaryStyle}
+            depth={startDepth}
+            summary={renderDialogHeader(projectId, dialog, containUnsupportedTriggers(dialog))}
           >
             <div>{triggerList}</div>
           </ExpandableNode>
@@ -272,19 +260,15 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
       });
     } else {
       return filteredDialogs.map((dialog: DialogInfo) =>
-        renderDialogHeader(projectId, dialog, containUnsupportedTriggers(dialog), startDepth)
+        renderDialogHeader(projectId, dialog, containUnsupportedTriggers(dialog))
       );
     }
   }
 
   function createBotSubtree(bot: BotInProject & { hasWarnings: boolean }) {
-    if (showDialogs) {
+    if (showDialogs && !bot.isRemote) {
       return (
-        // <details key={bot.projectId}>
-        //   <summary css={summaryStyle}>{renderBotHeader(bot)}</summary>
-        //   {createDetailsTree(bot, 1)}
-        // </details>
-        <ExpandableNode key={bot.projectId} summary={renderBotHeader(bot)} summaryCSS={summaryStyle}>
+        <ExpandableNode key={bot.projectId} summary={renderBotHeader(bot)}>
           <div>{createDetailsTree(bot, 1)}</div>
         </ExpandableNode>
       );

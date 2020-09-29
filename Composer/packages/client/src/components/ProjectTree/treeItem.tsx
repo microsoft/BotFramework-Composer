@@ -19,13 +19,13 @@ import { TreeLink } from './ProjectTree';
 
 // -------------------- Styles -------------------- //
 const indent = 8;
-const itemText = (depth: number) => css`
+const itemText = css`
   outline: none;
   :focus {
     outline: rgb(102, 102, 102) solid 1px;
     z-index: 1;
   }
-  padding-left: ${depth * indent}px;
+  padding-left: ${indent}px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
@@ -110,7 +110,7 @@ const navItem = (isActive: boolean, shift: number) => css`
   }
 `;
 
-export const overflowSet = (depth: number) => css`
+export const overflowSet = css`
   width: 100%;
   height: 100%;
   padding-right: 12px;
@@ -142,7 +142,6 @@ interface ITreeItemProps {
   link: TreeLink;
   isActive?: boolean;
   isSubItemActive?: boolean;
-  depth: number;
   onDelete?: (link: TreeLink) => void;
   onSelect: (link: TreeLink) => void;
   icon?: string;
@@ -151,7 +150,7 @@ interface ITreeItemProps {
   shiftOut?: number; // needed to make an outline look right; should be the size of the "details" reveal arrow
 }
 
-const onRenderItem = (depth: number) => (item: IOverflowSetItemProps) => {
+const onRenderItem = (item: IOverflowSetItemProps) => {
   const warningContent = formatMessage(
     'This trigger type is not supported by the RegEx recognizer and will not be fired.'
   );
@@ -160,7 +159,7 @@ const onRenderItem = (depth: number) => (item: IOverflowSetItemProps) => {
     <div
       data-is-focusable
       aria-label={warningContent}
-      css={itemText(depth)}
+      css={itemText}
       role="cell"
       tabIndex={0}
       onBlur={item.onBlur}
@@ -224,7 +223,6 @@ const onRenderOverflowButton = (showIcon: boolean, isActive: boolean) => {
 export const TreeItem: React.FC<ITreeItemProps> = ({
   link,
   isActive,
-  depth,
   onDelete = undefined,
   onSelect,
   icon,
@@ -279,7 +277,6 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         items={[
           {
             key: linkString,
-            depth,
             icon,
             ...link,
           },
@@ -287,7 +284,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         overflowItems={overflowMenu}
         role="row"
         styles={{ item: { flex: 1 } }}
-        onRenderItem={onRenderItem(depth)}
+        onRenderItem={onRenderItem}
         onRenderOverflowButton={onRenderOverflowButton(!link.isRoot, !!isActive)}
       />
     </div>
