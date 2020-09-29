@@ -84,7 +84,7 @@ Extracted entities are passed along to any triggered actions or child dialogs us
 
 When triggered, if LUIS is able to identify a city, the city name will be made available as `@city` within the triggered actions. The entity value can be used directly in expressions and LG templates, or [stored into a memory property](using_memory.md) for later use.
 
-### Regular Expression Recognizer
+### Regular expressions Recognizer
 
 Composer also provides a recognizer that uses regular expressions rather than the LUIS API.
 
@@ -98,7 +98,7 @@ In the example below, a similar `book-flight` intent is defined. However, this w
 
 [Learn more about the RegEx recognizer &rarr;](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/recognizers-rules-steps-reference.md#regex-recognizer)
 
-[Learn more about Regular Expressions &rarr;](https://regexr.com/)
+[Learn more about regular expressions &rarr;](https://regexr.com/)
 
 ## Event Bubbling
 

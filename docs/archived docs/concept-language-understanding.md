@@ -6,7 +6,7 @@ LU has the following characteristics when used in the Bot Framework Composer:
 
 - LU content can be authored in an inline editor or in **User Input** using the [.lu file format][100].
 - LU content is training data for recognizers.
-- Composer currently supports LU technologies such as LUIS and Regular Expression.
+- Composer currently supports LU technologies such as LUIS and regular expressions.
 
 ## Core LU concepts in Composer
 
@@ -31,7 +31,7 @@ To define and use intents in Composer, you will need to:
 4. Publish the training data to LUIS.
 
 > [!NOTE]
-> For additional information on defining intents with the LUIS recognizer and Regular Expression recognizer refer to the [Defining triggers](how-to-define-triggers.md#intent) article.
+> For additional information on defining intents with the LUIS recognizer and regular expressions recognizer refer to the [Defining triggers](how-to-define-triggers.md#intent) article.
 
 ### Utterances
 
@@ -42,7 +42,7 @@ In Composer, utterances are always captured in a markdown list and followed by a
 You may have noticed that LU format is very similar to LG format but there are some key differences.
 
 - LU is for bots to understand user's input (primarily capture **intent** and more)
-- LU is associated with recognizers (LUIS/Regular Expression)
+- LU is associated with recognizers (LUIS/regular expressions)
 - LG is for bots to respond to users as output
 - LG is associated with a language generator
 
@@ -96,7 +96,7 @@ To create the LU content, follow these steps:
 
 ### Set up a recognizer
 
-Composer currently supports two types of recognizers: LUIS (by default) and Regular Expressions. This article focuses solely on the LUIS recognizer. Before setting up a recognizer type, you need to select the dialog you will be using for this purpose. In this example you will use the main dialog to set up LUIS as the recognizer type.
+Composer currently supports two types of recognizers: LUIS (by default) and regular expressions. This article focuses solely on the LUIS recognizer. Before setting up a recognizer type, you need to select the dialog you will be using for this purpose. In this example you will use the main dialog to set up LUIS as the recognizer type.
 
 1. Select the main dialog in the navigation pane. Then you will see the **Language Understanding** section in the bots properties panel on the right side of the Composer window. select **LUIS** from the **Recognizer Type** drop-down list.
    ![select-recognizer](./media/language-understanding/select-recognizer.png)

@@ -59,18 +59,18 @@ You can break pieces of your conversation flow into different dialogs and can ch
    > Each dialog can have its own [recognizer](../concept-dialog.md#recognizer), a component that lets the bot examine an incoming message and decide what it means by choosing between a set of predefined [intents](../concept-language-understanding.md#intents). Different types of recognizers use different techniques to determine which intent, if any, to choose.
 
    > [!NOTE]
-   > For now, you're going to use the [Regular Expression Recognizer](../how-to-define-triggers.md#regular-expression-recognizer), which uses pattern matching. Later, you will use more sophisticated natural language understanding technology from [LUIS](../how-to-define-triggers.md#luis-recognizer).
+   > For now, you're going to use the [regular expressions recognizer](../how-to-define-triggers.md#regular-expression-recognizer), which uses pattern matching. Later, you will use more sophisticated natural language understanding technology from [LUIS](../how-to-define-triggers.md#luis-recognizer).
 
-3. Select **Regular Expression** from the **Recognizer Type** drop-down list.
+3. Select **Regular expressions recognizer** from the **Recognizer Type** drop-down list.
 
-   ![regular expression recognizer](../media/tutorial-weatherbot/02/recognizer-type.png)
+   ![regular expressions recognizer](../media/tutorial-weatherbot/02/recognizer-type.png)
 
 4. Enter **weather** for both **Intent** and **Pattern**. Make sure you press **Enter** in your keyboard to save the setting.
 
    ![intent and pattern](../media/tutorial-weatherbot/02/intent-pattern.png)
 
    > [!NOTE]
-   > This tells the bot to look for the word "weather" anywhere in an incoming message. Regular expression patterns are generally much more complicated, but this is adequate for the purposes of this example.
+   > This tells the bot to look for the word "weather" anywhere in an incoming message. Regular expressions patterns are generally much more complicated, but this is adequate for the purposes of this example.
 
 5. Next, create a new trigger in the **weatherBot** dialog by selecting **+ New Trigger**.
 
