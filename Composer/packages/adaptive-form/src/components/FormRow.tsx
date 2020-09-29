@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { isAdditionalField, FieldProps, UIOptions } from '@bfc/extension-client';
+import { FieldProps, UIOptions } from '@bfc/extension-client';
 import { css, jsx } from '@emotion/core';
 import React from 'react';
 
@@ -58,8 +58,8 @@ export const getRowProps = (rowProps: FormRowProps, field: string) => {
     rawErrors: rawErrors?.[field],
     required: required.includes(field),
     uiOptions: newUiOptions,
-    value: isAdditionalField(newUiOptions) ? value : value && value[field],
-    onChange: isAdditionalField(newUiOptions) ? onChange : handleChange,
+    value: !newUiOptions.additionalField && value ? value[field] : value,
+    onChange: !newUiOptions.additionalField ? handleChange : onChange,
     depth,
     definitions,
     transparentBorder,
