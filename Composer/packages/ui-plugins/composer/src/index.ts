@@ -1,13 +1,21 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { PluginConfig, FormUISchema, UISchema, MenuUISchema, RecognizerUISchema } from '@bfc/extension-client';
+import mergeWith from 'lodash/mergeWith';
+import {
+  PluginConfig,
+  FormUISchema,
+  UISchema,
+  MenuUISchema,
+  FlowUISchema,
+  RecognizerUISchema,
+} from '@bfc/extension-client';
 import { SDKKinds } from '@bfc/shared';
 import formatMessage from 'format-message';
-import mergeWith from 'lodash/mergeWith';
 import { IntentField, RecognizerField, QnAActionsField } from '@bfc/adaptive-form';
 
 import { DefaultMenuSchema } from './defaultMenuSchema';
+import { DefaultFlowSchema } from './defaultFlowSchema';
 import { DefaultRecognizerSchema } from './defaultRecognizerSchema';
 
 const DefaultFormSchema: FormUISchema = {
@@ -16,7 +24,7 @@ const DefaultFormSchema: FormUISchema = {
     description: () => formatMessage('This configures a data driven dialog via a collection of events and actions.'),
     helpLink: 'https://aka.ms/bf-composer-docs-dialog',
     order: ['recognizer', '*'],
-    hidden: ['triggers', 'generator', 'selector', 'schema'],
+    hidden: ['triggers', 'generator', 'selector'],
     properties: {
       recognizer: {
         label: () => formatMessage('Language Understanding'),
@@ -164,17 +172,19 @@ const DefaultFormSchema: FormUISchema = {
 const synthesizeUISchema = (
   formSchema: FormUISchema,
   menuSchema: MenuUISchema,
+  flowSchema: FlowUISchema,
   recognizerSchema: RecognizerUISchema
 ): UISchema => {
   let uischema: UISchema = {};
   uischema = mergeWith(uischema, formSchema, (origin, formOption) => ({ ...origin, form: formOption }));
   uischema = mergeWith(uischema, menuSchema, (origin, menuOption) => ({ ...origin, menu: menuOption }));
+  uischema = mergeWith(uischema, flowSchema, (origin, flowOption) => ({ ...origin, flow: flowOption }));
   uischema = mergeWith(uischema, recognizerSchema, (origin, opt) => ({ ...origin, recognizer: opt }));
   return uischema;
 };
 
 const config: PluginConfig = {
-  uiSchema: synthesizeUISchema(DefaultFormSchema, DefaultMenuSchema, DefaultRecognizerSchema),
+  uiSchema: synthesizeUISchema(DefaultFormSchema, DefaultMenuSchema, DefaultFlowSchema, DefaultRecognizerSchema),
 };
 
 export default config;

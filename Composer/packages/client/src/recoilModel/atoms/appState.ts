@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { atom } from 'recoil';
+import { atom, atomFamily } from 'recoil';
 import { ProjectTemplate, UserSettings } from '@bfc/shared';
 
 import {
@@ -10,6 +10,7 @@ import {
   RuntimeTemplate,
   AppUpdateState,
   BoilerplateVersion,
+  Notification,
   ExtensionConfig,
 } from '../../recoilModel/types';
 import { getUserSettings } from '../utils';
@@ -149,6 +150,18 @@ export const boilerplateVersionState = atom<BoilerplateVersion>({
   key: getFullyQualifiedKey('boilerplateVersion'),
   default: {
     updateRequired: false,
+  },
+});
+
+export const notificationIdsState = atom<string[]>({
+  key: getFullyQualifiedKey('notificationIds'),
+  default: [],
+});
+
+export const notificationsState = atomFamily<Notification, string>({
+  key: getFullyQualifiedKey('notification'),
+  default: (id: string): Notification => {
+    return { id, type: 'info', title: '' };
   },
 });
 
