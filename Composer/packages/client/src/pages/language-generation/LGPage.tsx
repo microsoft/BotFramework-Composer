@@ -91,7 +91,7 @@ const LGPage: React.FC<RouteComponentProps<LGPageProps>> = (props: RouteComponen
 
   const onRenderHeaderContent = () => {
     return (
-      <ActionButton onClick={onToggleEditMode}>
+      <ActionButton data-testid="showcode" onClick={onToggleEditMode}>
         {edit ? formatMessage('Hide code') : formatMessage('Show code')}
       </ActionButton>
     );

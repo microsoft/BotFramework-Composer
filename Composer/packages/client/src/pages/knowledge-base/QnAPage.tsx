@@ -113,7 +113,7 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
   const onRenderHeaderContent = () => {
     if (!isRoot) {
       return (
-        <ActionButton onClick={onToggleEditMode}>
+        <ActionButton data-testid="showcode" onClick={onToggleEditMode}>
           {edit ? formatMessage('Hide code') : formatMessage('Show code')}
         </ActionButton>
       );
