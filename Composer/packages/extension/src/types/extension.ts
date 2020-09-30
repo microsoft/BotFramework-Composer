@@ -1,14 +1,19 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+export type ExtensionContributionPage = {
+  /** Id of cooresponding UI bundle. */
+  bundleId: string;
+  /** Label to dispaly in nav. */
+  label: string;
+  /** Optional icon to use in nav. Available icons [here](https://developer.microsoft.com/en-us/fluentui#/styles/web/icons). */
+  icon?: string;
+  // when?: string;
+};
+
 export type ExtensionContribution = {
   views?: {
-    page?: {
-      id: string;
-      name: string;
-      icon?: string;
-      when?: string;
-    }[];
+    pages?: ExtensionContributionPage[];
     publish?: {
       bundleId?: string;
     };
@@ -25,6 +30,8 @@ export type ExtensionMetadata = {
   id: string;
   /** name field from composer object in package.json, defaults to id */
   name: string;
+  /** description field from package.json */
+  description: string;
   /** currently installed version */
   version: string;
   /** enabled or disabled */
