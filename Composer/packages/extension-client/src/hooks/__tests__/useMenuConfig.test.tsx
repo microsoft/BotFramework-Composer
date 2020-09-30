@@ -20,9 +20,22 @@ const plugins = {
   },
 };
 
+const shellData = {
+  schemas: {
+    sdk: {
+      content: {
+        definitions: {
+          foo: 'foo',
+          bar: 'bar',
+        },
+      },
+    },
+  },
+};
+
 const wrapper: React.FC = ({ children }) => (
   // @ts-expect-error
-  <EditorExtensionContext.Provider value={{ plugins }}>{children}</EditorExtensionContext.Provider>
+  <EditorExtensionContext.Provider value={{ plugins, shellData }}>{children}</EditorExtensionContext.Provider>
 );
 
 describe('useMenuConfig', () => {
