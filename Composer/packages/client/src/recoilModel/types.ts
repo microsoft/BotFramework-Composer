@@ -46,6 +46,8 @@ type ExtensionPublishContribution = {
 };
 
 export type ExtensionPageContribution = {
+  /** plugin id */
+  id: string;
   bundleId: string;
   label: string;
   icon?: string;
