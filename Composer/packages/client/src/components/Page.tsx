@@ -6,6 +6,8 @@ import { jsx, css } from '@emotion/core';
 import React from 'react';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 
+import { LeftRightSplit } from '../components/Split/LeftRightSplit';
+
 import { Toolbar, IToolbarItem } from './Toolbar';
 import { NavTree, INavTreeItem } from './NavTree';
 import { ProjectTree } from './ProjectTree/ProjectTree';
@@ -73,7 +75,7 @@ export const content = css`
   padding: 20px;
   position: relative;
   overflow: auto;
-
+  height: 100%;
   label: PageContent;
 `;
 
@@ -111,18 +113,19 @@ const Page: React.FC<IPageProps> = ({
           {onRenderHeaderContent && <div css={headerContent}>{onRenderHeaderContent()}</div>}
         </div>
         <div css={main} role="main">
-          {/* <NavTree navLinks={navLinks} regionName={navRegionName} /> */}
-          <ProjectTree
-            selected=""
-            selectedDialog=""
-            showDialogs={showDialogs}
-            showTriggers={false}
-            onDelete={(item) => console.log('deleting', item)}
-            onSelect={(item) => console.log('selected', item)}
-          />
-          <div aria-label={mainRegionName} css={content} data-testid="PageContent" role="region">
-            {children}
-          </div>
+          <LeftRightSplit initialLeftGridWidth="20%" minLeftPixels={200} minRightPixels={800}>
+            <ProjectTree
+              selected=""
+              selectedDialog=""
+              showDialogs={showDialogs}
+              showTriggers={false}
+              onDelete={(item) => console.log('deleting', item)}
+              onSelect={(item) => console.log('selected', item)}
+            />
+            <div aria-label={mainRegionName} css={content} data-testid="PageContent" role="region">
+              {children}
+            </div>
+          </LeftRightSplit>
         </div>
       </div>
     </div>

@@ -4,6 +4,7 @@
 import { useRef, useState, useEffect } from 'react';
 import { Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 import { ShellApi } from '@bfc/shared';
+import isEqual from 'lodash/isEqual';
 
 import { querySelectableElements, SelectorElement } from '../utils/cursorTracker';
 import { NodeIndexGenerator } from '../utils/NodeIndexGetter';
@@ -17,11 +18,17 @@ export const useSelectionEffect = (state: { data: any; nodeContext: NodeRenderer
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [selectableElements, setSelectableElements] = useState<SelectorElement[]>(querySelectableElements());
   const nodeIndexGenerator = useRef(new NodeIndexGenerator());
+  const selectedIdsRef = useRef(focusedId ? [focusedId] : []);
+
   const getSelectableIds = () => nodeIndexGenerator.current.getItemList().map((x) => x.key as string);
 
   useEffect((): void => {
-    // Notify container at every selection change.
-    onSelect(selectedIds.length ? selectedIds : focusedId ? [focusedId] : []);
+    const currentSelectedIds = selectedIds.length ? selectedIds : focusedId ? [focusedId] : [];
+    if (!isEqual(currentSelectedIds, selectedIdsRef.current)) {
+      selectedIdsRef.current = currentSelectedIds;
+      // Notify container at every selection change.
+      onSelect(currentSelectedIds);
+    }
   }, [focusedId, selectedIds]);
 
   useEffect((): void => {
@@ -36,6 +43,7 @@ export const useSelectionEffect = (state: { data: any; nodeContext: NodeRenderer
 
   useEffect((): void => {
     nodeIndexGenerator.current.reset();
+    //this one will clean the ids
     setSelectedIds([]);
     setSelectableElements(querySelectableElements());
   }, [data, focusedEvent]);
