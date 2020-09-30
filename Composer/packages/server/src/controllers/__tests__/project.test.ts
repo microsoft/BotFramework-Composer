@@ -333,13 +333,13 @@ describe('skill operation', () => {
     const mockReq = {
       params: { projectId },
       query: {
-        url: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json',
+        url: 'https://not-exist/manifest/manifest-1.0.json',
       },
       body: {},
     } as Request;
     await ProjectController.getSkill(mockReq, mockRes);
-    expect(mockRes.status).toHaveBeenCalledWith(200);
-  }, 10000);
+    expect(mockRes.status).toHaveBeenCalledWith(404);
+  });
 });
 
 // TODO: add a success publish test.
