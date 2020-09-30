@@ -4,8 +4,8 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { FunctionComponent, useMemo, useContext } from 'react';
+import { WidgetContainerProps } from '@bfc/extension-client';
 
-import { WidgetContainerProps } from '../types/flowRenderer.types';
 import { transformIfCondtion } from '../transformers/transformIfCondition';
 import { ifElseLayouter } from '../layouters/ifelseLayouter';
 import { NodeEventTypes } from '../constants/NodeEventTypes';

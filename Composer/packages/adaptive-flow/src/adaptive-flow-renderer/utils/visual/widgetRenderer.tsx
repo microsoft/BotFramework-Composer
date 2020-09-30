@@ -3,10 +3,10 @@
 
 import React from 'react';
 import { BaseSchema } from '@bfc/shared';
-import { FlowEditorWidgetMap } from '@bfc/extension-client';
+import { FlowEditorWidgetMap, FlowWidget, FlowWidgetProp, WidgetEventHandler } from '@bfc/extension-client';
 
-import { FlowWidget, FlowWidgetProp, WidgetEventHandler } from '../../types/flowRenderer.types';
 import { Boundary } from '../../models/Boundary';
+import { evaluateWidgetProp, ActionContextKey } from '../expression/widgetExpressionEvaluator';
 
 export interface UIWidgetContext {
   /** The uniq id of current schema data. Usually a json path. */
@@ -43,13 +43,23 @@ export const renderUIWidget = (
   };
 
   const buildWidgetProp = (rawPropValue: FlowWidgetProp, context: UIWidgetContext) => {
+    // Case 1: For function props, invoke it to transform action data
     if (typeof rawPropValue === 'function') {
       const dataTransformer = rawPropValue;
       const element = dataTransformer(context.data);
       return element;
     }
 
-    // handle recursive widget def
+    // Case 2: For string props, try evaluate it with Expression/LG engine
+    if (typeof rawPropValue === 'string') {
+      try {
+        return evaluateWidgetProp(rawPropValue, { [ActionContextKey]: context.data }, ActionContextKey);
+      } catch (err) {
+        return rawPropValue;
+      }
+    }
+
+    // Case 3: Recursive widget definition
     if (typeof rawPropValue === 'object' && rawPropValue.widget) {
       const widgetSchema = rawPropValue as FlowWidget;
       return renderUIWidget(widgetSchema, widgetMap, context);

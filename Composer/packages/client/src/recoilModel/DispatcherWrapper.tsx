@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useRef, useEffect, useState, Fragment } from 'react';
+import { useRef, useState, Fragment, useLayoutEffect } from 'react';
 // eslint-disable-next-line @typescript-eslint/camelcase
 import { atom, useRecoilTransactionObserver_UNSTABLE, Snapshot, useRecoilState } from 'recoil';
 import once from 'lodash/once';
@@ -72,7 +72,9 @@ const InitDispatcher = ({ onLoad }) => {
 
   const [currentDispatcherState, setDispatcher] = useRecoilState(dispatcherState);
 
-  useEffect(() => {
+  //The render order is different with 0.0.10, the local state will trigger a render before atom value
+  //so use the useLayoutEffect here
+  useLayoutEffect(() => {
     setDispatcher(dispatcherRef.current);
     prepareAxiosWithRecoil(currentDispatcherState);
     onLoad(true);
