@@ -60,8 +60,6 @@ import {
   detailsHeaderStyle,
 } from './styles';
 
-const noOp = () => undefined;
-
 interface QnASectionItem extends QnASection {
   fileId: string;
   dialogId: string | undefined;
@@ -295,7 +293,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
             menuIconProps={{ iconName: 'Edit' }}
             styles={{
               root: {
-                //marginTop: 3,
                 color: NeutralColors.black,
                 visibility: isAllTab ? 'hidden' : 'visiable',
               },
@@ -332,12 +329,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
               <Fragment>
                 {sourceUrl && (
                   <Fragment>
-                    <Link
-                      className={classNames.groupHeaderSourceName}
-                      href={sourceUrl}
-                      target={'_blank'}
-                      onClick={noOp}
-                    >
+                    <Link css={groupNameStyle} href={sourceUrl} target={'_blank'}>
                       {groupName}
                     </Link>
                   </Fragment>
@@ -585,9 +577,9 @@ const TableView: React.FC<TableViewProps> = (props) => {
         key: 'UsedIn',
         name: formatMessage('Used In'),
         fieldName: 'UsedIn',
-        minWidth: 100,
-        maxWidth: 100,
-        isResizable: false,
+        minWidth: 150,
+        maxWidth: 200,
+        isResizable: true,
         data: 'string',
         onRender: (item) => {
           return (
@@ -695,7 +687,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
             {defaultRender({
               ...props,
               isCollapsable: false,
-
               onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
             })}
           </Sticky>

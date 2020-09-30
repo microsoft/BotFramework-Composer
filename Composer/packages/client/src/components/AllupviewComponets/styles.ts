@@ -23,10 +23,6 @@ export const classNames = mergeStyleSets({
     fontWeight: FontWeights.regular,
     alignItems: 'center',
   },
-  groupHeaderSourceName: {
-    marginLeft: '18px',
-    fontSize: '16px',
-  },
   emptyTableList: {
     display: 'flex',
     alignItems: 'center',

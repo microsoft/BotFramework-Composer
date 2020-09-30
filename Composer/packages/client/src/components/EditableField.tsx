@@ -18,8 +18,12 @@ const defaultContainerStyle = (hasFocus) => css`
   :hover .ms-Button-icon {
     visibility: visible;
   }
-  :hover {
-    outline: ${hasFocus ? `2px solid ${SharedColors.cyanBlue10}` : `1px solid ${SharedColors.cyanBlue10}`};
+  .ms-TextField-field {
+    cursor: pointer;
+    padding-left: ${hasFocus ? '8px' : '0px'};
+    :focus {
+      cursor: inherit;
+    }
   }
 `;
 

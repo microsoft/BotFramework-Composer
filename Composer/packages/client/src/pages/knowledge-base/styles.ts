@@ -119,7 +119,7 @@ export const addAlternative = {
   root: {
     fontSize: 12,
     paddingLeft: 0,
-    marginLeft: 3,
+    marginLeft: -5,
     color: SharedColors.cyanBlue10,
     visibility: 'hidden',
   },
@@ -129,7 +129,7 @@ export const addQnAPair = {
   root: {
     fontSize: 12,
     paddingLeft: 0,
-    marginLeft: 65,
+    marginLeft: 57,
     marginTop: -10,
     color: SharedColors.cyanBlue10,
   },
@@ -204,6 +204,11 @@ export const editableFieldQuestion = {
   },
   field: {
     fontSize: FontSizes.size12,
+    selectors: {
+      '::placeholder': {
+        fontSize: FontSizes.size12,
+      },
+    },
   },
 };
 
@@ -220,21 +225,13 @@ export const groupHeader = {
 
 export const groupNameStyle = css`
   margin-top: -5px;
-  margin-left: 16px;
+  margin-left: 8px;
   font-size: ${FontSizes.size16};
+  font-weight: ${FontWeights.semibold};
 `;
 
 export const detailsHeaderStyle = css`
-  .ms-DetailsHeader-cellName {
-    margin-left: 7px;
-  }
   .ms-TooltipHost {
     background: ${NeutralColors.white};
   }
-`;
-
-export const sourceStyle = css`
-  margin-left: 16px;
-  font-weight: ${FontWeights.semibold};
-  font-size: ${FontSizes.size16};
 `;
