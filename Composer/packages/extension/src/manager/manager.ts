@@ -4,7 +4,7 @@
 import path from 'path';
 
 import glob from 'globby';
-import { readJson } from 'fs-extra';
+import { readJson, ensureDir } from 'fs-extra';
 
 import { ExtensionContext } from '../extensionContext';
 import logger from '../logger';
@@ -13,6 +13,8 @@ import { ExtensionBundle, PackageJSON, ExtensionMetadata, ExtensionSearchResult 
 import { npm } from '../utils/npm';
 
 const log = logger.extend('manager');
+
+const SEARCH_CACHE_TIMEOUT = 5 * 60000; // 5 minutes
 
 function processBundles(extensionPath: string, bundles: ExtensionBundle[]) {
   return bundles.map((b) => ({
@@ -25,6 +27,7 @@ function getExtensionMetadata(extensionPath: string, packageJson: PackageJSON): 
   return {
     id: packageJson.name,
     name: packageJson.composer?.name ?? packageJson.name,
+    description: packageJson.description,
     version: packageJson.version,
     enabled: true,
     path: extensionPath,
@@ -36,13 +39,14 @@ function getExtensionMetadata(extensionPath: string, packageJson: PackageJSON): 
 class ExtensionManager {
   private searchCache = new Map<string, ExtensionSearchResult>();
   private _manifest: ExtensionManifestStore | undefined;
+  private _lastSearchTimestamp: Date | undefined;
 
   /**
    * Returns all extensions currently in the extension manifest
    */
-  public getAll() {
+  public getAll(): ExtensionMetadata[] {
     const extensions = this.manifest.getExtensions();
-    return Object.values(extensions);
+    return Object.values(extensions).filter(Boolean) as ExtensionMetadata[];
   }
 
   /**
@@ -58,6 +62,7 @@ class ExtensionManager {
    */
   public async loadAll() {
     await this.seedBuiltinExtensions();
+    await ensureDir(this.remoteDir);
 
     const extensions = Object.entries(this.manifest.getExtensions());
 
@@ -78,7 +83,12 @@ class ExtensionManager {
     log('Installing %s to %s', packageNameAndVersion, this.remoteDir);
 
     try {
-      const { stdout } = await npm('install', packageNameAndVersion, { '--prefix': this.remoteDir });
+      const { stdout } = await npm(
+        'install',
+        packageNameAndVersion,
+        { '--prefix': this.remoteDir },
+        { cwd: this.remoteDir }
+      );
 
       log('%s', stdout);
 
@@ -147,7 +157,7 @@ class ExtensionManager {
     log('Removing %s', id);
 
     try {
-      const { stdout } = await npm('uninstall', id, { '--prefix': this.remoteDir });
+      const { stdout } = await npm('uninstall', id, { '--prefix': this.remoteDir }, { cwd: this.remoteDir });
 
       log('%s', stdout);
 
@@ -163,30 +173,16 @@ class ExtensionManager {
    * @param query The search query
    */
   public async search(query: string) {
-    const { stdout } = await npm('search', `keywords:botframework-composer extension ${query}`, { '--json': '' });
+    await this.updateSearchCache();
 
-    try {
-      const result = JSON.parse(stdout);
-      if (Array.isArray(result)) {
-        result.forEach((searchResult) => {
-          const { name, keywords = [], version, description, links } = searchResult;
-          if (keywords.includes('botframework-composer') && keywords.includes('extension')) {
-            const url = links?.npm ?? '';
-            this.searchCache.set(name, {
-              id: name,
-              version,
-              description,
-              keywords,
-              url,
-            });
-          }
-        });
-      }
-    } catch (err) {
-      log('%O', err);
-    }
+    const results = Array.from(this.searchCache.values()).filter((result) => {
+      return (
+        !this.find(result.id) &&
+        [result.id, result.description, ...result.keywords].some((target) => target.includes(query))
+      );
+    });
 
-    return Array.from(this.searchCache.values());
+    return results;
   }
 
   /**
@@ -285,6 +281,37 @@ class ExtensionManager {
     }
 
     return process.env.COMPOSER_REMOTE_EXTENSIONS_DIR;
+  }
+
+  private async updateSearchCache() {
+    const timeout = new Date(new Date().getTime() - SEARCH_CACHE_TIMEOUT);
+    if (!this._lastSearchTimestamp || this._lastSearchTimestamp < timeout) {
+      const { stdout } = await npm('search', '', {
+        '--json': '',
+        '--searchopts': '"keywords:botframework-composer extension"',
+      });
+
+      try {
+        const result = JSON.parse(stdout);
+        if (Array.isArray(result)) {
+          result.forEach((searchResult) => {
+            const { name, keywords = [], version, description, links } = searchResult;
+            if (keywords.includes('botframework-composer') && keywords.includes('extension')) {
+              const url = links?.npm ?? '';
+              this.searchCache.set(name, {
+                id: name,
+                version,
+                description,
+                keywords,
+                url,
+              });
+            }
+          });
+        }
+      } catch (err) {
+        log('%O', err);
+      }
+    }
   }
 }
 

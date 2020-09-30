@@ -14,9 +14,8 @@ import { skills } from './constants';
 
 const projectId = '123.abc';
 
-const renderSkillEndpointField = ({ value = '', updateSkillSetting = jest.fn() } = {}) => {
+const renderSkillEndpointField = ({ value = {}, updateSkillSetting = jest.fn() } = {}) => {
   const props = {
-    label: 'Skill endpoint',
     value,
   } as any;
 
@@ -41,7 +40,7 @@ describe('Begin Skill Dialog', () => {
     const updateSkillSetting = jest.fn();
     const { baseElement, findByRole } = renderSkillEndpointField({
       updateSkillSetting,
-      value: `=settings.skill['${skills[0].id}'].endpointUrl`,
+      value: { skillEndpoint: `=settings.skill['${skills[0].id}'].endpointUrl` },
     });
 
     const listbox = await findByRole('listbox');
