@@ -208,11 +208,14 @@ class ExtensionManager {
    */
   public async search(query: string) {
     await this.updateSearchCache();
+    const normalizedQuery = query.toLowerCase();
 
     const results = Array.from(this.searchCache.values()).filter((result) => {
       return (
         !this.find(result.id) &&
-        [result.id, result.description, ...result.keywords].some((target) => target.includes(query))
+        [result.id, result.description, ...result.keywords].some((target) =>
+          target.toLowerCase().includes(normalizedQuery)
+        )
       );
     });
 
