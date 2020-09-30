@@ -15,13 +15,15 @@ export function useMenuConfig(): MenuUISchema {
 
   return useMemo(() => {
     const menuSchema = mapValues(uiSchema, 'menu') as MenuUISchema;
-    const implementedMenuSchema = Object.entries(menuSchema).reduce((result, [$kind, menuOpt]) => {
-      // Take those $kinds implemented in both sdk.schema and uischema
-      if (sdkDefinitions[$kind] && menuOpt) {
-        result[$kind] = menuOpt;
+    const implementedMenuSchema = {} as MenuUISchema;
+
+    // Keep those $kinds implemented in both sdk.schema and uischema
+    Object.entries(menuSchema).forEach(([$kind, menuOpt]) => {
+      if (menuOpt && sdkDefinitions[$kind]) {
+        implementedMenuSchema[$kind] = menuOpt;
       }
-      return result;
-    }, {} as MenuUISchema);
+    });
+
     return implementedMenuSchema;
   }, [plugins.uiSchema, sdkSchema]);
 }
