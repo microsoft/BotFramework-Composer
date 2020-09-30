@@ -51,8 +51,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     rollbackToVersion: rollbackToVersionDispatcher,
   } = useRecoilValue(dispatcherState);
 
-  const [addDialogHidden, setAddDialogHidden] = useState(true);
-  const [editDialogHidden, setEditDialogHidden] = useState(true);
+  const [dialogHidden, setDialogHidden] = useState(true);
 
   const [showLog, setShowLog] = useState(false);
   const [publishDialogHidden, setPublishDialogHidden] = useState(true);
@@ -62,11 +61,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const [groups, setGroups] = useState<any[]>([]);
   const [selectedVersion, setSelectedVersion] = useState<IStatus | null>(null);
   const [dialogProps, setDialogProps] = useState({
-    title: formatMessage('Title'),
-    type: DialogType.normal,
-    children: {},
-  });
-  const [editDialogProps, setEditDialogProps] = useState({
     title: formatMessage('Title'),
     type: DialogType.normal,
     children: {},
@@ -94,7 +88,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         iconProps: {
           iconName: 'Add',
         },
-        onClick: () => setAddDialogHidden(false),
+        onClick: () => openAddProfileDialog(),
       },
       align: 'left',
       dataTestid: 'publishPage-Toolbar-Add',
@@ -277,37 +271,45 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     [settings.publishTargets, projectId, botName, editTarget]
   );
 
-  useEffect(() => {
-    setDialogProps({
-      ...PublishProfileDialog.ADD_PROFILE,
-      type: DialogType.normal,
-      children: (
-        <CreatePublishTarget
-          closeDialog={() => setAddDialogHidden(true)}
-          current={null}
-          targets={settings.publishTargets || []}
-          types={publishTypes}
-          updateSettings={savePublishTarget}
-        />
-      ),
-    });
-  }, [publishTypes, savePublishTarget, settings.publishTargets]);
+  const openAddProfileDialog = useMemo(
+    () => () => {
+      setDialogProps({
+        ...PublishProfileDialog.ADD_PROFILE,
+        type: DialogType.normal,
+        children: (
+          <CreatePublishTarget
+            closeDialog={() => setDialogHidden(true)}
+            current={null}
+            targets={settings.publishTargets || []}
+            types={publishTypes}
+            updateSettings={savePublishTarget}
+          />
+        ),
+      });
+      setDialogHidden(false);
+    },
+    [publishTypes, savePublishTarget, settings.publishTargets]
+  );
 
-  useEffect(() => {
-    setEditDialogProps({
-      ...PublishProfileDialog.EDIT_PROFILE,
-      type: DialogType.normal,
-      children: (
-        <CreatePublishTarget
-          closeDialog={() => setEditDialogHidden(true)}
-          current={editTarget ? editTarget.item : null}
-          targets={(settings.publishTargets || []).filter((item) => editTarget && item.name != editTarget.item.name)}
-          types={publishTypes}
-          updateSettings={updatePublishTarget}
-        />
-      ),
-    });
-  }, [editTarget, publishTypes, updatePublishTarget]);
+  const openEditProfileDialog = useMemo(
+    () => (editTarget) => {
+      setDialogProps({
+        ...PublishProfileDialog.EDIT_PROFILE,
+        type: DialogType.normal,
+        children: (
+          <CreatePublishTarget
+            closeDialog={() => setDialogHidden(true)}
+            current={editTarget ? editTarget.item : null}
+            targets={(settings.publishTargets || []).filter((item) => editTarget && item.name != editTarget.item.name)}
+            types={publishTypes}
+            updateSettings={updatePublishTarget}
+          />
+        ),
+      });
+      setDialogHidden(false);
+    },
+    [publishTypes, updatePublishTarget]
+  );
 
   const rollbackToVersion = useMemo(
     () => async (version) => {
@@ -348,7 +350,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const onEdit = async (index: number, item: PublishTarget) => {
     const newItem = { item: item, index: index };
     setEditTarget(newItem);
-    setEditDialogHidden(false);
+    openEditProfileDialog(newItem);
   };
 
   const onDelete = useMemo(
@@ -393,21 +395,12 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     <Fragment>
       <Dialog
         dialogContentProps={dialogProps}
-        hidden={addDialogHidden}
+        hidden={dialogHidden}
         minWidth={'fit-content'}
         modalProps={{ isBlocking: true }}
-        onDismiss={() => setAddDialogHidden(true)}
+        onDismiss={() => setDialogHidden(true)}
       >
         {dialogProps.children}
-      </Dialog>
-      <Dialog
-        dialogContentProps={editDialogProps}
-        hidden={editDialogHidden}
-        minWidth={'fit-content'}
-        modalProps={{ isBlocking: true }}
-        onDismiss={() => setEditDialogHidden(true)}
-      >
-        {editDialogProps.children}
       </Dialog>
       {!publishDialogHidden && (
         <PublishDialog

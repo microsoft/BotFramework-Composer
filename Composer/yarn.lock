@@ -7,6 +7,92 @@
   resolved "https://botbuilder.myget.org/F/botframework-cli/npm/7zip-bin/-/7zip-bin-5.0.3.tgz#bc5b5532ecafd923a61f2fb097e3b108c0106a3f"
   integrity sha1-vFtVMuyv2SOmHy+wl+OxCMAQaj8=
 
+"@azure/arm-appinsights@./plugins/lib/arm-appinsights":
+  version "2.1.0"
+  dependencies:
+    "@azure/ms-rest-azure-js" "2.0.1"
+    "@azure/ms-rest-js" "2.0.7"
+    tslib "^1.9.3"
+
+"@azure/arm-appservice-profile-2019-03-01-hybrid@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@azure/arm-appservice-profile-2019-03-01-hybrid/-/arm-appservice-profile-2019-03-01-hybrid-1.0.0.tgz#36b41dd5ce2d7d07ac8828efb4bc0badf9820c3e"
+  integrity sha512-5hW65PAO3Uhx5V5cIyjvOU+akErhJFm3AtBCA/fAMb/Bj73c5c5HFYJus+CzNoJQyKEE0RubDh7Q3YDjjmXG9g==
+  dependencies:
+    "@azure/ms-rest-azure-js" "^1.3.2"
+    "@azure/ms-rest-js" "^1.8.1"
+    tslib "^1.9.3"
+
+"@azure/arm-appservice@^6.0.0":
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/@azure/arm-appservice/-/arm-appservice-6.1.0.tgz#c2c4c4d50bd9f0eccbd81a268e1f6ec649aa7caa"
+  integrity sha512-CST99Ht+ziZ42zlCpIqKZ2vIrDHBStk9ODIEue08LU+AFIbRuXqR7DFyLv9Q8NldCvzKAXFfCA6LJiJgCYoEWw==
+  dependencies:
+    "@azure/ms-rest-azure-js" "^2.0.1"
+    "@azure/ms-rest-js" "^2.0.4"
+    tslib "^1.10.0"
+
+"@azure/arm-botservice@./plugins/lib/arm-botservice":
+  version "1.0.0"
+  dependencies:
+    "@azure/ms-rest-azure-js" "2.0.1"
+    "@azure/ms-rest-js" "2.0.7"
+    tslib "^1.9.3"
+
+"@azure/arm-cognitiveservices@^5.2.0":
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/@azure/arm-cognitiveservices/-/arm-cognitiveservices-5.2.0.tgz#a1ffde25fe1145a0f4559d0c7a18cf1251e4b2ce"
+  integrity sha512-6+cyoHGPlKgdPW387M20Mys+uE0/gS+MFZh7bUPAag8JyTF/hrSGhWSRQOpNl2BFrMjERJxaUGuaC1/ihoOg+w==
+  dependencies:
+    "@azure/ms-rest-azure-js" "^2.0.1"
+    "@azure/ms-rest-js" "^2.0.4"
+    tslib "^1.10.0"
+
+"@azure/arm-cosmosdb@^9.0.0":
+  version "9.1.0"
+  resolved "https://registry.yarnpkg.com/@azure/arm-cosmosdb/-/arm-cosmosdb-9.1.0.tgz#d57e947b5aa07460f3e136abc25b63613e3757ef"
+  integrity sha512-ZHQTnBSjJ+TUAlXqfc1M23A0622gSSvYVd5gCqWHwG64e/R4zAySDDXcIi0bGYAUv/0nZzKHYulrgYpU+GnDjw==
+  dependencies:
+    "@azure/ms-rest-azure-js" "^2.0.1"
+    "@azure/ms-rest-js" "^2.0.4"
+    tslib "^1.10.0"
+
+"@azure/arm-deploymentmanager@3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@azure/arm-deploymentmanager/-/arm-deploymentmanager-3.0.0.tgz#793ae174d043d2118d520eaec67f0986c319f7a3"
+  integrity sha512-9gv9hUCfAg52Dqxw7W2+B1ytBNitIBEoxd8C1OJnlBH84j5L2S8yLfZsqsyAKbeQE8zkbvVFnrdgO1CS8HUj7g==
+  dependencies:
+    "@azure/ms-rest-azure-js" "^2.0.1"
+    "@azure/ms-rest-js" "^2.0.4"
+    tslib "^1.10.0"
+
+"@azure/arm-resources@2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@azure/arm-resources/-/arm-resources-2.1.0.tgz#bb7a3faca0c717656bef93c6f81ff6a9d1d8fa8b"
+  integrity sha512-WpBQt3QwfulWAgss7r6apfKswc6SS8Z005AhQalx618757dX+0kTiizL5XipDZFWq/nlCN2fFv9ba1m4v5x2tg==
+  dependencies:
+    "@azure/ms-rest-azure-js" "^2.0.1"
+    "@azure/ms-rest-js" "^2.0.4"
+    tslib "^1.10.0"
+
+"@azure/arm-storage@^15.0.0":
+  version "15.1.0"
+  resolved "https://registry.yarnpkg.com/@azure/arm-storage/-/arm-storage-15.1.0.tgz#fa14b5e532babf39b47c5cffe89de5aa062e1f80"
+  integrity sha512-IWomHlT7eEnCSMDHH/z5/XyPHhGAIPmWYgHkIyYB2YQt+Af+hWvE1NIwI79Eeiu+Am4U8BKUsXWmWKqDYh0Srg==
+  dependencies:
+    "@azure/ms-rest-azure-js" "^2.0.1"
+    "@azure/ms-rest-js" "^2.0.4"
+    tslib "^1.10.0"
+
+"@azure/arm-subscriptions@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@azure/arm-subscriptions/-/arm-subscriptions-2.0.0.tgz#4202740b7f65a9d0f16f7903579a615f5de45a92"
+  integrity sha512-+ys2glK5YgwZ9KhwWblfAQIPABtiB5OdKEpPOpcvr7B5ygYTwZuSUNObX9MRu/MyiRo1zDlUvlxHltBphq/bLQ==
+  dependencies:
+    "@azure/ms-rest-azure-js" "^2.0.1"
+    "@azure/ms-rest-js" "^2.0.4"
+    tslib "^1.10.0"
+
 "@azure/cognitiveservices-luis-authoring@4.0.0-preview.1":
   version "4.0.0-preview.1"
   resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@azure/cognitiveservices-luis-authoring/-/@azure/cognitiveservices-luis-authoring-4.0.0-preview.1.tgz#79de764893dc997d95713bb6a0487d887dc78f40"
@@ -15,13 +101,67 @@
     "@azure/ms-rest-js" "^2.0.3"
     tslib "^1.10.0"
 
-"@azure/ms-rest-azure-js@2.0.1":
+"@azure/cosmos@^3.7.4":
+  version "3.9.2"
+  resolved "https://registry.yarnpkg.com/@azure/cosmos/-/cosmos-3.9.2.tgz#2d4ca87bdef5fa1358f022a13305510691147ab0"
+  integrity sha512-nS02/LyjE22osouSJGWw6DqJ34tbkEgAcysrbKyDzyiqdDKNprP8sAU43WGVr6Jxjw8jGBzg6rkHz9A+IvPcdg==
+  dependencies:
+    "@types/debug" "^4.1.4"
+    debug "^4.1.1"
+    fast-json-stable-stringify "^2.0.0"
+    jsbi "^3.1.3"
+    node-abort-controller "^1.0.4"
+    node-fetch "^2.6.0"
+    priorityqueuejs "^1.0.0"
+    semaphore "^1.0.5"
+    tslib "^2.0.0"
+    universal-user-agent "^6.0.0"
+    uuid "^8.1.0"
+
+"@azure/graph@5.0.1":
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/@azure/graph/-/graph-5.0.1.tgz#93b89872ad63d40956ddb664d9bcca46cf958179"
+  integrity sha512-MMge4Uzl0hK/72h4cGESjX3D5jSwV9Ylwp4HiXp0LdF//vFhYLzsnVRfD1cfkMl5nGlbaqOR3mej4QWAeppjig==
+  dependencies:
+    "@azure/ms-rest-azure-js" "^2.0.0"
+    "@azure/ms-rest-js" "^2.0.3"
+    tslib "^1.10.0"
+
+"@azure/ms-rest-azure-env@^1.1.0":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@azure/ms-rest-azure-env/-/ms-rest-azure-env-1.1.2.tgz#8505873afd4a1227ec040894a64fdd736b4a101f"
+  integrity sha512-l7z0DPCi2Hp88w12JhDTtx5d0Y3+vhfE7JKJb9O7sEz71Cwp053N8piTtTnnk/tUor9oZHgEKi/p3tQQmLPjvA==
+
+"@azure/ms-rest-azure-env@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@azure/ms-rest-azure-env/-/ms-rest-azure-env-2.0.0.tgz#45809f89763a480924e21d3c620cd40866771625"
+  integrity sha512-dG76W7ElfLi+fbTjnZVGj+M9e0BIEJmRxU6fHaUQ12bZBe8EJKYb2GV50YWNaP2uJiVQ5+7nXEVj1VN1UQtaEw==
+
+"@azure/ms-rest-azure-js@2.0.1", "@azure/ms-rest-azure-js@^2.0.0", "@azure/ms-rest-azure-js@^2.0.1":
   version "2.0.1"
   resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@azure/ms-rest-azure-js/-/@azure/ms-rest-azure-js-2.0.1.tgz#fa1b38f039b3ee48a9e086a88c8a5b5b7776491c"
   integrity sha1-+hs48Dmz7kip4IaojIpbW3d2SRw=
   dependencies:
     "@azure/ms-rest-js" "^2.0.4"
     tslib "^1.10.0"
+
+"@azure/ms-rest-azure-js@^1.3.2":
+  version "1.3.8"
+  resolved "https://registry.yarnpkg.com/@azure/ms-rest-azure-js/-/ms-rest-azure-js-1.3.8.tgz#96b518223d3baa2496b2981bc07288b3d887486e"
+  integrity sha512-AHLfDTCyIH6wBK6+CpImI6sc9mLZ17ZgUrTx3Rhwv+3Mb3Z73BxormkarfR6Stb6scrBYitxJ27FXyndXlGAYg==
+  dependencies:
+    "@azure/ms-rest-js" "^1.8.10"
+    tslib "^1.9.3"
+
+"@azure/ms-rest-browserauth@0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@azure/ms-rest-browserauth/-/ms-rest-browserauth-0.1.4.tgz#a2b9434c7de08fd3e742b4bfd75427deef1dbab1"
+  integrity sha512-yV7B+dQzvuHwWpS2KJuu+wU56CdPIUBCJQVG8iidCPXp1zCqGSH5HcbmxHzESMSieDrMeybtPeLx/PNA6Y7YYA==
+  dependencies:
+    "@azure/ms-rest-azure-env" "^1.1.0"
+    "@azure/ms-rest-js" "^1.8.1"
+    adal-angular "^1.0.17"
+    tslib "^1.9.3"
 
 "@azure/ms-rest-js@1.7.0":
   version "1.7.0"
@@ -30,6 +170,36 @@
   dependencies:
     "@types/tunnel" "0.0.0"
     axios "^0.18.0"
+    form-data "^2.3.2"
+    tough-cookie "^2.4.3"
+    tslib "^1.9.2"
+    tunnel "0.0.6"
+    uuid "^3.2.1"
+    xml2js "^0.4.19"
+
+"@azure/ms-rest-js@2.0.7":
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/@azure/ms-rest-js/-/ms-rest-js-2.0.7.tgz#3165bb7068387bf36c4c43db85d3662c916fd581"
+  integrity sha512-rQpNxDhyOIyS4E+4sUCBMvjrtbNwB32wH06cC2SFoQM4TR29bIKaTlIC1tMe0K07w9c5tNk/2uUHs6/ld/Z3+A==
+  dependencies:
+    "@types/node-fetch" "^2.3.7"
+    "@types/tunnel" "0.0.1"
+    abort-controller "^3.0.0"
+    form-data "^2.5.0"
+    node-fetch "^2.6.0"
+    tough-cookie "^3.0.1"
+    tslib "^1.10.0"
+    tunnel "0.0.6"
+    uuid "^3.3.2"
+    xml2js "^0.4.19"
+
+"@azure/ms-rest-js@^1.8.1", "@azure/ms-rest-js@^1.8.10":
+  version "1.8.15"
+  resolved "https://registry.yarnpkg.com/@azure/ms-rest-js/-/ms-rest-js-1.8.15.tgz#4267b6b8c00d85301791fe0cf347e0455a807338"
+  integrity sha512-kIB71V3DcrA4iysBbOsYcxd4WWlOE7OFtCUYNfflPODM0lbIR23A236QeTn5iAeYwcHmMjR/TAKp5KQQh/WqoQ==
+  dependencies:
+    "@types/tunnel" "0.0.0"
+    axios "^0.19.0"
     form-data "^2.3.2"
     tough-cookie "^2.4.3"
     tslib "^1.9.2"
@@ -68,6 +238,15 @@
     tunnel "0.0.6"
     uuid "^3.3.2"
     xml2js "^0.4.19"
+
+"@azure/ms-rest-nodeauth@3.0.3":
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/@azure/ms-rest-nodeauth/-/ms-rest-nodeauth-3.0.3.tgz#e485b9c960da718d0476115e9f0ec550ccbba561"
+  integrity sha512-/KAgVV68vkOdrx6O3T6qO7thCep4nPbWzkpNIPFN3P6uzEzDIk6BCGgkzabnmkb2kXaf4+IGHs0UMoXSfN/IgQ==
+  dependencies:
+    "@azure/ms-rest-azure-env" "^2.0.0"
+    "@azure/ms-rest-js" "^2.0.4"
+    adal-node "^0.1.28"
 
 "@babel/cli@7.2.3":
   version "7.2.3"
@@ -3448,7 +3627,7 @@
   resolved "https://registry.yarnpkg.com/@types/debug/-/debug-4.1.2.tgz#84824e9259fc583dd9385635738359c9582f7f82"
   integrity sha512-jkf6UiWUjcOqdQbatbvOm54/YbCdjt3JjiAzT/9KS2XtMmOkYHdKsI5u8fulhbuTUuiqNBfa6J5GSDiwjK+zLA==
 
-"@types/debug@^4.1.5":
+"@types/debug@^4.1.4", "@types/debug@^4.1.5":
   version "4.1.5"
   resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@types/debug/-/@types/debug-4.1.5.tgz#b14efa8852b7768d898906613c23f688713e02cd"
   integrity sha1-sU76iFK3do2JiQZhPCP2iHE+As0=
@@ -3729,6 +3908,11 @@
   version "12.12.30"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-12.12.30.tgz#3501e6f09b954de9c404671cefdbcc5d9d7c45f6"
   integrity sha512-sz9MF/zk6qVr3pAnM0BSQvYIBK44tS75QC5N+VbWSE4DjCV/pJ+UzCW/F+vVnl7TkOPcuwQureKNtSSwjBTaMg==
+
+"@types/node@^8.0.47":
+  version "8.10.64"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.10.64.tgz#0dddc4c53ca4819a32b7478232d8b446ca90e1c6"
+  integrity sha512-/EwBIb+imu8Qi/A3NF9sJ9iuKo7yV+pryqjmeRqaU0C4wBAOhas5mdvoYeJ5PCKrh6thRSJHdoasFqh3BQGILA==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.0"
@@ -4434,6 +4618,26 @@ acorn@^7.1.1:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-7.2.0.tgz#17ea7e40d7c8640ff54a694c889c26f31704effe"
   integrity sha512-apwXVmYVpQ34m/i71vrApRrRKCWQnZZF1+npOD0WV5xZFfwWOmKGQ2RWlfdy9vWITsenisM8M0Qeq8agcFHNiQ==
 
+adal-angular@^1.0.17:
+  version "1.0.17"
+  resolved "https://registry.yarnpkg.com/adal-angular/-/adal-angular-1.0.17.tgz#6e936e0e41f91d3b2a88e7ffca9c2f6f6f562cc4"
+  integrity sha1-bpNuDkH5HTsqiOf/ypwvb29WLMQ=
+
+adal-node@^0.1.28:
+  version "0.1.28"
+  resolved "https://registry.yarnpkg.com/adal-node/-/adal-node-0.1.28.tgz#468c4bb3ebbd96b1270669f4b9cba4e0065ea485"
+  integrity sha1-RoxLs+u9lrEnBmn0ucuk4AZepIU=
+  dependencies:
+    "@types/node" "^8.0.47"
+    async ">=0.6.0"
+    date-utils "*"
+    jws "3.x.x"
+    request ">= 2.52.0"
+    underscore ">= 1.3.1"
+    uuid "^3.1.0"
+    xmldom ">= 0.1.x"
+    xpath.js "~1.1.0"
+
 adaptive-expressions@4.10.0-preview-147186:
   version "4.10.0-preview-147186"
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adaptive-expressions/-/adaptive-expressions-4.10.0-preview-147186.tgz#4468fcb00a27d955d4f1fd46566fda5a46baef87"
@@ -4997,6 +5201,11 @@ async@0.9.x:
   resolved "https://botbuilder.myget.org/F/botframework-cli/npm/async/-/async-0.9.2.tgz#aea74d5e61c1f899613bf64bda66d4c78f2fd17d"
   integrity sha1-rqdNXmHB+JlhO/ZL2mbUx48v0X0=
 
+async@>=0.6.0, async@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/async/-/async-3.2.0.tgz#b3a2685c5ebb641d3de02d161002c60fc9f85720"
+  integrity sha512-TR2mEZFVOj2pLStYxLht7TyfuRzaydfpxr3k9RpHIzMgw7A64dzsdqCxH1WJyQdoe8T10nDXd9wnEigmiuHIZw==
+
 async@^2.5.0:
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/async/-/async-2.6.2.tgz#18330ea7e6e313887f5d2f2a904bac6fe4dd5381"
@@ -5010,11 +5219,6 @@ async@^2.6.2:
   integrity sha512-zflvls11DCy+dQWzTW2dzuilv8Z5X/pjfmZOWba6TNIVDm+2UDaJmXSOXlasHKfNBs8oo3M0aT50fDEWfKZjXg==
   dependencies:
     lodash "^4.17.14"
-
-async@^3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/async/-/async-3.2.0.tgz#b3a2685c5ebb641d3de02d161002c60fc9f85720"
-  integrity sha512-TR2mEZFVOj2pLStYxLht7TyfuRzaydfpxr3k9RpHIzMgw7A64dzsdqCxH1WJyQdoe8T10nDXd9wnEigmiuHIZw==
 
 asynckit@^0.4.0:
   version "0.4.0"
@@ -5083,7 +5287,7 @@ axios@^0.18.0:
     follow-redirects "1.5.10"
     is-buffer "^2.0.2"
 
-axios@^0.19.2:
+axios@^0.19.0, axios@^0.19.2:
   version "0.19.2"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.19.2.tgz#3ea36c5d8818d0d5f8a8a97a6d36b86cdc00cb27"
   integrity sha512-fjgm5MvRHLhx+osE2xoekY70AhARk3a6hkN+3Io1jc00jtquGvxYlKlsFUhmUET0V5te6CcZI7lcv2Ym61mjHA==
@@ -7960,6 +8164,11 @@ date-now@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/date-now/-/date-now-0.1.4.tgz#eaf439fd4d4848ad74e5cc7dbef200672b9e345b"
   integrity sha1-6vQ5/U1ISK105cx9vvIAZyueNFs=
+
+date-utils@*:
+  version "1.2.21"
+  resolved "https://registry.yarnpkg.com/date-utils/-/date-utils-1.2.21.tgz#61fb16cdc1274b3c9acaaffe9fc69df8720a2b64"
+  integrity sha1-YfsWzcEnSzyayq/+n8ad+HIKK2Q=
 
 debug@2.6.9, debug@^2.1.1, debug@^2.1.2, debug@^2.2.0, debug@^2.3.3, debug@^2.6.0, debug@^2.6.9:
   version "2.6.9"
@@ -12210,6 +12419,11 @@ js-yaml@^3.13.1:
     argparse "^1.0.7"
     esprima "^4.0.0"
 
+jsbi@^3.1.3:
+  version "3.1.4"
+  resolved "https://registry.yarnpkg.com/jsbi/-/jsbi-3.1.4.tgz#9654dd02207a66a4911b4e4bb74265bc2cbc9dd0"
+  integrity sha512-52QRRFSsi9impURE8ZUbzAMCLjPm4THO7H2fcuIvaaeFTbSysvkodbQQXIVsNgq/ypDbq6dJiuGKL0vZ/i9hUg==
+
 jsbn@~0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/jsbn/-/jsbn-0.1.1.tgz#a5e654c2e5a2deb5f201d96cefbca80c0ef2f513"
@@ -12476,7 +12690,7 @@ jwks-rsa@^1.6.0:
     ms "^2.1.1"
     request "^2.88.0"
 
-jws@^3.2.2:
+jws@3.x.x, jws@^3.2.2:
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/jws/-/jws-3.2.2.tgz#001099f3639468c9414000e99995fa52fb478304"
   integrity sha512-YHlZCB6lMTllWDtSPHz/ZXTsi8S00usEV6v1tjq8tOUZzw7DpSDWVXjXDre6ed1w/pd495ODpHZYSdkRTsa0HA==
@@ -13665,6 +13879,11 @@ no-case@^2.2.0:
   integrity sha512-rmTZ9kz+f3rCvK2TD1Ue/oZlns7OGoIWP4fc3llxxRXlOkHKoWPPWJOfFYpITabSow43QJbRIoHQXtt10VldyQ==
   dependencies:
     lower-case "^1.1.1"
+
+node-abort-controller@^1.0.4:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/node-abort-controller/-/node-abort-controller-1.1.0.tgz#8a734a631b022af29963be7245c1483cbb9e070d"
+  integrity sha512-dEYmUqjtbivotqjraOe8UvhT/poFfog1BQRNsZm/MSEDDESk2cQ1tvD8kGyuN07TM/zoW+n42odL8zTeJupYdQ==
 
 node-fetch@^1.0.1:
   version "1.7.3"
@@ -15561,6 +15780,11 @@ pretty-format@^26.4.2:
     ansi-styles "^4.0.0"
     react-is "^16.12.0"
 
+priorityqueuejs@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/priorityqueuejs/-/priorityqueuejs-1.0.0.tgz#2ee4f23c2560913e08c07ce5ccdd6de3df2c5af8"
+  integrity sha1-LuTyPCVgkT4IwHzlzN1t498sWvg=
+
 private@^0.1.6, private@^0.1.8:
   version "0.1.8"
   resolved "https://registry.yarnpkg.com/private/-/private-0.1.8.tgz#2381edb3689f7a53d653190060fcf822d2f368ff"
@@ -16447,6 +16671,32 @@ request-promise@^4.2.2:
     stealthy-require "^1.1.1"
     tough-cookie "^2.3.3"
 
+"request@>= 2.52.0", request@^2.88.2:
+  version "2.88.2"
+  resolved "https://registry.yarnpkg.com/request/-/request-2.88.2.tgz#d73c918731cb5a87da047e207234146f664d12b3"
+  integrity sha512-MsvtOrfG9ZcrOwAW+Qi+F6HbD0CWXEh9ou77uOb7FM2WPhwT7smM833PzanhJLsgXjN89Ir6V2PczXNnMpwKhw==
+  dependencies:
+    aws-sign2 "~0.7.0"
+    aws4 "^1.8.0"
+    caseless "~0.12.0"
+    combined-stream "~1.0.6"
+    extend "~3.0.2"
+    forever-agent "~0.6.1"
+    form-data "~2.3.2"
+    har-validator "~5.1.3"
+    http-signature "~1.2.0"
+    is-typedarray "~1.0.0"
+    isstream "~0.1.2"
+    json-stringify-safe "~5.0.1"
+    mime-types "~2.1.19"
+    oauth-sign "~0.9.0"
+    performance-now "^2.1.0"
+    qs "~6.5.2"
+    safe-buffer "^5.1.2"
+    tough-cookie "~2.5.0"
+    tunnel-agent "^0.6.0"
+    uuid "^3.3.2"
+
 request@^2.86.0, request@^2.88.0:
   version "2.88.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.88.0.tgz#9c2fca4f7d35b592efe57c7f0a55e81052124fef"
@@ -16470,32 +16720,6 @@ request@^2.86.0, request@^2.88.0:
     qs "~6.5.2"
     safe-buffer "^5.1.2"
     tough-cookie "~2.4.3"
-    tunnel-agent "^0.6.0"
-    uuid "^3.3.2"
-
-request@^2.88.2:
-  version "2.88.2"
-  resolved "https://registry.yarnpkg.com/request/-/request-2.88.2.tgz#d73c918731cb5a87da047e207234146f664d12b3"
-  integrity sha512-MsvtOrfG9ZcrOwAW+Qi+F6HbD0CWXEh9ou77uOb7FM2WPhwT7smM833PzanhJLsgXjN89Ir6V2PczXNnMpwKhw==
-  dependencies:
-    aws-sign2 "~0.7.0"
-    aws4 "^1.8.0"
-    caseless "~0.12.0"
-    combined-stream "~1.0.6"
-    extend "~3.0.2"
-    forever-agent "~0.6.1"
-    form-data "~2.3.2"
-    har-validator "~5.1.3"
-    http-signature "~1.2.0"
-    is-typedarray "~1.0.0"
-    isstream "~0.1.2"
-    json-stringify-safe "~5.0.1"
-    mime-types "~2.1.19"
-    oauth-sign "~0.9.0"
-    performance-now "^2.1.0"
-    qs "~6.5.2"
-    safe-buffer "^5.1.2"
-    tough-cookie "~2.5.0"
     tunnel-agent "^0.6.0"
     uuid "^3.3.2"
 
@@ -16882,6 +17106,11 @@ selfsigned@1.10.8, selfsigned@^1.10.7:
   integrity sha512-2P4PtieJeEwVgTU9QEcwIRDQ/mXJLX8/+I3ur+Pg16nS8oNbrGxEso9NyYWy8NAmXiNl4dlAp5MwoNeCWzON4w==
   dependencies:
     node-forge "^0.10.0"
+
+semaphore@^1.0.5:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/semaphore/-/semaphore-1.1.0.tgz#aaad8b86b20fe8e9b32b16dc2ee682a8cd26a8aa"
+  integrity sha512-O4OZEaNtkMd/K0i6js9SL+gqy0ZCBMgUvlSqHKi4IBdjhe7wB8pwztUk1BbZ1fmrvpwFrPbHzqd2w5pTcJH6LA==
 
 semver-compare@^1.0.0:
   version "1.0.0"
@@ -18565,6 +18794,11 @@ undefsafe@^2.0.2:
   dependencies:
     debug "^2.2.0"
 
+"underscore@>= 1.3.1":
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.11.0.tgz#dd7c23a195db34267186044649870ff1bab5929e"
+  integrity sha512-xY96SsN3NA461qIRKZ/+qox37YXPtSBswMGfiNptr+wrt6ds4HaMw23TP612fEyGekRE6LNRiLYr/aqbHXNedw==
+
 underscore@~1.8.3:
   version "1.8.3"
   resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.8.3.tgz#4f3fb53b106e6097fcf9cb4109f2a5e9bdfa5022"
@@ -18657,6 +18891,11 @@ unist-util-stringify-position@^1.0.0, unist-util-stringify-position@^1.1.1:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/unist-util-stringify-position/-/unist-util-stringify-position-1.1.2.tgz#3f37fcf351279dcbca7480ab5889bb8a832ee1c6"
   integrity sha512-pNCVrk64LZv1kElr0N1wPiHEUoXNVFERp+mlTg/s9R5Lwg87f9bM/3sQB99w+N9D/qnM9ar3+AKDBwo/gm/iQQ==
+
+universal-user-agent@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/universal-user-agent/-/universal-user-agent-6.0.0.tgz#3381f8503b251c0d9cd21bc1de939ec9df5480ee"
+  integrity sha512-isyNax3wXoKaulPDZWHQqbmIx1k2tb9fb3GGDBRxCscfYV2Ch7WxPArBsFEG8s/safwXTT7H4QGhaIkTp9447w==
 
 universalify@^0.1.0:
   version "0.1.2"
@@ -18852,7 +19091,7 @@ uuid@^3.0.0, uuid@^3.2.1, uuid@^3.3.2:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
   integrity sha512-yXJmeNaw3DnnKAOKJE51sL/ZaYfWJRl1pK9dr19YFCu0ObS231AB1/LbqTKRAQ5kw8A90rA6fr4riOUpTZvQZA==
 
-uuid@^3.4.0:
+uuid@^3.1.0, uuid@^3.4.0:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
@@ -18862,7 +19101,7 @@ uuid@^7.0.3:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-7.0.3.tgz#c5c9f2c8cf25dc0a372c4df1441c41f5bd0c680b"
   integrity sha512-DPSke0pXhTZgoF/d+WSt2QaKMCFSfx7QegxEWT+JOuHF5aWrKEn0G+ztjuJg/gG8/ItK+rbPCD/yNv8yyih6Cg==
 
-uuid@^8.3.0:
+uuid@^8.1.0, uuid@^8.3.0:
   version "8.3.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.0.tgz#ab738085ca22dc9a8c92725e459b1d507df5d6ea"
   integrity sha512-fX6Z5o4m6XsXBdli9g7DtWgAx+osMsRRZFKma1mIUsLCz6vRvv+pz5VNbyu9UEDzpMWulZfvpgb/cmDXVulYFQ==
@@ -19722,10 +19961,20 @@ xmlchars@^2.2.0:
   resolved "https://registry.yarnpkg.com/xmlchars/-/xmlchars-2.2.0.tgz#060fe1bcb7f9c76fe2a17db86a9bc3ab894210cb"
   integrity sha512-JZnDKK8B0RCDw84FNdDAIpZK+JuJw+s7Lz8nksI7SIuU3UXJJslUthsi+uWBUYOwPFwW7W7PRLRfUKpxjtjFCw==
 
+"xmldom@>= 0.1.x":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/xmldom/-/xmldom-0.3.0.tgz#e625457f4300b5df9c2e1ecb776147ece47f3e5a"
+  integrity sha512-z9s6k3wxE+aZHgXYxSTpGDo7BYOUfJsIRyoZiX6HTjwpwfS2wpQBQKa2fD+ShLyPkqDYo5ud7KitmLZ2Cd6r0g==
+
 xmlhttprequest@1:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/xmlhttprequest/-/xmlhttprequest-1.8.0.tgz#67fe075c5c24fef39f9d65f5f7b7fe75171968fc"
   integrity sha1-Z/4HXFwk/vOfnWX197f+dRcZaPw=
+
+xpath.js@~1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/xpath.js/-/xpath.js-1.1.0.tgz#3816a44ed4bb352091083d002a383dd5104a5ff1"
+  integrity sha512-jg+qkfS4K8E7965sqaUl8mRngXiKb3WZGfONgE18pr03FUQiuSV6G+Ej4tS55B+rIQSFEIw3phdVAQ4pPqNWfQ==
 
 xregexp@^4.3.0:
   version "4.3.0"
