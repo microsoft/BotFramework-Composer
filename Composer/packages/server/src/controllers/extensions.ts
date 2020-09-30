@@ -9,6 +9,7 @@ interface AddExtensionRequest extends Request {
   body: {
     id?: string;
     version?: string;
+    path?: string;
   };
 }
 
@@ -53,17 +54,33 @@ export async function listExtensions(req: Request, res: Response) {
 }
 
 export async function addExtension(req: AddExtensionRequest, res: Response) {
-  const { id, version } = req.body;
+  const { id, version, path } = req.body;
 
-  if (!id) {
-    res.status(400).json({ error: '`id` is missing from body' });
-    return;
+  let installedId: string | null = null;
+
+  if (path) {
+    if (id) {
+      res.status(400).json({ error: '`id` and `path` cannot be used together.' });
+      return;
+    }
+
+    installedId = await ExtensionManager.installLocal(path);
+  } else {
+    if (!id) {
+      res.status(400).json({ error: '`id` is missing from body' });
+      return;
+    }
+
+    installedId = await ExtensionManager.installRemote(id, version);
   }
 
-  await ExtensionManager.installRemote(id, version);
-  await ExtensionManager.load(id);
-  const extension = ExtensionManager.find(id);
-  res.json(presentExtension(extension));
+  if (installedId) {
+    await ExtensionManager.load(installedId);
+    const extension = ExtensionManager.find(installedId);
+    res.json(presentExtension(extension));
+  } else {
+    res.status(500).json({ error: 'Unable to install extension.' });
+  }
 }
 
 export async function toggleExtension(req: ToggleExtensionRequest, res: Response) {
