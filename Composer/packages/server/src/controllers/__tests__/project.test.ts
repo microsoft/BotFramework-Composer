@@ -335,7 +335,7 @@ describe('skill operation', () => {
 
   it('should retrieve skill manifest', async () => {
     mockSendRequest.mockResolvedValue({});
-    const url = 'https://not-exist/manifest/manifest-1.0.json';
+    const url = 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json';
 
     const mockReq = {
       params: { projectId },
@@ -345,13 +345,12 @@ describe('skill operation', () => {
       body: {},
     } as Request;
     await ProjectController.getSkill(mockReq, mockRes);
-
-    expect(mockRes.status).toHaveBeenCalledWith(404);
+    expect(mockRes.status).toHaveBeenCalledWith(200);
     expect(mockSendRequest).toHaveBeenCalledWith({
       url,
       method: 'GET',
     });
-  });
+  }, 10000);
 });
 
 // TODO: add a success publish test.
