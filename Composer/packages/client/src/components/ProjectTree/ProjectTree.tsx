@@ -2,14 +2,13 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import React, { useCallback, useState, Fragment } from 'react';
+import React, { useCallback, useState } from 'react';
 import { jsx, css } from '@emotion/core';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
 import cloneDeep from 'lodash/cloneDeep';
 import formatMessage from 'format-message';
 import { DialogInfo, ITrigger } from '@bfc/shared';
-import { Resizable, ResizeCallback } from 're-resizable';
 import debounce from 'lodash/debounce';
 import { useRecoilValue } from 'recoil';
 import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
@@ -35,7 +34,6 @@ const searchBox: ISearchBoxStyles = {
 const root = css`
   width: 100%;
   height: 100%;
-  border-right: 1px solid #c4c4c4;
   box-sizing: border-box;
   overflow-y: auto;
   overflow-x: hidden;
@@ -219,10 +217,6 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
     }
   };
 
-  const handleResize: ResizeCallback = (_e, _dir, _ref, d) => {
-    updateUserSettings({ dialogNavWidth: currentWidth + d.width });
-  };
-
   function filterMatch(scope: string) {
     return scope.toLowerCase().includes(filter.toLowerCase());
   }
@@ -283,35 +277,25 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
       : projectCollection.map(createBotSubtree);
 
   return (
-    <Fragment>
-      <Resizable
-        enable={{
-          right: true,
-        }}
-        maxWidth={500}
-        minWidth={180}
-        size={{ width: currentWidth, height: 'auto' }}
-        onResizeStop={handleResize}
-      >
+    <div
+      aria-label={formatMessage('Navigation pane')}
+      className="ProjectTree"
+      css={root}
+      data-testid="ProjectTree"
+      role="region"
+    >
+      <FocusZone isCircularNavigation direction={FocusZoneDirection.vertical}>
+        <SearchBox
+          underlined
+          ariaLabel={formatMessage('Type dialog name')}
+          iconProps={{ iconName: 'Filter' }}
+          placeholder={formatMessage('Filter Dialog')}
+          styles={searchBox}
+          onChange={onFilter}
+        />
         <div
-          aria-label={formatMessage('Navigation pane')}
-          className="ProjectTree"
-          css={root}
-          data-testid="ProjectTree"
-          role="region"
-        >
-          <FocusZone isCircularNavigation direction={FocusZoneDirection.vertical}>
-            <SearchBox
-              underlined
-              ariaLabel={formatMessage('Type dialog name')}
-              iconProps={{ iconName: 'Filter' }}
-              placeholder={formatMessage('Filter Dialog')}
-              styles={searchBox}
-              onChange={onFilter}
-            />
-            <div
-              aria-label={formatMessage(
-                `{
+          aria-label={formatMessage(
+            `{
             dialogNum, plural,
                 =0 {No bots}
                 =1 {One bot}
@@ -322,14 +306,12 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
                   0 {}
                 other {Press down arrow key to navigate the search results}
             }`,
-                { dialogNum: projectCollection.length }
-              )}
-              aria-live={'polite'}
-            />
-            {projectTree}
-          </FocusZone>
-        </div>
-      </Resizable>
-    </Fragment>
+            { dialogNum: projectCollection.length }
+          )}
+          aria-live={'polite'}
+        />
+        {projectTree}
+      </FocusZone>
+    </div>
   );
 };

@@ -10,6 +10,7 @@ import { RequireAuth } from '../RequireAuth';
 import { ErrorBoundary } from '../ErrorBoundary';
 import { Conversation } from '../Conversation';
 import { ProjectTree } from '../ProjectTree/ProjectTree';
+import { LeftRightSplit } from '../Split/LeftRightSplit';
 
 import Routes from './../../router';
 import { applicationErrorState, dispatcherState, currentProjectIdState, currentModeState } from './../../recoilModel';
@@ -43,6 +44,12 @@ export const RightPanel = () => {
   const projectId = useRecoilValue(currentProjectIdState);
   const currentMode = useRecoilValue(currentModeState);
 
+  const conversation = (
+    <Conversation>
+      <Routes component={Content} />
+    </Conversation>
+  );
+
   return (
     <div css={rightPanel}>
       <ErrorBoundary
@@ -52,18 +59,20 @@ export const RightPanel = () => {
       >
         <RequireAuth>
           <div css={{ display: 'flex', flexDirection: 'row' }}>
-            {SHOW_TREE.includes(currentMode) && (
-              <ProjectTree
-                selected={'testg'}
-                selectedDialog={'test'}
-                showTriggers={currentMode === 'design'}
-                onDelete={(item) => console.log('deleting', item)}
-                onSelect={(item) => console.log('selected', item)}
-              />
+            {SHOW_TREE.includes(currentMode) ? (
+              <LeftRightSplit initialLeftGridWidth="200px" minLeftPixels={200} minRightPixels={800}>
+                <ProjectTree
+                  selected={'testg'}
+                  selectedDialog={'test'}
+                  showTriggers={currentMode === 'design'}
+                  onDelete={(item) => console.log('deleting', item)}
+                  onSelect={(item) => console.log('selected', item)}
+                />
+                {conversation}
+              </LeftRightSplit>
+            ) : (
+              conversation
             )}
-            <Conversation>
-              <Routes component={Content} />
-            </Conversation>
           </div>
         </RequireAuth>
       </ErrorBoundary>
