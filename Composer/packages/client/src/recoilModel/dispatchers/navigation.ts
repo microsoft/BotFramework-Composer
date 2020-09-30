@@ -65,7 +65,7 @@ export const navigationDispatcher = () => {
 
         if (typeof beginDialogIndex !== 'undefined' && beginDialogIndex >= 0) {
           path = createSelectedPath(beginDialogIndex);
-          path = encodeArrayPathToDesignerPath(currentDialog?.content, path) ?? path;
+          path = encodeArrayPathToDesignerPath(currentDialog?.content, path);
           updatedBreadcrumb.push({ dialogId, selected: '', focused: '' });
         }
       }
@@ -92,7 +92,7 @@ export const navigationDispatcher = () => {
 
       const dialogs = await snapshot.getPromise(dialogsState(projectId));
       const currentDialog = dialogs.find(({ id }) => id === dialogId);
-      const encodedSelectPath = encodeArrayPathToDesignerPath(currentDialog?.content, selectPath) ?? selectPath;
+      const encodedSelectPath = encodeArrayPathToDesignerPath(currentDialog?.content, selectPath);
       const currentUri = convertPathToUrl(projectId, dialogId, encodedSelectPath);
 
       if (checkUrl(currentUri, projectId, designPageLocation)) return;
@@ -144,10 +144,15 @@ export const navigationDispatcher = () => {
       breadcrumb: BreadcrumbItem[] = []
     ) => {
       set(currentProjectIdState, projectId);
-      const search = getUrlSearch(selectPath, focusPath);
+
+      const dialogs = await snapshot.getPromise(dialogsState(projectId));
+      const currentDialog = dialogs.find(({ id }) => id === dialogId)?.content;
+      const encodedSelectPath = encodeArrayPathToDesignerPath(currentDialog, selectPath);
+      const encodedFocusPath = encodeArrayPathToDesignerPath(currentDialog, focusPath);
+      const search = getUrlSearch(encodedSelectPath, encodedFocusPath);
       const designPageLocation = await snapshot.getPromise(designPageLocationState(projectId));
       if (search) {
-        const currentUri = `/bot/${projectId}/dialogs/${dialogId}${getUrlSearch(selectPath, focusPath)}`;
+        const currentUri = `/bot/${projectId}/dialogs/${dialogId}${search}`;
 
         if (checkUrl(currentUri, projectId, designPageLocation)) return;
         navigateTo(currentUri, { state: { breadcrumb } });

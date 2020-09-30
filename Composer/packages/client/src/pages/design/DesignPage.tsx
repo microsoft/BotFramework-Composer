@@ -194,8 +194,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       const focused = decodeDesignerPathToArrayPath(dialogData, params.get('focused') ?? '');
 
       //make sure focusPath always valid
-      const focusPath = getFocusPath(selected, focused);
-      const data = getDialogData(dialogMap, dialogId, focusPath);
+      const data = getDialogData(dialogMap, dialogId, getFocusPath(selected, focused));
       if (typeof data === 'undefined') {
         const { id } = dialogs.find(({ id }) => id === dialogId) || dialogs.find(({ isRoot }) => isRoot) || {};
         /**
