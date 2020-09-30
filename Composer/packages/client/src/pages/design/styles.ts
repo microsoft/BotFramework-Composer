@@ -8,7 +8,7 @@ import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 export const pageRoot = css`
   height: 100%;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 
   label: DesignPageContainer;
 `;
@@ -17,7 +17,6 @@ export const contentWrapper = css`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  height: 100%;
   label: DesignPageContent;
 `;
 
