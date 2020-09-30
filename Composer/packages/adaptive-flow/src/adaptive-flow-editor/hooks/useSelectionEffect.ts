@@ -43,6 +43,7 @@ export const useSelectionEffect = (state: { data: any; nodeContext: NodeRenderer
 
   useEffect((): void => {
     nodeIndexGenerator.current.reset();
+    //this one will clean the ids
     setSelectedIds([]);
     setSelectableElements(querySelectableElements());
   }, [data, focusedEvent]);
