@@ -8,12 +8,13 @@ import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcru
 import formatMessage from 'format-message';
 import { globalHistory, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
-import { DialogInfo, PromptTab, getEditorAPI, registerEditorAPI } from '@bfc/shared';
+import { DialogInfo, PromptTab, getEditorAPI, registerEditorAPI, FieldNames } from '@bfc/shared';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import { EditorExtension, useTriggerApi, PluginConfig } from '@bfc/extension-client';
 import { useRecoilValue } from 'recoil';
 
+import { LeftRightSplit } from '../../components/Split/LeftRightSplit';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TestController } from '../../components/TestController/TestController';
 import { DialogDeleting } from '../../constants';
@@ -554,8 +555,15 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       regEx: '',
       triggerPhrases: '',
     };
-    if (dialogId) {
-      createTrigger(dialogId, formData);
+    const dialog = dialogs.find((d) => d.id === dialogId);
+    if (dialogId && dialog) {
+      const url = `/bot/${projectId}/knowledge-base/${dialogId}`;
+      const triggers = get(dialog, FieldNames.Events, []);
+      if (triggers.some((t) => t.type === qnaMatcherKey)) {
+        navigateTo(url);
+      } else {
+        createTrigger(dialogId, formData, url);
+      }
       // import qna from urls
       if (urls.length > 0) {
         await importQnAFromUrls({ id: `${dialogId}.${locale}`, urls, projectId });
@@ -579,64 +587,68 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   return (
     <React.Fragment>
       <div css={pageRoot}>
-        <ProjectTree
-          dialogId={dialogId}
-          dialogs={dialogs}
-          selected={selected}
-          onDeleteDialog={handleDeleteDialog}
-          onDeleteTrigger={handleDeleteTrigger}
-          onSelect={(...props) => handleSelect(projectId, ...props)}
-        />
-        <div css={contentWrapper} role="main">
-          <div css={{ position: 'relative' }} data-testid="DesignPage-ToolBar">
-            <span
-              ref={addNewBtnRef}
-              css={{ width: 120, height: '100%', position: 'absolute', left: 0, visibility: 'hidden' }}
-              data-testid="CoachmarkRef-AddNew"
-            />
-            <Toolbar toolbarItems={toolbarItems} />
-          </div>
-          <Conversation css={editorContainer}>
-            <div css={editorWrapper}>
-              <div aria-label={formatMessage('Authoring canvas')} css={visualPanel} role="region">
-                {breadcrumbItems}
-                {dialogJsonVisible ? (
-                  <JsonEditor
-                    key={'dialogjson'}
-                    editorSettings={userSettings.codeEditor}
-                    id={currentDialog.id}
-                    schema={schemas.sdk.content}
-                    value={currentDialog.content || undefined}
-                    onChange={(data) => {
-                      updateDialog({ id: currentDialog.id, content: data, projectId });
-                    }}
-                  />
-                ) : withWarning ? (
-                  warningIsVisible && (
-                    <WarningMessage
-                      okText={formatMessage('Change Recognizer')}
-                      onCancel={() => {
-                        setWarningIsVisible(false);
-                      }}
-                      onOk={() => navigateTo(`/bot/${projectId}/knowledge-base/all`)}
-                    />
-                  )
-                ) : (
-                  <EditorExtension plugins={pluginConfig} projectId={projectId} shell={shellForFlowEditor}>
-                    <VisualEditor
-                      openNewTriggerModal={openNewTriggerModal}
-                      onBlur={() => setFlowEditorFocused(false)}
-                      onFocus={() => setFlowEditorFocused(true)}
-                    />
-                  </EditorExtension>
-                )}
-              </div>
-              <EditorExtension plugins={pluginConfig} projectId={projectId} shell={shellForPropertyEditor}>
-                <PropertyEditor key={focusPath + undoVersion} />
-              </EditorExtension>
+        <LeftRightSplit initialLeftGridWidth="20%" minLeftPixels={200} minRightPixels={800}>
+          <ProjectTree
+            dialogId={dialogId}
+            dialogs={dialogs}
+            selected={selected}
+            onDeleteDialog={handleDeleteDialog}
+            onDeleteTrigger={handleDeleteTrigger}
+            onSelect={(...props) => handleSelect(projectId, ...props)}
+          />
+          <div css={contentWrapper} role="main">
+            <div css={{ position: 'relative' }} data-testid="DesignPage-ToolBar">
+              <span
+                ref={addNewBtnRef}
+                css={{ width: 120, height: '100%', position: 'absolute', left: 0, visibility: 'hidden' }}
+                data-testid="CoachmarkRef-AddNew"
+              />
+              <Toolbar toolbarItems={toolbarItems} />
             </div>
-          </Conversation>
-        </div>
+            <Conversation css={editorContainer}>
+              <div css={editorWrapper}>
+                <LeftRightSplit initialLeftGridWidth="75%" minLeftPixels={500} minRightPixels={300}>
+                  <div aria-label={formatMessage('Authoring canvas')} css={visualPanel} role="region">
+                    {breadcrumbItems}
+                    {dialogJsonVisible ? (
+                      <JsonEditor
+                        key={'dialogjson'}
+                        editorSettings={userSettings.codeEditor}
+                        id={currentDialog.id}
+                        schema={schemas.sdk.content}
+                        value={currentDialog.content || undefined}
+                        onChange={(data) => {
+                          updateDialog({ id: currentDialog.id, content: data, projectId });
+                        }}
+                      />
+                    ) : withWarning ? (
+                      warningIsVisible && (
+                        <WarningMessage
+                          okText={formatMessage('Change Recognizer')}
+                          onCancel={() => {
+                            setWarningIsVisible(false);
+                          }}
+                          onOk={() => navigateTo(`/bot/${projectId}/knowledge-base/all`)}
+                        />
+                      )
+                    ) : (
+                      <EditorExtension plugins={pluginConfig} projectId={projectId} shell={shellForFlowEditor}>
+                        <VisualEditor
+                          openNewTriggerModal={openNewTriggerModal}
+                          onBlur={() => setFlowEditorFocused(false)}
+                          onFocus={() => setFlowEditorFocused(true)}
+                        />
+                      </EditorExtension>
+                    )}
+                  </div>
+                  <EditorExtension plugins={pluginConfig} projectId={projectId} shell={shellForPropertyEditor}>
+                    <PropertyEditor key={focusPath + undoVersion} />
+                  </EditorExtension>
+                </LeftRightSplit>
+              </div>
+            </Conversation>
+          </div>
+        </LeftRightSplit>
       </div>
       <Suspense fallback={<LoadingSpinner />}>
         {showCreateDialogModal && (
