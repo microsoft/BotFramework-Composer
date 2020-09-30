@@ -10,9 +10,10 @@ type UIOptionValue<R = string, D = any> = R | UIOptionFunc<R, D>;
 type UIOptionFunc<R, D> = (data: D) => R;
 
 export interface Fieldset {
-  title: string;
+  title: UIOptionValue<string>;
   fields?: string[];
   defaultExpanded?: boolean;
+  itemKey?: string;
 }
 
 export interface UIOptions {
@@ -42,6 +43,8 @@ export interface UIOptions {
   label?: UIOptionValue<string | false | undefined>;
   /** Set order of fields. Use * for all other fields. */
   order?: UIOptionValue<(string | [string, string])[]>;
+  /** Renders fieldsets in a tabbed view when true */
+  pivotFieldsets?: true;
   /** Placeholder override. If undefined, schema.examples are used. */
   placeholder?: UIOptionValue<string, undefined>;
   /** Define ui options on fields that are children of this field. */
