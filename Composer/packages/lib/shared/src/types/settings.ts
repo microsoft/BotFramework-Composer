@@ -31,6 +31,7 @@ export interface DialogSetting {
   MicrosoftAppId?: string;
   MicrosoftAppPassword?: string;
   luis: ILuisConfig;
+  luFeatures: ILUFeaturesConfig;
   qna: IQnAConfig;
   publishTargets?: PublishTarget[];
   runtime: {
@@ -58,6 +59,16 @@ export interface ILuisConfig {
   defaultLanguage: string | 'en-us';
   environment: string | 'composer';
 }
+
+export type ILUFeaturesConfig = {
+  enablePattern?: boolean;
+  enableMLEntities?: boolean;
+  enableListEntities?: boolean;
+  enableCompositeEntities?: boolean;
+  enablePrebuiltEntities?: boolean;
+  enableRegexEntities?: boolean;
+  enablePhraseLists?: boolean;
+};
 
 export interface IQnAConfig {
   subscriptionKey: string;

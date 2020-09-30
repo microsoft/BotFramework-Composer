@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { DialogInfo, LuFile, LgFile, QnAFile, LuIntentSection, LgTemplate, DialogSchemaFile } from './indexers';
-import { SkillSetting, UserSettings } from './settings';
+import { ILUFeaturesConfig, SkillSetting, UserSettings } from './settings';
 import { OBISchema } from './schema';
 
 /** Recursively marks all properties as optional. */
@@ -55,6 +55,7 @@ export interface ShellData {
   hosted: boolean;
   lgFiles: LgFile[];
   luFiles: LuFile[];
+  luFeatures: ILUFeaturesConfig;
   qnaFiles: QnAFile[];
   userSettings: UserSettings;
   skills: any[];
