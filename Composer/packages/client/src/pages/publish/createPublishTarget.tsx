@@ -13,7 +13,11 @@ import { JsonEditor } from '@bfc/code-editor';
 import { useRecoilValue } from 'recoil';
 import { PublishTarget } from '@bfc/shared';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
+// import { DialogType } from 'office-ui-fabric-react/lib/Dialog';
+import { IPersonaSharedProps, Persona, PersonaSize } from 'office-ui-fabric-react/lib/Persona';
+// import { Link } from 'office-ui-fabric-react/lib/Link';
 
+// import { PublishProfileDialog } from '../../constants';
 import { PublishType } from '../../recoilModel/types';
 import { userSettingsState } from '../../recoilModel';
 import { PluginAPI } from '../../plugins/api';
@@ -22,19 +26,22 @@ import { PluginHost } from '../../components/PluginHost/PluginHost';
 import { label, separator, customPublishUISurface } from './styles';
 interface CreatePublishTargetProps {
   closeDialog: () => void;
-  current: PublishTarget | null;
+  current: { index: number; item: PublishTarget } | null;
   targets: PublishTarget[];
   types: PublishType[];
-  updateSettings: (name: string, type: string, configuration: string) => Promise<void>;
+  updateSettings: (name: string, type: string, configuration: string, editTarget: any) => Promise<void>;
+  setDialogProps: (value: any) => void;
 }
 
 const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
   const { current } = props;
-  const [targetType, setTargetType] = useState<string | undefined>(current?.type);
-  const [name, setName] = useState(current ? current.name : '');
-  const [config, setConfig] = useState(current ? JSON.parse(current.configuration) : undefined);
+  const [targetType, setTargetType] = useState<string | undefined>(current?.item.type);
+  const [name, setName] = useState(current ? current.item.name : '');
+  const [config, setConfig] = useState(current ? JSON.parse(current.item.configuration) : undefined);
   const [errorMessage, setErrorMsg] = useState('');
   const [pluginConfigIsValid, setPluginConfigIsValid] = useState(false);
+  const [page, setPage] = useState(1);
+
   const userSettings = useRecoilValue(userSettingsState);
 
   const targetTypes = useMemo(() => {
@@ -61,6 +68,8 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
 
       if (exists) {
         setErrorMsg(formatMessage('A profile with that name already exists.'));
+      } else {
+        setErrorMsg('');
       }
     }
   };
@@ -73,46 +82,82 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
     return targetType ? props.types.find((t) => t.name === targetType)?.schema : undefined;
   }, [props.targets, targetType]);
 
-  const hasView = useMemo(() => {
-    return targetType ? props.types.find((t) => t.name === targetType)?.hasView : undefined;
-  }, [props.targets, targetType]);
+  // const hasView = useMemo(() => {
+  //   return targetType ? props.types.find((t) => t.name === targetType)?.hasView : undefined;
+  // }, [props.targets, targetType]);
 
   const updateName = (e, newName) => {
-    setErrorMsg('');
     setName(newName);
     isNameValid(newName);
   };
-
-  const nextDisabled = useMemo(() => {
-    const disabled = !targetType || !name || !!errorMessage;
-    if (hasView) {
-      // plugin config must also be valid
-      return disabled || !pluginConfigIsValid;
-    }
-    return disabled;
-  }, [errorMessage, name, pluginConfigIsValid, targetType]);
 
   const saveDisabled = useMemo(() => {
     return !targetType || !name || !!errorMessage;
   }, [errorMessage, name, targetType]);
 
+  const nextDisabled = useMemo(() => {
+    if (page === 1) {
+      return saveDisabled;
+    } else if (page > 1) {
+      return !pluginConfigIsValid;
+    }
+  }, [saveDisabled, pluginConfigIsValid]);
   // setup plugin APIs
   useEffect(() => {
     PluginAPI.publish.setPublishConfig = (config) => updateConfig(config);
     PluginAPI.publish.setConfigIsValid = (valid) => setPluginConfigIsValid(valid);
-    PluginAPI.publish.useConfigBeingEdited = () => [current ? JSON.parse(current.configuration) : undefined];
+    PluginAPI.publish.useConfigBeingEdited = () => [current ? JSON.parse(current.item.configuration) : undefined];
   }, [current, targetType, name]);
 
   const submit = async (_e) => {
     if (targetType) {
-      await props.updateSettings(name, targetType, JSON.stringify(config) || '{}');
+      await props.updateSettings(name, targetType, JSON.stringify(config) || '{}', current);
       props.closeDialog();
     }
   };
 
+  const PageOne = useMemo(() => {
+    return (
+      <Fragment>
+        <form>
+          <TextField
+            defaultValue={props.current ? props.current.item.name : ''}
+            errorMessage={errorMessage}
+            label={formatMessage('Create profile name')}
+            placeholder={formatMessage('My Staging Environment')}
+            readOnly={props.current ? true : false}
+            onChange={updateName}
+          />
+          <Dropdown
+            defaultSelectedKey={props.current ? props.current.item.type : null}
+            label={formatMessage('Select your publish target')}
+            options={targetTypes}
+            placeholder={formatMessage('Choose One')}
+            onChange={updateType}
+          />
+        </form>
+        {props.current && (
+          <Fragment>
+            {instructions && <p>{instructions}</p>}
+            <div css={label}>{formatMessage('Publish Configuration')}</div>
+            <JsonEditor
+              key={targetType}
+              editorSettings={userSettings.codeEditor}
+              height={200}
+              schema={schema}
+              value={config}
+              onChange={updateConfig}
+            />
+          </Fragment>
+        )}
+      </Fragment>
+    );
+  }, [targetTypes, errorMessage, instructions, schema, userSettings]);
+
   const publishTargetContent = useMemo(() => {
-    if (hasView && targetType) {
-      // render custom plugin view
+    if (page === 1) {
+      return PageOne;
+    } else {
       return (
         <PluginHost
           extraIframeStyles={[customPublishUISurface]}
@@ -121,48 +166,21 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
         ></PluginHost>
       );
     }
-    // render default instruction / schema editor view
-    if (current) {
-      return (
-        <Fragment>
-          {instructions && <p>{instructions}</p>}
-          <div css={label}>{formatMessage('Publish Configuration')}</div>
-          <JsonEditor
-            key={targetType}
-            editorSettings={userSettings.codeEditor}
-            height={200}
-            schema={schema}
-            value={config}
-            onChange={updateConfig}
-          />
-          <button hidden disabled={saveDisabled} type="submit" />
-        </Fragment>
-      );
-    }
-  }, [targetType, instructions, schema, hasView, saveDisabled]);
+  }, [page, targetType, PageOne]);
+
+  const examplePersona: IPersonaSharedProps = {
+    text: 'Somebody',
+    secondaryText: 'Software Engineer',
+    tertiaryText: 'In a meeting',
+    optionalText: 'Available at 4:00pm',
+  };
 
   return (
     <Fragment>
-      <form style={{ minHeight: '400px' }} onSubmit={submit}>
-        <TextField
-          defaultValue={props.current ? props.current.name : ''}
-          errorMessage={errorMessage}
-          label={formatMessage('Create profile name')}
-          placeholder={formatMessage('My Staging Environment')}
-          readOnly={props.current ? true : false}
-          onChange={updateName}
-        />
-        <Dropdown
-          defaultSelectedKey={props.current ? props.current.type : null}
-          label={formatMessage('Select your publish target')}
-          options={targetTypes}
-          placeholder={formatMessage('Choose One')}
-          onChange={updateType}
-        />
-        {publishTargetContent}
-      </form>
+      {publishTargetContent}
       <Separator css={separator} />
       <DialogFooter>
+        <Persona {...examplePersona} size={PersonaSize.size24} />
         <DefaultButton text={formatMessage('Cancel')} onClick={props.closeDialog} />
         {current ? (
           <PrimaryButton disabled={saveDisabled} text={formatMessage('Save')} onClick={submit} />
@@ -171,7 +189,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
             disabled={nextDisabled}
             text={formatMessage('Next')}
             onClick={() => {
-              console.log('test');
+              setPage(page + 1);
             }}
           />
         )}

@@ -11,7 +11,6 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { PublishTarget } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
-import { PluginAPI } from '../../plugins/api';
 import { setAccessToken, setGraphToken } from '../../utils/auth';
 import { LeftRightSplit } from '../../components/Split/LeftRightSplit';
 import settingsStorage from '../../utils/dialogSettingStorage';
@@ -67,7 +66,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     type: DialogType.normal,
     children: {},
   });
-  const [editTarget, setEditTarget] = useState<{ index: number; item: PublishTarget } | null>(null);
+  // const [editTarget, setEditTarget] = useState<{ index: number; item: PublishTarget } | null>(null);
 
   const isRollbackSupported = useMemo(
     () => (target, version): boolean => {
@@ -250,8 +249,8 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     [settings.publishTargets, projectId, botName]
   );
 
-  const updatePublishTarget = useCallback(
-    async (name: string, type: string, configuration: string) => {
+  const updatePublishTarget = useMemo(
+    () => async (name: string, type: string, configuration: string, editTarget: any) => {
       if (!editTarget) {
         return;
       }
@@ -270,7 +269,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
       onSelectTarget(name);
     },
-    [settings.publishTargets, projectId, botName, editTarget]
+    [settings.publishTargets, projectId, botName]
   );
 
   const openAddProfileDialog = useMemo(
@@ -282,6 +281,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
           <CreatePublishTarget
             closeDialog={() => setDialogHidden(true)}
             current={null}
+            setDialogProps={setDialogProps}
             targets={settings.publishTargets || []}
             types={publishTypes}
             updateSettings={savePublishTarget}
@@ -301,7 +301,8 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         children: (
           <CreatePublishTarget
             closeDialog={() => setDialogHidden(true)}
-            current={editTarget ? editTarget.item : null}
+            current={editTarget ? editTarget : null}
+            setDialogProps={setDialogProps}
             targets={(settings.publishTargets || []).filter((item) => editTarget && item.name != editTarget.item.name)}
             types={publishTypes}
             updateSettings={updatePublishTarget}
@@ -351,7 +352,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   const onEdit = async (index: number, item: PublishTarget) => {
     const newItem = { item: item, index: index };
-    setEditTarget(newItem);
     openEditProfileDialog(newItem);
   };
 
@@ -394,24 +394,24 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   );
 
   // setup plugin APIs
-  useEffect(() => {
-    PluginAPI.publish.startProvision = (config) => {
-      console.log('BEGIN A PROVISION FOR PROJECT ', projectId, 'USING CONFIG', config);
+  // useEffect(() => {
+  //   PluginAPI.publish.startProvision = (config) => {
+  //     console.log('BEGIN A PROVISION FOR PROJECT ', projectId, 'USING CONFIG', config);
 
-      //   try {
-      //     const result = await axios.post(`/api/provision/${projectId}/type`, configuration);
-      //     console.log(result.data);
-      //     return result.status;
-      //   } catch (err) {
-      //     logger({
-      //       status: AzureAPIStatus.ERROR,
-      //       message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
-      //     });
-      //     return err.response.status;
-      //   }
-      // };
-    };
-  }, [projectId]);
+  //     //   try {
+  //     //     const result = await axios.post(`/api/provision/${projectId}/type`, configuration);
+  //     //     console.log(result.data);
+  //     //     return result.status;
+  //     //   } catch (err) {
+  //     //     logger({
+  //     //       status: AzureAPIStatus.ERROR,
+  //     //       message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
+  //     //     });
+  //     //     return err.response.status;
+  //     //   }
+  //     // };
+  //   };
+  // }, [projectId]);
 
   return (
     <Fragment>
