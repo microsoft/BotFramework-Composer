@@ -11,7 +11,7 @@ import { isPropertyHidden, resolvePropSchema } from '../utils';
 import { SchemaField } from './SchemaField';
 
 export interface FormRowProps extends Omit<FieldProps, 'onChange'> {
-  onChange: (field: string) => (data: any) => void;
+  onChange: (data: any) => void;
   row: string | [string, string];
 }
 
@@ -35,13 +35,19 @@ export const getRowProps = (rowProps: FormRowProps, field: string) => {
   const { required = [] } = schema;
   const fieldSchema = resolvePropSchema(schema, field, definitions);
 
-  const intellisenseScopes: string[] = [];
-  if (field === 'property') {
-    intellisenseScopes.push('variable-scopes');
-  }
-
   const newUiOptions = (uiOptions.properties?.[field] as UIOptions) ?? {};
-  newUiOptions.intellisenseScopes = intellisenseScopes;
+
+  const handleChange = (data: any) => {
+    const newData = { ...value };
+
+    if (typeof data === 'undefined' || (typeof data === 'string' && data.length === 0)) {
+      delete newData[field];
+    } else {
+      newData[field] = data;
+    }
+
+    onChange(newData);
+  };
 
   return {
     id: `${id}.${field}`,
@@ -52,8 +58,8 @@ export const getRowProps = (rowProps: FormRowProps, field: string) => {
     rawErrors: rawErrors?.[field],
     required: required.includes(field),
     uiOptions: newUiOptions,
-    value: value && value[field],
-    onChange: onChange(field),
+    value: !newUiOptions.additionalField && value ? value[field] : value,
+    onChange: !newUiOptions.additionalField ? handleChange : onChange,
     depth,
     definitions,
     transparentBorder,
