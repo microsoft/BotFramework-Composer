@@ -7,7 +7,7 @@ import { JSONSchema7 } from '@bfc/extension-client';
 interface IAdaptiveFormContext {
   focusedTab?: string;
   baseSchema: JSONSchema7;
-  onFocusedTab?: (_: string) => void;
+  onFocusedTab?: (focusedTab: string) => void;
 }
 
 export const AdaptiveFormContext = createContext<IAdaptiveFormContext>({ baseSchema: {} });
