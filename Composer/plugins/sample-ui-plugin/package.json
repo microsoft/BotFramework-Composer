@@ -25,10 +25,12 @@
         "publish": {
           "bundleId": "publish"
         },
-        "page-DISABLED": {
-          "bundleId": "page",
-          "label": "Sample UI Plugin"
-        }
+        "page-DISABLED": [
+          {
+            "bundleId": "page",
+            "label": "Sample UI Plugin"
+          }
+        ]
       }
     }
   },

@@ -17,7 +17,7 @@ const objectSerializer = {
 
 export const uiOptions: UIOptions = {
   label: false,
-  fieldSets: [{ title: formatMessage('Dialog Interface') }],
+  fieldsets: [{ title: formatMessage('Dialog Interface') }],
   properties: {
     dialogValue: {
       serializer: objectSerializer,
