@@ -61,14 +61,35 @@ class ExtensionManager {
    * Loads all builtin extensions and remote extensions.
    */
   public async loadAll() {
-    await this.seedBuiltinExtensions();
     await ensureDir(this.remoteDir);
 
-    const extensions = Object.entries(this.manifest.getExtensions());
+    await this.loadFromDir(this.builtinDir);
+    await this.loadFromDir(this.remoteDir);
+  }
 
-    for (const [id, metadata] of extensions) {
-      if (metadata?.enabled) {
-        await this.load(id);
+  /**
+   * Loads extensions from a given directory
+   * @param dir directory to load extensions from
+   * @param isBuiltin used to set extension metadata
+   */
+  public async loadFromDir(dir: string, isBuiltin = false) {
+    log('Loading extensions from %s', dir);
+    const extensions = await glob('*/package.json', { cwd: dir });
+    for (const extensionPackageJsonPath of extensions) {
+      const fullPath = path.join(dir, extensionPackageJsonPath);
+      const extensionInstallPath = path.dirname(fullPath);
+      const packageJson = (await readJson(fullPath)) as PackageJSON;
+      const isEnabled = packageJson?.composer && packageJson.composer.enabled !== false;
+      const metadata = getExtensionMetadata(extensionInstallPath, packageJson);
+      if (packageJson && (isEnabled || packageJson.extendsComposer === true)) {
+        this.manifest.updateExtensionConfig(metadata.id, {
+          ...metadata,
+          builtIn: isBuiltin,
+        });
+        await this.load(metadata.id);
+      } else if (this.manifest.getExtensionConfig(metadata.id)) {
+        // remove the extension if it exists in the manifest
+        this.manifest.removeExtension(metadata.id);
       }
     }
   }
@@ -267,27 +288,6 @@ class ExtensionManager {
       log('Error getting package json for %s', id);
       // eslint-disable-next-line no-console
       console.error(err);
-    }
-  }
-
-  public async seedBuiltinExtensions() {
-    const extensions = await glob('*/package.json', { cwd: this.builtinDir, dot: true });
-    for (const extensionPackageJsonPath of extensions) {
-      // go through each extension, make sure to add it to the manager store then load it as usual
-      const fullPath = path.join(this.builtinDir, extensionPackageJsonPath);
-      const extensionInstallPath = path.dirname(fullPath);
-      const packageJson = (await readJson(fullPath)) as PackageJSON;
-      const isEnabled = packageJson?.composer && packageJson.composer.enabled !== false;
-      const metadata = getExtensionMetadata(extensionInstallPath, packageJson);
-      if (packageJson && (isEnabled || packageJson.extendsComposer === true)) {
-        this.manifest.updateExtensionConfig(packageJson.name, {
-          ...metadata,
-          builtIn: true,
-        });
-      } else if (this.manifest.getExtensionConfig(packageJson.name)) {
-        // remove the extension if it exists in the manifest
-        this.manifest.removeExtension(packageJson.name);
-      }
     }
   }
 
