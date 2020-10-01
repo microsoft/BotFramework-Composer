@@ -20,6 +20,7 @@ describe('<AppSettings /> & <ElectronSettings />', () => {
   it('should render the user settings page', () => {
     const { getByText, getAllByText } = renderWithRecoil(<AppSettings />, ({ set }) => {
       set(onboardingState, {
+        coachMarkRefs: {},
         complete: false,
       });
     });
@@ -43,6 +44,7 @@ describe('<AppSettings /> & <ElectronSettings />', () => {
         },
         propertyEditorWidth: 400,
         dialogNavWidth: 180,
+        appLocale: 'en-US',
       });
     });
     getByText('Application Updates');

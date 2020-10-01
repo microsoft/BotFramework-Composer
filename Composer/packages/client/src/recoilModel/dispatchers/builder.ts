@@ -6,6 +6,7 @@ import { useRecoilCallback, CallbackInterface } from 'recoil';
 import { ILuisConfig, IQnAConfig } from '@bfc/shared';
 
 import * as luUtil from '../../utils/luUtil';
+import * as buildUtil from '../../utils/buildUtil';
 import { Text, BotStatus } from '../../constants';
 import httpClient from '../../utils/httpUtil';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
@@ -23,9 +24,9 @@ export const builderDispatcher = () => {
       qnaConfig: IQnAConfig,
       projectId: string
     ) => {
-      const dialogs = await snapshot.getPromise(dialogsState);
-      const luFiles = await snapshot.getPromise(luFilesState);
-      const qnaFiles = await snapshot.getPromise(qnaFilesState);
+      const dialogs = await snapshot.getPromise(dialogsState(projectId));
+      const luFiles = await snapshot.getPromise(luFilesState(projectId));
+      const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
       const referredLuFiles = luUtil.checkLuisBuild(luFiles, dialogs);
 
       const errorMsg = qnaFiles.reduce(
@@ -42,13 +43,13 @@ export const builderDispatcher = () => {
         { title: Text.LUISDEPLOYFAILURE, message: '' }
       );
       if (errorMsg.message) {
-        set(botLoadErrorState, errorMsg);
-        set(botStatusState, BotStatus.failed);
+        set(botLoadErrorState(projectId), errorMsg);
+        set(botStatusState(projectId), BotStatus.failed);
         return;
       }
       try {
         //TODO crosstrain should add locale
-        const crossTrainConfig = luUtil.createCrossTrainConfig(dialogs, referredLuFiles);
+        const crossTrainConfig = buildUtil.createCrossTrainConfig(dialogs, referredLuFiles);
         await httpClient.post(`/projects/${projectId}/build`, {
           luisConfig,
           qnaConfig,
@@ -59,10 +60,13 @@ export const builderDispatcher = () => {
         });
         luFileStatusStorage.publishAll(projectId);
         qnaFileStatusStorage.publishAll(projectId);
-        set(botStatusState, BotStatus.published);
+        set(botStatusState(projectId), BotStatus.published);
       } catch (err) {
-        set(botStatusState, BotStatus.failed);
-        set(botLoadErrorState, { title: Text.LUISDEPLOYFAILURE, message: err.response?.data?.message || err.message });
+        set(botStatusState(projectId), BotStatus.failed);
+        set(botLoadErrorState(projectId), {
+          title: Text.LUISDEPLOYFAILURE,
+          message: err.response?.data?.message || err.message,
+        });
       }
     }
   );

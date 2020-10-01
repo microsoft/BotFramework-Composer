@@ -11,8 +11,7 @@ import debounce from 'lodash/debounce';
 import formatMessage from 'format-message';
 
 import { ContentProps } from '../constants';
-import { dispatcherState } from '../../../../recoilModel';
-import { validatedDialogsSelector } from '../../../../recoilModel/selectors/validatedDialogs';
+import { dispatcherState, validateDialogSelectorFamily } from '../../../../recoilModel';
 
 import { SelectItems } from './SelectItems';
 
@@ -30,8 +29,13 @@ const textFieldStyles = (focused: boolean) => ({
   },
 });
 
-const DescriptionColumn: React.FC<DialogInfo> = ({ id, displayName }: DialogInfo) => {
-  const items = useRecoilValue(validatedDialogsSelector);
+interface DescriptionColumnProps extends DialogInfo {
+  projectId: string;
+}
+
+const DescriptionColumn: React.FC<DescriptionColumnProps> = (props) => {
+  const { id, displayName, projectId } = props;
+  const items = useRecoilValue(validateDialogSelectorFamily(projectId));
   const { content } = items.find(({ id: dialogId }) => dialogId === id) || {};
 
   const [value, setValue] = useState(content?.$designer?.description);
@@ -89,9 +93,11 @@ const DescriptionColumn: React.FC<DialogInfo> = ({ id, displayName }: DialogInfo
   );
 };
 
-export const SelectDialogs: React.FC<ContentProps> = ({ setSelectedDialogs }) => {
-  const dialogs = useRecoilValue(validatedDialogsSelector);
-  const items = useMemo(() => dialogs.map(({ id, content, displayName }) => ({ id, content, displayName })), []);
+export const SelectDialogs: React.FC<ContentProps> = ({ setSelectedDialogs, projectId }) => {
+  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const items = useMemo(() => dialogs.map(({ id, content, displayName }) => ({ id, content, displayName })), [
+    projectId,
+  ]);
 
   // for detail file list in open panel
   const tableColumns = useMemo(
@@ -123,11 +129,13 @@ export const SelectDialogs: React.FC<ContentProps> = ({ setSelectedDialogs }) =>
         isResizable: true,
         isSortedDescending: false,
         data: 'string',
-        onRender: DescriptionColumn,
+        onRender: (item: DialogInfo) => {
+          return <DescriptionColumn {...item} projectId={projectId} />;
+        },
         isPadded: true,
       },
     ],
-    []
+    [projectId]
   );
 
   const selection = useMemo(

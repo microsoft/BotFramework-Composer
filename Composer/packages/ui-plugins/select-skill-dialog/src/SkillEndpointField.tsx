@@ -1,52 +1,48 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
-import React from 'react';
-import { FieldProps, useFormConfig } from '@bfc/extension-client';
-import {
-  getUiLabel,
-  getUIOptions,
-  getUiPlaceholder,
-  getUiDescription,
-  schemaField,
-  SelectField,
-} from '@bfc/adaptive-form';
+import React, { useMemo } from 'react';
+import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { FieldProps, useShellApi } from '@bfc/extension-client';
+import { FieldLabel } from '@bfc/adaptive-form';
+import { getSkillNameFromSetting, Skill } from '@bfc/shared';
 
 export const SkillEndpointField: React.FC<FieldProps> = (props) => {
-  const { depth, schema, uiOptions: baseUIOptions, value, onChange } = props;
-  const formUIOptions = useFormConfig();
+  const { description, label, required, uiOptions, value } = props;
+  const { shellApi, skillsSettings, skills = [] } = useShellApi();
+  const { updateSkillSetting } = shellApi;
 
-  const uiOptions = {
-    ...getUIOptions(schema, formUIOptions),
-    ...baseUIOptions,
-  };
+  const id = getSkillNameFromSetting(value?.skillEndpoint);
+  const skill = skills.find(({ id: skillId }) => skillId === id) || ({} as Skill);
+  const { endpointUrl, msAppId } = skillsSettings[id] || {};
 
-  const deserializedValue = typeof uiOptions?.serializer?.get === 'function' ? uiOptions.serializer.get(value) : value;
+  const { endpoints = [] } = skill;
 
-  const handleChange = (newValue: any) => {
-    const serializedValue = newValue;
-    if (typeof uiOptions?.serializer?.set === 'function') {
-      uiOptions.serializer.set(newValue);
+  const options = useMemo(
+    () =>
+      endpoints.map(({ name, endpointUrl, msAppId }, key) => ({
+        key,
+        text: name,
+        data: {
+          endpointUrl,
+          msAppId,
+        },
+      })),
+    [endpoints]
+  );
+
+  const { key } = options.find(({ data }) => data.endpointUrl === endpointUrl && data.msAppId === msAppId) || {};
+
+  const handleChange = (_: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
+    if (option) {
+      updateSkillSetting(skill.id, { ...skill, ...option.data });
     }
-    onChange(serializedValue);
   };
-
-  const label = getUiLabel({ ...props, uiOptions });
-  const placeholder = getUiPlaceholder({ ...props, uiOptions });
-  const description = getUiDescription({ ...props, uiOptions });
 
   return (
-    <div css={schemaField.container(depth)}>
-      <SelectField
-        {...props}
-        description={description}
-        label={label}
-        placeholder={placeholder}
-        value={deserializedValue}
-        onChange={handleChange}
-      />
-    </div>
+    <React.Fragment>
+      <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
+      <Dropdown options={options} selectedKey={key} onChange={handleChange} />
+    </React.Fragment>
   );
 };

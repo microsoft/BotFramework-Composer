@@ -24,8 +24,8 @@
     "watch": "yarn build:ts --watch"
   },
   "peerDependencies": {
-    "react": "16.13.0",
-    "react-dom": "16.13.0"
+    "react": "16.13.1",
+    "react-dom": "16.13.1"
   },
   "devDependencies": {
     "@bfc/test-utils": "*",
@@ -42,8 +42,8 @@
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^0.6.0",
     "postcss-loader": "^3.0.0",
-    "react-dom": "16.13.0",
-    "react": "16.13.0",
+    "react-dom": "16.13.1",
+    "react": "16.13.1",
     "rimraf": "^2.6.3",
     "style-loader": "^0.23.1",
     "ts-loader": "7.0.4",

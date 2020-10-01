@@ -5,6 +5,8 @@ import { AppUpdaterSettings, CodeEditorSettings, PromptTab } from '@bfc/shared';
 
 import { AppUpdaterStatus } from '../constants';
 
+import { CardProps } from './../components/NotificationCard';
+
 export interface StateError {
   status?: number;
   summary: string;
@@ -39,10 +41,21 @@ export interface PublishType {
   };
 }
 
+type ExtensionPublishContribution = {
+  bundleId: string;
+};
+
+export type ExtensionPageContribution = {
+  bundleId: string;
+  label: string;
+  icon?: string;
+};
+
 // TODO: move this definition to a shared spot
 export interface ExtensionConfig {
   id: string;
   name: string;
+  description: string;
   enabled: boolean;
   version: string;
   /** Special property only used in the in-memory representation of extensions to flag as a built-in. Not written to disk. */
@@ -50,7 +63,12 @@ export interface ExtensionConfig {
   /** Path where module is installed */
   path: string;
   bundles: any; // TODO: needed?
-  contributes: any; // TODO: define this type
+  contributes?: {
+    views?: {
+      publish?: ExtensionPublishContribution;
+      pages?: ExtensionPageContribution[];
+    };
+  };
 }
 
 export interface RuntimeTemplate {
@@ -72,7 +90,6 @@ export interface BotLoadError {
 }
 
 export interface DesignPageLocation {
-  projectId: string;
   dialogId: string;
   selected: string;
   focused: string;
@@ -128,3 +145,5 @@ export enum QnAAllUpViewStatus {
   Success,
   Failed,
 }
+
+export type Notification = CardProps & { id: string };

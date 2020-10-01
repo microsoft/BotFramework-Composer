@@ -17,7 +17,7 @@ export const contentWrapper = css`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-
+  height: 100%;
   label: DesignPageContent;
 `;
 
@@ -26,10 +26,10 @@ export const projectContainer = css`
   flex-direction: column;
   flex-grow: 0;
   flex-shrink: 0;
-  width: 255px;
+  width: 100%;
+  height: 100%;
   overflow: auto;
-  border-right: 1px solid #c4c4c4;
-
+  border-right: 1px solid red;
   label: DesignPageProjectContent;
 `;
 
@@ -73,14 +73,14 @@ export const editorWrapper = css`
   flex-direction: row;
   flex-grow: 1;
   overflow: hidden;
+  height: 100%;
 `;
 
 export const visualPanel = css`
   display: flex;
   flex-direction: column;
   flex: 1;
-  border-right: 1px solid #c4c4c4;
-
+  height: 100%;
   label: DesignPageVisualPanel;
 `;
 
@@ -99,6 +99,7 @@ export const formEditor = css`
   transition: width 0.2s ease-in-out;
   overflow-y: scroll;
   height: 100%;
+  min-width: 300px;
 `;
 
 export const breadcrumbClass = mergeStyleSets({
