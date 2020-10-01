@@ -37,6 +37,7 @@ const processSelection = (
     );
   }
 
+  // If the property type hasn't changed, reset the payload and update the type required payload (string => format, ref => $ref)
   if (oldKind === newKind) {
     switch (newKind) {
       case 'string':

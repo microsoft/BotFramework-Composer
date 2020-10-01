@@ -37,6 +37,7 @@ export const CommandBarUploadButton = (props: Props) => {
       <CommandBarButton
         ariaLabel={title}
         iconProps={{ iconName: 'Import' }}
+        styles={{ root: { height: '100%' } }}
         text={title}
         title={title}
         onClick={onClickImport}

@@ -15,5 +15,5 @@ export const useKeyBinding = (kind: 'keydown' | 'keyup', cb: (e: KeyboardEvent) 
     });
 
     return () => lifetime.dispose();
-  }, []);
+  }, [callback]);
 };

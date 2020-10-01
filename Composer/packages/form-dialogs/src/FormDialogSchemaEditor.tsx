@@ -6,17 +6,13 @@ import * as React from 'react';
 import { RecoilRoot, useRecoilTransactionObserver_UNSTABLE } from 'recoil';
 import { formDialogSchemaJsonSelector } from 'src/atoms/appState';
 import { useHandlers } from 'src/atoms/handlers';
-import { VisualEditor } from 'src/components/VisualEditor';
+import { FormDialogPropertiesEditor } from 'src/components/FormDialogPropertiesEditor';
 
 export type FormDialogSchemaEditorProps = {
   /**
    * Unique id for the visual editor.
    */
   editorId: string;
-  /**
-   * Wether to show or hide the theme picker.
-   */
-  showThemePicker?: boolean;
   /**
    * Initial json schema content.
    */
@@ -40,15 +36,7 @@ export type FormDialogSchemaEditorProps = {
 };
 
 const InternalFormDialogSchemaEditor = React.memo((props: FormDialogSchemaEditorProps) => {
-  const {
-    editorId,
-    schema,
-    showThemePicker = false,
-    templates = [],
-    schemaExtension = '.schema',
-    onSchemaUpdated,
-    onGenerateDialog,
-  } = props;
+  const { editorId, schema, templates = [], schemaExtension = '.schema', onSchemaUpdated, onGenerateDialog } = props;
 
   const { setTemplates, reset, importSchemaString } = useHandlers();
 
@@ -73,10 +61,9 @@ const InternalFormDialogSchemaEditor = React.memo((props: FormDialogSchemaEditor
   });
 
   return (
-    <VisualEditor
+    <FormDialogPropertiesEditor
       key={editorId}
       schemaExtension={schemaExtension}
-      showThemePicker={showThemePicker}
       onGenerateDialog={onGenerateDialog}
       onReset={startOver}
     />

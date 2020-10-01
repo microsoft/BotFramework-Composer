@@ -1,9 +1,9 @@
 {
   "name": "@bfc/form-dialogs",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "license": "MIT",
   "author": "Microsoft",
-  "description": "Botframework Composer dialog form components.",
+  "description": "Form Dialog components for Bot Framework Composer",
   "main": "./lib/index.js",
   "typings": "./lib/VisualSchemaEditor.d.ts",
   "files": [

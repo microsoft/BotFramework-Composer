@@ -63,12 +63,11 @@ const SchemaName = styled(Stack)({
 
 type Props = {
   schemaExtension: string;
-  showThemePicker?: boolean;
   onReset: () => void;
   onGenerateDialog: (formDialogSchemaJson: string) => void;
 };
 
-export const VisualEditor = React.memo((props: Props) => {
+export const FormDialogPropertiesEditor = React.memo((props: Props) => {
   const { onReset, onGenerateDialog, schemaExtension } = props;
 
   const schema = useRecoilValue(formDialogSchemaAtom);

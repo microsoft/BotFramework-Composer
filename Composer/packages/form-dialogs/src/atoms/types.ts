@@ -14,14 +14,14 @@ export type TypedPropertyPayload = {
   entities?: string[];
 };
 
-const builtInFormats = ['data-time', 'date', 'time', 'email', 'uri', 'iri'] as const;
+const builtInFormats = ['date-time', 'date', 'time', 'email', 'uri', 'iri'] as const;
 
 export type BuiltInStringFormat = typeof builtInFormats[number];
 
 export type StringFormatItem = { displayName: string; value: BuiltInStringFormat };
 
 export const builtInStringFormats: readonly StringFormatItem[] = [
-  { displayName: 'date-time', value: 'data-time' },
+  { displayName: 'date-time', value: 'date-time' },
   { displayName: 'date', value: 'date' },
   { displayName: 'time', value: 'time' },
   { displayName: 'email', value: 'email' },
