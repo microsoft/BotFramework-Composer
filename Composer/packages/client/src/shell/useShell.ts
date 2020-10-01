@@ -241,7 +241,9 @@ export function useShell(source: EventSource, projectId: string): Shell {
         hosted: !!isAbsHosted(),
         skills,
       }
-    : ({} as ShellData);
+    : ({
+        projectId,
+      } as ShellData);
 
   return {
     api,

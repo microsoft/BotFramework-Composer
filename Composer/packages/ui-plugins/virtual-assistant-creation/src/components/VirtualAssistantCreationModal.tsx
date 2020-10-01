@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { RouteComponentProps, Router } from '@reach/router';
 import { useShellApi } from '@bfc/extension-client';
 import { navigate } from '@reach/router';
@@ -30,13 +30,11 @@ export const AppContext = React.createContext(AppContextDefaultValue);
 export const VirtualAssistantCreationModal: React.FC<VirtualAssistantCreationModalProps> = (props) => {
   const { onDismiss, handleCreateNew, formData } = props;
   const [state, setState] = useState(AppContextDefaultValue.state);
-  const { shellApi } = useShellApi();
+  const { shellApi, ...shellData } = useShellApi();
+  const { projectId } = shellData;
 
   const createAndConfigureBot = async () => {
     await handleCreateNew(formData, 'vaCore');
-    await updateBotResponses();
-    await updateQnaFiles();
-    navigate('./');
   };
 
   const updateBotResponses = async () => {
@@ -71,6 +69,14 @@ export const VirtualAssistantCreationModal: React.FC<VirtualAssistantCreationMod
     navigate('./');
     onDismiss();
   };
+
+  useEffect((): void => {
+    if (projectId) {
+      updateBotResponses();
+      updateQnaFiles();
+      navigate('./');
+    }
+  }, [projectId, shellApi]);
 
   return (
     <AppContext.Provider value={{ state, setState }}>
