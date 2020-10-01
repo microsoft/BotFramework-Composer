@@ -19,14 +19,14 @@ namespace Tests
         [ExpectedException(typeof(ArgumentException))]
         public void WhenAllowedCallersIsNullThrowException()
         {
-            var unused = new AllowedCallersClaimsValidator(new BotSkillSettings());
+            var unused = new AllowedCallersClaimsValidator(new BotSkillConfig());
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void WhenAllowedCallersIsEmptyThrowException()
         {
-            var unused = new AllowedCallersClaimsValidator(new BotSkillSettings()
+            var unused = new AllowedCallersClaimsValidator(new BotSkillConfig()
             {
                 AllowedCallers = new string[0]
             });
@@ -35,7 +35,7 @@ namespace Tests
         [TestMethod]
         public async Task AllowAnyCaller()
         {
-            var validator = new AllowedCallersClaimsValidator(new BotSkillSettings()
+            var validator = new AllowedCallersClaimsValidator(new BotSkillConfig()
             {
                 AllowedCallers = new string[]{"*"}
             });
@@ -49,7 +49,7 @@ namespace Tests
         public async Task AllowedCaller()
         {
             const string callerAppId = "BE3F9920-D42D-4D3A-9BDF-DBA62DAE3A00";
-            var validator = new AllowedCallersClaimsValidator(new BotSkillSettings()
+            var validator = new AllowedCallersClaimsValidator(new BotSkillConfig()
             {
                 AllowedCallers = new string[]{callerAppId}
             });
@@ -63,7 +63,7 @@ namespace Tests
         public async Task AllowedCallers()
         {
             const string callerAppId = "BE3F9920-D42D-4D3A-9BDF-DBA62DAE3A00";
-            var validator = new AllowedCallersClaimsValidator(new BotSkillSettings()
+            var validator = new AllowedCallersClaimsValidator(new BotSkillConfig()
             {
                 AllowedCallers = new string[]{"anotherId", callerAppId}
             });
@@ -78,7 +78,7 @@ namespace Tests
         public async Task NonAllowedCallerShouldThrowException()
         {
             var callerAppId = "BE3F9920-D42D-4D3A-9BDF-DBA62DAE3A00";
-            var validator = new AllowedCallersClaimsValidator(new BotSkillSettings()
+            var validator = new AllowedCallersClaimsValidator(new BotSkillConfig()
             {
                 AllowedCallers = new string[]{callerAppId}
             });

@@ -15,7 +15,7 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates.Authorization
     {
         private readonly List<string> _allowedCallers;
 
-        public AllowedCallersClaimsValidator(BotSkillSettings settings)
+        public AllowedCallersClaimsValidator(BotSkillConfig settings)
         {
             // skill.allowedCallers is the setting in the appsettings.json file
             // that consists of the list of parent bot IDs that are allowed to access the skill.
