@@ -3,6 +3,7 @@
 
 import axios from 'axios';
 import { ShellApi } from '@bfc/shared';
+
 import { AvailablePersonalities } from '../models/creationOptions';
 
 // Utility constants
@@ -19,7 +20,7 @@ export const updatePersonalityQnaFile = async (shellApi: ShellApi, selectedPerso
     url: endpoint,
     responseType: 'json',
   })
-    .then(async function (response) {
+    .then(async (response) => {
       await shellApi.updateQnaContent('Chit-chat.en-us', atob(response.data.content));
       return response;
     })

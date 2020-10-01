@@ -1,3 +1,4 @@
+/* eslint-disable format-message/literal-pattern */
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
@@ -7,12 +8,13 @@ import formatMessage from 'format-message';
 import React, { Fragment, useContext } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
-
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import { Separator, ISeparatorStyles } from 'office-ui-fabric-react/lib/Separator';
+
+import { RouterPaths } from '../shared/constants';
+
 import { AppContext } from './VirtualAssistantCreationModal';
 import { DialogFooterWrapper } from './dialogFooterWrapper';
-import { RouterPaths } from '../shared/constants';
 
 // -------------------- Styles -------------------- //
 
@@ -60,11 +62,11 @@ export const ConfigSummaryPage: React.FC<ConfigSummaryPageProps> = (props) => {
   return (
     <Fragment>
       <DialogWrapper
-        isOpen={true}
-        onDismiss={props.onDismiss}
-        title={formatMessage('Configuration Summary')}
-        subText={formatMessage('The following customizations will be applied to your bot')}
+        isOpen
         dialogType={DialogTypes.CreateFlow}
+        subText={formatMessage('The following customizations will be applied to your bot')}
+        title={formatMessage('Configuration Summary')}
+        onDismiss={props.onDismiss}
       >
         {categoryText('General')}
         {configEntry('Selected Assistant Type', state.selectedAssistant.name)}
@@ -77,8 +79,8 @@ export const ConfigSummaryPage: React.FC<ConfigSummaryPageProps> = (props) => {
         {configEntry('Greeting Message', state.selectedGreetingMessage)}
         {configEntry('Fallback Text', state.selectedFallbackText)}
         <DialogFooterWrapper
-          prevPath={RouterPaths.customizeBotPage}
           nextPath={RouterPaths.provisionSummaryPage}
+          prevPath={RouterPaths.customizeBotPage}
           onDismiss={onDismiss}
         />
       </DialogWrapper>

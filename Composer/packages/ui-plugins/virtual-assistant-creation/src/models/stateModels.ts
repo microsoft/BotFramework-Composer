@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { Dispatch, SetStateAction } from 'react';
+
 import { AvailablePersonalities } from './creationOptions';
 
 export type IAppState = {

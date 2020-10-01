@@ -7,12 +7,13 @@ import formatMessage from 'format-message';
 import React, { Fragment } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
-
 import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
-import { DialogFooterWrapper } from './dialogFooterWrapper';
-import { RouterPaths } from '../shared/constants';
 import { DetailsList, DetailsListLayoutMode, IColumn, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
+
+import { RouterPaths } from '../shared/constants';
+
+import { DialogFooterWrapper } from './dialogFooterWrapper';
 
 // Content Data
 const provisioningDetailItems = () => {
@@ -107,26 +108,26 @@ export const ProvisionSummaryPage: React.FC<ProvisionSummaryPageProps> = (props)
   return (
     <Fragment>
       <DialogWrapper
-        isOpen={true}
-        onDismiss={props.onDismiss}
-        title={formatMessage('Provisioning Summary')}
-        subText={formatMessage('The following will be provisioned to enable your bot')}
+        isOpen
         dialogType={DialogTypes.CreateFlow}
+        subText={formatMessage('The following will be provisioned to enable your bot')}
+        title={formatMessage('Provisioning Summary')}
+        onDismiss={props.onDismiss}
       >
         <Pivot>
           <PivotItem headerText={formatMessage('Summary')}>
             <DetailsList
-              items={provisioningDetailItems()}
               columns={columns}
+              items={provisioningDetailItems()}
               layoutMode={DetailsListLayoutMode.justified}
               selectionMode={SelectionMode.none}
             />
           </PivotItem>
           <PivotItem headerText={formatMessage('ARM Template')}>
-            <TextField multiline rows={40} disabled />
+            <TextField disabled multiline rows={40} />
           </PivotItem>
         </Pivot>
-        <DialogFooterWrapper prevPath={RouterPaths.configSummaryPage} onSubmit={onSubmit} onDismiss={onDismiss} />
+        <DialogFooterWrapper prevPath={RouterPaths.configSummaryPage} onDismiss={onDismiss} onSubmit={onSubmit} />
       </DialogWrapper>
     </Fragment>
   );

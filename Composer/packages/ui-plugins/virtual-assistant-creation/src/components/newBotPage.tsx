@@ -9,10 +9,12 @@ import { RouteComponentProps } from '@reach/router';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { Label } from 'office-ui-fabric-react/lib/Label';
+
 import { IAssistant } from '../models/stateModels';
+import { RouterPaths } from '../shared/constants';
+
 import { AppContext } from './VirtualAssistantCreationModal';
 import { DialogFooterWrapper } from './dialogFooterWrapper';
-import { RouterPaths } from '../shared/constants';
 
 // -------------------- NewBotPage -------------------- //
 type NewBotPageProps = {
@@ -24,7 +26,7 @@ export const NewBotPage: React.FC<NewBotPageProps> = (props) => {
   const onDismiss = props.onDismiss;
 
   const assistantSelectionChanged = (event: any, option?: IChoiceGroupOption) => {
-    var selectedAssistant = state.availableAssistantTemplates.find((assistant: IAssistant) => {
+    const selectedAssistant = state.availableAssistantTemplates.find((assistant: IAssistant) => {
       return assistant.name.toLowerCase() == option?.key.toLowerCase();
     });
     if (selectedAssistant) {
@@ -33,7 +35,7 @@ export const NewBotPage: React.FC<NewBotPageProps> = (props) => {
   };
 
   const getAssistantsToRender = (): IChoiceGroupOption[] => {
-    var result: IChoiceGroupOption[] = [];
+    const result: IChoiceGroupOption[] = [];
     state.availableAssistantTemplates.forEach((assistant: IAssistant) => {
       result.push({
         key: assistant.name,
@@ -45,29 +47,29 @@ export const NewBotPage: React.FC<NewBotPageProps> = (props) => {
 
   return (
     <DialogWrapper
-      isOpen={true}
-      onDismiss={props.onDismiss}
-      title={formatMessage('Choose Your Assistant')}
-      subText={formatMessage('Create a new bot or choose from Virtual assistant templates.')}
+      isOpen
       dialogType={DialogTypes.CreateFlow}
+      subText={formatMessage('Create a new bot or choose from Virtual assistant templates.')}
+      title={formatMessage('Choose Your Assistant')}
+      onDismiss={props.onDismiss}
     >
       <Label>{formatMessage('Choose one:')}</Label>
       <ChoiceGroup
-        required={true}
-        onChange={(event: any, option?: IChoiceGroupOption) => {
-          assistantSelectionChanged(event, option);
-        }}
+        required
+        defaultSelectedKey={state.selectedAssistant.name}
+        options={getAssistantsToRender()}
         styles={{
           root: {
             width: '100%',
           },
         }}
-        defaultSelectedKey={state.selectedAssistant.name}
-        options={getAssistantsToRender()}
+        onChange={(event: any, option?: IChoiceGroupOption) => {
+          assistantSelectionChanged(event, option);
+        }}
       />
       <DialogFooterWrapper
-        prevPath={RouterPaths.defineConversationPage}
         nextPath={RouterPaths.customizeBotPage}
+        prevPath={RouterPaths.defineConversationPage}
         onDismiss={onDismiss}
       />
     </DialogWrapper>

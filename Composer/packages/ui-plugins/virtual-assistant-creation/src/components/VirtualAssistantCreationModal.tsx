@@ -5,16 +5,18 @@
 import { jsx } from '@emotion/core';
 import React, { useState } from 'react';
 import { RouteComponentProps, Router } from '@reach/router';
+import { useShellApi } from '@bfc/extension-client';
+import { navigate } from '@reach/router';
+
+import { AppContextDefaultValue } from '../models/stateModels';
+import { updatePersonalityQnaFile } from '../shared/util';
+import { RouterPaths } from '../shared/constants';
+import { formData } from '../shared/types';
+
 import { NewBotPage } from './newBotPage';
 import { CustomizeBotPage } from './customizeBotPage';
 import { ConfigSummaryPage } from './configSummaryPage';
-import { AppContextDefaultValue } from '../models/stateModels';
-import { useShellApi } from '@bfc/extension-client';
-import { updatePersonalityQnaFile } from '../shared/util';
 import ProvisionSummaryPage from './provisionSummaryPage';
-import { RouterPaths } from '../shared/constants';
-import { navigate } from '@reach/router';
-import { formData } from '../shared/types';
 
 // -------------------- VirtualAssistantCreationModal -------------------- //
 type VirtualAssistantCreationModalProps = {
@@ -30,15 +32,15 @@ export const VirtualAssistantCreationModal: React.FC<VirtualAssistantCreationMod
   const [state, setState] = useState(AppContextDefaultValue.state);
   const { shellApi } = useShellApi();
 
-  var createAndConfigureBot = async () => {
-    await handleCreateNew(formData, 'vacore');
+  const createAndConfigureBot = async () => {
+    await handleCreateNew(formData, 'vaCore');
     await updateBotResponses();
     await updateQnaFiles();
     navigate('./');
   };
 
   const updateBotResponses = async () => {
-    const generatedLgFileId = formData.name + '.en-us';
+    const generatedLgFileId = formData.name.toLowerCase() + '.en-us';
     await shellApi.updateLgTemplate(
       generatedLgFileId,
       'ReturningUserGreeting',
@@ -73,13 +75,13 @@ export const VirtualAssistantCreationModal: React.FC<VirtualAssistantCreationMod
   return (
     <AppContext.Provider value={{ state, setState }}>
       <Router>
-        <NewBotPage onDismiss={onModalDismiss} path={RouterPaths.newBotPage} default />
-        <CustomizeBotPage onDismiss={onModalDismiss} path={RouterPaths.customizeBotPage} />
-        <ConfigSummaryPage onDismiss={onModalDismiss} path={RouterPaths.configSummaryPage} />
+        <NewBotPage default path={RouterPaths.newBotPage} onDismiss={onModalDismiss} />
+        <CustomizeBotPage path={RouterPaths.customizeBotPage} onDismiss={onModalDismiss} />
+        <ConfigSummaryPage path={RouterPaths.configSummaryPage} onDismiss={onModalDismiss} />
         <ProvisionSummaryPage
+          path={RouterPaths.provisionSummaryPage}
           onDismiss={onModalDismiss}
           onSubmit={createAndConfigureBot}
-          path={RouterPaths.provisionSummaryPage}
         />
       </Router>
     </AppContext.Provider>

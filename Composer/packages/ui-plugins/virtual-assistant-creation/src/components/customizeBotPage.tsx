@@ -1,3 +1,4 @@
+/* eslint-disable format-message/literal-pattern */
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
@@ -7,16 +8,17 @@ import formatMessage from 'format-message';
 import React, { useContext } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
-
 import { Dropdown, IDropdownStyles, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { AppContext } from './VirtualAssistantCreationModal';
-import { DialogFooterWrapper } from './dialogFooterWrapper';
+
 import { RouterPaths } from '../shared/constants';
 import { AvailablePersonalities } from '../models/creationOptions';
+
+import { AppContext } from './VirtualAssistantCreationModal';
+import { DialogFooterWrapper } from './dialogFooterWrapper';
 
 // -------------------- Styles -------------------- //
 const textFieldStyling = css`
@@ -47,54 +49,53 @@ export const CustomizeBotPage: React.FC<CustomizeBotPageProps> = (props) => {
 
   return (
     <DialogWrapper
-      isOpen={true}
-      onDismiss={props.onDismiss}
-      title={formatMessage('Customize your assistant')}
+      isOpen
+      dialogType={DialogTypes.CreateFlow}
       subText={formatMessage(
         'Give your bot personality, multi-language capabilities and more. You can edit this later in Bot Settings.'
       )}
-      dialogType={DialogTypes.CreateFlow}
+      title={formatMessage('Customize your assistant')}
+      onDismiss={props.onDismiss}
     >
       <Stack tokens={verticalStackTokens}>
         <Stack.Item>
           <Label>{formatMessage('Bot Name')}</Label>
           <TextField
+            css={textFieldStyling}
+            value={formatMessage(state.selectedBotName)}
             onChange={(event: any, newValue?: string) => {
               setState({ ...state, selectedBotName: newValue as string });
             }}
-            value={formatMessage(state.selectedBotName)}
-            css={textFieldStyling}
           />
         </Stack.Item>
         <Stack.Item>
           <Label>{formatMessage('User Input')}</Label>
-          <Stack horizontal={true} tokens={horizontalStackTokens}>
+          <Stack horizontal tokens={horizontalStackTokens}>
             <Checkbox
+              checked={state.isTextEnabled}
               label={formatMessage('Text')}
               onChange={() => {
                 setState({ ...state, isTextEnabled: !state.isTextEnabled });
               }}
-              checked={state.isTextEnabled}
             />
             <Checkbox
+              checked={state.isSpeechEnabled}
               label={formatMessage('Speech')}
               onChange={() => {
                 setState({ ...state, isSpeechEnabled: !state.isSpeechEnabled });
               }}
-              checked={state.isSpeechEnabled}
             />
           </Stack>
         </Stack.Item>
         <Stack.Item>
           <Dropdown
-            placeholder={formatMessage('Select an option')}
             label={formatMessage('Personality')}
             options={personalityOptions()}
-            styles={dropdownStyles}
+            placeholder={formatMessage('Select an option')}
             selectedKey={state.selectedPersonality}
+            styles={dropdownStyles}
             onChange={(ev: any, option?: IDropdownOption) => {
               setState({ ...state, selectedPersonality: AvailablePersonalities[option?.text as string] });
-              console.log(state.selectedPersonality);
             }}
           />
         </Stack.Item>
@@ -119,8 +120,8 @@ export const CustomizeBotPage: React.FC<CustomizeBotPageProps> = (props) => {
           />
         </Stack.Item>
         <DialogFooterWrapper
-          prevPath={RouterPaths.newBotPage}
           nextPath={RouterPaths.configSummaryPage}
+          prevPath={RouterPaths.newBotPage}
           onDismiss={onDismiss}
         />
       </Stack>

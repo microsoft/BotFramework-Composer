@@ -7,6 +7,8 @@ import Path from 'path';
 import React, { useEffect, useRef, Fragment, useState, useMemo } from 'react';
 import { RouteComponentProps, Router, navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
+import { VirtualAssistantCreationModal } from '@bfc/ui-plugin-va-creation';
+import { PluginConfig, mergePluginConfigs, EditorExtension } from '@bfc/extension-client';
 
 import { CreationFlowStatus } from '../../constants';
 import {
@@ -22,14 +24,12 @@ import Home from '../../pages/home/Home';
 import ImportQnAFromUrlModal from '../../pages/knowledge-base/ImportQnAFromUrlModal';
 import { QnABotTemplateId } from '../../constants';
 import { useProjectIdCache } from '../../utils/hooks';
+import { useShell } from '../../shell';
+import plugins from '../../plugins';
 
 import { CreateOptions } from './CreateOptions';
 import { OpenProject } from './OpenProject';
 import DefineConversation from './DefineConversation';
-import { VirtualAssistantCreationModal } from '@bfc/ui-plugin-va-creation';
-import { useShell } from '../../shell';
-import { PluginConfig, mergePluginConfigs, EditorExtension } from '@bfc/extension-client';
-import plugins from '../../plugins';
 
 type CreationFlowProps = RouteComponentProps<{}>;
 
@@ -172,7 +172,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   return (
     <Fragment>
       <Home />
-      <EditorExtension projectId={projectId} plugins={pluginConfig} shell={shellForCreation}>
+      <EditorExtension plugins={pluginConfig} projectId={projectId} shell={shellForCreation}>
         <Router>
           <DefineConversation
             createFolder={createFolder}
@@ -212,10 +212,10 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
             onSubmit={handleCreateQnA}
           />
           <VirtualAssistantCreationModal
-            handleCreateNew={handleCreateNew}
             formData={formData}
-            onDismiss={handleDismiss}
+            handleCreateNew={handleCreateNew}
             path="create/vaCore/*"
+            onDismiss={handleDismiss}
           />
         </Router>
       </EditorExtension>
