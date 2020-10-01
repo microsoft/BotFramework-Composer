@@ -48,7 +48,7 @@ const ExtensionSearchResults: React.FC<ExtensionSearchResultsProps> = (props) =>
   const selection = useRef(
     new Selection({
       onSelectionChanged: () => {
-        onSelect(selection.getSelection()[0] as ExtensionConfig);
+        onSelect(selection.getSelection()[0] as ExtensionSearchResult);
       },
     })
   ).current;
