@@ -25,6 +25,13 @@ import {
   DeploymentsConfig,
 } from './azureResourceManagerConfig';
 
+export enum DeploymentStatus {
+  NOT_DEPLOY = 'NOT_DEPLOYMENT',
+  DEPLOYING = 'DEPLOYING',
+  DEPLOY_FAIL = 'DEPLOY_FAIL',
+  DEPLOY_SUCCESS = 'DEPLOY_SUCCESS',
+}
+
 export class AzureResourceDeploymentStatus {
   public resourceGroupStatus: DeploymentStatus = DeploymentStatus.NOT_DEPLOY;
   public luisAuthoringStatus: DeploymentStatus = DeploymentStatus.NOT_DEPLOY;
@@ -35,13 +42,6 @@ export class AzureResourceDeploymentStatus {
   public webAppStatus: DeploymentStatus = DeploymentStatus.NOT_DEPLOY;
   public botStatus: DeploymentStatus = DeploymentStatus.NOT_DEPLOY;
   public counterStatus: DeploymentStatus = DeploymentStatus.NOT_DEPLOY;
-}
-
-export enum DeploymentStatus {
-  NOT_DEPLOY = 'NOT_DEPLOYMENT',
-  DEPLOYING = 'DEPLOYING',
-  DEPLOY_FAIL = 'DEPLOY_FAIL',
-  DEPLOY_SUCCESS = 'DEPLOY_SUCCESS',
 }
 
 export class AzureResourceMananger {
@@ -55,7 +55,7 @@ export class AzureResourceMananger {
   private creds: any;
 
   // Subscription id
-  private subId: string;
+  private subscriptionId: string;
 
   // The deployment status of the azure resources
   private deployStatus: AzureResourceDeploymentStatus = new AzureResourceDeploymentStatus();
@@ -67,7 +67,7 @@ export class AzureResourceMananger {
     this.config = config;
     this.logger = config.logger;
     this.creds = config.creds;
-    this.subId = config.subId;
+    this.subscriptionId = config.subscriptionId;
     this.deploymentOutput = {
       applicationInsights: {},
       cosmosDb: {},
@@ -101,263 +101,272 @@ export class AzureResourceMananger {
     }
 
     // Create Resource Group based on the config
-    if (this.config.resourceGroup) {
-      await this.createResourceGroup(this.config.resourceGroup);
-      if (this.deployStatus.resourceGroupStatus != DeploymentStatus.DEPLOY_SUCCESS) {
-        this.logger({
-          status: BotProjectDeployLoggerType.PROVISION_ERROR,
-          message: 'Create Resource Group Failed.',
-        });
-        return;
-      }
-    }
+    // if (this.config.resourceGroup) {
+    //   await this.createResourceGroup(this.config.resourceGroup);
+    //   if (this.deployStatus.resourceGroupStatus != DeploymentStatus.DEPLOY_SUCCESS) {
+    //     this.logger({
+    //       status: BotProjectDeployLoggerType.PROVISION_ERROR,
+    //       message: 'Create Resource Group Failed.',
+    //     });
+    //     return;
+    //   }
+    // }
 
-    if (this.config.createOrNot.appInsights) {
-      if (!this.config.appInsights) {
-        this.config.appInsights = {
-          location: this.config.resourceGroup.location,
-          name: this.config.resourceGroup.name,
-          resourceGroupName: this.config.resourceGroup.name,
-        };
-      }
-      if (!this.config.appInsights.resourceGroupName) {
-        this.config.appInsights.resourceGroupName = this.config.resourceGroup.name;
-      }
-      if (!this.config.appInsights.location) {
-        this.config.appInsights.location = this.config.resourceGroup.location;
-      }
-      if (!this.config.appInsights.name) {
-        this.config.appInsights.name = this.config.resourceGroup.name;
-      }
+    // // Create application insights
+    // if (this.config.createOrNot.appInsights) {
+    //   if (!this.config.appInsights) {
+    //     this.config.appInsights = {
+    //       location: this.config.resourceGroup.location,
+    //       name: this.config.resourceGroup.name,
+    //       resourceGroupName: this.config.resourceGroup.name,
+    //     };
+    //   }
+    //   if (!this.config.appInsights.resourceGroupName) {
+    //     this.config.appInsights.resourceGroupName = this.config.resourceGroup.name;
+    //   }
+    //   if (!this.config.appInsights.location) {
+    //     this.config.appInsights.location = this.config.resourceGroup.location;
+    //   }
+    //   if (!this.config.appInsights.name) {
+    //     this.config.appInsights.name = this.config.resourceGroup.name;
+    //   }
 
-      await this.deployAppInsightsResource(this.config.appInsights);
-      if (this.deployStatus.appInsightsStatus != DeploymentStatus.DEPLOY_SUCCESS) {
-        this.logger({
-          status: BotProjectDeployLoggerType.PROVISION_ERROR,
-          message: 'Create App Insights Failed.',
-        });
-        return;
-      }
-    }
+    //   await this.deployAppInsightsResource(this.config.appInsights);
+    //   if (this.deployStatus.appInsightsStatus != DeploymentStatus.DEPLOY_SUCCESS) {
+    //     this.logger({
+    //       status: BotProjectDeployLoggerType.PROVISION_ERROR,
+    //       message: 'Create App Insights Failed.',
+    //     });
+    //     return;
+    //   }
+    // }
 
-    if (this.config.createOrNot.blobStorage) {
-      if (!this.config.blobStorage) {
-        this.config.blobStorage = {
-          resourceGroupName: this.config.resourceGroup.name,
-          name: this.config.resourceGroup.name.toLowerCase().replace('-', '').replace('_', ''),
-          location: this.config.resourceGroup.location,
-          containerName: 'transcripts',
-        };
-      }
-      if (!this.config.blobStorage.location) {
-        this.config.blobStorage.location = this.config.resourceGroup.location;
-      }
-      if (!this.config.blobStorage.name) {
-        this.config.blobStorage.name = this.config.resourceGroup.name.toLowerCase().replace('-', '').replace('_', '');
-      }
-      if (!this.config.blobStorage.resourceGroupName) {
-        this.config.blobStorage.resourceGroupName = this.config.resourceGroup.name;
-      }
+    // // Create blob storage
+    // if (this.config.createOrNot.blobStorage) {
+    //   if (!this.config.blobStorage) {
+    //     this.config.blobStorage = {
+    //       resourceGroupName: this.config.resourceGroup.name,
+    //       name: this.config.resourceGroup.name.toLowerCase().replace('-', '').replace('_', ''),
+    //       location: this.config.resourceGroup.location,
+    //       containerName: 'transcripts',
+    //     };
+    //   }
+    //   if (!this.config.blobStorage.location) {
+    //     this.config.blobStorage.location = this.config.resourceGroup.location;
+    //   }
+    //   if (!this.config.blobStorage.name) {
+    //     this.config.blobStorage.name = this.config.resourceGroup.name.toLowerCase().replace('-', '').replace('_', '');
+    //   }
+    //   if (!this.config.blobStorage.resourceGroupName) {
+    //     this.config.blobStorage.resourceGroupName = this.config.resourceGroup.name;
+    //   }
 
-      await this.deployBlobStorageResource(this.config.blobStorage);
-      if (this.deployStatus.blobStorageStatus != DeploymentStatus.DEPLOY_SUCCESS) {
-        this.logger({
-          status: BotProjectDeployLoggerType.PROVISION_ERROR,
-          message: 'Create Blob Storage Failed.',
-        });
-        return;
-      }
-    }
+    //   await this.deployBlobStorageResource(this.config.blobStorage);
+    //   if (this.deployStatus.blobStorageStatus != DeploymentStatus.DEPLOY_SUCCESS) {
+    //     this.logger({
+    //       status: BotProjectDeployLoggerType.PROVISION_ERROR,
+    //       message: 'Create Blob Storage Failed.',
+    //     });
+    //     return;
+    //   }
+    // }
 
-    if (this.config.createOrNot.luisResource) {
-      if (!this.config.luisResource) {
-        this.config.luisResource = {
-          resourceGroupName: this.config.resourceGroup.name,
-          location: this.config.resourceGroup.location,
-          accountName: `${this.config.resourceGroup.name}-luis`,
-        };
-      }
-      if (!this.config.luisResource.resourceGroupName) {
-        this.config.luisResource.resourceGroupName = this.config.resourceGroup.name;
-      }
-      if (!this.config.luisResource.location) {
-        this.config.luisResource.location = this.config.resourceGroup.location;
-      }
-      if (!this.config.luisResource.accountName) {
-        this.config.luisResource.accountName = `${this.config.resourceGroup.name}-luis`;
-      }
+    // // Create LUIS endpoint key
+    // if (this.config.createOrNot.luisResource) {
+    //   if (!this.config.luisResource) {
+    //     this.config.luisResource = {
+    //       resourceGroupName: this.config.resourceGroup.name,
+    //       location: this.config.resourceGroup.location,
+    //       accountName: `${this.config.resourceGroup.name}-luis`,
+    //     };
+    //   }
+    //   if (!this.config.luisResource.resourceGroupName) {
+    //     this.config.luisResource.resourceGroupName = this.config.resourceGroup.name;
+    //   }
+    //   if (!this.config.luisResource.location) {
+    //     this.config.luisResource.location = this.config.resourceGroup.location;
+    //   }
+    //   if (!this.config.luisResource.accountName) {
+    //     this.config.luisResource.accountName = `${this.config.resourceGroup.name}-luis`;
+    //   }
 
-      await this.deployLuisResource(this.config.luisResource);
-      if (this.deployStatus.luisStatus != DeploymentStatus.DEPLOY_SUCCESS) {
-        this.logger({
-          status: BotProjectDeployLoggerType.PROVISION_ERROR,
-          message: 'Create Luis Resource Failed.',
-        });
-        return;
-      }
-    }
+    //   await this.deployLuisResource(this.config.luisResource);
+    //   if (this.deployStatus.luisStatus != DeploymentStatus.DEPLOY_SUCCESS) {
+    //     this.logger({
+    //       status: BotProjectDeployLoggerType.PROVISION_ERROR,
+    //       message: 'Create Luis Resource Failed.',
+    //     });
+    //     return;
+    //   }
+    // }
 
-    if (this.config.createOrNot.luisAuthoringResource) {
-      if (!this.config.luisAuthoringResource) {
-        this.config.luisAuthoringResource = {
-          location: this.config.resourceGroup.location,
-          accountName: `${this.config.resourceGroup.name}-luis-Authoring`,
-          resourceGroupName: this.config.resourceGroup.name,
-        };
-      }
-      if (!this.config.luisAuthoringResource.resourceGroupName) {
-        this.config.luisAuthoringResource.resourceGroupName = this.config.resourceGroup.name;
-      }
-      if (!this.config.luisAuthoringResource.location) {
-        this.config.luisAuthoringResource.location = this.config.resourceGroup.location;
-      }
-      if (!this.config.luisAuthoringResource.accountName) {
-        this.config.luisAuthoringResource.accountName = `${this.config.resourceGroup.name}-luis-Authoring`;
-      }
+    // // Create LUIS authoring key
+    // if (this.config.createOrNot.luisAuthoringResource) {
+    //   if (!this.config.luisAuthoringResource) {
+    //     this.config.luisAuthoringResource = {
+    //       location: this.config.resourceGroup.location,
+    //       accountName: `${this.config.resourceGroup.name}-luis-Authoring`,
+    //       resourceGroupName: this.config.resourceGroup.name,
+    //     };
+    //   }
+    //   if (!this.config.luisAuthoringResource.resourceGroupName) {
+    //     this.config.luisAuthoringResource.resourceGroupName = this.config.resourceGroup.name;
+    //   }
+    //   if (!this.config.luisAuthoringResource.location) {
+    //     this.config.luisAuthoringResource.location = this.config.resourceGroup.location;
+    //   }
+    //   if (!this.config.luisAuthoringResource.accountName) {
+    //     this.config.luisAuthoringResource.accountName = `${this.config.resourceGroup.name}-luis-Authoring`;
+    //   }
 
-      await this.deployLuisAuthoringResource(this.config.luisAuthoringResource);
-      if (this.deployStatus.luisAuthoringStatus != DeploymentStatus.DEPLOY_SUCCESS) {
-        this.logger({
-          status: BotProjectDeployLoggerType.PROVISION_ERROR,
-          message: 'Create Luis Authoring Resource Failed.',
-        });
-        return;
-      }
-    }
+    //   await this.deployLuisAuthoringResource(this.config.luisAuthoringResource);
+    //   if (this.deployStatus.luisAuthoringStatus != DeploymentStatus.DEPLOY_SUCCESS) {
+    //     this.logger({
+    //       status: BotProjectDeployLoggerType.PROVISION_ERROR,
+    //       message: 'Create Luis Authoring Resource Failed.',
+    //     });
+    //     return;
+    //   }
+    // }
 
-    if (this.config.createOrNot.cosmosDB) {
-      if (!this.config.cosmosDB) {
-        this.config.cosmosDB = {
-          resourceGroupName: this.config.resourceGroup.name,
-          location: this.config.resourceGroup.location,
-          name: this.config.resourceGroup.name.replace('_', '').substr(0, 31).toLowerCase(),
-          databaseName: `botstate-db`,
-          containerName: `botstate-container`,
-        };
-      }
-      if (!this.config.cosmosDB.resourceGroupName) {
-        this.config.cosmosDB.resourceGroupName = this.config.resourceGroup.name;
-      }
-      if (!this.config.cosmosDB.location) {
-        this.config.cosmosDB.location = this.config.resourceGroup.location;
-      }
-      if (!this.config.cosmosDB.name) {
-        this.config.cosmosDB.name = this.config.resourceGroup.name.replace('_', '').substr(0, 31).toLowerCase();
-      }
-      if (!this.config.cosmosDB.databaseName) {
-        this.config.cosmosDB.databaseName = `botstate-db`;
-      }
-      if (!this.config.cosmosDB.containerName) {
-        this.config.cosmosDB.containerName = `botstate-container`;
-      }
+    // // Create CosmosDB
+    // if (this.config.createOrNot.cosmosDB) {
+    //   if (!this.config.cosmosDB) {
+    //     this.config.cosmosDB = {
+    //       resourceGroupName: this.config.resourceGroup.name,
+    //       location: this.config.resourceGroup.location,
+    //       name: this.config.resourceGroup.name.replace('_', '').substr(0, 31).toLowerCase(),
+    //       databaseName: `botstate-db`,
+    //       containerName: `botstate-container`,
+    //     };
+    //   }
+    //   if (!this.config.cosmosDB.resourceGroupName) {
+    //     this.config.cosmosDB.resourceGroupName = this.config.resourceGroup.name;
+    //   }
+    //   if (!this.config.cosmosDB.location) {
+    //     this.config.cosmosDB.location = this.config.resourceGroup.location;
+    //   }
+    //   if (!this.config.cosmosDB.name) {
+    //     this.config.cosmosDB.name = this.config.resourceGroup.name.replace('_', '').substr(0, 31).toLowerCase();
+    //   }
+    //   if (!this.config.cosmosDB.databaseName) {
+    //     this.config.cosmosDB.databaseName = `botstate-db`;
+    //   }
+    //   if (!this.config.cosmosDB.containerName) {
+    //     this.config.cosmosDB.containerName = `botstate-container`;
+    //   }
 
-      await this.deployCosmosDBResource(this.config.cosmosDB);
-      if (this.deployStatus.cosmosDBStatus != DeploymentStatus.DEPLOY_SUCCESS) {
-        this.logger({
-          status: BotProjectDeployLoggerType.PROVISION_ERROR,
-          message: 'Create Cosmos DB Failed.',
-        });
-        return;
-      }
-    }
+    //   await this.deployCosmosDBResource(this.config.cosmosDB);
+    //   if (this.deployStatus.cosmosDBStatus != DeploymentStatus.DEPLOY_SUCCESS) {
+    //     this.logger({
+    //       status: BotProjectDeployLoggerType.PROVISION_ERROR,
+    //       message: 'Create Cosmos DB Failed.',
+    //     });
+    //     return;
+    //   }
+    // }
 
-    if (this.config.createOrNot.webApp) {
-      if (!this.config.webApp) {
-        this.config.webApp = {
-          resourceGroupName: this.config.resourceGroup.name,
-          location: this.config.resourceGroup.location,
-          name: this.config.resourceGroup.name,
-        };
-      }
-      if (!this.config.webApp.resourceGroupName) {
-        this.config.webApp.resourceGroupName = this.config.resourceGroup.name;
-      }
-      if (!this.config.webApp.location) {
-        this.config.webApp.location = this.config.resourceGroup.location;
-      }
-      if (!this.config.webApp.name) {
-        this.config.webApp.name = this.config.resourceGroup.name;
-      }
+    // // Create web app
+    // if (this.config.createOrNot.webApp) {
+    //   if (!this.config.webApp) {
+    //     this.config.webApp = {
+    //       resourceGroupName: this.config.resourceGroup.name,
+    //       location: this.config.resourceGroup.location,
+    //       name: this.config.resourceGroup.name,
+    //     };
+    //   }
+    //   if (!this.config.webApp.resourceGroupName) {
+    //     this.config.webApp.resourceGroupName = this.config.resourceGroup.name;
+    //   }
+    //   if (!this.config.webApp.location) {
+    //     this.config.webApp.location = this.config.resourceGroup.location;
+    //   }
+    //   if (!this.config.webApp.name) {
+    //     this.config.webApp.name = this.config.resourceGroup.name;
+    //   }
 
-      await this.deployWebAppResource(this.config.webApp);
-      if (this.deployStatus.webAppStatus != DeploymentStatus.DEPLOY_SUCCESS) {
-        this.logger({
-          status: BotProjectDeployLoggerType.PROVISION_ERROR,
-          message: 'Create Web App Failed.',
-        });
-        return;
-      }
-    }
+    //   await this.deployWebAppResource(this.config.webApp);
+    //   if (this.deployStatus.webAppStatus != DeploymentStatus.DEPLOY_SUCCESS) {
+    //     this.logger({
+    //       status: BotProjectDeployLoggerType.PROVISION_ERROR,
+    //       message: 'Create Web App Failed.',
+    //     });
+    //     return;
+    //   }
+    // }
 
-    if (this.config.createOrNot.bot) {
-      if (!this.config.bot) {
-        this.config.bot = {
-          resourceGroupName: this.config.resourceGroup.name,
-          location: this.config.resourceGroup.location,
-          name: this.config.resourceGroup.name,
-          displayName: this.config.resourceGroup.name,
-        };
-      }
-      if (!this.config.bot.resourceGroupName) {
-        this.config.bot.resourceGroupName = this.config.resourceGroup.name;
-      }
-      if (!this.config.bot.location) {
-        this.config.bot.location = this.config.resourceGroup.location;
-      }
-      if (!this.config.bot.name) {
-        this.config.bot.name = this.config.resourceGroup.name;
-      }
-      await this.deployBotResource(this.config.bot);
-      if (this.deployStatus.botStatus != DeploymentStatus.DEPLOY_SUCCESS) {
-        this.logger({
-          status: BotProjectDeployLoggerType.PROVISION_ERROR,
-          message: 'Create Bot Failed.',
-        });
-        return;
-      }
-    }
+    // // Create bot registration
+    // if (this.config.createOrNot.bot) {
+    //   if (!this.config.bot) {
+    //     this.config.bot = {
+    //       resourceGroupName: this.config.resourceGroup.name,
+    //       location: this.config.resourceGroup.location,
+    //       name: this.config.resourceGroup.name,
+    //       displayName: this.config.resourceGroup.name,
+    //     };
+    //   }
+    //   if (!this.config.bot.resourceGroupName) {
+    //     this.config.bot.resourceGroupName = this.config.resourceGroup.name;
+    //   }
+    //   if (!this.config.bot.location) {
+    //     this.config.bot.location = this.config.resourceGroup.location;
+    //   }
+    //   if (!this.config.bot.name) {
+    //     this.config.bot.name = this.config.resourceGroup.name;
+    //   }
+    //   await this.deployBotResource(this.config.bot);
+    //   if (this.deployStatus.botStatus != DeploymentStatus.DEPLOY_SUCCESS) {
+    //     this.logger({
+    //       status: BotProjectDeployLoggerType.PROVISION_ERROR,
+    //       message: 'Create Bot Failed.',
+    //     });
+    //     return;
+    //   }
+    // }
 
-    if (this.config.createOrNot.deployments) {
-      if (!this.config.deployments) {
-        this.config.deployments = {
-          resourceGroupName: this.config.resourceGroup.name,
-          name: '1d41002f-62a1-49f3-bd43-2f3f32a19cbb',
-        };
-      }
+    // // create deployments
+    // // what is this??
+    // if (this.config.createOrNot.deployments) {
+    //   if (!this.config.deployments) {
+    //     this.config.deployments = {
+    //       resourceGroupName: this.config.resourceGroup.name,
+    //       name: '1d41002f-62a1-49f3-bd43-2f3f32a19cbb',
+    //     };
+    //   }
 
-      if (!this.config.deployments.resourceGroupName) {
-        this.config.deployments.resourceGroupName = this.config.resourceGroup.name;
-      }
-      if (!this.config.deployments.name) {
-        this.config.deployments.name = '1d41002f-62a1-49f3-bd43-2f3f32a19cbb';
-      }
+    //   if (!this.config.deployments.resourceGroupName) {
+    //     this.config.deployments.resourceGroupName = this.config.resourceGroup.name;
+    //   }
+    //   if (!this.config.deployments.name) {
+    //     this.config.deployments.name = '1d41002f-62a1-49f3-bd43-2f3f32a19cbb';
+    //   }
 
-      await this.deployDeploymentCounter(this.config.deployments);
-      if (this.deployStatus.counterStatus != DeploymentStatus.DEPLOY_SUCCESS) {
-        this.logger({
-          status: BotProjectDeployLoggerType.PROVISION_ERROR,
-          message: 'Create Deployment Counter Failed.',
-        });
-      }
-    }
+    //   await this.deployDeploymentCounter(this.config.deployments);
+    //   if (this.deployStatus.counterStatus != DeploymentStatus.DEPLOY_SUCCESS) {
+    //     this.logger({
+    //       status: BotProjectDeployLoggerType.PROVISION_ERROR,
+    //       message: 'Create Deployment Counter Failed.',
+    //     });
+    //   }
+    // }
   }
 
   /**
    * Create resource group
-   * @param config 
+   * @param config
    */
-  private async createResourceGroup(config: ResourceGroupConfig) {
-    try {
-      if (!config.name) {
-        this.logger({
-          status: BotProjectDeployLoggerType.PROVISION_ERROR,
-          message: 'You should provide a valid resource group name.',
-        });
-        return;
-      }
+  public async createResourceGroup(config: ResourceGroupConfig): Promise<ResourceGroupConfig> {
+    if (!config.name) {
+      throw new Error('You should provide a valid resource group name.');
+    }
+    // Create a new resource group
+    if (!config.location) {
+      throw new Error('You should provide a valid resource group name.');
+    }
 
+    try {
       this.deployStatus.resourceGroupStatus = DeploymentStatus.DEPLOYING;
-      const resourceManagementClient = new ResourceManagementClient(this.creds, this.subId);
+      const resourceManagementClient = new ResourceManagementClient(this.creds, this.subscriptionId);
 
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_INFO,
@@ -366,6 +375,7 @@ export class AzureResourceMananger {
 
       const validateExist = await resourceManagementClient.resourceGroups.checkExistence(config.name);
 
+      // IF A RESOURCE GROUP EXISTS, USE THIS ONE!
       if (validateExist.body) {
         // Already Exists a resource group with the provided name
         const resourceGroupGetResult = await resourceManagementClient.resourceGroups.get(config.name);
@@ -384,61 +394,53 @@ export class AzureResourceMananger {
           message: `Use the Resource Group: ${config.name} at ${resourceGroupGetResult.location}`,
         });
 
-        // Update the location of rescoureGroup config
-        this.config.resourceGroup.location = resourceGroupGetResult.location;
+        // If the resource group exists, use the existing location property
+        // this.config.resourceGroup.location = resourceGroupGetResult.location;
         this.deployStatus.resourceGroupStatus = DeploymentStatus.DEPLOY_SUCCESS;
-        return;
-      }
-
-      // Create a new resource group
-      if (!config.location) {
+        return {
+          name: config.name,
+          location: resourceGroupGetResult.location,
+        };
+      } else {
         this.logger({
-          status: BotProjectDeployLoggerType.PROVISION_ERROR,
-          message: 'You should provide a valid location for resource group',
+          status: BotProjectDeployLoggerType.PROVISION_INFO,
+          message: 'Creating Resource Group ...',
         });
-        return;
-      }
 
-      this.logger({
-        status: BotProjectDeployLoggerType.PROVISION_INFO,
-        message: 'Creating Resource Group ...',
-      });
-
-      const resourceGroupResult = await resourceManagementClient.resourceGroups.createOrUpdate(config.name, {
-        location: config.location,
-      });
-
-      if (resourceGroupResult._response.status >= 300) {
-        this.deployStatus.resourceGroupStatus = DeploymentStatus.DEPLOY_FAIL;
-        this.logger({
-          status: BotProjectDeployLoggerType.PROVISION_ERROR,
-          message: resourceGroupResult._response.bodyAsText,
+        const resourceGroupResult = await resourceManagementClient.resourceGroups.createOrUpdate(config.name, {
+          location: config.location,
         });
-        return;
-      }
 
-      this.deployStatus.resourceGroupStatus = DeploymentStatus.DEPLOY_SUCCESS;
+        if (resourceGroupResult._response.status >= 300) {
+          this.deployStatus.resourceGroupStatus = DeploymentStatus.DEPLOY_FAIL;
+          throw new Error(resourceGroupResult._response.bodyAsText);
+        }
+
+        this.deployStatus.resourceGroupStatus = DeploymentStatus.DEPLOY_SUCCESS;
+        return config;
+      }
     } catch (err) {
       this.deployStatus.resourceGroupStatus = DeploymentStatus.DEPLOY_FAIL;
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
         message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
       });
+      throw err;
     }
   }
 
   /**
    * Deploy luis authoring resource
-   * @param config 
+   * @param config
    */
-  private async deployLuisAuthoringResource(config: LuisAuthoringResourceConfig) {
+  public async deployLuisAuthoringResource(config: LuisAuthoringResourceConfig) {
     try {
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_INFO,
         message: 'Deploying Luis Authoring Resource ...',
       });
       this.deployStatus.luisAuthoringStatus = DeploymentStatus.DEPLOYING;
-      const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(this.creds, this.subId);
+      const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(this.creds, this.subscriptionId);
       const deployResult = await cognitiveServicesManagementClient.accounts.create(
         config.resourceGroupName,
         config.accountName,
@@ -447,7 +449,7 @@ export class AzureResourceMananger {
           sku: {
             name: config.sku ?? 'F0',
           },
-          location: config.location ?? this.config.resourceGroup.location,
+          location: config.location, // ?? this.config.resourceGroup.location,
         }
       );
       if (deployResult._response.status >= 300) {
@@ -456,7 +458,7 @@ export class AzureResourceMananger {
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
           message: deployResult._response.bodyAsText,
         });
-        return;
+        throw new Error(deployResult._response.bodyAsText);
       }
 
       const authoringEndpoint = deployResult.properties?.endpoint ?? '';
@@ -468,27 +470,29 @@ export class AzureResourceMananger {
       this.deploymentOutput.luis.authoringEndpoint = authoringEndpoint;
       this.deploymentOutput.luis.authoringKey = authoringKey;
       this.deployStatus.luisAuthoringStatus = DeploymentStatus.DEPLOY_SUCCESS;
+      return { authoringKey, authoringEndpoint };
     } catch (err) {
       this.deployStatus.luisAuthoringStatus = DeploymentStatus.DEPLOY_FAIL;
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
         message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
       });
+      throw err;
     }
   }
 
   /**
    * Deploy luis resource
-   * @param config 
+   * @param config
    */
-  private async deployLuisResource(config: LuisResourceConfig) {
+  public async deployLuisResource(config: LuisResourceConfig): Promise<{ endpoint: string; endpointKey: string }> {
     try {
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_INFO,
         message: 'Deploying Luis Resource ...',
       });
       this.deployStatus.luisStatus = DeploymentStatus.DEPLOYING;
-      const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(this.creds, this.subId);
+      const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(this.creds, this.subscriptionId);
       const deployResult = await cognitiveServicesManagementClient.accounts.create(
         config.resourceGroupName,
         config.accountName,
@@ -497,7 +501,7 @@ export class AzureResourceMananger {
           sku: {
             name: config.sku ?? 'S0',
           },
-          location: config.location ?? this.config.resourceGroup.location,
+          location: config.location, // ?? this.config.resourceGroup.location,
         }
       );
       if (deployResult._response.status >= 300) {
@@ -506,7 +510,7 @@ export class AzureResourceMananger {
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
           message: deployResult._response.bodyAsText,
         });
-        return;
+        throw new Error(deployResult._response.bodyAsText);
       }
 
       const endpoint = deployResult.properties?.endpoint ?? '';
@@ -519,18 +523,20 @@ export class AzureResourceMananger {
       this.deploymentOutput.luis.endpointKey = endpointKey;
 
       this.deployStatus.luisStatus = DeploymentStatus.DEPLOY_SUCCESS;
+      return { endpoint, endpointKey };
     } catch (err) {
       this.deployStatus.luisStatus = DeploymentStatus.DEPLOY_FAIL;
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
         message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
       });
+      throw err;
     }
   }
 
   /**
    * Deploy application insights
-   * @param config 
+   * @param config
    */
   private async deployAppInsightsResource(config: ApplicationInsightsConfig) {
     try {
@@ -539,7 +545,10 @@ export class AzureResourceMananger {
         message: 'Deploying Application Insights Resource ...',
       });
       this.deployStatus.appInsightsStatus = DeploymentStatus.DEPLOYING;
-      const applicationInsightsManagementClient = new ApplicationInsightsManagementClient(this.creds, this.subId);
+      const applicationInsightsManagementClient = new ApplicationInsightsManagementClient(
+        this.creds,
+        this.subscriptionId
+      );
       const deployResult = await applicationInsightsManagementClient.components.createOrUpdate(
         config.resourceGroupName,
         config.name,
@@ -572,9 +581,9 @@ export class AzureResourceMananger {
 
   /**
    * Deploy cosmos db
-   * @param config 
+   * @param config
    */
-  private async deployCosmosDBResource(config: CosmosDBConfig) {
+  public async deployCosmosDBResource(config: CosmosDBConfig) {
     try {
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_INFO,
@@ -583,7 +592,7 @@ export class AzureResourceMananger {
       this.deployStatus.cosmosDBStatus = DeploymentStatus.DEPLOYING;
 
       // Create DB accounts
-      const cosmosDBManagementClient = new CosmosDBManagementClient(this.creds, this.subId);
+      const cosmosDBManagementClient = new CosmosDBManagementClient(this.creds, this.subscriptionId);
       const dbAccountDeployResult = await cosmosDBManagementClient.databaseAccounts.createOrUpdate(
         config.resourceGroupName,
         config.name,
@@ -604,7 +613,7 @@ export class AzureResourceMananger {
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
           message: dbAccountDeployResult._response.bodyAsText,
         });
-        return;
+        throw new Error(dbAccountDeployResult._response.bodyAsText);
       }
 
       // Create DB
@@ -614,7 +623,7 @@ export class AzureResourceMananger {
         config.databaseName,
         {
           resource: {
-            id: 'botstate-db',
+            id: config.databaseName,
           },
           options: {},
         }
@@ -637,7 +646,7 @@ export class AzureResourceMananger {
         config.containerName,
         {
           resource: {
-            id: 'botstate-container',
+            id: config.containerName,
             indexingPolicy: {
               indexingMode: 'Consistent',
               automatic: true,
@@ -696,27 +705,40 @@ export class AzureResourceMananger {
       this.deploymentOutput.cosmosDb.containerId = 'botstate-container';
 
       this.deployStatus.cosmosDBStatus = DeploymentStatus.DEPLOY_SUCCESS;
+
+      return {
+        authKey,
+        cosmosDbEndpoint,
+        databaseId: config.databaseName,
+        containerId: config.containerName,
+        collectionId: 'botstate-collection',
+      };
     } catch (err) {
       this.deployStatus.cosmosDBStatus = DeploymentStatus.DEPLOY_FAIL;
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
         message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
       });
+      throw err;
     }
   }
 
   /**
    * Deploy blob storage
-   * @param config 
+   * @param config
    */
-  private async deployBlobStorageResource(config: BlobStorageConfig) {
+  public async deployBlobStorageResource(
+    config: BlobStorageConfig
+  ): Promise<{ name: string; connectionString: string; container: string }> {
     try {
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_INFO,
         message: 'Deploying Blob Storage Resource ...',
       });
       this.deployStatus.blobStorageStatus = DeploymentStatus.DEPLOYING;
-      const storageManagementClient = new StorageManagementClient(this.creds, this.subId);
+      const storageManagementClient = new StorageManagementClient(this.creds, this.subscriptionId);
+
+      console.log('Create a storage account with ', config.resourceGroupName, config.name);
       const deployResult = await storageManagementClient.storageAccounts.create(config.resourceGroupName, config.name, {
         location: config.location,
         kind: 'StorageV2',
@@ -730,7 +752,7 @@ export class AzureResourceMananger {
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
           message: deployResult._response.bodyAsText,
         });
-        return;
+        throw new Error(deployResult._response.bodyAsText);
       }
 
       const accountKeysResult = await storageManagementClient.storageAccounts.listKeys(
@@ -739,30 +761,35 @@ export class AzureResourceMananger {
       );
       const connectionString = accountKeysResult?.keys?.[0].value ?? '';
 
+      console.log('ACCOUNT KEYS', JSON.stringify(accountKeysResult, null, 2));
+
       this.deploymentOutput.blobStorage.connectionString = connectionString;
       this.deploymentOutput.blobStorage.container = config.containerName ?? 'transcripts';
       this.deployStatus.blobStorageStatus = DeploymentStatus.DEPLOY_SUCCESS;
+
+      return { name: config.name, connectionString, container: config.containerName };
     } catch (err) {
       this.deployStatus.blobStorageStatus = DeploymentStatus.DEPLOY_FAIL;
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
         message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
       });
+      throw err;
     }
   }
 
   /**
    * Deploy web app
-   * @param config 
+   * @param config
    */
-  private async deployWebAppResource(config: WebAppConfig) {
+  public async deployWebAppResource(config: WebAppConfig): Promise<string> {
     try {
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_INFO,
         message: 'Deploying Web App Resource ...',
       });
       this.deployStatus.webAppStatus = DeploymentStatus.DEPLOYING;
-      const webSiteManagementClient = new WebSiteManagementClient(this.creds, this.subId);
+      const webSiteManagementClient = new WebSiteManagementClient(this.creds, this.subscriptionId);
 
       // Create new Service Plan
       const servicePlanResult = await webSiteManagementClient.appServicePlans.createOrUpdate(
@@ -824,31 +851,34 @@ export class AzureResourceMananger {
         });
         return;
       }
+
       const siteHost = webAppResult?.hostNames?.[0];
-      if (!this.config.bot) {
-        this.config.bot = {
-          resourceGroupName: this.config.resourceGroup.name,
-          location: this.config.resourceGroup.location,
-          name: this.config.resourceGroup.name,
-          displayName: this.config.resourceGroup.name,
-        };
-      }
-      this.config.bot.endpoint = `https://${siteHost}/api/messages`;
+      // if (!this.config.bot) {
+      //   this.config.bot = {
+      //     resourceGroupName: this.config.resourceGroup.name,
+      //     location: this.config.resourceGroup.location,
+      //     name: this.config.resourceGroup.name,
+      //     displayName: this.config.resourceGroup.name,
+      //   };
+      // }
+      // this.config.bot.endpoint = `https://${siteHost}/api/messages`;
       this.deployStatus.webAppStatus = DeploymentStatus.DEPLOY_SUCCESS;
+      return siteHost;
     } catch (err) {
       this.deployStatus.webAppStatus = DeploymentStatus.DEPLOY_FAIL;
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
         message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
       });
+      throw err;
     }
   }
 
   /**
    * Deploy bot channel registration
-   * @param config 
+   * @param config
    */
-  private async deployBotResource(config: BotConfig) {
+  public async deployBotResource(config: BotConfig) {
     try {
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_INFO,
@@ -856,7 +886,7 @@ export class AzureResourceMananger {
       });
       this.deployStatus.botStatus = DeploymentStatus.DEPLOYING;
 
-      const azureBotSerivce = new AzureBotService(this.creds, this.subId);
+      const azureBotSerivce = new AzureBotService(this.creds, this.subscriptionId);
 
       const botResult = await azureBotSerivce.bots.create(config.resourceGroupName, config.name, {
         properties: {
@@ -893,7 +923,7 @@ export class AzureResourceMananger {
 
   /**
    * Deploy guid deployment counter, indicates how many deployments have been made
-   * @param config 
+   * @param config
    */
   private async deployDeploymentCounter(config: DeploymentsConfig) {
     try {
@@ -903,17 +933,17 @@ export class AzureResourceMananger {
       });
       this.deployStatus.counterStatus = DeploymentStatus.DEPLOYING;
 
-      const resourceClient = new ResourceManagementClient(this.creds, this.subId);
+      const resourceClient = new ResourceManagementClient(this.creds, this.subscriptionId);
 
       const counterResult = await resourceClient.deployments.createOrUpdate(config.resourceGroupName, config.name, {
         properties: {
           mode: 'Incremental',
           template: {
-            $schema: "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-            contentVersion: "1.0.0.0",
-            resources: []
-          }
-        }
+            $schema: 'https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#',
+            contentVersion: '1.0.0.0',
+            resources: [],
+          },
+        },
       });
 
       if (counterResult._response.status >= 300) {

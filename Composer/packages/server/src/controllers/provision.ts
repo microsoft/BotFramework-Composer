@@ -19,11 +19,13 @@ export const ProvisionController = {
       return;
     }
     const user = await ExtensionContext.getUserFromRequest(req);
-    const { type } = req.body; // type is webapp or functions
+    const type = req.params.type; // type is webapp or functions
     const projectId = req.params.projectId;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
     // deal with publishTargets not exist in settings
     // const publishTargets = currentProject.settings?.publishTargets || [];
+
+    console.log('CALLING PLUGIN EXTENSION METHOD FOR ', type);
 
     if (ExtensionContext?.extensions?.publish[type]?.methods?.provision) {
       // get the externally provision method
@@ -41,46 +43,13 @@ export const ProvisionController = {
           message: err.message,
         });
       }
+    } else {
+      res.status(400).json({
+        statusCode: '400',
+        message: 'method not implemented',
+      });
     }
   },
-  // provision: async (req, res) => {
-  //   if (!req.body || !req.body.accessToken || !req.body.graphToken) {
-  //     res.status(401).json({ message: 'Unauthorized' });
-  //     return;
-  //   }
-  //   // const user = await PluginLoader.getUserFromRequest(req);
-  //   const { type } = req.body; // type is webapp or functions
-  //   // const projectId = req.params.projectId;
-  //   // const currentProject = await BotProjectService.getProjectById(projectId, user);
-  //   // deal with publishTargets not exist in settings
-  //   // const publishTargets = currentProject.settings?.publishTargets || [];
-
-  //   if (pluginLoader?.extensions?.publish[type]?.methods?.provision) {
-  //     // get the externally provision method
-  //     // const pluginMethod = pluginLoader.extensions.publish[type].methods.provision;
-
-  //     try {
-  //       // call the method
-  //       // const result = await pluginMethod.call(null, req.body, currentProject, user);
-  //       // set status and return value as json
-  //       // res.status(result.status).json({
-  //       //   config: result.config,
-  //       //   details: result.details,
-  //       // });
-  //       res.status(202).json({
-  //         config: null,
-  //         details: {},
-  //       });
-  //     } catch (err) {
-  //       console.log(err);
-  //       res.status(400).json({
-  //         statusCode: '400',
-  //         message: err.message,
-  //       });
-  //     }
-  //   }
-  // },
-
   getProvisionStatus: async (req, res) => {
     const target = req.params.target;
     const user = await ExtensionContext.getUserFromRequest(req);

@@ -38,13 +38,19 @@ interface PublishConfig {
   [key: string]: any;
 }
 
+interface ResourceType {
+  key: string;
+  // other keys TBD
+  [key: string]: any;
+}
+
 interface ProvisionConfig {
   name: string; // profile name
   type: string; // webapp or function
   subscription: { subscriptionId: string; tenantId: string; displayName: string };
   hostname: string; // for previous bot, it's ${name}-${environment}
   location: { id: string; name: string; displayName: string };
-  externalResources: string[];
+  externalResources: ResourceType[];
   choice: string;
   accessToken: string;
   graphToken: string;
@@ -330,45 +336,55 @@ export default async (composer: any): Promise<void> => {
 
     private asyncProvision = async (config: ProvisionConfig, project, user) => {
       const { hostname, subscription, accessToken, graphToken, location } = config;
-      const botproj = new BotProjectProvision({
-        subId: subscription.subscriptionId,
+
+      console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> azure provision process begins', config)
+
+      // Create the object responsible for actually taking the provision actions.
+      const azureProvisioner = new BotProjectProvision({
+        subscriptionId: subscription.subscriptionId,
         logger: (msg: any) => {
           console.log(msg);
           this.logMessages.push(JSON.stringify(msg, null, 2));
         },
         accessToken: accessToken,
         graphToken: graphToken,
-        projPath: '../../plugins/samples/assets/shared/scripts',
-        tenantId: subscription.tenantId,
+        tenantId: subscription.tenantId, // does the tenantId ever come back from the subscription API we use? it does not appear in my tests.
       });
+
       // set interval to update status
       const updatetimer = setInterval(() => {
         if (this.provisionStatus[project.id][config.name]) {
-          this.provisionStatus[project.id][config.name].details = botproj.getProvisionStatus();
+          this.provisionStatus[project.id][config.name].details = azureProvisioner.getProvisionStatus();
         } else {
           this.provisionStatus[project.id][config.name] = {
             status: 202,
-            details: botproj.getProvisionStatus(),
+            details: azureProvisioner.getProvisionStatus(),
           };
         }
       }, 10000);
 
+      // perform the provision using azureProvisioner.create.
+      // this will start the process, then return.
+      // However, the process will continue in the background and report its status changes using azureProvisioner.getProvisionStatus().
       try {
-        const result = await botproj.create(hostname, location.name, '');
-        const previous = this.provisionStatus[project.id][config.name];
-        previous.status = 200;
-        previous.config = result;
-        previous.details = botproj.getProvisionStatus();
-        this.setProvisionStatus(project.id, config.name, previous);
-        console.log(result);
-        return result;
+        // DO NOT AWAIT THIS, since it needs to continue in the background...
+        console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> call to azureProvisioner.create! ')
+
+        azureProvisioner.create(config);
+        // const previous = this.provisionStatus[project.id][config.name];
+        // previous.status = 200;
+        // previous.config = result;
+        // previous.details = azureProvisioner.getProvisionStatus();
+        // this.setProvisionStatus(project.id, config.name, previous);
+        // console.log(result);
+        // return result;
       } catch (error) {
         console.log(error);
 
         const previous = this.provisionStatus[project.id][config.name];
         previous.status = 500;
         previous.config = {};
-        previous.details = botproj.getProvisionStatus();
+        previous.details = azureProvisioner.getProvisionStatus();
         previous.error = JSON.parse(JSON.stringify(error, Object.getOwnPropertyNames(error)));
 
         this.setProvisionStatus(project.id, config.name, previous);
