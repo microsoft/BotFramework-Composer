@@ -245,7 +245,6 @@ const InternalDemoApp = () => {
           }}
         >
           <FormDialogSchemaEditor
-            showThemePicker
             editorId={selectedItemId}
             schema={selectedItem}
             schemaExtension=".form-dialog"
