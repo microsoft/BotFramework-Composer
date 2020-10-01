@@ -11,6 +11,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { PublishTarget } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
+import { PluginAPI } from '../../plugins/api';
 import { setAccessToken, setGraphToken } from '../../utils/auth';
 import { LeftRightSplit } from '../../components/Split/LeftRightSplit';
 import settingsStorage from '../../utils/dialogSettingStorage';
@@ -26,6 +27,7 @@ import { navigateTo } from '../../utils/navigation';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { PublishProfileDialog } from '../../constants';
+import httpClient from '../../utils/httpUtil';
 
 import { TargetList } from './targetList';
 import { PublishDialog } from './publishDialog';
@@ -394,24 +396,22 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   );
 
   // setup plugin APIs
-  // useEffect(() => {
-  //   PluginAPI.publish.startProvision = (config) => {
-  //     console.log('BEGIN A PROVISION FOR PROJECT ', projectId, 'USING CONFIG', config);
-
-  //     //   try {
-  //     //     const result = await axios.post(`/api/provision/${projectId}/type`, configuration);
-  //     //     console.log(result.data);
-  //     //     return result.status;
-  //     //   } catch (err) {
-  //     //     logger({
-  //     //       status: AzureAPIStatus.ERROR,
-  //     //       message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
-  //     //     });
-  //     //     return err.response.status;
-  //     //   }
-  //     // };
-  //   };
-  // }, [projectId]);
+  useEffect(() => {
+    console.log('SETTING STARTPROVISION FUNCT');
+    PluginAPI.publish.startProvision = async (config) => {
+      console.log('BEGIN A PROVISION FOR PROJECT ', projectId, 'USING CONFIG', config);
+      try {
+        const result = await httpClient.post(`/provision/${projectId}/${config.type}`, config);
+        console.log(result.data);
+      } catch (err) {
+        // logger({
+        //   status: AzureAPIStatus.ERROR,
+        //   message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
+        // });
+        // return err.response.status;
+      }
+    };
+  }, [projectId]);
 
   return (
     <Fragment>

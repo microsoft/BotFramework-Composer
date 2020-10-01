@@ -11,37 +11,37 @@ export interface AzureResourceManangerConfig {
   logger: any;
 
   // The subscription id of user
-  subId: string;
+  subscriptionId: string;
 
-  // Create Resource Group config
-  resourceGroup: ResourceGroupConfig;
+  // // Create Resource Group config
+  // resourceGroup: ResourceGroupConfig;
 
-  // Create luis authoring resource config
-  luisAuthoringResource: LuisAuthoringResourceConfig;
+  // // Create luis authoring resource config
+  // luisAuthoringResource: LuisAuthoringResourceConfig;
 
-  // Create luis resource config
-  luisResource: LuisResourceConfig;
+  // // Create luis resource config
+  // luisResource: LuisResourceConfig;
 
-  // Create application insights config
-  appInsights: ApplicationInsightsConfig;
+  // // Create application insights config
+  // appInsights: ApplicationInsightsConfig;
 
-  // Create cosmos db config
-  cosmosDB: CosmosDBConfig;
+  // // Create cosmos db config
+  // cosmosDB: CosmosDBConfig;
 
-  // Create blob storage config
-  blobStorage: BlobStorageConfig;
+  // // Create blob storage config
+  // blobStorage: BlobStorageConfig;
 
-  // Create bot service
-  bot: BotConfig;
+  // // Create bot service
+  // bot: BotConfig;
 
-  // Create web app
-  webApp: WebAppConfig;
+  // // Create web app
+  // webApp: WebAppConfig;
 
-  // Deployments counter
-  deployments: DeploymentsConfig;
+  // // Deployments counter
+  // deployments: DeploymentsConfig;
 
-  // Use this to handle the create or not of a resource
-  createOrNot: CreateResouces;
+  // // Use this to handle the create or not of a resource
+  // createOrNot: CreateResouces;
 }
 
 export interface CreateResouces {

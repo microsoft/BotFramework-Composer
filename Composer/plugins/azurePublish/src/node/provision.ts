@@ -6,13 +6,50 @@ import { AzureBotService } from '@azure/arm-botservice';
 import { TokenCredentials } from '@azure/ms-rest-js';
 import * as rp from 'request-promise';
 
-import { BotProjectDeployConfig } from './botProjectDeployConfig';
 import { BotProjectDeployLoggerType } from './botProjectLoggerType';
 import { AzureResourceManangerConfig } from './azureResourceManager/azureResourceManagerConfig';
 import { AzureResourceMananger, AzureResourceDeploymentStatus } from './azureResourceManager/azureResourceManager';
 
+// TODO: fix these duplicated interfaces between here and index.ts
+export interface ProvisionConfig {
+  // subscriptionId: string;
+  // logger: (string) => any;
+  accessToken: string;
+  graphToken: string;
+  tenantId?: string;
+  hostname: string; // for previous bot, it's ${name}-${environment}
+  externalResources: ResourceType[];
+  location: { id: string; name: string; displayName: string };
+}
+
+export interface ProvisionerConfig {
+  subscriptionId: string;
+  logger: (string) => any;
+  accessToken: string;
+  graphToken: string;
+  tenantId?: string;
+}
+
+interface ResourceType {
+  key: string;
+  // other keys TBD
+  [key: string]: any;
+}
+
+const AzureResourceTypes = {
+  APP_REGISTRATION: 'appRegistration',
+  BOT_REGISTRATION: 'botRegistration',
+  WEBAPP: 'webApp',
+  AZUREFUNCTIONS: 'azureFunctions',
+  COSMODB: 'cosmoDb',
+  APPINSIGHTS: 'applicationInsights',
+  LUIS_AUTHORING: 'luisAuthoring',
+  LUIS_PREDICTION: 'luisPrediction',
+  BLOBSTORAGE: 'blobStorage',
+};
+
 export class BotProjectProvision {
-  private subId: string;
+  private subscriptionId: string;
   private accessToken: string;
   private graphToken: string;
   private logger: (string) => any;
@@ -20,9 +57,8 @@ export class BotProjectProvision {
   // Will be assigned by create or deploy
   private tenantId = '';
 
-
-  constructor(config: BotProjectDeployConfig) {
-    this.subId = config.subId;
+  constructor(config: ProvisionerConfig) {
+    this.subscriptionId = config.subscriptionId;
     this.logger = config.logger;
     this.accessToken = config.accessToken;
     this.graphToken = config.graphToken;
@@ -31,8 +67,6 @@ export class BotProjectProvision {
   /*******************************************************************************************************************************/
   /* This section has to do with creating new Azure resources
   /*******************************************************************************************************************************/
-
-
   private getErrorMesssage(err) {
     if (err.body) {
       if (err.body.error) {
@@ -57,37 +91,100 @@ export class BotProjectProvision {
   /***********************************************************************************************
    * Azure API accessors
    **********************************************************************************************/
-  private async createApp(displayName: string) {
+  /*
+   * create the applicationId for the bot registration
+   * Docs: https://docs.microsoft.com/en-us/graph/api/application-post-applications?view=graph-rest-1.0&tabs=http
+   */
+  private async createApp(displayName: string): Promise<{ appId: string; appPassword: string }> {
     const applicationUri = 'https://graph.microsoft.com/v1.0/applications';
-    const requestBody = {
-      displayName: displayName,
-    };
-    const options = {
-      body: requestBody,
+
+    this.logger({
+      status: BotProjectDeployLoggerType.PROVISION_INFO,
+      message: '> Creating App Registration ...',
+    });
+
+    const appCreateOptions = {
+      body: {
+        displayName: displayName,
+      },
       json: true,
       headers: { Authorization: `Bearer ${this.graphToken}` },
     } as rp.RequestPromiseOptions;
-    const response = await rp.post(applicationUri, options);
-    return response;
-  }
 
-  private async addPassword(displayName: string, id: string) {
-    const addPasswordUri = `https://graph.microsoft.com/v1.0/applications/${id}/addPassword`;
+    // This call if successful returns an object in the form
+    // documented here: https://docs.microsoft.com/en-us/graph/api/resources/application?view=graph-rest-1.0#properties
+    // we need the `appId` and `id` fields - appId is part of our configuration, and the `id` is used to set the password.
+    let appCreated;
+    try {
+      appCreated = await rp.post(applicationUri, appCreateOptions);
+    } catch (err) {
+      this.logger({
+        status: BotProjectDeployLoggerType.PROVISION_ERROR,
+        message: `App create failed: ${JSON.stringify(err, null, 4)}`,
+      });
+      throw new Error('App create failed!');
+    }
+
+    this.logger({
+      status: BotProjectDeployLoggerType.PROVISION_INFO,
+      message: JSON.stringify(appCreated, null, 4),
+    });
+
+    const appId = appCreated.appId;
+
+    // use id to add new password and save the password as configuration
+    const addPasswordUri = `https://graph.microsoft.com/v1.0/applications/${appCreated.id}/addPassword`;
     const requestBody = {
       passwordCredential: {
         displayName: `${displayName}-pwd`,
       },
     };
-    const options = {
+    const setSecretOptions = {
       body: requestBody,
       json: true,
       headers: { Authorization: `Bearer ${this.graphToken}` },
     } as rp.RequestPromiseOptions;
-    const response = await rp.post(addPasswordUri, options);
-    return response;
+
+    let passwordSet;
+    try {
+      passwordSet = await rp.post(addPasswordUri, setSecretOptions);
+    } catch (err) {
+      this.logger({
+        status: BotProjectDeployLoggerType.PROVISION_ERROR,
+        message: `Add application password failed: ${JSON.stringify(err, null, 4)}`,
+      });
+      throw new Error('Add application password failed!');
+    }
+
+    const appPassword = passwordSet.secretText;
+
+    this.logger({
+      status: BotProjectDeployLoggerType.PROVISION_INFO,
+      message: `> Create App Id Success! ID: ${appId}`,
+    });
+
+    return { appId, appPassword };
   }
 
+  // /* Set the password for the bot registration */
+  // private async addPassword(displayName: string, id: string) {
+  //   const addPasswordUri = `https://graph.microsoft.com/v1.0/applications/${id}/addPassword`;
+  //   const requestBody = {
+  //     passwordCredential: {
+  //       displayName: `${displayName}-pwd`,
+  //     },
+  //   };
+  //   const options = {
+  //     body: requestBody,
+  //     json: true,
+  //     headers: { Authorization: `Bearer ${this.graphToken}` },
+  //   } as rp.RequestPromiseOptions;
+  //   const response = await rp.post(addPasswordUri, options);
+  //   return response;
+  // }
+
   /**
+   * Return the tenantId based on a subscription
    * For more information about this api, please refer to this doc: https://docs.microsoft.com/en-us/rest/api/resources/Tenants/List
    */
   private async getTenantId() {
@@ -96,11 +193,11 @@ export class BotProjectProvision {
         'Error: Missing access token. Please provide a non-expired Azure access token. Tokens can be obtained by running az account get-access-token'
       );
     }
-    if (!this.subId) {
+    if (!this.subscriptionId) {
       throw new Error(`Error: Missing subscription Id. Please provide a valid Azure subscription id.`);
     }
     try {
-      const tenantUrl = `https://management.azure.com/subscriptions/${this.subId}?api-version=2020-01-01`;
+      const tenantUrl = `https://management.azure.com/subscriptions/${this.subscriptionId}?api-version=2020-01-01`;
       const options = {
         headers: { Authorization: `Bearer ${this.accessToken}` },
       } as rp.RequestPromiseOptions;
@@ -119,196 +216,255 @@ export class BotProjectProvision {
    * Provision a set of Azure resources for use with a bot
    */
   public async create(
-    hostname: string,
-    location: string,
-    appId: string,
-    appPassword?: string,
-    createLuisResource = false,
-    createLuisAuthoringResource = false,
-    createCosmosDb = false,
-    createStorage = false,
-    createAppInsights = false
+    config: ProvisionConfig
+    // hostname: string,
+    // location: string,
+    // appId?: string,
+    // appPassword?: string,
+    // createLuisResource = false,
+    // createLuisAuthoringResource = false,
+    // createCosmosDb = false,
+    // createStorage = false,
+    // createAppInsights = false
   ) {
     try {
+      console.log('AZURE PROVISION CREATE CALLED', config);
+      // ensure a tenantId is available.
       if (!this.tenantId) {
         this.tenantId = await this.getTenantId();
       }
+
+      // tokenCredentials is used for authentication across the API calls
       const tokenCredentials = new TokenCredentials(this.accessToken);
 
-      // If the appId is not specified, create one
-      if (!appId) {
-        this.logger({
-          status: BotProjectDeployLoggerType.PROVISION_INFO,
-          message: '> Creating App Registration ...',
-        });
+      const provisionResults = {
+        appId: null,
+        appPassword: null,
+        resourceGroup: null,
+        webApp: null,
+        luisPrediction: null,
+        luisAuthoring: null,
+        blobStorage: null,
+        cosmoDB: null,
+      };
 
-        // create the app registration based on the display name
-        const appCreated = await this.createApp(hostname);
-        this.logger({
-          status: BotProjectDeployLoggerType.PROVISION_INFO,
-          message: JSON.stringify(appCreated, null, 4),
-        });
-
-        // use the newly created app
-        appId = appCreated.appId ?? '';
-        const id = appCreated.id ?? '';
-        if (!id) {
-          this.logger({
-            status: BotProjectDeployLoggerType.PROVISION_ERROR,
-            message: `App create failed: ${JSON.stringify(appCreated, null, 4)}`,
-          });
-          throw new Error('App create failed!');
-        }
-
-        // use id to add new password and save the password as configuration
-        const addPasswordResult = await this.addPassword(hostname, id);
-        appPassword = addPasswordResult.secretText;
-        if (!appPassword) {
-          this.logger({
-            status: BotProjectDeployLoggerType.PROVISION_ERROR,
-            message: `Add application password failed: ${JSON.stringify(addPasswordResult, null, 4)}`,
-          });
-          throw new Error('Add application password failed!');
-        }
-      }
-
-      this.logger({
-        status: BotProjectDeployLoggerType.PROVISION_INFO,
-        message: `> Create App Id Success! ID: ${appId}`,
-      });
-
-      const resourceGroupName = `${hostname}`;
-
-      // timestamp will be used as deployment name
-      const timeStamp = new Date().getTime().toString();
+      const resourceGroupName = `${config.hostname}`;
 
       // azure resource manager class config
       const armConfig = {
-        createOrNot: {
-          appInsights: createAppInsights,
-          cosmosDB: createCosmosDb,
-          blobStorage: createStorage,
-          luisResource: createLuisResource,
-          luisAuthoringResource: createLuisAuthoringResource,
-          webApp: true,
-          bot: true,
-          deployments: true,
-        },
-        bot: {
-          appId: appId ?? undefined,
-        },
-        webApp: {
-          appId: appId ?? '',
-          appPwd: appPassword ?? '',
-        },
-        resourceGroup: {
-          name: resourceGroupName,
-          location: location,
-        },
-        subId: this.subId,
+        subscriptionId: this.subscriptionId,
         creds: tokenCredentials,
         logger: this.logger,
       } as AzureResourceManangerConfig;
-      const armInstance = new AzureResourceMananger(armConfig);
-      if (!this.azureResourceManagementClient) {
-        this.azureResourceManagementClient = armInstance;
+
+      // This object is used to actually make the calls to Azure...
+      this.azureResourceManagementClient = new AzureResourceMananger(armConfig);
+
+      // Ensure the resource group is ready
+
+      try {
+        provisionResults.resourceGroup = await this.azureResourceManagementClient.createResourceGroup({
+          name: resourceGroupName,
+          location: config.location.name,
+        });
+      } catch (err) {
+        this.logger({
+          status: BotProjectDeployLoggerType.PROVISION_ERROR,
+          message: err.message,
+        });
+        throw err;
       }
 
-      await armInstance.deployResources();
-      // If application insights created, update the application insights settings in azure bot service
-      if (createAppInsights) {
-        this.logger({
-          status: BotProjectDeployLoggerType.PROVISION_INFO,
-          message: `> Linking Application Insights settings to Bot Service ...`,
-        });
+      // SOME OF THESE MUST HAPPEN IN THE RIGHT ORDER!
+      // app reg first (get app id)
+      // then bot webapp (get endpoint)
+      // then bot reg (use app id and endpoint)
 
-        const appinsightsClient = new ApplicationInsightsManagementClient(tokenCredentials, this.subId);
-        const appComponents = await appinsightsClient.components.get(resourceGroupName, resourceGroupName);
-        const appinsightsId = appComponents.appId;
-        const appinsightsInstrumentationKey = appComponents.instrumentationKey;
-        const apiKeyOptions = {
-          name: `${resourceGroupName}-provision-${timeStamp}`,
-          linkedReadProperties: [
-            `/subscriptions/${this.subId}/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${resourceGroupName}/api`,
-            `/subscriptions/${this.subId}/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${resourceGroupName}/agentconfig`,
-          ],
-          linkedWriteProperties: [
-            `/subscriptions/${this.subId}/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${resourceGroupName}/annotations`,
-          ],
-        };
-        const appinsightsApiKeyResponse = await appinsightsClient.aPIKeys.create(
-          resourceGroupName,
-          resourceGroupName,
-          apiKeyOptions
-        );
-        const appinsightsApiKey = appinsightsApiKeyResponse.apiKey;
+      // Loop over the list of required resources and take the actions necessary to create them.
+      for (let x = 0; x < config.externalResources.length; x++) {
+        const resourceToCreate = config.externalResources[x];
+        switch (resourceToCreate.key) {
+          // Create the appId and appPassword - this is usually the first step.
+          case AzureResourceTypes.APP_REGISTRATION:
+            // eslint-disable-next-line no-case-declarations
+            const { appId, appPassword } = await this.createApp(config.hostname);
+            provisionResults.appId = appId;
+            provisionResults.appPassword = appPassword;
+            break;
 
-        this.logger({
-          status: BotProjectDeployLoggerType.PROVISION_INFO,
-          message: `> AppInsights AppId: ${appinsightsId} ...`,
-        });
-        this.logger({
-          status: BotProjectDeployLoggerType.PROVISION_INFO,
-          message: `> AppInsights InstrumentationKey: ${appinsightsInstrumentationKey} ...`,
-        });
-        this.logger({
-          status: BotProjectDeployLoggerType.PROVISION_INFO,
-          message: `> AppInsights ApiKey: ${appinsightsApiKey} ...`,
-        });
-
-        if (appinsightsId && appinsightsInstrumentationKey && appinsightsApiKey) {
-          const botServiceClient = new AzureBotService(tokenCredentials, this.subId);
-          const botCreated = await botServiceClient.bots.get(resourceGroupName, hostname);
-          if (botCreated.properties) {
-            botCreated.properties.developerAppInsightKey = appinsightsInstrumentationKey;
-            botCreated.properties.developerAppInsightsApiKey = appinsightsApiKey;
-            botCreated.properties.developerAppInsightsApplicationId = appinsightsId;
-            const botUpdateResult = await botServiceClient.bots.update(resourceGroupName, hostname, botCreated);
-
-            if (botUpdateResult._response.status != 200) {
-              this.logger({
-                status: BotProjectDeployLoggerType.PROVISION_ERROR,
-                message: `! Something went wrong while trying to link Application Insights settings to Bot Service Result: ${JSON.stringify(
-                  botUpdateResult
-                )}`,
-              });
-              throw new Error(`Linking Application Insights Failed.`);
-            }
-            this.logger({
-              status: BotProjectDeployLoggerType.PROVISION_INFO,
-              message: `> Linking Application Insights settings to Bot Service Success!`,
+          case AzureResourceTypes.WEBAPP:
+            // eslint-disable-next-line no-case-declarations
+            const hostname = await this.azureResourceManagementClient.deployWebAppResource({
+              resourceGroupName: resourceGroupName,
+              location: provisionResults.resourceGroup.location,
+              name: config.hostname,
+              appId: provisionResults.appId,
+              appPwd: provisionResults.appPassword,
             });
-          } else {
-            this.logger({
-              status: BotProjectDeployLoggerType.PROVISION_WARNING,
-              message: `! The Bot doesn't have a keys properties to update.`,
+            provisionResults.webApp = {
+              hostname: hostname,
+            };
+            break;
+
+          // Create the Azure Bot Service registration
+          case AzureResourceTypes.BOT_REGISTRATION:
+            await this.azureResourceManagementClient.deployBotResource({
+              resourceGroupName: resourceGroupName,
+              location: provisionResults.resourceGroup.location,
+              name: config.hostname, // come back to this!
+              displayName: config.hostname, // todo: this may be wrong!
+              endpoint: `https://${provisionResults.webApp.hostname}/api/messages`,
+              appId: provisionResults.appId,
             });
-          }
+            break;
+
+          case AzureResourceTypes.AZUREFUNCTIONS:
+            // TODO
+            break;
+          case AzureResourceTypes.COSMODB:
+            provisionResults.cosmoDB = await this.azureResourceManagementClient.deployCosmosDBResource({
+              resourceGroupName: resourceGroupName,
+              location: provisionResults.resourceGroup.location,
+              name: config.hostname.replace(/_/g, '').substr(0, 31).toLowerCase(),
+              databaseName: `botstate-db`,
+              containerName: `botstate-container`,
+            });
+            break;
+          case AzureResourceTypes.APPINSIGHTS:
+            break;
+          case AzureResourceTypes.LUIS_AUTHORING:
+            provisionResults.luisAuthoring = await this.azureResourceManagementClient.deployLuisAuthoringResource({
+              resourceGroupName: resourceGroupName,
+              location: provisionResults.resourceGroup.location,
+              accountName: `${config.hostname}-luis-authoring`,
+            });
+            break;
+          case AzureResourceTypes.LUIS_PREDICTION:
+            // eslint-disable-next-line no-case-declarations
+            provisionResults.luisPrediction = await this.azureResourceManagementClient.deployLuisResource({
+              resourceGroupName: resourceGroupName,
+              location: provisionResults.resourceGroup.location,
+              accountName: `${config.hostname}-luis`,
+            });
+            break;
+          case AzureResourceTypes.BLOBSTORAGE:
+            // eslint-disable-next-line no-case-declarations
+            const storageAccountName = config.hostname.toLowerCase().replace(/-/g, '').replace(/_/g, '');
+            console.log('STORAGE ACCOUNT NAME IS ', storageAccountName);
+            provisionResults.blobStorage = await this.azureResourceManagementClient.deployBlobStorageResource({
+              resourceGroupName: resourceGroupName,
+              location: provisionResults.resourceGroup.location,
+              name: storageAccountName,
+              containerName: 'transcripts',
+            });
+          break;
         }
       }
-      const output = armInstance.getOutput();
-      const applicationOutput = {
-        MicrosoftAppId: appId,
-        MicrosoftAppPassword: appPassword,
-      };
-      Object.assign(output, applicationOutput);
 
-      this.logger({
-        status: BotProjectDeployLoggerType.PROVISION_INFO,
-        message: output,
-      });
+      console.log('PROVISION COMPLETE', provisionResults);
 
-      const provisionResult = {} as any;
+      return provisionResults;
 
-      provisionResult.settings = output;
-      provisionResult.hostname = hostname;
-      if (createLuisResource) {
-        provisionResult.luisResource = `${hostname}-luis`;
-      } else {
-        provisionResult.luisResource = '';
-      }
+      // // timestamp will be used as deployment name
+      // const timeStamp = new Date().getTime().toString();
 
-      return provisionResult;
+      // // START THE DEPLOY!
+      // await this.azureResourceManagementClient.deployResources();
+
+      // // If application insights created, update the application insights settings in azure bot service
+      // if (createAppInsights) {
+      //   this.logger({
+      //     status: BotProjectDeployLoggerType.PROVISION_INFO,
+      //     message: `> Linking Application Insights settings to Bot Service ...`,
+      //   });
+
+      //   const appinsightsClient = new ApplicationInsightsManagementClient(tokenCredentials, this.subscriptionId);
+      //   const appComponents = await appinsightsClient.components.get(resourceGroupName, resourceGroupName);
+      //   const appinsightsId = appComponents.appId;
+      //   const appinsightsInstrumentationKey = appComponents.instrumentationKey;
+      //   const apiKeyOptions = {
+      //     name: `${resourceGroupName}-provision-${timeStamp}`,
+      //     linkedReadProperties: [
+      //       `/subscriptions/${this.subscriptionId}/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${resourceGroupName}/api`,
+      //       `/subscriptions/${this.subscriptionId}/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${resourceGroupName}/agentconfig`,
+      //     ],
+      //     linkedWriteProperties: [
+      //       `/subscriptions/${this.subscriptionId}/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${resourceGroupName}/annotations`,
+      //     ],
+      //   };
+      //   const appinsightsApiKeyResponse = await appinsightsClient.aPIKeys.create(
+      //     resourceGroupName,
+      //     resourceGroupName,
+      //     apiKeyOptions
+      //   );
+      //   const appinsightsApiKey = appinsightsApiKeyResponse.apiKey;
+
+      //   this.logger({
+      //     status: BotProjectDeployLoggerType.PROVISION_INFO,
+      //     message: `> AppInsights AppId: ${appinsightsId} ...`,
+      //   });
+      //   this.logger({
+      //     status: BotProjectDeployLoggerType.PROVISION_INFO,
+      //     message: `> AppInsights InstrumentationKey: ${appinsightsInstrumentationKey} ...`,
+      //   });
+      //   this.logger({
+      //     status: BotProjectDeployLoggerType.PROVISION_INFO,
+      //     message: `> AppInsights ApiKey: ${appinsightsApiKey} ...`,
+      //   });
+
+      //   if (appinsightsId && appinsightsInstrumentationKey && appinsightsApiKey) {
+      //     const botServiceClient = new AzureBotService(tokenCredentials, this.subscriptionId);
+      //     const botCreated = await botServiceClient.bots.get(resourceGroupName, hostname);
+      //     if (botCreated.properties) {
+      //       botCreated.properties.developerAppInsightKey = appinsightsInstrumentationKey;
+      //       botCreated.properties.developerAppInsightsApiKey = appinsightsApiKey;
+      //       botCreated.properties.developerAppInsightsApplicationId = appinsightsId;
+      //       const botUpdateResult = await botServiceClient.bots.update(resourceGroupName, hostname, botCreated);
+
+      //       if (botUpdateResult._response.status != 200) {
+      //         this.logger({
+      //           status: BotProjectDeployLoggerType.PROVISION_ERROR,
+      //           message: `! Something went wrong while trying to link Application Insights settings to Bot Service Result: ${JSON.stringify(
+      //             botUpdateResult
+      //           )}`,
+      //         });
+      //         throw new Error(`Linking Application Insights Failed.`);
+      //       }
+      //       this.logger({
+      //         status: BotProjectDeployLoggerType.PROVISION_INFO,
+      //         message: `> Linking Application Insights settings to Bot Service Success!`,
+      //       });
+      //     } else {
+      //       this.logger({
+      //         status: BotProjectDeployLoggerType.PROVISION_WARNING,
+      //         message: `! The Bot doesn't have a keys properties to update.`,
+      //       });
+      //     }
+      //   }
+      // }
+      // const output = this.azureResourceManagementClient.getOutput();
+      // const applicationOutput = {
+      //   MicrosoftAppId: appId,
+      //   MicrosoftAppPassword: appPassword,
+      // };
+      // Object.assign(output, applicationOutput);
+
+      // this.logger({
+      //   status: BotProjectDeployLoggerType.PROVISION_INFO,
+      //   message: output,
+      // });
+
+      // const provisionResult = {} as any;
+
+      // provisionResult.settings = output;
+      // provisionResult.hostname = hostname;
+      // if (createLuisResource) {
+      //   provisionResult.luisResource = `${hostname}-luis`;
+      // } else {
+      //   provisionResult.luisResource = '';
+      // }
+
+      // return provisionResult;
     } catch (err) {
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_ERROR,

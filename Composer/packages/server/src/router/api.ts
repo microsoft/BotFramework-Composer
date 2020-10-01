@@ -52,8 +52,8 @@ router.post('/storages/folder', StorageController.createFolder);
 router.put('/storages/folder', StorageController.updateFolder);
 
 // provision
-router.post('/azure/provision/:projectId/:type', ProvisionController.provision);
-router.get('/azure/provisionStatus/:projectId/:target', ProvisionController.getProvisionStatus);
+router.post('/provision/:projectId/:type', ProvisionController.provision);
+router.get('/provisionStatus/:projectId/:target', ProvisionController.getProvisionStatus);
 
 // publishing
 router.get('/publish/types', PublishController.getTypes);

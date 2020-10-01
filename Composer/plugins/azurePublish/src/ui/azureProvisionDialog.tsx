@@ -16,15 +16,19 @@ import { DeployLocation } from '@bfc/shared';
 import {  getSubscriptions, getResourceGroups, getDeployLocations } from './api';
 
 const extensionResourceOptions = [
+  // { key: 'appRegistration', text: 'Microsoft Application Registration', description: 'Required registration allowing your bot to communicate with Azure services'},
+  // { key: 'webApp', text: 'Azure Web App', description: 'Hosting for your bot' },
+  // { key: 'botRegistration', text: 'Azure Bot Service', description: 'Register your bot with the Azure Bot Service' },
+  // { key: 'luisAuthoring', text: 'Luis Authoring Resource', description: 'Author LUIS applications' },
+  // { key: 'luisPrediction', text: 'Luis Prediction Resource', description: 'Use LUIS in your bot' },
+  // { key: 'blobStorage', text: 'BlobStorage', description: 'Capture transcripts into Blob Storage' },
   { key: 'cosmoDb', text: 'CosmoDb', description: 'Use CosmoDB to store your bot state' },
-  {
-    key: 'applicationInsight',
-    text: 'ApplicationInsight',
-    description: 'Track the performance of your app with app insights',
-  },
-  { key: 'luisAuthoring', text: 'Luis Authoring Resource', description: 'Author LUIS applications' },
-  { key: 'luisPrediction', text: 'Luis Prediction Resource', description: 'Use LUIS in your bot' },
-  { key: 'blobStorage', text: 'BlobStorage', description: 'Capture transcripts into Blob Storage' },
+  // {
+  //   key: 'applicationInsight',
+  //   text: 'ApplicationInsight',
+  //   description: 'Track the performance of your app with app insights',
+  // },
+  // { key: 'blobStorage', text: 'BlobStorage', description: 'Capture transcripts into Blob Storage' },
 ];
 
 export const AzureProvisionDialog: React.FC = () => {
@@ -33,6 +37,7 @@ export const AzureProvisionDialog: React.FC = () => {
   const [deployLocations, setDeployLocations] = useState<DeployLocation[]>([]);
 
   const [token, setToken] = useState<string>();
+  const [graphToken, setGraphToken] = useState<string>();
 
   const [currentSubscription, setSubscription] = useState<Subscription>();
   const [currentHostName, setHostName] = useState('');
@@ -54,6 +59,7 @@ export const AzureProvisionDialog: React.FC = () => {
     const { access_token, graph_token } = getAccessTokensFromStorage();
     console.log('RECEIVED ACCeSS TOKENS FROM STORAGE', access_token, graph_token);
     setToken(access_token);
+    setGraphToken(graph_token);
     getSubscriptions(access_token).then(setSubscriptions);
   }, []);
 
@@ -181,6 +187,8 @@ export const AzureProvisionDialog: React.FC = () => {
               location: currentLocation,
               type: 'azurePublish', // todo: this should be dynamic
               externalResources: extensionResourceOptions,
+              graphToken: graphToken,
+              accessToken: token,
             });
           }}
         />
