@@ -75,6 +75,22 @@ export async function npm(
   });
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function search(): Promise<any[]> {
+  try {
+    const { stdout } = await npm('search', '', {
+      '--json': '',
+      '--searchopts': '"keywords:botframework-composer extension"',
+    });
+
+    return JSON.parse(stdout);
+  } catch (err) {
+    log('%O', err);
+
+    return [];
+  }
+}
+
 export async function downloadPackage(name: string, versionOrTag: string, destination: string) {
   const dLog = log.extend(name);
   dLog('Starting download.');

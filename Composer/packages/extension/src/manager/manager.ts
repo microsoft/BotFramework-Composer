@@ -11,7 +11,7 @@ import { ExtensionContext } from '../extensionContext';
 import logger from '../logger';
 import { ExtensionManifestStore } from '../storage/extensionManifestStore';
 import { ExtensionBundle, PackageJSON, ExtensionMetadata, ExtensionSearchResult } from '../types/extension';
-import { npm, downloadPackage } from '../utils/npm';
+import { search, downloadPackage } from '../utils/npm';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires, import/order
 const rimraf = promisify(require('rimraf'));
@@ -287,15 +287,11 @@ class ExtensionManager {
   private async updateSearchCache() {
     const timeout = new Date(new Date().getTime() - SEARCH_CACHE_TIMEOUT);
     if (!this._lastSearchTimestamp || this._lastSearchTimestamp < timeout) {
-      const { stdout } = await npm('search', '', {
-        '--json': '',
-        '--searchopts': '"keywords:botframework-composer extension"',
-      });
-
       try {
-        const result = JSON.parse(stdout);
-        if (Array.isArray(result)) {
-          result.forEach((searchResult) => {
+        const results = await search();
+
+        if (Array.isArray(results)) {
+          results.forEach((searchResult) => {
             const { name, keywords = [], version, description, links } = searchResult;
             if (keywords.includes('botframework-composer') && keywords.includes('extension')) {
               const url = links?.npm ?? '';
