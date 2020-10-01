@@ -32,9 +32,10 @@ export const VirtualAssistantCreationModal: React.FC<VirtualAssistantCreationMod
   const [state, setState] = useState(AppContextDefaultValue.state);
   const { shellApi, ...shellData } = useShellApi();
   const { projectId } = shellData;
+  const [initialProjectId, setInitialProjectId] = useState(projectId);
 
   const createAndConfigureBot = async () => {
-    await handleCreateNew(formData, 'vaCore');
+    handleCreateNew(formData, 'vaCore');
   };
 
   const updateBotResponses = async () => {
@@ -70,8 +71,9 @@ export const VirtualAssistantCreationModal: React.FC<VirtualAssistantCreationMod
     onDismiss();
   };
 
+  // projectID change indicates that the project files have been created and post create calls can be executed
   useEffect((): void => {
-    if (projectId) {
+    if (projectId !== initialProjectId) {
       updateBotResponses();
       updateQnaFiles();
       navigate('./');

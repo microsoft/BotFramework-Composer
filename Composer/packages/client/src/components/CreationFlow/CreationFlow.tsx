@@ -113,7 +113,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   };
 
   const handleCreateNew = async (formData, templateId: string, qnaKbUrls?: string[]) => {
-    await createProject(
+    createProject(
       templateId || '',
       formData.name,
       formData.description,
