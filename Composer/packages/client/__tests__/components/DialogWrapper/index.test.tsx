@@ -3,7 +3,6 @@
 
 import React from 'react';
 import { render } from '@bfc/test-utils';
-
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
 describe('<DialogWrapper />', () => {
