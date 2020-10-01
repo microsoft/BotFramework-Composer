@@ -33,7 +33,7 @@ export const useLinks = () => {
   const pluginPages = extensions.reduce((pages, p) => {
     const pagesConfig = p.contributes?.views?.pages;
     if (Array.isArray(pagesConfig) && pagesConfig.length > 0) {
-      pages.push(...pagesConfig);
+      pages.push(...pagesConfig.map((page) => ({ ...page, id: p.id })));
     }
     return pages;
   }, [] as ExtensionPageContribution[]);
