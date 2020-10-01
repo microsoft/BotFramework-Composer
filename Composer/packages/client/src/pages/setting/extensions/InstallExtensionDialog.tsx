@@ -7,7 +7,6 @@ import React, { useState, useEffect } from 'react';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import { Separator } from 'office-ui-fabric-react/lib/Separator';
 import axios, { CancelToken } from 'axios';
 import formatMessage from 'format-message';
 
@@ -84,7 +83,6 @@ const InstallExtensionDialog: React.FC<InstallExtensionDialogProps> = (props) =>
       onDismiss={onDismiss}
     >
       <div>
-        <Separator>{formatMessage('OR')}</Separator>
         <SearchBox
           placeholder={formatMessage('Search for extensions on npm')}
           value={searchQuery ?? ''}
