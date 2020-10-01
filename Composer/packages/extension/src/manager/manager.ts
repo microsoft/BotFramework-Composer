@@ -4,13 +4,13 @@
 import path from 'path';
 
 import glob from 'globby';
-import { readJson, ensureDir, existsSync } from 'fs-extra';
+import { readJson, ensureDir } from 'fs-extra';
 
 import { ExtensionContext } from '../extensionContext';
 import logger from '../logger';
 import { ExtensionManifestStore } from '../storage/extensionManifestStore';
 import { ExtensionBundle, PackageJSON, ExtensionMetadata, ExtensionSearchResult } from '../types/extension';
-import { npm } from '../utils/npm';
+import { npm, downloadPackage } from '../utils/npm';
 
 const log = logger.extend('manager');
 
@@ -101,65 +101,23 @@ class ExtensionManager {
    * @returns id of installed package
    */
   public async installRemote(name: string, version?: string) {
+    await ensureDir(this.remoteDir);
     const packageNameAndVersion = version ? `${name}@${version}` : `${name}@latest`;
     log('Installing %s to %s', packageNameAndVersion, this.remoteDir);
 
     try {
-      const { stdout } = await npm(
-        'install',
-        packageNameAndVersion,
-        { '--prefix': this.remoteDir },
-        { cwd: this.remoteDir }
-      );
-
-      log('%s', stdout);
+      const destination = path.join(this.remoteDir, name);
+      await downloadPackage(name, version ?? 'latest', destination);
 
       const packageJson = await this.getPackageJson(name, this.remoteDir);
-
       if (packageJson) {
-        const extensionPath = path.resolve(this.remoteDir, 'node_modules', name);
-        this.manifest.updateExtensionConfig(name, getExtensionMetadata(extensionPath, packageJson));
+        this.manifest.updateExtensionConfig(packageJson.name, getExtensionMetadata(destination, packageJson));
+      }
 
-        return packageJson.name;
-      } else {
-        throw new Error(`Unable to install ${packageNameAndVersion}`);
-      }
+      return name;
     } catch (err) {
-      if (err?.stderr) {
-        log('%s', err.stderr);
-      }
+      log('%s', err.message ?? err);
       throw new Error(`Unable to install ${packageNameAndVersion}`);
-    }
-  }
-
-  /**
-   * Installs a local extension at path
-   * @param path Path of directory where extension is
-   */
-  public async installLocal(extPath: string) {
-    try {
-      const packageJsonPath = path.join(extPath, 'package.json');
-
-      if (!existsSync(packageJsonPath)) {
-        throw new Error(`Extension not found at path: ${extPath}`);
-      }
-
-      const packageJson = await readJson(packageJsonPath);
-
-      log('Linking %s', packageJson.name);
-      await npm('link', '.', {}, { cwd: extPath });
-
-      log('Installing %s@local to %s', packageJson.name, this.remoteDir);
-      await npm('link', packageJson.name, { '--prefix': this.remoteDir }, { cwd: this.remoteDir });
-
-      const extensionPath = path.resolve(this.remoteDir, 'node_modules', packageJson.name);
-      this.manifest.updateExtensionConfig(packageJson.name, getExtensionMetadata(extensionPath, packageJson));
-
-      return packageJson.name;
-    } catch (err) {
-      log('%s', err.msg ?? err.stderr ?? err);
-      // eslint-disable-next-line no-console
-      console.error(err);
     }
   }
 
@@ -280,7 +238,7 @@ class ExtensionManager {
 
   private async getPackageJson(id: string, dir: string): Promise<PackageJSON | undefined> {
     try {
-      const extensionPackagePath = path.resolve(dir, 'node_modules', id, 'package.json');
+      const extensionPackagePath = path.resolve(dir, id, 'package.json');
       log('fetching package.json for %s at %s', id, extensionPackagePath);
       const packageJson = await readJson(extensionPackagePath);
       return packageJson as PackageJSON;
