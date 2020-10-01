@@ -21,24 +21,23 @@ export const extensionsDispatcher = () => {
   });
 
   const addExtension = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (extensionName: string, version: string) => {
+    (callbackHelpers: CallbackInterface) => async (extensionName: string, version?: string) => {
       const { set } = callbackHelpers;
       try {
-        const res = await httpClient.post('/extensions', { name: extensionName, version });
+        const res = await httpClient.post('/extensions', { id: extensionName, version });
         const addedExtension: ExtensionConfig = res.data;
 
         set(extensionsState, (extensions) => {
           if (extensions.find((p) => p.id === addedExtension.id)) {
-            extensions = extensions.map((p) => {
+            return extensions.map((p) => {
               if (p.id === addedExtension.id) {
                 return addedExtension;
               }
               return p;
             });
           } else {
-            extensions.push(addedExtension);
+            return [...extensions, addedExtension];
           }
-          return extensions;
         });
       } catch (err) {
         console.error(err);

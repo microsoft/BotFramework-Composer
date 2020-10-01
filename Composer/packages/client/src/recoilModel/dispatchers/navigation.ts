@@ -8,6 +8,7 @@ import { PromptTab, SDKKinds } from '@bfc/shared';
 import cloneDeep from 'lodash/cloneDeep';
 
 import { currentProjectIdState } from '../atoms';
+import { encodeArrayPathToDesignerPath } from '../../utils/convertUtils/designerPathEncoder';
 
 import { createSelectedPath, getSelected } from './../../utils/dialogUtil';
 import { BreadcrumbItem } from './../../recoilModel/types';
@@ -64,6 +65,7 @@ export const navigationDispatcher = () => {
 
         if (typeof beginDialogIndex !== 'undefined' && beginDialogIndex >= 0) {
           path = createSelectedPath(beginDialogIndex);
+          path = encodeArrayPathToDesignerPath(currentDialog?.content, path);
           updatedBreadcrumb.push({ dialogId, selected: '', focused: '' });
         }
       }
@@ -88,7 +90,10 @@ export const navigationDispatcher = () => {
 
       if (!dialogId) dialogId = 'Main';
 
-      const currentUri = convertPathToUrl(projectId, dialogId, selectPath);
+      const dialogs = await snapshot.getPromise(dialogsState(projectId));
+      const currentDialog = dialogs.find(({ id }) => id === dialogId);
+      const encodedSelectPath = encodeArrayPathToDesignerPath(currentDialog?.content, selectPath);
+      const currentUri = convertPathToUrl(projectId, dialogId, encodedSelectPath);
 
       if (checkUrl(currentUri, projectId, designPageLocation)) return;
       navigateTo(currentUri, { state: { breadcrumb: updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Selected) } });
@@ -106,12 +111,16 @@ export const navigationDispatcher = () => {
       let currentUri = `/bot/${projectId}/dialogs/${dialogId}`;
 
       if (focusPath) {
-        const targetSelected = getSelected(focusPath);
+        const dialogs = await snapshot.getPromise(dialogsState(projectId));
+        const currentDialog = dialogs.find(({ id }) => id === dialogId);
+        const encodedFocusPath = encodeArrayPathToDesignerPath(currentDialog?.content, focusPath);
+
+        const targetSelected = getSelected(encodedFocusPath);
         if (targetSelected !== selected) {
           updatedBreadcrumb = updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Selected);
           updatedBreadcrumb.push({ dialogId, selected: targetSelected, focused: '' });
         }
-        currentUri = `${currentUri}?selected=${targetSelected}&focused=${focusPath}`;
+        currentUri = `${currentUri}?selected=${targetSelected}&focused=${encodedFocusPath}`;
         updatedBreadcrumb = updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Focused);
       } else {
         currentUri = `${currentUri}?selected=${selected}`;
@@ -135,10 +144,15 @@ export const navigationDispatcher = () => {
       breadcrumb: BreadcrumbItem[] = []
     ) => {
       set(currentProjectIdState, projectId);
-      const search = getUrlSearch(selectPath, focusPath);
+
+      const dialogs = await snapshot.getPromise(dialogsState(projectId));
+      const currentDialog = dialogs.find(({ id }) => id === dialogId)?.content;
+      const encodedSelectPath = encodeArrayPathToDesignerPath(currentDialog, selectPath);
+      const encodedFocusPath = encodeArrayPathToDesignerPath(currentDialog, focusPath);
+      const search = getUrlSearch(encodedSelectPath, encodedFocusPath);
       const designPageLocation = await snapshot.getPromise(designPageLocationState(projectId));
       if (search) {
-        const currentUri = `/bot/${projectId}/dialogs/${dialogId}${getUrlSearch(selectPath, focusPath)}`;
+        const currentUri = `/bot/${projectId}/dialogs/${dialogId}${search}`;
 
         if (checkUrl(currentUri, projectId, designPageLocation)) return;
         navigateTo(currentUri, { state: { breadcrumb } });
