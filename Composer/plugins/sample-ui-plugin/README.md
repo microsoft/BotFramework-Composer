@@ -15,17 +15,25 @@ Below, we will explain how you, as a developer, can author your own extension th
 
 The first thing that you need to do when authoring a Composer extension is to configure the `package.json` properly. In order to do this, you will need to fill out the following top-level properties in the `package.json`:
 
-**`extendsComposer`** - boolean
-
-This property must be set to `true` in order for Composer to recognize it as an extension.
-
 ---
 
 **`composer`** - object
 
-This property will contain the rest of the configuration options for your Composer extension. This will specify things like what contribution points your extension will host custom UI at, and which bundled JavaScript files (your React applications) to load in order to do so.
+This property will contain the configuration options for your Composer extension. This will specify things like what contribution points your extension will host custom UI at, and which bundled JavaScript files (your React applications) to load in order to do so.
 
 In the future, we expect the possibilities of this property to grow and change.
+
+---
+
+**`composer.name`** - string
+
+The name of the plugin. Defaults to the package name.
+
+---
+
+**`composer.enabled`** - boolean
+
+Only used for builtin extensions. Composer will not load the extension if this is set to false.
 
 ---
 
@@ -60,7 +68,7 @@ The `composer.contributes.views` property is an object that allows you to specif
 
 Each key inside of the `views` property represents one of the contribution points that an extension can provide custom UI for.
 
-The current valid contribution points are: `page` and `publish`. More will be available in the future.
+The current valid contribution points are: `pages` and `publish`. More will be available in the future.
 
 `package.json`
 ```
@@ -69,9 +77,9 @@ The current valid contribution points are: `page` and `publish`. More will be av
   ...
   "composer": {
     "views": {
-      "page": {
+      "pages": [{
         // specify page contribution point configration here
-      },
+      }],
       "publish": {
         // specify publish contribution point configuration here
       }
@@ -80,7 +88,7 @@ The current valid contribution points are: `page` and `publish`. More will be av
 }
 ```
 
-Each `view.<contribution-point>` property will specify a `bundleId` property that correlates to the `id` property of the desired React app bundle to display at that contribution point as specified in the `composer.bundles` array.
+Each `view.<contribution-point>` property will specify an `bundleId` property that correlates to the `id` property of the desired React app bundle to display at that contribution point as specified in the `composer.bundles` array.
 
 Adding on to the example that we used in the `composer.bundles` section:
 
@@ -109,9 +117,37 @@ Adding on to the example that we used in the `composer.bundles` section:
 }
 ```
 
-Depending on the contribution point, the `view.<contribution-point>` property might also allow other configuration properties besides `bundleId` that will affect each contribution point differently.
+Depending on the contribution point, the `view.<contribution-point>` property might also allow other configuration properties besides `id` that will affect each contribution point differently.
 
 > Look at `/sample-ui-plugin/package.json` as an example
+
+---
+
+**`composer.contributes.views.pages`** -- array
+
+This is an array containing your extension's page contributions. Composer will add a link to the left nav with the route `/page/<bundle-id>`.
+
+Each page must define an `bundleId` and `label` and can optionally define `icon`. Available icons can be found [here](https://developer.microsoft.com/en-us/fluentui#/styles/web/icons).
+
+```json
+{
+  "composer": {
+    "bundles": [{
+      "id": "page-id",
+      "path": "some/path.js"
+    }],
+    "contributes": {
+      "views": {
+        "pages": [{
+          "bundleId": "page-id",
+          "label": "My Page",
+          "icon": "Airplane"
+        }]
+      }
+    }
+  }
+}
+```
 
 ## Bundling Extension Client Code
 

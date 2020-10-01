@@ -3,30 +3,17 @@
 import React from 'react';
 import { FieldProps } from '@bfc/extension-client';
 
-import { getOrderedProperties } from '../../utils';
+import { getOrderedProperties, getSchemaWithAdditionalFields } from '../../utils';
 import { FormRow } from '../FormRow';
 
 const ObjectField: React.FC<FieldProps<object>> = function ObjectField(props) {
-  const { schema, uiOptions, depth, value, label, ...rest } = props;
+  const { schema: baseSchema, uiOptions, depth, value, label, ...rest } = props;
 
-  if (!schema) {
+  if (!baseSchema) {
     return null;
   }
 
-  const newDepth = depth + 1;
-
-  const handleChange = (field: string) => (data: any) => {
-    const newData = { ...value };
-
-    if (typeof data === 'undefined' || (typeof data === 'string' && data.length === 0)) {
-      delete newData[field];
-    } else {
-      newData[field] = data;
-    }
-
-    props.onChange(newData);
-  };
-
+  const schema = getSchemaWithAdditionalFields(baseSchema, uiOptions);
   const orderedProperties = getOrderedProperties(schema, uiOptions, value);
 
   return (
@@ -35,12 +22,11 @@ const ObjectField: React.FC<FieldProps<object>> = function ObjectField(props) {
         <FormRow
           key={`${props.id}.${typeof row === 'string' ? row : row.join('_')}`}
           {...rest}
-          depth={newDepth}
+          depth={depth + 1}
           row={row}
           schema={schema}
           uiOptions={uiOptions}
           value={value}
-          onChange={handleChange}
         />
       ))}
     </React.Fragment>

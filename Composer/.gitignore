@@ -9,10 +9,5 @@ TestBots/
 
 l10ntemp/
 
-packages/server/schemas/*.schema
-packages/server/schemas/*.uischema
-!packages/server/schemas/sdk.schema
-!packages/server/schemas/sdk.uischema
-
 # remote extensions
 .composer
