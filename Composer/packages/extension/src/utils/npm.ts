@@ -22,7 +22,7 @@ type NpmOutput = {
   stderr: string;
   code: number;
 };
-type NpmCommand = 'uninstall' | 'search';
+type NpmCommand = 'search';
 type NpmOptions = {
   [key: string]: string;
 };
@@ -45,7 +45,8 @@ export async function npm(
   command: NpmCommand,
   args: string,
   opts: NpmOptions = {},
-  spawnOpts: SpawnOptionsWithoutStdio = {}
+  spawnOpts: SpawnOptionsWithoutStdio = {},
+  platform = process.platform
 ): Promise<NpmOutput> {
   return new Promise((resolve, reject) => {
     const cmdOptions = processOptions(opts);
@@ -54,7 +55,7 @@ export async function npm(
     let stdout = '';
     let stderr = '';
 
-    const proc = spawn('npm', spawnArgs, { ...spawnOpts, shell: process.platform === 'win32' });
+    const proc = spawn('npm', spawnArgs, { ...spawnOpts, shell: platform === 'win32' });
 
     proc.stdout.on('data', (data) => {
       stdout += data;
