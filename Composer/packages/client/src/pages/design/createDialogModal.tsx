@@ -7,11 +7,10 @@ import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { useRecoilValue } from 'recoil';
+import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
 import { DialogCreationCopy, nameRegex } from '../../constants';
 import { StorageFolder } from '../../recoilModel/types';
-import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
-
 import { FieldConfig, useForm } from '../../hooks/useForm';
 import { validateDialogSelectorFamily } from '../../recoilModel';
 

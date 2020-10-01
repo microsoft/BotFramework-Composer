@@ -8,10 +8,10 @@ import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
+import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
 import { StorageFolder } from '../../recoilModel/types';
 import { DialogCreationCopy } from '../../constants';
-import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
 import { LocationSelectContent } from './LocationSelectContent';
 interface OpenProjectProps extends RouteComponentProps<{}> {
