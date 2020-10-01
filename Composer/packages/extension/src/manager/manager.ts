@@ -120,7 +120,7 @@ class ExtensionManager {
 
       return name;
     } catch (err) {
-      log('%s', err.message ?? err);
+      log('%O', err);
       throw new Error(`Unable to install ${packageNameAndVersion}`);
     }
   }
@@ -250,8 +250,7 @@ class ExtensionManager {
       return packageJson as PackageJSON;
     } catch (err) {
       log('Error getting package json for %s', id);
-      // eslint-disable-next-line no-console
-      console.error(err);
+      log('%O', err);
     }
   }
 
