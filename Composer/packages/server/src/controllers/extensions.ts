@@ -54,29 +54,18 @@ export async function listExtensions(req: Request, res: Response) {
 }
 
 export async function addExtension(req: AddExtensionRequest, res: Response) {
-  const { id, version, path } = req.body;
+  const { id, version } = req.body;
 
-  let installedId: string | null = null;
-
-  if (path) {
-    if (id) {
-      res.status(400).json({ error: '`id` and `path` cannot be used together.' });
-      return;
-    }
-
-    installedId = await ExtensionManager.installLocal(path);
-  } else {
-    if (!id) {
-      res.status(400).json({ error: '`id` is missing from body' });
-      return;
-    }
-
-    installedId = await ExtensionManager.installRemote(id, version);
+  if (!id) {
+    res.status(400).json({ error: '`id` is missing from body' });
+    return;
   }
 
-  if (installedId) {
-    await ExtensionManager.load(installedId);
-    const extension = ExtensionManager.find(installedId);
+  const extensionId = await ExtensionManager.installRemote(id, version);
+
+  if (extensionId) {
+    await ExtensionManager.load(extensionId);
+    const extension = ExtensionManager.find(extensionId);
     res.json(presentExtension(extension));
   } else {
     res.status(500).json({ error: 'Unable to install extension.' });
