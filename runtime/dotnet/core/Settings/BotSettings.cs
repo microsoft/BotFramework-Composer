@@ -24,7 +24,7 @@ namespace Microsoft.BotFramework.Composer.Core.Settings
 
         public string Bot { get; set; }
 
-        public BotSkillConfig SkillConfig { get; set; }
+        public BotSkillConfig SkillConfiguration { get; set; }
 
         public class BlobStorageConfiguration
         {
