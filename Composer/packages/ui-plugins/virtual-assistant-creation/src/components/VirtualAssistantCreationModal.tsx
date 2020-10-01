@@ -32,7 +32,7 @@ export const VirtualAssistantCreationModal: React.FC<VirtualAssistantCreationMod
   const [state, setState] = useState(AppContextDefaultValue.state);
   const { shellApi, ...shellData } = useShellApi();
   const { projectId } = shellData;
-  const [initialProjectId, setInitialProjectId] = useState(projectId);
+  const [initialProjectId] = useState(projectId);
 
   const createAndConfigureBot = async () => {
     handleCreateNew(formData, 'vaCore');
