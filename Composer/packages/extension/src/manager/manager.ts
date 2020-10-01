@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import path from 'path';
+import { promisify } from 'util';
 
 import glob from 'globby';
 import { readJson, ensureDir } from 'fs-extra';
@@ -11,6 +12,9 @@ import logger from '../logger';
 import { ExtensionManifestStore } from '../storage/extensionManifestStore';
 import { ExtensionBundle, PackageJSON, ExtensionMetadata, ExtensionSearchResult } from '../types/extension';
 import { npm, downloadPackage } from '../utils/npm';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires, import/order
+const rimraf = promisify(require('rimraf'));
 
 const log = logger.extend('manager');
 
@@ -169,14 +173,16 @@ class ExtensionManager {
   public async remove(id: string) {
     log('Removing %s', id);
 
-    try {
-      const { stdout } = await npm('uninstall', id, { '--prefix': this.remoteDir }, { cwd: this.remoteDir });
+    const metadata = this.find(id);
 
-      log('%s', stdout);
+    if (metadata) {
+      if (metadata.builtIn) {
+        throw new Error('Cannot remove builtin extension.');
+      }
 
+      await rimraf(metadata.path);
       this.manifest.removeExtension(id);
-    } catch (err) {
-      log('%s', err);
+    } else {
       throw new Error(`Unable to remove extension: ${id}`);
     }
   }
