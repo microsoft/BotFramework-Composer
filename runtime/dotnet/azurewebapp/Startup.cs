@@ -92,7 +92,15 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
 
         public BotFrameworkHttpAdapter GetBotAdapter(IStorage storage, BotSettings settings, UserState userState, ConversationState conversationState, IServiceProvider s, TelemetryInitializerMiddleware telemetryInitializerMiddleware)
         {
-            var adapter = IsSkill(settings) ? new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(this.Configuration), s.GetService<AuthenticationConfiguration>()) : new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(this.Configuration));
+            BotFrameworkHttpAdapter adapter;
+            if (IsSkill(settings))
+            {
+                adapter = new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(this.Configuration), s.GetService<AuthenticationConfiguration>());
+            }
+            else
+            {
+                adapter = new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(this.Configuration));
+            }
 
             adapter
               .UseStorage(storage)
