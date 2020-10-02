@@ -83,12 +83,17 @@ export interface NavigationState {
   qnaKbUrls?: string[];
 }
 
-export function convertPathToUrl(projectId: string, skillId: string, dialogId: string, path?: string): string {
+export function convertPathToUrl(
+  projectId: string,
+  skillId: string | undefined,
+  dialogId: string,
+  path?: string
+): string {
   //path is like main.triggers[0].actions[0]
   //uri = id?selected=triggers[0]&focused=triggers[0].actions[0]
 
   let uri =
-    projectId === skillId
+    skillId == null
       ? `/bot/${projectId}/dialogs/${dialogId}`
       : `/bot/${projectId}/skill/${skillId}/dialogs/${dialogId}`;
   if (!path) return uri;

@@ -106,8 +106,10 @@ const getTabFromFragment = () => {
   }
 };
 
-const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = (props) => {
-  const { location, dialogId, projectId = '' } = props;
+const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; skillId?: string; projectId: string }>> = (
+  props
+) => {
+  const { location, dialogId, projectId = '', skillId } = props;
   const userSettings = useRecoilValue(userSettingsState);
   const botProjectsSpace = useRecoilValue(botProjectSpaceSelector);
   const schemas = useRecoilValue(schemasState(projectId));
@@ -209,7 +211,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
          *   - If 'dialog' not exists at `dialogId` path, fallback to main dialog.
          */
         if (id) {
-          navTo(projectId, id);
+          navTo(projectId, skillId, id);
         }
         return;
       }
@@ -253,17 +255,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     createTrigger(dialogId, formData);
   };
 
-  function handleSelect(projectId, id, selected = '') {
-    if (selected) {
-      selectTo(projectId, selected);
-    } else {
-      navTo(projectId, id, []);
-    }
-  }
-
   const onCreateDialogComplete = (newDialog) => {
     if (newDialog) {
-      navTo(projectId, newDialog, []);
+      navTo(projectId, skillId, newDialog, []);
     }
   };
 
@@ -499,7 +493,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   function handleBreadcrumbItemClick(_event, item) {
     if (item) {
       const { dialogId, selected, focused, index } = item;
-      selectAndFocus(projectId, dialogId, selected, focused, clearBreadcrumb(breadcrumb, index));
+      selectAndFocus(projectId, skillId, dialogId, selected, focused, clearBreadcrumb(breadcrumb, index));
     }
   }
 
@@ -577,7 +571,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     }
   }
 
-  async function handleDeleteTrigger(projectId, id, index) {
+  async function handleDeleteTrigger(projectId, skillId, id, index) {
     const content = deleteTrigger(dialogs, id, index, (trigger) => triggerApi.deleteTrigger(id, trigger));
 
     if (content) {
@@ -589,24 +583,24 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       if (index === currentIdx) {
         if (currentIdx - 1 >= 0) {
           //if the deleted node is selected and the selected one is not the first one, navTo the previous trigger;
-          selectTo(projectId, createSelectedPath(currentIdx - 1));
+          selectTo(projectId, skillId, createSelectedPath(currentIdx - 1));
         } else {
           //if the deleted node is selected and the selected one is the first one, navTo the first trigger;
-          navTo(projectId, id, []);
+          navTo(projectId, skillId, id, []);
         }
       } else if (index < currentIdx) {
         //if the deleted node is at the front, navTo the current one;
-        selectTo(projectId, createSelectedPath(currentIdx - 1));
+        selectTo(projectId, skillId, createSelectedPath(currentIdx - 1));
       }
     }
   }
 
-  async function handleDelete(link: { projectId: string; dialogName?: string; trigger?: number }) {
+  async function handleDelete(link: { projectId: string; skillId: string; dialogName?: string; trigger?: number }) {
     const { projectId, dialogName, trigger } = link;
     if (trigger == null) {
       handleDeleteDialog(projectId, dialogName);
     } else {
-      handleDeleteTrigger(projectId, dialogName, trigger);
+      handleDeleteTrigger(projectId, skillId, dialogName, trigger);
     }
   }
 

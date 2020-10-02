@@ -9,7 +9,7 @@ import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { LeftRightSplit } from '../components/Split/LeftRightSplit';
 
 import { Toolbar, IToolbarItem } from './Toolbar';
-import { NavTree, INavTreeItem } from './NavTree';
+import { INavTreeItem } from './NavTree';
 import { ProjectTree } from './ProjectTree/ProjectTree';
 
 // -------------------- Styles -------------------- //
@@ -95,7 +95,6 @@ interface IPageProps {
 
 const Page: React.FC<IPageProps> = ({
   title,
-  navLinks,
   toolbarItems,
   onRenderHeaderContent,
   children,
@@ -114,14 +113,7 @@ const Page: React.FC<IPageProps> = ({
         </div>
         <div css={main} role="main">
           <LeftRightSplit initialLeftGridWidth="20%" minLeftPixels={200} minRightPixels={800}>
-            <ProjectTree
-              selected=""
-              selectedDialog=""
-              showDialogs={showDialogs}
-              showTriggers={false}
-              onDelete={(item) => console.log('deleting', item)}
-              onSelect={(item) => console.log('selected', item)}
-            />
+            <ProjectTree regionName={navRegionName} showDialogs={showDialogs} showTriggers={false} />
             <div aria-label={mainRegionName} css={content} data-testid="PageContent" role="region">
               {children}
             </div>

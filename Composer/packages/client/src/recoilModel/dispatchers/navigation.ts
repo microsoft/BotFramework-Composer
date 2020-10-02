@@ -49,6 +49,7 @@ export const navigationDispatcher = () => {
   const navTo = useRecoilCallback(
     ({ snapshot, set }: CallbackInterface) => async (
       projectId: string,
+      skillId: string | undefined,
       dialogId: string,
       breadcrumb: BreadcrumbItem[] = []
     ) => {
@@ -68,7 +69,8 @@ export const navigationDispatcher = () => {
         }
       }
 
-      const currentUri = convertPathToUrl(projectId, dialogId, path);
+      const currentUri = convertPathToUrl(projectId, skillId, dialogId, path);
+      console.log(currentUri);
 
       if (checkUrl(currentUri, projectId, designPageLocation)) return;
 
@@ -77,7 +79,11 @@ export const navigationDispatcher = () => {
   );
 
   const selectTo = useRecoilCallback(
-    ({ snapshot, set }: CallbackInterface) => async (projectId: string, selectPath: string) => {
+    ({ snapshot, set }: CallbackInterface) => async (
+      projectId: string,
+      skillId: string | undefined,
+      selectPath: string
+    ) => {
       if (!selectPath) return;
       set(currentProjectIdState, projectId);
       const designPageLocation = await snapshot.getPromise(designPageLocationState(projectId));
@@ -88,7 +94,7 @@ export const navigationDispatcher = () => {
 
       if (!dialogId) dialogId = 'Main';
 
-      const currentUri = convertPathToUrl(projectId, dialogId, selectPath);
+      const currentUri = convertPathToUrl(projectId, skillId, dialogId, selectPath);
 
       if (checkUrl(currentUri, projectId, designPageLocation)) return;
       navigateTo(currentUri, { state: { breadcrumb: updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Selected) } });
@@ -129,6 +135,7 @@ export const navigationDispatcher = () => {
   const selectAndFocus = useRecoilCallback(
     ({ snapshot, set }: CallbackInterface) => async (
       projectId: string,
+      skillId: string | undefined,
       dialogId: string,
       selectPath: string,
       focusPath: string,
@@ -143,7 +150,7 @@ export const navigationDispatcher = () => {
         if (checkUrl(currentUri, projectId, designPageLocation)) return;
         navigateTo(currentUri, { state: { breadcrumb } });
       } else {
-        navTo(projectId, dialogId, breadcrumb);
+        navTo(projectId, skillId, dialogId, breadcrumb);
       }
     }
   );
