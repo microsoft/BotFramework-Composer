@@ -88,7 +88,7 @@ class ExtensionContext {
     const packageJSON = fs.readFileSync(packageJsonPath, 'utf8');
     const json = JSON.parse(packageJSON);
 
-    if (json.extendsComposer) {
+    if (json.composer?.enabled !== false) {
       const modulePath = path.dirname(packageJsonPath);
       try {
         // eslint-disable-next-line security/detect-non-literal-require, @typescript-eslint/no-var-requires
