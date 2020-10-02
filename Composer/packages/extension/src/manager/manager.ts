@@ -11,6 +11,7 @@ import logger from '../logger';
 import { ExtensionManifestStore } from '../storage/extensionManifestStore';
 import { ExtensionBundle, PackageJSON, ExtensionMetadata } from '../types/extension';
 import { search, downloadPackage } from '../utils/npm';
+import { isSubdirectory } from '../utils/isSubdirectory';
 
 const log = logger.extend('manager');
 
@@ -103,6 +104,11 @@ export class ExtensionManagerImp {
 
     try {
       const destination = path.join(this.remoteDir, name);
+
+      if (!isSubdirectory(this.remoteDir, destination)) {
+        throw new Error('Cannot install outside of the configured directory.');
+      }
+
       await downloadPackage(name, version ?? 'latest', destination);
 
       const packageJson = await this.getPackageJson(name, this.remoteDir);

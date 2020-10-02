@@ -202,6 +202,12 @@ describe('#installRemote', () => {
     expect(ensureDir).toHaveBeenLastCalledWith(process.env.COMPOSER_REMOTE_EXTENSIONS_DIR);
   });
 
+  it('validates destination directory', () => {
+    manager = new ExtensionManagerImp(manifest);
+    expect(manager.installRemote('../extension')).rejects.toThrow();
+    expect(manager.installRemote('../../extension')).rejects.toThrow();
+  });
+
   it('downloads package and updates the manifest', async () => {
     (readJson as jest.Mock).mockResolvedValue({
       name: 'extension1',
