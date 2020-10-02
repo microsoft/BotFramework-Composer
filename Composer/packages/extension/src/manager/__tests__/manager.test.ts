@@ -15,6 +15,12 @@ const mockManifest = ({
     id: 'extension1',
     builtIn: true,
     enabled: true,
+    bundles: [
+      {
+        id: 'bundleId',
+        path: '/some/path',
+      },
+    ],
   },
   extension2: {
     id: 'extension2',
@@ -317,4 +323,25 @@ describe('#search', () => {
   });
 });
 
-// describe('#getBundle', () => {});
+describe('#getBundle', () => {
+  beforeEach(() => {
+    (manifest.getExtensionConfig as jest.Mock).mockImplementation((id) => {
+      return mockManifest[id];
+    });
+  });
+
+  it('throws an error if extension not found', () => {
+    manager = new ExtensionManagerImp(manifest);
+    expect(() => manager.getBundle('does-not-exist', 'bundleId')).toThrow('extension not found');
+  });
+
+  it('throws an error if bundle not found', () => {
+    manager = new ExtensionManagerImp(manifest);
+    expect(() => manager.getBundle('extension1', 'does-not-exist')).toThrow('bundle not found');
+  });
+
+  it('returns the bundle path', () => {
+    manager = new ExtensionManagerImp(manifest);
+    expect(manager.getBundle('extension1', 'bundleId')).toEqual('/some/path');
+  });
+});
