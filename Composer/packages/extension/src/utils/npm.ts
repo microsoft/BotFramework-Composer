@@ -63,7 +63,9 @@ export async function downloadPackage(name: string, versionOrTag: string, destin
   dLog('Fetching tarball.');
   const tarball = (await fetch(tarballUrl)).body;
   // clean up previous version
+  // lgtm[js/path-injection]
   await remove(destination);
+  // lgtm[js/path-injection]
   await mkdir(destination);
 
   const extractor = tar.extract({
