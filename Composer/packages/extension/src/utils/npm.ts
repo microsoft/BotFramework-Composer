@@ -113,14 +113,13 @@ export async function downloadPackage(name: string, versionOrTag: string, destin
   await rimraf(destination);
   await mkdir(destination);
 
+  const extractor = tar.extract({
+    strip: 1,
+    C: destination,
+    strict: true,
+  });
+
   dLog('Extracting tarball.');
-  await streamPipeline(
-    tarball,
-    tar.extract({
-      strip: 1,
-      C: destination,
-      strict: true,
-    })
-  );
+  await streamPipeline(tarball, extractor);
   dLog('Done downloading.');
 }
