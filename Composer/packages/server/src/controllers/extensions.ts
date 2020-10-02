@@ -3,11 +3,13 @@
 
 import { Request, Response } from 'express';
 import { ExtensionManager } from '@bfc/extension';
+import { ExtensionMetadata } from '@bfc/extension/lib/types/extension';
 
 interface AddExtensionRequest extends Request {
   body: {
     id?: string;
     version?: string;
+    path?: string;
   };
 }
 
@@ -44,8 +46,11 @@ interface ExtensionFetchRequest extends Request {
   };
 }
 
+const presentExtension = (e?: ExtensionMetadata) => (e ? { ...e, bundles: undefined, path: undefined } : undefined);
+
 export async function listExtensions(req: Request, res: Response) {
-  res.json(ExtensionManager.getAll()); // might need to have this list all enabled extensions ?
+  const extensions = ExtensionManager.getAll().map(presentExtension);
+  res.json(extensions);
 }
 
 export async function addExtension(req: AddExtensionRequest, res: Response) {
@@ -56,9 +61,15 @@ export async function addExtension(req: AddExtensionRequest, res: Response) {
     return;
   }
 
-  await ExtensionManager.installRemote(id, version);
-  await ExtensionManager.load(id);
-  res.json(ExtensionManager.find(id));
+  const extensionId = await ExtensionManager.installRemote(id, version);
+
+  if (extensionId) {
+    await ExtensionManager.load(extensionId);
+    const extension = ExtensionManager.find(extensionId);
+    res.json(presentExtension(extension));
+  } else {
+    res.status(500).json({ error: 'Unable to install extension.' });
+  }
 }
 
 export async function toggleExtension(req: ToggleExtensionRequest, res: Response) {
@@ -80,7 +91,8 @@ export async function toggleExtension(req: ToggleExtensionRequest, res: Response
     await ExtensionManager.disable(id);
   }
 
-  res.json(ExtensionManager.find(id));
+  const extension = ExtensionManager.find(id);
+  res.json(presentExtension(extension));
 }
 
 export async function removeExtension(req: RemoveExtensionRequest, res: Response) {
@@ -97,7 +109,7 @@ export async function removeExtension(req: RemoveExtensionRequest, res: Response
   }
 
   await ExtensionManager.remove(id);
-  res.json(ExtensionManager.getAll());
+  res.json(ExtensionManager.getAll().map(presentExtension));
 }
 
 export async function searchExtensions(req: SearchExtensionsRequest, res: Response) {

@@ -4,6 +4,7 @@
 import { Request, Response } from 'express';
 import rimraf from 'rimraf';
 import { ExtensionContext } from '@bfc/extension';
+import * as msRest from '@azure/ms-rest-js';
 
 import { BotProjectService } from '../../services/project';
 import { ProjectController } from '../../controllers/project';
@@ -21,6 +22,9 @@ jest.mock('@bfc/extension', () => {
     },
   };
 });
+
+const mockSendRequest = jest.fn();
+msRest.ServiceClient.prototype.sendRequest = mockSendRequest;
 
 const mockSampleBotPath = Path.join(__dirname, '../../__mocks__/asset/projects/SampleBot');
 
@@ -330,15 +334,22 @@ describe('skill operation', () => {
   });
 
   it('should retrieve skill manifest', async () => {
+    mockSendRequest.mockResolvedValue({});
+    const url = 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json';
+
     const mockReq = {
       params: { projectId },
       query: {
-        url: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json',
+        url,
       },
       body: {},
     } as Request;
     await ProjectController.getSkill(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
+    expect(mockSendRequest).toHaveBeenCalledWith({
+      url,
+      method: 'GET',
+    });
   }, 10000);
 });
 

@@ -63,7 +63,7 @@ export const PluginHost: React.FC<PluginHostProps> = (props) => {
             resolve();
           };
           // If plugin bundles end up being too large and block the client thread due to the load, enable the async flag on this call
-          injectScript(iframeDocument, pluginScriptId, `/api/plugins/${pluginName}/view/${pluginType}`, false, cb);
+          injectScript(iframeDocument, pluginScriptId, `/api/extensions/${pluginName}/view/${pluginType}`, false, cb);
         });
       }
     };

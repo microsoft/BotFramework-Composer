@@ -4,20 +4,20 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import get from 'lodash/get';
-import { LinkBtn } from '@bfc/ui-shared';
+import { LinkBtn, FixedInfo } from '@bfc/ui-shared';
 import { useContext } from 'react';
+import formatMessage from 'format-message';
+import { WidgetContainerProps, WidgetComponent } from '@bfc/extension-client';
 
-import { WidgetContainerProps, WidgetComponent } from '../types/flowRenderer.types';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { RendererContext } from '../contexts/RendererContext';
 import { ElementWrapperTag } from '../types/PluggableComponents.types';
 
 export interface DialogRefCardProps extends WidgetContainerProps {
   dialog: string | object;
-  getRefContent?: (dialogRef: JSX.Element | null) => JSX.Element;
 }
 
-export const DialogRef: WidgetComponent<DialogRefCardProps> = ({ id, onEvent, dialog, getRefContent }) => {
+export const DialogRef: WidgetComponent<DialogRefCardProps> = ({ id, onEvent, dialog }) => {
   const { ElementWrapper } = useContext(RendererContext);
   const calleeDialog = typeof dialog === 'object' ? get(dialog, '$ref') : dialog;
   const dialogRef = calleeDialog ? (
@@ -31,6 +31,12 @@ export const DialogRef: WidgetComponent<DialogRefCardProps> = ({ id, onEvent, di
         {calleeDialog}
       </LinkBtn>
     </ElementWrapper>
-  ) : null;
-  return typeof getRefContent === 'function' ? getRefContent(dialogRef) : dialogRef;
+  ) : (
+    '?'
+  );
+  return (
+    <div>
+      {dialogRef} <FixedInfo>{formatMessage('(Dialog)')}</FixedInfo>
+    </div>
+  );
 };

@@ -81,8 +81,10 @@ export function resolveFieldWidget(
           return DefaultFields.OpenObjectField;
         } else if (!schema.properties) {
           return (props) => DefaultFields.JsonField({ ...props, height: 100, value: props.value || {}, key: 'object' });
+        } else if (uiOptions?.fieldsets) {
+          return uiOptions.pivotFieldsets ? DefaultFields.PivotFieldsets : DefaultFields.Fieldsets;
         } else {
-          return uiOptions?.fieldSets ? DefaultFields.FieldSets : DefaultFields.ObjectField;
+          return DefaultFields.ObjectField;
         }
     }
   }

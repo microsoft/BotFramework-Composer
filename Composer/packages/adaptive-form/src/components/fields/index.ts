@@ -13,6 +13,7 @@ export * from './ObjectArrayField';
 export * from './ObjectField';
 export * from './OneOfField';
 export * from './OpenObjectField';
+export * from './PivotFieldsets';
 export * from './RecognizerField';
 export * from './RegexIntentField';
 export * from './QnAActionsField';
