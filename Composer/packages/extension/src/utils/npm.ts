@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { spawn, SpawnOptionsWithoutStdio } from 'child_process';
 import { promisify } from 'util';
 
 import { mkdir } from 'fs-extra';
@@ -9,6 +8,7 @@ import fetch from 'node-fetch';
 import tar from 'tar';
 
 import logger from '../logger';
+import { ExtensionSearchResult } from '../types/extension';
 
 const streamPipeline = promisify(require('stream').pipeline);
 
@@ -17,73 +17,29 @@ const rimraf = promisify(require('rimraf'));
 
 const log = logger.extend('npm');
 
-type NpmOutput = {
-  stdout: string;
-  stderr: string;
-  code: number;
-};
-type NpmCommand = 'search';
-type NpmOptions = {
-  [key: string]: string;
-};
-
-function processOptions(opts: NpmOptions) {
-  return Object.entries({ '--no-fund': '', '--no-audit': '', '--quiet': '', ...opts }).map(([flag, value]) => {
-    return value ? `${flag}=${value}` : flag;
-  });
-}
-
-/**
- * Executes npm commands that include user input safely
- * @param `command` npm command to execute.
- * @param `args` cli arguments
- * @param `opts` cli flags
- * @param `spawnOpts` options to pass to spawn command
- * @returns Object with stdout, stderr, and exit code from command
- */
-export async function npm(
-  command: NpmCommand,
-  args: string,
-  opts: NpmOptions = {},
-  spawnOpts: SpawnOptionsWithoutStdio = {},
-  platform = process.platform
-): Promise<NpmOutput> {
-  return new Promise((resolve, reject) => {
-    const cmdOptions = processOptions(opts);
-    const spawnArgs = [command, ...cmdOptions, args];
-    log('npm %s', spawnArgs.join(' '));
-    let stdout = '';
-    let stderr = '';
-
-    const proc = spawn('npm', spawnArgs, { ...spawnOpts, shell: platform === 'win32' });
-
-    proc.stdout.on('data', (data) => {
-      stdout += data;
-    });
-
-    proc.stderr.on('data', (data) => {
-      stderr += data;
-    });
-
-    proc.on('close', (code) => {
-      if (code > 0) {
-        reject({ stdout, stderr, code });
-      } else {
-        resolve({ stdout, stderr, code });
-      }
-    });
-  });
-}
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function search(): Promise<any[]> {
+export async function search(query = ''): Promise<ExtensionSearchResult[]> {
   try {
-    const { stdout } = await npm('search', '', {
-      '--json': '',
-      '--searchopts': '"keywords:botframework-composer extension"',
-    });
+    log('Searching for %s', query);
+    const queryString = query.replace(' ', '+');
+    const res = await fetch(
+      `https://registry.npmjs.org/-/v1/search?text=${queryString}+keywords:botframework-composer&size=100&from=0&quality=0.65&popularity=0.98&maintenance=0.5`
+    );
+    const data = await res.json();
 
-    return JSON.parse(stdout);
+    log('Got %d result(s).', data.objects?.length ?? 0);
+
+    return data.objects.map((result) => {
+      const { name, version, description = '', keywords = [], links = {} } = result.package;
+
+      return {
+        id: name,
+        version,
+        description,
+        keywords,
+        url: links.npm ?? '',
+      } as ExtensionSearchResult;
+    });
   } catch (err) {
     log('%O', err);
 

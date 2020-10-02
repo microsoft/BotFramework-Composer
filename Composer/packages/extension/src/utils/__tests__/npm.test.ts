@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /* eslint-disable no-underscore-dangle */
-import { spawn } from 'child_process';
 import { Readable, Writable } from 'stream';
 
 import fetch from 'node-fetch';
@@ -9,17 +8,7 @@ import rimraf from 'rimraf';
 import { mkdir } from 'fs-extra';
 import tar from 'tar';
 
-import { npm, search, downloadPackage } from '../npm';
-
-const mockProc = {
-  stdout: {
-    on: jest.fn(),
-  },
-  stderr: {
-    on: jest.fn(),
-  },
-  on: jest.fn(),
-};
+import { search, downloadPackage } from '../npm';
 
 class MockBody extends Readable {
   _read() {
@@ -35,10 +24,6 @@ class MockExtractor extends Writable {
   }
 }
 
-jest.mock('child_process', () => ({
-  spawn: jest.fn().mockImplementation(() => mockProc),
-}));
-
 jest.mock('node-fetch', () => jest.fn());
 jest.mock('rimraf', () => {
   return jest.fn().mockImplementation((path, cb) => {
@@ -52,76 +37,49 @@ jest.mock('tar', () => ({
   extract: jest.fn(),
 }));
 
-beforeEach(() => {
-  mockProc.stdout.on.mockImplementation((event, cb) => {
-    if (event === 'data') {
-      cb('stdout data');
-    }
-  });
-  mockProc.stderr.on.mockImplementation((event, cb) => {
-    if (event === 'data') {
-      cb('stderr data');
-    }
-  });
-  mockProc.on.mockImplementation((event, cb) => {
-    if (event === 'close') {
-      cb(0);
-    }
-  });
-});
-
-describe('npm', () => {
-  it('spawns an npm process', async () => {
-    const { stdout, stderr, code } = await npm('search', 'arg1 arg2', { '--prefix': '/foo' }, { cwd: '/foo' });
-    expect(spawn).toHaveBeenCalledWith(
-      'npm',
-      ['search', '--no-fund', '--no-audit', '--quiet', '--prefix=/foo', 'arg1 arg2'],
-      {
-        cwd: '/foo',
-        shell: false,
-      }
-    );
-    expect(stdout).toEqual('stdout data');
-    expect(stderr).toEqual('stderr data');
-    expect(code).toEqual(0);
-  });
-
-  it('uses a shell if on windows', async () => {
-    await npm('search', '', {}, {}, 'win32');
-    expect(spawn).toHaveBeenCalledWith('npm', expect.any(Array), { shell: true });
-  });
-
-  it('rejects when error', () => {
-    mockProc.on.mockImplementation((event, cb) => {
-      if (event === 'close') {
-        cb(1);
-      }
-    });
-    expect(npm('search', '')).rejects.toEqual(expect.objectContaining({ code: 1 }));
-  });
-});
-
 describe('search', () => {
-  const stdout = [{ name: 'package1' }, { name: 'package2' }];
+  const data = [
+    {
+      name: 'package1',
+      description: 'package1 description',
+      version: '0.0.1',
+      keywords: ['foo'],
+      links: { npm: 'package1 npm link' },
+    },
+    { name: 'package2', description: 'package2 description', version: '0.0.2' },
+  ];
 
   beforeEach(() => {
-    mockProc.stdout.on.mockImplementation((event, cb) => {
-      if (event === 'data') {
-        cb(JSON.stringify(stdout));
-      }
-    });
+    const mockRes = {
+      json: jest.fn(),
+    };
+    ((fetch as unknown) as jest.Mock).mockImplementation(() => mockRes);
+    mockRes.json.mockResolvedValue({ objects: data.map((d) => ({ package: d })) });
   });
 
   it('returns results of npm search', async () => {
-    const results = await search();
+    const results = await search('my query');
 
-    expect(spawn).toHaveBeenCalledWith(
-      'npm',
-      expect.arrayContaining(['search', '--searchopts="keywords:botframework-composer extension"', '--json']),
-      expect.any(Object)
+    expect(fetch).toHaveBeenCalledWith(
+      expect.stringContaining('registry.npmjs.org/-/v1/search?text=my+query+keywords:botframework-composer')
     );
 
-    expect(results).toEqual(stdout);
+    expect(results).toEqual([
+      {
+        id: 'package1',
+        description: 'package1 description',
+        version: '0.0.1',
+        keywords: ['foo'],
+        url: 'package1 npm link',
+      },
+      {
+        id: 'package2',
+        description: 'package2 description',
+        version: '0.0.2',
+        keywords: [],
+        url: '',
+      },
+    ]);
   });
 });
 

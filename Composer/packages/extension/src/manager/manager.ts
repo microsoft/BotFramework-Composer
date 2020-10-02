@@ -10,15 +10,13 @@ import { readJson, ensureDir } from 'fs-extra';
 import { ExtensionContext } from '../extensionContext';
 import logger from '../logger';
 import { ExtensionManifestStore } from '../storage/extensionManifestStore';
-import { ExtensionBundle, PackageJSON, ExtensionMetadata, ExtensionSearchResult } from '../types/extension';
+import { ExtensionBundle, PackageJSON, ExtensionMetadata } from '../types/extension';
 import { search, downloadPackage } from '../utils/npm';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires, import/order
 const rimraf = promisify(require('rimraf'));
 
 const log = logger.extend('manager');
-
-const SEARCH_CACHE_TIMEOUT = 5 * 60000; // 5 minutes
 
 function processBundles(extensionPath: string, bundles: ExtensionBundle[]) {
   return bundles.map((b) => ({
@@ -41,9 +39,6 @@ function getExtensionMetadata(extensionPath: string, packageJson: PackageJSON): 
 }
 
 export class ExtensionManagerImp {
-  private searchCache = new Map<string, ExtensionSearchResult>();
-  private _lastSearchTimestamp: Date | undefined;
-
   public constructor(private _manifest?: ExtensionManifestStore) {}
 
   /**
@@ -193,19 +188,12 @@ export class ExtensionManagerImp {
    * @param query The search query
    */
   public async search(query: string) {
-    await this.updateSearchCache();
-    const normalizedQuery = query.toLowerCase();
+    const results = await search(query);
 
-    const results = Array.from(this.searchCache.values()).filter((result) => {
-      return (
-        !this.find(result.id) &&
-        [result.id, result.description, ...result.keywords].some((target) =>
-          target.toLowerCase().includes(normalizedQuery)
-        )
-      );
+    return results.filter((searchResult) => {
+      const { keywords } = searchResult;
+      return keywords.includes('botframework-composer') && keywords.includes('extension');
     });
-
-    return results;
   }
 
   /**
@@ -266,33 +254,6 @@ export class ExtensionManagerImp {
     }
 
     return process.env.COMPOSER_REMOTE_EXTENSIONS_DIR;
-  }
-
-  private async updateSearchCache() {
-    const timeout = new Date(new Date().getTime() - SEARCH_CACHE_TIMEOUT);
-    if (!this._lastSearchTimestamp || this._lastSearchTimestamp < timeout) {
-      try {
-        const results = await search();
-
-        if (Array.isArray(results)) {
-          results.forEach((searchResult) => {
-            const { name, keywords = [], version, description, links } = searchResult;
-            if (keywords.includes('botframework-composer') && keywords.includes('extension')) {
-              const url = links?.npm ?? '';
-              this.searchCache.set(name, {
-                id: name,
-                version,
-                description,
-                keywords,
-                url,
-              });
-            }
-          });
-        }
-      } catch (err) /* istanbul ignore next */ {
-        log('%O', err);
-      }
-    }
   }
 }
 

@@ -264,58 +264,42 @@ describe('#search', () => {
   beforeEach(() => {
     (search as jest.Mock).mockResolvedValue([
       {
-        name: 'extension1',
+        id: 'extension1',
         keywords: ['botframework-composer', 'extension', 'foo', 'bar'],
         description: 'LOREM ipsum',
         version: '1.0.0',
-        links: { npm: 'extension1 npm link' },
+        url: 'extension1 npm link',
       },
       {
-        name: 'extension-2',
+        id: 'extension-2',
         keywords: ['botframework-composer', 'extension', 'bar'],
         description: 'foo',
         version: '1.0.0',
-        links: { npm: 'extension-2 npm link' },
+        url: 'extension-2 npm link',
       },
       {
-        name: 'foo',
-        keywords: ['botframework-composer', 'extension'],
+        id: 'foo',
+        keywords: ['botframework-composer'],
         description: 'lorem ipsum',
         version: '1.0.0',
-        links: { npm: 'foo npm link' },
+        url: 'foo npm link',
       },
       {
-        name: 'bar',
-        keywords: ['botframework-composer', 'extension'],
+        id: 'bar',
+        keywords: ['botframework-composer'],
         description: '',
         version: '1.0.0',
-        links: { npm: 'bar npm link' },
+        url: 'bar npm link',
       },
     ]);
   });
 
-  it('filters the search cache by the query', async () => {
+  it('filters the search results by the extension keyword', async () => {
     manager = new ExtensionManagerImp(manifest);
 
     const results = await manager.search('foo');
-    expect(results).toHaveLength(3);
-  });
 
-  it('does not use case sensitive', async () => {
-    manager = new ExtensionManagerImp(manifest);
-
-    const results = await manager.search('LoReM');
-    expect(results).toHaveLength(2);
-  });
-
-  it('omits installed extensions', async () => {
-    (manifest.getExtensionConfig as jest.Mock).mockImplementation((id) => {
-      return mockManifest[id];
-    });
-
-    manager = new ExtensionManagerImp(manifest);
-
-    const results = await manager.search('foo');
+    expect(search).toHaveBeenCalledWith('foo');
     expect(results).toHaveLength(2);
   });
 });
