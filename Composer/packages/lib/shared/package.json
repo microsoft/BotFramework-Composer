@@ -21,7 +21,7 @@
     "watch": "yarn build:ts --watch"
   },
   "peerDependencies": {
-    "react": "16.13.0",
+    "react": "16.13.1",
     "react-dom": "16.13.1"
   },
   "devDependencies": {
@@ -32,7 +32,7 @@
     "autoprefixer": "^9.5.1",
     "copyfiles": "^2.1.0",
     "office-ui-fabric-react": "^7.88.1",
-    "react": "16.13.0",
+    "react": "16.13.1",
     "react-dom": "16.13.1",
     "rimraf": "^2.6.3"
   },
