@@ -26,6 +26,7 @@ using Microsoft.Bot.Builder.Skills;
 using Microsoft.Bot.Connector.Authentication;
 using Microsoft.BotFramework.Composer.Core;
 using Microsoft.BotFramework.Composer.Core.Settings;
+using Microsoft.BotFramework.Composer.WebAppTemplates.Authorization;
 
 //using Microsoft.BotFramework.Composer.CustomAction;
 using Microsoft.Extensions.Configuration;
@@ -84,9 +85,14 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             return storage;
         }
 
+        public bool IsSkill(BotSettings settings)
+        {
+            return settings?.SkillConfiguration?.IsSkill == true;
+        }
+
         public BotFrameworkHttpAdapter GetBotAdapter(IStorage storage, BotSettings settings, UserState userState, ConversationState conversationState, IServiceProvider s, TelemetryInitializerMiddleware telemetryInitializerMiddleware)
         {
-            var adapter = new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(this.Configuration));
+            var adapter = IsSkill(settings) ? new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(this.Configuration), s.GetService<AuthenticationConfiguration>()) : new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(this.Configuration));
 
             adapter
               .UseStorage(storage)
@@ -123,8 +129,15 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             services.AddSingleton<ICredentialProvider, ConfigurationCredentialProvider>();
             services.AddSingleton<BotAdapter>(sp => (BotFrameworkHttpAdapter)sp.GetService<IBotFrameworkHttpAdapter>());
 
-            // Register AuthConfiguration to enable custom claim validation.
-            services.AddSingleton<AuthenticationConfiguration>();
+            // Register AuthConfiguration to enable custom claim validation for skills.
+            if (IsSkill(settings))
+            {
+                services.AddSingleton(sp => new AuthenticationConfiguration { ClaimsValidator = new AllowedCallersClaimsValidator(settings.SkillConfiguration) });
+            }
+            else
+            {
+                services.AddSingleton(sp => new AuthenticationConfiguration());
+            }
 
             // register components.
             ComponentRegistration.Add(new DialogsComponentRegistration());

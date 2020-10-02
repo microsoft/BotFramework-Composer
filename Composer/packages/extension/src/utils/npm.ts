@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { spawn } from 'child_process';
+import { spawn, SpawnOptionsWithoutStdio } from 'child_process';
 
 import logger from '../logger';
 
@@ -12,13 +12,13 @@ type NpmOutput = {
   stderr: string;
   code: number;
 };
-type NpmCommand = 'install' | 'uninstall' | 'search';
+type NpmCommand = 'install' | 'uninstall' | 'search' | 'link';
 type NpmOptions = {
   [key: string]: string;
 };
 
 function processOptions(opts: NpmOptions) {
-  return Object.entries({ '--no-fund': '', '--no-audit': '', ...opts }).map(([flag, value]) => {
+  return Object.entries({ '--no-fund': '', '--no-audit': '', '--quiet': '', ...opts }).map(([flag, value]) => {
     return value ? `${flag}=${value}` : flag;
   });
 }
@@ -28,9 +28,15 @@ function processOptions(opts: NpmOptions) {
  * @param `command` npm command to execute.
  * @param `args` cli arguments
  * @param `opts` cli flags
+ * @param `spawnOpts` options to pass to spawn command
  * @returns Object with stdout, stderr, and exit code from command
  */
-export async function npm(command: NpmCommand, args: string, opts: NpmOptions = {}): Promise<NpmOutput> {
+export async function npm(
+  command: NpmCommand,
+  args: string,
+  opts: NpmOptions = {},
+  spawnOpts: SpawnOptionsWithoutStdio = {}
+): Promise<NpmOutput> {
   return new Promise((resolve, reject) => {
     const cmdOptions = processOptions(opts);
     const spawnArgs = [command, ...cmdOptions, args];
@@ -38,7 +44,7 @@ export async function npm(command: NpmCommand, args: string, opts: NpmOptions = 
     let stdout = '';
     let stderr = '';
 
-    const proc = spawn('npm', spawnArgs);
+    const proc = spawn('npm', spawnArgs, { ...spawnOpts, shell: process.platform === 'win32' });
 
     proc.stdout.on('data', (data) => {
       stdout += data;
