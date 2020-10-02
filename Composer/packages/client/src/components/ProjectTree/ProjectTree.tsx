@@ -15,7 +15,7 @@ import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 
 import { dispatcherState, currentProjectIdState } from '../../recoilModel';
 import { botProjectSpaceSelector } from '../../recoilModel/selectors';
-import { createSelectedPath, getFriendlyName } from '../../utils/dialogUtil';
+import { getFriendlyName } from '../../utils/dialogUtil';
 import { containUnsupportedTriggers, triggerNotSupported } from '../../utils/dialogValidator';
 
 import { TreeItem } from './treeItem';
@@ -113,7 +113,7 @@ type BotInProject = {
 };
 
 type IProjectTreeProps = {
-  onSelect: (link: TreeLink) => void;
+  onSelect?: (link: TreeLink) => void;
   showTriggers?: boolean;
   showDialogs?: boolean;
   regionName: string;

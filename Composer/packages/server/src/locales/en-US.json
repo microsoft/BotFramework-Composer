@@ -110,6 +110,9 @@
   "add_a_skill_46d2b71c": {
     "message": "Add a skill"
   },
+  "add_a_trigger_c6861401": {
+    "message": "Add a trigger"
+  },
   "add_a_welcome_message_9e1480b2": {
     "message": "Add a welcome message"
   },
@@ -550,6 +553,9 @@
   },
   "create_copy_to_translate_bot_content_efc872c": {
     "message": "Create copy to translate bot content"
+  },
+  "create_edit_skill_manifest_1c1b14fe": {
+    "message": "Create/edit skill manifest"
   },
   "create_folder_error_38aa86f5": {
     "message": "Create Folder Error"
@@ -1655,6 +1661,9 @@
   "progress_of_total_87de8616": {
     "message": "{ progress }% of { total }"
   },
+  "project_tree_43d88e83": {
+    "message": "Project tree"
+  },
   "prompt_for_a_date_5d2c689e": {
     "message": "Prompt for a date"
   },
@@ -1678,9 +1687,6 @@
   },
   "prompt_with_multi_choice_f428542f": {
     "message": "Prompt with multi-choice"
-  },
-  "properties_20630dd5": {
-    "message": "Properties"
   },
   "property_description_8d21ea2e": {
     "message": "Property description."
@@ -1792,6 +1798,9 @@
   },
   "remove_f47dc62a": {
     "message": "Remove"
+  },
+  "remove_this_trigger_622d866d": {
+    "message": "Remove this trigger"
   },
   "repeat_this_dialog_83ca994e": {
     "message": "Repeat this dialog"
