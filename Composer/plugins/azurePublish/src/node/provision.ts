@@ -246,6 +246,7 @@ export class BotProjectProvision {
         luisAuthoring: null,
         blobStorage: null,
         cosmoDB: null,
+        appInsights: null,
       };
 
       const resourceGroupName = `${config.hostname}`;
@@ -284,6 +285,7 @@ export class BotProjectProvision {
       for (let x = 0; x < config.externalResources.length; x++) {
         const resourceToCreate = config.externalResources[x];
         switch (resourceToCreate.key) {
+          /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
           // Create the appId and appPassword - this is usually the first step.
           case AzureResourceTypes.APP_REGISTRATION:
             // eslint-disable-next-line no-case-declarations
@@ -292,6 +294,8 @@ export class BotProjectProvision {
             provisionResults.appPassword = appPassword;
             break;
 
+          /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+          // Create a web app to host the bot
           case AzureResourceTypes.WEBAPP:
             // eslint-disable-next-line no-case-declarations
             const hostname = await this.azureResourceManagementClient.deployWebAppResource({
@@ -306,6 +310,7 @@ export class BotProjectProvision {
             };
             break;
 
+          /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
           // Create the Azure Bot Service registration
           case AzureResourceTypes.BOT_REGISTRATION:
             await this.azureResourceManagementClient.deployBotResource({
@@ -318,9 +323,14 @@ export class BotProjectProvision {
             });
             break;
 
+          /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+          // Create the Azure Bot Service registration
           case AzureResourceTypes.AZUREFUNCTIONS:
             // TODO
             break;
+
+          /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+          // Create the Cosmo DB for state
           case AzureResourceTypes.COSMODB:
             provisionResults.cosmoDB = await this.azureResourceManagementClient.deployCosmosDBResource({
               resourceGroupName: resourceGroupName,
@@ -330,15 +340,39 @@ export class BotProjectProvision {
               containerName: `botstate-container`,
             });
             break;
+
+          /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+          // Create the app insights for telemetry
           case AzureResourceTypes.APPINSIGHTS:
+            provisionResults.appInsights = await this.azureResourceManagementClient.deployAppInsightsResource({
+              resourceGroupName: resourceGroupName,
+              location: provisionResults.resourceGroup.location,
+              name: config.hostname,
+            });
+
+            // connect the new app insights stuff to the bot registration (if created)
+            if (config.externalResources.find((r) => r.key === AzureResourceTypes.BOT_REGISTRATION)) {
+              await this.azureResourceManagementClient.connectAppInsightsToBotService({
+                resourceGroupName: resourceGroupName,
+                name: config.hostname,
+              });
+            }
+
             break;
+
+          /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+          // Create a LUIS authoring key
           case AzureResourceTypes.LUIS_AUTHORING:
             provisionResults.luisAuthoring = await this.azureResourceManagementClient.deployLuisAuthoringResource({
               resourceGroupName: resourceGroupName,
               location: provisionResults.resourceGroup.location,
               accountName: `${config.hostname}-luis-authoring`,
             });
+
             break;
+
+          /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+          // Create a LUIS prediction key
           case AzureResourceTypes.LUIS_PREDICTION:
             // eslint-disable-next-line no-case-declarations
             provisionResults.luisPrediction = await this.azureResourceManagementClient.deployLuisResource({
@@ -347,124 +381,30 @@ export class BotProjectProvision {
               accountName: `${config.hostname}-luis`,
             });
             break;
+
+          /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+          // Create a blob storage for transcripts
           case AzureResourceTypes.BLOBSTORAGE:
             // eslint-disable-next-line no-case-declarations
-            const storageAccountName = config.hostname.toLowerCase().replace(/-/g, '').replace(/_/g, '');
-            console.log('STORAGE ACCOUNT NAME IS ', storageAccountName);
             provisionResults.blobStorage = await this.azureResourceManagementClient.deployBlobStorageResource({
               resourceGroupName: resourceGroupName,
               location: provisionResults.resourceGroup.location,
-              name: storageAccountName,
+              name: config.hostname.toLowerCase().replace(/-/g, '').replace(/_/g, ''),
               containerName: 'transcripts',
             });
-          break;
+            break;
         }
       }
+
+      // TODO: NOT SURE WHAT THIS DOES! Something about tracking what deployments happen because of composer?
+      await this.azureResourceManagementClient.deployDeploymentCounter({
+        resourceGroupName: resourceGroupName,
+        name: '1d41002f-62a1-49f3-bd43-2f3f32a19cbb', // WHAT IS THIS CONSTANT???
+      });
 
       console.log('PROVISION COMPLETE', provisionResults);
 
       return provisionResults;
-
-      // // timestamp will be used as deployment name
-      // const timeStamp = new Date().getTime().toString();
-
-      // // START THE DEPLOY!
-      // await this.azureResourceManagementClient.deployResources();
-
-      // // If application insights created, update the application insights settings in azure bot service
-      // if (createAppInsights) {
-      //   this.logger({
-      //     status: BotProjectDeployLoggerType.PROVISION_INFO,
-      //     message: `> Linking Application Insights settings to Bot Service ...`,
-      //   });
-
-      //   const appinsightsClient = new ApplicationInsightsManagementClient(tokenCredentials, this.subscriptionId);
-      //   const appComponents = await appinsightsClient.components.get(resourceGroupName, resourceGroupName);
-      //   const appinsightsId = appComponents.appId;
-      //   const appinsightsInstrumentationKey = appComponents.instrumentationKey;
-      //   const apiKeyOptions = {
-      //     name: `${resourceGroupName}-provision-${timeStamp}`,
-      //     linkedReadProperties: [
-      //       `/subscriptions/${this.subscriptionId}/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${resourceGroupName}/api`,
-      //       `/subscriptions/${this.subscriptionId}/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${resourceGroupName}/agentconfig`,
-      //     ],
-      //     linkedWriteProperties: [
-      //       `/subscriptions/${this.subscriptionId}/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${resourceGroupName}/annotations`,
-      //     ],
-      //   };
-      //   const appinsightsApiKeyResponse = await appinsightsClient.aPIKeys.create(
-      //     resourceGroupName,
-      //     resourceGroupName,
-      //     apiKeyOptions
-      //   );
-      //   const appinsightsApiKey = appinsightsApiKeyResponse.apiKey;
-
-      //   this.logger({
-      //     status: BotProjectDeployLoggerType.PROVISION_INFO,
-      //     message: `> AppInsights AppId: ${appinsightsId} ...`,
-      //   });
-      //   this.logger({
-      //     status: BotProjectDeployLoggerType.PROVISION_INFO,
-      //     message: `> AppInsights InstrumentationKey: ${appinsightsInstrumentationKey} ...`,
-      //   });
-      //   this.logger({
-      //     status: BotProjectDeployLoggerType.PROVISION_INFO,
-      //     message: `> AppInsights ApiKey: ${appinsightsApiKey} ...`,
-      //   });
-
-      //   if (appinsightsId && appinsightsInstrumentationKey && appinsightsApiKey) {
-      //     const botServiceClient = new AzureBotService(tokenCredentials, this.subscriptionId);
-      //     const botCreated = await botServiceClient.bots.get(resourceGroupName, hostname);
-      //     if (botCreated.properties) {
-      //       botCreated.properties.developerAppInsightKey = appinsightsInstrumentationKey;
-      //       botCreated.properties.developerAppInsightsApiKey = appinsightsApiKey;
-      //       botCreated.properties.developerAppInsightsApplicationId = appinsightsId;
-      //       const botUpdateResult = await botServiceClient.bots.update(resourceGroupName, hostname, botCreated);
-
-      //       if (botUpdateResult._response.status != 200) {
-      //         this.logger({
-      //           status: BotProjectDeployLoggerType.PROVISION_ERROR,
-      //           message: `! Something went wrong while trying to link Application Insights settings to Bot Service Result: ${JSON.stringify(
-      //             botUpdateResult
-      //           )}`,
-      //         });
-      //         throw new Error(`Linking Application Insights Failed.`);
-      //       }
-      //       this.logger({
-      //         status: BotProjectDeployLoggerType.PROVISION_INFO,
-      //         message: `> Linking Application Insights settings to Bot Service Success!`,
-      //       });
-      //     } else {
-      //       this.logger({
-      //         status: BotProjectDeployLoggerType.PROVISION_WARNING,
-      //         message: `! The Bot doesn't have a keys properties to update.`,
-      //       });
-      //     }
-      //   }
-      // }
-      // const output = this.azureResourceManagementClient.getOutput();
-      // const applicationOutput = {
-      //   MicrosoftAppId: appId,
-      //   MicrosoftAppPassword: appPassword,
-      // };
-      // Object.assign(output, applicationOutput);
-
-      // this.logger({
-      //   status: BotProjectDeployLoggerType.PROVISION_INFO,
-      //   message: output,
-      // });
-
-      // const provisionResult = {} as any;
-
-      // provisionResult.settings = output;
-      // provisionResult.hostname = hostname;
-      // if (createLuisResource) {
-      //   provisionResult.luisResource = `${hostname}-luis`;
-      // } else {
-      //   provisionResult.luisResource = '';
-      // }
-
-      // return provisionResult;
     } catch (err) {
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
