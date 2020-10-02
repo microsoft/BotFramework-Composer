@@ -263,11 +263,14 @@ describe('#remove', () => {
     expect(manager.remove('extension1')).rejects.toThrow(/Unable to remove extension/);
   });
 
-  it('throws an error if extension is builtin', () => {
+  it('is a no-op if the extension is builtin', async () => {
     (manifest.getExtensionConfig as jest.Mock).mockReturnValue({ builtIn: true });
     manager = new ExtensionManagerImp(manifest);
 
-    expect(manager.remove('extension1')).rejects.toThrow(/Cannot remove builtin extension./);
+    await manager.remove('extension1');
+
+    expect(remove).not.toHaveBeenCalled();
+    expect(manifest.removeExtension).not.toHaveBeenCalled();
   });
 
   it('removes the extension from the manifest and cleans up', async () => {

@@ -169,7 +169,7 @@ export class ExtensionManagerImp {
 
     if (metadata) {
       if (metadata.builtIn) {
-        throw new Error('Cannot remove builtin extension.');
+        return;
       }
 
       await remove(metadata.path);
