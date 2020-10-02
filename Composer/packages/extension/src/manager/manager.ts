@@ -84,9 +84,9 @@ export class ExtensionManagerImp {
       const fullPath = path.join(dir, extensionPackageJsonPath);
       const extensionInstallPath = path.dirname(fullPath);
       const packageJson = (await readJson(fullPath)) as PackageJSON;
-      const isEnabled = packageJson?.composer && packageJson.composer.enabled !== false;
+      const isEnabled = packageJson.composer?.enabled !== false;
       const metadata = getExtensionMetadata(extensionInstallPath, packageJson);
-      if (packageJson && (isEnabled || packageJson.extendsComposer === true)) {
+      if (isEnabled) {
         this.manifest.updateExtensionConfig(metadata.id, {
           ...metadata,
           builtIn: isBuiltin,
