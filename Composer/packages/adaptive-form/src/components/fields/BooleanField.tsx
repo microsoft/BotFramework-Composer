@@ -28,9 +28,31 @@ const BooleanField: React.FC<FieldProps> = function CheckboxWidget(props) {
     },
   ];
 
+  if (uiOptions.canBeExpression) {
+    options.push({
+      key: 'expression',
+      text: formatMessage('Write in expression'),
+    });
+  }
+
   const handleChange = (e, option?: IDropdownOption) => {
     if (option) {
-      const optionValue = option.key === 'none' ? undefined : option.key === 'true';
+      let optionValue: boolean | string | undefined;
+      switch (option.key) {
+        case 'none':
+          optionValue = undefined;
+          break;
+        case 'true':
+          optionValue = true;
+          break;
+        case 'false':
+          optionValue = false;
+          break;
+        case 'expression':
+          optionValue = '=';
+          break;
+      }
+
       onChange(optionValue);
     }
   };

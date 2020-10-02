@@ -26,6 +26,11 @@ const NumberField: React.FC<FieldProps> = (props) => {
   const { type } = schema;
 
   const updateValue = (step: number) => (value: string) => {
+    if (value === '=') {
+      onChange('=');
+      return;
+    }
+
     if (value === '') {
       onChange(0);
       return;
@@ -56,8 +61,11 @@ const NumberField: React.FC<FieldProps> = (props) => {
           labelWrapper: { display: 'none' },
         }}
         value={displayValue}
+        onClick={props.onClick}
         onDecrement={updateValue(-step)}
         onIncrement={updateValue(step)}
+        onKeyDown={props.onKeyDown}
+        onKeyUp={props.onKeyUp}
         onValidate={updateValue(0)}
       />
     </>

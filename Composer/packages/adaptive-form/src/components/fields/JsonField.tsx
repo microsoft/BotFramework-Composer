@@ -15,8 +15,10 @@ const fieldStyle = css`
   label: JsonField;
 `;
 
-const JsonField: React.FC<FieldProps> = (props) => {
-  const { onChange, value, id, label, description, uiOptions, required, schema } = props;
+type JsonFieldProps = FieldProps & { height?: number; key?: string };
+
+const JsonField: React.FC<JsonFieldProps> = (props) => {
+  const { onChange, value, id, label, description, uiOptions, required, schema, height = 200, key = '' } = props;
   const { userSettings } = useShellApi();
 
   return (
@@ -24,8 +26,10 @@ const JsonField: React.FC<FieldProps> = (props) => {
       <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
       <div css={fieldStyle} data-testid="JsonFieldEditor">
         <JsonEditor
+          key={key}
           editorSettings={userSettings.codeEditor}
-          height={200}
+          height={height}
+          id={id}
           schema={schema}
           value={value}
           onChange={onChange}

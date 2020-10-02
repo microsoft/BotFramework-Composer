@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FieldProps, UIOptions, useFormConfig } from '@bfc/extension-client';
 
 import { getUIOptions, resolveFieldWidget, resolveRef, getUiLabel, getUiPlaceholder, getUiDescription } from '../utils';
@@ -35,6 +35,8 @@ const SchemaField: React.FC<FieldProps> = (props) => {
   } = props;
   const formUIOptions = useFormConfig();
 
+  const [fieldFocused, setFieldFocused] = useState(false);
+
   const schema = resolveRef(baseSchema, definitions);
   const uiOptions: UIOptions = {
     ...getUIOptions(schema, formUIOptions),
@@ -46,6 +48,7 @@ const SchemaField: React.FC<FieldProps> = (props) => {
       typeof uiOptions?.serializer?.set === 'function' ? uiOptions.serializer.set(newValue) : newValue;
 
     onChange(serializedValue);
+    setFieldFocused(true);
   };
 
   useEffect(() => {
@@ -68,9 +71,10 @@ const SchemaField: React.FC<FieldProps> = (props) => {
 
   const deserializedValue = typeof uiOptions?.serializer?.get === 'function' ? uiOptions.serializer.get(value) : value;
 
-  const FieldWidget = resolveFieldWidget(schema, uiOptions, formUIOptions);
+  const FieldWidget = resolveFieldWidget(schema, uiOptions, formUIOptions, value);
   const fieldProps: FieldProps = {
     ...rest,
+    focused: fieldFocused,
     definitions,
     description: getUiDescription({ ...props, uiOptions }),
     enumOptions: schema.enum as string[],
@@ -83,6 +87,8 @@ const SchemaField: React.FC<FieldProps> = (props) => {
     schema,
     uiOptions,
     value: deserializedValue,
+    onFocus: () => setFieldFocused(true),
+    onBlur: () => setFieldFocused(false),
   };
 
   return (

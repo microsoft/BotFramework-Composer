@@ -13,7 +13,8 @@ import * as DefaultFields from '../components/fields';
 export function resolveFieldWidget(
   schema?: JSONSchema7,
   uiOptions?: UIOptions,
-  globalUIOptions?: FormUISchema
+  globalUIOptions?: FormUISchema,
+  value?: any
 ): FieldWidget {
   const FieldOverride = uiOptions?.field;
 
@@ -37,6 +38,10 @@ export function resolveFieldWidget(
       }
     }
 
+    if (uiOptions?.canBeExpression && typeof value === 'string' && value.startsWith('=')) {
+      return DefaultFields.IntellisenseTextField;
+    }
+
     if ((schema.oneOf && Array.isArray(schema.oneOf)) || Array.isArray(schema.type)) {
       return DefaultFields.OneOfField;
     }
@@ -45,17 +50,17 @@ export function resolveFieldWidget(
       return DefaultFields.SelectField;
     }
 
-    if (uiOptions?.intellisenseScopes?.length) {
-      return DefaultFields.IntellisenseField;
-    }
-
     switch (schema.type) {
       case undefined:
       case 'string':
-        return DefaultFields.StringField;
+        return uiOptions?.intellisenseScopes?.length ? DefaultFields.IntellisenseTextField : DefaultFields.StringField;
+
       case 'integer':
       case 'number':
-        return DefaultFields.NumberField;
+        return uiOptions?.intellisenseScopes?.length
+          ? DefaultFields.IntellisenseNumberField
+          : DefaultFields.NumberField;
+
       case 'boolean':
         return DefaultFields.BooleanField;
       case 'array': {
@@ -65,6 +70,8 @@ export function resolveFieldWidget(
           return DefaultFields.ObjectArrayField;
         } else if (!Array.isArray(items) && typeof items === 'object' && items.type === 'object') {
           return DefaultFields.ObjectArrayField;
+        } else if (!schema.items && !schema.oneOf) {
+          return (props) => DefaultFields.JsonField({ ...props, height: 100, value: props.value || {}, key: 'array' });
         }
 
         return DefaultFields.ArrayField;
@@ -72,6 +79,8 @@ export function resolveFieldWidget(
       case 'object':
         if (schema.additionalProperties) {
           return DefaultFields.OpenObjectField;
+        } else if (!schema.properties) {
+          return (props) => DefaultFields.JsonField({ ...props, height: 100, value: props.value || {}, key: 'object' });
         } else {
           return uiOptions?.fieldSets ? DefaultFields.FieldSets : DefaultFields.ObjectField;
         }

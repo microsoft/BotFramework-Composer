@@ -53,10 +53,15 @@ export interface FieldProps<T = any> {
   transparentBorder?: boolean;
   uiOptions: UIOptions;
   value?: T;
+  focused?: boolean;
 
   onChange: ChangeHandler<T>;
   onFocus?: (id: string, value?: T) => void;
   onBlur?: (id: string, value?: T) => void;
+
+  onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+  onKeyUp?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+  onClick?: (event: React.MouseEvent<HTMLInputElement, MouseEvent>) => void;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

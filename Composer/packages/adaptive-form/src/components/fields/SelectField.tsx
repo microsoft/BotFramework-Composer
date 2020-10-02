@@ -33,12 +33,21 @@ export const SelectField: React.FC<FieldProps<string | number>> = function Selec
       text: '',
     });
 
+    if (uiOptions.canBeExpression) {
+      opts.push({
+        key: 'expression',
+        text: formatMessage('Write in expression'),
+      });
+    }
+
     return opts;
-  }, [enumOptions]);
+  }, [enumOptions, uiOptions.canBeExpression]);
 
   const handleChange = (_e: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
     /* istanbul ignore else */
-    if (option) {
+    if (option?.key === 'expression') {
+      onChange('=');
+    } else if (option) {
       onChange(option.key);
     } else {
       onChange(undefined);

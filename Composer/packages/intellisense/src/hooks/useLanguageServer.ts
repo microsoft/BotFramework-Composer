@@ -70,7 +70,7 @@ export const useLanguageServer = (
 
   // Get completion results when selection changes
   React.useEffect(() => {
-    if (ws.current && ws.current.readyState === WebSocket.OPEN) {
+    if (ws.current && ws.current.readyState === WebSocket.OPEN && cursorPosition >= 0) {
       getCompletionItems();
     }
   }, [cursorPosition]);

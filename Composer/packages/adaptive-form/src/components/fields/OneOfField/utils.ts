@@ -49,6 +49,10 @@ export function getOptions(
           const merged = merge({}, omit(schema, 'oneOf'), resolved);
           const label = getOptionLabel(resolved);
 
+          if (resolved.$role === 'expression') {
+            return;
+          }
+
           return {
             key: label,
             text: label,

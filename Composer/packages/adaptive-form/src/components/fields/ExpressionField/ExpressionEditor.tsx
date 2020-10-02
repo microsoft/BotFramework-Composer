@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { FieldProps, useShellApi } from '@bfc/extension-client';
-import { IntellisenseTextField } from '@bfc/intellisense';
+import { Intellisense } from '@bfc/intellisense';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import React from 'react';
@@ -15,7 +15,7 @@ const ExpressionEditor: React.FC<FieldProps> = (props) => {
   const { projectId } = useShellApi();
 
   return (
-    <IntellisenseTextField
+    <Intellisense
       id={`intellisense-${id}`}
       projectId={projectId}
       scopes={['expressions', 'user-variables']}
@@ -23,7 +23,7 @@ const ExpressionEditor: React.FC<FieldProps> = (props) => {
       value={value}
       onChange={onChange}
     >
-      {(textFieldValue, onValueChanged, onKeyDownTextField, onKeyUpTextField, onClickTextField) => (
+      {({ textFieldValue, onValueChanged, onKeyDownTextField, onKeyUpTextField, onClickTextField }) => (
         <TextField
           autoComplete="off"
           disabled={disabled}
@@ -45,7 +45,7 @@ const ExpressionEditor: React.FC<FieldProps> = (props) => {
           }}
         />
       )}
-    </IntellisenseTextField>
+    </Intellisense>
   );
 };
 
