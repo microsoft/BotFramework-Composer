@@ -96,7 +96,7 @@ const InstallExtensionDialog: React.FC<InstallExtensionDialogProps> = (props) =>
       </div>
       <DialogFooter>
         <DefaultButton onClick={onDismiss}>Cancel</DefaultButton>
-        <PrimaryButton disabled={false} onClick={onSubmit}>
+        <PrimaryButton disabled={!selectedExtension} onClick={onSubmit}>
           {formatMessage('Add')}
         </PrimaryButton>
       </DialogFooter>
