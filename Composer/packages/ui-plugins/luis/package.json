@@ -24,7 +24,7 @@
     "@bfc/adaptive-form": "*",
     "@bfc/extension-client": "*",
     "@bfc/shared": "*",
-    "react": "16.13.0",
+    "react": "16.13.1",
     "react-dom": "16.13.1"
   },
   "devDependencies": {
@@ -33,7 +33,7 @@
     "@bfc/test-utils": "*",
     "@types/react": "16.9.23",
     "@types/react-dom": "16.9.5",
-    "react": "16.13.0",
+    "react": "16.13.1",
     "react-dom": "16.13.1"
   },
   "dependencies": {
