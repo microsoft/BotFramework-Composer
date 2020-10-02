@@ -5,9 +5,8 @@
 import { jsx } from '@emotion/core';
 import { FC, Fragment } from 'react';
 import get from 'lodash/get';
-import { FlowEditorWidgetMap as NodeWidgetMap } from '@bfc/extension-client';
+import { FlowEditorWidgetMap, FlowUISchema } from '@bfc/extension-client';
 
-import { FlowSchema } from '../types/flowRenderer.types';
 import { EditorEventHandler } from '../constants/NodeEventTypes';
 import { RendererContext, DefaultRenderers, RendererContextData } from '../contexts/RendererContext';
 import builtinSchema from '../configs/builtinSchema';
@@ -31,10 +30,10 @@ export interface AdaptiveDialogProps {
   onEvent: EditorEventHandler;
 
   /** UI schema to define how to render a sdk $kind */
-  schema: FlowSchema;
+  schema: FlowUISchema;
 
   /** All available widgets to render a node */
-  widgets: NodeWidgetMap;
+  widgets: FlowEditorWidgetMap;
   renderers?: Partial<RendererContextData>;
 }
 
