@@ -209,20 +209,6 @@ export class ExtensionManagerImp {
   }
 
   /**
-   * Returns a list of all of an extension's bundles
-   * @param id The ID of the extension for which we will fetch the list of bundles
-   */
-  public async getAllBundles(id: string) {
-    const info = this.find(id);
-
-    if (!info) {
-      throw new Error('extension not found');
-    }
-
-    return info.bundles ?? [];
-  }
-
-  /**
    * Returns a specific bundle for an extension
    * @param id The id of the desired extension
    * @param bundleId The id of the desired extension's bundle
@@ -249,7 +235,7 @@ export class ExtensionManagerImp {
       log('fetching package.json for %s at %s', id, extensionPackagePath);
       const packageJson = await readJson(extensionPackagePath);
       return packageJson as PackageJSON;
-    } catch (err) {
+    } catch (err) /* istanbul ignore next */ {
       log('Error getting package json for %s', id);
       log('%O', err);
     }
@@ -303,7 +289,7 @@ export class ExtensionManagerImp {
             }
           });
         }
-      } catch (err) {
+      } catch (err) /* istanbul ignore next */ {
         log('%O', err);
       }
     }
