@@ -68,7 +68,7 @@ export class ExtensionManagerImp {
   public async loadAll() {
     await ensureDir(this.remoteDir);
 
-    await this.loadFromDir(this.builtinDir);
+    await this.loadFromDir(this.builtinDir, true);
     await this.loadFromDir(this.remoteDir);
   }
 
@@ -255,20 +255,17 @@ export class ExtensionManagerImp {
     }
   }
 
-  public reloadManifest() {
-    this._manifest = undefined;
-  }
-
   private get manifest() {
-    if (this._manifest) {
-      return this._manifest;
+    /* istanbul ignore next */
+    if (!this._manifest) {
+      this._manifest = new ExtensionManifestStore(process.env.COMPOSER_EXTENSION_DATA as string);
     }
 
-    this._manifest = new ExtensionManifestStore(process.env.COMPOSER_EXTENSION_DATA as string);
     return this._manifest;
   }
 
   private get builtinDir() {
+    /* istanbul ignore next */
     if (!process.env.COMPOSER_BUILTIN_EXTENSIONS_DIR) {
       throw new Error('COMPOSER_BUILTIN_EXTENSIONS_DIR must be set.');
     }
@@ -277,6 +274,7 @@ export class ExtensionManagerImp {
   }
 
   private get remoteDir() {
+    /* istanbul ignore next */
     if (!process.env.COMPOSER_REMOTE_EXTENSIONS_DIR) {
       throw new Error('COMPOSER_REMOTE_EXTENSIONS_DIR must be set.');
     }
