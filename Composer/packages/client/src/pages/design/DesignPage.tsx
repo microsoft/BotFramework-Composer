@@ -19,7 +19,6 @@ import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TestController } from '../../components/TestController/TestController';
 import { DialogDeleting } from '../../constants';
 import {
-  createSelectedPath,
   deleteTrigger,
   getBreadcrumbLabel,
   qnaMatcherKey,
