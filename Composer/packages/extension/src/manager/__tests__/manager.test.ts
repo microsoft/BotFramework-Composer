@@ -1,11 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { writeJsonSync } from 'fs-extra';
+import { writeJsonSync, esnureDir } from 'fs-extra';
 
-import { ExtensionManager } from '../manager';
+import { ExtensionManifestStore, ExtensionManifest } from '../../storage/extensionManifestStore';
+import { ExtensionManagerImp } from '../manager';
 
-const mockManifest = {
+const mockManifest = ({
   extension1: {
     id: 'extension1',
     builtIn: true,
@@ -19,16 +20,26 @@ const mockManifest = {
     id: 'extension3',
     enabled: false,
   },
-};
+} as unknown) as ExtensionManifest;
+
+jest.mock('../../storage/extensionManifestStore');
+
+// jest.mock('fs-extra', () => {
+
+// });
+
+let manager: ExtensionManagerImp;
+let manifest: ExtensionManifestStore;
 
 beforeEach(() => {
-  writeJsonSync(process.env.COMPOSER_EXTENSION_DATA as string, mockManifest);
-  ExtensionManager.reloadManifest();
+  manifest = new ExtensionManifestStore('/some/path');
 });
 
 describe('#getAll', () => {
   it('return an array of all extensions', () => {
-    expect(ExtensionManager.getAll()).toEqual([
+    (manifest.getExtensions as jest.Mock).mockReturnValue(mockManifest);
+    manager = new ExtensionManagerImp(manifest);
+    expect(manager.getAll()).toEqual([
       {
         id: 'extension1',
         builtIn: true,
@@ -48,22 +59,26 @@ describe('#getAll', () => {
 
 describe('#find', () => {
   it('returns extension metadata for id', () => {
-    expect(ExtensionManager.find('extension1')).toEqual({ id: 'extension1', builtIn: true, enabled: true });
-    expect(ExtensionManager.find('does-not-exist')).toBeUndefined();
+    (manifest.getExtensionConfig as jest.Mock).mockImplementation((id) => {
+      return mockManifest[id];
+    });
+    manager = new ExtensionManagerImp(manifest);
+    expect(manager.find('extension1')).toEqual({ id: 'extension1', builtIn: true, enabled: true });
+    expect(manager.find('does-not-exist')).toBeUndefined();
   });
 });
 
 describe('#loadAll', () => {
   it('loads built-in extensions and remote extensions that are enabled', async () => {
-    const loadSpy = jest.spyOn(ExtensionManager, 'load');
+    const loadSpy = jest.spyOn(manager, 'loadFromDir');
 
     loadSpy.mockReturnValue(Promise.resolve());
 
-    await ExtensionManager.loadAll();
+    await manager.loadAll();
 
     expect(loadSpy).toHaveBeenCalledTimes(2);
-    expect(loadSpy).toHaveBeenCalledWith('extension1');
-    expect(loadSpy).toHaveBeenCalledWith('extension2');
+    expect(loadSpy).toHaveBeenNthCalledWith(1, process.env.COMPOSER_BUILTIN_EXTENSIONS_DIR);
+    expect(loadSpy).toHaveBeenNthCalledWith(2, process.env.COMPOSER_REMOTE_EXTENSIONS_DIR);
   });
 });
 

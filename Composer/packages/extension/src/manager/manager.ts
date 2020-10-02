@@ -40,10 +40,11 @@ function getExtensionMetadata(extensionPath: string, packageJson: PackageJSON): 
   };
 }
 
-class ExtensionManager {
+export class ExtensionManagerImp {
   private searchCache = new Map<string, ExtensionSearchResult>();
-  private _manifest: ExtensionManifestStore | undefined;
   private _lastSearchTimestamp: Date | undefined;
+
+  public constructor(private _manifest?: ExtensionManifestStore) {}
 
   /**
    * Returns all extensions currently in the extension manifest
@@ -311,6 +312,6 @@ class ExtensionManager {
   }
 }
 
-const manager = new ExtensionManager();
+const ExtensionManager = new ExtensionManagerImp();
 
-export { manager as ExtensionManager };
+export { ExtensionManager };
