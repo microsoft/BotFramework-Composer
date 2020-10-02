@@ -191,8 +191,8 @@ export class ExtensionManagerImp {
     const results = await search(query);
 
     return results.filter((searchResult) => {
-      const { keywords } = searchResult;
-      return keywords.includes('botframework-composer') && keywords.includes('extension');
+      const { id, keywords } = searchResult;
+      return !this.find(id) && keywords.includes('extension');
     });
   }
 

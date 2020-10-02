@@ -302,6 +302,19 @@ describe('#search', () => {
     expect(search).toHaveBeenCalledWith('foo');
     expect(results).toHaveLength(2);
   });
+
+  it('omits currently installed extensions', async () => {
+    (manifest.getExtensionConfig as jest.Mock).mockImplementation((id) => {
+      return mockManifest[id];
+    });
+
+    manager = new ExtensionManagerImp(manifest);
+
+    const results = await manager.search('foo');
+
+    expect(search).toHaveBeenCalledWith('foo');
+    expect(results).toHaveLength(1);
+  });
 });
 
 // describe('#getBundle', () => {});
