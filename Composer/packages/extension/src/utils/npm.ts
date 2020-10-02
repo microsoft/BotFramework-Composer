@@ -3,7 +3,7 @@
 
 import { promisify } from 'util';
 
-import { mkdir } from 'fs-extra';
+import { mkdir, remove } from 'fs-extra';
 import fetch from 'node-fetch';
 import tar from 'tar';
 
@@ -11,9 +11,6 @@ import logger from '../logger';
 import { ExtensionSearchResult } from '../types/extension';
 
 const streamPipeline = promisify(require('stream').pipeline);
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires, import/order
-const rimraf = promisify(require('rimraf'));
 
 const log = logger.extend('npm');
 
@@ -66,7 +63,7 @@ export async function downloadPackage(name: string, versionOrTag: string, destin
   dLog('Fetching tarball.');
   const tarball = (await fetch(tarballUrl)).body;
   // clean up previous version
-  await rimraf(destination);
+  await remove(destination);
   await mkdir(destination);
 
   const extractor = tar.extract({

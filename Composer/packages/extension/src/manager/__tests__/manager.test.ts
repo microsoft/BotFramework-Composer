@@ -2,9 +2,8 @@
 // Licensed under the MIT License.
 import path from 'path';
 
-import { readJson, ensureDir } from 'fs-extra';
+import { readJson, ensureDir, remove } from 'fs-extra';
 import glob from 'globby';
-import rimraf from 'rimraf';
 
 import { search, downloadPackage } from '../../utils/npm';
 import { ExtensionManifestStore, ExtensionManifest } from '../../storage/extensionManifestStore';
@@ -35,11 +34,11 @@ const mockManifest = ({
 jest.mock('../../storage/extensionManifestStore');
 
 jest.mock('globby', () => jest.fn());
-jest.mock('rimraf', () => jest.fn().mockImplementation((path, cb) => cb()));
 
 jest.mock('fs-extra', () => ({
   ensureDir: jest.fn(),
   readJson: jest.fn(),
+  remove: jest.fn(),
 }));
 
 jest.mock('../../utils/npm');
@@ -60,6 +59,12 @@ describe('#getAll', () => {
         id: 'extension1',
         builtIn: true,
         enabled: true,
+        bundles: [
+          {
+            id: 'bundleId',
+            path: '/some/path',
+          },
+        ],
       },
       {
         id: 'extension2',
@@ -79,7 +84,17 @@ describe('#find', () => {
       return mockManifest[id];
     });
     manager = new ExtensionManagerImp(manifest);
-    expect(manager.find('extension1')).toEqual({ id: 'extension1', builtIn: true, enabled: true });
+    expect(manager.find('extension1')).toEqual({
+      id: 'extension1',
+      builtIn: true,
+      enabled: true,
+      bundles: [
+        {
+          id: 'bundleId',
+          path: '/some/path',
+        },
+      ],
+    });
     expect(manager.find('does-not-exist')).toBeUndefined();
   });
 });
@@ -261,7 +276,7 @@ describe('#remove', () => {
 
     await manager.remove('extension1');
 
-    expect(rimraf).toHaveBeenCalledWith('/some/path', expect.any(Function));
+    expect(remove).toHaveBeenCalledWith('/some/path');
     expect(manifest.removeExtension).toHaveBeenCalledWith('extension1');
   });
 });

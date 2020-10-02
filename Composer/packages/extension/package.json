@@ -8,7 +8,7 @@
   "scripts": {
     "build": "yarn build:clean && yarn build:ts",
     "build:ts": "tsc -p tsconfig.build.json",
-    "build:clean": "rimraf lib && rimraf build",
+    "build:clean": "rimraf lib",
     "lint": "eslint --quiet ./src",
     "test": "jest"
   },
@@ -20,7 +20,6 @@
     "@types/path-to-regexp": "^1.7.0",
     "@types/tar": "^4.0.3",
     "json-schema": "^0.2.5",
-    "rimraf": "^3.0.2",
     "typescript": "^3.8.3"
   },
   "dependencies": {
@@ -30,7 +29,6 @@
     "node-fetch": "^2.6.1",
     "passport": "^0.4.1",
     "path-to-regexp": "^6.1.0",
-    "rimraf": "^3.0.2",
     "tar": "^6.0.5"
   }
 }

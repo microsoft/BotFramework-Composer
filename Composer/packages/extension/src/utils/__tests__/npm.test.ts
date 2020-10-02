@@ -4,8 +4,7 @@
 import { Readable, Writable } from 'stream';
 
 import fetch from 'node-fetch';
-import rimraf from 'rimraf';
-import { mkdir } from 'fs-extra';
+import { mkdir, remove } from 'fs-extra';
 import tar from 'tar';
 
 import { search, downloadPackage } from '../npm';
@@ -25,13 +24,9 @@ class MockExtractor extends Writable {
 }
 
 jest.mock('node-fetch', () => jest.fn());
-jest.mock('rimraf', () => {
-  return jest.fn().mockImplementation((path, cb) => {
-    cb();
-  });
-});
 jest.mock('fs-extra', () => ({
   mkdir: jest.fn(),
+  remove: jest.fn(),
 }));
 jest.mock('tar', () => ({
   extract: jest.fn(),
@@ -138,7 +133,7 @@ describe('downloadPackage', () => {
 
   it('prepares the destination directory', async () => {
     await downloadPackage(packageName, 'latest', '/some/path');
-    expect(rimraf).toHaveBeenCalledWith('/some/path', expect.any(Function));
+    expect(remove).toHaveBeenCalledWith('/some/path');
     expect(mkdir).toHaveBeenCalledWith('/some/path');
   });
 
