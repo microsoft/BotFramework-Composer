@@ -20,6 +20,7 @@
     "@types/path-to-regexp": "^1.7.0",
     "@types/tar": "^4.0.3",
     "json-schema": "^0.2.5",
+    "rimraf": "^3.0.2",
     "typescript": "^3.8.3"
   },
   "dependencies": {
