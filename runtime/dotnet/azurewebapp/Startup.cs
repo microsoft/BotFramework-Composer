@@ -142,6 +142,10 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             {
                 services.AddSingleton(sp => new AuthenticationConfiguration { ClaimsValidator = new AllowedCallersClaimsValidator(settings.Skill) });
             }
+            else
+            {
+                services.AddSingleton(sp => new AuthenticationConfiguration());
+            }
 
             // register components.
             ComponentRegistration.Add(new DialogsComponentRegistration());
@@ -196,7 +200,8 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
 
             resourceExplorer.RegisterType<OnQnAMatch>("Microsoft.OnQnAMatch");
 
-            services.AddSingleton<IBotFrameworkHttpAdapter, BotFrameworkHttpAdapter>((s) => GetBotAdapter(storage, settings, userState, conversationState, s, s.GetService<TelemetryInitializerMiddleware>()));
+            services.AddSingleton<IBotFrameworkHttpAdapter, BotFrameworkHttpAdapter>((s) =>
+                GetBotAdapter(storage, settings, userState, conversationState, s, s.GetService<TelemetryInitializerMiddleware>()));
 
             var removeRecipientMention = settings?.Feature?.RemoveRecipientMention ?? false;
 
