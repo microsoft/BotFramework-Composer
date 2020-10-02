@@ -92,15 +92,7 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
 
         public BotFrameworkHttpAdapter GetBotAdapter(IStorage storage, BotSettings settings, UserState userState, ConversationState conversationState, IServiceProvider s, TelemetryInitializerMiddleware telemetryInitializerMiddleware)
         {
-            BotFrameworkHttpAdapter adapter;
-            if (IsSkill(settings))
-            {
-                adapter = new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(this.Configuration), s.GetService<AuthenticationConfiguration>());
-            }
-            else
-            {
-                adapter = new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(this.Configuration));
-            }
+            BotFrameworkHttpAdapter adapter = new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(this.Configuration), s.GetService<AuthenticationConfiguration>());
 
             adapter
               .UseStorage(storage)
@@ -138,14 +130,16 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             services.AddSingleton<BotAdapter>(sp => (BotFrameworkHttpAdapter)sp.GetService<IBotFrameworkHttpAdapter>());
 
             // Register AuthConfiguration to enable custom claim validation for skills.
-            if (IsSkill(settings))
+            services.AddSingleton(sp =>
             {
-                services.AddSingleton(sp => new AuthenticationConfiguration { ClaimsValidator = new AllowedCallersClaimsValidator(settings.Skill) });
-            }
-            else
-            {
-                services.AddSingleton(sp => new AuthenticationConfiguration());
-            }
+                AllowedCallersClaimsValidator claimsValidator = null;
+                if (IsSkill(settings))
+                {
+                    claimsValidator = new AllowedCallersClaimsValidator(settings.Skill);
+                }
+
+                return new AuthenticationConfiguration { ClaimsValidator = claimsValidator };
+            });
 
             // register components.
             ComponentRegistration.Add(new DialogsComponentRegistration());
