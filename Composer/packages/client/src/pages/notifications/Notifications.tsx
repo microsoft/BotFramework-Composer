@@ -18,8 +18,8 @@ import { NotificationHeader } from './NotificationHeader';
 import { root } from './styles';
 import { INotification, NotificationType } from './types';
 
-const Notifications: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
-  const { projectId = '' } = props;
+const Notifications: React.FC<RouteComponentProps<{ projectId: string; skillId?: string }>> = (props) => {
+  const { projectId = '', skillId } = props;
   const [filter, setFilter] = useState('');
   const { setCurrentMode } = useRecoilValue(dispatcherState);
 
@@ -30,7 +30,7 @@ const Notifications: React.FC<RouteComponentProps<{ projectId: string }>> = (pro
       let uri = `/bot/${projectId}/language-generation/${resourceId}/edit#L=${diagnostic.range?.start.line || 0}`;
       //the format of item.id is lgFile#inlineTemplateId
       if (dialogPath) {
-        uri = convertPathToUrl(projectId, resourceId, dialogPath);
+        uri = convertPathToUrl(projectId, skillId, resourceId, dialogPath);
       }
       navigateTo(uri);
     },
@@ -38,7 +38,7 @@ const Notifications: React.FC<RouteComponentProps<{ projectId: string }>> = (pro
       const { projectId, resourceId, diagnostic, dialogPath } = item;
       let uri = `/bot/${projectId}/language-understanding/${resourceId}/edit#L=${diagnostic.range?.start.line || 0}`;
       if (dialogPath) {
-        uri = convertPathToUrl(projectId, resourceId, dialogPath);
+        uri = convertPathToUrl(projectId, skillId, resourceId, dialogPath);
       }
       navigateTo(uri);
     },
@@ -51,7 +51,7 @@ const Notifications: React.FC<RouteComponentProps<{ projectId: string }>> = (pro
       //path is like main.trigers[0].actions[0]
       //uri = id?selected=triggers[0]&focused=triggers[0].actions[0]
       const { projectId, id, dialogPath } = item;
-      const uri = convertPathToUrl(projectId, id, dialogPath ?? '');
+      const uri = convertPathToUrl(projectId, skillId, id, dialogPath ?? '');
       navigateTo(uri);
     },
     [NotificationType.SKILL]: (item: INotification) => {

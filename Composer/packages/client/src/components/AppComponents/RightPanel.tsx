@@ -5,6 +5,7 @@
 import { jsx, css } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
 import { forwardRef } from 'react';
+import formatMessage from 'format-message';
 
 import { RequireAuth } from '../RequireAuth';
 import { ErrorBoundary } from '../ErrorBoundary';
@@ -61,13 +62,7 @@ export const RightPanel = () => {
           <div css={{ display: 'flex', flexDirection: 'row' }}>
             {SHOW_TREE.includes(currentMode) ? (
               <LeftRightSplit initialLeftGridWidth="200px" minLeftPixels={200} minRightPixels={800}>
-                <ProjectTree
-                  selected={'testg'}
-                  selectedDialog={'test'}
-                  showTriggers={currentMode === 'design'}
-                  onDelete={(item) => console.log('deleting', item)}
-                  onSelect={(item) => console.log('selected', item)}
-                />
+                <ProjectTree regionName={formatMessage('Project tree')} showTriggers={currentMode === 'design'} />
                 {conversation}
               </LeftRightSplit>
             ) : (

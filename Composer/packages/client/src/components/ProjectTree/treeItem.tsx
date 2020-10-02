@@ -15,7 +15,7 @@ import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuStyles } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { ICalloutContentStyles } from 'office-ui-fabric-react/lib/Callout';
 
-import { TreeLink } from './ProjectTree';
+import { TreeLink, TreeMenuItem } from './ProjectTree';
 
 // -------------------- Styles -------------------- //
 const indent = 8;
@@ -142,8 +142,8 @@ interface ITreeItemProps {
   link: TreeLink;
   isActive?: boolean;
   isSubItemActive?: boolean;
-  onDelete?: (link: TreeLink) => void;
-  onSelect: (link: TreeLink) => void;
+  menu: TreeMenuItem[];
+  onSelect?: (link: TreeLink) => void;
   icon?: string;
   dialogName?: string;
   showProps?: boolean;
@@ -220,35 +220,10 @@ const onRenderOverflowButton = (showIcon: boolean, isActive: boolean) => {
   };
 };
 
-export const TreeItem: React.FC<ITreeItemProps> = ({
-  link,
-  isActive,
-  onDelete = undefined,
-  onSelect,
-  icon,
-  dialogName,
-  shiftOut,
-  showProps,
-}) => {
+export const TreeItem: React.FC<ITreeItemProps> = ({ link, isActive, icon, dialogName, shiftOut, onSelect }) => {
   const a11yLabel = `${dialogName ?? '$Root'}_${link.displayName}`;
 
   const overflowMenu: { key: string; name: string; onClick: () => void }[] = [];
-
-  if (onDelete != null) {
-    overflowMenu.push({
-      key: 'delete',
-      name: formatMessage('Delete'),
-      onClick: () => onDelete(link),
-    });
-  }
-
-  if (showProps) {
-    overflowMenu.push({
-      key: 'props',
-      name: formatMessage('Properties'),
-      onClick: () => onSelect(link),
-    });
-  }
 
   const linkString = `${link.projectId}_DialogTreeItem${link.dialogName}_${link.trigger ?? ''}`;
 
@@ -260,11 +235,11 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
       role="gridcell"
       tabIndex={0}
       onClick={() => {
-        onSelect(link);
+        onSelect?.(link);
       }}
       onKeyDown={(e) => {
         if (e.key === 'Enter') {
-          onSelect(link);
+          onSelect?.(link);
         }
       }}
     >
