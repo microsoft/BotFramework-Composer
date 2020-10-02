@@ -122,6 +122,12 @@ async function removeProject(req: Request, res: Response) {
 }
 
 async function openProject(req: Request, res: Response) {
+  if (!req.body.storageId || !req.body.path) {
+    res.status(400).json({
+      message: 'parameters not provided, require stoarge id and path',
+    });
+    return;
+  }
   const user = await ExtensionContext.getUserFromRequest(req);
 
   const location: LocationRef = {
@@ -258,8 +264,25 @@ async function removeFile(req: Request, res: Response) {
 }
 
 async function getSkill(req: Request, res: Response) {
-  const content = await getSkillManifest(req.query.url);
-  res.status(200).json(content);
+  const projectId = req.params.projectId;
+  const user = await ExtensionContext.getUserFromRequest(req);
+  const ignoreProjectValidation: boolean = req.query.ignoreProjectValidation;
+  if (!ignoreProjectValidation) {
+    const currentProject = await BotProjectService.getProjectById(projectId, user);
+    if (currentProject === undefined) {
+      res.status(404).json({
+        message: 'No such bot project opened',
+      });
+    }
+  }
+  try {
+    const content = await getSkillManifest(req.query.url);
+    res.status(200).json(content);
+  } catch (err) {
+    res.status(404).json({
+      message: err.message,
+    });
+  }
 }
 
 async function exportProject(req: Request, res: Response) {
