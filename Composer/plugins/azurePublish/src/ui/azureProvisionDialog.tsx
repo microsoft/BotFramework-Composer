@@ -16,19 +16,18 @@ import { DeployLocation } from '@bfc/shared';
 import {  getSubscriptions, getResourceGroups, getDeployLocations } from './api';
 
 const extensionResourceOptions = [
-  // { key: 'appRegistration', text: 'Microsoft Application Registration', description: 'Required registration allowing your bot to communicate with Azure services'},
-  // { key: 'webApp', text: 'Azure Web App', description: 'Hosting for your bot' },
-  // { key: 'botRegistration', text: 'Azure Bot Service', description: 'Register your bot with the Azure Bot Service' },
-  // { key: 'luisAuthoring', text: 'Luis Authoring Resource', description: 'Author LUIS applications' },
-  // { key: 'luisPrediction', text: 'Luis Prediction Resource', description: 'Use LUIS in your bot' },
-  // { key: 'blobStorage', text: 'BlobStorage', description: 'Capture transcripts into Blob Storage' },
-  { key: 'cosmoDb', text: 'CosmoDb', description: 'Use CosmoDB to store your bot state' },
-  // {
-  //   key: 'applicationInsight',
-  //   text: 'ApplicationInsight',
-  //   description: 'Track the performance of your app with app insights',
-  // },
-  // { key: 'blobStorage', text: 'BlobStorage', description: 'Capture transcripts into Blob Storage' },
+  { key: 'appRegistration', text: 'Microsoft Application Registration', description: 'Required registration allowing your bot to communicate with Azure services'},
+  { key: 'webApp', text: 'Azure Web App', description: 'Hosting for your bot' },
+  { key: 'botRegistration', text: 'Azure Bot Service', description: 'Register your bot with the Azure Bot Service' },
+  { key: 'luisAuthoring', text: 'Luis Authoring Resource', description: 'Author LUIS applications' },
+  { key: 'luisPrediction', text: 'Luis Prediction Resource', description: 'Use LUIS in your bot' },
+  { key: 'blobStorage', text: 'BlobStorage', description: 'Capture transcripts into Blob Storage' },
+  // { key: 'cosmoDb', text: 'CosmoDb', description: 'Use CosmoDB to store your bot state' },
+  {
+    key: 'applicationInsights',
+    text: 'application Insights',
+    description: 'Track the performance of your app with app insights',
+  },
 ];
 
 export const AzureProvisionDialog: React.FC = () => {

@@ -538,7 +538,7 @@ export class AzureResourceMananger {
    * Deploy application insights
    * @param config
    */
-  private async deployAppInsightsResource(config: ApplicationInsightsConfig) {
+  public async deployAppInsightsResource(config: ApplicationInsightsConfig): Promise<{ instrumentationKey: string }> {
     try {
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_INFO,
@@ -564,18 +564,116 @@ export class AzureResourceMananger {
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
           message: deployResult._response.bodyAsText,
         });
-        return;
+        throw new Error(deployResult._response.bodyAsText);
       }
 
       // Update output and status
       this.deploymentOutput.applicationInsights.instrumentationKey = deployResult.instrumentationKey;
       this.deployStatus.appInsightsStatus = DeploymentStatus.DEPLOY_SUCCESS;
+      return {
+        instrumentationKey: deployResult.instrumentationKey,
+      };
     } catch (err) {
       this.deployStatus.appInsightsStatus = DeploymentStatus.DEPLOY_FAIL;
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
         message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
       });
+      throw err;
+    }
+  }
+
+  public async connectAppInsightsToBotService(config: any) {
+    this.logger({
+      status: BotProjectDeployLoggerType.PROVISION_INFO,
+      message: `> Linking Application Insights settings to Bot Service ...`,
+    });
+    // timestamp will be used as deployment name
+    const timeStamp = new Date().getTime().toString();
+
+    const appinsightsClient = new ApplicationInsightsManagementClient(this.creds, this.subscriptionId);
+    const appComponents = await appinsightsClient.components.get(config.resourceGroupName, config.name);
+    const appinsightsId = appComponents.appId;
+    const appinsightsInstrumentationKey = appComponents.instrumentationKey;
+    const apiKeyOptions = {
+      name: `${config.resourceGroupName}-provision-${timeStamp}`,
+      linkedReadProperties: [
+        `/subscriptions/${this.subscriptionId}/resourceGroups/${config.resourceGroupName}/providers/microsoft.insights/components/${config.name}/api`,
+        `/subscriptions/${this.subscriptionId}/resourceGroups/${config.resourceGroupName}/providers/microsoft.insights/components/${config.name}/agentconfig`,
+      ],
+      linkedWriteProperties: [
+        `/subscriptions/${this.subscriptionId}/resourceGroups/${config.resourceGroupName}/providers/microsoft.insights/components/${config.name}/annotations`,
+      ],
+    };
+
+    let appinsightsApiKeyResponse;
+    try {
+      appinsightsApiKeyResponse = await appinsightsClient.aPIKeys.create(
+        config.resourceGroupName,
+        config.resourceGroupName,
+        apiKeyOptions
+      );
+    } catch (err) {
+      this.logger({
+        status: BotProjectDeployLoggerType.PROVISION_ERROR,
+        message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
+      });
+      throw err;
+    }
+
+    const appinsightsApiKey = appinsightsApiKeyResponse.apiKey;
+
+    this.logger({
+      status: BotProjectDeployLoggerType.PROVISION_INFO,
+      message: `> AppInsights AppId: ${appinsightsId} ...`,
+    });
+    this.logger({
+      status: BotProjectDeployLoggerType.PROVISION_INFO,
+      message: `> AppInsights InstrumentationKey: ${appinsightsInstrumentationKey} ...`,
+    });
+    this.logger({
+      status: BotProjectDeployLoggerType.PROVISION_INFO,
+      message: `> AppInsights ApiKey: ${appinsightsApiKey} ...`,
+    });
+
+    if (appinsightsId && appinsightsInstrumentationKey && appinsightsApiKey) {
+      const botServiceClient = new AzureBotService(this.creds, this.subscriptionId);
+      let botCreated;
+      try {
+        botCreated = await botServiceClient.bots.get(config.resourceGroupName, config.name);
+      } catch (err) {
+        this.logger({
+          status: BotProjectDeployLoggerType.PROVISION_ERROR,
+          message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
+        });
+        throw err;
+      }
+      if (botCreated.properties) {
+        botCreated.properties.developerAppInsightKey = appinsightsInstrumentationKey;
+        botCreated.properties.developerAppInsightsApiKey = appinsightsApiKey;
+        botCreated.properties.developerAppInsightsApplicationId = appinsightsId;
+        let botUpdateResult;
+        try {
+          botUpdateResult = await botServiceClient.bots.update(config.resourceGroupName, config.name, botCreated);
+        } catch (err) {
+          this.logger({
+            status: BotProjectDeployLoggerType.PROVISION_ERROR,
+            message: `! Something went wrong while trying to link Application Insights settings to Bot Service Result: ${JSON.stringify(
+              botUpdateResult
+            )}`,
+          });
+          throw err;
+        }
+        this.logger({
+          status: BotProjectDeployLoggerType.PROVISION_INFO,
+          message: `> Linking Application Insights settings to Bot Service Success!`,
+        });
+      } else {
+        this.logger({
+          status: BotProjectDeployLoggerType.PROVISION_WARNING,
+          message: `! The Bot doesn't have a keys properties to update.`,
+        });
+      }
     }
   }
 
@@ -697,9 +795,9 @@ export class AzureResourceMananger {
       }
 
       const authKey = authKeyResult.primaryMasterKey;
-      const cosmosDbEndpoint = dbAccountDeployResult.documentEndpoint;
+      const cosmosDBEndpoint = dbAccountDeployResult.documentEndpoint;
       this.deploymentOutput.cosmosDb.authKey = authKey;
-      this.deploymentOutput.cosmosDb.cosmosDBEndpoint = cosmosDbEndpoint;
+      this.deploymentOutput.cosmosDb.cosmosDBEndpoint = cosmosDBEndpoint;
       this.deploymentOutput.cosmosDb.databaseId = 'botstate-db';
       this.deploymentOutput.cosmosDb.collectoinId = 'botstate-collection';
       this.deploymentOutput.cosmosDb.containerId = 'botstate-container';
@@ -708,7 +806,7 @@ export class AzureResourceMananger {
 
       return {
         authKey,
-        cosmosDbEndpoint,
+        cosmosDBEndpoint,
         databaseId: config.databaseName,
         containerId: config.containerName,
         collectionId: 'botstate-collection',
@@ -925,7 +1023,7 @@ export class AzureResourceMananger {
    * Deploy guid deployment counter, indicates how many deployments have been made
    * @param config
    */
-  private async deployDeploymentCounter(config: DeploymentsConfig) {
+  public async deployDeploymentCounter(config: DeploymentsConfig) {
     try {
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_INFO,

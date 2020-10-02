@@ -13,7 +13,6 @@ import { Debugger } from 'debug';
 import { mergeDeep } from './mergeDeep';
 import { BotProjectDeploy } from './deploy';
 import { BotProjectProvision } from './provision';
-
 import schema from './schema';
 
 // This option controls whether the history is serialized to a file between sessions with Composer
@@ -337,7 +336,7 @@ export default async (composer: any): Promise<void> => {
     private asyncProvision = async (config: ProvisionConfig, project, user) => {
       const { hostname, subscription, accessToken, graphToken, location } = config;
 
-      console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> azure provision process begins', config)
+      console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> azure provision process begins', config);
 
       // Create the object responsible for actually taking the provision actions.
       const azureProvisioner = new BotProjectProvision({
@@ -366,31 +365,61 @@ export default async (composer: any): Promise<void> => {
       // perform the provision using azureProvisioner.create.
       // this will start the process, then return.
       // However, the process will continue in the background and report its status changes using azureProvisioner.getProvisionStatus().
-      try {
-        // DO NOT AWAIT THIS, since it needs to continue in the background...
-        console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> call to azureProvisioner.create! ')
+      // DO NOT AWAIT THIS, since it needs to continue in the background...
+      console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> call to azureProvisioner.create! ');
+      // const previous = this.provisionStatus[project.id][config.name];
+      // previous.status = 200;
+      // previous.config = result;
+      // previous.details = azureProvisioner.getProvisionStatus();
+      // this.setProvisionStatus(project.id, config.name, previous);
+      // console.log(result);
+      // return result;
 
-        azureProvisioner.create(config);
-        // const previous = this.provisionStatus[project.id][config.name];
-        // previous.status = 200;
-        // previous.config = result;
-        // previous.details = azureProvisioner.getProvisionStatus();
-        // this.setProvisionStatus(project.id, config.name, previous);
-        // console.log(result);
-        // return result;
-      } catch (error) {
-        console.log(error);
+      azureProvisioner
+        .create(config)
+        .then((provisionResults) => {
+          // GOT PROVISION RESULTS!
+          // cast this into the right form for a publish profile
+          const publishProfile = {
+            name: config.hostname,
+            environment: '',
+            settings: {
+              applicationInsights: {
+                InstrumentationKey: provisionResults.appInsights?.instrumentationKey,
+              },
+              cosmosDb: provisionResults.cosmoDB,
+              blobStorage: provisionResults.blobStorage,
+              luis: {
+                authoringKey: provisionResults.luisAuthoring?.authoringKey,
+                authoringEndpoint: provisionResults.luisAuthoring?.authoringEndpoint,
+                endpointKey: provisionResults.luisPrediction?.endpointKey,
+                endpoint: provisionResults.luisPrediction?.endpoint,
+                region: provisionResults.resourceGroup.location,
+              },
+              MicrosoftAppId: provisionResults.appId,
+              MicrosoftAppPassword: provisionResults.appPassword,
+              hostname: config.hostname,
+            },
+          };
 
-        const previous = this.provisionStatus[project.id][config.name];
-        previous.status = 500;
-        previous.config = {};
-        previous.details = azureProvisioner.getProvisionStatus();
-        previous.error = JSON.parse(JSON.stringify(error, Object.getOwnPropertyNames(error)));
+          console.log('PUBLISH PROFILE', publishProfile);
 
-        this.setProvisionStatus(project.id, config.name, previous);
-      } finally {
-        clearInterval(updatetimer);
-      }
+          // write this to the project settings.
+        })
+        .catch((error) => {
+          console.log(error);
+
+          const previous = this.provisionStatus[project.id][config.name];
+          previous.status = 500;
+          previous.config = {};
+          previous.details = azureProvisioner.getProvisionStatus();
+          previous.error = JSON.parse(JSON.stringify(error, Object.getOwnPropertyNames(error)));
+
+          this.setProvisionStatus(project.id, config.name, previous);
+        })
+        .finally(() => {
+          clearInterval(updatetimer);
+        });
     };
 
     /*******************************************************************************************************************************/
@@ -574,14 +603,9 @@ export default async (composer: any): Promise<void> => {
         return {};
       }
     };
-
   }
 
-  const azurePublish = new AzurePublisher(
-    'azurewebapp',
-    'azurePublish',
-    'Publish bot to Azure Web App (Preview)'
-  );
+  const azurePublish = new AzurePublisher('azurewebapp', 'azurePublish', 'Publish bot to Azure Web App (Preview)');
   const azureFunctionsPublish = new AzurePublisher(
     'azurefunctions',
     'azureFunctionsPublish',
