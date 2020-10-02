@@ -3,7 +3,7 @@
 
 namespace Microsoft.BotFramework.Composer.Core.Settings
 {
-    public class BotSkillSettings
+    public class BotSkillConfiguration
     {
         // Is skill
         public bool IsSkill { get; set; }

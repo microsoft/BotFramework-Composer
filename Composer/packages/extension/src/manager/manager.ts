@@ -4,7 +4,7 @@
 import path from 'path';
 
 import glob from 'globby';
-import { readJson, ensureDir } from 'fs-extra';
+import { readJson, ensureDir, existsSync } from 'fs-extra';
 
 import { ExtensionContext } from '../extensionContext';
 import logger from '../logger';
@@ -77,6 +77,7 @@ class ExtensionManager {
    * Installs a remote extension via NPM
    * @param name The name of the extension to install
    * @param version The version of the extension to install
+   * @returns id of installed package
    */
   public async installRemote(name: string, version?: string) {
     const packageNameAndVersion = version ? `${name}@${version}` : `${name}@latest`;
@@ -97,6 +98,8 @@ class ExtensionManager {
       if (packageJson) {
         const extensionPath = path.resolve(this.remoteDir, 'node_modules', name);
         this.manifest.updateExtensionConfig(name, getExtensionMetadata(extensionPath, packageJson));
+
+        return packageJson.name;
       } else {
         throw new Error(`Unable to install ${packageNameAndVersion}`);
       }
@@ -105,6 +108,37 @@ class ExtensionManager {
         log('%s', err.stderr);
       }
       throw new Error(`Unable to install ${packageNameAndVersion}`);
+    }
+  }
+
+  /**
+   * Installs a local extension at path
+   * @param path Path of directory where extension is
+   */
+  public async installLocal(extPath: string) {
+    try {
+      const packageJsonPath = path.join(extPath, 'package.json');
+
+      if (!existsSync(packageJsonPath)) {
+        throw new Error(`Extension not found at path: ${extPath}`);
+      }
+
+      const packageJson = await readJson(packageJsonPath);
+
+      log('Linking %s', packageJson.name);
+      await npm('link', '.', {}, { cwd: extPath });
+
+      log('Installing %s@local to %s', packageJson.name, this.remoteDir);
+      await npm('link', packageJson.name, { '--prefix': this.remoteDir }, { cwd: this.remoteDir });
+
+      const extensionPath = path.resolve(this.remoteDir, 'node_modules', packageJson.name);
+      this.manifest.updateExtensionConfig(packageJson.name, getExtensionMetadata(extensionPath, packageJson));
+
+      return packageJson.name;
+    } catch (err) {
+      log('%s', err.msg ?? err.stderr ?? err);
+      // eslint-disable-next-line no-console
+      console.error(err);
     }
   }
 
@@ -174,11 +208,14 @@ class ExtensionManager {
    */
   public async search(query: string) {
     await this.updateSearchCache();
+    const normalizedQuery = query.toLowerCase();
 
     const results = Array.from(this.searchCache.values()).filter((result) => {
       return (
         !this.find(result.id) &&
-        [result.id, result.description, ...result.keywords].some((target) => target.includes(query))
+        [result.id, result.description, ...result.keywords].some((target) =>
+          target.toLowerCase().includes(normalizedQuery)
+        )
       );
     });
 

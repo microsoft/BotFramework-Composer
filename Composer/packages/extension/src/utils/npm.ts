@@ -12,7 +12,7 @@ type NpmOutput = {
   stderr: string;
   code: number;
 };
-type NpmCommand = 'install' | 'uninstall' | 'search';
+type NpmCommand = 'install' | 'uninstall' | 'search' | 'link';
 type NpmOptions = {
   [key: string]: string;
 };
