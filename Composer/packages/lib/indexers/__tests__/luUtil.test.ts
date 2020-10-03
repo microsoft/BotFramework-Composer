@@ -8,8 +8,18 @@ import { luIndexer } from '../src/luIndexer';
 const { luParser, luSectionTypes } = sectionHandler;
 
 describe('LU parse and validation', () => {
-  it('Throws when ML entity is disable', async () => {
-    // const fileContent = `@ ml userName`;
+  it('Throws when ML entity is disable (validateResource)', () => {
+    const fileContent = `# AskForName
+    - {@userName=Jack}
+    `;
+    const result1 = luIndexer.parse(fileContent, 'a.lu', { enableMLEntities: false });
+    expect(result1.diagnostics.length).toEqual(1);
+
+    const result2 = luIndexer.parse(fileContent, 'a.lu', { enableMLEntities: true });
+    expect(result2.diagnostics.length).toEqual(0);
+  });
+
+  it('Throws when ML entity is disable (parseFile)', async () => {
     const fileContent = `# AskForName
     - {@userName=Jack}
     `;
@@ -399,10 +409,10 @@ describe('LU Nested Section CRUD test', () => {
     const intent = {
       Name: 'CheckTodo/CheckCompletedTodo',
       Body: `- check my completed todo
-    - show my completed todos
+      - show my completed todos
 
-    @ simple todoTime
-    `,
+      @ simple todoTime
+      `,
     };
 
     const luFile1 = luIndexer.parse(fileContent, fileId, luFeatures);
@@ -431,10 +441,10 @@ describe('LU Nested Section CRUD test', () => {
     const intent = {
       Name: 'CheckMyTodo/CheckCompletedTodo',
       Body: `- check my completed todo
-    - show my completed todos
+      - show my completed todos
 
-    @ simple todoTime
-    `,
+      @ simple todoTime
+      `,
     };
 
     const luFile1 = luIndexer.parse(fileContent, fileId, luFeatures);
@@ -465,11 +475,11 @@ describe('LU Nested Section CRUD test', () => {
     const intent = {
       Name: 'CheckMyUnreadTodo',
       Body: `- please check my unread todo
-    - please show my unread todos
+      - please show my unread todos
 
-    @ simple todoTitle
-    @ simple todoContent
-    `,
+      @ simple todoTitle
+      @ simple todoContent
+      `,
     };
 
     const luFile1 = luIndexer.parse(fileContent, fileId, luFeatures);
@@ -503,12 +513,12 @@ describe('LU Nested Section CRUD test', () => {
     const intent = {
       Name: 'CheckMyUnreadTodo',
       Body: `- please check my unread todo
-- please show my unread todos
-# Oops
-## Oops
-@ simple todoTitle
-@ simple todoContent
-`,
+  - please show my unread todos
+  # Oops
+  ## Oops
+  @ simple todoTitle
+  @ simple todoContent
+  `,
     };
 
     const luFile1 = luIndexer.parse(fileContent, fileId, luFeatures);
@@ -539,9 +549,9 @@ describe('LU Nested Section CRUD test', () => {
   it('update nestedIntentSection with # ## ### in body', () => {
     const intentName = 'CheckTodo';
     const intentBody1 = `# Oops
-## Oops
-### Oops
-`;
+  ## Oops
+  ### Oops
+  `;
 
     const luFile1 = luIndexer.parse(fileContent, fileId, luFeatures);
     const luFile1Updated1 = updateIntent(luFile1, intentName, { Name: intentName, Body: intentBody1 }, luFeatures);
@@ -551,8 +561,8 @@ describe('LU Nested Section CRUD test', () => {
     expect(luresource1.Errors.length).toBeGreaterThan(0);
 
     const intentBody2 = `## Oops
-    ### Oops
-    `;
+      ### Oops
+      `;
     const luFile1Updated2 = updateIntent(luFile1, intentName, { Name: intentName, Body: intentBody2 }, luFeatures);
     const luresource2 = luParser.parse(luFile1Updated2.content);
     expect(luresource2.Sections.length).toEqual(2);
@@ -562,14 +572,14 @@ describe('LU Nested Section CRUD test', () => {
 
     // if nestedSection not enable
     const fileContent3 = `# Greeting
-- hi
+  - hi
 
-# CheckTodo
-- please check my todo
-`;
+  # CheckTodo
+  - please check my todo
+  `;
     const intentBody3 = `## Oops
-### Oops
-`;
+  ### Oops
+  `;
     const luFile2 = luIndexer.parse(fileContent3, fileId, luFeatures);
     const luFile1Updated3 = updateIntent(luFile2, intentName, { Name: intentName, Body: intentBody3 }, luFeatures);
     const luresource3 = luParser.parse(luFile1Updated3.content);
@@ -586,10 +596,10 @@ describe('LU Nested Section CRUD test', () => {
     const intent = {
       Name: 'CheckMyUnreadTodo',
       Body: `- please check my unread todo
-  - please show my unread todos
+    - please show my unread todos
 
-  @ simple todoContent
-  `,
+    @ simple todoContent
+    `,
     };
 
     const luFile1 = luIndexer.parse(fileContent, fileId, luFeatures);

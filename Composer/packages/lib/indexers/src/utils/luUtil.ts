@@ -27,8 +27,20 @@ import formatMessage from 'format-message';
 import { buildNewlineText, splitNewlineText } from './help';
 
 const { luParser, sectionOperator } = sectionHandler;
-const { parseFile } = BFLUParser;
+const { parseFile, validateResource } = BFLUParser;
 const NEWLINE = '\r\n';
+export const defaultLUFeatures = {
+  enablePattern: true,
+  enableMLEntities: true,
+  enableListEntities: true,
+  enableCompositeEntities: true,
+  enablePrebuiltEntities: true,
+  enableRegexEntities: true,
+  enablePhraseLists: true,
+  enableModelDescription: true,
+  enableExternalReferences: true,
+  enableComments: true,
+};
 
 // when new add a section in inline editor, the section haven't exist on file context, to make suggestion/validation possiable here mock one.
 export const PlaceHolderSectionName = formatMessage(`_NewSectionPlaceHolderSectionName`);
@@ -85,9 +97,15 @@ export function convertLuParseResultToLuFile(id: string, resource, luFeatures: I
       );
     }
   });
-  const diagnostics = Errors.map((e) => convertLuDiagnostic(e, id));
-  console.log(luFeatures);
-  // const semanticDiagnostics =
+
+  const appliedluFeatures = merge(defaultLUFeatures, luFeatures || {});
+
+  const syntaxDiagnostics = Errors.map((e) => convertLuDiagnostic(e, id)) as Diagnostic[];
+  const semanticDiagnostics = validateResource(JSON.parse(JSON.stringify(resource)), appliedluFeatures).map((e) =>
+    convertLuDiagnostic(e, id)
+  ) as Diagnostic[];
+
+  const diagnostics = syntaxDiagnostics.concat(semanticDiagnostics);
   return {
     id,
     content: Content,
@@ -290,20 +308,10 @@ export function removeIntents(luFile: LuFile, intentNames: string[], luFeatures:
   return result;
 }
 
-export const defaultParseConfig = {
-  enablePattern: true,
-  enableMLEntities: true,
-  enableListEntities: true,
-  enableCompositeEntities: true,
-  enablePrebuiltEntities: true,
-  enableRegexEntities: true,
-  enablePhraseLists: true,
-};
-
 export function parse(id: string, content: string, luFeatures: ILUFeaturesConfig): LuFile {
-  const appliedConfig = merge(defaultParseConfig, luFeatures || {});
-  const result = luParser.parse(content, undefined, appliedConfig);
-  return convertLuParseResultToLuFile(id, result, luFeatures);
+  const appliedConfig = merge(defaultLUFeatures, luFeatures || {});
+  const result = luParser.parse(content);
+  return convertLuParseResultToLuFile(id, result, appliedConfig);
 }
 
 export async function semanticValidate(
@@ -311,7 +319,7 @@ export async function semanticValidate(
   content: string,
   luFeatures: ILUFeaturesConfig
 ): Promise<Diagnostic[]> {
-  const appliedConfig = merge(defaultParseConfig, luFeatures || {});
+  const appliedConfig = merge(defaultLUFeatures, luFeatures || {});
   const diagnostics: Diagnostic[] = [];
 
   try {
