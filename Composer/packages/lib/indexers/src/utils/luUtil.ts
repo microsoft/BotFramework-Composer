@@ -101,7 +101,7 @@ export function convertLuParseResultToLuFile(id: string, resource, luFeatures: I
   const appliedluFeatures = merge(defaultLUFeatures, luFeatures || {});
 
   const syntaxDiagnostics = Errors.map((e) => convertLuDiagnostic(e, id)) as Diagnostic[];
-  const semanticDiagnostics = validateResource(JSON.parse(JSON.stringify(resource)), appliedluFeatures).map((e) =>
+  const semanticDiagnostics = validateResource(resource, appliedluFeatures).map((e) =>
     convertLuDiagnostic(e, id)
   ) as Diagnostic[];
 

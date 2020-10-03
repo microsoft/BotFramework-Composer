@@ -2352,10 +2352,10 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bfcomposer/bf-lu@1.5.3":
-  version "1.5.3"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/bf-lu/-/@bfcomposer/bf-lu-1.5.3.tgz#5c85c8da3addb10147f8e7665573c1681136fedd"
-  integrity sha1-XIXI2jrdsQFH+OdmVXPBaBE2/t0=
+"@bfcomposer/bf-lu@^1.5.4":
+  version "1.5.4"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/bf-lu/-/@bfcomposer/bf-lu-1.5.4.tgz#951a0e5258a6cb1cda427c4bbb8e3b6f2021e5b7"
+  integrity sha1-lRoOUlimyxzaQnxLu447byAh5bc=
   dependencies:
     "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
     "@azure/ms-rest-azure-js" "2.0.1"
