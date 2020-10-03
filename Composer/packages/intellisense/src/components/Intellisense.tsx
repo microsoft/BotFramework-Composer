@@ -18,6 +18,7 @@ export const Intellisense = React.memo(
     focused?: boolean;
     completionListOverrideResolver?: (value: any) => JSX.Element | null;
     onChange: (newValue: string) => void;
+    onBlur?: (id: string) => void;
     children: (renderProps: {
       textFieldValue: string;
       focused?: boolean;
@@ -27,7 +28,18 @@ export const Intellisense = React.memo(
       onClickTextField: (event: React.MouseEvent<HTMLInputElement, MouseEvent>) => void;
     }) => JSX.Element;
   }) => {
-    const { url, scopes, projectId, id, value, focused, completionListOverrideResolver, onChange, children } = props;
+    const {
+      url,
+      scopes,
+      projectId,
+      id,
+      value,
+      focused,
+      completionListOverrideResolver,
+      onChange,
+      onBlur,
+      children,
+    } = props;
 
     const [textFieldValue, setTextFieldValue] = React.useState(value ?? '');
     const [showCompletionList, setShowCompletionList] = React.useState(false);
@@ -73,6 +85,7 @@ export const Intellisense = React.memo(
           if (checkIsOutside(x, y, mainContainerRef.current) && checkIsOutside(x, y, completionListRef.current)) {
             setShowCompletionList(false);
             setCursorPosition(-1);
+            onBlur && onBlur(id);
           }
         }
       };

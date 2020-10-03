@@ -30,6 +30,7 @@ export const IntellisenseTextField: React.FC<FieldProps<string>> = function Inte
       scopes={uiOptions.intellisenseScopes || []}
       url={getIntellisenseUrl()}
       value={value}
+      onBlur={props.onBlur}
       onChange={onChange}
     >
       {({ textFieldValue, focused, onValueChanged, onKeyDownTextField, onKeyUpTextField, onClickTextField }) => (
@@ -38,6 +39,7 @@ export const IntellisenseTextField: React.FC<FieldProps<string>> = function Inte
           focused={focused}
           id={id}
           value={textFieldValue}
+          onBlur={undefined}
           onChange={(newValue) => onValueChanged(newValue || '')}
           onClick={onClickTextField}
           onKeyDown={onKeyDownTextField}
