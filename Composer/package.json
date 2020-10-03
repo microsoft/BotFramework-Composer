@@ -12,7 +12,8 @@
     "mkdirp": "^0.5.2",
     "selfsigned": "1.10.8",
     "serialize-javascript": "^3.1.0",
-    "set-value": "^3.0.2"
+    "set-value": "^3.0.2",
+    "terser-webpack-plugin": "^2.3.7"
   },
   "engines": {
     "node": ">=12"
