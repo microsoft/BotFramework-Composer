@@ -62,7 +62,6 @@ export interface PackageJSON {
   name: string;
   version: string;
   description: string;
-  extendsComposer: boolean;
   composer?: {
     name?: string;
     enabled?: boolean;
