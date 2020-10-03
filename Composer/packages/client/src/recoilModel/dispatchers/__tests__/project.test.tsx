@@ -1,9 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useRecoilValue } from 'recoil';
+import { selector, useRecoilValue } from 'recoil';
 import { act, RenderHookResult, HookResult } from '@bfc/test-utils/lib/hooks';
 import { useRecoilState } from 'recoil';
+import cloneDeep from 'lodash/cloneDeep';
+import endsWith from 'lodash/endsWith';
 
 import httpClient from '../../../utils/httpUtil';
 import { projectDispatcher } from '../project';
@@ -33,12 +35,15 @@ import {
   botDisplayNameState,
   botOpeningState,
   botProjectFileState,
+  botProjectIdsState,
+  botNameIdentifierState,
+  botErrorState,
 } from '../../atoms';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '../../dispatchers';
 import { BotStatus } from '../../../constants';
 
-import mockProjectResponse from './mocks/mockProjectResponse.json';
+import mockResponse from './mocks/mockProjectResponse.json';
 
 // let httpMocks;
 let navigateTo;
@@ -75,6 +80,25 @@ jest.mock('../../persistence/FilePersistence', () => {
 });
 
 describe('Project dispatcher', () => {
+  let mockProjectResponse;
+  const botStatesSelector = selector({
+    key: 'botStatesSelector',
+    get: ({ get }) => {
+      const botProjectIds = get(botProjectIdsState);
+      const botProjectData: { [projectName: string]: { botDisplayName: string; botError: any } } = {};
+      botProjectIds.map((projectId) => {
+        const botDisplayName = get(botDisplayNameState(projectId));
+        const botNameIdentifier = get(botNameIdentifierState(projectId));
+        const botError = get(botErrorState(projectId));
+
+        botProjectData[botNameIdentifier] = {
+          botDisplayName,
+          botError,
+        };
+      });
+      return botProjectData;
+    },
+  });
   const useRecoilTestHook = () => {
     const schemas = useRecoilValue(schemasState(projectId));
     const location = useRecoilValue(locationState(projectId));
@@ -89,6 +113,7 @@ describe('Project dispatcher', () => {
     const diagnostics = useRecoilValue(botDiagnosticsState(projectId));
     const locale = useRecoilValue(localeState(projectId));
     const botStatus = useRecoilValue(botStatusState(projectId));
+    const botStates = useRecoilValue(botStatesSelector);
 
     const currentDispatcher = useRecoilValue(dispatcherState);
     const [recentProjects, setRecentProjects] = useRecoilState(recentProjectsState);
@@ -128,13 +153,15 @@ describe('Project dispatcher', () => {
       botProjectFile,
       setBotProjectFile,
       setRecentProjects,
+      botStates,
     };
   };
 
   let renderedComponent: HookResult<ReturnType<typeof useRecoilTestHook>>, dispatcher: Dispatcher;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     navigateTo.mockReset();
+    mockProjectResponse = cloneDeep(mockResponse);
     const rendered: RenderHookResult<unknown, ReturnType<typeof useRecoilTestHook>> = renderRecoilHook(
       useRecoilTestHook,
       {
@@ -153,17 +180,19 @@ describe('Project dispatcher', () => {
   });
 
   it('should throw an error if no bot project file is present in the bot', async () => {
+    const cloned = cloneDeep(mockProjectResponse);
+    const filtered = cloned.files.filter((file) => !endsWith(file.name, '.botproj'));
+    cloned.files = filtered;
     (httpClient.put as jest.Mock).mockResolvedValueOnce({
-      data: mockProjectResponse,
+      data: cloned,
     });
     await act(async () => {
       await dispatcher.openProject('../test/empty-bot', 'default');
     });
     expect(navigateTo).toHaveBeenLastCalledWith(`/home`);
-    expect(renderedComponent.current.appError).toBeUndefined();
   });
 
-  fit('should open bot project', async () => {
+  it('should open bot project', async () => {
     (httpClient.put as jest.Mock).mockResolvedValueOnce({
       data: mockProjectResponse,
     });
@@ -182,7 +211,7 @@ describe('Project dispatcher', () => {
     expect(renderedComponent.current.schemas.sdk).toBeDefined();
     expect(renderedComponent.current.schemas.default).toBeDefined();
     expect(renderedComponent.current.schemas.diagnostics?.length).toBe(0);
-    expect(navigateTo).toHaveBeenLastCalledWith(`/bot/${projectId}/dialogs/`);
+    expect(navigateTo).toHaveBeenLastCalledWith(`/bot/${projectId}/dialogs/emptybot-1`);
   });
 
   it('should handle project failure if project does not exist', async () => {
@@ -199,10 +228,10 @@ describe('Project dispatcher', () => {
       ]);
       await dispatcher.openProject('../test/empty-bot', 'default');
     });
-    // expect(renderedComponent.current.botOpening).toBeFalsy();
+    expect(renderedComponent.current.botOpening).toBeFalsy();
     expect(renderedComponent.current.appError).toEqual(errorObj);
     expect(renderedComponent.current.recentProjects.length).toBe(0);
-    expect(navigateTo).not.toHaveBeenCalled();
+    expect(navigateTo).toHaveBeenLastCalledWith(`/home`);
   });
 
   it('should fetch recent projects', async () => {
@@ -213,36 +242,6 @@ describe('Project dispatcher', () => {
     });
 
     expect(renderedComponent.current.recentProjects).toEqual(recentProjects);
-  });
-
-  it('should get runtime templates', async () => {
-    const templates = [
-      { id: 'EchoBot', index: 1, name: 'Echo Bot' },
-      { id: 'EmptyBot', index: 2, name: 'Empty Bot' },
-    ];
-    (httpClient.get as jest.Mock).mockResolvedValue({
-      data: templates,
-    });
-    await act(async () => {
-      await dispatcher.fetchRuntimeTemplates();
-    });
-
-    expect(renderedComponent.current.runtimeTemplates).toEqual(templates);
-  });
-
-  it('should get templates', async () => {
-    const templates = [
-      { id: 'EchoBot', index: 1, name: 'Echo Bot' },
-      { id: 'EmptyBot', index: 2, name: 'Empty Bot' },
-    ];
-    (httpClient.get as jest.Mock).mockResolvedValue({
-      data: templates,
-    });
-    await act(async () => {
-      await dispatcher.fetchTemplates();
-    });
-
-    expect(renderedComponent.current.templates).toEqual(templates);
   });
 
   it('should delete a project', async () => {
@@ -292,7 +291,7 @@ describe('Project dispatcher', () => {
     expect(renderedComponent.current.announcement).toEqual('Scripts successfully updated.');
   });
 
-  it('should get bolierplate version', async () => {
+  it('should get boilerplate version', async () => {
     const version = { updateRequired: true, latestVersion: '3', currentVersion: '2' };
     (httpClient.get as jest.Mock).mockResolvedValue({
       data: version,
@@ -302,5 +301,50 @@ describe('Project dispatcher', () => {
     });
 
     expect(renderedComponent.current.boilerplateVersion).toEqual(version);
+  });
+
+  it('should be able to add an existing skill to Botproject and a remote skill', async () => {
+    const skills = [
+      { botName: 'Echo-Skill-1', id: '40876.502871204648', location: '/Users/tester/Desktop/Echo-Skill-1' },
+      { botName: 'Echo-Skill-2', id: '50876.502871204648', location: '/Users/tester/Desktop/Echo-Skill-2' },
+    ];
+    const mappedSkills = skills.map(({ botName, id, location }) => {
+      const cloned = cloneDeep(mockProjectResponse);
+      return {
+        ...cloned,
+        botName,
+        id,
+        location,
+      };
+    });
+
+    await act(async () => {
+      (httpClient.put as jest.Mock).mockResolvedValueOnce({
+        data: mockProjectResponse,
+      });
+
+      await dispatcher.openProject('../test/empty-bot', 'default');
+    });
+
+    await act(async () => {
+      (httpClient.put as jest.Mock).mockResolvedValueOnce({
+        data: mappedSkills[0],
+      });
+      await dispatcher.addExistingSkillToBotProject(mappedSkills[0].location, 'default');
+    });
+
+    expect(renderedComponent.current.botStates.echoSkill1).toBeDefined();
+    expect(renderedComponent.current.botStates.echoSkill1.botDisplayName).toBe('Echo-Skill-1');
+
+    await act(async () => {
+      (httpClient.put as jest.Mock).mockResolvedValueOnce({
+        data: mappedSkills[1],
+      });
+      await dispatcher.addExistingSkillToBotProject(mappedSkills[1].location, 'default');
+    });
+
+    expect(renderedComponent.current.botStates.echoSkill2).toBeDefined();
+    expect(renderedComponent.current.botStates.echoSkill2.botDisplayName).toBe('Echo-Skill-2');
+    expect(navigateTo).toHaveBeenLastCalledWith(`/bot/${projectId}/dialogs/emptybot-1`);
   });
 });

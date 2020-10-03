@@ -1,0 +1,40 @@
+{
+  "old": "value",
+  "steps": [
+    {
+      "$kind": "Microsoft.TextInput",
+      "prompt": "${hello()} I'm a ToDo bot"
+    },
+    {
+      "$kind": "Microsoft.SendActivity",
+      "activity": "${bye()} See you again"
+    },
+    {
+      "$kind": "Microsoft.SendActivity",
+      "activity": "${bye()} bye bye again"
+    },
+    {
+      "$kind": "Microsoft.SendActivity",
+      "activity": "${ShowImage(dialog.attachments[0].contentUrl, dialog.attachments[0].contentType)}"
+    },
+    {
+      "$kind": "Microsoft.SendActivity",
+      "activity": "You entered: ${user.date[0].value}"
+    },
+    {
+      "$kind": "Microsoft.TextInput",
+      "activity": "${bye3()} See you again"
+    },
+    {
+      "$kind": "Microsoft.OnIntent",
+      "intent": "ShowIntent",
+      "steps": [
+        {
+          "$kind": "Microsoft.BeginDialog",
+          "dialog": "a"
+        }
+      ]
+    }
+  ],
+  "generator": "bot1.lg"
+}

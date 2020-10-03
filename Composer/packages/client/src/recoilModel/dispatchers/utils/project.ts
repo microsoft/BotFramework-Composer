@@ -267,6 +267,7 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
   try {
     schemas.sdk.content = processSchema(projectId, schemas.sdk.content);
   } catch (err) {
+    console.log('Error', err);
     const diagnostics = schemas.diagnostics ?? [];
     diagnostics.push(err.message);
     schemas.diagnostics = diagnostics;
