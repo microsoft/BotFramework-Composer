@@ -2,10 +2,13 @@
 // Licensed under the MIT License.
 
 import { selector, useRecoilValue } from 'recoil';
+import { v4 as uuid } from 'uuid';
 import { act, RenderHookResult, HookResult } from '@bfc/test-utils/lib/hooks';
 import { useRecoilState } from 'recoil';
 import cloneDeep from 'lodash/cloneDeep';
 import endsWith from 'lodash/endsWith';
+import findIndex from 'lodash/findIndex';
+import { SkillSetting } from '@bfc/shared/src/types';
 
 import httpClient from '../../../utils/httpUtil';
 import { projectDispatcher } from '../project';
@@ -38,12 +41,15 @@ import {
   botProjectIdsState,
   botNameIdentifierState,
   botErrorState,
+  botProjectSpaceLoadedState,
 } from '../../atoms';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '../../dispatchers';
 import { BotStatus } from '../../../constants';
 
-import mockResponse from './mocks/mockProjectResponse.json';
+import mockProjectData from './mocks/mockProjectResponse.json';
+import mockManifestData from './mocks/mockManifest.json';
+import mockBotProjectFileData from './mocks/mockBotProjectFile.json';
 
 // let httpMocks;
 let navigateTo;
@@ -80,25 +86,30 @@ jest.mock('../../persistence/FilePersistence', () => {
 });
 
 describe('Project dispatcher', () => {
-  let mockProjectResponse;
+  let mockProjectResponse, mockManifestResponse, mockBotProjectResponse;
   const botStatesSelector = selector({
     key: 'botStatesSelector',
     get: ({ get }) => {
       const botProjectIds = get(botProjectIdsState);
-      const botProjectData: { [projectName: string]: { botDisplayName: string; botError: any } } = {};
+      const botProjectData: { [projectName: string]: any } = {};
       botProjectIds.map((projectId) => {
         const botDisplayName = get(botDisplayNameState(projectId));
         const botNameIdentifier = get(botNameIdentifierState(projectId));
         const botError = get(botErrorState(projectId));
-
-        botProjectData[botNameIdentifier] = {
-          botDisplayName,
-          botError,
-        };
+        const location = get(locationState(projectId));
+        if (botNameIdentifier) {
+          botProjectData[botNameIdentifier] = {
+            botDisplayName,
+            location,
+            botError,
+            projectId,
+          };
+        }
       });
       return botProjectData;
     },
   });
+
   const useRecoilTestHook = () => {
     const schemas = useRecoilValue(schemasState(projectId));
     const location = useRecoilValue(locationState(projectId));
@@ -114,6 +125,7 @@ describe('Project dispatcher', () => {
     const locale = useRecoilValue(localeState(projectId));
     const botStatus = useRecoilValue(botStatusState(projectId));
     const botStates = useRecoilValue(botStatesSelector);
+    const botProjectSpaceLoaded = useRecoilValue(botProjectSpaceLoadedState);
 
     const currentDispatcher = useRecoilValue(dispatcherState);
     const [recentProjects, setRecentProjects] = useRecoilState(recentProjectsState);
@@ -154,6 +166,7 @@ describe('Project dispatcher', () => {
       setBotProjectFile,
       setRecentProjects,
       botStates,
+      botProjectSpaceLoaded,
     };
   };
 
@@ -161,7 +174,9 @@ describe('Project dispatcher', () => {
 
   beforeEach(async () => {
     navigateTo.mockReset();
-    mockProjectResponse = cloneDeep(mockResponse);
+    mockProjectResponse = cloneDeep(mockProjectData);
+    mockManifestResponse = cloneDeep(mockManifestData);
+    mockBotProjectResponse = cloneDeep(mockBotProjectFileData);
     const rendered: RenderHookResult<unknown, ReturnType<typeof useRecoilTestHook>> = renderRecoilHook(
       useRecoilTestHook,
       {
@@ -303,7 +318,10 @@ describe('Project dispatcher', () => {
     expect(renderedComponent.current.boilerplateVersion).toEqual(version);
   });
 
-  it('should be able to add an existing skill to Botproject and a remote skill', async () => {
+  it('should be able to add an existing skill to Botproject', async () => {
+    (httpClient.get as jest.Mock).mockResolvedValueOnce({
+      data: {},
+    });
     const skills = [
       { botName: 'Echo-Skill-1', id: '40876.502871204648', location: '/Users/tester/Desktop/Echo-Skill-1' },
       { botName: 'Echo-Skill-2', id: '50876.502871204648', location: '/Users/tester/Desktop/Echo-Skill-2' },
@@ -322,7 +340,6 @@ describe('Project dispatcher', () => {
       (httpClient.put as jest.Mock).mockResolvedValueOnce({
         data: mockProjectResponse,
       });
-
       await dispatcher.openProject('../test/empty-bot', 'default');
     });
 
@@ -345,6 +362,163 @@ describe('Project dispatcher', () => {
 
     expect(renderedComponent.current.botStates.echoSkill2).toBeDefined();
     expect(renderedComponent.current.botStates.echoSkill2.botDisplayName).toBe('Echo-Skill-2');
+
+    await act(async () => {
+      await dispatcher.addRemoteSkillToBotProject('https://test.net/api/manifest/man', 'test-skill', 'remote');
+    });
+
     expect(navigateTo).toHaveBeenLastCalledWith(`/bot/${projectId}/dialogs/emptybot-1`);
+  });
+
+  it('should be able to add a remote skill to Botproject', async () => {
+    const mockImplementation = (httpClient.get as jest.Mock).mockImplementation((url: string) => {
+      if (endsWith(url, '/projects/generateProjectId')) {
+        return {
+          data: '1234.1123213',
+        };
+      } else {
+        return {
+          data: mockManifestResponse,
+        };
+      }
+    });
+
+    await act(async () => {
+      (httpClient.put as jest.Mock).mockResolvedValueOnce({
+        data: mockProjectResponse,
+      });
+      await dispatcher.openProject('../test/empty-bot', 'default');
+    });
+
+    await act(async () => {
+      await dispatcher.addRemoteSkillToBotProject(
+        'https://test-dev.azurewebsites.net/manifests/onenote-2-1-preview-1-manifest.json',
+        'one-note',
+        'remote'
+      );
+    });
+
+    expect(renderedComponent.current.botStates.oneNote).toBeDefined();
+    expect(renderedComponent.current.botStates.oneNote.botDisplayName).toBe('OneNoteSync');
+    expect(renderedComponent.current.botStates.oneNote.location).toBe(
+      'https://test-dev.azurewebsites.net/manifests/onenote-2-1-preview-1-manifest.json'
+    );
+    expect(navigateTo).toHaveBeenLastCalledWith(`/bot/${projectId}/dialogs/emptybot-1`);
+    mockImplementation.mockClear();
+  });
+
+  it('should remove a skill from bot project', async () => {
+    const mockImplementation = (httpClient.get as jest.Mock).mockImplementation((url: string) => {
+      if (endsWith(url, '/projects/generateProjectId')) {
+        return {
+          data: uuid(),
+        };
+      } else {
+        return {
+          data: mockManifestResponse,
+        };
+      }
+    });
+
+    await act(async () => {
+      (httpClient.put as jest.Mock).mockResolvedValueOnce({
+        data: mockProjectResponse,
+      });
+      await dispatcher.openProject('../test/empty-bot', 'default');
+    });
+
+    await act(async () => {
+      await dispatcher.addRemoteSkillToBotProject(
+        'https://test-dev.azurewebsites.net/manifests/onenote-2-1-preview-1-manifest.json',
+        'one-note',
+        'remote'
+      );
+    });
+
+    await act(async () => {
+      await dispatcher.addRemoteSkillToBotProject(
+        'https://test-dev.azurewebsites.net/manifests/onenote-second-manifest.json',
+        'one-note-2',
+        'remote'
+      );
+    });
+
+    const oneNoteProjectId = renderedComponent.current.botStates.oneNote.projectId;
+    mockImplementation.mockClear();
+
+    await act(async () => {
+      dispatcher.removeSkillFromBotProject(oneNoteProjectId);
+    });
+    expect(renderedComponent.current.botStates.oneNote).toBeUndefined();
+  });
+
+  it('should be able to add a new skill to Botproject', async () => {
+    await act(async () => {
+      (httpClient.put as jest.Mock).mockResolvedValueOnce({
+        data: mockProjectResponse,
+      });
+      await dispatcher.openProject('../test/empty-bot', 'default');
+    });
+
+    const newProjectDataClone = cloneDeep(mockProjectResponse);
+    newProjectDataClone.botName = 'new-bot';
+    await act(async () => {
+      (httpClient.post as jest.Mock).mockResolvedValueOnce({
+        data: newProjectDataClone,
+      });
+      await dispatcher.addNewSkillToBotProject({
+        name: 'new-bot',
+        description: '',
+        schemaUrl: '',
+        location: '/Users/tester/Desktop/samples',
+        templateId: 'InterruptionSample',
+        locale: 'us-en',
+        qnaKbUrls: [],
+      });
+    });
+
+    expect(renderedComponent.current.botStates.newBot).toBeDefined();
+    expect(renderedComponent.current.botStates.newBot.botDisplayName).toBe('new-bot');
+    expect(navigateTo).toHaveBeenLastCalledWith(`/bot/${projectId}/dialogs/emptybot-1`);
+  });
+
+  it('should be able to open a project and its skills in Bot project file', async (done) => {
+    let callIndex = 0;
+    (httpClient.put as jest.Mock).mockImplementation(() => {
+      let mockSkillData: any;
+      callIndex++;
+      switch (callIndex) {
+        case 1:
+          return Promise.resolve({ data: mockProjectResponse });
+        case 2: {
+          mockSkillData = cloneDeep(mockProjectResponse);
+          mockSkillData.botName = 'todo-skill';
+          mockSkillData.id = '20876.502871204648';
+          return Promise.resolve({ data: mockSkillData });
+        }
+        case 3: {
+          mockSkillData = cloneDeep(mockProjectResponse);
+          mockSkillData.botName = 'google-keep-sync';
+          mockSkillData.id = '50876.502871204648';
+          return Promise.resolve({ data: mockSkillData });
+        }
+      }
+    });
+    const matchIndex = findIndex(mockProjectResponse.files, (file: any) => endsWith(file.name, '.botproj'));
+    mockProjectResponse.files[matchIndex] = {
+      ...mockProjectResponse.files[matchIndex],
+      content: JSON.stringify(mockBotProjectResponse),
+    };
+    expect(renderedComponent.current.botProjectSpaceLoaded).toBeFalsy();
+
+    await act(async () => {
+      await dispatcher.openProject('../test/empty-bot', 'default');
+    });
+    setImmediate(() => {
+      expect(renderedComponent.current.botStates.todoSkill.botDisplayName).toBe('todo-skill');
+      expect(renderedComponent.current.botStates.googleKeepSync.botDisplayName).toBe('google-keep-sync');
+      expect(renderedComponent.current.botProjectSpaceLoaded).toBeTruthy();
+      done();
+    });
   });
 });
