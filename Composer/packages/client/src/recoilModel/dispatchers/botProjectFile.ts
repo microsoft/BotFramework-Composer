@@ -76,20 +76,6 @@ export const botProjectFileDispatcher = () => {
     }
   );
 
-  // const renameRootBotInBotProjectFile = useRecoilCallback(
-  //   ({ set, snapshot }: CallbackInterface) => async (projectId: string) => {
-  //     const location = await snapshot.getPromise(locationState(projectId));
-  //     const botname = await snapshot.getPromise(botNameState(projectId));
-  //     set(botProjectFileState(projectId), (current: BotProjectSpace) => {
-  //       const result = produce(current, (draftState: BotProjectSpace) => {
-  //         draftState.workspace = convertPathToFileProtocol(location);
-  //         draftState.name = botname;
-  //       });
-  //       return result;
-  //     });
-  //   }
-  // );
-
   return {
     addLocalSkillToBotProjectFile,
     removeSkillFromBotProjectFile,

@@ -8,6 +8,7 @@ import toPairs from 'lodash/toPairs';
 const index = (skillContent: any[], skillSettings: { [name: string]: SkillSetting } = {}): Skill[] => {
   return toPairs(skillSettings).map(
     ([id, settings]): Skill => {
+      console.log('Content', skillContent);
       const { content = {} } = skillContent.find(({ id: key }) => key === id) || {};
       const { description, endpoints = [] } = content;
 

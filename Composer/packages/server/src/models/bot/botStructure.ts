@@ -108,7 +108,6 @@ export const serializeFiles = async (fileStorage, rootPath, botName) => {
     templateInterpolate(BotStructureTemplate.lu, { LOCALE: '*', BOTNAME: '*' }),
     templateInterpolate(BotStructureTemplate.qna, { LOCALE: '*', BOTNAME: '*' }),
     templateInterpolate(BotStructureTemplate.dialogSchema, { BOTNAME: '*' }),
-    templateInterpolate(BotStructureTemplate.dialogSchema, { BOTNAME: '*' }),
     templateInterpolate(BotStructureTemplate.botProject, { BOTNAME: '*' }),
   ];
   for (const pattern of entryPatterns) {

@@ -99,11 +99,11 @@ describe('copyTo', () => {
     }
   });
 
-  it('should copy successfully', async () => {
+  fit('should copy successfully', async () => {
     const newBotProject = await proj.copyTo(locationRef);
     await newBotProject.init();
     const project: { [key: string]: any } = newBotProject.getProject();
-    expect(project.files.length).toBe(13);
+    expect(project.files.length).toBe(15);
   });
 });
 
