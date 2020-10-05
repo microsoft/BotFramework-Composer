@@ -122,10 +122,6 @@ export const breadcrumbClass = mergeStyleSets({
   },
 });
 
-export const deleteDialogContent = css`
-  color: #000;
-`;
-
 export const middleTriggerContainer = css`
   display: flex;
   justify-content: center;
