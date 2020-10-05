@@ -41,7 +41,7 @@ Plugin modules must come in one of the following forms:
 * A function called `initialize` is exported from the module
 
 Currently, plugins can be loaded into Composer using 1 of 2 methods:
-* The plugin is placed in the /plugins/ folder, and contains a package.json file with `extendsComposer` set to `true`
+* The plugin is placed in the /plugins/ folder
 * The plugin is loaded directly via changes to Composer code, using `ExtensionContext.loadPlugin(name, plugin)`
 
 The simplest form of a plugin module is below:

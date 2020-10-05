@@ -9,6 +9,7 @@ interface AddExtensionRequest extends Request {
   body: {
     id?: string;
     version?: string;
+    path?: string;
   };
 }
 
@@ -60,10 +61,15 @@ export async function addExtension(req: AddExtensionRequest, res: Response) {
     return;
   }
 
-  await ExtensionManager.installRemote(id, version);
-  await ExtensionManager.load(id);
-  const extension = ExtensionManager.find(id);
-  res.json(presentExtension(extension));
+  const extensionId = await ExtensionManager.installRemote(id, version);
+
+  if (extensionId) {
+    await ExtensionManager.load(extensionId);
+    const extension = ExtensionManager.find(extensionId);
+    res.json(presentExtension(extension));
+  } else {
+    res.status(500).json({ error: 'Unable to install extension.' });
+  }
 }
 
 export async function toggleExtension(req: ToggleExtensionRequest, res: Response) {

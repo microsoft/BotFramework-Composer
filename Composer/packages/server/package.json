@@ -93,6 +93,7 @@
     "portfinder": "1.0.25",
     "rimraf": "^3.0.2",
     "ts-md5": "^1.2.7",
+    "tslib": "^2.0.0",
     "uuid": "^8.3.0",
     "vscode-languageserver": "^5.3.0-next",
     "vscode-ws-jsonrpc": "^0.1.1",
