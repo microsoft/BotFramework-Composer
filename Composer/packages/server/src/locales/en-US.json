@@ -35,6 +35,12 @@
   "about_70c18bba": {
     "message": "About"
   },
+  "accepted_values_b4224bcd": {
+    "message": "Accepted values"
+  },
+  "accepts_multiple_values_73658f63": {
+    "message": "Accepts multiple values"
+  },
   "access_external_resources_7e37fe21": {
     "message": "Access external resources"
   },
@@ -152,6 +158,9 @@
   "add_new_validation_rule_here_eb675ccf": {
     "message": "Add new validation rule here"
   },
+  "add_property_d381eba3": {
+    "message": "Add Property"
+  },
   "add_qna_pair_bcb1624": {
     "message": "Add QnA Pair"
   },
@@ -166,6 +175,9 @@
   },
   "advanced_events_2cbfa47d": {
     "message": "Advanced Events"
+  },
+  "advanced_options_4dcc8385": {
+    "message": "Advanced options"
   },
   "all_4321c3a1": {
     "message": "All"
@@ -197,6 +209,9 @@
   "any_or_expression_acad7d37": {
     "message": "Any or expression"
   },
+  "any_string_f22dc2e1": {
+    "message": "any string"
+  },
   "append_choices_35c45a2d": {
     "message": "Append choices"
   },
@@ -217,6 +232,12 @@
   },
   "are_you_sure_you_want_to_exit_the_onboarding_produ_c2de1b23": {
     "message": "Are you sure you want to exit the Onboarding Product Tour? You can restart the tour in the onboarding settings."
+  },
+  "are_you_sure_you_want_to_remove_propertyname_8a793e4f": {
+    "message": "Are you sure you want to remove \"{ propertyName }\"?"
+  },
+  "are_you_sure_you_want_to_start_over_your_progress__3b7cde9b": {
+    "message": "Are you sure you want to start over? Your progress will be lost."
   },
   "are_you_sure_you_want_to_stop_current_runtime_and__a5f883b2": {
     "message": "Are you sure you want to stop current runtime and replace them?"
@@ -406,6 +427,9 @@
   },
   "chris_whitten_11df1f35": {
     "message": "Chris Whitten"
+  },
+  "clear_all_da755751": {
+    "message": "Clear all"
   },
   "click_on_the_b_add_b_button_in_the_toolbar_and_sel_4daf351a": {
     "message": "Click on the <b>Add</b> button in the toolbar, and select <b>Add a new trigger</b>. In the <b>Create a trigger</b> wizard, set the <b>Trigger Type</b> to <i>Intent recognized</i> and configure the <b>Trigger Name</b> and <b>Trigger Phrases</b>. Then add actions in the Visual Editor."
@@ -638,6 +662,9 @@
   "default_recognizer_9c06c1a3": {
     "message": "Default recognizer"
   },
+  "define_by_value_type_3cd3d1a8": {
+    "message": "Define by value type"
+  },
   "define_conversation_objective_146d1cc6": {
     "message": "Define conversation objective"
   },
@@ -845,11 +872,23 @@
   "enter_a_manifest_url_to_add_a_new_skill_to_your_bo_57e9d660": {
     "message": "Enter a manifest url to add a new skill to your bot."
   },
+  "enter_a_max_value_14e8ba52": {
+    "message": "Enter a max value"
+  },
+  "enter_a_min_value_c3030813": {
+    "message": "Enter a min value"
+  },
   "enter_a_question_74f2e045": {
     "message": "Enter a question"
   },
   "enter_an_answer_84152a83": {
     "message": "Enter an answer"
+  },
+  "entities_ef09392c": {
+    "message": "Entities"
+  },
+  "enum_help_text_434bd44f": {
+    "message": "Enum help text"
   },
   "environment_68aed6d3": {
     "message": "Environment"
@@ -925,6 +964,9 @@
   },
   "export_de71cd8e": {
     "message": "Export"
+  },
+  "export_json_2e2981f5": {
+    "message": "Export JSON"
   },
   "expression_7f906a13": {
     "message": "Expression"
@@ -1004,6 +1046,9 @@
   "generate_44e33e72": {
     "message": "Generate"
   },
+  "generate_dialog_b80a85b2": {
+    "message": "Generate dialog"
+  },
   "get_a_new_copy_of_the_runtime_code_84970bf": {
     "message": "Get a new copy of the runtime code"
   },
@@ -1079,6 +1124,9 @@
   "import_qna_from_url_26a99161": {
     "message": "Import QnA From Url"
   },
+  "import_schema_75659c5f": {
+    "message": "Import schema"
+  },
   "in_production_5a70b8b4": {
     "message": "In production"
   },
@@ -1102,6 +1150,9 @@
   },
   "install_the_update_and_restart_composer_fac30a61": {
     "message": "Install the update and restart Composer."
+  },
+  "integer_7f378275": {
+    "message": "integer"
   },
   "integer_b08abbe9": {
     "message": "Integer"
@@ -1235,6 +1286,12 @@
   "link_to_where_this_luis_intent_is_defined_9be25fb7": {
     "message": "link to where this LUIS intent is defined"
   },
+  "list_a034633b": {
+    "message": "list"
+  },
+  "list_count_values_33ea7088": {
+    "message": "list - { count } values"
+  },
   "list_view_e33843f0": {
     "message": "List view"
   },
@@ -1310,6 +1367,12 @@
   "manifest_version_1edc004a": {
     "message": "Manifest Version"
   },
+  "maximum_f0e8e5e4": {
+    "message": "Maximum"
+  },
+  "maximum_help_text_7f3e6562": {
+    "message": "Maximum help text"
+  },
   "mb_8f9f9e84": {
     "message": "MB"
   },
@@ -1348,6 +1411,12 @@
   },
   "minimap_beb3be27": {
     "message": "Minimap"
+  },
+  "minimum_f31b05ab": {
+    "message": "Minimum"
+  },
+  "minimum_help_text_6ab5b190": {
+    "message": "Minimum help text"
   },
   "missing_definition_for_defname_33f2b594": {
     "message": "Missing definition for { defName }"
@@ -1418,6 +1487,9 @@
   "name_of_skill_dialog_to_call_201707f3": {
     "message": "Name of skill dialog to call"
   },
+  "name_of_the_property_f3cae657": {
+    "message": "Name of the property"
+  },
   "navigation_control_94f2649e": {
     "message": "navigation control"
   },
@@ -1469,6 +1541,9 @@
   "no_search_results_1ba50423": {
     "message": "No search results"
   },
+  "no_name_e082310e": {
+    "message": "[no name]"
+  },
   "no_updates_available_cecd904d": {
     "message": "No updates available"
   },
@@ -1507,6 +1582,9 @@
   },
   "number_constant_or_expression_to_evaluate_1098771": {
     "message": "Number constant or expression to evaluate."
+  },
+  "number_dc1c178": {
+    "message": "number"
   },
   "number_or_expression_55c7f9f": {
     "message": "Number or expression"
@@ -1555,6 +1633,15 @@
   },
   "open_inline_editor_a5aabcfa": {
     "message": "Open inline editor"
+  },
+  "optional_221bcc9d": {
+    "message": "Optional"
+  },
+  "optional_db6daecb": {
+    "message": "optional"
+  },
+  "optional_properties_2c23c7c6": {
+    "message": "Optional properties"
   },
   "or_4f7d4edb": {
     "message": "Or: "
@@ -1670,17 +1757,41 @@
   "prompt_with_multi_choice_f428542f": {
     "message": "Prompt with multi-choice"
   },
+  "property_array_help_text_126845dc": {
+    "message": "Property array help text"
+  },
   "property_description_8d21ea2e": {
     "message": "Property description."
   },
   "property_editor_preferences_ad7a4b62": {
     "message": "Property editor preferences"
   },
+  "property_has_error_s_please_fix_the_error_s_for_th_e994c143": {
+    "message": "Property has error(s), please fix the error(s) for this property."
+  },
+  "property_name_914371f5": {
+    "message": "Property name"
+  },
+  "property_name_help_text_421a5f7f": {
+    "message": "Property name help text"
+  },
+  "property_quick_actions_d3498f14": {
+    "message": "Property quick actions"
+  },
+  "property_required_help_text_57f027ad": {
+    "message": "Property required help text"
+  },
   "property_title_f2b443b7": {
     "message": "Property title"
   },
   "property_type_95689fa5": {
     "message": "Property type."
+  },
+  "property_type_e38cf7e4": {
+    "message": "Property Type"
+  },
+  "property_type_help_text_8a2c202d": {
+    "message": "Property type help text"
   },
   "provide_a_brief_description_it_will_appear_on_the__f962eb38": {
     "message": "Provide a brief description. It will appear on the publish history list."
@@ -1786,6 +1897,21 @@
   },
   "reprompt_dialog_event_c42d2c33": {
     "message": "Reprompt dialog event"
+  },
+  "required_5f7ef8c0": {
+    "message": "Required"
+  },
+  "required_a6089a96": {
+    "message": "required"
+  },
+  "required_properties_dfb0350d": {
+    "message": "Required properties"
+  },
+  "requiredtext_ff8f722f": {
+    "message": "{ requiredText }"
+  },
+  "requiredtext_priority_priority_4293288f": {
+    "message": "{ requiredText } | Priority: { priority }"
   },
   "response_is_response_3cd62f8f": {
     "message": "Response is { response }"
@@ -2087,6 +2213,9 @@
   "the_welcome_message_is_triggered_by_the_i_conversa_a3ff58f8": {
     "message": "The welcome message is triggered by the <i>ConversationUpdate</i> event. To add a new <i>ConversationUpdate</i> trigger:"
   },
+  "there_are_no_kind_properties_e299287e": {
+    "message": "There are no { kind } properties."
+  },
   "there_was_an_error_74ed3c58": {
     "message": "There was an error"
   },
@@ -2212,6 +2341,9 @@
   },
   "try_again_ad656c3c": {
     "message": "Try again"
+  },
+  "type_and_press_enter_33a2905d": {
+    "message": "Type and press enter"
   },
   "type_c8106334": {
     "message": "Type"
