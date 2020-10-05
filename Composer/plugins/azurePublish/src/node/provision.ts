@@ -397,10 +397,10 @@ export class BotProjectProvision {
       }
 
       // TODO: NOT SURE WHAT THIS DOES! Something about tracking what deployments happen because of composer?
-      await this.azureResourceManagementClient.deployDeploymentCounter({
-        resourceGroupName: resourceGroupName,
-        name: '1d41002f-62a1-49f3-bd43-2f3f32a19cbb', // WHAT IS THIS CONSTANT???
-      });
+      // await this.azureResourceManagementClient.deployDeploymentCounter({
+      //   resourceGroupName: resourceGroupName,
+      //   name: '1d41002f-62a1-49f3-bd43-2f3f32a19cbb', // WHAT IS THIS CONSTANT???
+      // });
 
       console.log('PROVISION COMPLETE', provisionResults);
 

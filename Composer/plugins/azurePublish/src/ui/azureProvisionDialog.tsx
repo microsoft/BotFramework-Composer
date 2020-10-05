@@ -21,13 +21,13 @@ const extensionResourceOptions = [
   { key: 'botRegistration', text: 'Azure Bot Service', description: 'Register your bot with the Azure Bot Service' },
   { key: 'luisAuthoring', text: 'Luis Authoring Resource', description: 'Author LUIS applications' },
   { key: 'luisPrediction', text: 'Luis Prediction Resource', description: 'Use LUIS in your bot' },
-  { key: 'blobStorage', text: 'BlobStorage', description: 'Capture transcripts into Blob Storage' },
+  // { key: 'blobStorage', text: 'BlobStorage', description: 'Capture transcripts into Blob Storage' },
   // { key: 'cosmoDb', text: 'CosmoDb', description: 'Use CosmoDB to store your bot state' },
-  {
-    key: 'applicationInsights',
-    text: 'application Insights',
-    description: 'Track the performance of your app with app insights',
-  },
+  // {
+  //   key: 'applicationInsights',
+  //   text: 'application Insights',
+  //   description: 'Track the performance of your app with app insights',
+  // },
 ];
 
 export const AzureProvisionDialog: React.FC = () => {
@@ -160,7 +160,10 @@ export const AzureProvisionDialog: React.FC = () => {
           {extensionResourceOptions.map((resource) => {
             return (
               <Fragment>
-                {resource.key} = {resource.description}
+                <section>
+                  <strong>{resource.key}</strong>
+                  <p>{resource.description}</p>
+                </section>
               </Fragment>
               // <SettingToggle
               //   key={resource.key}

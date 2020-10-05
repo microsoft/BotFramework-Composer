@@ -377,7 +377,7 @@ export default async (composer: any): Promise<void> => {
 
       azureProvisioner
         .create(config)
-        .then((provisionResults) => {
+        .then(async (provisionResults) => {
           // GOT PROVISION RESULTS!
           // cast this into the right form for a publish profile
           const publishProfile = {
@@ -405,6 +405,16 @@ export default async (composer: any): Promise<void> => {
           console.log('PUBLISH PROFILE', publishProfile);
 
           // write this to the project settings.
+          project.settings.publishTargets.push({
+            name: config.hostname,
+            type: 'azurePublish',
+            configuration: JSON.stringify(publishProfile),
+            lastPublished: null,
+            provisionConfig: '{}', // todo to be removed i think
+            provisionStatus: '{}', // todo to be removed i think
+          });
+
+          await project.updateDefaultSlotEnvSettings(project.settings);
         })
         .catch((error) => {
           console.log(error);
