@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+      "sourceMap": true,
+      "noImplicitAny": true,
+      "module": "esnext",
+      "target": "es6",
+      "importHelpers": true,
+      "strictNullChecks": false,
+      "noUnusedParameters": true,
+      "keyofStringsOnly": true,
+      "baseUrl": ".",
+      "paths": {
+          "src/*": ["src/*"]
+      }
+  },
+  "include": ["src/**/*"]
+}
