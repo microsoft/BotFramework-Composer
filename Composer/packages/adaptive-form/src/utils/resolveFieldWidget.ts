@@ -14,7 +14,8 @@ export function resolveFieldWidget(
   schema?: JSONSchema7,
   uiOptions?: UIOptions,
   globalUIOptions?: FormUISchema,
-  value?: any
+  value?: any,
+  expression?: boolean
 ): FieldWidget {
   const FieldOverride = uiOptions?.field;
 
@@ -38,7 +39,7 @@ export function resolveFieldWidget(
       }
     }
 
-    if (uiOptions?.canBeExpression && typeof value === 'string' && value.startsWith('=')) {
+    if (expression && typeof value === 'string' && value.startsWith('=')) {
       return DefaultFields.IntellisenseTextField;
     }
 

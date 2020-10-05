@@ -10,7 +10,7 @@ import formatMessage from 'format-message';
 import { FieldLabel } from '../FieldLabel';
 
 const BooleanField: React.FC<FieldProps> = function CheckboxWidget(props) {
-  const { onChange, value, label, id, schema, required, uiOptions } = props;
+  const { expression, onChange, value, label, id, schema, required, uiOptions } = props;
   const { description } = schema;
 
   const options: IDropdownOption[] = [
@@ -28,7 +28,7 @@ const BooleanField: React.FC<FieldProps> = function CheckboxWidget(props) {
     },
   ];
 
-  if (uiOptions.canBeExpression) {
+  if (expression) {
     options.push({
       key: 'expression',
       text: formatMessage('Write in expression'),

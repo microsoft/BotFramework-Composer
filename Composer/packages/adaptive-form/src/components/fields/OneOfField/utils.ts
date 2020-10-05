@@ -100,6 +100,14 @@ export function getSelectedOption(value: any | undefined, options: IDropdownOpti
     );
   }
 
+  if (valueType === 'integer') {
+    return (
+      options.find(({ data }) => data.schema.type === valueType) ||
+      options.find(({ data }) => data.schema.type === 'number') ||
+      options[0]
+    );
+  }
+
   // lastly, attempt to find the option based on value type
   return options.find(({ data }) => data.schema.type === valueType) || options[0];
 }

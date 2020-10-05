@@ -18,6 +18,7 @@ export const SelectField: React.FC<FieldProps<string | number>> = function Selec
     onFocus = () => {},
     value = '',
     error,
+    expression,
     uiOptions,
     required,
   } = props;
@@ -33,7 +34,7 @@ export const SelectField: React.FC<FieldProps<string | number>> = function Selec
       text: '',
     });
 
-    if (uiOptions.canBeExpression) {
+    if (expression) {
       opts.push({
         key: 'expression',
         text: formatMessage('Write in expression'),
@@ -41,7 +42,7 @@ export const SelectField: React.FC<FieldProps<string | number>> = function Selec
     }
 
     return opts;
-  }, [enumOptions, uiOptions.canBeExpression]);
+  }, [enumOptions, expression]);
 
   const handleChange = (_e: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
     /* istanbul ignore else */
