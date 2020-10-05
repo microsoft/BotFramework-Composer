@@ -147,7 +147,7 @@ export class BotProjectDeploy {
     });
 
     const publishEndpoint = `https://${
-      hostname ? hostname : name + '-' + env
+      hostname ? hostname : name + (env ? '-' + env : '')
     }.scm.azurewebsites.net/zipdeploy/?isAsync=true`;
     try {
       const response = await rp.post({

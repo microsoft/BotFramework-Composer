@@ -127,6 +127,7 @@ export const publisherDispatcher = () => {
         const response = await httpClient.post(
           `/publish/${projectId}/publish/${target.name}`,
           {
+            accessToken: token,
             metadata,
             sensitiveSettings,
           },

@@ -10,6 +10,7 @@ import { ILuisConfig, FileInfo, IQnAConfig } from '@bfc/shared';
 
 import { ICrossTrainConfig, createCrossTrainConfig } from './utils/crossTrainUtil';
 import { BotProjectDeployLoggerType } from './botProjectLoggerType';
+import { env } from 'process';
 
 const crossTrainer = require('@microsoft/bf-lu/lib/parser/cross-train/crossTrainer.js');
 const luBuild = require('@microsoft/bf-lu/lib/parser/lubuild/builder.js');
@@ -222,7 +223,8 @@ export class LuisAndQnaPublish {
     }
     // Extract the accoutn object that matches the expected resource name.
     // This is the name that would appear in the azure portal associated with the luis endpoint key.
-    const account = this.getAccount(accountList, luisResource ? luisResource : `${name}-${environment}-luis`);
+    const defaultLuisResource = name + (environment ? '-' + environment : '') + '-luis';
+    const account = this.getAccount(accountList, luisResource ? luisResource : defaultLuisResource);
 
     // Assign the appropriate account to each of the applicable LUIS apps for this bot.
     // DOCS HERE: https://westus.dev.cognitive.microsoft.com/docs/services/5890b47c39e2bb17b84a55ff/operations/5be32228e8473de116325515
@@ -230,7 +232,7 @@ export class LuisAndQnaPublish {
       const luisAppId = luisAppIds[dialogKey];
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: `Assigning to luis app id: ${luisAppId}`,
+        message: `Assigning to luis app id: ${luisAppId} with account ${JSON.stringify(account)}`,
       });
 
       const luisAssignEndpoint = `${luisEndpoint}/luis/api/v2.0/apps/${luisAppId}/azureaccounts`;
