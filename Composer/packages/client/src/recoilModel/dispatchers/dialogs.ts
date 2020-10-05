@@ -21,16 +21,16 @@ import { removeDialogSchema } from './dialogSchema';
 
 export const dialogsDispatcher = () => {
   const removeDialog = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (id: string, projectId: string) => {
+    (callbackHelpers: CallbackInterface) => async (dialogId: string, projectId: string) => {
       const { set, snapshot } = callbackHelpers;
       let dialogs = await snapshot.getPromise(dialogsState(projectId));
-      dialogs = dialogs.filter((dialog) => dialog.id !== id);
+      dialogs = dialogs.filter((dialog) => dialog.id !== dialogId);
       set(dialogsState(projectId), dialogs);
       //remove dialog should remove all locales lu and lg files and the dialog schema file
-      await removeLgFileState(callbackHelpers, { id, projectId });
-      await removeLuFileState(callbackHelpers, { id, projectId });
-      await removeQnAFileState(callbackHelpers, { id, projectId });
-      removeDialogSchema(callbackHelpers, { id, projectId });
+      await removeLgFileState(callbackHelpers, { id: dialogId, projectId });
+      await removeLuFileState(callbackHelpers, { id: dialogId, projectId });
+      await removeQnAFileState(callbackHelpers, { id: dialogId, projectId });
+      removeDialogSchema(callbackHelpers, { id: dialogId, projectId });
     }
   );
 

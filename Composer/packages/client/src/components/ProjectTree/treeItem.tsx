@@ -7,6 +7,7 @@ import React from 'react';
 import { FontWeights } from '@uifabric/styling';
 import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
+import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
@@ -150,6 +151,22 @@ interface ITreeItemProps {
   shiftOut?: number; // needed to make an outline look right; should be the size of the "details" reveal arrow
 }
 
+const renderTreeMenuItem = (item: TreeMenuItem) => {
+  if (item.label === '') {
+    return {
+      key: 'divider',
+      itemType: ContextualMenuItemType.Divider,
+    };
+  }
+  return {
+    key: item.label,
+    ariaLabel: item.label,
+    text: item.label,
+    iconProps: { iconName: item.icon },
+    onItemClick: item.action,
+  };
+};
+
 const onRenderItem = (item: IOverflowSetItemProps) => {
   const warningContent = formatMessage(
     'This trigger type is not supported by the RegEx recognizer and will not be fired.'
@@ -195,10 +212,10 @@ const onRenderItem = (item: IOverflowSetItemProps) => {
   );
 };
 
-const onRenderOverflowButton = (showIcon: boolean, isActive: boolean) => {
+const onRenderOverflowButton = (isActive: boolean) => {
   const moreLabel = formatMessage('Actions');
-  return (overflowItems) => {
-    return showIcon ? (
+  return (overflowItems: IContextualMenuItem[]) => {
+    return (
       <TooltipHost content={moreLabel} directionalHint={DirectionalHint.rightCenter}>
         <IconButton
           ariaLabel={moreLabel}
@@ -216,14 +233,14 @@ const onRenderOverflowButton = (showIcon: boolean, isActive: boolean) => {
           }}
         />
       </TooltipHost>
-    ) : null;
+    );
   };
 };
 
-export const TreeItem: React.FC<ITreeItemProps> = ({ link, isActive, icon, dialogName, shiftOut, onSelect }) => {
+export const TreeItem: React.FC<ITreeItemProps> = ({ link, isActive, icon, dialogName, shiftOut, onSelect, menu }) => {
   const a11yLabel = `${dialogName ?? '$Root'}_${link.displayName}`;
 
-  const overflowMenu: { key: string; name: string; onClick: () => void }[] = [];
+  const overflowMenu = menu.map(renderTreeMenuItem);
 
   const linkString = `${link.projectId}_DialogTreeItem${link.dialogName}_${link.trigger ?? ''}`;
 
@@ -260,7 +277,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({ link, isActive, icon, dialo
         role="row"
         styles={{ item: { flex: 1 } }}
         onRenderItem={onRenderItem}
-        onRenderOverflowButton={onRenderOverflowButton(!link.isRoot, !!isActive)}
+        onRenderOverflowButton={onRenderOverflowButton(!!isActive)}
       />
     </div>
   );

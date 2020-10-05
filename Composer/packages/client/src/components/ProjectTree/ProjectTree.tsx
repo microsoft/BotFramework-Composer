@@ -13,10 +13,13 @@ import debounce from 'lodash/debounce';
 import { useRecoilValue } from 'recoil';
 import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 
+import { dialogStyle } from '../../components/Modal/dialogStyle';
+import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { dispatcherState, currentProjectIdState } from '../../recoilModel';
 import { botProjectSpaceSelector } from '../../recoilModel/selectors';
-import { getFriendlyName } from '../../utils/dialogUtil';
+import { getFriendlyName, deleteTrigger } from '../../utils/dialogUtil';
 import { containUnsupportedTriggers, triggerNotSupported } from '../../utils/dialogValidator';
+import { DialogDeleting } from '../../constants';
 
 import { TreeItem } from './treeItem';
 import { ExpandableNode } from './ExpandableNode';
@@ -43,18 +46,32 @@ const root = css`
   label: root;
 `;
 
+const deleteDialogContent = css`
+  color: #000;
+`;
+
 // -------------------- ProjectTree -------------------- //
 
 const icons = {
   TRIGGER: 'LightningBolt',
   DIALOG: 'Org',
   BOT: 'CubeShape',
-  EXTERNAL_SKILL: '',
+  EXTERNAL_SKILL: 'Globe',
   FORM_DIALOG: '',
   FORM_FIELD: '',
   FORM_ACTION: '',
-  FILTER: 'FILTER',
+  FILTER: 'Filter',
 };
+
+function onRenderContent(subTitle, style) {
+  return (
+    <div css={deleteDialogContent}>
+      <p>{DialogDeleting.CONTENT}</p>
+      {subTitle && <div style={style}>{subTitle}</div>}
+      <p>{DialogDeleting.CONFIRM_CONTENT}</p>
+    </div>
+  );
+}
 
 export type TreeLink = {
   displayName: string;
@@ -121,7 +138,7 @@ type IProjectTreeProps = {
 };
 
 export const ProjectTree: React.FC<IProjectTreeProps> = ({ showTriggers = true, showDialogs = true }) => {
-  const { onboardingAddCoachMarkRef, navTo } = useRecoilValue(dispatcherState);
+  const { onboardingAddCoachMarkRef, navTo, removeDialog, selectTo, updateDialog } = useRecoilValue(dispatcherState);
 
   const [filter, setFilter] = useState('');
   const [selectedLink, setSelectedLink] = useState<TreeLink | undefined>();
@@ -180,7 +197,55 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({ showTriggers = true, 
       </span>
     );
   };
+  async function handleDeleteDialog(skillId, dialogId) {
+    const refs = getAllRef(dialogId, dialogs);
+    let setting: any = {
+      confirmBtnText: formatMessage('Yes'),
+      cancelBtnText: formatMessage('Cancel'),
+    };
+    let title = '';
+    let subTitle = '';
+    if (refs.length > 0) {
+      title = DialogDeleting.TITLE;
+      subTitle = `${refs.reduce((result, item) => `${result} ${item} \n`, '')}`;
+      setting = {
+        onRenderContent,
+        style: dialogStyle.console,
+      };
+    } else {
+      title = DialogDeleting.NO_LINKED_TITLE;
+    }
+    const result = await OpenConfirmModal(title, subTitle, setting);
 
+    if (result) {
+      await removeDialog(dialogId, skillId);
+      commitChanges();
+    }
+  }
+
+  async function handleDeleteTrigger(projectId, skillId, id, index) {
+    const content = deleteTrigger(dialogs, id, index, (trigger) => triggerApi.deleteTrigger(id, trigger));
+
+    if (content) {
+      updateDialog({ id, content, projectId });
+      const match = /\[(\d+)\]/g.exec(selected);
+      const current = match && match[1];
+      if (!current) return;
+      const currentIdx = parseInt(current);
+      if (index === currentIdx) {
+        if (currentIdx - 1 >= 0) {
+          //if the deleted node is selected and the selected one is not the first one, navTo the previous trigger;
+          selectTo(projectId, skillId, createSelectedPath(currentIdx - 1));
+        } else {
+          //if the deleted node is selected and the selected one is the first one, navTo the first trigger;
+          navTo(projectId, skillId, id, []);
+        }
+      } else if (index < currentIdx) {
+        //if the deleted node is at the front, navTo the current one;
+        selectTo(projectId, skillId, createSelectedPath(currentIdx - 1));
+      }
+    }
+  }
   const renderDialogHeader = (botId: string, dialog: DialogInfo, warningContent: string) => {
     const link: TreeLink = {
       dialogName: dialog.id,
@@ -209,7 +274,12 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({ showTriggers = true, 
           menu={[
             { icon: '', label: formatMessage('Add a trigger'), action: () => {} },
             { label: '' },
-            { label: 'Remove this dialog', action: (link) => {} },
+            {
+              label: 'Remove this dialog',
+              action: (link) => {
+                handleDeleteDialog(link.skillId, link.dialogName);
+              },
+            },
           ]}
           shiftOut={showTriggers ? 0 : 28}
           onSelect={handleOnSelect}
@@ -238,7 +308,14 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({ showTriggers = true, 
         icon={TYPE_TO_ICON_MAP[item.type] || icons.TRIGGER}
         isActive={isLinkEqual(link, selectedLink)}
         link={link}
-        menu={[{ label: formatMessage('Remove this trigger'), action: (link) => {} }]}
+        menu={[
+          {
+            label: formatMessage('Remove this trigger'),
+            action: (link) => {
+              handleDeleteTrigger(link.projectId, link.skillId, link.dialogName, link.trigger);
+            },
+          },
+        ]}
         shiftOut={48}
         onSelect={handleOnSelect}
       />

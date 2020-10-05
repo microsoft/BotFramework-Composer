@@ -17,17 +17,8 @@ import { useRecoilValue } from 'recoil';
 import { LeftRightSplit } from '../../components/Split/LeftRightSplit';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TestController } from '../../components/TestController/TestController';
-import { DialogDeleting } from '../../constants';
-import {
-  deleteTrigger,
-  getBreadcrumbLabel,
-  qnaMatcherKey,
-  TriggerFormData,
-  getDialogData,
-} from '../../utils/dialogUtil';
+import { getBreadcrumbLabel, qnaMatcherKey, TriggerFormData, getDialogData } from '../../utils/dialogUtil';
 import { Conversation } from '../../components/Conversation';
-import { dialogStyle } from '../../components/Modal/dialogStyle';
-import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { clearBreadcrumb, getFocusPath } from '../../utils/navigation';
 import { navigateTo } from '../../utils/navigation';
@@ -54,15 +45,7 @@ import { undoFunctionState, undoVersionState } from '../../recoilModel/undo/hist
 import { decodeDesignerPathToArrayPath } from '../../utils/convertUtils/designerPathEncoder';
 
 import { WarningMessage } from './WarningMessage';
-import {
-  breadcrumbClass,
-  contentWrapper,
-  deleteDialogContent,
-  editorContainer,
-  editorWrapper,
-  pageRoot,
-  visualPanel,
-} from './styles';
+import { breadcrumbClass, contentWrapper, editorContainer, editorWrapper, pageRoot, visualPanel } from './styles';
 import { VisualEditor } from './VisualEditor';
 import { PropertyEditor } from './PropertyEditor';
 
@@ -71,16 +54,6 @@ const CreateDialogModal = React.lazy(() => import('./createDialogModal'));
 const DisplayManifestModal = React.lazy(() => import('../../components/Modal/DisplayManifestModal'));
 const ExportSkillModal = React.lazy(() => import('./exportSkillModal'));
 const TriggerCreationModal = React.lazy(() => import('../../components/ProjectTree/TriggerCreationModal'));
-
-function onRenderContent(subTitle, style) {
-  return (
-    <div css={deleteDialogContent}>
-      <p>{DialogDeleting.CONTENT}</p>
-      {subTitle && <div style={style}>{subTitle}</div>}
-      <p>{DialogDeleting.CONFIRM_CONTENT}</p>
-    </div>
-  );
-}
 
 function onRenderBreadcrumbItem(item, render) {
   return <span>{render(item)}</span>;
@@ -547,65 +520,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; skillId?: str
   async function handleCreateDialogSubmit(dialogName, dialogData) {
     await createDialog({ id: dialogName, content: dialogData, projectId });
     commitChanges();
-  }
-
-  async function handleDeleteDialog(projectId, dialogId) {
-    const refs = getAllRef(dialogId, dialogs);
-    let setting: any = {
-      confirmBtnText: formatMessage('Yes'),
-      cancelBtnText: formatMessage('Cancel'),
-    };
-    let title = '';
-    let subTitle = '';
-    if (refs.length > 0) {
-      title = DialogDeleting.TITLE;
-      subTitle = `${refs.reduce((result, item) => `${result} ${item} \n`, '')}`;
-      setting = {
-        onRenderContent,
-        style: dialogStyle.console,
-      };
-    } else {
-      title = DialogDeleting.NO_LINKED_TITLE;
-    }
-    const result = await OpenConfirmModal(title, subTitle, setting);
-
-    if (result) {
-      await removeDialog(dialogId, projectId);
-      commitChanges();
-    }
-  }
-
-  async function handleDeleteTrigger(projectId, skillId, id, index) {
-    const content = deleteTrigger(dialogs, id, index, (trigger) => triggerApi.deleteTrigger(id, trigger));
-
-    if (content) {
-      updateDialog({ id, content, projectId });
-      const match = /\[(\d+)\]/g.exec(selected);
-      const current = match && match[1];
-      if (!current) return;
-      const currentIdx = parseInt(current);
-      if (index === currentIdx) {
-        if (currentIdx - 1 >= 0) {
-          //if the deleted node is selected and the selected one is not the first one, navTo the previous trigger;
-          selectTo(projectId, skillId, createSelectedPath(currentIdx - 1));
-        } else {
-          //if the deleted node is selected and the selected one is the first one, navTo the first trigger;
-          navTo(projectId, skillId, id, []);
-        }
-      } else if (index < currentIdx) {
-        //if the deleted node is at the front, navTo the current one;
-        selectTo(projectId, skillId, createSelectedPath(currentIdx - 1));
-      }
-    }
-  }
-
-  async function handleDelete(link: { projectId: string; skillId: string; dialogName?: string; trigger?: number }) {
-    const { projectId, dialogName, trigger } = link;
-    if (trigger == null) {
-      handleDeleteDialog(projectId, dialogName);
-    } else {
-      handleDeleteTrigger(projectId, skillId, dialogName, trigger);
-    }
   }
 
   const addNewBtnRef = useCallback((addNew) => {
