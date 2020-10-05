@@ -19,6 +19,7 @@ import {
 import { useHandlers } from 'src/atoms/handlers';
 import { CommandBarUploadButton } from 'src/components/common/CommandBarUpload';
 import { FormDialogSchemaDetails } from 'src/components/property/FormDialogSchemaDetails';
+import { useUndo } from 'src/undo/useUndo';
 import { useUndoKeyBinding } from 'src/utils/hooks/useUndoKeyBinding';
 
 const downloadFile = async (fileName: string, schemaExtension: string, content: string) => {
@@ -78,6 +79,7 @@ export const FormDialogPropertiesEditor = React.memo((props: Props) => {
 
   const schemaIdRef = React.useRef<string>(schema.id);
 
+  const { undo, redo, canUndo, canRedo } = useUndo();
   useUndoKeyBinding();
 
   React.useEffect(() => {
@@ -97,6 +99,28 @@ export const FormDialogPropertiesEditor = React.memo((props: Props) => {
       ariaLabel: formatMessage('Add Property'),
       onClick: () => {
         addProperty();
+      },
+    },
+    {
+      key: 'undo',
+      text: formatMessage('Undo'),
+      iconProps: { iconName: 'Undo' },
+      title: formatMessage('Undo'),
+      ariaLabel: formatMessage('Undo'),
+      disabled: !canUndo(),
+      onClick: () => {
+        undo();
+      },
+    },
+    {
+      key: 'redo',
+      text: formatMessage('Redo'),
+      iconProps: { iconName: 'Redo' },
+      title: formatMessage('Redo'),
+      ariaLabel: formatMessage('Redo'),
+      disabled: !canRedo(),
+      onClick: () => {
+        redo();
       },
     },
     {
