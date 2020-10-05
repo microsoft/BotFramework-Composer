@@ -13,13 +13,10 @@ import debounce from 'lodash/debounce';
 import { useRecoilValue } from 'recoil';
 import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 
-import { dialogStyle } from '../../components/Modal/dialogStyle';
-import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
-import { dispatcherState, currentProjectIdState } from '../../recoilModel';
-import { botProjectSpaceSelector } from '../../recoilModel/selectors';
-import { getFriendlyName, deleteTrigger } from '../../utils/dialogUtil';
+import { dispatcherState, currentProjectIdState, rootBotProjectIdSelector } from '../../recoilModel';
+import { getFriendlyName } from '../../utils/dialogUtil';
 import { containUnsupportedTriggers, triggerNotSupported } from '../../utils/dialogValidator';
-import { DialogDeleting } from '../../constants';
+// import { DialogDeleting } from '../../constants';
 
 import { TreeItem } from './treeItem';
 import { ExpandableNode } from './ExpandableNode';
@@ -63,15 +60,15 @@ const icons = {
   FILTER: 'Filter',
 };
 
-function onRenderContent(subTitle, style) {
-  return (
-    <div css={deleteDialogContent}>
-      <p>{DialogDeleting.CONTENT}</p>
-      {subTitle && <div style={style}>{subTitle}</div>}
-      <p>{DialogDeleting.CONFIRM_CONTENT}</p>
-    </div>
-  );
-}
+// function onRenderContent(subTitle, style) {
+//   return (
+//     <div css={deleteDialogContent}>
+//       <p>{DialogDeleting.CONTENT}</p>
+//       {subTitle && <div style={style}>{subTitle}</div>}
+//       <p>{DialogDeleting.CONFIRM_CONTENT}</p>
+//     </div>
+//   );
+// }
 
 export type TreeLink = {
   displayName: string;
@@ -122,6 +119,18 @@ const TYPE_TO_ICON_MAP = {
   'Microsoft.OnUnknownIntent': '',
 };
 
+function getAllRef(targetId, dialogs) {
+  let refs: string[] = [];
+  dialogs.forEach((dialog) => {
+    if (dialog.id === targetId) {
+      refs = refs.concat(dialog.referredDialogs);
+    } else if (!dialog.referredDialogs.every((item) => item !== targetId)) {
+      refs.push(dialog.displayName || dialog.id);
+    }
+  });
+  return refs;
+}
+
 type BotInProject = {
   dialogs: DialogInfo[];
   projectId: string;
@@ -144,7 +153,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({ showTriggers = true, 
   const [selectedLink, setSelectedLink] = useState<TreeLink | undefined>();
   const delayedSetFilter = debounce((newValue) => setFilter(newValue), 1000);
   const addMainDialogRef = useCallback((mainDialog) => onboardingAddCoachMarkRef({ mainDialog }), []);
-  const projectCollection = useRecoilValue<BotInProject[]>(botProjectSpaceSelector).map((bot) => ({
+  const projectCollection = useRecoilValue<BotInProject[]>(rootBotProjectIdSelector).map((bot) => ({
     ...bot,
     hasWarnings: false,
   }));
@@ -197,54 +206,62 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({ showTriggers = true, 
       </span>
     );
   };
-  async function handleDeleteDialog(skillId, dialogId) {
-    const refs = getAllRef(dialogId, dialogs);
-    let setting: any = {
-      confirmBtnText: formatMessage('Yes'),
-      cancelBtnText: formatMessage('Cancel'),
-    };
-    let title = '';
-    let subTitle = '';
-    if (refs.length > 0) {
-      title = DialogDeleting.TITLE;
-      subTitle = `${refs.reduce((result, item) => `${result} ${item} \n`, '')}`;
-      setting = {
-        onRenderContent,
-        style: dialogStyle.console,
-      };
-    } else {
-      title = DialogDeleting.NO_LINKED_TITLE;
-    }
-    const result = await OpenConfirmModal(title, subTitle, setting);
 
-    if (result) {
-      await removeDialog(dialogId, skillId);
-      commitChanges();
-    }
+  // TODO: we need to be able to access all of a project's skills' undo buffers individually to make this work
+  async function handleDeleteDialog(skillId, dialogId) {
+    console.log('deleting', dialogId, 'in skill id', skillId);
+    // const undoFunction = useRecoilValue(undoFunctionState(skillId));
+
+    // const { commitChanges } = undoFunction;
+
+    // const refs = getAllRef(dialogId, dialogs);
+    // let setting: any = {
+    //   confirmBtnText: formatMessage('Yes'),
+    //   cancelBtnText: formatMessage('Cancel'),
+    // };
+    // let title = '';
+    // let subTitle = '';
+    // if (refs.length > 0) {
+    //   title = DialogDeleting.TITLE;
+    //   subTitle = `${refs.reduce((result, item) => `${result} ${item} \n`, '')}`;
+    //   setting = {
+    //     onRenderContent,
+    //     style: dialogStyle.console,
+    //   };
+    // } else {
+    //   title = DialogDeleting.NO_LINKED_TITLE;
+    // }
+    // const result = await OpenConfirmModal(title, subTitle, setting);
+
+    // if (result) {
+    //   await removeDialog(dialogId, skillId);
+    //   //commitChanges();
+    // }
   }
 
-  async function handleDeleteTrigger(projectId, skillId, id, index) {
-    const content = deleteTrigger(dialogs, id, index, (trigger) => triggerApi.deleteTrigger(id, trigger));
+  async function handleDeleteTrigger(projectId, skillId, dialogId, index) {
+    console.log('deleting trigger', index, 'in dialog', dialogId, 'on skill id', skillId, 'in project id', 'projectId');
+    // const content = deleteTrigger(dialogs, id, index, (trigger) => triggerApi.deleteTrigger(id, trigger));
 
-    if (content) {
-      updateDialog({ id, content, projectId });
-      const match = /\[(\d+)\]/g.exec(selected);
-      const current = match && match[1];
-      if (!current) return;
-      const currentIdx = parseInt(current);
-      if (index === currentIdx) {
-        if (currentIdx - 1 >= 0) {
-          //if the deleted node is selected and the selected one is not the first one, navTo the previous trigger;
-          selectTo(projectId, skillId, createSelectedPath(currentIdx - 1));
-        } else {
-          //if the deleted node is selected and the selected one is the first one, navTo the first trigger;
-          navTo(projectId, skillId, id, []);
-        }
-      } else if (index < currentIdx) {
-        //if the deleted node is at the front, navTo the current one;
-        selectTo(projectId, skillId, createSelectedPath(currentIdx - 1));
-      }
-    }
+    // if (content) {
+    //   updateDialog({ id, content, projectId });
+    //   const match = /\[(\d+)\]/g.exec(selected);
+    //   const current = match && match[1];
+    //   if (!current) return;
+    //   const currentIdx = parseInt(current);
+    //   if (index === currentIdx) {
+    //     if (currentIdx - 1 >= 0) {
+    //       //if the deleted node is selected and the selected one is not the first one, navTo the previous trigger;
+    //       selectTo(projectId, skillId, createSelectedPath(currentIdx - 1));
+    //     } else {
+    //       //if the deleted node is selected and the selected one is the first one, navTo the first trigger;
+    //       navTo(projectId, skillId, dialogId, []);
+    //     }
+    //   } else if (index < currentIdx) {
+    //     //if the deleted node is at the front, navTo the current one;
+    //     selectTo(projectId, skillId, createSelectedPath(currentIdx - 1));
+    //   }
+    // }
   }
   const renderDialogHeader = (botId: string, dialog: DialogInfo, warningContent: string) => {
     const link: TreeLink = {
