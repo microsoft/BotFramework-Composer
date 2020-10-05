@@ -45,7 +45,6 @@ const getHandlers = () => {
     set(formDialogSchemaAtom, (currentSchema) => {
       return { ...currentSchema, requiredPropertyIds: [newPropertyId, ...currentSchema.requiredPropertyIds] };
     });
-
     set(formDialogPropertyAtom(newPropertyId), {
       id: newPropertyId,
       kind: 'string',

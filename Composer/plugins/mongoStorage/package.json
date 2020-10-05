@@ -7,7 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc"
   },
-  "extendsComposer": false,
+  "composer": {
+    "enabled": false
+  },
   "author": "benbro@microsoft.com",
   "license": "MIT",
   "dependencies": {
