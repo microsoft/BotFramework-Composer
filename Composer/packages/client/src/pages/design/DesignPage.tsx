@@ -11,7 +11,7 @@ import get from 'lodash/get';
 import { DialogInfo, PromptTab, getEditorAPI, registerEditorAPI, FieldNames } from '@bfc/shared';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
-import { EditorExtension, useTriggerApi, PluginConfig } from '@bfc/extension-client';
+import { EditorExtension, PluginConfig } from '@bfc/extension-client';
 import { useRecoilValue } from 'recoil';
 
 import { LeftRightSplit } from '../../components/Split/LeftRightSplit';
@@ -59,18 +59,6 @@ function onRenderBreadcrumbItem(item, render) {
   return <span>{render(item)}</span>;
 }
 
-function getAllRef(targetId, dialogs) {
-  let refs: string[] = [];
-  dialogs.forEach((dialog) => {
-    if (dialog.id === targetId) {
-      refs = refs.concat(dialog.referredDialogs);
-    } else if (!dialog.referredDialogs.every((item) => item !== targetId)) {
-      refs.push(dialog.displayName || dialog.id);
-    }
-  });
-  return refs;
-}
-
 const getTabFromFragment = () => {
   const tab = window.location.hash.substring(1);
 
@@ -100,7 +88,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; skillId?: str
   const { undo, redo, canRedo, canUndo, commitChanges, clearUndo } = undoFunction;
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
   const {
-    removeDialog,
     updateDialog,
     createDialogCancel,
     createDialogBegin,
@@ -136,7 +123,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; skillId?: str
   const shell = useShell('DesignPage', projectId);
   const shellForFlowEditor = useShell('FlowEditor', projectId);
   const shellForPropertyEditor = useShell('PropertyEditor', projectId);
-  const triggerApi = useTriggerApi(shell.api);
   const { createTrigger } = shell.api;
 
   useEffect(() => {
