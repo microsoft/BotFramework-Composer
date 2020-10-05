@@ -22,7 +22,6 @@ describe('<AppSettings /> & <ElectronSettings />', () => {
       set(onboardingState, {
         coachMarkRefs: {},
         complete: false,
-        coachMarkRefs: {},
       });
     });
     // there are 2 onboarding texts
