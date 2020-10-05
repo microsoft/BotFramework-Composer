@@ -1,3 +1,14 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import ReactDOM from 'react-dom';
+
+if (!document.head.title) {
+  const title = document.createElement('title');
+  title.innerHTML = 'Plugin Host';
+  document.head.append(title);
+}
+
 // add default doc styles
 if (!document.getElementById('plugin-host-default-styles')) {
   const styles = document.createElement('style');
@@ -23,7 +34,8 @@ if (!document.getElementById('plugin-root')) {
 }
 // initialize the API object
 window.Composer = {};
+
 // init the render function
-window.Composer['render'] = function (component) {
+window.Composer.render = function (component) {
   ReactDOM.render(component, document.getElementById('plugin-root'));
 };
