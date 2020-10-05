@@ -4,7 +4,7 @@
 import { generateUniqueId } from '@bfc/shared';
 import { ChangeHandler } from '@bfc/extension-client';
 import { useEffect, useState } from 'react';
-import { isEqual } from 'lodash';
+import isEqual from 'lodash/isEqual';
 
 type ArrayChangeHandler<ItemType> = (items: ArrayItem<ItemType>[]) => void;
 
