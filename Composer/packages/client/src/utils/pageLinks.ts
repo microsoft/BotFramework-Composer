@@ -72,7 +72,7 @@ export const topLinks = (projectId: string, openedDialogId: string, pluginPages:
   if (pluginPages.length > 0) {
     pluginPages.forEach((p) => {
       links.push({
-        to: `page/${p.id}`,
+        to: `plugin/${p.id}/${p.bundleId}`,
         iconName: p.icon ?? 'StatusCircleQuestionMark',
         labelName: p.label,
         exact: true,

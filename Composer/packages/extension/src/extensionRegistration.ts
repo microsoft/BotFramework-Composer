@@ -64,7 +64,7 @@ export class ExtensionRegistration {
         name: plugin.customName || this.name,
         description: plugin.customDescription || this.description,
         instructions: plugin.instructions,
-        hasView: plugin.hasView,
+        bundleId: plugin.bundleId,
         schema: plugin.schema,
       },
       methods: plugin,
