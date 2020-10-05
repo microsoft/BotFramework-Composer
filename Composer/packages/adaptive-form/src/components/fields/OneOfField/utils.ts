@@ -42,22 +42,23 @@ export function getOptions(
   }
 
   if (oneOf && Array.isArray(oneOf)) {
-    return oneOf
+    const resolvedOneOf = oneOf.map((s) => (typeof s === 'object' ? resolveRef(s, definitions) : s));
+    return resolvedOneOf
       .map((s) => {
         if (typeof s === 'object') {
-          const resolved = resolveRef(s, definitions);
-          const merged = merge({}, omit(schema, 'oneOf'), resolved);
-          const label = getOptionLabel(resolved);
+          const merged = merge({}, omit(schema, 'oneOf'), s);
+          const label = getOptionLabel(s);
 
-          if (resolved.$role === 'expression') {
-            return;
+          if (
+            s.$role !== 'expression' ||
+            (resolvedOneOf as JSONSchema7[]).some(({ properties, items }) => properties || items)
+          ) {
+            return {
+              key: label,
+              text: label,
+              data: { schema: merged },
+            } as IDropdownOption;
           }
-
-          return {
-            key: label,
-            text: label,
-            data: { schema: merged },
-          } as IDropdownOption;
         }
       })
       .filter(Boolean) as IDropdownOption[];
