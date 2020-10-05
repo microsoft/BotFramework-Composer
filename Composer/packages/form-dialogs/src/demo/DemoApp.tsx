@@ -255,6 +255,7 @@ const InternalDemoApp = () => {
           }}
         >
           <FormDialogSchemaEditor
+            allowUndo
             editorId={selectedItemId}
             schema={selectedItem}
             schemaExtension=".form-dialog"

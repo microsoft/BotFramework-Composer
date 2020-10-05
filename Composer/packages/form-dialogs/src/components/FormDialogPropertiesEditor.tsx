@@ -64,12 +64,13 @@ const SchemaName = styled(Stack)({
 
 type Props = {
   schemaExtension: string;
+  allowUndo: boolean;
   onReset: () => void;
   onGenerateDialog: (formDialogSchemaJson: string) => void;
 };
 
 export const FormDialogPropertiesEditor = React.memo((props: Props) => {
-  const { onReset, onGenerateDialog, schemaExtension } = props;
+  const { onReset, onGenerateDialog, schemaExtension, allowUndo } = props;
 
   const schema = useRecoilValue(formDialogSchemaAtom);
   const propertyIds = useRecoilValue(allFormDialogPropertyIdsSelector);
@@ -101,28 +102,32 @@ export const FormDialogPropertiesEditor = React.memo((props: Props) => {
         addProperty();
       },
     },
-    {
-      key: 'undo',
-      text: formatMessage('Undo'),
-      iconProps: { iconName: 'Undo' },
-      title: formatMessage('Undo'),
-      ariaLabel: formatMessage('Undo'),
-      disabled: !canUndo(),
-      onClick: () => {
-        undo();
-      },
-    },
-    {
-      key: 'redo',
-      text: formatMessage('Redo'),
-      iconProps: { iconName: 'Redo' },
-      title: formatMessage('Redo'),
-      ariaLabel: formatMessage('Redo'),
-      disabled: !canRedo(),
-      onClick: () => {
-        redo();
-      },
-    },
+    ...(allowUndo
+      ? [
+          {
+            key: 'undo',
+            text: formatMessage('Undo'),
+            iconProps: { iconName: 'Undo' },
+            title: formatMessage('Undo'),
+            ariaLabel: formatMessage('Undo'),
+            disabled: !canUndo(),
+            onClick: () => {
+              undo();
+            },
+          },
+          {
+            key: 'redo',
+            text: formatMessage('Redo'),
+            iconProps: { iconName: 'Redo' },
+            title: formatMessage('Redo'),
+            ariaLabel: formatMessage('Redo'),
+            disabled: !canRedo(),
+            onClick: () => {
+              redo();
+            },
+          },
+        ]
+      : []),
     {
       key: 'import',
       onRender: () => <CommandBarUploadButton accept={schemaExtension} onUpload={upload} />,

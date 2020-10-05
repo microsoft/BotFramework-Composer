@@ -20,6 +20,10 @@ export type FormDialogSchemaEditorProps = {
    */
   schema: { id: string; content: string };
   /**
+   * Enables the undo/redo.
+   */
+  allowUndo?: boolean;
+  /**
    * Form dialog schema file extension.
    */
   schemaExtension?: string;
@@ -38,7 +42,15 @@ export type FormDialogSchemaEditorProps = {
 };
 
 const InternalFormDialogSchemaEditor = React.memo((props: FormDialogSchemaEditorProps) => {
-  const { editorId, schema, templates = [], schemaExtension = '.schema', onSchemaUpdated, onGenerateDialog } = props;
+  const {
+    editorId,
+    schema,
+    templates = [],
+    schemaExtension = '.schema',
+    onSchemaUpdated,
+    onGenerateDialog,
+    allowUndo = false,
+  } = props;
 
   const trackedAtoms = useRecoilValue(trackedAtomsSelector);
   const { setTemplates, reset, importSchemaString } = useHandlers();
@@ -67,6 +79,7 @@ const InternalFormDialogSchemaEditor = React.memo((props: FormDialogSchemaEditor
     <UndoRoot key={schema.id} trackedAtoms={trackedAtoms}>
       <FormDialogPropertiesEditor
         key={editorId}
+        allowUndo={allowUndo}
         schemaExtension={schemaExtension}
         onGenerateDialog={onGenerateDialog}
         onReset={startOver}
