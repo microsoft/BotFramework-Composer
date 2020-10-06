@@ -38,6 +38,7 @@ import {
   showAddSkillDialogModalState,
   localeState,
   botProjectSpaceSelector,
+  rootBotProjectIdSelector,
 } from '../../recoilModel';
 import ImportQnAFromUrlModal from '../knowledge-base/ImportQnAFromUrlModal';
 import { triggerNotSupported } from '../../utils/dialogValidator';
@@ -67,23 +68,22 @@ const getTabFromFragment = () => {
   }
 };
 
-const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; skillId?: string; projectId: string }>> = (
-  props
-) => {
-  const { location, dialogId, projectId = '', skillId } = props;
+const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string; skillId: string }>> = (props) => {
+  const { location, dialogId, projectId = '', skillId = '' } = props;
   const userSettings = useRecoilValue(userSettingsState);
   const botProjectsSpace = useRecoilValue(botProjectSpaceSelector);
-  const schemas = useRecoilValue(schemasState(projectId));
-  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
-  const displaySkillManifest = useRecoilValue(displaySkillManifestState(projectId));
-  const breadcrumb = useRecoilValue(breadcrumbState(projectId));
-  const focusPath = useRecoilValue(focusPathState(projectId));
-  const showCreateDialogModal = useRecoilValue(showCreateDialogModalState(projectId));
-  const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState(projectId));
-  const locale = useRecoilValue(localeState(projectId));
-  const undoFunction = useRecoilValue(undoFunctionState(projectId));
-  const undoVersion = useRecoilValue(undoVersionState(projectId));
+  const schemas = useRecoilValue(schemasState(skillId));
+  const dialogs = useRecoilValue(validateDialogSelectorFamily(skillId));
+  const displaySkillManifest = useRecoilValue(displaySkillManifestState(skillId));
+  const breadcrumb = useRecoilValue(breadcrumbState(skillId));
+  const focusPath = useRecoilValue(focusPathState(skillId));
+  const showCreateDialogModal = useRecoilValue(showCreateDialogModalState(skillId));
+  const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState(skillId));
+  const locale = useRecoilValue(localeState(skillId));
+  const undoFunction = useRecoilValue(undoFunctionState(skillId));
+  const undoVersion = useRecoilValue(undoVersionState(skillId));
   const { appLocale } = useRecoilValue(userSettingsState);
+  const rootProjectId = useRecoilValue(rootBotProjectIdSelector) ?? projectId;
 
   const { undo, redo, canRedo, canUndo, commitChanges, clearUndo } = undoFunction;
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
@@ -134,12 +134,12 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; skillId?: str
     if (currentDialog) {
       setCurrentDialog(currentDialog);
     }
-    // const rootDialog = dialogs.find(({ isRoot }) => isRoot);
-    // if (!currentDialog && rootDialog) {
-    //   const { search } = location || {};
-    //   navigateTo(`/bot/${projectId}/skill/${skillId}/dialogs/${rootDialog.id}${search}`);
-    //   return;
-    // }
+    const rootDialog = dialogs.find(({ isRoot }) => isRoot);
+    if (!currentDialog && rootDialog) {
+      const { search } = location || {};
+      navigateTo(`/bot/${rootProjectId}/skill/${projectId}/dialogs/${rootDialog.id}${search}`);
+      return;
+    }
     setWarningIsVisible(true);
   }, [dialogId, dialogs, location]);
 
@@ -174,7 +174,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; skillId?: str
          *   - If 'dialog' not exists at `dialogId` path, fallback to main dialog.
          */
         if (id) {
-          navTo(projectId, skillId, id);
+          navTo(rootProjectId, projectId, id);
         }
         return;
       }
@@ -220,7 +220,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; skillId?: str
 
   const onCreateDialogComplete = (newDialog) => {
     if (newDialog) {
-      navTo(projectId, skillId, newDialog, []);
+      navTo(rootProjectId, projectId, newDialog, []);
     }
   };
 
@@ -456,7 +456,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; skillId?: str
   function handleBreadcrumbItemClick(_event, item) {
     if (item) {
       const { dialogId, selected, focused, index } = item;
-      selectAndFocus(projectId, skillId, dialogId, selected, focused, clearBreadcrumb(breadcrumb, index));
+      selectAndFocus(rootProjectId, projectId, dialogId, selected, focused, clearBreadcrumb(breadcrumb, index));
     }
   }
 
