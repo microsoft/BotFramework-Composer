@@ -13,7 +13,7 @@ import {
   Notification,
   ExtensionConfig,
 } from '../../recoilModel/types';
-import { getUserSettings } from '../utils';
+import { DEFAULT_FEATURE_FLIGHT_VALUES, getFeatureFlightValues, getUserSettings } from '../utils';
 import onboardingStorage from '../../utils/onboardingStorage';
 import { CreationFlowStatus, AppUpdaterStatus } from '../../constants';
 
@@ -99,6 +99,12 @@ export const runtimeTemplatesState = atom<RuntimeTemplate[]>({
 export const userSettingsState = atom<UserSettings>({
   key: getFullyQualifiedKey('userSettings'),
   default: getUserSettings(),
+});
+
+//TODO: strongly type feature flags?
+export const featureFlagState = atom<typeof DEFAULT_FEATURE_FLIGHT_VALUES>({
+  key: getFullyQualifiedKey('featureFlag'),
+  default: getFeatureFlightValues(),
 });
 
 export const announcementState = atom<string>({

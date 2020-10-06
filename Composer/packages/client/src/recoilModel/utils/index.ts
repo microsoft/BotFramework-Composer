@@ -33,3 +33,15 @@ export const getUserSettings = (): UserSettings => {
 
   return settings;
 };
+
+export const DEFAULT_FEATURE_FLIGHT_VALUES = {
+  showQnaOptionOnCreation: true,
+  showTutorialContainer: true,
+};
+
+// TODO: strongly type feature flag values?
+export const getFeatureFlightValues = (): typeof DEFAULT_FEATURE_FLIGHT_VALUES => {
+  // TODO: Add additional constraints to determine initial values of feature flag data
+
+  return DEFAULT_FEATURE_FLIGHT_VALUES;
+};

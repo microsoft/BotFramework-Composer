@@ -13,7 +13,7 @@ import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 
 import { isElectron } from '../../../utils/electronUtil';
-import { onboardingState, userSettingsState, dispatcherState } from '../../../recoilModel';
+import { onboardingState, userSettingsState, dispatcherState, featureFlagState } from '../../../recoilModel';
 
 import { container, section } from './styles';
 import { SettingToggle } from './SettingToggle';
@@ -27,9 +27,10 @@ const ElectronSettings = lazy(() =>
 const AppSettings: React.FC<RouteComponentProps> = () => {
   const [calloutIsShown, showCallout] = useState(false);
 
-  const { onboardingSetComplete, updateUserSettings } = useRecoilValue(dispatcherState);
+  const { onboardingSetComplete, updateUserSettings, setFeatureFlag } = useRecoilValue(dispatcherState);
   const userSettings = useRecoilValue(userSettingsState);
   const { complete } = useRecoilValue(onboardingState);
+  const featureFlags = useRecoilValue(featureFlagState);
 
   const onOnboardingChange = useCallback(
     (checked: boolean) => {
@@ -61,6 +62,31 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
       text: formatMessage('Does Not Exist'),
     });
   }
+
+  const onFeatureFlagChange = (feature: string) => {
+    setFeatureFlag(feature, !featureFlags[feature]);
+  };
+
+  const renderFeatureFlagOptions = () => {
+    const result: JSX.Element[] = [];
+    for (const feature in featureFlags) {
+      result.push(
+        <SettingToggle
+          checked={featureFlags[feature]}
+          description={formatMessage('FEATURE FLAG')}
+          id={feature}
+          image={images.onboarding}
+          title={feature}
+          onToggle={(checked: boolean) => {
+            console.log('in here with feature: ' + feature);
+            console.log('Setting value to: ' + !featureFlags[feature]);
+            setFeatureFlag(feature, !featureFlags[feature]);
+          }}
+        />
+      );
+    }
+    return result;
+  };
 
   return (
     <div css={container}>
@@ -154,6 +180,10 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
           title={formatMessage('Application language')}
           onChange={onLocaleChange}
         />
+      </section>
+      <section css={section}>
+        <h2>{formatMessage('Feature Flags')}</h2>
+        {renderFeatureFlagOptions()}
       </section>
       <Suspense fallback={<div />}>{renderElectronSettings && <ElectronSettings />}</Suspense>
     </div>

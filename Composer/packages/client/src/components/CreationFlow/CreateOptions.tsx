@@ -22,9 +22,11 @@ import {
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { ProjectTemplate } from '@bfc/shared';
 import { NeutralColors } from '@uifabric/fluent-theme';
+import { useRecoilValue } from 'recoil';
 
 import { DialogCreationCopy, EmptyBotTemplateId, QnABotTemplateId } from '../../constants';
 import { DialogWrapper, DialogTypes } from '../DialogWrapper';
+import { featureFlagState } from '../../recoilModel';
 
 // -------------------- Styles -------------------- //
 
@@ -110,6 +112,7 @@ export function CreateOptions(props) {
   const { templates, onDismiss, onNext } = props;
   const [currentTemplate, setCurrentTemplate] = useState('');
   const [emptyBotKey, setEmptyBotKey] = useState('');
+  const featureFlags = useRecoilValue(featureFlagState);
 
   const selection = useMemo(() => {
     return new Selection({
@@ -223,29 +226,36 @@ export function CreateOptions(props) {
     }
   }, [templates]);
 
-  const choiceOptions = [
-    {
-      ariaLabel: formatMessage('Create from scratch') + (option === optionKeys.createFromScratch ? ' selected' : ''),
-      key: optionKeys.createFromScratch,
-      'data-testid': 'Create from scratch',
-      text: formatMessage('Create from scratch'),
-      onRenderField: SelectOption,
-    },
-    {
-      ariaLabel: formatMessage('Create from QnA') + (option === optionKeys.createFromQnA ? ' selected' : ''),
-      key: optionKeys.createFromQnA,
-      'data-testid': 'Create from QnA',
-      text: formatMessage('Create from knowledge base (QnA Maker)'),
-      onRenderField: SelectOption,
-    },
-    {
-      ariaLabel: formatMessage('Create from template') + (option === optionKeys.createFromTemplate ? ' selected' : ''),
-      key: optionKeys.createFromTemplate,
-      'data-testid': 'Create from template',
-      text: formatMessage('Create from template'),
-      onRenderField: SelectOption,
-    },
-  ];
+  const getChoiceOptions = () => {
+    const options = [
+      {
+        ariaLabel: formatMessage('Create from scratch') + (option === optionKeys.createFromScratch ? ' selected' : ''),
+        key: optionKeys.createFromScratch,
+        'data-testid': 'Create from scratch',
+        text: formatMessage('Create from scratch'),
+        onRenderField: SelectOption,
+      },
+      {
+        ariaLabel:
+          formatMessage('Create from template') + (option === optionKeys.createFromTemplate ? ' selected' : ''),
+        key: optionKeys.createFromTemplate,
+        'data-testid': 'Create from template',
+        text: formatMessage('Create from template'),
+        onRenderField: SelectOption,
+      },
+    ];
+    if (featureFlags.showQnaOptionOnCreation) {
+      options.push({
+        ariaLabel: formatMessage('Create from QnA') + (option === optionKeys.createFromQnA ? ' selected' : ''),
+        key: optionKeys.createFromQnA,
+        'data-testid': 'Create from QnA',
+        text: formatMessage('Create from knowledge base (QnA Maker)'),
+        onRenderField: SelectOption,
+      });
+    }
+
+    return options;
+  };
 
   return (
     <Fragment>
@@ -257,7 +267,7 @@ export function CreateOptions(props) {
       >
         <ChoiceGroup
           label={formatMessage('Choose how to create your bot')}
-          options={choiceOptions}
+          options={getChoiceOptions()}
           selectedKey={option}
           onChange={handleChange}
         />

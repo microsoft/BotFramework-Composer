@@ -18,6 +18,7 @@ import {
   templateProjectsState,
   templateIdState,
   currentProjectIdState,
+  featureFlagState,
 } from '../../recoilModel/atoms/appState';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 
@@ -66,6 +67,7 @@ const Home: React.FC<RouteComponentProps> = () => {
   const botName = useRecoilValue(botNameState(projectId));
   const recentProjects = useRecoilValue(recentProjectsState);
   const templateId = useRecoilValue(templateIdState);
+  const featureFlags = useRecoilValue(featureFlagState);
   const { openProject, setCreationFlowStatus, onboardingAddCoachMarkRef, saveTemplateId } = useRecoilValue(
     dispatcherState
   );
@@ -195,45 +197,47 @@ const Home: React.FC<RouteComponentProps> = () => {
               />
             </div>
           )}
-          <div css={home.leftContainer}>
-            <h2 css={home.subtitle}>{formatMessage('Video tutorials:')}&nbsp;</h2>
-            <div css={home.newBotContainer}>
-              {tutorials.map((item, index) => (
-                <ItemContainer
-                  key={index}
-                  ariaLabel={item.title}
-                  content={item.content}
-                  href={item.href}
-                  rel="noopener nofollow"
-                  styles={home.tutorialTile}
-                  subContent={item.subContent}
-                  target="_blank"
-                  title={item.title}
-                />
-              ))}
-              <div css={home.linkContainer}>
-                <div>
-                  {formatMessage(
-                    'Bot Framework provides the most comprehensive experience for building conversational applications.'
-                  )}
+          {featureFlags.showTutorialContainer && (
+            <div css={home.leftContainer}>
+              <h2 css={home.subtitle}>{formatMessage('Video tutorials:')}&nbsp;</h2>
+              <div css={home.newBotContainer}>
+                {tutorials.map((item, index) => (
+                  <ItemContainer
+                    key={index}
+                    ariaLabel={item.title}
+                    content={item.content}
+                    href={item.href}
+                    rel="noopener nofollow"
+                    styles={home.tutorialTile}
+                    subContent={item.subContent}
+                    target="_blank"
+                    title={item.title}
+                  />
+                ))}
+                <div css={home.linkContainer}>
+                  <div>
+                    {formatMessage(
+                      'Bot Framework provides the most comprehensive experience for building conversational applications.'
+                    )}
+                  </div>
+                  {linksButtom.map((link) => {
+                    return (
+                      <Link
+                        key={'homePageLeftLinks-' + link.text}
+                        href={link.to}
+                        rel="noopener noreferrer"
+                        style={{ width: '150px' }}
+                        tabIndex={0}
+                        target="_blank"
+                      >
+                        <div css={link.css}>{link.text}</div>
+                      </Link>
+                    );
+                  })}
                 </div>
-                {linksButtom.map((link) => {
-                  return (
-                    <Link
-                      key={'homePageLeftLinks-' + link.text}
-                      href={link.to}
-                      rel="noopener noreferrer"
-                      style={{ width: '150px' }}
-                      tabIndex={0}
-                      target="_blank"
-                    >
-                      <div css={link.css}>{link.text}</div>
-                    </Link>
-                  );
-                })}
               </div>
             </div>
-          </div>
+          )}
         </div>
         <div aria-label={formatMessage('Example bot list')} css={home.rightPage} role="region">
           <h3 css={home.bluetitle}>{formatMessage(`Examples`)}</h3>
