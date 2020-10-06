@@ -2,11 +2,13 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
+import { useRecoilValue } from 'recoil';
 // eslint-disable-next-line @typescript-eslint/camelcase
 import { RecoilRoot, useRecoilTransactionObserver_UNSTABLE } from 'recoil';
-import { formDialogSchemaJsonSelector } from 'src/atoms/appState';
+import { formDialogSchemaJsonSelector, trackedAtomsSelector } from 'src/atoms/appState';
 import { useHandlers } from 'src/atoms/handlers';
 import { FormDialogPropertiesEditor } from 'src/components/FormDialogPropertiesEditor';
+import { UndoRoot } from 'src/undo/UndoRoot';
 
 export type FormDialogSchemaEditorProps = {
   /**
@@ -17,6 +19,10 @@ export type FormDialogSchemaEditorProps = {
    * Initial json schema content.
    */
   schema: { id: string; content: string };
+  /**
+   * Enables the undo/redo.
+   */
+  allowUndo?: boolean;
   /**
    * Form dialog schema file extension.
    */
@@ -36,8 +42,17 @@ export type FormDialogSchemaEditorProps = {
 };
 
 const InternalFormDialogSchemaEditor = React.memo((props: FormDialogSchemaEditorProps) => {
-  const { editorId, schema, templates = [], schemaExtension = '.schema', onSchemaUpdated, onGenerateDialog } = props;
+  const {
+    editorId,
+    schema,
+    templates = [],
+    schemaExtension = '.schema',
+    onSchemaUpdated,
+    onGenerateDialog,
+    allowUndo = false,
+  } = props;
 
+  const trackedAtoms = useRecoilValue(trackedAtomsSelector);
   const { setTemplates, reset, importSchemaString } = useHandlers();
 
   React.useEffect(() => {
@@ -61,12 +76,15 @@ const InternalFormDialogSchemaEditor = React.memo((props: FormDialogSchemaEditor
   });
 
   return (
-    <FormDialogPropertiesEditor
-      key={editorId}
-      schemaExtension={schemaExtension}
-      onGenerateDialog={onGenerateDialog}
-      onReset={startOver}
-    />
+    <UndoRoot key={schema.id} trackedAtoms={trackedAtoms}>
+      <FormDialogPropertiesEditor
+        key={editorId}
+        allowUndo={allowUndo}
+        schemaExtension={schemaExtension}
+        onGenerateDialog={onGenerateDialog}
+        onReset={startOver}
+      />
+    </UndoRoot>
   );
 });
 
