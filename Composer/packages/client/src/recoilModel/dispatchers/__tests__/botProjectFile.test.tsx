@@ -3,6 +3,7 @@
 
 import { selector, useRecoilValue, selectorFamily, useRecoilState } from 'recoil';
 import { act, RenderHookResult, HookResult } from '@bfc/test-utils/lib/hooks';
+import noop from 'lodash/noop';
 
 import { botProjectFileDispatcher } from '../botProjectFile';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
@@ -26,11 +27,7 @@ const testSkillId = '123.1sd23';
 describe('Bot Project File dispatcher', () => {
   const skillsDataSelector = selectorFamily({
     key: 'skillsDataSelector-botProjectFile',
-    get: (skillId: string) => ({ get }) => {
-      return {
-        name: get(botNameIdentifierState(skillId)),
-      };
-    },
+    get: (skillId: string) => noop,
     set: (skillId: string) => ({ set }, stateUpdater: any) => {
       const { botNameIdentifier, location } = stateUpdater;
       set(botNameIdentifierState(skillId), botNameIdentifier);
@@ -128,27 +125,9 @@ describe('Bot Project File dispatcher', () => {
     });
 
     expect(renderedComponent.current.botProjectFile.content.skills.todoSkill.workspace).toBe(
-      'file://Users/tester/Desktop/LoadedBotProject/Todo-Skill'
+      'file:///Users/tester/Desktop/LoadedBotProject/Todo-Skill'
     );
     expect(renderedComponent.current.botProjectFile.content.skills.todoSkill.remote).toBeFalsy();
-  });
-
-  it('should add a remote skill to bot project file', async () => {
-    const manifestUrl = 'https://test-dev.azurewebsites.net/manifests/test-2-1-preview-1-manifest.json';
-    await act(async () => {
-      renderedComponent.current.setSkillsData({
-        location: manifestUrl,
-        botNameIdentifier: 'oneNoteSkill',
-      });
-    });
-
-    await act(async () => {
-      dispatcher.addRemoteSkillToBotProjectFile(testSkillId, manifestUrl, 'remote');
-    });
-
-    expect(renderedComponent.current.botProjectFile.content.skills.oneNoteSkill.manifest).toBe(manifestUrl);
-    expect(renderedComponent.current.botProjectFile.content.skills.oneNoteSkill.workspace).toBeUndefined();
-    expect(renderedComponent.current.botProjectFile.content.skills.oneNoteSkill.endpointName).toBe('remote');
   });
 
   it('should add a remote skill to bot project file', async () => {

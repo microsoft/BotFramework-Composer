@@ -109,7 +109,7 @@ export class LocalDiskStorage implements IFileStorage {
       archive.directory(directory, directory.split(source)[1]);
     });
 
-    const files = await glob('*.dialog', { cwd: source, dot: true });
+    const files = await glob(['*.dialog', '*.botproj'], { cwd: source, dot: true });
     files.forEach((file) => {
       archive.file(path.format({ dir: `${source}/`, base: `${file}` }), { name: path.basename(file) });
     });
