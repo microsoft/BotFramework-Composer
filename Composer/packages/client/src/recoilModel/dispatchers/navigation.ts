@@ -72,7 +72,6 @@ export const navigationDispatcher = () => {
       }
 
       const currentUri = convertPathToUrl(projectId, skillId, dialogId, path);
-      console.log(currentUri);
 
       if (checkUrl(currentUri, projectId, designPageLocation)) return;
 

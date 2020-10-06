@@ -372,8 +372,8 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({ showTriggers = true, 
         return (
           <ExpandableNode
             key={dialog.id}
-            ref={dialog.isRoot ? addMainDialogRef : undefined}
             depth={startDepth}
+            dialogRef={dialog.isRoot ? addMainDialogRef : undefined}
             summary={renderDialogHeader(projectId, dialog, containUnsupportedTriggers(dialog))}
           >
             <div>{triggerList}</div>
