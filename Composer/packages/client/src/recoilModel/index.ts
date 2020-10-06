@@ -3,4 +3,4 @@
 
 export * from './atoms';
 export * from './DispatcherWrapper';
-export * from './selectors/';
+export * from './selectors';
