@@ -24,10 +24,6 @@ const getAtomMap = (snapshot: Snapshot, trackedAtoms: RecoilState<any>[]): AtomM
 };
 
 const didAtomMapsChange = (prevMap: AtomMap, currMap: AtomMap) => {
-  if (prevMap.size !== currMap.size) {
-    return true;
-  }
-
   for (const key of prevMap.keys()) {
     if (!currMap.has(key)) {
       return true;
