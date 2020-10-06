@@ -13,9 +13,8 @@ import { convertPathToFileProtocol } from '../../utils/fileUtil';
 export const botProjectFileDispatcher = () => {
   const addLocalSkillToBotProjectFile = useRecoilCallback(
     ({ set, snapshot }: CallbackInterface) => async (skillId: string) => {
-      const isBotProjectSpace = await snapshot.getPromise(isBotProjectSpaceSelector);
       const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
-      if (!isBotProjectSpace || !rootBotProjectId) {
+      if (!rootBotProjectId) {
         return;
       }
       const skillLocation = await snapshot.getPromise(locationState(skillId));
