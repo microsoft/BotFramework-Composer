@@ -8,12 +8,13 @@ import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcru
 import formatMessage from 'format-message';
 import { globalHistory, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
-import { DialogFactory, SDKKinds, DialogInfo, PromptTab, getEditorAPI, registerEditorAPI } from '@bfc/shared';
+import { DialogInfo, PromptTab, getEditorAPI, registerEditorAPI, FieldNames } from '@bfc/shared';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import { EditorExtension, useTriggerApi, PluginConfig } from '@bfc/extension-client';
 import { useRecoilValue } from 'recoil';
 
+import { LeftRightSplit } from '../../components/Split/LeftRightSplit';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TestController } from '../../components/TestController/TestController';
 import { DialogDeleting } from '../../constants';
@@ -46,14 +47,12 @@ import {
   focusPathState,
   showCreateDialogModalState,
   showAddSkillDialogModalState,
-  actionsSeedState,
   localeState,
-  qnaFilesState,
 } from '../../recoilModel';
-import { getBaseName } from '../../utils/fileUtil';
 import ImportQnAFromUrlModal from '../knowledge-base/ImportQnAFromUrlModal';
 import { triggerNotSupported } from '../../utils/dialogValidator';
 import { undoFunctionState, undoVersionState } from '../../recoilModel/undo/history';
+import { decodeDesignerPathToArrayPath } from '../../utils/convertUtils/designerPathEncoder';
 
 import { WarningMessage } from './WarningMessage';
 import {
@@ -119,9 +118,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const focusPath = useRecoilValue(focusPathState(projectId));
   const showCreateDialogModal = useRecoilValue(showCreateDialogModalState(projectId));
   const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState(projectId));
-  const actionsSeed = useRecoilValue(actionsSeedState(projectId));
   const locale = useRecoilValue(localeState(projectId));
-  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   const undoFunction = useRecoilValue(undoFunctionState(projectId));
   const undoVersion = useRecoilValue(undoVersionState(projectId));
 
@@ -139,7 +136,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     selectTo,
     selectAndFocus,
     addSkillDialogCancel,
-    createQnAFile,
     exportToZip,
     onboardingAddCoachMarkRef,
     importQnAFromUrls,
@@ -147,7 +143,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   } = useRecoilValue(dispatcherState);
 
   const params = new URLSearchParams(location?.search);
-  const selected = params.get('selected') || '';
+  const selected = decodeDesignerPathToArrayPath(
+    dialogs.find((x) => x.id === props.dialogId)?.content,
+    params.get('selected') || ''
+  );
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
   const [dialogJsonVisible, setDialogJsonVisibility] = useState(false);
   const [importQnAModalVisibility, setImportQnAModalVisibility] = useState(false);
@@ -185,22 +184,14 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     }
   }, [dialogId]);
 
-  // migration: add qna file for dialog
-  useEffect(() => {
-    dialogs.forEach(async (dialog) => {
-      if (!qnaFiles || qnaFiles.length === 0 || !qnaFiles.find((qnaFile) => getBaseName(qnaFile.id) === dialog.id)) {
-        await createQnAFile({ id: dialog.id, content: '', projectId });
-      }
-    });
-  }, [dialogs]);
-
   useEffect(() => {
     if (location && props.dialogId && props.projectId) {
       const { dialogId, projectId } = props;
       const params = new URLSearchParams(location.search);
       const dialogMap = dialogs.reduce((acc, { content, id }) => ({ ...acc, [id]: content }), {});
-      const selected = params.get('selected') ?? '';
-      const focused = params.get('focused') ?? '';
+      const dialogData = getDialogData(dialogMap, dialogId);
+      const selected = decodeDesignerPathToArrayPath(dialogData, params.get('selected') ?? '');
+      const focused = decodeDesignerPathToArrayPath(dialogData, params.get('focused') ?? '');
 
       //make sure focusPath always valid
       const data = getDialogData(dialogMap, dialogId, getFocusPath(selected, focused));
@@ -497,16 +488,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     );
   }, [dialogs, breadcrumb, dialogJsonVisible]);
 
-  async function handleCreateDialogSubmit(data: { name: string; description: string }) {
-    const seededContent = new DialogFactory(schemas.sdk?.content).create(SDKKinds.AdaptiveDialog, {
-      $designer: { name: data.name, description: data.description },
-      generator: `${data.name}.lg`,
-      recognizer: `${data.name}.lu.qna`,
-    });
-    if (seededContent.triggers?.[0]) {
-      seededContent.triggers[0].actions = actionsSeed;
-    }
-    await createDialog({ id: data.name, content: seededContent, projectId });
+  async function handleCreateDialogSubmit(dialogName, dialogData) {
+    await createDialog({ id: dialogName, content: dialogData, projectId });
     commitChanges();
   }
 
@@ -577,9 +560,15 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       regEx: '',
       triggerPhrases: '',
     };
-    if (dialogId) {
+    const dialog = dialogs.find((d) => d.id === dialogId);
+    if (dialogId && dialog) {
       const url = `/bot/${projectId}/knowledge-base/${dialogId}`;
-      createTrigger(dialogId, formData, url);
+      const triggers = get(dialog, FieldNames.Events, []);
+      if (triggers.some((t) => t.type === qnaMatcherKey)) {
+        navigateTo(url);
+      } else {
+        createTrigger(dialogId, formData, url);
+      }
       // import qna from urls
       if (urls.length > 0) {
         await importQnAFromUrls({ id: `${dialogId}.${locale}`, urls, projectId });
@@ -603,73 +592,79 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   return (
     <React.Fragment>
       <div css={pageRoot}>
-        <ProjectTree
-          dialogId={dialogId}
-          dialogs={dialogs}
-          selected={selected}
-          onDeleteDialog={handleDeleteDialog}
-          onDeleteTrigger={handleDeleteTrigger}
-          onSelect={(...props) => handleSelect(projectId, ...props)}
-        />
-        <div css={contentWrapper} role="main">
-          <div css={{ position: 'relative' }} data-testid="DesignPage-ToolBar">
-            <span
-              ref={addNewBtnRef}
-              css={{ width: 120, height: '100%', position: 'absolute', left: 0, visibility: 'hidden' }}
-              data-testid="CoachmarkRef-AddNew"
-            />
-            <Toolbar toolbarItems={toolbarItems} />
-          </div>
-          <Conversation css={editorContainer}>
-            <div css={editorWrapper}>
-              <div aria-label={formatMessage('Authoring canvas')} css={visualPanel} role="region">
-                {breadcrumbItems}
-                {dialogJsonVisible ? (
-                  <JsonEditor
-                    key={'dialogjson'}
-                    editorSettings={userSettings.codeEditor}
-                    id={currentDialog.id}
-                    schema={schemas.sdk.content}
-                    value={currentDialog.content || undefined}
-                    onChange={(data) => {
-                      updateDialog({ id: currentDialog.id, content: data, projectId });
-                    }}
-                  />
-                ) : withWarning ? (
-                  warningIsVisible && (
-                    <WarningMessage
-                      okText={formatMessage('Change Recognizer')}
-                      onCancel={() => {
-                        setWarningIsVisible(false);
-                      }}
-                      onOk={() => navigateTo(`/bot/${projectId}/knowledge-base/all`)}
-                    />
-                  )
-                ) : (
-                  <EditorExtension plugins={pluginConfig} projectId={projectId} shell={shellForFlowEditor}>
-                    <VisualEditor
-                      openNewTriggerModal={openNewTriggerModal}
-                      onBlur={() => setFlowEditorFocused(false)}
-                      onFocus={() => setFlowEditorFocused(true)}
-                    />
-                  </EditorExtension>
-                )}
-              </div>
-              <EditorExtension plugins={pluginConfig} projectId={projectId} shell={shellForPropertyEditor}>
-                <PropertyEditor key={focusPath + undoVersion} />
-              </EditorExtension>
+        <LeftRightSplit initialLeftGridWidth="20%" minLeftPixels={200} minRightPixels={800}>
+          <ProjectTree
+            dialogId={dialogId}
+            dialogs={dialogs}
+            selected={selected}
+            onDeleteDialog={handleDeleteDialog}
+            onDeleteTrigger={handleDeleteTrigger}
+            onSelect={(...props) => handleSelect(projectId, ...props)}
+          />
+          <div css={contentWrapper} role="main">
+            <div css={{ position: 'relative' }} data-testid="DesignPage-ToolBar">
+              <span
+                ref={addNewBtnRef}
+                css={{ width: 120, height: '100%', position: 'absolute', left: 0, visibility: 'hidden' }}
+                data-testid="CoachmarkRef-AddNew"
+              />
+              <Toolbar toolbarItems={toolbarItems} />
             </div>
-          </Conversation>
-        </div>
+            <Conversation css={editorContainer}>
+              <div css={editorWrapper}>
+                <LeftRightSplit initialLeftGridWidth="75%" minLeftPixels={500} minRightPixels={300}>
+                  <div aria-label={formatMessage('Authoring canvas')} css={visualPanel} role="region">
+                    {breadcrumbItems}
+                    {dialogJsonVisible ? (
+                      <JsonEditor
+                        key={'dialogjson'}
+                        editorSettings={userSettings.codeEditor}
+                        id={currentDialog.id}
+                        schema={schemas.sdk.content}
+                        value={currentDialog.content || undefined}
+                        onChange={(data) => {
+                          updateDialog({ id: currentDialog.id, content: data, projectId });
+                        }}
+                      />
+                    ) : withWarning ? (
+                      warningIsVisible && (
+                        <WarningMessage
+                          okText={formatMessage('Change Recognizer')}
+                          onCancel={() => {
+                            setWarningIsVisible(false);
+                          }}
+                          onOk={() => navigateTo(`/bot/${projectId}/knowledge-base/all`)}
+                        />
+                      )
+                    ) : (
+                      <EditorExtension plugins={pluginConfig} projectId={projectId} shell={shellForFlowEditor}>
+                        <VisualEditor
+                          openNewTriggerModal={openNewTriggerModal}
+                          onBlur={() => setFlowEditorFocused(false)}
+                          onFocus={() => setFlowEditorFocused(true)}
+                        />
+                      </EditorExtension>
+                    )}
+                  </div>
+                  <EditorExtension plugins={pluginConfig} projectId={projectId} shell={shellForPropertyEditor}>
+                    <PropertyEditor key={focusPath + undoVersion} />
+                  </EditorExtension>
+                </LeftRightSplit>
+              </div>
+            </Conversation>
+          </div>
+        </LeftRightSplit>
       </div>
       <Suspense fallback={<LoadingSpinner />}>
         {showCreateDialogModal && (
-          <CreateDialogModal
-            isOpen={showCreateDialogModal}
-            projectId={projectId}
-            onDismiss={() => createDialogCancel(projectId)}
-            onSubmit={handleCreateDialogSubmit}
-          />
+          <EditorExtension plugins={pluginConfig} projectId={projectId} shell={shell}>
+            <CreateDialogModal
+              isOpen={showCreateDialogModal}
+              projectId={projectId}
+              onDismiss={() => createDialogCancel(projectId)}
+              onSubmit={handleCreateDialogSubmit}
+            />
+          </EditorExtension>
         )}
         {showAddSkillDialogModal && (
           <CreateSkillModal

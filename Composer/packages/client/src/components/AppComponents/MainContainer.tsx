@@ -3,6 +3,8 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 
+import { NotificationContainer } from '../NotificationContainer';
+
 import { SideBar } from './SideBar';
 import { RightPanel } from './RightPanel';
 import { Assistant } from './Assistant';
@@ -18,6 +20,7 @@ export const MainContainer = () => {
       <SideBar />
       <RightPanel />
       <Assistant />
+      <NotificationContainer />
     </div>
   );
 };

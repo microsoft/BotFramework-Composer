@@ -19,6 +19,11 @@ export interface BotFeatureSettings {
   removeRecipientMention: boolean;
 }
 
+export interface BotSkillSettings {
+  isSkill: boolean;
+  alllowedCallers: string[];
+}
+
 export interface BlobStorageConfiguration {
   connectionString: string;
   container: string;
