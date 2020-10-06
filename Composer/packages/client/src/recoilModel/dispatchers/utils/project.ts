@@ -440,12 +440,11 @@ const mapToRemoteSkill = async (skillsSettings: {
 
 const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, storageId = 'default') => {
   const { projectData, botFiles } = data;
-  const { set, snapshot } = callbackHelpers;
-  const dispatcher = await snapshot.getPromise(dispatcherState);
+  const { set } = callbackHelpers;
 
   const mainDialog = await initBotState(callbackHelpers, projectData, botFiles);
   const rootBotProjectId = projectData.id;
-  const { name, settings } = projectData;
+  const { name } = projectData;
   set(botNameIdentifierState(rootBotProjectId), camelCase(name));
 
   if (botFiles.botProjectSpaceFiles && botFiles.botProjectSpaceFiles.length) {
@@ -453,25 +452,9 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
     set(botProjectFileState(rootBotProjectId), currentBotProjectFileIndexed);
     const currentBotProjectFile: BotProjectSpace = currentBotProjectFileIndexed.content;
 
-    let skills: { [skillId: string]: BotProjectSpaceSkill } = {
+    const skills: { [skillId: string]: BotProjectSpaceSkill } = {
       ...currentBotProjectFile.skills,
     };
-
-    let skillsToAddToBotProjectFile: string[] = [];
-    let mappedSkills: { [name: string]: BotProjectSpaceSkill } = {};
-    let endpointsMap: Map<string, string> = new Map();
-
-    // TODO: Remove flag when UI for Bot Projects is ready
-    if (process.env.BOT_PROJECT_FLOW) {
-      const result = await mapToRemoteSkill(settings?.skill);
-      mappedSkills = result.mappedSkills;
-      endpointsMap = result.endpointsMap;
-      skillsToAddToBotProjectFile = Object.keys(mappedSkills);
-      skills = {
-        ...skills,
-        ...mappedSkills,
-      };
-    }
 
     // RootBot loads first + skills load async
     const totalProjectsCount = Object.keys(skills).length + 1;
@@ -487,14 +470,8 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
         }
         if (skillPromise) {
           skillPromise
-            .then(({ manifestResponse, projectId }) => {
+            .then(({ projectId }) => {
               addProjectToBotProjectSpace(set, projectId, totalProjectsCount);
-              // TODO: Remove flag when UI for Bot Projects is ready
-              if (skillsToAddToBotProjectFile.includes(nameIdentifier) && skill.manifest) {
-                const endpointUrl = endpointsMap.get(nameIdentifier) || '';
-                const endpointName = getEndpointNameGivenUrl(manifestResponse, endpointUrl);
-                dispatcher.addRemoteSkillToBotProjectFile(projectId, skill.manifest, endpointName);
-              }
             })
             .catch((ex) => {
               const { projectId } = handleSkillLoadingFailure(callbackHelpers, {
@@ -502,13 +479,6 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
                 ex,
               });
               addProjectToBotProjectSpace(set, projectId, totalProjectsCount);
-              if (
-                process.env.BOT_PROJECT_FLOW &&
-                skillsToAddToBotProjectFile.includes(nameIdentifier) &&
-                skill.manifest
-              ) {
-                dispatcher.addRemoteSkillToBotProjectFile(projectId, skill.manifest, '');
-              }
             });
         }
       }
