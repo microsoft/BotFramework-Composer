@@ -27,7 +27,7 @@ import {
   saveProject,
   removeRecentProject,
   createNewBotFromTemplate,
-  resetBotStates,
+  //resetBotStates,
   openRemoteSkill,
   openRootBotAndSkillsByProjectId,
   openRootBotAndSkillsByPath,

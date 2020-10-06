@@ -13,7 +13,7 @@ import debounce from 'lodash/debounce';
 import { useRecoilValue } from 'recoil';
 import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 
-import { dispatcherState, currentProjectIdState, rootBotProjectIdSelector } from '../../recoilModel';
+import { dispatcherState, currentProjectIdState, botProjectSpaceSelector } from '../../recoilModel';
 import { getFriendlyName } from '../../utils/dialogUtil';
 import { containUnsupportedTriggers, triggerNotSupported } from '../../utils/dialogValidator';
 // import { DialogDeleting } from '../../constants';
@@ -43,9 +43,9 @@ const root = css`
   label: root;
 `;
 
-const deleteDialogContent = css`
-  color: #000;
-`;
+//const deleteDialogContent = css`
+//  color: #000;
+//`;
 
 // -------------------- ProjectTree -------------------- //
 
@@ -119,17 +119,17 @@ const TYPE_TO_ICON_MAP = {
   'Microsoft.OnUnknownIntent': '',
 };
 
-function getAllRef(targetId, dialogs) {
-  let refs: string[] = [];
-  dialogs.forEach((dialog) => {
-    if (dialog.id === targetId) {
-      refs = refs.concat(dialog.referredDialogs);
-    } else if (!dialog.referredDialogs.every((item) => item !== targetId)) {
-      refs.push(dialog.displayName || dialog.id);
-    }
-  });
-  return refs;
-}
+// function getAllRef(targetId, dialogs) {
+//   let refs: string[] = [];
+//   dialogs.forEach((dialog) => {
+//     if (dialog.id === targetId) {
+//       refs = refs.concat(dialog.referredDialogs);
+//     } else if (!dialog.referredDialogs.every((item) => item !== targetId)) {
+//       refs.push(dialog.displayName || dialog.id);
+//     }
+//   });
+//   return refs;
+// }
 
 type BotInProject = {
   dialogs: DialogInfo[];
@@ -147,13 +147,13 @@ type IProjectTreeProps = {
 };
 
 export const ProjectTree: React.FC<IProjectTreeProps> = ({ showTriggers = true, showDialogs = true }) => {
-  const { onboardingAddCoachMarkRef, navTo, removeDialog, selectTo, updateDialog } = useRecoilValue(dispatcherState);
+  const { onboardingAddCoachMarkRef, navTo } = useRecoilValue(dispatcherState);
 
   const [filter, setFilter] = useState('');
   const [selectedLink, setSelectedLink] = useState<TreeLink | undefined>();
   const delayedSetFilter = debounce((newValue) => setFilter(newValue), 1000);
   const addMainDialogRef = useCallback((mainDialog) => onboardingAddCoachMarkRef({ mainDialog }), []);
-  const projectCollection = useRecoilValue<BotInProject[]>(rootBotProjectIdSelector).map((bot) => ({
+  const projectCollection = useRecoilValue<BotInProject[]>(botProjectSpaceSelector).map((bot) => ({
     ...bot,
     hasWarnings: false,
   }));
