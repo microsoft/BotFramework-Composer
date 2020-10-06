@@ -95,7 +95,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; skillId?: str
     dismissManifestModal,
     setDesignPageLocation,
     navTo,
-    selectTo,
+    //selectTo,
     selectAndFocus,
     addSkillDialogCancel,
     exportToZip,

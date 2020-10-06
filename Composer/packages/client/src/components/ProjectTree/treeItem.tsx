@@ -214,7 +214,8 @@ const onRenderItem = (item: IOverflowSetItemProps) => {
 
 const onRenderOverflowButton = (isActive: boolean) => {
   const moreLabel = formatMessage('Actions');
-  return (overflowItems: IContextualMenuItem[]) => {
+  return (overflowItems: IContextualMenuItem[] | undefined) => {
+    if (overflowItems == null) return null;
     return (
       <TooltipHost content={moreLabel} directionalHint={DirectionalHint.rightCenter}>
         <IconButton

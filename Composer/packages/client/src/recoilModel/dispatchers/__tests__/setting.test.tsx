@@ -15,8 +15,6 @@ jest.mock('../../../utils/httpUtil');
 
 const projectId = '1235a.2341';
 
-const projectId = '1235a.2341';
-
 const settings = {
   feature: {
     UseShowTypingMiddleware: false,

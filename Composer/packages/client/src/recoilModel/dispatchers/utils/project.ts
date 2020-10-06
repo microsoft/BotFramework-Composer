@@ -90,11 +90,11 @@ export const setErrorOnBotProject = async (
 };
 
 export const flushExistingTasks = async (callbackHelpers) => {
-  const { snapshot, reset } = callbackHelpers;
-  const projectIds = await snapshot.getPromise(botProjectIdsState);
-  for (const projectId of projectIds) {
-    //resetBotStates(callbackHelpers, projectId);
-  }
+  const { /*snapshot, */ reset } = callbackHelpers;
+  //const projectIds = await snapshot.getPromise(botProjectIdsState);
+  //for (const projectId of projectIds) {
+  //resetBotStates(callbackHelpers, projectId);
+  //}
   reset(botProjectIdsState);
   const workers = [lgWorker, luWorker, qnaWorker];
 

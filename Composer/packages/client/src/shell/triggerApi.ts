@@ -93,7 +93,7 @@ function createTriggerApi(
     if (url) {
       navigateTo(url);
     } else {
-      selectTo(projectId, `triggers[${index}]`);
+      selectTo(projectId, projectId, `triggers[${index}]`); // TODO: use the right project/skill IDs
     }
   };
   return {

@@ -9,7 +9,7 @@ import {
   DialogSetting,
   SkillManifest,
   BotAssets,
-  BotProjectSpace,
+  //BotProjectSpace,
   BotProjectFile,
 } from '@bfc/shared';
 
