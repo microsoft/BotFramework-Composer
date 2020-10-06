@@ -12,9 +12,7 @@ import {
   QnAFile,
   BotProjectSpace,
   BotProjectFile,
-  SkillSetting,
   BotProjectSpaceSkill,
-  getEndpointNameGivenUrl,
 } from '@bfc/shared';
 import objectGet from 'lodash/get';
 import objectSet from 'lodash/set';
@@ -71,7 +69,6 @@ import {
 import { undoHistoryState } from '../../undo/history';
 import { rootBotProjectIdSelector } from '../../selectors';
 import { trimFileProtocol, getUniqueName } from '../../../utils/fileUtil';
-import { dispatcherState } from '../../DispatcherWrapper';
 
 export const resetBotStates = async ({ reset }: CallbackInterface, projectId: string) => {
   const botStates = Object.keys(botstates);
@@ -416,26 +413,6 @@ const handleSkillLoadingFailure = (callbackHelpers, { ex, skillNameIdentifier })
   set(botNameIdentifierState(projectId), skillNameIdentifier);
   setErrorOnBotProject(callbackHelpers, projectId, skillNameIdentifier, ex);
   return { projectId: projectId };
-};
-
-const mapToRemoteSkill = async (skillsSettings: {
-  [skillName: string]: SkillSetting;
-}): Promise<{ mappedSkills: { [name: string]: BotProjectSpaceSkill }; endpointsMap: Map<string, string> }> => {
-  const endpointsMap = new Map<string, string>();
-  try {
-    const mappedSkills: { [name: string]: BotProjectSpaceSkill } = {};
-    for (const skillName in skillsSettings) {
-      const val = skillsSettings[skillName];
-      mappedSkills[skillName] = {
-        manifest: val.manifestUrl || '',
-        remote: true,
-      };
-      endpointsMap.set(skillName, val.endpointUrl || '');
-    }
-    return { mappedSkills, endpointsMap };
-  } catch (ex) {
-    return { mappedSkills: {}, endpointsMap: endpointsMap };
-  }
 };
 
 const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, storageId = 'default') => {

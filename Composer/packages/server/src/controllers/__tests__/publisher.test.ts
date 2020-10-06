@@ -68,7 +68,7 @@ describe('get types', () => {
 describe('status', () => {
   const target = 'default';
 
-  fit('should get status', async () => {
+  it('should get status', async () => {
     const projectId = await BotProjectService.openProject(location2);
 
     const mockReq = {
