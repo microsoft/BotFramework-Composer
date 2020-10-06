@@ -102,7 +102,7 @@ The general guidelines listed in this section apply to all types of help content
 
 * **Example**:
 
-    ![error message example](./media/error-message.png)
+    ![error message example](./media/composer-error-message.png)
 
 ## Watermark texts
 
