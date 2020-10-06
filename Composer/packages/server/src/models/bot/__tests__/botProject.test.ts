@@ -5,7 +5,7 @@ import fs from 'fs';
 
 import rimraf from 'rimraf';
 import { DialogFactory, SDKKinds } from '@bfc/shared';
-import { endsWith } from 'lodash';
+import endsWith from 'lodash/endsWith';
 
 import { Path } from '../../../utility/path';
 import { BotProject } from '../botProject';
