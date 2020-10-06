@@ -27,6 +27,7 @@ export const CommandBarUploadButton = (props: Props) => {
   const onChange = () => {
     if (inputFileRef.current.files) {
       onUpload(inputFileRef.current.files.item(0));
+      inputFileRef.current.value = null;
     }
   };
 

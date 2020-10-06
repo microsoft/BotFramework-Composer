@@ -3,7 +3,7 @@
 
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 
-import { atom, atomFamily, selector, selectorFamily } from 'recoil';
+import { atom, atomFamily, RecoilState, selector, selectorFamily } from 'recoil';
 import { FormDialogProperty, FormDialogSchema } from 'src/atoms/types';
 import { spreadSchemaPropertyStore, validateSchemaPropertyStore } from 'src/atoms/utils';
 
@@ -32,7 +32,7 @@ export const formDialogPropertyAtom = atomFamily<FormDialogProperty, string>({
     name: '',
     kind: 'string',
     payload: { kind: 'string' },
-    required: false,
+    required: true,
     array: false,
     examples: [],
   }),
@@ -150,4 +150,14 @@ export const formDialogTemplatesAtom = atom<string[]>({
 export const activePropertyIdAtom = atom<string>({
   key: 'ActivePropertyIdAtom',
   default: '',
+});
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const trackedAtomsSelector = selector<RecoilState<any>[]>({
+  key: 'TrackedAtoms',
+  get: ({ get }) => {
+    const propIds = get(allFormDialogPropertyIdsSelector) || [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return [formDialogSchemaAtom, activePropertyIdAtom, ...propIds.map((pId) => formDialogPropertyAtom(pId))];
+  },
 });
