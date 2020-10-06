@@ -8,7 +8,6 @@ import { useRecoilState } from 'recoil';
 import cloneDeep from 'lodash/cloneDeep';
 import endsWith from 'lodash/endsWith';
 import findIndex from 'lodash/findIndex';
-import { SkillSetting } from '@bfc/shared/src/types';
 
 import httpClient from '../../../utils/httpUtil';
 import { projectDispatcher } from '../project';
