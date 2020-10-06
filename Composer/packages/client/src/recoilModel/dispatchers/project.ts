@@ -240,7 +240,7 @@ export const projectDispatcher = () => {
         isRemote: false,
       });
       projectIdCache.set(projectId);
-      navigateToBot(callbackHelpers, projectId, mainDialog, qnaKbUrls);
+      navigateToBot(callbackHelpers, projectId, mainDialog, qnaKbUrls, templateId);
     } catch (ex) {
       set(botProjectIdsState, []);
       handleProjectFailure(callbackHelpers, ex);

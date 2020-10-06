@@ -1,5 +1,5 @@
 {
-  "$schema": "https://schemas.botframework.com/schemas/botprojects/v0.1/botproject-schema.json",
+  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/main/Composer/packages/server/schemas/botproject.schema",
   "name": "",
   "workspace": "",
   "skills": {}
