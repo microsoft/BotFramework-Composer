@@ -3,8 +3,8 @@
 
 export const skills = [
   {
+    id: 'yuesuemailskill0207',
     manifestUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json',
-    name: 'Email Skill',
     endpoints: [
       {
         name: 'production',
@@ -14,8 +14,12 @@ export const skills = [
         msAppId: '79432da8-0f7e-4a16-8c23-ddbba30ae85d',
       },
     ],
+    name: 'Email Skill',
+    description: 'Production endpoint for the Email Skill',
+    content: {},
   },
   {
+    id: 'sandwich',
     manifestUrl: 'https://ericv3skillssimplesandwichbot.azurewebsites.net/wwwroot/sandwich-bot-manifest.json',
     name: 'Sandwich Skill Bot',
     endpoints: [
@@ -27,40 +31,7 @@ export const skills = [
         msAppId: '94e29d0f-3f0d-46f0-aa78-00aed83698cf',
       },
     ],
+    description: 'Default endpoint for the skill',
+    content: {},
   },
 ];
-
-export const schema = {
-  'Microsoft.BeginSkill': {
-    $role: 'implements(Microsoft.IDialog)',
-    title: 'Begin a skill dialog',
-    description: 'Begin a remote skill dialog.',
-    type: 'object',
-    properties: {
-      $kind: {
-        title: '$kind',
-        description: 'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-        type: 'string',
-        pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-        const: 'Microsoft.BeginSkill',
-      },
-      id: {
-        type: 'string',
-        title: 'Id',
-        description: 'Optional id for the skill dialog',
-      },
-      skillAppId: {
-        $role: 'expression',
-        type: 'string',
-        title: 'Skill App ID',
-        description: 'The Microsoft App ID for the skill.',
-      },
-      skillEndpoint: {
-        type: 'string',
-        title: 'Skill endpoint ',
-        description: 'The /api/messages endpoint for the skill.',
-        examples: ['https://myskill.contoso.com/api/messages/'],
-      },
-    },
-  },
-};

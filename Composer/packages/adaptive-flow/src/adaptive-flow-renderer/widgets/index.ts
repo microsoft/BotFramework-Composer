@@ -9,3 +9,5 @@ export { SwitchConditionWidget } from './SwitchConditionWidget';
 export { ForeachWidget } from './ForeachWidget';
 export { ActionHeader } from './ActionHeader';
 export { ActionGroup } from './ActionGroup';
+export { PropertyDescription } from './PropertyDescription';
+export { ResourceOperation } from './ResourceOperation';
