@@ -7,7 +7,7 @@ In this article, we drafted some guidelines on how to write the help contents in
 This document includes:
 
 - [Terminology](#terminology)
-- [Naming guidelines](#naming-guidelines)
+- [Guidelines](#guidelines)
   - [General guidelines](#general-guidelines)
   - [Button names](#button-names)
   - [Menu names](#menu-names)
@@ -25,7 +25,7 @@ This document includes:
 * **Watermark text**: text that lives inside an edit box or entry field.
 * **Help link**: context-sensitive help (CSH) link added to the user interface to help users with a concept or procedure while using a product.
 
-# Naming guidelines
+# Guidelines
 
 ## General guidelines
 
