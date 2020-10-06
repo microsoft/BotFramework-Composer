@@ -6,9 +6,9 @@ import { CallbackInterface, useRecoilCallback } from 'recoil';
 import { produce } from 'immer';
 import { BotProjectSpaceSkill } from '@bfc/shared';
 
-import { botNameState, botProjectFileState, locationState, projectMetaDataState } from '../atoms';
+import { botNameIdentifierState, botProjectFileState, locationState } from '../atoms';
 import { isBotProjectSpaceSelector, rootBotProjectIdSelector } from '../selectors';
-import { convertPathToFileProtocol, trimFileProtocol } from '../../utils/fileUtil';
+import { convertPathToFileProtocol } from '../../utils/fileUtil';
 
 export const botProjectFileDispatcher = () => {
   const addLocalSkillToBotProjectFile = useRecoilCallback(
@@ -19,16 +19,15 @@ export const botProjectFileDispatcher = () => {
         return;
       }
       const skillLocation = await snapshot.getPromise(locationState(skillId));
-      const botName = await snapshot.getPromise(botNameState(skillId));
+      const botName = await snapshot.getPromise(botNameIdentifierState(skillId));
 
       set(botProjectFileState(rootBotProjectId), (current) => {
         const result = produce(current, (draftState) => {
           const skill: BotProjectSpaceSkill = {
             workspace: convertPathToFileProtocol(skillLocation),
             remote: false,
-            name: botName,
           };
-          draftState.content.skills.push(skill);
+          draftState.content.skills[botName] = skill;
         });
         return result;
       });
@@ -42,18 +41,17 @@ export const botProjectFileDispatcher = () => {
       if (!isBotProjectSpace || !rootBotProjectId) {
         return;
       }
-      const botName = await snapshot.getPromise(botNameState(skillId));
+      const botName = await snapshot.getPromise(botNameIdentifierState(skillId));
 
       set(botProjectFileState(rootBotProjectId), (current) => {
         const result = produce(current, (draftState) => {
           const skill: BotProjectSpaceSkill = {
             manifest: manifestUrl,
             remote: true,
-            name: botName,
             endpointName,
           };
 
-          draftState.content.skills.push(skill);
+          draftState.content.skills[botName] = skill;
         });
         return result;
       });
@@ -61,63 +59,22 @@ export const botProjectFileDispatcher = () => {
   );
 
   const removeSkillFromBotProjectFile = useRecoilCallback(
-    ({ set, snapshot }: CallbackInterface) => async (projectId: string) => {
+    ({ set, snapshot }: CallbackInterface) => async (skillId: string) => {
       const isBotProjectSpace = await snapshot.getPromise(isBotProjectSpaceSelector);
       const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
       if (!isBotProjectSpace || !rootBotProjectId) {
         return;
       }
-      const location = await snapshot.getPromise(locationState(projectId));
-      const { isRemote } = await snapshot.getPromise(projectMetaDataState(projectId));
+
+      const botName = await snapshot.getPromise(botNameIdentifierState(skillId));
       set(botProjectFileState(rootBotProjectId), (current) => {
         const result = produce(current, (draftState) => {
-          draftState.content.skills = draftState.content.skills.filter((skill: BotProjectSpaceSkill) => {
-            if (isRemote) {
-              return skill.manifest !== location;
-            } else {
-              if (skill.workspace) {
-                const trimmed = trimFileProtocol(skill.workspace);
-                return trimmed !== location;
-              }
-            }
-            return true;
-          });
+          delete draftState.content.skills[botName];
         });
         return result;
       });
     }
   );
-
-  // const removeRemoteSkillFromBotProjectFile = useRecoilCallback(
-  //   ({ set, snapshot }: CallbackInterface) => async (rootBotProjectId: string, projectId: string) => {
-  //     const manifestLocation = await snapshot.getPromise(locationState(projectId));
-  //     set(botProjectFileState(rootBotProjectId), (current: BotProjectSpace) => {
-  //       const result = produce(current, (draftState: BotProjectSpace) => {
-  //         draftState.skills = draftState.skills.filter(({ manifest, remote }) => {
-  //           if (remote) {
-  //             return manifestLocation !== manifest;
-  //           }
-  //           return true;
-  //         });
-  //       });
-  //       return result;
-  //     });
-  //   }
-  // );
-
-  // const renameRootBotInBotProjectFile = useRecoilCallback(
-  //   ({ set, snapshot }: CallbackInterface) => async (projectId: string) => {
-  //     const location = await snapshot.getPromise(locationState(projectId));
-  //     const botname = await snapshot.getPromise(botNameState(projectId));
-  //     set(botProjectFileState(projectId), (current: BotProjectSpace) => {
-  //       const result = produce(current, (draftState: BotProjectSpace) => {
-  //         draftState.workspace = convertPathToFileProtocol(location);
-  //         draftState.name = botname;
-  //       });
-  //       return result;
-  //     });
-  //   }
-  // );
 
   return {
     addLocalSkillToBotProjectFile,

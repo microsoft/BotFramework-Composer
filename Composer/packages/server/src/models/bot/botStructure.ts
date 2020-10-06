@@ -26,6 +26,7 @@ const BotStructureTemplate = {
   },
   formDialogs: 'form-dialogs/${FORMDIALOGNAME}',
   skillManifests: 'manifests/${MANIFESTFILENAME}',
+  botProject: '${BOTNAME}.botproj',
 };
 
 const templateInterpolate = (str: string, obj: { [key: string]: string }) =>
@@ -91,6 +92,7 @@ export const defaultFilePath = (botName: string, defaultLocale: string, filename
   if (fileType === FileExtensions.DialogSchema) {
     TemplatePath = isRootFile ? BotStructureTemplate.dialogSchema : BotStructureTemplate.dialogs.dialogSchema;
   }
+
   return templateInterpolate(TemplatePath, {
     BOTNAME,
     DIALOGNAME,
@@ -106,6 +108,7 @@ export const serializeFiles = async (fileStorage, rootPath, botName) => {
     templateInterpolate(BotStructureTemplate.lu, { LOCALE: '*', BOTNAME: '*' }),
     templateInterpolate(BotStructureTemplate.qna, { LOCALE: '*', BOTNAME: '*' }),
     templateInterpolate(BotStructureTemplate.dialogSchema, { BOTNAME: '*' }),
+    templateInterpolate(BotStructureTemplate.botProject, { BOTNAME: '*' }),
   ];
   for (const pattern of entryPatterns) {
     const paths = await fileStorage.glob(pattern, rootPath);

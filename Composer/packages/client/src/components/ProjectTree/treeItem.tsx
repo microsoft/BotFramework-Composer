@@ -41,8 +41,6 @@ const content = css`
   outline: none;
   display: flex;
   align-items: center;
-  justify-items: center;
-  height: 24px;
 
   label: ProjectTreeItem;
 `;
@@ -80,7 +78,7 @@ const moreButton = (isActive: boolean): IButtonStyles => {
 const navItem = (isActive: boolean, shift: number) => css`
   width: 100%;
   position: relative;
-  height: 24px;
+  height: 36px;
   font-size: 12px;
   margin-left: ${shift}px;
   color: ${isActive ? '#ffffff' : '#545454'};
@@ -140,7 +138,7 @@ const errorIcon = {
 // -------------------- TreeItem -------------------- //
 
 interface ITreeItemProps {
-  link: TreeLink;
+  link: any;
   isActive?: boolean;
   isSubItemActive?: boolean;
   menu: TreeMenuItem[];
@@ -185,7 +183,7 @@ const onRenderItem = (item: IOverflowSetItemProps) => {
       <div css={content} role="presentation" tabIndex={-1}>
         {item.icon != null && (
           <Icon
-            iconName={item.icon}
+            iconName="Flow"
             styles={{
               root: {
                 width: '12px',
@@ -238,7 +236,15 @@ const onRenderOverflowButton = (isActive: boolean) => {
   };
 };
 
-export const TreeItem: React.FC<ITreeItemProps> = ({ link, isActive, icon, dialogName, shiftOut, onSelect, menu }) => {
+export const TreeItem: React.FC<ITreeItemProps> = ({
+  link,
+  isActive = false,
+  icon,
+  dialogName,
+  shiftOut,
+  onSelect,
+  menu,
+}) => {
   const a11yLabel = `${dialogName ?? '$Root'}_${link.displayName}`;
 
   const overflowMenu = menu.map(renderTreeMenuItem);
