@@ -12,6 +12,7 @@ import {
   focusedStorageFolderState,
   applicationErrorState,
   templateProjectsState,
+  runtimeTemplatesState,
 } from '../atoms/appState';
 import { FileTypes } from '../../constants';
 import { getExtension } from '../../utils/fileUtil';
@@ -151,6 +152,21 @@ export const storageDispatcher = () => {
     }
   });
 
+  const fetchRuntimeTemplates = useRecoilCallback<[], Promise<void>>(
+    (callbackHelpers: CallbackInterface) => async () => {
+      const { set } = callbackHelpers;
+      try {
+        const response = await httpClient.get(`/runtime/templates`);
+        if (Array.isArray(response.data)) {
+          set(runtimeTemplatesState, [...response.data]);
+        }
+      } catch (ex) {
+        // TODO: Handle exceptions
+        logMessage(callbackHelpers, `Error fetching runtime templates: ${ex}`);
+      }
+    }
+  );
+
   return {
     fetchStorages,
     updateCurrentPathForStorage,
@@ -161,5 +177,6 @@ export const storageDispatcher = () => {
     createFolder,
     updateFolder,
     fetchTemplates,
+    fetchRuntimeTemplates,
   };
 };

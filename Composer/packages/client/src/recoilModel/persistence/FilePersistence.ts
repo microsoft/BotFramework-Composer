@@ -3,15 +3,7 @@
 import keys from 'lodash/keys';
 import differenceWith from 'lodash/differenceWith';
 import isEqual from 'lodash/isEqual';
-import {
-  DialogInfo,
-  DialogSchemaFile,
-  DialogSetting,
-  SkillManifest,
-  BotAssets,
-  //BotProjectSpace,
-  BotProjectFile,
-} from '@bfc/shared';
+import { DialogInfo, DialogSchemaFile, DialogSetting, SkillManifest, BotAssets, BotProjectFile } from '@bfc/shared';
 
 import { LuFile, LgFile, QnAFile } from './../../../../lib/shared/src/types/indexers';
 import * as client from './http';

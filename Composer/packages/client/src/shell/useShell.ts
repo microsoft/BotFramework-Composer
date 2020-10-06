@@ -22,7 +22,7 @@ import {
   localeState,
   qnaFilesState,
   designPageLocationState,
-  botNameState,
+  botDisplayNameState,
   dialogSchemasState,
   lgFilesState,
   luFilesState,
@@ -54,7 +54,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
   const luFiles = useRecoilValue(luFilesState(projectId));
   const lgFiles = useRecoilValue(lgFilesState(projectId));
   const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
-  const botName = useRecoilValue(botNameState(projectId));
+  const botName = useRecoilValue(botDisplayNameState(projectId));
   const settings = useRecoilValue(settingsState(projectId));
 
   const userSettings = useRecoilValue(userSettingsState);

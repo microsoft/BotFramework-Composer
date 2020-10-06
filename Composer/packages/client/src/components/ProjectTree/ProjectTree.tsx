@@ -11,6 +11,7 @@ import formatMessage from 'format-message';
 import { DialogInfo, ITrigger } from '@bfc/shared';
 import debounce from 'lodash/debounce';
 import { useRecoilValue } from 'recoil';
+import { IGroupedListStyles } from 'office-ui-fabric-react/lib/GroupedList';
 import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 
 import { dispatcherState, currentProjectIdState, botProjectSpaceSelector } from '../../recoilModel';
@@ -22,6 +23,13 @@ import { TreeItem } from './treeItem';
 import { ExpandableNode } from './ExpandableNode';
 
 // -------------------- Styles -------------------- //
+
+const groupListStyle: Partial<IGroupedListStyles> = {
+  root: {
+    width: '100%',
+    boxSizing: 'border-box',
+  },
+};
 
 const searchBox: ISearchBoxStyles = {
   root: {
@@ -339,6 +347,10 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({ showTriggers = true, 
     );
   }
 
+  const onRenderShowAll = () => {
+    return null;
+  };
+
   const onFilter = (_e?: any, newValue?: string): void => {
     if (typeof newValue === 'string') {
       delayedSetFilter(newValue);
@@ -373,7 +385,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({ showTriggers = true, 
           <ExpandableNode
             key={dialog.id}
             depth={startDepth}
-            dialogRef={dialog.isRoot ? addMainDialogRef : undefined}
+            detailsRef={dialog.isRoot ? addMainDialogRef : undefined}
             summary={renderDialogHeader(projectId, dialog, containUnsupportedTriggers(dialog))}
           >
             <div>{triggerList}</div>
@@ -425,9 +437,9 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({ showTriggers = true, 
           aria-label={formatMessage(
             `{
             dialogNum, plural,
-                =0 {No bots}
-                =1 {One bot}
-              other {# bots}
+                =0 {No dialogs}
+                =1 {One dialog}
+              other {# dialogs}
             } have been found.
             {
               dialogNum, select,

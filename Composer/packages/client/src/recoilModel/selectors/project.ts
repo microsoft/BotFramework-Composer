@@ -6,28 +6,24 @@ import isEmpty from 'lodash/isEmpty';
 
 import {
   botErrorState,
-  botNameState,
+  botDisplayNameState,
   botProjectFileState,
   botProjectIdsState,
   dialogsState,
   projectMetaDataState,
+  botNameIdentifierState,
 } from '../atoms';
 
 // Actions
-export const botProjectsWithoutErrorsSelector = selector({
-  key: 'botProjectsWithoutErrorsSelector',
+export const botsForFilePersistenceSelector = selector({
+  key: 'botsForFilePersistenceSelector',
   get: ({ get }) => {
     const botProjectIds = get(botProjectIdsState);
-    const projectsWithoutErrors = botProjectIds
-      .filter((projectId) => !get(botErrorState(projectId)))
-      .map((projectId: string) => {
-        const metaData = get(projectMetaDataState(projectId));
-        return {
-          projectId,
-          ...metaData,
-        };
-      });
-    return projectsWithoutErrors;
+    return botProjectIds.filter((projectId: string) => {
+      const { isRemote } = get(projectMetaDataState(projectId));
+      const botError = get(botErrorState(projectId));
+      return !botError && !isRemote;
+    });
   },
 });
 
@@ -39,9 +35,11 @@ export const botProjectSpaceSelector = selector({
       const dialogs = get(dialogsState(projectId));
       const metaData = get(projectMetaDataState(projectId));
       const botError = get(botErrorState(projectId));
-      const name = get(botNameState(projectId));
-      return { dialogs, projectId, name, ...metaData, error: botError };
+      const name = get(botDisplayNameState(projectId));
+      const botNameId = get(botNameIdentifierState(projectId));
+      return { dialogs, projectId, name, ...metaData, error: botError, botNameId };
     });
+    console.log(result);
     return result;
   },
 });

@@ -44,8 +44,8 @@ export const dialogSchemasState = atomFamily<DialogSchemaFile[], string>({
   default: [],
 });
 
-export const botNameState = atomFamily<string, string>({
-  key: getFullyQualifiedKey('botName'),
+export const botDisplayNameState = atomFamily<string, string>({
+  key: getFullyQualifiedKey('botDisplayName'),
   default: (id) => {
     return '';
   },
@@ -278,4 +278,9 @@ export const currentManifestIndexState = atomFamily<number, string>({
 export const botErrorState = atomFamily<any, string>({
   key: getFullyQualifiedKey('botError'),
   default: undefined,
+});
+
+export const botNameIdentifierState = atomFamily<string, string>({
+  key: getFullyQualifiedKey('botNameIdentifierState'),
+  default: '',
 });

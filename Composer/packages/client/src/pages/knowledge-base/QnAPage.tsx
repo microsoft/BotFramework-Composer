@@ -15,7 +15,7 @@ import { navigateTo } from '../../utils/navigation';
 import { TestController } from '../../components/TestController/TestController';
 import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
-import { botNameState, dialogsState, qnaAllUpViewStatusState } from '../../recoilModel/atoms/botState';
+import { botDisplayNameState, dialogsState, qnaAllUpViewStatusState } from '../../recoilModel/atoms/botState';
 import { dispatcherState } from '../../recoilModel';
 import { QnAAllUpViewStatus } from '../../recoilModel/types';
 
@@ -34,7 +34,7 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
 
   const actions = useRecoilValue(dispatcherState);
   const dialogs = useRecoilValue(dialogsState(projectId));
-  const botName = useRecoilValue(botNameState(projectId));
+  const botName = useRecoilValue(botDisplayNameState(projectId));
   //To do: support other languages
   const locale = 'en-us';
   //const locale = useRecoilValue(localeState);
