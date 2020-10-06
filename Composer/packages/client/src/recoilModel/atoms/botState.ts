@@ -261,7 +261,7 @@ export const filePersistenceState = atomFamily<FilePersistence, string>({
 });
 
 export const botProjectFileState = atomFamily<BotProjectFile, string>({
-  key: getFullyQualifiedKey('botProjectFileState'),
+  key: getFullyQualifiedKey('botProjectFile'),
   default: {
     content: {} as BotProjectSpace,
     id: '',
@@ -269,18 +269,13 @@ export const botProjectFileState = atomFamily<BotProjectFile, string>({
   },
 });
 
-// Always using the first manifest file for now. We dont have the need to support multiple manifest for a skill
-export const currentManifestIndexState = atomFamily<number, string>({
-  key: getFullyQualifiedKey('currentManifestIndexState'),
-  default: 0,
-});
-
 export const botErrorState = atomFamily<any, string>({
   key: getFullyQualifiedKey('botError'),
   default: undefined,
 });
 
+// Object key to identify the skill in BotProject file and settings.skill
 export const botNameIdentifierState = atomFamily<string, string>({
-  key: getFullyQualifiedKey('botNameIdentifierState'),
+  key: getFullyQualifiedKey('botNameIdentifier'),
   default: '',
 });

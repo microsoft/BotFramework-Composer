@@ -4,11 +4,10 @@
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 import { produce } from 'immer';
-import { BotProjectSpaceSkill } from '@bfc/shared';
+import { BotProjectSpaceSkill, convertAbsolutePathToFileProtocol } from '@bfc/shared';
 
 import { botNameIdentifierState, botProjectFileState, locationState } from '../atoms';
-import { isBotProjectSpaceSelector, rootBotProjectIdSelector } from '../selectors';
-import { convertPathToFileProtocol } from '../../utils/fileUtil';
+import { rootBotProjectIdSelector } from '../selectors';
 
 export const botProjectFileDispatcher = () => {
   const addLocalSkillToBotProjectFile = useRecoilCallback(
@@ -23,7 +22,7 @@ export const botProjectFileDispatcher = () => {
       set(botProjectFileState(rootBotProjectId), (current) => {
         const result = produce(current, (draftState) => {
           const skill: BotProjectSpaceSkill = {
-            workspace: convertPathToFileProtocol(skillLocation),
+            workspace: convertAbsolutePathToFileProtocol(skillLocation),
             remote: false,
           };
           draftState.content.skills[botName] = skill;
@@ -35,9 +34,8 @@ export const botProjectFileDispatcher = () => {
 
   const addRemoteSkillToBotProjectFile = useRecoilCallback(
     ({ set, snapshot }: CallbackInterface) => async (skillId: string, manifestUrl: string, endpointName: string) => {
-      const isBotProjectSpace = await snapshot.getPromise(isBotProjectSpaceSelector);
       const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
-      if (!isBotProjectSpace || !rootBotProjectId) {
+      if (!rootBotProjectId) {
         return;
       }
       const botName = await snapshot.getPromise(botNameIdentifierState(skillId));
@@ -59,9 +57,8 @@ export const botProjectFileDispatcher = () => {
 
   const removeSkillFromBotProjectFile = useRecoilCallback(
     ({ set, snapshot }: CallbackInterface) => async (skillId: string) => {
-      const isBotProjectSpace = await snapshot.getPromise(isBotProjectSpaceSelector);
       const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
-      if (!isBotProjectSpace || !rootBotProjectId) {
+      if (!rootBotProjectId) {
         return;
       }
 

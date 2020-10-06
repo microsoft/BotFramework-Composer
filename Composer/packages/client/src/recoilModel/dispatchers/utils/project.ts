@@ -13,6 +13,7 @@ import {
   BotProjectSpace,
   BotProjectFile,
   BotProjectSpaceSkill,
+  convertFileProtocolToPath,
 } from '@bfc/shared';
 import objectGet from 'lodash/get';
 import objectSet from 'lodash/set';
@@ -68,7 +69,7 @@ import {
 } from '../../atoms';
 import { undoHistoryState } from '../../undo/history';
 import { rootBotProjectIdSelector } from '../../selectors';
-import { trimFileProtocol, getUniqueName } from '../../../utils/fileUtil';
+import { getUniqueName } from '../../../utils/fileUtil';
 
 export const resetBotStates = async ({ reset }: CallbackInterface, projectId: string) => {
   const botStates = Object.keys(botstates);
@@ -440,7 +441,7 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
         const skill = skills[nameIdentifier];
         let skillPromise;
         if (!skill.remote && skill.workspace) {
-          const skillPath = trimFileProtocol(skill.workspace);
+          const skillPath = convertFileProtocolToPath(skill.workspace);
           skillPromise = openLocalSkill(callbackHelpers, skillPath, storageId, nameIdentifier);
         } else if (skill.manifest) {
           skillPromise = openRemoteSkill(callbackHelpers, skill.manifest, nameIdentifier);
@@ -537,7 +538,7 @@ export const checkIfBotExistsInBotProjectFile = async (
       }
     } else {
       if (workspace) {
-        const resolvedPath = trimFileProtocol(workspace);
+        const resolvedPath = convertFileProtocolToPath(workspace);
         if (pathOrManifest === resolvedPath) {
           return true;
         }
