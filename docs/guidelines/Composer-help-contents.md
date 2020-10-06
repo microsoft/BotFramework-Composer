@@ -6,12 +6,11 @@ In this article, we drafted some guidelines on how to write the help contents in
 
 This document includes:
 
-- [Bot Framework Composer Help Content Guidelines](#bot-framework-composer-help-content-guidelines)
 - [Terminology](#terminology)
 - [Naming guidelines](#naming-guidelines)
   - [General guidelines](#general-guidelines)
   - [Button names](#button-names)
-    - [Menu names](#menu-names)
+  - [Menu names](#menu-names)
   - [Instructional copy](#instructional-copy)
   - [Tooltips](#tooltips)
   - [Error messages](#error-messages)
@@ -50,7 +49,7 @@ The general guidelines listed in this section apply to all types of help content
 
     ![button name example](./media/azure-button.png)
 
-### Menu names
+## Menu names
 
 1. Keep names short and limit to **2** words maximum.
 2. Keep names common, clear, and concise.
