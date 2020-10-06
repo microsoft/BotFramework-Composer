@@ -7,28 +7,28 @@ In this article, we drafted some guidelines on how to write the help contents in
 This document includes:
 
 - [Bot Framework Composer Help Content Guidelines](#bot-framework-composer-help-content-guidelines)
-  - [Terminology](#terminology)
-  - [Naming guidelines](#naming-guidelines)
-    - [General guidelines](#general-guidelines)
-    - [Button names](#button-names)
+- [Terminology](#terminology)
+- [Naming guidelines](#naming-guidelines)
+  - [General guidelines](#general-guidelines)
+  - [Button names](#button-names)
     - [Menu names](#menu-names)
-    - [Instructional copy](#instructional-copy)
-    - [Tooltips](#tooltips)
-    - [Error messages](#error-messages)
-    - [Watermark texts](#watermark-texts)
-    - [Help links](#help-links)
-  - [Resources](#resources)
+  - [Instructional copy](#instructional-copy)
+  - [Tooltips](#tooltips)
+  - [Error messages](#error-messages)
+  - [Watermark texts](#watermark-texts)
+  - [Help links](#help-links)
+- [Resources](#resources)
 
-## Terminology
+# Terminology
 
 * **Instructional copy**: instructional texts that provide users with information about what to do.
 * **Tooltip**: texts displayed in an informational text box when hovering over an item.
 * **Watermark text**: text that lives inside an edit box or entry field.
 * **Help link**: context-sensitive help (CSH) link added to the user interface to help users with a concept or procedure while using a product.
 
-## Naming guidelines
+# Naming guidelines
 
-### General guidelines
+## General guidelines
 
 The general guidelines listed in this section apply to all types of help contents as documented in this doc.
 
@@ -38,7 +38,7 @@ The general guidelines listed in this section apply to all types of help content
 4. Be consistent in language and style within the product and across the product portfolio (related products).
 5. Use sentence case unless texts contain proper names.
 
-### Button names
+## Button names
 
 1. Keep names short and limit to **3** words maximum.
 2. Where possible, reiterate the action to be performed upon click.
@@ -61,7 +61,7 @@ The general guidelines listed in this section apply to all types of help content
 
     ![menu name example](./media/azure-menu.png)
 
-### Instructional copy
+## Instructional copy
 
 1. Limit to **1** phrase or **2** sentences in English.
 2. When necessary, include a help link pointing to a specific doc.
@@ -76,7 +76,7 @@ The general guidelines listed in this section apply to all types of help content
 
     ![instructional copy example](./media/pva-instructional-copy.png)
 
-### Tooltips
+## Tooltips
 
 1. Limit to 1 phrase or 2 sentences in English.
 2. Can include visuals or diagrams.
@@ -91,7 +91,7 @@ The general guidelines listed in this section apply to all types of help content
 
     ![tooltip example](./media/azure-tooltip.png)
 
-### Error messages
+## Error messages
 
 1. Say what happened and why.
 2. Include enough information to help users get out of the erroneous situation.
@@ -105,7 +105,7 @@ The general guidelines listed in this section apply to all types of help content
 
     ![error message example](./media/error-message.png)
 
-### Watermark texts
+## Watermark texts
 
 1. Limit to a single word, a phrase, or a short sentence.
 2. Can show an example of what information is expected to be filled out in this box.
@@ -114,7 +114,7 @@ The general guidelines listed in this section apply to all types of help content
 
     ![watermark example](./media/azure-watermark.png)
 
-### Help links
+## Help links
 
 1. Help links should be contextual to the user experience.
 2. Provide a "Learn more" link or "Documentation" link as in Azure.
@@ -130,7 +130,7 @@ The general guidelines listed in this section apply to all types of help content
 
     ![help link example2](./media/vm-helplink.png)
 
-## Resources
+# Resources
 
 * [Microsoft contributor’s guide - Links to articles from the user interface](https://review.docs.microsoft.com/help/contribute/contribute-link-to-articles-from-the-user-interface?branch=master)
 * [Writing is designing](https://www.google.com/books/edition/Writing_Is_Designing/y_HJDwAAQBAJ?hl=en&gbpv=1&printsec=frontcover)
