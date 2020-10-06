@@ -1,10 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { DropdownMenuItemType, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { FieldProps, JSONSchema7, JSONSchema7Definition } from '@bfc/extension-client';
 import merge from 'lodash/merge';
 import omit from 'lodash/omit';
-import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import formatMessage from 'format-message';
 
 import { getUiDescription, getUiPlaceholder, getValueType, resolveRef } from '../../../utils';
 
@@ -43,16 +44,13 @@ export function getOptions(
 
   if (oneOf && Array.isArray(oneOf)) {
     const resolvedOneOf = oneOf.map((s) => (typeof s === 'object' ? resolveRef(s, definitions) : s));
-    return resolvedOneOf
+    const options = resolvedOneOf
       .map((s) => {
         if (typeof s === 'object') {
           const merged = merge({}, omit(schema, 'oneOf'), s);
           const label = getOptionLabel(s);
 
-          if (
-            s.$role !== 'expression' ||
-            (resolvedOneOf as JSONSchema7[]).some(({ properties, items }) => properties || items)
-          ) {
+          if (s.$role !== 'expression') {
             return {
               key: label,
               text: label,
@@ -62,6 +60,29 @@ export function getOptions(
         }
       })
       .filter(Boolean) as IDropdownOption[];
+
+    const expression = (resolvedOneOf as JSONSchema7[]).find(({ $role }) => $role === 'expression');
+    const merged = merge({}, omit(schema, 'oneOf'), expression);
+
+    if (expression && (resolvedOneOf as JSONSchema7[]).some(({ properties, items }) => properties || items)) {
+      options.push(
+        {
+          key: 'divider',
+          text: '-',
+          itemType: DropdownMenuItemType.Divider,
+        },
+        {
+          key: 'expression',
+          text: formatMessage('Write in expression'),
+          data: {
+            icon: 'Variable',
+            schema: merged,
+          },
+        }
+      );
+    }
+
+    return options;
   }
 
   return [];

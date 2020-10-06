@@ -6,8 +6,10 @@ import { JsonEditor } from '@bfc/code-editor';
 import { FieldProps, useFormConfig, useShellApi } from '@bfc/extension-client';
 import { Intellisense } from '@bfc/intellisense';
 import { jsx } from '@emotion/core';
+import { SharedColors } from '@uifabric/fluent-theme/lib/fluent';
 import formatMessage from 'format-message';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import React, { useEffect, useMemo, useState } from 'react';
 
 import { getUiPlaceholder, resolveFieldWidget } from '../../../utils';
@@ -18,6 +20,17 @@ import { ExpressionEditor } from '../ExpressionField/ExpressionEditor';
 import { oneOfField } from '../styles';
 
 import { getOptions, getSelectedOption } from './utils';
+
+const onRenderOption = (option?: IDropdownOption): JSX.Element => {
+  return (
+    <div>
+      {option?.data && option?.data?.icon && (
+        <Icon aria-hidden="true" iconName={option.data.icon} style={{ marginRight: '8px' }} title={option.data.icon} />
+      )}
+      <span>{option?.text}</span>
+    </div>
+  );
+};
 
 const OneOfField: React.FC<FieldProps> = (props) => {
   const { definitions, description, id, label, schema, required, uiOptions, value } = props;
@@ -164,16 +177,24 @@ const OneOfField: React.FC<FieldProps> = (props) => {
           <Dropdown
             ariaLabel={formatMessage('select property type')}
             data-testid="OneOfFieldType"
+            dropdownWidth={-1}
             id={`${props.id}-oneOf`}
             options={options}
             responsiveMode={ResponsiveMode.large}
             selectedKey={selectedKey}
             styles={{
-              caretDownWrapper: { height: '24px', lineHeight: '24px' },
-              root: { flexBasis: 'auto', padding: '5px 0', minWidth: '110px' },
-              title: { height: '24px', lineHeight: '20px' },
+              caretDown: { color: SharedColors.cyanBlue10 },
+              caretDownWrapper: { height: '20px', lineHeight: '20px' },
+              root: { flexBasis: 'auto', paddingBottom: '-4px' },
+              title: {
+                border: 'none',
+                color: SharedColors.cyanBlue10,
+                height: '20px',
+                lineHeight: '20px',
+              },
             }}
             onChange={handleTypeChange}
+            onRenderOption={onRenderOption}
           />
         )}
       </div>
