@@ -13,7 +13,6 @@ import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
 import { DialogCreationCopy, nameRegex } from '../../constants';
 import { StorageFolder } from '../../recoilModel/types';
-import { DialogWrapper, DialogTypes } from '../../components/DialogWrapper';
 import { FieldConfig, useForm } from '../../hooks/useForm';
 import { actionsSeedState, schemasState, validateDialogSelectorFamily } from '../../recoilModel';
 
