@@ -18,6 +18,8 @@
     "start:server": "cd demo && ts-node ./src/server.ts"
   },
   "dependencies": {
+    "@bfc/indexers": "*",
+    "@bfc/shared": "*",
     "@microsoft/bf-cli-command": "^4.10.0-preview.141651",
     "@microsoft/bf-lu": "^4.10.0-dev.20200808.5a7c973",
     "express": "^4.15.2",
