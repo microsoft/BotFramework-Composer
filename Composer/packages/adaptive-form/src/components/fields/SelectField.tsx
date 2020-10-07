@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import React, { useMemo } from 'react';
-import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
+import { Dropdown, DropdownMenuItemType, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 import { FieldProps } from '@bfc/extension-client';
 import formatMessage from 'format-message';
 
@@ -18,12 +18,13 @@ export const SelectField: React.FC<FieldProps<string | number>> = function Selec
     onFocus = () => {},
     value = '',
     error,
+    expression,
     uiOptions,
     required,
   } = props;
 
   const options: IDropdownOption[] = useMemo(() => {
-    const opts = (enumOptions ?? []).map((o) => ({
+    const opts: IDropdownOption[] = (enumOptions ?? []).map((o) => ({
       key: o?.toString(),
       text: o?.toString(),
     }));
@@ -33,15 +34,22 @@ export const SelectField: React.FC<FieldProps<string | number>> = function Selec
       text: '',
     });
 
-    if (uiOptions.canBeExpression) {
-      opts.push({
-        key: 'expression',
-        text: formatMessage('Write in expression'),
-      });
+    if (expression) {
+      opts.push(
+        {
+          key: 'divider',
+          text: '-',
+          itemType: DropdownMenuItemType.Divider,
+        },
+        {
+          key: 'expression',
+          text: formatMessage('Write in expression'),
+        }
+      );
     }
 
     return opts;
-  }, [enumOptions, uiOptions.canBeExpression]);
+  }, [enumOptions, expression]);
 
   const handleChange = (_e: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
     /* istanbul ignore else */

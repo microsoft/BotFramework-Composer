@@ -40,6 +40,7 @@ export interface FieldProps<T = any> {
   disabled?: boolean;
   enumOptions?: string[];
   error?: string | JSX.Element;
+  expression?: boolean;
   hidden?: boolean;
   hideError?: boolean;
   id: string;

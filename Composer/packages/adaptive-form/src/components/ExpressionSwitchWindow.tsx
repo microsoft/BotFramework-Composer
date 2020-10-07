@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import { FontIcon } from 'office-ui-fabric-react';
+import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import React from 'react';
 
 const styles = {

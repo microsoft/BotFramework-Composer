@@ -4,13 +4,13 @@
 import { jsx } from '@emotion/core';
 import React from 'react';
 import { FieldProps } from '@bfc/extension-client';
-import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
+import { Dropdown, DropdownMenuItemType, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 import formatMessage from 'format-message';
 
 import { FieldLabel } from '../FieldLabel';
 
 const BooleanField: React.FC<FieldProps> = function CheckboxWidget(props) {
-  const { onChange, value, label, id, schema, required, uiOptions } = props;
+  const { expression, onChange, value, label, id, schema, required, uiOptions } = props;
   const { description } = schema;
 
   const options: IDropdownOption[] = [
@@ -28,11 +28,18 @@ const BooleanField: React.FC<FieldProps> = function CheckboxWidget(props) {
     },
   ];
 
-  if (uiOptions.canBeExpression) {
-    options.push({
-      key: 'expression',
-      text: formatMessage('Write in expression'),
-    });
+  if (expression) {
+    options.push(
+      {
+        key: 'divider',
+        text: '-',
+        itemType: DropdownMenuItemType.Divider,
+      },
+      {
+        key: 'expression',
+        text: formatMessage('Write in expression'),
+      }
+    );
   }
 
   const handleChange = (e, option?: IDropdownOption) => {

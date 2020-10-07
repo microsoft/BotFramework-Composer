@@ -61,7 +61,6 @@ export interface UIOptions {
   /** subtitle rendered in form title, defaults to schema.$kind */
   subtitle?: UIOptionValue<string>;
   intellisenseScopes?: string[];
-  canBeExpression?: boolean;
 }
 
 export type RoleSchema = { [key in SDKRoles]?: Omit<UIOptions, 'properties'> };
