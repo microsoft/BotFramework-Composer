@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
 import React, { useMemo } from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { FieldProps, useShellApi } from '@bfc/extension-client';
@@ -14,7 +12,7 @@ export const SkillEndpointField: React.FC<FieldProps> = (props) => {
   const { shellApi, skillsSettings, skills = [] } = useShellApi();
   const { updateSkillSetting } = shellApi;
 
-  const id = getSkillNameFromSetting(value);
+  const id = getSkillNameFromSetting(value?.skillEndpoint);
   const skill = skills.find(({ id: skillId }) => skillId === id) || ({} as Skill);
   const { endpointUrl, msAppId } = skillsSettings[id] || {};
 
