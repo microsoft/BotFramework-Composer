@@ -4,7 +4,7 @@ import path from 'path';
 
 export default async (composer: any): Promise<void> => {
   if (process.env.VA_CREATION) {
-    // register the base template which will appear in the NEw Bot modal
+    // register the base template which will appear in the new bot modal
     composer.addBotTemplate({
       id: 'va-core',
       name: 'VA Core',

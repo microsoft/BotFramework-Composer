@@ -1,10 +1,9 @@
 {
   "name": "vacore",
   "version": "1.0.0",
-  "description": "provide functionality around using VA core",
+  "description": "A plug-in to provide the declarative VA template as an option in the new bot creation flow",
   "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc"
   },
   "extendsComposer": true,
