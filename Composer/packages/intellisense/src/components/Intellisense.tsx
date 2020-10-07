@@ -14,15 +14,15 @@ export const Intellisense = React.memo(
     scopes: string[];
     projectId?: string;
     id: string;
-    value?: string;
+    value?: any;
     focused?: boolean;
     completionListOverrideResolver?: (value: any) => JSX.Element | null;
     onChange: (newValue: string) => void;
     onBlur?: (id: string) => void;
     children: (renderProps: {
-      textFieldValue: string;
+      textFieldValue: any;
       focused?: boolean;
-      onValueChanged: (newValue: string) => void;
+      onValueChanged: (newValue: any) => void;
       onKeyDownTextField: (event: React.KeyboardEvent<HTMLInputElement>) => void;
       onKeyUpTextField: (event: React.KeyboardEvent<HTMLInputElement>) => void;
       onClickTextField: (event: React.MouseEvent<HTMLInputElement, MouseEvent>) => void;
@@ -41,7 +41,7 @@ export const Intellisense = React.memo(
       children,
     } = props;
 
-    const [textFieldValue, setTextFieldValue] = React.useState(value ?? '');
+    const [textFieldValue, setTextFieldValue] = React.useState(value);
     const [showCompletionList, setShowCompletionList] = React.useState(false);
     const [selectedCompletionItem, setSelectedCompletionItem] = React.useState(0);
     const [cursorPosition, setCursorPosition] = React.useState(-1);

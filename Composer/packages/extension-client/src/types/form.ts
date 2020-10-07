@@ -54,6 +54,7 @@ export interface FieldProps<T = any> {
   uiOptions: UIOptions;
   value?: T;
   focused?: boolean;
+  style?: React.CSSProperties;
 
   onChange: ChangeHandler<T>;
   onFocus?: (id: string, value?: T) => void;

@@ -2,19 +2,15 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { JsonEditor } from '@bfc/code-editor';
-import { FieldProps, useFormConfig, useShellApi } from '@bfc/extension-client';
-import { Intellisense } from '@bfc/intellisense';
+
+import { FieldProps, useFormConfig } from '@bfc/extension-client';
 import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { getUiPlaceholder, resolveFieldWidget } from '../../../utils';
-import { getIntellisenseUrl } from '../../../utils/getIntellisenseUrl';
-import { ExpressionSwitchWindow } from '../../ExpressionSwitchWindow';
 import { FieldLabel } from '../../FieldLabel';
-import { ExpressionEditor } from '../ExpressionField/ExpressionEditor';
 import { oneOfField } from '../styles';
 
 import { getOptions, getSelectedOption } from './utils';
@@ -22,16 +18,12 @@ import { getOptions, getSelectedOption } from './utils';
 const OneOfField: React.FC<FieldProps> = (props) => {
   const { definitions, description, id, label, schema, required, uiOptions, value } = props;
   const formUIOptions = useFormConfig();
-  const editorRef = React.useRef<any>();
+
   const options = useMemo(() => getOptions(schema, definitions), [schema, definitions]);
   const initialSelectedOption = useMemo(
     () => getSelectedOption(value, options) || ({ key: '', data: { schema: undefined } } as IDropdownOption),
     []
   );
-
-  const [focused, setFocused] = useState(false);
-
-  const { userSettings } = useShellApi();
 
   const [
     {
@@ -48,27 +40,6 @@ const OneOfField: React.FC<FieldProps> = (props) => {
     }
   };
 
-  const editorDidMount = (_, editor: any) => {
-    editorRef.current = editor;
-  };
-
-  useEffect(() => {
-    if (editorRef.current) {
-      const onFocusListener = editorRef.current.onDidFocusEditorWidget(() => {
-        setFocused(true);
-      });
-
-      const onBlurListener = editorRef.current.onDidBlurEditorWidget(() => {
-        setFocused(false);
-      });
-
-      return () => {
-        onFocusListener.dispose();
-        onBlurListener.dispose();
-      };
-    }
-  }, [editorRef.current]);
-
   const renderField = () => {
     if (!selectedSchema || Array.isArray(selectedSchema.type) || !selectedSchema.type) {
       return null;
@@ -77,67 +48,12 @@ const OneOfField: React.FC<FieldProps> = (props) => {
     const placeholder = getUiPlaceholder({ ...props, schema: selectedSchema }) || props.placeholder;
     const enumOptions = selectedSchema?.enum as string[];
 
-    if (selectedKey === 'expression') {
-      return <ExpressionEditor {...props} placeholder={placeholder} />;
-    }
-
-    // return a json editor for open ended obejcts
-    if (
-      (selectedSchema.type === 'object' && !selectedSchema.properties) ||
-      (selectedSchema.type === 'array' && !selectedSchema.items && !selectedSchema.oneOf)
-    ) {
-      const defaultValue = selectedSchema.type === 'object' ? {} : [];
-      return (
-        <Intellisense
-          completionListOverrideResolver={(value: any) => {
-            if (value === {}) {
-              return (
-                <ExpressionSwitchWindow
-                  type="Object"
-                  onSwitchToExpression={() => {
-                    props.onChange('=');
-                  }}
-                />
-              );
-            } else if (value === []) {
-              return (
-                <ExpressionSwitchWindow
-                  type="Object"
-                  onSwitchToExpression={() => {
-                    props.onChange('=');
-                  }}
-                />
-              );
-            } else return null;
-          }}
-          focused={focused}
-          id={`intellisense-${id}`}
-          scopes={['expressions']}
-          url={getIntellisenseUrl()}
-          value={value}
-          onChange={props.onChange}
-        >
-          {({ textFieldValue, onValueChanged }) => (
-            <JsonEditor
-              key={selectedSchema.type}
-              editorDidMount={editorDidMount}
-              editorSettings={userSettings.codeEditor}
-              height={100}
-              id={props.id}
-              schema={selectedSchema}
-              value={textFieldValue || defaultValue}
-              onChange={onValueChanged}
-            />
-          )}
-        </Intellisense>
-      );
-    }
-
-    const Field = resolveFieldWidget(selectedSchema, uiOptions, formUIOptions);
+    const { field: Field, customProps } = resolveFieldWidget(selectedSchema, uiOptions, formUIOptions, value);
     return (
       <Field
         key={selectedSchema.type}
         {...props}
+        {...customProps}
         css={{ label: 'ExpressionFieldValue' }}
         enumOptions={enumOptions}
         label={selectedSchema.type !== 'object' ? false : undefined}

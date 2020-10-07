@@ -21,9 +21,9 @@ const ExpressionField: React.FC<FieldProps> = (props) => {
 
   const newUiOptions = { ...uiOptions, intellisenseScopes: intellisenseScopes, canBeExpression: true };
 
-  const Field = resolveFieldWidget(newSchema, newUiOptions, formUIOptions, value);
+  const { field: Field, customProps } = resolveFieldWidget(newSchema, newUiOptions, formUIOptions, value);
 
-  return <Field {...props} schema={newSchema} uiOptions={newUiOptions} />;
+  return <Field {...props} {...customProps} schema={newSchema} uiOptions={newUiOptions} />;
 };
 
 export { ExpressionField };
