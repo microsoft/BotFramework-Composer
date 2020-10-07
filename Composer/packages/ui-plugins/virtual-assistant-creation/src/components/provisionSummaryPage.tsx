@@ -11,69 +11,67 @@ import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 import { DetailsList, DetailsListLayoutMode, IColumn, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
-import { RouterPaths } from '../shared/constants';
+import { RouterPaths } from '../constants';
 
-import { DialogFooterWrapper } from './dialogFooterWrapper';
+import { DialogFooterWrapper } from './DialogFooterWrapper';
 
 // Content Data
-const provisioningDetailItems = () => {
-  return [
-    {
-      key: '0',
-      Resource: formatMessage('Azure Bot Service'),
-      Notes: formatMessage(
-        'The Azure Bot Service resource stores configuration information that allows your Virtual Assistant to be accessed on the supported Channels and provide OAuth authentication.'
-      ),
-    },
-    {
-      key: '1',
-      Resource: formatMessage('Azure Blob Storage'),
-      Notes: formatMessage('Used to store conversation transcripts.'),
-    },
-    {
-      key: '2',
-      Resource: formatMessage('Azure Cosmos DB'),
-      Notes: formatMessage('Used to store conversation state.'),
-    },
-    {
-      key: '3',
-      Resource: formatMessage('Azure App Service Plan'),
-      Notes: formatMessage('Used to host your Bot Web App and QnA Maker Web App.'),
-    },
-    {
-      key: '4',
-      Resource: formatMessage('Azure Application Insights'),
-      Notes: formatMessage('Used to capture conversation and application telemetry.'),
-    },
-    {
-      key: '5',
-      Resource: formatMessage('Bot Web App'),
-      Notes: formatMessage('Hosts your Bot application.'),
-    },
-    {
-      key: '6',
-      Resource: formatMessage('Language Understanding'),
-      Notes: formatMessage('Subscription keys for Language Understanding Cognitive Service.'),
-    },
-    {
-      key: '7',
-      Resource: formatMessage('QnA Maker'),
-      Notes: formatMessage(
-        'Subscription keys for QnA Maker Cognitive Service which facilitates the bot personality you selected.'
-      ),
-    },
-    {
-      key: '8',
-      Resource: formatMessage('QnA Maker Web App'),
-      Notes: formatMessage('Hosts your QnA Maker knowledgebases'),
-    },
-    {
-      key: '9',
-      Resource: formatMessage('QnA Maker Azure Search Service'),
-      Notes: formatMessage('Search index for your QnA Maker knowledgebases.'),
-    },
-  ];
-};
+const provisioningDetailItems = [
+  {
+    key: '0',
+    Resource: formatMessage('Azure Bot Service'),
+    Notes: formatMessage(
+      'The Azure Bot Service resource stores configuration information that allows your Virtual Assistant to be accessed on the supported Channels and provide OAuth authentication.'
+    ),
+  },
+  {
+    key: '1',
+    Resource: formatMessage('Azure Blob Storage'),
+    Notes: formatMessage('Used to store conversation transcripts.'),
+  },
+  {
+    key: '2',
+    Resource: formatMessage('Azure Cosmos DB'),
+    Notes: formatMessage('Used to store conversation state.'),
+  },
+  {
+    key: '3',
+    Resource: formatMessage('Azure App Service Plan'),
+    Notes: formatMessage('Used to host your Bot Web App and QnA Maker Web App.'),
+  },
+  {
+    key: '4',
+    Resource: formatMessage('Azure Application Insights'),
+    Notes: formatMessage('Used to capture conversation and application telemetry.'),
+  },
+  {
+    key: '5',
+    Resource: formatMessage('Bot Web App'),
+    Notes: formatMessage('Hosts your Bot application.'),
+  },
+  {
+    key: '6',
+    Resource: formatMessage('Language Understanding'),
+    Notes: formatMessage('Subscription keys for Language Understanding Cognitive Service.'),
+  },
+  {
+    key: '7',
+    Resource: formatMessage('QnA Maker'),
+    Notes: formatMessage(
+      'Subscription keys for QnA Maker Cognitive Service which facilitates the bot personality you selected.'
+    ),
+  },
+  {
+    key: '8',
+    Resource: formatMessage('QnA Maker Web App'),
+    Notes: formatMessage('Hosts your QnA Maker knowledgebases'),
+  },
+  {
+    key: '9',
+    Resource: formatMessage('QnA Maker Azure Search Service'),
+    Notes: formatMessage('Search index for your QnA Maker knowledgebases.'),
+  },
+];
 
 const columns: IColumn[] = [
   {
@@ -118,7 +116,7 @@ export const ProvisionSummaryPage: React.FC<ProvisionSummaryPageProps> = (props)
           <PivotItem headerText={formatMessage('Summary')}>
             <DetailsList
               columns={columns}
-              items={provisioningDetailItems()}
+              items={provisioningDetailItems}
               layoutMode={DetailsListLayoutMode.justified}
               selectionMode={SelectionMode.none}
             />

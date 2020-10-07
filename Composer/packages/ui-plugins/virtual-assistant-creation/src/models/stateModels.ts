@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
+import formatMessage from 'format-message';
 import { Dispatch, SetStateAction } from 'react';
 
-import { AvailablePersonalities } from './creationOptions';
+import { AvailablePersonalities } from '../types';
 
 export type IAppState = {
   availableHostedSkills: IAvailableHostedSkill[];
@@ -42,52 +42,52 @@ export interface IAvailableHostedSkill {
 export const initialAppState: IAppState = {
   availableHostedSkills: [
     {
-      name: 'POI',
-      description: 'Find points of interest and directions',
+      name: formatMessage('POI'),
+      description: formatMessage('Find points of interest and directions'),
     },
     {
-      name: 'To Do',
-      description: 'Add task management capabilities to your assistant',
+      name: formatMessage('To Do'),
+      description: formatMessage('Add task management capabilities to your assistant'),
     },
     {
-      name: 'Calendar',
-      description: 'Add calendar capabilities to your Assistant',
+      name: formatMessage('Calendar'),
+      description: formatMessage('Add calendar capabilities to your Assistant'),
     },
     {
-      name: 'Who',
-      description: 'Add person look up capabilities to your Assistant',
+      name: formatMessage('Who'),
+      description: formatMessage('Add person look up capabilities to your Assistant'),
     },
   ],
   availableAssistantTemplates: [
     {
-      name: 'Basic Assistant',
-      description: 'Configured with simple conversational capability like greeting, chit-chat & more.',
+      name: formatMessage('Basic Assistant'),
+      description: formatMessage('Configured with simple conversational capability like greeting, chit-chat & more.'),
       imgName: 'customAssistant.jpg',
     },
     {
-      name: 'Enterprise Assistant',
-      description: 'Configured with enterprise scenarios, calendar, who bot, professional chit-chat.',
+      name: formatMessage('Enterprise Assistant'),
+      description: formatMessage('Configured with enterprise scenarios, calendar, who bot, professional chit-chat.'),
       imgName: 'EnterpriseAssistant.jpg',
     },
     {
-      name: 'Hospitality Assistant',
-      description: 'Configured with hospitality scenarios, Bing search and caring chit-chat.',
+      name: formatMessage('Hospitality Assistant'),
+      description: formatMessage('Configured with hospitality scenarios, Bing search and caring chit-chat.'),
       imgName: 'hospitality.jpg',
     },
   ],
   selectedAssistant: {
-    name: 'Basic Assistant',
-    description: 'Configured with simple conversational capability like greeting, chit-chat & more.',
+    name: formatMessage('Basic Assistant'),
+    description: formatMessage('Configured with simple conversational capability like greeting, chit-chat & more.'),
     imgName: 'customAssistant.jpg',
   },
   selectedBotName: '',
   isTextEnabled: true,
   isSpeechEnabled: false,
   selectedLanguages: [],
-  selectedPersonality: AvailablePersonalities.professional,
+  selectedPersonality: 'professional',
   selectedWelcomeImage: '',
-  selectedFallbackText: "I am sorry, I didn't understand that",
-  selectedGreetingMessage: 'Hi there! Here are some things that I can do!',
+  selectedFallbackText: formatMessage("I am sorry, I didn't understand that"),
+  selectedGreetingMessage: formatMessage('Hi there! Here are some things that I can do!'),
   selectedSkills: [],
   selectedQnaFile: '',
 };

@@ -3,4 +3,3 @@
 import { VirtualAssistantCreationModal } from './components/VirtualAssistantCreationModal';
 
 export default VirtualAssistantCreationModal;
-export * from './components';

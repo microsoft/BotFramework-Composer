@@ -1,6 +1,6 @@
-/* eslint-disable format-message/literal-pattern */
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+/* eslint-disable format-message/literal-pattern */
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
@@ -14,11 +14,11 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 
-import { RouterPaths } from '../shared/constants';
-import { AvailablePersonalities } from '../models/creationOptions';
+import { AvailablePersonalitySelections, RouterPaths } from '../constants';
+import { AvailablePersonalities } from '../types';
 
 import { AppContext } from './VirtualAssistantCreationModal';
-import { DialogFooterWrapper } from './dialogFooterWrapper';
+import { DialogFooterWrapper } from './DialogFooterWrapper';
 
 // -------------------- Styles -------------------- //
 const textFieldStyling = css`
@@ -32,6 +32,12 @@ const dropdownStyles: Partial<IDropdownStyles> = {
   dropdown: { width: 300 },
 };
 
+const personalityOptions = (): IDropdownOption[] => {
+  return Object.values(AvailablePersonalitySelections).map((personality) => {
+    return { key: personality, text: formatMessage(personality) };
+  });
+};
+
 // -------------------- CustomizeBotPage -------------------- //
 type CustomizeBotPageProps = {
   onDismiss: () => void;
@@ -41,18 +47,12 @@ export const CustomizeBotPage: React.FC<CustomizeBotPageProps> = (props) => {
   const { state, setState } = useContext(AppContext);
   const onDismiss = props.onDismiss;
 
-  const personalityOptions = (): IDropdownOption[] => {
-    return Object.values(AvailablePersonalities).map((personality) => {
-      return { key: personality, text: formatMessage(personality) };
-    });
-  };
-
   return (
     <DialogWrapper
       isOpen
       dialogType={DialogTypes.CreateFlow}
       subText={formatMessage(
-        'Give your bot personality, multi-language capabilities and more. You can edit this later in Bot Settings.'
+        'Give your bot personality, multi-language capabilities and more; you can edit this later in Bot Settings.'
       )}
       title={formatMessage('Customize your assistant')}
       onDismiss={props.onDismiss}
@@ -95,7 +95,7 @@ export const CustomizeBotPage: React.FC<CustomizeBotPageProps> = (props) => {
             selectedKey={state.selectedPersonality}
             styles={dropdownStyles}
             onChange={(ev: any, option?: IDropdownOption) => {
-              setState({ ...state, selectedPersonality: AvailablePersonalities[option?.text as string] });
+              setState({ ...state, selectedPersonality: option?.key as AvailablePersonalities });
             }}
           />
         </Stack.Item>

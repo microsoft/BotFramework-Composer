@@ -11,10 +11,10 @@ import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import { Separator, ISeparatorStyles } from 'office-ui-fabric-react/lib/Separator';
 
-import { RouterPaths } from '../shared/constants';
+import { RouterPaths } from '../constants';
 
 import { AppContext } from './VirtualAssistantCreationModal';
-import { DialogFooterWrapper } from './dialogFooterWrapper';
+import { DialogFooterWrapper } from './DialogFooterWrapper';
 
 // -------------------- Styles -------------------- //
 

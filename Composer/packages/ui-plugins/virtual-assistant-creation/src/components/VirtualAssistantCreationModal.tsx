@@ -9,20 +9,20 @@ import { useShellApi } from '@bfc/extension-client';
 import { navigate } from '@reach/router';
 
 import { AppContextDefaultValue } from '../models/stateModels';
-import { updatePersonalityQnaFile } from '../shared/util';
-import { RouterPaths } from '../shared/constants';
-import { formData } from '../shared/types';
+import { updatePersonalityQnaFile } from '../util';
+import { RouterPaths } from '../constants';
+import { botCreationFormData } from '../types';
 
-import { NewBotPage } from './newBotPage';
-import { CustomizeBotPage } from './customizeBotPage';
-import { ConfigSummaryPage } from './configSummaryPage';
-import ProvisionSummaryPage from './provisionSummaryPage';
+import { NewBotPage } from './NewBotPage';
+import { CustomizeBotPage } from './CustomizeBotPage';
+import { ConfigSummaryPage } from './ConfigSummaryPage';
+import ProvisionSummaryPage from './ProvisionSummaryPage';
 
 // -------------------- VirtualAssistantCreationModal -------------------- //
 type VirtualAssistantCreationModalProps = {
   onDismiss: () => void;
-  handleCreateNew: (formData: formData, templateId: string) => Promise<void>;
-  formData: formData;
+  handleCreateNew: (formData: botCreationFormData, templateId: string) => Promise<void>;
+  formData: botCreationFormData;
 } & RouteComponentProps<{}>;
 
 export const AppContext = React.createContext(AppContextDefaultValue);

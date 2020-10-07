@@ -11,10 +11,16 @@ import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/Choi
 import { Label } from 'office-ui-fabric-react/lib/Label';
 
 import { IAssistant } from '../models/stateModels';
-import { RouterPaths } from '../shared/constants';
+import { RouterPaths } from '../constants';
 
 import { AppContext } from './VirtualAssistantCreationModal';
-import { DialogFooterWrapper } from './dialogFooterWrapper';
+import { DialogFooterWrapper } from './DialogFooterWrapper';
+
+const choiceGroupStyling = {
+  root: {
+    width: '100%',
+  },
+};
 
 // -------------------- NewBotPage -------------------- //
 type NewBotPageProps = {
@@ -58,11 +64,7 @@ export const NewBotPage: React.FC<NewBotPageProps> = (props) => {
         required
         defaultSelectedKey={state.selectedAssistant.name}
         options={getAssistantsToRender()}
-        styles={{
-          root: {
-            width: '100%',
-          },
-        }}
+        styles={choiceGroupStyling}
         onChange={(event: any, option?: IChoiceGroupOption) => {
           assistantSelectionChanged(event, option);
         }}

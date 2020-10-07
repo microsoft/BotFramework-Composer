@@ -7,7 +7,7 @@ import Path from 'path';
 import React, { useEffect, useRef, Fragment, useState, useMemo } from 'react';
 import { RouteComponentProps, Router, navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
-import { VirtualAssistantCreationModal } from '@bfc/ui-plugin-va-creation';
+import VirtualAssistantCreationModal from '@bfc/ui-plugin-va-creation';
 import { PluginConfig, mergePluginConfigs, EditorExtension } from '@bfc/extension-client';
 
 import { CreationFlowStatus } from '../../constants';

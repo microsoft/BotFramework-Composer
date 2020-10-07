@@ -4,7 +4,7 @@
 import axios from 'axios';
 import { ShellApi } from '@bfc/shared';
 
-import { AvailablePersonalities } from '../models/creationOptions';
+import { AvailablePersonalities } from './types';
 
 // Utility constants
 const GitHubRepoApiRootUrl =
@@ -13,7 +13,7 @@ const GitHubRepoApiRootUrl =
 // GitHub API Utility Functions
 export const updatePersonalityQnaFile = async (shellApi: ShellApi, selectedPersonality: AvailablePersonalities) => {
   const personalityFileName = `qna_chitchat_${selectedPersonality}.qna`;
-  // TODO: handle different markets once creation supports multi-local
+  // Only handling english market for this POC
   const endpoint = `${GitHubRepoApiRootUrl}english/${personalityFileName}`;
   axios({
     method: 'get',
