@@ -107,6 +107,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
     PluginAPI.publish.setPublishConfig = (config) => updateConfig(config);
     PluginAPI.publish.setConfigIsValid = (valid) => setPluginConfigIsValid(valid);
     PluginAPI.publish.useConfigBeingEdited = () => [current ? JSON.parse(current.item.configuration) : undefined];
+    PluginAPI.publish.closeDialog = props.closeDialog;
   }, [current, targetType, name]);
 
   const submit = async (_e) => {
@@ -156,7 +157,27 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
 
   const publishTargetContent = useMemo(() => {
     if (page === 1) {
-      return PageOne;
+      return (
+        <Fragment>
+          {PageOne}
+          <Separator css={separator} />
+          <DialogFooter>
+            <Persona {...examplePersona} size={PersonaSize.size24} />
+            <DefaultButton text={formatMessage('Cancel')} onClick={props.closeDialog} />
+            {current ? (
+              <PrimaryButton disabled={saveDisabled} text={formatMessage('Save')} onClick={submit} />
+            ) : (
+              <PrimaryButton
+                disabled={nextDisabled}
+                text={formatMessage('Next')}
+                onClick={() => {
+                  setPage(page + 1);
+                }}
+              />
+            )}
+          </DialogFooter>
+        </Fragment>
+      );
     } else {
       return (
         <PluginHost
@@ -175,27 +196,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
     optionalText: 'Available at 4:00pm',
   };
 
-  return (
-    <Fragment>
-      {publishTargetContent}
-      <Separator css={separator} />
-      <DialogFooter>
-        <Persona {...examplePersona} size={PersonaSize.size24} />
-        <DefaultButton text={formatMessage('Cancel')} onClick={props.closeDialog} />
-        {current ? (
-          <PrimaryButton disabled={saveDisabled} text={formatMessage('Save')} onClick={submit} />
-        ) : (
-          <PrimaryButton
-            disabled={nextDisabled}
-            text={formatMessage('Next')}
-            onClick={() => {
-              setPage(page + 1);
-            }}
-          />
-        )}
-      </DialogFooter>
-    </Fragment>
-  );
+  return <Fragment>{publishTargetContent}</Fragment>;
 };
 
 export { CreatePublishTarget };

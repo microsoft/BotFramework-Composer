@@ -19,3 +19,7 @@ export function useConfigBeingEdited(): PublishConfig[] | undefined[] {
 export function startProvision(config: any): void {
   return window[ComposerGlobalName].startProvision(config);
 }
+
+export function closeDialog(): void {
+  return window[ComposerGlobalName].closeDialog();
+}

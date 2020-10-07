@@ -63,13 +63,13 @@ export const PublishController = {
         const results = await pluginMethod.call(null, configuration, currentProject, metadata, user);
 
         // copy status into payload for ease of access in client
-        const response = {
-          ...results.result,
-          status: results.status,
-        };
+        // const response = {
+        //   ...results.result,
+        //   status: results.status,
+        // };
 
         // set status and return value as json
-        res.status(results.status).json(response);
+        res.status(results.status).json(results);
       } catch (err) {
         res.status(400).json({
           statusCode: '400',
@@ -87,6 +87,7 @@ export const PublishController = {
     const target = req.params.target;
     const user = await ExtensionContext.getUserFromRequest(req);
     const projectId = req.params.projectId;
+    const jobId = req.params.jobId;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
 
     const publishTargets = currentProject.settings?.publishTargets || [];
@@ -103,19 +104,15 @@ export const PublishController = {
       if (typeof pluginMethod === 'function') {
         const configuration = {
           profileName: profile.name,
+          jobId: jobId,
           ...JSON.parse(profile.configuration),
         };
 
         // call the method
         const results = await pluginMethod.call(null, configuration, currentProject, user);
-        // copy status into payload for ease of access in client
-        const response = {
-          ...results.result,
-          status: results.status,
-        };
 
         // set status and return value as json
-        return res.status(results.status).json(response);
+        return res.status(results.status).json(results);
       }
     }
 

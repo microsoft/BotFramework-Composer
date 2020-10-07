@@ -6,14 +6,14 @@ import * as React from 'react';
 import { useState, useMemo, useEffect, Fragment } from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { getAccessTokensFromStorage, startProvision } from '@bfc/extension-client';
+import { getAccessTokensFromStorage, startProvision, closeDialog } from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { ResourceGroup } from '@azure/arm-resources/esm/models';
 import { DeployLocation } from '@bfc/shared';
 
-import {  getSubscriptions, getResourceGroups, getDeployLocations } from './api';
+import { getSubscriptions, getResourceGroups, getDeployLocations } from './api';
 
 const extensionResourceOptions = [
   { key: 'appRegistration', text: 'Microsoft Application Registration', description: 'Required registration allowing your bot to communicate with Azure services'},
@@ -115,18 +115,12 @@ export const AzureProvisionDialog: React.FC = () => {
     }
   }, [currentSubscription]);
 
-  // const toggleResource = (opt: string) => {
-  //   return (enabled: boolean) => {
-  //     enabledResources[opt].enabled = enabled;
-  //     setEnabledResources(enabledResources);
-  //   };
-  // };
-
   const onSubmit = useMemo(
     () => async (options) => {
-      console.log('Call the provision API with options', options);
-      const provisionRequestStatus = await startProvision(options);
-      console.log('GOT HTTP RESPONSE', provisionRequestStatus);
+      // call back to the main Composer API to begin this process...
+      startProvision(options);
+      // TODO: close window
+      closeDialog();
     },
     []
   );
@@ -165,20 +159,13 @@ export const AzureProvisionDialog: React.FC = () => {
                   <p>{resource.description}</p>
                 </section>
               </Fragment>
-              // <SettingToggle
-              //   key={resource.key}
-              //   checked={enabledResources[resource.key].enabled}
-              //   description={resource.description}
-              //   title={resource.text}
-              //   onToggle={toggleResource(resource.key)}
-              // />
             );
           })}
         </form>
       )}
       {(!subscriptionOption || !subscriptionOption.length) && <Fragment>LOADING</Fragment>}
       <DialogFooter>
-        {/* <DefaultButton text={formatMessage('Cancel')} onClick={props.onDismiss} /> */}
+        <DefaultButton text={'Cancel'} onClick={closeDialog} />
         <PrimaryButton
           disabled={!currentSubscription || !currentHostName || errorHostName !== ''}
           text={'Ok'}
@@ -189,8 +176,6 @@ export const AzureProvisionDialog: React.FC = () => {
               location: currentLocation,
               type: 'azurePublish', // todo: this should be dynamic
               externalResources: extensionResourceOptions,
-              graphToken: graphToken,
-              accessToken: token,
             });
           }}
         />

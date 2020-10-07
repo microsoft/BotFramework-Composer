@@ -31,6 +31,7 @@ interface PublishAPI {
   setPublishConfig?: (config: PublishConfig) => void;
   useConfigBeingEdited?: (() => PublishConfig[]) | (() => void);
   startProvision?: (config: any) => void;
+  closeDialog?: () => void;
 }
 
 class API implements IAPI {
@@ -63,6 +64,7 @@ class API implements IAPI {
       setPublishConfig: undefined,
       useConfigBeingEdited: undefined,
       startProvision: undefined,
+      closeDialog: undefined,
     };
   }
 }

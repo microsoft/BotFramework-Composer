@@ -27,7 +27,6 @@ import { navigateTo } from '../../utils/navigation';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { PublishProfileDialog } from '../../constants';
-import httpClient from '../../utils/httpUtil';
 
 import { TargetList } from './targetList';
 import { PublishDialog } from './publishDialog';
@@ -52,6 +51,8 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     publishToTarget,
     setQnASettings,
     rollbackToVersion: rollbackToVersionDispatcher,
+    provisionToTarget,
+    // getProvisionStatus,
   } = useRecoilValue(dispatcherState);
 
   const [dialogHidden, setDialogHidden] = useState(true);
@@ -146,12 +147,12 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     [projectId]
   );
 
-  const getUpdatedStatus = (target) => {
+  const getUpdatedStatus = (target, jobId) => {
     if (target) {
       // TODO: this should use a backoff mechanism to not overload the server with requests
       // OR BETTER YET, use a websocket events system to receive updates... (SOON!)
       setTimeout(async () => {
-        getPublishStatus(projectId, target);
+        getPublishStatus(projectId, target, jobId);
       }, 10000);
     }
   };
@@ -226,7 +227,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   useEffect(() => {
     // most recent item is a 202, which means we should poll for updates...
     if (selectedTargetName !== 'all' && thisPublishHistory.length && thisPublishHistory[0].status === 202) {
-      getUpdatedStatus(selectedTarget);
+      getUpdatedStatus(selectedTarget, thisPublishHistory[0].id);
     } else if (selectedTarget && selectedTarget.lastPublished && thisPublishHistory.length === 0) {
       // if the history is EMPTY, but we think we've done a publish based on lastPublished timestamp,
       // we still poll for the results IF we see that a publish has happened previously
@@ -395,21 +396,11 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     []
   );
 
-  // setup plugin APIs
+  // setup plugin APIs so that the provisioning plugin can initiate the process from inside the iframe
   useEffect(() => {
-    console.log('SETTING STARTPROVISION FUNCT');
     PluginAPI.publish.startProvision = async (config) => {
       console.log('BEGIN A PROVISION FOR PROJECT ', projectId, 'USING CONFIG', config);
-      try {
-        const result = await httpClient.post(`/provision/${projectId}/${config.type}`, config);
-        console.log(result.data);
-      } catch (err) {
-        // logger({
-        //   status: AzureAPIStatus.ERROR,
-        //   message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
-        // });
-        // return err.response.status;
-      }
+      provisionToTarget(config, config.type, projectId);
     };
   }, [projectId]);
 
@@ -515,7 +506,7 @@ const LogDialog = (props) => {
         multiline
         placeholder="Log Output"
         style={{ minHeight: 300 }}
-        value={props && props.version ? props.version.log : ''}
+        value={props && props.version ? props.version.log.join('\n\n') : ''}
       />
     </Dialog>
   );
