@@ -35,7 +35,7 @@ export function resolveFieldWidget(
       const KindOverride = schema.$kind && globalUIOptions[schema.$kind]?.field;
 
       if (KindOverride) {
-        return KindOverride;
+        return { field: KindOverride };
       }
     }
 
