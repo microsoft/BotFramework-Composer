@@ -365,6 +365,9 @@
   "bot_name_is_botname_a28c2d05": {
     "message": "Bot name is { botName }"
   },
+  "bot_project_file_does_not_exist_a0864a2c": {
+    "message": "Bot project file does not exist."
+  },
   "bot_responses_4617b4a2": {
     "message": "Bot responses"
   },
@@ -758,8 +761,8 @@
   "dialogfactory_missing_schema_5c3255c4": {
     "message": "DialogFactory missing schema."
   },
-  "dialognum_plural_0_no_bots_1_one_bot_other_bots_ha_1cf10787": {
-    "message": "{ dialogNum, plural,\n     =0 {No bots}\n     =1 {One bot}\n  other {# bots}\n} have been found.\n            { dialogNum, select,\n      0 {}\n  other {Press down arrow key to navigate the search results}\n}"
+  "dialognum_plural_0_no_dialogs_1_one_dialog_other_d_1b86909b": {
+    "message": "{ dialogNum, plural,\n     =0 {No dialogs}\n     =1 {One dialog}\n  other {# dialogs}\n} have been found.\n            { dialogNum, select,\n      0 {}\n  other {Press down arrow key to navigate the search results}\n}"
   },
   "disable_a5c05db3": {
     "message": "Disable"
@@ -1553,11 +1556,11 @@
   "no_lu_or_qna_file_with_name_id_21cfe9dc": {
     "message": "NO LU OR QNA FILE WITH NAME { id }"
   },
-  "no_search_results_1ba50423": {
-    "message": "No search results"
-  },
   "no_name_e082310e": {
     "message": "[no name]"
+  },
+  "no_search_results_1ba50423": {
+    "message": "No search results"
   },
   "no_updates_available_cecd904d": {
     "message": "No updates available"
@@ -1795,9 +1798,6 @@
   },
   "property_quick_actions_d3498f14": {
     "message": "Property quick actions"
-  },
-  "property_required_help_text_57f027ad": {
-    "message": "Property required help text"
   },
   "property_title_f2b443b7": {
     "message": "Property title"
