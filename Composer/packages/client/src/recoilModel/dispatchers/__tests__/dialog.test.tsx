@@ -12,11 +12,16 @@ import {
   lgFilesState,
   luFilesState,
   schemasState,
+  dialogSchemasState,
   actionsSeedState,
   onCreateDialogCompleteState,
   showCreateDialogModalState,
+  qnaFilesState,
 } from '../../atoms';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
+import { Dispatcher } from '..';
+
+const projectId = '42345.23432';
 
 jest.mock('@bfc/indexers', () => {
   return {
@@ -36,6 +41,18 @@ jest.mock('@bfc/indexers', () => {
     },
     luIndexer: {
       parse: (content, id) => ({
+        id,
+        content,
+      }),
+    },
+    lgUtil: {
+      parse: (id, content) => ({
+        id,
+        content,
+      }),
+    },
+    luUtil: {
+      parse: (id, content) => ({
         id,
         content,
       }),
@@ -66,35 +83,46 @@ jest.mock('../../parsers/lgWorker', () => {
   };
 });
 
+jest.mock('../../parsers/qnaWorker', () => {
+  return {
+    parse: (id, content) => ({ id, content }),
+  };
+});
+
 describe('dialog dispatcher', () => {
-  let renderedComponent, dispatcher;
+  let renderedComponent, dispatcher: Dispatcher;
   beforeEach(() => {
     const useRecoilTestHook = () => {
-      const dialogs = useRecoilValue(dialogsState);
-      const luFiles = useRecoilValue(luFilesState);
-      const lgFiles = useRecoilValue(lgFilesState);
+      const dialogs = useRecoilValue(dialogsState(projectId));
+      const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
+      const luFiles = useRecoilValue(luFilesState(projectId));
+      const lgFiles = useRecoilValue(lgFilesState(projectId));
+      const actionsSeed = useRecoilValue(actionsSeedState(projectId));
+      const onCreateDialogComplete = useRecoilValue(onCreateDialogCompleteState(projectId));
+      const showCreateDialogModal = useRecoilValue(showCreateDialogModalState(projectId));
+      const qnaFiles = useRecoilValue(qnaFilesState(projectId));
       const currentDispatcher = useRecoilValue(dispatcherState);
-      const actionsSeed = useRecoilValue(actionsSeedState);
-      const onCreateDialogComplete = useRecoilValue(onCreateDialogCompleteState);
-      const showCreateDialogModal = useRecoilValue(showCreateDialogModalState);
 
       return {
         dialogs,
+        dialogSchemas,
         luFiles,
         lgFiles,
         currentDispatcher,
         actionsSeed,
         onCreateDialogComplete,
         showCreateDialogModal,
+        qnaFiles,
       };
     };
 
     const { result } = renderRecoilHook(useRecoilTestHook, {
       states: [
-        { recoilState: dialogsState, initialValue: [{ id: '1' }, { id: '2' }] },
-        { recoilState: lgFilesState, initialValue: [{ id: '1.lg' }, { id: '2' }] },
-        { recoilState: luFilesState, initialValue: [{ id: '1.lu' }, { id: '2' }] },
-        { recoilState: schemasState, initialValue: { sdk: { content: '' } } },
+        { recoilState: dialogsState(projectId), initialValue: [{ id: '1' }, { id: '2' }] },
+        { recoilState: dialogSchemasState(projectId), initialValue: [{ id: '1' }, { id: '2' }] },
+        { recoilState: lgFilesState(projectId), initialValue: [{ id: '1.lg' }, { id: '2' }] },
+        { recoilState: luFilesState(projectId), initialValue: [{ id: '1.lu' }, { id: '2' }] },
+        { recoilState: schemasState(projectId), initialValue: { sdk: { content: '' } } },
       ],
       dispatcher: {
         recoilState: dispatcherState,
@@ -109,9 +137,14 @@ describe('dialog dispatcher', () => {
 
   it('removes a dialog file', async () => {
     await act(async () => {
-      await dispatcher.removeDialog('1');
+      await dispatcher.createDialog({ id: '1', content: 'abcde', projectId });
     });
+    await act(async () => {
+      await dispatcher.removeDialog('1', projectId);
+    });
+
     expect(renderedComponent.current.dialogs).toEqual([{ id: '2' }]);
+    expect(renderedComponent.current.dialogSchemas).toEqual([{ id: '2' }]);
     expect(renderedComponent.current.lgFiles).toEqual([{ id: '2' }]);
     expect(renderedComponent.current.luFiles).toEqual([{ id: '2' }]);
   });
@@ -119,17 +152,18 @@ describe('dialog dispatcher', () => {
   it('updates a dialog file', async () => {
     test.validateDialog = jest.fn().mockReturnValue([]);
     await act(async () => {
-      await dispatcher.updateDialog({ id: '1', content: 'new' });
+      dispatcher.updateDialog({ id: '1', content: 'new', projectId });
     });
     expect(renderedComponent.current.dialogs.find((dialog) => dialog.id === '1').content).toEqual('new');
   });
 
   it('creates a dialog file', async () => {
     await act(async () => {
-      await dispatcher.createDialog({ id: '100', content: 'abcde' });
+      await dispatcher.createDialog({ id: '100', content: 'abcde', projectId });
     });
     expect(renderedComponent.current.luFiles.find((dialog) => dialog.id === '100.en-us')).not.toBeNull();
     expect(renderedComponent.current.lgFiles.find((dialog) => dialog.id === '100.en-us')).not.toBeNull();
+    expect(renderedComponent.current.qnaFiles.find((dialog) => dialog.id === '100.en-us')).not.toBeNull();
     expect(renderedComponent.current.dialogs.find((dialog) => dialog.id === '100').content).toEqual('abcde');
   });
 
@@ -138,8 +172,9 @@ describe('dialog dispatcher', () => {
     const ON_COMPLETE = { action: 'moreStuff' };
 
     await act(async () => {
-      await dispatcher.createDialogBegin({ actions: ACTIONS }, ON_COMPLETE);
+      dispatcher.createDialogBegin({ actions: ACTIONS }, ON_COMPLETE, projectId);
     });
+
     expect(renderedComponent.current.actionsSeed).toEqual({ actions: ACTIONS });
     expect(renderedComponent.current.onCreateDialogComplete).toEqual({ func: ON_COMPLETE });
     expect(renderedComponent.current.showCreateDialogModal).toBe(true);
@@ -147,7 +182,7 @@ describe('dialog dispatcher', () => {
 
   it('cancels creating a dialog', async () => {
     await act(async () => {
-      await dispatcher.createDialogCancel();
+      await dispatcher.createDialogCancel(projectId);
     });
     expect(renderedComponent.current.actionsSeed).toEqual([]);
     expect(renderedComponent.current.onCreateDialogComplete).toEqual({ func: undefined });

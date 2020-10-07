@@ -8,13 +8,16 @@ import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import get from 'lodash/get';
 import VisualDesigner from '@bfc/adaptive-flow';
-import Extension from '@bfc/extension';
 import { useRecoilValue } from 'recoil';
+import { useShellApi } from '@bfc/extension-client';
 
 import grayComposerIcon from '../../images/grayComposerIcon.svg';
-import { useShell } from '../../shell';
-import plugins from '../../plugins';
-import { schemasState, dialogsState, designPageLocationState, dispatcherState } from '../../recoilModel';
+import {
+  dispatcherState,
+  validateDialogSelectorFamily,
+  schemasState,
+  designPageLocationState,
+} from '../../recoilModel';
 
 import { middleTriggerContainer, middleTriggerElements, triggerButton, visualEditor } from './styles';
 
@@ -52,16 +55,19 @@ function onRenderBlankVisual(isTriggerEmpty, onClickAddTrigger) {
 
 interface VisualEditorProps {
   openNewTriggerModal: () => void;
+  onFocus?: (event: React.FocusEvent<HTMLDivElement>) => void;
+  onBlur?: (event: React.FocusEvent<HTMLDivElement>) => void;
 }
 
 const VisualEditor: React.FC<VisualEditorProps> = (props) => {
-  const { api: shellApi, data: shellData } = useShell('VisualEditor');
-  const { openNewTriggerModal } = props;
+  const { ...shellData } = useShellApi();
+  const { projectId } = shellData;
+  const { openNewTriggerModal, onFocus, onBlur } = props;
   const [triggerButtonVisible, setTriggerButtonVisibility] = useState(false);
-  const designPageLocation = useRecoilValue(designPageLocationState);
   const { onboardingAddCoachMarkRef } = useRecoilValue(dispatcherState);
-  const dialogs = useRecoilValue(dialogsState);
-  const schemas = useRecoilValue(schemasState);
+  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const schemas = useRecoilValue(schemasState(projectId));
+  const designPageLocation = useRecoilValue(designPageLocationState(projectId));
   const { dialogId, selected } = designPageLocation;
 
   const addRef = useCallback((visualEditor) => onboardingAddCoachMarkRef({ visualEditor }), []);
@@ -80,9 +86,7 @@ const VisualEditor: React.FC<VisualEditorProps> = (props) => {
         css={visualEditor(triggerButtonVisible || !selected)}
         data-testid="VisualEditor"
       >
-        <Extension plugins={plugins} shell={shellApi} shellData={shellData}>
-          <VisualDesigner schema={schemas.sdk?.content} />
-        </Extension>
+        <VisualDesigner schema={schemas.sdk?.content} onBlur={onBlur} onFocus={onFocus} />
       </div>
       {!selected && onRenderBlankVisual(triggerButtonVisible, openNewTriggerModal)}
     </React.Fragment>

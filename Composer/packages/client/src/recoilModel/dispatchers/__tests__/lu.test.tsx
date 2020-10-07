@@ -5,9 +5,10 @@ import { useRecoilState } from 'recoil';
 import { LuIntentSection, LuFile } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import { act } from '@bfc/test-utils/lib/hooks';
+import { luUtil } from '@bfc/indexers';
 
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
-import { luFilesState } from '../../atoms';
+import { luFilesState, currentProjectIdState } from '../../atoms';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
 import { luDispatcher } from '../lu';
@@ -22,12 +23,13 @@ jest.mock('../../parsers/luWorker', () => {
     removeIntents: require('@bfc/indexers/lib/utils/luUtil').removeIntents,
   };
 });
-const luFiles = [
-  {
-    id: 'common.en-us',
-    content: `\r\n# Hello\r\n-hi`,
-  },
-] as LuFile[];
+const projectId = '123ansd.23432';
+const file1 = {
+  id: 'common.en-us',
+  content: `\r\n# Hello\r\n-hi`,
+};
+
+const luFiles = [luUtil.parse(file1.id, file1.content)] as LuFile[];
 
 const getLuIntent = (Name, Body): LuIntentSection =>
   ({
@@ -39,7 +41,7 @@ describe('Lu dispatcher', () => {
   let renderedComponent, dispatcher: Dispatcher;
   beforeEach(() => {
     const useRecoilTestHook = () => {
-      const [luFiles, setLuFiles] = useRecoilState(luFilesState);
+      const [luFiles, setLuFiles] = useRecoilState(luFilesState(projectId));
       const currentDispatcher = useRecoilValue(dispatcherState);
 
       return {
@@ -50,7 +52,10 @@ describe('Lu dispatcher', () => {
     };
 
     const { result } = renderRecoilHook(useRecoilTestHook, {
-      states: [{ recoilState: luFilesState, initialValue: luFiles }],
+      states: [
+        { recoilState: luFilesState(projectId), initialValue: luFiles },
+        { recoilState: currentProjectIdState, initialValue: projectId },
+      ],
       dispatcher: {
         recoilState: dispatcherState,
         initialValue: {
@@ -66,7 +71,7 @@ describe('Lu dispatcher', () => {
     await act(async () => {
       await dispatcher.updateLuFile({
         id: 'common.en-us',
-        projectId: 'test',
+        projectId,
         content: `\r\n# New\r\n-new`,
       });
     });
@@ -80,6 +85,7 @@ describe('Lu dispatcher', () => {
         id: luFiles[0].id,
         intentName: 'Hello',
         intent: getLuIntent('Hello', '-IntentValue'),
+        projectId,
       });
     });
 
@@ -91,16 +97,18 @@ describe('Lu dispatcher', () => {
       await dispatcher.createLuIntent({
         id: luFiles[0].id,
         intent: getLuIntent('New', '-IntentValue'),
+        projectId,
       });
     });
     expect(renderedComponent.current.luFiles[0].content).toMatch(/-IntentValue/);
   });
 
-  it('should remove a lg template', async () => {
+  it('should remove a lu intent', async () => {
     await act(async () => {
       await dispatcher.removeLuIntent({
         id: luFiles[0].id,
         intentName: 'Hello',
+        projectId,
       });
     });
 

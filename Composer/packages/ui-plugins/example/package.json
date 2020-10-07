@@ -17,24 +17,24 @@
   "license": "MIT",
   "peerDependencies": {
     "@bfc/adaptive-form": "*",
-    "@bfc/extension": "*",
+    "@bfc/extension-client": "*",
     "@emotion/core": "^10.0.27",
     "@uifabric/fluent-theme": "^7.1.4",
     "@uifabric/icons": "^7.3.0",
     "@uifabric/styling": "^7.7.4",
     "office-ui-fabric-react": "^7.71.0",
-    "react": "16.13.0",
-    "react-dom": "16.13.0"
+    "react": "16.13.1",
+    "react-dom": "16.13.1"
   },
   "devDependencies": {
     "@bfc/adaptive-form": "*",
-    "@bfc/extension": "*",
+    "@bfc/extension-client": "*",
     "@bfc/test-utils": "*",
     "@emotion/core": "^10.0.27",
     "@types/react": "16.9.23",
     "@types/react-dom": "16.9.5",
-    "react": "16.13.0",
-    "react-dom": "16.13.0"
+    "react": "16.13.1",
+    "react-dom": "16.13.1"
   },
   "dependencies": {
   }

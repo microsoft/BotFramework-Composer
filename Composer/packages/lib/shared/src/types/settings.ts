@@ -18,6 +18,7 @@ export interface UserSettings {
   codeEditor: CodeEditorSettings;
   propertyEditorWidth: number;
   dialogNavWidth: number;
+  appLocale: string;
 }
 
 export interface AppUpdaterSettings {
@@ -25,10 +26,18 @@ export interface AppUpdaterSettings {
   useNightly: boolean;
 }
 
+export interface SkillSetting {
+  name: string;
+  manifestUrl: string;
+  msAppId: string;
+  endpointUrl: string;
+}
+
 export interface DialogSetting {
   MicrosoftAppId?: string;
   MicrosoftAppPassword?: string;
   luis: ILuisConfig;
+  qna: IQnAConfig;
   publishTargets?: PublishTarget[];
   runtime: {
     customRuntime: boolean;
@@ -39,9 +48,8 @@ export interface DialogSetting {
   importedLibraries: LibraryRef[];
   languages: string[];
   skill?: {
-    name: string;
-    manifestUrl: string;
-  }[];
+    [skillName: string]: SkillSetting;
+  };
   botId?: string;
   skillHostEndpoint?: string;
   [key: string]: any;
@@ -56,6 +64,23 @@ export interface ILuisConfig {
   authoringRegion: string | 'westus';
   defaultLanguage: string | 'en-us';
   environment: string | 'composer';
+}
+
+export interface IQnAConfig {
+  subscriptionKey: string;
+  endpointKey: string;
+  qnaRegion: string;
+  [key: string]: string;
+}
+
+export interface IConfig extends ILuisConfig {
+  subscriptionKey: string;
+  qnaRegion: string | 'westus';
+}
+
+export interface IPublishConfig {
+  luis: ILuisConfig;
+  qna: IQnAConfig;
 }
 
 export interface PublishTarget {

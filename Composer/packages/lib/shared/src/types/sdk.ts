@@ -18,8 +18,8 @@ export interface BaseSchema {
   $copy?: string;
   /** Extra information for the Bot Framework Composer. */
   $designer?: DesignerData;
-  /** If 'disabled' set to true, runtime will skip this action. */
-  disabled: any;
+  /** If 'disabled' equals to or be evaluated as 'true', runtime will skip this action. */
+  disabled?: boolean | string;
 }
 
 /* Union of components which implement the IActivityTemplate interface */
@@ -47,7 +47,7 @@ export interface IChoiceObject {
 
 export type IChoice = IChoiceObject[] | string;
 
-type IListStyle = 'None' | 'Auto' | 'Inline' | 'List' | 'SuggestedAction' | 'HeroCard';
+type IListStyle = 'none' | 'auto' | 'inline' | 'list' | 'suggestedAction' | 'heroCard';
 
 export interface IChoiceOption {
   /** Character used to separate individual choices when there are more than 2 choices */
@@ -189,7 +189,12 @@ export interface RegexRecognizer extends BaseSchema {
   intents: IntentPattern[];
 }
 
-export type MicrosoftIRecognizer = LuisRecognizer | RegexRecognizer | string;
+export interface CrossTrainedRecognizer extends BaseSchema {
+  /** Pattern->Intents mappings */
+  recognizers: string[];
+}
+
+export type MicrosoftIRecognizer = LuisRecognizer | RegexRecognizer | CrossTrainedRecognizer | string;
 
 /**
  * Rules

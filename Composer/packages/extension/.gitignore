@@ -1,0 +1,4 @@
+lib/
+src/__tests__/__manifest__.json
+src/__tests__/__builtin__
+src/__tests__/__remote__

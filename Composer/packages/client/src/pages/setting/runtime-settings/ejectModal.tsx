@@ -22,6 +22,7 @@ export interface EjectModalProps {
 
 export const EjectModal: React.FC<EjectModalProps> = (props) => {
   const [selectedTemplate, setSelectedTemplate] = useState<string | undefined>();
+
   const runtimeTemplates = useRecoilValue(runtimeTemplatesState);
   const { fetchRuntimeTemplates } = useRecoilValue(dispatcherState);
 

@@ -5,7 +5,7 @@ const fs = require('fs-extra');
 const msRestNodeAuth = require('@azure/ms-rest-nodeauth');
 const argv = require('minimist')(process.argv.slice(2));
 const path = require('path');
-const rp = require('request-promise')
+const rp = require('request-promise');
 const { promisify } = require('util');
 const { GraphRbacManagementClient } = require('@azure/graph');
 const { ApplicationInsightsManagementClient } = require('@azure/arm-appinsights');
@@ -14,7 +14,7 @@ const { ResourceManagementClient } = require('@azure/arm-resources');
 const readFile = promisify(fs.readFile);
 const ora = require('ora');
 
-const logger = msg => {
+const logger = (msg) => {
   if (msg.status === BotProjectDeployLoggerType.PROVISION_ERROR) {
     console.log(chalk.red(msg.message));
   } else if (msg.status === BotProjectDeployLoggerType.PROVISION_ERROR_DETAILS) {
@@ -38,10 +38,15 @@ const usage = () => {
     ['createCosmosDb', 'Create a CosmosDB? Default true'],
     ['createStorage', 'Create a storage account? Default true'],
     ['createAppInsights', 'Create an AppInsights resource? Default true'],
+    ['createQnAResource', 'Create a QnA resource? Default true'],
     [
       'customArmTemplate',
       'Path to runtime ARM template. By default it will use an Azure WebApp template. Pass `DeploymentTemplates/function-template-with-preexisting-rg.json` for Azure Functions or your own template for a custom deployment.',
     ],
+    [
+      'qnaTemplate',
+      'Path to qna template. By default it will use `DeploymentTemplates/qna-template.json`'
+    ]
   ];
 
   const instructions = [
@@ -59,7 +64,7 @@ const usage = () => {
     chalk.yellow('<16 character password>'),
     ``,
     chalk.bold(`All options:`),
-    ...options.map(option => {
+    ...options.map((option) => {
       return chalk.greenBright('--' + option[0]) + '\t' + chalk.yellow(option[1]);
     }),
   ];
@@ -92,10 +97,13 @@ const createLuisAuthoringResource = argv.createLuisAuthoringResource == 'false' 
 const createCosmosDb = argv.createCosmosDb == 'false' ? false : true;
 const createStorage = argv.createStorage == 'false' ? false : true;
 const createAppInsights = argv.createAppInsights == 'false' ? false : true;
+const createQnAResource = argv.createQnAResource == 'false' ? false : true;
 var tenantId = argv.tenantId ? argv.tenantId : '';
 
 const templatePath =
   argv.customArmTemplate || path.join(__dirname, 'DeploymentTemplates', 'template-with-preexisting-rg.json');
+const qnaTemplatePath =
+  argv.qnaTemplate || path.join(__dirname, 'DeploymentTemplates', 'qna-template.json');
 
 const BotProjectDeployLoggerType = {
   // Logger Type for Provision
@@ -158,13 +166,13 @@ const createResourceGroup = async (client, location, resourceGroupName) => {
  * Format parameters
  * @param {} scope
  */
-const pack = scope => {
+const pack = (scope) => {
   return {
     value: scope,
   };
 };
 
-const unpackObject = output => {
+const unpackObject = (output) => {
   const unpacked = {};
   for (const key in output) {
     const objValue = output[key];
@@ -177,7 +185,7 @@ const unpackObject = output => {
 
 /**
  * For more information about this api, please refer to this doc: https://docs.microsoft.com/en-us/rest/api/resources/Tenants/List
- * @param {*} accessToken 
+ * @param {*} accessToken
  */
 const getTenantId = async (accessToken) => {
   if (!accessToken) {
@@ -186,9 +194,7 @@ const getTenantId = async (accessToken) => {
     );
   }
   if (!subId) {
-    throw new Error(
-      `Error: Missing subscription Id. Please provide a valid Azure subscription id.`
-    );
+    throw new Error(`Error: Missing subscription Id. Please provide a valid Azure subscription id.`);
   }
   try {
     const tenantUrl = `https://management.azure.com/subscriptions/${subId}?api-version=2020-01-01`;
@@ -197,17 +203,27 @@ const getTenantId = async (accessToken) => {
     };
     const response = await rp.get(tenantUrl, options);
     const jsonRes = JSON.parse(response);
-    if (
-      jsonRes.tenantId === undefined
-    ) {
+    if (jsonRes.tenantId === undefined) {
       throw new Error(`No tenants found in the account.`);
     }
     return jsonRes.tenantId;
   } catch (err) {
     throw new Error(`Get Tenant Id Failed, details: ${getErrorMesssage(err)}`);
   }
-}
+};
 
+/**
+ * 
+ * @param {*} appId the appId of application registration
+ * @param {*} appPwd the app password of application registration
+ * @param {*} location the locaiton of all resources
+ * @param {*} name the name of resource group
+ * @param {*} shouldCreateAuthoringResource
+ * @param {*} shouldCreateLuisResource 
+ * @param {*} useAppInsights 
+ * @param {*} useCosmosDb 
+ * @param {*} useStorage 
+ */
 const getDeploymentTemplateParam = (
   appId,
   appPwd,
@@ -230,6 +246,59 @@ const getDeploymentTemplateParam = (
     useCosmosDb: pack(useCosmosDb),
     useStorage: pack(useStorage),
   };
+};
+
+/**
+ * Get QnA template param
+ */
+const getQnaTemplateParam = (
+  location,
+  name
+) => {
+  return {
+    appServicePlanLocation: pack(location),
+    name: pack(name)
+  };
+};
+
+/**
+ * Validate the qna template and the qna template param
+ */
+const validateQnADeployment = async (client, resourceGroupName, deployName, templateParam) => {
+  logger({
+    status: BotProjectDeployLoggerType.PROVISION_INFO,
+    message: '> Validating QnA deployment ...',
+  });
+
+  const templateFile = await readFile(qnaTemplatePath, { encoding: 'utf-8' });
+  const deployParam = {
+    properties: {
+      template: JSON.parse(templateFile),
+      parameters: templateParam,
+      mode: 'Incremental',
+    },
+  };
+  return await client.deployments.validate(resourceGroupName, deployName, deployParam);
+};
+
+/**
+ * Create a QnA resource deployment
+ * @param {*} client 
+ * @param {*} resourceGroupName 
+ * @param {*} deployName 
+ * @param {*} templateParam 
+ */
+const createQnADeployment = async (client, resourceGroupName, deployName, templateParam) => {
+  const templateFile = await readFile(qnaTemplatePath, { encoding: 'utf-8' });
+  const deployParam = {
+    properties: {
+      template: JSON.parse(templateFile),
+      parameters: templateParam,
+      mode: 'Incremental',
+    },
+  };
+
+  return await client.deployments.createOrUpdate(resourceGroupName, deployName, deployParam);
 };
 
 /**
@@ -301,7 +370,7 @@ const updateDeploymentJsonFile = async (client, resourceGroupName, deployName, a
   }
 };
 
-const provisionFailed = msg => {
+const provisionFailed = (msg) => {
   logger({
     status: BotProjectDeployLoggerType.PROVISION_ERROR,
     message: chalk.bold('** Provision failed **'),
@@ -318,19 +387,16 @@ const getErrorMesssage = (err) => {
           errMsg += detail.message;
         }
         return errMsg;
-      }
-      else {
+      } else {
         return err.body.error.message;
       }
-    }
-    else {
+    } else {
       return JSON.stringify(err.body, null, 2);
     }
-  }
-  else {
+  } else {
     return JSON.stringify(err, null, 2);
   }
-}
+};
 
 /**
  * Provision a set of Azure resources for use with a bot
@@ -345,15 +411,22 @@ const create = async (
   appPassword,
   createLuisResource = true,
   createLuisAuthoringResource = true,
+  createQnAResource = true,
   createCosmosDb = true,
   createStorage = true,
   createAppInsights = true
 ) => {
+  
+  // App insights is a dependency of QnA
+  if (createQnAResource) {
+    createAppInsights = true;
+  }
+
   // If tenantId is empty string, get tenanId from API
   if (!tenantId) {
     const token = await creds.getToken();
     const accessToken = token.accessToken;
-    // the returned access token will almost surely have a tenantId. 
+    // the returned access token will almost surely have a tenantId.
     // use this as the default if one isn't specified.
     if (token.tenantId) {
       tenantId = token.tenantId;
@@ -412,7 +485,7 @@ const create = async (
   } catch (err) {
     logger({
       status: BotProjectDeployLoggerType.PROVISION_ERROR,
-      message: getErrorMesssage(err)
+      message: getErrorMesssage(err),
     });
     return provisionFailed();
   }
@@ -482,9 +555,78 @@ const create = async (
     spinner.fail();
     logger({
       status: BotProjectDeployLoggerType.PROVISION_ERROR,
-      message: getErrorMesssage(err)
+      message: getErrorMesssage(err),
     });
     return provisionFailed();
+  }
+
+  var qnaResult = null;
+
+  // Create qna resources, the reason why seperate the qna resources from others: https://github.com/Azure/azure-sdk-for-js/issues/10186 
+  if (createQnAResource) {
+    const qnaDeployName = new Date().getTime().toString();
+    const qnaDeploymentTemplateParam = getQnaTemplateParam(
+      location,
+      name
+    );
+    const qnaValidation = await validateQnADeployment(client, resourceGroupName, qnaDeployName, qnaDeploymentTemplateParam);
+    if (qnaValidation.error) {
+      logger({
+        status: BotProjectDeployLoggerType.PROVISION_ERROR,
+        message: `! Error: ${qnaValidation.error.message}`,
+      });
+      if (qnaValidation.error.details) {
+        logger({
+          status: BotProjectDeployLoggerType.PROVISION_ERROR_DETAILS,
+          message: JSON.stringify(qnaValidation.error.details, null, 2),
+        });
+      }
+      logger({
+        status: BotProjectDeployLoggerType.PROVISION_ERROR,
+        message: `+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`,
+      });
+      return provisionFailed();
+    }
+
+    // Create qna deloyment
+    logger({
+      status: BotProjectDeployLoggerType.PROVISION_INFO,
+      message: `> Deploying QnA Resources (this could take a while)...`,
+    });
+    const spinner = ora().start();
+    try {
+      const qnaDeployment = await createQnADeployment(client, resourceGroupName, qnaDeployName, qnaDeploymentTemplateParam);
+      // Handle errors
+      if (qnaDeployment._response.status != 200) {
+        spinner.fail();
+        logger({
+          status: BotProjectDeployLoggerType.PROVISION_ERROR,
+          message: `! QnA Template is not valid with provided parameters. Review the log for more information.`,
+        });
+        logger({
+          status: BotProjectDeployLoggerType.PROVISION_ERROR,
+          message: `! Error: ${qnaValidation.error}`,
+        });
+        logger({
+          status: BotProjectDeployLoggerType.PROVISION_ERROR,
+          message: `+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`,
+        });
+        return provisionFailed();
+      }
+    } catch (err) {
+      spinner.fail();
+      logger({
+        status: BotProjectDeployLoggerType.PROVISION_ERROR,
+        message: getErrorMesssage(err),
+      });
+      return provisionFailed();
+    }
+
+    const qnaDeploymentOutput = await client.deployments.get(resourceGroupName, qnaDeployName);
+    if (qnaDeploymentOutput && qnaDeploymentOutput.properties && qnaDeploymentOutput.properties.outputs) {
+      const qnaOutputResult = qnaDeploymentOutput.properties.outputs;
+      qnaResult = unpackObject(qnaOutputResult);
+    }
   }
 
   // If application insights created, update the application insights settings in azure bot service
@@ -570,10 +712,10 @@ const create = async (
     const operations = await client.deploymentOperations.list(resourceGroupName, timeStamp);
     if (operations) {
       const failedOperations = operations.filter(
-        value => value && value.properties && value.properties.statusMessage.error !== null
+        (value) => value && value.properties && value.properties.statusMessage.error !== null
       );
       if (failedOperations) {
-        failedOperations.forEach(operation => {
+        failedOperations.forEach((operation) => {
           switch (
           operation &&
           operation.properties &&
@@ -610,13 +752,21 @@ const create = async (
       });
     }
   }
+
+  // Merge qna outputs with other resources' outputs
+  if (createQnAResource) {
+    if (qnaResult) {
+      Object.assign(updateResult, qnaResult);
+    }
+  }
+
   return updateResult;
 };
 
 console.log(chalk.bold('Login to Azure:'));
 msRestNodeAuth
   .interactiveLogin({ domain: tenantId })
-  .then(async creds => {
+  .then(async (creds) => {
     const createResult = await create(
       creds,
       subId,
@@ -627,6 +777,7 @@ msRestNodeAuth
       appPassword,
       createLuisResource,
       createLuisAuthoringResource,
+      createQnAResource,
       createCosmosDb,
       createStorage,
       createAppInsights
@@ -656,6 +807,6 @@ msRestNodeAuth
       console.log('');
     }
   })
-  .catch(err => {
+  .catch((err) => {
     console.error(err);
   });

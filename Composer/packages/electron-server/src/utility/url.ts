@@ -6,7 +6,7 @@ import lowerCase from 'lodash/lowerCase';
 import log from './logger';
 const error = log.extend('electron-deeplink-url');
 
-export const parseDeepLinkUrl = (deeplinkUrl) => {
+export const parseDeepLinkUrl = (deeplinkUrl: string) => {
   try {
     const convertedUrl = new URL(deeplinkUrl);
     const action = lowerCase(convertedUrl.hostname);

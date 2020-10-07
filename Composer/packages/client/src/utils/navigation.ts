@@ -68,7 +68,8 @@ export function getUrlSearch(selected: string, focused: string): string {
 
 export function checkUrl(
   currentUri: string,
-  { dialogId, projectId, selected, focused, promptTab }: DesignPageLocation
+  projectId: string,
+  { dialogId, selected, focused, promptTab }: DesignPageLocation
 ) {
   let lastUri = `/bot/${projectId}/dialogs/${dialogId}${getUrlSearch(selected, focused)}`;
   if (promptTab) {
@@ -77,12 +78,13 @@ export function checkUrl(
   return lastUri === currentUri;
 }
 
-interface NavigationState {
-  breadcrumb: BreadcrumbItem[];
+export interface NavigationState {
+  breadcrumb?: BreadcrumbItem[];
+  qnaKbUrls?: string[];
 }
 
 export function convertPathToUrl(projectId: string, dialogId: string, path?: string): string {
-  //path is like main.trigers[0].actions[0]
+  //path is like main.triggers[0].actions[0]
   //uri = id?selected=triggers[0]&focused=triggers[0].actions[0]
 
   let uri = `/bot/${projectId}/dialogs/${dialogId}`;

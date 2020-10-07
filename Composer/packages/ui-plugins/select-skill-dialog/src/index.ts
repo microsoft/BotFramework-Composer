@@ -1,25 +1,31 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { PluginConfig } from '@bfc/extension';
-import formatMessage from 'format-message';
+import { PluginConfig } from '@bfc/extension-client';
 import { SDKKinds } from '@bfc/shared';
+import formatMessage from 'format-message';
 
-import { SelectSkillDialog } from './SelectSkillDialogField';
-import { BeginSkillDialogField } from './BeginSkillDialogField';
+import { SelectSkillDialogField } from './SelectSkillDialogField';
+import { SkillEndpointField } from './SkillEndpointField';
 
 const config: PluginConfig = {
   uiSchema: {
     [SDKKinds.BeginSkill]: {
       form: {
-        order: ['skillAppId', '*', 'resultProperty', 'disabled', 'activityProcessed'],
-        hidden: ['botId', 'skillEndpoint', 'skillAppId', 'skillHostEndpoint'],
-        field: BeginSkillDialogField,
+        order: ['selectSkillDialog', 'selectSkillEndpoint', '*', 'resultProperty', 'activityProcessed'],
+        hidden: ['skillEndpoint', 'botId', 'skillAppId', 'skillHostEndpoint'],
         properties: {
-          id: {
-            description: () => formatMessage('Name of skill dialog to call'),
-            label: () => formatMessage('Skill Dialog Name'),
-            field: SelectSkillDialog,
+          selectSkillDialog: {
+            additionalField: true,
+            field: SelectSkillDialogField,
+            label: formatMessage('Skill Dialog Name'),
+            description: formatMessage('Name of skill dialog to call'),
+          },
+          selectSkillEndpoint: {
+            additionalField: true,
+            field: SkillEndpointField,
+            label: formatMessage('Skill Endpoint'),
+            description: formatMessage('The /api/messages endpoint for the skill.'),
           },
         },
       },

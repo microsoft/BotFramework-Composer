@@ -1,19 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { JSONSchema7 } from '@bfc/extension';
-import {
-  AppUpdaterSettings,
-  CodeEditorSettings,
-  DialogInfo,
-  LuFile,
-  LgFile,
-  PromptTab,
-  DialogSetting,
-} from '@bfc/shared';
+import { JSONSchema7 } from '@bfc/extension-client';
+import { AppUpdaterSettings, CodeEditorSettings, PromptTab } from '@bfc/shared';
 
 import { AppUpdaterStatus } from '../constants';
 
-import { SkillManifest } from './../pages/design/exportSkillModal/constants';
+import { CardProps } from './../components/NotificationCard';
 
 export interface StateError {
   status?: number;
@@ -38,6 +30,7 @@ export interface StorageFolder extends File {
 export interface PublishType {
   name: string;
   description: string;
+  hasView?: boolean;
   instructions?: string;
   schema?: JSONSchema7;
   features: {
@@ -45,6 +38,38 @@ export interface PublishType {
     publish: boolean;
     rollback: boolean;
     status: boolean;
+  };
+}
+
+type ExtensionPublishContribution = {
+  bundleId: string;
+};
+
+export type ExtensionPageContribution = {
+  /** plugin id */
+  id: string;
+  bundleId: string;
+  label: string;
+  icon?: string;
+};
+
+// TODO: move this definition to a shared spot
+export interface ExtensionConfig {
+  id: string;
+  name: string;
+  description: string;
+  enabled: boolean;
+  version: string;
+  /** Special property only used in the in-memory representation of extensions to flag as a built-in. Not written to disk. */
+  builtIn?: boolean;
+  /** Path where module is installed */
+  path: string;
+  bundles: any; // TODO: needed?
+  contributes?: {
+    views?: {
+      publish?: ExtensionPublishContribution;
+      pages?: ExtensionPageContribution[];
+    };
   };
 }
 
@@ -67,7 +92,6 @@ export interface BotLoadError {
 }
 
 export interface DesignPageLocation {
-  projectId: string;
   dialogId: string;
   selected: string;
   focused: string;
@@ -109,15 +133,7 @@ export type UserSettingsPayload = {
   codeEditor: Partial<CodeEditorSettings>;
   propertyEditorWidth: number;
   dialogNavWidth: number;
-};
-
-export type BotAssets = {
-  projectId: string;
-  dialogs: DialogInfo[];
-  luFiles: LuFile[];
-  lgFiles: LgFile[];
-  skillManifests: SkillManifest[];
-  setting: DialogSetting;
+  appLocale: string;
 };
 
 export type BoilerplateVersion = {
@@ -125,3 +141,11 @@ export type BoilerplateVersion = {
   currentVersion?: string;
   updateRequired?: boolean;
 };
+
+export enum QnAAllUpViewStatus {
+  Loading,
+  Success,
+  Failed,
+}
+
+export type Notification = CardProps & { id: string };

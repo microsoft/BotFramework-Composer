@@ -3,20 +3,16 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import formatMessage from 'format-message';
 import { CacheProvider } from '@emotion/core';
 import createCache from '@emotion/cache';
 import { RecoilRoot } from 'recoil';
 
 import './index.css';
+
 import { App } from './App';
 import { DispatcherWrapper } from './recoilModel';
 
 const appHostElm = document.getElementById('root');
-
-formatMessage.setup({
-  missingTranslation: 'ignore',
-});
 
 const emotionCache = createCache({
   // @ts-ignore

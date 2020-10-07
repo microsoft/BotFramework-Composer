@@ -1,50 +1,19 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-// @ts-nocheck
-
 import React from 'react';
-import { fireEvent, getAllByRole, render, act } from '@bfc/test-utils';
-import { Extension } from '@bfc/extension';
+import { act, fireEvent, getAllByRole, render } from '@bfc/test-utils';
+import { EditorExtension } from '@bfc/extension-client';
 
-import { SelectSkillDialog } from '../SelectSkillDialogField';
+import { SelectSkillDialogField, settingReferences } from '../SelectSkillDialogField';
 
-const skills = [
-  {
-    manifestUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json',
-    name: 'Email Skill',
-    endpoints: [
-      {
-        name: 'production',
-        protocol: 'BotFrameworkV3',
-        description: 'Production endpoint for the Email Skill',
-        endpointUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/api/messages',
-        msAppId: '79432da8-0f7e-4a16-8c23-ddbba30ae85d',
-      },
-    ],
-  },
-  {
-    manifestUrl: 'https://ericv3skillssimplesandwichbot.azurewebsites.net/wwwroot/sandwich-bot-manifest.json',
-    name: 'Sandwich Skill Bot',
-    endpoints: [
-      {
-        name: 'YourSandwichBotName',
-        protocol: 'BotFrameworkV3',
-        description: 'Default endpoint for the skill',
-        endpointUrl: 'https://ericv3skillssimplesandwichbot.azurewebsites.net/api/messages',
-        msAppId: '94e29d0f-3f0d-46f0-aa78-00aed83698cf',
-      },
-    ],
-  },
-];
+import { skills } from './constants';
 
-const renderSelectSkillDialog = ({ addSkillDialog, onChange } = {}) => {
+const renderSelectSkillDialog = ({ addSkillDialog = jest.fn(), onChange = jest.fn() } = {}) => {
   const props = {
-    description: 'Name of the skill to call.',
-    id: 'select.skillDialog',
-    label: 'Skill Dialog Name',
+    value: {},
     onChange,
-  };
+  } as any;
 
   const shell = {
     addSkillDialog,
@@ -55,9 +24,9 @@ const renderSelectSkillDialog = ({ addSkillDialog, onChange } = {}) => {
   };
 
   return render(
-    <Extension shell={shell} shellData={shellData}>
-      <SelectSkillDialog {...props} />
-    </Extension>
+    <EditorExtension shell={{ api: shell, data: shellData }}>
+      <SelectSkillDialogField {...props} />
+    </EditorExtension>
   );
 };
 
@@ -66,7 +35,12 @@ describe('Select Skill Dialog', () => {
     const addSkillDialog = jest.fn().mockImplementation(() => {
       return {
         then: (cb) => {
-          cb({ manifestUrl: 'https://' });
+          cb({
+            manifestUrl: 'https://skill',
+            name: 'test-skill',
+            msAppId: '0000-0000',
+            endpointUrl: 'https://skill/api/messafes',
+          });
         },
       };
     });
@@ -74,31 +48,17 @@ describe('Select Skill Dialog', () => {
 
     const { baseElement, findByRole } = renderSelectSkillDialog({ addSkillDialog, onChange });
     const combobox = await findByRole('combobox');
-    fireEvent.click(combobox);
+    act(() => {
+      fireEvent.click(combobox);
+    });
 
     const dialogs = getAllByRole(baseElement, 'option');
-    fireEvent.click(dialogs[dialogs.length - 1]);
+    act(() => {
+      fireEvent.click(dialogs[dialogs.length - 1]);
+    });
 
     expect(addSkillDialog).toHaveBeenCalled();
-    expect(onChange).toHaveBeenCalledWith({ key: 'https://' });
-  });
-
-  it('should select skill', async () => {
-    const onChange = jest.fn();
-
-    const { baseElement, findByRole } = renderSelectSkillDialog({ onChange });
-    const combobox = await findByRole('combobox');
-    fireEvent.click(combobox);
-
-    const [skill] = getAllByRole(baseElement, 'option');
-    fireEvent.click(skill);
-
-    expect(onChange).toHaveBeenCalledWith({
-      index: 0,
-      isSelected: false,
-      key: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json',
-      text: 'Email Skill',
-    });
+    expect(onChange).toHaveBeenCalledWith({ ...settingReferences('test-skill') });
   });
 
   it('should display label', async () => {

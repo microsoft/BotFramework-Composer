@@ -146,7 +146,9 @@ const renderIcon = (file: File) => {
   }
   // fallback for other possible file types
   const url = `https://static2.sharepointonline.com/files/fabric/assets/brand-icons/document/svg/${iconName}_16x1.svg`;
-  return <img alt={`${iconName} file icon`} className={detailListClass.fileIconImg} src={url} />;
+  return (
+    <img alt={formatMessage(`{iconName} file icon`, { iconName })} className={detailListClass.fileIconImg} src={url} />
+  );
 };
 
 export const FileSelector: React.FC<FileSelectorProps> = (props) => {
@@ -345,7 +347,7 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
           <div data-is-focusable css={tableCell}>
             <div css={content} tabIndex={-1}>
               <IconButton
-                ariaLabel="Edit"
+                ariaLabel={formatMessage('Edit')}
                 iconProps={{ iconName: 'Edit' }}
                 styles={editButton}
                 title="Edit"
@@ -501,7 +503,7 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
         {operationMode.write && (
           <StackItem align={'end'} styles={{ root: { marginBottom: 5 } }}>
             <Link disabled={editMode !== EditMode.NONE} onClick={onCreateNewFolder}>
-              {formatMessage('create new folder')}
+              {formatMessage('Create new folder')}
             </Link>
           </StackItem>
         )}

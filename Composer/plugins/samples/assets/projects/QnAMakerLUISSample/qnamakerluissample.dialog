@@ -49,7 +49,7 @@
       "$designer": {
         "id": "242409"
       },
-      "condition": "#Help.Score >= 0.8",
+      "condition": "#Help.Score >= 0.6",
       "actions": [
         {
           "$kind": "Microsoft.SendActivity",
@@ -90,7 +90,7 @@
       "$designer": {
         "id": "872754"
       },
-      "condition": "#BuySurface.Score >= 0.8",
+      "condition": "#BuySurface.Score >= 0.6",
       "actions": [
         {
           "$kind": "Microsoft.SendActivity",

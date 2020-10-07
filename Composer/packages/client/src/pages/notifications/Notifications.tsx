@@ -16,9 +16,10 @@ import { NotificationHeader } from './NotificationHeader';
 import { root } from './styles';
 import { INotification, NotificationType } from './types';
 
-const Notifications: React.FC<RouteComponentProps> = () => {
+const Notifications: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
+  const { projectId = '' } = props;
   const [filter, setFilter] = useState('');
-  const notifications = useNotifications(filter);
+  const notifications = useNotifications(projectId, filter);
   const navigations = {
     [NotificationType.LG]: (item: INotification) => {
       const { projectId, resourceId, diagnostic, dialogPath } = item;
@@ -37,6 +38,11 @@ const Notifications: React.FC<RouteComponentProps> = () => {
       }
       navigateTo(uri);
     },
+    [NotificationType.QNA]: (item: INotification) => {
+      const { projectId, resourceId, diagnostic } = item;
+      const uri = `/bot/${projectId}/knowledge-base/${resourceId}/edit#L=${diagnostic.range?.start.line || 0}`;
+      navigateTo(uri);
+    },
     [NotificationType.DIALOG]: (item: INotification) => {
       //path is like main.trigers[0].actions[0]
       //uri = id?selected=triggers[0]&focused=triggers[0].actions[0]
@@ -47,6 +53,10 @@ const Notifications: React.FC<RouteComponentProps> = () => {
     [NotificationType.SKILL]: (item: INotification) => {
       const { projectId } = item;
       navigateTo(`/bot/${projectId}/skills`);
+    },
+    [NotificationType.SETTING]: (item: INotification) => {
+      const { projectId } = item;
+      navigateTo(`/settings/bot/${projectId}/dialog-settings`);
     },
   };
   const handleItemClick = (item: INotification) => {

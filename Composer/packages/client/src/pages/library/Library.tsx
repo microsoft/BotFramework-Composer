@@ -12,7 +12,7 @@ import { LibraryRef } from '@bfc/shared';
 
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
-import { settingsState, projectIdState, dispatcherState } from '../../recoilModel';
+import { settingsState, dispatcherState } from '../../recoilModel';
 
 import httpClient from './../../utils/httpUtil';
 import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor } from './styles';
@@ -20,26 +20,20 @@ import { ImportDialog } from './importDialog';
 import { LibraryList } from './libraryList';
 import { WorkingModal } from './workingModal';
 
-interface LibraryPageProps extends RouteComponentProps<{}> {
-  targetName?: string;
-}
-
 const DEFAULT_CATEGORY = formatMessage('Available');
 
-const Library: React.FC<LibraryPageProps> = (props) => {
+const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: string }>> = (props) => {
   const [items, setItems] = useState<LibraryRef[]>([]);
   const [groups, setGroups] = useState<any[]>([]);
-  const settings = useRecoilValue(settingsState);
-  const projectId = useRecoilValue(projectIdState);
+  const { projectId = '' } = props;
+  const settings = useRecoilValue(settingsState(projectId));
 
   const [availableLibraries, updateAvailableLibraries] = useState<any[]>([]);
 
   const [selectedItem, setSelectedItem] = useState<LibraryRef>();
   const [working, setWorking] = useState(false);
   const [addDialogHidden, setAddDialogHidden] = useState(true);
-  const { setImportedLibraries, fetchProjectById, setApplicationLevelError, checkProjectUpdates } = useRecoilValue(
-    dispatcherState
-  );
+  const { setImportedLibraries, fetchProjectById, setApplicationLevelError } = useRecoilValue(dispatcherState);
 
   useEffect(() => {
     getLibraries();
@@ -160,10 +154,10 @@ const Library: React.FC<LibraryPageProps> = (props) => {
         });
       }
 
-      await setImportedLibraries(newList);
+      await setImportedLibraries(projectId, newList);
 
       // wait til the file persistence completes
-      await checkProjectUpdates();
+      // await checkProjectUpdates();
 
       // reload modified content
       await fetchProjectById(projectId);
@@ -213,10 +207,10 @@ const Library: React.FC<LibraryPageProps> = (props) => {
           const filtered = settings.importedLibraries.filter((f) => f.name !== response.data.package);
 
           // persist settings change
-          setImportedLibraries(filtered);
+          setImportedLibraries(projectId, filtered);
 
           // wait til the file persistence completes
-          await checkProjectUpdates();
+          // await checkProjectUpdates();
 
           // reload modified content
           await fetchProjectById(projectId);

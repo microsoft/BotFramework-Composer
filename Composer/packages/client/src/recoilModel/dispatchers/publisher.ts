@@ -4,24 +4,35 @@
 
 import formatMessage from 'format-message';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
+import { defaultPublishConfig } from '@bfc/shared';
 
-import { publishTypesState, botStatusState, publishHistoryState, botLoadErrorState } from '../atoms/botState';
-import filePersistence from '../persistence/FilePersistence';
+import {
+  publishTypesState,
+  botStatusState,
+  publishHistoryState,
+  botLoadErrorState,
+  isEjectRuntimeExistState,
+  filePersistenceState,
+} from '../atoms/botState';
 import { botEndpointsState } from '../atoms';
 
 import { BotStatus, Text } from './../../constants';
 import httpClient from './../../utils/httpUtil';
-import { logMessage } from './shared';
+import { logMessage, setError } from './shared';
+
+const PUBLISH_SUCCESS = 200;
+const PUBLISH_PENDING = 202;
+const PUBLISH_FAILED = 500;
 
 export const publisherDispatcher = () => {
-  const publishFailure = async ({ set }: CallbackInterface, title: string, error, target) => {
-    if (target.name === 'default') {
-      set(botStatusState, BotStatus.failed);
-      set(botLoadErrorState, { ...error, title });
+  const publishFailure = async ({ set }: CallbackInterface, title: string, error, target, projectId: string) => {
+    if (target.name === defaultPublishConfig.name) {
+      set(botStatusState(projectId), BotStatus.failed);
+      set(botLoadErrorState(projectId), { ...error, title });
     }
     // prepend the latest publish results to the history
 
-    set(publishHistoryState, (publishHistory) => {
+    set(publishHistoryState(projectId), (publishHistory) => {
       const targetHistory = publishHistory[target.name] ?? [];
       return {
         ...publishHistory,
@@ -31,13 +42,17 @@ export const publisherDispatcher = () => {
   };
 
   const publishSuccess = async ({ set }: CallbackInterface, projectId: string, data, target) => {
-    const { endpointURL } = data;
-    if (target.name === 'default' && endpointURL) {
-      set(botStatusState, BotStatus.connected);
-      set(botEndpointsState, (botEndpoints) => ({ ...botEndpoints, [projectId]: `${endpointURL}/api/messages` }));
+    const { endpointURL, status } = data;
+    if (target.name === defaultPublishConfig.name) {
+      if (status === PUBLISH_SUCCESS && endpointURL) {
+        set(botStatusState(projectId), BotStatus.connected);
+        set(botEndpointsState, (botEndpoints) => ({ ...botEndpoints, [projectId]: `${endpointURL}/api/messages` }));
+      } else {
+        set(botStatusState(projectId), BotStatus.reloading);
+      }
     }
 
-    set(publishHistoryState, (publishHistory) => {
+    set(publishHistoryState(projectId), (publishHistory) => {
       const targetHistory = publishHistory[target.name] ?? [];
       return {
         ...publishHistory,
@@ -50,23 +65,29 @@ export const publisherDispatcher = () => {
         ],
       };
     });
-    set(publishTypesState, data);
   };
 
   const updatePublishStatus = ({ set }: CallbackInterface, projectId: string, target: any, data: any) => {
     const { endpointURL, status, id } = data;
     // the action below only applies to when a bot is being started using the "start bot" button
     // a check should be added to this that ensures this ONLY applies to the "default" profile.
-    if (target.name === 'default' && endpointURL) {
-      set(botStatusState, BotStatus.connected);
-      set(botEndpointsState, (botEndpoints) => ({
-        ...botEndpoints,
-        [projectId]: `${endpointURL}/api/messages`,
-      }));
+    if (target.name === defaultPublishConfig.name) {
+      if (status === PUBLISH_SUCCESS && endpointURL) {
+        set(botStatusState(projectId), BotStatus.connected);
+        set(botEndpointsState, (botEndpoints) => ({
+          ...botEndpoints,
+          [projectId]: `${endpointURL}/api/messages`,
+        }));
+      } else if (status === PUBLISH_PENDING) {
+        set(botStatusState(projectId), BotStatus.reloading);
+      } else if (status === PUBLISH_FAILED) {
+        set(botStatusState(projectId), BotStatus.failed);
+        set(botLoadErrorState(projectId), { ...data, title: formatMessage('Start bot failed') });
+      }
     }
 
     if (status !== 404) {
-      set(publishHistoryState, (publishHistory) => {
+      set(publishHistoryState(projectId), (publishHistory) => {
         const currentHistory = { ...data, target: target };
         let targetHistories = publishHistory[target.name] ? [...publishHistory[target.name]] : [];
         // if no history exists, create one with the latest status
@@ -87,11 +108,11 @@ export const publisherDispatcher = () => {
     }
   };
 
-  const getPublishTargetTypes = useRecoilCallback((callbackHelpers: CallbackInterface) => async () => {
+  const getPublishTargetTypes = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
     const { set } = callbackHelpers;
     try {
       const response = await httpClient.get(`/publish/types`);
-      set(publishTypesState, response.data);
+      set(publishTypesState(projectId), response.data);
     } catch (err) {
       //TODO: error
       logMessage(callbackHelpers, err.message);
@@ -125,9 +146,9 @@ export const publisherDispatcher = () => {
             },
           };
 
-          await publishFailure(callbackHelpers, Text.DOTNETFAILURE, error, target);
+          await publishFailure(callbackHelpers, Text.DOTNETFAILURE, error, target, projectId);
         } else {
-          await publishFailure(callbackHelpers, Text.CONNECTBOTFAILURE, err.response?.data, target);
+          await publishFailure(callbackHelpers, Text.CONNECTBOTFAILURE, err.response?.data, target, projectId);
         }
       }
     }
@@ -142,7 +163,7 @@ export const publisherDispatcher = () => {
         });
         await publishSuccess(callbackHelpers, projectId, response.data, target);
       } catch (err) {
-        await publishFailure(callbackHelpers, Text.CONNECTBOTFAILURE, err.response.data, target);
+        await publishFailure(callbackHelpers, Text.CONNECTBOTFAILURE, err.response.data, target, projectId);
       }
     }
   );
@@ -154,7 +175,6 @@ export const publisherDispatcher = () => {
         const response = await httpClient.get(`/publish/${projectId}/status/${target.name}`);
         updatePublishStatus(callbackHelpers, projectId, target, response.data);
       } catch (err) {
-        console.log(err);
         updatePublishStatus(callbackHelpers, projectId, target, err.response.data);
       }
     }
@@ -162,26 +182,48 @@ export const publisherDispatcher = () => {
 
   const getPublishHistory = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (projectId: string, target: any) => {
-      const { set } = callbackHelpers;
+      const { set, snapshot } = callbackHelpers;
       try {
-        await filePersistence.flush();
+        const filePersistence = await snapshot.getPromise(filePersistenceState(projectId));
+        filePersistence.flush();
         const response = await httpClient.get(`/publish/${projectId}/history/${target.name}`);
-        set(publishHistoryState, (publishHistory) => ({
+        set(publishHistoryState(projectId), (publishHistory) => ({
           ...publishHistory,
           [target.name]: response.data,
         }));
       } catch (err) {
         //TODO: error
-        logMessage(callbackHelpers, err.message);
+        logMessage(callbackHelpers, err.response?.data?.message || err.message);
       }
     }
   );
 
+  const setEjectRuntimeExist = useRecoilCallback(
+    ({ set }: CallbackInterface) => async (isExist: boolean, projectId: string) => {
+      set(isEjectRuntimeExistState(projectId), isExist);
+    }
+  );
+
+  // only support local publish
+  const stopPublishBot = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async (projectId: string, target: any = defaultPublishConfig) => {
+      const { set } = callbackHelpers;
+      try {
+        await httpClient.post(`/publish/${projectId}/stopPublish/${target.name}`);
+        set(botStatusState(projectId), BotStatus.unConnected);
+      } catch (err) {
+        setError(callbackHelpers, err);
+        logMessage(callbackHelpers, err.message);
+      }
+    }
+  );
   return {
     getPublishTargetTypes,
     publishToTarget,
+    stopPublishBot,
     rollbackToVersion,
     getPublishStatus,
     getPublishHistory,
+    setEjectRuntimeExist,
   };
 };

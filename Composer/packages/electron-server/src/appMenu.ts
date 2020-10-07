@@ -1,10 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { app, dialog, Menu, MenuItemConstructorOptions, shell } from 'electron';
+import { app, dialog, ipcMain, Menu, MenuItemConstructorOptions, shell } from 'electron';
+import formatMessage from 'format-message';
 
-import { isMac } from './utility/platform';
 import { AppUpdater } from './appUpdater';
+import { isMac } from './utility/platform';
 
 function getAppMenu(): MenuItemConstructorOptions[] {
   if (isMac()) {
@@ -12,13 +13,13 @@ function getAppMenu(): MenuItemConstructorOptions[] {
       {
         label: 'Bot Framework Composer',
         submenu: [
-          { role: 'services' },
+          { role: 'services', label: formatMessage('Services') },
           { type: 'separator' },
-          { label: 'Hide Bot Framework Composer', role: 'hide' },
-          { role: 'hideOthers' },
-          { role: 'unhide' },
+          { role: 'hide', label: formatMessage('Hide Bot Framework Composer') },
+          { role: 'hideOthers', label: formatMessage('Hide Others') },
+          { role: 'unhide', label: formatMessage('Show All') },
           { type: 'separator' },
-          { label: 'Quit Bot Framework Composer', role: 'quit' },
+          { label: formatMessage('Quit Bot Framework Composer'), role: 'quit' },
         ],
       },
     ];
@@ -29,115 +30,192 @@ function getAppMenu(): MenuItemConstructorOptions[] {
 function getRestOfEditMenu(): MenuItemConstructorOptions[] {
   if (isMac()) {
     return [
-      { role: 'delete' },
       { type: 'separator' },
       {
-        label: 'Speech',
-        submenu: [{ role: 'startSpeaking' }, { role: 'stopSpeaking' }],
+        label: formatMessage('Speech'),
+        submenu: [
+          { role: 'startSpeaking', label: formatMessage('Start Speaking') },
+          { role: 'stopSpeaking', label: formatMessage('Stop Speaking') },
+        ],
       },
     ];
   }
-  return [{ role: 'delete' }, { type: 'separator' }, { role: 'selectAll' }];
+  return [{ type: 'separator' }, { role: 'selectAll', label: formatMessage('Select All') }];
 }
 
 function getRestOfWindowMenu(): MenuItemConstructorOptions[] {
   if (isMac()) {
-    return [{ type: 'separator' }, { role: 'front' }, { type: 'separator' }, { role: 'window' }];
+    return [
+      { type: 'separator' },
+      { role: 'front', label: formatMessage('Bring All to Front') },
+      { type: 'separator' },
+      { role: 'window', label: formatMessage('Window') },
+    ];
   }
-  return [{ role: 'close' }];
+  return [{ role: 'close', label: formatMessage('Close') }];
 }
 
-export function initAppMenu() {
+export function initAppMenu(win?: Electron.BrowserWindow) {
+  // delegate menu events to Renderer process (Composer web app)
+  const handleMenuEvents = (menuEventName: string) => {
+    if (win) {
+      win.webContents.send('electron-menu-clicked', { label: menuEventName });
+    }
+  };
+
   const template: MenuItemConstructorOptions[] = [
     // App (Mac)
     ...getAppMenu(),
     // File
     {
-      label: 'File',
-      submenu: [isMac() ? { role: 'close' } : { role: 'quit' }],
+      label: formatMessage('File'),
+      submenu: [
+        isMac()
+          ? { role: 'close', label: formatMessage('Close Window') }
+          : { role: 'quit', label: formatMessage('Exit') },
+      ],
     },
     // Edit
     {
-      label: 'Edit',
+      label: formatMessage('Edit'),
       submenu: [
-        { role: 'undo' },
-        { role: 'redo' },
+        {
+          id: 'Undo',
+          label: formatMessage('Undo'),
+          enabled: false,
+          accelerator: 'CmdOrCtrl+Z',
+          click: () => handleMenuEvents('undo'),
+        },
+        {
+          id: 'Redo',
+          label: formatMessage('Redo'),
+          enabled: false,
+          accelerator: 'CmdOrCtrl+Shift+Z',
+          click: () => handleMenuEvents('redo'),
+        },
         { type: 'separator' },
-        { role: 'cut' },
-        { role: 'copy' },
-        { role: 'paste' },
+        // Native mode shortcuts
+        {
+          id: 'Cut-native',
+          label: formatMessage('Cut'),
+          role: 'cut',
+        },
+        {
+          id: 'Copy-native',
+          label: formatMessage('Copy'),
+          role: 'copy',
+        },
+        {
+          id: 'Paste-native',
+          label: formatMessage('Paste'),
+          role: 'paste',
+        },
+        {
+          id: 'Delete-native',
+          label: formatMessage('Delete'),
+          role: 'delete',
+        },
+        // Action editing mode shortcuts
+        {
+          id: 'Cut',
+          label: formatMessage('Cut'),
+          enabled: false,
+          visible: false,
+          accelerator: 'CmdOrCtrl+X',
+          click: () => handleMenuEvents('cut'),
+        },
+        {
+          id: 'Copy',
+          label: formatMessage('Copy'),
+          enabled: false,
+          visible: false,
+          accelerator: 'CmdOrCtrl+C',
+          click: () => handleMenuEvents('copy'),
+        },
+        {
+          id: 'Delete',
+          label: formatMessage('Delete'),
+          enabled: false,
+          visible: false,
+          accelerator: 'Delete',
+          click: () => handleMenuEvents('delete'),
+        },
         ...getRestOfEditMenu(),
       ],
     },
     // View
     {
-      label: 'View',
+      label: formatMessage('View'),
       submenu: [
-        { role: 'toggleDevTools' },
+        { role: 'toggleDevTools', label: formatMessage('Toggle Developer Tools') },
         { type: 'separator' },
-        { role: 'resetZoom' },
-        { role: 'zoomIn' },
-        { role: 'zoomOut' },
+        { role: 'resetZoom', label: formatMessage('Actual Zoom') },
+        { role: 'zoomIn', label: formatMessage('Zoom In') },
+        { role: 'zoomOut', label: formatMessage('Zoom Out') },
         { type: 'separator' },
-        { role: 'togglefullscreen' },
+        { role: 'togglefullscreen', label: formatMessage('Toggle Full Screen') },
       ],
     },
     // Window
     {
-      label: 'Window',
-      submenu: [{ role: 'minimize' }, { role: 'zoom' }, ...getRestOfWindowMenu()],
+      label: formatMessage('Window'),
+      submenu: [
+        { role: 'minimize', label: formatMessage('Minimize') },
+        { role: 'zoom', label: formatMessage('Zoom') },
+        ...getRestOfWindowMenu(),
+      ],
     },
     {
-      label: 'Help',
+      label: formatMessage('Help'),
       submenu: [
         {
-          label: 'Documentation',
+          label: formatMessage('Documentation'),
           click: async () => {
             await shell.openExternal('https://docs.microsoft.com/en-us/composer/');
           },
         },
         {
-          label: 'Composer on GitHub',
+          label: formatMessage('Composer on GitHub'),
           click: async () => {
             await shell.openExternal('https://aka.ms/BotFrameworkComposer');
           },
         },
         {
-          label: 'Learn More About Bot Framework',
+          label: formatMessage('Learn More About Bot Framework'),
           click: async () => {
             await shell.openExternal('https://dev.botframework.com/');
           },
         },
         { type: 'separator' },
         {
-          label: 'Report an Issue',
+          label: formatMessage('Report an Issue'),
           click: async () => {
             await shell.openExternal('https://github.com/microsoft/BotFramework-Composer/issues/new/choose');
           },
         },
         { type: 'separator' },
         {
-          label: 'View License',
+          label: formatMessage('View License'),
           click: async () => {
             await shell.openExternal('https://aka.ms/bfcomposer-license');
           },
         },
         {
-          label: 'Privacy Statement',
+          label: formatMessage('Privacy Statement'),
           click: async () => {
             await shell.openExternal('https://aka.ms/bfcomposer-privacy');
           },
         },
         { type: 'separator' },
         {
-          label: 'Check for Updates',
+          label: formatMessage('Check for Updates'),
           click: () => {
             AppUpdater.getInstance().checkForUpdates(true);
           },
         },
         { type: 'separator' },
         {
-          label: 'About',
+          label: formatMessage('About'),
           click: async () => {
             // show dialog with name and version
             dialog.showMessageBox({
@@ -161,4 +239,40 @@ export function initAppMenu() {
 
   const menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
+
+  if (ipcMain && ipcMain.on) {
+    ipcMain.on('composer-state-change', (e, state) => {
+      const toggleEditingMode = (menu: Menu, mode: 'native' | 'action') => {
+        ['Cut', 'Copy', 'Delete'].forEach((label) => {
+          const nativeModeId = label + '-native';
+          const actionModeId = label;
+          menu.getMenuItemById(nativeModeId).visible = mode === 'native';
+          menu.getMenuItemById(actionModeId).visible = mode === 'action';
+        });
+        menu.getMenuItemById('Paste-native').visible = mode === 'native';
+      };
+
+      // Turn shortcuts to Action editing mode when Flow Editor is focused.
+      const flowFocused = !!state.flowFocused;
+      if (flowFocused) {
+        toggleEditingMode(menu, 'action');
+
+        // Let menu enable/disable status reflects action selection states.
+        const actionSelected = !!state.actionSelected;
+        ['Cut', 'Copy', 'Delete'].forEach((id) => {
+          menu.getMenuItemById(id).enabled = actionSelected;
+        });
+      } else {
+        toggleEditingMode(menu, 'native');
+      }
+
+      // Let menu undo/redo status reflects history status
+      const canUndo = !!state.canUndo;
+      menu.getMenuItemById('Undo').enabled = canUndo;
+      const canRedo = !!state.canRedo;
+      menu.getMenuItemById('Redo').enabled = canRedo;
+
+      Menu.setApplicationMenu(menu);
+    });
+  }
 }

@@ -17,6 +17,7 @@ import { onboardingState, userSettingsState, dispatcherState } from '../../../re
 
 import { container, section } from './styles';
 import { SettingToggle } from './SettingToggle';
+import { SettingDropdown } from './SettingDropdown';
 import * as images from './images';
 
 const ElectronSettings = lazy(() =>
@@ -43,7 +44,23 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
     updateUserSettings({ codeEditor: { [key]: checked } });
   };
 
+  const onLocaleChange = (appLocale: string) => {
+    updateUserSettings({ appLocale });
+  };
+
   const renderElectronSettings = isElectron();
+
+  const languageOptions = [{ key: 'en-US', text: formatMessage('English (US)') }];
+  if (process.env.NODE_ENV !== 'production') {
+    languageOptions.push({
+      key: 'en-US-pseudo',
+      text: formatMessage('Pseudo'),
+    });
+    languageOptions.push({
+      key: 'en-US-DoesNotExist',
+      text: formatMessage('Does Not Exist'),
+    });
+  }
 
   return (
     <div css={container}>
@@ -106,7 +123,7 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
         <SettingToggle
           checked={userSettings.codeEditor.minimap}
           description={formatMessage(
-            'A minimap gives a overview of your source code for quick navigation and code understanding.'
+            'A minimap gives an overview of your source code for quick navigation and code understanding.'
           )}
           image={images.minimap}
           title={formatMessage('Minimap')}
@@ -127,7 +144,17 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
           onToggle={onCodeEditorChange('wordWrap')}
         />
       </section>
-
+      <section css={section}>
+        <h2>{formatMessage('Application Language')}</h2>
+        <SettingDropdown
+          description={formatMessage('This is the language used for Composer’s user interface.')}
+          image={images.language}
+          options={languageOptions}
+          selected={userSettings.appLocale}
+          title={formatMessage('Application language')}
+          onChange={onLocaleChange}
+        />
+      </section>
       <Suspense fallback={<div />}>{renderElectronSettings && <ElectronSettings />}</Suspense>
     </div>
   );

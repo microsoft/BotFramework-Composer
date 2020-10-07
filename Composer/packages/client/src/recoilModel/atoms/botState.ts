@@ -1,192 +1,256 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { atom } from 'recoil';
-import { DialogInfo, Diagnostic, LgFile, LuFile, BotSchemas, Skill, DialogSetting } from '@bfc/shared';
+import { atomFamily } from 'recoil';
+import {
+  DialogInfo,
+  DialogSchemaFile,
+  Diagnostic,
+  LgFile,
+  LuFile,
+  QnAFile,
+  BotSchemas,
+  Skill,
+  DialogSetting,
+} from '@bfc/shared';
 
-import { BotLoadError, DesignPageLocation } from '../../recoilModel/types';
+import { BotLoadError, DesignPageLocation, QnAAllUpViewStatus } from '../../recoilModel/types';
+import FilePersistence from '../persistence/FilePersistence';
 
 import { PublishType, BreadcrumbItem } from './../../recoilModel/types';
 import { BotStatus } from './../../constants';
-
 const getFullyQualifiedKey = (value: string) => {
   return `Bot_${value}_State`;
 };
 
-export const dialogsState = atom<DialogInfo[]>({
+export const dialogsState = atomFamily<DialogInfo[], string>({
   key: getFullyQualifiedKey('dialogs'),
-  default: [],
-});
-
-export const projectIdState = atom<string>({
-  key: getFullyQualifiedKey('projectId'),
-  default: '',
-});
-
-export const botNameState = atom<string>({
-  key: getFullyQualifiedKey('botName'),
-  default: '',
-});
-
-export const locationState = atom<string>({
-  key: getFullyQualifiedKey('location'),
-  default: '',
-});
-
-export const botEnvironmentState = atom<string>({
-  key: getFullyQualifiedKey('botEnvironment'),
-  default: 'production',
-});
-
-// current bot authoring language
-export const localeState = atom<string>({
-  key: getFullyQualifiedKey('locale'),
-  default: 'en-us',
-});
-
-export const BotDiagnosticsState = atom<Diagnostic[]>({
-  key: getFullyQualifiedKey('botDiagnostics'),
-  default: [],
-});
-
-export const botStatusState = atom<BotStatus>({
-  key: getFullyQualifiedKey('botStatus'),
-  default: BotStatus.unConnected,
-});
-
-export const botLoadErrorState = atom<BotLoadError>({
-  key: getFullyQualifiedKey('botLoadErrorMsg'),
-  default: { title: '', message: '' },
-});
-
-export const lgFilesState = atom<LgFile[]>({
-  key: getFullyQualifiedKey('lgFiles'),
-  default: [],
-});
-
-export const luFilesState = atom<LuFile[]>({
-  key: getFullyQualifiedKey('luFiles'),
-  default: [],
-});
-
-export const schemasState = atom<BotSchemas>({
-  key: getFullyQualifiedKey('schemas'),
-  default: {},
-});
-
-export const skillsState = atom<Skill[]>({
-  key: getFullyQualifiedKey('skills'),
-  default: [],
-});
-
-export const actionsSeedState = atom<any>({
-  key: getFullyQualifiedKey('actionsSeed'),
-  default: [],
-});
-
-export const skillManifestsState = atom<any[]>({
-  key: getFullyQualifiedKey('skillManifests'),
-  default: [],
-});
-
-export const designPageLocationState = atom<DesignPageLocation>({
-  key: getFullyQualifiedKey('designPageLocation'),
-  default: {
-    projectId: '',
-    dialogId: '',
-    focused: '',
-    selected: '',
+  default: (id) => {
+    return [];
   },
 });
 
-export const breadcrumbState = atom<BreadcrumbItem[]>({
-  key: getFullyQualifiedKey('breadcrumb'),
+export const schemasState = atomFamily<BotSchemas, string>({
+  key: getFullyQualifiedKey('schemas'),
+  default: (id) => {
+    return {};
+  },
+});
+
+export const dialogSchemasState = atomFamily<DialogSchemaFile[], string>({
+  key: getFullyQualifiedKey('dialogSchema'),
   default: [],
 });
 
-export const showCreateDialogModalState = atom<boolean>({
-  key: getFullyQualifiedKey('showCreateDialogModal'),
-  default: false,
+export const botNameState = atomFamily<string, string>({
+  key: getFullyQualifiedKey('botName'),
+  default: (id) => {
+    return '';
+  },
 });
 
-export const showAddSkillDialogModalState = atom<boolean>({
+export const locationState = atomFamily<string, string>({
+  key: getFullyQualifiedKey('location'),
+  default: (id) => {
+    return '';
+  },
+});
+
+export const botEnvironmentState = atomFamily<string, string>({
+  key: getFullyQualifiedKey('botEnvironment'),
+  default: (id) => {
+    return 'production';
+  },
+});
+
+// current bot authoring language
+export const localeState = atomFamily<string, string>({
+  key: getFullyQualifiedKey('locale'),
+  default: (id) => {
+    return 'en-us';
+  },
+});
+
+export const botStatusState = atomFamily<BotStatus, string>({
+  key: getFullyQualifiedKey('botStatus'),
+  default: (id) => {
+    return BotStatus.unConnected;
+  },
+});
+
+export const botDiagnosticsState = atomFamily<Diagnostic[], string>({
+  key: getFullyQualifiedKey('botDiagnostics'),
+  default: (id) => {
+    return [];
+  },
+});
+
+export const botLoadErrorState = atomFamily<BotLoadError, string>({
+  key: getFullyQualifiedKey('botLoadErrorMsg'),
+  default: (id) => {
+    return { title: '', message: '' };
+  },
+});
+
+export const lgFilesState = atomFamily<LgFile[], string>({
+  key: getFullyQualifiedKey('lgFiles'),
+  default: (id) => {
+    return [];
+  },
+});
+
+export const luFilesState = atomFamily<LuFile[], string>({
+  key: getFullyQualifiedKey('luFiles'),
+  default: (id) => {
+    return [];
+  },
+});
+
+export const skillsState = atomFamily<Skill[], string>({
+  key: getFullyQualifiedKey('skills'),
+  default: (id) => {
+    return [];
+  },
+});
+
+export const actionsSeedState = atomFamily<any, string>({
+  key: getFullyQualifiedKey('actionsSeed'),
+  default: (id) => {
+    return [];
+  },
+});
+
+export const skillManifestsState = atomFamily<any, string>({
+  key: getFullyQualifiedKey('skillManifests'),
+  default: (id) => {
+    return [];
+  },
+});
+
+export const breadcrumbState = atomFamily<BreadcrumbItem[], string>({
+  key: getFullyQualifiedKey('breadcrumb'),
+  default: (id) => {
+    return [];
+  },
+});
+
+export const showCreateDialogModalState = atomFamily<boolean, string>({
+  key: getFullyQualifiedKey('showCreateDialogModal'),
+  default: (id) => {
+    return false;
+  },
+});
+
+export const showAddSkillDialogModalState = atomFamily<boolean, string>({
   key: getFullyQualifiedKey('showAddSkillDialogModal'),
   default: false,
 });
 
-export const settingsState = atom<DialogSetting>({
+export const settingsState = atomFamily<DialogSetting, string>({
   key: getFullyQualifiedKey('settings'),
-  default: { defaultLanguage: 'en-us', languages: ['en-us'], luis: {} } as DialogSetting,
+  default: { defaultLanguage: 'en-us', languages: ['en-us'], luis: {}, qna: {} } as DialogSetting,
 });
 
-export const publishVersionsState = atom<any>({
+export const publishVersionsState = atomFamily<any, string>({
   key: getFullyQualifiedKey('publishVersions'),
   default: {},
 });
 
-export const publishStatusState = atom<any>({
+export const publishStatusState = atomFamily<any, string>({
   key: getFullyQualifiedKey('publishStatus'),
   default: 'inactive',
 });
 
-export const lastPublishChangeState = atom<any>({
+export const lastPublishChangeState = atomFamily<any, string>({
   key: getFullyQualifiedKey('lastPublishChange'),
   default: null,
 });
 
-export const publishTypesState = atom<PublishType[]>({
+export const publishTypesState = atomFamily<PublishType[], string>({
   key: getFullyQualifiedKey('publishTypes'),
   default: [],
 });
 
-export const botOpeningState = atom<boolean>({
-  key: getFullyQualifiedKey('botOpening'),
-  default: false,
-});
-
-export const publishHistoryState = atom<any>({
+export const publishHistoryState = atomFamily<any, string>({
   key: getFullyQualifiedKey('publishHistory'),
   default: {},
 });
 
-export const onCreateDialogCompleteState = atom<any>({
+export const onCreateDialogCompleteState = atomFamily<any, string>({
   key: getFullyQualifiedKey('onCreateDialogComplete'),
   default: {
     func: undefined,
   },
 });
 
-export const focusPathState = atom<string>({
+export const focusPathState = atomFamily<string, string>({
   key: getFullyQualifiedKey('focusPath'),
   default: '',
 });
 
-export const onAddSkillDialogCompleteState = atom<any>({
+export const onAddSkillDialogCompleteState = atomFamily<any, string>({
   key: getFullyQualifiedKey('onAddSkillDialogComplete'),
   default: { func: undefined },
 });
 
-export const displaySkillManifestState = atom<any>({
+export const displaySkillManifestState = atomFamily<any, string>({
   key: getFullyQualifiedKey('displaySkillManifest'),
   default: undefined,
 });
 
-export const showAddLanguageModalState = atom<boolean>({
+export const showAddLanguageModalState = atomFamily<boolean, string>({
   key: getFullyQualifiedKey('showAddLanguageModal'),
   default: false,
 });
 
-export const showDelLanguageModalState = atom<boolean>({
+export const showDelLanguageModalState = atomFamily<boolean, string>({
   key: getFullyQualifiedKey('showDelLanguageModal'),
   default: false,
 });
 
-export const onAddLanguageDialogCompleteState = atom<any>({
+export const onAddLanguageDialogCompleteState = atomFamily<any, string>({
   key: getFullyQualifiedKey('onAddLanguageDialogComplete'),
   default: { func: undefined },
 });
 
-export const onDelLanguageDialogCompleteState = atom<any>({
+export const onDelLanguageDialogCompleteState = atomFamily<any, string>({
   key: getFullyQualifiedKey('onDelLanguageDialogComplete'),
   default: { func: undefined },
+});
+
+export const projectMetaDataState = atomFamily<any, string>({
+  key: getFullyQualifiedKey('projectsMetaDataState'),
+  default: (id) => {
+    return {};
+  },
+});
+
+export const designPageLocationState = atomFamily<DesignPageLocation, string>({
+  key: getFullyQualifiedKey('designPageLocation'),
+  default: {
+    dialogId: '',
+    focused: '',
+    selected: '',
+  },
+});
+
+export const qnaAllUpViewStatusState = atomFamily<any, string>({
+  key: getFullyQualifiedKey('qnaAllUpViewStatusState'),
+  default: QnAAllUpViewStatus.Success,
+});
+
+export const isEjectRuntimeExistState = atomFamily<boolean, string>({
+  key: getFullyQualifiedKey('isEjectRuntimeExist'),
+  default: false,
+});
+
+export const qnaFilesState = atomFamily<QnAFile[], string>({
+  key: getFullyQualifiedKey('qnaFiles'),
+  default: [],
+});
+
+export const filePersistenceState = atomFamily<FilePersistence, string>({
+  key: getFullyQualifiedKey('filePersistence'),
+  default: {} as FilePersistence,
+  dangerouslyAllowMutability: true,
 });
