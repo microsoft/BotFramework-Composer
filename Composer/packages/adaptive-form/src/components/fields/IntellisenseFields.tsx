@@ -51,6 +51,36 @@ export const IntellisenseTextField: React.FC<FieldProps<string>> = function Inte
   );
 };
 
+export const IntellisenseExpressionField: React.FC<FieldProps<string>> = function IntellisenseExpressionField(props) {
+  const { id, value = '', onChange, focused: defaultFocused } = props;
+
+  return (
+    <Intellisense
+      focused={defaultFocused}
+      id={`intellisense-${id}`}
+      scopes={['expressions', 'user-variables']}
+      url={getIntellisenseUrl()}
+      value={value}
+      onBlur={props.onBlur}
+      onChange={onChange}
+    >
+      {({ textFieldValue, focused, onValueChanged, onKeyDownTextField, onKeyUpTextField, onClickTextField }) => (
+        <StringField
+          {...props}
+          focused={focused}
+          id={id}
+          value={textFieldValue}
+          onBlur={undefined} // onBlur managed by Intellisense
+          onChange={(newValue) => onValueChanged(newValue || '')}
+          onClick={onClickTextField}
+          onKeyDown={onKeyDownTextField}
+          onKeyUp={onKeyUpTextField}
+        />
+      )}
+    </Intellisense>
+  );
+};
+
 export const IntellisenseNumberField: React.FC<FieldProps<string>> = function IntellisenseNumberField(props) {
   const { id, value = '', onChange, uiOptions } = props;
 

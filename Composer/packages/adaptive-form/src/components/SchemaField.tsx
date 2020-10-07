@@ -19,7 +19,7 @@ const schemaField = {
   `,
 };
 
-const SchemaField: React.FC<FieldProps> = (props) => {
+export const SchemaField: React.FC<FieldProps> = (props) => {
   const {
     className,
     definitions,
@@ -31,6 +31,7 @@ const SchemaField: React.FC<FieldProps> = (props) => {
     hideError,
     hidden,
     onChange,
+    expression,
     ...rest
   } = props;
   const formUIOptions = useFormConfig();
@@ -71,7 +72,7 @@ const SchemaField: React.FC<FieldProps> = (props) => {
 
   const deserializedValue = typeof uiOptions?.serializer?.get === 'function' ? uiOptions.serializer.get(value) : value;
 
-  const { field: FieldWidget, customProps } = resolveFieldWidget(schema, uiOptions, formUIOptions, value);
+  const { field: FieldWidget, customProps } = resolveFieldWidget(schema, uiOptions, formUIOptions, value, expression);
   const fieldProps: FieldProps = {
     ...rest,
     ...customProps,
@@ -99,6 +100,3 @@ const SchemaField: React.FC<FieldProps> = (props) => {
     </div>
   );
 };
-
-export { SchemaField, schemaField };
-export default SchemaField;

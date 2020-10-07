@@ -40,7 +40,7 @@ export function resolveFieldWidget(
     }
 
     if (expression && typeof value === 'string' && value.startsWith('=')) {
-      return { field: DefaultFields.IntellisenseTextField };
+      return { field: DefaultFields.IntellisenseExpressionField };
     }
 
     if ((schema.oneOf && Array.isArray(schema.oneOf)) || Array.isArray(schema.type)) {

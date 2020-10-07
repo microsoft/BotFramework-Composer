@@ -61,7 +61,13 @@ const OneOfField: React.FC<FieldProps> = (props) => {
     const placeholder = getUiPlaceholder({ ...props, schema: selectedSchema }) || props.placeholder;
     const enumOptions = selectedSchema?.enum as string[];
 
-    const { field: Field, customProps } = resolveFieldWidget(selectedSchema, uiOptions, formUIOptions, value);
+    const { field: Field, customProps } = resolveFieldWidget(
+      selectedSchema,
+      uiOptions,
+      formUIOptions,
+      value,
+      props.expression
+    );
     return (
       <Field
         key={selectedSchema.type}
