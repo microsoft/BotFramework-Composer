@@ -110,9 +110,11 @@ describe('listing all extensions', () => {
         description: 'description text',
         contributes: {
           views: {
-            publish: {
-              bundleId: '',
-            },
+            publish: [
+              {
+                bundleId: '',
+              },
+            ],
             pages: [
               {
                 bundleId: 'page1',
@@ -134,9 +136,11 @@ describe('listing all extensions', () => {
         description: 'description text',
         contributes: {
           views: {
-            publish: {
-              bundleId: '',
-            },
+            publish: [
+              {
+                bundleId: '',
+              },
+            ],
             pages: [
               {
                 bundleId: 'page2',
