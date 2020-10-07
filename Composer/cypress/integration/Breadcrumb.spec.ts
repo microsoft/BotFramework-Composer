@@ -47,7 +47,6 @@ context('breadcrumb', () => {
       cy.findByText('Dialog started').click();
     });
 
-  // });
     hasBreadcrumbItems(cy, ['Addtodo', 'Dialog started']);
   });
 
