@@ -1556,11 +1556,11 @@
   "no_lu_or_qna_file_with_name_id_21cfe9dc": {
     "message": "NO LU OR QNA FILE WITH NAME { id }"
   },
-  "no_name_e082310e": {
-    "message": "[no name]"
-  },
   "no_search_results_1ba50423": {
     "message": "No search results"
+  },
+  "no_name_e082310e": {
+    "message": "[no name]"
   },
   "no_updates_available_cecd904d": {
     "message": "No updates available"
@@ -1798,6 +1798,9 @@
   },
   "property_quick_actions_d3498f14": {
     "message": "Property quick actions"
+  },
+  "property_required_help_text_57f027ad": {
+    "message": "Property required help text"
   },
   "property_title_f2b443b7": {
     "message": "Property title"
