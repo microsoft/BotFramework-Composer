@@ -1,6 +1,7 @@
 const path = require('path');
 
 const PnpWebpackPlugin = require('pnp-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 const paths = require('./paths');
 
@@ -23,25 +24,13 @@ module.exports = (webpackEnv) => {
       resolve: {
         extensions: ['.js'],
       },
-    },
-    {
-      entry: {
-        'react-dom-bundle': 'react-dom',
-      },
-      mode: isEnvProduction ? 'production' : 'development',
-      // export react-dom globally under a variable named ReactDOM
-      output: {
-        path: path.resolve(__dirname, '../public'),
-        library: 'ReactDOM',
-        libraryTarget: 'var',
-      },
-      externals: {
-        // ReactDOM depends on React, but we need this to resolve to the globally-exposed React variable in react-bundle.js (created by webpack-react.config.js).
-        // If we don't do this, ReactDom will bundle its own copy of React and we will have 2 copies which breaks hooks.
-        react: 'React',
-      },
-      resolve: {
-        extensions: ['.js'],
+      optimization: {
+        minimize: isEnvProduction,
+        minimizer: [
+          new TerserPlugin({
+            extractComments: false,
+          }),
+        ],
       },
     },
     {
@@ -62,6 +51,14 @@ module.exports = (webpackEnv) => {
       },
       resolve: {
         extensions: ['.js'],
+      },
+      optimization: {
+        minimize: isEnvProduction,
+        minimizer: [
+          new TerserPlugin({
+            extractComments: false,
+          }),
+        ],
       },
     },
     {
