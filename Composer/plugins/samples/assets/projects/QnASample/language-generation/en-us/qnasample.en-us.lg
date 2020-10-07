@@ -1,0 +1,10 @@
+[import](common.lg)
+
+
+# TextInput_Prompt_4Z7RSY()
+[Activity
+    Text = ${expandText(@answer)}
+    SuggestedActions = ${foreach(turn.recognized.answers[0].context.prompts, x, x.displayText)}
+]
+# SendActivity_AmRjR8()
+- ${expandText(@answer)}

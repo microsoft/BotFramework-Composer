@@ -21,6 +21,7 @@ export const HeaderText = css`
 export const ContentStyle = css`
   margin-left: 2px;
   display: flex;
+  height: 100%;
   border-top: 1px solid #dddddd;
   flex: 1;
   position: relative;
@@ -113,4 +114,8 @@ export const targetSelected = css`
   background: ${NeutralColors.gray20};
   font-weight: ${FontWeights.bold};
   font-size: ${FontSizes.small};
+`;
+
+export const customPublishUISurface = css`
+  min-height: 300px;
 `;

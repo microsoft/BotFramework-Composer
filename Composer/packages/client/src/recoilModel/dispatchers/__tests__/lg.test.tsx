@@ -8,25 +8,41 @@ import { act } from '@bfc/test-utils/lib/hooks';
 
 import { lgDispatcher } from '../lg';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
-import { lgFilesState } from '../../atoms';
+import { lgFilesState, currentProjectIdState } from '../../atoms';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
 
+const projectId = '123asad.123sad';
+
 jest.mock('../../parsers/lgWorker', () => {
+  const filterParseResult = (lgFile: LgFile) => {
+    const cloned = { ...lgFile };
+    delete cloned.parseResult;
+    return cloned;
+  };
   return {
-    parse: (id, content) => ({ id, content }),
-    addTemplate: require('../../../utils/lgUtil').addTemplate,
-    addTemplates: require('../../../utils/lgUtil').addTemplates,
-    updateTemplate: require('../../../utils/lgUtil').updateTemplate,
-    removeTemplate: require('../../../utils/lgUtil').removeTemplate,
-    removeAllTemplates: require('../../../utils/lgUtil').removeTemplates,
-    copyTemplate: require('../../../utils/lgUtil').copyTemplate,
+    parse: (projectId, id, content) => ({ id, content }),
+    addTemplate: (projectId, lgFile, template) =>
+      filterParseResult(require('../../../utils/lgUtil').addTemplate(lgFile, template)),
+    addTemplates: (projectId, lgFile, templates) =>
+      filterParseResult(require('../../../utils/lgUtil').addTemplates(lgFile, templates)),
+    updateTemplate: (projectId, lgFile, templateName, template) =>
+      filterParseResult(require('../../../utils/lgUtil').updateTemplate(lgFile, templateName, template)),
+    removeTemplate: (projectId, lgFile, templateName) =>
+      filterParseResult(require('../../../utils/lgUtil').removeTemplate(lgFile, templateName)),
+    removeTemplates: (projectId, lgFile, templateNames) =>
+      filterParseResult(require('../../../utils/lgUtil').removeTemplates(lgFile, templateNames)),
+    copyTemplate: (projectId, lgFile, fromTemplateName, toTemplateName) =>
+      filterParseResult(require('../../../utils/lgUtil').copyTemplate(lgFile, fromTemplateName, toTemplateName)),
   };
 });
 const lgFiles = [
   {
     id: 'common.en-us',
     content: `\r\n# Hello\r\n-hi`,
+    templates: [{ name: 'Hello', body: '-hi', parameters: [] }],
+    diagnostics: [],
+    allTemplates: [{ name: 'Hello', body: '-hi', parameters: [] }],
   },
 ] as LgFile[];
 
@@ -42,7 +58,7 @@ describe('Lg dispatcher', () => {
   let renderedComponent, dispatcher: Dispatcher;
   beforeEach(() => {
     const useRecoilTestHook = () => {
-      const [lgFiles, setLgFiles] = useRecoilState(lgFilesState);
+      const [lgFiles, setLgFiles] = useRecoilState(lgFilesState(projectId));
       const currentDispatcher = useRecoilValue(dispatcherState);
 
       return {
@@ -53,7 +69,10 @@ describe('Lg dispatcher', () => {
     };
 
     const { result } = renderRecoilHook(useRecoilTestHook, {
-      states: [{ recoilState: lgFilesState, initialValue: lgFiles }],
+      states: [
+        { recoilState: lgFilesState(projectId), initialValue: lgFiles },
+        { recoilState: currentProjectIdState, initialValue: projectId },
+      ],
       dispatcher: {
         recoilState: dispatcherState,
         initialValue: {
@@ -70,6 +89,7 @@ describe('Lg dispatcher', () => {
       await dispatcher.createLgTemplate({
         id: 'common.en-us',
         template: getLgTemplate('Test', '-add'),
+        projectId,
       });
     });
 
@@ -78,7 +98,7 @@ describe('Lg dispatcher', () => {
 
   it('should update a lg file', async () => {
     await act(async () => {
-      await dispatcher.updateLgFile({ id: 'common.en-us', content: `test` });
+      await dispatcher.updateLgFile({ id: 'common.en-us', content: `test`, projectId });
     });
 
     expect(renderedComponent.current.lgFiles[0].content).toBe(`test`);
@@ -90,6 +110,7 @@ describe('Lg dispatcher', () => {
         id: 'common.en-us',
         templateName: 'Hello',
         template: getLgTemplate('Hello', '-TemplateValue'),
+        projectId,
       });
     });
 
@@ -101,6 +122,7 @@ describe('Lg dispatcher', () => {
       await dispatcher.removeLgTemplate({
         id: 'common.en-us',
         templateName: 'Hello',
+        projectId,
       });
     });
 
@@ -112,6 +134,7 @@ describe('Lg dispatcher', () => {
       await dispatcher.removeLgTemplates({
         id: 'common.en-us',
         templateNames: ['Hello'],
+        projectId,
       });
     });
 

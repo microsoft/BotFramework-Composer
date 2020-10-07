@@ -53,12 +53,11 @@ export function generageDiagnostic(message: string, severity: DiagnosticSeverity
   };
 }
 
-// if section, offset +1 to exclude #IntentName
 export function convertDiagnostics(lgDiags: BFDiagnostic[] = [], document: TextDocument, offset = 0): Diagnostic[] {
   const diagnostics: Diagnostic[] = [];
   const defaultRange = Range.create(Position.create(0, 0), Position.create(0, 0));
   lgDiags.forEach((diag) => {
-    const range = diag.range ? offsetRange(diag.range, offset) : defaultRange;
+    const range = diag.range ? offsetRange(diag.range, 1 + offset) : defaultRange;
     const diagnostic: Diagnostic = {
       severity: convertSeverity(diag.severity),
       range,

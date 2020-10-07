@@ -36,7 +36,7 @@ export interface LGDocument {
   projectId?: string;
   fileId?: string;
   templateId?: string;
-  index: () => Promise<LgFile>;
+  index: () => LgFile;
 }
 
 export type LGFileResolver = (id: string) => LgFile | undefined;

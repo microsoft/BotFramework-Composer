@@ -3,82 +3,98 @@
 
 import { useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
-import { Diagnostic, DiagnosticSeverity } from '@bfc/shared';
+import get from 'lodash/get';
+import { BotIndexer } from '@bfc/indexers';
 
 import {
-  dialogsState,
+  validateDialogSelectorFamily,
   luFilesState,
   lgFilesState,
-  projectIdState,
-  BotDiagnosticsState,
+  botDiagnosticsState,
   settingsState,
-} from '../../recoilModel/atoms/botState';
+  skillManifestsState,
+  dialogSchemasState,
+  qnaFilesState,
+} from '../../recoilModel';
 
 import {
   Notification,
   DialogNotification,
+  SettingNotification,
   LuNotification,
   LgNotification,
+  QnANotification,
   ServerNotification,
   SkillNotification,
 } from './types';
-import { getReferredFiles } from './../../utils/luUtil';
-export default function useNotifications(filter?: string) {
-  const dialogs = useRecoilValue(dialogsState);
-  const luFiles = useRecoilValue(luFilesState);
-  const projectId = useRecoilValue(projectIdState);
-  const lgFiles = useRecoilValue(lgFilesState);
-  const diagnostics = useRecoilValue(BotDiagnosticsState);
-  const settings = useRecoilValue(settingsState);
+import { getReferredLuFiles } from './../../utils/luUtil';
+
+export default function useNotifications(projectId: string, filter?: string) {
+  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const luFiles = useRecoilValue(luFilesState(projectId));
+  const lgFiles = useRecoilValue(lgFilesState(projectId));
+  const diagnostics = useRecoilValue(botDiagnosticsState(projectId));
+  const setting = useRecoilValue(settingsState(projectId));
+  const skillManifests = useRecoilValue(skillManifestsState(projectId));
+  const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
+  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
+
+  const botAssets = {
+    projectId,
+    dialogs,
+    luFiles,
+    qnaFiles,
+    lgFiles,
+    skillManifests,
+    setting,
+    dialogSchemas,
+  };
+
   const memoized = useMemo(() => {
-    const notifactions: Notification[] = [];
+    const notifications: Notification[] = [];
     diagnostics.forEach((d) => {
-      notifactions.push(new ServerNotification(projectId, '', d.source, d));
+      notifications.push(new ServerNotification(projectId, '', d.source, d));
     });
-    dialogs.forEach((dialog) => {
-      // used skill not existed in setting
-      dialog.skills.forEach((skillId) => {
-        if (settings.skill?.findIndex(({ manifestUrl }) => manifestUrl === skillId) === -1) {
-          const diagnostic = new Diagnostic(
-            `skill '${skillId}' is not existed in appsettings.json`,
-            dialog.id,
-            DiagnosticSeverity.Error
-          );
-          const location = `${dialog.id}.dialog`;
-          notifactions.push(new DialogNotification(projectId, dialog.id, location, diagnostic));
-        }
-      });
-      // use skill but not fill bot endpoint in skill page.
-      if (dialog.skills.length) {
-        if (!settings.botId || !settings.skillHostEndpoint) {
-          const diagnostic = new Diagnostic(
-            'appsettings.json Microsoft App Id or Skill Host Endpoint are empty',
-            dialog.id,
-            DiagnosticSeverity.Warning
-          );
-          const location = `${dialog.id}.dialog`;
-          notifactions.push(new SkillNotification(projectId, dialog.id, location, diagnostic));
-        }
+    const skillDiagnostics = BotIndexer.checkSkillSetting(botAssets);
+    skillDiagnostics.forEach((item) => {
+      if (item.source.endsWith('.json')) {
+        notifications.push(new SkillNotification(projectId, item.source, item.source, item));
+      } else {
+        notifications.push(new DialogNotification(projectId, item.source, item.source, item));
       }
+    });
+    const luisLocaleDiagnostics = BotIndexer.checkLUISLocales(botAssets);
+
+    luisLocaleDiagnostics.forEach((item) => {
+      notifications.push(new SettingNotification(projectId, item.source, item.source, item));
+    });
+
+    dialogs.forEach((dialog) => {
       dialog.diagnostics.map((diagnostic) => {
         const location = `${dialog.id}.dialog`;
-        notifactions.push(new DialogNotification(projectId, dialog.id, location, diagnostic));
+        notifications.push(new DialogNotification(projectId, dialog.id, location, diagnostic));
       });
     });
-    getReferredFiles(luFiles, dialogs).forEach((lufile) => {
+    getReferredLuFiles(luFiles, dialogs).forEach((lufile) => {
       lufile.diagnostics.map((diagnostic) => {
         const location = `${lufile.id}.lu`;
-        notifactions.push(new LuNotification(projectId, lufile.id, location, diagnostic, lufile, dialogs));
+        notifications.push(new LuNotification(projectId, lufile.id, location, diagnostic, lufile, dialogs));
       });
     });
     lgFiles.forEach((lgFile) => {
       lgFile.diagnostics.map((diagnostic) => {
         const location = `${lgFile.id}.lg`;
-        notifactions.push(new LgNotification(projectId, lgFile.id, location, diagnostic, lgFile, dialogs));
+        notifications.push(new LgNotification(projectId, lgFile.id, location, diagnostic, lgFile, dialogs));
       });
     });
-    return notifactions;
-  }, [dialogs, luFiles, lgFiles, projectId, diagnostics, settings]);
+    qnaFiles.forEach((qnaFile) => {
+      get(qnaFile, 'diagnostics', []).map((diagnostic) => {
+        const location = `${qnaFile.id}.qna`;
+        notifications.push(new QnANotification(projectId, qnaFile.id, location, diagnostic));
+      });
+    });
+    return notifications;
+  }, [botAssets, diagnostics]);
 
   const notifications: Notification[] = filter ? memoized.filter((x) => x.severity === filter) : memoized;
   return notifications;

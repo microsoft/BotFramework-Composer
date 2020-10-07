@@ -1,3 +1,7 @@
 build/
 data.json
-__tests__/__data__.json
+schemas/*-pseudo.schema
+schemas/*-pseudo.uischema
+src/__tests__/__data__.json
+src/locales/*-pseudo.json
+extensions.json

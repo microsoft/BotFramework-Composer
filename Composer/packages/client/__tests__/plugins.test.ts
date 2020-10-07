@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { SDKKinds } from '@bfc/shared';
+
 import { mergePluginConfigs } from '../src/plugins';
 
 describe('mergePluginConfigs', () => {
@@ -43,22 +45,35 @@ describe('mergePluginConfigs', () => {
           },
         },
       },
-      recognizers: [],
       flowWidgets: {},
     });
   });
 
   it('adds recognizers', () => {
     const config1 = {
-      recognizers: ['recognizer 1'],
+      uiSchema: {
+        [SDKKinds.RegexRecognizer]: {
+          recognizer: { displayName: 'recognizer1' },
+        },
+      },
     };
 
     const config2 = {
-      recognizers: ['recognizer 2'],
+      uiSchema: {
+        [SDKKinds.LuisRecognizer]: {
+          recognizer: { displayName: 'recognizer2' },
+        },
+      },
     };
 
-    // @ts-expect-error
-    expect(mergePluginConfigs(config1, config2).recognizers).toEqual(['recognizer 1', 'recognizer 2']);
+    expect(mergePluginConfigs(config1, config2).uiSchema).toEqual({
+      [SDKKinds.RegexRecognizer]: {
+        recognizer: { displayName: 'recognizer1' },
+      },
+      [SDKKinds.LuisRecognizer]: {
+        recognizer: { displayName: 'recognizer2' },
+      },
+    });
   });
 
   it('replaces other arrays', () => {

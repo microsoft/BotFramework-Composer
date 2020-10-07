@@ -1,9 +1,21 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ILuisConfig, IQnAConfig } from '@bfc/shared';
+
+import { ICrossTrainConfig } from './builder';
+
 export interface LocationRef {
   storageId: string;
   path: string;
+}
+
+export interface IBuildConfig {
+  luisConfig: ILuisConfig;
+  qnaConfig: IQnAConfig;
+  luFileIds: string[];
+  qnaFileIds: string[];
+  crossTrainConfig: ICrossTrainConfig;
 }
 
 export interface ILuisSettings {

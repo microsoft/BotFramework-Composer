@@ -11,7 +11,8 @@
     "start": "tsc --watch --preserveWatchOutput",
     "build": "tsc --build ./tsconfig.build.json",
     "lint": "eslint --quiet src",
-    "prepare": "yarn build"
+    "prepare": "yarn build",
+    "extract": "cross-env NODE_ENV=production format-message extract -g underscored_crc32 -o locales/en-US.json src/**/*.ts src/**/*.tsx"
   },
   "keywords": [
     "botframework",
@@ -20,25 +21,26 @@
   "author": "v-thdurn@microsoft.com",
   "license": "MIT",
   "peerDependencies": {
-    "@bfc/extension": "*",
+    "@bfc/extension-client": "*",
     "@bfc/adaptive-form": "*",
     "@uifabric/fluent-theme": "^7.1.4",
     "@uifabric/icons": "^7.3.0",
     "@uifabric/styling": "^7.7.4",
     "format-message": "^6.2.3",
     "office-ui-fabric-react": "^7.71.0",
-    "react": "16.13.0",
-    "react-dom": "16.13.0"
+    "react": "16.13.1",
+    "react-dom": "16.13.1"
   },
   "devDependencies": {
     "@bfc/adaptive-form": "*",
-    "@bfc/extension": "*",
+    "@bfc/extension-client": "*",
     "@bfc/test-utils": "*",
     "@types/react": "16.9.23",
     "@types/react-dom": "16.9.5",
     "format-message": "^6.2.3",
-    "react": "16.13.0",
-    "react-dom": "16.13.0"
+    "format-message-cli": "^6.2.3",
+    "react": "16.13.1",
+    "react-dom": "16.13.1"
   },
   "dependencies": {
     "@emotion/core": "^10.0.27"

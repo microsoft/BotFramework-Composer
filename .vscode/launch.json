@@ -22,7 +22,7 @@
       ],
       "sourceMaps": true,
       "cwd": "${workspaceFolder}/Composer/packages/tools/language-servers/language-understanding/demo/src",
-      "protocol": "inspector",
+      "protocol": "inspector"
     },
     {
       "name": "LG LSP Server",
@@ -38,21 +38,19 @@
       ],
       "sourceMaps": true,
       "cwd": "${workspaceFolder}/Composer/packages/tools/language-servers/language-generation/demo/src",
-      "protocol": "inspector",
+      "protocol": "inspector"
     },
     {
       "type": "node",
       "request": "launch",
       "name": "Server: Launch",
-      "args": [
-        "./build/server.js"
-      ],
-      "preLaunchTask": "server: build",
+      "args": ["./build/init.js"],
+      "env": {
+        "DEBUG": ""
+      },
       "restart": true,
-      "outFiles": [
-        "./build/*"
-      ],
-      "envFile": "${workspaceFolder}/Composer/packages/server/.env",
+      "outFiles": ["./build/*"],
+      "preLaunchTask": "server: build",
       "outputCapture": "std",
       "cwd": "${workspaceFolder}/Composer/packages/server"
     },
@@ -63,14 +61,8 @@
       "name": "Jest Debug",
       "program": "${workspaceRoot}/Composer/node_modules/jest/bin/jest",
       "stopOnEntry": false,
-      "args": [
-        "--runInBand",
-        "--env=jsdom",
-        "--config=jest.config.js"
-      ],
-      "runtimeArgs": [
-        "--inspect-brk"
-      ],
+      "args": ["--runInBand", "--env=jsdom", "--config=jest.config.js"],
+      "runtimeArgs": ["--inspect-brk"],
       "cwd": "${workspaceRoot}/Composer/packages/server",
       "sourceMaps": true,
       "console": "integratedTerminal"
@@ -87,11 +79,13 @@
       "request": "launch",
       "name": "Electron Main Process",
       "runtimeExecutable": "${workspaceRoot}/Composer/node_modules/.bin/electron",
-      "args": [
-        "${workspaceRoot}/Composer/packages/electron-server",
-      ],
+      "windows": {
+        "runtimeExecutable": "${workspaceRoot}/Composer/node_modules/.bin/electron.cmd"
+      },
+      "args": ["${workspaceRoot}/Composer/packages/electron-server"],
       "env": {
         "NODE_ENV": "development",
+        "DEBUG": "composer*"
       },
       "outputCapture": "std"
     },
@@ -104,9 +98,7 @@
         "${workspaceRoot}/Composer/node_modules/jest/bin/jest",
         "--runInBand"
       ],
-      "args": [
-        "${fileBasename}",
-      ],
+      "args": ["${fileBasename}"],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "port": 9229

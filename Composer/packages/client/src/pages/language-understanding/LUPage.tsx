@@ -11,25 +11,22 @@ import { useRecoilValue } from 'recoil';
 import { navigateTo } from '../../utils/navigation';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TestController } from '../../components/TestController/TestController';
-import { dialogsState, projectIdState } from '../../recoilModel/atoms/botState';
 import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
+import { validateDialogSelectorFamily } from '../../recoilModel';
 
 import TableView from './table-view';
 import { actionButton } from './styles';
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
-interface LUPageProps extends RouteComponentProps<{}> {
+const LUPage: React.FC<RouteComponentProps<{
   dialogId?: string;
-  path: string;
-}
-
-const LUPage: React.FC<LUPageProps> = (props) => {
-  const dialogs = useRecoilValue(dialogsState);
-  const projectId = useRecoilValue(projectIdState);
+  projectId: string;
+}>> = (props) => {
+  const { dialogId = '', projectId = '' } = props;
+  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
 
   const path = props.location?.pathname ?? '';
-  const { dialogId = '' } = props;
   const edit = /\/edit(\/)?$/.test(path);
   const isRoot = dialogId === 'all';
 
@@ -80,7 +77,7 @@ const LUPage: React.FC<LUPageProps> = (props) => {
   const toolbarItems = [
     {
       type: 'element',
-      element: <TestController />,
+      element: <TestController projectId={projectId} />,
       align: 'right',
     },
   ];
@@ -114,8 +111,8 @@ const LUPage: React.FC<LUPageProps> = (props) => {
     >
       <Suspense fallback={<LoadingSpinner />}>
         <Router component={Fragment} primary={false}>
-          <CodeEditor dialogId={dialogId} path="/edit" />
-          <TableView dialogId={dialogId} path="/" />
+          <CodeEditor dialogId={dialogId} path="/edit" projectId={projectId} />
+          <TableView dialogId={dialogId} path="/" projectId={projectId} />
         </Router>
       </Suspense>
     </Page>

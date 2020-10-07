@@ -9,8 +9,8 @@ export enum PromptTab {
   OTHER = 'other',
 }
 
-export const PropmtTabTitles = {
-  [PromptTab.BOT_ASKS]: formatMessage('Bot Asks'),
-  [PromptTab.USER_INPUT]: formatMessage('User Input'),
-  [PromptTab.OTHER]: formatMessage('Other'),
+export const PromptTabTitles = {
+  [PromptTab.BOT_ASKS]: () => formatMessage('Bot Asks'),
+  [PromptTab.USER_INPUT]: () => formatMessage('User Input'),
+  [PromptTab.OTHER]: () => formatMessage('Other'),
 };

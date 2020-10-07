@@ -6,7 +6,7 @@ import find from 'lodash/find';
 import flatten from 'lodash/flatten';
 import { importResolverGenerator, ResolverResource } from '@bfc/shared';
 import extractMemoryPaths from '@bfc/indexers/lib/dialogUtils/extractMemoryPaths';
-import { UserIdentity } from '@bfc/plugin-loader';
+import { UserIdentity } from '@bfc/extension';
 
 import { BotProject } from '../models/bot/botProject';
 import { LocationRef } from '../models/bot/interface';
@@ -145,6 +145,10 @@ export class BotProjectService {
     if (!(await StorageService.checkBlob(locationRef.storageId, locationRef.path, user))) {
       BotProjectService.deleteRecentProject(locationRef.path);
       throw new Error(`file ${locationRef.path} does not exist`);
+    }
+
+    if (!(await StorageService.checkIsBotFolder(locationRef.storageId, locationRef.path, user))) {
+      throw new Error(`${locationRef.path} is not a bot project folder`);
     }
 
     for (const key in BotProjectService.projectLocationMap) {

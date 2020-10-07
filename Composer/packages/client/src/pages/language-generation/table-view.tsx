@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import isEmpty from 'lodash/isEmpty';
-import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
+import { DetailsList, DetailsListLayoutMode, SelectionMode, IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
@@ -17,36 +17,40 @@ import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
 import { LgTemplate } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
+import { lgUtil } from '@bfc/indexers';
 
-import { increaseNameUtilNotExist } from '../../utils/lgUtil';
+import { EditableField } from '../../components/EditableField';
 import { navigateTo } from '../../utils/navigation';
-import { actionButton, formCell, content } from '../language-understanding/styles';
+import { actionButton, formCell } from '../language-understanding/styles';
 import {
   dispatcherState,
-  dialogsState,
-  lgFilesState,
-  projectIdState,
   localeState,
+  lgFilesState,
   settingsState,
+  validateDialogSelectorFamily,
 } from '../../recoilModel';
 import { languageListTemplates } from '../../components/MultiLanguage';
 
-interface TableViewProps extends RouteComponentProps<{}> {
+interface TableViewProps extends RouteComponentProps<{ dialogId: string; projectId: string }> {
   dialogId: string;
+  projectId: string;
 }
 
 const TableView: React.FC<TableViewProps> = (props) => {
-  const dialogs = useRecoilValue(dialogsState);
-  const lgFiles = useRecoilValue(lgFilesState);
-  const projectId = useRecoilValue(projectIdState);
-  const locale = useRecoilValue(localeState);
-  const settings = useRecoilValue(settingsState);
-  const { createLgTemplate, copyLgTemplate, removeLgTemplate, setMessage } = useRecoilValue(dispatcherState);
+  const { dialogId, projectId } = props;
+
+  const lgFiles = useRecoilValue(lgFilesState(projectId));
+  const locale = useRecoilValue(localeState(projectId));
+  const settings = useRecoilValue(settingsState(projectId));
+  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const { createLgTemplate, copyLgTemplate, removeLgTemplate, setMessage, updateLgTemplate } = useRecoilValue(
+    dispatcherState
+  );
 
   const { languages, defaultLanguage } = settings;
 
-  const { dialogId } = props;
   const file = lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
+  const defaultLangFile = lgFiles.find(({ id }) => id === `${dialogId}.${defaultLanguage}`);
 
   const [templates, setTemplates] = useState<LgTemplate[]>([]);
   const listRef = useRef(null);
@@ -64,8 +68,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const moreLabel = formatMessage('Actions');
 
   const onClickEdit = useCallback(
-    (template: LgTemplate) => {
-      const { name } = template;
+    (name: string) => {
       navigateTo(`/bot/${projectId}/language-generation/${dialogId}/edit?t=${encodeURIComponent(name)}`);
     },
     [dialogId, projectId]
@@ -73,8 +76,9 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
   const onCreateNewTemplate = useCallback(() => {
     if (file) {
-      const newName = increaseNameUtilNotExist(templates, 'TemplateName');
+      const newName = lgUtil.increaseNameUtilNotExist(file.templates, 'TemplateName');
       const payload = {
+        projectId,
         id: file.id,
         template: {
           name: newName,
@@ -82,49 +86,80 @@ const TableView: React.FC<TableViewProps> = (props) => {
         } as LgTemplate,
       };
       createLgTemplate(payload);
-      setFocusedIndex(templates.length);
+      setFocusedIndex(file.templates.length);
     }
-  }, [templates, file, projectId]);
+  }, [file]);
 
   const onRemoveTemplate = useCallback(
-    (index) => {
+    (name) => {
       if (file) {
         const payload = {
           id: file.id,
-          templateName: templates[index].name,
+          templateName: name,
+          projectId,
         };
-
         removeLgTemplate(payload);
+        setFocusedIndex(file.templates.findIndex((item) => item.name === name));
       }
     },
-    [templates, file, projectId]
+    [file]
   );
 
   const onCopyTemplate = useCallback(
-    (index) => {
+    (name) => {
       if (file) {
-        const name = templates[index].name;
-        const resolvedName = increaseNameUtilNotExist(templates, `${name}_Copy`);
+        const resolvedName = lgUtil.increaseNameUtilNotExist(file.templates, `${name}_Copy`);
         const payload = {
           id: file.id,
           fromTemplateName: name,
           toTemplateName: resolvedName,
+          projectId,
         };
         copyLgTemplate(payload);
-        setFocusedIndex(templates.length);
+        setFocusedIndex(file.templates.length);
       }
     },
-    [templates, file, projectId]
+    [file]
+  );
+
+  const handleTemplateUpdate = useCallback(
+    (templateName: string, template: LgTemplate) => {
+      if (file) {
+        const payload = {
+          id: file.id,
+          templateName,
+          template,
+          projectId,
+        };
+        updateLgTemplate(payload);
+      }
+    },
+    [file]
+  );
+
+  const handleTemplateUpdateDefaultLocale = useCallback(
+    (templateName: string, template: LgTemplate) => {
+      if (defaultLangFile) {
+        const payload = {
+          id: defaultLangFile.id,
+          templateName,
+          template,
+          projectId,
+        };
+        updateLgTemplate(payload);
+      }
+    },
+    [defaultLangFile]
   );
 
   const getTemplatesMoreButtons = useCallback(
-    (item, index) => {
+    (item) => {
       const buttons = [
         {
           key: 'edit',
           name: formatMessage('Edit'),
           onClick: () => {
-            onClickEdit(templates[index]);
+            onClickEdit(item.name);
           },
         },
         {
@@ -132,7 +167,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           name: formatMessage('Delete'),
           onClick: () => {
             setMessage('item deleted');
-            onRemoveTemplate(index);
+            onRemoveTemplate(item.name);
           },
         },
         {
@@ -140,7 +175,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           name: formatMessage('Make a copy'),
           onClick: () => {
             setMessage('item copied');
-            onCopyTemplate(index);
+            onCopyTemplate(item.name);
           },
         },
       ];
@@ -150,7 +185,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     [activeDialog, templates]
   );
 
-  const getTableColums = useCallback(() => {
+  const getTableColums = useCallback((): IColumn[] => {
     const languagesList = languageListTemplates(languages, locale, defaultLanguage);
     const defaultLangTeamplate = languagesList.find((item) => item.locale === defaultLanguage);
     const currentLangTeamplate = languagesList.find((item) => item.locale === locale);
@@ -165,15 +200,27 @@ const TableView: React.FC<TableViewProps> = (props) => {
         name: formatMessage('Name'),
         fieldName: 'name',
         minWidth: 100,
-        maxWidth: 150,
+        maxWidth: 200,
         isResizable: true,
         data: 'string',
         onRender: (item) => {
+          const displayName = `#${item.name}`;
           return (
             <div data-is-focusable css={formCell}>
-              <div aria-label={formatMessage(`Name is {name}`, { name: item.name })} css={content} tabIndex={-1}>
-                #{item.name}
-              </div>
+              <EditableField
+                ariaLabel={formatMessage(`Name is {name}`, { name: displayName })}
+                depth={0}
+                id={displayName}
+                name={displayName}
+                value={displayName}
+                onBlur={(_id, value) => {
+                  const newValue = value?.trim().replace(/^#/, '');
+                  if (newValue) {
+                    handleTemplateUpdate(item.name, { ...item, name: newValue });
+                  }
+                }}
+                onChange={() => {}}
+              />
             </div>
           );
         },
@@ -185,17 +232,25 @@ const TableView: React.FC<TableViewProps> = (props) => {
         minWidth: 500,
         isResizable: true,
         data: 'string',
-        isPadded: true,
         onRender: (item) => {
+          const text = item.body;
           return (
             <div data-is-focusable css={formCell}>
-              <div
-                aria-label={formatMessage(`Response is {response}`, { response: item.body })}
-                css={content}
-                tabIndex={-1}
-              >
-                {item.body}
-              </div>
+              <EditableField
+                multiline
+                ariaLabel={formatMessage(`Response is {response}`, { response: text })}
+                depth={0}
+                id={text}
+                name={text}
+                value={text}
+                onBlur={(_id, value) => {
+                  const newValue = value?.trim();
+                  if (newValue) {
+                    handleTemplateUpdate(item.name, { ...item, body: newValue });
+                  }
+                }}
+                onChange={() => {}}
+              />
             </div>
           );
         },
@@ -205,16 +260,25 @@ const TableView: React.FC<TableViewProps> = (props) => {
         name: currentLangResponsesHeader,
         fieldName: 'responses',
         minWidth: 300,
+        maxWidth: 500,
         isResizable: true,
         data: 'string',
-        isPadded: true,
         onRender: (item) => {
           const text = item.body;
           return (
             <div data-is-focusable css={formCell}>
-              <div aria-label={formatMessage(`Response is {response}`, { response: text })} css={content} tabIndex={-1}>
-                {text}
-              </div>
+              <EditableField
+                multiline
+                ariaLabel={formatMessage(`Response is {response}`, { response: text })}
+                depth={0}
+                id={text}
+                name={text}
+                value={text}
+                onBlur={(_id, value) => {
+                  handleTemplateUpdate(item.name, { ...item, body: value });
+                }}
+                onChange={() => {}}
+              />
             </div>
           );
         },
@@ -226,14 +290,25 @@ const TableView: React.FC<TableViewProps> = (props) => {
         minWidth: 300,
         isResizable: true,
         data: 'string',
-        isPadded: true,
         onRender: (item) => {
           const text = item[`body-${defaultLanguage}`];
           return (
             <div data-is-focusable css={formCell}>
-              <div aria-label={formatMessage(`Response is {response}`, { response: text })} css={content} tabIndex={-1}>
-                {text}
-              </div>
+              <EditableField
+                multiline
+                ariaLabel={formatMessage(`Response is {response}`, { response: text })}
+                depth={0}
+                id={text}
+                name={text}
+                value={text}
+                onBlur={(_id, value) => {
+                  const newValue = value?.trim();
+                  if (newValue) {
+                    handleTemplateUpdateDefaultLocale(item.name, { ...item, body: newValue });
+                  }
+                }}
+                onChange={() => {}}
+              />
             </div>
           );
         },
@@ -271,7 +346,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         maxWidth: 50,
         fieldName: 'buttons',
         data: 'string',
-        onRender: (item, index) => {
+        onRender: (item) => {
           return (
             <TooltipHost calloutProps={{ gapSpace: 10 }} content={moreLabel}>
               <IconButton
@@ -279,7 +354,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 menuIconProps={{ iconName: 'MoreVertical' }}
                 menuProps={{
                   shouldFocusOnMount: true,
-                  items: getTemplatesMoreButtons(item, index),
+                  items: getTemplatesMoreButtons(item),
                 }}
                 styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
               />
@@ -303,7 +378,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     }
 
     return tableColums;
-  }, [activeDialog, templates, projectId]);
+  }, [activeDialog, projectId]);
 
   const onRenderDetailsHeader = useCallback((props, defaultRender) => {
     return (
@@ -329,7 +404,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           iconProps={{ iconName: 'CirclePlus' }}
           onClick={() => {
             onCreateNewTemplate();
-            setMessage('item added');
+            setMessage(formatMessage('item added'));
           }}
         >
           {formatMessage('New template')}
@@ -342,10 +417,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
   const templatesToRender = useMemo(() => {
     if (locale !== defaultLanguage) {
-      const defaultLangTeamplates = lgFiles.find(({ id }) => id === `${dialogId}.${defaultLanguage}`)?.templates;
-
       return templates.map((item) => {
-        const itemInDefaultLang = defaultLangTeamplates?.find(({ name }) => name === item.name);
+        const itemInDefaultLang = defaultLangFile?.templates?.find(({ name }) => name === item.name);
         return {
           ...item,
           [`body-${defaultLanguage}`]: itemInDefaultLang?.body || '',

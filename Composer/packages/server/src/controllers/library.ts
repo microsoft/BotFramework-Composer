@@ -6,12 +6,11 @@ import fs from 'fs';
 
 import * as unzipper from 'unzip-stream';
 import axios from 'axios';
-import { PluginLoader, pluginLoader } from '@bfc/plugin-loader';
-import downloadNpmPackage from 'download-npm-package';
+import { ExtensionContext } from '@bfc/extension';
+// import downloadNpmPackage from 'download-npm-package';
 
 import { BotProjectService } from '../services/project';
 import { LocalDiskStorage } from '../models/storage/localDiskStorage';
-import { Store } from '../store/store';
 
 const TMP_DIR = '/tmp';
 
@@ -25,13 +24,13 @@ export interface FileRef {
 export const LibraryController = {
   getLibrary: async function (req, res) {
     // get libraries installed "locally"
-    const localLibrary = Store.get('library', []);
-    const combined = localLibrary.concat(pluginLoader.extensions.libraries);
+    // const localLibrary = Store.get('library', []);
+    const combined = ExtensionContext.extensions.libraries;
     // mix in any libraries installed via plugins
     res.json(combined);
   },
   import: async function (req, res) {
-    const user = await PluginLoader.getUserFromRequest(req);
+    const user = await ExtensionContext.getUserFromRequest(req);
     const projectId = req.params.projectId;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
 
@@ -62,7 +61,7 @@ export const LibraryController = {
     }
   },
   removeImported: async function (req, res) {
-    const user = await PluginLoader.getUserFromRequest(req);
+    const user = await ExtensionContext.getUserFromRequest(req);
     const projectId = req.params.projectId;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
 
@@ -244,10 +243,10 @@ export const LibraryController = {
         case 'npm':
           // download and extract the files from Npm
           try {
-            await downloadNpmPackage({
-              arg: `${uri}@${version}`,
-              dir: TMP_DIR,
-            });
+            // await downloadNpmPackage({
+            //   arg: `${uri}@${version}`,
+            //   dir: TMP_DIR,
+            // });
           } catch (err) {
             console.error('NPM fetch failed', err);
             if (err.message === 'Response code 404 (Not Found)') {

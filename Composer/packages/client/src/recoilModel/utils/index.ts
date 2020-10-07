@@ -19,6 +19,7 @@ export const DEFAULT_USER_SETTINGS = {
   },
   propertyEditorWidth: 400,
   dialogNavWidth: 180,
+  appLocale: 'en-US',
 };
 
 export const getUserSettings = (): UserSettings => {

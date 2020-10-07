@@ -1,4 +1,7 @@
-const isOfficeUiFullImport = str => /office-ui-fabric-react$/.test(str);
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+const isOfficeUiFullImport = (str) => /office-ui-fabric-react$/.test(str);
 
 module.exports = {
   create(context) {

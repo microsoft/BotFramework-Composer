@@ -5,10 +5,6 @@ import formatMessage from 'format-message';
 
 import { SDKKinds } from './types';
 
-formatMessage.setup({
-  missingTranslation: 'ignore',
-});
-
 interface LabelOverride {
   title?: string | false;
   subtitle?: string | false;
@@ -21,7 +17,7 @@ type ConceptLabelKey = SDKKinds | 'Activity';
  * These labels will be used when rendering the EdgeMenu
  * TODO: this is currently a copy of the SDKOverrides content from editor.schema. This should be drilled in from the shell.
  */
-export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
+export const conceptLabels: () => { [key in ConceptLabelKey]?: LabelOverride } = () => ({
   Activity: {
     description: formatMessage(
       'What your Bot says to the user. Visit <a target="_blank" href="https://aka.ms/bf-composer-docs-lg"> the documentation</a> a reference of capabilities.'
@@ -105,7 +101,7 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
   },
   [SDKKinds.LuisRecognizer]: {
     description: formatMessage(
-      "To understand what the user says, your dialog needs a 'IRecognizer', that includes example words and sentences that users may use."
+      "To understand what the user says, your dialog needs an 'IRecognizer' that includes example words and sentences that users may use."
     ),
     title: formatMessage('Language Understanding'),
   },
@@ -114,7 +110,7 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
   },
   [SDKKinds.MultiLanguageRecognizer]: {
     description: formatMessage(
-      "To understand what the user says, your dialog needs a 'IRecognizer', that includes example words and sentences that users may use."
+      "To understand what the user says, your dialog needs an 'IRecognizer' that includes example words and sentences that users may use."
     ),
     title: formatMessage('Language Understanding'),
   },
@@ -135,6 +131,9 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
   [SDKKinds.OnCancelDialog]: {
     title: formatMessage('Dialog cancelled'),
     subtitle: formatMessage('Cancel dialog event'),
+  },
+  [SDKKinds.OnChooseIntent]: {
+    title: formatMessage('Duplicated intents recognized'),
   },
   [SDKKinds.OnCondition]: {
     title: formatMessage('Handle a Condition'),
@@ -189,6 +188,17 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     title: formatMessage('Message updated'),
     subtitle: formatMessage('Message updated activity'),
   },
+  [SDKKinds.UpdateActivity]: {
+    title: formatMessage('Update activity'),
+    subtitle: formatMessage('Update a an activity previously sent during the conversation'),
+  },
+  [SDKKinds.DeleteActivity]: {
+    title: formatMessage('Delete activity'),
+  },
+  [SDKKinds.OnMessageUpdateActivity]: {
+    title: formatMessage('Message updated'),
+    subtitle: formatMessage('Message updated activity'),
+  },
   [SDKKinds.OnRepromptDialog]: {
     title: formatMessage('Re-prompt for input'),
     subtitle: formatMessage('Reprompt dialog event'),
@@ -200,6 +210,9 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
   [SDKKinds.OnUnknownIntent]: {
     title: formatMessage('Unknown intent'),
     subtitle: formatMessage('Unknown intent recognized'),
+  },
+  [SDKKinds.OnQnAMatch]: {
+    title: formatMessage('QnA Intent recognized'),
   },
   [SDKKinds.QnAMakerDialog]: {
     title: formatMessage('Connect to QnA Knowledgebase'),
@@ -245,4 +258,4 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
   [SDKKinds.TrueSelector]: {
     title: formatMessage('TrueSelector'),
   },
-};
+});

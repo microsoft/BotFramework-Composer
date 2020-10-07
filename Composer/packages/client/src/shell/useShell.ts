@@ -2,55 +2,66 @@
 // Licensed under the MIT License.
 
 import { useMemo, useRef } from 'react';
-import { ShellApi, ShellData } from '@bfc/shared';
-import isEqual from 'lodash/isEqual';
+import { ShellApi, ShellData, Shell, DialogSchemaFile } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
+import formatMessage from 'format-message';
 
-import { updateRegExIntent } from '../utils/dialogUtil';
-import { getDialogData, setDialogData, sanitizeDialogData } from '../utils/dialogUtil';
-import { getFocusPath } from '../utils/navigation';
+import { updateRegExIntent, renameRegExIntent, updateIntentTrigger } from '../utils/dialogUtil';
+import { getDialogData, setDialogData } from '../utils/dialogUtil';
 import { isAbsHosted } from '../utils/envUtil';
 import {
-  botNameState,
-  schemasState,
-  skillsState,
-  lgFilesState,
-  dialogsState,
-  projectIdState,
-  localeState,
-  luFilesState,
   dispatcherState,
-  breadcrumbState,
-  designPageLocationState,
-  focusPathState,
   userSettingsState,
+  settingsState,
   clipboardActionsState,
+  schemasState,
+  validateDialogSelectorFamily,
+  breadcrumbState,
+  focusPathState,
+  skillsState,
+  localeState,
+  qnaFilesState,
+  designPageLocationState,
+  botNameState,
+  dialogSchemasState,
+  lgFilesState,
+  luFilesState,
 } from '../recoilModel';
+import { undoFunctionState } from '../recoilModel/undo/history';
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
+import { useQnaApi } from './qnaApi';
+import { useTriggerApi } from './triggerApi';
 
 const FORM_EDITOR = 'PropertyEditor';
 
-type EventSource = 'VisualEditor' | 'PropertyEditor' | 'ProjectTree';
+type EventSource = 'FlowEditor' | 'PropertyEditor' | 'DesignPage';
 
-export function useShell(source: EventSource): { api: ShellApi; data: ShellData } {
+export function useShell(source: EventSource, projectId: string): Shell {
   const dialogMapRef = useRef({});
-  const botName = useRecoilValue(botNameState);
-  const dialogs = useRecoilValue(dialogsState);
-  const luFiles = useRecoilValue(luFilesState);
-  const projectId = useRecoilValue(projectIdState);
-  const locale = useRecoilValue(localeState);
-  const lgFiles = useRecoilValue(lgFilesState);
-  const skills = useRecoilValue(skillsState);
-  const schemas = useRecoilValue(schemasState);
-  const breadcrumb = useRecoilValue(breadcrumbState);
-  const designPageLocation = useRecoilValue(designPageLocationState);
-  const focusPath = useRecoilValue(focusPathState);
+
+  const schemas = useRecoilValue(schemasState(projectId));
+  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const breadcrumb = useRecoilValue(breadcrumbState(projectId));
+  const focusPath = useRecoilValue(focusPathState(projectId));
+  const skills = useRecoilValue(skillsState(projectId));
+  const locale = useRecoilValue(localeState(projectId));
+  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
+  const undoFunction = useRecoilValue(undoFunctionState(projectId));
+  const designPageLocation = useRecoilValue(designPageLocationState(projectId));
+  const { undo, redo, commitChanges } = undoFunction;
+  const luFiles = useRecoilValue(luFilesState(projectId));
+  const lgFiles = useRecoilValue(lgFilesState(projectId));
+  const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
+  const botName = useRecoilValue(botNameState(projectId));
+  const settings = useRecoilValue(settingsState(projectId));
+
   const userSettings = useRecoilValue(userSettingsState);
   const clipboardActions = useRecoilValue(clipboardActionsState);
   const {
     updateDialog,
+    updateDialogSchema,
     createDialogBegin,
     navTo,
     focusTo,
@@ -62,10 +73,13 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     updateUserSettings,
     setMessage,
     displayManifestModal,
+    updateSkill,
   } = useRecoilValue(dispatcherState);
-  const lgApi = useLgApi();
-  const luApi = useLuApi();
 
+  const lgApi = useLgApi(projectId);
+  const luApi = useLuApi(projectId);
+  const qnaApi = useQnaApi(projectId);
+  const triggerApi = useTriggerApi(projectId);
   const { dialogId, selected, focused, promptTab } = designPageLocation;
 
   const dialogsMap = useMemo(() => {
@@ -75,36 +89,36 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     }, {});
   }, [dialogs]);
 
-  async function updateRegExIntentHandler(id, intentName, pattern) {
+  function updateRegExIntentHandler(id, intentName, pattern) {
     const dialog = dialogs.find((dialog) => dialog.id === id);
-    if (!dialog) throw new Error(`dialog ${dialogId} not found`);
+    if (!dialog) throw new Error(formatMessage(`dialog {dialogId} not found`, { dialogId }));
     const newDialog = updateRegExIntent(dialog, intentName, pattern);
-    return await updateDialog({ id, content: newDialog.content });
+    updateDialog({ id, content: newDialog.content, projectId });
   }
 
-  function cleanData() {
-    const cleanedData = sanitizeDialogData(dialogsMap[dialogId]);
-    if (!isEqual(dialogsMap[dialogId], cleanedData)) {
-      const payload = {
-        id: dialogId,
-        content: cleanedData,
-      };
-      updateDialog(payload);
-    }
+  function renameRegExIntentHandler(id: string, intentName: string, newIntentName: string) {
+    const dialog = dialogs.find((dialog) => dialog.id === id);
+    if (!dialog) throw new Error(`dialog ${dialogId} not found`);
+    const newDialog = renameRegExIntent(dialog, intentName, newIntentName);
+    updateDialog({ id, content: newDialog.content, projectId });
+  }
+
+  function updateIntentTriggerHandler(id: string, intentName: string, newIntentName: string) {
+    const dialog = dialogs.find((dialog) => dialog.id === id);
+    if (!dialog) throw new Error(`dialog ${dialogId} not found`);
+    const newDialog = updateIntentTrigger(dialog, intentName, newIntentName);
+    updateDialog({ id, content: newDialog.content, projectId });
   }
 
   function navigationTo(path) {
-    cleanData();
-    navTo(path, breadcrumb);
+    navTo(projectId, path, breadcrumb);
   }
 
   function focusEvent(subPath) {
-    cleanData();
-    selectTo(subPath);
+    selectTo(projectId, subPath);
   }
 
   function focusSteps(subPaths: string[] = [], fragment?: string) {
-    cleanData();
     let dataPath: string = subPaths[0];
 
     if (source === FORM_EDITOR) {
@@ -116,7 +130,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
       }
     }
 
-    focusTo(dataPath, fragment ?? '');
+    focusTo(projectId, dataPath, fragment ?? '');
   }
 
   dialogMapRef.current = dialogsMap;
@@ -130,6 +144,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
       updateDialog({
         id: dialogId,
         content: newDialogData,
+        projectId,
       });
     },
     saveData: (newData, updatePath) => {
@@ -142,25 +157,19 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
       const payload = {
         id: dialogId,
         content: updatedDialog,
+        projectId,
       };
       dialogMapRef.current[dialogId] = updatedDialog;
       updateDialog(payload);
-
-      //make sure focusPath always valid
-      const data = getDialogData(dialogMapRef.current, dialogId, getFocusPath(selected, focused));
-      if (typeof data === 'undefined') {
-        /**
-         * It's improper to fallback to `dialogId` directly:
-         *   - If 'action' not exists at `focused` path, fallback to trigger path;
-         *   - If 'trigger' not exisits at `selected` path, fallback to dialog Id;
-         *   - If 'dialog' not exists at `dialogId` path, fallback to main dialog.
-         */
-        navTo(dialogId, []);
-      }
+      commitChanges();
     },
     ...lgApi,
     ...luApi,
+    ...qnaApi,
+    ...triggerApi,
     updateRegExIntent: updateRegExIntentHandler,
+    renameRegExIntent: renameRegExIntentHandler,
+    updateIntentTrigger: updateIntentTriggerHandler,
     navTo: navigationTo,
     onFocusEvent: focusEvent,
     onFocusSteps: focusSteps,
@@ -168,24 +177,33 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     onCopy: setVisualEditorClipboard,
     createDialog: (actionsSeed) => {
       return new Promise((resolve) => {
-        createDialogBegin(actionsSeed, (newDialog: string | null) => {
-          resolve(newDialog);
-        });
+        createDialogBegin(
+          actionsSeed,
+          (newDialog: string | null) => {
+            resolve(newDialog);
+          },
+          projectId
+        );
       });
     },
     addSkillDialog: () => {
       return new Promise((resolve) => {
-        addSkillDialogBegin((newSkill: { manifestUrl: string } | null) => {
+        addSkillDialogBegin((newSkill: { manifestUrl: string; name: string } | null) => {
           resolve(newSkill);
-        });
+        }, projectId);
       });
     },
-    undo: () => {}, //TODO
-    redo: () => {}, //TODO
+    undo,
+    redo,
+    commitChanges,
     addCoachMarkRef: onboardingAddCoachMarkRef,
-    updateUserSettings: updateUserSettings,
+    updateUserSettings,
     announce: setMessage,
-    displayManifestModal: displayManifestModal,
+    displayManifestModal: (skillId) => displayManifestModal(skillId, projectId),
+    updateDialogSchema: async (dialogSchema: DialogSchemaFile) => {
+      updateDialogSchema(dialogSchema, projectId);
+    },
+    updateSkillSetting: (...params) => updateSkill(projectId, ...params),
   };
 
   const currentDialog = useMemo(() => dialogs.find((d) => d.id === dialogId), [dialogs, dialogId]);
@@ -202,11 +220,13 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
         botName,
         projectId,
         dialogs,
+        dialogSchemas,
         dialogId,
         focusPath,
         schemas,
         lgFiles,
         luFiles,
+        qnaFiles,
         currentDialog,
         userSettings,
         designerId: editorData?.$designer?.id,
@@ -217,6 +237,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
         clipboardActions,
         hosted: !!isAbsHosted(),
         skills,
+        skillsSettings: settings.skill || {},
       }
     : ({} as ShellData);
 

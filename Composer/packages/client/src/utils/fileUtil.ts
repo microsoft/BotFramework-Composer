@@ -2,9 +2,13 @@
 // Licensed under the MIT License.
 
 import moment from 'moment';
+import formatMessage from 'format-message';
+import generate from 'format-message-generate-id';
 
 import { FileTypes, SupportedFileTypes } from '../constants';
 import { File } from '../recoilModel/types';
+
+import httpClient from './httpUtil';
 
 export function getExtension(filename?: string): string | any {
   if (typeof filename !== 'string') return filename;
@@ -58,14 +62,44 @@ export function getFileEditDate(file: File) {
 }
 
 export function formatBytes(bytes?: number, decimals?: number) {
-  if (bytes === 0 || !bytes) return '0 Bytes';
+  if (bytes === 0 || !bytes) return formatMessage('0 Bytes');
   const k = 1024,
     dm = !decimals || decimals <= 0 ? 0 : decimals || 2,
-    sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+    sizes = [
+      formatMessage('Bytes'),
+      formatMessage('KB'),
+      formatMessage('MB'),
+      formatMessage('GB'),
+      formatMessage('TB'),
+    ],
     i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  // TODO: use Intl.NumberFormat once we can get the locale
+
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
 
 export const calculateTimeDiff = (time: any) => {
   return moment(time).fromNow();
 };
+
+export async function loadLocale(locale: string) {
+  // we're changing the locale, which might fail if we can't load it
+  const resp = await httpClient.get(`/assets/locales/${locale}.json`);
+  const data = resp?.data;
+  if (data == null || typeof data === 'string') {
+    // this is an invalid locale, so don't set anything
+    console.error('Tried to read an invalid locale');
+    return null;
+  } else {
+    // We don't care about the return value except in our unit tests
+    return formatMessage.setup({
+      locale: locale,
+      generateId: generate.underscored_crc32,
+      missingTranslation: process.env.NODE_ENV === 'development' ? 'warning' : 'ignore',
+      translations: {
+        [locale]: data,
+      },
+    });
+  }
+}

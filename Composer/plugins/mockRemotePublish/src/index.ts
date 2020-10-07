@@ -8,7 +8,7 @@
  */
 
 import { v4 as uuid } from 'uuid';
-import { ComposerPluginRegistration, PublishResponse, PublishPlugin } from '@bfc/plugin-loader';
+import { ExtensionRegistration, PublishResponse, PublishPlugin, JSONSchema7 } from '@bfc/extension';
 
 import schema from './schema';
 
@@ -23,16 +23,17 @@ interface PublishConfig {
 
 class LocalPublisher implements PublishPlugin<PublishConfig> {
   private data: { [botId: string]: LocalPublishData };
-  private composer: ComposerPluginRegistration;
-
-  constructor(composer: ComposerPluginRegistration) {
+  private composer: ExtensionRegistration;
+  public schema: JSONSchema7;
+  constructor(composer: ExtensionRegistration) {
     this.data = {};
     this.composer = composer;
+    this.schema = schema;
   }
 
   private finishPublish = async (botId: string, profileName: string, jobId: string) => {
     setTimeout(() => {
-      this.data[botId][profileName].forEach(element => {
+      this.data[botId][profileName].forEach((element) => {
         if (element.result.id == jobId && element.status !== 500) {
           element.status = 200;
           element.result.message = 'Success';
@@ -97,7 +98,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     const botId = project.id;
     const result = [];
     if (this.data[botId] && this.data[botId][profileName]) {
-      this.data[botId][profileName].map(item => {
+      this.data[botId][profileName].map((item) => {
         result.push({
           ...item.result,
           status: item.status,
@@ -113,7 +114,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     const profileName = config.name;
     const botId = project.id;
     this.composer.log('eval list %O', this.data[botId][profileName]);
-    const matched = this.data[botId][profileName].filter(item => {
+    const matched = this.data[botId][profileName].filter((item) => {
       this.composer.log('comparing %s %s', item.result.id, rollbackToVersion);
       return item.result.id === rollbackToVersion;
     });
@@ -133,8 +134,8 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
   };
 }
 
-export default async (composer: ComposerPluginRegistration): Promise<void> => {
+export default async (composer: ExtensionRegistration): Promise<void> => {
   const publisher = new LocalPublisher(composer);
   // pass in the custom storage class that will override the default
-  await composer.addPublishMethod(publisher, schema);
+  await composer.addPublishMethod(publisher);
 };

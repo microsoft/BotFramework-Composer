@@ -4,15 +4,19 @@
 import * as React from 'react';
 import { RecoilRoot } from 'recoil';
 import { renderHook } from '@bfc/test-utils/lib/hooks';
+import { Range, Position } from '@bfc/shared';
 
 import useNotifications from '../../../src/pages/notifications/useNotifications';
 import {
-  projectIdState,
   dialogsState,
   luFilesState,
   lgFilesState,
-  BotDiagnosticsState,
+  settingsState,
+  schemasState,
+  currentProjectIdState,
+  botDiagnosticsState,
 } from '../../../src/recoilModel';
+import mockProjectResponse from '../../../src/recoilModel/dispatchers/__tests__/mocks/mockProjectResponse.json';
 
 const state = {
   projectId: 'test',
@@ -22,15 +26,7 @@ const state = {
       content: 'test',
       luFile: 'test',
       referredLuIntents: [],
-      diagnostics: [
-        {
-          message: 'must be an expression',
-          path: 'test.triggers[0]#Microsoft.OnUnknownIntent#condition',
-          severity: 1,
-          source: 'test',
-        },
-      ],
-      skills: ['https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json'],
+      skills: [`=settings.skill['Email-Skill'].endpointUrl`],
     },
   ],
   luFiles: [
@@ -42,10 +38,7 @@ const state = {
           Body: '- test12345 ss',
           Entities: [],
           Name: 'test',
-          range: {
-            endLineNumber: 7,
-            startLineNumber: 4,
-          },
+          range: new Range(new Position(4, 0), new Position(7, 14)),
         },
       ],
       diagnostics: [
@@ -69,7 +62,7 @@ const state = {
         {
           body: '- ${add(1,2)}',
           name: 'bar',
-          range: { endLineNumber: 0, startLineNumber: 0 },
+          range: new Range(new Position(0, 0), new Position(2, 14)),
         },
       ],
       diagnostics: [
@@ -93,21 +86,24 @@ const state = {
     },
   ],
   settings: {
-    skill: [
-      {
+    skill: {
+      'Email-Skill': {
         manifestUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json',
-        name: 'Email Skill',
+        endpointUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/api/messages',
+        name: 'Email-Skill',
       },
-    ],
+    },
   },
 };
 
 const initRecoilState = ({ set }) => {
-  set(projectIdState, state.projectId);
-  set(dialogsState, state.dialogs);
-  set(luFilesState, state.luFiles);
-  set(lgFilesState, state.lgFiles);
-  set(BotDiagnosticsState, state.diagnostics);
+  set(currentProjectIdState, state.projectId);
+  set(dialogsState(state.projectId), state.dialogs);
+  set(luFilesState(state.projectId), state.luFiles);
+  set(lgFilesState(state.projectId), state.lgFiles);
+  set(botDiagnosticsState(state.projectId), state.diagnostics);
+  set(settingsState(state.projectId), state.settings);
+  set(schemasState(state.projectId), mockProjectResponse.schemas);
 };
 
 describe('useNotification hooks', () => {
@@ -118,14 +114,14 @@ describe('useNotification hooks', () => {
       return <RecoilRoot initializeState={initRecoilState}>{children}</RecoilRoot>;
     };
 
-    const { result } = renderHook(() => useNotifications(), {
+    const { result } = renderHook(() => useNotifications(state.projectId), {
       wrapper,
     });
     renderedResult = result;
   });
 
   it('should return notifications', () => {
-    expect(renderedResult.current.length).toBe(5);
+    expect(renderedResult.current.length).toBe(4);
   });
 
   it('should return filtered notifications', () => {
@@ -134,7 +130,7 @@ describe('useNotification hooks', () => {
       return <RecoilRoot initializeState={initRecoilState}>{children}</RecoilRoot>;
     };
 
-    const { result } = renderHook(() => useNotifications('Error'), {
+    const { result } = renderHook(() => useNotifications(state.projectId, 'Error'), {
       wrapper,
     });
 
