@@ -5,6 +5,7 @@
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 
 import { settingsState } from '../atoms/botState';
+import { getAccessTokenInCache, getGraphTokenInCache } from '../../utils/auth';
 
 import httpClient from './../../utils/httpUtil';
 
@@ -14,34 +15,33 @@ export const provisionDispatcher = () => {
      However I'm leaving it here just in case that was the wrong decision, and also to leave the structure of this in place
      so that we can use it for possible near term intergrations between the Composer core and the azurepublish provisioning component.
   */
-  // const provisionToTarget = useRecoilCallback(
-  //   ({ set }: CallbackInterface) => async (config: any, type: string, projectId: string) => {
-  //     try {
-  //       const token = getAccessTokenInCache();
-  //       const result = await httpClient.post(
-  //         `/azure/provision/${projectId}/${type}`,
-  //         // TODO: do not send access token as part of body if sending as part of header
-  //         { ...config, accessToken: token, graphToken: getGraphTokenInCache() },
-  //         {
-  //           headers: { Authorization: `Bearer ${token}` },
-  //         }
-  //       );
-  //       console.log(result.data);
-  //       set(settingsState(projectId), (settings) => ({
-  //         ...settings,
-  //         provisionConfig: result.data,
-  //       }));
-  //     } catch (error) {
-  //       console.log(error.response.data);
-  //     }
-  //   }
-  // );
+  const provisionToTarget = useRecoilCallback(
+    ({ set }: CallbackInterface) => async (config: any, type: string, projectId: string) => {
+      try {
+        const token = getAccessTokenInCache();
+        const result = await httpClient.post(
+          `/provision/${projectId}/${type}`,
+          { ...config, accessToken: token, graphToken: getGraphTokenInCache() },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        console.log(result.data);
+        // set(settingsState(projectId), (settings) => ({
+        //   ...settings,
+        //   provisionConfig: result.data,
+        // }));
+      } catch (error) {
+        console.log(error.response.data);
+      }
+    }
+  );
 
   const getProvisionStatus = useRecoilCallback(
     ({ set }: CallbackInterface) => async (projectId: string, target: any) => {
       const timer = setInterval(async () => {
         try {
-          const response = await httpClient.get(`/azure/provisionStatus/${projectId}/${target.name}`);
+          const response = await httpClient.get(`/provisionStatus/${projectId}/${target.name}`);
           console.log(response.data);
           if (response.data.config && response.data.config != {}) {
             clearInterval(timer);
@@ -91,6 +91,6 @@ export const provisionDispatcher = () => {
 
   return {
     getProvisionStatus,
-    // provisionToTarget,
+    provisionToTarget,
   };
 };

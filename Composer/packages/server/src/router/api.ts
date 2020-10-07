@@ -53,10 +53,12 @@ router.put('/storages/folder', StorageController.updateFolder);
 
 // provision
 router.post('/provision/:projectId/:type', ProvisionController.provision);
+router.get('/provisionStatus/:projectId/:target/:jobId', ProvisionController.getProvisionStatus);
 router.get('/provisionStatus/:projectId/:target', ProvisionController.getProvisionStatus);
 
 // publishing
 router.get('/publish/types', PublishController.getTypes);
+router.get('/publish/:projectId/status/:target/:jobId', PublishController.status);
 router.get('/publish/:projectId/status/:target', PublishController.status);
 router.post('/publish/:projectId/publish/:target', PublishController.publish);
 router.get('/publish/:projectId/history/:target', PublishController.history);

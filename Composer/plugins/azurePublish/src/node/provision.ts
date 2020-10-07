@@ -1,19 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ApplicationInsightsManagementClient } from '@azure/arm-appinsights';
-import { AzureBotService } from '@azure/arm-botservice';
 import { TokenCredentials } from '@azure/ms-rest-js';
 import * as rp from 'request-promise';
 
 import { BotProjectDeployLoggerType } from './botProjectLoggerType';
 import { AzureResourceManangerConfig } from './azureResourceManager/azureResourceManagerConfig';
-import { AzureResourceMananger, AzureResourceDeploymentStatus } from './azureResourceManager/azureResourceManager';
+import { AzureResourceMananger } from './azureResourceManager/azureResourceManager';
 
 // TODO: fix these duplicated interfaces between here and index.ts
 export interface ProvisionConfig {
-  // subscriptionId: string;
-  // logger: (string) => any;
   accessToken: string;
   graphToken: string;
   tenantId?: string;
@@ -88,10 +84,11 @@ export class BotProjectProvision {
     }
   }
 
+  // TODO: Move these into the azure resource manager class
   /***********************************************************************************************
    * Azure API accessors
    **********************************************************************************************/
-  /*
+   /*
    * create the applicationId for the bot registration
    * Docs: https://docs.microsoft.com/en-us/graph/api/application-post-applications?view=graph-rest-1.0&tabs=http
    */
@@ -166,23 +163,7 @@ export class BotProjectProvision {
     return { appId, appPassword };
   }
 
-  // /* Set the password for the bot registration */
-  // private async addPassword(displayName: string, id: string) {
-  //   const addPasswordUri = `https://graph.microsoft.com/v1.0/applications/${id}/addPassword`;
-  //   const requestBody = {
-  //     passwordCredential: {
-  //       displayName: `${displayName}-pwd`,
-  //     },
-  //   };
-  //   const options = {
-  //     body: requestBody,
-  //     json: true,
-  //     headers: { Authorization: `Bearer ${this.graphToken}` },
-  //   } as rp.RequestPromiseOptions;
-  //   const response = await rp.post(addPasswordUri, options);
-  //   return response;
-  // }
-
+  // TODO: Move this into the azure resouce manager class
   /**
    * Return the tenantId based on a subscription
    * For more information about this api, please refer to this doc: https://docs.microsoft.com/en-us/rest/api/resources/Tenants/List
@@ -215,20 +196,8 @@ export class BotProjectProvision {
   /**
    * Provision a set of Azure resources for use with a bot
    */
-  public async create(
-    config: ProvisionConfig
-    // hostname: string,
-    // location: string,
-    // appId?: string,
-    // appPassword?: string,
-    // createLuisResource = false,
-    // createLuisAuthoringResource = false,
-    // createCosmosDb = false,
-    // createStorage = false,
-    // createAppInsights = false
-  ) {
+  public async create(config: ProvisionConfig) {
     try {
-      console.log('AZURE PROVISION CREATE CALLED', config);
       // ensure a tenantId is available.
       if (!this.tenantId) {
         this.tenantId = await this.getTenantId();
@@ -237,6 +206,7 @@ export class BotProjectProvision {
       // tokenCredentials is used for authentication across the API calls
       const tokenCredentials = new TokenCredentials(this.accessToken);
 
+      // this object collects all of the various configuration output
       const provisionResults = {
         appId: null,
         appPassword: null,
@@ -262,7 +232,6 @@ export class BotProjectProvision {
       this.azureResourceManagementClient = new AzureResourceMananger(armConfig);
 
       // Ensure the resource group is ready
-
       try {
         provisionResults.resourceGroup = await this.azureResourceManagementClient.createResourceGroup({
           name: resourceGroupName,
@@ -277,6 +246,7 @@ export class BotProjectProvision {
       }
 
       // SOME OF THESE MUST HAPPEN IN THE RIGHT ORDER!
+      // TODO: ensure the sort order?
       // app reg first (get app id)
       // then bot webapp (get endpoint)
       // then bot reg (use app id and endpoint)
@@ -402,8 +372,6 @@ export class BotProjectProvision {
       //   name: '1d41002f-62a1-49f3-bd43-2f3f32a19cbb', // WHAT IS THIS CONSTANT???
       // });
 
-      console.log('PROVISION COMPLETE', provisionResults);
-
       return provisionResults;
     } catch (err) {
       this.logger({
@@ -412,13 +380,5 @@ export class BotProjectProvision {
       });
       throw err;
     }
-  }
-
-  public getProvisionStatus() {
-    if (!this.azureResourceManagementClient) {
-      return new AzureResourceDeploymentStatus();
-    }
-
-    return this.azureResourceManagementClient.getStatus();
   }
 }

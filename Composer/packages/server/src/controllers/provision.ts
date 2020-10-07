@@ -55,7 +55,7 @@ export const ProvisionController = {
     const user = await ExtensionContext.getUserFromRequest(req);
     const projectId = req.params.projectId;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
-
+    const jobId = req.params.jobId;
     const publishTargets = currentProject.settings?.publishTargets || [];
     const allTargets = [defaultPublishConfig, ...publishTargets];
 
@@ -74,6 +74,7 @@ export const ProvisionController = {
         // set status and return value as json
         res.status(result.status).json({
           ...result,
+          jobId: jobId,
           config: result.config || null,
           details: result.details || {},
         });
