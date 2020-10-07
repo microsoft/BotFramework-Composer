@@ -155,7 +155,7 @@ interface AdaptiveSchema extends Omit<JSONSchema7, 'definitions' | 'properties' 
   definitions?: SchemaDefinitions;
   oneOf?: AdaptiveSchema[];
   properties?: SchemaDefinitions;
-  additionalProperties?: SchemaDefinitions;
+  additionalProperties?: boolean | AdaptiveSchema;
   items?: AdaptiveSchema | AdaptiveSchema[];
 }
 
