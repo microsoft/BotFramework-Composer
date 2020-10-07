@@ -60,6 +60,7 @@ const OneOfField: React.FC<FieldProps> = (props) => {
     // attempt to get a placeholder with the selected schema
     const placeholder = getUiPlaceholder({ ...props, schema: selectedSchema }) || props.placeholder;
     const enumOptions = selectedSchema?.enum as string[];
+    const expression = schema?.oneOf?.some(({ $role }: any) => $role === 'expression');
 
     const { field: Field, customProps } = resolveFieldWidget(
       selectedSchema,
@@ -70,6 +71,7 @@ const OneOfField: React.FC<FieldProps> = (props) => {
     );
     return (
       <Field
+        expression={expression}
         key={selectedSchema.type}
         {...props}
         {...customProps}
