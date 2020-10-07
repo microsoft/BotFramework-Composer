@@ -11,7 +11,6 @@ import formatMessage from 'format-message';
 import { DialogInfo, ITrigger } from '@bfc/shared';
 import debounce from 'lodash/debounce';
 import { useRecoilValue } from 'recoil';
-import { IGroupedListStyles } from 'office-ui-fabric-react/lib/GroupedList';
 import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 
 import { dispatcherState, currentProjectIdState, botProjectSpaceSelector } from '../../recoilModel';
@@ -23,13 +22,6 @@ import { TreeItem } from './treeItem';
 import { ExpandableNode } from './ExpandableNode';
 
 // -------------------- Styles -------------------- //
-
-const groupListStyle: Partial<IGroupedListStyles> = {
-  root: {
-    width: '100%',
-    boxSizing: 'border-box',
-  },
-};
 
 const searchBox: ISearchBoxStyles = {
   root: {
@@ -437,9 +429,9 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({ showTriggers = true, 
           aria-label={formatMessage(
             `{
             dialogNum, plural,
-                =0 {No dialogs}
-                =1 {One dialog}
-              other {# dialogs}
+                =0 {No bots}
+                =1 {One bot}
+              other {# bots}
             } have been found.
             {
               dialogNum, select,
