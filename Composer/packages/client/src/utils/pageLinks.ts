@@ -1,10 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import formatMessage from 'format-message';
+import { ExtensionPageContribution } from '@bfc/extension-client';
 
-import { ExtensionPageContribution } from '../recoilModel/types';
+export type ExtensionPageConfig = ExtensionPageContribution & { id: string };
 
-export const topLinks = (projectId: string, openedDialogId: string, pluginPages: ExtensionPageContribution[]) => {
+export const topLinks = (projectId: string, openedDialogId: string, pluginPages: ExtensionPageConfig[]) => {
   const botLoaded = !!projectId;
   let links = [
     {

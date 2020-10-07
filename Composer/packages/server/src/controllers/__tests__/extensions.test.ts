@@ -46,9 +46,11 @@ const mockExtension1 = {
   ],
   contributes: {
     views: {
-      publish: {
-        bundleId: '',
-      },
+      publish: [
+        {
+          bundleId: '',
+        },
+      ],
       pages: [
         {
           bundleId: 'page1',
@@ -78,9 +80,11 @@ const allExtensions: ExtensionMetadata[] = [
     ],
     contributes: {
       views: {
-        publish: {
-          bundleId: '',
-        },
+        publish: [
+          {
+            bundleId: '',
+          },
+        ],
         pages: [
           {
             bundleId: 'page2',

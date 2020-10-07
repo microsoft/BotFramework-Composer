@@ -7,7 +7,11 @@ import { JSONSchema7 } from 'json-schema';
 import { PublishPlugin } from './publish';
 import { RuntimeTemplate, BotTemplate } from './runtime';
 
-export type ExtensionContributionPage = {
+export type ExtensionPublishContribution = {
+  bundleId: string;
+};
+
+export type ExtensionPageContribution = {
   /** Id of cooresponding UI bundle. */
   bundleId: string;
   /** Label to dispaly in nav. */
@@ -19,10 +23,8 @@ export type ExtensionContributionPage = {
 
 export type ExtensionContribution = {
   views?: {
-    pages?: ExtensionContributionPage[];
-    publish?: {
-      bundleId?: string;
-    };
+    pages?: ExtensionPageContribution[];
+    publish?: ExtensionPublishContribution[];
   };
 };
 
