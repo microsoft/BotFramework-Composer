@@ -13,6 +13,7 @@ export const schema = (): JSONSchema7 => ({
       title: formatMessage('Input'),
       description: formatMessage('Dialog input schema.'),
       additionalProperties: {
+        // @ts-ignore
         $ref: '#/definitions/dialogProperties',
       },
     },
@@ -21,6 +22,7 @@ export const schema = (): JSONSchema7 => ({
       title: formatMessage('Output'),
       description: formatMessage('Dialog output schema.'),
       additionalProperties: {
+        // @ts-ignore
         $ref: '#/definitions/dialogProperties',
       },
     },

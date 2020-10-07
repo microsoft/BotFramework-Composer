@@ -2,8 +2,7 @@
 // Licensed under the MIT License.
 
 import { Request, Response } from 'express';
-import { ExtensionManager } from '@bfc/extension';
-import { ExtensionMetadata } from '@bfc/extension/lib/types/extension';
+import { ExtensionManager, ExtensionMetadata } from '@bfc/extension';
 
 import * as ExtensionsController from '../extensions';
 
