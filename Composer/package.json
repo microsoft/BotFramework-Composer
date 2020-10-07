@@ -37,7 +37,7 @@
   ],
   "scripts": {
     "build": "node scripts/begin.js && yarn build:prod && yarn l10n",
-    "build:prod": "yarn build:dev && yarn build:server && yarn build:client && yarn build:electron",
+    "build:prod": "yarn build:dev && yarn build:client && yarn build:server && yarn build:electron",
     "build:dev": "wsrun -ltm -x @bfc/electron-server -x @bfc/client -x @bfc/server -p @bfc/* -c build && yarn build:plugins",
     "build:electron": "yarn workspace @bfc/electron-server build && yarn workspace @bfc/electron-server l10n",
     "build:server": "yarn workspace @bfc/server build",
