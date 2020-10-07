@@ -106,25 +106,12 @@ export async function loadLocale(locale: string) {
   }
 }
 
-export const trimFileProtocol = (path: string) => {
-  if (!path) {
-    return '';
-  }
-  return path.replace(/file:(\/)*/, '');
-};
-
-export const convertPathToFileProtocol = (path: string) => {
-  if (!path) {
-    return '';
-  }
-  return `file://${path}`;
-};
-
-export const getUniqueName = (list: string[], currentName: string) => {
+export const getUniqueName = (list: string[], currentName: string, separator = '-') => {
   let uniqueName = currentName;
-  const i = 1;
-  while (list.includes(currentName)) {
-    uniqueName += `-${i}`;
+  let i = 1;
+  while (list.includes(uniqueName)) {
+    uniqueName = `${currentName}${separator}${i}`;
+    i++;
   }
   return uniqueName;
 };

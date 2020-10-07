@@ -27,6 +27,7 @@ export const botsForFilePersistenceSelector = selector({
   },
 });
 
+// TODO: This selector would be modfied and leveraged by the project tree
 export const botProjectSpaceSelector = selector({
   key: 'botProjectSpaceSelector',
   get: ({ get }) => {
@@ -39,19 +40,7 @@ export const botProjectSpaceSelector = selector({
       const botNameId = get(botNameIdentifierState(projectId));
       return { dialogs, projectId, name, ...metaData, error: botError, botNameId };
     });
-    console.log(result);
     return result;
-  },
-});
-
-export const isBotProjectSpaceSelector = selector({
-  key: 'isBotProjectSpaceSelector',
-  get: ({ get }) => {
-    const projectIds = get(botProjectIdsState);
-    const rootBotId = projectIds[0];
-    const metaData = get(projectMetaDataState(rootBotId));
-    const botProjectFile = get(botProjectFileState(rootBotId));
-    return metaData.isRootBot && !isEmpty(botProjectFile);
   },
 });
 
@@ -60,8 +49,10 @@ export const rootBotProjectIdSelector = selector({
   get: ({ get }) => {
     const projectIds = get(botProjectIdsState);
     const rootBotId = projectIds[0];
+    const botProjectFile = get(botProjectFileState(rootBotId));
+
     const metaData = get(projectMetaDataState(rootBotId));
-    if (metaData.isRootBot) {
+    if (metaData.isRootBot && !isEmpty(botProjectFile)) {
       return rootBotId;
     }
   },

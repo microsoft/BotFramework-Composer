@@ -13,6 +13,7 @@ import {
   BotProjectSpace,
   BotProjectFile,
   BotProjectSpaceSkill,
+  convertFileProtocolToPath,
 } from '@bfc/shared';
 import objectGet from 'lodash/get';
 import objectSet from 'lodash/set';
@@ -68,7 +69,7 @@ import {
 } from '../../atoms';
 import { undoHistoryState } from '../../undo/history';
 import { rootBotProjectIdSelector } from '../../selectors';
-import { trimFileProtocol, getUniqueName } from '../../../utils/fileUtil';
+import { getUniqueName } from '../../../utils/fileUtil';
 
 export const resetBotStates = async ({ reset }: CallbackInterface, projectId: string) => {
   const botStates = Object.keys(botstates);
@@ -393,11 +394,11 @@ export const createNewBotFromTemplate = async (
 const addProjectToBotProjectSpace = (set, projectId: string, skillCt: number) => {
   let isBotProjectLoaded = false;
   set(botProjectIdsState, (current: string[]) => {
-    const botProjectIDs = [...current, projectId];
-    if (botProjectIDs.length === skillCt) {
+    const botProjectIds = [...current, projectId];
+    if (botProjectIds.length === skillCt) {
       isBotProjectLoaded = true;
     }
-    return botProjectIDs;
+    return botProjectIds;
   });
   if (isBotProjectLoaded) {
     set(botProjectSpaceLoadedState, true);
@@ -411,7 +412,7 @@ const handleSkillLoadingFailure = (callbackHelpers, { ex, skillNameIdentifier })
   set(botDisplayNameState(projectId), skillNameIdentifier);
   set(botNameIdentifierState(projectId), skillNameIdentifier);
   setErrorOnBotProject(callbackHelpers, projectId, skillNameIdentifier, ex);
-  return { projectId: projectId };
+  return projectId;
 };
 
 const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, storageId = 'default') => {
@@ -439,7 +440,7 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
         const skill = skills[nameIdentifier];
         let skillPromise;
         if (!skill.remote && skill.workspace) {
-          const skillPath = trimFileProtocol(skill.workspace);
+          const skillPath = convertFileProtocolToPath(skill.workspace);
           skillPromise = openLocalSkill(callbackHelpers, skillPath, storageId, nameIdentifier);
         } else if (skill.manifest) {
           skillPromise = openRemoteSkill(callbackHelpers, skill.manifest, nameIdentifier);
@@ -450,7 +451,7 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
               addProjectToBotProjectSpace(set, projectId, totalProjectsCount);
             })
             .catch((ex) => {
-              const { projectId } = handleSkillLoadingFailure(callbackHelpers, {
+              const projectId = handleSkillLoadingFailure(callbackHelpers, {
                 skillNameIdentifier: nameIdentifier,
                 ex,
               });
@@ -536,7 +537,7 @@ export const checkIfBotExistsInBotProjectFile = async (
       }
     } else {
       if (workspace) {
-        const resolvedPath = trimFileProtocol(workspace);
+        const resolvedPath = convertFileProtocolToPath(workspace);
         if (pathOrManifest === resolvedPath) {
           return true;
         }
