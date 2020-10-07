@@ -214,8 +214,8 @@ const InternalDemoApp = () => {
 
   return (
     <Stack horizontal verticalFill styles={{ root: { height: 'calc(100vh)' } }}>
-      <Stack styles={{ root: { width: 400, padding: 16, borderRight: '1px solid' } }} tokens={{ childrenGap: 8 }}>
-        <Stack horizontal tokens={{ childrenGap: 8 }}>
+      <Stack styles={{ root: { width: 400, borderRight: '1px solid' } }} tokens={{ childrenGap: 8 }}>
+        <Stack horizontal tokens={{ childrenGap: 8, padding: 16 }}>
           <TextField
             styles={{ root: { flex: 1 } }}
             value={newItemName}
@@ -224,16 +224,26 @@ const InternalDemoApp = () => {
           ></TextField>
           <IconButton disabled={!newItemName} iconProps={{ iconName: 'Add' }} onClick={onAddItem} />
         </Stack>
-        {items.map((item) => (
-          <Stack
-            key={item}
-            styles={{ root: { cursor: 'pointer', marginBottom: 8, height: 32 } }}
-            verticalAlign="center"
-            onClick={() => selectItem(item)}
-          >
-            {item}
-          </Stack>
-        ))}
+        <div>
+          {items.map((item) => (
+            <Stack
+              key={item}
+              styles={{
+                root: {
+                  cursor: 'pointer',
+                  padding: '0 16px',
+                  height: 48,
+                  backgroundColor: item === selectedItemId ? '#ddd' : 'transparent',
+                  borderBottom: '1px solid #444',
+                },
+              }}
+              verticalAlign="center"
+              onClick={() => selectItem(item)}
+            >
+              {item}
+            </Stack>
+          ))}
+        </div>
       </Stack>
       {selectedItemId && (
         <Stack
@@ -245,6 +255,7 @@ const InternalDemoApp = () => {
           }}
         >
           <FormDialogSchemaEditor
+            allowUndo
             editorId={selectedItemId}
             schema={selectedItem}
             schemaExtension=".form-dialog"
