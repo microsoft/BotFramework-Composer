@@ -395,11 +395,11 @@ export const createNewBotFromTemplate = async (
 const addProjectToBotProjectSpace = (set, projectId: string, skillCt: number) => {
   let isBotProjectLoaded = false;
   set(botProjectIdsState, (current: string[]) => {
-    const botProjectIDs = [...current, projectId];
-    if (botProjectIDs.length === skillCt) {
+    const botProjectIds = [...current, projectId];
+    if (botProjectIds.length === skillCt) {
       isBotProjectLoaded = true;
     }
-    return botProjectIDs;
+    return botProjectIds;
   });
   if (isBotProjectLoaded) {
     set(botProjectSpaceLoadedState, true);
@@ -413,7 +413,7 @@ const handleSkillLoadingFailure = (callbackHelpers, { ex, skillNameIdentifier })
   set(botDisplayNameState(projectId), skillNameIdentifier);
   set(botNameIdentifierState(projectId), skillNameIdentifier);
   setErrorOnBotProject(callbackHelpers, projectId, skillNameIdentifier, ex);
-  return { projectId: projectId };
+  return projectId;
 };
 
 const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, storageId = 'default') => {
@@ -452,7 +452,7 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
               addProjectToBotProjectSpace(set, projectId, totalProjectsCount);
             })
             .catch((ex) => {
-              const { projectId } = handleSkillLoadingFailure(callbackHelpers, {
+              const projectId = handleSkillLoadingFailure(callbackHelpers, {
                 skillNameIdentifier: nameIdentifier,
                 ex,
               });

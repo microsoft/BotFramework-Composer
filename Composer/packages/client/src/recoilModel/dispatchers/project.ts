@@ -21,6 +21,7 @@ import {
   currentProjectIdState,
   botErrorState,
   botNameIdentifierState,
+  botProjectSpaceLoadedState,
 } from '../atoms';
 import { dispatcherState } from '../DispatcherWrapper';
 import { getFileNameFromPath } from '../../utils/fileUtil';
@@ -291,6 +292,7 @@ export const projectDispatcher = () => {
       resetBotStates(callbackHelpers, projectId);
       reset(botProjectIdsState);
       reset(currentProjectIdState);
+      reset(botProjectSpaceLoadedState);
     } catch (e) {
       logMessage(callbackHelpers, e.message);
     }
