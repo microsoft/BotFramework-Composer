@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import path from 'path';
+
 import moment from 'moment';
 import formatMessage from 'format-message';
 import generate from 'format-message-generate-id';
@@ -103,3 +105,21 @@ export async function loadLocale(locale: string) {
     });
   }
 }
+
+export const getUniqueName = (list: string[], currentName: string, seperator = '-') => {
+  let uniqueName = currentName;
+  let i = 1;
+  while (list.includes(uniqueName)) {
+    uniqueName = `${currentName}${seperator}${i}`;
+    i++;
+  }
+  return uniqueName;
+};
+
+export const getFileNameFromPath = (param: string, ext: string | undefined = undefined) => {
+  return path.basename(param, ext).replace(/\\/g, '/');
+};
+
+export const getAbsolutePath = (basePath: string, relativePath: string) => {
+  return path.resolve(basePath, relativePath);
+};

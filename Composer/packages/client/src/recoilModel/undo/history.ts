@@ -9,6 +9,7 @@ import {
 } from 'recoil';
 import { atomFamily, Snapshot, useRecoilCallback, CallbackInterface, useSetRecoilState } from 'recoil';
 import uniqueId from 'lodash/uniqueId';
+import isEmpty from 'lodash/isEmpty';
 
 import { navigateTo, getUrlSearch } from '../../utils/navigation';
 
@@ -140,10 +141,12 @@ export const UndoRoot = React.memo((props: UndoRootProps) => {
   });
 
   const setInitialProjectState = useRecoilCallback(({ snapshot }: CallbackInterface) => () => {
-    undoHistory.clear();
-    const assetMap = getAtomAssetsMap(snapshot, projectId);
-    undoHistory.add(assetMap);
-    setInitialStateLoaded(true);
+    if (!isEmpty(undoHistory)) {
+      undoHistory.clear();
+      const assetMap = getAtomAssetsMap(snapshot, projectId);
+      undoHistory.add(assetMap);
+      setInitialStateLoaded(true);
+    }
   });
 
   useEffect(() => {
