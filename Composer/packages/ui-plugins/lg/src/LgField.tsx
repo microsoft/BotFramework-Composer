@@ -49,7 +49,7 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
 
   const updateLgTemplate = useCallback(
     (body: string) => {
-      shellApi.deboucedUpdateLgTemplate(lgFileId, lgName, body);
+      shellApi.debouncedUpdateLgTemplate(lgFileId, lgName, body);
     },
     [lgName, lgFileId]
   );

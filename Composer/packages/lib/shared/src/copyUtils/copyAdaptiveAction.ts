@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { MicrosoftIDialog } from '../types';
+import { MicrosoftIDialog } from '@bfc/types';
 
 import { ExternalApi } from './ExternalApi';
 import CopyConstructorMap from './CopyConstructorMap';

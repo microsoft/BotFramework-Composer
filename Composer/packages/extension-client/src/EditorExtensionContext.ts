@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import React from 'react';
-import { ShellApi, ShellData } from '@bfc/shared';
+import { ShellApi, ShellData } from '@bfc/types';
 
 import { PluginConfig } from './types';
 
