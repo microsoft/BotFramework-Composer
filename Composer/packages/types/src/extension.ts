@@ -1,7 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export type ExtensionContributionPage = {
+import { RequestHandler } from 'express-serve-static-core';
+import { JSONSchema7 } from 'json-schema';
+
+import { PublishPlugin } from './publish';
+import { RuntimeTemplate, BotTemplate } from './runtime';
+
+export type ExtensionPublishContribution = {
+  bundleId: string;
+};
+
+export type ExtensionPageContribution = {
   /** Id of cooresponding UI bundle. */
   bundleId: string;
   /** Label to dispaly in nav. */
@@ -13,10 +23,8 @@ export type ExtensionContributionPage = {
 
 export type ExtensionContribution = {
   views?: {
-    pages?: ExtensionContributionPage[];
-    publish?: {
-      bundleId?: string;
-    };
+    pages?: ExtensionPageContribution[];
+    publish?: ExtensionPublishContribution[];
   };
 };
 
@@ -44,21 +52,21 @@ export type ExtensionMetadata = {
   contributes: ExtensionContribution;
 };
 
-export interface ExtensionMap {
+export type ExtensionMap = {
   [id: string]: ExtensionMetadata | undefined;
-}
+};
 
 /** Info about a plugin returned from an NPM search query */
-export interface ExtensionSearchResult {
+export type ExtensionSearchResult = {
   id: string;
   keywords: string[];
   version: string;
   description: string;
   url: string;
-}
+};
 
 /** Representation of the properties Composer cares about inside of an extension's package.json */
-export interface PackageJSON {
+export type PackageJSON = {
   name: string;
   version: string;
   description: string;
@@ -68,4 +76,35 @@ export interface PackageJSON {
     contributes?: ExtensionContribution;
     bundles?: ExtensionBundle[];
   };
-}
+};
+
+export type ExtensionCollection = {
+  storage: {
+    [key: string]: any;
+  };
+  publish: {
+    [key: string]: {
+      plugin: {
+        name: string;
+        description: string;
+        /** (Optional instructions displayed in the UI) */
+        instructions?: string;
+        /** (Optional) Schema for publishing configuration. */
+        schema?: JSONSchema7;
+        /** Whether or not the plugin has custom UI to host in the publish surface */
+        bundleId?: string;
+      };
+      methods: PublishPlugin;
+    };
+  };
+  authentication: {
+    middleware?: RequestHandler;
+    serializeUser?: (user: any, next: any) => void;
+    deserializeUser?: (user: any, next: any) => void;
+    allowedUrls: string[];
+    [key: string]: any;
+  };
+  runtimeTemplates: RuntimeTemplate[];
+  botTemplates: BotTemplate[];
+  baseTemplates: BotTemplate[];
+};

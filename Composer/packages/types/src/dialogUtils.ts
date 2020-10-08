@@ -1,27 +1,27 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export interface ISearchTarget {
+export type ISearchTarget = {
   type: string;
   value: string;
-}
+};
 
-export interface IDefinition {
+export type IDefinition = {
   [key: string]: any;
-}
+};
 
-export interface ISearchResult {
+export type ISearchResult = {
   [key: string]: string[];
-}
+};
 
-export interface IExpressionProperties {
+export type IExpressionProperties = {
   [key: string]: {
     properties: string[];
     requiredTypes: { [key: string]: boolean };
   };
-}
+};
 
-export interface IIntentTrigger {
+export type IIntentTrigger = {
   intent: string;
   dialogs: string[];
-}
+};

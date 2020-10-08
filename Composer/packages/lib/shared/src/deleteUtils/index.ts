@@ -1,7 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License
 
-import { MicrosoftIDialog, SDKKinds } from '../types';
+import { MicrosoftIDialog, SDKKinds } from '@bfc/types';
+
 import { LuMetaData, LuType } from '../luNameBuilder';
 import { walkAdaptiveAction } from '../walkerUtils/walkAdaptiveAction';
 import { walkAdaptiveActionList } from '../walkerUtils/walkAdaptiveActionList';

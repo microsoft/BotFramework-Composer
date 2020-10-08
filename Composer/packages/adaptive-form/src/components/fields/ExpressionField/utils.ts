@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { JSONSchema7, JSONSchema7Definition, SchemaDefinitions } from '@bfc/extension-client';
+import { JSONSchema7, SchemaDefinitions } from '@bfc/extension-client';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
 import { resolveRef, getValueType } from '../../../utils';
@@ -43,7 +43,7 @@ function getOptionLabel(schema: JSONSchema7, parent: JSONSchema7): string {
 }
 
 export function getOneOfOptions(
-  oneOf: JSONSchema7Definition[],
+  oneOf: JSONSchema7[],
   parentSchema: JSONSchema7,
   definitions?: SchemaDefinitions
 ): SchemaOption[] {
