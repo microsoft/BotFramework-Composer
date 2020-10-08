@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useContext, useMemo } from 'react';
-import { MicrosoftIRecognizer, SDKKinds } from '@bfc/shared';
+import { MicrosoftIRecognizer, SDKKinds } from '@bfc/types';
 import get from 'lodash/get';
 
 import { EditorExtensionContext } from '../EditorExtensionContext';

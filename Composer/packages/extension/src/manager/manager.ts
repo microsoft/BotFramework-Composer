@@ -5,11 +5,11 @@ import path from 'path';
 
 import glob from 'globby';
 import { readJson, ensureDir, remove } from 'fs-extra';
+import { ExtensionBundle, PackageJSON, ExtensionMetadata } from '@bfc/types';
 
 import { ExtensionContext } from '../extensionContext';
 import logger from '../logger';
 import { ExtensionManifestStore } from '../storage/extensionManifestStore';
-import { ExtensionBundle, PackageJSON, ExtensionMetadata } from '../types/extension';
 import { search, downloadPackage } from '../utils/npm';
 import { isSubdirectory } from '../utils/isSubdirectory';
 

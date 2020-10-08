@@ -3,8 +3,7 @@
 
 import get from 'lodash/get';
 import keyBy from 'lodash/keyBy';
-
-import { DialogSetting, Skill } from '../types';
+import { DialogSetting, Skill } from '@bfc/types';
 
 export function fetchFromSettings(path: string, settings: DialogSetting): string {
   if (path) {

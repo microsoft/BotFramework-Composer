@@ -1,33 +1,35 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export interface CodeEditorSettings {
+import type { PublishTarget } from './publish';
+
+export type CodeEditorSettings = {
   lineNumbers: boolean;
   wordWrap: boolean;
   minimap: boolean;
-}
+};
 
-export interface UserSettings {
+export type UserSettings = {
   appUpdater: AppUpdaterSettings;
   codeEditor: CodeEditorSettings;
   propertyEditorWidth: number;
   dialogNavWidth: number;
   appLocale: string;
-}
+};
 
-export interface AppUpdaterSettings {
+export type AppUpdaterSettings = {
   autoDownload: boolean;
   useNightly: boolean;
-}
+};
 
-export interface SkillSetting {
+export type SkillSetting = {
   name: string;
   manifestUrl: string;
   msAppId: string;
   endpointUrl: string;
-}
+};
 
-export interface DialogSetting {
+export type DialogSetting = {
   MicrosoftAppId?: string;
   MicrosoftAppPassword?: string;
   luis: ILuisConfig;
@@ -46,9 +48,9 @@ export interface DialogSetting {
   botId?: string;
   skillHostEndpoint?: string;
   [key: string]: any;
-}
+};
 
-export interface ILuisConfig {
+export type ILuisConfig = {
   name: string;
   endpoint: string;
   authoringKey: string;
@@ -57,28 +59,16 @@ export interface ILuisConfig {
   authoringRegion: string | 'westus';
   defaultLanguage: string | 'en-us';
   environment: string | 'composer';
-}
+};
 
-export interface IQnAConfig {
+export type IQnAConfig = {
   subscriptionKey: string;
   endpointKey: string;
   qnaRegion: string;
   [key: string]: string;
-}
+};
 
-export interface IConfig extends ILuisConfig {
+export type IConfig = ILuisConfig & {
   subscriptionKey: string;
   qnaRegion: string | 'westus';
-}
-
-export interface IPublishConfig {
-  luis: ILuisConfig;
-  qna: IQnAConfig;
-}
-
-export interface PublishTarget {
-  name: string;
-  type: string;
-  configuration: string;
-  lastPublished?: Date;
-}
+};
