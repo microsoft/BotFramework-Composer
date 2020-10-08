@@ -6,7 +6,6 @@ import { jsx } from '@emotion/core';
 import React, { useState, useMemo, useRef } from 'react';
 import { FieldProps, useShellApi } from '@bfc/extension-client';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { JSONSchema7 } from 'json-schema';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { TextField, ITextField } from 'office-ui-fabric-react/lib/TextField';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
@@ -91,7 +90,7 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = (props) => {
       allOrderProps.length > 2 ||
       orderedProperties.some((property) => Array.isArray(property)) ||
       Object.entries(properties).some(([key, propSchema]) => {
-        const resolved = resolveRef(propSchema as JSONSchema7, props.definitions);
+        const resolved = resolveRef(propSchema, props.definitions);
         return allOrderProps.includes(key) && resolved.$role === 'expression';
       })
     );
@@ -134,7 +133,7 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = (props) => {
             {...props}
             transparentBorder
             id={`${id}.${idx}`}
-            schema={itemSchema as JSONSchema7}
+            schema={itemSchema}
             stackArrayItems={stackArrayItems}
             value={item.value}
             {...getArrayItemProps(arrayItems, idx, handleChange)}

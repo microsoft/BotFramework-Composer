@@ -5,7 +5,7 @@ import React from 'react';
 import { renderWithRecoil } from '../../testUtils';
 import {
   settingsState,
-  botNameState,
+  botDisplayNameState,
   publishTypesState,
   publishHistoryState,
   currentProjectIdState,
@@ -53,7 +53,7 @@ const state = {
 
 const initRecoilState = ({ set }) => {
   set(currentProjectIdState, state.projectId);
-  set(botNameState(state.projectId), state.botName);
+  set(botDisplayNameState(state.projectId), state.botName);
   set(publishTypesState(state.projectId), state.publishTypes);
   set(publishHistoryState(state.projectId), state.publishHistory);
   set(settingsState(state.projectId), state.settings);

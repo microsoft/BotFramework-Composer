@@ -38,6 +38,7 @@
   "dependencies": {
     "@bfc/shared": "*",
     "@bfc/indexers": "*",
+    "@bfc/ui-shared": "*",
     "@emotion/core": "^10.0.27"
   }
 }
