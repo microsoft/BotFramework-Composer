@@ -27,8 +27,10 @@ function getOptionLabel(schema: JSONSchema7): string {
 export function getOptions(
   schema: JSONSchema7,
   definitions?: { [key: string]: JSONSchema7Definition }
-): IDropdownOption[] {
+): { options: IDropdownOption[]; isNested: boolean } {
   const { type, oneOf } = schema;
+
+  let isNested = false;
 
   if (type && Array.isArray(type)) {
     const options: IDropdownOption[] = type.map((t) => ({
@@ -39,7 +41,7 @@ export function getOptions(
 
     options.sort(({ text: t1 }, { text: t2 }) => (t1 > t2 ? 1 : -1));
 
-    return options;
+    return { options, isNested };
   }
 
   if (oneOf && Array.isArray(oneOf)) {
@@ -80,12 +82,13 @@ export function getOptions(
           },
         }
       );
+      isNested = true;
     }
 
-    return options;
+    return { options, isNested };
   }
 
-  return [];
+  return { options: [], isNested };
 }
 
 export function getSelectedOption(value: any | undefined, options: IDropdownOption[]): IDropdownOption | undefined {
@@ -131,7 +134,7 @@ export function getSelectedOption(value: any | undefined, options: IDropdownOpti
   }
 
   // lastly, attempt to find the option based on value type
-  return options.find(({ data }) => data.schema.type === valueType) || options[0];
+  return options.find(({ data }) => data?.schema.type === valueType) || options[0];
 }
 
 export function getFieldProps(props: FieldProps, schema?: JSONSchema7): FieldProps {

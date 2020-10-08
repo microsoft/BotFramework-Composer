@@ -10,12 +10,38 @@ import formatMessage from 'format-message';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import React, { useMemo, useState } from 'react';
+import { css } from '@emotion/core';
 
 import { getUiPlaceholder, resolveFieldWidget } from '../../../utils';
 import { FieldLabel } from '../../FieldLabel';
-import { oneOfField } from '../styles';
 
 import { getOptions, getSelectedOption } from './utils';
+
+const styles = {
+  container: css`
+    width: 100%;
+
+    label: OneOfField;
+  `,
+  label: css`
+    display: flex;
+    justify-content: space-between;
+
+    label: OneOfFieldLabel;
+  `,
+
+  nestedDropdown: {
+    caretDown: { color: SharedColors.cyanBlue10 },
+    caretDownWrapper: { height: '20px', lineHeight: '20px' },
+    root: { flexBasis: 'auto', paddingBottom: '-4px' },
+    title: {
+      border: 'none',
+      color: SharedColors.cyanBlue10,
+      height: '20px',
+      lineHeight: '20px',
+    },
+  },
+};
 
 const onRenderOption = (option?: IDropdownOption): JSX.Element => {
   return (
@@ -32,7 +58,7 @@ const OneOfField: React.FC<FieldProps> = (props) => {
   const { definitions, description, id, label, schema, required, uiOptions, value } = props;
   const formUIOptions = useFormConfig();
 
-  const options = useMemo(() => getOptions(schema, definitions), [schema, definitions]);
+  const { options } = useMemo(() => getOptions(schema, definitions), [schema, definitions]);
   const initialSelectedOption = useMemo(
     () => getSelectedOption(value, options) || ({ key: '', data: { schema: undefined } } as IDropdownOption),
     []
@@ -71,8 +97,8 @@ const OneOfField: React.FC<FieldProps> = (props) => {
     );
     return (
       <Field
-        expression={expression}
         key={selectedSchema.type}
+        expression={expression}
         {...props}
         {...customProps}
         css={{ label: 'ExpressionFieldValue' }}
@@ -87,9 +113,30 @@ const OneOfField: React.FC<FieldProps> = (props) => {
     );
   };
 
+  const renderDropDown = () => {
+    if (options && options.length > 1) {
+      return (
+        <Dropdown
+          ariaLabel={formatMessage('select property type')}
+          data-testid="OneOfFieldType"
+          dropdownWidth={-1}
+          id={`${props.id}-oneOf`}
+          options={options}
+          responsiveMode={ResponsiveMode.large}
+          selectedKey={selectedKey}
+          styles={styles.nestedDropdown}
+          onChange={handleTypeChange}
+          onRenderOption={onRenderOption}
+        />
+      );
+    } else {
+      return null;
+    }
+  };
+
   return (
-    <div css={oneOfField.container}>
-      <div css={oneOfField.label}>
+    <div css={styles.container}>
+      <div css={styles.label}>
         <FieldLabel
           description={description}
           helpLink={uiOptions?.helpLink}
@@ -97,30 +144,7 @@ const OneOfField: React.FC<FieldProps> = (props) => {
           label={label}
           required={required}
         />
-        {options && options.length > 1 && (
-          <Dropdown
-            ariaLabel={formatMessage('select property type')}
-            data-testid="OneOfFieldType"
-            dropdownWidth={-1}
-            id={`${props.id}-oneOf`}
-            options={options}
-            responsiveMode={ResponsiveMode.large}
-            selectedKey={selectedKey}
-            styles={{
-              caretDown: { color: SharedColors.cyanBlue10 },
-              caretDownWrapper: { height: '20px', lineHeight: '20px' },
-              root: { flexBasis: 'auto', paddingBottom: '-4px' },
-              title: {
-                border: 'none',
-                color: SharedColors.cyanBlue10,
-                height: '20px',
-                lineHeight: '20px',
-              },
-            }}
-            onChange={handleTypeChange}
-            onRenderOption={onRenderOption}
-          />
-        )}
+        {renderDropDown()}
       </div>
       {renderField()}
     </div>
