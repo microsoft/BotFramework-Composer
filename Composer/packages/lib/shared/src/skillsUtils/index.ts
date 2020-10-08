@@ -35,3 +35,8 @@ export const getSkillNameFromSetting = (value?: string) => {
   }
   return '';
 };
+
+export const getEndpointNameGivenUrl = (manifestData: any, urlToMatch: string) => {
+  const matchedEndpoint = manifestData?.endpoints.find(({ endpointUrl }) => endpointUrl === urlToMatch);
+  return matchedEndpoint ? matchedEndpoint.name : '';
+};

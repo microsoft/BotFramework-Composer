@@ -170,17 +170,22 @@ export const extensionsState = atom<Omit<ExtensionMetadata, 'path'>[]>({
   default: [],
 });
 
-export const botOpeningState = atom<boolean>({
-  key: getFullyQualifiedKey('botOpening'),
-  default: false,
-});
-
-export const botProjectsSpaceState = atom<string[]>({
-  key: getFullyQualifiedKey('botProjectsSpace'),
+export const botProjectIdsState = atom<string[]>({
+  key: getFullyQualifiedKey('botProjectIdsState'),
   default: [],
 });
 
 export const currentProjectIdState = atom<string>({
   key: getFullyQualifiedKey('currentProjectId'),
   default: '',
+});
+
+export const botProjectSpaceLoadedState = atom<boolean>({
+  key: getFullyQualifiedKey('botProjectSpaceLoadedState'),
+  default: false,
+});
+
+export const botOpeningState = atom<boolean>({
+  key: getFullyQualifiedKey('botOpeningState'),
+  default: false,
 });
