@@ -23,7 +23,7 @@ const authCredentials = {
 };
 
 export class PowerVirtualAgentsProvider extends ExternalContentProvider {
-  private tempBotAssetsDir = join(__dirname, '/temp');
+  private tempBotAssetsDir = join(process.env.COMPOSER_TEMP_DIR as string, 'pva-assets');
 
   constructor(metadata: PowerVirtualAgentsMetadata) {
     super(metadata);

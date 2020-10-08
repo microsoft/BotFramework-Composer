@@ -30,7 +30,7 @@ async function startImport(req: StartImportRequest, res: Response, next) {
       const { eTag, zipPath } = await contentProvider.downloadBotContent();
 
       // extract zip into new "template" directory
-      const baseDir = join(__dirname, '/temp');
+      const baseDir = process.env.COMPOSER_REMOTE_TEMPLATES_DIR as string;
       ensureDirSync(baseDir);
       const templateDir = join(baseDir, 'extractedTemplate');
       log('Extracting bot zip...');

@@ -56,6 +56,10 @@ export async function start(electronContext?: ElectronContext): Promise<number |
   setEnvDefault('COMPOSER_BUILTIN_EXTENSIONS_DIR', path.resolve(__dirname, '../../../../extensions'));
   // Composer/.composer/extensions
   setEnvDefault('COMPOSER_REMOTE_EXTENSIONS_DIR', path.resolve(__dirname, '../../../.composer/extensions'));
+  // Composer/.composer/remoteTemplates
+  setEnvDefault('COMPOSER_REMOTE_TEMPLATES_DIR', path.resolve(__dirname, '../../../.composer/remoteTemplates'));
+  // Composer/.composer/temp
+  setEnvDefault('COMPOSER_TEMP_DIR', path.resolve(__dirname, '../../../.composer/temp'));
   await ExtensionManager.loadAll();
 
   const { login, authorize } = getAuthProvider();
