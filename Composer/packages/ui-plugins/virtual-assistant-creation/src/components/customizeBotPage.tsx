@@ -34,7 +34,7 @@ const dropdownStyles: Partial<IDropdownStyles> = {
 
 const personalityOptions = (): IDropdownOption[] => {
   return Object.values(AvailablePersonalitySelections).map((personality) => {
-    return { key: personality, text: formatMessage(personality) };
+    return { key: personality, text: formatMessage('{personality}', { personality: personality }) };
   });
 };
 

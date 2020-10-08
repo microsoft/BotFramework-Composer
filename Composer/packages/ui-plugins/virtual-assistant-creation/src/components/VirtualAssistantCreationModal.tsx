@@ -30,8 +30,7 @@ export const AppContext = React.createContext(AppContextDefaultValue);
 export const VirtualAssistantCreationModal: React.FC<VirtualAssistantCreationModalProps> = (props) => {
   const { onDismiss, handleCreateNew, formData } = props;
   const [state, setState] = useState(AppContextDefaultValue.state);
-  const { shellApi, ...shellData } = useShellApi();
-  const { projectId } = shellData;
+  const { shellApi, projectId } = useShellApi();
   const [initialProjectId] = useState(projectId);
 
   const createAndConfigureBot = async () => {
@@ -39,6 +38,7 @@ export const VirtualAssistantCreationModal: React.FC<VirtualAssistantCreationMod
   };
 
   const updateBotResponses = async () => {
+    // VA creation POC initially scoped for english
     const generatedLgFileId = formData.name.toLowerCase() + '.en-us';
     await shellApi.updateLgTemplate(
       generatedLgFileId,
@@ -59,11 +59,14 @@ export const VirtualAssistantCreationModal: React.FC<VirtualAssistantCreationMod
   };
 
   const updateQnaFiles = async () => {
-    await updatePersonalityQnaFile(shellApi, state.selectedPersonality);
+    updatePersonalityQnaFile(shellApi, state.selectedPersonality);
   };
 
   const createLgFromString = (text: string) => {
-    return '- ' + text;
+    if (text && text.length > 0 && text[0] !== '-') {
+      return `- ${text}`;
+    }
+    return text;
   };
 
   const onModalDismiss = () => {
@@ -74,8 +77,8 @@ export const VirtualAssistantCreationModal: React.FC<VirtualAssistantCreationMod
   // projectID change indicates that the project files have been created and post create calls can be executed
   useEffect((): void => {
     if (projectId !== initialProjectId) {
-      updateBotResponses();
       updateQnaFiles();
+      updateBotResponses();
       navigate('./');
     }
   }, [projectId, shellApi]);
@@ -95,5 +98,3 @@ export const VirtualAssistantCreationModal: React.FC<VirtualAssistantCreationMod
     </AppContext.Provider>
   );
 };
-
-export default VirtualAssistantCreationModal;
