@@ -83,6 +83,7 @@ export const navigationDispatcher = () => {
     ({ snapshot, set }: CallbackInterface) => async (
       projectId: string,
       skillId: string | undefined,
+      destinationDialogId: string | undefined,
       selectPath: string
     ) => {
       if (!selectPath) return;
@@ -90,10 +91,8 @@ export const navigationDispatcher = () => {
       const designPageLocation = await snapshot.getPromise(designPageLocationState(projectId));
       const breadcrumb = await snapshot.getPromise(breadcrumbState(projectId));
 
-      // initial dialogId, projectId maybe empty string  ""
-      let { dialogId } = designPageLocation;
-
-      if (!dialogId) dialogId = 'Main';
+      // target dialogId, projectId maybe empty string  ""
+      const dialogId = destinationDialogId ?? designPageLocation.dialogId ?? 'Main';
 
       const dialogs = await snapshot.getPromise(dialogsState(projectId));
       const currentDialog = dialogs.find(({ id }) => id === dialogId);

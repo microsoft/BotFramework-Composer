@@ -55,12 +55,12 @@ const icons = {
   BOT: 'CubeShape',
   EXTERNAL_SKILL: 'Globe',
   FORM_DIALOG: '',
-  FORM_FIELD: '',
-  FORM_ACTION: '',
+  FORM_FIELD: 'Variable2', // x in parentheses
+  FORM_TRIGGER: 'TriggerAuto', // lightning bolt with gear
   FILTER: 'Filter',
 };
 
-// function onRenderContent(subTitle, style) {
+// function onRenderDeleteDialog(subTitle, style) {
 //   return (
 //     <div css={deleteDialogContent}>
 //       <p>{DialogDeleting.CONTENT}</p>
@@ -147,7 +147,7 @@ type IProjectTreeProps = {
 };
 
 export const ProjectTree: React.FC<IProjectTreeProps> = ({ showTriggers = true, showDialogs = true }) => {
-  const { onboardingAddCoachMarkRef, navTo } = useRecoilValue(dispatcherState);
+  const { onboardingAddCoachMarkRef, selectTo, navTo } = useRecoilValue(dispatcherState);
 
   const [filter, setFilter] = useState('');
   const [selectedLink, setSelectedLink] = useState<TreeLink | undefined>();
@@ -169,9 +169,14 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({ showTriggers = true, 
   };
 
   const handleOnSelect = (link: TreeLink) => {
+    console.log('selected', link);
+    setSelectedLink(link);
     if (link.dialogName != null) {
-      setSelectedLink(link);
-      navTo(link.projectId, link.skillId, link.dialogName);
+      if (link.trigger != null) {
+        selectTo(link.projectId, link.skillId, link.dialogName, `triggers[${link.trigger}]`);
+      } else {
+        navTo(link.projectId, link.skillId, link.dialogName);
+      }
     }
   };
 
@@ -263,13 +268,13 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({ showTriggers = true, 
     //   }
     // }
   }
-  const renderDialogHeader = (botId: string, dialog: DialogInfo, warningContent: string) => {
+  const renderDialogHeader = (skillId: string, dialog: DialogInfo, warningContent: string) => {
     const link: TreeLink = {
       dialogName: dialog.id,
       displayName: dialog.displayName,
       isRoot: dialog.isRoot,
       projectId: currentProjectId,
-      skillId: botId,
+      skillId,
       warningContent,
     };
     return (
@@ -338,10 +343,6 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({ showTriggers = true, 
       />
     );
   }
-
-  const onRenderShowAll = () => {
-    return null;
-  };
 
   const onFilter = (_e?: any, newValue?: string): void => {
     if (typeof newValue === 'string') {

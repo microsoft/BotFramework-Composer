@@ -138,7 +138,7 @@ const errorIcon = {
 // -------------------- TreeItem -------------------- //
 
 interface ITreeItemProps {
-  link: any;
+  link: TreeLink;
   isActive?: boolean;
   isSubItemActive?: boolean;
   menu: TreeMenuItem[];
