@@ -24,11 +24,9 @@
       "description": "List of skills (remote or local) skills that the Root Bot consumes.",
       "type": "object",
       "patternProperties": {
-        "^.*$": {
-          "$ref": "#/definitions/skill"
-        }
+        "^\\$": { "title": "Skill name", "description": "Unique Skill name identifier" }
       },
-      "additionalProperties": false
+      "additionalProperties": { "$ref": "#/definitions/skill" }
     }
   },
   "definitions": {
