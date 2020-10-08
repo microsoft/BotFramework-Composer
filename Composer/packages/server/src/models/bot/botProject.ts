@@ -6,7 +6,16 @@ import fs from 'fs';
 
 import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
-import { getNewDesigner, FileInfo, Skill, Diagnostic, IBotProject, DialogSetting, FileExtensions } from '@bfc/shared';
+import {
+  getNewDesigner,
+  FileInfo,
+  Skill,
+  Diagnostic,
+  IBotProject,
+  DialogSetting,
+  FileExtensions,
+  convertAbsolutePathToFileProtocol,
+} from '@bfc/shared';
 import merge from 'lodash/merge';
 import { UserIdentity, ExtensionContext } from '@bfc/extension';
 import { FeedbackType, generate } from '@microsoft/bf-generate-library';
@@ -19,6 +28,7 @@ import { ISettingManager, OBFUSCATED_VALUE } from '../settings';
 import { DefaultSettingManager } from '../settings/defaultSettingManager';
 import log from '../../logger';
 import { BotProjectService } from '../../services/project';
+import AssetService from '../../services/asset';
 
 import { Builder } from './builder';
 import { IFileStorage } from './../storage/interface';
@@ -76,6 +86,17 @@ export class BotProject implements IBotProject {
     const files: FileInfo[] = [];
     this.files.forEach((file) => {
       if (file.name.endsWith('.dialog')) {
+        files.push(file);
+      }
+    });
+
+    return files;
+  }
+
+  public get botProjectFiles() {
+    const files: FileInfo[] = [];
+    this.files.forEach((file) => {
+      if (file.name.endsWith(FileExtensions.BotProject)) {
         files.push(file);
       }
     });
@@ -336,6 +357,14 @@ export class BotProject implements IBotProject {
     content.id = name;
     const updatedContent = autofixReferInDialog(botName, JSON.stringify(content, null, 2));
     await this._updateFile(relativePath, updatedContent);
+
+    for (const botProjectFile of this.botProjectFiles) {
+      const { relativePath } = botProjectFile;
+      const content = JSON.parse(botProjectFile.content);
+      content.workspace = convertAbsolutePathToFileProtocol(this.dataDir);
+      content.name = botName;
+      await this._updateFile(relativePath, JSON.stringify(content, null, 2));
+    }
     await serializeFiles(this.fileStorage, this.dataDir, botName);
   };
 
@@ -554,6 +583,7 @@ export class BotProject implements IBotProject {
         await pluginMethod.call(null, projectId);
       }
     }
+
     if (ExtensionContext.extensions.publish[method]?.methods?.removeRuntimeData) {
       const pluginMethod = ExtensionContext.extensions.publish[method].methods.removeRuntimeData;
       if (typeof pluginMethod === 'function') {
@@ -681,6 +711,7 @@ export class BotProject implements IBotProject {
       'sdk.override.uischema',
       'sdk.schema',
       'sdk.uischema',
+      '*.botproj',
     ];
     for (const pattern of patterns) {
       // load only from the data dir, otherwise may get "build" versions from
@@ -708,9 +739,16 @@ export class BotProject implements IBotProject {
       fileList.set(file.name, file);
     });
 
-    const migrationFiles = await this._createQnAFilesForOldBot(fileList);
+    const migrationFilesList = await Promise.all([
+      this._createQnAFilesForOldBot(fileList),
+      this._createBotProjectFileForOldBots(fileList),
+    ]);
 
-    return new Map<string, FileInfo>([...fileList, ...migrationFiles]);
+    const files = [...fileList];
+    migrationFilesList.forEach((migrationFiles) => {
+      files.push(...migrationFiles);
+    });
+    return new Map<string, FileInfo>(files);
   };
 
   // migration: create qna files for old bots
@@ -749,6 +787,35 @@ export class BotProject implements IBotProject {
       }
     }
     return fileList;
+  };
+
+  private _createBotProjectFileForOldBots = async (files: Map<string, FileInfo>) => {
+    const fileList = new Map<string, FileInfo>();
+    try {
+      const defaultBotProjectFile: any = await AssetService.manager.botProjectFileTemplate;
+
+      for (const [_, file] of files) {
+        if (file.name.endsWith(FileExtensions.BotProject)) {
+          return fileList;
+        }
+      }
+      const fileName = `${this.name}${FileExtensions.BotProject}`;
+      const root = this.dataDir;
+
+      defaultBotProjectFile.workspace = convertAbsolutePathToFileProtocol(root);
+      defaultBotProjectFile.name = this.name;
+
+      await this._createFile(fileName, JSON.stringify(defaultBotProjectFile, null, 2));
+      const pathToBotProject: string = Path.join(root, fileName);
+      const fileInfo = await this._getFileInfo(pathToBotProject);
+
+      if (fileInfo) {
+        fileList.set(fileInfo.name, fileInfo);
+      }
+      return fileList;
+    } catch (ex) {
+      return fileList;
+    }
   };
 
   private _getSchemas = async (): Promise<FileInfo[]> => {

@@ -14,7 +14,6 @@ import { UndoRoot } from './undo/history';
 import { prepareAxios } from './../utils/auth';
 import createDispatchers, { Dispatcher } from './dispatchers';
 import {
-  botProjectsSpaceState,
   dialogsState,
   luFilesState,
   qnaFilesState,
@@ -23,7 +22,9 @@ import {
   dialogSchemasState,
   settingsState,
   filePersistenceState,
+  botProjectFileState,
 } from './atoms';
+import { botsForFilePersistenceSelector } from './selectors';
 
 const getBotAssets = async (projectId, snapshot: Snapshot): Promise<BotAssets> => {
   const result = await Promise.all([
@@ -34,6 +35,7 @@ const getBotAssets = async (projectId, snapshot: Snapshot): Promise<BotAssets> =
     snapshot.getPromise(skillManifestsState(projectId)),
     snapshot.getPromise(settingsState(projectId)),
     snapshot.getPromise(dialogSchemasState(projectId)),
+    snapshot.getPromise(botProjectFileState(projectId)),
   ]);
   return {
     projectId,
@@ -44,6 +46,7 @@ const getBotAssets = async (projectId, snapshot: Snapshot): Promise<BotAssets> =
     skillManifests: result[4],
     setting: result[5],
     dialogSchemas: result[6],
+    botProjectFile: result[7],
   };
 };
 
@@ -85,10 +88,11 @@ const InitDispatcher = ({ onLoad }) => {
 
 export const DispatcherWrapper = ({ children }) => {
   const [loaded, setLoaded] = useState(false);
-  const botProjects = useRecoilValue(botProjectsSpaceState);
+  const botProjects = useRecoilValue(botsForFilePersistenceSelector);
 
   useRecoilTransactionObserver_UNSTABLE(async ({ snapshot, previousSnapshot }) => {
-    for (const projectId of botProjects) {
+    const botsForFilePersistence = await snapshot.getPromise(botsForFilePersistenceSelector);
+    for (const projectId of botsForFilePersistence) {
       const assets = await getBotAssets(projectId, snapshot);
       const previousAssets = await getBotAssets(projectId, previousSnapshot);
       const filePersistence = await snapshot.getPromise(filePersistenceState(projectId));

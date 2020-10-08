@@ -11,7 +11,7 @@ import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
 import { ContentProps, VERSION_REGEX } from '../constants';
-import { botNameState, skillManifestsState } from '../../../../recoilModel';
+import { botDisplayNameState, skillManifestsState } from '../../../../recoilModel';
 
 const styles = {
   container: css`
@@ -42,7 +42,7 @@ export const getManifestId = (
 };
 
 export const SaveManifest: React.FC<ContentProps> = ({ errors, manifest, setSkillManifest, projectId }) => {
-  const botName = useRecoilValue(botNameState(projectId));
+  const botName = useRecoilValue(botDisplayNameState(projectId));
   const skillManifests = useRecoilValue(skillManifestsState(projectId));
 
   const { id } = manifest;
