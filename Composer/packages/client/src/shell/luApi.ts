@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useEffect, useState } from 'react';
-import { LuFile, LuIntentSection } from '@bfc/shared';
+import { LuFile, LuIntentSection, LuContextApi } from '@bfc/types';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 import debounce from 'lodash/debounce';
@@ -20,7 +20,7 @@ function createLuApi(
   state: { focusPath: string; projectId: string },
   dispatchers: Dispatcher,
   luFileResolver: (id: string) => LuFile | undefined
-) {
+): LuContextApi {
   const addLuIntent = async (id: string, intentName: string, intent: LuIntentSection) => {
     const file = luFileResolver(id);
     if (!file) throw new Error(fileNotFound(id));

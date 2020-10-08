@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useMemo, useRef } from 'react';
-import { ShellApi, ShellData, Shell, DialogSchemaFile } from '@bfc/shared';
+import { ShellApi, ShellData, Shell, DialogSchemaFile, DialogInfo } from '@bfc/types';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
@@ -206,40 +206,38 @@ export function useShell(source: EventSource, projectId: string): Shell {
     updateSkillSetting: (...params) => updateSkill(projectId, ...params),
   };
 
-  const currentDialog = useMemo(() => dialogs.find((d) => d.id === dialogId), [dialogs, dialogId]);
+  const currentDialog = useMemo(() => dialogs.find((d) => d.id === dialogId), [dialogs, dialogId]) as DialogInfo;
   const editorData = useMemo(() => {
     return source === 'PropertyEditor'
       ? getDialogData(dialogsMap, dialogId, focused || selected || '')
       : getDialogData(dialogsMap, dialogId);
   }, [source, dialogsMap, dialogId, focused, selected]);
 
-  const data: ShellData = currentDialog
-    ? {
-        data: editorData,
-        locale,
-        botName,
-        projectId,
-        dialogs,
-        dialogSchemas,
-        dialogId,
-        focusPath,
-        schemas,
-        lgFiles,
-        luFiles,
-        qnaFiles,
-        currentDialog,
-        userSettings,
-        designerId: editorData?.$designer?.id,
-        focusedEvent: selected,
-        focusedActions: focused ? [focused] : [],
-        focusedSteps: focused ? [focused] : selected ? [selected] : [],
-        focusedTab: promptTab,
-        clipboardActions,
-        hosted: !!isAbsHosted(),
-        skills,
-        skillsSettings: settings.skill || {},
-      }
-    : ({} as ShellData);
+  const data: ShellData = {
+    data: editorData,
+    locale,
+    botName,
+    projectId,
+    dialogs,
+    dialogSchemas,
+    dialogId,
+    focusPath,
+    schemas,
+    lgFiles,
+    luFiles,
+    qnaFiles,
+    currentDialog,
+    userSettings,
+    designerId: editorData?.$designer?.id,
+    focusedEvent: selected,
+    focusedActions: focused ? [focused] : [],
+    focusedSteps: focused ? [focused] : selected ? [selected] : [],
+    focusedTab: promptTab,
+    clipboardActions,
+    hosted: !!isAbsHosted(),
+    skills,
+    skillsSettings: settings.skill || {},
+  };
 
   return {
     api,
