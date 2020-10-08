@@ -12,13 +12,14 @@ import { navigate } from '@reach/router';
 // -------------------- DialogFooter -------------------- //
 type DialogFooterWrapperProps = {
   onDismiss: () => void;
+  updateState?: () => void;
   onSubmit?: () => void;
   prevPath?: string;
   nextPath?: string;
 };
 
 export const DialogFooterWrapper: React.FC<DialogFooterWrapperProps> = (props) => {
-  const { onDismiss, onSubmit, nextPath, prevPath } = props;
+  const { onDismiss, onSubmit, updateState, nextPath, prevPath } = props;
 
   const buttonText = onSubmit ? formatMessage('Create') : formatMessage('Next');
 
@@ -32,6 +33,9 @@ export const DialogFooterWrapper: React.FC<DialogFooterWrapperProps> = (props) =
     if (onSubmit && !nextPath) {
       onSubmit();
     } else if (nextPath) {
+      if (updateState) {
+        updateState();
+      }
       navigate(nextPath);
     }
   };

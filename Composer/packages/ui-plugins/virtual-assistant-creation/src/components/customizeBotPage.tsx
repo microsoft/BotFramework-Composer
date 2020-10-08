@@ -5,7 +5,7 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import formatMessage from 'format-message';
-import React, { useContext } from 'react';
+import React, { useState } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { Dropdown, IDropdownStyles, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
@@ -16,8 +16,8 @@ import { Stack } from 'office-ui-fabric-react/lib/Stack';
 
 import { AvailablePersonalitySelections, RouterPaths } from '../constants';
 import { AvailablePersonalities } from '../types';
+import { CustomizeBotPageState } from '../models/stateModels';
 
-import { AppContext } from './VirtualAssistantCreationModal';
 import { DialogFooterWrapper } from './DialogFooterWrapper';
 
 // -------------------- Styles -------------------- //
@@ -40,12 +40,16 @@ const personalityOptions = (): IDropdownOption[] => {
 
 // -------------------- CustomizeBotPage -------------------- //
 type CustomizeBotPageProps = {
+  globalCustomizeState: CustomizeBotPageState;
+  updateGlobalCustomizeState: (newCustomizeState: CustomizeBotPageState) => void;
   onDismiss: () => void;
 } & RouteComponentProps<{}>;
 
 export const CustomizeBotPage: React.FC<CustomizeBotPageProps> = (props) => {
-  const { state, setState } = useContext(AppContext);
-  const onDismiss = props.onDismiss;
+  const { onDismiss, globalCustomizeState, updateGlobalCustomizeState } = props;
+
+  const [state, setState] = useState(globalCustomizeState);
+
   return (
     <DialogWrapper
       isOpen
@@ -121,6 +125,9 @@ export const CustomizeBotPage: React.FC<CustomizeBotPageProps> = (props) => {
         <DialogFooterWrapper
           nextPath={RouterPaths.configSummaryPage}
           prevPath={RouterPaths.newBotPage}
+          updateState={() => {
+            updateGlobalCustomizeState(state);
+          }}
           onDismiss={onDismiss}
         />
       </Stack>

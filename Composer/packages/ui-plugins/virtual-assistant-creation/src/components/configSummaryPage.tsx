@@ -5,15 +5,15 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import formatMessage from 'format-message';
-import React, { Fragment, useContext } from 'react';
+import React, { Fragment } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import { Separator, ISeparatorStyles } from 'office-ui-fabric-react/lib/Separator';
 
 import { RouterPaths } from '../constants';
+import { IAppState } from '../models/stateModels';
 
-import { AppContext } from './VirtualAssistantCreationModal';
 import { DialogFooterWrapper } from './DialogFooterWrapper';
 
 // -------------------- Styles -------------------- //
@@ -35,11 +35,11 @@ const separatorStyles: Partial<ISeparatorStyles> = {
 // -------------------- ConfigSummaryPage -------------------- //
 type ConfigSummaryPageProps = {
   onDismiss: () => void;
+  appState: IAppState;
 } & RouteComponentProps<{}>;
 
 export const ConfigSummaryPage: React.FC<ConfigSummaryPageProps> = (props) => {
-  const { state } = useContext(AppContext);
-  const onDismiss = props.onDismiss;
+  const { onDismiss, appState } = props;
 
   const renderCategoryText = (text: string) => {
     return (
@@ -69,15 +69,23 @@ export const ConfigSummaryPage: React.FC<ConfigSummaryPageProps> = (props) => {
         onDismiss={props.onDismiss}
       >
         {renderCategoryText(formatMessage('General'))}
-        {renderConfigEntry(formatMessage('Selected Assistant Type'), state.selectedAssistant.name)}
-        {renderConfigEntry(formatMessage('Bot Name'), state.selectedBotName)}
-        {renderConfigEntry(formatMessage('Personality Choice'), state.selectedPersonality)}
-        {renderConfigEntry(formatMessage('Bot Configured for Text'), state.isTextEnabled.toString())}
-        {renderConfigEntry(formatMessage('Bot Configured for Speech'), state.isSpeechEnabled.toString())}
-        {renderConfigEntry(formatMessage('Selected Assistant Type'), state.selectedAssistant.name)}
+        {renderConfigEntry(
+          formatMessage('Selected Assistant Type'),
+          appState.SelectBotPageState.selectedAssistant.name
+        )}
+        {renderConfigEntry(formatMessage('Bot Name'), appState.CustomizeBotPageState.selectedBotName)}
+        {renderConfigEntry(formatMessage('Personality Choice'), appState.CustomizeBotPageState.selectedPersonality)}
+        {renderConfigEntry(
+          formatMessage('Bot Configured for Text'),
+          appState.CustomizeBotPageState.isTextEnabled.toString()
+        )}
+        {renderConfigEntry(
+          formatMessage('Bot Configured for Speech'),
+          appState.CustomizeBotPageState.isSpeechEnabled.toString()
+        )}
         {renderCategoryText(formatMessage('Content'))}
-        {renderConfigEntry(formatMessage('Greeting Message'), state.selectedGreetingMessage)}
-        {renderConfigEntry(formatMessage('Fallback Text'), state.selectedFallbackText)}
+        {renderConfigEntry(formatMessage('Greeting Message'), appState.CustomizeBotPageState.selectedGreetingMessage)}
+        {renderConfigEntry(formatMessage('Fallback Text'), appState.CustomizeBotPageState.selectedFallbackText)}
         <DialogFooterWrapper
           nextPath={RouterPaths.provisionSummaryPage}
           prevPath={RouterPaths.customizeBotPage}

@@ -4,16 +4,15 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
-import React, { useContext } from 'react';
+import React, { useState } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 
-import { IAssistant } from '../models/stateModels';
+import { IAssistant, SelectBotPageState } from '../models/stateModels';
 import { RouterPaths } from '../constants';
 
-import { AppContext } from './VirtualAssistantCreationModal';
 import { DialogFooterWrapper } from './DialogFooterWrapper';
 
 const choiceGroupStyling = {
@@ -24,12 +23,15 @@ const choiceGroupStyling = {
 
 // -------------------- NewBotPage -------------------- //
 type NewBotPageProps = {
+  updateGlobalSelectBotState: (newSelectBotPageState: SelectBotPageState) => void;
+  globalSelectBotState: SelectBotPageState;
   onDismiss: () => void;
 } & RouteComponentProps<{}>;
 
 export const NewBotPage: React.FC<NewBotPageProps> = (props) => {
-  const { state, setState } = useContext(AppContext);
-  const onDismiss = props.onDismiss;
+  const { onDismiss, updateGlobalSelectBotState, globalSelectBotState } = props;
+  // copy global state to local state on render, local state used for internal tracking and global state refreshed when user proceeds to next modal
+  const [state, setState] = useState(globalSelectBotState);
 
   const assistantSelectionChanged = (event: any, option?: IChoiceGroupOption) => {
     const selectedAssistant = state.availableAssistantTemplates.find((assistant: IAssistant) => {
@@ -72,6 +74,9 @@ export const NewBotPage: React.FC<NewBotPageProps> = (props) => {
       <DialogFooterWrapper
         nextPath={RouterPaths.customizeBotPage}
         prevPath={RouterPaths.defineConversationPage}
+        updateState={() => {
+          updateGlobalSelectBotState(state);
+        }}
         onDismiss={onDismiss}
       />
     </DialogWrapper>
