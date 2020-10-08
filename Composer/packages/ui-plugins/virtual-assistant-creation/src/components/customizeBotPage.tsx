@@ -46,7 +46,6 @@ type CustomizeBotPageProps = {
 export const CustomizeBotPage: React.FC<CustomizeBotPageProps> = (props) => {
   const { state, setState } = useContext(AppContext);
   const onDismiss = props.onDismiss;
-
   return (
     <DialogWrapper
       isOpen

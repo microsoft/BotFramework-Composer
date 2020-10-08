@@ -11,7 +11,7 @@ import { navigate } from '@reach/router';
 import { AppContextDefaultValue } from '../models/stateModels';
 import { updatePersonalityQnaFile } from '../util';
 import { RouterPaths } from '../constants';
-import { botCreationFormData } from '../types';
+import { BotCreationFormData } from '../types';
 
 import { NewBotPage } from './NewBotPage';
 import { CustomizeBotPage } from './CustomizeBotPage';
@@ -21,8 +21,8 @@ import ProvisionSummaryPage from './ProvisionSummaryPage';
 // -------------------- VirtualAssistantCreationModal -------------------- //
 type VirtualAssistantCreationModalProps = {
   onDismiss: () => void;
-  handleCreateNew: (formData: botCreationFormData, templateId: string) => Promise<void>;
-  formData: botCreationFormData;
+  handleCreateNew: (formData: BotCreationFormData, templateId: string) => Promise<void>;
+  formData: BotCreationFormData;
 } & RouteComponentProps<{}>;
 
 export const AppContext = React.createContext(AppContextDefaultValue);

@@ -1,6 +1,6 @@
-/* eslint-disable format-message/literal-pattern */
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+/* eslint-disable format-message/literal-pattern */
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
@@ -53,8 +53,8 @@ export const ConfigSummaryPage: React.FC<ConfigSummaryPageProps> = (props) => {
   const configEntry = (name: string, value: string) => {
     return (
       <div>
-        <Text css={entryText(true)}>{formatMessage(name)} : </Text>
-        <Text css={entryText(false)}>{formatMessage(value)}</Text>
+        <Text css={entryText(true)}>{name} : </Text>
+        <Text css={entryText(false)}>{value}</Text>
       </div>
     );
   };
@@ -68,16 +68,16 @@ export const ConfigSummaryPage: React.FC<ConfigSummaryPageProps> = (props) => {
         title={formatMessage('Configuration Summary')}
         onDismiss={props.onDismiss}
       >
-        {categoryText('General')}
-        {configEntry('Selected Assistant Type', state.selectedAssistant.name)}
-        {configEntry('Bot Name', state.selectedBotName)}
-        {configEntry('Personality Choice', state.selectedPersonality)}
-        {configEntry('Bot Configured for Text', state.isTextEnabled.toString())}
-        {configEntry('Bot Configured for Speech', state.isSpeechEnabled.toString())}
-        {configEntry('Selected Assistant Type', state.selectedAssistant.name)}
-        {categoryText('Content')}
-        {configEntry('Greeting Message', state.selectedGreetingMessage)}
-        {configEntry('Fallback Text', state.selectedFallbackText)}
+        {categoryText(formatMessage('General'))}
+        {configEntry(formatMessage('Selected Assistant Type'), state.selectedAssistant.name)}
+        {configEntry(formatMessage('Bot Name'), state.selectedBotName)}
+        {configEntry(formatMessage('Personality Choice'), state.selectedPersonality)}
+        {configEntry(formatMessage('Bot Configured for Text'), state.isTextEnabled.toString())}
+        {configEntry(formatMessage('Bot Configured for Speech'), state.isSpeechEnabled.toString())}
+        {configEntry(formatMessage('Selected Assistant Type'), state.selectedAssistant.name)}
+        {categoryText(formatMessage('Content'))}
+        {configEntry(formatMessage('Greeting Message'), state.selectedGreetingMessage)}
+        {configEntry(formatMessage('Fallback Text'), state.selectedFallbackText)}
         <DialogFooterWrapper
           nextPath={RouterPaths.provisionSummaryPage}
           prevPath={RouterPaths.customizeBotPage}

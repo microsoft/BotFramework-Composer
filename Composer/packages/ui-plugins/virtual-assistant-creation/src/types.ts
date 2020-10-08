@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export type botCreationFormData = {
+export type BotCreationFormData = {
   name: string;
   description: string;
   location: string;
