@@ -250,7 +250,7 @@ const InternalDemoApp = () => {
             schemaExtension=".form-dialog"
             templates={templates}
             // eslint-disable-next-line no-console
-            onGenerateDialog={(schema) => console.log(schema)}
+            onGenerateDialog={() => {}}
             onSchemaUpdated={onUpdateItem}
           />
         </Stack>

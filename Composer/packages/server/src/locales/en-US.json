@@ -17,6 +17,9 @@
   "a_dialog_file_must_have_a_name_123ff67d": {
     "message": "a dialog file must have a name"
   },
+  "a_form_dialog_enables_your_bot_to_collect_pieces_o_fdd3fe56": {
+    "message": "A form dialog enables your bot to collect pieces of information ."
+  },
   "a_minimap_gives_an_overview_of_your_source_code_fo_9a897f4f": {
     "message": "A minimap gives an overview of your source code for quick navigation and code understanding."
   },
@@ -557,6 +560,9 @@
   "create_a_new_dialog_21d84b82": {
     "message": "Create a new dialog"
   },
+  "create_a_new_form_dialog_schema_by_clicking_above_34b80531": {
+    "message": "Create a new form dialog schema by clicking + above."
+  },
   "create_a_new_skill_manifest_or_select_which_one_yo_a97e9616": {
     "message": "Create a new skill manifest or select which one you want to edit"
   },
@@ -571,6 +577,9 @@
   },
   "create_folder_error_38aa86f5": {
     "message": "Create Folder Error"
+  },
+  "create_form_dialog_bb98a4f2": {
+    "message": "Create form dialog"
   },
   "create_from_knowledge_base_qna_maker_7422486": {
     "message": "Create from knowledge base (QnA Maker)"
@@ -740,6 +749,9 @@
   "dialog_started_912507c": {
     "message": "Dialog started"
   },
+  "dialog_with_the_name_value_already_exists_62838518": {
+    "message": "Dialog with the name: { value } already exists."
+  },
   "dialogfactory_missing_schema_5c3255c4": {
     "message": "DialogFactory missing schema."
   },
@@ -787,12 +799,6 @@
   },
   "duplicated_intents_recognized_d3908424": {
     "message": "Duplicated intents recognized"
-  },
-  "each_page_of_pagesizestring_in_propstring_a7e23b00": {
-    "message": "Each page of { pageSizeString } in { propString }"
-  },
-  "each_value_in_ae285cd9": {
-    "message": "Each value in"
   },
   "early_adopters_e8db7999": {
     "message": "Early adopters"
@@ -920,9 +926,6 @@
   "error_processing_schema_2c707cf3": {
     "message": "Error Processing Schema"
   },
-  "event_48c2be6e": {
-    "message": " (Event)"
-  },
   "event_activity_2067a94b": {
     "message": "Event activity"
   },
@@ -1028,6 +1031,9 @@
   "for_each_page_3b4d4b69": {
     "message": "For Each Page"
   },
+  "form_dialogs_85a31b65": {
+    "message": "Form Dialogs"
+  },
   "form_editor_7c2b02f0": {
     "message": "form editor"
   },
@@ -1048,6 +1054,9 @@
   },
   "generate_dialog_b80a85b2": {
     "message": "Generate dialog"
+  },
+  "generating_form_dialog_using_schemaid_schema_faile_8062f953": {
+    "message": "Generating form dialog using ${ schemaId } schema failed."
   },
   "get_a_new_copy_of_the_runtime_code_84970bf": {
     "message": "Get a new copy of the runtime code"
@@ -1087,9 +1096,6 @@
   },
   "home_351838cd": {
     "message": "Home"
-  },
-  "host_ef9acfae": {
-    "message": "Host "
   },
   "http_request_79847109": {
     "message": "HTTP Request"
@@ -1294,6 +1300,9 @@
   },
   "list_view_e33843f0": {
     "message": "List view"
+  },
+  "load_form_dialog_schema_templates_error_6a348e76": {
+    "message": "Load form dialog schema templates Error"
   },
   "loading_25990131": {
     "message": "Loading..."
@@ -1532,17 +1541,20 @@
   "no_extensions_installed_4b925277": {
     "message": "No extensions installed"
   },
+  "no_form_dialog_schema_matches_your_filtering_crite_a198cb62": {
+    "message": "No form dialog schema matches your filtering criteria!"
+  },
   "no_lu_file_with_name_id_fb21315d": {
     "message": "NO LU FILE WITH NAME { id }"
   },
   "no_lu_or_qna_file_with_name_id_21cfe9dc": {
     "message": "NO LU OR QNA FILE WITH NAME { id }"
   },
-  "no_search_results_1ba50423": {
-    "message": "No search results"
-  },
   "no_name_e082310e": {
     "message": "[no name]"
+  },
+  "no_search_results_1ba50423": {
+    "message": "No search results"
   },
   "no_updates_available_cecd904d": {
     "message": "No updates available"
@@ -1922,15 +1934,6 @@
   "restart_bot_34e36428": {
     "message": "Restart Bot"
   },
-  "result_b1f14e91": {
-    "message": " = Result"
-  },
-  "result_property_100ef34f": {
-    "message": " = Result property"
-  },
-  "return_value_b386d1b": {
-    "message": "= Return value"
-  },
   "review_and_generate_63dec712": {
     "message": "Review and generate"
   },
@@ -1963,6 +1966,12 @@
   },
   "schema_24739a48": {
     "message": "Schema"
+  },
+  "schemanum_plural_0_no_schemas_1_one_schema_other_s_b3523dc": {
+    "message": "{ schemaNum, plural,\n     =0 {No schemas}\n     =1 {One schema}\n  other {# schemas}\n} have been found.\n            { schemaNum, select,\n      0 {}\n  other {Press down arrow key to navigate the search results}\n}"
+  },
+  "schemas_74566170": {
+    "message": "Schemas"
   },
   "scripts_successfully_updated_3a75d57f": {
     "message": "Scripts successfully updated."
@@ -2207,9 +2216,6 @@
   "the_return_type_does_not_match_2ae72548": {
     "message": "the return type does not match"
   },
-  "the_root_bot_is_not_a_bot_project_d1495cf6": {
-    "message": "The root bot is not a bot project"
-  },
   "the_welcome_message_is_triggered_by_the_i_conversa_a3ff58f8": {
     "message": "The welcome message is triggered by the <i>ConversationUpdate</i> event. To add a new <i>ConversationUpdate</i> trigger:"
   },
@@ -2312,9 +2318,6 @@
   "toggle_extension_e41de2d2": {
     "message": "Toggle extension"
   },
-  "token_property_e53a19d9": {
-    "message": " = Token Property"
-  },
   "toolbar_bafd4228": {
     "message": "toolbar"
   },
@@ -2353,6 +2356,9 @@
   },
   "type_dialog_name_14a50769": {
     "message": "Type dialog name"
+  },
+  "type_form_dialog_schema_name_b767985c": {
+    "message": "Type form dialog schema name"
   },
   "typing_activity_6b634ae": {
     "message": "Typing activity"

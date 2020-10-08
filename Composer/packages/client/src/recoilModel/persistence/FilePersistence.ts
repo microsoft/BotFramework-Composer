@@ -3,7 +3,7 @@
 import keys from 'lodash/keys';
 import differenceWith from 'lodash/differenceWith';
 import isEqual from 'lodash/isEqual';
-import { DialogInfo, DialogSchemaFile, DialogSetting, SkillManifest, BotAssets } from '@bfc/shared';
+import { DialogInfo, DialogSchemaFile, DialogSetting, SkillManifest, BotAssets, FormDialogSchema } from '@bfc/shared';
 
 import { LuFile, LgFile, QnAFile } from './../../../../lib/shared/src/types/indexers';
 import * as client from './http';
@@ -198,6 +198,12 @@ class FilePersistence {
     return [];
   }
 
+  private getFormDialogSchemaFileChanges(current: FormDialogSchema[], previous: FormDialogSchema[]) {
+    const changeItems = this.getDifferenceItems(current, previous);
+    const changes = this.getFileChanges(FileExtensions.FormDialog, changeItems);
+    return changes;
+  }
+
   private getAssetsChanges(currentAssets: BotAssets, previousAssets: BotAssets): IFileChange[] {
     const dialogChanges = this.getDialogChanges(currentAssets.dialogs, previousAssets.dialogs);
     const dialogSchemaChanges = this.getDialogSchemaChanges(currentAssets.dialogSchemas, previousAssets.dialogSchemas);
@@ -209,6 +215,11 @@ class FilePersistence {
       previousAssets.skillManifests
     );
     const settingChanges = this.getSettingsChanges(currentAssets.setting, previousAssets.setting);
+    const formDialogChanges = this.getFormDialogSchemaFileChanges(
+      currentAssets.formDialogSchemas,
+      previousAssets.formDialogSchemas
+    );
+
     const fileChanges: IFileChange[] = [
       ...dialogChanges,
       ...dialogSchemaChanges,
@@ -217,6 +228,7 @@ class FilePersistence {
       ...lgChanges,
       ...skillManifestChanges,
       ...settingChanges,
+      ...formDialogChanges,
     ];
     return fileChanges;
   }

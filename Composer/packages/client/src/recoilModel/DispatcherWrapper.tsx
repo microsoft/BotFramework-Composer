@@ -23,6 +23,7 @@ import {
   dialogSchemasState,
   settingsState,
   filePersistenceState,
+  formDialogSchemasState,
 } from './atoms';
 
 const getBotAssets = async (projectId, snapshot: Snapshot): Promise<BotAssets> => {
@@ -34,6 +35,7 @@ const getBotAssets = async (projectId, snapshot: Snapshot): Promise<BotAssets> =
     snapshot.getPromise(skillManifestsState(projectId)),
     snapshot.getPromise(settingsState(projectId)),
     snapshot.getPromise(dialogSchemasState(projectId)),
+    snapshot.getPromise(formDialogSchemasState(projectId)),
   ]);
   return {
     projectId,
@@ -44,6 +46,7 @@ const getBotAssets = async (projectId, snapshot: Snapshot): Promise<BotAssets> =
     skillManifests: result[4],
     setting: result[5],
     dialogSchemas: result[6],
+    formDialogSchemas: result[7],
   };
 };
 

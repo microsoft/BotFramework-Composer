@@ -26,17 +26,29 @@ export type FormDialogSchemaEditorProps = {
    */
   templates?: string[];
   /**
+   * Indicates of caller is running generation logic.
+   */
+  isGenerating?: boolean;
+  /**
    * Callback for when the json schema update is updated.
    */
   onSchemaUpdated: (id: string, content: string) => void;
   /**
    * Callback for generating dialog using current valid form dialog schema.
    */
-  onGenerateDialog: (formDialogSchemaJson: string) => void;
+  onGenerateDialog: (schemaId: string) => void;
 };
 
 const InternalFormDialogSchemaEditor = React.memo((props: FormDialogSchemaEditorProps) => {
-  const { editorId, schema, templates = [], schemaExtension = '.schema', onSchemaUpdated, onGenerateDialog } = props;
+  const {
+    editorId,
+    schema,
+    templates = [],
+    schemaExtension = '.schema',
+    isGenerating = false,
+    onSchemaUpdated,
+    onGenerateDialog,
+  } = props;
 
   const { setTemplates, reset, importSchemaString } = useHandlers();
 
@@ -63,6 +75,7 @@ const InternalFormDialogSchemaEditor = React.memo((props: FormDialogSchemaEditor
   return (
     <FormDialogPropertiesEditor
       key={editorId}
+      isGenerating={isGenerating}
       schemaExtension={schemaExtension}
       onGenerateDialog={onGenerateDialog}
       onReset={startOver}

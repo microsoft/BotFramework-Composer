@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { atomFamily } from 'recoil';
+import { atom, atomFamily, selectorFamily } from 'recoil';
 import {
   DialogInfo,
   DialogSchemaFile,
@@ -12,6 +12,8 @@ import {
   BotSchemas,
   Skill,
   DialogSetting,
+  FormDialogSchema,
+  FormDialogSchemaTemplate,
 } from '@bfc/shared';
 
 import { BotLoadError, DesignPageLocation, QnAAllUpViewStatus } from '../../recoilModel/types';
@@ -253,4 +255,35 @@ export const filePersistenceState = atomFamily<FilePersistence, string>({
   key: getFullyQualifiedKey('filePersistence'),
   default: {} as FilePersistence,
   dangerouslyAllowMutability: true,
+});
+
+export const formDialogSchemaIdsState = atomFamily<string[], string>({
+  key: getFullyQualifiedKey('formDialogSchemaIds'),
+  default: [],
+});
+
+export const formDialogSchemaState = atomFamily<FormDialogSchema, { projectId: string; schemaId: string }>({
+  key: getFullyQualifiedKey('formDialogSchema'),
+  default: {
+    id: '',
+    content: '',
+  } as FormDialogSchema,
+});
+
+export const formDialogSchemasState = selectorFamily<FormDialogSchema[], string>({
+  key: getFullyQualifiedKey('formDialogSchemas'),
+  get: (projectId: string) => ({ get }) => {
+    const formDialogSchemaIds = get(formDialogSchemaIdsState(projectId));
+    return formDialogSchemaIds.map((schemaId) => get(formDialogSchemaState({ projectId, schemaId })));
+  },
+});
+
+export const formDialogLibraryTemplatesState = atom<FormDialogSchemaTemplate[]>({
+  key: getFullyQualifiedKey('formDialogLibraryTemplates'),
+  default: [],
+});
+
+export const formDialogGenerationProgressingState = atom({
+  key: getFullyQualifiedKey('formDialogGenerationProgressing'),
+  default: false,
 });

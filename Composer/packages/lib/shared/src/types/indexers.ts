@@ -182,6 +182,7 @@ export type BotAssets = {
   skillManifests: SkillManifest[];
   setting: DialogSetting;
   dialogSchemas: DialogSchemaFile[];
+  formDialogSchemas: FormDialogSchema[];
 };
 
 export interface BotInfo {
@@ -189,3 +190,13 @@ export interface BotInfo {
   diagnostics: Diagnostic[];
   name: string;
 }
+
+export type FormDialogSchema = {
+  id: string;
+  content: string;
+};
+
+export type FormDialogSchemaTemplate = {
+  name: string;
+  isGlobal: boolean;
+};

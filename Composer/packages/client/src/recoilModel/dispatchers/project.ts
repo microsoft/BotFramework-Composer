@@ -1,71 +1,73 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { useRecoilCallback, CallbackInterface } from 'recoil';
+import { indexer, validateDialog } from '@bfc/indexers';
 import {
+  convertSkillsToDictionary,
   dereferenceDefinitions,
+  DialogInfo,
+  DialogSetting,
+  FileExtensions,
   LuFile,
   QnAFile,
-  DialogInfo,
   SensitiveProperties,
-  DialogSetting,
-  convertSkillsToDictionary,
 } from '@bfc/shared';
-import { indexer, validateDialog } from '@bfc/indexers';
+import formatMessage from 'format-message';
 import objectGet from 'lodash/get';
 import objectSet from 'lodash/set';
-import formatMessage from 'format-message';
+import { CallbackInterface, useRecoilCallback } from 'recoil';
 
+import { BotStatus, QnABotTemplateId } from '../../constants';
+import settingStorage from '../../utils/dialogSettingStorage';
+import { getBaseName } from '../../utils/fileUtil';
+import httpClient from '../../utils/httpUtil';
+import languageStorage from '../../utils/languageStorage';
+import luFileStatusStorage from '../../utils/luFileStatusStorage';
+import { getReferredLuFiles } from '../../utils/luUtil';
+import { navigateTo } from '../../utils/navigation';
+import { projectIdCache } from '../../utils/projectCache';
+import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
+import { getReferredQnaFiles } from '../../utils/qnaUtil';
+import {
+  botDiagnosticsState,
+  botProjectsSpaceState,
+  currentProjectIdState,
+  designPageLocationState,
+  filePersistenceState,
+  formDialogSchemaIdsState,
+  formDialogSchemaState,
+  projectMetaDataState,
+} from '../atoms';
 import lgWorker from '../parsers/lgWorker';
 import luWorker from '../parsers/luWorker';
 import qnaWorker from '../parsers/qnaWorker';
-import httpClient from '../../utils/httpUtil';
-import { BotStatus } from '../../constants';
-import { getReferredLuFiles } from '../../utils/luUtil';
-import luFileStatusStorage from '../../utils/luFileStatusStorage';
-import { getReferredQnaFiles } from '../../utils/qnaUtil';
-import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
-import settingStorage from '../../utils/dialogSettingStorage';
-import filePersistence from '../persistence/FilePersistence';
-import { navigateTo } from '../../utils/navigation';
-import languageStorage from '../../utils/languageStorage';
-import { projectIdCache } from '../../utils/projectCache';
-import {
-  designPageLocationState,
-  botDiagnosticsState,
-  botProjectsSpaceState,
-  projectMetaDataState,
-  filePersistenceState,
-  currentProjectIdState,
-} from '../atoms';
-import { QnABotTemplateId } from '../../constants';
-import FilePersistence from '../persistence/FilePersistence';
-import UndoHistory from '../undo/undoHistory';
+import { default as filePersistence, default as FilePersistence } from '../persistence/FilePersistence';
 import { undoHistoryState } from '../undo/history';
+import UndoHistory from '../undo/undoHistory';
 
 import {
-  skillManifestsState,
-  settingsState,
+  announcementState,
+  applicationErrorState,
+  boilerplateVersionState,
+  botEnvironmentState,
+  botNameState,
+  botOpeningState,
+  botStatusState,
+  dialogSchemasState,
+  dialogsState,
+  lgFilesState,
   localeState,
+  locationState,
   luFilesState,
   qnaFilesState,
-  skillsState,
-  schemasState,
-  lgFilesState,
-  locationState,
-  botStatusState,
-  botNameState,
-  botEnvironmentState,
-  dialogsState,
-  botOpeningState,
   recentProjectsState,
-  templateProjectsState,
   runtimeTemplatesState,
-  applicationErrorState,
+  schemasState,
+  settingsState,
+  skillManifestsState,
+  skillsState,
   templateIdState,
-  announcementState,
-  boilerplateVersionState,
-  dialogSchemasState,
+  templateProjectsState,
 } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
 
@@ -206,6 +208,8 @@ export const projectDispatcher = () => {
       await lgWorker.addProject(projectId, lgFiles);
       set(botProjectsSpaceState, []);
 
+      const formDialogSchemaFiles = files.filter((f) => f.name.endsWith(FileExtensions.FormDialogSchema));
+
       // Important: gotoSnapshot will wipe all states.
       const newSnapshot = snapshot.map(({ set }) => {
         set(skillManifestsState(projectId), skillManifestFiles);
@@ -224,6 +228,16 @@ export const projectDispatcher = () => {
         set(schemasState(projectId), schemas);
         set(localeState(projectId), locale);
         set(botDiagnosticsState(projectId), diagnostics);
+
+        // Form dialogs
+        set(
+          formDialogSchemaIdsState(projectId),
+          formDialogSchemaFiles.map((f) => getBaseName(f.name))
+        );
+        formDialogSchemaFiles.forEach((f) => {
+          const schemaId = getBaseName(f.name);
+          set(formDialogSchemaState({ projectId, schemaId }), { id: schemaId, content: f.content });
+        });
 
         refreshLocalStorage(projectId, settings);
         set(settingsState(projectId), mergedSettings);
@@ -255,6 +269,10 @@ export const projectDispatcher = () => {
       setError(callbackHelpers, err);
       navigateTo('/home');
     }
+  };
+
+  const reloadProject = async (callbackHelpers: CallbackInterface, data: any) => {
+    await initBotState(callbackHelpers, data, false, '');
   };
 
   const removeRecentProject = async (callbackHelpers: CallbackInterface, path: string) => {
@@ -505,5 +523,6 @@ export const projectDispatcher = () => {
     saveTemplateId,
     updateBoilerplate,
     getBoilerplateVersion,
+    reloadProject,
   };
 };

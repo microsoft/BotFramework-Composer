@@ -63,6 +63,13 @@ export const topLinks = (projectId: string, openedDialogId: string, pluginPages:
       exact: true,
       disabled: !botLoaded,
     },
+    {
+      to: `/bot/${projectId}/form-dialogs`,
+      iconName: 'OfficeChat',
+      labelName: formatMessage('Form Dialogs'),
+      exact: false,
+      disabled: !botLoaded,
+    },
   ];
 
   if (process.env.COMPOSER_AUTH_PROVIDER === 'abs-h') {

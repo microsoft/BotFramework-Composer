@@ -27,6 +27,7 @@ const Notifications = React.lazy(() => import('./pages/notifications/Notificatio
 const Publish = React.lazy(() => import('./pages/publish/Publish'));
 const Skills = React.lazy(() => import('./pages/skills'));
 const BotCreationFlowRouter = React.lazy(() => import('./components/CreationFlow/CreationFlow'));
+const FormDialogPage = React.lazy(() => import('./pages/form-dialog/FormDialogPage'));
 
 const Routes = (props) => {
   const botOpening = useRecoilValue(botOpeningState);
@@ -55,6 +56,8 @@ const Routes = (props) => {
             <Notifications path="notifications" />
             <Publish path="publish/:targetName" />
             <Skills path="skills/*" />
+            <FormDialogPage path="form-dialogs" />
+            <FormDialogPage path="form-dialogs/:schemaId/*" />
             <DesignPage path="*" />
           </ProjectRouter>
           <SettingPage path="settings/*" />
