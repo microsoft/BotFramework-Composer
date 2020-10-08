@@ -9,9 +9,8 @@
     "node": ">=12"
   },
   "scripts": {
-    "build": "yarn clean && yarn build:css && yarn build:ts",
+    "build": "yarn clean && yarn build:ts",
     "build:ts": "tsc --build tsconfig.build.json",
-    "build:css": "copyfiles --up 1 \"src/**/*.css\" \"src/**/*.scss\" lib",
     "clean": "rimraf lib demo/dist",
     "prepublishOnly": "npm run build",
     "test": "jest",
@@ -25,6 +24,7 @@
     "react-dom": "16.13.1"
   },
   "devDependencies": {
+    "@bfc/types": "*",
     "@bfc/test-utils": "*",
     "@types/nanoid": "^2.1.0",
     "@types/react": "16.9.23",
