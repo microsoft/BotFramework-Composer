@@ -10,7 +10,7 @@ const PluginPageContainer: React.FC<RouteComponentProps<{ pluginId: string; bund
   const { pluginId, bundleId } = props;
 
   if (!pluginId || !bundleId) {
-    return <div />;
+    return null;
   }
 
   return <PluginHost bundleId={bundleId} pluginName={pluginId} pluginType="page"></PluginHost>;
