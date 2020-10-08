@@ -78,7 +78,7 @@ const moreButton = (isActive: boolean): IButtonStyles => {
 const navItem = (isActive: boolean, shift: number) => css`
   width: 100%;
   position: relative;
-  height: 36px;
+  height: 24px;
   font-size: 12px;
   margin-left: ${shift}px;
   color: ${isActive ? '#ffffff' : '#545454'};
@@ -183,7 +183,7 @@ const onRenderItem = (item: IOverflowSetItemProps) => {
       <div css={content} role="presentation" tabIndex={-1}>
         {item.icon != null && (
           <Icon
-            iconName="Flow"
+            iconName={item.icon}
             styles={{
               root: {
                 width: '12px',
