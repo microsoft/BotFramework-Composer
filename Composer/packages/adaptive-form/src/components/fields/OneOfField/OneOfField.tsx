@@ -30,6 +30,27 @@ const styles = {
     label: OneOfFieldLabel;
   `,
 
+  fieldContainer: css`
+    width: 100%;
+    display: flex;
+  `,
+
+  icon: css`
+    margin-right: 3px;
+    font-size: 12px;
+  `,
+
+  dropdown: {
+    title: {
+      width: '44px',
+      backgroundColor: '#F3F2F1',
+      height: '100%',
+      lineHeight: '28px',
+    },
+
+    dropdown: { height: '100%' },
+  },
+
   nestedDropdown: {
     caretDown: { color: SharedColors.cyanBlue10 },
     caretDownWrapper: { height: '20px', lineHeight: '20px' },
@@ -46,10 +67,20 @@ const styles = {
 const onRenderOption = (option?: IDropdownOption): JSX.Element => {
   return (
     <div>
-      {option?.data && option?.data?.icon && (
-        <Icon aria-hidden="true" iconName={option.data.icon} style={{ marginRight: '8px' }} title={option.data.icon} />
-      )}
+      {option?.data && option?.data?.icon && <span css={styles.icon}> {option?.data?.icon}</span>}
       <span>{option?.text}</span>
+    </div>
+  );
+};
+
+const onRenderTitle = (options: IDropdownOption[] | undefined): JSX.Element => {
+  const option = options?.[0];
+  const icon = option?.data.icon;
+
+  return (
+    <div>
+      {icon && <span css={styles.icon}>{icon}</span>}
+      <Icon css={{ fontSize: 9, height: 9 }} iconName={'ChevronDown'} title={'ChevronDown'} />
     </div>
   );
 };
@@ -58,7 +89,7 @@ const OneOfField: React.FC<FieldProps> = (props) => {
   const { definitions, description, id, label, schema, required, uiOptions, value } = props;
   const formUIOptions = useFormConfig();
 
-  const { options } = useMemo(() => getOptions(schema, definitions), [schema, definitions]);
+  const { options, isNested } = useMemo(() => getOptions(schema, definitions), [schema, definitions]);
   const initialSelectedOption = useMemo(
     () => getSelectedOption(value, options) || ({ key: '', data: { schema: undefined } } as IDropdownOption),
     []
@@ -124,9 +155,11 @@ const OneOfField: React.FC<FieldProps> = (props) => {
           options={options}
           responsiveMode={ResponsiveMode.large}
           selectedKey={selectedKey}
-          styles={styles.nestedDropdown}
+          styles={isNested ? styles.nestedDropdown : styles.dropdown}
           onChange={handleTypeChange}
+          onRenderCaretDown={isNested ? undefined : () => null}
           onRenderOption={onRenderOption}
+          onRenderTitle={isNested ? undefined : onRenderTitle}
         />
       );
     } else {
@@ -134,19 +167,31 @@ const OneOfField: React.FC<FieldProps> = (props) => {
     }
   };
 
+  const renderFieldLabel = () => {
+    return (
+      <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
+    );
+  };
+
   return (
     <div css={styles.container}>
-      <div css={styles.label}>
-        <FieldLabel
-          description={description}
-          helpLink={uiOptions?.helpLink}
-          id={id}
-          label={label}
-          required={required}
-        />
-        {renderDropDown()}
-      </div>
-      {renderField()}
+      {isNested ? (
+        <React.Fragment>
+          <div css={styles.label}>
+            {renderFieldLabel()}
+            {renderDropDown()}
+          </div>
+          {renderField()}
+        </React.Fragment>
+      ) : (
+        <React.Fragment>
+          <div css={styles.label}>{renderFieldLabel()}</div>
+          <div style={{ display: 'flex' }}>
+            {renderDropDown()}
+            <div style={{ flexGrow: 1 }}>{renderField()}</div>
+          </div>
+        </React.Fragment>
+      )}
     </div>
   );
 };

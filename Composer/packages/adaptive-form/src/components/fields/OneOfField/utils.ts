@@ -24,6 +24,24 @@ function getOptionLabel(schema: JSONSchema7): string {
   return type || 'unknown';
 }
 
+const getOptionIconText = (type: any): string => {
+  const typeFormatted = Array.isArray(type) ? type[0] : type;
+  if (typeFormatted === 'string') {
+    return 'abc';
+  } else if (typeFormatted === 'number') {
+    return '123';
+  } else if (typeFormatted === 'array') {
+    return '[ ]';
+  } else if (typeFormatted === 'object') {
+    return '{ }';
+  } else if (typeFormatted === 'boolean') {
+    return 'y/n';
+  } else if (typeFormatted === 'expression') {
+    return '=';
+  }
+  return '';
+};
+
 export function getOptions(
   schema: JSONSchema7,
   definitions?: { [key: string]: JSONSchema7Definition }
@@ -36,7 +54,7 @@ export function getOptions(
     const options: IDropdownOption[] = type.map((t) => ({
       key: t,
       text: t,
-      data: { schema: { ...schema, type: t } },
+      data: { schema: { ...schema, type: t }, icon: getOptionIconText(t) },
     }));
 
     options.sort(({ text: t1 }, { text: t2 }) => (t1 > t2 ? 1 : -1));
@@ -56,7 +74,7 @@ export function getOptions(
             return {
               key: label,
               text: label,
-              data: { schema: merged },
+              data: { schema: merged, icon: getOptionIconText(s.type) },
             } as IDropdownOption;
           }
         }
@@ -77,7 +95,7 @@ export function getOptions(
           key: 'expression',
           text: formatMessage('Write in expression'),
           data: {
-            icon: 'Variable',
+            icon: getOptionIconText('expression'),
             schema: merged,
           },
         }
