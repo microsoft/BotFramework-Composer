@@ -69,7 +69,9 @@ const getTabFromFragment = () => {
 };
 
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string; skillId: string }>> = (props) => {
-  const { location, dialogId, projectId = '', skillId = '' } = props;
+  const { location, dialogId, projectId = '' } = props;
+  let { skillId } = props;
+  if (skillId == null) skillId = projectId;
   const userSettings = useRecoilValue(userSettingsState);
   const botProjectsSpace = useRecoilValue(botProjectSpaceSelector);
   const schemas = useRecoilValue(schemasState(skillId));
@@ -120,9 +122,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0]);
   const [exportSkillModalVisible, setExportSkillModalVisible] = useState(false);
   const [warningIsVisible, setWarningIsVisible] = useState(true);
-  const shell = useShell('DesignPage', projectId);
-  const shellForFlowEditor = useShell('FlowEditor', projectId);
-  const shellForPropertyEditor = useShell('PropertyEditor', projectId);
+  const shell = useShell('DesignPage', skillId);
+  const shellForFlowEditor = useShell('FlowEditor', skillId);
+  const shellForPropertyEditor = useShell('PropertyEditor', skillId);
   const { createTrigger } = shell.api;
 
   useEffect(() => {
@@ -137,7 +139,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     const rootDialog = dialogs.find(({ isRoot }) => isRoot);
     if (!currentDialog && rootDialog) {
       const { search } = location || {};
-      navigateTo(`/bot/${rootProjectId}/skill/${projectId}/dialogs/${rootDialog.id}${search}`);
+      navigateTo(`/bot/${rootProjectId}/skill/${skillId}/dialogs/${rootDialog.id}${search}`);
       return;
     }
     setWarningIsVisible(true);
@@ -150,13 +152,15 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     const dialogContent = currentDialog?.content ? Object.assign({}, currentDialog.content) : { emptyDialog: true };
     if (!dialogContent.emptyDialog && !dialogContent.id) {
       dialogContent.id = dialogId;
-      updateDialog({ id: dialogId, content: dialogContent, projectId });
+      updateDialog({ id: dialogId, content: dialogContent, projectId: skillId });
     }
   }, [dialogId]);
 
   useEffect(() => {
     if (location && props.dialogId && props.projectId) {
       const { dialogId, projectId } = props;
+      let { skillId } = props;
+      if (skillId == null) skillId = projectId;
       const params = new URLSearchParams(location.search);
       const dialogMap = dialogs.reduce((acc, { content, id }) => ({ ...acc, [id]: content }), {});
       const dialogData = getDialogData(dialogMap, dialogId);
@@ -174,12 +178,12 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
          *   - If 'dialog' not exists at `dialogId` path, fallback to main dialog.
          */
         if (id) {
-          navTo(rootProjectId, projectId, id);
+          navTo(rootProjectId, skillId, id);
         }
         return;
       }
 
-      setDesignPageLocation(projectId, {
+      setDesignPageLocation(skillId, {
         dialogId,
         selected,
         focused,
@@ -220,7 +224,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
   const onCreateDialogComplete = (newDialog) => {
     if (newDialog) {
-      navTo(rootProjectId, projectId, newDialog, []);
+      navTo(rootProjectId, skillId, newDialog, []);
     }
   };
 
@@ -255,7 +259,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             key: 'adddialog',
             text: formatMessage('Add new dialog'),
             onClick: () => {
-              createDialogBegin([], onCreateDialogComplete, projectId);
+              createDialogBegin([], onCreateDialogComplete, skillId ?? projectId);
             },
           },
           {
@@ -433,7 +437,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             key: 'zipexport',
             text: formatMessage('Export assets to .zip'),
             onClick: () => {
-              exportToZip(projectId);
+              exportToZip(skillId ?? projectId);
             },
           },
           {
@@ -448,7 +452,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     },
     {
       type: 'element',
-      element: <TestController projectId={projectId} />,
+      element: <TestController projectId={skillId} />,
       align: 'right',
     },
   ];
@@ -456,7 +460,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   function handleBreadcrumbItemClick(_event, item) {
     if (item) {
       const { dialogId, selected, focused, index } = item;
-      selectAndFocus(rootProjectId, projectId, dialogId, selected, focused, clearBreadcrumb(breadcrumb, index));
+      selectAndFocus(rootProjectId, skillId, dialogId, selected, focused, clearBreadcrumb(breadcrumb, index));
     }
   }
 
@@ -504,7 +508,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   }, [dialogs, breadcrumb, dialogJsonVisible]);
 
   async function handleCreateDialogSubmit(dialogName, dialogData) {
-    await createDialog({ id: dialogName, content: dialogData, projectId });
+    await createDialog({ id: dialogName, content: dialogData, projectId: skillId });
     commitChanges();
   }
 
@@ -528,7 +532,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     };
     const dialog = dialogs.find((d) => d.id === dialogId);
     if (dialogId && dialog) {
-      const url = `/bot/${projectId}/knowledge-base/${dialogId}`;
+      const url = `/bot/${rootProjectId}/skill/${skillId}/knowledge-base/${dialogId}`;
       const triggers = get(dialog, FieldNames.Events, []);
       if (triggers.some((t) => t.type === qnaMatcherKey)) {
         navigateTo(url);
@@ -537,7 +541,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       }
       // import qna from urls
       if (urls.length > 0) {
-        await importQnAFromUrls({ id: `${dialogId}.${locale}`, urls, projectId });
+        await importQnAFromUrls({ id: `${dialogId}.${locale}`, urls, projectId: skillId ?? projectId });
       }
     }
   };
@@ -581,7 +585,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                     schema={schemas.sdk.content}
                     value={currentDialog.content || undefined}
                     onChange={(data) => {
-                      updateDialog({ id: currentDialog.id, content: data, projectId });
+                      updateDialog({ id: currentDialog.id, content: data, projectId: skillId ?? projectId });
                     }}
                   />
                 ) : withWarning ? (
@@ -591,11 +595,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                       onCancel={() => {
                         setWarningIsVisible(false);
                       }}
-                      onOk={() => navigateTo(`/bot/${projectId}/knowledge-base/all`)}
+                      onOk={() => navigateTo(`/bot/${projectId}/skill/${skillId ?? projectId}/knowledge-base/all`)}
                     />
                   )
                 ) : (
-                  <EditorExtension plugins={pluginConfig} projectId={projectId} shell={shellForFlowEditor}>
+                  <EditorExtension plugins={pluginConfig} projectId={skillId ?? projectId} shell={shellForFlowEditor}>
                     <VisualEditor
                       openNewTriggerModal={openNewTriggerModal}
                       onBlur={() => setFlowEditorFocused(false)}
@@ -604,7 +608,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                   </EditorExtension>
                 )}
               </div>
-              <EditorExtension plugins={pluginConfig} projectId={projectId} shell={shellForPropertyEditor}>
+              <EditorExtension plugins={pluginConfig} projectId={skillId ?? projectId} shell={shellForPropertyEditor}>
                 <PropertyEditor key={focusPath + undoVersion} />
               </EditorExtension>
             </LeftRightSplit>
