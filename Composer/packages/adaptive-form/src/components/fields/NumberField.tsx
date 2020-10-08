@@ -12,19 +12,15 @@ const NumberField: React.FC<FieldProps> = (props) => {
   const { expression, schema, onChange } = props;
   const { type } = schema;
 
-  const [value, setValue] = useState<string | undefined>(props.value);
+  const [value, setValue] = useState<string | undefined>(typeof props.value === 'number' ? props.value.toString() : '');
 
   // if the number is a float, we need to convert to a fixed decimal place
   // in order to avoid floating point math rounding errors (ex. 1.2000000001)
   // ex. if step = 0.01, we fix to 2 decimals
   const handleChange = (newValue?: string) => {
     if (typeof newValue !== 'undefined') {
-      if (
-        (expression && newValue.startsWith('=')) ||
-        (isNaN(Number(newValue)) && newValue.length < (value || '').length)
-      ) {
+      if (expression && newValue.startsWith('=')) {
         onChange(newValue);
-        setValue(newValue);
       } else if (!isNaN(Number(newValue))) {
         if (type === 'number') {
           const numberValue = +parseFloat(newValue).toFixed(floatNumberOfDecimals);
