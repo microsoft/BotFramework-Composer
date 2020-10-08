@@ -40,15 +40,15 @@ const personalityOptions = (): IDropdownOption[] => {
 
 // -------------------- CustomizeBotPage -------------------- //
 type CustomizeBotPageProps = {
-  globalCustomizeState: CustomizeBotPageState;
-  updateGlobalCustomizeState: (newCustomizeState: CustomizeBotPageState) => void;
+  initialState: CustomizeBotPageState;
+  onNext: (newCustomizeState: CustomizeBotPageState) => void;
   onDismiss: () => void;
 } & RouteComponentProps<{}>;
 
 export const CustomizeBotPage: React.FC<CustomizeBotPageProps> = (props) => {
-  const { onDismiss, globalCustomizeState, updateGlobalCustomizeState } = props;
+  const { onDismiss, initialState, onNext } = props;
 
-  const [state, setState] = useState(globalCustomizeState);
+  const [state, setState] = useState(initialState);
 
   return (
     <DialogWrapper
@@ -126,7 +126,7 @@ export const CustomizeBotPage: React.FC<CustomizeBotPageProps> = (props) => {
           nextPath={RouterPaths.configSummaryPage}
           prevPath={RouterPaths.newBotPage}
           updateState={() => {
-            updateGlobalCustomizeState(state);
+            onNext(state);
           }}
           onDismiss={onDismiss}
         />

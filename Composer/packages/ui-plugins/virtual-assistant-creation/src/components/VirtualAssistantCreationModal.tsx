@@ -11,7 +11,12 @@ import { navigate } from '@reach/router';
 import { updatePersonalityQnaFile } from '../util';
 import { RouterPaths } from '../constants';
 import { BotCreationFormData } from '../types';
-import { CustomizeBotPageState, getInitialAppState, SelectBotPageState } from '../models/stateModels';
+import {
+  CustomizeBotPageState,
+  getInitialBotCustomizeState,
+  getInitialSelectBotPageState,
+  SelectBotPageState,
+} from '../models/stateModels';
 
 import { NewBotPage } from './NewBotPage';
 import { CustomizeBotPage } from './CustomizeBotPage';
@@ -34,7 +39,8 @@ const createLgFromString = (text: string) => {
 
 export const VirtualAssistantCreationModal: React.FC<VirtualAssistantCreationModalProps> = (props) => {
   const { onDismiss, handleCreateNew, formData } = props;
-  const [state, setState] = useState(getInitialAppState());
+  const [selectBotPageState, setSelectBotPageState] = useState(getInitialSelectBotPageState);
+  const [customizeBotPageState, setCustomizeBotPageState] = useState(getInitialBotCustomizeState);
   const { shellApi, projectId } = useShellApi();
   const [initialProjectId] = useState(projectId);
 
@@ -48,27 +54,27 @@ export const VirtualAssistantCreationModal: React.FC<VirtualAssistantCreationMod
     await shellApi.updateLgTemplate(
       generatedLgFileId,
       'ReturningUserGreeting',
-      createLgFromString(state.CustomizeBotPageState.selectedGreetingMessage)
+      createLgFromString(customizeBotPageState.selectedGreetingMessage)
     );
     await shellApi.updateLgTemplate(
       generatedLgFileId,
       'NewUserGreeting',
-      createLgFromString(state.CustomizeBotPageState.selectedGreetingMessage)
+      createLgFromString(customizeBotPageState.selectedGreetingMessage)
     );
     await shellApi.updateLgTemplate(
       generatedLgFileId,
       'BotName',
-      createLgFromString(state.CustomizeBotPageState.selectedBotName)
+      createLgFromString(customizeBotPageState.selectedBotName)
     );
     await shellApi.updateLgTemplate(
       generatedLgFileId,
       'FallBackMessage',
-      createLgFromString(state.CustomizeBotPageState.selectedFallbackText)
+      createLgFromString(customizeBotPageState.selectedFallbackText)
     );
   };
 
   const updateQnaFiles = async () => {
-    updatePersonalityQnaFile(shellApi, state.CustomizeBotPageState.selectedPersonality);
+    updatePersonalityQnaFile(shellApi, customizeBotPageState.selectedPersonality);
   };
 
   const onModalDismiss = () => {
@@ -77,11 +83,11 @@ export const VirtualAssistantCreationModal: React.FC<VirtualAssistantCreationMod
   };
 
   const updateGlobalCustomizeState = (newCustomizeState: CustomizeBotPageState) => {
-    setState({ ...state, CustomizeBotPageState: newCustomizeState });
+    setCustomizeBotPageState({ ...newCustomizeState });
   };
 
   const updateGlobalSelectBotState = (newSelectBotPageState: SelectBotPageState) => {
-    setState({ ...state, SelectBotPageState: newSelectBotPageState });
+    setSelectBotPageState({ ...selectBotPageState, ...newSelectBotPageState });
   };
 
   // projectID change indicates that the project files have been created and post create calls can be executed
@@ -96,18 +102,23 @@ export const VirtualAssistantCreationModal: React.FC<VirtualAssistantCreationMod
     <Router>
       <NewBotPage
         default
-        globalSelectBotState={state.SelectBotPageState}
+        initialState={selectBotPageState}
         path={RouterPaths.newBotPage}
-        updateGlobalSelectBotState={updateGlobalSelectBotState}
         onDismiss={onModalDismiss}
+        onNext={updateGlobalSelectBotState}
       />
       <CustomizeBotPage
-        globalCustomizeState={state.CustomizeBotPageState}
+        initialState={customizeBotPageState}
         path={RouterPaths.customizeBotPage}
-        updateGlobalCustomizeState={updateGlobalCustomizeState}
+        onDismiss={onModalDismiss}
+        onNext={updateGlobalCustomizeState}
+      />
+      <ConfigSummaryPage
+        customizeBotPageState={customizeBotPageState}
+        path={RouterPaths.configSummaryPage}
+        selectBotPageState={selectBotPageState}
         onDismiss={onModalDismiss}
       />
-      <ConfigSummaryPage appState={state} path={RouterPaths.configSummaryPage} onDismiss={onModalDismiss} />
       <ProvisionSummaryPage
         path={RouterPaths.provisionSummaryPage}
         onDismiss={onModalDismiss}

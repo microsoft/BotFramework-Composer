@@ -12,7 +12,7 @@ import { Text } from 'office-ui-fabric-react/lib/Text';
 import { Separator, ISeparatorStyles } from 'office-ui-fabric-react/lib/Separator';
 
 import { RouterPaths } from '../constants';
-import { IAppState } from '../models/stateModels';
+import { CustomizeBotPageState, SelectBotPageState } from '../models/stateModels';
 
 import { DialogFooterWrapper } from './DialogFooterWrapper';
 
@@ -35,11 +35,12 @@ const separatorStyles: Partial<ISeparatorStyles> = {
 // -------------------- ConfigSummaryPage -------------------- //
 type ConfigSummaryPageProps = {
   onDismiss: () => void;
-  appState: IAppState;
+  customizeBotPageState: CustomizeBotPageState;
+  selectBotPageState: SelectBotPageState;
 } & RouteComponentProps<{}>;
 
 export const ConfigSummaryPage: React.FC<ConfigSummaryPageProps> = (props) => {
-  const { onDismiss, appState } = props;
+  const { onDismiss, customizeBotPageState, selectBotPageState } = props;
 
   const renderCategoryText = (text: string) => {
     return (
@@ -69,23 +70,17 @@ export const ConfigSummaryPage: React.FC<ConfigSummaryPageProps> = (props) => {
         onDismiss={props.onDismiss}
       >
         {renderCategoryText(formatMessage('General'))}
-        {renderConfigEntry(
-          formatMessage('Selected Assistant Type'),
-          appState.SelectBotPageState.selectedAssistant.name
-        )}
-        {renderConfigEntry(formatMessage('Bot Name'), appState.CustomizeBotPageState.selectedBotName)}
-        {renderConfigEntry(formatMessage('Personality Choice'), appState.CustomizeBotPageState.selectedPersonality)}
-        {renderConfigEntry(
-          formatMessage('Bot Configured for Text'),
-          appState.CustomizeBotPageState.isTextEnabled.toString()
-        )}
+        {renderConfigEntry(formatMessage('Selected Assistant Type'), selectBotPageState.selectedAssistant.name)}
+        {renderConfigEntry(formatMessage('Bot Name'), customizeBotPageState.selectedBotName)}
+        {renderConfigEntry(formatMessage('Personality Choice'), customizeBotPageState.selectedPersonality)}
+        {renderConfigEntry(formatMessage('Bot Configured for Text'), customizeBotPageState.isTextEnabled.toString())}
         {renderConfigEntry(
           formatMessage('Bot Configured for Speech'),
-          appState.CustomizeBotPageState.isSpeechEnabled.toString()
+          customizeBotPageState.isSpeechEnabled.toString()
         )}
         {renderCategoryText(formatMessage('Content'))}
-        {renderConfigEntry(formatMessage('Greeting Message'), appState.CustomizeBotPageState.selectedGreetingMessage)}
-        {renderConfigEntry(formatMessage('Fallback Text'), appState.CustomizeBotPageState.selectedFallbackText)}
+        {renderConfigEntry(formatMessage('Greeting Message'), customizeBotPageState.selectedGreetingMessage)}
+        {renderConfigEntry(formatMessage('Fallback Text'), customizeBotPageState.selectedFallbackText)}
         <DialogFooterWrapper
           nextPath={RouterPaths.provisionSummaryPage}
           prevPath={RouterPaths.customizeBotPage}
