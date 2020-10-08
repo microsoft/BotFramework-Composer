@@ -169,7 +169,6 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({ showTriggers = true, 
   };
 
   const handleOnSelect = (link: TreeLink) => {
-    console.log('selected', link);
     setSelectedLink(link);
     if (link.dialogName != null) {
       if (link.trigger != null) {
