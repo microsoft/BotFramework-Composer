@@ -1,15 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export interface IRange {
+export type IRange = {
   start: IPosition;
   end: IPosition;
-}
+};
 
-export interface IPosition {
+export type IPosition = {
   line: number;
   character: number;
-}
+};
 
 export enum DiagnosticSeverity {
   Error = 0,
@@ -18,7 +18,7 @@ export enum DiagnosticSeverity {
   Hint = 3,
 }
 
-export interface IDiagnostic {
+export type IDiagnostic = {
   /**
    * Error
    * Warning
@@ -52,4 +52,4 @@ export interface IDiagnostic {
    * for example CA2001
    */
   code?: string;
-}
+};
