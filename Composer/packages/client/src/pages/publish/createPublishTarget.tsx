@@ -35,7 +35,7 @@ interface CreatePublishTargetProps {
 
 const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
   const { current } = props;
-  const [targetType, setTargetType] = useState<string | undefined>(current?.item.type);
+  const [targetType, setTargetType] = useState<string>(current?.item.type || '');
   const [name, setName] = useState(current ? current.item.name : '');
   const [config, setConfig] = useState(current ? JSON.parse(current.item.configuration) : undefined);
   const [errorMessage, setErrorMsg] = useState('');
@@ -82,9 +82,9 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
     return targetType ? props.types.find((t) => t.name === targetType)?.schema : undefined;
   }, [props.targets, targetType]);
 
-  // const hasView = useMemo(() => {
-  //   return targetType ? props.types.find((t) => t.name === targetType)?.hasView : undefined;
-  // }, [props.targets, targetType]);
+  const targetBundleId = useMemo(() => {
+    return (targetType && props.types.find((t) => t.name === targetType)?.bundleId) || '';
+  }, [props.targets, targetType]);
 
   const updateName = (e, newName) => {
     setName(newName);
@@ -181,9 +181,10 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
     } else {
       return (
         <PluginHost
+          bundleId={targetBundleId}
           extraIframeStyles={[customPublishUISurface]}
           pluginName={targetType}
-          pluginType={'publish'}
+          pluginType="publish"
         ></PluginHost>
       );
     }

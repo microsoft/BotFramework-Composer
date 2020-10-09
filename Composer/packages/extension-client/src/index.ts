@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+export * from '@bfc/types';
+
 export * from './auth';
 export * from './common';
 export * from './components';

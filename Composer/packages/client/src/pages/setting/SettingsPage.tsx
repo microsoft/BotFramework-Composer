@@ -37,7 +37,7 @@ const getProjectLink = (path: string, id?: string) => {
 const SettingPage: React.FC<RouteComponentProps> = () => {
   const projectId = useRecoilValue(currentProjectIdState);
   const {
-    deleteBotProject,
+    deleteBot: deleteBotProject,
     addLanguageDialogBegin,
     addLanguageDialogCancel,
     delLanguageDialogBegin,
@@ -80,7 +80,7 @@ const SettingPage: React.FC<RouteComponentProps> = () => {
     },
     { id: 'application', name: settingLabels.appSettings, url: getProjectLink('application') },
     { id: 'runtime', name: settingLabels.runtime, url: getProjectLink('runtime', projectId), disabled: !projectId },
-    // { id: 'extensions', name: settingLabels.extensions, url: getProjectLink('extensions') },
+    { id: 'extensions', name: settingLabels.extensions, url: getProjectLink('extensions') },
     { id: 'about', name: settingLabels.about, url: getProjectLink('about') },
   ];
 
@@ -89,8 +89,6 @@ const SettingPage: React.FC<RouteComponentProps> = () => {
   useEffect(() => {
     if (!projectId && location.pathname.indexOf('/settings/bot/') !== -1) {
       navigate('/settings/application');
-    } else {
-      navigate(links[0].url);
     }
   }, [projectId]);
 

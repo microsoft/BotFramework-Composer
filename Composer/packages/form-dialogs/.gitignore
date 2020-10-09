@@ -1,0 +1,9 @@
+node_modules
+dist
+lib
+
+packages
+bin
+obj
+
+**/*.log

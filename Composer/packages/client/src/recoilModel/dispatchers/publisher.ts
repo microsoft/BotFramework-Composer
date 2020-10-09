@@ -226,6 +226,7 @@ export const publisherDispatcher = () => {
       }
     }
   );
+
   return {
     getPublishTargetTypes,
     publishToTarget,

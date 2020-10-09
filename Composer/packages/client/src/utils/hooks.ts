@@ -7,8 +7,9 @@ import replace from 'lodash/replace';
 import find from 'lodash/find';
 import { useRecoilValue } from 'recoil';
 
-import { designPageLocationState, extensionsState, currentProjectIdState } from './../recoilModel';
-import { bottomLinks, topLinks } from './pageLinks';
+import { designPageLocationState, enabledExtensionsSelector, currentProjectIdState } from '../recoilModel';
+
+import { bottomLinks, topLinks, ExtensionPageConfig } from './pageLinks';
 import routerCache from './routerCache';
 import { projectIdCache } from './projectCache';
 
@@ -24,17 +25,17 @@ export const useLocation = () => {
 export const useLinks = () => {
   const projectId = useRecoilValue(currentProjectIdState);
   const designPageLocation = useRecoilValue(designPageLocationState(projectId));
-  const extensions = useRecoilValue(extensionsState);
+  const extensions = useRecoilValue(enabledExtensionsSelector);
   const openedDialogId = designPageLocation.dialogId || 'Main';
 
   // add page-contributing extensions
   const pluginPages = extensions.reduce((pages, p) => {
-    const pageConfig = p.contributes?.views?.page;
-    if (pageConfig) {
-      pages.push({ ...pageConfig, id: p.id });
+    const pagesConfig = p.contributes?.views?.pages;
+    if (Array.isArray(pagesConfig) && pagesConfig.length > 0) {
+      pages.push(...pagesConfig.map((page) => ({ ...page, id: p.id })));
     }
     return pages;
-  }, [] as any[]);
+  }, [] as ExtensionPageConfig[]);
 
   return { topLinks: topLinks(projectId, openedDialogId, pluginPages), bottomLinks };
 };

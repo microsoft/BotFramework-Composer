@@ -2,12 +2,13 @@
 // Licensed under the MIT License.
 
 import { Request, Response } from 'express';
-import { ExtensionManager } from '@bfc/extension';
+import { ExtensionManager, ExtensionMetadata } from '@bfc/extension';
 
 interface AddExtensionRequest extends Request {
   body: {
     id?: string;
     version?: string;
+    path?: string;
   };
 }
 
@@ -33,7 +34,7 @@ interface SearchExtensionsRequest extends Request {
 interface ExtensionViewBundleRequest extends Request {
   params: {
     id: string;
-    view: string;
+    bundleId: string;
   };
 }
 
@@ -44,8 +45,11 @@ interface ExtensionFetchRequest extends Request {
   };
 }
 
+const presentExtension = (e?: ExtensionMetadata) => (e ? { ...e, bundles: undefined, path: undefined } : undefined);
+
 export async function listExtensions(req: Request, res: Response) {
-  res.json(ExtensionManager.getAll()); // might need to have this list all enabled extensions ?
+  const extensions = ExtensionManager.getAll().map(presentExtension);
+  res.json(extensions);
 }
 
 export async function addExtension(req: AddExtensionRequest, res: Response) {
@@ -56,9 +60,15 @@ export async function addExtension(req: AddExtensionRequest, res: Response) {
     return;
   }
 
-  await ExtensionManager.installRemote(id, version);
-  await ExtensionManager.load(id);
-  res.json(ExtensionManager.find(id));
+  const extensionId = await ExtensionManager.installRemote(id, version);
+
+  if (extensionId) {
+    await ExtensionManager.load(extensionId);
+    const extension = ExtensionManager.find(extensionId);
+    res.json(presentExtension(extension));
+  } else {
+    res.status(500).json({ error: 'Unable to install extension.' });
+  }
 }
 
 export async function toggleExtension(req: ToggleExtensionRequest, res: Response) {
@@ -80,7 +90,8 @@ export async function toggleExtension(req: ToggleExtensionRequest, res: Response
     await ExtensionManager.disable(id);
   }
 
-  res.json(ExtensionManager.find(id));
+  const extension = ExtensionManager.find(id);
+  res.json(presentExtension(extension));
 }
 
 export async function removeExtension(req: RemoveExtensionRequest, res: Response) {
@@ -97,7 +108,7 @@ export async function removeExtension(req: RemoveExtensionRequest, res: Response
   }
 
   await ExtensionManager.remove(id);
-  res.json(ExtensionManager.getAll());
+  res.json(ExtensionManager.getAll().map(presentExtension));
 }
 
 export async function searchExtensions(req: SearchExtensionsRequest, res: Response) {
@@ -108,22 +119,11 @@ export async function searchExtensions(req: SearchExtensionsRequest, res: Respon
 }
 
 export async function getBundleForView(req: ExtensionViewBundleRequest, res: Response) {
-  const { id, view } = req.params;
-
-  if (!id) {
-    res.status(400).json({ error: '`id` is missing from body' });
-    return;
-  }
-
-  if (!view) {
-    res.status(400).json({ error: '`view` is missing from body' });
-    return;
-  }
+  const { id, bundleId } = req.params;
 
   const extension = ExtensionManager.find(id);
 
   if (extension) {
-    const bundleId = extension.contributes.views?.[view].bundleId as string;
     const bundle = ExtensionManager.getBundle(id, bundleId);
     if (bundle) {
       res.sendFile(bundle);
