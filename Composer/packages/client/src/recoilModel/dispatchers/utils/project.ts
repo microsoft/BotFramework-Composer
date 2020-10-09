@@ -39,6 +39,7 @@ import {
   recentProjectsState,
   botErrorState,
   botNameIdentifierState,
+  showCreateQnAFromUrlDialogState,
 } from '../../atoms';
 import lgWorker from '../../parsers/lgWorker';
 import luWorker from '../../parsers/luWorker';
@@ -49,7 +50,7 @@ import { BotStatus, QnABotTemplateId } from '../../../constants';
 import httpClient from '../../../utils/httpUtil';
 import { getReferredLuFiles } from '../../../utils/luUtil';
 import luFileStatusStorage from '../../../utils/luFileStatusStorage';
-import { getReferredQnaFiles } from '../../../utils/qnaUtil';
+import { getReferredQnaFiles, reformQnAToContainerKB } from '../../../utils/qnaUtil';
 import qnaFileStatusStorage from '../../../utils/qnaFileStatusStorage';
 import { logMessage, setError } from '../shared';
 import {
@@ -159,8 +160,13 @@ const loadProjectData = (response) => {
   const storedLocale = languageStorage.get(botName)?.locale;
   const locale = settings.languages.includes(storedLocale) ? storedLocale : settings.defaultLanguage;
   const indexedFiles = indexer.index(files, botName, locale, skillContent, mergedSettings);
+
+  // migrate script move qna pairs in *.qna to *-manual.source.qna.
+  // TODO: remove after a period of time.
+  const updateQnAFiles = reformQnAToContainerKB(projectId, indexedFiles.qnaFiles);
+
   return {
-    botFiles: { ...indexedFiles, mergedSettings },
+    botFiles: { ...indexedFiles, qnaFiles: updateQnAFiles, mergedSettings },
     projectData: response.data,
     error: undefined,
   };
@@ -390,7 +396,13 @@ export const createNewBotFromTemplate = async (
   }
   const currentBotProjectFileIndexed: BotProjectFile = botFiles.botProjectSpaceFiles[0];
   set(botProjectFileState(projectId), currentBotProjectFileIndexed);
+
   const mainDialog = await initBotState(callbackHelpers, projectData, botFiles);
+  // if create from QnATemplate, continue creation flow.
+  if (templateId === QnABotTemplateId) {
+    set(showCreateQnAFromUrlDialogState(projectId), true);
+  }
+
   return { projectId, mainDialog };
 };
 

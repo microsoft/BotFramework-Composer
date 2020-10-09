@@ -11,8 +11,8 @@ import {
   Diagnostic,
   DiagnosticSeverity,
   LuFile,
-  fetchFromSettings,
   getSkillNameFromSetting,
+  fetchFromSettings,
 } from '@bfc/shared';
 import difference from 'lodash/difference';
 import map from 'lodash/map';
@@ -49,7 +49,7 @@ const checkSkillSetting = (assets: BotAssets): Diagnostic[] => {
     // used skill not existed in setting
     dialog.skills.forEach((skillId) => {
       const endpointUrlCollection = map(skill, ({ endpointUrl }) => endpointUrl);
-      if (!endpointUrlCollection.includes(skillId)) {
+      if (!endpointUrlCollection.includes(fetchFromSettings(skillId, assets.setting))) {
         const skillName = getSkillNameFromSetting(skillId) || skillId;
         diagnostics.push(
           new Diagnostic(

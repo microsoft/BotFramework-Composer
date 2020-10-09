@@ -35,7 +35,7 @@ const botAssets: BotAssets = {
   dialogs: [
     {
       luFile: 'a.lu',
-      skills: ['skill1', 'skill2'],
+      skills: [`=settings.skill['Email-Skill'].endpointUrl`, `=settings.skill['Calendar-Skill'].endpointUrl`],
     } as DialogInfo,
   ],
   setting: {
