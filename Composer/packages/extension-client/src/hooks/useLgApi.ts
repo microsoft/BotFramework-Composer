@@ -1,7 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LgTemplateRef, LgMetaData, BaseSchema, LgType, ShellApi } from '@bfc/shared';
+import { LgType, LgTemplateRef, LgMetaData } from '@bfc/shared';
+import { BaseSchema, ShellApi } from '@bfc/types';
 
 /**
  * LG CRUD lib

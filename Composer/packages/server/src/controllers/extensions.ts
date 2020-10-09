@@ -2,8 +2,7 @@
 // Licensed under the MIT License.
 
 import { Request, Response } from 'express';
-import { ExtensionManager } from '@bfc/extension';
-import { ExtensionMetadata } from '@bfc/extension/lib/types/extension';
+import { ExtensionManager, ExtensionMetadata } from '@bfc/extension';
 
 interface AddExtensionRequest extends Request {
   body: {
@@ -35,7 +34,7 @@ interface SearchExtensionsRequest extends Request {
 interface ExtensionViewBundleRequest extends Request {
   params: {
     id: string;
-    view: string;
+    bundleId: string;
   };
 }
 
@@ -120,22 +119,11 @@ export async function searchExtensions(req: SearchExtensionsRequest, res: Respon
 }
 
 export async function getBundleForView(req: ExtensionViewBundleRequest, res: Response) {
-  const { id, view } = req.params;
-
-  if (!id) {
-    res.status(400).json({ error: '`id` is missing from body' });
-    return;
-  }
-
-  if (!view) {
-    res.status(400).json({ error: '`view` is missing from body' });
-    return;
-  }
+  const { id, bundleId } = req.params;
 
   const extension = ExtensionManager.find(id);
 
   if (extension) {
-    const bundleId = extension.contributes.views?.[view].bundleId as string;
     const bundle = ExtensionManager.getBundle(id, bundleId);
     if (bundle) {
       res.sendFile(bundle);

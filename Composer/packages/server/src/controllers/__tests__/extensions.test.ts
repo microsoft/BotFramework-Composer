@@ -2,8 +2,7 @@
 // Licensed under the MIT License.
 
 import { Request, Response } from 'express';
-import { ExtensionManager } from '@bfc/extension';
-import { ExtensionMetadata } from '@bfc/extension/lib/types/extension';
+import { ExtensionManager, ExtensionMetadata } from '@bfc/extension';
 
 import * as ExtensionsController from '../extensions';
 
@@ -47,9 +46,11 @@ const mockExtension1 = {
   ],
   contributes: {
     views: {
-      publish: {
-        bundleId: '',
-      },
+      publish: [
+        {
+          bundleId: '',
+        },
+      ],
       pages: [
         {
           bundleId: 'page1',
@@ -79,9 +80,11 @@ const allExtensions: ExtensionMetadata[] = [
     ],
     contributes: {
       views: {
-        publish: {
-          bundleId: '',
-        },
+        publish: [
+          {
+            bundleId: '',
+          },
+        ],
         pages: [
           {
             bundleId: 'page2',
@@ -107,9 +110,11 @@ describe('listing all extensions', () => {
         description: 'description text',
         contributes: {
           views: {
-            publish: {
-              bundleId: '',
-            },
+            publish: [
+              {
+                bundleId: '',
+              },
+            ],
             pages: [
               {
                 bundleId: 'page1',
@@ -131,9 +136,11 @@ describe('listing all extensions', () => {
         description: 'description text',
         contributes: {
           views: {
-            publish: {
-              bundleId: '',
-            },
+            publish: [
+              {
+                bundleId: '',
+              },
+            ],
             pages: [
               {
                 bundleId: 'page2',
@@ -306,23 +313,12 @@ describe('searching extensions', () => {
 });
 
 describe('getting a view bundle', () => {
-  it('validates id parameter', async () => {
-    await ExtensionsController.getBundleForView({ params: { id: '' } } as Request, res);
-
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith({ error: expect.any(String) });
-  });
-
-  it('validates view parameter', async () => {
-    await ExtensionsController.getBundleForView({ params: { id: 'some-id', view: '' } } as Request, res);
-
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith({ error: expect.any(String) });
-  });
-
   it('returns 404 if extension not found', async () => {
     (ExtensionManager.find as jest.Mock).mockReturnValue(null);
-    await ExtensionsController.getBundleForView({ params: { id: 'does-not-exist', view: 'some-id' } } as Request, res);
+    await ExtensionsController.getBundleForView(
+      { params: { id: 'does-not-exist', bundleId: 'some-id' } } as Request,
+      res
+    );
 
     expect(res.status).toHaveBeenCalledWith(404);
     expect(res.json).toHaveBeenCalledWith({ error: expect.any(String) });
@@ -330,24 +326,15 @@ describe('getting a view bundle', () => {
 
   describe('when extension found', () => {
     const id = 'extension-id';
-    const viewId = 'view-id';
     const bundleId = 'bundle-id';
 
     beforeEach(() => {
-      (ExtensionManager.find as jest.Mock).mockReturnValue({
-        contributes: {
-          views: {
-            [viewId]: {
-              bundleId,
-            },
-          },
-        },
-      });
+      (ExtensionManager.find as jest.Mock).mockReturnValue(id);
     });
 
     it('returns a 404 if bundle not found', async () => {
       (ExtensionManager.getBundle as jest.Mock).mockReturnValue(null);
-      await ExtensionsController.getBundleForView({ params: { id, view: viewId } } as Request, res);
+      await ExtensionsController.getBundleForView({ params: { id, bundleId } } as Request, res);
 
       expect(res.status).toHaveBeenCalledWith(404);
       expect(res.json).toHaveBeenCalledWith({ error: expect.any(String) });
@@ -355,7 +342,7 @@ describe('getting a view bundle', () => {
 
     it('sends the javascript bundle', async () => {
       (ExtensionManager.getBundle as jest.Mock).mockReturnValue('js bundle path');
-      await ExtensionsController.getBundleForView({ params: { id, view: viewId } } as Request, res);
+      await ExtensionsController.getBundleForView({ params: { id, bundleId } } as Request, res);
 
       expect(res.sendFile).toHaveBeenCalledWith('js bundle path');
     });

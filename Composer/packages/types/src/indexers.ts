@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Diagnostic, Range } from './diagnostic';
+import { IDiagnostic, IRange } from './diagnostic';
 import { IIntentTrigger } from './dialogUtils';
 
 import { DialogSetting } from './index';
@@ -18,34 +18,34 @@ export enum FileExtensions {
   BotProject = '.botproj',
 }
 
-export interface FileInfo {
+export type FileInfo = {
   name: string;
   content: string;
   path: string;
   relativePath: string;
   lastModified: string;
-}
+};
 
-export interface ITrigger {
+export type ITrigger = {
   id: string;
   displayName: string;
   type: string;
   isIntent: boolean;
-}
+};
 
-export interface ReferredLuIntents {
+export type ReferredLuIntents = {
   name: string;
   path: string;
-}
+};
 
-export interface DialogSchemaFile {
+export type DialogSchemaFile = {
   id: string;
   content: any;
-}
+};
 
-export interface DialogInfo {
+export type DialogInfo = {
   content: any;
-  diagnostics: Diagnostic[];
+  diagnostics: IDiagnostic[];
   displayName: string;
   id: string;
   isRoot: boolean;
@@ -58,35 +58,35 @@ export interface DialogInfo {
   triggers: ITrigger[];
   intentTriggers: IIntentTrigger[];
   skills: string[];
-}
+};
 
-export interface LgTemplateJsonPath {
+export type LgTemplateJsonPath = {
   name: string;
   path: string;
-}
+};
 
-export interface Intent {
+export type Intent = {
   name: string;
-}
+};
 
-export interface Utterance {
+export type Utterance = {
   intent: string;
   text: string;
-}
+};
 
-export interface LuIntentSection {
+export type LuIntentSection = {
   Name: string;
   Body: string;
   Entities?: LuEntity[];
   Children?: LuIntentSection[];
-  range?: Range;
-}
+  range?: IRange;
+};
 
-export interface LuParsed {
+export type LuParsed = {
   empty: boolean;
   intents: LuIntentSection[];
-  diagnostics: Diagnostic[];
-}
+  diagnostics: IDiagnostic[];
+};
 
 export enum LuSectionTypes {
   SIMPLEINTENTSECTION = 'simpleIntentSection',
@@ -94,55 +94,55 @@ export enum LuSectionTypes {
   MODELINFOSECTION = 'modelInfoSection',
 }
 
-export interface LuEntity {
+export type LuEntity = {
   Name: string;
-}
+};
 
-export interface LuFile {
+export type LuFile = {
   id: string;
   content: string;
-  diagnostics: Diagnostic[];
+  diagnostics: IDiagnostic[];
   intents: LuIntentSection[];
   empty: boolean;
   [key: string]: any;
-}
+};
 
-export interface QnASection {
+export type QnASection = {
   Questions: { content: string; id: string }[];
   Answer: string;
   Body: string;
-}
+};
 
-export interface QnAFile {
+export type QnAFile = {
   id: string;
   content: string;
   qnaSections: QnASection[];
   [key: string]: any;
-}
+};
 
-export interface LgTemplate {
+export type LgTemplate = {
   name: string;
   body: string;
   parameters: string[];
-  range?: Range;
-}
+  range?: IRange;
+};
 
-export interface LgParsed {
-  diagnostics: Diagnostic[];
+export type LgParsed = {
+  diagnostics: IDiagnostic[];
   templates: LgTemplate[];
-}
+};
 
-export interface LgFile {
+export type LgFile = {
   id: string;
   content: string;
-  diagnostics: Diagnostic[];
+  diagnostics: IDiagnostic[];
   templates: LgTemplate[];
   allTemplates: LgTemplate[];
   options?: string[];
   parseResult?: any;
-}
+};
 
-export interface Skill {
+export type Skill = {
   id: string;
   content: any;
   description?: string;
@@ -151,28 +151,28 @@ export interface Skill {
   manifestUrl: string;
   msAppId: string;
   name: string;
-}
+};
 
-export interface TextFile {
+export type TextFile = {
   id: string;
   content: string;
-}
+};
 export type FileResolver = (id: string) => FileInfo | undefined;
 
 export type MemoryResolver = (id: string) => string[] | undefined;
 
-export interface SkillManifestInfo {
+export type SkillManifestInfo = {
   content: { [key: string]: any };
   lastModified: string;
   id: string;
-}
+};
 
-export interface SkillManifest {
+export type SkillManifest = {
   content: any;
   id: string;
   path?: string;
   lastModified?: string;
-}
+};
 
 export type BotAssets = {
   projectId: string;
@@ -186,10 +186,31 @@ export type BotAssets = {
   botProjectFile: BotProjectFile;
 };
 
-export interface BotInfo {
+export type BotInfo = {
   assets: BotAssets;
-  diagnostics: Diagnostic[];
+  diagnostics: IDiagnostic[];
   name: string;
+};
+
+export interface BotProjectSpaceSkill {
+  workspace?: string;
+  manifest?: string;
+  remote: boolean;
+  endpointName?: string;
+}
+
+export interface BotProjectSpace {
+  workspace: string;
+  name: string;
+  skills: {
+    [skillId: string]: BotProjectSpaceSkill;
+  };
+}
+
+export interface BotProjectFile {
+  id: string;
+  content: BotProjectSpace;
+  lastModified: string;
 }
 
 export interface BotProjectSpaceSkill {

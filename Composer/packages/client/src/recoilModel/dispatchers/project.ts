@@ -36,12 +36,12 @@ import {
   saveProject,
   removeRecentProject,
   createNewBotFromTemplate,
-  //resetBotStates,
+  resetBotStates,
   openRemoteSkill,
   openRootBotAndSkillsByProjectId,
+  checkIfBotExistsInBotProjectFile,
   getSkillNameIdentifier,
   openRootBotAndSkillsByPath,
-  checkIfBotExistsInBotProjectFile,
 } from './utils/project';
 
 export const projectDispatcher = () => {
@@ -56,7 +56,7 @@ export const projectDispatcher = () => {
           const filtered = currentProjects.filter((id) => id !== projectIdToRemove);
           return filtered;
         });
-        //resetBotStates(callbackHelpers, projectIdToRemove);
+        resetBotStates(callbackHelpers, projectIdToRemove);
       } catch (ex) {
         setError(callbackHelpers, ex);
       }
@@ -85,16 +85,14 @@ export const projectDispatcher = () => {
     (callbackHelpers: CallbackInterface) => async (path: string, storageId = 'default'): Promise<void> => {
       const { set, snapshot } = callbackHelpers;
       try {
+        set(botOpeningState, true);
         const dispatcher = await snapshot.getPromise(dispatcherState);
-
         const botExists = await checkIfBotExistsInBotProjectFile(callbackHelpers, path);
         if (botExists) {
-          throw {
-            message: formatMessage('This operation cannot be completed. The skill is already part of the Bot Project'),
-          };
+          throw new Error(
+            formatMessage('This operation cannot be completed. The skill is already part of the Bot Project')
+          );
         }
-        set(botOpeningState, true);
-
         const skillNameIdentifier: string = await getSkillNameIdentifier(callbackHelpers, getFileNameFromPath(path));
 
         const { projectId, mainDialog } = await openLocalSkill(callbackHelpers, path, storageId, skillNameIdentifier);
@@ -291,7 +289,7 @@ export const projectDispatcher = () => {
       qnaFileStatusStorage.removeAllStatuses(projectId);
       settingStorage.remove(projectId);
       projectIdCache.clear();
-      //resetBotStates(callbackHelpers, projectId);
+      resetBotStates(callbackHelpers, projectId);
       reset(botProjectIdsState);
       reset(currentProjectIdState);
       reset(botProjectSpaceLoadedState);

@@ -36,7 +36,6 @@ export const botProjectSpaceSelector = selector({
       const dialogs = get(dialogsState(projectId));
       const metaData = get(projectMetaDataState(projectId));
       const botError = get(botErrorState(projectId));
-      if (botError) console.log('in selector:', botError);
       const name = get(botDisplayNameState(projectId));
       const botNameId = get(botNameIdentifierState(projectId));
       return { dialogs, projectId, name, ...metaData, error: botError, botNameId };

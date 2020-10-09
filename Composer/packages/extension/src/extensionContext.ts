@@ -9,12 +9,13 @@ import { Express } from 'express';
 import { pathToRegexp } from 'path-to-regexp';
 import glob from 'globby';
 import formatMessage from 'format-message';
+import { UserIdentity, ExtensionCollection, RuntimeTemplate } from '@bfc/types';
 
-import { UserIdentity, ExtensionCollection, RuntimeTemplate, DEFAULT_RUNTIME } from './types/types';
 import logger from './logger';
 import { ExtensionRegistration } from './extensionRegistration';
 
 const log = logger.extend('extension-context');
+export const DEFAULT_RUNTIME = 'csharp-azurewebapp';
 
 class ExtensionContext {
   private _passport: passport.PassportStatic;
@@ -63,7 +64,7 @@ class ExtensionContext {
           return this.extensions.authentication.middleware(req, res, next);
         }
       }
-      next();
+      next && next();
     });
   }
 

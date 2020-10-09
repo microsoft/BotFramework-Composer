@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { JSONSchema6 } from 'json-schema';
+import { JSONSchema7 } from 'json-schema';
 
 // All of the known SDK types. Update this list when we take a schema update.
 // To get this list copy the output of the following commands in a node repl from the project root:
@@ -139,19 +139,27 @@ export interface DefinitionSummary {
   $ref: string;
 }
 
-export interface OBISchema extends JSONSchema6 {
-  $schema?: string;
-  $role?: string;
-  $kind?: SDKKinds;
+export type SchemaDefinitions = {
+  [key: string]: AdaptiveSchema;
+};
+
+interface AdaptiveSchema extends Omit<JSONSchema7, 'definitions' | 'properties' | 'additionalProperties'> {
   $copy?: string;
   $id?: string;
+  $kind?: string;
+  $role?: string;
   $designer?: {
     id: string;
     [key: string]: any;
   };
-  description?: string;
-  oneOf?: DefinitionSummary[];
-  definitions?: any;
-  title?: string;
-  __additional_property?: boolean;
+  definitions?: SchemaDefinitions;
+  oneOf?: AdaptiveSchema[];
+  properties?: SchemaDefinitions;
+  additionalProperties?: boolean | AdaptiveSchema;
+  items?: AdaptiveSchema | AdaptiveSchema[];
 }
+
+// Re-export monkey patched json schema interfaces
+export { AdaptiveSchema as JSONSchema7 };
+
+export type DefinitionCache = Map<string, AdaptiveSchema>;

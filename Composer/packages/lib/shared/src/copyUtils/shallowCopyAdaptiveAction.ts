@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { BaseSchema } from '../types';
+import { BaseSchema } from '@bfc/types';
 
 import { ExternalApi } from './ExternalApi';
 
