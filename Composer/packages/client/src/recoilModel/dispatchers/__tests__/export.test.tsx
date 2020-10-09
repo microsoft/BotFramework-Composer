@@ -7,7 +7,7 @@ import { act } from '@bfc/test-utils/lib/hooks';
 import httpClient from '../../../utils/httpUtil';
 import { exportDispatcher } from '../export';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
-import { botNameState, currentProjectIdState } from '../../atoms';
+import { botDisplayNameState, currentProjectIdState } from '../../atoms';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '../../../recoilModel/dispatchers';
 
@@ -22,7 +22,7 @@ describe('Export dispatcher', () => {
     prevAppendChild = document.body.appendChild;
 
     const useRecoilTestHook = () => {
-      const botName = useRecoilValue(botNameState(projectId));
+      const botName = useRecoilValue(botDisplayNameState(projectId));
       const currentDispatcher = useRecoilValue(dispatcherState);
       return {
         botName,
@@ -33,7 +33,7 @@ describe('Export dispatcher', () => {
     const { result } = renderRecoilHook(useRecoilTestHook, {
       states: [
         { recoilState: currentProjectIdState, initialValue: projectId },
-        { recoilState: botNameState(projectId), initialValue: 'emptybot-1' },
+        { recoilState: botDisplayNameState(projectId), initialValue: 'emptybot-1' },
       ],
       dispatcher: {
         recoilState: dispatcherState,

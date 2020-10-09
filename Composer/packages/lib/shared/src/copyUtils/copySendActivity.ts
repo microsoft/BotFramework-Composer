@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { SendActivity } from '../types';
+import { SendActivity } from '@bfc/types';
 
 import { ExternalApi } from './ExternalApi';
 import { shallowCopyAdaptiveAction } from './shallowCopyAdaptiveAction';

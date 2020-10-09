@@ -17,7 +17,7 @@ import { projectContainer } from '../design/styles';
 import {
   dispatcherState,
   settingsState,
-  botNameState,
+  botDisplayNameState,
   publishTypesState,
   publishHistoryState,
 } from '../../recoilModel';
@@ -36,7 +36,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const { projectId = '' } = props;
   const [selectedTarget, setSelectedTarget] = useState<PublishTarget | undefined>();
   const settings = useRecoilValue(settingsState(projectId));
-  const botName = useRecoilValue(botNameState(projectId));
+  const botName = useRecoilValue(botDisplayNameState(projectId));
   const publishTypes = useRecoilValue(publishTypesState(projectId));
   const publishHistory = useRecoilValue(publishHistoryState(projectId));
 

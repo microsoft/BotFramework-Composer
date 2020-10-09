@@ -3,9 +3,9 @@
 
 import { RequestHandler } from 'express-serve-static-core';
 import { Debugger } from 'debug';
+import { PublishPlugin, RuntimeTemplate, BotTemplate } from '@bfc/types';
 
 import logger from './logger';
-import { PublishPlugin, RuntimeTemplate, BotTemplate } from './types/types';
 import { ExtensionContext } from './extensionContext';
 
 const log = logger.extend('extension-registration');
@@ -64,7 +64,7 @@ export class ExtensionRegistration {
         name: plugin.customName || this.name,
         description: plugin.customDescription || this.description,
         instructions: plugin.instructions,
-        hasView: plugin.hasView,
+        bundleId: plugin.bundleId,
         schema: plugin.schema,
       },
       methods: plugin,
@@ -157,7 +157,7 @@ export class ExtensionRegistration {
     // bind a basic auth middleware. this can be overridden. see setAuthMiddleware below
     this.context.extensions.authentication.middleware = (req, res, next) => {
       if (req.isAuthenticated()) {
-        next();
+        next && next();
       } else {
         log('Rejecting access to ', req.url);
         res.redirect(this.context.loginUri);
