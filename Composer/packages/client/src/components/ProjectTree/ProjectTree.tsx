@@ -35,12 +35,18 @@ const root = css`
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  overflow-y: auto;
+  overflow-y: hidden;
   overflow-x: hidden;
   .ms-List-cell {
     min-height: 16px;
   }
   label: root;
+`;
+
+const tree = css`
+  overflow-y: auto;
+  height: 100%;
+  label: tree;
 `;
 
 //const deleteDialogContent = css`
@@ -442,7 +448,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({ showTriggers = true, 
           )}
           aria-live={'polite'}
         />
-        {projectTree}
+        <div css={tree}>{projectTree}</div>
       </FocusZone>
     </div>
   );

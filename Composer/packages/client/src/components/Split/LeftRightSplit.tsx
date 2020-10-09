@@ -33,6 +33,7 @@ const Left = styled.div`
   outline: none;
   overflow: hidden;
   grid-area: left;
+  label: SplitLeft;
 `;
 
 const Split = styled.div`
@@ -65,6 +66,7 @@ const Right = styled.div`
   outline: none;
   overflow: hidden;
   grid-area: right;
+  label: SplitRight;
 `;
 
 // ensures a value can be used in gridTemplateColumns
