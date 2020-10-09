@@ -10,7 +10,6 @@ import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import {
   skillManifestsState,
   onAddSkillDialogCompleteState,
-  skillsState,
   settingsState,
   showAddSkillDialogModalState,
   displaySkillManifestState,
@@ -42,7 +41,7 @@ const makeTestSkill: (number) => Skill = (n) => ({
   endpointUrl: 'url',
   endpoints: [{ test: 'foo' }],
   msAppId: 'ID',
-  content: {
+  manifestContent: {
     description: 'test skill' + n,
     endpoints: [{ test: 'foo' }],
   },

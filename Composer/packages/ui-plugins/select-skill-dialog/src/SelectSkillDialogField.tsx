@@ -23,19 +23,25 @@ export const settingReferences = (skillName: string) => ({
 
 export const SelectSkillDialogField: React.FC<FieldProps> = (props) => {
   const { value, onChange } = props;
-  const { shellApi, skills = [] } = useShellApi();
-  const { addSkillDialog, displayManifestModal } = shellApi;
-  const [comboboxTitle, setComboboxTitle] = useState<string | null>(null);
+
+  const { shellApi, skills } = useShellApi();
+  const { displayManifestModal } = shellApi;
+  const [comboboxTitle, _] = useState<string | null>(null);
 
   const skillId = getSkillNameFromSetting(value?.skillEndpoint);
-  const { content, manifestUrl, name } = skills.find(({ id }) => id === skillId) || ({} as Skill);
+  const { manifest, name }: Skill = skills[skillId] || {};
 
-  const options: IComboBoxOption[] = skills.map(({ id, name }) => ({
-    key: name,
-    text: name,
-    data: settingReferences(id),
-    isSelected: id === skillId,
-  }));
+  const options: IComboBoxOption[] = [];
+  for (const skillNameIdentifier in skills) {
+    const skill = skills[skillNameIdentifier];
+    const option = {
+      key: skillNameIdentifier,
+      text: skill.name,
+      data: settingReferences(skillNameIdentifier),
+      isSelected: skillNameIdentifier === skillId,
+    };
+    options.push(option);
+  }
 
   options.push(
     {
@@ -52,17 +58,7 @@ export const SelectSkillDialogField: React.FC<FieldProps> = (props) => {
 
   const handleChange = (_, option: IComboBoxOption) => {
     if (option) {
-      if (option.key === ADD_DIALOG) {
-        setComboboxTitle(formatMessage('Add a new Skill Dialog'));
-        addSkillDialog().then((skill) => {
-          if (skill?.manifestUrl && skill?.name) {
-            onChange({ ...value, ...settingReferences(skill.name) });
-          }
-          setComboboxTitle(null);
-        });
-      } else {
-        onChange({ ...value, ...option.data });
-      }
+      onChange({ ...value, ...option.data });
     }
   };
 
@@ -78,9 +74,9 @@ export const SelectSkillDialogField: React.FC<FieldProps> = (props) => {
         onChange={handleChange}
       />
       <Link
-        disabled={!content || !name}
+        disabled={!manifest || !name}
         styles={{ root: { fontSize: '12px', paddingTop: '4px' } }}
-        onClick={() => manifestUrl && displayManifestModal(manifestUrl)}
+        onClick={() => manifest && displayManifestModal(name)}
       >
         {formatMessage('Show skill manifest')}
       </Link>

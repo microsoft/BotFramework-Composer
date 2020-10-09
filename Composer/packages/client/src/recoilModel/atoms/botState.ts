@@ -10,10 +10,10 @@ import {
   LuFile,
   QnAFile,
   BotSchemas,
-  Skill,
   DialogSetting,
   BotProjectSpace,
   BotProjectFile,
+  SkillManifestFile,
 } from '@bfc/shared';
 
 import { BotLoadError, DesignPageLocation, QnAAllUpViewStatus } from '../../recoilModel/types';
@@ -108,13 +108,6 @@ export const luFilesState = atomFamily<LuFile[], string>({
   },
 });
 
-export const skillsState = atomFamily<Skill[], string>({
-  key: getFullyQualifiedKey('skills'),
-  default: (id) => {
-    return [];
-  },
-});
-
 export const actionsSeedState = atomFamily<any, string>({
   key: getFullyQualifiedKey('actionsSeed'),
   default: (id) => {
@@ -122,7 +115,7 @@ export const actionsSeedState = atomFamily<any, string>({
   },
 });
 
-export const skillManifestsState = atomFamily<any, string>({
+export const skillManifestsState = atomFamily<SkillManifestFile[], string>({
   key: getFullyQualifiedKey('skillManifests'),
   default: (id) => {
     return [];
@@ -278,4 +271,10 @@ export const botErrorState = atomFamily<any, string>({
 export const botNameIdentifierState = atomFamily<string, string>({
   key: getFullyQualifiedKey('botNameIdentifier'),
   default: '',
+});
+
+// TODO: Currently always setting to 0 as we dont support more than 1 manifest. This index would need to change based on the default manifest chosen in the future.
+export const currentSkillManifestIndexState = atomFamily<number, string>({
+  key: getFullyQualifiedKey('currentSkillManifestIndex'),
+  default: 0,
 });

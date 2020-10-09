@@ -3,7 +3,14 @@
 
 import get from 'lodash/get';
 import keyBy from 'lodash/keyBy';
-import { DialogSetting, Skill } from '@bfc/types';
+import { BotProjectSpaceSkill, DialogSetting } from '@bfc/types';
+import formatMessage from 'format-message';
+import camelCase from 'lodash/camelCase';
+
+export const VIRTUAL_LOCAL_ENDPOINT = {
+  key: -1,
+  name: formatMessage('Local Endpoint'),
+};
 
 export function fetchFromSettings(path: string, settings: DialogSetting): string {
   if (path) {
@@ -13,8 +20,8 @@ export function fetchFromSettings(path: string, settings: DialogSetting): string
   return '';
 }
 
-export const convertSkillsToDictionary = (skills: Skill[]) => {
-  const mappedSkills = skills.map(({ msAppId, endpointUrl, manifestUrl, name }: Skill) => {
+export const convertSkillsToDictionary = (skills: any[]) => {
+  const mappedSkills = skills.map(({ msAppId, endpointUrl, manifestUrl, name }) => {
     return {
       name,
       msAppId,
@@ -23,7 +30,7 @@ export const convertSkillsToDictionary = (skills: Skill[]) => {
     };
   });
 
-  return keyBy(mappedSkills, 'name');
+  return keyBy(mappedSkills, (item) => camelCase(item.name));
 };
 
 export const getSkillNameFromSetting = (value?: string) => {
@@ -39,4 +46,12 @@ export const getSkillNameFromSetting = (value?: string) => {
 export const getEndpointNameGivenUrl = (manifestData: any, urlToMatch: string) => {
   const matchedEndpoint = manifestData?.endpoints.find(({ endpointUrl }) => endpointUrl === urlToMatch);
   return matchedEndpoint ? matchedEndpoint.name : '';
+};
+
+export const getManifestNameFromUrl = (manifestUrl: string) => {
+  const manifestNameIndex = manifestUrl.lastIndexOf('/') + 1;
+  if (!manifestNameIndex) {
+    return manifestUrl;
+  }
+  return manifestUrl.substring(manifestNameIndex);
 };

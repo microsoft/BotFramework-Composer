@@ -27,6 +27,7 @@ import { isAbsHosted } from '../../utils/envUtil';
 import useNotifications from '../../pages/notifications/useNotifications';
 import { navigateTo, openInEmulator } from '../../utils/navigation';
 
+import { StartBotsDialog } from './startBotsDialog';
 import { isBuildConfigComplete, needsBuild } from './../../utils/buildUtil';
 import { PublishDialog } from './publishDialog';
 import { ErrorCallout } from './errorCallout';
@@ -245,16 +246,7 @@ export const TestController: React.FC<{ projectId: string }> = (props) => {
         onDismiss={dismissCallout}
         onTry={handleStart}
       />
-      {settings.luis && modalOpen && (
-        <PublishDialog
-          botName={botName}
-          config={publishDialogConfig}
-          isOpen={modalOpen}
-          projectId={projectId}
-          onDismiss={dismissDialog}
-          onPublish={handleBuild}
-        />
-      )}
+      {settings.luis && modalOpen && <StartBotsDialog isOpen={modalOpen} onDismiss={dismissDialog} />}
     </Fragment>
   );
 };

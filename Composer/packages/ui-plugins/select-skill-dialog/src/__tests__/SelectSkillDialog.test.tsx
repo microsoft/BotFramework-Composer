@@ -4,6 +4,7 @@
 import React from 'react';
 import { act, fireEvent, getAllByRole, render } from '@bfc/test-utils';
 import { EditorExtension } from '@bfc/extension-client';
+import { ShellData } from '@bfc/shared';
 
 import { SelectSkillDialogField, settingReferences } from '../SelectSkillDialogField';
 
@@ -15,13 +16,13 @@ const renderSelectSkillDialog = ({ addSkillDialog = jest.fn(), onChange = jest.f
     onChange,
   } as any;
 
-  const shell = {
+  const shell: any = {
     addSkillDialog,
   };
 
-  const shellData = {
+  const shellData: ShellData = {
     skills,
-  };
+  } as ShellData;
 
   return render(
     <EditorExtension shell={{ api: shell, data: shellData }}>

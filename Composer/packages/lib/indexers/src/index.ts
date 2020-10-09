@@ -1,13 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { DialogSetting, FileInfo, importResolverGenerator } from '@bfc/shared';
+import { FileInfo, importResolverGenerator } from '@bfc/shared';
 
 import { dialogIndexer } from './dialogIndexer';
 import { dialogSchemaIndexer } from './dialogSchemaIndexer';
 import { lgIndexer } from './lgIndexer';
 import { luIndexer } from './luIndexer';
 import { qnaIndexer } from './qnaIndexer';
-import { skillIndexer } from './skillIndexer';
 import { skillManifestIndexer } from './skillManifestIndexer';
 import { botProjectSpaceIndexer } from './botProjectSpaceIndexer';
 import { FileExtensions } from './utils/fileExtensions';
@@ -46,7 +45,7 @@ class Indexer {
     return importResolverGenerator(lgFiles, '.lg', locale);
   };
 
-  public index(files: FileInfo[], botName: string, locale: string, skillContent: any, settings: DialogSetting) {
+  public index(files: FileInfo[], botName: string, locale: string) {
     const result = this.classifyFile(files);
     return {
       dialogs: dialogIndexer.index(result[FileExtensions.Dialog], botName),
@@ -55,7 +54,6 @@ class Indexer {
       luFiles: luIndexer.index(result[FileExtensions.Lu]),
       qnaFiles: qnaIndexer.index(result[FileExtensions.QnA]),
       skillManifestFiles: skillManifestIndexer.index(result[FileExtensions.Manifest]),
-      skills: skillIndexer.index(skillContent, settings.skill),
       botProjectSpaceFiles: botProjectSpaceIndexer.index(result[FileExtensions.BotProjectSpace]),
     };
   }

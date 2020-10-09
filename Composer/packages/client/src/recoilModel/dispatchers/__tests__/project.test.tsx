@@ -32,7 +32,6 @@ import {
   localeState,
   schemasState,
   locationState,
-  skillsState,
   botStatusState,
   botDisplayNameState,
   botOpeningState,

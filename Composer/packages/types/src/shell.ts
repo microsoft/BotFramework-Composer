@@ -6,6 +6,8 @@ import type { DialogInfo, LuFile, LgFile, QnAFile, LuIntentSection, LgTemplate, 
 import type { SkillSetting, UserSettings } from './settings';
 import type { JSONSchema7 } from './schema';
 
+import { ManifestEndpoint, Skill } from '.';
+
 /** Recursively marks all properties as optional. */
 type AllPartial<T> = {
   [P in keyof T]?: T[P] extends (infer U)[] ? AllPartial<U>[] : T[P] extends object ? AllPartial<T[P]> : T[P];
@@ -57,7 +59,7 @@ export type ShellData = {
   luFiles: LuFile[];
   qnaFiles: QnAFile[];
   userSettings: UserSettings;
-  skills: any[];
+  skills: Record<string, Skill>;
   skillsSettings: Record<string, SkillSetting>;
   // TODO: remove
   schemas: BotSchemas;
@@ -101,7 +103,7 @@ export type ShellApi = {
   displayManifestModal: (manifestId: string) => void;
   updateDialogSchema: (_: DialogSchemaFile) => Promise<void>;
   createTrigger: (id: string, formData, url?: string) => void;
-  updateSkillSetting: (skillId: string, skillsData: SkillSetting) => Promise<void>;
+  updateSkill: (skillId: string, skillsData: { skill: Skill; selectedEndpointIndex: number }) => Promise<void>;
 };
 
 export type Shell = {

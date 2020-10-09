@@ -20,9 +20,10 @@ import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { FontSizes } from '@uifabric/fluent-theme';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
+import { Skill } from '@bfc/shared';
 
-import { DisplayManifestModal } from '../../components/Modal/DisplayManifestModal';
-import { dispatcherState, skillsState } from '../../recoilModel';
+// import { DisplayManifestModal } from '../../components/Modal/DisplayManifestModal';
+import { dispatcherState, skillsStateSelector } from '../../recoilModel';
 
 import { TableView, TableCell } from './styles';
 
@@ -120,8 +121,8 @@ interface SkillListProps {
 }
 
 const SkillList: React.FC<SkillListProps> = ({ projectId }) => {
-  const { removeSkill, updateSkill } = useRecoilValue(dispatcherState);
-  const skills = useRecoilValue(skillsState(projectId));
+  const { removeSkillFromBotProject, addRemoteSkillToBotProject } = useRecoilValue(dispatcherState);
+  const skills = useRecoilValue(skillsStateSelector);
 
   const [selectedSkillUrl, setSelectedSkillUrl] = useState<string | null>(null);
 
@@ -131,20 +132,26 @@ const SkillList: React.FC<SkillListProps> = ({ projectId }) => {
     }
   };
 
-  const handleEditSkill = (projectId, skillId) => (skillData) => {
-    updateSkill(projectId, skillId, skillData);
+  const handleEditSkill = (projectId, skillId) => (skillData) => {};
+
+  const generateSkillsList = (skills: Record<string, Skill>) => {
+    const skillsList: any[] = [];
+    for (const skillName in skills) {
+      const currentSkill = skills[skillName];
+      skillsList.push({
+        skill: {
+          name: currentSkill.name,
+          description: currentSkill.description,
+          onDelete: () => removeSkillFromBotProject(currentSkill.id),
+          onViewManifest: () => handleViewManifest(currentSkill.id),
+          onEditSkill: handleEditSkill(projectId, currentSkill.id),
+        },
+      });
+    }
+    return skillsList;
   };
 
-  const items = useMemo(
-    () =>
-      skills.map((skill) => ({
-        skill,
-        onDelete: () => removeSkill(projectId, skill.id),
-        onViewManifest: () => handleViewManifest(skill),
-        onEditSkill: handleEditSkill(projectId, skill.id),
-      })),
-    [skills, projectId]
-  );
+  const items = useMemo(() => generateSkillsList(skills), [skills, projectId]);
 
   const onDismissManifest = () => {
     setSelectedSkillUrl(null);
@@ -179,13 +186,13 @@ const SkillList: React.FC<SkillListProps> = ({ projectId }) => {
           />
         </ScrollablePane>
       </div>
-      <DisplayManifestModal
+      {/* <DisplayManifestModal
         isDraggable={false}
         isModeless={false}
         manifestId={selectedSkillUrl}
         projectId={projectId}
         onDismiss={onDismissManifest}
-      />
+      /> */}
     </React.Fragment>
   );
 };

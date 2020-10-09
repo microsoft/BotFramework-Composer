@@ -57,3 +57,14 @@ export const rootBotProjectIdSelector = selector({
     }
   },
 });
+
+export const skillsProjectIdSelector = selector({
+  key: 'skillsProjectIdSelector',
+  get: ({ get }) => {
+    const botIds = get(botProjectIdsState);
+    return botIds.filter((projectId: string) => {
+      const { isRootBot } = get(projectMetaDataState(projectId));
+      return !isRootBot;
+    });
+  },
+});

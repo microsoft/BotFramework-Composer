@@ -23,7 +23,7 @@ jest.mock('../../src/components/Modal/dialogStyle', () => ({}));
 const skills: Skill[] = [
   {
     id: 'email-skill',
-    content: {},
+    manifestContent: {},
     manifestUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json',
     name: 'Email-Skill',
     description: 'The Email skill provides email related capabilities and supports Office and Google calendars.',
@@ -33,7 +33,7 @@ const skills: Skill[] = [
   },
   {
     id: 'point-of-interest-skill',
-    content: {},
+    manifestContent: {},
     manifestUrl: 'https://hualxielearn2-snskill.azurewebsites.net/manifest/manifest-1.0.json',
     name: 'Point Of Interest Skill',
     description: 'The Point of Interest skill provides PoI search capabilities leveraging Azure Maps and Foursquare.',

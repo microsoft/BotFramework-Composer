@@ -61,6 +61,7 @@ import {
   deleteDialogContent,
   editorContainer,
   editorWrapper,
+  manifestUrl,
   pageRoot,
   visualPanel,
 } from './styles';
@@ -139,7 +140,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     exportToZip,
     onboardingAddCoachMarkRef,
     importQnAFromUrls,
-    addSkill,
+    addRemoteSkillToBotProject,
+    addExistingSkillToBotProject,
   } = useRecoilValue(dispatcherState);
 
   const params = new URLSearchParams(location?.search);
@@ -329,6 +331,29 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       },
       menuProps: {
         items: [
+          {
+            'data-testid': 'AddRemoteSkill',
+            key: 'addRemoteSkill',
+            text: formatMessage(`Add remote skill`, {
+              displayName: currentDialog?.displayName ?? '',
+            }),
+            onClick: () => {
+              addRemoteSkillToBotProject(
+                'https://onenote-dev.azurewebsites.net/manifests/OneNoteSync-2-1-preview-1-manifest.json',
+                'remote'
+              );
+            },
+          },
+          {
+            'data-testid': 'AddLocalSkill',
+            key: 'addLocalSkill',
+            text: formatMessage(`Add local skill from path`, {
+              displayName: currentDialog?.displayName ?? '',
+            }),
+            onClick: () => {
+              addExistingSkillToBotProject('/Users/srravich/Desktop/LoadedBotProject/GoogleKeepSync');
+            },
+          },
           {
             key: 'edit.undo',
             text: formatMessage('Undo'),
@@ -670,7 +695,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           <CreateSkillModal
             projectId={projectId}
             onDismiss={() => addSkillDialogCancel(projectId)}
-            onSubmit={(skill) => addSkill(projectId, skill)}
+            onSubmit={addRemoteSkillToBotProject}
           />
         )}
         {exportSkillModalVisible && (

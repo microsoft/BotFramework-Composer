@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useMemo, useRef } from 'react';
-import { ShellApi, ShellData, Shell, DialogSchemaFile } from '@bfc/shared';
+import { ShellApi, ShellData, Shell, DialogSchemaFile, Skill, ManifestEndpoint } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
@@ -18,7 +18,6 @@ import {
   validateDialogSelectorFamily,
   breadcrumbState,
   focusPathState,
-  skillsState,
   localeState,
   qnaFilesState,
   designPageLocationState,
@@ -28,6 +27,7 @@ import {
   luFilesState,
 } from '../recoilModel';
 import { undoFunctionState } from '../recoilModel/undo/history';
+import { skillsStateSelector } from '../recoilModel/selectors';
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
@@ -45,7 +45,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
   const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
   const breadcrumb = useRecoilValue(breadcrumbState(projectId));
   const focusPath = useRecoilValue(focusPathState(projectId));
-  const skills = useRecoilValue(skillsState(projectId));
+  const skills = useRecoilValue(skillsStateSelector);
   const locale = useRecoilValue(localeState(projectId));
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   const undoFunction = useRecoilValue(undoFunctionState(projectId));
@@ -73,7 +73,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     updateUserSettings,
     setMessage,
     displayManifestModal,
-    updateSkill,
+    updateSkillsDataInBotProjectFile: updateEndpointInBotProjectFile,
   } = useRecoilValue(dispatcherState);
 
   const lgApi = useLgApi(projectId);
@@ -203,7 +203,9 @@ export function useShell(source: EventSource, projectId: string): Shell {
     updateDialogSchema: async (dialogSchema: DialogSchemaFile) => {
       updateDialogSchema(dialogSchema, projectId);
     },
-    updateSkillSetting: (...params) => updateSkill(projectId, ...params),
+    updateSkill: async (skillId: string, skillsData) => {
+      updateEndpointInBotProjectFile(skillId, skillsData.skill, skillsData.selectedEndpointIndex);
+    },
   };
 
   const currentDialog = useMemo(() => dialogs.find((d) => d.id === dialogId), [dialogs, dialogId]);
