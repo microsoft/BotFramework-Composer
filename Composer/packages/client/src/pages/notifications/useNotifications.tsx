@@ -17,6 +17,7 @@ import {
   settingsState,
   skillManifestsState,
   validateDialogSelectorFamily,
+  botProjectFileState,
 } from '../../recoilModel';
 
 import { getReferredLuFiles } from './../../utils/luUtil';
@@ -41,6 +42,7 @@ export default function useNotifications(projectId: string, filter?: string) {
   const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   const formDialogSchemas = useRecoilValue(formDialogSchemasState(projectId));
+  const botProjectFile = useRecoilValue(botProjectFileState(projectId));
 
   const botAssets: BotAssets = {
     projectId,
@@ -52,6 +54,7 @@ export default function useNotifications(projectId: string, filter?: string) {
     setting,
     dialogSchemas,
     formDialogSchemas,
+    botProjectFile,
   };
 
   const memoized = useMemo(() => {

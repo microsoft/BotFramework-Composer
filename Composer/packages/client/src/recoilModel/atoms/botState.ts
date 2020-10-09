@@ -14,6 +14,8 @@ import {
   DialogSetting,
   FormDialogSchema,
   FormDialogSchemaTemplate,
+  BotProjectSpace,
+  BotProjectFile,
 } from '@bfc/shared';
 
 import { BotLoadError, DesignPageLocation, QnAAllUpViewStatus } from '../../recoilModel/types';
@@ -44,8 +46,8 @@ export const dialogSchemasState = atomFamily<DialogSchemaFile[], string>({
   default: [],
 });
 
-export const botNameState = atomFamily<string, string>({
-  key: getFullyQualifiedKey('botName'),
+export const botDisplayNameState = atomFamily<string, string>({
+  key: getFullyQualifiedKey('botDisplayName'),
   default: (id) => {
     return '';
   },
@@ -220,10 +222,13 @@ export const onDelLanguageDialogCompleteState = atomFamily<any, string>({
   default: { func: undefined },
 });
 
-export const projectMetaDataState = atomFamily<any, string>({
+export const projectMetaDataState = atomFamily<{ isRootBot: boolean; isRemote: boolean }, string>({
   key: getFullyQualifiedKey('projectsMetaDataState'),
-  default: (id) => {
-    return {};
+  default: () => {
+    return {
+      isRootBot: false,
+      isRemote: false,
+    };
   },
 });
 
@@ -286,4 +291,24 @@ export const formDialogLibraryTemplatesState = atom<FormDialogSchemaTemplate[]>(
 export const formDialogGenerationProgressingState = atom({
   key: getFullyQualifiedKey('formDialogGenerationProgressing'),
   default: false,
+});
+
+export const botProjectFileState = atomFamily<BotProjectFile, string>({
+  key: getFullyQualifiedKey('botProjectFile'),
+  default: {
+    content: {} as BotProjectSpace,
+    id: '',
+    lastModified: '',
+  },
+});
+
+export const botErrorState = atomFamily<any, string>({
+  key: getFullyQualifiedKey('botError'),
+  default: undefined,
+});
+
+// Object key to identify the skill in BotProject file and settings.skill
+export const botNameIdentifierState = atomFamily<string, string>({
+  key: getFullyQualifiedKey('botNameIdentifier'),
+  default: '',
 });

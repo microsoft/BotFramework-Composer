@@ -1,13 +1,21 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import keys from 'lodash/keys';
+import {
+  BotAssets,
+  BotProjectFile,
+  DialogInfo,
+  DialogSchemaFile,
+  DialogSetting,
+  FormDialogSchema,
+  SkillManifest,
+} from '@bfc/shared';
+import { LgFile, LuFile, QnAFile } from '@bfc/types';
 import differenceWith from 'lodash/differenceWith';
 import isEqual from 'lodash/isEqual';
-import { DialogInfo, DialogSchemaFile, DialogSetting, SkillManifest, BotAssets, FormDialogSchema } from '@bfc/shared';
+import keys from 'lodash/keys';
 
-import { LuFile, LgFile, QnAFile } from './../../../../lib/shared/src/types/indexers';
 import * as client from './http';
-import { IFileChange, ChangeType, FileExtensions } from './types';
+import { ChangeType, FileExtensions, IFileChange } from './types';
 
 class FilePersistence {
   private _taskQueue: { [id: string]: IFileChange[] } = {};
@@ -184,6 +192,20 @@ class FilePersistence {
     return changes;
   }
 
+  private getBotProjectFileChanges(current: BotProjectFile, previous: BotProjectFile) {
+    if (!isEqual(current, previous)) {
+      return [
+        {
+          id: `${current.id}${FileExtensions.BotProject}`,
+          change: JSON.stringify(current.content, null, 2),
+          type: ChangeType.UPDATE,
+          projectId: this._projectId,
+        },
+      ];
+    }
+    return [];
+  }
+
   private getSettingsChanges(current: DialogSetting, previous: DialogSetting) {
     if (!isEqual(current, previous)) {
       return [
@@ -215,9 +237,15 @@ class FilePersistence {
       previousAssets.skillManifests
     );
     const settingChanges = this.getSettingsChanges(currentAssets.setting, previousAssets.setting);
+
     const formDialogChanges = this.getFormDialogSchemaFileChanges(
       currentAssets.formDialogSchemas,
       previousAssets.formDialogSchemas
+    );
+
+    const botProjectFileChanges = this.getBotProjectFileChanges(
+      currentAssets.botProjectFile,
+      previousAssets.botProjectFile
     );
 
     const fileChanges: IFileChange[] = [
@@ -229,6 +257,7 @@ class FilePersistence {
       ...skillManifestChanges,
       ...settingChanges,
       ...formDialogChanges,
+      ...botProjectFileChanges,
     ];
     return fileChanges;
   }

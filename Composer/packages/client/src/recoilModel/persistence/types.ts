@@ -16,6 +16,7 @@ export enum FileExtensions {
   Lg = '.lg',
   QnA = '.qna',
   Setting = 'appsettings.json',
+  BotProject = '.botproj',
 }
 
 export type FileErrorHandler = (error) => void;

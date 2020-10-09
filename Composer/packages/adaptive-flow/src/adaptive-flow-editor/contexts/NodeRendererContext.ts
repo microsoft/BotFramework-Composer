@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { DialogFactory, OBISchema } from '@bfc/shared';
+import { DialogFactory, JSONSchema7 } from '@bfc/shared';
 
 export interface NodeRendererContextValue {
   focusedId?: string;
@@ -10,7 +10,7 @@ export interface NodeRendererContextValue {
   focusedTab?: string;
   clipboardActions: any[];
   dialogFactory: DialogFactory;
-  customSchemas: OBISchema[];
+  customSchemas: JSONSchema7[];
 }
 
 export const defaultRendererContextValue = {

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License
 
-import { MicrosoftIDialog, SDKKinds } from '../types';
+import { MicrosoftIDialog, SDKKinds } from '@bfc/types';
 
 import { walkIfCondition } from './walkIfCondition';
 import { walkSwitchCondition } from './walkSwitchCondition';

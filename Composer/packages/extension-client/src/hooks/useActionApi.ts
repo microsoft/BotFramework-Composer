@@ -2,14 +2,13 @@
 // Licensed under the MIT License.
 
 import {
-  BaseSchema,
   deepCopyActions,
   deleteAction as destructAction,
   deleteActions as destructActions,
   FieldProcessorAsync,
   walkAdaptiveActionList,
-  ShellApi,
 } from '@bfc/shared';
+import { BaseSchema, ShellApi } from '@bfc/types';
 
 import { useLgApi } from './useLgApi';
 import { useLuApi } from './useLuApi';

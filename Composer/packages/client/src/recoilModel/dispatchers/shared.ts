@@ -41,12 +41,18 @@ export const setError = (callbackHelpers: CallbackInterface, payload) => {
       ),
       summary: formatMessage('Modification Rejected'),
     });
+  } else if (payload?.response?.data?.message) {
+    callbackHelpers.set(applicationErrorState, payload.response.data);
+  } else if (payload instanceof Error) {
+    callbackHelpers.set(applicationErrorState, {
+      summary: payload.name,
+      message: payload.message,
+    });
   } else {
-    if (payload?.response?.data?.message) {
-      callbackHelpers.set(applicationErrorState, payload.response.data);
-    } else {
-      callbackHelpers.set(applicationErrorState, payload);
-    }
+    callbackHelpers.set(applicationErrorState, payload);
   }
-  if (payload != null) logMessage(callbackHelpers, `Error: ${JSON.stringify(payload)}`);
+  if (payload != null) {
+    const message = JSON.stringify(payload);
+    logMessage(callbackHelpers, `Error: ${message}`);
+  }
 };
