@@ -21,7 +21,7 @@ import {
 import { NewBotPage } from './NewBotPage';
 import { CustomizeBotPage } from './CustomizeBotPage';
 import { ConfigSummaryPage } from './ConfigSummaryPage';
-import ProvisionSummaryPage from './ProvisionSummaryPage';
+import { ProvisionSummaryPage } from './ProvisionSummaryPage';
 
 // -------------------- VirtualAssistantCreationModal -------------------- //
 type VirtualAssistantCreationModalProps = {
