@@ -2,160 +2,114 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
-import React, { useEffect, useState, useCallback } from 'react';
+import { jsx, css } from '@emotion/core';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import {
-  DetailsList,
   DetailsListLayoutMode,
+  Selection,
   SelectionMode,
   IColumn,
   CheckboxVisibility,
+  ConstrainMode,
+  DetailsRow,
+  IDetailsRowStyles,
 } from 'office-ui-fabric-react/lib/DetailsList';
-import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
+import { ShimmeredDetailsList } from 'office-ui-fabric-react/lib/ShimmeredDetailsList';
 import formatMessage from 'format-message';
-import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import axios from 'axios';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, selector } from 'recoil';
+import { NeutralColors } from '@uifabric/fluent-theme';
+import { ExtensionMetadata, ExtensionSearchResult } from '@bfc/extension-client';
 
-import { ExtensionConfig } from '../../../recoilModel/types';
 import { Toolbar, IToolbarItem } from '../../../components/Toolbar';
-import httpClient from '../../../utils/httpUtil';
 import { dispatcherState, extensionsState } from '../../../recoilModel';
+
+import { InstallExtensionDialog } from './InstallExtensionDialog';
+
+const remoteExtensionsState = selector({
+  key: 'remoteExtensions',
+  get: ({ get }) => get(extensionsState).filter((e) => !e.builtIn),
+});
+
+const noExtensionsStyles = css`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
 const Extensions: React.FC<RouteComponentProps> = () => {
   const { fetchExtensions, toggleExtension, addExtension, removeExtension } = useRecoilValue(dispatcherState);
-  const extensions = useRecoilValue(extensionsState);
+  const extensions = useRecoilValue(remoteExtensionsState);
+  // if a string, its the id of the extension being updated
+  const [isUpdating, setIsUpdating] = useState<string | boolean>(false);
   const [showNewModal, setShowNewModal] = useState(false);
-  const [extensionName, setExtensionName] = useState<string | null>(null);
-  const [extensionVersion, setExtensionVersion] = useState<string | null>(null);
-  const [matchingExtensions, setMatchingExtensions] = useState<ExtensionConfig[]>([]);
-  const [selectedExtension, setSelectedExtension] = useState<any>();
+  const [selectedExtensions, setSelectedExtensions] = useState<ExtensionMetadata[]>([]);
+  const selection = useRef(
+    new Selection({
+      onSelectionChanged: () => {
+        setSelectedExtensions(selection.getSelection() as ExtensionMetadata[]);
+      },
+    })
+  ).current;
 
   useEffect(() => {
     fetchExtensions();
   }, []);
-
-  useEffect(() => {
-    if (extensionName !== null) {
-      const source = axios.CancelToken.source();
-
-      const timer = setTimeout(() => {
-        httpClient
-          .get(`/extensions/search?q=${extensionName}`, { cancelToken: source.token })
-          .then((res) => {
-            setMatchingExtensions(res.data);
-          })
-          .catch((err) => {
-            if (!axios.isCancel(err)) {
-              console.error(err);
-            }
-          });
-      }, 200);
-
-      return () => {
-        source.cancel('User interruption');
-        clearTimeout(timer);
-      };
-    }
-  }, [extensionName]);
 
   const installedColumns: IColumn[] = [
     {
       key: 'name',
       name: formatMessage('Name'),
       minWidth: 100,
-      maxWidth: 150,
-      onRender: (item: ExtensionConfig) => {
-        return <span>{item.id}</span>;
-      },
-    },
-    {
-      key: 'version',
-      name: formatMessage('Version'),
-      minWidth: 30,
-      maxWidth: 100,
-      onRender: (item: ExtensionConfig) => {
-        return <span>{item.version}</span>;
-      },
-    },
-    {
-      key: 'enabled',
-      name: formatMessage('Enabled'),
-      minWidth: 30,
-      maxWidth: 150,
-      onRender: (item: ExtensionConfig) => {
-        const text = item.enabled ? formatMessage('Disable') : formatMessage('Enable');
-        return (
-          <DefaultButton disabled={item.builtIn} onClick={() => toggleExtension(item.id, !item.enabled)}>
-            {text}
-          </DefaultButton>
-        );
-      },
-    },
-    {
-      key: 'remove',
-      name: formatMessage('Remove'),
-      minWidth: 30,
-      maxWidth: 150,
-      onRender: (item: ExtensionConfig) => {
-        return (
-          <DefaultButton disabled={item.builtIn} onClick={() => removeExtension(item.id)}>
-            {formatMessage('Remove')}
-          </DefaultButton>
-        );
-      },
-    },
-  ];
-
-  const matchingColumns: IColumn[] = [
-    {
-      key: 'name',
-      name: formatMessage('Name'),
-      minWidth: 100,
-      maxWidth: 150,
-      onRender: (item: any) => {
-        return <span>{item.id}</span>;
-      },
+      maxWidth: 250,
+      isResizable: true,
+      fieldName: 'name',
     },
     {
       key: 'description',
       name: formatMessage('Description'),
-      minWidth: 100,
-      maxWidth: 300,
+      minWidth: 150,
+      maxWidth: 500,
+      isResizable: true,
+      isCollapsible: true,
       isMultiline: true,
-      onRender: (item: any) => {
-        return <div css={{ overflowWrap: 'break-word' }}>{item.description}</div>;
-      },
+      fieldName: 'description',
     },
     {
       key: 'version',
       name: formatMessage('Version'),
-      minWidth: 30,
-      maxWidth: 100,
-      onRender: (item: any) => {
-        return <span>{item.version}</span>;
-      },
-    },
-    {
-      key: 'url',
-      name: formatMessage('Url'),
       minWidth: 100,
       maxWidth: 100,
-      onRender: (item: any) => {
-        return item.url ? (
-          <a href={item.url} rel="noopener noreferrer" target="_blank">
-            View on npm
-          </a>
-        ) : null;
+      isResizable: true,
+      fieldName: 'version',
+    },
+    {
+      key: 'enabled',
+      name: formatMessage('Enabled'),
+      minWidth: 100,
+      maxWidth: 150,
+      isResizable: true,
+      onRender: (item: ExtensionMetadata) => {
+        return (
+          <Toggle
+            ariaLabel={formatMessage('Toggle extension')}
+            checked={item.enabled}
+            styles={{ root: { marginBottom: 0 } }}
+            onChange={async () => {
+              const timeout = setTimeout(() => setIsUpdating(item.id), 200);
+              await toggleExtension(item.id, !item.enabled);
+              clearTimeout(timeout);
+              setIsUpdating(false);
+            }}
+          />
+        );
       },
     },
   ];
 
   const toolbarItems: IToolbarItem[] = [
-    // TODO (toanzian / abrown): re-enable once remote extensions are supported
-    /*{
+    {
       type: 'action',
       text: formatMessage('Add'),
       buttonProps: {
@@ -167,61 +121,96 @@ const Extensions: React.FC<RouteComponentProps> = () => {
         },
       },
       align: 'left',
-    },*/
+    },
+    {
+      type: 'action',
+      text: formatMessage('Uninstall'),
+      buttonProps: {
+        iconProps: {
+          iconName: 'Trash',
+        },
+        onClick: async () => {
+          const names = selectedExtensions.map((e) => e.name).join('\n');
+          const message = formatMessage('Are you sure you want to uninstall these extensions?');
+          if (confirm(`${message}\n\n${names}`)) {
+            for (const ext of selectedExtensions) {
+              const timeout = setTimeout(() => setIsUpdating(ext.id), 200);
+              await removeExtension(ext.id);
+              clearTimeout(timeout);
+              setIsUpdating(false);
+            }
+          }
+        },
+      },
+      disabled: selectedExtensions.length === 0,
+      align: 'left',
+    },
   ];
 
-  const submit = useCallback(() => {
-    if (selectedExtension && extensionVersion) {
-      addExtension(selectedExtension.id, extensionVersion);
+  const submit = useCallback(async (selectedExtension?: ExtensionSearchResult) => {
+    if (selectedExtension) {
+      setIsUpdating(true);
       setShowNewModal(false);
-      setExtensionName(null);
-      setExtensionVersion(null);
-      setSelectedExtension(null);
+      await addExtension(selectedExtension.id);
+      setIsUpdating(false);
     }
-  }, [selectedExtension, extensionVersion]);
+  }, []);
+
+  const shownItems = () => {
+    if (isUpdating === true) {
+      // extension is being added, render a shimmer row at end of list
+      return [...extensions, null];
+    } else if (typeof isUpdating === 'string') {
+      // extension is being removed or updated, show shimmer for that row
+      return extensions.map((e) => (e.id === isUpdating ? null : e));
+    } else if (extensions.length === 0) {
+      // render no installed message
+      return [{}];
+    } else {
+      return extensions;
+    }
+  };
+
+  const dismissInstallDialog = useCallback(() => setShowNewModal(false), []);
 
   return (
-    <div>
+    <div style={{ maxWidth: '100%' }}>
       <Toolbar toolbarItems={toolbarItems} />
-      <DetailsList
-        checkboxVisibility={CheckboxVisibility.hidden}
+      <ShimmeredDetailsList
+        checkboxVisibility={CheckboxVisibility.onHover}
         columns={installedColumns}
-        items={extensions}
+        constrainMode={ConstrainMode.horizontalConstrained}
+        items={shownItems()}
         layoutMode={DetailsListLayoutMode.justified}
-        selectionMode={SelectionMode.single}
-      />
-      <Dialog
-        dialogContentProps={{
-          type: DialogType.close,
-          title: formatMessage('Add new extension'),
-          subText: formatMessage('Search for extensions'),
+        selection={selection}
+        selectionMode={SelectionMode.multiple}
+        onRenderRow={(rowProps, defaultRender) => {
+          if (rowProps && defaultRender) {
+            if (isUpdating) {
+              return defaultRender(rowProps);
+            }
+
+            if (extensions.length === 0) {
+              return (
+                <div css={noExtensionsStyles}>
+                  <p>{formatMessage('No extensions installed')}</p>
+                </div>
+              );
+            }
+
+            const customStyles: Partial<IDetailsRowStyles> = {
+              root: {
+                color: rowProps.item?.enabled ? undefined : NeutralColors.gray90,
+              },
+            };
+
+            return <DetailsRow {...rowProps} styles={customStyles} />;
+          }
+
+          return null;
         }}
-        hidden={!showNewModal}
-        minWidth="600px"
-        onDismiss={() => setShowNewModal(false)}
-      >
-        <div>
-          <TextField
-            label={formatMessage('Extension name')}
-            value={extensionName ?? ''}
-            onChange={(_e, val) => setExtensionName(val ?? null)}
-          />
-          <DetailsList
-            checkboxVisibility={CheckboxVisibility.always}
-            columns={matchingColumns}
-            items={matchingExtensions}
-            layoutMode={DetailsListLayoutMode.justified}
-            selectionMode={SelectionMode.single}
-            onActiveItemChanged={(item) => setSelectedExtension(item)}
-          />
-        </div>
-        <DialogFooter>
-          <DefaultButton onClick={() => setShowNewModal(false)}>Cancel</DefaultButton>
-          <PrimaryButton disabled={false} onClick={submit}>
-            {formatMessage('Add')}
-          </PrimaryButton>
-        </DialogFooter>
-      </Dialog>
+      />
+      <InstallExtensionDialog isOpen={showNewModal} onDismiss={dismissInstallDialog} onInstall={submit} />
     </div>
   );
 };

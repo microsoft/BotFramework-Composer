@@ -1,12 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import formatMessage from 'format-message';
+import { ExtensionPageContribution } from '@bfc/extension-client';
 
-export const topLinks = (
-  projectId: string,
-  openedDialogId: string,
-  pluginPages: { id: string; label: string; icon?: string; when?: string }[]
-) => {
+export type ExtensionPageConfig = ExtensionPageContribution & { id: string };
+
+export const topLinks = (projectId: string, openedDialogId: string, pluginPages: ExtensionPageConfig[]) => {
   const botLoaded = !!projectId;
   let links = [
     {
@@ -74,7 +73,7 @@ export const topLinks = (
   if (pluginPages.length > 0) {
     pluginPages.forEach((p) => {
       links.push({
-        to: `page/${p.id}`,
+        to: `plugin/${p.id}/${p.bundleId}`,
         iconName: p.icon ?? 'StatusCircleQuestionMark',
         labelName: p.label,
         exact: true,

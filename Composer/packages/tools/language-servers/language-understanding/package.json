@@ -18,6 +18,8 @@
     "start:server": "cd demo && ts-node ./src/server.ts"
   },
   "dependencies": {
+    "@bfc/indexers": "*",
+    "@bfc/shared": "*",
     "@microsoft/bf-cli-command": "^4.10.0-preview.141651",
     "@microsoft/bf-lu": "^4.10.0-dev.20200808.5a7c973",
     "express": "^4.15.2",
@@ -41,7 +43,6 @@
     "ts-loader": "7.0.4",
     "ts-node": "^8.3.0",
     "typescript": "3.9.2",
-    "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.11.0",

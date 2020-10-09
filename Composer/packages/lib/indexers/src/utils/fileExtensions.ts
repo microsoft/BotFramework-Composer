@@ -8,4 +8,5 @@ export enum FileExtensions {
   QnA = '.qna',
   lg = '.lg',
   Manifest = '.json',
+  BotProjectSpace = '.botproj',
 }

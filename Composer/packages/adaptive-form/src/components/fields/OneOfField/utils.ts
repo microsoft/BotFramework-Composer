@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FieldProps, JSONSchema7, JSONSchema7Definition } from '@bfc/extension-client';
+import { FieldProps, JSONSchema7, SchemaDefinitions } from '@bfc/extension-client';
 import merge from 'lodash/merge';
 import omit from 'lodash/omit';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
@@ -23,10 +23,7 @@ function getOptionLabel(schema: JSONSchema7): string {
   return type || 'unknown';
 }
 
-export function getOptions(
-  schema: JSONSchema7,
-  definitions?: { [key: string]: JSONSchema7Definition }
-): IDropdownOption[] {
+export function getOptions(schema: JSONSchema7, definitions?: SchemaDefinitions): IDropdownOption[] {
   const { type, oneOf } = schema;
 
   if (type && Array.isArray(type)) {

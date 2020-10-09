@@ -5,7 +5,7 @@ import React from 'react';
 import { render, fireEvent, act } from '@bfc/test-utils';
 import assign from 'lodash/assign';
 
-import { FieldSets } from '../FieldSets';
+import { Fieldsets } from '../FieldSets';
 
 import { fieldProps } from './testUtils';
 
@@ -19,14 +19,14 @@ const schema = {
 
 function renderSubject(overrides = {}) {
   const props = assign({}, fieldProps(), overrides);
-  return render(<FieldSets {...props} />);
+  return render(<Fieldsets {...props} />);
 }
 
-describe('<FieldSets />', () => {
+describe('<Fieldsets />', () => {
   it('renders an object with two field sets', async () => {
     const onChange = jest.fn();
     const uiOptions = {
-      fieldSets: [
+      fieldsets: [
         {
           title: 'set 1',
           fields: ['name'],
@@ -55,5 +55,29 @@ describe('<FieldSets />', () => {
     });
 
     expect(onChange).toHaveBeenLastCalledWith({ city: 'Seattle' });
+  });
+
+  it('renders additional fields', async () => {
+    const uiOptions = {
+      properties: {
+        additionalField: {
+          additionalField: true,
+          field: () => <div>Additional Field</div>,
+        },
+      },
+      fieldsets: [
+        {
+          title: 'set 1',
+          fields: ['name'],
+        },
+        {
+          title: 'set 2',
+        },
+      ],
+    };
+
+    const { findByText } = renderSubject({ schema, uiOptions, value: {} });
+
+    await findByText('Additional Field');
   });
 });

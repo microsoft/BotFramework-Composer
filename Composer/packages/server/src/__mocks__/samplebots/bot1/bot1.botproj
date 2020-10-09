@@ -1,0 +1,6 @@
+{
+  "$schema": "https://schemas.botframework.com/schemas/botprojects/v0.1/botproject-schema.json",
+  "name": "bot1",
+  "workspace": "file:///Users/tester/Projects/BotFramework-Composer/Composer/packages/server/src/__mocks__/samplebots/bot1",
+  "skills": {}
+}

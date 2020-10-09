@@ -105,6 +105,7 @@ module.exports = {
         '@typescript-eslint/no-non-null-assertion': 'off',
         '@typescript-eslint/no-object-literal-type-assertion': 'off',
         '@typescript-eslint/unbound-method': 'off',
+        '@typescript-eslint/no-explicit-any': 'off',
 
         'security/detect-buffer-noassert': 'off',
         'security/detect-child-process': 'off',

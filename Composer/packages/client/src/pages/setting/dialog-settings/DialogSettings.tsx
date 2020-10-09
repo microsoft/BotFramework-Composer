@@ -14,7 +14,13 @@ import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import cloneDeep from 'lodash/cloneDeep';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 
-import { dispatcherState, userSettingsState, botNameState, localeState, settingsState } from '../../../recoilModel';
+import {
+  dispatcherState,
+  userSettingsState,
+  botDisplayNameState,
+  localeState,
+  settingsState,
+} from '../../../recoilModel';
 import { languageListTemplates } from '../../../components/MultiLanguage';
 
 import { settingsEditor, toolbar } from './style';
@@ -22,7 +28,7 @@ import { BotSettings } from './constants';
 
 export const DialogSettings: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
   const { projectId = '' } = props;
-  const botName = useRecoilValue(botNameState(projectId));
+  const botName = useRecoilValue(botDisplayNameState(projectId));
   const locale = useRecoilValue(localeState(projectId));
   const settings = useRecoilValue(settingsState(projectId));
   const userSettings = useRecoilValue(userSettingsState);

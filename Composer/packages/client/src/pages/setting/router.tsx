@@ -12,7 +12,7 @@ import { About } from '../about/About';
 import { DialogSettings } from './dialog-settings/DialogSettings';
 import { AppSettings } from './app-settings/AppSettings';
 import { RuntimeSettings } from './runtime-settings/RuntimeSettings';
-// import { Extensions } from './extensions/Extensions';
+import { Extensions } from './extensions/Extensions';
 
 export const SettingsRoutes = React.memo(({ projectId }: { projectId: string }) => {
   const applicationError = useRecoilValue(applicationErrorState);
@@ -34,7 +34,7 @@ export const SettingsRoutes = React.memo(({ projectId }: { projectId: string }) 
         <About path="about" />
         <DialogSettings path="/bot/:projectId/dialog-settings" />
         <RuntimeSettings path="/bot/:projectId/runtime" />
-        {/* <Extensions path="extensions" /> */}
+        <Extensions path="extensions" />
       </Router>
     </ErrorBoundary>
   );

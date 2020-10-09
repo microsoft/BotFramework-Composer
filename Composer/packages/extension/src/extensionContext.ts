@@ -9,12 +9,13 @@ import { Express } from 'express';
 import { pathToRegexp } from 'path-to-regexp';
 import glob from 'globby';
 import formatMessage from 'format-message';
+import { UserIdentity, ExtensionCollection, RuntimeTemplate } from '@bfc/types';
 
-import { UserIdentity, ExtensionCollection, RuntimeTemplate, DEFAULT_RUNTIME } from './types/types';
 import logger from './logger';
 import { ExtensionRegistration } from './extensionRegistration';
 
 const log = logger.extend('extension-context');
+export const DEFAULT_RUNTIME = 'csharp-azurewebapp';
 
 class ExtensionContext {
   private _passport: passport.PassportStatic;
@@ -63,7 +64,7 @@ class ExtensionContext {
           return this.extensions.authentication.middleware(req, res, next);
         }
       }
-      next();
+      next && next();
     });
   }
 
@@ -88,7 +89,7 @@ class ExtensionContext {
     const packageJSON = fs.readFileSync(packageJsonPath, 'utf8');
     const json = JSON.parse(packageJSON);
 
-    if (json.extendsComposer) {
+    if (json.composer?.enabled !== false) {
       const modulePath = path.dirname(packageJsonPath);
       try {
         // eslint-disable-next-line security/detect-non-literal-require, @typescript-eslint/no-var-requires
