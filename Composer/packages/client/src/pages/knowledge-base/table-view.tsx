@@ -33,16 +33,10 @@ import { NeutralColors } from '@uifabric/fluent-theme';
 
 import emptyQnAIcon from '../../images/emptyQnAIcon.svg';
 import { navigateTo } from '../../utils/navigation';
-import {
-  dialogsState,
-  qnaFilesState,
-  localeState,
-  //settingsState,
-} from '../../recoilModel/atoms/botState';
+import { dialogsState, qnaFilesState, localeState } from '../../recoilModel/atoms/botState';
 import { dispatcherState } from '../../recoilModel';
 import { getBaseName } from '../../utils/fileUtil';
 import { EditableField } from '../../components/EditableField';
-import { classNames } from '../../components/AllupviewComponets/styles';
 import { EditQnAModal } from '../../components/QnA/EditQnAFrom';
 import { getQnAFileUrlOption } from '../../utils/qnaUtil';
 
@@ -58,6 +52,7 @@ import {
   groupHeader,
   groupNameStyle,
   detailsHeaderStyle,
+  classNames,
 } from './styles';
 
 interface QnASectionItem extends QnASection {
@@ -78,7 +73,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const dialogs = useRecoilValue(dialogsState(projectId));
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   const locale = useRecoilValue(localeState(projectId));
-  //const settings = useRecoilValue(settingsState);
   const {
     removeQnAImport,
     removeQnAFile,
@@ -89,7 +83,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
     updateQnAQuestion,
   } = useRecoilValue(dispatcherState);
 
-  // const { languages, defaultLanguage } = settings;
   const targetFileId = dialogId.endsWith('.source') ? dialogId : `${dialogId}.${locale}`;
   const qnaFile = qnaFiles.find(({ id }) => id === targetFileId);
   const limitedNumber = 1;
@@ -195,14 +188,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
     newArray[index] = !newArray[index];
     setIsQnASectionsExpanded(newArray);
   };
-
-  // const expandRow = (index) => {
-  //   if (!isQnASectionsExpanded[index]) {
-  //     const newArray = [...isQnASectionsExpanded];
-  //     newArray[index] = true;
-  //     setIsQnASectionsExpanded(newArray);
-  //   }
-  // };
 
   const expandRow = (index) => {
     const expandedRow = new Array(isQnASectionsExpanded.length).fill(false);

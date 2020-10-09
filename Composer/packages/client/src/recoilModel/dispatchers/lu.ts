@@ -80,7 +80,8 @@ export const createLuFileState = async (
   const createdLuId = `${id}.${locale}`;
   const createdLuFile = (await luWorker.parse(id, content)) as LuFile;
   if (luFiles.find((lu) => lu.id === createdLuId)) {
-    throw new Error('lu file already exist');
+    setError(callbackHelpers, new Error(formatMessage('lu file already exist')));
+    return;
   }
   const changes: LuFile[] = [];
 
@@ -107,7 +108,9 @@ export const removeLuFileState = async (
 
   const targetLuFile = luFiles.find((item) => item.id === id) || luFiles.find((item) => item.id === `${id}.${locale}`);
   if (!targetLuFile) {
-    throw new Error(`remove lu file ${id} not exist`);
+    // eslint-disable-next-line format-message/literal-pattern
+    setError(callbackHelpers, new Error(formatMessage(`remove lu file ${id} not exist`)));
+    return;
   }
 
   luFiles.forEach((file) => {

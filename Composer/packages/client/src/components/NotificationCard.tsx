@@ -11,7 +11,7 @@ import { Shimmer, ShimmerElementType } from 'office-ui-fabric-react/lib/Shimmer'
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 
-import { NotificationCardTypes } from '../recoilModel/types';
+import { NotificationCardType } from '../recoilModel/types';
 import Timer from '../utils/timer';
 
 // -------------------- Styles -------------------- //
@@ -123,7 +123,7 @@ export type Link = {
 };
 
 export type CardProps = {
-  type: NotificationCardTypes;
+  type: NotificationCardType;
   title: string;
   description?: string;
   retentionTime?: number;

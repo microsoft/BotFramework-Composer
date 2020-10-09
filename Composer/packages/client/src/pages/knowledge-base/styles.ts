@@ -1,8 +1,31 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { css } from '@emotion/core';
-import { FontWeights } from '@uifabric/styling';
+import { FontWeights, mergeStyleSets } from '@uifabric/styling';
 import { NeutralColors, SharedColors, FontSizes } from '@uifabric/fluent-theme';
+
+export const classNames = mergeStyleSets({
+  groupHeader: {
+    display: 'flex',
+    fontSize: FontSizes.size16,
+    fontWeight: FontWeights.regular,
+    alignItems: 'center',
+  },
+  emptyTableList: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%',
+  },
+  emptyTableListCenter: {
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'column',
+    width: '50%',
+    textAlign: 'center',
+    marginTop: '-20%',
+  },
+});
 
 export const content = css`
   min-height: 28px;
@@ -56,14 +79,6 @@ export const textFieldAnswer = {
     paddingLeft: 4,
   },
 };
-
-// export const addQnAPairLink = {
-//   root: {
-//     fontSize: 14,
-//     lineHeight: 28,
-//     marginLeft: 72,
-//   },
-// };
 
 export const divider = css`
   height: 1px;

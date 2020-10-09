@@ -10,6 +10,7 @@ import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/O
 import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
+import formatMessage from 'format-message';
 
 import { navigateTo } from '../utils/navigation';
 
@@ -76,30 +77,33 @@ interface INavTreeProps {
 const NavTree: React.FC<INavTreeProps> = (props) => {
   const { navLinks, regionName } = props;
 
+  const onRenderOverflowButton = (isSelected: boolean, item) => (
+    menuItems: IOverflowSetItemProps[] | undefined
+  ): JSX.Element => {
+    const buttonStyles: Partial<IButtonStyles> = {
+      root: {
+        minWidth: 0,
+        padding: '0 4px',
+        alignSelf: 'stretch',
+        height: 'auto',
+        background: isSelected ? NeutralColors.gray20 : NeutralColors.white,
+      },
+    };
+    return (
+      <CommandBarButton
+        ariaLabel={formatMessage('Menu items')}
+        menuIconProps={item.menuIconProps as IIconProps}
+        menuProps={{ items: menuItems as IContextualMenuItem[] }}
+        role="menuitem"
+        styles={buttonStyles}
+      />
+    );
+  };
+
   return (
     <div aria-label={regionName} className="ProjectTree" css={root} data-testid="ProjectTree" role="region">
       {navLinks.map((item) => {
         const isSelected = location.pathname.includes(item.url);
-        const onRenderOverflowButton = (menuItems: IOverflowSetItemProps[] | undefined): JSX.Element => {
-          const buttonStyles: Partial<IButtonStyles> = {
-            root: {
-              minWidth: 0,
-              padding: '0 4px',
-              alignSelf: 'stretch',
-              height: 'auto',
-              background: isSelected ? NeutralColors.gray20 : NeutralColors.white,
-            },
-          };
-          return (
-            <CommandBarButton
-              ariaLabel="Menu items"
-              menuIconProps={item.menuIconProps as IIconProps}
-              menuProps={{ items: menuItems as IContextualMenuItem[] }}
-              role="menuitem"
-              styles={buttonStyles}
-            />
-          );
-        };
 
         return (
           <div key={item.id} style={{ display: 'flex' }}>
@@ -121,7 +125,7 @@ const NavTree: React.FC<INavTreeProps> = (props) => {
                 overflowItems={item.menuItems as IOverflowSetItemProps[]}
                 role="menubar"
                 onRenderItem={() => undefined}
-                onRenderOverflowButton={onRenderOverflowButton}
+                onRenderOverflowButton={onRenderOverflowButton(isSelected, item)}
               />
             )}
           </div>

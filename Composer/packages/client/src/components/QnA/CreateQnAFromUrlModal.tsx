@@ -33,6 +33,7 @@ const formConfig: FieldConfig<CreateQnAFromUrlFormData> = {
   url: {
     required: true,
     defaultValue: '',
+    validate: validateUrl,
   },
   name: {
     required: true,
@@ -69,20 +70,9 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromModalProps> = (props) 
   const showWithScratch = useRecoilValue(showCreateQnAFromUrlDialogWithScratchState(projectId));
 
   formConfig.name.validate = validateName(qnaFiles);
-  formConfig.url.validate = validateUrl;
   const { formData, updateField, hasErrors, formErrors } = useForm(formConfig);
   const isQnAFileselected = !(dialogId === 'all');
   const disabled = hasErrors || !formData.url || !formData.name;
-
-  const updateName = (name = '') => {
-    updateField('name', name);
-  };
-  const updateMultiTurn = (val) => {
-    updateField('multiTurn', val);
-  };
-  const updateUrl = (url = '') => {
-    updateField('url', url);
-  };
 
   return (
     <Dialog
@@ -107,7 +97,7 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromModalProps> = (props) 
             placeholder={formatMessage('Type a name that describes this content')}
             styles={textField}
             value={formData.name}
-            onChange={(e, name) => updateName(name)}
+            onChange={(e, name = '') => updateField('name', name)}
           />
         </Stack>
         <Stack>
@@ -118,7 +108,7 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromModalProps> = (props) 
             placeholder={formatMessage('Enter a URL or browse to upload a file ')}
             styles={textField}
             value={formData.url}
-            onChange={(e, url) => updateUrl(url)}
+            onChange={(e, url = '') => updateField('url', url)}
           />
 
           {!isQnAFileselected && (
@@ -128,7 +118,7 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromModalProps> = (props) 
         <Stack>
           <Checkbox
             label={formatMessage('Enable multi-turn extraction')}
-            onChange={(_e, val) => updateMultiTurn(val)}
+            onChange={(_e, val) => updateField('multiTurn', val)}
           />
         </Stack>
       </div>

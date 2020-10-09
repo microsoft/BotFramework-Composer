@@ -28,11 +28,11 @@ const defaultContainerStyle = (hasFocus) => css`
 `;
 
 //------------------------
-interface IconProps {
+type IconProps = {
   iconStyles?: Partial<IIconProps>;
   iconName: string;
   onClick?: () => void;
-}
+};
 
 interface EditableFieldProps extends Omit<ITextFieldProps, 'onChange' | 'onFocus' | 'onBlur'> {
   autoAdjustHeight?: boolean;
@@ -153,7 +153,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
     borderColor = localValue || transparentBorder || depth > 1 ? 'transparent' : NeutralColors.gray30;
   }
   return (
-    <div className={'EditableField-container'} css={[defaultContainerStyle(hasFocus), containerStyles]}>
+    <div css={[defaultContainerStyle(hasFocus), containerStyles]} data-test-id={'EditableFieldContainer'}>
       <TextField
         key={`${id}${autoAdjustHeight}`} // force update component
         ariaLabel={ariaLabel}
@@ -193,7 +193,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
             styles
           ) as Partial<ITextFieldStyles>
         }
-        value={hasFocus ? localValue : localValue + extraContent}
+        value={hasFocus ? localValue : `${localValue}${extraContent}`}
         onBlur={handleCommit}
         onChange={handleChange}
         onFocus={handleOnFocus}

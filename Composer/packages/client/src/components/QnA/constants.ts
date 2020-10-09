@@ -6,29 +6,29 @@ import formatMessage from 'format-message';
 
 import { FieldValidator } from '../../hooks/useForm';
 
-export interface CreateQnAFromScratchFormData {
+export type CreateQnAFromScratchFormData = {
   name: string;
-}
-export interface CreateQnAFromUrlFormData {
+};
+export type CreateQnAFromUrlFormData = {
   url: string;
   name: string;
   multiTurn: boolean;
-}
+};
 
-export interface CreateQnAFormData {
+export type CreateQnAFormData = {
   url?: string;
   name: string;
   multiTurn?: boolean;
-}
+};
 
-export interface CreateQnAFromModalProps {
+export type CreateQnAFromModalProps = {
   projectId: string;
   dialogId: string;
   qnaFiles: QnAFile[];
   subscriptionKey?: string;
   onDismiss?: () => void;
   onSubmit: (formData: CreateQnAFormData) => void;
-}
+};
 
 export const validateUrl: FieldValidator = (url: string): string => {
   let error = '';

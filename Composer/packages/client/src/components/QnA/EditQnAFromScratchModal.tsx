@@ -17,16 +17,16 @@ import { getBaseName } from '../../utils/fileUtil';
 import { validateName } from './constants';
 import { styles, dialogWindow, textField } from './styles';
 
-interface EditQnAFromScratchModalProps {
+type EditQnAFromScratchModalProps = {
   qnaFiles: QnAFile[];
   qnaFile: QnAFile;
   onDismiss: () => void;
   onSubmit: (formData: EditQnAFromScratchFormData) => void;
-}
+};
 
-export interface EditQnAFromScratchFormData {
+export type EditQnAFromScratchFormData = {
   name: string;
-}
+};
 
 const formConfig: FieldConfig<EditQnAFromScratchFormData> = {
   name: {

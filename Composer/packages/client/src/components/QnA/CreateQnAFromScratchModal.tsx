@@ -44,10 +44,6 @@ export const CreateQnAFromScratchModal: React.FC<CreateQnAFromModalProps> = (pro
   const { formData, updateField, hasErrors, formErrors } = useForm(formConfig);
   const disabled = hasErrors;
 
-  const updateName = (name = '') => {
-    updateField('name', name);
-  };
-
   return (
     <Dialog
       dialogContentProps={{
@@ -71,7 +67,7 @@ export const CreateQnAFromScratchModal: React.FC<CreateQnAFromModalProps> = (pro
             placeholder={formatMessage('Type a name that describes this content')}
             styles={textField}
             value={formData.name}
-            onChange={(e, name) => updateName(name)}
+            onChange={(e, name = '') => updateField('name', name)}
           />
         </Stack>
       </div>

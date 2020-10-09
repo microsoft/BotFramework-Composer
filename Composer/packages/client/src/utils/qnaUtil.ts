@@ -13,20 +13,20 @@ import { createFile, updateFile } from '../recoilModel/persistence/http';
 
 import { getBaseName, getExtension } from './fileUtil';
 
-export function getFileLocale(fileName: string) {
+export const getFileLocale = (fileName: string) => {
   //file name = 'a.en-us.qna'
   return getExtension(getBaseName(fileName));
-}
-export function getReferredQnaFiles(qnaFiles: QnAFile[], dialogs: DialogInfo[]) {
+};
+export const getReferredQnaFiles = (qnaFiles: QnAFile[], dialogs: DialogInfo[]) => {
   return qnaFiles.filter((file) => {
     const idWithOutLocale = getBaseName(file.id);
     return dialogs.some((dialog) => dialog.qnaFile === idWithOutLocale && !!file.content);
   });
-}
+};
 // substring text file by lines
-export function substringTextByLine(text: string, start?: number, end?: number): string {
+export const substringTextByLine = (text: string, start?: number, end?: number): string => {
   return text.split('\n').slice(start, end).join('\n');
-}
+};
 /**
  * Migrate qna pair in <dialog>.qna to container KB <dialog>-munual.source.qna file.
  * @param qnaFiles

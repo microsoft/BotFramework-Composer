@@ -11,12 +11,12 @@ import { isQnAFileCreatedFromUrl } from '../../utils/qnaUtil';
 import EditQnAFromScratchModal, { EditQnAFromScratchFormData } from './EditQnAFromScratchModal';
 import EditQnAFromUrlModal, { EditQnAFromUrlFormData } from './EditQnAFromUrlModal';
 
-interface EditQnAModalProps {
+type EditQnAModalProps = {
   qnaFiles: QnAFile[];
   qnaFile: QnAFile;
   onDismiss: () => void;
   onSubmit: (formData: EditQnAFromScratchFormData | EditQnAFromUrlFormData) => void;
-}
+};
 
 export const EditQnAModal: React.FC<EditQnAModalProps> = (props) => {
   if (isQnAFileCreatedFromUrl(props.qnaFile)) {

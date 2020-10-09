@@ -118,7 +118,8 @@ export const removeLgFileState = async (
 
   const targetLgFile = lgFiles.find((item) => item.id === id) || lgFiles.find((item) => item.id === `${id}.${locale}`);
   if (!targetLgFile) {
-    throw new Error(`remove lg file ${id} not exist`);
+    setError(callbackHelpers, new Error(`remove lg file ${id} not exist`));
+    return;
   }
 
   lgFiles = lgFiles.filter((file) => file.id !== targetLgFile.id);

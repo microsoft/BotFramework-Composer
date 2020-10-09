@@ -5,7 +5,7 @@ import * as React from 'react';
 
 import { renderWithRecoil } from '../../../__tests__/testUtils/renderWithRecoil';
 import { NotificationCard, CardProps } from '../NotificationCard';
-import { NotificationCardTypes } from '../../recoilModel/types';
+import { NotificationCardType } from '../../recoilModel/types';
 import Timer from '../../utils/timer';
 
 jest.useFakeTimers();
@@ -16,7 +16,7 @@ describe('<NotificationCard />', () => {
       title: 'There was error creating your KB',
       description: 'error',
       retentionTime: 1,
-      type: NotificationCardTypes.ERROR,
+      type: NotificationCardType.ERROR,
     };
     const onDismiss = jest.fn();
     const { container } = renderWithRecoil(<NotificationCard cardProps={cardProps} id="test" onDismiss={onDismiss} />);
@@ -29,7 +29,7 @@ describe('<NotificationCard />', () => {
       title: 'There was error creating your KB',
       description: 'error',
       retentionTime: 5000,
-      type: NotificationCardTypes.ERROR,
+      type: NotificationCardType.ERROR,
       onRenderCardContent: () => <div>customized</div>,
     };
     const onDismiss = jest.fn();

@@ -201,9 +201,6 @@ export class Builder {
 
   private async runLuBuild(files: FileInfo[], allFiles: FileInfo[]) {
     const config = await this._getConfig(files, 'lu');
-    // if (config.models.length === 0) {
-    //   throw new Error('No LUIS files exist');
-    // }
     const resolver = luImportResolverGenerator(getLUFiles(allFiles));
     const loadResult = await this.luBuilder.loadContents(
       config.models,

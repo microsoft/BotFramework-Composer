@@ -18,17 +18,17 @@ import { getQnAFileUrlOption } from '../../utils/qnaUtil';
 import { validateName, validateUrl } from './constants';
 import { styles, dialogWindow, textField } from './styles';
 
-interface EditQnAFromUrlModalProps {
+type EditQnAFromUrlModalProps = {
   qnaFiles: QnAFile[];
   qnaFile: QnAFile;
   onDismiss: () => void;
   onSubmit: (formData: EditQnAFromUrlFormData) => void;
-}
+};
 
-export interface EditQnAFromUrlFormData {
+export type EditQnAFromUrlFormData = {
   name: string;
   url: string;
-}
+};
 
 const formConfig: FieldConfig<EditQnAFromUrlFormData> = {
   name: {
