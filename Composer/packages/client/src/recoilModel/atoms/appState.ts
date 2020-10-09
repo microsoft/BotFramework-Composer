@@ -3,6 +3,7 @@
 
 import { atom, atomFamily } from 'recoil';
 import { ProjectTemplate, UserSettings } from '@bfc/shared';
+import { ExtensionMetadata } from '@bfc/extension-client';
 
 import {
   StorageFolder,
@@ -11,7 +12,6 @@ import {
   AppUpdateState,
   BoilerplateVersion,
   Notification,
-  ExtensionConfig,
 } from '../../recoilModel/types';
 import { getUserSettings } from '../utils';
 import onboardingStorage from '../../utils/onboardingStorage';
@@ -177,7 +177,7 @@ export const notificationsState = atomFamily<Notification, string>({
   },
 });
 
-export const extensionsState = atom<ExtensionConfig[]>({
+export const extensionsState = atom<Omit<ExtensionMetadata, 'path'>[]>({
   key: getFullyQualifiedKey('extensions'),
   default: [],
 });

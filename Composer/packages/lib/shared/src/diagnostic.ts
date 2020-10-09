@@ -1,7 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export class Range {
+import { IRange, IPosition, IDiagnostic, DiagnosticSeverity } from '@bfc/types';
+
+export class Range implements IRange {
   start: Position;
   end: Position;
 
@@ -11,7 +13,7 @@ export class Range {
   }
 }
 
-export class Position {
+export class Position implements IPosition {
   line: number;
   character: number;
 
@@ -21,14 +23,7 @@ export class Position {
   }
 }
 
-export enum DiagnosticSeverity {
-  Error = 0,
-  Warning = 1,
-  Information = 2,
-  Hint = 3,
-}
-
-export class Diagnostic {
+export class Diagnostic implements IDiagnostic {
   /**
    * Error
    * Warning

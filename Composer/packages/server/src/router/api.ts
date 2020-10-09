@@ -78,7 +78,7 @@ router.post('/extensions', ExtensionsController.addExtension);
 router.delete('/extensions', ExtensionsController.removeExtension);
 router.patch('/extensions/toggle', ExtensionsController.toggleExtension);
 router.get('/extensions/search', ExtensionsController.searchExtensions);
-router.get('/extensions/:id/view/:view', ExtensionsController.getBundleForView);
+router.get('/extensions/:id/:bundleId', ExtensionsController.getBundleForView);
 // proxy route for extensions (allows extension client code to make fetch calls using the Composer server as a proxy -- avoids browser blocking request due to CORS)
 router.post('/extensions/proxy/:url', ExtensionsController.performExtensionFetch);
 

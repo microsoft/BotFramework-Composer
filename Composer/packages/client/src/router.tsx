@@ -61,7 +61,7 @@ const Routes = (props) => {
           <SettingPage path="settings/*" />
           <BotCreationFlowRouter path="projects/*" />
           <BotCreationFlowRouter path="home" />
-          <PluginPageContainer path="page/:pluginId" />
+          <PluginPageContainer path="plugin/:pluginId/:bundleId" />
           <NotFound default />
         </Router>
       </Suspense>

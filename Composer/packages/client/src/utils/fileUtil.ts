@@ -106,11 +106,11 @@ export async function loadLocale(locale: string) {
   }
 }
 
-export const getUniqueName = (list: string[], currentName: string, separator = '-') => {
+export const getUniqueName = (list: string[], currentName: string, seperator = '-') => {
   let uniqueName = currentName;
   let i = 1;
   while (list.includes(uniqueName)) {
-    uniqueName = `${currentName}${separator}${i}`;
+    uniqueName = `${currentName}${seperator}${i}`;
     i++;
   }
   return uniqueName;

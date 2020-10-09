@@ -5,5 +5,5 @@
     "allowJs": true,
     "module": "esnext"
   },
-  "include": ["./src/**/*", "./__tests__/**/*"]
+  "include": ["./src/**/*", "./__tests__/**/*", "./extension-container/**/*"]
 }
