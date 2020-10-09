@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { globalHistory } from '@reach/router';
 import replace from 'lodash/replace';
 import find from 'lodash/find';
@@ -28,16 +28,20 @@ export const useLinks = () => {
   const extensions = useRecoilValue(enabledExtensionsSelector);
   const openedDialogId = designPageLocation.dialogId || 'Main';
 
-  // add page-contributing extensions
-  const pluginPages = extensions.reduce((pages, p) => {
-    const pagesConfig = p.contributes?.views?.pages;
-    if (Array.isArray(pagesConfig) && pagesConfig.length > 0) {
-      pages.push(...pagesConfig.map((page) => ({ ...page, id: p.id })));
-    }
-    return pages;
-  }, [] as ExtensionPageConfig[]);
+  const pageLinks = useMemo(() => {
+    // add page-contributing extensions
+    const pluginPages = extensions.reduce((pages, p) => {
+      const pagesConfig = p.contributes?.views?.pages;
+      if (Array.isArray(pagesConfig) && pagesConfig.length > 0) {
+        pages.push(...pagesConfig.map((page) => ({ ...page, id: p.id })));
+      }
+      return pages;
+    }, [] as ExtensionPageConfig[]);
 
-  return { topLinks: topLinks(projectId, openedDialogId, pluginPages), bottomLinks };
+    return topLinks(projectId, openedDialogId, pluginPages);
+  }, [projectId, openedDialogId, extensions]);
+
+  return { topLinks: pageLinks, bottomLinks };
 };
 
 export const useRouterCache = (to: string) => {
