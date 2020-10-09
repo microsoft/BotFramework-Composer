@@ -15,7 +15,7 @@ import {
   dispatcherState,
   validateDialogSelectorFamily,
   botStatusState,
-  botNameState,
+  botDisplayNameState,
   luFilesState,
   qnaFilesState,
   settingsState,
@@ -62,7 +62,7 @@ export const TestController: React.FC<{ projectId: string }> = (props) => {
 
   const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
   const botStatus = useRecoilValue(botStatusState(projectId));
-  const botName = useRecoilValue(botNameState(projectId));
+  const botName = useRecoilValue(botDisplayNameState(projectId));
   const luFiles = useRecoilValue(luFilesState(projectId));
   const settings = useRecoilValue(settingsState(projectId));
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));

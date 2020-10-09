@@ -32,9 +32,6 @@ type CreationFlowProps = RouteComponentProps<{}>;
 const CreationFlow: React.FC<CreationFlowProps> = () => {
   const {
     fetchTemplates,
-    openProject,
-    createProject,
-    saveProjectAs,
     fetchStorages,
     fetchFolderItemsByPath,
     setCreationFlowStatus,
@@ -42,9 +39,13 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     updateCurrentPathForStorage,
     updateFolder,
     saveTemplateId,
-    fetchProjectById,
     fetchRecentProjects,
+    openProject,
+    createNewBot,
+    saveProjectAs,
+    fetchProjectById,
   } = useRecoilValue(dispatcherState);
+
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
   const projectId = useRecoilValue(currentProjectIdState);
   const templateProjects = useRecoilValue(templateProjectsState);
@@ -102,15 +103,16 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   };
 
   const handleCreateNew = async (formData, templateId: string, qnaKbUrls?: string[]) => {
-    createProject(
-      templateId || '',
-      formData.name,
-      formData.description,
-      formData.location,
-      formData.schemaUrl,
+    const newBotData = {
+      templateId: templateId || '',
+      name: formData.name,
+      description: formData.description,
+      location: formData.location,
+      schemaUrl: formData.schemaUrl,
       appLocale,
-      qnaKbUrls
-    );
+      qnaKbUrls,
+    };
+    createNewBot(newBotData);
   };
 
   const handleSaveAs = (formData) => {
