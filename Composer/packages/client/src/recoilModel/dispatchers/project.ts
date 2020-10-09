@@ -25,15 +25,8 @@ import {
 } from '../atoms';
 import { dispatcherState } from '../DispatcherWrapper';
 import { getFileNameFromPath } from '../../utils/fileUtil';
-import { reformQnAToContainerKB } from '../../utils/qnaUtil';
 
-import {
-  recentProjectsState,
-  templateIdState,
-  announcementState,
-  boilerplateVersionState,
-  showCreateQnAFromUrlDialogState,
-} from './../atoms';
+import { recentProjectsState, templateIdState, announcementState, boilerplateVersionState } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
 import {
   flushExistingTasks,

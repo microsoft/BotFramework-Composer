@@ -79,6 +79,13 @@ export function convertQnADiagnostic(d: any, source: string): Diagnostic {
   return result;
 }
 
+function convertLURange(section: any): Range {
+  const start: Position = new Position(section.Range.Start.Line, section.Range.Start.Character);
+  const end: Position = new Position(section.Range.End.Line, section.Range.End.Character);
+
+  return new Range(start, end);
+}
+
 export function convertQnAParseResultToQnAFile(id = '', resource: LuParseResource): QnAFile {
   // attach uniq id for CRUD.
   // TODO: persistence uniq id when do re-parse.
@@ -92,10 +99,6 @@ export function convertQnAParseResultToQnAFile(id = '', resource: LuParseResourc
   const { Errors, Content } = resource;
   const qnaSections = Sections.filter(({ SectionType }) => SectionType === SectionTypes.QnASection).map((section) => {
     const { Answer, Body, sectionId, Questions } = section;
-    const range = new Range(
-      new Position(section.Range.Start.Line, section.Range.Start.Character),
-      new Position(section.Range.End.Line, section.Range.End.Character)
-    );
     const QuestionsWithId = Questions.map((content) => {
       return {
         content,
@@ -108,7 +111,7 @@ export function convertQnAParseResultToQnAFile(id = '', resource: LuParseResourc
       sectionId,
       Answer,
       Questions: QuestionsWithId,
-      range,
+      range: convertLURange(section),
     };
   });
 

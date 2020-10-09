@@ -49,7 +49,7 @@ const checkSkillSetting = (assets: BotAssets): Diagnostic[] => {
     // used skill not existed in setting
     dialog.skills.forEach((skillId) => {
       const endpointUrlCollection = map(skill, ({ endpointUrl }) => endpointUrl);
-      if (!endpointUrlCollection.includes(fetchFromSettings(skillId, assets.setting))) {
+      if (!endpointUrlCollection.includes(skillId)) {
         const skillName = getSkillNameFromSetting(skillId) || skillId;
         diagnostics.push(
           new Diagnostic(

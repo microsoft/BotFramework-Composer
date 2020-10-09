@@ -26,8 +26,7 @@ import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
 import isEqual from 'lodash/isEqual';
 import isEmpty from 'lodash/isEmpty';
-import { QnAFile } from '@bfc/shared/src/types';
-import { QnASection } from '@bfc/shared';
+import { QnASection, QnAFile } from '@bfc/shared';
 import { qnaUtil } from '@bfc/indexers';
 import { NeutralColors } from '@uifabric/fluent-theme';
 

@@ -120,7 +120,7 @@ export type QnASection = {
   Questions: { content: string; id: string }[];
   Answer: string;
   Body: string;
-  range?: Range;
+  range?: IRange;
 };
 
 export type QnAFile = {

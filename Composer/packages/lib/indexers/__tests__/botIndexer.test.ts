@@ -8,6 +8,17 @@ const { checkSkillSetting, checkLUISLocales, filterLUISFilesToPublish } = BotInd
 
 const botAssets: BotAssets = {
   projectId: 'test',
+  botProjectFile: {
+    id: 'test',
+    content: {
+      workspace: '',
+      name: '',
+      skills: {},
+    },
+    lastModified: '',
+  },
+  dialogSchemas: [],
+  qnaFiles: [],
   lgFiles: [],
   luFiles: [
     {
@@ -36,6 +47,8 @@ const botAssets: BotAssets = {
       'Email-Skill': {
         name: 'Email-Skill',
         manifestUrl: 'skill1',
+        msAppId: 'skill1',
+        endpointUrl: 'skill1',
       },
     },
     luis: {} as ILuisConfig,

@@ -53,8 +53,8 @@ describe('parse', () => {
 
     const result = parse(content);
     expect(result.imports.length).toEqual(2);
-    expect(result.imports[0]).toEqual('windows-guide.source.qna');
-    expect(result.imports[1]).toEqual('../common/aks.qna');
+    expect(result.imports[0]).toEqual({ id: 'windows-guide.source.qna', path: 'windows-guide.source.qna' });
+    expect(result.imports[1]).toEqual({ id: 'aks.qna', path: '../common/aks.qna' });
     expect(result.empty).toEqual(false);
     expect(result.qnaSections.length).toEqual(0);
   });
@@ -66,10 +66,6 @@ describe('parse', () => {
 `;
 
     const result = parse(content);
-    expect(result.infos).toEqual([
-      '> !# @source.urls = https://aka.ms/surface-pro-4-user-guide-EN.pdf',
-      '> !# @source.name = guide',
-    ]);
     expect(result.empty).toEqual(false);
   });
 });
