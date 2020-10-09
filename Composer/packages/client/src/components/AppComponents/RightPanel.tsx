@@ -59,7 +59,7 @@ export const RightPanel = () => {
         setApplicationLevelError={setApplicationLevelError}
       >
         <RequireAuth>
-          <div css={{ display: 'flex', flexDirection: 'row' }}>
+          <div css={{ display: 'flex', flexDirection: 'row', label: 'MainPage' }}>
             {SHOW_TREE.includes(currentMode) ? (
               <LeftRightSplit initialLeftGridWidth="200px" minLeftPixels={200} minRightPixels={800}>
                 <ProjectTree regionName={formatMessage('Project tree')} showTriggers={currentMode === 'design'} />
