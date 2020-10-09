@@ -1,7 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import React from 'react';
 import ReactDOM from 'react-dom';
+import * as ExtensionClient from '@bfc/extension-client';
 
 if (!document.head.title) {
   const title = document.createElement('title');
@@ -33,6 +35,10 @@ if (!document.getElementById('plugin-root')) {
   document.body.appendChild(root);
 }
 // initialize the API object
+window.React = React;
+window.ReactDOM = ReactDOM;
+// @ts-ignore
+window.ExtensionClient = ExtensionClient;
 window.Composer = {};
 
 // init the render function
