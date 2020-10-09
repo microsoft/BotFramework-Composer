@@ -29,6 +29,7 @@ interface QnAPageProps extends RouteComponentProps<{}> {
 
 const QnAPage: React.FC<QnAPageProps> = (props) => {
   const { dialogId = '', projectId = '' } = props;
+
   const actions = useRecoilValue(dispatcherState);
   const dialogs = useRecoilValue(dialogsState(projectId));
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));

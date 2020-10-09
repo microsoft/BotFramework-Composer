@@ -17,7 +17,11 @@ const Fieldsets: React.FC<FieldProps<object>> = (props) => {
   return (
     <React.Fragment>
       {fieldsets.map(({ schema, uiOptions, title, defaultExpanded }, key) => (
-        <CollapseField key={key} defaultExpanded={defaultExpanded} title={title}>
+        <CollapseField
+          key={key}
+          defaultExpanded={defaultExpanded}
+          title={typeof title === 'function' ? title(value) : title}
+        >
           <ObjectField {...props} schema={schema} uiOptions={uiOptions} />
         </CollapseField>
       ))}

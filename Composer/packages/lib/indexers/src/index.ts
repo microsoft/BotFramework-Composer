@@ -9,6 +9,7 @@ import { luIndexer } from './luIndexer';
 import { qnaIndexer } from './qnaIndexer';
 import { skillIndexer } from './skillIndexer';
 import { skillManifestIndexer } from './skillManifestIndexer';
+import { botProjectSpaceIndexer } from './botProjectSpaceIndexer';
 import { FileExtensions } from './utils/fileExtensions';
 import { getExtension, getBaseName } from './utils/help';
 
@@ -29,6 +30,7 @@ class Indexer {
         [FileExtensions.Dialog]: [],
         [FileExtensions.DialogSchema]: [],
         [FileExtensions.Manifest]: [],
+        [FileExtensions.BotProjectSpace]: [],
       }
     );
   }
@@ -54,6 +56,7 @@ class Indexer {
       qnaFiles: qnaIndexer.index(result[FileExtensions.QnA]),
       skillManifestFiles: skillManifestIndexer.index(result[FileExtensions.Manifest]),
       skills: skillIndexer.index(skillContent, settings.skill),
+      botProjectSpaceFiles: botProjectSpaceIndexer.index(result[FileExtensions.BotProjectSpace]),
     };
   }
 }
@@ -69,3 +72,4 @@ export * from './qnaIndexer';
 export * from './utils';
 export * from './validations';
 export * from './skillIndexer';
+export * from './botProjectSpaceIndexer';

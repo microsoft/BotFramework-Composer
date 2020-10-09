@@ -7,7 +7,6 @@
   "scripts": {
     "build": "tsc"
   },
-  "extendsComposer": true,
   "dependencies": {
     "@azure/arm-appinsights": "2.1.0",
     "@azure/arm-appservice-profile-2019-03-01-hybrid": "1.0.0",

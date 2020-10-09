@@ -40,7 +40,7 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = (props) => {
     }
 
     const newIntent = { Name: intentName, Body: newValue };
-    shellApi.deboucedUpdateLuIntent(luFile.id, intentName, newIntent);
+    shellApi.debouncedUpdateLuIntent(luFile.id, intentName, newIntent);
     onChange(intentName);
   };
 

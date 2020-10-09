@@ -1,8 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License
 
-import { SDKKinds } from '../../types';
-import { LgType } from '..';
+import { SDKKinds } from '@bfc/types';
+
+import LgType from '../models/LgType';
 
 /**
  * { hostKind: 'Microsoft.TextInput', hostField: 'prompt' } => 'SendActivity_Prompt'

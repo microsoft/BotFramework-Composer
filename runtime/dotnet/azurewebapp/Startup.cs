@@ -87,7 +87,7 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
 
         public bool IsSkill(BotSettings settings)
         {
-            return settings?.Skill?.IsSkill == true;
+            return settings?.SkillConfiguration?.IsSkill == true;
         }
 
         public BotFrameworkHttpAdapter GetBotAdapter(IStorage storage, BotSettings settings, UserState userState, ConversationState conversationState, IServiceProvider s, TelemetryInitializerMiddleware telemetryInitializerMiddleware)
@@ -132,7 +132,11 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             // Register AuthConfiguration to enable custom claim validation for skills.
             if (IsSkill(settings))
             {
-                services.AddSingleton(sp => new AuthenticationConfiguration { ClaimsValidator = new AllowedCallersClaimsValidator(settings.Skill) });
+                services.AddSingleton(sp => new AuthenticationConfiguration { ClaimsValidator = new AllowedCallersClaimsValidator(settings.SkillConfiguration) });
+            }
+            else
+            {
+                services.AddSingleton(sp => new AuthenticationConfiguration());
             }
 
             // register components.

@@ -53,6 +53,7 @@ import {
 import { CreateQnAModal } from '../../components/QnA';
 import { triggerNotSupported } from '../../utils/dialogValidator';
 import { undoFunctionState, undoVersionState } from '../../recoilModel/undo/history';
+import { decodeDesignerPathToArrayPath } from '../../utils/convertUtils/designerPathEncoder';
 
 import { WarningMessage } from './WarningMessage';
 import {
@@ -145,7 +146,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   } = useRecoilValue(dispatcherState);
 
   const params = new URLSearchParams(location?.search);
-  const selected = params.get('selected') || '';
+  const selected = decodeDesignerPathToArrayPath(
+    dialogs.find((x) => x.id === props.dialogId)?.content,
+    params.get('selected') || ''
+  );
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
   const [dialogJsonVisible, setDialogJsonVisibility] = useState(false);
   const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0]);
@@ -196,8 +200,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       const { dialogId, projectId } = props;
       const params = new URLSearchParams(location.search);
       const dialogMap = dialogs.reduce((acc, { content, id }) => ({ ...acc, [id]: content }), {});
-      const selected = params.get('selected') ?? '';
-      const focused = params.get('focused') ?? '';
+      const dialogData = getDialogData(dialogMap, dialogId);
+      const selected = decodeDesignerPathToArrayPath(dialogData, params.get('selected') ?? '');
+      const focused = decodeDesignerPathToArrayPath(dialogData, params.get('focused') ?? '');
 
       //make sure focusPath always valid
       const data = getDialogData(dialogMap, dialogId, getFocusPath(selected, focused));
