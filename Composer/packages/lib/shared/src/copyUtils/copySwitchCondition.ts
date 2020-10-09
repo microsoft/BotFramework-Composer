@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { SwitchCondition, CaseCondition } from '../types';
+import { SwitchCondition, CaseCondition } from '@bfc/types';
 
 import { ExternalApi } from './ExternalApi';
 import { copyAdaptiveActionList } from './copyAdaptiveActionList';

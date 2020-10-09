@@ -239,9 +239,6 @@ export class BotProjectService {
   };
 
   private static addRecentProject = (path: string): void => {
-    // if (!BotProjectService.currentBotProject) {
-    //   return;
-    // }
     const currDir = Path.resolve(path);
     const idx = BotProjectService.recentBotProjects.findIndex((ref) => currDir === Path.resolve(ref.path));
     if (idx > -1) {

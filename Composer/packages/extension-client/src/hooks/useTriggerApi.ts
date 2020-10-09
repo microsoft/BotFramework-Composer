@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ShellApi, SDKKinds, ITriggerCondition, BaseSchema } from '@bfc/shared';
+import { ShellApi, SDKKinds, ITriggerCondition, BaseSchema } from '@bfc/types';
 import get from 'lodash/get';
 
 import { useActionApi } from './useActionApi';
