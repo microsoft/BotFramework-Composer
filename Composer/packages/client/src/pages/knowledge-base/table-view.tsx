@@ -115,12 +115,12 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
   const detailListRef = useRef<IDetailsList | null>(null);
   const [editQnAFile, setEditQnAFile] = useState<QnAFile | undefined>(undefined);
+  const [expandedIndex, setExpandedIndex] = useState(-1);
   const [kthSectionIsCreatingQuestion, setCreatingQuestionInKthSection] = useState<string>('');
   const currentDialogImportedFileIds = qnaFile?.imports.map(({ id }) => getBaseName(id)) || [];
   const currentDialogImportedFiles = qnaFiles.filter(({ id }) => currentDialogImportedFileIds.includes(id));
   const currentDialogImportedSourceFiles = currentDialogImportedFiles.filter(({ id }) => id.endsWith('.source'));
   const allSourceFiles = qnaFiles.filter(({ id }) => id.endsWith('.source'));
-  const [isQnASectionsExpanded, setIsQnASectionsExpanded] = useState<boolean[]>([]);
   const [creatQnAPairSettings, setCreatQnAPairSettings] = useState<{
     groupKey: string;
     sectionIndex: number;
@@ -149,22 +149,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
   useEffect(() => {
     if (isEmpty(qnaFiles)) return;
-    const allSections = qnaFiles.reduce((result: any[], qnaFile) => {
-      const res = generateQnASections(qnaFile);
-      return result.concat(res);
-    }, []);
-    if (dialogId === 'all') {
-      setIsQnASectionsExpanded(Array(allSections.length).fill(false));
-    } else {
-      const dialogSections = allSections.filter(
-        (t) => t.dialogId === dialogId || currentDialogImportedFileIds.includes(t.fileId)
-      );
-      setIsQnASectionsExpanded(Array(dialogSections.length).fill(false));
-    }
-  }, [dialogId, projectId]);
-
-  useEffect(() => {
-    if (isEmpty(qnaFiles)) return;
 
     const allSections = qnaFiles
       .filter(({ id }) => id.endsWith('.source'))
@@ -180,18 +164,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
       setQnASections(dialogSections);
     }
   }, [qnaFiles, dialogId, projectId]);
-
-  const toggleExpandRow = (index) => {
-    const newArray = [...isQnASectionsExpanded];
-    newArray[index] = !newArray[index];
-    setIsQnASectionsExpanded(newArray);
-  };
-
-  const expandRow = (index) => {
-    const expandedRow = new Array(isQnASectionsExpanded.length).fill(false);
-    expandedRow[index] = true;
-    setIsQnASectionsExpanded(expandedRow);
-  };
 
   const onUpdateQnAQuestion = (fileId: string, sectionId: string, questionId: string, content: string) => {
     if (!fileId) return;
@@ -225,9 +197,14 @@ const TableView: React.FC<TableViewProps> = (props) => {
       sectionId,
       projectId,
     });
-    const newArray = [...isQnASectionsExpanded];
-    newArray.splice(sectionIndex, 1);
-    setIsQnASectionsExpanded(newArray);
+    // update expand status
+    if (expandedIndex) {
+      if (sectionIndex < expandedIndex) {
+        setExpandedIndex(expandedIndex - 1);
+      } else if (sectionIndex === expandedIndex) {
+        setExpandedIndex(-1);
+      }
+    }
   };
 
   const onCreateNewQnAPairs = (fileId: string | undefined) => {
@@ -236,9 +213,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     const sectionIndex = qnaSections.findIndex((item) => item.fileId === fileId);
     createQnAPairs({ id: fileId, content: newQnAPair, projectId });
     setCreatQnAPairSettings({ groupKey: fileId, sectionIndex });
-    const newArray = [...isQnASectionsExpanded];
-    newArray.splice(sectionIndex, 0, false);
-    setIsQnASectionsExpanded(newArray);
+    // focus to new created
   };
 
   const onCreateNewQuestion = (fileId, sectionId, content?: string) => {
@@ -407,13 +382,13 @@ const TableView: React.FC<TableViewProps> = (props) => {
           return (
             <IconButton
               ariaLabel="ChevronDown"
-              iconProps={{ iconName: isQnASectionsExpanded[index] ? 'ChevronDown' : 'ChevronRight' }}
+              iconProps={{ iconName: expandedIndex === index ? 'ChevronDown' : 'ChevronRight' }}
               styles={{
                 root: { ...icon.root, marginTop: 2, marginLeft: 7, fontSize: 12 },
                 icon: { fontSize: 13, color: NeutralColors.black },
               }}
               title="ChevronDown"
-              onClick={() => toggleExpandRow(index)}
+              onClick={() => setExpandedIndex(expandedIndex === index ? -1 : index)}
             />
           );
         },
@@ -428,8 +403,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
         data: 'string',
         onRender: (item: QnASectionItem, index) => {
           const questions = item.Questions;
-          const showingQuestions = isQnASectionsExpanded[index] ? questions : questions.slice(0, limitedNumber);
-          //This question content of this qna Section is '#?'
+          const isExpanded = expandedIndex === index;
+          const showingQuestions = isExpanded ? questions : questions.slice(0, limitedNumber);
           const isQuestionEmpty = showingQuestions.length === 1 && showingQuestions[0].content === '';
           const isSourceSectionInDialog = item.fileId.endsWith('.source') && !dialogId.endsWith('.source');
           const isAllowEdit = dialogId !== 'all' && !isSourceSectionInDialog;
@@ -447,7 +422,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
                   item.fileId === creatQnAPairSettings.groupKey &&
                   index === creatQnAPairSettings.sectionIndex &&
                   qIndex === 0;
-                const isExpanded = isQnASectionsExpanded[index];
                 return (
                   <EditableField
                     key={question.id}
@@ -478,7 +452,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                       }
                     }}
                     onChange={() => {}}
-                    onFocus={() => expandRow(index)}
+                    onFocus={() => setExpandedIndex(index)}
                   />
                 );
               })}
@@ -503,7 +477,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                     setCreatingQuestionInKthSection('');
                   }}
                   onChange={() => {}}
-                  onFocus={() => expandRow(index)}
+                  onFocus={() => setExpandedIndex(index)}
                 />
               ) : (
                 addQuestionButton
@@ -522,7 +496,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         onRender: (item, index) => {
           const isSourceSectionInDialog = item.fileId.endsWith('.source') && !dialogId.endsWith('.source');
           const isAllowEdit = dialogId !== 'all' && !isSourceSectionInDialog;
-          const isExpanded = isQnASectionsExpanded[index];
+          const isExpanded = expandedIndex === index;
           return (
             <div data-is-focusable css={formCell}>
               <EditableField
@@ -549,7 +523,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                   }
                 }}
                 onChange={() => {}}
-                onFocus={() => expandRow(index)}
+                onFocus={() => setExpandedIndex(index)}
               />
             </div>
           );
