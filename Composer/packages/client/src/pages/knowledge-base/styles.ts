@@ -199,6 +199,11 @@ export const editableField = {
     overflowY: 'auto' as 'auto',
     fontSize: FontSizes.size12,
     maxHeight: 500,
+    selectors: {
+      '::placeholder': {
+        fontSize: FontSizes.size12,
+      },
+    },
   },
 };
 
