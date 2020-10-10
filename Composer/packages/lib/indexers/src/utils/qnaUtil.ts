@@ -207,15 +207,15 @@ export function insertSection(qnaFile: QnAFile, position: number | string, secti
  * if content is undefined, do remove question
  * if id & content, do update question
  */
-interface QuestionChanges {
+type QuestionChanges = {
   id?: string;
   content?: string;
-}
+};
 
-interface QnASectionChanges {
+type QnASectionChanges = {
   Questions?: QuestionChanges[];
   Answer?: string;
-}
+};
 
 /**
  *

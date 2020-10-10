@@ -127,6 +127,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
 
   const resetValue = () => {
     updateField('value', '');
+    setHasBeenEdited(true);
     fieldRef.current?.focus();
   };
 
