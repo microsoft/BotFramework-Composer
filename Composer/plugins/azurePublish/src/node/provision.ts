@@ -42,6 +42,7 @@ const AzureResourceTypes = {
   LUIS_AUTHORING: 'luisAuthoring',
   LUIS_PREDICTION: 'luisPrediction',
   BLOBSTORAGE: 'blobStorage',
+  QNA: 'qna'
 };
 
 export class BotProjectProvision {
@@ -217,6 +218,7 @@ export class BotProjectProvision {
         blobStorage: null,
         cosmoDB: null,
         appInsights: null,
+        qna: null,
       };
 
       const resourceGroupName = `${config.hostname}`;
@@ -362,6 +364,16 @@ export class BotProjectProvision {
               name: config.hostname.toLowerCase().replace(/-/g, '').replace(/_/g, ''),
               containerName: 'transcripts',
             });
+            break;
+
+          /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+          // Create qna account and related search resources
+          case AzureResourceTypes.QNA:
+            provisionResults.qna = await this.azureResourceManagementClient.deployQnAReource({
+              resourceGroupName: resourceGroupName,
+              location: provisionResults.resourceGroup.location,
+              accountName: resourceGroupName,
+            })
             break;
         }
       }

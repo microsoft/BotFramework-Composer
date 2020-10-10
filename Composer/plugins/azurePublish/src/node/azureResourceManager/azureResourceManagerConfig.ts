@@ -110,4 +110,11 @@ export interface DeploymentsConfig {
   name: string;
 }
 
+export interface QnAResourceConfig {
+  resourceGroupName: string;
+  accountName: string;
+  location: string;
+  sku?: string;
+}
+
 export type ApplicationType = 'web' | 'other';
