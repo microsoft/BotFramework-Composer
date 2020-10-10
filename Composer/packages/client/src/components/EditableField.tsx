@@ -176,9 +176,13 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
   if (!editing && !error) {
     borderColor = formData.value || transparentBorder || depth > 1 ? 'transparent' : NeutralColors.gray30;
   }
+
   return (
     <Fragment>
-      <div css={[defaultContainerStyle(hasFocus, hasErrors), containerStyles]} data-test-id={'EditableFieldContainer'}>
+      <div
+        css={[defaultContainerStyle(hasFocus, hasErrors && hasBeenEdited), containerStyles]}
+        data-test-id={'EditableFieldContainer'}
+      >
         <TextField
           key={`${id}-${expanded}-${multiline}-${hasFocus}`} // force update component to trigger autoAdjustHeight
           ariaLabel={ariaLabel}
@@ -254,7 +258,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
           />
         )}
       </div>
-      {hasErrors && <span style={{ color: SharedColors.red20 }}>{formErrors.value}</span>}
+      {hasErrors && hasBeenEdited && <span style={{ color: SharedColors.red20 }}>{formErrors.value}</span>}
       {error && <span style={{ color: SharedColors.red20 }}>{error}</span>}
     </Fragment>
   );

@@ -497,7 +497,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                   id={'New Question'}
                   name={'New Question'}
                   placeholder={'add new question'}
-                  styles={editableFieldQuestion}
+                  styles={editableField}
                   value={''}
                   onBlur={(_id, value) => {
                     const newValue = value?.trim();
