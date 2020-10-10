@@ -11,12 +11,13 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { PublishTarget } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
+import { LeftRightSplit } from '../../components/Split/LeftRightSplit';
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { projectContainer } from '../design/styles';
 import {
   dispatcherState,
   settingsState,
-  botNameState,
+  botDisplayNameState,
   publishTypesState,
   publishHistoryState,
 } from '../../recoilModel';
@@ -35,7 +36,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const { projectId = '' } = props;
   const [selectedTarget, setSelectedTarget] = useState<PublishTarget | undefined>();
   const settings = useRecoilValue(settingsState(projectId));
-  const botName = useRecoilValue(botNameState(projectId));
+  const botName = useRecoilValue(botDisplayNameState(projectId));
   const publishTypes = useRecoilValue(publishTypesState(projectId));
   const publishHistory = useRecoilValue(publishHistoryState(projectId));
 
@@ -403,52 +404,54 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         <h1 css={HeaderText}>{selectedTarget ? selectedTargetName : formatMessage('Publish Profiles')}</h1>
       </div>
       <div css={ContentStyle} data-testid="Publish" role="main">
-        <div
-          aria-label={formatMessage('Navigation panel')}
-          css={projectContainer}
-          data-testid="target-list"
-          role="region"
-        >
+        <LeftRightSplit initialLeftGridWidth="20%" minLeftPixels={200} minRightPixels={800}>
           <div
-            key={'_all'}
-            css={selectedTargetName === 'all' ? targetSelected : overflowSet}
-            style={{
-              height: '36px',
-              cursor: 'pointer',
-            }}
-            onClick={() => {
-              setSelectedTarget(undefined);
-              onSelectTarget('all');
-            }}
+            aria-label={formatMessage('Navigation panel')}
+            css={projectContainer}
+            data-testid="target-list"
+            role="region"
           >
-            {formatMessage('All profiles')}
-          </div>
-          {settings && settings.publishTargets && (
-            <TargetList
-              list={settings.publishTargets}
-              selectedTarget={selectedTargetName}
-              onDelete={async (index) => await onDelete(index)}
-              onEdit={async (item, target) => await onEdit(item, target)}
-              onSelect={(item) => {
-                setSelectedTarget(item);
-                onSelectTarget(item.name);
+            <div
+              key={'_all'}
+              css={selectedTargetName === 'all' ? targetSelected : overflowSet}
+              style={{
+                height: '36px',
+                cursor: 'pointer',
               }}
-            />
-          )}
-        </div>
-        <div aria-label={formatMessage('List view')} css={contentEditor} role="region">
-          <Fragment>
-            <PublishStatusList
-              groups={groups}
-              items={thisPublishHistory}
-              updateItems={setThisPublishHistory}
-              onItemClick={setSelectedVersion}
-            />
-            {!thisPublishHistory || thisPublishHistory.length === 0 ? (
-              <div style={{ marginLeft: '50px', fontSize: 'smaller', marginTop: '20px' }}>No publish history</div>
-            ) : null}
-          </Fragment>
-        </div>
+              onClick={() => {
+                setSelectedTarget(undefined);
+                onSelectTarget('all');
+              }}
+            >
+              {formatMessage('All profiles')}
+            </div>
+            {settings && settings.publishTargets && (
+              <TargetList
+                list={settings.publishTargets}
+                selectedTarget={selectedTargetName}
+                onDelete={async (index) => await onDelete(index)}
+                onEdit={async (item, target) => await onEdit(item, target)}
+                onSelect={(item) => {
+                  setSelectedTarget(item);
+                  onSelectTarget(item.name);
+                }}
+              />
+            )}
+          </div>
+          <div aria-label={formatMessage('List view')} css={contentEditor} role="region">
+            <Fragment>
+              <PublishStatusList
+                groups={groups}
+                items={thisPublishHistory}
+                updateItems={setThisPublishHistory}
+                onItemClick={setSelectedVersion}
+              />
+              {!thisPublishHistory || thisPublishHistory.length === 0 ? (
+                <div style={{ marginLeft: '50px', fontSize: 'smaller', marginTop: '20px' }}>No publish history</div>
+              ) : null}
+            </Fragment>
+          </div>
+        </LeftRightSplit>
       </div>
     </Fragment>
   );

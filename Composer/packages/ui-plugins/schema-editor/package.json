@@ -24,8 +24,8 @@
     "@bfc/adaptive-form": "*",
     "@bfc/code-editor": "*",
     "format-message": "^6.2.3",
-    "react": "16.13.0",
-    "react-dom": "16.13.0"
+    "react": "16.13.1",
+    "react-dom": "16.13.1"
   },
   "devDependencies": {
     "@bfc/extension-client": "*",
@@ -34,8 +34,8 @@
     "@types/react": "16.9.23",
     "@types/react-dom": "16.9.5",
     "format-message": "^6.2.3",
-    "react": "16.13.0",
-    "react-dom": "16.13.0"
+    "react": "16.13.1",
+    "react-dom": "16.13.1"
   },
   "dependencies": {
     "@emotion/core": "^10.0.27"

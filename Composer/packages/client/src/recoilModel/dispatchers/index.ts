@@ -18,7 +18,9 @@ import { settingsDispatcher } from './setting';
 import { skillDispatcher } from './skill';
 import { userDispatcher } from './user';
 import { multilangDispatcher } from './multilang';
+import { notificationDispatcher } from './notification';
 import { extensionsDispatcher } from './extensions';
+import { botProjectFileDispatcher } from './botProjectFile';
 
 const createDispatchers = () => {
   return {
@@ -39,7 +41,9 @@ const createDispatchers = () => {
     ...skillDispatcher(),
     ...userDispatcher(),
     ...multilangDispatcher(),
+    ...notificationDispatcher(),
     ...extensionsDispatcher(),
+    ...botProjectFileDispatcher(),
   };
 };
 

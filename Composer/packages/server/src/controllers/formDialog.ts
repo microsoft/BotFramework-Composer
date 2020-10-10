@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { Request, Response } from 'express';
-import { PluginLoader } from '@bfc/extension';
+import { ExtensionContext } from '@bfc/extension';
 import { schemas, expandPropertyDefinition } from '@microsoft/bf-generate-library';
 
 import { BotProjectService } from '../services/project';
@@ -34,7 +34,7 @@ const getTemplateSchemas = async (req: Request, res: Response) => {
 
 const generate = async (req: Request, res: Response) => {
   const projectId = req.params.projectId;
-  const user = await PluginLoader.getUserFromRequest(req);
+  const user = await ExtensionContext.getUserFromRequest(req);
 
   const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {

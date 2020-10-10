@@ -1,31 +1,40 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
 import React, { useState } from 'react';
 import { IComboBoxOption, SelectableOptionMenuItemType } from 'office-ui-fabric-react/lib/ComboBox';
-import { useShellApi } from '@bfc/extension-client';
+import { FieldProps, useShellApi } from '@bfc/extension-client';
 import formatMessage from 'format-message';
-import { schemaField } from '@bfc/adaptive-form';
+import { getSkillNameFromSetting, Skill } from '@bfc/shared';
+import { Link } from 'office-ui-fabric-react/lib/components/Link/Link';
 
 import { ComboBoxField } from './ComboBoxField';
 
 const ADD_DIALOG = 'ADD_DIALOG';
 
-export const SelectSkillDialog: React.FC<{
-  value: string;
-  onChange: (option: IComboBoxOption | null) => void;
-}> = (props) => {
+const referBySettings = (skillName: string, property: string) => {
+  return `=settings.skill['${skillName}'].${property}`;
+};
+
+export const settingReferences = (skillName: string) => ({
+  skillEndpoint: referBySettings(skillName, 'endpointUrl'),
+  skillAppId: referBySettings(skillName, 'msAppId'),
+});
+
+export const SelectSkillDialogField: React.FC<FieldProps> = (props) => {
   const { value, onChange } = props;
   const { shellApi, skills = [] } = useShellApi();
-  const { addSkillDialog } = shellApi;
+  const { addSkillDialog, displayManifestModal } = shellApi;
   const [comboboxTitle, setComboboxTitle] = useState<string | null>(null);
 
-  const options: IComboBoxOption[] = skills.map(({ name }) => ({
+  const skillId = getSkillNameFromSetting(value?.skillEndpoint);
+  const { content, manifestUrl, name } = skills.find(({ id }) => id === skillId) || ({} as Skill);
+
+  const options: IComboBoxOption[] = skills.map(({ id, name }) => ({
     key: name,
     text: name,
-    isSelected: value === name,
+    data: settingReferences(id),
+    isSelected: id === skillId,
   }));
 
   options.push(
@@ -41,35 +50,40 @@ export const SelectSkillDialog: React.FC<{
     options.push({ key: 'customTitle', text: comboboxTitle });
   }
 
-  const handleChange = (_, option) => {
+  const handleChange = (_, option: IComboBoxOption) => {
     if (option) {
       if (option.key === ADD_DIALOG) {
         setComboboxTitle(formatMessage('Add a new Skill Dialog'));
         addSkillDialog().then((skill) => {
           if (skill?.manifestUrl && skill?.name) {
-            onChange({ key: skill?.manifestUrl, text: skill?.name });
+            onChange({ ...value, ...settingReferences(skill.name) });
           }
           setComboboxTitle(null);
         });
       } else {
-        onChange(option);
+        onChange({ ...value, ...option.data });
       }
-    } else {
-      onChange(null);
     }
   };
 
   return (
-    <div css={schemaField.container(0)}>
+    <React.Fragment>
       <ComboBoxField
         comboboxTitle={comboboxTitle}
         description={formatMessage('Name of skill dialog to call')}
         id={'SkillDialogName'}
         label={formatMessage('Skill Dialog Name')}
         options={options}
-        value={value}
+        value={skillId}
         onChange={handleChange}
       />
-    </div>
+      <Link
+        disabled={!content || !name}
+        styles={{ root: { fontSize: '12px', paddingTop: '4px' } }}
+        onClick={() => manifestUrl && displayManifestModal(manifestUrl)}
+      >
+        {formatMessage('Show skill manifest')}
+      </Link>
+    </React.Fragment>
   );
 };

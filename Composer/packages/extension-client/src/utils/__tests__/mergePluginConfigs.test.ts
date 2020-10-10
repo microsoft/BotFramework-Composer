@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { SDKKinds } from '@bfc/shared';
+import { SDKKinds } from '@bfc/types';
 
 import { PluginConfig } from '../../types';
 import { mergePluginConfigs } from '../mergePluginConfigs';
@@ -56,23 +56,25 @@ describe('mergePluginConfigs', () => {
   it('merges recognizers into single list', () => {
     const plugins: Partial<PluginConfig>[] = [
       {
-        recognizers: [
-          {
-            id: 'default',
-            displayName: 'Default',
-            isSelected: () => false,
-            handleRecognizerChange: jest.fn(),
+        uiSchema: {
+          [SDKKinds.LuisRecognizer]: {
+            recognizer: {
+              displayName: 'Default',
+              isSelected: () => false,
+              seedNewRecognizer: jest.fn(),
+            },
           },
-          {
-            id: 'new',
-            displayName: 'New Recognizer',
-            isSelected: () => false,
-            handleRecognizerChange: jest.fn(),
+          [SDKKinds.RegexRecognizer]: {
+            recognizer: {
+              displayName: 'New Recognizer',
+              isSelected: () => false,
+              seedNewRecognizer: jest.fn(),
+            },
           },
-        ],
+        },
       },
     ];
 
-    expect(mergePluginConfigs(...plugins).recognizers).toHaveLength(2);
+    expect(Object.keys(mergePluginConfigs(...plugins).uiSchema)).toHaveLength(2);
   });
 });

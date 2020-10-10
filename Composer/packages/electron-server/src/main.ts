@@ -63,7 +63,7 @@ async function createAppDataDir() {
   const azurePublishPath: string = join(composerAppDataPath, 'publishBots');
   process.env.COMPOSER_APP_DATA = join(composerAppDataPath, 'data.json'); // path to the actual data file
   process.env.COMPOSER_EXTENSION_DATA = join(composerAppDataPath, 'extensions.json');
-  process.env.COMPOSER_REMOTE_PLUGINS_DIR = join(composerAppDataPath, '.composer');
+  process.env.COMPOSER_REMOTE_EXTENSIONS_DIR = join(composerAppDataPath, 'extensions');
 
   log('creating composer app data path at: ', composerAppDataPath);
 
@@ -142,7 +142,7 @@ async function loadServer() {
     // only change paths if packaged electron app
     const unpackedDir = getUnpackedAsarPath();
     process.env.COMPOSER_RUNTIME_FOLDER = join(unpackedDir, 'runtime');
-    process.env.COMPOSER_BUILTIN_PLUGINS_DIR = join(unpackedDir, 'build', 'plugins');
+    process.env.COMPOSER_BUILTIN_EXTENSIONS_DIR = join(unpackedDir, 'build', 'plugins');
   }
 
   // only create a new data directory if packaged electron app

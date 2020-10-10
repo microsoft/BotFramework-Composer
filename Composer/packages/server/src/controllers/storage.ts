@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { Request, Response } from 'express';
-import { PluginLoader } from '@bfc/extension';
+import { ExtensionContext } from '@bfc/extension';
 
 import StorageService from '../services/storage';
 import { Path } from '../utility/path';
@@ -45,13 +45,13 @@ async function updateFolder(req: Request, res: Response) {
 
 async function getBlob(req: Request, res: Response) {
   const storageId = req.params.storageId;
-  const user = await PluginLoader.getUserFromRequest(req);
+  const user = await ExtensionContext.getUserFromRequest(req);
 
   try {
     if (!req.query.path) {
       throw new Error('path missing from query');
     }
-    const reqpath = decodeURI(req.query.path);
+    const reqpath = decodeURIComponent(req.query.path);
     if (!Path.isAbsolute(reqpath)) {
       throw new Error('path must be absolute');
     }
