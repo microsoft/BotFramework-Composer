@@ -2,8 +2,7 @@
 // Licensed under the MIT License.
 
 import formatMessage from 'format-message';
-
-import { SDKKinds } from './types';
+import { SDKKinds } from '@bfc/types';
 
 interface LabelOverride {
   title?: string | false;

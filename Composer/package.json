@@ -12,7 +12,8 @@
     "mkdirp": "^0.5.2",
     "selfsigned": "1.10.8",
     "serialize-javascript": "^3.1.0",
-    "set-value": "^3.0.2"
+    "set-value": "^3.0.2",
+    "terser-webpack-plugin": "^2.3.7"
   },
   "engines": {
     "node": ">=12"
@@ -24,28 +25,23 @@
     "packages/electron-server",
     "packages/extension",
     "packages/extension-client",
+    "packages/form-dialogs",
     "packages/intellisense",
-    "packages/lib",
     "packages/lib/*",
     "packages/server",
     "packages/test-utils",
-    "packages/tools",
     "packages/tools/built-in-functions",
-    "packages/tools/language-servers",
     "packages/tools/language-servers/*",
+    "packages/types",
     "packages/ui-plugins/*"
   ],
   "scripts": {
-    "build": "node scripts/begin.js && yarn build:prod",
-    "build:prod": "yarn build:dev && yarn build:server && yarn build:client && yarn build:electron",
-    "build:dev": "yarn build:test && yarn build:lib && yarn build:tools && yarn build:extensions && yarn build:plugins && yarn l10n",
-    "build:test": "yarn workspace @bfc/test-utils build",
-    "build:lib": "yarn workspace @bfc/libs build:all",
+    "build": "node scripts/begin.js && yarn build:prod && yarn l10n",
+    "build:prod": "yarn build:dev && yarn build:client && yarn build:server && yarn build:electron",
+    "build:dev": "wsrun -ltm -x @bfc/electron-server -x @bfc/client -x @bfc/server -p @bfc/* -c build && yarn build:plugins",
     "build:electron": "yarn workspace @bfc/electron-server build && yarn workspace @bfc/electron-server l10n",
-    "build:extensions": "wsrun -lt -p @bfc/extension @bfc/intellisense @bfc/extension-client @bfc/adaptive-form @bfc/adaptive-flow @bfc/ui-plugin-*  -c build",
     "build:server": "yarn workspace @bfc/server build",
     "build:client": "yarn workspace @bfc/client build",
-    "build:tools": "yarn workspace @bfc/tools build:all",
     "build:plugins": "yarn build:plugins:localpublish && yarn build:plugins:samples && yarn build:plugins:azurePublish && yarn build:plugins:runtimes",
     "build:plugins:localpublish": "cd plugins/localPublish && yarn install && yarn build",
     "build:plugins:samples": "cd plugins/samples && yarn install && yarn build",

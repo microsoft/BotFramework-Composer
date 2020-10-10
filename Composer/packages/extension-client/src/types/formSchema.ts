@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { MicrosoftIRecognizer, SDKKinds, SDKRoles, ShellApi, ShellData } from '@bfc/shared';
+import { MicrosoftIRecognizer, SDKKinds, SDKRoles, ShellApi, ShellData } from '@bfc/types';
 
 import { FieldWidget } from './form';
 
@@ -9,13 +9,16 @@ type UIOptionValue<R = string, D = any> = R | UIOptionFunc<R, D>;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type UIOptionFunc<R, D> = (data: D) => R;
 
-interface FieldSet {
-  title: string;
+export interface Fieldset {
+  title: UIOptionValue<string>;
   fields?: string[];
   defaultExpanded?: boolean;
+  itemKey?: string;
 }
 
 export interface UIOptions {
+  /** Specifies if the property is an additional field */
+  additionalField?: true;
   /** Description override. */
   description?: UIOptionValue<string | undefined>;
   /** Field widget override. */
@@ -35,11 +38,13 @@ export interface UIOptions {
    */
   hidden?: UIOptionValue<string[]>;
   /** Organizes fields into collapsible sets */
-  fieldSets?: FieldSet[];
+  fieldsets?: Fieldset[];
   /** Label override. */
   label?: UIOptionValue<string | false | undefined>;
   /** Set order of fields. Use * for all other fields. */
   order?: UIOptionValue<(string | [string, string])[]>;
+  /** Renders fieldsets in a tabbed view when true */
+  pivotFieldsets?: true;
   /** Placeholder override. If undefined, schema.examples are used. */
   placeholder?: UIOptionValue<string, undefined>;
   /** Define ui options on fields that are children of this field. */

@@ -3,6 +3,7 @@
 
 import { atom, atomFamily } from 'recoil';
 import { ProjectTemplate, UserSettings } from '@bfc/shared';
+import { ExtensionMetadata } from '@bfc/extension-client';
 
 import {
   StorageFolder,
@@ -11,7 +12,6 @@ import {
   AppUpdateState,
   BoilerplateVersion,
   Notification,
-  ExtensionConfig,
 } from '../../recoilModel/types';
 import { getUserSettings } from '../utils';
 import onboardingStorage from '../../utils/onboardingStorage';
@@ -165,22 +165,27 @@ export const notificationsState = atomFamily<Notification, string>({
   },
 });
 
-export const extensionsState = atom<ExtensionConfig[]>({
+export const extensionsState = atom<Omit<ExtensionMetadata, 'path'>[]>({
   key: getFullyQualifiedKey('extensions'),
   default: [],
 });
 
-export const botOpeningState = atom<boolean>({
-  key: getFullyQualifiedKey('botOpening'),
-  default: false,
-});
-
-export const botProjectsSpaceState = atom<string[]>({
-  key: getFullyQualifiedKey('botProjectsSpace'),
+export const botProjectIdsState = atom<string[]>({
+  key: getFullyQualifiedKey('botProjectIdsState'),
   default: [],
 });
 
 export const currentProjectIdState = atom<string>({
   key: getFullyQualifiedKey('currentProjectId'),
   default: '',
+});
+
+export const botProjectSpaceLoadedState = atom<boolean>({
+  key: getFullyQualifiedKey('botProjectSpaceLoadedState'),
+  default: false,
+});
+
+export const botOpeningState = atom<boolean>({
+  key: getFullyQualifiedKey('botOpeningState'),
+  default: false,
 });

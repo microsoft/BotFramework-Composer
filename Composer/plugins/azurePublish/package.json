@@ -5,10 +5,11 @@
   "main": "lib/index.js",
   "license": "MIT",
   "scripts": {
-    "build:lib": "cd ../lib && yarn && yarn build:all",
+    "build:appinsight": "cd ../lib/arm-appinsights && yarn && yarn build",
+    "build:botservice": "cd ../lib/arm-botservice && yarn && yarn build",
     "build:ui": "webpack --config webpack.config.js",
     "build:node": "tsc --project tsconfig.node.json",
-    "build": "yarn build:lib && yarn build:node && yarn build:ui"
+    "build": "yarn build:appinsight && yarn build:botservice && yarn build:node && yarn build:ui"
   },
   "extendsComposer": true,
   "composer": {

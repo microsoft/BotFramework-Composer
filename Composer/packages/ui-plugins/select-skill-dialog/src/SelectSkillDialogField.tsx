@@ -1,13 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
 import React, { useState } from 'react';
 import { IComboBoxOption, SelectableOptionMenuItemType } from 'office-ui-fabric-react/lib/ComboBox';
-import { useShellApi } from '@bfc/extension-client';
+import { FieldProps, useShellApi } from '@bfc/extension-client';
 import formatMessage from 'format-message';
-import { schemaField } from '@bfc/adaptive-form';
 import { getSkillNameFromSetting, Skill } from '@bfc/shared';
 import { Link } from 'office-ui-fabric-react/lib/components/Link/Link';
 
@@ -24,16 +21,13 @@ export const settingReferences = (skillName: string) => ({
   skillAppId: referBySettings(skillName, 'msAppId'),
 });
 
-export const SelectSkillDialog: React.FC<{
-  value: any;
-  onChange: (value: any) => void;
-}> = (props) => {
+export const SelectSkillDialogField: React.FC<FieldProps> = (props) => {
   const { value, onChange } = props;
   const { shellApi, skills = [] } = useShellApi();
   const { addSkillDialog, displayManifestModal } = shellApi;
   const [comboboxTitle, setComboboxTitle] = useState<string | null>(null);
 
-  const skillId = getSkillNameFromSetting(value.skillEndpoint);
+  const skillId = getSkillNameFromSetting(value?.skillEndpoint);
   const { content, manifestUrl, name } = skills.find(({ id }) => id === skillId) || ({} as Skill);
 
   const options: IComboBoxOption[] = skills.map(({ id, name }) => ({
@@ -73,7 +67,7 @@ export const SelectSkillDialog: React.FC<{
   };
 
   return (
-    <div css={schemaField.container(0)}>
+    <React.Fragment>
       <ComboBoxField
         comboboxTitle={comboboxTitle}
         description={formatMessage('Name of skill dialog to call')}
@@ -90,6 +84,6 @@ export const SelectSkillDialog: React.FC<{
       >
         {formatMessage('Show skill manifest')}
       </Link>
-    </div>
+    </React.Fragment>
   );
 };

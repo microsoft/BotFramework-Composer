@@ -68,7 +68,7 @@ describe('get types', () => {
 describe('status', () => {
   const target = 'default';
 
-  it.only('should get status', async () => {
+  it('should get status', async () => {
     const projectId = await BotProjectService.openProject(location2);
 
     const mockReq = {
@@ -115,6 +115,7 @@ describe('rollback', () => {
       body: {},
     } as Request;
     await PublishController.rollback(mockReq, mockRes);
+
     expect(mockRes.status).toHaveBeenCalledWith(400);
   });
 });
