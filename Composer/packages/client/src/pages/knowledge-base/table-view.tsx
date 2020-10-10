@@ -456,6 +456,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                   <EditableField
                     key={question.id}
                     enableIcon
+                    required
                     ariaLabel={formatMessage(`Question is {content}`, { content: question.content })}
                     componentFocusOnmount={shouldFocusOnMount}
                     depth={0}
@@ -472,7 +473,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                     styles={editableFieldQuestion}
                     value={question.content}
                     onBlur={(_id, value) => {
-                      const newValue = value?.trim().replace(/^#/, '');
+                      const newValue = value?.trim();
                       const isChanged = question.content !== newValue;
                       if (newValue && isChanged) {
                         onUpdateQnAQuestion(item.fileId, item.sectionId, question.id, newValue);
@@ -490,6 +491,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
               {kthSectionIsCreatingQuestion === index ? (
                 <EditableField
                   key={''}
+                  required
                   ariaLabel={formatMessage('Question is empty now')}
                   depth={0}
                   disabled={isAllowEdit}
@@ -499,7 +501,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                   styles={editableFieldQuestion}
                   value={''}
                   onBlur={(_id, value) => {
-                    const newValue = value?.trim().replace(/^#/, '');
+                    const newValue = value?.trim();
                     if (newValue) {
                       onCreateNewQuestion(item.fileId, item.sectionId, newValue);
                     }
@@ -530,6 +532,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
               <EditableField
                 enableIcon
                 multiline
+                required
                 ariaLabel={formatMessage(`Answer is {content}`, { content: item.Answer })}
                 autoAdjustHeight={isQnASectionsExpanded[index]}
                 depth={0}
@@ -544,7 +547,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 styles={editableFieldAnswer(isQnASectionsExpanded[index])}
                 value={item.Answer}
                 onBlur={(_id, value) => {
-                  const newValue = value?.trim().replace(/^#/, '');
+                  const newValue = value?.trim();
                   const isChanged = item.Answer !== newValue;
                   if (newValue && isChanged) {
                     onUpdateQnAAnswer(item.fileId, item.sectionId, newValue);

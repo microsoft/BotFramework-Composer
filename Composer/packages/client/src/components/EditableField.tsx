@@ -2,25 +2,31 @@
 // Licensed under the MIT License.
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Fragment } from 'react';
 import { TextField, ITextFieldStyles, ITextFieldProps, ITextField } from 'office-ui-fabric-react/lib/TextField';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { mergeStyleSets } from '@uifabric/styling';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
+
+import { FieldConfig, useForm } from '../hooks/useForm';
 //------------------------
-const defaultContainerStyle = (hasFocus) => css`
+const defaultContainerStyle = (hasFocus, hasErrors) => css`
   display: flex;
   width: 100%;
-  outline: ${hasFocus ? `2px solid ${SharedColors.cyanBlue10}` : undefined};
-  background: ${hasFocus ? NeutralColors.white : 'inherit'};
+  outline: ${hasErrors
+    ? `2px solid ${SharedColors.red10}`
+    : hasFocus
+    ? `2px solid ${SharedColors.cyanBlue10}`
+    : undefined};
+  background: ${hasFocus || hasErrors ? NeutralColors.white : 'inherit'};
   margin-top: 2px;
   :hover .ms-Button-icon {
     visibility: visible;
   }
   .ms-TextField-field {
     cursor: pointer;
-    padding-left: ${hasFocus ? '8px' : '0px'};
+    padding-left: ${hasFocus || hasErrors ? '8px' : '0px'};
     :focus {
       cursor: inherit;
     }
@@ -67,6 +73,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
     componentFocusOnmount = false,
     containerStyles,
     depth,
+    required,
     extraContent = '',
     styles = {},
     iconProps,
@@ -88,9 +95,17 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
   } = props;
   const [editing, setEditing] = useState<boolean>(false);
   const [hasFocus, setHasFocus] = useState<boolean>(false);
-  const [localValue, setLocalValue] = useState<string | undefined>(value);
   const [initialValue, setInitialValue] = useState<string | undefined>('');
   const [hasBeenEdited, setHasBeenEdited] = useState<boolean>(false);
+
+  const formConfig: FieldConfig<{ value: string }> = {
+    value: {
+      required: required,
+      defaultValue: value,
+    },
+  };
+  const { formData, updateField, hasErrors, formErrors } = useForm(formConfig);
+
   const fieldRef = useRef<ITextField>(null);
   useEffect(() => {
     if (componentFocusOnmount) {
@@ -98,24 +113,24 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
     }
   }, []);
   useEffect(() => {
-    if (!hasBeenEdited || value !== localValue) {
-      setLocalValue(value);
+    if (!hasBeenEdited || value !== formData.value) {
+      updateField('value', value);
     }
   }, [value]);
 
   useEffect(() => {
     if (hasFocus) {
-      setInitialValue(localValue);
+      setInitialValue(formData.value);
     }
   }, [hasFocus]);
 
   const resetValue = () => {
-    setLocalValue('');
+    updateField('value', '');
     fieldRef.current?.focus();
   };
 
   const handleChange = (_e: any, newValue?: string) => {
-    setLocalValue(newValue);
+    updateField('value', newValue);
     setHasBeenEdited(true);
     onChange(newValue);
   };
@@ -123,7 +138,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
   const handleCommit = () => {
     setHasFocus(false);
     setEditing(false);
-    onBlur && onBlur(id, localValue);
+    onBlur && onBlur(id, formData.value);
   };
 
   const handleOnFocus = () => {
@@ -134,7 +149,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
   const cancel = () => {
     setHasFocus(false);
     setEditing(false);
-    setLocalValue(initialValue);
+    updateField('value', initialValue);
     fieldRef.current?.blur();
   };
 
@@ -150,80 +165,83 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
   let borderColor: string | undefined = undefined;
 
   if (!editing && !error) {
-    borderColor = localValue || transparentBorder || depth > 1 ? 'transparent' : NeutralColors.gray30;
+    borderColor = formData.value || transparentBorder || depth > 1 ? 'transparent' : NeutralColors.gray30;
   }
   return (
-    <div css={[defaultContainerStyle(hasFocus), containerStyles]} data-test-id={'EditableFieldContainer'}>
-      <TextField
-        key={`${id}${autoAdjustHeight}`} // force update component
-        ariaLabel={ariaLabel}
-        autoAdjustHeight={autoAdjustHeight}
-        autoComplete="off"
-        className={className}
-        componentRef={fieldRef}
-        errorMessage={error as string}
-        multiline={multiline}
-        placeholder={placeholder || value}
-        resizable={resizable}
-        styles={
-          mergeStyleSets(
-            {
-              root: { margin: '0', width: '100%' },
-              field: {
-                fontSize: fontSize,
-                selectors: {
-                  '::placeholder': {
-                    fontSize: fontSize,
-                  },
-                },
-              },
-              fieldGroup: {
-                borderColor,
-                transition: 'border-color 0.1s linear',
-                selectors: {
-                  ':hover': {
-                    borderColor: hasFocus ? undefined : NeutralColors.gray30,
-                  },
-                  '.ms-TextField-field': {
-                    background: hasFocus ? NeutralColors.white : 'inherit',
-                  },
-                },
-              },
-            },
-            styles
-          ) as Partial<ITextFieldStyles>
-        }
-        value={hasFocus ? localValue : `${localValue}${extraContent}`}
-        onBlur={handleCommit}
-        onChange={handleChange}
-        onFocus={handleOnFocus}
-        onKeyDown={handleOnKeyDown}
-        onMouseEnter={() => setEditing(true)}
-        onMouseLeave={() => !hasFocus && setEditing(false)}
-      />
-      {enableIcon && (
-        <IconButton
-          iconProps={{
-            iconName: iconProps?.iconName,
-            styles: mergeStyleSets(
+    <Fragment>
+      <div css={[defaultContainerStyle(hasFocus, hasErrors), containerStyles]} data-test-id={'EditableFieldContainer'}>
+        <TextField
+          key={`${id}${autoAdjustHeight}`} // force update component
+          ariaLabel={ariaLabel}
+          autoAdjustHeight={autoAdjustHeight}
+          autoComplete="off"
+          className={className}
+          componentRef={fieldRef}
+          multiline={multiline}
+          placeholder={placeholder || value}
+          resizable={resizable}
+          styles={
+            mergeStyleSets(
               {
-                root: {
-                  color: NeutralColors.black,
-                  visibility: 'hidden',
+                root: { margin: '0', width: '100%' },
+                field: {
+                  fontSize: fontSize,
+                  selectors: {
+                    '::placeholder': {
+                      fontSize: fontSize,
+                    },
+                  },
+                },
+                fieldGroup: {
+                  borderColor,
+                  transition: 'border-color 0.1s linear',
+                  selectors: {
+                    ':hover': {
+                      borderColor: hasFocus ? undefined : NeutralColors.gray30,
+                    },
+                    '.ms-TextField-field': {
+                      background: hasFocus || hasErrors ? NeutralColors.white : 'inherit',
+                    },
+                  },
                 },
               },
-              iconProps?.iconStyles
-            ),
-          }}
-          styles={{
-            root: {
-              background: hasFocus ? NeutralColors.white : 'inherit',
-            },
-          }}
-          onClick={iconProps?.onClick || resetValue}
+              styles
+            ) as Partial<ITextFieldStyles>
+          }
+          value={hasFocus ? formData.value : `${formData.value}${extraContent}`}
+          onBlur={handleCommit}
+          onChange={handleChange}
+          onFocus={handleOnFocus}
+          onKeyDown={handleOnKeyDown}
+          onMouseEnter={() => setEditing(true)}
+          onMouseLeave={() => !hasFocus && setEditing(false)}
         />
-      )}
-    </div>
+        {enableIcon && (
+          <IconButton
+            iconProps={{
+              iconName: iconProps?.iconName,
+              styles: mergeStyleSets(
+                {
+                  root: {
+                    color: NeutralColors.black,
+                    visibility: 'hidden',
+                  },
+                },
+                iconProps?.iconStyles
+              ),
+            }}
+            styles={{
+              root: {
+                background: hasFocus ? NeutralColors.white : 'inherit',
+              },
+            }}
+            onClick={iconProps?.onClick || resetValue}
+          />
+        )}
+      </div>
+      {hasErrors && <span style={{ color: SharedColors.red20 }}>{formErrors.value}</span>}
+      {error && <span style={{ color: SharedColors.red20 }}>{error}</span>}
+    </Fragment>
   );
 };
 
