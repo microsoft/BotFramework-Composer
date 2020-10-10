@@ -4,13 +4,14 @@
 import path from 'path';
 
 import glob from 'globby';
-import { readJson } from 'fs-extra';
+import { readJson, ensureDir, remove } from 'fs-extra';
+import { ExtensionBundle, PackageJSON, ExtensionMetadata } from '@bfc/types';
 
 import { ExtensionContext } from '../extensionContext';
 import logger from '../logger';
 import { ExtensionManifestStore } from '../storage/extensionManifestStore';
-import { ExtensionBundle, PackageJSON, ExtensionMetadata, ExtensionSearchResult } from '../types/extension';
-import { npm } from '../utils/npm';
+import { search, downloadPackage } from '../utils/npm';
+import { isSubdirectory } from '../utils/isSubdirectory';
 
 const log = logger.extend('manager');
 
@@ -25,6 +26,7 @@ function getExtensionMetadata(extensionPath: string, packageJson: PackageJSON): 
   return {
     id: packageJson.name,
     name: packageJson.composer?.name ?? packageJson.name,
+    description: packageJson.description,
     version: packageJson.version,
     enabled: true,
     path: extensionPath,
@@ -33,16 +35,15 @@ function getExtensionMetadata(extensionPath: string, packageJson: PackageJSON): 
   };
 }
 
-class ExtensionManager {
-  private searchCache = new Map<string, ExtensionSearchResult>();
-  private _manifest: ExtensionManifestStore | undefined;
+export class ExtensionManagerImp {
+  public constructor(private _manifest?: ExtensionManifestStore) {}
 
   /**
    * Returns all extensions currently in the extension manifest
    */
-  public getAll() {
+  public getAll(): ExtensionMetadata[] {
     const extensions = this.manifest.getExtensions();
-    return Object.values(extensions);
+    return Object.values(extensions).filter(Boolean) as ExtensionMetadata[];
   }
 
   /**
@@ -57,13 +58,35 @@ class ExtensionManager {
    * Loads all builtin extensions and remote extensions.
    */
   public async loadAll() {
-    await this.seedBuiltinExtensions();
+    await ensureDir(this.remoteDir);
 
-    const extensions = Object.entries(this.manifest.getExtensions());
+    await this.loadFromDir(this.builtinDir, true);
+    await this.loadFromDir(this.remoteDir);
+  }
 
-    for (const [id, metadata] of extensions) {
-      if (metadata?.enabled) {
-        await this.load(id);
+  /**
+   * Loads extensions from a given directory
+   * @param dir directory to load extensions from
+   * @param isBuiltin used to set extension metadata
+   */
+  public async loadFromDir(dir: string, isBuiltin = false) {
+    log('Loading extensions from %s', dir);
+    const extensions = await glob('*/package.json', { cwd: dir });
+    for (const extensionPackageJsonPath of extensions) {
+      const fullPath = path.join(dir, extensionPackageJsonPath);
+      const extensionInstallPath = path.dirname(fullPath);
+      const packageJson = (await readJson(fullPath)) as PackageJSON;
+      const isEnabled = packageJson.composer?.enabled !== false;
+      const metadata = getExtensionMetadata(extensionInstallPath, packageJson);
+      if (isEnabled) {
+        this.manifest.updateExtensionConfig(metadata.id, {
+          ...metadata,
+          builtIn: isBuiltin,
+        });
+        await this.load(metadata.id);
+      } else if (this.manifest.getExtensionConfig(metadata.id)) {
+        // remove the extension if it exists in the manifest
+        this.manifest.removeExtension(metadata.id);
       }
     }
   }
@@ -72,28 +95,30 @@ class ExtensionManager {
    * Installs a remote extension via NPM
    * @param name The name of the extension to install
    * @param version The version of the extension to install
+   * @returns id of installed package
    */
   public async installRemote(name: string, version?: string) {
+    await ensureDir(this.remoteDir);
     const packageNameAndVersion = version ? `${name}@${version}` : `${name}@latest`;
     log('Installing %s to %s', packageNameAndVersion, this.remoteDir);
 
     try {
-      const { stdout } = await npm('install', packageNameAndVersion, { '--prefix': this.remoteDir });
+      const destination = path.join(this.remoteDir, name);
 
-      log('%s', stdout);
+      if (!isSubdirectory(this.remoteDir, destination)) {
+        throw new Error('Cannot install outside of the configured directory.');
+      }
+
+      await downloadPackage(name, version ?? 'latest', destination);
 
       const packageJson = await this.getPackageJson(name, this.remoteDir);
-
       if (packageJson) {
-        const extensionPath = path.resolve(this.remoteDir, 'node_modules', name);
-        this.manifest.updateExtensionConfig(name, getExtensionMetadata(extensionPath, packageJson));
-      } else {
-        throw new Error(`Unable to install ${packageNameAndVersion}`);
+        this.manifest.updateExtensionConfig(packageJson.name, getExtensionMetadata(destination, packageJson));
       }
+
+      return name;
     } catch (err) {
-      if (err?.stderr) {
-        log('%s', err.stderr);
-      }
+      log('%O', err);
       throw new Error(`Unable to install ${packageNameAndVersion}`);
     }
   }
@@ -146,14 +171,16 @@ class ExtensionManager {
   public async remove(id: string) {
     log('Removing %s', id);
 
-    try {
-      const { stdout } = await npm('uninstall', id, { '--prefix': this.remoteDir });
+    const metadata = this.find(id);
 
-      log('%s', stdout);
+    if (metadata) {
+      if (metadata.builtIn) {
+        return;
+      }
 
+      await remove(metadata.path);
       this.manifest.removeExtension(id);
-    } catch (err) {
-      log('%s', err);
+    } else {
       throw new Error(`Unable to remove extension: ${id}`);
     }
   }
@@ -163,44 +190,12 @@ class ExtensionManager {
    * @param query The search query
    */
   public async search(query: string) {
-    const { stdout } = await npm('search', `keywords:botframework-composer extension ${query}`, { '--json': '' });
+    const results = await search(query);
 
-    try {
-      const result = JSON.parse(stdout);
-      if (Array.isArray(result)) {
-        result.forEach((searchResult) => {
-          const { name, keywords = [], version, description, links } = searchResult;
-          if (keywords.includes('botframework-composer') && keywords.includes('extension')) {
-            const url = links?.npm ?? '';
-            this.searchCache.set(name, {
-              id: name,
-              version,
-              description,
-              keywords,
-              url,
-            });
-          }
-        });
-      }
-    } catch (err) {
-      log('%O', err);
-    }
-
-    return Array.from(this.searchCache.values());
-  }
-
-  /**
-   * Returns a list of all of an extension's bundles
-   * @param id The ID of the extension for which we will fetch the list of bundles
-   */
-  public async getAllBundles(id: string) {
-    const info = this.find(id);
-
-    if (!info) {
-      throw new Error('extension not found');
-    }
-
-    return info.bundles ?? [];
+    return results.filter((searchResult) => {
+      const { id, keywords } = searchResult;
+      return !this.find(id) && keywords.includes('extension');
+    });
   }
 
   /**
@@ -226,52 +221,27 @@ class ExtensionManager {
 
   private async getPackageJson(id: string, dir: string): Promise<PackageJSON | undefined> {
     try {
-      const extensionPackagePath = path.resolve(dir, 'node_modules', id, 'package.json');
+      const extensionPackagePath = path.resolve(dir, id, 'package.json');
       log('fetching package.json for %s at %s', id, extensionPackagePath);
       const packageJson = await readJson(extensionPackagePath);
       return packageJson as PackageJSON;
-    } catch (err) {
+    } catch (err) /* istanbul ignore next */ {
       log('Error getting package json for %s', id);
-      // eslint-disable-next-line no-console
-      console.error(err);
+      log('%O', err);
     }
-  }
-
-  public async seedBuiltinExtensions() {
-    const extensions = await glob('*/package.json', { cwd: this.builtinDir, dot: true });
-    for (const extensionPackageJsonPath of extensions) {
-      // go through each extension, make sure to add it to the manager store then load it as usual
-      const fullPath = path.join(this.builtinDir, extensionPackageJsonPath);
-      const extensionInstallPath = path.dirname(fullPath);
-      const packageJson = (await readJson(fullPath)) as PackageJSON;
-      const isEnabled = packageJson?.composer && packageJson.composer.enabled !== false;
-      const metadata = getExtensionMetadata(extensionInstallPath, packageJson);
-      if (packageJson && (isEnabled || packageJson.extendsComposer === true)) {
-        this.manifest.updateExtensionConfig(packageJson.name, {
-          ...metadata,
-          builtIn: true,
-        });
-      } else if (this.manifest.getExtensionConfig(packageJson.name)) {
-        // remove the extension if it exists in the manifest
-        this.manifest.removeExtension(packageJson.name);
-      }
-    }
-  }
-
-  public reloadManifest() {
-    this._manifest = undefined;
   }
 
   private get manifest() {
-    if (this._manifest) {
-      return this._manifest;
+    /* istanbul ignore next */
+    if (!this._manifest) {
+      this._manifest = new ExtensionManifestStore(process.env.COMPOSER_EXTENSION_DATA as string);
     }
 
-    this._manifest = new ExtensionManifestStore(process.env.COMPOSER_EXTENSION_DATA as string);
     return this._manifest;
   }
 
   private get builtinDir() {
+    /* istanbul ignore next */
     if (!process.env.COMPOSER_BUILTIN_EXTENSIONS_DIR) {
       throw new Error('COMPOSER_BUILTIN_EXTENSIONS_DIR must be set.');
     }
@@ -280,6 +250,7 @@ class ExtensionManager {
   }
 
   private get remoteDir() {
+    /* istanbul ignore next */
     if (!process.env.COMPOSER_REMOTE_EXTENSIONS_DIR) {
       throw new Error('COMPOSER_REMOTE_EXTENSIONS_DIR must be set.');
     }
@@ -288,6 +259,6 @@ class ExtensionManager {
   }
 }
 
-const manager = new ExtensionManager();
+const ExtensionManager = new ExtensionManagerImp();
 
-export { manager as ExtensionManager };
+export { ExtensionManager };

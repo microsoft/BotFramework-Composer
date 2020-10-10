@@ -22,13 +22,15 @@
     ],
     "contributes": {
       "views": {
-        "publish": {
+        "publish": [{
           "bundleId": "publish"
-        },
-        "page-DISABLED": {
-          "bundleId": "page",
-          "label": "Sample UI Plugin"
-        }
+        }],
+        "pages-DISABLED": [
+          {
+            "bundleId": "page",
+            "label": "Sample UI Plugin"
+          }
+        ]
       }
     }
   },

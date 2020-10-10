@@ -25,7 +25,8 @@ function resolveBaseSchema(schema: JSONSchema7, $kind: string): JSONSchema7 | un
 
 const PropertyEditor: React.FC = () => {
   const { shellApi, ...shellData } = useShellApi();
-  const { currentDialog, data: formData = {}, focusPath, focusedSteps, schemas } = shellData;
+  const { currentDialog, data: formData = {}, focusPath, focusedSteps, focusedTab, schemas } = shellData;
+  const { onFocusSteps } = shellApi;
 
   const [localData, setLocalData] = useState(formData as MicrosoftAdaptiveDialog);
 
@@ -108,14 +109,20 @@ const PropertyEditor: React.FC = () => {
     setLocalData(newData);
   };
 
+  const handleFocusTab = (focusedTab) => {
+    onFocusSteps(focusedSteps, focusedTab);
+  };
+
   return (
     <div aria-label={formatMessage('form editor')} css={formEditor} data-testid="PropertyEditor" role="region">
       <AdaptiveForm
         errors={errors}
+        focusedTab={focusedTab}
         formData={localData}
         schema={$schema}
         uiOptions={$uiOptions}
         onChange={handleDataChange}
+        onFocusedTab={handleFocusTab}
       />
     </div>
   );

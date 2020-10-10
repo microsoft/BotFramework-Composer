@@ -16,9 +16,9 @@ jest.mock('../../FormRow', () => ({
         <input
           onChange={(e) => {
             try {
-              onChange(row)(JSON.parse(e.target.value));
+              onChange(JSON.parse(e.target.value));
             } catch {
-              onChange(row)(e.target.value);
+              onChange(e.target.value);
             }
           }}
         />
@@ -66,6 +66,6 @@ describe.only('<ObjectField />', () => {
     const { container } = renderSubject({ onChange, schema, value });
     const input = container.querySelectorAll('input')[0];
     fireEvent.change(input, { target: { value: 'new name' } });
-    expect(onChange).toHaveBeenCalledWith({ name: 'new name', age: 21 });
+    expect(onChange).toHaveBeenCalledWith('new name');
   });
 });

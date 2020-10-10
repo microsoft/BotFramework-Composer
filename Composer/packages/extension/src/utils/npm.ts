@@ -1,59 +1,80 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { spawn } from 'child_process';
+import { promisify } from 'util';
+
+import { mkdir, remove } from 'fs-extra';
+import fetch from 'node-fetch';
+import tar from 'tar';
+import { ExtensionSearchResult } from '@bfc/types';
 
 import logger from '../logger';
 
+const streamPipeline = promisify(require('stream').pipeline);
+
 const log = logger.extend('npm');
 
-type NpmOutput = {
-  stdout: string;
-  stderr: string;
-  code: number;
-};
-type NpmCommand = 'install' | 'uninstall' | 'search';
-type NpmOptions = {
-  [key: string]: string;
-};
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function search(query = ''): Promise<ExtensionSearchResult[]> {
+  try {
+    log('Searching for %s', query);
+    const queryString = query.replace(' ', '+');
+    const res = await fetch(
+      `https://registry.npmjs.org/-/v1/search?text=${queryString}+keywords:botframework-composer&size=100&from=0&quality=0.65&popularity=0.98&maintenance=0.5`
+    );
+    const data = await res.json();
 
-function processOptions(opts: NpmOptions) {
-  return Object.entries({ '--no-fund': '', '--no-audit': '', ...opts }).map(([flag, value]) => {
-    return value ? `${flag}=${value}` : flag;
-  });
+    log('Got %d result(s).', data.objects?.length ?? 0);
+
+    return data.objects.map((result) => {
+      const { name, version, description = '', keywords = [], links = {} } = result.package;
+
+      return {
+        id: name,
+        version,
+        description,
+        keywords,
+        url: links.npm ?? '',
+      } as ExtensionSearchResult;
+    });
+  } catch (err) {
+    log('%O', err);
+
+    return [];
+  }
 }
 
-/**
- * Executes npm commands that include user input safely
- * @param `command` npm command to execute.
- * @param `args` cli arguments
- * @param `opts` cli flags
- * @returns Object with stdout, stderr, and exit code from command
- */
-export async function npm(command: NpmCommand, args: string, opts: NpmOptions = {}): Promise<NpmOutput> {
-  return new Promise((resolve, reject) => {
-    const cmdOptions = processOptions(opts);
-    const spawnArgs = [command, ...cmdOptions, args];
-    log('npm %s', spawnArgs.join(' '));
-    let stdout = '';
-    let stderr = '';
+export async function downloadPackage(name: string, versionOrTag: string, destination: string) {
+  const dLog = log.extend(name);
+  dLog('Starting download.');
+  const res = await fetch(`https://registry.npmjs.org/${name}`);
+  const metadata = await res.json();
+  const targetVersion = metadata['dist-tags'][versionOrTag] ?? versionOrTag;
 
-    const proc = spawn('npm', spawnArgs);
+  dLog('Resolved version %s to %s', versionOrTag, targetVersion);
 
-    proc.stdout.on('data', (data) => {
-      stdout += data;
-    });
+  const tarballUrl = metadata.versions[targetVersion]?.dist.tarball;
 
-    proc.stderr.on('data', (data) => {
-      stderr += data;
-    });
+  if (!tarballUrl) {
+    dLog('Unable to get tarball url.');
+    throw new Error(`Could not find ${name}@${targetVersion} on npm.`);
+  }
 
-    proc.on('close', (code) => {
-      if (code > 0) {
-        reject({ stdout, stderr, code });
-      } else {
-        resolve({ stdout, stderr, code });
-      }
-    });
+  dLog('Fetching tarball.');
+  const tarball = (await fetch(tarballUrl)).body;
+  // clean up previous version
+  // lgtm[js/path-injection]
+  await remove(destination);
+  // lgtm[js/path-injection]
+  await mkdir(destination);
+
+  const extractor = tar.extract({
+    strip: 1,
+    C: destination,
+    strict: true,
   });
+
+  dLog('Extracting tarball.');
+  await streamPipeline(tarball, extractor);
+  dLog('Done downloading.');
 }

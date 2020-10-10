@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React, { useMemo } from 'react';
-import { Shell } from '@bfc/shared';
+import { Shell } from '@bfc/types';
 
 import { EditorExtensionContext } from '../EditorExtensionContext';
 import { PluginConfig } from '../types';

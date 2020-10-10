@@ -1,0 +1,25 @@
+
+{
+  "$schema": "https://schemas.botframework.com/schemas/skills/skill-manifest-2.1.preview-1.json",
+  "$id": "OneNoteSync",
+  "name": "OneNoteSync",
+  "version": "1.0",
+  "publisherName": "Microsoft",
+  "description": "Sync notes to OneNote",
+  "endpoints": [
+    {
+      "name": "default",
+      "protocol": "BotFrameworkV3",
+      "description": "Local endpoint for SkillBot.",
+      "endpointUrl": "http://localhost:3988/api/messages",
+      "msAppId": "123-b33a9-4b2bb-9d6d-21"
+    },
+    {
+      "name": "remote",
+      "protocol": "BotFrameworkV3",
+      "description": "Production  endpoint for SkillBot.",
+      "endpointUrl": "https://test.net/api/messages",
+      "msAppId": "123-8138c-43144-8676-21"
+    }
+  ]
+}

@@ -3,9 +3,17 @@
 // Licensed under the MIT License.
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 import isArray from 'lodash/isArray';
+import formatMessage from 'format-message';
 
 import httpClient from '../../utils/httpUtil';
-import { storagesState, storageFileLoadingStatusState, focusedStorageFolderState } from '../atoms/appState';
+import {
+  storagesState,
+  storageFileLoadingStatusState,
+  focusedStorageFolderState,
+  applicationErrorState,
+  templateProjectsState,
+  runtimeTemplatesState,
+} from '../atoms/appState';
 import { FileTypes } from '../../constants';
 import { getExtension } from '../../utils/fileUtil';
 
@@ -101,6 +109,64 @@ export const storageDispatcher = () => {
     }
   );
 
+  const createFolder = useRecoilCallback<[string, string], Promise<void>>(
+    ({ set }: CallbackInterface) => async (path, name) => {
+      const storageId = 'default';
+      try {
+        await httpClient.post(`/storages/folder`, { path, name, storageId });
+      } catch (err) {
+        set(applicationErrorState, {
+          message: err.message,
+          summary: formatMessage('Create Folder Error'),
+        });
+      }
+    }
+  );
+
+  const updateFolder = useRecoilCallback<[string, string, string], Promise<void>>(
+    ({ set }: CallbackInterface) => async (path, oldName, newName) => {
+      const storageId = 'default';
+      try {
+        await httpClient.put(`/storages/folder`, { path, oldName, newName, storageId });
+      } catch (err) {
+        set(applicationErrorState, {
+          message: err.message,
+          summary: formatMessage('Update Folder Name Error'),
+        });
+      }
+    }
+  );
+
+  const fetchTemplates = useRecoilCallback<[], Promise<void>>((callbackHelpers: CallbackInterface) => async () => {
+    try {
+      const response = await httpClient.get(`/assets/projectTemplates`);
+
+      const data = response && response.data;
+
+      if (data && Array.isArray(data) && data.length > 0) {
+        callbackHelpers.set(templateProjectsState, data);
+      }
+    } catch (err) {
+      // TODO: Handle exceptions
+      logMessage(callbackHelpers, `Error fetching runtime templates: ${err}`);
+    }
+  });
+
+  const fetchRuntimeTemplates = useRecoilCallback<[], Promise<void>>(
+    (callbackHelpers: CallbackInterface) => async () => {
+      const { set } = callbackHelpers;
+      try {
+        const response = await httpClient.get(`/runtime/templates`);
+        if (Array.isArray(response.data)) {
+          set(runtimeTemplatesState, [...response.data]);
+        }
+      } catch (ex) {
+        // TODO: Handle exceptions
+        logMessage(callbackHelpers, `Error fetching runtime templates: ${ex}`);
+      }
+    }
+  );
+
   return {
     fetchStorages,
     updateCurrentPathForStorage,
@@ -108,5 +174,9 @@ export const storageDispatcher = () => {
     fetchStorageByName,
     fetchFolderItemsByPath,
     setStorageFileLoadingStatus,
+    createFolder,
+    updateFolder,
+    fetchTemplates,
+    fetchRuntimeTemplates,
   };
 };
