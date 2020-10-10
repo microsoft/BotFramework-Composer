@@ -46,8 +46,7 @@ import {
   rowDetails,
   icon,
   addAlternative,
-  editableFieldAnswer,
-  editableFieldQuestion,
+  editableField,
   groupHeader,
   groupNameStyle,
   detailsHeaderStyle,
@@ -452,6 +451,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                   item.fileId === creatQnAPairSettings.groupKey &&
                   index === creatQnAPairSettings.sectionIndex &&
                   qIndex === 0;
+                const isExpanded = isQnASectionsExpanded[index];
                 return (
                   <EditableField
                     key={question.id}
@@ -461,16 +461,15 @@ const TableView: React.FC<TableViewProps> = (props) => {
                     componentFocusOnmount={shouldFocusOnMount}
                     depth={0}
                     disabled={isAllowEdit}
-                    extraContent={
-                      qIndex === 0 && !isQnASectionsExpanded[index] && !isQuestionEmpty ? ` (${questions.length})` : ''
-                    }
+                    extraContent={qIndex === 0 && !isExpanded && !isQuestionEmpty ? ` (${questions.length})` : ''}
                     iconProps={{
                       iconName: 'Cancel',
                     }}
                     id={question.id}
                     name={question.content}
                     placeholder={'Add new question'}
-                    styles={editableFieldQuestion}
+                    resizable={false}
+                    styles={editableField}
                     value={question.content}
                     onBlur={(_id, value) => {
                       const newValue = value?.trim();
@@ -527,16 +526,16 @@ const TableView: React.FC<TableViewProps> = (props) => {
         onRender: (item, index) => {
           const isSourceSectionInDialog = item.fileId.endsWith('.source') && !dialogId.endsWith('.source');
           const isAllowEdit = dialogId !== 'all' && !isSourceSectionInDialog;
+          const isExpanded = isQnASectionsExpanded[index];
           return (
-            <div data-is-focusable css={formCell} style={{ marginTop: '2px' }}>
+            <div data-is-focusable css={formCell}>
               <EditableField
                 enableIcon
-                multiline
                 required
                 ariaLabel={formatMessage(`Answer is {content}`, { content: item.Answer })}
-                autoAdjustHeight={isQnASectionsExpanded[index]}
                 depth={0}
                 disabled={isAllowEdit}
+                expanded={isExpanded}
                 iconProps={{
                   iconName: 'Cancel',
                 }}
@@ -544,7 +543,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 name={item.Answer}
                 placeholder={'Add new answer'}
                 resizable={false}
-                styles={editableFieldAnswer(isQnASectionsExpanded[index])}
+                styles={editableField}
                 value={item.Answer}
                 onBlur={(_id, value) => {
                   const newValue = value?.trim();

@@ -41,7 +41,7 @@ type IconProps = {
 };
 
 interface EditableFieldProps extends Omit<ITextFieldProps, 'onChange' | 'onFocus' | 'onBlur'> {
-  autoAdjustHeight?: boolean;
+  expanded?: boolean;
   componentFocusOnmount?: boolean;
   fontSize?: string;
   styles?: Partial<ITextFieldStyles>;
@@ -79,8 +79,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
     iconProps,
     placeholder,
     fontSize,
-    autoAdjustHeight = false,
-    multiline = false,
+    expanded = false,
     onChange,
     onFocus,
     onBlur,
@@ -97,6 +96,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
   const [hasFocus, setHasFocus] = useState<boolean>(false);
   const [initialValue, setInitialValue] = useState<string | undefined>('');
   const [hasBeenEdited, setHasBeenEdited] = useState<boolean>(false);
+  const [multiline, setMultiline] = useState<boolean>(false);
 
   const formConfig: FieldConfig<{ value: string }> = {
     value: {
@@ -124,12 +124,21 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
     }
   }, [hasFocus]);
 
+  useEffect(() => {
+    if (expanded || hasFocus) {
+      if (formData.value.length > 50) setMultiline(true);
+    } else {
+      setMultiline(false);
+    }
+  }, [expanded, hasFocus]);
+
   const resetValue = () => {
     updateField('value', '');
     fieldRef.current?.focus();
   };
 
   const handleChange = (_e: any, newValue?: string) => {
+    if (newValue && newValue?.length > 50) setMultiline(true);
     updateField('value', newValue);
     setHasBeenEdited(true);
     onChange(newValue);
@@ -171,9 +180,9 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
     <Fragment>
       <div css={[defaultContainerStyle(hasFocus, hasErrors), containerStyles]} data-test-id={'EditableFieldContainer'}>
         <TextField
-          key={`${id}${autoAdjustHeight}`} // force update component
+          key={`${id}-${expanded}-${multiline}-${hasFocus}`} // force update component to trigger autoAdjustHeight
           ariaLabel={ariaLabel}
-          autoAdjustHeight={autoAdjustHeight}
+          autoAdjustHeight={expanded}
           autoComplete="off"
           className={className}
           componentRef={fieldRef}
@@ -208,7 +217,13 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
               styles
             ) as Partial<ITextFieldStyles>
           }
-          value={hasFocus ? formData.value : `${formData.value}${extraContent}`}
+          value={
+            hasFocus || !extraContent || expanded
+              ? formData.value
+              : `${
+                  formData.value.length > 20 ? formData.value.substring(0, 20) + '...' : formData.value
+                }${extraContent}`
+          }
           onBlur={handleCommit}
           onChange={handleChange}
           onFocus={handleOnFocus}

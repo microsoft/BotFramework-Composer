@@ -99,7 +99,7 @@ export const rowDetails = {
             visibility: 'visible',
           },
           '.ms-Button': {
-            visibility: 'visible',
+            display: 'block',
           },
         },
       },
@@ -136,7 +136,7 @@ export const addAlternative = {
     paddingLeft: 0,
     marginLeft: -5,
     color: SharedColors.cyanBlue10,
-    visibility: 'hidden',
+    display: 'none',
   },
 };
 
@@ -172,40 +172,17 @@ export const backIcon = {
   },
 };
 
-export const editableFieldAnswer = (isExpand) => {
-  return {
-    root: {
-      height: '100%',
-      selectors: {
-        '.ms-TextField-wrapper': {
-          height: '100%',
-        },
+export const editableField = {
+  root: {
+    height: '100%',
+    selectors: {
+      '.ms-TextField-wrapper': {
+        height: '100%',
       },
     },
-    fieldGroup: {
-      height: '100%',
-      border: '0',
-      selectors: {
-        '&.ms-TextField-fieldGroup': {
-          selectors: {
-            '::after': {
-              border: 'none !important',
-            },
-          },
-        },
-      },
-    },
-    field: {
-      height: isExpand ? undefined : '60px !important',
-      overflowY: 'auto' as 'auto',
-      fontSize: FontSizes.size12,
-      maxHeight: 500,
-    },
-  };
-};
-
-export const editableFieldQuestion = {
+  },
   fieldGroup: {
+    height: '100%',
     border: '0',
     selectors: {
       '&.ms-TextField-fieldGroup': {
@@ -218,12 +195,9 @@ export const editableFieldQuestion = {
     },
   },
   field: {
+    overflowY: 'auto' as 'auto',
     fontSize: FontSizes.size12,
-    selectors: {
-      '::placeholder': {
-        fontSize: FontSizes.size12,
-      },
-    },
+    maxHeight: 500,
   },
 };
 
