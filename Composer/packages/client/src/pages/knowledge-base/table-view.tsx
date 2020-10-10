@@ -115,7 +115,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
   const detailListRef = useRef<IDetailsList | null>(null);
   const [editQnAFile, setEditQnAFile] = useState<QnAFile | undefined>(undefined);
-  const [kthSectionIsCreatingQuestion, setCreatingQuestionInKthSection] = useState<number>(-1);
+  const [kthSectionIsCreatingQuestion, setCreatingQuestionInKthSection] = useState<string>('');
   const currentDialogImportedFileIds = qnaFile?.imports.map(({ id }) => getBaseName(id)) || [];
   const currentDialogImportedFiles = qnaFiles.filter(({ id }) => currentDialogImportedFileIds.includes(id));
   const currentDialogImportedSourceFiles = currentDialogImportedFiles.filter(({ id }) => id.endsWith('.source'));
@@ -435,11 +435,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           const isAllowEdit = dialogId !== 'all' && !isSourceSectionInDialog;
 
           const addQuestionButton = (
-            <ActionButton
-              //iconProps={{ iconName: 'Add', styles: addIcon }}
-              styles={addAlternative}
-              onClick={(e) => setCreatingQuestionInKthSection(index)}
-            >
+            <ActionButton styles={addAlternative} onClick={() => setCreatingQuestionInKthSection(item.sectionId)}>
               {formatMessage('+ Add alternative phrasing')}
             </ActionButton>
           );
@@ -487,7 +483,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 );
               })}
 
-              {kthSectionIsCreatingQuestion === index ? (
+              {kthSectionIsCreatingQuestion === item.sectionId ? (
                 <EditableField
                   key={''}
                   required
@@ -504,7 +500,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                     if (newValue) {
                       onCreateNewQuestion(item.fileId, item.sectionId, newValue);
                     }
-                    setCreatingQuestionInKthSection(-1);
+                    setCreatingQuestionInKthSection('');
                   }}
                   onChange={() => {}}
                   onFocus={() => expandRow(index)}

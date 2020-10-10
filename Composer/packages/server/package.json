@@ -12,7 +12,7 @@
     "build": "tsc -p tsconfig.build.json && node scripts/build.js",
     "clean": "rimraf build",
     "prep:dist:electron": "yarn build --outDir ../electron-server/dist && node scripts/copyAssets.js",
-    "start": "node build/init.js",
+    "start": "cross-env QNA_SUBSCRIPTION_KEY=77957a4340e7472a8dea4948223893be node build/init.js",
     "start:dev": "nodemon",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -22,7 +22,7 @@
   },
   "author": "",
   "nodemonConfig": {
-    "exec": "cross-env TS_NODE_FILES=true node -r ts-node/register src/init.ts",
+    "exec": "cross-env TS_NODE_FILES=true QNA_SUBSCRIPTION_KEY=77957a4340e7472a8dea4948223893be node --inspect=9228 -r ts-node/register src/init.ts",
     "watch": [
       "src",
       "../extension/lib"

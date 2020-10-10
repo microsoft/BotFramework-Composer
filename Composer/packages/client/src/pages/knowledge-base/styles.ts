@@ -3,6 +3,7 @@
 import { css } from '@emotion/core';
 import { FontWeights, mergeStyleSets } from '@uifabric/styling';
 import { NeutralColors, SharedColors, FontSizes } from '@uifabric/fluent-theme';
+import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 
 export const classNames = mergeStyleSets({
   groupHeader: {
@@ -138,7 +139,7 @@ export const addAlternative = {
     color: SharedColors.cyanBlue10,
     display: 'none',
   },
-};
+} as IButtonStyles;
 
 export const addQnAPair = {
   root: {

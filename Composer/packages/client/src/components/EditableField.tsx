@@ -94,7 +94,6 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
   } = props;
   const [editing, setEditing] = useState<boolean>(false);
   const [hasFocus, setHasFocus] = useState<boolean>(false);
-  const [initialValue, setInitialValue] = useState<string | undefined>('');
   const [hasBeenEdited, setHasBeenEdited] = useState<boolean>(false);
   const [multiline, setMultiline] = useState<boolean>(false);
 
@@ -119,12 +118,6 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
   }, [value]);
 
   useEffect(() => {
-    if (hasFocus) {
-      setInitialValue(formData.value);
-    }
-  }, [hasFocus]);
-
-  useEffect(() => {
     if (expanded || hasFocus) {
       if (formData.value.length > 50) setMultiline(true);
     } else {
@@ -147,6 +140,11 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
   const handleCommit = () => {
     setHasFocus(false);
     setEditing(false);
+
+    // update view after resetValue
+    if (!formData.value) {
+      updateField('value', value);
+    }
     onBlur && onBlur(id, formData.value);
   };
 
@@ -158,7 +156,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
   const cancel = () => {
     setHasFocus(false);
     setEditing(false);
-    updateField('value', initialValue);
+    updateField('value', value);
     fieldRef.current?.blur();
   };
 
