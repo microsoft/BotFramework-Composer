@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { FC, ComponentClass } from 'react';
-import { BaseSchema, SDKKinds } from '@bfc/shared';
+import { BaseSchema, SDKKinds } from '@bfc/types';
 
 export type FlowEditorWidgetMap = { [widgetName: string]: WidgetComponent<any> };
 export enum FlowSchemaBuiltinKeys {
@@ -36,5 +36,5 @@ type Value = string | number | boolean | undefined | { [key: string]: any };
 type PropGenerator = (data: any) => string | number | object | JSX.Element;
 
 export type FlowUISchema = {
-  [key in SDKKinds]?: FlowWidget;
+  [key in SDKKinds | FlowSchemaBuiltinKeys]?: FlowWidget;
 };

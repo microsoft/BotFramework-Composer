@@ -8,7 +8,6 @@
     "build": "tsc",
     "start": "node lib/index.js"
   },
-  "extendsComposer": true,
   "author": "",
   "license": "ISC",
   "dependencies": {

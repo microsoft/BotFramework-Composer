@@ -1,7 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LuIntentSection, BaseSchema, LuMetaData, LuType, ShellApi } from '@bfc/shared';
+import { LuMetaData, LuType } from '@bfc/shared';
+import { LuIntentSection, BaseSchema, ShellApi } from '@bfc/types';
 
 /**
  * LU CRUD API

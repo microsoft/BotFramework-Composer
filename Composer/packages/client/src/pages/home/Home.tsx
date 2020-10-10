@@ -12,7 +12,7 @@ import { navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 
 import { CreationFlowStatus } from '../../constants';
-import { dispatcherState, botNameState } from '../../recoilModel';
+import { dispatcherState, botDisplayNameState } from '../../recoilModel';
 import {
   recentProjectsState,
   templateProjectsState,
@@ -63,7 +63,7 @@ const tutorials = [
 const Home: React.FC<RouteComponentProps> = () => {
   const templateProjects = useRecoilValue(templateProjectsState);
   const projectId = useRecoilValue(currentProjectIdState);
-  const botName = useRecoilValue(botNameState(projectId));
+  const botName = useRecoilValue(botDisplayNameState(projectId));
   const recentProjects = useRecoilValue(recentProjectsState);
   const templateId = useRecoilValue(templateIdState);
   const { openProject, setCreationFlowStatus, onboardingAddCoachMarkRef, saveTemplateId } = useRecoilValue(

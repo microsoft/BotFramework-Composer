@@ -1,17 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { JSONSchema7, JSONSchema7Definition } from 'json-schema';
+import { SchemaDefinitions, DefinitionCache, JSONSchema7 } from '@bfc/types';
 
-import { SchemaDefinitions, DefinitionCache } from './types';
 import { getRef } from './getRef';
 import { CIRCULAR_REFS, isCircular } from './circular';
 
-export function dereference<S extends JSONSchema7 | JSONSchema7[] | JSONSchema7Definition>(
+export function dereference<S extends JSONSchema7 | JSONSchema7[]>(
   schema: S,
   definitions: SchemaDefinitions,
   cache: DefinitionCache
-): S extends JSONSchema7[] ? JSONSchema7[] : S extends JSONSchema7 ? JSONSchema7 : JSONSchema7Definition {
+): S extends JSONSchema7[] ? JSONSchema7[] : JSONSchema7 {
   if (Array.isArray(schema)) {
     const arraySchema: JSONSchema7[] = [];
 

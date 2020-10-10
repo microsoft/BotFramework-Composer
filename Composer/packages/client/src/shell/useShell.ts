@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useMemo, useRef } from 'react';
-import { ShellApi, ShellData, Shell, fetchFromSettings, DialogSchemaFile, SkillSetting } from '@bfc/shared';
+import { ShellApi, ShellData, Shell, DialogSchemaFile } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
@@ -22,7 +22,7 @@ import {
   localeState,
   qnaFilesState,
   designPageLocationState,
-  botNameState,
+  botDisplayNameState,
   dialogSchemasState,
   lgFilesState,
   luFilesState,
@@ -54,7 +54,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
   const luFiles = useRecoilValue(luFilesState(projectId));
   const lgFiles = useRecoilValue(lgFilesState(projectId));
   const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
-  const botName = useRecoilValue(botNameState(projectId));
+  const botName = useRecoilValue(botDisplayNameState(projectId));
   const settings = useRecoilValue(settingsState(projectId));
 
   const userSettings = useRecoilValue(userSettingsState);
@@ -203,10 +203,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     updateDialogSchema: async (dialogSchema: DialogSchemaFile) => {
       updateDialogSchema(dialogSchema, projectId);
     },
-    skillsSettings: {
-      get: (path: string) => fetchFromSettings(path, settings),
-      set: (id: string, skill: SkillSetting) => updateSkill(projectId, id, skill),
-    },
+    updateSkillSetting: (...params) => updateSkill(projectId, ...params),
   };
 
   const currentDialog = useMemo(() => dialogs.find((d) => d.id === dialogId), [dialogs, dialogId]);
@@ -240,6 +237,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
         clipboardActions,
         hosted: !!isAbsHosted(),
         skills,
+        skillsSettings: settings.skill || {},
       }
     : ({} as ShellData);
 

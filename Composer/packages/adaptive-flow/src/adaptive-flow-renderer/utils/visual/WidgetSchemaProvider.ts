@@ -3,20 +3,19 @@
 
 import get from 'lodash/get';
 import merge from 'lodash/merge';
-
-import { FlowWidget, FlowSchema } from '../../types/flowRenderer.types';
+import { FlowWidget, FlowUISchema } from '@bfc/extension-client';
 
 export class WidgetSchemaProvider {
-  schema: FlowSchema;
+  schema: FlowUISchema;
 
   /**
    * @param schemas Schemas to be merged together. Latter ones will override former ones.
    */
-  constructor(...schemas: FlowSchema[]) {
+  constructor(...schemas: FlowUISchema[]) {
     this.schema = this.mergeSchemas(schemas);
   }
 
-  private mergeSchemas(orderedSchemas: FlowSchema[]): FlowSchema {
+  private mergeSchemas(orderedSchemas: FlowUISchema[]): FlowUISchema {
     if (!Array.isArray(orderedSchemas) || !orderedSchemas.length) return {};
     return merge({}, ...orderedSchemas);
   }
