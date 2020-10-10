@@ -21,6 +21,7 @@ import { multilangDispatcher } from './multilang';
 import { notificationDispatcher } from './notification';
 import { extensionsDispatcher } from './extensions';
 import { botProjectFileDispatcher } from './botProjectFile';
+import { zoomDispatcher } from './zoom';
 
 const createDispatchers = () => {
   return {
@@ -44,6 +45,7 @@ const createDispatchers = () => {
     ...notificationDispatcher(),
     ...extensionsDispatcher(),
     ...botProjectFileDispatcher(),
+    ...zoomDispatcher(),
   };
 };
 
