@@ -47,8 +47,6 @@ const styles = css`
   left: 0;
   right: 0;
 
-  overflow: scroll;
-
   border: 1px solid transparent;
 
   &:focus {
