@@ -45,9 +45,9 @@ interface ZoomZoneProps {
 export const ZoomZone: React.FC<ZoomZoneProps> = ({ zoomRateInfo, updateZoomRate, children }) => {
   const divRef = useRef<HTMLDivElement>(null);
   const { rateList, maxRate, minRate, currentRate } = zoomRateInfo || {
-    rateList: [0.75, 1, 3],
+    rateList: [0.5, 1, 3],
     maxRate: 3,
-    minRate: 0.75,
+    minRate: 0.5,
     currentRate: 1,
   };
   const onWheel = (event: WheelEvent) => {
@@ -77,6 +77,11 @@ export const ZoomZone: React.FC<ZoomZoneProps> = ({ zoomRateInfo, updateZoomRate
         background: 'rgba(44, 41, 41, 0.8)',
         borderRadius: '2px',
         margin: '2.5px 0',
+        selectors: {
+          ':disabled': {
+            backgroundColor: '#BDBDBD',
+          },
+        },
       },
       rootHovered: {
         backgroundColor: 'rgba(44, 41, 41, 0.8)',
