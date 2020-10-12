@@ -47,9 +47,9 @@ const editorTopBarStyles = classNamesFunction<IStackProps, IStackStyles>()({
 });
 
 type Props = {
-  projectId?: string;
-  generationInProgress?: boolean;
+  projectId: string;
   schemaId: string;
+  generationInProgress?: boolean;
   templates: string[];
   onChange: (id: string, content: string) => void;
   onGenerate: (schemaId: string) => void;
