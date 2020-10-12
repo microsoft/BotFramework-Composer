@@ -236,6 +236,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
         focusedTab: promptTab,
         clipboardActions,
         hosted: !!isAbsHosted(),
+        luFeatures: settings.luFeatures,
         skills,
         skillsSettings: settings.skill || {},
       }
