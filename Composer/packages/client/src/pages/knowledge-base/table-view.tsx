@@ -96,7 +96,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
   const targetFileId = dialogId.endsWith('.source') ? dialogId : `${dialogId}.${locale}`;
   const qnaFile = qnaFiles.find(({ id }) => id === targetFileId);
-  const limitedNumber = 1;
   const generateQnASections = (file: QnAFile): QnASectionItem[] => {
     if (!file) return [];
     const usedInDialog: any[] = [];
@@ -135,7 +134,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     sectionIndex: number;
     item?: { Qustion: string; Answer: string };
   }>({
-    groupKey: '',
+    groupKey: '-1',
     sectionIndex: -1,
   });
   const currentDialogImportedFileIds = qnaFile?.imports.map(({ id }) => getBaseName(id)) || [];
@@ -232,12 +231,19 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
   const onCreateNewQnAPairsStart = (fileId: string | undefined) => {
     if (!fileId) return;
-    const sectionIndex = qnaSections.findIndex((item) => item.fileId === fileId);
+    const groupStartIndex = qnaSections.findIndex((item) => item.fileId === fileId);
+    // create on empty KB.
+    let insertPosition = groupStartIndex;
+    if (groupStartIndex === -1) {
+      insertPosition = 0;
+      setGroups(getGroups(fileId));
+    }
     const newItem = createQnASectionItem(fileId);
     const newQnaSections = [...qnaSections];
-    newQnaSections.splice(sectionIndex, 0, newItem);
+    newQnaSections.splice(insertPosition, 0, newItem);
     setQnASections(newQnaSections);
-    setCreatQnAPairSettings({ groupKey: fileId, sectionIndex, item: { Answer: '', Qustion: '' } });
+    setExpandedIndex(insertPosition);
+    setCreatQnAPairSettings({ groupKey: fileId, sectionIndex: insertPosition, item: { Answer: '', Qustion: '' } });
   };
 
   const onCreateNewQuestion = (fileId, sectionId, content?: string) => {
@@ -269,7 +275,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
       const isImportedSource = containerId.endsWith('.source');
       const sourceUrl = isImportedSource && containerQnAFile && getQnAFileUrlOption(containerQnAFile);
       const isAllTab = dialogId === 'all';
-      const isCreatingQnA = creatQnAPairSettings.groupKey && creatQnAPairSettings.sectionIndex > -1;
+      const isCreatingQnA = creatQnAPairSettings.groupKey === containerId && creatQnAPairSettings.sectionIndex > -1;
       const onRenderItem = (item: IOverflowSetItemProps): JSX.Element => {
         return (
           <IconButton
@@ -294,7 +300,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
             role="menuitem"
             styles={{
               root: {
-                //marginTop: 3,
                 padding: 0,
                 color: NeutralColors.black,
                 visibility: isAllTab ? 'hidden' : 'visiable',
@@ -430,8 +435,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
         onRender: (item: QnASectionItem, index) => {
           const questions = item.Questions;
           const isExpanded = expandedIndex === index;
-          const showingQuestions = isExpanded ? questions : questions.slice(0, limitedNumber);
-          const isQuestionEmpty = showingQuestions.length === 1 && showingQuestions[0].content === '';
           const isSourceSectionInDialog = item.fileId.endsWith('.source') && !dialogId.endsWith('.source');
           const isAllowEdit = dialogId !== 'all' && !isSourceSectionInDialog;
           const isCreatingQnA =
@@ -445,56 +448,60 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
           return (
             <div data-is-focusable css={formCell}>
-              {showingQuestions.map((question, qIndex: number) => {
+              {questions.map((question, qIndex: number) => {
+                const isQuestionEmpty = question.content === '';
                 return (
-                  <EditableField
-                    key={question.id}
-                    enableIcon
-                    required
-                    ariaLabel={formatMessage(`Question is {content}`, { content: question.content })}
-                    depth={0}
-                    disabled={isAllowEdit}
-                    extraContent={qIndex === 0 && !isExpanded && !isQuestionEmpty ? ` (${questions.length})` : ''}
-                    iconProps={{
-                      iconName: 'Cancel',
-                    }}
-                    id={question.id}
-                    name={question.content}
-                    placeholder={'Add new question'}
-                    resizable={false}
-                    styles={editableField}
-                    value={question.content}
-                    onBlur={(_id, value) => {
-                      const newValue = value?.trim();
-                      const isChanged = question.content !== newValue;
-                      if (!newValue || !isChanged) return;
+                  <div key={question.id} style={{ display: isExpanded ? 'block' : qIndex === 0 ? 'block' : 'none' }}>
+                    <EditableField
+                      key={question.id}
+                      enableIcon
+                      required
+                      ariaLabel={formatMessage(`Question is {content}`, { content: question.content })}
+                      depth={0}
+                      disabled={isAllowEdit}
+                      extraContent={qIndex === 0 && !isExpanded && !isQuestionEmpty ? ` (${questions.length})` : ''}
+                      iconProps={{
+                        iconName: 'Cancel',
+                      }}
+                      id={question.id}
+                      name={question.content}
+                      placeholder={'Add new question'}
+                      resizable={false}
+                      styles={editableField}
+                      value={question.content}
+                      onBlur={(_id, value) => {
+                        const newValue = value?.trim();
+                        const isChanged = question.content !== newValue;
+                        if (!newValue || !isChanged) return;
 
-                      if (isCreatingQnA) {
-                        const creatingQnAItem = creatQnAPairSettings.item;
-                        const fileId = creatQnAPairSettings.groupKey;
-                        if (!creatingQnAItem) return;
-                        const updatedItem = {
-                          ...creatingQnAItem,
-                          Question: newValue,
-                        };
-                        setCreatQnAPairSettings({
-                          ...creatQnAPairSettings,
-                          item: updatedItem,
-                        });
-                        onCreateNewQnAPairsEnd(fileId, updatedItem);
-                      } else {
-                        onUpdateQnAQuestion(item.fileId, item.sectionId, question.id, newValue);
-                      }
-                    }}
-                    onChange={() => {}}
-                    onFocus={() => setExpandedIndex(index)}
-                  />
+                        if (isCreatingQnA) {
+                          const creatingQnAItem = creatQnAPairSettings.item;
+                          const fileId = creatQnAPairSettings.groupKey;
+                          if (!creatingQnAItem) return;
+                          const updatedItem = {
+                            ...creatingQnAItem,
+                            Question: newValue,
+                          };
+                          setCreatQnAPairSettings({
+                            ...creatQnAPairSettings,
+                            item: updatedItem,
+                          });
+                          onCreateNewQnAPairsEnd(fileId, updatedItem);
+                        } else {
+                          onUpdateQnAQuestion(item.fileId, item.sectionId, question.id, newValue);
+                        }
+                      }}
+                      onChange={() => {}}
+                      onFocus={() => setExpandedIndex(index)}
+                    />
+                  </div>
                 );
               })}
 
               {kthSectionIsCreatingQuestion === item.sectionId ? (
                 <EditableField
                   key={''}
+                  componentFocusOnmount
                   required
                   ariaLabel={formatMessage('Question is empty now')}
                   depth={0}
@@ -656,7 +663,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
   };
 
   const [groups, setGroups] = useState<IGroup[] | undefined>(undefined);
-  const getGroups = (): IGroup[] | undefined => {
+  const getGroups = (createOnEmptyFileId = ''): IGroup[] | undefined => {
     let containerFiles = currentDialogImportedSourceFiles;
     if (dialogId === 'all') {
       containerFiles = allSourceFiles;
@@ -668,8 +675,12 @@ const TableView: React.FC<TableViewProps> = (props) => {
     containerFiles.forEach((currentFile) => {
       const lastGroup = newGroups[newGroups.length - 1];
       const startIndex = lastGroup ? lastGroup.startIndex + lastGroup.count : 0;
-      const { id, qnaSections } = currentFile;
-      const count = qnaSections.length;
+      const { id } = currentFile;
+      let count = currentFile.qnaSections.length;
+      // create on empty file, insert a place-holder section.
+      if (count === 0 && createOnEmptyFileId === id) {
+        count = 1;
+      }
       const name = getBaseName(id);
 
       // restore last group collapse state
@@ -682,7 +693,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
         startIndex,
         count,
         level: 0,
-        // isCollapsed: prevGroup.isCollapsed !== undefined ? prevGroup.isCollapsed : true,
       });
     });
     return newGroups;

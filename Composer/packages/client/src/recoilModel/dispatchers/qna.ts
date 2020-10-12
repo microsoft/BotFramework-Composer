@@ -390,14 +390,15 @@ ${response.data}
       id,
       name,
       projectId,
+      content = '',
     }: {
       id: string; // dialogId.locale
       name: string;
+      content?: string;
       projectId: string;
     }) => {
       await dismissCreateQnAModal({ projectId });
 
-      const content = qnaUtil.generateQnAPair();
       await createKBFileState(callbackHelpers, {
         id,
         name,
