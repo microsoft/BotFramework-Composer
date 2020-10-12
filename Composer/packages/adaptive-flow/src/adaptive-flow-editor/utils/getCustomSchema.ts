@@ -1,24 +1,24 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { OBISchema, SDKKinds } from '@bfc/shared';
+import { JSONSchema7, SDKKinds } from '@bfc/shared';
 import pickBy from 'lodash/pickBy';
 
 interface CustomSchemaSet {
-  actions?: OBISchema;
-  triggers?: OBISchema;
-  recognizers?: OBISchema;
+  actions?: JSONSchema7;
+  triggers?: JSONSchema7;
+  recognizers?: JSONSchema7;
 }
 
-const pickSchema = (
-  picked$kinds: SDKKinds[],
-  sourceSchema: { [key in SDKKinds]: OBISchema }
-): OBISchema | undefined => {
+type SourceSchema = { [key in SDKKinds]: JSONSchema7 };
+
+const pickSchema = (picked$kinds: SDKKinds[], sourceSchema: SourceSchema): JSONSchema7 | undefined => {
   if (!Array.isArray(picked$kinds) || picked$kinds.length === 0) return undefined;
 
   const pickedSchema = picked$kinds.reduce(
     (schema, $kind) => {
       const definition = sourceSchema[$kind];
+      schema.definitions = schema.definitions ?? {};
       schema.definitions[$kind] = definition;
       schema.oneOf?.push({
         title: definition.title || $kind,
@@ -30,11 +30,13 @@ const pickSchema = (
     {
       oneOf: [],
       definitions: {},
-    } as OBISchema
+    } as JSONSchema7
   );
 
   // Sort `oneOf` list alphabetically
-  pickedSchema.oneOf?.sort((a, b) => (a.$ref < b.$ref ? -1 : 1));
+  pickedSchema.oneOf?.sort((a, b) => {
+    return (a.$ref ?? '') < (b.$ref ?? '') ? -1 : 1;
+  });
 
   return pickedSchema;
 };
@@ -47,18 +49,18 @@ const roleImplementsInterface = (interfaceName: SDKKinds, $role?: SchemaRole): b
   return false;
 };
 
-const isActionSchema = (schema: OBISchema) => roleImplementsInterface(SDKKinds.IDialog, schema.$role);
-const isTriggerSchema = (schema: OBISchema) => roleImplementsInterface(SDKKinds.ITrigger, schema.$role);
-const isRecognizerSchema = (schema: OBISchema) =>
+const isActionSchema = (schema: JSONSchema7) => roleImplementsInterface(SDKKinds.IDialog, schema.$role);
+const isTriggerSchema = (schema: JSONSchema7) => roleImplementsInterface(SDKKinds.ITrigger, schema.$role);
+const isRecognizerSchema = (schema: JSONSchema7) =>
   roleImplementsInterface(SDKKinds.IRecognizer, schema.$role) ||
   roleImplementsInterface(SDKKinds.IEntityRecognizer, schema.$role);
 
-export const getCustomSchema = (baseSchema?: OBISchema, ejectedSchema?: OBISchema): CustomSchemaSet => {
+export const getCustomSchema = (baseSchema?: JSONSchema7, ejectedSchema?: JSONSchema7): CustomSchemaSet => {
   if (!baseSchema || !ejectedSchema) return {};
   if (typeof baseSchema.definitions !== 'object' || typeof ejectedSchema.definitions !== 'object') return {};
 
   const baseDefinitions = baseSchema.definitions;
-  const ejectedDefinitions = ejectedSchema.definitions;
+  const ejectedDefinitions = ejectedSchema.definitions ?? {};
 
   const baseKindHash = Object.keys(baseDefinitions).reduce((hash, $kind) => {
     hash[$kind] = true;
@@ -75,9 +77,9 @@ export const getCustomSchema = (baseSchema?: OBISchema, ejectedSchema?: OBISchem
 
   return pickBy(
     {
-      actions: pickSchema(actionKinds, ejectedDefinitions),
-      triggers: pickSchema(triggerKinds, ejectedDefinitions),
-      recognizers: pickSchema(recognizerKinds, ejectedDefinitions),
+      actions: pickSchema(actionKinds, ejectedDefinitions as SourceSchema),
+      triggers: pickSchema(triggerKinds, ejectedDefinitions as SourceSchema),
+      recognizers: pickSchema(recognizerKinds, ejectedDefinitions as SourceSchema),
     },
     (v) => v !== undefined
   );

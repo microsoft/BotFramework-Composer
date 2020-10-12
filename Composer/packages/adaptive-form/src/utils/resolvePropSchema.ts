@@ -1,15 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { JSONSchema7, JSONSchema7Definition } from '@bfc/extension-client';
+import { JSONSchema7, SchemaDefinitions } from '@bfc/extension-client';
 
 import { resolveRef } from './resolveRef';
 
 export function resolvePropSchema(
   schema: JSONSchema7,
   path: string,
-  definitions: {
-    [k: string]: JSONSchema7Definition;
-  } = {}
+  definitions: SchemaDefinitions = {}
 ): JSONSchema7 | undefined {
   const propSchema = schema.properties?.[path];
 

@@ -6,10 +6,14 @@ import { RouteComponentProps } from '@reach/router';
 
 import { PluginHost } from '../../components/PluginHost/PluginHost';
 
-const PluginPageContainer: React.FC<RouteComponentProps<{ pluginId: string }>> = (props) => {
-  const { pluginId } = props;
+const PluginPageContainer: React.FC<RouteComponentProps<{ pluginId: string; bundleId: string }>> = (props) => {
+  const { pluginId, bundleId } = props;
 
-  return <PluginHost pluginName={pluginId} pluginType={'page'}></PluginHost>;
+  if (!pluginId || !bundleId) {
+    return null;
+  }
+
+  return <PluginHost bundleId={bundleId} pluginName={pluginId} pluginType="page"></PluginHost>;
 };
 
 export { PluginPageContainer };
