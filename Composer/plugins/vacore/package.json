@@ -1,0 +1,21 @@
+{
+  "name": "vacore",
+  "version": "1.0.0",
+  "description": "A plug-in to provide the declarative VA template as an option in the new bot creation flow",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "extendsComposer": true,
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "adm-zip": "^0.4.14",
+    "archiver": "^3.1.1",
+    "globby": "^11.0.0",
+    "path": "^0.12.7",
+    "portfinder": "^1.0.26",
+    "rimraf": "^3.0.2",
+    "uuid": "^7.0.1"
+  }
+}

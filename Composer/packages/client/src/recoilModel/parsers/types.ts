@@ -1,36 +1,42 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { LuIntentSection, LgFile, LuFile, QnASection, FileInfo, LgTemplate } from '@bfc/shared';
+import { LuIntentSection, LgFile, LuFile, QnASection, FileInfo, LgTemplate, ILUFeaturesConfig } from '@bfc/shared';
 
 export type LuParsePayload = {
   id: string;
   content: string;
+  luFeatures: ILUFeaturesConfig;
 };
 
 export type LuAddIntentPayload = {
   luFile: LuFile;
   intent: LuIntentSection;
+  luFeatures: ILUFeaturesConfig;
 };
 
 export type LuAddIntentsPayload = {
   luFile: LuFile;
   intents: LuIntentSection[];
+  luFeatures: ILUFeaturesConfig;
 };
 
 export type LuUpdateIntentPayload = {
   luFile: LuFile;
   intentName: string;
   intent?: { Name?: string; Body?: string };
+  luFeatures: ILUFeaturesConfig;
 };
 
 export type LuRemoveIntentPayload = {
   luFile: LuFile;
   intentName: string;
+  luFeatures: ILUFeaturesConfig;
 };
 
 export type LuRemoveIntentsPayload = {
   luFile: LuFile;
   intentNames: string[];
+  luFeatures: ILUFeaturesConfig;
 };
 
 export type LgParsePayload = {
@@ -98,6 +104,7 @@ export type IndexPayload = {
   botName: string;
   schemas: any;
   locale: string;
+  luFeatures: { key: string; value: boolean };
 };
 
 export type QnAPayload = {
