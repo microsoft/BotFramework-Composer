@@ -34,6 +34,7 @@
     "@azure/arm-botservice": "../lib/arm-botservice",
     "@azure/arm-deploymentmanager": "3.0.0",
     "@azure/arm-resources": "2.1.0",
+    "@azure/arm-search": "^1.3.0",
     "@azure/arm-subscriptions": "2.0.0",
     "@azure/cognitiveservices-luis-authoring": "4.0.0-preview.1",
     "@azure/graph": "5.0.1",
