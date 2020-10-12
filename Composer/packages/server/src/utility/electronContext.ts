@@ -1,8 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+// TODO: add types for "options"
 export type ElectronContext = {
-  getAccessToken: (options) => Promise<string>;
+  getAccessToken: (options) => Promise<{ accessToken: string; acquiredAt: number; expiresIn: number }>;
   loginAndGetIdToken: (options) => Promise<string>;
 };
 

@@ -41,7 +41,8 @@ export interface OAuthTokenOptions extends OAuthLoginOptions {
 }
 
 function getLoginUrl(options: OAuthLoginOptions): string {
-  const { clientId, redirectUri = composerRedirectUri, scopes = [] } = options;
+  const { clientId, redirectUri = composerRedirectUri } = options;
+  const scopes = [...(options.scopes || [])];
   if (scopes.indexOf('openid') === -1) {
     scopes.push('openid');
   }
@@ -83,11 +84,14 @@ export function getAccessTokenUrl(options: OAuthTokenOptions): string {
   return url;
 }
 
-async function createAccessTokenWindow(url: string): Promise<string> {
+async function createAccessTokenWindow(
+  url: string
+): Promise<{ accessToken: string; acquiredAt: number; expiresIn: number }> {
   const tokenWindow = new BrowserWindow({ width: 400, height: 600, show: false });
-  const waitingForAccessToken = monitorWindowForQueryParam(tokenWindow, 'access_token');
+  const waitingForAccessToken = monitorWindowForQueryParams(tokenWindow, ['access_token', 'expires_in']);
   tokenWindow.loadURL(url);
-  return waitingForAccessToken;
+  const { access_token: accessToken, expires_in: expiresIn } = await waitingForAccessToken;
+  return { accessToken, acquiredAt: Date.now(), expiresIn: Number(expiresIn) };
 }
 
 async function createLoginWindow(url: string): Promise<string> {
@@ -99,18 +103,22 @@ async function createLoginWindow(url: string): Promise<string> {
     parent: ElectronWindow.getInstance().browserWindow, // always show login window on top of main app window
   });
   loginWindow.setMenu(null);
-  const waitingForIdToken = monitorWindowForQueryParam(loginWindow, 'id_token');
+  const waitingForIdToken = monitorWindowForQueryParams(loginWindow, ['id_token']);
   loginWindow.loadURL(url);
-  return waitingForIdToken;
+  const { id_token: idToken } = await waitingForIdToken;
+  return idToken;
 }
 
 /** Will wait until the specified window redirects to a URL starting with bfcomposer://oauth,
  *  and then resolve with the desired parameter value or reject with an error message.
  *
  *  @param window The Electron browser window to monitor for redirect events
- *  @param queryParam The query string parameter to be ripped off the final URL after all redirects are finished
+ *  @param queryParams The query string parameters to be ripped off the final URL after all redirects are finished
  */
-async function monitorWindowForQueryParam(window: BrowserWindow, queryParam: string): Promise<string> {
+async function monitorWindowForQueryParams(
+  window: BrowserWindow,
+  queryParams: string[]
+): Promise<{ [paramName: string]: string }> {
   return new Promise((resolve, reject) => {
     const prematureCloseListener = () => {
       reject({ error: 'The window was closed before authentication was complete.' });
@@ -122,12 +130,9 @@ async function monitorWindowForQueryParam(window: BrowserWindow, queryParam: str
         // Just rip the desired parameters from the url and close the window.
         event.preventDefault();
         const parsedUrl = new URL(redirectUrl.replace('#', '?'));
-        const param = parsedUrl.searchParams.get(queryParam);
-        if (param) {
-          window.removeListener('closed', prematureCloseListener);
-          window.close();
-          resolve(param);
-        }
+        const result = {};
+
+        // look for any errors
         const error = parsedUrl.searchParams.get('error');
         const errorDescription = parsedUrl.searchParams.get('error_description');
         if (error || errorDescription) {
@@ -135,7 +140,19 @@ async function monitorWindowForQueryParam(window: BrowserWindow, queryParam: str
           window.close();
           reject({ error, errorDescription });
         }
-        reject({ error: `Unknown error retrieving ${param} from OAuth window` });
+
+        // pull desired params off of the url
+        for (const paramName of queryParams) {
+          const paramVal = parsedUrl.searchParams.get(paramName);
+          if (paramVal) {
+            result[paramName] = paramVal;
+          }
+        }
+
+        // clean up the window and return params
+        window.removeListener('closed', prematureCloseListener);
+        window.close();
+        resolve(result);
       }
     });
   });
@@ -145,7 +162,7 @@ async function monitorWindowForQueryParam(window: BrowserWindow, queryParam: str
  * Logs the user in using the OAuth implicit flow and returns an id token
  *
  * @param id Internal id used by Composer to route the OAuth response back to the client that it originated from
- * @returns An object containing the id token and the id of the OAuth client that originated the request
+ * @returns The ID token granted by the login flow
  */
 export async function loginAndGetIdToken(options: OAuthLoginOptions): Promise<string> {
   try {
@@ -161,9 +178,11 @@ export async function loginAndGetIdToken(options: OAuthLoginOptions): Promise<st
  * Uses an id token to request an access token on behalf of the user and returns token
  *
  * @param id Internal id used by Composer to route the OAuth response back to the client that it originated from
- * @returns An object containing the access token and the id of the OAuth client that originated the request
+ * @returns The access token granted by the login flow
  */
-export async function getAccessToken(options: OAuthTokenOptions): Promise<string> {
+export async function getAccessToken(
+  options: OAuthTokenOptions
+): Promise<{ accessToken: string; acquiredAt: number; expiresIn: number }> {
   try {
     const tokenUrl = getAccessTokenUrl(options);
     const res = await createAccessTokenWindow(tokenUrl);

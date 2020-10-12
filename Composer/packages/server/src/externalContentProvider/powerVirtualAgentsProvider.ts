@@ -17,7 +17,8 @@ type PowerVirtualAgentsMetadata = ContentProviderMetadata & {
   triggerId?: string;
 };
 
-const baseUrl = 'https://bots.int.customercareintelligence.net'; // int = test environment
+//const baseUrl = 'https://bots.int.customercareintelligence.net'; // int = test environment
+const baseUrl = 'https://bots.ppe.customercareintelligence.net'; // ppe
 const authCredentials = {
   clientId: 'ce48853e-0605-4f77-8746-d70ac63cc6bc',
   scopes: ['a522f059-bb65-47c0-8934-7db6e5286414/.default'], // int / ppe
@@ -73,10 +74,7 @@ export class PowerVirtualAgentsProvider extends ExternalContentProvider {
   private async getAccessToken(): Promise<string> {
     try {
       // login to the 1P app and get an access token
-      // const { getAccessToken, loginAndGetIdToken } = useElectronContext();
-      // const idToken = await loginAndGetIdToken(authCredentials);
-      // const accessToken = await getAccessToken({ ...authCredentials, idToken });
-      const { accessToken } = await authService.getAccessToken(authCredentials);
+      const accessToken = await authService.getAccessToken(authCredentials);
       return accessToken;
     } catch (e) {
       return Promise.reject(new Error(`Error while trying to get a PVA access token: ${e}`));
