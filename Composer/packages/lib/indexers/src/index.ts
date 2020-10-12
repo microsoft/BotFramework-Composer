@@ -48,11 +48,12 @@ class Indexer {
 
   public index(files: FileInfo[], botName: string, locale: string, skillContent: any, settings: DialogSetting) {
     const result = this.classifyFile(files);
+    const luFeatures = settings.luFeatures;
     return {
       dialogs: dialogIndexer.index(result[FileExtensions.Dialog], botName),
       dialogSchemas: dialogSchemaIndexer.index(result[FileExtensions.DialogSchema]),
       lgFiles: lgIndexer.index(result[FileExtensions.lg], this.getLgImportResolver(result[FileExtensions.lg], locale)),
-      luFiles: luIndexer.index(result[FileExtensions.Lu]),
+      luFiles: luIndexer.index(result[FileExtensions.Lu], luFeatures),
       qnaFiles: qnaIndexer.index(result[FileExtensions.QnA]),
       skillManifestFiles: skillManifestIndexer.index(result[FileExtensions.Manifest]),
       skills: skillIndexer.index(skillContent, settings.skill),
