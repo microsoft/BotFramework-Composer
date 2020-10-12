@@ -9,5 +9,6 @@ export * from './useLgApi';
 export * from './useLuApi';
 export * from './useMenuConfig';
 export * from './useRecognizerConfig';
+export * from './useProjectApi';
 export * from './useShellApi';
 export * from './useTriggerApi';

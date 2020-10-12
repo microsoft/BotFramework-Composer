@@ -21,6 +21,13 @@ function createLuApi(
   dispatchers: Dispatcher,
   luFileResolver: (id: string) => LuFile | undefined
 ): LuContextApi {
+  const updateLuFile = async (id: string, content: string) => {
+    const file = luFileResolver(id);
+    if (!file) throw new Error(fileNotFound(id));
+
+    await dispatchers.updateLuFile({ id, content, projectId: state.projectId });
+  };
+
   const addLuIntent = async (id: string, intentName: string, intent: LuIntentSection) => {
     const file = luFileResolver(id);
     if (!file) throw new Error(fileNotFound(id));
@@ -73,6 +80,7 @@ function createLuApi(
   };
 
   return {
+    updateLuFile,
     addLuIntent,
     getLuIntents,
     getLuIntent,

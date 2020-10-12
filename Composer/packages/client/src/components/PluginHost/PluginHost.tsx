@@ -5,9 +5,9 @@
 import { jsx, SerializedStyles } from '@emotion/core';
 import React, { useState, useEffect, useRef } from 'react';
 import { Shell } from '@bfc/types';
+import { PluginType } from '@bfc/extension-client';
 
 import { PluginAPI } from '../../plugins/api';
-import { PluginType } from '../../plugins/types';
 
 import { iframeStyle } from './styles';
 

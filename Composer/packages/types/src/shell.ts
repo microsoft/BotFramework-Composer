@@ -50,6 +50,7 @@ export type LuContextApi = {
   getLuIntent: (id: string, intentName: string) => LuIntentSection | undefined;
   getLuIntents: (id: string) => LuIntentSection[];
   addLuIntent: (id: string, intentName: string, intent: LuIntentSection) => Promise<LuFile[] | undefined>;
+  updateLuFile: (id: string, content: string) => Promise<void>;
   updateLuIntent: (id: string, intentName: string, intent: LuIntentSection) => Promise<LuFile[] | undefined>;
   debouncedUpdateLuIntent: (id: string, intentName: string, intent: LuIntentSection) => Promise<LuFile[] | undefined>;
   renameLuIntent: (id: string, intentName: string, newIntentName: string) => Promise<LuFile[] | undefined>;
@@ -60,29 +61,29 @@ export type LgContextApi = {
   getLgTemplates: (id: string) => LgTemplate[];
   copyLgTemplate: (id: string, fromTemplateName: string, toTemplateName?: string) => Promise<LgFile[] | undefined>;
   addLgTemplate: (id: string, templateName: string, templateStr: string) => Promise<LgFile[] | undefined>;
+  updateLgFile: (id: string, content: string) => Promise<void>;
   updateLgTemplate: (id: string, templateName: string, templateStr: string) => Promise<LgFile[] | undefined>;
   debouncedUpdateLgTemplate: (id: string, templateName: string, templateStr: string) => Promise<LgFile[] | undefined>;
   removeLgTemplate: (id: string, templateName: string) => Promise<LgFile[] | undefined>;
   removeLgTemplates: (id: string, templateNames: string[]) => Promise<LgFile[] | undefined>;
 };
 
-export type ProjectContextApi = LuContextApi &
-  LgContextApi & {
-    getDialog: (dialogId: string) => any;
-    saveDialog: (dialogId: string, newDialogData: any) => any;
+export type ProjectContextApi = {
+  getDialog: (dialogId: string) => any;
+  saveDialog: (dialogId: string, newDialogData: any) => any;
 
-    updateQnaContent: (id: string, content: string) => void;
-    updateRegExIntent: (id: string, intentName: string, pattern: string) => void;
-    renameRegExIntent: (id: string, intentName: string, newIntentName: string) => void;
-    updateIntentTrigger: (id: string, intentName: string, newIntentName: string) => void;
-    createDialog: (actions: any) => Promise<string | null>;
-    commitChanges: () => void;
-    addSkillDialog: () => Promise<{ manifestUrl: string; name: string } | null>;
-    displayManifestModal: (manifestId: string) => void;
-    updateDialogSchema: (_: DialogSchemaFile) => Promise<void>;
-    createTrigger: (id: string, formData, url?: string) => void;
-    updateSkillSetting: (skillId: string, skillsData: SkillSetting) => Promise<void>;
-  };
+  updateQnaContent: (id: string, content: string) => void;
+  updateRegExIntent: (id: string, intentName: string, pattern: string) => void;
+  renameRegExIntent: (id: string, intentName: string, newIntentName: string) => void;
+  updateIntentTrigger: (id: string, intentName: string, newIntentName: string) => void;
+  createDialog: (actions: any) => Promise<string | null>;
+  commitChanges: () => void;
+  addSkillDialog: () => Promise<{ manifestUrl: string; name: string } | null>;
+  displayManifestModal: (manifestId: string) => void;
+  updateDialogSchema: (_: DialogSchemaFile) => Promise<void>;
+  createTrigger: (id: string, formData, url?: string) => void;
+  updateSkillSetting: (skillId: string, skillsData: SkillSetting) => Promise<void>;
+};
 
 export type ProjectContext = {
   botName: string;
@@ -125,7 +126,11 @@ export type DialogEditingContext = {
 
 export type ShellData = ApplicationContext & ProjectContext & DialogEditingContext;
 
-export type ShellApi = ApplicationContextApi & ProjectContextApi & DialogEditingContextApi;
+export type ShellApi = ApplicationContextApi &
+  ProjectContextApi &
+  DialogEditingContextApi &
+  LgContextApi &
+  LuContextApi;
 
 export type Shell = {
   api: ShellApi;
