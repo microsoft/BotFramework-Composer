@@ -12,6 +12,7 @@ import httpClient from '../../utils/httpUtil';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
 import { luFilesState, qnaFilesState, dialogsState, botStatusState, botLoadErrorState } from '../atoms';
+import { settingsState } from '../atoms/botState';
 
 const checkEmptyQuestionOrAnswerInQnAFile = (sections) => {
   return sections.some((s) => !s.Answer || s.Questions.some((q) => !q.content));
@@ -27,8 +28,8 @@ export const builderDispatcher = () => {
       const dialogs = await snapshot.getPromise(dialogsState(projectId));
       const luFiles = await snapshot.getPromise(luFilesState(projectId));
       const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
+      const settings = await snapshot.getPromise(settingsState(projectId));
       const referredLuFiles = luUtil.checkLuisBuild(luFiles, dialogs);
-
       const errorMsg = qnaFiles.reduce(
         (result, file) => {
           if (
@@ -48,13 +49,16 @@ export const builderDispatcher = () => {
         return;
       }
       try {
-        //TODO crosstrain should add locale
-        const crossTrainConfig = buildUtil.createCrossTrainConfig(dialogs, referredLuFiles);
+        const crossTrainConfig = buildUtil.createCrossTrainConfig(dialogs, referredLuFiles, settings.languages);
         await httpClient.post(`/projects/${projectId}/build`, {
           luisConfig,
           qnaConfig,
           projectId,
           crossTrainConfig,
+          recognizerTypes: dialogs.reduce((result, file) => {
+            result[file.id] = file.recognizerType;
+            return result;
+          }, {}),
           luFiles: referredLuFiles.map((file) => file.id),
           qnaFiles: qnaFiles.map((file) => file.id),
         });

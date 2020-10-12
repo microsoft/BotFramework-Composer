@@ -58,6 +58,7 @@ export type DialogInfo = {
   triggers: ITrigger[];
   intentTriggers: IIntentTrigger[];
   skills: string[];
+  recognizerType: RecognizerType;
 };
 
 export type LgTemplateJsonPath = {
@@ -212,3 +213,5 @@ export interface BotProjectFile {
   content: BotProjectSpace;
   lastModified: string;
 }
+
+export type RecognizerType = 'DefaultRecognizer' | 'RegexRecognizer' | 'CustomRecognizer';

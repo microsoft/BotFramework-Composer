@@ -450,6 +450,7 @@ export class BotProject implements IBotProject {
     luFileIds = [],
     qnaFileIds = [],
     crossTrainConfig,
+    recognizerTypes,
   }: IBuildConfig) => {
     if ((luFileIds.length || qnaFileIds.length) && this.settings) {
       const luFiles: FileInfo[] = [];
@@ -471,7 +472,7 @@ export class BotProject implements IBotProject {
         crossTrainConfig,
         this.settings.downsampling
       );
-      await this.builder.build(luFiles, qnaFiles);
+      await this.builder.build(luFiles, qnaFiles, recognizerTypes);
     }
   };
 

@@ -19,6 +19,7 @@ import { JsonWalk, VisitorFunc } from './utils/jsonWalk';
 import { getBaseName } from './utils/help';
 import extractIntentTriggers from './dialogUtils/extractIntentTriggers';
 import { createPath } from './validations/expressionValidation/utils';
+import { getRecognizerType } from './utils';
 // find out all lg templates given dialog
 function extractLgTemplates(id, dialog): LgTemplateJsonPath[] {
   const templates: LgTemplateJsonPath[] = [];
@@ -192,6 +193,7 @@ function parse(id: string, content: any) {
     triggers: extractTriggers(content),
     intentTriggers: extractIntentTriggers(content),
     skills: extractReferredSkills(content),
+    recognizerType: getRecognizerType(content.recognizer),
   };
 }
 

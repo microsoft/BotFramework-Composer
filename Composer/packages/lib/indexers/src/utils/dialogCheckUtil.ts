@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+import { RecognizerType, SDKKinds } from '@bfc/shared';
 
 /**
  * fix dialog's lg/lu referrence, use dialog's lg/lu file
@@ -20,4 +21,16 @@ export function autofixReferInDialog(dialogId: string, content: string): string 
     // pass, content may be empty
     return content;
   }
+}
+
+export function getRecognizerType(recognizer): RecognizerType {
+  if (typeof recognizer === 'string') {
+    return 'DefaultRecognizer';
+  }
+
+  if (recognizer?.$kind && recognizer.$kind === SDKKinds.RegexRecognizer) {
+    return 'RegexRecognizer';
+  }
+
+  return 'CustomRecognizer';
 }
