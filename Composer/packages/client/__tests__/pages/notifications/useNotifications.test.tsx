@@ -15,6 +15,7 @@ import {
   schemasState,
   currentProjectIdState,
   botDiagnosticsState,
+  jsonSchemaFilesState,
 } from '../../../src/recoilModel';
 import mockProjectResponse from '../../../src/recoilModel/dispatchers/__tests__/mocks/mockProjectResponse.json';
 
@@ -78,6 +79,12 @@ const state = {
       ],
     },
   ],
+  jsonSchemaFiles: [
+    {
+      id: 'schema1.json',
+      content: 'test',
+    },
+  ],
   diagnostics: [
     {
       message: 'server error',
@@ -101,6 +108,7 @@ const initRecoilState = ({ set }) => {
   set(dialogsState(state.projectId), state.dialogs);
   set(luFilesState(state.projectId), state.luFiles);
   set(lgFilesState(state.projectId), state.lgFiles);
+  set(jsonSchemaFilesState(state.projectId), state.jsonSchemaFiles);
   set(botDiagnosticsState(state.projectId), state.diagnostics);
   set(settingsState(state.projectId), state.settings);
   set(schemasState(state.projectId), mockProjectResponse.schemas);

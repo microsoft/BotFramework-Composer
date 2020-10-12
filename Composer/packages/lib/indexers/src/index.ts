@@ -4,6 +4,7 @@ import { DialogSetting, FileInfo, importResolverGenerator } from '@bfc/shared';
 
 import { dialogIndexer } from './dialogIndexer';
 import { dialogSchemaIndexer } from './dialogSchemaIndexer';
+import { jsonSchemaFileIndexer } from './jsonSchemaFileIndexer';
 import { lgIndexer } from './lgIndexer';
 import { luIndexer } from './luIndexer';
 import { qnaIndexer } from './qnaIndexer';
@@ -57,6 +58,7 @@ class Indexer {
       skillManifestFiles: skillManifestIndexer.index(result[FileExtensions.Manifest]),
       skills: skillIndexer.index(skillContent, settings.skill),
       botProjectSpaceFiles: botProjectSpaceIndexer.index(result[FileExtensions.BotProjectSpace]),
+      jsonSchemaFiles: jsonSchemaFileIndexer.index(result[FileExtensions.Json]),
     };
   }
 }

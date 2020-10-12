@@ -16,6 +16,7 @@ import {
   dialogSchemasState,
   qnaFilesState,
   botProjectFileState,
+  jsonSchemaFilesState,
 } from '../../recoilModel';
 
 import {
@@ -40,6 +41,7 @@ export default function useNotifications(projectId: string, filter?: string) {
   const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   const botProjectFile = useRecoilValue(botProjectFileState(projectId));
+  const jsonSchemaFiles = useRecoilValue(jsonSchemaFilesState(projectId));
 
   const botAssets = {
     projectId,
@@ -51,6 +53,7 @@ export default function useNotifications(projectId: string, filter?: string) {
     setting,
     dialogSchemas,
     botProjectFile,
+    jsonSchemaFiles,
   };
 
   const memoized = useMemo(() => {

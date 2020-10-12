@@ -31,6 +31,7 @@ export type ITrigger = {
   displayName: string;
   type: string;
   isIntent: boolean;
+  content: any;
 };
 
 export type ReferredLuIntents = {
@@ -153,6 +154,11 @@ export type Skill = {
   name: string;
 };
 
+export type JsonSchemaFile = {
+  id: string;
+  content: string;
+};
+
 export type TextFile = {
   id: string;
   content: string;
@@ -184,6 +190,7 @@ export type BotAssets = {
   setting: DialogSetting;
   dialogSchemas: DialogSchemaFile[];
   botProjectFile: BotProjectFile;
+  jsonSchemaFiles: JsonSchemaFile[];
 };
 
 export type BotInfo = {

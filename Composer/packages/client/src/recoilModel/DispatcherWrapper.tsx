@@ -23,6 +23,7 @@ import {
   settingsState,
   filePersistenceState,
   botProjectFileState,
+  jsonSchemaFilesState,
 } from './atoms';
 import { botsForFilePersistenceSelector } from './selectors';
 
@@ -36,6 +37,7 @@ const getBotAssets = async (projectId, snapshot: Snapshot): Promise<BotAssets> =
     snapshot.getPromise(settingsState(projectId)),
     snapshot.getPromise(dialogSchemasState(projectId)),
     snapshot.getPromise(botProjectFileState(projectId)),
+    snapshot.getPromise(jsonSchemaFilesState(projectId)),
   ]);
   return {
     projectId,
@@ -47,6 +49,7 @@ const getBotAssets = async (projectId, snapshot: Snapshot): Promise<BotAssets> =
     setting: result[5],
     dialogSchemas: result[6],
     botProjectFile: result[7],
+    jsonSchemaFiles: result[8],
   };
 };
 

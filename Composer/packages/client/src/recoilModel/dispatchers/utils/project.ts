@@ -39,6 +39,7 @@ import {
   recentProjectsState,
   botErrorState,
   botNameIdentifierState,
+  jsonSchemaFilesState,
 } from '../../atoms';
 import lgWorker from '../../parsers/lgWorker';
 import luWorker from '../../parsers/luWorker';
@@ -257,7 +258,17 @@ export const initQnaFilesStatus = (projectId: string, qnaFiles: QnAFile[], dialo
 export const initBotState = async (callbackHelpers: CallbackInterface, data: any, botFiles: any) => {
   const { snapshot, set } = callbackHelpers;
   const { botName, botEnvironment, location, schemas, settings, id: projectId, diagnostics } = data;
-  const { dialogs, dialogSchemas, luFiles, lgFiles, qnaFiles, skillManifestFiles, skills, mergedSettings } = botFiles;
+  const {
+    dialogs,
+    dialogSchemas,
+    luFiles,
+    lgFiles,
+    qnaFiles,
+    jsonSchemaFiles,
+    skillManifestFiles,
+    skills,
+    mergedSettings,
+  } = botFiles;
   const curLocation = await snapshot.getPromise(locationState(projectId));
   const storedLocale = languageStorage.get(botName)?.locale;
   const locale = settings.languages.includes(storedLocale) ? storedLocale : settings.defaultLanguage;
@@ -284,6 +295,7 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
   set(skillManifestsState(projectId), skillManifestFiles);
   set(luFilesState(projectId), initLuFilesStatus(botName, luFiles, dialogs));
   set(lgFilesState(projectId), lgFiles);
+  set(jsonSchemaFilesState(projectId), jsonSchemaFiles);
   set(dialogsState(projectId), verifiedDialogs);
   set(dialogSchemasState(projectId), dialogSchemas);
   set(botEnvironmentState(projectId), botEnvironment);

@@ -9,4 +9,5 @@ export enum FileExtensions {
   lg = '.lg',
   Manifest = '.json',
   BotProjectSpace = '.botproj',
+  Json = '.json',
 }
