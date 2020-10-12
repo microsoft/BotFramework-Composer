@@ -45,6 +45,9 @@ module.exports = (webpackEnv) => {
       minimizer: [
         new TerserPlugin({
           extractComments: false,
+          terserOptions: {
+            sourceMap: true,
+          },
         }),
       ],
     },
