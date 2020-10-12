@@ -7,6 +7,8 @@ import fs from 'fs';
 import * as unzipper from 'unzip-stream';
 import axios from 'axios';
 import { ExtensionContext } from '@bfc/extension';
+import { SchemaMerger } from '@microsoft/bf-dialog/lib/library/schemaMerger';
+
 // import downloadNpmPackage from 'download-npm-package';
 
 import { BotProjectService } from '../services/project';
@@ -33,25 +35,82 @@ export const LibraryController = {
     const user = await ExtensionContext.getUserFromRequest(req);
     const projectId = req.params.projectId;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
+    const runtime = ExtensionContext.getRuntimeByProject(currentProject);
 
     // get URL or package name
     const packageName = req.query.package || req.body.package;
     const version = req.query.version || req.body.version;
     const isUpdating = req.query.isUpdating || req.body.isUpdating || false;
 
-    if (packageName) {
+    if (packageName && currentProject.settings?.runtime?.path) {
       try {
-        const importResults = await LibraryController.importRemoteAsset(
-          currentProject,
+        // Call the runtime's component install mechanism.
+        const installOutput = await runtime.installComponent(
+          currentProject.settings?.runtime?.path || '',
           packageName,
-          version,
-          isUpdating
+          version
         );
-        if (importResults) {
-          res.json(importResults);
+
+        console.log('INSTALL OUTPUT', installOutput);
+
+        console.log('EXAMINING PACKAGE: ', path.join(currentProject.settings?.runtime?.path, 'package.json'));
+        // call do a dry run on the dialog merge
+        const dryrun = new SchemaMerger(
+          [path.join(currentProject.settings?.runtime?.path, 'package.json')],
+          '',
+          path.join(currentProject.dataDir, 'dialogs'),
+          true, // copy only? true = dry run
+          true, // verbosity: true = verbose
+          console.log,
+          console.warn,
+          console.error
+        );
+
+        const dryRunMergeResults = await dryrun.merge();
+        console.log('MERGE RESULTS', dryRunMergeResults);
+
+        // evaluate dry run.
+        // Did we have any conflicts that prevent moving forward? if so, install
+        // Otherwise, copy the files into the project
+
+        // check the results to see if we have any problems
+        if (dryRunMergeResults && dryRunMergeResults.conflicts && dryRunMergeResults.conflicts.length && !isUpdating) {
+          // we need to prompt the user to confirm the changes before proceeding
+          res.json({
+            success: false,
+            results: dryRunMergeResults,
+          });
         } else {
-          res.status(500).json({ message: 'No declarative assets were found in the specified package.' });
+          const realMerge = new SchemaMerger(
+            [path.join(currentProject.settings?.runtime?.path, 'package.json')],
+            '',
+            path.join(currentProject.dataDir, 'dialogs'),
+            false, // copy only? true = dry run
+            false, // verbosity: true = verbose
+            console.log,
+            console.warn,
+            console.error
+          );
+
+          const mergeResults = await realMerge.merge();
+          console.log('MERGE RESULTS', mergeResults);
+          res.json({
+            success: true,
+            results: mergeResults,
+          });
         }
+
+        // const importResults = await LibraryController.importRemoteAsset(
+        //   currentProject,
+        //   packageName,
+        //   version,
+        //   isUpdating
+        // );
+        // if (importResults) {
+        //   res.json(importResults);
+        // } else {
+        //   res.status(500).json({ message: 'No declarative assets were found in the specified package.' });
+        // }
       } catch (err) {
         console.error('Error in import', { message: err.message });
         res.status(500).json({ message: err.message });

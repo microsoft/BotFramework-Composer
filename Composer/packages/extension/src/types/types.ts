@@ -75,6 +75,8 @@ export interface RuntimeTemplate {
 
   run: (project: IBotProject, localDisk?: any) => Promise<void>;
 
+  installComponent: (runtimePath: string, packageName: string, version: string) => Promise<string>;
+
   /** build for deploy method */
   buildDeploy: (
     runtimePath: string,
