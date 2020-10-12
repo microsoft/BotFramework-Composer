@@ -131,7 +131,6 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
     editorEvent && handleEditorEvent(editorEvent.type, editorEvent.payload);
   };
 
-  console.log('zoom' + zoomRateInfo);
   return (
     <CacheProvider value={emotionCache}>
       <NodeRendererContext.Provider value={nodeContext}>
@@ -147,7 +146,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
           >
             <ZoomZone updateZoomRate={updateZoomRate} zoomRateInfo={zoomRateInfo}>
               <SelectionContext.Provider value={selectionContext}>
-                <MarqueeSelection css={{ width: '100%', height: '100%' }} selection={selection}>
+                <MarqueeSelection selection={selection}>
                   <div
                     className="flow-editor-container"
                     css={{

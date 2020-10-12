@@ -48,9 +48,9 @@ export const ZoomZone: React.FC<ZoomZoneProps> = ({ zoomRateInfo, updateZoomRate
     currentRate: 1,
   };
   const onWheel = (event: WheelEvent) => {
-    event.preventDefault();
-    event.stopPropagation();
     if (event.ctrlKey) {
+      event.preventDefault();
+      event.stopPropagation();
       handleZoom(event.deltaY);
     }
   };
@@ -94,7 +94,7 @@ export const ZoomZone: React.FC<ZoomZoneProps> = ({ zoomRateInfo, updateZoomRate
   }, [zoomRateInfo]);
 
   return (
-    <div ref={divRef}>
+    <div ref={divRef} css={{ overflow: 'scroll', width: '100%', height: '100%' }}>
       {children}
       {buttonRender()}
     </div>
