@@ -13,7 +13,7 @@ import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { ResourceGroup } from '@azure/arm-resources/esm/models';
 import { DeployLocation } from '@bfc/types';
 import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
-import { JsonEditor } from '@bfc/code-editor';
+// import { JsonEditor } from '@bfc/code-editor';
 
 import { getSubscriptions, getResourceGroups, getDeployLocations } from './api';
 
@@ -57,7 +57,7 @@ export const AzureProvisionDialog: React.FC = () => {
   // const [selectedResources, setExternalResources] = useState<string[]>([]);
   const [enabledResources, setEnabledResources] = useState({});
 
-  const [importConfig, setImportConfig] = useState('');
+  const [importConfig, setImportConfig] = useState();
 
   useEffect(() => {
     // Load the list of subscriptions for the dropdown....
@@ -189,7 +189,13 @@ export const AzureProvisionDialog: React.FC = () => {
       {choice.key === 'import' && (
         <Fragment>
           <div>Publish Configuration</div>
-          <JsonEditor key={'azurePublish'} height={200} value={importConfig} onChange={setImportConfig} />
+          {/* <JsonEditor
+            key="azurePublish"
+            id="azurePublish"
+            height={200}
+            value={importConfig}
+            onChange={setImportConfig}
+          /> */}
         </Fragment>
       )}
       {(!subscriptionOption || !subscriptionOption.length) && <Fragment>LOADING</Fragment>}

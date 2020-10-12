@@ -1,22 +1,31 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /* eslint-disable react-hooks/rules-of-hooks */
-
+import formatMessage from 'format-message';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 
 import { settingsState } from '../atoms/botState';
 import { getAccessTokenInCache, getGraphTokenInCache } from '../../utils/auth';
+import { CardProps } from '../../components/NotificationCard';
 
+import { addNotificationInternal, createNotifiction } from './notification';
 import httpClient from './../../utils/httpUtil';
 
 export const provisionDispatcher = () => {
+  const getProvisionPendingNotification = (value: string): CardProps => {
+    return {
+      title: formatMessage('Provisioning ...'),
+      description: formatMessage('{msg}', { msg: value }),
+      type: 'pending',
+    };
+  };
   /* NOTE
      On 9/25 Ben is marking these as deprecated since the required functionality has moved into the azurePublish ui plugin.
      However I'm leaving it here just in case that was the wrong decision, and also to leave the structure of this in place
      so that we can use it for possible near term intergrations between the Composer core and the azurepublish provisioning component.
   */
   const provisionToTarget = useRecoilCallback(
-    ({ set }: CallbackInterface) => async (config: any, type: string, projectId: string) => {
+    (callbackHelpers: CallbackInterface) => async (config: any, type: string, projectId: string) => {
       try {
         const token = getAccessTokenInCache();
         const result = await httpClient.post(
@@ -31,6 +40,8 @@ export const provisionDispatcher = () => {
         //   ...settings,
         //   provisionConfig: result.data,
         // }));
+        const notification = createNotifiction(getProvisionPendingNotification(result.data.message));
+        addNotificationInternal(callbackHelpers, notification);
       } catch (error) {
         console.log(error.response.data);
       }

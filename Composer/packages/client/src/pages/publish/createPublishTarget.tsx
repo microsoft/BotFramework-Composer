@@ -14,7 +14,7 @@ import { useRecoilValue } from 'recoil';
 import { PublishTarget } from '@bfc/shared';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
 // import { DialogType } from 'office-ui-fabric-react/lib/Dialog';
-import { IPersonaSharedProps, Persona, PersonaSize } from 'office-ui-fabric-react/lib/Persona';
+// import { IPersonaSharedProps, Persona, PersonaSize } from 'office-ui-fabric-react/lib/Persona';
 // import { Link } from 'office-ui-fabric-react/lib/Link';
 
 // import { PublishProfileDialog } from '../../constants';
@@ -190,12 +190,12 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
     }
   }, [page, targetType, PageOne]);
 
-  const examplePersona: IPersonaSharedProps = {
-    text: 'Somebody',
-    secondaryText: 'Software Engineer',
-    tertiaryText: 'In a meeting',
-    optionalText: 'Available at 4:00pm',
-  };
+  // const examplePersona: IPersonaSharedProps = {
+  //   text: 'Somebody',
+  //   secondaryText: 'Software Engineer',
+  //   tertiaryText: 'In a meeting',
+  //   optionalText: 'Available at 4:00pm',
+  // };
 
   return <Fragment>{publishTargetContent}</Fragment>;
 };
