@@ -12,11 +12,14 @@ import { DialogInfo, ITrigger } from '@bfc/shared';
 import debounce from 'lodash/debounce';
 import { useRecoilValue } from 'recoil';
 import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
+import { RouteComponentProps } from '@reach/router';
 
-import { dispatcherState, currentProjectIdState, botProjectSpaceSelector } from '../../recoilModel';
+import { dispatcherState, currentProjectIdState, currentModeState, botProjectSpaceSelector } from '../../recoilModel';
 import { getFriendlyName } from '../../utils/dialogUtil';
 import { containUnsupportedTriggers, triggerNotSupported } from '../../utils/dialogValidator';
+import { navigateTo } from '../../utils/navigation';
 // import { DialogDeleting } from '../../constants';
+import { PageMode } from '../../recoilModel/atoms';
 
 import { TreeItem } from './treeItem';
 import { ExpandableNode } from './ExpandableNode';
@@ -152,7 +155,11 @@ type IProjectTreeProps = {
   navLinks?: TreeLink[];
 };
 
-export const ProjectTree: React.FC<IProjectTreeProps> = ({ showTriggers = true, showDialogs = true }) => {
+export const ProjectTree: React.FC<RouteComponentProps<IProjectTreeProps>> = ({
+  showTriggers = true,
+  showDialogs = true,
+  location,
+}) => {
   const { onboardingAddCoachMarkRef, selectTo, navTo } = useRecoilValue(dispatcherState);
 
   const [filter, setFilter] = useState('');
@@ -164,6 +171,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({ showTriggers = true, 
     hasWarnings: false,
   }));
   const currentProjectId = useRecoilValue(currentProjectIdState);
+  const currentMode = useRecoilValue(currentModeState);
 
   const botHasWarnings = (bot: BotInProject) => {
     return bot.dialogs.some((dialog) => dialog.triggers.some((tr) => triggerNotSupported(dialog, tr)));
@@ -174,13 +182,35 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({ showTriggers = true, 
     return false;
   };
 
+  const MODE_TO_URL_MAP: { [mode: string]: string } = {
+    lg: 'language-generation',
+    lu: 'language-understanding',
+    qna: 'knowledge-base',
+  };
+
+  const createModeUrl = (link: TreeLink, mode: PageMode) => {
+    if (link.skillId == null) {
+      return `/bot/${link.projectId}/${MODE_TO_URL_MAP[mode]}/${link.dialogName}`;
+    }
+    return `/bot/${link.projectId}/skill/${link.skillId}/${MODE_TO_URL_MAP[mode]}/${link.dialogName}`;
+  };
+
   const handleOnSelect = (link: TreeLink) => {
     setSelectedLink(link);
     if (link.dialogName != null) {
       if (link.trigger != null) {
+        // if there's a trigger, we can only be in design mode, so we don't need the mode here
         selectTo(link.projectId, link.skillId, link.dialogName, `triggers[${link.trigger}]`);
       } else {
-        navTo(link.projectId, link.skillId, link.dialogName);
+        switch (currentMode) {
+          case 'design':
+            navTo(link.projectId, link.skillId, link.dialogName);
+            break;
+          case 'lg':
+          case 'lu':
+          case 'qna':
+            navigateTo(createModeUrl(link, currentMode));
+        }
       }
     }
   };
