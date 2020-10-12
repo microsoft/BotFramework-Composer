@@ -7,7 +7,7 @@ import { useRecoilValue } from 'recoil';
 import React from 'react';
 
 import { dispatcherState } from '../recoilModel';
-import { notificationsSelector } from '../recoilModel/selectors/notificationsSelector';
+import { notificationsSelector } from '../recoilModel/selectors/notifications';
 
 import { NotificationCard } from './NotificationCard';
 

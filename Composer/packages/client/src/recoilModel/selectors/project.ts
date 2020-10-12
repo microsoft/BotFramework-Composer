@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { selector } from 'recoil';
+import { selector, selectorFamily } from 'recoil';
 import isEmpty from 'lodash/isEmpty';
 
 import {
@@ -38,6 +38,7 @@ export const botProjectSpaceSelector = selector({
       const botError = get(botErrorState(projectId));
       const name = get(botDisplayNameState(projectId));
       const botNameId = get(botNameIdentifierState(projectId));
+
       return { dialogs, projectId, name, ...metaData, error: botError, botNameId };
     });
     return result;
@@ -66,5 +67,22 @@ export const skillsProjectIdSelector = selector({
       const { isRootBot } = get(projectMetaDataState(projectId));
       return !isRootBot;
     });
+  },
+});
+
+export const botProjectSpaceFilterSelector = selectorFamily({
+  key: 'botProjectSpaceFilterSelector',
+  get: (filters: any) => ({ get }) => {
+    const botProjects = get(botProjectIdsState);
+    const result = botProjects.map((projectId: string) => {
+      const dialogs = get(dialogsState(projectId));
+      const metaData = get(projectMetaDataState(projectId));
+      const botError = get(botErrorState(projectId));
+      const name = get(botDisplayNameState(projectId));
+      const botNameId = get(botNameIdentifierState(projectId));
+
+      return { dialogs, projectId, name, ...metaData, error: botError, botNameId };
+    });
+    return filters(result);
   },
 });

@@ -301,6 +301,7 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
   set(botDiagnosticsState(projectId), diagnostics);
 
   refreshLocalStorage(projectId, settings);
+  set(settingsState(projectId), mergedSettings);
 
   set(filePersistenceState(projectId), new FilePersistence(projectId));
   set(undoHistoryState(projectId), new UndoHistory(projectId));
@@ -473,7 +474,6 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
     const currentBotProjectFile: BotProjectSpace = currentBotProjectFileIndexed.content;
 
     set(botProjectFileState(rootBotProjectId), currentBotProjectFileIndexed);
-    set(settingsState(rootBotProjectId), mergedSettings);
 
     const skills: { [skillId: string]: BotProjectSpaceSkill } = currentBotProjectFile.skills;
 

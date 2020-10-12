@@ -10,11 +10,13 @@ import {
   publishTypesState,
   botStatusState,
   publishHistoryState,
-  botLoadErrorState,
+  botRuntimeErrorState,
   isEjectRuntimeExistState,
   filePersistenceState,
+  settingsState,
 } from '../atoms/botState';
 import { botEndpointsState } from '../atoms';
+import { openInEmulator } from '../../utils/navigation';
 
 import { BotStatus, Text } from './../../constants';
 import httpClient from './../../utils/httpUtil';
@@ -28,7 +30,7 @@ export const publisherDispatcher = () => {
   const publishFailure = async ({ set }: CallbackInterface, title: string, error, target, projectId: string) => {
     if (target.name === defaultPublishConfig.name) {
       set(botStatusState(projectId), BotStatus.failed);
-      set(botLoadErrorState(projectId), { ...error, title });
+      set(botRuntimeErrorState(projectId), { ...error, title });
     }
     // prepend the latest publish results to the history
 
@@ -82,7 +84,7 @@ export const publisherDispatcher = () => {
         set(botStatusState(projectId), BotStatus.reloading);
       } else if (status === PUBLISH_FAILED) {
         set(botStatusState(projectId), BotStatus.failed);
-        set(botLoadErrorState(projectId), { ...data, title: formatMessage('Start bot failed') });
+        set(botRuntimeErrorState(projectId), { ...data, title: formatMessage('Start bot failed') });
       }
     }
 
@@ -218,6 +220,23 @@ export const publisherDispatcher = () => {
     }
   );
 
+  const openBotInEmulator = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
+    const { snapshot } = callbackHelpers;
+    const botEndpoints = await snapshot.getPromise(botEndpointsState);
+    const settings = await snapshot.getPromise(settingsState(projectId));
+    try {
+      openInEmulator(
+        botEndpoints[projectId] || 'http://localhost:3979/api/messages',
+        settings.MicrosoftAppId && settings.MicrosoftAppPassword
+          ? { MicrosoftAppId: settings.MicrosoftAppId, MicrosoftAppPassword: settings.MicrosoftAppPassword }
+          : { MicrosoftAppPassword: '', MicrosoftAppId: '' }
+      );
+    } catch (err) {
+      setError(callbackHelpers, err);
+      logMessage(callbackHelpers, err.message);
+    }
+  });
+
   return {
     getPublishTargetTypes,
     publishToTarget,
@@ -226,5 +245,6 @@ export const publisherDispatcher = () => {
     getPublishStatus,
     getPublishHistory,
     setEjectRuntimeExist,
+    openBotInEmulator,
   };
 };

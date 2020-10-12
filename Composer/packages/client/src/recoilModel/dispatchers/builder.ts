@@ -11,7 +11,7 @@ import { Text, BotStatus } from '../../constants';
 import httpClient from '../../utils/httpUtil';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
-import { luFilesState, qnaFilesState, dialogsState, botStatusState, botLoadErrorState } from '../atoms';
+import { luFilesState, qnaFilesState, dialogsState, botStatusState, botRuntimeErrorState } from '../atoms';
 
 const checkEmptyQuestionOrAnswerInQnAFile = (sections) => {
   return sections.some((s) => !s.Answer || s.Questions.some((q) => !q.content));
@@ -43,7 +43,7 @@ export const builderDispatcher = () => {
         { title: Text.LUISDEPLOYFAILURE, message: '' }
       );
       if (errorMsg.message) {
-        set(botLoadErrorState(projectId), errorMsg);
+        set(botRuntimeErrorState(projectId), errorMsg);
         set(botStatusState(projectId), BotStatus.failed);
         return;
       }
@@ -63,7 +63,7 @@ export const builderDispatcher = () => {
         set(botStatusState(projectId), BotStatus.published);
       } catch (err) {
         set(botStatusState(projectId), BotStatus.failed);
-        set(botLoadErrorState(projectId), {
+        set(botRuntimeErrorState(projectId), {
           title: Text.LUISDEPLOYFAILURE,
           message: err.response?.data?.message || err.message,
         });

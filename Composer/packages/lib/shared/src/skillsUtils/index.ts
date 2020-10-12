@@ -3,7 +3,7 @@
 
 import get from 'lodash/get';
 import keyBy from 'lodash/keyBy';
-import { BotProjectSpaceSkill, DialogSetting } from '@bfc/types';
+import { DialogSetting } from '@bfc/types';
 import formatMessage from 'format-message';
 import camelCase from 'lodash/camelCase';
 

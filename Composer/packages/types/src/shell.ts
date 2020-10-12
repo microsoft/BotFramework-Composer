@@ -6,7 +6,7 @@ import type { DialogInfo, LuFile, LgFile, QnAFile, LuIntentSection, LgTemplate, 
 import type { SkillSetting, UserSettings } from './settings';
 import type { JSONSchema7 } from './schema';
 
-import { ManifestEndpoint, Skill } from '.';
+import { Skill } from '.';
 
 /** Recursively marks all properties as optional. */
 type AllPartial<T> = {

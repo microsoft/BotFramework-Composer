@@ -5,7 +5,7 @@
 import { jsx, css } from '@emotion/core';
 import formatMessage from 'format-message';
 import { IconButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
-import { useCallback, Fragment } from 'react';
+import { useCallback, Fragment, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { SharedColors } from '@uifabric/fluent-theme';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
@@ -19,6 +19,8 @@ import {
 } from '../recoilModel';
 import composerIcon from '../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../constants';
+
+import { StartBotsDialog } from './TestController/startBotsDialog';
 
 // -------------------- Styles -------------------- //
 
@@ -85,10 +87,19 @@ export const Header = () => {
   const locale = useRecoilValue(localeState(projectId));
   const appUpdate = useRecoilValue(appUpdateState);
   const { showing, status } = appUpdate;
+  const [showStartBotsPanel, setStartPanelView] = useState(false);
 
   const onUpdateAvailableClick = useCallback(() => {
     setAppUpdateShowing(true);
   }, []);
+
+  function dismissStartPanelViewer() {
+    setStartPanelView(false);
+  }
+
+  function showStartPanelViewer() {
+    setStartPanelView(true);
+  }
 
   const showUpdateAvailableIcon = status === AppUpdaterStatus.UPDATE_AVAILABLE && !showing;
 
@@ -117,6 +128,8 @@ export const Header = () => {
           onClick={onUpdateAvailableClick}
         />
       )}
+      <button onClick={showStartPanelViewer}> Start Bots </button>
+      {showStartBotsPanel && <StartBotsDialog isOpen={showStartBotsPanel} onDismiss={dismissStartPanelViewer} />}
     </div>
   );
 };

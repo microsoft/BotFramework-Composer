@@ -87,7 +87,7 @@ export const botDiagnosticsState = atomFamily<Diagnostic[], string>({
   },
 });
 
-export const botLoadErrorState = atomFamily<BotLoadError, string>({
+export const botRuntimeErrorState = atomFamily<BotLoadError, string>({
   key: getFullyQualifiedKey('botLoadErrorMsg'),
   default: (id) => {
     return { title: '', message: '' };

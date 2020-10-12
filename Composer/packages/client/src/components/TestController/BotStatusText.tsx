@@ -8,7 +8,7 @@ import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { DefaultButton, ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { DefaultButton, ActionButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import formatMessage from 'format-message';
 import {
@@ -19,36 +19,9 @@ import {
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { useRecoilValue } from 'recoil';
 import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
+import { SharedColors, FontSizes } from '@uifabric/fluent-theme';
 
 import { botProjectSpaceSelector } from '../../recoilModel';
-
-import { BotStatusIndicator } from './BotStatusIndicator';
-import { BotRuntimeOperation } from './BotRuntimeOperation';
-
-const styles = {
-  detailListContainer: css`
-    flex-grow: 1;
-    height: 350px;
-    position: relative;
-    overflow: hidden;
-  `,
-};
-
-export const actionButton = css`
-  font-size: 14px;
-  margin-top: 2px;
-  color: #0078d4;
-`;
-
-const dialog = {
-  title: {
-    fontWeight: FontWeights.bold,
-  },
-};
-
-const rowHeader = { display: 'flex', alignItems: 'center' };
-
-// eslint-disable-next-line react/display-name
 
 interface IStartBotsDialogProps {
   isOpen: boolean;
@@ -58,6 +31,7 @@ interface IStartBotsDialogProps {
 export const StartBotsDialog: React.FC<IStartBotsDialogProps> = (props) => {
   const { isOpen, onDismiss } = props;
   const projectCollection = useRecoilValue(botProjectSpaceSelector);
+
   const [items, setItems] = useState<{ displayName: string; projectId: string }[]>([]);
   const [allBotsStarted, setAllBotsStarted] = useState<boolean>(false);
 
@@ -78,9 +52,9 @@ export const StartBotsDialog: React.FC<IStartBotsDialogProps> = (props) => {
     setAllBotsStarted(false);
   };
 
-  const tableColumns: any = [
+  const tableColumns = [
     {
-      key: 'botName',
+      key: 'column1',
       name: formatMessage('Bot'),
       fieldName: 'id',
       isRowHeader: true,
@@ -89,21 +63,30 @@ export const StartBotsDialog: React.FC<IStartBotsDialogProps> = (props) => {
       sortAscendingAriaLabel: formatMessage('Sorted A to Z'),
       sortDescendingAriaLabel: formatMessage('Sorted Z to A'),
       data: 'string',
-      onRender: (item: { displayName: string; projectId: string }) => {
-        return <BotRuntimeOperation displayName={item.displayName} projectId={item.projectId} />;
+      onRender: (item: any) => {
+        return (
+          <div style={rowHeader}>
+            <Icon iconName={item.status === 'Running' ? 'CircleStopSolid' : 'Play'} styles={icon()} />
+            <span aria-label={item.displayName}>{item.displayName}</span>
+          </div>
+        );
       },
       isPadded: true,
     },
     {
-      key: 'status',
+      key: 'column2',
       name: formatMessage('Status'),
       fieldName: 'type',
       isRowHeader: true,
       isResizable: true,
       isSorted: true,
       data: 'string',
-      onRender: (item: { displayName: string; projectId: string }) => {
-        return <BotStatusIndicator projectId={item.projectId} />;
+      onRender: (item: any) => {
+        return (
+          <span aria-label={item.status} style={statusStyle}>
+            {item.status}
+          </span>
+        );
       },
       isPadded: true,
     },
@@ -128,6 +111,7 @@ export const StartBotsDialog: React.FC<IStartBotsDialogProps> = (props) => {
       <div css={styles.detailListContainer}>
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
           <ActionButton css={actionButton}>
+            {allBotsStarted ? <Icon iconName={allBotsStarted ? 'CircleStopSolid' : ''} styles={icon()} /> : null}
             {allBotsStarted ? (
               <button onClick={stopAllBots}> Stop all Bots </button>
             ) : (

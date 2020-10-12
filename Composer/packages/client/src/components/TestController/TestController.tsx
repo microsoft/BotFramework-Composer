@@ -19,7 +19,7 @@ import {
   luFilesState,
   qnaFilesState,
   settingsState,
-  botLoadErrorState,
+  botRuntimeErrorState,
 } from '../../recoilModel';
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { BotStatus } from '../../constants';
@@ -27,7 +27,6 @@ import { isAbsHosted } from '../../utils/envUtil';
 import useNotifications from '../../pages/notifications/useNotifications';
 import { navigateTo, openInEmulator } from '../../utils/navigation';
 
-import { StartBotsDialog } from './startBotsDialog';
 import { isBuildConfigComplete, needsBuild } from './../../utils/buildUtil';
 import { PublishDialog } from './publishDialog';
 import { ErrorCallout } from './errorCallout';
@@ -67,7 +66,7 @@ export const TestController: React.FC<{ projectId: string }> = (props) => {
   const luFiles = useRecoilValue(luFilesState(projectId));
   const settings = useRecoilValue(settingsState(projectId));
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
-  const botLoadErrorMsg = useRecoilValue(botLoadErrorState(projectId));
+  const botLoadErrorMsg = useRecoilValue(botRuntimeErrorState(projectId));
 
   const botEndpoints = useRecoilValue(botEndpointsState);
   const {
@@ -100,7 +99,7 @@ export const TestController: React.FC<{ projectId: string }> = (props) => {
       case BotStatus.failed:
         openCallout();
         stopPollingRuntime();
-        setBotStatus(BotStatus.pending, projectId);
+        setBotStatus(projectId, BotStatus.pending);
         break;
       case BotStatus.published:
         stopPollingRuntime();
@@ -154,7 +153,7 @@ export const TestController: React.FC<{ projectId: string }> = (props) => {
   }
 
   async function handleBuild(config: IPublishConfig) {
-    setBotStatus(BotStatus.publishing, projectId);
+    setBotStatus(projectId, BotStatus.publishing);
     dismissDialog();
     const { luis, qna } = config;
     await setSettings(projectId, {
@@ -166,7 +165,7 @@ export const TestController: React.FC<{ projectId: string }> = (props) => {
   }
 
   async function handleLoadBot() {
-    setBotStatus(BotStatus.reloading, projectId);
+    setBotStatus(projectId, BotStatus.reloading);
     if (settings.qna && settings.qna.subscriptionKey) {
       await setQnASettings(projectId, settings.qna.subscriptionKey);
     }
@@ -246,7 +245,16 @@ export const TestController: React.FC<{ projectId: string }> = (props) => {
         onDismiss={dismissCallout}
         onTry={handleStart}
       />
-      {settings.luis && modalOpen && <StartBotsDialog isOpen={modalOpen} onDismiss={dismissDialog} />}
+      {settings.luis && modalOpen && (
+        <PublishDialog
+          botName={botName}
+          config={publishDialogConfig}
+          isOpen={modalOpen}
+          projectId={projectId}
+          onDismiss={dismissDialog}
+          onPublish={handleBuild}
+        />
+      )}
     </Fragment>
   );
 };

@@ -309,8 +309,8 @@ export const projectDispatcher = () => {
     }
   });
 
-  const setBotStatus = useRecoilCallback<[BotStatus, string], void>(
-    ({ set }: CallbackInterface) => (status: BotStatus, projectId: string) => {
+  const setBotStatus = useRecoilCallback<[string, BotStatus], void>(
+    ({ set }: CallbackInterface) => (projectId: string, status: BotStatus) => {
       set(botStatusState(projectId), status);
     }
   );
