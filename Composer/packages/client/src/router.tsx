@@ -47,7 +47,16 @@ const Routes = (props) => {
           <Redirect noThrow from="/bot/:projectId/knowledge-base" to="/bot/:projectId/knowledge-base/all" />
           <Redirect noThrow from="/bot/:projectId/publish" to="/bot/:projectId/publish/all" />
           <ProjectRouter path="/bot/:projectId">
-            <DesignPage path="skill/:skillId/dialogs/:dialogId/*" />
+            <DesignPage path="dialogs/:dialogId/*" />
+            <LUPage path="language-understanding/:dialogId/*" />
+            <LGPage path="language-generation/:dialogId/*" />
+            <QnAPage path="knowledge-base/:dialogId/*" />
+            <Notifications path="notifications" />
+            <Publish path="publish/:targetName" />
+            <Skills path="skills/*" />
+            <DesignPage path="*" />
+          </ProjectRouter>
+          <ProjectRouter path="/bot/:projectId/skill/:skillId">
             <DesignPage path="dialogs/:dialogId/*" />
             <LUPage path="language-understanding/:dialogId/*" />
             <LGPage path="language-generation/:dialogId/*" />
