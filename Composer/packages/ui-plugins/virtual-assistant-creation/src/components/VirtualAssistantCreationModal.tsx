@@ -45,7 +45,7 @@ export const VirtualAssistantCreationModal: React.FC<VirtualAssistantCreationMod
   const [initialProjectId] = useState(projectId);
 
   const createAndConfigureBot = async () => {
-    handleCreateNew(formData, 'vaCore');
+    handleCreateNew(formData, 'va-core');
   };
 
   const updateBotResponses = async () => {

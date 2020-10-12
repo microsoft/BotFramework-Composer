@@ -144,7 +144,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
       return;
     }
     // If selected template is vaCore then route to VA Customization modal
-    if (templateId === 'vaCore') {
+    if (templateId === 'va-core') {
       setFormData(formData);
       navigate(`./vaCore/customize`);
       return;
