@@ -10,7 +10,9 @@ import { RecognizerOptions } from './recognizerSchema';
 
 export interface PluginConfig {
   uiSchema?: UISchema;
-  flowWidgets?: FlowEditorWidgetMap;
+  widgets?: {
+    flow?: FlowEditorWidgetMap;
+  };
 }
 
 export type UISchema = {
