@@ -2,7 +2,8 @@ import { createWriteStream } from 'fs';
 import { ensureDirSync, removeSync } from 'fs-extra';
 import fetch, { RequestInit } from 'node-fetch';
 import { join } from 'path';
-import { useElectronContext } from '../utility/electronContext';
+import { authService } from '../services/auth';
+// import { useElectronContext } from '../utility/electronContext';
 
 import { BotContentInfo, ContentProviderMetadata, ExternalContentProvider } from './externalContentProvider';
 
@@ -42,7 +43,8 @@ export class PowerVirtualAgentsProvider extends ExternalContentProvider {
       const eTag = result.headers.get('etag') || '';
       const contentType = result.headers.get('content-type');
       if (!contentType || contentType !== 'application/zip') {
-        throw 'Invalid content type header! Must be application/zip';
+        const json = await result.json();
+        throw `Did not receive zip back from PVA: ${json}`;
       }
 
       // write the zip to disk
@@ -71,9 +73,10 @@ export class PowerVirtualAgentsProvider extends ExternalContentProvider {
   private async getAccessToken(): Promise<string> {
     try {
       // login to the 1P app and get an access token
-      const { getAccessToken, loginAndGetIdToken } = useElectronContext();
-      const idToken = await loginAndGetIdToken(authCredentials);
-      const accessToken = await getAccessToken({ ...authCredentials, idToken });
+      // const { getAccessToken, loginAndGetIdToken } = useElectronContext();
+      // const idToken = await loginAndGetIdToken(authCredentials);
+      // const accessToken = await getAccessToken({ ...authCredentials, idToken });
+      const { accessToken } = await authService.getAccessToken(authCredentials);
       return accessToken;
     } catch (e) {
       return Promise.reject(new Error(`Error while trying to get a PVA access token: ${e}`));
