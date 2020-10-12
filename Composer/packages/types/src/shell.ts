@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import type { DialogInfo, LuFile, LgFile, QnAFile, LuIntentSection, LgTemplate, DialogSchemaFile } from './indexers';
-import type { SkillSetting, UserSettings } from './settings';
+import type { ILUFeaturesConfig, SkillSetting, UserSettings } from './settings';
 import type { JSONSchema7 } from './schema';
 
 /** Recursively marks all properties as optional. */
@@ -92,6 +92,7 @@ export type ProjectContext = {
   dialogSchemas: DialogSchemaFile[];
   lgFiles: LgFile[];
   luFiles: LuFile[];
+  luFeatures: ILUFeaturesConfig;
   qnaFiles: QnAFile[];
   skills: any[];
   skillsSettings: Record<string, SkillSetting>;

@@ -18,9 +18,17 @@ import { BotProject } from '../bot/botProject';
 
 export class AssetManager {
   public templateStorage: LocalDiskStorage;
+  private _botProjectFileTemplate;
 
   constructor() {
     this.templateStorage = new LocalDiskStorage();
+  }
+
+  public get botProjectFileTemplate() {
+    if (!this._botProjectFileTemplate) {
+      this._botProjectFileTemplate = this.getDefaultBotProjectTemplate();
+    }
+    return this._botProjectFileTemplate;
   }
 
   public async getProjectTemplates() {
@@ -114,6 +122,24 @@ export class AssetManager {
       }
     } catch (err) {
       return undefined;
+    }
+  }
+
+  private getDefaultBotProjectTemplate() {
+    if (!ExtensionContext.extensions.botTemplates.length) {
+      return undefined;
+    }
+    const boilerplate = ExtensionContext.extensions.botTemplates[0];
+
+    const location = Path.join(boilerplate.path, `${boilerplate.id}.botproj`);
+    try {
+      if (fs.existsSync(location)) {
+        const raw = fs.readFileSync(location, 'utf8');
+        const json = JSON.parse(raw);
+        return json;
+      }
+    } catch (err) {
+      return '';
     }
   }
 }
