@@ -22,7 +22,7 @@ import {
 import { openAlertModal } from './components/Modal/AlertDialog';
 import { dialogStyle } from './components/Modal/dialogStyle';
 import { LoadingSpinner } from './components/LoadingSpinner';
-import { PluginPageContainer } from './pages/plugin/pluginPageContainer';
+import { PluginPageContainer } from './pages/plugin/PluginPageContainer';
 
 const DesignPage = React.lazy(() => import('./pages/design/DesignPage'));
 const LUPage = React.lazy(() => import('./pages/language-understanding/LUPage'));
