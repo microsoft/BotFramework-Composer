@@ -4,12 +4,17 @@ import { isElectron } from '../utility/isElectron';
 abstract class AuthProvider {
   constructor(protected config: OAuthConfig) {}
 
-  abstract async getAccessToken(options: OAuthOptions): Promise<AuthResult>;
+  abstract async getAccessToken(options: OAuthOptions): Promise<string>;
 }
 
-type AuthResult = {
+type TokenRecord = {
+  expiryTime: Date;
   accessToken: string;
-  idToken?: string; // do we need to return this?
+  idToken: string;
+};
+
+type TokenCache = {
+  [credentials: string]: TokenRecord | undefined;
 };
 
 export type OAuthOptions = {
@@ -22,29 +27,37 @@ type OAuthConfig = {
 };
 
 class ElectronAuthProvider extends AuthProvider {
-  private idToken: string;
-  // private idTokenExpiryDate: Date | undefined;
-  private accessToken: string;
-  // private accessTokenExpiryDate: Date | undefined;
   private _electronContext: ElectronContext | undefined;
+  private tokenRefreshFactor: number = 0.75; // refresh the token after 75% of the expiry time has passed
+  private tokenCache: TokenCache;
 
   constructor(config: OAuthConfig) {
     super(config);
-    this.idToken = '';
-    this.accessToken = '';
+    this.tokenCache = {};
   }
 
-  async getAccessToken(options: OAuthOptions): Promise<AuthResult> {
+  async getAccessToken(options: OAuthOptions): Promise<string> {
     const { getAccessToken, loginAndGetIdToken } = this.electronContext;
 
-    const idToken = await loginAndGetIdToken(options);
-    this.idToken = this.idToken;
+    // try to get a cached token
+    const cachedToken = this.getCachedToken(options);
+    if (!!cachedToken && Date.now() <= cachedToken.expiryTime.valueOf()) {
+      console.log('returning cached token');
+      return cachedToken.accessToken;
+    }
 
-    const accessToken = await getAccessToken({ ...options, idToken });
-    this.accessToken = accessToken;
-    console.log(this.accessToken);
+    try {
+      // otherwise get a fresh token
+      console.log('getting fresh token');
+      const idToken = await loginAndGetIdToken(options);
+      const { accessToken, acquiredAt, expiresIn } = await getAccessToken({ ...options, idToken });
+      this.cacheTokens({ accessToken, acquiredAt, expiresIn, idToken }, options);
 
-    return { accessToken, idToken };
+      return accessToken;
+    } catch (e) {
+      // TODO: error handling
+      return '';
+    }
   }
 
   private get electronContext() {
@@ -52,6 +65,46 @@ class ElectronAuthProvider extends AuthProvider {
       this._electronContext = useElectronContext();
     }
     return this._electronContext;
+  }
+
+  private getCachedToken(options: OAuthOptions): TokenRecord | undefined {
+    const tokenHash = this.getTokenHash(options);
+    const cachedToken = this.tokenCache[tokenHash];
+    return cachedToken;
+  }
+
+  private cacheTokens(
+    tokenInfo: { accessToken: string; acquiredAt: number; expiresIn: number; idToken: string },
+    options: OAuthOptions
+  ): void {
+    const { accessToken, acquiredAt, expiresIn, idToken } = tokenInfo;
+    const tokenHash = this.getTokenHash(options);
+    const expiresInMs = expiresIn * 1000; // expiresIn is in seconds
+
+    // cache token
+    this.tokenCache[tokenHash] = {
+      accessToken,
+      expiryTime: new Date(acquiredAt + expiresInMs),
+      idToken,
+    };
+
+    // setup timer to refresh token
+    const timeUntilRefresh = this.tokenRefreshFactor * expiresInMs;
+    setTimeout(() => this.refreshAccessToken(options), timeUntilRefresh);
+  }
+
+  private async refreshAccessToken(options: OAuthOptions) {
+    console.log('refreshing token...');
+    const { getAccessToken } = this.electronContext;
+    const cachedToken = this.tokenCache[this.getTokenHash(options)];
+    if (!!cachedToken) {
+      const { accessToken, acquiredAt, expiresIn } = await getAccessToken({ ...options, idToken: cachedToken.idToken });
+      this.cacheTokens({ accessToken, acquiredAt, expiresIn, idToken: cachedToken.idToken }, options);
+    }
+  }
+
+  private getTokenHash(options: OAuthOptions): string {
+    return `${options.clientId}#${options.scopes.join('')}`;
   }
 }
 
@@ -61,7 +114,7 @@ class WebAuthProvider extends AuthProvider {
   }
 
   // TODO (toanzian / ccastro): implement
-  async getAccessToken(options: OAuthOptions): Promise<AuthResult> {
+  async getAccessToken(options: OAuthOptions): Promise<string> {
     throw new Error(
       'WebAuthProvider has not been implemented yet. Implicit auth flow currently only works in Electron.'
     );
@@ -81,7 +134,7 @@ class AuthService {
     }
   }
 
-  async getAccessToken(options: OAuthOptions): Promise<AuthResult> {
+  async getAccessToken(options: OAuthOptions): Promise<string> {
     return this.provider.getAccessToken(options);
   }
 }

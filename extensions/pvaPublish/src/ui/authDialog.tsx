@@ -13,7 +13,8 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
 const API_VERSION = '1';
 //const BASE_URL = `https://powerva.microsoft.com/api/botmanagement/v${API_VERSION}`; // prod / sdf
-const BASE_URL = `https://bots.int.customercareintelligence.net/api/botmanagement/v${API_VERSION}`; // int / ppe
+//const BASE_URL = `https://bots.int.customercareintelligence.net/api/botmanagement/v${API_VERSION}`; // int / ppe
+const BASE_URL = `https://bots.ppe.customercareintelligence.net/api/botmanagement/v${API_VERSION}`; // int / ppe
 
 const pvaBranding = '#0F677B';
 const pvaBrandingHover = '#0A4A5C';
@@ -39,7 +40,7 @@ export const PVADialog: FC = () => {
         //scopes: ['96ff4394-9197-43aa-b393-6a41652e21f8/.default'], // prod / sdf
 
         scopes: ['a522f059-bb65-47c0-8934-7db6e5286414/.default'], // int / ppe
-      }); // this function would manage expiry and storage on the composer side
+      });
       setLoggingIn(false);
       setToken(token);
     };
