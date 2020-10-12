@@ -45,7 +45,7 @@ describe('mergePluginConfigs', () => {
           },
         },
       },
-      flowWidgets: {},
+      widgets: {},
     });
   });
 
