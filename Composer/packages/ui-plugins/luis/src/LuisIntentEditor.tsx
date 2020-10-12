@@ -11,7 +11,17 @@ import { LuIntentSection, CodeEditorSettings, LuMetaData, LuType } from '@bfc/sh
 
 const LuisIntentEditor: React.FC<FieldProps<string>> = (props) => {
   const { onChange, value, schema, placeholder } = props;
-  const { currentDialog, designerId, luFiles, shellApi, locale, projectId, userSettings } = useShellApi();
+
+  const {
+    currentDialog,
+    designerId,
+    luFiles,
+    shellApi,
+    locale,
+    projectId,
+    userSettings,
+    luFeatures = {},
+  } = useShellApi();
   const luFile = luFiles.find((f) => f.id === `${currentDialog.id}.${locale}`);
 
   let intentName = value;
@@ -55,7 +65,7 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = (props) => {
       diagnostics={diagnostics}
       editorSettings={userSettings.codeEditor}
       height={225}
-      luOption={{ fileId: luFile.id, sectionId: luIntent.Name, projectId }}
+      luOption={{ fileId: luFile.id, sectionId: luIntent.Name, projectId, luFeatures }}
       placeholder={placeholder || inlineModePlaceholder}
       value={luIntent.Body}
       onChange={commitChanges}
