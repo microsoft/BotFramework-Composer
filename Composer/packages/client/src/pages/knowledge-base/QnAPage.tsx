@@ -58,7 +58,7 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
             key: 'Create KB from scratch',
             onClick: () => {
               setCreateOnDialogId(dialog.id);
-              actions.createQnAFromScratchDialogBegin({ dialogId: dialog.id, projectId });
+              actions.createQnAFromScratchDialogBegin({ projectId });
             },
           },
           {
@@ -66,7 +66,7 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
             key: 'Create KB from URL or file',
             onClick: () => {
               setCreateOnDialogId(dialog.id);
-              actions.createQnAFromUrlDialogBegin({ dialogId: dialog.id, projectId, showFromScratch: false });
+              actions.createQnAFromUrlDialogBegin({ projectId, showFromScratch: false });
             },
           },
         ],

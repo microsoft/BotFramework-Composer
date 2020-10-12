@@ -130,7 +130,7 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromModalProps> = (props) 
             text={formatMessage('Create knowledge base from scratch')}
             onClick={() => {
               // switch to create from scratch flow, pass onComplete callback.
-              actions.createQnAFromScratchDialogBegin({ dialogId, projectId, onComplete: onComplete?.func });
+              actions.createQnAFromScratchDialogBegin({ projectId, onComplete: onComplete?.func });
             }}
           />
         )}

@@ -141,6 +141,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     exportToZip,
     onboardingAddCoachMarkRef,
     createQnAKBFromUrl,
+    createQnAKBFromScratch,
     createQnAFromUrlDialogBegin,
     addSkill,
   } = useRecoilValue(dispatcherState);
@@ -323,11 +324,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
               createQnAFromUrlDialogBegin({
                 projectId,
                 showFromScratch: true,
-                onComplete: () => {
-                  // when click create from scratch, page navigated to all up view. also insert trigger in dialog.
-                  if (!dialogId || window.location.pathname.includes('/dialogs/')) return;
-                  createTrigger(dialogId, defaultQnATriggerData, false);
-                },
               });
             },
           },
@@ -566,8 +562,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     createTrigger(dialogId, defaultQnATriggerData);
 
     const { name, url, multiTurn } = data;
-    // import qna from url
-    await createQnAKBFromUrl({ id: `${dialogId}.${locale}`, name, url, multiTurn, projectId });
+    if (url) {
+      await createQnAKBFromUrl({ id: `${dialogId}.${locale}`, name, url, multiTurn, projectId });
+    } else {
+      await createQnAKBFromScratch({ id: `${dialogId}.${locale}`, name, projectId });
+    }
   };
 
   const pluginConfig: PluginConfig = useMemo(() => {

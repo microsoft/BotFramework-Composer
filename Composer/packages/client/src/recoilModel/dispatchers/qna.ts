@@ -201,19 +201,14 @@ export const renameKBFileState = async (
 export const qnaDispatcher = () => {
   const createQnAFromUrlDialogBegin = useRecoilCallback(
     ({ set }: CallbackInterface) => async ({
-      dialogId,
       onComplete,
       projectId,
       showFromScratch,
     }: {
-      dialogId?: string;
       onComplete?: Function;
       showFromScratch: boolean;
       projectId: string;
     }) => {
-      if (dialogId) {
-        navigateTo(`/bot/${projectId}/knowledge-base/${dialogId}`);
-      }
       set(showCreateQnAFromUrlDialogState(projectId), true);
       if (showFromScratch) {
         set(showCreateQnAFromUrlDialogWithScratchState(projectId), true);
@@ -232,20 +227,7 @@ export const qnaDispatcher = () => {
   );
 
   const createQnAFromScratchDialogBegin = useRecoilCallback(
-    ({ set }: CallbackInterface) => async ({
-      dialogId,
-      onComplete,
-      projectId,
-    }: {
-      dialogId?: string;
-      onComplete?: Function;
-      projectId: string;
-    }) => {
-      // navigate to all up view scratch.
-      if (dialogId) {
-        navigateTo(`/bot/${projectId}/knowledge-base/${dialogId}`);
-      }
-
+    ({ set }: CallbackInterface) => async ({ onComplete, projectId }: { onComplete?: Function; projectId: string }) => {
       set(showCreateQnAFromScratchDialogState(projectId), true);
       set(onCreateQnAFromScratchDialogCompleteState(projectId), { func: onComplete });
     }
@@ -407,7 +389,13 @@ ${response.data}
       });
       await createQnAFromScratchDialogSuccess({ projectId });
 
-      navigateTo(`/bot/${projectId}/knowledge-base/${getBaseName(id)}`);
+      const notification = createNotifiction(
+        getQnaSuccessNotification(() => {
+          navigateTo(`/bot/${projectId}/knowledge-base/${getBaseName(id)}`);
+          deleteNotificationInternal(callbackHelpers, notification.id);
+        })
+      );
+      addNotificationInternal(callbackHelpers, notification);
     }
   );
 
