@@ -55,6 +55,7 @@ interface EditableFieldProps extends Omit<ITextFieldProps, 'onChange' | 'onFocus
   description?: string;
   disabled?: boolean;
   resizable?: boolean;
+  requiredMessage?: string;
   id: string;
   name?: string;
   placeholder?: string;
@@ -74,6 +75,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
     containerStyles,
     depth,
     required,
+    requiredMessage,
     extraContent = '',
     styles = {},
     iconProps,
@@ -176,10 +178,12 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
     borderColor = formData.value || transparentBorder || depth > 1 ? 'transparent' : NeutralColors.gray30;
   }
 
+  const hasEditingErrors = hasErrors && hasBeenEdited;
+
   return (
     <Fragment>
       <div
-        css={[defaultContainerStyle(hasFocus, hasErrors && hasBeenEdited), containerStyles]}
+        css={[defaultContainerStyle(hasFocus, hasEditingErrors), containerStyles]}
         data-test-id={'EditableFieldContainer'}
       >
         <TextField
@@ -212,7 +216,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
                       borderColor: hasFocus ? undefined : NeutralColors.gray30,
                     },
                     '.ms-TextField-field': {
-                      background: hasFocus || hasErrors ? NeutralColors.white : 'inherit',
+                      background: hasFocus || hasEditingErrors ? NeutralColors.white : 'inherit',
                     },
                   },
                 },
@@ -257,7 +261,9 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
           />
         )}
       </div>
-      {hasErrors && hasBeenEdited && <span style={{ color: SharedColors.red20 }}>{formErrors.value}</span>}
+      {hasErrors && hasBeenEdited && (
+        <span style={{ color: SharedColors.red20 }}>{requiredMessage || formErrors.value}</span>
+      )}
       {error && <span style={{ color: SharedColors.red20 }}>{error}</span>}
     </Fragment>
   );

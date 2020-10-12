@@ -181,7 +181,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
   const onUpdateQnAQuestion = (fileId: string, sectionId: string, questionId: string, content: string) => {
     if (!fileId) return;
-    actions.setMessage('item deleted');
+    actions.setMessage('item updated');
     updateQnAQuestion({
       id: fileId,
       sectionId,
@@ -193,7 +193,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
   const onUpdateQnAAnswer = (fileId: string, sectionId: string, content: string) => {
     if (!fileId) return;
-    actions.setMessage('item deleted');
+    actions.setMessage('item updated');
     updateQnAAnswer({
       id: fileId,
       sectionId,
@@ -405,7 +405,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
       {
         key: 'ToggleShowAll',
         name: '',
-        fieldName: 'Chevron',
+        fieldName: 'ToggleShowAll',
         minWidth: 30,
         maxWidth: 30,
         isResizable: true,
@@ -416,9 +416,9 @@ const TableView: React.FC<TableViewProps> = (props) => {
               iconProps={{ iconName: expandedIndex === index ? 'ChevronDown' : 'ChevronRight' }}
               styles={{
                 root: { ...icon.root, marginTop: 2, marginLeft: 7, fontSize: 12 },
-                icon: { fontSize: 13, color: NeutralColors.black },
+                icon: { fontSize: 12, color: NeutralColors.black },
               }}
-              title="ChevronDown"
+              title={formatMessage('Toggle show all')}
               onClick={() => setExpandedIndex(expandedIndex === index ? -1 : index)}
             />
           );
@@ -450,29 +450,31 @@ const TableView: React.FC<TableViewProps> = (props) => {
             <div data-is-focusable css={formCell}>
               {questions.map((question, qIndex: number) => {
                 const isQuestionEmpty = question.content === '';
+                const isOnlyQuestion = questions.length === 1 && qIndex === 0;
                 return (
                   <div key={question.id} style={{ display: isExpanded ? 'block' : qIndex === 0 ? 'block' : 'none' }}>
                     <EditableField
                       key={question.id}
-                      enableIcon
-                      required
                       ariaLabel={formatMessage(`Question is {content}`, { content: question.content })}
                       depth={0}
                       disabled={isAllowEdit}
+                      enableIcon={isExpanded}
                       extraContent={qIndex === 0 && !isExpanded && !isQuestionEmpty ? ` (${questions.length})` : ''}
                       iconProps={{
                         iconName: 'Cancel',
                       }}
                       id={question.id}
                       name={question.content}
-                      placeholder={'Add new question'}
+                      placeholder={formatMessage('Add new question')}
+                      required={isOnlyQuestion}
+                      requiredMessage={formatMessage('At least one question is required')}
                       resizable={false}
                       styles={editableField}
                       value={question.content}
-                      onBlur={(_id, value) => {
+                      onBlur={(_id, value = '') => {
                         const newValue = value?.trim();
                         const isChanged = question.content !== newValue;
-                        if (!newValue || !isChanged) return;
+                        if ((!newValue && isOnlyQuestion) || !isChanged) return;
 
                         if (isCreatingQnA) {
                           const creatingQnAItem = creatQnAPairSettings.item;
@@ -508,7 +510,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                   disabled={isAllowEdit}
                   id={'New Question'}
                   name={'New Question'}
-                  placeholder={'Add new question'}
+                  placeholder={formatMessage('Add new question')}
                   styles={editableField}
                   value={''}
                   onBlur={(_id, value) => {
@@ -561,18 +563,19 @@ const TableView: React.FC<TableViewProps> = (props) => {
           return (
             <div data-is-focusable css={formCell}>
               <EditableField
-                enableIcon
                 required
                 ariaLabel={formatMessage(`Answer is {content}`, { content: item.Answer })}
                 depth={0}
                 disabled={isAllowEdit}
+                enableIcon={isExpanded}
                 expanded={isExpanded}
                 iconProps={{
                   iconName: 'Cancel',
                 }}
                 id={item.sectionId}
                 name={item.Answer}
-                placeholder={'Add new answer'}
+                placeholder={formatMessage('Add new answer')}
+                requiredMessage={formatMessage('Answer is required')}
                 resizable={false}
                 styles={editableField}
                 value={item.Answer}
@@ -734,11 +737,18 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const onRenderRow = useCallback(
     (props) => {
       if (props) {
-        return <DetailsRow {...props} styles={rowDetails} tabIndex={props.itemIndex} />;
+        return (
+          <DetailsRow
+            {...props}
+            className={expandedIndex === props.itemIndex ? 'expanded' : ''}
+            styles={rowDetails}
+            tabIndex={props.itemIndex}
+          />
+        );
       }
       return null;
     },
-    [dialogId]
+    [dialogId, expandedIndex]
   );
 
   if (qnaFile?.empty) {

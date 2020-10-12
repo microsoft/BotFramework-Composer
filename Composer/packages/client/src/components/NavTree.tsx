@@ -25,6 +25,12 @@ const root = css`
   .ms-List-cell {
     min-height: 36px;
   }
+  .ProjectTreeItem {
+    display: flex;
+    &:hover .ms-Button {
+      background: ${NeutralColors.gray20};
+    }
+  }
 `;
 
 const itemBase: IButtonStyles = {
@@ -106,7 +112,7 @@ const NavTree: React.FC<INavTreeProps> = (props) => {
         const isSelected = location.pathname.includes(item.url);
 
         return (
-          <div key={item.id} style={{ display: 'flex' }}>
+          <div key={item.id} className="ProjectTreeItem">
             <DefaultButton
               key={item.id}
               disabled={item.disabled}

@@ -89,6 +89,7 @@ export const divider = css`
 export const rowDetails = {
   root: {
     minHeight: 76,
+    width: '100%',
     selectors: {
       '&:hover': {
         background: NeutralColors.gray30,
