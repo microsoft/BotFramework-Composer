@@ -3,6 +3,7 @@
 
 import * as path from 'path';
 import { promisify } from 'util';
+import { env } from 'process';
 
 import * as fs from 'fs-extra';
 import * as rp from 'request-promise';
@@ -10,7 +11,6 @@ import { ILuisConfig, FileInfo, IQnAConfig } from '@bfc/shared';
 
 import { ICrossTrainConfig, createCrossTrainConfig } from './utils/crossTrainUtil';
 import { BotProjectDeployLoggerType } from './botProjectLoggerType';
-import { env } from 'process';
 
 const crossTrainer = require('@microsoft/bf-lu/lib/parser/cross-train/crossTrainer.js');
 const luBuild = require('@microsoft/bf-lu/lib/parser/lubuild/builder.js');
