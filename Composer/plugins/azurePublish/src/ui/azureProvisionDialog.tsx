@@ -11,12 +11,18 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { getAccessTokensFromStorage, startProvision, closeDialog } from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { ResourceGroup } from '@azure/arm-resources/esm/models';
-import { DeployLocation } from '@bfc/shared';
+import { DeployLocation } from '@bfc/types';
+import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
+import { JsonEditor } from '@bfc/code-editor';
 
 import { getSubscriptions, getResourceGroups, getDeployLocations } from './api';
 
 const extensionResourceOptions = [
-  { key: 'appRegistration', text: 'Microsoft Application Registration', description: 'Required registration allowing your bot to communicate with Azure services'},
+  {
+    key: 'appRegistration',
+    text: 'Microsoft Application Registration',
+    description: 'Required registration allowing your bot to communicate with Azure services',
+  },
   { key: 'webApp', text: 'Azure Web App', description: 'Hosting for your bot' },
   { key: 'botRegistration', text: 'Azure Bot Service', description: 'Register your bot with the Azure Bot Service' },
   { key: 'luisAuthoring', text: 'Luis Authoring Resource', description: 'Author LUIS applications' },
@@ -30,6 +36,11 @@ const extensionResourceOptions = [
   // },
 ];
 
+const choiceOptions: IChoiceGroupOption[] = [
+  { key: 'create', text: 'Create new Azure resources' },
+  { key: 'import', text: 'Import existing Azure resources' },
+];
+
 export const AzureProvisionDialog: React.FC = () => {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [resourceGroups, setResourceGroups] = useState<ResourceGroup[]>([]);
@@ -38,12 +49,15 @@ export const AzureProvisionDialog: React.FC = () => {
   const [token, setToken] = useState<string>();
   const [graphToken, setGraphToken] = useState<string>();
 
+  const [choice, setChoice] = useState(choiceOptions[0]);
   const [currentSubscription, setSubscription] = useState<Subscription>();
   const [currentHostName, setHostName] = useState('');
   const [errorHostName, setErrorHostName] = useState('');
   const [currentLocation, setLocation] = useState<DeployLocation>();
   // const [selectedResources, setExternalResources] = useState<string[]>([]);
   const [enabledResources, setEnabledResources] = useState({});
+
+  const [importConfig, setImportConfig] = useState('');
 
   useEffect(() => {
     // Load the list of subscriptions for the dropdown....
@@ -117,6 +131,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const onSubmit = useMemo(
     () => async (options) => {
+      console.log(options);
       // call back to the main Composer API to begin this process...
       startProvision(options);
       // TODO: close window
@@ -125,10 +140,18 @@ export const AzureProvisionDialog: React.FC = () => {
     []
   );
 
+  const updateChoice = useMemo(
+    () => (ev, option) => {
+      setChoice(option);
+    },
+    []
+  );
+
   return (
     <Fragment>
-      {subscriptionOption && subscriptionOption.length && (
-        <form>
+      <ChoiceGroup defaultSelectedKey="create" options={choiceOptions} onChange={updateChoice} />
+      {subscriptionOption?.length && choice.key === 'create' && (
+        <form style={{ width: '60%' }}>
           <Dropdown
             required
             label={'Subscription'}
@@ -162,6 +185,12 @@ export const AzureProvisionDialog: React.FC = () => {
             );
           })}
         </form>
+      )}
+      {choice.key === 'import' && (
+        <Fragment>
+          <div>Publish Configuration</div>
+          <JsonEditor key={'azurePublish'} height={200} value={importConfig} onChange={setImportConfig} />
+        </Fragment>
       )}
       {(!subscriptionOption || !subscriptionOption.length) && <Fragment>LOADING</Fragment>}
       <DialogFooter>
