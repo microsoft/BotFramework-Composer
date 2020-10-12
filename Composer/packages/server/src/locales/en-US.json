@@ -17,9 +17,6 @@
   "a_dialog_file_must_have_a_name_123ff67d": {
     "message": "a dialog file must have a name"
   },
-  "a_form_dialog_enables_your_bot_to_collect_pieces_o_fdd3fe56": {
-    "message": "A form dialog enables your bot to collect pieces of information ."
-  },
   "a_minimap_gives_an_overview_of_your_source_code_fo_9a897f4f": {
     "message": "A minimap gives an overview of your source code for quick navigation and code understanding."
   },
@@ -235,9 +232,6 @@
   },
   "are_you_sure_you_want_to_exit_the_onboarding_produ_c2de1b23": {
     "message": "Are you sure you want to exit the Onboarding Product Tour? You can restart the tour in the onboarding settings."
-  },
-  "are_you_sure_you_want_to_remove_form_dialog_schema_67c927ce": {
-    "message": "Are you sure you want to remove form dialog schema \"{ id }\"?"
   },
   "are_you_sure_you_want_to_remove_propertyname_8a793e4f": {
     "message": "Are you sure you want to remove \"{ propertyName }\"?"
@@ -566,9 +560,6 @@
   "create_a_new_dialog_21d84b82": {
     "message": "Create a new dialog"
   },
-  "create_a_new_form_dialog_schema_by_clicking_above_34b80531": {
-    "message": "Create a new form dialog schema by clicking + above."
-  },
   "create_a_new_skill_manifest_or_select_which_one_yo_a97e9616": {
     "message": "Create a new skill manifest or select which one you want to edit"
   },
@@ -583,9 +574,6 @@
   },
   "create_folder_error_38aa86f5": {
     "message": "Create Folder Error"
-  },
-  "create_form_dialog_bb98a4f2": {
-    "message": "Create form dialog"
   },
   "create_from_knowledge_base_qna_maker_7422486": {
     "message": "Create from knowledge base (QnA Maker)"
@@ -701,9 +689,6 @@
   "delete_bot_73586104": {
     "message": "Delete Bot"
   },
-  "delete_form_dialog_schema_892df4e8": {
-    "message": "Delete form dialog schema"
-  },
   "delete_language_1527609d": {
     "message": "Delete language"
   },
@@ -758,9 +743,6 @@
   "dialog_started_912507c": {
     "message": "Dialog started"
   },
-  "dialog_with_the_name_value_already_exists_62838518": {
-    "message": "Dialog with the name: { value } already exists."
-  },
   "dialogfactory_missing_schema_5c3255c4": {
     "message": "DialogFactory missing schema."
   },
@@ -808,6 +790,12 @@
   },
   "duplicated_intents_recognized_d3908424": {
     "message": "Duplicated intents recognized"
+  },
+  "each_page_of_pagesizestring_in_propstring_a7e23b00": {
+    "message": "Each page of { pageSizeString } in { propString }"
+  },
+  "each_value_in_ae285cd9": {
+    "message": "Each value in"
   },
   "early_adopters_e8db7999": {
     "message": "Early adopters"
@@ -935,6 +923,9 @@
   "error_processing_schema_2c707cf3": {
     "message": "Error Processing Schema"
   },
+  "event_48c2be6e": {
+    "message": " (Event)"
+  },
   "event_activity_2067a94b": {
     "message": "Event activity"
   },
@@ -1046,9 +1037,6 @@
   "form_title_baf85c7e": {
     "message": "form title"
   },
-  "forms_380ab2ae": {
-    "message": "Forms"
-  },
   "fromtemplatename_does_not_exist_d429483c": {
     "message": "fromTemplateName does not exist"
   },
@@ -1063,9 +1051,6 @@
   },
   "generate_dialog_b80a85b2": {
     "message": "Generate dialog"
-  },
-  "generating_form_dialog_using_schemaid_schema_faile_8062f953": {
-    "message": "Generating form dialog using ${ schemaId } schema failed."
   },
   "get_a_new_copy_of_the_runtime_code_84970bf": {
     "message": "Get a new copy of the runtime code"
@@ -1105,6 +1090,9 @@
   },
   "home_351838cd": {
     "message": "Home"
+  },
+  "host_ef9acfae": {
+    "message": "Host "
   },
   "http_request_79847109": {
     "message": "HTTP Request"
@@ -1309,9 +1297,6 @@
   },
   "list_view_e33843f0": {
     "message": "List view"
-  },
-  "load_form_dialog_schema_templates_error_6a348e76": {
-    "message": "Load form dialog schema templates Error"
   },
   "loading_25990131": {
     "message": "Loading..."
@@ -1549,9 +1534,6 @@
   },
   "no_extensions_installed_4b925277": {
     "message": "No extensions installed"
-  },
-  "no_form_dialog_schema_matches_your_filtering_crite_a198cb62": {
-    "message": "No form dialog schema matches your filtering criteria!"
   },
   "no_lu_file_with_name_id_fb21315d": {
     "message": "NO LU FILE WITH NAME { id }"
@@ -1799,9 +1781,6 @@
   "property_quick_actions_d3498f14": {
     "message": "Property quick actions"
   },
-  "property_required_help_text_57f027ad": {
-    "message": "Property required help text"
-  },
   "property_title_f2b443b7": {
     "message": "Property title"
   },
@@ -1943,6 +1922,15 @@
   "restart_bot_34e36428": {
     "message": "Restart Bot"
   },
+  "result_b1f14e91": {
+    "message": " = Result"
+  },
+  "result_property_100ef34f": {
+    "message": " = Result property"
+  },
+  "return_value_b386d1b": {
+    "message": "= Return value"
+  },
   "review_and_generate_63dec712": {
     "message": "Review and generate"
   },
@@ -1976,15 +1964,6 @@
   "schema_24739a48": {
     "message": "Schema"
   },
-  "schemaid_doesn_t_exists_select_an_schema_to_edit_o_9cccc954": {
-    "message": "{ schemaId } doesn''t exists, select an schema to edit or create a new one"
-  },
-  "schemanum_plural_0_no_schemas_1_one_schema_other_s_b3523dc": {
-    "message": "{ schemaNum, plural,\n     =0 {No schemas}\n     =1 {One schema}\n  other {# schemas}\n} have been found.\n            { schemaNum, select,\n      0 {}\n  other {Press down arrow key to navigate the search results}\n}"
-  },
-  "schemas_74566170": {
-    "message": "Schemas"
-  },
   "scripts_successfully_updated_3a75d57f": {
     "message": "Scripts successfully updated."
   },
@@ -2014,9 +1993,6 @@
   },
   "select_an_event_type_3d7108f1": {
     "message": "Select an event type"
-  },
-  "select_an_schema_to_edit_or_create_a_new_one_59c7326a": {
-    "message": "Select an schema to edit or create a new one"
   },
   "select_language_to_delete_d1662d3d": {
     "message": "Select language to delete"
@@ -2339,6 +2315,9 @@
   "toggle_extension_e41de2d2": {
     "message": "Toggle extension"
   },
+  "token_property_e53a19d9": {
+    "message": " = Token Property"
+  },
   "toolbar_bafd4228": {
     "message": "toolbar"
   },
@@ -2377,9 +2356,6 @@
   },
   "type_dialog_name_14a50769": {
     "message": "Type dialog name"
-  },
-  "type_form_dialog_schema_name_b767985c": {
-    "message": "Type form dialog schema name"
   },
   "typing_activity_6b634ae": {
     "message": "Typing activity"
