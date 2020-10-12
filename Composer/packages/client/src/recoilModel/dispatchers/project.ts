@@ -34,6 +34,8 @@ import {
   flushExistingTasks,
   getSkillNameIdentifier,
   handleProjectFailure,
+  initBotState,
+  loadProjectData,
   navigateToBot,
   openLocalSkill,
   openRemoteSkill,
@@ -340,6 +342,12 @@ export const projectDispatcher = () => {
     }
   });
 
+  const reloadProject = async (callbackHelpers: CallbackInterface, response: any) => {
+    const { projectData, botFiles } = loadProjectData(response);
+
+    await initBotState(callbackHelpers, projectData, botFiles);
+  };
+
   return {
     openProject,
     createNewBot,
@@ -356,5 +364,6 @@ export const projectDispatcher = () => {
     addExistingSkillToBotProject,
     addRemoteSkillToBotProject,
     replaceSkillInBotProject,
+    reloadProject,
   };
 };

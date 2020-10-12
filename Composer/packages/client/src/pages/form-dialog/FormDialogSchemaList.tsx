@@ -1,18 +1,21 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FormDialogSchema } from '@bfc/shared';
 import styled from '@emotion/styled';
+import { NeutralColors } from '@uifabric/fluent-theme';
 import { DefaultPalette } from '@uifabric/styling';
 import formatMessage from 'format-message';
 import debounce from 'lodash/debounce';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { CommandBarButton, IconButton } from 'office-ui-fabric-react/lib/Button';
 import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { List } from 'office-ui-fabric-react/lib/List';
+import { IOverflowSetItemProps, OverflowSet } from 'office-ui-fabric-react/lib/OverflowSet';
 import { IStackItemProps, IStackItemStyles, Stack } from 'office-ui-fabric-react/lib/Stack';
+import { DirectionalHint, TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { classNamesFunction } from 'office-ui-fabric-react/lib/Utilities';
 import * as React from 'react';
+import { useRecoilValue } from 'recoil';
+
+import { formDialogSchemaDialogExistsSelector, formDialogSchemaState } from '../../recoilModel';
 
 import { FormDialogSchemaListHeader } from './FormDialogSchemaListHeader';
 
@@ -58,6 +61,12 @@ const oneLinerStyles = classNamesFunction<IStackItemProps, IStackItemStyles>()({
   },
 });
 
+const ItemRoot = styled(Stack)(({ selected }: { selected: boolean }) => ({
+  padding: '0 12px',
+  cursor: 'pointer',
+  background: selected ? DefaultPalette.neutralLighter : 'transparent',
+}));
+
 const EmptyView = styled(Stack)({
   opacity: 0.5,
   padding: 8,
@@ -65,93 +74,148 @@ const EmptyView = styled(Stack)({
   textAlign: 'center',
 });
 
-type SchemaItemProps = {
-  id: string;
+type FormDialogSchemaItemProps = {
+  projectId: string;
+  schemaId: string;
   selected: boolean;
-  isEmpty?: boolean;
-  onClick: (name: string) => void;
-  onDelete: (name: string) => void;
-  onGenerate: (name: string) => void;
+  onClick: (schemaId: string) => void;
+  onDelete: (schemaId: string) => void;
+  onGenerate: (schemaId: string) => void;
+  onViewDialog: (schemaId: string) => void;
 };
 
-const FormDialogSchemaItem = React.memo((props: SchemaItemProps) => {
-  const { id, onClick, onDelete, onGenerate, selected = false, isEmpty = false } = props;
+const FormDialogSchemaItem = React.memo((props: FormDialogSchemaItemProps) => {
+  const { projectId, schemaId, onClick, onDelete, onGenerate, selected = false, onViewDialog } = props;
+
+  const item = useRecoilValue(formDialogSchemaState({ projectId, schemaId }));
+  const viewDialogActionDisabled = !useRecoilValue(formDialogSchemaDialogExistsSelector({ projectId, schemaId }));
+  const generateActionDisabled = item?.content === '' || isEmptyObject(item?.content);
 
   const clickHandler = React.useCallback(() => {
-    onClick(id);
-  }, [id, onClick]);
+    onClick(schemaId);
+  }, [schemaId, onClick]);
 
   const deleteHandler = React.useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-      e.preventDefault();
       e.stopPropagation();
 
-      onDelete(id);
+      onDelete(schemaId);
     },
-    [id, onDelete]
+    [schemaId, onDelete]
   );
 
-  const runHandler = React.useCallback(
+  const generateDialog = React.useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-      e.preventDefault();
       e.stopPropagation();
 
-      onGenerate(id);
+      onGenerate(schemaId);
     },
-    [id, onGenerate]
+    [schemaId, onGenerate]
+  );
+
+  const viewDialog = React.useCallback(
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      e.stopPropagation();
+
+      onViewDialog(schemaId);
+    },
+    [schemaId, onViewDialog]
+  );
+
+  const renderOverflowItem = React.useCallback(
+    (item: IOverflowSetItemProps) => <CommandBarButton aria-label={item.name} role="menuitem" onClick={item.onClick} />,
+    []
+  );
+
+  const renderOverflowButton = React.useCallback(
+    (overflowItems?: IOverflowSetItemProps[]) => (
+      <TooltipHost content={formatMessage('Actions')} directionalHint={DirectionalHint.rightCenter}>
+        <IconButton
+          data-is-focusable
+          menuIconProps={{
+            iconName: 'MoreVertical',
+            style: { color: NeutralColors.gray130 },
+          }}
+          menuProps={{ items: overflowItems || [] }}
+          role="menuitem"
+        />
+      </TooltipHost>
+    ),
+    []
   );
 
   return (
-    <Stack
+    <ItemRoot
       data-is-focusable
       horizontal
-      styles={{
-        root: {
-          padding: '0 8px',
-          cursor: 'pointer',
-          background: selected ? DefaultPalette.neutralLighter : 'transparent',
-        },
-      }}
+      selected={selected}
       tokens={{ childrenGap: 8 }}
       verticalAlign="center"
       onClick={clickHandler}
     >
-      <Icon iconName="Chat" />
       <Stack.Item grow styles={oneLinerStyles}>
-        {id}
+        {schemaId}
       </Stack.Item>
-      <Stack horizontal tokens={{ childrenGap: 8 }} verticalAlign="center">
-        <IconButton
-          disabled={isEmpty}
-          iconProps={{ iconName: 'Rerun' }}
-          title={formatMessage('Generate')}
-          onClick={runHandler}
-        />
-        <IconButton iconProps={{ iconName: 'Delete' }} title={formatMessage('Delete')} onClick={deleteHandler} />
-      </Stack>
-    </Stack>
+      <OverflowSet
+        aria-label={formatMessage('Form dialog schema actions')}
+        overflowItems={[
+          {
+            key: 'viewDialog',
+            name: formatMessage('View dialog'),
+            onClick: viewDialog,
+            disabled: viewDialogActionDisabled,
+          },
+          {
+            key: 'generateDialog',
+            name: formatMessage('Generate dialog'),
+            onClick: generateDialog,
+            disabled: generateActionDisabled,
+          },
+          {
+            key: 'deleteItem',
+            name: formatMessage('Delete'),
+            onClick: deleteHandler,
+          },
+        ]}
+        role="menubar"
+        onRenderItem={renderOverflowItem}
+        onRenderOverflowButton={renderOverflowButton}
+      />
+    </ItemRoot>
   );
 });
 
 type FormDialogSchemaListProps = {
-  items: readonly FormDialogSchema[];
+  projectId: string;
+  items: readonly string[];
   selectedId: string | undefined;
+  loading?: boolean;
   onSelectItem: (schemaId: string) => void;
   onDeleteItem: (schemaId: string) => void;
   onGenerate: (schemaId: string) => void;
+  onViewDialog: (schemaId: string) => void;
   onCreateItem: () => void;
-  loading?: boolean;
 };
 
 export const FormDialogSchemaList: React.FC<FormDialogSchemaListProps> = React.memo((props) => {
-  const { selectedId, items, onDeleteItem, onSelectItem, onCreateItem, onGenerate, loading = false } = props;
+  const {
+    projectId,
+    selectedId,
+    items,
+    onDeleteItem,
+    onSelectItem,
+    onCreateItem,
+    onGenerate,
+    onViewDialog,
+    loading = false,
+  } = props;
 
   const { 0: query, 1: setQuery } = React.useState('');
   const delayedSetQuery = debounce((newValue) => setQuery(newValue), 300);
 
   const filteredItems = React.useMemo(() => {
-    return items.filter(({ id }) => id.toLowerCase().indexOf(query.toLowerCase()) !== -1);
-  }, [query, items, selectedId]);
+    return items.filter((item) => item.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+  }, [query, items]);
 
   const onFilter = (_e?: React.ChangeEvent<HTMLInputElement>, newValue?: string): void => {
     if (typeof newValue === 'string') {
@@ -159,16 +223,17 @@ export const FormDialogSchemaList: React.FC<FormDialogSchemaListProps> = React.m
     }
   };
 
-  const renderCell = React.useCallback(
-    (item) => (
+  const renderItem = React.useCallback(
+    (itemId) => (
       <FormDialogSchemaItem
-        key={item.id}
-        id={item.id}
-        isEmpty={isEmptyObject(item.content)}
-        selected={selectedId === item.id}
+        key={itemId}
+        projectId={projectId}
+        schemaId={itemId}
+        selected={selectedId === itemId}
         onClick={onSelectItem}
         onDelete={onDeleteItem}
         onGenerate={onGenerate}
+        onViewDialog={onViewDialog}
       />
     ),
     [selectedId, onSelectItem, onDeleteItem, onGenerate]
@@ -182,34 +247,35 @@ export const FormDialogSchemaList: React.FC<FormDialogSchemaListProps> = React.m
         onChangeQuery={onFilter}
         onCreateItem={onCreateItem}
       />
-      <FocusZone isCircularNavigation direction={FocusZoneDirection.vertical}>
-        <div
-          aria-label={formatMessage(
-            `{
-                schemaNum, plural,
+
+      <div
+        aria-label={formatMessage(
+          `{
+              itemCount, plural,
                 =0 {No schemas}
                 =1 {One schema}
               other {# schemas}
             } have been found.
             {
-              schemaNum, select,
+              itemCount, select,
                   0 {}
                 other {Press down arrow key to navigate the search results}
             }`,
-            { schemaNum: items.length }
-          )}
-          aria-live={'polite'}
-        />
-        {filteredItems.length ? (
-          <List<FormDialogSchema> items={filteredItems} onRenderCell={renderCell} />
-        ) : (
-          <EmptyView verticalFill horizontalAlign="center" verticalAlign="center">
-            {query
-              ? formatMessage('No form dialog schema matches your filtering criteria!')
-              : formatMessage('Create a new form dialog schema by clicking + above.')}
-          </EmptyView>
+          { itemCount: items.length }
         )}
-      </FocusZone>
+        aria-live="polite"
+      />
+      {filteredItems.length ? (
+        <FocusZone isCircularNavigation direction={FocusZoneDirection.vertical}>
+          {filteredItems.map(renderItem)}
+        </FocusZone>
+      ) : (
+        <EmptyView verticalFill horizontalAlign="center" verticalAlign="center">
+          {query
+            ? formatMessage('No form dialog schema matches your filtering criteria!')
+            : formatMessage('Create a new form dialog schema by clicking + above.')}
+        </EmptyView>
+      )}
     </Root>
   );
 });

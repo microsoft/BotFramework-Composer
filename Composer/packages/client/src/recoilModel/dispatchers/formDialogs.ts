@@ -3,17 +3,17 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import { FormDialogSchemaTemplate } from '@bfc/shared';
+import { navigate } from '@reach/router';
 import formatMessage from 'format-message';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 
 import httpClient from '../../utils/httpUtil';
-import { applicationErrorState } from '../atoms/appState';
 import {
+  applicationErrorState,
   formDialogGenerationProgressingState,
   formDialogLibraryTemplatesState,
-  formDialogSchemaIdsState,
-  formDialogSchemaState,
-} from '../atoms/botState';
+} from '../atoms/appState';
+import { formDialogSchemaIdsState, formDialogSchemaState } from '../atoms/botState';
 import { dispatcherState } from '../DispatcherWrapper';
 
 export const formDialogsDispatcher = () => {
@@ -75,7 +75,7 @@ export const formDialogsDispatcher = () => {
         const response = await httpClient.post(`/formDialogs/${projectId}/generate`, {
           name: schemaId,
         });
-        reloadProject(callbackHelpers, response.data);
+        reloadProject(callbackHelpers, response);
       } catch (error) {
         set(applicationErrorState, {
           message: error.message,
@@ -87,11 +87,16 @@ export const formDialogsDispatcher = () => {
     }
   );
 
+  const navigateToGeneratedDialog = ({ projectId, schemaId }) => {
+    navigate(`/bot/${projectId}/dialogs/${schemaId}`);
+  };
+
   return {
     createFormDialogSchema,
     updateFormDialogSchema,
     loadFormDialogSchemaTemplates,
     removeFormDialogSchema,
     generateFormDialog,
+    navigateToGeneratedDialog,
   };
 };

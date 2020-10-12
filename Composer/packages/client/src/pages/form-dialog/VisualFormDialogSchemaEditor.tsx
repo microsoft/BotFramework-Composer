@@ -10,6 +10,9 @@ import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { IStackProps, IStackStyles, Stack } from 'office-ui-fabric-react/lib/Stack';
 import { classNamesFunction } from 'office-ui-fabric-react/lib/Utilities';
 import * as React from 'react';
+import { useRecoilValue } from 'recoil';
+
+import { formDialogSchemaState } from '../../recoilModel';
 
 const Root = styled(Stack)<{
   inProgress: boolean;
@@ -46,14 +49,16 @@ const editorTopBarStyles = classNamesFunction<IStackProps, IStackStyles>()({
 type Props = {
   projectId?: string;
   generationInProgress?: boolean;
-  schema: { id: string; content: string };
+  schemaId: string;
   templates: string[];
   onChange: (id: string, content: string) => void;
   onGenerate: (schemaId: string) => void;
 };
 
 export const VisualFormDialogSchemaEditor = React.memo((props: Props) => {
-  const { projectId, schema, templates, onChange, onGenerate, generationInProgress = false } = props;
+  const { projectId, schemaId, templates, onChange, onGenerate, generationInProgress = false } = props;
+
+  const schema = useRecoilValue(formDialogSchemaState({ projectId, schemaId }));
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const editorRef = React.useRef<any>();

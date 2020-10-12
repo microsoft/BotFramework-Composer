@@ -56,8 +56,8 @@ const Routes = (props) => {
             <Notifications path="notifications" />
             <Publish path="publish/:targetName" />
             <Skills path="skills/*" />
-            <FormDialogPage path="form-dialogs" />
-            <FormDialogPage path="form-dialogs/:schemaId/*" />
+            <FormDialogPage path="forms/:schemaId/*" />
+            <FormDialogPage path="forms/*" />
             <DesignPage path="*" />
           </ProjectRouter>
           <SettingPage path="settings/*" />

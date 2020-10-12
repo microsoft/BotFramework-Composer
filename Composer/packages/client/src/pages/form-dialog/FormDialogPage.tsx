@@ -2,92 +2,78 @@
 // Licensed under the MIT License.
 
 import styled from '@emotion/styled';
-import { RouteComponentProps } from '@reach/router';
+import { navigate, RouteComponentProps } from '@reach/router';
+import formatMessage from 'format-message';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { Text } from 'office-ui-fabric-react/lib/Text';
 import * as React from 'react';
 import { useRecoilValue } from 'recoil';
 
+import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
+import { LeftRightSplit } from '../../components/Split/LeftRightSplit';
 import {
   dispatcherState,
   formDialogGenerationProgressingState,
   formDialogLibraryTemplatesState,
-  formDialogSchemasState,
+  formDialogSchemaIdsState,
 } from '../../recoilModel';
-import { LeftRightSplit } from '../../components/Split/LeftRightSplit';
 
-import { VisualFormDialogSchemaEditor } from './VisualFormDialogSchemaEditor';
-import { FormDialogSchemaList } from './FormDialogSchemaList';
 import CreateFormDialogSchemaModal from './CreateFormDialogSchemaModal';
+import { FormDialogSchemaList } from './FormDialogSchemaList';
+import { VisualFormDialogSchemaEditor } from './VisualFormDialogSchemaEditor';
 
 const EmptyView = styled(Stack)({
-  position: 'relative',
   width: '100%',
-  ':after': {
-    fontSize: 20,
-    content: '"Select an schema to edit or create a new one"',
-    position: 'absolute',
-    textAlign: 'center',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    opacity: 0.5,
-  },
+  opacity: 0.5,
 });
 
 type Props = RouteComponentProps<{ projectId: string; schemaId: string }>;
 
 const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
   const { projectId = '', schemaId = '' } = props;
-  const formDialogSchemas = useRecoilValue(formDialogSchemasState(projectId));
+  const formDialogSchemaIds = useRecoilValue(formDialogSchemaIdsState(projectId));
   const formDialogLibraryTemplates = useRecoilValue(formDialogLibraryTemplatesState);
   const formDialogGenerationProgressing = useRecoilValue(formDialogGenerationProgressingState);
   const {
-    loadFormDialogSchemaTemplates,
     removeFormDialogSchema,
     generateFormDialog,
     createFormDialogSchema,
     updateFormDialogSchema,
+    navigateToGeneratedDialog,
   } = useRecoilValue(dispatcherState);
 
-  React.useEffect(() => {
-    (async () => {
-      await loadFormDialogSchemaTemplates();
-    })();
-  }, []);
-
   const { 0: createSchemaDialogOpen, 1: setCreateSchemaDialogOpen } = React.useState(false);
-  const { 0: selectedFormDialogSchemaId, 1: setSelectedFormDialogSchemaId } = React.useState<string>(schemaId);
 
   const availableTemplates = React.useMemo(
     () => formDialogLibraryTemplates.filter((t) => !t.isGlobal).map((t) => t.name),
     [formDialogLibraryTemplates]
   );
 
-  const selectedFormDialogSchema = React.useMemo(
-    () => formDialogSchemas.find((fds) => fds.id === selectedFormDialogSchemaId),
-    [formDialogSchemas, selectedFormDialogSchemaId]
-  );
+  const validSchemaId = React.useMemo(() => formDialogSchemaIds.includes(schemaId), [formDialogSchemaIds, schemaId]);
 
   const createItemStart = React.useCallback(() => setCreateSchemaDialogOpen(true), [setCreateSchemaDialogOpen]);
 
-  const selectItem = React.useCallback(
-    (id: string) => {
-      setSelectedFormDialogSchemaId(id);
-    },
-    [setSelectedFormDialogSchemaId]
-  );
+  const selectItem = React.useCallback((id: string) => {
+    navigate(`/bot/${projectId}/forms/${id}`);
+  }, []);
 
   const deleteItem = React.useCallback(
-    (id: string) => {
-      removeFormDialogSchema({ id, projectId });
-      if (selectedFormDialogSchemaId === id) {
-        selectItem('');
+    async (id: string) => {
+      const res = await OpenConfirmModal(
+        formatMessage('Delete form dialog schema'),
+        formatMessage('Are you sure you want to remove form dialog schema "{id}"?', { id })
+      );
+      if (res) {
+        removeFormDialogSchema({ id, projectId });
+        if (schemaId === id) {
+          selectItem('');
+        }
       }
     },
-    [selectItem, removeFormDialogSchema, selectedFormDialogSchemaId]
+    [selectItem, removeFormDialogSchema, schemaId]
   );
 
-  const generateFormDialogs = React.useCallback(
+  const generateDialog = React.useCallback(
     (schemaId: string) => {
       if (schemaId) {
         generateFormDialog({ projectId, schemaId });
@@ -96,13 +82,22 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
     [generateFormDialog, projectId]
   );
 
+  const viewDialog = React.useCallback(
+    (schemaId: string) => {
+      if (schemaId) {
+        navigateToGeneratedDialog({ projectId, schemaId });
+      }
+    },
+    [navigateToGeneratedDialog, projectId]
+  );
+
   const updateItem = React.useCallback(
     (id: string, content: string) => {
-      if (id === selectedFormDialogSchemaId) {
+      if (id === schemaId) {
         updateFormDialogSchema({ id, content, projectId });
       }
     },
-    [updateFormDialogSchema, selectedFormDialogSchemaId]
+    [updateFormDialogSchema, schemaId]
   );
 
   const createItem = React.useCallback(
@@ -118,25 +113,35 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
       <Stack horizontal verticalFill>
         <LeftRightSplit initialLeftGridWidth={320} minLeftPixels={320} minRightPixels={800}>
           <FormDialogSchemaList
-            items={formDialogSchemas}
+            items={formDialogSchemaIds}
             loading={formDialogGenerationProgressing}
-            selectedId={selectedFormDialogSchemaId}
+            projectId={projectId}
+            selectedId={schemaId}
             onCreateItem={createItemStart}
             onDeleteItem={deleteItem}
-            onGenerate={generateFormDialogs}
+            onGenerate={generateDialog}
             onSelectItem={selectItem}
+            onViewDialog={viewDialog}
           />
-          {selectedFormDialogSchema ? (
+          {validSchemaId ? (
             <VisualFormDialogSchemaEditor
               generationInProgress={formDialogGenerationProgressing}
               projectId={projectId}
-              schema={selectedFormDialogSchema}
+              schemaId={schemaId}
               templates={availableTemplates}
               onChange={updateItem}
-              onGenerate={generateFormDialogs}
+              onGenerate={generateDialog}
             />
           ) : (
-            <EmptyView verticalFill />
+            <EmptyView verticalFill horizontalAlign="center" verticalAlign="center">
+              <Text variant="large">
+                {schemaId
+                  ? formatMessage(`{schemaId} doesn't exists, select an schema to edit or create a new one`, {
+                      schemaId,
+                    })
+                  : formatMessage('Select an schema to edit or create a new one')}
+              </Text>
+            </EmptyView>
           )}
         </LeftRightSplit>
       </Stack>

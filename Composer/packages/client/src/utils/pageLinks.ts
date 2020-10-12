@@ -65,9 +65,9 @@ export const topLinks = (projectId: string, openedDialogId: string, pluginPages:
       disabled: !botLoaded,
     },
     {
-      to: `/bot/${projectId}/form-dialogs`,
-      iconName: 'OfficeChat',
-      labelName: formatMessage('Form Dialogs'),
+      to: `/bot/${projectId}/forms`,
+      iconName: 'Table',
+      labelName: formatMessage('Forms'),
       exact: false,
       disabled: !botLoaded,
     },

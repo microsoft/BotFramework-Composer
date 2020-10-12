@@ -6,10 +6,10 @@ import formatMessage from 'format-message';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
+import { ISearchBoxProps, ISearchBoxStyles, SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import * as React from 'react';
-import { SearchBox, ISearchBoxProps, ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 import { classNamesFunction } from 'office-ui-fabric-react/lib/Utilities';
+import * as React from 'react';
 
 const TitleBar = styled(Stack)({
   flex: 1,

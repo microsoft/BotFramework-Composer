@@ -14,7 +14,6 @@ import { useRecoilValue } from 'recoil';
 import {
   allFormDialogPropertyIdsSelector,
   formDialogSchemaAtom,
-  formDialogSchemaJsonSelector,
   formDialogSchemaValidSelector,
 } from 'src/atoms/appState';
 import { useHandlers } from 'src/atoms/handlers';
@@ -22,17 +21,6 @@ import { CommandBarUploadButton } from 'src/components/common/CommandBarUpload';
 import { FormDialogSchemaDetails } from 'src/components/property/FormDialogSchemaDetails';
 import { useUndo } from 'src/undo/useUndo';
 import { useUndoKeyBinding } from 'src/utils/hooks/useUndoKeyBinding';
-
-const downloadFile = async (fileName: string, schemaExtension: string, content: string) => {
-  const blob = new Blob([content], { type: 'application/json' });
-  const href = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = href;
-  link.download = `${fileName}.${schemaExtension}`;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-};
 
 const Root = styled(Stack)({
   backgroundColor: NeutralColors.gray20,
@@ -84,7 +72,7 @@ export const FormDialogPropertiesEditor = React.memo((props: Props) => {
   const schema = useRecoilValue(formDialogSchemaAtom);
   const propertyIds = useRecoilValue(allFormDialogPropertyIdsSelector);
   const schemaValid = useRecoilValue(formDialogSchemaValidSelector);
-  const schemaJson = useRecoilValue(formDialogSchemaJsonSelector);
+
   const { importSchema, addProperty } = useHandlers();
 
   const schemaIdRef = React.useRef<string>(schema.id);
@@ -145,17 +133,6 @@ export const FormDialogPropertiesEditor = React.memo((props: Props) => {
     {
       key: 'import',
       onRender: () => <CommandBarUploadButton accept={schemaExtension} disabled={isGenerating} onUpload={upload} />,
-    },
-    {
-      key: 'export',
-      iconProps: { iconName: 'Export' },
-      text: formatMessage('Export JSON'),
-      title: formatMessage('Export JSON'),
-      ariaLabel: formatMessage('Export JSON'),
-      disabled: isGenerating || !propertyIds.length || !schemaValid,
-      onClick: () => {
-        downloadFile(schema.name, schemaExtension, schemaJson);
-      },
     },
     {
       key: 'reset',
