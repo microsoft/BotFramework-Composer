@@ -23,7 +23,15 @@ export type PublishResponse = {
   result: PublishResult;
 };
 
-type PublishAuthHelpers = {
+export type PullResponse = {
+  error?: { message: string };
+  eTag?: string;
+  status: number;
+  /** Path to the pulled .zip containing updated bot content */
+  zipPath?: string;
+};
+
+export type PublishAuthHelpers = {
   getAccessToken: (options) => Promise<string>;
   loginAndGetIdToken: (options) => Promise<string>;
 };
@@ -55,6 +63,12 @@ export type PublishPlugin<Config = any> = {
     rollbackToVersion: string,
     user?: UserIdentity
   ) => Promise<PublishResponse>;
+  pull?: (
+    config: Config,
+    project: IBotProject,
+    user?: UserIdentity,
+    authHelpers?: PublishAuthHelpers
+  ) => Promise<PullResponse>;
 
   // other properties
   schema?: JSONSchema7;
