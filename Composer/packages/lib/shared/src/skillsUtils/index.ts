@@ -3,8 +3,7 @@
 
 import get from 'lodash/get';
 import keyBy from 'lodash/keyBy';
-
-import { DialogSetting, Skill } from '../types';
+import { DialogSetting, Skill } from '@bfc/types';
 
 export function fetchFromSettings(path: string, settings: DialogSetting): string {
   if (path) {
@@ -35,4 +34,9 @@ export const getSkillNameFromSetting = (value?: string) => {
     return matched[1];
   }
   return '';
+};
+
+export const getEndpointNameGivenUrl = (manifestData: any, urlToMatch: string) => {
+  const matchedEndpoint = manifestData?.endpoints.find(({ endpointUrl }) => endpointUrl === urlToMatch);
+  return matchedEndpoint ? matchedEndpoint.name : '';
 };

@@ -4,7 +4,7 @@ import * as React from 'react';
 import { fireEvent } from '@bfc/test-utils';
 
 import { PublishDialog } from '../../../src/components/TestController/publishDialog';
-import { botNameState, settingsState, dispatcherState, currentProjectIdState } from '../../../src/recoilModel';
+import { botDisplayNameState, settingsState, dispatcherState, currentProjectIdState } from '../../../src/recoilModel';
 import { renderWithRecoil } from '../../testUtils';
 jest.useFakeTimers();
 
@@ -31,7 +31,7 @@ describe('<PublishDialog />', () => {
         setSettings: setSettingsMock,
       });
       set(currentProjectIdState, projectId);
-      set(botNameState(projectId), 'sampleBot0');
+      set(botDisplayNameState(projectId), 'sampleBot0');
       set(settingsState(projectId), {
         luis: luisConfig,
         qna: qnaConfig,

@@ -356,6 +356,9 @@
   "bot_name_is_botname_a28c2d05": {
     "message": "Bot name is { botName }"
   },
+  "bot_project_file_does_not_exist_a0864a2c": {
+    "message": "Bot project file does not exist."
+  },
   "bot_responses_4617b4a2": {
     "message": "Bot responses"
   },
@@ -1538,11 +1541,11 @@
   "no_lu_or_qna_file_with_name_id_21cfe9dc": {
     "message": "NO LU OR QNA FILE WITH NAME { id }"
   },
-  "no_search_results_1ba50423": {
-    "message": "No search results"
-  },
   "no_name_e082310e": {
     "message": "[no name]"
+  },
+  "no_search_results_1ba50423": {
+    "message": "No search results"
   },
   "no_updates_available_cecd904d": {
     "message": "No updates available"
@@ -1777,9 +1780,6 @@
   },
   "property_quick_actions_d3498f14": {
     "message": "Property quick actions"
-  },
-  "property_required_help_text_57f027ad": {
-    "message": "Property required help text"
   },
   "property_title_f2b443b7": {
     "message": "Property title"
@@ -2245,6 +2245,9 @@
   },
   "this_language_will_be_copied_and_used_as_the_basis_573515e4": {
     "message": "This language will be copied and used as the basis (and fallback language) for the translation."
+  },
+  "this_operation_cannot_be_completed_the_skill_is_al_4886d311": {
+    "message": "This operation cannot be completed. The skill is already part of the Bot Project"
   },
   "this_trigger_type_is_not_supported_by_the_regex_re_2c3b7c46": {
     "message": "This trigger type is not supported by the RegEx recognizer and will not be fired."

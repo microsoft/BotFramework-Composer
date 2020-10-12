@@ -4,12 +4,10 @@
 import { JSONSchema7 } from 'json-schema';
 import merge from 'lodash/merge';
 import formatMessage from 'format-message';
+import { DesignerData, MicrosoftIDialog, LuIntentSection, SDKKinds } from '@bfc/types';
 
-import { DesignerData } from './types/sdk';
 import { copyAdaptiveAction } from './copyUtils';
 import { deleteAdaptiveAction, deleteAdaptiveActionList } from './deleteUtils';
-import { MicrosoftIDialog, LuIntentSection } from './types';
-import { SDKKinds } from './types';
 import { FieldProcessorAsync } from './copyUtils/ExternalApi';
 import { generateDesignerId } from './generateUniqueId';
 
