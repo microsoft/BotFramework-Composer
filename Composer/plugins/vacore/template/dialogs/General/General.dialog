@@ -1,0 +1,72 @@
+{
+  "$kind": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "xqkRH9",
+    "name": "General",
+    "description": ""
+  },
+  "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
+  "triggers": [
+    {
+      "$kind": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "mKmCya",
+        "name": "Cancel"
+      },
+      "intent": "Cancel",
+      "actions": [
+        {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "JIKBPR"
+          },
+          "activity": "${SendActivity_JIKBPR()}"
+        },
+        {
+          "$kind": "Microsoft.CancelAllDialogs",
+          "$designer": {
+            "id": "cijXOD"
+          },
+          "activityProcessed": true
+        }
+      ]
+    },
+    {
+      "$kind": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "FmSrE6",
+        "name": "Escalate"
+      },
+      "intent": "Escalate",
+      "actions": [
+        {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "tJCEYl"
+          },
+          "activity": "${SendActivity_tJCEYl()}"
+        }
+      ]
+    },
+    {
+      "$kind": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "cccZIk",
+        "name": "Help"
+      },
+      "intent": "Help",
+      "actions": [
+        {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "ORmxjp"
+          },
+          "activity": "${SendActivity_ORmxjp()}"
+        }
+      ]
+    }
+  ],
+  "generator": "General.lg",
+  "recognizer": "General.lu"
+}
