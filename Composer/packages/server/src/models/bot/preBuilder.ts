@@ -30,9 +30,9 @@ export class PreBuilder {
   ) {
     await this.createRecognizersDir();
 
-    this.updateCrossTrainConfig(options.luFiles, options.crossTrainConfig);
+    await this.updateCrossTrainConfig(options.luFiles, options.crossTrainConfig);
 
-    this.updateRecognizers(recognizerTypes, [...options.luFiles, ...options.qnaFiles]);
+    await this.updateRecognizers(recognizerTypes, [...options.luFiles, ...options.qnaFiles]);
   }
 
   async createRecognizersDir() {
@@ -54,17 +54,30 @@ export class PreBuilder {
     return Path.relative(this.folderPath, luFile?.path ?? '');
   }
 
+  /**
+   * convert the cross train config from id to relativePath. The cli use the config to find the files.
+   * config = {
+   * 'main.lu': {
+   *  rootDialog: true,
+   *    triggers: {
+   *      'intentA':'diaA.lu',
+   *       'intentB': 'diaB.lu'
+   *    }
+   *  }
+   * }
+   */
   generateCrossTrainConfig(crossTrainConfig: CrossTrainConfig, files: FileInfo[]) {
     const pathCache = {};
 
     const configWithPath = keys(crossTrainConfig).reduce((result: CrossTrainConfig, key: string) => {
       const { triggers: preTriggers, rootDialog } = crossTrainConfig[key];
-
+      // replace the key with path
       if (!pathCache[key]) pathCache[key] = this.replaceCrossTrainId(key, files);
 
       const triggers = keys(preTriggers).reduce((result: { [key: string]: string[] }, key) => {
         const ids = preTriggers[key];
         result[key] = ids.map((item) => {
+          // replace the trigger value with path
           if (!pathCache[item]) pathCache[item] = this.replaceCrossTrainId(item, files);
 
           return pathCache[item];
@@ -79,11 +92,19 @@ export class PreBuilder {
     return configWithPath;
   }
 
-  updateRecognizers(recognizerTypes: RecognizerTypes, files: FileInfo[]) {
-    keys(recognizerTypes).forEach((item) => {
-      const type = recognizerTypes[item];
-      const targetFiles = files.filter((file) => file.name.startsWith(item)).map((item) => item.name);
-      recognizers[type](item, targetFiles, this.storage, { defalutLanguage: 'en-us', folderPath: this.folderPath });
-    });
+  /**
+   * update the recoginzers before build
+   */
+  async updateRecognizers(recognizerTypes: RecognizerTypes, files: FileInfo[]) {
+    await Promise.all(
+      keys(recognizerTypes).map(async (item) => {
+        const type = recognizerTypes[item];
+        const targetFiles = files.filter((file) => file.name.startsWith(item)).map((item) => item.name);
+        await recognizers[type](item, targetFiles, this.storage, {
+          defalutLanguage: 'en-us',
+          folderPath: this.folderPath,
+        });
+      })
+    );
   }
 }
