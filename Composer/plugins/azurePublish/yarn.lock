@@ -586,8 +586,8 @@ adal-node@^0.1.28:
 
 adaptive-expressions@4.11.0-dev.20201010.6e4a99e:
   version "4.11.0-dev.20200929.ca9de94"
-  resolved "https://registry.npmjs.org/adaptive-expressions/-/adaptive-expressions-4.11.0-dev.20200929.ca9de94.tgz#305c8462e7e0c329f55aa8cd2b2496bb81c2490c"
-  integrity sha512-xq5QG19kIPio6piHEA4aPkqqi2ejYoYCBEovF55gJXaW5jKG+Q7bao3yqb2VTq9vISEyIq9VabmIlHzRQrOXyg==
+  resolved "https://registry.npm.taobao.org/adaptive-expressions/download/adaptive-expressions-4.11.0-dev.20200929.ca9de94.tgz#305c8462e7e0c329f55aa8cd2b2496bb81c2490c"
+  integrity sha1-MFyEYufgwyn1WqjNKySWu4HCSQw=
   dependencies:
     "@microsoft/recognizers-text-data-types-timex-expression" "1.1.4"
     "@types/atob-lite" "^2.0.0"

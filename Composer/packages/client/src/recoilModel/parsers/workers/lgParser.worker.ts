@@ -92,8 +92,11 @@ type LgMessageEvent =
 
 type LgResources = Map<string, LgFile>;
 
-const lgFileResolver = (lgFiles: LgResources[]) => {
-  return lgImportResolverGenerator(lgFiles, '.lg');
+const lgFileResolver = (lgFiles: LgFile[]) => {
+  return lgImportResolverGenerator(
+    lgFiles.map((u) => new LGResource(u.id, u.id, u.content)),
+    '.lg'
+  );
 };
 
 export class LgCache {
@@ -163,7 +166,11 @@ export const handleMessage = (msg: LgMessageEvent) => {
     case LgActionType.Parse: {
       const { id, content, lgFiles, projectId } = msg.payload;
 
-      const lgFile = lgUtil.parse(id, content, lgFiles);
+      const lgFile = lgUtil.parse(
+        id,
+        content,
+        lgFiles.map((u) => new LGResource(u.id, u.id, u.content))
+      );
       cache.set(projectId, lgFile);
       payload = filterParseResult(lgFile);
       break;

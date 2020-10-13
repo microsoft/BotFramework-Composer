@@ -791,8 +791,8 @@
   "duplicated_intents_recognized_d3908424": {
     "message": "Duplicated intents recognized"
   },
-  "each_page_of_pagesizestring_in_propstring_a7e23b00": {
-    "message": "Each page of { pageSizeString } in { propString }"
+  "each_page_of_be455012": {
+    "message": "Each page of"
   },
   "each_value_in_ae285cd9": {
     "message": "Each value in"
@@ -922,9 +922,6 @@
   },
   "error_processing_schema_2c707cf3": {
     "message": "Error Processing Schema"
-  },
-  "event_48c2be6e": {
-    "message": " (Event)"
   },
   "event_activity_2067a94b": {
     "message": "Event activity"
@@ -1091,9 +1088,6 @@
   "home_351838cd": {
     "message": "Home"
   },
-  "host_ef9acfae": {
-    "message": "Host "
-  },
   "http_request_79847109": {
     "message": "HTTP Request"
   },
@@ -1129,6 +1123,9 @@
   },
   "import_schema_75659c5f": {
     "message": "Import schema"
+  },
+  "in_4caf13c1": {
+    "message": "in"
   },
   "in_production_5a70b8b4": {
     "message": "In production"
@@ -1637,6 +1634,9 @@
   "open_inline_editor_a5aabcfa": {
     "message": "Open inline editor"
   },
+  "open_skills_page_for_configuration_details_a2a484ea": {
+    "message": "Open Skills page for configuration details"
+  },
   "optional_221bcc9d": {
     "message": "Optional"
   },
@@ -1921,15 +1921,6 @@
   },
   "restart_bot_34e36428": {
     "message": "Restart Bot"
-  },
-  "result_b1f14e91": {
-    "message": " = Result"
-  },
-  "result_property_100ef34f": {
-    "message": " = Result property"
-  },
-  "return_value_b386d1b": {
-    "message": "= Return value"
   },
   "review_and_generate_63dec712": {
     "message": "Review and generate"
@@ -2314,9 +2305,6 @@
   },
   "toggle_extension_e41de2d2": {
     "message": "Toggle extension"
-  },
-  "token_property_e53a19d9": {
-    "message": " = Token Property"
   },
   "toolbar_bafd4228": {
     "message": "toolbar"

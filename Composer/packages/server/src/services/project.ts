@@ -7,6 +7,7 @@ import flatten from 'lodash/flatten';
 import { luImportResolverGenerator, LUResolverResource } from '@bfc/shared';
 import extractMemoryPaths from '@bfc/indexers/lib/dialogUtils/extractMemoryPaths';
 import { UserIdentity } from '@bfc/extension';
+import { LGResource } from 'botbuilder-lg';
 
 import { BotProject } from '../models/bot/botProject';
 import { LocationRef } from '../models/bot/interface';
