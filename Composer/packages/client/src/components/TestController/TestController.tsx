@@ -26,6 +26,8 @@ import { BotStatus } from '../../constants';
 import { isAbsHosted } from '../../utils/envUtil';
 import useNotifications from '../../pages/notifications/useNotifications';
 import { navigateTo, openInEmulator } from '../../utils/navigation';
+import { useShell } from '../../shell';
+import { crossTrainBuilder } from '../../utils/builders/crossTrainBuilder';
 
 import { isBuildConfigComplete, needsBuild } from './../../utils/buildUtil';
 import { PublishDialog } from './publishDialog';
@@ -60,6 +62,7 @@ export const TestController: React.FC<{ projectId: string }> = (props) => {
   const botActionRef = useRef(null);
   const notifications = useNotifications(projectId);
 
+  const shell = useShell('DesignPage', projectId);
   const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
   const botStatus = useRecoilValue(botStatusState(projectId));
   const botName = useRecoilValue(botDisplayNameState(projectId));
@@ -161,7 +164,7 @@ export const TestController: React.FC<{ projectId: string }> = (props) => {
       luis: luis,
       qna: Object.assign({}, settings.qna, qna),
     });
-    await build(projectId, config);
+    await build(projectId, config, shell.data, crossTrainBuilder);
   }
 
   async function handleLoadBot() {
