@@ -131,10 +131,6 @@ export type DialogEditingContextApi = {
 
 export type DialogEditingContext = {
   currentDialog: DialogInfo;
-  data: {
-    $kind: string;
-    [key: string]: any;
-  };
   designerId: string;
   dialogId: string;
   clipboardActions: any[];

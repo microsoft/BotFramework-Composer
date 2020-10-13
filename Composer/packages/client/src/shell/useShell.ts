@@ -225,7 +225,6 @@ export function useShell(source: EventSource, projectId: string): Shell {
   }, [source, dialogsMap, dialogId, focused, selected]);
 
   const data: ShellData = {
-    data: editorData,
     locale,
     botName,
     projectId,
