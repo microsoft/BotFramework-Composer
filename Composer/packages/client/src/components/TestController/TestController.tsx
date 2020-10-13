@@ -165,7 +165,7 @@ export const TestController: React.FC<{ projectId: string }> = (props) => {
       qna: Object.assign({}, settings.qna, qna),
     });
 
-    // const buildser = selectBuilder(pluginConfig.recognizer.builder);
+    // const builder = selectBuilder(pluginConfig.recognizer.builder);
     // await build(projectId, config, shell.data, builder);
     await build(projectId, config, shell.data, crossTrainBuilder);
   }
