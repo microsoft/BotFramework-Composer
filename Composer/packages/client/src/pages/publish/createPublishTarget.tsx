@@ -14,7 +14,7 @@ import { useRecoilValue } from 'recoil';
 import { PublishTarget } from '@bfc/shared';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
 // import { DialogType } from 'office-ui-fabric-react/lib/Dialog';
-import { IPersonaSharedProps, Persona, PersonaSize } from 'office-ui-fabric-react/lib/Persona';
+// import { IPersonaSharedProps, Persona, PersonaSize } from 'office-ui-fabric-react/lib/Persona';
 // import { Link } from 'office-ui-fabric-react/lib/Link';
 
 // import { PublishProfileDialog } from '../../constants';
@@ -119,7 +119,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
 
   const PageOne = useMemo(() => {
     return (
-      <Fragment>
+      <div style={{ width: '60%' }}>
         <form>
           <TextField
             defaultValue={props.current ? props.current.item.name : ''}
@@ -151,7 +151,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
             />
           </Fragment>
         )}
-      </Fragment>
+      </div>
     );
   }, [targetTypes, errorMessage, instructions, schema, userSettings]);
 
@@ -162,7 +162,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
           {PageOne}
           <Separator css={separator} />
           <DialogFooter>
-            <Persona {...examplePersona} size={PersonaSize.size24} />
+            {/* <Persona {...examplePersona} size={PersonaSize.size24} /> */}
             <DefaultButton text={formatMessage('Cancel')} onClick={props.closeDialog} />
             {current ? (
               <PrimaryButton disabled={saveDisabled} text={formatMessage('Save')} onClick={submit} />
@@ -190,12 +190,12 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
     }
   }, [page, targetType, PageOne]);
 
-  const examplePersona: IPersonaSharedProps = {
-    text: 'Somebody',
-    secondaryText: 'Software Engineer',
-    tertiaryText: 'In a meeting',
-    optionalText: 'Available at 4:00pm',
-  };
+  // const examplePersona: IPersonaSharedProps = {
+  //   text: 'Somebody',
+  //   secondaryText: 'Software Engineer',
+  //   tertiaryText: 'In a meeting',
+  //   optionalText: 'Available at 4:00pm',
+  // };
 
   return <Fragment>{publishTargetContent}</Fragment>;
 };

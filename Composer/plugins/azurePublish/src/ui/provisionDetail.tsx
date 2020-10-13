@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import { Panel } from 'office-ui-fabric-react/lib/Panel';
 import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
-import { PublishTarget } from '@bfc/shared';
+import { PublishTarget } from '@bfc/types';
 
 interface ProvisionDetailProps {
   onDismiss: () => void;
