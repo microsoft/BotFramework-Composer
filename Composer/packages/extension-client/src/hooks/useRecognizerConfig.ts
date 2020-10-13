@@ -10,13 +10,11 @@ import { RecognizerOptions, RecognizerSchema } from '../types';
 
 export const FallbackRecognizerKey = 'fallback';
 
-// TODO: (ze) remove this logic after the ui widget PR. [issue #4167]
-const reuseLuisIntentEditor = (recognizers: RecognizerSchema[]) => {
-  const crosstrainRecognizer = recognizers.find((x) => x.id === SDKKinds.CrossTrainedRecognizerSet);
-  const luisRecognizer = recognizers.find((x) => x.id === SDKKinds.LuisRecognizer);
-  if (crosstrainRecognizer && luisRecognizer) {
-    crosstrainRecognizer.intentEditor = luisRecognizer.intentEditor;
+const resolveRecognizerWidget = (widgetValue: any, recognizerWidgets: { [name: string]: any }) => {
+  if (typeof widgetValue === 'string' && recognizerWidgets[widgetValue]) {
+    return recognizerWidgets[widgetValue];
   }
+  return widgetValue;
 };
 
 const getDefaultRecognizer = (recognizers: RecognizerSchema[]) => {
@@ -60,16 +58,18 @@ export function useRecognizerConfig(): RecognizerSchemaConfig {
   const recognizers: RecognizerSchema[] = useMemo(() => {
     if (!plugins.uiSchema) return [];
 
+    const recognizerWidgets = plugins.widgets?.recognizer ?? {};
     const schemas = Object.entries(plugins.uiSchema)
       .filter(([_, uiOptions]) => uiOptions && uiOptions.recognizer)
       .map(([$kind, uiOptions]) => {
         const recognizerOptions = uiOptions?.recognizer as RecognizerOptions;
+        const intentEditor = resolveRecognizerWidget(recognizerOptions.intentEditor, recognizerWidgets);
         return {
           id: $kind,
           ...recognizerOptions,
+          intentEditor,
         } as RecognizerSchema;
       });
-    reuseLuisIntentEditor(schemas);
     return schemas;
   }, [plugins.uiSchema]);
 
