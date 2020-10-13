@@ -121,7 +121,7 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
       onRender: (item: LibraryRef) => {
         return (
           <Fragment>
-            {item.lastImported && (
+            {props.isInstalled(item) && (
               <OverflowSet
                 overflowItems={[
                   {
@@ -139,12 +139,9 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
                 onRenderOverflowButton={onRenderOverflowButton}
               />
             )}
-            {!item.lastImported && (
+            {!props.isInstalled(item) && (
               <Fragment>
-                {props.isInstalled(item) && formatMessage('Installed')}
-                {!props.isInstalled(item) && (
-                  <DefaultButton text={formatMessage('Install')} onClick={props.redownload} />
-                )}
+                <DefaultButton text={formatMessage('Install')} onClick={props.redownload} />
               </Fragment>
             )}
           </Fragment>

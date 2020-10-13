@@ -222,7 +222,7 @@ const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   };
 
   const isInstalled = (item: LibraryRef): boolean => {
-    return settings.importedLibraries?.find((l) => l.name === item.name) != undefined;
+    return installedComponents?.find((l) => l.name === item.name) != undefined;
   };
   const selectItem = (item: LibraryRef | null) => {
     if (item) {
