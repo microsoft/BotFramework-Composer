@@ -16,7 +16,7 @@ export type RecognizerTypes = { [fileName: string]: RecognizerType };
 type GeneratedDialog = { name: string; content: string };
 
 const LuisRecognizerTemplate = (target: string, fileName: string) => ({
-  $kind: 'Microsoft.LuisRecognizer',
+  $kind: SDKKinds.LuisRecognizer,
   id: `LUIS_${target}`,
   applicationId: `=settings.luis.${fileName.replace('.', '_')}`,
   endpoint: '=settings.luis.endpoint',
@@ -24,7 +24,7 @@ const LuisRecognizerTemplate = (target: string, fileName: string) => ({
 });
 
 const MultiLanguageRecognizerTemplate = (target: string) => ({
-  $kind: 'Microsoft.MultiLanguageRecognizer',
+  $kind: SDKKinds.MultiLanguageRecognizer,
   id: `LUIS_${target}`,
   recognizers: {},
 });
