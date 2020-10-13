@@ -40,11 +40,21 @@ export default async (composer: any): Promise<void> => {
     installComponent: async (runtimePath: string, packageName: string, version: string): Promise<string> => {
       // run dotnet install on the project
       const { stderr: installError, stdout: installOutput } = await execAsync(
-        `dotnet install ${packageName} --Version=${version}`,
+        `dotnet add package ${packageName} --version=${version}`,
         {
           cwd: path.join(runtimePath, 'azurewebapp'),
         }
       );
+      if (installError) {
+        throw new Error(installError);
+      }
+      return installOutput;
+    },
+    uninstallComponent: async (runtimePath: string, packageName: string): Promise<string> => {
+      // run dotnet install on the project
+      const { stderr: installError, stdout: installOutput } = await execAsync(`dotnet remove package ${packageName}`, {
+        cwd: path.join(runtimePath, 'azurewebapp'),
+      });
       if (installError) {
         throw new Error(installError);
       }
