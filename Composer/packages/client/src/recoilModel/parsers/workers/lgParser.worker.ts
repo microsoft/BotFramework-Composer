@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 import { lgUtil } from '@bfc/indexers';
 import { lgImportResolverGenerator, LgFile } from '@bfc/shared';
+import { LGResource } from 'botbuilder-lg';
 
 import {
   LgActionType,
@@ -119,7 +120,8 @@ export class LgCache {
   public addProject(projectId: string, lgFiles: LgFile[]) {
     const lgResources = new Map();
     lgFiles.forEach((file) => {
-      lgResources.set(file.id, lgUtil.parse(file.id, file.content, lgFiles));
+      const resources = lgFiles.map((u) => new LGResource(u.id, u.id, u.content));
+      lgResources.set(file.id, lgUtil.parse(file.id, file.content, resources));
     });
     this.projects.set(projectId, lgResources);
   }
