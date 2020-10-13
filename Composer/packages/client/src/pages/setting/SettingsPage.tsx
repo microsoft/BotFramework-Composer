@@ -45,6 +45,7 @@ const SettingPage: React.FC<RouteComponentProps> = () => {
     addLanguages,
     deleteLanguages,
     fetchProjectById,
+    setCurrentMode,
   } = useRecoilValue(dispatcherState);
   const locale = useRecoilValue(localeState(projectId));
   const showDelLanguageModal = useRecoilValue(showDelLanguageModalState(projectId));
@@ -58,6 +59,7 @@ const SettingPage: React.FC<RouteComponentProps> = () => {
   // use cached projectId do fetch.
   const cachedProjectId = useProjectIdCache();
   useEffect(() => {
+    setCurrentMode('settings');
     if (!projectId && cachedProjectId) {
       fetchProjectById(cachedProjectId);
     }

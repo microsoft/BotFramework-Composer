@@ -7,6 +7,7 @@ import React from 'react';
 import { FontWeights } from '@uifabric/styling';
 import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
+import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
@@ -15,15 +16,17 @@ import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuStyles } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { ICalloutContentStyles } from 'office-ui-fabric-react/lib/Callout';
 
+import { TreeLink, TreeMenuItem } from './ProjectTree';
+
 // -------------------- Styles -------------------- //
-const indent = 16;
-const itemText = (depth: number) => css`
+const indent = 8;
+const itemText = css`
   outline: none;
   :focus {
     outline: rgb(102, 102, 102) solid 1px;
     z-index: 1;
   }
-  padding-left: ${depth * indent}px;
+  padding-left: ${indent}px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
@@ -42,15 +45,9 @@ const content = css`
   label: ProjectTreeItem;
 `;
 
-const leftIndent = css`
-  height: 100%;
-  width: ${indent}px;
-`;
-
 const moreMenu: Partial<ICalloutContentStyles> = {
   root: {
     marginTop: '-7px',
-    width: '100px',
   },
 };
 
@@ -77,13 +74,14 @@ const moreButton = (isActive: boolean): IButtonStyles => {
   };
 };
 
-const navItem = (isActive: boolean, isSubItemActive: boolean) => css`
-  width: 100%;
+const navItem = (isActive: boolean, shift: number) => css`
+  width: calc(100%-${shift}px);
   position: relative;
-  height: 36px;
+  height: 24px;
   font-size: 12px;
-  color: #545454;
-  background: ${isActive && !isSubItemActive ? '#f2f2f2' : 'transparent'};
+  margin-left: ${shift}px;
+  color: ${isActive ? '#ffffff' : '#545454'};
+  background: ${isActive ? '#0078d4' : 'transparent'};
   font-weight: ${isActive ? FontWeights.semibold : FontWeights.regular};
   &:hover {
     color: #545454;
@@ -113,58 +111,81 @@ const navItem = (isActive: boolean, isSubItemActive: boolean) => css`
 export const overflowSet = css`
   width: 100%;
   height: 100%;
-  padding-left: 12px;
   padding-right: 12px;
   box-sizing: border-box;
-  line-height: 36px;
+  line-height: 20px;
   justify-content: space-between;
   display: flex;
-  justify-content: space-between;
 `;
 
+const statusIcon = {
+  width: '24px',
+  fontSize: 16,
+  marginLeft: 6,
+};
+
 const warningIcon = {
-  marginRight: 5,
+  ...statusIcon,
   color: '#BE880A',
-  fontSize: 9,
+};
+
+const errorIcon = {
+  ...statusIcon,
+  color: '#CC3F3F',
 };
 
 // -------------------- TreeItem -------------------- //
 
 interface ITreeItemProps {
-  link: any;
-  isActive: boolean;
+  link: TreeLink;
+  isActive?: boolean;
   isSubItemActive?: boolean;
-  depth: number | undefined;
-  onDelete: (id: string) => void;
-  onSelect: (id: string) => void;
+  menu: TreeMenuItem[];
+  onSelect?: (link: TreeLink) => void;
+  icon?: string;
+  dialogName?: string;
+  showProps?: boolean;
+  shiftOut?: number; // needed to make an outline look right; should be the size of the "details" reveal arrow
 }
+
+const renderTreeMenuItem = (item: TreeMenuItem) => {
+  if (item.label === '') {
+    return {
+      key: 'divider',
+      itemType: ContextualMenuItemType.Divider,
+    };
+  }
+  return {
+    key: item.label,
+    ariaLabel: item.label,
+    text: item.label,
+    iconProps: { iconName: item.icon },
+    onItemClick: item.action,
+  };
+};
 
 const onRenderItem = (item: IOverflowSetItemProps) => {
   const warningContent = formatMessage(
     'This trigger type is not supported by the RegEx recognizer and will not be fired.'
   );
+  const errorContent = 'stub for error content'; // TODO: get actual warning and error messages from link
   return (
     <div
       data-is-focusable
-      css={itemText(item.depth)}
+      aria-label={warningContent}
+      css={itemText}
       role="cell"
       tabIndex={0}
       onBlur={item.onBlur}
       onFocus={item.onFocus}
     >
-      <div css={content} tabIndex={-1}>
-        {item.warningContent ? (
-          <TooltipHost content={warningContent} directionalHint={DirectionalHint.bottomLeftEdge}>
-            <Icon iconName={'Warning'} style={warningIcon} />
-          </TooltipHost>
-        ) : (
-          <div css={leftIndent} />
-        )}
-        {item.depth !== 0 && (
+      <div css={content} role="presentation" tabIndex={-1}>
+        {item.icon != null && (
           <Icon
-            iconName="Flow"
+            iconName={item.icon}
             styles={{
               root: {
+                width: '12px',
                 marginRight: '8px',
                 outline: 'none',
               },
@@ -173,16 +194,26 @@ const onRenderItem = (item: IOverflowSetItemProps) => {
           />
         )}
         {item.displayName}
+        {item.errorContent && (
+          <TooltipHost content={errorContent} directionalHint={DirectionalHint.bottomLeftEdge}>
+            <Icon iconName={'Warning'} style={warningIcon} />
+          </TooltipHost>
+        )}
+        {item.warningContent && (
+          <TooltipHost content={warningContent} directionalHint={DirectionalHint.bottomLeftEdge}>
+            <Icon iconName={'ErrorBadge'} style={errorIcon} />
+          </TooltipHost>
+        )}
       </div>
     </div>
   );
 };
 
-const onRenderOverflowButton = (isRoot: boolean, isActive: boolean) => {
+const onRenderOverflowButton = (isActive: boolean) => {
   const moreLabel = formatMessage('Actions');
-  const showIcon = !isRoot;
-  return (overflowItems) => {
-    return showIcon ? (
+  return (overflowItems: IContextualMenuItem[] | undefined) => {
+    if (overflowItems == null) return null;
+    return (
       <TooltipHost content={moreLabel} directionalHint={DirectionalHint.rightCenter}>
         <IconButton
           ariaLabel={moreLabel}
@@ -200,23 +231,38 @@ const onRenderOverflowButton = (isRoot: boolean, isActive: boolean) => {
           }}
         />
       </TooltipHost>
-    ) : null;
+    );
   };
 };
 
-export const TreeItem: React.FC<ITreeItemProps> = (props) => {
-  const { link, isActive, isSubItemActive, depth, onDelete, onSelect } = props;
+export const TreeItem: React.FC<ITreeItemProps> = ({
+  link,
+  isActive = false,
+  icon,
+  dialogName,
+  shiftOut,
+  onSelect,
+  menu,
+}) => {
+  const a11yLabel = `${dialogName ?? '$Root'}_${link.displayName}`;
+
+  const overflowMenu = menu.map(renderTreeMenuItem);
+
+  const linkString = `${link.projectId}_DialogTreeItem${link.dialogName}_${link.trigger ?? ''}`;
 
   return (
     <div
-      css={navItem(isActive, !!isSubItemActive)}
-      role="presentation"
+      aria-label={a11yLabel}
+      css={navItem(!!isActive, shiftOut ?? 0)}
+      data-testid={a11yLabel}
+      role="gridcell"
+      tabIndex={0}
       onClick={() => {
-        onSelect(link.id);
+        onSelect?.(link);
       }}
       onKeyDown={(e) => {
         if (e.key === 'Enter') {
-          onSelect(link.id);
+          onSelect?.(link);
         }
       }}
     >
@@ -225,25 +271,19 @@ export const TreeItem: React.FC<ITreeItemProps> = (props) => {
         //remove this at that time
         doNotContainWithinFocusZone
         css={overflowSet}
-        data-testid={`DialogTreeItem${link.id}`}
+        data-testid={linkString}
         items={[
           {
-            key: link.id,
-            depth,
+            key: linkString,
+            icon,
             ...link,
           },
         ]}
-        overflowItems={[
-          {
-            key: 'delete',
-            name: formatMessage('Delete'),
-            onClick: () => onDelete(link.id),
-          },
-        ]}
+        overflowItems={overflowMenu}
         role="row"
         styles={{ item: { flex: 1 } }}
         onRenderItem={onRenderItem}
-        onRenderOverflowButton={onRenderOverflowButton(link.isRoot, isActive)}
+        onRenderOverflowButton={onRenderOverflowButton(!!isActive)}
       />
     </div>
   );
