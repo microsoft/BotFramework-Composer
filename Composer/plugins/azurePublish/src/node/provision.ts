@@ -339,7 +339,7 @@ export class BotProjectProvision {
             provisionResults.luisAuthoring = await this.azureResourceManagementClient.deployLuisAuthoringResource({
               resourceGroupName: resourceGroupName,
               location: provisionResults.resourceGroup.location,
-              accountName: `${config.hostname}-luis-authoring`,
+              name: `${config.hostname}-luis-authoring`,
             });
 
             break;
@@ -351,7 +351,7 @@ export class BotProjectProvision {
             provisionResults.luisPrediction = await this.azureResourceManagementClient.deployLuisResource({
               resourceGroupName: resourceGroupName,
               location: provisionResults.resourceGroup.location,
-              accountName: `${config.hostname}-luis`,
+              name: `${config.hostname}-luis`,
             });
             break;
 
@@ -373,7 +373,7 @@ export class BotProjectProvision {
             provisionResults.qna = await this.azureResourceManagementClient.deployQnAReource({
               resourceGroupName: resourceGroupName,
               location: provisionResults.resourceGroup.location,
-              accountName: `${config.hostname}-qna`,
+              name: `${config.hostname}-qna`,
             })
             break;
         }
