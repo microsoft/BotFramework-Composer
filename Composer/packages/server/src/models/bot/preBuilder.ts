@@ -44,7 +44,10 @@ export class PreBuilder {
   async updateCrossTrainConfig(luFiles: FileInfo[], crossTrainConfig?: CrossTrainConfig) {
     if (crossTrainConfig && luFiles.length) {
       const configWithPath = this.generateCrossTrainConfig(crossTrainConfig, luFiles);
-      await this.storage.writeFile(`${this.folderPath}/crossTrain.json`, JSON.stringify(configWithPath, null, 2));
+      await this.storage.writeFile(
+        `${this.folderPath}/cross-train.config.json`,
+        JSON.stringify(configWithPath, null, 2)
+      );
     }
   }
 
