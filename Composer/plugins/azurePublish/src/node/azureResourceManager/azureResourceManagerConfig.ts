@@ -47,14 +47,14 @@ export interface ResourceGroupConfig {
 
 export interface LuisAuthoringResourceConfig {
   resourceGroupName: string;
-  accountName: string;
+  name: string;
   location: string;
   sku?: string;
 }
 
 export interface LuisResourceConfig {
   resourceGroupName: string;
-  accountName: string;
+  name: string;
   location: string;
   sku?: string;
 }
@@ -112,7 +112,7 @@ export interface DeploymentsConfig {
 
 export interface QnAResourceConfig {
   resourceGroupName: string;
-  accountName: string;
+  name: string;
   location: string;
   sku?: string;
 }

@@ -126,7 +126,7 @@ export class AzureResourceMananger {
       const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(this.creds, this.subscriptionId);
       const deployResult = await cognitiveServicesManagementClient.accounts.create(
         config.resourceGroupName,
-        config.accountName,
+        config.name,
         {
           kind: 'LUIS.Authoring',
           sku: {
@@ -146,7 +146,7 @@ export class AzureResourceMananger {
       const authoringEndpoint = deployResult.properties?.endpoint ?? '';
       const keys = await cognitiveServicesManagementClient.accounts.listKeys(
         config.resourceGroupName,
-        config.accountName
+        config.name
       );
       const authoringKey = keys?.key1 ?? '';
       return { authoringKey, authoringEndpoint };
@@ -172,7 +172,7 @@ export class AzureResourceMananger {
       const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(this.creds, this.subscriptionId);
       const deployResult = await cognitiveServicesManagementClient.accounts.create(
         config.resourceGroupName,
-        config.accountName,
+        config.name,
         {
           kind: 'LUIS',
           sku: {
@@ -192,7 +192,7 @@ export class AzureResourceMananger {
       const endpoint = deployResult.properties?.endpoint ?? '';
       const keys = await cognitiveServicesManagementClient.accounts.listKeys(
         config.resourceGroupName,
-        config.accountName
+        config.name
       );
       const endpointKey = keys?.key1 ?? '';
       return { endpoint, endpointKey };
@@ -207,7 +207,7 @@ export class AzureResourceMananger {
 
   /**
    * QnA Resource depends on serveral components, including appinights and web config
-   * @param config 
+   * @param config
    */
   public async deployQnAReource(config: QnAResourceConfig): Promise<{ endpoint: string; subscriptionKey: string }> {
     try {
@@ -217,9 +217,9 @@ export class AzureResourceMananger {
       });
 
       // initialize the name
-      const qnaMakerSearchName = `${config.accountName}-search`.toLowerCase().replace('_', '');
-      const qnaMakerWebAppName = `${config.accountName}-qnahost`.toLowerCase().replace('_', '');
-      const qnaMakerServiceName = `${config.accountName}-qna`;
+      const qnaMakerSearchName = `${config.name}-search`.toLowerCase().replace('_', '');
+      const qnaMakerWebAppName = `${config.name}-qnahost`.toLowerCase().replace('_', '');
+      const qnaMakerServiceName = `${config.name}-qna`;
       // deploy search service
       const searchManagementClient = new SearchManagementClient(this.creds, this.subscriptionId);
       const searchServiceDeployResult = await searchManagementClient.services.createOrUpdate(config.resourceGroupName, qnaMakerSearchName, {
