@@ -23,7 +23,7 @@ This document includes:
 
 * **Instructional copy**: Instructional texts that provide users with information about what to do.
 * **Tooltip**: Texts displayed in an informational text box when hovering over an item.
-* **Watermark text**: Texts that live inside an edit box or entry field, usually instructional and with an example.
+* **Watermark text**: Texts that live inside an edit box or entry field, usually with an example that supplements the instructional text.
 * **Help link**: Context-sensitive help (CSH) links added to the user interface to help users with a concept or procedure while using a product.
 
 # Guidelines
