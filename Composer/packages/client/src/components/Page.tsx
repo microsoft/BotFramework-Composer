@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css, SerializedStyles } from '@emotion/core';
 import React from 'react';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 
@@ -50,7 +50,7 @@ export const headerTitle = css`
 export const headerContent = css`
   display: flex;
   align-items: center;
-
+  font-size: ${FontSizes.smallPlus};
   label: PageHeaderContent;
 `;
 
@@ -85,6 +85,7 @@ interface IPageProps {
   toolbarItems: IToolbarItem[];
   navLinks: INavTreeItem[];
   title: string;
+  headerStyle?: SerializedStyles;
   navRegionName: string;
   mainRegionName: string;
   onRenderHeaderContent?: () => string | JSX.Element | null;
@@ -92,13 +93,22 @@ interface IPageProps {
 }
 
 const Page: React.FC<IPageProps> = (props) => {
-  const { title, navLinks, toolbarItems, onRenderHeaderContent, children, navRegionName, mainRegionName } = props;
+  const {
+    title,
+    navLinks,
+    toolbarItems,
+    onRenderHeaderContent,
+    children,
+    navRegionName,
+    mainRegionName,
+    headerStyle = header,
+  } = props;
 
   return (
     <div css={root} data-testid={props['data-testid']}>
       <div css={pageWrapper}>
         <Toolbar toolbarItems={toolbarItems} />
-        <div css={header}>
+        <div css={headerStyle}>
           <h1 css={headerTitle}>{title}</h1>
           {onRenderHeaderContent && <div css={headerContent}>{onRenderHeaderContent()}</div>}
         </div>

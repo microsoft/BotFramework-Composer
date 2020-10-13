@@ -64,6 +64,13 @@ export const topLinks = (projectId: string, openedDialogId: string, pluginPages:
       exact: true,
       disabled: !botLoaded,
     },
+    {
+      to: `/bot/${projectId}/botProjectsSettings`,
+      iconName: 'WaffleOffice365',
+      labelName: formatMessage('Bot Projects'),
+      exact: true,
+      disabled: !botLoaded,
+    },
   ];
 
   if (process.env.COMPOSER_AUTH_PROVIDER === 'abs-h') {

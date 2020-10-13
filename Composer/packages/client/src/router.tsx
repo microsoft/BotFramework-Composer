@@ -23,6 +23,7 @@ const LUPage = React.lazy(() => import('./pages/language-understanding/LUPage'))
 const QnAPage = React.lazy(() => import('./pages/knowledge-base/QnAPage'));
 const LGPage = React.lazy(() => import('./pages/language-generation/LGPage'));
 const SettingPage = React.lazy(() => import('./pages/setting/SettingsPage'));
+const BotProjectSettings = React.lazy(() => import('./pages/botProject/BotProjectSettings'));
 const Notifications = React.lazy(() => import('./pages/notifications/Notifications'));
 const Publish = React.lazy(() => import('./pages/publish/Publish'));
 const Skills = React.lazy(() => import('./pages/skills'));
@@ -55,6 +56,7 @@ const Routes = (props) => {
             <Notifications path="notifications" />
             <Publish path="publish/:targetName" />
             <Skills path="skills/*" />
+            <BotProjectSettings path="botProjectsSettings" />
             <DesignPage path="*" />
           </ProjectRouter>
           <SettingPage path="settings/*" />

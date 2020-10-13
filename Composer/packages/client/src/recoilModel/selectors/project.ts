@@ -12,6 +12,7 @@ import {
   dialogsState,
   projectMetaDataState,
   botNameIdentifierState,
+  settingsState,
 } from '../atoms';
 
 // Actions
@@ -34,11 +35,12 @@ export const botProjectSpaceSelector = selector({
     const botProjects = get(botProjectIdsState);
     const result = botProjects.map((projectId: string) => {
       const dialogs = get(dialogsState(projectId));
+      const settings = get(settingsState(projectId));
       const metaData = get(projectMetaDataState(projectId));
       const botError = get(botErrorState(projectId));
       const name = get(botDisplayNameState(projectId));
       const botNameId = get(botNameIdentifierState(projectId));
-      return { dialogs, projectId, name, ...metaData, error: botError, botNameId };
+      return { dialogs, projectId, settings, name, ...metaData, error: botError, botNameId };
     });
     return result;
   },
