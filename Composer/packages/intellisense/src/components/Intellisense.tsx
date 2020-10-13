@@ -81,18 +81,26 @@ export const Intellisense = React.memo(
       const outsideClickHandler = (event: MouseEvent) => {
         const { x, y } = event;
 
-        if (mainContainerRef.current && completionListRef.current) {
-          if (checkIsOutside(x, y, mainContainerRef.current) && checkIsOutside(x, y, completionListRef.current)) {
-            setShowCompletionList(false);
-            setCursorPosition(-1);
-            onBlur && onBlur(id);
-          }
+        let shouldBlur = true;
+
+        if (mainContainerRef.current && !checkIsOutside(x, y, mainContainerRef.current)) {
+          shouldBlur = false;
+        }
+        if (completionListRef.current && !checkIsOutside(x, y, completionListRef.current)) {
+          shouldBlur = false;
+        }
+
+        if (shouldBlur) {
+          setShowCompletionList(false);
+          setCursorPosition(-1);
+          onBlur && onBlur(id);
         }
       };
 
       const keyupHandler = (event: KeyboardEvent) => {
         if (event.key === 'Escape') {
           setShowCompletionList(false);
+          onBlur && onBlur(id);
         }
       };
 

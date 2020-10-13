@@ -99,6 +99,7 @@ export const IntellisenseNumberField: React.FC<FieldProps<string>> = function In
       scopes={uiOptions.intellisenseScopes || []}
       url={getIntellisenseUrl()}
       value={value}
+      onBlur={props.onBlur}
       onChange={onChange}
     >
       {({ textFieldValue, onValueChanged, onKeyDownTextField, onKeyUpTextField, onClickTextField }) => (
@@ -106,6 +107,7 @@ export const IntellisenseNumberField: React.FC<FieldProps<string>> = function In
           {...props}
           id={id}
           value={textFieldValue}
+          onBlur={undefined} // onBlur managed by Intellisense
           onChange={(newValue) => onValueChanged(newValue || 0)}
           onClick={onClickTextField}
           onKeyDown={onKeyDownTextField}
