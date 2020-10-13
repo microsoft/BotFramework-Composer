@@ -170,7 +170,7 @@
   dependencies:
     "@microsoft/bf-lu" "^4.11.0-dev.20201005.7e5e1b8"
     adaptive-expressions "4.10.0-preview-147186"
-    botbuilder-lg "^4.10.0-preview-150886"
+    botbuilder-lg "4.11.0-dev.20201010.6e4a99e"
     lodash "^4.17.19"
 
 "@bfc/shared@../../packages/lib/shared":
@@ -831,12 +831,12 @@ bluebird@^3.5.0:
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.7.2.tgz#9f229c15be272454ffa973ace0dbee79a1b0c36f"
   integrity sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg==
 
-botbuilder-lg@^4.10.0-preview-150886:
-  version "4.10.1"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botbuilder-lg/-/botbuilder-lg-4.10.1.tgz#fb74d81fa32fb9bc07bfe58aea58d06052681134"
-  integrity sha1-+3TYH6MvubwHv+WK6ljQYFJoETQ=
+botbuilder-lg@4.11.0-dev.20201010.6e4a99e:
+  version "4.11.0-dev.20201010.6e4a99e"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botbuilder-lg/-/botbuilder-lg-4.11.0-dev.20201010.6e4a99e.tgz#6201f1fb29756cd968589fcfd7980016b1f33369"
+  integrity sha1-YgHx+yl1bNloWJ/P15gAFrHzM2k=
   dependencies:
-    adaptive-expressions "4.10.1"
+    adaptive-expressions "4.11.0-dev.20201010.6e4a99e"
     antlr4ts "0.5.0-alpha.3"
     lodash "^4.17.19"
     path "^0.12.7"

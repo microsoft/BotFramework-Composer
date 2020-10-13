@@ -15,10 +15,10 @@
     "lint:typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@bfc/built-in-functions": "*",
     "@bfc/indexers": "*",
-    "botbuilder-lg": "^4.10.0-preview-150886",
-    "vscode-languageserver": "^5.3.0-next",
-    "@bfc/built-in-functions": "*"
+    "botbuilder-lg": "4.11.0-dev.20201010.6e4a99e",
+    "vscode-languageserver": "^5.3.0-next"
   },
   "devDependencies": {
     "@bfc/test-utils": "*",
