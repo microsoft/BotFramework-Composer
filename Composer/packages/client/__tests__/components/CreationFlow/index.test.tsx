@@ -73,7 +73,7 @@ describe('<CreationFlow/>', () => {
     expect(createProjectMock).toHaveBeenCalledWith({
       appLocale: 'en-US',
       description: '',
-      location: '/test-folder/Desktop',
+      location: '\\test-folder\\Desktop',
       name: 'EchoBot-1',
       qnaKbUrls: undefined,
       schemaUrl: '',
