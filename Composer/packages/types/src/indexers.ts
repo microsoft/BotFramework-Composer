@@ -153,10 +153,6 @@ export type Skill = {
   name: string;
 };
 
-export type TextFile = {
-  id: string;
-  content: string;
-};
 export type FileResolver = (id: string) => FileInfo | undefined;
 
 export type MemoryResolver = (id: string) => string[] | undefined;

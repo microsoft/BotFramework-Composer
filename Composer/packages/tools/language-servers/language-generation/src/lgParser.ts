@@ -4,10 +4,10 @@
 import { fork, ChildProcess } from 'child_process';
 import path from 'path';
 
-import { importResolverGenerator } from '@bfc/shared';
-import { ResolverResource } from '@bfc/shared';
+import { lgImportResolverGenerator } from '@bfc/shared';
 import uniqueId from 'lodash/uniqueId';
 import { lgIndexer } from '@bfc/indexers';
+import { LGResource } from 'botbuilder-lg';
 
 const isTest = process.env?.NODE_ENV === 'test';
 export interface WorkerMsg {
@@ -17,8 +17,8 @@ export interface WorkerMsg {
 }
 
 class LgParserWithoutWorker {
-  public async parseText(content: string, id: string, resources: ResolverResource[]) {
-    const lgImportResolver = importResolverGenerator(resources, '.lg');
+  public async parseText(content: string, id: string, resources: LGResource[]) {
+    const lgImportResolver = lgImportResolverGenerator(resources, '.lg');
     return lgIndexer.parse(content, id, lgImportResolver);
   }
 }
@@ -32,7 +32,7 @@ class LgParserWithWorker {
     LgParserWithWorker.worker.on('message', this.handleMsg.bind(this));
   }
 
-  public async parseText(content: string, id: string, resources: ResolverResource[]): Promise<any> {
+  public async parseText(content: string, id: string, resources: LGResource[]): Promise<any> {
     const msgId = uniqueId();
     const msg = { id: msgId, payload: { content, id, resources } };
     return new Promise((resolve, reject) => {

@@ -4,7 +4,7 @@
 import merge from 'lodash/merge';
 import find from 'lodash/find';
 import flatten from 'lodash/flatten';
-import { importResolverGenerator, ResolverResource } from '@bfc/shared';
+import { luImportResolverGenerator, LUResolverResource } from '@bfc/shared';
 import extractMemoryPaths from '@bfc/indexers/lib/dialogUtils/extractMemoryPaths';
 import { UserIdentity } from '@bfc/extension';
 
@@ -35,18 +35,19 @@ export class BotProjectService {
     }
   }
 
-  public static getLgResources(projectId?: string): ResolverResource[] {
+  public static getLgResources(projectId?: string): LGResource[] {
     BotProjectService.initialize();
     const project = BotProjectService.getIndexedProjectById(projectId);
     if (!project) throw new Error('project not found');
     const resources = project.lgFiles.map((file) => {
       const { name, content } = file;
-      return { id: Path.basename(name, '.lg'), content };
+      const id = Path.basename(name, '.lg');
+      return new LGResource(id, id, content);
     });
     return resources;
   }
 
-  public static luImportResolver(source: string, id: string, projectId: string): ResolverResource {
+  public static luImportResolver(source: string, id: string, projectId: string): LUResolverResource {
     BotProjectService.initialize();
     const project = BotProjectService.getIndexedProjectById(projectId);
     if (!project) throw new Error('project not found');
@@ -54,7 +55,7 @@ export class BotProjectService {
       const { name, content } = file;
       return { id: Path.basename(name, '.lu'), content };
     });
-    const resolver = importResolverGenerator(resource, '.lu');
+    const resolver = luImportResolverGenerator(resource, '.lu');
     return resolver(source, id);
   }
 
