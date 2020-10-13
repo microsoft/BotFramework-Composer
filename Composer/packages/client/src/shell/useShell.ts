@@ -34,6 +34,7 @@ import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
 import { useQnaApi } from './qnaApi';
 import { useTriggerApi } from './triggerApi';
+import { useActionApi } from './actionApi';
 
 const FORM_EDITOR = 'PropertyEditor';
 
@@ -83,6 +84,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
   const luApi = useLuApi(projectId);
   const qnaApi = useQnaApi(projectId);
   const triggerApi = useTriggerApi(projectId);
+  const actionApi = useActionApi(projectId);
   const { dialogId, selected, focused, promptTab } = designPageLocation;
 
   const dialogsMap = useMemo(() => {
@@ -170,10 +172,6 @@ export function useShell(source: EventSource, projectId: string): Shell {
       updateDialog(payload);
       commitChanges();
     },
-    ...lgApi,
-    ...luApi,
-    ...qnaApi,
-    ...triggerApi,
     updateRegExIntent: updateRegExIntentHandler,
     renameRegExIntent: renameRegExIntentHandler,
     updateIntentTrigger: updateIntentTriggerHandler,
@@ -212,6 +210,11 @@ export function useShell(source: EventSource, projectId: string): Shell {
     },
     updateSkillSetting: (...params) => updateSkill(projectId, ...params),
     updateFlowZoomRate,
+    ...lgApi,
+    ...luApi,
+    ...qnaApi,
+    ...triggerApi,
+    ...actionApi,
   };
 
   const currentDialog = useMemo(() => dialogs.find((d) => d.id === dialogId), [dialogs, dialogId]) as DialogInfo;

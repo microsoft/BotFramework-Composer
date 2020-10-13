@@ -4,8 +4,6 @@
 import { BaseSchema, ShellApi } from '@botframework-composer/types';
 import { DialogUtils } from '@bfc/shared';
 
-import { useActionApi } from './useActionApi';
-
 export interface DialogApiContext {
   copyAction: (actionId: string) => BaseSchema;
   deleteAction: (actionId: BaseSchema) => BaseSchema;
@@ -15,8 +13,13 @@ export interface DialogApiContext {
 
 const { disableNodes, enableNodes, appendNodesAfter, queryNodes, insertNodes, deleteNode, deleteNodes } = DialogUtils;
 
+/**
+ * @internal
+ * used in:
+ * useEditorEventApi
+ */
 export function useDialogEditApi(shellApi: ShellApi) {
-  const { constructActions, copyActions, deleteAction, deleteActions } = useActionApi(shellApi);
+  const { constructActions, copyActions, deleteAction, deleteActions } = shellApi;
 
   async function insertActions(
     dialogId: string,

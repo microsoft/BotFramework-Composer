@@ -3,4 +3,4 @@
 
 import { MicrosoftIDialog } from '@botframework-composer/types';
 
-export type AdaptiveActionVisitor = (action: MicrosoftIDialog) => void;
+export type AdaptiveActionVisitor = (action: MicrosoftIDialog | string) => void;

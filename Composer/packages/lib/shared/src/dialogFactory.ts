@@ -326,7 +326,7 @@ export const getDesignerId = (data?: DesignerData) => {
 };
 
 export const deepCopyAction = async (
-  data,
+  data: MicrosoftIDialog,
   copyLgTemplate: FieldProcessorAsync<string>,
   copyLuIntent: FieldProcessorAsync<LuIntentSection | string | undefined>
 ) => {
@@ -338,14 +338,14 @@ export const deepCopyAction = async (
 };
 
 export const deepCopyActions = async (
-  actions: any[],
+  actions: MicrosoftIDialog[],
   copyLgTemplate: FieldProcessorAsync<string>,
   copyLuIntent: FieldProcessorAsync<LuIntentSection | string | undefined>
 ) => {
   // NOTES: underlying lg api for writing new lg template to file is not concurrency-safe,
   //        so we have to call them sequentially
   // TODO: copy them parralleled via Promise.all() after optimizing lg api.
-  const copiedActions: any[] = [];
+  const copiedActions: MicrosoftIDialog[] = [];
   for (const action of actions) {
     // Deep copy nodes with external resources
     const copy = await deepCopyAction(action, copyLgTemplate, copyLuIntent);

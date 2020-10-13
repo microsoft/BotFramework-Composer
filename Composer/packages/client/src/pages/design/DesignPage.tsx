@@ -11,7 +11,7 @@ import get from 'lodash/get';
 import { DialogInfo, PromptTab, getEditorAPI, registerEditorAPI, FieldNames } from '@bfc/shared';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
-import { EditorExtension, useTriggerApi, PluginConfig } from '@bfc/extension-client';
+import { EditorExtension, PluginConfig } from '@bfc/extension-client';
 import { useRecoilValue } from 'recoil';
 
 import { LeftRightSplit } from '../../components/Split/LeftRightSplit';
@@ -53,6 +53,7 @@ import ImportQnAFromUrlModal from '../knowledge-base/ImportQnAFromUrlModal';
 import { triggerNotSupported } from '../../utils/dialogValidator';
 import { undoFunctionState, undoVersionState } from '../../recoilModel/undo/history';
 import { decodeDesignerPathToArrayPath } from '../../utils/convertUtils/designerPathEncoder';
+import { useTriggerApi } from '../../shell/triggerApi';
 
 import { WarningMessage } from './WarningMessage';
 import {
@@ -157,7 +158,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const shell = useShell('DesignPage', projectId);
   const shellForFlowEditor = useShell('FlowEditor', projectId);
   const shellForPropertyEditor = useShell('PropertyEditor', projectId);
-  const triggerApi = useTriggerApi(shell.api);
+  const triggerApi = useTriggerApi(projectId);
   const { createTrigger } = shell.api;
 
   useEffect(() => {

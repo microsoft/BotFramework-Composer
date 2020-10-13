@@ -11,7 +11,7 @@ export async function copyAdaptiveAction(data: MicrosoftIDialog, externalApi: Ex
     return data;
   }
 
-  if (!data || !data.$kind) return {};
+  if (!data || !data.$kind) return {} as MicrosoftIDialog;
 
   const copier = CopyConstructorMap[data.$kind] || CopyConstructorMap.default;
 
