@@ -3,3 +3,4 @@
 
 export * from './ListOverview';
 export * from './PropertyAssignment';
+export * from './DialogWrapper';
