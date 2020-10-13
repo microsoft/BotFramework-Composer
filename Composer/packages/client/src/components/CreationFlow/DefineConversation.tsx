@@ -13,9 +13,9 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 import { FontWeights } from '@uifabric/styling';
+import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
 import { DialogCreationCopy, QnABotTemplateId, nameRegex } from '../../constants';
-import { DialogWrapper, DialogTypes } from '../DialogWrapper';
 import { FieldConfig, useForm } from '../../hooks/useForm';
 import { StorageFolder } from '../../recoilModel/types';
 
