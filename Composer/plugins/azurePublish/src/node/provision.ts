@@ -299,7 +299,13 @@ export class BotProjectProvision {
           /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
           // Create the Azure Bot Service registration
           case AzureResourceTypes.AZUREFUNCTIONS:
-            // TODO
+            await this.azureResourceManagementClient.deployAzureFunctions({
+              resourceGroupName: resourceGroupName,
+              location: provisionResults.resourceGroup.location,
+              name: config.hostname,
+              appId: provisionResults.appId,
+              appPwd: provisionResults.appPassword,
+            });
             break;
 
           /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
