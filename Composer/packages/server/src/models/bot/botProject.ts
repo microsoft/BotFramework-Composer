@@ -452,7 +452,7 @@ export class BotProject implements IBotProject {
     crossTrainConfig,
     recognizerTypes,
   }: IBuildConfig) => {
-    if ((luFileIds.length || qnaFileIds.length) && this.settings) {
+    if (this.settings) {
       const luFiles: FileInfo[] = [];
       luFileIds.forEach((id) => {
         const f = this.files.get(`${id}.lu`);
@@ -718,7 +718,10 @@ export class BotProject implements IBotProject {
       // load only from the data dir, otherwise may get "build" versions from
       // deployment process
       const root = this.dataDir;
-      const paths = await this.fileStorage.glob([pattern, '!(generated/**)', '!(runtime/**)'], root);
+      const paths = await this.fileStorage.glob(
+        [pattern, '!(generated/**)', '!(runtime/**)', '!(recognizers/**)'],
+        root
+      );
 
       for (const filePath of paths.sort()) {
         const realFilePath: string = Path.join(root, filePath);

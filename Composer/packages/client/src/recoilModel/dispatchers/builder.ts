@@ -60,7 +60,7 @@ export const builderDispatcher = () => {
             return result;
           }, {}),
           luFiles: referredLuFiles.map((file) => file.id),
-          qnaFiles: qnaFiles.map((file) => file.id),
+          qnaFiles: qnaFiles.filter((file) => file.qnaSections.length).map((file) => file.id),
         });
         luFileStatusStorage.publishAll(projectId);
         qnaFileStatusStorage.publishAll(projectId);
