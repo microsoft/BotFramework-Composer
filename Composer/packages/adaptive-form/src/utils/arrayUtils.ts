@@ -3,8 +3,7 @@
 
 import { generateUniqueId } from '@bfc/shared';
 import { ChangeHandler } from '@bfc/extension-client';
-import { useEffect, useState } from 'react';
-import isEqual from 'lodash/isEqual';
+import { useState } from 'react';
 
 type ArrayChangeHandler<ItemType> = (items: ArrayItem<ItemType>[]) => void;
 
@@ -78,19 +77,6 @@ export function useArrayItems<ItemType = unknown>(
   onChange: ChangeHandler<ItemType[]>
 ): ArrayItemState<ItemType> {
   const [cache, setCache] = useState(generateArrayItems(items));
-
-  useEffect(() => {
-    const newCache = generateArrayItems(items);
-
-    if (
-      !isEqual(
-        cache.map(({ value }) => value),
-        newCache.map(({ value }) => value)
-      )
-    ) {
-      setCache(newCache);
-    }
-  }, [items]);
 
   const handleChange = (newItems: ArrayItem<ItemType>[]) => {
     setCache(newItems);
