@@ -42,7 +42,8 @@ const AzureResourceTypes = {
   LUIS_AUTHORING: 'luisAuthoring',
   LUIS_PREDICTION: 'luisPrediction',
   BLOBSTORAGE: 'blobStorage',
-  QNA: 'qna'
+  QNA: 'qna',
+  SERVICE_PLAN: 'servicePlan'
 };
 
 export class BotProjectProvision {
@@ -372,7 +373,7 @@ export class BotProjectProvision {
             provisionResults.qna = await this.azureResourceManagementClient.deployQnAReource({
               resourceGroupName: resourceGroupName,
               location: provisionResults.resourceGroup.location,
-              accountName: resourceGroupName,
+              accountName: `${config.hostname}-qna`,
             })
             break;
         }
