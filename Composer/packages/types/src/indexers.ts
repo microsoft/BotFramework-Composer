@@ -16,6 +16,7 @@ export enum FileExtensions {
   Setting = 'appsettings.json',
   FormDialogSchema = '.form-dialog',
   BotProject = '.botproj',
+  Json = '.json',
 }
 
 export type FileInfo = {
