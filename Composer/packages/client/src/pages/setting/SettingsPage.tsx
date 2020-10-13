@@ -37,7 +37,7 @@ const getProjectLink = (path: string, id?: string) => {
 const SettingPage: React.FC<RouteComponentProps> = () => {
   const projectId = useRecoilValue(currentProjectIdState);
   const {
-    deleteBotProject,
+    deleteBot: deleteBotProject,
     addLanguageDialogBegin,
     addLanguageDialogCancel,
     delLanguageDialogBegin,
@@ -89,8 +89,6 @@ const SettingPage: React.FC<RouteComponentProps> = () => {
   useEffect(() => {
     if (!projectId && location.pathname.indexOf('/settings/bot/') !== -1) {
       navigate('/settings/application');
-    } else {
-      navigate(links[0].url);
     }
   }, [projectId]);
 

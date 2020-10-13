@@ -20,13 +20,12 @@ import { ShimmeredDetailsList } from 'office-ui-fabric-react/lib/ShimmeredDetail
 import formatMessage from 'format-message';
 import { useRecoilValue, selector } from 'recoil';
 import { NeutralColors } from '@uifabric/fluent-theme';
+import { ExtensionMetadata, ExtensionSearchResult } from '@bfc/extension-client';
 
-import { ExtensionConfig } from '../../../recoilModel/types';
 import { Toolbar, IToolbarItem } from '../../../components/Toolbar';
 import { dispatcherState, extensionsState } from '../../../recoilModel';
 
 import { InstallExtensionDialog } from './InstallExtensionDialog';
-import { ExtensionSearchResult } from './ExtensionSearchResults';
 
 const remoteExtensionsState = selector({
   key: 'remoteExtensions',
@@ -45,11 +44,11 @@ const Extensions: React.FC<RouteComponentProps> = () => {
   // if a string, its the id of the extension being updated
   const [isUpdating, setIsUpdating] = useState<string | boolean>(false);
   const [showNewModal, setShowNewModal] = useState(false);
-  const [selectedExtensions, setSelectedExtensions] = useState<ExtensionConfig[]>([]);
+  const [selectedExtensions, setSelectedExtensions] = useState<ExtensionMetadata[]>([]);
   const selection = useRef(
     new Selection({
       onSelectionChanged: () => {
-        setSelectedExtensions(selection.getSelection() as ExtensionConfig[]);
+        setSelectedExtensions(selection.getSelection() as ExtensionMetadata[]);
       },
     })
   ).current;
@@ -91,7 +90,7 @@ const Extensions: React.FC<RouteComponentProps> = () => {
       minWidth: 100,
       maxWidth: 150,
       isResizable: true,
-      onRender: (item: ExtensionConfig) => {
+      onRender: (item: ExtensionMetadata) => {
         return (
           <Toggle
             ariaLabel={formatMessage('Toggle extension')}
@@ -158,15 +157,15 @@ const Extensions: React.FC<RouteComponentProps> = () => {
   }, []);
 
   const shownItems = () => {
-    if (extensions.length === 0) {
-      // render no installed message
-      return [{}];
-    } else if (isUpdating === true) {
+    if (isUpdating === true) {
       // extension is being added, render a shimmer row at end of list
       return [...extensions, null];
     } else if (typeof isUpdating === 'string') {
       // extension is being removed or updated, show shimmer for that row
       return extensions.map((e) => (e.id === isUpdating ? null : e));
+    } else if (extensions.length === 0) {
+      // render no installed message
+      return [{}];
     } else {
       return extensions;
     }
@@ -186,20 +185,25 @@ const Extensions: React.FC<RouteComponentProps> = () => {
         selection={selection}
         selectionMode={SelectionMode.multiple}
         onRenderRow={(rowProps, defaultRender) => {
-          if (extensions.length === 0) {
-            return (
-              <div css={noExtensionsStyles}>
-                <p>{formatMessage('No extensions installed')}</p>
-              </div>
-            );
-          }
+          if (rowProps && defaultRender) {
+            if (isUpdating) {
+              return defaultRender(rowProps);
+            }
 
-          if (defaultRender && rowProps) {
+            if (extensions.length === 0) {
+              return (
+                <div css={noExtensionsStyles}>
+                  <p>{formatMessage('No extensions installed')}</p>
+                </div>
+              );
+            }
+
             const customStyles: Partial<IDetailsRowStyles> = {
               root: {
-                color: rowProps?.item?.enabled ? undefined : NeutralColors.gray90,
+                color: rowProps.item?.enabled ? undefined : NeutralColors.gray90,
               },
             };
+
             return <DetailsRow {...rowProps} styles={customStyles} />;
           }
 

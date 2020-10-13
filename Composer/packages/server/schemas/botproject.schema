@@ -1,0 +1,72 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/microsoft/BotFramework-Composer/blob/main/Composer/packages/server/schemas/botproject.schema",
+  "$version": "1.0.0",
+  "title": "Root Bot and Skills workspace schema for a environment. Each publishing environment has a Bot Project file associated with it.",
+  "description": "Schema that captures the relationship between the Root Bot and remote/local skills that the Root Bot consumes.",
+  "type": "object",
+  "required": ["$schema", "name", "workspace", "skills"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "format": "uri",
+      "description": "The schema to verify this workspace file."
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the Root Bot."
+    },
+    "workspace": {
+      "type": "string",
+      "description": "Absolute path to the Root Bot. If a workspace is local, we use the file protocol as opposed to http/https for remote workspaces."
+    },
+    "skills": {
+      "description": "List of skills (remote or local) skills that the Root Bot consumes.",
+      "type": "object",
+      "patternProperties": {
+        "^\\$": { "title": "Skill name", "description": "Unique Skill name identifier" }
+      },
+      "additionalProperties": { "$ref": "#/definitions/skill" }
+    }
+  },
+  "definitions": {
+    "skill": {
+      "type": "object",
+      "description": "Properties of a skill.",
+      "additionalProperties": false,
+      "required": ["remote"],
+      "oneOf": [
+        {
+          "anyOf": [
+            {
+              "required": ["workspace"]
+            },
+            {
+              "required": ["manifest"]
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "manifest": {
+          "type": "string",
+          "description": "URL that points to the manifest exposed by the skill."
+        },
+        "workspace": {
+          "type": "string",
+          "description": "Absolute path to a skill workspace. If a workspace is local, we use the file protocol as opposed to http/https protocols for remote workspaces."
+        },
+        "remote": {
+          "description": "Indication if the skill is remote or local skill.",
+          "type": "boolean",
+          "title": "isRemote",
+          "default": false
+        },
+        "endpointName": {
+          "type": "string",
+          "description": "The name of the endpoint inside the above chosen manifest that the Root Bot can use to consume the skill capabilities."
+        }
+      }
+    }
+  }
+}

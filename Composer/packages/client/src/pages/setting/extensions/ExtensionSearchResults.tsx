@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React from 'react';
+import React, { useRef } from 'react';
 import formatMessage from 'format-message';
 import {
   DetailsListLayoutMode,
@@ -11,19 +11,12 @@ import {
   IColumn,
   CheckboxVisibility,
   ConstrainMode,
+  Selection,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { ScrollablePane } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky } from 'office-ui-fabric-react/lib/Sticky';
 import { ShimmeredDetailsList } from 'office-ui-fabric-react/lib/ShimmeredDetailsList';
-
-// TODO: extract to shared?
-export type ExtensionSearchResult = {
-  id: string;
-  keywords: string[];
-  version: string;
-  description: string;
-  url: string;
-};
+import { ExtensionSearchResult } from '@bfc/extension-client';
 
 type ExtensionSearchResultsProps = {
   results: ExtensionSearchResult[];
@@ -44,6 +37,13 @@ const noResultsStyles = css`
 
 const ExtensionSearchResults: React.FC<ExtensionSearchResultsProps> = (props) => {
   const { results, isSearching, onSelect } = props;
+  const selection = useRef(
+    new Selection({
+      onSelectionChanged: () => {
+        onSelect(selection.getSelection()[0] as ExtensionSearchResult);
+      },
+    })
+  ).current;
 
   const searchColumns: IColumn[] = [
     {
@@ -101,9 +101,9 @@ const ExtensionSearchResults: React.FC<ExtensionSearchResultsProps> = (props) =>
           enableShimmer={isSearching}
           items={noResultsFound ? [{}] : results}
           layoutMode={DetailsListLayoutMode.justified}
+          selection={selection}
           selectionMode={SelectionMode.single}
           shimmerLines={8}
-          onActiveItemChanged={(item) => onSelect(item)}
           onRenderDetailsHeader={(headerProps, defaultRender) => {
             if (defaultRender) {
               return <Sticky>{defaultRender(headerProps)}</Sticky>;

@@ -2,13 +2,13 @@
 // Licensed under the MIT License.
 
 import { Request, Response } from 'express';
-import { ExtensionManager } from '@bfc/extension';
-import { ExtensionMetadata } from '@bfc/extension/lib/types/extension';
+import { ExtensionManager, ExtensionMetadata } from '@bfc/extension';
 
 interface AddExtensionRequest extends Request {
   body: {
     id?: string;
     version?: string;
+    path?: string;
   };
 }
 
@@ -34,7 +34,7 @@ interface SearchExtensionsRequest extends Request {
 interface ExtensionViewBundleRequest extends Request {
   params: {
     id: string;
-    view: string;
+    bundleId: string;
   };
 }
 
@@ -60,10 +60,15 @@ export async function addExtension(req: AddExtensionRequest, res: Response) {
     return;
   }
 
-  await ExtensionManager.installRemote(id, version);
-  await ExtensionManager.load(id);
-  const extension = ExtensionManager.find(id);
-  res.json(presentExtension(extension));
+  const extensionId = await ExtensionManager.installRemote(id, version);
+
+  if (extensionId) {
+    await ExtensionManager.load(extensionId);
+    const extension = ExtensionManager.find(extensionId);
+    res.json(presentExtension(extension));
+  } else {
+    res.status(500).json({ error: 'Unable to install extension.' });
+  }
 }
 
 export async function toggleExtension(req: ToggleExtensionRequest, res: Response) {
@@ -114,22 +119,11 @@ export async function searchExtensions(req: SearchExtensionsRequest, res: Respon
 }
 
 export async function getBundleForView(req: ExtensionViewBundleRequest, res: Response) {
-  const { id, view } = req.params;
-
-  if (!id) {
-    res.status(400).json({ error: '`id` is missing from body' });
-    return;
-  }
-
-  if (!view) {
-    res.status(400).json({ error: '`view` is missing from body' });
-    return;
-  }
+  const { id, bundleId } = req.params;
 
   const extension = ExtensionManager.find(id);
 
   if (extension) {
-    const bundleId = extension.contributes.views?.[view].bundleId as string;
     const bundle = ExtensionManager.getBundle(id, bundleId);
     if (bundle) {
       res.sendFile(bundle);

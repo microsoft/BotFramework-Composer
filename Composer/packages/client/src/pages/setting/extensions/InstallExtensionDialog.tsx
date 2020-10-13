@@ -9,10 +9,11 @@ import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import axios, { CancelToken } from 'axios';
 import formatMessage from 'format-message';
+import { ExtensionSearchResult } from '@bfc/extension-client';
 
 import httpClient from '../../../utils/httpUtil';
 
-import { ExtensionSearchResult, ExtensionSearchResults } from './ExtensionSearchResults';
+import { ExtensionSearchResults } from './ExtensionSearchResults';
 
 type InstallExtensionDialogProps = {
   isOpen: boolean;
@@ -96,7 +97,7 @@ const InstallExtensionDialog: React.FC<InstallExtensionDialogProps> = (props) =>
       </div>
       <DialogFooter>
         <DefaultButton onClick={onDismiss}>Cancel</DefaultButton>
-        <PrimaryButton disabled={false} onClick={onSubmit}>
+        <PrimaryButton disabled={!selectedExtension} onClick={onSubmit}>
           {formatMessage('Add')}
         </PrimaryButton>
       </DialogFooter>

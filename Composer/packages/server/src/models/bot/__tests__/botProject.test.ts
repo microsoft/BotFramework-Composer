@@ -5,6 +5,7 @@ import fs from 'fs';
 
 import rimraf from 'rimraf';
 import { DialogFactory, SDKKinds } from '@bfc/shared';
+import endsWith from 'lodash/endsWith';
 
 import { Path } from '../../../utility/path';
 import { BotProject } from '../botProject';
@@ -12,6 +13,19 @@ import { LocationRef } from '../interface';
 
 jest.mock('azure-storage', () => {
   return {};
+});
+
+jest.mock('../../../services/asset', () => {
+  return {
+    manager: {
+      botProjectFileTemplate: {
+        $schema: '',
+        name: '',
+        workspace: '',
+        skills: {},
+      },
+    },
+  };
 });
 
 const botDir = '../../../__mocks__/samplebots/bot1';
@@ -30,7 +44,13 @@ beforeEach(async () => {
 describe('init', () => {
   it('should get project successfully', () => {
     const project: { [key: string]: any } = proj.getProject();
-    expect(project.files.length).toBe(13);
+    expect(project.files.length).toBe(15);
+  });
+
+  it('should always have a default bot project file', () => {
+    const project: { [key: string]: any } = proj.getProject();
+    const botprojectFile = project.files.find((file) => endsWith(file.name, 'botproj'));
+    expect(botprojectFile).toBeDefined();
   });
 });
 
@@ -103,7 +123,7 @@ describe('copyTo', () => {
     const newBotProject = await proj.copyTo(locationRef);
     await newBotProject.init();
     const project: { [key: string]: any } = newBotProject.getProject();
-    expect(project.files.length).toBe(13);
+    expect(project.files.length).toBe(15);
   });
 });
 
@@ -380,7 +400,7 @@ describe('deleteAllFiles', () => {
     const newBotProject = await proj.copyTo(locationRef);
     await newBotProject.init();
     const project: { [key: string]: any } = newBotProject.getProject();
-    expect(project.files.length).toBe(14);
+    expect(project.files.length).toBe(15);
     await newBotProject.deleteAllFiles();
     expect(fs.existsSync(copyDir)).toBe(false);
   });
