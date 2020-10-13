@@ -64,7 +64,7 @@
     "@bfc/shared": "*",
     "@microsoft/bf-dispatcher": "^4.10.0-preview.141651",
     "@microsoft/bf-generate-library": "^4.10.0-daily.20201008.172736",
-    "@microsoft/bf-lu": "^4.11.0-dev.20200916.4f7c793",
+    "@microsoft/bf-lu": "^4.11.0-dev.20201005.7e5e1b8",
     "archiver": "^5.0.2",
     "axios": "^0.19.2",
     "azure-storage": "^2.10.3",

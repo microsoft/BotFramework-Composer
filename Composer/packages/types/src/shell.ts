@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import type { DialogInfo, LuFile, LgFile, QnAFile, LuIntentSection, LgTemplate, DialogSchemaFile } from './indexers';
-import type { SkillSetting, UserSettings } from './settings';
+import type { ILUFeaturesConfig, SkillSetting, UserSettings } from './settings';
 import type { JSONSchema7 } from './schema';
 
 /** Recursively marks all properties as optional. */
@@ -55,6 +55,7 @@ export type ShellData = {
   hosted: boolean;
   lgFiles: LgFile[];
   luFiles: LuFile[];
+  luFeatures: ILUFeaturesConfig;
   qnaFiles: QnAFile[];
   userSettings: UserSettings;
   skills: any[];

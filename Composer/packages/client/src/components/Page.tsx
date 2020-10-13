@@ -74,7 +74,7 @@ export const content = css`
   padding: 20px;
   position: relative;
   overflow: auto;
-  height: 100%;
+  height: calc(100% - 40px);
   label: PageContent;
 `;
 
