@@ -105,6 +105,16 @@ export interface WebAppConfig {
   appPwd?: string;
 }
 
+export interface AzureFuntionsConfig {
+  resourceGroupName: string;
+  name: string;
+  location: string;
+  sku?: string;
+  appId?: string;
+  appPwd?: string;
+  instrumentationKey?: string;
+}
+
 export interface DeploymentsConfig {
   resourceGroupName: string;
   name: string;

@@ -24,6 +24,7 @@ import {
   ResourceGroupConfig,
   DeploymentsConfig,
   QnAResourceConfig,
+  AzureFuntionsConfig,
 } from './azureResourceManagerConfig';
 
 export class AzureResourceMananger {
@@ -799,6 +800,68 @@ export class AzureResourceMananger {
       }
 
       const siteHost = webAppResult?.hostNames?.[0];
+      return siteHost;
+    } catch (err) {
+      this.logger({
+        status: BotProjectDeployLoggerType.PROVISION_ERROR,
+        message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
+      });
+      throw err;
+    }
+  }
+
+  /**
+   * Deploy Azure Functions instance
+   * @param config
+   */
+  public async deployAzureFunctions(config: AzureFuntionsConfig) {
+    try {
+      this.logger({
+        status: BotProjectDeployLoggerType.PROVISION_INFO,
+        message: 'Deploying Azure Functions Resource ...',
+      });
+      const webSiteManagementClient = new WebSiteManagementClient(this.creds, this.subscriptionId);
+      const azureFunctionsName = config.name;
+      const azureFunctionsResult = await webSiteManagementClient.webApps.createOrUpdate(config.resourceGroupName, config.name, {
+        name: azureFunctionsName,
+        location: config.location,
+        kind: 'functionapp',
+        httpsOnly: true,
+        siteConfig: {
+          appSettings: [
+            {
+              name: 'MicrosoftAppId',
+              value: config.appId,
+            },
+            {
+              name: 'MicrosoftAppPassword',
+              value: config.appPwd,
+            },
+            {
+              name: 'FUNCTIONS_EXTENSION_VERSION',
+              value: '~3'
+            },
+            {
+              name: 'FUNCTIONS_WORKER_RUNTIME',
+              value: 'dotnet'
+            },
+            {
+              name: 'APPINSIGHTS_INSTRUMENTATIONKEY',
+              value: config.instrumentationKey ?? ''
+            }
+          ]
+        },
+      });
+
+      if (azureFunctionsResult._response.status >= 300) {
+        this.logger({
+          status: BotProjectDeployLoggerType.PROVISION_ERROR,
+          message: azureFunctionsResult._response.bodyAsText,
+        });
+        throw new Error(azureFunctionsResult._response.bodyAsText);
+      }
+
+      const siteHost = azureFunctionsResult?.hostNames?.[0];
       return siteHost;
     } catch (err) {
       this.logger({
