@@ -9,12 +9,10 @@
   "repository": "https://github.com/microsoft/BotFramework-Composer",
   "license": "MIT",
   "scripts": {
-    "build": "yarn clean && yarn build:css && yarn build:ts",
+    "build": "yarn clean && yarn build:ts",
     "build:ts": "tsc --build tsconfig.build.json",
-    "build:css": "copyfiles --up 1 \"src/**/*.css\" \"src/**/*.scss\" lib",
-    "clean": "rimraf lib demo/dist",
+    "clean": "rimraf lib",
     "prepublishOnly": "npm run build",
-    "start": "webpack-dev-server --config demo/webpack.config.demo.js",
     "test": "jest",
     "lint": "eslint --quiet ./src",
     "lint:fix": "yarn lint --fix",
@@ -22,12 +20,13 @@
     "watch": "yarn build:ts --watch"
   },
   "devDependencies": {
+    "@bfc/shared": "*",
     "@bfc/test-utils": "*",
     "@types/lodash": "^4.14.146",
     "rimraf": "^2.6.3"
   },
   "dependencies": {
-    "@microsoft/bf-lu": "^4.10.0-dev.20200808.5a7c973",
+    "@microsoft/bf-lu": "^4.11.0-dev.20201005.7e5e1b8",
     "adaptive-expressions": "4.10.0-preview-147186",
     "botbuilder-lg": "^4.10.0-preview-150886",
     "lodash": "^4.17.19"

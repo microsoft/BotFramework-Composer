@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { SDKKinds } from '../types/schema';
+import { SDKKinds } from '@bfc/types';
 
 import { copySendActivity } from './copySendActivity';
 import { copyInputDialog } from './copyInputDialog';

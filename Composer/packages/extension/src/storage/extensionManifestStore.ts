@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 import { existsSync, writeJsonSync, readJsonSync } from 'fs-extra';
+import { ExtensionMap, ExtensionMetadata } from '@bfc/types';
 
 import logger from '../logger';
-import { ExtensionMap, ExtensionMetadata } from '../types/extension';
 
 const log = logger.extend('plugins');
 

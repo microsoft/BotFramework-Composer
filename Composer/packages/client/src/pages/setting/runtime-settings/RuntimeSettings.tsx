@@ -17,7 +17,7 @@ import {
   dispatcherState,
   ejectRuntimeSelector,
   boilerplateVersionState,
-  botNameState,
+  botDisplayNameState,
   settingsState,
   isEjectRuntimeExistState,
 } from '../../../recoilModel';
@@ -30,7 +30,7 @@ import { breathingSpace, runtimeSettingsStyle, runtimeControls, runtimeToggle, c
 
 export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
   const { projectId = '' } = props;
-  const botName = useRecoilValue(botNameState(projectId));
+  const botName = useRecoilValue(botDisplayNameState(projectId));
   const settings = useRecoilValue(settingsState(projectId));
   const ejectedRuntimeExists = useRecoilValue(isEjectRuntimeExistState(projectId));
 

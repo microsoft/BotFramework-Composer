@@ -110,6 +110,7 @@ describe('setting dispatcher', () => {
         MicrosoftAppPassword: 'test',
         luis: { ...settings.luis, authoringKey: 'test', endpointKey: 'test' },
         qna: { ...settings.qna, subscriptionKey: 'test', endpointKey: 'test' },
+        luFeatures: {},
       });
     });
 

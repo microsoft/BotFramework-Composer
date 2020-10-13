@@ -3,9 +3,9 @@
 import keys from 'lodash/keys';
 import differenceWith from 'lodash/differenceWith';
 import isEqual from 'lodash/isEqual';
-import { DialogInfo, DialogSchemaFile, DialogSetting, SkillManifest, BotAssets } from '@bfc/shared';
+import { DialogInfo, DialogSchemaFile, DialogSetting, SkillManifest, BotAssets, BotProjectFile } from '@bfc/shared';
+import { LuFile, LgFile, QnAFile } from '@bfc/types';
 
-import { LuFile, LgFile, QnAFile } from './../../../../lib/shared/src/types/indexers';
 import * as client from './http';
 import { IFileChange, ChangeType, FileExtensions } from './types';
 
@@ -184,6 +184,20 @@ class FilePersistence {
     return changes;
   }
 
+  private getBotProjectFileChanges(current: BotProjectFile, previous: BotProjectFile) {
+    if (!isEqual(current, previous)) {
+      return [
+        {
+          id: `${current.id}${FileExtensions.BotProject}`,
+          change: JSON.stringify(current.content, null, 2),
+          type: ChangeType.UPDATE,
+          projectId: this._projectId,
+        },
+      ];
+    }
+    return [];
+  }
+
   private getSettingsChanges(current: DialogSetting, previous: DialogSetting) {
     if (!isEqual(current, previous)) {
       return [
@@ -209,6 +223,12 @@ class FilePersistence {
       previousAssets.skillManifests
     );
     const settingChanges = this.getSettingsChanges(currentAssets.setting, previousAssets.setting);
+
+    const botProjectFileChanges = this.getBotProjectFileChanges(
+      currentAssets.botProjectFile,
+      previousAssets.botProjectFile
+    );
+
     const fileChanges: IFileChange[] = [
       ...dialogChanges,
       ...dialogSchemaChanges,
@@ -217,6 +237,7 @@ class FilePersistence {
       ...lgChanges,
       ...skillManifestChanges,
       ...settingChanges,
+      ...botProjectFileChanges,
     ];
     return fileChanges;
   }
