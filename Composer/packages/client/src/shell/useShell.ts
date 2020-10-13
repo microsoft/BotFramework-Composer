@@ -36,7 +36,7 @@ import { useTriggerApi } from './triggerApi';
 
 const FORM_EDITOR = 'PropertyEditor';
 
-type EventSource = 'FlowEditor' | 'PropertyEditor' | 'DesignPage';
+type EventSource = 'FlowEditor' | 'PropertyEditor' | 'DesignPage' | 'VaCreation';
 
 export function useShell(source: EventSource, projectId: string): Shell {
   const dialogMapRef = useRef({});
