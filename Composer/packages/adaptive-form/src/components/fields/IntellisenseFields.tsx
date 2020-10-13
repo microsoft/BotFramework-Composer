@@ -82,7 +82,7 @@ export const IntellisenseExpressionField: React.FC<FieldProps<string>> = functio
 };
 
 export const IntellisenseNumberField: React.FC<FieldProps<string>> = function IntellisenseNumberField(props) {
-  const { id, value = '', onChange, uiOptions } = props;
+  const { id, value = '', onChange, uiOptions, focused: defaultFocused } = props;
 
   const completionListOverrideResolver = (value: string) => {
     if (value === '') {
@@ -95,6 +95,7 @@ export const IntellisenseNumberField: React.FC<FieldProps<string>> = function In
   return (
     <Intellisense
       completionListOverrideResolver={completionListOverrideResolver}
+      focused={defaultFocused}
       id={`intellisense-${id}`}
       scopes={uiOptions.intellisenseScopes || []}
       url={getIntellisenseUrl()}
@@ -102,9 +103,10 @@ export const IntellisenseNumberField: React.FC<FieldProps<string>> = function In
       onBlur={props.onBlur}
       onChange={onChange}
     >
-      {({ textFieldValue, onValueChanged, onKeyDownTextField, onKeyUpTextField, onClickTextField }) => (
+      {({ textFieldValue, focused, onValueChanged, onKeyDownTextField, onKeyUpTextField, onClickTextField }) => (
         <NumberField
           {...props}
+          focused={focused}
           id={id}
           value={textFieldValue}
           onBlur={undefined} // onBlur managed by Intellisense
