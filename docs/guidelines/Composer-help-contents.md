@@ -6,6 +6,7 @@ In this article, we drafted some guidelines on how to write the help contents in
 
 This document includes:
 
+- [Bot Framework Composer Help Content Guidelines](#bot-framework-composer-help-content-guidelines)
 - [Terminology](#terminology)
 - [Guidelines](#guidelines)
   - [General guidelines](#general-guidelines)
@@ -45,9 +46,14 @@ The general guidelines listed in this section apply to all types of help content
 4. Should only contain letters.
 5. Don’t use acronyms.
 
-* **Example**:
+* **Examples**:
 
-    ![button name example](./media/azure-button.png)
+    ![toolbar button example](./media/azure-button.png)
+
+    ![modal button example](./media/pva-modal-button.png)
+
+> [!NOTE]
+> Please note these are general guidelines for button names. The execution of them to different types of buttons may differ.
 
 ## Menu names
 
@@ -89,6 +95,11 @@ The general guidelines listed in this section apply to all types of help content
 * **Example**:
 
     ![tooltip example](./media/azure-tooltip.png)
+
+> [!NOTE]
+> Please distinguish between "instructional copy" and "tooltip":
+> * An "instructional copy" provides the user with information about what to do rather than what a UX element or label is.
+> * A "tooltip" provides the user with information about what a UX element or label is.
 
 ## Error messages
 
