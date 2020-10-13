@@ -3,67 +3,30 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import { useRecoilCallback, CallbackInterface } from 'recoil';
-import { IPublishConfig } from '@bfc/types';
+import { IPublishConfig, ShellData } from '@bfc/types';
 
-import * as luUtil from '../../utils/luUtil';
-import * as buildUtil from '../../utils/buildUtil';
-import { Text, BotStatus } from '../../constants';
-import httpClient from '../../utils/httpUtil';
-import luFileStatusStorage from '../../utils/luFileStatusStorage';
-import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
-import { luFilesState, qnaFilesState, dialogsState, botStatusState, botLoadErrorState } from '../atoms';
+import { botStatusState, botLoadErrorState } from '../atoms';
+import { Builder } from '../../utils/builders/builderTypes';
 
-const checkEmptyQuestionOrAnswerInQnAFile = (sections) => {
+export const checkEmptyQuestionOrAnswerInQnAFile = (sections) => {
   return sections.some((s) => !s.Answer || s.Questions.some((q) => !q.content));
 };
 
 export const builderDispatcher = () => {
   const build = useRecoilCallback(
-    ({ set, snapshot }: CallbackInterface) => async (projectId: string, config: IPublishConfig) => {
-      const dialogs = await snapshot.getPromise(dialogsState(projectId));
-      const luFiles = await snapshot.getPromise(luFilesState(projectId));
-      const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
-      const referredLuFiles = luUtil.checkLuisBuild(luFiles, dialogs);
-
-      const errorMsg = qnaFiles.reduce(
-        (result, file) => {
-          if (
-            file.qnaSections &&
-            file.qnaSections.length > 0 &&
-            checkEmptyQuestionOrAnswerInQnAFile(file.qnaSections)
-          ) {
-            result.message = result.message + `${file.id}.qna file contains empty answer or questions`;
-          }
-          return result;
-        },
-        { title: Text.LUISDEPLOYFAILURE, message: '' }
+    ({ set }: CallbackInterface) => (
+      projectId: string,
+      config: IPublishConfig,
+      shellData: ShellData,
+      builder: Builder<any>
+    ) => {
+      return builder(
+        projectId,
+        config,
+        shellData,
+        (status) => set(botStatusState(projectId), status),
+        (error) => set(botLoadErrorState(projectId), error)
       );
-      if (errorMsg.message) {
-        set(botLoadErrorState(projectId), errorMsg);
-        set(botStatusState(projectId), BotStatus.failed);
-        return;
-      }
-      try {
-        //TODO crosstrain should add locale
-        const crossTrainConfig = buildUtil.createCrossTrainConfig(dialogs, referredLuFiles);
-        await httpClient.post(`/projects/${projectId}/build`, {
-          luisConfig: config.luis,
-          qnaConfig: config.qna,
-          projectId,
-          crossTrainConfig,
-          luFiles: referredLuFiles.map((file) => file.id),
-          qnaFiles: qnaFiles.map((file) => file.id),
-        });
-        luFileStatusStorage.publishAll(projectId);
-        qnaFileStatusStorage.publishAll(projectId);
-        set(botStatusState(projectId), BotStatus.published);
-      } catch (err) {
-        set(botStatusState(projectId), BotStatus.failed);
-        set(botLoadErrorState(projectId), {
-          title: Text.LUISDEPLOYFAILURE,
-          message: err.response?.data?.message || err.message,
-        });
-      }
     }
   );
   return {
