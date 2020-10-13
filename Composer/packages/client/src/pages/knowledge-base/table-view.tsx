@@ -416,7 +416,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
               iconProps={{ iconName: expandedIndex === index ? 'ChevronDown' : 'ChevronRight' }}
               styles={{
                 root: { ...icon.root, marginTop: 2, marginLeft: 7, fontSize: 12 },
-                icon: { fontSize: 12, color: NeutralColors.black },
+                icon: { fontSize: 8, color: NeutralColors.black },
               }}
               title={formatMessage('Toggle show all')}
               onClick={() => setExpandedIndex(expandedIndex === index ? -1 : index)}

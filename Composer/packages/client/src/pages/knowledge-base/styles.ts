@@ -88,9 +88,12 @@ export const divider = css`
 
 export const rowDetails = {
   root: {
-    minHeight: 76,
+    minHeight: 40,
     width: '100%',
     selectors: {
+      '.ms-GroupHeader-expand': {
+        fontSize: 8,
+      },
       '&:hover': {
         background: NeutralColors.gray30,
         selectors: {
@@ -212,7 +215,7 @@ export const groupHeader = {
   root: {
     selectors: {
       '.ms-GroupHeader-expand': {
-        fontSize: 12,
+        fontSize: 8,
         marginLeft: 16,
       },
     },

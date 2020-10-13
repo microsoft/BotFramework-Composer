@@ -33,6 +33,9 @@ const defaultContainerStyle = (hasFocus, hasErrors) => css`
   }
 `;
 
+// turncat to show two line.
+const maxCharacterNumbers = 120;
+
 //------------------------
 type IconProps = {
   iconStyles?: Partial<IIconProps>;
@@ -85,7 +88,6 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
     onChange,
     onFocus,
     onBlur,
-    resizable = true,
     value,
     id,
     error,
@@ -97,7 +99,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
   const [editing, setEditing] = useState<boolean>(false);
   const [hasFocus, setHasFocus] = useState<boolean>(false);
   const [hasBeenEdited, setHasBeenEdited] = useState<boolean>(false);
-  const [multiline, setMultiline] = useState<boolean>(false);
+  const [multiline, setMultiline] = useState<boolean>(true);
 
   const formConfig: FieldConfig<{ value: string }> = {
     value: {
@@ -120,11 +122,17 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
   }, [value]);
 
   useEffect(() => {
-    if (expanded || hasFocus) {
-      if (formData.value.length > 50) setMultiline(true);
-    } else {
-      setMultiline(false);
+    if (formData.value.length > maxCharacterNumbers) {
+      setMultiline(true);
+      return;
     }
+
+    if (expanded || hasFocus) {
+      if (formData.value.length > maxCharacterNumbers) {
+        setMultiline(true);
+      }
+    }
+    setMultiline(false);
   }, [expanded, hasFocus]);
 
   const resetValue = () => {
@@ -134,7 +142,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
   };
 
   const handleChange = (_e: any, newValue?: string) => {
-    if (newValue && newValue?.length > 50) setMultiline(true);
+    if (newValue && newValue?.length > maxCharacterNumbers) setMultiline(true);
     updateField('value', newValue);
     setHasBeenEdited(true);
     onChange(newValue);
@@ -164,7 +172,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
   };
 
   const handleOnKeyDown = (e) => {
-    if (e.key === 'Enter' && !multiline) {
+    if (e.key === 'Enter' && expanded) {
       handleCommit();
     }
     if (e.key === 'Escape') {
@@ -195,7 +203,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
           componentRef={fieldRef}
           multiline={multiline}
           placeholder={placeholder || value}
-          resizable={resizable}
+          resizable={false}
           styles={
             mergeStyleSets(
               {
@@ -228,8 +236,10 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
             hasFocus || !extraContent || expanded
               ? formData.value
               : `${
-                  formData.value.length > 20 ? formData.value.substring(0, 20) + '...' : formData.value
-                }${extraContent}`
+                  formData.value.length > maxCharacterNumbers
+                    ? formData.value.substring(0, maxCharacterNumbers) + '...'
+                    : formData.value
+                } ${extraContent}`
           }
           onBlur={handleCommit}
           onChange={handleChange}
