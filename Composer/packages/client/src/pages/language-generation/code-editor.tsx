@@ -13,7 +13,7 @@ import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 import { CodeEditorSettings } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
-import { LgFile } from '@bfc/shared/src/types/indexers';
+import { LgFile } from '@bfc/extension-client';
 
 import { localeState, lgFilesState, settingsState } from '../../recoilModel/atoms/botState';
 import { userSettingsState, dispatcherState } from '../../recoilModel';

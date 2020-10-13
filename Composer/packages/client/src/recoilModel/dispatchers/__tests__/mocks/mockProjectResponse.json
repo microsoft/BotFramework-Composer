@@ -6,8 +6,8 @@
     {
       "name": "emptybot-1.dialog",
       "content": "{\n  \"$kind\": \"Microsoft.AdaptiveDialog\",\n  \"$designer\": {\n    \"name\": \"AddItem\",\n    \"id\": \"225905\"\n  },\n  \"autoEndDialog\": true,\n  \"defaultResultProperty\": \"dialog.result\",\n  \"triggers\": [\n    {\n      \"$kind\": \"Microsoft.OnBeginDialog\",\n      \"$designer\": {\n        \"name\": \"BeginDialog\",\n        \"id\": \"479346\"\n      },\n      \"actions\": [\n        {\n          \"$kind\": \"Microsoft.SetProperties\",\n          \"$designer\": {\n            \"id\": \"811190\",\n            \"name\": \"Set properties\"\n          },\n          \"assignments\": [\n            {\n              \"property\": \"dialog.itemTitle\",\n              \"value\": \"=coalesce(@itemTitle, $itemTitle)\"\n            },\n            {\n              \"property\": \"dialog.listType\",\n              \"value\": \"=coalesce(@listType, $listType)\"\n            }\n          ]\n        },\n        {\n          \"$kind\": \"Microsoft.TextInput\",\n          \"$designer\": {\n            \"id\": \"282825\",\n            \"name\": \"AskForTitle\"\n          },\n          \"prompt\": \"${TextInput_Prompt_282825()}\",\n          \"maxTurnCount\": \"3\",\n          \"property\": \"dialog.itemTitle\",\n          \"value\": \"=coalesce(@itemTitle, $itemTitle)\",\n          \"allowInterruptions\": \"!@itemTitle && #_Interruption.Score >= 0.9\"\n        },\n        {\n          \"$kind\": \"Microsoft.ChoiceInput\",\n          \"$designer\": {\n            \"id\": \"878594\",\n            \"name\": \"AskForListType\"\n          },\n          \"prompt\": \"${TextInput_Prompt_878594()}\",\n          \"maxTurnCount\": \"3\",\n          \"property\": \"dialog.listType\",\n          \"value\": \"=@listType\",\n          \"allowInterruptions\": \"!@listType\",\n          \"outputFormat\": \"value\",\n          \"choices\": [\n            {\n              \"value\": \"todo\",\n              \"synonyms\": [\n                \"to do\"\n              ]\n            },\n            {\n              \"value\": \"grocery\",\n              \"synonyms\": [\n                \"groceries\"\n              ]\n            },\n            {\n              \"value\": \"shopping\",\n              \"synonyms\": [\n                \"shoppers\"\n              ]\n            }\n          ],\n          \"appendChoices\": \"true\",\n          \"defaultLocale\": \"en-us\",\n          \"style\": \"Auto\",\n          \"choiceOptions\": {\n            \"inlineSeparator\": \", \",\n            \"inlineOr\": \" or \",\n            \"inlineOrMore\": \", or \",\n            \"includeNumbers\": true\n          },\n          \"recognizerOptions\": {\n            \"noValue\": false\n          }\n        },\n        {\n          \"$kind\": \"Microsoft.EditArray\",\n          \"$designer\": {\n            \"id\": \"733511\",\n            \"name\": \"Edit an Array property\"\n          },\n          \"changeType\": \"push\",\n          \"itemsProperty\": \"user.lists[dialog.listType]\",\n          \"value\": \"=$itemTitle\"\n        },\n        {\n          \"$kind\": \"Microsoft.SendActivity\",\n          \"$designer\": {\n            \"id\": \"139532\",\n            \"name\": \"Send a response\"\n          },\n          \"activity\": \"${SendActivity_139532()}\"\n        }\n      ]\n    }\n  ],\n  \"generator\": \"additem.lg\",\n  \"recognizer\": \"additem.lu\"\n}\n",
-      "path": "/Users/tester/Desktop/EmptyBot-1/dialogs/additem/additem.dialog",
-      "relativePath": "dialogs/additem/additem.dialog",
+      "path": "/Users/tester/Desktop/EmptyBot-1/additem.dialog",
+      "relativePath": "",
       "lastModified": "Thu Jul 09 2020 10:19:09 GMT-0700 (Pacific Daylight Time)"
     },
     {
@@ -21,6 +21,12 @@
       "name": "additem.en-us.lu",
       "content": "\n# TextInput_Response_282825\n- Please remind me to {itemTitle=buy milk}\n- Please remember that I need to {itemTitle=buy milk}\n- shoppers",
       "path": "/Users/tester/Desktop/EmptyBot-1/dialogs/additem/language-understanding/en-us/additem.en-us.lu",
+      "relativePath": "dialogs/additem/language-understanding/en-us/additem.en-us.lu",
+      "lastModified": "Thu Jul 09 2020 10:19:09 GMT-0700 (Pacific Daylight Time)"
+    },{
+      "name": "EmptyBot-1.botproj",
+      "content": "{\"$schema\":\"https:\/\/schemas.botframework.com\/schemas\/botprojects\/v0.1\/botproject-schema.json\",\"name\":\"echobot-0\",\"workspace\":\"\/Users\/tester\/Desktop\/samples\/EchoBot-0\",\"skills\":{}}",
+      "path": "/Users/tester/Desktop/EmptyBot-1/EmptyBot-1.botproj",
       "relativePath": "dialogs/additem/language-understanding/en-us/additem.en-us.lu",
       "lastModified": "Thu Jul 09 2020 10:19:09 GMT-0700 (Pacific Daylight Time)"
     }
@@ -8623,7 +8629,7 @@
     },
     "diagnostics": []
   },
-  "skills": [],
+  "skills": {},
   "diagnostics": [],
   "settings": {
     "feature": {

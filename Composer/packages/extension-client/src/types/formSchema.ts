@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { MicrosoftIRecognizer, SDKKinds, SDKRoles, ShellApi, ShellData } from '@bfc/shared';
+import { MicrosoftIRecognizer, SDKKinds, SDKRoles, ShellApi, ShellData } from '@bfc/types';
 
 import { FieldWidget } from './form';
 
@@ -10,9 +10,10 @@ type UIOptionValue<R = string, D = any> = R | UIOptionFunc<R, D>;
 type UIOptionFunc<R, D> = (data: D) => R;
 
 export interface Fieldset {
-  title: string;
+  title: UIOptionValue<string>;
   fields?: string[];
   defaultExpanded?: boolean;
+  itemKey?: string;
 }
 
 export interface UIOptions {
@@ -42,6 +43,8 @@ export interface UIOptions {
   label?: UIOptionValue<string | false | undefined>;
   /** Set order of fields. Use * for all other fields. */
   order?: UIOptionValue<(string | [string, string])[]>;
+  /** Renders fieldsets in a tabbed view when true */
+  pivotFieldsets?: true;
   /** Placeholder override. If undefined, schema.examples are used. */
   placeholder?: UIOptionValue<string, undefined>;
   /** Define ui options on fields that are children of this field. */
@@ -72,7 +75,7 @@ export type RecognizerSchema = {
   /** Display name used in the UI. Recommended to use function over static string to enable multi-locale feature. */
   displayName: UIOptionValue<string>;
   /** An inline editor to edit an intent. If none provided, users will not be able to edit. */
-  intentEditor?: FieldWidget;
+  intentEditor?: FieldWidget | string;
   /** A function invoked with the form data to determine if this is the currently selected recognizer */
   isSelected?: (data: any) => boolean;
   /** Invoked when constructing a new recognizer instance.

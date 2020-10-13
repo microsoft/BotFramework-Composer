@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { BaseSchema, DialogUtils, ShellApi } from '@bfc/shared';
-import { disableNodes, enableNodes } from '@bfc/shared/lib/dialogUtils';
+import { BaseSchema, ShellApi } from '@bfc/types';
+import { DialogUtils } from '@bfc/shared';
 
 import { useActionApi } from './useActionApi';
 
@@ -13,7 +13,7 @@ export interface DialogApiContext {
   deleteActions: (actionIds: BaseSchema[]) => BaseSchema[];
 }
 
-const { appendNodesAfter, queryNodes, insertNodes, deleteNode, deleteNodes } = DialogUtils;
+const { disableNodes, enableNodes, appendNodesAfter, queryNodes, insertNodes, deleteNode, deleteNodes } = DialogUtils;
 
 export function useDialogEditApi(shellApi: ShellApi) {
   const { constructActions, copyActions, deleteAction, deleteActions } = useActionApi(shellApi);
