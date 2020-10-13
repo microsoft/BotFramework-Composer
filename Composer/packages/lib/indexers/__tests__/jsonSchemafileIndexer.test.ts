@@ -3,6 +3,7 @@
 
 import { jsonSchemaFileIndexer } from '../src/jsonSchemaFileIndexer';
 import { FileInfo } from '../src/type';
+import { getBaseName } from '../src/utils/help';
 
 const { index } = jsonSchemaFileIndexer;
 
@@ -12,28 +13,28 @@ describe('jsonSchemaFileIndexer', () => {
       const input: FileInfo[] = [
         {
           name: 'test1.json',
-          relativePath: './test1.lg',
+          relativePath: './test1.json',
           content: '{ "$schema":"http://json-schema.org/draft/schema" }',
           path: '/',
         },
         {
           name: 'test2.json',
-          relativePath: './test2.lg',
+          relativePath: './test2.json',
           content: '{ "$schema":"http://json-schema.org/draft-07/schema" }',
           path: '/',
         },
         {
           name: 'test3.json',
-          relativePath: './test3.lg',
+          relativePath: './test3.json',
           content: '{ "$schema":"http://json-schema.org/draft-07/schemav2" }',
           path: '/',
         },
       ];
 
-      const expected = input.map((i) => {
+      const expected = input.map((item) => {
         return {
-          name: i.name,
-          content: JSON.parse(i.content),
+          name: getBaseName(item.name),
+          content: JSON.parse(item.content),
         };
       });
 
@@ -50,20 +51,20 @@ describe('jsonSchemaFileIndexer', () => {
     it('should not return other json files', () => {
       const input: FileInfo[] = [
         {
-          name: 'test1.json',
-          relativePath: './test1.lg',
+          name: 'test1',
+          relativePath: './test1.json',
           content: '{ "$schema":"http://microsoft.org/wsp" }',
           path: '/',
         },
         {
-          name: 'test2.json',
-          relativePath: './test2.lg',
+          name: 'test2',
+          relativePath: './test2.json',
           content: '{ "$schema":"http://json-schema.org/draft-07/schema" }',
           path: '/',
         },
         {
-          name: 'test3.json',
-          relativePath: './test3.lg',
+          name: 'test3',
+          relativePath: './test3.json',
           content: '{ "$schema":"http://microsoft.org/wsp" }',
           path: '/',
         },
@@ -71,7 +72,7 @@ describe('jsonSchemaFileIndexer', () => {
 
       const expected = [
         {
-          name: input[1].name,
+          name: 'test2',
           content: JSON.parse(input[1].content),
         },
       ];

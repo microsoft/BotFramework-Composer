@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FileExtensions, FileInfo, JsonSchemaFile } from '@bfc/shared';
+import { FileInfo, JsonSchemaFile } from '@bfc/shared';
 import has from 'lodash/has';
 
 import { getBaseName } from './utils/help';
@@ -14,7 +14,7 @@ const index = (jsonFiles: FileInfo[]) => {
       if (has(jsonContent, '$schema')) {
         const schema = jsonContent.$schema.toLowerCase().trim();
         if (schema.startsWith('http://json-schema.org')) {
-          return [...jsonSchemaFiles, { content: jsonContent, id: getBaseName(name, FileExtensions.Json) }];
+          return [...jsonSchemaFiles, { content: jsonContent, id: getBaseName(name) }];
         }
       }
 
