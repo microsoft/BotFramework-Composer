@@ -2,12 +2,7 @@
 // Licensed under the MIT License.
 
 import { Dispatch } from 'react';
-import merge from 'lodash/merge';
 import { Shell } from '@bfc/types';
-
-import { ComposerGlobalName } from './common/constants';
-
-const STORAGE_KEY = '__internal__';
 
 export type State = Shell;
 
@@ -21,13 +16,7 @@ class ExtensionStore implements Store {
   private listeners: Dispatch<Partial<State>>[] = [];
 
   constructor(initialState = {}) {
-    const windowState = window[ComposerGlobalName]?.[STORAGE_KEY] ?? {};
-
-    if (window[ComposerGlobalName]?.[STORAGE_KEY]) {
-      this.setState(merge({}, windowState, initialState));
-    } else {
-      this.setState(initialState);
-    }
+    this.setState(initialState);
   }
 
   getState() {
@@ -36,8 +25,6 @@ class ExtensionStore implements Store {
 
   setState(newState: Partial<State>) {
     this.state = { ...this.state, ...newState };
-
-    this.syncWindow();
 
     this.listeners.forEach((dispatch) => {
       dispatch(this.state);
@@ -50,17 +37,6 @@ class ExtensionStore implements Store {
 
   removeListener(listener: Dispatch<Partial<State>>) {
     this.listeners = this.listeners.filter((l) => l !== listener);
-  }
-
-  private syncWindow() {
-    // ensure composer namespace is present before writing state
-    if (!window[ComposerGlobalName]) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-      // @ts-ignore
-      window[ComposerGlobalName] = {};
-    }
-
-    window[ComposerGlobalName][STORAGE_KEY] = this.state;
   }
 }
 
