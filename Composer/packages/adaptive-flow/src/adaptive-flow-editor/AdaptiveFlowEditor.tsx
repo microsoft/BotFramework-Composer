@@ -105,7 +105,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
   };
 
   const customFlowSchema: FlowUISchema = nodeContext.customSchemas.reduce((result, s) => {
-    const definitionKeys: string[] = Object.keys(s.definitions);
+    const definitionKeys = Object.keys(s.definitions ?? {});
     definitionKeys.forEach(($kind) => {
       result[$kind] = {
         widget: 'ActionHeader',

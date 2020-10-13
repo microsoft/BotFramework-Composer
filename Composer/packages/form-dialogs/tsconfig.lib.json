@@ -1,0 +1,19 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+      "noImplicitAny": true,
+      "declarationMap": true,
+      "declaration": true,
+      "outDir": "./lib/",
+      "declarationDir": "./lib/",
+      "module": "esnext",
+      "target": "es6",
+      "importHelpers": true,
+      "strictNullChecks": false,
+      "baseUrl": ".",
+      "paths": {
+          "src/*": ["src/*"]
+      }
+  },
+  "include": ["src/**/*"]
+}
