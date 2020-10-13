@@ -16,15 +16,7 @@ import {
 import { ScrollablePane } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky } from 'office-ui-fabric-react/lib/Sticky';
 import { ShimmeredDetailsList } from 'office-ui-fabric-react/lib/ShimmeredDetailsList';
-
-// TODO: extract to shared?
-export type ExtensionSearchResult = {
-  id: string;
-  keywords: string[];
-  version: string;
-  description: string;
-  url: string;
-};
+import { ExtensionSearchResult } from '@bfc/extension-client';
 
 type ExtensionSearchResultsProps = {
   results: ExtensionSearchResult[];

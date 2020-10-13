@@ -6,9 +6,9 @@ import { promisify } from 'util';
 import { mkdir, remove } from 'fs-extra';
 import fetch from 'node-fetch';
 import tar from 'tar';
+import { ExtensionSearchResult } from '@bfc/types';
 
 import logger from '../logger';
-import { ExtensionSearchResult } from '../types/extension';
 
 const streamPipeline = promisify(require('stream').pipeline);
 

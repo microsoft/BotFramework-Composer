@@ -76,6 +76,15 @@ const PropertyListItemContent = React.memo((props: ContentProps) => {
     onActivateItem(property.id);
   }, [onActivateItem, property.id]);
 
+  const keyUp = React.useCallback(
+    (e: React.KeyboardEvent<HTMLDivElement>) => {
+      if (e.key === 'Enter') {
+        activateItem();
+      }
+    },
+    [activateItem]
+  );
+
   const propertyTypeDisplayName = React.useMemo(() => getPropertyTypeDisplayName(property), [property]);
 
   return (
@@ -85,6 +94,7 @@ const PropertyListItemContent = React.memo((props: ContentProps) => {
       tokens={{ childrenGap: 8 }}
       verticalAlign="center"
       onClick={activateItem}
+      onKeyUp={keyUp}
     >
       <Icon {...dragHandleProps} iconName="GripperDotsVertical" />
       <ErrorIcon>

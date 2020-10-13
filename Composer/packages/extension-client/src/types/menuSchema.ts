@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { SDKKinds } from '@bfc/shared';
+import { SDKKinds } from '@bfc/types';
 
 export interface MenuOptions {
   label?: string;
