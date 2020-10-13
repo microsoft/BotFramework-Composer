@@ -13,11 +13,11 @@ import { ComposerBootstrapSampler } from './sampler/BootstrapSampler';
 import { PreBuilder } from './preBuilder';
 import { RecognizerTypes } from './recognizer';
 
-const crossTrainer = require('@bfcomposer/bf-lu/lib/parser/cross-train/crossTrainer.js');
-const luBuild = require('@bfcomposer/bf-lu/lib/parser/lubuild/builder.js');
-const qnaBuild = require('@bfcomposer/bf-lu/lib/parser/qnabuild/builder.js');
-const LuisBuilder = require('@bfcomposer/bf-lu/lib/parser/luis/luisBuilder');
-const luisToLuContent = require('@bfcomposer/bf-lu/lib/parser/luis/luConverter');
+const crossTrainer = require('@microsoft/bf-lu/lib/parser/cross-train/crossTrainer.js');
+const luBuild = require('@microsoft/bf-lu/lib/parser/lubuild/builder.js');
+const qnaBuild = require('@microsoft/bf-lu/lib/parser/qnabuild/builder.js');
+const LuisBuilder = require('@microsoft/bf-lu/lib/parser/luis/luisBuilder');
+const luisToLuContent = require('@microsoft/bf-lu/lib/parser/luis/luConverter');
 
 const GENERATEDFOLDER = 'generated';
 const INTERUPTION = 'interuption';

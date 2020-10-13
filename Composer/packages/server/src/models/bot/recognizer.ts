@@ -18,7 +18,8 @@ type GeneratedDialog = { name: string; content: string };
 const LuisRecognizerTemplate = (target: string, fileName: string) => ({
   $kind: SDKKinds.LuisRecognizer,
   id: `LUIS_${target}`,
-  applicationId: `=settings.luis.${fileName.replace(/[.-]/g, '_')}`,
+  applicationId: `=settings.luis.${fileName.replace(/[.-]/g, '_')}.appId`,
+  version: `=settings.luis.${fileName.replace(/[.-]/g, '_')}.version`,
   endpoint: '=settings.luis.endpoint',
   endpointKey: '=settings.luis.endpointKey',
 });
