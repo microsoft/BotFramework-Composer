@@ -85,6 +85,7 @@ export class DefaultSettingManager extends FileSettingManager {
       skill: {},
       defaultLanguage: 'en-us',
       languages: ['en-us'],
+      customizedFunctions: [],
     };
   };
 
@@ -101,6 +102,10 @@ export class DefaultSettingManager extends FileSettingManager {
     //add luis authoring endpoint for old bot
     if (!result.luis.authoringEndpoint && result.luis.authoringEndpoint !== '') {
       result.luis.authoringEndpoint = this.createDefaultSettings().luis.authoringEndpoint;
+    }
+    //add customizedFunctions for old bot
+    if (!result.customizedFunctions) {
+      result.customizedFunctions = this.createDefaultSettings().customizedFunctions;
     }
     return result;
   }

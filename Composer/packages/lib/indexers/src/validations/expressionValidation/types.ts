@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Diagnostic, LgFile, LuFile } from '@bfc/shared';
+import { Diagnostic, LgFile, LuFile, DialogSetting, SchemaDefinitions, MicrosoftIDialog } from '@bfc/shared';
 import { ReturnType } from 'adaptive-expressions';
 
 export const StringMapExpressionType = {
@@ -15,9 +15,10 @@ export const StringMapExpressionType = {
 
 export type ValidateFunc = (
   path: string,
-  value: any,
+  value: MicrosoftIDialog,
   type: string,
-  schema: any,
+  schema: SchemaDefinitions,
+  setting: DialogSetting,
   lgFiles: LgFile[],
   luFiles: LuFile[]
 ) => Diagnostic[] | null; // error msg
