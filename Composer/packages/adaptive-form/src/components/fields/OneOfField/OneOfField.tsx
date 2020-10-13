@@ -14,6 +14,7 @@ import { css } from '@emotion/core';
 
 import { getUiPlaceholder, resolveFieldWidget } from '../../../utils';
 import { FieldLabel } from '../../FieldLabel';
+import { sharedFieldIconStyles } from '../../sharedStyles';
 
 import { getOptions, getSelectedOption } from './utils';
 
@@ -37,17 +38,10 @@ const styles = {
 
   icon: css`
     margin-right: 3px;
-    font-size: 12px;
   `,
 
   dropdown: {
-    title: {
-      width: '44px',
-      backgroundColor: '#F3F2F1',
-      height: '100%',
-      lineHeight: '28px',
-    },
-
+    title: { ...sharedFieldIconStyles, height: '100%' },
     dropdown: { height: '100%' },
   },
 
@@ -119,13 +113,14 @@ const OneOfField: React.FC<FieldProps> = (props) => {
     const enumOptions = selectedSchema?.enum as string[];
     const expression = schema?.oneOf?.some(({ $role }: any) => $role === 'expression');
 
-    const { field: Field, customProps } = resolveFieldWidget(
-      selectedSchema,
+    const { field: Field, customProps } = resolveFieldWidget({
+      schema: selectedSchema,
       uiOptions,
-      formUIOptions,
+      globalUIOptions: formUIOptions,
       value,
-      props.expression
-    );
+      expression: props.expression,
+      isOneOf: options.length > 1,
+    });
     return (
       <Field
         key={selectedSchema.type}
@@ -134,8 +129,8 @@ const OneOfField: React.FC<FieldProps> = (props) => {
         {...customProps}
         css={{ label: 'ExpressionFieldValue' }}
         enumOptions={enumOptions}
-        label={selectedSchema.type !== 'object' ? false : undefined}
         // allow object fields to render their labels
+        label={selectedSchema.type !== 'object' ? false : undefined}
         placeholder={placeholder}
         schema={selectedSchema}
         transparentBorder={false}

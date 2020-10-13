@@ -3,6 +3,7 @@
 import { FieldProps, FieldWidget, FormUISchema, JSONSchema7, UIOptions } from '@bfc/extension-client';
 
 import * as DefaultFields from '../components/fields';
+import { withTypeIcons } from '../components/withTypeIcons';
 
 /**
  * Resolves field widget in this order:
@@ -10,13 +11,16 @@ import * as DefaultFields from '../components/fields';
  * @param schema
  * @param uiOptions
  */
-export function resolveFieldWidget(
-  schema?: JSONSchema7,
-  uiOptions?: UIOptions,
-  globalUIOptions?: FormUISchema,
-  value?: any,
-  expression?: boolean
-): { field: FieldWidget; customProps?: Partial<FieldProps> } {
+export function resolveFieldWidget(params: {
+  schema?: JSONSchema7;
+  uiOptions?: UIOptions;
+  globalUIOptions?: FormUISchema;
+  value?: any;
+  expression?: boolean;
+  isOneOf?: boolean;
+}): { field: FieldWidget; customProps?: Partial<FieldProps> } {
+  const { schema, uiOptions, globalUIOptions, value, expression, isOneOf } = params;
+
   const FieldOverride = uiOptions?.field;
 
   if (typeof FieldOverride === 'function') {
@@ -24,6 +28,9 @@ export function resolveFieldWidget(
   }
 
   if (schema) {
+    let baseField: FieldWidget;
+    const showIntellisense = uiOptions?.intellisenseScopes?.length || expression;
+
     if (schema.$role) {
       switch (schema.$role) {
         case 'expression':
@@ -44,7 +51,8 @@ export function resolveFieldWidget(
     }
 
     if (expression && typeof value === 'string' && value.startsWith('=')) {
-      return { field: DefaultFields.IntellisenseExpressionField };
+      baseField = DefaultFields.IntellisenseExpressionField;
+      return { field: isOneOf ? baseField : withTypeIcons(baseField) };
     }
 
     if (Array.isArray(schema.enum)) {
@@ -54,22 +62,21 @@ export function resolveFieldWidget(
     switch (schema.type) {
       case undefined:
       case 'string':
+        baseField = showIntellisense ? DefaultFields.IntellisenseTextField : DefaultFields.StringField;
         return {
-          field: uiOptions?.intellisenseScopes?.length
-            ? DefaultFields.IntellisenseTextField
-            : DefaultFields.StringField,
+          field: isOneOf ? baseField : withTypeIcons(baseField),
         };
 
       case 'integer':
       case 'number':
+        baseField = showIntellisense ? DefaultFields.IntellisenseNumberField : DefaultFields.NumberField;
         return {
-          field: uiOptions?.intellisenseScopes?.length
-            ? DefaultFields.IntellisenseNumberField
-            : DefaultFields.NumberField,
+          field: isOneOf ? baseField : withTypeIcons(baseField),
         };
 
       case 'boolean':
-        return { field: DefaultFields.BooleanField };
+        baseField = DefaultFields.BooleanField;
+        return { field: isOneOf ? baseField : withTypeIcons(baseField) };
       case 'array': {
         const { items } = schema;
 
@@ -78,10 +85,9 @@ export function resolveFieldWidget(
         } else if (!Array.isArray(items) && typeof items === 'object' && items.type === 'object') {
           return { field: DefaultFields.ObjectArrayField };
         } else if (!schema.items && !schema.oneOf) {
+          baseField = showIntellisense ? DefaultFields.IntellisenseJSONField : DefaultFields.JsonField;
           return {
-            field: uiOptions?.intellisenseScopes?.length
-              ? DefaultFields.IntellisenseJSONField
-              : DefaultFields.JsonField,
+            field: isOneOf ? baseField : withTypeIcons(baseField),
             customProps: { style: { height: 100 } },
           };
         }
@@ -92,10 +98,9 @@ export function resolveFieldWidget(
         if (schema.additionalProperties) {
           return { field: DefaultFields.OpenObjectField };
         } else if (!schema.properties) {
+          baseField = showIntellisense ? DefaultFields.IntellisenseJSONField : DefaultFields.JsonField;
           return {
-            field: uiOptions?.intellisenseScopes?.length
-              ? DefaultFields.IntellisenseJSONField
-              : DefaultFields.JsonField,
+            field: isOneOf ? baseField : withTypeIcons(baseField),
             customProps: { style: { height: 100 } },
           };
         } else if (uiOptions?.fieldsets) {

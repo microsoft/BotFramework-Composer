@@ -72,7 +72,13 @@ export const SchemaField: React.FC<FieldProps> = (props) => {
 
   const deserializedValue = typeof uiOptions?.serializer?.get === 'function' ? uiOptions.serializer.get(value) : value;
 
-  const { field: FieldWidget, customProps } = resolveFieldWidget(schema, uiOptions, formUIOptions, value, expression);
+  const { field: FieldWidget, customProps } = resolveFieldWidget({
+    schema,
+    uiOptions,
+    globalUIOptions: formUIOptions,
+    value,
+    expression,
+  });
   const fieldProps: FieldProps = {
     ...rest,
     ...customProps,

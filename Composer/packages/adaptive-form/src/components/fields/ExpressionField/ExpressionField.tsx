@@ -14,7 +14,13 @@ const ExpressionField: React.FC<FieldProps> = (props) => {
 
   const newSchema = omit({ ...schema }, '$role');
 
-  const { field: Field, customProps } = resolveFieldWidget(newSchema, uiOptions, formUIOptions, value, true);
+  const { field: Field, customProps } = resolveFieldWidget({
+    schema: newSchema,
+    uiOptions,
+    globalUIOptions: formUIOptions,
+    value,
+    expression: true,
+  });
 
   return <Field {...props} {...customProps} expression schema={newSchema} uiOptions={uiOptions} />;
 };

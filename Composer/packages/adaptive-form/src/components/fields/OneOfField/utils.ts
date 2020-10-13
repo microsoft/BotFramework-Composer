@@ -8,6 +8,7 @@ import omit from 'lodash/omit';
 import formatMessage from 'format-message';
 
 import { getUiDescription, getUiPlaceholder, getValueType, resolveRef } from '../../../utils';
+import { getFieldIconText } from '../../../utils/getFieldIconText';
 
 function getOptionLabel(schema: JSONSchema7): string {
   const { title, enum: enumOptions } = schema;
@@ -24,24 +25,6 @@ function getOptionLabel(schema: JSONSchema7): string {
   return type || 'unknown';
 }
 
-const getOptionIconText = (type: any): string => {
-  const typeFormatted = Array.isArray(type) ? type[0] : type;
-  if (typeFormatted === 'string') {
-    return 'abc';
-  } else if (typeFormatted === 'number') {
-    return '123';
-  } else if (typeFormatted === 'array') {
-    return '[ ]';
-  } else if (typeFormatted === 'object') {
-    return '{ }';
-  } else if (typeFormatted === 'boolean') {
-    return 'y/n';
-  } else if (typeFormatted === 'expression') {
-    return '=';
-  }
-  return '';
-};
-
 export function getOptions(
   schema: JSONSchema7,
   definitions?: { [key: string]: JSONSchema7Definition }
@@ -54,7 +37,7 @@ export function getOptions(
     const options: IDropdownOption[] = type.map((t) => ({
       key: t,
       text: t,
-      data: { schema: { ...schema, type: t }, icon: getOptionIconText(t) },
+      data: { schema: { ...schema, type: t }, icon: getFieldIconText(t) },
     }));
 
     options.sort(({ text: t1 }, { text: t2 }) => (t1 > t2 ? 1 : -1));
@@ -74,7 +57,7 @@ export function getOptions(
             return {
               key: label,
               text: label,
-              data: { schema: merged, icon: getOptionIconText(s.type) },
+              data: { schema: merged, icon: getFieldIconText(s.type) },
             } as IDropdownOption;
           }
         }
@@ -95,7 +78,7 @@ export function getOptions(
           key: 'expression',
           text: formatMessage('Write in expression'),
           data: {
-            icon: getOptionIconText('expression'),
+            icon: getFieldIconText('expression'),
             schema: merged,
           },
         }

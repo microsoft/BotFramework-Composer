@@ -19,3 +19,5 @@ export const focusBorder = css`
     }
   }
 `;
+
+export const sharedFieldIconStyles = { backgroundColor: '#F3F2F1', width: '44px', lineHeight: '28px', fontSize: 12 };
