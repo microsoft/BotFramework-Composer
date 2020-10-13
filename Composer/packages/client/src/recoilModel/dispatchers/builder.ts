@@ -8,10 +8,6 @@ import { IPublishConfig, ShellData } from '@bfc/types';
 import { botStatusState, botLoadErrorState } from '../atoms';
 import { Builder } from '../../utils/builders/builderTypes';
 
-export const checkEmptyQuestionOrAnswerInQnAFile = (sections) => {
-  return sections.some((s) => !s.Answer || s.Questions.some((q) => !q.content));
-};
-
 export const builderDispatcher = () => {
   const build = useRecoilCallback(
     ({ set }: CallbackInterface) => (

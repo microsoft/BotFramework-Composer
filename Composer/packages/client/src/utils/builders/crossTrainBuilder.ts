@@ -4,7 +4,6 @@
 import { IPublishConfig } from '@bfc/types';
 
 import { Text, BotStatus } from '../../constants';
-import { checkEmptyQuestionOrAnswerInQnAFile } from '../../recoilModel/dispatchers/builder';
 import * as luUtil from '../luUtil';
 import * as buildUtil from '../buildUtil';
 import httpClient from '../httpUtil';
@@ -12,6 +11,10 @@ import luFileStatusStorage from '../luFileStatusStorage';
 import qnaFileStatusStorage from '../qnaFileStatusStorage';
 
 import { Builder } from './builderTypes';
+
+const checkEmptyQuestionOrAnswerInQnAFile = (sections) => {
+  return sections.some((s) => !s.Answer || s.Questions.some((q) => !q.content));
+};
 
 export const crossTrainBuilder: Builder<IPublishConfig> = async (projectId, config, shellData, setStatus, setError) => {
   const { dialogs, luFiles, qnaFiles } = shellData;
