@@ -21,7 +21,7 @@
     "@bfc/indexers": "*",
     "@bfc/shared": "*",
     "@microsoft/bf-cli-command": "^4.10.0-preview.141651",
-    "@microsoft/bf-lu": "^4.10.0-dev.20200808.5a7c973",
+    "@microsoft/bf-lu": "^4.11.0-dev.20201005.7e5e1b8",
     "express": "^4.15.2",
     "monaco-languageclient": "^0.10.0",
     "normalize-url": "^2.0.1",
