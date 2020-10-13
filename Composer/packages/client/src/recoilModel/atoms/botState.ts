@@ -253,11 +253,11 @@ export const showCreateQnAFromScratchDialogState = atomFamily<boolean, string>({
   key: getFullyQualifiedKey('showCreateQnAFromScratchDialog'),
   default: false,
 });
-export const onCreateQnAFromUrlDialogCompleteState = atomFamily<any, string>({
+export const onCreateQnAFromUrlDialogCompleteState = atomFamily<{ func: undefined | (() => void) }, string>({
   key: getFullyQualifiedKey('onCreateQnAFromUrlDialogCompleteState'),
   default: { func: undefined },
 });
-export const onCreateQnAFromScratchDialogCompleteState = atomFamily<any, string>({
+export const onCreateQnAFromScratchDialogCompleteState = atomFamily<{ func: undefined | (() => void) }, string>({
   key: getFullyQualifiedKey('onCreateQnAFromScratchDialogCompleteState'),
   default: { func: undefined },
 });

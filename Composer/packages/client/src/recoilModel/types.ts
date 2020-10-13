@@ -111,11 +111,3 @@ export type BoilerplateVersion = {
 };
 
 export type Notification = CardProps & { id: string };
-
-export enum NotificationCardType {
-  INFO = 'info',
-  WARNING = 'warning',
-  ERROR = 'error',
-  PENDING = 'pending',
-  SUCCESS = 'success',
-}

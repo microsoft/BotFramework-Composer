@@ -205,7 +205,7 @@ export const qnaDispatcher = () => {
       projectId,
       showFromScratch,
     }: {
-      onComplete?: Function;
+      onComplete?: () => void;
       showFromScratch: boolean;
       projectId: string;
     }) => {
@@ -227,7 +227,13 @@ export const qnaDispatcher = () => {
   );
 
   const createQnAFromScratchDialogBegin = useRecoilCallback(
-    ({ set }: CallbackInterface) => async ({ onComplete, projectId }: { onComplete?: Function; projectId: string }) => {
+    ({ set }: CallbackInterface) => async ({
+      onComplete,
+      projectId,
+    }: {
+      onComplete?: () => void;
+      projectId: string;
+    }) => {
       set(showCreateQnAFromScratchDialogState(projectId), true);
       set(onCreateQnAFromScratchDialogCompleteState(projectId), { func: onComplete });
     }
@@ -246,7 +252,7 @@ export const qnaDispatcher = () => {
         await snapshot.getPromise(onCreateQnAFromUrlDialogCompleteState(projectId))
       ).func;
       if (typeof onCreateQnAFromUrlDialogComplete === 'function') {
-        onCreateQnAFromUrlDialogComplete({ projectId });
+        onCreateQnAFromUrlDialogComplete();
       }
       set(showCreateQnAFromUrlDialogState(projectId), false);
       set(onCreateQnAFromUrlDialogCompleteState(projectId), { func: undefined });
@@ -259,7 +265,7 @@ export const qnaDispatcher = () => {
         await snapshot.getPromise(onCreateQnAFromScratchDialogCompleteState(projectId))
       ).func;
       if (typeof onCreateQnAFromScratchDialogComplete === 'function') {
-        onCreateQnAFromScratchDialogComplete({ projectId });
+        onCreateQnAFromScratchDialogComplete();
       }
       set(showCreateQnAFromScratchDialogState(projectId), false);
       set(onCreateQnAFromScratchDialogCompleteState(projectId), { func: undefined });

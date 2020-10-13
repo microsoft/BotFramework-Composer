@@ -12,7 +12,6 @@ import {
   AppUpdateState,
   BoilerplateVersion,
   Notification,
-  NotificationCardType,
 } from '../../recoilModel/types';
 import { getUserSettings } from '../utils';
 import onboardingStorage from '../../utils/onboardingStorage';
@@ -162,7 +161,7 @@ export const notificationIdsState = atom<string[]>({
 export const notificationsState = atomFamily<Notification, string>({
   key: getFullyQualifiedKey('notification'),
   default: (id: string): Notification => {
-    return { id, type: NotificationCardType.INFO, title: '' };
+    return { id, type: 'info', title: '' };
   },
 });
 

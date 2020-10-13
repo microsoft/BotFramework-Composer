@@ -46,7 +46,7 @@ jest.mock('@bfc/indexers', () => {
       }),
     },
     qnaIndexer: {
-      parse: (content, id) => ({
+      parse: (id, content) => ({
         id,
         content,
       }),

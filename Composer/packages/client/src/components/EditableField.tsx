@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css, SerializedStyles } from '@emotion/core';
 import React, { useState, useEffect, useRef, Fragment } from 'react';
 import { TextField, ITextFieldStyles, ITextFieldProps, ITextField } from 'office-ui-fabric-react/lib/TextField';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
@@ -52,7 +52,7 @@ interface EditableFieldProps extends Omit<ITextFieldProps, 'onChange' | 'onFocus
   ariaLabel?: string;
   error?: string | JSX.Element;
   extraContent?: string;
-  containerStyles?: any;
+  containerStyles?: SerializedStyles;
   className?: string;
   depth: number;
   description?: string;

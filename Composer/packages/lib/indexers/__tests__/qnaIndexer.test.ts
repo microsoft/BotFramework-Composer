@@ -35,12 +35,12 @@ const content2 = `> # QnA pairs
 
 describe('parse', () => {
   it('should parse QnA file', () => {
-    const result1 = parse(content1);
+    const result1 = parse('a.qna', content1);
     expect(result1.diagnostics.length).toEqual(0);
     expect(result1.empty).toEqual(false);
     expect(result1.qnaSections.length).toEqual(2);
 
-    const result2 = parse(content2);
+    const result2 = parse('a.qna', content2);
     expect(result2.diagnostics.length).toEqual(0);
     expect(result2.empty).toEqual(false);
     expect(result2.qnaSections.length).toEqual(1);
@@ -51,7 +51,7 @@ describe('parse', () => {
   [import](../common/aks.qna)
   `;
 
-    const result = parse(content);
+    const result = parse('a.qna', content);
     expect(result.imports.length).toEqual(2);
     expect(result.imports[0]).toEqual({ id: 'windows-guide.source.qna', path: 'windows-guide.source.qna' });
     expect(result.imports[1]).toEqual({ id: 'aks.qna', path: '../common/aks.qna' });
@@ -65,7 +65,7 @@ describe('parse', () => {
 > # QnA pairs
 `;
 
-    const result = parse(content);
+    const result = parse('a.qna', content);
     expect(result.empty).toEqual(false);
   });
 });

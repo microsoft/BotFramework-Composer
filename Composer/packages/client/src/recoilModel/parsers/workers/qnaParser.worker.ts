@@ -1,14 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { qnaIndexer } from '@bfc/indexers';
 import * as qnaUtil from '@bfc/indexers/lib/utils/qnaUtil';
 
 import { QnAActionType } from './../types';
 const ctx: Worker = self as any;
-
-const parse = (content: string, id: string) => {
-  return qnaIndexer.parse(content, id);
-};
 
 ctx.onmessage = function (msg) {
   const { id: msgId, type, payload } = msg.data;
@@ -17,7 +12,7 @@ ctx.onmessage = function (msg) {
   try {
     switch (type) {
       case QnAActionType.Parse: {
-        result = parse(content, id);
+        result = qnaUtil.parse(id, content);
         break;
       }
       case QnAActionType.AddSection: {

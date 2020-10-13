@@ -2,13 +2,9 @@
 // Licensed under the MIT License.
 import { FileInfo, QnAFile } from '@bfc/shared';
 
-import { parse as utilParse } from './utils/qnaUtil';
+import { parse } from './utils/qnaUtil';
 import { getBaseName } from './utils/help';
 import { FileExtensions } from './utils/fileExtensions';
-
-function parse(content: string, id = ''): QnAFile {
-  return utilParse(id, content);
-}
 
 function index(files: FileInfo[]): QnAFile[] {
   if (files.length === 0) return [];
@@ -17,7 +13,7 @@ function index(files: FileInfo[]): QnAFile[] {
     const { name, content } = file;
     if (name.endsWith(FileExtensions.QnA)) {
       const id = getBaseName(name, FileExtensions.QnA);
-      const data = parse(content, id);
+      const data = parse(id, content);
       qnaFiles.push(data);
     }
   }
