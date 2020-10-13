@@ -3,7 +3,6 @@
 
 import path from 'path';
 
-import { v4 as uuid } from 'uuid';
 import md5 from 'md5';
 import { copy, rmdir, emptyDir, readJson, pathExists, writeJson, mkdirSync, writeFileSync } from 'fs-extra';
 import { IBotProject } from '@bfc/shared';
@@ -69,6 +68,7 @@ export default async (composer: any): Promise<void> => {
     public customDescription: string;
     public logger: Debugger;
     public hasView = true;
+    public bundleId = 'publish'; /** host custom UI */
 
     constructor(mode?: string, customName?: string, customDescription?: string) {
       this.histories = {};
@@ -470,7 +470,6 @@ export default async (composer: any): Promise<void> => {
     };
 
     provision = async (config: ProvisionConfig, project: IBotProject, user) => {
-
       const jobId = BackgroundProcessManager.startProcess(202, project.id, config.name, 'Creating Azure resources...');
       this.asyncProvision(jobId, config, project, user);
       return BackgroundProcessManager.getStatus(jobId);

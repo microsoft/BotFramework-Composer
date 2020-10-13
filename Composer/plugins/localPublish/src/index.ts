@@ -135,10 +135,8 @@ class LocalPublisher {
         const url = `http://localhost:${port}`;
         return {
           status: 200,
-          result: {
-            message: 'Running',
-            endpointURL: url,
-          },
+          message: 'Running',
+          endpointURL: url,
         };
       } else {
         const status = {
