@@ -75,7 +75,7 @@ export const formDialogsDispatcher = () => {
         const response = await httpClient.post(`/formDialogs/${projectId}/generate`, {
           name: schemaId,
         });
-        reloadProject(callbackHelpers, response);
+        await reloadProject(callbackHelpers, response);
       } catch (error) {
         set(applicationErrorState, {
           message: error.message,
