@@ -603,7 +603,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       <div css={pageRoot}>
         <LeftRightSplit initialLeftGridWidth="20%" minLeftPixels={200} minRightPixels={800}>
           <ProjectTree
-            regionName={formatMessage('project tree')}
             onDeleteDialog={handleDeleteDialog}
             onDeleteTrigger={handleDeleteTrigger}
             onSelect={(...props) => handleSelect(projectId, ...props)}

@@ -167,14 +167,10 @@ const renderTreeMenuItem = (link: TreeLink) => (item: TreeMenuItem) => {
 };
 
 const onRenderItem = (item: IOverflowSetItemProps) => {
-  const warningContent = formatMessage(
-    'This trigger type is not supported by the RegEx recognizer and will not be fired.'
-  );
-  const errorContent = 'stub for error content'; // TODO: get actual warning and error messages from link
   return (
     <div
       data-is-focusable
-      aria-label={warningContent}
+      aria-label={`${item.displayName} ${item.warningContent} ${item.errorContent}`}
       css={itemText}
       role="cell"
       tabIndex={0}
@@ -197,12 +193,12 @@ const onRenderItem = (item: IOverflowSetItemProps) => {
         )}
         {item.displayName}
         {item.errorContent && (
-          <TooltipHost content={errorContent} directionalHint={DirectionalHint.bottomLeftEdge}>
+          <TooltipHost content={item.errorContent} directionalHint={DirectionalHint.bottomLeftEdge}>
             <Icon iconName={'Warning'} style={warningIcon} />
           </TooltipHost>
         )}
         {item.warningContent && (
-          <TooltipHost content={warningContent} directionalHint={DirectionalHint.bottomLeftEdge}>
+          <TooltipHost content={item.warningContent} directionalHint={DirectionalHint.bottomLeftEdge}>
             <Icon iconName={'ErrorBadge'} style={errorIcon} />
           </TooltipHost>
         )}

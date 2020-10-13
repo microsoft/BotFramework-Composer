@@ -8,12 +8,17 @@ import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
 import cloneDeep from 'lodash/cloneDeep';
 import formatMessage from 'format-message';
-import { DialogInfo, ITrigger } from '@bfc/shared';
+import { DialogInfo, ITrigger, Diagnostic, DiagnosticSeverity } from '@bfc/shared';
 import debounce from 'lodash/debounce';
 import { useRecoilValue } from 'recoil';
 import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 
-import { dispatcherState, currentProjectIdState, botProjectSpaceSelector } from '../../recoilModel';
+import {
+  dispatcherState,
+  currentProjectIdState,
+  botProjectSpaceSelector,
+  validateDialogSelectorFamily,
+} from '../../recoilModel';
 import { getFriendlyName } from '../../utils/dialogUtil';
 import { containUnsupportedTriggers, triggerNotSupported } from '../../utils/dialogValidator';
 
@@ -118,7 +123,6 @@ type IProjectTreeProps = {
   onSelect?: (link: TreeLink) => void;
   showTriggers?: boolean;
   showDialogs?: boolean;
-  regionName: string;
   navLinks?: TreeLink[];
   onDeleteTrigger: (id: string, index: number) => void;
   onDeleteDialog: (id: string) => void;
@@ -142,13 +146,33 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
   }));
   const currentProjectId = useRecoilValue(currentProjectIdState);
 
+  const notificationMap: { [projectId: string]: { [dialogId: string]: Diagnostic[] } } = {};
+  for (const bot of projectCollection) {
+    notificationMap[bot.projectId] = {};
+    // this seems to be the only way to get these notifications
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const dialogMessages = useRecoilValue(validateDialogSelectorFamily(bot.projectId));
+    for (const message of dialogMessages) {
+      const dialogId = message.id;
+      notificationMap[bot.projectId][dialogId] = message.diagnostics;
+    }
+  }
+
+  const dialogHasWarnings = (dialog: DialogInfo) => {
+    dialog.triggers.some((tr) => triggerNotSupported(dialog, tr));
+  };
+
   const botHasWarnings = (bot: BotInProject) => {
-    return bot.dialogs.some((dialog) => dialog.triggers.some((tr) => triggerNotSupported(dialog, tr)));
+    return bot.dialogs.some(dialogHasWarnings);
+  };
+
+  const dialogHasErrors = (dialog: DialogInfo) => {
+    console.log(notificationMap[currentProjectId][dialog.id]);
+    notificationMap[currentProjectId][dialog.id].some((diag) => diag.message != null);
   };
 
   const botHasErrors = (bot: BotInProject) => {
-    // TODO: this is just a stub for now
-    return false;
+    return bot.dialogs.some(dialogHasErrors);
   };
 
   const handleOnSelect = (link: TreeLink) => {
@@ -194,13 +218,23 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
     );
   };
 
-  const renderDialogHeader = (skillId: string, dialog: DialogInfo, warningContent: string) => {
+  const renderDialogHeader = (skillId: string, dialog: DialogInfo) => {
+    const warningContent = notificationMap[currentProjectId][dialog.id]
+      .filter((diag) => diag.severity === DiagnosticSeverity.Warning)
+      .map((diag) => diag.message)
+      .join(',');
+    const errorContent = notificationMap[currentProjectId][dialog.id]
+      .filter((diag) => diag.severity === DiagnosticSeverity.Error)
+      .map((diag) => diag.message)
+      .join(',');
+
     const link: TreeLink = {
       dialogName: dialog.id,
       displayName: dialog.displayName,
       isRoot: dialog.isRoot,
       projectId: currentProjectId,
       skillId: undefined,
+      errorContent,
       warningContent,
     };
     return (
@@ -294,18 +328,26 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
 
     if (showTriggers) {
       return filteredDialogs.map((dialog: DialogInfo) => {
+        const errorContent = '';
         const triggerList = dialog.triggers
           .filter((tr) => filterMatch(dialog.displayName) || filterMatch(getTriggerName(tr)))
           .map((tr, index) => {
             const warningContent = triggerNotSupported(dialog, tr);
-            return renderTrigger(projectId, { ...tr, index, displayName: getTriggerName(tr), warningContent }, dialog);
+            const errorContent = notificationMap[projectId][dialog.id].some(
+              (diag) => diag.severity === DiagnosticSeverity.Error && diag.path?.match(RegExp(`triggers\\[${index}\\]`))
+            );
+            return renderTrigger(
+              projectId,
+              { ...tr, index, displayName: getTriggerName(tr), warningContent, errorContent },
+              dialog
+            );
           });
         return (
           <ExpandableNode
             key={dialog.id}
             depth={startDepth}
             detailsRef={dialog.isRoot ? addMainDialogRef : undefined}
-            summary={renderDialogHeader(projectId, dialog, containUnsupportedTriggers(dialog))}
+            summary={renderDialogHeader(projectId, dialog, containUnsupportedTriggers(dialog), errorContent)}
           >
             <div>{triggerList}</div>
           </ExpandableNode>
@@ -313,7 +355,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
       });
     } else {
       return filteredDialogs.map((dialog: DialogInfo) =>
-        renderDialogHeader(projectId, dialog, containUnsupportedTriggers(dialog))
+        renderDialogHeader(projectId, dialog, containUnsupportedTriggers(dialog), '')
       );
     }
   }

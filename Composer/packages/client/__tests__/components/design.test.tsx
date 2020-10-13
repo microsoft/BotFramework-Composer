@@ -20,20 +20,11 @@ const projectId = '1234a-324234';
 
 describe('<ProjectTree/>', () => {
   it('should render the ProjectTree', async () => {
-    const dialogId = 'todobot';
-    const selected = 'triggers[0]';
     const handleSelect = jest.fn(() => {});
     const handleDeleteDialog = jest.fn(() => {});
     const handleDeleteTrigger = jest.fn(() => {});
     const { findByText } = renderWithRecoil(
-      <ProjectTree
-        dialogId={dialogId}
-        dialogs={dialogs as DialogInfo[]}
-        selected={selected}
-        onDeleteDialog={handleDeleteDialog}
-        onDeleteTrigger={handleDeleteTrigger}
-        onSelect={handleSelect}
-      />
+      <ProjectTree onDeleteDialog={handleDeleteDialog} onDeleteTrigger={handleDeleteTrigger} onSelect={handleSelect} />
     );
     const node = await findByText('addtodo');
     fireEvent.click(node);
