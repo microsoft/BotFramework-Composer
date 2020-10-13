@@ -48,6 +48,7 @@ import {
   showCreateDialogModalState,
   showAddSkillDialogModalState,
   localeState,
+  rootBotProjectIdSelector,
 } from '../../recoilModel';
 import ImportQnAFromUrlModal from '../knowledge-base/ImportQnAFromUrlModal';
 import { triggerNotSupported } from '../../utils/dialogValidator';
@@ -121,6 +122,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const locale = useRecoilValue(localeState(projectId));
   const undoFunction = useRecoilValue(undoFunctionState(projectId));
   const undoVersion = useRecoilValue(undoVersionState(projectId));
+  const rootProjectId = useRecoilValue(rootBotProjectIdSelector) ?? projectId;
 
   const { undo, redo, canRedo, canUndo, commitChanges, clearUndo } = undoFunction;
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
@@ -187,6 +189,12 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   useEffect(() => {
     if (location && props.dialogId && props.projectId) {
       const { dialogId, projectId } = props;
+
+      // TODO: swap to the commented-out block once we're working on skills for real
+      // let { skillId } = props;
+      // if (skillId == null) skillId = projectId;
+      const skillId = undefined;
+
       const params = new URLSearchParams(location.search);
       const dialogMap = dialogs.reduce((acc, { content, id }) => ({ ...acc, [id]: content }), {});
       const dialogData = getDialogData(dialogMap, dialogId);
@@ -204,7 +212,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
          *   - If 'dialog' not exists at `dialogId` path, fallback to main dialog.
          */
         if (id) {
-          navTo(projectId, id);
+          navTo(rootProjectId, skillId, id);
         }
         return;
       }
@@ -250,15 +258,15 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
   function handleSelect(projectId, id, selected = '') {
     if (selected) {
-      selectTo(projectId, selected);
+      selectTo(projectId, undefined, undefined, selected);
     } else {
-      navTo(projectId, id, []);
+      navTo(projectId, undefined, id, []);
     }
   }
 
   const onCreateDialogComplete = (newDialog) => {
     if (newDialog) {
-      navTo(projectId, newDialog, []);
+      navTo(projectId, undefined, newDialog, []);
     }
   };
 
@@ -441,7 +449,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   function handleBreadcrumbItemClick(_event, item) {
     if (item) {
       const { dialogId, selected, focused, index } = item;
-      selectAndFocus(projectId, dialogId, selected, focused, clearBreadcrumb(breadcrumb, index));
+      selectAndFocus(projectId, undefined, dialogId, selected, focused, clearBreadcrumb(breadcrumb, index));
     }
   }
 
@@ -493,8 +501,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     commitChanges();
   }
 
-  async function handleDeleteDialog(id) {
-    const refs = getAllRef(id, dialogs);
+  async function handleDeleteDialog(dialogId) {
+    const refs = getAllRef(dialogId, dialogs);
     let setting: any = {
       confirmBtnText: formatMessage('Yes'),
       cancelBtnText: formatMessage('Cancel'),
@@ -511,19 +519,20 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     } else {
       title = DialogDeleting.NO_LINKED_TITLE;
     }
+    console.log('in delete:', title, 'st=', subTitle, 'set=', setting, 'refs=', refs);
     const result = await OpenConfirmModal(title, subTitle, setting);
 
     if (result) {
-      await removeDialog(id, projectId);
+      await removeDialog(dialogId, projectId);
       commitChanges();
     }
   }
 
-  async function handleDeleteTrigger(id, index) {
-    const content = deleteTrigger(dialogs, id, index, (trigger) => triggerApi.deleteTrigger(id, trigger));
+  async function handleDeleteTrigger(dialogId: string, index: number) {
+    const content = deleteTrigger(dialogs, dialogId, index, (trigger) => triggerApi.deleteTrigger(dialogId, trigger));
 
     if (content) {
-      updateDialog({ id, content, projectId });
+      updateDialog({ id: dialogId, content, projectId });
       const match = /\[(\d+)\]/g.exec(selected);
       const current = match && match[1];
       if (!current) return;
@@ -531,14 +540,14 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       if (index === currentIdx) {
         if (currentIdx - 1 >= 0) {
           //if the deleted node is selected and the selected one is not the first one, navTo the previous trigger;
-          selectTo(projectId, createSelectedPath(currentIdx - 1));
+          selectTo(projectId, undefined, dialogId, createSelectedPath(currentIdx - 1));
         } else {
           //if the deleted node is selected and the selected one is the first one, navTo the first trigger;
-          navTo(projectId, id, []);
+          navTo(projectId, undefined, dialogId, []);
         }
       } else if (index < currentIdx) {
         //if the deleted node is at the front, navTo the current one;
-        selectTo(projectId, createSelectedPath(currentIdx - 1));
+        selectTo(projectId, undefined, dialogId, createSelectedPath(currentIdx - 1));
       }
     }
   }

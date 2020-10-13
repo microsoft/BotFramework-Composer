@@ -200,7 +200,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
       displayName: dialog.displayName,
       isRoot: dialog.isRoot,
       projectId: currentProjectId,
-      skillId,
+      skillId: undefined,
       warningContent,
     };
     return (
@@ -245,7 +245,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
       dialogName: dialog.id,
       isRoot: false,
       projectId: currentProjectId,
-      skillId: projectId,
+      skillId: undefined,
     };
 
     return (

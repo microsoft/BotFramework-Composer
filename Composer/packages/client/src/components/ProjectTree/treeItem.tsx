@@ -148,7 +148,7 @@ interface ITreeItemProps {
   shiftOut?: number; // needed to make an outline look right; should be the size of the "details" reveal arrow
 }
 
-const renderTreeMenuItem = (item: TreeMenuItem) => {
+const renderTreeMenuItem = (link: TreeLink) => (item: TreeMenuItem) => {
   if (item.label === '') {
     return {
       key: 'divider',
@@ -160,7 +160,9 @@ const renderTreeMenuItem = (item: TreeMenuItem) => {
     ariaLabel: item.label,
     text: item.label,
     iconProps: { iconName: item.icon },
-    onItemClick: item.action,
+    onClick: (ev) => {
+      item.action?.(link);
+    },
   };
 };
 
@@ -246,7 +248,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
 }) => {
   const a11yLabel = `${dialogName ?? '$Root'}_${link.displayName}`;
 
-  const overflowMenu = menu.map(renderTreeMenuItem);
+  const overflowMenu = menu.map(renderTreeMenuItem(link));
 
   const linkString = `${link.projectId}_DialogTreeItem${link.dialogName}_${link.trigger ?? ''}`;
 

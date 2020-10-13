@@ -43,7 +43,7 @@ export const RightPanel = () => {
   const applicationError = useRecoilValue(applicationErrorState);
   const { setApplicationLevelError, fetchProjectById } = useRecoilValue(dispatcherState);
   const projectId = useRecoilValue(currentProjectIdState);
-  const currentMode = useRecoilValue(currentModeState);
+  //const currentMode = useRecoilValue(currentModeState);
 
   const conversation = (
     <Conversation>
@@ -60,14 +60,15 @@ export const RightPanel = () => {
       >
         <RequireAuth>
           <div css={{ display: 'flex', flexDirection: 'row', label: 'MainPage' }}>
+            {/*
             {SHOW_TREE.includes(currentMode) ? (
               <LeftRightSplit initialLeftGridWidth="200px" minLeftPixels={200} minRightPixels={800}>
                 <ProjectTree regionName={formatMessage('Project tree')} showTriggers={currentMode === 'design'} />
                 {conversation}
               </LeftRightSplit>
-            ) : (
-              conversation
-            )}
+            ) : ( */}
+            {conversation}
+            {/* })} */}
           </div>
         </RequireAuth>
       </ErrorBoundary>
