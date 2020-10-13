@@ -161,7 +161,7 @@ export const TestController: React.FC<{ projectId: string }> = (props) => {
       luis: luis,
       qna: Object.assign({}, settings.qna, qna),
     });
-    await build(luis, qna, projectId);
+    await build(projectId, config);
   }
 
   async function handleLoadBot() {

@@ -3,7 +3,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import { useRecoilCallback, CallbackInterface } from 'recoil';
-import { ILuisConfig, IQnAConfig } from '@bfc/shared';
+import { IPublishConfig } from '@bfc/types';
 
 import * as luUtil from '../../utils/luUtil';
 import * as buildUtil from '../../utils/buildUtil';
@@ -19,11 +19,7 @@ const checkEmptyQuestionOrAnswerInQnAFile = (sections) => {
 
 export const builderDispatcher = () => {
   const build = useRecoilCallback(
-    ({ set, snapshot }: CallbackInterface) => async (
-      luisConfig: ILuisConfig,
-      qnaConfig: IQnAConfig,
-      projectId: string
-    ) => {
+    ({ set, snapshot }: CallbackInterface) => async (projectId: string, config: IPublishConfig) => {
       const dialogs = await snapshot.getPromise(dialogsState(projectId));
       const luFiles = await snapshot.getPromise(luFilesState(projectId));
       const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
@@ -51,8 +47,8 @@ export const builderDispatcher = () => {
         //TODO crosstrain should add locale
         const crossTrainConfig = buildUtil.createCrossTrainConfig(dialogs, referredLuFiles);
         await httpClient.post(`/projects/${projectId}/build`, {
-          luisConfig,
-          qnaConfig,
+          luisConfig: config.luis,
+          qnaConfig: config.qna,
           projectId,
           crossTrainConfig,
           luFiles: referredLuFiles.map((file) => file.id),
