@@ -27,9 +27,67 @@ export const LibraryController = {
   getLibrary: async function (req, res) {
     // get libraries installed "locally"
     // const localLibrary = Store.get('library', []);
-    const combined = ExtensionContext.extensions.libraries;
+    // const combined = ExtensionContext.extensions.libraries;
     // mix in any libraries installed via plugins
+    // TODO: externalize this into a plugin config file
+    const combined = [
+      {
+        name: 'benbrown/dialogs-getemail',
+        version: '',
+        category: 'Input Helpers',
+        description: 'collect and validate an email address',
+      },
+      {
+        name: 'benbrown/dialogs-getphone',
+        version: '',
+        category: 'Input Helpers',
+        description: 'collect and validate a phone number',
+      },
+      {
+        name: 'benbrown/dialogs-multiline',
+        version: '',
+        category: 'Input Helpers',
+        description: 'collect multiple messages into a single field with a [DONE] button',
+      },
+    ];
+
     res.json(combined);
+  },
+  getComponents: async function (req, res) {
+    const user = await ExtensionContext.getUserFromRequest(req);
+    const projectId = req.params.projectId;
+    const currentProject = await BotProjectService.getProjectById(projectId, user);
+    const runtime = ExtensionContext.getRuntimeByProject(currentProject);
+
+    if (currentProject.settings?.runtime?.path) {
+      const manifestFile = runtime.identifyManifest(currentProject.settings?.runtime?.path);
+
+      const dryrun = new SchemaMerger(
+        [manifestFile],
+        '',
+        path.join(currentProject.dataDir, 'dialogs/imported'),
+        true, // copy only? true = dry run
+        false, // verbosity: true = verbose
+        console.log,
+        console.warn,
+        console.error
+      );
+      const dryRunMergeResults = await dryrun.merge();
+
+      if (dryRunMergeResults) {
+        res.json({
+          components: dryRunMergeResults.components.filter((c) => c.includesSchema || c.includesExports),
+        });
+      } else {
+        res.status(500).json({
+          message: 'Could not load component list',
+        });
+      }
+    } else {
+      res.json({
+        components: [],
+      });
+    }
   },
   import: async function (req, res) {
     const user = await ExtensionContext.getUserFromRequest(req);
@@ -51,12 +109,14 @@ export const LibraryController = {
           version
         );
 
+        const manifestFile = runtime.identifyManifest(currentProject.settings?.runtime?.path);
+
         console.log('INSTALL OUTPUT', installOutput);
 
-        console.log('EXAMINING PACKAGE: ', path.join(currentProject.settings?.runtime?.path, 'package.json'));
+        console.log('EXAMINING PACKAGE: ', manifestFile);
         // call do a dry run on the dialog merge
         const dryrun = new SchemaMerger(
-          [path.join(currentProject.settings?.runtime?.path, 'package.json')],
+          [manifestFile],
           '',
           path.join(currentProject.dataDir, 'dialogs'),
           true, // copy only? true = dry run
@@ -82,9 +142,9 @@ export const LibraryController = {
           });
         } else {
           const realMerge = new SchemaMerger(
-            [path.join(currentProject.settings?.runtime?.path, 'package.json')],
+            [manifestFile],
             '',
-            path.join(currentProject.dataDir, 'dialogs'),
+            path.join(currentProject.dataDir, 'dialogs/imported'),
             false, // copy only? true = dry run
             false, // verbosity: true = verbose
             console.log,
@@ -93,11 +153,20 @@ export const LibraryController = {
           );
 
           const mergeResults = await realMerge.merge();
-          console.log('MERGE RESULTS', mergeResults);
-          res.json({
-            success: true,
-            results: mergeResults,
-          });
+          if (mergeResults) {
+            console.log('MERGE RESULTS', mergeResults);
+            res.json({
+              success: true,
+              name: packageName,
+              installedVersion: version,
+              results: mergeResults,
+            });
+          } else {
+            res.json({
+              success: false,
+              results: 'Could not merge components',
+            });
+          }
         }
 
         // const importResults = await LibraryController.importRemoteAsset(
@@ -115,35 +184,66 @@ export const LibraryController = {
         console.error('Error in import', { message: err.message });
         res.status(500).json({ message: err.message });
       }
+    } else if (!currentProject.settings?.runtime?.path) {
+      res.status(500).json({ message: 'Please eject your runtime before installing a package.' });
     } else {
-      res.status(500).json({ message: 'Please specify a package name or git url to import' });
+      res.status(500).json({ message: 'Please specify a package name or git url to import.' });
     }
   },
   removeImported: async function (req, res) {
     const user = await ExtensionContext.getUserFromRequest(req);
     const projectId = req.params.projectId;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
+    const runtime = ExtensionContext.getRuntimeByProject(currentProject);
 
     // get URL or package name
     const packageName = req.query.package || req.body.package;
+    if (packageName && currentProject.settings?.runtime?.path) {
+      const output = await runtime.uninstallComponent(currentProject.settings.runtime.path, packageName);
 
-    if (packageName) {
-      // find this package in the bot's settings
-      const thisPackage = currentProject?.settings?.importedLibraries?.find((p) => p.name === packageName);
-      if (thisPackage) {
-        // remove the files located at package.location
-        try {
-          await currentProject.fileStorage.rmrfDir(path.join(currentProject.dataDir, thisPackage.location));
-        } catch (err) {
-          return res.status(500).json({ message: err.message });
-        }
-        return res.json({ package: packageName, removed: true });
-      } else {
-        res.status(500).json({ message: `No installed library matches the name ${packageName}` });
-      }
+      const manifestFile = runtime.identifyManifest(currentProject.settings?.runtime?.path);
+
+      console.log('UNINSTALL OUTPUT', output);
+      console.log('EXAMINING PACKAGE: ', manifestFile);
+      // call do a dry run on the dialog merge
+      const dryrun = new SchemaMerger(
+        [manifestFile],
+        '',
+        path.join(currentProject.dataDir, 'dialogs/imported'),
+        true, // copy only? true = dry run
+        true, // verbosity: true = verbose
+        console.log,
+        console.warn,
+        console.error
+      );
+
+      const dryRunMergeResults = await dryrun.merge();
+      console.log('MERGE RESULTS', dryRunMergeResults);
+      res.json({
+        success: true,
+        // results: mergeResults,
+      });
+
+      // delete the folder from ImportedAssets
     } else {
       res.status(500).json({ message: 'Please specify a package name to remove' });
     }
+    // // find this package in the bot's settings
+    // const thisPackage = currentProject?.settings?.importedLibraries?.find((p) => p.name === packageName);
+    // if (thisPackage) {
+    //   // remove the files located at package.location
+    //   try {
+    //     await currentProject.fileStorage.rmrfDir(path.join(currentProject.dataDir, thisPackage.location));
+    //   } catch (err) {
+    //     return res.status(500).json({ message: err.message });
+    //   }
+    //   return res.json({ package: packageName, removed: true });
+    // } else {
+    //   res.status(500).json({ message: `No installed library matches the name ${packageName}` });
+    // }
+    // } else {
+    //   res.status(500).json({ message: 'Please specify a package name to remove' });
+    // }
   },
   importRemoteAsset: async function (
     currentProject,

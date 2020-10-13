@@ -29,14 +29,16 @@ const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const settings = useRecoilValue(settingsState(projectId));
 
   const [availableLibraries, updateAvailableLibraries] = useState<any[]>([]);
+  const [installedComponents, updateInstalledComponents] = useState<any[]>([]);
 
   const [selectedItem, setSelectedItem] = useState<LibraryRef>();
   const [working, setWorking] = useState(false);
   const [addDialogHidden, setAddDialogHidden] = useState(true);
-  const { setImportedLibraries, fetchProjectById, setApplicationLevelError } = useRecoilValue(dispatcherState);
+  const { fetchProjectById, setApplicationLevelError } = useRecoilValue(dispatcherState);
 
   useEffect(() => {
     getLibraries();
+    getInstalledLibraries();
 
     // return () => {
     //   fetchProjectById(projectId);
@@ -47,13 +49,13 @@ const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     const groups: any[] = [];
     let items: any[] = [];
 
-    items = items.concat(settings.importedLibraries || []);
+    items = items.concat(installedComponents || []);
 
     groups.push({
       key: 'installed',
       name: 'Installed',
       startIndex: 0,
-      count: settings.importedLibraries ? settings.importedLibraries.length : 0,
+      count: installedComponents ? installedComponents.length : 0,
       level: 0,
     });
 
@@ -84,7 +86,7 @@ const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
     setItems(items);
     setGroups(groups);
-  }, [settings.importedLibraries, availableLibraries]);
+  }, [installedComponents, availableLibraries]);
 
   const toolbarItems: IToolbarItem[] = [
     {
@@ -128,33 +130,13 @@ const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   const importLibrary = async (packageName, version, isUpdating) => {
     try {
-      const response = await httpClient.post(`/projects/${projectId}/import`, {
+      await httpClient.post(`/projects/${projectId}/import`, {
         package: packageName,
         version: version,
         isUpdating,
       });
 
-      const payload = response.data;
-      const newList = settings.importedLibraries?.slice() || [];
-      // if this library exists, update the date and version
-      const existing = newList.find((f) => f.name === payload.name);
-      if (existing) {
-        const index = newList.indexOf(existing);
-        newList.splice(index, 1, {
-          ...existing,
-          lastImported: new Date(),
-          version: payload.installedVersion,
-        });
-      } else {
-        newList.push({
-          name: payload.name,
-          lastImported: new Date(),
-          version: payload.installedVersion,
-          location: payload.location,
-        });
-      }
-
-      await setImportedLibraries(projectId, newList);
+      await getInstalledLibraries();
 
       // wait til the file persistence completes
       // await checkProjectUpdates();
@@ -184,6 +166,19 @@ const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     }
   };
 
+  const getInstalledLibraries = async () => {
+    try {
+      const response = await httpClient.get(`/projects/${projectId}/installedComponents`);
+      updateInstalledComponents(response.data.components);
+    } catch (err) {
+      setApplicationLevelError({
+        status: err.response.status,
+        message: err.response && err.response.data.message ? err.response.data.message : err,
+        summary: 'LIBRARY ERROR',
+      });
+    }
+  };
+
   const redownload = async () => {
     return importFromWeb(selectedItem?.name, selectedItem?.version, true);
   };
@@ -199,15 +194,15 @@ const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         closeDialog();
         setWorking(true);
         try {
-          const response = await httpClient.post(`/projects/${projectId}/unimport`, {
+          await httpClient.post(`/projects/${projectId}/unimport`, {
             package: selectedItem.name,
           });
 
-          // remove the item from settings
-          const filtered = settings.importedLibraries.filter((f) => f.name !== response.data.package);
+          // // remove the item from settings
+          // const filtered = settings.importedLibraries.filter((f) => f.name !== response.data.package);
 
-          // persist settings change
-          setImportedLibraries(projectId, filtered);
+          // // persist settings change
+          // setImportedLibraries(projectId, filtered);
 
           // wait til the file persistence completes
           // await checkProjectUpdates();

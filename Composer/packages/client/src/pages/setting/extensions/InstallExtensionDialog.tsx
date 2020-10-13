@@ -9,10 +9,11 @@ import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import axios, { CancelToken } from 'axios';
 import formatMessage from 'format-message';
+import { ExtensionSearchResult } from '@bfc/extension-client';
 
 import httpClient from '../../../utils/httpUtil';
 
-import { ExtensionSearchResult, ExtensionSearchResults } from './ExtensionSearchResults';
+import { ExtensionSearchResults } from './ExtensionSearchResults';
 
 type InstallExtensionDialogProps = {
   isOpen: boolean;

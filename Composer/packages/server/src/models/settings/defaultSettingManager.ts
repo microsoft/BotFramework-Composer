@@ -48,6 +48,15 @@ export class DefaultSettingManager extends FileSettingManager {
         defaultLanguage: 'en-us',
         environment: 'composer',
       },
+      luFeatures: {
+        enablePattern: true,
+        enableMLEntities: true,
+        enableListEntities: true,
+        enableCompositeEntities: true,
+        enablePrebuiltEntities: true,
+        enableRegexEntities: true,
+        enablePhraseLists: true,
+      },
       publishTargets: [],
       qna: {
         subscriptionKey: '',
