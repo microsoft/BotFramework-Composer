@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { DialogTypes, DialogWrapper } from '@bfc/ui-shared';
 import formatMessage from 'format-message';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
@@ -9,7 +10,6 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import React, { useCallback } from 'react';
 import { useRecoilValue } from 'recoil';
 
-import { DialogTypes, DialogWrapper } from '../../components/DialogWrapper';
 import { nameRegex } from '../../constants';
 import { FieldConfig, useForm } from '../../hooks/useForm';
 import { dialogsState } from '../../recoilModel';

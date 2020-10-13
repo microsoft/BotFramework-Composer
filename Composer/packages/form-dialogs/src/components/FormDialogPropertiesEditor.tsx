@@ -112,7 +112,7 @@ export const FormDialogPropertiesEditor = React.memo((props: Props) => {
             iconProps: { iconName: 'Undo' },
             title: formatMessage('Undo'),
             ariaLabel: formatMessage('Undo'),
-            disabled: !canUndo(),
+            disabled: isGenerating || !canUndo(),
             onClick: () => {
               undo();
             },
@@ -123,7 +123,7 @@ export const FormDialogPropertiesEditor = React.memo((props: Props) => {
             iconProps: { iconName: 'Redo' },
             title: formatMessage('Redo'),
             ariaLabel: formatMessage('Redo'),
-            disabled: !canRedo(),
+            disabled: isGenerating || !canRedo(),
             onClick: () => {
               redo();
             },
