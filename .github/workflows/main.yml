@@ -27,13 +27,13 @@ jobs:
           node-version: 12.13.0
       - name: Clear global yarn cache (temp)
         run: yarn cache clean
-      - name: Restore yarn cache
-        uses: actions/cache@preview
-        with:
-          path: ~/.cache/yarn
-          key: ${{ runner.os }}-yarn-${{ hashFiles(format('{0}{1}', github.workspace, '/Composer/yarn.lock')) }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
+      #- name: Restore yarn cache
+      #  uses: actions/cache@preview
+      #  with:
+      #    path: ~/.cache/yarn
+      #    key: ${{ runner.os }}-yarn-${{ hashFiles(format('{0}{1}', github.workspace, '/Composer/yarn.lock')) }}
+      #    restore-keys: |
+      #      ${{ runner.os }}-yarn-
       - name: yarn install
         run: yarn
       - name: yarn build:dev
