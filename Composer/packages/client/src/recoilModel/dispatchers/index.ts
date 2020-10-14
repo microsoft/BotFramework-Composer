@@ -22,6 +22,7 @@ import { notificationDispatcher } from './notification';
 import { extensionsDispatcher } from './extensions';
 import { formDialogsDispatcher } from './formDialogs';
 import { botProjectFileDispatcher } from './botProjectFile';
+import { zoomDispatcher } from './zoom';
 
 const createDispatchers = () => {
   return {
@@ -46,6 +47,7 @@ const createDispatchers = () => {
     ...extensionsDispatcher(),
     ...formDialogsDispatcher(),
     ...botProjectFileDispatcher(),
+    ...zoomDispatcher(),
   };
 };
 

@@ -15,6 +15,7 @@ import {
   schemasState,
   currentProjectIdState,
   botDiagnosticsState,
+  botProjectIdsState,
   formDialogSchemaIdsState,
 } from '../../../src/recoilModel';
 import mockProjectResponse from '../../../src/recoilModel/dispatchers/__tests__/mocks/mockProjectResponse.json';
@@ -100,6 +101,7 @@ const state = {
 
 const initRecoilState = ({ set }) => {
   set(currentProjectIdState, state.projectId);
+  set(botProjectIdsState, [state.projectId]);
   set(dialogsState(state.projectId), state.dialogs);
   set(luFilesState(state.projectId), state.luFiles);
   set(lgFilesState(state.projectId), state.lgFiles);
