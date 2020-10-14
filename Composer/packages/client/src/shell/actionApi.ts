@@ -18,13 +18,6 @@ import { LuIntentSection, MicrosoftIDialog } from '@botframework-composer/types'
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
 
-/**
- * @internal
- * used in:
- * - useEditorEventApi
- * - useDialogEditApi
- * - useTriggerApi
- */
 export const useActionApi = (projectId: string) => {
   const { getLgTemplates, removeLgTemplates, addLgTemplate } = useLgApi(projectId);
   const { addLuIntent, getLuIntent, removeLuIntent } = useLuApi(projectId);

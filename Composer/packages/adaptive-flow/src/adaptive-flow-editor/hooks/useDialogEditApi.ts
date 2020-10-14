@@ -13,11 +13,6 @@ export interface DialogApiContext {
 
 const { disableNodes, enableNodes, appendNodesAfter, queryNodes, insertNodes, deleteNode, deleteNodes } = DialogUtils;
 
-/**
- * @internal
- * used in:
- * useEditorEventApi
- */
 export function useDialogEditApi(shellApi: ShellApi) {
   const { constructActions, copyActions, deleteAction, deleteActions } = shellApi;
 
