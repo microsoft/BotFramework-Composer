@@ -88,6 +88,7 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
   }, [dialogs]);
 
   useEffect(() => {
+    setCreateOnDialogId('');
     const activeDialog = dialogs.find(({ id }) => id === dialogId);
     if (!activeDialog && dialogs.length && dialogId !== 'all') {
       navigateTo(`/bot/${projectId}/knowledge-base/${dialogId}`);
