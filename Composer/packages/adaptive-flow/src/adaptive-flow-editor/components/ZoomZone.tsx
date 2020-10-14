@@ -8,7 +8,7 @@ import { ZoomInfo } from '@bfc/shared';
 import { IconButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
 
-function ScrollZoom(
+function scrollZoom(
   container: HTMLElement,
   delta: number,
   rateList: number[],
@@ -34,6 +34,11 @@ function ScrollZoom(
   }
 
   target.style.transform = `scale(${rate})`;
+  target.style.transformOrigin = 'top left';
+  container.scroll({
+    top: (container.clientHeight * (rate - 1)) / 2,
+    left: (container.clientWidth * (rate - 1)) / 2,
+  });
   return rate;
 }
 
@@ -59,7 +64,7 @@ export const ZoomZone: React.FC<ZoomZoneProps> = ({ zoomRateInfo, updateZoomRate
   };
 
   const handleZoom = (delta: number) => {
-    const rate = ScrollZoom(divRef.current as HTMLElement, delta, rateList, maxRate, minRate, currentRate);
+    const rate = scrollZoom(divRef.current as HTMLElement, delta, rateList, maxRate, minRate, currentRate);
     updateZoomRate(rate);
   };
 
