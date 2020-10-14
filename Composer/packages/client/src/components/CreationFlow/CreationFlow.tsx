@@ -128,12 +128,6 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     saveProjectAs(projectId, formData.name, formData.description, formData.location);
   };
 
-  const handleCreateQnA = async (urls: string[]) => {
-    saveTemplateId(QnABotTemplateId);
-    handleDismiss();
-    handleCreateNew(formData, QnABotTemplateId, urls);
-  };
-
   const handleDefineConversationSubmit = async (formData, templateId: string) => {
     // If selected template is qnaSample then route to QNA import modal
     if (templateId === 'QnASample') {
@@ -204,12 +198,6 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
             onCurrentPathUpdate={updateCurrentPath}
             onDismiss={handleDismiss}
             onOpen={openBot}
-          />
-          <ImportQnAFromUrlModal
-            dialogId={formData.name.toLowerCase()}
-            path="create/QnASample/importQnA"
-            onDismiss={handleDismiss}
-            onSubmit={handleCreateQnA}
           />
           <VirtualAssistantCreationModal
             formData={formData}
