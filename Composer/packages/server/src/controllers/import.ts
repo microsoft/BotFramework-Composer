@@ -43,8 +43,9 @@ async function startImport(req: StartImportRequest, res: Response, next) {
       }, 2000);
     } catch (e) {
       const msg = 'Error importing bot content: ' + e;
-      log(msg);
-      res.status(500).send(msg);
+      const err = new Error(msg);
+      log(err);
+      res.status(500).send(err.stack);
     }
   } else {
     res.status(500).send('No content provider found for source: ' + source);

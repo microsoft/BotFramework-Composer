@@ -24,6 +24,13 @@ const authCredentials = {
   scopes: ['a522f059-bb65-47c0-8934-7db6e5286414/.default'], // int / ppe
 };
 
+function prettyPrintError(err: string | any): string {
+  if (typeof err === 'string') {
+    return err;
+  }
+  return JSON.stringify(err, null, 2);
+}
+
 export class PowerVirtualAgentsProvider extends ExternalContentProvider {
   private tempBotAssetsDir = join(process.env.COMPOSER_TEMP_DIR as string, 'pva-assets');
 
@@ -45,7 +52,7 @@ export class PowerVirtualAgentsProvider extends ExternalContentProvider {
       const contentType = result.headers.get('content-type');
       if (!contentType || contentType !== 'application/zip') {
         const json = await result.json();
-        throw `Did not receive zip back from PVA: ${json}`;
+        throw `Did not receive zip back from PVA: ${prettyPrintError(json)}`;
       }
 
       // write the zip to disk
@@ -63,7 +70,7 @@ export class PowerVirtualAgentsProvider extends ExternalContentProvider {
         throw 'Response containing zip does not have a body';
       }
     } catch (e) {
-      return Promise.reject(new Error(`Error while trying to download the bot content: ${e}`));
+      throw `Error while trying to download the bot content: ${prettyPrintError(e)}`;
     }
   }
 
@@ -75,9 +82,13 @@ export class PowerVirtualAgentsProvider extends ExternalContentProvider {
     try {
       // login to the 1P app and get an access token
       const accessToken = await authService.getAccessToken(authCredentials);
+      if (accessToken === '') {
+        throw 'User cancelled login flow.';
+      }
       return accessToken;
     } catch (e) {
-      return Promise.reject(new Error(`Error while trying to get a PVA access token: ${e}`));
+      //return Promise.reject(new Error(`Error while trying to get a PVA access token: ${prettyPrintError(e)}`));
+      throw `Error while trying to get a PVA access token: ${prettyPrintError(e)}`;
     }
   }
 
