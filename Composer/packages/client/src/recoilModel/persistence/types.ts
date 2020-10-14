@@ -9,12 +9,14 @@ export enum ChangeType {
 
 export enum FileExtensions {
   Dialog = '.dialog',
+  FormDialog = '.form-dialog',
   DialogSchema = '.dialog.schema',
   Manifest = '.json',
   Lu = '.lu',
   Lg = '.lg',
   QnA = '.qna',
   Setting = 'appsettings.json',
+  BotProject = '.botproj',
 }
 
 export type FileErrorHandler = (error) => void;

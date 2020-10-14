@@ -29,6 +29,13 @@ function createLgApi(
     return file.templates;
   };
 
+  const updateLgFile = async (id: string, content: string) => {
+    const file = lgFileResolver(id);
+    if (!file) throw new Error(fileNotFound(id));
+
+    await actions.updateLgFile({ id, content, projectId: state.projectId });
+  };
+
   const updateLgTemplate = async (id: string, templateName: string, templateBody: string) => {
     const file = lgFileResolver(id);
     if (!file) throw new Error(fileNotFound(id));
@@ -81,10 +88,11 @@ function createLgApi(
   };
 
   return {
+    updateLgFile,
     addLgTemplate: updateLgTemplate,
     getLgTemplates,
     updateLgTemplate,
-    deboucedUpdateLgTemplate: debounce(updateLgTemplate, 250),
+    debouncedUpdateLgTemplate: debounce(updateLgTemplate, 250),
     removeLgTemplate,
     removeLgTemplates,
     copyLgTemplate,

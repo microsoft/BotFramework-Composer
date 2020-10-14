@@ -1,24 +1,28 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { atomFamily } from 'recoil';
 import {
+  BotProjectFile,
+  BotProjectSpace,
+  BotSchemas,
+  Diagnostic,
   DialogInfo,
   DialogSchemaFile,
-  Diagnostic,
+  DialogSetting,
+  FormDialogSchema,
   LgFile,
   LuFile,
   QnAFile,
-  BotSchemas,
   Skill,
-  DialogSetting,
 } from '@bfc/shared';
+import { atomFamily } from 'recoil';
 
 import { BotLoadError, DesignPageLocation, QnAAllUpViewStatus } from '../../recoilModel/types';
 import FilePersistence from '../persistence/FilePersistence';
 
-import { PublishType, BreadcrumbItem } from './../../recoilModel/types';
 import { BotStatus } from './../../constants';
+import { BreadcrumbItem, PublishType } from './../../recoilModel/types';
+
 const getFullyQualifiedKey = (value: string) => {
   return `Bot_${value}_State`;
 };
@@ -42,8 +46,8 @@ export const dialogSchemasState = atomFamily<DialogSchemaFile[], string>({
   default: [],
 });
 
-export const botNameState = atomFamily<string, string>({
-  key: getFullyQualifiedKey('botName'),
+export const botDisplayNameState = atomFamily<string, string>({
+  key: getFullyQualifiedKey('botDisplayName'),
   default: (id) => {
     return '';
   },
@@ -218,10 +222,13 @@ export const onDelLanguageDialogCompleteState = atomFamily<any, string>({
   default: { func: undefined },
 });
 
-export const projectMetaDataState = atomFamily<any, string>({
+export const projectMetaDataState = atomFamily<{ isRootBot: boolean; isRemote: boolean }, string>({
   key: getFullyQualifiedKey('projectsMetaDataState'),
-  default: (id) => {
-    return {};
+  default: () => {
+    return {
+      isRootBot: false,
+      isRemote: false,
+    };
   },
 });
 
@@ -253,4 +260,37 @@ export const filePersistenceState = atomFamily<FilePersistence, string>({
   key: getFullyQualifiedKey('filePersistence'),
   default: {} as FilePersistence,
   dangerouslyAllowMutability: true,
+});
+
+export const formDialogSchemaIdsState = atomFamily<string[], string>({
+  key: getFullyQualifiedKey('formDialogSchemaIds'),
+  default: [],
+});
+
+export const formDialogSchemaState = atomFamily<FormDialogSchema, { projectId: string; schemaId: string }>({
+  key: getFullyQualifiedKey('formDialogSchema'),
+  default: {
+    id: '',
+    content: '',
+  } as FormDialogSchema,
+});
+
+export const botProjectFileState = atomFamily<BotProjectFile, string>({
+  key: getFullyQualifiedKey('botProjectFile'),
+  default: {
+    content: {} as BotProjectSpace,
+    id: '',
+    lastModified: '',
+  },
+});
+
+export const botErrorState = atomFamily<any, string>({
+  key: getFullyQualifiedKey('botError'),
+  default: undefined,
+});
+
+// Object key to identify the skill in BotProject file and settings.skill
+export const botNameIdentifierState = atomFamily<string, string>({
+  key: getFullyQualifiedKey('botNameIdentifier'),
+  default: '',
 });

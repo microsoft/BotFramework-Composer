@@ -5,7 +5,7 @@
 function initialize(registration) {
   const plugin = {
     customDescription: 'Publish using custom UI',
-    hasView: true /** we have custom UI to host */,
+    bundleId: 'publish' /** we have custom UI to host */,
     publish,
     getStatus,
   };

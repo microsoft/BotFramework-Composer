@@ -20,13 +20,12 @@ import { ShimmeredDetailsList } from 'office-ui-fabric-react/lib/ShimmeredDetail
 import formatMessage from 'format-message';
 import { useRecoilValue, selector } from 'recoil';
 import { NeutralColors } from '@uifabric/fluent-theme';
+import { ExtensionMetadata, ExtensionSearchResult } from '@bfc/extension-client';
 
-import { ExtensionConfig } from '../../../recoilModel/types';
 import { Toolbar, IToolbarItem } from '../../../components/Toolbar';
 import { dispatcherState, extensionsState } from '../../../recoilModel';
 
 import { InstallExtensionDialog } from './InstallExtensionDialog';
-import { ExtensionSearchResult } from './ExtensionSearchResults';
 
 const remoteExtensionsState = selector({
   key: 'remoteExtensions',
@@ -45,11 +44,11 @@ const Extensions: React.FC<RouteComponentProps> = () => {
   // if a string, its the id of the extension being updated
   const [isUpdating, setIsUpdating] = useState<string | boolean>(false);
   const [showNewModal, setShowNewModal] = useState(false);
-  const [selectedExtensions, setSelectedExtensions] = useState<ExtensionConfig[]>([]);
+  const [selectedExtensions, setSelectedExtensions] = useState<ExtensionMetadata[]>([]);
   const selection = useRef(
     new Selection({
       onSelectionChanged: () => {
-        setSelectedExtensions(selection.getSelection() as ExtensionConfig[]);
+        setSelectedExtensions(selection.getSelection() as ExtensionMetadata[]);
       },
     })
   ).current;
@@ -91,7 +90,7 @@ const Extensions: React.FC<RouteComponentProps> = () => {
       minWidth: 100,
       maxWidth: 150,
       isResizable: true,
-      onRender: (item: ExtensionConfig) => {
+      onRender: (item: ExtensionMetadata) => {
         return (
           <Toggle
             ariaLabel={formatMessage('Toggle extension')}

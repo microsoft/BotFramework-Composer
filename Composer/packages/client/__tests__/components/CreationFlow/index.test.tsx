@@ -15,7 +15,7 @@ describe('<CreationFlow/>', () => {
   const createProjectMock = jest.fn();
   const initRecoilState = ({ set }) => {
     set(dispatcherState, {
-      createProject: createProjectMock,
+      createNewBot: createProjectMock,
       fetchStorages: jest.fn(),
       fetchTemplateProjects: jest.fn(),
       onboardingAddCoachMarkRef: jest.fn(),
@@ -70,14 +70,20 @@ describe('<CreationFlow/>', () => {
     act(() => {
       fireEvent.click(node);
     });
-    expect(createProjectMock).toHaveBeenCalledWith(
-      'EchoBot',
-      'EchoBot-1',
-      '',
-      expect.stringMatching(/(\/|\\)test-folder(\/|\\)Desktop/),
-      '',
-      'en-US',
-      undefined
-    );
+
+    let expectedLocation = '/test-folder/Desktop';
+    if (process.platform === 'win32') {
+      expectedLocation = '\\test-folder\\Desktop';
+    }
+
+    expect(createProjectMock).toHaveBeenCalledWith({
+      appLocale: 'en-US',
+      description: '',
+      location: expectedLocation,
+      name: 'EchoBot-1',
+      qnaKbUrls: undefined,
+      schemaUrl: '',
+      templateId: 'EchoBot',
+    });
   });
 });

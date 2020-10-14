@@ -9,8 +9,10 @@ import { luIndexer } from './luIndexer';
 import { qnaIndexer } from './qnaIndexer';
 import { skillIndexer } from './skillIndexer';
 import { skillManifestIndexer } from './skillManifestIndexer';
+import { botProjectSpaceIndexer } from './botProjectSpaceIndexer';
 import { FileExtensions } from './utils/fileExtensions';
 import { getExtension, getBaseName } from './utils/help';
+import { formDialogSchemaIndexer } from './formDialogSchemaIndexer';
 
 class Indexer {
   private classifyFile(files: FileInfo[]) {
@@ -25,10 +27,12 @@ class Indexer {
       {
         [FileExtensions.lg]: [],
         [FileExtensions.Lu]: [],
+        [FileExtensions.FormDialog]: [],
         [FileExtensions.QnA]: [],
         [FileExtensions.Dialog]: [],
         [FileExtensions.DialogSchema]: [],
         [FileExtensions.Manifest]: [],
+        [FileExtensions.BotProjectSpace]: [],
       }
     );
   }
@@ -46,14 +50,17 @@ class Indexer {
 
   public index(files: FileInfo[], botName: string, locale: string, skillContent: any, settings: DialogSetting) {
     const result = this.classifyFile(files);
+    const luFeatures = settings.luFeatures;
     return {
       dialogs: dialogIndexer.index(result[FileExtensions.Dialog], botName),
       dialogSchemas: dialogSchemaIndexer.index(result[FileExtensions.DialogSchema]),
       lgFiles: lgIndexer.index(result[FileExtensions.lg], this.getLgImportResolver(result[FileExtensions.lg], locale)),
-      luFiles: luIndexer.index(result[FileExtensions.Lu]),
+      luFiles: luIndexer.index(result[FileExtensions.Lu], luFeatures),
       qnaFiles: qnaIndexer.index(result[FileExtensions.QnA]),
       skillManifestFiles: skillManifestIndexer.index(result[FileExtensions.Manifest]),
       skills: skillIndexer.index(skillContent, settings.skill),
+      botProjectSpaceFiles: botProjectSpaceIndexer.index(result[FileExtensions.BotProjectSpace]),
+      formDialogSchemas: formDialogSchemaIndexer.index(result[FileExtensions.FormDialog]),
     };
   }
 }
@@ -69,3 +76,4 @@ export * from './qnaIndexer';
 export * from './utils';
 export * from './validations';
 export * from './skillIndexer';
+export * from './botProjectSpaceIndexer';

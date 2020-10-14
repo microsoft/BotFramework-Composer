@@ -1,15 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { globalHistory } from '@reach/router';
 import replace from 'lodash/replace';
 import find from 'lodash/find';
 import { useRecoilValue } from 'recoil';
 
-import { ExtensionPageContribution } from '../recoilModel/types';
+import { designPageLocationState, currentProjectIdState, pluginPagesSelector } from '../recoilModel';
 
-import { designPageLocationState, extensionsState, currentProjectIdState } from './../recoilModel';
 import { bottomLinks, topLinks } from './pageLinks';
 import routerCache from './routerCache';
 import { projectIdCache } from './projectCache';
@@ -26,19 +25,14 @@ export const useLocation = () => {
 export const useLinks = () => {
   const projectId = useRecoilValue(currentProjectIdState);
   const designPageLocation = useRecoilValue(designPageLocationState(projectId));
-  const extensions = useRecoilValue(extensionsState);
+  const pluginPages = useRecoilValue(pluginPagesSelector);
   const openedDialogId = designPageLocation.dialogId || 'Main';
 
-  // add page-contributing extensions
-  const pluginPages = extensions.reduce((pages, p) => {
-    const pagesConfig = p.contributes?.views?.pages;
-    if (Array.isArray(pagesConfig) && pagesConfig.length > 0) {
-      pages.push(...pagesConfig.map((page) => ({ ...page, id: p.id })));
-    }
-    return pages;
-  }, [] as ExtensionPageContribution[]);
+  const pageLinks = useMemo(() => {
+    return topLinks(projectId, openedDialogId, pluginPages);
+  }, [projectId, openedDialogId, pluginPages]);
 
-  return { topLinks: topLinks(projectId, openedDialogId, pluginPages), bottomLinks };
+  return { topLinks: pageLinks, bottomLinks };
 };
 
 export const useRouterCache = (to: string) => {

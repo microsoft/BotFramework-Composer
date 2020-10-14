@@ -104,7 +104,13 @@ export function resolveFieldWidget(params: {
             customProps: { style: { height: 100 } },
           };
         } else if (uiOptions?.fieldsets) {
-          return { field: uiOptions.pivotFieldsets ? DefaultFields.PivotFieldsets : DefaultFields.Fieldsets };
+          return {
+            field:
+              uiOptions.pivotFieldsets ||
+              uiOptions.fieldsets.some(({ fields = [] }) => fields.some((field) => typeof field !== 'string'))
+                ? DefaultFields.PivotFieldsets
+                : DefaultFields.Fieldsets,
+          };
         } else {
           return { field: DefaultFields.ObjectField };
         }

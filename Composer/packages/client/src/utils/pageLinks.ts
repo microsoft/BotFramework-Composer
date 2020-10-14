@@ -1,10 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import formatMessage from 'format-message';
+import { ExtensionPageContribution } from '@bfc/extension-client';
 
-import { ExtensionPageContribution } from '../recoilModel/types';
+export type ExtensionPageConfig = ExtensionPageContribution & { id: string };
 
-export const topLinks = (projectId: string, openedDialogId: string, pluginPages: ExtensionPageContribution[]) => {
+export const topLinks = (projectId: string, openedDialogId: string, pluginPages: ExtensionPageConfig[]) => {
   const botLoaded = !!projectId;
   let links = [
     {
@@ -63,6 +64,17 @@ export const topLinks = (projectId: string, openedDialogId: string, pluginPages:
       exact: true,
       disabled: !botLoaded,
     },
+    ...(process.env.COMPOSER_ENABLE_FORMS
+      ? [
+          {
+            to: `/bot/${projectId}/forms`,
+            iconName: 'Table',
+            labelName: formatMessage('Forms'),
+            exact: false,
+            disabled: !botLoaded,
+          },
+        ]
+      : []),
   ];
 
   if (process.env.COMPOSER_AUTH_PROVIDER === 'abs-h') {
@@ -72,11 +84,11 @@ export const topLinks = (projectId: string, openedDialogId: string, pluginPages:
   if (pluginPages.length > 0) {
     pluginPages.forEach((p) => {
       links.push({
-        to: `page/${p.id}`,
+        to: `/bot/${projectId}/plugin/${p.id}/${p.bundleId}`,
         iconName: p.icon ?? 'StatusCircleQuestionMark',
         labelName: p.label,
         exact: true,
-        disabled: false,
+        disabled: !projectId,
       });
     });
   }
