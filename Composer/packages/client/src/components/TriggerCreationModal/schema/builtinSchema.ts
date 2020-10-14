@@ -34,14 +34,6 @@ export const builtinTriggerUISchema: TriggerUIOptionMap = {
     label: 'Dialog cancelled (Cancel dialog event)',
     submenu: 'Dialog events',
   },
-  [SDKKinds.OnBeginDialog]: {
-    label: 'Dialog started (Begin dialog event)',
-    submenu: 'Dialog events',
-  },
-  [SDKKinds.OnCancelDialog]: {
-    label: 'Dialog cancelled (Cancel dialog event)',
-    submenu: 'Dialog events',
-  },
   [SDKKinds.OnError]: {
     label: 'Error occurred (Error event)',
     submenu: 'Dialog events',
