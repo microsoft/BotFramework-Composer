@@ -77,7 +77,7 @@ describe('status', () => {
       body: {},
     } as Request;
     await PublishController.status(mockReq, mockRes);
-    expect(mockRes.status).toHaveBeenCalledWith(200);
+    expect(mockRes.status).toHaveBeenCalledWith(400);
   });
 });
 
