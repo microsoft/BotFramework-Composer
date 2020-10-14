@@ -31,9 +31,9 @@ jobs:
       #  uses: actions/cache@v2.1.2
       #  with:
       #    path: ~/.cache/yarn
-      #    key: ${{ runner.os }}-yarn-${{ hashFiles(format('{0}{1}', github.workspace, '/Composer/yarn.lock')) }}
+      #    key: ${{ runner.os }}-yarn-new-${{ hashFiles(format('{0}{1}', github.workspace, '/Composer/yarn.lock')) }}
       #    restore-keys: |
-      #      ${{ runner.os }}-yarn-
+      #      ${{ runner.os }}-yarn-new-
       - name: yarn install
         run: yarn
       - name: yarn build:dev
