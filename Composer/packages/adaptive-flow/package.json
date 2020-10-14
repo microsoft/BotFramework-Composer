@@ -28,7 +28,7 @@
     "@bfc/ui-shared": "*",
     "@emotion/core": "^10.0.27",
     "@emotion/styled": "^10.0.27",
-    "adaptive-expressions": "4.11.0-dev.20201010.6e4a99e",
+    "adaptive-expressions": "^4.11.0-dev.20201013.d5458bf",
     "botbuilder-lg": "4.11.0-dev.20201010.6e4a99e",
     "create-react-class": "^15.6.3",
     "d3": "^5.9.1",

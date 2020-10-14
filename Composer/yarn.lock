@@ -4544,6 +4544,25 @@ adaptive-expressions@4.11.0-dev.20201010.6e4a99e:
     moment "^2.25.1"
     moment-timezone "^0.5.28"
 
+adaptive-expressions@^4.11.0-dev.20201013.d5458bf:
+  version "4.11.0-dev.20201013.d5458bf"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adaptive-expressions/-/adaptive-expressions-4.11.0-dev.20201013.d5458bf.tgz#d7573dab8d883985b80df8c8859edc4dead7593a"
+  integrity sha1-11c9q42IOYW4DfjIhZ7cTerXWTo=
+  dependencies:
+    "@microsoft/recognizers-text-data-types-timex-expression" "1.1.4"
+    "@types/atob-lite" "^2.0.0"
+    "@types/lru-cache" "^5.1.0"
+    "@types/moment-timezone" "^0.5.13"
+    "@types/xmldom" "^0.1.29"
+    antlr4ts "0.5.0-alpha.3"
+    atob-lite "^2.0.0"
+    big-integer "^1.6.48"
+    jspath "^0.4.0"
+    lodash "^4.17.19"
+    lru-cache "^5.1.1"
+    moment "^2.25.1"
+    moment-timezone "^0.5.28"
+
 address@1.0.3, address@^1.0.1:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/address/-/address-1.0.3.tgz#b5f50631f8d6cec8bd20c963963afb55e06cbce9"

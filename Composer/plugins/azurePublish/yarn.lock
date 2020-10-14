@@ -171,7 +171,7 @@
   version "0.0.0"
   dependencies:
     "@microsoft/bf-lu" "^4.11.0-dev.20201005.7e5e1b8"
-    adaptive-expressions "4.11.0-dev.20201010.6e4a99e"
+    adaptive-expressions "^4.11.0-dev.20201013.d5458bf"
     botbuilder-lg "4.11.0-dev.20201010.6e4a99e"
     lodash "^4.17.19"
 
@@ -585,9 +585,28 @@ adal-node@^0.1.28:
     xpath.js "~1.1.0"
 
 adaptive-expressions@4.11.0-dev.20201010.6e4a99e:
-  version "4.11.0-dev.20200929.ca9de94"
-  resolved "https://registry.npm.taobao.org/adaptive-expressions/download/adaptive-expressions-4.11.0-dev.20200929.ca9de94.tgz#305c8462e7e0c329f55aa8cd2b2496bb81c2490c"
-  integrity sha1-MFyEYufgwyn1WqjNKySWu4HCSQw=
+  version "4.11.0-dev.20201010.6e4a99e"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adaptive-expressions/-/adaptive-expressions-4.11.0-dev.20201010.6e4a99e.tgz#493292c1619ef243901e041849b9ed42af9fb6fd"
+  integrity sha1-STKSwWGe8kOQHgQYSbntQq+ftv0=
+  dependencies:
+    "@microsoft/recognizers-text-data-types-timex-expression" "1.1.4"
+    "@types/atob-lite" "^2.0.0"
+    "@types/lru-cache" "^5.1.0"
+    "@types/moment-timezone" "^0.5.13"
+    "@types/xmldom" "^0.1.29"
+    antlr4ts "0.5.0-alpha.3"
+    atob-lite "^2.0.0"
+    big-integer "^1.6.48"
+    jspath "^0.4.0"
+    lodash "^4.17.19"
+    lru-cache "^5.1.1"
+    moment "^2.25.1"
+    moment-timezone "^0.5.28"
+
+adaptive-expressions@^4.11.0-dev.20201013.d5458bf:
+  version "4.11.0-dev.20201013.d5458bf"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adaptive-expressions/-/adaptive-expressions-4.11.0-dev.20201013.d5458bf.tgz#d7573dab8d883985b80df8c8859edc4dead7593a"
+  integrity sha1-11c9q42IOYW4DfjIhZ7cTerXWTo=
   dependencies:
     "@microsoft/recognizers-text-data-types-timex-expression" "1.1.4"
     "@types/atob-lite" "^2.0.0"
