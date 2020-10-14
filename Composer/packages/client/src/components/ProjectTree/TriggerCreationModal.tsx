@@ -111,7 +111,7 @@ const initialFormDataErrors = {
 
 const getLuDiagnostics = (intent: string, triggerPhrases: string) => {
   const content = `#${intent}\n${triggerPhrases}`;
-  const { diagnostics } = luIndexer.parse(content);
+  const { diagnostics } = luIndexer.parse(content, '', {});
   return combineMessage(diagnostics);
 };
 
@@ -431,6 +431,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
                   projectId,
                   fileId: dialogId,
                   sectionId: PlaceHolderSectionName,
+                  luFeatures: {},
                 }}
                 placeholder={inlineModePlaceholder}
                 value={formData.triggerPhrases}
