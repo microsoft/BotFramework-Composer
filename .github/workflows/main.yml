@@ -28,7 +28,7 @@ jobs:
       - name: Clear global yarn cache (temp)
         run: yarn cache clean
       - name: Restore yarn cache
-        uses: actions/cache@preview
+        uses: @actions/cache@v2.1.2
         with:
           path: ~/.cache/yarn
           key: ${{ runner.os }}-yarn-${{ hashFiles(format('{0}{1}', github.workspace, '/Composer/yarn.lock')) }}
