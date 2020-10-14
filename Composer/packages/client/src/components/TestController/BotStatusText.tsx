@@ -5,7 +5,6 @@
 import { jsx, css } from '@emotion/core';
 import React, { useEffect, useState } from 'react';
 import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
-import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { DefaultButton, ActionButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
@@ -19,7 +18,6 @@ import {
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { useRecoilValue } from 'recoil';
 import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
-import { SharedColors, FontSizes } from '@uifabric/fluent-theme';
 
 import { botProjectSpaceSelector } from '../../recoilModel';
 

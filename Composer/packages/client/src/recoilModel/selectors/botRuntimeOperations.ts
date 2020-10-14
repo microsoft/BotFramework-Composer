@@ -43,21 +43,22 @@ export const isBuildConfigCompleteSelector = selectorFamily({
 
 const botRuntimeAction = (dispatcher: Dispatcher) => {
   return {
-    onStart: async (projectId: string, config?: IPublishConfig) => {
+    buildWithDefaultRecognizer: async (projectId: string, config: IPublishConfig) => {
       if (config) {
         dispatcher.setBotStatus(projectId, BotStatus.publishing);
         await dispatcher.build(config.luis, config.qna, projectId);
       }
-
+    },
+    startBot: async (projectId, config?: IPublishConfig) => {
       dispatcher.setBotStatus(projectId, BotStatus.reloading);
-      if (config?.qna?.subscriptionKey) {
+      if (config?.qna?.subscriptionKey && !config?.qna?.endpointKey) {
         await dispatcher.setQnASettings(projectId, config.qna.subscriptionKey);
       }
 
       const sensitiveSettings = settingsStorage.get(projectId);
       await dispatcher.publishToTarget(projectId, defaultPublishConfig, { comment: '' }, sensitiveSettings);
     },
-    onStop: async (projectId: string) => {
+    stop: async (projectId: string) => {
       dispatcher.stopPublishBot(projectId);
     },
   };

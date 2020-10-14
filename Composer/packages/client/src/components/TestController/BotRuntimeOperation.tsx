@@ -37,23 +37,26 @@ export const BotRuntimeOperation: React.FC<BotStartOperationProps> = ({ projectI
   const currentBotStatus = useRecoilValue(botStatusState(projectId));
   const botBuildRequired = useRecoilValue(botBuildRequiredSelector(projectId));
   const { config: startBotConfig } = useRecoilValue(isBuildConfigCompleteSelector(projectId));
-  const operations = useRecoilValue(botRuntimeOperationsSelector);
+  const botRuntimeOperations = useRecoilValue(botRuntimeOperationsSelector);
 
   const handleBotStop = () => {
-    operations?.onStop(projectId);
+    botRuntimeOperations?.stop(projectId);
   };
 
   const handleBotStart = async () => {
-    let config: IPublishConfig | undefined = undefined;
+    const config: IPublishConfig | undefined = startBotConfig;
     if (botBuildRequired) {
-      config = startBotConfig;
+      // Default recognizer
+      botRuntimeOperations?.buildWithDefaultRecognizer(projectId, config);
+    } else {
+      // Regex recognizer
+      botRuntimeOperations?.startBot(projectId, config);
     }
-    operations?.onStart(projectId, config);
   };
 
   return (
     <Fragment>
-      {currentBotStatus === BotStatus.published ? (
+      {currentBotStatus === BotStatus.connected ? (
         <button onClick={handleBotStop}>
           <Icon iconName={'CircleStopSolid'} styles={icon} />
         </button>

@@ -10,6 +10,7 @@ import { SharedColors } from '@uifabric/fluent-theme';
 
 import { BotStatus } from '../../constants';
 import { botEndpointsState, botStatusState, dispatcherState } from '../../recoilModel';
+import { botRuntimeOperationsSelector } from '../../recoilModel/selectors/botRuntimeOperations';
 
 import { EmulatorOpenButton } from './emulatorOpenButton';
 
@@ -29,6 +30,7 @@ export const BotStatusIndicator: React.FC<BotStatusIndicatorProps> = ({ projectI
   const botEndpoints = useRecoilValue(botEndpointsState);
   const { openBotInEmulator, setBotStatus, getPublishStatus } = useRecoilValue(dispatcherState);
   const [botStatusText, setBotStatusText] = useState('');
+  const operations = useRecoilValue(botRuntimeOperationsSelector);
 
   // TODO: Build a useInterval hook instead of doing it in component.
   function stopPollingRuntime() {
@@ -56,6 +58,7 @@ export const BotStatusIndicator: React.FC<BotStatusIndicatorProps> = ({ projectI
         break;
       case BotStatus.published:
         stopPollingRuntime();
+        operations?.startBot(projectId);
         break;
       case BotStatus.reloading:
         startPollingRuntime();

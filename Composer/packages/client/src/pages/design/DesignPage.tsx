@@ -351,7 +351,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
               displayName: currentDialog?.displayName ?? '',
             }),
             onClick: () => {
-              addExistingSkillToBotProject('/Users/srravich/Desktop/LoadedBotProject/GoogleKeepSync');
+              addExistingSkillToBotProject('/Users/srravich/Desktop/skill1');
             },
           },
           {

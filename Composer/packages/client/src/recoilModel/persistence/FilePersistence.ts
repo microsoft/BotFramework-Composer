@@ -186,7 +186,6 @@ class FilePersistence {
 
   private getBotProjectFileChanges(current: BotProjectFile, previous: BotProjectFile) {
     if (!isEqual(current, previous)) {
-      debugger;
       return [
         {
           id: `${current.id}${FileExtensions.BotProject}`,

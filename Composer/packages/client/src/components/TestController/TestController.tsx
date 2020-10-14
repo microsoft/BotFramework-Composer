@@ -94,30 +94,30 @@ export const TestController: React.FC<{ projectId: string }> = (props) => {
     }
   }, [projectId]);
 
-  useEffect(() => {
-    switch (botStatus) {
-      case BotStatus.failed:
-        openCallout();
-        stopPollingRuntime();
-        setBotStatus(projectId, BotStatus.pending);
-        break;
-      case BotStatus.published:
-        stopPollingRuntime();
-        handleLoadBot();
-        break;
-      case BotStatus.reloading:
-        startPollingRuntime();
-        break;
-      default:
-      case BotStatus.connected:
-        stopPollingRuntime();
-        break;
-    }
-    return () => {
-      stopPollingRuntime();
-      return;
-    };
-  }, [botStatus]);
+  // useEffect(() => {
+  //   switch (botStatus) {
+  //     case BotStatus.failed:
+  //       openCallout();
+  //       stopPollingRuntime();
+  //       setBotStatus(projectId, BotStatus.pending);
+  //       break;
+  //     case BotStatus.published:
+  //       stopPollingRuntime();
+  //       handleLoadBot();
+  //       break;
+  //     case BotStatus.reloading:
+  //       startPollingRuntime();
+  //       break;
+  //     default:
+  //     case BotStatus.connected:
+  //       stopPollingRuntime();
+  //       break;
+  //   }
+  //   return () => {
+  //     stopPollingRuntime();
+  //     return;
+  //   };
+  // }, [botStatus]);
 
   function dismissDialog() {
     setModalOpen(false);
