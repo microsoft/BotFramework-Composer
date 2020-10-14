@@ -69,7 +69,7 @@ export type ShellData = {
   skillsSettings: Record<string, SkillSetting>;
   // TODO: remove
   schemas: BotSchemas;
-  zoomRateInfo: ZoomInfo;
+  flowZoomRate: ZoomInfo;
 };
 
 export type ShellApi = {
@@ -111,7 +111,7 @@ export type ShellApi = {
   updateDialogSchema: (_: DialogSchemaFile) => Promise<void>;
   createTrigger: (id: string, formData, url?: string) => void;
   updateSkillSetting: (skillId: string, skillsData: SkillSetting) => Promise<void>;
-  updateZoomRate: (currentRate: number) => void;
+  updateFlowZoomRate: (currentRate: number) => void;
 };
 
 export type Shell = {
