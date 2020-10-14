@@ -88,6 +88,56 @@ describe('getFieldsets', () => {
     ]);
   });
 
+  it('should updated uiOptions for nested field sets', () => {
+    const uiOptions: any = {
+      fieldsets: [
+        {
+          title: 'set1',
+          fields: [
+            { title: 'set 1a', fields: ['one'] },
+            { title: 'set 1b', fields: ['two'] },
+          ],
+        },
+        {
+          title: 'set2',
+          fields: ['*'],
+        },
+      ],
+    };
+
+    const result = getFieldsets(schema, uiOptions, {});
+
+    expect(result).toEqual([
+      expect.objectContaining({
+        title: 'set1',
+        schema: {
+          properties: {
+            one: { type: 'string' },
+            two: { type: 'string' },
+          },
+        },
+        uiOptions: expect.objectContaining({
+          fieldsets: [
+            { title: 'set 1a', fields: ['one'] },
+            { title: 'set 1b', fields: ['two'] },
+          ],
+        }),
+      }),
+      expect.objectContaining({
+        title: 'set2',
+        schema: {
+          properties: {
+            three: { type: 'number' },
+            four: { type: 'object' },
+            five: { type: 'object' },
+            six: { type: 'object' },
+            seven: { type: 'boolean' },
+          },
+        },
+      }),
+    ]);
+  });
+
   it('should include additional fields', () => {
     const uiOptions: any = {
       fieldsets: [
@@ -173,5 +223,29 @@ describe('getFieldsets', () => {
     };
 
     expect(() => getFieldsets(schema, uiOptions, {})).toThrow('duplicate fields');
+  });
+
+  it('should throw an error for improper nested fields', () => {
+    const uiOptions = {
+      fieldsets: [
+        { title: 'set1', fields: ['two', 'four', { title: 'improper' }] },
+        { title: 'set2', fields: ['two', '*'] },
+      ],
+    };
+
+    expect(() => getFieldsets(schema, uiOptions, {})).toThrow(
+      'fields must be either all strings or all fieldset objects'
+    );
+  });
+
+  it('should throw an error for multiple wildcards in nested fieldsets', () => {
+    const uiOptions = {
+      fieldsets: [
+        { title: 'set1', fields: [{ title: 'improper' }] },
+        { title: 'set2', fields: ['two', '*'] },
+      ],
+    };
+
+    expect(() => getFieldsets(schema, uiOptions, {})).toThrow('multiple wildcards');
   });
 });

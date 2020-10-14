@@ -73,7 +73,10 @@ export function resolveFieldWidget(
         if (schema.additionalProperties) {
           return DefaultFields.OpenObjectField;
         } else if (uiOptions?.fieldsets) {
-          return uiOptions.pivotFieldsets ? DefaultFields.PivotFieldsets : DefaultFields.Fieldsets;
+          return uiOptions.pivotFieldsets ||
+            uiOptions.fieldsets.some(({ fields = [] }) => fields.some((field) => typeof field !== 'string'))
+            ? DefaultFields.PivotFieldsets
+            : DefaultFields.Fieldsets;
         } else {
           return DefaultFields.ObjectField;
         }
