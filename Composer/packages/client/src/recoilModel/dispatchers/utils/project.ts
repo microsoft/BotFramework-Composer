@@ -1,75 +1,75 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { v4 as uuid } from 'uuid';
+import { indexer, validateDialog } from '@bfc/indexers';
 import {
-  SensitiveProperties,
-  convertSkillsToDictionary,
-  DialogSetting,
-  dereferenceDefinitions,
-  DialogInfo,
-  LuFile,
-  QnAFile,
-  BotProjectSpace,
   BotProjectFile,
+  BotProjectSpace,
   BotProjectSpaceSkill,
   convertFileProtocolToPath,
+  convertSkillsToDictionary,
+  dereferenceDefinitions,
+  DialogInfo,
+  DialogSetting,
+  LuFile,
+  QnAFile,
+  SensitiveProperties,
 } from '@bfc/shared';
-import objectGet from 'lodash/get';
-import objectSet from 'lodash/set';
-import { indexer, validateDialog } from '@bfc/indexers';
-import { CallbackInterface } from 'recoil';
-import { stringify } from 'query-string';
 import formatMessage from 'format-message';
 import camelCase from 'lodash/camelCase';
+import objectGet from 'lodash/get';
+import objectSet from 'lodash/set';
+import { stringify } from 'query-string';
+import { CallbackInterface } from 'recoil';
+import { v4 as uuid } from 'uuid';
 
-import * as botstates from '../../atoms/botState';
-import UndoHistory from '../../undo/undoHistory';
-import languageStorage from '../../../utils/languageStorage';
+import { BotStatus, QnABotTemplateId } from '../../../constants';
 import settingStorage from '../../../utils/dialogSettingStorage';
+import { getUniqueName } from '../../../utils/fileUtil';
+import httpClient from '../../../utils/httpUtil';
+import languageStorage from '../../../utils/languageStorage';
+import luFileStatusStorage from '../../../utils/luFileStatusStorage';
+import { getReferredLuFiles } from '../../../utils/luUtil';
+import { navigateTo } from '../../../utils/navigation';
+import qnaFileStatusStorage from '../../../utils/qnaFileStatusStorage';
+import { getReferredQnaFiles } from '../../../utils/qnaUtil';
 import {
   botDiagnosticsState,
+  botDisplayNameState,
+  botEnvironmentState,
+  botErrorState,
+  botNameIdentifierState,
   botProjectFileState,
-  botProjectSpaceLoadedState,
   botProjectIdsState,
+  botProjectSpaceLoadedState,
+  botStatusState,
   currentProjectIdState,
+  dialogSchemasState,
+  dialogsState,
   filePersistenceState,
+  formDialogSchemaIdsState,
+  formDialogSchemaState,
+  lgFilesState,
+  localeState,
+  locationState,
+  luFilesState,
   projectMetaDataState,
   qnaFilesState,
   recentProjectsState,
-  botErrorState,
-  botNameIdentifierState,
+  schemasState,
+  settingsState,
+  skillManifestsState,
+  skillsState,
 } from '../../atoms';
+import * as botstates from '../../atoms/botState';
 import lgWorker from '../../parsers/lgWorker';
 import luWorker from '../../parsers/luWorker';
 import qnaWorker from '../../parsers/qnaWorker';
 import FilePersistence from '../../persistence/FilePersistence';
-import { navigateTo } from '../../../utils/navigation';
-import { BotStatus, QnABotTemplateId } from '../../../constants';
-import httpClient from '../../../utils/httpUtil';
-import { getReferredLuFiles } from '../../../utils/luUtil';
-import luFileStatusStorage from '../../../utils/luFileStatusStorage';
-import { getReferredQnaFiles } from '../../../utils/qnaUtil';
-import qnaFileStatusStorage from '../../../utils/qnaFileStatusStorage';
-import { logMessage, setError } from '../shared';
-import {
-  skillManifestsState,
-  settingsState,
-  localeState,
-  luFilesState,
-  skillsState,
-  schemasState,
-  lgFilesState,
-  locationState,
-  botStatusState,
-  botDisplayNameState,
-  botEnvironmentState,
-  dialogsState,
-  dialogSchemasState,
-} from '../../atoms';
-import { undoHistoryState } from '../../undo/history';
 import { rootBotProjectIdSelector } from '../../selectors';
-import { getUniqueName } from '../../../utils/fileUtil';
+import { undoHistoryState } from '../../undo/history';
+import UndoHistory from '../../undo/undoHistory';
+import { logMessage, setError } from '../shared';
 
 export const resetBotStates = async ({ reset }: CallbackInterface, projectId: string) => {
   const botStates = Object.keys(botstates);
@@ -153,7 +153,7 @@ export const navigateToBot = (
   }
 };
 
-const loadProjectData = (response) => {
+export const loadProjectData = (response) => {
   const { files, botName, settings, skills: skillContent, id: projectId } = response.data;
   const mergedSettings = getMergedSettings(projectId, settings);
   const storedLocale = languageStorage.get(botName)?.locale;
@@ -257,7 +257,17 @@ export const initQnaFilesStatus = (projectId: string, qnaFiles: QnAFile[], dialo
 export const initBotState = async (callbackHelpers: CallbackInterface, data: any, botFiles: any) => {
   const { snapshot, set } = callbackHelpers;
   const { botName, botEnvironment, location, schemas, settings, id: projectId, diagnostics } = data;
-  const { dialogs, dialogSchemas, luFiles, lgFiles, qnaFiles, skillManifestFiles, skills, mergedSettings } = botFiles;
+  const {
+    dialogs,
+    dialogSchemas,
+    formDialogSchemas,
+    luFiles,
+    lgFiles,
+    qnaFiles,
+    skillManifestFiles,
+    skills,
+    mergedSettings,
+  } = botFiles;
   const curLocation = await snapshot.getPromise(locationState(projectId));
   const storedLocale = languageStorage.get(botName)?.locale;
   const locale = settings.languages.includes(storedLocale) ? storedLocale : settings.defaultLanguage;
@@ -280,6 +290,15 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
   });
 
   await lgWorker.addProject(projectId, lgFiles);
+
+  // Form dialogs
+  set(
+    formDialogSchemaIdsState(projectId),
+    formDialogSchemas.map((f) => f.id)
+  );
+  formDialogSchemas.forEach(({ id, content }) => {
+    set(formDialogSchemaState({ projectId, schemaId: id }), { id, content });
+  });
 
   set(skillManifestsState(projectId), skillManifestFiles);
   set(luFilesState(projectId), initLuFilesStatus(botName, luFiles, dialogs));
