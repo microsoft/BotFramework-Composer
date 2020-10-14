@@ -4,17 +4,26 @@
 import * as React from 'react';
 import { fireEvent } from '@bfc/test-utils';
 
-import { renderWithRecoil } from '../testUtils';
+import { renderWithRecoil, SAMPLE_DIALOG } from '../testUtils';
 import { ProjectTree } from '../../src/components/ProjectTree/ProjectTree';
 import { TriggerCreationModal } from '../../src/components/ProjectTree/TriggerCreationModal';
 import { CreateDialogModal } from '../../src/pages/design/createDialogModal';
+import { dialogsState, currentProjectIdState, botProjectIdsState, schemasState } from '../../src/recoilModel';
 
 jest.mock('@bfc/code-editor', () => {
   return {
     LuEditor: () => <div></div>,
   };
 });
-const projectId = '1234a-324234';
+const projectId = '12345.6789';
+const dialogs = [SAMPLE_DIALOG];
+
+const initRecoilState = ({ set }) => {
+  set(currentProjectIdState, projectId);
+  set(botProjectIdsState, [projectId]);
+  set(dialogsState(projectId), dialogs);
+  set(schemasState(projectId), { sdk: { content: {} } });
+};
 
 describe('<ProjectTree/>', () => {
   it('should render the ProjectTree', async () => {
@@ -22,9 +31,10 @@ describe('<ProjectTree/>', () => {
     const handleDeleteDialog = jest.fn(() => {});
     const handleDeleteTrigger = jest.fn(() => {});
     const { findByText } = renderWithRecoil(
-      <ProjectTree onDeleteDialog={handleDeleteDialog} onDeleteTrigger={handleDeleteTrigger} onSelect={handleSelect} />
+      <ProjectTree onDeleteDialog={handleDeleteDialog} onDeleteTrigger={handleDeleteTrigger} onSelect={handleSelect} />,
+      initRecoilState
     );
-    const node = await findByText('addtodo');
+    const node = await findByText('Greeting');
     fireEvent.click(node);
     expect(handleSelect).toHaveBeenCalledTimes(1);
   });

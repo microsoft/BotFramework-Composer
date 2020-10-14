@@ -141,7 +141,7 @@ interface ITreeItemProps {
   link: TreeLink;
   isActive?: boolean;
   isSubItemActive?: boolean;
-  menu: TreeMenuItem[];
+  menu?: TreeMenuItem[];
   onSelect?: (link: TreeLink) => void;
   icon?: string;
   dialogName?: string;
@@ -241,7 +241,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   dialogName,
   shiftOut,
   onSelect,
-  menu,
+  menu = [],
 }) => {
   const a11yLabel = `${dialogName ?? '$Root'}_${link.displayName}`;
 

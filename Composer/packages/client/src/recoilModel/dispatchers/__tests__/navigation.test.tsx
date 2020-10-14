@@ -178,7 +178,7 @@ describe('navigation dispatcher', () => {
         await dispatcher.navTo(projectId, null, 'dialogId', []);
       });
       expectNavTo(`/bot/${projectId}/dialogs/dialogId`);
-      expect(mockConvertPathToUrl).toBeCalledWith(projectId, 'dialogId', undefined);
+      expect(mockConvertPathToUrl).toBeCalledWith(projectId, null, 'dialogId', undefined);
     });
 
     it('redirects to the begin dialog trigger', async () => {
@@ -188,7 +188,7 @@ describe('navigation dispatcher', () => {
         await dispatcher.navTo(projectId, null, 'newDialogId', []);
       });
       expectNavTo(`/bot/${projectId}/dialogs/newDialogId?selection=triggers[0]`);
-      expect(mockConvertPathToUrl).toBeCalledWith(projectId, 'newDialogId', 'triggers[0]');
+      expect(mockConvertPathToUrl).toBeCalledWith(projectId, null, 'newDialogId', 'triggers[0]');
       expect(mockCreateSelectedPath).toBeCalledWith(0);
     });
 
@@ -215,7 +215,7 @@ describe('navigation dispatcher', () => {
         await dispatcher.selectTo(projectId, null, null, 'selection');
       });
       expectNavTo(`/bot/${projectId}/dialogs/dialogId?selected=selection`);
-      expect(mockConvertPathToUrl).toBeCalledWith(projectId, 'dialogId', 'selection');
+      expect(mockConvertPathToUrl).toBeCalledWith(projectId, null, 'dialogId', 'selection');
     });
 
     it("doesn't go anywhere if we're already there", async () => {
