@@ -28,7 +28,15 @@ const PROMPTS_ORDER = [
 const createPromptFieldSet = (userAskFields: string[]) => [
   { title: PromptTabTitles[PromptTab.BOT_ASKS], itemKey: PromptTab.BOT_ASKS, fields: ['prompt'] },
   { title: PromptTabTitles[PromptTab.USER_INPUT], itemKey: PromptTab.USER_INPUT, fields: userAskFields },
-  { title: PromptTabTitles[PromptTab.OTHER], itemKey: PromptTab.OTHER },
+  {
+    title: PromptTabTitles[PromptTab.OTHER],
+    itemKey: PromptTab.OTHER,
+    fields: [
+      { title: () => formatMessage('Recognizers'), fields: ['recognizerOptions', 'unrecognizedPrompt'] },
+      { title: () => formatMessage('Validation'), fields: ['validations', 'invalidPrompt'] },
+      { title: () => formatMessage('Prompt Configurations'), fields: ['*'] },
+    ],
+  },
 ];
 
 const choiceSchema: UIOptions = {
@@ -125,7 +133,6 @@ const config: PluginConfig = {
         fieldsets: createPromptFieldSet(['property', 'outputFormat', 'value']),
         helpLink: 'https://aka.ms/bfc-ask-for-user-input',
         order: PROMPTS_ORDER,
-        pivotFieldsets: true,
         properties: {
           prompt: {
             label: () => formatMessage('Prompt for Attachment'),
@@ -153,7 +160,6 @@ const config: PluginConfig = {
         ]),
         helpLink: 'https://aka.ms/bfc-ask-for-user-input',
         order: PROMPTS_ORDER,
-        pivotFieldsets: true,
         properties: {
           prompt: {
             label: () => formatMessage('Prompt with multi-choice'),
@@ -189,7 +195,6 @@ const config: PluginConfig = {
         ]),
         helpLink: 'https://aka.ms/bfc-ask-for-user-input',
         order: PROMPTS_ORDER,
-        pivotFieldsets: true,
         properties: {
           prompt: {
             label: () => formatMessage('Prompt for confirmation'),
@@ -216,7 +221,6 @@ const config: PluginConfig = {
         fieldsets: createPromptFieldSet(['property', 'outputFormat', 'value', 'expectedResponses']),
         helpLink: 'https://aka.ms/bfc-ask-for-user-input',
         order: PROMPTS_ORDER,
-        pivotFieldsets: true,
         properties: {
           prompt: {
             label: () => formatMessage('Prompt for a date'),
@@ -239,7 +243,6 @@ const config: PluginConfig = {
         fieldsets: createPromptFieldSet(['property', 'outputFormat', 'value', 'expectedResponses', 'defaultLocale']),
         helpLink: 'https://aka.ms/bfc-ask-for-user-input',
         order: PROMPTS_ORDER,
-        pivotFieldsets: true,
         properties: {
           prompt: {
             label: () => formatMessage('Prompt for a number'),
@@ -262,7 +265,6 @@ const config: PluginConfig = {
         fieldsets: createPromptFieldSet(['property', 'outputFormat', 'value', 'expectedResponses']),
         helpLink: 'https://aka.ms/bfc-ask-for-user-input',
         order: PROMPTS_ORDER,
-        pivotFieldsets: true,
         properties: {
           prompt: {
             label: () => formatMessage('Prompt for text'),
