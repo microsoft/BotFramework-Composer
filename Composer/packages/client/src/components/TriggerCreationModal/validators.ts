@@ -3,11 +3,10 @@
 
 import formatMessage from 'format-message';
 import { luIndexer, combineMessage } from '@bfc/indexers';
+import { SDKKinds } from '@bfc/shared';
 
 import { TriggerFormData, TriggerFormDataErrors } from '../../utils/dialogUtil';
 import { nameRegex } from '../../constants';
-
-import { eventTypeKey, customEventKey, intentTypeKey, activityTypeKey } from './constants';
 
 export const getLuDiagnostics = (intent: string, triggerPhrases: string) => {
   const content = `#${intent}\n${triggerPhrases}`;
@@ -15,7 +14,7 @@ export const getLuDiagnostics = (intent: string, triggerPhrases: string) => {
   return combineMessage(diagnostics);
 };
 export const validateIntentName = (selectedType: string, intent: string): string | undefined => {
-  if (selectedType === intentTypeKey && (!intent || !nameRegex.test(intent))) {
+  if (selectedType === SDKKinds.OnIntent && (!intent || !nameRegex.test(intent))) {
     return formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
   }
   return undefined;
@@ -26,30 +25,20 @@ const validateDupRegExIntent = (
   isRegEx: boolean,
   regExIntents: [{ intent: string; pattern: string }]
 ): string | undefined => {
-  if (selectedType === intentTypeKey && isRegEx && regExIntents.find((ri) => ri.intent === intent)) {
+  if (selectedType === SDKKinds.OnIntent && isRegEx && regExIntents.find((ri) => ri.intent === intent)) {
     return formatMessage(`RegEx {intent} is already defined`, { intent });
   }
   return undefined;
 };
 export const validateRegExPattern = (selectedType: string, isRegEx: boolean, regEx: string): string | undefined => {
-  if (selectedType === intentTypeKey && isRegEx && !regEx) {
+  if (selectedType === SDKKinds.OnIntent && isRegEx && !regEx) {
     return formatMessage('Please input regEx pattern');
   }
   return undefined;
 };
 export const validateEventName = (selectedType: string, $kind: string, eventName: string): string | undefined => {
-  if (selectedType === customEventKey && $kind === eventTypeKey && !eventName) {
+  if (selectedType === SDKKinds.OnDialogEvent && !eventName) {
     return formatMessage('Please enter an event name');
-  }
-  return undefined;
-};
-export const validateEventKind = (selectedType: string, $kind: string): string | undefined => {
-  if (selectedType === eventTypeKey && !$kind) {
-    return formatMessage('Please select a event type');
-  }
-
-  if (selectedType === activityTypeKey && !$kind) {
-    return formatMessage('Please select an activity type');
   }
   return undefined;
 };
@@ -59,13 +48,14 @@ const validateTriggerKind = (selectedType: string): string | undefined => {
   }
   return undefined;
 };
+
 const validateTriggerPhrases = (
   selectedType: string,
   isRegEx: boolean,
   intent: string,
   triggerPhrases: string
 ): string | undefined => {
-  if (selectedType === intentTypeKey && !isRegEx && triggerPhrases) {
+  if (selectedType === SDKKinds.OnIntent && !isRegEx && triggerPhrases) {
     return getLuDiagnostics(intent, triggerPhrases);
   }
   return undefined;
@@ -79,7 +69,7 @@ export const validateForm = (
   const errors: TriggerFormDataErrors = {};
   const { $kind, event: eventName, intent, regEx, triggerPhrases } = data;
 
-  errors.event = validateEventName(selectedType, $kind, eventName) ?? validateEventKind(selectedType, $kind);
+  errors.event = validateEventName(selectedType, $kind, eventName);
   errors.$kind = validateTriggerKind(selectedType);
   errors.intent = validateIntentName(selectedType, intent);
   errors.regEx =
