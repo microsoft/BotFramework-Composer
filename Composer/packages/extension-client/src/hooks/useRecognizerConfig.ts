@@ -76,7 +76,7 @@ export function useRecognizerConfig(): RecognizerSchemaConfig {
   const defaultRecognizer = getDefaultRecognizer(recognizers);
   const fallbackRecognizer = getFallbackRecognizer(recognizers);
 
-  const currentRecognizerValue = shellData.currentDialog?.content?.recognizer;
+  const currentRecognizerValue = shellData.currentDialog?.content?.recognizer as MicrosoftIRecognizer;
   const currentRecognizer = findRecognizerByValue(recognizers, currentRecognizerValue) ?? fallbackRecognizer;
 
   return {
