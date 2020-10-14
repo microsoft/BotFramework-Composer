@@ -1,26 +1,28 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { atomFamily } from 'recoil';
 import {
+  BotProjectFile,
+  BotProjectSpace,
+  BotSchemas,
+  Diagnostic,
   DialogInfo,
   DialogSchemaFile,
-  Diagnostic,
+  DialogSetting,
+  FormDialogSchema,
   LgFile,
   LuFile,
   QnAFile,
-  BotSchemas,
   Skill,
-  DialogSetting,
-  BotProjectSpace,
-  BotProjectFile,
 } from '@bfc/shared';
+import { atomFamily } from 'recoil';
 
 import { BotLoadError, DesignPageLocation, QnAAllUpViewStatus } from '../../recoilModel/types';
 import FilePersistence from '../persistence/FilePersistence';
 
-import { PublishType, BreadcrumbItem } from './../../recoilModel/types';
 import { BotStatus } from './../../constants';
+import { BreadcrumbItem, PublishType } from './../../recoilModel/types';
+
 const getFullyQualifiedKey = (value: string) => {
   return `Bot_${value}_State`;
 };
@@ -258,6 +260,19 @@ export const filePersistenceState = atomFamily<FilePersistence, string>({
   key: getFullyQualifiedKey('filePersistence'),
   default: {} as FilePersistence,
   dangerouslyAllowMutability: true,
+});
+
+export const formDialogSchemaIdsState = atomFamily<string[], string>({
+  key: getFullyQualifiedKey('formDialogSchemaIds'),
+  default: [],
+});
+
+export const formDialogSchemaState = atomFamily<FormDialogSchema, { projectId: string; schemaId: string }>({
+  key: getFullyQualifiedKey('formDialogSchema'),
+  default: {
+    id: '',
+    content: '',
+  } as FormDialogSchema,
 });
 
 export const botProjectFileState = atomFamily<BotProjectFile, string>({
