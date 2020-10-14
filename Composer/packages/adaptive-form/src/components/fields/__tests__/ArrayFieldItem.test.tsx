@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render, fireEvent, screen } from '@bfc/test-utils';
+import { render, fireEvent, screen, act } from '@bfc/test-utils';
 import assign from 'lodash/assign';
 
 import { ArrayFieldItem } from '../ArrayFieldItem';
@@ -69,12 +69,25 @@ describe('<ArrayFieldItem />', () => {
     });
   });
 
-  it.each(['', { foo: '' }])('removes itself on blur if there is no value', (value) => {
+  it('removes itself on blur if there is no value', () => {
     const onRemove = jest.fn();
     const { container } = renderSubject({
       canRemove: true,
       onRemove,
-      value,
+      value: '',
+    });
+    const field = container.querySelector('input');
+    // @ts-ignore
+    fireEvent.blur(field);
+    expect(onRemove).toHaveBeenCalled();
+  });
+
+  it('removes itself on blur if there is no value', () => {
+    const onRemove = jest.fn();
+    const { container } = renderSubject({
+      canRemove: true,
+      onRemove,
+      value: { foo: '' },
     });
     const field = container.querySelector('input');
     // @ts-ignore

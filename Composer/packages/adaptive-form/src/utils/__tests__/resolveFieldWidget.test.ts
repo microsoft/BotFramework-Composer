@@ -1,12 +1,24 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+
 import * as DefaultFields from '../../components/fields';
+import { withTypeIcons } from '../../components/withTypeIcons';
 import { resolveFieldWidget } from '../resolveFieldWidget';
+
+const defaultProps = {
+  onChange: jest.fn(),
+  depth: 0,
+  schema: {},
+  definitions: {},
+  id: 'test',
+  name: 'test name',
+  uiOptions: {},
+};
 
 const TestField = () => 'test field';
 
 describe('resolveFieldWidget', () => {
-  describe('ui option field', () => {
+  describe('uiOption field', () => {
     it('returns field override if present', () => {
       const uiOptions = {
         field: TestField,
@@ -17,20 +29,19 @@ describe('resolveFieldWidget', () => {
       };
 
       // @ts-ignore
-      expect(resolveFieldWidget(schema, uiOptions)).toEqual(TestField);
+      const { field: ReturnedField } = resolveFieldWidget({ schema, uiOptions });
+      expect(ReturnedField).toEqual(TestField);
     });
   });
 
-  describe('schema.$role', () => {
-    describe('$role: expression', () => {
-      it('returns ExpressionField', () => {
-        const schema = {
-          type: 'string' as const,
-          $role: 'expression',
-        };
-
-        expect(resolveFieldWidget(schema, {})).toEqual(DefaultFields.ExpressionField);
-      });
+  describe('$role: expression', () => {
+    it('returns ExpressionField', () => {
+      const schema = {
+        type: 'string' as const,
+        $role: 'expression',
+      };
+      const { field: ReturnedField } = resolveFieldWidget({ schema });
+      expect(ReturnedField).toEqual(DefaultFields.ExpressionField);
     });
   });
 
@@ -46,8 +57,8 @@ describe('resolveFieldWidget', () => {
           field: DefaultFields.RecognizerField,
         },
       };
-
-      expect(resolveFieldWidget(schema, {}, globalSchema)).toEqual(DefaultFields.RecognizerField);
+      const { field: ReturnedField } = resolveFieldWidget({ schema, globalUIOptions: globalSchema });
+      expect(ReturnedField).toEqual(DefaultFields.RecognizerField);
     });
   });
 
@@ -64,7 +75,8 @@ describe('resolveFieldWidget', () => {
         ],
       };
 
-      expect(resolveFieldWidget(schema)).toEqual(DefaultFields.OneOfField);
+      const { field: ReturnedField } = resolveFieldWidget({ schema });
+      expect(ReturnedField).toEqual(DefaultFields.OneOfField);
     });
   });
 
@@ -74,7 +86,10 @@ describe('resolveFieldWidget', () => {
         title: 'undefined',
       };
 
-      expect(resolveFieldWidget(schema)).toEqual(DefaultFields.StringField);
+      const { field: ReturnedField } = resolveFieldWidget({ schema });
+      const ExpectedField = withTypeIcons(DefaultFields.StringField);
+
+      expect(ReturnedField(defaultProps)).toEqual(ExpectedField(defaultProps));
     });
   });
 
@@ -84,7 +99,8 @@ describe('resolveFieldWidget', () => {
         type: ['string' as const, 'number' as const, 'boolean' as const],
       };
 
-      expect(resolveFieldWidget(schema)).toEqual(DefaultFields.OneOfField);
+      const { field: ReturnedField } = resolveFieldWidget({ schema });
+      expect(ReturnedField).toEqual(DefaultFields.OneOfField);
     });
   });
 
@@ -94,7 +110,8 @@ describe('resolveFieldWidget', () => {
         enum: ['one', 'two', 'three'],
       };
 
-      expect(resolveFieldWidget(schema)).toEqual(DefaultFields.SelectField);
+      const { field: ReturnedField } = resolveFieldWidget({ schema });
+      expect(ReturnedField).toEqual(DefaultFields.SelectField);
     });
   });
 
@@ -104,7 +121,10 @@ describe('resolveFieldWidget', () => {
         type: 'string' as const,
       };
 
-      expect(resolveFieldWidget(schema)).toEqual(DefaultFields.StringField);
+      const { field: ReturnedField } = resolveFieldWidget({ schema });
+      const ExpectedField = withTypeIcons(DefaultFields.StringField);
+
+      expect(ReturnedField(defaultProps)).toEqual(ExpectedField(defaultProps));
     });
   });
 
@@ -114,7 +134,10 @@ describe('resolveFieldWidget', () => {
         type: 'integer' as const,
       };
 
-      expect(resolveFieldWidget(schema)).toEqual(DefaultFields.NumberField);
+      const { field: ReturnedField } = resolveFieldWidget({ schema });
+      const ExpectedField = withTypeIcons(DefaultFields.NumberField);
+
+      expect(ReturnedField(defaultProps)).toEqual(ExpectedField(defaultProps));
     });
   });
 
@@ -124,7 +147,10 @@ describe('resolveFieldWidget', () => {
         type: 'number' as const,
       };
 
-      expect(resolveFieldWidget(schema)).toEqual(DefaultFields.NumberField);
+      const { field: ReturnedField } = resolveFieldWidget({ schema });
+      const ExpectedField = withTypeIcons(DefaultFields.NumberField);
+
+      expect(ReturnedField(defaultProps)).toEqual(ExpectedField(defaultProps));
     });
   });
 
@@ -134,7 +160,10 @@ describe('resolveFieldWidget', () => {
         type: 'boolean' as const,
       };
 
-      expect(resolveFieldWidget(schema)).toEqual(DefaultFields.BooleanField);
+      const { field: ReturnedField } = resolveFieldWidget({ schema });
+      const ExpectedField = withTypeIcons(DefaultFields.BooleanField);
+
+      expect(ReturnedField(defaultProps)).toEqual(ExpectedField(defaultProps));
     });
   });
 
@@ -144,7 +173,10 @@ describe('resolveFieldWidget', () => {
         type: 'array' as const,
       };
 
-      expect(resolveFieldWidget(schema)).toEqual(DefaultFields.ArrayField);
+      const { field: ReturnedField } = resolveFieldWidget({ schema });
+      const ExpectedField = withTypeIcons(DefaultFields.JsonField);
+
+      expect(ReturnedField(defaultProps)).toEqual(ExpectedField(defaultProps));
     });
 
     it('returns ObjectArrayField when item type is object', () => {
@@ -155,7 +187,8 @@ describe('resolveFieldWidget', () => {
         },
       };
 
-      expect(resolveFieldWidget(schema)).toEqual(DefaultFields.ObjectArrayField);
+      const { field: ReturnedField } = resolveFieldWidget({ schema });
+      expect(ReturnedField).toEqual(DefaultFields.ObjectArrayField);
     });
 
     it('can handle different items schemas', () => {
@@ -168,7 +201,8 @@ describe('resolveFieldWidget', () => {
         ],
       };
 
-      expect(resolveFieldWidget(stringArray)).toEqual(DefaultFields.ArrayField);
+      const { field: ReturnedField1 } = resolveFieldWidget({ schema: stringArray });
+      expect(ReturnedField1).toEqual(DefaultFields.ArrayField);
 
       const objectArray = {
         type: 'array' as const,
@@ -179,7 +213,8 @@ describe('resolveFieldWidget', () => {
         ],
       };
 
-      expect(resolveFieldWidget(objectArray)).toEqual(DefaultFields.ObjectArrayField);
+      const { field: ReturnedField2 } = resolveFieldWidget({ schema: objectArray });
+      expect(ReturnedField2).toEqual(DefaultFields.ObjectArrayField);
     });
   });
 
@@ -189,7 +224,10 @@ describe('resolveFieldWidget', () => {
         type: 'object' as const,
       };
 
-      expect(resolveFieldWidget(schema)).toEqual(DefaultFields.ObjectField);
+      const { field: ReturnedField } = resolveFieldWidget({ schema });
+      const ExpectedField = withTypeIcons(DefaultFields.JsonField);
+
+      expect(ReturnedField(defaultProps)).toEqual(ExpectedField(defaultProps));
     });
 
     it('returns OpenObjectField when additional properties are allowed', () => {
@@ -198,13 +236,15 @@ describe('resolveFieldWidget', () => {
         additionalProperties: true,
       };
 
-      expect(resolveFieldWidget(schema)).toEqual(DefaultFields.OpenObjectField);
+      const { field: ReturnedField } = resolveFieldWidget({ schema });
+      expect(ReturnedField).toEqual(DefaultFields.OpenObjectField);
     });
   });
 
   describe('unknown schema', () => {
     it('returns UnsupportedField', () => {
-      expect(resolveFieldWidget()).toEqual(DefaultFields.UnsupportedField);
+      const { field: ReturnedField } = resolveFieldWidget({});
+      expect(ReturnedField).toEqual(DefaultFields.UnsupportedField);
     });
   });
 });

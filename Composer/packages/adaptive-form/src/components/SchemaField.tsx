@@ -96,7 +96,10 @@ export const SchemaField: React.FC<FieldProps> = (props) => {
     uiOptions,
     value: deserializedValue,
     onFocus: () => setFieldFocused(true),
-    onBlur: () => setFieldFocused(false),
+    onBlur: () => {
+      setFieldFocused(false);
+      rest.onBlur && rest.onBlur(rest.id);
+    },
   };
 
   return (
