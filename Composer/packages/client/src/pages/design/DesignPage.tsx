@@ -194,7 +194,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       // TODO: swap to the commented-out block once we're working on skills for real
       // let { skillId } = props;
       // if (skillId == null) skillId = projectId;
-      const skillId = undefined;
 
       const params = new URLSearchParams(location.search);
       const dialogMap = dialogs.reduce((acc, { content, id }) => ({ ...acc, [id]: content }), {});
@@ -213,7 +212,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
          *   - If 'dialog' not exists at `dialogId` path, fallback to main dialog.
          */
         if (id) {
-          navTo(rootProjectId, skillId, id);
+          navTo(rootProjectId, null, id);
         }
         return;
       }
@@ -260,15 +259,15 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   function handleSelect(projectId, id, selected = '') {
     updateZoomRate({ currentRate: 1 });
     if (selected) {
-      selectTo(projectId, undefined, undefined, selected);
+      selectTo(projectId, null, null, selected);
     } else {
-      navTo(projectId, undefined, id, []);
+      navTo(projectId, null, id, []);
     }
   }
 
   const onCreateDialogComplete = (newDialog) => {
     if (newDialog) {
-      navTo(projectId, undefined, newDialog, []);
+      navTo(projectId, null, newDialog, []);
     }
   };
 
@@ -451,7 +450,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   function handleBreadcrumbItemClick(_event, item) {
     if (item) {
       const { dialogId, selected, focused, index } = item;
-      selectAndFocus(projectId, undefined, dialogId, selected, focused, clearBreadcrumb(breadcrumb, index));
+      selectAndFocus(projectId, null, dialogId, selected, focused, clearBreadcrumb(breadcrumb, index));
     }
   }
 
@@ -542,14 +541,14 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       if (index === currentIdx) {
         if (currentIdx - 1 >= 0) {
           //if the deleted node is selected and the selected one is not the first one, navTo the previous trigger;
-          selectTo(projectId, undefined, dialogId, createSelectedPath(currentIdx - 1));
+          selectTo(projectId, null, dialogId, createSelectedPath(currentIdx - 1));
         } else {
           //if the deleted node is selected and the selected one is the first one, navTo the first trigger;
-          navTo(projectId, undefined, dialogId, []);
+          navTo(projectId, null, dialogId, []);
         }
       } else if (index < currentIdx) {
         //if the deleted node is at the front, navTo the current one;
-        selectTo(projectId, undefined, dialogId, createSelectedPath(currentIdx - 1));
+        selectTo(projectId, null, dialogId, createSelectedPath(currentIdx - 1));
       }
     }
   }

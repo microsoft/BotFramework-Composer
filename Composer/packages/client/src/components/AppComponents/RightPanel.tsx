@@ -5,16 +5,21 @@
 import { jsx, css } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
 import { forwardRef } from 'react';
-import formatMessage from 'format-message';
+// import formatMessage from 'format-message';
 
 import { RequireAuth } from '../RequireAuth';
 import { ErrorBoundary } from '../ErrorBoundary';
 import { Conversation } from '../Conversation';
-import { ProjectTree } from '../ProjectTree/ProjectTree';
-import { LeftRightSplit } from '../Split/LeftRightSplit';
+//import { ProjectTree } from '../ProjectTree/ProjectTree';
+//import { LeftRightSplit } from '../Split/LeftRightSplit';
 
 import Routes from './../../router';
-import { applicationErrorState, dispatcherState, currentProjectIdState, currentModeState } from './../../recoilModel';
+import {
+  applicationErrorState,
+  dispatcherState,
+  currentProjectIdState,
+  // currentModeState,
+} from './../../recoilModel';
 
 // -------------------- Styles -------------------- //
 

@@ -50,7 +50,7 @@ export const navigationDispatcher = () => {
   const navTo = useRecoilCallback(
     ({ snapshot, set }: CallbackInterface) => async (
       projectId: string,
-      skillId: string | undefined,
+      skillId: string | null,
       dialogId: string,
       breadcrumb: BreadcrumbItem[] = []
     ) => {
@@ -82,8 +82,8 @@ export const navigationDispatcher = () => {
   const selectTo = useRecoilCallback(
     ({ snapshot, set }: CallbackInterface) => async (
       projectId: string,
-      skillId: string | void,
-      destinationDialogId: string | undefined,
+      skillId: string | null,
+      destinationDialogId: string | null,
       selectPath: string
     ) => {
       if (!selectPath) return;
@@ -142,7 +142,7 @@ export const navigationDispatcher = () => {
   const selectAndFocus = useRecoilCallback(
     ({ snapshot, set }: CallbackInterface) => async (
       projectId: string,
-      skillId: string | undefined,
+      skillId: string | null,
       dialogId: string,
       selectPath: string,
       focusPath: string,

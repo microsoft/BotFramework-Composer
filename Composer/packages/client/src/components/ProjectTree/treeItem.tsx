@@ -47,7 +47,7 @@ const content = css`
 
 const moreMenu: Partial<ICalloutContentStyles> = {
   root: {
-    marginTop: '-7px',
+    marginTop: '-1px',
   },
 };
 
@@ -113,13 +113,14 @@ export const overflowSet = css`
   height: 100%;
   padding-right: 12px;
   box-sizing: border-box;
-  line-height: 20px;
+  line-height: 24px;
   justify-content: space-between;
   display: flex;
 `;
 
 const statusIcon = {
   width: '24px',
+  height: '18px',
   fontSize: 16,
   marginLeft: 6,
 };

@@ -73,7 +73,7 @@ export type TreeLink = {
   warningContent?: string;
   errorContent?: string;
   projectId: string;
-  skillId?: string;
+  skillId: string | null;
   dialogName?: string;
   trigger?: number;
 };
@@ -232,7 +232,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
       displayName: dialog.displayName,
       isRoot: dialog.isRoot,
       projectId: currentProjectId,
-      skillId: undefined,
+      skillId: null,
       errorContent,
       warningContent,
     };
@@ -278,7 +278,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
       dialogName: dialog.id,
       isRoot: false,
       projectId: currentProjectId,
-      skillId: undefined,
+      skillId: null,
     };
 
     return (
@@ -327,7 +327,6 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
 
     if (showTriggers) {
       return filteredDialogs.map((dialog: DialogInfo) => {
-        const errorContent = '';
         const triggerList = dialog.triggers
           .filter((tr) => filterMatch(dialog.displayName) || filterMatch(getTriggerName(tr)))
           .map((tr, index) => {

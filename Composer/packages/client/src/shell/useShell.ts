@@ -114,11 +114,11 @@ export function useShell(source: EventSource, projectId: string): Shell {
   }
 
   function navigationTo(path) {
-    navTo(projectId, path, breadcrumb);
+    navTo(projectId, null, path, breadcrumb);
   }
 
   function focusEvent(subPath) {
-    selectTo(projectId, subPath);
+    selectTo(projectId, null, null, subPath);
   }
 
   function focusSteps(subPaths: string[] = [], fragment?: string) {

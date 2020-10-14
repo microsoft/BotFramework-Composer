@@ -83,7 +83,7 @@ export interface NavigationState {
   qnaKbUrls?: string[];
 }
 
-export function convertPathToUrl(projectId: string, skillId: string | void, dialogId: string, path?: string): string {
+export function convertPathToUrl(projectId: string, skillId: string | null, dialogId: string, path?: string): string {
   //path is like main.triggers[0].actions[0]
   //uri = id?selected=triggers[0]&focused=triggers[0].actions[0]
 
