@@ -581,9 +581,6 @@
   "create_folder_error_38aa86f5": {
     "message": "Create Folder Error"
   },
-  "create_from_6db143f6": {
-    "message": "Create from"
-  },
   "create_from_knowledge_base_qna_maker_7422486": {
     "message": "Create from knowledge base (QnA Maker)"
   },
@@ -803,12 +800,6 @@
   "duplicated_intents_recognized_d3908424": {
     "message": "Duplicated intents recognized"
   },
-  "each_page_of_pagesizestring_in_propstring_a7e23b00": {
-    "message": "Each page of { pageSizeString } in { propString }"
-  },
-  "each_value_in_ae285cd9": {
-    "message": "Each value in"
-  },
   "early_adopters_e8db7999": {
     "message": "Early adopters"
   },
@@ -934,9 +925,6 @@
   },
   "error_processing_schema_2c707cf3": {
     "message": "Error Processing Schema"
-  },
-  "event_48c2be6e": {
-    "message": " (Event)"
   },
   "event_activity_2067a94b": {
     "message": "Event activity"
@@ -1102,12 +1090,6 @@
   },
   "home_351838cd": {
     "message": "Home"
-  },
-  "hostname_fa8632e6": {
-    "message": "HostName"
-  },
-  "host_ef9acfae": {
-    "message": "Host "
   },
   "http_request_79847109": {
     "message": "HTTP Request"
@@ -1325,17 +1307,11 @@
   "location_is_location_8c17b5de": {
     "message": "location is { location }"
   },
-  "locations_346f0a33": {
-    "message": "Locations"
-  },
   "log_to_console_4fc23e34": {
     "message": "Log to console"
   },
   "login_6f3d6249": {
     "message": "Login"
-  },
-  "login_to_composer_eb42b41": {
-    "message": "Login to Composer"
   },
   "loop_for_each_item_53eb7c5b": {
     "message": "Loop: for each item"
@@ -1472,6 +1448,9 @@
   "msft_ignite_ai_show_e131edef": {
     "message": "MSFT Ignite AI Show"
   },
+  "msg_bf173fef": {
+    "message": "{ msg }"
+  },
   "multi_choice_839b54bb": {
     "message": "Multi-choice"
   },
@@ -1483,9 +1462,6 @@
   },
   "must_have_a_name_d5c5c464": {
     "message": "Must have a name"
-  },
-  "my_publish_profile_2ed56828": {
-    "message": "My Publish Profile"
   },
   "my_staging_environment_2b92d0aa": {
     "message": "My Staging Environment"
@@ -1513,9 +1489,6 @@
   },
   "name_of_the_property_f3cae657": {
     "message": "Name of the property"
-  },
-  "name_of_your_new_resource_group_1b7a34e4": {
-    "message": "Name of your new resource group"
   },
   "navigation_control_94f2649e": {
     "message": "navigation control"
@@ -1823,6 +1796,9 @@
   "provide_a_brief_description_it_will_appear_on_the__f962eb38": {
     "message": "Provide a brief description. It will appear on the publish history list."
   },
+  "provisioning_1330aede": {
+    "message": "Provisioning ..."
+  },
   "pseudo_1a319287": {
     "message": "Pseudo"
   },
@@ -1831,9 +1807,6 @@
   },
   "publish_configuration_d759a4e3": {
     "message": "Publish Configuration"
-  },
-  "publish_destination_type_5f8c200a": {
-    "message": "Publish Destination Type"
   },
   "publish_models_9a36752a": {
     "message": "Publish models"
@@ -1943,9 +1916,6 @@
   "requiredtext_priority_priority_4293288f": {
     "message": "{ requiredText } | Priority: { priority }"
   },
-  "resource_group_59eac426": {
-    "message": "Resource group"
-  },
   "response_is_response_3cd62f8f": {
     "message": "Response is { response }"
   },
@@ -1954,15 +1924,6 @@
   },
   "restart_bot_34e36428": {
     "message": "Restart Bot"
-  },
-  "result_b1f14e91": {
-    "message": " = Result"
-  },
-  "result_property_100ef34f": {
-    "message": " = Result property"
-  },
-  "return_value_b386d1b": {
-    "message": "= Return value"
   },
   "review_and_generate_63dec712": {
     "message": "Review and generate"
@@ -2051,17 +2012,8 @@
   "select_which_tasks_this_skill_can_perform_172b0eae": {
     "message": "Select which tasks this skill can perform"
   },
-  "select_your_location_1d5c501": {
-    "message": "Select your location"
-  },
   "select_your_publish_target_de531f7f": {
     "message": "Select your publish target"
-  },
-  "select_your_resource_group_bf36b186": {
-    "message": "Select your resource group"
-  },
-  "select_your_subscription_17b5260": {
-    "message": "Select your subscription"
   },
   "selection_field_86d1dc94": {
     "message": "selection field"
@@ -2200,9 +2152,6 @@
   },
   "submit_a3cc6859": {
     "message": "Submit"
-  },
-  "subscription_15330b8a": {
-    "message": "Subscription"
   },
   "synonyms_optional_afe5cdb1": {
     "message": "Synonyms (Optional)"
@@ -2366,9 +2315,6 @@
   "toggle_extension_e41de2d2": {
     "message": "Toggle extension"
   },
-  "token_property_e53a19d9": {
-    "message": " = Token Property"
-  },
   "toolbar_bafd4228": {
     "message": "toolbar"
   },
@@ -2410,9 +2356,6 @@
   },
   "typing_activity_6b634ae": {
     "message": "Typing activity"
-  },
-  "unable_to_determine_recognizer_type_from_data_valu_2960f526": {
-    "message": "Unable to determine recognizer type from data: { value }"
   },
   "undo_a7be8fef": {
     "message": "Undo"
