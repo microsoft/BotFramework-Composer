@@ -259,8 +259,8 @@ export function extractOptionByKey(nameOfKey: string, options: string[]): string
   return result;
 }
 
-export function parse(id: string, content: string, lgFiles: LGResource[]): LgFile {
-  const lgImportResolver = lgImportResolverGenerator(lgFiles, '.lg');
+export function parse(id: string, content: string, lgResources: LGResource[]): LgFile {
+  const lgImportResolver = lgImportResolverGenerator(lgResources, '.lg');
 
   return lgIndexer.parse(content, id, lgImportResolver);
 }

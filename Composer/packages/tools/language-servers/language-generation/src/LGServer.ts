@@ -18,6 +18,7 @@ import get from 'lodash/get';
 import { filterTemplateDiagnostics, isValid, lgUtil } from '@bfc/indexers';
 import { MemoryResolver, LgFile, lgImportResolverGenerator } from '@bfc/shared';
 import { buildInFunctionsMap } from '@bfc/built-in-functions';
+import { LGResource } from 'botbuilder-lg';
 
 import { LgParser } from './lgParser';
 import {
@@ -31,7 +32,6 @@ import {
   cardPropDict,
   cardPropPossibleValueType,
 } from './utils';
-import { LGResource } from 'botbuilder-lg';
 
 // define init methods call from client
 const InitializeDocumentsMethodName = 'initializeDocuments';

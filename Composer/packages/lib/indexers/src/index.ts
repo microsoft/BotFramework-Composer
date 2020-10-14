@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { DialogSetting, FileInfo, lgImportResolverGenerator } from '@bfc/shared';
+import { LGResource } from 'botbuilder-lg';
 
 import { dialogIndexer } from './dialogIndexer';
 import { dialogSchemaIndexer } from './dialogSchemaIndexer';
@@ -12,7 +13,6 @@ import { skillManifestIndexer } from './skillManifestIndexer';
 import { botProjectSpaceIndexer } from './botProjectSpaceIndexer';
 import { FileExtensions } from './utils/fileExtensions';
 import { getExtension, getBaseName } from './utils/help';
-import { LGResource } from 'botbuilder-lg';
 
 class Indexer {
   private classifyFile(files: FileInfo[]) {
@@ -37,12 +37,12 @@ class Indexer {
   }
 
   private getLgImportResolver = (files: FileInfo[], locale: string) => {
-    const lgFiles = files.map(({ name, content }) => {
+    const lgResources = files.map(({ name, content }) => {
       const id = getBaseName(name, '.lg');
       return new LGResource(id, id, content);
     });
 
-    return lgImportResolverGenerator(lgFiles, '.lg', locale);
+    return lgImportResolverGenerator(lgResources, '.lg', locale);
   };
 
   public index(files: FileInfo[], botName: string, locale: string, skillContent: any, settings: DialogSetting) {
