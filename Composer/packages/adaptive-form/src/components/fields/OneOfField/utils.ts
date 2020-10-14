@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { DropdownMenuItemType, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { FieldProps, JSONSchema7, JSONSchema7Definition } from '@bfc/extension-client';
+import { FieldProps, JSONSchema7, SchemaDefinitions } from '@bfc/extension-client';
 import merge from 'lodash/merge';
 import omit from 'lodash/omit';
 import formatMessage from 'format-message';
@@ -27,7 +27,7 @@ function getOptionLabel(schema: JSONSchema7): string {
 
 export function getOptions(
   schema: JSONSchema7,
-  definitions?: { [key: string]: JSONSchema7Definition }
+  definitions?: SchemaDefinitions
 ): { options: IDropdownOption[]; isNested: boolean } {
   const { type, oneOf } = schema;
 
