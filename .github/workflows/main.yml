@@ -36,8 +36,8 @@ jobs:
             ${{ runner.os }}-yarn-
       - name: yarn install
         run: yarn
-      - name: yarn build:dev
-        run: yarn build:dev
+      - name: yarn build
+        run: yarn build
       - name: yarn lint
         run: yarn lint
       - name: yarn test:coverage
