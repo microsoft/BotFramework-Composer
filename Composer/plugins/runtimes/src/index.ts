@@ -48,7 +48,11 @@ export default async (composer: any): Promise<void> => {
       const profile = project.settings.publishTargets.find((p) => p.name === profileName);
       if (profile.type === 'azurePublish') {
         csproj = 'Microsoft.BotFramework.Composer.WebApp.csproj';
-      } else if (profile.type === 'azureFunctionsPublish') {
+      }
+      else if (profile.type === 'coreBotAzurePublish') {
+        csproj = 'src/Microsoft.Bot.Runtime.WebHost/Microsoft.Bot.Runtime.WebHost.csproj';
+      }
+      else if (profile.type === 'azureFunctionsPublish') {
         csproj = 'Microsoft.BotFramework.Composer.Functions.csproj';
       }
       const publishFolder = path.join(runtimePath, 'bin', 'Release', 'netcoreapp3.1');
@@ -143,7 +147,18 @@ export default async (composer: any): Promise<void> => {
           await copyDir(srcManifestDir, srcStorage, manifestDstDir, dstStorage);
         }
       }
-    },
+      else if (mode === 'corebotazurewebapp') {
+        const manifestDstDir = path.resolve(dstRuntimePath, 'src', 'Microsoft.Bot.Runtime.WebHost', 'wwwroot', 'manifests');
+
+        if (await fs.pathExists(manifestDstDir)) {
+          await removeDirAndFiles(manifestDstDir);
+        }
+
+        if (await fs.pathExists(srcManifestDir)) {
+          await copyDir(srcManifestDir, srcStorage, manifestDstDir, dstStorage);
+        }
+      }
+    }
   });
 
   composer.addRuntimeTemplate({
