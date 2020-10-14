@@ -15,8 +15,7 @@
     "react-dom": "16.13.1"
   },
   "devDependencies": {
-    "@botframework-composer/types": "0.0.1",
-    "@botframework-composer/test-utils": "0.0.1",
+    "@botframework-composer/test-utils": "*",
     "@types/react": "16.9.23",
     "react": "16.13.1",
     "react-dom": "16.13.1",
@@ -24,6 +23,7 @@
     "typescript": "3.9.2"
   },
   "dependencies": {
+    "@botframework-composer/types": "*",
     "debug": "^4.1.1",
     "lodash": "^4.17.19"
   }
