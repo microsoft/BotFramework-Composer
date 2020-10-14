@@ -35,6 +35,7 @@ interface ZoomZoneProps {
   updateFlowZoomRate: (currentRate: number) => void;
   children?: ReactNode;
 }
+
 export const ZoomZone: React.FC<ZoomZoneProps> = ({ flowZoomRate, focusedId, updateFlowZoomRate, children }) => {
   const divRef = useRef<HTMLDivElement>(null);
   const { rateList, maxRate, minRate, currentRate } = flowZoomRate || {
@@ -57,15 +58,15 @@ export const ZoomZone: React.FC<ZoomZoneProps> = ({ flowZoomRate, focusedId, upd
     updateFlowZoomRate(rate);
   };
 
+  const container = divRef.current as HTMLElement;
   useEffect(() => {
-    const container = divRef.current as HTMLElement;
     if (!container) return;
     const target = container.children[0] as HTMLElement;
     target.style.transform = `scale(${currentRate})`;
     target.style.transformOrigin = 'top left';
     container.scroll({
-      top: (container.clientHeight * (currentRate - 1)) / 2,
-      left: (container.clientWidth * (currentRate - 1)) / 2,
+      top: (container.scrollWidth - container.clientWidth) / 2,
+      left: (container.scrollHeight - container.clientHeight) / 2,
     });
 
     if (currentRate === 1) {
