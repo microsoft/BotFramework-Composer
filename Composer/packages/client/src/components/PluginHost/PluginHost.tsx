@@ -49,28 +49,6 @@ export const PluginHost: React.FC<PluginHostProps> = (props) => {
   const { extraIframeStyles = [], pluginType, pluginName, bundleId, shell } = props;
 
   useEffect(() => {
-    if (isLoaded && pluginType && pluginName && bundleId) {
-      const iframeWindow = targetRef.current?.contentWindow as Window;
-      const iframeDocument = targetRef.current?.contentDocument as Document;
-
-      attachPluginAPI(iframeWindow, pluginType, shell);
-
-      //load the bundle for the specified plugin
-      const pluginScriptId = `plugin-${pluginType}-${pluginName}`;
-      const bundleUri = `/api/extensions/${pluginName}/${bundleId}`;
-      // If plugin bundles end up being too large and block the client thread due to the load, enable the async flag on this call
-      injectScript(iframeDocument, pluginScriptId, bundleUri, false);
-    }
-  }, [isLoaded]);
-
-  // sync the shell to the iframe store when shell changes
-  useEffect(() => {
-    if (isLoaded && targetRef.current) {
-      targetRef.current.contentWindow?.Composer.sync(shell);
-    }
-  }, [isLoaded, shell]);
-
-  useEffect(() => {
     // renders the plugin's UI inside of the iframe
     if (pluginName && pluginType) {
       const iframeDocument = targetRef.current?.contentDocument as Document;
@@ -91,6 +69,28 @@ export const PluginHost: React.FC<PluginHostProps> = (props) => {
       };
     }
   }, [pluginName, pluginType, bundleId, targetRef]);
+
+  useEffect(() => {
+    if (isLoaded && pluginType && pluginName && bundleId) {
+      const iframeWindow = targetRef.current?.contentWindow as Window;
+      const iframeDocument = targetRef.current?.contentDocument as Document;
+
+      attachPluginAPI(iframeWindow, pluginType, shell);
+
+      //load the bundle for the specified plugin
+      const pluginScriptId = `plugin-${pluginType}-${pluginName}`;
+      const bundleUri = `/api/extensions/${pluginName}/${bundleId}`;
+      // If plugin bundles end up being too large and block the client thread due to the load, enable the async flag on this call
+      injectScript(iframeDocument, pluginScriptId, bundleUri, false);
+    }
+  }, [isLoaded]);
+
+  // sync the shell to the iframe store when shell changes
+  useEffect(() => {
+    if (isLoaded && targetRef.current) {
+      targetRef.current.contentWindow?.Composer.sync(shell);
+    }
+  }, [isLoaded, shell]);
 
   return <iframe ref={targetRef} css={[iframeStyle, ...extraIframeStyles]} title={`${pluginName} host`}></iframe>;
 };
