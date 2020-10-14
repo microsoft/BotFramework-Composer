@@ -21,10 +21,11 @@ function renderSubject(overrides = {}, shellOverrides = {}) {
       {
         currentDialog: {
           content: { recognizer: undefined },
-          shellApi: {
-            updateRegExIntent: jest.fn(),
-          },
         },
+        shellApi: {
+          updateRegExIntent: jest.fn(),
+        },
+        focusedSteps: [],
       },
       shellOverrides
     )

@@ -9,6 +9,11 @@ import { App } from '../src/App';
 
 import { wrapWithRecoil } from './testUtils';
 
+jest.mock('axios', () => ({
+  create: jest.fn().mockReturnThis(),
+  get: jest.fn(),
+}));
+
 function renderWithRouter(ui, { route = '/dialogs/home', history = createHistory(createMemorySource(route)) } = {}) {
   return {
     ...render(<LocationProvider history={history}>{ui}</LocationProvider>),

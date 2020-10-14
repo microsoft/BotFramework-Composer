@@ -20,10 +20,6 @@ import { calculateRangeSelection } from '../utils/calculateRangeSelection';
 
 import { useDialogEditApi } from './useDialogEditApi';
 
-/**
- * used in:
- * - AdaptiveFlowEditor.tsx
- */
 export const useEditorEventApi = (
   state: { path: string; data: any; nodeContext: NodeRendererContextValue; selectionContext: SelectionContextData },
   shellApi: ShellApi

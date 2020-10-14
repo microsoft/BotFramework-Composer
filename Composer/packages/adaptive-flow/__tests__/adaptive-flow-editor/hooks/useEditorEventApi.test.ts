@@ -9,7 +9,7 @@ import { defaultRendererContextValue } from '../../../src/adaptive-flow-editor/c
 import { defaultSelectionContextValue } from '../../../src/adaptive-flow-editor/contexts/SelectionContext';
 import { NodeEventTypes } from '../../../src/adaptive-flow-renderer/constants/NodeEventTypes';
 
-describe('useSelectionEffect', () => {
+describe('useEditorEventApi', () => {
   const hook = renderHook(() =>
     useEditorEventApi(
       {

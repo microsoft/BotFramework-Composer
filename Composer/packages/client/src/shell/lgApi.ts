@@ -83,7 +83,7 @@ function createLgApi(
     const normalizedLgTemplates = templateNames
       .map((x) => {
         const lgTemplateRef = LgTemplateRef.parse(x);
-        return lgTemplateRef ? lgTemplateRef.name : '';
+        return lgTemplateRef ? lgTemplateRef.name : x;
       })
       .filter((x) => !!x);
 
