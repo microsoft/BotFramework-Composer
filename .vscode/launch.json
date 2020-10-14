@@ -92,7 +92,8 @@
         "${workspaceRoot}/Composer/packages/electron-server/build/**/*.js",
         "${workspaceRoot}/Composer/plugins/**/*.js",
         "${workspaceRoot}/Composer/packages/server/build/**/*.js"
-      ]
+      ],
+      "sourceMaps": true
     },
     {
       "name": "Debug current jest test",
