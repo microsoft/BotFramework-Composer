@@ -8,17 +8,10 @@ import { ZoomInfo } from '@bfc/shared';
 import { IconButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
 
-function scrollZoom(
-  container: HTMLElement,
-  delta: number,
-  rateList: number[],
-  maxRate: number,
-  minRate: number,
-  currentRate: number
-): number {
-  if (!container) return currentRate;
+import { scrollNodeIntoView } from '../utils/scrollNodeIntoView';
+import { AttrNames } from '../constants/ElementAttributes';
 
-  const target = container.children[0] as HTMLElement;
+function scrollZoom(delta: number, rateList: number[], maxRate: number, minRate: number, currentRate: number): number {
   let rate: number = currentRate;
 
   if (delta < 0) {
@@ -33,23 +26,18 @@ function scrollZoom(
     rate = 1;
   }
 
-  target.style.transform = `scale(${rate})`;
-  target.style.transformOrigin = 'top left';
-  container.scroll({
-    top: (container.clientHeight * (rate - 1)) / 2,
-    left: (container.clientWidth * (rate - 1)) / 2,
-  });
   return rate;
 }
 
 interface ZoomZoneProps {
-  zoomRateInfo: ZoomInfo;
-  updateZoomRate: (currentRate: number) => void;
+  flowZoomRate: ZoomInfo;
+  focusedId: string;
+  updateFlowZoomRate: (currentRate: number) => void;
   children?: ReactNode;
 }
-export const ZoomZone: React.FC<ZoomZoneProps> = ({ zoomRateInfo, updateZoomRate, children }) => {
+export const ZoomZone: React.FC<ZoomZoneProps> = ({ flowZoomRate, focusedId, updateFlowZoomRate, children }) => {
   const divRef = useRef<HTMLDivElement>(null);
-  const { rateList, maxRate, minRate, currentRate } = zoomRateInfo || {
+  const { rateList, maxRate, minRate, currentRate } = flowZoomRate || {
     rateList: [0.5, 1, 3],
     maxRate: 3,
     minRate: 0.5,
@@ -64,9 +52,26 @@ export const ZoomZone: React.FC<ZoomZoneProps> = ({ zoomRateInfo, updateZoomRate
   };
 
   const handleZoom = (delta: number) => {
-    const rate = scrollZoom(divRef.current as HTMLElement, delta, rateList, maxRate, minRate, currentRate);
-    updateZoomRate(rate);
+    const rate = scrollZoom(delta, rateList, maxRate, minRate, currentRate);
+
+    updateFlowZoomRate(rate);
   };
+
+  useEffect(() => {
+    const container = divRef.current as HTMLElement;
+    if (!container) return;
+    const target = container.children[0] as HTMLElement;
+    target.style.transform = `scale(${currentRate})`;
+    target.style.transformOrigin = 'top left';
+    container.scroll({
+      top: (container.clientHeight * (currentRate - 1)) / 2,
+      left: (container.clientWidth * (currentRate - 1)) / 2,
+    });
+
+    if (currentRate === 1) {
+      scrollNodeIntoView(`[${AttrNames.SelectedId}="${focusedId}"]`);
+    }
+  }, [currentRate]);
 
   const buttonRender = () => {
     const buttonBoxStyle = css({ position: 'absolute', left: '25px', bottom: '25px', width: '35px' });
@@ -120,12 +125,14 @@ export const ZoomZone: React.FC<ZoomZoneProps> = ({ zoomRateInfo, updateZoomRate
       </div>
     );
   };
+
+  // Using ref and eventListener instead of <div @wheel='xxx()' /> because passive property can not be set in <div @wheel='xxx()' />
   useEffect(() => {
-    if (zoomRateInfo) {
+    if (flowZoomRate) {
       divRef.current?.addEventListener('wheel', onWheel, { passive: false });
     }
     return () => divRef.current?.removeEventListener('wheel', onWheel);
-  }, [zoomRateInfo]);
+  }, [flowZoomRate]);
 
   return (
     <div ref={divRef} css={{ overflow: 'scroll', width: '100%', height: '100%' }}>

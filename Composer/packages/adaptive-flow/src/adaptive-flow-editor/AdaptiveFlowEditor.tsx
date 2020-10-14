@@ -72,10 +72,10 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
     data: inputData,
     hosted,
     schemas,
-    zoomRateInfo,
+    flowZoomRate,
   } = shellData;
 
-  const { updateZoomRate } = shellApi;
+  const { updateFlowZoomRate } = shellApi;
 
   const dataCache = useRef({});
 
@@ -144,7 +144,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
             {...enableKeyboardCommandAttributes(handleCommand)}
             data-testid="visualdesigner-container"
           >
-            <ZoomZone updateZoomRate={updateZoomRate} zoomRateInfo={zoomRateInfo}>
+            <ZoomZone flowZoomRate={flowZoomRate} focusedId={focusedId} updateFlowZoomRate={updateFlowZoomRate}>
               <SelectionContext.Provider value={selectionContext}>
                 <MarqueeSelection selection={selection}>
                   <div
