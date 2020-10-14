@@ -13,8 +13,9 @@ import { iframeStyle } from './styles';
 
 interface PluginHostProps {
   extraIframeStyles?: SerializedStyles[];
-  pluginName?: string;
-  pluginType?: PluginType;
+  pluginName: string;
+  pluginType: PluginType;
+  bundleId: string;
 }
 
 /** Binds closures around Composer client code to plugin iframe's window object */
@@ -41,7 +42,7 @@ export const PluginHost: React.FC<PluginHostProps> = (props) => {
   const { extraIframeStyles = [] } = props;
 
   useEffect(() => {
-    const { pluginName, pluginType } = props;
+    const { pluginName, pluginType, bundleId } = props;
     // renders the plugin's UI inside of the iframe
     const renderPluginView = async () => {
       if (pluginName && pluginType) {
@@ -62,13 +63,14 @@ export const PluginHost: React.FC<PluginHostProps> = (props) => {
           const cb = () => {
             resolve();
           };
+          const bundleUri = `/api/extensions/${pluginName}/${bundleId}`;
           // If plugin bundles end up being too large and block the client thread due to the load, enable the async flag on this call
-          injectScript(iframeDocument, pluginScriptId, `/api/plugins/${pluginName}/view/${pluginType}`, false, cb);
+          injectScript(iframeDocument, pluginScriptId, bundleUri, false, cb);
         });
       }
     };
     renderPluginView();
-  }, [props.pluginName, props.pluginType, targetRef]);
+  }, [props.pluginName, props.pluginType, props.bundleId, targetRef]);
 
   return <iframe ref={targetRef} css={[iframeStyle, ...extraIframeStyles]} title={`${props.pluginName} host`}></iframe>;
 };

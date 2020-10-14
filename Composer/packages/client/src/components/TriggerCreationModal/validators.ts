@@ -11,7 +11,7 @@ import { eventTypeKey, customEventKey, intentTypeKey, activityTypeKey } from './
 
 export const getLuDiagnostics = (intent: string, triggerPhrases: string) => {
   const content = `#${intent}\n${triggerPhrases}`;
-  const { diagnostics } = luIndexer.parse(content);
+  const { diagnostics } = luIndexer.parse(content, '', {});
   return combineMessage(diagnostics);
 };
 export const validateIntentName = (selectedType: string, intent: string): string | undefined => {

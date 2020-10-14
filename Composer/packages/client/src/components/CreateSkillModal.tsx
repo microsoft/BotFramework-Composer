@@ -12,12 +12,11 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { useRecoilValue } from 'recoil';
 import debounce from 'lodash/debounce';
 import { SkillSetting } from '@bfc/shared';
+import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
 import { addSkillDialog } from '../constants';
 import httpClient from '../utils/httpUtil';
 import { skillsState } from '../recoilModel';
-
-import { DialogWrapper, DialogTypes } from './DialogWrapper';
 
 export interface SkillFormDataErrors {
   endpoint?: string;
@@ -83,7 +82,7 @@ export const validateManifestUrl = async ({
   } else {
     try {
       setValidationState({ ...validationState, manifestUrl: ValidationState.Validating });
-      const { data } = await httpClient.get(`/projects/${projectId}/skill/retrieve-skill-manifest`, {
+      const { data } = await httpClient.get(`/projects/${projectId}/skill/retrieveSkillManifest`, {
         params: {
           url: manifestUrl,
         },

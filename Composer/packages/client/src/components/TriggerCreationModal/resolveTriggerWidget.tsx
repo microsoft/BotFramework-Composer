@@ -102,6 +102,7 @@ export function resolveTriggerWidget(
           projectId,
           fileId: dialogId,
           sectionId: PlaceHolderSectionName,
+          luFeatures: {},
         }}
         placeholder={inlineModePlaceholder}
         value={formData.triggerPhrases}
