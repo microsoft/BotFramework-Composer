@@ -187,17 +187,22 @@ export const FormDialogPropertyCard = React.memo((props: FormDialogPropertyCardP
             <RequiredPriorityIndicator propertyId={propertyId} required={required} />
 
             <OverflowSet
-              aria-label={formatMessage('Property quick actions')}
+              aria-label={formatMessage('Property actions')}
               overflowItems={[
                 {
                   key: 'collapseItem',
-                  name: 'Collapse',
+                  name: formatMessage('Collapse'),
                   onClick: deactivateItem,
                 },
-                { key: 'duplicateItem', name: 'Duplicate', onClick: onDuplicate, iconProps: { iconName: 'Copy' } },
+                {
+                  key: 'duplicateItem',
+                  name: formatMessage('Duplicate'),
+                  onClick: onDuplicate,
+                  iconProps: { iconName: 'Copy' },
+                },
                 {
                   key: 'deleteItem',
-                  name: 'Delete',
+                  name: formatMessage('Delete'),
                   onClick: onRemove,
                   iconProps: { iconName: 'Delete' },
                 },
