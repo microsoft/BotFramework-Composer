@@ -10,6 +10,9 @@ import log from '../../logger';
 import { ComposerReservoirSampler } from './sampler/ReservoirSampler';
 import { ComposerBootstrapSampler } from './sampler/BootstrapSampler';
 
+import { Orchestrator } from '@microsoft/bf-orchestrator';
+import { IOrchestratorBuildOutput, IOrchestratorNLRList, IOrchestratorProgress } from './interface';
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const crossTrainer = require('@microsoft/bf-lu/lib/parser/cross-train/crossTrainer.js');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -110,6 +113,59 @@ export class Builder {
 
   public set locale(v: string) {
     this._locale = v;
+  }
+
+  /**
+   * Orchestrator: Get available list of NLR models
+   */
+  public async runOrchestratorNlrList(): Promise<IOrchestratorNLRList> {
+    return JSON.parse(await Orchestrator.nlrListAsync());
+  }
+
+  /**
+   * Orchestrator: Download an available NLR model.
+   *
+   * @remarks Available NLR models and VersionIds are obtained by running runOrchestratorNlrList first.
+   *
+   * @param modelPath - Folder path to save NLR model
+   * @param nlrId - VersionId of the model
+   * @param onProgress - Callback to notify of D/L progress
+   * @param onFinish - Callback to notify of D/L completed
+   */
+  public async runOrchestratorNlrGet(
+    modelPath: string,
+    nlrId: string,
+    onProgress: IOrchestratorProgress,
+    onFinish: IOrchestratorProgress
+  ): Promise<void> {
+    await Orchestrator.nlrGetAsync(modelPath, nlrId, onProgress, onFinish);
+  }
+
+  /**
+   * Orchestrator: Build command to compile .lu files into Binary LU (.blu) snapshots.
+   *
+   * A snapshot (.blu file) is created per .lu supplied
+   *
+   * @param files - Array of FileInfo
+   * @param modelPath - Path to NLR model folder
+   * @param isDialog - Flag to toggle creation of Recognizer Dialogs (default: true)
+   * @param fullEmbedding - Use larger embeddings and skip size optimization (default: false)
+   * @returns An object containing snapshot bytes and recognizer dialogs for each .lu file
+   */
+  public async runOrchestratorBuild(
+    files: FileInfo[],
+    modelPath: string,
+    isDialog: boolean = true,
+    fullEmbedding: boolean = false
+  ): Promise<IOrchestratorBuildOutput> {
+    let luObjects = files
+      .filter((fi) => fi.name.endsWith('.lu'))
+      .map((fi) => ({
+        id: fi.name,
+        content: fi.content,
+      }));
+
+    return await Orchestrator.buildAsync(modelPath, luObjects, isDialog, null, fullEmbedding);
   }
 
   private async createGeneratedDir() {

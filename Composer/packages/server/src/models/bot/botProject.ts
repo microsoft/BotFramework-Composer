@@ -794,7 +794,7 @@ export class BotProject implements IBotProject {
     try {
       const defaultBotProjectFile: any = await AssetService.manager.botProjectFileTemplate;
 
-      for (const [_, file] of files) {
+      for (const [, file] of files) {
         if (file.name.endsWith(FileExtensions.BotProject)) {
           return fileList;
         }
