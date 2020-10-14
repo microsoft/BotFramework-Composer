@@ -12,7 +12,6 @@ import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
 import { TriggerFormData, TriggerFormDataErrors } from '../../utils/dialogUtil';
 import { isRegExRecognizerType, isLUISnQnARecognizerType } from '../../utils/dialogValidator';
 
-import { customEventKey, intentTypeKey } from './constants';
 import { intentStyles } from './styles';
 import { validateEventName, validateIntentName, getLuDiagnostics, validateRegExPattern } from './validators';
 
@@ -27,7 +26,7 @@ export function resolveTriggerWidget(
 ) {
   const isRegEx = isRegExRecognizerType(dialogFile);
   const isLUISnQnA = isLUISnQnARecognizerType(dialogFile);
-  const showTriggerPhrase = selectedType === intentTypeKey && isLUISnQnA;
+  const showTriggerPhrase = selectedType === SDKKinds.OnIntent && isLUISnQnA;
 
   const onNameChange = (e, name) => {
     const errors: TriggerFormDataErrors = {};
@@ -136,10 +135,10 @@ export function resolveTriggerWidget(
 
   let widget;
   switch (selectedType) {
-    case intentTypeKey:
+    case SDKKinds.OnIntent:
       widget = onIntentWidget;
       break;
-    case customEventKey:
+    case SDKKinds.OnDialogEvent:
       widget = onEventWidget;
       break;
     default:

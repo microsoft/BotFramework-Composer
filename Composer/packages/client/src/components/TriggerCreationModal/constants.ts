@@ -2,23 +2,18 @@
 // Licensed under the MIT License.
 
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { SDKKinds } from '@bfc/shared';
 
-export const eventTypeKey = SDKKinds.OnDialogEvent;
-export const intentTypeKey = SDKKinds.OnIntent;
-export const activityTypeKey = SDKKinds.OnActivity;
-export const qnaMatcherKey = SDKKinds.OnQnAMatch;
-export const onChooseIntentKey = SDKKinds.OnChooseIntent;
-export const customEventKey = 'CustomEvents';
+export const dialogEventKey = 'DialogEvent';
+export const activityTypeKey = 'Activities';
 
 export const TriggerOptions: IDropdownOption[] = [
   { key: 'Microsoft.OnIntent', text: 'Intent recognized' },
   { key: 'Microsoft.OnQnAMatch', text: 'QnA Intent recognized' },
   { key: 'Microsoft.OnUnknownIntent', text: 'Unknown intent' },
-  { key: 'Microsoft.OnDialogEvent', text: 'Dialog events' },
-  { key: 'Microsoft.OnActivity', text: 'Activities' },
+  { key: dialogEventKey, text: 'Dialog events' },
+  { key: activityTypeKey, text: 'Activities' },
   { key: 'Microsoft.OnChooseIntent', text: 'Duplicated intents recognized' },
-  { key: customEventKey, text: 'Custom events' },
+  { key: 'Microsoft.OnDialogEvent', text: 'Custom events' },
 ];
 
 export const ActivityOptions: IDropdownOption[] = [

@@ -7,10 +7,8 @@ import React, { useState } from 'react';
 import formatMessage from 'format-message';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { SDKKinds } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
@@ -19,20 +17,12 @@ import { userSettingsState } from '../../recoilModel/atoms';
 import { validateDialogSelectorFamily } from '../../recoilModel';
 import { isRegExRecognizerType, resolveRecognizer$kind } from '../../utils/dialogValidator';
 
-import { eventTypeKey, customEventKey, intentTypeKey, activityTypeKey } from './constants';
-import {
-  optionStyles,
-  dialogContentStyles,
-  modalStyles,
-  dialogWindowStyles,
-  dropdownStyles,
-  warningIconStyles,
-} from './styles';
-import { validateForm, validateEventKind } from './validators';
-import { getEventOptions, getActivityOptions, getTriggerOptions } from './getDropdownOptions';
+import { optionStyles, dialogContentStyles, modalStyles, dialogWindowStyles, warningIconStyles } from './styles';
+import { validateForm } from './validators';
 import { resolveTriggerWidget } from './resolveTriggerWidget';
+import { TriggerDropdownGroup } from './TriggerDropdownGroup';
 
-const renderDropdownOption = (option?: IDropdownOption) => {
+export const renderDropdownOption = (option?: IDropdownOption) => {
   if (!option) return null;
   return (
     <div css={optionStyles}>
@@ -44,7 +34,7 @@ const renderDropdownOption = (option?: IDropdownOption) => {
 
 const hasError = (errors: TriggerFormDataErrors) => Object.values(errors).some((msg) => !!msg);
 
-const initialFormData: TriggerFormData = {
+export const initialFormData: TriggerFormData = {
   errors: {},
   $kind: SDKKinds.OnIntent,
   event: '',
@@ -72,12 +62,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const regexIntents = dialogFile?.content?.recognizer?.intents ?? [];
 
   const [formData, setFormData] = useState(initialFormData);
-  const [selectedType, setSelectedType] = useState<string>(intentTypeKey);
-  const showEventDropDown = selectedType === eventTypeKey;
-  const showActivityDropDown = selectedType === activityTypeKey;
-  const eventTypes: IDropdownOption[] = getEventOptions();
-  const activityTypes: IDropdownOption[] = getActivityOptions();
-  const triggerTypeOptions: IDropdownOption[] = getTriggerOptions(recognizer$kind);
+  const [selectedType, setSelectedType] = useState<string>(SDKKinds.OnIntent);
 
   const onClickSubmitButton = (e) => {
     e.preventDefault();
@@ -88,28 +73,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
       return;
     }
     onDismiss();
-    onSubmit(dialogId, formData);
-  };
-
-  const onSelectTriggerType = (e, option) => {
-    setSelectedType(option.key || '');
-    const compoundTypes = [activityTypeKey, eventTypeKey];
-    const isCompound = compoundTypes.some((t) => option.key === t);
-    let newFormData: TriggerFormData = initialFormData;
-    if (isCompound) {
-      newFormData = { ...newFormData, $kind: '' };
-    } else {
-      newFormData = { ...newFormData, $kind: option.key === customEventKey ? SDKKinds.OnDialogEvent : option.key };
-    }
-    setFormData({ ...newFormData, errors: {} });
-  };
-
-  const handleEventTypeChange = (e: React.FormEvent, option?: IDropdownOption) => {
-    if (option) {
-      const errors: TriggerFormDataErrors = {};
-      errors.event = validateEventKind(selectedType, option.key as string);
-      setFormData({ ...formData, $kind: option.key as string, errors: { ...formData.errors, ...errors } });
-    }
+    onSubmit(dialogId, { ...formData, $kind: selectedType });
   };
 
   const errors = validateForm(selectedType, formData, isRegEx, regexIntents);
@@ -140,41 +104,12 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
       onDismiss={onDismiss}
     >
       <div css={dialogWindowStyles}>
-        <Stack>
-          <Dropdown
-            data-testid={'triggerTypeDropDown'}
-            defaultSelectedKey={selectedType}
-            errorMessage={formData.errors.$kind}
-            label={formatMessage('What is the type of this trigger?')}
-            options={triggerTypeOptions}
-            styles={dropdownStyles}
-            onChange={onSelectTriggerType}
-            onRenderOption={renderDropdownOption}
-          />
-          {showEventDropDown && (
-            <Dropdown
-              data-testid={'eventTypeDropDown'}
-              errorMessage={formData.errors.event}
-              label={formatMessage('Which event?')}
-              options={eventTypes}
-              placeholder={formatMessage('Select an event type')}
-              styles={dropdownStyles}
-              onChange={handleEventTypeChange}
-            />
-          )}
-          {showActivityDropDown && (
-            <Dropdown
-              data-testid={'activityTypeDropDown'}
-              errorMessage={formData.errors.activity}
-              label={formatMessage('Which activity type?')}
-              options={activityTypes}
-              placeholder={formatMessage('Select an activity type')}
-              styles={dropdownStyles}
-              onChange={handleEventTypeChange}
-            />
-          )}
-          {triggerWidget}
-        </Stack>
+        <TriggerDropdownGroup
+          recognizerType={recognizer$kind}
+          setTriggerType={setSelectedType}
+          triggerType={selectedType}
+        />
+        {triggerWidget}
       </div>
       <DialogFooter>
         <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
