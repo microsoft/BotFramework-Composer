@@ -16,10 +16,6 @@ const downloadModelTimeoutMs = 90000;
 
 describe('Orchestrator Tests', () => {
   beforeAll(async () => {
-    Utility.toPrintDebuggingLogToConsole = false;
-  });
-
-  beforeAll(async () => {
     // disable Orchestrator Lib console logging across the board - interferes with Jest
     Utility.toPrintDebuggingLogToConsole = false;
 
@@ -27,7 +23,8 @@ describe('Orchestrator Tests', () => {
     const successStatusStub = jest.fn();
 
     let builder = new Builder('', {} as IFileStorage, 'en-us');
-    // download the UT NLR model once before all tests are run - build tests don't work without this
+
+    // download the UT NLR model once before all tests are run - build tests don't work without a valid model
     await builder.runOrchestratorNlrGet(nlrPath, nlrId, progressStatusStub, successStatusStub);
 
     expect(progressStatusStub).toBeCalled();
