@@ -28,7 +28,7 @@ describe('<ProjectTree/>', () => {
     const { findByText } = renderWithRecoil(
       <ProjectTree
         dialogId={dialogId}
-        dialogs={dialogs as DialogInfo[]}
+        dialogs={(dialogs as unknown) as DialogInfo[]}
         selected={selected}
         onDeleteDialog={handleDeleteDialog}
         onDeleteTrigger={handleDeleteTrigger}

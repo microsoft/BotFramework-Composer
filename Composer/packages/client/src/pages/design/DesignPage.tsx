@@ -179,8 +179,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   useEffect(() => {
     const currentDialog = dialogs.find(({ id }) => id === dialogId);
 
-    const dialogContent = currentDialog?.content ? Object.assign({}, currentDialog.content) : { emptyDialog: true };
-    if (!dialogContent.emptyDialog && !dialogContent.id) {
+    const dialogContent = currentDialog?.content ? Object.assign({}, currentDialog.content) : null;
+    if (dialogContent !== null && !dialogContent.id) {
       dialogContent.id = dialogId;
       updateDialog({ id: dialogId, content: dialogContent, projectId });
     }
