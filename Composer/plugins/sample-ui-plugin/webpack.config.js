@@ -18,6 +18,7 @@ module.exports = {
     // expect react & react-dom to be available in the extension host iframe globally under "React" and "ReactDOM" variables
     react: 'React',
     'react-dom': 'ReactDOM',
+    '@bfc/extension-client': 'ExtensionClient',
   },
   module: {
     rules: [{ test: /\.tsx?$/, use: 'ts-loader' }],
