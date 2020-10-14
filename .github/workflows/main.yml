@@ -34,8 +34,8 @@ jobs:
       #    key: ${{ runner.os }}-yarn-new-${{ hashFiles(format('{0}{1}', github.workspace, '/Composer/yarn.lock')) }}
       #    restore-keys: |
       #      ${{ runner.os }}-yarn-new-
-      - name: yarn install
-        run: yarn
+      - name: yarn --frozen-lockfile
+        run: yarn --frozen-lockfile
       - name: yarn build:dev
         run: yarn build:dev
       - name: yarn lint
