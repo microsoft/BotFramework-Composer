@@ -13,6 +13,7 @@ import {
   LuFile,
   LgFile,
   QnAFile,
+  FormDialogSchema,
 } from '@bfc/shared';
 import keys from 'lodash/keys';
 
