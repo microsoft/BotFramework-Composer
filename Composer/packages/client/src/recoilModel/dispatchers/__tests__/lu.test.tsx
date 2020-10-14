@@ -13,9 +13,11 @@ import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
 import { luDispatcher } from '../lu';
 
+const luFeatures = {};
+
 jest.mock('../../parsers/luWorker', () => {
   return {
-    parse: (id, content) => ({ id, content }),
+    parse: (id, content, luFeatures) => ({ id, content, luFeatures }),
     addIntent: require('@bfc/indexers/lib/utils/luUtil').addIntent,
     addIntents: require('@bfc/indexers/lib/utils/luUtil').addIntents,
     updateIntent: require('@bfc/indexers/lib/utils/luUtil').updateIntent,
@@ -29,7 +31,7 @@ const file1 = {
   content: `\r\n# Hello\r\n-hi`,
 };
 
-const luFiles = [luUtil.parse(file1.id, file1.content)] as LuFile[];
+const luFiles = [luUtil.parse(file1.id, file1.content, luFeatures)] as LuFile[];
 
 const getLuIntent = (Name, Body): LuIntentSection =>
   ({

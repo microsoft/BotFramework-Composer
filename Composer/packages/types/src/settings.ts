@@ -31,6 +31,7 @@ export type DialogSetting = {
   MicrosoftAppId?: string;
   MicrosoftAppPassword?: string;
   luis: ILuisConfig;
+  luFeatures: ILUFeaturesConfig;
   qna: IQnAConfig;
   publishTargets?: PublishTarget[];
   runtime: {
@@ -57,6 +58,16 @@ export type ILuisConfig = {
   authoringRegion: string | 'westus';
   defaultLanguage: string | 'en-us';
   environment: string | 'composer';
+};
+
+export type ILUFeaturesConfig = {
+  enablePattern?: boolean;
+  enableMLEntities?: boolean;
+  enableListEntities?: boolean;
+  enableCompositeEntities?: boolean;
+  enablePrebuiltEntities?: boolean;
+  enableRegexEntities?: boolean;
+  enablePhraseLists?: boolean;
 };
 
 export type IQnAConfig = {

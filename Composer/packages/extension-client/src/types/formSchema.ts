@@ -9,10 +9,11 @@ type UIOptionValue<R = string, D = any> = R | UIOptionFunc<R, D>;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type UIOptionFunc<R, D> = (data: D) => R;
 
-export interface Fieldset {
+export interface Fieldset<F = string[] | Fieldset<string[]>[]> {
   title: UIOptionValue<string>;
-  fields?: string[];
+  fields?: F;
   defaultExpanded?: boolean;
+  description?: UIOptionValue<string>;
   itemKey?: string;
 }
 
@@ -75,7 +76,7 @@ export type RecognizerSchema = {
   /** Display name used in the UI. Recommended to use function over static string to enable multi-locale feature. */
   displayName: UIOptionValue<string>;
   /** An inline editor to edit an intent. If none provided, users will not be able to edit. */
-  intentEditor?: FieldWidget;
+  intentEditor?: FieldWidget | string;
   /** A function invoked with the form data to determine if this is the currently selected recognizer */
   isSelected?: (data: any) => boolean;
   /** Invoked when constructing a new recognizer instance.

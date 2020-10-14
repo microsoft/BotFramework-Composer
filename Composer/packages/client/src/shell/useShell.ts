@@ -36,7 +36,7 @@ import { useTriggerApi } from './triggerApi';
 
 const FORM_EDITOR = 'PropertyEditor';
 
-type EventSource = 'FlowEditor' | 'PropertyEditor' | 'DesignPage';
+type EventSource = 'FlowEditor' | 'PropertyEditor' | 'DesignPage' | 'VaCreation';
 
 export function useShell(source: EventSource, projectId: string): Shell {
   const dialogMapRef = useRef({});
@@ -238,10 +238,13 @@ export function useShell(source: EventSource, projectId: string): Shell {
         focusedTab: promptTab,
         clipboardActions,
         hosted: !!isAbsHosted(),
+        luFeatures: settings.luFeatures,
         skills,
         skillsSettings: settings.skill || {},
       }
-    : ({} as ShellData);
+    : ({
+        projectId,
+      } as ShellData);
 
   return {
     api,
