@@ -9,10 +9,11 @@ type UIOptionValue<R = string, D = any> = R | UIOptionFunc<R, D>;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type UIOptionFunc<R, D> = (data: D) => R;
 
-export interface Fieldset {
+export interface Fieldset<F = string[] | Fieldset<string[]>[]> {
   title: UIOptionValue<string>;
-  fields?: string[];
+  fields?: F;
   defaultExpanded?: boolean;
+  description?: UIOptionValue<string>;
   itemKey?: string;
 }
 
