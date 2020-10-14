@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
+import * as formatMessage from 'format-message';
 import * as React from 'react';
 import { useState, useMemo, useEffect, Fragment } from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
@@ -13,9 +14,20 @@ import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { ResourceGroup } from '@azure/arm-resources/esm/models';
 import { DeployLocation } from '@bfc/types';
 import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
+import {
+  DetailsList,
+  DetailsListLayoutMode,
+  SelectionMode,
+  IColumn,
+  IGroup,
+  CheckboxVisibility,
+} from 'office-ui-fabric-react/lib/DetailsList';
+import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
+import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+
 // import { JsonEditor } from '@bfc/code-editor';
 
-import { getSubscriptions, getResourceGroups, getDeployLocations } from './api';
+import { getSubscriptions, getResourceGroups, getDeployLocations, getPreview } from './api';
 
 const extensionResourceOptions = [
   {
@@ -35,11 +47,23 @@ const extensionResourceOptions = [
   //   description: 'Track the performance of your app with app insights',
   // },
 ];
+const resourceTypes = ['Azure Web App', 'Cognitive Services'];
 
 const choiceOptions: IChoiceGroupOption[] = [
   { key: 'create', text: 'Create new Azure resources' },
   { key: 'import', text: 'Import existing Azure resources' },
 ];
+
+function onRenderDetailsHeader(props, defaultRender) {
+  return (
+    <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
+      {defaultRender({
+        ...props,
+        onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
+      })}
+    </Sticky>
+  );
+}
 
 export const AzureProvisionDialog: React.FC = () => {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
@@ -58,6 +82,54 @@ export const AzureProvisionDialog: React.FC = () => {
   const [enabledResources, setEnabledResources] = useState({});
 
   const [importConfig, setImportConfig] = useState();
+  const [page, setPage] = useState(1);
+  const [group, setGroup] = useState<IGroup[]>();
+  const [listItems, setListItem] = useState();
+
+  const columns = [
+    {
+      key: 'Name',
+      name: formatMessage('Name'),
+      className: 'name',
+      fieldName: 'name',
+      minWidth: 70,
+      isRowHeader: true,
+      isResizable: true,
+      data: 'string',
+      onRender: (item: any) => {
+        return <span>{item.name}</span>;
+      },
+      isPadded: true,
+    },
+    {
+      key: 'Type',
+      name: formatMessage('Type'),
+      className: 'type',
+      fieldName: 'type',
+      minWidth: 70,
+      isRowHeader: true,
+      isResizable: true,
+      data: 'string',
+      onRender: (item: any) => {
+        return <span>{item.text}</span>;
+      },
+      isPadded: true,
+    },
+    {
+      key: 'Tier',
+      name: formatMessage('Tier'),
+      className: 'tier',
+      fieldName: 'tier',
+      minWidth: 70,
+      isRowHeader: true,
+      isResizable: true,
+      data: 'string',
+      onRender: (item: any) => {
+        return <span>{item.tier}</span>;
+      },
+      isPadded: true,
+    },
+  ];
 
   useEffect(() => {
     // Load the list of subscriptions for the dropdown....
@@ -129,6 +201,32 @@ export const AzureProvisionDialog: React.FC = () => {
     }
   }, [currentSubscription]);
 
+  const onNext = useMemo(
+    () => (config) => {
+      const result = getPreview(config.hostname);
+      console.log(enabledResources);
+      let items = [] as any;
+      const groups: IGroup[] = [];
+      let startIndex = 0;
+      for (const type of resourceTypes) {
+        const resources = result.filter((item) => enabledResources[item.key] && item.group === type);
+
+        groups.push({
+          key: type,
+          name: type,
+          startIndex: startIndex,
+          count: resources.length,
+        });
+        startIndex = startIndex + resources.length;
+        items = items.concat(resources);
+      }
+      setGroup(groups);
+      setListItem(items);
+      setPage(2);
+    },
+    [enabledResources]
+  );
+
   const onSubmit = useMemo(
     () => async (options) => {
       console.log(options);
@@ -147,7 +245,7 @@ export const AzureProvisionDialog: React.FC = () => {
     []
   );
 
-  return (
+  return page === 1 ? (
     <Fragment>
       <ChoiceGroup defaultSelectedKey="create" options={choiceOptions} onChange={updateChoice} />
       {subscriptionOption?.length && choice.key === 'create' && (
@@ -174,7 +272,7 @@ export const AzureProvisionDialog: React.FC = () => {
             onChange={updateCurrentLocation}
           />
 
-          {extensionResourceOptions.map((resource) => {
+          {/* {extensionResourceOptions.map((resource) => {
             return (
               <Fragment>
                 <section>
@@ -183,7 +281,7 @@ export const AzureProvisionDialog: React.FC = () => {
                 </section>
               </Fragment>
             );
-          })}
+          })} */}
         </form>
       )}
       {choice.key === 'import' && (
@@ -199,6 +297,36 @@ export const AzureProvisionDialog: React.FC = () => {
         </Fragment>
       )}
       {(!subscriptionOption || !subscriptionOption.length) && <Fragment>LOADING</Fragment>}
+      <DialogFooter>
+        <DefaultButton text={'Cancel'} onClick={closeDialog} />
+        <PrimaryButton
+          disabled={!currentSubscription || !currentHostName || errorHostName !== ''}
+          text={'Next'}
+          onClick={() => {
+            onNext({
+              subscription: currentSubscription,
+              hostname: currentHostName,
+              location: currentLocation,
+              type: 'azurePublish', // todo: this should be dynamic
+              externalResources: extensionResourceOptions,
+            });
+          }}
+        />
+      </DialogFooter>
+    </Fragment>
+  ) : (
+    <Fragment>
+      <DetailsList
+        isHeaderVisible
+        checkboxVisibility={CheckboxVisibility.hidden}
+        columns={columns}
+        getKey={(item) => item.key}
+        groups={group}
+        items={listItems}
+        layoutMode={DetailsListLayoutMode.justified}
+        setKey="none"
+        onRenderDetailsHeader={onRenderDetailsHeader}
+      />
       <DialogFooter>
         <DefaultButton text={'Cancel'} onClick={closeDialog} />
         <PrimaryButton

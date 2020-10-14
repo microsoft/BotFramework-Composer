@@ -16,20 +16,6 @@ import debug from 'debug';
 
 import { AzureAPIStatus, AzureResourceProviderType } from './types';
 
-const AzureResourceTypes = {
-  APP_REGISTRATION: 'appRegistration',
-  BOT_REGISTRATION: 'botRegistration',
-  WEBAPP: 'webApp',
-  AZUREFUNCTIONS: 'azureFunctions',
-  COSMODB: 'cosmoDb',
-  APPINSIGHTS: 'applicationInsights',
-  LUIS_AUTHORING: 'luisAuthoring',
-  LUIS_PREDICTION: 'luisPrediction',
-  BLOBSTORAGE: 'blobStorage',
-  QNA: 'qna',
-  SERVICE_PLAN: 'servicePlan'
-};
-
 const logger = debug('composer:extension:azureProvision');
 
 export const getSubscriptions = async (token: string): Promise<Array<Subscription>> => {
@@ -383,14 +369,7 @@ export const CheckCognitiveResourceSku = async (
 /**
  * Get preview and description of resources
  */
-export const getPreview = (
-  hostname: string,
-  luis: boolean = false,
-  luisAuthoring: boolean = false,
-  cosmosDb: boolean = false,
-  blobStorage: boolean = false
-) => {
-  let previewList = {};
+export const getPreview = (hostname: string) => {
   const azureWebAppName = `${hostname}`;
   const azureServicePlanName = `${hostname}`;
   const botServiceName = `${hostname}`;
@@ -401,82 +380,105 @@ export const getPreview = (
   const qnaAccountName = `${hostname}-qna`;
   const applicationInsightsName = `${hostname}`;
 
-  previewList[AzureResourceTypes.WEBAPP] = {
-    description: 'App Service Web Apps lets you quickly build, deploy, and scale enterprise-grade web, mobile, and API apps running on any platform. Hosting for your bot.',
-    text: 'Azure Web App',
-    name: azureWebAppName,
-    tier: 'S1 Standard'
-  };
-
-  previewList[AzureResourceTypes.APP_REGISTRATION] = {
-    description: 'Required registration allowing your bot to communicate with Azure services.',
-    text: 'Microsoft Application Registration',
-    name: 'Microsoft Application Registration',
-    tier: 'Free'
-  };
-
-  previewList[AzureResourceTypes.BOT_REGISTRATION] = {
-    description: 'Your own Bot hosted where you want, registered with the Azure Bot Service. Build, connect, and manage Bots to interact with your users wherever they are - from your app or website to Cortana, Skype, Messenger and many other services.',
-    text: 'Microsoft Bot Channels Registration',
-    name: botServiceName,
-    tier: 'F0'
-  };
-
-  previewList[AzureResourceTypes.AZUREFUNCTIONS] = {
-    description: 'Azure Functions hosting your bot services.',
-    text: 'Azure Functions',
-    name: azureWebAppName,
-    tier: 'S1 Standard'
-  };
-
-  previewList[AzureResourceTypes.COSMODB] = {
-    description: 'Azure Cosmos DB is a fully managed, globally-distributed, horizontally scalable in storage and throughput, multi-model database service backed up by comprehensive SLAs. It will be used for bot state retrieving.',
-    text: 'Azure Cosmos DB',
-    name: cosmosDbName,
-    tier: 'Pay as you go'
-  };
-
-  previewList[AzureResourceTypes.BLOBSTORAGE] = {
-    description: 'Microsoft Azure provides scalable, durable cloud storage, backup, and recovery solutions for any data, big or small. Used for bot transcripts logging.',
-    text: 'Azure Blob Storage',
-    name: blobStorageName,
-    tier: 'Standard_LRS'
-  };
-
-  previewList[AzureResourceTypes.APPINSIGHTS] = {
-    description: 'Application performance, availability and usage information at your fingertips. Used for Bot chatting data analyzing.',
-    text: 'Application Insights',
-    name: applicationInsightsName,
-    tier: 'Pay as you go'
-  };
-
-  previewList[AzureResourceTypes.LUIS_AUTHORING] = {
-    description: 'Language Understanding (LUIS) is a natural language processing service that enables you to understand human language in your own application, website, chatbot, IoT device, and more. Used for Luis app authoring.',
-    text: 'Microsoft Language Understanding Authoring Account',
-    name: luisAuthoringName,
-    tier: 'F0'
-  };
-
-  previewList[AzureResourceTypes.LUIS_PREDICTION] = {
-    description: 'Language Understanding (LUIS) is a natural language processing service that enables you to understand human language in your own application, website, chatbot, IoT device, and more. Used for Luis endpoint hitting.',
-    text: 'Microsoft Language Understanding Prediction Account',
-    name: luisResourceName,
-    tier: 'S0 Standard'
-  };
-
-  previewList[AzureResourceTypes.QNA] = {
-    description: 'QnA Maker is a cloud-based API service that lets you create a conversational question-and-answer layer over your existing data. Use it to build a knowledge base by extracting questions and answers from your content, including FAQs, manuals, and documents. ',
-    text: 'Microsoft QnA Maker',
-    name: qnaAccountName,
-    tier: 'S0 Standard'
-  };
-
-  previewList[AzureResourceTypes.SERVICE_PLAN] = {
-    description: 'App Service plans give you the flexibility to allocate specific apps to a given set of resources and further optimize your Azure resource utilization. This way, if you want to save money on your testing environment you can share a plan across multiple apps.',
-    text: 'Microsoft App Service Plan',
-    name: azureServicePlanName,
-    tier: 'S1 Standard'
-  };
+  const previewList = [
+    {
+      description:
+        'App Service Web Apps lets you quickly build, deploy, and scale enterprise-grade web, mobile, and API apps running on any platform. Hosting for your bot.',
+      text: 'Azure Web App',
+      name: azureWebAppName,
+      tier: 'S1 Standard',
+      group: 'Azure Web App',
+      key: 'webApp',
+    },
+    {
+      description: 'Required registration allowing your bot to communicate with Azure services.',
+      text: 'Microsoft Application Registration',
+      name: 'Microsoft Application Registration',
+      tier: 'Free',
+      group: 'Azure Web App',
+      key: 'appRegistration',
+    },
+    {
+      description:
+        'Your own Bot hosted where you want, registered with the Azure Bot Service. Build, connect, and manage Bots to interact with your users wherever they are - from your app or website to Cortana, Skype, Messenger and many other services.',
+      text: 'Microsoft Bot Channels Registration',
+      name: botServiceName,
+      tier: 'F0',
+      group: 'Azure Web App',
+      key: 'botRegistration',
+    },
+    {
+      description: 'Azure Functions hosting your bot services.',
+      text: 'Azure Functions',
+      name: azureWebAppName,
+      tier: 'S1 Standard',
+      group: 'Azure Web App',
+      key: 'azureFunctions',
+    },
+    {
+      description:
+        'Azure Cosmos DB is a fully managed, globally-distributed, horizontally scalable in storage and throughput, multi-model database service backed up by comprehensive SLAs. It will be used for bot state retrieving.',
+      text: 'Azure Cosmos DB',
+      name: cosmosDbName,
+      tier: 'Pay as you go',
+      group: 'Azure Web App',
+      key: 'cosmoDb',
+    },
+    {
+      description:
+        'Microsoft Azure provides scalable, durable cloud storage, backup, and recovery solutions for any data, big or small. Used for bot transcripts logging.',
+      text: 'Azure Blob Storage',
+      name: blobStorageName,
+      tier: 'Standard_LRS',
+      group: 'Azure Web App',
+      key: 'blobStorage',
+    },
+    {
+      description:
+        'Application performance, availability and usage information at your fingertips. Used for Bot chatting data analyzing.',
+      text: 'Application Insights',
+      name: applicationInsightsName,
+      tier: 'Pay as you go',
+      group: 'Azure Web App',
+      key: 'applicationInsights',
+    },
+    {
+      description:
+        'Language Understanding (LUIS) is a natural language processing service that enables you to understand human language in your own application, website, chatbot, IoT device, and more. Used for Luis app authoring.',
+      text: 'Microsoft Language Understanding Authoring Account',
+      name: luisAuthoringName,
+      tier: 'F0',
+      group: 'Cognitive Services',
+      key: 'luisAuthoring',
+    },
+    {
+      description:
+        'Language Understanding (LUIS) is a natural language processing service that enables you to understand human language in your own application, website, chatbot, IoT device, and more. Used for Luis endpoint hitting.',
+      text: 'Microsoft Language Understanding Prediction Account',
+      name: luisResourceName,
+      tier: 'S0 Standard',
+      group: 'Cognitive Services',
+      key: 'luisPrediction',
+    },
+    {
+      description:
+        'QnA Maker is a cloud-based API service that lets you create a conversational question-and-answer layer over your existing data. Use it to build a knowledge base by extracting questions and answers from your content, including FAQs, manuals, and documents. ',
+      text: 'Microsoft QnA Maker',
+      name: qnaAccountName,
+      tier: 'S0 Standard',
+      group: 'Cognitive Services',
+      key: 'qna',
+    },
+    {
+      description:
+        'App Service plans give you the flexibility to allocate specific apps to a given set of resources and further optimize your Azure resource utilization. This way, if you want to save money on your testing environment you can share a plan across multiple apps.',
+      text: 'Microsoft App Service Plan',
+      name: azureServicePlanName,
+      tier: 'S1 Standard',
+      group: 'Azure Web App',
+      key: 'servicePlan',
+    },
+  ];
 
   return previewList;
 };
