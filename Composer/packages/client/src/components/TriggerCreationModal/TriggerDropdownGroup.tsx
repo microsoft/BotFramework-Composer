@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { FC, useState } from 'react';
+import React, { FC, useMemo, useState } from 'react';
 import formatMessage from 'format-message';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
@@ -12,6 +12,8 @@ import { activityTypeKey, dialogEventKey } from './constants';
 import { dropdownStyles } from './styles';
 import { getEventOptions, getActivityOptions, checkTriggerOptions, getTriggerOptions } from './getDropdownOptions';
 import { renderDropdownOption } from './TriggerCreationModal';
+import { generateTriggerOptionTree } from './TriggerOptionTree';
+import { builtinTriggerUISchema } from './schema/builtinSchema';
 
 export interface TriggerDropwdownGroupProps {
   recognizerType: SDKKinds | undefined;
@@ -49,6 +51,10 @@ export const TriggerDropdownGroup: FC<TriggerDropwdownGroupProps> = ({
     setChildKey(option.key);
     setTriggerType(option.key);
   };
+
+  const triggerOptionTree = useMemo(() => {
+    return generateTriggerOptionTree(builtinTriggerUISchema);
+  }, []);
 
   return (
     <Stack>

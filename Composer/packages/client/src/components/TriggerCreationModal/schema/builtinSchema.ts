@@ -3,9 +3,9 @@
 
 import { SDKKinds } from '@bfc/shared';
 
-import { TriggerUIOption } from './TriggerOption';
+import { TriggerUIOptionMap } from './TriggerOption';
 
-export const builtinSchema: { [key: string]: TriggerUIOption } = {
+export const builtinTriggerUISchema: TriggerUIOptionMap = {
   [SDKKinds.OnIntent]: {
     label: 'Intent recognized',
   },
