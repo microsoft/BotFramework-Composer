@@ -16,6 +16,7 @@ import { useLocation, useRouterCache } from '../utils/hooks';
 import { dispatcherState } from '../recoilModel';
 
 import { QnAIcon } from './QnAIcon';
+import { BotProjectsSettingsIcon } from './BotProjectsSettingsIcon';
 // -------------------- Styles -------------------- //
 
 const link = (active: boolean, disabled: boolean) => css`
@@ -99,12 +100,23 @@ export const NavItem: React.FC<INavItemProps> = (props) => {
   const active = pathname.startsWith(to);
 
   const addRef = useCallback((ref) => onboardingAddCoachMarkRef({ [`nav${labelName.replace(' ', '')}`]: ref }), []);
-  const iconElement =
-    iconName === 'QnAIcon' ? (
-      <QnAIcon active={active} disabled={disabled} />
-    ) : (
-      <Icon iconName={iconName} styles={icon(active, disabled)} />
-    );
+
+  const getIcon = (iconName: string) => {
+    let navIcon;
+    switch (iconName) {
+      case 'QnAIcon':
+        navIcon = <QnAIcon active={active} disabled={disabled} />;
+        break;
+      case 'BotProjectsSettings':
+        navIcon = <BotProjectsSettingsIcon active={active} disabled={disabled} />;
+        break;
+      default:
+        navIcon = <Icon iconName={iconName} styles={icon(active, disabled)} />;
+    }
+    return navIcon;
+  };
+
+  const iconElement = getIcon(iconName);
   const activeArea = (
     <div
       aria-disabled={disabled}

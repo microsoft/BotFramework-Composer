@@ -66,7 +66,7 @@ export const topLinks = (projectId: string, openedDialogId: string, pluginPages:
     },
     {
       to: `/bot/${projectId}/botProjectsSettings`,
-      iconName: 'WaffleOffice365',
+      iconName: 'BotProjectsSettings',
       labelName: formatMessage('Bot Projects'),
       exact: true,
       disabled: !botLoaded,

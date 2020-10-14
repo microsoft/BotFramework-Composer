@@ -18,6 +18,7 @@ export const container = css`
   display: flex;
   flex-direction: column;
   max-width: 1000px;
+  height: 100%;
 `;
 
 export const titleStyle = {
@@ -32,6 +33,11 @@ export const botNameStyle = css`
   font-weight: ${FontWeights.semibold};
   color: ${NeutralColors.black};
   margin-bottom: 27px;
+`;
+
+export const mainContentHeader = css`
+  display: flex;
+  justify-content: space-between;
 `;
 
 export const labelContainer = css`
@@ -72,6 +78,7 @@ export const botLanguageFieldStyle = css`
 export const manageBotLanguage = {
   root: {
     fontSize: 12,
+    fontWeight: FontWeights.regular,
     color: SharedColors.cyanBlue10,
     paddingLeft: 0,
   },
@@ -120,3 +127,99 @@ export const deleteBotButton = {
     color: NeutralColors.white,
   },
 };
+
+export const publishTargetsContainer = css`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const publishTargetsHeader = css`
+  display: flex;
+  flex-direction: row;
+  height: 42px;
+`;
+
+export const publishTargetsHeaderText = css`
+  width: 200px;
+  font-size: ${FontSizes.medium};
+  font-weight: ${FontWeights.semibold};
+  border-bottom: 1px solid ${NeutralColors.gray30};
+  padding-top: 10px;
+  padding-left: 10px;
+`;
+
+export const publishTargetsItem = css`
+  display: flex;
+  flex-direction: row;
+  height: 42px;
+`;
+
+export const publishTargetsItemText = css`
+  width: 200px;
+  font-size: ${FontSizes.medium};
+  font-weight: ${FontWeights.regular};
+  border-bottom: 1px solid ${NeutralColors.gray30};
+  padding-top: 10px;
+  padding-left: 10px;
+`;
+
+export const addPublishProfile = {
+  root: {
+    fontSize: 12,
+    fontWeight: FontWeights.regular,
+    color: SharedColors.cyanBlue10,
+    paddingLeft: 0,
+    marginLeft: 5,
+  },
+};
+
+export const editPublishProfile = {
+  root: {
+    fontSize: 12,
+    fontWeight: FontWeights.regular,
+    color: SharedColors.cyanBlue10,
+    paddingLeft: 0,
+    paddingBottom: 5,
+  },
+};
+
+export const publishTargetsEditButton = css`
+  width: 200px;
+  font-size: ${FontSizes.medium};
+  font-weight: ${FontWeights.regular};
+  border-bottom: 1px solid ${NeutralColors.gray30};
+  padding-top: 3px;
+  padding-left: 10px;
+`;
+
+export const runtimeSettingsStyle = css`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+`;
+
+export const runtimeControls = css`
+  margin-bottom: 18px;
+
+  & > h1 {
+    margin-top: 0;
+  }
+`;
+
+export const runtimeToggle = css`
+  display: flex;
+
+  & > * {
+    margin-right: 2rem;
+  }
+`;
+
+export const breathingSpace = css`
+  margin-bottom: 1rem;
+`;
