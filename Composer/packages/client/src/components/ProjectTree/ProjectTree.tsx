@@ -20,7 +20,7 @@ import {
   validateDialogSelectorFamily,
 } from '../../recoilModel';
 import { getFriendlyName } from '../../utils/dialogUtil';
-import { containUnsupportedTriggers, triggerNotSupported } from '../../utils/dialogValidator';
+import { triggerNotSupported } from '../../utils/dialogValidator';
 
 import { TreeItem } from './treeItem';
 import { ExpandableNode } from './ExpandableNode';
@@ -159,7 +159,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
   }
 
   const dialogHasWarnings = (dialog: DialogInfo) => {
-    dialog.triggers.some((tr) => triggerNotSupported(dialog, tr));
+    notificationMap[currentProjectId][dialog.id].some((diag) => diag.severity === DiagnosticSeverity.Warning);
   };
 
   const botHasWarnings = (bot: BotInProject) => {
@@ -167,8 +167,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
   };
 
   const dialogHasErrors = (dialog: DialogInfo) => {
-    console.log(notificationMap[currentProjectId][dialog.id]);
-    notificationMap[currentProjectId][dialog.id].some((diag) => diag.message != null);
+    notificationMap[currentProjectId][dialog.id].some((diag) => diag.severity === DiagnosticSeverity.Error);
   };
 
   const botHasErrors = (bot: BotInProject) => {
@@ -347,16 +346,14 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
             key={dialog.id}
             depth={startDepth}
             detailsRef={dialog.isRoot ? addMainDialogRef : undefined}
-            summary={renderDialogHeader(projectId, dialog, containUnsupportedTriggers(dialog), errorContent)}
+            summary={renderDialogHeader(projectId, dialog)}
           >
             <div>{triggerList}</div>
           </ExpandableNode>
         );
       });
     } else {
-      return filteredDialogs.map((dialog: DialogInfo) =>
-        renderDialogHeader(projectId, dialog, containUnsupportedTriggers(dialog), '')
-      );
+      return filteredDialogs.map((dialog: DialogInfo) => renderDialogHeader(projectId, dialog));
     }
   }
 

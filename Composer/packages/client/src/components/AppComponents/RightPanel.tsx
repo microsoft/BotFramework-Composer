@@ -37,7 +37,7 @@ const content = css`
 
 const Content = forwardRef<HTMLDivElement>((props, ref) => <div css={content} {...props} ref={ref} />);
 
-const SHOW_TREE = ['design'];
+// const SHOW_TREE = ['design'];
 
 export const RightPanel = () => {
   const applicationError = useRecoilValue(applicationErrorState);
