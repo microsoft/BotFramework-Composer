@@ -51,7 +51,7 @@
     "@bfc/indexers": "../../packages/lib/indexers",
     "@bfc/shared": "../../packages/lib/shared",
     "@bfc/types": "../../packages/types",
-    "@microsoft/bf-lu": "^4.10.0-dev.20200808.5a7c973",
+    "@microsoft/bf-lu": "^4.11.0-dev.20201005.7e5e1b8",
     "@types/archiver": "3.1.0",
     "@types/fs-extra": "8.1.0",
     "@types/request": "2.48.4",

@@ -299,7 +299,7 @@
 "@bfc/indexers@../../packages/lib/indexers":
   version "0.0.0"
   dependencies:
-    "@microsoft/bf-lu" "^4.10.0-dev.20200808.5a7c973"
+    "@microsoft/bf-lu" "^4.11.0-dev.20201005.7e5e1b8"
     adaptive-expressions "4.10.0-preview-147186"
     botbuilder-lg "^4.10.0-preview-150886"
     lodash "^4.17.19"
@@ -447,15 +447,13 @@
     "@uifabric/utilities" "^7.32.4"
     tslib "^1.10.0"
 
-"@microsoft/bf-lu@^4.10.0-dev.20200808.5a7c973":
-  version "4.10.1"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.10.1.tgz#ac4cbbde522d6b7f163e781e9976c8af0ef0833a"
-  integrity sha1-rEy73lIta38WPngemXbIrw7wgzo=
+"@microsoft/bf-lu@^4.11.0-dev.20201005.7e5e1b8":
+  version "4.11.0-dev.20201013.7ccb128"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.11.0-dev.20201013.7ccb128.tgz#9dbb5043d3f7a384d1449c73fd984016b5115ca4"
+  integrity sha1-nbtQQ9P3o4TRRJxz/ZhAFrURXKQ=
   dependencies:
     "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
     "@azure/ms-rest-azure-js" "2.0.1"
-    "@oclif/command" "~1.5.19"
-    "@oclif/errors" "~1.2.2"
     "@types/node-fetch" "~2.5.5"
     antlr4 "^4.7.2"
     chalk "2.4.1"
@@ -469,7 +467,7 @@
     lodash "^4.17.19"
     node-fetch "~2.6.0"
     semver "^5.5.1"
-    tslib "^1.10.0"
+    tslib "^2.0.3"
 
 "@microsoft/load-themed-styles@^1.10.26":
   version "1.10.109"
@@ -509,108 +507,6 @@
   dependencies:
     "@nodelib/fs.scandir" "2.1.3"
     fastq "^1.6.0"
-
-"@oclif/command@^1.5.13", "@oclif/command@^1.5.20":
-  version "1.8.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@oclif/command/-/@oclif/command-1.8.0.tgz#c1a499b10d26e9d1a611190a81005589accbb339"
-  integrity sha1-waSZsQ0m6dGmERkKgQBViazLszk=
-  dependencies:
-    "@oclif/config" "^1.15.1"
-    "@oclif/errors" "^1.3.3"
-    "@oclif/parser" "^3.8.3"
-    "@oclif/plugin-help" "^3"
-    debug "^4.1.1"
-    semver "^7.3.2"
-
-"@oclif/command@~1.5.19":
-  version "1.5.20"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@oclif/command/-/@oclif/command-1.5.20.tgz#bb0693586d7d66a457c49b719e394c02ff0169a7"
-  integrity sha1-uwaTWG19ZqRXxJtxnjlMAv8Baac=
-  dependencies:
-    "@oclif/config" "^1"
-    "@oclif/errors" "^1.2.2"
-    "@oclif/parser" "^3.8.3"
-    "@oclif/plugin-help" "^2"
-    debug "^4.1.1"
-    semver "^5.6.0"
-
-"@oclif/config@^1", "@oclif/config@^1.15.1":
-  version "1.17.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@oclif/config/-/@oclif/config-1.17.0.tgz#ba8639118633102a7e481760c50054623d09fcab"
-  integrity sha1-uoY5EYYzECp+SBdgxQBUYj0J/Ks=
-  dependencies:
-    "@oclif/errors" "^1.3.3"
-    "@oclif/parser" "^3.8.0"
-    debug "^4.1.1"
-    globby "^11.0.1"
-    is-wsl "^2.1.1"
-    tslib "^2.0.0"
-
-"@oclif/errors@^1.2.2", "@oclif/errors@^1.3.3":
-  version "1.3.3"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@oclif/errors/-/@oclif/errors-1.3.3.tgz#fb597dfbc58c6b8609dc0b2fdf91a2d487818a82"
-  integrity sha1-+1l9+8WMa4YJ3Asv35Gi1IeBioI=
-  dependencies:
-    clean-stack "^3.0.0"
-    fs-extra "^9.0.1"
-    indent-string "^4.0.0"
-    strip-ansi "^6.0.0"
-    wrap-ansi "^7.0.0"
-
-"@oclif/errors@~1.2.2":
-  version "1.2.2"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@oclif/errors/-/@oclif/errors-1.2.2.tgz#9d8f269b15f13d70aa93316fed7bebc24688edc2"
-  integrity sha1-nY8mmxXxPXCqkzFv7XvrwkaI7cI=
-  dependencies:
-    clean-stack "^1.3.0"
-    fs-extra "^7.0.0"
-    indent-string "^3.2.0"
-    strip-ansi "^5.0.0"
-    wrap-ansi "^4.0.0"
-
-"@oclif/linewrap@^1.0.0":
-  version "1.0.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@oclif/linewrap/-/@oclif/linewrap-1.0.0.tgz#aedcb64b479d4db7be24196384897b5000901d91"
-  integrity sha1-rty2S0edTbe+JBljhIl7UACQHZE=
-
-"@oclif/parser@^3.8.0", "@oclif/parser@^3.8.3":
-  version "3.8.5"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@oclif/parser/-/@oclif/parser-3.8.5.tgz#c5161766a1efca7343e1f25d769efbefe09f639b"
-  integrity sha1-xRYXZqHvynND4fJddp777+CfY5s=
-  dependencies:
-    "@oclif/errors" "^1.2.2"
-    "@oclif/linewrap" "^1.0.0"
-    chalk "^2.4.2"
-    tslib "^1.9.3"
-
-"@oclif/plugin-help@^2":
-  version "2.2.3"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@oclif/plugin-help/-/@oclif/plugin-help-2.2.3.tgz#b993041e92047f0e1762668aab04d6738ac06767"
-  integrity sha1-uZMEHpIEfw4XYmaKqwTWc4rAZ2c=
-  dependencies:
-    "@oclif/command" "^1.5.13"
-    chalk "^2.4.1"
-    indent-string "^4.0.0"
-    lodash.template "^4.4.0"
-    string-width "^3.0.0"
-    strip-ansi "^5.0.0"
-    widest-line "^2.0.1"
-    wrap-ansi "^4.0.0"
-
-"@oclif/plugin-help@^3":
-  version "3.2.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@oclif/plugin-help/-/@oclif/plugin-help-3.2.0.tgz#b2c1112f49202ebce042f86b2e42e49908172ef1"
-  integrity sha1-ssERL0kgLrzgQvhrLkLkmQgXLvE=
-  dependencies:
-    "@oclif/command" "^1.5.20"
-    "@oclif/config" "^1.15.1"
-    chalk "^2.4.1"
-    indent-string "^4.0.0"
-    lodash.template "^4.4.0"
-    string-width "^4.2.0"
-    strip-ansi "^6.0.0"
-    widest-line "^3.1.0"
-    wrap-ansi "^4.0.0"
 
 "@types/anymatch@*":
   version "1.3.1"
@@ -1127,20 +1023,10 @@ ansi-regex@^2.0.0:
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/ansi-regex/-/ansi-regex-2.1.1.tgz#c3b33ab5ee360d86e0e628f0468ae7ef27d654df"
   integrity sha1-w7M6te42DYbg5ijwRorn7yfWVN8=
 
-ansi-regex@^3.0.0:
-  version "3.0.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/ansi-regex/-/ansi-regex-3.0.0.tgz#ed0317c322064f79466c02966bddb605ab37d998"
-  integrity sha1-7QMXwyIGT3lGbAKWa922Bas32Zg=
-
 ansi-regex@^4.1.0:
   version "4.1.0"
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/ansi-regex/-/ansi-regex-4.1.0.tgz#8b9f8f08cf1acb843756a839ca8c7e3168c51997"
   integrity sha1-i5+PCM8ay4Q3Vqg5yox+MWjFGZc=
-
-ansi-regex@^5.0.0:
-  version "5.0.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/ansi-regex/-/ansi-regex-5.0.0.tgz#388539f55179bf39339c81af30a654d69f87cb75"
-  integrity sha1-OIU59VF5vzkznIGvMKZU1p+Hy3U=
 
 ansi-styles@^3.2.0, ansi-styles@^3.2.1:
   version "3.2.1"
@@ -1148,13 +1034,6 @@ ansi-styles@^3.2.0, ansi-styles@^3.2.1:
   integrity sha1-QfuyAkPlCxK+DwS43tvwdSDOhB0=
   dependencies:
     color-convert "^1.9.0"
-
-ansi-styles@^4.0.0:
-  version "4.3.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/ansi-styles/-/ansi-styles-4.3.0.tgz#edd803628ae71c04c85ae7a0906edad34b648937"
-  integrity sha1-7dgDYornHATIWuegkG7a00tkiTc=
-  dependencies:
-    color-convert "^2.0.1"
 
 antlr4@^4.7.2:
   version "4.8.0"
@@ -1671,7 +1550,7 @@ chalk@2.4.1:
     escape-string-regexp "^1.0.5"
     supports-color "^5.3.0"
 
-chalk@^2.0.0, chalk@^2.3.0, chalk@^2.4.1, chalk@^2.4.2:
+chalk@^2.0.0, chalk@^2.3.0, chalk@^2.4.2:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-2.4.2.tgz#cd42541677a54333cf541a49108c1432b44c9424"
   integrity sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==
@@ -1761,18 +1640,6 @@ clean-css@^4.2.3:
   dependencies:
     source-map "~0.6.0"
 
-clean-stack@^1.3.0:
-  version "1.3.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/clean-stack/-/clean-stack-1.3.0.tgz#9e821501ae979986c46b1d66d2d432db2fd4ae31"
-  integrity sha1-noIVAa6XmYbEax1m0tQy2y/UrjE=
-
-clean-stack@^3.0.0:
-  version "3.0.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/clean-stack/-/clean-stack-3.0.0.tgz#a7c249369fcf0f33c7888c20ea3f3dc79620211f"
-  integrity sha1-p8JJNp/PDzPHiIwg6j89x5YgIR8=
-  dependencies:
-    escape-string-regexp "4.0.0"
-
 cliui@^5.0.0:
   version "5.0.0"
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/cliui/-/cliui-5.0.0.tgz#deefcfdb2e800784aa34f46fa08e06851c7bbbc5"
@@ -1797,22 +1664,10 @@ color-convert@^1.9.0:
   dependencies:
     color-name "1.1.3"
 
-color-convert@^2.0.1:
-  version "2.0.1"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/color-convert/-/color-convert-2.0.1.tgz#72d3a68d598c9bdb3af2ad1e84f21d896abd4de3"
-  integrity sha1-ctOmjVmMm9s68q0ehPIdiWq9TeM=
-  dependencies:
-    color-name "~1.1.4"
-
 color-name@1.1.3:
   version "1.1.3"
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/color-name/-/color-name-1.1.3.tgz#a7d0558bd89c42f795dd42328f740831ca53bc25"
   integrity sha1-p9BVi9icQveV3UIyj3QIMcpTvCU=
-
-color-name@~1.1.4:
-  version "1.1.4"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/color-name/-/color-name-1.1.4.tgz#c2a09a87acbde69543de6f63fa3995c826c536a2"
-  integrity sha1-wqCah6y95pVD3m9j+jmVyCbFNqI=
 
 combined-stream@^1.0.6, combined-stream@^1.0.8, combined-stream@~1.0.6:
   version "1.0.8"
@@ -2252,11 +2107,6 @@ emoji-regex@^7.0.1:
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/emoji-regex/-/emoji-regex-7.0.3.tgz#933a04052860c85e83c122479c4748a8e4c72156"
   integrity sha1-kzoEBShgyF6DwSJHnEdIqOTHIVY=
 
-emoji-regex@^8.0.0:
-  version "8.0.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/emoji-regex/-/emoji-regex-8.0.0.tgz#e818fd69ce5ccfcb404594f842963bf53164cc37"
-  integrity sha1-6Bj9ac5cz8tARZT4QpY79TFkzDc=
-
 emojis-list@^3.0.0:
   version "3.0.0"
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/emojis-list/-/emojis-list-3.0.0.tgz#5570662046ad29e2e916e71aae260abdff4f6a78"
@@ -2345,11 +2195,6 @@ es-to-primitive@^1.2.1:
     is-callable "^1.1.4"
     is-date-object "^1.0.1"
     is-symbol "^1.0.2"
-
-escape-string-regexp@4.0.0:
-  version "4.0.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/escape-string-regexp/-/escape-string-regexp-4.0.0.tgz#14ba83a5d373e3d311e5afca29cf5bfad965bf34"
-  integrity sha1-FLqDpdNz49MR5a/KKc9b+tllvzQ=
 
 escape-string-regexp@^1.0.5:
   version "1.0.5"
@@ -2659,15 +2504,6 @@ fs-extra@8.1.0, fs-extra@^8.1.0:
     jsonfile "^4.0.0"
     universalify "^0.1.0"
 
-fs-extra@^7.0.0:
-  version "7.0.1"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/fs-extra/-/fs-extra-7.0.1.tgz#4f189c44aa123b895f722804f55ea23eadc348e9"
-  integrity sha1-TxicRKoSO4lfcigE9V6iPq3DSOk=
-  dependencies:
-    graceful-fs "^4.1.2"
-    jsonfile "^4.0.0"
-    universalify "^0.1.0"
-
 fs-extra@^9.0.1:
   version "9.0.1"
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/fs-extra/-/fs-extra-9.0.1.tgz#910da0062437ba4c39fedd863f1675ccfefcb9fc"
@@ -2822,7 +2658,7 @@ globby@^10.0.1:
     merge2 "^1.2.3"
     slash "^3.0.0"
 
-globby@^11.0.0, globby@^11.0.1:
+globby@^11.0.0:
   version "11.0.1"
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/globby/-/globby-11.0.1.tgz#9a2bf107a068f3ffeabc49ad702c79ede8cfd357"
   integrity sha1-mivxB6Bo8//qvEmtcCx57ejP01c=
@@ -3028,16 +2864,6 @@ imurmurhash@^0.1.4:
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/imurmurhash/-/imurmurhash-0.1.4.tgz#9218b9b2b928a238b13dc4fb6b6d576f231453ea"
   integrity sha1-khi5srkoojixPcT7a21XbyMUU+o=
 
-indent-string@^3.2.0:
-  version "3.2.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/indent-string/-/indent-string-3.2.0.tgz#4a5fd6d27cc332f37e5419a504dbb837105c9289"
-  integrity sha1-Sl/W0nzDMvN+VBmlBNu4NxBckok=
-
-indent-string@^4.0.0:
-  version "4.0.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/indent-string/-/indent-string-4.0.0.tgz#624f8f4497d619b2d9768531d58f4122854d7251"
-  integrity sha1-Yk+PRJfWGbLZdoUx1Y9BIoVNclE=
-
 infer-owner@^1.0.3:
   version "1.0.4"
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/infer-owner/-/infer-owner-1.0.4.tgz#c4cefcaa8e51051c2a40ba2ce8a3d27295af9467"
@@ -3173,11 +2999,6 @@ is-descriptor@^1.0.0, is-descriptor@^1.0.2:
     is-data-descriptor "^1.0.0"
     kind-of "^6.0.2"
 
-is-docker@^2.0.0:
-  version "2.1.1"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/is-docker/-/is-docker-2.1.1.tgz#4125a88e44e450d384e09047ede71adc2d144156"
-  integrity sha1-QSWojkTkUNOE4JBH7eca3C0UQVY=
-
 is-extendable@^0.1.0, is-extendable@^0.1.1:
   version "0.1.1"
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/is-extendable/-/is-extendable-0.1.1.tgz#62b110e289a471418e3ec36a617d472e301dfc89"
@@ -3199,11 +3020,6 @@ is-fullwidth-code-point@^2.0.0:
   version "2.0.0"
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/is-fullwidth-code-point/-/is-fullwidth-code-point-2.0.0.tgz#a3b30a5c4f199183167aaab93beefae3ddfb654f"
   integrity sha1-o7MKXE8ZkYMWeqq5O+764937ZU8=
-
-is-fullwidth-code-point@^3.0.0:
-  version "3.0.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/is-fullwidth-code-point/-/is-fullwidth-code-point-3.0.0.tgz#f116f8064fe90b3f7844a38997c0b75051269f1d"
-  integrity sha1-8Rb4Bk/pCz94RKOJl8C3UFEmnx0=
 
 is-glob@^3.1.0:
   version "3.1.0"
@@ -3271,13 +3087,6 @@ is-wsl@^1.1.0:
   version "1.1.0"
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/is-wsl/-/is-wsl-1.1.0.tgz#1f16e4aa22b04d1336b66188a66af3c600c3a66d"
   integrity sha1-HxbkqiKwTRM2tmGIpmrzxgDDpm0=
-
-is-wsl@^2.1.1:
-  version "2.2.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/is-wsl/-/is-wsl-2.2.0.tgz#74a4c76e77ca9fd3f932f290c17ea326cd157271"
-  integrity sha1-dKTHbnfKn9P5MvKQwX6jJs0VcnE=
-  dependencies:
-    is-docker "^2.0.0"
 
 isarray@1.0.0, isarray@^1.0.0, isarray@~1.0.0:
   version "1.0.0"
@@ -3486,11 +3295,6 @@ lodash._getnative@^3.0.0:
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/lodash._getnative/-/lodash._getnative-3.9.1.tgz#570bc7dede46d61cdcde687d65d3eecbaa3aaff5"
   integrity sha1-VwvH3t5G1hzc3mh9ZdPuy6o6r/U=
 
-lodash._reinterpolate@^3.0.0:
-  version "3.0.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/lodash._reinterpolate/-/lodash._reinterpolate-3.0.0.tgz#0ccf2d89166af03b3663c796538b75ac6e114d9d"
-  integrity sha1-DM8tiRZq8Ds2Y8eWU4t1rG4RTZ0=
-
 lodash.defaults@^4.2.0:
   version "4.2.0"
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/lodash.defaults/-/lodash.defaults-4.2.0.tgz#d09178716ffea4dde9e5fb7b37f6f0802274580c"
@@ -3529,21 +3333,6 @@ lodash.keys@^3.0.0:
     lodash._getnative "^3.0.0"
     lodash.isarguments "^3.0.0"
     lodash.isarray "^3.0.0"
-
-lodash.template@^4.4.0:
-  version "4.5.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/lodash.template/-/lodash.template-4.5.0.tgz#f976195cf3f347d0d5f52483569fe8031ccce8ab"
-  integrity sha1-+XYZXPPzR9DV9SSDVp/oAxzM6Ks=
-  dependencies:
-    lodash._reinterpolate "^3.0.0"
-    lodash.templatesettings "^4.0.0"
-
-lodash.templatesettings@^4.0.0:
-  version "4.2.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/lodash.templatesettings/-/lodash.templatesettings-4.2.0.tgz#e481310f049d3cf6d47e912ad09313b154f0fb33"
-  integrity sha1-5IExDwSdPPbUfpEq0JMTsVTw+zM=
-  dependencies:
-    lodash._reinterpolate "^3.0.0"
 
 lodash.toarray@^3.0.0:
   version "3.0.2"
@@ -4636,11 +4425,6 @@ semver@^6.0.0, semver@^6.3.0:
   resolved "https://registry.yarnpkg.com/semver/-/semver-6.3.0.tgz#ee0a64c8af5e8ceea67687b133761e1becbd1d3d"
   integrity sha512-b39TBaTSfV6yBrapU89p5fKekE2m/NwnDocOVruQFS1/veMgdzuPcnOM34M6CwxW8jH/lxEa5rBoDeUwu5HHTw==
 
-semver@^7.3.2:
-  version "7.3.2"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/semver/-/semver-7.3.2.tgz#604962b052b81ed0786aae84389ffba70ffd3938"
-  integrity sha1-YElisFK4HtB4aq6EOJ/7pw/9OTg=
-
 serialize-javascript@^4.0.0:
   version "4.0.0"
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/serialize-javascript/-/serialize-javascript-4.0.0.tgz#b525e1238489a5ecfc42afacc3fe99e666f4b1aa"
@@ -4851,14 +4635,6 @@ stream-shift@^1.0.0:
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/stream-shift/-/stream-shift-1.0.1.tgz#d7088281559ab2778424279b0877da3c392d5a3d"
   integrity sha1-1wiCgVWasneEJCebCHfaPDktWj0=
 
-string-width@^2.1.1:
-  version "2.1.1"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/string-width/-/string-width-2.1.1.tgz#ab93f27a8dc13d28cac815c462143a6d9012ae9e"
-  integrity sha1-q5Pyeo3BPSjKyBXEYhQ6bZASrp4=
-  dependencies:
-    is-fullwidth-code-point "^2.0.0"
-    strip-ansi "^4.0.0"
-
 string-width@^3.0.0, string-width@^3.1.0:
   version "3.1.0"
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/string-width/-/string-width-3.1.0.tgz#22767be21b62af1081574306f69ac51b62203961"
@@ -4867,15 +4643,6 @@ string-width@^3.0.0, string-width@^3.1.0:
     emoji-regex "^7.0.1"
     is-fullwidth-code-point "^2.0.0"
     strip-ansi "^5.1.0"
-
-string-width@^4.0.0, string-width@^4.1.0, string-width@^4.2.0:
-  version "4.2.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/string-width/-/string-width-4.2.0.tgz#952182c46cc7b2c313d1596e623992bd163b72b5"
-  integrity sha1-lSGCxGzHssMT0VluYjmSvRY7crU=
-  dependencies:
-    emoji-regex "^8.0.0"
-    is-fullwidth-code-point "^3.0.0"
-    strip-ansi "^6.0.0"
 
 string.prototype.trimend@^1.0.1:
   version "1.0.1"
@@ -4914,26 +4681,12 @@ strip-ansi@^3.0.0:
   dependencies:
     ansi-regex "^2.0.0"
 
-strip-ansi@^4.0.0:
-  version "4.0.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/strip-ansi/-/strip-ansi-4.0.0.tgz#a8479022eb1ac368a871389b635262c505ee368f"
-  integrity sha1-qEeQIusaw2iocTibY1JixQXuNo8=
-  dependencies:
-    ansi-regex "^3.0.0"
-
 strip-ansi@^5.0.0, strip-ansi@^5.1.0, strip-ansi@^5.2.0:
   version "5.2.0"
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/strip-ansi/-/strip-ansi-5.2.0.tgz#8c9a536feb6afc962bdfa5b104a5091c1ad9c0ae"
   integrity sha1-jJpTb+tq/JYr36WxBKUJHBrZwK4=
   dependencies:
     ansi-regex "^4.1.0"
-
-strip-ansi@^6.0.0:
-  version "6.0.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/strip-ansi/-/strip-ansi-6.0.0.tgz#0b1571dd7669ccd4f3e06e14ef1eed26225ae532"
-  integrity sha1-CxVx3XZpzNTz4G4U7x7tJiJa5TI=
-  dependencies:
-    ansi-regex "^5.0.0"
 
 supports-color@^5.3.0:
   version "5.5.0"
@@ -5091,7 +4844,7 @@ tslib@^1.10.0, tslib@^1.9.0, tslib@^1.9.2, tslib@^1.9.3:
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
   integrity sha1-zy04vcNKE0vK8QkcQfZhni9nLQA=
 
-tslib@^2.0.0:
+tslib@^2.0.0, tslib@^2.0.3:
   version "2.0.3"
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/tslib/-/tslib-2.0.3.tgz#8e0741ac45fc0c226e58a17bfc3e64b9bc6ca61c"
   integrity sha1-jgdBrEX8DCJuWKF7/D5kubxsphw=
@@ -5410,35 +5163,12 @@ which@^1.2.14, which@^1.2.9, which@^1.3.1:
   dependencies:
     isexe "^2.0.0"
 
-widest-line@^2.0.1:
-  version "2.0.1"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/widest-line/-/widest-line-2.0.1.tgz#7438764730ec7ef4381ce4df82fb98a53142a3fc"
-  integrity sha1-dDh2RzDsfvQ4HOTfgvuYpTFCo/w=
-  dependencies:
-    string-width "^2.1.1"
-
-widest-line@^3.1.0:
-  version "3.1.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/widest-line/-/widest-line-3.1.0.tgz#8292333bbf66cb45ff0de1603b136b7ae1496eca"
-  integrity sha1-gpIzO79my0X/DeFgOxNreuFJbso=
-  dependencies:
-    string-width "^4.0.0"
-
 worker-farm@^1.7.0:
   version "1.7.0"
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/worker-farm/-/worker-farm-1.7.0.tgz#26a94c5391bbca926152002f69b84a4bf772e5a8"
   integrity sha1-JqlMU5G7ypJhUgAvabhKS/dy5ag=
   dependencies:
     errno "~0.1.7"
-
-wrap-ansi@^4.0.0:
-  version "4.0.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/wrap-ansi/-/wrap-ansi-4.0.0.tgz#b3570d7c70156159a2d42be5cc942e957f7b1131"
-  integrity sha1-s1cNfHAVYVmi1CvlzJQulX97ETE=
-  dependencies:
-    ansi-styles "^3.2.0"
-    string-width "^2.1.1"
-    strip-ansi "^4.0.0"
 
 wrap-ansi@^5.1.0:
   version "5.1.0"
@@ -5448,15 +5178,6 @@ wrap-ansi@^5.1.0:
     ansi-styles "^3.2.0"
     string-width "^3.0.0"
     strip-ansi "^5.0.0"
-
-wrap-ansi@^7.0.0:
-  version "7.0.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
-  integrity sha1-Z+FFz/UQpqaYS98RUpEdadLrnkM=
-  dependencies:
-    ansi-styles "^4.0.0"
-    string-width "^4.1.0"
-    strip-ansi "^6.0.0"
 
 wrappy@1:
   version "1.0.2"
