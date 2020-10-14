@@ -40,7 +40,10 @@ export function combineSimpleMessage(diagnostics: Diagnostic[]): string {
       });
       msg += position;
     }
-    const [, errorInfo] = diagnostic.message.split('error message: ');
+    let errorInfo = diagnostic.message;
+    if (diagnostic.message.includes('error message: ')) {
+      errorInfo = diagnostic.message.split('error message: ')[1] || '';
+    }
     return msg + errorInfo;
   }
   return '';
