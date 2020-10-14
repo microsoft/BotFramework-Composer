@@ -24,7 +24,7 @@ jobs:
       - name: Set Node Version
         uses: actions/setup-node@v1
         with:
-          node-version: 12.13.0
+          node-version: 12.13.0      
       - name: Clear global yarn cache (temp)
         run: yarn cache clean
       #- name: Restore yarn cache
@@ -36,6 +36,8 @@ jobs:
       #      ${{ runner.os }}-yarn-new-
       - name: yarn --frozen-lockfile
         run: yarn --frozen-lockfile
+      - name: yarn --check-files
+        run: yarn --check-files
       - name: yarn build:dev
         run: yarn build:dev
       - name: yarn lint
