@@ -1,7 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import * as ExtensionClient from '@bfc/extension-client';
+import { Shell } from '@bfc/types';
+
+import * as ExtensionClient from '../index';
 
 declare global {
   interface Window {
@@ -20,7 +22,7 @@ declare global {
      */
     Composer: {
       __pluginType: string;
-      render: (type: string, shell: Shell, component: React.ReactElement) => void;
+      render: (component: React.ReactElement) => void;
       sync: (shell: Shell) => void;
       [key: string]: any;
     };
