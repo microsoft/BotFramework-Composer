@@ -161,7 +161,7 @@ const loadProjectData = (response) => {
   const mergedSettings = getMergedSettings(projectId, settings);
   const storedLocale = languageStorage.get(botName)?.locale;
   const locale = settings.languages.includes(storedLocale) ? storedLocale : settings.defaultLanguage;
-  const indexedFiles = indexer.index(files, botName, locale);
+  const indexedFiles = indexer.index(files, botName, locale, mergedSettings);
   return {
     botFiles: { ...indexedFiles, mergedSettings },
     projectData: response.data,

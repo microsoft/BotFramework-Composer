@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { FileInfo, importResolverGenerator } from '@bfc/shared';
+import { DialogSetting, FileInfo, importResolverGenerator } from '@bfc/shared';
 
 import { dialogIndexer } from './dialogIndexer';
 import { dialogSchemaIndexer } from './dialogSchemaIndexer';
@@ -45,7 +45,7 @@ class Indexer {
     return importResolverGenerator(lgFiles, '.lg', locale);
   };
 
-  public index(files: FileInfo[], botName: string, locale: string) {
+  public index(files: FileInfo[], botName: string, locale: string, settings: DialogSetting) {
     const result = this.classifyFile(files);
     const luFeatures = settings.luFeatures;
     return {
