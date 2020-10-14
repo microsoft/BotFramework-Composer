@@ -245,6 +245,9 @@
   "are_you_sure_you_want_to_uninstall_these_extension_cf6265e8": {
     "message": "Are you sure you want to uninstall these extensions?"
   },
+  "arm_template_bc8441bb": {
+    "message": "ARM Template"
+  },
   "array_643947ee": {
     "message": "Array"
   },
@@ -280,6 +283,27 @@
   },
   "available_skills_95c114ac": {
     "message": "Available Skills"
+  },
+  "azure_app_service_plan_a285fb06": {
+    "message": "Azure App Service Plan"
+  },
+  "azure_application_insights_c80028e4": {
+    "message": "Azure Application Insights"
+  },
+  "azure_blob_storage_b5503630": {
+    "message": "Azure Blob Storage"
+  },
+  "azure_bot_service_3afc983": {
+    "message": "Azure Bot Service"
+  },
+  "azure_cosmos_db_a82b5d09": {
+    "message": "Azure Cosmos DB"
+  },
+  "back_2900f52a": {
+    "message": "Back"
+  },
+  "basic_assistant_d23bde15": {
+    "message": "Basic Assistant"
   },
   "been_used_5daccdb2": {
     "message": "Been used"
@@ -329,6 +353,12 @@
   "bot_asks_5e9f0202": {
     "message": "Bot Asks"
   },
+  "bot_configured_for_speech_66fc8e57": {
+    "message": "Bot Configured for Speech"
+  },
+  "bot_configured_for_text_a67eca78": {
+    "message": "Bot Configured for Text"
+  },
   "bot_framework_composer_enables_developers_and_mult_ce0e42a9": {
     "message": "Bot Framework Composer enables developers and multi-disciplinary teams to build all kinds of conversational experiences, using the latest components from the Bot Framework: SDK, LG, LU, and declarative file formats, all without writing code."
   },
@@ -353,6 +383,9 @@
   "bot_language_active_7cf9dc78": {
     "message": "Bot language (active)"
   },
+  "bot_name_bbd0779d": {
+    "message": "Bot Name"
+  },
   "bot_name_is_botname_a28c2d05": {
     "message": "Bot name is { botName }"
   },
@@ -370,6 +403,9 @@
   },
   "bot_settings_ce2783e4": {
     "message": "Bot Settings"
+  },
+  "bot_web_app_ca8b1468": {
+    "message": "Bot Web App"
   },
   "branch_if_else_391e5681": {
     "message": "Branch: If/else"
@@ -428,6 +464,12 @@
   "choose_one_2c4277df": {
     "message": "Choose One"
   },
+  "choose_one_7feacdb6": {
+    "message": "Choose one:"
+  },
+  "choose_your_assistant_7ee96d89": {
+    "message": "Choose Your Assistant"
+  },
   "chris_whitten_11df1f35": {
     "message": "Chris Whitten"
   },
@@ -485,11 +527,23 @@
   "conditionalselector_ed2031f0": {
     "message": "ConditionalSelector"
   },
+  "configuration_summary_f9b92424": {
+    "message": "Configuration Summary"
+  },
   "configure_composer_to_start_your_bot_using_runtime_fe37dadf": {
     "message": "Configure Composer to start your bot using runtime code you can customize and control."
   },
   "configure_resources_27fec71f": {
     "message": "Configure resources"
+  },
+  "configured_with_enterprise_scenarios_calendar_who__e9e7e75a": {
+    "message": "Configured with enterprise scenarios, calendar, who bot, professional chit-chat."
+  },
+  "configured_with_hospitality_scenarios_bing_search__f71c09c0": {
+    "message": "Configured with hospitality scenarios, Bing search and caring chit-chat."
+  },
+  "configured_with_simple_conversational_capability_l_d42f128c": {
+    "message": "Configured with simple conversational capability like greeting, chit-chat & more."
   },
   "configures_default_language_model_to_use_if_there__f09f1acd": {
     "message": "Configures default language model to use if there is no culture code in the file name (Default: en-us)"
@@ -520,6 +574,9 @@
   },
   "connect_to_qna_knowledgebase_4b324132": {
     "message": "Connect to QnA Knowledgebase"
+  },
+  "content_1440204b": {
+    "message": "Content"
   },
   "continue_loop_22635585": {
     "message": "Continue loop"
@@ -562,6 +619,9 @@
   },
   "create_a_name_for_the_project_which_will_be_used_t_57e9b690": {
     "message": "Create a name for the project which will be used to name the application: (projectname-environment-LUfilename)"
+  },
+  "create_a_new_bot_or_choose_from_virtual_assistant__7c1e6674": {
+    "message": "Create a new bot or choose from Virtual assistant templates."
   },
   "create_a_new_dialog_21d84b82": {
     "message": "Create a new dialog"
@@ -631,6 +691,9 @@
   },
   "custom_recognizer_951bab90": {
     "message": "Custom recognizer"
+  },
+  "customize_your_assistant_e4038b74": {
+    "message": "Customize your assistant"
   },
   "cut_c8c92681": {
     "message": "Cut"
@@ -890,6 +953,9 @@
   "enter_an_answer_84152a83": {
     "message": "Enter an answer"
   },
+  "enterprise_assistant_434df551": {
+    "message": "Enterprise Assistant"
+  },
   "entities_ef09392c": {
     "message": "Entities"
   },
@@ -995,6 +1061,9 @@
   "extracting_qna_pairs_from_urls_eaed1b1c": {
     "message": "Extracting QNA pairs from { urls }"
   },
+  "fallback_text_e5ff1cb7": {
+    "message": "Fallback Text"
+  },
   "false_2f39ee6d": {
     "message": "false"
   },
@@ -1003,6 +1072,9 @@
   },
   "field_set_6e7d7f67": {
     "message": "Field Set"
+  },
+  "fields_must_be_either_all_strings_or_all_fieldset__d3df28c": {
+    "message": "fields must be either all strings or all fieldset objects"
   },
   "file_name_8fd421ff": {
     "message": "File name"
@@ -1064,6 +1136,9 @@
   "getting_started_f45a7e87": {
     "message": "Getting Started"
   },
+  "give_your_bot_personality_multi_language_capabilit_f00c2c93": {
+    "message": "Give your bot personality, multi-language capabilities and more; you can edit this later in Bot Settings."
+  },
   "go_to_qna_all_up_view_page_d475333d": {
     "message": "Go to QnA all-up view page."
   },
@@ -1072,6 +1147,9 @@
   },
   "greeting_f906f962": {
     "message": "Greeting"
+  },
+  "greeting_message_ce77bbb2": {
+    "message": "Greeting Message"
   },
   "handle_a_condition_f32eb8d": {
     "message": "Handle a Condition"
@@ -1085,14 +1163,29 @@
   "here_s_what_we_know_4e9c1731": {
     "message": "Here’s what we know…"
   },
+  "hi_there_here_are_some_things_that_i_can_do_32909722": {
+    "message": "Hi there! Here are some things that I can do!"
+  },
   "hide_code_5dcffa94": {
     "message": "Hide code"
   },
   "home_351838cd": {
     "message": "Home"
   },
+  "hospitality_assistant_c330e403": {
+    "message": "Hospitality Assistant"
+  },
+  "hosts_your_bot_application_9dd01ffc": {
+    "message": "Hosts your Bot application."
+  },
+  "hosts_your_qna_maker_knowledgebases_64713aee": {
+    "message": "Hosts your QnA Maker knowledgebases"
+  },
   "http_request_79847109": {
     "message": "HTTP Request"
+  },
+  "i_am_sorry_i_didn_t_understand_that_f86e307a": {
+    "message": "I am sorry, I didn''t understand that"
   },
   "i_want_to_delete_this_bot_f81a4735": {
     "message": "I want to delete this bot"
@@ -1559,6 +1652,9 @@
   "not_yet_published_669e37b3": {
     "message": "Not yet published"
   },
+  "notes_c42e0fd5": {
+    "message": "Notes"
+  },
   "notification_list_ee2abb6c": {
     "message": "Notification list"
   },
@@ -1670,6 +1766,15 @@
   "paste_5963d1c1": {
     "message": "Paste"
   },
+  "personality_1381bf78": {
+    "message": "{ personality }"
+  },
+  "personality_cf47985f": {
+    "message": "Personality"
+  },
+  "personality_choice_3dfd8268": {
+    "message": "Personality Choice"
+  },
   "please_add_at_least_minitems_endpoint_5439fd74": {
     "message": "Please add at least { minItems } endpoint"
   },
@@ -1736,6 +1841,9 @@
   "progress_of_total_87de8616": {
     "message": "{ progress }% of { total }"
   },
+  "prompt_configurations_ab47cd3f": {
+    "message": "Prompt Configurations"
+  },
   "prompt_for_a_date_5d2c689e": {
     "message": "Prompt for a date"
   },
@@ -1799,6 +1907,9 @@
   "provisioning_1330aede": {
     "message": "Provisioning ..."
   },
+  "provisioning_summary_2be9422f": {
+    "message": "Provisioning Summary"
+  },
   "pseudo_1a319287": {
     "message": "Pseudo"
   },
@@ -1837,6 +1948,15 @@
   },
   "qna_intent_recognized_49c3d797": {
     "message": "QnA Intent recognized"
+  },
+  "qna_maker_azure_search_service_88a403db": {
+    "message": "QnA Maker Azure Search Service"
+  },
+  "qna_maker_c313ed6e": {
+    "message": "QnA Maker"
+  },
+  "qna_maker_web_app_3da183bd": {
+    "message": "QnA Maker Web App"
   },
   "qna_navigation_pane_b79ebcbf": {
     "message": "Qna Navigation Pane"
@@ -1916,6 +2036,9 @@
   "requiredtext_priority_priority_4293288f": {
     "message": "{ requiredText } | Priority: { priority }"
   },
+  "resource_374a9df": {
+    "message": "Resource"
+  },
   "response_is_response_3cd62f8f": {
     "message": "Response is { response }"
   },
@@ -1970,6 +2093,9 @@
   "search_for_extensions_on_npm_c5ca65d9": {
     "message": "Search for extensions on npm"
   },
+  "search_index_for_your_qna_maker_knowledgebases_22700ca7": {
+    "message": "Search index for your QnA Maker knowledgebases."
+  },
   "see_log_4b833bf7": {
     "message": "See Log"
   },
@@ -1987,6 +2113,9 @@
   },
   "select_an_event_type_3d7108f1": {
     "message": "Select an event type"
+  },
+  "select_an_option_9f5dfb55": {
+    "message": "Select an option"
   },
   "select_language_to_delete_d1662d3d": {
     "message": "Select language to delete"
@@ -2014,6 +2143,9 @@
   },
   "select_your_publish_target_de531f7f": {
     "message": "Select your publish target"
+  },
+  "selected_assistant_type_83d58f54": {
+    "message": "Selected Assistant Type"
   },
   "selection_field_86d1dc94": {
     "message": "selection field"
@@ -2123,6 +2255,9 @@
   "specify_a_name_description_and_location_for_your_n_667f1438": {
     "message": "Specify a name, description, and location for your new bot project."
   },
+  "speech_16063aed": {
+    "message": "Speech"
+  },
   "start_bot_25ecad14": {
     "message": "Start Bot"
   },
@@ -2153,6 +2288,15 @@
   "submit_a3cc6859": {
     "message": "Submit"
   },
+  "subscription_keys_for_language_understanding_cogni_105e039f": {
+    "message": "Subscription keys for Language Understanding Cognitive Service."
+  },
+  "subscription_keys_for_qna_maker_cognitive_service__91da99a4": {
+    "message": "Subscription keys for QnA Maker Cognitive Service which facilitates the bot personality you selected."
+  },
+  "summary_24ad7681": {
+    "message": "Summary"
+  },
   "synonyms_optional_afe5cdb1": {
     "message": "Synonyms (Optional)"
   },
@@ -2177,14 +2321,23 @@
   "the_api_messages_endpoint_for_the_skill_f318dc63": {
     "message": "The /api/messages endpoint for the skill."
   },
+  "the_azure_bot_service_resource_stores_configuratio_b7b4e73d": {
+    "message": "The Azure Bot Service resource stores configuration information that allows your Virtual Assistant to be accessed on the supported Channels and provide OAuth authentication."
+  },
   "the_callback_url_for_the_skill_host_e20e1012": {
     "message": "The callback url for the skill host."
   },
   "the_dialog_you_have_tried_to_delete_is_currently_u_a37c7a02": {
     "message": "The dialog you have tried to delete is currently used in the below dialog(s). Removing this dialog will cause your Bot to malfunction without additional action."
   },
+  "the_following_customizations_will_be_applied_to_yo_7d3384cf": {
+    "message": "The following customizations will be applied to your bot"
+  },
   "the_following_lufile_s_are_invalid_c61ea748": {
     "message": "The Following LuFile(s) are invalid: \n"
+  },
+  "the_following_will_be_provisioned_to_enable_your_b_6c52fdac": {
+    "message": "The following will be provisioned to enable your bot"
   },
   "the_main_dialog_is_named_after_your_bot_it_is_the__3d9864f": {
     "message": "The main dialog is named after your bot. It is the root and entry point of a bot."
@@ -2426,6 +2579,18 @@
   "used_in_126529e5": {
     "message": "Used In"
   },
+  "used_to_capture_conversation_and_application_telem_cae2c2a4": {
+    "message": "Used to capture conversation and application telemetry."
+  },
+  "used_to_host_your_bot_web_app_and_qna_maker_web_ap_514dc11b": {
+    "message": "Used to host your Bot Web App and QnA Maker Web App."
+  },
+  "used_to_store_conversation_state_11f348bd": {
+    "message": "Used to store conversation state."
+  },
+  "used_to_store_conversation_transcripts_d80440ab": {
+    "message": "Used to store conversation transcripts."
+  },
   "user_input_673e4a89": {
     "message": "User input"
   },
@@ -2437,6 +2602,9 @@
   },
   "validating_35b79a96": {
     "message": "Validating..."
+  },
+  "validation_b10c677c": {
+    "message": "Validation"
   },
   "validation_rules_efd3144d": {
     "message": "Validation Rules"
@@ -2515,6 +2683,9 @@
   },
   "what_is_the_type_of_this_trigger_d2701744": {
     "message": "What is the type of this trigger?"
+  },
+  "what_will_your_virtual_assistant_say_if_it_does_no_972dd9ab": {
+    "message": "What will your Virtual Assistant say if it does not understand the user?"
   },
   "what_your_bot_says_to_the_user_this_is_a_template__a8d2266d": {
     "message": "What your bot says to the user. This is a template used to create the outgoing message. It can include language generation rules, properties from memory, and other features.\n\nFor example, to define variations that will be chosen at random, write:\n- hello\n- hi"

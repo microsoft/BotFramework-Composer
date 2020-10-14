@@ -9,7 +9,7 @@ import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { getAccessTokensFromStorage, startProvision, closeDialog } from '@bfc/extension-client';
+import { getAccessTokensFromStorage, startProvision, closeDialog, setPublishConfig } from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { ResourceGroup } from '@azure/arm-resources/esm/models';
 import { DeployLocation } from '@bfc/types';
@@ -17,15 +17,14 @@ import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/Choi
 import {
   DetailsList,
   DetailsListLayoutMode,
-  SelectionMode,
   IColumn,
   IGroup,
   CheckboxVisibility,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-
-// import { JsonEditor } from '@bfc/code-editor';
+import { JsonEditor } from '@bfc/code-editor';
+import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 
 import { getSubscriptions, getResourceGroups, getDeployLocations, getPreview } from './api';
 
@@ -81,12 +80,13 @@ export const AzureProvisionDialog: React.FC = () => {
   // const [selectedResources, setExternalResources] = useState<string[]>([]);
   const [enabledResources, setEnabledResources] = useState({});
 
+  const [isEditorError, setEditorError] = useState(false);
   const [importConfig, setImportConfig] = useState();
   const [page, setPage] = useState(1);
   const [group, setGroup] = useState<IGroup[]>();
   const [listItems, setListItem] = useState();
 
-  const columns = [
+  const columns: IColumn[] = [
     {
       key: 'Name',
       name: formatMessage('Name'),
@@ -238,6 +238,15 @@ export const AzureProvisionDialog: React.FC = () => {
     []
   );
 
+  const onSave = useMemo(
+    () => () => {
+      console.log(importConfig);
+      setPublishConfig(importConfig);
+      closeDialog();
+    },
+    []
+  );
+
   const updateChoice = useMemo(
     () => (ev, option) => {
       setChoice(option);
@@ -271,47 +280,47 @@ export const AzureProvisionDialog: React.FC = () => {
             placeholder={'Select your location'}
             onChange={updateCurrentLocation}
           />
-
-          {/* {extensionResourceOptions.map((resource) => {
-            return (
-              <Fragment>
-                <section>
-                  <strong>{resource.key}</strong>
-                  <p>{resource.description}</p>
-                </section>
-              </Fragment>
-            );
-          })} */}
         </form>
       )}
+      {choice.key === 'create' && (!subscriptionOption || !subscriptionOption.length) && <Spinner label="Loading" />}
       {choice.key === 'import' && (
         <Fragment>
           <div>Publish Configuration</div>
-          {/* <JsonEditor
-            key="azurePublish"
+          <JsonEditor
             id="azurePublish"
             height={200}
+            styles={{ width: '60%' }}
             value={importConfig}
-            onChange={setImportConfig}
-          /> */}
+            onChange={(value) => {
+              setEditorError(false);
+              setImportConfig(value);
+            }}
+            onError={() => {
+              setEditorError(true);
+            }}
+          />
         </Fragment>
       )}
-      {(!subscriptionOption || !subscriptionOption.length) && <Fragment>LOADING</Fragment>}
+
       <DialogFooter>
         <DefaultButton text={'Cancel'} onClick={closeDialog} />
-        <PrimaryButton
-          disabled={!currentSubscription || !currentHostName || errorHostName !== ''}
-          text={'Next'}
-          onClick={() => {
-            onNext({
-              subscription: currentSubscription,
-              hostname: currentHostName,
-              location: currentLocation,
-              type: 'azurePublish', // todo: this should be dynamic
-              externalResources: extensionResourceOptions,
-            });
-          }}
-        />
+        {choice.key === 'create' ? (
+          <PrimaryButton
+            disabled={!currentSubscription || !currentHostName || errorHostName !== ''}
+            text="Next"
+            onClick={() => {
+              onNext({
+                subscription: currentSubscription,
+                hostname: currentHostName,
+                location: currentLocation,
+                type: 'azurePublish', // todo: this should be dynamic
+                externalResources: extensionResourceOptions,
+              });
+            }}
+          />
+        ) : (
+          <PrimaryButton disabled={isEditorError} text="Save" onClick={onSave} />
+        )}
       </DialogFooter>
     </Fragment>
   ) : (
