@@ -130,7 +130,7 @@ export class LUServer {
         content: editorContent,
       };
     };
-    const { fileId, sectionId, projectId } = this.getLUDocument(document) || {};
+    const { fileId, sectionId, projectId, luFeatures } = this.getLUDocument(document) || {};
 
     if (this.importResolver && fileId && projectId) {
       const resolver = this.importResolver;
@@ -141,7 +141,7 @@ export class LUServer {
             generageDiagnostic(`lu file: ${fileId}.lu not exist on server`, DiagnosticSeverity.Error, document),
           ]);
         }
-        const luFile = luIndexer.parse(plainLuFile.content, plainLuFile.id);
+        const luFile = luIndexer.parse(plainLuFile.content, plainLuFile.id, luFeatures);
         let { content } = luFile;
         /**
          * source is . means use as file resolver, not import resolver
@@ -149,7 +149,7 @@ export class LUServer {
          * so here build the full content from server file content and editor content
          */
         if (source === '.' && sectionId) {
-          content = updateIntent(luFile, sectionId, { Name: sectionId, Body: editorContent }).content;
+          content = updateIntent(luFile, sectionId, { Name: sectionId, Body: editorContent }, luFeatures).content;
         }
         return { id, content };
       };
@@ -160,7 +160,7 @@ export class LUServer {
 
   protected addLUDocument(document: TextDocument, luOption?: LUOption) {
     const { uri } = document;
-    const { fileId, sectionId, projectId } = luOption || {};
+    const { fileId, sectionId, projectId, luFeatures = {} } = luOption || {};
     const index = () => {
       const importResolver: ImportResolverDelegate = this.getImportResolver(document);
       let content: string = document.getText();
@@ -174,7 +174,7 @@ export class LUServer {
       }
 
       const id = fileId || uri;
-      const { intents: sections, diagnostics } = parse(content, id);
+      const { intents: sections, diagnostics } = parse(content, id, luFeatures);
 
       return { sections, diagnostics, content };
     };
@@ -183,6 +183,7 @@ export class LUServer {
       projectId,
       fileId,
       sectionId,
+      luFeatures,
       index,
     };
     this.LUDocuments.push(luDocument);

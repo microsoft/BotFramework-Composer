@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { OBISchema } from '@bfc/shared';
+import { JSONSchema7 } from '@bfc/shared';
 
 import { getCustomSchema } from '../../../src/adaptive-flow-editor/utils/getCustomSchema';
 
@@ -23,7 +23,7 @@ describe('getCustomSchema', () => {
           description: 'Send an activity.',
         },
       },
-    } as OBISchema;
+    } as JSONSchema7;
     expect(getCustomSchema({ oneOf: [], definitions: {} }, ejected)).toEqual({
       actions: {
         oneOf: [
@@ -59,7 +59,7 @@ describe('getCustomSchema', () => {
           description: 'My Trigger.',
         },
       },
-    } as OBISchema;
+    } as JSONSchema7;
     expect(getCustomSchema({ oneOf: [], definitions: {} }, ejected)).toEqual({
       actions: {
         oneOf: [

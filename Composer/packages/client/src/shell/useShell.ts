@@ -22,7 +22,7 @@ import {
   localeState,
   qnaFilesState,
   designPageLocationState,
-  botNameState,
+  botDisplayNameState,
   dialogSchemasState,
   lgFilesState,
   luFilesState,
@@ -36,7 +36,7 @@ import { useTriggerApi } from './triggerApi';
 
 const FORM_EDITOR = 'PropertyEditor';
 
-type EventSource = 'FlowEditor' | 'PropertyEditor' | 'DesignPage';
+type EventSource = 'FlowEditor' | 'PropertyEditor' | 'DesignPage' | 'VaCreation';
 
 export function useShell(source: EventSource, projectId: string): Shell {
   const dialogMapRef = useRef({});
@@ -54,7 +54,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
   const luFiles = useRecoilValue(luFilesState(projectId));
   const lgFiles = useRecoilValue(lgFilesState(projectId));
   const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
-  const botName = useRecoilValue(botNameState(projectId));
+  const botName = useRecoilValue(botDisplayNameState(projectId));
   const settings = useRecoilValue(settingsState(projectId));
 
   const userSettings = useRecoilValue(userSettingsState);
@@ -236,10 +236,13 @@ export function useShell(source: EventSource, projectId: string): Shell {
         focusedTab: promptTab,
         clipboardActions,
         hosted: !!isAbsHosted(),
+        luFeatures: settings.luFeatures,
         skills,
         skillsSettings: settings.skill || {},
       }
-    : ({} as ShellData);
+    : ({
+        projectId,
+      } as ShellData);
 
   return {
     api,

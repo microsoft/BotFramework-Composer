@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { DesignerData, BaseSchema } from '../types';
+import { DesignerData, BaseSchema } from '@bfc/types';
 
 export type FieldProcessor<T> = (
   fromActionId: string,

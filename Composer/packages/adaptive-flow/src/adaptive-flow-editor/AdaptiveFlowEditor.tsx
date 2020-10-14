@@ -8,10 +8,9 @@ import React, { useRef, useMemo, useEffect } from 'react';
 import isEqual from 'lodash/isEqual';
 import formatMessage from 'format-message';
 import { DialogFactory } from '@bfc/shared';
-import { useShellApi, JSONSchema7 } from '@bfc/extension-client';
+import { useShellApi, JSONSchema7, FlowUISchema, FlowWidget } from '@bfc/extension-client';
 import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 
-import { FlowSchema, FlowWidget } from '../adaptive-flow-renderer/types/flowRenderer.types';
 import { NodeEventTypes } from '../adaptive-flow-renderer/constants/NodeEventTypes';
 import { AdaptiveDialog } from '../adaptive-flow-renderer/adaptive/AdaptiveDialog';
 
@@ -105,8 +104,8 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
     customSchemas: customActionSchema ? [customActionSchema] : [],
   };
 
-  const customFlowSchema: FlowSchema = nodeContext.customSchemas.reduce((result, s) => {
-    const definitionKeys: string[] = Object.keys(s.definitions);
+  const customFlowSchema: FlowUISchema = nodeContext.customSchemas.reduce((result, s) => {
+    const definitionKeys = Object.keys(s.definitions ?? {});
     definitionKeys.forEach(($kind) => {
       result[$kind] = {
         widget: 'ActionHeader',
@@ -114,7 +113,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
       } as FlowWidget;
     });
     return result;
-  }, {} as FlowSchema);
+  }, {} as FlowUISchema);
 
   const divRef = useRef<HTMLDivElement>(null);
 

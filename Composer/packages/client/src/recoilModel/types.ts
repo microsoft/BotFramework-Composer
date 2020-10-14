@@ -30,7 +30,7 @@ export interface StorageFolder extends File {
 export interface PublishType {
   name: string;
   description: string;
-  hasView?: boolean;
+  bundleId?: string;
   instructions?: string;
   schema?: JSONSchema7;
   features: {
@@ -39,20 +39,6 @@ export interface PublishType {
     rollback: boolean;
     status: boolean;
   };
-}
-
-// TODO: move this definition to a shared spot
-export interface ExtensionConfig {
-  id: string;
-  name: string;
-  enabled: boolean;
-  version: string;
-  /** Special property only used in the in-memory representation of extensions to flag as a built-in. Not written to disk. */
-  builtIn?: boolean;
-  /** Path where module is installed */
-  path: string;
-  bundles: any; // TODO: needed?
-  contributes: any; // TODO: define this type
 }
 
 export interface RuntimeTemplate {
