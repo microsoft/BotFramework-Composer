@@ -14,9 +14,12 @@ const RETURNTYPE_NOT_MATCH = formatMessage('the return type does not match');
 const BUILT_IN_FUNCTION_ERROR = formatMessage("it's not a built-in function or a custom function.");
 
 const expressionErrorMessage = (error: string) => formatMessage('must be an expression: {error}', { error });
-
+const builtInFunctionErrorMessage = (error: string) =>
+  formatMessage(`{error} Please add unknow functions to setting's customFunctions field.`, {
+    error,
+  });
 const customFunctionErrorMessage = (func: string) =>
-  formatMessage(`Error: {func} does not have an evaluator, it's not a built-in function or a custom function`, {
+  formatMessage(`{func} does not have an evaluator, it's not a built-in function or a custom function`, {
     func,
   });
 
@@ -79,20 +82,15 @@ const checkReturnType = (returnType: number, types: number[]): string => {
 };
 
 const filterCustomFunctionError = (error: string, CustomFunctions: string[]): string => {
-  let errorMessage = expressionErrorMessage(error);
-
   //Now all customFunctions is from lg file content.
-  if (CustomFunctions.some((item) => startsWith(error, customFunctionErrorMessage(item)))) {
-    errorMessage = '';
-  }
-
-  //Todo: if the custom functions are defined in runtime, use the field from settings to filter
-  // settings.customFunctions.some();
+  //If the custom functions are defined in runtime, use the field from settings to filter
   if (error.endsWith(BUILT_IN_FUNCTION_ERROR)) {
-    errorMessage = '';
+    if (CustomFunctions.some((item) => startsWith(error, customFunctionErrorMessage(item)))) return '';
+
+    return builtInFunctionErrorMessage(error);
   }
 
-  return errorMessage;
+  return expressionErrorMessage(error);
 };
 
 export const validate = (expression: ExpressionProperty, customFunctions: string[]): Diagnostic | null => {
