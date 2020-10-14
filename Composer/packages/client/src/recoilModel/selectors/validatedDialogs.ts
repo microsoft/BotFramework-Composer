@@ -4,8 +4,7 @@
 import { selectorFamily } from 'recoil';
 import { validateDialog } from '@bfc/indexers';
 
-import { dialogsState, schemasState, lgFilesState, luFilesState } from '../atoms/botState';
-import { botProjectIdsState } from '../atoms';
+import { botProjectIdsState, dialogsState, schemasState, lgFilesState, luFilesState } from '../atoms';
 
 export const validateDialogSelectorFamily = selectorFamily({
   key: 'validateDialogSelectorFamily',
