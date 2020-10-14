@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx, SerializedStyles } from '@emotion/core';
 import React, { useState, useEffect, useRef } from 'react';
-import { Shell } from '@bfc/types';
+import { Shell } from '@botframework-composer/types';
 import { PluginType } from '@bfc/extension-client';
 
 import { PluginAPI } from '../../plugins/api';

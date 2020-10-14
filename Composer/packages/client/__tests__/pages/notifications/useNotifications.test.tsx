@@ -3,7 +3,7 @@
 
 import * as React from 'react';
 import { RecoilRoot } from 'recoil';
-import { renderHook } from '@bfc/test-utils/lib/hooks';
+import { renderHook } from '@botframework-composer/test-utils/lib/hooks';
 import { Range, Position } from '@bfc/shared';
 
 import useNotifications from '../../../src/pages/notifications/useNotifications';

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { LgType, LgTemplateRef, LgMetaData } from '@bfc/shared';
-import { BaseSchema, ShellApi } from '@bfc/types';
+import { BaseSchema, ShellApi } from '@botframework-composer/types';
 
 /**
  * LG CRUD lib

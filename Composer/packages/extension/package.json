@@ -13,8 +13,8 @@
     "test": "jest"
   },
   "devDependencies": {
-    "@bfc/types": "*",
-    "@bfc/test-utils": "*",
+    "@botframework-composer/types": "*",
+    "@botframework-composer/test-utils": "*",
     "@types/express": "^4.17.6",
     "@types/fs-extra": "^9.0.1",
     "@types/passport": "^1.0.3",

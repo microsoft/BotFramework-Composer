@@ -4,7 +4,7 @@ import keys from 'lodash/keys';
 import differenceWith from 'lodash/differenceWith';
 import isEqual from 'lodash/isEqual';
 import { DialogInfo, DialogSchemaFile, DialogSetting, SkillManifest, BotAssets, BotProjectFile } from '@bfc/shared';
-import { LuFile, LgFile, QnAFile } from '@bfc/types';
+import { LuFile, LgFile, QnAFile } from '@botframework-composer/types';
 
 import * as client from './http';
 import { IFileChange, ChangeType, FileExtensions } from './types';

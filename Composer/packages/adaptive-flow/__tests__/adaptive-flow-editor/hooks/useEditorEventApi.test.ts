@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { renderHook } from '@bfc/test-utils/lib/hooks';
+import { renderHook } from '@botframework-composer/test-utils/lib/hooks';
 
 import { useEditorEventApi } from '../../../src/adaptive-flow-editor/hooks/useEditorEventApi';
 import { ShellApiStub } from '../stubs/ShellApiStub';

@@ -5,7 +5,7 @@ import path from 'path';
 
 import glob from 'globby';
 import { readJson, ensureDir, remove, pathExists } from 'fs-extra';
-import { ExtensionBundle, PackageJSON, ExtensionMetadata } from '@bfc/types';
+import { ExtensionBundle, PackageJSON, ExtensionMetadata } from '@botframework-composer/types';
 
 import { ExtensionContext } from '../extensionContext';
 import logger from '../logger';

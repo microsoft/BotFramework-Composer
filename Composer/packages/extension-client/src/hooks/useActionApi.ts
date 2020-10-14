@@ -8,7 +8,7 @@ import {
   FieldProcessorAsync,
   walkAdaptiveActionList,
 } from '@bfc/shared';
-import { BaseSchema, ShellApi } from '@bfc/types';
+import { BaseSchema, ShellApi } from '@botframework-composer/types';
 
 import { useLgApi } from './useLgApi';
 import { useLuApi } from './useLuApi';

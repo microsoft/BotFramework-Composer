@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { BaseSchema, ShellApi } from '@bfc/types';
+import { BaseSchema, ShellApi } from '@botframework-composer/types';
 import { DialogUtils } from '@bfc/shared';
 
 import { useActionApi } from './useActionApi';

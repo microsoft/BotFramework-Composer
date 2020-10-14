@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { fireEvent } from '@bfc/test-utils';
+import { fireEvent } from '@botframework-composer/test-utils';
 import { DialogInfo } from '@bfc/shared';
 
 import { renderWithRecoil } from '../testUtils';

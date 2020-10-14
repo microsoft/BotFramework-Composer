@@ -4,7 +4,7 @@
 import { JSONSchema7 } from 'json-schema';
 import merge from 'lodash/merge';
 import formatMessage from 'format-message';
-import { DesignerData, MicrosoftIDialog, LuIntentSection, SDKKinds } from '@bfc/types';
+import { DesignerData, MicrosoftIDialog, LuIntentSection, SDKKinds } from '@botframework-composer/types';
 
 import { copyAdaptiveAction } from './copyUtils';
 import { deleteAdaptiveAction, deleteAdaptiveActionList } from './deleteUtils';

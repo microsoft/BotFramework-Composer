@@ -1,7 +1,7 @@
 {
   "name": "@bfc/extension-client",
   "version": "1.0.0",
-  "description": "Composer extension library to be consumed by the client bundle of a Composer extension.",
+  "description": "Extension library to be consumed by the client bundle of a Botframework Composer extension.",
   "main": "lib/index.js",
   "license": "MIT",
   "private": true,
@@ -15,8 +15,8 @@
     "react-dom": "16.13.1"
   },
   "devDependencies": {
-    "@bfc/types": "*",
-    "@bfc/test-utils": "*",
+    "@botframework-composer/types": "0.0.1",
+    "@botframework-composer/test-utils": "0.0.1",
     "@types/react": "16.9.23",
     "react": "16.13.1",
     "react-dom": "16.13.1",

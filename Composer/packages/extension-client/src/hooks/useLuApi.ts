@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { LuMetaData, LuType } from '@bfc/shared';
-import { LuIntentSection, BaseSchema, ShellApi } from '@bfc/types';
+import { LuIntentSection, BaseSchema, ShellApi } from '@botframework-composer/types';
 
 /**
  * LU CRUD API

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useMemo, useRef } from 'react';
-import { ShellApi, ShellData, Shell, DialogSchemaFile, DialogInfo } from '@bfc/types';
+import { ShellApi, ShellData, Shell, DialogSchemaFile, DialogInfo } from '@botframework-composer/types';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render, fireEvent, act } from '@bfc/test-utils';
+import { render, fireEvent, act } from '@botframework-composer/test-utils';
 import assign from 'lodash/assign';
 
 import { Fieldsets } from '../FieldSets';
