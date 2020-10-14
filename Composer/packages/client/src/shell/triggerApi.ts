@@ -11,7 +11,7 @@ import {
   SDKKinds,
   BaseSchema,
   MicrosoftIDialog,
-} from '@bfc/types';
+} from '@botframework-composer/types';
 import { useRecoilValue } from 'recoil';
 import { LgTemplateSamples } from '@bfc/shared';
 import get from 'lodash/get';

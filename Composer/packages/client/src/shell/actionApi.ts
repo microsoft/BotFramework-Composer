@@ -13,7 +13,7 @@ import {
   LuType,
   LuMetaData,
 } from '@bfc/shared';
-import { LuIntentSection, MicrosoftIDialog } from '@bfc/types';
+import { LuIntentSection, MicrosoftIDialog } from '@botframework-composer/types';
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
