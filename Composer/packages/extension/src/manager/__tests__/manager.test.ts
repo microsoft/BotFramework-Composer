@@ -103,6 +103,8 @@ describe('#loadAll', () => {
   let loadSpy: jest.SpyInstance;
 
   beforeEach(() => {
+    (manifest.getExtensions as jest.Mock).mockReturnValue({});
+
     manager = new ExtensionManagerImp(manifest);
     loadSpy = jest.spyOn(manager, 'loadFromDir');
 

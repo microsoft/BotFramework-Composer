@@ -12,11 +12,11 @@ import { resolveToBasePath } from './utils/fileUtil';
 import { data } from './styles';
 import { NotFound } from './components/NotFound';
 import { BASEPATH } from './constants';
-import { dispatcherState, schemasState, botProjectIdsState, botOpeningState } from './recoilModel';
+import { dispatcherState, schemasState, botProjectIdsState, botOpeningState, pluginPagesSelector } from './recoilModel';
 import { openAlertModal } from './components/Modal/AlertDialog';
 import { dialogStyle } from './components/Modal/dialogStyle';
 import { LoadingSpinner } from './components/LoadingSpinner';
-import { PluginPageContainer } from './pages/plugin/pluginPageContainer';
+import { PluginPageContainer } from './pages/plugin/PluginPageContainer';
 
 const DesignPage = React.lazy(() => import('./pages/design/DesignPage'));
 const LUPage = React.lazy(() => import('./pages/language-understanding/LUPage'));
@@ -31,6 +31,8 @@ const FormDialogPage = React.lazy(() => import('./pages/form-dialog/FormDialogPa
 
 const Routes = (props) => {
   const botOpening = useRecoilValue(botOpeningState);
+  const pluginPages = useRecoilValue(pluginPagesSelector);
+
   return (
     <div css={data}>
       <Suspense fallback={<LoadingSpinner />}>
@@ -59,11 +61,18 @@ const Routes = (props) => {
             <FormDialogPage path="forms/:schemaId/*" />
             <FormDialogPage path="forms/*" />
             <DesignPage path="*" />
+            {pluginPages.map((page) => (
+              <PluginPageContainer
+                key={`${page.id}/${page.bundleId}`}
+                bundleId={page.bundleId}
+                path={`plugin/${page.id}/${page.bundleId}`}
+                pluginId={page.id}
+              />
+            ))}
           </ProjectRouter>
           <SettingPage path="settings/*" />
           <BotCreationFlowRouter path="projects/*" />
           <BotCreationFlowRouter path="home" />
-          <PluginPageContainer path="plugin/:pluginId/:bundleId" />
           <NotFound default />
         </Router>
       </Suspense>
