@@ -14,7 +14,7 @@ const FallbackRecognizerJsonEditor: RecognizerOptions = {
 
 export const DefaultRecognizerSchema: RecognizerUISchema = {
   [SDKKinds.RegexRecognizer]: {
-    displayName: () => formatMessage('Regular expressions recognizer'),
+    displayName: () => formatMessage('Regular expression recognizer'),
     intentEditor: RegexIntentField,
     renameIntent: (intentName, newIntentName, shellData, shellApi) => {
       const { currentDialog } = shellData;
