@@ -15,6 +15,8 @@ import {
   schemasState,
   currentProjectIdState,
   botDiagnosticsState,
+  botProjectIdsState,
+  formDialogSchemaIdsState,
 } from '../../../src/recoilModel';
 import mockProjectResponse from '../../../src/recoilModel/dispatchers/__tests__/mocks/mockProjectResponse.json';
 
@@ -94,16 +96,22 @@ const state = {
       },
     },
   },
+  formDialogSchemas: [{ id: '1', content: '{}' }],
 };
 
 const initRecoilState = ({ set }) => {
   set(currentProjectIdState, state.projectId);
+  set(botProjectIdsState, [state.projectId]);
   set(dialogsState(state.projectId), state.dialogs);
   set(luFilesState(state.projectId), state.luFiles);
   set(lgFilesState(state.projectId), state.lgFiles);
   set(botDiagnosticsState(state.projectId), state.diagnostics);
   set(settingsState(state.projectId), state.settings);
   set(schemasState(state.projectId), mockProjectResponse.schemas);
+  set(
+    formDialogSchemaIdsState(state.projectId),
+    state.formDialogSchemas.map((fds) => fds.id)
+  );
 };
 
 describe('useNotification hooks', () => {
