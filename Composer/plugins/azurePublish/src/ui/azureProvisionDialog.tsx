@@ -9,7 +9,13 @@ import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { getAccessTokensFromStorage, startProvision, closeDialog, setPublishConfig } from '@bfc/extension-client';
+import {
+  currentProjectId,
+  getAccessTokensFromStorage,
+  startProvision,
+  closeDialog,
+  setPublishConfig,
+} from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { ResourceGroup } from '@azure/arm-resources/esm/models';
 import { DeployLocation } from '@bfc/types';
@@ -26,27 +32,11 @@ import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { JsonEditor } from '@bfc/code-editor';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 
-import { getSubscriptions, getResourceGroups, getDeployLocations, getPreview } from './api';
+import { getResourceList, getSubscriptions, getResourceGroups, getDeployLocations, getPreview } from './api';
 
-const extensionResourceOptions = [
-  {
-    key: 'appRegistration',
-    text: 'Microsoft Application Registration',
-    description: 'Required registration allowing your bot to communicate with Azure services',
-  },
-  { key: 'webApp', text: 'Azure Web App', description: 'Hosting for your bot' },
-  { key: 'botRegistration', text: 'Azure Bot Service', description: 'Register your bot with the Azure Bot Service' },
-  { key: 'luisAuthoring', text: 'Luis Authoring Resource', description: 'Author LUIS applications' },
-  { key: 'luisPrediction', text: 'Luis Prediction Resource', description: 'Use LUIS in your bot' },
-  // { key: 'blobStorage', text: 'BlobStorage', description: 'Capture transcripts into Blob Storage' },
-  // { key: 'cosmoDb', text: 'CosmoDb', description: 'Use CosmoDB to store your bot state' },
-  // {
-  //   key: 'applicationInsights',
-  //   text: 'application Insights',
-  //   description: 'Track the performance of your app with app insights',
-  // },
-];
 const resourceTypes = ['Azure Web App', 'Cognitive Services'];
+
+const publishType = 'azurePublish';
 
 const choiceOptions: IChoiceGroupOption[] = [
   { key: 'create', text: 'Create new Azure resources' },
@@ -77,7 +67,7 @@ export const AzureProvisionDialog: React.FC = () => {
   const [currentHostName, setHostName] = useState('');
   const [errorHostName, setErrorHostName] = useState('');
   const [currentLocation, setLocation] = useState<DeployLocation>();
-  // const [selectedResources, setExternalResources] = useState<string[]>([]);
+  const [extensionResourceOptions, setExtensionResourceOptions] = useState<any[]>([]);
   const [enabledResources, setEnabledResources] = useState({});
 
   const [isEditorError, setEditorError] = useState(false);
@@ -132,21 +122,30 @@ export const AzureProvisionDialog: React.FC = () => {
   ];
 
   useEffect(() => {
-    // Load the list of subscriptions for the dropdown....
+    const { access_token, graph_token } = getAccessTokensFromStorage();
+    setToken(access_token);
+    setGraphToken(graph_token);
+    getSubscriptions(access_token).then(setSubscriptions);
+    getResources();
+  }, []);
+
+  const getResources = async () => {
+    const resources = await getResourceList(currentProjectId(), publishType).catch((err) => {
+      // todo: how do we handle API errors in this component
+      console.log('ERROR', err);
+    });
+    setExtensionResourceOptions(resources);
+
+    // set all of the resources to enabled by default.
+    // in the future we may allow users to toggle some of them on and off
     const enabled = {};
-    extensionResourceOptions.forEach((resourceType) => {
+    resources.forEach((resourceType) => {
       enabled[resourceType.key] = {
         enabled: true,
       };
     });
     setEnabledResources(enabled);
-
-    const { access_token, graph_token } = getAccessTokensFromStorage();
-    console.log('RECEIVED ACCeSS TOKENS FROM STORAGE', access_token, graph_token);
-    setToken(access_token);
-    setGraphToken(graph_token);
-    getSubscriptions(access_token).then(setSubscriptions);
-  }, []);
+  };
 
   const subscriptionOption = useMemo(() => {
     console.log('GOT SUBSCRIPTIONS', subscriptions);
@@ -209,7 +208,7 @@ export const AzureProvisionDialog: React.FC = () => {
       const groups: IGroup[] = [];
       let startIndex = 0;
       for (const type of resourceTypes) {
-        const resources = result.filter((item) => enabledResources[item.key] && item.group === type);
+        const resources = result.filter((item) => enabledResources[item.key].enabled === true && item.group === type);
 
         groups.push({
           key: type,
@@ -287,7 +286,7 @@ export const AzureProvisionDialog: React.FC = () => {
         <Fragment>
           <div>Publish Configuration</div>
           <JsonEditor
-            id="azurePublish"
+            id={publishType}
             height={200}
             styles={{ width: '60%' }}
             value={importConfig}
@@ -313,7 +312,7 @@ export const AzureProvisionDialog: React.FC = () => {
                 subscription: currentSubscription,
                 hostname: currentHostName,
                 location: currentLocation,
-                type: 'azurePublish', // todo: this should be dynamic
+                type: publishType,
                 externalResources: extensionResourceOptions,
               });
             }}
@@ -346,7 +345,7 @@ export const AzureProvisionDialog: React.FC = () => {
               subscription: currentSubscription,
               hostname: currentHostName,
               location: currentLocation,
-              type: 'azurePublish', // todo: this should be dynamic
+              type: publishType,
               externalResources: extensionResourceOptions,
             });
           }}

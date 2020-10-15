@@ -7,6 +7,7 @@ import * as rp from 'request-promise';
 import { BotProjectDeployLoggerType } from './botProjectLoggerType';
 import { AzureResourceManangerConfig } from './azureResourceManager/azureResourceManagerConfig';
 import { AzureResourceMananger } from './azureResourceManager/azureResourceManager';
+import { AzureResourceTypes } from './resourceTypes';
 
 // TODO: fix these duplicated interfaces between here and index.ts
 export interface ProvisionConfig {
@@ -31,20 +32,6 @@ interface ResourceType {
   // other keys TBD
   [key: string]: any;
 }
-
-const AzureResourceTypes = {
-  APP_REGISTRATION: 'appRegistration',
-  BOT_REGISTRATION: 'botRegistration',
-  WEBAPP: 'webApp',
-  AZUREFUNCTIONS: 'azureFunctions',
-  COSMODB: 'cosmoDb',
-  APPINSIGHTS: 'applicationInsights',
-  LUIS_AUTHORING: 'luisAuthoring',
-  LUIS_PREDICTION: 'luisPrediction',
-  BLOBSTORAGE: 'blobStorage',
-  QNA: 'qna',
-  SERVICE_PLAN: 'servicePlan'
-};
 
 export class BotProjectProvision {
   private subscriptionId: string;
@@ -90,7 +77,7 @@ export class BotProjectProvision {
   /***********************************************************************************************
    * Azure API accessors
    **********************************************************************************************/
-   /*
+  /*
    * create the applicationId for the bot registration
    * Docs: https://docs.microsoft.com/en-us/graph/api/application-post-applications?view=graph-rest-1.0&tabs=http
    */
@@ -217,7 +204,7 @@ export class BotProjectProvision {
         luisPrediction: null,
         luisAuthoring: null,
         blobStorage: null,
-        cosmoDB: null,
+        cosmosDB: null,
         appInsights: null,
         qna: null,
       };
@@ -310,8 +297,8 @@ export class BotProjectProvision {
 
           /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
           // Create the Cosmo DB for state
-          case AzureResourceTypes.COSMODB:
-            provisionResults.cosmoDB = await this.azureResourceManagementClient.deployCosmosDBResource({
+          case AzureResourceTypes.COSMOSDB:
+            provisionResults.cosmosDB = await this.azureResourceManagementClient.deployCosmosDBResource({
               resourceGroupName: resourceGroupName,
               location: provisionResults.resourceGroup.location,
               name: config.hostname.replace(/_/g, '').substr(0, 31).toLowerCase(),
@@ -380,7 +367,7 @@ export class BotProjectProvision {
               resourceGroupName: resourceGroupName,
               location: provisionResults.resourceGroup.location,
               name: `${config.hostname}-qna`,
-            })
+            });
             break;
         }
       }

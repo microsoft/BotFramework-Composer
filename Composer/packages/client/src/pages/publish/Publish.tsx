@@ -402,6 +402,9 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       console.log('BEGIN A PROVISION FOR PROJECT ', projectId, 'USING CONFIG', config);
       provisionToTarget(config, config.type, projectId);
     };
+    PluginAPI.publish.currentProjectId = () => {
+      return projectId;
+    };
   }, [projectId]);
 
   return (

@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { ComposerGlobalName } from '../common/constants';
+
 import { PublishConfig } from './types';
 
 export function setPublishConfig(config: PublishConfig) {
@@ -18,6 +19,10 @@ export function useConfigBeingEdited(): PublishConfig[] | undefined[] {
 
 export function startProvision(config: any): void {
   return window[ComposerGlobalName].startProvision(config);
+}
+
+export function currentProjectId(): string {
+  return window[ComposerGlobalName].currentProjectId();
 }
 
 export function closeDialog(): void {
