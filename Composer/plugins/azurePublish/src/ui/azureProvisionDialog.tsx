@@ -202,13 +202,25 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const onNext = useMemo(
     () => (config) => {
-      const result = getPreview(config.hostname);
-      console.log(enabledResources);
+      const names = getPreview(config.hostname);
+      console.log('got names', names);
+      const result = extensionResourceOptions.map((resource) => {
+        const name = names.find((n) => n.key === resource.key);
+        return {
+          ...resource,
+          name: name ? name.name : `UNKNOWN NAME FOR ${ resource.key }`,
+        };
+      });
+
+      // todo: generate list of resourceTypes based on what is in extensionResourceOptions
+      console.log('WILL PROVISION THESE ITEMS', result);
       let items = [] as any;
       const groups: IGroup[] = [];
       let startIndex = 0;
       for (const type of resourceTypes) {
-        const resources = result.filter((item) => enabledResources[item.key].enabled === true && item.group === type);
+        const resources = result.filter(
+          (item) => enabledResources[item.key] && enabledResources[item.key].enabled === true && item.group === type
+        );
 
         groups.push({
           key: type,
