@@ -236,8 +236,9 @@ const TableView: React.FC<TableViewProps> = (props) => {
     let insertPosition = groupStartIndex;
     if (groupStartIndex === -1) {
       insertPosition = 0;
-      setGroups(getGroups(fileId));
     }
+    const newGroups = getGroups(fileId);
+    setGroups(newGroups);
     const newItem = createQnASectionItem(fileId);
     const newQnaSections = [...qnaSections];
     newQnaSections.splice(insertPosition, 0, newItem);
@@ -262,8 +263,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     const newId = `${name}.source`;
     await actions.renameQnAKB({ id: editQnAFile.id, name: newId, projectId });
     if (!qnaFile) return;
-    await actions.removeQnAImport({ id: qnaFile.id, sourceId: editQnAFile.id, projectId });
-    await actions.createQnAImport({ id: qnaFile.id, sourceId: newId, projectId });
+    await actions.updateQnAImport({ id: qnaFile.id, sourceId: editQnAFile.id, newSourceId: newId, projectId });
     setEditQnAFile(undefined);
   };
 
@@ -515,7 +515,10 @@ const TableView: React.FC<TableViewProps> = (props) => {
                   value={''}
                   onBlur={(_id, value) => {
                     const newValue = value?.trim();
-                    if (!newValue) return;
+                    if (!newValue) {
+                      setCreatingQuestionInKthSection('');
+                      return;
+                    }
 
                     if (isCreatingQnA) {
                       const creatingQnAItem = creatQnAPairSettings.item;
@@ -666,7 +669,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
   };
 
   const [groups, setGroups] = useState<IGroup[] | undefined>(undefined);
-  const getGroups = (createOnEmptyFileId = ''): IGroup[] | undefined => {
+  const getGroups = (createOnGroupId = ''): IGroup[] | undefined => {
     let containerFiles = currentDialogImportedSourceFiles;
     if (dialogId === 'all') {
       containerFiles = allSourceFiles;
@@ -680,9 +683,9 @@ const TableView: React.FC<TableViewProps> = (props) => {
       const startIndex = lastGroup ? lastGroup.startIndex + lastGroup.count : 0;
       const { id } = currentFile;
       let count = currentFile.qnaSections.length;
-      // create on empty file, insert a place-holder section.
-      if (count === 0 && createOnEmptyFileId === id) {
-        count = 1;
+      // create on file, insert a place-holder section.
+      if (createOnGroupId === id) {
+        count += 1;
       }
       const name = getBaseName(id);
 

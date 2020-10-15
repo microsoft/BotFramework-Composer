@@ -599,6 +599,31 @@ ${response.data}
       });
     }
   );
+  const updateQnAImport = useRecoilCallback(
+    ({ set, snapshot }: CallbackInterface) => async ({
+      id,
+      sourceId,
+      newSourceId,
+      projectId,
+    }: {
+      id: string;
+      sourceId: string;
+      newSourceId: string;
+      projectId: string;
+    }) => {
+      const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
+      const qnaFile = qnaFiles.find((temp) => temp.id === id);
+      if (!qnaFile) return qnaFiles;
+
+      let updatedFile = qnaUtil.removeImport(qnaFile, `${sourceId}.qna`);
+      updatedFile = qnaUtil.addImport(updatedFile, `${newSourceId}.qna`);
+      set(qnaFilesState(projectId), (qnaFiles) => {
+        return qnaFiles.map((file) => {
+          return file.id === id ? updatedFile : file;
+        });
+      });
+    }
+  );
   const removeQnAKB = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async ({ id, projectId }: { id: string; projectId: string }) => {
       await removeKBFileState(callbackHelpers, { id, projectId });
@@ -621,6 +646,7 @@ ${response.data}
   return {
     createQnAImport,
     removeQnAImport,
+    updateQnAImport,
     createQnAPairs,
     removeQnAPairs,
     createQnAQuestion,
