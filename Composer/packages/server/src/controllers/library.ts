@@ -6,12 +6,10 @@ import path from 'path';
 import { ExtensionContext } from '@bfc/extension';
 import { SchemaMerger } from '@microsoft/bf-dialog/lib/library/schemaMerger';
 
-// import downloadNpmPackage from 'download-npm-package';
-
 import { BotProjectService } from '../services/project';
 
 // this flag controls whether or not composer will remove imported assets when a package is removed
-const CLEANUP_FILES_ON_UNINSTALL = true;
+const CLEANUP_FILES_ON_UNINSTALL = false;
 
 export interface FileRef {
   filename: string;
@@ -55,6 +53,12 @@ export const LibraryController = {
     const projectId = req.params.projectId;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
     const runtime = ExtensionContext.getRuntimeByProject(currentProject);
+    const mergeErrors: string[] = [];
+
+    const captureErrors = (msg: string): void => {
+      console.error(msg);
+      mergeErrors.push(msg);
+    };
 
     if (currentProject.settings?.runtime?.path) {
       const manifestFile = runtime.identifyManifest(currentProject.settings?.runtime?.path);
@@ -67,7 +71,7 @@ export const LibraryController = {
         false, // verbosity: true = verbose
         console.log,
         console.warn,
-        console.error
+        captureErrors
       );
       const dryRunMergeResults = await dryrun.merge();
 
@@ -77,7 +81,7 @@ export const LibraryController = {
         });
       } else {
         res.status(500).json({
-          message: 'Could not load component list',
+          message: 'Could not load component list:' + mergeErrors.join('\n'),
         });
       }
     } else {
@@ -96,6 +100,12 @@ export const LibraryController = {
     const packageName = req.query.package || req.body.package;
     const version = req.query.version || req.body.version;
     const isUpdating = req.query.isUpdating || req.body.isUpdating || false;
+    const mergeErrors: string[] = [];
+
+    const captureErrors = (msg: string): void => {
+      console.error(msg);
+      mergeErrors.push(msg);
+    };
 
     if (packageName && currentProject.settings?.runtime?.path) {
       try {
@@ -117,10 +127,10 @@ export const LibraryController = {
           '',
           path.join(currentProject.dataDir, 'dialogs'),
           true, // copy only? true = dry run
-          true, // verbosity: true = verbose
+          false, // verbosity: true = verbose
           console.log,
           console.warn,
-          console.error
+          captureErrors
         );
 
         const dryRunMergeResults = await dryrun.merge();
@@ -129,6 +139,10 @@ export const LibraryController = {
         // evaluate dry run.
         // Did we have any conflicts that prevent moving forward? if so, install
         // Otherwise, copy the files into the project
+
+        if (!dryRunMergeResults) {
+          throw new Error('A problem occured during the install of this Component:\n' + mergeErrors.join('\n'));
+        }
 
         // check the results to see if we have any problems
         if (dryRunMergeResults && dryRunMergeResults.conflicts && dryRunMergeResults.conflicts.length && !isUpdating) {
@@ -168,6 +182,13 @@ export const LibraryController = {
       } catch (err) {
         console.error('Error in import', { message: err.message });
         await runtime.uninstallComponent(currentProject.settings.runtime.path, packageName);
+        // if packageName is in the github form <username/package> remove the first part, because otherwise the unisntall doesn't work
+        if (packageName.match(/.*\/.*/)) {
+          const [user, realPackageName] = packageName.split(/\//);
+          if (!user.match(/^@/)) {
+            await runtime.uninstallComponent(currentProject.settings.runtime.path, realPackageName);
+          }
+        }
         res.status(500).json({ success: false, message: err.message });
       }
     } else if (!currentProject.settings?.runtime?.path) {
@@ -181,6 +202,12 @@ export const LibraryController = {
     const projectId = req.params.projectId;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
     const runtime = ExtensionContext.getRuntimeByProject(currentProject);
+    const mergeErrors: string[] = [];
+
+    const captureErrors = (msg: string): void => {
+      console.error(msg);
+      mergeErrors.push(msg);
+    };
 
     // get URL or package name
     const packageName = req.query.package || req.body.package;
@@ -193,18 +220,22 @@ export const LibraryController = {
         console.log('UNINSTALL OUTPUT', output);
         console.log('EXAMINING PACKAGE: ', manifestFile);
         // call do a dry run on the dialog merge
-        const dryrun = new SchemaMerger(
+        const merger = new SchemaMerger(
           [manifestFile],
           '',
           path.join(currentProject.dataDir, 'dialogs/imported'),
-          true, // copy only? true = dry run
-          true, // verbosity: true = verbose
+          false, // copy only? true = dry run
+          false, // verbosity: true = verbose
           console.log,
           console.warn,
-          console.error
+          captureErrors
         );
 
-        const dryRunMergeResults = await dryrun.merge();
+        const mergeResults = await merger.merge();
+
+        if (!mergeResults) {
+          throw new Error(mergeErrors.join('\n'));
+        }
 
         if (CLEANUP_FILES_ON_UNINSTALL) {
           // Remove the files from the project
@@ -212,7 +243,7 @@ export const LibraryController = {
           await currentProject.fileStorage.rmrfDir(projectFiles);
         }
 
-        console.log('MERGE RESULTS', dryRunMergeResults);
+        console.log('MERGE RESULTS', mergeResults);
         res.json({
           success: true,
           // results: mergeResults,
