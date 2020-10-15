@@ -47,8 +47,8 @@ if (app.isPackaged) {
 log(`${process.env.NODE_ENV} environment detected.`);
 
 function processArgsForWindows(args: string[]): string {
-  const envId = '40c6f77b-8fc6-4bbd-9bdc-2d4a941ef0b8';
-  const botId = '8e2f2bff-7534-45b2-9343-2aa12e12af98';
+  const envId = '5d8804e2-ed21-4ad1-8eee-e86db6939406';
+  const botId = 'f2a9af02-b019-4094-9474-f3d5aa68106c';
   const payload = {
     botId,
     description: 'A bot that reports the current weather.',

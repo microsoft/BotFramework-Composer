@@ -29,14 +29,14 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
           const data = await res.json();
 
           // navigate to creation flow with template selected
-          const { eTag, templateDir } = data;
+          const { eTag, templateDir, urlSuffix } = data;
           const { description, name } = JSON.parse(payload) as { description: string; name: string };
           navigate(
             `/projects/create/${encodeURIComponent(source)}?imported=true&templateDir=${encodeURIComponent(
               templateDir
             )}&name=${encodeURIComponent(name)}&description=${encodeURIComponent(
               description
-            )}&eTag=${encodeURIComponent(eTag)}`
+            )}&eTag=${encodeURIComponent(eTag)}&urlSuffix=${encodeURIComponent(urlSuffix)}`
           );
         } catch (e) {
           // something went wrong, abort and navigate to the home page

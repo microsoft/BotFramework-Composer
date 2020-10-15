@@ -3,8 +3,17 @@ export type ContentProviderMetadata = {
 };
 
 export type BotContentInfo = {
+  /** Where the bot content .zip is located */
   zipPath: string;
+
+  /** ETag signifying the current snapshot of the bot content */
   eTag: string;
+
+  /** @description
+   * (Optional) The url suffix to allow a post-import deep link into a dialog & trigger.
+   *  Ex. "dialogs/my-dialog?selected=triggers[%22trigger-id%22]" will navigate to /bot/BOT-ID/dialogs/my-dialog?selected=triggers[%22trigger-id%22]
+   */
+  urlSuffix?: string;
 };
 
 export abstract class ExternalContentProvider {

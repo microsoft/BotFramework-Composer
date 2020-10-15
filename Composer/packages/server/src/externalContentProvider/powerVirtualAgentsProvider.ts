@@ -3,9 +3,10 @@ import { ensureDirSync, removeSync } from 'fs-extra';
 import fetch, { RequestInit } from 'node-fetch';
 import { join } from 'path';
 import { authService } from '../services/auth';
-// import { useElectronContext } from '../utility/electronContext';
 
 import { BotContentInfo, ContentProviderMetadata, ExternalContentProvider } from './externalContentProvider';
+
+const COMPOSER_1P_APP_ID = 'ce48853e-0605-4f77-8746-d70ac63cc6bc';
 
 type PowerVirtualAgentsMetadata = ContentProviderMetadata & {
   botId?: string;
@@ -17,10 +18,10 @@ type PowerVirtualAgentsMetadata = ContentProviderMetadata & {
   triggerId?: string;
 };
 
-//const baseUrl = 'https://bots.int.customercareintelligence.net'; // int = test environment
-const baseUrl = 'https://bots.ppe.customercareintelligence.net'; // ppe
+const baseUrl = 'https://bots.int.customercareintelligence.net'; // int = test environment
+//const baseUrl = 'https://bots.ppe.customercareintelligence.net'; // ppe
 const authCredentials = {
-  clientId: 'ce48853e-0605-4f77-8746-d70ac63cc6bc',
+  clientId: COMPOSER_1P_APP_ID,
   scopes: ['a522f059-bb65-47c0-8934-7db6e5286414/.default'], // int / ppe
 };
 
@@ -65,7 +66,7 @@ export class PowerVirtualAgentsProvider extends ExternalContentProvider {
           writeStream.once('error', reject);
           result.body.pipe(writeStream);
         });
-        return { eTag, zipPath };
+        return { eTag, zipPath, urlSuffix: this.getDeepLink() };
       } else {
         throw 'Response containing zip does not have a body';
       }
@@ -105,5 +106,26 @@ export class PowerVirtualAgentsProvider extends ExternalContentProvider {
       'X-CCI-TenantId': tenantId,
       'X-CCI-Routing-TenantId': tenantId,
     };
+  }
+
+  private getDeepLink(): string {
+    // use metadata (if provided) to create a deep link to a specific dialog / trigger / action etc. after opening bot.
+    let deepLink = '';
+    const dialogId = 'my-dialog';
+    const triggerId = 'my-trigger';
+    const actionId = 'my-action';
+    if (dialogId) {
+      deepLink += `dialogs/${dialogId}`;
+    }
+    if (dialogId && triggerId) {
+      deepLink += `?selected=triggers[${encodeURIComponent(`"${triggerId}"`)}]`;
+    }
+    if (dialogId && triggerId && actionId) {
+      deepLink += `&focused=triggers[${encodeURIComponent(`"${triggerId}"`)}].actions[${encodeURIComponent(
+        `"${actionId}"`
+      )}]`;
+    }
+    // base64 encode to make parsing on the client side easier
+    return Buffer.from(deepLink, 'utf-8').toString('base64');
   }
 }

@@ -123,6 +123,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
       qnaKbUrls,
       templateDir: formData.templateDir,
       eTag: formData.eTag,
+      urlSuffix: formData.urlSuffix,
     };
     createNewBot(newBotData);
   };
