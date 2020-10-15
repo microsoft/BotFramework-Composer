@@ -65,7 +65,7 @@ export default async (composer: any): Promise<void> => {
       // do the dotnet publish
       try {
         const { stdout, stderr } = await execAsync(
-          `dotnet publish "${dotnetProjectPath}" -c release -o "${publishFolder}" -v q --self-contained`,
+          `dotnet publish "${dotnetProjectPath}" -c release -o "${publishFolder}" -v q --self-contained true`,
           {
             cwd: runtimePath,
           }
