@@ -46,7 +46,7 @@ Let's start by adding some variation to the welcome message.
 
     ![Bot Responses](../media/tutorial-weatherbot/05/bot-responses.png)
 
-6.  Toggle the **Edit Mode** switch in the upper right hand corner so that it turns blue. This will enable a syntax-highlighted LG editor in the main pane.
+6.  Toggle the **Show code** switch in the upper right hand corner so that it turns blue. This will enable a syntax-highlighted LG editor in the main pane.
 
     > You'll notice that every message you created in the flow editor also appears here. They're linked, and any changes you make in this view will be reflected in the flow as well.
 

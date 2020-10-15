@@ -15,6 +15,7 @@ export enum FileExtensions {
   Lu = '.lu',
   Lg = '.lg',
   QnA = '.qna',
+  SourceQnA = '.source.qna',
   Setting = 'appsettings.json',
   BotProject = '.botproj',
 }
