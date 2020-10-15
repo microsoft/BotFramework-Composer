@@ -6,7 +6,6 @@
   "license": "MIT",
   "scripts": {
     "build:appinsight": "cd ../lib/arm-appinsights && yarn && yarn build",
-    "build:botservice": "cd ../lib/arm-botservice && yarn && yarn build",
     "build:ui": "webpack --config webpack.config.js",
     "build:node": "tsc --project tsconfig.node.json",
     "build": "yarn build:node && yarn build:ui"
@@ -31,7 +30,7 @@
     "@azure/arm-appinsights": "../lib/arm-appinsights",
     "@azure/arm-appservice": "^6.0.0",
     "@azure/arm-appservice-profile-2019-03-01-hybrid": "1.0.0",
-    "@azure/arm-botservice": "../lib/arm-botservice",
+    "@azure/arm-botservice": "^2.0.0",
     "@azure/arm-cognitiveservices": "^5.2.0",
     "@azure/arm-cosmosdb": "^9.0.0",
     "@azure/arm-deploymentmanager": "3.0.0",

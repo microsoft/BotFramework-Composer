@@ -27,12 +27,14 @@
     "@azure/ms-rest-js" "^2.0.4"
     tslib "^1.10.0"
 
-"@azure/arm-botservice@../lib/arm-botservice":
-  version "1.0.0"
+"@azure/arm-botservice@^2.0.0":
+  version "2.0.0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@azure/arm-botservice/-/@azure/arm-botservice-2.0.0.tgz#f82469374dde5ed6cdbe1f11669aa30d27889ec6"
+  integrity sha1-+CRpN03eXtbNvh8RZpqjDSeInsY=
   dependencies:
-    "@azure/ms-rest-azure-js" "2.0.1"
-    "@azure/ms-rest-js" "2.0.7"
-    tslib "^1.9.3"
+    "@azure/ms-rest-azure-js" "^2.0.1"
+    "@azure/ms-rest-js" "^2.0.4"
+    tslib "^1.10.0"
 
 "@azure/arm-cognitiveservices@^5.2.0":
   version "5.2.0"

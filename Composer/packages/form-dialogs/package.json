@@ -8,8 +8,7 @@
   "typings": "./lib/VisualSchemaEditor.d.ts",
   "files": [
     "lib/*index*",
-    "lib/VisualSchemaEditor.d.ts",
-    "LICENSE"
+    "lib/FormDialogSchemaEditor.d.ts"
   ],
   "scripts": {
     "clean": "rimraf lib dist",
