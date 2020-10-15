@@ -40,9 +40,14 @@ const FormDialogPage: React.FC<Props> = React.memo((props: Props) => {
     createFormDialogSchema,
     updateFormDialogSchema,
     navigateToGeneratedDialog,
+    loadFormDialogSchemaTemplates,
   } = useRecoilValue(dispatcherState);
 
   const { 0: createSchemaDialogOpen, 1: setCreateSchemaDialogOpen } = React.useState(false);
+
+  React.useEffect(() => {
+    loadFormDialogSchemaTemplates();
+  }, []);
 
   const availableTemplates = React.useMemo(
     () => formDialogLibraryTemplates.filter((t) => !t.isGlobal).map((t) => t.name),

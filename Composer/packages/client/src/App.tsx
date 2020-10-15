@@ -20,11 +20,10 @@ export const App: React.FC = () => {
     loadLocale(appLocale);
   }, [appLocale]);
 
-  const { fetchExtensions, loadFormDialogSchemaTemplates } = useRecoilValue(dispatcherState);
+  const { fetchExtensions } = useRecoilValue(dispatcherState);
 
   useEffect(() => {
     fetchExtensions();
-    loadFormDialogSchemaTemplates();
   }, []);
 
   return (
