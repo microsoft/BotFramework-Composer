@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { FileInfo, IConfig } from '@bfc/shared';
+import { Orchestrator } from '@microsoft/bf-orchestrator';
 
 import { Path } from '../../utility/path';
 import { IFileStorage } from '../storage/interface';
@@ -9,8 +10,6 @@ import log from '../../logger';
 
 import { ComposerReservoirSampler } from './sampler/ReservoirSampler';
 import { ComposerBootstrapSampler } from './sampler/BootstrapSampler';
-
-import { Orchestrator } from '@microsoft/bf-orchestrator';
 import { IOrchestratorBuildOutput, IOrchestratorNLRList, IOrchestratorProgress } from './interface';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -155,10 +154,10 @@ export class Builder {
   public async runOrchestratorBuild(
     files: FileInfo[],
     modelPath: string,
-    isDialog: boolean = true,
-    fullEmbedding: boolean = false
+    isDialog = true,
+    fullEmbedding = false
   ): Promise<IOrchestratorBuildOutput> {
-    let luObjects = files
+    const luObjects = files
       .filter((fi) => fi.name.endsWith('.lu'))
       .map((fi) => ({
         id: fi.name,
