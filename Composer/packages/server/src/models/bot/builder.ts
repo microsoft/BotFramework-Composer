@@ -61,13 +61,13 @@ export class Builder {
     this._locale = locale;
   }
 
-  public build = async (luFiles: FileInfo[], qnaFiles: FileInfo[]) => {
+  public build = async (luFiles: FileInfo[], qnaFiles: FileInfo[], allFiles: FileInfo[]) => {
     try {
       await this.createGeneratedDir();
       //do cross train before publish
-      await this.crossTrain(luFiles, qnaFiles);
+      await this.crossTrain(luFiles, qnaFiles, allFiles);
       const { interruptionLuFiles, interruptionQnaFiles } = await this.getInterruptionFiles();
-      await this.runLuBuild(interruptionLuFiles);
+      await this.runLuBuild(interruptionLuFiles, allFiles);
       await this.runQnaBuild(interruptionQnaFiles);
     } catch (error) {
       throw new Error(error.message ?? error.text ?? 'Error publishing to LUIS or QNA.');
@@ -106,7 +106,7 @@ export class Builder {
     await this.storage.mkDir(this.generatedFolderPath);
   }
 
-  private async crossTrain(luFiles: FileInfo[], qnaFiles: FileInfo[]) {
+  private async crossTrain(luFiles: FileInfo[], qnaFiles: FileInfo[], allFiles: FileInfo[]) {
     const luContents = luFiles.map((file) => {
       return { content: file.content, id: file.name };
     });
@@ -191,7 +191,7 @@ export class Builder {
     );
   }
 
-  private async runLuBuild(files: FileInfo[]) {
+  private async runLuBuild(files: FileInfo[], allFiles: FileInfo[]) {
     const config = await this._getConfig(files, 'lu');
 
     let luContents = await this.luBuilder.loadContents(config.models, {

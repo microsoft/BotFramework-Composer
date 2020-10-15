@@ -89,7 +89,7 @@ export type ProjectContextApi = {
   addSkillDialog: () => Promise<{ manifestUrl: string; name: string } | null>;
   displayManifestModal: (manifestId: string) => void;
   updateDialogSchema: (_: DialogSchemaFile) => Promise<void>;
-  createTrigger: (id: string, formData, url?: string) => void;
+  createTrigger: (id: string, formData, autoSelected?: boolean) => void;
   updateSkillSetting: (skillId: string, skillsData: SkillSetting) => Promise<void>;
   updateFlowZoomRate: (currentRate: number) => void;
 };

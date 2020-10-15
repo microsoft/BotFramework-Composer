@@ -8,7 +8,7 @@ import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcru
 import formatMessage from 'format-message';
 import { globalHistory, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
-import { DialogInfo, PromptTab, getEditorAPI, registerEditorAPI, FieldNames } from '@bfc/shared';
+import { DialogInfo, PromptTab, getEditorAPI, registerEditorAPI } from '@bfc/shared';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import { EditorExtension, useTriggerApi, PluginConfig } from '@bfc/extension-client';
@@ -48,8 +48,9 @@ import {
   showCreateDialogModalState,
   showAddSkillDialogModalState,
   localeState,
+  qnaFilesState,
 } from '../../recoilModel';
-import ImportQnAFromUrlModal from '../knowledge-base/ImportQnAFromUrlModal';
+import { CreateQnAModal } from '../../components/QnA';
 import { triggerNotSupported } from '../../utils/dialogValidator';
 import { undoFunctionState, undoVersionState } from '../../recoilModel/undo/history';
 import { decodeDesignerPathToArrayPath } from '../../utils/convertUtils/designerPathEncoder';
@@ -111,6 +112,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const { location, dialogId, projectId = '' } = props;
   const userSettings = useRecoilValue(userSettingsState);
 
+  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   const schemas = useRecoilValue(schemasState(projectId));
   const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
   const displaySkillManifest = useRecoilValue(displaySkillManifestState(projectId));
@@ -138,7 +140,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     addSkillDialogCancel,
     exportToZip,
     onboardingAddCoachMarkRef,
-    importQnAFromUrls,
+    createQnAKBFromUrl,
+    createQnAKBFromScratch,
+    createQnAFromUrlDialogBegin,
     addSkill,
     updateZoomRate,
   } = useRecoilValue(dispatcherState);
@@ -150,7 +154,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   );
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
   const [dialogJsonVisible, setDialogJsonVisibility] = useState(false);
-  const [importQnAModalVisibility, setImportQnAModalVisibility] = useState(false);
   const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0]);
   const [exportSkillModalVisible, setExportSkillModalVisible] = useState(false);
   const [warningIsVisible, setWarningIsVisible] = useState(true);
@@ -159,6 +162,15 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const shellForPropertyEditor = useShell('PropertyEditor', projectId);
   const triggerApi = useTriggerApi(shell.api);
   const { createTrigger } = shell.api;
+
+  const defaultQnATriggerData = {
+    $kind: qnaMatcherKey,
+    errors: { $kind: '', intent: '', event: '', triggerPhrases: '', regEx: '', activity: '' },
+    event: '',
+    intent: '',
+    regEx: '',
+    triggerPhrases: '',
+  };
 
   useEffect(() => {
     const currentDialog = dialogs.find(({ id }) => id === dialogId);
@@ -232,10 +244,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     //leave design page should clear the history
     return clearUndo;
   }, []);
-
-  const openImportQnAModal = () => {
-    setImportQnAModalVisibility(true);
-  };
 
   const onTriggerCreationDismiss = () => {
     setTriggerModalVisibility(false);
@@ -315,7 +323,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
               displayName: currentDialog?.displayName ?? '',
             }),
             onClick: () => {
-              openImportQnAModal();
+              createQnAFromUrlDialogBegin({
+                projectId,
+                showFromScratch: true,
+              });
             },
           },
         ],
@@ -548,33 +559,15 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     onboardingAddCoachMarkRef({ addNew });
   }, []);
 
-  const cancelImportQnAModal = () => {
-    setImportQnAModalVisibility(false);
-  };
+  const handleCreateQnA = async (data) => {
+    if (!dialogId) return;
+    createTrigger(dialogId, defaultQnATriggerData);
 
-  const handleCreateQnA = async (urls: string[]) => {
-    cancelImportQnAModal();
-    const formData = {
-      $kind: qnaMatcherKey,
-      errors: { $kind: '', intent: '', event: '', triggerPhrases: '', regEx: '', activity: '' },
-      event: '',
-      intent: '',
-      regEx: '',
-      triggerPhrases: '',
-    };
-    const dialog = dialogs.find((d) => d.id === dialogId);
-    if (dialogId && dialog) {
-      const url = `/bot/${projectId}/knowledge-base/${dialogId}`;
-      const triggers = get(dialog, FieldNames.Events, []);
-      if (triggers.some((t) => t.type === qnaMatcherKey)) {
-        navigateTo(url);
-      } else {
-        createTrigger(dialogId, formData, url);
-      }
-      // import qna from urls
-      if (urls.length > 0) {
-        await importQnAFromUrls({ id: `${dialogId}.${locale}`, urls, projectId });
-      }
+    const { name, url, multiTurn } = data;
+    if (url) {
+      await createQnAKBFromUrl({ id: `${dialogId}.${locale}`, name, url, multiTurn, projectId });
+    } else {
+      await createQnAKBFromScratch({ id: `${dialogId}.${locale}`, name, projectId });
     }
   };
 
@@ -692,9 +685,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             onSubmit={onTriggerCreationSubmit}
           />
         )}
-        {importQnAModalVisibility && (
-          <ImportQnAFromUrlModal dialogId={dialogId} onDismiss={cancelImportQnAModal} onSubmit={handleCreateQnA} />
-        )}
+        <CreateQnAModal dialogId={dialogId} projectId={projectId} qnaFiles={qnaFiles} onSubmit={handleCreateQnA} />)
         {displaySkillManifest && (
           <DisplayManifestModal
             manifestId={displaySkillManifest}
