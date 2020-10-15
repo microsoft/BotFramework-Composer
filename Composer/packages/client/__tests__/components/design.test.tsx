@@ -30,11 +30,11 @@ describe('<ProjectTree/>', () => {
     const handleSelect = jest.fn(() => {});
     const handleDeleteDialog = jest.fn(() => {});
     const handleDeleteTrigger = jest.fn(() => {});
-    const { findByText } = renderWithRecoil(
+    const { findByTestId } = renderWithRecoil(
       <ProjectTree onDeleteDialog={handleDeleteDialog} onDeleteTrigger={handleDeleteTrigger} onSelect={handleSelect} />,
       initRecoilState
     );
-    const node = await findByText('Greeting');
+    const node = await findByTestId('EchoBot-1_Greeting');
     fireEvent.click(node);
     expect(handleSelect).toHaveBeenCalledTimes(1);
   });

@@ -520,7 +520,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     } else {
       title = DialogDeleting.NO_LINKED_TITLE;
     }
-    console.log('in delete:', title, 'st=', subTitle, 'set=', setting, 'refs=', refs);
     const result = await OpenConfirmModal(title, subTitle, setting);
 
     if (result) {

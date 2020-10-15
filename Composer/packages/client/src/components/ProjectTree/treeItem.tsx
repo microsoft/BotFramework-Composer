@@ -161,17 +161,18 @@ const renderTreeMenuItem = (link: TreeLink) => (item: TreeMenuItem) => {
     ariaLabel: item.label,
     text: item.label,
     iconProps: { iconName: item.icon },
-    onClick: (ev) => {
+    onClick: () => {
       item.action?.(link);
     },
   };
 };
 
 const onRenderItem = (item: IOverflowSetItemProps) => {
+  const { warningContent, errorContent } = item;
   return (
     <div
       data-is-focusable
-      aria-label={`${item.displayName} ${item.warningContent} ${item.errorContent}`}
+      aria-label={`${item.displayName} ${warningContent ?? ''} ${errorContent ?? ''}`}
       css={itemText}
       role="cell"
       tabIndex={0}

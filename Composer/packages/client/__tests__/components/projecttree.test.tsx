@@ -35,9 +35,7 @@ describe('<ProjectTree/>', () => {
       initRecoilState
     );
 
-    console.log(await (await component.findByTestId('dialog')).innerHTML);
-
-    const node = await component.findByText('Unknown intent');
+    const node = await component.findByTestId('EchoBot-1_Greeting');
     fireEvent.click(node);
     expect(mockFileSelect).toHaveBeenCalledTimes(1);
   });
