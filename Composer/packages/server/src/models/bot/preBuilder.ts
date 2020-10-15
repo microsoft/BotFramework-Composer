@@ -26,13 +26,14 @@ export class PreBuilder {
       crossTrainConfig?: CrossTrainConfig;
       luFiles: FileInfo[];
       qnaFiles: FileInfo[];
+      emptyFiles: { [fileName: string]: boolean };
     }
   ) {
     await this.createRecognizersDir();
 
     await this.updateCrossTrainConfig(options.luFiles, options.crossTrainConfig);
 
-    await this.updateRecognizers(recognizerTypes, [...options.luFiles, ...options.qnaFiles]);
+    await this.updateRecognizers(recognizerTypes, [...options.luFiles, ...options.qnaFiles], options.emptyFiles);
   }
 
   async createRecognizersDir() {
@@ -98,12 +99,16 @@ export class PreBuilder {
   /**
    * update the recoginzers before build
    */
-  async updateRecognizers(recognizerTypes: RecognizerTypes, files: FileInfo[]) {
+  async updateRecognizers(recognizerTypes: RecognizerTypes, files: FileInfo[], emptyFiles) {
     await Promise.all(
       keys(recognizerTypes).map(async (item) => {
         const type = recognizerTypes[item];
-        const targetFiles = files.filter((file) => file.name.startsWith(item)).map((item) => item.name);
-        await recognizers[type](item, targetFiles, this.storage, {
+        const targetFiles = files
+          .filter((file) => file.name.startsWith(item) && !emptyFiles[file.name])
+          .map((item) => item.name);
+
+        const updateFunc = recognizers[type] ?? recognizers.Default;
+        await updateFunc(item, targetFiles, this.storage, {
           defalutLanguage: 'en-us',
           folderPath: this.folderPath,
         });

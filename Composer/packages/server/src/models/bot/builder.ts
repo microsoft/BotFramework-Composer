@@ -10,8 +10,6 @@ import log from '../../logger';
 
 import { ComposerReservoirSampler } from './sampler/ReservoirSampler';
 import { ComposerBootstrapSampler } from './sampler/BootstrapSampler';
-import { PreBuilder } from './preBuilder';
-import { RecognizerTypes } from './recognizer';
 
 const crossTrainer = require('@microsoft/bf-lu/lib/parser/cross-train/crossTrainer.js');
 const luBuild = require('@microsoft/bf-lu/lib/parser/lubuild/builder.js');
@@ -45,7 +43,6 @@ export class Builder {
   public storage: IFileStorage;
   public config: IConfig | null = null;
   public downSamplingConfig: DownSamplingConfig = { maxImbalanceRatio: 0, maxUtteranceAllowed: 0 };
-  public preBuilder: PreBuilder;
   private _locale: string;
   public crossTrainConfig: CrossTrainConfig = {};
 
@@ -62,22 +59,16 @@ export class Builder {
     this.interruptionFolderPath = Path.join(this.generatedFolderPath, INTERUPTION);
     this.storage = storage;
     this._locale = locale;
-    this.preBuilder = new PreBuilder(path, storage);
   }
 
-  public build = async (luFiles: FileInfo[], qnaFiles: FileInfo[], recognizerTypes: RecognizerTypes) => {
+  public build = async (luFiles: FileInfo[], qnaFiles: FileInfo[]) => {
     try {
-      await this.preBuilder.prebuild(recognizerTypes, { crossTrainConfig: this.crossTrainConfig, luFiles, qnaFiles });
-
       await this.createGeneratedDir();
       //do cross train before publish
       await this.crossTrain(luFiles, qnaFiles);
       const { interruptionLuFiles, interruptionQnaFiles } = await this.getInterruptionFiles();
       await this.runLuBuild(interruptionLuFiles);
       await this.runQnaBuild(interruptionQnaFiles);
-
-      //remove the cross train result
-      await this.cleanCrossTrain();
     } catch (error) {
       throw new Error(error.message ?? error.text ?? 'Error publishing to LUIS or QNA.');
     }
@@ -110,6 +101,8 @@ export class Builder {
   private async createGeneratedDir() {
     // clear previous folder
     await this.deleteDir(this.generatedFolderPath);
+    //remove the cross train result
+    await this.cleanCrossTrain();
     await this.storage.mkDir(this.generatedFolderPath);
   }
 

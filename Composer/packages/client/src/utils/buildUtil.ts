@@ -62,3 +62,5 @@ export function isBuildConfigComplete(config, dialogs, luFiles, qnaFiles) {
 export function needsBuild(dialogs) {
   return dialogs.some((dialog) => typeof dialog.content.recognizer === 'string');
 }
+
+export function createRecognizerTypeMap(dialogs: DialogInfo[]) {}

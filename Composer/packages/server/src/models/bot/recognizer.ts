@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { RecognizerType, SDKKinds } from '@bfc/shared';
+import { SDKKinds } from '@bfc/shared';
 
 import { IFileStorage } from '../storage/interface';
 
@@ -11,6 +11,7 @@ export type UpdateRecognizer = (
   options: { defalutLanguage?: string; folderPath?: string }
 ) => Promise<void> | void;
 
+export type RecognizerType = SDKKinds.CrossTrainedRecognizerSet | SDKKinds.LuisRecognizer | string;
 export type RecognizerTypes = { [fileName: string]: RecognizerType };
 
 type GeneratedDialog = { name: string; content: string };
@@ -44,6 +45,47 @@ const getLuFileLocal = (fileName: string) => {
   return items[items.length - 2];
 };
 
+const getMultiLanguagueRecognizerDialog = (target: string, luFileNames: string[], defalutLanguage = 'en-us') => {
+  const multiLanguageRecognizer = MultiLanguageRecognizerTemplate(target);
+
+  luFileNames.forEach((item) => {
+    const local = getLuFileLocal(item);
+    multiLanguageRecognizer.recognizers[local] = item;
+    if (local === defalutLanguage) {
+      multiLanguageRecognizer.recognizers[''] = item;
+    }
+  });
+
+  return { name: `${target}.lu.dialog`, content: JSON.stringify(multiLanguageRecognizer, null, 2) };
+};
+
+const getCrossTrainedRecognizerDialog = (target: string, fileNames: string[]) => {
+  const crossTrainedRecognizer = CrossTrainedRecognizerTemplate();
+
+  if (fileNames.some((item) => item.endsWith('.qna'))) {
+    crossTrainedRecognizer.recognizers.push(`${target}.qna`);
+  }
+
+  if (fileNames.some((item) => item.endsWith('.lu'))) {
+    crossTrainedRecognizer.recognizers.push(`${target}.lu`);
+  }
+
+  return {
+    name: `${target}.lu.qna.dialog`,
+    content: JSON.stringify(crossTrainedRecognizer, null, 2),
+  };
+};
+
+const getLuisRecognizerDialogs = (target: string, luFileNames: string[]) => {
+  return luFileNames.map((item) => {
+    const local = getLuFileLocal(item);
+    return {
+      name: `${target}.${local}.lu.dialog`,
+      content: JSON.stringify(LuisRecognizerTemplate(target, item), null, 2),
+    };
+  });
+};
+
 /**
  * DefaultRecognizer:
  *  luisRecoginzers: create and preserve(exists)
@@ -54,47 +96,29 @@ const getLuFileLocal = (fileName: string) => {
  * @param fileNames the lu and qna files name list
  * @param folderPath the recognizers folder's path
  */
-export const updateDefault: UpdateRecognizer = async (
+const updateRecognizers = (isCrosstrain: boolean): UpdateRecognizer => async (
   target: string,
   fileNames: string[],
   storage: IFileStorage,
   { defalutLanguage, folderPath }
 ) => {
-  const multiLanguageRecognizers = MultiLanguageRecognizerTemplate(target);
-  const crossTrainedRecognizers = CrossTrainedRecognizerTemplate();
+  const luFileNames = fileNames.filter((item) => item.endsWith('.lu'));
+  const multiLanguageRecognizerDialog = getMultiLanguagueRecognizerDialog(target, luFileNames, defalutLanguage);
+  const luisRecognizersDialogs = getLuisRecognizerDialogs(target, luFileNames);
   const needUpdateDialogs: GeneratedDialog[] = [];
   const needPreserveDialogs: GeneratedDialog[] = [];
 
-  if (fileNames.some((item) => item.endsWith('.qna'))) {
-    crossTrainedRecognizers.recognizers.push(`${target}.qna`);
+  if (isCrosstrain) {
+    const crossTrainedRecognizerDialog = getCrossTrainedRecognizerDialog(target, fileNames);
+    needUpdateDialogs.push(crossTrainedRecognizerDialog);
   }
 
-  const luFileNames = fileNames.filter((item) => item.endsWith('.lu'));
-
-  if (luFileNames.length) {
-    crossTrainedRecognizers.recognizers.push(`${target}.lu`);
-  }
-
-  luFileNames.forEach((item) => {
-    const local = getLuFileLocal(item);
-    needPreserveDialogs.push({
-      name: `${target}.${local}.lu.dialog`,
-      content: JSON.stringify(LuisRecognizerTemplate(target, item), null, 2),
-    });
-    multiLanguageRecognizers.recognizers[local] = item;
-    if (local === defalutLanguage) {
-      multiLanguageRecognizers.recognizers[''] = item;
-    }
+  luisRecognizersDialogs.forEach((item) => {
+    needPreserveDialogs.push(item);
   });
 
-  //The multiLanguageRecognizer and crossTrainedRecognizer need to check update every time
-  needUpdateDialogs.push({
-    name: `${target}.lu.qna.dialog`,
-    content: JSON.stringify(crossTrainedRecognizers, null, 2),
-  });
-
-  if (luFileNames.length) {
-    needUpdateDialogs.push({ name: `${target}.lu.dialog`, content: JSON.stringify(multiLanguageRecognizers, null, 2) });
+  if (luisRecognizersDialogs.length) {
+    needUpdateDialogs.push(multiLanguageRecognizerDialog);
   }
 
   const previousFilePaths = await storage.glob(`${target}.*`, folderPath ?? '');
@@ -119,10 +143,15 @@ export const updateDefault: UpdateRecognizer = async (
   );
 };
 
+export const updateCrossTrained: UpdateRecognizer = updateRecognizers(true);
+
+export const updateLuis: UpdateRecognizer = updateRecognizers(false);
+
 /**
  * RegexRecognizer now remove all the files
+ * ToDo: CustomRecognizer now remove all the files
  */
-export const updateRegex: UpdateRecognizer = async (
+export const removeRecognizers: UpdateRecognizer = async (
   target: string,
   fileNames: string[],
   storage: IFileStorage,
@@ -137,22 +166,10 @@ export const updateRegex: UpdateRecognizer = async (
   );
 };
 
-/**
- * ToDo: CustomRecognizer now remove all the files
- */
-export const updateCustom: UpdateRecognizer = async (
-  target: string,
-  fileNames: string[],
-  storage: IFileStorage,
-  { folderPath }
-) => {
-  await updateRegex(target, fileNames, storage, { folderPath });
-};
-
 const recognizers: { [key in RecognizerType]: UpdateRecognizer } = {
-  DefaultRecognizer: updateDefault,
-  RegexRecognizer: updateRegex,
-  CustomRecognizer: updateCustom,
+  'Microsoft.CrossTrainedRecognizerSet': updateCrossTrained,
+  'Microsoft.LuisRecognizer': updateLuis,
+  Default: removeRecognizers,
 };
 
 export default recognizers;

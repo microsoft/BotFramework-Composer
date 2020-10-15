@@ -23,6 +23,7 @@ export const builderDispatcher = () => {
     ({ set, snapshot }: CallbackInterface) => async (
       luisConfig: ILuisConfig,
       qnaConfig: IQnAConfig,
+      recognizerTypes: { [fileName: string]: string },
       projectId: string
     ) => {
       const dialogs = await snapshot.getPromise(dialogsState(projectId));
@@ -55,12 +56,9 @@ export const builderDispatcher = () => {
           qnaConfig,
           projectId,
           crossTrainConfig,
-          recognizerTypes: dialogs.reduce((result, file) => {
-            result[file.id] = file.recognizerType;
-            return result;
-          }, {}),
-          luFiles: referredLuFiles.map((file) => file.id),
-          qnaFiles: qnaFiles.filter((file) => file.qnaSections.length).map((file) => file.id),
+          recognizerTypes,
+          luFiles: referredLuFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
+          qnaFiles: qnaFiles.map((file) => ({ id: file.id, isEmpty: !file.qnaSections.length })),
         });
         luFileStatusStorage.publishAll(projectId);
         qnaFileStatusStorage.publishAll(projectId);

@@ -6,6 +6,8 @@ import { ILuisConfig, IQnAConfig } from '@bfc/shared';
 import { CrossTrainConfig } from './builder';
 import { RecognizerTypes } from './recognizer';
 
+export type Resource = { id: string; isEmpty: boolean };
+
 export interface LocationRef {
   storageId: string;
   path: string;
@@ -14,8 +16,8 @@ export interface LocationRef {
 export interface IBuildConfig {
   luisConfig: ILuisConfig;
   qnaConfig: IQnAConfig;
-  luFileIds: string[];
-  qnaFileIds: string[];
+  luResource: Resource[];
+  qnaResource: Resource[];
   crossTrainConfig: CrossTrainConfig;
   recognizerTypes: RecognizerTypes;
 }

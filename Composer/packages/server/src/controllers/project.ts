@@ -330,8 +330,8 @@ async function build(req: Request, res: Response) {
       const files = await currentProject.buildFiles({
         luisConfig,
         qnaConfig,
-        luFileIds: luFiles,
-        qnaFileIds: qnaFiles,
+        luResource: luFiles,
+        qnaResource: qnaFiles,
         crossTrainConfig,
         recognizerTypes,
       });
