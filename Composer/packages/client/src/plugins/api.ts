@@ -31,6 +31,7 @@ interface PublishAPI {
   setPublishConfig?: (config: PublishConfig) => void;
   useConfigBeingEdited?: (() => PublishConfig[]) | (() => void);
   startProvision?: (config: any) => void;
+  currentProjectId?: () => string;
   closeDialog?: () => void;
 }
 
@@ -50,7 +51,6 @@ class API implements IAPI {
       },
       // TODO: deprecate this when we are using real login
       getAccessTokensFromStorage: () => {
-        console.log('GET ACCeSS TOKENS FROM STORAGE!', getAccessTokenInCache(), getGraphTokenInCache());
         return {
           // eslint-disable-next-line @typescript-eslint/camelcase
           access_token: getAccessTokenInCache(),
@@ -64,6 +64,7 @@ class API implements IAPI {
       setPublishConfig: undefined,
       useConfigBeingEdited: undefined,
       startProvision: undefined,
+      currentProjectId: undefined,
       closeDialog: undefined,
     };
   }

@@ -19,11 +19,6 @@ export const provisionDispatcher = () => {
       type: 'pending',
     };
   };
-  /* NOTE
-     On 9/25 Ben is marking these as deprecated since the required functionality has moved into the azurePublish ui plugin.
-     However I'm leaving it here just in case that was the wrong decision, and also to leave the structure of this in place
-     so that we can use it for possible near term intergrations between the Composer core and the azurepublish provisioning component.
-  */
   const provisionToTarget = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (config: any, type: string, projectId: string) => {
       try {
@@ -52,8 +47,7 @@ export const provisionDispatcher = () => {
     ({ set }: CallbackInterface) => async (projectId: string, target: any) => {
       const timer = setInterval(async () => {
         try {
-          const response = await httpClient.get(`/provisionStatus/${projectId}/${target.name}`);
-          console.log(response.data);
+          const response = await httpClient.get(`/provision/${projectId}/status/${target.name}`);
           if (response.data.config && response.data.config != {}) {
             clearInterval(timer);
             // update publishConfig

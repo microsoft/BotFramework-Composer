@@ -9,6 +9,7 @@ import { IBotProject } from '@bfc/shared';
 import { JSONSchema7 } from '@bfc/extension';
 import { Debugger } from 'debug';
 
+import { AzureResourceTypes, AzureResourceDefinitions } from './resourceTypes';
 import { mergeDeep } from './mergeDeep';
 import { BotProjectDeploy } from './deploy';
 import { BotProjectProvision } from './provision';
@@ -344,7 +345,7 @@ export default async (composer: any): Promise<void> => {
             applicationInsights: {
               InstrumentationKey: provisionResults.appInsights?.instrumentationKey,
             },
-            cosmosDb: provisionResults.cosmoDB,
+            cosmosDb: provisionResults.cosmosDB,
             blobStorage: provisionResults.blobStorage,
             luis: {
               authoringKey: provisionResults.luisAuthoring?.authoringKey,
@@ -501,6 +502,72 @@ export default async (composer: any): Promise<void> => {
         status: 404,
         message: 'bot not published',
       };
+    };
+
+    getResources = async (project: IBotProject, user) => {
+      const recommendedResources = [];
+
+      // add in the ALWAYS REQUIRED options
+
+      // Always need an app registration (app id and password)
+      recommendedResources.push({
+        ...AzureResourceDefinitions[AzureResourceTypes.APP_REGISTRATION],
+        required: true,
+      });
+
+      // always need hosting compute - either web app or functions
+      if (this.mode === 'azurewebapp') {
+        recommendedResources.push({
+          ...AzureResourceDefinitions[AzureResourceTypes.WEBAPP],
+          required: true,
+        });
+      } else {
+        recommendedResources.push({
+          ...AzureResourceDefinitions[AzureResourceTypes.AZUREFUNCTIONS],
+          required: true,
+        });
+      }
+
+      // Always need a bot service registration
+      recommendedResources.push({
+        ...AzureResourceDefinitions[AzureResourceTypes.BOT_REGISTRATION],
+        required: true,
+      });
+
+      // Now add in optional items
+      recommendedResources.push({
+        ...AzureResourceDefinitions[AzureResourceTypes.COSMOSDB],
+        required: false,
+      });
+      recommendedResources.push({
+        ...AzureResourceDefinitions[AzureResourceTypes.APPINSIGHTS],
+        required: false,
+      });
+      recommendedResources.push({
+        ...AzureResourceDefinitions[AzureResourceTypes.BLOBSTORAGE],
+        required: false,
+      });
+
+      // TODO: determine if QNA or LUIS is REQUIRED or OPTIONAL
+      const requireLUIS = false;
+      const requireQNA = false;
+
+      recommendedResources.push({
+        ...AzureResourceDefinitions[AzureResourceTypes.LUIS_AUTHORING],
+        required: requireLUIS,
+      });
+
+      recommendedResources.push({
+        ...AzureResourceDefinitions[AzureResourceTypes.LUIS_PREDICTION],
+        required: requireLUIS,
+      });
+
+      recommendedResources.push({
+        ...AzureResourceDefinitions[AzureResourceTypes.QNA],
+        required: requireQNA,
+      });
+
+      return recommendedResources;
     };
   }
 
