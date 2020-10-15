@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { selector, selectorFamily } from 'recoil';
+import { selector } from 'recoil';
 import isEmpty from 'lodash/isEmpty';
 
 import {
@@ -12,12 +12,11 @@ import {
   dialogsState,
   projectMetaDataState,
   botNameIdentifierState,
-  botStatusState,
 } from '../atoms';
 
 // Actions
-export const botsForFilePersistenceSelector = selector({
-  key: 'botsForFilePersistenceSelector',
+export const localBotsWithoutErrorsSelector = selector({
+  key: 'localBotsWithoutErrorsSelector',
   get: ({ get }) => {
     const botProjectIds = get(botProjectIdsState);
     return botProjectIds.filter((projectId: string) => {
@@ -39,11 +38,9 @@ export const botProjectSpaceSelector = selector({
       const botError = get(botErrorState(projectId));
       const name = get(botDisplayNameState(projectId));
       const botNameId = get(botNameIdentifierState(projectId));
-      const botStatus = get(botStatusState(projectId));
 
-      return { dialogs, projectId, name, ...metaData, error: botError, botNameId, botStatus };
+      return { dialogs, projectId, name, ...metaData, error: botError, botNameId };
     });
-    console.log('RESULT', result);
     return result;
   },
 });
@@ -70,22 +67,5 @@ export const skillsProjectIdSelector = selector({
       const { isRootBot } = get(projectMetaDataState(projectId));
       return !isRootBot;
     });
-  },
-});
-
-export const botProjectSpaceFilterSelector = selectorFamily({
-  key: 'botProjectSpaceFilterSelector',
-  get: (filters: any) => ({ get }) => {
-    const botProjects = get(botProjectIdsState);
-    const result = botProjects.map((projectId: string) => {
-      const dialogs = get(dialogsState(projectId));
-      const metaData = get(projectMetaDataState(projectId));
-      const botError = get(botErrorState(projectId));
-      const name = get(botDisplayNameState(projectId));
-      const botNameId = get(botNameIdentifierState(projectId));
-
-      return { dialogs, projectId, name, ...metaData, error: botError, botNameId };
-    });
-    return filters(result);
   },
 });

@@ -6,3 +6,4 @@ export * from './eject';
 export * from './extensions';
 export * from './validatedDialogs';
 export * from './skills';
+export * from './botRuntimeOperations';

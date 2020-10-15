@@ -24,7 +24,7 @@ import {
   filePersistenceState,
   botProjectFileState,
 } from './atoms';
-import { botsForFilePersistenceSelector } from './selectors';
+import { localBotsWithoutErrorsSelector } from './selectors';
 
 const getBotAssets = async (projectId, snapshot: Snapshot): Promise<BotAssets> => {
   const result = await Promise.all([
@@ -88,10 +88,10 @@ const InitDispatcher = ({ onLoad }) => {
 
 export const DispatcherWrapper = ({ children }) => {
   const [loaded, setLoaded] = useState(false);
-  const botProjects = useRecoilValue(botsForFilePersistenceSelector);
+  const botProjects = useRecoilValue(localBotsWithoutErrorsSelector);
 
   useRecoilTransactionObserver_UNSTABLE(async ({ snapshot, previousSnapshot }) => {
-    const botsForFilePersistence = await snapshot.getPromise(botsForFilePersistenceSelector);
+    const botsForFilePersistence = await snapshot.getPromise(localBotsWithoutErrorsSelector);
     for (const projectId of botsForFilePersistence) {
       const assets = await getBotAssets(projectId, snapshot);
       const previousAssets = await getBotAssets(projectId, previousSnapshot);

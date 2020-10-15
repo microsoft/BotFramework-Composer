@@ -6,24 +6,20 @@ import { jsx } from '@emotion/core';
 import { Fragment, useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { defaultPublishConfig } from '@bfc/shared';
-import { SharedColors } from '@uifabric/fluent-theme';
+import formatMessage from 'format-message';
 
-import { BotStatus } from '../../constants';
+import { BotStatus, BotStatusesCopy } from '../../constants';
 import { botEndpointsState, botStatusState, dispatcherState } from '../../recoilModel';
 import { botRuntimeOperationsSelector } from '../../recoilModel/selectors/botRuntimeOperations';
+import { useInterval } from '../../utils/hooks';
 
 import { EmulatorOpenButton } from './emulatorOpenButton';
 
 const POLLING_INTERVAL = 2500;
-let botStatusInterval: NodeJS.Timeout | undefined = undefined;
 
 interface BotStatusIndicatorProps {
   projectId: string;
 }
-
-const statusStyle = {
-  color: SharedColors.green20,
-};
 
 export const BotStatusIndicator: React.FC<BotStatusIndicatorProps> = ({ projectId }) => {
   const currentBotStatus = useRecoilValue(botStatusState(projectId));
@@ -31,61 +27,50 @@ export const BotStatusIndicator: React.FC<BotStatusIndicatorProps> = ({ projectI
   const { openBotInEmulator, setBotStatus, getPublishStatus } = useRecoilValue(dispatcherState);
   const [botStatusText, setBotStatusText] = useState('');
   const operations = useRecoilValue(botRuntimeOperationsSelector);
+  const [isRunning, setIntervalRunning] = useState(false);
 
-  // TODO: Build a useInterval hook instead of doing it in component.
-  function stopPollingRuntime() {
-    if (botStatusInterval) {
-      clearInterval(botStatusInterval);
-      botStatusInterval = undefined;
-    }
-  }
-
-  function startPollingRuntime() {
-    if (!botStatusInterval) {
-      const cancelInterval = setInterval(() => {
-        // get publish status
-        getPublishStatus(projectId, defaultPublishConfig);
-      }, POLLING_INTERVAL);
-      botStatusInterval = cancelInterval;
-    }
-  }
+  useInterval(
+    () => {
+      getPublishStatus(projectId, defaultPublishConfig);
+    },
+    isRunning ? POLLING_INTERVAL : null
+  );
 
   useEffect(() => {
     switch (currentBotStatus) {
       case BotStatus.failed:
-        stopPollingRuntime();
-        setBotStatus(projectId, BotStatus.pending);
+        setBotStatusText(BotStatusesCopy[BotStatus.failed]);
+        setIntervalRunning(false);
         break;
       case BotStatus.published:
-        stopPollingRuntime();
+        setBotStatusText(BotStatusesCopy[BotStatus.published]);
+        setIntervalRunning(false);
         operations?.startBot(projectId);
         break;
       case BotStatus.reloading:
-        startPollingRuntime();
+        setBotStatusText(BotStatusesCopy[BotStatus.reloading]);
+        setIntervalRunning(true);
         break;
-      default:
+
       case BotStatus.connected:
-        stopPollingRuntime();
+        setIntervalRunning(false);
+        setBotStatusText(BotStatusesCopy[BotStatus.connected]);
+        break;
+
+      case BotStatus.publishing:
+        setBotStatusText(BotStatusesCopy[BotStatus.publishing]);
+        break;
+
+      default:
+      case BotStatus.unConnected:
+        setBotStatusText(BotStatusesCopy[BotStatus.unConnected]);
         break;
     }
-
-    if (currentBotStatus === BotStatus.connected) {
-      setBotStatusText('Started');
-    } else if (currentBotStatus === BotStatus.failed) {
-      setBotStatusText('Error occured');
-    } else {
-      setBotStatusText('Inactive');
-    }
-
-    return () => {
-      stopPollingRuntime();
-      return;
-    };
   }, [currentBotStatus]);
 
   return (
     <Fragment>
-      {botStatusText}
+      <span>{botStatusText}</span>
       <EmulatorOpenButton
         botEndpoint={botEndpoints[projectId] || 'http://localhost:3979/api/messages'}
         botStatus={currentBotStatus}

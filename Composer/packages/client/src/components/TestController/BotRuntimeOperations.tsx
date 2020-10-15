@@ -15,10 +15,10 @@ import { BotStatus } from '../../constants';
 import {
   botBuildRequiredSelector,
   botRuntimeOperationsSelector,
-  isBuildConfigCompleteSelector,
+  buildEssentialsSelector,
 } from '../../recoilModel/selectors/botRuntimeOperations';
 
-interface BotStartOperationProps {
+interface BotRuntimeOperationsProps {
   projectId: string;
   displayName: string;
 }
@@ -33,14 +33,14 @@ const icon: IButtonStyles = {
   },
 };
 
-export const BotRuntimeOperation: React.FC<BotStartOperationProps> = ({ projectId, displayName }) => {
+export const BotRuntimeOperations: React.FC<BotRuntimeOperationsProps> = ({ projectId, displayName }) => {
   const currentBotStatus = useRecoilValue(botStatusState(projectId));
   const botBuildRequired = useRecoilValue(botBuildRequiredSelector(projectId));
-  const { config: startBotConfig } = useRecoilValue(isBuildConfigCompleteSelector(projectId));
+  const { configuration: startBotConfig } = useRecoilValue(buildEssentialsSelector(projectId));
   const botRuntimeOperations = useRecoilValue(botRuntimeOperationsSelector);
 
   const handleBotStop = () => {
-    botRuntimeOperations?.stop(projectId);
+    botRuntimeOperations?.stopBot(projectId);
   };
 
   const handleBotStart = async () => {

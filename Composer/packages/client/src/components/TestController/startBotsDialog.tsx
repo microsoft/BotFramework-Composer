@@ -3,11 +3,10 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { DefaultButton, ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import formatMessage from 'format-message';
@@ -19,11 +18,17 @@ import {
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { useRecoilValue } from 'recoil';
 import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
+import { IPublishConfig } from '@bfc/shared';
 
 import { botProjectSpaceSelector } from '../../recoilModel';
+import {
+  buildConfigurationSelector,
+  botRuntimeOperationsSelector,
+  trackBotStatusesSelector,
+} from '../../recoilModel/selectors';
 
 import { BotStatusIndicator } from './BotStatusIndicator';
-import { BotRuntimeOperation } from './BotRuntimeOperation';
+import { BotRuntimeOperations } from './BotRuntimeOperations';
 
 const styles = {
   detailListContainer: css`
@@ -46,9 +51,23 @@ const dialog = {
   },
 };
 
-const rowHeader = { display: 'flex', alignItems: 'center' };
+function useBotStatusTracker(postSkillsStartAction: () => void, trackedProjectIds: string[]) {
+  const savedCallback: any = useRef();
+  const areBotsStarting = useRecoilValue(trackBotStatusesSelector(trackedProjectIds));
 
-// eslint-disable-next-line react/display-name
+  // Remember the latest callback.
+  useEffect(() => {
+    savedCallback.current = postSkillsStartAction;
+  }, [postSkillsStartAction]);
+
+  useEffect(() => {
+    const trackedBotsStarted = !areBotsStarting;
+    if (trackedProjectIds.length && trackedBotsStarted) {
+      // Start the root bot now after skills are started.
+      savedCallback.current();
+    }
+  }, [areBotsStarting]);
+}
 
 interface IStartBotsDialogProps {
   isOpen: boolean;
@@ -60,21 +79,56 @@ export const StartBotsDialog: React.FC<IStartBotsDialogProps> = (props) => {
   const projectCollection = useRecoilValue(botProjectSpaceSelector);
   const [items, setItems] = useState<{ displayName: string; projectId: string }[]>([]);
   const [allBotsStarted, setAllBotsStarted] = useState<boolean>(false);
+  const builderEssentials = useRecoilValue(buildConfigurationSelector);
+  const botRuntimeOperations = useRecoilValue(botRuntimeOperationsSelector);
+  const [trackedProjectIds, setProjectsToTrack] = useState<string[]>([]);
 
   useEffect(() => {
     const result = projectCollection.map(({ name, projectId }) => ({ displayName: name, projectId }));
     setItems(result);
   }, [projectCollection]);
 
+  const handleBotStart = async (projectId: string, config: IPublishConfig, botBuildRequired: boolean) => {
+    if (botBuildRequired) {
+      // Default recognizer
+      botRuntimeOperations?.buildWithDefaultRecognizer(projectId, config);
+    } else {
+      // Regex recognizer
+      botRuntimeOperations?.startBot(projectId, config);
+    }
+  };
+
+  const startRootBot = () => {
+    setProjectsToTrack([]);
+    const rootBot = builderEssentials[0];
+    const { projectId, configuration, buildRequired } = rootBot;
+    handleBotStart(projectId, configuration, buildRequired);
+  };
+
+  // Custom hook to make sure root bot is started after all skills have been started.
+  useBotStatusTracker(() => {
+    startRootBot();
+  }, trackedProjectIds);
+
   const onRenderRow = (props?: IDetailsRowProps, defaultRender?: IRenderFunction<IDetailsRowProps>): JSX.Element => {
     return <div>{defaultRender && defaultRender(props)}</div>;
   };
 
   const startAllBots = () => {
+    const [_, ...skillsBots] = builderEssentials;
+    const trackProjects: string[] = [];
+    for (const botBuildConfig of skillsBots) {
+      const { projectId, configuration, buildRequired } = botBuildConfig;
+      trackProjects.push(projectId);
+      handleBotStart(projectId, configuration, buildRequired);
+    }
+    setProjectsToTrack(trackProjects);
     setAllBotsStarted(true);
   };
 
   const stopAllBots = () => {
+    setProjectsToTrack([]);
+    builderEssentials.forEach(({ projectId }) => botRuntimeOperations?.stopBot(projectId));
     setAllBotsStarted(false);
   };
 
@@ -90,7 +144,7 @@ export const StartBotsDialog: React.FC<IStartBotsDialogProps> = (props) => {
       sortDescendingAriaLabel: formatMessage('Sorted Z to A'),
       data: 'string',
       onRender: (item: { displayName: string; projectId: string }) => {
-        return <BotRuntimeOperation displayName={item.displayName} projectId={item.projectId} />;
+        return <BotRuntimeOperations displayName={item.displayName} projectId={item.projectId} />;
       },
       isPadded: true,
     },
@@ -134,7 +188,6 @@ export const StartBotsDialog: React.FC<IStartBotsDialogProps> = (props) => {
               <button onClick={startAllBots}>Start all bots</button>
             )}
           </ActionButton>
-
           <DetailsList
             columns={tableColumns}
             compact={false}

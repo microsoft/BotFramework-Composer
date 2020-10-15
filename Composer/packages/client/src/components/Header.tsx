@@ -5,7 +5,7 @@
 import { jsx, css } from '@emotion/core';
 import formatMessage from 'format-message';
 import { IconButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
-import { useCallback, Fragment, useState } from 'react';
+import { useCallback, Fragment, useState, useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import { SharedColors } from '@uifabric/fluent-theme';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
@@ -16,6 +16,7 @@ import {
   botDisplayNameState,
   localeState,
   currentProjectIdState,
+  runningBotsSelector,
 } from '../recoilModel';
 import composerIcon from '../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../constants';
@@ -79,7 +80,7 @@ const headerTextContainer = css`
 `;
 
 // -------------------- Header -------------------- //
-
+const defaultStartPanelText = formatMessage('Start all bots');
 export const Header = () => {
   const { setAppUpdateShowing } = useRecoilValue(dispatcherState);
   const projectId = useRecoilValue(currentProjectIdState);
@@ -88,6 +89,16 @@ export const Header = () => {
   const appUpdate = useRecoilValue(appUpdateState);
   const { showing, status } = appUpdate;
   const [showStartBotsPanel, setStartPanelView] = useState(false);
+  const runningBots = useRecoilValue(runningBotsSelector);
+  const [startPanelText, setStartPanelText] = useState('Start ');
+
+  useEffect(() => {
+    if (runningBots.totalBots === 0) {
+      setStartPanelText(`Start all  (${runningBots.projectIds.length}/${runningBots.totalBots} running)`);
+    } else {
+      setStartPanelText(`Stop all bots`);
+    }
+  }, [runningBots]);
 
   const onUpdateAvailableClick = useCallback(() => {
     setAppUpdateShowing(true);
@@ -128,8 +139,12 @@ export const Header = () => {
           onClick={onUpdateAvailableClick}
         />
       )}
-      <button onClick={showStartPanelViewer}> Start Bots </button>
+
+      <button onClick={showStartPanelViewer}>
+        <span>{startPanelText}</span>
+      </button>
       {showStartBotsPanel && <StartBotsDialog isOpen={showStartBotsPanel} onDismiss={dismissStartPanelViewer} />}
     </div>
   );
 };
+//?Start Bots
