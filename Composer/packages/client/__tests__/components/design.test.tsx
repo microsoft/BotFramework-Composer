@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { fireEvent } from '@bfc/test-utils';
+import { fireEvent } from '@botframework-composer/test-utils';
 import { DialogInfo } from '@bfc/shared';
 
 import { renderWithRecoil } from '../testUtils';
@@ -28,7 +28,7 @@ describe('<ProjectTree/>', () => {
     const { findByText } = renderWithRecoil(
       <ProjectTree
         dialogId={dialogId}
-        dialogs={dialogs as DialogInfo[]}
+        dialogs={(dialogs as unknown) as DialogInfo[]}
         selected={selected}
         onDeleteDialog={handleDeleteDialog}
         onDeleteTrigger={handleDeleteTrigger}

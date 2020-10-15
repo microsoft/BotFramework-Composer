@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render } from '@bfc/test-utils';
+import { render } from '@botframework-composer/test-utils';
 
 import { AdaptiveTrigger } from '../../../src/adaptive-flow-renderer/adaptive/AdaptiveTrigger';
 import { SchemaContext } from '../../../src/adaptive-flow-renderer/contexts/SchemaContext';

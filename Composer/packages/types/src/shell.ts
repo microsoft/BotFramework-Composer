@@ -5,6 +5,7 @@
 import type { DialogInfo, LuFile, LgFile, QnAFile, LuIntentSection, LgTemplate, DialogSchemaFile } from './indexers';
 import type { ILUFeaturesConfig, SkillSetting, UserSettings } from './settings';
 import type { JSONSchema7 } from './schema';
+import { MicrosoftIDialog } from './sdk';
 
 /** Recursively marks all properties as optional. */
 type AllPartial<T> = {
@@ -108,6 +109,16 @@ export type ProjectContext = {
   schemas: BotSchemas;
 };
 
+export type ActionContextApi = {
+  constructAction: (dialogId: string, action: MicrosoftIDialog) => Promise<MicrosoftIDialog>;
+  constructActions: (dialogId: string, actions: MicrosoftIDialog[]) => Promise<MicrosoftIDialog[]>;
+  copyAction: (dialogId: string, action: MicrosoftIDialog) => Promise<MicrosoftIDialog>;
+  copyActions: (dialogId: string, actions: MicrosoftIDialog[]) => Promise<MicrosoftIDialog[]>;
+  deleteAction: (dialogId: string, action: MicrosoftIDialog) => Promise<void>;
+  deleteActions: (dialogId: string, actions: MicrosoftIDialog[]) => Promise<void>;
+  actionsContainLuIntent: (action: MicrosoftIDialog[]) => boolean;
+};
+
 export type DialogEditingContextApi = {
   saveData: <T = any>(newData: T, updatePath?: string) => void;
   onFocusSteps: (stepIds: string[], focusedTab?: string) => void;
@@ -120,10 +131,6 @@ export type DialogEditingContextApi = {
 
 export type DialogEditingContext = {
   currentDialog: DialogInfo;
-  data: {
-    $kind: string;
-    [key: string]: any;
-  };
   designerId: string;
   dialogId: string;
   clipboardActions: any[];
@@ -140,7 +147,8 @@ export type ShellApi = ApplicationContextApi &
   ProjectContextApi &
   DialogEditingContextApi &
   LgContextApi &
-  LuContextApi;
+  LuContextApi &
+  ActionContextApi;
 
 export type Shell = {
   api: ShellApi;
