@@ -8,7 +8,7 @@ import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
 import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 
@@ -27,8 +27,14 @@ const root = css`
   }
   .ProjectTreeItem {
     display: flex;
+    .ms-Icon {
+      color: ${SharedColors.blue10};
+    }
     &:hover .ms-Button {
       background: ${NeutralColors.gray20};
+      .ms-Icon {
+        visibility: inherit;
+      }
     }
   }
 `;
@@ -93,6 +99,11 @@ const NavTree: React.FC<INavTreeProps> = (props) => {
         alignSelf: 'stretch',
         height: 'auto',
         background: isSelected ? NeutralColors.gray20 : NeutralColors.white,
+        selectors: {
+          '.ms-Icon': {
+            visibility: isSelected ? 'inherit' : 'hidden',
+          },
+        },
       },
     };
     return (

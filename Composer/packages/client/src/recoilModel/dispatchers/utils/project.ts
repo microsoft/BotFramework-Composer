@@ -32,7 +32,7 @@ import luFileStatusStorage from '../../../utils/luFileStatusStorage';
 import { getReferredLuFiles } from '../../../utils/luUtil';
 import { navigateTo } from '../../../utils/navigation';
 import qnaFileStatusStorage from '../../../utils/qnaFileStatusStorage';
-import { getReferredQnaFiles } from '../../../utils/qnaUtil';
+import { getReferredQnaFiles, reformQnAToContainerKB } from '../../../utils/qnaUtil';
 import {
   botDiagnosticsState,
   botDisplayNameState,
