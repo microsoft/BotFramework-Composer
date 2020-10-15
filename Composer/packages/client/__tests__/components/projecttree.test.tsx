@@ -30,14 +30,14 @@ describe('<ProjectTree/>', () => {
 
   it('should handle project tree item click', async () => {
     const mockFileSelect = jest.fn(() => null);
-    const { findByText, debug } = renderWithRecoil(
+    const component = renderWithRecoil(
       <ProjectTree onDeleteDialog={() => {}} onDeleteTrigger={() => {}} onSelect={mockFileSelect} />,
       initRecoilState
     );
 
-    debug();
+    console.log(await (await component.findByTestId('dialog')).innerHTML);
 
-    const node = await findByText('Unknown intent');
+    const node = await component.findByText('Unknown intent');
     fireEvent.click(node);
     expect(mockFileSelect).toHaveBeenCalledTimes(1);
   });

@@ -413,6 +413,8 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
           {showAll != null ? (
             <TreeItem
               link={{ displayName: formatMessage('All'), skillId: null, projectId: currentProjectId, isRoot: true }}
+              shiftOut={28}
+              onSelect={showAll}
             />
           ) : null}
           {projectTree}
