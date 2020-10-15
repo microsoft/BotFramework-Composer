@@ -2,46 +2,48 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useRecoilCallback, CallbackInterface } from 'recoil';
 import formatMessage from 'format-message';
 import findIndex from 'lodash/findIndex';
+import { CallbackInterface, useRecoilCallback } from 'recoil';
 
-import httpClient from '../../utils/httpUtil';
 import { BotStatus } from '../../constants';
-import luFileStatusStorage from '../../utils/luFileStatusStorage';
-import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
 import settingStorage from '../../utils/dialogSettingStorage';
+import { getFileNameFromPath } from '../../utils/fileUtil';
+import httpClient from '../../utils/httpUtil';
+import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { navigateTo } from '../../utils/navigation';
 import { projectIdCache } from '../../utils/projectCache';
+import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
 import {
-  botProjectIdsState,
-  botStatusState,
-  botOpeningState,
-  projectMetaDataState,
-  currentProjectIdState,
   botErrorState,
   botNameIdentifierState,
+  botOpeningState,
+  botProjectIdsState,
   botProjectSpaceLoadedState,
+  botStatusState,
+  currentProjectIdState,
+  projectMetaDataState,
 } from '../atoms';
 import { dispatcherState } from '../DispatcherWrapper';
-import { getFileNameFromPath } from '../../utils/fileUtil';
 
-import { recentProjectsState, templateIdState, announcementState, boilerplateVersionState } from './../atoms';
+import { announcementState, boilerplateVersionState, recentProjectsState, templateIdState } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
 import {
+  checkIfBotExistsInBotProjectFile,
+  createNewBotFromTemplate,
   flushExistingTasks,
+  getSkillNameIdentifier,
   handleProjectFailure,
+  initBotState,
+  loadProjectData,
   navigateToBot,
   openLocalSkill,
-  saveProject,
-  removeRecentProject,
-  createNewBotFromTemplate,
-  resetBotStates,
   openRemoteSkill,
-  openRootBotAndSkillsByProjectId,
-  checkIfBotExistsInBotProjectFile,
-  getSkillNameIdentifier,
   openRootBotAndSkillsByPath,
+  openRootBotAndSkillsByProjectId,
+  removeRecentProject,
+  resetBotStates,
+  saveProject,
 } from './utils/project';
 
 export const projectDispatcher = () => {
@@ -340,6 +342,12 @@ export const projectDispatcher = () => {
     }
   });
 
+  const reloadProject = async (callbackHelpers: CallbackInterface, response: any) => {
+    const { projectData, botFiles } = loadProjectData(response);
+
+    await initBotState(callbackHelpers, projectData, botFiles);
+  };
+
   return {
     openProject,
     createNewBot,
@@ -356,5 +364,6 @@ export const projectDispatcher = () => {
     addExistingSkillToBotProject,
     addRemoteSkillToBotProject,
     replaceSkillInBotProject,
+    reloadProject,
   };
 };

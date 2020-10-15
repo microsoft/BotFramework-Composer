@@ -11,6 +11,7 @@ import { skillManifestIndexer } from './skillManifestIndexer';
 import { botProjectSpaceIndexer } from './botProjectSpaceIndexer';
 import { FileExtensions } from './utils/fileExtensions';
 import { getExtension, getBaseName } from './utils/help';
+import { formDialogSchemaIndexer } from './formDialogSchemaIndexer';
 
 class Indexer {
   private classifyFile(files: FileInfo[]) {
@@ -25,6 +26,7 @@ class Indexer {
       {
         [FileExtensions.lg]: [],
         [FileExtensions.Lu]: [],
+        [FileExtensions.FormDialog]: [],
         [FileExtensions.QnA]: [],
         [FileExtensions.Dialog]: [],
         [FileExtensions.DialogSchema]: [],
@@ -56,6 +58,7 @@ class Indexer {
       qnaFiles: qnaIndexer.index(result[FileExtensions.QnA]),
       skillManifestFiles: skillManifestIndexer.index(result[FileExtensions.Manifest]),
       botProjectSpaceFiles: botProjectSpaceIndexer.index(result[FileExtensions.BotProjectSpace]),
+      formDialogSchemas: formDialogSchemaIndexer.index(result[FileExtensions.FormDialog]),
     };
   }
 }

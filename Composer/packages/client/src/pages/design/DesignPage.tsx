@@ -142,6 +142,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     importQnAFromUrls,
     addRemoteSkillToBotProject,
     addExistingSkillToBotProject,
+    updateZoomRate,
   } = useRecoilValue(dispatcherState);
 
   const params = new URLSearchParams(location?.search);
@@ -251,6 +252,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   };
 
   function handleSelect(projectId, id, selected = '') {
+    updateZoomRate({ currentRate: 1 });
     if (selected) {
       selectTo(projectId, selected);
     } else {

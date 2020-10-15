@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useMemo, useRef } from 'react';
-import { ShellApi, ShellData, Shell, DialogSchemaFile, Skill, ManifestEndpoint } from '@bfc/shared';
+import { ShellApi, ShellData, Shell, DialogSchemaFile, DialogInfo } from '@bfc/types';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
@@ -25,6 +25,7 @@ import {
   dialogSchemasState,
   lgFilesState,
   luFilesState,
+  rateInfoState,
 } from '../recoilModel';
 import { undoFunctionState } from '../recoilModel/undo/history';
 import { skillsStateSelector } from '../recoilModel/selectors';
@@ -56,6 +57,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
   const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
   const botName = useRecoilValue(botDisplayNameState(projectId));
   const settings = useRecoilValue(settingsState(projectId));
+  const flowZoomRate = useRecoilValue(rateInfoState);
 
   const userSettings = useRecoilValue(userSettingsState);
   const clipboardActions = useRecoilValue(clipboardActionsState);
@@ -74,6 +76,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     setMessage,
     displayManifestModal,
     updateSkillsDataInBotProjectFile: updateEndpointInBotProjectFile,
+    updateZoomRate,
   } = useRecoilValue(dispatcherState);
 
   const lgApi = useLgApi(projectId);
@@ -131,6 +134,10 @@ export function useShell(source: EventSource, projectId: string): Shell {
     }
 
     focusTo(projectId, dataPath, fragment ?? '');
+  }
+
+  function updateFlowZoomRate(currentRate) {
+    updateZoomRate({ currentRate });
   }
 
   dialogMapRef.current = dialogsMap;
@@ -206,45 +213,43 @@ export function useShell(source: EventSource, projectId: string): Shell {
     updateSkill: async (skillId: string, skillsData) => {
       updateEndpointInBotProjectFile(skillId, skillsData.skill, skillsData.selectedEndpointIndex);
     },
+    updateFlowZoomRate,
   };
 
-  const currentDialog = useMemo(() => dialogs.find((d) => d.id === dialogId), [dialogs, dialogId]);
+  const currentDialog = useMemo(() => dialogs.find((d) => d.id === dialogId), [dialogs, dialogId]) as DialogInfo;
   const editorData = useMemo(() => {
     return source === 'PropertyEditor'
       ? getDialogData(dialogsMap, dialogId, focused || selected || '')
       : getDialogData(dialogsMap, dialogId);
   }, [source, dialogsMap, dialogId, focused, selected]);
 
-  const data: ShellData = currentDialog
-    ? {
-        data: editorData,
-        locale,
-        botName,
-        projectId,
-        dialogs,
-        dialogSchemas,
-        dialogId,
-        focusPath,
-        schemas,
-        lgFiles,
-        luFiles,
-        qnaFiles,
-        currentDialog,
-        userSettings,
-        designerId: editorData?.$designer?.id,
-        focusedEvent: selected,
-        focusedActions: focused ? [focused] : [],
-        focusedSteps: focused ? [focused] : selected ? [selected] : [],
-        focusedTab: promptTab,
-        clipboardActions,
-        hosted: !!isAbsHosted(),
-        luFeatures: settings.luFeatures,
-        skills,
-        skillsSettings: settings.skill || {},
-      }
-    : ({
-        projectId,
-      } as ShellData);
+  const data: ShellData = {
+    data: editorData,
+    locale,
+    botName,
+    projectId,
+    dialogs,
+    dialogSchemas,
+    dialogId,
+    focusPath,
+    schemas,
+    lgFiles,
+    luFiles,
+    qnaFiles,
+    currentDialog,
+    userSettings,
+    designerId: editorData?.$designer?.id,
+    focusedEvent: selected,
+    focusedActions: focused ? [focused] : [],
+    focusedSteps: focused ? [focused] : selected ? [selected] : [],
+    focusedTab: promptTab,
+    clipboardActions,
+    hosted: !!isAbsHosted(),
+    luFeatures: settings.luFeatures,
+    skills,
+    skillsSettings: settings.skill || {},
+    flowZoomRate,
+  };
 
   return {
     api,

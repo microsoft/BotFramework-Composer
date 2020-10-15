@@ -1,8 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { selector } from 'recoil';
+import { selector, selectorFamily } from 'recoil';
 import isEmpty from 'lodash/isEmpty';
+import { FormDialogSchema } from '@bfc/shared';
 
 import {
   botErrorState,
@@ -12,6 +13,8 @@ import {
   dialogsState,
   projectMetaDataState,
   botNameIdentifierState,
+  formDialogSchemaIdsState,
+  formDialogSchemaState,
 } from '../atoms';
 
 // Actions
@@ -67,5 +70,21 @@ export const skillsProjectIdSelector = selector({
       const { isRootBot } = get(projectMetaDataState(projectId));
       return !isRootBot;
     });
+  },
+});
+
+export const formDialogSchemasSelectorFamily = selectorFamily<FormDialogSchema[], string>({
+  key: 'formDialogSchemasSelector',
+  get: (projectId: string) => ({ get }) => {
+    const formDialogSchemaIds = get(formDialogSchemaIdsState(projectId));
+    return formDialogSchemaIds.map((schemaId) => get(formDialogSchemaState({ projectId, schemaId })));
+  },
+});
+
+export const formDialogSchemaDialogExistsSelector = selectorFamily<boolean, { projectId: string; schemaId: string }>({
+  key: 'formDialogSchemasSelector',
+  get: ({ projectId, schemaId }: { projectId: string; schemaId: string }) => ({ get }) => {
+    const dialogs = get(dialogsState(projectId));
+    return !!dialogs.find((d) => d.id === schemaId);
   },
 });

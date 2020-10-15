@@ -24,7 +24,7 @@ import {
   filePersistenceState,
   botProjectFileState,
 } from './atoms';
-import { localBotsWithoutErrorsSelector } from './selectors';
+import { localBotsWithoutErrorsSelector, formDialogSchemasSelectorFamily } from './selectors';
 
 const getBotAssets = async (projectId, snapshot: Snapshot): Promise<BotAssets> => {
   const result = await Promise.all([
@@ -36,6 +36,7 @@ const getBotAssets = async (projectId, snapshot: Snapshot): Promise<BotAssets> =
     snapshot.getPromise(settingsState(projectId)),
     snapshot.getPromise(dialogSchemasState(projectId)),
     snapshot.getPromise(botProjectFileState(projectId)),
+    snapshot.getPromise(formDialogSchemasSelectorFamily(projectId)),
   ]);
   return {
     projectId,
@@ -47,6 +48,7 @@ const getBotAssets = async (projectId, snapshot: Snapshot): Promise<BotAssets> =
     setting: result[5],
     dialogSchemas: result[6],
     botProjectFile: result[7],
+    formDialogSchemas: result[8],
   };
 };
 
