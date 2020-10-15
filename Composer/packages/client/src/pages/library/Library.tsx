@@ -235,7 +235,7 @@ const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   return (
     <Fragment>
       <Dialog
-        dialogContentProps={{ title: formatMessage('Import a Library'), type: DialogType.normal }}
+        dialogContentProps={{ title: formatMessage('Import a Package'), type: DialogType.normal }}
         hidden={addDialogHidden}
         minWidth={450}
         modalProps={{ isBlocking: true }}
@@ -246,7 +246,7 @@ const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       <WorkingModal hidden={!working} title={formatMessage('Importing library...')} />
       <Toolbar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
-        <h1 css={HeaderText}>{formatMessage('Asset Library')}</h1>
+        <h1 css={HeaderText}>{formatMessage('Package Library')}</h1>
       </div>
       <div css={ContentStyle} data-testid="installedLibraries" role="main">
         <div aria-label={formatMessage('List view')} css={contentEditor} role="region">
