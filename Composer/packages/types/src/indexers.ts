@@ -17,6 +17,7 @@ export enum FileExtensions {
   Setting = 'appsettings.json',
   FormDialogSchema = '.form-dialog',
   BotProject = '.botproj',
+  Json = '.json',
 }
 
 export type FileInfo = {
@@ -32,6 +33,7 @@ export type ITrigger = {
   displayName: string;
   type: string;
   isIntent: boolean;
+  content: any;
 };
 
 export type ReferredLuIntents = {
@@ -168,6 +170,11 @@ export type Skill = {
   name: string;
 };
 
+export type JsonSchemaFile = {
+  id: string;
+  content: string;
+};
+
 export type TextFile = {
   id: string;
   content: string;
@@ -200,6 +207,7 @@ export type BotAssets = {
   dialogSchemas: DialogSchemaFile[];
   formDialogSchemas: FormDialogSchema[];
   botProjectFile: BotProjectFile;
+  jsonSchemaFiles: JsonSchemaFile[];
 };
 
 export type BotInfo = {
