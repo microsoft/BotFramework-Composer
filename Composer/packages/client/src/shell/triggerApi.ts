@@ -9,7 +9,6 @@ import get from 'lodash/get';
 
 import { useResolvers } from '../hooks/useResolver';
 import { onChooseIntentKey, generateNewDialog, intentTypeKey, qnaMatcherKey } from '../utils/dialogUtil';
-import { navigateTo } from '../utils/navigation';
 import { schemasState, lgFilesState, dialogsState, localeState } from '../recoilModel';
 import { Dispatcher } from '../recoilModel/dispatchers';
 
@@ -29,7 +28,7 @@ function createTriggerApi(
     return value.substring(startIndex + 1, endIndex);
   };
 
-  const createTriggerHandler = async (id, formData, url) => {
+  const createTriggerHandler = async (id, formData, autoSelected = true) => {
     const luFile = luFileResolver(id);
     const lgFile = lgFileResolver(id);
     const dialog = dialogResolver(id);
@@ -90,9 +89,7 @@ function createTriggerApi(
       content: newDialog.content,
     };
     await updateDialog(dialogPayload);
-    if (url) {
-      navigateTo(url);
-    } else {
+    if (autoSelected) {
       selectTo(projectId, `triggers[${index}]`);
     }
   };
