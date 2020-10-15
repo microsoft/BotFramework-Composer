@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useRecoilValue } from 'recoil';
-import { act } from '@bfc/test-utils/lib/hooks';
+import { act } from '@botframework-composer/test-utils/lib/hooks';
 import { SDKKinds } from '@bfc/shared';
 
 import { navigationDispatcher } from '../navigation';

@@ -37,7 +37,7 @@ export const generateSkillManifest = (
 
   const { content } = rootDialog;
   const triggers = selectedTriggers.reduce((acc: ITrigger[], { id: path }) => {
-    const trigger = get(content, path);
+    const trigger = get(content, path) as ITrigger;
     return trigger ? [...acc, trigger] : acc;
   }, []);
 
@@ -128,10 +128,10 @@ export const generateDispatchModels = (
   const luLanguages = intents.length
     ? rootLuFiles.reduce((acc, { empty, id }) => {
         const [name, locale] = id.split('.');
-        const { content = {} } = dialogs.find(({ id }) => id === name) || {};
+        const { content } = dialogs.find(({ id }) => id === name) || ({ content: {} } as DialogInfo);
         const { recognizer = '' } = content;
 
-        if (!recognizer.includes('.lu') || empty) {
+        if ((typeof recognizer === 'string' && !recognizer.includes('.lu')) || empty) {
           return acc;
         }
 
@@ -152,10 +152,10 @@ export const generateDispatchModels = (
 
   const languages = rootQnAFiles.reduce((acc, { empty, id }) => {
     const [name, locale] = id.split('.');
-    const { content = {} } = dialogs.find(({ id }) => id === name) || {};
+    const { content } = dialogs.find(({ id }) => id === name) || ({ content: {} } as DialogInfo);
     const { recognizer = '' } = content;
 
-    if (!recognizer.includes('.qna') || empty) {
+    if ((typeof recognizer === 'string' && !recognizer.includes('.qna')) || empty) {
       return acc;
     }
 

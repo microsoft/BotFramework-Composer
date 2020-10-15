@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { fireEvent } from '@bfc/test-utils';
+import { fireEvent } from '@botframework-composer/test-utils';
 
 import { ProjectTree } from '../../src/components/ProjectTree/ProjectTree';
 import { renderWithRecoil, SAMPLE_DIALOG } from '../testUtils';

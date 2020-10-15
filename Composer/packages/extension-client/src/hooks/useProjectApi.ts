@@ -3,7 +3,7 @@
 
 import { useMemo } from 'react';
 import pick from 'lodash/pick';
-import { ProjectContext, ProjectContextApi } from '@bfc/types';
+import { ProjectContext, ProjectContextApi } from '@botframework-composer/types';
 
 import { validateHookContext } from '../utils/validateHookContext';
 

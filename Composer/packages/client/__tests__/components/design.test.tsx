@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { fireEvent } from '@bfc/test-utils';
+import { fireEvent } from '@botframework-composer/test-utils';
 
 import { renderWithRecoil, SAMPLE_DIALOG } from '../testUtils';
 import { ProjectTree } from '../../src/components/ProjectTree/ProjectTree';
@@ -30,9 +30,13 @@ describe('<ProjectTree/>', () => {
     const handleSelect = jest.fn(() => {});
     const handleDeleteDialog = jest.fn(() => {});
     const handleDeleteTrigger = jest.fn(() => {});
+
     const { findByTestId } = renderWithRecoil(
-      <ProjectTree onDeleteDialog={handleDeleteDialog} onDeleteTrigger={handleDeleteTrigger} onSelect={handleSelect} />,
-      initRecoilState
+      <ProjectTree
+        onDeleteDialog={handleDeleteDialog}
+        onDeleteTrigger={handleDeleteTrigger}
+        onSelect={handleSelect}
+      />
     );
     const node = await findByTestId('EchoBot-1_Greeting');
     fireEvent.click(node);
