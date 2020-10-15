@@ -25,15 +25,17 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12.13.0
-      # - name: Restore yarn cache
-      #   uses: actions/cache@preview
-      #   with:
-      #     path: ~/.cache/yarn
-      #     key: ${{ runner.os }}-yarn-new-${{ hashFiles(format('{0}{1}', github.workspace, '/Composer/yarn.lock')) }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-yarn-new-
-      - name: yarn install
-        run: yarn
+      #- name: Restore yarn cache
+      #  uses: actions/cache@v2.1.2
+      #  with:
+      #    path: ~/.cache/yarn
+      #    key: ${{ runner.os }}-yarn-new-${{ hashFiles(format('{0}{1}', github.workspace, '/Composer/yarn.lock')) }}
+      #    restore-keys: |
+      #      ${{ runner.os }}-yarn-new-
+      - name: Clear global yarn cache
+        run: yarn cache clean
+      - name: yarn --update-checksums
+        run: yarn --update-checksums
       - name: yarn build:dev
         run: yarn build:dev
       - name: yarn lint
