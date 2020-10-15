@@ -90,10 +90,6 @@ function createTriggerApi(
     };
     await updateDialog(dialogPayload);
     if (autoSelected) {
-      selectTo(projectId, `triggers[${index}]`);
-    } else if (url) {
-      navigateTo(url);
-    } else {
       selectTo(projectId, null, null, `triggers[${index}]`);
     }
   };

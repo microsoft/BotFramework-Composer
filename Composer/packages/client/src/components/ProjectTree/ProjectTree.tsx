@@ -135,6 +135,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
   showDialogs = true,
   onDeleteDialog,
   onDeleteTrigger,
+  onSelect,
 }) => {
   const { onboardingAddCoachMarkRef, selectTo, navTo } = useRecoilValue(dispatcherState);
 
@@ -178,6 +179,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
 
   const handleOnSelect = (link: TreeLink) => {
     setSelectedLink(link);
+    onSelect?.(link); // if we've defined a custom onSelect, use it
     if (link.dialogName != null) {
       if (link.trigger != null) {
         selectTo(link.projectId, link.skillId, link.dialogName, `triggers[${link.trigger}]`);
