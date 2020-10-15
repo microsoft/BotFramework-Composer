@@ -118,6 +118,7 @@ function extractTriggers(dialog): ITrigger[] {
             displayName: '',
             type: rule.$kind,
             isIntent: rule.$kind === SDKKinds.OnIntent,
+            content: rule,
           };
           if (has(rule, '$designer.name')) {
             trigger.displayName = rule.$designer.name;

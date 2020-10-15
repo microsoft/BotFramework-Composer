@@ -70,10 +70,16 @@ describe('<CreationFlow/>', () => {
     act(() => {
       fireEvent.click(node);
     });
+
+    let expectedLocation = '/test-folder/Desktop';
+    if (process.platform === 'win32') {
+      expectedLocation = '\\test-folder\\Desktop';
+    }
+
     expect(createProjectMock).toHaveBeenCalledWith({
       appLocale: 'en-US',
       description: '',
-      location: expect.stringMatching(/(\/|\\)test-folder(\/|\\)Desktop/),
+      location: expectedLocation,
       name: 'EchoBot-1',
       qnaKbUrls: undefined,
       schemaUrl: '',

@@ -7,6 +7,7 @@ import { Path } from '../../utility/path';
 import { IFileStorage } from '../storage/interface';
 import log from '../../logger';
 
+import { luImportResolverGenerator, getLUFiles, getQnAFiles } from './luResolver';
 import { ComposerReservoirSampler } from './sampler/ReservoirSampler';
 import { ComposerBootstrapSampler } from './sampler/BootstrapSampler';
 
@@ -71,14 +72,14 @@ export class Builder {
     this._locale = locale;
   }
 
-  public build = async (luFiles: FileInfo[], qnaFiles: FileInfo[]) => {
+  public build = async (luFiles: FileInfo[], qnaFiles: FileInfo[], allFiles: FileInfo[]) => {
     try {
       await this.createGeneratedDir();
 
       //do cross train before publish
-      await this.crossTrain(luFiles, qnaFiles);
+      await this.crossTrain(luFiles, qnaFiles, allFiles);
       const { interruptionLuFiles, interruptionQnaFiles } = await this.getInterruptionFiles();
-      await this.runLuBuild(interruptionLuFiles);
+      await this.runLuBuild(interruptionLuFiles, allFiles);
       await this.runQnaBuild(interruptionQnaFiles);
 
       //remove the cross train result
@@ -118,7 +119,7 @@ export class Builder {
     await this.storage.mkDir(this.generatedFolderPath);
   }
 
-  private async crossTrain(luFiles: FileInfo[], qnaFiles: FileInfo[]) {
+  private async crossTrain(luFiles: FileInfo[], qnaFiles: FileInfo[], allFiles: FileInfo[]) {
     const luContents = luFiles.map((file) => {
       return { content: file.content, id: file.name };
     });
@@ -126,7 +127,8 @@ export class Builder {
     const qnaContents = qnaFiles.map((file) => {
       return { content: file.content, id: file.name };
     });
-    const result = await crossTrainer.crossTrain(luContents, qnaContents, this.crossTrainConfig);
+    const resolver = luImportResolverGenerator([...getLUFiles(allFiles), ...getQnAFiles(allFiles)]);
+    const result = await crossTrainer.crossTrain(luContents, qnaContents, this.crossTrainConfig, resolver);
 
     await this.writeFiles(result.luResult);
     await this.writeFiles(result.qnaResult);
@@ -197,17 +199,16 @@ export class Builder {
     );
   }
 
-  private async runLuBuild(files: FileInfo[]) {
+  private async runLuBuild(files: FileInfo[], allFiles: FileInfo[]) {
     const config = await this._getConfig(files, 'lu');
-    // if (config.models.length === 0) {
-    //   throw new Error('No LUIS files exist');
-    // }
-
+    const resolver = luImportResolverGenerator(getLUFiles(allFiles));
     const loadResult = await this.luBuilder.loadContents(
       config.models,
       config.fallbackLocal,
       config.suffix,
-      config.region
+      config.region,
+      null,
+      resolver
     );
     loadResult.luContents = await this.downsizeUtterances(loadResult.luContents);
     const authoringEndpoint = config.authoringEndpoint ?? `https://${config.region}.api.cognitive.microsoft.com`;
