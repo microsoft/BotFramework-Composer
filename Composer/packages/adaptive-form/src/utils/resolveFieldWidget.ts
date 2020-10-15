@@ -5,6 +5,15 @@ import { FieldProps, FieldWidget, FormUISchema, JSONSchema7, UIOptions } from '@
 import * as DefaultFields from '../components/fields';
 import { withTypeIcons } from '../components/withTypeIcons';
 
+const IntellisenseTextFieldWithIcon = withTypeIcons(DefaultFields.IntellisenseTextField);
+const StringFieldWithIcon = withTypeIcons(DefaultFields.StringField);
+const IntellisenseNumberFieldWithIcon = withTypeIcons(DefaultFields.IntellisenseNumberField);
+const NumberFieldWithIcon = withTypeIcons(DefaultFields.NumberField);
+const BooleanFieldWithIcon = withTypeIcons(DefaultFields.BooleanField);
+const JsonFieldWithIcon = withTypeIcons(DefaultFields.JsonField);
+const IntellisenseJSONFieldWithIcon = withTypeIcons(DefaultFields.IntellisenseJSONField);
+const IntellisenseExpressionFieldWithIcon = withTypeIcons(DefaultFields.IntellisenseExpressionField);
+
 /**
  * Resolves field widget in this order:
  *   UISchema field override, schema.$role, schema.$kind, schema.type
@@ -28,7 +37,6 @@ export function resolveFieldWidget(params: {
   }
 
   if (schema) {
-    let baseField: FieldWidget;
     const showIntellisense = uiOptions?.intellisenseScopes?.length || expression;
 
     if (schema.$role) {
@@ -51,8 +59,7 @@ export function resolveFieldWidget(params: {
     }
 
     if (expression && typeof value === 'string' && value.startsWith('=')) {
-      baseField = DefaultFields.IntellisenseExpressionField;
-      return { field: isOneOf ? baseField : withTypeIcons(baseField) };
+      return { field: isOneOf ? DefaultFields.IntellisenseExpressionField : IntellisenseExpressionFieldWithIcon };
     }
 
     if (Array.isArray(schema.enum)) {
@@ -62,21 +69,32 @@ export function resolveFieldWidget(params: {
     switch (schema.type) {
       case undefined:
       case 'string':
-        baseField = showIntellisense ? DefaultFields.IntellisenseTextField : DefaultFields.StringField;
+        if (showIntellisense && isOneOf) {
+          return { field: DefaultFields.IntellisenseTextField };
+        } else if (showIntellisense && !isOneOf) {
+          return { field: IntellisenseTextFieldWithIcon };
+        } else if (!showIntellisense && !isOneOf) {
+          return { field: StringFieldWithIcon };
+        }
         return {
-          field: isOneOf ? baseField : withTypeIcons(baseField),
+          field: DefaultFields.StringField,
         };
 
       case 'integer':
       case 'number':
-        baseField = showIntellisense ? DefaultFields.IntellisenseNumberField : DefaultFields.NumberField;
+        if (showIntellisense && isOneOf) {
+          return { field: DefaultFields.IntellisenseNumberField };
+        } else if (showIntellisense && !isOneOf) {
+          return { field: IntellisenseNumberFieldWithIcon };
+        } else if (!showIntellisense && !isOneOf) {
+          return { field: NumberFieldWithIcon };
+        }
         return {
-          field: isOneOf ? baseField : withTypeIcons(baseField),
+          field: DefaultFields.NumberField,
         };
 
       case 'boolean':
-        baseField = DefaultFields.BooleanField;
-        return { field: isOneOf ? baseField : withTypeIcons(baseField) };
+        return { field: isOneOf ? DefaultFields.BooleanField : BooleanFieldWithIcon };
       case 'array': {
         const { items } = schema;
 
@@ -85,9 +103,15 @@ export function resolveFieldWidget(params: {
         } else if (!Array.isArray(items) && typeof items === 'object' && items.type === 'object') {
           return { field: DefaultFields.ObjectArrayField };
         } else if (!schema.items && !schema.oneOf) {
-          baseField = showIntellisense ? DefaultFields.IntellisenseJSONField : DefaultFields.JsonField;
+          if (showIntellisense && isOneOf) {
+            return { field: DefaultFields.IntellisenseJSONField, customProps: { style: { height: 100 } } };
+          } else if (showIntellisense && !isOneOf) {
+            return { field: IntellisenseJSONFieldWithIcon, customProps: { style: { height: 100 } } };
+          } else if (!showIntellisense && !isOneOf) {
+            return { field: JsonFieldWithIcon, customProps: { style: { height: 100 } } };
+          }
           return {
-            field: isOneOf ? baseField : withTypeIcons(baseField),
+            field: DefaultFields.JsonField,
             customProps: { style: { height: 100 } },
           };
         }
@@ -98,9 +122,15 @@ export function resolveFieldWidget(params: {
         if (schema.additionalProperties) {
           return { field: DefaultFields.OpenObjectField };
         } else if (!schema.properties) {
-          baseField = showIntellisense ? DefaultFields.IntellisenseJSONField : DefaultFields.JsonField;
+          if (showIntellisense && isOneOf) {
+            return { field: DefaultFields.IntellisenseJSONField, customProps: { style: { height: 100 } } };
+          } else if (showIntellisense && !isOneOf) {
+            return { field: IntellisenseJSONFieldWithIcon, customProps: { style: { height: 100 } } };
+          } else if (!showIntellisense && !isOneOf) {
+            return { field: JsonFieldWithIcon, customProps: { style: { height: 100 } } };
+          }
           return {
-            field: isOneOf ? baseField : withTypeIcons(baseField),
+            field: DefaultFields.JsonField,
             customProps: { style: { height: 100 } },
           };
         } else if (uiOptions?.fieldsets) {
