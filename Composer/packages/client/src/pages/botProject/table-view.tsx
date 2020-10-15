@@ -11,7 +11,6 @@ import { PublishTarget } from '@bfc/shared';
 import { TextField, ITextFieldProps } from 'office-ui-fabric-react/lib/TextField';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { ActionButton, Button } from 'office-ui-fabric-react/lib/Button';
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { Text } from 'office-ui-fabric-react/lib/Text';
@@ -19,7 +18,6 @@ import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { navigateTo } from '../../utils/navigation';
-//import { navigateTo } from '../../utils/navigation';
 import {
   settingsState,
   localeState,
@@ -40,17 +38,13 @@ import {
   titleStyle,
   labelContainer,
   customerLabel,
-  runtimeLabel,
   appIdOrPassWordStyle,
   botLanguageDescriptionStyle,
   botLanguageFieldStyle,
   manageBotLanguage,
   languageItem,
-  toggleUseCustomRuntimeStyle,
   botLanguageContainerStyle,
-  runtimeLabelStyle,
-  textOr,
-  textRuntimeCode,
+  customRuntimeStyle,
   deleteBotText,
   deleteBotButton,
   publishTargetsContainer,
@@ -60,6 +54,7 @@ import {
   publishTargetsItemText,
   addPublishProfile,
   editPublishProfile,
+  publishTargetsStyle,
   publishTargetsEditButton,
 } from './styles';
 
@@ -85,13 +80,17 @@ const TableView: React.FC<BotProjectSettingsProps> = (props) => {
   const isRootBot = botProject?.isRootBot;
   const settings = useRecoilValue(settingsState(projectId));
   console.log(settings);
-  const { languages, defaultLanguage, publishTargets, MicrosoftAppId, MicrosoftAppPassword } = useRecoilValue(
-    settingsState(projectId)
-  );
+  const {
+    languages,
+    defaultLanguage,
+    publishTargets,
+    MicrosoftAppId,
+    MicrosoftAppPassword,
+    skillHostEndpoint,
+  } = useRecoilValue(settingsState(projectId));
   const publishTypes = useRecoilValue(publishTypesState(projectId));
   const locale = useRecoilValue(localeState(projectId));
   const showAddLanguageModal = useRecoilValue(showAddLanguageModalState(projectId));
-  const [isUseCustomRuntimeEnabled, setUseCustomRuntime] = useState<boolean>(false);
   const [addDialogHidden, setAddDialogHidden] = useState(true);
   const [editDialogHidden, setEditDialogHidden] = useState(true);
   const botName = useRecoilValue(botDisplayNameState(projectId));
@@ -106,10 +105,6 @@ const TableView: React.FC<BotProjectSettingsProps> = (props) => {
     if (projectId) {
       getPublishTargetTypes(projectId);
     }
-  }, [projectId]);
-
-  useEffect(() => {
-    setUseCustomRuntime(false);
   }, [projectId]);
 
   const [editDialogProps, setEditDialogProps] = useState({
@@ -223,23 +218,19 @@ const TableView: React.FC<BotProjectSettingsProps> = (props) => {
     );
   };
 
-  const onRenderUseCustomeRuntimeLabel = (props: ITextFieldProps | undefined) => {
-    return (
-      <div css={labelContainer}>
-        <div css={runtimeLabel(isUseCustomRuntimeEnabled)}>{props?.label}</div>
-        <TooltipHost content={props?.label}>
-          <Icon iconName={'Unknown'} />
-        </TooltipHost>
-      </div>
-    );
-  };
-
   const SkillHostEndPoint = useMemo(() => {
     return (
       <TextField
         aria-labelledby={'SkillHostEndPoint'}
         label={formatMessage('Skill host endpoint url')}
         placeholder={'Enter Skill host endpoint url'}
+        value={skillHostEndpoint}
+        onChange={async (e, value) =>
+          await setSettings(projectId, {
+            ...settings,
+            skillHostEndpoint: value,
+          })
+        }
         onRenderLabel={onRenderLabel}
       />
     );
@@ -345,45 +336,6 @@ const TableView: React.FC<BotProjectSettingsProps> = (props) => {
       </div>
     );
   }, [projectId, languageListOptions]);
-
-  // const CustomerRuntime = useMemo(() => {
-  // return (
-  //     <div css={appIdOrPassWordStyle}>
-  //         <div css={botLanguageDescriptionStyle}>
-  //   {formatMessage('Configure Composer to start your bot using runtime code you can customize and control')}
-  // </div>
-  // <Toggle
-  //   checked={isUseCustomRuntimeEnabled}
-  //   className={'toggleUseCustomRuntime'}
-  //   defaultChecked={false}
-  //   offText={formatMessage('Use custom runtime')}
-  //   styles={toggleUseCustomRuntimeStyle}
-  //   onChange={() => setUseCustomRuntime(!isUseCustomRuntimeEnabled)}
-  //   onText={formatMessage('Use custom runtime')}
-  // />
-  // <TextField
-  //   aria-labelledby={'Runtime code location'}
-  //   disabled={!isUseCustomRuntimeEnabled}
-  //   label={formatMessage('Runtime code location')}
-  //   placeholder={'Enter Runtime code location'}
-  //   onRenderLabel={onRenderUseCustomeRuntimeLabel}
-  // />
-  // <div css={runtimeLabelStyle}>
-  //   <div css={textOr}>{formatMessage('Or')} </div>
-  //   <div css={textRuntimeCode(isUseCustomRuntimeEnabled)}>{formatMessage('Get a new copy of runtime code')}</div>
-  // </div>
-  // <TextField
-  //   aria-labelledby={'Start command'}
-  //   disabled={!isUseCustomRuntimeEnabled}
-  //   label={formatMessage('Start command')}
-  //   placeholder={'Enter Start command'}
-  //   styles={{ root: { marginTop: 15 } }}
-  //   onRenderLabel={onRenderUseCustomeRuntimeLabel}
-  // />
-
-  //     </div>
-  // );
-  //}, [projectId, languageListOptions, isUseCustomRuntimeEnabled]);
 
   const DeleteBotButton = useMemo(() => {
     const openDeleteBotModal = async () => {
@@ -510,10 +462,18 @@ const TableView: React.FC<BotProjectSettingsProps> = (props) => {
       >
         {BotLanguage}
       </CollapsableWrapper>
-      <CollapsableWrapper title={formatMessage('Custom runtime')} titleStyle={titleStyle}>
+      <CollapsableWrapper
+        title={formatMessage('Custom runtime')}
+        titleStyle={titleStyle}
+        containerStyle={customRuntimeStyle}
+      >
         <RuntimeSettings projectId={projectId} />
       </CollapsableWrapper>
-      <CollapsableWrapper title={formatMessage('Publish targets')} titleStyle={titleStyle}>
+      <CollapsableWrapper
+        title={formatMessage('Publish targets')}
+        titleStyle={titleStyle}
+        containerStyle={publishTargetsStyle}
+      >
         {PublishTargets}
       </CollapsableWrapper>
       {DeleteBotButton}

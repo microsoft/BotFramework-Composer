@@ -11,7 +11,6 @@ import { JsonEditor } from '@bfc/code-editor';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
-//import { navigateTo } from '../../utils/navigation';
 import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
 import { dispatcherState } from '../../recoilModel';

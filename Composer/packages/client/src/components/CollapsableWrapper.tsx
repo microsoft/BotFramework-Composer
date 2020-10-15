@@ -16,6 +16,7 @@ interface CollapsableComponentProps {
 
 const header = css`
   display: flex;
+  margin-left: -8px;
 `;
 
 const defaultContainerStyle = css`

@@ -95,6 +95,7 @@ export const toggleUseCustomRuntimeStyle = {
 };
 
 export const botLanguageContainerStyle = css`
+  margin-left: 2px;
   margin-bottom: 12px;
 `;
 
@@ -106,6 +107,11 @@ export const textOr = css`
   font-size: 12px;
   margin-right: 5px;
   color: #000000;
+`;
+
+export const customRuntimeStyle = css`
+  margin-left: 2px;
+  margin-bottom: 14px;
 `;
 
 export const textRuntimeCode = (enable: boolean) => css`
@@ -161,6 +167,11 @@ export const publishTargetsItemText = css`
   border-bottom: 1px solid ${NeutralColors.gray30};
   padding-top: 10px;
   padding-left: 10px;
+`;
+
+export const publishTargetsStyle = css`
+  margin-left: 2px;
+  margin-bottom: 14px;
 `;
 
 export const addPublishProfile = {

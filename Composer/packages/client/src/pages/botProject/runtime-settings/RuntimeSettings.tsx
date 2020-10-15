@@ -6,8 +6,10 @@ import { jsx } from '@emotion/core';
 import { useState, Fragment, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { TextField, ITextFieldProps } from 'office-ui-fabric-react/lib/TextField';
+import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
@@ -26,7 +28,15 @@ import { LoadingSpinner } from '../../../components/LoadingSpinner';
 
 import { EjectModal } from './ejectModal';
 import { WorkingModal } from './workingModal';
-import { breathingSpace, runtimeSettingsStyle, runtimeControls, runtimeToggle, controlGroup } from './style';
+import {
+  breathingSpace,
+  runtimeSettingsStyle,
+  runtimeControls,
+  runtimeToggle,
+  labelContainer,
+  customerLabel,
+  iconStyle,
+} from './style';
 
 export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
   const { projectId = '' } = props;
@@ -90,7 +100,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
 
   const header = () => (
     <div css={runtimeControls}>
-      <p>{formatMessage('Configure Composer to start your bot using runtime code you can customize and control.')}</p>
+      {formatMessage('Configure Composer to start your bot using runtime code you can customize and control.')}
     </div>
   );
 
@@ -153,11 +163,23 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
     }
   };
 
+  //好像缺个ID
+  const onRenderLabel = (props: ITextFieldProps | undefined) => {
+    return (
+      <div css={labelContainer}>
+        <div css={customerLabel(props?.disabled)}> {props?.label} </div>
+        <TooltipHost content={props?.label}>
+          <Icon iconName={'Unknown'} styles={iconStyle(props?.disabled)} />
+        </TooltipHost>
+      </div>
+    );
+  };
+
   return botName ? (
     <div css={runtimeSettingsStyle}>
       {header()}
       {toggle()}
-      <div css={controlGroup}>
+      <div>
         <TextField
           required
           data-testid="runtimeCodeLocation"
@@ -167,6 +189,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
           styles={name}
           value={settings.runtime ? settings.runtime.path : ''}
           onChange={updateSetting('path')}
+          onRenderLabel={onRenderLabel}
         />
         {formatMessage('Or: ')}
         <Link
@@ -186,11 +209,12 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
           styles={name}
           value={settings.runtime ? settings.runtime.command : ''}
           onChange={updateSetting('command')}
+          onRenderLabel={onRenderLabel}
         />
       </div>
       <br />
       {needsUpdate && (
-        <div css={controlGroup}>
+        <div>
           <p>
             {formatMessage(
               'A newer version of the provisioning scripts has been found, and this project can be updated to the latest.'
