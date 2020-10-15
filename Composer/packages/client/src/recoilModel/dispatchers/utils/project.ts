@@ -49,6 +49,7 @@ import {
   filePersistenceState,
   formDialogSchemaIdsState,
   formDialogSchemaState,
+  jsonSchemaFilesState,
   lgFilesState,
   localeState,
   locationState,
@@ -266,10 +267,11 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
   const {
     dialogs,
     dialogSchemas,
-    formDialogSchemas,
     luFiles,
     lgFiles,
     qnaFiles,
+    jsonSchemaFiles,
+    formDialogSchemas,
     skillManifestFiles,
     skills,
     mergedSettings,
@@ -309,6 +311,7 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
   set(skillManifestsState(projectId), skillManifestFiles);
   set(luFilesState(projectId), initLuFilesStatus(botName, luFiles, dialogs));
   set(lgFilesState(projectId), lgFiles);
+  set(jsonSchemaFilesState(projectId), jsonSchemaFiles);
   set(dialogsState(projectId), verifiedDialogs);
   set(dialogSchemasState(projectId), dialogSchemas);
   set(botEnvironmentState(projectId), botEnvironment);
