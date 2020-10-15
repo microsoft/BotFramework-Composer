@@ -7,6 +7,11 @@ import { schemas, expandPropertyDefinition } from '@microsoft/bf-generate-librar
 
 import { BotProjectService } from '../services/project';
 
+// If we are in electron, the env variable has the asar.unpacked path to the templates
+// Otherwise, library uses built in templates path
+const getTemplatesRootDir = () =>
+  process.env.COMPOSER_FORM_DIALOG_TEMPLATES_DIR ? [process.env.COMPOSER_FORM_DIALOG_TEMPLATES_DIR] : undefined;
+
 const expandJsonSchemaProperty = async (req: Request, res: Response) => {
   const { propertyName, schema } = req.body;
   const result = await expandPropertyDefinition(propertyName, schema);
@@ -21,7 +26,7 @@ const expandJsonSchemaProperty = async (req: Request, res: Response) => {
 };
 
 const getTemplateSchemas = async (req: Request, res: Response) => {
-  const result = await schemas();
+  const result = await schemas(getTemplatesRootDir());
 
   if (result !== undefined) {
     res.status(200).json(result);

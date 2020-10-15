@@ -143,6 +143,7 @@ async function loadServer() {
     const unpackedDir = getUnpackedAsarPath();
     process.env.COMPOSER_RUNTIME_FOLDER = join(unpackedDir, 'runtime');
     process.env.COMPOSER_BUILTIN_EXTENSIONS_DIR = join(unpackedDir, 'build', 'plugins');
+    process.env.COMPOSER_FORM_DIALOG_TEMPLATES_DIR = join(unpackedDir, 'form-dialog-templates');
   }
 
   // only create a new data directory if packaged electron app
