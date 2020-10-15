@@ -50,7 +50,7 @@ export default async (composer: any): Promise<void> => {
         csproj = 'Microsoft.BotFramework.Composer.WebApp.csproj';
       }
       else if (profile.type === 'coreBotAzurePublish') {
-        csproj = 'src/Microsoft.Bot.Runtime.WebHost/Microsoft.Bot.Runtime.WebHost.csproj';
+        csproj = path.join('src', 'Microsoft.Bot.Runtime.WebHost', 'Microsoft.Bot.Runtime.WebHost.csproj');
       }
       else if (profile.type === 'azureFunctionsPublish') {
         csproj = 'Microsoft.BotFramework.Composer.Functions.csproj';
