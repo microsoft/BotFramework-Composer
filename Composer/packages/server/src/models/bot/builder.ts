@@ -3,13 +3,12 @@
 
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { FileInfo, IConfig } from '@bfc/shared';
+import { ComposerReservoirSampler } from '@microsoft/bf-dispatcher/lib/mathematics/sampler/ComposerReservoirSampler';
+import { ComposerBootstrapSampler } from '@microsoft/bf-dispatcher/lib/mathematics/sampler/ComposerBootstrapSampler';
 
 import { Path } from '../../utility/path';
 import { IFileStorage } from '../storage/interface';
 import log from '../../logger';
-
-import { ComposerReservoirSampler } from './sampler/ReservoirSampler';
-import { ComposerBootstrapSampler } from './sampler/BootstrapSampler';
 
 const crossTrainer = require('@microsoft/bf-lu/lib/parser/cross-train/crossTrainer.js');
 const luBuild = require('@microsoft/bf-lu/lib/parser/lubuild/builder.js');
@@ -19,6 +18,7 @@ const luisToLuContent = require('@microsoft/bf-lu/lib/parser/luis/luConverter');
 
 const GENERATEDFOLDER = 'generated';
 const INTERUPTION = 'interuption';
+const SAMPLE_SIZE_CONFIGURATION = 2;
 
 export type SingleConfig = {
   rootDialog: boolean;
@@ -150,7 +150,8 @@ export class Builder {
     //do bootstramp sampling to make the utterances' number ratio to 1:10
     const bootstrapSampler = new ComposerBootstrapSampler(
       luObject.utterances,
-      this.downSamplingConfig.maxImbalanceRatio
+      this.downSamplingConfig.maxImbalanceRatio,
+      SAMPLE_SIZE_CONFIGURATION
     );
     luObject.utterances = bootstrapSampler.getSampledUtterances();
     //if detect the utterances>15000, use reservoir sampling to down size
