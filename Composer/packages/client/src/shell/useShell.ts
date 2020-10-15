@@ -40,6 +40,25 @@ const FORM_EDITOR = 'PropertyEditor';
 
 type EventSource = 'FlowEditor' | 'PropertyEditor' | 'DesignPage' | 'VaCreation';
 
+const stubDialog = (): DialogInfo => ({
+  content: {
+    $kind: '',
+  },
+  diagnostics: [],
+  displayName: '',
+  id: '',
+  isRoot: true,
+  lgFile: '',
+  lgTemplates: [],
+  luFile: '',
+  qnaFile: '',
+  referredLuIntents: [],
+  referredDialogs: [],
+  triggers: [],
+  intentTriggers: [],
+  skills: [],
+});
+
 export function useShell(source: EventSource, projectId: string): Shell {
   const dialogMapRef = useRef({});
 
@@ -217,7 +236,10 @@ export function useShell(source: EventSource, projectId: string): Shell {
     ...actionApi,
   };
 
-  const currentDialog = useMemo(() => dialogs.find((d) => d.id === dialogId), [dialogs, dialogId]) as DialogInfo;
+  const currentDialog = useMemo(() => dialogs.find((d) => d.id === dialogId) ?? stubDialog(), [
+    dialogs,
+    dialogId,
+  ]) as DialogInfo;
   const editorData = useMemo(() => {
     return source === 'PropertyEditor'
       ? getDialogData(dialogsMap, dialogId, focused || selected || '')
