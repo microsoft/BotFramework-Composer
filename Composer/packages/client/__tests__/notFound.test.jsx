@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { render } from '@bfc/test-utils';
+import { render } from '@botframework-composer/test-utils';
 
 import { BASEPATH } from '../src/constants';
 import { NotFound } from '../src/components/NotFound';

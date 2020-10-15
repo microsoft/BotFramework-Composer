@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render, fireEvent, findAllByText } from '@bfc/test-utils';
+import { render, fireEvent, findAllByText } from '@botframework-composer/test-utils';
 
 import { NodeMenu } from '../../../src/adaptive-flow-editor/renderers/NodeMenu';
 import { NodeEventTypes } from '../../../src/adaptive-flow-renderer/constants/NodeEventTypes';

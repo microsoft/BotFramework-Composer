@@ -1,17 +1,20 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+
+import differenceWith from 'lodash/differenceWith';
+import isEqual from 'lodash/isEqual';
 import {
-  BotAssets,
-  BotProjectFile,
   DialogInfo,
   DialogSchemaFile,
   DialogSetting,
-  FormDialogSchema,
   SkillManifest,
+  BotAssets,
+  BotProjectFile,
+  LuFile,
+  LgFile,
+  QnAFile,
+  FormDialogSchema,
 } from '@bfc/shared';
-import { LgFile, LuFile, QnAFile } from '@bfc/types';
-import differenceWith from 'lodash/differenceWith';
-import isEqual from 'lodash/isEqual';
 import keys from 'lodash/keys';
 
 import * as client from './http';

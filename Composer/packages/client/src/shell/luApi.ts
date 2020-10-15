@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useEffect, useState } from 'react';
-import { LuFile, LuIntentSection, LuContextApi } from '@bfc/types';
+import { LuFile, LuIntentSection, LuContextApi } from '@botframework-composer/types';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 import debounce from 'lodash/debounce';

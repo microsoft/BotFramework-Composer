@@ -6,7 +6,7 @@ import path from 'path';
 import { v4 as uuid } from 'uuid';
 import md5 from 'md5';
 import { copy, rmdir, emptyDir, readJson, pathExists, writeJson, mkdirSync, writeFileSync } from 'fs-extra';
-import { IBotProject } from '@bfc/shared';
+import { IBotProject } from '@botframework-composer/types';
 import { JSONSchema7 } from '@bfc/extension';
 import { Debugger } from 'debug';
 

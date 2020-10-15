@@ -7,7 +7,8 @@
  * for more usage detail, please check client/__tests__/utils/luUtil.test.ts
  */
 import keys from 'lodash/keys';
-import { LuFile, DialogInfo, IIntentTrigger, FieldNames, SDKKinds, FileInfo } from '@bfc/shared';
+import { FieldNames } from '@bfc/shared';
+import { LuFile, DialogInfo, IIntentTrigger, SDKKinds, FileInfo } from '@botframework-composer/types';
 import { luIndexer } from '@bfc/indexers';
 
 import { getBaseName, getExtension } from './fileUtil';
