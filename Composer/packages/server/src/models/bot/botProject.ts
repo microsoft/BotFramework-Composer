@@ -386,7 +386,8 @@ export class BotProject implements IBotProject {
     }
     const file = this.files.get(name);
     if (file === undefined) {
-      throw new Error(`no such file ${name}`);
+      const { lastModified } = await this.createFile(name, content);
+      return lastModified;
     }
 
     const relativePath = file.relativePath;
@@ -482,7 +483,7 @@ export class BotProject implements IBotProject {
         crossTrainConfig,
         this.settings.downsampling
       );
-      await this.builder.build(luFiles, qnaFiles);
+      await this.builder.build(luFiles, qnaFiles, Array.from(this.files.values()) as FileInfo[]);
     }
   };
 

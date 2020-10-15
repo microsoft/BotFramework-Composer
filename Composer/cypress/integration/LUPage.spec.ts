@@ -13,7 +13,7 @@ context('LU Page', () => {
     cy.contains('__TestToDoBotWithLuisSample');
     cy.contains('All');
 
-    cy.get('.toggleEditMode button').should('not.exist');
+    cy.findByTestId('showcode').should('not.exist');
 
     // by default it goes to table view
     cy.findByTestId('LUPage').findByTestId('table-view').should('exist');
@@ -25,7 +25,7 @@ context('LU Page', () => {
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('__TestToDoBotWithLuisSample').click('left');
     });
-    cy.get('.toggleEditMode button').as('switchButton');
+    cy.findByTestId('showcode').as('switchButton');
     // goto edit-mode
     cy.get('@switchButton').click();
     cy.findByTestId('LUPage').get('.monaco-editor').should('exist');
