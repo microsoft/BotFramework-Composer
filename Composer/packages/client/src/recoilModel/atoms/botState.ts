@@ -10,6 +10,7 @@ import {
   DialogSchemaFile,
   DialogSetting,
   FormDialogSchema,
+  JsonSchemaFile,
   LgFile,
   LuFile,
   QnAFile,
@@ -271,6 +272,11 @@ export const isEjectRuntimeExistState = atomFamily<boolean, string>({
 
 export const qnaFilesState = atomFamily<QnAFile[], string>({
   key: getFullyQualifiedKey('qnaFiles'),
+  default: [],
+});
+
+export const jsonSchemaFilesState = atomFamily<JsonSchemaFile[], string>({
+  key: getFullyQualifiedKey('jsonSchemaFiles'),
   default: [],
 });
 

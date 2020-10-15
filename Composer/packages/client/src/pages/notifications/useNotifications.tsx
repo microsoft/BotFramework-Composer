@@ -12,6 +12,7 @@ import {
   botProjectFileState,
   dialogSchemasState,
   formDialogSchemasSelectorFamily,
+  jsonSchemaFilesState,
   lgFilesState,
   luFilesState,
   qnaFilesState,
@@ -43,6 +44,7 @@ export default function useNotifications(projectId: string, filter?: string) {
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   const formDialogSchemas = useRecoilValue(formDialogSchemasSelectorFamily(projectId));
   const botProjectFile = useRecoilValue(botProjectFileState(projectId));
+  const jsonSchemaFiles = useRecoilValue(jsonSchemaFilesState(projectId));
 
   const botAssets: BotAssets = {
     projectId,
@@ -55,6 +57,7 @@ export default function useNotifications(projectId: string, filter?: string) {
     dialogSchemas,
     formDialogSchemas,
     botProjectFile,
+    jsonSchemaFiles,
   };
 
   const memoized = useMemo(() => {
