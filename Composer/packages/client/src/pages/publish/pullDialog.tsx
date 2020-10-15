@@ -1,4 +1,4 @@
-import { PublishTarget } from '@bfc/types';
+import { PublishTarget } from '@botframework-composer/types';
 import formatMessage from 'format-message';
 import { DefaultButton, Dialog, DialogFooter, DialogType, PrimaryButton } from 'office-ui-fabric-react';
 import React, { useCallback, useState } from 'react';

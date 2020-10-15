@@ -6,6 +6,8 @@ import { authService } from '../services/auth';
 
 import { BotContentInfo, ContentProviderMetadata, ExternalContentProvider } from './externalContentProvider';
 
+const COMPOSER_1P_APP_ID = 'ce48853e-0605-4f77-8746-d70ac63cc6bc';
+
 type PowerVirtualAgentsMetadata = ContentProviderMetadata & {
   botId?: string;
   description?: string; // maybe we can derive this from the bot content
@@ -19,7 +21,7 @@ type PowerVirtualAgentsMetadata = ContentProviderMetadata & {
 const baseUrl = 'https://bots.int.customercareintelligence.net'; // int = test environment
 //const baseUrl = 'https://bots.ppe.customercareintelligence.net'; // ppe
 const authCredentials = {
-  clientId: 'ce48853e-0605-4f77-8746-d70ac63cc6bc',
+  clientId: COMPOSER_1P_APP_ID,
   scopes: ['a522f059-bb65-47c0-8934-7db6e5286414/.default'], // int / ppe
 };
 
@@ -108,6 +110,6 @@ export class PowerVirtualAgentsProvider extends ExternalContentProvider {
 
   private getDeepLink(): string {
     // TODO: use metadata (if provided) to create a deep link to a specific dialog / trigger / action etc.
-    return '';
+    return `dialogs/myDialog?selected=triggers[${encodeURIComponent('my-id')}]`;
   }
 }
