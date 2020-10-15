@@ -1295,6 +1295,9 @@
   "import_schema_75659c5f": {
     "message": "Import schema"
   },
+  "importing_bot_content_58f9e60c": {
+    "message": "Importing bot content..."
+  },
   "in_production_5a70b8b4": {
     "message": "In production"
   },
@@ -2026,6 +2029,18 @@
   },
   "publishing_d63a8f2d": {
     "message": "Publishing"
+  },
+  "pull_complete_963266dd": {
+    "message": "Pull complete"
+  },
+  "pull_d1c3e8fe": {
+    "message": "Pull"
+  },
+  "pull_from_selected_profile_b5c635ec": {
+    "message": "Pull from selected profile"
+  },
+  "pulling_bot_content_93238b2": {
+    "message": "Pulling bot content..."
   },
   "qna_28ee5e26": {
     "message": "QnA"

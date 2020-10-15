@@ -11,6 +11,9 @@ import extractZip from 'extract-zip';
 import { BotProjectService } from '../services/project';
 import { copyDir } from '../utility/storage';
 import { authService } from '../services/auth';
+import logger from '../logger';
+
+const log = logger.extend('publisher-controller');
 
 function extensionImplementsMethod(extensionName: string, methodName: string): boolean {
   return extensionName && ExtensionContext.extensions.publish[extensionName]?.methods[methodName];
@@ -307,6 +310,7 @@ export const PublishController = {
   },
 
   pull: async (req, res) => {
+    log('starting pull');
     const target = req.params.target;
     const user = await ExtensionContext.getUserFromRequest(req);
     const projectId = req.params.projectId;
@@ -333,13 +337,13 @@ export const PublishController = {
       if (typeof pluginMethod === 'function') {
         try {
           // call the method
-          const results = await pluginMethod.call(
+          const results = (await pluginMethod.call(
             null,
             configuration,
             currentProject,
             user,
             authService.getAccessToken.bind(authService)
-          );
+          )) as { zipPath?: string; eTag: string; status: number; error?: any };
           if (results.status === 500) {
             // something went wrong
             console.error(results.error?.message);
@@ -354,17 +358,29 @@ export const PublishController = {
 
           // wipe old .backup if present
           const backupDir = join(currentProject.dir, '.backup');
+          log('wiping old .backup folder: ', backupDir);
           await removeSync(backupDir);
 
-          // copy current bot project contents into botProject/.backup
-          await ensureDirSync(backupDir);
-          await copyDir(currentProject.dir, currentProject.fileStorage, backupDir, currentProject.fileStorage); // .backup might get duplicated?
+          // copy current bot project contents into COMPOSER_TEMP_DIR/.backup
+          const tempBackupDir = join(process.env.COMPOSER_TEMP_DIR as string, '.backup');
+          log('copying current bot project contents into temp backup folder: ', tempBackupDir);
+          await copyDir(currentProject.dir, currentProject.fileStorage, tempBackupDir, currentProject.fileStorage); // .backup might get duplicated?
 
           // extract downloaded assets into bot project
+          log('extracting pulled assets into project folder: ', currentProject.dir);
           await extractZip(results.zipPath, { dir: currentProject.dir });
 
+          // copy from temp backup into backup
+          log(`copying backed up assets from ${tempBackupDir} into ${backupDir}`);
+          await ensureDirSync(backupDir);
+          await copyDir(tempBackupDir, currentProject.fileStorage, backupDir, currentProject.fileStorage);
+          await removeSync(tempBackupDir);
+
           // update eTag
-          BotProjectService.setETagForProject(results.eTag as string, projectId); // TODO: uncast this etag
+          log('setting etag');
+          BotProjectService.setETagForProject(results.eTag, projectId);
+
+          log('pull successful');
 
           return res.status(200);
         } catch (err) {

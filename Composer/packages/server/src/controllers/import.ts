@@ -27,7 +27,7 @@ async function startImport(req: StartImportRequest, res: Response, next) {
   if (contentProvider) {
     try {
       // download the bot content zip
-      const { eTag, zipPath } = await contentProvider.downloadBotContent();
+      const { eTag, urlSuffix, zipPath } = await contentProvider.downloadBotContent();
 
       // extract zip into new "template" directory
       const baseDir = process.env.COMPOSER_REMOTE_TEMPLATES_DIR as string;
@@ -39,7 +39,7 @@ async function startImport(req: StartImportRequest, res: Response, next) {
       await contentProvider.cleanUp();
 
       setTimeout(() => {
-        res.json({ eTag, templateDir });
+        res.json({ eTag, templateDir, urlSuffix });
       }, 2000);
     } catch (e) {
       const msg = 'Error importing bot content: ' + e;

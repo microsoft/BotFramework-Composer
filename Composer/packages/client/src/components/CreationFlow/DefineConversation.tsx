@@ -198,12 +198,13 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
       };
       if (props.location?.search) {
         const decoded = decodeURIComponent(props.location.search);
-        const { eTag, imported, templateDir } = querystring.parse(decoded);
+        const { eTag, imported, templateDir, urlSuffix } = querystring.parse(decoded);
 
         if (imported && templateDir) {
           dataToSubmit.templateDir = templateDir as string;
         }
         dataToSubmit.eTag = eTag as string;
+        dataToSubmit.urlSuffix = urlSuffix;
       }
 
       onSubmit(

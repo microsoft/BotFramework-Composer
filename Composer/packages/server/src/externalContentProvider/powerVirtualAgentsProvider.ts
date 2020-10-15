@@ -3,7 +3,6 @@ import { ensureDirSync, removeSync } from 'fs-extra';
 import fetch, { RequestInit } from 'node-fetch';
 import { join } from 'path';
 import { authService } from '../services/auth';
-// import { useElectronContext } from '../utility/electronContext';
 
 import { BotContentInfo, ContentProviderMetadata, ExternalContentProvider } from './externalContentProvider';
 
@@ -17,8 +16,8 @@ type PowerVirtualAgentsMetadata = ContentProviderMetadata & {
   triggerId?: string;
 };
 
-//const baseUrl = 'https://bots.int.customercareintelligence.net'; // int = test environment
-const baseUrl = 'https://bots.ppe.customercareintelligence.net'; // ppe
+const baseUrl = 'https://bots.int.customercareintelligence.net'; // int = test environment
+//const baseUrl = 'https://bots.ppe.customercareintelligence.net'; // ppe
 const authCredentials = {
   clientId: 'ce48853e-0605-4f77-8746-d70ac63cc6bc',
   scopes: ['a522f059-bb65-47c0-8934-7db6e5286414/.default'], // int / ppe
@@ -65,7 +64,7 @@ export class PowerVirtualAgentsProvider extends ExternalContentProvider {
           writeStream.once('error', reject);
           result.body.pipe(writeStream);
         });
-        return { eTag, zipPath };
+        return { eTag, zipPath, urlSuffix: this.getDeepLink() };
       } else {
         throw 'Response containing zip does not have a body';
       }
@@ -105,5 +104,10 @@ export class PowerVirtualAgentsProvider extends ExternalContentProvider {
       'X-CCI-TenantId': tenantId,
       'X-CCI-Routing-TenantId': tenantId,
     };
+  }
+
+  private getDeepLink(): string {
+    // TODO: use metadata (if provided) to create a deep link to a specific dialog / trigger / action etc.
+    return '';
   }
 }
