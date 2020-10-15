@@ -121,7 +121,7 @@ type BotInProject = {
 
 type IProjectTreeProps = {
   onSelect?: (link: TreeLink) => void;
-  showAll?: () => void;
+  onAllSelected?: () => void;
   showTriggers?: boolean;
   showDialogs?: boolean;
   navLinks?: TreeLink[];
@@ -130,7 +130,7 @@ type IProjectTreeProps = {
 };
 
 export const ProjectTree: React.FC<IProjectTreeProps> = ({
-  showAll = undefined,
+  onAllSelected = undefined,
   showTriggers = true,
   showDialogs = true,
   onDeleteDialog,
@@ -410,11 +410,11 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
           aria-live={'polite'}
         />
         <div css={tree}>
-          {showAll != null ? (
+          {onAllSelected != null ? (
             <TreeItem
               link={{ displayName: formatMessage('All'), skillId: null, projectId: currentProjectId, isRoot: true }}
               shiftOut={28}
-              onSelect={showAll}
+              onSelect={onAllSelected}
             />
           ) : null}
           {projectTree}
