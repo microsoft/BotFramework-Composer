@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { renderHook, RenderHookResult } from '@bfc/test-utils/lib/hooks';
+import { renderHook, RenderHookResult } from '@botframework-composer/test-utils/lib/hooks';
 import React, { useEffect, useRef } from 'react';
 import { RecoilRoot, RecoilState, useSetRecoilState } from 'recoil';
 import reduce from 'lodash/reduce';

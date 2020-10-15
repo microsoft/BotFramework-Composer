@@ -64,6 +64,17 @@ export const topLinks = (projectId: string, openedDialogId: string, pluginPages:
       exact: true,
       disabled: !botLoaded,
     },
+    ...(process.env.COMPOSER_ENABLE_FORMS
+      ? [
+          {
+            to: `/bot/${projectId}/forms`,
+            iconName: 'Table',
+            labelName: formatMessage('Forms'),
+            exact: false,
+            disabled: !botLoaded,
+          },
+        ]
+      : []),
   ];
 
   if (process.env.COMPOSER_AUTH_PROVIDER === 'abs-h') {
@@ -73,11 +84,11 @@ export const topLinks = (projectId: string, openedDialogId: string, pluginPages:
   if (pluginPages.length > 0) {
     pluginPages.forEach((p) => {
       links.push({
-        to: `plugin/${p.id}/${p.bundleId}`,
+        to: `/bot/${projectId}/plugin/${p.id}/${p.bundleId}`,
         iconName: p.icon ?? 'StatusCircleQuestionMark',
         labelName: p.label,
         exact: true,
-        disabled: false,
+        disabled: !projectId,
       });
     });
   }

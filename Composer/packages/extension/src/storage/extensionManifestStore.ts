@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { existsSync, writeJsonSync, readJsonSync } from 'fs-extra';
-import { ExtensionMap, ExtensionMetadata } from '@bfc/types';
+import { ExtensionMap, ExtensionMetadata } from '@botframework-composer/types';
 
 import logger from '../logger';
 

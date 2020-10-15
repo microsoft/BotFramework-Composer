@@ -9,11 +9,13 @@ export enum ChangeType {
 
 export enum FileExtensions {
   Dialog = '.dialog',
+  FormDialog = '.form-dialog',
   DialogSchema = '.dialog.schema',
   Manifest = '.json',
   Lu = '.lu',
   Lg = '.lg',
   QnA = '.qna',
+  SourceQnA = '.source.qna',
   Setting = 'appsettings.json',
   BotProject = '.botproj',
 }

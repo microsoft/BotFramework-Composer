@@ -22,7 +22,7 @@
   },
   "author": "",
   "nodemonConfig": {
-    "exec": "cross-env TS_NODE_FILES=true node -r ts-node/register src/init.ts",
+    "exec": "cross-env TS_NODE_FILES=true node --inspect=9228 -r ts-node/register src/init.ts",
     "watch": [
       "src",
       "../extension/lib"
@@ -31,7 +31,7 @@
     "delay": 2
   },
   "devDependencies": {
-    "@bfc/test-utils": "*",
+    "@botframework-composer/test-utils": "*",
     "@types/archiver": "^3.1.0",
     "@types/body-parser": "^1.17.0",
     "@types/compression": "^1.0.1",
@@ -88,6 +88,7 @@
     "luis-apis": "2.5.1",
     "minimatch": "^3.0.4",
     "morgan": "^1.9.1",
+    "multimatch": "^4.0.0",
     "passport": "^0.4.1",
     "path-to-regexp": "^6.1.0",
     "portfinder": "1.0.25",

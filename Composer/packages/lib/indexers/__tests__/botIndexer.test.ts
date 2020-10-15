@@ -18,6 +18,17 @@ const { checkSkillSetting, checkLUISLocales, filterLUISFilesToPublish } = BotInd
 
 const botAssets: BotAssets = {
   projectId: 'test',
+  botProjectFile: {
+    id: 'test',
+    content: {
+      workspace: '',
+      name: '',
+      skills: {},
+    },
+    lastModified: '',
+  },
+  dialogSchemas: [],
+  qnaFiles: [],
   lgFiles: [],
   qnaFiles: [],
   dialogSchemas: [],
@@ -36,7 +47,7 @@ const botAssets: BotAssets = {
   dialogs: [
     {
       luFile: 'a.lu',
-      skills: ['skill1', 'skill2'],
+      skills: [`=settings.skill['Email-Skill'].endpointUrl`, `=settings.skill['Calendar-Skill'].endpointUrl`],
     } as DialogInfo,
   ],
   setting: {
@@ -48,6 +59,8 @@ const botAssets: BotAssets = {
       'Email-Skill': {
         name: 'Email-Skill',
         manifestUrl: 'skill1',
+        msAppId: 'skill1',
+        endpointUrl: 'skill1',
       } as SkillSetting,
     },
     luis: {} as ILuisConfig,

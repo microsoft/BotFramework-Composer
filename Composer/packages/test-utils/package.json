@@ -1,13 +1,14 @@
 {
-  "name": "@bfc/test-utils",
-  "version": "0.0.0",
-  "private": true,
-  "description": "",
+  "name": "@botframework-composer/test-utils",
+  "version": "0.0.1",
+  "description": "Shared testing utilities for Botframework Composer.",
   "main": "lib/index.js",
-  "author": "",
+  "author": "andy.brown@microsoft.com",
   "license": "MIT",
+  "files": ["lib"],
   "scripts": {
-    "build": "rimraf lib && tsc"
+    "build": "rimraf lib && tsc",
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "@babel/core": "^7.9.6",
@@ -25,6 +26,8 @@
     "react-test-renderer": "^16.13.1"
   },
   "devDependencies": {
-    "@types/jest": "^25.2.3"
+    "@types/jest": "^25.2.3",
+    "rimraf": "^3.0.2",
+    "typescript": "^3.8.3"
   }
 }

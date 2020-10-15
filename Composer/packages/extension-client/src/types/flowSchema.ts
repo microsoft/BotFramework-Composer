@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { FC, ComponentClass } from 'react';
-import { BaseSchema, SDKKinds } from '@bfc/types';
+import { BaseSchema, SDKKinds } from '@botframework-composer/types';
 
 export type FlowEditorWidgetMap = { [widgetName: string]: WidgetComponent<any> };
 export enum FlowSchemaBuiltinKeys {
