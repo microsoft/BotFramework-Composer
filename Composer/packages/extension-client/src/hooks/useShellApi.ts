@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { useContext } from 'react';
-import { ShellApi, ShellData } from '@bfc/types';
+import { ShellApi, ShellData } from '@botframework-composer/types';
 
 import { EditorExtensionContext } from '../EditorExtensionContext';
 import { PluginConfig } from '../types';

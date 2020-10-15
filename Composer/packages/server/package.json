@@ -31,7 +31,7 @@
     "delay": 2
   },
   "devDependencies": {
-    "@bfc/test-utils": "*",
+    "@botframework-composer/test-utils": "*",
     "@types/archiver": "^3.1.0",
     "@types/body-parser": "^1.17.0",
     "@types/compression": "^1.0.1",

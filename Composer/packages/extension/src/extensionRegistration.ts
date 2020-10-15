@@ -3,7 +3,7 @@
 
 import { RequestHandler } from 'express-serve-static-core';
 import { Debugger } from 'debug';
-import { PublishPlugin, RuntimeTemplate, BotTemplate } from '@bfc/types';
+import { PublishPlugin, RuntimeTemplate, BotTemplate } from '@botframework-composer/types';
 
 import logger from './logger';
 import { ExtensionContext } from './extensionContext';

@@ -75,7 +75,7 @@
     "@babel/cli": "7.2.3",
     "@babel/core": "7.3.4",
     "@babel/runtime": "7.3.4",
-    "@bfc/test-utils": "*",
+    "@botframework-composer/test-utils": "*",
     "@emotion/babel-preset-css-prop": "^10.0.14",
     "@svgr/webpack": "4.1.0",
     "@types/jwt-decode": "^2.2.1",

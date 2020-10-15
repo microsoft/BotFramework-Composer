@@ -7,7 +7,7 @@ import * as dialogUtils from './dialogUtils';
 
 formatMessage.setup({ missingTranslation: 'ignore' });
 
-export * from '@bfc/types';
+export * from '@botframework-composer/types';
 
 export * from './constant';
 export * from './copyUtils';
