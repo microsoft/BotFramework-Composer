@@ -14,9 +14,11 @@ export enum FileExtensions {
   Lu = '.lu',
   Lg = '.lg',
   Qna = '.qna',
+  SourceQnA = '.source.qna',
   Setting = 'appsettings.json',
   FormDialogSchema = '.form-dialog',
   BotProject = '.botproj',
+  Json = '.json',
 }
 
 export type FileInfo = {
@@ -32,6 +34,7 @@ export type ITrigger = {
   displayName: string;
   type: string;
   isIntent: boolean;
+  content: any;
 };
 
 export type ReferredLuIntents = {
@@ -105,19 +108,33 @@ export type LuFile = {
   diagnostics: IDiagnostic[];
   intents: LuIntentSection[];
   empty: boolean;
+  resource: LuParseResource;
   [key: string]: any;
 };
 
+export type LuParseResource = {
+  Sections: any[];
+  Errors: any[];
+  Content: string;
+};
+
 export type QnASection = {
+  sectionId: string;
   Questions: { content: string; id: string }[];
   Answer: string;
   Body: string;
+  range?: IRange;
 };
 
 export type QnAFile = {
   id: string;
   content: string;
+  diagnostics: IDiagnostic[];
   qnaSections: QnASection[];
+  imports: { id: string; path: string }[];
+  options: { id: string; name: string; value: string }[];
+  empty: boolean;
+  resource: LuParseResource;
   [key: string]: any;
 };
 
@@ -154,6 +171,11 @@ export type Skill = {
   name: string;
 };
 
+export type JsonSchemaFile = {
+  id: string;
+  content: string;
+};
+
 export type TextFile = {
   id: string;
   content: string;
@@ -186,6 +208,7 @@ export type BotAssets = {
   dialogSchemas: DialogSchemaFile[];
   formDialogSchemas: FormDialogSchema[];
   botProjectFile: BotProjectFile;
+  jsonSchemaFiles: JsonSchemaFile[];
 };
 
 export type BotInfo = {

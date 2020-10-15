@@ -10,6 +10,7 @@ import {
   DialogSchemaFile,
   DialogSetting,
   FormDialogSchema,
+  JsonSchemaFile,
   LgFile,
   LuFile,
   QnAFile,
@@ -17,7 +18,7 @@ import {
 } from '@bfc/shared';
 import { atomFamily } from 'recoil';
 
-import { BotLoadError, DesignPageLocation, QnAAllUpViewStatus } from '../../recoilModel/types';
+import { BotLoadError, DesignPageLocation } from '../../recoilModel/types';
 import FilePersistence from '../persistence/FilePersistence';
 
 import { BotStatus } from './../../constants';
@@ -241,9 +242,27 @@ export const designPageLocationState = atomFamily<DesignPageLocation, string>({
   },
 });
 
-export const qnaAllUpViewStatusState = atomFamily<any, string>({
-  key: getFullyQualifiedKey('qnaAllUpViewStatusState'),
-  default: QnAAllUpViewStatus.Success,
+export const showCreateQnAFromUrlDialogState = atomFamily<boolean, string>({
+  key: getFullyQualifiedKey('showCreateQnAFromUrlDialog'),
+  default: false,
+});
+
+export const showCreateQnAFromUrlDialogWithScratchState = atomFamily<boolean, string>({
+  key: getFullyQualifiedKey('showCreateQnAFromUrlDialogWithScratch'),
+  default: false,
+});
+
+export const showCreateQnAFromScratchDialogState = atomFamily<boolean, string>({
+  key: getFullyQualifiedKey('showCreateQnAFromScratchDialog'),
+  default: false,
+});
+export const onCreateQnAFromUrlDialogCompleteState = atomFamily<{ func: undefined | (() => void) }, string>({
+  key: getFullyQualifiedKey('onCreateQnAFromUrlDialogCompleteState'),
+  default: { func: undefined },
+});
+export const onCreateQnAFromScratchDialogCompleteState = atomFamily<{ func: undefined | (() => void) }, string>({
+  key: getFullyQualifiedKey('onCreateQnAFromScratchDialogCompleteState'),
+  default: { func: undefined },
 });
 
 export const isEjectRuntimeExistState = atomFamily<boolean, string>({
@@ -253,6 +272,11 @@ export const isEjectRuntimeExistState = atomFamily<boolean, string>({
 
 export const qnaFilesState = atomFamily<QnAFile[], string>({
   key: getFullyQualifiedKey('qnaFiles'),
+  default: [],
+});
+
+export const jsonSchemaFilesState = atomFamily<JsonSchemaFile[], string>({
+  key: getFullyQualifiedKey('jsonSchemaFiles'),
   default: [],
 });
 
