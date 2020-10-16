@@ -171,7 +171,7 @@
 "@bfc/indexers@../../packages/lib/indexers":
   version "0.0.0"
   dependencies:
-    "@microsoft/bf-lu" "^4.11.0-dev.20201005.7e5e1b8"
+    "@microsoft/bf-lu" "^4.11.0-dev.20201013.7ccb128"
     adaptive-expressions "4.10.0-preview-147186"
     botbuilder-lg "^4.10.0-preview-150886"
     lodash "^4.17.19"
@@ -231,10 +231,10 @@
     semver "^5.5.1"
     tslib "^1.10.0"
 
-"@microsoft/bf-lu@^4.11.0-dev.20201005.7e5e1b8":
-  version "4.11.0-dev.20201005.7e5e1b8"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.11.0-dev.20201005.7e5e1b8.tgz#62f9a37bb8340456e41853e179f2941dab9dfc87"
-  integrity sha512-0vZ7sw+lDj0HiUa1vfaftIqhCSEMLwOl9uExR3gt1HkulakG676vtyG9Orr5z7ROTn+byhSHXdjfgFZdMtw1BQ==
+"@microsoft/bf-lu@^4.11.0-dev.20201013.7ccb128":
+  version "4.11.0-dev.20201014.d8a6b54"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.11.0-dev.20201014.d8a6b54.tgz#59bdb6e94e54307f76ccadd606ca9e61b6ee4aed"
+  integrity sha512-3iTq2YSXlQaxShepP/Hu393iuyAAOsAg0IGqt88Hhm+1QhT0WJeuqxzYQeZHYitxJrpEcWfN9/PsoCkBqDEsgw==
   dependencies:
     "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
     "@azure/ms-rest-azure-js" "2.0.1"
@@ -251,7 +251,7 @@
     lodash "^4.17.19"
     node-fetch "~2.6.0"
     semver "^5.5.1"
-    tslib "^1.10.0"
+    tslib "^2.0.3"
 
 "@microsoft/bf-luis-cli@^4.10.0-dev.20200721.8bb21ac":
   version "4.10.0-dev.20200721.8bb21ac"
@@ -2523,6 +2523,11 @@ tslib@^1.10.0, tslib@^1.9.2, tslib@^1.9.3:
   version "1.13.0"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.13.0.tgz#c881e13cc7015894ed914862d276436fa9a47043"
   integrity sha512-i/6DQjL8Xf3be4K/E6Wgpekn5Qasl1usyw++dAA35Ue5orEn65VIxOA+YvNNl9HV3qv70T7CNwjODHZrLwvd1Q==
+
+tslib@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.0.3.tgz#8e0741ac45fc0c226e58a17bfc3e64b9bc6ca61c"
+  integrity sha512-uZtkfKblCEQtZKBF6EBXVZeQNl82yqtDQdv+eck8u7tdPxjLu2/lp5/uPW+um2tpuxINHWy3GhiccY7QgEaVHQ==
 
 tslib@~1.10.0:
   version "1.10.0"
