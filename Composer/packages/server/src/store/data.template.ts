@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { defaultFeatureFlags } from '@bfc/shared';
+
 import settings from '../settings';
 
 export default {
@@ -17,4 +19,5 @@ export default {
   ],
   recentBotProjects: [],
   projectLocationMap: {},
+  currentFeatureFlags: defaultFeatureFlags,
 };

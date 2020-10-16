@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { atom, atomFamily } from 'recoil';
-import { ProjectTemplate, UserSettings } from '@bfc/shared';
+import { FeatureFlag, ProjectTemplate, UserSettings } from '@bfc/shared';
 import { ExtensionMetadata } from '@bfc/extension-client';
 
 import {
@@ -13,7 +13,7 @@ import {
   BoilerplateVersion,
   Notification,
 } from '../../recoilModel/types';
-import { DEFAULT_FEATURE_FLIGHT_VALUES, getFeatureFlightValues, getUserSettings } from '../utils';
+import { getUserSettings } from '../utils';
 import onboardingStorage from '../../utils/onboardingStorage';
 import { CreationFlowStatus, AppUpdaterStatus } from '../../constants';
 
@@ -101,10 +101,9 @@ export const userSettingsState = atom<UserSettings>({
   default: getUserSettings(),
 });
 
-//TODO: strongly type feature flags?
-export const featureFlagState = atom<typeof DEFAULT_FEATURE_FLIGHT_VALUES>({
+export const featureFlagState = atom<FeatureFlag[]>({
   key: getFullyQualifiedKey('featureFlag'),
-  default: getFeatureFlightValues(),
+  default: [],
 });
 
 export const announcementState = atom<string>({

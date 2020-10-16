@@ -10,6 +10,7 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { RouteComponentProps } from '@reach/router';
 import { navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
+import { getFeatureFlagValue } from '@bfc/shared';
 
 import { CreationFlowStatus } from '../../constants';
 import { dispatcherState, botDisplayNameState } from '../../recoilModel';
@@ -137,7 +138,6 @@ const Home: React.FC<RouteComponentProps> = () => {
       disabled: botName ? false : true,
     },
   ];
-
   return (
     <div css={home.outline}>
       <Toolbar toolbarItems={toolbarItems} />
@@ -197,7 +197,7 @@ const Home: React.FC<RouteComponentProps> = () => {
               />
             </div>
           )}
-          {featureFlags.showTutorialContainer && (
+          {getFeatureFlagValue('Show Tutorial', featureFlags) ? (
             <div css={home.leftContainer}>
               <h2 css={home.subtitle}>{formatMessage('Video tutorials:')}&nbsp;</h2>
               <div css={home.newBotContainer}>
@@ -237,7 +237,7 @@ const Home: React.FC<RouteComponentProps> = () => {
                 </div>
               </div>
             </div>
-          )}
+          ) : null}
         </div>
         <div aria-label={formatMessage('Example bot list')} css={home.rightPage} role="region">
           <h3 css={home.bluetitle}>{formatMessage(`Examples`)}</h3>

@@ -14,6 +14,7 @@ import { useRecoilValue } from 'recoil';
 
 import { isElectron } from '../../../utils/electronUtil';
 import { onboardingState, userSettingsState, dispatcherState, featureFlagState } from '../../../recoilModel';
+import { FeatureFlag } from '../../../recoilModel/utils';
 
 import { container, section } from './styles';
 import { SettingToggle } from './SettingToggle';
@@ -31,7 +32,7 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
   const userSettings = useRecoilValue(userSettingsState);
   const { complete } = useRecoilValue(onboardingState);
   const featureFlags = useRecoilValue(featureFlagState);
-
+  console.log(featureFlags);
   const onOnboardingChange = useCallback(
     (checked: boolean) => {
       // on means its not complete
@@ -63,28 +64,22 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
     });
   }
 
-  const onFeatureFlagChange = (feature: string) => {
-    setFeatureFlag(feature, !featureFlags[feature]);
-  };
-
   const renderFeatureFlagOptions = () => {
     const result: JSX.Element[] = [];
-    for (const feature in featureFlags) {
+    featureFlags.forEach((featureFlag: FeatureFlag) => {
       result.push(
         <SettingToggle
-          checked={featureFlags[feature]}
-          description={formatMessage('FEATURE FLAG')}
-          id={feature}
+          checked={featureFlag.value}
+          description={featureFlag.description}
+          id={featureFlag.name}
           image={images.onboarding}
-          title={feature}
+          title={featureFlag.name}
           onToggle={(checked: boolean) => {
-            console.log('in here with feature: ' + feature);
-            console.log('Setting value to: ' + !featureFlags[feature]);
-            setFeatureFlag(feature, !featureFlags[feature]);
+            setFeatureFlag(featureFlag.name, !featureFlag.value);
           }}
         />
       );
-    }
+    });
     return result;
   };
 
