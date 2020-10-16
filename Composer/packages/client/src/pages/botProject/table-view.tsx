@@ -79,7 +79,6 @@ const TableView: React.FC<BotProjectSettingsProps> = (props) => {
   const botProject = botProjectsMetaData.find((b) => b.projectId === projectId);
   const isRootBot = botProject?.isRootBot;
   const settings = useRecoilValue(settingsState(projectId));
-  console.log(settings);
   const {
     languages,
     defaultLanguage,

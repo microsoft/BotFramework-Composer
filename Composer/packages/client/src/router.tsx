@@ -47,6 +47,7 @@ const Routes = (props) => {
           />
           <Redirect noThrow from="/bot/:projectId/knowledge-base" to="/bot/:projectId/knowledge-base/all" />
           <Redirect noThrow from="/bot/:projectId/publish" to="/bot/:projectId/publish/all" />
+          <Redirect noThrow from="/bot/:projectId/botProjectsSettings" to="/bot/:projectId/botProjectsSettings/root" />
           <Redirect noThrow from="/" to={resolveToBasePath(BASEPATH, 'home')} />
           <ProjectRouter path="/bot/:projectId">
             <DesignPage path="dialogs/:dialogId/*" />
@@ -56,7 +57,8 @@ const Routes = (props) => {
             <Notifications path="notifications" />
             <Publish path="publish/:targetName" />
             <Skills path="skills/*" />
-            <BotProjectSettings path="botProjectsSettings" />
+            <BotProjectSettings path="botProjectsSettings/root" />
+            <BotProjectSettings path="botProjectsSettings/skill/:skillId" />
             <DesignPage path="*" />
           </ProjectRouter>
           <SettingPage path="settings/*" />

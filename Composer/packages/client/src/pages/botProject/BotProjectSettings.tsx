@@ -20,14 +20,13 @@ import { botProjectSpaceSelector } from '../../recoilModel/selectors/project';
 import TableView from './table-view';
 import { header, container, botNameStyle, mainContentHeader } from './styles';
 
-// const CodeEditor = React.lazy(() => import('./code-editor'));
 interface BotProjectSettingsProps extends RouteComponentProps<{}> {
   projectId?: string;
+  skillId?: string;
 }
 
 const BotProjectSettings: React.FC<BotProjectSettingsProps> = (props) => {
-  const { projectId = '' } = props;
-
+  const projectId = props.skillId || props.projectId || '';
   const botProjectsMetaData = useRecoilValue(botProjectSpaceSelector);
   const userSettings = useRecoilValue(userSettingsState);
   const schemas = useRecoilValue(schemasState(projectId));
@@ -44,18 +43,21 @@ const BotProjectSettings: React.FC<BotProjectSettingsProps> = (props) => {
     setAdvancedSettings(false);
   }, [projectId]);
 
-  //const isRoot = dialogId === 'all';
   const navLinks: INavTreeItem[] = useMemo(() => {
-    const newbotProjectLinks: INavTreeItem[] = botProjectsMetaData.map((b) => {
+    const localBotProjects = botProjectsMetaData.filter((b) => !b.isRemote);
+    const rootBotprojectId = botProjectsMetaData.find((b) => b.isRootBot)?.projectId;
+    const newbotProjectLinks: INavTreeItem[] = localBotProjects.map((b) => {
       return {
         id: b.projectId,
         name: b.name,
         ariaLabel: formatMessage('bot'),
-        url: `/bot/${b.projectId}/botProjectsSettings/`,
+        url: b.isRootBot
+          ? `/bot/${rootBotprojectId}/botProjectsSettings/root`
+          : `/bot/${rootBotprojectId}/botProjectsSettings/skill/${b.projectId}`,
         isRootBot: b.isRootBot,
       };
     });
-    const rootBotIndex = botProjectsMetaData.findIndex((link) => link.isRootBot);
+    const rootBotIndex = localBotProjects.findIndex((link) => link.isRootBot);
 
     if (rootBotIndex > -1) {
       const rootBotLink = newbotProjectLinks.splice(rootBotIndex, 1)[0];
@@ -63,7 +65,6 @@ const BotProjectSettings: React.FC<BotProjectSettingsProps> = (props) => {
     }
     return newbotProjectLinks;
   }, [botProjectsMetaData]);
-
   const onRenderHeaderContent = () => {
     return formatMessage(
       'This Page contains detailed information about your bot. For security reasons, they are hidden by default. To test your bot or publish to Azure, you may need to provide these settings'

@@ -57,6 +57,11 @@ export const setSettingState = async (
       settingStorage.setField(projectId, property, propertyValue);
     }
   }
+  //Todo if skill bot's SensitiveProperties coming save it in root bot local settings
+  //  rootProjectId: {
+  //  root: {luis: ....}
+  //  skillId: {luis ....}
+  //}
   set(settingsState(projectId), settings);
 };
 
