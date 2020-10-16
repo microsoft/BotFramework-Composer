@@ -17,35 +17,8 @@ export const defaultFeatureFlags: FeatureFlagMap = {
     isHidden: false,
     value: true,
   },
-  'Show Tutorial': {
-    description: 'Show tutorial section in the home page',
-    isHidden: false,
-    value: true,
-  },
-  'Show Qna in creation': {
-    description: 'Show QNA in creation for da people of the world',
-    isHidden: false,
-    value: true,
-  },
-  'Hide Form Dialog': {
-    description: 'Show QNA in creation for da people of the world',
-    isHidden: false,
-    value: true,
-  },
-  'Hide Web Chat': {
-    description: 'Webchat is snazzy, why hide ',
-    isHidden: false,
-    value: true,
-  },
 };
 
-export type FeatureFlagNames =
-  | 'Show Qna in creation'
-  | 'Show Tutorial'
-  | 'VA Creation'
-  | 'Hide Form Dialog'
-  | 'Hide Web Chat Editor';
-
-export const getFeatureFlagValue = (name: FeatureFlagNames, featureFlagMap: FeatureFlagMap): boolean => {
+export const getFeatureFlagValue = (name: string, featureFlagMap: FeatureFlagMap): boolean => {
   return featureFlagMap[name].value;
 };

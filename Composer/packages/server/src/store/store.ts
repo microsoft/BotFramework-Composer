@@ -33,13 +33,10 @@ class JsonStore implements KVStore {
 
   public get<T = unknown>(key: string, defaultValue?: T): T {
     this.readStore();
-    log('in Get');
 
     if (key in this.data) {
-      log('loading data from data.json');
       return this.data[key];
     } else if (defaultValue) {
-      log('loading default value');
       // when default value is present, save it
       this.set(key, defaultValue);
       return defaultValue;

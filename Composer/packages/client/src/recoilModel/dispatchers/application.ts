@@ -16,7 +16,6 @@ import {
 import { AppUpdaterStatus, CreationFlowStatus } from '../../constants';
 import OnboardingState from '../../utils/onboardingStorage';
 import { StateError, AppUpdateState } from '../../recoilModel/types';
-import { FeatureFlag } from '../utils';
 import httpClient from '../../utils/httpUtil';
 
 import { setError } from './shared';
@@ -107,21 +106,6 @@ export const applicationDispatcher = () => {
     }
   );
 
-  const setFeatureFlag = useRecoilCallback(
-    ({ set }: CallbackInterface) => async (featureName: string, value: boolean) => {
-      // TODO: make better if needed
-      let newFeatureFlagState: FeatureFlagMap = {};
-      // update local
-      set(featureFlagState, (featureFlagState) => {
-        newFeatureFlagState = { ...featureFlagState };
-        newFeatureFlagState[featureName] = { ...featureFlagState[featureName], value: value };
-        return newFeatureFlagState;
-      });
-      // update server
-      await httpClient.post(`/featureFlags/updateFlags`, { featureFlags: newFeatureFlagState });
-    }
-  );
-
   return {
     setAppUpdateStatus,
     setAppUpdateShowing,
@@ -132,6 +116,5 @@ export const applicationDispatcher = () => {
     onboardingAddCoachMarkRef,
     setCreationFlowStatus,
     setApplicationLevelError,
-    setFeatureFlag,
   };
 };

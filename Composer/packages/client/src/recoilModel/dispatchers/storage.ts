@@ -173,14 +173,25 @@ export const storageDispatcher = () => {
     const { set } = callbackHelpers;
     try {
       const response = await httpClient.get('/featureFlags/getFlags');
-      console.log(response.data);
-      // TODO add check to ensure response data is of type FeatureFlagMap
       set(featureFlagState, response.data);
     } catch (ex) {
-      // TODO: Handle exceptions
       logMessage(callbackHelpers, `Error fetching feature flag data: ${ex}`);
     }
   });
+
+  const setFeatureFlag = useRecoilCallback(
+    ({ set }: CallbackInterface) => async (featureName: string, value: boolean) => {
+      let newFeatureFlagState: FeatureFlagMap = {};
+      // update local
+      set(featureFlagState, (featureFlagState) => {
+        newFeatureFlagState = { ...featureFlagState };
+        newFeatureFlagState[featureName] = { ...featureFlagState[featureName], value: value };
+        return newFeatureFlagState;
+      });
+      // update server
+      await httpClient.post(`/featureFlags/updateFlags`, { featureFlags: newFeatureFlagState });
+    }
+  );
 
   return {
     fetchStorages,
@@ -194,5 +205,6 @@ export const storageDispatcher = () => {
     fetchTemplates,
     fetchRuntimeTemplates,
     fetchFeatureFlags,
+    setFeatureFlag,
   };
 };

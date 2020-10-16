@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { atom, atomFamily } from 'recoil';
-import { FeatureFlag, FeatureFlagMap, ProjectTemplate, UserSettings } from '@bfc/shared';
+import { FeatureFlagMap, ProjectTemplate, UserSettings } from '@bfc/shared';
 import { ExtensionMetadata } from '@bfc/extension-client';
 
 import {
