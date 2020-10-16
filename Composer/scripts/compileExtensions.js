@@ -46,9 +46,11 @@ const getLastModified = (files = []) => {
   let last = new Date(0);
 
   for (const f of files) {
-    const stats = fs.statSync(f);
-    if (stats.mtime > last) {
-      last = stats.mtime;
+    // returns last modified date of file in ISO 8601 format
+    const gitTimestamp = execSync(`git log -1 --pretty="%cI" ${f}`).toString().trim();
+    const timestamp = new Date(gitTimestamp);
+    if (timestamp > last) {
+      last = timestamp;
     }
   }
 
@@ -74,7 +76,7 @@ const compile = (name, extPath) => {
   if (hasBuild) {
     console.log('[%s] compiling', name);
     console.log('[%s] yarn --force', name);
-    execSync('yarn --force', { cwd: extPath, stdio: 'inherit' });
+    execSync('yarn --force --frozen-lockfile', { cwd: extPath, stdio: 'inherit' });
     console.log('[%s] yarn build', name);
     execSync('yarn build', { cwd: extPath, stdio: 'inherit' });
   }
