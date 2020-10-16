@@ -31,8 +31,8 @@ async function startImport(req: StartImportRequest, res: Response, next) {
 
       // extract zip into new "template" directory
       const baseDir = process.env.COMPOSER_REMOTE_TEMPLATES_DIR as string;
-      ensureDirSync(baseDir);
       const templateDir = join(baseDir, 'extractedTemplate');
+      ensureDirSync(templateDir);
       log('Extracting bot zip...');
       await extractZip(zipPath, { dir: templateDir });
       log('Done extracting.');
