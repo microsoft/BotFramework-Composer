@@ -109,7 +109,23 @@ export class PowerVirtualAgentsProvider extends ExternalContentProvider {
   }
 
   private getDeepLink(): string {
-    // TODO: use metadata (if provided) to create a deep link to a specific dialog / trigger / action etc.
-    return `dialogs/myDialog?selected=triggers[${encodeURIComponent('my-id')}]`;
+    // use metadata (if provided) to create a deep link to a specific dialog / trigger / action etc. after opening bot.
+    let deepLink = '';
+    const dialogId = 'my-dialog';
+    const triggerId = 'my-trigger';
+    const actionId = 'my-action';
+    if (dialogId) {
+      deepLink += `dialogs/${dialogId}`;
+    }
+    if (dialogId && triggerId) {
+      deepLink += `?selected=triggers[${encodeURIComponent(`"${triggerId}"`)}]`;
+    }
+    if (dialogId && triggerId && actionId) {
+      deepLink += `&focused=triggers[${encodeURIComponent(`"${triggerId}"`)}].actions[${encodeURIComponent(
+        `"${actionId}"`
+      )}]`;
+    }
+    // base64 encode to make parsing on the client side easier
+    return Buffer.from(deepLink, 'utf-8').toString('base64');
   }
 }
