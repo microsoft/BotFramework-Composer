@@ -30,7 +30,6 @@ The Bot Framework Composer is an open source tool based on the Bot Framework SDK
 - [Create your first bot][3]!
 - To find the most recent release and learn what has changed in Bot Framework Composer, see the [latest release][204].
 
-
 ## Build Composer Locally
 
 To build and run the Composer project locally as a web application, clone the source code from Github and build the application using the instructions below.
@@ -44,12 +43,11 @@ $ yarn build // build extensions and libs
 $ yarn startall // start client and server at the same time
 ```
 
-## Extend Composer with Plugins
+## Extend Composer with Extensions
 
-Many aspects of Composer's functionality can be customized and extended through plugins. Features such as authentication, storage, publishing and even the samples and templates available on the homescreen can be customized by creating new plugins.
+Many aspects of Composer's functionality can be customized and extended through extensions. Features such as authentication, storage, publishing and even the samples and templates available on the homescreen can be customized by creating new extensions.
 
-[Read more about building Composer plugins &rarr;](Composer/plugins/README.md)
-
+[Read more about building Composer extensions &rarr;](extensions/README.md)
 
 ## Support and Feedback
 
