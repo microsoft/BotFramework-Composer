@@ -18,6 +18,8 @@ import { RouteComponentProps } from '@reach/router';
 import { LgTemplate } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import { lgUtil } from '@bfc/indexers';
+import { Text } from 'office-ui-fabric-react/lib/Text';
+import { FontWeights } from '@uifabric/styling';
 
 import { EditableField } from '../../components/EditableField';
 import { navigateTo } from '../../utils/navigation';
@@ -30,6 +32,7 @@ import {
   validateDialogSelectorFamily,
 } from '../../recoilModel';
 import { languageListTemplates } from '../../components/MultiLanguage';
+import { Collapsible } from '../../components/Collapsible';
 
 interface TableViewProps extends RouteComponentProps<{ dialogId: string; projectId: string }> {
   dialogId: string;
@@ -432,33 +435,53 @@ const TableView: React.FC<TableViewProps> = (props) => {
     return templates;
   }, [templates]);
 
+  const onRenderCollapsibleTitle = () => {
+    return (
+      <Text
+        styles={{
+          root: {
+            fontSize: FontSizes.size16,
+            fontWeight: FontWeights.semibold,
+            minWidth: 100,
+            textAlign: 'left',
+            margin: '0 0 0 10px',
+          },
+        }}
+      >
+        {dialogId}
+      </Text>
+    );
+  };
+
   return (
     <div className={'table-view'} data-testid={'table-view'}>
       <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
-        <DetailsList
-          className="table-view-list"
-          columns={getTableColums()}
-          componentRef={listRef}
-          getKey={getKeyCallback}
-          //initialFocusedIndex={focusedIndex}
-          items={templatesToRender}
-          // getKey={item => item.name}
-          layoutMode={DetailsListLayoutMode.justified}
-          selectionMode={SelectionMode.none}
-          styles={{
-            root: {
-              overflowX: 'hidden',
-              // hack for https://github.com/OfficeDev/office-ui-fabric-react/issues/8783
-              selectors: {
-                'div[role="row"]:hover': {
-                  background: 'none',
+        <Collapsible onRenderTitle={onRenderCollapsibleTitle}>
+          <DetailsList
+            className="table-view-list"
+            columns={getTableColums()}
+            componentRef={listRef}
+            getKey={getKeyCallback}
+            //initialFocusedIndex={focusedIndex}
+            items={templatesToRender}
+            // getKey={item => item.name}
+            layoutMode={DetailsListLayoutMode.justified}
+            selectionMode={SelectionMode.none}
+            styles={{
+              root: {
+                overflowX: 'hidden',
+                // hack for https://github.com/OfficeDev/office-ui-fabric-react/issues/8783
+                selectors: {
+                  'div[role="row"]:hover': {
+                    background: 'none',
+                  },
                 },
               },
-            },
-          }}
-          onRenderDetailsFooter={onRenderDetailsFooter}
-          onRenderDetailsHeader={onRenderDetailsHeader}
-        />
+            }}
+            onRenderDetailsFooter={onRenderDetailsFooter}
+            onRenderDetailsHeader={onRenderDetailsHeader}
+          />
+        </Collapsible>
       </ScrollablePane>
     </div>
   );
