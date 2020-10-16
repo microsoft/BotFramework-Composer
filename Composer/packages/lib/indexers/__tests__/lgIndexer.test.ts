@@ -1,8 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { FileInfo } from '@bfc/shared';
+
 import { lgIndexer } from '../src/lgIndexer';
-import { FileInfo } from '../src/type';
 import { getBaseName } from '../src/utils/help';
 
 const { parse, index } = lgIndexer;
@@ -50,6 +51,7 @@ describe('index', () => {
     relativePath: './test.lg',
     content,
     path: '/',
+    lastModified: '',
   };
 
   const files = {
