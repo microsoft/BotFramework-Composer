@@ -73,8 +73,8 @@ const compile = (name, extPath) => {
 
   if (hasBuild) {
     console.log('[%s] compiling', name);
-    console.log('[%s] yarn', name);
-    execSync('yarn', { cwd: extPath, stdio: 'inherit' });
+    console.log('[%s] yarn --force', name);
+    execSync('yarn --force', { cwd: extPath, stdio: 'inherit' });
     console.log('[%s] yarn build', name);
     execSync('yarn build', { cwd: extPath, stdio: 'inherit' });
   }
