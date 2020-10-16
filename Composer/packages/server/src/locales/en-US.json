@@ -2097,7 +2097,7 @@
     "message": "RegEx { intent } is already defined"
   },
   "regular_expression_855557bf": {
-    "message": "Regular Expression"
+    "message": "Regular expression recognizer"
   },
   "release_1af20f26": {
     "message": "Release: "
