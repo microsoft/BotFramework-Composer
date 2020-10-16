@@ -11,6 +11,10 @@ import archiver from 'archiver';
 import { v4 as uuid } from 'uuid';
 import AdmZip from 'adm-zip';
 import portfinder from 'portfinder';
+import killPort from 'kill-port';
+import map from 'lodash/map';
+import range from 'lodash/range';
+import getPort from 'get-port';
 
 const stat = promisify(fs.stat);
 const readDir = promisify(fs.readdir);
@@ -260,6 +264,13 @@ class LocalPublisher {
     await this.zipBot(dstPath, srcDir);
   };
 
+  private getAvailablePorts = (): number[] => {
+    const excludePorts = map(LocalPublisher.runningBots, 'port');
+    const portRanges = range(3979, 5000);
+    const filtered = portRanges.filter((current) => !excludePorts.includes(current));
+    return filtered;
+  };
+
   // start bot in current version
   private setBot = async (botId: string, version: string, settings: any, project: any) => {
     // get port, and stop previous bot if exist
@@ -272,7 +283,8 @@ class LocalPublisher {
         this.stopBot(botId);
       }
       if (!port) {
-        port = await portfinder.getPortPromise({ port: 3979, stopPort: 5000 });
+        port = await getPort({ port: this.getAvailablePorts() });
+        // port = await portfinder.getPortPromise({ port: 3979, stopPort: 5000 });
       }
 
       // if not using custom runtime, update assets in tmp older
@@ -446,22 +458,15 @@ class LocalPublisher {
   };
 
   // make it public, so that able to stop runtime before switch ejected runtime.
-  public stopBot = (botId: string) => {
+  public stopBot = async (botId: string) => {
     const proc = LocalPublisher.runningBots[botId]?.process;
+    const port = LocalPublisher.runningBots[botId]?.port;
 
-    if (proc) {
-      this.composer.log('Killing process %d', -proc.pid);
-      // Kill the bot process AND all child processes
-      try {
-        this.removeListener(proc);
-        process.kill(isWin ? proc.pid : -proc.pid);
-      } catch (err) {
-        // ESRCH means pid not found
-        // this throws an error but doesn't indicate failure for us
-        if (err.code !== 'ESRCH') {
-          throw err;
-        }
-      }
+    if (port) {
+      this.composer.log('Killing process at port %d', port);
+
+      this.removeListener(proc);
+      await killPort(port);
     }
     delete LocalPublisher.runningBots[botId];
   };

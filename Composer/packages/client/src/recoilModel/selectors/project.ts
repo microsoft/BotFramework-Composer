@@ -25,12 +25,25 @@ export const localBotsWithoutErrorsSelector = selector({
     return botProjectIds.filter((projectId: string) => {
       const { isRemote } = get(projectMetaDataState(projectId));
       const botError = get(botErrorState(projectId));
-      return !botError && !isRemote;
+      return !isRemote && !botError;
     });
   },
 });
 
-// TODO: This selector would be modfied and leveraged by the project tree
+export const localBotsDataSelector = selector({
+  key: 'localBotsDataSelector',
+  get: ({ get }) => {
+    const botProjectIds = get(localBotsWithoutErrorsSelector);
+    return botProjectIds.map((projectId: string) => {
+      return {
+        projectId,
+        name: get(botDisplayNameState(projectId)),
+      };
+    });
+  },
+});
+
+// TODO: Selector used in Design Page view with remote bot data
 export const botProjectSpaceSelector = selector({
   key: 'botProjectSpaceSelector',
   get: ({ get }) => {

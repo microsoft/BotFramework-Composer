@@ -25,5 +25,4 @@ export * from './schemaUtils';
 export * from './viewUtils';
 export * from './walkerUtils';
 export * from './skillsUtils';
-export * from './fileUtils';
 export const DialogUtils = dialogUtils;

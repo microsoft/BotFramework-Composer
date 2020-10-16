@@ -6,7 +6,7 @@ import path from 'path';
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 import { produce } from 'immer';
-import { BotProjectSpaceSkill, convertPathToFileProtocol, Skill } from '@bfc/shared';
+import { BotProjectSpaceSkill, Skill } from '@bfc/shared';
 
 import { botNameIdentifierState, botProjectFileState, locationState, settingsState } from '../atoms';
 import { rootBotProjectIdSelector } from '../selectors';
@@ -26,7 +26,7 @@ export const botProjectFileDispatcher = () => {
       const result = produce(current, (draftState) => {
         const relativePath = path.relative(rootBotLocation, skillLocation);
         const skill: BotProjectSpaceSkill = {
-          workspace: convertPathToFileProtocol(relativePath),
+          workspace: relativePath,
           remote: false,
         };
         draftState.content.skills[botName] = skill;
@@ -42,7 +42,6 @@ export const botProjectFileDispatcher = () => {
         return;
       }
       const botName = await snapshot.getPromise(botNameIdentifierState(skillId));
-
       set(botProjectFileState(rootBotProjectId), (current) => {
         const result = produce(current, (draftState) => {
           const skill: BotProjectSpaceSkill = {

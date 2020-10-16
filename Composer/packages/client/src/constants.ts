@@ -99,11 +99,11 @@ export const Steps = {
 
 export const BotStatusesCopy = {
   connected: formatMessage('Running'),
-  pubishing: formatMessage('Building'),
+  publishing: formatMessage('Publishing'),
   published: formatMessage('Starting'),
   unConnected: formatMessage('Inactive'),
   failed: formatMessage('Failed to start'),
-  reloading: formatMessage('Reloading'),
+  loading: formatMessage('Loading'),
 };
 
 export const DialogCreationCopy = {

@@ -13,8 +13,7 @@ import { dispatcherState } from '../DispatcherWrapper';
 import { isBuildConfigComplete as isBuildConfigurationComplete, needsBuild } from '../../utils/buildUtil';
 
 import { validateDialogSelectorFamily } from './validatedDialogs';
-
-import { localBotsWithoutErrorsSelector } from '.';
+import { localBotsWithoutErrorsSelector } from './project';
 
 export const trackBotStatusesSelector = selectorFamily({
   key: 'trackBotStatusesSelector',

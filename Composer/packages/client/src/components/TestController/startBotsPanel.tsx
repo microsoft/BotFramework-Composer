@@ -19,7 +19,7 @@ import {
 import { useRecoilValue } from 'recoil';
 import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
 
-import { botProjectSpaceSelector } from '../../recoilModel';
+import { botProjectSpaceSelector, localBotsDataSelector } from '../../recoilModel';
 
 import { LocalBotStatusIndicator } from './LocalBotStatusIndicator';
 import { LocalBotRuntime } from './LocalBotRuntime';
@@ -58,7 +58,7 @@ interface StartBotsPanelProps {
 
 export const StartBotsPanel: React.FC<StartBotsPanelProps> = (props) => {
   const { isOpen, onDismiss } = props;
-  const projectCollection = useRecoilValue(botProjectSpaceSelector);
+  const projectCollection = useRecoilValue(localBotsDataSelector);
   const [items, setItems] = useState<{ displayName: string; projectId: string }[]>([]);
 
   useEffect(() => {

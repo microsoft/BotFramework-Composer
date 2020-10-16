@@ -122,6 +122,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const locale = useRecoilValue(localeState(projectId));
   const undoFunction = useRecoilValue(undoFunctionState(projectId));
   const undoVersion = useRecoilValue(undoVersionState(projectId));
+  const appLocale = useRecoilValue(localeState(projectId));
 
   const { undo, redo, canRedo, canUndo, commitChanges, clearUndo } = undoFunction;
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
@@ -143,6 +144,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     addRemoteSkillToBotProject,
     addExistingSkillToBotProject,
     updateZoomRate,
+    addNewSkillToBotProject,
   } = useRecoilValue(dispatcherState);
 
   const params = new URLSearchParams(location?.search);
@@ -344,6 +346,34 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                 'https://onenote-dev.azurewebsites.net/manifests/OneNoteSync-2-1-preview-1-manifest.json',
                 'remote'
               );
+            },
+          },
+          {
+            'data-testid': 'AnotherShit',
+            key: 'AnotherShit',
+            text: formatMessage(`add another bad skill`, {
+              displayName: currentDialog?.displayName ?? '',
+            }),
+            onClick: () => {
+              addExistingSkillToBotProject('/Users/srravich/Desktop/EchoBot-new');
+            },
+          },
+          {
+            'data-testid': 'createNewSkill',
+            key: 'createNewSkill',
+            text: formatMessage(`Create new Skill`, {
+              displayName: currentDialog?.displayName ?? '',
+            }),
+            onClick: () => {
+              addNewSkillToBotProject({
+                name: 'newers-bot',
+                description: '',
+                schemaUrl: '',
+                location: '/Users/srravich/Desktop/samples',
+                templateId: 'InterruptionSample',
+                locale: appLocale,
+                qnaKbUrls: [],
+              });
             },
           },
           {
