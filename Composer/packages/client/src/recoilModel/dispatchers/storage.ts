@@ -4,6 +4,7 @@
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 import isArray from 'lodash/isArray';
 import formatMessage from 'format-message';
+import { FeatureFlagMap } from '@bfc/shared';
 
 import httpClient from '../../utils/httpUtil';
 import {
@@ -172,20 +173,14 @@ export const storageDispatcher = () => {
     const { set } = callbackHelpers;
     try {
       const response = await httpClient.get('/featureFlags/getFlags');
-      if (Array.isArray(response.data)) {
-        console.log('Fetched feature flags with response');
-        console.log(response);
-        set(featureFlagState, [...response.data]);
-      }
+      console.log(response.data);
+      // TODO add check to ensure response data is of type FeatureFlagMap
+      set(featureFlagState, response.data);
     } catch (ex) {
       // TODO: Handle exceptions
       logMessage(callbackHelpers, `Error fetching feature flag data: ${ex}`);
     }
   });
-
-  // const updateFeatureFlags = useRecoilCallback((callbackHelpers: CallbackInterface) => async () => {
-  //   await httpClient.post(`/featureFlags/updateFlags`, { featureFlgaState });
-  // });
 
   return {
     fetchStorages,

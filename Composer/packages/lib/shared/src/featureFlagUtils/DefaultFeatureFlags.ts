@@ -2,44 +2,42 @@
 // Licensed under the MIT License.
 
 export type FeatureFlag = {
-  name: FeatureFlagNames;
   description: string;
   isHidden: boolean;
   value: boolean;
 };
 
-export const defaultFeatureFlags: FeatureFlag[] = [
-  {
-    name: 'VA Creation',
+export type FeatureFlagMap = {
+  [key: string]: FeatureFlag;
+};
+
+export const defaultFeatureFlags: FeatureFlagMap = {
+  'VA Creation': {
     description: 'VA template made available in new bot flow',
     isHidden: false,
-    value: false,
+    value: true,
   },
-  {
-    name: 'Show Tutorial',
+  'Show Tutorial': {
     description: 'Show tutorial section in the home page',
     isHidden: false,
-    value: false,
+    value: true,
   },
-  {
-    name: 'Show Qna in creation',
+  'Show Qna in creation': {
     description: 'Show QNA in creation for da people of the world',
     isHidden: false,
-    value: false,
+    value: true,
   },
-  {
-    name: 'Hide Form Dialog',
+  'Hide Form Dialog': {
     description: 'Show QNA in creation for da people of the world',
     isHidden: false,
-    value: false,
+    value: true,
   },
-  {
-    name: 'Hide Web Chat Editor',
-    description: 'Show QNA in creation for da people of the world',
+  'Hide Web Chat': {
+    description: 'Webchat is snazzy, why hide ',
     isHidden: false,
-    value: false,
+    value: true,
   },
-];
+};
 
 export type FeatureFlagNames =
   | 'Show Qna in creation'
@@ -48,12 +46,6 @@ export type FeatureFlagNames =
   | 'Hide Form Dialog'
   | 'Hide Web Chat Editor';
 
-export const getFeatureFlagValue = (name: FeatureFlagNames, featureFlagArray: FeatureFlag[]): boolean => {
-  let result = false;
-  featureFlagArray.forEach((featureFlag: FeatureFlag) => {
-    if (featureFlag.name == name) {
-      result = featureFlag.value;
-    }
-  });
-  return result;
+export const getFeatureFlagValue = (name: FeatureFlagNames, featureFlagMap: FeatureFlagMap): boolean => {
+  return featureFlagMap[name].value;
 };

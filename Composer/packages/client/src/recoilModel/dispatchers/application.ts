@@ -4,6 +4,7 @@
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 import debounce from 'lodash/debounce';
+import { FeatureFlagMap } from '@bfc/shared';
 
 import {
   appUpdateState,
@@ -108,14 +109,12 @@ export const applicationDispatcher = () => {
 
   const setFeatureFlag = useRecoilCallback(
     ({ set }: CallbackInterface) => async (featureName: string, value: boolean) => {
-      let newFeatureFlagState: FeatureFlag[] = [];
+      // TODO: make better if needed
+      let newFeatureFlagState: FeatureFlagMap = {};
       // update local
       set(featureFlagState, (featureFlagState) => {
-        newFeatureFlagState = featureFlagState.map(
-          (featureFlag: FeatureFlag): FeatureFlag => {
-            return featureFlag.name === featureName ? { ...featureFlag, value: value } : featureFlag;
-          }
-        );
+        newFeatureFlagState = { ...featureFlagState };
+        newFeatureFlagState[featureName] = { ...featureFlagState[featureName], value: value };
         return newFeatureFlagState;
       });
       // update server

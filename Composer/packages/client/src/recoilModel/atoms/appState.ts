@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { atom, atomFamily } from 'recoil';
-import { FeatureFlag, ProjectTemplate, UserSettings } from '@bfc/shared';
+import { FeatureFlag, FeatureFlagMap, ProjectTemplate, UserSettings } from '@bfc/shared';
 import { ExtensionMetadata } from '@bfc/extension-client';
 
 import {
@@ -101,9 +101,9 @@ export const userSettingsState = atom<UserSettings>({
   default: getUserSettings(),
 });
 
-export const featureFlagState = atom<FeatureFlag[]>({
+export const featureFlagState = atom<FeatureFlagMap>({
   key: getFullyQualifiedKey('featureFlag'),
-  default: [],
+  default: {},
 });
 
 export const announcementState = atom<string>({

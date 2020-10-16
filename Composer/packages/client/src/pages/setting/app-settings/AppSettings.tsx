@@ -11,10 +11,10 @@ import { DirectionalHint } from 'office-ui-fabric-react/lib/common/DirectionalHi
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
+import { FeatureFlag } from '@bfc/shared';
 
 import { isElectron } from '../../../utils/electronUtil';
 import { onboardingState, userSettingsState, dispatcherState, featureFlagState } from '../../../recoilModel';
-import { FeatureFlag } from '../../../recoilModel/utils';
 
 import { container, section } from './styles';
 import { SettingToggle } from './SettingToggle';
@@ -32,7 +32,6 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
   const userSettings = useRecoilValue(userSettingsState);
   const { complete } = useRecoilValue(onboardingState);
   const featureFlags = useRecoilValue(featureFlagState);
-  console.log(featureFlags);
   const onOnboardingChange = useCallback(
     (checked: boolean) => {
       // on means its not complete
@@ -66,16 +65,17 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
 
   const renderFeatureFlagOptions = () => {
     const result: JSX.Element[] = [];
-    featureFlags.forEach((featureFlag: FeatureFlag) => {
+    Object.keys(featureFlags).forEach((key: string) => {
+      const featureFlag: FeatureFlag = featureFlags[key];
       result.push(
         <SettingToggle
           checked={featureFlag.value}
           description={featureFlag.description}
-          id={featureFlag.name}
+          id={key}
           image={images.onboarding}
-          title={featureFlag.name}
+          title={key}
           onToggle={(checked: boolean) => {
-            setFeatureFlag(featureFlag.name, !featureFlag.value);
+            setFeatureFlag(key, !featureFlag.value);
           }}
         />
       );

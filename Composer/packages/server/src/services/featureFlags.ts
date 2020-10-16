@@ -1,52 +1,51 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { defaultFeatureFlags, FeatureFlag, FeatureFlagNames } from '@bfc/shared';
+import { defaultFeatureFlags, FeatureFlagMap } from '@bfc/shared';
 
 import { Store } from '../store/store';
 
 export class FeatureFlagService {
-  private static currentFeatureFlags: FeatureFlag[] = [];
-  // private static featureFlagMap: {
-  //   [key: string]: FeatureFlag;
-  // };
+  private static currentFeatureFlagMap: FeatureFlagMap = {};
 
   private static initialize() {
-    if (!FeatureFlagService.currentFeatureFlags || FeatureFlagService.currentFeatureFlags.length === 0) {
-      // Get users feature flag config from data.json and populate if it does not exist
-      FeatureFlagService.currentFeatureFlags = Store.get('currentFeatureFlags', defaultFeatureFlags);
-      // Check to see if any new feature flags have been added and append new feature flags to store
+    // Get users feature flag config from data.json and populate if it does not exist
+    FeatureFlagService.currentFeatureFlagMap = Store.get('currentFeatureFlags', defaultFeatureFlags);
 
-      // TODO: DEBUG AND IMPROVE
-      while (FeatureFlagService.currentFeatureFlags.length < defaultFeatureFlags.length) {
-        for (let i = 0; i < defaultFeatureFlags.length; i++) {
-          let addFeatureFlag = true;
-          for (let t = 0; t < FeatureFlagService.currentFeatureFlags.length; t++) {
-            if (defaultFeatureFlags[i].name === FeatureFlagService.currentFeatureFlags[t].name) {
-              addFeatureFlag = false;
-              break;
-            }
-          }
-          if (addFeatureFlag) {
-            FeatureFlagService.currentFeatureFlags.push(defaultFeatureFlags[i]);
-            if (FeatureFlagService.currentFeatureFlags.length === defaultFeatureFlags.length) {
-              break;
-            }
-          }
-        }
-        Store.set('currentFeatureFlags', FeatureFlagService.currentFeatureFlags);
+    const currentFeatureFlagKeys = Object.keys(FeatureFlagService.currentFeatureFlagMap);
+    const defaultFeatureFlagKeys = Object.keys(defaultFeatureFlags);
+
+    const keysToAdd = defaultFeatureFlagKeys.filter((key: string) => {
+      if (currentFeatureFlagKeys.indexOf(key) === -1) {
+        return key;
       }
+    });
+
+    const keysToRemove = currentFeatureFlagKeys.filter((key: string) => {
+      if (defaultFeatureFlagKeys.indexOf(key) === -1) {
+        return key;
+      }
+    });
+
+    keysToAdd.forEach((key: string) => {
+      FeatureFlagService.currentFeatureFlagMap[key] = defaultFeatureFlags[key];
+    });
+
+    keysToRemove.forEach((key: string) => {
+      delete FeatureFlagService.currentFeatureFlagMap[key];
+    });
+
+    if (keysToRemove?.length > 0 || keysToAdd?.length > 0) {
+      Store.set('currentFeatureFlags', FeatureFlagService.currentFeatureFlagMap);
     }
   }
 
-  public static getFeatureFlags(): FeatureFlag[] {
+  public static getFeatureFlags(): FeatureFlagMap {
     FeatureFlagService.initialize();
-    return FeatureFlagService.currentFeatureFlags;
+    return FeatureFlagService.currentFeatureFlagMap;
   }
 
-  public static updateFeatureFlag(newFeatureFlags: FeatureFlag[]) {
-    FeatureFlagService.initialize();
-    // TODO: change feature flag
+  public static updateFeatureFlag(newFeatureFlags: FeatureFlagMap) {
     Store.set('currentFeatureFlags', newFeatureFlags);
   }
 }

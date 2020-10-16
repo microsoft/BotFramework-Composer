@@ -8,7 +8,6 @@ import { FeatureFlagService } from '../services/featureFlags';
 async function getFeatureFlags(req: Request, res: Response) {
   try {
     const featureFlags = await FeatureFlagService.getFeatureFlags();
-    // output.log(featureFlags);
     return res.status(200).json(featureFlags);
   } catch (err) {
     return res.status(404).json({
