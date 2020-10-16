@@ -21,7 +21,7 @@
     "@bfc/indexers": "*",
     "@bfc/shared": "*",
     "@microsoft/bf-cli-command": "^4.10.0-preview.141651",
-    "@microsoft/bf-lu": "^4.11.0-dev.20201005.7e5e1b8",
+    "@microsoft/bf-lu": "^4.11.0-dev.20201013.7ccb128",
     "express": "^4.15.2",
     "monaco-languageclient": "^0.10.0",
     "normalize-url": "^2.0.1",
@@ -33,7 +33,7 @@
     "ws": "^5.0.0"
   },
   "devDependencies": {
-    "@bfc/test-utils": "*",
+    "@botframework-composer/test-utils": "*",
     "@types/node": "^12.0.4",
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^3.2.0",

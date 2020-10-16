@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import React, { useCallback } from 'react';
 import { LgEditor } from '@bfc/code-editor';
 import { FieldProps, useShellApi } from '@bfc/extension-client';
-import { FieldLabel } from '@bfc/adaptive-form';
+import { FieldLabel, useFormData } from '@bfc/adaptive-form';
 import { LgMetaData, LgTemplateRef, LgType, CodeEditorSettings } from '@bfc/shared';
 import { filterTemplateDiagnostics } from '@bfc/indexers';
 
@@ -34,10 +34,11 @@ const getInitialTemplate = (fieldName: string, formData?: string): string => {
 
 const LgField: React.FC<FieldProps<string>> = (props) => {
   const { label, id, description, value, name, uiOptions, required } = props;
-  const { designerId, currentDialog, lgFiles, shellApi, projectId, locale, userSettings, data } = useShellApi();
+  const { designerId, currentDialog, lgFiles, shellApi, projectId, locale, userSettings } = useShellApi();
+  const formData = useFormData();
 
   let lgType = name;
-  const $kind = data?.$kind;
+  const $kind = formData?.$kind;
   if ($kind) {
     lgType = new LgType($kind, name).toString();
   }
