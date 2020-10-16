@@ -562,6 +562,11 @@
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@types/html-minifier-terser/-/@types/html-minifier-terser-5.1.1.tgz#3c9ee980f1a10d6021ae6632ca3e79ca2ec4fb50"
   integrity sha1-PJ7pgPGhDWAhrmYyyj55yi7E+1A=
 
+"@types/json-schema@^7.0.6":
+  version "7.0.6"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@types/json-schema/-/@types/json-schema-7.0.6.tgz#f4c7ec43e81b319a9815115031709f26987891f0"
+  integrity sha1-9MfsQ+gbMZqYFRFQMXCfJph4kfA=
+
 "@types/lru-cache@^5.1.0":
   version "5.1.0"
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@types/lru-cache/-/@types/lru-cache-5.1.0.tgz#57f228f2b80c046b4a1bd5cac031f81f207f4f03"
@@ -1005,12 +1010,12 @@ ajv-errors@^1.0.0:
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/ajv-errors/-/ajv-errors-1.0.1.tgz#f35986aceb91afadec4102fbd85014950cefa64d"
   integrity sha1-81mGrOuRr63sQQL72FAUlQzvpk0=
 
-ajv-keywords@^3.1.0, ajv-keywords@^3.4.1:
+ajv-keywords@^3.1.0, ajv-keywords@^3.4.1, ajv-keywords@^3.5.2:
   version "3.5.2"
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/ajv-keywords/-/ajv-keywords-3.5.2.tgz#31f29da5ab6e00d1c2d329acf7b5929614d5014d"
   integrity sha1-MfKdpatuANHC0yms97WSlhTVAU0=
 
-ajv@^6.1.0, ajv@^6.10.2, ajv@^6.12.3:
+ajv@^6.1.0, ajv@^6.10.2, ajv@^6.12.3, ajv@^6.12.5:
   version "6.12.6"
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/ajv/-/ajv-6.12.6.tgz#baf5a62e802b07d977034586f8c3baf5adf26df4"
   integrity sha1-uvWmLoArB9l3A0WG+MO69a3ybfQ=
@@ -3176,6 +3181,13 @@ json5@^1.0.1:
   dependencies:
     minimist "^1.2.0"
 
+json5@^2.1.2:
+  version "2.1.3"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/json5/-/json5-2.1.3.tgz#c9b0f7fa9233bfe5807fe66fcf3a5617ed597d43"
+  integrity sha1-ybD3+pIzv+WAf+ZvzzpWF+1ZfUM=
+  dependencies:
+    minimist "^1.2.5"
+
 jsonfile@^4.0.0:
   version "4.0.0"
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/jsonfile/-/jsonfile-4.0.0.tgz#8771aae0799b64076b76640fca058f9c10e33ecb"
@@ -3273,6 +3285,15 @@ loader-utils@^1.0.2, loader-utils@^1.2.3, loader-utils@^1.4.0:
     big.js "^5.2.2"
     emojis-list "^3.0.0"
     json5 "^1.0.1"
+
+loader-utils@^2.0.0:
+  version "2.0.0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/loader-utils/-/loader-utils-2.0.0.tgz#e4cace5b816d425a166b5f097e10cd12b36064b0"
+  integrity sha1-5MrOW4FtQloWa18JfhDNErNgZLA=
+  dependencies:
+    big.js "^5.2.2"
+    emojis-list "^3.0.0"
+    json5 "^2.1.2"
 
 locate-path@^3.0.0:
   version "3.0.0"
@@ -3480,7 +3501,7 @@ mime-db@1.44.0:
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/mime-db/-/mime-db-1.44.0.tgz#fa11c5eb0aca1334b4233cb4d52f10c5a6272f92"
   integrity sha1-+hHF6wrKEzS0Izy01S8QxaYnL5I=
 
-mime-types@^2.1.12, mime-types@~2.1.19:
+mime-types@^2.1.12, mime-types@^2.1.27, mime-types@~2.1.19:
   version "2.1.27"
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/mime-types/-/mime-types-2.1.27.tgz#47949f98e279ea53119f5722e0f34e529bec009f"
   integrity sha1-R5SfmOJ56lMRn1ci4PNOUpvsAJ8=
@@ -4412,6 +4433,15 @@ schema-utils@^1.0.0:
     ajv-errors "^1.0.0"
     ajv-keywords "^3.1.0"
 
+schema-utils@^3.0.0:
+  version "3.0.0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/schema-utils/-/schema-utils-3.0.0.tgz#67502f6aa2b66a2d4032b4279a2944978a0913ef"
+  integrity sha1-Z1AvaqK2ai1AMrQnmilEl4oJE+8=
+  dependencies:
+    "@types/json-schema" "^7.0.6"
+    ajv "^6.12.5"
+    ajv-keywords "^3.5.2"
+
 semaphore@^1.0.5:
   version "1.1.0"
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/semaphore/-/semaphore-1.1.0.tgz#aaad8b86b20fe8e9b32b16dc2ee682a8cd26a8aa"
@@ -4951,6 +4981,15 @@ urix@^0.1.0:
   version "0.1.0"
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/urix/-/urix-0.1.0.tgz#da937f7a62e21fec1fd18d49b35c2935067a6c72"
   integrity sha1-2pN/emLiH+wf0Y1Js1wpNQZ6bHI=
+
+url-loader@^4.1.1:
+  version "4.1.1"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/url-loader/-/url-loader-4.1.1.tgz#28505e905cae158cf07c92ca622d7f237e70a4e2"
+  integrity sha1-KFBekFyuFYzwfJLKYi1/I35wpOI=
+  dependencies:
+    loader-utils "^2.0.0"
+    mime-types "^2.1.27"
+    schema-utils "^3.0.0"
 
 url@^0.11.0:
   version "0.11.0"
