@@ -225,7 +225,6 @@ export interface BotProjectSpaceSkill {
 }
 
 export interface BotProjectSpace {
-  workspace: string;
   name: string;
   skills: {
     [skillId: string]: BotProjectSpaceSkill;
