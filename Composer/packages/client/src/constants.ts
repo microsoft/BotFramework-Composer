@@ -90,6 +90,8 @@ export enum CreationFlowStatus {
   CLOSE = 'Close',
 }
 
+export type CreationFlowTypes = 'Bot' | 'Skill';
+
 export const Steps = {
   CREATE: 'CREATE',
   DEFINE: 'DEFINE',
@@ -101,6 +103,10 @@ export const DialogCreationCopy = {
   CREATE_NEW_BOT: {
     title: formatMessage('Create bot from template or scratch?'),
     subText: formatMessage('You can create a new bot from scratch with Composer, or start with a template.'),
+  },
+  CREATE_NEW_SKILLBOT: {
+    title: formatMessage('Create a skill to your bot'),
+    subText: '',
   },
   DEFINE_CONVERSATION_OBJECTIVE: {
     title: formatMessage('Define conversation objective'),

@@ -6,6 +6,8 @@ import { CallbackInterface, useRecoilCallback } from 'recoil';
 import { SkillManifest, SkillSetting } from '@bfc/shared';
 import produce from 'immer';
 
+import { dispatcherState } from '../DispatcherWrapper';
+
 import {
   skillManifestsState,
   onAddSkillDialogCompleteState,
@@ -14,7 +16,6 @@ import {
   settingsState,
 } from './../atoms/botState';
 import { setSettingState } from './setting';
-import { dispatcherState } from '../DispatcherWrapper';
 import { getSkillNameIdentifier } from './utils/project';
 
 export const skillDispatcher = () => {

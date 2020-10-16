@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import React, { Suspense, useEffect, useMemo, useState, useCallback } from 'react';
 import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb';
 import formatMessage from 'format-message';
-import { globalHistory, RouteComponentProps } from '@reach/router';
+import { globalHistory, navigate, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
 import { DialogInfo, PromptTab, getEditorAPI, registerEditorAPI } from '@bfc/shared';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
@@ -55,6 +55,7 @@ import { triggerNotSupported } from '../../utils/dialogValidator';
 import { undoFunctionState, undoVersionState } from '../../recoilModel/undo/history';
 import { decodeDesignerPathToArrayPath } from '../../utils/convertUtils/designerPathEncoder';
 import { useTriggerApi } from '../../shell/triggerApi';
+import { CreationFlowStatus } from '../../constants';
 
 import { WarningMessage } from './WarningMessage';
 import {
@@ -146,6 +147,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     createQnAFromUrlDialogBegin,
     addSkill,
     updateZoomRate,
+    addSkillDialogBegin,
+    setCreationFlowStatus,
+    setCreationFlowTypes,
   } = useRecoilValue(dispatcherState);
 
   const params = new URLSearchParams(location?.search);
@@ -328,6 +332,34 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                 projectId,
                 showFromScratch: true,
               });
+            },
+          },
+          {
+            'data-testid': 'CreateNewSkill',
+            key: 'CreateNewSkill',
+            text: formatMessage(' Create a new skill'),
+            onClick: () => {
+              setCreationFlowStatus(CreationFlowStatus.NEW);
+              setCreationFlowTypes('Skill');
+              navigate(`/projects/create`);
+            },
+          },
+          {
+            'data-testid': 'OpenSkill',
+            key: 'OpenSkill',
+            text: formatMessage(' Open a new skill'),
+            onClick: () => {
+              setCreationFlowTypes('Skill');
+              setCreationFlowStatus(CreationFlowStatus.OPEN);
+              navigate(`/projects/open`);
+            },
+          },
+          {
+            'data-testid': 'ConnectRemoteSkill',
+            key: 'ConnectRemoteSkill',
+            text: formatMessage(' Connect a remote skill'),
+            onClick: () => {
+              addSkillDialogBegin(() => {}, projectId);
             },
           },
         ],

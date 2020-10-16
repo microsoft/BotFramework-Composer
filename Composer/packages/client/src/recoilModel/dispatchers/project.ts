@@ -25,6 +25,7 @@ import {
   projectMetaDataState,
 } from '../atoms';
 import { dispatcherState } from '../DispatcherWrapper';
+import { rootBotProjectIdSelector } from '../selectors';
 
 import { announcementState, boilerplateVersionState, recentProjectsState, templateIdState } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
@@ -100,6 +101,7 @@ export const projectDispatcher = () => {
       const { set, snapshot } = callbackHelpers;
       try {
         set(botOpeningState, true);
+        const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
         const dispatcher = await snapshot.getPromise(dispatcherState);
         const botExists = await checkIfBotExistsInBotProjectFile(callbackHelpers, path);
         if (botExists) {
@@ -117,6 +119,9 @@ export const projectDispatcher = () => {
 
         set(botProjectIdsState, (current) => [...current, projectId]);
         await dispatcher.addLocalSkillToBotProjectFile(projectId);
+        if (rootBotProjectId) {
+          navigateToBot(callbackHelpers, rootBotProjectId, '');
+        }
       } catch (ex) {
         handleProjectFailure(callbackHelpers, ex);
       } finally {
@@ -153,11 +158,12 @@ export const projectDispatcher = () => {
     (callbackHelpers: CallbackInterface) => async (newProjectData: any) => {
       const { set, snapshot } = callbackHelpers;
       const dispatcher = await snapshot.getPromise(dispatcherState);
+      const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
       try {
-        const { templateId, name, description, location, schemaUrl, locale, qnaKbUrls } = newProjectData;
+        const { templateId, name, description, location, schemaUrl, locale } = newProjectData;
         set(botOpeningState, true);
 
-        const { projectId, mainDialog } = await createNewBotFromTemplate(
+        const { projectId } = await createNewBotFromTemplate(
           callbackHelpers,
           templateId,
           name,
@@ -174,7 +180,9 @@ export const projectDispatcher = () => {
         });
         set(botProjectIdsState, (current) => [...current, projectId]);
         await dispatcher.addLocalSkillToBotProjectFile(projectId);
-        navigateToBot(callbackHelpers, projectId, mainDialog, qnaKbUrls, templateId);
+        if (rootBotProjectId) {
+          navigateToBot(callbackHelpers, rootBotProjectId, '');
+        }
         return projectId;
       } catch (ex) {
         handleProjectFailure(callbackHelpers, ex);

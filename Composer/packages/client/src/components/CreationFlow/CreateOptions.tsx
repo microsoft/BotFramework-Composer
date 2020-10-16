@@ -23,8 +23,10 @@ import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { ProjectTemplate } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { NeutralColors } from '@uifabric/fluent-theme';
+import { useRecoilState } from 'recoil';
 
 import { DialogCreationCopy, EmptyBotTemplateId, QnABotTemplateId } from '../../constants';
+import { creationFlowTypeState } from '../../recoilModel';
 
 // -------------------- Styles -------------------- //
 
@@ -110,6 +112,7 @@ export function CreateOptions(props) {
   const { templates, onDismiss, onNext } = props;
   const [currentTemplate, setCurrentTemplate] = useState('');
   const [emptyBotKey, setEmptyBotKey] = useState('');
+  const creationFlowType = useRecoilState(creationFlowTypeState);
 
   const selection = useMemo(() => {
     return new Selection({
@@ -247,20 +250,15 @@ export function CreateOptions(props) {
     },
   ];
 
+  // TODO: creationFlowType[0] ?
+  const choiceGroupTitle = creationFlowType[0] === 'Skill' ? '' : formatMessage('Choose how to create your bot');
+  const dialogWrapperProps =
+    creationFlowType[0] === 'Skill' ? DialogCreationCopy.CREATE_NEW_SKILLBOT : DialogCreationCopy.CREATE_NEW_BOT;
+
   return (
     <Fragment>
-      <DialogWrapper
-        isOpen
-        {...DialogCreationCopy.CREATE_NEW_BOT}
-        dialogType={DialogTypes.CreateFlow}
-        onDismiss={onDismiss}
-      >
-        <ChoiceGroup
-          label={formatMessage('Choose how to create your bot')}
-          options={choiceOptions}
-          selectedKey={option}
-          onChange={handleChange}
-        />
+      <DialogWrapper isOpen {...dialogWrapperProps} dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss}>
+        <ChoiceGroup label={choiceGroupTitle} options={choiceOptions} selectedKey={option} onChange={handleChange} />
         <h3 css={listHeader}>{formatMessage('Examples')}</h3>
         <div css={detailListContainer} data-is-scrollable="true">
           <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>

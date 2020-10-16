@@ -14,10 +14,12 @@ import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 import { FontWeights } from '@uifabric/styling';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
+import { useRecoilState } from 'recoil';
 
-import { DialogCreationCopy, QnABotTemplateId, nameRegex } from '../../constants';
+import { DialogCreationCopy, QnABotTemplateId, nameRegex, CreationFlowStatus } from '../../constants';
 import { FieldConfig, useForm } from '../../hooks/useForm';
 import { StorageFolder } from '../../recoilModel/types';
+import { creationFlowTypeState } from '../../recoilModel';
 
 import { LocationSelectContent } from './LocationSelectContent';
 
@@ -92,6 +94,7 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
     createFolder,
     updateFolder,
   } = props;
+  const creationFlowType = useRecoilState(creationFlowTypeState);
   const files = focusedStorageFolder?.children ?? [];
   const writable = focusedStorageFolder.writable;
   const getDefaultName = () => {
@@ -212,14 +215,14 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
     updateField('location', location);
   }, [focusedStorageFolder]);
 
+  const dialogWrapperProps =
+    creationFlowType[0] === 'Skill'
+      ? DialogCreationCopy.DEFINE_CONVERSATION_OBJECTIVE
+      : DialogCreationCopy.DEFINE_BOT_PROJECT;
+
   return (
     <Fragment>
-      <DialogWrapper
-        isOpen
-        {...DialogCreationCopy.DEFINE_BOT_PROJECT}
-        dialogType={DialogTypes.CreateFlow}
-        onDismiss={onDismiss}
-      >
+      <DialogWrapper isOpen {...dialogWrapperProps} dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss}>
         <form onSubmit={handleSubmit}>
           <input style={{ display: 'none' }} type="submit" />
           <Stack horizontal styles={stackinput} tokens={{ childrenGap: '2rem' }}>

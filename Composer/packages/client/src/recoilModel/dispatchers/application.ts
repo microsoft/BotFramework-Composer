@@ -5,8 +5,14 @@
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 import debounce from 'lodash/debounce';
 
-import { appUpdateState, announcementState, onboardingState, creationFlowStatusState } from '../atoms/appState';
-import { AppUpdaterStatus, CreationFlowStatus } from '../../constants';
+import {
+  appUpdateState,
+  announcementState,
+  onboardingState,
+  creationFlowStatusState,
+  creationFlowTypeState,
+} from '../atoms/appState';
+import { AppUpdaterStatus, CreationFlowStatus, CreationFlowTypes } from '../../constants';
 import OnboardingState from '../../utils/onboardingStorage';
 import { StateError, AppUpdateState } from '../../recoilModel/types';
 
@@ -92,6 +98,10 @@ export const applicationDispatcher = () => {
     set(creationFlowStatusState, status);
   });
 
+  const setCreationFlowTypes = useRecoilCallback(({ set }: CallbackInterface) => (type: CreationFlowTypes) => {
+    set(creationFlowTypeState, type);
+  });
+
   const setApplicationLevelError = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => (errorObj: StateError | undefined) => {
       setError(callbackHelpers, errorObj);
@@ -108,5 +118,6 @@ export const applicationDispatcher = () => {
     onboardingAddCoachMarkRef,
     setCreationFlowStatus,
     setApplicationLevelError,
+    setCreationFlowTypes,
   };
 };

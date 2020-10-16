@@ -19,6 +19,7 @@ import {
   focusedStorageFolderState,
   currentProjectIdState,
   userSettingsState,
+  creationFlowTypeState,
 } from '../../recoilModel';
 import Home from '../../pages/home/Home';
 import { useProjectIdCache } from '../../utils/hooks';
@@ -46,9 +47,12 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     createNewBot,
     saveProjectAs,
     fetchProjectById,
+    addNewSkillToBotProject,
+    addExistingSkillToBotProject,
   } = useRecoilValue(dispatcherState);
 
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
+  const creationFlowType = useRecoilValue(creationFlowTypeState);
   const projectId = useRecoilValue(currentProjectIdState);
   const templateProjects = useRecoilValue(templateProjectsState);
   const storages = useRecoilValue(storagesState);
@@ -108,9 +112,15 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
 
   const openBot = async (botFolder) => {
     setCreationFlowStatus(CreationFlowStatus.CLOSE);
-    openProject(botFolder);
+
+    if (creationFlowType === 'Skill') {
+      addExistingSkillToBotProject(botFolder);
+    } else {
+      openProject(botFolder);
+    }
   };
 
+  // TODO: remove qnaKbUrls
   const handleCreateNew = async (formData, templateId: string, qnaKbUrls?: string[]) => {
     const newBotData = {
       templateId: templateId || '',
@@ -121,7 +131,11 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
       appLocale,
       qnaKbUrls,
     };
-    createNewBot(newBotData);
+    if (creationFlowType === 'Skill') {
+      addNewSkillToBotProject(newBotData);
+    } else {
+      createNewBot(newBotData);
+    }
   };
 
   const handleSaveAs = (formData) => {
@@ -130,6 +144,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
 
   const handleDefineConversationSubmit = async (formData, templateId: string) => {
     // If selected template is qnaSample then route to QNA import modal
+    // TODO: remove this QnA url
     if (templateId === 'QnASample') {
       setFormData(formData);
       navigate(`./QnASample/importQnA`);
