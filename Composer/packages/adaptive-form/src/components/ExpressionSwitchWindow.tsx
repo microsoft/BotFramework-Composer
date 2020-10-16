@@ -5,6 +5,7 @@
 import { css, jsx } from '@emotion/core';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import React from 'react';
+import formatMessage from 'format-message';
 
 const styles = {
   fieldTypeText: css`
@@ -44,7 +45,7 @@ export const ExpressionSwitchWindow = (props: { type: string; onSwitchToExpressi
         }}
       >
         <FontIcon css={styles.icon} iconName={'CalculatorEqualTo'} />
-        {`Write in expression`}
+        {formatMessage(`Write in expression`)}
       </div>
     </React.Fragment>
   );
