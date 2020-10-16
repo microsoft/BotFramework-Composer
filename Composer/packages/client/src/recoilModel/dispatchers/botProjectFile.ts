@@ -72,9 +72,25 @@ export const botProjectFileDispatcher = () => {
     }
   );
 
+  const removeRemoteSkillFromBotProjectFile = useRecoilCallback(
+    ({ set, snapshot }: CallbackInterface) => async (skillId: string) => {
+      const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
+      if (!rootBotProjectId) {
+        return;
+      }
+      set(botProjectFileState(rootBotProjectId), (current) => {
+        const result = produce(current, (draftState) => {
+          delete draftState.content.skills[skillId];
+        });
+        return result;
+      });
+    }
+  );
+
   return {
     addLocalSkillToBotProjectFile,
     removeSkillFromBotProjectFile,
     addRemoteSkillToBotProjectFile,
+    removeRemoteSkillFromBotProjectFile,
   };
 };

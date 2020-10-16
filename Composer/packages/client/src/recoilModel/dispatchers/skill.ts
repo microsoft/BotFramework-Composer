@@ -14,6 +14,8 @@ import {
   settingsState,
 } from './../atoms/botState';
 import { setSettingState } from './setting';
+import { dispatcherState } from '../DispatcherWrapper';
+import { getSkillNameIdentifier } from './utils/project';
 
 export const skillDispatcher = () => {
   const createSkillManifest = ({ set }, { id, content, projectId }) => {
@@ -42,20 +44,26 @@ export const skillDispatcher = () => {
   const addSkill = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (projectId: string, skill: SkillSetting) => {
       const { set, snapshot } = callbackHelpers;
+      const dispatcher = await snapshot.getPromise(dispatcherState);
       const { func: onAddSkillDialogComplete } = await snapshot.getPromise(onAddSkillDialogCompleteState(projectId));
       const settings = await snapshot.getPromise(settingsState(projectId));
+      const skillName = await getSkillNameIdentifier(callbackHelpers, skill.name);
 
       setSettingState(
         callbackHelpers,
         projectId,
         produce(settings, (updateSettings) => {
-          updateSettings.skill = { ...(updateSettings.skill || {}), [skill.name]: skill };
+          updateSettings.skill = { ...(updateSettings.skill || {}), [skillName]: skill };
         })
       );
 
       if (typeof onAddSkillDialogComplete === 'function') {
         onAddSkillDialogComplete(skill || null);
       }
+
+      // sync to *.botproj
+      // TODO: skill.endpointUrl to skill.endpointName
+      await dispatcher.addRemoteSkillToBotProject(skill.manifestUrl, skillName, skill.endpointUrl);
 
       set(showAddSkillDialogModalState(projectId), false);
       set(onAddSkillDialogCompleteState(projectId), {});
@@ -65,6 +73,7 @@ export const skillDispatcher = () => {
   const removeSkill = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (projectId: string, key: string) => {
       const { snapshot } = callbackHelpers;
+      const dispatcher = await snapshot.getPromise(dispatcherState);
       const settings = await snapshot.getPromise(settingsState(projectId));
 
       setSettingState(
@@ -74,6 +83,9 @@ export const skillDispatcher = () => {
           delete updateSettings.skill?.[key];
         })
       );
+
+      // sync to *.botproj
+      await dispatcher.removeRemoteSkillFromBotProject(key);
     }
   );
 
