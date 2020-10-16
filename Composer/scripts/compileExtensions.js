@@ -73,12 +73,15 @@ const compile = (name, extPath) => {
   const packageJSON = JSON.parse(fs.readFileSync(path.join(extPath, 'package.json')));
   const hasBuild = packageJSON && packageJSON.scripts && packageJSON.scripts.build;
 
+  console.log('[%s] compiling', name);
+  console.log('[%s] yarn --force', name);
+  execSync('yarn --force --frozen-lockfile', { cwd: extPath, stdio: 'inherit' });
+
   if (hasBuild) {
-    console.log('[%s] compiling', name);
-    console.log('[%s] yarn --force', name);
-    execSync('yarn --force --frozen-lockfile', { cwd: extPath, stdio: 'inherit' });
     console.log('[%s] yarn build', name);
     execSync('yarn build', { cwd: extPath, stdio: 'inherit' });
+  } else {
+    console.log('[%s] no build script found.', name);
   }
 };
 
