@@ -18,6 +18,18 @@ console.log('Compiling extensions in %s', extensionsDir);
 
 const allExtensions = fs.readdirSync(extensionsDir, { withFileTypes: true });
 
+const checkComposerLibs = () => {
+  const libsToCheck = ['types', 'extension', 'extension-client', 'lib/shared'];
+
+  for (const libName of libsToCheck) {
+    const libPath = path.resolve(__dirname, '../packages/', libName, 'lib/index.js');
+    if (!fs.existsSync(libPath)) {
+      console.error('Composer libraries have not yet been compiled. Run `yarn build:libs` first.');
+      process.exit(1);
+    }
+  }
+};
+
 let buildCache = (() => {
   if (fs.existsSync(buildCachePath)) {
     try {
@@ -67,6 +79,8 @@ const compile = (name, extPath) => {
     execSync('yarn build', { cwd: extPath, stdio: 'inherit' });
   }
 };
+
+checkComposerLibs();
 
 for (const entry of allExtensions) {
   if (entry.isDirectory()) {
