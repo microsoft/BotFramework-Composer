@@ -6,7 +6,7 @@ import { ExtensionMap, ExtensionMetadata } from '@botframework-composer/types';
 
 import logger from '../logger';
 
-const log = logger.extend('plugins');
+const log = logger.extend('extensions');
 
 export type ExtensionManifest = ExtensionMap;
 

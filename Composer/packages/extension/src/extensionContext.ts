@@ -103,6 +103,7 @@ class ExtensionContext {
     }
   }
 
+  /** @deprecated */
   public async loadPluginsFromFolder(dir: string) {
     const plugins = await glob('*/package.json', { cwd: dir, dot: true });
     for (const p in plugins) {
