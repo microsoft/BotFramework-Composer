@@ -177,7 +177,12 @@ export const PropertyTypeSelector = React.memo((props: Props) => {
       selectedKey={selectedKey}
       styles={{ root: { minWidth: 200 } }}
       onChange={change}
-      onRenderLabel={onRenderLabel(formatMessage('Property type help text'), propertyTypeTooltipId)}
+      onRenderLabel={onRenderLabel(
+        formatMessage(
+          `The property type defines the expected input. The type can be a list (or enum) of defined values or a data format, such as a date, email, number, or string.`
+        ),
+        propertyTypeTooltipId
+      )}
     />
   );
 });
