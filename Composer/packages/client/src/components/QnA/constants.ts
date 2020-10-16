@@ -47,12 +47,12 @@ export const validateName = (sources: QnAFile[]): FieldValidator => {
     let currentError = '';
     if (name) {
       if (!FileNameRegex.test(name)) {
-        currentError = formatMessage('KB name cannot contain speacial characters.');
+        currentError = formatMessage('KB name cannot contain special characters.');
       }
 
       const duplicatedItemIndex = sources.findIndex((item) => item.id.toLowerCase() === `${name.toLowerCase()}.source`);
       if (duplicatedItemIndex > -1) {
-        currentError = formatMessage('You already have a KB with that name.Choose another name and try again.');
+        currentError = formatMessage('You already have a KB with that name. Choose another name and try again.');
       }
     }
     return currentError;

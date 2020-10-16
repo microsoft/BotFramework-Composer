@@ -1373,8 +1373,8 @@
   "kb_d9c53902": {
     "message": "KB"
   },
-  "kb_name_cannot_contain_speacial_characters_6588abda": {
-    "message": "KB name cannot contain speacial characters."
+  "kb_name_cannot_contain_special_characters_616d7939": {
+    "message": "KB name cannot contain special characters."
   },
   "key_cannot_be_blank_dccc1b46": {
     "message": "Key cannot be blank"
@@ -2840,8 +2840,8 @@
   "yes_dde87d5": {
     "message": "Yes"
   },
-  "you_already_have_a_kb_with_that_name_choose_anothe_fc2f7156": {
-    "message": "You already have a KB with that name.Choose another name and try again."
+  "you_already_have_a_kb_with_that_name_choose_anothe_b7f7c517": {
+    "message": "You already have a KB with that name. Choose another name and try again."
   },
   "you_are_about_to_publish_your_bot_to_the_profile_b_79a6a226": {
     "message": "You are about to publish your bot to the profile below. Do you want to proceed?"
