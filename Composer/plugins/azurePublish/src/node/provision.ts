@@ -9,7 +9,6 @@ import { AzureResourceManangerConfig } from './azureResourceManager/azureResourc
 import { AzureResourceMananger } from './azureResourceManager/azureResourceManager';
 import { AzureResourceTypes } from './resourceTypes';
 
-// TODO: fix these duplicated interfaces between here and index.ts
 export interface ProvisionConfig {
   accessToken: string;
   graphToken: string;
@@ -17,14 +16,12 @@ export interface ProvisionConfig {
   hostname: string; // for previous bot, it's ${name}-${environment}
   externalResources: ResourceType[];
   location: { id: string; name: string; displayName: string };
-}
-
-export interface ProvisionerConfig {
-  subscriptionId: string;
+  subscription: { subscriptionId: string; tenantId: string; displayName: string };
   logger: (string) => any;
-  accessToken: string;
-  graphToken: string;
-  tenantId?: string;
+  name?: string; // profile name
+  type?: string; // webapp or function
+  choice?: string;
+  [key: string]: any;
 }
 
 interface ResourceType {
@@ -42,8 +39,8 @@ export class BotProjectProvision {
   // Will be assigned by create or deploy
   private tenantId = '';
 
-  constructor(config: ProvisionerConfig) {
-    this.subscriptionId = config.subscriptionId;
+  constructor(config: ProvisionConfig) {
+    this.subscriptionId = config.subscription.subscriptionId;
     this.logger = config.logger;
     this.accessToken = config.accessToken;
     this.graphToken = config.graphToken;
