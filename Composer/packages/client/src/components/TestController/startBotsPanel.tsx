@@ -5,9 +5,9 @@
 import { jsx, css } from '@emotion/core';
 import React, { useEffect, useState } from 'react';
 import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
+import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { DefaultButton, ActionButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
+import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import formatMessage from 'format-message';
 import {
@@ -21,17 +21,45 @@ import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
 
 import { botProjectSpaceSelector } from '../../recoilModel';
 
-interface IStartBotsDialogProps {
+import { LocalBotStatusIndicator } from './LocalBotStatusIndicator';
+import { LocalBotRuntime } from './LocalBotRuntime';
+
+const styles = {
+  detailListContainer: css`
+    flex-grow: 1;
+    height: 350px;
+    position: relative;
+    overflow: hidden;
+  `,
+};
+
+export const actionButton = css`
+  font-size: 14px;
+  margin-top: 2px;
+  color: #0078d4;
+`;
+
+export const botInfoContainer = css`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+`;
+
+const dialog = {
+  title: {
+    fontWeight: FontWeights.bold,
+  },
+};
+
+interface StartBotsPanelProps {
   isOpen: boolean;
   onDismiss: () => void;
 }
 
-export const StartBotsDialog: React.FC<IStartBotsDialogProps> = (props) => {
+export const StartBotsPanel: React.FC<StartBotsPanelProps> = (props) => {
   const { isOpen, onDismiss } = props;
   const projectCollection = useRecoilValue(botProjectSpaceSelector);
-
   const [items, setItems] = useState<{ displayName: string; projectId: string }[]>([]);
-  const [allBotsStarted, setAllBotsStarted] = useState<boolean>(false);
 
   useEffect(() => {
     const result = projectCollection.map(({ name, projectId }) => ({ displayName: name, projectId }));
@@ -42,18 +70,12 @@ export const StartBotsDialog: React.FC<IStartBotsDialogProps> = (props) => {
     return <div>{defaultRender && defaultRender(props)}</div>;
   };
 
-  const startAllBots = () => {
-    setAllBotsStarted(true);
-  };
-
-  const stopAllBots = () => {
-    setAllBotsStarted(false);
-  };
-
-  const tableColumns = [
+  const tableColumns: any = [
     {
-      key: 'column1',
+      key: 'botName',
       name: formatMessage('Bot'),
+      minWidth: 200,
+      maxWidth: 200,
       fieldName: 'id',
       isRowHeader: true,
       isResizable: true,
@@ -61,29 +83,28 @@ export const StartBotsDialog: React.FC<IStartBotsDialogProps> = (props) => {
       sortAscendingAriaLabel: formatMessage('Sorted A to Z'),
       sortDescendingAriaLabel: formatMessage('Sorted Z to A'),
       data: 'string',
-      onRender: (item: any) => {
+      onRender: (item: { displayName: string; projectId: string }) => {
         return (
-          <div style={rowHeader}>
-            <Icon iconName={item.status === 'Running' ? 'CircleStopSolid' : 'Play'} styles={icon()} />
-            <span aria-label={item.displayName}>{item.displayName}</span>
+          <div css={botInfoContainer}>
+            <LocalBotRuntime displayName={item.displayName} projectId={item.projectId} />
           </div>
         );
       },
       isPadded: true,
     },
     {
-      key: 'column2',
+      key: 'status',
       name: formatMessage('Status'),
       fieldName: 'type',
       isRowHeader: true,
       isResizable: true,
       isSorted: true,
       data: 'string',
-      onRender: (item: any) => {
+      onRender: (item: { displayName: string; projectId: string }) => {
         return (
-          <span aria-label={item.status} style={statusStyle}>
-            {item.status}
-          </span>
+          <div css={botInfoContainer}>
+            <LocalBotStatusIndicator projectId={item.projectId} />
+          </div>
         );
       },
       isPadded: true,
@@ -108,15 +129,6 @@ export const StartBotsDialog: React.FC<IStartBotsDialogProps> = (props) => {
     >
       <div css={styles.detailListContainer}>
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
-          <ActionButton css={actionButton}>
-            {allBotsStarted ? <Icon iconName={allBotsStarted ? 'CircleStopSolid' : ''} styles={icon()} /> : null}
-            {allBotsStarted ? (
-              <button onClick={stopAllBots}> Stop all Bots </button>
-            ) : (
-              <button onClick={startAllBots}>Start all bots</button>
-            )}
-          </ActionButton>
-
           <DetailsList
             columns={tableColumns}
             compact={false}

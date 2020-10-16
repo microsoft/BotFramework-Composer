@@ -8,9 +8,11 @@ import {
   BotProjectSpaceSkill,
   convertFileProtocolToPath,
   convertSkillsToDictionary,
+  getEndpointNameGivenUrl,
   dereferenceDefinitions,
   DialogInfo,
   DialogSetting,
+  getManifestNameFromUrl,
   LuFile,
   QnAFile,
   SensitiveProperties,
@@ -61,6 +63,7 @@ import {
   skillManifestsState,
 } from '../../atoms';
 import * as botstates from '../../atoms/botState';
+import { dispatcherState } from '../../DispatcherWrapper';
 import lgWorker from '../../parsers/lgWorker';
 import luWorker from '../../parsers/luWorker';
 import qnaWorker from '../../parsers/qnaWorker';
@@ -152,7 +155,7 @@ export const navigateToBot = (
   }
 };
 
-const loadProjectData = (response) => {
+export const loadProjectData = (response) => {
   const { files, botName, settings, id: projectId } = response.data;
   const mergedSettings = getMergedSettings(projectId, settings);
   const storedLocale = languageStorage.get(botName)?.locale;

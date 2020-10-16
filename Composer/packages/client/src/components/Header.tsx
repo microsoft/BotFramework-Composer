@@ -4,11 +4,12 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import formatMessage from 'format-message';
-import { IconButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
+import { IconButton, IButtonStyles, ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { useCallback, Fragment, useState, useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
-import { SharedColors } from '@uifabric/fluent-theme';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
 
 import {
   dispatcherState,
@@ -21,7 +22,13 @@ import {
 import composerIcon from '../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../constants';
 
-import { StartBotsDialog } from './TestController/startBotsDialog';
+import { StartBotsPanel } from './TestController/startBotsPanel';
+import { useBotOperations } from './TestController/useLocalBotOperations';
+export const actionButton = css`
+  font-size: 18px;
+  margin-top: 2px;
+  color: #fff;
+`;
 
 // -------------------- Styles -------------------- //
 
@@ -59,11 +66,9 @@ const updateAvailableIcon = {
     fontSize: '20px',
   },
   root: {
-    position: 'absolute',
     height: '20px',
     width: '20px',
-    top: 'calc(50% - 10px)',
-    right: '20px',
+    margin: '0 20px',
   },
   rootHovered: {
     backgroundColor: 'transparent',
@@ -75,12 +80,30 @@ const updateAvailableIcon = {
 
 const headerTextContainer = css`
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  width: 50%;
 `;
 
+const rightSection = css`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 50%;
+`;
+
+const botRuntimeStartIcon: IButtonStyles = {
+  root: {
+    color: `#fff`,
+    marginRight: '12px',
+    boxSizing: 'border-box',
+    fontSize: `${FontSizes.size16}`,
+    width: '20px',
+  },
+};
+
 // -------------------- Header -------------------- //
-const defaultStartPanelText = formatMessage('Start all bots');
+
 export const Header = () => {
   const { setAppUpdateShowing } = useRecoilValue(dispatcherState);
   const projectId = useRecoilValue(currentProjectIdState);
@@ -90,13 +113,19 @@ export const Header = () => {
   const { showing, status } = appUpdate;
   const [showStartBotsPanel, setStartPanelView] = useState(false);
   const runningBots = useRecoilValue(runningBotsSelector);
-  const [startPanelText, setStartPanelText] = useState('Start ');
+  const [startPanelText, setStartPanelText] = useState('');
+  const [allBotsStarted, setAllBotsStarted] = useState<boolean>(false);
+  const { stopAllBots, startAllBots } = useBotOperations(setAllBotsStarted);
 
   useEffect(() => {
-    if (runningBots.totalBots === 0) {
-      setStartPanelText(`Start all  (${runningBots.projectIds.length}/${runningBots.totalBots} running)`);
+    if (runningBots.projectIds.length > 0) {
+      setStartPanelText(
+        `${formatMessage('Stop all bots')} (${runningBots.projectIds.length}/${runningBots.totalBots}) ${formatMessage(
+          'running'
+        )})`
+      );
     } else {
-      setStartPanelText(`Stop all bots`);
+      setStartPanelText(formatMessage('Start all bots'));
     }
   }, [runningBots]);
 
@@ -108,8 +137,15 @@ export const Header = () => {
     setStartPanelView(false);
   }
 
-  function showStartPanelViewer() {
-    setStartPanelView(true);
+  function handleStartOrStopAll() {
+    if (allBotsStarted) {
+      stopAllBots();
+      dismissStartPanelViewer();
+      setAllBotsStarted(false);
+    } else {
+      startAllBots();
+      setStartPanelView(true);
+    }
   }
 
   const showUpdateAvailableIcon = status === AppUpdaterStatus.UPDATE_AVAILABLE && !showing;
@@ -131,19 +167,32 @@ export const Header = () => {
           </Fragment>
         )}
       </div>
-      {showUpdateAvailableIcon && (
-        <IconButton
-          iconProps={{ iconName: 'History' }}
-          styles={updateAvailableIcon as IButtonStyles}
-          title={formatMessage('Update available')}
-          onClick={onUpdateAvailableClick}
-        />
-      )}
 
-      <button onClick={showStartPanelViewer}>
-        <span>{startPanelText}</span>
-      </button>
-      {showStartBotsPanel && <StartBotsDialog isOpen={showStartBotsPanel} onDismiss={dismissStartPanelViewer} />}
+      <div css={rightSection}>
+        {runningBots.projectIds.length > 0 ? (
+          <ActionButton css={actionButton} onClick={handleStartOrStopAll}>
+            <Icon iconName={'CircleStopSolid'} styles={botRuntimeStartIcon} />
+          </ActionButton>
+        ) : (
+          <ActionButton css={actionButton} onClick={handleStartOrStopAll}>
+            <Icon iconName={'Play'} styles={botRuntimeStartIcon} />
+          </ActionButton>
+        )}
+        <ActionButton css={actionButton} onClick={() => setStartPanelView(true)}>
+          <span>{startPanelText}</span>
+        </ActionButton>
+
+        {showUpdateAvailableIcon && (
+          <IconButton
+            iconProps={{ iconName: 'History' }}
+            styles={updateAvailableIcon as IButtonStyles}
+            title={formatMessage('Update available')}
+            onClick={onUpdateAvailableClick}
+          />
+        )}
+      </div>
+
+      {showStartBotsPanel && <StartBotsPanel isOpen={showStartBotsPanel} onDismiss={dismissStartPanelViewer} />}
     </div>
   );
 };

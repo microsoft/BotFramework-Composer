@@ -12,7 +12,9 @@
   "dependencies": {
     "adm-zip": "^0.4.14",
     "archiver": "^5.0.2",
+    "get-port": "^5.1.1",
     "globby": "^11.0.0",
+    "kill-port": "^1.6.1",
     "path": "^0.12.7",
     "portfinder": "^1.0.26",
     "rimraf": "^3.0.2",

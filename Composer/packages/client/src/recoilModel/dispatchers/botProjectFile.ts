@@ -2,9 +2,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import path from 'path';
+
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 import { produce } from 'immer';
-import { BotProjectSpaceSkill, convertAbsolutePathToFileProtocol, Skill } from '@bfc/shared';
+import { BotProjectSpaceSkill, convertPathToFileProtocol, Skill } from '@bfc/shared';
 
 import { botNameIdentifierState, botProjectFileState, locationState, settingsState } from '../atoms';
 import { rootBotProjectIdSelector } from '../selectors';
@@ -16,13 +18,15 @@ export const botProjectFileDispatcher = () => {
     if (!rootBotProjectId) {
       return;
     }
+    const rootBotLocation = await snapshot.getPromise(locationState(rootBotProjectId));
     const skillLocation = await snapshot.getPromise(locationState(skillId));
     const botName = await snapshot.getPromise(botNameIdentifierState(skillId));
 
     set(botProjectFileState(rootBotProjectId), (current) => {
       const result = produce(current, (draftState) => {
+        const relativePath = path.relative(rootBotLocation, skillLocation);
         const skill: BotProjectSpaceSkill = {
-          workspace: convertAbsolutePathToFileProtocol(skillLocation),
+          workspace: convertPathToFileProtocol(relativePath),
           remote: false,
         };
         draftState.content.skills[botName] = skill;

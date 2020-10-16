@@ -8,12 +8,13 @@ import settingsStorage from '../../utils/dialogSettingStorage';
 import { BotStatus } from '../../constants';
 import { isAbsHosted } from '../../utils/envUtil';
 import { botStatusState, luFilesState, qnaFilesState, settingsState } from '../atoms';
-import { localBotsWithoutErrorsSelector } from '../selectors';
 import { Dispatcher } from '../dispatchers';
 import { dispatcherState } from '../DispatcherWrapper';
 import { isBuildConfigComplete as isBuildConfigurationComplete, needsBuild } from '../../utils/buildUtil';
 
 import { validateDialogSelectorFamily } from './validatedDialogs';
+
+import { localBotsWithoutErrorsSelector } from '.';
 
 export const trackBotStatusesSelector = selectorFamily({
   key: 'trackBotStatusesSelector',

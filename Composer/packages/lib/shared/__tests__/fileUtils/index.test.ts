@@ -1,15 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { convertAbsolutePathToFileProtocol, convertFileProtocolToPath } from '../../src/fileUtils';
+import { convertPathToFileProtocol, convertFileProtocolToPath } from '../../src/fileUtils';
 
 it('should convert a posix path to file protocol', () => {
   const testPath = '/Users/tester/empty-bot-0';
-  expect(convertAbsolutePathToFileProtocol(testPath)).toBe('file:///Users/tester/empty-bot-0');
+  expect(convertPathToFileProtocol(testPath)).toBe('file:///Users/tester/empty-bot-0');
 });
 
 it('should convert a windows path to file protocol', () => {
   const testPath = 'C:/Users/Tester/empty-bot-0';
-  expect(convertAbsolutePathToFileProtocol(testPath)).toBe('file:///C:/Users/Tester/empty-bot-0');
+  expect(convertPathToFileProtocol(testPath)).toBe('file:///C:/Users/Tester/empty-bot-0');
 });
 
 it('should convert a Windows file protocol path to regular path', () => {

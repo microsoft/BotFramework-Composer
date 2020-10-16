@@ -3,7 +3,6 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Fragment } from 'react';
 import { useRecoilValue } from 'recoil';
 import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
 import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
@@ -16,9 +15,9 @@ import {
   botBuildRequiredSelector,
   botRuntimeOperationsSelector,
   buildEssentialsSelector,
-} from '../../recoilModel/selectors/botRuntimeOperations';
+} from '../../recoilModel/selectors/localRuntimeBuilder';
 
-interface BotRuntimeOperationsProps {
+interface LocalBotRuntimeProps {
   projectId: string;
   displayName: string;
 }
@@ -33,7 +32,7 @@ const icon: IButtonStyles = {
   },
 };
 
-export const BotRuntimeOperations: React.FC<BotRuntimeOperationsProps> = ({ projectId, displayName }) => {
+export const LocalBotRuntime: React.FC<LocalBotRuntimeProps> = ({ projectId, displayName }) => {
   const currentBotStatus = useRecoilValue(botStatusState(projectId));
   const botBuildRequired = useRecoilValue(botBuildRequiredSelector(projectId));
   const { configuration: startBotConfig } = useRecoilValue(buildEssentialsSelector(projectId));
@@ -55,7 +54,7 @@ export const BotRuntimeOperations: React.FC<BotRuntimeOperationsProps> = ({ proj
   };
 
   return (
-    <Fragment>
+    <div>
       {currentBotStatus === BotStatus.connected ? (
         <button onClick={handleBotStop}>
           <Icon iconName={'CircleStopSolid'} styles={icon} />
@@ -66,6 +65,6 @@ export const BotRuntimeOperations: React.FC<BotRuntimeOperationsProps> = ({ proj
         </button>
       )}
       <span aria-label={displayName}>{displayName}</span>
-    </Fragment>
+    </div>
   );
 };
