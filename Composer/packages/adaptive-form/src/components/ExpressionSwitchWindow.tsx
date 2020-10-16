@@ -32,8 +32,11 @@ const styles = {
   `,
 };
 
-export const ExpressionSwitchWindow = (props: { type: string; onSwitchToExpression: () => void }) => {
+type ExpressionSwitchWindowProps = { type: string; onSwitchToExpression: () => void };
+
+export const ExpressionSwitchWindow = (props: ExpressionSwitchWindowProps) => {
   const { type, onSwitchToExpression } = props;
+
   return (
     <React.Fragment>
       <div css={styles.fieldTypeText}>{`Start typing ${type} or`}</div>

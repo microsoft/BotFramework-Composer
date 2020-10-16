@@ -23,13 +23,16 @@ export const IntellisenseTextField: React.FC<FieldProps<string>> = function Inte
     }
   };
 
+  const scopes = uiOptions.intellisenseScopes || [];
+  const url = getIntellisenseUrl();
+
   return (
     <Intellisense
       completionListOverrideResolver={completionListOverrideResolver}
       focused={defaultFocused}
       id={`intellisense-${id}`}
-      scopes={uiOptions.intellisenseScopes || []}
-      url={getIntellisenseUrl()}
+      scopes={scopes}
+      url={url}
       value={value}
       onBlur={props.onBlur}
       onChange={onChange}
@@ -54,12 +57,15 @@ export const IntellisenseTextField: React.FC<FieldProps<string>> = function Inte
 export const IntellisenseExpressionField: React.FC<FieldProps<string>> = function IntellisenseExpressionField(props) {
   const { id, value = '', onChange, focused: defaultFocused } = props;
 
+  const scopes = ['expressions', 'user-variables'];
+  const url = getIntellisenseUrl();
+
   return (
     <Intellisense
       focused={defaultFocused}
       id={`intellisense-${id}`}
-      scopes={['expressions', 'user-variables']}
-      url={getIntellisenseUrl()}
+      scopes={scopes}
+      url={url}
       value={value}
       onBlur={props.onBlur}
       onChange={onChange}
@@ -92,13 +98,16 @@ export const IntellisenseNumberField: React.FC<FieldProps<string>> = function In
     }
   };
 
+  const scopes = uiOptions.intellisenseScopes || [];
+  const url = getIntellisenseUrl();
+
   return (
     <Intellisense
       completionListOverrideResolver={completionListOverrideResolver}
       focused={defaultFocused}
       id={`intellisense-${id}`}
-      scopes={uiOptions.intellisenseScopes || []}
-      url={getIntellisenseUrl()}
+      scopes={scopes}
+      url={url}
       value={value}
       onBlur={props.onBlur}
       onChange={onChange}
@@ -147,14 +156,16 @@ export const IntellisenseJSONField: React.FC<FieldProps<string>> = function Inte
   };
 
   const defaultValue = schema.type === 'object' ? {} : [];
+  const scopes = ['expressions'];
+  const url = getIntellisenseUrl();
 
   return (
     <Intellisense
       completionListOverrideResolver={completionListOverrideResolver}
       focused={defaultFocused}
       id={`intellisense-${id}`}
-      scopes={['expressions']}
-      url={getIntellisenseUrl()}
+      scopes={scopes}
+      url={url}
       value={value || defaultValue}
       onBlur={props.onBlur}
       onChange={onChange}

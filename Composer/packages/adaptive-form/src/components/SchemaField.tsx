@@ -32,6 +32,8 @@ export const SchemaField: React.FC<FieldProps> = (props) => {
     hidden,
     onChange,
     expression,
+    onBlur,
+    id,
     ...rest
   } = props;
   const formUIOptions = useFormConfig();
@@ -82,6 +84,7 @@ export const SchemaField: React.FC<FieldProps> = (props) => {
   const fieldProps: FieldProps = {
     ...rest,
     ...customProps,
+    id: id,
     focused: fieldFocused,
     definitions,
     description: getUiDescription({ ...props, uiOptions }),
@@ -98,7 +101,7 @@ export const SchemaField: React.FC<FieldProps> = (props) => {
     onFocus: () => setFieldFocused(true),
     onBlur: () => {
       setFieldFocused(false);
-      rest.onBlur && rest.onBlur(rest.id);
+      onBlur && onBlur(id);
     },
   };
 
