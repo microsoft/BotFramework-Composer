@@ -14,6 +14,7 @@ import { CognitiveServicesResourceAndSku } from '@azure/arm-cognitiveservices/es
 import { TokenCredentials } from '@azure/ms-rest-js';
 import debug from 'debug';
 
+import * as Images from './images';
 import { AzureAPIStatus, AzureResourceProviderType } from './types';
 
 const logger = debug('composer:extension:azureProvision');
@@ -393,46 +394,57 @@ export const getPreview = (hostname: string) => {
   const previewList = [
     {
       name: azureWebAppName,
+      icon: Images.AppService,
       key: 'webApp',
     },
     {
       name: 'Microsoft Application Registration',
+      icon: Images.AppRegistration,
       key: 'appRegistration',
     },
     {
       name: botServiceName,
+      icon: Images.BotServices,
       key: 'botRegistration',
     },
     {
       name: azureWebAppName,
+      icon: Images.FunctionApp,
       key: 'azureFunctions',
     },
     {
       name: cosmosDbName,
+      icon: Images.AzureCosmosDb,
       key: 'cosmosDb',
     },
     {
       name: blobStorageName,
+      icon: Images.BlobStorage,
       key: 'blobStorage',
     },
     {
       name: applicationInsightsName,
+      icon: Images.AppInsights,
       key: 'applicationInsights',
     },
     {
       name: luisAuthoringName,
+      icon: Images.CognitiveServices,
       key: 'luisAuthoring',
     },
     {
       name: luisResourceName,
+      icon: Images.CognitiveServices,
       key: 'luisPrediction',
     },
     {
       name: qnaAccountName,
+      icon: Images.CognitiveServices,
       key: 'qna',
     },
     {
       name: azureServicePlanName,
+      icon: Images.AppServicePlan,
       key: 'servicePlan',
     },
   ];

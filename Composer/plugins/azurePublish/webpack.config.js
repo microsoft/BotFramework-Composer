@@ -20,7 +20,17 @@ module.exports = {
     'react-dom': 'ReactDOM',
   },
   module: {
-    rules: [{ test: /\.tsx?$/, use: 'ts-loader' }],
+    rules: [
+      { test: /\.tsx?$/, use: 'ts-loader' },
+      {
+        test: /\.svg$/i,
+        use: [
+          {
+            loader: 'url-loader',
+          },
+        ],
+      },
+    ],
   },
   resolve: {
     extensions: ['.js', '.ts', '.tsx'],

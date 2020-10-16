@@ -78,6 +78,18 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const columns: IColumn[] = [
     {
+      key: 'icon',
+      name: 'File Type',
+      iconName: 'Page',
+      isIconOnly: true,
+      fieldName: 'name',
+      minWidth: 16,
+      maxWidth: 16,
+      onRender: (item: any) => {
+        return <img src={item.icon} />;
+      },
+    },
+    {
       key: 'Name',
       name: formatMessage('Name'),
       className: 'name',
@@ -205,10 +217,11 @@ export const AzureProvisionDialog: React.FC = () => {
       const names = getPreview(config.hostname);
       console.log('got names', names);
       const result = extensionResourceOptions.map((resource) => {
-        const name = names.find((n) => n.key === resource.key);
+        const previewObject = names.find((n) => n.key === resource.key);
         return {
           ...resource,
-          name: name ? name.name : `UNKNOWN NAME FOR ${ resource.key }`,
+          name: previewObject ? previewObject.name : `UNKNOWN NAME FOR ${resource.key}`,
+          icon: previewObject ? previewObject.icon : undefined,
         };
       });
 
@@ -293,9 +306,9 @@ export const AzureProvisionDialog: React.FC = () => {
           />
         </form>
       )}
-      {choice.key === 'create' && (!subscriptionOption || !subscriptionOption.length) && <Spinner label="Loading" />}
+      {choice.key === 'create' && !subscriptionOption ? <Spinner label="Loading" /> : null}
       {choice.key === 'import' && (
-        <Fragment>
+        <div style={{ width: '60%' }}>
           <div>Publish Configuration</div>
           <JsonEditor
             id={publishType}
@@ -310,7 +323,7 @@ export const AzureProvisionDialog: React.FC = () => {
               setEditorError(true);
             }}
           />
-        </Fragment>
+        </div>
       )}
 
       <DialogFooter>
