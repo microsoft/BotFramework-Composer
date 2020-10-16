@@ -145,12 +145,18 @@ export const navigateToBot = (
   projectId: string,
   mainDialog: string,
   qnaKbUrls?: string[],
-  templateId?: string
+  templateId?: string,
+  urlSuffix?: string
 ) => {
   if (projectId) {
     const { set } = callbackHelpers;
     set(currentProjectIdState, projectId);
-    const url = `/bot/${projectId}/dialogs/${mainDialog}`;
+    let url = `/bot/${projectId}/dialogs/${mainDialog}`;
+    if (urlSuffix) {
+      // deep link was provided to creation flow (base64 encoded to make query string parsing easier)
+      urlSuffix = atob(urlSuffix);
+      url = `/bot/${projectId}/${urlSuffix}`;
+    }
     navigateTo(url);
   }
 };
