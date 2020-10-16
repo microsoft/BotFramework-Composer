@@ -6,7 +6,7 @@ import fs from 'fs';
 
 import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
-import { getNewDesigner, FileInfo, Diagnostic, IBotProject, DialogSetting, FileExtensions } from '@bfc/shared';
+import { getNewDesigner, FileInfo, Diagnostic, IBotProject, DialogSetting, FileExtensions, Skill } from '@bfc/shared';
 import merge from 'lodash/merge';
 import { UserIdentity, ExtensionContext } from '@bfc/extension';
 import { FeedbackType, generate } from '@microsoft/bf-generate-library';
