@@ -185,7 +185,7 @@
     nanoid "^3.1.3"
     nanoid-dictionary "^3.0.0"
 
-"@botframework-composer/types@*":
+"@botframework-composer/types@*", "@botframework-composer/types@0.0.1":
   version "0.0.1"
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@botframework-composer/types/-/@botframework-composer/types-0.0.1.tgz#117b86bf8e3bf43567471d436eb1c2f0ffcd6bb8"
   integrity sha1-EXuGv4479DVnRx1DbrHC8P/Na7g=
