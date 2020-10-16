@@ -2991,13 +2991,13 @@
     argparse "~1.0.10"
     tslib "^1.10.0"
 
-"@microsoft/bf-generate-library@^4.10.0-daily.20201008.172736":
-  version "4.10.0-daily.20201008.172736"
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-generate-library/-/@microsoft/bf-generate-library-4.10.0-daily.20201008.172736.tgz#e5a97cb8d2b2d70524cd3094f7d49dd667cfebc0"
-  integrity sha1-5al8uNKy1wUkzTCU99Sd1mfP68A=
+"@microsoft/bf-generate-library@^4.10.0-daily.20201015.174962":
+  version "4.10.0-daily.20201015.174962"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-generate-library/-/@microsoft/bf-generate-library-4.10.0-daily.20201015.174962.tgz#42838aa5a44649a9de7bc3a7c987fe91b7ab65e3"
+  integrity sha1-QoOKpaRGSanee8OnyYf+kberZeM=
   dependencies:
-    "@microsoft/bf-lu" "^4.11.0-dev.20200831.d7b6149"
-    adaptive-expressions "^4.11.0-dev.20200916.f8fef0f"
+    "@microsoft/bf-lu" "^4.11.0-dev.20201015.a41c691"
+    adaptive-expressions "^4.11.0-dev.20201015.e56fdb7"
     ajv "^6.9.1"
     botbuilder-lg "^4.11.0-dev.20200916.f8fef0f"
     clone "^2.1.2"
@@ -3033,28 +3033,6 @@
     semver "^5.5.1"
     tslib "^1.10.0"
 
-"@microsoft/bf-lu@^4.11.0-dev.20200831.d7b6149":
-  version "4.11.0-dev.20201008.18fba61"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.11.0-dev.20201008.18fba61.tgz#7ffcb888309f06d518a85d342c62dc4b843d2949"
-  integrity sha1-f/y4iDCfBtUYqF00LGLcS4Q9KUk=
-  dependencies:
-    "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
-    "@azure/ms-rest-azure-js" "2.0.1"
-    "@types/node-fetch" "~2.5.5"
-    antlr4 "^4.7.2"
-    chalk "2.4.1"
-    console-stream "^0.1.1"
-    deep-equal "^1.0.1"
-    delay "^4.3.0"
-    fs-extra "^8.1.0"
-    get-stdin "^6.0.0"
-    globby "^10.0.1"
-    intercept-stdout "^0.1.2"
-    lodash "^4.17.19"
-    node-fetch "~2.6.0"
-    semver "^5.5.1"
-    tslib "^1.10.0"
-
 "@microsoft/bf-lu@^4.11.0-dev.20201005.7e5e1b8":
   version "4.11.0-dev.20201005.7e5e1b8"
   resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.11.0-dev.20201005.7e5e1b8.tgz#62f9a37bb8340456e41853e179f2941dab9dfc87"
@@ -3076,6 +3054,28 @@
     node-fetch "~2.6.0"
     semver "^5.5.1"
     tslib "^1.10.0"
+
+"@microsoft/bf-lu@^4.11.0-dev.20201015.a41c691":
+  version "4.11.0-dev.20201015.a41c691"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.11.0-dev.20201015.a41c691.tgz#1002eb10b7625fead68274c007ac857de79f4446"
+  integrity sha1-EALrELdiX+rWgnTAB6yFfeefREY=
+  dependencies:
+    "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
+    "@azure/ms-rest-azure-js" "2.0.1"
+    "@types/node-fetch" "~2.5.5"
+    antlr4 "^4.7.2"
+    chalk "2.4.1"
+    console-stream "^0.1.1"
+    deep-equal "^1.0.1"
+    delay "^4.3.0"
+    fs-extra "^8.1.0"
+    get-stdin "^6.0.0"
+    globby "^10.0.1"
+    intercept-stdout "^0.1.2"
+    lodash "^4.17.19"
+    node-fetch "~2.6.0"
+    semver "^5.5.1"
+    tslib "^2.0.3"
 
 "@microsoft/load-themed-styles@^1.10.26":
   version "1.10.39"
@@ -4568,10 +4568,29 @@ adaptive-expressions@4.10.0-preview-150886:
     moment "^2.25.1"
     moment-timezone "^0.5.28"
 
-adaptive-expressions@4.11.0-dev.20200929.ca9de94, adaptive-expressions@^4.11.0-dev.20200916.f8fef0f:
+adaptive-expressions@4.11.0-dev.20200929.ca9de94:
   version "4.11.0-dev.20200929.ca9de94"
   resolved "https://registry.yarnpkg.com/adaptive-expressions/-/adaptive-expressions-4.11.0-dev.20200929.ca9de94.tgz#305c8462e7e0c329f55aa8cd2b2496bb81c2490c"
   integrity sha512-xq5QG19kIPio6piHEA4aPkqqi2ejYoYCBEovF55gJXaW5jKG+Q7bao3yqb2VTq9vISEyIq9VabmIlHzRQrOXyg==
+  dependencies:
+    "@microsoft/recognizers-text-data-types-timex-expression" "1.1.4"
+    "@types/atob-lite" "^2.0.0"
+    "@types/lru-cache" "^5.1.0"
+    "@types/moment-timezone" "^0.5.13"
+    "@types/xmldom" "^0.1.29"
+    antlr4ts "0.5.0-alpha.3"
+    atob-lite "^2.0.0"
+    big-integer "^1.6.48"
+    jspath "^0.4.0"
+    lodash "^4.17.19"
+    lru-cache "^5.1.1"
+    moment "^2.25.1"
+    moment-timezone "^0.5.28"
+
+adaptive-expressions@^4.11.0-dev.20201015.e56fdb7:
+  version "4.11.0-dev.20201015.e56fdb7"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adaptive-expressions/-/adaptive-expressions-4.11.0-dev.20201015.e56fdb7.tgz#5f51c4ce5e80e3d9d844085b79f7403130748f7d"
+  integrity sha1-X1HEzl6A49nYRAhbefdAMTB0j30=
   dependencies:
     "@microsoft/recognizers-text-data-types-timex-expression" "1.1.4"
     "@types/atob-lite" "^2.0.0"
@@ -18712,6 +18731,11 @@ tslib@^2.0.0:
   version "2.0.0"
   resolved "https://botbuilder.myget.org/F/botframework-cli/npm/tslib/-/tslib-2.0.0.tgz#18d13fc2dce04051e20f074cc8387fd8089ce4f3"
   integrity sha1-GNE/wtzgQFHiDwdMyDh/2Aic5PM=
+
+tslib@^2.0.3:
+  version "2.0.3"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/tslib/-/tslib-2.0.3.tgz#8e0741ac45fc0c226e58a17bfc3e64b9bc6ca61c"
+  integrity sha1-jgdBrEX8DCJuWKF7/D5kubxsphw=
 
 tsutils@^3.17.1:
   version "3.17.1"

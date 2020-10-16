@@ -35,7 +35,7 @@ switch (process.platform) {
 }
 
 // copy templates from bf-generate-library/templates to asar unpacked dir under packaged electron app
-fs.copy(source, destination, { filter: (src) => src.endsWith('.md') }, (err) => {
+fs.copy(source, destination, { filter: (src) => !src.endsWith('.md') }, (err) => {
   if (err) {
     console.error(`[${tag}] Error while copying plugins: `, err);
     return;

@@ -1,6 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import * as path from 'path';
+
+import * as fs from 'fs-extra';
 import { Request, Response } from 'express';
 import { ExtensionContext } from '@bfc/extension';
 import { schemas, expandPropertyDefinition } from '@microsoft/bf-generate-library';
@@ -10,7 +13,23 @@ import { BotProjectService } from '../services/project';
 // If we are in electron, the env variable has the asar.unpacked path to the templates
 // Otherwise, library uses built in templates path
 const getTemplatesRootDir = () =>
-  process.env.COMPOSER_FORM_DIALOG_TEMPLATES_DIR ? [process.env.COMPOSER_FORM_DIALOG_TEMPLATES_DIR] : undefined;
+  process.env.COMPOSER_FORM_DIALOG_TEMPLATES_DIR ? process.env.COMPOSER_FORM_DIALOG_TEMPLATES_DIR : undefined;
+
+const getTemplateDirs = async () => {
+  const templatesRootDir = getTemplatesRootDir();
+  const dirs: string[] = [];
+  if (templatesRootDir && templatesRootDir.length) {
+    for (const dirName of await fs.readdir(templatesRootDir)) {
+      const dir = path.join(templatesRootDir, dirName);
+      if ((await fs.lstat(dir)).isDirectory()) {
+        // Add templates subdirectories as templates
+        dirs.push(dir);
+      }
+    }
+  }
+
+  return dirs;
+};
 
 const expandJsonSchemaProperty = async (req: Request, res: Response) => {
   const { propertyName, schema } = req.body;
@@ -26,7 +45,8 @@ const expandJsonSchemaProperty = async (req: Request, res: Response) => {
 };
 
 const getTemplateSchemas = async (req: Request, res: Response) => {
-  const result = await schemas(getTemplatesRootDir());
+  const templatesDirs = await getTemplateDirs();
+  const result = await schemas(templatesDirs);
 
   if (result !== undefined) {
     res.status(200).json(result);
@@ -45,7 +65,9 @@ const generate = async (req: Request, res: Response) => {
   if (currentProject !== undefined) {
     const { name } = req.body;
 
-    await currentProject.generateDialog(name);
+    const templatesDirs = await getTemplateDirs();
+
+    await currentProject.generateDialog(name, templatesDirs);
     const updatedProject = await BotProjectService.getProjectById(projectId, user);
     res.status(200).json({ id: projectId, ...updatedProject.getProject() });
   } else {
