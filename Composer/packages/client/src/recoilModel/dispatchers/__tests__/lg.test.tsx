@@ -4,7 +4,7 @@
 import { useRecoilState } from 'recoil';
 import { LgFile, LgTemplate } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
-import { act } from '@bfc/test-utils/lib/hooks';
+import { act } from '@botframework-composer/test-utils/lib/hooks';
 
 import { lgDispatcher } from '../lg';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';

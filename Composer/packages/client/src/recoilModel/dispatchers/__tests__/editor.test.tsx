@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { act } from '@bfc/test-utils/lib/hooks';
+import { act } from '@botframework-composer/test-utils/lib/hooks';
 
 import { editorDispatcher } from '../editor';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';

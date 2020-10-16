@@ -58,8 +58,8 @@ const DescriptionColumn: React.FC<DescriptionColumnProps> = (props) => {
   ).current;
 
   useEffect(() => {
-    if (value !== content.$designer?.description) {
-      sync(updateDialog, value, content);
+    if (value !== content?.$designer?.description) {
+      sync(updateDialog, value ?? '', content);
     }
   }, [value, updateDialog]);
 

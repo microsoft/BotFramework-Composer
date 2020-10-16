@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { render, fireEvent, getByText } from '@bfc/test-utils';
+import { render, fireEvent, getByText } from '@botframework-composer/test-utils';
 
 import { ErrorCallout } from '../../../src/components/TestController/errorCallout';
 

@@ -1,13 +1,24 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import keys from 'lodash/keys';
+
 import differenceWith from 'lodash/differenceWith';
 import isEqual from 'lodash/isEqual';
-import { DialogInfo, DialogSchemaFile, DialogSetting, SkillManifest, BotAssets, BotProjectFile } from '@bfc/shared';
-import { LuFile, LgFile, QnAFile } from '@bfc/types';
+import {
+  DialogInfo,
+  DialogSchemaFile,
+  DialogSetting,
+  SkillManifest,
+  BotAssets,
+  BotProjectFile,
+  LuFile,
+  LgFile,
+  QnAFile,
+  FormDialogSchema,
+} from '@bfc/shared';
+import keys from 'lodash/keys';
 
 import * as client from './http';
-import { IFileChange, ChangeType, FileExtensions } from './types';
+import { ChangeType, FileExtensions, IFileChange } from './types';
 
 class FilePersistence {
   private _taskQueue: { [id: string]: IFileChange[] } = {};
@@ -212,6 +223,12 @@ class FilePersistence {
     return [];
   }
 
+  private getFormDialogSchemaFileChanges(current: FormDialogSchema[], previous: FormDialogSchema[]) {
+    const changeItems = this.getDifferenceItems(current, previous);
+    const changes = this.getFileChanges(FileExtensions.FormDialog, changeItems);
+    return changes;
+  }
+
   private getAssetsChanges(currentAssets: BotAssets, previousAssets: BotAssets): IFileChange[] {
     const dialogChanges = this.getDialogChanges(currentAssets.dialogs, previousAssets.dialogs);
     const dialogSchemaChanges = this.getDialogSchemaChanges(currentAssets.dialogSchemas, previousAssets.dialogSchemas);
@@ -223,6 +240,11 @@ class FilePersistence {
       previousAssets.skillManifests
     );
     const settingChanges = this.getSettingsChanges(currentAssets.setting, previousAssets.setting);
+
+    const formDialogChanges = this.getFormDialogSchemaFileChanges(
+      currentAssets.formDialogSchemas,
+      previousAssets.formDialogSchemas
+    );
 
     const botProjectFileChanges = this.getBotProjectFileChanges(
       currentAssets.botProjectFile,
@@ -237,6 +259,7 @@ class FilePersistence {
       ...lgChanges,
       ...skillManifestChanges,
       ...settingChanges,
+      ...formDialogChanges,
       ...botProjectFileChanges,
     ];
     return fileChanges;

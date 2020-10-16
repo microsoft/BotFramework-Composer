@@ -35,6 +35,7 @@ import { IFileStorage } from './../storage/interface';
 import { LocationRef, IBuildConfig } from './interface';
 import { retrieveSkillManifests } from './skillManager';
 import { defaultFilePath, serializeFiles, parseFileName } from './botStructure';
+import { PreBuilder } from './preBuilder';
 
 const debug = log.extend('bot-project');
 const mkDirAsync = promisify(fs.mkdir);
@@ -55,6 +56,7 @@ export class BotProject implements IBotProject {
   public dataDir: string;
   public fileStorage: IFileStorage;
   public builder: Builder;
+  public preBuilder: PreBuilder;
   public defaultSDKSchema: {
     [key: string]: string;
   };
@@ -80,12 +82,24 @@ export class BotProject implements IBotProject {
     this.settingManager = new DefaultSettingManager(this.dir);
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId, user);
     this.builder = new Builder(this.dir, this.fileStorage, defaultLanguage);
+    this.preBuilder = new PreBuilder(this.dir, this.fileStorage);
   }
 
   public get dialogFiles() {
     const files: FileInfo[] = [];
     this.files.forEach((file) => {
       if (file.name.endsWith('.dialog')) {
+        files.push(file);
+      }
+    });
+
+    return files;
+  }
+
+  public get formDialogSchemaFiles() {
+    const files: FileInfo[] = [];
+    this.files.forEach((file) => {
+      if (file.name.endsWith('.form-dialog')) {
         files.push(file);
       }
     });
@@ -375,7 +389,8 @@ export class BotProject implements IBotProject {
     }
     const file = this.files.get(name);
     if (file === undefined) {
-      throw new Error(`no such file ${name}`);
+      const { lastModified } = await this.createFile(name, content);
+      return lastModified;
     }
 
     const relativePath = file.relativePath;
@@ -447,31 +462,40 @@ export class BotProject implements IBotProject {
   public buildFiles = async ({
     luisConfig,
     qnaConfig,
-    luFileIds = [],
-    qnaFileIds = [],
+    luResource = [],
+    qnaResource = [],
     crossTrainConfig,
+    recognizerTypes,
   }: IBuildConfig) => {
-    if ((luFileIds.length || qnaFileIds.length) && this.settings) {
+    if (this.settings) {
+      const emptyFiles = {};
       const luFiles: FileInfo[] = [];
-      luFileIds.forEach((id) => {
-        const f = this.files.get(`${id}.lu`);
+      luResource.forEach(({ id, isEmpty }) => {
+        const fileName = `${id}.lu`;
+        const f = this.files.get(fileName);
         if (f) {
           luFiles.push(f);
+          emptyFiles[fileName] = isEmpty;
         }
       });
       const qnaFiles: FileInfo[] = [];
-      qnaFileIds.forEach((id) => {
-        const f = this.files.get(`${id}.qna`);
+      qnaResource.forEach(({ id, isEmpty }) => {
+        const fileName = `${id}.qna`;
+        const f = this.files.get(fileName);
         if (f) {
           qnaFiles.push(f);
+          emptyFiles[fileName] = isEmpty;
         }
       });
+
+      await this.preBuilder.prebuild(recognizerTypes, { crossTrainConfig, luFiles, qnaFiles, emptyFiles });
+
       this.builder.setBuildConfig(
         { ...luisConfig, subscriptionKey: qnaConfig.subscriptionKey, qnaRegion: qnaConfig.qnaRegion },
         crossTrainConfig,
         this.settings.downsampling
       );
-      await this.builder.build(luFiles, qnaFiles);
+      await this.builder.build(luFiles, qnaFiles, Array.from(this.files.values()) as FileInfo[]);
     }
   };
 
@@ -703,10 +727,11 @@ export class BotProject implements IBotProject {
     const patterns = [
       '**/*.dialog',
       '**/*.dialog.schema',
+      '**/*.form-dialog',
       '**/*.lg',
       '**/*.lu',
       '**/*.qna',
-      'manifests/*.json',
+      '**/*.json',
       'sdk.override.schema',
       'sdk.override.uischema',
       'sdk.schema',
@@ -717,7 +742,10 @@ export class BotProject implements IBotProject {
       // load only from the data dir, otherwise may get "build" versions from
       // deployment process
       const root = this.dataDir;
-      const paths = await this.fileStorage.glob([pattern, '!(generated/**)', '!(runtime/**)'], root);
+      const paths = await this.fileStorage.glob(
+        [pattern, '!(generated/**)', '!(runtime/**)', '!(recognizers/**)'],
+        root
+      );
 
       for (const filePath of paths.sort()) {
         const realFilePath: string = Path.join(root, filePath);

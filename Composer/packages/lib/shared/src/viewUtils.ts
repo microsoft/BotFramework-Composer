@@ -3,7 +3,7 @@
 
 import get from 'lodash/get';
 import formatMessage from 'format-message';
-import { SDKKinds } from '@bfc/types';
+import { SDKKinds } from '@botframework-composer/types';
 
 import { conceptLabels as conceptLabelsFn } from './labelMap';
 import { PromptTab, PromptTabTitles } from './promptTabs';

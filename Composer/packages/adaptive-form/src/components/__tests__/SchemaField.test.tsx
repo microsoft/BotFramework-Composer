@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render, waitFor, fireEvent } from '@bfc/test-utils';
+import { render, waitFor, fireEvent } from '@botframework-composer/test-utils';
 import { FieldProps, useFormConfig } from '@bfc/extension-client';
 import assign from 'lodash/assign';
 

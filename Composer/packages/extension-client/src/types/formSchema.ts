@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { MicrosoftIRecognizer, SDKKinds, SDKRoles, ShellApi, ShellData } from '@bfc/types';
+import { MicrosoftIRecognizer, SDKKinds, SDKRoles, ShellApi, ShellData } from '@botframework-composer/types';
 
 import { FieldWidget } from './form';
 
@@ -9,10 +9,11 @@ type UIOptionValue<R = string, D = any> = R | UIOptionFunc<R, D>;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type UIOptionFunc<R, D> = (data: D) => R;
 
-export interface Fieldset {
+export interface Fieldset<F = string[] | Fieldset<string[]>[]> {
   title: UIOptionValue<string>;
-  fields?: string[];
+  fields?: F;
   defaultExpanded?: boolean;
+  description?: UIOptionValue<string>;
   itemKey?: string;
 }
 
