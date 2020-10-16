@@ -57,7 +57,7 @@ You can define LG templates in two places: The inline LG editor and **Bot Respon
 
 ![LG inline editor](./media/language-generation/lg-inline-editor.png)
 
-Select the **Bot Responses** icon (or the bot icon when collapsed) in the navigation pane to see the LG editor listing all LG templates defined in the bot. Toggle **Edit Mode** on the upper right corner to edit your LG template.
+Select the **Bot Responses** icon (or the bot icon when collapsed) in the navigation pane to see the LG editor listing all LG templates defined in the bot. Toggle **Show code** on the upper right corner to edit your LG template.
 
 ![Bot Responses](./media/language-generation/Bot-Responses.png)
 

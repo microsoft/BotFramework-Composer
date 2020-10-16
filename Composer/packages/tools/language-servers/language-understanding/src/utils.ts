@@ -9,6 +9,7 @@ export interface LUOption {
   projectId: string;
   fileId: string;
   sectionId: string;
+  luFeatures: any;
 }
 
 export interface Template {
@@ -22,6 +23,7 @@ export interface LUDocument {
   projectId?: string;
   fileId?: string;
   sectionId?: string;
+  luFeatures: any;
   index: () => any;
 }
 

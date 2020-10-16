@@ -1,16 +1,20 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { SDKKinds } from '@bfc/types';
+import { SDKKinds } from '@botframework-composer/types';
 
 import { UIOptions } from './formSchema';
 import { FlowEditorWidgetMap, FlowWidget } from './flowSchema';
 import { MenuOptions } from './menuSchema';
 import { RecognizerOptions } from './recognizerSchema';
+import { FieldWidget } from './form';
 
 export interface PluginConfig {
   uiSchema?: UISchema;
-  flowWidgets?: FlowEditorWidgetMap;
+  widgets?: {
+    flow?: FlowEditorWidgetMap;
+    recognizer?: { [name: string]: FieldWidget };
+  };
 }
 
 export type UISchema = {

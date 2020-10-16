@@ -4,8 +4,8 @@
 import path from 'path';
 
 import glob from 'globby';
-import { readJson, ensureDir, remove } from 'fs-extra';
-import { ExtensionBundle, PackageJSON, ExtensionMetadata } from '@bfc/types';
+import { readJson, ensureDir, remove, pathExists } from 'fs-extra';
+import { ExtensionBundle, PackageJSON, ExtensionMetadata } from '@botframework-composer/types';
 
 import { ExtensionContext } from '../extensionContext';
 import logger from '../logger';
@@ -62,6 +62,8 @@ export class ExtensionManagerImp {
 
     await this.loadFromDir(this.builtinDir, true);
     await this.loadFromDir(this.remoteDir);
+
+    await this.cleanManifest();
   }
 
   /**
@@ -217,6 +219,15 @@ export class ExtensionManagerImp {
     }
 
     return bundle.path;
+  }
+
+  private async cleanManifest() {
+    for (const ext of this.getAll()) {
+      if (!(await pathExists(ext.path))) {
+        log('Removing %s. It is in the manifest but could not be located.', ext.id);
+        this.remove(ext.id);
+      }
+    }
   }
 
   private async getPackageJson(id: string, dir: string): Promise<PackageJSON | undefined> {

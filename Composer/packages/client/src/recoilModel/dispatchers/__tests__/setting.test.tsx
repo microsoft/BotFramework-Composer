@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useRecoilValue } from 'recoil';
-import { act } from '@bfc/test-utils/lib/hooks';
+import { act } from '@botframework-composer/test-utils/lib/hooks';
 
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import { settingsState, currentProjectIdState, skillsState } from '../../atoms';
@@ -109,6 +109,7 @@ describe('setting dispatcher', () => {
         MicrosoftAppPassword: 'test',
         luis: { ...settings.luis, authoringKey: 'test', endpointKey: 'test' },
         qna: { ...settings.qna, subscriptionKey: 'test', endpointKey: 'test' },
+        luFeatures: {},
       });
     });
 

@@ -22,7 +22,7 @@
   },
   "author": "",
   "nodemonConfig": {
-    "exec": "cross-env TS_NODE_FILES=true node -r ts-node/register src/init.ts",
+    "exec": "cross-env TS_NODE_FILES=true node --inspect=9228 -r ts-node/register src/init.ts",
     "watch": [
       "src",
       "../extension/lib"
@@ -31,7 +31,7 @@
     "delay": 2
   },
   "devDependencies": {
-    "@bfc/test-utils": "*",
+    "@botframework-composer/test-utils": "*",
     "@types/archiver": "^3.1.0",
     "@types/body-parser": "^1.17.0",
     "@types/compression": "^1.0.1",
@@ -56,15 +56,15 @@
   "dependencies": {
     "@azure/ms-rest-js": "^2.0.6",
     "@bfc/client": "*",
+    "@bfc/extension": "*",
     "@bfc/indexers": "*",
     "@bfc/intellisense-languageserver": "*",
     "@bfc/lg-languageserver": "*",
     "@bfc/lu-languageserver": "*",
-    "@bfc/extension": "*",
     "@bfc/shared": "*",
     "@microsoft/bf-dispatcher": "^4.10.0-preview.141651",
-    "@microsoft/bf-generate-library": "^4.10.0-daily.20200827.161452",
-    "@microsoft/bf-lu": "^4.10.0-dev.20200808.5a7c973",
+    "@microsoft/bf-generate-library": "^4.10.0-daily.20201008.172736",
+    "@microsoft/bf-lu": "^4.11.0-dev.20201005.7e5e1b8",
     "archiver": "^5.0.2",
     "axios": "^0.19.2",
     "azure-storage": "^2.10.3",
@@ -88,6 +88,7 @@
     "luis-apis": "2.5.1",
     "minimatch": "^3.0.4",
     "morgan": "^1.9.1",
+    "multimatch": "^4.0.0",
     "passport": "^0.4.1",
     "path-to-regexp": "^6.1.0",
     "portfinder": "1.0.25",

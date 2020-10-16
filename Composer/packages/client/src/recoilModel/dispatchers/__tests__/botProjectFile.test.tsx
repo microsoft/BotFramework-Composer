@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { selector, useRecoilValue, selectorFamily, useRecoilState } from 'recoil';
-import { act, RenderHookResult, HookResult } from '@bfc/test-utils/lib/hooks';
+import { act, RenderHookResult, HookResult } from '@botframework-composer/test-utils/lib/hooks';
 import noop from 'lodash/noop';
 
 import { botProjectFileDispatcher } from '../botProjectFile';

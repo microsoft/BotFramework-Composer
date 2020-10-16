@@ -21,9 +21,10 @@ export const App: React.FC = () => {
   }, [appLocale]);
 
   const { fetchExtensions } = useRecoilValue(dispatcherState);
+
   useEffect(() => {
     fetchExtensions();
-  });
+  }, []);
 
   return (
     <Fragment key={appLocale}>

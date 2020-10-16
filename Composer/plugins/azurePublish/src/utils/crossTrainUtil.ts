@@ -7,7 +7,8 @@
  * for more usage detail, please check client/__tests__/utils/luUtil.test.ts
  */
 import keys from 'lodash/keys';
-import { LuFile, DialogInfo, IIntentTrigger, FieldNames, SDKKinds, FileInfo } from '@bfc/shared';
+import { FieldNames } from '@bfc/shared';
+import { LuFile, DialogInfo, IIntentTrigger, SDKKinds, FileInfo } from '@botframework-composer/types';
 import { luIndexer } from '@bfc/indexers';
 
 import { getBaseName, getExtension } from './fileUtil';
@@ -153,7 +154,7 @@ export interface ICrossTrainConfig {
       verbose: true
     }
   */
-export function createCrossTrainConfig(dialogs: any[], luFilesInfo: FileInfo[]): ICrossTrainConfig {
+export function createCrossTrainConfig(dialogs: any[], luFilesInfo: FileInfo[], luFeatures = {}): ICrossTrainConfig {
   const triggerRules = {};
   const countMap = {};
   const wrapDialogs: { [key: string]: any }[] = [];
@@ -161,7 +162,7 @@ export function createCrossTrainConfig(dialogs: any[], luFilesInfo: FileInfo[]):
     wrapDialogs.push(parse(dialog));
   }
 
-  const luFiles = luIndexer.index(luFilesInfo);
+  const luFiles = luIndexer.index(luFilesInfo, luFeatures);
 
   //map all referred lu files
   luFiles.forEach((file) => {
