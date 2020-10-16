@@ -138,7 +138,7 @@ async function monitorWindowForQueryParams(
         if (error || errorDescription) {
           window.removeListener('closed', prematureCloseListener);
           window.close();
-          reject({ error, errorDescription });
+          return reject({ error, errorDescription });
         }
 
         // pull desired params off of the url
