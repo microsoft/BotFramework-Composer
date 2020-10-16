@@ -85,7 +85,7 @@ const Main: React.FC = () => {
       data: "string",
     },
     {
-      key: "contentifoo",
+      key: "content",
       name: "Content",
       minWidth: 200,
       maxWidth: 800,
