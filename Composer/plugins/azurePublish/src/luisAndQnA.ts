@@ -6,7 +6,7 @@ import { promisify } from 'util';
 
 import * as fs from 'fs-extra';
 import * as rp from 'request-promise';
-import { ILuisConfig, FileInfo, IQnAConfig } from '@bfc/shared';
+import { ILuisConfig, FileInfo, IQnAConfig } from '@botframework-composer/types';
 
 import { ICrossTrainConfig, createCrossTrainConfig } from './utils/crossTrainUtil';
 import { BotProjectDeployLoggerType } from './botProjectLoggerType';

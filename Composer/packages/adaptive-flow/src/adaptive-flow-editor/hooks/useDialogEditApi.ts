@@ -1,10 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { BaseSchema, ShellApi } from '@bfc/types';
+import { BaseSchema, ShellApi } from '@botframework-composer/types';
 import { DialogUtils } from '@bfc/shared';
-
-import { useActionApi } from './useActionApi';
 
 export interface DialogApiContext {
   copyAction: (actionId: string) => BaseSchema;
@@ -16,7 +14,7 @@ export interface DialogApiContext {
 const { disableNodes, enableNodes, appendNodesAfter, queryNodes, insertNodes, deleteNode, deleteNodes } = DialogUtils;
 
 export function useDialogEditApi(shellApi: ShellApi) {
-  const { constructActions, copyActions, deleteAction, deleteActions } = useActionApi(shellApi);
+  const { constructActions, copyActions, deleteAction, deleteActions } = shellApi;
 
   async function insertActions(
     dialogId: string,

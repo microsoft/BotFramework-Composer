@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Shell } from '@bfc/types';
+import { Shell } from '@botframework-composer/types';
 
 import * as ExtensionClient from '../index';
 

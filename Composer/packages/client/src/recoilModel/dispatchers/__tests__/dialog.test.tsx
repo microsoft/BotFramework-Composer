@@ -3,7 +3,7 @@
 
 import { useRecoilValue } from 'recoil';
 import test from '@bfc/indexers';
-import { act } from '@bfc/test-utils/lib/hooks';
+import { act } from '@botframework-composer/test-utils/lib/hooks';
 
 import { dialogsDispatcher } from '../dialogs';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';

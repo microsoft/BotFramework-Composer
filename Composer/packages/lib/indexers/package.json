@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@bfc/shared": "*",
-    "@bfc/test-utils": "*",
+    "@botframework-composer/test-utils": "*",
     "@types/lodash": "^4.14.146",
     "rimraf": "^2.6.3"
   },

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { fireEvent } from '@bfc/test-utils';
+import { fireEvent } from '@botframework-composer/test-utils';
 
 import { renderWithRecoil } from '../testUtils/renderWithRecoil';
 import CreateQnAFromUrlModal from '../../src/components/QnA/CreateQnAFromUrlModal';

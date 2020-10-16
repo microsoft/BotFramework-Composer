@@ -22,6 +22,7 @@
     "@bfc/indexers": "../../packages/lib/indexers",
     "@bfc/shared": "../../packages/lib/shared",
     "@microsoft/bf-lu": "^4.11.0-dev.20201013.7ccb128",
+    "@botframework-composer/types": "0.0.1",
     "@microsoft/bf-luis-cli": "^4.10.0-dev.20200721.8bb21ac",
     "@types/archiver": "3.1.0",
     "@types/fs-extra": "8.1.0",

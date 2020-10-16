@@ -731,7 +731,7 @@ export class BotProject implements IBotProject {
       '**/*.lg',
       '**/*.lu',
       '**/*.qna',
-      'manifests/*.json',
+      '**/*.json',
       'sdk.override.schema',
       'sdk.override.uischema',
       'sdk.schema',
