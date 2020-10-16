@@ -14,6 +14,7 @@ import { mergeDeep } from './mergeDeep';
 import { BotProjectDeploy } from './deploy';
 import { BotProjectProvision } from './provision';
 import { BackgroundProcessManager } from './backgroundProcessManager';
+import { ProvisionConfig } from './provision';
 import schema from './schema';
 
 // This option controls whether the history is serialized to a file between sessions with Composer
@@ -41,19 +42,6 @@ interface PublishConfig {
 interface ResourceType {
   key: string;
   // other keys TBD
-  [key: string]: any;
-}
-
-interface ProvisionConfig {
-  name: string; // profile name
-  type: string; // webapp or function
-  subscription: { subscriptionId: string; tenantId: string; displayName: string };
-  hostname: string; // for previous bot, it's ${name}-${environment}
-  location: { id: string; name: string; displayName: string };
-  externalResources: ResourceType[];
-  choice: string;
-  accessToken: string;
-  graphToken: string;
   [key: string]: any;
 }
 
@@ -321,7 +309,7 @@ export default async (composer: any): Promise<void> => {
       const { hostname, subscription, accessToken, graphToken, location } = config;
       // Create the object responsible for actually taking the provision actions.
       const azureProvisioner = new BotProjectProvision({
-        subscriptionId: subscription.subscriptionId,
+        subscription: subscription,
         logger: (msg: any) => {
           this.logger(msg);
           BackgroundProcessManager.updateProcess(jobId, 202, msg.message);
@@ -329,6 +317,9 @@ export default async (composer: any): Promise<void> => {
         accessToken: accessToken,
         graphToken: graphToken,
         tenantId: subscription.tenantId, // does the tenantId ever come back from the subscription API we use? it does not appear in my tests.
+        hostname: hostname,
+        externalResources: [],
+        location: location
       });
 
       // perform the provision using azureProvisioner.create.
