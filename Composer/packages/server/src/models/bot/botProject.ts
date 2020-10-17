@@ -549,7 +549,7 @@ export class BotProject implements IBotProject {
     return qnaEndpointKey;
   };
 
-  public async generateDialog(name: string) {
+  public async generateDialog(name: string, templateDirs?: string[]) {
     const defaultLocale = this.settings?.defaultLanguage || defaultLanguage;
     const relativePath = defaultFilePath(this.name, defaultLocale, `${name}${FileExtensions.FormDialogSchema}`);
     const schemaPath = Path.resolve(this.dir, relativePath);
@@ -568,7 +568,7 @@ export class BotProject implements IBotProject {
       outDir,
       metaSchema: undefined,
       allLocales: undefined,
-      templateDirs: [],
+      templateDirs: templateDirs || [],
       force: false,
       merge: true,
       singleton: true,

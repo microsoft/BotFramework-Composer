@@ -29,6 +29,9 @@
   "a_profile_with_that_name_already_exists_7c559958": {
     "message": "A profile with that name already exists."
   },
+  "a_property_is_a_piece_of_information_that_your_bot_eccd34bf": {
+    "message": "A property is a piece of information that your bot will collect. The property name is the name used in Composer; it is not necessarily the same text that will appear in your bot''s messages."
+  },
   "a_subscription_key_is_created_when_you_create_a_qn_37a6926f": {
     "message": "A subscription key is created when you create a QnA Maker resource."
   },
@@ -125,8 +128,8 @@
   "add_additional_url_bdfac25d": {
     "message": "Add additional URL"
   },
-  "add_alternative_phrasing_47234f77": {
-    "message": "add alternative phrasing"
+  "add_alternative_phrasing_17e0304c": {
+    "message": "+ Add alternative phrasing"
   },
   "add_an_intent_trigger_a9acc149": {
     "message": "Add an intent trigger"
@@ -139,6 +142,9 @@
   },
   "add_multiple_comma_separated_synonyms_2639283f": {
     "message": "Add multiple comma-separated synonyms"
+  },
+  "add_new_answer_9de3808e": {
+    "message": "Add new answer"
   },
   "add_new_dialog_25f12c9": {
     "message": "Add new dialog"
@@ -155,6 +161,9 @@
   "add_new_propertyname_bedf7dc6": {
     "message": "Add new { propertyName }"
   },
+  "add_new_question_85612b7f": {
+    "message": "Add new question"
+  },
   "add_new_trigger_on_displayname_2aaf6e4c": {
     "message": "Add new trigger on { displayName }"
   },
@@ -164,8 +173,8 @@
   "add_property_d381eba3": {
     "message": "Add Property"
   },
-  "add_qna_pair_bcb1624": {
-    "message": "Add QnA Pair"
+  "add_qna_pair_16c228f0": {
+    "message": "+ Add QnA Pair"
   },
   "add_some_example_phrases_to_trigger_this_intent_pl_568eaf51": {
     "message": "> add some example phrases to trigger this intent:\n> - please tell me the weather\n> - what is the weather like in '{'city=Seattle'}'\n\n> entity definitions:\n> @ ml city"
@@ -203,8 +212,11 @@
   "answer_4620913f": {
     "message": "Answer"
   },
-  "answer_is_answer_799483f0": {
-    "message": "Answer is { answer }"
+  "answer_is_content_c6af84ad": {
+    "message": "Answer is { content }"
+  },
+  "answer_is_required_da652c05": {
+    "message": "Answer is required"
   },
   "any_constant_or_expression_to_evaluate_ba2017b1": {
     "message": "Any constant or expression to evaluate."
@@ -268,6 +280,9 @@
   },
   "ask_a_question_92ef7e0c": {
     "message": "Ask a question"
+  },
+  "at_least_one_question_is_required_6f287e04": {
+    "message": "At least one question is required"
   },
   "attachment_input_e0ece49c": {
     "message": "Attachment Input"
@@ -617,6 +632,9 @@
   "create_a_dialog_9f6c8618": {
     "message": "Create a dialog"
   },
+  "create_a_knowledge_base_from_scratch_or_import_kno_2eb38ac0": {
+    "message": "Create a knowledge base from scratch or import knowledge from a URL or PDF files"
+  },
   "create_a_name_for_the_project_which_will_be_used_t_57e9b690": {
     "message": "Create a name for the project which will be used to name the application: (projectname-environment-LUfilename)"
   },
@@ -659,6 +677,15 @@
   "create_from_template_87e12c94": {
     "message": "Create from template"
   },
+  "create_kb_e78571ba": {
+    "message": "Create KB"
+  },
+  "create_kb_from_scratch_eddd037a": {
+    "message": "Create KB from scratch"
+  },
+  "create_kb_from_url_or_file_49ad6671": {
+    "message": "Create KB from URL or file"
+  },
   "create_knowledge_base_db6d66c4": {
     "message": "Create knowledge base"
   },
@@ -671,8 +698,17 @@
   "create_new_folder_19d3faa4": {
     "message": "Create new folder"
   },
+  "create_new_kb_1c4f86a0": {
+    "message": "Create new KB"
+  },
+  "create_new_knowledge_base_d15d6873": {
+    "message": "Create new knowledge base"
+  },
   "create_new_knowledge_base_e14d07a5": {
     "message": "Create New Knowledge Base"
+  },
+  "create_new_knowledge_base_from_scratch_638c4fd2": {
+    "message": "Create new knowledge base from scratch"
   },
   "create_or_edit_skill_manifest_8ad98da9": {
     "message": "Create or edit skill manifest"
@@ -766,6 +802,9 @@
   },
   "delete_form_dialog_schema_892df4e8": {
     "message": "Delete form dialog schema"
+  },
+  "delete_knowledge_base_66e3a7f1": {
+    "message": "Delete knowledge base"
   },
   "delete_language_1527609d": {
     "message": "Delete language"
@@ -902,11 +941,14 @@
   "edit_in_json_75d0d754": {
     "message": "Edit in JSON"
   },
-  "edit_mode_7e07cfdf": {
-    "message": "Edit mode"
+  "edit_kb_name_5e2d8c5b": {
+    "message": "Edit KB name"
   },
   "edit_property_dd6a1172": {
     "message": "Edit Property"
+  },
+  "edit_source_45af68b4": {
+    "message": "Edit source"
   },
   "ejecting_runtime_f6c90614": {
     "message": "Ejecting runtime..."
@@ -923,11 +965,17 @@
   "emit_event_32aa6583": {
     "message": "Emit Event"
   },
+  "empty_qna_icon_34c180c6": {
+    "message": "Empty QnA Icon"
+  },
   "enable_6f5d1328": {
     "message": "Enable"
   },
   "enable_line_numbers_to_refer_to_code_lines_by_numb_e5ba66ea": {
     "message": "Enable line numbers to refer to code lines by number."
+  },
+  "enable_multi_turn_extraction_8a168892": {
+    "message": "Enable multi-turn extraction"
   },
   "enabled_ba7cab66": {
     "message": "Enabled"
@@ -959,20 +1007,14 @@
   "enter_a_min_value_c3030813": {
     "message": "Enter a min value"
   },
-  "enter_a_question_74f2e045": {
-    "message": "Enter a question"
-  },
-  "enter_an_answer_84152a83": {
-    "message": "Enter an answer"
+  "enter_a_url_or_browse_to_upload_a_file_88a783fa": {
+    "message": "Enter a URL or browse to upload a file "
   },
   "enterprise_assistant_434df551": {
     "message": "Enterprise Assistant"
   },
   "entities_ef09392c": {
     "message": "Entities"
-  },
-  "enum_help_text_434bd44f": {
-    "message": "Enum help text"
   },
   "environment_68aed6d3": {
     "message": "Environment"
@@ -1070,8 +1112,8 @@
   "extract_question_and_answer_pairs_from_an_online_f_c1e12724": {
     "message": "Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence. "
   },
-  "extracting_qna_pairs_from_urls_eaed1b1c": {
-    "message": "Extracting QNA pairs from { urls }"
+  "extracting_qna_pairs_from_url_b0331bba": {
+    "message": "Extracting QNA pairs from { url }"
   },
   "fallback_text_e5ff1cb7": {
     "message": "Fallback Text"
@@ -1114,6 +1156,9 @@
   },
   "for_each_page_3b4d4b69": {
     "message": "For Each Page"
+  },
+  "for_properties_of_type_list_or_enum_your_bot_accep_9e7649c6": {
+    "message": "For properties of type list (or enum), your bot accepts only the values you define. After your dialog is generated, you can provide synonyms for each value."
   },
   "form_dialog_schema_actions_c9f1c26": {
     "message": "Form dialog schema actions"
@@ -1220,9 +1265,6 @@
   "id_already_exists_please_enter_a_unique_file_name_174913a3": {
     "message": "{ id } already exists. Please enter a unique file name."
   },
-  "id_is_id_c0fc7a7d": {
-    "message": "id is { id }"
-  },
   "if_condition_56c9be4a": {
     "message": "If Condition"
   },
@@ -1234,9 +1276,6 @@
   },
   "if_you_already_have_a_qna_account_provide_the_info_466d6a4b": {
     "message": "If you already have a QNA account, provide the information below. If you do not have an account yet, create a (free) account first."
-  },
-  "import_qna_from_url_26a99161": {
-    "message": "Import QnA From Url"
   },
   "import_schema_75659c5f": {
     "message": "Import schema"
@@ -1328,6 +1367,9 @@
   "kb_d9c53902": {
     "message": "KB"
   },
+  "kb_name_cannot_contain_speacial_characters_6588abda": {
+    "message": "KB name cannot contain speacial characters."
+  },
   "key_cannot_be_blank_dccc1b46": {
     "message": "Key cannot be blank"
   },
@@ -1336,6 +1378,12 @@
   },
   "keys_must_be_unique_2028cef3": {
     "message": "Keys must be unique"
+  },
+  "knowledge_base_name_7d83bbe4": {
+    "message": "Knowledge base name"
+  },
+  "knowledge_source_dd66f38f": {
+    "message": "Knowledge source"
   },
   "l_startline_startcharacter_l_endline_endcharacter_72bc2e5d": {
     "message": "L{ startLine }:{ startCharacter } - L{ endLine }:{ endCharacter } "
@@ -1451,6 +1499,9 @@
   "lu_editor_d09fb2b0": {
     "message": "LU editor"
   },
+  "lu_file_already_exist_7f118089": {
+    "message": "lu file already exist"
+  },
   "lu_file_id_not_found_8732d33e": {
     "message": "LU file { id } not found"
   },
@@ -1487,14 +1538,17 @@
   "manifest_version_1edc004a": {
     "message": "Manifest Version"
   },
+  "manually_add_question_and_answer_pairs_to_create_a_f1318c4e": {
+    "message": "Manually add question and answer pairs to create a KB"
+  },
   "maximum_f0e8e5e4": {
     "message": "Maximum"
   },
-  "maximum_help_text_7f3e6562": {
-    "message": "Maximum help text"
-  },
   "mb_8f9f9e84": {
     "message": "MB"
+  },
+  "menu_items_2d66492c": {
+    "message": "Menu items"
   },
   "message_5c38209d": {
     "message": "Message"
@@ -1534,9 +1588,6 @@
   },
   "minimum_f31b05ab": {
     "message": "Minimum"
-  },
-  "minimum_help_text_6ab5b190": {
-    "message": "Minimum help text"
   },
   "missing_definition_for_defname_33f2b594": {
     "message": "Missing definition for { defName }"
@@ -1769,6 +1820,12 @@
   "optional_properties_2c23c7c6": {
     "message": "Optional properties"
   },
+  "optional_setting_a_maximum_value_enables_your_bot__1ec30919": {
+    "message": "Optional. Setting a maximum value enables your bot to reject a value that is too large and re-prompt the user for a new value."
+  },
+  "optional_setting_a_minimum_value_enables_your_bot__f1fd4bce": {
+    "message": "Optional. Setting a minimum value enables your bot to reject a value that is too small and re-prompt the user for a new value."
+  },
   "or_4f7d4edb": {
     "message": "Or: "
   },
@@ -1928,9 +1985,6 @@
   "property_type_e38cf7e4": {
     "message": "Property Type"
   },
-  "property_type_help_text_8a2c202d": {
-    "message": "Property type help text"
-  },
   "provide_a_brief_description_it_will_appear_on_the__f962eb38": {
     "message": "Provide a brief description. It will appear on the publish history list."
   },
@@ -1996,6 +2050,12 @@
   },
   "question_9121487": {
     "message": "Question"
+  },
+  "question_is_content_3952e657": {
+    "message": "Question is { content }"
+  },
+  "question_is_empty_now_f0b5733e": {
+    "message": "Question is empty now"
   },
   "randomselector_4a5274f1": {
     "message": "RandomSelector"
@@ -2387,6 +2447,9 @@
   "the_page_you_are_looking_for_can_t_be_found_a3b75795": {
     "message": "The page you are looking for can''t be found."
   },
+  "the_property_type_defines_the_expected_input_the_t_58a6ef09": {
+    "message": "The property type defines the expected input. The type can be a list (or enum) of defined values or a data format, such as a date, email, number, or string."
+  },
   "the_return_type_does_not_match_2ae72548": {
     "message": "the return type does not match"
   },
@@ -2431,6 +2494,9 @@
   },
   "this_operation_cannot_be_completed_the_skill_is_al_4886d311": {
     "message": "This operation cannot be completed. The skill is already part of the Bot Project"
+  },
+  "this_option_allows_your_users_to_give_multiple_val_d2dd0d58": {
+    "message": "This option allows your users to give multiple values for this property."
   },
   "this_trigger_type_is_not_supported_by_the_regex_re_2c3b7c46": {
     "message": "This trigger type is not supported by the RegEx recognizer and will not be fired."
@@ -2498,6 +2564,9 @@
   "toggle_extension_e41de2d2": {
     "message": "Toggle extension"
   },
+  "toggle_show_all_61f19d77": {
+    "message": "Toggle show all"
+  },
   "toolbar_bafd4228": {
     "message": "toolbar"
   },
@@ -2524,6 +2593,9 @@
   },
   "try_again_ad656c3c": {
     "message": "Try again"
+  },
+  "type_a_name_that_describes_this_content_d1a910b6": {
+    "message": "Type a name that describes this content"
   },
   "type_and_press_enter_33a2905d": {
     "message": "Type and press enter"
@@ -2752,6 +2824,9 @@
   },
   "yes_dde87d5": {
     "message": "Yes"
+  },
+  "you_already_have_a_kb_with_that_name_choose_anothe_fc2f7156": {
+    "message": "You already have a KB with that name.Choose another name and try again."
   },
   "you_are_about_to_publish_your_bot_to_the_profile_b_79a6a226": {
     "message": "You are about to publish your bot to the profile below. Do you want to proceed?"
