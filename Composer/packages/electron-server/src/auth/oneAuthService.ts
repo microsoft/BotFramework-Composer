@@ -17,6 +17,17 @@ import { OneAuthBase } from './oneAuthBase';
 
 const log = logger.extend('one-auth');
 
+let oneAuth;
+if (isWindows()) {
+  oneAuth = require('oneauth-win64');
+}
+if (isMac()) {
+  oneAuth = require('oneauth-mac');
+}
+if (isLinux()) {
+  oneAuth = {};
+}
+
 const COMPOSER_APP_ID = 'com.microsoft.BotFrameworkComposer';
 const COMPOSER_APP_NAME = 'BotFrameworkComposer';
 const COMPOSER_APP_VERSION = app.getVersion();
@@ -37,6 +48,17 @@ export class OneAuthInstance extends OneAuthBase {
     log('Using genuine OneAuth.');
     // will wait until called to initialize (so that we're sure we have a browser window)
     this.initialized = false;
+    if (isWindows()) {
+      this._oneAuth = require('oneauth-win64');
+    }
+    if (isMac()) {
+      this._oneAuth = require('oneauth-mac');
+    }
+    this._oneAuth = {};
+  }
+
+  private get oneAuth() {
+    return this._oneAuth;
   }
 
   private initialize() {

@@ -23,12 +23,19 @@ import { isMac, isWindows } from './utility/platform';
 import { parseDeepLinkUrl } from './utility/url';
 import { OneAuthService } from './auth/oneAuthService';
 
+const env = log.extend('env');
+env('%O', process.env);
+
 const microsoftLogoPath = join(__dirname, '../resources/ms_logo.svg');
 let currentAppLocale = getAppLocale().appLocale;
 
 const error = log.extend('error');
-let deeplinkUrl = '';
 let serverPort;
+let signalThatMainWindowIsShowing;
+const waitForMainWindowToShow = new Promise((resolve) => {
+  signalThatMainWindowIsShowing = resolve;
+});
+
 // webpack dev server runs on :3000
 const getBaseUrl = () => {
   if (isDevelopment) {
@@ -47,16 +54,6 @@ if (app.isPackaged) {
 log(`${process.env.NODE_ENV} environment detected.`);
 
 function processArgsForWindows(args: string[]): string {
-  const envId = '5d8804e2-ed21-4ad1-8eee-e86db6939406';
-  const botId = 'f2a9af02-b019-4094-9474-f3d5aa68106c';
-  const payload = {
-    botId,
-    description: 'A bot that reports the current weather.',
-    envId,
-    name: 'toanzian-test-bot1',
-    tenantId: '72f988bf-86f1-41af-91ab-2d7cd011db47',
-  };
-  args.push(`bfcomposer://import?source=pva&payload=${encodeURIComponent(JSON.stringify(payload))}`);
   const deepLinkUrl = args.find((arg) => arg.startsWith(composerProtocol));
   if (deepLinkUrl) {
     return parseDeepLinkUrl(deepLinkUrl);
@@ -75,7 +72,7 @@ async function createAppDataDir() {
   process.env.COMPOSER_EXTENSION_MANIFEST = join(composerAppDataPath, 'extensions.json');
   process.env.COMPOSER_EXTENSION_DATA_DIR = join(composerAppDataPath, 'extension-data');
   process.env.COMPOSER_REMOTE_EXTENSIONS_DIR = join(composerAppDataPath, 'extensions');
-  process.env.COMPOSER_REMOTE_TEMPLATE_DIR = join(composerAppDataPath, 'remoteTemplates');
+  process.env.COMPOSER_REMOTE_TEMPLATES_DIR = join(composerAppDataPath, 'remoteTemplates');
   process.env.COMPOSER_TEMP_DIR = join(composerAppDataPath, 'temp');
 
   log('creating composer app data path at: ', composerAppDataPath);
@@ -162,13 +159,26 @@ async function main(show = false) {
       mainWindow.webContents.openDevTools();
     }
 
-    if (isWindows()) {
-      deeplinkUrl = processArgsForWindows(process.argv);
-    }
-    await mainWindow.webContents.loadURL(getBaseUrl() + deeplinkUrl);
+    await mainWindow.loadURL(getBaseUrl());
 
     if (show) {
       mainWindow.show();
+    }
+
+    if (isWindows()) {
+      // wait until the main window is showing and then open deep links
+      waitForMainWindowToShow
+        .then(async () => {
+          log('[Windows] Main window is now showing. Processing deep link if any.');
+          const deeplinkUrl = processArgsForWindows(process.argv);
+          if (deeplinkUrl) {
+            log('[Windows] Loading deeplink: %s', deeplinkUrl);
+            await mainWindow.webContents.loadURL(getBaseUrl() + deeplinkUrl);
+          }
+        })
+        .catch((e) =>
+          console.error('[Windows] Error while waiting for main window to show before processing deep link: ', e)
+        );
     }
 
     mainWindow.on('closed', () => {
@@ -211,8 +221,10 @@ async function run() {
   const gotTheLock = app.requestSingleInstanceLock();
   if (gotTheLock) {
     app.on('second-instance', async (e, argv) => {
+      let deeplinkUrl = '';
       if (isWindows()) {
         deeplinkUrl = processArgsForWindows(argv);
+        log('[Windows] Loading deeplink: %s', deeplinkUrl);
       }
 
       const mainWindow = ElectronWindow.getInstance().browserWindow;
@@ -253,7 +265,7 @@ async function run() {
     initSettingsListeners();
     await main();
 
-    setTimeout(startApp, 500);
+    setTimeout(() => startApp(signalThatMainWindowIsShowing), 500);
   });
 
   // Quit when all windows are closed.
@@ -277,10 +289,18 @@ async function run() {
     // Protocol handler for osx
     app.on('open-url', (event, url) => {
       event.preventDefault();
-      deeplinkUrl = parseDeepLinkUrl(url);
       if (ElectronWindow.isBrowserWindowCreated) {
-        const mainWindow = ElectronWindow.getInstance().browserWindow;
-        mainWindow?.loadURL(getBaseUrl() + deeplinkUrl);
+        waitForMainWindowToShow
+          .then(() => {
+            log('[Mac] Main window is now showing. Processing deep link if any.');
+            const deeplinkUrl = parseDeepLinkUrl(url);
+            log('[Mac] Loading deeplink: %s', deeplinkUrl);
+            const mainWindow = ElectronWindow.getInstance().browserWindow;
+            mainWindow?.loadURL(getBaseUrl() + deeplinkUrl);
+          })
+          .catch((e) =>
+            console.error('[Mac] Error while waiting for main window to show before processing deep link: ', e)
+          );
       }
     });
   });
