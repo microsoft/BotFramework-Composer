@@ -1,5 +1,8 @@
 import { ElectronContext, useElectronContext } from '../utility/electronContext';
 import { isElectron } from '../utility/isElectron';
+import logger from '../logger';
+
+const log = logger.extend('electron-auth-provider');
 
 abstract class AuthProvider {
   constructor(protected config: OAuthConfig) {}
@@ -8,9 +11,8 @@ abstract class AuthProvider {
 }
 
 type TokenRecord = {
-  expiryTime: Date;
+  expiryTime: number;
   accessToken: string;
-  idToken: string;
 };
 
 type TokenCache = {
@@ -19,6 +21,8 @@ type TokenCache = {
 
 export type OAuthOptions = {
   clientId: string;
+  /** ID of the resource to fetch an access token for -- can either be a URI (https://graph.microsoft.com) or a <guid>[/scope] (abc-123-456) */
+  targetResource?: string;
   scopes: string[];
 };
 
@@ -34,28 +38,37 @@ class ElectronAuthProvider extends AuthProvider {
   constructor(config: OAuthConfig) {
     super(config);
     this.tokenCache = {};
+    log('Initialized.');
   }
 
   async getAccessToken(options: OAuthOptions): Promise<string> {
-    const { getAccessToken, loginAndGetIdToken } = this.electronContext;
+    const { getAccessToken } = this.electronContext;
+    const { targetResource } = options;
+
+    if (process.platform === 'linux') {
+      log('Auth login flow is currently unsupported in Linux.');
+      return '';
+    }
+
+    log('Getting access token.');
 
     // try to get a cached token
     const cachedToken = this.getCachedToken(options);
     if (!!cachedToken && Date.now() <= cachedToken.expiryTime.valueOf()) {
-      console.log('returning cached token');
+      log('Returning cached token.');
       return cachedToken.accessToken;
     }
 
     try {
       // otherwise get a fresh token
-      console.log('getting fresh token');
-      const idToken = await loginAndGetIdToken(options);
-      const { accessToken, acquiredAt, expiresIn } = await getAccessToken({ ...options, idToken });
-      this.cacheTokens({ accessToken, acquiredAt, expiresIn, idToken }, options);
+      log('Did not find cached token. Getting fresh token.');
+      const { accessToken, acquiredAt, expiryTime } = await getAccessToken({ target: targetResource });
+      this.cacheTokens({ accessToken, acquiredAt, expiryTime }, options);
 
       return accessToken;
     } catch (e) {
       // TODO: error handling
+      log('Error while trying to get access token: %O', e);
       return '';
     }
   }
@@ -74,37 +87,42 @@ class ElectronAuthProvider extends AuthProvider {
   }
 
   private cacheTokens(
-    tokenInfo: { accessToken: string; acquiredAt: number; expiresIn: number; idToken: string },
+    tokenInfo: { accessToken: string; acquiredAt: number; expiryTime: number },
     options: OAuthOptions
   ): void {
-    const { accessToken, acquiredAt, expiresIn, idToken } = tokenInfo;
+    const { accessToken, acquiredAt, expiryTime } = tokenInfo;
     const tokenHash = this.getTokenHash(options);
-    const expiresInMs = expiresIn * 1000; // expiresIn is in seconds
+    const expiresIn = expiryTime - acquiredAt;
+
+    log('Caching token...');
 
     // cache token
     this.tokenCache[tokenHash] = {
       accessToken,
-      expiryTime: new Date(acquiredAt + expiresInMs),
-      idToken,
+      expiryTime,
     };
 
+    log('Token cached.');
+
     // setup timer to refresh token
-    const timeUntilRefresh = this.tokenRefreshFactor * expiresInMs;
+    const timeUntilRefresh = this.tokenRefreshFactor * expiresIn;
     setTimeout(() => this.refreshAccessToken(options), timeUntilRefresh);
   }
 
   private async refreshAccessToken(options: OAuthOptions) {
-    console.log('refreshing token...');
-    const { getAccessToken } = this.electronContext;
+    log('Refreshing access token...');
+    const { getAccessTokenSilently } = this.electronContext;
+    const { targetResource } = options;
     const cachedToken = this.tokenCache[this.getTokenHash(options)];
     if (!!cachedToken) {
-      const { accessToken, acquiredAt, expiresIn } = await getAccessToken({ ...options, idToken: cachedToken.idToken });
-      this.cacheTokens({ accessToken, acquiredAt, expiresIn, idToken: cachedToken.idToken }, options);
+      const { accessToken, acquiredAt, expiryTime } = await getAccessTokenSilently({ target: targetResource });
+      this.cacheTokens({ accessToken, acquiredAt, expiryTime }, options);
+      log('Access token refreshed.');
     }
   }
 
   private getTokenHash(options: OAuthOptions): string {
-    return `${options.clientId}#${options.scopes.join('')}`;
+    return options.targetResource || '';
   }
 }
 

@@ -18,11 +18,42 @@ type PowerVirtualAgentsMetadata = ContentProviderMetadata & {
   triggerId?: string;
 };
 
-const baseUrl = 'https://bots.int.customercareintelligence.net'; // int = test environment
-//const baseUrl = 'https://bots.ppe.customercareintelligence.net'; // ppe
 const authCredentials = {
+  // web auth flow
   clientId: COMPOSER_1P_APP_ID,
   scopes: ['a522f059-bb65-47c0-8934-7db6e5286414/.default'], // int / ppe
+
+  // electron auth flow
+  targetResource: 'a522f059-bb65-47c0-8934-7db6e5286414',
+};
+
+const getBaseUrl = () => {
+  const pvaEnv = (process.env.COMPOSER_PVA_ENV || '').toLowerCase();
+  switch (pvaEnv) {
+    case 'prod': {
+      const url = 'https://powerva.microsoft.com';
+      console.log('prod detected, grabbing PVA content from: ', url);
+      return url;
+    }
+
+    case 'ppe': {
+      const url = 'https://bots.ppe.customercareintelligence.net';
+      console.log('ppe detected, grabbing PVA content from: ', url);
+      return url;
+    }
+
+    case 'int': {
+      const url = 'https://bots.int.customercareintelligence.net';
+      console.log('int detected, grabbing PVA content from: ', url);
+      return url;
+    }
+
+    default: {
+      const url = 'https://bots.int.customercareintelligence.net';
+      console.log('no flag detected, grabbing PVA content from: ', url);
+      return url;
+    }
+  }
 };
 
 function prettyPrintError(err: string | any): string {
@@ -95,7 +126,7 @@ export class PowerVirtualAgentsProvider extends ExternalContentProvider {
 
   private getContentUrl(): string {
     const { envId, botId } = this.metadata;
-    return `${baseUrl}/api/botmanagement/v1/environments/${envId}/bots/${botId}/composer/content`;
+    return `${getBaseUrl()}/api/botmanagement/v1/environments/${envId}/bots/${botId}/composer/content`;
   }
 
   private async getRequestHeaders() {
