@@ -2993,13 +2993,13 @@
     ts-md5 "^1.2.6"
     tslib "^1.10.0"
 
-"@microsoft/bf-generate-library@^4.10.0-daily.20201008.172736":
-  version "4.10.0-daily.20201008.172736"
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-generate-library/-/@microsoft/bf-generate-library-4.10.0-daily.20201008.172736.tgz#e5a97cb8d2b2d70524cd3094f7d49dd667cfebc0"
-  integrity sha1-5al8uNKy1wUkzTCU99Sd1mfP68A=
+"@microsoft/bf-generate-library@^4.10.0-daily.20201015.174962":
+  version "4.10.0-daily.20201015.174962"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-generate-library/-/@microsoft/bf-generate-library-4.10.0-daily.20201015.174962.tgz#42838aa5a44649a9de7bc3a7c987fe91b7ab65e3"
+  integrity sha1-QoOKpaRGSanee8OnyYf+kberZeM=
   dependencies:
-    "@microsoft/bf-lu" "^4.11.0-dev.20200831.d7b6149"
-    adaptive-expressions "^4.11.0-dev.20200916.f8fef0f"
+    "@microsoft/bf-lu" "^4.11.0-dev.20201015.a41c691"
+    adaptive-expressions "^4.11.0-dev.20201015.e56fdb7"
     ajv "^6.9.1"
     botbuilder-lg "^4.11.0-dev.20200916.f8fef0f"
     clone "^2.1.2"
@@ -3011,10 +3011,10 @@
     seedrandom "~3.0.5"
     swagger-parser "^8.0.4"
 
-"@microsoft/bf-lu@^4.11.0-dev.20200831.d7b6149":
-  version "4.11.0-dev.20201008.18fba61"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.11.0-dev.20201008.18fba61.tgz#7ffcb888309f06d518a85d342c62dc4b843d2949"
-  integrity sha1-f/y4iDCfBtUYqF00LGLcS4Q9KUk=
+"@microsoft/bf-lu@^4.11.0-dev.20201013.7ccb128":
+  version "4.11.0-dev.20201013.7ccb128"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.11.0-dev.20201013.7ccb128.tgz#9dbb5043d3f7a384d1449c73fd984016b5115ca4"
+  integrity sha512-xaG5yDxtdwNNfYa6cs9wmCGTN6K6d2sh8jfGvMt7dqs26My3c6Sus03VF74sRrp2OQXnbBLqZPVY1qzLKnjoJg==
   dependencies:
     "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
     "@azure/ms-rest-azure-js" "2.0.1"
@@ -3031,12 +3031,12 @@
     lodash "^4.17.19"
     node-fetch "~2.6.0"
     semver "^5.5.1"
-    tslib "^1.10.0"
+    tslib "^2.0.3"
 
-"@microsoft/bf-lu@^4.11.0-dev.20201013.7ccb128":
-  version "4.11.0-dev.20201013.7ccb128"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.11.0-dev.20201013.7ccb128.tgz#9dbb5043d3f7a384d1449c73fd984016b5115ca4"
-  integrity sha512-xaG5yDxtdwNNfYa6cs9wmCGTN6K6d2sh8jfGvMt7dqs26My3c6Sus03VF74sRrp2OQXnbBLqZPVY1qzLKnjoJg==
+"@microsoft/bf-lu@^4.11.0-dev.20201015.a41c691":
+  version "4.11.0-dev.20201016.24ec3b9"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.11.0-dev.20201016.24ec3b9.tgz#a0f3880087978ff09236510e25ffcf085cbeee5a"
+  integrity sha1-oPOIAIeXj/CSNlEOJf/PCFy+7lo=
   dependencies:
     "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
     "@azure/ms-rest-azure-js" "2.0.1"
@@ -4568,10 +4568,29 @@ adaptive-expressions@4.10.0-preview-150886:
     moment "^2.25.1"
     moment-timezone "^0.5.28"
 
-adaptive-expressions@4.11.0-dev.20200929.ca9de94, adaptive-expressions@^4.11.0-dev.20200916.f8fef0f:
+adaptive-expressions@4.11.0-dev.20200929.ca9de94:
   version "4.11.0-dev.20200929.ca9de94"
   resolved "https://registry.yarnpkg.com/adaptive-expressions/-/adaptive-expressions-4.11.0-dev.20200929.ca9de94.tgz#305c8462e7e0c329f55aa8cd2b2496bb81c2490c"
   integrity sha512-xq5QG19kIPio6piHEA4aPkqqi2ejYoYCBEovF55gJXaW5jKG+Q7bao3yqb2VTq9vISEyIq9VabmIlHzRQrOXyg==
+  dependencies:
+    "@microsoft/recognizers-text-data-types-timex-expression" "1.1.4"
+    "@types/atob-lite" "^2.0.0"
+    "@types/lru-cache" "^5.1.0"
+    "@types/moment-timezone" "^0.5.13"
+    "@types/xmldom" "^0.1.29"
+    antlr4ts "0.5.0-alpha.3"
+    atob-lite "^2.0.0"
+    big-integer "^1.6.48"
+    jspath "^0.4.0"
+    lodash "^4.17.19"
+    lru-cache "^5.1.1"
+    moment "^2.25.1"
+    moment-timezone "^0.5.28"
+
+adaptive-expressions@^4.11.0-dev.20201015.e56fdb7:
+  version "4.11.0-dev.20201016.dbe9571"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adaptive-expressions/-/adaptive-expressions-4.11.0-dev.20201016.dbe9571.tgz#9697c34573960c6f323dfa0518d6f1c1c3258836"
+  integrity sha1-lpfDRXOWDG8yPfoFGNbxwcMliDY=
   dependencies:
     "@microsoft/recognizers-text-data-types-timex-expression" "1.1.4"
     "@types/atob-lite" "^2.0.0"

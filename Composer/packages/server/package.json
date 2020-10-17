@@ -63,7 +63,7 @@
     "@bfc/lu-languageserver": "*",
     "@bfc/shared": "*",
     "@microsoft/bf-dispatcher": "^4.11.0-beta.20201015.008a3a4",
-    "@microsoft/bf-generate-library": "^4.10.0-daily.20201008.172736",
+    "@microsoft/bf-generate-library": "^4.10.0-daily.20201015.174962",
     "@microsoft/bf-lu": "^4.11.0-dev.20201013.7ccb128",
     "archiver": "^5.0.2",
     "axios": "^0.19.2",
