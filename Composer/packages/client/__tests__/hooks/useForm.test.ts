@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { renderHook, act } from '@bfc/test-utils/lib/hooks';
+import { renderHook, act } from '@botframework-composer/test-utils/lib/hooks';
 
 import { useForm, FieldConfig } from '../../src/hooks/useForm';
 

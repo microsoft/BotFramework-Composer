@@ -5,7 +5,7 @@ import { useRecoilState } from 'recoil';
 import { QnAFile } from '@bfc/shared';
 import { qnaUtil } from '@bfc/indexers';
 import { useRecoilValue } from 'recoil';
-import { act } from '@bfc/test-utils/lib/hooks';
+import { act } from '@botframework-composer/test-utils/lib/hooks';
 
 import { qnaDispatcher } from '../qna';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';

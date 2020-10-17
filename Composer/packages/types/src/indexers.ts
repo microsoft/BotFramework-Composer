@@ -3,6 +3,7 @@
 
 import { IDiagnostic, IRange } from './diagnostic';
 import { IIntentTrigger } from './dialogUtils';
+import { MicrosoftIDialog } from './sdk';
 
 import { DialogSetting } from './index';
 
@@ -47,7 +48,7 @@ export type DialogSchemaFile = {
 };
 
 export type DialogInfo = {
-  content: any;
+  content: MicrosoftIDialog;
   diagnostics: IDiagnostic[];
   displayName: string;
   id: string;

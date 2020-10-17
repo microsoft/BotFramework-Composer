@@ -3,7 +3,7 @@
 
 import { selector, useRecoilValue } from 'recoil';
 import { v4 as uuid } from 'uuid';
-import { act, RenderHookResult, HookResult } from '@bfc/test-utils/lib/hooks';
+import { act, RenderHookResult, HookResult } from '@botframework-composer/test-utils/lib/hooks';
 import { useRecoilState } from 'recoil';
 import cloneDeep from 'lodash/cloneDeep';
 import endsWith from 'lodash/endsWith';
