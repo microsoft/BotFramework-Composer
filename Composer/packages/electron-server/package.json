@@ -11,11 +11,11 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json && ncp src/preload.js build/preload.js",
     "clean": "rimraf build && rimraf dist && rimraf l10ntemp",
-    "copy-plugins": "node scripts/copy-plugins.js",
+    "copy-extensions": "node scripts/copy-extensions.js",
     "copy-runtime": "node scripts/copy-runtime.js",
     "copy-form-dialog-templates": "node scripts/copy-form-dialog-templates.js",
     "dist": "node scripts/electronBuilderDist.js",
-    "dist:full": "yarn clean && yarn build && yarn run pack && yarn copy-runtime && yarn copy-plugins && yarn copy-form-dialog-templates && yarn dist",
+    "dist:full": "yarn clean && yarn build && yarn run pack && yarn copy-runtime && yarn copy-extensions && yarn copy-form-dialog-templates && yarn dist",
     "lint": "eslint --quiet ./src",
     "lint:fix": "yarn lint --fix",
     "pack": "node scripts/electronBuilderPack.js",

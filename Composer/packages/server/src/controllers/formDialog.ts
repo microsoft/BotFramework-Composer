@@ -3,10 +3,10 @@
 
 import * as path from 'path';
 
-import * as fs from 'fs-extra';
-import { Request, Response } from 'express';
 import { ExtensionContext } from '@bfc/extension';
-import { schemas, expandPropertyDefinition } from '@microsoft/bf-generate-library';
+import { expandPropertyDefinition, schemas } from '@microsoft/bf-generate-library';
+import { Request, Response } from 'express';
+import * as fs from 'fs-extra';
 
 import { BotProjectService } from '../services/project';
 
