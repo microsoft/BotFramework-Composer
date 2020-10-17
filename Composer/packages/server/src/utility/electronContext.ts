@@ -2,9 +2,17 @@
 // Licensed under the MIT License.
 
 // TODO: add types for "options"
+type ElectronAuthOptions = {
+  realm?: string;
+  target?: string;
+};
 export type ElectronContext = {
-  getAccessToken: (options) => Promise<{ accessToken: string; acquiredAt: number; expiresIn: number }>;
-  loginAndGetIdToken: (options) => Promise<string>;
+  getAccessToken: (
+    options: ElectronAuthOptions
+  ) => Promise<{ accessToken: string; acquiredAt: number; expiryTime: number }>;
+  getAccessTokenSilently: (
+    options: ElectronAuthOptions
+  ) => Promise<{ accessToken: string; acquiredAt: number; expiryTime: number }>;
 };
 
 var context;
