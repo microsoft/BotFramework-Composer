@@ -7,8 +7,6 @@ import React, { useState } from 'react';
 import formatMessage from 'format-message';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { SDKKinds, RegexRecognizer } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
@@ -17,20 +15,10 @@ import { userSettingsState } from '../../recoilModel/atoms';
 import { validateDialogSelectorFamily } from '../../recoilModel';
 import { isRegExRecognizerType, resolveRecognizer$kind } from '../../utils/dialogValidator';
 
-import { optionStyles, dialogContentStyles, modalStyles, dialogWindowStyles, warningIconStyles } from './styles';
+import { dialogContentStyles, modalStyles, dialogWindowStyles } from './styles';
 import { validateForm } from './validators';
 import { resolveTriggerWidget } from './resolveTriggerWidget';
 import { TriggerDropdownGroup } from './TriggerDropdownGroup';
-
-export const renderDropdownOption = (option?: IDropdownOption) => {
-  if (!option) return null;
-  return (
-    <div css={optionStyles}>
-      {option.text}
-      {option.data && option.data.icon && <Icon iconName={option.data.icon} style={warningIconStyles} />}
-    </div>
-  );
-};
 
 const hasError = (errors: TriggerFormDataErrors) => Object.values(errors).some((msg) => !!msg);
 
