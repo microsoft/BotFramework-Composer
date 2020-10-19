@@ -11,8 +11,8 @@ import {
   Diagnostic,
   DiagnosticSeverity,
   LuFile,
-  fetchFromSettings,
   getSkillNameFromSetting,
+  fetchFromSettings,
 } from '@bfc/shared';
 import difference from 'lodash/difference';
 import map from 'lodash/map';

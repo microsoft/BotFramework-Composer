@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { render, fireEvent, act } from '@bfc/test-utils';
+import { render, fireEvent, act } from '@botframework-composer/test-utils';
 
 import { StorageFolder } from '../../../../src/recoilModel/types';
 import { FileSelector } from '../../../../src/components/CreationFlow/FileSelector';

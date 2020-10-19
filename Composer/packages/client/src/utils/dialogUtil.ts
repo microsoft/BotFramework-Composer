@@ -9,6 +9,10 @@ import cloneDeep from 'lodash/cloneDeep';
 import { getFocusPath } from './navigation';
 import { upperCaseName } from './fileUtil';
 
+export const qnaMatcherKey = SDKKinds.OnQnAMatch;
+export const onChooseIntentKey = SDKKinds.OnChooseIntent;
+export const intentTypeKey = SDKKinds.OnIntent;
+
 interface DialogsMap {
   [dialogId: string]: any;
 }
@@ -74,9 +78,8 @@ function createTrigger(dialog: DialogInfo, data: TriggerFormData, factory: Dialo
 
 export function updateIntentTrigger(dialog: DialogInfo, intentName: string, newIntentName: string): DialogInfo {
   const dialogCopy = cloneDeep(dialog);
-  const trigger = (dialogCopy.content?.triggers ?? []).find(
-    (t) => t.$kind === SDKKinds.OnIntent && t.intent === intentName
-  );
+  const triggers = dialogCopy.content?.triggers as ITriggerCondition[];
+  const trigger = (triggers ?? []).find((t) => t.$kind === SDKKinds.OnIntent && t.intent === intentName);
 
   if (trigger) {
     trigger.intent = newIntentName;

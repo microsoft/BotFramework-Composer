@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useContext, useMemo } from 'react';
-import { MicrosoftIRecognizer, SDKKinds } from '@bfc/types';
+import { MicrosoftIRecognizer, SDKKinds } from '@botframework-composer/types';
 import get from 'lodash/get';
 
 import { EditorExtensionContext } from '../EditorExtensionContext';
@@ -76,7 +76,7 @@ export function useRecognizerConfig(): RecognizerSchemaConfig {
   const defaultRecognizer = getDefaultRecognizer(recognizers);
   const fallbackRecognizer = getFallbackRecognizer(recognizers);
 
-  const currentRecognizerValue = shellData.currentDialog?.content?.recognizer;
+  const currentRecognizerValue = shellData.currentDialog?.content?.recognizer as MicrosoftIRecognizer;
   const currentRecognizer = findRecognizerByValue(recognizers, currentRecognizerValue) ?? fallbackRecognizer;
 
   return {

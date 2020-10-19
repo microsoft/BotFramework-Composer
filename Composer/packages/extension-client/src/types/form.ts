@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { JSONSchema7, SchemaDefinitions } from '@bfc/types';
+import { JSONSchema7, SchemaDefinitions } from '@botframework-composer/types';
 import React from 'react';
 
 import { UIOptions } from './formSchema';

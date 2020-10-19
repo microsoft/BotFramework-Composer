@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import get from 'lodash/get';
-import { SDKKinds } from '@bfc/types';
+import { SDKKinds } from '@botframework-composer/types';
 
 import { walkAdaptiveAction } from './walkAdaptiveAction';
 import { walkAdaptiveActionList } from './walkAdaptiveActionList';

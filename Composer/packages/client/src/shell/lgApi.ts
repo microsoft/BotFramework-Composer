@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useEffect, useState } from 'react';
-import { LgFile } from '@bfc/shared';
+import { LgFile, LgContextApi, LgTemplateRef } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import debounce from 'lodash/debounce';
 import formatMessage from 'format-message';
@@ -20,13 +20,20 @@ function createLgApi(
   state: { focusPath: string; projectId: string },
   actions: Dispatcher,
   lgFileResolver: (id: string) => LgFile | undefined
-) {
+): LgContextApi {
   const getLgTemplates = (id) => {
     if (id === undefined) throw new Error('must have a file id');
     const focusedDialogId = state.focusPath.split('#').shift() || id;
     const file = lgFileResolver(focusedDialogId);
     if (!file) throw new Error(fileNotFound(id));
     return file.templates;
+  };
+
+  const updateLgFile = async (id: string, content: string) => {
+    const file = lgFileResolver(id);
+    if (!file) throw new Error(fileNotFound(id));
+
+    await actions.updateLgFile({ id, content, projectId: state.projectId });
   };
 
   const updateLgTemplate = async (id: string, templateName: string, templateBody: string) => {
@@ -68,19 +75,27 @@ function createLgApi(
     });
   };
 
-  const removeLgTemplates = async (id, templateNames) => {
+  const removeLgTemplates = async (id: string, templateNames: string[]) => {
     const file = lgFileResolver(id);
     if (!file) throw new Error(fileNotFound(id));
     if (!templateNames) throw new Error(TEMPLATE_ERROR);
 
+    const normalizedLgTemplates = templateNames
+      .map((x) => {
+        const lgTemplateRef = LgTemplateRef.parse(x);
+        return lgTemplateRef ? lgTemplateRef.name : x;
+      })
+      .filter((x) => !!x);
+
     return await actions.removeLgTemplates({
       id: file.id,
-      templateNames,
+      templateNames: normalizedLgTemplates,
       projectId: state.projectId,
     });
   };
 
   return {
+    updateLgFile,
     addLgTemplate: updateLgTemplate,
     getLgTemplates,
     updateLgTemplate,

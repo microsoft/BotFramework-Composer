@@ -26,7 +26,7 @@ describe('test persistence layer', () => {
   it('test notify update', async () => {
     const previous = {
       projectId: 'test',
-      dialogs: [{ id: 'a', content: { a: 'old' } }] as DialogInfo[],
+      dialogs: ([{ id: 'a', content: { a: 'old' } }] as unknown) as DialogInfo[],
       dialogSchemas: [{ id: 'a', content: { a: 'old schema' } }] as DialogSchemaFile[],
       lgFiles: [{ id: 'a.en-us', content: '' }] as LgFile[],
       luFiles: [{ id: 'a.en-us', content: '' }] as LuFile[],
@@ -34,7 +34,7 @@ describe('test persistence layer', () => {
 
     const current = {
       projectId: 'test',
-      dialogs: [{ id: 'a', content: { a: 'new' } }] as DialogInfo[],
+      dialogs: ([{ id: 'a', content: { a: 'new' } }] as unknown) as DialogInfo[],
       dialogSchemas: [{ id: 'a', content: { a: 'new schema' } }] as DialogSchemaFile[],
       lgFiles: [{ id: 'a.en-us', content: 'a.lg' }] as LgFile[],
       luFiles: [{ id: 'a.en-us', content: 'a.lu' }] as LuFile[],
@@ -51,7 +51,7 @@ describe('test persistence layer', () => {
   it('test notify create', async () => {
     const previous = {
       projectId: 'test',
-      dialogs: [{ id: 'a', content: { a: 'a' } }] as DialogInfo[],
+      dialogs: ([{ id: 'a', content: { a: 'a' } }] as unknown) as DialogInfo[],
       dialogSchemas: [{ id: 'a', content: { a: 'a' } }] as DialogSchemaFile[],
       lgFiles: [{ id: 'a.en-us', content: 'a' }] as LgFile[],
       luFiles: [{ id: 'a.en-us', content: 'a' }] as LuFile[],
@@ -59,10 +59,10 @@ describe('test persistence layer', () => {
 
     const current = {
       projectId: 'test',
-      dialogs: [
+      dialogs: ([
         { id: 'a', content: { a: 'a' } },
         { id: 'b', content: { b: 'b' } },
-      ] as DialogInfo[],
+      ] as unknown) as DialogInfo[],
       dialogSchemas: [
         { id: 'a', content: { a: 'a' } },
         { id: 'b', content: { b: 'b' } },
@@ -88,10 +88,10 @@ describe('test persistence layer', () => {
   it('test notify remove', async () => {
     const previous = {
       projectId: 'test',
-      dialogs: [
+      dialogs: ([
         { id: 'a', content: { a: 'a' } },
         { id: 'b', content: { b: 'b.pre' } },
-      ] as DialogInfo[],
+      ] as unknown) as DialogInfo[],
       dialogSchemas: [
         { id: 'a', content: { a: 'a' } },
         { id: 'b', content: { b: 'b.pre' } },
@@ -108,7 +108,7 @@ describe('test persistence layer', () => {
 
     const current = {
       projectId: 'test',
-      dialogs: [{ id: 'a', content: { a: 'a' } }] as DialogInfo[],
+      dialogs: ([{ id: 'a', content: { a: 'a' } }] as unknown) as DialogInfo[],
       dialogSchemas: [{ id: 'a', content: { a: 'a' } }] as DialogSchemaFile[],
       lgFiles: [{ id: 'a.en-us', content: 'a' }] as LgFile[],
       luFiles: [{ id: 'a.en-us', content: 'a' }] as LuFile[],
