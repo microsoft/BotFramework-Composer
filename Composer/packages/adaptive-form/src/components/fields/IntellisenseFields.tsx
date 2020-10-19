@@ -12,7 +12,7 @@ import { JsonField } from './JsonField';
 import { NumberField } from './NumberField';
 import { StringField } from './StringField';
 
-export const IntellisenseTextField: React.FC<FieldProps<string>> = function IntellisenseTextField(props) {
+export const IntellisenseTextField: React.FC<FieldProps<string>> = (props) => {
   const { id, value = '', onChange, uiOptions, focused: defaultFocused } = props;
 
   const completionListOverrideResolver = (value: string) => {
@@ -54,7 +54,7 @@ export const IntellisenseTextField: React.FC<FieldProps<string>> = function Inte
   );
 };
 
-export const IntellisenseExpressionField: React.FC<FieldProps<string>> = function IntellisenseExpressionField(props) {
+export const IntellisenseExpressionField: React.FC<FieldProps<string>> = (props) => {
   const { id, value = '', onChange, focused: defaultFocused } = props;
 
   const scopes = ['expressions', 'user-variables'];
@@ -87,7 +87,7 @@ export const IntellisenseExpressionField: React.FC<FieldProps<string>> = functio
   );
 };
 
-export const IntellisenseNumberField: React.FC<FieldProps<string>> = function IntellisenseNumberField(props) {
+export const IntellisenseNumberField: React.FC<FieldProps<string>> = (props) => {
   const { id, value = '', onChange, uiOptions, focused: defaultFocused } = props;
 
   const completionListOverrideResolver = (value: string) => {
@@ -129,7 +129,7 @@ export const IntellisenseNumberField: React.FC<FieldProps<string>> = function In
   );
 };
 
-export const IntellisenseJSONField: React.FC<FieldProps<string>> = function IntellisenseJSONField(props) {
+export const IntellisenseJSONField: React.FC<FieldProps<string>> = (props) => {
   const { id, value = '', onChange, focused: defaultFocused, schema } = props;
 
   const completionListOverrideResolver = (value: any) => {
