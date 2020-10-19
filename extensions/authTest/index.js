@@ -4,11 +4,11 @@
 const LocalStrategy = require('passport-local').Strategy;
 
 module.exports = {
-  initialize: composer => {
+  initialize: (composer) => {
     console.log('Register auth plugin');
 
     composer.usePassportStrategy(
-      new LocalStrategy(function(username, password, done) {
+      new LocalStrategy(function (username, password, done) {
         if (username === 'admin' && password === 'secret') {
           done(null, {
             name: 'admin',

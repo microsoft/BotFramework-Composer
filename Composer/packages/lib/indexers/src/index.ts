@@ -79,3 +79,5 @@ export * from './utils';
 export * from './validations';
 export * from './skillIndexer';
 export * from './botProjectSpaceIndexer';
+export * from './extractSchemaProperties';
+export * from './groupTriggers';

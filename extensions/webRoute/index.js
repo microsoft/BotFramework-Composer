@@ -2,8 +2,7 @@
 // Licensed under the MIT License.
 
 module.exports = {
-  initialize: composer => {
-
+  initialize: (composer) => {
     console.log('Register web route middleware');
 
     composer.addWebMiddleware((req, res, next) => {

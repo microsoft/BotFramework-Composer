@@ -1,13 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import * as React from 'react';
-import { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { setConfigIsValid, setPublishConfig, useConfigBeingEdited } from '@bfc/extension-client';
 
 import { column, label, publishRoot, textField } from '../styles';
 
-export const Main: React.FC<{}> = (props) => {
+export const Main: React.FC<{ title: string }> = (props) => {
   const [configBeingEdited] = useConfigBeingEdited();
   const [val1, setVal1] = useState(configBeingEdited ? configBeingEdited.val1 : '');
   const [val2, setVal2] = useState(configBeingEdited ? configBeingEdited.val2 : '');
@@ -36,6 +35,7 @@ export const Main: React.FC<{}> = (props) => {
 
   return (
     <div className={publishRoot}>
+      <h3>{props.title}</h3>
       <div className={column}>
         <label className={label} htmlFor={'val1'}>
           Value 1
