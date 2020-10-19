@@ -914,6 +914,12 @@
   "duplicated_intents_recognized_d3908424": {
     "message": "Duplicated intents recognized"
   },
+  "each_page_of_pagesizestring_in_propstring_a7e23b00": {
+    "message": "Each page of { pageSizeString } in { propString }"
+  },
+  "each_value_in_ae285cd9": {
+    "message": "Each value in"
+  },
   "early_adopters_e8db7999": {
     "message": "Early adopters"
   },
@@ -1046,6 +1052,9 @@
   "error_processing_schema_2c707cf3": {
     "message": "Error Processing Schema"
   },
+  "event_48c2be6e": {
+    "message": " (Event)"
+  },
   "event_activity_2067a94b": {
     "message": "Event activity"
   },
@@ -1087,9 +1096,6 @@
   },
   "export_de71cd8e": {
     "message": "Export"
-  },
-  "export_json_2e2981f5": {
-    "message": "Export JSON"
   },
   "expression_7f906a13": {
     "message": "Expression"
@@ -1241,6 +1247,9 @@
   "hospitality_assistant_c330e403": {
     "message": "Hospitality Assistant"
   },
+  "host_ef9acfae": {
+    "message": "Host "
+  },
   "hosts_your_bot_application_9dd01ffc": {
     "message": "Hosts your Bot application."
   },
@@ -1366,9 +1375,9 @@
   },
   "kb_d9c53902": {
     "message": "KB"
-  },
-  "kb_name_cannot_contain_speacial_characters_6588abda": {
-    "message": "KB name cannot contain speacial characters."
+  }
+  "kb_name_cannot_contain_special_characters_616d7939": {
+    "message": "KB name cannot contain special characters."
   },
   "key_cannot_be_blank_dccc1b46": {
     "message": "Key cannot be blank"
@@ -1973,9 +1982,6 @@
   "property_name_help_text_421a5f7f": {
     "message": "Property name help text"
   },
-  "property_required_help_text_57f027ad": {
-    "message": "Property required help text"
-  },
   "property_title_f2b443b7": {
     "message": "Property title"
   },
@@ -2088,6 +2094,9 @@
     "message": "RegEx { intent } is already defined"
   },
   "regular_expression_855557bf": {
+    "message": "Regular Expression"
+  },
+  "regular_expression_recognizer_44664557": {
     "message": "Regular expression recognizer"
   },
   "release_1af20f26": {
@@ -2134,6 +2143,15 @@
   },
   "restart_bot_34e36428": {
     "message": "Restart Bot"
+  },
+  "result_b1f14e91": {
+    "message": " = Result"
+  },
+  "result_property_100ef34f": {
+    "message": " = Result property"
+  },
+  "return_value_b386d1b": {
+    "message": "= Return value"
   },
   "review_and_generate_63dec712": {
     "message": "Review and generate"
@@ -2567,6 +2585,9 @@
   "toggle_show_all_61f19d77": {
     "message": "Toggle show all"
   },
+  "token_property_e53a19d9": {
+    "message": " = Token Property"
+  },
   "toolbar_bafd4228": {
     "message": "toolbar"
   },
@@ -2825,8 +2846,8 @@
   "yes_dde87d5": {
     "message": "Yes"
   },
-  "you_already_have_a_kb_with_that_name_choose_anothe_fc2f7156": {
-    "message": "You already have a KB with that name.Choose another name and try again."
+  "you_already_have_a_kb_with_that_name_choose_anothe_b7f7c517": {
+    "message": "You already have a KB with that name. Choose another name and try again."
   },
   "you_are_about_to_publish_your_bot_to_the_profile_b_79a6a226": {
     "message": "You are about to publish your bot to the profile below. Do you want to proceed?"
