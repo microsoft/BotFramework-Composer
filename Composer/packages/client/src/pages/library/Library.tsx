@@ -130,11 +130,26 @@ const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   const importLibrary = async (packageName, version, isUpdating) => {
     try {
-      await httpClient.post(`/projects/${projectId}/import`, {
+      const results = await httpClient.post(`/projects/${projectId}/import`, {
         package: packageName,
         version: version,
         isUpdating,
       });
+
+      // check to see if there was a conflict that requires confirmation
+      if (results.data.success === false) {
+        const title = formatMessage('Conflicting changes detected');
+        const msg = formatMessage(
+          'This operation will overwrite changes made to previously imported files. Do you want to proceed?'
+        );
+        if (await OpenConfirmModal(title, msg)) {
+          await httpClient.post(`/projects/${projectId}/import`, {
+            package: packageName,
+            version: version,
+            isUpdating: true,
+          });
+        }
+      }
 
       await getInstalledLibraries();
 
@@ -177,6 +192,10 @@ const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         summary: 'LIBRARY ERROR',
       });
     }
+  };
+
+  const install = async () => {
+    return importFromWeb(selectedItem?.name, selectedItem?.version, false);
   };
 
   const redownload = async () => {
@@ -253,6 +272,7 @@ const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
           <Fragment>
             <LibraryList
               groups={groups}
+              install={install}
               isInstalled={isInstalled}
               items={items}
               redownload={redownload}

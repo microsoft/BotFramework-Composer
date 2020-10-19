@@ -120,7 +120,7 @@ export const LibraryController = {
 
         console.log('INSTALL OUTPUT', installOutput);
 
-        console.log('EXAMINING PACKAGE: ', manifestFile);
+        // console.log('EXAMINING PACKAGE: ', manifestFile);
         // call do a dry run on the dialog merge
         const dryrun = new SchemaMerger(
           [manifestFile],
@@ -165,7 +165,7 @@ export const LibraryController = {
 
           const mergeResults = await realMerge.merge();
           if (mergeResults) {
-            console.log('MERGE RESULTS', mergeResults);
+            // console.log('MERGE RESULTS', mergeResults);
             res.json({
               success: true,
               name: packageName,
