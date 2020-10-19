@@ -7,8 +7,8 @@
  *
  */
 
-import { Templates, Template, Diagnostic as LGDiagnostic, LGResource, ImportResolverDelegate } from 'botbuilder-lg';
-import { LgTemplate, lgImportResolverGenerator, Diagnostic, Position, Range, LgFile } from '@bfc/shared';
+import { Templates, Template, Diagnostic as LGDiagnostic, ImportResolverDelegate } from 'botbuilder-lg';
+import { LgTemplate, lgImportResolverGenerator, TextFile, Diagnostic, Position, Range, LgFile } from '@bfc/shared';
 import formatMessage from 'format-message';
 import isEmpty from 'lodash/isEmpty';
 import { SourceRange } from 'botbuilder-lg/lib/sourceRange';
@@ -259,8 +259,8 @@ export function extractOptionByKey(nameOfKey: string, options: string[]): string
   return result;
 }
 
-export function parse(id: string, content: string, lgResources: LGResource[]): LgFile {
-  const lgImportResolver = lgImportResolverGenerator(lgResources, '.lg');
+export function parse(id: string, content: string, lgFiles: TextFile[]): LgFile {
+  const lgImportResolver = lgImportResolverGenerator(lgFiles, '.lg');
 
   return lgIndexer.parse(content, id, lgImportResolver);
 }

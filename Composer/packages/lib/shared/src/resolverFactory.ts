@@ -4,8 +4,8 @@
 import formatMessage from 'format-message';
 import { LGResource, ImportResolverDelegate } from 'botbuilder-lg';
 
-export declare type LUResolverResource = { content: string; id: string };
-export declare type LUImportResolverDelegate = (source: string, resourceId: string) => LUResolverResource;
+export declare type ResolverResource = { content: string; id: string };
+export declare type LUImportResolverDelegate = (source: string, resourceId: string) => ResolverResource;
 
 function getFileName(path: string): string {
   return path.split('/').pop() || path;
@@ -18,7 +18,7 @@ function getFileName(path: string): string {
  * @param defaultLocale   complete resource id = [id].[locale][ext]
  */
 export function luImportResolverGenerator(
-  resources: LUResolverResource[],
+  resources: ResolverResource[],
   ext = '',
   defaultLocale = 'en-us'
 ): LUImportResolverDelegate {
@@ -60,7 +60,7 @@ export function luImportResolverGenerator(
  * @param defaultLocale   complete resource id = [id].[locale][ext]
  */
 export function lgImportResolverGenerator(
-  resources: LGResource[],
+  resources: ResolverResource[],
   ext = '',
   defaultLocale = 'en-us'
 ): ImportResolverDelegate {

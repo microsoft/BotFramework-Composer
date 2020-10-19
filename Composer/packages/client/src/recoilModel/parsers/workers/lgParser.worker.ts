@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 import { lgUtil } from '@bfc/indexers';
 import { lgImportResolverGenerator, LgFile } from '@bfc/shared';
-import { LGResource } from 'botbuilder-lg';
 
 import {
   LgActionType,
@@ -92,11 +91,8 @@ type LgMessageEvent =
 
 type LgResources = Map<string, LgFile>;
 
-const lgFileResolver = (lgFiles: LgFile[]) => {
-  return lgImportResolverGenerator(
-    lgFiles.map((u) => new LGResource(u.id, u.id, u.content)),
-    '.lg'
-  );
+const lgFileResolver = (lgFiles) => {
+  return lgImportResolverGenerator(lgFiles, '.lg');
 };
 
 export class LgCache {
@@ -123,8 +119,7 @@ export class LgCache {
   public addProject(projectId: string, lgFiles: LgFile[]) {
     const lgResources = new Map();
     lgFiles.forEach((file) => {
-      const resources = lgFiles.map((u) => new LGResource(u.id, u.id, u.content));
-      lgResources.set(file.id, lgUtil.parse(file.id, file.content, resources));
+      lgResources.set(file.id, lgUtil.parse(file.id, file.content, lgFiles));
     });
     this.projects.set(projectId, lgResources);
   }
@@ -166,11 +161,7 @@ export const handleMessage = (msg: LgMessageEvent) => {
     case LgActionType.Parse: {
       const { id, content, lgFiles, projectId } = msg.payload;
 
-      const lgFile = lgUtil.parse(
-        id,
-        content,
-        lgFiles.map((u) => new LGResource(u.id, u.id, u.content))
-      );
+      const lgFile = lgUtil.parse(id, content, lgFiles);
       cache.set(projectId, lgFile);
       payload = filterParseResult(lgFile);
       break;

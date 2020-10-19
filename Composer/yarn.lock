@@ -4524,7 +4524,7 @@ acorn@^7.4.0:
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/acorn/-/acorn-7.4.0.tgz#e1ad486e6c54501634c6c397c5c121daa383607c"
   integrity sha1-4a1IbmxUUBY0xsOXxcEh2qODYHw=
 
-adaptive-expressions@4.11.0-dev.20200929.ca9de94, adaptive-expressions@^4.11.0-dev.20200916.f8fef0f:
+adaptive-expressions@4.11.0-dev.20200929.ca9de94:
   version "4.11.0-dev.20200929.ca9de94"
   resolved "https://registry.yarnpkg.com/adaptive-expressions/-/adaptive-expressions-4.11.0-dev.20200929.ca9de94.tgz#305c8462e7e0c329f55aa8cd2b2496bb81c2490c"
   integrity sha512-xq5QG19kIPio6piHEA4aPkqqi2ejYoYCBEovF55gJXaW5jKG+Q7bao3yqb2VTq9vISEyIq9VabmIlHzRQrOXyg==

@@ -4,10 +4,9 @@
 import merge from 'lodash/merge';
 import find from 'lodash/find';
 import flatten from 'lodash/flatten';
-import { luImportResolverGenerator, LUResolverResource } from '@bfc/shared';
+import { luImportResolverGenerator, ResolverResource } from '@bfc/shared';
 import extractMemoryPaths from '@bfc/indexers/lib/dialogUtils/extractMemoryPaths';
 import { UserIdentity } from '@bfc/extension';
-import { LGResource } from 'botbuilder-lg';
 
 import { BotProject } from '../models/bot/botProject';
 import { LocationRef } from '../models/bot/interface';
@@ -36,19 +35,18 @@ export class BotProjectService {
     }
   }
 
-  public static getLgResources(projectId?: string): LGResource[] {
+  public static getLgResources(projectId?: string): ResolverResource[] {
     BotProjectService.initialize();
     const project = BotProjectService.getIndexedProjectById(projectId);
     if (!project) throw new Error('project not found');
     const resources = project.lgFiles.map((file) => {
       const { name, content } = file;
-      const id = Path.basename(name, '.lg');
-      return new LGResource(id, id, content);
+      return { id: Path.basename(name, '.lg'), content };
     });
     return resources;
   }
 
-  public static luImportResolver(source: string, id: string, projectId: string): LUResolverResource {
+  public static luImportResolver(source: string, id: string, projectId: string): ResolverResource {
     BotProjectService.initialize();
     const project = BotProjectService.getIndexedProjectById(projectId);
     if (!project) throw new Error('project not found');

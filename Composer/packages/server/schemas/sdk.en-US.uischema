@@ -11,48 +11,6 @@
             }
         }
     },
-    "Microsoft.AttachmentInput": {
-        "form": {
-            "label": "Prompt for a file or an attachment",
-            "subtitle": "Attachment Input"
-        }
-    },
-    "Microsoft.ChoiceInput": {
-        "form": {
-            "label": "Prompt with multi-choice",
-            "subtitle": "Choice Input"
-        }
-    },
-    "Microsoft.ConfirmInput": {
-        "form": {
-            "label": "Prompt for confirmation",
-            "subtitle": "Confirm Input"
-        }
-    },
-    "Microsoft.DateTimeInput": {
-        "form": {
-            "label": "Prompt for a date or a time",
-            "subtitle": "Date Time Input"
-        }
-    },
-    "Microsoft.NumberInput": {
-        "form": {
-            "label": "Prompt for a number",
-            "subtitle": "Number Input"
-        }
-    },
-    "Microsoft.OAuthInput": {
-        "form": {
-            "label": "OAuth login",
-            "subtitle": "OAuth Input"
-        }
-    },
-    "Microsoft.TextInput": {
-        "form": {
-            "label": "Prompt for text",
-            "subtitle": "Text Input"
-        }
-    },
     "Microsoft.BeginDialog": {
         "form": {
             "label": "Begin a new dialog",
@@ -98,11 +56,6 @@
         "form": {
             "label": "Delete a property",
             "subtitle": "Delete Property"
-        }
-    },
-    "Microsoft.DeleteActivity": {
-        "form": {
-            "label": "Delete activity"
         }
     },
     "Microsoft.EditActions": {
@@ -213,9 +166,46 @@
             "subtitle": "Trace Activity"
         }
     },
-    "Microsoft.UpdateActivity": {
+    "Microsoft.AttachmentInput": {
         "form": {
-            "label": "Update an activity"
+            "label": "Prompt for a file or an attachment",
+            "subtitle": "Attachment Input"
+        }
+    },
+    "Microsoft.ChoiceInput": {
+        "form": {
+            "label": "Prompt with multi-choice",
+            "subtitle": "Choice Input"
+        }
+    },
+    "Microsoft.ConfirmInput": {
+        "form": {
+            "label": "Prompt for confirmation",
+            "subtitle": "Confirm Input"
+        }
+    },
+    "Microsoft.DateTimeInput": {
+        "form": {
+            "label": "Prompt for a date or a time",
+            "subtitle": "Date Time Input"
+        }
+    },
+    "Microsoft.NumberInput": {
+        "form": {
+            "label": "Prompt for a number",
+            "subtitle": "Number Input"
+        }
+    },
+    "Microsoft.OAuthInput": {
+        "form": {
+            "label": "OAuth login",
+            "subtitle": "OAuth Input"
+        }
+    },
+    "Microsoft.TextInput": {
+        "form": {
+            "label": "Prompt for text",
+            "subtitle": "Text Input"
         }
     },
     "Microsoft.OnActivity": {
@@ -277,6 +267,12 @@
         "form": {
             "label": "Handover to human",
             "subtitle": "Handoff activity"
+        }
+    },
+    "Microsoft.OnInstallationUpdateActivity": {
+        "form": {
+            "label": "Installation updated",
+            "subtitle": "Installation updated activity"
         }
     },
     "Microsoft.OnIntent": {

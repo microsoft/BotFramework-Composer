@@ -1088,9 +1088,6 @@
   "export_de71cd8e": {
     "message": "Export"
   },
-  "export_json_2e2981f5": {
-    "message": "Export JSON"
-  },
   "expression_7f906a13": {
     "message": "Expression"
   },
@@ -1811,6 +1808,9 @@
   "open_inline_editor_a5aabcfa": {
     "message": "Open inline editor"
   },
+  "open_skills_page_for_configuration_details_a2a484ea": {
+    "message": "Open Skills page for configuration details"
+  },
   "optional_221bcc9d": {
     "message": "Optional"
   },
@@ -1955,9 +1955,6 @@
   "property_actions_9c1a20d9": {
     "message": "Property actions"
   },
-  "property_array_help_text_126845dc": {
-    "message": "Property array help text"
-  },
   "property_description_8d21ea2e": {
     "message": "Property description."
   },
@@ -1969,12 +1966,6 @@
   },
   "property_name_914371f5": {
     "message": "Property name"
-  },
-  "property_name_help_text_421a5f7f": {
-    "message": "Property name help text"
-  },
-  "property_required_help_text_57f027ad": {
-    "message": "Property required help text"
   },
   "property_title_f2b443b7": {
     "message": "Property title"
@@ -2088,6 +2079,9 @@
     "message": "RegEx { intent } is already defined"
   },
   "regular_expression_855557bf": {
+    "message": "Regular Expression"
+  },
+  "regular_expression_recognizer_44664557": {
     "message": "Regular expression recognizer"
   },
   "release_1af20f26": {

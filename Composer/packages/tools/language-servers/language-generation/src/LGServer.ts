@@ -16,9 +16,8 @@ import {
 import { TextDocumentPositionParams, DocumentOnTypeFormattingParams } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
 import { filterTemplateDiagnostics, isValid, lgUtil } from '@bfc/indexers';
-import { MemoryResolver, LgFile, lgImportResolverGenerator } from '@bfc/shared';
+import { MemoryResolver, ResolverResource, LgFile, lgImportResolverGenerator } from '@bfc/shared';
 import { buildInFunctionsMap } from '@bfc/built-in-functions';
-import { LGResource } from 'botbuilder-lg';
 
 import { LgParser } from './lgParser';
 import {
@@ -48,7 +47,7 @@ export class LGServer {
 
   constructor(
     protected readonly connection: IConnection,
-    protected readonly getLgResources: (projectId?: string) => LGResource[],
+    protected readonly getLgResources: (projectId?: string) => ResolverResource[],
     protected readonly memoryResolver?: MemoryResolver
   ) {
     this.documents.listen(this.connection);
@@ -162,17 +161,17 @@ export class LGServer {
     const index = (): LgFile => {
       const content = this.documents.get(uri)?.getText() || '';
       // if inline mode, composite local with server resolved file.
-      const lgResources = projectId ? this.getLgResources(projectId) : [];
+      const lgTextFiles = projectId ? this.getLgResources(projectId) : [];
       if (fileId && templateId) {
-        const lgResource = lgResources.find((item) => item.id === fileId);
-        if (lgResource) {
-          const lgFile = lgUtil.parse(lgResource.id, lgResource.content, lgResources);
-          const lgResolver = lgImportResolverGenerator(lgResources, '.lg');
+        const lgTextFile = lgTextFiles.find((item) => item.id === fileId);
+        if (lgTextFile) {
+          const lgFile = lgUtil.parse(lgTextFile.id, lgTextFile.content, lgTextFiles);
+          const lgResolver = lgImportResolverGenerator(lgTextFiles, '.lg');
           return lgUtil.updateTemplate(lgFile, templateId, { body: content }, lgResolver);
         }
       }
 
-      return lgUtil.parse(fileId || uri, content, lgResources);
+      return lgUtil.parse(fileId || uri, content, lgTextFiles);
     };
     const lgDocument: LGDocument = {
       uri,

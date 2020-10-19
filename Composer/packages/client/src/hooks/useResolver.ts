@@ -3,7 +3,6 @@
 import { useRef } from 'react';
 import { lgImportResolverGenerator } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
-import { LGResource } from 'botbuilder-lg';
 
 import { dialogsState, luFilesState, lgFilesState, localeState, qnaFilesState } from '../recoilModel';
 
@@ -29,11 +28,7 @@ export const useResolvers = (projectId: string) => {
   const dialogsRef = useRef(dialogs);
   dialogsRef.current = dialogs;
 
-  const lgImportresolver = () =>
-    lgImportResolverGenerator(
-      lgFilesRef.current.map((u) => new LGResource(u.id, u.id, u.content)),
-      '.lg'
-    );
+  const lgImportresolver = () => lgImportResolverGenerator(lgFilesRef.current, '.lg');
 
   const lgFileResolver = (id: string) => {
     const fileId = id.includes('.') ? id : `${id}.${localeRef.current}`;
