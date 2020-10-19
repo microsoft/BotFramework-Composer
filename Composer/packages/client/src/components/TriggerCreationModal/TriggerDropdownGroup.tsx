@@ -19,12 +19,17 @@ import {
   TriggerOptionTreeNode,
 } from './TriggerOptionTree';
 import { checkRecognizerCompatibility } from './checkRecognizerCompatibility';
+import { triggerOrderMap } from './schema/defaultTriggerOrder';
 
 export interface TriggerDropwdownGroupProps {
   recognizerType: SDKKinds | undefined;
   triggerType: string;
   setTriggerType: (type: string) => void;
 }
+
+const getTriggerLabelOrder = (label: string) => {
+  return triggerOrderMap[label] ?? Number.MAX_VALUE;
+};
 
 export const TriggerDropdownGroup: FC<TriggerDropwdownGroupProps> = ({ recognizerType, setTriggerType }) => {
   const renderDropdownOption = useCallback(
@@ -75,13 +80,15 @@ export const TriggerDropdownGroup: FC<TriggerDropwdownGroupProps> = ({ recognize
           <Dropdown
             data-testid={currentNode.label}
             label={currentNode.prompt}
-            options={currentNode.children.map((x) => {
-              return {
-                key: getKey(x),
-                text: x.label,
-                node: x,
-              };
-            })}
+            options={currentNode.children
+              .map((x) => {
+                return {
+                  key: getKey(x),
+                  text: x.label,
+                  node: x,
+                };
+              })
+              .sort((opt1, opt2) => getTriggerLabelOrder(opt1.text) - getTriggerLabelOrder(opt2.text))}
             placeholder={currentNode.placeholder}
             selectedKey={selectedKey}
             styles={dropdownStyles}
