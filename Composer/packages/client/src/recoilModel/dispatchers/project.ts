@@ -22,6 +22,7 @@ import {
   botProjectSpaceLoadedState,
   botStatusState,
   currentProjectIdState,
+  filePersistenceState,
   projectMetaDataState,
 } from '../atoms';
 import { dispatcherState } from '../DispatcherWrapper';
@@ -343,6 +344,7 @@ export const projectDispatcher = () => {
   });
 
   const reloadProject = async (callbackHelpers: CallbackInterface, response: any) => {
+    callbackHelpers.reset(filePersistenceState(response.data.id));
     const { projectData, botFiles } = loadProjectData(response);
 
     await initBotState(callbackHelpers, projectData, botFiles);

@@ -29,6 +29,9 @@
   "a_profile_with_that_name_already_exists_7c559958": {
     "message": "A profile with that name already exists."
   },
+  "a_property_is_a_piece_of_information_that_your_bot_eccd34bf": {
+    "message": "A property is a piece of information that your bot will collect. The property name is the name used in Composer; it is not necessarily the same text that will appear in your bot''s messages."
+  },
   "a_subscription_key_is_created_when_you_create_a_qn_37a6926f": {
     "message": "A subscription key is created when you create a QnA Maker resource."
   },
@@ -1019,9 +1022,6 @@
   "entities_ef09392c": {
     "message": "Entities"
   },
-  "enum_help_text_434bd44f": {
-    "message": "Enum help text"
-  },
   "environment_68aed6d3": {
     "message": "Environment"
   },
@@ -1162,6 +1162,9 @@
   },
   "for_each_page_3b4d4b69": {
     "message": "For Each Page"
+  },
+  "for_properties_of_type_list_or_enum_your_bot_accep_9e7649c6": {
+    "message": "For properties of type list (or enum), your bot accepts only the values you define. After your dialog is generated, you can provide synonyms for each value."
   },
   "form_dialog_schema_actions_c9f1c26": {
     "message": "Form dialog schema actions"
@@ -1372,7 +1375,7 @@
   },
   "kb_d9c53902": {
     "message": "KB"
-  },
+  }
   "kb_name_cannot_contain_special_characters_616d7939": {
     "message": "KB name cannot contain special characters."
   },
@@ -1550,9 +1553,6 @@
   "maximum_f0e8e5e4": {
     "message": "Maximum"
   },
-  "maximum_help_text_7f3e6562": {
-    "message": "Maximum help text"
-  },
   "mb_8f9f9e84": {
     "message": "MB"
   },
@@ -1597,9 +1597,6 @@
   },
   "minimum_f31b05ab": {
     "message": "Minimum"
-  },
-  "minimum_help_text_6ab5b190": {
-    "message": "Minimum help text"
   },
   "missing_definition_for_defname_33f2b594": {
     "message": "Missing definition for { defName }"
@@ -1832,6 +1829,12 @@
   "optional_properties_2c23c7c6": {
     "message": "Optional properties"
   },
+  "optional_setting_a_maximum_value_enables_your_bot__1ec30919": {
+    "message": "Optional. Setting a maximum value enables your bot to reject a value that is too large and re-prompt the user for a new value."
+  },
+  "optional_setting_a_minimum_value_enables_your_bot__f1fd4bce": {
+    "message": "Optional. Setting a minimum value enables your bot to reject a value that is too small and re-prompt the user for a new value."
+  },
   "or_4f7d4edb": {
     "message": "Or: "
   },
@@ -1987,9 +1990,6 @@
   },
   "property_type_e38cf7e4": {
     "message": "Property Type"
-  },
-  "property_type_help_text_8a2c202d": {
-    "message": "Property type help text"
   },
   "provide_a_brief_description_it_will_appear_on_the__f962eb38": {
     "message": "Provide a brief description. It will appear on the publish history list."
@@ -2465,6 +2465,9 @@
   "the_page_you_are_looking_for_can_t_be_found_a3b75795": {
     "message": "The page you are looking for can''t be found."
   },
+  "the_property_type_defines_the_expected_input_the_t_58a6ef09": {
+    "message": "The property type defines the expected input. The type can be a list (or enum) of defined values or a data format, such as a date, email, number, or string."
+  },
   "the_return_type_does_not_match_2ae72548": {
     "message": "the return type does not match"
   },
@@ -2509,6 +2512,9 @@
   },
   "this_operation_cannot_be_completed_the_skill_is_al_4886d311": {
     "message": "This operation cannot be completed. The skill is already part of the Bot Project"
+  },
+  "this_option_allows_your_users_to_give_multiple_val_d2dd0d58": {
+    "message": "This option allows your users to give multiple values for this property."
   },
   "this_trigger_type_is_not_supported_by_the_regex_re_2c3b7c46": {
     "message": "This trigger type is not supported by the RegEx recognizer and will not be fired."
