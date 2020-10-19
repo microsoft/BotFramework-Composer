@@ -202,7 +202,7 @@ As an example, let's create our NodeJS module:
 // this will be called by Composer
 function initialize(registration) {
   const plugin = {
-    customDescription: 'Publish using custom UI',
+    description: 'Publish using custom UI',
     hasView: true, // we have custom UI to host
     publish,
     getStatus,
