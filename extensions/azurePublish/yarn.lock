@@ -231,6 +231,28 @@
     semver "^5.5.1"
     tslib "^1.10.0"
 
+"@microsoft/bf-lu@4.11.0-dev.20201005.7e5e1b8":
+  version "4.11.0-dev.20201005.7e5e1b8"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.11.0-dev.20201005.7e5e1b8.tgz#62f9a37bb8340456e41853e179f2941dab9dfc87"
+  integrity sha1-Yvmje7g0BFbkGFPhefKUHaud/Ic=
+  dependencies:
+    "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
+    "@azure/ms-rest-azure-js" "2.0.1"
+    "@types/node-fetch" "~2.5.5"
+    antlr4 "^4.7.2"
+    chalk "2.4.1"
+    console-stream "^0.1.1"
+    deep-equal "^1.0.1"
+    delay "^4.3.0"
+    fs-extra "^8.1.0"
+    get-stdin "^6.0.0"
+    globby "^10.0.1"
+    intercept-stdout "^0.1.2"
+    lodash "^4.17.19"
+    node-fetch "~2.6.0"
+    semver "^5.5.1"
+    tslib "^1.10.0"
+
 "@microsoft/bf-lu@^4.11.0-dev.20201013.7ccb128":
   version "4.11.0-dev.20201014.d8a6b54"
   resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.11.0-dev.20201014.d8a6b54.tgz#59bdb6e94e54307f76ccadd606ca9e61b6ee4aed"
@@ -877,6 +899,9 @@ buffer@^5.1.0, buffer@^5.5.0:
   version "5.6.0"
   resolved "https://registry.yarnpkg.com/buffer/-/buffer-5.6.0.tgz#a31749dc7d81d84db08abf937b6b8c4033f62786"
   integrity sha512-/gDYp/UtU0eA1ys8bOs9J6a+E/KWIY+DZ+Q2WESNUA0jFRsJOc0SNUO6xJ5SGA1xueg3NL65W6s+NY5l9cunuw==
+  dependencies:
+    base64-js "^1.0.2"
+    ieee754 "^1.1.4"
 
 cardinal@^2.1.1:
   version "2.1.1"

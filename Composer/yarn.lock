@@ -2980,10 +2980,10 @@
     fs-extra "^7.0.1"
     tslib "~1.10.0"
 
-"@microsoft/bf-dispatcher@^4.11.0-beta.20201015.008a3a4":
-  version "4.11.0-beta.20201015.008a3a4"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-dispatcher/-/bf-dispatcher-4.11.0-beta.20201015.008a3a4.tgz#a80b68b8a123653ae52e35cde25cb2d1d1b98390"
-  integrity sha512-EN1hdAKSh8siN4UDuhMsM5QJtVlAj5X6peiXB8z18rPNL7oyGUFzgEfUoQ9ZqfWpRUasz1Zj8sAyoFS76NpkGQ==
+"@microsoft/bf-dispatcher@^4.11.0-beta.20201016.393c6b2":
+  version "4.11.0-beta.20201016.393c6b2"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-dispatcher/-/bf-dispatcher-4.11.0-beta.20201016.393c6b2.tgz#7dab414752f8711fed37ae5625c38fdd0192eddb"
+  integrity sha512-pR1vVy17riuTos33IvQfDCmGG8xFmNoPUEb376kXITTtugNWVXgsD62P+thk0EAeegr7lCohNk+Zy3rfJ9lgvQ==
   dependencies:
     "@microsoft/bf-lu" next
     "@oclif/command" "~1.5.19"
