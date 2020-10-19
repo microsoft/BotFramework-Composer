@@ -19,7 +19,7 @@ export default async (composer: any): Promise<void> => {
     key: 'csharp-azurewebapp',
     name: 'C#',
     startCommand: 'dotnet run --project azurewebapp',
-    path: path.resolve(__dirname, '../../../../runtime/dotnet'),
+    path: path.resolve(__dirname, '../../../runtime/dotnet'),
     build: async (runtimePath: string, _project: any) => {
       composer.log(`BUILD THIS C# PROJECT! at ${runtimePath}...`);
       composer.log('Run dotnet user-secrets init...');
