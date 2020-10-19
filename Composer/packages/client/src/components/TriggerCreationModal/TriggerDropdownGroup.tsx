@@ -72,6 +72,7 @@ export const TriggerDropdownGroup: FC<TriggerDropwdownGroupProps> = ({ recognize
         const selectedKey = nextNode ? getKey(nextNode) : '';
         const dropdown = (
           <Dropdown
+            data-testid={currentNode.label}
             label={currentNode.prompt}
             options={currentNode.children.map((x) => {
               return {

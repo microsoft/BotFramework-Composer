@@ -30,7 +30,7 @@ describe('<TriggerCreationModal/>', () => {
     expect(component.container).toBeDefined();
   });
 
-  it('hould create a Luis Intent recognized', async () => {
+  it('should create a Luis Intent recognized', async () => {
     const component = renderComponent();
     const triggerType = component.getByTestId('triggerTypeDropDown');
     fireEvent.click(triggerType);
