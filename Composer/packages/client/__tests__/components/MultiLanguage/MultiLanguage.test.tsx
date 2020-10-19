@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { render, fireEvent } from '@bfc/test-utils';
+import { render, fireEvent } from '@botframework-composer/test-utils';
 
 import { AddLanguageModal, DeleteLanguageModal } from '../../../src/components/MultiLanguage';
 

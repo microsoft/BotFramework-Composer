@@ -15,7 +15,7 @@ import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { luIndexer, combineMessage } from '@bfc/indexers';
 import { PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
-import { SDKKinds } from '@bfc/shared';
+import { SDKKinds, RegexRecognizer } from '@bfc/shared';
 import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
 import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
 import { useRecoilValue } from 'recoil';
@@ -214,7 +214,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const dialogFile = dialogs.find((dialog) => dialog.id === dialogId);
   const isRegEx = isRegExRecognizerType(dialogFile);
   const isLUISnQnA = isLUISnQnARecognizerType(dialogFile);
-  const regexIntents = dialogFile?.content?.recognizer?.intents ?? [];
+  const regexIntents = (dialogFile?.content?.recognizer as RegexRecognizer)?.intents ?? [];
   const initialFormData: TriggerFormData = {
     errors: initialFormDataErrors,
     $kind: intentTypeKey,
@@ -268,7 +268,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     e.preventDefault();
 
     //If still have some errors here, it is a bug.
-    const errors = validateForm(selectedType, formData, isRegEx, regexIntents);
+    const errors = validateForm(selectedType, formData, isRegEx, regexIntents as any);
     if (shouldDisable(errors)) {
       setFormData({ ...formData, errors });
       return;
@@ -334,7 +334,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     }
     setFormData({ ...formData, triggerPhrases: body, errors: { ...formData.errors, ...errors } });
   };
-  const errors = validateForm(selectedType, formData, isRegEx, regexIntents);
+  const errors = validateForm(selectedType, formData, isRegEx, regexIntents as any);
   const disable = shouldDisable(errors);
 
   return (

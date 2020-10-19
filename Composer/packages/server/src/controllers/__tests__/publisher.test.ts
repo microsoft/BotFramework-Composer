@@ -11,7 +11,7 @@ import { BotProjectService } from '../../services/project';
 import { Path } from '../../utility/path';
 import { PublishController } from '../../controllers/publisher';
 
-const pluginDir = path.resolve(__dirname, '../../../../../plugins');
+const pluginDir = path.resolve(__dirname, '../../../../../../extensions');
 
 let mockRes: Response;
 

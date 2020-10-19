@@ -22,7 +22,7 @@
   },
   "author": "",
   "nodemonConfig": {
-    "exec": "cross-env TS_NODE_FILES=true node -r ts-node/register src/init.ts",
+    "exec": "cross-env TS_NODE_FILES=true node --inspect=9228 -r ts-node/register src/init.ts",
     "watch": [
       "src",
       "../extension/lib"
@@ -31,7 +31,7 @@
     "delay": 2
   },
   "devDependencies": {
-    "@bfc/test-utils": "*",
+    "@botframework-composer/test-utils": "*",
     "@types/archiver": "^3.1.0",
     "@types/body-parser": "^1.17.0",
     "@types/compression": "^1.0.1",
@@ -62,9 +62,9 @@
     "@bfc/lg-languageserver": "*",
     "@bfc/lu-languageserver": "*",
     "@bfc/shared": "*",
-    "@microsoft/bf-dispatcher": "^4.10.0-preview.141651",
-    "@microsoft/bf-generate-library": "^4.10.0-daily.20201008.172736",
-    "@microsoft/bf-lu": "^4.11.0-dev.20201005.7e5e1b8",
+    "@microsoft/bf-dispatcher": "^4.11.0-beta.20201016.393c6b2",
+    "@microsoft/bf-generate-library": "^4.10.0-daily.20201015.174962",
+    "@microsoft/bf-lu": "^4.11.0-dev.20201013.7ccb128",
     "@microsoft/bf-orchestrator": "^4.11.0-beta.20201013.20d7917",
     "archiver": "^5.0.2",
     "axios": "^0.19.2",
@@ -89,6 +89,7 @@
     "luis-apis": "2.5.1",
     "minimatch": "^3.0.4",
     "morgan": "^1.9.1",
+    "multimatch": "^4.0.0",
     "passport": "^0.4.1",
     "path-to-regexp": "^6.1.0",
     "portfinder": "1.0.25",

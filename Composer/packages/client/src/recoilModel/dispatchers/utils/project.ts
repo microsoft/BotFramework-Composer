@@ -32,7 +32,7 @@ import luFileStatusStorage from '../../../utils/luFileStatusStorage';
 import { getReferredLuFiles } from '../../../utils/luUtil';
 import { navigateTo } from '../../../utils/navigation';
 import qnaFileStatusStorage from '../../../utils/qnaFileStatusStorage';
-import { getReferredQnaFiles } from '../../../utils/qnaUtil';
+import { getReferredQnaFiles, reformQnAToContainerKB } from '../../../utils/qnaUtil';
 import {
   botDiagnosticsState,
   botDisplayNameState,
@@ -49,6 +49,7 @@ import {
   filePersistenceState,
   formDialogSchemaIdsState,
   formDialogSchemaState,
+  jsonSchemaFilesState,
   lgFilesState,
   localeState,
   locationState,
@@ -60,6 +61,7 @@ import {
   settingsState,
   skillManifestsState,
   skillsState,
+  showCreateQnAFromUrlDialogState,
 } from '../../atoms';
 import * as botstates from '../../atoms/botState';
 import lgWorker from '../../parsers/lgWorker';
@@ -159,8 +161,13 @@ export const loadProjectData = (response) => {
   const storedLocale = languageStorage.get(botName)?.locale;
   const locale = settings.languages.includes(storedLocale) ? storedLocale : settings.defaultLanguage;
   const indexedFiles = indexer.index(files, botName, locale, skillContent, mergedSettings);
+
+  // migrate script move qna pairs in *.qna to *-manual.source.qna.
+  // TODO: remove after a period of time.
+  const updateQnAFiles = reformQnAToContainerKB(projectId, indexedFiles.qnaFiles);
+
   return {
-    botFiles: { ...indexedFiles, mergedSettings },
+    botFiles: { ...indexedFiles, qnaFiles: updateQnAFiles, mergedSettings },
     projectData: response.data,
     error: undefined,
   };
@@ -260,10 +267,11 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
   const {
     dialogs,
     dialogSchemas,
-    formDialogSchemas,
     luFiles,
     lgFiles,
     qnaFiles,
+    jsonSchemaFiles,
+    formDialogSchemas,
     skillManifestFiles,
     skills,
     mergedSettings,
@@ -303,6 +311,7 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
   set(skillManifestsState(projectId), skillManifestFiles);
   set(luFilesState(projectId), initLuFilesStatus(botName, luFiles, dialogs));
   set(lgFilesState(projectId), lgFiles);
+  set(jsonSchemaFilesState(projectId), jsonSchemaFiles);
   set(dialogsState(projectId), verifiedDialogs);
   set(dialogSchemasState(projectId), dialogSchemas);
   set(botEnvironmentState(projectId), botEnvironment);
@@ -409,7 +418,13 @@ export const createNewBotFromTemplate = async (
   }
   const currentBotProjectFileIndexed: BotProjectFile = botFiles.botProjectSpaceFiles[0];
   set(botProjectFileState(projectId), currentBotProjectFileIndexed);
+
   const mainDialog = await initBotState(callbackHelpers, projectData, botFiles);
+  // if create from QnATemplate, continue creation flow.
+  if (templateId === QnABotTemplateId) {
+    set(showCreateQnAFromUrlDialogState(projectId), true);
+  }
+
   return { projectId, mainDialog };
 };
 

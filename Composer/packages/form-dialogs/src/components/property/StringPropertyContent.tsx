@@ -37,7 +37,12 @@ export const StringPropertyContent = React.memo((props: Props) => {
         label={formatMessage('Accepted values')}
         values={payload.enums || []}
         onChange={changeEnum}
-        onRenderLabel={onRenderLabel(formatMessage('Enum help text'), tooltipId)}
+        onRenderLabel={onRenderLabel(
+          formatMessage(
+            'For properties of type list (or enum), your bot accepts only the values you define. After your dialog is generated, you can provide synonyms for each value.'
+          ),
+          tooltipId
+        )}
       />
     )
   );

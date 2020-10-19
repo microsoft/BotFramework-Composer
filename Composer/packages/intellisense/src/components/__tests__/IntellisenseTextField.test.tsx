@@ -2,12 +2,12 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render } from '@bfc/test-utils';
+import { render } from '@botframework-composer/test-utils';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { CompletionItem } from 'vscode-languageserver-types';
 
 import { IntellisenseTextField } from '../IntellisenseTextField';
 import * as dependency from '../../hooks/useLanguageServer';
-import { CompletionItem } from 'vscode-languageserver-types';
 
 const useLanguageServerMock = (
   url: string,

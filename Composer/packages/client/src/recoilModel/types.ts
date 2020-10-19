@@ -110,10 +110,4 @@ export type BoilerplateVersion = {
   updateRequired?: boolean;
 };
 
-export enum QnAAllUpViewStatus {
-  Loading,
-  Success,
-  Failed,
-}
-
 export type Notification = CardProps & { id: string };

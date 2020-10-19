@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import formatMessage from 'format-message';
-import { SDKKinds } from '@bfc/types';
+import { SDKKinds } from '@botframework-composer/types';
 
 interface LabelOverride {
   title?: string | false;

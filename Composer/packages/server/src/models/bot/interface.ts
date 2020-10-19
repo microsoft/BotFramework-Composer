@@ -3,7 +3,10 @@
 
 import { BaseSchema, ILuisConfig, IQnAConfig } from '@bfc/shared';
 
-import { ICrossTrainConfig } from './builder';
+import { CrossTrainConfig } from './builder';
+import { RecognizerTypes } from './recognizer';
+
+export type Resource = { id: string; isEmpty: boolean };
 
 export interface LocationRef {
   storageId: string;
@@ -13,9 +16,10 @@ export interface LocationRef {
 export interface IBuildConfig {
   luisConfig: ILuisConfig;
   qnaConfig: IQnAConfig;
-  luFileIds: string[];
-  qnaFileIds: string[];
-  crossTrainConfig: ICrossTrainConfig;
+  luResource: Resource[];
+  qnaResource: Resource[];
+  crossTrainConfig: CrossTrainConfig;
+  recognizerTypes: RecognizerTypes;
 }
 
 export interface ILuisSettings {

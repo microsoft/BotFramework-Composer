@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { SDKKinds } from '@bfc/types';
+import { SDKKinds } from '@botframework-composer/types';
 
 import { PluginConfig } from '../../types';
 import { mergePluginConfigs } from '../mergePluginConfigs';
