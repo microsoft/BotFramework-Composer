@@ -462,7 +462,7 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
     };
   }
 
-  const azurePublish = new AzurePublisher('azurewebapp', 'azurePublish', 'Publish bot to Azure Webapps (Preview)');
+  const azurePublish = new AzurePublisher('azurewebapp', 'azurePublish', 'Publish bot to Azure (Preview)');
   const azureFunctionsPublish = new AzurePublisher(
     'azurefunctions',
     'azureFunctionsPublish',
