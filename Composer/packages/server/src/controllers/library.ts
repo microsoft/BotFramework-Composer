@@ -124,7 +124,7 @@ export const LibraryController = {
         // call do a dry run on the dialog merge
         const dryrun = new SchemaMerger(
           [manifestFile],
-          '',
+          path.join(currentProject.dataDir, 'schemas/sdk'),
           path.join(currentProject.dataDir, 'dialogs/imported'),
           true, // copy only? true = dry run
           false, // verbosity: true = verbose
@@ -154,7 +154,7 @@ export const LibraryController = {
         } else {
           const realMerge = new SchemaMerger(
             [manifestFile],
-            '',
+            path.join(currentProject.dataDir, 'schemas/sdk'),
             path.join(currentProject.dataDir, 'dialogs/imported'),
             false, // copy only? true = dry run
             false, // verbosity: true = verbose
@@ -222,7 +222,7 @@ export const LibraryController = {
         // call do a dry run on the dialog merge
         const merger = new SchemaMerger(
           [manifestFile],
-          '',
+          path.join(currentProject.dataDir, 'schemas/sdk'),
           path.join(currentProject.dataDir, 'dialogs/imported'),
           false, // copy only? true = dry run
           false, // verbosity: true = verbose
