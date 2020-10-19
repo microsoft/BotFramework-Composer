@@ -16,10 +16,11 @@ import { FeatureFlag } from '@bfc/shared';
 import { isElectron } from '../../../utils/electronUtil';
 import { onboardingState, userSettingsState, dispatcherState, featureFlagState } from '../../../recoilModel';
 
-import { container, section } from './styles';
+import { container, featureFlagGroupContainer, section } from './styles';
 import { SettingToggle } from './SettingToggle';
 import { SettingDropdown } from './SettingDropdown';
 import * as images from './images';
+import { FeatureFlagToggle } from './FeatureFlagToggle';
 
 const ElectronSettings = lazy(() =>
   import('./electronSettings').then((module) => ({ default: module.ElectronSettings }))
@@ -27,6 +28,7 @@ const ElectronSettings = lazy(() =>
 
 const AppSettings: React.FC<RouteComponentProps> = () => {
   const [calloutIsShown, showCallout] = useState(false);
+  const [featureFlagVisible, showFeatureFlag] = useState(false);
 
   const { onboardingSetComplete, updateUserSettings, setFeatureFlag } = useRecoilValue(dispatcherState);
   const userSettings = useRecoilValue(userSettingsState);
@@ -67,20 +69,18 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
     const result: JSX.Element[] = [];
     Object.keys(featureFlags).forEach((key: string) => {
       const featureFlag: FeatureFlag = featureFlags[key];
-      result.push(
-        <SettingToggle
-          checked={featureFlag.value}
-          description={featureFlag.description}
-          id={key}
-          image={images.onboarding}
-          title={key}
-          onToggle={(checked: boolean) => {
-            setFeatureFlag(key, !featureFlag.value);
-          }}
-        />
-      );
+      if (!featureFlag.isHidden) {
+        result.push(
+          <FeatureFlagToggle
+            description={featureFlag.description}
+            featureFlagName={key}
+            setFeatureFlag={setFeatureFlag}
+            value={featureFlag.value}
+          />
+        );
+      }
     });
-    return result;
+    return <div css={featureFlagGroupContainer}>{result}</div>;
   };
 
   return (
@@ -177,8 +177,17 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
         />
       </section>
       <section css={section}>
-        <h2>{formatMessage('Feature Flags')}</h2>
-        {renderFeatureFlagOptions()}
+        <h2>{formatMessage('Application Updates')}</h2>
+        <SettingToggle
+          checked={featureFlagVisible}
+          description={formatMessage('Toggle the visibility of individual, preview, features in Composer.')}
+          image={images.previewFeatures}
+          title={formatMessage('Preview features')}
+          onToggle={(checked: boolean) => {
+            showFeatureFlag(checked);
+          }}
+        />
+        {featureFlagVisible && renderFeatureFlagOptions()}
       </section>
       <Suspense fallback={<div />}>{renderElectronSettings && <ElectronSettings />}</Suspense>
     </div>

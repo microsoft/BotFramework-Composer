@@ -6,7 +6,7 @@ import { defaultFeatureFlags, FeatureFlagMap } from '@bfc/shared';
 import { Store } from '../store/store';
 
 export class FeatureFlagService {
-  private static currentFeatureFlagMap: FeatureFlagMap = {};
+  private static currentFeatureFlagMap: FeatureFlagMap = {} as FeatureFlagMap;
 
   private static initialize() {
     // Get users feature flag config from data.json and populate if it does not exist
