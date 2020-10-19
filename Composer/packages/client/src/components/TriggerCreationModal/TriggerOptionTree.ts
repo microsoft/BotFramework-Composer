@@ -40,7 +40,7 @@ const getGroupKey = (submenu) => (typeof submenu === 'object' ? submenu.label : 
 
 export const generateTriggerOptionTree = (triggerUIOptions: TriggerUIOptionMap): TriggerOptionTree => {
   const root = new TriggerOptionGroupNode(
-    '',
+    'triggerTypeDropDown',
     formatMessage('What is the type of this trigger?'),
     formatMessage('Select a trigger type')
   );
