@@ -87,6 +87,7 @@ export type ExtensionCollection = {
       plugin: {
         name: string;
         description: string;
+        extensionId: string;
         /** (Optional instructions displayed in the UI) */
         instructions?: string;
         /** (Optional) Schema for publishing configuration. */

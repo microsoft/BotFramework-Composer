@@ -65,12 +65,8 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
     }
   };
 
-  const instructions: string | undefined = useMemo((): string | undefined => {
-    return targetType ? props.types.find((t) => t.name === targetType)?.instructions : '';
-  }, [props.targets, targetType]);
-
-  const schema = useMemo(() => {
-    return targetType ? props.types.find((t) => t.name === targetType)?.schema : undefined;
+  const selectedTarget = useMemo(() => {
+    return props.types.find((t) => t.name === targetType);
   }, [props.targets, targetType]);
 
   const targetBundleId = useMemo(() => {
@@ -107,34 +103,34 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
   };
 
   const publishTargetContent = useMemo(() => {
-    if (targetBundleId && targetType) {
+    if (selectedTarget?.bundleId) {
       // render custom plugin view
       return (
         <PluginHost
-          bundleId={targetBundleId}
+          bundleId={selectedTarget.bundleId}
           extraIframeStyles={[customPublishUISurface]}
-          pluginName={targetType}
+          pluginName={selectedTarget.extensionId}
           pluginType="publish"
-        ></PluginHost>
+        />
       );
     }
     // render default instruction / schema editor view
     return (
       <Fragment>
-        {instructions && <p>{instructions}</p>}
+        {selectedTarget?.instructions && <p>{selectedTarget?.instructions}</p>}
         <div css={label}>{formatMessage('Publish Configuration')}</div>
         <JsonEditor
           key={targetType}
           editorSettings={userSettings.codeEditor}
           height={200}
-          schema={schema}
+          schema={selectedTarget?.schema}
           value={config}
           onChange={updateConfig}
         />
         <button hidden disabled={saveDisabled} type="submit" />
       </Fragment>
     );
-  }, [targetType, instructions, schema, targetBundleId, saveDisabled]);
+  }, [selectedTarget, targetType, saveDisabled]);
 
   return (
     <Fragment>

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render, fireEvent, screen } from '@bfc/test-utils';
+import { render, fireEvent, screen } from '@botframework-composer/test-utils';
 import assign from 'lodash/assign';
 
 import { OneOfField } from '../OneOfField';

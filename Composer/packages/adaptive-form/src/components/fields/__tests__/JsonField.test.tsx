@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render } from '@bfc/test-utils';
+import { render } from '@botframework-composer/test-utils';
 import assign from 'lodash/assign';
 
 import { JsonField } from '../JsonField';
