@@ -171,15 +171,9 @@
 "@bfc/indexers@../../Composer/packages/lib/indexers":
   version "0.0.0"
   dependencies:
-<<<<<<< HEAD:Composer/plugins/azurePublish/yarn.lock
-    "@microsoft/bf-lu" "^4.11.0-dev.20201005.7e5e1b8"
+    "@microsoft/bf-lu" "^4.11.0-dev.20201013.7ccb128"
     adaptive-expressions "^4.11.0-dev.20201013.d5458bf"
     botbuilder-lg "4.11.0-dev.20201010.6e4a99e"
-=======
-    "@microsoft/bf-lu" "^4.11.0-dev.20201013.7ccb128"
-    adaptive-expressions "4.10.0-preview-147186"
-    botbuilder-lg "^4.10.0-preview-150886"
->>>>>>> main:extensions/azurePublish/yarn.lock
     lodash "^4.17.19"
 
 "@bfc/shared@../../Composer/packages/lib/shared":
