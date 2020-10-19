@@ -47,7 +47,7 @@ const getLastModified = (files = []) => {
 
   for (const f of files) {
     // returns last modified date of file in ISO 8601 format
-    const gitTimestamp = execSync(`git log -1 --pretty="%cI" ${f}`).toString().trim();
+    const gitTimestamp = execSync(`git log -1 --pretty="%cI" "${f}"`).toString().trim();
     const timestamp = new Date(gitTimestamp);
     if (timestamp > last) {
       last = timestamp;
