@@ -9,6 +9,7 @@ import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { SDKKinds } from '@bfc/shared';
+import { useTriggerConfig } from '@bfc/extension-client';
 
 import { dropdownStyles, optionStyles, warningIconStyles } from './styles';
 import {
@@ -17,7 +18,6 @@ import {
   TriggerOptionLeafNode,
   TriggerOptionTreeNode,
 } from './TriggerOptionTree';
-import { builtinTriggerUISchema } from './schema/builtinTriggerSchema';
 import { checkRecognizerCompatibility } from './checkRecognizerCompatibility';
 
 export interface TriggerDropwdownGroupProps {
@@ -41,8 +41,9 @@ export const TriggerDropdownGroup: FC<TriggerDropwdownGroupProps> = ({ recognize
     [recognizerType]
   );
 
+  const triggerUISchema = useTriggerConfig();
   const triggerOptionTree = useMemo(() => {
-    return generateTriggerOptionTree(builtinTriggerUISchema);
+    return generateTriggerOptionTree(triggerUISchema);
   }, []);
 
   const [activeNode, setActiveNode] = useState<TriggerOptionTreeNode>(triggerOptionTree);
