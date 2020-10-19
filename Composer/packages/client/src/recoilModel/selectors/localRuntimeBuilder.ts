@@ -50,12 +50,14 @@ export const buildEssentialsSelector = selectorFamily({
     const luFiles = get(luFilesState(projectId));
     const qnaFiles = get(qnaFilesState(projectId));
     const botBuildRequired = get(botBuildRequiredSelector(projectId));
+    const status = get(botStatusState(projectId));
 
     return {
       isConfigurationComplete: isBuildConfigurationComplete(configuration, dialogs, luFiles, qnaFiles),
       configuration,
       buildRequired: botBuildRequired,
       projectId,
+      status,
     };
   },
 });

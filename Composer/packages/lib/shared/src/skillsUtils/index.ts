@@ -9,7 +9,7 @@ import camelCase from 'lodash/camelCase';
 
 export const VIRTUAL_LOCAL_ENDPOINT = {
   key: -1,
-  name: formatMessage('Local Endpoint'),
+  name: formatMessage('Local Composer'),
 };
 
 export function fetchFromSettings(path: string, settings: DialogSetting): string {

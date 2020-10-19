@@ -501,11 +501,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         ],
       },
     },
-    {
-      type: 'element',
-      element: <TestController projectId={projectId} />,
-      align: 'right',
-    },
   ];
 
   function handleBreadcrumbItemClick(_event, item) {

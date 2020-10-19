@@ -215,12 +215,6 @@ const SettingPage: React.FC<RouteComponentProps> = () => {
       dataTestid: 'AddLanguageFlyout',
       disabled: false,
     },
-
-    {
-      type: 'element',
-      element: <TestController projectId={projectId} />,
-      align: 'right',
-    },
   ];
 
   const title = useMemo(() => {

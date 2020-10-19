@@ -220,6 +220,11 @@ export const publisherDispatcher = () => {
     }
   );
 
+  const resetBotRuntimeError = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
+    const { reset } = callbackHelpers;
+    reset(botRuntimeErrorState(projectId));
+  });
+
   const openBotInEmulator = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
     const { snapshot } = callbackHelpers;
     const botEndpoints = await snapshot.getPromise(botEndpointsState);
@@ -246,5 +251,6 @@ export const publisherDispatcher = () => {
     getPublishHistory,
     setEjectRuntimeExist,
     openBotInEmulator,
+    resetBotRuntimeError,
   };
 };

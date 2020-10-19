@@ -114,11 +114,6 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
         ],
       },
     },
-    {
-      type: 'element',
-      element: <TestController projectId={projectId} />,
-      align: 'right',
-    },
   ];
 
   const onRenderHeaderContent = () => {

@@ -5,6 +5,7 @@ import { IPublishConfig } from '@bfc/shared';
 import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 
+import { BotStatus } from '../../constants';
 import {
   botRuntimeOperationsSelector,
   buildConfigurationSelector,
@@ -19,7 +20,7 @@ export function useBotOperations(onAllBotsStarted?: (started: boolean) => void) 
   const botRuntimeOperations = useRecoilValue(botRuntimeOperationsSelector);
   const rootBotId = useRecoilValue(rootBotProjectIdSelector);
   const [trackedProjectIds, setProjectsToTrack] = useState<string[]>([]);
-  const { updateSettingForLocalEndpointSkills } = useRecoilValue(dispatcherState);
+  const { updateSettingForLocalEndpointSkills, resetBotRuntimeError } = useRecoilValue(dispatcherState);
 
   const handleBotStart = async (projectId: string, config: IPublishConfig, botBuildRequired: boolean) => {
     if (botBuildRequired) {
@@ -35,8 +36,11 @@ export function useBotOperations(onAllBotsStarted?: (started: boolean) => void) 
     setProjectsToTrack([]);
     await updateSettingForLocalEndpointSkills();
     const rootBot = builderEssentials[0];
-    const { projectId, configuration, buildRequired } = rootBot;
-    handleBotStart(projectId, configuration, buildRequired);
+    const { projectId, configuration, buildRequired, status } = rootBot;
+    if (status !== BotStatus.connected) {
+      resetBotRuntimeError(projectId);
+      handleBotStart(projectId, configuration, buildRequired);
+    }
   };
 
   // Custom hook to make sure root bot is started after all skills have been started.
@@ -49,8 +53,11 @@ export function useBotOperations(onAllBotsStarted?: (started: boolean) => void) 
     const trackProjects: string[] = skillsBots.map((skillBot) => skillBot.projectId);
     setProjectsToTrack(trackProjects);
     for (const botBuildConfig of skillsBots) {
-      const { projectId, configuration, buildRequired } = botBuildConfig;
-      await handleBotStart(projectId, configuration, buildRequired);
+      if (botBuildConfig.status !== BotStatus.connected) {
+        const { projectId, configuration, buildRequired } = botBuildConfig;
+        resetBotRuntimeError(projectId);
+        await handleBotStart(projectId, configuration, buildRequired);
+      }
     }
     if (onAllBotsStarted) {
       onAllBotsStarted(true);

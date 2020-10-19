@@ -17,6 +17,7 @@ import {
   LuFile,
   QnAFile,
   SensitiveProperties,
+  defaultPublishConfig,
 } from '@bfc/shared';
 import formatMessage from 'format-message';
 import camelCase from 'lodash/camelCase';
@@ -69,7 +70,7 @@ import lgWorker from '../../parsers/lgWorker';
 import luWorker from '../../parsers/luWorker';
 import qnaWorker from '../../parsers/qnaWorker';
 import FilePersistence from '../../persistence/FilePersistence';
-import { rootBotProjectIdSelector } from '../../selectors';
+import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../../selectors';
 import { undoHistoryState } from '../../undo/history';
 import UndoHistory from '../../undo/undoHistory';
 import { logMessage, setError } from '../shared';
@@ -97,12 +98,15 @@ export const setErrorOnBotProject = async (
   if (payload != null) logMessage(callbackHelpers, `Error loading ${botName}: ${JSON.stringify(payload)}`);
 };
 
-export const flushExistingTasks = async (callbackHelpers) => {
+export const flushExistingTasks = async (callbackHelpers: CallbackInterface) => {
   const { snapshot, reset } = callbackHelpers;
   reset(botProjectSpaceLoadedState);
   const projectIds = await snapshot.getPromise(botProjectIdsState);
-  reset(botProjectIdsState, []);
+  const runtimeOperations = await snapshot.getPromise(botRuntimeOperationsSelector);
+
+  reset(botProjectIdsState);
   for (const projectId of projectIds) {
+    await runtimeOperations?.stopBot(projectId);
     resetBotStates(callbackHelpers, projectId);
   }
   const workers = [lgWorker, luWorker, qnaWorker];
@@ -482,6 +486,7 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
 
   set(botNameIdentifierState(rootBotProjectId), camelCase(name));
   set(botProjectIdsState, [rootBotProjectId]);
+  dispatcher.getPublishStatus(rootBotProjectId, defaultPublishConfig);
 
   if (botFiles.botProjectSpaceFiles && botFiles.botProjectSpaceFiles.length) {
     const currentBotProjectFileIndexed: BotProjectFile = botFiles.botProjectSpaceFiles[0];
@@ -520,6 +525,7 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
               if (matchedEndpoint) {
                 dispatcher.updateEndpointNameInBotProjectFile(nameIdentifier, matchedEndpoint);
               }
+              dispatcher.getPublishStatus(projectId, defaultPublishConfig);
             })
             .catch((ex) => {
               const projectId = handleSkillLoadingFailure(callbackHelpers, {

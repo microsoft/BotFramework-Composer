@@ -21,13 +21,13 @@ import {
 } from '../recoilModel';
 import composerIcon from '../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../constants';
+import { useLocation } from '../utils/hooks';
 
 import { StartBotsPanel } from './TestController/startBotsPanel';
 import { useBotOperations } from './TestController/useLocalBotOperations';
 export const actionButton = css`
   font-size: 18px;
   margin-top: 2px;
-  color: #fff;
 `;
 
 // -------------------- Styles -------------------- //
@@ -102,9 +102,17 @@ const botRuntimeStartIcon: IButtonStyles = {
   },
 };
 
+const startBotWidgetContainer = css`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+`;
+
 // -------------------- Header -------------------- //
 
 export const Header = () => {
+  const currentLocation = useLocation();
   const { setAppUpdateShowing } = useRecoilValue(dispatcherState);
   const projectId = useRecoilValue(currentProjectIdState);
   const projectName = useRecoilValue(botDisplayNameState(projectId));
@@ -114,8 +122,25 @@ export const Header = () => {
   const [showStartBotsPanel, setStartPanelView] = useState(false);
   const runningBots = useRecoilValue(runningBotsSelector);
   const [startPanelText, setStartPanelText] = useState('');
-  const [allBotsStarted, setAllBotsStarted] = useState<boolean>(false);
-  const { stopAllBots, startAllBots } = useBotOperations(setAllBotsStarted);
+  const { projectIds: runningProjects } = useRecoilValue(runningBotsSelector);
+  const [areBotsStarted, setBotsInBotProjectStarted] = useState<boolean>(false);
+  const { stopAllBots, startAllBots } = useBotOperations();
+  const [showStartBotsWidget, setStartBotsWidgetVisible] = useState(true);
+
+  useEffect(() => {
+    // TODO: Start using modes to detect current page after #4361
+    if (!currentLocation.location.pathname.includes('home')) {
+      setStartBotsWidgetVisible(true);
+      return;
+    }
+    setStartBotsWidgetVisible(false);
+  }, [currentLocation]);
+
+  useEffect(() => {
+    if (runningProjects.length > 0) {
+      setBotsInBotProjectStarted(true);
+    }
+  }, [runningProjects]);
 
   useEffect(() => {
     if (runningBots.projectIds.length > 0) {
@@ -138,10 +163,10 @@ export const Header = () => {
   }
 
   function handleStartOrStopAll() {
-    if (allBotsStarted) {
+    if (areBotsStarted) {
       stopAllBots();
       dismissStartPanelViewer();
-      setAllBotsStarted(false);
+      setBotsInBotProjectStarted(false);
     } else {
       startAllBots();
       setStartPanelView(true);
@@ -169,18 +194,23 @@ export const Header = () => {
       </div>
 
       <div css={rightSection}>
-        {runningBots.projectIds.length > 0 ? (
-          <ActionButton css={actionButton} onClick={handleStartOrStopAll}>
-            <Icon iconName={'CircleStopSolid'} styles={botRuntimeStartIcon} />
-          </ActionButton>
-        ) : (
-          <ActionButton css={actionButton} onClick={handleStartOrStopAll}>
-            <Icon iconName={'Play'} styles={botRuntimeStartIcon} />
-          </ActionButton>
+        {showStartBotsWidget && (
+          <div css={startBotWidgetContainer}>
+            {runningBots.projectIds.length > 0 ? (
+              <ActionButton css={actionButton} onClick={handleStartOrStopAll}>
+                <Icon iconName={'CircleStopSolid'} styles={botRuntimeStartIcon} />
+              </ActionButton>
+            ) : (
+              <ActionButton css={actionButton} onClick={handleStartOrStopAll}>
+                <Icon iconName={'Play'} styles={botRuntimeStartIcon} />
+              </ActionButton>
+            )}
+            <span>{startPanelText}</span>
+            <ActionButton css={actionButton} onClick={() => setStartPanelView(true)}>
+              <Icon iconName={'ProductList'} styles={botRuntimeStartIcon} />
+            </ActionButton>
+          </div>
         )}
-        <ActionButton css={actionButton} onClick={() => setStartPanelView(true)}>
-          <span>{startPanelText}</span>
-        </ActionButton>
 
         {showUpdateAvailableIcon && (
           <IconButton

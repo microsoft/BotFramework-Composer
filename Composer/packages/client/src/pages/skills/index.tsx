@@ -11,7 +11,6 @@ import { SkillSetting } from '@bfc/shared';
 
 import { dispatcherState, settingsState, botDisplayNameState } from '../../recoilModel';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
-import { TestController } from '../../components/TestController/TestController';
 import { CreateSkillModal } from '../../components/CreateSkillModal';
 
 import { ContainerStyle, ContentHeaderStyle, HeaderText } from './styles';
@@ -39,11 +38,6 @@ const Skills: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => 
         },
       },
       align: 'left',
-    },
-    {
-      type: 'element',
-      element: <TestController projectId={projectId} />,
-      align: 'right',
     },
   ];
 

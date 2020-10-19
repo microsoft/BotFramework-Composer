@@ -21,7 +21,7 @@ export const SkillEndpointField: React.FC<FieldProps> = (props) => {
   const endpoints = skill?.manifest?.endpoints || [];
 
   const options = useMemo(() => {
-    const endpointsInManifest = endpoints.map(({ name, endpointUrl, msAppId }, key) => ({
+    const endpointsInManifest: any[] = endpoints.map(({ name, endpointUrl, msAppId }, key) => ({
       key,
       text: name,
       data: {
@@ -36,6 +36,11 @@ export const SkillEndpointField: React.FC<FieldProps> = (props) => {
     if (!skill.remote) {
       localEndpoint = [
         {
+          key: 'localEndpointHeader',
+          itemType: SelectableOptionMenuItemType.Header,
+          text: 'Local Endpoints',
+        },
+        {
           key: -1,
           text: VIRTUAL_LOCAL_ENDPOINT.name,
           data: {
@@ -44,13 +49,16 @@ export const SkillEndpointField: React.FC<FieldProps> = (props) => {
             name: VIRTUAL_LOCAL_ENDPOINT.name,
           },
         },
-        {
-          key: 'separator',
-          itemType: SelectableOptionMenuItemType.Divider,
-          text: '',
-        },
       ];
     }
+    if (endpointsInManifest.length > 0) {
+      endpointsInManifest.unshift({
+        key: 'remoteEndpointHeader',
+        itemType: SelectableOptionMenuItemType.Header,
+        text: 'Manifest Endpoints',
+      });
+    }
+
     return [...localEndpoint, ...endpointsInManifest];
   }, [endpoints]);
 

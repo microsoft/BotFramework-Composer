@@ -10,7 +10,6 @@ import rimraf from 'rimraf';
 import archiver from 'archiver';
 import { v4 as uuid } from 'uuid';
 import AdmZip from 'adm-zip';
-import portfinder from 'portfinder';
 import killPort from 'kill-port';
 import map from 'lodash/map';
 import range from 'lodash/range';
@@ -90,7 +89,7 @@ class LocalPublisher {
       }
       await this.setBot(botId, version, fullSettings, project);
     } catch (error) {
-      this.stopBot(botId);
+      await this.stopBot(botId);
       this.setBotStatus(botId, {
         status: 500,
         result: {
@@ -151,6 +150,7 @@ class LocalPublisher {
         };
         if (LocalPublisher.runningBots[botId].status === 500) {
           // after we return the 500 status once, delete it out of the running bots list.
+          await this.stopBot(botId);
           delete LocalPublisher.runningBots[botId];
         }
         return status;
@@ -216,6 +216,7 @@ class LocalPublisher {
     const botId = project.id;
     const isExist = await this.botExist(botId);
     // get runtime template
+
     const runtime = this.composer.getRuntimeByProject(project);
     try {
       if (!isExist) {
@@ -235,7 +236,7 @@ class LocalPublisher {
         await runtime.build(runtimeDir, project);
       } else {
         // stop bot
-        this.stopBot(botId);
+        await this.stopBot(botId);
         // get previous settings
         // when changing type of runtime
         const settings = JSON.parse(
@@ -280,7 +281,7 @@ class LocalPublisher {
         this.composer.log('Bot already running. Stopping bot...');
         // this may or may not be set based on the status of the bot
         port = LocalPublisher.runningBots[botId].port;
-        this.stopBot(botId);
+        await this.stopBot(botId);
       }
       if (!port) {
         port = await getPort({ port: this.getAvailablePorts() });
@@ -306,7 +307,7 @@ class LocalPublisher {
       await this.startBot(botId, port, settings, project);
     } catch (error) {
       console.error('Error in startbot: ', error);
-      this.stopBot(botId);
+      await this.stopBot(botId);
       this.setBotStatus(botId, {
         status: 500,
         result: {
@@ -344,18 +345,19 @@ class LocalPublisher {
           }
         );
         this.composer.log('Started process %d', spawnProcess.pid);
+        this.setBotStatus(botId, {
+          process: spawnProcess,
+          port: port,
+          status: 200,
+          result: { message: 'Runtime started' },
+        });
+        const processLog = this.composer.log.extend(spawnProcess.pid);
+        this.addListeners(spawnProcess, botId, processLog);
+        resolve();
       } catch (err) {
-        return reject(err);
+        reject(err);
+        throw err;
       }
-      this.setBotStatus(botId, {
-        process: spawnProcess,
-        port: port,
-        status: 200,
-        result: { message: 'Runtime started' },
-      });
-      const processLog = this.composer.log.extend(spawnProcess.pid);
-      this.addListeners(spawnProcess, botId, processLog);
-      resolve();
     });
   };
 
@@ -465,10 +467,20 @@ class LocalPublisher {
     if (port) {
       this.composer.log('Killing process at port %d', port);
 
-      this.removeListener(proc);
-      await killPort(port);
+      await new Promise((resolve, reject) => {
+        setTimeout(async () => {
+          killPort(port)
+            .then(() => {
+              this.removeListener(proc);
+              delete LocalPublisher.runningBots[botId];
+              resolve();
+            })
+            .catch((err) => {
+              reject(err);
+            });
+        }, 1000);
+      });
     }
-    delete LocalPublisher.runningBots[botId];
   };
 
   private copyDir = async (srcDir: string, dstDir: string) => {

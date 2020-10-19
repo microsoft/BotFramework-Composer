@@ -10,7 +10,6 @@ import { useRecoilValue } from 'recoil';
 
 import { navigateTo } from '../../utils/navigation';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { TestController } from '../../components/TestController/TestController';
 import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
 import { validateDialogSelectorFamily } from '../../recoilModel';
@@ -74,14 +73,6 @@ const LUPage: React.FC<RouteComponentProps<{
     [dialogId, projectId]
   );
 
-  const toolbarItems = [
-    {
-      type: 'element',
-      element: <TestController projectId={projectId} />,
-      align: 'right',
-    },
-  ];
-
   const onRenderHeaderContent = () => {
     if (!isRoot || edit) {
       return (
@@ -106,7 +97,7 @@ const LUPage: React.FC<RouteComponentProps<{
       navLinks={navLinks}
       navRegionName={formatMessage('LU Navigation Pane')}
       title={formatMessage('User Input')}
-      toolbarItems={toolbarItems}
+      toolbarItems={[]}
       onRenderHeaderContent={onRenderHeaderContent}
     >
       <Suspense fallback={<LoadingSpinner />}>
