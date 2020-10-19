@@ -4,4 +4,3 @@
 export * from './renderWithRecoilAndContext';
 export * from './renderWithRecoil';
 export * from './react-recoil-hooks-testing-library';
-export * from './sampleDialog';

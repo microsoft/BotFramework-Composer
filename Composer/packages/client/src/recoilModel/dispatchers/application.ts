@@ -75,7 +75,7 @@ export const applicationDispatcher = () => {
     set(announcementState, message);
   });
 
-  const setCurrentMode = useRecoilCallback(({ set }: CallbackInterface) => (mode: PageMode) => {
+  const setCurrentPageMode = useRecoilCallback(({ set }: CallbackInterface) => (mode: PageMode) => {
     set(currentModeState, mode);
   });
 
@@ -119,6 +119,6 @@ export const applicationDispatcher = () => {
     onboardingAddCoachMarkRef,
     setCreationFlowStatus,
     setApplicationLevelError,
-    setCurrentMode,
+    setCurrentPageMode,
   };
 };

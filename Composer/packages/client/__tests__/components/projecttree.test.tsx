@@ -5,7 +5,8 @@ import * as React from 'react';
 import { fireEvent } from '@botframework-composer/test-utils';
 
 import { ProjectTree } from '../../src/components/ProjectTree/ProjectTree';
-import { renderWithRecoil, SAMPLE_DIALOG } from '../testUtils';
+import { renderWithRecoil } from '../testUtils';
+import { SAMPLE_DIALOG } from '../mocks/sampleDialog';
 import { dialogsState, currentProjectIdState, botProjectIdsState, schemasState } from '../../src/recoilModel';
 
 const projectId = '12345.6789';
@@ -44,10 +45,10 @@ describe('<ProjectTree/>', () => {
     const mockOnSelected = jest.fn();
     const { findByText } = renderWithRecoil(
       <ProjectTree
-        onAllSelected={mockOnSelected}
         onDeleteDialog={() => {}}
         onDeleteTrigger={() => {}}
         onSelect={() => {}}
+        onSelectAllLink={mockOnSelected}
       />,
       initRecoilState
     );

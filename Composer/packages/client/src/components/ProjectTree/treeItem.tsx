@@ -146,7 +146,7 @@ interface ITreeItemProps {
   icon?: string;
   dialogName?: string;
   showProps?: boolean;
-  shiftOut?: number; // needed to make an outline look right; should be the size of the "details" reveal arrow
+  forceIndent?: number; // needed to make an outline look right; should be the size of the "details" reveal arrow
 }
 
 const renderTreeMenuItem = (link: TreeLink) => (item: TreeMenuItem) => {
@@ -162,7 +162,7 @@ const renderTreeMenuItem = (link: TreeLink) => (item: TreeMenuItem) => {
     text: item.label,
     iconProps: { iconName: item.icon },
     onClick: () => {
-      item.action?.(link);
+      item.onClick?.(link);
     },
   };
 };
@@ -240,7 +240,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   isActive = false,
   icon,
   dialogName,
-  shiftOut,
+  forceIndent: shiftOut,
   onSelect,
   menu = [],
 }) => {

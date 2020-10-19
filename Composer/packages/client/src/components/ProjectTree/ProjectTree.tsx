@@ -12,13 +12,9 @@ import { DialogInfo, ITrigger, Diagnostic, DiagnosticSeverity } from '@bfc/share
 import debounce from 'lodash/debounce';
 import { useRecoilValue } from 'recoil';
 import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
+import isEqual from 'lodash/isEqual';
 
-import {
-  dispatcherState,
-  currentProjectIdState,
-  botProjectSpaceSelector,
-  validateDialogSelectorFamily,
-} from '../../recoilModel';
+import { dispatcherState, currentProjectIdState, botProjectSpaceSelector } from '../../recoilModel';
 import { getFriendlyName } from '../../utils/dialogUtil';
 import { triggerNotSupported } from '../../utils/dialogValidator';
 
@@ -65,6 +61,8 @@ const tree = css`
   label: tree;
 `;
 
+const SUMMARY_ARROW_SPACE = 28; // the rough pixel size of the dropdown arrow to the left of a Details/Summary element
+
 // -------------------- ProjectTree -------------------- //
 
 export type TreeLink = {
@@ -78,21 +76,10 @@ export type TreeLink = {
   trigger?: number;
 };
 
-function isLinkEqual(link1: TreeLink | undefined, link2: TreeLink | undefined) {
-  if (link1 === link2) return true;
-  if (link1 == null) return false;
-  if (link2 == null) return false;
-  if (link1.projectId !== link2.projectId) return false;
-  if (link1.skillId !== link2.skillId) return false;
-  if (link1.dialogName !== link2.dialogName) return false;
-  if (link1.trigger !== link2.trigger) return false;
-  return true;
-}
-
 export type TreeMenuItem = {
   icon?: string;
   label: string; // leave this blank to place a separator
-  action?: (link: TreeLink) => void;
+  onClick?: (link: TreeLink) => void;
 };
 
 function getTriggerName(trigger: ITrigger) {
@@ -119,9 +106,9 @@ type BotInProject = {
   isRemote: boolean;
 };
 
-type IProjectTreeProps = {
+type Props = {
   onSelect?: (link: TreeLink) => void;
-  onAllSelected?: () => void;
+  onSelectAllLink?: () => void;
   showTriggers?: boolean;
   showDialogs?: boolean;
   navLinks?: TreeLink[];
@@ -129,8 +116,8 @@ type IProjectTreeProps = {
   onDeleteDialog: (id: string) => void;
 };
 
-export const ProjectTree: React.FC<IProjectTreeProps> = ({
-  onAllSelected = undefined,
+export const ProjectTree: React.FC<Props> = ({
+  onSelectAllLink: onAllSelected = undefined,
   showTriggers = true,
   showDialogs = true,
   onDeleteDialog,
@@ -148,16 +135,18 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
     hasWarnings: false,
   }));
   const currentProjectId = useRecoilValue(currentProjectIdState);
+  const botProjectSpace = useRecoilValue(botProjectSpaceSelector);
 
   const notificationMap: { [projectId: string]: { [dialogId: string]: Diagnostic[] } } = {};
   for (const bot of projectCollection) {
     notificationMap[bot.projectId] = {};
-    // this seems to be the only way to get these notifications
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const dialogMessages = useRecoilValue(validateDialogSelectorFamily(bot.projectId));
-    for (const message of dialogMessages) {
-      const dialogId = message.id;
-      notificationMap[bot.projectId][dialogId] = message.diagnostics;
+
+    const matchingBot = botProjectSpace.filter((project) => project.projectId === bot.projectId)[0];
+    if (matchingBot == null) continue; // should never happen, but just to be safe
+
+    for (const dialog of matchingBot.dialogs) {
+      const dialogId = dialog.id;
+      notificationMap[bot.projectId][dialogId] = dialog.diagnostics;
     }
   }
 
@@ -211,11 +200,11 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
       >
         <TreeItem
           showProps
+          forceIndent={bot.isRemote ? SUMMARY_ARROW_SPACE : 0}
           icon={bot.isRemote ? icons.EXTERNAL_SKILL : icons.BOT}
-          isSubItemActive={isLinkEqual(link, selectedLink)}
+          isSubItemActive={isEqual(link, selectedLink)}
           link={link}
-          menu={[{ label: formatMessage('Create/edit skill manifest'), action: () => {} }]}
-          shiftOut={bot.isRemote ? 28 : 0}
+          menu={[{ label: formatMessage('Create/edit skill manifest'), onClick: () => {} }]}
         />
       </span>
     );
@@ -253,26 +242,26 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
       >
         <TreeItem
           showProps
+          forceIndent={showTriggers ? 0 : SUMMARY_ARROW_SPACE}
           icon={icons.DIALOG}
-          isSubItemActive={isLinkEqual(link, selectedLink)}
+          isSubItemActive={isEqual(link, selectedLink)}
           link={link}
           menu={[
             {
               label: formatMessage('Remove this dialog'),
               icon: 'Delete',
-              action: (link) => {
+              onClick: (link) => {
                 onDeleteDialog(link.dialogName ?? '');
               },
             },
           ]}
-          shiftOut={showTriggers ? 0 : 28}
           onSelect={handleOnSelect}
         />
       </span>
     );
   };
 
-  function renderTrigger(projectId: string, item: any, dialog: DialogInfo): React.ReactNode {
+  const renderTrigger = (projectId: string, item: any, dialog: DialogInfo): React.ReactNode => {
     // NOTE: put the form-dialog detection here when it's ready
     const link: TreeLink = {
       displayName: item.displayName,
@@ -289,23 +278,23 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
       <TreeItem
         key={`${item.id}_${item.index}`}
         dialogName={dialog.displayName}
+        forceIndent={48}
         icon={icons.TRIGGER}
-        isActive={isLinkEqual(link, selectedLink)}
+        isActive={isEqual(link, selectedLink)}
         link={link}
         menu={[
           {
             label: formatMessage('Remove this trigger'),
             icon: 'Delete',
-            action: (link) => {
+            onClick: (link) => {
               onDeleteTrigger(link.dialogName ?? '', link.trigger ?? 0);
             },
           },
         ]}
-        shiftOut={48}
         onSelect={handleOnSelect}
       />
     );
-  }
+  };
 
   const onFilter = (_e?: any, newValue?: string): void => {
     if (typeof newValue === 'string') {
@@ -313,11 +302,11 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
     }
   };
 
-  function filterMatch(scope: string) {
+  const filterMatch = (scope: string): boolean => {
     return scope.toLowerCase().includes(filter.toLowerCase());
-  }
+  };
 
-  function createDetailsTree(bot: BotInProject, startDepth: number) {
+  const createDetailsTree = (bot: BotInProject, startDepth: number) => {
     const { projectId } = bot;
     const dialogs = sortDialog(bot.dialogs);
 
@@ -358,9 +347,9 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
     } else {
       return filteredDialogs.map((dialog: DialogInfo) => renderDialogHeader(projectId, dialog));
     }
-  }
+  };
 
-  function createBotSubtree(bot: BotInProject & { hasWarnings: boolean }) {
+  const createBotSubtree = (bot: BotInProject & { hasWarnings: boolean }) => {
     if (showDialogs && !bot.isRemote) {
       return (
         <ExpandableNode key={bot.projectId} summary={renderBotHeader(bot)}>
@@ -370,7 +359,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
     } else {
       return renderBotHeader(bot);
     }
-  }
+  };
 
   const projectTree =
     projectCollection.length === 1
@@ -414,8 +403,8 @@ export const ProjectTree: React.FC<IProjectTreeProps> = ({
         <div css={tree}>
           {onAllSelected != null ? (
             <TreeItem
+              forceIndent={SUMMARY_ARROW_SPACE}
               link={{ displayName: formatMessage('All'), skillId: null, projectId: currentProjectId, isRoot: true }}
-              shiftOut={28}
               onSelect={onAllSelected}
             />
           ) : null}

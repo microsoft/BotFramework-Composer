@@ -4,7 +4,8 @@
 import * as React from 'react';
 import { fireEvent } from '@botframework-composer/test-utils';
 
-import { renderWithRecoil, SAMPLE_DIALOG } from '../testUtils';
+import { renderWithRecoil } from '../testUtils';
+import { SAMPLE_DIALOG } from '../mocks/sampleDialog';
 import { ProjectTree } from '../../src/components/ProjectTree/ProjectTree';
 import { TriggerCreationModal } from '../../src/components/ProjectTree/TriggerCreationModal';
 import { CreateDialogModal } from '../../src/pages/design/createDialogModal';

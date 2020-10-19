@@ -204,7 +204,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     if (location && props.dialogId && props.projectId) {
       const { dialogId, projectId } = props;
 
-      // TODO: swap to the commented-out block once we're working on skills for real
+      // TODO: swap to the commented-out block once we're working on skills for real (issue #4429)
       // let { skillId } = props;
       // if (skillId == null) skillId = projectId;
 
