@@ -7,7 +7,6 @@ import { BotProjectService } from '../services/project';
 const defaultPublishConfig = {
   name: 'default',
   type: 'localpublish',
-  provisionConfig: '',
   configuration: JSON.stringify({}),
 };
 
@@ -92,10 +91,9 @@ export const ProvisionController = {
     if (profile && method && ExtensionContext?.extensions?.publish[method]?.methods?.getProvisionStatus) {
       // get the externally defined method
       const pluginMethod = ExtensionContext.extensions.publish[method].methods.getProvisionStatus;
-      const provisionConfig = profile.provisionConfig || '{}';
       try {
         // call the method
-        const result = await pluginMethod.call(null, JSON.parse(provisionConfig), currentProject, user);
+        const result = await pluginMethod.call(null, target, currentProject, user, jobId);
         // set status and return value as json
         res.status(result.status).json({
           ...result,

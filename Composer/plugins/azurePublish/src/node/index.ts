@@ -49,7 +49,7 @@ interface ResourceType {
 export default async (composer: any): Promise<void> => {
   class AzurePublisher {
     private historyFilePath: string;
-    private histories: any;
+    private publishHistories: any;
     private mode: string;
     public schema: JSONSchema7;
     public instructions: string;
@@ -60,7 +60,7 @@ export default async (composer: any): Promise<void> => {
     public bundleId = 'publish'; /** host custom UI */
 
     constructor(mode?: string, customName?: string, customDescription?: string) {
-      this.histories = {};
+      this.publishHistories = {};
       this.historyFilePath = path.resolve(__dirname, '../publishHistory.txt');
       if (PERSIST_HISTORY) {
         this.loadHistoryFromFile();
@@ -98,27 +98,27 @@ export default async (composer: any): Promise<void> => {
     /*******************************************************************************************************************************/
     private async loadHistoryFromFile() {
       if (await pathExists(this.historyFilePath)) {
-        this.histories = await readJson(this.historyFilePath);
+        this.publishHistories = await readJson(this.historyFilePath);
       }
     }
 
     private getHistory = async (botId: string, profileName: string) => {
-      if (this.histories && this.histories[botId] && this.histories[botId][profileName]) {
-        return this.histories[botId][profileName];
+      if (this.publishHistories && this.publishHistories[botId] && this.publishHistories[botId][profileName]) {
+        return this.publishHistories[botId][profileName];
       }
       return [];
     };
 
     private updateHistory = async (botId: string, profileName: string, newHistory: any) => {
-      if (!this.histories[botId]) {
-        this.histories[botId] = {};
+      if (!this.publishHistories[botId]) {
+        this.publishHistories[botId] = {};
       }
-      if (!this.histories[botId][profileName]) {
-        this.histories[botId][profileName] = [];
+      if (!this.publishHistories[botId][profileName]) {
+        this.publishHistories[botId][profileName] = [];
       }
-      this.histories[botId][profileName].unshift(newHistory);
+      this.publishHistories[botId][profileName].unshift(newHistory);
       if (PERSIST_HISTORY) {
-        await writeJson(this.historyFilePath, this.histories);
+        await writeJson(this.historyFilePath, this.publishHistories);
       }
     };
 
@@ -305,21 +305,19 @@ export default async (composer: any): Promise<void> => {
       );
     };
 
+    /*******************************************************************************************************************************/
+    /* These methods provision resources to azure async */
+    /*******************************************************************************************************************************/
     asyncProvision = async (jobId: string, config: ProvisionConfig, project: IBotProject, user) => {
-      const { hostname, subscription, accessToken, graphToken, location } = config;
+      const { subscription } = config;
       // Create the object responsible for actually taking the provision actions.
       const azureProvisioner = new BotProjectProvision({
-        subscription: subscription,
+        ...config,
         logger: (msg: any) => {
           this.logger(msg);
           BackgroundProcessManager.updateProcess(jobId, 202, msg.message);
         },
-        accessToken: accessToken,
-        graphToken: graphToken,
         tenantId: subscription.tenantId, // does the tenantId ever come back from the subscription API we use? it does not appear in my tests.
-        hostname: hostname,
-        externalResources: [],
-        location: location
       });
 
       // perform the provision using azureProvisioner.create.
@@ -353,12 +351,10 @@ export default async (composer: any): Promise<void> => {
 
         // write this to the project settings.
         project.settings.publishTargets.push({
-          name: config.hostname,
+          name: config.name,
           type: 'azurePublish',
           configuration: JSON.stringify(publishProfile),
           lastPublished: null,
-          provisionConfig: '{}', // todo to be removed i think
-          provisionStatus: '{}', // todo to be removed i think
         });
 
         await project.updateDefaultSlotEnvSettings(project.settings);
@@ -370,7 +366,7 @@ export default async (composer: any): Promise<void> => {
     };
 
     /**************************************************************************************************
-     * plugin methods
+     * plugin methods for publish
      *************************************************************************************************/
     publish = async (config: PublishConfig, project: IBotProject, metadata, user) => {
       const {
@@ -461,18 +457,21 @@ export default async (composer: any): Promise<void> => {
       return await this.getHistory(botId, profileName);
     };
 
+    /**************************************************************************************************
+     * plugin methods for provision
+     *************************************************************************************************/
     provision = async (config: ProvisionConfig, project: IBotProject, user) => {
       const jobId = BackgroundProcessManager.startProcess(202, project.id, config.name, 'Creating Azure resources...');
+      console.log(config);
       this.asyncProvision(jobId, config, project, user);
       return BackgroundProcessManager.getStatus(jobId);
     };
 
-    getProvisionStatus = async (config: ProvisionConfig, project: IBotProject, user) => {
-      const processName = config.name;
+    getProvisionStatus = async (processName: string, project: IBotProject, user, jobId = '') => {
       const botId = project.id;
       // get status by Job ID first.
-      if (config.jobId) {
-        const status = BackgroundProcessManager.getStatus(config.jobId);
+      if (jobId) {
+        const status = BackgroundProcessManager.getStatus(jobId);
         if (status) {
           return status;
         }
@@ -483,16 +482,6 @@ export default async (composer: any): Promise<void> => {
           return status;
         }
       }
-      // if ACTIVE status is found, look for recent status in history
-      const current = await this.getHistory(botId, processName);
-      if (current.length > 0) {
-        return current[0];
-      }
-      // finally, return a 404 if not found at all
-      return {
-        status: 404,
-        message: 'bot not published',
-      };
     };
 
     getResources = async (project: IBotProject, user) => {

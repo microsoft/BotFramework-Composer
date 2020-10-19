@@ -53,8 +53,6 @@ export type PublishTarget = {
   name: string;
   type: string;
   configuration: string;
-  provisionConfig: string;
-  provisionStatus: string;
   lastPublished?: Date;
 };
 

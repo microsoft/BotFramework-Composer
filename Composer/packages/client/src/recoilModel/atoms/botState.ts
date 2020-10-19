@@ -180,6 +180,11 @@ export const publishHistoryState = atomFamily<any, string>({
   default: {},
 });
 
+export const provisionStatusState = atomFamily<any, string>({
+  key: getFullyQualifiedKey('provisionStatus'),
+  default: {},
+});
+
 export const onCreateDialogCompleteState = atomFamily<any, string>({
   key: getFullyQualifiedKey('onCreateDialogComplete'),
   default: {
