@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { render, fireEvent, act } from '@bfc/test-utils';
+import { render, fireEvent, act } from '@botframework-composer/test-utils';
 import { createHistory, createMemorySource, LocationProvider } from '@reach/router';
 import { RecoilRoot } from 'recoil';
 
@@ -70,10 +70,16 @@ describe('<CreationFlow/>', () => {
     act(() => {
       fireEvent.click(node);
     });
+
+    let expectedLocation = '/test-folder/Desktop';
+    if (process.platform === 'win32') {
+      expectedLocation = '\\test-folder\\Desktop';
+    }
+
     expect(createProjectMock).toHaveBeenCalledWith({
       appLocale: 'en-US',
       description: '',
-      location: '/test-folder/Desktop',
+      location: expectedLocation,
       name: 'EchoBot-1',
       qnaKbUrls: undefined,
       schemaUrl: '',

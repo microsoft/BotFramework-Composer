@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { act, fireEvent, getAllByRole, render } from '@bfc/test-utils';
+import { act, fireEvent, getAllByRole, render } from '@botframework-composer/test-utils';
 import { EditorExtension } from '@bfc/extension-client';
 
 import { SelectSkillDialogField, settingReferences } from '../SelectSkillDialogField';

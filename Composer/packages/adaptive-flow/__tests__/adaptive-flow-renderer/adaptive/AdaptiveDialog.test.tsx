@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render } from '@bfc/test-utils';
+import { render } from '@botframework-composer/test-utils';
 
 import { AdaptiveKinds } from '../../../src/adaptive-flow-renderer/constants/AdaptiveKinds';
 import { AdaptiveDialog } from '../../../src/adaptive-flow-renderer/adaptive/AdaptiveDialog';

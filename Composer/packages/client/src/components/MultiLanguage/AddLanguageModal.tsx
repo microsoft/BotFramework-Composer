@@ -14,8 +14,8 @@ import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
-import { DialogWrapper, DialogTypes } from '../DialogWrapper';
 import { MultiLanguagesDialog } from '../../constants';
 
 import { ILanguageFormData } from './types';
