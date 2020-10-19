@@ -21,7 +21,6 @@ import { getOptions, getSelectedOption } from './utils';
 const styles = {
   container: css`
     width: 100%;
-
     label: OneOfField;
   `,
   label: css`
@@ -30,21 +29,17 @@ const styles = {
 
     label: OneOfFieldLabel;
   `,
-
   fieldContainer: css`
     width: 100%;
     display: flex;
   `,
-
   icon: css`
     margin-right: 3px;
   `,
-
   dropdown: {
     title: { ...sharedFieldIconStyles, height: '100%' },
     dropdown: { height: '100%' },
   },
-
   nestedDropdown: {
     caretDown: { color: SharedColors.cyanBlue10 },
     caretDownWrapper: { height: '20px', lineHeight: '20px' },

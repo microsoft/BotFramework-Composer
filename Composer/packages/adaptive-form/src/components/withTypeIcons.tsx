@@ -13,15 +13,17 @@ import { FieldLabel } from './FieldLabel';
 import { sharedFieldIconStyles } from './sharedStyles';
 
 const styles = {
-  wrapper: css({
+  mainWrapper: css({ display: 'flex' }),
+  iconWrapper: css({
     ...sharedFieldIconStyles,
     textAlign: 'center',
     border: '1px solid rgb(96, 94, 92)',
     borderRadius: '2px',
     cursor: 'default',
   }),
+  componentWrapper: css({ flexGrow: 1 }),
 };
-export function withTypeIcons(WrappedComponent: FieldWidget): FieldWidget {
+export function WithTypeIcons(WrappedComponent: FieldWidget): FieldWidget {
   return (props: FieldProps) => {
     const iconText = getFieldIconText(props.schema.type);
     return (
@@ -33,9 +35,9 @@ export function withTypeIcons(WrappedComponent: FieldWidget): FieldWidget {
           label={props.label}
           required={props.required}
         />
-        <div style={{ display: 'flex' }}>
-          <div css={styles.wrapper}>{iconText}</div>
-          <div style={{ flexGrow: 1 }}>
+        <div css={styles.mainWrapper}>
+          <div css={styles.iconWrapper}>{iconText}</div>
+          <div css={styles.componentWrapper}>
             <WrappedComponent {...props} label={undefined} />
           </div>
         </div>

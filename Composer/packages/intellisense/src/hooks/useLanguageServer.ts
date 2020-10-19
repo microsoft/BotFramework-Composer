@@ -70,6 +70,7 @@ export const useLanguageServer = (
 
   // Get completion results when selection changes
   React.useEffect(() => {
+    // cursorPosition of -1 means the field is not focused
     if (ws.current && ws.current.readyState === WebSocket.OPEN && cursorPosition >= 0) {
       getCompletionItems();
     }
