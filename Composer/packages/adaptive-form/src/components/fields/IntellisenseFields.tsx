@@ -3,7 +3,7 @@
 
 import { FieldProps } from '@bfc/extension-client';
 import { Intellisense } from '@bfc/intellisense';
-import React from 'react';
+import React, { useRef } from 'react';
 
 import { getIntellisenseUrl } from '../../utils/getIntellisenseUrl';
 import { ExpressionSwitchWindow } from '../ExpressionSwitchWindow';
@@ -16,15 +16,11 @@ export const IntellisenseTextField: React.FC<FieldProps<string>> = (props) => {
   const { id, value = '', onChange, uiOptions, focused: defaultFocused } = props;
 
   const completionListOverrideResolver = (value: string) => {
-    if (value === '') {
-      return <ExpressionSwitchWindow type={'String'} onSwitchToExpression={() => onChange('=')} />;
-    } else {
-      return null;
-    }
+    return value === '' ? <ExpressionSwitchWindow kind={'String'} onSwitchToExpression={() => onChange('=')} /> : null;
   };
 
   const scopes = uiOptions.intellisenseScopes || [];
-  const url = getIntellisenseUrl();
+  const intellisenseServerUrlRef = useRef(getIntellisenseUrl());
 
   return (
     <Intellisense
@@ -32,7 +28,7 @@ export const IntellisenseTextField: React.FC<FieldProps<string>> = (props) => {
       focused={defaultFocused}
       id={`intellisense-${id}`}
       scopes={scopes}
-      url={url}
+      url={intellisenseServerUrlRef.current}
       value={value}
       onBlur={props.onBlur}
       onChange={onChange}
@@ -58,14 +54,14 @@ export const IntellisenseExpressionField: React.FC<FieldProps<string>> = (props)
   const { id, value = '', onChange, focused: defaultFocused } = props;
 
   const scopes = ['expressions', 'user-variables'];
-  const url = getIntellisenseUrl();
+  const intellisenseServerUrlRef = useRef(getIntellisenseUrl());
 
   return (
     <Intellisense
       focused={defaultFocused}
       id={`intellisense-${id}`}
       scopes={scopes}
-      url={url}
+      url={intellisenseServerUrlRef.current}
       value={value}
       onBlur={props.onBlur}
       onChange={onChange}
@@ -91,15 +87,11 @@ export const IntellisenseNumberField: React.FC<FieldProps<string>> = (props) => 
   const { id, value = '', onChange, uiOptions, focused: defaultFocused } = props;
 
   const completionListOverrideResolver = (value: string) => {
-    if (value === '') {
-      return <ExpressionSwitchWindow type={'Number'} onSwitchToExpression={() => onChange('=')} />;
-    } else {
-      return null;
-    }
+    return value === '' ? <ExpressionSwitchWindow kind={'Number'} onSwitchToExpression={() => onChange('=')} /> : null;
   };
 
   const scopes = uiOptions.intellisenseScopes || [];
-  const url = getIntellisenseUrl();
+  const intellisenseServerUrlRef = useRef(getIntellisenseUrl());
 
   return (
     <Intellisense
@@ -107,7 +99,7 @@ export const IntellisenseNumberField: React.FC<FieldProps<string>> = (props) => 
       focused={defaultFocused}
       id={`intellisense-${id}`}
       scopes={scopes}
-      url={url}
+      url={intellisenseServerUrlRef.current}
       value={value}
       onBlur={props.onBlur}
       onChange={onChange}
@@ -136,7 +128,7 @@ export const IntellisenseJSONField: React.FC<FieldProps<string>> = (props) => {
     if (typeof value === 'object' && Object.keys(value).length === 0) {
       return (
         <ExpressionSwitchWindow
-          type="Object"
+          kind="Object"
           onSwitchToExpression={() => {
             onChange('=');
           }}
@@ -145,7 +137,7 @@ export const IntellisenseJSONField: React.FC<FieldProps<string>> = (props) => {
     } else if (Array.isArray(value) && value.length === 0) {
       return (
         <ExpressionSwitchWindow
-          type="Array"
+          kind="Array"
           onSwitchToExpression={() => {
             onChange('=');
           }}
@@ -157,7 +149,7 @@ export const IntellisenseJSONField: React.FC<FieldProps<string>> = (props) => {
 
   const defaultValue = schema.type === 'object' ? {} : [];
   const scopes = ['expressions'];
-  const url = getIntellisenseUrl();
+  const intellisenseServerUrlRef = useRef(getIntellisenseUrl());
 
   return (
     <Intellisense
@@ -165,7 +157,7 @@ export const IntellisenseJSONField: React.FC<FieldProps<string>> = (props) => {
       focused={defaultFocused}
       id={`intellisense-${id}`}
       scopes={scopes}
-      url={url}
+      url={intellisenseServerUrlRef.current}
       value={value || defaultValue}
       onBlur={props.onBlur}
       onChange={onChange}

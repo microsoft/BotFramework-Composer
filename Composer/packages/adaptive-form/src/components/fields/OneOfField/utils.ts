@@ -68,21 +68,14 @@ export function getOptions(
     const merged = merge({}, omit(schema, 'oneOf'), expression);
 
     if (expression && (resolvedOneOf as JSONSchema7[]).some(({ properties, items }) => properties || items)) {
-      options.push(
-        {
-          key: 'divider',
-          text: '-',
-          itemType: DropdownMenuItemType.Divider,
+      options.push({
+        key: 'expression',
+        text: formatMessage('Write in expression'),
+        data: {
+          icon: getFieldIconText('expression'),
+          schema: merged,
         },
-        {
-          key: 'expression',
-          text: formatMessage('Write in expression'),
-          data: {
-            icon: getFieldIconText('expression'),
-            schema: merged,
-          },
-        }
-      );
+      });
       isNested = true;
     }
 

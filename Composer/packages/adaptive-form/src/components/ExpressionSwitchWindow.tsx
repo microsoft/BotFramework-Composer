@@ -32,21 +32,16 @@ const styles = {
   `,
 };
 
-type ExpressionSwitchWindowProps = { type: string; onSwitchToExpression: () => void };
+type ExpressionSwitchWindowProps = { kind: string; onSwitchToExpression: () => void };
 
 export const ExpressionSwitchWindow = (props: ExpressionSwitchWindowProps) => {
-  const { type, onSwitchToExpression } = props;
+  const { kind, onSwitchToExpression } = props;
 
   return (
     <React.Fragment>
-      <div css={styles.fieldTypeText}>{`Start typing ${type} or`}</div>
+      <div css={styles.fieldTypeText}>{formatMessage('Start typing {kind} or', { kind: kind })}</div>
 
-      <div
-        css={styles.switchToExpressionText}
-        onClick={() => {
-          onSwitchToExpression();
-        }}
-      >
+      <div css={styles.switchToExpressionText} onClick={onSwitchToExpression}>
         <FontIcon css={styles.icon} iconName={'CalculatorEqualTo'} />
         {formatMessage(`Write in expression`)}
       </div>

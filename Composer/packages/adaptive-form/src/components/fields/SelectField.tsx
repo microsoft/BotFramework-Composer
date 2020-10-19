@@ -35,28 +35,22 @@ export const SelectField: React.FC<FieldProps<string | number>> = function Selec
     });
 
     if (expression) {
-      opts.push(
-        {
-          key: 'divider',
-          text: '-',
-          itemType: DropdownMenuItemType.Divider,
-        },
-        {
-          key: 'expression',
-          text: formatMessage('Write in expression'),
-        }
-      );
+      opts.push({
+        key: 'expression',
+        text: formatMessage('Write in expression'),
+      });
     }
 
     return opts;
   }, [enumOptions, expression]);
 
   const handleChange = (_e: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
-    /* istanbul ignore else */
-    if (option?.key === 'expression') {
-      onChange('=');
-    } else if (option) {
-      onChange(option.key);
+    if (option) {
+      if (option.key === 'expression') {
+        onChange('=');
+      } else {
+        onChange(option.key);
+      }
     } else {
       onChange(undefined);
     }

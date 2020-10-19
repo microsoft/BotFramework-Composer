@@ -119,6 +119,7 @@ const OneOfField: React.FC<FieldProps> = (props) => {
       globalUIOptions: formUIOptions,
       value,
       expression: props.expression,
+      // It is considered a "OneOf" if there are multiple options to choose from, aka a dropdown is displayed to pick
       isOneOf: options.length > 1,
     });
     return (
@@ -134,16 +135,17 @@ const OneOfField: React.FC<FieldProps> = (props) => {
         placeholder={placeholder}
         schema={selectedSchema}
         transparentBorder={false}
-        uiOptions={{ ...props.uiOptions, helpLink: 'https://bing.com' }}
+        uiOptions={props.uiOptions}
       />
     );
   };
 
   const renderDropDown = () => {
+    // We want a dropdown only if there are multiple options to choose from
     if (options && options.length > 1) {
       return (
         <Dropdown
-          ariaLabel={formatMessage('select property type')}
+          ariaLabel={formatMessage('Select property type')}
           data-testid="OneOfFieldType"
           dropdownWidth={-1}
           id={`${props.id}-oneOf`}

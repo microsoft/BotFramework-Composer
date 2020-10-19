@@ -29,17 +29,10 @@ const BooleanField: React.FC<FieldProps> = function CheckboxWidget(props) {
   ];
 
   if (expression) {
-    options.push(
-      {
-        key: 'divider',
-        text: '-',
-        itemType: DropdownMenuItemType.Divider,
-      },
-      {
-        key: 'expression',
-        text: formatMessage('Write in expression'),
-      }
-    );
+    options.push({
+      key: 'expression',
+      text: formatMessage('Write in expression'),
+    });
   }
 
   const handleChange = (e, option?: IDropdownOption) => {
