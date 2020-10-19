@@ -37,7 +37,7 @@ export const SelectField: React.FC<FieldProps<string | number>> = function Selec
     if (expression) {
       opts.push({
         key: 'expression',
-        text: formatMessage('Write in expression'),
+        text: formatMessage('Write an expression'),
       });
     }
 

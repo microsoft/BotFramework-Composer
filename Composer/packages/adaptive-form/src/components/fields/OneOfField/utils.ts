@@ -70,7 +70,7 @@ export function getOptions(
     if (expression && (resolvedOneOf as JSONSchema7[]).some(({ properties, items }) => properties || items)) {
       options.push({
         key: 'expression',
-        text: formatMessage('Write in expression'),
+        text: formatMessage('Write an expression'),
         data: {
           icon: getFieldIconText('expression'),
           schema: merged,

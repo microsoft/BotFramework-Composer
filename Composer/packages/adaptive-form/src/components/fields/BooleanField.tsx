@@ -31,7 +31,7 @@ const BooleanField: React.FC<FieldProps> = function CheckboxWidget(props) {
   if (expression) {
     options.push({
       key: 'expression',
-      text: formatMessage('Write in expression'),
+      text: formatMessage('Write an expression'),
     });
   }
 
@@ -39,9 +39,6 @@ const BooleanField: React.FC<FieldProps> = function CheckboxWidget(props) {
     if (option) {
       let optionValue: boolean | string | undefined;
       switch (option.key) {
-        case 'none':
-          optionValue = undefined;
-          break;
         case 'true':
           optionValue = true;
           break;
@@ -50,6 +47,10 @@ const BooleanField: React.FC<FieldProps> = function CheckboxWidget(props) {
           break;
         case 'expression':
           optionValue = '=';
+          break;
+        case 'none':
+        default:
+          optionValue = undefined;
           break;
       }
 

@@ -39,7 +39,7 @@ export const IntellisenseTextField: React.FC<FieldProps<string>> = (props) => {
           focused={focused}
           id={id}
           value={textFieldValue}
-          onBlur={undefined} // onBlur managed by Intellisense
+          onBlur={() => {}} // onBlur managed by Intellisense
           onChange={(newValue) => onValueChanged(newValue || '')}
           onClick={onClickTextField}
           onKeyDown={onKeyDownTextField}
@@ -72,7 +72,7 @@ export const IntellisenseExpressionField: React.FC<FieldProps<string>> = (props)
           focused={focused}
           id={id}
           value={textFieldValue}
-          onBlur={undefined} // onBlur managed by Intellisense
+          onBlur={() => {}} // onBlur managed by Intellisense
           onChange={(newValue) => onValueChanged(newValue || '')}
           onClick={onClickTextField}
           onKeyDown={onKeyDownTextField}
@@ -110,7 +110,7 @@ export const IntellisenseNumberField: React.FC<FieldProps<string>> = (props) => 
           focused={focused}
           id={id}
           value={textFieldValue}
-          onBlur={undefined} // onBlur managed by Intellisense
+          onBlur={() => {}} // onBlur managed by Intellisense
           onChange={(newValue) => onValueChanged(newValue || 0)}
           onClick={onClickTextField}
           onKeyDown={onKeyDownTextField}
@@ -167,7 +167,7 @@ export const IntellisenseJSONField: React.FC<FieldProps<string>> = (props) => {
           {...props}
           style={{ height: 100 }}
           value={textFieldValue}
-          onBlur={undefined} // onBlur managed by Intellisense
+          onBlur={() => {}} // onBlur managed by Intellisense
           onChange={onValueChanged}
         />
       )}

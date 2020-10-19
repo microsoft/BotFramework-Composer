@@ -43,7 +43,7 @@ export const ExpressionSwitchWindow = (props: ExpressionSwitchWindowProps) => {
 
       <div css={styles.switchToExpressionText} onClick={onSwitchToExpression}>
         <FontIcon css={styles.icon} iconName={'CalculatorEqualTo'} />
-        {formatMessage(`Write in expression`)}
+        {formatMessage(`Write an expression`)}
       </div>
     </React.Fragment>
   );
