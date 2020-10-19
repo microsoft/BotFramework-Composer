@@ -155,16 +155,16 @@ export class BotProject implements IBotProject {
     return this.files.get('app.schema') ?? this.files.get('sdk.schema');
   }
 
-  public get schemaOverrides() {
-    return this.files.get('app.override.schema') ?? this.files.get('sdk.override.schema');
-  }
-
   public get uiSchema() {
     return this.files.get('app.uischema') ?? this.files.get('sdk.uischema');
   }
 
   public get uiSchemaOverrides() {
     return this.files.get('app.override.uischema') ?? this.files.get('sdk.override.uischema');
+  }
+
+  public get schemaOverrides() {
+    return this.files.get('app.override.schema') ?? this.files.get('sdk.override.schema');
   }
 
   public getFile(id: string) {
