@@ -28,6 +28,7 @@ const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const { projectId = '' } = props;
   const settings = useRecoilValue(settingsState(projectId));
 
+  const [ejectedRuntime, setEjectedRuntime] = useState<boolean>(false);
   const [availableLibraries, updateAvailableLibraries] = useState<any[]>([]);
   const [installedComponents, updateInstalledComponents] = useState<any[]>([]);
 
@@ -39,10 +40,9 @@ const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   useEffect(() => {
     getLibraries();
     getInstalledLibraries();
-
-    // return () => {
-    //   fetchProjectById(projectId);
-    // };
+    if (settings.runtime && settings.runtime.customRuntime === true && settings.runtime.path) {
+      setEjectedRuntime(true);
+    }
   }, []);
 
   useEffect(() => {
@@ -109,8 +109,7 @@ const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   };
 
   const importFromWeb = async (packageName, version, isUpdating) => {
-    // TODO: check to see if package already exists in this project
-    const existing = settings.importedLibraries?.find((l) => l.name === packageName);
+    const existing = installedComponents?.find((l) => l.name === packageName);
     let okToProceed = true;
     if (existing) {
       const title = formatMessage('Update Library');
@@ -152,9 +151,6 @@ const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       }
 
       await getInstalledLibraries();
-
-      // wait til the file persistence completes
-      // await checkProjectUpdates();
 
       // reload modified content
       await fetchProjectById(projectId);
@@ -217,15 +213,6 @@ const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
             package: selectedItem.name,
           });
 
-          // // remove the item from settings
-          // const filtered = settings.importedLibraries.filter((f) => f.name !== response.data.package);
-
-          // // persist settings change
-          // setImportedLibraries(projectId, filtered);
-
-          // wait til the file persistence completes
-          // await checkProjectUpdates();
-
           // reload modified content
           await fetchProjectById(projectId);
         } catch (err) {
@@ -267,6 +254,12 @@ const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{formatMessage('Package Library')}</h1>
       </div>
+      {!ejectedRuntime && (
+        <div>
+          To install components, this project must first have an ejected runtime. Please navigate to the runtime
+          settings page and eject the runtime first.
+        </div>
+      )}
       <div css={ContentStyle} data-testid="installedLibraries" role="main">
         <div aria-label={formatMessage('List view')} css={contentEditor} role="region">
           <Fragment>
