@@ -51,23 +51,21 @@ class MongoStorage implements IFileStorage {
     if (!MongoStorage.db) {
       mongoose.connect('mongodb://localhost:27017/composer', {});
       MongoStorage.db = mongoose.connection;
-      MongoStorage.db.on('error', err => {
+      MongoStorage.db.on('error', (err) => {
         throw new Error(err);
       });
-      MongoStorage.db.once('open', function() {
+      MongoStorage.db.once('open', function () {
         // we're connected!
         // eslint-disable-next-line no-console
         // console.log('CONNECTED TO MONGO');
       });
 
       MongoStorage.files = mongoose.model('file', fileSchema, 'files');
-
     }
 
     if (user) {
       this._user = user;
     }
-
   }
 
   async stat(path: string): Promise<any> {
@@ -155,7 +153,7 @@ class MongoStorage implements IFileStorage {
         } else {
           // strip off the path, leaving just the filename
           resolve(
-            files.map(item => {
+            files.map((item) => {
               return item.path.replace(path, '');
             })
           );
@@ -202,7 +200,7 @@ class MongoStorage implements IFileStorage {
     path = cleanPath(path);
 
     return new Promise((resolve, reject) => {
-      MongoStorage.files.deleteOne({ path: path }, err => {
+      MongoStorage.files.deleteOne({ path: path }, (err) => {
         if (err) {
           reject(err);
         } else {
@@ -269,7 +267,7 @@ class MongoStorage implements IFileStorage {
         } else {
           // strip off the path, leaving just the filename
           resolve(
-            files.map(item => {
+            files.map((item) => {
               return item.path.replace(path, '');
             })
           );
@@ -311,4 +309,4 @@ class MongoStorage implements IFileStorage {
 export default async (composer: any): Promise<void> => {
   // pass in the custom storage class that will override the default
   await composer.useStorage(MongoStorage);
-}
+};

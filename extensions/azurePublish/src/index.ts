@@ -6,8 +6,8 @@ import path from 'path';
 import { v4 as uuid } from 'uuid';
 import md5 from 'md5';
 import { copy, rmdir, emptyDir, readJson, pathExists, writeJson, mkdirSync, writeFileSync } from 'fs-extra';
-import { IBotProject } from '@botframework-composer/types';
-import { JSONSchema7 } from '@bfc/extension';
+import { IBotProject, PublishPlugin } from '@botframework-composer/types';
+import { JSONSchema7, ExtensionRegistration } from '@bfc/extension';
 import { Debugger } from 'debug';
 
 import { mergeDeep } from './mergeDeep';
@@ -37,8 +37,8 @@ interface PublishConfig {
 }
 
 // Wrap the entire class definition in the export so the composer object can be available to it
-export default async (composer: any): Promise<void> => {
-  class AzurePublisher {
+export default async (composer: ExtensionRegistration): Promise<void> => {
+  class AzurePublisher implements PublishPlugin<PublishConfig> {
     private publishingBots: { [key: string]: any };
     private historyFilePath: string;
     private histories: any;
@@ -46,11 +46,11 @@ export default async (composer: any): Promise<void> => {
     private mode: string;
     public schema: JSONSchema7;
     public instructions: string;
-    public customName: string;
-    public customDescription: string;
+    public name: string;
+    public description: string;
     public logger: Debugger;
 
-    constructor(mode?: string, customName?: string, customDescription?: string) {
+    constructor(mode: string, name: string, description?: string) {
       this.histories = {};
       this.historyFilePath = path.resolve(__dirname, '../publishHistory.txt');
       if (PERSIST_HISTORY) {
@@ -61,8 +61,8 @@ export default async (composer: any): Promise<void> => {
       this.mode = mode || 'azurewebapp';
       this.schema = schema;
       this.instructions = instructions;
-      this.customName = customName;
-      this.customDescription = customDescription;
+      this.name = name;
+      this.description = description;
       this.logger = composer.log;
     }
 
@@ -95,7 +95,7 @@ export default async (composer: any): Promise<void> => {
       }
     }
 
-    private getHistory = async (botId: string, profileName: string) => {
+    private history = async (botId: string, profileName: string) => {
       if (this.histories && this.histories[botId] && this.histories[botId][profileName]) {
         return this.histories[botId][profileName];
       }
@@ -442,7 +442,7 @@ export default async (composer: any): Promise<void> => {
       if (status) {
         return status;
       } else {
-        const current = await this.getHistory(botId, profileName);
+        const current = await this.history(botId, profileName);
         if (current.length > 0) {
           return { status: current[0].status, result: { ...current[0] } };
         }
@@ -455,14 +455,14 @@ export default async (composer: any): Promise<void> => {
       }
     };
 
-    history = async (config: PublishConfig, project: IBotProject, user) => {
+    getHistory = async (config: PublishConfig, project: IBotProject, user) => {
       const profileName = config.profileName;
       const botId = project.id;
-      return await this.getHistory(botId, profileName);
+      return await this.history(botId, profileName);
     };
   }
 
-  const azurePublish = new AzurePublisher();
+  const azurePublish = new AzurePublisher('azurewebapp', 'azurePublish', 'Publish bot to Azure Webapps (Preview)');
   const azureFunctionsPublish = new AzurePublisher(
     'azurefunctions',
     'azureFunctionsPublish',

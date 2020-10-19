@@ -8,9 +8,10 @@ const samplesDir = path.resolve(__dirname, '../assets/projects');
 const boilerplateDir = path.resolve(__dirname, '../assets/shared');
 
 const samplesRegitry = {
-  '*': {  // base registry item, can be override by later specific entry
-    tags: ["Basic"],
-    support: ["C#", "JS"]
+  '*': {
+    // base registry item, can be override by later specific entry
+    tags: ['Basic'],
+    support: ['C#', 'JS'],
   },
   EchoBot: {
     name: 'Echo Bot',
@@ -42,7 +43,8 @@ const samplesRegitry = {
   },
   InterruptionSample: {
     name: 'Interruptions',
-    description: 'An advanced sample bot that shows how to handle context switching and interruption in a conversation.',
+    description:
+      'An advanced sample bot that shows how to handle context switching and interruption in a conversation.',
   },
   RespondingWithTextSample: {
     name: 'Responding with Text',
@@ -63,15 +65,14 @@ const samplesRegitry = {
   QnASample: {
     name: 'QnA Sample',
     description: 'A sample bot that import online QnA resource',
-  }
-}
-
+  },
+};
 
 function getSamples(): any[] {
   const subPaths = fs.readdirSync(samplesDir);
   const samples = [];
   for (const subPath of subPaths) {
-    const fullPath = samplesDir + "/" + subPath;
+    const fullPath = samplesDir + '/' + subPath;
     if (!fs.statSync(fullPath).isDirectory()) {
       continue;
     }
@@ -92,21 +93,21 @@ function getSamples(): any[] {
       return -1;
     }
     return 1;
-  })
+  });
   return samples;
 }
 
 function getBoilerplates() {
   return [
     {
-      id: "boilerplate",
-      name: "boilerplate",
-      description: "base template for every bot template",
+      id: 'boilerplate',
+      name: 'boilerplate',
+      description: 'base template for every bot template',
       path: boilerplateDir,
-      tags: ["boilerplate"],
-      support: ["*"],
-    }
-  ]
+      tags: ['boilerplate'],
+      support: ['*'],
+    },
+  ];
 }
 
 const samples = getSamples();
