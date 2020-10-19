@@ -97,11 +97,12 @@ export const botProjectFileDispatcher = () => {
   );
 
   const updateSkillsData = useRecoilCallback(
-    ({ set, snapshot }: CallbackInterface) => async (
+    (callbackHelpers: CallbackInterface) => async (
       skillNameIdentifier: string,
       skillsData: Skill,
       selectedEndpointIndex: number
     ) => {
+      const { set, snapshot } = callbackHelpers;
       const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
       if (!rootBotProjectId) {
         return;

@@ -2,25 +2,33 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx, css } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
 import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
-import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
+import { ActionButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { IPublishConfig } from '@bfc/shared';
+import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
+import { useCallback } from 'react';
 
 import { botStatusState } from '../../recoilModel';
 import { BotStatus } from '../../constants';
-import {
-  botBuildRequiredSelector,
-  botRuntimeOperationsSelector,
-  buildEssentialsSelector,
-} from '../../recoilModel/selectors/localRuntimeBuilder';
+
+import { useBotOperations } from './useLocalBotOperations';
 
 interface LocalBotRuntimeProps {
   projectId: string;
   displayName: string;
 }
+
+const localBotRuntimeContainerStyles = css`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const loadingSpinnerStyle = css`
+  margin-right: 12px;
+`;
 
 const icon: IButtonStyles = {
   root: {
@@ -34,36 +42,31 @@ const icon: IButtonStyles = {
 
 export const LocalBotRuntime: React.FC<LocalBotRuntimeProps> = ({ projectId, displayName }) => {
   const currentBotStatus = useRecoilValue(botStatusState(projectId));
-  const botBuildRequired = useRecoilValue(botBuildRequiredSelector(projectId));
-  const { configuration: startBotConfig } = useRecoilValue(buildEssentialsSelector(projectId));
-  const botRuntimeOperations = useRecoilValue(botRuntimeOperationsSelector);
+  const { startSingleBot, stopSingleBot } = useBotOperations();
 
-  const handleBotStop = () => {
-    botRuntimeOperations?.stopBot(projectId);
-  };
-
-  const handleBotStart = async () => {
-    const config: IPublishConfig | undefined = startBotConfig;
-    if (botBuildRequired) {
-      // Default recognizer
-      botRuntimeOperations?.buildWithDefaultRecognizer(projectId, config);
-    } else {
-      // Regex recognizer
-      botRuntimeOperations?.startBot(projectId, config);
+  const botRunIndicatorCallback = useCallback(() => {
+    switch (currentBotStatus) {
+      case BotStatus.connected:
+      case BotStatus.failed:
+        return (
+          <ActionButton onClick={() => stopSingleBot(projectId)}>
+            <Icon iconName={'CircleStopSolid'} styles={icon} />
+          </ActionButton>
+        );
+      case BotStatus.unConnected:
+        return (
+          <ActionButton onClick={() => startSingleBot(projectId)}>
+            <Icon iconName={'Play'} styles={icon} />
+          </ActionButton>
+        );
+      default:
+        return <Spinner css={loadingSpinnerStyle} />;
     }
-  };
+  }, [currentBotStatus]);
 
   return (
-    <div>
-      {currentBotStatus === BotStatus.connected ? (
-        <button onClick={handleBotStop}>
-          <Icon iconName={'CircleStopSolid'} styles={icon} />
-        </button>
-      ) : (
-        <button onClick={handleBotStart}>
-          <Icon iconName={'Play'} styles={icon} />
-        </button>
-      )}
+    <div css={localBotRuntimeContainerStyles}>
+      {botRunIndicatorCallback()}
       <span aria-label={displayName}>{displayName}</span>
     </div>
   );

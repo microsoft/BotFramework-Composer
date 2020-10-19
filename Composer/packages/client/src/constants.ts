@@ -99,7 +99,7 @@ export const Steps = {
 
 export const BotStatusesCopy = {
   connected: formatMessage('Running'),
-  publishing: formatMessage('Publishing'),
+  publishing: formatMessage('Building'),
   published: formatMessage('Starting'),
   unConnected: formatMessage('Inactive'),
   failed: formatMessage('Failed to start'),

@@ -7,13 +7,14 @@ import { selector, selectorFamily } from 'recoil';
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { BotStatus } from '../../constants';
 import { isAbsHosted } from '../../utils/envUtil';
-import { botStatusState, luFilesState, qnaFilesState, settingsState } from '../atoms';
+import { botDisplayNameState, botStatusState, luFilesState, qnaFilesState, settingsState } from '../atoms';
 import { Dispatcher } from '../dispatchers';
 import { dispatcherState } from '../DispatcherWrapper';
 import { isBuildConfigComplete as isBuildConfigurationComplete, needsBuild } from '../../utils/buildUtil';
 
 import { validateDialogSelectorFamily } from './validatedDialogs';
-import { localBotsWithoutErrorsSelector } from './project';
+
+import { localBotsWithoutErrorsSelector } from '.';
 
 export const trackBotStatusesSelector = selectorFamily({
   key: 'trackBotStatusesSelector',
@@ -65,7 +66,8 @@ export const buildConfigurationSelector = selector({
     const localProjects = get(localBotsWithoutErrorsSelector);
     return localProjects.map((projectId: string) => {
       const result = get(buildEssentialsSelector(projectId));
-      return result;
+      const name = get(botDisplayNameState(projectId));
+      return { ...result, name };
     });
   },
 });

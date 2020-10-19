@@ -37,7 +37,6 @@ export const skillsStateSelector = selector({
           remote: isRemote,
         };
       }
-      console.log('RESULT', result);
       return result;
     }, {});
     return skills;

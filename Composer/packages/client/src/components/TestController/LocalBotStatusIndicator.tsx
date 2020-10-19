@@ -19,7 +19,6 @@ import { ErrorCallout } from './errorCallout';
 import { useBotOperations } from './useLocalBotOperations';
 
 const actionButton = css`
-  font-size: 18px;
   color: #0078d4;
 `;
 

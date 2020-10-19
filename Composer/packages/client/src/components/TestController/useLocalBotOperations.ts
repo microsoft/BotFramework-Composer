@@ -2,18 +2,24 @@
 // Licensed under the MIT License.
 
 import { IPublishConfig } from '@bfc/shared';
-import { css } from '@emotion/core';
 import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 
-import { botRuntimeOperationsSelector, buildConfigurationSelector } from '../../recoilModel';
+import {
+  botRuntimeOperationsSelector,
+  buildConfigurationSelector,
+  dispatcherState,
+  rootBotProjectIdSelector,
+} from '../../recoilModel';
 
 import { useBotStatusTracker } from './useBotStatusTracker';
 
 export function useBotOperations(onAllBotsStarted?: (started: boolean) => void) {
   const builderEssentials = useRecoilValue(buildConfigurationSelector);
   const botRuntimeOperations = useRecoilValue(botRuntimeOperationsSelector);
+  const rootBotId = useRecoilValue(rootBotProjectIdSelector);
   const [trackedProjectIds, setProjectsToTrack] = useState<string[]>([]);
+  const { updateSettingForLocalEndpointSkills } = useRecoilValue(dispatcherState);
 
   const handleBotStart = async (projectId: string, config: IPublishConfig, botBuildRequired: boolean) => {
     if (botBuildRequired) {
@@ -25,8 +31,9 @@ export function useBotOperations(onAllBotsStarted?: (started: boolean) => void) 
     }
   };
 
-  const startRootBot = () => {
+  const startRootBot = async () => {
     setProjectsToTrack([]);
+    await updateSettingForLocalEndpointSkills();
     const rootBot = builderEssentials[0];
     const { projectId, configuration, buildRequired } = rootBot;
     handleBotStart(projectId, configuration, buildRequired);
@@ -59,15 +66,24 @@ export function useBotOperations(onAllBotsStarted?: (started: boolean) => void) 
   };
 
   const startSingleBot = (projectId: string) => {
-    const skillData = builderEssentials.find((builder) => builder.projectId === projectId);
-    if (skillData) {
-      handleBotStart(projectId, skillData?.configuration, skillData?.buildRequired);
+    if (projectId === rootBotId) {
+      startRootBot();
+    } else {
+      const botData = builderEssentials.find((builder) => builder.projectId === projectId);
+      if (botData) {
+        handleBotStart(projectId, botData?.configuration, botData?.buildRequired);
+      }
     }
+  };
+
+  const stopSingleBot = (projectId: string) => {
+    botRuntimeOperations?.stopBot(projectId);
   };
 
   return {
     stopAllBots,
     startAllBots,
     startSingleBot,
+    stopSingleBot,
   };
 }

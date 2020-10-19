@@ -48,6 +48,7 @@ import {
   showCreateDialogModalState,
   showAddSkillDialogModalState,
   localeState,
+  botProjectSpaceSelector,
 } from '../../recoilModel';
 import ImportQnAFromUrlModal from '../knowledge-base/ImportQnAFromUrlModal';
 import { triggerNotSupported } from '../../utils/dialogValidator';
@@ -61,7 +62,6 @@ import {
   deleteDialogContent,
   editorContainer,
   editorWrapper,
-  manifestUrl,
   pageRoot,
   visualPanel,
 } from './styles';
@@ -123,6 +123,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const undoFunction = useRecoilValue(undoFunctionState(projectId));
   const undoVersion = useRecoilValue(undoVersionState(projectId));
   const appLocale = useRecoilValue(localeState(projectId));
+  const botProjectsSpace = useRecoilValue(botProjectSpaceSelector);
 
   const { undo, redo, canRedo, canUndo, commitChanges, clearUndo } = undoFunction;
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
@@ -145,6 +146,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     addExistingSkillToBotProject,
     updateZoomRate,
     addNewSkillToBotProject,
+    removeSkillFromBotProject,
   } = useRecoilValue(dispatcherState);
 
   const params = new URLSearchParams(location?.search);
@@ -322,19 +324,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
               openImportQnAModal();
             },
           },
-        ],
-      },
-    },
-    {
-      type: 'dropdown',
-      text: formatMessage('Edit'),
-      align: 'left',
-      dataTestid: 'EditFlyout',
-      buttonProps: {
-        iconProps: { iconName: 'Edit' },
-      },
-      menuProps: {
-        items: [
           {
             'data-testid': 'AddRemoteSkill',
             key: 'addRemoteSkill',
@@ -349,16 +338,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             },
           },
           {
-            'data-testid': 'AnotherShit',
-            key: 'AnotherShit',
-            text: formatMessage(`add another bad skill`, {
-              displayName: currentDialog?.displayName ?? '',
-            }),
-            onClick: () => {
-              addExistingSkillToBotProject('/Users/srravich/Desktop/EchoBot-new');
-            },
-          },
-          {
             'data-testid': 'createNewSkill',
             key: 'createNewSkill',
             text: formatMessage(`Create new Skill`, {
@@ -369,7 +348,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                 name: 'newers-bot',
                 description: '',
                 schemaUrl: '',
-                location: '/Users/srravich/Desktop/samples',
+                location: '/Users/srravich/Desktop/samples/Archive',
                 templateId: 'InterruptionSample',
                 locale: appLocale,
                 qnaKbUrls: [],
@@ -377,15 +356,49 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             },
           },
           {
-            'data-testid': 'AddLocalSkill',
-            key: 'addLocalSkill',
-            text: formatMessage(`Add local skill from path`, {
+            'data-testid': 'removeSkillAtIndex',
+            key: 'removeSkillAtIndex',
+            text: formatMessage(`Remove a skill`, {
               displayName: currentDialog?.displayName ?? '',
             }),
             onClick: () => {
-              addExistingSkillToBotProject('/Users/srravich/Desktop/skill1');
+              const matchedProject: any = botProjectsSpace[botProjectsSpace.length - 1];
+              removeSkillFromBotProject(matchedProject.projectId);
             },
           },
+          {
+            'data-testid': 'AddLocalSkill',
+            key: 'addLocalSkill',
+            text: formatMessage(`Add Google Keep Skill`, {
+              displayName: currentDialog?.displayName ?? '',
+            }),
+            onClick: () => {
+              addExistingSkillToBotProject('/Users/srravich/Desktop/samples/Archive/GoogleKeepSync');
+            },
+          },
+          {
+            'data-testid': 'AddLocalSkill-1',
+            key: 'addLocalSkill',
+            text: formatMessage(`Add Todo Skill`, {
+              displayName: currentDialog?.displayName ?? '',
+            }),
+            onClick: () => {
+              addExistingSkillToBotProject('/Users/srravich/Desktop/samples/Archive/Todo-Skill');
+            },
+          },
+        ],
+      },
+    },
+    {
+      type: 'dropdown',
+      text: formatMessage('Edit'),
+      align: 'left',
+      dataTestid: 'EditFlyout',
+      buttonProps: {
+        iconProps: { iconName: 'Edit' },
+      },
+      menuProps: {
+        items: [
           {
             key: 'edit.undo',
             text: formatMessage('Undo'),

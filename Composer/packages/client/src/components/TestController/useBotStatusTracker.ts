@@ -6,18 +6,18 @@ import { useRecoilValue } from 'recoil';
 
 import { trackBotStatusesSelector } from '../../recoilModel';
 
-export function useBotStatusTracker(postSkillsStartAction: () => void, trackedProjectIds: string[]) {
+export function useBotStatusTracker(postTrackedBotsStartedAction: () => void, trackedProjectIds: string[]) {
   const savedCallback: any = useRef();
   const areBotsStarting = useRecoilValue(trackBotStatusesSelector(trackedProjectIds));
 
   // Remember the latest callback.
   useEffect(() => {
-    savedCallback.current = postSkillsStartAction;
-  }, [postSkillsStartAction]);
+    savedCallback.current = postTrackedBotsStartedAction;
+  }, [postTrackedBotsStartedAction]);
 
   useEffect(() => {
-    const trackedBotsStarted = !areBotsStarting;
-    if (trackedProjectIds.length && trackedBotsStarted) {
+    const allTrackedBotStarted = !areBotsStarting;
+    if (trackedProjectIds.length && allTrackedBotStarted) {
       // Start the root bot now after skills are started.
       savedCallback.current();
     }

@@ -447,10 +447,7 @@ const handleSkillLoadingFailure = (callbackHelpers, { ex, skillNameIdentifier })
   return projectId;
 };
 
-const migrateSkillsForExistingBots = (
-  botProjectFile: BotProjectSpace,
-  rootBotSkill: SkillSetting & { manifestUrl: string }
-) => {
+const migrateSkillsForExistingBots = (botProjectFile: BotProjectSpace, rootBotSkill: any) => {
   if (Object.keys(botProjectFile.skills).length === 0 && Object.keys(rootBotSkill).length > 0) {
     for (const skillName in rootBotSkill) {
       const currentSkill = rootBotSkill[skillName];
@@ -488,8 +485,14 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
 
   if (botFiles.botProjectSpaceFiles && botFiles.botProjectSpaceFiles.length) {
     const currentBotProjectFileIndexed: BotProjectFile = botFiles.botProjectSpaceFiles[0];
-    const updatedFileContent = migrateSkillsForExistingBots(currentBotProjectFileIndexed.content, mergedSettings.skill);
-    currentBotProjectFileIndexed.content = updatedFileContent;
+    if (mergedSettings.skill) {
+      const updatedFileContent = migrateSkillsForExistingBots(
+        currentBotProjectFileIndexed.content,
+        mergedSettings.skill
+      );
+      currentBotProjectFileIndexed.content = updatedFileContent;
+    }
+
     const currentBotProjectFile: BotProjectSpace = currentBotProjectFileIndexed.content;
 
     set(botProjectFileState(rootBotProjectId), currentBotProjectFileIndexed);
