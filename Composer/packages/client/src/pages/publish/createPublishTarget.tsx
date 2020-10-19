@@ -17,14 +17,15 @@ import { Separator } from 'office-ui-fabric-react/lib/Separator';
 // import { IPersonaSharedProps, Persona, PersonaSize } from 'office-ui-fabric-react/lib/Persona';
 // import { Link } from 'office-ui-fabric-react/lib/Link';
 
-// import { PublishProfileDialog } from '../../constants';
 import { PublishType } from '../../recoilModel/types';
 import { userSettingsState } from '../../recoilModel';
 import { PluginAPI } from '../../plugins/api';
 import { PluginHost } from '../../components/PluginHost/PluginHost';
+import { dispatcherState } from '../../recoilModel';
 
 import { label, separator, customPublishUISurface } from './styles';
 interface CreatePublishTargetProps {
+  projectId: string;
   closeDialog: () => void;
   current: { index: number; item: PublishTarget } | null;
   targets: PublishTarget[];
@@ -34,7 +35,7 @@ interface CreatePublishTargetProps {
 }
 
 const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
-  const { current } = props;
+  const { current, projectId } = props;
   const [targetType, setTargetType] = useState<string>(current?.item.type || '');
   const [name, setName] = useState(current ? current.item.name : '');
   const [config, setConfig] = useState(current ? JSON.parse(current.item.configuration) : undefined);
@@ -43,6 +44,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
   const [page, setPage] = useState(1);
 
   const userSettings = useRecoilValue(userSettingsState);
+  const { provisionToTarget, getProvisionStatus } = useRecoilValue(dispatcherState);
 
   const targetTypes = useMemo(() => {
     return props.types.map((t) => ({ key: t.name, text: t.description }));
@@ -108,7 +110,21 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
     PluginAPI.publish.setConfigIsValid = (valid) => setPluginConfigIsValid(valid);
     PluginAPI.publish.useConfigBeingEdited = () => [current ? JSON.parse(current.item.configuration) : undefined];
     PluginAPI.publish.closeDialog = props.closeDialog;
-  }, [current, targetType, name]);
+  }, [current]);
+
+  // setup plugin APIs so that the provisioning plugin can initiate the process from inside the iframe
+  useEffect(() => {
+    PluginAPI.publish.startProvision = async (config) => {
+      console.log('BEGIN A PROVISION FOR PROJECT ', projectId, 'USING CONFIG', config);
+      const fullConfig = { ...config, name: name, type: targetType };
+      console.log(fullConfig);
+      provisionToTarget(fullConfig, config.type, projectId);
+      getProvisionStatus(projectId, fullConfig);
+    };
+    PluginAPI.publish.currentProjectId = () => {
+      return projectId;
+    };
+  }, [projectId, name, targetType]);
 
   const submit = async (_e) => {
     if (targetType) {

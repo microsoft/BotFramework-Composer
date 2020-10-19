@@ -11,7 +11,6 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { PublishTarget } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
-import { PluginAPI } from '../../plugins/api';
 import { setAccessToken, setGraphToken } from '../../utils/auth';
 import { LeftRightSplit } from '../../components/Split/LeftRightSplit';
 import settingsStorage from '../../utils/dialogSettingStorage';
@@ -51,8 +50,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     publishToTarget,
     setQnASettings,
     rollbackToVersion: rollbackToVersionDispatcher,
-    provisionToTarget,
-    // getProvisionStatus,
   } = useRecoilValue(dispatcherState);
 
   const [dialogHidden, setDialogHidden] = useState(true);
@@ -242,8 +239,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
           name,
           type,
           configuration,
-          provisionConfig: '{}',
-          provisionStatus: '{}',
         },
       ]);
       await setPublishTargets(targets, projectId);
@@ -264,8 +259,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         name,
         type,
         configuration,
-        provisionConfig: '{}',
-        provisionStatus: '{}',
       };
 
       await setPublishTargets(targets, projectId);
@@ -284,6 +277,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
           <CreatePublishTarget
             closeDialog={() => setDialogHidden(true)}
             current={null}
+            projectId={projectId}
             setDialogProps={setDialogProps}
             targets={settings.publishTargets || []}
             types={publishTypes}
@@ -305,6 +299,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
           <CreatePublishTarget
             closeDialog={() => setDialogHidden(true)}
             current={editTarget ? editTarget : null}
+            projectId={projectId}
             setDialogProps={setDialogProps}
             targets={(settings.publishTargets || []).filter((item) => editTarget && item.name != editTarget.item.name)}
             types={publishTypes}
@@ -395,17 +390,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     },
     []
   );
-
-  // setup plugin APIs so that the provisioning plugin can initiate the process from inside the iframe
-  useEffect(() => {
-    PluginAPI.publish.startProvision = async (config) => {
-      console.log('BEGIN A PROVISION FOR PROJECT ', projectId, 'USING CONFIG', config);
-      provisionToTarget(config, config.type, projectId);
-    };
-    PluginAPI.publish.currentProjectId = () => {
-      return projectId;
-    };
-  }, [projectId]);
 
   return (
     <Fragment>

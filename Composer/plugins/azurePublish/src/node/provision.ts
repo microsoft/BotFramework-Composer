@@ -17,9 +17,9 @@ export interface ProvisionConfig {
   externalResources: ResourceType[];
   location: { id: string; name: string; displayName: string };
   subscription: { subscriptionId: string; tenantId: string; displayName: string };
-  logger: (string) => any;
-  name?: string; // profile name
-  type?: string; // webapp or function
+  logger?: (string) => any;
+  name: string; // profile name
+  type: string; // webapp or function
   choice?: string;
   [key: string]: any;
 }
