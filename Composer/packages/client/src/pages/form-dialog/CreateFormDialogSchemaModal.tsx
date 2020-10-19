@@ -71,6 +71,7 @@ const CreateFormDialogSchemaModal: React.FC<Props> = (props) => {
         <Stack>
           <TextField
             required
+            autoComplete="off"
             errorMessage={formErrors.name}
             label={formatMessage('Name')}
             styles={name}
