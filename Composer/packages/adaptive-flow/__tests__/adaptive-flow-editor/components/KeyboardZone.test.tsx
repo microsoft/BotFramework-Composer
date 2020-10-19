@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render, fireEvent } from '@bfc/test-utils';
+import { render, fireEvent } from '@botframework-composer/test-utils';
 
 import { enableKeyboardCommandAttributes } from '../../../src/adaptive-flow-editor/components/KeyboardZone';
 

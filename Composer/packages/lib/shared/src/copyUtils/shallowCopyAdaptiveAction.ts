@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { BaseSchema } from '@bfc/types';
+import { BaseSchema } from '@botframework-composer/types';
 
 import { ExternalApi } from './ExternalApi';
 

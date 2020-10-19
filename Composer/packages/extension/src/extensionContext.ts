@@ -9,7 +9,7 @@ import { Express } from 'express';
 import { pathToRegexp } from 'path-to-regexp';
 import glob from 'globby';
 import formatMessage from 'format-message';
-import { UserIdentity, ExtensionCollection, RuntimeTemplate } from '@bfc/types';
+import { UserIdentity, ExtensionCollection, RuntimeTemplate } from '@botframework-composer/types';
 
 import logger from './logger';
 import { ExtensionRegistration } from './extensionRegistration';
@@ -103,6 +103,7 @@ class ExtensionContext {
     }
   }
 
+  /** @deprecated */
   public async loadPluginsFromFolder(dir: string) {
     const plugins = await glob('*/package.json', { cwd: dir, dot: true });
     for (const p in plugins) {

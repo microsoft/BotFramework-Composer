@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render, fireEvent, findByText } from '@bfc/test-utils';
+import { render, fireEvent, findByText } from '@botframework-composer/test-utils';
 
 import { IconMenu } from '../../../src/adaptive-flow-editor/components/IconMenu';
 
