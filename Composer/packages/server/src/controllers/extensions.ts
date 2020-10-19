@@ -136,9 +136,9 @@ export async function getBundleForView(req: ExtensionViewBundleRequest, res: Res
         return;
       }
     }
-  } else {
-    res.status(404).json({ error: 'extension not found' });
   }
+
+  res.status(404).json({ error: 'extension not found' });
 }
 
 export async function performExtensionFetch(req: ExtensionFetchRequest, res: Response) {

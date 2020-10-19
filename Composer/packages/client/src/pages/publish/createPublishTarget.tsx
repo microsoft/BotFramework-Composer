@@ -103,35 +103,33 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
   };
 
   const publishTargetContent = useMemo(() => {
-    if (selectedTarget) {
-      if (selectedTarget.bundleId) {
-        // render custom plugin view
-        return (
-          <PluginHost
-            bundleId={selectedTarget.bundleId}
-            extraIframeStyles={[customPublishUISurface]}
-            pluginName={selectedTarget.extensionId}
-            pluginType="publish"
-          />
-        );
-      }
-      // render default instruction / schema editor view
+    if (selectedTarget?.bundleId) {
+      // render custom plugin view
       return (
-        <Fragment>
-          {selectedTarget.instructions && <p>{selectedTarget.instructions}</p>}
-          <div css={label}>{formatMessage('Publish Configuration')}</div>
-          <JsonEditor
-            key={targetType}
-            editorSettings={userSettings.codeEditor}
-            height={200}
-            schema={selectedTarget.schema}
-            value={config}
-            onChange={updateConfig}
-          />
-          <button hidden disabled={saveDisabled} type="submit" />
-        </Fragment>
+        <PluginHost
+          bundleId={selectedTarget.bundleId}
+          extraIframeStyles={[customPublishUISurface]}
+          pluginName={selectedTarget.extensionId}
+          pluginType="publish"
+        />
       );
     }
+    // render default instruction / schema editor view
+    return (
+      <Fragment>
+        {selectedTarget?.instructions && <p>{selectedTarget?.instructions}</p>}
+        <div css={label}>{formatMessage('Publish Configuration')}</div>
+        <JsonEditor
+          key={targetType}
+          editorSettings={userSettings.codeEditor}
+          height={200}
+          schema={selectedTarget?.schema}
+          value={config}
+          onChange={updateConfig}
+        />
+        <button hidden disabled={saveDisabled} type="submit" />
+      </Fragment>
+    );
   }, [selectedTarget, targetType, saveDisabled]);
 
   return (
