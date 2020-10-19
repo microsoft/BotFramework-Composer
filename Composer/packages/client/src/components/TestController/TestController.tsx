@@ -3,13 +3,13 @@
 
 /** @jsx jsx */
 
-import React, { useState, useRef, Fragment, useEffect, useCallback } from 'react';
+import React, { useState, useRef, Fragment, useEffect, useCallback, useMemo } from 'react';
 import { jsx, css } from '@emotion/core';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 import { IConfig, IPublishConfig, defaultPublishConfig } from '@bfc/shared';
-import { useRecognizerConfig } from '@bfc/extension-client';
+import { useRecognizerConfig, EditorExtension, PluginConfig, mergePluginConfigs } from '@bfc/extension-client';
 
 import {
   botEndpointsState,
@@ -21,12 +21,15 @@ import {
   qnaFilesState,
   settingsState,
   botLoadErrorState,
+  schemasState,
 } from '../../recoilModel';
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { BotStatus } from '../../constants';
 import { isAbsHosted } from '../../utils/envUtil';
 import useNotifications from '../../pages/notifications/useNotifications';
 import { navigateTo, openInEmulator } from '../../utils/navigation';
+import plugins from '../../plugins';
+import { useShell } from '../../shell/useShell';
 
 import { isBuildConfigComplete, needsBuild } from './../../utils/buildUtil';
 import { PublishDialog } from './publishDialog';
@@ -53,7 +56,7 @@ let botStatusInterval: NodeJS.Timeout | undefined = undefined;
 
 // -------------------- TestController -------------------- //
 const POLLING_INTERVAL = 2500;
-export const TestController: React.FC<{ projectId: string }> = (props) => {
+export const TestControllerContent: React.FC<{ projectId: string }> = (props) => {
   const { projectId = '' } = props;
   const [modalOpen, setModalOpen] = useState(false);
   const [calloutVisible, setCalloutVisible] = useState(false);
@@ -264,5 +267,22 @@ export const TestController: React.FC<{ projectId: string }> = (props) => {
         />
       )}
     </Fragment>
+  );
+};
+
+export const TestController: React.FC<{ projectId: string }> = (props) => {
+  const schemas = useRecoilValue(schemasState(props.projectId));
+  const shellForPropertyEditor = useShell('DesignPage', props.projectId);
+
+  const pluginConfig: PluginConfig = useMemo(() => {
+    const sdkUISchema = schemas?.ui?.content ?? {};
+    const userUISchema = schemas?.uiOverrides?.content ?? {};
+    return mergePluginConfigs({ uiSchema: sdkUISchema }, plugins, { uiSchema: userUISchema });
+  }, [schemas?.ui?.content, schemas?.uiOverrides?.content]);
+
+  return (
+    <EditorExtension plugins={pluginConfig} projectId={props.projectId} shell={shellForPropertyEditor}>
+      <TestControllerContent {...props} />
+    </EditorExtension>
   );
 };
