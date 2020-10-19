@@ -85,5 +85,5 @@ export const TriggerDropdownGroup: FC<TriggerDropwdownGroupProps> = ({ recognize
   };
 
   const dropdownList = getDropdownList(activeNode);
-  return <Stack>{...dropdownList}</Stack>;
+  return <Stack>{dropdownList}</Stack>;
 };
