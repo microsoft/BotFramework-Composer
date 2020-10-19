@@ -678,13 +678,15 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           />
         )}
         {triggerModalVisible && (
-          <TriggerCreationModal
-            dialogId={dialogId}
-            isOpen={triggerModalVisible}
-            projectId={projectId}
-            onDismiss={onTriggerCreationDismiss}
-            onSubmit={onTriggerCreationSubmit}
-          />
+          <EditorExtension plugins={pluginConfig} projectId={projectId} shell={shell}>
+            <TriggerCreationModal
+              dialogId={dialogId}
+              isOpen={triggerModalVisible}
+              projectId={projectId}
+              onDismiss={onTriggerCreationDismiss}
+              onSubmit={onTriggerCreationSubmit}
+            />
+          </EditorExtension>
         )}
         <CreateQnAModal dialogId={dialogId} projectId={projectId} qnaFiles={qnaFiles} onSubmit={handleCreateQnA} />)
         {displaySkillManifest && (
