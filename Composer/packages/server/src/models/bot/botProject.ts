@@ -152,19 +152,19 @@ export class BotProject implements IBotProject {
   }
 
   public get schema() {
-    return this.files.get('sdk.schema');
+    return this.files.get('app.schema') ?? this.files.get('sdk.schema');
   }
 
   public get uiSchema() {
-    return this.files.get('sdk.uischema');
+    return this.files.get('app.uischema') ?? this.files.get('sdk.uischema');
   }
 
   public get uiSchemaOverrides() {
-    return this.files.get('sdk.override.uischema');
+    return this.files.get('app.override.uischema') ?? this.files.get('sdk.override.uischema');
   }
 
   public get schemaOverrides() {
-    return this.files.get('sdk.override.schema');
+    return this.files.get('app.override.schema') ?? this.files.get('sdk.override.schema');
   }
 
   public getFile(id: string) {
@@ -549,7 +549,7 @@ export class BotProject implements IBotProject {
     return qnaEndpointKey;
   };
 
-  public async generateDialog(name: string) {
+  public async generateDialog(name: string, templateDirs?: string[]) {
     const defaultLocale = this.settings?.defaultLanguage || defaultLanguage;
     const relativePath = defaultFilePath(this.name, defaultLocale, `${name}${FileExtensions.FormDialogSchema}`);
     const schemaPath = Path.resolve(this.dir, relativePath);
@@ -568,7 +568,7 @@ export class BotProject implements IBotProject {
       outDir,
       metaSchema: undefined,
       allLocales: undefined,
-      templateDirs: [],
+      templateDirs: templateDirs || [],
       force: false,
       merge: true,
       singleton: true,
@@ -736,6 +736,10 @@ export class BotProject implements IBotProject {
       'sdk.override.uischema',
       'sdk.schema',
       'sdk.uischema',
+      'app.override.schema',
+      'app.override.uischema',
+      'app.schema',
+      'app.uischema',
       '*.botproj',
     ];
     for (const pattern of patterns) {
