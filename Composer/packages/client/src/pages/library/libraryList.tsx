@@ -27,6 +27,7 @@ export interface ILibraryListProps {
   items: LibraryRef[];
   groups: IGroup[];
   redownload: (evt: any) => void;
+  install: (evt: any) => void;
   isInstalled: (item: LibraryRef) => boolean;
   removeLibrary: (evt: any) => void;
   onItemClick: (item: LibraryRef | null) => void;
@@ -141,7 +142,7 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
             )}
             {!props.isInstalled(item) && (
               <Fragment>
-                <DefaultButton text={formatMessage('Install')} onClick={props.redownload} />
+                <DefaultButton text={formatMessage('Install')} onClick={props.install} />
               </Fragment>
             )}
           </Fragment>
