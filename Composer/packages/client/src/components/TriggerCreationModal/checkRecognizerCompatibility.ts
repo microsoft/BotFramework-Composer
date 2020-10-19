@@ -3,6 +3,7 @@
 
 import { SDKKinds } from '@bfc/shared';
 
+// TODO (zeye): define triggers compatibility in sdk schema
 /**
  * Returns 'false' if recognizer and trigger is not compatible.
  */
