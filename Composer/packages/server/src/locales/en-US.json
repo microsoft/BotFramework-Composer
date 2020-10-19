@@ -914,15 +914,6 @@
   "duplicated_intents_recognized_d3908424": {
     "message": "Duplicated intents recognized"
   },
-<<<<<<< HEAD
-  "each_page_of_be455012": {
-    "message": "Each page of"
-  },
-  "each_value_in_ae285cd9": {
-    "message": "Each value in"
-  },
-=======
->>>>>>> main
   "early_adopters_e8db7999": {
     "message": "Early adopters"
   },
@@ -1018,9 +1009,6 @@
   },
   "enter_a_url_or_browse_to_upload_a_file_88a783fa": {
     "message": "Enter a URL or browse to upload a file "
-  },
-  "enterprise_assistant_434df551": {
-    "message": "Enterprise Assistant"
   },
   "enterprise_assistant_434df551": {
     "message": "Enterprise Assistant"
@@ -1126,9 +1114,6 @@
   },
   "extracting_qna_pairs_from_url_b0331bba": {
     "message": "Extracting QNA pairs from { url }"
-  },
-  "fallback_text_e5ff1cb7": {
-    "message": "Fallback Text"
   },
   "fallback_text_e5ff1cb7": {
     "message": "Fallback Text"
@@ -1294,9 +1279,6 @@
   },
   "import_schema_75659c5f": {
     "message": "Import schema"
-  },
-  "in_4caf13c1": {
-    "message": "in"
   },
   "in_production_5a70b8b4": {
     "message": "In production"
@@ -1829,9 +1811,6 @@
   "open_inline_editor_a5aabcfa": {
     "message": "Open inline editor"
   },
-  "open_skills_page_for_configuration_details_a2a484ea": {
-    "message": "Open Skills page for configuration details"
-  },
   "optional_221bcc9d": {
     "message": "Optional"
   },
@@ -2231,12 +2210,9 @@
   "select_an_option_9f5dfb55": {
     "message": "Select an option"
   },
-<<<<<<< HEAD
-=======
   "select_an_schema_to_edit_or_create_a_new_one_59c7326a": {
     "message": "Select an schema to edit or create a new one"
   },
->>>>>>> main
   "select_language_to_delete_d1662d3d": {
     "message": "Select language to delete"
   },
@@ -2588,12 +2564,9 @@
   "toggle_extension_e41de2d2": {
     "message": "Toggle extension"
   },
-<<<<<<< HEAD
-=======
   "toggle_show_all_61f19d77": {
     "message": "Toggle show all"
   },
->>>>>>> main
   "toolbar_bafd4228": {
     "message": "toolbar"
   },
