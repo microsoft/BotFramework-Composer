@@ -16,7 +16,7 @@ import {
   TriggerOptionLeafNode,
   TriggerOptionTreeNode,
 } from './TriggerOptionTree';
-import { builtinTriggerUISchema } from './schema/builtinSchema';
+import { builtinTriggerUISchema } from './schema/builtinTriggerSchema';
 
 export interface TriggerDropwdownGroupProps {
   recognizerType: SDKKinds | undefined;
