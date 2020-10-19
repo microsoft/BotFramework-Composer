@@ -2,25 +2,37 @@
 // Licensed under the MIT License.
 
 import { useEffect, useState } from 'react';
-import { LuFile, LgFile, DialogInfo, LgTemplateSamples } from '@bfc/shared';
+import {
+  LgTemplate,
+  LuFile,
+  LgFile,
+  DialogInfo,
+  ITriggerCondition,
+  SDKKinds,
+  BaseSchema,
+  MicrosoftIDialog,
+} from '@botframework-composer/types';
 import { useRecoilValue } from 'recoil';
-import { LgTemplate } from '@bfc/shared';
+import { LgTemplateSamples } from '@bfc/shared';
 import get from 'lodash/get';
 
 import { useResolvers } from '../hooks/useResolver';
 import { onChooseIntentKey, generateNewDialog, intentTypeKey, qnaMatcherKey } from '../utils/dialogUtil';
-import { navigateTo } from '../utils/navigation';
 import { schemasState, lgFilesState, dialogsState, localeState } from '../recoilModel';
 import { Dispatcher } from '../recoilModel/dispatchers';
 
 import { dispatcherState } from './../recoilModel/DispatcherWrapper';
+import { useActionApi } from './actionApi';
+import { useLuApi } from './luApi';
 
 function createTriggerApi(
   state: { projectId; schemas; dialogs; locale; lgFiles },
   dispatchers: Dispatcher, //TODO
   luFileResolver: (id: string) => LuFile | undefined,
   lgFileResolver: (id: string) => LgFile | undefined,
-  dialogResolver: (id: string) => DialogInfo | undefined
+  dialogResolver: (id: string) => DialogInfo | undefined,
+  deleteActions: (dialogId: string, actions: MicrosoftIDialog[]) => Promise<void>,
+  removeLuIntent: (id: string, intentName: string) => void
 ) {
   const getDesignerIdFromDialogPath = (dialog, path) => {
     const value = get(dialog, path, '');
@@ -29,7 +41,7 @@ function createTriggerApi(
     return value.substring(startIndex + 1, endIndex);
   };
 
-  const createTriggerHandler = async (id, formData, url) => {
+  const createTriggerHandler = async (id, formData, autoSelected = true) => {
     const luFile = luFileResolver(id);
     const lgFile = lgFileResolver(id);
     const dialog = dialogResolver(id);
@@ -90,14 +102,30 @@ function createTriggerApi(
       content: newDialog.content,
     };
     await updateDialog(dialogPayload);
-    if (url) {
-      navigateTo(url);
-    } else {
+    if (autoSelected) {
       selectTo(projectId, `triggers[${index}]`);
     }
   };
+
+  const deleteTrigger = (dialogId: string, trigger: ITriggerCondition) => {
+    if (!trigger) return;
+
+    // Clean the lu resource on intent trigger
+    if (get(trigger, '$kind') === SDKKinds.OnIntent) {
+      const triggerIntent = get(trigger, 'intent', '') as string;
+      removeLuIntent(dialogId, triggerIntent);
+    }
+
+    // Clean action resources
+    const actions = get(trigger, 'actions') as BaseSchema[];
+    if (!actions || !Array.isArray(actions)) return;
+
+    deleteActions(dialogId, actions);
+  };
+
   return {
     createTrigger: createTriggerHandler,
+    deleteTrigger,
   };
 }
 
@@ -106,6 +134,8 @@ export function useTriggerApi(projectId: string) {
   const lgFiles = useRecoilValue(lgFilesState(projectId));
   const dialogs = useRecoilValue(dialogsState(projectId));
   const locale = useRecoilValue(localeState(projectId));
+  const { deleteActions } = useActionApi(projectId);
+  const { removeLuIntent } = useLuApi(projectId);
 
   const dispatchers = useRecoilValue(dispatcherState);
   const { luFileResolver, lgFileResolver, dialogResolver } = useResolvers(projectId);
@@ -115,7 +145,9 @@ export function useTriggerApi(projectId: string) {
       dispatchers,
       luFileResolver,
       lgFileResolver,
-      dialogResolver
+      dialogResolver,
+      deleteActions,
+      removeLuIntent
     )
   );
 
@@ -125,7 +157,9 @@ export function useTriggerApi(projectId: string) {
       dispatchers,
       luFileResolver,
       lgFileResolver,
-      dialogResolver
+      dialogResolver,
+      deleteActions,
+      removeLuIntent
     );
     setApi(newApi);
     return () => {

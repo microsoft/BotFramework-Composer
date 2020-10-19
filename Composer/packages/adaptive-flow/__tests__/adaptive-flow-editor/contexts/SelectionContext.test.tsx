@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React, { useContext } from 'react';
-import { render } from '@bfc/test-utils';
+import { render } from '@botframework-composer/test-utils';
 
 import { SelectionContext } from '../../../src/adaptive-flow-editor/contexts/SelectionContext';
 

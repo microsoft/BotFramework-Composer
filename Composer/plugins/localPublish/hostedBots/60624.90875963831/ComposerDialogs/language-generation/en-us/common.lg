@@ -1,0 +1,16 @@
+# T
+[HeroCard
+  title = Lets Begin
+  subtitle = Microsoft Bot Framework
+  text = Build and connect intelligent bots to interact with your users naturally wherever they are, from text/sms to Skype, Slack,   Office 365 mail and other popular services.
+  image = https://greatsmilesbirmingham.com/wp-content/uploads/2017/09/canstockphoto30606317.jpg
+  buttons = ${cardActionTemplate( 'imBack',  'click me', 'click me intent' )}
+]
+
+# cardActionTemplate( type,  title, value)
+[CardAction
+    Types = ${if(type == null, 'imBack', type)}
+    Title = ${title}
+    Value = ${value}
+    Text = ${value}
+]  

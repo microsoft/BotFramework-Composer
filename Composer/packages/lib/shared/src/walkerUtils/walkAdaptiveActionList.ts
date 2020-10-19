@@ -1,10 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License
 
-import { MicrosoftIDialog } from '@bfc/types';
+import { MicrosoftIDialog } from '@botframework-composer/types';
 
 import { walkAdaptiveAction } from './walkAdaptiveAction';
-export const walkAdaptiveActionList = (inputs: MicrosoftIDialog[], visit: (action: MicrosoftIDialog) => void): void => {
+import { AdaptiveActionVisitor } from './AdaptiveActionVisitor';
+
+export const walkAdaptiveActionList = (inputs: MicrosoftIDialog[], visit: AdaptiveActionVisitor): void => {
   if (Array.isArray(inputs)) {
     inputs.forEach((action) => walkAdaptiveAction(action, visit));
   }

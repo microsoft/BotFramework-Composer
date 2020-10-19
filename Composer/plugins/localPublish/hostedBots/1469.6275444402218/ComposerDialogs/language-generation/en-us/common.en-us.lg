@@ -1,0 +1,8 @@
+
+# Template()
+[HeroCard 
+        title=Cheese gromit!
+        subtitle=title
+        text=This is some text describing the card, it's cool because it's cool
+        buttons=Option 1| Option 2| Option 3
+]

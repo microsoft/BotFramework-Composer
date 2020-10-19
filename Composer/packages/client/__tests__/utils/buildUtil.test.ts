@@ -80,14 +80,11 @@ describe('createCrossTrainConfig', () => {
       { id: 'dia5.en-us' },
       { id: 'dia6.en-us' },
     ];
-    const config = createCrossTrainConfig(dialogs as DialogInfo[], luFiles as LuFile[]);
-    expect(config.rootIds.length).toEqual(1);
-    expect(config.rootIds[0]).toEqual('main.en-us.lu');
-    expect(config.triggerRules['main.en-us.lu'].dia1_trigger).toEqual('dia1.en-us.lu');
-    expect(config.triggerRules['main.en-us.lu'].no_dialog).toEqual('');
-    expect(config.triggerRules['main.en-us.lu'].dia1_trigger).toEqual('dia1.en-us.lu');
-    expect(config.triggerRules['main.en-us.lu'].dias_trigger.length).toBe(2);
-    expect(config.triggerRules['dia1.en-us.lu'].dia3_trigger).toEqual('dia3.en-us.lu');
-    expect(config.triggerRules['dia1.en-us.lu']['dia4.en-us.lu']).toBeUndefined();
+    const config = createCrossTrainConfig(dialogs as DialogInfo[], luFiles as LuFile[], ['en-us']);
+    expect(config['main.en-us.lu'].rootDialog).toBeTruthy();
+    expect(config['main.en-us.lu'].triggers.dia1_trigger[0]).toEqual('dia1.en-us.lu');
+    expect(config['main.en-us.lu'].triggers.no_dialog.length).toEqual(0);
+    expect(config['main.en-us.lu'].triggers.dia2_trigger[0]).toEqual('dia2.en-us.lu');
+    expect(config['main.en-us.lu'].triggers.dias_trigger.length).toBe(2);
   });
 });

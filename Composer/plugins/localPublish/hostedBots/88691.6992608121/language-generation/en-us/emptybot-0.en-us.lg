@@ -1,0 +1,10 @@
+[import](common.lg)
+
+
+
+
+# SendActivity_gt7EtU()
+[Activity 
+  text=sds
+  ChannelData=${dialog.response.content}
+]

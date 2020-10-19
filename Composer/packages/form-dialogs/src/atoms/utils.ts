@@ -77,7 +77,7 @@ export const createSchemaStoreFromJson = (schemaName: string, jsonString: string
     const propertyType = propertyData?.type || 'ref';
     const array = propertyType === 'array';
     const payload = retrievePayload(propertyType, propertyData, array);
-    const kind = <FormDialogPropertyKind>(propertyType === 'array' ? payload.kind : propertyType);
+    const kind = <FormDialogPropertyKind>(propertyType === 'array' ? payload.kind || 'ref' : propertyType);
     const required = requiredArray.indexOf(name) !== -1;
     const examples = examplesRecord[name] || [];
 

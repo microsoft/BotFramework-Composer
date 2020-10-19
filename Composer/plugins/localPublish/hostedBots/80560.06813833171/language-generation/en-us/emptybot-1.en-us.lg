@@ -1,0 +1,27 @@
+[import](common.lg)
+
+# SendActivity_bZXCBO()
+- ${A()}
+
+# A
+[Activity
+ ChannelData=${json(j())}
+]
+
+# j
+- ```{
+"attachment":{
+"type":"template",
+"payload":{
+"template_type":"button",
+"text":"What do you want to do next?",
+"buttons":[
+{
+"type":"web_url",
+"url":"https://www.messenger.com",
+"title":"Visit Messenger"
+}
+]
+}
+}
+}```

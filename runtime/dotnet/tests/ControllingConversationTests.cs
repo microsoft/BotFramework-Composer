@@ -21,7 +21,7 @@ namespace Tests
     {
         private static string getOsPath(string path) => Path.Combine(path.TrimEnd('\\').Split('\\'));
 
-        private static readonly string samplesDirectory = getOsPath(@"..\..\..\..\..\..\Composer\plugins\samples\assets\projects");
+        private static readonly string samplesDirectory = getOsPath(@"..\..\..\..\..\..\extensions\samples\assets\projects");
 
         private static ResourceExplorer resourceExplorer = new ResourceExplorer();
 

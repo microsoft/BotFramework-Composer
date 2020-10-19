@@ -1,0 +1,23 @@
+{
+  "name": "mockRemotePublish",
+  "version": "1.0.0",
+  "description": "publish assets to a remote URL",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "composer": {
+    "enabled": false
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "uuid": "^7.0.1"
+  },
+  "devDependencies": {
+    "@bfc/extension": "file:../../Composer/packages/extension",
+    "@types/node": "^14.11.8",
+    "@types/uuid": "^7.0.2"
+  }
+}

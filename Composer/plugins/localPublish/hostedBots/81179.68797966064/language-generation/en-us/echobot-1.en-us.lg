@@ -1,0 +1,11 @@
+[import](common.lg)
+
+# SendActivity_Welcome
+- ${WelcomeUser()}
+
+
+
+# SendActivity_BAC9R3()
+[Activity
+ChannelData=${dialog.response.content}
+]

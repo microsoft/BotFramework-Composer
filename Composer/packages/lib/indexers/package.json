@@ -21,12 +21,12 @@
   },
   "devDependencies": {
     "@bfc/shared": "*",
-    "@bfc/test-utils": "*",
+    "@botframework-composer/test-utils": "*",
     "@types/lodash": "^4.14.146",
     "rimraf": "^2.6.3"
   },
   "dependencies": {
-    "@microsoft/bf-lu": "^4.11.0-dev.20201005.7e5e1b8",
+    "@microsoft/bf-lu": "^4.11.0-dev.20201013.7ccb128",
     "adaptive-expressions": "^4.11.0-dev.20201013.d5458bf",
     "botbuilder-lg": "4.11.0-dev.20201010.6e4a99e",
     "lodash": "^4.17.19"
