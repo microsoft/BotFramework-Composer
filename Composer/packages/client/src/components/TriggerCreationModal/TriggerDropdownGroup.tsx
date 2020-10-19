@@ -1,15 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { FC, ReactNode, useMemo, useState } from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import { FC, ReactNode, useCallback, useMemo, useState } from 'react';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
+import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { SDKKinds } from '@bfc/shared';
 
-import { dropdownStyles } from './styles';
-import { checkTriggerOptions, getTriggerOptions } from './getDropdownOptions';
-import { renderDropdownOption } from './TriggerCreationModal';
+import { dropdownStyles, optionStyles, warningIconStyles } from './styles';
 import {
   generateTriggerOptionTree,
   TriggerOptionGroupNode,
@@ -17,6 +18,7 @@ import {
   TriggerOptionTreeNode,
 } from './TriggerOptionTree';
 import { builtinTriggerUISchema } from './schema/builtinTriggerSchema';
+import { checkRecognizerCompatibility } from './checkRecognizerCompatibility';
 
 export interface TriggerDropwdownGroupProps {
   recognizerType: SDKKinds | undefined;
@@ -25,14 +27,24 @@ export interface TriggerDropwdownGroupProps {
 }
 
 export const TriggerDropdownGroup: FC<TriggerDropwdownGroupProps> = ({ recognizerType, setTriggerType }) => {
-  const triggerTypeOptions: IDropdownOption[] = getTriggerOptions();
-
-  // Mark out incompatible triggers of current recognizer
-  checkTriggerOptions(triggerTypeOptions, recognizerType);
+  const renderDropdownOption = useCallback(
+    (option?: IDropdownOption) => {
+      if (!option) return null;
+      const compatible = checkRecognizerCompatibility(option.key as SDKKinds, recognizerType);
+      return (
+        <div css={optionStyles}>
+          {option.text}
+          {!compatible && <Icon iconName={'warning'} style={warningIconStyles} />}
+        </div>
+      );
+    },
+    [recognizerType]
+  );
 
   const triggerOptionTree = useMemo(() => {
     return generateTriggerOptionTree(builtinTriggerUISchema);
   }, []);
+
   const [activeNode, setActiveNode] = useState<TriggerOptionTreeNode>(triggerOptionTree);
   const onClickNode = (node: TriggerOptionTreeNode) => {
     setActiveNode(node);
