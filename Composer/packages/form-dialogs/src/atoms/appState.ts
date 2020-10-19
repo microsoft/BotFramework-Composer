@@ -103,7 +103,7 @@ export const formDialogSchemaJsonSelector = selector({
     const schemaPropertyStores = propertyIds.map((pId) => get(formDialogPropertyAtom(pId)));
 
     let jsonObject: object = {
-      schema: schemaDraftUrl,
+      $schema: schemaDraftUrl,
       type: 'object',
       $requires: ['standard.schema'],
     };

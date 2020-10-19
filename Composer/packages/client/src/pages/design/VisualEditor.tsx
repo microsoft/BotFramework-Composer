@@ -61,7 +61,7 @@ interface VisualEditorProps {
 
 const VisualEditor: React.FC<VisualEditorProps> = (props) => {
   const { ...shellData } = useShellApi();
-  const { projectId } = shellData;
+  const { projectId, currentDialog } = shellData;
   const { openNewTriggerModal, onFocus, onBlur } = props;
   const [triggerButtonVisible, setTriggerButtonVisibility] = useState(false);
   const { onboardingAddCoachMarkRef } = useRecoilValue(dispatcherState);
@@ -86,7 +86,12 @@ const VisualEditor: React.FC<VisualEditorProps> = (props) => {
         css={visualEditor(triggerButtonVisible || !selected)}
         data-testid="VisualEditor"
       >
-        <VisualDesigner schema={schemas.sdk?.content} onBlur={onBlur} onFocus={onFocus} />
+        <VisualDesigner
+          data={currentDialog.content ?? {}}
+          schema={schemas.sdk?.content}
+          onBlur={onBlur}
+          onFocus={onFocus}
+        />
       </div>
       {!selected && onRenderBlankVisual(triggerButtonVisible, openNewTriggerModal)}
     </React.Fragment>

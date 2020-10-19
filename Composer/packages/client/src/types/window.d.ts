@@ -1,19 +1,30 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-interface Window {
-  /**
-   * Electron mechanism used for communication from renderer to main process.
-   */
-  ipcRenderer: IPCRenderer;
+import * as ExtensionClient from '@bfc/extension-client';
 
-  /**
-   * Flag that is set on the window object when the client is embedded within Electron.
-   */
-  __IS_ELECTRON__?: boolean;
+declare global {
+  interface Window {
+    /**
+     * Electron mechanism used for communication from renderer to main process.
+     */
+    ipcRenderer: IPCRenderer;
 
-  /**
-   * Composer UI Extension API
-   */
-  Composer: any;
+    /**
+     * Flag that is set on the window object when the client is embedded within Electron.
+     */
+    __IS_ELECTRON__?: boolean;
+
+    /**
+     * Composer UI Extension API
+     */
+    Composer: {
+      __pluginType: string;
+      render: (type: string, shell: Shell, component: React.ReactElement) => void;
+      sync: (shell: Shell) => void;
+      [key: string]: any;
+    };
+
+    ExtensionClient: typeof ExtensionClient;
+  }
 }

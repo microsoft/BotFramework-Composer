@@ -11,6 +11,9 @@ import { Path } from '../../../utility/path';
 import { BotProject } from '../botProject';
 import { LocationRef } from '../interface';
 
+import { Resource } from './../interface';
+import { RecognizerTypes } from './../recognizer';
+
 jest.mock('azure-storage', () => {
   return {};
 });
@@ -44,7 +47,7 @@ beforeEach(async () => {
 describe('init', () => {
   it('should get project successfully', () => {
     const project: { [key: string]: any } = proj.getProject();
-    expect(project.files.length).toBe(15);
+    expect(project.files.length).toBe(16);
   });
 
   it('should always have a default bot project file', () => {
@@ -123,7 +126,7 @@ describe('copyTo', () => {
     const newBotProject = await proj.copyTo(locationRef);
     await newBotProject.init();
     const project: { [key: string]: any } = newBotProject.getProject();
-    expect(project.files.length).toBe(15);
+    expect(project.files.length).toBe(16);
   });
 });
 
@@ -287,16 +290,19 @@ describe('buildFiles', () => {
       qnaRegion: 'westus',
       subscriptionKey: '21640b8e2110449abfdfccf2f6bbee02',
     };
-    const luFileIds = ['a.en-us', 'b.en-us', 'bot1.en-us'];
-    const qnaFileIds = ['a.en-us', 'b.en-us', 'bot1.en-us'];
-    const crossTrainConfig = {
-      botName: 'bot1',
-      rootIds: [],
-      triggerRules: {},
-      intentName: '_Interruption',
-      verbose: true,
-    };
-    await proj.buildFiles({ luisConfig, qnaConfig, luFileIds, qnaFileIds, crossTrainConfig });
+    const luResource: Resource[] = [
+      { id: 'a.en-us', isEmpty: false },
+      { id: 'b.en-us', isEmpty: false },
+      { id: 'bot1.en-us', isEmpty: false },
+    ];
+    const qnaResource: Resource[] = [
+      { id: 'a.en-us', isEmpty: false },
+      { id: 'b.en-us', isEmpty: false },
+      { id: 'bot1.en-us', isEmpty: false },
+    ];
+    const crossTrainConfig = {};
+    const recognizerTypes: RecognizerTypes = { a: 'DefaultRecognizer', b: 'DefaultRecognizer', c: 'DefaultRecognizer' };
+    await proj.buildFiles({ luisConfig, qnaConfig, luResource, qnaResource, crossTrainConfig, recognizerTypes });
 
     try {
       if (fs.existsSync(path)) {
@@ -400,7 +406,7 @@ describe('deleteAllFiles', () => {
     const newBotProject = await proj.copyTo(locationRef);
     await newBotProject.init();
     const project: { [key: string]: any } = newBotProject.getProject();
-    expect(project.files.length).toBe(15);
+    expect(project.files.length).toBe(16);
     await newBotProject.deleteAllFiles();
     expect(fs.existsSync(copyDir)).toBe(false);
   });

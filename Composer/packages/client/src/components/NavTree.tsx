@@ -3,11 +3,14 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { DefaultButton, CommandBarButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors } from '@uifabric/fluent-theme';
-import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
+import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
 import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
+import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
+import formatMessage from 'format-message';
 
 import { navigateTo } from '../utils/navigation';
 
@@ -21,6 +24,18 @@ const root = css`
   overflow-x: hidden;
   .ms-List-cell {
     min-height: 36px;
+  }
+  .ProjectTreeItem {
+    display: flex;
+    .ms-Icon {
+      color: ${SharedColors.blue10};
+    }
+    &:hover .ms-Button {
+      background: ${NeutralColors.gray20};
+      .ms-Icon {
+        visibility: inherit;
+      }
+    }
   }
 `;
 
@@ -61,6 +76,8 @@ export interface INavTreeItem {
   name: string;
   ariaLabel?: string;
   url: string;
+  menuItems?: IContextualMenuItem[];
+  menuIconProps?: IIconProps;
   disabled?: boolean;
 }
 
@@ -72,23 +89,63 @@ interface INavTreeProps {
 const NavTree: React.FC<INavTreeProps> = (props) => {
   const { navLinks, regionName } = props;
 
+  const onRenderOverflowButton = (isSelected: boolean, item) => (
+    menuItems: IOverflowSetItemProps[] | undefined
+  ): JSX.Element => {
+    const buttonStyles: Partial<IButtonStyles> = {
+      root: {
+        minWidth: 0,
+        padding: '0 4px',
+        alignSelf: 'stretch',
+        height: 'auto',
+        background: isSelected ? NeutralColors.gray20 : NeutralColors.white,
+        selectors: {
+          '.ms-Icon': {
+            visibility: isSelected ? 'inherit' : 'hidden',
+          },
+        },
+      },
+    };
+    return (
+      <CommandBarButton
+        ariaLabel={formatMessage('Menu items')}
+        menuIconProps={item.menuIconProps as IIconProps}
+        menuProps={{ items: menuItems as IContextualMenuItem[] }}
+        role="menuitem"
+        styles={buttonStyles}
+      />
+    );
+  };
+
   return (
     <div aria-label={regionName} className="ProjectTree" css={root} data-testid="ProjectTree" role="region">
       {navLinks.map((item) => {
         const isSelected = location.pathname.includes(item.url);
 
         return (
-          <DefaultButton
-            key={item.id}
-            disabled={item.disabled}
-            href={item.url}
-            styles={isSelected ? itemSelected : itemNotSelected}
-            text={item.name}
-            onClick={(e) => {
-              e.preventDefault();
-              navigateTo(item.url);
-            }}
-          />
+          <div key={item.id} className="ProjectTreeItem">
+            <DefaultButton
+              key={item.id}
+              disabled={item.disabled}
+              href={item.url}
+              styles={isSelected ? itemSelected : itemNotSelected}
+              text={item.name}
+              onClick={(e) => {
+                e.preventDefault();
+                navigateTo(item.url);
+              }}
+            />
+            {item.menuItems && !item.disabled && (
+              <OverflowSet
+                key={item.id + 'menu'}
+                items={[]}
+                overflowItems={item.menuItems as IOverflowSetItemProps[]}
+                role="menubar"
+                onRenderItem={() => undefined}
+                onRenderOverflowButton={onRenderOverflowButton(isSelected, item)}
+              />
+            )}
+          </div>
         );
       })}
     </div>

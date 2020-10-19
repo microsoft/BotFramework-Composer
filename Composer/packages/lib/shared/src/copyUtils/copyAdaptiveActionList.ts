@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { MicrosoftIDialog } from '@bfc/types';
+import { MicrosoftIDialog } from '@botframework-composer/types';
 
 import { copyAdaptiveAction } from './copyAdaptiveAction';
 import { ExternalApi } from './ExternalApi';

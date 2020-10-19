@@ -9,7 +9,7 @@ import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dia
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { SDKKinds } from '@bfc/shared';
+import { SDKKinds, RegexRecognizer } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
 import { TriggerFormData, TriggerFormDataErrors } from '../../utils/dialogUtil';
@@ -59,7 +59,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const dialogFile = dialogs.find((dialog) => dialog.id === dialogId);
   const recognizer$kind = resolveRecognizer$kind(dialogFile);
   const isRegEx = isRegExRecognizerType(dialogFile);
-  const regexIntents = dialogFile?.content?.recognizer?.intents ?? [];
+  const regexIntents = (dialogFile?.content?.recognizer as RegexRecognizer)?.intents ?? [];
 
   const [formData, setFormData] = useState(initialFormData);
   const [selectedType, setSelectedType] = useState<string>(SDKKinds.OnIntent);
@@ -67,7 +67,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const onClickSubmitButton = (e) => {
     e.preventDefault();
 
-    const errors = validateForm(selectedType, formData, isRegEx, regexIntents);
+    const errors = validateForm(selectedType, formData, isRegEx, regexIntents as any);
     if (hasError(errors)) {
       setFormData({ ...formData, errors });
       return;
@@ -76,7 +76,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     onSubmit(dialogId, { ...formData, $kind: selectedType });
   };
 
-  const errors = validateForm(selectedType, formData, isRegEx, regexIntents);
+  const errors = validateForm(selectedType, formData, isRegEx, regexIntents as any);
   const disable = hasError(errors);
 
   const triggerWidget = resolveTriggerWidget(

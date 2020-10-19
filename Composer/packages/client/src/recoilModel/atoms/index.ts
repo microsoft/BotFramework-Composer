@@ -3,3 +3,4 @@
 
 export * from './appState';
 export * from './botState';
+export * from './zoomState';

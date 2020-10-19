@@ -9,8 +9,7 @@ context('Notification Page', () => {
   it('can show lg syntax error ', () => {
     cy.visitPage('Bot Responses');
 
-    cy.get('.toggleEditMode button').as('switchButton');
-    cy.get('@switchButton').click();
+    cy.findByTestId('showcode').click();
     cy.get('textarea').type('#', { delay: 200 });
 
     cy.findByTestId('LeftNav-CommandBarButtonNotifications').click();
@@ -29,7 +28,7 @@ context('Notification Page', () => {
       cy.findByText('__TestToDoBotWithLuisSample').click();
     });
 
-    cy.get('.toggleEditMode button').click();
+    cy.findByTestId('showcode').click();
     cy.get('textarea').type('t', { delay: 200 });
 
     cy.findByTestId('LeftNav-CommandBarButtonNotifications').click();

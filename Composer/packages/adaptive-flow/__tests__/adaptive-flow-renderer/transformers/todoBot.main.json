@@ -4,7 +4,7 @@
       "createdAt": "2019-07-04T08:14:01.139Z",
       "updatedAt": "2019-08-01T23:45:38.308Z",
       "id": "288769",
-      "description": "This is a bot that demonstrates how to manage a ToDo list using Regular Expressions."
+      "description": "This is a bot that demonstrates how to manage a ToDo list using regular expressions."
     },
     "autoEndDialog": false,
     "recognizer": {
