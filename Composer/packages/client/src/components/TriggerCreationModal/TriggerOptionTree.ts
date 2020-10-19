@@ -1,9 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { TriggerUISchema } from '@bfc/extension-client';
 import formatMessage from 'format-message';
 
-import { TriggerUIOptionMap } from './schema/TriggerOption';
+import { TriggerUIOption } from './schema/TriggerOption';
 
 export class TriggerOptionLeafNode {
   label: string;
@@ -38,7 +39,7 @@ export type TriggerOptionTreeNode = TriggerOptionGroupNode | TriggerOptionLeafNo
 
 const getGroupKey = (submenu) => (typeof submenu === 'object' ? submenu.label : submenu || '');
 
-export const generateTriggerOptionTree = (triggerUIOptions: TriggerUIOptionMap): TriggerOptionTree => {
+export const generateTriggerOptionTree = (triggerUIOptions: TriggerUISchema): TriggerOptionTree => {
   const root = new TriggerOptionGroupNode(
     'triggerTypeDropDown',
     formatMessage('What is the type of this trigger?'),
@@ -46,13 +47,13 @@ export const generateTriggerOptionTree = (triggerUIOptions: TriggerUIOptionMap):
   );
 
   const leafNodeList = Object.entries(triggerUIOptions)
-    .filter(([, options]) => !options.submenu)
-    .map(([$kind, options]) => new TriggerOptionLeafNode(options.label, $kind));
+    .filter(([, options]) => options && !options.submenu)
+    .map(([$kind, options]) => new TriggerOptionLeafNode(options?.label ?? '', $kind));
   root.children.push(...leafNodeList);
   leafNodeList.forEach((leaf) => (leaf.parent = root));
 
   const groups = Object.values(triggerUIOptions)
-    .map((options) => options.submenu)
+    .map((options) => options && options.submenu)
     .filter((submenu) => !!submenu)
     .reduce((result, submenu) => {
       const name = getGroupKey(submenu);
@@ -67,9 +68,9 @@ export const generateTriggerOptionTree = (triggerUIOptions: TriggerUIOptionMap):
     }, {} as { [key: string]: TriggerOptionGroupNode });
 
   Object.entries(triggerUIOptions)
-    .filter(([, options]) => options.submenu)
+    .filter(([, options]) => options && options.submenu)
     .forEach(([$kind, options]) => {
-      const { label, submenu } = options;
+      const { label, submenu } = options as TriggerUIOption;
       const node = new TriggerOptionLeafNode(label, $kind);
       const groupName = getGroupKey(submenu);
       const groupParent = groups[groupName];
