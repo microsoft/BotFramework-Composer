@@ -125,7 +125,7 @@ export const LibraryController = {
         const dryrun = new SchemaMerger(
           [manifestFile],
           '',
-          path.join(currentProject.dataDir, 'dialogs'),
+          path.join(currentProject.dataDir, 'dialogs/imported'),
           true, // copy only? true = dry run
           false, // verbosity: true = verbose
           console.log,
