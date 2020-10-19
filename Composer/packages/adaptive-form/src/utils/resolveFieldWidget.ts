@@ -3,16 +3,16 @@
 import { FieldProps, FieldWidget, FormUISchema, JSONSchema7, UIOptions } from '@bfc/extension-client';
 
 import * as DefaultFields from '../components/fields';
-import { withTypeIcons } from '../components/withTypeIcons';
+import { WithTypeIcons } from '../components/WithTypeIcons';
 
-const IntellisenseTextFieldWithIcon = withTypeIcons(DefaultFields.IntellisenseTextField);
-const StringFieldWithIcon = withTypeIcons(DefaultFields.StringField);
-const IntellisenseNumberFieldWithIcon = withTypeIcons(DefaultFields.IntellisenseNumberField);
-const NumberFieldWithIcon = withTypeIcons(DefaultFields.NumberField);
-const BooleanFieldWithIcon = withTypeIcons(DefaultFields.BooleanField);
-const JsonFieldWithIcon = withTypeIcons(DefaultFields.JsonField);
-const IntellisenseJSONFieldWithIcon = withTypeIcons(DefaultFields.IntellisenseJSONField);
-const IntellisenseExpressionFieldWithIcon = withTypeIcons(DefaultFields.IntellisenseExpressionField);
+const IntellisenseTextFieldWithIcon = WithTypeIcons(DefaultFields.IntellisenseTextField);
+const StringFieldWithIcon = WithTypeIcons(DefaultFields.StringField);
+const IntellisenseNumberFieldWithIcon = WithTypeIcons(DefaultFields.IntellisenseNumberField);
+const NumberFieldWithIcon = WithTypeIcons(DefaultFields.NumberField);
+const BooleanFieldWithIcon = WithTypeIcons(DefaultFields.BooleanField);
+const JsonFieldWithIcon = WithTypeIcons(DefaultFields.JsonField);
+const IntellisenseJSONFieldWithIcon = WithTypeIcons(DefaultFields.IntellisenseJSONField);
+const IntellisenseExpressionFieldWithIcon = WithTypeIcons(DefaultFields.IntellisenseExpressionField);
 
 /**
  * Resolves field widget in this order:

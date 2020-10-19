@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { DropdownMenuItemType, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { FieldProps, JSONSchema7, SchemaDefinitions } from '@bfc/extension-client';
 import merge from 'lodash/merge';
 import omit from 'lodash/omit';

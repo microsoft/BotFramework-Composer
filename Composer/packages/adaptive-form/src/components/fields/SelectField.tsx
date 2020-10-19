@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import React, { useMemo } from 'react';
-import { Dropdown, DropdownMenuItemType, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
+import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 import { FieldProps } from '@bfc/extension-client';
 import formatMessage from 'format-message';
 
