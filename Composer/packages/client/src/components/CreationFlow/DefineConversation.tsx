@@ -16,7 +16,7 @@ import { FontWeights } from '@uifabric/styling';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { useRecoilState } from 'recoil';
 
-import { DialogCreationCopy, QnABotTemplateId, nameRegex, CreationFlowStatus } from '../../constants';
+import { DialogCreationCopy, QnABotTemplateId, nameRegex } from '../../constants';
 import { FieldConfig, useForm } from '../../hooks/useForm';
 import { StorageFolder } from '../../recoilModel/types';
 import { creationFlowTypeState } from '../../recoilModel';
