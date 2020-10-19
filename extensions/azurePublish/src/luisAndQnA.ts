@@ -227,7 +227,7 @@ export class LuisAndQnaPublish {
     // Assign the appropriate account to each of the applicable LUIS apps for this bot.
     // DOCS HERE: https://westus.dev.cognitive.microsoft.com/docs/services/5890b47c39e2bb17b84a55ff/operations/5be32228e8473de116325515
     for (const dialogKey in luisAppIds) {
-      const luisAppId = luisAppIds[dialogKey];
+      const luisAppId = luisAppIds[dialogKey].appId;
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
         message: `Assigning to luis app id: ${luisAppId}`,
