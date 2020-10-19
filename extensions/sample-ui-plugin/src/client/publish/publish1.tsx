@@ -6,4 +6,4 @@ import { render } from '@bfc/extension-client';
 
 import { Main } from './main';
 
-render(<Main />);
+render(<Main title="Publish 1" />);

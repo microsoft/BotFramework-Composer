@@ -25,6 +25,9 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
   private data: { [botId: string]: LocalPublishData };
   private composer: ExtensionRegistration;
   public schema: JSONSchema7;
+  public name = 'mockRemotePublish';
+  public description = 'Publish bot to mock remote';
+
   constructor(composer: ExtensionRegistration) {
     this.data = {};
     this.composer = composer;

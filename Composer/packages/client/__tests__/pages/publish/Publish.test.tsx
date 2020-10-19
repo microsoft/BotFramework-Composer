@@ -35,6 +35,7 @@ const state = {
       name: 'azurePublish',
       description: 'azure publish',
       instructions: 'plugin instruction',
+      extensionId: 'azurePublish',
       schema: {
         default: {
           test: 'test',
