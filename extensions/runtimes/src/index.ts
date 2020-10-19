@@ -14,12 +14,14 @@ const execAsync = promisify(exec);
 const removeDirAndFiles = promisify(rimraf);
 
 export default async (composer: any): Promise<void> => {
+  const dotnetTemplatePath = path.resolve(__dirname, '../../../runtime/dotnet');
+  const nodeTemplatePath = path.resolve(__dirname, '../../../runtime/node');
   // register the bundled c# runtime used by the local publisher with the eject feature
   composer.addRuntimeTemplate({
     key: 'csharp-azurewebapp',
     name: 'C#',
     startCommand: 'dotnet run --project azurewebapp',
-    path: path.resolve(__dirname, '../../../../runtime/dotnet'),
+    path: dotnetTemplatePath,
     build: async (runtimePath: string, _project: any) => {
       composer.log(`BUILD THIS C# PROJECT! at ${runtimePath}...`);
       composer.log('Run dotnet user-secrets init...');
@@ -98,7 +100,7 @@ export default async (composer: any): Promise<void> => {
       return publishFolder;
     },
     eject: async (project, localDisk: IFileStorage, isReplace: boolean) => {
-      const sourcePath = path.resolve(__dirname, '../../../../runtime/dotnet');
+      const sourcePath = dotnetTemplatePath;
       const destPath = path.join(project.dir, 'runtime');
       if ((await project.fileStorage.exists(destPath)) && isReplace) {
         // remove runtime folder
@@ -150,7 +152,7 @@ export default async (composer: any): Promise<void> => {
     key: 'node-azurewebapp',
     name: 'JS (preview)',
     startCommand: 'node ./lib/webapp.js',
-    path: path.resolve(__dirname, '../../../../runtime/node'),
+    path: nodeTemplatePath,
     build: async (runtimePath: string, _project: any) => {
       // do stuff
       composer.log('BUILD THIS JS PROJECT');
@@ -199,7 +201,7 @@ export default async (composer: any): Promise<void> => {
       return path.resolve(runtimePath, '../');
     },
     eject: async (project: any, localDisk: IFileStorage, isReplace: boolean) => {
-      const sourcePath = path.resolve(__dirname, '../../../../runtime/node');
+      const sourcePath = nodeTemplatePath;
       const destPath = path.join(project.dir, 'runtime');
 
       if ((await project.fileStorage.exists(destPath)) && isReplace) {
