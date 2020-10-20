@@ -10,7 +10,6 @@ const COMPOSER_1P_APP_ID = 'ce48853e-0605-4f77-8746-d70ac63cc6bc';
 
 type PowerVirtualAgentsMetadata = ContentProviderMetadata & {
   botId?: string;
-  description?: string; // maybe we can derive this from the bot content
   dialogId?: string;
   envId?: string;
   name?: string; // maybe we can derive this from the bot content
