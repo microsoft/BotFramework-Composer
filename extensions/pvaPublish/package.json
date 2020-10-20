@@ -11,7 +11,7 @@
     "bundles": [
       {
         "id": "publish",
-        "path": "dist/publish-bundle.js"
+        "path": "dist/ui/publish-bundle.js"
       }
     ],
     "contributes": {
@@ -24,7 +24,7 @@
       }
     }
   },
-  "main": "dist/index.js",
+  "main": "dist/node/index.js",
   "dependencies": {
     "@bfc/extension-client": "file:../../Composer/packages/extension-client",
     "@uifabric/icons": "7.3.59",
@@ -37,9 +37,10 @@
   },
   "devDependencies": {
     "@types/node": "^14.11.2",
-    "html-webpack-plugin": "^4.3.0",
+    "mini-svg-data-uri": "^1.2.3",
     "ts-loader": "^8.0.0",
     "typescript": "^3.9.6",
+    "url-loader": "^4.1.1",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.12"
   }

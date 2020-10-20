@@ -25,9 +25,13 @@ type PublishProfileHistory = {
 };
 
 export type PublishConfig = {
+  baseUrl: string;
+  botId: string;
+  deleteMissingDependencies: boolean;
+  envId: string;
   fullSettings: any;
   profileName: string;
-  [key: string]: any;
+  tenantId: string;
 };
 
 export type PublishState =

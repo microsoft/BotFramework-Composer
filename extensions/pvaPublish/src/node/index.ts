@@ -1,4 +1,4 @@
-import { getStatus, history, publish, pull } from './publish';
+import { getStatus, history, publish } from './publish';
 
 function initialize(registration) {
   const plugin = {
@@ -8,7 +8,7 @@ function initialize(registration) {
     history,
     getStatus,
     publish,
-    pull,
+    // TODO: add 'pull' once ready,
   };
   registration.addPublishMethod(plugin);
 }

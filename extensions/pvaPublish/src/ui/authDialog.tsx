@@ -6,15 +6,14 @@ import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
 import { root } from './styles';
 import { Bot, BotEnvironment } from './types';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
+const PVABotIcon = require('./media/pva-bot-icon.svg');
 
-const API_VERSION = '1';
-//const BASE_URL = `https://powerva.microsoft.com/api/botmanagement/v${API_VERSION}`; // prod / sdf
-//const BASE_URL = `https://bots.int.customercareintelligence.net/api/botmanagement/v${API_VERSION}`; // int / ppe
-const BASE_URL = `https://bots.ppe.customercareintelligence.net/api/botmanagement/v${API_VERSION}`; // int / ppe
+const API_VERSION = 'v1';
+const BASE_URL = `https://powerva.microsoft.com/api/botmanagement/${API_VERSION}`; // prod / sdf
 
 const pvaBranding = '#0F677B';
 const pvaBrandingHover = '#0A4A5C';
@@ -36,10 +35,7 @@ export const PVADialog: FC = () => {
     const loginAndGetToken = async () => {
       const token = await getAccessToken({
         clientId: 'ce48853e-0605-4f77-8746-d70ac63cc6bc',
-
-        //scopes: ['96ff4394-9197-43aa-b393-6a41652e21f8/.default'], // prod / sdf
-
-        scopes: ['a522f059-bb65-47c0-8934-7db6e5286414/.default'], // int / ppe
+        scopes: ['96ff4394-9197-43aa-b393-6a41652e21f8/.default'], // prod / sdf
       });
       setLoggingIn(false);
       setToken(token);
@@ -243,8 +239,7 @@ export const PVADialog: FC = () => {
               left: 0,
               width: 30,
               height: 30,
-              backgroundImage:
-                'url("https://cci-prod-botdesigner.azureedge.net/20200818.7/ppux/0.0.20200818.1-ppux-ppe-2020-08-12-prod/static/media/NewBotIcon.e05db014.svg")',
+              backgroundImage: `url("${PVABotIcon.default}")`,
             }}
           ></i>
           <Stack horizontalAlign={'start'}>

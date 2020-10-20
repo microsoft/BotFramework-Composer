@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "dist",
+    "outDir": "dist/node",
     "typeRoots" : ["./node_modules/@types"],
     "sourceMap": true
   },

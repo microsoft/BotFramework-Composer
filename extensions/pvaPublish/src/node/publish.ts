@@ -16,46 +16,7 @@ import {
   PublishHistory,
   PullResponse,
 } from './types';
-
-const COMPOSER_1P_APP_ID = 'ce48853e-0605-4f77-8746-d70ac63cc6bc';
-const API_VERSION = '1';
-const authCredentials = {
-  // web auth flow
-  clientId: COMPOSER_1P_APP_ID,
-  scopes: ['a522f059-bb65-47c0-8934-7db6e5286414/.default'], // int / ppe
-
-  // electron auth flow
-  targetResource: 'a522f059-bb65-47c0-8934-7db6e5286414',
-};
-
-const getBaseUrl = () => {
-  const pvaEnv = (process.env.COMPOSER_PVA_ENV || '').toLowerCase();
-  switch (pvaEnv) {
-    case 'prod': {
-      const url = `https://powerva.microsoft.com/api/botmanagement/v${API_VERSION}`;
-      console.log('prod detected, operation using PVA url: ', url);
-      return url;
-    }
-
-    case 'ppe': {
-      const url = `https://bots.ppe.customercareintelligence.net/api/botmanagement/v${API_VERSION}`;
-      console.log('ppe detected, operation using PVA url: ', url);
-      return url;
-    }
-
-    case 'int': {
-      const url = `https://bots.int.customercareintelligence.net/api/botmanagement/v${API_VERSION}`;
-      console.log('int detected, operation using PVA url: ', url);
-      return url;
-    }
-
-    default: {
-      const url = `https://bots.int.customercareintelligence.net/api/botmanagement/v${API_VERSION}`;
-      console.log('no flag detected, operation using PVA url: ', url);
-      return url;
-    }
-  }
-};
+import { getAuthCredentials, getBaseUrl } from './utils';
 
 // in-memory history that allows us to get the status of the most recent job
 const publishHistory: PublishHistory = {};
@@ -72,16 +33,19 @@ export const publish = async (
     profileName, // the name of the publishing profile "My PVA Prod Slot"
 
     // these are specific to the PVA publish profile shape
+    baseUrl,
     botId,
     envId,
     tenantId,
-    deleteMissingDependencies, // publish behavior
+    deleteMissingDependencies = false, // publish behavior
   } = config;
   const { comment = '' } = metadata;
 
   try {
     // authenticate with PVA
-    const accessToken = await getAccessToken(authCredentials);
+    const base = baseUrl || getBaseUrl();
+    const creds = getAuthCredentials(base);
+    const accessToken = await getAccessToken(creds);
 
     // where we will store the bot .zip
     const zipDir = join(process.env.COMPOSER_TEMP_DIR as string, 'pva-publish');
@@ -118,9 +82,10 @@ export const publish = async (
     const length = zipReadStream.readableLength;
 
     // initiate the publish job
-    const url = `${getBaseUrl()}/environments/${envId}/bots/${botId}/composer/publishoperations?deleteMissingDependencies=${deleteMissingDependencies}&comment=${encodeURIComponent(
-      comment
-    )}`;
+    let url = `${base}/environments/${envId}/bots/${botId}/composer/publishoperations?deleteMissingDependencies=${deleteMissingDependencies}`;
+    if (comment) {
+      url += `&comment=${encodeURIComponent(comment)}`;
+    }
     const res = await fetch(url, {
       method: 'POST',
       body: zipReadStream,
@@ -137,7 +102,6 @@ export const publish = async (
 
     // transform the PVA job to a publish response
     const result = xformJobToResult(job);
-    console.log(job);
 
     // add to publish history
     const botProjectId = project.id;
@@ -171,6 +135,7 @@ export const getStatus = async (
     profileName, // the name of the publishing profile "My PVA Prod Slot"
 
     // these are specific to the PVA publish profile shape
+    baseUrl,
     botId,
     envId,
     tenantId,
@@ -190,10 +155,12 @@ export const getStatus = async (
 
   try {
     // authenticate with PVA
-    const accessToken = await getAccessToken(authCredentials);
+    const base = baseUrl || getBaseUrl();
+    const creds = getAuthCredentials(base);
+    const accessToken = await getAccessToken(creds);
 
     // check the status for the publish job
-    const url = `${getBaseUrl()}/environments/${envId}/bots/${botId}/composer/publishoperations/${operationId}`;
+    const url = `${base}/environments/${envId}/bots/${botId}/composer/publishoperations/${operationId}`;
     const res = await fetch(url, {
       method: 'GET',
       headers: {
@@ -238,6 +205,7 @@ export const history = async (
 ): Promise<PublishResult[]> => {
   const {
     // these are specific to the PVA publish profile shape
+    baseUrl,
     botId,
     envId,
     tenantId,
@@ -245,10 +213,12 @@ export const history = async (
 
   try {
     // authenticate with PVA
-    const accessToken = await getAccessToken(authCredentials);
+    const base = baseUrl || getBaseUrl();
+    const creds = getAuthCredentials(base);
+    const accessToken = await getAccessToken(creds);
 
     // get the publish history for the bot
-    const url = `${getBaseUrl()}/environments/${envId}/bots/${botId}/composer/publishoperations`;
+    const url = `${base}/environments/${envId}/bots/${botId}/composer/publishoperations`;
     const res = await fetch(url, {
       method: 'GET',
       headers: {
@@ -274,15 +244,19 @@ export const pull = async (
 ): Promise<PullResponse> => {
   const {
     // these are specific to the PVA publish profile shape
+    baseUrl,
     botId,
     envId,
     tenantId,
   } = config;
   try {
     // authenticate with PVA
-    const accessToken = await getAccessToken(authCredentials);
-    // fetch zip
-    const url = `${getBaseUrl()}/api/botmanagement/v1/environments/${envId}/bots/${botId}/composer/content`;
+    const base = baseUrl || getBaseUrl();
+    const creds = getAuthCredentials(base);
+    const accessToken = await getAccessToken(creds);
+
+    // fetch zip containing bot content
+    const url = `${base}/environments/${envId}/bots/${botId}/composer/content`;
     const options: RequestInit = {
       method: 'GET',
       headers: {
