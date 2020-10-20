@@ -9,8 +9,8 @@ import formatMessage from 'format-message';
 import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { useRecoilValue } from 'recoil';
 import { LibraryRef } from '@bfc/shared';
+import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
 
-import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { settingsState, dispatcherState } from '../../recoilModel';
 
