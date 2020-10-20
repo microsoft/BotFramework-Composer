@@ -27,7 +27,7 @@ export interface LUDocument {
   index: () => any;
 }
 
-export declare type ImportResolverDelegate = (
+export declare type LUImportResolverDelegate = (
   source: string,
   resourceId: string
 ) => {
