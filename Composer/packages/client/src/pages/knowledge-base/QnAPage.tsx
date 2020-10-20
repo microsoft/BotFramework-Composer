@@ -104,6 +104,10 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
     [dialogId, projectId, edit]
   );
 
+  useEffect(() => {
+    actions.setCurrentPageMode('qna');
+  }, []);
+
   const toolbarItems = [
     {
       type: 'element',
