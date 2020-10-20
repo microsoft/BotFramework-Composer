@@ -42,16 +42,17 @@ let buildCache = (() => {
   }
 })();
 
-const getLastModified = (files = []) => {
+const getLastModified = (extensionPath) => {
   let last = new Date(0);
 
-  for (const f of files) {
-    // returns last modified date of file in ISO 8601 format
-    const gitTimestamp = execSync(`git log -1 --pretty="%cI" "${f}"`).toString().trim();
+  try {
+    const gitTimestamp = execSync(`git log -1 --pretty="%cI" "${extensionPath}"`).toString().trim();
     const timestamp = new Date(gitTimestamp);
     if (timestamp > last) {
       last = timestamp;
     }
+  } catch (_err) {
+    last = new Date();
   }
 
   return last;
@@ -90,10 +91,7 @@ checkComposerLibs();
 for (const entry of allExtensions) {
   if (entry.isDirectory()) {
     const dir = path.join(extensionsDir, entry.name);
-    const allFiles = glob
-      .sync('**/*', { cwd: dir, gitignore: true, ignore: ['node_modules', 'lib', 'dist'] })
-      .map((f) => path.join(dir, f));
-    const lastModified = getLastModified(allFiles);
+    const lastModified = getLastModified(dir);
     if (shouldCompile(entry.name, lastModified)) {
       try {
         compile(entry.name, dir);
