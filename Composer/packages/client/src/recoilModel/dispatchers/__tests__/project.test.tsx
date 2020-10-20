@@ -272,7 +272,6 @@ describe('Project dispatcher', () => {
     expect(renderedComponent.current.lgFiles.length).toBe(0);
     expect(renderedComponent.current.luFiles.length).toBe(0);
     expect(renderedComponent.current.botEnvironment).toBe('production');
-    expect(renderedComponent.current.skills.length).toBe(0);
     expect(renderedComponent.current.botOpening).toBeFalsy();
     expect(renderedComponent.current.schemas.sdk).toBeUndefined();
     expect(renderedComponent.current.schemas.default).toBeUndefined();
@@ -281,7 +280,7 @@ describe('Project dispatcher', () => {
 
   it('should set bot status', async () => {
     await act(async () => {
-      await dispatcher.setBotStatus(BotStatus.pending, projectId);
+      await dispatcher.setBotStatus(projectId, BotStatus.pending);
     });
 
     expect(renderedComponent.current.botStatus).toEqual(BotStatus.pending);
@@ -391,7 +390,6 @@ describe('Project dispatcher', () => {
     await act(async () => {
       await dispatcher.addRemoteSkillToBotProject(
         'https://test-dev.azurewebsites.net/manifests/onenote-2-1-preview-1-manifest.json',
-        'one-note',
         'remote'
       );
     });
