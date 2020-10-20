@@ -21,7 +21,7 @@ import { parser } from '@microsoft/bf-lu/lib/parser';
 
 import { EntityTypesObj, LineState } from './entityEnum';
 import * as util from './matchingPattern';
-import { ImportResolverDelegate, LUOption, LUDocument, generageDiagnostic, convertDiagnostics } from './utils';
+import { LUImportResolverDelegate, LUOption, LUDocument, generageDiagnostic, convertDiagnostics } from './utils';
 
 // define init methods call from client
 const LABELEXPERIENCEREQUEST = 'labelingExperienceRequest';
@@ -162,7 +162,7 @@ export class LUServer {
     const { uri } = document;
     const { fileId, sectionId, projectId, luFeatures = {} } = luOption || {};
     const index = () => {
-      const importResolver: ImportResolverDelegate = this.getImportResolver(document);
+      const importResolver: LUImportResolverDelegate = this.getImportResolver(document);
       let content: string = document.getText();
       // if inline mode, composite local with server resolved file.
       if (this.importResolver && fileId && sectionId) {

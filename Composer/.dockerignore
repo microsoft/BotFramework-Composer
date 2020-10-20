@@ -11,7 +11,7 @@ Dockerfile
 .dockerignore
 
 # ignore local bots
-plugins/localPublish/hostedBots/*
+extensions/localPublish/hostedBots/*
 
 # ignore test
 coverage

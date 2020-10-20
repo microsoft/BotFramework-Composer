@@ -30,6 +30,7 @@ export interface StorageFolder extends File {
 export interface PublishType {
   name: string;
   description: string;
+  extensionId: string;
   bundleId?: string;
   instructions?: string;
   schema?: JSONSchema7;

@@ -41,7 +41,7 @@ const PivotFieldsets: React.FC<FieldProps<object>> = (props) => {
     <div>
       <Pivot linkSize={PivotLinkSize.large} selectedKey={focusedTab} styles={styles.tabs} onLinkClick={handleTabChange}>
         {fieldsets.map(({ schema, uiOptions, title, itemKey }) => {
-          const Field = resolveFieldWidget(schema, uiOptions);
+          const { field: Field } = resolveFieldWidget({ schema, uiOptions });
 
           return (
             <PivotItem key={itemKey} headerText={typeof title === 'function' ? title(value) : title} itemKey={itemKey}>

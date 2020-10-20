@@ -173,7 +173,7 @@ export type Skill = {
 
 export type JsonSchemaFile = {
   id: string;
-  content: string;
+  content: any;
 };
 
 export type TextFile = {
