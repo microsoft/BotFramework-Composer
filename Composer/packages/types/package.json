@@ -15,6 +15,7 @@
   "author": "andy.brown@microsoft.com",
   "license": "MIT",
   "dependencies": {
+    "@types/axios": "^0.14.0",
     "json-schema": "^0.2.5"
   },
   "devDependencies": {
