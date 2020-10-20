@@ -1,9 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { DialogSetting, FileInfo, importResolverGenerator } from '@bfc/shared';
+import { DialogSetting, FileInfo, lgImportResolverGenerator } from '@bfc/shared';
 
 import { dialogIndexer } from './dialogIndexer';
 import { dialogSchemaIndexer } from './dialogSchemaIndexer';
+import { jsonSchemaFileIndexer } from './jsonSchemaFileIndexer';
 import { lgIndexer } from './lgIndexer';
 import { luIndexer } from './luIndexer';
 import { qnaIndexer } from './qnaIndexer';
@@ -44,7 +45,7 @@ class Indexer {
       };
     });
 
-    return importResolverGenerator(lgFiles, '.lg', locale);
+    return lgImportResolverGenerator(lgFiles, '.lg', locale);
   };
 
   public index(files: FileInfo[], botName: string, locale: string, settings: DialogSetting) {
@@ -58,6 +59,7 @@ class Indexer {
       qnaFiles: qnaIndexer.index(result[FileExtensions.QnA]),
       skillManifestFiles: skillManifestIndexer.index(result[FileExtensions.Manifest]),
       botProjectSpaceFiles: botProjectSpaceIndexer.index(result[FileExtensions.BotProjectSpace]),
+      jsonSchemaFiles: jsonSchemaFileIndexer.index(result[FileExtensions.Json]),
       formDialogSchemas: formDialogSchemaIndexer.index(result[FileExtensions.FormDialog]),
     };
   }
@@ -75,3 +77,5 @@ export * from './utils';
 export * from './validations';
 export * from './skillIndexer';
 export * from './botProjectSpaceIndexer';
+export * from './extractSchemaProperties';
+export * from './groupTriggers';

@@ -5,12 +5,11 @@
 import { jsx } from '@emotion/core';
 import React, { Fragment, useMemo, useCallback, Suspense, useEffect } from 'react';
 import formatMessage from 'format-message';
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
+import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { RouteComponentProps, Router } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { actionButton } from '../language-understanding/styles';
 import { navigateTo } from '../../utils/navigation';
 import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
@@ -73,24 +72,19 @@ const LGPage: React.FC<RouteComponentProps<LGPageProps>> = (props: RouteComponen
   }, [dialogId, dialogs, projectId]);
 
   const onToggleEditMode = useCallback(
-    (_e, checked) => {
+    (_e) => {
       let url = `/bot/${projectId}/language-generation/${dialogId}`;
-      if (checked) url += `/edit`;
+      if (!edit) url += `/edit`;
       navigateTo(url);
     },
-    [dialogId, projectId]
+    [dialogId, projectId, edit]
   );
 
   const onRenderHeaderContent = () => {
     return (
-      <Toggle
-        checked={!!edit}
-        className={'toggleEditMode'}
-        css={actionButton}
-        offText={formatMessage('Edit mode')}
-        onChange={onToggleEditMode}
-        onText={formatMessage('Edit mode')}
-      />
+      <ActionButton data-testid="showcode" onClick={onToggleEditMode}>
+        {edit ? formatMessage('Hide code') : formatMessage('Show code')}
+      </ActionButton>
     );
   };
 

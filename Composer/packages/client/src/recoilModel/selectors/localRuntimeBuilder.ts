@@ -13,8 +13,7 @@ import { dispatcherState } from '../DispatcherWrapper';
 import { isBuildConfigComplete as isBuildConfigurationComplete, needsBuild } from '../../utils/buildUtil';
 
 import { validateDialogSelectorFamily } from './validatedDialogs';
-
-import { localBotsWithoutErrorsSelector } from '.';
+import { localBotsWithoutErrorsSelector } from './project';
 
 export const trackBotStatusesSelector = selectorFamily({
   key: 'trackBotStatusesSelector',
@@ -69,7 +68,8 @@ export const buildConfigurationSelector = selector({
     return localProjects.map((projectId: string) => {
       const result = get(buildEssentialsSelector(projectId));
       const name = get(botDisplayNameState(projectId));
-      return { ...result, name };
+      const dialogs = get(validateDialogSelectorFamily(projectId));
+      return { ...result, name, dialogs };
     });
   },
 });
@@ -91,10 +91,16 @@ export const runningBotsSelector = selector({
 
 const botRuntimeAction = (dispatcher: Dispatcher) => {
   return {
-    buildWithDefaultRecognizer: async (projectId: string, config: IPublishConfig) => {
+    buildWithDefaultRecognizer: async (projectId: string, buildDependencies) => {
+      const { dialogs, config, recognizers } = buildDependencies;
       if (config) {
         dispatcher.setBotStatus(projectId, BotStatus.publishing);
-        await dispatcher.build(config.luis, config.qna, projectId);
+        const recognizerTypes = dialogs.reduce((result, file) => {
+          const recognizer = recognizers.filter((r) => r.isSelected && r.isSelected(file.content.recognizer));
+          result[file.id] = recognizer[0]?.id || '';
+          return result;
+        }, {});
+        await dispatcher.build(projectId, config.luis, config.qna, recognizerTypes);
       }
     },
     startBot: async (projectId: string, config?: IPublishConfig) => {

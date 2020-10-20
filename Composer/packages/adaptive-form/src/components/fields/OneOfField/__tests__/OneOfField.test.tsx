@@ -2,11 +2,12 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render, fireEvent, screen } from '@bfc/test-utils';
+import { render, fireEvent, screen } from '@botframework-composer/test-utils';
 import assign from 'lodash/assign';
 
 import { OneOfField } from '../OneOfField';
 import { resolveFieldWidget } from '../../../../utils/resolveFieldWidget';
+import { getFieldIconText } from '../../../../utils/getFieldIconText';
 
 jest.mock('../../../../utils/resolveFieldWidget', () => ({
   resolveFieldWidget: jest.fn(),
@@ -29,16 +30,8 @@ function renderSubject(overrides = {}) {
 
 describe('<OneOfField />', () => {
   beforeEach(() => {
-    (resolveFieldWidget as jest.Mock).mockImplementation(({ type }) => {
-      return () => <div>{type ?? 'unsupported'} field</div>;
-    });
-  });
-
-  describe('when the schema does not specify any options', () => {
-    it('renders unsupported field', () => {
-      const { container, queryByTestId } = renderSubject({ schema: { type: 'string' } });
-      expect(container).toHaveTextContent('unsupported field');
-      expect(queryByTestId('OneOfFieldType')).not.toBeInTheDocument();
+    (resolveFieldWidget as jest.Mock).mockImplementation(({ schema: { type } }) => {
+      return { field: () => <div>{type ?? 'unsupported'} field</div> };
     });
   });
 
@@ -55,7 +48,6 @@ describe('<OneOfField />', () => {
       oneOf: [
         {
           type: 'string',
-          title: 'Custom Title',
         },
         {
           type: 'number',
@@ -71,17 +63,19 @@ describe('<OneOfField />', () => {
       const dropdown = getByTestId('OneOfFieldType');
 
       // it renders the first option by default
-      expect(screen.getByText('custom title')).toBeInTheDocument();
-      expect(dropdown).toHaveTextContent(/custom title/);
+      const stringIconText = getFieldIconText('string');
+      expect(screen.getByText(stringIconText)).toBeInTheDocument();
+      expect(dropdown).toHaveTextContent(stringIconText);
       expect(getByText('string field')).toBeInTheDocument();
 
       fireEvent.click(dropdown);
-      expect(screen.getAllByText('custom title')).toHaveLength(2);
+      expect(screen.getAllByText(stringIconText)).toHaveLength(2);
       expect(screen.getByText('number')).toBeInTheDocument();
       expect(screen.getByText('boolean')).toBeInTheDocument();
 
+      const booleanIconText = getFieldIconText('boolean');
       fireEvent.click(screen.getByText('boolean'));
-      expect(dropdown).toHaveTextContent(/boolean/);
+      expect(dropdown).toHaveTextContent(booleanIconText);
       expect(getByText('boolean field')).toBeInTheDocument();
     });
 

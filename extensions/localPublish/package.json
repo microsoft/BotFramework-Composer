@@ -1,0 +1,31 @@
+{
+  "name": "localpublish",
+  "version": "1.0.0",
+  "description": "start and update the local test bot runtime",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@bfc/extension": "file:../../Composer/packages/extension",
+    "@botframework-composer/types": "latest",
+    "adm-zip": "^0.4.14",
+    "archiver": "^5.0.2",
+    "get-port": "^5.1.1",
+    "globby": "^11.0.0",
+    "kill-port": "^1.6.1",
+    "path": "^0.12.7",
+    "portfinder": "^1.0.26",
+    "rimraf": "^3.0.2",
+    "uuid": "^7.0.1"
+  },
+  "resolutions": {
+    "bl": "^4.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^14.11.8"
+  }
+}

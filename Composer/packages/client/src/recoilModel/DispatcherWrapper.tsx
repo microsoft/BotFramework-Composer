@@ -23,6 +23,7 @@ import {
   settingsState,
   filePersistenceState,
   botProjectFileState,
+  jsonSchemaFilesState,
 } from './atoms';
 import { localBotsWithoutErrorsSelector, formDialogSchemasSelectorFamily } from './selectors';
 
@@ -37,6 +38,7 @@ const getBotAssets = async (projectId, snapshot: Snapshot): Promise<BotAssets> =
     snapshot.getPromise(dialogSchemasState(projectId)),
     snapshot.getPromise(botProjectFileState(projectId)),
     snapshot.getPromise(formDialogSchemasSelectorFamily(projectId)),
+    snapshot.getPromise(jsonSchemaFilesState(projectId)),
   ]);
   return {
     projectId,
@@ -49,6 +51,7 @@ const getBotAssets = async (projectId, snapshot: Snapshot): Promise<BotAssets> =
     dialogSchemas: result[6],
     botProjectFile: result[7],
     formDialogSchemas: result[8],
+    jsonSchemaFiles: result[9],
   };
 };
 

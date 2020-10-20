@@ -9,7 +9,7 @@ services:
       - ~/Documents/Composer:/Bots
       - ./runtime:/runtime
       - ./.appdata:/appdata
-      - ./Composer/plugins/localPublish/hostedBots:/app/Composer/plugins/localPublish/hostedBots
+      - ./extensions/localPublish/hostedBots:/app/extensions/localPublish/hostedBots
     environment:
       COMPOSER_BOTS_FOLDER: /Bots
       COMPOSER_RUNTIME_FOLDER: /runtime

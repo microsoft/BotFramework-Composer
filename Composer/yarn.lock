@@ -882,7 +882,7 @@
 
 "@babel/parser@^7.0.0", "@babel/parser@^7.1.0", "@babel/parser@^7.10.4", "@babel/parser@^7.10.5", "@babel/parser@^7.11.3", "@babel/parser@^7.11.5", "@babel/parser@^7.2.2", "@babel/parser@^7.3.4", "@babel/parser@^7.4.0", "@babel/parser@^7.7.0", "@babel/parser@^7.7.4", "@babel/parser@^7.7.5", "@babel/parser@^7.8.6", "@babel/parser@^7.9.0", "@babel/parser@^7.9.6":
   version "7.11.5"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@babel/parser/-/@babel/parser-7.11.5.tgz#c7ff6303df71080ec7a4f5b8c003c58f1cf51037"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@babel/parser/-/@babel/parser-7.11.5.tgz#c7ff6303df71080ec7a4f5b8c003c58f1cf51037"
   integrity sha1-x/9jA99xCA7HpPW4wAPFjxz1EDc=
 
 "@babel/plugin-proposal-async-generator-functions@^7.2.0":
@@ -2980,24 +2980,26 @@
     fs-extra "^7.0.1"
     tslib "~1.10.0"
 
-"@microsoft/bf-dispatcher@^4.10.0-preview.141651":
-  version "4.10.0-preview.141651"
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-dispatcher/-/@microsoft/bf-dispatcher-4.10.0-preview.141651.tgz#d943197c42e15894a55eadf4c5e3d85d9bbccfd7"
-  integrity sha1-2UMZfELhWJSlXq30xePYXZu8z9c=
+"@microsoft/bf-dispatcher@^4.11.0-beta.20201016.393c6b2":
+  version "4.11.0-beta.20201016.393c6b2"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-dispatcher/-/bf-dispatcher-4.11.0-beta.20201016.393c6b2.tgz#7dab414752f8711fed37ae5625c38fdd0192eddb"
+  integrity sha512-pR1vVy17riuTos33IvQfDCmGG8xFmNoPUEb376kXITTtugNWVXgsD62P+thk0EAeegr7lCohNk+Zy3rfJ9lgvQ==
   dependencies:
-    "@microsoft/bf-lu" "4.10.0-preview.141651"
+    "@microsoft/bf-lu" next
     "@oclif/command" "~1.5.19"
     "@oclif/config" "~1.13.3"
     argparse "~1.0.10"
+    readline-sync "^1.4.10"
+    ts-md5 "^1.2.6"
     tslib "^1.10.0"
 
-"@microsoft/bf-generate-library@^4.10.0-daily.20201008.172736":
-  version "4.10.0-daily.20201008.172736"
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-generate-library/-/@microsoft/bf-generate-library-4.10.0-daily.20201008.172736.tgz#e5a97cb8d2b2d70524cd3094f7d49dd667cfebc0"
-  integrity sha1-5al8uNKy1wUkzTCU99Sd1mfP68A=
+"@microsoft/bf-generate-library@^4.10.0-daily.20201015.174962":
+  version "4.10.0-daily.20201015.174962"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-generate-library/-/@microsoft/bf-generate-library-4.10.0-daily.20201015.174962.tgz#42838aa5a44649a9de7bc3a7c987fe91b7ab65e3"
+  integrity sha1-QoOKpaRGSanee8OnyYf+kberZeM=
   dependencies:
-    "@microsoft/bf-lu" "^4.11.0-dev.20200831.d7b6149"
-    adaptive-expressions "^4.11.0-dev.20200916.f8fef0f"
+    "@microsoft/bf-lu" "^4.11.0-dev.20201015.a41c691"
+    adaptive-expressions "^4.11.0-dev.20201015.e56fdb7"
     ajv "^6.9.1"
     botbuilder-lg "^4.11.0-dev.20200916.f8fef0f"
     clone "^2.1.2"
@@ -3009,34 +3011,10 @@
     seedrandom "~3.0.5"
     swagger-parser "^8.0.4"
 
-"@microsoft/bf-lu@4.10.0-preview.141651":
-  version "4.10.0-preview.141651"
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.10.0-preview.141651.tgz#29ed2af803d23ee760354913f5b814873bc1285c"
-  integrity sha1-Ke0q+APSPudgNUkT9bgUhzvBKFw=
-  dependencies:
-    "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
-    "@azure/ms-rest-azure-js" "2.0.1"
-    "@oclif/command" "~1.5.19"
-    "@oclif/errors" "~1.2.2"
-    "@types/node-fetch" "~2.5.5"
-    antlr4 "^4.7.2"
-    chalk "2.4.1"
-    console-stream "^0.1.1"
-    deep-equal "^1.0.1"
-    delay "^4.3.0"
-    fs-extra "^8.1.0"
-    get-stdin "^6.0.0"
-    globby "^10.0.1"
-    intercept-stdout "^0.1.2"
-    lodash "^4.17.15"
-    node-fetch "~2.6.0"
-    semver "^5.5.1"
-    tslib "^1.10.0"
-
-"@microsoft/bf-lu@^4.11.0-dev.20200831.d7b6149":
-  version "4.11.0-dev.20201008.18fba61"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.11.0-dev.20201008.18fba61.tgz#7ffcb888309f06d518a85d342c62dc4b843d2949"
-  integrity sha1-f/y4iDCfBtUYqF00LGLcS4Q9KUk=
+"@microsoft/bf-lu@^4.11.0-dev.20201013.7ccb128":
+  version "4.11.0-dev.20201013.7ccb128"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.11.0-dev.20201013.7ccb128.tgz#9dbb5043d3f7a384d1449c73fd984016b5115ca4"
+  integrity sha512-xaG5yDxtdwNNfYa6cs9wmCGTN6K6d2sh8jfGvMt7dqs26My3c6Sus03VF74sRrp2OQXnbBLqZPVY1qzLKnjoJg==
   dependencies:
     "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
     "@azure/ms-rest-azure-js" "2.0.1"
@@ -3053,12 +3031,12 @@
     lodash "^4.17.19"
     node-fetch "~2.6.0"
     semver "^5.5.1"
-    tslib "^1.10.0"
+    tslib "^2.0.3"
 
-"@microsoft/bf-lu@^4.11.0-dev.20201005.7e5e1b8":
-  version "4.11.0-dev.20201005.7e5e1b8"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.11.0-dev.20201005.7e5e1b8.tgz#62f9a37bb8340456e41853e179f2941dab9dfc87"
-  integrity sha1-Yvmje7g0BFbkGFPhefKUHaud/Ic=
+"@microsoft/bf-lu@^4.11.0-dev.20201015.a41c691":
+  version "4.11.0-dev.20201016.24ec3b9"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.11.0-dev.20201016.24ec3b9.tgz#a0f3880087978ff09236510e25ffcf085cbeee5a"
+  integrity sha1-oPOIAIeXj/CSNlEOJf/PCFy+7lo=
   dependencies:
     "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
     "@azure/ms-rest-azure-js" "2.0.1"
@@ -3075,7 +3053,29 @@
     lodash "^4.17.19"
     node-fetch "~2.6.0"
     semver "^5.5.1"
-    tslib "^1.10.0"
+    tslib "^2.0.3"
+
+"@microsoft/bf-lu@next":
+  version "4.11.0-dev.20201015.a41c691"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.11.0-dev.20201015.a41c691.tgz#1002eb10b7625fead68274c007ac857de79f4446"
+  integrity sha512-Bq/4NJ8FpJV/wOOdjxLPMHmZoT08qSKozFbnukjdh5L0UNDDDyhTSSLmG1hdGc337VmtQF6YBsLu9sEmATSJUA==
+  dependencies:
+    "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
+    "@azure/ms-rest-azure-js" "2.0.1"
+    "@types/node-fetch" "~2.5.5"
+    antlr4 "^4.7.2"
+    chalk "2.4.1"
+    console-stream "^0.1.1"
+    deep-equal "^1.0.1"
+    delay "^4.3.0"
+    fs-extra "^8.1.0"
+    get-stdin "^6.0.0"
+    globby "^10.0.1"
+    intercept-stdout "^0.1.2"
+    lodash "^4.17.19"
+    node-fetch "~2.6.0"
+    semver "^5.5.1"
+    tslib "^2.0.3"
 
 "@microsoft/load-themed-styles@^1.10.26":
   version "1.10.39"
@@ -3717,7 +3717,7 @@
   resolved "https://registry.yarnpkg.com/@types/mime/-/mime-2.0.1.tgz#dc488842312a7f075149312905b5e3c0b054c79d"
   integrity sha512-FwI9gX75FgVBJ7ywgnq/P7tw+/o1GUbtP0KzbtusLigAOgIgNISRK0ZPl4qertvXSIE8YbsVJueQ90cDt9YYyw==
 
-"@types/minimatch@*":
+"@types/minimatch@*", "@types/minimatch@^3.0.3":
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-3.0.3.tgz#3dca0e3f33b200fc7d1139c0cd96c1268cadfd9d"
   integrity sha512-tHq6qdbT9U1IRSGf14CL0pUlULksvY9OZ+5eEgl1N7t+OA3tGvNpxJCzuKQlsNgCVwbAs670L1vcVQi8j9HjnA==
@@ -3735,13 +3735,6 @@
   integrity sha1-TYElQeh7I1dyYaWqlfcE3T0B5BA=
   dependencies:
     "@types/node" "*"
-
-"@types/moment-timezone@^0.5.12":
-  version "0.5.12"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@types/moment-timezone/-/@types/moment-timezone-0.5.12.tgz#0fb680c03db194fe8ff4551eaeb1eec8d3d80e9f"
-  integrity sha1-D7aAwD2xlP6P9FUerrHuyNPYDp8=
-  dependencies:
-    moment ">=2.14.0"
 
 "@types/moment-timezone@^0.5.13":
   version "0.5.13"
@@ -4531,28 +4524,10 @@ acorn@^7.4.0:
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/acorn/-/acorn-7.4.0.tgz#e1ad486e6c54501634c6c397c5c121daa383607c"
   integrity sha1-4a1IbmxUUBY0xsOXxcEh2qODYHw=
 
-adaptive-expressions@4.10.0-preview-147186:
-  version "4.10.0-preview-147186"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adaptive-expressions/-/adaptive-expressions-4.10.0-preview-147186.tgz#4468fcb00a27d955d4f1fd46566fda5a46baef87"
-  dependencies:
-    "@microsoft/recognizers-text-data-types-timex-expression" "1.1.4"
-    "@types/atob-lite" "^2.0.0"
-    "@types/lru-cache" "^5.1.0"
-    "@types/moment-timezone" "^0.5.12"
-    "@types/xmldom" "^0.1.29"
-    antlr4ts "0.5.0-alpha.3"
-    atob-lite "^2.0.0"
-    big-integer "^1.6.48"
-    jspath "^0.4.0"
-    lodash "^4.17.15"
-    lru-cache "^5.1.1"
-    moment "^2.25.1"
-    moment-timezone "^0.5.28"
-
-adaptive-expressions@4.10.0-preview-150886:
-  version "4.10.0-preview-150886"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adaptive-expressions/-/adaptive-expressions-4.10.0-preview-150886.tgz#27d147b8b9389318e1b608601d83f5003701cf7b"
-  integrity sha1-J9FHuLk4kxjhtghgHYP1ADcBz3s=
+adaptive-expressions@4.11.0-dev.20200929.ca9de94:
+  version "4.11.0-dev.20200929.ca9de94"
+  resolved "https://registry.yarnpkg.com/adaptive-expressions/-/adaptive-expressions-4.11.0-dev.20200929.ca9de94.tgz#305c8462e7e0c329f55aa8cd2b2496bb81c2490c"
+  integrity sha512-xq5QG19kIPio6piHEA4aPkqqi2ejYoYCBEovF55gJXaW5jKG+Q7bao3yqb2VTq9vISEyIq9VabmIlHzRQrOXyg==
   dependencies:
     "@microsoft/recognizers-text-data-types-timex-expression" "1.1.4"
     "@types/atob-lite" "^2.0.0"
@@ -4568,10 +4543,48 @@ adaptive-expressions@4.10.0-preview-150886:
     moment "^2.25.1"
     moment-timezone "^0.5.28"
 
-adaptive-expressions@4.11.0-dev.20200929.ca9de94, adaptive-expressions@^4.11.0-dev.20200916.f8fef0f:
-  version "4.11.0-dev.20200929.ca9de94"
-  resolved "https://registry.yarnpkg.com/adaptive-expressions/-/adaptive-expressions-4.11.0-dev.20200929.ca9de94.tgz#305c8462e7e0c329f55aa8cd2b2496bb81c2490c"
-  integrity sha512-xq5QG19kIPio6piHEA4aPkqqi2ejYoYCBEovF55gJXaW5jKG+Q7bao3yqb2VTq9vISEyIq9VabmIlHzRQrOXyg==
+adaptive-expressions@4.11.0-dev.20201010.6e4a99e:
+  version "4.11.0-dev.20201010.6e4a99e"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adaptive-expressions/-/adaptive-expressions-4.11.0-dev.20201010.6e4a99e.tgz#493292c1619ef243901e041849b9ed42af9fb6fd"
+  integrity sha1-STKSwWGe8kOQHgQYSbntQq+ftv0=
+  dependencies:
+    "@microsoft/recognizers-text-data-types-timex-expression" "1.1.4"
+    "@types/atob-lite" "^2.0.0"
+    "@types/lru-cache" "^5.1.0"
+    "@types/moment-timezone" "^0.5.13"
+    "@types/xmldom" "^0.1.29"
+    antlr4ts "0.5.0-alpha.3"
+    atob-lite "^2.0.0"
+    big-integer "^1.6.48"
+    jspath "^0.4.0"
+    lodash "^4.17.19"
+    lru-cache "^5.1.1"
+    moment "^2.25.1"
+    moment-timezone "^0.5.28"
+
+adaptive-expressions@^4.11.0-dev.20201013.d5458bf:
+  version "4.11.0-dev.20201013.d5458bf"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adaptive-expressions/-/adaptive-expressions-4.11.0-dev.20201013.d5458bf.tgz#d7573dab8d883985b80df8c8859edc4dead7593a"
+  integrity sha1-11c9q42IOYW4DfjIhZ7cTerXWTo=
+  dependencies:
+    "@microsoft/recognizers-text-data-types-timex-expression" "1.1.4"
+    "@types/atob-lite" "^2.0.0"
+    "@types/lru-cache" "^5.1.0"
+    "@types/moment-timezone" "^0.5.13"
+    "@types/xmldom" "^0.1.29"
+    antlr4ts "0.5.0-alpha.3"
+    atob-lite "^2.0.0"
+    big-integer "^1.6.48"
+    jspath "^0.4.0"
+    lodash "^4.17.19"
+    lru-cache "^5.1.1"
+    moment "^2.25.1"
+    moment-timezone "^0.5.28"
+
+adaptive-expressions@^4.11.0-dev.20201015.e56fdb7:
+  version "4.11.0-dev.20201016.dbe9571"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adaptive-expressions/-/adaptive-expressions-4.11.0-dev.20201016.dbe9571.tgz#9697c34573960c6f323dfa0518d6f1c1c3258836"
+  integrity sha1-lpfDRXOWDG8yPfoFGNbxwcMliDY=
   dependencies:
     "@microsoft/recognizers-text-data-types-timex-expression" "1.1.4"
     "@types/atob-lite" "^2.0.0"
@@ -4944,6 +4957,11 @@ arr-union@^3.1.0:
   resolved "https://registry.yarnpkg.com/arr-union/-/arr-union-3.1.0.tgz#e39b09aea9def866a8f206e288af63919bae39c4"
   integrity sha1-45sJrqne+Gao8gbiiK9jkZuuOcQ=
 
+array-differ@^3.0.0:
+  version "3.0.0"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/array-differ/-/array-differ-3.0.0.tgz#3cbb3d0f316810eafcc47624734237d6aee4ae6b"
+  integrity sha1-PLs9DzFoEOr8xHYkc0I31q7krms=
+
 array-filter@~0.0.0:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/array-filter/-/array-filter-0.0.1.tgz#7da8cf2e26628ed732803581fd21f67cacd2eeec"
@@ -5020,6 +5038,11 @@ arrify@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/arrify/-/arrify-1.0.1.tgz#898508da2226f380df904728456849c1501a4b0d"
   integrity sha1-iYUI2iIm84DfkEcoRWhJwVAaSw0=
+
+arrify@^2.0.1:
+  version "2.0.1"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/arrify/-/arrify-2.0.1.tgz#c9655e9331e0abcd588d2a7cad7e9956f66701fa"
+  integrity sha1-yWVekzHgq81YjSp8rX6ZVvZnAfo=
 
 asap@~2.0.3, asap@~2.0.6:
   version "2.0.6"
@@ -5690,12 +5713,12 @@ boolean@^3.0.0:
   resolved "https://registry.yarnpkg.com/boolean/-/boolean-3.0.1.tgz#35ecf2b4a2ee191b0b44986f14eb5f052a5cbb4f"
   integrity sha512-HRZPIjPcbwAVQvOTxR4YE3o8Xs98NqbbL1iEZDCz7CL8ql0Lt5iOyJFxfnAB0oFs8Oh02F/lLlg30Mexv46LjA==
 
-botbuilder-lg@^4.10.0-preview-150886:
-  version "4.10.0-preview-150886"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botbuilder-lg/-/botbuilder-lg-4.10.0-preview-150886.tgz#bbc91011c1c3be3a343acfdb3168f152d71fadc1"
-  integrity sha1-u8kQEcHDvjo0Os/bMWjxUtcfrcE=
+botbuilder-lg@4.11.0-dev.20201010.6e4a99e:
+  version "4.11.0-dev.20201010.6e4a99e"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botbuilder-lg/-/botbuilder-lg-4.11.0-dev.20201010.6e4a99e.tgz#6201f1fb29756cd968589fcfd7980016b1f33369"
+  integrity sha1-YgHx+yl1bNloWJ/P15gAFrHzM2k=
   dependencies:
-    adaptive-expressions "4.10.0-preview-150886"
+    adaptive-expressions "4.11.0-dev.20201010.6e4a99e"
     antlr4ts "0.5.0-alpha.3"
     lodash "^4.17.19"
     path "^0.12.7"
@@ -8647,7 +8670,7 @@ elegant-spinner@^1.0.1:
 
 elliptic@^6.0.0, elliptic@^6.5.3:
   version "6.5.3"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/elliptic/-/elliptic-6.5.3.tgz#cb59eb2efdaf73a0bd78ccd7015a62ad6e0f93d6"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/elliptic/-/elliptic-6.5.3.tgz#cb59eb2efdaf73a0bd78ccd7015a62ad6e0f93d6"
   integrity sha1-y1nrLv2vc6C9eMzXAVpirW4Pk9Y=
   dependencies:
     bn.js "^4.4.0"
@@ -12740,7 +12763,7 @@ killable@^1.0.1:
 
 kind-of@^2.0.1, kind-of@^3.0.2, kind-of@^3.0.3, kind-of@^3.2.0, kind-of@^4.0.0, kind-of@^5.0.0, kind-of@^6.0.0, kind-of@^6.0.2, kind-of@^6.0.3:
   version "6.0.3"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/kind-of/-/kind-of-6.0.3.tgz#07c05034a6c349fa06e24fa35aa76db4580ce4dd"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/kind-of/-/kind-of-6.0.3.tgz#07c05034a6c349fa06e24fa35aa76db4580ce4dd"
   integrity sha1-B8BQNKbDSfoG4k+jWqdttFgM5N0=
 
 kleur@^3.0.2:
@@ -13155,7 +13178,7 @@ lodash.uniq@^4.5.0:
 
 "lodash@>=3.5 <5", lodash@^4.0.0, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.3.0:
   version "4.17.20"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
   integrity sha1-tEqbYpe8tpjxxRo1RaKzs2jVnFI=
 
 log-driver@^1.2.7:
@@ -13683,7 +13706,7 @@ mixin-object@^2.0.1:
 
 mkdirp@0.5.1, mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@^0.5.2, mkdirp@^0.5.3, mkdirp@^0.5.4, mkdirp@^1.0.3, mkdirp@~0.5.1:
   version "0.5.5"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/mkdirp/-/mkdirp-0.5.5.tgz#d91cefd62d1436ca0f41620e251288d420099def"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/mkdirp/-/mkdirp-0.5.5.tgz#d91cefd62d1436ca0f41620e251288d420099def"
   integrity sha1-2Rzv1i0UNsoPQWIOJRKI1CAJne8=
   dependencies:
     minimist "^1.2.5"
@@ -13792,6 +13815,17 @@ multicast-dns@^6.0.1:
   dependencies:
     dns-packet "^1.3.1"
     thunky "^1.0.2"
+
+multimatch@^4.0.0:
+  version "4.0.0"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/multimatch/-/multimatch-4.0.0.tgz#8c3c0f6e3e8449ada0af3dd29efb491a375191b3"
+  integrity sha1-jDwPbj6ESa2grz3SnvtJGjdRkbM=
+  dependencies:
+    "@types/minimatch" "^3.0.3"
+    array-differ "^3.0.0"
+    array-union "^2.1.0"
+    arrify "^2.0.1"
+    minimatch "^3.0.4"
 
 mute-stream@0.0.5:
   version "0.0.5"
@@ -16365,7 +16399,7 @@ read-text-file@^1.1.0:
 
 readable-stream@^2.3.5:
   version "2.3.7"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/readable-stream/-/readable-stream-2.3.7.tgz#1eca1cf711aef814c04f62252a36a62f6cb23b57"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/readable-stream/-/readable-stream-2.3.7.tgz#1eca1cf711aef814c04f62252a36a62f6cb23b57"
   integrity sha1-Hsoc9xGu+BTAT2IlKjamL2yyO1c=
   dependencies:
     core-util-is "~1.0.0"
@@ -16438,6 +16472,11 @@ readdirp@~3.4.0:
   integrity sha512-0xe001vZBnJEK+uKcj8qOhyAKPzIT+gStxWr3LCB0DwcXR5NZJ3IaC+yGnHCYzB/S7ov3m3EEbZI2zeNvX+hGQ==
   dependencies:
     picomatch "^2.2.1"
+
+readline-sync@^1.4.10:
+  version "1.4.10"
+  resolved "https://registry.yarnpkg.com/readline-sync/-/readline-sync-1.4.10.tgz#41df7fbb4b6312d673011594145705bf56d8873b"
+  integrity sha512-gNva8/6UAe8QYepIQH/jQ2qn91Qj0B9sYjMBBs3QOB8F2CXcKgLxQaJRP76sWVRQt+QU+8fAkCbCvjjMFu7Ycw==
 
 readline-sync@^1.4.9:
   version "1.4.9"
@@ -17178,7 +17217,7 @@ select-hose@^2.0.0:
 
 selfsigned@1.10.8, selfsigned@^1.10.7:
   version "1.10.8"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/selfsigned/-/selfsigned-1.10.8.tgz#0d17208b7d12c33f8eac85c41835f27fc3d81a30"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/selfsigned/-/selfsigned-1.10.8.tgz#0d17208b7d12c33f8eac85c41835f27fc3d81a30"
   integrity sha1-DRcgi30Swz+OrIXEGDXyf8PYGjA=
   dependencies:
     node-forge "^0.10.0"
@@ -17322,7 +17361,7 @@ set-blocking@^2.0.0, set-blocking@~2.0.0:
 
 set-value@^0.4.3, set-value@^2.0.0, set-value@^3.0.2:
   version "3.0.2"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/set-value/-/set-value-3.0.2.tgz#74e8ecd023c33d0f77199d415409a40f21e61b90"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/set-value/-/set-value-3.0.2.tgz#74e8ecd023c33d0f77199d415409a40f21e61b90"
   integrity sha1-dOjs0CPDPQ93GZ1BVAmkDyHmG5A=
   dependencies:
     is-plain-object "^2.0.4"
@@ -18615,7 +18654,7 @@ ts-loader@^6.0.1:
     micromatch "^4.0.0"
     semver "^6.0.0"
 
-ts-md5@^1.2.7:
+ts-md5@^1.2.6, ts-md5@^1.2.7:
   version "1.2.7"
   resolved "https://registry.yarnpkg.com/ts-md5/-/ts-md5-1.2.7.tgz#b76471fc2fd38f0502441f6c3b9494ed04537401"
   integrity sha512-emODogvKGWi1KO1l9c6YxLMBn6CEH3VrH5mVPIyOtxBG52BvV4jP3GWz6bOZCz61nLgBc3ffQYE4+EHfCD+V7w==
@@ -18691,6 +18730,11 @@ tslib@^2.0.0:
   version "2.0.0"
   resolved "https://botbuilder.myget.org/F/botframework-cli/npm/tslib/-/tslib-2.0.0.tgz#18d13fc2dce04051e20f074cc8387fd8089ce4f3"
   integrity sha1-GNE/wtzgQFHiDwdMyDh/2Aic5PM=
+
+tslib@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.0.3.tgz#8e0741ac45fc0c226e58a17bfc3e64b9bc6ca61c"
+  integrity sha512-uZtkfKblCEQtZKBF6EBXVZeQNl82yqtDQdv+eck8u7tdPxjLu2/lp5/uPW+um2tpuxINHWy3GhiccY7QgEaVHQ==
 
 tsutils@^3.17.1:
   version "3.17.1"

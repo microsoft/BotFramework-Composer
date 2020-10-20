@@ -37,7 +37,6 @@ export const skillDispatcher = () => {
       return;
     }
 
-    debugger;
     for (const skillNameIdentifier in botProjectFile.content.skills) {
       const botProjectSkill = botProjectFile.content.skills[skillNameIdentifier];
       const projectId = skills[skillNameIdentifier]?.id;
