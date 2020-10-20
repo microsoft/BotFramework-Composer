@@ -14,6 +14,7 @@ import {
 } from './../../src/utils/navigation';
 
 const projectId = '123a-sdf123';
+const skillId = '98765.4321';
 
 describe('getFocusPath', () => {
   it('return focus path', () => {
@@ -94,13 +95,22 @@ describe('composer url util', () => {
   });
 
   it('convert path to url', () => {
-    const result1 = convertPathToUrl(projectId, 'main');
-    expect(result1).toEqual(`/bot/${projectId}/dialogs/main`);
-    const result2 = convertPathToUrl(projectId, 'main', 'main.triggers[0].actions[0]');
-    expect(result2).toEqual(`/bot/${projectId}/dialogs/main?selected=triggers[0]&focused=triggers[0].actions[0]`);
-    const result3 = convertPathToUrl(projectId, 'main', 'main.triggers[0].actions[0]#Microsoft.TextInput#prompt');
-    expect(result3).toEqual(
-      `/bot/${projectId}/dialogs/main?selected=triggers[0]&focused=triggers[0].actions[0]#botAsks`
+    const result1 = convertPathToUrl(projectId, skillId, 'main');
+    expect(result1).toEqual(`/bot/${projectId}/skill/${skillId}/dialogs/main`);
+    const result2 = convertPathToUrl(projectId, skillId, 'main', 'main.triggers[0].actions[0]');
+    expect(result2).toEqual(
+      `/bot/${projectId}/skill/${skillId}/dialogs/main?selected=triggers[0]&focused=triggers[0].actions[0]`
     );
+    const result3 = convertPathToUrl(
+      projectId,
+      skillId,
+      'main',
+      'main.triggers[0].actions[0]#Microsoft.TextInput#prompt'
+    );
+    expect(result3).toEqual(
+      `/bot/${projectId}/skill/${skillId}/dialogs/main?selected=triggers[0]&focused=triggers[0].actions[0]#botAsks`
+    );
+    const result4 = convertPathToUrl(projectId, null, 'main');
+    expect(result4).toEqual(`/bot/${projectId}/dialogs/main`);
   });
 });
