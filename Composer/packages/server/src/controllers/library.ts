@@ -60,7 +60,7 @@ export const LibraryController = {
       mergeErrors.push(msg);
     };
 
-    if (currentProject.settings?.runtime?.path) {
+    if (currentProject.settings?.runtime?.customRuntime && currentProject.settings?.runtime?.path) {
       const manifestFile = runtime.identifyManifest(currentProject.settings?.runtime?.path);
 
       const dryrun = new SchemaMerger(

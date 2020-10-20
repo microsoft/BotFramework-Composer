@@ -43,9 +43,9 @@ const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   useEffect(() => {
     getLibraries();
-    getInstalledLibraries();
     if (settings.runtime && settings.runtime.customRuntime === true && settings.runtime.path) {
       setEjectedRuntime(true);
+      getInstalledLibraries();
     }
   }, []);
 
@@ -53,15 +53,17 @@ const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     const groups: any[] = [];
     let items: any[] = [];
 
-    items = items.concat(installedComponents || []);
+    if (installedComponents.length) {
+      items = items.concat(installedComponents || []);
 
-    groups.push({
-      key: 'installed',
-      name: 'Installed',
-      startIndex: 0,
-      count: installedComponents ? installedComponents.length : 0,
-      level: 0,
-    });
+      groups.push({
+        key: 'installed',
+        name: 'Installed',
+        startIndex: 0,
+        count: installedComponents ? installedComponents.length : 0,
+        level: 0,
+      });
+    }
 
     // find all categories listed in the available libraries
     const categories = [DEFAULT_CATEGORY];
