@@ -7,6 +7,9 @@ import { useState, Fragment, useEffect } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
+import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
+import { MessageBarButton } from 'office-ui-fabric-react/lib/Button';
+
 import { useRecoilValue } from 'recoil';
 import { LibraryRef } from '@bfc/shared';
 
@@ -14,7 +17,8 @@ import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { settingsState, dispatcherState } from '../../recoilModel';
 
-import httpClient from './../../utils/httpUtil';
+import httpClient from '../../utils/httpUtil';
+import { navigateTo } from '../../utils/navigation';
 import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor } from './styles';
 import { ImportDialog } from './importDialog';
 import { LibraryList } from './libraryList';
@@ -238,6 +242,10 @@ const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     }
   };
 
+  const navigateToEject = (evt: any): void => {
+    navigateTo(`/settings/bot/${projectId}/runtime`);
+  };
+
   return (
     <Fragment>
       <Dialog
@@ -255,10 +263,18 @@ const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         <h1 css={HeaderText}>{formatMessage('Package Library')}</h1>
       </div>
       {!ejectedRuntime && (
-        <div>
-          To install components, this project must first have an ejected runtime. Please navigate to the runtime
-          settings page and eject the runtime first.
-        </div>
+        <MessageBar
+          messageBarType={MessageBarType.warning}
+          isMultiline={false}
+          actions={
+            <div>
+              <MessageBarButton onClick={navigateToEject}>{formatMessage('Eject runtime')}</MessageBarButton>
+            </div>
+          }
+        >
+          To install components, this project must have an ejected runtime. Please navigate to the runtime settings
+          page.
+        </MessageBar>
       )}
       <div css={ContentStyle} data-testid="installedLibraries" role="main">
         <div aria-label={formatMessage('List view')} css={contentEditor} role="region">
@@ -266,6 +282,7 @@ const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
             <LibraryList
               groups={groups}
               install={install}
+              disabled={!ejectedRuntime}
               isInstalled={isInstalled}
               items={items}
               redownload={redownload}

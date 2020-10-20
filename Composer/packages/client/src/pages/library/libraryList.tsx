@@ -24,6 +24,7 @@ import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { listRoot, tableView, detailList } from './styles';
 
 export interface ILibraryListProps {
+  disabled: boolean;
   items: LibraryRef[];
   groups: IGroup[];
   redownload: (evt: any) => void;
@@ -46,7 +47,7 @@ function onRenderDetailsHeader(props, defaultRender) {
 }
 
 export const LibraryList: React.FC<ILibraryListProps> = (props) => {
-  const { items, groups } = props;
+  const { items, groups, disabled } = props;
   const [selectIndex, setSelectedIndex] = useState<number>();
   const [currentSort, setSort] = useState({ key: 'ItemName', descending: true });
 
@@ -142,7 +143,7 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
             )}
             {!props.isInstalled(item) && (
               <Fragment>
-                <DefaultButton text={formatMessage('Install')} onClick={props.install} />
+                <DefaultButton text={formatMessage('Install')} onClick={props.install} disabled={disabled} />
               </Fragment>
             )}
           </Fragment>
