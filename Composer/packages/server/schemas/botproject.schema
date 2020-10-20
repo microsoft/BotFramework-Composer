@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://github.com/microsoft/BotFramework-Composer/blob/main/Composer/packages/server/schemas/botproject.schema",
-  "$version": "1.0.0",
+  "$version": "0.2.0",
   "title": "Root Bot and Skills workspace schema for a environment. Each publishing environment has a Bot Project file associated with it.",
   "description": "Schema that captures the relationship between the Root Bot and remote/local skills that the Root Bot consumes.",
   "type": "object",
