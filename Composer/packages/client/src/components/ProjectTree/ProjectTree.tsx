@@ -150,20 +150,20 @@ export const ProjectTree: React.FC<Props> = ({
     }
   }
 
-  const dialogHasWarnings = (dialog: DialogInfo) => {
-    notificationMap[currentProjectId][dialog.id].some((diag) => diag.severity === DiagnosticSeverity.Warning);
+  const dialogHasWarnings = (projectId: string) => (dialog: DialogInfo) => {
+    notificationMap[projectId][dialog.id].some((diag) => diag.severity === DiagnosticSeverity.Warning);
   };
 
   const botHasWarnings = (bot: BotInProject) => {
-    return bot.dialogs.some(dialogHasWarnings);
+    return bot.dialogs.some(dialogHasWarnings(bot.projectId));
   };
 
-  const dialogHasErrors = (dialog: DialogInfo) => {
-    notificationMap[currentProjectId][dialog.id].some((diag) => diag.severity === DiagnosticSeverity.Error);
+  const dialogHasErrors = (projectId: string) => (dialog: DialogInfo) => {
+    notificationMap[projectId][dialog.id].some((diag) => diag.severity === DiagnosticSeverity.Error);
   };
 
   const botHasErrors = (bot: BotInProject) => {
-    return bot.dialogs.some(dialogHasErrors);
+    return bot.dialogs.some(dialogHasErrors(bot.projectId));
   };
 
   const handleOnSelect = (link: TreeLink) => {
@@ -211,11 +211,11 @@ export const ProjectTree: React.FC<Props> = ({
   };
 
   const renderDialogHeader = (skillId: string, dialog: DialogInfo) => {
-    const warningContent = notificationMap[currentProjectId][dialog.id]
+    const warningContent = notificationMap[skillId][dialog.id]
       .filter((diag) => diag.severity === DiagnosticSeverity.Warning)
       .map((diag) => diag.message)
       .join(',');
-    const errorContent = notificationMap[currentProjectId][dialog.id]
+    const errorContent = notificationMap[skillId][dialog.id]
       .filter((diag) => diag.severity === DiagnosticSeverity.Error)
       .map((diag) => diag.message)
       .join(',');
@@ -224,7 +224,7 @@ export const ProjectTree: React.FC<Props> = ({
       dialogName: dialog.id,
       displayName: dialog.displayName,
       isRoot: dialog.isRoot,
-      projectId: currentProjectId,
+      projectId: skillId,
       skillId: null,
       errorContent,
       warningContent,
@@ -270,7 +270,7 @@ export const ProjectTree: React.FC<Props> = ({
       trigger: item.index,
       dialogName: dialog.id,
       isRoot: false,
-      projectId: currentProjectId,
+      projectId: projectId,
       skillId: null,
     };
 
