@@ -1,13 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getFieldIconText } from '../../../../utils/getFieldIconText';
 import { getOptions, getSelectedOption } from '../utils';
 
 function makeOption(schema, type) {
   return {
     key: type,
     text: type,
-    data: { schema: { ...schema, type } },
+    data: { schema: { ...schema, type }, icon: getFieldIconText(type) },
   };
 }
 
@@ -19,7 +20,8 @@ describe('getOptions', () => {
     };
 
     it('returns all of the types, sorted', () => {
-      expect(getOptions(schema, {})).toEqual([
+      const { options } = getOptions(schema, {});
+      expect(options).toEqual([
         makeOption(schema, 'boolean'),
         makeOption(schema, 'number'),
         makeOption(schema, 'string'),
@@ -66,8 +68,9 @@ describe('getOptions', () => {
     };
 
     it('returns one of options', () => {
-      const options = getOptions(schema, definitions).map((o) => o.key);
-      expect(options).toEqual([
+      const { options } = getOptions(schema, definitions);
+      const optionKeys = options.map((o) => o.key);
+      expect(optionKeys).toEqual([
         'my awesome string',
         'boolean',
         'number',
