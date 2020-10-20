@@ -2,60 +2,38 @@
 // Licensed under the MIT License.
 
 export type FeatureFlag = {
+  // Name to be displayed for this features toggle UI in app settings page
+  displayName: string;
+  // Description to be displayed for this features toggle UI in app settings page
   description: string;
+  // Indicates whether or not the feature flag toggle will be visible to the user through the settings page UI
+  // Hidden feature flags are intended for features not ready for public preview
   isHidden: boolean;
-  value: boolean;
+  enabled: boolean;
 };
 
-export type FeatureFlagNames =
-  | 'VA Creation'
-  | 'Show Tutorial'
-  | 'Show Form Dialog'
-  | 'COMPOSER_VA_CREATION'
-  | 'COMPOSER_FORM_DIALOG'
-  | 'COMPOSER_TEST_FEATURE';
+export type FeatureFlagKey = 'VA_CREATION' | 'SHOW_FORM_DIALOG';
 
-export type FeatureFlagMap = {
-  [key in FeatureFlagNames]: FeatureFlag;
-};
+export type FeatureFlagMap = Record<FeatureFlagKey, FeatureFlag>;
 
 export const defaultFeatureFlags: FeatureFlagMap = {
-  'VA Creation': {
+  VA_CREATION: {
+    displayName: 'VA Creation',
     description: 'VA template made available in new bot flow.',
     isHidden: false,
-    value: true,
+    enabled: false,
   },
-  'Show Tutorial': {
-    description: 'Show tutorial on home page.',
-    isHidden: false,
-    value: true,
-  },
-  'Show Form Dialog': {
-    description: 'Show tutorial on home page.',
+  SHOW_FORM_DIALOG: {
+    displayName: 'Show Form Dialog',
+    description: 'Show form dialog editor in the canvas',
     isHidden: true,
-    value: false,
-  },
-  COMPOSER_VA_CREATION: {
-    description: 'Show tutorial on home page.',
-    isHidden: true,
-    value: false,
-  },
-  COMPOSER_FORM_DIALOG: {
-    description: 'Show tutorial on home page.',
-    isHidden: true,
-    value: false,
-  },
-  COMPOSER_TEST_FEATURE: {
-    description: 'Show tutorial on home page.',
-    isHidden: true,
-    value: false,
+    enabled: false,
   },
 };
 
 export const getFeatureFlagValue = (name: string, featureFlagMap: FeatureFlagMap): boolean => {
   if (!featureFlagMap[name]) {
-    // console.log(`feature flag does not exist for: ${name}`);
     return false;
   }
-  return featureFlagMap[name].value;
+  return featureFlagMap[name].enabled;
 };

@@ -11,16 +11,16 @@ import { DirectionalHint } from 'office-ui-fabric-react/lib/common/DirectionalHi
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
-import { FeatureFlag } from '@bfc/shared';
+import { FeatureFlag, FeatureFlagKey } from '@bfc/shared';
 
 import { isElectron } from '../../../utils/electronUtil';
-import { onboardingState, userSettingsState, dispatcherState, featureFlagState } from '../../../recoilModel';
+import { onboardingState, userSettingsState, dispatcherState, featureFlagsState } from '../../../recoilModel';
 
 import { container, featureFlagGroupContainer, section } from './styles';
 import { SettingToggle } from './SettingToggle';
 import { SettingDropdown } from './SettingDropdown';
 import * as images from './images';
-import { FeatureFlagToggle } from './FeatureFlagToggle';
+import { FeatureFlagCheckBox } from './FeatureFlagCheckBox';
 
 const ElectronSettings = lazy(() =>
   import('./electronSettings').then((module) => ({ default: module.ElectronSettings }))
@@ -30,10 +30,10 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
   const [calloutIsShown, showCallout] = useState(false);
   const [featureFlagVisible, showFeatureFlag] = useState(false);
 
-  const { onboardingSetComplete, updateUserSettings, setFeatureFlag } = useRecoilValue(dispatcherState);
+  const { onboardingSetComplete, updateUserSettings, toggleFeatureFlag } = useRecoilValue(dispatcherState);
   const userSettings = useRecoilValue(userSettingsState);
   const { complete } = useRecoilValue(onboardingState);
-  const featureFlags = useRecoilValue(featureFlagState);
+  const featureFlags = useRecoilValue(featureFlagsState);
   const onOnboardingChange = useCallback(
     (checked: boolean) => {
       // on means its not complete
@@ -66,17 +66,19 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
   }
 
   const renderFeatureFlagOptions = () => {
-    const result: JSX.Element[] = [];
+    const result: React.ReactNode[] = [];
+    console.log(featureFlags);
     Object.keys(featureFlags).forEach((key: string) => {
       const featureFlag: FeatureFlag = featureFlags[key];
       if (!featureFlag.isHidden) {
         result.push(
-          <FeatureFlagToggle
+          <FeatureFlagCheckBox
             key={key}
             description={featureFlag.description}
-            featureFlagName={key}
-            setFeatureFlag={setFeatureFlag}
-            value={featureFlag.value}
+            enabled={featureFlag.enabled}
+            featureFlagKey={key as FeatureFlagKey}
+            featureFlagName={featureFlag.displayName}
+            toggleFeatureFlag={toggleFeatureFlag}
           />
         );
       }

@@ -1,17 +1,18 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { defaultFeatureFlags, FeatureFlagMap, FeatureFlagNames } from '@bfc/shared';
+import { defaultFeatureFlags, FeatureFlagMap, FeatureFlagKey } from '@bfc/shared';
 
-import log from '../logger';
 import { Store } from '../store/store';
+
+const storeKey = 'featureFlags';
 
 export class FeatureFlagService {
   private static currentFeatureFlagMap: FeatureFlagMap = {} as FeatureFlagMap;
 
   private static initialize() {
     // Get users feature flag config from data.json and populate if it does not exist
-    FeatureFlagService.currentFeatureFlagMap = Store.get('currentFeatureFlags', defaultFeatureFlags);
+    FeatureFlagService.currentFeatureFlagMap = Store.get(storeKey, defaultFeatureFlags);
     FeatureFlagService.updateFeatureFlags();
   }
 
@@ -20,13 +21,13 @@ export class FeatureFlagService {
     const defaultFeatureFlagKeys = Object.keys(defaultFeatureFlags);
 
     const keysToAdd = defaultFeatureFlagKeys.filter((key: string) => {
-      if (currentFeatureFlagKeys.indexOf(key) === -1) {
+      if (!currentFeatureFlagKeys.includes(key)) {
         return key;
       }
     });
 
     const keysToRemove = currentFeatureFlagKeys.filter((key: string) => {
-      if (defaultFeatureFlagKeys.indexOf(key) === -1) {
+      if (!defaultFeatureFlagKeys.includes(key)) {
         return key;
       }
     });
@@ -42,13 +43,13 @@ export class FeatureFlagService {
     const hiddenFeatureFlagUpdated = FeatureFlagService.updateHiddenFeatureFlags();
 
     if (keysToRemove?.length > 0 || keysToAdd?.length > 0 || hiddenFeatureFlagUpdated) {
-      Store.set('currentFeatureFlags', FeatureFlagService.currentFeatureFlagMap);
+      Store.set(storeKey, FeatureFlagService.currentFeatureFlagMap);
     }
   };
 
   private static updateHiddenFeatureFlags = (): boolean => {
     const hiddenFeatureFlagKeys = Object.keys(FeatureFlagService.currentFeatureFlagMap).filter((key: string) => {
-      if (FeatureFlagService.currentFeatureFlagMap[key as FeatureFlagNames].isHidden) {
+      if (FeatureFlagService.currentFeatureFlagMap[key as FeatureFlagKey].isHidden) {
         return key;
       }
     });
@@ -56,7 +57,7 @@ export class FeatureFlagService {
     let result = false;
     hiddenFeatureFlagKeys.forEach((key: string) => {
       if (process.env[key] && process.env[key] !== FeatureFlagService.currentFeatureFlagMap[key]) {
-        FeatureFlagService.currentFeatureFlagMap[key as FeatureFlagNames].value =
+        FeatureFlagService.currentFeatureFlagMap[key as FeatureFlagKey].enabled =
           process.env[key]?.toLowerCase() === 'true';
         result = true;
       }
@@ -70,6 +71,6 @@ export class FeatureFlagService {
   }
 
   public static updateFeatureFlag(newFeatureFlags: FeatureFlagMap) {
-    Store.set('currentFeatureFlags', newFeatureFlags);
+    Store.set(storeKey, newFeatureFlags);
   }
 }

@@ -10,7 +10,6 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { RouteComponentProps } from '@reach/router';
 import { navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
-import { Feature } from '@bfc/shared';
 
 import { CreationFlowStatus } from '../../constants';
 import { dispatcherState, botDisplayNameState } from '../../recoilModel';
@@ -19,7 +18,7 @@ import {
   templateProjectsState,
   templateIdState,
   currentProjectIdState,
-  featureFlagState,
+  featureFlagsState,
 } from '../../recoilModel/atoms/appState';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 
@@ -68,7 +67,7 @@ const Home: React.FC<RouteComponentProps> = () => {
   const botName = useRecoilValue(botDisplayNameState(projectId));
   const recentProjects = useRecoilValue(recentProjectsState);
   const templateId = useRecoilValue(templateIdState);
-  const featureFlagMap = useRecoilValue(featureFlagState);
+  const featureFlagMap = useRecoilValue(featureFlagsState);
   const { openProject, setCreationFlowStatus, onboardingAddCoachMarkRef, saveTemplateId } = useRecoilValue(
     dispatcherState
   );
@@ -197,47 +196,45 @@ const Home: React.FC<RouteComponentProps> = () => {
               />
             </div>
           )}
-          <Feature featureFlagMap={featureFlagMap} featureFlagName="Show Tutorial">
-            <div css={home.leftContainer}>
-              <h2 css={home.subtitle}>{formatMessage('Video tutorials:')}&nbsp;</h2>
-              <div css={home.newBotContainer}>
-                {tutorials.map((item, index) => (
-                  <ItemContainer
-                    key={index}
-                    ariaLabel={item.title}
-                    content={item.content}
-                    href={item.href}
-                    rel="noopener nofollow"
-                    styles={home.tutorialTile}
-                    subContent={item.subContent}
-                    target="_blank"
-                    title={item.title}
-                  />
-                ))}
-                <div css={home.linkContainer}>
-                  <div>
-                    {formatMessage(
-                      'Bot Framework provides the most comprehensive experience for building conversational applications.'
-                    )}
-                  </div>
-                  {linksButtom.map((link) => {
-                    return (
-                      <Link
-                        key={'homePageLeftLinks-' + link.text}
-                        href={link.to}
-                        rel="noopener noreferrer"
-                        style={{ width: '150px' }}
-                        tabIndex={0}
-                        target="_blank"
-                      >
-                        <div css={link.css}>{link.text}</div>
-                      </Link>
-                    );
-                  })}
+          <div css={home.leftContainer}>
+            <h2 css={home.subtitle}>{formatMessage('Video tutorials:')}&nbsp;</h2>
+            <div css={home.newBotContainer}>
+              {tutorials.map((item, index) => (
+                <ItemContainer
+                  key={index}
+                  ariaLabel={item.title}
+                  content={item.content}
+                  href={item.href}
+                  rel="noopener nofollow"
+                  styles={home.tutorialTile}
+                  subContent={item.subContent}
+                  target="_blank"
+                  title={item.title}
+                />
+              ))}
+              <div css={home.linkContainer}>
+                <div>
+                  {formatMessage(
+                    'Bot Framework provides the most comprehensive experience for building conversational applications.'
+                  )}
                 </div>
+                {linksButtom.map((link) => {
+                  return (
+                    <Link
+                      key={'homePageLeftLinks-' + link.text}
+                      href={link.to}
+                      rel="noopener noreferrer"
+                      style={{ width: '150px' }}
+                      tabIndex={0}
+                      target="_blank"
+                    >
+                      <div css={link.css}>{link.text}</div>
+                    </Link>
+                  );
+                })}
               </div>
             </div>
-          </Feature>
+          </div>
         </div>
         <div aria-label={formatMessage('Example bot list')} css={home.rightPage} role="region">
           <h3 css={home.bluetitle}>{formatMessage(`Examples`)}</h3>

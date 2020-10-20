@@ -19,5 +19,5 @@ export default {
   ],
   recentBotProjects: [],
   projectLocationMap: {},
-  currentFeatureFlags: defaultFeatureFlags,
+  featureFlags: defaultFeatureFlags,
 };

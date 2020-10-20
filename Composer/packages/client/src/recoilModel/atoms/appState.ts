@@ -101,7 +101,7 @@ export const userSettingsState = atom<UserSettings>({
   default: getUserSettings(),
 });
 
-export const featureFlagState = atom<FeatureFlagMap>({
+export const featureFlagsState = atom<FeatureFlagMap>({
   key: getFullyQualifiedKey('featureFlag'),
   default: {} as FeatureFlagMap,
 });

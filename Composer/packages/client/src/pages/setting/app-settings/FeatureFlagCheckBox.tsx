@@ -5,34 +5,33 @@
 import { jsx } from '@emotion/core';
 import React from 'react';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
+import { FeatureFlagKey } from '@bfc/shared';
 
 import * as styles from './styles';
 
-type FeatureFlagToggleProps = {
+type FeatureFlagCheckBoxProps = {
+  featureFlagKey: FeatureFlagKey;
   featureFlagName: string;
   description: string;
-  value: boolean;
-  setFeatureFlag: (featureFlagName: string, value: boolean) => {};
+  enabled: boolean;
+  toggleFeatureFlag: (FeatureFlagKey: string, enabled: boolean) => void;
 };
 
-const renderLabel = (featureName: string, description: string) => (
-  props: any,
-  defaultRender?: (props: any) => JSX.Element | null
-) => (
+const renderLabel = (featureName: string, description: string) => () => (
   <span>
     <span css={styles.featureFlagTitle}>{`${featureName}.`}</span>
     {` ${description}`}
   </span>
 );
 
-export const FeatureFlagToggle: React.FC<FeatureFlagToggleProps> = (props) => {
+export const FeatureFlagCheckBox: React.FC<FeatureFlagCheckBoxProps> = (props) => {
   return (
     <Checkbox
-      checked={props.value}
+      checked={props.enabled}
       css={styles.featureFlagContainer}
       onChange={(e: any, checked?: boolean) => {
         if (checked !== undefined) {
-          props.setFeatureFlag(props.featureFlagName, checked);
+          props.toggleFeatureFlag(props.featureFlagKey, checked);
         }
       }}
       onRenderLabel={renderLabel(props.featureFlagName, props.description)}

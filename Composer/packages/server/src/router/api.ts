@@ -84,8 +84,8 @@ router.get('/extensions/:id/:bundleId', ExtensionsController.getBundleForView);
 router.post('/extensions/proxy/:url', ExtensionsController.performExtensionFetch);
 
 //FeatureFlags
-router.get('/featureFlags/getFlags', FeatureFlagController.getFeatureFlags);
-router.post('/featureFlags/updateFlags', FeatureFlagController.updateFeatureFlags);
+router.get('/featureFlags', FeatureFlagController.getFeatureFlags);
+router.post('/featureFlags', FeatureFlagController.updateFeatureFlags);
 
 const errorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
   Promise.resolve(handler(req, res, next)).catch(next);

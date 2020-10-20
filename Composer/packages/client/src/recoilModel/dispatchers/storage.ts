@@ -14,7 +14,7 @@ import {
   applicationErrorState,
   templateProjectsState,
   runtimeTemplatesState,
-  featureFlagState,
+  featureFlagsState,
 } from '../atoms/appState';
 import { FileTypes } from '../../constants';
 import { getExtension } from '../../utils/fileUtil';
@@ -172,24 +172,24 @@ export const storageDispatcher = () => {
   const fetchFeatureFlags = useRecoilCallback<[], Promise<void>>((callbackHelpers: CallbackInterface) => async () => {
     const { set } = callbackHelpers;
     try {
-      const response = await httpClient.get('/featureFlags/getFlags');
-      set(featureFlagState, response.data);
+      const response = await httpClient.get('/featureFlags');
+      set(featureFlagsState, response.data);
     } catch (ex) {
       logMessage(callbackHelpers, `Error fetching feature flag data: ${ex}`);
     }
   });
 
-  const setFeatureFlag = useRecoilCallback(
-    ({ set }: CallbackInterface) => async (featureName: string, value: boolean) => {
-      let newFeatureFlagState: FeatureFlagMap = {} as FeatureFlagMap;
+  const toggleFeatureFlag = useRecoilCallback(
+    ({ set }: CallbackInterface) => async (featureName: string, enabled: boolean) => {
+      let newFeatureFlags: FeatureFlagMap = {} as FeatureFlagMap;
       // update local
-      set(featureFlagState, (featureFlagState) => {
-        newFeatureFlagState = { ...featureFlagState };
-        newFeatureFlagState[featureName] = { ...featureFlagState[featureName], value: value };
-        return newFeatureFlagState;
+      set(featureFlagsState, (featureFlagsState) => {
+        newFeatureFlags = { ...featureFlagsState };
+        newFeatureFlags[featureName] = { ...featureFlagsState[featureName], enabled: enabled };
+        return newFeatureFlags;
       });
       // update server
-      await httpClient.post(`/featureFlags/updateFlags`, { featureFlags: newFeatureFlagState });
+      await httpClient.post(`/featureFlags`, { featureFlags: newFeatureFlags });
     }
   );
 
@@ -205,6 +205,6 @@ export const storageDispatcher = () => {
     fetchTemplates,
     fetchRuntimeTemplates,
     fetchFeatureFlags,
-    setFeatureFlag,
+    toggleFeatureFlag,
   };
 };

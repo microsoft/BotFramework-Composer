@@ -10,7 +10,7 @@ async function getFeatureFlags(req: Request, res: Response) {
     const featureFlags = await FeatureFlagService.getFeatureFlags();
     return res.status(200).json(featureFlags);
   } catch (err) {
-    return res.status(404).json({
+    return res.status(500).json({
       message: err instanceof Error ? err.message : err,
     });
   }
@@ -28,7 +28,7 @@ async function updateFeatureFlags(req: Request, res: Response) {
     await FeatureFlagService.updateFeatureFlag(featureFlags);
     res.status(200).json(featureFlags);
   } catch (err) {
-    res.status(404).json({
+    res.status(500).json({
       message: err instanceof Error ? err.message : err,
     });
   }

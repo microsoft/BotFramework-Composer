@@ -3,4 +3,4 @@
 
 export * from './DefaultFeatureFlags';
 
-export * from './Feature';
+export * from './ComposerFeature';
