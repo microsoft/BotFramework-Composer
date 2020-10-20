@@ -737,7 +737,7 @@ export class BotProject implements IBotProject {
       // deployment process
       const root = this.dataDir;
       const paths = await this.fileStorage.glob(
-        [pattern, '!(generated/**)', '!(runtime/**)', '!(recognizers/**)'],
+        [pattern, '!(generated/**)', '!(runtime/**)', '!(recognizers/**)', '!(scripts/**)', '!(settings/**)'],
         root
       );
 
