@@ -6,54 +6,59 @@ import { render } from '@botframework-composer/test-utils';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { CompletionItem } from 'vscode-languageserver-types';
 
-import { IntellisenseTextField } from '../IntellisenseTextField';
-import * as dependency from '../../hooks/useLanguageServer';
+import { Intellisense } from '../Intellisense';
 
-const useLanguageServerMock = (
-  url: string,
-  scopes: string[],
-  documentUri: string,
-  textFieldValue: string,
-  cursorPosition: number,
-  projectId?: string
-): CompletionItem[] => {
-  if (textFieldValue !== '' && 'completionItem'.startsWith(textFieldValue)) {
-    return [{ label: 'completionItem', data: {} }];
-  } else {
-    return [];
-  }
-};
+jest.mock('../../hooks/useLanguageServer', () => ({
+  useLanguageServer: (url, scopes, documentUri, textFieldValue): CompletionItem[] => {
+    if (textFieldValue !== '' && 'completionItem'.startsWith(textFieldValue)) {
+      return [{ label: 'completionItem', data: {} }];
+    } else {
+      return [];
+    }
+  },
+}));
 
-const IntellisenseTextFieldWrapper = (props) => {
+const IntellisenseFieldWrapper = (props) => {
   const { value } = props;
 
   return (
-    <IntellisenseTextField url="" scopes={['expressions']} id="" onChange={() => {}} value={value}>
-      {(textFieldValue, onValueChanged, onKeyDownTextField, onKeyUpTextField, onClickTextField) => (
+    <Intellisense
+      focused={true}
+      id={`intellisense`}
+      scopes={[]}
+      url={''}
+      value={value}
+      onBlur={props.onBlur}
+      onChange={() => {}}
+    >
+      {({ textFieldValue, focused, onValueChanged, onKeyDownTextField, onKeyUpTextField, onClickTextField }) => (
         <TextField
+          {...props}
+          focused={focused}
+          id={''}
           value={textFieldValue}
-          onChange={(_e, newValue) => onValueChanged(newValue || '')}
+          onBlur={undefined} // onBlur managed by Intellisense
+          onChange={(newValue) => onValueChanged(newValue || '')}
           onClick={onClickTextField}
           onKeyDown={onKeyDownTextField}
           onKeyUp={onKeyUpTextField}
         />
       )}
-    </IntellisenseTextField>
+    </Intellisense>
   );
 };
 
-describe('<IntellisenseTextField />', () => {
+describe('<Intellisense />', () => {
   let textFieldValue = '';
 
-  dependency.useLanguageServer = useLanguageServerMock;
-  const { container, rerender } = render(<IntellisenseTextFieldWrapper value={textFieldValue} />);
+  const { container, rerender } = render(<IntellisenseFieldWrapper value={textFieldValue} />);
 
   it('renders', async () => {
     expect(container).toBeDefined();
   });
 
   it('does not have any completion items when the textField is empty', async () => {
-    await rerender(<IntellisenseTextFieldWrapper value={textFieldValue} />);
+    await rerender(<IntellisenseFieldWrapper value={textFieldValue} />);
     const input = await container.querySelector('input');
     expect(input?.value).toBe(textFieldValue);
 
@@ -65,7 +70,7 @@ describe('<IntellisenseTextField />', () => {
 
   it('does have a completion item when a good example of text is entered', async () => {
     textFieldValue = 'compl';
-    await rerender(<IntellisenseTextFieldWrapper value={textFieldValue} />);
+    await rerender(<IntellisenseFieldWrapper value={textFieldValue} />);
     const input = await container.querySelector('input');
     expect(input?.value).toBe(textFieldValue);
 
@@ -77,7 +82,7 @@ describe('<IntellisenseTextField />', () => {
 
   it('does not have any completion items when a bad example of text is entered', async () => {
     textFieldValue = 'test';
-    await rerender(<IntellisenseTextFieldWrapper value={textFieldValue} />);
+    await rerender(<IntellisenseFieldWrapper value={textFieldValue} />);
     const input = await container.querySelector('input');
     expect(input?.value).toBe(textFieldValue);
 

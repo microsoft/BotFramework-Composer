@@ -2,38 +2,57 @@
 // Licensed under the MIT License.
 
 import React from 'react';
+
 import { useLanguageServer } from '../hooks/useLanguageServer';
 import { checkIsOutside } from '../utils/uiUtils';
+
 import { CompletionList } from './CompletionList';
 
-export const IntellisenseTextField = React.memo(
+export const Intellisense = React.memo(
   (props: {
     url: string;
     scopes: string[];
     projectId?: string;
     id: string;
-    value?: string;
+    value?: any;
+    focused?: boolean;
+    completionListOverrideResolver?: (value: any) => JSX.Element | null;
     onChange: (newValue: string) => void;
-    children: (
-      textFieldValue: string,
-      onValueChanged: (newValue: string) => void,
-      onKeyDownTextField: (event: React.KeyboardEvent<HTMLInputElement>) => void,
-      onKeyUpTextField: (event: React.KeyboardEvent<HTMLInputElement>) => void,
-      onClickTextField: (event: React.MouseEvent<HTMLInputElement, MouseEvent>) => void
-    ) => JSX.Element;
+    onBlur?: (id: string) => void;
+    children: (renderProps: {
+      textFieldValue: any;
+      focused?: boolean;
+      onValueChanged: (newValue: any) => void;
+      onKeyDownTextField: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+      onKeyUpTextField: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+      onClickTextField: (event: React.MouseEvent<HTMLInputElement, MouseEvent>) => void;
+    }) => JSX.Element;
   }) => {
-    const { url, scopes, projectId, id, value, onChange, children } = props;
+    const {
+      url,
+      scopes,
+      projectId,
+      id,
+      value,
+      focused,
+      completionListOverrideResolver,
+      onChange,
+      onBlur,
+      children,
+    } = props;
 
-    const [textFieldValue, setTextFieldValue] = React.useState('');
+    const [textFieldValue, setTextFieldValue] = React.useState(value);
     const [showCompletionList, setShowCompletionList] = React.useState(false);
     const [selectedCompletionItem, setSelectedCompletionItem] = React.useState(0);
-    const [cursorPosition, setCursorPosition] = React.useState(0);
+    const [cursorPosition, setCursorPosition] = React.useState(-1);
 
     const didComplete = React.useRef<boolean>(false);
     const mainContainerRef = React.useRef<HTMLDivElement>(null);
     const completionListRef = React.useRef<HTMLDivElement>(null);
 
     const completionItems = useLanguageServer(url, scopes, id, textFieldValue, cursorPosition, projectId);
+    const completionListOverride =
+      completionListOverrideResolver !== undefined && focused ? completionListOverrideResolver(textFieldValue) : null;
 
     // If value is provided then component becomes controlled
     React.useEffect(() => {
@@ -62,16 +81,26 @@ export const IntellisenseTextField = React.memo(
       const outsideClickHandler = (event: MouseEvent) => {
         const { x, y } = event;
 
-        if (mainContainerRef.current && completionListRef.current) {
-          if (checkIsOutside(x, y, mainContainerRef.current) && checkIsOutside(x, y, completionListRef.current)) {
-            setShowCompletionList(false);
-          }
+        let shouldBlur = true;
+
+        if (mainContainerRef.current && !checkIsOutside(x, y, mainContainerRef.current)) {
+          shouldBlur = false;
+        }
+        if (completionListRef.current && !checkIsOutside(x, y, completionListRef.current)) {
+          shouldBlur = false;
+        }
+
+        if (shouldBlur) {
+          setShowCompletionList(false);
+          setCursorPosition(-1);
+          onBlur && onBlur(id);
         }
       };
 
       const keyupHandler = (event: KeyboardEvent) => {
         if (event.key === 'Escape') {
           setShowCompletionList(false);
+          onBlur && onBlur(id);
         }
       };
 
@@ -95,7 +124,7 @@ export const IntellisenseTextField = React.memo(
     const setValueToSelectedCompletionItem = (index: number) => {
       if (index < completionItems.length) {
         const selectedSuggestion = completionItems[index].insertText || '';
-        const range = completionItems[index].data.range;
+        const range = completionItems[index].data?.range;
 
         if (range) {
           const newValue =
@@ -159,16 +188,17 @@ export const IntellisenseTextField = React.memo(
 
     return (
       <div onKeyUp={onKeyUpMainComponent} ref={mainContainerRef} style={{ position: 'relative' }}>
-        {children(textFieldValue, onValueChanged, onKeyDownTextField, onKeyUpTextField, onClickTextField)}
+        {children({ textFieldValue, focused, onValueChanged, onKeyDownTextField, onKeyUpTextField, onClickTextField })}
 
-        {showCompletionList && (
+        {completionListOverride || showCompletionList ? (
           <CompletionList
             ref={completionListRef}
             completionItems={completionItems}
             selectedItem={selectedCompletionItem}
             onClickCompletionItem={onClickCompletionItem}
+            completionListOverride={completionListOverride}
           />
-        )}
+        ) : null}
       </div>
     );
   }
