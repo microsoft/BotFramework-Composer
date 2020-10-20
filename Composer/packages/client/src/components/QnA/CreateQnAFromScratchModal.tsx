@@ -15,7 +15,7 @@ import { FieldConfig, useForm } from '../../hooks/useForm';
 import { dispatcherState, showCreateQnAFromUrlDialogState } from '../../recoilModel';
 
 import { validateName, CreateQnAFromModalProps, CreateQnAFromScratchFormData } from './constants';
-import { subText, styles, dialogWindowMini, textField } from './styles';
+import { subText, styles, dialogWindow, textField } from './styles';
 
 const formConfig: FieldConfig<CreateQnAFromScratchFormData> = {
   name: {
@@ -58,7 +58,7 @@ export const CreateQnAFromScratchModal: React.FC<CreateQnAFromModalProps> = (pro
       }}
       onDismiss={onDismiss}
     >
-      <div css={dialogWindowMini}>
+      <div css={dialogWindow}>
         <Stack>
           <TextField
             data-testid={`knowledgeLocationTextField-name`}
