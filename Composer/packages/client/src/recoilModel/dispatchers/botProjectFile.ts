@@ -71,34 +71,9 @@ export const botProjectFileDispatcher = () => {
     });
   });
 
-  const updateManifest = useRecoilCallback(
-    ({ set, snapshot }: CallbackInterface) => async (skillProjectId: string, manifestId: string | undefined) => {
-      const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
-      if (!rootBotProjectId) {
-        return;
-      }
-      const skillNameIdentifier = await snapshot.getPromise(botNameIdentifierState(skillProjectId));
-
-      set(botProjectFileState(rootBotProjectId), (current) => {
-        const result = produce(current, (draftState) => {
-          if (!manifestId) {
-            delete draftState[skillNameIdentifier].manifest;
-          } else {
-            draftState[skillNameIdentifier] = {
-              ...draftState[skillNameIdentifier],
-              manifest: manifestId,
-            };
-          }
-        });
-        return result;
-      });
-    }
-  );
-
   return {
     addLocalSkillToBotProjectFile: addLocalSkill,
     removeSkillFromBotProjectFile: removeSkill,
     addRemoteSkillToBotProjectFile: addRemoteSkill,
-    updateManifestInBotProjectFile: updateManifest,
   };
 };
