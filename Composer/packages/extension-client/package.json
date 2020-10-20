@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@botframework-composer/types": "*",
+    "botbuilder-lg": "4.11.0-dev.20201010.6e4a99e",
     "debug": "^4.1.1",
     "lodash": "^4.17.19"
   }

@@ -8,6 +8,8 @@ import get from 'lodash/get';
 import { EditorExtensionContext } from '../EditorExtensionContext';
 import { RecognizerOptions, RecognizerSchema } from '../types';
 
+import { resolveSeedNewRecognizer } from './resolveSeedNewRecognizer';
+
 export const FallbackRecognizerKey = 'fallback';
 
 const resolveRecognizerWidget = (widgetValue: any, recognizerWidgets: { [name: string]: any }) => {
@@ -64,10 +66,12 @@ export function useRecognizerConfig(): RecognizerSchemaConfig {
       .map(([$kind, uiOptions]) => {
         const recognizerOptions = uiOptions?.recognizer as RecognizerOptions;
         const intentEditor = resolveRecognizerWidget(recognizerOptions.intentEditor, recognizerWidgets);
+        const seedNewRecognizer = resolveSeedNewRecognizer($kind, recognizerOptions);
         return {
           id: $kind,
           ...recognizerOptions,
           intentEditor,
+          seedNewRecognizer,
         } as RecognizerSchema;
       });
     return schemas;
