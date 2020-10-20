@@ -4,7 +4,7 @@
   "description": "Manage external dialog assets.",
   "main": "lib/index.js",
   "scripts": {
-    "build:new": "yarn clean && yarn build:client && yarn build:node",
+    "build": "yarn clean && yarn build:client && yarn build:node",
     "build:client": "webpack --config webpack.config.js",
     "build:node": "tsc --project tsconfig.node.json",
     "clean": "rimraf dist"
