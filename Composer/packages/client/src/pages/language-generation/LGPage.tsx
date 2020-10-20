@@ -95,7 +95,7 @@ const LGPage: React.FC<RouteComponentProps<LGPageProps>> = (props: RouteComponen
       navLinks={navLinks}
       navRegionName={formatMessage('LG Navigation Pane')}
       title={formatMessage('Bot Responses')}
-      toolbarItems={}
+      toolbarItems={[]}
       onRenderHeaderContent={onRenderHeaderContent}
     >
       <Suspense fallback={<LoadingSpinner />}>

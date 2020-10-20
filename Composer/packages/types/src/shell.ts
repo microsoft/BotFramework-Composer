@@ -97,7 +97,6 @@ export type ProjectContextApi = {
   displayManifestModal: (manifestId: string) => void;
   updateDialogSchema: (_: DialogSchemaFile) => Promise<void>;
   createTrigger: (id: string, formData, autoSelected?: boolean) => void;
-  updateSkillSetting: (skillId: string, skillsData: SkillSetting) => Promise<void>;
   updateFlowZoomRate: (currentRate: number) => void;
   updateSkill: (skillId: string, skillsData: { skill: Skill; selectedEndpointIndex: number }) => Promise<void>;
 };
@@ -111,7 +110,7 @@ export type ProjectContext = {
   luFiles: LuFile[];
   luFeatures: ILUFeaturesConfig;
   qnaFiles: QnAFile[];
-  skills: any[];
+  skills: Record<string, Skill>;
   skillsSettings: Record<string, SkillSetting>;
   schemas: BotSchemas;
 };

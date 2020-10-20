@@ -295,7 +295,6 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       }
       if (!port) {
         port = await getPort({ port: this.getAvailablePorts() });
-        // port = await portfinder.getPortPromise({ port: 3979, stopPort: 5000 });
       }
 
       // if not using custom runtime, update assets in tmp older

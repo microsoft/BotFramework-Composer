@@ -98,29 +98,6 @@ export const settingsDispatcher = () => {
       }
     }
   );
-
-  const setQnASettings = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (projectId: string, subscriptionKey: string) => {
-      const { set } = callbackHelpers;
-      try {
-        const response = await httpClient.post(`/projects/${projectId}/qnaSettings/set`, {
-          projectId,
-          subscriptionKey,
-        });
-        settingStorage.setField(projectId, 'qna.endpointKey', response.data);
-        set(settingsState(projectId), (currentValue) => ({
-          ...currentValue,
-          qna: {
-            ...currentValue.qna,
-            endpointKey: response.data,
-          },
-        }));
-      } catch (err) {
-        setError(callbackHelpers, err);
-      }
-    }
-  );
-
   return {
     setSettings,
     setRuntimeSettings,

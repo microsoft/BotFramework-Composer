@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Skill, Manifest } from '@bfc/types';
+import { Manifest, Skill } from '@bfc/shared';
 import { selector } from 'recoil';
 
 import {

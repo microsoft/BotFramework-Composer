@@ -6,15 +6,13 @@ import { act, fireEvent, getByLabelText, getByTestId, getByText } from '@botfram
 import { Skill } from '@bfc/shared';
 
 import httpClient from '../../src//utils/httpUtil';
-import SkillList from '../../src/pages/skills/skill-list';
 import { renderWithRecoil } from '../testUtils';
 import CreateSkillModal, {
   validateEndpoint,
   validateManifestUrl,
   validateName,
 } from '../../src/components/CreateSkillModal';
-import { currentProjectIdState, settingsState, skillsState } from '../../src/recoilModel';
-import Skills from '../../src/pages/skills';
+import { currentProjectIdState, settingsState } from '../../src/recoilModel';
 
 jest.mock('../../src//utils/httpUtil');
 

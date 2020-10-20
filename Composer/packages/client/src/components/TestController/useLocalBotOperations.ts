@@ -23,11 +23,11 @@ export function useBotOperations(onAllBotsStarted?: (started: boolean) => void) 
   const handleBotStart = async (projectId: string, config: IPublishConfig, botBuildRequired: boolean) => {
     if (botBuildRequired) {
       // Default recognizer
-      const dialogs = builderEssentials.find(({ projectId: currentProjecId }) => projectId === currentProjecId);
-      if (dialogs) {
+      const matchedBuilder = builderEssentials.find(({ projectId: currentProjecId }) => projectId === currentProjecId);
+      if (matchedBuilder?.dialogs) {
         await botRuntimeOperations?.buildWithDefaultRecognizer(projectId, {
           recognizers,
-          dialogs,
+          dialogs: matchedBuilder.dialogs,
           config,
         });
       }

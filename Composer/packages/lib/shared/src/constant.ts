@@ -18,7 +18,7 @@ export const FieldNames = {
 };
 export const defaultPublishConfig = {
   name: 'default',
-  type: 'localpublish',
+  type: 'localPublisher',
   configuration: JSON.stringify({}),
 };
 

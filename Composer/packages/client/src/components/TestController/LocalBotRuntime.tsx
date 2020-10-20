@@ -47,13 +47,13 @@ export const LocalBotRuntime: React.FC<LocalBotRuntimeProps> = ({ projectId, dis
   const botRunIndicatorCallback = useCallback(() => {
     switch (currentBotStatus) {
       case BotStatus.connected:
-      case BotStatus.failed:
         return (
           <ActionButton onClick={() => stopSingleBot(projectId)}>
             <Icon iconName={'CircleStopSolid'} styles={icon} />
           </ActionButton>
         );
       case BotStatus.unConnected:
+      case BotStatus.failed:
         return (
           <ActionButton onClick={() => startSingleBot(projectId)}>
             <Icon iconName={'Play'} styles={icon} />

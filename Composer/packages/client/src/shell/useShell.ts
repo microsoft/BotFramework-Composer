@@ -28,7 +28,7 @@ import {
   rateInfoState,
 } from '../recoilModel';
 import { undoFunctionState } from '../recoilModel/undo/history';
-import { rootBotProjectIdSelector, skillsStateSelector } from '../recoilModel/selectors';
+import { skillsStateSelector } from '../recoilModel/selectors';
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
@@ -78,7 +78,6 @@ export function useShell(source: EventSource, projectId: string): Shell {
   const botName = useRecoilValue(botDisplayNameState(projectId));
   const settings = useRecoilValue(settingsState(projectId));
   const flowZoomRate = useRecoilValue(rateInfoState);
-  const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
 
   const userSettings = useRecoilValue(userSettingsState);
   const clipboardActions = useRecoilValue(clipboardActionsState);
