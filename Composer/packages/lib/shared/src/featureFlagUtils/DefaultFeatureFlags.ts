@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import formatMessage from 'format-message';
+
 export type FeatureFlag = {
   // Name to be displayed for this features toggle UI in app settings page
   displayName: string;
@@ -18,14 +20,14 @@ export type FeatureFlagMap = Record<FeatureFlagKey, FeatureFlag>;
 
 export const defaultFeatureFlags: FeatureFlagMap = {
   VA_CREATION: {
-    displayName: 'VA Creation',
-    description: 'VA template made available in new bot flow.',
+    displayName: formatMessage('VA Creation'),
+    description: formatMessage('VA template made available in new bot flow.'),
     isHidden: false,
     enabled: false,
   },
   SHOW_FORM_DIALOG: {
-    displayName: 'Show Form Dialog',
-    description: 'Show form dialog editor in the canvas',
+    displayName: formatMessage('Show Form Dialog'),
+    description: formatMessage('Show form dialog editor in the canvas'),
     isHidden: true,
     enabled: false,
   },
