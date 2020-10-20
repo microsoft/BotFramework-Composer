@@ -31,13 +31,21 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
           // navigate to creation flow with template selected
           const { eTag, templateDir, urlSuffix } = data;
           const { description, name } = JSON.parse(payload) as { description: string; name: string };
-          navigate(
-            `/projects/create/${encodeURIComponent(source)}?imported=true&templateDir=${encodeURIComponent(
-              templateDir
-            )}&name=${encodeURIComponent(name)}&description=${encodeURIComponent(
-              description
-            )}&eTag=${encodeURIComponent(eTag)}&urlSuffix=${encodeURIComponent(urlSuffix)}`
-          );
+          let creationUrl = `/projects/create/${encodeURIComponent(
+            source
+          )}?imported=true&templateDir=${encodeURIComponent(templateDir)}&eTag=${encodeURIComponent(eTag)}`;
+
+          if (name) {
+            creationUrl += `&name=${encodeURIComponent(name)}`;
+          }
+          if (description) {
+            creationUrl += `&description=${encodeURIComponent(description)}`;
+          }
+          if (urlSuffix) {
+            creationUrl += `&urlSuffix=${encodeURIComponent(urlSuffix)}`;
+          }
+
+          navigate(creationUrl);
         } catch (e) {
           // something went wrong, abort and navigate to the home page
           console.error(`Aborting import: ${e}`);
