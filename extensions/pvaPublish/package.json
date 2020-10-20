@@ -7,7 +7,7 @@
     "build:node": "tsc --project tsconfig.node.json"
   },
   "composer": {
-    "enabled": true,
+    "enabled": false,
     "bundles": [
       {
         "id": "publish",
