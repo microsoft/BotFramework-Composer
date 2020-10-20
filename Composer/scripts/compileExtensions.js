@@ -66,7 +66,17 @@ const writeToCache = (name, lastModified) => {
   fs.writeFileSync(buildCachePath, JSON.stringify(buildCache, null, 2));
 };
 
-const shouldCompile = (name, lastModified) => {
+const missingMain = (extPath, packageJSON) => {
+  const main = packageJSON && packageJSON.main;
+
+  if (main) {
+    return !fs.existsSync(path.join(extPath, main));
+  }
+
+  return true;
+};
+
+const hasChanges = (name, lastModified) => {
   return buildCache[name] ? new Date(buildCache[name]) < lastModified : true;
 };
 
@@ -89,16 +99,17 @@ const compile = (name, extPath) => {
 checkComposerLibs();
 
 for (const entry of allExtensions) {
-  if (entry.isDirectory()) {
-    const dir = path.join(extensionsDir, entry.name);
-    const lastModified = getLastModified(dir);
-    if (shouldCompile(entry.name, lastModified)) {
-      try {
-        compile(entry.name, dir);
+  try {
+    if (entry.isDirectory()) {
+      const extPath = path.join(extensionsDir, entry.name);
+      const packageJSON = JSON.parse(fs.readFileSync(path.join(extPath, 'package.json')));
+      const lastModified = getLastModified(extPath);
+      if (missingMain(extPath, packageJSON) || hasChanges(entry.name, lastModified)) {
+        compile(entry.name, extPath);
         writeToCache(entry.name, lastModified);
-      } catch (err) {
-        console.error(err);
       }
     }
+  } catch (err) {
+    console.error(err);
   }
 }
