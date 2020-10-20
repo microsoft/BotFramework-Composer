@@ -9,9 +9,7 @@ const path = require('path');
 // eslint-disable-next-line security/detect-child-process
 const { execSync } = require('child_process');
 
-const glob = require('globby');
-
-const extensionsDir = path.resolve(__dirname, '../../extensions');
+const extensionsDir = process.env.COMPOSER_BUILTIN_EXTENSIONS_DIR || path.resolve(__dirname, '../../extensions');
 const buildCachePath = path.resolve(extensionsDir, '.build-cache.json');
 
 console.log('Compiling extensions in %s', extensionsDir);
@@ -46,7 +44,10 @@ const getLastModified = (extensionPath) => {
   let last = new Date(0);
 
   try {
-    const gitTimestamp = execSync(`git log -1 --pretty="%cI" "${extensionPath}"`).toString().trim();
+    const gitTimestamp = execSync(`git log -1 --pretty="%cI" "${extensionPath}"`, {
+      encoding: 'utf-8',
+      stdio: ['ignore', 'pipe', 'ignore'],
+    }).trim();
     const timestamp = new Date(gitTimestamp);
     if (timestamp > last) {
       last = timestamp;
