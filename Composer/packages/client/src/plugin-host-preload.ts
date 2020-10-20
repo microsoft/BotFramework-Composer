@@ -3,9 +3,14 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+// eslint-disable-next-line @bfc/bfcomposer/office-ui-import-scope
 import * as Fabric from 'office-ui-fabric-react';
 import * as ExtensionClient from '@bfc/extension-client';
 import { syncStore, Shell } from '@bfc/extension-client';
+
+import './index.css';
+
+Fabric.initializeIcons(undefined, { disableWarnings: true });
 
 if (!document.head.title) {
   const title = document.createElement('title');
@@ -20,7 +25,6 @@ if (!document.getElementById('plugin-host-default-styles')) {
   styles.type = 'text/css';
   styles.appendChild(
     document.createTextNode(`
-      html, body { padding: 0; margin: 0; }
       #plugin-root {
         display: flex;
         flex-flow: column nowrap;
@@ -31,9 +35,9 @@ if (!document.getElementById('plugin-host-default-styles')) {
   document.head.appendChild(styles);
 }
 // add the react mount point
-if (!document.getElementById('plugin-root')) {
+if (!document.getElementById('root')) {
   const root = document.createElement('div');
-  root.id = 'plugin-root';
+  root.id = 'root';
   document.body.appendChild(root);
 }
 // initialize the API object
@@ -41,24 +45,23 @@ window.React = React;
 window.ReactDOM = ReactDOM;
 window.ExtensionClient = ExtensionClient;
 window.Fabric = Fabric;
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-// @ts-ignore
-window.Composer = {};
+window.Composer = {
+  __pluginType: '',
+  render: (type: string, shell: Shell, component: React.ReactElement) => {
+    // eslint-disable-next-line no-underscore-dangle
+    window.Composer.__pluginType = type;
 
-// init the render function
-window.Composer.render = function (type: string, shell: Shell, component: React.ReactElement) {
-  // eslint-disable-next-line no-underscore-dangle
-  window.Composer.__pluginType = type;
+    if (shell) {
+      syncStore(shell);
+    }
 
-  if (shell) {
+    ReactDOM.render(component, document.getElementById('root'));
+    window.parent?.postMessage('plugin-rendered', '*');
+  },
+  sync: (shell: Shell) => {
     syncStore(shell);
-  }
-
-  ReactDOM.render(component, document.getElementById('plugin-root'));
+  },
 };
 
-window.Composer.sync = function (shell: Shell) {
-  syncStore(shell);
-};
-
+// signal to the host that we are ready to accept the plugin bundle
 window.parent?.postMessage('host-preload-complete', '*');

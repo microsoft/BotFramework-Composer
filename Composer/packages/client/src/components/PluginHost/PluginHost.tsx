@@ -3,29 +3,39 @@
 
 /** @jsx jsx */
 import { jsx, css, SerializedStyles } from '@emotion/core';
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Shell } from '@botframework-composer/types';
 import { PluginType } from '@bfc/extension-client';
 
+import { LoadingSpinner } from '../LoadingSpinner';
 import { PluginAPI } from '../../plugins/api';
 
-export const iframeStyle = css`
+const containerStyles = css`
+  position: relative;
+  height: 100%;
+  width: 100%;
+`;
+
+const iframeStyle = (isLoading = false) => css`
   height: 100%;
   width: 100%;
   border: 0;
+  display: ${isLoading ? 'none' : 'block'};
+`;
+
+const loadingStyles = css`
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 interface PluginHostProps {
-  extraIframeStyles?: SerializedStyles[];
   pluginName: string;
   pluginType: PluginType;
   bundleId: string;
   shell?: Shell;
-}
-
-function resetIframe(iframeDoc: Document) {
-  iframeDoc.head.innerHTML = '';
-  iframeDoc.body.innerHTML = '';
 }
 
 /** Binds closures around Composer client code to plugin iframe's window object */
@@ -54,7 +64,22 @@ function injectScript(doc: Document, id: string, src: string, async: boolean, on
  */
 export const PluginHost: React.FC<PluginHostProps> = (props) => {
   const targetRef = useRef<HTMLIFrameElement>(null);
-  const { extraIframeStyles = [], pluginType, pluginName, bundleId, shell } = props;
+  const { pluginType, pluginName, bundleId, shell } = props;
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const isReady = (ev) => {
+      if (ev.data === 'plugin-rendered') {
+        setIsLoading(false);
+      }
+    };
+
+    window.addEventListener('message', isReady);
+
+    return () => {
+      window.removeEventListener('message', isReady);
+    };
+  }, []);
 
   const loadBundle = (name: string, bundle: string, type: PluginType) => {
     const iframeWindow = targetRef.current?.contentWindow as Window;
@@ -72,14 +97,7 @@ export const PluginHost: React.FC<PluginHostProps> = (props) => {
   useEffect(() => {
     // renders the plugin's UI inside of the iframe
     if (pluginName && pluginType && targetRef.current) {
-      const iframeDocument = targetRef.current.contentDocument as Document;
-
-      // cleanup
-      resetIframe(iframeDocument);
-
-      // load the preload script to setup the plugin API
-      injectScript(iframeDocument, 'preload-bundle', '/plugin-host-preload.js', false);
-
+      setIsLoading(true);
       const onPreloaded = (ev) => {
         if (ev.data === 'host-preload-complete') {
           loadBundle(pluginName, bundleId, pluginType);
@@ -102,5 +120,20 @@ export const PluginHost: React.FC<PluginHostProps> = (props) => {
     }
   }, [shell]);
 
-  return <iframe ref={targetRef} css={[iframeStyle, ...extraIframeStyles]} title={`${pluginName} host`} />;
+  return (
+    <div css={containerStyles}>
+      <iframe
+        key={`${pluginName}.${bundleId}.${pluginType}`}
+        ref={targetRef}
+        css={iframeStyle(isLoading)}
+        src="/plugin-host.html"
+        title={`${pluginName} host`}
+      />
+      {isLoading && (
+        <div css={loadingStyles}>
+          <LoadingSpinner />
+        </div>
+      )}
+    </div>
+  );
 };
