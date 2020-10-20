@@ -5,5 +5,8 @@ export * from './useFlowConfig';
 export * from './useFormConfig';
 export * from './useMenuConfig';
 export * from './useRecognizerConfig';
-export * from './useProjectApi';
 export * from './useShellApi';
+
+export * from './useApplicationApi';
+export * from './useProjectApi';
+export * from './useHttpClient';
