@@ -31,8 +31,11 @@ import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { JsonEditor } from '@bfc/code-editor';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
+import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 
 import { getResourceList, getSubscriptions, getResourceGroups, getDeployLocations, getPreview } from './api';
+
+initializeIcons(undefined, { disableWarnings: true });
 
 const resourceTypes = ['Azure Web App', 'Cognitive Services'];
 

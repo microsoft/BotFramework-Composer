@@ -18,14 +18,13 @@ import { Separator } from 'office-ui-fabric-react/lib/Separator';
 // import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { PublishType } from '../../recoilModel/types';
-import { userSettingsState } from '../../recoilModel';
+import { userSettingsState, provisionStatusState, currentProjectIdState } from '../../recoilModel';
 import { PluginAPI } from '../../plugins/api';
 import { PluginHost } from '../../components/PluginHost/PluginHost';
 import { dispatcherState } from '../../recoilModel';
 
 import { label, separator, customPublishUISurface } from './styles';
 interface CreatePublishTargetProps {
-  projectId: string;
   closeDialog: () => void;
   current: { index: number; item: PublishTarget } | null;
   targets: PublishTarget[];
@@ -35,7 +34,7 @@ interface CreatePublishTargetProps {
 }
 
 const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
-  const { current, projectId } = props;
+  const { current } = props;
   const [targetType, setTargetType] = useState<string>(current?.item.type || '');
   const [name, setName] = useState(current ? current.item.name : '');
   const [config, setConfig] = useState(current ? JSON.parse(current.item.configuration) : undefined);
@@ -44,7 +43,8 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
   const [page, setPage] = useState(1);
 
   const userSettings = useRecoilValue(userSettingsState);
-  const { provisionToTarget, getProvisionStatus } = useRecoilValue(dispatcherState);
+  const projectId = useRecoilValue(currentProjectIdState);
+  const { provisionToTarget } = useRecoilValue(dispatcherState);
 
   const targetTypes = useMemo(() => {
     return props.types.map((t) => ({ key: t.name, text: t.description }));
@@ -119,7 +119,6 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
       const fullConfig = { ...config, name: name, type: targetType };
       console.log(fullConfig);
       provisionToTarget(fullConfig, config.type, projectId);
-      getProvisionStatus(projectId, fullConfig);
     };
     PluginAPI.publish.currentProjectId = () => {
       return projectId;

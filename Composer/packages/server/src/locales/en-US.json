@@ -1955,6 +1955,9 @@
   "provide_a_brief_description_it_will_appear_on_the__f962eb38": {
     "message": "Provide a brief description. It will appear on the publish history list."
   },
+  "provision_success_d6a6e437": {
+    "message": "Provision success"
+  },
   "provisioning_1330aede": {
     "message": "Provisioning ..."
   },
