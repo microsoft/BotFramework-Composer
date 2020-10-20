@@ -72,6 +72,7 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
       if (!featureFlag.isHidden) {
         result.push(
           <FeatureFlagToggle
+            key={key}
             description={featureFlag.description}
             featureFlagName={key}
             setFeatureFlag={setFeatureFlag}
@@ -179,6 +180,7 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
       <section css={section}>
         <h2>{formatMessage('Application Updates')}</h2>
         <SettingToggle
+          hideToggle
           checked={featureFlagVisible}
           description={formatMessage('Toggle the visibility of individual, preview, features in Composer.')}
           image={images.previewFeatures}
@@ -187,7 +189,7 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
             showFeatureFlag(checked);
           }}
         />
-        {featureFlagVisible && renderFeatureFlagOptions()}
+        {renderFeatureFlagOptions()}
       </section>
       <Suspense fallback={<div />}>{renderElectronSettings && <ElectronSettings />}</Suspense>
     </div>

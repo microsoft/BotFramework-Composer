@@ -181,7 +181,7 @@ export const storageDispatcher = () => {
 
   const setFeatureFlag = useRecoilCallback(
     ({ set }: CallbackInterface) => async (featureName: string, value: boolean) => {
-      let newFeatureFlagState: FeatureFlagMap = {};
+      let newFeatureFlagState: FeatureFlagMap = {} as FeatureFlagMap;
       // update local
       set(featureFlagState, (featureFlagState) => {
         newFeatureFlagState = { ...featureFlagState };

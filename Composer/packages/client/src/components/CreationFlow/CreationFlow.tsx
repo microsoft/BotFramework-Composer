@@ -48,7 +48,6 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     createNewBot,
     saveProjectAs,
     fetchProjectById,
-    fetchFeatureFlags,
   } = useRecoilValue(dispatcherState);
 
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);

@@ -4,19 +4,11 @@
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 import debounce from 'lodash/debounce';
-import { FeatureFlagMap } from '@bfc/shared';
 
-import {
-  appUpdateState,
-  announcementState,
-  onboardingState,
-  creationFlowStatusState,
-  featureFlagState,
-} from '../atoms/appState';
+import { appUpdateState, announcementState, onboardingState, creationFlowStatusState } from '../atoms/appState';
 import { AppUpdaterStatus, CreationFlowStatus } from '../../constants';
 import OnboardingState from '../../utils/onboardingStorage';
 import { StateError, AppUpdateState } from '../../recoilModel/types';
-import httpClient from '../../utils/httpUtil';
 
 import { setError } from './shared';
 

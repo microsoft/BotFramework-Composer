@@ -7,6 +7,14 @@ export type FeatureFlag = {
   value: boolean;
 };
 
+export type FeatureFlagNames =
+  | 'VA Creation'
+  | 'Show Tutorial'
+  | 'Show Form Dialog'
+  | 'COMPOSER_VA_CREATION'
+  | 'COMPOSER_FORM_DIALOG'
+  | 'COMPOSER_TEST_FEATURE';
+
 export type FeatureFlagMap = {
   [key in FeatureFlagNames]: FeatureFlag;
 };
@@ -25,15 +33,28 @@ export const defaultFeatureFlags: FeatureFlagMap = {
   'Show Form Dialog': {
     description: 'Show tutorial on home page.',
     isHidden: true,
-    value: true,
+    value: false,
+  },
+  COMPOSER_VA_CREATION: {
+    description: 'Show tutorial on home page.',
+    isHidden: true,
+    value: false,
+  },
+  COMPOSER_FORM_DIALOG: {
+    description: 'Show tutorial on home page.',
+    isHidden: true,
+    value: false,
+  },
+  COMPOSER_TEST_FEATURE: {
+    description: 'Show tutorial on home page.',
+    isHidden: true,
+    value: false,
   },
 };
 
-export type FeatureFlagNames = 'VA Creation' | 'Show Tutorial' | 'Show Form Dialog';
-
 export const getFeatureFlagValue = (name: string, featureFlagMap: FeatureFlagMap): boolean => {
   if (!featureFlagMap[name]) {
-    console.log(`feature flag does not exist for: ${name}`);
+    // console.log(`feature flag does not exist for: ${name}`);
     return false;
   }
   return featureFlagMap[name].value;

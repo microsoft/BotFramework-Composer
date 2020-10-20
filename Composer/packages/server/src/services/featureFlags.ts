@@ -1,8 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { defaultFeatureFlags, FeatureFlagMap } from '@bfc/shared';
+import { defaultFeatureFlags, FeatureFlagMap, FeatureFlagNames } from '@bfc/shared';
 
+import log from '../logger';
 import { Store } from '../store/store';
 
 export class FeatureFlagService {
@@ -11,7 +12,10 @@ export class FeatureFlagService {
   private static initialize() {
     // Get users feature flag config from data.json and populate if it does not exist
     FeatureFlagService.currentFeatureFlagMap = Store.get('currentFeatureFlags', defaultFeatureFlags);
+    FeatureFlagService.updateFeatureFlags();
+  }
 
+  private static updateFeatureFlags = () => {
     const currentFeatureFlagKeys = Object.keys(FeatureFlagService.currentFeatureFlagMap);
     const defaultFeatureFlagKeys = Object.keys(defaultFeatureFlags);
 
@@ -35,10 +39,30 @@ export class FeatureFlagService {
       delete FeatureFlagService.currentFeatureFlagMap[key];
     });
 
-    if (keysToRemove?.length > 0 || keysToAdd?.length > 0) {
+    const hiddenFeatureFlagUpdated = FeatureFlagService.updateHiddenFeatureFlags();
+
+    if (keysToRemove?.length > 0 || keysToAdd?.length > 0 || hiddenFeatureFlagUpdated) {
       Store.set('currentFeatureFlags', FeatureFlagService.currentFeatureFlagMap);
     }
-  }
+  };
+
+  private static updateHiddenFeatureFlags = (): boolean => {
+    const hiddenFeatureFlagKeys = Object.keys(FeatureFlagService.currentFeatureFlagMap).filter((key: string) => {
+      if (FeatureFlagService.currentFeatureFlagMap[key as FeatureFlagNames].isHidden) {
+        return key;
+      }
+    });
+
+    let result = false;
+    hiddenFeatureFlagKeys.forEach((key: string) => {
+      if (process.env[key] && process.env[key] !== FeatureFlagService.currentFeatureFlagMap[key]) {
+        FeatureFlagService.currentFeatureFlagMap[key as FeatureFlagNames].value =
+          process.env[key]?.toLowerCase() === 'true';
+        result = true;
+      }
+    });
+    return result;
+  };
 
   public static getFeatureFlags(): FeatureFlagMap {
     FeatureFlagService.initialize();
