@@ -4,12 +4,6 @@ import { ExtensionContext } from '@bfc/extension';
 
 import { BotProjectService } from '../services/project';
 
-const defaultPublishConfig = {
-  name: 'default',
-  type: 'localpublish',
-  configuration: JSON.stringify({}),
-};
-
 export const ProvisionController = {
   getResources: async (req, res) => {
     const user = await ExtensionContext.getUserFromRequest(req);
@@ -75,32 +69,22 @@ export const ProvisionController = {
     }
   },
   getProvisionStatus: async (req, res) => {
+    const type = req.params.type;
     const target = req.params.target;
     const user = await ExtensionContext.getUserFromRequest(req);
     const projectId = req.params.projectId;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
     const jobId = req.params.jobId;
-    const publishTargets = currentProject.settings?.publishTargets || [];
-    const allTargets = [defaultPublishConfig, ...publishTargets];
 
-    const profiles = allTargets.filter((t) => t.name === target);
-    const profile = profiles.length ? profiles[0] : undefined;
-
-    const method = profile ? profile.type : undefined;
-
-    if (profile && method && ExtensionContext?.extensions?.publish[method]?.methods?.getProvisionStatus) {
+    if (type && ExtensionContext?.extensions?.publish[type]?.methods?.getProvisionStatus) {
       // get the externally defined method
-      const pluginMethod = ExtensionContext.extensions.publish[method].methods.getProvisionStatus;
+      const pluginMethod = ExtensionContext.extensions.publish[type].methods.getProvisionStatus;
       try {
         // call the method
         const result = await pluginMethod.call(null, target, currentProject, user, jobId);
+        console.log(result);
         // set status and return value as json
-        res.status(result.status).json({
-          ...result,
-          jobId: jobId,
-          config: result.config || null,
-          details: result.details || {},
-        });
+        res.status(result.status).json(result);
       } catch (err) {
         console.log(err);
         res.status(400).json({

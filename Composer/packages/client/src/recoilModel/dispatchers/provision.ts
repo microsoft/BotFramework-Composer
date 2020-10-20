@@ -26,6 +26,19 @@ export const provisionDispatcher = () => {
       type: 'success',
     };
   };
+  const getProvisionFailureNotification = (value: string): CardProps => {
+    return {
+      title: formatMessage('Provision failure'),
+      description: formatMessage('{msg}', { msg: value }),
+      type: 'error',
+    };
+  };
+
+  const updateNotification = (callbackHelpers: CallbackInterface, oldNotificationId, newNotification) => {
+    deleteNotificationInternal(callbackHelpers, oldNotificationId);
+    addNotificationInternal(callbackHelpers, newNotification);
+  };
+
   const provisionToTarget = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (config: any, type: string, projectId: string) => {
       try {
@@ -41,74 +54,183 @@ export const provisionDispatcher = () => {
         const notification = createNotifiction(getProvisionPendingNotification(result.data.message));
         addNotificationInternal(callbackHelpers, notification);
         // update provision status
-        callbackHelpers.set(provisionStatusState(projectId), (provisionStatus) => ({
-          ...provisionStatus,
-          [result.data.processName]: {
-            ...result.data,
-            notificationId: notification.id,
-          },
-        }));
+        callbackHelpers.set(provisionStatusState(projectId), (provisionStatus) => {
+          const newStat = {
+            ...provisionStatus,
+            [result.data.processName]: {
+              ...result.data,
+              notificationId: notification.id,
+            },
+          };
+          console.log(newStat);
+          return newStat;
+        });
+
+        // get provision status
+        updateProvisionStatus(
+          callbackHelpers,
+          result.data.id,
+          projectId,
+          result.data.processName,
+          type,
+          notification.id
+        );
       } catch (error) {
         console.log(error.response.data);
       }
     }
   );
 
-  const getProvisionStatus = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (projectId: string, target: any) => {
-      const timer = setInterval(async () => {
-        try {
-          const response = await httpClient.get(`/provision/${projectId}/status/${target.name}`);
-          if (response.data.config && response.data.config != {}) {
-            clearInterval(timer);
-            // update publishConfig
-            callbackHelpers.set(settingsState(projectId), (settings) => {
-              settings.publishTargets = settings.publishTargets?.map((item) => {
-                if (item.name === target.name) {
-                  return {
-                    ...item,
-                    configuration: JSON.stringify(response.data.config, null, 2),
-                  };
-                } else {
-                  return item;
-                }
-              });
-              return settings;
-            });
-
-            // get provision status
-            const provisionStatus = await callbackHelpers.snapshot.getPromise(provisionStatusState(projectId));
-            // delete previous status for the provision
-            const status = provisionStatus[target.name];
-            deleteNotificationInternal(callbackHelpers, status.notificationId);
-            // set notification into success
-            const newNotification = createNotifiction(getProvisionSuccessNotification(response.data.message));
-            addNotificationInternal(callbackHelpers, newNotification);
-          } else {
-            // update provision status
-            callbackHelpers.set(provisionStatusState(projectId), (status) => ({
-              ...status,
-              [target.name]: response.data,
-            }));
-            // update notification
-          }
-        } catch (err) {
-          console.log(err.response);
-          // remove that publishTarget
+  // update provision status interval
+  const updateProvisionStatus = async (
+    callbackHelpers: CallbackInterface,
+    jobId: string,
+    projectId: string,
+    targetName: string,
+    targetType: string,
+    id: string
+  ) => {
+    let notificationId = id;
+    const timer = setInterval(async () => {
+      try {
+        const response = await httpClient.get(`/provision/${projectId}/status/${targetType}/${targetName}/${jobId}`);
+        if (response.data.config && response.data.config != {}) {
+          clearInterval(timer);
+          // update publishConfig
           callbackHelpers.set(settingsState(projectId), (settings) => {
-            settings.publishTargets = settings.publishTargets?.filter((item) => item.name !== target.name);
+            settings.publishTargets = settings.publishTargets?.map((item) => {
+              if (item.name === targetName) {
+                return {
+                  ...item,
+                  configuration: JSON.stringify(response.data.config, null, 2),
+                };
+              } else {
+                return item;
+              }
+            });
             return settings;
           });
-          // update notification
 
-          clearInterval(timer);
+          // set notification into success
+          const newNotification = createNotifiction(getProvisionSuccessNotification(response.data.message));
+          updateNotification(callbackHelpers, notificationId, newNotification);
+          notificationId = newNotification.id;
+          // delete provisionStatus
+          callbackHelpers.set(provisionStatusState(projectId), (status) => {
+            delete status[targetName];
+            return status;
+          });
+        } else {
+          // set notification into success
+          const newNotification = createNotifiction(getProvisionPendingNotification(response.data.message));
+          // update notification
+          updateNotification(callbackHelpers, notificationId, newNotification);
+          notificationId = newNotification.id;
+
+          // update provision status
+          const statObj = await callbackHelpers.snapshot.getPromise(provisionStatusState(projectId));
+          const stat = statObj[targetName];
+          console.log(stat);
+          const newStat = { ...stat, ...response.data, notificationId: newNotification.id };
+          console.log(newStat);
+          // update provision status
+          callbackHelpers.set(provisionStatusState(projectId), (status) => ({
+            ...status,
+            [targetName]: newStat,
+          }));
         }
-      }, 10000);
-    }
-  );
+      } catch (err) {
+        console.log(err.response.data);
+        // update notification
+        const newNotification = createNotifiction(
+          getProvisionFailureNotification(err.response.data?.message || 'Error')
+        );
+        updateNotification(callbackHelpers, notificationId, newNotification);
+        notificationId = newNotification.id;
+        const newStat = { ...err.response.data, notificationId: newNotification.id };
+        console.log(newStat);
+        // update provision status
+        callbackHelpers.set(provisionStatusState(projectId), (status) => ({
+          ...status,
+          [targetName]: newStat,
+        }));
+        clearInterval(timer);
+      }
+    }, 2000);
+  };
+
+  // const getProvisionStatus = useRecoilCallback(
+  //   (callbackHelpers: CallbackInterface) => async (projectId: string, targetName: string, targetType: string) => {
+  //     //get jobId by targetName
+  //     const provisionStatus = await callbackHelpers.snapshot.getPromise(provisionStatusState(projectId));
+  //     const jobId = provisionStatus[targetName]?.id;
+  //     console.log(jobId);
+  //     try {
+  //       const response = await httpClient.get(`/provision/${projectId}/status/${targetType}/${targetName}/${jobId}`);
+  //       if (response.data.config && response.data.config != {}) {
+  //         // update publishConfig
+  //         callbackHelpers.set(settingsState(projectId), (settings) => {
+  //           settings.publishTargets = settings.publishTargets?.map((item) => {
+  //             if (item.name === targetName) {
+  //               return {
+  //                 ...item,
+  //                 configuration: JSON.stringify(response.data.config, null, 2),
+  //               };
+  //             } else {
+  //               return item;
+  //             }
+  //           });
+  //           return settings;
+  //         });
+
+  //         const status = provisionStatus[targetName];
+  //         // set notification into success
+  //         const newNotification = createNotifiction(getProvisionPendingNotification(response.data.message));
+  //         updateNotification(callbackHelpers, status.notificationId, newNotification);
+
+  //         // delete provisionStatus
+  //         callbackHelpers.set(provisionStatusState(projectId), (status) => {
+  //           delete status[targetName];
+  //           return status;
+  //         });
+  //       } else {
+  //         const stat = provisionStatus[targetName];
+  //         console.log(stat);
+  //         // update notification
+  //         // set notification into success
+  //         const newNotification = createNotifiction(getProvisionSuccessNotification(response.data.message));
+  //         updateNotification(callbackHelpers, stat.notificationId, newNotification);
+
+  //         const newStat = { ...stat, ...response.data, notificationId: newNotification.id };
+  //         console.log(newStat);
+  //         // update provision status
+  //         callbackHelpers.set(provisionStatusState(projectId), (status) => ({
+  //           ...status,
+  //           [targetName]: newStat,
+  //         }));
+  //       }
+  //     } catch (err) {
+  //       console.log(err.response);
+
+  //       // update notification
+  //       const newNotification = createNotifiction(
+  //         getProvisionFailureNotification(err.response.data?.message || 'Error')
+  //       );
+  //       const status = provisionStatus[targetName];
+  //       updateNotification(callbackHelpers, status.notificationId, newNotification);
+  //       const newStat = { ...err.response.data, notificationId: newNotification.id };
+  //       console.log(newStat);
+  //       // update provision status
+  //       callbackHelpers.set(provisionStatusState(projectId), (status) => ({
+  //         ...status,
+  //         [targetName]: newStat,
+  //       }));
+  //     }
+  //   }
+  // );
 
   return {
-    getProvisionStatus,
+    // getProvisionStatus,
     provisionToTarget,
   };
 };
