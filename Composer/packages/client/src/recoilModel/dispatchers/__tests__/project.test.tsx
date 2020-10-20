@@ -361,7 +361,7 @@ describe('Project dispatcher', () => {
     expect(renderedComponent.current.botStates.echoSkill2.botDisplayName).toBe('Echo-Skill-2');
 
     await act(async () => {
-      await dispatcher.addRemoteSkillToBotProject('https://test.net/api/manifest/man', 'test-skill', 'remote');
+      await dispatcher.addRemoteSkillToBotProject('https://test.net/api/manifest/test', 'remote');
     });
 
     expect(navigateTo).toHaveBeenLastCalledWith(`/bot/${projectId}/dialogs/emptybot-1`);
@@ -393,10 +393,9 @@ describe('Project dispatcher', () => {
         'remote'
       );
     });
-
-    expect(renderedComponent.current.botStates.oneNote).toBeDefined();
-    expect(renderedComponent.current.botStates.oneNote.botDisplayName).toBe('OneNoteSync');
-    expect(renderedComponent.current.botStates.oneNote.location).toBe(
+    expect(renderedComponent.current.botStates.oneNoteSync).toBeDefined();
+    expect(renderedComponent.current.botStates.oneNoteSync.botDisplayName).toBe('OneNoteSync');
+    expect(renderedComponent.current.botStates.oneNoteSync.location).toBe(
       'https://test-dev.azurewebsites.net/manifests/onenote-2-1-preview-1-manifest.json'
     );
     expect(navigateTo).toHaveBeenLastCalledWith(`/bot/${projectId}/dialogs/emptybot-1`);
@@ -426,26 +425,17 @@ describe('Project dispatcher', () => {
     await act(async () => {
       await dispatcher.addRemoteSkillToBotProject(
         'https://test-dev.azurewebsites.net/manifests/onenote-2-1-preview-1-manifest.json',
-        'one-note',
         'remote'
       );
     });
 
-    await act(async () => {
-      await dispatcher.addRemoteSkillToBotProject(
-        'https://test-dev.azurewebsites.net/manifests/onenote-second-manifest.json',
-        'one-note-2',
-        'remote'
-      );
-    });
-
-    const oneNoteProjectId = renderedComponent.current.botStates.oneNote.projectId;
+    const oneNoteProjectId = renderedComponent.current.botStates.oneNoteSync.projectId;
     mockImplementation.mockClear();
 
     await act(async () => {
       dispatcher.removeSkillFromBotProject(oneNoteProjectId);
     });
-    expect(renderedComponent.current.botStates.oneNote).toBeUndefined();
+    expect(renderedComponent.current.botStates.oneNoteSync).toBeUndefined();
   });
 
   it('should be able to add a new skill to Botproject', async () => {

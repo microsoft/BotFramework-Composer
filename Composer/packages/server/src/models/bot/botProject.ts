@@ -360,7 +360,6 @@ export class BotProject implements IBotProject {
     for (const botProjectFile of this.botProjectFiles) {
       const { relativePath } = botProjectFile;
       const content = JSON.parse(botProjectFile.content);
-      content.workspace = this.dataDir;
       content.name = botName;
       await this._updateFile(relativePath, JSON.stringify(content, null, 2));
     }
