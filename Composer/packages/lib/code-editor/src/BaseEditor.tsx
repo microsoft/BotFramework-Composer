@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import Editor, { EditorDidMount, EditorProps, Monaco, monaco } from '@monaco-editor/react';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
@@ -114,6 +114,8 @@ export interface BaseEditorProps extends EditorProps {
   errorMessage?: string; // error text show below editor
   editorSettings?: Partial<CodeEditorSettings>;
   onChangeSettings?: (settings: Partial<CodeEditorSettings>) => void;
+  onBlur?: (id: string) => void;
+  onFocus?: (id: string) => void;
 }
 
 const BaseEditor: React.FC<BaseEditorProps> = (props) => {
@@ -131,6 +133,8 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
     height = '100%',
     onInit,
     editorSettings,
+    onFocus,
+    onBlur,
     ...rest
   } = props;
   const baseOptions = useMemo(() => assignDefined(defaultOptions, props.options), [props.options]);
@@ -138,18 +142,22 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
 
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
-  const [editor, setEditor] = useState<any>(undefined);
+  const editorRef = useRef<any>();
 
   // initialValue is designed to imporve local performance
   // it should be force updated if id change, or previous value is empty.
   const initialValue = useMemo(() => value || (hidePlaceholder ? '' : placeholder), [id, !!value]);
 
   const onEditorMount: EditorDidMount = (getValue, editor) => {
-    setEditor(editor);
+    editorRef.current = editor;
 
     if (typeof editorDidMount === 'function') {
       editorDidMount(getValue, editor);
     }
+
+    editor.onDidDispose(() => {
+      editorRef.current = undefined;
+    });
   };
 
   useEffect(() => {
@@ -159,12 +167,14 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
   }, []);
 
   useEffect(() => {
-    if (editor) {
-      const onFocusListener = editor.onDidFocusEditorWidget(() => {
+    if (editorRef.current) {
+      const onFocusListener = editorRef.current.onDidFocusEditorWidget(() => {
+        onFocus && id && onFocus(id);
         setFocused(true);
       });
 
-      const onBlurListener = editor.onDidBlurEditorWidget(() => {
+      const onBlurListener = editorRef.current.onDidBlurEditorWidget(() => {
+        onBlur && id && onBlur(id);
         setFocused(false);
       });
 
@@ -173,19 +183,22 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
         onBlurListener.dispose();
       };
     }
-  }, [editor]);
+  }, [editorRef.current]);
 
   useEffect(() => {
-    if (editor) {
-      const disposable = editor.onDidChangeModelContent(() => {
-        onChange(editor.getValue());
+    if (editorRef.current) {
+      const disposable = editorRef.current.onDidChangeModelContent(() => {
+        if (editorRef.current) {
+          const newValue = editorRef.current.getValue();
+          setTimeout(() => onChange(newValue), 0);
+        }
       });
 
       return () => {
         disposable.dispose();
       };
     }
-  }, [onChange, editor]);
+  }, [onChange, editorRef.current]);
 
   const errorMsgFromDiagnostics = useMemo(() => {
     const errors = findErrors(diagnostics);
@@ -209,7 +222,7 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
   );
 
   useEffect(() => {
-    if (editor && editorSettings) {
+    if (editorRef.current && editorSettings) {
       setEditorOptions(mergeEditorSettings(baseOptions, editorSettings));
     }
   }, [editorSettings]);

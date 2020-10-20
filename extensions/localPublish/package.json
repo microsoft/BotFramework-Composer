@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@bfc/extension": "file:../../Composer/packages/extension",
+    "@botframework-composer/types": "latest",
     "adm-zip": "^0.4.14",
     "archiver": "^5.0.2",
     "globby": "^11.0.0",

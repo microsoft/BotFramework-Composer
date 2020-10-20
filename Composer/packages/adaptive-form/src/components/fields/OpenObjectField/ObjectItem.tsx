@@ -12,7 +12,7 @@ import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import formatMessage from 'format-message';
 
 import { StringField } from '../StringField';
-import SchemaField from '../../SchemaField';
+import { SchemaField } from '../../SchemaField';
 
 import { container, item, itemContainer } from './styles';
 

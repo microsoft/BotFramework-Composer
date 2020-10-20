@@ -16,7 +16,7 @@ import {
 import { TextDocumentPositionParams, DocumentOnTypeFormattingParams } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
 import { filterTemplateDiagnostics, isValid, lgUtil } from '@bfc/indexers';
-import { MemoryResolver, ResolverResource, LgFile, importResolverGenerator } from '@bfc/shared';
+import { MemoryResolver, ResolverResource, LgFile, lgImportResolverGenerator } from '@bfc/shared';
 import { buildInFunctionsMap } from '@bfc/built-in-functions';
 
 import { LgParser } from './lgParser';
@@ -166,7 +166,7 @@ export class LGServer {
         const lgTextFile = lgTextFiles.find((item) => item.id === fileId);
         if (lgTextFile) {
           const lgFile = lgUtil.parse(lgTextFile.id, lgTextFile.content, lgTextFiles);
-          const lgResolver = importResolverGenerator(lgTextFiles, '.lg');
+          const lgResolver = lgImportResolverGenerator(lgTextFiles, '.lg');
           return lgUtil.updateTemplate(lgFile, templateId, { body: content }, lgResolver);
         }
       }
