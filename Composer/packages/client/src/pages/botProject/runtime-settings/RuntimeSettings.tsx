@@ -163,7 +163,6 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
     }
   };
 
-  //好像缺个ID
   const onRenderLabel = (props: ITextFieldProps | undefined) => {
     return (
       <div css={labelContainer}>

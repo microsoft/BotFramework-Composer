@@ -3,7 +3,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
-import { SensitiveProperties, DialogSetting, PublishTarget, Skill } from '@bfc/shared';
+import { SensitiveProperties, SensitivePropertiesManageGroup, DialogSetting, PublishTarget, Skill } from '@bfc/shared';
 import { skillIndexer } from '@bfc/indexers';
 import get from 'lodash/get';
 import has from 'lodash/has';
@@ -12,6 +12,7 @@ import keys from 'lodash/keys';
 
 import settingStorage from '../../utils/dialogSettingStorage';
 import { settingsState, skillsState } from '../atoms/botState';
+import { rootBotProjectIdSelector } from '../selectors/project';
 
 import httpClient from './../../utils/httpUtil';
 import { setError } from './shared';
@@ -23,7 +24,6 @@ export const setSettingState = async (
 ) => {
   const { set, snapshot } = callbackHelpers;
   const previousSettings = await snapshot.getPromise(settingsState(projectId));
-
   if (!isEqual(settings.skill, previousSettings.skill)) {
     const skills = await snapshot.getPromise(skillsState(projectId));
     const skillContent = await Promise.all(
@@ -57,11 +57,16 @@ export const setSettingState = async (
       settingStorage.setField(projectId, property, propertyValue);
     }
   }
-  //Todo if skill bot's SensitiveProperties coming save it in root bot local settings
-  //  rootProjectId: {
-  //  root: {luis: ....}
-  //  skillId: {luis ....}
-  //}
+
+  for (const property of SensitivePropertiesManageGroup) {
+    const rootProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
+    if (has(settings, property) && rootProjectId) {
+      const propertyValue = get(settings, property, '');
+      const luisPropertyValue = get(settingStorage.get(rootProjectId), property, '');
+      const newluisPropertyValue = { ...luisPropertyValue, [projectId]: propertyValue };
+      settingStorage.setField(rootProjectId, property, newluisPropertyValue);
+    }
+  }
   set(settingsState(projectId), settings);
 };
 

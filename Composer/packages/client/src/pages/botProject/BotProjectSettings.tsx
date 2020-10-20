@@ -121,7 +121,7 @@ const BotProjectSettings: React.FC<BotProjectSettingsProps> = (props) => {
               onChange={handleChange}
             />
           )}
-          {!isAdvancedSettingsEnabled && <TableView projectId={projectId} />}
+          {!isAdvancedSettingsEnabled && <TableView hasSkills={botProjectsMetaData.length > 1} projectId={projectId} />}
         </div>
       </Suspense>
     </Page>

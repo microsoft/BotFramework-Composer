@@ -3,11 +3,14 @@
 
 export const SensitiveProperties = [
   'MicrosoftAppPassword',
-  'luis.authoringKey',
+  //'luis.authoringKey',
   'luis.endpointKey',
-  'qna.subscriptionKey',
+  //'qna.subscriptionKey',
   'qna.endpointKey',
 ];
+
+export const SensitivePropertiesManageGroup = ['luis.authoringKey', 'luis.authoringRegion', 'qna.subscriptionKey'];
+
 export const FieldNames = {
   Events: 'triggers',
   Actions: 'actions',

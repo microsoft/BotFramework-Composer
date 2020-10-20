@@ -50,6 +50,20 @@ export const customerLabel = css`
   margin-right: 5px;
 `;
 
+export const unknownIconStyle = (required) => {
+  return {
+    root: {
+      selectors: {
+        '&::before': {
+          content: required ? " '*'" : '',
+          color: SharedColors.red10,
+          paddingRight: 3,
+        },
+      },
+    },
+  };
+};
+
 export const runtimeLabel = (enabled: boolean) => css`
   font-size: ${FontSizes.small};
   margin-right: 5px;
@@ -234,3 +248,32 @@ export const runtimeToggle = css`
 export const breathingSpace = css`
   margin-bottom: 1rem;
 `;
+
+export const marginBottom = css`
+  margin-bottom: 20px;
+`;
+
+export const luiskeyStyle = (isDisabled) => {
+  return {
+    root: {
+      selectors: {
+        '.ms-TextField-field': {
+          background: isDisabled ? '#ddf3db' : '',
+        },
+      },
+    },
+  };
+};
+
+export const luisregionStyle = (isDisabled) => {
+  return {
+    root: {
+      selectors: {
+        '.ms-TextField-field': {
+          background: isDisabled ? '#ddf3db' : '',
+        },
+      },
+      marginTop: 15,
+    },
+  };
+};
