@@ -33,7 +33,9 @@ class OneAuthInstance {
     if (isMac()) {
       this._oneAuth = require('oneauth-mac');
     }
-    this._oneAuth = {};
+    if (isLinux()) {
+      this._oneAuth = {};
+    }
   }
 
   private get oneAuth() {
@@ -65,7 +67,6 @@ class OneAuthInstance {
       const aadConfig = new AadConfiguration(
         COMPOSER_CLIENT_ID,
         COMPOSER_REDIRECT_URI,
-        //'a522f059-bb65-47c0-8934-7db6e5286414',
         GRAPH_RESOURCE,
         false // prefer broker
       );
