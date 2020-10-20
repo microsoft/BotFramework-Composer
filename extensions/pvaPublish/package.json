@@ -1,0 +1,46 @@
+{
+  "name": "pva-publish-composer",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "yarn build:ui && yarn build:node",
+    "build:ui": "webpack --config webpack.config.js",
+    "build:node": "tsc --project tsconfig.node.json"
+  },
+  "composer": {
+    "enabled": true,
+    "bundles": [
+      {
+        "id": "publish",
+        "path": "dist/publish-bundle.js"
+      }
+    ],
+    "contributes": {
+      "views": {
+        "publish": [
+          {
+            "bundleId": "publish"
+          }
+        ]
+      }
+    }
+  },
+  "main": "dist/index.js",
+  "dependencies": {
+    "@bfc/extension-client": "file:../../Composer/packages/extension-client",
+    "@uifabric/icons": "7.3.59",
+    "@uifabric/react-hooks": "7.4.12",
+    "fs-extra": "^9.0.1",
+    "node-fetch": "2.6.1",
+    "office-ui-fabric-react": "7.121.11",
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0"
+  },
+  "devDependencies": {
+    "@types/node": "^14.11.2",
+    "html-webpack-plugin": "^4.3.0",
+    "ts-loader": "^8.0.0",
+    "typescript": "^3.9.6",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.12"
+  }
+}

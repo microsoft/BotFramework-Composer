@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "outDir": "dist",
+    "typeRoots" : ["./node_modules/@types"],
+    "sourceMap": true
+  },
+  "include": [
+    "src/node/**/*"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "alwaysStrict": true,
+    "jsx": "react"
+  },
+  "include": [
+    "src/ui/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+  ]
+}
