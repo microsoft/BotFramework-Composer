@@ -160,10 +160,22 @@
             "subtitle": "Switch Condition"
         }
     },
+    "Microsoft.ThrowException": {
+        "form": {
+            "label": "Throw an exception",
+            "subtitle": "Throw an exception"
+        }
+    },
     "Microsoft.TraceActivity": {
         "form": {
             "label": "Emit a trace event",
             "subtitle": "Trace Activity"
+        }
+    },
+    "Microsoft.Ask": {
+        "form": {
+            "label": "Send a response to ask a question",
+            "subtitle": "Ask Activity"
         }
     },
     "Microsoft.AttachmentInput": {
@@ -214,6 +226,12 @@
             "subtitle": "Activity received"
         }
     },
+    "Microsoft.OnAssignEntity": {
+        "form": {
+            "label": "Handle a condition when an entity is assigned",
+            "subtitle": "EntityAssigned activity"
+        }
+    },
     "Microsoft.OnBeginDialog": {
         "form": {
             "label": "Dialog started",
@@ -243,6 +261,12 @@
         "form": {
             "label": "Dialog events",
             "subtitle": "Dialog event"
+        }
+    },
+    "Microsoft.OnEndOfActions": {
+        "form": {
+            "label": "Handle a condition when actions have ended",
+            "subtitle": "EndOfActions activity"
         }
     },
     "Microsoft.OnEndOfConversationActivity": {
