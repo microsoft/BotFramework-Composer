@@ -30,12 +30,13 @@ jobs:
           push: false
           context: .
           file: Dockerfile
-          tags: botframework-composer:$(date +%s),botframework-composer:latest
+          tags: botframework-composer
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
+          load: true
       - name: Health check
         run: |
-          docker run --rm -p "5000:5000" botframework-composer:latest
+          docker run --rm -p "5000:5000" botframework-composer
           sleep 10
           curl -Is http://localhost:5000 | grep -q "200 OK"
         shell: bash
