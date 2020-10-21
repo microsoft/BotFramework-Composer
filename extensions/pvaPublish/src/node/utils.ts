@@ -23,7 +23,7 @@ export const getBaseUrl = () => {
     }
 
     default: {
-      const url = BASE_URLS.INT;
+      const url = BASE_URLS.PROD;
       console.log('No pva publish env detected, operation using PVA url: ', url);
       return url;
     }

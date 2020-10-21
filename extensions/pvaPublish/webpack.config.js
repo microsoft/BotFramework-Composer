@@ -15,17 +15,19 @@ module.exports = {
   },
   module: {
     rules: [
-      { test: /\.tsx?$/, use: 'ts-loader' },
+      {
+        test: /\.tsx?$/,
+        loader: 'ts-loader',
+        options: {
+          configFile: 'tsconfig.ui.json',
+        },
+      },
       {
         test: /\.svg$/i,
-        use: [
-          {
-            loader: 'url-loader',
-            options: {
-              generator: (content) => svgToMiniDataURI(content.toString()),
-            },
-          },
-        ],
+        loader: 'url-loader',
+        options: {
+          generator: (content) => svgToMiniDataURI(content.toString()),
+        },
       },
     ],
   },

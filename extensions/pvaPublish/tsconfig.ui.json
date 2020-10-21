@@ -1,13 +1,13 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "dist/node",
-    "sourceMap": true
+    "alwaysStrict": true,
+    "jsx": "react"
   },
   "include": [
-    "src/node"
+    "src/ui/"
   ],
   "exclude": [
-    "src/ui"
+    "src/node"
   ]
 }

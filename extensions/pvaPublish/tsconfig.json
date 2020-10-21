@@ -1,10 +1,9 @@
 {
   "compilerOptions": {
-    "alwaysStrict": true,
-    "jsx": "react"
+    "typeRoots": ["./node_modules/@types"]
   },
   "include": [
-    "src/ui/**/*"
+    "src/**/*",
   ],
   "exclude": [
     "node_modules",
