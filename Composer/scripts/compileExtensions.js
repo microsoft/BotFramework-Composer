@@ -87,6 +87,8 @@ const compile = (name, extPath) => {
 
 checkComposerLibs();
 
+const errors = [];
+
 for (const entry of allExtensions) {
   if (entry.isDirectory()) {
     const dir = path.join(extensionsDir, entry.name);
@@ -99,8 +101,18 @@ for (const entry of allExtensions) {
         compile(entry.name, dir);
         writeToCache(entry.name, lastModified);
       } catch (err) {
+        errors.push({
+          name: entry.name,
+          message: err.message,
+        });
         console.error(err);
       }
     }
   }
+}
+
+if (errors.length > 0) {
+  const formattedErrors = errors.map((e) => `\t- [${e.name}] ${e.message}`).join('\n');
+  console.error(`There was an error compiling these extensions:\n${formattedErrors}`);
+  process.exit(1);
 }
