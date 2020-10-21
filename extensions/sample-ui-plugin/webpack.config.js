@@ -7,7 +7,8 @@ const path = require('path');
 module.exports = {
   entry: {
     page: './src/client/page/index.tsx',
-    publish: './src/client/publish/index.tsx',
+    publish1: './src/client/publish/publish1.tsx',
+    publish2: './src/client/publish/publish2.tsx',
   },
   mode: 'development',
   devtool: 'eval-source-map',
