@@ -10,10 +10,13 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
 import { root } from './styles';
 import { Bot, BotEnvironment } from './types';
+
 const PVABotIcon = require('./media/pva-bot-icon.svg');
 
 const API_VERSION = 'v1';
 const BASE_URL = `https://powerva.microsoft.com/api/botmanagement/${API_VERSION}`; // prod / sdf
+const COMPOSER_1P_APP_ID = 'ce48853e-0605-4f77-8746-d70ac63cc6bc';
+const PVA_PROD_1P_APP_ID = '96ff4394-9197-43aa-b393-6a41652e21f8';
 
 const pvaBranding = '#0F677B';
 const pvaBrandingHover = '#0A4A5C';
@@ -34,9 +37,13 @@ export const PVADialog: FC = () => {
     setLoggingIn(true);
     const loginAndGetToken = async () => {
       const token = await getAccessToken({
-        clientId: 'ce48853e-0605-4f77-8746-d70ac63cc6bc',
-        scopes: ['96ff4394-9197-43aa-b393-6a41652e21f8/.default'], // prod / sdf
-      });
+        // web auth flow
+        clientId: COMPOSER_1P_APP_ID,
+        scopes: [`${PVA_PROD_1P_APP_ID}/.default`],
+
+        // electron auth flow
+        targetResource: PVA_PROD_1P_APP_ID,
+      } as any); // TODO: Remove 'any' once types are fixed in @bfc/extension-client
       setLoggingIn(false);
       setToken(token);
     };

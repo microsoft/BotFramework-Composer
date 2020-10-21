@@ -1,13 +1,14 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "alwaysStrict": true,
-    "jsx": "react"
+    "alwaysStrict": true
   },
   "include": [
-    "src/ui/"
+    "src/ui"
   ],
   "exclude": [
-    "src/node"
+    "src/ui/**/*.spec.tsx",
+    "src/node",
+    "testing/"
   ]
 }

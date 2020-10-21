@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "scripts": {
     "build": "yarn build:ui && yarn build:node",
-    "build:ui": "webpack --config webpack.config.js",
     "build:node": "tsc --project tsconfig.node.json",
-    "test": "yarn test:node",
-    "test:node": "jest"
+    "build:ui": "webpack --config webpack.config.js",
+    "test": "yarn test:node && yarn test:ui",
+    "test:node": "jest --config jest.config.node.js",
+    "test:ui": "jest --config jest.config.ui.js"
   },
   "composer": {
     "enabled": false,
