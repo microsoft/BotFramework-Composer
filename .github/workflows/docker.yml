@@ -15,13 +15,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
       - name: Cache Docker layers
         uses: actions/cache@v2
         with:
-          path: /tmp/.build-cache
-          key: ${{ runner.os }}-build-${{ github.sha }}
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-build-
+            ${{ runner.os }}-buildx-
       - name: Build
         uses: docker/build-push-action@v2
         with:
@@ -29,8 +31,8 @@ jobs:
           context: .
           file: Dockerfile
           tags: botframework-composer
-          cache-from: type=local,src=/tmp/.build-cache
-          cache-to: type=local,dest=/tmp/.build-cache
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
           load: true
       - name: Health check
         run: |
