@@ -692,7 +692,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             onSubmit={onTriggerCreationSubmit}
           />
         )}
-        <CreateQnAModal dialogId={dialogId} projectId={projectId} qnaFiles={qnaFiles} onSubmit={handleCreateQnA} />)
+        <CreateQnAModal dialogId={dialogId} projectId={projectId} qnaFiles={qnaFiles} onSubmit={handleCreateQnA} />
         {displaySkillManifest && (
           <DisplayManifestModal
             manifestId={displaySkillManifest}

@@ -87,7 +87,6 @@ describe('Bot Project File dispatcher', () => {
               content: {
                 $schema: '',
                 name: 'TesterBot',
-                workspace: 'file:///Users/tester/Desktop/LoadedBotProject/TesterBot',
                 skills: {},
               },
             },
@@ -99,6 +98,10 @@ describe('Bot Project File dispatcher', () => {
             },
           },
           { recoilState: botProjectIdsState, initialValue: [rootBotProjectId] },
+          {
+            recoilState: locationState(rootBotProjectId),
+            initialValue: '/Users/tester/Desktop/LoadedBotProject/RootBot',
+          },
         ],
         dispatcher: {
           recoilState: dispatcherState,
@@ -115,7 +118,7 @@ describe('Bot Project File dispatcher', () => {
   it('should add a local skill to bot project file', async () => {
     await act(async () => {
       renderedComponent.current.setSkillsData({
-        location: 'Users/tester/Desktop/LoadedBotProject/Todo-Skill',
+        location: '/Users/tester/Desktop/LoadedBotProject/Todo-Skill',
         botNameIdentifier: 'todoSkill',
       });
     });
@@ -124,9 +127,7 @@ describe('Bot Project File dispatcher', () => {
       dispatcher.addLocalSkillToBotProjectFile(testSkillId);
     });
 
-    expect(renderedComponent.current.botProjectFile.content.skills.todoSkill.workspace).toBe(
-      'file:///Users/tester/Desktop/LoadedBotProject/Todo-Skill'
-    );
+    expect(renderedComponent.current.botProjectFile.content.skills.todoSkill.workspace).toBe('../Todo-Skill');
     expect(renderedComponent.current.botProjectFile.content.skills.todoSkill.remote).toBeFalsy();
   });
 
