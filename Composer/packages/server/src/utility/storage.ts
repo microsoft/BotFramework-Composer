@@ -29,8 +29,7 @@ export async function copyDir(srcDir: string, srcStorage: IFileStorage, dstDir: 
 
     if ((await srcStorage.stat(srcPath)).isFile) {
       // copy files
-      const content = await srcStorage.readFile(srcPath);
-      await dstStorage.writeFile(dstPath, content);
+      await srcStorage.copyFile(srcPath, dstPath);
     } else {
       // recursively copy dirs
       await copyDir(srcPath, srcStorage, dstPath, dstStorage);
