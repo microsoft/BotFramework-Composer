@@ -86,8 +86,8 @@ const compile = (name, extPath) => {
   const hasBuild = packageJSON && packageJSON.scripts && packageJSON.scripts.build;
 
   console.log('[%s] compiling', name);
-  console.log('[%s] yarn --force', name);
-  execSync('yarn --force', { cwd: extPath, stdio: 'inherit' });
+  console.log('[%s] yarn install', name);
+  execSync('yarn --force --production=false', { cwd: extPath, stdio: 'inherit' });
 
   if (hasBuild) {
     console.log('[%s] yarn build', name);
