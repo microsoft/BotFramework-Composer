@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css, SerializedStyles } from '@emotion/core';
+import { jsx, css } from '@emotion/core';
 import React, { useState, useEffect, useRef } from 'react';
 import { Shell } from '@botframework-composer/types';
 import { PluginType } from '@bfc/extension-client';
