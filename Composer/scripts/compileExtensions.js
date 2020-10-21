@@ -87,7 +87,7 @@ const compile = (name, extPath) => {
 
   console.log('[%s] compiling', name);
   console.log('[%s] yarn --force', name);
-  execSync('yarn --force --frozen-lockfile', { cwd: extPath, stdio: 'inherit' });
+  execSync('yarn --force', { cwd: extPath, stdio: 'inherit' });
 
   if (hasBuild) {
     console.log('[%s] yarn build', name);
@@ -99,18 +99,30 @@ const compile = (name, extPath) => {
 
 checkComposerLibs();
 
+const errors = [];
+
 for (const entry of allExtensions) {
-  try {
-    if (entry.isDirectory()) {
-      const extPath = path.join(extensionsDir, entry.name);
-      const packageJSON = JSON.parse(fs.readFileSync(path.join(extPath, 'package.json')));
-      const lastModified = getLastModified(extPath);
-      if (missingMain(extPath, packageJSON) || hasChanges(entry.name, lastModified)) {
+  if (entry.isDirectory()) {
+    const extPath = path.join(extensionsDir, entry.name);
+    const packageJSON = JSON.parse(fs.readFileSync(path.join(extPath, 'package.json')));
+    const lastModified = getLastModified(extPath);
+    if (missingMain(extPath, packageJSON) || hasChanges(entry.name, lastModified)) {
+      try {
         compile(entry.name, extPath);
         writeToCache(entry.name, lastModified);
+      } catch (err) {
+        errors.push({
+          name: entry.name,
+          message: err.message,
+        });
+        console.error(err);
       }
     }
-  } catch (err) {
-    console.error(err);
   }
+}
+
+if (errors.length > 0) {
+  const formattedErrors = errors.map((e) => `\t- [${e.name}] ${e.message}`).join('\n');
+  console.error(`There was an error compiling these extensions:\n${formattedErrors}`);
+  process.exit(1);
 }
