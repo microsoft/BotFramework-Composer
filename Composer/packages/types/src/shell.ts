@@ -47,7 +47,7 @@ export type BotSchemas = {
 };
 
 export type ApplicationContextApi = {
-  navTo: (path: string, rest?: any) => void;
+  navigateTo: (to: string, opts?: { state?: any; replace?: boolean }) => void;
   updateUserSettings: (settings: AllPartial<UserSettings>) => void;
   announce: (message: string) => void;
   addCoachMarkRef: (ref: { [key: string]: any }) => void;
@@ -89,6 +89,7 @@ export type ProjectContextApi = {
   getDialog: (dialogId: string) => any;
   saveDialog: (dialogId: string, newDialogData: any) => any;
   reloadProject: () => void;
+  navTo: (path: string) => void;
 
   updateQnaContent: (id: string, content: string) => void;
   updateRegExIntent: (id: string, intentName: string, pattern: string) => void;

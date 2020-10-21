@@ -36,6 +36,7 @@ const PROJECT_KEYS = [
   'api.createTrigger',
   'api.updateSkillSetting',
   'api.reloadProject',
+  'api.navTo',
 ];
 
 export function useProjectApi(): ProjectContext & ProjectContextApi {

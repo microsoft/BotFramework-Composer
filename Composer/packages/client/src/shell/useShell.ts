@@ -30,6 +30,7 @@ import {
 } from '../recoilModel';
 import { undoFunctionState } from '../recoilModel/undo/history';
 import httpClient from '../utils/httpUtil';
+import { navigateTo } from '../utils/navigation';
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
@@ -223,22 +224,25 @@ export function useShell(source: EventSource, projectId: string): Shell {
     undo,
     redo,
     commitChanges,
-    addCoachMarkRef: onboardingAddCoachMarkRef,
-    updateUserSettings,
-    announce: setMessage,
     displayManifestModal: (skillId) => displayManifestModal(skillId, projectId),
     updateDialogSchema: async (dialogSchema: DialogSchemaFile) => {
       updateDialogSchema(dialogSchema, projectId);
     },
     updateSkillSetting: (...params) => updateSkill(projectId, ...params),
     updateFlowZoomRate,
-    setApplicationLevelError,
     reloadProject: () => reloadProject(projectId),
     ...lgApi,
     ...luApi,
     ...qnaApi,
     ...triggerApi,
     ...actionApi,
+
+    // application context
+    addCoachMarkRef: onboardingAddCoachMarkRef,
+    announce: setMessage,
+    navigateTo,
+    setApplicationLevelError,
+    updateUserSettings,
   };
 
   const currentDialog = useMemo(() => dialogs.find((d) => d.id === dialogId) ?? stubDialog(), [
