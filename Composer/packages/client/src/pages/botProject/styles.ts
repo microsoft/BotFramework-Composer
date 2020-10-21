@@ -100,6 +100,10 @@ export const manageBotLanguage = {
 
 export const languageItem = css`
   margin: 5px;
+  height: 34px;
+  &:hover {
+    background: #ebebeb;
+  }
 `;
 
 export const toggleUseCustomRuntimeStyle = {
@@ -253,27 +257,18 @@ export const marginBottom = css`
   margin-bottom: 20px;
 `;
 
-export const luiskeyStyle = (isDisabled) => {
-  return {
-    root: {
-      selectors: {
-        '.ms-TextField-field': {
-          background: isDisabled ? '#ddf3db' : '',
-        },
-      },
-    },
-  };
+export const textFieldStyle = {
+  root: {
+    marginTop: 10,
+  },
 };
 
-export const luisregionStyle = (isDisabled) => {
-  return {
-    root: {
-      selectors: {
-        '.ms-TextField-field': {
-          background: isDisabled ? '#ddf3db' : '',
-        },
-      },
-      marginTop: 15,
-    },
-  };
-};
+export const defaultLanguageTextStyle = css`
+  color: #898989;
+  font-size: 8px;
+`;
+
+export const languageTextStyle = css`
+  color: ${NeutralColors.black};
+  font-size: 12px;
+`;

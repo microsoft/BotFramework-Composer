@@ -4,11 +4,11 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
-import React, { useMemo, useRef, useState, useEffect, useCallback } from 'react';
+import React, { useMemo, useState, useEffect, useCallback, Fragment } from 'react';
 import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
 import { PublishTarget } from '@bfc/shared';
-import { TextField, ITextFieldProps, ITextField } from 'office-ui-fabric-react/lib/TextField';
+import { TextField, ITextFieldProps } from 'office-ui-fabric-react/lib/TextField';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { ActionButton, Button } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
@@ -16,7 +16,9 @@ import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import get from 'lodash/get';
+import { QnAFile, DialogInfo, LuFile } from '@bfc/shared';
 
+import { getBaseName } from '../../utils/fileUtil';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { navigateTo } from '../../utils/navigation';
 import {
@@ -25,15 +27,19 @@ import {
   showAddLanguageModalState,
   publishTypesState,
   botDisplayNameState,
+  luFilesState,
+  qnaFilesState,
 } from '../../recoilModel/atoms';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
-import { dispatcherState } from '../../recoilModel';
+import { dispatcherState, validateDialogSelectorFamily } from '../../recoilModel';
 import { botProjectSpaceSelector } from '../../recoilModel/selectors/project';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 import { AddLanguageModal } from '../../components/MultiLanguage';
 import { languageListTemplates } from '../../components/MultiLanguage';
 import { CreatePublishTarget } from '../publish/createPublishTarget';
 import settingStorage from '../../utils/dialogSettingStorage';
+import ClickOnFocusTextField from '../../components/ClickOnFocusTextField';
+import { isLUISnQnARecognizerType } from '../../utils/dialogValidator';
 
 import { RuntimeSettings } from './runtime-settings/RuntimeSettings';
 import {
@@ -60,12 +66,12 @@ import {
   publishTargetsStyle,
   publishTargetsEditButton,
   marginBottom,
-  luiskeyStyle,
-  luisregionStyle,
   unknownIconStyle,
+  textFieldStyle,
+  defaultLanguageTextStyle,
+  languageTextStyle,
 } from './styles';
 
-// const CodeEditor = React.lazy(() => import('./code-editor'));
 interface BotProjectSettingsProps extends RouteComponentProps<{}> {
   projectId?: string;
   hasSkills: boolean;
@@ -117,6 +123,9 @@ const TableView: React.FC<BotProjectSettingsProps> = (props) => {
   const [addDialogHidden, setAddDialogHidden] = useState(true);
   const [editDialogHidden, setEditDialogHidden] = useState(true);
   const botName = useRecoilValue(botDisplayNameState(projectId));
+  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const luFiles = useRecoilValue(luFilesState(projectId));
+  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
 
   const [dialogProps, setDialogProps] = useState({
     title: formatMessage('Title'),
@@ -124,27 +133,24 @@ const TableView: React.FC<BotProjectSettingsProps> = (props) => {
     children: {},
   });
 
-  const luisKeyComponentRef = useRef<ITextField>(null);
-  const luisRegionComponentRef = useRef<ITextField>(null);
-  const qnASubscriptionKeyComponentRef = useRef<ITextField>(null);
-  const [isluisKeyComponentDisabled, setLuisKeyComponentDisabled] = useState<boolean>(!isRootBot && !skillLuisKey);
-  const [isluisregionComponentDisabled, setluisregionComponentDisabled] = useState<boolean>(
-    !isRootBot && !skillLuisRegion
-  );
-  const [isQnASubscriptionKeyComponentDisabled, setQnASubscriptionKeyComponentDisabled] = useState<boolean>(
-    !isRootBot && !skillqnaKey
-  );
+  // const [isluisKeyComponentDisabled, setLuisKeyComponentDisabled] = useState<boolean>(!isRootBot && !skillLuisKey);
+  // const [isluisregionComponentDisabled, setluisregionComponentDisabled] = useState<boolean>(
+  //   !isRootBot && !skillLuisRegion
+  // );
+  // const [isQnASubscriptionKeyComponentDisabled, setQnASubscriptionKeyComponentDisabled] = useState<boolean>(
+  //   !isRootBot && !skillqnaKey
+  // );
   useEffect(() => {
     if (projectId) {
       getPublishTargetTypes(projectId);
     }
   }, [projectId]);
 
-  useEffect(() => {
-    setLuisKeyComponentDisabled(!isRootBot && !skillLuisKey);
-    setluisregionComponentDisabled(!isRootBot && !skillLuisRegion);
-    setQnASubscriptionKeyComponentDisabled(!isRootBot && !skillqnaKey);
-  }, [projectId]);
+  // useEffect(() => {
+  //   setLuisKeyComponentDisabled(!isRootBot && !skillLuisKey);
+  //   setluisregionComponentDisabled(!isRootBot && !skillLuisRegion);
+  //   setQnASubscriptionKeyComponentDisabled(!isRootBot && !skillqnaKey);
+  // }, [projectId]);
 
   const [editDialogProps, setEditDialogProps] = useState({
     title: formatMessage('Title'),
@@ -281,7 +287,7 @@ const TableView: React.FC<BotProjectSettingsProps> = (props) => {
       <div css={appIdOrPassWordStyle}>
         <TextField
           aria-labelledby={'Microsoft AppId'}
-          errorMessage={hasSkills ? errorsMsg.MicrosoftAppId : ''}
+          errorMessage={hasSkills ? errorsMsg[projectId]?.MicrosoftAppId : ''}
           label={formatMessage('Microsoft AppId')}
           placeholder={'Enter Microsoft AppId'}
           required={hasSkills}
@@ -292,16 +298,28 @@ const TableView: React.FC<BotProjectSettingsProps> = (props) => {
               MicrosoftAppId: value,
             });
             if (value) {
-              setErrorsMsg({ ...errorsMsg, MicrosoftAppId: '' });
+              setErrorsMsg({
+                ...errorsMsg,
+                [projectId]: {
+                  ...errorsMsg[projectId],
+                  MicrosoftAppId: '',
+                },
+              });
             } else {
-              setErrorsMsg({ ...errorsMsg, MicrosoftAppId: formatMessage('Microsoft App Id is needed') });
+              setErrorsMsg({
+                ...errorsMsg,
+                [projectId]: {
+                  ...errorsMsg[projectId],
+                  MicrosoftAppId: formatMessage('Microsoft App Id is needed'),
+                },
+              });
             }
           }}
           onRenderLabel={onRenderLabel}
         />
         <TextField
           aria-labelledby={'Microsoft Password'}
-          errorMessage={hasSkills ? errorsMsg.MicrosoftPassword : ''}
+          errorMessage={hasSkills ? errorsMsg[projectId]?.MicrosoftAppPassword : ''}
           label={formatMessage('Microsoft Password')}
           placeholder={'Enter Microsoft Password'}
           required={hasSkills}
@@ -313,117 +331,192 @@ const TableView: React.FC<BotProjectSettingsProps> = (props) => {
               MicrosoftAppPassword: value,
             });
             if (value) {
-              setErrorsMsg({ ...errorsMsg, MicrosoftPassword: '' });
+              setErrorsMsg({
+                ...errorsMsg,
+                [projectId]: {
+                  ...errorsMsg[projectId],
+                  MicrosoftAppPassword: '',
+                },
+              });
             } else {
-              setErrorsMsg({ ...errorsMsg, MicrosoftPassword: formatMessage('Microsoft App Password is needed') });
+              setErrorsMsg({
+                ...errorsMsg,
+                [projectId]: {
+                  ...errorsMsg[projectId],
+                  MicrosoftAppPassword: formatMessage('Microsoft App Password is needed'),
+                },
+              });
             }
           }}
           onRenderLabel={onRenderLabel}
         />
       </div>
     );
-  }, [projectId, MicrosoftAppId, MicrosoftAppPassword]);
+  }, [projectId, MicrosoftAppId, MicrosoftAppPassword, errorsMsg, hasSkills]);
+
+  const isLUISMandatory = (dialogs: DialogInfo[], luFiles: LuFile[]) => {
+    return dialogs.some((dialog) => {
+      const isDefault = isLUISnQnARecognizerType(dialog);
+      const luFile = luFiles.find((luFile) => getBaseName(luFile.id) === dialog.id);
+      return isDefault && luFile?.content;
+    });
+  };
+
+  const isQnAKeyMandatory = (dialogs: DialogInfo[], qnaFiles: QnAFile[]) => {
+    return dialogs.some((dialog) => {
+      const isDefault = isLUISnQnARecognizerType(dialog);
+      const qnaFile = qnaFiles.find((qnaFile) => getBaseName(qnaFile.id) === dialog.id);
+      return isDefault && qnaFile?.content;
+    });
+  };
 
   const ExternalService = useMemo(() => {
+    const isLUISKeyNeeded = isLUISMandatory(dialogs, luFiles);
+    const isQnAKeyNeeded = isQnAKeyMandatory(dialogs, qnaFiles);
     return (
       <div css={appIdOrPassWordStyle}>
-        <TextField
-          aria-labelledby={'LUIS key'}
-          componentRef={luisKeyComponentRef}
-          disabled={isluisKeyComponentDisabled}
-          label={formatMessage('LUIS key')}
-          placeholder={isRootBot ? 'Enter LUIS key' : "<---- Same as root bot's LUIS key ---->"}
-          styles={luiskeyStyle(isluisKeyComponentDisabled)}
-          value={isRootBot ? rootLuisKey : skillLuisKey}
-          onChange={async (e, value) => {
-            await setSettings(projectId, {
-              ...settings,
-              luis: { ...settings.luis, authoringKey: value ? value : '' },
-            });
-            if (!isRootBot && !value) {
-              setLuisKeyComponentDisabled(true);
-            }
-          }}
-          onRenderLabel={onRenderLabel}
-        />
-        {!isRootBot && (
-          <ActionButton
-            styles={manageBotLanguage}
-            onClick={() => {
-              setLuisKeyComponentDisabled(false);
-              luisKeyComponentRef.current?.focus();
+        {isRootBot && (
+          <TextField
+            aria-labelledby={'LUIS key'}
+            errorMessage={isLUISKeyNeeded ? errorsMsg[projectId]?.luisKey : ''}
+            label={formatMessage('LUIS key')}
+            placeholder={'Enter LUIS key'}
+            required={isLUISKeyNeeded}
+            value={rootLuisKey}
+            onChange={async (e, value) => {
+              await setSettings(projectId, {
+                ...settings,
+                luis: { ...settings.luis, authoringKey: value ? value : '' },
+              });
+              if (value) {
+                setErrorsMsg({
+                  ...errorsMsg,
+                  [projectId]: {
+                    ...errorsMsg[projectId],
+                    luisKey: '',
+                  },
+                });
+              } else {
+                setErrorsMsg({
+                  ...errorsMsg,
+                  [projectId]: {
+                    ...errorsMsg[projectId],
+                    luisKey: formatMessage('LUIS Key is needed'),
+                  },
+                });
+              }
             }}
-          >
-            {formatMessage('Use custom LUIS key')}
-          </ActionButton>
+            onRenderLabel={onRenderLabel}
+          />
         )}
-        <TextField
-          aria-labelledby={'LUIS region'}
-          componentRef={luisRegionComponentRef}
-          disabled={isluisregionComponentDisabled}
-          label={formatMessage('LUIS region')}
-          placeholder={isRootBot ? 'Enter LUIS key' : "<---- Same as root bot's LUIS region ---->"}
-          styles={luisregionStyle(isluisregionComponentDisabled)}
-          value={isRootBot ? rootLuisRegion : skillLuisRegion}
-          onChange={async (e, value) => {
-            await setSettings(projectId, {
-              ...settings,
-              luis: { ...settings.luis, authoringRegion: value ? value : '' },
-            });
-            if (!isRootBot && !value) {
-              setluisregionComponentDisabled(true);
-            }
-          }}
-          onRenderLabel={onRenderLabel}
-        />
+
         {!isRootBot && (
-          <ActionButton
-            styles={manageBotLanguage}
-            onClick={() => {
-              setluisregionComponentDisabled(false);
-              luisRegionComponentRef.current?.focus();
+          <ClickOnFocusTextField
+            required
+            ariaLabelledby={'LUIS key'}
+            buttonText={formatMessage('Use custom LUIS key')}
+            label={formatMessage('LUIS key')}
+            placeholder={'Enter LUIS key'}
+            placeholderOnDisable={"<---- Same as root bot's LUIS key ---->"}
+            value={skillLuisKey}
+            onChange={async (e, value) => {
+              await setSettings(projectId, {
+                ...settings,
+                luis: { ...settings.luis, authoringKey: value ? value : '' },
+              });
             }}
-          >
-            {formatMessage('Use custom LUIS region')}
-          </ActionButton>
+          />
         )}
-        <TextField
-          aria-labelledby={'QnA Maker Subscription key'}
-          componentRef={qnASubscriptionKeyComponentRef}
-          disabled={isQnASubscriptionKeyComponentDisabled}
-          label={formatMessage('QnA Maker Subscription key')}
-          placeholder={isRootBot ? 'Enter QnA Maker Subscription key' : "<---- Same as root bot's QnA key ---->"}
-          styles={luisregionStyle(isQnASubscriptionKeyComponentDisabled)}
-          value={isRootBot ? rootqnaKey : skillqnaKey}
-          onChange={async (e, value) => {
-            await setSettings(projectId, {
-              ...settings,
-              qna: { ...settings.qna, subscriptionKey: value ? value : '' },
-            });
-            if (!isRootBot && !value) {
-              setQnASubscriptionKeyComponentDisabled(true);
-            }
-          }}
-          onRenderLabel={onRenderLabel}
-        />
-        {!isRootBot && (
-          <ActionButton
-            styles={manageBotLanguage}
-            onClick={() => {
-              setQnASubscriptionKeyComponentDisabled(false);
-              qnASubscriptionKeyComponentRef.current?.focus();
+        {isRootBot && (
+          <TextField
+            aria-labelledby={'LUIS region'}
+            label={formatMessage('LUIS region')}
+            placeholder={'Enter LUIS region'}
+            styles={textFieldStyle}
+            value={rootLuisRegion}
+            onChange={async (e, value) => {
+              await setSettings(projectId, {
+                ...settings,
+                luis: { ...settings.luis, authoringRegion: value ? value : '' },
+              });
             }}
-          >
-            {formatMessage('Use custom QnA Maker Subscription key')}
-          </ActionButton>
+            onRenderLabel={onRenderLabel}
+          />
+        )}
+        {!isRootBot && (
+          <ClickOnFocusTextField
+            required
+            ariaLabelledby={'LUIS region'}
+            buttonText={formatMessage('Use custom LUIS region')}
+            label={formatMessage('LUIS region')}
+            placeholder={'Enter LUIS region'}
+            placeholderOnDisable={"<---- Same as root bot's LUIS region ---->"}
+            value={skillLuisRegion}
+            onChange={async (e, value) => {
+              await setSettings(projectId, {
+                ...settings,
+                luis: { ...settings.luis, authoringRegion: value ? value : '' },
+              });
+            }}
+          />
+        )}
+        {isRootBot && (
+          <TextField
+            aria-labelledby={'QnA Maker Subscription key'}
+            errorMessage={isQnAKeyNeeded ? errorsMsg[projectId]?.qnaKey : ''}
+            label={formatMessage('QnA Maker Subscription key')}
+            placeholder={'Enter QnA Maker Subscription key'}
+            required={isQnAKeyNeeded}
+            styles={textFieldStyle}
+            value={rootqnaKey}
+            onChange={async (e, value) => {
+              await setSettings(projectId, {
+                ...settings,
+                qna: { ...settings.qna, subscriptionKey: value ? value : '' },
+              });
+              if (value) {
+                setErrorsMsg({
+                  ...errorsMsg,
+                  [projectId]: {
+                    ...errorsMsg[projectId],
+                    qnaKey: '',
+                  },
+                });
+              } else {
+                setErrorsMsg({
+                  ...errorsMsg,
+                  [projectId]: {
+                    ...errorsMsg[projectId],
+                    qnaKey: formatMessage('QnA Key is needed'),
+                  },
+                });
+              }
+            }}
+            onRenderLabel={onRenderLabel}
+          />
+        )}
+
+        {!isRootBot && (
+          <ClickOnFocusTextField
+            required
+            ariaLabelledby={'QnA Maker Subscription key'}
+            buttonText={formatMessage('Use custom QnA Maker Subscription key')}
+            label={formatMessage('QnA Maker Subscription key')}
+            placeholder={'Enter QnA Maker Subscription key'}
+            placeholderOnDisable={"<---- Same as root bot's QnA Maker Subscription key ---->"}
+            value={skillqnaKey}
+            onChange={async (e, value) => {
+              await setSettings(projectId, {
+                ...settings,
+                qna: { ...settings.qna, subscriptionKey: value ? value : '' },
+              });
+            }}
+          />
         )}
       </div>
     );
   }, [
     projectId,
-    isluisKeyComponentDisabled,
-    isluisregionComponentDisabled,
-    isQnASubscriptionKeyComponentDisabled,
     isRootBot,
     rootLuisKey,
     skillLuisKey,
@@ -431,9 +524,16 @@ const TableView: React.FC<BotProjectSettingsProps> = (props) => {
     skillLuisRegion,
     rootqnaKey,
     skillqnaKey,
+    dialogs,
+    qnaFiles,
+    luFiles,
+    errorsMsg,
   ]);
 
   const BotLanguage = useMemo(() => {
+    const index = languageListOptions.findIndex((l) => l.key === defaultLanguage);
+    const dl = languageListOptions.splice(index, 1)[0];
+    languageListOptions.unshift(dl);
     return (
       <div css={appIdOrPassWordStyle}>
         <div css={botLanguageDescriptionStyle}>
@@ -444,7 +544,15 @@ const TableView: React.FC<BotProjectSettingsProps> = (props) => {
         <div css={botLanguageFieldStyle}>
           {languageListOptions.map((l) => (
             <div key={l.key} css={languageItem}>
-              {l.text}
+              {l.key === defaultLanguage && (
+                <Fragment>
+                  <div css={languageTextStyle}>
+                    {l.text}
+                    <span css={defaultLanguageTextStyle}> {'DEFAULT LANGUAGE'}</span>
+                  </div>
+                </Fragment>
+              )}
+              {l.key !== defaultLanguage && l.text}
             </div>
           ))}
         </div>
@@ -453,7 +561,7 @@ const TableView: React.FC<BotProjectSettingsProps> = (props) => {
         </ActionButton>
       </div>
     );
-  }, [projectId, languageListOptions]);
+  }, [projectId, defaultLanguage, languageListOptions]);
 
   const DeleteBotButton = useMemo(() => {
     const openDeleteBotModal = async () => {
