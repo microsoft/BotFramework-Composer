@@ -3,7 +3,7 @@
 
 import { RequestHandler } from 'express-serve-static-core';
 import { Debugger } from 'debug';
-import { PublishPlugin, RuntimeTemplate, BotTemplate } from '@botframework-composer/types';
+import { PublishPlugin, RuntimeTemplate, BotTemplate, IBotProject, UserIdentity } from '@botframework-composer/types';
 
 import logger from './logger';
 import { ExtensionContext } from './extensionContext';
@@ -106,6 +106,10 @@ export class ExtensionRegistration {
    *************************************************************************************/
   public getRuntime(type: string | undefined): RuntimeTemplate {
     return this.context.getRuntime(type);
+  }
+
+  public async getProjectById(projectId: string, user?: UserIdentity): Promise<IBotProject> {
+    return this.context.getProjectById(projectId, user);
   }
 
   /**************************************************************************************

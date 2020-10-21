@@ -45,6 +45,8 @@ export async function start(): Promise<number | string> {
 
   // make sure plugin has access to our express...
   ExtensionContext.useExpress(app);
+  // and to the bot project service
+  ExtensionContext.useBotProjectService(BotProjectService);
 
   // load all installed plugins
   setEnvDefault('COMPOSER_EXTENSION_DATA', path.resolve(__dirname, '../../../.composer/extensions.json'));

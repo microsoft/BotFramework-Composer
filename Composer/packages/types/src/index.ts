@@ -3,6 +3,7 @@
 
 export * from './diagnostic';
 export * from './dialogUtils';
+export * from './project';
 export * from './extension';
 export * from './indexers';
 export * from './publish';

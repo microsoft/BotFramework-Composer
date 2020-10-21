@@ -10,7 +10,6 @@ import { StorageController } from '../controllers/storage';
 import { PublishController } from '../controllers/publisher';
 import { AssetController } from '../controllers/asset';
 import { EjectController } from '../controllers/eject';
-import { LibraryController } from '../controllers/library';
 import { FormDialogController } from '../controllers/formDialog';
 import * as ExtensionsController from '../controllers/extensions';
 
@@ -68,12 +67,6 @@ router.post('/runtime/eject/:projectId/:template', EjectController.eject);
 
 //assets
 router.get('/assets/projectTemplates', AssetController.getProjTemplates);
-
-// import
-router.post('/projects/:projectId/import', LibraryController.import);
-router.post('/projects/:projectId/unimport', LibraryController.removeImported);
-router.get('/projects/:projectId/installedComponents', LibraryController.getComponents);
-router.get('/library', LibraryController.getLibrary);
 
 router.use('/assets/locales/', express.static(path.join(__dirname, '..', '..', 'src', 'locales')));
 

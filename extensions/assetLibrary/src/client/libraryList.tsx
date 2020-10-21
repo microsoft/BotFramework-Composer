@@ -20,12 +20,26 @@ import {
   IOverflowSetItemProps,
 } from "office-ui-fabric-react";
 import React, { useState, useEffect, useMemo, Fragment } from "react";
-import { LibraryRef } from "@botframework-composer/types";
-import format from "date-fns/format";
 
 import { listRoot, tableView, detailList } from "./styles";
 
+export interface LibraryRef {
+  name: string;
+  version: string;
+  authors: string[];
+  releaseNotes: string;
+  keywords: string[];
+  license: string;
+  repository: string;
+  copyright: string;
+  icon: string;
+  description: string;
+  type: string;
+}
+
+
 export interface ILibraryListProps {
+  disabled: boolean;
   items: LibraryRef[];
   groups: IGroup[];
   redownload: (evt: any) => void;
@@ -50,7 +64,7 @@ function onRenderDetailsHeader(props, defaultRender) {
 }
 
 export const LibraryList: React.FC<ILibraryListProps> = (props) => {
-  const { items, groups } = props;
+  const { items, groups, disabled } = props;
   const [selectIndex, setSelectedIndex] = useState<number>();
   const [currentSort, setSort] = useState({
     key: "ItemName",
@@ -88,24 +102,6 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
       isPadded: true,
     },
     {
-      key: "PublishDate",
-      name: "Date",
-      fieldName: "date",
-      minWidth: 70,
-      maxWidth: 90,
-      isRowHeader: true,
-      isResizable: true,
-      data: "string",
-      onRender: (item: LibraryRef) => {
-        if (item.lastImported) {
-          return <span>{format(item.lastImported, "MM-DD-YYY")}</span>;
-        } else {
-          return "";
-        }
-      },
-      isPadded: true,
-    },
-    {
       key: "Version",
       name: "Version",
       fieldName: "version",
@@ -119,6 +115,34 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
       },
       isPadded: true,
     },
+    {
+      key: "Description",
+      name: "Description",
+      fieldName: "description",
+      minWidth: 150,
+      maxWidth: 600,
+      isRowHeader: true,
+      isResizable: true,
+      data: "string",
+      onRender: (item: LibraryRef) => {
+        return <span>{item.description}</span>;
+      },
+      isPadded: true,
+    },
+    // {
+    //   key: "AuthorName",
+    //   name: "Authors",
+    //   fieldName: "authors",
+    //   minWidth: 150,
+    //   maxWidth: 300,
+    //   isRowHeader: true,
+    //   isResizable: true,
+    //   data: "string",
+    //   onRender: (item: LibraryRef) => {
+    //     return <span>{item.authors ? item.authors.join(',') : ''}</span>;
+    //   },
+    //   isPadded: true,
+    // },
     {
       key: "actions",
       name: "",
@@ -152,6 +176,7 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
                 <DefaultButton
                   text={formatMessage("Install")}
                   onClick={props.install}
+                  disabled={disabled}
                 />
               </Fragment>
             )}

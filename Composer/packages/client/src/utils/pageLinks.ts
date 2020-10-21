@@ -64,13 +64,6 @@ export const topLinks = (projectId: string, openedDialogId: string, pluginPages:
       exact: true,
       disabled: !botLoaded,
     },
-    {
-      to: `/bot/${projectId}/library`,
-      iconName: 'Library',
-      labelName: formatMessage('Asset Library'),
-      exact: true,
-      disabled: !botLoaded,
-    },
     ...(process.env.COMPOSER_ENABLE_FORMS
       ? [
           {

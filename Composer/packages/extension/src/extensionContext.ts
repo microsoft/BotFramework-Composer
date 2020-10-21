@@ -9,7 +9,13 @@ import { Express } from 'express';
 import { pathToRegexp } from 'path-to-regexp';
 import glob from 'globby';
 import formatMessage from 'format-message';
-import { UserIdentity, ExtensionCollection, RuntimeTemplate } from '@botframework-composer/types';
+import {
+  UserIdentity,
+  ExtensionCollection,
+  RuntimeTemplate,
+  BotProjectService,
+  IBotProject,
+} from '@botframework-composer/types';
 
 import logger from './logger';
 import { ExtensionRegistration } from './extensionRegistration';
@@ -20,6 +26,7 @@ export const DEFAULT_RUNTIME = 'csharp-azurewebapp';
 class ExtensionContext {
   private _passport: passport.PassportStatic;
   private _webserver: Express | undefined;
+  private _botprojectservice: BotProjectService | undefined;
   public loginUri = '/login';
 
   public extensions: ExtensionCollection;
@@ -46,6 +53,10 @@ class ExtensionContext {
     return this._webserver;
   }
 
+  public get botProjectService() {
+    return this._botprojectservice;
+  }
+
   // allow webserver to be set programmatically
   public useExpress(webserver: Express) {
     this._webserver = webserver;
@@ -66,6 +77,10 @@ class ExtensionContext {
       }
       next && next();
     });
+  }
+
+  public useBotProjectService(service: BotProjectService) {
+    this._botprojectservice = service;
   }
 
   public async loadPlugin(name: string, description: string, thisPlugin: any) {
@@ -137,6 +152,14 @@ class ExtensionContext {
 
   public async getUserFromRequest(req): Promise<UserIdentity | undefined> {
     return req.user || undefined;
+  }
+
+  public async getProjectById(projectId: string, user?: UserIdentity): Promise<IBotProject> {
+    if (this.botProjectService !== undefined) {
+      return this.botProjectService.getProjectById(projectId, user);
+    } else {
+      throw new Error('No BotProjectService available');
+    }
   }
 }
 

@@ -5,12 +5,11 @@
 import { jsx } from "@emotion/core";
 import React, { useState, Fragment, useEffect } from "react";
 import formatMessage from "format-message";
-import { Dialog, DialogType } from "office-ui-fabric-react";
-import { LibraryRef } from "@botframework-composer/types";
+import { Dialog, DialogType, MessageBar, MessageBarType, MessageBarButton } from "office-ui-fabric-react";
 import {
   render,
-  useProjectApi,
   useHttpClient,
+  useProjectApi,
   useApplicationApi,
 } from "@bfc/extension-client";
 
@@ -24,7 +23,7 @@ import {
   contentEditor,
 } from "./styles";
 import { ImportDialog } from "./importDialog";
-import { LibraryList } from "./libraryList";
+import { LibraryRef, LibraryList } from "./libraryList";
 import { WorkingModal } from "./workingModal";
 
 const DEFAULT_CATEGORY = formatMessage("Available");
@@ -33,8 +32,7 @@ const Library: React.FC = () => {
   const [items, setItems] = useState<LibraryRef[]>([]);
   const [groups, setGroups] = useState<any[]>([]);
   const { settings, projectId, reloadProject } = useProjectApi();
-  const { setApplicationLevelError } = useApplicationApi();
-  const httpClient = useHttpClient();
+  const { setApplicationLevelError, navigateTo } = useApplicationApi();
 
   const [ejectedRuntime, setEjectedRuntime] = useState<boolean>(false);
   const [availableLibraries, updateAvailableLibraries] = useState<any[]>([]);
@@ -43,16 +41,42 @@ const Library: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState<LibraryRef>();
   const [working, setWorking] = useState(false);
   const [addDialogHidden, setAddDialogHidden] = useState(true);
+  const httpClient = useHttpClient();
+  const API_ROOT = '';
+
+  const installComponentAPI = async (projectId: string, packageName: string, version: string, isUpdating: boolean) => {
+    return httpClient.post(`${API_ROOT}/projects/${projectId}/import`, {
+      package: packageName,
+      version: version,
+      isUpdating,
+    });
+  }
+
+  const getLibraryAPI = async () => {
+    return httpClient.get(`${API_ROOT}/library`);
+  }
+
+  const getInstalledComponentsAPI = async (projectId: string) => {
+    return httpClient.get(
+      `${API_ROOT}/projects/${projectId}/installedComponents`
+    );
+  }
+
+  const uninstallComponentAPI  = async (projectId: string, packageName: string) => {
+    return httpClient.post(`${API_ROOT}/projects/${projectId}/unimport`, {
+      package: packageName,
+    });
+  }
 
   useEffect(() => {
     getLibraries();
-    getInstalledLibraries();
     if (
       settings.runtime &&
       settings.runtime.customRuntime === true &&
       settings.runtime.path
     ) {
       setEjectedRuntime(true);
+      getInstalledLibraries();
     }
   }, []);
 
@@ -60,15 +84,17 @@ const Library: React.FC = () => {
     const groups: any[] = [];
     let items: any[] = [];
 
-    items = items.concat(installedComponents || []);
+    if (installedComponents.length) {
+      items = items.concat(installedComponents || []);
 
-    groups.push({
-      key: "installed",
-      name: "Installed",
-      startIndex: 0,
-      count: installedComponents ? installedComponents.length : 0,
-      level: 0,
-    });
+      groups.push({
+        key: "installed",
+        name: "Installed",
+        startIndex: 0,
+        count: installedComponents ? installedComponents.length : 0,
+        level: 0,
+      });
+    }
 
     // find all categories listed in the available libraries
     const categories = [DEFAULT_CATEGORY];
@@ -104,7 +130,7 @@ const Library: React.FC = () => {
   const toolbarItems: IToolbarItem[] = [
     {
       type: "action",
-      text: formatMessage("Import Library"),
+      text: formatMessage("Install Package"),
       buttonProps: {
         iconProps: {
           iconName: "Add",
@@ -113,7 +139,7 @@ const Library: React.FC = () => {
       },
       align: "left",
       dataTestid: "publishPage-ToolBar-Add",
-      disabled: false,
+      disabled: !ejectedRuntime,
     },
   ];
 
@@ -125,9 +151,9 @@ const Library: React.FC = () => {
     const existing = installedComponents?.find((l) => l.name === packageName);
     let okToProceed = true;
     if (existing) {
-      const title = formatMessage("Update Library");
+      const title = formatMessage("Update Package");
       const msg = formatMessage(
-        "Any changes you made to this library will be lost! Are you sure you want to continue?"
+        "Any changes you made to this package will be lost! Are you sure you want to continue?"
       );
       // okToProceed = (await OpenConfirmModal(title, msg)) ? true : false;
       okToProceed = confirm(msg);
@@ -136,18 +162,14 @@ const Library: React.FC = () => {
     if (okToProceed) {
       closeDialog();
       setWorking(true);
-      await importLibrary(packageName, version, isUpdating || false);
+      await importComponent(packageName, version, isUpdating || false);
       setWorking(false);
     }
   };
 
-  const importLibrary = async (packageName, version, isUpdating) => {
+  const importComponent = async (packageName, version, isUpdating) => {
     try {
-      const results = await httpClient.post(`/projects/${projectId}/import`, {
-        package: packageName,
-        version: version,
-        isUpdating,
-      });
+      const results = await installComponentAPI(projectId, packageName, version, isUpdating);
 
       // check to see if there was a conflict that requires confirmation
       if (results.data.success === false) {
@@ -157,11 +179,7 @@ const Library: React.FC = () => {
         );
         // if (await OpenConfirmModal(title, msg)) {
         if (confirm(msg)) {
-          await httpClient.post(`/projects/${projectId}/import`, {
-            package: packageName,
-            version: version,
-            isUpdating: true,
-          });
+          await await installComponentAPI(projectId, packageName, version, true);
         }
       }
 
@@ -184,7 +202,7 @@ const Library: React.FC = () => {
 
   const getLibraries = async () => {
     try {
-      const response = await httpClient.get(`/library`);
+      const response = await getLibraryAPI();
       updateAvailableLibraries(response.data);
     } catch (err) {
       setApplicationLevelError({
@@ -200,9 +218,7 @@ const Library: React.FC = () => {
 
   const getInstalledLibraries = async () => {
     try {
-      const response = await httpClient.get(
-        `/projects/${projectId}/installedComponents`
-      );
+      const response = await getInstalledComponentsAPI(projectId);
       updateInstalledComponents(response.data.components);
     } catch (err) {
       setApplicationLevelError({
@@ -224,11 +240,11 @@ const Library: React.FC = () => {
     return importFromWeb(selectedItem?.name, selectedItem?.version, true);
   };
 
-  const removeLibrary = async () => {
+  const removeComponent = async () => {
     if (selectedItem) {
-      const title = formatMessage("Remove Library");
+      const title = formatMessage("Remove Package");
       const msg = formatMessage(
-        "Any changes you made to this library will be lost! In addition, this may leave your bot in a broken state. Are you sure you want to continue?"
+        "Any changes you made to this package will be lost! In addition, this may leave your bot in a broken state. Are you sure you want to continue?"
       );
       // const okToProceed = (await OpenConfirmModal(title, msg)) ? true : false;
       const okToProceed = confirm(msg);
@@ -236,9 +252,10 @@ const Library: React.FC = () => {
         closeDialog();
         setWorking(true);
         try {
-          await httpClient.post(`/projects/${projectId}/unimport`, {
-            package: selectedItem.name,
-          });
+          await uninstallComponentAPI(projectId, selectedItem.name);
+
+          // reload installed list
+          await getInstalledLibraries();
 
           // reload modified content
           await reloadProject();
@@ -268,6 +285,11 @@ const Library: React.FC = () => {
     }
   };
 
+  const navigateToEject = (evt: any): void => {
+    // TODO: update this when navigateTo is available
+    navigateTo(`/settings/bot/${projectId}/runtime`);
+  };
+
   return (
     <Fragment>
       <Dialog
@@ -284,18 +306,25 @@ const Library: React.FC = () => {
       </Dialog>
       <WorkingModal
         hidden={!working}
-        title={formatMessage("Importing library...")}
+        title={formatMessage("Installing package...")}
       />
       <Toolbar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{formatMessage("Package Library")}</h1>
       </div>
       {!ejectedRuntime && (
-        <div>
-          To install components, this project must first have an ejected
-          runtime. Please navigate to the runtime settings page and eject the
-          runtime first.
-        </div>
+        <MessageBar
+          messageBarType={MessageBarType.warning}
+          isMultiline={false}
+          actions={
+            <div>
+              <MessageBarButton onClick={navigateToEject}>{formatMessage('Eject runtime')}</MessageBarButton>
+            </div>
+          }
+        >
+          To install components, this project must have an ejected runtime. Please navigate to the runtime settings
+          page.
+        </MessageBar>
       )}
       <div css={ContentStyle} data-testid="installedLibraries" role="main">
         <div
@@ -305,12 +334,13 @@ const Library: React.FC = () => {
         >
           <Fragment>
             <LibraryList
+              disabled={!ejectedRuntime}
               groups={groups}
               install={install}
               isInstalled={isInstalled}
               items={items}
               redownload={redownload}
-              removeLibrary={removeLibrary}
+              removeLibrary={removeComponent}
               updateItems={setItems}
               onItemClick={selectItem}
             />
