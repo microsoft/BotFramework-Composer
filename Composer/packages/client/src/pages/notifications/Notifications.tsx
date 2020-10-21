@@ -48,7 +48,7 @@ const Notifications: React.FC<RouteComponentProps<{}>> = () => {
       //path is like main.trigers[0].actions[0]
       //uri = id?selected=triggers[0]&focused=triggers[0].actions[0]
       const { projectId, id, dialogPath } = item;
-      const uri = convertPathToUrl(projectId, id, dialogPath);
+      const uri = convertPathToUrl(projectId, id, dialogPath ?? '');
       navigateTo(uri);
     },
     [NotificationType.SKILL]: (item: INotification) => {
