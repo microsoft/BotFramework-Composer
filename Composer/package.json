@@ -45,6 +45,7 @@
     "build:client": "yarn workspace @bfc/client build",
     "build:extensions": "node scripts/compileExtensions.js",
     "start": "cross-env NODE_ENV=production PORT=3000 yarn start:server",
+    "start:forms":"cross-env COMPOSER_ENABLE_FORMS=true yarn start:dev",
     "startall": "yarn start",
     "start:dev": "concurrently  \"npm:start:client\" \"npm:start:server:dev\"",
     "start:client": "yarn workspace @bfc/client start",
