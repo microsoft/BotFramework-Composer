@@ -15,7 +15,7 @@ const APPLICATION_KEYS = [
   'data.userSettings',
   'data.flowZoomRate',
 
-  'api.navTo',
+  'api.navigateTo',
   'api.updateUserSettings',
   'api.announce',
   'api.addCoachMarkRef',
