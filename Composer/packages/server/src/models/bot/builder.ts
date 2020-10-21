@@ -10,6 +10,8 @@ import { Path } from '../../utility/path';
 import { IFileStorage } from '../storage/interface';
 import log from '../../logger';
 
+import { luImportResolverGenerator, getLUFiles, getQnAFiles } from './luResolver';
+
 const crossTrainer = require('@microsoft/bf-lu/lib/parser/cross-train/crossTrainer.js');
 const luBuild = require('@microsoft/bf-lu/lib/parser/lubuild/builder.js');
 const qnaBuild = require('@microsoft/bf-lu/lib/parser/qnabuild/builder.js');
@@ -115,7 +117,8 @@ export class Builder {
       return { content: file.content, id: file.name };
     });
 
-    const result = await crossTrainer.crossTrain(luContents, qnaContents, this.crossTrainConfig, {});
+    const importResolver = luImportResolverGenerator([...getLUFiles(allFiles), ...getQnAFiles(allFiles)]);
+    const result = await crossTrainer.crossTrain(luContents, qnaContents, this.crossTrainConfig, { importResolver });
 
     await this.writeFiles(result.luResult);
     await this.writeFiles(result.qnaResult);
