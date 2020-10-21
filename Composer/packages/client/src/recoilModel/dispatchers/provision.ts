@@ -8,7 +8,7 @@ import { provisionStatusState, settingsState } from '../atoms/botState';
 import { getAccessTokenInCache, getGraphTokenInCache } from '../../utils/auth';
 import { CardProps } from '../../components/NotificationCard';
 
-import { addNotificationInternal, createNotifiction, deleteNotificationInternal } from './notification';
+import { addNotificationInternal, createNotifiction, updateNotificationInternal } from './notification';
 import httpClient from './../../utils/httpUtil';
 
 export const provisionDispatcher = () => {
@@ -34,10 +34,10 @@ export const provisionDispatcher = () => {
     };
   };
 
-  const updateNotification = (callbackHelpers: CallbackInterface, oldNotificationId, newNotification) => {
-    deleteNotificationInternal(callbackHelpers, oldNotificationId);
-    addNotificationInternal(callbackHelpers, newNotification);
-  };
+  // const updateNotification = (callbackHelpers: CallbackInterface, oldNotificationId, newNotification) => {
+  //   deleteNotificationInternal(callbackHelpers, oldNotificationId);
+  //   addNotificationInternal(callbackHelpers, newNotification);
+  // };
 
   const provisionToTarget = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (config: any, type: string, projectId: string) => {
@@ -88,9 +88,8 @@ export const provisionDispatcher = () => {
     projectId: string,
     targetName: string,
     targetType: string,
-    id: string
+    notificationId: string
   ) => {
-    let notificationId = id;
     const timer = setInterval(async () => {
       try {
         const response = await httpClient.get(`/provision/${projectId}/status/${targetType}/${targetName}/${jobId}`);
@@ -112,9 +111,16 @@ export const provisionDispatcher = () => {
           });
 
           // set notification into success
-          const newNotification = createNotifiction(getProvisionSuccessNotification(response.data.message));
-          updateNotification(callbackHelpers, notificationId, newNotification);
-          notificationId = newNotification.id;
+          // const newNotification = createNotifiction(getProvisionSuccessNotification(response.data.message));
+          // updateNotification(callbackHelpers, notificationId, newNotification);
+          // notificationId = newNotification.id;
+
+          // update notification
+          updateNotificationInternal(
+            callbackHelpers,
+            notificationId,
+            getProvisionSuccessNotification(response.data.message)
+          );
           // delete provisionStatus
           callbackHelpers.set(provisionStatusState(projectId), (status) => {
             delete status[targetName];
@@ -122,16 +128,21 @@ export const provisionDispatcher = () => {
           });
         } else {
           // set notification into success
-          const newNotification = createNotifiction(getProvisionPendingNotification(response.data.message));
-          // update notification
-          updateNotification(callbackHelpers, notificationId, newNotification);
-          notificationId = newNotification.id;
+          // const newNotification = createNotifiction(getProvisionPendingNotification(response.data.message));
+          // // update notification
+          // updateNotification(callbackHelpers, notificationId, newNotification);
+          // notificationId = newNotification.id;
+          updateNotificationInternal(
+            callbackHelpers,
+            notificationId,
+            getProvisionPendingNotification(response.data.message)
+          );
 
           // update provision status
           const statObj = await callbackHelpers.snapshot.getPromise(provisionStatusState(projectId));
           const stat = statObj[targetName];
           console.log(stat);
-          const newStat = { ...stat, ...response.data, notificationId: newNotification.id };
+          const newStat = { ...stat, ...response.data, notificationId };
           console.log(newStat);
           // update provision status
           callbackHelpers.set(provisionStatusState(projectId), (status) => ({
@@ -142,12 +153,18 @@ export const provisionDispatcher = () => {
       } catch (err) {
         console.log(err.response.data);
         // update notification
-        const newNotification = createNotifiction(
+        // const newNotification = createNotifiction(
+        //   getProvisionFailureNotification(err.response.data?.message || 'Error')
+        // );
+        // updateNotification(callbackHelpers, notificationId, newNotification);
+        // notificationId = newNotification.id;
+
+        updateNotificationInternal(
+          callbackHelpers,
+          notificationId,
           getProvisionFailureNotification(err.response.data?.message || 'Error')
         );
-        updateNotification(callbackHelpers, notificationId, newNotification);
-        notificationId = newNotification.id;
-        const newStat = { ...err.response.data, notificationId: newNotification.id };
+        const newStat = { ...err.response.data, notificationId };
         console.log(newStat);
         // update provision status
         callbackHelpers.set(provisionStatusState(projectId), (status) => ({
