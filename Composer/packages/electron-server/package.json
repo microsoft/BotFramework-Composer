@@ -47,7 +47,7 @@
     "@types/morgan": "^1.7.35",
     "@types/node": "^13.7.7",
     "@types/rimraf": "^2.0.2",
-    "electron": "8.2.4",
+    "electron": "8.5.2",
     "electron-builder": "^22.6.0",
     "fs-extra": "^9.0.0",
     "js-yaml": "^3.13.1",
