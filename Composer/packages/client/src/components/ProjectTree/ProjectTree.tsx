@@ -14,7 +14,12 @@ import { useRecoilValue } from 'recoil';
 import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 import isEqual from 'lodash/isEqual';
 
-import { dispatcherState, currentProjectIdState, botProjectSpaceSelector } from '../../recoilModel';
+import {
+  dispatcherState,
+  rootBotProjectIdSelector,
+  botProjectSpaceSelector,
+  currentProjectIdState,
+} from '../../recoilModel';
 import { getFriendlyName } from '../../utils/dialogUtil';
 import { triggerNotSupported } from '../../utils/dialogValidator';
 
@@ -134,7 +139,8 @@ export const ProjectTree: React.FC<Props> = ({
     ...bot,
     hasWarnings: false,
   }));
-  const currentProjectId = useRecoilValue(currentProjectIdState);
+  // if we're in a single-bot setting, the root will be undefined, so we fall back to current
+  const rootProjectId = useRecoilValue(rootBotProjectIdSelector) ?? useRecoilValue(currentProjectIdState);
   const botProjectSpace = useRecoilValue(botProjectSpaceSelector);
 
   const notificationMap: { [projectId: string]: { [dialogId: string]: Diagnostic[] } } = {};
@@ -174,7 +180,7 @@ export const ProjectTree: React.FC<Props> = ({
   const renderBotHeader = (bot: BotInProject) => {
     const link: TreeLink = {
       displayName: bot.name,
-      projectId: currentProjectId,
+      projectId: rootProjectId,
       skillId: bot.projectId,
       isRoot: true,
       warningContent: botHasWarnings(bot) ? formatMessage('This bot has warnings') : undefined,
@@ -195,7 +201,7 @@ export const ProjectTree: React.FC<Props> = ({
           showProps
           forceIndent={bot.isRemote ? SUMMARY_ARROW_SPACE : 0}
           icon={bot.isRemote ? icons.EXTERNAL_SKILL : icons.BOT}
-          isSubItemActive={isEqual(link, selectedLink)}
+          isActive={isEqual(link, selectedLink)}
           link={link}
           menu={[{ label: formatMessage('Create/edit skill manifest'), onClick: () => {} }]}
         />
@@ -217,7 +223,7 @@ export const ProjectTree: React.FC<Props> = ({
       dialogId: dialog.id,
       displayName: dialog.displayName,
       isRoot: dialog.isRoot,
-      projectId: currentProjectId,
+      projectId: rootProjectId,
       skillId: skillId,
       errorContent,
       warningContent,
@@ -237,7 +243,7 @@ export const ProjectTree: React.FC<Props> = ({
           showProps
           forceIndent={showTriggers ? 0 : SUMMARY_ARROW_SPACE}
           icon={icons.DIALOG}
-          isSubItemActive={isEqual(link, selectedLink)}
+          isActive={isEqual(link, selectedLink)}
           link={link}
           menu={[
             {
@@ -257,7 +263,7 @@ export const ProjectTree: React.FC<Props> = ({
   const renderTrigger = (projectId: string, item: any, dialog: DialogInfo): React.ReactNode => {
     // NOTE: put the form-dialog detection here when it's ready
     const link: TreeLink = {
-      projectId: currentProjectId,
+      projectId: rootProjectId,
       skillId: projectId,
       dialogId: dialog.id,
       trigger: item.index,
@@ -397,7 +403,7 @@ export const ProjectTree: React.FC<Props> = ({
           {onAllSelected != null ? (
             <TreeItem
               forceIndent={SUMMARY_ARROW_SPACE}
-              link={{ displayName: formatMessage('All'), projectId: currentProjectId, isRoot: true }}
+              link={{ displayName: formatMessage('All'), projectId: rootProjectId, isRoot: true }}
               onSelect={onAllSelected}
             />
           ) : null}

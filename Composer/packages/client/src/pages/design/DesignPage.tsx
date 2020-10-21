@@ -625,7 +625,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                         schema={schemas.sdk.content}
                         value={currentDialog.content || undefined}
                         onChange={(data) => {
-                          updateDialog({ id: currentDialog.id, content: data, projectId });
+                          updateDialog({ id: currentDialog.id, content: data, projectId: skillId ?? projectId });
                         }}
                       />
                     ) : withWarning ? (

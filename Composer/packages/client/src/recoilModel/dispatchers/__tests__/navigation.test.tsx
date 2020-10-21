@@ -230,7 +230,7 @@ describe('navigation dispatcher', () => {
   describe('focusTo', () => {
     it('goes to the same page with no arguments', async () => {
       await act(async () => {
-        await dispatcher.focusTo(projectId, '', '');
+        await dispatcher.focusTo(projectId, null, '', '');
       });
       expectNavTo(`/bot/${projectId}/dialogs/dialogId?selected=a`);
     });
@@ -238,7 +238,7 @@ describe('navigation dispatcher', () => {
     it('goes to a focused page', async () => {
       mockGetSelected.mockReturnValueOnce('select');
       await act(async () => {
-        await dispatcher.focusTo(projectId, 'focus', '');
+        await dispatcher.focusTo(projectId, null, 'focus', '');
       });
       expectNavTo(`/bot/${projectId}/dialogs/dialogId?selected=select&focused=focus`);
       expect(mockUpdateBreadcrumb).toHaveBeenCalledWith(expect.anything(), BreadcrumbUpdateType.Selected);
@@ -248,7 +248,7 @@ describe('navigation dispatcher', () => {
     it('goes to a focused page with fragment', async () => {
       mockGetSelected.mockReturnValueOnce('select');
       await act(async () => {
-        await dispatcher.focusTo(projectId, 'focus', 'fragment');
+        await dispatcher.focusTo(projectId, null, 'focus', 'fragment');
       });
       expectNavTo(`/bot/${projectId}/dialogs/dialogId?selected=select&focused=focus#fragment`);
       expect(mockUpdateBreadcrumb).toHaveBeenCalledWith(expect.anything(), BreadcrumbUpdateType.Selected);
@@ -259,7 +259,7 @@ describe('navigation dispatcher', () => {
       mockCheckUrl.mockReturnValue(true);
       mockGetSelected.mockReturnValueOnce('select');
       await act(async () => {
-        await dispatcher.focusTo(projectId, 'focus', 'fragment');
+        await dispatcher.focusTo(projectId, null, 'focus', 'fragment');
       });
       expect(mockNavigateTo).not.toBeCalled();
       expect(mockUpdateBreadcrumb).toHaveBeenCalledWith(expect.anything(), BreadcrumbUpdateType.Selected);
