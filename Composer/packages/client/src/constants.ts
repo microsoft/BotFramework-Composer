@@ -190,6 +190,13 @@ export const addSkillDialog = {
   },
 };
 
+export const repairSkillDialog = (name: string) => {
+  return {
+    title: formatMessage('Link to this skill has been broken'),
+    subText: formatMessage('{name} cannot be found at the location.', { name }),
+  };
+};
+
 export const SupportedFileTypes = [
   'accdb',
   'csv',

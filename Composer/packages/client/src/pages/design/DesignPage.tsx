@@ -72,6 +72,7 @@ import { VisualEditor } from './VisualEditor';
 import { PropertyEditor } from './PropertyEditor';
 
 const CreateSkillModal = React.lazy(() => import('../../components/CreateSkillModal'));
+const RepairSkillModal = React.lazy(() => import('../../components/RepairSkillModal'));
 const CreateDialogModal = React.lazy(() => import('./createDialogModal'));
 const DisplayManifestModal = React.lazy(() => import('../../components/Modal/DisplayManifestModal'));
 const ExportSkillModal = React.lazy(() => import('./exportSkillModal'));
@@ -184,6 +185,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     regEx: '',
     triggerPhrases: '',
   };
+
+  const [repairSkillId, setRepairSkillId] = useState('adfb');
 
   useEffect(() => {
     const currentDialog = dialogs.find(({ id }) => id === dialogId);
@@ -792,6 +795,23 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             projectId={projectId}
             onDismiss={() => dismissManifestModal(projectId)}
           />
+        )}
+        {repairSkillId && (
+          <RepairSkillModal
+            skillId={repairSkillId}
+            onDismiss={() => {
+              setRepairSkillId('');
+            }}
+            onNext={(option) => {
+              if (option === 'repairSkill') {
+                console.log('repair', repairSkillId);
+              } else if ((option = 'removeSkill')) {
+                console.log('remove', repairSkillId);
+                removeSkillFromBotProject(repairSkillId);
+              }
+              setRepairSkillId('');
+            }}
+          ></RepairSkillModal>
         )}
       </Suspense>
     </React.Fragment>
