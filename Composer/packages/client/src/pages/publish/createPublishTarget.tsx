@@ -18,7 +18,7 @@ import { Separator } from 'office-ui-fabric-react/lib/Separator';
 // import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { PublishType } from '../../recoilModel/types';
-import { userSettingsState, provisionStatusState, currentProjectIdState } from '../../recoilModel';
+import { userSettingsState, currentProjectIdState } from '../../recoilModel';
 import { PluginAPI } from '../../plugins/api';
 import { PluginHost } from '../../components/PluginHost/PluginHost';
 import { dispatcherState } from '../../recoilModel';
