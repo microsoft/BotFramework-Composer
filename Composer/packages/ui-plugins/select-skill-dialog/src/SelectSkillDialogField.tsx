@@ -25,17 +25,17 @@ export const SelectSkillDialogField: React.FC<FieldProps> = (props) => {
   const { shellApi, skills } = useShellApi();
   const { displayManifestModal } = shellApi;
 
-  const skillId = getSkillNameFromSetting(value?.skillEndpoint);
-  const { manifest, name }: Skill = skills[skillId] || {};
+  const skillNameIdentifier = getSkillNameFromSetting(value?.skillEndpoint);
+  const { manifest, name }: Skill = skills[skillNameIdentifier] || {};
 
   const options: IComboBoxOption[] = [];
-  for (const skillNameIdentifier in skills) {
-    const skill = skills[skillNameIdentifier];
+  for (const key in skills) {
+    const skill = skills[key];
     const option = {
-      key: skillNameIdentifier,
+      key: key,
       text: skill.name,
-      data: settingReferences(skillNameIdentifier),
-      isSelected: skillNameIdentifier === skillId,
+      data: settingReferences(key),
+      isSelected: key === skillNameIdentifier,
     };
     options.push(option);
   }
@@ -53,13 +53,13 @@ export const SelectSkillDialogField: React.FC<FieldProps> = (props) => {
         id={'SkillDialogName'}
         label={formatMessage('Skill Dialog Name')}
         options={options}
-        value={skillId}
+        value={skillNameIdentifier}
         onChange={handleChange}
       />
       <Link
-        disabled={!manifest || !name}
+        disabled={!skillNameIdentifier || !manifest || !name}
         styles={{ root: { fontSize: '12px', paddingTop: '4px' } }}
-        onClick={() => manifest && displayManifestModal(name)}
+        onClick={() => manifest && displayManifestModal(skillNameIdentifier)}
       >
         {formatMessage('Show skill manifest')}
       </Link>

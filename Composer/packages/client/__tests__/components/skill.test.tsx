@@ -7,39 +7,14 @@ import { Skill } from '@bfc/shared';
 
 import httpClient from '../../src//utils/httpUtil';
 import { renderWithRecoil } from '../testUtils';
-import CreateSkillModal, {
-  validateEndpoint,
-  validateManifestUrl,
-  validateName,
-} from '../../src/components/CreateSkillModal';
+import CreateSkillModal, { validateEndpoint, validateManifestUrl } from '../../src/components/CreateSkillModal';
 import { currentProjectIdState, settingsState } from '../../src/recoilModel';
 
 jest.mock('../../src//utils/httpUtil');
 
 jest.mock('../../src/components/Modal/dialogStyle', () => ({}));
 
-const skills: Skill[] = [
-  {
-    id: 'email-skill',
-    manifestContent: {},
-    manifestUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json',
-    name: 'Email-Skill',
-    description: 'The Email skill provides email related capabilities and supports Office and Google calendars.',
-    endpointUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/api/messages',
-    msAppId: '79432da8-0f7e-4a16-8c23-ddbba30ae85d',
-    endpoints: [],
-  },
-  {
-    id: 'point-of-interest-skill',
-    manifestContent: {},
-    manifestUrl: 'https://hualxielearn2-snskill.azurewebsites.net/manifest/manifest-1.0.json',
-    name: 'Point Of Interest Skill',
-    description: 'The Point of Interest skill provides PoI search capabilities leveraging Azure Maps and Foursquare.',
-    endpointUrl: 'https://hualxielearn2-snskill.azurewebsites.net/api/messages',
-    msAppId: 'e2852590-ea71-4a69-9e44-e74b5b6cbe89',
-    endpoints: [],
-  },
-];
+const skills: Record<string, Skill> = {};
 
 let recoilInitState;
 const projectId = '123a.234';
@@ -48,50 +23,25 @@ describe('Skill page', () => {
   beforeEach(() => {
     recoilInitState = ({ set }) => {
       set(currentProjectIdState, projectId);
-      set(skillsState(projectId), skills),
-        set(settingsState(projectId), {
-          luis: {
-            name: '',
-            authoringKey: '12345',
-            authoringEndpoint: 'testAuthoringEndpoint',
-            endpointKey: '12345',
-            endpoint: 'testEndpoint',
-            authoringRegion: 'westus',
-            defaultLanguage: 'en-us',
-            environment: 'composer',
-          },
-          qna: {
-            subscriptionKey: '12345',
-            qnaRegion: 'westus',
-            endpointKey: '',
-          },
-        });
+
+      set(settingsState(projectId), {
+        luis: {
+          name: '',
+          authoringKey: '12345',
+          authoringEndpoint: 'testAuthoringEndpoint',
+          endpointKey: '12345',
+          endpoint: 'testEndpoint',
+          authoringRegion: 'westus',
+          defaultLanguage: 'en-us',
+          environment: 'composer',
+        },
+        qna: {
+          subscriptionKey: '12345',
+          qnaRegion: 'westus',
+          endpointKey: '',
+        },
+      });
     };
-  });
-
-  it('can add a new skill', async () => {
-    const { baseElement } = renderWithRecoil(<Skills />, recoilInitState);
-
-    const button = getByText(baseElement, 'Connect to a new skill');
-    act(() => {
-      fireEvent.click(button);
-    });
-
-    const manifestUrl = getByLabelText(baseElement, 'Manifest url');
-    expect(manifestUrl).toBeTruthy();
-
-    const cancel = getByTestId(baseElement, 'SkillFormCancel');
-    act(() => {
-      fireEvent.click(cancel);
-    });
-  });
-});
-
-describe('<SkillList />', () => {
-  it('should render the SkillList', () => {
-    const { container } = renderWithRecoil(<SkillList projectId={projectId} />, recoilInitState);
-    expect(container).toHaveTextContent('Email-Skill');
-    expect(container).toHaveTextContent('Point Of Interest Skill');
   });
 });
 
@@ -144,7 +94,6 @@ describe('<SkillForm />', () => {
         formData,
         formDataErrors,
         projectId,
-        skills,
         setFormDataErrors,
         setValidationState,
         setSkillManifest,
@@ -160,29 +109,6 @@ describe('<SkillForm />', () => {
   });
 
   describe('validateManifestUrl', () => {
-    it('should set an error for duplicate skill manifest url', () => {
-      const formData = {
-        manifestUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/MANIFEST/MANIFEST-1.0.json',
-      };
-
-      validateManifestUrl({
-        formData,
-        formDataErrors,
-        projectId,
-        skills,
-        setFormDataErrors,
-        setValidationState,
-        setSkillManifest,
-        validationState,
-      });
-
-      expect(setFormDataErrors).toBeCalledWith(
-        expect.objectContaining({ manifestUrl: 'Duplicate skill manifest Url' })
-      );
-      expect(setSkillManifest).not.toBeCalled();
-      expect(setValidationState).not.toBeCalled();
-    });
-
     it('should set an error for a missing manifest url', () => {
       const formData = {};
 
@@ -190,7 +116,6 @@ describe('<SkillForm />', () => {
         formData,
         formDataErrors,
         projectId,
-        skills,
         setFormDataErrors,
         setValidationState,
         setSkillManifest,
@@ -210,7 +135,6 @@ describe('<SkillForm />', () => {
         formData,
         formDataErrors,
         projectId,
-        skills,
         setFormDataErrors,
         setValidationState,
         setSkillManifest,
@@ -248,7 +172,6 @@ describe('<SkillForm />', () => {
         formData,
         formDataErrors,
         projectId,
-        skills,
         setFormDataErrors,
         setValidationState,
         setSkillManifest,
@@ -275,40 +198,6 @@ describe('<SkillForm />', () => {
           manifestUrl: 'Manifest url can not be accessed',
         })
       );
-    });
-  });
-
-  describe('validateName', () => {
-    it('should set error for invalid name', () => {
-      const formData = { name: 'Email Skill' };
-
-      validateName({
-        formData,
-        formDataErrors,
-        skills,
-        setFormDataErrors,
-        setValidationState,
-        validationState,
-      });
-
-      expect(setFormDataErrors).toBeCalledWith(
-        expect.objectContaining({ name: 'Name cannot include special characters or spaces' })
-      );
-    });
-
-    it('should set error for duplicate name', () => {
-      const formData = { name: 'email-skill' };
-
-      validateName({
-        formData,
-        formDataErrors,
-        skills,
-        setFormDataErrors,
-        setValidationState,
-        validationState,
-      });
-
-      expect(setFormDataErrors).toBeCalledWith(expect.objectContaining({ name: 'Duplicate skill name' }));
     });
   });
 

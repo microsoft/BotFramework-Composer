@@ -10,6 +10,7 @@ import {
   botNameIdentifierState,
   botDisplayNameState,
   projectMetaDataState,
+  locationState,
 } from '../atoms';
 
 import { skillsProjectIdSelector } from './project';

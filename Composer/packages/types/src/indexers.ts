@@ -165,6 +165,8 @@ export type Manifest = {
   version: string;
   description: string;
   endpoints: ManifestEndpoint[];
+  // Other props of manifest are not used in Composer.
+  [prop: string]: any;
 };
 
 export type ManifestEndpoint = {

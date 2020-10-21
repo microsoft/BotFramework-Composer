@@ -5,7 +5,7 @@
 import { css, jsx } from '@emotion/core';
 import React, { useEffect } from 'react';
 import { Label } from 'office-ui-fabric-react/lib/Label';
-import { SkillManifest } from '@bfc/shared';
+import { SkillManifestFile } from '@bfc/shared';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
@@ -22,8 +22,8 @@ const styles = {
 
 export const getManifestId = (
   botName: string,
-  skillManifests: SkillManifest[],
-  { content: { $schema } = {} }: Partial<SkillManifest>
+  skillManifests: SkillManifestFile[],
+  { content: { $schema } = {} }: Partial<SkillManifestFile>
 ): string => {
   const [version] = VERSION_REGEX.exec($schema) || [''];
 

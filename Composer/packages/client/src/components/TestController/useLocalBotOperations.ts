@@ -51,7 +51,7 @@ export function useBotOperations(onAllBotsStarted?: (started: boolean) => void) 
   }, trackedProjectIds);
 
   const startAllBots = async () => {
-    const [rootBot, ...skillsBots] = builderEssentials;
+    const [, ...skillsBots] = builderEssentials;
     const trackProjects: string[] = skillsBots.map((skillBot) => skillBot.projectId);
     setProjectsToTrack(trackProjects);
     for (const botBuildConfig of skillsBots) {
