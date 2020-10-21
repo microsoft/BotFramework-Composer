@@ -11,7 +11,7 @@ import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
 export const ADD_DIALOG = 'ADD_DIALOG';
 
 interface ComboBoxFieldProps {
-  comboboxTitle: string | null;
+  comboboxTitle?: string;
   options: IComboBoxOption[];
   onChange: any;
   required?: boolean;

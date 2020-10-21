@@ -37,7 +37,7 @@ COPY --from=build /src/Composer/packages/server ./packages/server
 COPY --from=build /src/Composer/packages/lib ./packages/lib
 COPY --from=build /src/Composer/packages/tools ./packages/tools
 COPY --from=build /src/Composer/packages/ui-plugins ./packages/ui-plugins
-COPY --from=build /src/Composer/plugins ./plugins
+COPY --from=build /src/extensions ./extensions
 
 ENV NODE_ENV "production"
 RUN yarn --production --frozen-lockfile --force $YARN_ARGS && yarn cache clean

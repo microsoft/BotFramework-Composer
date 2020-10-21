@@ -17,6 +17,7 @@ import { Page } from '../../components/Page';
 import { dialogsState, qnaFilesState } from '../../recoilModel/atoms/botState';
 import { dispatcherState } from '../../recoilModel';
 import { CreateQnAModal } from '../../components/QnA';
+import { Dispatcher } from '../../recoilModel/dispatchers';
 
 import TableView from './table-view';
 
@@ -30,7 +31,7 @@ interface QnAPageProps extends RouteComponentProps<{}> {
 const QnAPage: React.FC<QnAPageProps> = (props) => {
   const { dialogId = '', projectId = '' } = props;
 
-  const actions = useRecoilValue(dispatcherState);
+  const actions: Dispatcher = useRecoilValue(dispatcherState);
   const dialogs = useRecoilValue(dialogsState(projectId));
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   //To do: support other languages
@@ -103,6 +104,10 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
     },
     [dialogId, projectId, edit]
   );
+
+  useEffect(() => {
+    actions.setCurrentPageMode('qna');
+  }, []);
 
   const toolbarItems = [
     {

@@ -7,6 +7,8 @@ import type { ILUFeaturesConfig, SkillSetting, UserSettings } from './settings';
 import type { JSONSchema7 } from './schema';
 import { MicrosoftIDialog } from './sdk';
 
+import { Skill } from '.';
+
 /** Recursively marks all properties as optional. */
 type AllPartial<T> = {
   [P in keyof T]?: T[P] extends (infer U)[] ? AllPartial<U>[] : T[P] extends object ? AllPartial<T[P]> : T[P];
@@ -52,6 +54,10 @@ export type ApplicationContext = {
   locale: string;
   hosted: boolean;
   userSettings: UserSettings;
+  skills: Record<string, Skill>;
+  skillsSettings: Record<string, SkillSetting>;
+  // TODO: remove
+  schemas: BotSchemas;
   flowZoomRate: ZoomInfo;
 };
 
@@ -91,8 +97,8 @@ export type ProjectContextApi = {
   displayManifestModal: (manifestId: string) => void;
   updateDialogSchema: (_: DialogSchemaFile) => Promise<void>;
   createTrigger: (id: string, formData, autoSelected?: boolean) => void;
-  updateSkillSetting: (skillId: string, skillsData: SkillSetting) => Promise<void>;
   updateFlowZoomRate: (currentRate: number) => void;
+  updateSkill: (skillId: string, skillsData: { skill: Skill; selectedEndpointIndex: number }) => Promise<void>;
 };
 
 export type ProjectContext = {
@@ -104,7 +110,7 @@ export type ProjectContext = {
   luFiles: LuFile[];
   luFeatures: ILUFeaturesConfig;
   qnaFiles: QnAFile[];
-  skills: any[];
+  skills: Record<string, Skill>;
   skillsSettings: Record<string, SkillSetting>;
   schemas: BotSchemas;
 };

@@ -3,116 +3,106 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
-import { SkillManifest, SkillSetting } from '@bfc/shared';
+import { SkillManifestFile } from '@bfc/shared';
 import produce from 'immer';
 
 import { dispatcherState } from '../DispatcherWrapper';
-
+import { rootBotProjectIdSelector, skillsStateSelector } from '../selectors';
 import {
   skillManifestsState,
   onAddSkillDialogCompleteState,
   showAddSkillDialogModalState,
   displaySkillManifestState,
+  botProjectFileState,
   settingsState,
-} from './../atoms/botState';
+  botEndpointsState,
+} from '../atoms';
+
 import { setSettingState } from './setting';
 import { getSkillNameIdentifier } from './utils/project';
 
 export const skillDispatcher = () => {
-  const createSkillManifest = ({ set }, { id, content, projectId }) => {
-    set(skillManifestsState(projectId), (skillManifests) => [...skillManifests, { content, id }]);
+  const updateSettingForLocalEndpointSkills = useRecoilCallback((callbackHelpers: CallbackInterface) => async () => {
+    const { snapshot } = callbackHelpers;
+    const botEndpoints = await snapshot.getPromise(botEndpointsState);
+    const skills = await snapshot.getPromise(skillsStateSelector);
+    const rootBotId = await snapshot.getPromise(rootBotProjectIdSelector);
+    if (!rootBotId) {
+      return;
+    }
+
+    const settings = await snapshot.getPromise(settingsState(rootBotId));
+    let updatedSettings = { ...settings };
+    const botProjectFile = await snapshot.getPromise(botProjectFileState(rootBotId));
+    if (!botProjectFile) {
+      return;
+    }
+
+    for (const skillNameIdentifier in botProjectFile.content.skills) {
+      const botProjectSkill = botProjectFile.content.skills[skillNameIdentifier];
+      const projectId = skills[skillNameIdentifier]?.id;
+      const currentSetting = await snapshot.getPromise(settingsState(projectId));
+
+      // Update settings only for skills that have chosen the local endpoint
+      if (projectId && botEndpoints[projectId] && !botProjectSkill.endpointName) {
+        updatedSettings = produce(updatedSettings, (draftState) => {
+          if (!draftState.skill) {
+            draftState.skill = {};
+          }
+
+          draftState.skill[skillNameIdentifier] = {
+            endpointUrl: botEndpoints[projectId],
+            msAppId: currentSetting.MicrosoftAppId ?? '',
+          };
+        });
+      }
+    }
+    setSettingState(callbackHelpers, rootBotId, updatedSettings);
+  });
+
+  const createSkillManifest = async (callbackHelpers: CallbackInterface, { id, content, projectId }) => {
+    const { set, snapshot } = callbackHelpers;
+    let manifestForBotProjectFile = undefined;
+    const dispatcher = await snapshot.getPromise(dispatcherState);
+    set(skillManifestsState(projectId), (skillManifests) => {
+      if (!skillManifests.length) {
+        manifestForBotProjectFile = id;
+      }
+      return [...skillManifests, { content, id }];
+    });
+    if (manifestForBotProjectFile) {
+      dispatcher.updateManifestInBotProjectFile(projectId, id);
+    }
   };
 
   const removeSkillManifest = useRecoilCallback(
-    ({ set }: CallbackInterface) => async (id: string, projectId: string) => {
-      set(skillManifestsState(projectId), (skillManifests) => skillManifests.filter((manifest) => manifest.id !== id));
+    ({ set, snapshot }: CallbackInterface) => async (id: string, projectId: string) => {
+      let newCurrentManifestId: string | undefined = undefined;
+      const dispatcher = await snapshot.getPromise(dispatcherState);
+      set(skillManifestsState(projectId), (skillManifests) => {
+        const filtered = skillManifests.filter((manifest) => manifest.id !== id);
+        if (filtered.length > 0) {
+          newCurrentManifestId = filtered[0].id;
+        }
+        return filtered;
+      });
+      dispatcher.updateManifestInBotProjectFile(projectId, newCurrentManifestId);
     }
   );
 
   const updateSkillManifest = useRecoilCallback(
-    ({ set, snapshot }: CallbackInterface) => async ({ id, content }: SkillManifest, projectId: string) => {
+    (callbackHelpers: CallbackInterface) => async ({ id, content }: SkillManifestFile, projectId: string) => {
+      const { set, snapshot } = callbackHelpers;
       const manifests = await snapshot.getPromise(skillManifestsState(projectId));
+      const dispatcher = await snapshot.getPromise(dispatcherState);
       if (!manifests.some((manifest) => manifest.id === id)) {
-        createSkillManifest({ set }, { id, content, projectId });
+        createSkillManifest(callbackHelpers, { id, content, projectId });
+        dispatcher.updateManifestInBotProjectFile(projectId, id);
+        return;
       }
 
       set(skillManifestsState(projectId), (skillManifests) =>
         skillManifests.map((manifest) => (manifest.id === id ? { id, content } : manifest))
-      );
-    }
-  );
-
-  const addSkill = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (projectId: string, skill: SkillSetting) => {
-      const { set, snapshot } = callbackHelpers;
-      const dispatcher = await snapshot.getPromise(dispatcherState);
-      const { func: onAddSkillDialogComplete } = await snapshot.getPromise(onAddSkillDialogCompleteState(projectId));
-      const settings = await snapshot.getPromise(settingsState(projectId));
-      const skillName = await getSkillNameIdentifier(callbackHelpers, skill.name);
-
-      setSettingState(
-        callbackHelpers,
-        projectId,
-        produce(settings, (updateSettings) => {
-          updateSettings.skill = { ...(updateSettings.skill || {}), [skillName]: skill };
-        })
-      );
-
-      if (typeof onAddSkillDialogComplete === 'function') {
-        onAddSkillDialogComplete(skill || null);
-      }
-
-      // sync to *.botproj
-      // TODO: skill.endpointUrl to skill.endpointName
-      await dispatcher.addRemoteSkillToBotProject(skill.manifestUrl, skillName, skill.endpointUrl);
-
-      set(showAddSkillDialogModalState(projectId), false);
-      set(onAddSkillDialogCompleteState(projectId), {});
-    }
-  );
-
-  const removeSkill = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (projectId: string, key: string) => {
-      const { snapshot } = callbackHelpers;
-      const dispatcher = await snapshot.getPromise(dispatcherState);
-      const settings = await snapshot.getPromise(settingsState(projectId));
-
-      setSettingState(
-        callbackHelpers,
-        projectId,
-        produce(settings, (updateSettings) => {
-          delete updateSettings.skill?.[key];
-        })
-      );
-
-      // sync to *.botproj
-      await dispatcher.removeRemoteSkillFromBotProject(key);
-    }
-  );
-
-  const updateSkill = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (
-      projectId: string,
-      key: string,
-      { endpointUrl, manifestUrl, msAppId, name }: SkillSetting
-    ) => {
-      const { snapshot } = callbackHelpers;
-      const settings = await snapshot.getPromise(settingsState(projectId));
-
-      setSettingState(
-        callbackHelpers,
-        projectId,
-        produce(settings, (updateSettings) => {
-          updateSettings.skill = {
-            ...(updateSettings.skill || {}),
-            [key]: {
-              endpointUrl,
-              manifestUrl,
-              msAppId,
-              name,
-            },
-          };
-        })
       );
     }
   );
@@ -136,9 +126,6 @@ export const skillDispatcher = () => {
   });
 
   return {
-    addSkill,
-    removeSkill,
-    updateSkill,
     createSkillManifest,
     removeSkillManifest,
     updateSkillManifest,
@@ -146,5 +133,6 @@ export const skillDispatcher = () => {
     addSkillDialogCancel,
     displayManifestModal,
     dismissManifestModal,
+    updateSettingForLocalEndpointSkills,
   };
 };

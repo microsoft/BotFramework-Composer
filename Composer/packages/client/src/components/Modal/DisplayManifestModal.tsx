@@ -16,7 +16,7 @@ import { IDialogContentStyles } from 'office-ui-fabric-react/lib/Dialog';
 import { IModalStyles } from 'office-ui-fabric-react/lib/Modal';
 import { useRecoilValue } from 'recoil';
 
-import { userSettingsState, skillsState } from '../../recoilModel';
+import { userSettingsState } from '../../recoilModel';
 
 // -------------------- Styles -------------------- //
 

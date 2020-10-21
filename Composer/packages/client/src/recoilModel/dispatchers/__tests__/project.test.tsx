@@ -32,7 +32,6 @@ import {
   localeState,
   schemasState,
   locationState,
-  skillsState,
   botStatusState,
   botDisplayNameState,
   botOpeningState,
@@ -112,7 +111,6 @@ describe('Project dispatcher', () => {
   const useRecoilTestHook = () => {
     const schemas = useRecoilValue(schemasState(projectId));
     const location = useRecoilValue(locationState(projectId));
-    const skills = useRecoilValue(skillsState(projectId));
     const botName = useRecoilValue(botDisplayNameState(projectId));
     const skillManifests = useRecoilValue(skillManifestsState(projectId));
     const luFiles = useRecoilValue(luFilesState(projectId));
@@ -146,7 +144,6 @@ describe('Project dispatcher', () => {
       botEnvironment,
       botName,
       botStatus,
-      skills,
       location,
       schemas,
       diagnostics,
@@ -220,7 +217,6 @@ describe('Project dispatcher', () => {
     expect(renderedComponent.current.lgFiles.length).toBe(1);
     expect(renderedComponent.current.luFiles.length).toBe(1);
     expect(renderedComponent.current.botEnvironment).toBe(mockProjectResponse.botEnvironment);
-    expect(renderedComponent.current.skills.length).toBe(0);
     expect(renderedComponent.current.botOpening).toBeFalsy();
     expect(renderedComponent.current.schemas.sdk).toBeDefined();
     expect(renderedComponent.current.schemas.default).toBeDefined();
@@ -273,7 +269,6 @@ describe('Project dispatcher', () => {
     expect(renderedComponent.current.lgFiles.length).toBe(0);
     expect(renderedComponent.current.luFiles.length).toBe(0);
     expect(renderedComponent.current.botEnvironment).toBe('production');
-    expect(renderedComponent.current.skills.length).toBe(0);
     expect(renderedComponent.current.botOpening).toBeFalsy();
     expect(renderedComponent.current.schemas.sdk).toBeUndefined();
     expect(renderedComponent.current.schemas.default).toBeUndefined();
@@ -282,7 +277,7 @@ describe('Project dispatcher', () => {
 
   it('should set bot status', async () => {
     await act(async () => {
-      await dispatcher.setBotStatus(BotStatus.pending, projectId);
+      await dispatcher.setBotStatus(projectId, BotStatus.pending);
     });
 
     expect(renderedComponent.current.botStatus).toEqual(BotStatus.pending);
@@ -363,7 +358,7 @@ describe('Project dispatcher', () => {
     expect(renderedComponent.current.botStates.echoSkill2.botDisplayName).toBe('Echo-Skill-2');
 
     await act(async () => {
-      await dispatcher.addRemoteSkillToBotProject('https://test.net/api/manifest/man', 'test-skill', 'remote');
+      await dispatcher.addRemoteSkillToBotProject('https://test.net/api/manifest/test', 'remote');
     });
 
     expect(navigateTo).toHaveBeenLastCalledWith(`/bot/${projectId}/dialogs/emptybot-1`);
@@ -392,14 +387,12 @@ describe('Project dispatcher', () => {
     await act(async () => {
       await dispatcher.addRemoteSkillToBotProject(
         'https://test-dev.azurewebsites.net/manifests/onenote-2-1-preview-1-manifest.json',
-        'one-note',
         'remote'
       );
     });
-
-    expect(renderedComponent.current.botStates.oneNote).toBeDefined();
-    expect(renderedComponent.current.botStates.oneNote.botDisplayName).toBe('OneNoteSync');
-    expect(renderedComponent.current.botStates.oneNote.location).toBe(
+    expect(renderedComponent.current.botStates.oneNoteSync).toBeDefined();
+    expect(renderedComponent.current.botStates.oneNoteSync.botDisplayName).toBe('OneNoteSync');
+    expect(renderedComponent.current.botStates.oneNoteSync.location).toBe(
       'https://test-dev.azurewebsites.net/manifests/onenote-2-1-preview-1-manifest.json'
     );
     expect(navigateTo).toHaveBeenLastCalledWith(`/bot/${projectId}/dialogs/emptybot-1`);
@@ -429,26 +422,17 @@ describe('Project dispatcher', () => {
     await act(async () => {
       await dispatcher.addRemoteSkillToBotProject(
         'https://test-dev.azurewebsites.net/manifests/onenote-2-1-preview-1-manifest.json',
-        'one-note',
         'remote'
       );
     });
 
-    await act(async () => {
-      await dispatcher.addRemoteSkillToBotProject(
-        'https://test-dev.azurewebsites.net/manifests/onenote-second-manifest.json',
-        'one-note-2',
-        'remote'
-      );
-    });
-
-    const oneNoteProjectId = renderedComponent.current.botStates.oneNote.projectId;
+    const oneNoteProjectId = renderedComponent.current.botStates.oneNoteSync.projectId;
     mockImplementation.mockClear();
 
     await act(async () => {
       dispatcher.removeSkillFromBotProject(oneNoteProjectId);
     });
-    expect(renderedComponent.current.botStates.oneNote).toBeUndefined();
+    expect(renderedComponent.current.botStates.oneNoteSync).toBeUndefined();
   });
 
   it('should be able to add a new skill to Botproject', async () => {

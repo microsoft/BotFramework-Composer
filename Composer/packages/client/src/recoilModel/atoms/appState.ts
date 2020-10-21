@@ -30,6 +30,18 @@ export type CurrentUser = {
   sessionExpired: boolean;
 };
 
+export type PageMode =
+  | 'home'
+  | 'design'
+  | 'lg'
+  | 'lu'
+  | 'qna'
+  | 'notifications'
+  | 'publish'
+  | 'skills'
+  | 'settings'
+  | 'about';
+
 const getFullyQualifiedKey = (value: string) => {
   return `App_${value}_State`;
 };
@@ -183,6 +195,11 @@ export const botProjectIdsState = atom<string[]>({
 export const currentProjectIdState = atom<string>({
   key: getFullyQualifiedKey('currentProjectId'),
   default: '',
+});
+
+export const currentModeState = atom<PageMode>({
+  key: getFullyQualifiedKey('currentMode'),
+  default: 'home',
 });
 
 export const botProjectSpaceLoadedState = atom<boolean>({

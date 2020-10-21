@@ -99,6 +99,15 @@ export const Steps = {
   NONE: 'NONE',
 };
 
+export const BotStatusesCopy = {
+  connected: formatMessage('Running'),
+  publishing: formatMessage('Building'),
+  published: formatMessage('Starting'),
+  unConnected: formatMessage('Inactive'),
+  failed: formatMessage('Failed to start'),
+  loading: formatMessage('Loading'),
+};
+
 export const DialogCreationCopy = {
   CREATE_NEW_BOT: {
     title: formatMessage('Create bot from template or scratch?'),

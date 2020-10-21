@@ -18,7 +18,6 @@ import {
   settingsState,
   currentProjectIdState,
 } from '../../recoilModel';
-import { TestController } from '../../components/TestController/TestController';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page';
@@ -45,6 +44,7 @@ const SettingPage: React.FC<RouteComponentProps> = () => {
     addLanguages,
     deleteLanguages,
     fetchProjectById,
+    setCurrentPageMode,
   } = useRecoilValue(dispatcherState);
   const locale = useRecoilValue(localeState(projectId));
   const showDelLanguageModal = useRecoilValue(showDelLanguageModalState(projectId));
@@ -58,6 +58,7 @@ const SettingPage: React.FC<RouteComponentProps> = () => {
   // use cached projectId do fetch.
   const cachedProjectId = useProjectIdCache();
   useEffect(() => {
+    setCurrentPageMode('settings');
     if (!projectId && cachedProjectId) {
       fetchProjectById(cachedProjectId);
     }
@@ -214,12 +215,6 @@ const SettingPage: React.FC<RouteComponentProps> = () => {
       align: 'left',
       dataTestid: 'AddLanguageFlyout',
       disabled: false,
-    },
-
-    {
-      type: 'element',
-      element: <TestController projectId={projectId} />,
-      align: 'right',
     },
   ];
 

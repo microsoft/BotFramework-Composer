@@ -11,12 +11,11 @@ import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { useRecoilValue } from 'recoil';
 import debounce from 'lodash/debounce';
-import { SkillSetting } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
 import { addSkillDialog } from '../constants';
 import httpClient from '../utils/httpUtil';
-import { skillsState } from '../recoilModel';
+import { skillsStateSelector } from '../recoilModel';
 
 export interface SkillFormDataErrors {
   endpoint?: string;
@@ -30,7 +29,7 @@ export const msAppIdRegex = /^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A
 
 export interface CreateSkillModalProps {
   projectId: string;
-  onSubmit: (data: SkillSetting) => void;
+  onSubmit: (manifestUrl: string, endpointName: string) => void;
   onDismiss: () => void;
 }
 
@@ -119,9 +118,12 @@ export const validateName = ({
 };
 
 export const CreateSkillModal: React.FC<CreateSkillModalProps> = ({ projectId, onSubmit, onDismiss }) => {
-  const skills = useRecoilValue(skillsState(projectId));
+  const skills = useRecoilValue(skillsStateSelector);
 
-  const [formData, setFormData] = useState<Partial<SkillSetting>>({});
+  const [formData, setFormData] = useState<{ manifestUrl: string; endpoint: string }>({
+    manifestUrl: '',
+    endpoint: '',
+  });
   const [formDataErrors, setFormDataErrors] = useState<SkillFormDataErrors>({});
   const [validationState, setValidationState] = useState({
     endpoint: ValidationState.NotValidated,
@@ -155,7 +157,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = ({ projectId, o
   };
 
   const handleManifestUrlChange = (_, manifestUrl = '') => {
-    const { msAppId, endpointUrl, ...rest } = formData;
+    const { msAppId, endpoint, ...rest } = formData;
     setValidationState((validationState) => ({
       ...validationState,
       manifestUrl: ValidationState.NotValidated,
@@ -172,18 +174,6 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = ({ projectId, o
     });
     setSkillManifest(null);
     setSelectedEndpointKey(null);
-  };
-
-  const handleNameChange = (_, name = '') => {
-    setValidationState((validationState) => ({ ...validationState, name: ValidationState.NotValidated }));
-    debouncedValidateName({
-      formData: { ...formData, name },
-      ...validationHelpers,
-    });
-    setFormData({
-      ...formData,
-      name,
-    });
   };
 
   const handleEndpointUrlChange = (_, option?: IDropdownOption) => {
@@ -211,7 +201,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = ({ projectId, o
       Object.values(validationState).every((validation) => validation === ValidationState.Validated) &&
       !Object.values(formDataErrors).some(Boolean)
     ) {
-      onSubmit({ name: skillManifest.name, ...formData } as SkillSetting);
+      onSubmit(formData.manifestUrl, formData.endpointName);
     }
   };
 
@@ -251,12 +241,6 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = ({ projectId, o
                 }}
               />
             )}
-            <TextField
-              errorMessage={formDataErrors.name}
-              label={formatMessage('Custom name (optional)')}
-              value={formData.name || ''}
-              onChange={handleNameChange}
-            />
             <Label required>{formatMessage('Skill Endpoint')}</Label>
             <Dropdown
               disabled={!endpointOptions.length}

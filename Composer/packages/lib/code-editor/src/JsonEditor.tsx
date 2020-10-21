@@ -80,12 +80,16 @@ const JsonEditor: React.FC<JsonEditorProps> = (props) => {
 
   const handleChange = (value) => {
     if (value) {
-      try {
-        const data = JSON.parse(value);
-        onChange(data);
-        setParseError('');
-      } catch (err) {
-        setParseError('Invalid json');
+      if (value === '=') {
+        onChange(value);
+      } else {
+        try {
+          const data = JSON.parse(value);
+          onChange(data);
+          setParseError('');
+        } catch (err) {
+          setParseError('Invalid json');
+        }
       }
     } else {
       onChange(undefined);
@@ -97,6 +101,7 @@ const JsonEditor: React.FC<JsonEditorProps> = (props) => {
 
   return (
     <BaseEditor
+      key={id}
       errorMessage={parseError}
       helpURL="https://www.json.org"
       id={id}

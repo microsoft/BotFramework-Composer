@@ -16,7 +16,6 @@ import { useRecoilValue } from 'recoil';
 
 import { LeftRightSplit } from '../../components/Split/LeftRightSplit';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { TestController } from '../../components/TestController/TestController';
 import { DialogDeleting } from '../../constants';
 import {
   createSelectedPath,
@@ -48,7 +47,9 @@ import {
   showCreateDialogModalState,
   showAddSkillDialogModalState,
   localeState,
+  botProjectSpaceSelector,
   qnaFilesState,
+  rootBotProjectIdSelector,
 } from '../../recoilModel';
 import { CreateQnAModal } from '../../components/QnA';
 import { triggerNotSupported } from '../../utils/dialogValidator';
@@ -125,6 +126,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const locale = useRecoilValue(localeState(projectId));
   const undoFunction = useRecoilValue(undoFunctionState(projectId));
   const undoVersion = useRecoilValue(undoVersionState(projectId));
+  const rootProjectId = useRecoilValue(rootBotProjectIdSelector) ?? projectId;
+  const appLocale = useRecoilValue(localeState(projectId));
+  const botProjectsSpace = useRecoilValue(botProjectSpaceSelector);
 
   const { undo, redo, canRedo, canUndo, commitChanges, clearUndo } = undoFunction;
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
@@ -142,6 +146,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     addSkillDialogCancel,
     exportToZip,
     onboardingAddCoachMarkRef,
+    addRemoteSkillToBotProject,
+    addExistingSkillToBotProject,
+    addNewSkillToBotProject,
     createQnAKBFromUrl,
     createQnAKBFromScratch,
     createQnAFromUrlDialogBegin,
@@ -150,6 +157,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     addSkillDialogBegin,
     setCreationFlowStatus,
     setCreationFlowTypes,
+    removeSkillFromBotProject,
   } = useRecoilValue(dispatcherState);
 
   const params = new URLSearchParams(location?.search);
@@ -205,6 +213,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   useEffect(() => {
     if (location && props.dialogId && props.projectId) {
       const { dialogId, projectId } = props;
+
+      // TODO: swap to the commented-out block once we're working on skills for real (issue #4429)
+      // let { skillId } = props;
+      // if (skillId == null) skillId = projectId;
+
       const params = new URLSearchParams(location.search);
       const dialogMap = dialogs.reduce((acc, { content, id }) => ({ ...acc, [id]: content }), {});
       const dialogData = getDialogData(dialogMap, dialogId);
@@ -222,7 +235,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
          *   - If 'dialog' not exists at `dialogId` path, fallback to main dialog.
          */
         if (id) {
-          navTo(projectId, id);
+          navTo(rootProjectId, null, id);
         }
         return;
       }
@@ -265,15 +278,15 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   function handleSelect(projectId, id, selected = '') {
     updateZoomRate({ currentRate: 1 });
     if (selected) {
-      selectTo(projectId, selected);
+      selectTo(projectId, null, null, selected);
     } else {
-      navTo(projectId, id, []);
+      navTo(projectId, null, id, []);
     }
   }
 
   const onCreateDialogComplete = (newDialog) => {
     if (newDialog) {
-      navTo(projectId, newDialog, []);
+      navTo(projectId, null, newDialog, []);
     }
   };
 
@@ -360,6 +373,68 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             text: formatMessage(' Connect a remote skill'),
             onClick: () => {
               addSkillDialogBegin(() => {}, projectId);
+            },
+          },
+          {
+            'data-testid': 'AddRemoteSkill',
+            key: 'addRemoteSkill',
+            text: formatMessage(`Add remote skill`, {
+              displayName: currentDialog?.displayName ?? '',
+            }),
+            onClick: () => {
+              addRemoteSkillToBotProject(
+                'https://onenote-dev.azurewebsites.net/manifests/OneNoteSync-2-1-preview-1-manifest.json',
+                'remote'
+              );
+            },
+          },
+          {
+            'data-testid': 'createNewSkill',
+            key: 'createNewSkill',
+            text: formatMessage(`Create new Skill`, {
+              displayName: currentDialog?.displayName ?? '',
+            }),
+            onClick: () => {
+              addNewSkillToBotProject({
+                name: 'newers-bot',
+                description: '',
+                schemaUrl: '',
+                location: '/Users/srravich/Desktop/samples/Archive',
+                templateId: 'InterruptionSample',
+                locale: appLocale,
+                qnaKbUrls: [],
+              });
+            },
+          },
+          {
+            'data-testid': 'removeSkillAtIndex',
+            key: 'removeSkillAtIndex',
+            text: formatMessage(`Remove a skill`, {
+              displayName: currentDialog?.displayName ?? '',
+            }),
+            onClick: () => {
+              const matchedProject: any = botProjectsSpace[botProjectsSpace.length - 1];
+              removeSkillFromBotProject(matchedProject.projectId);
+            },
+          },
+          {
+            'data-testid': 'AddLocalSkill',
+            key: 'addLocalSkill',
+            text: formatMessage(`Add Google Keep Skill`, {
+              displayName: currentDialog?.displayName ?? '',
+            }),
+            onClick: () => {
+              addExistingSkillToBotProject('/Users/srravich/Desktop/samples/Archive/GoogleKeepSync');
+            },
+          },
+          {
+            'data-testid': 'AddLocalSkill-1',
+            key: 'addLocalSkill',
+            text: formatMessage(`Add Todo Skill`, {
+              displayName: currentDialog?.displayName ?? '',
+            }),
+            onClick: () => {
+              addExistingSkillToBotProject('/Users/srravich/Desktop/samples/Archive/Todo-Skill');
             },
           },
         ],
@@ -477,17 +552,12 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         ],
       },
     },
-    {
-      type: 'element',
-      element: <TestController projectId={projectId} />,
-      align: 'right',
-    },
   ];
 
   function handleBreadcrumbItemClick(_event, item) {
     if (item) {
       const { dialogId, selected, focused, index } = item;
-      selectAndFocus(projectId, dialogId, selected, focused, clearBreadcrumb(breadcrumb, index));
+      selectAndFocus(projectId, null, dialogId, selected, focused, clearBreadcrumb(breadcrumb, index));
     }
   }
 
@@ -539,8 +609,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     commitChanges();
   }
 
-  async function handleDeleteDialog(id) {
-    const refs = getAllRef(id, dialogs);
+  async function handleDeleteDialog(dialogId) {
+    const refs = getAllRef(dialogId, dialogs);
     let setting: any = {
       confirmBtnText: formatMessage('Yes'),
       cancelBtnText: formatMessage('Cancel'),
@@ -560,16 +630,16 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     const result = await OpenConfirmModal(title, subTitle, setting);
 
     if (result) {
-      await removeDialog(id, projectId);
+      await removeDialog(dialogId, projectId);
       commitChanges();
     }
   }
 
-  async function handleDeleteTrigger(id, index) {
-    const content = deleteTrigger(dialogs, id, index, (trigger) => triggerApi.deleteTrigger(id, trigger));
+  async function handleDeleteTrigger(dialogId: string, index: number) {
+    const content = deleteTrigger(dialogs, dialogId, index, (trigger) => triggerApi.deleteTrigger(dialogId, trigger));
 
     if (content) {
-      updateDialog({ id, content, projectId });
+      updateDialog({ id: dialogId, content, projectId });
       const match = /\[(\d+)\]/g.exec(selected);
       const current = match && match[1];
       if (!current) return;
@@ -577,14 +647,14 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       if (index === currentIdx) {
         if (currentIdx - 1 >= 0) {
           //if the deleted node is selected and the selected one is not the first one, navTo the previous trigger;
-          selectTo(projectId, createSelectedPath(currentIdx - 1));
+          selectTo(projectId, null, dialogId, createSelectedPath(currentIdx - 1));
         } else {
           //if the deleted node is selected and the selected one is the first one, navTo the first trigger;
-          navTo(projectId, id, []);
+          navTo(projectId, null, dialogId, []);
         }
       } else if (index < currentIdx) {
         //if the deleted node is at the front, navTo the current one;
-        selectTo(projectId, createSelectedPath(currentIdx - 1));
+        selectTo(projectId, null, dialogId, createSelectedPath(currentIdx - 1));
       }
     }
   }
@@ -622,9 +692,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       <div css={pageRoot}>
         <LeftRightSplit initialLeftGridWidth="20%" minLeftPixels={200} minRightPixels={800}>
           <ProjectTree
-            dialogId={dialogId}
-            dialogs={dialogs}
-            selected={selected}
             onDeleteDialog={handleDeleteDialog}
             onDeleteTrigger={handleDeleteTrigger}
             onSelect={(...props) => handleSelect(projectId, ...props)}
@@ -698,7 +765,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           <CreateSkillModal
             projectId={projectId}
             onDismiss={() => addSkillDialogCancel(projectId)}
-            onSubmit={(skill) => addSkill(projectId, skill)}
+            onSubmit={addRemoteSkillToBotProject}
           />
         )}
         {exportSkillModalVisible && (

@@ -11,7 +11,6 @@ import { useRecoilValue } from 'recoil';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { navigateTo } from '../../utils/navigation';
-import { TestController } from '../../components/TestController/TestController';
 import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
 import { validateDialogSelectorFamily } from '../../recoilModel';
@@ -81,14 +80,6 @@ const LGPage: React.FC<RouteComponentProps<LGPageProps>> = (props: RouteComponen
     [dialogId, projectId, edit]
   );
 
-  const toolbarItems = [
-    {
-      type: 'element',
-      element: <TestController projectId={projectId} />,
-      align: 'right',
-    },
-  ];
-
   const onRenderHeaderContent = () => {
     return (
       <ActionButton data-testid="showcode" onClick={onToggleEditMode}>
@@ -104,7 +95,7 @@ const LGPage: React.FC<RouteComponentProps<LGPageProps>> = (props: RouteComponen
       navLinks={navLinks}
       navRegionName={formatMessage('LG Navigation Pane')}
       title={formatMessage('Bot Responses')}
-      toolbarItems={toolbarItems}
+      toolbarItems={[]}
       onRenderHeaderContent={onRenderHeaderContent}
     >
       <Suspense fallback={<LoadingSpinner />}>

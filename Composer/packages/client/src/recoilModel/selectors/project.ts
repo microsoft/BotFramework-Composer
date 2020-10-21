@@ -18,19 +18,32 @@ import {
 } from '../atoms';
 
 // Actions
-export const botsForFilePersistenceSelector = selector({
-  key: 'botsForFilePersistenceSelector',
+export const localBotsWithoutErrorsSelector = selector({
+  key: 'localBotsWithoutErrorsSelector',
   get: ({ get }) => {
     const botProjectIds = get(botProjectIdsState);
     return botProjectIds.filter((projectId: string) => {
       const { isRemote } = get(projectMetaDataState(projectId));
       const botError = get(botErrorState(projectId));
-      return !botError && !isRemote;
+      return !isRemote && !botError;
     });
   },
 });
 
-// TODO: This selector would be modfied and leveraged by the project tree
+export const localBotsDataSelector = selector({
+  key: 'localBotsDataSelector',
+  get: ({ get }) => {
+    const botProjectIds = get(localBotsWithoutErrorsSelector);
+    return botProjectIds.map((projectId: string) => {
+      return {
+        projectId,
+        name: get(botDisplayNameState(projectId)),
+      };
+    });
+  },
+});
+
+// TODO: Selector used in Design Page view with remote bot data
 export const botProjectSpaceSelector = selector({
   key: 'botProjectSpaceSelector',
   get: ({ get }) => {
@@ -41,8 +54,10 @@ export const botProjectSpaceSelector = selector({
       const botError = get(botErrorState(projectId));
       const name = get(botDisplayNameState(projectId));
       const botNameId = get(botNameIdentifierState(projectId));
+
       return { dialogs, projectId, name, ...metaData, error: botError, botNameId };
     });
+    console.log('RESULT', result);
     return result;
   },
 });
@@ -58,6 +73,17 @@ export const rootBotProjectIdSelector = selector({
     if (metaData.isRootBot && !isEmpty(botProjectFile)) {
       return rootBotId;
     }
+  },
+});
+
+export const skillsProjectIdSelector = selector({
+  key: 'skillsProjectIdSelector',
+  get: ({ get }) => {
+    const botIds = get(botProjectIdsState);
+    return botIds.filter((projectId: string) => {
+      const { isRootBot } = get(projectMetaDataState(projectId));
+      return !isRootBot;
+    });
   },
 });
 

@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FileInfo, SkillManifestInfo } from '@bfc/shared';
+import { FileInfo, SkillManifestFile } from '@bfc/shared';
 import has from 'lodash/has';
 
 import { getBaseName } from './utils/help';
 
 const index = (skillManifestFiles: FileInfo[]) => {
-  return skillManifestFiles.reduce((manifests: SkillManifestInfo[], { content, name, lastModified }) => {
+  return skillManifestFiles.reduce((manifests: SkillManifestFile[], { content, name, lastModified }) => {
     try {
       const jsonContent = JSON.parse(content);
 
@@ -22,7 +22,7 @@ const index = (skillManifestFiles: FileInfo[]) => {
     } catch (error) {
       return manifests;
     }
-  }, [] as SkillManifestInfo[]);
+  }, [] as SkillManifestFile[]);
 };
 
 export const skillManifestIndexer = {

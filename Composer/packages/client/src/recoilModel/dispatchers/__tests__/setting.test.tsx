@@ -5,7 +5,7 @@ import { useRecoilValue } from 'recoil';
 import { act } from '@botframework-composer/test-utils/lib/hooks';
 
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
-import { settingsState, currentProjectIdState, skillsState } from '../../atoms';
+import { settingsState, currentProjectIdState } from '../../atoms';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
 import { settingsDispatcher } from '../setting';
@@ -76,7 +76,6 @@ describe('setting dispatcher', () => {
   beforeEach(() => {
     const useRecoilTestHook = () => {
       const settings = useRecoilValue(settingsState(projectId));
-      const skills = useRecoilValue(skillsState(projectId));
       const currentDispatcher = useRecoilValue(dispatcherState);
       return {
         settings,
@@ -89,7 +88,6 @@ describe('setting dispatcher', () => {
       states: [
         { recoilState: settingsState(projectId), initialValue: settings },
         { recoilState: currentProjectIdState, initialValue: projectId },
-        { recoilState: skillsState(projectId), initialValue: [] },
       ],
       dispatcher: {
         recoilState: dispatcherState,
