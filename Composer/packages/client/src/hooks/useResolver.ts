@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { useRef } from 'react';
-import { importResolverGenerator } from '@bfc/shared';
+import { lgImportResolverGenerator } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
 import { dialogsState, luFilesState, lgFilesState, localeState, qnaFilesState } from '../recoilModel';
@@ -28,7 +28,7 @@ export const useResolvers = (projectId: string) => {
   const dialogsRef = useRef(dialogs);
   dialogsRef.current = dialogs;
 
-  const lgImportresolver = () => importResolverGenerator(lgFilesRef.current, '.lg');
+  const lgImportresolver = () => lgImportResolverGenerator(lgFilesRef.current, '.lg');
 
   const lgFileResolver = (id: string) => {
     const fileId = id.includes('.') ? id : `${id}.${localeRef.current}`;

@@ -18,12 +18,13 @@ export const SelectField: React.FC<FieldProps<string | number>> = function Selec
     onFocus = () => {},
     value = '',
     error,
+    expression,
     uiOptions,
     required,
   } = props;
 
   const options: IDropdownOption[] = useMemo(() => {
-    const opts = (enumOptions ?? []).map((o) => ({
+    const opts: IDropdownOption[] = (enumOptions ?? []).map((o) => ({
       key: o?.toString(),
       text: o?.toString(),
     }));
@@ -33,13 +34,23 @@ export const SelectField: React.FC<FieldProps<string | number>> = function Selec
       text: '',
     });
 
+    if (expression) {
+      opts.push({
+        key: 'expression',
+        text: formatMessage('Write an expression'),
+      });
+    }
+
     return opts;
-  }, [enumOptions]);
+  }, [enumOptions, expression]);
 
   const handleChange = (_e: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
-    /* istanbul ignore else */
     if (option) {
-      onChange(option.key);
+      if (option.key === 'expression') {
+        onChange('=');
+      } else {
+        onChange(option.key);
+      }
     } else {
       onChange(undefined);
     }
