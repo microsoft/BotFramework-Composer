@@ -36,7 +36,10 @@ jobs:
           load: true
       - name: Health check
         run: |
-          docker run --rm -p "5000:5000" botframework-composer
+          docker run -d --rm -p "5000:5000" botframework-composer
           sleep 10
           curl -Is http://localhost:5000 | grep -q "200 OK"
         shell: bash
+      - name: Clean up
+        if: always()
+        run: docker stop $(docker ps -a -q)
