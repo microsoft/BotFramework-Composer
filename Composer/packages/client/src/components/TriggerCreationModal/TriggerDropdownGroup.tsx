@@ -52,7 +52,8 @@ export const TriggerDropdownGroup: FC<TriggerDropwdownGroupProps> = ({ recognize
     return generateTriggerOptionTree(
       triggerUISchema,
       formatMessage('What is the type of this trigger?'),
-      formatMessage('Select a trigger type')
+      formatMessage('Select a trigger type'),
+      (opt1, opt2) => getTriggerLabelOrder(opt1.label) - getTriggerLabelOrder(opt2.label)
     );
   }, []);
 
@@ -85,15 +86,13 @@ export const TriggerDropdownGroup: FC<TriggerDropwdownGroupProps> = ({ recognize
           <Dropdown
             data-testid={currentNode.label}
             label={currentNode.prompt}
-            options={currentNode.children
-              .map((x) => {
-                return {
-                  key: getKey(x),
-                  text: x.label,
-                  node: x,
-                };
-              })
-              .sort((opt1, opt2) => getTriggerLabelOrder(opt1.text) - getTriggerLabelOrder(opt2.text))}
+            options={currentNode.children.map((x) => {
+              return {
+                key: getKey(x),
+                text: x.label,
+                node: x,
+              };
+            })}
             placeholder={currentNode.placeholder}
             selectedKey={selectedKey}
             styles={dropdownStyles}

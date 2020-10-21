@@ -40,8 +40,9 @@ const getGroupKey = (submenu) => (typeof submenu === 'object' ? submenu.label : 
 
 export const generateTriggerOptionTree = (
   triggerUIOptions: TriggerUISchema,
-  rootPrompt = '',
-  rootPlaceHolder = ''
+  rootPrompt: string,
+  rootPlaceHolder: string,
+  optionCompareFn?: (a: TriggerOptionTreeNode, b: TriggerOptionTreeNode) => number
 ): TriggerOptionTree => {
   const root = new TriggerOptionGroupNode('triggerTypeDropDown', rootPrompt, rootPlaceHolder);
 
@@ -77,5 +78,12 @@ export const generateTriggerOptionTree = (
       node.parent = groupParent;
     });
   root.children.push(...Object.values(groups));
+
+  // sort tree nodes
+  if (optionCompareFn) {
+    root.children.sort(optionCompareFn);
+    Object.values(groups).forEach((x) => x.children.sort(optionCompareFn));
+  }
+
   return root;
 };
