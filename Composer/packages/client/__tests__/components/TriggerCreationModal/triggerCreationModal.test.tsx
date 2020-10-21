@@ -4,8 +4,8 @@
 import * as React from 'react';
 import { fireEvent, waitFor } from '@botframework-composer/test-utils';
 
-import { TriggerCreationModal } from '../../src/components/TriggerCreationModal';
-import { renderWithRecoil } from '../testUtils';
+import { TriggerCreationModal } from '../../../src/components/TriggerCreationModal';
+import { renderWithRecoil } from '../../testUtils';
 
 const projectId = '123a-bv3c4';
 
