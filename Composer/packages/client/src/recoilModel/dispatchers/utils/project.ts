@@ -145,12 +145,7 @@ export const navigateToBot = (
   if (projectId) {
     const { set } = callbackHelpers;
     set(currentProjectIdState, projectId);
-    let url = `/bot/${projectId}/dialogs/${mainDialog}`;
-    if (templateId === QnABotTemplateId) {
-      url = `/bot/${projectId}/knowledge-base/${mainDialog}`;
-      navigateTo(url, { state: { qnaKbUrls } });
-      return;
-    }
+    const url = `/bot/${projectId}/dialogs/${mainDialog}`;
     navigateTo(url);
   }
 };
