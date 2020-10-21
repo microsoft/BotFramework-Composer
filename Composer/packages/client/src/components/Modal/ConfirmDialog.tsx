@@ -133,6 +133,7 @@ export const OpenConfirmModal = (title, subTitle, setting = {}) => {
     document.body.appendChild(node);
     const removeNode = () => {
       ReactDOM.unmountComponentAtNode(node);
+      node.remove();
     };
 
     const onConfirm = () => {

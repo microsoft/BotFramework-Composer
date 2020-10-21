@@ -2,35 +2,39 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
-import { useState, Fragment, useEffect } from 'react';
-import { RouteComponentProps } from '@reach/router';
-import formatMessage from 'format-message';
-import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
-import { MessageBarButton } from 'office-ui-fabric-react/lib/Button';
+import { jsx } from "@emotion/core";
+import React, { useState, Fragment, useEffect } from "react";
+import formatMessage from "format-message";
+import { Dialog, DialogType } from "office-ui-fabric-react";
+import { LibraryRef } from "@botframework-composer/types";
+import {
+  render,
+  useProjectApi,
+  useHttpClient,
+  useApplicationApi,
+} from "@bfc/extension-client";
 
-import { useRecoilValue } from 'recoil';
-import { LibraryRef } from '@bfc/shared';
-import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
+import { Toolbar, IToolbarItem } from "@bfc/ui-shared";
+// import { OpenConfirmModal } from "../../components/Modal/ConfirmDialog";
 
-import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
-import { settingsState, dispatcherState } from '../../recoilModel';
+import {
+  ContentHeaderStyle,
+  HeaderText,
+  ContentStyle,
+  contentEditor,
+} from "./styles";
+import { ImportDialog } from "./importDialog";
+import { LibraryList } from "./libraryList";
+import { WorkingModal } from "./workingModal";
 
-import httpClient from '../../utils/httpUtil';
-import { navigateTo } from '../../utils/navigation';
-import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor } from './styles';
-import { ImportDialog } from './importDialog';
-import { LibraryList } from './libraryList';
-import { WorkingModal } from './workingModal';
+const DEFAULT_CATEGORY = formatMessage("Available");
 
-const DEFAULT_CATEGORY = formatMessage('Available');
-
-const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: string }>> = (props) => {
+const Library: React.FC = () => {
   const [items, setItems] = useState<LibraryRef[]>([]);
   const [groups, setGroups] = useState<any[]>([]);
-  const { projectId = '' } = props;
-  const settings = useRecoilValue(settingsState(projectId));
+  const { settings, projectId, reloadProject } = useProjectApi();
+  const { setApplicationLevelError } = useApplicationApi();
+  const httpClient = useHttpClient();
 
   const [ejectedRuntime, setEjectedRuntime] = useState<boolean>(false);
   const [availableLibraries, updateAvailableLibraries] = useState<any[]>([]);
@@ -39,13 +43,16 @@ const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const [selectedItem, setSelectedItem] = useState<LibraryRef>();
   const [working, setWorking] = useState(false);
   const [addDialogHidden, setAddDialogHidden] = useState(true);
-  const { fetchProjectById, setApplicationLevelError } = useRecoilValue(dispatcherState);
 
   useEffect(() => {
     getLibraries();
-    if (settings.runtime && settings.runtime.customRuntime === true && settings.runtime.path) {
+    getInstalledLibraries();
+    if (
+      settings.runtime &&
+      settings.runtime.customRuntime === true &&
+      settings.runtime.path
+    ) {
       setEjectedRuntime(true);
-      getInstalledLibraries();
     }
   }, []);
 
@@ -53,17 +60,15 @@ const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     const groups: any[] = [];
     let items: any[] = [];
 
-    if (installedComponents.length) {
-      items = items.concat(installedComponents || []);
+    items = items.concat(installedComponents || []);
 
-      groups.push({
-        key: 'installed',
-        name: 'Installed',
-        startIndex: 0,
-        count: installedComponents ? installedComponents.length : 0,
-        level: 0,
-      });
-    }
+    groups.push({
+      key: "installed",
+      name: "Installed",
+      startIndex: 0,
+      count: installedComponents ? installedComponents.length : 0,
+      level: 0,
+    });
 
     // find all categories listed in the available libraries
     const categories = [DEFAULT_CATEGORY];
@@ -77,7 +82,9 @@ const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     });
 
     categories.forEach((category) => {
-      const categoryItems = availableLibraries.filter((i) => i.category === category);
+      const categoryItems = availableLibraries.filter(
+        (i) => i.category === category
+      );
       if (categoryItems.length) {
         groups.push({
           key: category,
@@ -96,16 +103,16 @@ const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   const toolbarItems: IToolbarItem[] = [
     {
-      type: 'action',
-      text: formatMessage('Import Library'),
+      type: "action",
+      text: formatMessage("Import Library"),
       buttonProps: {
         iconProps: {
-          iconName: 'Add',
+          iconName: "Add",
         },
         onClick: () => setAddDialogHidden(false),
       },
-      align: 'left',
-      dataTestid: 'publishPage-ToolBar-Add',
+      align: "left",
+      dataTestid: "publishPage-ToolBar-Add",
       disabled: false,
     },
   ];
@@ -118,11 +125,12 @@ const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     const existing = installedComponents?.find((l) => l.name === packageName);
     let okToProceed = true;
     if (existing) {
-      const title = formatMessage('Update Library');
+      const title = formatMessage("Update Library");
       const msg = formatMessage(
-        'Any changes you made to this library will be lost! Are you sure you want to continue?'
+        "Any changes you made to this library will be lost! Are you sure you want to continue?"
       );
-      okToProceed = (await OpenConfirmModal(title, msg)) ? true : false;
+      // okToProceed = (await OpenConfirmModal(title, msg)) ? true : false;
+      okToProceed = confirm(msg);
     }
 
     if (okToProceed) {
@@ -143,11 +151,12 @@ const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
       // check to see if there was a conflict that requires confirmation
       if (results.data.success === false) {
-        const title = formatMessage('Conflicting changes detected');
+        const title = formatMessage("Conflicting changes detected");
         const msg = formatMessage(
-          'This operation will overwrite changes made to previously imported files. Do you want to proceed?'
+          "This operation will overwrite changes made to previously imported files. Do you want to proceed?"
         );
-        if (await OpenConfirmModal(title, msg)) {
+        // if (await OpenConfirmModal(title, msg)) {
+        if (confirm(msg)) {
           await httpClient.post(`/projects/${projectId}/import`, {
             package: packageName,
             version: version,
@@ -159,13 +168,16 @@ const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       await getInstalledLibraries();
 
       // reload modified content
-      await fetchProjectById(projectId);
+      await reloadProject();
     } catch (err) {
       console.error(err);
       setApplicationLevelError({
         status: err.response.status,
-        message: err.response && err.response.data.message ? err.response.data.message : err,
-        summary: 'IMPORT ERROR',
+        message:
+          err.response && err.response.data.message
+            ? err.response.data.message
+            : err,
+        summary: "IMPORT ERROR",
       });
     }
   };
@@ -177,21 +189,29 @@ const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     } catch (err) {
       setApplicationLevelError({
         status: err.response.status,
-        message: err.response && err.response.data.message ? err.response.data.message : err,
-        summary: 'LIBRARY ERROR',
+        message:
+          err.response && err.response.data.message
+            ? err.response.data.message
+            : err,
+        summary: "LIBRARY ERROR",
       });
     }
   };
 
   const getInstalledLibraries = async () => {
     try {
-      const response = await httpClient.get(`/projects/${projectId}/installedComponents`);
+      const response = await httpClient.get(
+        `/projects/${projectId}/installedComponents`
+      );
       updateInstalledComponents(response.data.components);
     } catch (err) {
       setApplicationLevelError({
         status: err.response.status,
-        message: err.response && err.response.data.message ? err.response.data.message : err,
-        summary: 'LIBRARY ERROR',
+        message:
+          err.response && err.response.data.message
+            ? err.response.data.message
+            : err,
+        summary: "LIBRARY ERROR",
       });
     }
   };
@@ -206,11 +226,12 @@ const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   const removeLibrary = async () => {
     if (selectedItem) {
-      const title = formatMessage('Remove Library');
+      const title = formatMessage("Remove Library");
       const msg = formatMessage(
-        'Any changes you made to this library will be lost! In addition, this may leave your bot in a broken state. Are you sure you want to continue?'
+        "Any changes you made to this library will be lost! In addition, this may leave your bot in a broken state. Are you sure you want to continue?"
       );
-      const okToProceed = (await OpenConfirmModal(title, msg)) ? true : false;
+      // const okToProceed = (await OpenConfirmModal(title, msg)) ? true : false;
+      const okToProceed = confirm(msg);
       if (okToProceed) {
         closeDialog();
         setWorking(true);
@@ -220,12 +241,15 @@ const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
           });
 
           // reload modified content
-          await fetchProjectById(projectId);
+          await reloadProject();
         } catch (err) {
           setApplicationLevelError({
             status: err.response.status,
-            message: err.response && err.response.data.message ? err.response.data.message : err,
-            summary: 'IMPORT ERROR',
+            message:
+              err.response && err.response.data.message
+                ? err.response.data.message
+                : err,
+            summary: "IMPORT ERROR",
           });
         }
         setWorking(false);
@@ -244,14 +268,13 @@ const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     }
   };
 
-  const navigateToEject = (evt: any): void => {
-    navigateTo(`/settings/bot/${projectId}/runtime`);
-  };
-
   return (
     <Fragment>
       <Dialog
-        dialogContentProps={{ title: formatMessage('Import a Package'), type: DialogType.normal }}
+        dialogContentProps={{
+          title: formatMessage("Import a Package"),
+          type: DialogType.normal,
+        }}
         hidden={addDialogHidden}
         minWidth={450}
         modalProps={{ isBlocking: true }}
@@ -259,32 +282,31 @@ const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       >
         <ImportDialog closeDialog={closeDialog} doImport={importFromWeb} />
       </Dialog>
-      <WorkingModal hidden={!working} title={formatMessage('Importing library...')} />
+      <WorkingModal
+        hidden={!working}
+        title={formatMessage("Importing library...")}
+      />
       <Toolbar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
-        <h1 css={HeaderText}>{formatMessage('Package Library')}</h1>
+        <h1 css={HeaderText}>{formatMessage("Package Library")}</h1>
       </div>
       {!ejectedRuntime && (
-        <MessageBar
-          messageBarType={MessageBarType.warning}
-          isMultiline={false}
-          actions={
-            <div>
-              <MessageBarButton onClick={navigateToEject}>{formatMessage('Eject runtime')}</MessageBarButton>
-            </div>
-          }
-        >
-          To install components, this project must have an ejected runtime. Please navigate to the runtime settings
-          page.
-        </MessageBar>
+        <div>
+          To install components, this project must first have an ejected
+          runtime. Please navigate to the runtime settings page and eject the
+          runtime first.
+        </div>
       )}
       <div css={ContentStyle} data-testid="installedLibraries" role="main">
-        <div aria-label={formatMessage('List view')} css={contentEditor} role="region">
+        <div
+          aria-label={formatMessage("List view")}
+          css={contentEditor}
+          role="region"
+        >
           <Fragment>
             <LibraryList
               groups={groups}
               install={install}
-              disabled={!ejectedRuntime}
               isInstalled={isInstalled}
               items={items}
               redownload={redownload}
@@ -293,7 +315,15 @@ const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
               onItemClick={selectItem}
             />
             {!items || items.length === 0 ? (
-              <div style={{ marginLeft: '50px', fontSize: 'smaller', marginTop: '20px' }}>No libraries installed</div>
+              <div
+                style={{
+                  marginLeft: "50px",
+                  fontSize: "smaller",
+                  marginTop: "20px",
+                }}
+              >
+                No libraries installed
+              </div>
             ) : null}
           </Fragment>
         </div>
@@ -302,4 +332,4 @@ const Library: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   );
 };
 
-export default Library;
+render(<Library />);

@@ -98,6 +98,9 @@ export const applicationDispatcher = () => {
     }
   );
 
+  // @ts-ignore
+  window.setApplicationLevelError = setApplicationLevelError;
+
   return {
     setAppUpdateStatus,
     setAppUpdateShowing,

@@ -8,9 +8,9 @@ import React, { useCallback, useState } from 'react';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 import { SkillSetting } from '@bfc/shared';
+import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
 
 import { dispatcherState, settingsState, botDisplayNameState } from '../../recoilModel';
-import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { TestController } from '../../components/TestController/TestController';
 import { CreateSkillModal } from '../../components/CreateSkillModal';
 
