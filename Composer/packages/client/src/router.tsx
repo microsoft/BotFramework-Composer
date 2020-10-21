@@ -55,7 +55,7 @@ const Routes = (props) => {
             <LUPage path="language-understanding/:dialogId/*" />
             <LGPage path="language-generation/:dialogId/*" />
             <QnAPage path="knowledge-base/:dialogId/*" />
-            <Notifications path="notifications" />
+            <Notifications path="notifications/*" />
             <Publish path="publish/:targetName" />
             <Skills path="skills/*" />
             <FormDialogPage path="forms/:schemaId/*" />

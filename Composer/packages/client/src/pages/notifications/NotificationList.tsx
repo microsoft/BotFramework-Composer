@@ -16,14 +16,81 @@ import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { useMemo, useState } from 'react';
 import formatMessage from 'format-message';
+import { RouteComponentProps } from '@reach/router';
+import { useRecoilValue } from 'recoil';
+import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
+import { css } from '@emotion/core';
 
 import { Pagination } from '../../components/Pagination';
+import { notificationListSelector } from '../../recoilModel/selectors/notificationsPageSelector';
 
 import { INotification } from './types';
-import { notification, typeIcon, listRoot, icons, tableView, detailList, tableCell, content } from './styles';
 
-export interface INotificationListProps {
-  items: INotification[];
+// -------------------- Styles -------------------- //
+
+const icons = {
+  Error: { iconName: 'ErrorBadge', color: '#A80000', background: '#FED9CC' },
+  Warning: { iconName: 'Warning', color: '#8A8780', background: '#FFF4CE' },
+};
+
+const notification = mergeStyleSets({
+  typeIconHeaderIcon: {
+    padding: 0,
+    fontSize: '16px',
+  },
+  typeIconCell: {
+    textAlign: 'center',
+    cursor: 'pointer',
+  },
+  columnCell: {
+    cursor: 'pointer',
+  },
+});
+
+const typeIcon = (icon) => css`
+  vertical-align: middle;
+  font-size: 16px;
+  width: 24px;
+  height: 24px;
+  background: ${icon.background};
+  line-height: 24px;
+  color: ${icon.color};
+  cursor: pointer;
+`;
+
+const listRoot = css`
+  position: relative;
+  overflow-y: auto;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+`;
+
+const tableView = css`
+  position: relative;
+  flex-grow: 1;
+`;
+
+const detailList = css`
+  overflow-x: hidden;
+`;
+
+const tableCell = css`
+  outline: none;
+  :focus {
+    outline: rgb(102, 102, 102) solid 1px;
+  }
+`;
+
+const content = css`
+  outline: none;
+`;
+
+// -------------------- NotificationList -------------------- //
+export interface INotificationListProps extends RouteComponentProps {
+  projectId?: string;
+  showType: string;
   onItemClick: (item: INotification) => void;
 }
 
@@ -132,14 +199,16 @@ function onRenderDetailsHeader(props, defaultRender) {
 }
 
 export const NotificationList: React.FC<INotificationListProps> = (props) => {
-  const { items, onItemClick } = props;
+  const { onItemClick, projectId = '', showType } = props;
+  const notifications = useRecoilValue(notificationListSelector(projectId));
+  const availableNotifications = showType ? notifications.filter((x) => x.severity === showType) : notifications;
   const [pageIndex, setPageIndex] = useState<number>(1);
 
   const pageCount: number = useMemo(() => {
-    return Math.ceil(items.length / itemCount) || 1;
-  }, [items]);
+    return Math.ceil(availableNotifications.length / itemCount) || 1;
+  }, [availableNotifications]);
 
-  const showItems = items.slice((pageIndex - 1) * itemCount, pageIndex * itemCount);
+  const showItems = availableNotifications.slice((pageIndex - 1) * itemCount, pageIndex * itemCount);
 
   return (
     <div css={listRoot} data-testid="notifications-table-view" role="main">

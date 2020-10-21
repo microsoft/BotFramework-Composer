@@ -25,8 +25,8 @@ import {
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { BotStatus } from '../../constants';
 import { isAbsHosted } from '../../utils/envUtil';
-import useNotifications from '../../pages/notifications/useNotifications';
 import { navigateTo, openInEmulator } from '../../utils/navigation';
+import { allNotificationsSelector } from '../../recoilModel/selectors/notificationsPageSelector';
 
 import { isBuildConfigComplete, needsBuild } from './../../utils/buildUtil';
 import { PublishDialog } from './publishDialog';
@@ -59,7 +59,7 @@ export const TestController: React.FC<{ projectId: string }> = (props) => {
   const [calloutVisible, setCalloutVisible] = useState(false);
 
   const botActionRef = useRef(null);
-  const notifications = useNotifications(projectId);
+  const notifications = useRecoilValue(allNotificationsSelector);
 
   const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
   const botStatus = useRecoilValue(botStatusState(projectId));

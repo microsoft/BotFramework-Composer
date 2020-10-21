@@ -3,23 +3,24 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState } from 'react';
-import { RouteComponentProps } from '@reach/router';
+import { Fragment, Suspense, useState } from 'react';
+import { RouteComponentProps, Router } from '@reach/router';
+import formatMessage from 'format-message';
+import { useRecoilValue } from 'recoil';
 
-import { Toolbar } from '../../components/Toolbar';
 import { navigateTo } from '../../utils/navigation';
 import { convertPathToUrl } from '../../utils/navigation';
+import { Page } from '../../components/Page';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
+import { notificationNavLinksSelector } from '../../recoilModel/selectors/notificationsPageSelector';
 
-import useNotifications from './useNotifications';
 import { NotificationList } from './NotificationList';
-import { NotificationHeader } from './NotificationHeader';
-import { root } from './styles';
+import { NotificationFilter } from './NotificationFilter';
 import { INotification, NotificationType } from './types';
 
-const Notifications: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
-  const { projectId = '' } = props;
-  const [filter, setFilter] = useState('');
-  const notifications = useNotifications(projectId, filter);
+const Notifications: React.FC<RouteComponentProps<{}>> = () => {
+  const [showType, setShowType] = useState('');
+  const navLinks = useRecoilValue(notificationNavLinksSelector);
   const navigations = {
     [NotificationType.LG]: (item: INotification) => {
       const { projectId, resourceId, diagnostic, dialogPath } = item;
@@ -59,15 +60,31 @@ const Notifications: React.FC<RouteComponentProps<{ projectId: string }>> = (pro
       navigateTo(`/settings/bot/${projectId}/dialog-settings`);
     },
   };
+
   const handleItemClick = (item: INotification) => {
     navigations[item.type](item);
   };
+
+  const onRenderHeaderContent = () => {
+    return <NotificationFilter onChange={setShowType} />;
+  };
+
   return (
-    <div css={root} data-testid="notifications-page">
-      <Toolbar />
-      <NotificationHeader onChange={setFilter} />
-      <NotificationList items={notifications} onItemClick={handleItemClick} />
-    </div>
+    <Page
+      data-testid="LUPage"
+      mainRegionName={formatMessage('Notification List')}
+      navLinks={navLinks}
+      navRegionName={formatMessage('Notificaitons Pane')}
+      title={formatMessage('Notifications')}
+      toolbarItems={[]}
+      onRenderHeaderContent={onRenderHeaderContent}
+    >
+      <Suspense fallback={<LoadingSpinner />}>
+        <Router component={Fragment} primary={false}>
+          <NotificationList path="/:projectId" showType={showType} onItemClick={handleItemClick} />
+        </Router>
+      </Suspense>
+    </Page>
   );
 };
 

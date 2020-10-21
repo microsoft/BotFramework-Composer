@@ -3,11 +3,14 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { Dropdown, IDropdownOption, IDropdownStyles } from 'office-ui-fabric-react/lib/Dropdown';
 import formatMessage from 'format-message';
 
 import { DiagnosticSeverity } from './types';
-import { notificationHeader, notificationHeaderText, dropdownStyles } from './styles';
+
+export const dropdownStyles: Partial<IDropdownStyles> = {
+  dropdown: { width: 180, marginLeft: 'auto' },
+};
 
 const createOptions = (): IDropdownOption[] => {
   const defaultOptions: IDropdownOption[] = [
@@ -25,25 +28,22 @@ const createOptions = (): IDropdownOption[] => {
   return defaultOptions;
 };
 
-export interface INotificationHeader {
+export interface INotificationFilter {
   onChange: (text: string) => void;
 }
 
-export const NotificationHeader: React.FC<INotificationHeader> = (props) => {
+export const NotificationFilter: React.FC<INotificationFilter> = (props) => {
   const { onChange } = props;
 
   return (
-    <div css={notificationHeader}>
-      <h1 css={notificationHeaderText}>{formatMessage('Notifications')}</h1>
-      <Dropdown
-        ariaLabel={formatMessage('Notification type')}
-        data-testid="notifications-dropdown"
-        options={createOptions()}
-        styles={dropdownStyles}
-        onChange={(event, option) => {
-          if (option) onChange(option.data);
-        }}
-      />
-    </div>
+    <Dropdown
+      ariaLabel={formatMessage('Notification type')}
+      data-testid="notifications-dropdown"
+      options={createOptions()}
+      styles={dropdownStyles}
+      onChange={(event, option) => {
+        if (option) onChange(option.data);
+      }}
+    />
   );
 };

@@ -4,7 +4,7 @@
 import * as React from 'react';
 import { fireEvent, render } from '@botframework-composer/test-utils';
 
-import { NotificationHeader } from '../../src/pages/notifications/NotificationHeader';
+import { NotificationHeader } from '../../src/pages/notifications/NotificationFilter';
 
 describe('<NotificationHeader/>', () => {
   it('should render the NotificationHeader', () => {
