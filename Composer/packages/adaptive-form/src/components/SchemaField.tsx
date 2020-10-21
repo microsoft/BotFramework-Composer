@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FieldProps, UIOptions, useFormConfig } from '@bfc/extension-client';
 
 import { getUIOptions, resolveFieldWidget, resolveRef, getUiLabel, getUiPlaceholder, getUiDescription } from '../utils';
@@ -19,7 +19,7 @@ const schemaField = {
   `,
 };
 
-const SchemaField: React.FC<FieldProps> = (props) => {
+export const SchemaField: React.FC<FieldProps> = (props) => {
   const {
     className,
     definitions,
@@ -31,9 +31,14 @@ const SchemaField: React.FC<FieldProps> = (props) => {
     hideError,
     hidden,
     onChange,
+    expression,
+    onBlur,
+    id,
     ...rest
   } = props;
   const formUIOptions = useFormConfig();
+
+  const [fieldFocused, setFieldFocused] = useState(false);
 
   const schema = resolveRef(baseSchema, definitions);
   const uiOptions: UIOptions = {
@@ -46,6 +51,7 @@ const SchemaField: React.FC<FieldProps> = (props) => {
       typeof uiOptions?.serializer?.set === 'function' ? uiOptions.serializer.set(newValue) : newValue;
 
     onChange(serializedValue);
+    setFieldFocused(true);
   };
 
   useEffect(() => {
@@ -68,9 +74,18 @@ const SchemaField: React.FC<FieldProps> = (props) => {
 
   const deserializedValue = typeof uiOptions?.serializer?.get === 'function' ? uiOptions.serializer.get(value) : value;
 
-  const FieldWidget = resolveFieldWidget(schema, uiOptions, formUIOptions);
+  const { field: FieldWidget, customProps } = resolveFieldWidget({
+    schema,
+    uiOptions,
+    globalUIOptions: formUIOptions,
+    value,
+    expression,
+  });
   const fieldProps: FieldProps = {
     ...rest,
+    ...customProps,
+    id: id,
+    focused: fieldFocused,
     definitions,
     description: getUiDescription({ ...props, uiOptions }),
     enumOptions: schema.enum as string[],
@@ -83,6 +98,11 @@ const SchemaField: React.FC<FieldProps> = (props) => {
     schema,
     uiOptions,
     value: deserializedValue,
+    onFocus: () => setFieldFocused(true),
+    onBlur: () => {
+      setFieldFocused(false);
+      onBlur && onBlur(id);
+    },
   };
 
   return (
@@ -92,6 +112,3 @@ const SchemaField: React.FC<FieldProps> = (props) => {
     </div>
   );
 };
-
-export { SchemaField, schemaField };
-export default SchemaField;

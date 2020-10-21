@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FieldProps } from '@bfc/extension-client';
 import { NeutralColors } from '@uifabric/fluent-theme';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { ITextField, TextField } from 'office-ui-fabric-react/lib/TextField';
 import formatMessage from 'format-message';
 
 import { FieldLabel } from '../FieldLabel';
@@ -40,7 +40,16 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
     error,
     uiOptions,
     required,
+    focused,
   } = props;
+
+  const textFieldRef = React.createRef<ITextField>();
+
+  useEffect(() => {
+    if (focused && textFieldRef.current) {
+      textFieldRef.current.focus();
+    }
+  }, [focused, textFieldRef.current]);
 
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     if (typeof onFocus === 'function') {
@@ -65,6 +74,8 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
       <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
       <TextField
         ariaLabel={label || formatMessage('string field')}
+        autoComplete="off"
+        componentRef={textFieldRef}
         disabled={disabled}
         errorMessage={error}
         id={id}
@@ -78,7 +89,10 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
         value={value}
         onBlur={handleBlur}
         onChange={handleChange}
+        onClick={props.onClick}
         onFocus={handleFocus}
+        onKeyDown={props.onKeyDown}
+        onKeyUp={props.onKeyUp}
       />
     </>
   );
