@@ -24,7 +24,6 @@ jest.mock('../../../services/asset', () => {
       botProjectFileTemplate: {
         $schema: '',
         name: '',
-        workspace: '',
         skills: {},
       },
     },
