@@ -4,7 +4,7 @@
 import * as path from 'path';
 
 import rimraf from 'rimraf';
-import { FileInfo } from '@bfc/types';
+import { FileInfo } from '@bfc/shared';
 import { Utility } from '@microsoft/bf-orchestrator';
 
 import { IFileStorage } from '../../storage/interface';
