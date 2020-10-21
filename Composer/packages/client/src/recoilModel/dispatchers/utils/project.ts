@@ -1,12 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import path from 'path';
+
 import { indexer, validateDialog } from '@bfc/indexers';
 import {
   BotProjectFile,
   BotProjectSpace,
   BotProjectSpaceSkill,
-  convertFileProtocolToPath,
   convertSkillsToDictionary,
   dereferenceDefinitions,
   DialogInfo,
@@ -345,7 +346,7 @@ export const removeRecentProject = async (callbackHelpers: CallbackInterface, pa
 export const openRemoteSkill = async (
   callbackHelpers: CallbackInterface,
   manifestUrl: string,
-  botNameIdentifier: string
+  botNameIdentifier?: string
 ) => {
   const { set } = callbackHelpers;
 
@@ -361,7 +362,8 @@ export const openRemoteSkill = async (
     isRootBot: false,
     isRemote: true,
   });
-  set(botNameIdentifierState(projectId), botNameIdentifier);
+
+  set(botNameIdentifierState(projectId), botNameIdentifier || camelCase(manifestResponse.data.name));
   set(botDisplayNameState(projectId), manifestResponse.data.name);
   set(locationState(projectId), manifestUrl);
   return { projectId, manifestResponse: manifestResponse.data };
@@ -453,7 +455,8 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
 
   const mainDialog = await initBotState(callbackHelpers, projectData, botFiles);
   const rootBotProjectId = projectData.id;
-  const { name } = projectData;
+  const { name, location } = projectData;
+
   set(botNameIdentifierState(rootBotProjectId), camelCase(name));
 
   if (botFiles.botProjectSpaceFiles && botFiles.botProjectSpaceFiles.length) {
@@ -472,8 +475,10 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
         const skill = skills[nameIdentifier];
         let skillPromise;
         if (!skill.remote && skill.workspace) {
-          const skillPath = convertFileProtocolToPath(skill.workspace);
-          skillPromise = openLocalSkill(callbackHelpers, skillPath, storageId, nameIdentifier);
+          const rootBotPath = location;
+          const skillPath = skill.workspace;
+          const absoluteSkillPath = path.resolve(rootBotPath, skillPath);
+          skillPromise = openLocalSkill(callbackHelpers, absoluteSkillPath, storageId, nameIdentifier);
         } else if (skill.manifest) {
           skillPromise = openRemoteSkill(callbackHelpers, skill.manifest, nameIdentifier);
         }
@@ -559,6 +564,7 @@ export const checkIfBotExistsInBotProjectFile = async (
   if (!rootBotProjectId) {
     throw new Error(formatMessage('The root bot is not a bot project'));
   }
+  const rootBotLocation = await snapshot.getPromise(locationState(rootBotProjectId));
   const { content: botProjectFile } = await snapshot.getPromise(botProjectFileState(rootBotProjectId));
 
   for (const uniqueSkillName in botProjectFile.skills) {
@@ -569,8 +575,8 @@ export const checkIfBotExistsInBotProjectFile = async (
       }
     } else {
       if (workspace) {
-        const resolvedPath = convertFileProtocolToPath(workspace);
-        if (pathOrManifest === resolvedPath) {
+        const absolutePathOfSkill = path.resolve(rootBotLocation, workspace);
+        if (pathOrManifest === absolutePathOfSkill) {
           return true;
         }
       }
