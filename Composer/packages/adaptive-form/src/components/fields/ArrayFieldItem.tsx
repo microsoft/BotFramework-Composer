@@ -10,7 +10,7 @@ import { FontSizes } from '@uifabric/styling';
 import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import formatMessage from 'format-message';
 
-import SchemaField from '../SchemaField';
+import { SchemaField } from '../SchemaField';
 
 import { arrayItem } from './styles';
 

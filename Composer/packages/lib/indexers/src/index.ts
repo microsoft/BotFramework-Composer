@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { DialogSetting, FileInfo, importResolverGenerator } from '@bfc/shared';
+import { DialogSetting, FileInfo, lgImportResolverGenerator } from '@bfc/shared';
 
 import { dialogIndexer } from './dialogIndexer';
 import { dialogSchemaIndexer } from './dialogSchemaIndexer';
@@ -46,7 +46,7 @@ class Indexer {
       };
     });
 
-    return importResolverGenerator(lgFiles, '.lg', locale);
+    return lgImportResolverGenerator(lgFiles, '.lg', locale);
   };
 
   public index(files: FileInfo[], botName: string, locale: string, skillContent: any, settings: DialogSetting) {
