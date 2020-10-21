@@ -209,10 +209,13 @@ export const publisherDispatcher = () => {
   // only support local publish
   const stopPublishBot = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (projectId: string, target: any = defaultPublishConfig) => {
-      const { set } = callbackHelpers;
+      const { set, snapshot } = callbackHelpers;
       try {
         await httpClient.post(`/publish/${projectId}/stopPublish/${target.name}`);
-        set(botStatusState(projectId), BotStatus.unConnected);
+        const currentBotStatus = await snapshot.getPromise(botStatusState(projectId));
+        if (currentBotStatus !== BotStatus.failed) {
+          set(botStatusState(projectId), BotStatus.unConnected);
+        }
       } catch (err) {
         setError(callbackHelpers, err);
         logMessage(callbackHelpers, err.message);

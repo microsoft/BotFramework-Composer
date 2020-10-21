@@ -158,18 +158,13 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
           status: LocalPublisher.runningBots[botId].status,
           result: LocalPublisher.runningBots[botId].result,
         };
-        if (LocalPublisher.runningBots[botId].status === 500) {
-          // after we return the 500 status once, delete it out of the running bots list.
-          await this.stopBot(botId);
-          delete LocalPublisher.runningBots[botId];
-        }
         return status;
       }
     } else {
       return {
-        status: 200,
+        status: 404,
         result: {
-          message: 'Ready',
+          message: 'Status cannot be obtained for this bot.',
         },
       };
     }

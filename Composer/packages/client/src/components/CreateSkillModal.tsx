@@ -157,7 +157,7 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = ({ projectId, o
   };
 
   const handleManifestUrlChange = (_, manifestUrl = '') => {
-    const { msAppId, endpointUrl, ...rest } = formData;
+    const { msAppId, endpoint, ...rest } = formData;
     setValidationState((validationState) => ({
       ...validationState,
       manifestUrl: ValidationState.NotValidated,

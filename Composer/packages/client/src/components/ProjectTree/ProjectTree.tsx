@@ -151,7 +151,9 @@ export const ProjectTree: React.FC<Props> = ({
   }
 
   const dialogHasWarnings = (dialog: DialogInfo) => {
-    notificationMap[currentProjectId][dialog.id].some((diag) => diag.severity === DiagnosticSeverity.Warning);
+    if (notificationMap[currentProjectId][dialog.id]) {
+      return notificationMap[currentProjectId][dialog.id].some((diag) => diag.severity === DiagnosticSeverity.Warning);
+    }
   };
 
   const botHasWarnings = (bot: BotInProject) => {
@@ -159,7 +161,9 @@ export const ProjectTree: React.FC<Props> = ({
   };
 
   const dialogHasErrors = (dialog: DialogInfo) => {
-    notificationMap[currentProjectId][dialog.id].some((diag) => diag.severity === DiagnosticSeverity.Error);
+    if (notificationMap[currentProjectId][dialog.id]) {
+      notificationMap[currentProjectId][dialog.id].some((diag) => diag.severity === DiagnosticSeverity.Error);
+    }
   };
 
   const botHasErrors = (bot: BotInProject) => {
@@ -211,14 +215,18 @@ export const ProjectTree: React.FC<Props> = ({
   };
 
   const renderDialogHeader = (skillId: string, dialog: DialogInfo) => {
-    const warningContent = notificationMap[currentProjectId][dialog.id]
-      .filter((diag) => diag.severity === DiagnosticSeverity.Warning)
-      .map((diag) => diag.message)
-      .join(',');
-    const errorContent = notificationMap[currentProjectId][dialog.id]
-      .filter((diag) => diag.severity === DiagnosticSeverity.Error)
-      .map((diag) => diag.message)
-      .join(',');
+    let warningContent, errorContent;
+    if (notificationMap[currentProjectId][dialog.id]) {
+      warningContent = notificationMap[currentProjectId][dialog.id]
+        .filter((diag) => diag.severity === DiagnosticSeverity.Warning)
+        .map((diag) => diag.message)
+        .join(',');
+
+      errorContent = notificationMap[currentProjectId][dialog.id]
+        .filter((diag) => diag.severity === DiagnosticSeverity.Error)
+        .map((diag) => diag.message)
+        .join(',');
+    }
 
     const link: TreeLink = {
       dialogName: dialog.id,

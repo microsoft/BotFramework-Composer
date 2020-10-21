@@ -43,7 +43,7 @@ export const LocalBotStatusIndicator: React.FC<LocalBotStatusIndicatorProps> = (
   const botActionRef = useRef(null);
   const botLoadErrorMsg = useRecoilValue(botRuntimeErrorState(projectId));
   const [calloutVisible, setErrorCallout] = useState(false);
-  const { startSingleBot } = useBotOperations(undefined);
+  const { startSingleBot, stopSingleBot } = useBotOperations();
 
   useInterval(
     () => {
@@ -65,6 +65,7 @@ export const LocalBotStatusIndicator: React.FC<LocalBotStatusIndicatorProps> = (
       case BotStatus.failed:
         setBotStatusText(BotStatusesCopy[BotStatus.failed]);
         setIntervalRunning(false);
+        stopSingleBot(projectId);
         break;
       case BotStatus.published:
         setBotStatusText(BotStatusesCopy[BotStatus.published]);
@@ -76,11 +77,15 @@ export const LocalBotStatusIndicator: React.FC<LocalBotStatusIndicatorProps> = (
         setIntervalRunning(true);
         break;
 
-      case BotStatus.connected:
-        setIntervalRunning(false);
+      case BotStatus.connected: {
+        // Runtime errors aren't surface immediately. Stop the interval after one more ping
         setBotStatusText(BotStatusesCopy[BotStatus.connected]);
+        setIntervalRunning(false);
+        setTimeout(() => {
+          getPublishStatus(projectId, defaultPublishConfig);
+        }, 3000);
         break;
-
+      }
       case BotStatus.publishing:
         setBotStatusText(BotStatusesCopy[BotStatus.publishing]);
         break;

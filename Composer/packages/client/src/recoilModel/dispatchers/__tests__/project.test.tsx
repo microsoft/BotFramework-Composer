@@ -111,7 +111,6 @@ describe('Project dispatcher', () => {
   const useRecoilTestHook = () => {
     const schemas = useRecoilValue(schemasState(projectId));
     const location = useRecoilValue(locationState(projectId));
-    const skills = useRecoilValue(skillsState(projectId));
     const botName = useRecoilValue(botDisplayNameState(projectId));
     const skillManifests = useRecoilValue(skillManifestsState(projectId));
     const luFiles = useRecoilValue(luFilesState(projectId));
@@ -145,7 +144,6 @@ describe('Project dispatcher', () => {
       botEnvironment,
       botName,
       botStatus,
-      skills,
       location,
       schemas,
       diagnostics,
@@ -219,7 +217,6 @@ describe('Project dispatcher', () => {
     expect(renderedComponent.current.lgFiles.length).toBe(1);
     expect(renderedComponent.current.luFiles.length).toBe(1);
     expect(renderedComponent.current.botEnvironment).toBe(mockProjectResponse.botEnvironment);
-    expect(renderedComponent.current.skills.length).toBe(0);
     expect(renderedComponent.current.botOpening).toBeFalsy();
     expect(renderedComponent.current.schemas.sdk).toBeDefined();
     expect(renderedComponent.current.schemas.default).toBeDefined();
