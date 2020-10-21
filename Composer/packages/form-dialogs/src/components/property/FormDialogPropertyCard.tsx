@@ -175,7 +175,12 @@ export const FormDialogPropertyCard = React.memo((props: FormDialogPropertyCardP
             styles={{ root: { flex: 1 } }}
             value={name}
             onChange={changeName}
-            onRenderLabel={onRenderLabel(formatMessage('Property name help text'), propertyNameTooltipId)}
+            onRenderLabel={onRenderLabel(
+              formatMessage(
+                `A property is a piece of information that your bot will collect. The property name is the name used in Composer; it is not necessarily the same text that will appear in your bot's messages.`
+              ),
+              propertyNameTooltipId
+            )}
           />
           <Stack
             horizontal
@@ -187,17 +192,22 @@ export const FormDialogPropertyCard = React.memo((props: FormDialogPropertyCardP
             <RequiredPriorityIndicator propertyId={propertyId} required={required} />
 
             <OverflowSet
-              aria-label={formatMessage('Property quick actions')}
+              aria-label={formatMessage('Property actions')}
               overflowItems={[
                 {
                   key: 'collapseItem',
-                  name: 'Collapse',
+                  name: formatMessage('Collapse'),
                   onClick: deactivateItem,
                 },
-                { key: 'duplicateItem', name: 'Duplicate', onClick: onDuplicate, iconProps: { iconName: 'Copy' } },
+                {
+                  key: 'duplicateItem',
+                  name: formatMessage('Duplicate'),
+                  onClick: onDuplicate,
+                  iconProps: { iconName: 'Copy' },
+                },
                 {
                   key: 'deleteItem',
-                  name: 'Delete',
+                  name: formatMessage('Delete'),
                   onClick: onRemove,
                   iconProps: { iconName: 'Delete' },
                 },
@@ -227,7 +237,10 @@ export const FormDialogPropertyCard = React.memo((props: FormDialogPropertyCardP
               checked={array}
               label={formatMessage('Accepts multiple values')}
               onChange={changeArray}
-              onRenderLabel={onRenderLabel(formatMessage('Property array help text'), propertyArrayTooltipId)}
+              onRenderLabel={onRenderLabel(
+                formatMessage('This option allows your users to give multiple values for this property.'),
+                propertyArrayTooltipId
+              )}
             />
           </Stack>
         </Stack>

@@ -21,8 +21,6 @@ import {
   userSettingsState,
 } from '../../recoilModel';
 import Home from '../../pages/home/Home';
-import ImportQnAFromUrlModal from '../../pages/knowledge-base/ImportQnAFromUrlModal';
-import { QnABotTemplateId } from '../../constants';
 import { useProjectIdCache } from '../../utils/hooks';
 import { useShell } from '../../shell';
 import plugins from '../../plugins';
@@ -130,19 +128,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     saveProjectAs(projectId, formData.name, formData.description, formData.location);
   };
 
-  const handleCreateQnA = async (urls: string[]) => {
-    saveTemplateId(QnABotTemplateId);
-    handleDismiss();
-    handleCreateNew(formData, QnABotTemplateId, urls);
-  };
-
   const handleDefineConversationSubmit = async (formData, templateId: string) => {
-    // If selected template is qnaSample then route to QNA import modal
-    if (templateId === 'QnASample') {
-      setFormData(formData);
-      navigate(`./QnASample/importQnA`);
-      return;
-    }
     // If selected template is vaCore then route to VA Customization modal
     if (templateId === 'va-core') {
       setFormData(formData);
@@ -206,12 +192,6 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
             onCurrentPathUpdate={updateCurrentPath}
             onDismiss={handleDismiss}
             onOpen={openBot}
-          />
-          <ImportQnAFromUrlModal
-            dialogId={formData.name.toLowerCase()}
-            path="create/QnASample/importQnA"
-            onDismiss={handleDismiss}
-            onSubmit={handleCreateQnA}
           />
           <VirtualAssistantCreationModal
             formData={formData}

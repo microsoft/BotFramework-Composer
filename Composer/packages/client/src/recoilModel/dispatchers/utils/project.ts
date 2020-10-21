@@ -1,75 +1,78 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { v4 as uuid } from 'uuid';
+import path from 'path';
+
+import { indexer, validateDialog } from '@bfc/indexers';
 import {
-  SensitiveProperties,
+  BotProjectFile,
+  BotProjectSpace,
+  BotProjectSpaceSkill,
   convertSkillsToDictionary,
-  DialogSetting,
   dereferenceDefinitions,
   DialogInfo,
+  DialogSetting,
   LuFile,
   QnAFile,
-  BotProjectSpace,
-  BotProjectFile,
-  BotProjectSpaceSkill,
-  convertFileProtocolToPath,
+  SensitiveProperties,
 } from '@bfc/shared';
-import objectGet from 'lodash/get';
-import objectSet from 'lodash/set';
-import { indexer, validateDialog } from '@bfc/indexers';
-import { CallbackInterface } from 'recoil';
-import { stringify } from 'query-string';
 import formatMessage from 'format-message';
 import camelCase from 'lodash/camelCase';
+import objectGet from 'lodash/get';
+import objectSet from 'lodash/set';
+import { stringify } from 'query-string';
+import { CallbackInterface } from 'recoil';
+import { v4 as uuid } from 'uuid';
 
-import * as botstates from '../../atoms/botState';
-import UndoHistory from '../../undo/undoHistory';
-import languageStorage from '../../../utils/languageStorage';
+import { BotStatus, QnABotTemplateId } from '../../../constants';
 import settingStorage from '../../../utils/dialogSettingStorage';
+import { getUniqueName } from '../../../utils/fileUtil';
+import httpClient from '../../../utils/httpUtil';
+import languageStorage from '../../../utils/languageStorage';
+import luFileStatusStorage from '../../../utils/luFileStatusStorage';
+import { getReferredLuFiles } from '../../../utils/luUtil';
+import { navigateTo } from '../../../utils/navigation';
+import qnaFileStatusStorage from '../../../utils/qnaFileStatusStorage';
+import { getReferredQnaFiles, reformQnAToContainerKB } from '../../../utils/qnaUtil';
 import {
   botDiagnosticsState,
+  botDisplayNameState,
+  botEnvironmentState,
+  botErrorState,
+  botNameIdentifierState,
   botProjectFileState,
-  botProjectSpaceLoadedState,
   botProjectIdsState,
+  botProjectSpaceLoadedState,
+  botStatusState,
   currentProjectIdState,
+  dialogSchemasState,
+  dialogsState,
   filePersistenceState,
+  formDialogSchemaIdsState,
+  formDialogSchemaState,
+  jsonSchemaFilesState,
+  lgFilesState,
+  localeState,
+  locationState,
+  luFilesState,
   projectMetaDataState,
   qnaFilesState,
   recentProjectsState,
-  botErrorState,
-  botNameIdentifierState,
+  schemasState,
+  settingsState,
+  skillManifestsState,
+  skillsState,
+  showCreateQnAFromUrlDialogState,
 } from '../../atoms';
+import * as botstates from '../../atoms/botState';
 import lgWorker from '../../parsers/lgWorker';
 import luWorker from '../../parsers/luWorker';
 import qnaWorker from '../../parsers/qnaWorker';
 import FilePersistence from '../../persistence/FilePersistence';
-import { navigateTo } from '../../../utils/navigation';
-import { BotStatus, QnABotTemplateId } from '../../../constants';
-import httpClient from '../../../utils/httpUtil';
-import { getReferredLuFiles } from '../../../utils/luUtil';
-import luFileStatusStorage from '../../../utils/luFileStatusStorage';
-import { getReferredQnaFiles } from '../../../utils/qnaUtil';
-import qnaFileStatusStorage from '../../../utils/qnaFileStatusStorage';
-import { logMessage, setError } from '../shared';
-import {
-  skillManifestsState,
-  settingsState,
-  localeState,
-  luFilesState,
-  skillsState,
-  schemasState,
-  lgFilesState,
-  locationState,
-  botStatusState,
-  botDisplayNameState,
-  botEnvironmentState,
-  dialogsState,
-  dialogSchemasState,
-} from '../../atoms';
-import { undoHistoryState } from '../../undo/history';
 import { rootBotProjectIdSelector } from '../../selectors';
-import { getUniqueName } from '../../../utils/fileUtil';
+import { undoHistoryState } from '../../undo/history';
+import UndoHistory from '../../undo/undoHistory';
+import { logMessage, setError } from '../shared';
 
 export const resetBotStates = async ({ reset }: CallbackInterface, projectId: string) => {
   const botStates = Object.keys(botstates);
@@ -143,24 +146,24 @@ export const navigateToBot = (
   if (projectId) {
     const { set } = callbackHelpers;
     set(currentProjectIdState, projectId);
-    let url = `/bot/${projectId}/dialogs/${mainDialog}`;
-    if (templateId === QnABotTemplateId) {
-      url = `/bot/${projectId}/knowledge-base/${mainDialog}`;
-      navigateTo(url, { state: { qnaKbUrls } });
-      return;
-    }
+    const url = `/bot/${projectId}/dialogs/${mainDialog}`;
     navigateTo(url);
   }
 };
 
-const loadProjectData = (response) => {
+export const loadProjectData = (response) => {
   const { files, botName, settings, skills: skillContent, id: projectId } = response.data;
   const mergedSettings = getMergedSettings(projectId, settings);
   const storedLocale = languageStorage.get(botName)?.locale;
   const locale = settings.languages.includes(storedLocale) ? storedLocale : settings.defaultLanguage;
   const indexedFiles = indexer.index(files, botName, locale, skillContent, mergedSettings);
+
+  // migrate script move qna pairs in *.qna to *-manual.source.qna.
+  // TODO: remove after a period of time.
+  const updateQnAFiles = reformQnAToContainerKB(projectId, indexedFiles.qnaFiles);
+
   return {
-    botFiles: { ...indexedFiles, mergedSettings },
+    botFiles: { ...indexedFiles, qnaFiles: updateQnAFiles, mergedSettings },
     projectData: response.data,
     error: undefined,
   };
@@ -257,7 +260,18 @@ export const initQnaFilesStatus = (projectId: string, qnaFiles: QnAFile[], dialo
 export const initBotState = async (callbackHelpers: CallbackInterface, data: any, botFiles: any) => {
   const { snapshot, set } = callbackHelpers;
   const { botName, botEnvironment, location, schemas, settings, id: projectId, diagnostics } = data;
-  const { dialogs, dialogSchemas, luFiles, lgFiles, qnaFiles, skillManifestFiles, skills, mergedSettings } = botFiles;
+  const {
+    dialogs,
+    dialogSchemas,
+    luFiles,
+    lgFiles,
+    qnaFiles,
+    jsonSchemaFiles,
+    formDialogSchemas,
+    skillManifestFiles,
+    skills,
+    mergedSettings,
+  } = botFiles;
   const curLocation = await snapshot.getPromise(locationState(projectId));
   const storedLocale = languageStorage.get(botName)?.locale;
   const locale = settings.languages.includes(storedLocale) ? storedLocale : settings.defaultLanguage;
@@ -281,9 +295,19 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
 
   await lgWorker.addProject(projectId, lgFiles);
 
+  // Form dialogs
+  set(
+    formDialogSchemaIdsState(projectId),
+    formDialogSchemas.map((f) => f.id)
+  );
+  formDialogSchemas.forEach(({ id, content }) => {
+    set(formDialogSchemaState({ projectId, schemaId: id }), { id, content });
+  });
+
   set(skillManifestsState(projectId), skillManifestFiles);
   set(luFilesState(projectId), initLuFilesStatus(botName, luFiles, dialogs));
   set(lgFilesState(projectId), lgFiles);
+  set(jsonSchemaFilesState(projectId), jsonSchemaFiles);
   set(dialogsState(projectId), verifiedDialogs);
   set(dialogSchemasState(projectId), dialogSchemas);
   set(botEnvironmentState(projectId), botEnvironment);
@@ -322,7 +346,7 @@ export const removeRecentProject = async (callbackHelpers: CallbackInterface, pa
 export const openRemoteSkill = async (
   callbackHelpers: CallbackInterface,
   manifestUrl: string,
-  botNameIdentifier: string
+  botNameIdentifier?: string
 ) => {
   const { set } = callbackHelpers;
 
@@ -338,7 +362,8 @@ export const openRemoteSkill = async (
     isRootBot: false,
     isRemote: true,
   });
-  set(botNameIdentifierState(projectId), botNameIdentifier);
+
+  set(botNameIdentifierState(projectId), botNameIdentifier || camelCase(manifestResponse.data.name));
   set(botDisplayNameState(projectId), manifestResponse.data.name);
   set(locationState(projectId), manifestUrl);
   return { projectId, manifestResponse: manifestResponse.data };
@@ -390,7 +415,13 @@ export const createNewBotFromTemplate = async (
   }
   const currentBotProjectFileIndexed: BotProjectFile = botFiles.botProjectSpaceFiles[0];
   set(botProjectFileState(projectId), currentBotProjectFileIndexed);
+
   const mainDialog = await initBotState(callbackHelpers, projectData, botFiles);
+  // if create from QnATemplate, continue creation flow.
+  if (templateId === QnABotTemplateId) {
+    set(showCreateQnAFromUrlDialogState(projectId), true);
+  }
+
   return { projectId, mainDialog };
 };
 
@@ -424,7 +455,8 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
 
   const mainDialog = await initBotState(callbackHelpers, projectData, botFiles);
   const rootBotProjectId = projectData.id;
-  const { name } = projectData;
+  const { name, location } = projectData;
+
   set(botNameIdentifierState(rootBotProjectId), camelCase(name));
 
   if (botFiles.botProjectSpaceFiles && botFiles.botProjectSpaceFiles.length) {
@@ -443,8 +475,10 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
         const skill = skills[nameIdentifier];
         let skillPromise;
         if (!skill.remote && skill.workspace) {
-          const skillPath = convertFileProtocolToPath(skill.workspace);
-          skillPromise = openLocalSkill(callbackHelpers, skillPath, storageId, nameIdentifier);
+          const rootBotPath = location;
+          const skillPath = skill.workspace;
+          const absoluteSkillPath = path.resolve(rootBotPath, skillPath);
+          skillPromise = openLocalSkill(callbackHelpers, absoluteSkillPath, storageId, nameIdentifier);
         } else if (skill.manifest) {
           skillPromise = openRemoteSkill(callbackHelpers, skill.manifest, nameIdentifier);
         }
@@ -530,6 +564,7 @@ export const checkIfBotExistsInBotProjectFile = async (
   if (!rootBotProjectId) {
     throw new Error(formatMessage('The root bot is not a bot project'));
   }
+  const rootBotLocation = await snapshot.getPromise(locationState(rootBotProjectId));
   const { content: botProjectFile } = await snapshot.getPromise(botProjectFileState(rootBotProjectId));
 
   for (const uniqueSkillName in botProjectFile.skills) {
@@ -540,8 +575,8 @@ export const checkIfBotExistsInBotProjectFile = async (
       }
     } else {
       if (workspace) {
-        const resolvedPath = convertFileProtocolToPath(workspace);
-        if (pathOrManifest === resolvedPath) {
+        const absolutePathOfSkill = path.resolve(rootBotLocation, workspace);
+        if (pathOrManifest === absolutePathOfSkill) {
           return true;
         }
       }

@@ -95,9 +95,8 @@ function createTrigger(dialog: DialogInfo, data: TriggerFormData, factory: Dialo
 
 export function updateIntentTrigger(dialog: DialogInfo, intentName: string, newIntentName: string): DialogInfo {
   const dialogCopy = cloneDeep(dialog);
-  const trigger = (dialogCopy.content?.triggers ?? []).find(
-    (t) => t.$kind === SDKKinds.OnIntent && t.intent === intentName
-  );
+  const triggers = dialogCopy.content?.triggers as ITriggerCondition[];
+  const trigger = (triggers ?? []).find((t) => t.$kind === SDKKinds.OnIntent && t.intent === intentName);
 
   if (trigger) {
     trigger.intent = newIntentName;
