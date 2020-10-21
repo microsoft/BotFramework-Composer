@@ -131,7 +131,7 @@ const SkillList: React.FC<SkillListProps> = ({ projectId }) => {
     }
   };
 
-  const handleEditSkill = (projectId, skillId) => (skillData) => {
+  const handleEditSkill = (projectId: string, skillId: string) => (skillData) => {
     updateSkill(projectId, skillId, skillData);
   };
 

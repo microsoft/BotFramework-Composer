@@ -29,7 +29,7 @@ import {
 import { Conversation } from '../../components/Conversation';
 import { dialogStyle } from '../../components/Modal/dialogStyle';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
-import { ProjectTree } from '../../components/ProjectTree/ProjectTree';
+import { ProjectTree, TreeLink } from '../../components/ProjectTree/ProjectTree';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { clearBreadcrumb, getFocusPath } from '../../utils/navigation';
 import { navigateTo } from '../../utils/navigation';
@@ -110,13 +110,15 @@ const getTabFromFragment = () => {
   }
 };
 
-const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = (props) => {
-  const { location, dialogId, projectId = '' } = props;
+const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string; skillId?: string }>> = (
+  props
+) => {
+  const { location, dialogId, projectId = '', skillId = null } = props;
   const userSettings = useRecoilValue(userSettingsState);
 
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   const schemas = useRecoilValue(schemasState(projectId));
-  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const dialogs = useRecoilValue(validateDialogSelectorFamily(skillId ?? projectId));
   const displaySkillManifest = useRecoilValue(displaySkillManifestState(projectId));
   const breadcrumb = useRecoilValue(breadcrumbState(projectId));
   const focusPath = useRecoilValue(focusPathState(projectId));
@@ -160,10 +162,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0]);
   const [exportSkillModalVisible, setExportSkillModalVisible] = useState(false);
   const [warningIsVisible, setWarningIsVisible] = useState(true);
-  const shell = useShell('DesignPage', projectId);
-  const shellForFlowEditor = useShell('FlowEditor', projectId);
-  const shellForPropertyEditor = useShell('PropertyEditor', projectId);
-  const triggerApi = useTriggerApi(projectId);
+  const shell = useShell('DesignPage', skillId ?? rootProjectId);
+  const shellForFlowEditor = useShell('FlowEditor', skillId ?? rootProjectId);
+  const shellForPropertyEditor = useShell('PropertyEditor', skillId ?? rootProjectId);
+  const triggerApi = useTriggerApi(skillId ?? rootProjectId);
   const { createTrigger } = shell.api;
 
   const defaultQnATriggerData = {
@@ -204,9 +206,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     if (location && props.dialogId && props.projectId) {
       const { dialogId, projectId } = props;
 
-      // TODO: swap to the commented-out block once we're working on skills for real (issue #4429)
-      // let { skillId } = props;
-      // if (skillId == null) skillId = projectId;
+      let { skillId } = props;
+      if (skillId == null) skillId = projectId;
 
       const params = new URLSearchParams(location.search);
       const dialogMap = dialogs.reduce((acc, { content, id }) => ({ ...acc, [id]: content }), {});
@@ -217,20 +218,20 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       //make sure focusPath always valid
       const data = getDialogData(dialogMap, dialogId, getFocusPath(selected, focused));
       if (typeof data === 'undefined') {
-        const { id } = dialogs.find(({ id }) => id === dialogId) || dialogs.find(({ isRoot }) => isRoot) || {};
+        const { id: foundId } = dialogs.find(({ id }) => id === dialogId) || dialogs.find(({ isRoot }) => isRoot) || {};
         /**
          * It's improper to fallback to `dialogId` directly:
-         *   - If 'action' not exists at `focused` path, fallback to trigger path;
-         *   - If 'trigger' not exists at `selected` path, fallback to dialog Id;
-         *   - If 'dialog' not exists at `dialogId` path, fallback to main dialog.
+         *   - If 'action' does not exist at `focused` path, fallback to trigger path;
+         *   - If 'trigger' does not exist at `selected` path, fallback to dialog Id;
+         *   - If 'dialog' does not exist at `dialogId` path, fallback to main dialog.
          */
-        if (id) {
-          navTo(rootProjectId, null, id);
+        if (foundId != null) {
+          navTo(projectId, skillId, foundId);
         }
         return;
       }
 
-      setDesignPageLocation(projectId, {
+      setDesignPageLocation(skillId, {
         dialogId,
         selected,
         focused,
@@ -265,18 +266,19 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     createTrigger(dialogId, formData);
   };
 
-  function handleSelect(projectId, id, selected = '') {
+  function handleSelect(link: TreeLink, selectPath = '') {
     updateZoomRate({ currentRate: 1 });
-    if (selected) {
-      selectTo(projectId, null, null, selected);
-    } else {
-      navTo(projectId, null, id, []);
+    if (link.trigger != null || selectPath) {
+      const path = link.trigger == null ? selectPath : `triggers[${link.trigger}]`;
+      selectTo(link.projectId, link.skillId ?? null, link.dialogId ?? null, path);
+    } else if (link.dialogId != null) {
+      navTo(link.projectId, link.skillId ?? null, link.dialogId, []);
     }
   }
 
-  const onCreateDialogComplete = (newDialog) => {
-    if (newDialog) {
-      navTo(projectId, null, newDialog, []);
+  const onCreateDialogComplete = (dialogId) => {
+    if (dialogId) {
+      navTo(projectId, null, dialogId, []);
     }
   };
 
@@ -462,7 +464,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   function handleBreadcrumbItemClick(_event, item) {
     if (item) {
       const { dialogId, selected, focused, index } = item;
-      selectAndFocus(projectId, null, dialogId, selected, focused, clearBreadcrumb(breadcrumb, index));
+      selectAndFocus(projectId, skillId, dialogId, selected, focused, clearBreadcrumb(breadcrumb, index));
     }
   }
 
@@ -552,14 +554,14 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       if (index === currentIdx) {
         if (currentIdx - 1 >= 0) {
           //if the deleted node is selected and the selected one is not the first one, navTo the previous trigger;
-          selectTo(projectId, null, dialogId, createSelectedPath(currentIdx - 1));
+          selectTo(projectId, skillId, dialogId, createSelectedPath(currentIdx - 1));
         } else {
           //if the deleted node is selected and the selected one is the first one, navTo the first trigger;
-          navTo(projectId, null, dialogId, []);
+          navTo(projectId, skillId, dialogId, []);
         }
       } else if (index < currentIdx) {
         //if the deleted node is at the front, navTo the current one;
-        selectTo(projectId, null, dialogId, createSelectedPath(currentIdx - 1));
+        selectTo(projectId, skillId, dialogId, createSelectedPath(currentIdx - 1));
       }
     }
   }
@@ -599,7 +601,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           <ProjectTree
             onDeleteDialog={handleDeleteDialog}
             onDeleteTrigger={handleDeleteTrigger}
-            onSelect={(...props) => handleSelect(projectId, ...props)}
+            onSelect={handleSelect}
           />
           <div css={contentWrapper} role="main">
             <div css={{ position: 'relative' }} data-testid="DesignPage-ToolBar">

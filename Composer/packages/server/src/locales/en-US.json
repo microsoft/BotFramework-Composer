@@ -758,9 +758,6 @@
   "debugging_options_20e2e9da": {
     "message": "Debugging options"
   },
-  "decrement_by_step_9b6c2fa3": {
-    "message": "decrement by { step }"
-  },
   "default_language_486a558d": {
     "message": "Default language"
   },
@@ -1280,9 +1277,6 @@
   "in_the_b_create_a_trigger_b_wizard_set_the_trigger_f9b23519": {
     "message": "In the <b>Create a trigger</b> wizard, set the trigger type to <i>Activities</i> in the dropdown. Then set the <b>Activity Type</b> to <i>Greeting (ConversationUpdate activity)</i>, and click the <b>Submit</b> button."
   },
-  "increment_by_step_1cf3a88": {
-    "message": "increment by { step }"
-  },
   "input_1d1d9b8e": {
     "message": "Input"
   },
@@ -1754,9 +1748,6 @@
   "number_or_expression_55c7f9f": {
     "message": "Number or expression"
   },
-  "numeric_field_c2564f69": {
-    "message": "numeric field"
-  },
   "oauth_login_b6aa9534": {
     "message": "OAuth login"
   },
@@ -2204,8 +2195,8 @@
   "select_options_9ee7b227": {
     "message": "Select options"
   },
-  "select_property_type_5f3ab685": {
-    "message": "select property type"
+  "select_property_type_45c6e68e": {
+    "message": "Select property type"
   },
   "select_runtime_version_to_add_d63d383b": {
     "message": "Select runtime version to add"
@@ -2338,6 +2329,9 @@
   },
   "start_command_a085f2ec": {
     "message": "Start command"
+  },
+  "start_typing_kind_or_b0c305da": {
+    "message": "Start typing { kind } or"
   },
   "state_is_state_a2b8943": {
     "message": "State is { state }"
@@ -2794,6 +2788,9 @@
   },
   "which_event_6e655d2b": {
     "message": "Which event?"
+  },
+  "write_an_expression_8773ea5c": {
+    "message": "Write an expression"
   },
   "yes_dde87d5": {
     "message": "Yes"

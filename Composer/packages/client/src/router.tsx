@@ -70,6 +70,13 @@ const Routes = (props) => {
               />
             ))}
           </ProjectRouter>
+          <ProjectRouter path="/bot/:projectId/skill/:skillId">
+            <DesignPage path="dialogs/:dialogId/*" />
+            <LUPage path="language-understanding/:dialogId/*" />
+            <LGPage path="language-generation/:dialogId/*" />
+            <QnAPage path="knowledge-base/:dialogId/*" />
+            <DesignPage path="*" />
+          </ProjectRouter>
           <SettingPage path="settings/*" />
           <BotCreationFlowRouter path="projects/*" />
           <BotCreationFlowRouter path="home" />

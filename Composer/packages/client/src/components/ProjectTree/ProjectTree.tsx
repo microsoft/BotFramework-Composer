@@ -71,8 +71,8 @@ export type TreeLink = {
   warningContent?: string;
   errorContent?: string;
   projectId: string;
-  skillId: string | null;
-  dialogName?: string;
+  skillId?: string;
+  dialogId?: string;
   trigger?: number;
 };
 
@@ -107,7 +107,7 @@ type BotInProject = {
 };
 
 type Props = {
-  onSelect?: (link: TreeLink) => void;
+  onSelect: (link: TreeLink) => void;
   onSelectAllLink?: () => void;
   showTriggers?: boolean;
   showDialogs?: boolean;
@@ -124,7 +124,7 @@ export const ProjectTree: React.FC<Props> = ({
   onDeleteTrigger,
   onSelect,
 }) => {
-  const { onboardingAddCoachMarkRef, selectTo, navTo } = useRecoilValue(dispatcherState);
+  const { onboardingAddCoachMarkRef } = useRecoilValue(dispatcherState);
 
   const [filter, setFilter] = useState('');
   const [selectedLink, setSelectedLink] = useState<TreeLink | undefined>();
@@ -168,14 +168,7 @@ export const ProjectTree: React.FC<Props> = ({
 
   const handleOnSelect = (link: TreeLink) => {
     setSelectedLink(link);
-    onSelect?.(link); // if we've defined a custom onSelect, use it
-    if (link.dialogName != null) {
-      if (link.trigger != null) {
-        selectTo(link.projectId, link.skillId, link.dialogName, `triggers[${link.trigger}]`);
-      } else {
-        navTo(link.projectId, link.skillId, link.dialogName);
-      }
-    }
+    onSelect(link);
   };
 
   const renderBotHeader = (bot: BotInProject) => {
@@ -221,11 +214,11 @@ export const ProjectTree: React.FC<Props> = ({
       .join(',');
 
     const link: TreeLink = {
-      dialogName: dialog.id,
+      dialogId: dialog.id,
       displayName: dialog.displayName,
       isRoot: dialog.isRoot,
-      projectId: skillId,
-      skillId: null,
+      projectId: currentProjectId,
+      skillId: skillId,
       errorContent,
       warningContent,
     };
@@ -251,7 +244,7 @@ export const ProjectTree: React.FC<Props> = ({
               label: formatMessage('Remove this dialog'),
               icon: 'Delete',
               onClick: (link) => {
-                onDeleteDialog(link.dialogName ?? '');
+                onDeleteDialog(link.dialogId ?? '');
               },
             },
           ]}
@@ -264,14 +257,14 @@ export const ProjectTree: React.FC<Props> = ({
   const renderTrigger = (projectId: string, item: any, dialog: DialogInfo): React.ReactNode => {
     // NOTE: put the form-dialog detection here when it's ready
     const link: TreeLink = {
+      projectId: currentProjectId,
+      skillId: projectId,
+      dialogId: dialog.id,
+      trigger: item.index,
       displayName: item.displayName,
       warningContent: item.warningContent,
       errorContent: item.errorContent,
-      trigger: item.index,
-      dialogName: dialog.id,
       isRoot: false,
-      projectId: projectId,
-      skillId: null,
     };
 
     return (
@@ -287,7 +280,7 @@ export const ProjectTree: React.FC<Props> = ({
             label: formatMessage('Remove this trigger'),
             icon: 'Delete',
             onClick: (link) => {
-              onDeleteTrigger(link.dialogName ?? '', link.trigger ?? 0);
+              onDeleteTrigger(link.dialogId ?? '', link.trigger ?? 0);
             },
           },
         ]}
@@ -404,7 +397,7 @@ export const ProjectTree: React.FC<Props> = ({
           {onAllSelected != null ? (
             <TreeItem
               forceIndent={SUMMARY_ARROW_SPACE}
-              link={{ displayName: formatMessage('All'), skillId: null, projectId: currentProjectId, isRoot: true }}
+              link={{ displayName: formatMessage('All'), projectId: currentProjectId, isRoot: true }}
               onSelect={onAllSelected}
             />
           ) : null}
