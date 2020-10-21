@@ -10,7 +10,11 @@ import { isAbsHosted } from '../../utils/envUtil';
 import { botDisplayNameState, botStatusState, luFilesState, qnaFilesState, settingsState } from '../atoms';
 import { Dispatcher } from '../dispatchers';
 import { dispatcherState } from '../DispatcherWrapper';
-import { isBuildConfigComplete as isBuildConfigurationComplete, needsBuild } from '../../utils/buildUtil';
+import {
+  getRecognizerTypes,
+  isBuildConfigComplete as isBuildConfigurationComplete,
+  needsBuild,
+} from '../../utils/buildUtil';
 
 import { validateDialogSelectorFamily } from './validatedDialogs';
 import { localBotsWithoutErrorsSelector } from './project';
@@ -92,14 +96,10 @@ export const runningBotsSelector = selector({
 const botRuntimeAction = (dispatcher: Dispatcher) => {
   return {
     buildWithDefaultRecognizer: async (projectId: string, buildDependencies) => {
-      const { dialogs, config, recognizers } = buildDependencies;
+      const { dialogs, config } = buildDependencies;
       if (config) {
         dispatcher.setBotStatus(projectId, BotStatus.publishing);
-        const recognizerTypes = dialogs.reduce((result, file) => {
-          const recognizer = recognizers.filter((r) => r.isSelected && r.isSelected(file.content.recognizer));
-          result[file.id] = recognizer[0]?.id || '';
-          return result;
-        }, {});
+        const recognizerTypes = getRecognizerTypes(dialogs);
         await dispatcher.build(projectId, config.luis, config.qna, recognizerTypes);
       }
     },

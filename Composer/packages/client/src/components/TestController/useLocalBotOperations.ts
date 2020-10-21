@@ -4,7 +4,6 @@
 import { IPublishConfig } from '@bfc/shared';
 import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { useRecognizerConfig } from '@bfc/extension-client';
 
 import { BotStatus } from '../../constants';
 import { dispatcherState, rootBotProjectIdSelector } from '../../recoilModel';
@@ -13,7 +12,6 @@ import { botRuntimeOperationsSelector, buildConfigurationSelector } from '../../
 import { useBotStatusTracker } from './useBotStatusTracker';
 
 export function useBotOperations(onAllBotsStarted?: (started: boolean) => void) {
-  const { recognizers } = useRecognizerConfig();
   const builderEssentials = useRecoilValue(buildConfigurationSelector);
   const botRuntimeOperations = useRecoilValue(botRuntimeOperationsSelector);
   const rootBotId = useRecoilValue(rootBotProjectIdSelector);
@@ -26,7 +24,6 @@ export function useBotOperations(onAllBotsStarted?: (started: boolean) => void) 
       const matchedBuilder = builderEssentials.find(({ projectId: currentProjecId }) => projectId === currentProjecId);
       if (matchedBuilder?.dialogs) {
         await botRuntimeOperations?.buildWithDefaultRecognizer(projectId, {
-          recognizers,
           dialogs: matchedBuilder.dialogs,
           config,
         });
