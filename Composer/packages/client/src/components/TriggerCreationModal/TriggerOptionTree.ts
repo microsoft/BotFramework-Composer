@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import { TriggerUISchema } from '@bfc/extension-client';
-import formatMessage from 'format-message';
 
 import { TriggerUIOption } from './schema/TriggerOption';
 
@@ -39,12 +38,12 @@ export type TriggerOptionTreeNode = TriggerOptionGroupNode | TriggerOptionLeafNo
 
 const getGroupKey = (submenu) => (typeof submenu === 'object' ? submenu.label : submenu || '');
 
-export const generateTriggerOptionTree = (triggerUIOptions: TriggerUISchema): TriggerOptionTree => {
-  const root = new TriggerOptionGroupNode(
-    'triggerTypeDropDown',
-    formatMessage('What is the type of this trigger?'),
-    formatMessage('Select a trigger type')
-  );
+export const generateTriggerOptionTree = (
+  triggerUIOptions: TriggerUISchema,
+  rootPrompt = '',
+  rootPlaceHolder = ''
+): TriggerOptionTree => {
+  const root = new TriggerOptionGroupNode('triggerTypeDropDown', rootPrompt, rootPlaceHolder);
 
   const leafNodeList = Object.entries(triggerUIOptions)
     .filter(([, options]) => options && !options.submenu)
