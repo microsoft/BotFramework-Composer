@@ -11,7 +11,7 @@ import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-re
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuStyles } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { ICalloutContentStyles } from 'office-ui-fabric-react/lib/Callout';
@@ -74,7 +74,7 @@ const moreButton = (isActive: boolean): IButtonStyles => {
   };
 };
 
-const navItem = (isActive: boolean, shift: number) => css`
+const navItem = (isActive: boolean, isBroken: boolean, shift: number) => css`
   width: calc(100%-${shift}px);
   position: relative;
   height: 24px;
@@ -82,6 +82,7 @@ const navItem = (isActive: boolean, shift: number) => css`
   margin-left: ${shift}px;
   color: ${isActive ? '#ffffff' : '#545454'};
   background: ${isActive ? '#0078d4' : 'transparent'};
+  opacity: ${isBroken ? 0.5 : 1};
   font-weight: ${isActive ? FontWeights.semibold : FontWeights.regular};
   &:hover {
     color: #545454;
@@ -108,7 +109,7 @@ const navItem = (isActive: boolean, shift: number) => css`
   }
 `;
 
-export const overflowSet = css`
+export const overflowSet = (isBroken: boolean) => css`
   width: 100%;
   height: 100%;
   padding-right: 12px;
@@ -116,6 +117,9 @@ export const overflowSet = css`
   line-height: 24px;
   justify-content: space-between;
   display: flex;
+  i {
+    color: ${isBroken ? SharedColors.red20 : 'inherit'};
+  }
 `;
 
 const statusIcon = {
@@ -253,7 +257,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   return (
     <div
       aria-label={a11yLabel}
-      css={navItem(!!isActive, shiftOut ?? 0)}
+      css={navItem(!!isActive, !!link.isBroken, shiftOut ?? 0)}
       data-testid={a11yLabel}
       role="gridcell"
       tabIndex={0}
@@ -270,12 +274,12 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         //In 8.0 the OverflowSet will no longer be wrapped in a FocusZone
         //remove this at that time
         doNotContainWithinFocusZone
-        css={overflowSet}
+        css={overflowSet(!!link.isBroken)}
         data-testid={linkString}
         items={[
           {
             key: linkString,
-            icon,
+            icon: link.isBroken ? 'RemoveLink' : icon,
             ...link,
           },
         ]}

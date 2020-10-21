@@ -9,11 +9,12 @@ import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 
 import { repairSkillDialog } from '../constants';
+import { TreeLink } from './ProjectTree/ProjectTree';
 
 export type RepairSkillModalFormData = 'repairSkill' | 'removeSkill';
 
 export interface RepairSkillModalProps {
-  skillId: string;
+  skillItem: TreeLink;
   onNext: (RepairSkillModalFormData) => void;
   onDismiss: () => void;
 }
@@ -23,7 +24,7 @@ const optionKeys = {
   removeSkill: 'removeSkill',
 };
 
-export const CreateSkillModal: React.FC<RepairSkillModalProps> = ({ skillId, onNext, onDismiss }) => {
+export const CreateSkillModal: React.FC<RepairSkillModalProps> = ({ skillItem, onNext, onDismiss }) => {
   const [option, setOption] = useState(optionKeys.repairSkill);
 
   const handleChange = (event, option) => {
@@ -53,7 +54,12 @@ export const CreateSkillModal: React.FC<RepairSkillModalProps> = ({ skillId, onN
   ];
 
   return (
-    <DialogWrapper isOpen onDismiss={onDismiss} {...repairSkillDialog(skillId)} dialogType={DialogTypes.DesignFlow}>
+    <DialogWrapper
+      isOpen
+      onDismiss={onDismiss}
+      {...repairSkillDialog(skillItem.displayName)}
+      dialogType={DialogTypes.DesignFlow}
+    >
       <form onSubmit={handleJumpToNext}>
         <input style={{ display: 'none' }} type="submit" />
         <ChoiceGroup options={choiceOptions} selectedKey={option} onChange={handleChange} />

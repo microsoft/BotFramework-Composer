@@ -28,7 +28,7 @@ import {
 import { Conversation } from '../../components/Conversation';
 import { dialogStyle } from '../../components/Modal/dialogStyle';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
-import { ProjectTree } from '../../components/ProjectTree/ProjectTree';
+import { ProjectTree, TreeLink } from '../../components/ProjectTree/ProjectTree';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { clearBreadcrumb, getFocusPath } from '../../utils/navigation';
 import { navigateTo } from '../../utils/navigation';
@@ -153,7 +153,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     createQnAKBFromUrl,
     createQnAKBFromScratch,
     createQnAFromUrlDialogBegin,
-    addSkill,
     updateZoomRate,
     addSkillDialogBegin,
     setCreationFlowStatus,
@@ -186,7 +185,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     triggerPhrases: '',
   };
 
-  const [repairSkillId, setRepairSkillId] = useState('adfb');
+  const [brokenSkillItem, setBrokenSkillItem] = useState<undefined | TreeLink>(undefined);
 
   useEffect(() => {
     const currentDialog = dialogs.find(({ id }) => id === dialogId);
@@ -278,12 +277,15 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     createTrigger(dialogId, formData);
   };
 
-  function handleSelect(projectId, id, selected = '') {
+  function handleSelect(projectId, item, selected = '') {
+    if (item.isBroken) {
+      setBrokenSkillItem(item);
+    }
     updateZoomRate({ currentRate: 1 });
     if (selected) {
       selectTo(projectId, null, null, selected);
     } else {
-      navTo(projectId, null, id, []);
+      navTo(projectId, null, item, []);
     }
   }
 
@@ -796,20 +798,23 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             onDismiss={() => dismissManifestModal(projectId)}
           />
         )}
-        {repairSkillId && (
+        {brokenSkillItem && (
           <RepairSkillModal
-            skillId={repairSkillId}
+            skillItem={brokenSkillItem}
             onDismiss={() => {
-              setRepairSkillId('');
+              setBrokenSkillItem(undefined);
             }}
             onNext={(option) => {
               if (option === 'repairSkill') {
-                console.log('repair', repairSkillId);
+                setCreationFlowTypes('Skill');
+                setCreationFlowStatus(CreationFlowStatus.OPEN);
+                navigate(`/projects/open`);
               } else if ((option = 'removeSkill')) {
-                console.log('remove', repairSkillId);
-                removeSkillFromBotProject(repairSkillId);
+                const skillIdToRemove = brokenSkillItem.skillId;
+                if (!skillIdToRemove) return;
+                removeSkillFromBotProject(skillIdToRemove);
               }
-              setRepairSkillId('');
+              setBrokenSkillItem(undefined);
             }}
           ></RepairSkillModal>
         )}

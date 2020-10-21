@@ -68,6 +68,7 @@ const SUMMARY_ARROW_SPACE = 28; // the rough pixel size of the dropdown arrow to
 export type TreeLink = {
   displayName: string;
   isRoot: boolean;
+  isBroken?: boolean;
   warningContent?: string;
   errorContent?: string;
   projectId: string;
@@ -104,6 +105,7 @@ type BotInProject = {
   projectId: string;
   name: string;
   isRemote: boolean;
+  error?: any;
 };
 
 type Props = {
@@ -188,6 +190,7 @@ export const ProjectTree: React.FC<Props> = ({
       projectId: currentProjectId,
       skillId: bot.projectId,
       isRoot: true,
+      isBroken: !!bot.error,
       warningContent: botHasWarnings(bot) ? formatMessage('This bot has warnings') : undefined,
       errorContent: botHasErrors(bot) ? formatMessage('This bot has errors') : undefined,
     };
@@ -209,6 +212,7 @@ export const ProjectTree: React.FC<Props> = ({
           isSubItemActive={isEqual(link, selectedLink)}
           link={link}
           menu={[{ label: formatMessage('Create/edit skill manifest'), onClick: () => {} }]}
+          onSelect={handleOnSelect}
         />
       </span>
     );
