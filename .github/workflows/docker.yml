@@ -1,0 +1,41 @@
+name: Docker Build Validation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, reopened, synchronize]
+  workflow_dispatch:
+
+jobs:
+  build:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+      - name: Build
+        uses: docker/build-push-action@v2
+        with:
+          push: false
+          context: .
+          file: Dockerfile
+          tags: botframework-composer:$(date +%s),botframework-composer:latest
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+      - name: Health check
+        run: |
+          docker run --rm -p "5000:5000" botframework-composer:latest
+          sleep 10
+          curl -Is http://localhost:5000 | grep -q "200 OK"
+        shell: bash
