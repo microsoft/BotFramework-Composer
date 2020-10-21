@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { defaultFeatureFlags, FeatureFlagMap, FeatureFlagKey } from '@bfc/shared';
+import { getDefaultFeatureFlags, FeatureFlagMap, FeatureFlagKey } from '@bfc/shared';
 
 import { Store } from '../store/store';
 
@@ -9,16 +9,17 @@ const storeKey = 'featureFlags';
 
 export class FeatureFlagService {
   private static currentFeatureFlagMap: FeatureFlagMap = {} as FeatureFlagMap;
+  private static defaultFeatureFlags: FeatureFlagMap = getDefaultFeatureFlags();
 
   private static initialize() {
     // Get users feature flag config from data.json and populate if it does not exist
-    FeatureFlagService.currentFeatureFlagMap = Store.get(storeKey, defaultFeatureFlags);
+    FeatureFlagService.currentFeatureFlagMap = Store.get(storeKey, FeatureFlagService.defaultFeatureFlags);
     FeatureFlagService.updateFeatureFlags();
   }
 
   private static updateFeatureFlags = () => {
     const currentFeatureFlagKeys = Object.keys(FeatureFlagService.currentFeatureFlagMap);
-    const defaultFeatureFlagKeys = Object.keys(defaultFeatureFlags);
+    const defaultFeatureFlagKeys = Object.keys(FeatureFlagService.defaultFeatureFlags);
 
     const keysToAdd = defaultFeatureFlagKeys.filter((key: string) => {
       if (!currentFeatureFlagKeys.includes(key)) {
@@ -33,7 +34,7 @@ export class FeatureFlagService {
     });
 
     keysToAdd.forEach((key: string) => {
-      FeatureFlagService.currentFeatureFlagMap[key] = defaultFeatureFlags[key];
+      FeatureFlagService.currentFeatureFlagMap[key] = FeatureFlagService.defaultFeatureFlags[key];
     });
 
     keysToRemove.forEach((key: string) => {

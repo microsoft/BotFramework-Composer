@@ -21,10 +21,13 @@ export const App: React.FC = () => {
     loadLocale(appLocale);
   }, [appLocale]);
 
+  useEffect(() => {
+    fetchFeatureFlags();
+  }, []);
+
   const { fetchExtensions } = useRecoilValue(dispatcherState);
   useEffect(() => {
     fetchExtensions();
-    fetchFeatureFlags();
   });
 
   return (

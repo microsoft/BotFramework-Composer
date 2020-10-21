@@ -18,7 +18,7 @@ export type FeatureFlagKey = 'VA_CREATION' | 'SHOW_FORM_DIALOG';
 
 export type FeatureFlagMap = Record<FeatureFlagKey, FeatureFlag>;
 
-export const defaultFeatureFlags: FeatureFlagMap = {
+export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
   VA_CREATION: {
     displayName: formatMessage('VA Creation'),
     description: formatMessage('VA template made available in new bot flow.'),
@@ -31,4 +31,4 @@ export const defaultFeatureFlags: FeatureFlagMap = {
     isHidden: true,
     enabled: false,
   },
-};
+});

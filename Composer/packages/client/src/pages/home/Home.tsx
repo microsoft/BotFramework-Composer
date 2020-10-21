@@ -21,6 +21,7 @@ import {
   featureFlagsState,
 } from '../../recoilModel/atoms/appState';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
+import { useFilteredTemplates } from '../../hooks/useFilteredTemplates';
 
 import * as home from './styles';
 import { ItemContainer } from './ItemContainer';
@@ -67,10 +68,10 @@ const Home: React.FC<RouteComponentProps> = () => {
   const botName = useRecoilValue(botDisplayNameState(projectId));
   const recentProjects = useRecoilValue(recentProjectsState);
   const templateId = useRecoilValue(templateIdState);
-  const featureFlagMap = useRecoilValue(featureFlagsState);
   const { openProject, setCreationFlowStatus, onboardingAddCoachMarkRef, saveTemplateId } = useRecoilValue(
     dispatcherState
   );
+  const filteredTemplates = useFilteredTemplates(templateProjects);
 
   const onItemChosen = async (item) => {
     if (item && item.path) {
@@ -243,7 +244,7 @@ const Home: React.FC<RouteComponentProps> = () => {
               "These examples bring together all of the best practices and supporting components we've identified through building of conversational experiences."
             )}
           </p>
-          <ExampleList examples={templateProjects} onClick={onClickTemplate} />
+          <ExampleList examples={filteredTemplates} onClick={onClickTemplate} />
         </div>
       </div>
     </div>
