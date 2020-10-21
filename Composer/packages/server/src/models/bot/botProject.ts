@@ -6,16 +6,7 @@ import fs from 'fs';
 
 import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
-import {
-  getNewDesigner,
-  FileInfo,
-  Skill,
-  Diagnostic,
-  IBotProject,
-  DialogSetting,
-  FileExtensions,
-  convertAbsolutePathToFileProtocol,
-} from '@bfc/shared';
+import { getNewDesigner, FileInfo, Diagnostic, IBotProject, DialogSetting, FileExtensions, Skill } from '@bfc/shared';
 import merge from 'lodash/merge';
 import { UserIdentity, ExtensionContext } from '@bfc/extension';
 import { FeedbackType, generate } from '@microsoft/bf-generate-library';
@@ -375,7 +366,6 @@ export class BotProject implements IBotProject {
     for (const botProjectFile of this.botProjectFiles) {
       const { relativePath } = botProjectFile;
       const content = JSON.parse(botProjectFile.content);
-      content.workspace = convertAbsolutePathToFileProtocol(this.dataDir);
       content.name = botName;
       await this._updateFile(relativePath, JSON.stringify(content, null, 2));
     }
@@ -747,7 +737,7 @@ export class BotProject implements IBotProject {
       // deployment process
       const root = this.dataDir;
       const paths = await this.fileStorage.glob(
-        [pattern, '!(generated/**)', '!(runtime/**)', '!(recognizers/**)'],
+        [pattern, '!(generated/**)', '!(runtime/**)', '!(recognizers/**)', '!(scripts/**)', '!(settings/**)'],
         root
       );
 
@@ -833,8 +823,6 @@ export class BotProject implements IBotProject {
       }
       const fileName = `${this.name}${FileExtensions.BotProject}`;
       const root = this.dataDir;
-
-      defaultBotProjectFile.workspace = convertAbsolutePathToFileProtocol(root);
       defaultBotProjectFile.name = this.name;
 
       await this._createFile(fileName, JSON.stringify(defaultBotProjectFile, null, 2));
