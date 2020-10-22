@@ -83,5 +83,6 @@ ENV DOTNET_RUNNING_IN_CONTAINER=true \
 
 ENV COMPOSER_BUILTIN_EXTENSIONS_DIR "/app/extensions"
 ENV COMPOSER_REMOTE_EXTENSIONS_DIR "/app/remote-extensions"
+ENV COMPOSER_REMOTE_EXTENSION_DATA_DIR "/app/extension-data"
 ENV COMPOSER_EXTENSION_MANIFEST "/app/extensions.json"
 CMD ["yarn","start:server"]
