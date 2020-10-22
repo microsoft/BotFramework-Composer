@@ -23,7 +23,7 @@ const publishHistory: PublishHistory = {};
 
 export const publish = async (
   config: PublishConfig,
-  project: IBotProject,
+  project: any, // TODO: reenable once types have been fixed and published again IBotProject,
   metadata: any,
   _user: UserIdentity,
   getAccessToken
@@ -127,7 +127,7 @@ export const publish = async (
 
 export const getStatus = async (
   config: PublishConfig,
-  project: IBotProject,
+  project: any, // TODO: reenable once types have been fixed and published again IBotProject,
   user: UserIdentity,
   getAccessToken
 ): Promise<PublishResponse> => {
@@ -198,7 +198,7 @@ export const getStatus = async (
 
 export const history = async (
   config: PublishConfig,
-  _project: IBotProject,
+  _project: any, // TODO: reenable once types have been fixed and published again IBotProject,
   _user: UserIdentity,
   getAccessToken
 ): Promise<PublishResult[]> => {
@@ -233,7 +233,7 @@ export const history = async (
 
 export const pull = async (
   config: PublishConfig,
-  _project: IBotProject,
+  _project: any, // TODO: reenable once types have been fixed and published again IBotProject,
   _user: UserIdentity,
   getAccessToken
 ): Promise<PullResponse> => {
