@@ -186,10 +186,14 @@ export const projectDispatcher = () => {
           isRemote: false,
         });
         projectIdCache.set(projectId);
-        // for (const property of SensitivePropertiesManageGroup) {
-        //   const settings = settingStorage.get(projectId);
-        //   const value = get(settings, property, '');
-        // }
+
+        //migration on some sensitive property in browser local storage
+        for (const property of SensitivePropertiesManageGroup) {
+          const settings = settingStorage.get(projectId);
+          const value = get(settings, property, '');
+          const newValue = { root: value };
+          settingStorage.setField(projectId, property, newValue);
+        }
 
         navigateToBot(callbackHelpers, projectId, mainDialog);
       } catch (ex) {

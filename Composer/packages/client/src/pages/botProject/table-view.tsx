@@ -120,6 +120,7 @@ const TableView: React.FC<BotProjectSettingsProps> = (props) => {
   const groupQnAKey = get(sensitiveGroupManageProperty, 'qna.subscriptionKey', {});
   const rootqnaKey = groupQnAKey.root;
   const skillqnaKey = groupQnAKey[projectId];
+  console.log(rootLuisKey, skillLuisKey, rootLuisRegion, skillLuisRegion, rootqnaKey, skillqnaKey);
   const {
     languages,
     defaultLanguage,
