@@ -9,6 +9,7 @@ import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 
 import { repairSkillDialog } from '../constants';
+
 import { TreeLink } from './ProjectTree/ProjectTree';
 
 export type RepairSkillModalFormData = 'repairSkill' | 'removeSkill';
@@ -19,13 +20,13 @@ export interface RepairSkillModalProps {
   onDismiss: () => void;
 }
 
-const optionKeys = {
+export const RepairSkillModalOptionKeys = {
   repairSkill: 'repairSkill',
   removeSkill: 'removeSkill',
 };
 
 export const CreateSkillModal: React.FC<RepairSkillModalProps> = ({ skillItem, onNext, onDismiss }) => {
-  const [option, setOption] = useState(optionKeys.repairSkill);
+  const [option, setOption] = useState(RepairSkillModalOptionKeys.repairSkill);
 
   const handleChange = (event, option) => {
     setOption(option.key);
@@ -39,15 +40,16 @@ export const CreateSkillModal: React.FC<RepairSkillModalProps> = ({ skillItem, o
     {
       ariaLabel:
         formatMessage('Locate the bot file and repair the link') +
-        (option === optionKeys.repairSkill ? ' selected' : ''),
-      key: optionKeys.repairSkill,
+        (option === RepairSkillModalOptionKeys.repairSkill ? ' selected' : ''),
+      key: RepairSkillModalOptionKeys.repairSkill,
       'data-testid': 'Locate the bot file and repair the link',
       text: formatMessage('Locate the bot file and repair the link'),
     },
     {
       ariaLabel:
-        formatMessage('Remove this skill from your project') + (option === optionKeys.removeSkill ? ' selected' : ''),
-      key: optionKeys.removeSkill,
+        formatMessage('Remove this skill from your project') +
+        (option === RepairSkillModalOptionKeys.removeSkill ? ' selected' : ''),
+      key: RepairSkillModalOptionKeys.removeSkill,
       'data-testid': 'Remove this skill from your project',
       text: formatMessage('Remove this skill from your project'),
     },

@@ -8,13 +8,17 @@ import { FontWeights } from '@uifabric/styling';
 import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { ActionButton, IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuStyles } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { ICalloutContentStyles } from 'office-ui-fabric-react/lib/Callout';
+import { DiagnosticSeverity } from '@bfc/shared';
+
+import { ErrorInfo } from '../TestController/errorInfo';
+import { WarningInfo } from '../TestController/warningInfo';
 
 import { TreeLink, TreeMenuItem } from './ProjectTree';
 
@@ -109,6 +113,8 @@ const navItem = (isActive: boolean, isBroken: boolean, shift: number) => css`
   }
 `;
 
+// export const errorIcon
+
 export const overflowSet = (isBroken: boolean) => css`
   width: 100%;
   height: 100%;
@@ -123,9 +129,9 @@ export const overflowSet = (isBroken: boolean) => css`
 `;
 
 const statusIcon = {
-  width: '24px',
-  height: '18px',
-  fontSize: 16,
+  width: '12px',
+  height: '12px',
+  fontSize: 12,
   marginLeft: 6,
 };
 
@@ -172,7 +178,30 @@ const renderTreeMenuItem = (link: TreeLink) => (item: TreeMenuItem) => {
 };
 
 const onRenderItem = (item: IOverflowSetItemProps) => {
-  const { warningContent, errorContent } = item;
+  const { diagnostics = [] } = item;
+  const warnings = diagnostics.filter((diag) => diag.severity === DiagnosticSeverity.Warning);
+  const errors = diagnostics.filter((diag) => diag.severity === DiagnosticSeverity.Error);
+
+  const warningContent = warnings.map((diag) => diag.message).join(',');
+
+  const errorContent = errors.map((diag) => diag.message).join(',');
+
+  const warningHTML = warnings.map((item) => {
+    return <WarningInfo count={1} hidden={false} onClick={() => {}} />;
+  });
+
+  const errorHTML = errors.map((item) => {
+    return (
+      <ActionButton
+        ariaLabel={formatMessage('Error')}
+        iconProps={{ iconName: 'ErrorBadge', style: errorIcon }}
+        title={formatMessage('Error')}
+      >
+        {item.message}
+      </ActionButton>
+    );
+  });
+
   return (
     <div
       data-is-focusable
@@ -198,13 +227,13 @@ const onRenderItem = (item: IOverflowSetItemProps) => {
           />
         )}
         {item.displayName}
-        {item.errorContent && (
-          <TooltipHost content={item.errorContent} directionalHint={DirectionalHint.bottomLeftEdge}>
+        {warnings.length && (
+          <TooltipHost content={warningHTML} directionalHint={DirectionalHint.bottomLeftEdge}>
             <Icon iconName={'Warning'} style={warningIcon} />
           </TooltipHost>
         )}
-        {item.warningContent && (
-          <TooltipHost content={item.warningContent} directionalHint={DirectionalHint.bottomLeftEdge}>
+        {errors.length && (
+          <TooltipHost content={errorHTML} directionalHint={DirectionalHint.bottomLeftEdge}>
             <Icon iconName={'ErrorBadge'} style={errorIcon} />
           </TooltipHost>
         )}

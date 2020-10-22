@@ -69,8 +69,7 @@ export type TreeLink = {
   displayName: string;
   isRoot: boolean;
   isBroken?: boolean;
-  warningContent?: string;
-  errorContent?: string;
+  diagnostics: Diagnostic[];
   projectId: string;
   skillId: string | null;
   dialogName?: string;
@@ -105,6 +104,7 @@ type BotInProject = {
   projectId: string;
   name: string;
   isRemote: boolean;
+  diagnostics: Diagnostic[];
   error?: any;
 };
 
@@ -152,26 +152,6 @@ export const ProjectTree: React.FC<Props> = ({
     }
   }
 
-  const dialogHasWarnings = (dialog: DialogInfo) => {
-    if (notificationMap[currentProjectId][dialog.id]) {
-      return notificationMap[currentProjectId][dialog.id].some((diag) => diag.severity === DiagnosticSeverity.Warning);
-    }
-  };
-
-  const botHasWarnings = (bot: BotInProject) => {
-    return bot.dialogs.some(dialogHasWarnings);
-  };
-
-  const dialogHasErrors = (dialog: DialogInfo) => {
-    if (notificationMap[currentProjectId][dialog.id]) {
-      notificationMap[currentProjectId][dialog.id].some((diag) => diag.severity === DiagnosticSeverity.Error);
-    }
-  };
-
-  const botHasErrors = (bot: BotInProject) => {
-    return bot.dialogs.some(dialogHasErrors);
-  };
-
   const handleOnSelect = (link: TreeLink) => {
     setSelectedLink(link);
     onSelect?.(link); // if we've defined a custom onSelect, use it
@@ -191,8 +171,7 @@ export const ProjectTree: React.FC<Props> = ({
       skillId: bot.projectId,
       isRoot: true,
       isBroken: !!bot.error,
-      warningContent: botHasWarnings(bot) ? formatMessage('This bot has warnings') : undefined,
-      errorContent: botHasErrors(bot) ? formatMessage('This bot has errors') : undefined,
+      diagnostics: bot.diagnostics,
     };
 
     return (
@@ -219,27 +198,14 @@ export const ProjectTree: React.FC<Props> = ({
   };
 
   const renderDialogHeader = (skillId: string, dialog: DialogInfo) => {
-    let warningContent, errorContent;
-    if (notificationMap[currentProjectId][dialog.id]) {
-      warningContent = notificationMap[currentProjectId][dialog.id]
-        .filter((diag) => diag.severity === DiagnosticSeverity.Warning)
-        .map((diag) => diag.message)
-        .join(',');
-
-      errorContent = notificationMap[currentProjectId][dialog.id]
-        .filter((diag) => diag.severity === DiagnosticSeverity.Error)
-        .map((diag) => diag.message)
-        .join(',');
-    }
-
+    const diagnostics: Diagnostic[] = notificationMap[currentProjectId][dialog.id];
     const link: TreeLink = {
       dialogName: dialog.id,
       displayName: dialog.displayName,
       isRoot: dialog.isRoot,
       projectId: currentProjectId,
       skillId: null,
-      errorContent,
-      warningContent,
+      diagnostics,
     };
     return (
       <span
@@ -277,8 +243,7 @@ export const ProjectTree: React.FC<Props> = ({
     // NOTE: put the form-dialog detection here when it's ready
     const link: TreeLink = {
       displayName: item.displayName,
-      warningContent: item.warningContent,
-      errorContent: item.errorContent,
+      diagnostics: [],
       trigger: item.index,
       dialogName: dialog.id,
       isRoot: false,
@@ -416,7 +381,13 @@ export const ProjectTree: React.FC<Props> = ({
           {onAllSelected != null ? (
             <TreeItem
               forceIndent={SUMMARY_ARROW_SPACE}
-              link={{ displayName: formatMessage('All'), skillId: null, projectId: currentProjectId, isRoot: true }}
+              link={{
+                displayName: formatMessage('All'),
+                skillId: null,
+                projectId: currentProjectId,
+                isRoot: true,
+                diagnostics: [],
+              }}
               onSelect={onAllSelected}
             />
           ) : null}

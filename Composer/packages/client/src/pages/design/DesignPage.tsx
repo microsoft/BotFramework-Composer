@@ -56,6 +56,7 @@ import { undoFunctionState, undoVersionState } from '../../recoilModel/undo/hist
 import { decodeDesignerPathToArrayPath } from '../../utils/convertUtils/designerPathEncoder';
 import { useTriggerApi } from '../../shell/triggerApi';
 import { CreationFlowStatus } from '../../constants';
+import { RepairSkillModalOptionKeys } from '../../components/RepairSkillModal';
 
 import { WarningMessage } from './WarningMessage';
 import {
@@ -817,11 +818,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
               setBrokenSkillItem(undefined);
             }}
             onNext={(option) => {
-              if (option === 'repairSkill') {
+              if (option === RepairSkillModalOptionKeys.repairSkill) {
                 setCreationFlowTypes('Skill');
                 setCreationFlowStatus(CreationFlowStatus.OPEN);
                 navigate(`/projects/open`);
-              } else if ((option = 'removeSkill')) {
+              } else if ((option = RepairSkillModalOptionKeys.removeSkill)) {
                 const skillIdToRemove = brokenSkillItem.skillId;
                 if (!skillIdToRemove) return;
                 removeSkillFromBotProject(skillIdToRemove);
