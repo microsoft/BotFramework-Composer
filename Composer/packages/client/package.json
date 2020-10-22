@@ -8,9 +8,8 @@
     "node": ">=12"
   },
   "scripts": {
-    "start": "yarn build:extension-bundles && node scripts/start.js",
-    "build": "yarn build:extension-bundles && node --max_old_space_size=4096 scripts/build.js",
-    "build:extension-bundles": "webpack --config ./config/extensions.config.js --env production",
+    "start": "node scripts/start.js",
+    "build": "node --max_old_space_size=4096 scripts/build.js",
     "clean": "rimraf build",
     "test": "jest",
     "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src ./__tests__",
