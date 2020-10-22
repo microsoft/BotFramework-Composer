@@ -112,8 +112,8 @@ export const navigationDispatcher = () => {
       fragment: string
     ) => {
       set(currentProjectIdState, projectId);
-      const designPageLocation = await snapshot.getPromise(designPageLocationState(projectId));
-      const breadcrumb = await snapshot.getPromise(breadcrumbState(projectId));
+      const designPageLocation = await snapshot.getPromise(designPageLocationState(skillId ?? projectId));
+      const breadcrumb = await snapshot.getPromise(breadcrumbState(skillId ?? projectId));
       let updatedBreadcrumb = [...breadcrumb];
       const { dialogId, selected } = designPageLocation;
 
@@ -123,7 +123,7 @@ export const navigationDispatcher = () => {
           : `/bot/${projectId}/skill/${skillId}/dialogs/${dialogId}`;
 
       if (focusPath) {
-        const dialogs = await snapshot.getPromise(dialogsState(projectId));
+        const dialogs = await snapshot.getPromise(dialogsState(skillId ?? projectId));
         const currentDialog = dialogs.find(({ id }) => id === dialogId);
         const encodedFocusPath = encodeArrayPathToDesignerPath(currentDialog?.content, focusPath);
 
