@@ -14,4 +14,9 @@ Dockerfile
 extensions/localPublish/hostedBots/*
 
 # ignore test
-coverage
+Composer/coverage
+Composer/packages/server/.composer
+
+extensions/.build-cache.json
+extensions/**/lib
+extensions/**/dist

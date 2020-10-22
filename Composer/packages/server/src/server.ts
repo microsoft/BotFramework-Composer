@@ -115,6 +115,10 @@ export async function start(): Promise<number | string> {
     }
   });
 
+  app.get(`${BASEURL}/plugin-host.html`, (req, res) => {
+    res.render(path.resolve(clientDirectory, 'plugin-host.ejs'), { __nonce__: req.__nonce__ });
+  });
+
   app.get('*', (req, res) => {
     res.render(path.resolve(clientDirectory, 'index.ejs'), { __nonce__: req.__nonce__ });
   });
