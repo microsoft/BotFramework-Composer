@@ -174,6 +174,10 @@ export const deleteBotButton = {
     background: SharedColors.cyanBlue10,
     color: NeutralColors.white,
   },
+  rootHovered: {
+    background: SharedColors.cyanBlue10,
+    color: NeutralColors.white,
+  },
 };
 
 export const publishTargetsContainer = css`

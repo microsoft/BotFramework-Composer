@@ -76,6 +76,7 @@ export const content = css`
   overflow: auto;
   height: 100%;
   label: PageContent;
+  box-sizing: border-box;
 `;
 
 // -------------------- Page -------------------- //
