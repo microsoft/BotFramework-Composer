@@ -58,18 +58,21 @@ export const publish = async (
     // write the .zip to disk
     const zipWriteStream = createWriteStream(zipPath);
     await new Promise((resolve, reject) => {
-      project.exportToZip((archive: NodeJS.ReadStream & { finalize: () => void; on: (ev, listener) => void }) => {
-        archive.on('error', (err) => {
-          console.error('Got error trying to export to zip: ', err);
-          reject(err.message);
-        });
-        archive.pipe(zipWriteStream);
-        archive.on('end', () => {
-          archive.unpipe();
-          zipWriteStream.end();
-          resolve();
-        });
-      });
+      project.exportToZip(
+        { files: ['*.botproject'], directories: ['/knowledge-base/'] },
+        (archive: NodeJS.ReadStream & { finalize: () => void; on: (ev, listener) => void }) => {
+          archive.on('error', (err) => {
+            console.error('Got error trying to export to zip: ', err);
+            reject(err.message);
+          });
+          archive.pipe(zipWriteStream);
+          archive.on('end', () => {
+            archive.unpipe();
+            zipWriteStream.end();
+            resolve();
+          });
+        }
+      );
     });
 
     // open up the .zip for reading
@@ -291,11 +294,17 @@ const xformJobToResult = (job: PVAPublishJob): PublishResult => {
     eTag: job.importedContentEtag,
     id: job.operationId, // what is this used for in Composer?
     log: (job.diagnostics || []).map((diag) => `---\n${JSON.stringify(diag, null, 2)}\n---\n`).join('\n'),
-    message: getUserFriendlyMessage(job.state),
+    message: getUserFriendlyMessage(job),
     time: new Date(job.lastUpdateTimeUtc),
     status: getStatusFromJobState(job.state),
+    action: getAction(job),
   };
   return result;
+};
+
+const getAction = (job) => {
+  if (job.testUrl !== null) return null;
+  return { href: job.testUrl, label: 'Test in Power Virtual Agents' };
 };
 
 const getStatusFromJobState = (state: PublishState): number => {
@@ -337,8 +346,8 @@ const getOperationIdOfLastJob = (botProjectId: string, profileName: string): str
   return '';
 };
 
-const getUserFriendlyMessage = (state: PublishState): string => {
-  switch (state) {
+const getUserFriendlyMessage = (job: PVAPublishJob): string => {
+  switch (job.state) {
     case 'Done':
       return 'Publish successful.';
 

@@ -15,7 +15,6 @@ function initialize(registration: ExtensionRegistration) {
     // TODO: add 'pull' once ready,
   };
 
-  // @ts-expect-error (TODO: remove once auth is integrated and added to publish method signature)
   registration.addPublishMethod(extension);
 }
 

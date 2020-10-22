@@ -257,9 +257,9 @@ export class BotProject implements IBotProject {
     this.settings = config;
   };
 
-  public exportToZip = (cb) => {
+  public exportToZip = (exclusions, cb) => {
     try {
-      this.fileStorage.zip(this.dataDir, cb);
+      this.fileStorage.zip(this.dataDir, exclusions, cb);
     } catch (e) {
       debug('error zipping assets', e);
     }
