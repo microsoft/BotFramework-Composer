@@ -78,13 +78,11 @@ export const formDialogSchemaDialogExistsSelector = selectorFamily<boolean, { pr
   },
 });
 
-type JsonSchemaFilesByProjectId = { [projectId: string]: JsonSchemaFile[] };
-
 export const jsonSchemaFilesByProjectIdSelector = selector({
   key: 'jsonSchemaFilesByProjectIdSelector',
   get: ({ get }) => {
     const projectIds = get(botProjectIdsState);
-    const result: JsonSchemaFilesByProjectId = {};
+    const result: Record<string, JsonSchemaFile[]> = {};
     projectIds.forEach((projectId) => {
       result[projectId] = get(jsonSchemaFilesState(projectId));
     });
