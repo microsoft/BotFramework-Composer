@@ -138,11 +138,12 @@ export const ProjectTree: React.FC<Props> = ({
   const botProjectSpace = useRecoilValue(botProjectSpaceSelector);
 
   const notificationMap: { [projectId: string]: { [dialogId: string]: Diagnostic[] } } = {};
+
   for (const bot of projectCollection) {
     notificationMap[bot.projectId] = {};
 
-    const matchingBot = botProjectSpace.filter((project) => project.projectId === bot.projectId)[0];
-    if (matchingBot == null) continue; // should never happen, but just to be safe
+    const matchingBot = botProjectSpace?.filter((project) => project.projectId === bot.projectId)[0];
+    if (matchingBot == null) continue;
 
     for (const dialog of matchingBot.dialogs) {
       const dialogId = dialog.id;
@@ -151,7 +152,7 @@ export const ProjectTree: React.FC<Props> = ({
   }
 
   const dialogHasWarnings = (dialog: DialogInfo) => {
-    notificationMap[currentProjectId][dialog.id].some((diag) => diag.severity === DiagnosticSeverity.Warning);
+    notificationMap[currentProjectId][dialog.id]?.some((diag) => diag.severity === DiagnosticSeverity.Warning);
   };
 
   const botHasWarnings = (bot: BotInProject) => {
@@ -159,7 +160,7 @@ export const ProjectTree: React.FC<Props> = ({
   };
 
   const dialogHasErrors = (dialog: DialogInfo) => {
-    notificationMap[currentProjectId][dialog.id].some((diag) => diag.severity === DiagnosticSeverity.Error);
+    notificationMap[currentProjectId][dialog.id]?.some((diag) => diag.severity === DiagnosticSeverity.Error);
   };
 
   const botHasErrors = (bot: BotInProject) => {
@@ -212,11 +213,11 @@ export const ProjectTree: React.FC<Props> = ({
 
   const renderDialogHeader = (skillId: string, dialog: DialogInfo) => {
     const warningContent = notificationMap[currentProjectId][dialog.id]
-      .filter((diag) => diag.severity === DiagnosticSeverity.Warning)
+      ?.filter((diag) => diag.severity === DiagnosticSeverity.Warning)
       .map((diag) => diag.message)
       .join(',');
     const errorContent = notificationMap[currentProjectId][dialog.id]
-      .filter((diag) => diag.severity === DiagnosticSeverity.Error)
+      ?.filter((diag) => diag.severity === DiagnosticSeverity.Error)
       .map((diag) => diag.message)
       .join(',');
 
