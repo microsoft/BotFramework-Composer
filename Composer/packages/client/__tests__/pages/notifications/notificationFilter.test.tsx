@@ -4,16 +4,15 @@
 import * as React from 'react';
 import { fireEvent, render } from '@botframework-composer/test-utils';
 
-import { NotificationHeader } from '../../src/pages/notifications/NotificationFilter';
+import { NotificationFilter } from '../../../src/pages/notifications/NotificationFilter';
 
-describe('<NotificationHeader/>', () => {
+describe('<NotificationFilter/>', () => {
   it('should render the NotificationHeader', () => {
     const mockOnChange = jest.fn(() => null);
-    const { container } = render(<NotificationHeader onChange={mockOnChange} />);
+    const { container } = render(<NotificationFilter onChange={mockOnChange} />);
 
-    expect(container).toHaveTextContent('Notifications');
     expect(container).toHaveTextContent('All');
-    const dropdown = container.querySelector('[data-testid="notifications-dropdown"]');
+    const dropdown: any = container.querySelector('[data-testid="notifications-dropdown"]');
     fireEvent.click(dropdown);
     const test = document.querySelector('.ms-Dropdown-callout');
     expect(test).toHaveTextContent('Error');
