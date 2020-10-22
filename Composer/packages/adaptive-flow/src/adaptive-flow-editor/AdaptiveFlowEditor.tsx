@@ -7,7 +7,7 @@ import createCache from '@emotion/cache';
 import React, { useRef, useMemo, useEffect } from 'react';
 import isEqual from 'lodash/isEqual';
 import formatMessage from 'format-message';
-import { DialogFactory } from '@bfc/shared';
+import { DialogFactory, SchemaDefinitions } from '@bfc/shared';
 import { useShellApi, JSONSchema7, FlowUISchema, FlowWidget } from '@bfc/extension-client';
 import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 
@@ -171,7 +171,8 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
                         NodeWrapper: VisualEditorNodeWrapper,
                         ElementWrapper: VisualEditorElementWrapper,
                       }}
-                      schema={{ ...schemaFromPlugins, ...customFlowSchema }}
+                      sdkschema={schema?.definitions as SchemaDefinitions}
+                      uischema={{ ...schemaFromPlugins, ...customFlowSchema }}
                       widgets={widgetsFromPlugins}
                       onEvent={(eventName, eventData) => {
                         divRef.current?.focus({ preventScroll: true });
