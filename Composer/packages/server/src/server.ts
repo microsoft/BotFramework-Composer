@@ -26,11 +26,15 @@ import { BASEURL } from './constants';
 import { attachLSPServer } from './utility/attachLSP';
 import log from './logger';
 import { setEnvDefault } from './utility/setEnvDefault';
+import { ElectronContext, setElectronContext } from './utility/electronContext';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const session = require('express-session');
 
-export async function start(): Promise<number | string> {
+export async function start(electronContext?: ElectronContext): Promise<number | string> {
+  if (electronContext) {
+    setElectronContext(electronContext);
+  }
   const clientDirectory = path.resolve(require.resolve('@bfc/client'), '..');
   const app: Express = express();
   app.set('view engine', 'ejs');

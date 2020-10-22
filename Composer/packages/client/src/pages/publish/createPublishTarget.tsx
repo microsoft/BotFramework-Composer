@@ -18,7 +18,7 @@ import { PublishProfileDialog } from '../../constants';
 // import { IPersonaSharedProps, Persona, PersonaSize } from 'office-ui-fabric-react/lib/Persona';
 // import { Link } from 'office-ui-fabric-react/lib/Link';
 import { PublishType } from '../../recoilModel/types';
-import { userSettingsState, currentProjectIdState } from '../../recoilModel';
+import { userSettingsState, currentProjectIdState, currentUserState, grahpTokenState } from '../../recoilModel';
 import { PluginAPI } from '../../plugins/api';
 import { PluginHost } from '../../components/PluginHost/PluginHost';
 import { dispatcherState } from '../../recoilModel';
@@ -50,8 +50,10 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
   const [page, setPage] = useState(current ? PageTypes.EditProfile : PageTypes.AddProfile);
 
   const userSettings = useRecoilValue(userSettingsState);
+  const accessToken = useRecoilValue(currentUserState);
+  const graphToken = useRecoilValue(grahpTokenState);
   const projectId = useRecoilValue(currentProjectIdState);
-  const { provisionToTarget } = useRecoilValue(dispatcherState);
+  const { provisionToTarget, getAccessToken, getGraphToken } = useRecoilValue(dispatcherState);
 
   const targetTypes = useMemo(() => {
     return props.types.map((t) => ({ key: t.name, text: t.description }));
@@ -201,7 +203,13 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
                 disabled={nextDisabled}
                 text={formatMessage('Next')}
                 onClick={() => {
-                  setPage(PageTypes.ConfigProvision);
+                  // get accessToken
+                  getAccessToken();
+                  if (accessToken.token) {
+                    setPage(PageTypes.ConfigProvision);
+                    // graph token only used when provision, so can get it later
+                    getGraphToken();
+                  }
                 }}
               />
             </DialogFooter>
@@ -242,7 +250,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
         }
     }
     return null;
-  }, [config, page, FormInPage, PageEditProfile, nextDisabled, saveDisabled, selectedType, submit]);
+  }, [config, page, FormInPage, PageEditProfile, nextDisabled, saveDisabled, selectedType, submit, accessToken]);
 
   // const examplePersona: IPersonaSharedProps = {
   //   text: 'Somebody',
