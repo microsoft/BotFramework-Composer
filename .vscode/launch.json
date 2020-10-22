@@ -90,7 +90,7 @@
       "outputCapture": "std",
       "outFiles": [
         "${workspaceRoot}/Composer/packages/electron-server/build/**/*.js",
-        "${workspaceRoot}/Composer/plugins/**/*.js",
+        "${workspaceRoot}/extensions/**/*.js",
         "${workspaceRoot}/Composer/packages/server/build/**/*.js"
       ],
       "sourceMaps": true
