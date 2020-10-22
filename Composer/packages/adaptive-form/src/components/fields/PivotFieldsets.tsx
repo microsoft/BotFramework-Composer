@@ -5,10 +5,8 @@ import React from 'react';
 import { FieldProps } from '@bfc/extension-client';
 import { IPivotStyles, Pivot, PivotItem, PivotLinkSize } from 'office-ui-fabric-react/lib/components/Pivot';
 
-import { getFieldsets } from '../../utils';
+import { getFieldsets, resolveFieldWidget } from '../../utils';
 import { useAdaptiveFormContext } from '../../AdaptiveFormContext';
-
-import { ObjectField } from './ObjectField';
 
 const styles: { tabs: Partial<IPivotStyles> } = {
   tabs: {
@@ -18,6 +16,9 @@ const styles: { tabs: Partial<IPivotStyles> } = {
     },
     link: {
       flex: 1,
+    },
+    itemContainer: {
+      paddingTop: '8px',
     },
     linkIsSelected: {
       flex: 1,
@@ -39,11 +40,15 @@ const PivotFieldsets: React.FC<FieldProps<object>> = (props) => {
   return (
     <div>
       <Pivot linkSize={PivotLinkSize.large} selectedKey={focusedTab} styles={styles.tabs} onLinkClick={handleTabChange}>
-        {fieldsets.map(({ schema, uiOptions, title, itemKey }) => (
-          <PivotItem key={itemKey} headerText={typeof title === 'function' ? title(value) : title} itemKey={itemKey}>
-            <ObjectField {...props} schema={schema} uiOptions={uiOptions} />
-          </PivotItem>
-        ))}
+        {fieldsets.map(({ schema, uiOptions, title, itemKey }) => {
+          const { field: Field } = resolveFieldWidget({ schema, uiOptions });
+
+          return (
+            <PivotItem key={itemKey} headerText={typeof title === 'function' ? title(value) : title} itemKey={itemKey}>
+              <Field {...props} schema={schema} uiOptions={uiOptions} />
+            </PivotItem>
+          );
+        })}
       </Pivot>
     </div>
   );

@@ -2,40 +2,41 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { fireEvent } from '@bfc/test-utils';
-import { DialogInfo } from '@bfc/shared';
+import { fireEvent } from '@botframework-composer/test-utils';
 
 import { renderWithRecoil } from '../testUtils';
-import { dialogs } from '../constants.json';
+import { SAMPLE_DIALOG } from '../mocks/sampleDialog';
 import { ProjectTree } from '../../src/components/ProjectTree/ProjectTree';
 import { TriggerCreationModal } from '../../src/components/ProjectTree/TriggerCreationModal';
 import { CreateDialogModal } from '../../src/pages/design/createDialogModal';
+import { dialogsState, currentProjectIdState, botProjectIdsState, schemasState } from '../../src/recoilModel';
 
 jest.mock('@bfc/code-editor', () => {
   return {
     LuEditor: () => <div></div>,
   };
 });
-const projectId = '1234a-324234';
+const projectId = '12345.6789';
+const dialogs = [SAMPLE_DIALOG];
+
+const initRecoilState = ({ set }) => {
+  set(currentProjectIdState, projectId);
+  set(botProjectIdsState, [projectId]);
+  set(dialogsState(projectId), dialogs);
+  set(schemasState(projectId), { sdk: { content: {} } });
+};
 
 describe('<ProjectTree/>', () => {
   it('should render the ProjectTree', async () => {
-    const dialogId = 'todobot';
-    const selected = 'triggers[0]';
     const handleSelect = jest.fn(() => {});
     const handleDeleteDialog = jest.fn(() => {});
     const handleDeleteTrigger = jest.fn(() => {});
-    const { findByText } = renderWithRecoil(
-      <ProjectTree
-        dialogId={dialogId}
-        dialogs={dialogs as DialogInfo[]}
-        selected={selected}
-        onDeleteDialog={handleDeleteDialog}
-        onDeleteTrigger={handleDeleteTrigger}
-        onSelect={handleSelect}
-      />
+
+    const { findByTestId } = renderWithRecoil(
+      <ProjectTree onDeleteDialog={handleDeleteDialog} onDeleteTrigger={handleDeleteTrigger} onSelect={handleSelect} />,
+      initRecoilState
     );
-    const node = await findByText('addtodo');
+    const node = await findByTestId('EchoBot-1_Greeting');
     fireEvent.click(node);
     expect(handleSelect).toHaveBeenCalledTimes(1);
   });

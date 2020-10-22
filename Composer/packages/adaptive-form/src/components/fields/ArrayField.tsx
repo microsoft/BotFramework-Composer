@@ -29,6 +29,7 @@ const ArrayField: React.FC<FieldProps<unknown[]>> = (props) => {
     uiOptions,
     className,
     required,
+    placeholder,
     ...rest
   } = props;
   const [newValue, setNewValue] = useState<string>();
@@ -86,6 +87,7 @@ const ArrayField: React.FC<FieldProps<unknown[]>> = (props) => {
               iconName: 'ReturnKey',
               style: { color: SharedColors.cyanBlue10, opacity: 0.6 },
             }}
+            placeholder={placeholder}
             styles={{ root: { width: '100%' } }}
             value={newValue}
             onChange={handleNewChange}

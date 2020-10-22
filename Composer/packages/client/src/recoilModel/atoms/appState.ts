@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { atom, atomFamily } from 'recoil';
-import { ProjectTemplate, UserSettings } from '@bfc/shared';
+import { FormDialogSchemaTemplate, ProjectTemplate, UserSettings } from '@bfc/shared';
 import { ExtensionMetadata } from '@bfc/extension-client';
 
 import {
@@ -29,6 +29,18 @@ export type CurrentUser = {
   expiration?: number;
   sessionExpired: boolean;
 };
+
+export type PageMode =
+  | 'home'
+  | 'design'
+  | 'lg'
+  | 'lu'
+  | 'qna'
+  | 'notifications'
+  | 'publish'
+  | 'skills'
+  | 'settings'
+  | 'about';
 
 const getFullyQualifiedKey = (value: string) => {
   return `App_${value}_State`;
@@ -180,6 +192,11 @@ export const currentProjectIdState = atom<string>({
   default: '',
 });
 
+export const currentModeState = atom<PageMode>({
+  key: getFullyQualifiedKey('currentMode'),
+  default: 'home',
+});
+
 export const botProjectSpaceLoadedState = atom<boolean>({
   key: getFullyQualifiedKey('botProjectSpaceLoadedState'),
   default: false,
@@ -187,5 +204,15 @@ export const botProjectSpaceLoadedState = atom<boolean>({
 
 export const botOpeningState = atom<boolean>({
   key: getFullyQualifiedKey('botOpeningState'),
+  default: false,
+});
+
+export const formDialogLibraryTemplatesState = atom<FormDialogSchemaTemplate[]>({
+  key: getFullyQualifiedKey('formDialogLibraryTemplates'),
+  default: [],
+});
+
+export const formDialogGenerationProgressingState = atom({
+  key: getFullyQualifiedKey('formDialogGenerationProgressing'),
   default: false,
 });

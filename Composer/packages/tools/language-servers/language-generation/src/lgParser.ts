@@ -4,7 +4,7 @@
 import { fork, ChildProcess } from 'child_process';
 import path from 'path';
 
-import { importResolverGenerator } from '@bfc/shared';
+import { lgImportResolverGenerator } from '@bfc/shared';
 import { ResolverResource } from '@bfc/shared';
 import uniqueId from 'lodash/uniqueId';
 import { lgIndexer } from '@bfc/indexers';
@@ -18,7 +18,7 @@ export interface WorkerMsg {
 
 class LgParserWithoutWorker {
   public async parseText(content: string, id: string, resources: ResolverResource[]) {
-    const lgImportResolver = importResolverGenerator(resources, '.lg');
+    const lgImportResolver = lgImportResolverGenerator(resources, '.lg');
     return lgIndexer.parse(content, id, lgImportResolver);
   }
 }

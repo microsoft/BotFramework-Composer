@@ -1,8 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { FileInfo } from '@bfc/shared';
+
 import { luIndexer } from '../src/luIndexer';
-import { FileInfo } from '../src/type';
 
 const { parse, index } = luIndexer;
 
@@ -75,6 +76,7 @@ describe('index', () => {
     relativePath: './test.lu',
     content,
     path: '/',
+    lastModified: '',
   };
 
   it('should index lu file', () => {
