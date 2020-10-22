@@ -174,6 +174,8 @@ export type ManifestEndpoint = {
   endpointUrl: string;
   msAppId: string;
   description: string;
+  // Other skill endpoint fields in the schema that Composer is not using presently
+  [prop: string]: any;
 };
 
 export type Skill = {

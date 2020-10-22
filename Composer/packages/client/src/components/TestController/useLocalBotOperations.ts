@@ -16,7 +16,7 @@ export function useBotOperations(onAllBotsStarted?: (started: boolean) => void) 
   const botRuntimeOperations = useRecoilValue(botRuntimeOperationsSelector);
   const rootBotId = useRecoilValue(rootBotProjectIdSelector);
   const [trackedProjectIds, setProjectsToTrack] = useState<string[]>([]);
-  const { updateSettingForLocalEndpointSkills, resetBotRuntimeError } = useRecoilValue(dispatcherState);
+  const { updateSettingsForSkillsWithoutManifest, resetBotRuntimeError } = useRecoilValue(dispatcherState);
 
   const handleBotStart = async (projectId: string, config: IPublishConfig, botBuildRequired: boolean) => {
     resetBotRuntimeError(projectId);
@@ -37,7 +37,7 @@ export function useBotOperations(onAllBotsStarted?: (started: boolean) => void) 
 
   const startRootBot = async () => {
     setProjectsToTrack([]);
-    await updateSettingForLocalEndpointSkills();
+    await updateSettingsForSkillsWithoutManifest();
     const rootBot = builderEssentials[0];
     const { projectId, configuration, buildRequired, status } = rootBot;
     if (status !== BotStatus.connected) {

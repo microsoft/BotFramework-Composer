@@ -19,7 +19,8 @@ import {
 import { setSettingState } from './setting';
 
 export const skillDispatcher = () => {
-  const updateSettingForLocalEndpointSkills = useRecoilCallback((callbackHelpers: CallbackInterface) => async () => {
+  // For endpoints in manifests the settings are updated immediately in SelectSkill. If "Composer Local" is chosen needs updating when rootbot is started.
+  const updateSettingsForSkillsWithoutManifest = useRecoilCallback((callbackHelpers: CallbackInterface) => async () => {
     const { snapshot } = callbackHelpers;
     const botEndpoints = await snapshot.getPromise(botEndpointsState);
     const skills = await snapshot.getPromise(skillsStateSelector);
@@ -27,7 +28,6 @@ export const skillDispatcher = () => {
     if (!rootBotId) {
       return;
     }
-
     const settings = await snapshot.getPromise(settingsState(rootBotId));
     let updatedSettings = { ...settings };
     const botProjectFile = await snapshot.getPromise(botProjectFileState(rootBotId));
@@ -40,13 +40,12 @@ export const skillDispatcher = () => {
       const projectId = skills[skillNameIdentifier]?.id;
       const currentSetting = await snapshot.getPromise(settingsState(projectId));
 
-      // Update settings only for skills that have chosen the local endpoint
+      // Update settings only for skills that have chosen the "Composer local" endpoint and not manifest endpoints
       if (projectId && botEndpoints[projectId] && !botProjectSkill.endpointName) {
         updatedSettings = produce(updatedSettings, (draftState) => {
           if (!draftState.skill) {
             draftState.skill = {};
           }
-
           draftState.skill[skillNameIdentifier] = {
             endpointUrl: botEndpoints[projectId],
             msAppId: currentSetting.MicrosoftAppId ?? '',
@@ -92,10 +91,10 @@ export const skillDispatcher = () => {
       const { set, snapshot } = callbackHelpers;
       const manifests = await snapshot.getPromise(skillManifestsState(projectId));
       const dispatcher = await snapshot.getPromise(dispatcherState);
+
       if (!manifests.some((manifest) => manifest.id === id)) {
         createSkillManifest(callbackHelpers, { id, content, projectId });
         dispatcher.updateManifestInBotProjectFile(projectId, id);
-        return;
       }
 
       set(skillManifestsState(projectId), (skillManifests) =>
@@ -118,6 +117,6 @@ export const skillDispatcher = () => {
     updateSkillManifest,
     displayManifestModal,
     dismissManifestModal,
-    updateSettingForLocalEndpointSkills,
+    updateSettingsForSkillsWithoutManifest,
   };
 };

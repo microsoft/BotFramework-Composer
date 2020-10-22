@@ -1,11 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useRecoilValue } from 'recoil';
+import { selectorFamily, useRecoilState, useRecoilValue } from 'recoil';
 import { act } from '@botframework-composer/test-utils/lib/hooks';
-import { Skill } from '@bfc/shared';
 
 import { skillDispatcher } from '../skill';
+import { botProjectFileDispatcher } from '../botProjectFile';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import {
   skillManifestsState,
@@ -13,10 +13,18 @@ import {
   settingsState,
   showAddSkillDialogModalState,
   displaySkillManifestState,
+  botProjectFileState,
+  botNameIdentifierState,
+  locationState,
+  projectMetaDataState,
+  botDisplayNameState,
 } from '../../atoms/botState';
 import { dispatcherState } from '../../DispatcherWrapper';
-import { currentProjectIdState } from '../../atoms';
+import { botEndpointsState, botProjectIdsState, currentProjectIdState } from '../../atoms';
 import { Dispatcher } from '..';
+import { skillsStateSelector } from '../../selectors';
+
+import mockBotProjectFileData from './mocks/mockBotProjectFile.json';
 
 jest.mock('../../../utils/httpUtil', () => {
   return {
@@ -32,9 +40,28 @@ jest.mock('../../../utils/httpUtil', () => {
 
 const mockDialogComplete = jest.fn();
 const projectId = '42345.23432';
+const skillIds = ['1234.123', '234.234'];
 
 describe('skill dispatcher', () => {
   let renderedComponent, dispatcher: Dispatcher;
+
+  const skillsDataSelector = selectorFamily({
+    key: 'skillSelector-skill',
+    get: (skillId: string) => ({ get }) => {
+      return {
+        skillNameIdentifier: get(botNameIdentifierState(skillId)),
+        location: get(locationState(skillId)),
+      };
+    },
+    set: (skillId: string) => ({ set }, stateUpdater: any) => {
+      const { botNameIdentifier, location, displayName, settings } = stateUpdater;
+      set(botNameIdentifierState(skillId), botNameIdentifier);
+      set(locationState(skillId), location);
+      set(settingsState(skillId), settings);
+      set(botDisplayNameState(skillId), displayName);
+    },
+  });
+
   beforeEach(() => {
     mockDialogComplete.mockClear();
 
@@ -45,8 +72,12 @@ describe('skill dispatcher', () => {
       const settings = useRecoilValue(settingsState(projectId));
       const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState(projectId));
       const displaySkillManifest = useRecoilValue(displaySkillManifestState(projectId));
-
+      const skills = useRecoilValue(skillsStateSelector);
+      const [botEndpoints, setBotEndpoints] = useRecoilState(botEndpointsState);
       const currentDispatcher = useRecoilValue(dispatcherState);
+
+      const [todoSkillData, setTodoSkillData] = useRecoilState(skillsDataSelector(skillIds[0]));
+      const [googleKeepData, setGoogleKeepData] = useRecoilState(skillsDataSelector(skillIds[1]));
 
       return {
         projectId,
@@ -56,6 +87,15 @@ describe('skill dispatcher', () => {
         showAddSkillDialogModal,
         displaySkillManifest,
         currentDispatcher,
+        skills,
+        botEndpoints,
+        todoSkillData,
+        googleKeepData,
+        setters: {
+          setBotEndpoints,
+          setTodoSkillData,
+          setGoogleKeepData,
+        },
       };
     };
 
@@ -69,19 +109,30 @@ describe('skill dispatcher', () => {
           ],
         },
         { recoilState: onAddSkillDialogCompleteState(projectId), initialValue: { func: undefined } },
-        {
-          recoilState: skillsState(projectId),
-          initialValue: [makeTestSkill(1), makeTestSkill(2)],
-        },
         { recoilState: settingsState(projectId), initialValue: {} },
         { recoilState: showAddSkillDialogModalState(projectId), initialValue: false },
         { recoilState: displaySkillManifestState(projectId), initialValue: undefined },
         { recoilState: currentProjectIdState, initialValue: projectId },
+        { recoilState: botProjectIdsState, initialValue: [projectId, ...skillIds] },
+        { recoilState: settingsState(projectId), initialValue: {} },
+        {
+          recoilState: botProjectFileState(projectId),
+          initialValue: {
+            content: mockBotProjectFileData,
+          },
+        },
+        {
+          recoilState: projectMetaDataState(projectId),
+          initialValue: {
+            isRootBot: true,
+          },
+        },
       ],
       dispatcher: {
         recoilState: dispatcherState,
         initialValue: {
           skillDispatcher,
+          botProjectFileDispatcher,
         },
       },
     });
@@ -130,5 +181,44 @@ describe('skill dispatcher', () => {
       dispatcher.dismissManifestModal(projectId);
     });
     expect(renderedComponent.current.displaySkillManifest).toBeUndefined();
+  });
+
+  fit('should update setting.skill on local skills with "Composer Local" chosen as endpoint', async () => {
+    await act(async () => {
+      const botEndpoints = {};
+      botEndpoints[`${skillIds[0]}`] = 'http://localhost:3978/api/messages';
+      botEndpoints[`${skillIds[1]}`] = 'http://localhost:3979/api/messages';
+      renderedComponent.current.setters.setBotEndpoints(botEndpoints);
+      renderedComponent.current.setters.setTodoSkillData({
+        location: '/Users/tester/Desktop/LoadedBotProject/Todo-Skill',
+        botNameIdentifier: 'todoSkill',
+        settings: {
+          MicrosoftAppId: 'abc-defg-3431-sdfd',
+        },
+        displayName: 'todo-skill',
+      });
+
+      renderedComponent.current.setters.setGoogleKeepData({
+        location: '/Users/tester/Desktop/LoadedBotProject/GoogleKeep-Skill',
+        botNameIdentifier: 'googleKeepSync',
+        settings: {
+          MicrosoftAppId: '1231-1231-1231-1231',
+        },
+        displayName: 'google-keep',
+      });
+    });
+
+    await act(async () => {
+      dispatcher.updateSettingsForSkillsWithoutManifest();
+    });
+    // Only skills with no endpoint name in BotProject file use the Local Composer endpoint
+    expect(renderedComponent.current.settings).toEqual({
+      skill: {
+        googleKeepSync: {
+          endpointUrl: 'http://localhost:3979/api/messages',
+          msAppId: '1231-1231-1231-1231',
+        },
+      },
+    });
   });
 });

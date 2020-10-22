@@ -501,6 +501,7 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
 
   set(botNameIdentifierState(rootBotProjectId), camelCase(name));
   set(botProjectIdsState, [rootBotProjectId]);
+  // Get the status of the bot on opening if it was opened and run in another window.
   dispatcher.getPublishStatus(rootBotProjectId, defaultPublishConfig);
 
   if (botFiles.botProjectSpaceFiles && botFiles.botProjectSpaceFiles.length) {

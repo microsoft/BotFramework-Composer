@@ -5,7 +5,6 @@
 import React from 'react';
 import { fireEvent, getAllByRole, render } from '@botframework-composer/test-utils';
 import { EditorExtension } from '@bfc/extension-client';
-import { convertSkillsToDictionary, Skill } from '@bfc/shared';
 import { act } from '@botframework-composer/test-utils/lib/hooks';
 
 import { SkillEndpointField } from '../SkillEndpointField';
@@ -14,18 +13,18 @@ import { skills } from './constants';
 
 const projectId = '123.abc';
 
-const renderSkillEndpointField = ({ value = {}, updateSkillSetting = jest.fn() } = {}) => {
+const renderSkillEndpointField = ({ value = {}, updateSkill = jest.fn() } = {}) => {
   const props = {
     value,
   } as any;
 
   const shellData: any = {
-    skillsSettings: convertSkillsToDictionary(skills as Skill[]),
+    skillsSettings: {},
     skills,
   };
 
   const shell: any = {
-    updateSkillSetting,
+    updateSkill,
   };
 
   return render(
@@ -36,11 +35,14 @@ const renderSkillEndpointField = ({ value = {}, updateSkillSetting = jest.fn() }
 };
 
 describe('Begin Skill Dialog', () => {
-  it('should update the skill settings', async () => {
-    const updateSkillSetting = jest.fn();
+  it('should call update skill with the correct parameters', async () => {
+    const updateSkill = jest.fn();
+    const keys = Object.keys(skills);
+    const selectedKeyIndex = 1;
+    const selectedSkill = skills[keys[selectedKeyIndex]];
     const { baseElement, findByRole } = renderSkillEndpointField({
-      updateSkillSetting,
-      value: { skillEndpoint: `=settings.skill['${skills[0].id}'].endpointUrl` },
+      updateSkill,
+      value: { skillEndpoint: `=settings.skill['${keys[selectedKeyIndex]}'].endpointUrl` },
     });
 
     const listbox = await findByRole('listbox');
@@ -49,16 +51,70 @@ describe('Begin Skill Dialog', () => {
     });
 
     const endpoints = getAllByRole(baseElement, 'option');
+
     act(() => {
       fireEvent.click(endpoints[endpoints.length - 1]);
     });
 
-    expect(updateSkillSetting).toHaveBeenCalledWith(
-      skills[0].id,
+    expect(updateSkill).toHaveBeenCalledWith(
+      keys[selectedKeyIndex],
       expect.objectContaining({
-        endpointUrl: skills[0].endpoints[0].endpointUrl,
-        msAppId: skills[0].endpoints[0].msAppId,
+        selectedEndpointIndex: 1,
+        skill: selectedSkill,
       })
     );
+  });
+
+  it('should choose composer local endpoint', async () => {
+    const updateSkill = jest.fn();
+    const keys = Object.keys(skills);
+    const selectedKeyIndex = 1;
+    const selectedSkill = skills[keys[selectedKeyIndex]];
+    const { baseElement, findByRole } = renderSkillEndpointField({
+      updateSkill,
+      value: { skillEndpoint: `=settings.skill['${keys[selectedKeyIndex]}'].endpointUrl` },
+    });
+
+    const listbox = await findByRole('listbox');
+    act(() => {
+      fireEvent.click(listbox);
+    });
+
+    const endpoints = getAllByRole(baseElement, 'option');
+
+    act(() => {
+      fireEvent.click(endpoints[1]);
+    });
+
+    expect(updateSkill).toHaveBeenCalledWith(
+      keys[selectedKeyIndex],
+      expect.objectContaining({
+        selectedEndpointIndex: -1,
+        skill: selectedSkill,
+      })
+    );
+  });
+
+  it('should not fail if skill has no manifest', async () => {
+    const updateSkill = jest.fn();
+    const keys = Object.keys(skills);
+    const selectedKeyIndex = 1;
+    const selectedSkill = skills[keys[selectedKeyIndex]];
+    delete selectedSkill.manifest;
+    const { baseElement, findByRole } = renderSkillEndpointField({
+      updateSkill,
+      value: { skillEndpoint: `=settings.skill['${keys[selectedKeyIndex]}'].endpointUrl` },
+    });
+
+    const listbox = await findByRole('listbox');
+    act(() => {
+      fireEvent.click(listbox);
+    });
+
+    const endpoints = getAllByRole(baseElement, 'option').filter((endpoint) => {
+      return !!endpoint.title;
+    });
+
+    expect(endpoints.length).toBe(1);
   });
 });
