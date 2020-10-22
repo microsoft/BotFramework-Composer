@@ -12,9 +12,9 @@ jest.mock('../NotificationPanel', () => ({
   NotificationPanel: ({ isOpen }) => isOpen && <div data-testid="NotificationPanel" />,
 }));
 jest.mock('office-ui-fabric-react/lib/Button', () => ({
-  IconButton: ({ onClick }) => (
+  IconButton: ({ children, onClick }) => (
     <button data-testid="NotificationButton" onClick={onClick}>
-      Open panel
+      {children}
     </button>
   ),
 }));
