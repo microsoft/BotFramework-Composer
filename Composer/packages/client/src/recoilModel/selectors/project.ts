@@ -3,7 +3,9 @@
 
 import { selector, selectorFamily } from 'recoil';
 import isEmpty from 'lodash/isEmpty';
-import { FormDialogSchema } from '@bfc/shared';
+import { BotAssets, FormDialogSchema } from '@bfc/shared';
+import { BotIndexer } from '@bfc/indexers';
+import settingStorage from '../../utils/dialogSettingStorage';
 
 import {
   botErrorState,
@@ -15,6 +17,13 @@ import {
   botNameIdentifierState,
   formDialogSchemaIdsState,
   formDialogSchemaState,
+  settingsState,
+  luFilesState,
+  lgFilesState,
+  qnaFilesState,
+  skillManifestsState,
+  dialogSchemasState,
+  jsonSchemaFilesState,
 } from '../atoms';
 
 // Actions
@@ -55,7 +64,35 @@ export const botProjectSpaceSelector = selector({
       const name = get(botDisplayNameState(projectId));
       const botNameId = get(botNameIdentifierState(projectId));
 
-      return { dialogs, projectId, name, ...metaData, error: botError, botNameId };
+      const luFiles = get(luFilesState(projectId));
+      const lgFiles = get(lgFilesState(projectId));
+      const setting = get(settingsState(projectId));
+      const skillManifests = get(skillManifestsState(projectId));
+      const dialogSchemas = get(dialogSchemasState(projectId));
+      const qnaFiles = get(qnaFilesState(projectId));
+      const formDialogSchemas = get(formDialogSchemasSelectorFamily(projectId));
+      const botProjectFile = get(botProjectFileState(projectId));
+      const jsonSchemaFiles = get(jsonSchemaFilesState(projectId));
+      const localeSetting = settingStorage.get(projectId);
+      const botAssets: BotAssets = {
+        projectId,
+        dialogs,
+        luFiles,
+        qnaFiles,
+        lgFiles,
+        skillManifests,
+        setting,
+        dialogSchemas,
+        formDialogSchemas,
+        botProjectFile,
+        jsonSchemaFiles,
+      };
+      const diagnostics = [
+        ...BotIndexer.checkSetting(botAssets, localeSetting),
+        ...BotIndexer.checkManifest(botAssets),
+      ];
+
+      return { dialogs, projectId, name, ...metaData, error: botError, diagnostics, botNameId };
     });
     console.log('RESULT', result);
     return result;
