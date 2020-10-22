@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { lgUtil } from '@bfc/indexers';
-import { importResolverGenerator, LgFile } from '@bfc/shared';
+import { lgImportResolverGenerator, LgFile } from '@bfc/shared';
 
 import {
   LgActionType,
@@ -92,7 +92,7 @@ type LgMessageEvent =
 type LgResources = Map<string, LgFile>;
 
 const lgFileResolver = (lgFiles) => {
-  return importResolverGenerator(lgFiles, '.lg');
+  return lgImportResolverGenerator(lgFiles, '.lg');
 };
 
 export class LgCache {

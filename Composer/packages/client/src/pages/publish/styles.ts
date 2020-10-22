@@ -117,5 +117,5 @@ export const targetSelected = css`
 `;
 
 export const customPublishUISurface = css`
-  min-height: 300px;
+  height: 230px;
 `;

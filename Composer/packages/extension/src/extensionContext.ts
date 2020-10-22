@@ -85,18 +85,25 @@ class ExtensionContext {
 
   public async loadPlugin(name: string, description: string, thisPlugin: any) {
     log('Loading extension: %s', name);
-    const pluginRegistration = new ExtensionRegistration(this, name, description);
-    if (typeof thisPlugin.default === 'function') {
-      // the module exported just an init function
-      thisPlugin.default.call(null, pluginRegistration);
-    } else if (thisPlugin.default && thisPlugin.default.initialize) {
-      // the module exported an object with an initialize method
-      thisPlugin.default.initialize.call(null, pluginRegistration);
-    } else if (thisPlugin.initialize && typeof thisPlugin.initialize === 'function') {
-      // the module exported an object with an initialize method
-      thisPlugin.initialize.call(null, pluginRegistration);
-    } else {
-      throw new Error(formatMessage('Could not init plugin'));
+
+    try {
+      const pluginRegistration = new ExtensionRegistration(this, name, description);
+      if (typeof thisPlugin.default === 'function') {
+        // the module exported just an init function
+        await thisPlugin.default.call(null, pluginRegistration);
+      } else if (thisPlugin.default && thisPlugin.default.initialize) {
+        // the module exported an object with an initialize method
+        await thisPlugin.default.initialize.call(null, pluginRegistration);
+      } else if (thisPlugin.initialize && typeof thisPlugin.initialize === 'function') {
+        // the module exported an object with an initialize method
+        await thisPlugin.initialize.call(null, pluginRegistration);
+      } else {
+        throw new Error(formatMessage('Could not init plugin'));
+      }
+    } catch (err) {
+      log('Error loading extension: %s', name);
+      // eslint-disable-next-line no-console
+      console.error(err);
     }
   }
 

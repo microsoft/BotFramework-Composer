@@ -1,6 +1,6 @@
 {
   "name": "@botframework-composer/types",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Shared types for Botframework Composer..",
   "main": "lib/index.js",
   "files": [
@@ -16,10 +16,10 @@
   "license": "MIT",
   "dependencies": {
     "@types/axios": "^0.14.0",
+    "@types/express": "^4.16.1",
     "json-schema": "^0.2.5"
   },
   "devDependencies": {
-    "@types/express": "^4.16.1",
     "eslint": "7.0.0",
     "rimraf": "^3.0.2",
     "typescript": "^3.8.3"

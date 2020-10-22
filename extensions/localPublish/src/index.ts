@@ -11,6 +11,8 @@ import archiver from 'archiver';
 import { v4 as uuid } from 'uuid';
 import AdmZip from 'adm-zip';
 import portfinder from 'portfinder';
+import { PublishPlugin } from '@botframework-composer/types';
+import { ExtensionRegistration } from '@bfc/extension';
 
 const stat = promisify(fs.stat);
 const readDir = promisify(fs.readdir);
@@ -36,12 +38,14 @@ interface PublishConfig {
 
 const isWin = process.platform === 'win32';
 
-class LocalPublisher {
+class LocalPublisher implements PublishPlugin<PublishConfig> {
+  public name = 'localpublish';
+  public description = 'Publish bot to local runtime';
   static runningBots: { [key: string]: RunningBot } = {};
   private readonly baseDir = path.resolve(__dirname, '../');
-  private composer: any;
+  private composer: ExtensionRegistration;
 
-  constructor(composer: any) {
+  constructor(composer: ExtensionRegistration) {
     this.composer = composer;
   }
 
@@ -72,14 +76,16 @@ class LocalPublisher {
           this.getBotRuntimeDir(botId),
           project.fileStorage,
           this.getManifestSrcDir(project.dataDir),
-          project.fileStorage
+          project.fileStorage,
+          'azurewebapp'
         );
       } else if (project.settings.runtime.path && project.settings.runtime.command) {
         await runtime.setSkillManifest(
           project.settings.runtime.path,
           project.fileStorage,
           this.getManifestSrcDir(project.dataDir),
-          project.fileStorage
+          project.fileStorage,
+          'azurewebapp'
         );
       } else {
         throw new Error('Custom runtime settings are incomplete. Please specify path and command.');
@@ -105,7 +111,10 @@ class LocalPublisher {
     this.composer.log('Starting publish');
 
     // set the running bot status
-    this.setBotStatus(botId, { status: 202, result: { message: 'Reloading...' } });
+    this.setBotStatus(botId, {
+      status: 202,
+      result: { message: 'Reloading...' },
+    });
 
     try {
       // start or restart the bot process
@@ -395,13 +404,19 @@ class LocalPublisher {
     child.on('exit', (code) => {
       if (code !== 0) {
         logger('error on exit: %s, exit code %d', erroutput, code);
-        this.setBotStatus(botId, { status: 500, result: { message: erroutput } });
+        this.setBotStatus(botId, {
+          status: 500,
+          result: { message: erroutput },
+        });
       }
     });
 
     child.on('error', (err) => {
       logger('error: %s', err.message);
-      this.setBotStatus(botId, { status: 500, result: { message: err.message } });
+      this.setBotStatus(botId, {
+        status: 500,
+        result: { message: err.message },
+      });
     });
 
     child.on('message', (msg) => {
@@ -420,14 +435,20 @@ class LocalPublisher {
     if (fs.existsSync(dstPath)) {
       await removeFile(dstPath);
     }
-    const files = await glob('**/*', { cwd: srcDir, dot: true, ignore: ['runtime'] });
+    const files = await glob('**/*', {
+      cwd: srcDir,
+      dot: true,
+      ignore: ['runtime'],
+    });
     return new Promise((resolve, reject) => {
       const archive = archiver('zip');
       const output = fs.createWriteStream(dstPath);
       archive.pipe(output);
 
       for (const file of files) {
-        archive.append(fs.createReadStream(path.join(srcDir, file)), { name: file });
+        archive.append(fs.createReadStream(path.join(srcDir, file)), {
+          name: file,
+        });
       }
       archive.finalize();
       output.on('close', () => resolve(dstPath));
@@ -501,7 +522,7 @@ class LocalPublisher {
   };
 }
 
-export default async (composer: any): Promise<void> => {
+export default async (composer: ExtensionRegistration): Promise<void> => {
   const publisher = new LocalPublisher(composer);
   // register this publishing method with Composer
   await composer.addPublishMethod(publisher);

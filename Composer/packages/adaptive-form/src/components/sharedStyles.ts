@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { css } from '@emotion/core';
+import { NeutralColors } from '@uifabric/fluent-theme';
 
 export const focusBorder = css`
   &:focus {
@@ -19,3 +20,10 @@ export const focusBorder = css`
     }
   }
 `;
+
+export const sharedFieldIconStyles = {
+  backgroundColor: NeutralColors.gray20,
+  width: '44px',
+  lineHeight: '28px',
+  fontSize: 12,
+};

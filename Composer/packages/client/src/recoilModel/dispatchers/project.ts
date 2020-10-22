@@ -115,7 +115,7 @@ export const projectDispatcher = () => {
   );
 
   const addRemoteSkillToBotProject = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (manifestUrl: string, name: string, endpointName: string) => {
+    (callbackHelpers: CallbackInterface) => async (manifestUrl: string, endpointName: string) => {
       const { set, snapshot } = callbackHelpers;
       try {
         const dispatcher = await snapshot.getPromise(dispatcherState);
@@ -125,9 +125,9 @@ export const projectDispatcher = () => {
             formatMessage('This operation cannot be completed. The skill is already part of the Bot Project')
           );
         }
-        const skillNameIdentifier: string = await getSkillNameIdentifier(callbackHelpers, name);
+
         set(botOpeningState, true);
-        const { projectId } = await openRemoteSkill(callbackHelpers, manifestUrl, skillNameIdentifier);
+        const { projectId } = await openRemoteSkill(callbackHelpers, manifestUrl);
         set(botProjectIdsState, (current) => [...current, projectId]);
         await dispatcher.addRemoteSkillToBotProjectFile(projectId, manifestUrl, endpointName);
       } catch (ex) {

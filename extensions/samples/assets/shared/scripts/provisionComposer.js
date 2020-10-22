@@ -43,10 +43,7 @@ const usage = () => {
       'customArmTemplate',
       'Path to runtime ARM template. By default it will use an Azure WebApp template. Pass `DeploymentTemplates/function-template-with-preexisting-rg.json` for Azure Functions or your own template for a custom deployment.',
     ],
-    [
-      'qnaTemplate',
-      'Path to qna template. By default it will use `DeploymentTemplates/qna-template.json`'
-    ]
+    ['qnaTemplate', 'Path to qna template. By default it will use `DeploymentTemplates/qna-template.json`'],
   ];
 
   const instructions = [
@@ -57,11 +54,11 @@ const usage = () => {
     ``,
     chalk.bold(`Basic Usage:`),
     chalk.greenBright(`node provisionComposer --subscriptionId=`) +
-    chalk.yellow('<Azure Subscription Id>') +
-    chalk.greenBright(' --name=') +
-    chalk.yellow('<Name for your environment>') +
-    chalk.greenBright(' --appPassword=') +
-    chalk.yellow('<16 character password>'),
+      chalk.yellow('<Azure Subscription Id>') +
+      chalk.greenBright(' --name=') +
+      chalk.yellow('<Name for your environment>') +
+      chalk.greenBright(' --appPassword=') +
+      chalk.yellow('<16 character password>'),
     ``,
     chalk.bold(`All options:`),
     ...options.map((option) => {
@@ -102,8 +99,7 @@ var tenantId = argv.tenantId ? argv.tenantId : '';
 
 const templatePath =
   argv.customArmTemplate || path.join(__dirname, 'DeploymentTemplates', 'template-with-preexisting-rg.json');
-const qnaTemplatePath =
-  argv.qnaTemplate || path.join(__dirname, 'DeploymentTemplates', 'qna-template.json');
+const qnaTemplatePath = argv.qnaTemplate || path.join(__dirname, 'DeploymentTemplates', 'qna-template.json');
 
 const BotProjectDeployLoggerType = {
   // Logger Type for Provision
@@ -213,16 +209,16 @@ const getTenantId = async (accessToken) => {
 };
 
 /**
- * 
+ *
  * @param {*} appId the appId of application registration
  * @param {*} appPwd the app password of application registration
  * @param {*} location the locaiton of all resources
  * @param {*} name the name of resource group
  * @param {*} shouldCreateAuthoringResource
- * @param {*} shouldCreateLuisResource 
- * @param {*} useAppInsights 
- * @param {*} useCosmosDb 
- * @param {*} useStorage 
+ * @param {*} shouldCreateLuisResource
+ * @param {*} useAppInsights
+ * @param {*} useCosmosDb
+ * @param {*} useStorage
  */
 const getDeploymentTemplateParam = (
   appId,
@@ -251,13 +247,10 @@ const getDeploymentTemplateParam = (
 /**
  * Get QnA template param
  */
-const getQnaTemplateParam = (
-  location,
-  name
-) => {
+const getQnaTemplateParam = (location, name) => {
   return {
     appServicePlanLocation: pack(location),
-    name: pack(name)
+    name: pack(name),
   };
 };
 
@@ -283,10 +276,10 @@ const validateQnADeployment = async (client, resourceGroupName, deployName, temp
 
 /**
  * Create a QnA resource deployment
- * @param {*} client 
- * @param {*} resourceGroupName 
- * @param {*} deployName 
- * @param {*} templateParam 
+ * @param {*} client
+ * @param {*} resourceGroupName
+ * @param {*} deployName
+ * @param {*} templateParam
  */
 const createQnADeployment = async (client, resourceGroupName, deployName, templateParam) => {
   const templateFile = await readFile(qnaTemplatePath, { encoding: 'utf-8' });
@@ -416,7 +409,6 @@ const create = async (
   createStorage = true,
   createAppInsights = true
 ) => {
-  
   // App insights is a dependency of QnA
   if (createQnAResource) {
     createAppInsights = true;
@@ -562,14 +554,16 @@ const create = async (
 
   var qnaResult = null;
 
-  // Create qna resources, the reason why seperate the qna resources from others: https://github.com/Azure/azure-sdk-for-js/issues/10186 
+  // Create qna resources, the reason why seperate the qna resources from others: https://github.com/Azure/azure-sdk-for-js/issues/10186
   if (createQnAResource) {
     const qnaDeployName = new Date().getTime().toString();
-    const qnaDeploymentTemplateParam = getQnaTemplateParam(
-      location,
-      name
+    const qnaDeploymentTemplateParam = getQnaTemplateParam(location, name);
+    const qnaValidation = await validateQnADeployment(
+      client,
+      resourceGroupName,
+      qnaDeployName,
+      qnaDeploymentTemplateParam
     );
-    const qnaValidation = await validateQnADeployment(client, resourceGroupName, qnaDeployName, qnaDeploymentTemplateParam);
     if (qnaValidation.error) {
       logger({
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
@@ -595,7 +589,12 @@ const create = async (
     });
     const spinner = ora().start();
     try {
-      const qnaDeployment = await createQnADeployment(client, resourceGroupName, qnaDeployName, qnaDeploymentTemplateParam);
+      const qnaDeployment = await createQnADeployment(
+        client,
+        resourceGroupName,
+        qnaDeployName,
+        qnaDeploymentTemplateParam
+      );
       // Handle errors
       if (qnaDeployment._response.status != 200) {
         spinner.fail();
@@ -717,10 +716,10 @@ const create = async (
       if (failedOperations) {
         failedOperations.forEach((operation) => {
           switch (
-          operation &&
-          operation.properties &&
-          operation.properties.statusMessage.error.code &&
-          operation.properties.targetResource
+            operation &&
+            operation.properties &&
+            operation.properties.statusMessage.error.code &&
+            operation.properties.targetResource
           ) {
             case 'MissingRegistrationForLocation':
               logger({
@@ -800,6 +799,7 @@ msRestNodeAuth
         hostname: `${name}-${environment}`,
         luisResource: `${name}-${environment}-luis`,
         settings: createResult,
+        runtimeIdentifier: 'win-x64',
       };
 
       console.log(chalk.white(JSON.stringify(profile, null, 2)));

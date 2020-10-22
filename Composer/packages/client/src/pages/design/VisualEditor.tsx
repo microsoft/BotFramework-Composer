@@ -3,13 +3,14 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useMemo } from 'react';
 import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import get from 'lodash/get';
 import VisualDesigner from '@bfc/adaptive-flow';
 import { useRecoilValue } from 'recoil';
-import { useShellApi } from '@bfc/extension-client';
+import { useFormConfig, useShellApi } from '@bfc/extension-client';
+import cloneDeep from 'lodash/cloneDeep';
 
 import grayComposerIcon from '../../images/grayComposerIcon.svg';
 import {
@@ -72,6 +73,21 @@ const VisualEditor: React.FC<VisualEditorProps> = (props) => {
 
   const addRef = useCallback((visualEditor) => onboardingAddCoachMarkRef({ visualEditor }), []);
 
+  const formConfig = useFormConfig();
+  const overridedSDKSchema = useMemo(() => {
+    const sdkSchema = cloneDeep(schemas.sdk?.content ?? {});
+    const sdkDefinitions = sdkSchema.definitions;
+
+    // Override the sdk.schema 'title' field with form ui option 'label' field
+    // to make sure the title is consistent with Form Editor.
+    Object.entries(formConfig).forEach(([$kind, formOptions]) => {
+      if (formOptions && sdkDefinitions[$kind]) {
+        sdkDefinitions[$kind].title = formOptions?.label;
+      }
+    });
+    return sdkSchema;
+  }, [formConfig, schemas]);
+
   useEffect(() => {
     const dialog = dialogs.find((d) => d.id === dialogId);
     const visible = get(dialog, 'triggers', []).length === 0;
@@ -88,7 +104,7 @@ const VisualEditor: React.FC<VisualEditorProps> = (props) => {
       >
         <VisualDesigner
           data={currentDialog.content ?? {}}
-          schema={schemas.sdk?.content}
+          schema={overridedSDKSchema}
           onBlur={onBlur}
           onFocus={onFocus}
         />

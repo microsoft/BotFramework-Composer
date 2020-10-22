@@ -2,17 +2,36 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, SerializedStyles } from '@emotion/core';
+import { jsx, css } from '@emotion/core';
 import React, { useState, useEffect, useRef } from 'react';
 import { Shell } from '@botframework-composer/types';
 import { PluginType } from '@bfc/extension-client';
 
+import { LoadingSpinner } from '../LoadingSpinner';
 import { PluginAPI } from '../../plugins/api';
 
-import { iframeStyle } from './styles';
+const containerStyles = css`
+  position: relative;
+  height: 100%;
+  width: 100%;
+`;
+
+const iframeStyle = (isLoading = false) => css`
+  height: 100%;
+  width: 100%;
+  border: 0;
+  display: ${isLoading ? 'none' : 'block'};
+`;
+
+const loadingStyles = css`
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
 interface PluginHostProps {
-  extraIframeStyles?: SerializedStyles[];
   pluginName: string;
   pluginType: PluginType;
   bundleId: string;
@@ -45,20 +64,43 @@ function injectScript(doc: Document, id: string, src: string, async: boolean, on
  */
 export const PluginHost: React.FC<PluginHostProps> = (props) => {
   const targetRef = useRef<HTMLIFrameElement>(null);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const { extraIframeStyles = [], pluginType, pluginName, bundleId, shell } = props;
+  const { pluginType, pluginName, bundleId, shell } = props;
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const isReady = (ev) => {
+      if (ev.data === 'plugin-rendered') {
+        setIsLoading(false);
+      }
+    };
+
+    window.addEventListener('message', isReady);
+
+    return () => {
+      window.removeEventListener('message', isReady);
+    };
+  }, []);
+
+  const loadBundle = (name: string, bundle: string, type: PluginType) => {
+    const iframeWindow = targetRef.current?.contentWindow as Window;
+    const iframeDocument = targetRef.current?.contentDocument as Document;
+
+    attachPluginAPI(iframeWindow, type, shell);
+
+    //load the bundle for the specified plugin
+    const pluginScriptId = `plugin-${type}-${name}`;
+    const bundleUri = `/api/extensions/${name}/${bundle}`;
+    // If plugin bundles end up being too large and block the client thread due to the load, enable the async flag on this call
+    injectScript(iframeDocument, pluginScriptId, bundleUri, false);
+  };
 
   useEffect(() => {
     // renders the plugin's UI inside of the iframe
-    if (pluginName && pluginType) {
-      const iframeDocument = targetRef.current?.contentDocument as Document;
-
-      // // load the preload script to setup the plugin API
-      injectScript(iframeDocument, 'preload-bundle', '/plugin-host-preload.js', false);
-
+    if (pluginName && pluginType && targetRef.current) {
+      setIsLoading(true);
       const onPreloaded = (ev) => {
         if (ev.data === 'host-preload-complete') {
-          setIsLoaded(true);
+          loadBundle(pluginName, bundleId, pluginType);
         }
       };
 
@@ -68,29 +110,30 @@ export const PluginHost: React.FC<PluginHostProps> = (props) => {
         window.removeEventListener('message', onPreloaded);
       };
     }
-  }, [pluginName, pluginType, bundleId, targetRef]);
-
-  useEffect(() => {
-    if (isLoaded && pluginType && pluginName && bundleId) {
-      const iframeWindow = targetRef.current?.contentWindow as Window;
-      const iframeDocument = targetRef.current?.contentDocument as Document;
-
-      attachPluginAPI(iframeWindow, pluginType, shell);
-
-      //load the bundle for the specified plugin
-      const pluginScriptId = `plugin-${pluginType}-${pluginName}`;
-      const bundleUri = `/api/extensions/${pluginName}/${bundleId}`;
-      // If plugin bundles end up being too large and block the client thread due to the load, enable the async flag on this call
-      injectScript(iframeDocument, pluginScriptId, bundleUri, false);
-    }
-  }, [isLoaded]);
+  }, [pluginName, pluginType, bundleId]);
 
   // sync the shell to the iframe store when shell changes
   useEffect(() => {
-    if (isLoaded && targetRef.current) {
-      targetRef.current.contentWindow?.Composer.sync(shell);
+    const frameApi = targetRef.current?.contentWindow?.Composer;
+    if (frameApi && typeof frameApi.sync === 'function') {
+      frameApi.sync(shell);
     }
-  }, [isLoaded, shell]);
+  }, [shell]);
 
-  return <iframe ref={targetRef} css={[iframeStyle, ...extraIframeStyles]} title={`${pluginName} host`}></iframe>;
+  return (
+    <div css={containerStyles}>
+      <iframe
+        key={`${pluginName}.${bundleId}.${pluginType}`}
+        ref={targetRef}
+        css={iframeStyle(isLoading)}
+        src="/plugin-host.html"
+        title={`${pluginName} host`}
+      />
+      {isLoading && (
+        <div css={loadingStyles}>
+          <LoadingSpinner />
+        </div>
+      )}
+    </div>
+  );
 };

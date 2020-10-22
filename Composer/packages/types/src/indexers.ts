@@ -173,7 +173,7 @@ export type Skill = {
 
 export type JsonSchemaFile = {
   id: string;
-  content: string;
+  content: any;
 };
 
 export type TextFile = {
@@ -225,7 +225,6 @@ export interface BotProjectSpaceSkill {
 }
 
 export interface BotProjectSpace {
-  workspace: string;
   name: string;
   skills: {
     [skillId: string]: BotProjectSpaceSkill;

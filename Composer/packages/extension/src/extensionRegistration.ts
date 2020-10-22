@@ -58,12 +58,17 @@ export class ExtensionRegistration {
    * Publish related features
    *************************************************************************************/
   public async addPublishMethod(plugin: PublishPlugin) {
-    log('registering publish method', this.name);
-    this.context.extensions.publish[plugin.customName || this.name] = {
+    if (this.context.extensions.publish[plugin.name]) {
+      throw new Error(`Duplicate publish method. Cannot register publish method with name ${plugin.name}.`);
+    }
+
+    log('registering publish method', plugin.name);
+    this.context.extensions.publish[plugin.name] = {
       plugin: {
-        name: plugin.customName || this.name,
-        description: plugin.customDescription || this.description,
+        name: plugin.name,
+        description: plugin.description || this.description,
         instructions: plugin.instructions,
+        extensionId: this.name,
         bundleId: plugin.bundleId,
         schema: plugin.schema,
       },
