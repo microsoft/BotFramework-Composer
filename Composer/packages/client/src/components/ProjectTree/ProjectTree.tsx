@@ -365,7 +365,7 @@ export const ProjectTree: React.FC<Props> = ({
     triggers: ITrigger[],
     startDepth: number
   ) => {
-    const key = `${projectId}.${dialog.id}.group-{groupName}`;
+    const key = `${projectId}.${dialog.id}.group-${groupName}`;
 
     return (
       <ExpandableNode key={key} depth={startDepth} summary={renderTriggerGroupHeader(groupName, dialog, projectId)}>
