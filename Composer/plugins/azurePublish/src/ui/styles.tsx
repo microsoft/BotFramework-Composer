@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 import { css } from '@emotion/core';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
-
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { ITheme, getTheme } from 'office-ui-fabric-react/lib/Styling';
 

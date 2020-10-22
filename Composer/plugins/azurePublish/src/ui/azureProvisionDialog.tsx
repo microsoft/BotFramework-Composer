@@ -283,60 +283,131 @@ export const AzureProvisionDialog: React.FC = () => {
 
   return page === 1 ? (
     <Fragment>
-      <ChoiceGroup defaultSelectedKey="create" options={choiceOptions} onChange={updateChoice} />
-      {subscriptionOption?.length && choice.key === 'create' && (
-        <form style={{ width: '60%' }}>
-          <Dropdown
-            required
-            label={'Subscription'}
-            options={subscriptionOption}
-            placeholder={'Select your subscription'}
-            onChange={updateCurrentSubscription}
-          />
-          <TextField
-            required
-            errorMessage={errorHostName}
-            label={'HostName'}
-            placeholder={'Name of your new resource group'}
-            onChange={newResourceGroup}
-          />
-          <Dropdown
-            required
-            label={'Locations'}
-            options={deployLocationsOption}
-            placeholder={'Select your location'}
-            onChange={updateCurrentLocation}
-          />
-        </form>
-      )}
-      {choice.key === 'create' && !subscriptionOption ? <Spinner label="Loading" /> : null}
-      {choice.key === 'import' && (
-        <div style={{ width: '60%' }}>
-          <div>Publish Configuration</div>
-          <JsonEditor
-            id={publishType}
-            height={200}
-            styles={{ width: '60%' }}
-            value={importConfig}
-            onChange={(value) => {
-              setEditorError(false);
-              setImportConfig(value);
-            }}
-            onError={() => {
-              setEditorError(true);
-            }}
+      <div style={{ height: '100vh' }}>
+        <div
+          style={{
+            overflow: 'scroll',
+            maxHeight: '700px',
+            minHeight: '300px',
+          }}
+        >
+          <ChoiceGroup defaultSelectedKey="create" options={choiceOptions} onChange={updateChoice} />
+          {subscriptionOption?.length && choice.key === 'create' && (
+            <form style={{ width: '60%' }}>
+              <Dropdown
+                required
+                label={'Subscription'}
+                options={subscriptionOption}
+                placeholder={'Select your subscription'}
+                onChange={updateCurrentSubscription}
+              />
+              <TextField
+                required
+                errorMessage={errorHostName}
+                label={'HostName'}
+                placeholder={'Name of your new resource group'}
+                onChange={newResourceGroup}
+              />
+              <Dropdown
+                required
+                label={'Locations'}
+                options={deployLocationsOption}
+                placeholder={'Select your location'}
+                onChange={updateCurrentLocation}
+              />
+            </form>
+          )}
+          {choice.key === 'create' && !subscriptionOption ? <Spinner label="Loading" /> : null}
+          {choice.key === 'import' && (
+            <div style={{ width: '60%' }}>
+              <div>Publish Configuration</div>
+              <JsonEditor
+                id={publishType}
+                height={200}
+                styles={{ width: '60%' }}
+                value={importConfig}
+                onChange={(value) => {
+                  setEditorError(false);
+                  setImportConfig(value);
+                }}
+                onError={() => {
+                  setEditorError(true);
+                }}
+              />
+            </div>
+          )}
+        </div>
+        <div
+          style={{
+            height: '32px',
+            paddingTop: '16px',
+            background: '#FFFFFF',
+            borderTop: '1px solid #000',
+            position: 'sticky',
+            bottom: '0',
+            textAlign: 'right',
+          }}
+        >
+          <DefaultButton text={'Cancel'} onClick={closeDialog} />
+          {choice.key === 'create' ? (
+            <PrimaryButton
+              disabled={!currentSubscription || !currentHostName || errorHostName !== ''}
+              text="Next"
+              onClick={() => {
+                onNext({
+                  subscription: currentSubscription,
+                  hostname: currentHostName,
+                  location: currentLocation,
+                  type: publishType,
+                  externalResources: extensionResourceOptions,
+                });
+              }}
+            />
+          ) : (
+            <PrimaryButton disabled={isEditorError} text="Save" onClick={onSave} />
+          )}
+        </div>
+      </div>
+    </Fragment>
+  ) : (
+    <Fragment>
+      <div style={{ height: '100vh' }}>
+        <div
+          style={{
+            overflow: 'scroll',
+            maxHeight: '700px',
+            minHeight: '300px',
+          }}
+        >
+          <DetailsList
+            isHeaderVisible
+            checkboxVisibility={CheckboxVisibility.hidden}
+            columns={columns}
+            getKey={(item) => item.key}
+            groups={group}
+            items={listItems}
+            layoutMode={DetailsListLayoutMode.justified}
+            setKey="none"
+            onRenderDetailsHeader={onRenderDetailsHeader}
           />
         </div>
-      )}
-
-      <DialogFooter>
-        <DefaultButton text={'Cancel'} onClick={closeDialog} />
-        {choice.key === 'create' ? (
+        <div
+          style={{
+            height: '32px',
+            paddingTop: '16px',
+            background: '#FFFFFF',
+            borderTop: '1px solid #000',
+            position: 'sticky',
+            bottom: '0',
+            textAlign: 'right',
+          }}
+        >
+          <DefaultButton text={'Cancel'} onClick={closeDialog} />
           <PrimaryButton
             disabled={!currentSubscription || !currentHostName || errorHostName !== ''}
-            text="Next"
-            onClick={() => {
-              onNext({
+            text={'Ok'}
+            onClick={async () => {
+              await onSubmit({
                 subscription: currentSubscription,
                 hostname: currentHostName,
                 location: currentLocation,
@@ -345,40 +416,8 @@ export const AzureProvisionDialog: React.FC = () => {
               });
             }}
           />
-        ) : (
-          <PrimaryButton disabled={isEditorError} text="Save" onClick={onSave} />
-        )}
-      </DialogFooter>
-    </Fragment>
-  ) : (
-    <Fragment>
-      <DetailsList
-        isHeaderVisible
-        checkboxVisibility={CheckboxVisibility.hidden}
-        columns={columns}
-        getKey={(item) => item.key}
-        groups={group}
-        items={listItems}
-        layoutMode={DetailsListLayoutMode.justified}
-        setKey="none"
-        onRenderDetailsHeader={onRenderDetailsHeader}
-      />
-      <DialogFooter>
-        <DefaultButton text={'Cancel'} onClick={closeDialog} />
-        <PrimaryButton
-          disabled={!currentSubscription || !currentHostName || errorHostName !== ''}
-          text={'Ok'}
-          onClick={async () => {
-            await onSubmit({
-              subscription: currentSubscription,
-              hostname: currentHostName,
-              location: currentLocation,
-              type: publishType,
-              externalResources: extensionResourceOptions,
-            });
-          }}
-        />
-      </DialogFooter>
+        </div>
+      </div>
     </Fragment>
   );
 };
