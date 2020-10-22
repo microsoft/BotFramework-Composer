@@ -142,7 +142,7 @@ async function loadServer() {
     // only change paths if packaged electron app
     const unpackedDir = getUnpackedAsarPath();
     process.env.COMPOSER_RUNTIME_FOLDER = join(unpackedDir, 'runtime');
-    process.env.COMPOSER_BUILTIN_EXTENSIONS_DIR = join(unpackedDir, 'build', 'extensions');
+    process.env.COMPOSER_BUILTIN_EXTENSIONS_DIR = join(unpackedDir, 'extensions');
     process.env.COMPOSER_FORM_DIALOG_TEMPLATES_DIR = join(unpackedDir, 'form-dialog-templates');
   }
 
