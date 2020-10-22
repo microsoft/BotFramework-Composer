@@ -6,7 +6,7 @@ import { selectorFamily } from 'recoil';
 
 import { dialogIdsState, dialogState } from '../atoms';
 
-export const dialogsState = selectorFamily<DialogInfo[], string>({
+export const dialogsSelectorFamily = selectorFamily<DialogInfo[], string>({
   key: 'dialogs',
   get: (projectId: string) => ({ get }) => {
     const dialogIds = get(dialogIdsState(projectId));

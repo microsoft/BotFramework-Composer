@@ -8,7 +8,7 @@ import { Range, Position } from '@bfc/shared';
 
 import useNotifications from '../../../src/pages/notifications/useNotifications';
 import {
-  dialogsState,
+  dialogsSelectorFamily,
   luFilesState,
   lgFilesState,
   settingsState,
@@ -109,7 +109,7 @@ const state = {
 const initRecoilState = ({ set }) => {
   set(currentProjectIdState, state.projectId);
   set(botProjectIdsState, [state.projectId]);
-  set(dialogsState(state.projectId), state.dialogs);
+  set(dialogsSelectorFamily(state.projectId), state.dialogs);
   set(luFilesState(state.projectId), state.luFiles);
   set(lgFilesState(state.projectId), state.lgFiles);
   set(jsonSchemaFilesState(state.projectId), state.jsonSchemaFiles);

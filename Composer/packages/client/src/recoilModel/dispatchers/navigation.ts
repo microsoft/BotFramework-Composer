@@ -9,7 +9,7 @@ import cloneDeep from 'lodash/cloneDeep';
 
 import { currentProjectIdState } from '../atoms';
 import { encodeArrayPathToDesignerPath } from '../../utils/convertUtils/designerPathEncoder';
-import { dialogsState } from '../selectors';
+import { dialogsSelectorFamily } from '../selectors';
 
 import { createSelectedPath, getSelected } from './../../utils/dialogUtil';
 import { BreadcrumbItem } from './../../recoilModel/types';
@@ -55,7 +55,7 @@ export const navigationDispatcher = () => {
       dialogId: string,
       breadcrumb: BreadcrumbItem[] = []
     ) => {
-      const dialogs = await snapshot.getPromise(dialogsState(projectId));
+      const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
       const designPageLocation = await snapshot.getPromise(designPageLocationState(projectId));
       const updatedBreadcrumb = cloneDeep(breadcrumb);
       set(currentProjectIdState, projectId);
@@ -95,7 +95,7 @@ export const navigationDispatcher = () => {
       // target dialogId, projectId maybe empty string  ""
       const dialogId = destinationDialogId ?? designPageLocation.dialogId ?? 'Main';
 
-      const dialogs = await snapshot.getPromise(dialogsState(projectId));
+      const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
       const currentDialog = dialogs.find(({ id }) => id === dialogId);
       const encodedSelectPath = encodeArrayPathToDesignerPath(currentDialog?.content, selectPath);
       const currentUri = convertPathToUrl(projectId, skillId, dialogId, encodedSelectPath);
@@ -116,7 +116,7 @@ export const navigationDispatcher = () => {
       let currentUri = `/bot/${projectId}/dialogs/${dialogId}`;
 
       if (focusPath) {
-        const dialogs = await snapshot.getPromise(dialogsState(projectId));
+        const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
         const currentDialog = dialogs.find(({ id }) => id === dialogId);
         const encodedFocusPath = encodeArrayPathToDesignerPath(currentDialog?.content, focusPath);
 
@@ -151,7 +151,7 @@ export const navigationDispatcher = () => {
     ) => {
       set(currentProjectIdState, projectId);
 
-      const dialogs = await snapshot.getPromise(dialogsState(projectId));
+      const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
       const currentDialog = dialogs.find(({ id }) => id === dialogId)?.content;
       const encodedSelectPath = encodeArrayPathToDesignerPath(currentDialog, selectPath);
       const encodedFocusPath = encodeArrayPathToDesignerPath(currentDialog, focusPath);

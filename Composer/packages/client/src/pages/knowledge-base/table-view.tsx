@@ -32,7 +32,7 @@ import { NeutralColors } from '@uifabric/fluent-theme';
 
 import emptyQnAIcon from '../../images/emptyQnAIcon.svg';
 import { navigateTo } from '../../utils/navigation';
-import { dialogsState, qnaFilesState, localeState } from '../../recoilModel';
+import { dialogsSelectorFamily, qnaFilesState, localeState } from '../../recoilModel';
 import { dispatcherState } from '../../recoilModel';
 import { getBaseName } from '../../utils/fileUtil';
 import { EditableField } from '../../components/EditableField';
@@ -81,7 +81,7 @@ interface TableViewProps extends RouteComponentProps<{}> {
 const TableView: React.FC<TableViewProps> = (props) => {
   const { dialogId = '', projectId = '' } = props;
   const actions = useRecoilValue(dispatcherState);
-  const dialogs = useRecoilValue(dialogsState(projectId));
+  const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   const locale = useRecoilValue(localeState(projectId));
   const {
