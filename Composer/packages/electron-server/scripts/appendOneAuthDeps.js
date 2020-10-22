@@ -7,5 +7,6 @@ const packageJson = JSON.parse(packageJsonContents);
 packageJson.dependencies = {
   ...packageJson.dependencies,
   'oneauth-win64': '1.11.0',
+  'oneauth-mac': '1.11.0',
 };
 writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));

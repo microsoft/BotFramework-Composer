@@ -32,7 +32,7 @@ let currentAppLocale = getAppLocale().appLocale;
 const error = log.extend('error');
 let serverPort;
 let signalThatMainWindowIsShowing;
-let waitForMainWindowToShow = new Promise((resolve) => {
+const waitForMainWindowToShow = new Promise((resolve) => {
   signalThatMainWindowIsShowing = resolve;
 });
 
