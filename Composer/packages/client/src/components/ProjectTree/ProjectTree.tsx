@@ -139,6 +139,7 @@ export const ProjectTree: React.FC<Props> = ({
     ...bot,
     hasWarnings: false,
   }));
+
   // if we're in a single-bot setting, the root will be undefined, so we fall back to current
   const rootProjectId = useRecoilValue(rootBotProjectIdSelector) ?? useRecoilValue(currentProjectIdState);
   const botProjectSpace = useRecoilValue(botProjectSpaceSelector);
