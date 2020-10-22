@@ -12,14 +12,14 @@ FROM node:12-alpine as build
 ARG YARN_ARGS
 
 WORKDIR /src/Composer
-COPY . .
+COPY ./Composer .
+COPY ./extensions ../extensions
 # run yarn install as a distinct layer
 RUN yarn install --frozen-lock-file $YARN_ARGS
 ENV NODE_OPTIONS "--max-old-space-size=4096"
 ENV NODE_ENV "production"
+ENV COMPOSER_BUILTIN_EXTENSIONS_DIR "/src/extensions"
 RUN yarn build:prod $YARN_ARGS
-
-
 
 FROM node:12-alpine as composerbasic
 ARG YARN_ARGS
@@ -27,17 +27,8 @@ ARG YARN_ARGS
 WORKDIR /app/Composer
 COPY --from=build /src/Composer/yarn.lock .
 COPY --from=build /src/Composer/package.json .
-COPY --from=build /src/Composer/packages/client ./packages/client
-COPY --from=build /src/Composer/packages/adaptive-flow ./packages/adaptive-flow
-COPY --from=build /src/Composer/packages/adaptive-form ./packages/adaptive-form
-COPY --from=build /src/Composer/packages/extension ./packages/extension
-COPY --from=build /src/Composer/packages/extension-client ./packages/extension-client
-COPY --from=build /src/Composer/packages/intellisense ./packages/intellisense
-COPY --from=build /src/Composer/packages/server ./packages/server
-COPY --from=build /src/Composer/packages/lib ./packages/lib
-COPY --from=build /src/Composer/packages/tools ./packages/tools
-COPY --from=build /src/Composer/packages/ui-plugins ./packages/ui-plugins
-COPY --from=build /src/extensions ./extensions
+COPY --from=build /src/Composer/packages ./packages
+COPY --from=build /src/extensions ../extensions
 
 ENV NODE_ENV "production"
 RUN yarn --production --frozen-lockfile --force $YARN_ARGS && yarn cache clean
@@ -90,4 +81,7 @@ ENV DOTNET_RUNNING_IN_CONTAINER=true \
   # Set the invariant mode since icu_libs isn't included (see https://github.com/dotnet/announcements/issues/20)
   DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=true
 
+ENV COMPOSER_BUILTIN_EXTENSIONS_DIR "/app/extensions"
+ENV COMPOSER_REMOTE_EXTENSIONS_DIR "/app/remote-extensions"
+ENV COMPOSER_EXTENSION_DATA "/app/extensions.json"
 CMD ["yarn","start:server"]
