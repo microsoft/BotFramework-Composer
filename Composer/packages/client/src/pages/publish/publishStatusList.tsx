@@ -19,13 +19,14 @@ import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import moment from 'moment';
 import { useMemo, useState, useEffect } from 'react';
 import formatMessage from 'format-message';
+import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 
 import { listRoot, tableView, detailList } from './styles';
 
 export interface IStatusListProps {
   items: IStatus[];
-  groups: IGroup[];
-  onItemClick: (item: IStatus | null) => void;
+  onLogClick: (item: IStatus | null) => void;
+  onRollbackClick: (item: IStatus | null) => void;
   updateItems: (items: IStatus[]) => void;
 }
 
@@ -49,7 +50,7 @@ function onRenderDetailsHeader(props, defaultRender) {
 }
 
 export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
-  const { items, onItemClick, groups } = props;
+  const { items, onLogClick, onRollbackClick } = props;
   const [selectIndex, setSelectedIndex] = useState<number>();
   const [currentSort, setSort] = useState({ key: 'PublishDate', descending: true });
   const sortByDate = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
@@ -150,6 +151,55 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       },
       isPadded: true,
     },
+    {
+      key: 'PublishLog',
+      name: '',
+      className: 'publishLog',
+      minWidth: 70,
+      maxWidth: 90,
+      isResizable: true,
+      isCollapsible: true,
+      isMultiline: true,
+      data: 'string',
+      onRender: (item: IStatus) => {
+        return (
+          <ActionButton
+            allowDisabledFocus
+            onClick={() => {
+              onLogClick(item);
+            }}
+          >
+            {formatMessage('See log')}
+          </ActionButton>
+        );
+      },
+      isPadded: true,
+    },
+    {
+      key: 'PublishRollback',
+      name: '',
+      className: 'publishrollback',
+      fieldName: 'publishRollback',
+      minWidth: 70,
+      maxWidth: 90,
+      isResizable: true,
+      isCollapsible: true,
+      isMultiline: true,
+      data: 'string',
+      onRender: (item: IStatus) => {
+        return (
+          <ActionButton
+            allowDisabledFocus
+            onClick={() => {
+              onRollbackClick(item);
+            }}
+          >
+            {formatMessage('Rollback')}
+          </ActionButton>
+        );
+      },
+      isPadded: true,
+    },
   ];
   const selection = useMemo(() => {
     return new Selection({
@@ -160,20 +210,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
         }
       },
     });
-  }, [items, groups]);
-
-  useEffect(() => {
-    // init the selected publish status after switch to another target
-    setSelectedIndex(undefined);
-  }, [groups]);
-
-  useEffect(() => {
-    if (items && typeof selectIndex === 'number' && items.length > selectIndex) {
-      onItemClick(items[selectIndex]);
-    } else {
-      onItemClick(null);
-    }
-  }, [selectIndex, items]);
+  }, [items]);
 
   return (
     <div css={listRoot} data-testid={'publish-status-list'}>
@@ -191,7 +228,6 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
           groupProps={{
             showEmptyGroups: true,
           }}
-          groups={groups}
           items={items}
           layoutMode={DetailsListLayoutMode.justified}
           selection={selection}

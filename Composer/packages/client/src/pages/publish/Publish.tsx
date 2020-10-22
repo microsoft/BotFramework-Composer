@@ -10,10 +10,9 @@ import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { PublishTarget } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
+import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 
-import { LeftRightSplit } from '../../components/Split/LeftRightSplit';
 import settingsStorage from '../../utils/dialogSettingStorage';
-import { projectContainer } from '../design/styles';
 import {
   dispatcherState,
   settingsState,
@@ -23,13 +22,12 @@ import {
 } from '../../recoilModel';
 import { navigateTo } from '../../utils/navigation';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
-import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 
-import { TargetList } from './targetList';
 import { PublishDialog } from './publishDialog';
-import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor, overflowSet, targetSelected } from './styles';
+import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor } from './styles';
 import { CreatePublishTarget } from './createPublishTarget';
 import { PublishStatusList, IStatus } from './publishStatusList';
+import { BotStatusList } from './botStatusList';
 
 const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: string }>> = (props) => {
   const selectedTargetName = props.targetName;
@@ -51,26 +49,18 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   } = useRecoilValue(dispatcherState);
 
   const [addDialogHidden, setAddDialogHidden] = useState(true);
-  const [editDialogHidden, setEditDialogHidden] = useState(true);
 
   const [showLog, setShowLog] = useState(false);
   const [publishDialogHidden, setPublishDialogHidden] = useState(true);
 
   // items to show in the list
   const [thisPublishHistory, setThisPublishHistory] = useState<IStatus[]>([]);
-  const [groups, setGroups] = useState<any[]>([]);
   const [selectedVersion, setSelectedVersion] = useState<IStatus | null>(null);
   const [dialogProps, setDialogProps] = useState({
     title: formatMessage('Title'),
     type: DialogType.normal,
     children: {},
   });
-  const [editDialogProps, setEditDialogProps] = useState({
-    title: formatMessage('Title'),
-    type: DialogType.normal,
-    children: {},
-  });
-  const [editTarget, setEditTarget] = useState<{ index: number; item: PublishTarget } | null>(null);
 
   const isRollbackSupported = useMemo(
     () => (target, version): boolean => {
@@ -87,56 +77,22 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   const toolbarItems: IToolbarItem[] = [
     {
-      type: 'action',
-      text: formatMessage('Add new profile'),
-      buttonProps: {
-        iconProps: {
-          iconName: 'Add',
-        },
-        onClick: () => setAddDialogHidden(false),
-      },
-      align: 'left',
-      dataTestid: 'publishPage-Toolbar-Add',
-      disabled: false,
-    },
-    {
-      type: 'action',
-      text: formatMessage('Publish to selected profile'),
-      buttonProps: {
-        iconProps: {
-          iconName: 'CloudUpload',
-        },
-        onClick: () => setPublishDialogHidden(false),
-      },
-      align: 'left',
-      dataTestid: 'publishPage-Toolbar-Publish',
-      disabled: selectedTargetName !== 'all' ? false : true,
-    },
-    {
-      type: 'action',
-      text: formatMessage('See Log'),
-      buttonProps: {
-        iconProps: {
-          iconName: 'ClipboardList',
-        },
-        onClick: () => setShowLog(true),
-      },
-      align: 'left',
-      disabled: selectedVersion ? false : true,
-      dataTestid: 'publishPage-Toolbar-Log',
-    },
-    {
-      type: 'action',
-      text: formatMessage('Rollback'),
-      buttonProps: {
-        iconProps: {
-          iconName: 'ClipboardList',
-        },
-        onClick: () => rollbackToVersion(selectedVersion),
-      },
-      align: 'left',
-      disabled: selectedTarget && selectedVersion ? !isRollbackSupported(selectedTarget, selectedVersion) : true,
-      dataTestid: 'publishPage-Toolbar-Log',
+      type: 'element',
+      element: (
+        <ActionButton
+          data-testid="publishPage-Toolbar-Publish"
+          disabled={selectedTargetName !== 'all' ? false : true}
+          onClick={() => setPublishDialogHidden(false)}
+        >
+          <svg fill="none" height="15" viewBox="0 0 16 15" width="16" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M16 4.28906V15H5V0H11.7109L16 4.28906ZM12 4H14.2891L12 1.71094V4ZM15 14V5H11V1H6V14H15ZM0 5H4V6H0V5ZM1 7H4V8H1V7ZM2 9H4V10H2V9Z"
+              fill="#0078D4"
+            />
+          </svg>
+          {formatMessage('Publish selected bots')}
+        </ActionButton>
+      ),
     },
   ];
 
@@ -193,34 +149,14 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   useEffect(() => {
     if (settings.publishTargets && selectedTargetName === 'all') {
       let histories: any[] = [];
-      const groups: any[] = [];
-      let startIndex = 0;
       for (const target of settings.publishTargets) {
         if (publishHistory[target.name]) {
           histories = histories.concat(publishHistory[target.name]);
-          groups.push({
-            key: target.name,
-            name: target.name,
-            startIndex: startIndex,
-            count: publishHistory[target.name].length,
-            level: 0,
-          });
-          startIndex += publishHistory[target.name].length;
         }
       }
-      setGroups(groups);
       setThisPublishHistory(histories);
     } else if (selectedTargetName && publishHistory[selectedTargetName]) {
       setThisPublishHistory(publishHistory[selectedTargetName]);
-      setGroups([
-        {
-          key: selectedTargetName,
-          name: selectedTargetName,
-          startIndex: 0,
-          count: publishHistory[selectedTargetName].length,
-          level: 0,
-        },
-      ]);
     }
   }, [publishHistory, selectedTargetName, settings.publishTargets]);
 
@@ -251,27 +187,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     [settings.publishTargets, projectId, botName]
   );
 
-  const updatePublishTarget = useCallback(
-    async (name: string, type: string, configuration: string) => {
-      if (!editTarget) {
-        return;
-      }
-
-      const targets = settings.publishTargets ? [...settings.publishTargets] : [];
-
-      targets[editTarget.index] = {
-        name,
-        type,
-        configuration,
-      };
-
-      await setPublishTargets(targets, projectId);
-
-      onSelectTarget(name);
-    },
-    [settings.publishTargets, projectId, botName, editTarget]
-  );
-
   useEffect(() => {
     setDialogProps({
       title: formatMessage('Add a publish profile'),
@@ -288,22 +203,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     });
   }, [publishTypes, savePublishTarget, settings.publishTargets]);
 
-  useEffect(() => {
-    setEditDialogProps({
-      title: formatMessage('Edit a publish profile'),
-      type: DialogType.normal,
-      children: (
-        <CreatePublishTarget
-          closeDialog={() => setEditDialogHidden(true)}
-          current={editTarget ? editTarget.item : null}
-          targets={(settings.publishTargets || []).filter((item) => editTarget && item.name != editTarget.item.name)}
-          types={publishTypes}
-          updateSettings={updatePublishTarget}
-        />
-      ),
-    });
-  }, [editTarget, publishTypes, updatePublishTarget]);
-
   const rollbackToVersion = useMemo(
     () => async (version) => {
       const sensitiveSettings = settingsStorage.get(projectId);
@@ -312,6 +211,13 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     [projectId, selectedTarget]
   );
 
+  const onRollbackToVersion = (selectedVersion) => {
+    selectedTarget && isRollbackSupported(selectedTarget, selectedVersion) && rollbackToVersion(selectedVersion);
+  };
+  const onShowLog = (selectedVersion) => {
+    setSelectedVersion(selectedVersion);
+    setShowLog(true);
+  };
   const publish = useMemo(
     () => async (comment) => {
       // publish to remote
@@ -340,36 +246,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     [projectId, selectedTarget, settings.publishTargets]
   );
 
-  const onEdit = async (index: number, item: PublishTarget) => {
-    const newItem = { item: item, index: index };
-    setEditTarget(newItem);
-    setEditDialogHidden(false);
-  };
-
-  const onDelete = useMemo(
-    () => async (index: number) => {
-      const result = await OpenConfirmModal(
-        formatMessage('This will delete the profile. Do you wish to continue?'),
-        null,
-        {
-          confirmBtnText: formatMessage('Yes'),
-          cancelBtnText: formatMessage('Cancel'),
-        }
-      );
-
-      if (result) {
-        if (settings.publishTargets && settings.publishTargets.length > index) {
-          const targets = settings.publishTargets.slice(0, index).concat(settings.publishTargets.slice(index + 1));
-          await setPublishTargets(targets, projectId);
-          // redirect to all profiles
-          setSelectedTarget(undefined);
-          onSelectTarget('all');
-        }
-      }
-    },
-    [settings.publishTargets, projectId, botName]
-  );
-
   return (
     <Fragment>
       <Dialog
@@ -380,15 +256,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         onDismiss={() => setAddDialogHidden(true)}
       >
         {dialogProps.children}
-      </Dialog>
-      <Dialog
-        dialogContentProps={editDialogProps}
-        hidden={editDialogHidden}
-        minWidth={450}
-        modalProps={{ isBlocking: true }}
-        onDismiss={() => setEditDialogHidden(true)}
-      >
-        {editDialogProps.children}
       </Dialog>
       {!publishDialogHidden && (
         <PublishDialog
@@ -401,57 +268,23 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       {showLog && <LogDialog version={selectedVersion} onDismiss={() => setShowLog(false)} />}
       <Toolbar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
-        <h1 css={HeaderText}>{selectedTarget ? selectedTargetName : formatMessage('Publish Profiles')}</h1>
+        <h1 css={HeaderText}>{selectedTarget ? selectedTargetName : formatMessage('Publish Your bots')}</h1>
       </div>
       <div css={ContentStyle} data-testid="Publish" role="main">
-        <LeftRightSplit initialLeftGridWidth="20%" minLeftPixels={200} minRightPixels={800}>
-          <div
-            aria-label={formatMessage('Navigation panel')}
-            css={projectContainer}
-            data-testid="target-list"
-            role="region"
-          >
-            <div
-              key={'_all'}
-              css={selectedTargetName === 'all' ? targetSelected : overflowSet}
-              style={{
-                height: '36px',
-                cursor: 'pointer',
-              }}
-              onClick={() => {
-                setSelectedTarget(undefined);
-                onSelectTarget('all');
-              }}
-            >
-              {formatMessage('All profiles')}
-            </div>
-            {settings && settings.publishTargets && (
-              <TargetList
-                list={settings.publishTargets}
-                selectedTarget={selectedTargetName}
-                onDelete={async (index) => await onDelete(index)}
-                onEdit={async (item, target) => await onEdit(item, target)}
-                onSelect={(item) => {
-                  setSelectedTarget(item);
-                  onSelectTarget(item.name);
-                }}
-              />
-            )}
-          </div>
-          <div aria-label={formatMessage('List view')} css={contentEditor} role="region">
-            <Fragment>
-              <PublishStatusList
-                groups={groups}
-                items={thisPublishHistory}
-                updateItems={setThisPublishHistory}
-                onItemClick={setSelectedVersion}
-              />
-              {!thisPublishHistory || thisPublishHistory.length === 0 ? (
-                <div style={{ marginLeft: '50px', fontSize: 'smaller', marginTop: '20px' }}>No publish history</div>
-              ) : null}
-            </Fragment>
-          </div>
-        </LeftRightSplit>
+        <div aria-label={formatMessage('List view')} css={contentEditor} role="region">
+          <Fragment>
+            <BotStatusList
+              items={bot}
+              publishTargets={settings.publishTargets}
+              updatePublishHistory={setThisPublishHistory}
+              onLogClick={onShowLog}
+              onRollbackClick={onRollbackToVersion}
+            />
+            {!thisPublishHistory || thisPublishHistory.length === 0 ? (
+              <div style={{ marginLeft: '50px', fontSize: 'smaller', marginTop: '20px' }}>No publish history</div>
+            ) : null}
+          </Fragment>
+        </div>
       </div>
     </Fragment>
   );
