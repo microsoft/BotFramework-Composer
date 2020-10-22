@@ -374,7 +374,7 @@ export const openRemoteSkill = async (
   });
 
   let uniqueSkillNameIdentifier = botNameIdentifier;
-  if (uniqueSkillNameIdentifier) {
+  if (!uniqueSkillNameIdentifier) {
     uniqueSkillNameIdentifier = await getSkillNameIdentifier(callbackHelpers, manifestResponse.data.name);
   }
 

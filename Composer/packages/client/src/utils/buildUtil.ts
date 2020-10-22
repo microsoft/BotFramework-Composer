@@ -77,8 +77,7 @@ export function getRecognizerTypes(dialogs: DialogInfo[]) {
         result[id] = SDKKinds.LuisRecognizer;
       }
     } else {
-      const { $kind = '' } = recognizer as { $kind: string };
-      result[id] = $kind;
+      result[id] = '';
     }
     return result;
   }, {});
