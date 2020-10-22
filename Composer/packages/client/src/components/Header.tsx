@@ -20,6 +20,8 @@ import {
 import composerIcon from '../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../constants';
 
+import { NotificationButton } from './Notifications';
+
 // -------------------- Styles -------------------- //
 
 const headerContainer = css`
@@ -50,17 +52,22 @@ const divider = css`
   margin: 0px 0px 0px 20px;
 `;
 
-const updateAvailableIcon = {
+const controls = css`
+  display: flex;
+  position: absolute;
+  top: calc(50% - 10px);
+  right: 20px;
+`;
+
+const buttonStyles: IButtonStyles = {
   icon: {
     color: '#FFF',
     fontSize: '20px',
   },
   root: {
-    position: 'absolute',
     height: '20px',
     width: '20px',
-    top: 'calc(50% - 10px)',
-    right: '20px',
+    marginLeft: '16px',
   },
   rootHovered: {
     backgroundColor: 'transparent',
@@ -109,14 +116,17 @@ export const Header = () => {
           </Fragment>
         )}
       </div>
-      {showUpdateAvailableIcon && (
-        <IconButton
-          iconProps={{ iconName: 'History' }}
-          styles={updateAvailableIcon as IButtonStyles}
-          title={formatMessage('Update available')}
-          onClick={onUpdateAvailableClick}
-        />
-      )}
+      <div css={controls}>
+        {showUpdateAvailableIcon && (
+          <IconButton
+            iconProps={{ iconName: 'History' }}
+            styles={buttonStyles}
+            title={formatMessage('Update available')}
+            onClick={onUpdateAvailableClick}
+          />
+        )}
+        <NotificationButton buttonStyles={buttonStyles} />
+      </div>
     </div>
   );
 };

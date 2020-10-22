@@ -6,10 +6,10 @@ import { CallbackInterface, useRecoilCallback } from 'recoil';
 import { v4 as uuid } from 'uuid';
 
 import { notificationsState, notificationIdsState } from '../atoms/appState';
-import { CardProps } from '../../components/NotificationCard';
+import { CardProps } from '../../components/Notifications/NotificationCard';
 import { Notification } from '../../recoilModel/types';
 
-export const createNotifiction = (notificationCard: CardProps): Notification => {
+export const createNotification = (notificationCard: CardProps): Notification => {
   const id = uuid(6) + '';
   return { id, ...notificationCard };
 };
@@ -35,8 +35,18 @@ export const notificationDispatcher = () => {
     deleteNotificationInternal(callbackHelper, id);
   });
 
+  const markNotificationAsRead = useRecoilCallback(({ set }: CallbackInterface) => (id: string) => {
+    set(notificationsState(id), (notification) => ({ ...notification, read: true, hidden: true }));
+  });
+
+  const hideNotification = useRecoilCallback(({ set }: CallbackInterface) => (id: string) => {
+    set(notificationsState(id), (notification) => ({ ...notification, hidden: true }));
+  });
+
   return {
     addNotification,
     deleteNotification,
+    hideNotification,
+    markNotificationAsRead,
   };
 };
