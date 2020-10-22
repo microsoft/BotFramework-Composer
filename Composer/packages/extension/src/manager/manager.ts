@@ -245,7 +245,7 @@ export class ExtensionManagerImp {
   private get manifest() {
     /* istanbul ignore next */
     if (!this._manifest) {
-      this._manifest = new ExtensionManifestStore(process.env.COMPOSER_EXTENSION_DATA as string);
+      this._manifest = new ExtensionManifestStore(process.env.COMPOSER_EXTENSION_MANIFEST as string);
     }
 
     return this._manifest;
