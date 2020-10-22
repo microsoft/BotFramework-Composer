@@ -20,13 +20,12 @@ const MAX_RECENT_BOTS = 7;
 
 /** Metadata stored by Composer and associated by internal bot project id */
 type BotProjectMetadata = {
-  path: string;
+  alias?: string;
   eTag?: string;
+  path: string;
 };
 
-type BotProjectLocationMap = {
-  [key: string]: BotProjectMetadata;
-};
+type BotProjectLocationMap = Record<string, BotProjectMetadata>;
 
 /** Converts old bot project location maps to the new shape */
 function fixOldBotProjectMapEntries(
@@ -259,6 +258,42 @@ export class BotProjectService {
     const projectLoc = BotProjectService.projectLocationMap[projectId];
     if (projectLoc) {
       projectLoc.eTag = eTag;
+    }
+  };
+
+  public static getProjectByAlias = async (alias: string, user?: UserIdentity): Promise<BotProject | undefined> => {
+    BotProjectService.initialize();
+
+    let matchingProjectId;
+    for (const projectId in BotProjectService.projectLocationMap) {
+      const info = BotProjectService.projectLocationMap[projectId];
+      if (info.alias && info.alias === alias) {
+        matchingProjectId = projectId;
+        break;
+      }
+    }
+
+    if (matchingProjectId) {
+      const { eTag, path } = BotProjectService.projectLocationMap[matchingProjectId];
+      if (path == null) {
+        throw new Error(`project ${matchingProjectId} not found in cache`);
+      } else {
+        // check to make sure the project is still there!
+        if (!(await StorageService.checkBlob('default', path, user))) {
+          BotProjectService.deleteRecentProject(path);
+          BotProjectService.removeProjectIdFromCache(matchingProjectId);
+          throw new Error(`file ${path} does not exist`);
+        }
+        const project = new BotProject({ storageId: 'default', path: path }, user, eTag);
+        await project.init();
+        project.id = matchingProjectId;
+        // update current indexed bot projects
+        BotProjectService.updateCurrentProjects(project);
+        return project;
+      }
+    } else {
+      // no match found
+      return undefined;
     }
   };
 

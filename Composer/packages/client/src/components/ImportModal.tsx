@@ -7,8 +7,40 @@ import formatMessage from 'format-message';
 
 import { LoadingSpinner } from './LoadingSpinner';
 
+type NewProjectParams = {
+  description?: string;
+  eTag: string;
+  name?: string;
+  source: string;
+  templateDir: string;
+  urlSuffix?: string;
+};
+
 export const ImportModal: React.FC<RouteComponentProps> = (props) => {
   const { location } = props;
+
+  const importAsNewProject = (params: NewProjectParams) => {
+    // navigate to creation flow with template selected
+    const { description, eTag, name, source, templateDir, urlSuffix } = params;
+    let creationUrl = `/projects/create/${encodeURIComponent(source)}?imported=true&templateDir=${encodeURIComponent(
+      templateDir
+    )}&eTag=${encodeURIComponent(eTag)}`;
+
+    if (name) {
+      creationUrl += `&name=${encodeURIComponent(name)}`;
+    }
+    if (description) {
+      creationUrl += `&description=${encodeURIComponent(description)}`;
+    }
+    if (urlSuffix) {
+      creationUrl += `&urlSuffix=${encodeURIComponent(urlSuffix)}`;
+    }
+
+    navigate(creationUrl);
+  };
+
+  const importToExistingProject = (params) => {};
+
   useEffect(() => {
     const doImport = async () => {
       if (location && location.href) {
@@ -19,33 +51,46 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
           if (!source || !payload) {
             throw 'Missing source or payload.';
           }
+          const { description, name } = JSON.parse(payload) as { description: string; name: string };
 
-          const res = await fetch(`/api/import/${source}?payload=${encodeURIComponent(payload)}`, {
+          let res = await fetch(`/api/import/${source}?payload=${encodeURIComponent(payload)}`, {
             method: 'POST',
           });
           if (res.status !== 200) {
             throw `Something went wrong during import: ${res.status} ${res.statusText}`;
           }
           const data = await res.json();
+          const { alias, eTag, templateDir, urlSuffix } = data;
+
+          if (alias) {
+            // check to see if Composer currently has a bot project corresponding to the alias
+            res = await fetch(`/api/projects/alias/:alias${alias}`, { method: 'GET' });
+            if (res.status === 200) {
+              const project = await res.json();
+              console.log(`Found project with alias ${alias}: `, project);
+              // prompt user to download new content here, if not do creation flow below:
+              importToExistingProject({});
+            }
+          } else {
+            importAsNewProject({ description, name, templateDir, urlSuffix, eTag, source });
+          }
 
           // navigate to creation flow with template selected
-          const { eTag, templateDir, urlSuffix } = data;
-          const { description, name } = JSON.parse(payload) as { description: string; name: string };
-          let creationUrl = `/projects/create/${encodeURIComponent(
-            source
-          )}?imported=true&templateDir=${encodeURIComponent(templateDir)}&eTag=${encodeURIComponent(eTag)}`;
+          // let creationUrl = `/projects/create/${encodeURIComponent(
+          //   source
+          // )}?imported=true&templateDir=${encodeURIComponent(templateDir)}&eTag=${encodeURIComponent(eTag)}`;
 
-          if (name) {
-            creationUrl += `&name=${encodeURIComponent(name)}`;
-          }
-          if (description) {
-            creationUrl += `&description=${encodeURIComponent(description)}`;
-          }
-          if (urlSuffix) {
-            creationUrl += `&urlSuffix=${encodeURIComponent(urlSuffix)}`;
-          }
+          // if (name) {
+          //   creationUrl += `&name=${encodeURIComponent(name)}`;
+          // }
+          // if (description) {
+          //   creationUrl += `&description=${encodeURIComponent(description)}`;
+          // }
+          // if (urlSuffix) {
+          //   creationUrl += `&urlSuffix=${encodeURIComponent(urlSuffix)}`;
+          // }
 
-          navigate(creationUrl);
+          // navigate(creationUrl);
         } catch (e) {
           // something went wrong, abort and navigate to the home page
           console.error(`Aborting import: ${e}`);
