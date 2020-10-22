@@ -14,7 +14,7 @@ type FeatureFlagCheckBoxProps = {
   featureFlagName: string;
   description: string;
   enabled: boolean;
-  toggleFeatureFlag: (FeatureFlagKey: string, enabled: boolean) => void;
+  toggleFeatureFlag: (FeatureFlagKey: FeatureFlagKey, enabled: boolean) => void;
 };
 
 const renderLabel = (featureName: string, description: string) => () => (

@@ -4,7 +4,7 @@
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 import isArray from 'lodash/isArray';
 import formatMessage from 'format-message';
-import { FeatureFlagMap } from '@bfc/shared';
+import { FeatureFlagKey, FeatureFlagMap } from '@bfc/shared';
 
 import httpClient from '../../utils/httpUtil';
 import {
@@ -180,7 +180,7 @@ export const storageDispatcher = () => {
   });
 
   const toggleFeatureFlag = useRecoilCallback(
-    ({ set }: CallbackInterface) => async (featureName: string, enabled: boolean) => {
+    ({ set }: CallbackInterface) => async (featureName: FeatureFlagKey, enabled: boolean) => {
       let newFeatureFlags: FeatureFlagMap = {} as FeatureFlagMap;
       // update local
       set(featureFlagsState, (featureFlagsState) => {

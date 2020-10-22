@@ -12,16 +12,14 @@ import { navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 
 import { CreationFlowStatus } from '../../constants';
-import { dispatcherState, botDisplayNameState } from '../../recoilModel';
+import { dispatcherState, botDisplayNameState, filteredTemplatesSelector } from '../../recoilModel';
 import {
   recentProjectsState,
   templateProjectsState,
   templateIdState,
   currentProjectIdState,
-  featureFlagsState,
 } from '../../recoilModel/atoms/appState';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
-import { useFilteredTemplates } from '../../hooks/useFilteredTemplates';
 
 import * as home from './styles';
 import { ItemContainer } from './ItemContainer';
@@ -71,7 +69,7 @@ const Home: React.FC<RouteComponentProps> = () => {
   const { openProject, setCreationFlowStatus, onboardingAddCoachMarkRef, saveTemplateId } = useRecoilValue(
     dispatcherState
   );
-  const filteredTemplates = useFilteredTemplates(templateProjects);
+  const filteredTemplates = useRecoilValue(filteredTemplatesSelector);
 
   const onItemChosen = async (item) => {
     if (item && item.path) {

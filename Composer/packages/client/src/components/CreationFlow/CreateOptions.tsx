@@ -24,9 +24,10 @@ import { ProjectTemplate } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
+import { useRecoilValue } from 'recoil';
 
 import { DialogCreationCopy, EmptyBotTemplateId, QnABotTemplateId } from '../../constants';
-import { useFilteredTemplates } from '../../hooks/useFilteredTemplates';
+import { filteredTemplatesSelector } from '../../recoilModel';
 
 // -------------------- Styles -------------------- //
 
@@ -117,8 +118,7 @@ export function CreateOptions(props: CreateOptionsProps) {
   const { templates, onDismiss, onNext } = props;
   const [currentTemplate, setCurrentTemplate] = useState('');
   const [emptyBotKey, setEmptyBotKey] = useState('');
-  const filteredTemplates = useFilteredTemplates(templates);
-
+  const filteredTemplates = useRecoilValue(filteredTemplatesSelector);
   const selection = useMemo(() => {
     return new Selection({
       onSelectionChanged: () => {

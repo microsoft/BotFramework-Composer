@@ -67,7 +67,6 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
 
   const renderFeatureFlagOptions = () => {
     const result: React.ReactNode[] = [];
-    console.log(featureFlags);
     Object.keys(featureFlags).forEach((key: string) => {
       const featureFlag: FeatureFlag = featureFlags[key];
       if (!featureFlag.isHidden) {

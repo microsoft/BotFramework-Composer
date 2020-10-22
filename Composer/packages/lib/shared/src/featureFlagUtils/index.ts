@@ -14,7 +14,7 @@ export type FeatureFlag = {
   enabled: boolean;
 };
 
-export type FeatureFlagKey = 'VA_CREATION' | 'SHOW_FORM_DIALOG';
+export type FeatureFlagKey = 'VA_CREATION' | 'FORM_DIALOG';
 
 export type FeatureFlagMap = Record<FeatureFlagKey, FeatureFlag>;
 
@@ -25,10 +25,10 @@ export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
     isHidden: false,
     enabled: false,
   },
-  SHOW_FORM_DIALOG: {
+  FORM_DIALOG: {
     displayName: formatMessage('Show Form Dialog'),
     description: formatMessage('Show form dialog editor in the canvas'),
-    isHidden: true,
+    isHidden: false,
     enabled: false,
   },
 });
