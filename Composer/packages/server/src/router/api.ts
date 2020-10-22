@@ -15,6 +15,7 @@ import * as ExtensionsController from '../controllers/extensions';
 import { FeatureFlagController } from '../controllers/featureFlags';
 
 import { UtilitiesController } from './../controllers/utilities';
+import { AuthController } from '../controllers/auth';
 
 const router: Router = express.Router({});
 
@@ -87,6 +88,9 @@ router.post('/extensions/proxy/:url', ExtensionsController.performExtensionFetch
 //FeatureFlags
 router.get('/featureFlags', FeatureFlagController.getFeatureFlags);
 router.post('/featureFlags', FeatureFlagController.updateFeatureFlags);
+
+// auth
+router.get('/auth/getAccessToken', AuthController.getAccessToken);
 
 const errorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
   Promise.resolve(handler(req, res, next)).catch(next);
