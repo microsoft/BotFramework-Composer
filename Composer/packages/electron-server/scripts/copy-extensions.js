@@ -12,20 +12,17 @@ let destination;
 switch (process.platform) {
   case 'darwin':
     const productName = electronBuildConfig.productName;
-    destination = resolve(
-      __dirname,
-      `../dist/mac/${productName}.app/Contents/Resources/app.asar.unpacked/build/extensions`
-    );
+    destination = resolve(__dirname, `../dist/mac/${productName}.app/Contents/Resources/app.asar.unpacked/extensions`);
     console.log('[copy-extensions.js] Mac detected. Copying extensions to: ', destination);
     break;
 
   case 'linux':
-    destination = resolve(__dirname, '../dist/linux-unpacked/resources/app.asar.unpacked/build/extensions');
+    destination = resolve(__dirname, '../dist/linux-unpacked/resources/app.asar.unpacked/extensions');
     console.log('[copy-extensions.js] Linux detected. Copying extensions to: ', destination);
     break;
 
   case 'win32':
-    destination = resolve(__dirname, '../dist/win-unpacked/resources/app.asar.unpacked/build/extensions');
+    destination = resolve(__dirname, '../dist/win-unpacked/resources/app.asar.unpacked/extensions');
     console.log(`[copy-extensions.js] Windows detected. Copying extensions from ${source} to ${destination}`);
     break;
 
