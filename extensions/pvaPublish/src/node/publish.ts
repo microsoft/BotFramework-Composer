@@ -48,6 +48,9 @@ export const publish = async (
     const creds = getAuthCredentials(base);
     const accessToken = await getAccessToken(creds);
 
+    // TODO: Investigate optimizing stream logic before enabling extension.
+    // (https://github.com/microsoft/BotFramework-Composer/pull/4446#discussion_r510314378)
+
     // where we will store the bot .zip
     const zipDir = join(process.env.COMPOSER_TEMP_DIR as string, 'pva-publish');
     ensureDirSync(zipDir);

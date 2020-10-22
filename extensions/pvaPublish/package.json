@@ -35,6 +35,7 @@
     "@uifabric/icons": "7.3.59",
     "@uifabric/react-hooks": "7.4.12",
     "debug": "^4.2.0",
+    "format-message": "6.2.3",
     "fs-extra": "^9.0.1",
     "node-fetch": "2.6.1",
     "office-ui-fabric-react": "7.121.11",

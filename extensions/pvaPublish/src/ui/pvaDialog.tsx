@@ -12,6 +12,7 @@ import {
   Separator,
   Icon,
 } from 'office-ui-fabric-react';
+import formatMessage from 'format-message';
 
 import { root } from './styles';
 import { Bot, BotEnvironment } from './types';
@@ -149,9 +150,9 @@ export const PVADialog: FC = () => {
           return (
             <>
               <Dropdown
-                label={'Environment'}
+                label={formatMessage('Environment')}
                 onChange={onSelectEnv}
-                placeholder={'Select an environment'}
+                placeholder={formatMessage('Select an environment')}
                 options={envOptions}
                 responsiveMode={ResponsiveMode.large}
                 defaultSelectedKey={envOptions[0].key}
@@ -159,14 +160,14 @@ export const PVADialog: FC = () => {
             </>
           );
         } else {
-          return <p>No environments found.</p>;
+          return <p>{formatMessage('No environments found.')}</p>;
         }
       } else {
         return (
           <Spinner
             size={SpinnerSize.medium}
             labelPosition={'right'}
-            label={'Fetching environments...'}
+            label={formatMessage('Fetching environments...')}
             style={{ marginTop: 16, marginRight: 'auto' }}
           />
         );
@@ -184,9 +185,9 @@ export const PVADialog: FC = () => {
           return (
             <>
               <Dropdown
-                label={'Bot'}
+                label={formatMessage('Bot')}
                 onChange={onSelectBot}
-                placeholder={'Select a bot'}
+                placeholder={formatMessage('Select a bot')}
                 options={botOptions}
                 responsiveMode={ResponsiveMode.large}
                 defaultSelectedKey={botOptions[0].key}
@@ -194,14 +195,14 @@ export const PVADialog: FC = () => {
             </>
           );
         } else {
-          return <p>No bots found.</p>;
+          return <p>{formatMessage('No bots found.')}</p>;
         }
       } else {
         return (
           <Spinner
             size={SpinnerSize.medium}
             labelPosition={'right'}
-            label={'Fetching bots...'}
+            label={formatMessage('Fetching bots...')}
             style={{ marginTop: 16, marginRight: 'auto' }}
           />
         );
@@ -212,7 +213,12 @@ export const PVADialog: FC = () => {
   const loginSplash = useMemo(() => {
     if (!loggedIn) {
       const loginButton = loggingIn ? (
-        <Spinner size={SpinnerSize.medium} labelPosition={'right'} label={'Logging in...'} style={{ marginTop: 16 }} />
+        <Spinner
+          size={SpinnerSize.medium}
+          labelPosition={'right'}
+          label={formatMessage('Logging in...')}
+          style={{ marginTop: 16 }}
+        />
       ) : (
         <PrimaryButton
           onClick={login}
@@ -222,7 +228,7 @@ export const PVADialog: FC = () => {
             rootPressed: { backgroundColor: pvaBrandingClick, border: 0 },
           }}
         >
-          Login to proceed{' '}
+          {formatMessage('Login to proceed')}{' '}
           <Icon iconName={'ChevronRight'} color={'#FFF'} styles={{ root: { fontSize: '11px', marginLeft: 10 } }} />
         </PrimaryButton>
       );
@@ -238,11 +244,11 @@ export const PVADialog: FC = () => {
               fontWeight: 500,
             }}
           >
-            Power Virtual Agents
+            {formatMessage('Power Virtual Agents')}
           </p>
           <Separator styles={{ root: { width: '50%' } }} />
           <p style={{ textAlign: 'center', fontWeight: 500 }}>
-            Publish your bot assets from Composer directly into Power Virtual Agents.
+            {formatMessage('Publish your bot assets from Composer directly into Power Virtual Agents.')}
           </p>
           <i
             style={{
@@ -255,8 +261,8 @@ export const PVADialog: FC = () => {
             }}
           ></i>
           <Stack horizontalAlign={'start'}>
-            <p>1. Select an environment containing your bot</p>
-            <p>2. Select the bot you wish to publish to</p>
+            <p>{formatMessage('1. Select an environment containing your bot')}</p>
+            <p>{formatMessage('2. Select the bot you wish to publish to')}</p>
           </Stack>
           {loginButton}
         </Stack>
