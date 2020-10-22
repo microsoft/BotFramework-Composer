@@ -401,7 +401,7 @@ async function getSkill(req: Request, res: Response) {
 
 async function exportProject(req: Request, res: Response) {
   const currentProject = await BotProjectService.getProjectById(req.params.projectId);
-  currentProject.exportToZip((archive: Archiver) => {
+  currentProject.exportToZip(null, (archive: Archiver) => {
     archive.on('error', (err) => {
       res.status(500).send({ error: err.message });
     });

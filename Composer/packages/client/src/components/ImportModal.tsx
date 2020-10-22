@@ -39,7 +39,7 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
     navigate(creationUrl);
   };
 
-  const importToExistingProject = (params) => {};
+  // const importToExistingProject = (params) => {};
 
   useEffect(() => {
     const doImport = async () => {
@@ -60,20 +60,23 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
             throw `Something went wrong during import: ${res.status} ${res.statusText}`;
           }
           const data = await res.json();
-          const { alias, eTag, templateDir, urlSuffix } = data;
+          const { /*alias,*/ eTag, templateDir, urlSuffix } = data;
 
-          if (alias) {
-            // check to see if Composer currently has a bot project corresponding to the alias
-            res = await fetch(`/api/projects/alias/:alias${alias}`, { method: 'GET' });
-            if (res.status === 200) {
-              const project = await res.json();
-              console.log(`Found project with alias ${alias}: `, project);
-              // prompt user to download new content here, if not do creation flow below:
-              importToExistingProject({});
-            }
-          } else {
-            importAsNewProject({ description, name, templateDir, urlSuffix, eTag, source });
-          }
+          // if (alias) {
+          //   // check to see if Composer currently has a bot project corresponding to the alias
+          //   res = await fetch(`/api/projects/alias/:alias${alias}`, { method: 'GET' });
+          //   if (res.status === 200) {
+          //     const project = await res.json();
+          //     console.log(`Found project with alias ${alias}: `, project);
+          //     // prompt user to download new content here, if not do creation flow below:
+          //     importToExistingProject({});
+          //   }
+          // } else {
+          //   importAsNewProject({ description, name, templateDir, urlSuffix, eTag, source });
+          // }
+
+          // TODO: remove once alias flow is implemented
+          importAsNewProject({ description, name, templateDir, urlSuffix, eTag, source });
 
           // navigate to creation flow with template selected
           // let creationUrl = `/projects/create/${encodeURIComponent(
