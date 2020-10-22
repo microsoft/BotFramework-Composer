@@ -181,12 +181,13 @@ const Library: React.FC = () => {
         if (confirm(msg)) {
           await await installComponentAPI(projectId, packageName, version, true);
         }
+      } else {
+
+        updateInstalledComponents(results.data.components);
+        // reload modified content
+        await reloadProject();
       }
 
-      await getInstalledLibraries();
-
-      // reload modified content
-      await reloadProject();
     } catch (err) {
       console.error(err);
       setApplicationLevelError({
@@ -252,10 +253,13 @@ const Library: React.FC = () => {
         closeDialog();
         setWorking(true);
         try {
-          await uninstallComponentAPI(projectId, selectedItem.name);
+          const results = await uninstallComponentAPI(projectId, selectedItem.name);
 
-          // reload installed list
-          await getInstalledLibraries();
+          if (results.data.success) {
+            updateInstalledComponents(results.data.components);
+          } else {
+            throw new Error(results.data.message);
+          }
 
           // reload modified content
           await reloadProject();

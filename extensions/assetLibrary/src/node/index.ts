@@ -9,10 +9,6 @@ import { SchemaMerger } from '@microsoft/bf-dialog/lib/library/schemaMerger';
 
 const API_ROOT = '/api';
 
-// this flag controls whether or not composer will remove imported assets when a package is removed
-const CLEANUP_FILES_ON_UNINSTALL = false;
-
-
 export default async (composer: ExtensionRegistration): Promise<void> => {
 
   const LibraryController = {
@@ -97,9 +93,6 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
 
           const manifestFile = runtime.identifyManifest(currentProject.settings?.runtime?.path);
 
-          console.log('INSTALL OUTPUT', installOutput);
-
-          // console.log('EXAMINING PACKAGE: ', manifestFile);
           // call do a dry run on the dialog merge
           const dryrun = new SchemaMerger(
             [manifestFile],
@@ -113,12 +106,10 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
           );
 
           const dryRunMergeResults = await dryrun.merge();
-          console.log('MERGE RESULTS', dryRunMergeResults);
 
           // evaluate dry run.
           // Did we have any conflicts that prevent moving forward? if so, install
           // Otherwise, copy the files into the project
-
           if (!dryRunMergeResults) {
             throw new Error('A problem occured during the install of this Component:\n' + mergeErrors.join('\n'));
           }
@@ -128,7 +119,7 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
             // we need to prompt the user to confirm the changes before proceeding
             res.json({
               success: false,
-              results: dryRunMergeResults,
+              components: dryRunMergeResults.components.filter((c) => c.includesSchema || c.includesExports),
             });
           } else {
             const realMerge = new SchemaMerger(
@@ -144,12 +135,10 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
 
             const mergeResults = await realMerge.merge();
             if (mergeResults) {
-              // console.log('MERGE RESULTS', mergeResults);
               res.json({
                 success: true,
                 name: packageName,
-                installedVersion: version,
-                results: mergeResults,
+                components: mergeResults.components.filter((c) => c.includesSchema || c.includesExports),
               });
             } else {
               res.json({
@@ -196,8 +185,6 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
 
           const manifestFile = runtime.identifyManifest(currentProject.settings?.runtime?.path);
 
-          console.log('UNINSTALL OUTPUT', output);
-          console.log('EXAMINING PACKAGE: ', manifestFile);
           // call do a dry run on the dialog merge
           const merger = new SchemaMerger(
             [manifestFile],
@@ -216,16 +203,9 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
             throw new Error(mergeErrors.join('\n'));
           }
 
-          if (CLEANUP_FILES_ON_UNINSTALL) {
-            // Remove the files from the project
-            const projectFiles = path.join(currentProject.dataDir, 'dialogs/imported', packageName);
-            await currentProject.fileStorage.rmrfDir(projectFiles);
-          }
-
-          console.log('MERGE RESULTS', mergeResults);
           res.json({
             success: true,
-            // results: mergeResults,
+            components: mergeResults.components.filter((c) => c.includesSchema || c.includesExports),
           });
         } catch (err) {
           res.json({
