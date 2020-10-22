@@ -106,7 +106,7 @@ for (const entry of allExtensions) {
     const extPath = path.join(extensionsDir, entry.name);
     const packageJSONPath = path.join(extPath, 'package.json');
     if (!fs.existsSync(packageJSONPath)) {
-      console.warn(`Ignore directory ${extensionsDir} which is not a npm module.`);
+      console.warn(`Ignore directory ${extPath} which is not a npm module.`);
       continue;
     };
 
