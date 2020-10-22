@@ -49,7 +49,9 @@ class OneAuthInstance {
     }
     const window = ElectronWindow.getInstance().browserWindow;
     if (window) {
-      this.oneAuth.setLogPiiEnabled(false);
+      const isDevelopment = process.env.NODE_ENV && process.env.NODE_ENV === 'development';
+      log('PII logging enabled: %s', isDevelopment);
+      this.oneAuth.setLogPiiEnabled(isDevelopment);
       this.oneAuth.setLogCallback((logLevel, message) => {
         log('%s %s', logLevel, message);
       });
