@@ -87,6 +87,7 @@ export const botLanguageFieldStyle = css`
   max-height: 150px;
   border: 1px solid #c4c4c4;
   margin-top: 17px;
+  padding: 10px;
 `;
 
 export const manageBotLanguage = {
@@ -99,12 +100,35 @@ export const manageBotLanguage = {
 };
 
 export const languageItem = css`
-  margin: 5px;
-  height: 34px;
   &:hover {
     background: #ebebeb;
   }
 `;
+
+export const languageRowContainer = css`
+  display: flex;
+  height: 30px;
+  line-height: 30px;
+`;
+
+export const languageItemContainer = css`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  &:hover .ms-Button {
+    visibility: visible;
+  }
+`;
+
+export const languageButton = {
+  root: {
+    fontSize: FontSizes.small,
+    fontWeight: FontWeights.regular,
+    color: SharedColors.cyanBlue10,
+    height: 30,
+    visibility: 'hidden',
+  },
+};
 
 export const toggleUseCustomRuntimeStyle = {
   root: {
@@ -257,12 +281,6 @@ export const marginBottom = css`
   margin-bottom: 20px;
 `;
 
-export const textFieldStyle = {
-  root: {
-    marginTop: 10,
-  },
-};
-
 export const defaultLanguageTextStyle = css`
   color: #898989;
   font-size: 8px;
@@ -271,4 +289,42 @@ export const defaultLanguageTextStyle = css`
 export const languageTextStyle = css`
   color: ${NeutralColors.black};
   font-size: 12px;
+`;
+
+export const languageButtonContainer = css`
+  display: flex;
+  justify-content: space-between;
+  width: 240px;
+`;
+
+export const errorContainer = css`
+  display: flex;
+  width: 100%;
+  height: 48px;
+  line-height: 48px;
+  background: #fed9cc;
+  color: ${NeutralColors.black};
+`;
+
+export const customError = {
+  root: {
+    selectors: {
+      'p > span': {
+        width: '100%',
+      },
+    },
+  },
+};
+
+export const errorIcon = {
+  root: {
+    color: '#A80000',
+    marginRight: 8,
+    paddingLeft: 12,
+    fontSize: FontSizes.mediumPlus,
+  },
+};
+
+export const errorTextStyle = css`
+  margin-bottom: 5px;
 `;
