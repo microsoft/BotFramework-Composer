@@ -19,6 +19,7 @@ export function useBotOperations(onAllBotsStarted?: (started: boolean) => void) 
   const { updateSettingForLocalEndpointSkills, resetBotRuntimeError } = useRecoilValue(dispatcherState);
 
   const handleBotStart = async (projectId: string, config: IPublishConfig, botBuildRequired: boolean) => {
+    resetBotRuntimeError(projectId);
     if (botBuildRequired) {
       // Default recognizer
       const matchedBuilder = builderEssentials.find(({ projectId: currentProjecId }) => projectId === currentProjecId);
@@ -40,7 +41,6 @@ export function useBotOperations(onAllBotsStarted?: (started: boolean) => void) 
     const rootBot = builderEssentials[0];
     const { projectId, configuration, buildRequired, status } = rootBot;
     if (status !== BotStatus.connected) {
-      resetBotRuntimeError(projectId);
       handleBotStart(projectId, configuration, buildRequired);
     }
   };
@@ -57,7 +57,6 @@ export function useBotOperations(onAllBotsStarted?: (started: boolean) => void) 
     for (const botBuildConfig of skillsBots) {
       if (botBuildConfig.status !== BotStatus.connected) {
         const { projectId, configuration, buildRequired } = botBuildConfig;
-        resetBotRuntimeError(projectId);
         await handleBotStart(projectId, configuration, buildRequired);
       }
     }
