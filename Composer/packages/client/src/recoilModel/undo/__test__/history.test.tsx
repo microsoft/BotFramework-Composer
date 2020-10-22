@@ -8,13 +8,13 @@ import { useRecoilValue, useSetRecoilState, useRecoilState } from 'recoil';
 
 import { UndoRoot, undoFunctionState, undoHistoryState } from '../history';
 import {
-  dialogsState,
   lgFilesState,
   luFilesState,
   projectMetaDataState,
   currentProjectIdState,
   botProjectIdsState,
 } from '../../atoms';
+import { dialogsState } from '../../selectors';
 import { renderRecoilHook } from '../../../../__tests__/testUtils/react-recoil-hooks-testing-library';
 import UndoHistory from '../undoHistory';
 const projectId = '123-asd';

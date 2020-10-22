@@ -26,7 +26,6 @@ import {
   luFilesState,
   lgFilesState,
   settingsState,
-  dialogsState,
   botEnvironmentState,
   botDiagnosticsState,
   localeState,
@@ -42,6 +41,7 @@ import {
   botErrorState,
   botProjectSpaceLoadedState,
 } from '../../atoms';
+import { dialogsState } from '../../selectors';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '../../dispatchers';
 import { BotStatus } from '../../../constants';

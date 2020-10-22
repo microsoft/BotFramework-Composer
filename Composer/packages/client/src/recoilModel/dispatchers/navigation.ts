@@ -9,10 +9,11 @@ import cloneDeep from 'lodash/cloneDeep';
 
 import { currentProjectIdState } from '../atoms';
 import { encodeArrayPathToDesignerPath } from '../../utils/convertUtils/designerPathEncoder';
+import { dialogsState } from '../selectors';
 
 import { createSelectedPath, getSelected } from './../../utils/dialogUtil';
 import { BreadcrumbItem } from './../../recoilModel/types';
-import { breadcrumbState, designPageLocationState, focusPathState, dialogsState } from './../atoms/botState';
+import { breadcrumbState, designPageLocationState, focusPathState } from './../atoms/botState';
 import {
   BreadcrumbUpdateType,
   checkUrl,

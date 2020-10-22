@@ -14,7 +14,7 @@ import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { DialogCreationCopy, nameRegex } from '../../constants';
 import { StorageFolder } from '../../recoilModel/types';
 import { FieldConfig, useForm } from '../../hooks/useForm';
-import { actionsSeedState, schemasState, validateDialogSelectorFamily } from '../../recoilModel';
+import { actionsSeedState, schemasState, validateDialogsSelectorFamily } from '../../recoilModel';
 
 import { name, description, styles as wizardStyles } from './styles';
 
@@ -36,7 +36,7 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
   const { onSubmit, onDismiss, isOpen, projectId } = props;
 
   const schemas = useRecoilValue(schemasState(projectId));
-  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
   const actionsSeed = useRecoilValue(actionsSeedState(projectId));
 
   const { shellApi, ...shellData } = useShellApi();

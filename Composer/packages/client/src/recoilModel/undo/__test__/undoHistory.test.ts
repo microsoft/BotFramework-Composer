@@ -3,7 +3,7 @@
 
 import undoHistoryImpl from '../undoHistory';
 
-import { dialogsState } from './../../atoms/botState';
+import { dialogsState } from './../../selectors';
 
 const projectId = '12a-sdaas';
 const undoHistory = new undoHistoryImpl(projectId);

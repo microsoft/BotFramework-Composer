@@ -7,7 +7,8 @@ import { SDKKinds } from '@bfc/shared';
 
 import { navigationDispatcher } from '../navigation';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
-import { focusPathState, breadcrumbState, designPageLocationState, dialogsState } from '../../atoms/botState';
+import { focusPathState, breadcrumbState, designPageLocationState } from '../../atoms/botState';
+import { dialogsState } from '../../selectors';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '../../../recoilModel/dispatchers';
 import {

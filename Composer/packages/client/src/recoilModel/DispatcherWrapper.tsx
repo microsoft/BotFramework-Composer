@@ -10,11 +10,11 @@ import { BotAssets } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import isEmpty from 'lodash/isEmpty';
 
+import { dialogsState } from './selectors';
 import { UndoRoot } from './undo/history';
 import { prepareAxios } from './../utils/auth';
 import createDispatchers, { Dispatcher } from './dispatchers';
 import {
-  dialogsState,
   luFilesState,
   qnaFilesState,
   lgFilesState,

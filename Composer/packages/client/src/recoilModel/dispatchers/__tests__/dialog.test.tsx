@@ -8,7 +8,6 @@ import { act } from '@botframework-composer/test-utils/lib/hooks';
 import { dialogsDispatcher } from '../dialogs';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import {
-  dialogsState,
   lgFilesState,
   luFilesState,
   schemasState,
@@ -18,6 +17,7 @@ import {
   showCreateDialogModalState,
   qnaFilesState,
 } from '../../atoms';
+import { dialogsState } from '../../selectors';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
 

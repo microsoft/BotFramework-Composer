@@ -3,7 +3,8 @@
 
 import { RecoilState } from 'recoil';
 
-import { dialogsState, luFilesState, lgFilesState } from '../atoms';
+import { luFilesState, lgFilesState } from '../atoms';
+import { dialogsState } from '../selectors';
 
 export type AtomAssetsMap = Map<RecoilState<any>, any>;
 

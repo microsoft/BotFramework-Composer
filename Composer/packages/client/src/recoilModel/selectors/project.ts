@@ -10,13 +10,12 @@ import {
   botDisplayNameState,
   botProjectFileState,
   botProjectIdsState,
-  dialogsState,
   projectMetaDataState,
   botNameIdentifierState,
   formDialogSchemaIdsState,
   formDialogSchemaState,
 } from '../atoms';
-
+import { dialogsState } from '../selectors';
 // Actions
 export const botsForFilePersistenceSelector = selector({
   key: 'botsForFilePersistenceSelector',

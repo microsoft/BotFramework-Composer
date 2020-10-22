@@ -11,7 +11,8 @@ import { Text, BotStatus } from '../../constants';
 import httpClient from '../../utils/httpUtil';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
-import { luFilesState, qnaFilesState, dialogsState, botStatusState, botLoadErrorState } from '../atoms';
+import { luFilesState, qnaFilesState, botStatusState, botLoadErrorState } from '../atoms';
+import { dialogsState } from '../selectors';
 import { settingsState } from '../atoms/botState';
 
 const checkEmptyQuestionOrAnswerInQnAFile = (sections) => {

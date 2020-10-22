@@ -9,13 +9,13 @@ import {
   luFilesState,
   lgFilesState,
   settingsState,
-  dialogsState,
   localeState,
   actionsSeedState,
   onAddLanguageDialogCompleteState,
   onDelLanguageDialogCompleteState,
   currentProjectIdState,
 } from '../../atoms';
+import { dialogsState } from '../../selectors';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
 import { multilangDispatcher } from '../multilang';

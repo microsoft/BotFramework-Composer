@@ -14,7 +14,7 @@ import { navigateTo } from '../../utils/navigation';
 import { TestController } from '../../components/TestController/TestController';
 import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
-import { dialogsState, qnaFilesState } from '../../recoilModel/atoms/botState';
+import { dialogsState, qnaFilesState } from '../../recoilModel';
 import { dispatcherState } from '../../recoilModel';
 import { CreateQnAModal } from '../../components/QnA';
 
