@@ -6,15 +6,13 @@ import * as formatMessage from 'format-message';
 import * as React from 'react';
 import { useState, useMemo, useEffect, Fragment } from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import {
   currentProjectId,
   getAccessTokensFromStorage,
-  startProvision,
-  closeDialog,
-  setPublishConfig,
+  setProvisionConfig,
+  getProvisionConfig,
+  currentPage,
 } from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { ResourceGroup } from '@azure/arm-resources/esm/models';
@@ -38,13 +36,16 @@ import { getResourceList, getSubscriptions, getResourceGroups, getDeployLocation
 initializeIcons(undefined, { disableWarnings: true });
 
 const resourceTypes = ['Azure Web App', 'Cognitive Services'];
-
 const publishType = 'azurePublish';
-
 const choiceOptions: IChoiceGroupOption[] = [
   { key: 'create', text: 'Create new Azure resources' },
   { key: 'import', text: 'Import existing Azure resources' },
 ];
+
+const PageTypes = {
+  ConfigProvision: 'config',
+  ReviewResource: 'review',
+};
 
 function onRenderDetailsHeader(props, defaultRender) {
   return (
@@ -63,8 +64,8 @@ export const AzureProvisionDialog: React.FC = () => {
   const [deployLocations, setDeployLocations] = useState<DeployLocation[]>([]);
 
   const [token, setToken] = useState<string>();
-  const [graphToken, setGraphToken] = useState<string>();
 
+  // value for create resources
   const [choice, setChoice] = useState(choiceOptions[0]);
   const [currentSubscription, setSubscription] = useState<Subscription>();
   const [currentHostName, setHostName] = useState('');
@@ -73,9 +74,11 @@ export const AzureProvisionDialog: React.FC = () => {
   const [extensionResourceOptions, setExtensionResourceOptions] = useState<any[]>([]);
   const [enabledResources, setEnabledResources] = useState({});
 
+  // value for import provision setting
   const [isEditorError, setEditorError] = useState(false);
   const [importConfig, setImportConfig] = useState();
-  const [page, setPage] = useState(1);
+
+  const [page, setPage] = useState(PageTypes.ConfigProvision);
   const [group, setGroup] = useState<IGroup[]>();
   const [listItems, setListItem] = useState();
 
@@ -136,12 +139,22 @@ export const AzureProvisionDialog: React.FC = () => {
     },
   ];
 
+  // useEffect(() => {
+  //   const timer = setInterval(() => {
+  //     console.log(currentPage());
+  //     setPage(currentPage());
+  //   }, 1000);
+  //   return () => clearInterval(timer);
+  // }, []);
+
   useEffect(() => {
-    const { access_token, graph_token } = getAccessTokensFromStorage();
+    const { access_token } = getAccessTokensFromStorage();
     setToken(access_token);
-    setGraphToken(graph_token);
     getSubscriptions(access_token).then(setSubscriptions);
     getResources();
+    // it only run once
+    console.log(currentPage());
+    setPage(currentPage());
   }, []);
 
   const getResources = async () => {
@@ -177,9 +190,16 @@ export const AzureProvisionDialog: React.FC = () => {
 
       if (sub) {
         setSubscription(sub);
+        // update all the config to client
+        setProvisionConfig({
+          subscription: sub,
+          hostname: currentHostName,
+          location: currentLocation,
+          externalResources: extensionResourceOptions,
+        });
       }
     },
-    [subscriptions]
+    [subscriptions, currentHostName, currentLocation, extensionResourceOptions]
   );
 
   const newResourceGroup = useMemo(
@@ -191,9 +211,15 @@ export const AzureProvisionDialog: React.FC = () => {
       } else {
         setErrorHostName('');
         setHostName(newName);
+        setProvisionConfig({
+          subscription: currentSubscription,
+          hostname: newName,
+          location: currentLocation,
+          externalResources: extensionResourceOptions,
+        });
       }
     },
-    [resourceGroups]
+    [resourceGroups, currentSubscription, currentLocation, extensionResourceOptions]
   );
 
   const updateCurrentLocation = useMemo(
@@ -202,9 +228,15 @@ export const AzureProvisionDialog: React.FC = () => {
 
       if (location) {
         setLocation(location);
+        setProvisionConfig({
+          subscription: currentSubscription,
+          hostname: currentHostName,
+          location: location,
+          externalResources: extensionResourceOptions,
+        });
       }
     },
-    [deployLocations]
+    [deployLocations, currentSubscription, currentHostName, extensionResourceOptions]
   );
 
   useEffect(() => {
@@ -215,65 +247,6 @@ export const AzureProvisionDialog: React.FC = () => {
     }
   }, [currentSubscription]);
 
-  const onNext = useMemo(
-    () => (config) => {
-      const names = getPreview(config.hostname);
-      console.log('got names', names);
-      const result = extensionResourceOptions.map((resource) => {
-        const previewObject = names.find((n) => n.key === resource.key);
-        return {
-          ...resource,
-          name: previewObject ? previewObject.name : `UNKNOWN NAME FOR ${resource.key}`,
-          icon: previewObject ? previewObject.icon : undefined,
-        };
-      });
-
-      // todo: generate list of resourceTypes based on what is in extensionResourceOptions
-      console.log('WILL PROVISION THESE ITEMS', result);
-      let items = [] as any;
-      const groups: IGroup[] = [];
-      let startIndex = 0;
-      for (const type of resourceTypes) {
-        const resources = result.filter(
-          (item) => enabledResources[item.key] && enabledResources[item.key].enabled === true && item.group === type
-        );
-
-        groups.push({
-          key: type,
-          name: type,
-          startIndex: startIndex,
-          count: resources.length,
-        });
-        startIndex = startIndex + resources.length;
-        items = items.concat(resources);
-      }
-      setGroup(groups);
-      setListItem(items);
-      setPage(2);
-    },
-    [enabledResources]
-  );
-
-  const onSubmit = useMemo(
-    () => async (options) => {
-      console.log(options);
-      // call back to the main Composer API to begin this process...
-      startProvision(options);
-      // TODO: close window
-      closeDialog();
-    },
-    []
-  );
-
-  const onSave = useMemo(
-    () => () => {
-      console.log(importConfig);
-      setPublishConfig(importConfig);
-      closeDialog();
-    },
-    []
-  );
-
   const updateChoice = useMemo(
     () => (ev, option) => {
       setChoice(option);
@@ -281,7 +254,7 @@ export const AzureProvisionDialog: React.FC = () => {
     []
   );
 
-  return page === 1 ? (
+  return page === PageTypes.ConfigProvision ? (
     <Fragment>
       <ChoiceGroup defaultSelectedKey="create" options={choiceOptions} onChange={updateChoice} />
       {subscriptionOption?.length && choice.key === 'create' && (
@@ -329,7 +302,7 @@ export const AzureProvisionDialog: React.FC = () => {
         </div>
       )}
 
-      <DialogFooter>
+      {/* <DialogFooter>
         <DefaultButton text={'Cancel'} onClick={closeDialog} />
         {choice.key === 'create' ? (
           <PrimaryButton
@@ -348,7 +321,7 @@ export const AzureProvisionDialog: React.FC = () => {
         ) : (
           <PrimaryButton disabled={isEditorError} text="Save" onClick={onSave} />
         )}
-      </DialogFooter>
+      </DialogFooter> */}
     </Fragment>
   ) : (
     <Fragment>
@@ -363,7 +336,7 @@ export const AzureProvisionDialog: React.FC = () => {
         setKey="none"
         onRenderDetailsHeader={onRenderDetailsHeader}
       />
-      <DialogFooter>
+      {/* <DialogFooter>
         <DefaultButton text={'Cancel'} onClick={closeDialog} />
         <PrimaryButton
           disabled={!currentSubscription || !currentHostName || errorHostName !== ''}
@@ -378,7 +351,7 @@ export const AzureProvisionDialog: React.FC = () => {
             });
           }}
         />
-      </DialogFooter>
+      </DialogFooter> */}
     </Fragment>
   );
 };

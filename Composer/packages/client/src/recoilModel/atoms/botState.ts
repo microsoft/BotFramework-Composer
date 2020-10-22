@@ -185,6 +185,11 @@ export const provisionStatusState = atomFamily<any, string>({
   default: {},
 });
 
+export const provisionConfigState = atomFamily<any, string>({
+  key: getFullyQualifiedKey('provisionConfig'),
+  default: {},
+});
+
 export const onCreateDialogCompleteState = atomFamily<any, string>({
   key: getFullyQualifiedKey('onCreateDialogComplete'),
   default: {

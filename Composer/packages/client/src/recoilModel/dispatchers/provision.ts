@@ -4,7 +4,7 @@
 import formatMessage from 'format-message';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 
-import { provisionStatusState, settingsState } from '../atoms/botState';
+import { provisionConfigState, provisionStatusState, settingsState } from '../atoms/botState';
 import { getAccessTokenInCache, getGraphTokenInCache } from '../../utils/auth';
 import { CardProps } from '../../components/NotificationCard';
 
@@ -33,11 +33,6 @@ export const provisionDispatcher = () => {
       type: 'error',
     };
   };
-
-  // const updateNotification = (callbackHelpers: CallbackInterface, oldNotificationId, newNotification) => {
-  //   deleteNotificationInternal(callbackHelpers, oldNotificationId);
-  //   addNotificationInternal(callbackHelpers, newNotification);
-  // };
 
   const provisionToTarget = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (config: any, type: string, projectId: string) => {
@@ -176,6 +171,16 @@ export const provisionDispatcher = () => {
     }, 2000);
   };
 
+  const setProvisionConfig = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => (config: any, projectId: string) => {
+      const { set } = callbackHelpers;
+      set(provisionConfigState(projectId), (configs) => ({
+        ...configs,
+        [config.name]: config,
+      }));
+    }
+  );
+
   // const getProvisionStatus = useRecoilCallback(
   //   (callbackHelpers: CallbackInterface) => async (projectId: string, targetName: string, targetType: string) => {
   //     //get jobId by targetName
@@ -249,5 +254,6 @@ export const provisionDispatcher = () => {
   return {
     // getProvisionStatus,
     provisionToTarget,
+    setProvisionConfig,
   };
 };
