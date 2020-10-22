@@ -8,10 +8,9 @@ import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { IPanelProps, Panel, PanelType } from 'office-ui-fabric-react/lib/Panel';
 import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
-import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
-import { notificationsSelector } from '../../recoilModel/selectors/notificationsSelector';
+import { Notification } from '../../recoilModel/types';
 
 import { NotificationCard } from './NotificationCard';
 
@@ -35,15 +34,19 @@ const styles = {
   `,
 };
 
-interface NotificationPanelProps {
+type NotificationPanelProps = {
   isOpen: boolean;
+  notifications: Notification[];
   onDismiss: (event?: React.SyntheticEvent<HTMLElement, Event>) => void;
   onDeleteNotification: (id: string) => void;
-}
+};
 
-const NotificationPanel: React.FC<NotificationPanelProps> = ({ isOpen, onDeleteNotification, onDismiss }) => {
-  const notifications = useRecoilValue(notificationsSelector);
-
+const NotificationPanel: React.FC<NotificationPanelProps> = ({
+  isOpen,
+  notifications,
+  onDeleteNotification,
+  onDismiss,
+}) => {
   const handleClearAll = useCallback(() => {
     notifications.map(({ id }) => onDeleteNotification(id));
   }, [onDeleteNotification, notifications]);

@@ -35,9 +35,9 @@ const styles = {
   `,
 };
 
-interface NotificationButtonProps {
+type NotificationButtonProps = {
   buttonStyles?: IButtonStyles;
-}
+};
 
 const NotificationButton: React.FC<NotificationButtonProps> = ({ buttonStyles }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -61,7 +61,12 @@ const NotificationButton: React.FC<NotificationButtonProps> = ({ buttonStyles })
           </div>
         </div>
       </IconButton>
-      <NotificationPanel isOpen={isOpen} onDeleteNotification={deleteNotification} onDismiss={toggleIsOpen} />
+      <NotificationPanel
+        isOpen={isOpen}
+        notifications={notifications}
+        onDeleteNotification={deleteNotification}
+        onDismiss={toggleIsOpen}
+      />
     </div>
   );
 };

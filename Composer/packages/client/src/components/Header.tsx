@@ -20,21 +20,24 @@ import {
 import composerIcon from '../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../constants';
 
-import { NotificationButton } from './Notifications';
+import { NotificationButton } from './Notifications/NotificationButton';
 
 // -------------------- Styles -------------------- //
 
 const headerContainer = css`
-  position: relative;
   background: ${SharedColors.cyanBlue10};
   height: 50px;
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  justify-content: space-between;
+  padding-right: 20px;
+  margin: auto;
+`;
+
+const logo = css`
+  display: flex;
 `;
 
 const title = css`
-  margin-left: 20px;
   font-weight: ${FontWeights.semibold};
   font-size: 16px;
   color: #fff;
@@ -54,9 +57,7 @@ const divider = css`
 
 const controls = css`
   display: flex;
-  position: absolute;
-  top: calc(50% - 10px);
-  right: 20px;
+  align-items: center;
 `;
 
 const buttonStyles: IButtonStyles = {
@@ -81,6 +82,8 @@ const headerTextContainer = css`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  align-items: center;
+  margin-left: 20px;
 `;
 
 // -------------------- Header -------------------- //
@@ -101,20 +104,22 @@ export const Header = () => {
 
   return (
     <div css={headerContainer} role="banner">
-      <img
-        alt={formatMessage('Composer Logo')}
-        aria-label={formatMessage('Composer Logo')}
-        src={composerIcon}
-        style={{ marginLeft: '9px' }}
-      />
-      <div css={headerTextContainer}>
-        <div css={title}>{formatMessage('Bot Framework Composer')}</div>
-        {projectName && (
-          <Fragment>
-            <div css={divider} />
-            <span css={botName}>{`${projectName} (${locale})`}</span>
-          </Fragment>
-        )}
+      <div css={logo}>
+        <img
+          alt={formatMessage('Composer Logo')}
+          aria-label={formatMessage('Composer Logo')}
+          src={composerIcon}
+          style={{ marginLeft: '9px' }}
+        />
+        <div css={headerTextContainer}>
+          <div css={title}>{formatMessage('Bot Framework Composer')}</div>
+          {projectName && (
+            <Fragment>
+              <div css={divider} />
+              <span css={botName}>{`${projectName} (${locale})`}</span>
+            </Fragment>
+          )}
+        </div>
       </div>
       <div css={controls}>
         {showUpdateAvailableIcon && (

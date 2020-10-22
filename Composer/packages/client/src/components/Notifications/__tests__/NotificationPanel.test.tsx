@@ -5,7 +5,7 @@ import { fireEvent } from '@botframework-composer/test-utils';
 import React from 'react';
 
 import { renderWithRecoil } from '../../../../__tests__/testUtils';
-import { notificationIdsState, notificationsState } from '../../../recoilModel';
+import { Notification } from '../../../recoilModel/types';
 import { NotificationPanel } from '../NotificationPanel';
 
 jest.mock('../NotificationCard', () => ({ NotificationCard: () => <div data-testid="NotificationCard" /> }));
@@ -22,22 +22,17 @@ jest.mock('office-ui-fabric-react/lib/Button', () => ({
   ),
 }));
 
-describe('<NotificationPanel />', () => {
-  let recoilInitState;
-  beforeEach(() => {
-    recoilInitState = ({ set }) => {
-      set(notificationIdsState, ['1', '2', '3', '4']);
-      set(notificationsState('1'), { read: true });
-      set(notificationsState('2'), {});
-      set(notificationsState('3'), {});
-      set(notificationsState('4'), {});
-    };
-  });
+const notifications = [{ id: '1', read: true }, { id: 2 }, { id: 3 }, { id: 4 }];
 
+describe('<NotificationPanel />', () => {
   it('displays all the notifications', async () => {
     const { findAllByTestId } = renderWithRecoil(
-      <NotificationPanel isOpen onDeleteNotification={jest.fn()} onDismiss={jest.fn()} />,
-      recoilInitState
+      <NotificationPanel
+        isOpen
+        notifications={notifications as Notification[]}
+        onDeleteNotification={jest.fn()}
+        onDismiss={jest.fn()}
+      />
     );
     const notificationCards = await findAllByTestId('NotificationCard');
     expect(notificationCards.length).toBe(4);
@@ -46,8 +41,12 @@ describe('<NotificationPanel />', () => {
   it('clears all the notifications', async () => {
     const deleteNotification = jest.fn();
     const { findByTestId } = renderWithRecoil(
-      <NotificationPanel isOpen onDeleteNotification={deleteNotification} onDismiss={jest.fn} />,
-      recoilInitState
+      <NotificationPanel
+        isOpen
+        notifications={notifications as Notification[]}
+        onDeleteNotification={deleteNotification}
+        onDismiss={jest.fn}
+      />
     );
     const clearAll = await findByTestId('ClearAll');
 

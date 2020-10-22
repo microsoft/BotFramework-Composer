@@ -4,7 +4,6 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
-import React from 'react';
 
 import { dispatcherState } from '../../recoilModel';
 import { notificationsSelector } from '../../recoilModel/selectors/notificationsSelector';
@@ -22,7 +21,7 @@ const container = css`
 
 // -------------------- NotificationContainer -------------------- //
 
-export const NotificationContainer = React.memo(() => {
+export const NotificationContainer = () => {
   const notifications = useRecoilValue(notificationsSelector);
   const { deleteNotification, hideNotification } = useRecoilValue(dispatcherState);
 
@@ -41,4 +40,4 @@ export const NotificationContainer = React.memo(() => {
       })}
     </div>
   );
-});
+};
