@@ -18,7 +18,7 @@ export const styles = {
   },
   modal: {
     main: {
-      maxWidth: '800px !important',
+      maxWidth: '600px !important',
     },
   },
 };
@@ -26,15 +26,15 @@ export const styles = {
 export const dialogWindow = css`
   display: flex;
   flex-direction: column;
-  width: 400px;
-  min-height: 200px;
+  width: 552px;
+  min-height: 254px;
 `;
 
 export const dialogWindowMini = css`
   display: flex;
   flex-direction: column;
-  width: 400px;
-  min-height: 100px;
+  width: 552px;
+  min-height: 308px;
 `;
 
 export const textField = {
