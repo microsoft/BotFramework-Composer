@@ -3,7 +3,6 @@ import { join } from 'path';
 import { ensureDirSync } from 'fs-extra';
 import extractZip from 'extract-zip';
 import { contentProviderFactory } from '../externalContentProvider/contentProviderFactory';
-import { ContentProviderMetadata } from '../externalContentProvider/externalContentProvider';
 import { ExternalContentProviderType } from '../externalContentProvider/providerType';
 import logger from '../logger';
 
@@ -21,9 +20,9 @@ interface StartImportRequest extends Request {
 async function startImport(req: StartImportRequest, res: Response, next) {
   const { source } = req.params;
   const { payload } = req.query;
-  const metadata: ContentProviderMetadata = JSON.parse(payload);
+  const metadata = JSON.parse(payload);
 
-  const contentProvider = contentProviderFactory.getProvider(source, metadata);
+  const contentProvider = contentProviderFactory.getProvider({ type: source, metadata });
   if (contentProvider) {
     try {
       // download the bot content zip
@@ -38,8 +37,13 @@ async function startImport(req: StartImportRequest, res: Response, next) {
       log('Done extracting.');
       await contentProvider.cleanUp();
 
+      let alias;
+      if (contentProvider.getAlias) {
+        alias = await contentProvider.getAlias();
+      }
+
       setTimeout(() => {
-        res.json({ eTag, templateDir, urlSuffix });
+        res.json({ alias, eTag, templateDir, urlSuffix });
       }, 2000);
     } catch (e) {
       const msg = 'Error importing bot content: ' + e;

@@ -1,5 +1,5 @@
 import { createWriteStream } from 'fs';
-import { ensureDirSync, removeSync } from 'fs-extra';
+import { ensureDirSync, remove } from 'fs-extra';
 import fetch, { RequestInit } from 'node-fetch';
 import { join } from 'path';
 import { authService } from '../services/auth';
@@ -8,12 +8,13 @@ import { BotContentInfo, ContentProviderMetadata, ExternalContentProvider } from
 
 const COMPOSER_1P_APP_ID = 'ce48853e-0605-4f77-8746-d70ac63cc6bc';
 
-type PowerVirtualAgentsMetadata = ContentProviderMetadata & {
-  botId?: string;
+export type PowerVirtualAgentsMetadata = ContentProviderMetadata & {
+  baseUrl: string;
+  botId: string;
   dialogId?: string;
-  envId?: string;
-  name?: string; // maybe we can derive this from the bot content
-  tenantId?: string;
+  envId: string;
+  name: string;
+  tenantId: string;
   triggerId?: string;
 };
 
@@ -21,7 +22,6 @@ const authCredentials = {
   // web auth flow
   clientId: COMPOSER_1P_APP_ID,
   scopes: ['a522f059-bb65-47c0-8934-7db6e5286414/.default'], // int / ppe
-
   // electron auth flow
   targetResource: 'a522f059-bb65-47c0-8934-7db6e5286414',
 };
@@ -62,7 +62,7 @@ function prettyPrintError(err: string | any): string {
   return JSON.stringify(err, null, 2);
 }
 
-export class PowerVirtualAgentsProvider extends ExternalContentProvider {
+export class PowerVirtualAgentsProvider extends ExternalContentProvider<PowerVirtualAgentsMetadata> {
   private tempBotAssetsDir = join(process.env.COMPOSER_TEMP_DIR as string, 'pva-assets');
 
   constructor(metadata: PowerVirtualAgentsMetadata) {
@@ -106,7 +106,12 @@ export class PowerVirtualAgentsProvider extends ExternalContentProvider {
   }
 
   public async cleanUp(): Promise<void> {
-    removeSync(this.tempBotAssetsDir);
+    await remove(this.tempBotAssetsDir);
+  }
+
+  public async getAlias(): Promise<string> {
+    const alias = `${this.metadata.envId}.${this.metadata.botId}`;
+    return alias;
   }
 
   private async getAccessToken(): Promise<string> {
