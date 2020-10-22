@@ -1,11 +1,23 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 import { app } from 'electron';
-import { AadConfiguration, AppConfiguration, AuthParameters, AuthScheme } from 'oneauth-win64';
 
 import ElectronWindow from '../electronWindow';
 import { isLinux, isMac, isWindows } from '../utility/platform';
 import logger from '../utility/logger';
 
 const log = logger.extend('one-auth');
+
+let oneAuth;
+if (isWindows()) {
+  oneAuth = require('oneauth-win64');
+}
+if (isMac()) {
+  oneAuth = require('oneauth-mac');
+}
+if (isLinux()) {
+  oneAuth = {};
+}
 
 const COMPOSER_APP_ID = 'com.microsoft.BotFrameworkComposer';
 const COMPOSER_APP_NAME = 'BotFrameworkComposer';
@@ -14,32 +26,25 @@ const COMPOSER_CLIENT_ID = 'ce48853e-0605-4f77-8746-d70ac63cc6bc';
 const COMPOSER_REDIRECT_URI = 'ms-appx-web://Microsoft.AAD.BrokerPlugin/ce48853e-0605-4f77-8746-d70ac63cc6bc';
 const GRAPH_RESOURCE = 'https://graph.microsoft.com';
 const DEFAULT_LOCALE = 'en'; // TODO: get this from settings?
-const DEFAULT_AUTH_SCHEME = AuthScheme.Bearer; // bearer token
+const DEFAULT_AUTH_SCHEME = 2; //oneAuth.AuthScheme.Bearer; // bearer token
 const DEFAULT_AUTH_AUTHORITY = 'https://login.microsoftonline.com/common'; // work and school accounts
 
 // TODO: share this type with ElectronContext
-type AuthParamOptions = Partial<Pick<AuthParameters, 'realm' | 'target'>>;
+interface PartialAuthParamaters {
+  realm: string;
+  target: string;
+}
+
+type AuthParamOptions = Partial<PartialAuthParamaters>;
 
 class OneAuthInstance {
   private initialized: boolean;
-  private _oneAuth: any;
+  private oneAuth: any; //eslint-disable-line
 
   constructor() {
     // will wait until called to initialize (so that we're sure we have a browser window)
     this.initialized = false;
-    if (isWindows()) {
-      this._oneAuth = require('oneauth-win64');
-    }
-    if (isMac()) {
-      this._oneAuth = require('oneauth-mac');
-    }
-    if (isLinux()) {
-      this._oneAuth = {};
-    }
-  }
-
-  private get oneAuth() {
-    return this._oneAuth;
+    this.oneAuth = oneAuth;
   }
 
   private initialize() {
@@ -56,7 +61,7 @@ class OneAuthInstance {
         log('%s %s', logLevel, message);
       });
       log('Initializing...');
-      const appConfig = new AppConfiguration(
+      const appConfig = new this.oneAuth.AppConfiguration(
         COMPOSER_APP_ID,
         COMPOSER_APP_NAME,
         COMPOSER_APP_VERSION,
@@ -66,7 +71,7 @@ class OneAuthInstance {
       );
       // Personal Accounts
       // const msaConfig = new OneAuth.MsaConfiguration();
-      const aadConfig = new AadConfiguration(
+      const aadConfig = new this.oneAuth.AadConfiguration(
         COMPOSER_CLIENT_ID,
         COMPOSER_REDIRECT_URI,
         GRAPH_RESOURCE,
@@ -89,7 +94,7 @@ class OneAuthInstance {
     log('Getting access token...');
     let params;
     if (options) {
-      params = new AuthParameters(
+      params = new this.oneAuth.AuthParameters(
         DEFAULT_AUTH_SCHEME,
         DEFAULT_AUTH_AUTHORITY,
         options.target || GRAPH_RESOURCE,
@@ -127,7 +132,7 @@ class OneAuthInstance {
     log('Getting access token silently...');
     let params;
     if (options) {
-      params = new AuthParameters(
+      params = new this.oneAuth.AuthParameters(
         DEFAULT_AUTH_SCHEME,
         DEFAULT_AUTH_AUTHORITY,
         options.target || GRAPH_RESOURCE,
