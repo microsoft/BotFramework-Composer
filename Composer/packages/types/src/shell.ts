@@ -52,6 +52,7 @@ export type ApplicationContextApi = {
   announce: (message: string) => void;
   addCoachMarkRef: (ref: { [key: string]: any }) => void;
   setApplicationLevelError: (err: any) => void;
+  confirm: (title: string, subTitle: string, settings?: any) => Promise<boolean>;
 };
 
 export type ApplicationContext = {

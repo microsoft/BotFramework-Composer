@@ -127,7 +127,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
   );
 };
 
-export const OpenConfirmModal = (title, subTitle, setting = {}) => {
+export const OpenConfirmModal = (title, subTitle, setting = {}): Promise<boolean> => {
   return new Promise((resolve) => {
     const node = document.createElement('div');
     document.body.appendChild(node);

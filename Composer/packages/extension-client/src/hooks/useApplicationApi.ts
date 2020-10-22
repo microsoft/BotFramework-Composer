@@ -20,6 +20,7 @@ const APPLICATION_KEYS = [
   'api.announce',
   'api.addCoachMarkRef',
   'api.setApplicationLevelError',
+  'api.confirm',
 ];
 
 export function useApplicationApi(): ApplicationContext & ApplicationContextApi {

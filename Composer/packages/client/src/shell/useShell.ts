@@ -31,6 +31,7 @@ import {
 import { undoFunctionState } from '../recoilModel/undo/history';
 import httpClient from '../utils/httpUtil';
 import { navigateTo } from '../utils/navigation';
+import { OpenConfirmModal } from '../components/Modal/ConfirmDialog';
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
@@ -243,6 +244,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     navigateTo,
     setApplicationLevelError,
     updateUserSettings,
+    confirm: OpenConfirmModal,
   };
 
   const currentDialog = useMemo(() => dialogs.find((d) => d.id === dialogId) ?? stubDialog(), [
