@@ -11,7 +11,7 @@
     "test:ui": "jest --config jest.config.ui.js"
   },
   "composer": {
-    "enabled": false,
+    "enabled": true,
     "bundles": [
       {
         "id": "publish",

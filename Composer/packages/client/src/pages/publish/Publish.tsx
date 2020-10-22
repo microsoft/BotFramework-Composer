@@ -429,10 +429,10 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         />
       )}
       <PullDialog
-        onDismiss={() => setPullDialogHidden(true)}
         hidden={pullDialogHidden}
         projectId={projectId}
         selectedTarget={selectedTarget}
+        onDismiss={() => setPullDialogHidden(true)}
       />
       {showLog && <LogDialog version={selectedVersion} onDismiss={() => setShowLog(false)} />}
       <Toolbar toolbarItems={toolbarItems} />
@@ -502,7 +502,7 @@ const LogDialog = (props) => {
     <Dialog
       dialogContentProps={logDialogProps}
       hidden={false}
-      minWidth={450}
+      minWidth={700}
       modalProps={{ isBlocking: true }}
       onDismiss={props.onDismiss}
     >
