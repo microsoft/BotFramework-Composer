@@ -14,7 +14,7 @@ import {
 } from '@bfc/shared';
 
 import { BotIndexer } from '../src/botIndexer';
-const { checkSkillSetting, checkLUISLocales, filterLUISFilesToPublish } = BotIndexer;
+const { checkManifest, checkSetting, checkSkillSetting, checkLUISLocales, filterLUISFilesToPublish } = BotIndexer;
 
 const botAssets: BotAssets = {
   projectId: 'test',
@@ -30,8 +30,6 @@ const botAssets: BotAssets = {
   dialogSchemas: [],
   qnaFiles: [],
   lgFiles: [],
-  qnaFiles: [],
-  dialogSchemas: [],
   luFiles: [
     {
       id: 'a.en-us',
@@ -69,6 +67,73 @@ const botAssets: BotAssets = {
     runtime: {} as any,
   } as DialogSetting,
 };
+
+describe('check manifest', () => {
+  it('manifest file should exist', () => {
+    const diagnostics = checkManifest(botAssets);
+    expect(diagnostics.length).toEqual(1);
+  });
+});
+
+describe('check LUIS & QnA key', () => {
+  it('LUIS authoringKey shoud exsit in setting', () => {
+    const diagnostics = checkSetting(botAssets, {});
+    expect(diagnostics.length).toEqual(1);
+  });
+
+  it('LUIS authoringKey shoud exsit in setting or locale storage', () => {
+    const diagnostics = checkSetting(botAssets, {
+      MicrosoftAppPassword: '',
+      luis: {
+        authoringKey: '4d210acc6d794d71a2a3450*****2fb7',
+        endpointKey: '',
+      },
+      qna: {
+        authoringKey: '',
+        endpointKey: '',
+      },
+    });
+    expect(diagnostics.length).toEqual(0);
+  });
+
+  it('QnA subscriptionKey shoud exsit in setting', () => {
+    const botAssets2 = {
+      ...botAssets,
+      dialogs: [
+        {
+          luFile: 'a.lu',
+          qnaFile: 'a.lu.qna',
+        } as DialogInfo,
+      ],
+    };
+    const diagnostics = checkSetting(botAssets2, {});
+    expect(diagnostics.length).toEqual(2);
+  });
+
+  it('QnA subscriptionKe shoud exsit in setting or locale storage', () => {
+    const botAssets2 = {
+      ...botAssets,
+      dialogs: [
+        {
+          luFile: 'a.lu',
+          qnaFile: 'a.lu.qna',
+        } as DialogInfo,
+      ],
+    };
+    const diagnostics = checkSetting(botAssets2, {
+      MicrosoftAppPassword: '',
+      luis: {
+        authoringKey: '4d210acc6d794d71a2a3450*****2fb7',
+        endpointKey: '',
+      },
+      qna: {
+        subscriptionKey: '4d210acc6d794d71a2a3450*****2fb7',
+        endpointKey: '',
+      },
+    });
+    expect(diagnostics.length).toEqual(0);
+  });
+});
 
 describe('checkLUISLocales', () => {
   it('should check luis not supported locales', () => {

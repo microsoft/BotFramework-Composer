@@ -3,6 +3,7 @@
 /**
  * Verify bot settings, files meet LUIS/QnA requirments.
  */
+import get from 'lodash/get';
 
 import {
   BotAssets,
@@ -19,7 +20,58 @@ import map from 'lodash/map';
 
 import { getLocale } from './utils/help';
 
-// Verify bot settings, files meet LUIS/QnA requirments.
+/**
+ * Check skill manifest.json.
+ * 1. Manifest should exist
+ */
+const checkManifest = (assets: BotAssets): Diagnostic[] => {
+  const { skillManifests } = assets;
+
+  const diagnostics: Diagnostic[] = [];
+  if (skillManifests.length === 0) {
+    diagnostics.push(new Diagnostic('Missing skill manifest', 'manifest.json', DiagnosticSeverity.Error));
+  }
+  return diagnostics;
+};
+
+/**
+ * Check skill appsettings.json.
+ * 1. Missing LUIS key
+ * 2. Missing QnA Maker subscription key.
+ */
+const checkSetting = (assets: BotAssets, localStorage: { [key: string]: any }): Diagnostic[] => {
+  const { dialogs, setting } = assets;
+  const diagnostics: Diagnostic[] = [];
+
+  const useLUIS = dialogs.some((item) => !!item.luFile);
+  // if use LUIS, check LUIS authoringKey key
+  if (useLUIS) {
+    const authoringKeyFromSettings = get(setting, 'luis.authoringKey');
+    const authoringKeyFromLocal = get(localStorage, 'luis.authoringKey');
+    if (!authoringKeyFromLocal && !authoringKeyFromSettings) {
+      diagnostics.push(new Diagnostic('Missing LUIS key', 'appsettings.json', DiagnosticSeverity.Error));
+    }
+  }
+
+  const useQnA = dialogs.some((item) => !!item.qnaFile);
+  // if use QnA, check QnA subscriptionKey
+  if (useQnA) {
+    const authoringKeyFromSettings = get(setting, 'qna.subscriptionKey');
+    const authoringKeyFromLocal = get(localStorage, 'qna.subscriptionKey');
+    if (!authoringKeyFromLocal && !authoringKeyFromSettings) {
+      diagnostics.push(
+        new Diagnostic('Missing QnA Maker subscription key', 'appsettings.json', DiagnosticSeverity.Error)
+      );
+    }
+  }
+
+  return diagnostics;
+};
+
+/**
+ * Check bot settings & dialog
+ * files meet LUIS/QnA requirments.
+ */
 const checkLUISLocales = (assets: BotAssets): Diagnostic[] => {
   const {
     dialogs,
@@ -36,7 +88,11 @@ const checkLUISLocales = (assets: BotAssets): Diagnostic[] => {
   });
 };
 
-// Verify bot skill setting.
+/**
+ * Check bot skill & setting
+ * 1. used skill not existed in setting
+ * 2. appsettings.json Microsoft App Id or Skill Host Endpoint are empty
+ */
 const checkSkillSetting = (assets: BotAssets): Diagnostic[] => {
   const {
     setting: { skill = {}, botId, skillHostEndpoint },
@@ -97,6 +153,8 @@ const filterLUISFilesToPublish = (luFiles: LuFile[]): LuFile[] => {
 
 export const BotIndexer = {
   index,
+  checkManifest,
+  checkSetting,
   checkLUISLocales,
   checkSkillSetting,
   filterLUISFilesToPublish,
