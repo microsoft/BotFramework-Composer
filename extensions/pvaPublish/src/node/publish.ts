@@ -17,6 +17,7 @@ import {
   PullResponse,
 } from './types';
 import { getAuthCredentials, getBaseUrl } from './utils';
+import { log } from './logger';
 
 // in-memory history that allows us to get the status of the most recent job
 const publishHistory: PublishHistory = {};
@@ -90,9 +91,7 @@ export const publish = async (
       method: 'POST',
       body: zipReadStream,
       headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'X-CCI-TenantId': tenantId,
-        'X-CCI-Routing-TenantId': tenantId,
+        ...getAuthHeaders(accessToken, tenantId),
         'Content-Type': 'application/zip',
         'Content-Length': length.toString(),
         'If-Match': project.eTag,
@@ -164,14 +163,12 @@ export const getStatus = async (
     const res = await fetch(url, {
       method: 'GET',
       headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'X-CCI-TenantId': tenantId,
-        'X-CCI-Routing-TenantId': tenantId,
+        ...getAuthHeaders(accessToken, tenantId),
         'If-None-Match': project.eTag,
       },
     });
     const job: PVAPublishJob = await res.json();
-    console.log(job);
+    log('Got updated status from publish job: %O', job);
 
     // transform the PVA job to a publish response
     const result = xformJobToResult(job);
@@ -221,11 +218,7 @@ export const history = async (
     const url = `${base}/environments/${envId}/bots/${botId}/composer/publishoperations`;
     const res = await fetch(url, {
       method: 'GET',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'X-CCI-TenantId': tenantId,
-        'X-CCI-Routing-TenantId': tenantId,
-      },
+      headers: getAuthHeaders(accessToken, tenantId),
     });
     const jobs: PVAPublishJob[] = await res.json();
 
@@ -259,11 +252,7 @@ export const pull = async (
     const url = `${base}/environments/${envId}/bots/${botId}/composer/content`;
     const options: RequestInit = {
       method: 'GET',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'X-CCI-TenantId': tenantId,
-        'X-CCI-Routing-TenantId': tenantId,
-      },
+      headers: getAuthHeaders(accessToken, tenantId),
     };
     const result = await fetch(url, options);
 
@@ -369,4 +358,12 @@ const getUserFriendlyMessage = (state: PublishState): string => {
     default:
       return '';
   }
+};
+
+const getAuthHeaders = (accessToken: string, tenantId: string) => {
+  return {
+    Authorization: `Bearer ${accessToken}`,
+    'X-CCI-TenantId': tenantId,
+    'X-CCI-Routing-TenantId': tenantId,
+  };
 };

@@ -1,12 +1,17 @@
 import { useCallback, useEffect, useMemo, useState, FC } from 'react';
 import * as React from 'react';
 import { getAccessToken, setConfigIsValid, setPublishConfig, fetch } from '@bfc/extension-client';
-import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
-import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
-import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { Separator } from 'office-ui-fabric-react/lib/Separator';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import {
+  Dropdown,
+  IDropdownOption,
+  ResponsiveMode,
+  Spinner,
+  SpinnerSize,
+  PrimaryButton,
+  Stack,
+  Separator,
+  Icon,
+} from 'office-ui-fabric-react';
 
 import { root } from './styles';
 import { Bot, BotEnvironment } from './types';

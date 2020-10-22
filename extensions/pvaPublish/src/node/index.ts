@@ -1,7 +1,9 @@
+import { ExtensionRegistration } from '@bfc/extension';
+
 import { getStatus, history, publish } from './publish';
 
-function initialize(registration) {
-  const plugin = {
+function initialize(registration: ExtensionRegistration) {
+  const extension = {
     name: 'pva-publish-composer',
     description: 'Publish bot to Power Virtual Agents (Preview)',
     bundleId: 'publish',
@@ -10,7 +12,9 @@ function initialize(registration) {
     publish,
     // TODO: add 'pull' once ready,
   };
-  registration.addPublishMethod(plugin);
+
+  // @ts-ignore (TODO: remove once auth is integrated and added to publish method signature)
+  registration.addPublishMethod(extension);
 }
 
 module.exports = {

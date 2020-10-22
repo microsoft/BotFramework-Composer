@@ -6,7 +6,7 @@ module.exports = {
   mode: 'production',
   output: {
     filename: 'publish-bundle.js',
-    path: resolve(__dirname, 'dist', 'ui'),
+    path: resolve(__dirname, 'lib', 'ui'),
   },
   externals: {
     // expect react & react-dom to be available in the extension host iframe
