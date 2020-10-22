@@ -16,12 +16,12 @@ export const dialogsSelectorFamily = selectorFamily<DialogInfo[], string>({
     });
   },
   set: (projectId: string) => ({ set }, newDialogs) => {
-    if (Array.isArray(newDialogs)) {
-      set(
-        dialogIdsState(projectId),
-        newDialogs.map((dialog) => dialog.id)
-      );
-      newDialogs.forEach((dialog) => set(dialogState({ projectId, dialogId: dialog.id }), dialog));
-    }
+    const newDialogArray = newDialogs as DialogInfo[];
+
+    set(
+      dialogIdsState(projectId),
+      newDialogArray.map((dialog) => dialog.id)
+    );
+    newDialogArray.forEach((dialog) => set(dialogState({ projectId, dialogId: dialog.id }), dialog));
   },
 });
