@@ -9,9 +9,7 @@ const path = require('path');
 // eslint-disable-next-line security/detect-child-process
 const { execSync } = require('child_process');
 
-const glob = require('globby');
-
-const extensionsDir = path.resolve(__dirname, '../../extensions');
+const extensionsDir = process.env.COMPOSER_BUILTIN_EXTENSIONS_DIR || path.resolve(__dirname, '../../extensions');
 const buildCachePath = path.resolve(extensionsDir, '.build-cache.json');
 
 console.log('Compiling extensions in %s', extensionsDir);
@@ -42,16 +40,20 @@ let buildCache = (() => {
   }
 })();
 
-const getLastModified = (files = []) => {
+const getLastModified = (extensionPath) => {
   let last = new Date(0);
 
-  for (const f of files) {
-    // returns last modified date of file in ISO 8601 format
-    const gitTimestamp = execSync(`git log -1 --pretty="%cI" "${f}"`).toString().trim();
+  try {
+    const gitTimestamp = execSync(`git log -1 --pretty="%cI" "${extensionPath}"`, {
+      encoding: 'utf-8',
+      stdio: ['ignore', 'pipe', 'ignore'],
+    }).trim();
     const timestamp = new Date(gitTimestamp);
     if (timestamp > last) {
       last = timestamp;
     }
+  } catch (_err) {
+    last = new Date();
   }
 
   return last;
@@ -65,7 +67,17 @@ const writeToCache = (name, lastModified) => {
   fs.writeFileSync(buildCachePath, JSON.stringify(buildCache, null, 2));
 };
 
-const shouldCompile = (name, lastModified) => {
+const missingMain = (extPath, packageJSON) => {
+  const main = packageJSON && packageJSON.main;
+
+  if (main) {
+    return !fs.existsSync(path.join(extPath, main));
+  }
+
+  return true;
+};
+
+const hasChanges = (name, lastModified) => {
   return buildCache[name] ? new Date(buildCache[name]) < lastModified : true;
 };
 
@@ -74,8 +86,8 @@ const compile = (name, extPath) => {
   const hasBuild = packageJSON && packageJSON.scripts && packageJSON.scripts.build;
 
   console.log('[%s] compiling', name);
-  console.log('[%s] yarn --force', name);
-  execSync('yarn --force --frozen-lockfile', { cwd: extPath, stdio: 'inherit' });
+  console.log('[%s] yarn install', name);
+  execSync('yarn --force --production=false', { cwd: extPath, stdio: 'inherit' });
 
   if (hasBuild) {
     console.log('[%s] yarn build', name);
@@ -87,20 +99,30 @@ const compile = (name, extPath) => {
 
 checkComposerLibs();
 
+const errors = [];
+
 for (const entry of allExtensions) {
   if (entry.isDirectory()) {
-    const dir = path.join(extensionsDir, entry.name);
-    const allFiles = glob
-      .sync('**/*', { cwd: dir, gitignore: true, ignore: ['node_modules', 'lib', 'dist'] })
-      .map((f) => path.join(dir, f));
-    const lastModified = getLastModified(allFiles);
-    if (shouldCompile(entry.name, lastModified)) {
+    const extPath = path.join(extensionsDir, entry.name);
+    const packageJSON = JSON.parse(fs.readFileSync(path.join(extPath, 'package.json')));
+    const lastModified = getLastModified(extPath);
+    if (missingMain(extPath, packageJSON) || hasChanges(entry.name, lastModified)) {
       try {
-        compile(entry.name, dir);
+        compile(entry.name, extPath);
         writeToCache(entry.name, lastModified);
       } catch (err) {
+        errors.push({
+          name: entry.name,
+          message: err.message,
+        });
         console.error(err);
       }
     }
   }
+}
+
+if (errors.length > 0) {
+  const formattedErrors = errors.map((e) => `\t- [${e.name}] ${e.message}`).join('\n');
+  console.error(`There was an error compiling these extensions:\n${formattedErrors}`);
+  process.exit(1);
 }
