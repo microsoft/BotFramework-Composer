@@ -3,7 +3,7 @@
 
 import { selector, selectorFamily } from 'recoil';
 import isEmpty from 'lodash/isEmpty';
-import { FormDialogSchema } from '@bfc/shared';
+import { FormDialogSchema, JsonSchemaFile } from '@bfc/shared';
 
 import {
   botErrorState,
@@ -14,6 +14,7 @@ import {
   botNameIdentifierState,
   formDialogSchemaIdsState,
   formDialogSchemaState,
+  jsonSchemaFilesState,
 } from '../atoms';
 import { dialogsSelectorFamily } from '../selectors';
 // Actions
@@ -73,5 +74,17 @@ export const formDialogSchemaDialogExistsSelector = selectorFamily<boolean, { pr
   get: ({ projectId, schemaId }: { projectId: string; schemaId: string }) => ({ get }) => {
     const dialogs = get(dialogsSelectorFamily(projectId));
     return !!dialogs.find((d) => d.id === schemaId);
+  },
+});
+
+export const jsonSchemaFilesByProjectIdSelector = selector({
+  key: 'jsonSchemaFilesByProjectIdSelector',
+  get: ({ get }) => {
+    const projectIds = get(botProjectIdsState);
+    const result: Record<string, JsonSchemaFile[]> = {};
+    projectIds.forEach((projectId) => {
+      result[projectId] = get(jsonSchemaFilesState(projectId));
+    });
+    return result;
   },
 });
