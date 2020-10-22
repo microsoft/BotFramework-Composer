@@ -40,7 +40,9 @@ const filterOutTS = (src) => {
 fs.copy(source, destination, { filter: filterOutTS }, (err) => {
   if (err) {
     console.error('[copy-extensions.js] Error while copying extensions: ', err);
+    process.exit(1);
     return;
   }
   console.log('[copy-extensions.js] Copied extensions successfully.');
+  process.exit(0);
 });
