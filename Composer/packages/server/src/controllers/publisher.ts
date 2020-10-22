@@ -136,7 +136,7 @@ export const PublishController = {
         );
         // update the eTag if the publish was completed and an eTag is provided
         if (results.status === 200 && results.result?.eTag) {
-          BotProjectService.setETagForProject(results.result.eTag, projectId);
+          BotProjectService.setProjectLocationData(projectId, { eTag: results.result.eTag });
         }
         // copy status into payload for ease of access in client
         const response = {
@@ -378,7 +378,7 @@ export const PublishController = {
 
           // update eTag
           log('setting etag');
-          BotProjectService.setETagForProject(results.eTag, projectId);
+          BotProjectService.setProjectLocationData(projectId, { eTag: results.eTag });
 
           log('pull successful');
 

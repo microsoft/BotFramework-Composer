@@ -70,6 +70,7 @@ interface DefineConversationFormData {
   templateDir?: string; // location of the imported template
   eTag?: string; // e tag used for content sync between composer and imported bot content
   urlSuffix?: string; // url to deep link to after creation
+  alias?: string; // identifier that is used to track bots between imports
 }
 
 interface DefineConversationProps
@@ -199,13 +200,14 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
       };
       if (props.location?.search) {
         const decoded = decodeURIComponent(props.location.search);
-        const { eTag, imported, templateDir, urlSuffix } = querystring.parse(decoded);
+        const { alias, eTag, imported, templateDir, urlSuffix } = querystring.parse(decoded);
 
         if (imported && templateDir) {
           dataToSubmit.templateDir = templateDir as string;
         }
         dataToSubmit.eTag = eTag as string;
         dataToSubmit.urlSuffix = urlSuffix as string;
+        dataToSubmit.alias = alias as string;
       }
 
       onSubmit(
