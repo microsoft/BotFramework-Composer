@@ -90,7 +90,6 @@ export function useShell(source: EventSource, projectId: string): Shell {
     selectTo,
     setVisualEditorSelection,
     setVisualEditorClipboard,
-    addSkillDialogBegin,
     onboardingAddCoachMarkRef,
     updateUserSettings,
     setMessage,
@@ -208,13 +207,6 @@ export function useShell(source: EventSource, projectId: string): Shell {
           },
           projectId
         );
-      });
-    },
-    addSkillDialog: () => {
-      return new Promise((resolve) => {
-        addSkillDialogBegin((newSkill: { manifestUrl: string; name: string } | null) => {
-          resolve(newSkill);
-        }, projectId);
       });
     },
     undo,

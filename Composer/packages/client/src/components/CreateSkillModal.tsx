@@ -63,7 +63,6 @@ export const validateManifestUrl = async ({
   formData,
   formDataErrors,
   projectId,
-  skills,
   setFormDataErrors,
   setValidationState,
   setSkillManifest,
@@ -76,8 +75,6 @@ export const validateManifestUrl = async ({
     setFormDataErrors({ ...errors, manifestUrl: formatMessage('Please input a manifest Url') });
   } else if (!urlRegex.test(manifestUrl)) {
     setFormDataErrors({ ...errors, manifestUrl: formatMessage('Url should start with http[s]://') });
-  } else if (skills.some((skill) => skill.manifestUrl.toLowerCase() === manifestUrl.toLowerCase())) {
-    setFormDataErrors({ ...errors, manifestUrl: formatMessage('Duplicate skill manifest Url') });
   } else {
     try {
       setValidationState({ ...validationState, manifestUrl: ValidationState.Validating });
@@ -96,33 +93,12 @@ export const validateManifestUrl = async ({
   }
 };
 
-export const validateName = ({
-  formData,
-  formDataErrors,
-  skills,
-  setFormDataErrors,
-  setValidationState,
-  validationState,
-}) => {
-  const { name } = formData;
-  const { name: _, ...errors } = formDataErrors;
-
-  if (name && !skillNameRegex.test(name)) {
-    setFormDataErrors({ ...errors, name: formatMessage('Name cannot include special characters or spaces') });
-  } else if (name && skills.some((skill) => skill.name.toLowerCase() === name.toLowerCase())) {
-    setFormDataErrors({ ...errors, name: formatMessage('Duplicate skill name') });
-  } else {
-    setFormDataErrors(errors);
-    setValidationState({ ...validationState, name: ValidationState.Validated });
-  }
-};
-
 export const CreateSkillModal: React.FC<CreateSkillModalProps> = ({ projectId, onSubmit, onDismiss }) => {
   const skills = useRecoilValue(skillsStateSelector);
 
-  const [formData, setFormData] = useState<{ manifestUrl: string; endpoint: string }>({
+  const [formData, setFormData] = useState<{ manifestUrl: string; endpointName: string }>({
     manifestUrl: '',
-    endpoint: '',
+    endpointName: '',
   });
   const [formDataErrors, setFormDataErrors] = useState<SkillFormDataErrors>({});
   const [validationState, setValidationState] = useState({
@@ -144,7 +120,6 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = ({ projectId, o
     }));
   }, [skillManifest]);
 
-  const debouncedValidateName = useRef(debounce(validateName, 500)).current;
   const debouncedValidateManifestURl = useRef(debounce(validateManifestUrl, 500)).current;
 
   const validationHelpers = {
@@ -156,21 +131,22 @@ export const CreateSkillModal: React.FC<CreateSkillModalProps> = ({ projectId, o
     validationState,
   };
 
-  const handleManifestUrlChange = (_, manifestUrl = '') => {
-    const { msAppId, endpoint, ...rest } = formData;
+  const handleManifestUrlChange = (_, currentManifestUrl = '') => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { manifestUrl, ...rest } = formData;
     setValidationState((validationState) => ({
       ...validationState,
       manifestUrl: ValidationState.NotValidated,
       endpoint: ValidationState.NotValidated,
     }));
     debouncedValidateManifestURl({
-      formData: { ...rest, manifestUrl },
+      formData: { manifestUrl: currentManifestUrl },
       projectId,
       ...validationHelpers,
     });
     setFormData({
       ...rest,
-      manifestUrl,
+      manifestUrl: currentManifestUrl,
     });
     setSkillManifest(null);
     setSelectedEndpointKey(null);

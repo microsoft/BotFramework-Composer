@@ -45,7 +45,6 @@ import {
   breadcrumbState,
   focusPathState,
   showCreateDialogModalState,
-  showAddSkillDialogModalState,
   localeState,
   botProjectSpaceSelector,
   qnaFilesState,
@@ -123,14 +122,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const breadcrumb = useRecoilValue(breadcrumbState(projectId));
   const focusPath = useRecoilValue(focusPathState(projectId));
   const showCreateDialogModal = useRecoilValue(showCreateDialogModalState(projectId));
-  const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState(projectId));
   const locale = useRecoilValue(localeState(projectId));
   const undoFunction = useRecoilValue(undoFunctionState(projectId));
   const undoVersion = useRecoilValue(undoVersionState(projectId));
   const rootProjectId = useRecoilValue(rootBotProjectIdSelector) ?? projectId;
   const appLocale = useRecoilValue(localeState(projectId));
   const botProjectsSpace = useRecoilValue(botProjectSpaceSelector);
-
+  const [showAddSkillDialogModal, setAddSkillDialogModalVisibility] = useState(false);
   const { undo, redo, canRedo, canUndo, commitChanges, clearUndo } = undoFunction;
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
   const {
@@ -144,7 +142,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     navTo,
     selectTo,
     selectAndFocus,
-    addSkillDialogCancel,
     exportToZip,
     onboardingAddCoachMarkRef,
     addRemoteSkillToBotProject,
@@ -440,6 +437,16 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             }),
             onClick: () => {
               addExistingSkillToBotProject('/Users/srravich/Desktop/samples/Archive/Todo-Skill');
+            },
+          },
+          {
+            'data-testid': 'AddNewRemoteSkill',
+            key: 'AddNewRemoteSkill',
+            text: formatMessage(`Add New Remote skill`, {
+              displayName: currentDialog?.displayName ?? '',
+            }),
+            onClick: () => {
+              setAddSkillDialogModalVisibility(true);
             },
           },
         ],
@@ -769,8 +776,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         {showAddSkillDialogModal && (
           <CreateSkillModal
             projectId={projectId}
-            onDismiss={() => addSkillDialogCancel(projectId)}
-            onSubmit={addRemoteSkillToBotProject}
+            onDismiss={() => {
+              setAddSkillDialogModalVisibility(false);
+            }}
+            onSubmit={(manifestUrl, endpointName) => {
+              setAddSkillDialogModalVisibility(false);
+              addRemoteSkillToBotProject(manifestUrl, endpointName);
+            }}
           />
         )}
         {exportSkillModalVisible && (
@@ -793,8 +805,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         <CreateQnAModal dialogId={dialogId} projectId={projectId} qnaFiles={qnaFiles} onSubmit={handleCreateQnA} />)
         {displaySkillManifest && (
           <DisplayManifestModal
-            manifestId={displaySkillManifest}
             projectId={projectId}
+            skillNameIdentifier={displaySkillManifest}
             onDismiss={() => dismissManifestModal(projectId)}
           />
         )}

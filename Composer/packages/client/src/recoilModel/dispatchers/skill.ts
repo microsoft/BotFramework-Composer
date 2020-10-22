@@ -10,8 +10,6 @@ import { dispatcherState } from '../DispatcherWrapper';
 import { rootBotProjectIdSelector, skillsStateSelector } from '../selectors';
 import {
   skillManifestsState,
-  onAddSkillDialogCompleteState,
-  showAddSkillDialogModalState,
   displaySkillManifestState,
   botProjectFileState,
   settingsState,
@@ -107,16 +105,6 @@ export const skillDispatcher = () => {
     }
   );
 
-  const addSkillDialogBegin = useRecoilCallback(({ set }: CallbackInterface) => (onComplete, projectId: string) => {
-    set(showAddSkillDialogModalState(projectId), true);
-    set(onAddSkillDialogCompleteState(projectId), { func: onComplete });
-  });
-
-  const addSkillDialogCancel = useRecoilCallback(({ set }: CallbackInterface) => (projectId: string) => {
-    set(showAddSkillDialogModalState(projectId), false);
-    set(onAddSkillDialogCompleteState(projectId), {});
-  });
-
   const displayManifestModal = useRecoilCallback(({ set }: CallbackInterface) => (id: string, projectId: string) => {
     set(displaySkillManifestState(projectId), id);
   });
@@ -129,8 +117,6 @@ export const skillDispatcher = () => {
     createSkillManifest,
     removeSkillManifest,
     updateSkillManifest,
-    addSkillDialogBegin,
-    addSkillDialogCancel,
     displayManifestModal,
     dismissManifestModal,
     updateSettingForLocalEndpointSkills,

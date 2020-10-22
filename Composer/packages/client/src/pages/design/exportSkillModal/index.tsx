@@ -10,7 +10,7 @@ import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
 import { JSONSchema7 } from '@bfc/extension-client';
 import { Link } from 'office-ui-fabric-react/lib/components/Link';
 import { useRecoilValue } from 'recoil';
-import { SkillManifest } from '@bfc/shared';
+import { SkillManifestFile } from '@bfc/shared';
 
 import {
   dispatcherState,
@@ -45,7 +45,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
   const [errors, setErrors] = useState({});
   const [schema, setSchema] = useState<JSONSchema7>({});
 
-  const [skillManifest, setSkillManifest] = useState<Partial<SkillManifest>>({});
+  const [skillManifest, setSkillManifest] = useState<Partial<SkillManifestFile>>({});
 
   const { content = {}, id } = skillManifest;
 
@@ -79,7 +79,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
 
   const handleSave = () => {
     if (skillManifest.content && skillManifest.id) {
-      updateSkillManifest(skillManifest as SkillManifest, projectId);
+      updateSkillManifest(skillManifest as SkillManifestFile, projectId);
     }
   };
 

@@ -356,7 +356,7 @@ export const removeRecentProject = async (callbackHelpers: CallbackInterface, pa
 export const openRemoteSkill = async (
   callbackHelpers: CallbackInterface,
   manifestUrl: string,
-  botNameIdentifier?: string
+  botNameIdentifier = ''
 ) => {
   const { set } = callbackHelpers;
 
@@ -373,7 +373,12 @@ export const openRemoteSkill = async (
     isRemote: true,
   });
 
-  set(botNameIdentifierState(projectId), botNameIdentifier || camelCase(manifestResponse.data.name));
+  let uniqueSkillNameIdentifier = botNameIdentifier;
+  if (!uniqueSkillNameIdentifier) {
+    uniqueSkillNameIdentifier = await getSkillNameIdentifier(callbackHelpers, manifestResponse.data.name);
+  }
+
+  set(botNameIdentifierState(projectId), uniqueSkillNameIdentifier);
   set(botDisplayNameState(projectId), manifestResponse.data.name);
   set(locationState(projectId), manifestUrl);
   set(skillManifestsState(projectId), [

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { DialogInfo, LuFile } from '@bfc/shared';
+import { DialogInfo, LuFile, SDKKinds } from '@bfc/shared';
 
 import { LuisConfig, QnaConfig } from '../constants';
 
@@ -63,4 +63,22 @@ export function needsBuild(dialogs) {
   return dialogs.some((dialog) => typeof dialog.content.recognizer === 'string');
 }
 
-export function createRecognizerTypeMap(dialogs: DialogInfo[]) {}
+//ToDo: every recognizer need to get recognizer type from the dialog's recognizer field.
+//now CrossTrainedRecognizerSet and LuisRecognizer's recognizer is abbreviated
+//as recognizer: '***.lu.qna'
+export function getRecognizerTypes(dialogs: DialogInfo[]) {
+  return dialogs.reduce((result, { id, content }) => {
+    const { recognizer } = content;
+    if (typeof recognizer === 'string') {
+      if (recognizer.endsWith('.lu.qna')) {
+        result[id] = SDKKinds.CrossTrainedRecognizerSet;
+      }
+      if (recognizer.endsWith('.lu')) {
+        result[id] = SDKKinds.LuisRecognizer;
+      }
+    } else {
+      result[id] = '';
+    }
+    return result;
+  }, {});
+}

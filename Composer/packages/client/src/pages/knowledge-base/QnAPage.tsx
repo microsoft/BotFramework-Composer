@@ -11,7 +11,6 @@ import { RouteComponentProps, Router } from '@reach/router';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { navigateTo } from '../../utils/navigation';
-import { TestController } from '../../components/TestController/TestController';
 import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
 import { dialogsState, qnaFilesState } from '../../recoilModel/atoms/botState';
@@ -109,14 +108,6 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
     actions.setCurrentPageMode('qna');
   }, []);
 
-  const toolbarItems = [
-    {
-      type: 'element',
-      element: <TestController projectId={projectId} />,
-      align: 'right',
-    },
-  ];
-
   const onRenderHeaderContent = () => {
     if (!isRoot) {
       return (
@@ -135,7 +126,7 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
       navLinks={navLinks}
       navRegionName={formatMessage('Qna Navigation Pane')}
       title={formatMessage('QnA')}
-      toolbarItems={toolbarItems}
+      toolbarItems={[]}
       onRenderHeaderContent={onRenderHeaderContent}
     >
       <Suspense fallback={<LoadingSpinner />}>

@@ -93,7 +93,6 @@ export type ProjectContextApi = {
   updateIntentTrigger: (id: string, intentName: string, newIntentName: string) => void;
   createDialog: (actions: any) => Promise<string | null>;
   commitChanges: () => void;
-  addSkillDialog: () => Promise<{ manifestUrl: string; name: string } | null>;
   displayManifestModal: (manifestId: string) => void;
   updateDialogSchema: (_: DialogSchemaFile) => Promise<void>;
   createTrigger: (id: string, formData, autoSelected?: boolean) => void;
