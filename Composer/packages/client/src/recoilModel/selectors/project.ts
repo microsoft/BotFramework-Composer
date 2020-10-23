@@ -5,8 +5,8 @@ import { selector, selectorFamily } from 'recoil';
 import isEmpty from 'lodash/isEmpty';
 import { BotAssets, FormDialogSchema } from '@bfc/shared';
 import { BotIndexer } from '@bfc/indexers';
-import settingStorage from '../../utils/dialogSettingStorage';
 
+import settingStorage from '../../utils/dialogSettingStorage';
 import {
   botErrorState,
   botDisplayNameState,

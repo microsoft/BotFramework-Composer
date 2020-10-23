@@ -104,6 +104,7 @@ type BotInProject = {
   projectId: string;
   name: string;
   isRemote: boolean;
+  isRootBot: boolean;
   diagnostics: Diagnostic[];
   error?: any;
 };
@@ -173,6 +174,41 @@ export const ProjectTree: React.FC<Props> = ({
       isBroken: !!bot.error,
       diagnostics: bot.diagnostics,
     };
+    const menu = [
+      {
+        label: formatMessage('Add a dialog'),
+        icon: 'Add',
+        onClick: () => {},
+      },
+      {
+        label: formatMessage('Start bot'),
+        icon: 'TriangleSolidRight12',
+        onClick: () => {},
+      },
+      {
+        label: '',
+        onClick: () => {},
+      },
+      {
+        label: formatMessage('Create/edit skill manifest'),
+        onClick: () => {},
+      },
+      {
+        label: formatMessage('Export this bot as .zip'),
+        onClick: () => {},
+      },
+      {
+        label: formatMessage('Settings'),
+        onClick: () => {},
+      },
+    ];
+
+    if (!bot.isRootBot) {
+      menu.splice(3, 0, {
+        label: formatMessage('Remove this skill from project'),
+        onClick: () => {},
+      });
+    }
 
     return (
       <span
@@ -190,7 +226,7 @@ export const ProjectTree: React.FC<Props> = ({
           icon={bot.isRemote ? icons.EXTERNAL_SKILL : icons.BOT}
           isSubItemActive={isEqual(link, selectedLink)}
           link={link}
-          menu={[{ label: formatMessage('Create/edit skill manifest'), onClick: () => {} }]}
+          menu={menu}
           onSelect={handleOnSelect}
         />
       </span>
@@ -207,6 +243,24 @@ export const ProjectTree: React.FC<Props> = ({
       skillId: null,
       diagnostics,
     };
+    const menu = [
+      {
+        label: formatMessage('Add a trigger'),
+        icon: 'Add',
+        onClick: () => {},
+      },
+      {
+        label: '',
+        onClick: () => {},
+      },
+      {
+        label: formatMessage('Remove this dialog'),
+        onClick: (link) => {
+          onDeleteDialog(link.dialogName ?? '');
+        },
+      },
+    ];
+
     return (
       <span
         key={dialog.id}
@@ -224,15 +278,7 @@ export const ProjectTree: React.FC<Props> = ({
           icon={icons.DIALOG}
           isSubItemActive={isEqual(link, selectedLink)}
           link={link}
-          menu={[
-            {
-              label: formatMessage('Remove this dialog'),
-              icon: 'Delete',
-              onClick: (link) => {
-                onDeleteDialog(link.dialogName ?? '');
-              },
-            },
-          ]}
+          menu={menu}
           onSelect={handleOnSelect}
         />
       </span>
@@ -262,7 +308,6 @@ export const ProjectTree: React.FC<Props> = ({
         menu={[
           {
             label: formatMessage('Remove this trigger'),
-            icon: 'Delete',
             onClick: (link) => {
               onDeleteTrigger(link.dialogName ?? '', link.trigger ?? 0);
             },

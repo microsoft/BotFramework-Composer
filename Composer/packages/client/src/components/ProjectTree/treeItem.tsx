@@ -16,7 +16,7 @@ import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuStyles } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { ICalloutContentStyles } from 'office-ui-fabric-react/lib/Callout';
-import { DiagnosticSeverity } from '@bfc/shared';
+import { DiagnosticSeverity, Diagnostic } from '@bfc/shared';
 
 import { TreeLink, TreeMenuItem } from './ProjectTree';
 
@@ -196,7 +196,8 @@ const renderTreeMenuItem = (link: TreeLink) => (item: TreeMenuItem) => {
     key: item.label,
     ariaLabel: item.label,
     text: item.label,
-    iconProps: { iconName: item.icon },
+    style: { fontSize: 12 },
+    iconProps: { iconName: item.icon, styles: { root: { fontSize: 12, display: item.icon ? 'inherit' : 'none' } } },
     onClick: () => {
       item.onClick?.(link);
     },
@@ -205,8 +206,8 @@ const renderTreeMenuItem = (link: TreeLink) => (item: TreeMenuItem) => {
 
 const onRenderItem = (item: IOverflowSetItemProps) => {
   const { diagnostics = [] } = item;
-  const warnings = diagnostics.filter((diag) => diag.severity === DiagnosticSeverity.Warning);
-  const errors = diagnostics.filter((diag) => diag.severity === DiagnosticSeverity.Error);
+  const warnings: Diagnostic[] = diagnostics.filter((diag) => diag.severity === DiagnosticSeverity.Warning);
+  const errors: Diagnostic[] = diagnostics.filter((diag) => diag.severity === DiagnosticSeverity.Error);
 
   const warningContent = warnings.map((diag) => diag.message).join(',');
 
@@ -218,7 +219,7 @@ const onRenderItem = (item: IOverflowSetItemProps) => {
       linkText = 'Create skill mainfest';
     }
     return (
-      <div css={diagnosticLink}>
+      <div key={item.message} css={diagnosticLink}>
         <Icon iconName={'Warning'} style={diagnosticWarningIcon} />
         <span>{item.message}</span>
         <Link>{linkText}</Link>
@@ -232,7 +233,7 @@ const onRenderItem = (item: IOverflowSetItemProps) => {
       linkText = 'Fix in bot settings';
     }
     return (
-      <div css={diagnosticLink}>
+      <div key={item.message} css={diagnosticLink}>
         <Icon iconName={'ErrorBadge'} style={diagnosticErrorIcon} />
         <span>{item.message}</span>
         <Link>{linkText}</Link>
