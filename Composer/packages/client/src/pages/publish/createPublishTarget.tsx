@@ -106,12 +106,9 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
     if (selectedTarget?.bundleId) {
       // render custom plugin view
       return (
-        <PluginHost
-          bundleId={selectedTarget.bundleId}
-          extraIframeStyles={[customPublishUISurface]}
-          pluginName={selectedTarget.extensionId}
-          pluginType="publish"
-        />
+        <div css={customPublishUISurface}>
+          <PluginHost bundleId={selectedTarget.bundleId} pluginName={selectedTarget.extensionId} pluginType="publish" />
+        </div>
       );
     }
     // render default instruction / schema editor view

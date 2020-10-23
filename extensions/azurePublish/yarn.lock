@@ -160,6 +160,7 @@
   version "1.0.0"
   dependencies:
     "@botframework-composer/types" "*"
+    "@types/passport" "^1.0.3"
     debug "^4.1.1"
     fs-extra "^9.0.1"
     globby "^11.0.0"
@@ -456,6 +457,14 @@
   resolved "https://registry.yarnpkg.com/@types/bluebird/-/bluebird-3.5.32.tgz#381e7b59e39f010d20bbf7e044e48f5caf1ab620"
   integrity sha512-dIOxFfI0C+jz89g6lQ+TqhGgPQ0MxSnh/E4xuC0blhFtyW269+mPG5QeLgbdwst/LvdP8o1y0o/Gz5EHXLec/g==
 
+"@types/body-parser@*":
+  version "1.19.0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@types/body-parser/-/@types/body-parser-1.19.0.tgz#0685b3c47eb3006ffed117cdd55164b61f80538f"
+  integrity sha1-BoWzxH6zAG/+0RfN1VFkth+AU48=
+  dependencies:
+    "@types/connect" "*"
+    "@types/node" "*"
+
 "@types/caseless@*":
   version "0.12.2"
   resolved "https://registry.yarnpkg.com/@types/caseless/-/caseless-0.12.2.tgz#f65d3d6389e01eeb458bd54dc8f52b95a9463bc8"
@@ -465,6 +474,32 @@
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@types/color-name/-/color-name-1.1.1.tgz#1c1261bbeaa10a8055bbc5d8ab84b7b2afc846a0"
   integrity sha512-rr+OQyAjxze7GgWrSaJwydHStIhHq2lvY3BOC2Mj7KnzI7XK0Uw1TOOdI9lDoajEbSWLiYgoo4f1R51erQfhPQ==
+
+"@types/connect@*":
+  version "3.4.33"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@types/connect/-/@types/connect-3.4.33.tgz#31610c901eca573b8713c3330abc6e6b9f588546"
+  integrity sha1-MWEMkB7KVzuHE8MzCrxua59YhUY=
+  dependencies:
+    "@types/node" "*"
+
+"@types/express-serve-static-core@*":
+  version "4.17.13"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@types/express-serve-static-core/-/@types/express-serve-static-core-4.17.13.tgz#d9af025e925fc8b089be37423b8d1eac781be084"
+  integrity sha1-2a8CXpJfyLCJvjdCO40erHgb4IQ=
+  dependencies:
+    "@types/node" "*"
+    "@types/qs" "*"
+    "@types/range-parser" "*"
+
+"@types/express@*":
+  version "4.17.8"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@types/express/-/@types/express-4.17.8.tgz#3df4293293317e61c60137d273a2e96cd8d5f27a"
+  integrity sha1-PfQpMpMxfmHGATfSc6LpbNjV8no=
+  dependencies:
+    "@types/body-parser" "*"
+    "@types/express-serve-static-core" "*"
+    "@types/qs" "*"
+    "@types/serve-static" "*"
 
 "@types/fs-extra@8.1.0":
   version "8.1.0"
@@ -485,6 +520,11 @@
   version "5.1.0"
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@types/lru-cache/-/@types/lru-cache-5.1.0.tgz#57f228f2b80c046b4a1bd5cac031f81f207f4f03"
   integrity sha1-V/Io8rgMBGtKG9XKwDH4HyB/TwM=
+
+"@types/mime@*":
+  version "2.0.3"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@types/mime/-/@types/mime-2.0.3.tgz#c893b73721db73699943bfc3653b1deb7faa4a3a"
+  integrity sha1-yJO3NyHbc2mZQ7/DZTsd63+qSjo=
 
 "@types/minimatch@*":
   version "3.0.3"
@@ -516,6 +556,23 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.10.61.tgz#d299136ce54bcaf1abaa4a487f9e4bedf6b0d393"
   integrity sha512-l+zSbvT8TPRaCxL1l9cwHCb0tSqGAGcjPJFItGGYat5oCTiq1uQQKYg5m7AF1mgnEBzFXGLJ2LRmNjtreRX76Q==
 
+"@types/passport@^1.0.3":
+  version "1.0.4"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@types/passport/-/@types/passport-1.0.4.tgz#1b35c4e197560d3974fa5f71711b6e9cce0711f0"
+  integrity sha1-GzXE4ZdWDTl0+l9xcRtunM4HEfA=
+  dependencies:
+    "@types/express" "*"
+
+"@types/qs@*":
+  version "6.9.5"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@types/qs/-/@types/qs-6.9.5.tgz#434711bdd49eb5ee69d90c1d67c354a9a8ecb18b"
+  integrity sha1-Q0cRvdSete5p2QwdZ8NUqajssYs=
+
+"@types/range-parser@*":
+  version "1.2.3"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@types/range-parser/-/@types/range-parser-1.2.3.tgz#7ee330ba7caafb98090bece86a5ee44115904c2c"
+  integrity sha1-fuMwunyq+5gJC+zoal7kQRWQTCw=
+
 "@types/request-promise@4.1.45":
   version "4.1.45"
   resolved "https://registry.yarnpkg.com/@types/request-promise/-/request-promise-4.1.45.tgz#7fcdd39fd920674ab7bfb44197270f225fb4e585"
@@ -543,6 +600,14 @@
     "@types/node" "*"
     "@types/tough-cookie" "*"
     form-data "^2.5.0"
+
+"@types/serve-static@*":
+  version "1.13.6"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@types/serve-static/-/@types/serve-static-1.13.6.tgz#866b1b8dec41c36e28c7be40ac725b88be43c5c1"
+  integrity sha1-hmsbjexBw24ox75ArHJbiL5DxcE=
+  dependencies:
+    "@types/mime" "*"
+    "@types/node" "*"
 
 "@types/sinon@^7.5.0":
   version "7.5.2"
@@ -899,9 +964,6 @@ buffer@^5.1.0, buffer@^5.5.0:
   version "5.6.0"
   resolved "https://registry.yarnpkg.com/buffer/-/buffer-5.6.0.tgz#a31749dc7d81d84db08abf937b6b8c4033f62786"
   integrity sha512-/gDYp/UtU0eA1ys8bOs9J6a+E/KWIY+DZ+Q2WESNUA0jFRsJOc0SNUO6xJ5SGA1xueg3NL65W6s+NY5l9cunuw==
-  dependencies:
-    base64-js "^1.0.2"
-    ieee754 "^1.1.4"
 
 cardinal@^2.1.1:
   version "2.1.1"

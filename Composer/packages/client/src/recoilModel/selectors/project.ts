@@ -5,6 +5,7 @@ import { selector, selectorFamily } from 'recoil';
 import isEmpty from 'lodash/isEmpty';
 import { BotAssets, FormDialogSchema } from '@bfc/shared';
 import { BotIndexer } from '@bfc/indexers';
+import { FormDialogSchema, JsonSchemaFile } from '@bfc/shared';
 
 import settingStorage from '../../utils/dialogSettingStorage';
 import {
@@ -94,7 +95,6 @@ export const botProjectSpaceSelector = selector({
 
       return { dialogs, projectId, name, ...metaData, error: botError, diagnostics, botNameId };
     });
-    console.log('RESULT', result);
     return result;
   },
 });
@@ -137,5 +137,17 @@ export const formDialogSchemaDialogExistsSelector = selectorFamily<boolean, { pr
   get: ({ projectId, schemaId }: { projectId: string; schemaId: string }) => ({ get }) => {
     const dialogs = get(dialogsState(projectId));
     return !!dialogs.find((d) => d.id === schemaId);
+  },
+});
+
+export const jsonSchemaFilesByProjectIdSelector = selector({
+  key: 'jsonSchemaFilesByProjectIdSelector',
+  get: ({ get }) => {
+    const projectIds = get(botProjectIdsState);
+    const result: Record<string, JsonSchemaFile[]> = {};
+    projectIds.forEach((projectId) => {
+      result[projectId] = get(jsonSchemaFilesState(projectId));
+    });
+    return result;
   },
 });

@@ -143,13 +143,6 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   };
 
   const handleDefineConversationSubmit = async (formData, templateId: string) => {
-    // If selected template is qnaSample then route to QNA import modal
-    // TODO: remove this QnA url
-    if (templateId === 'QnASample') {
-      setFormData(formData);
-      navigate(`./QnASample/importQnA`);
-      return;
-    }
     // If selected template is vaCore then route to VA Customization modal
     if (templateId === 'va-core') {
       setFormData(formData);

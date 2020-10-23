@@ -9,8 +9,9 @@ import {
   BotProjectSpace,
   BotProjectSpaceSkill,
   convertSkillsToDictionary,
-  getEndpointNameGivenUrl,
+  migrateSkillsForExistingBots,
   dereferenceDefinitions,
+  fetchEndpointNameForSkill,
   DialogInfo,
   DialogSetting,
   getManifestNameFromUrl,
@@ -152,12 +153,7 @@ export const navigateToBot = (
   if (projectId) {
     const { set } = callbackHelpers;
     set(currentProjectIdState, projectId);
-    let url = `/bot/${projectId}/dialogs/${mainDialog}`;
-    if (templateId === QnABotTemplateId) {
-      url = `/bot/${projectId}/knowledge-base/${mainDialog}`;
-      navigateTo(url, { state: { qnaKbUrls } });
-      return;
-    }
+    const url = `/bot/${projectId}/dialogs/${mainDialog}`;
     navigateTo(url);
   }
 };
@@ -471,29 +467,6 @@ const handleSkillLoadingFailure = (callbackHelpers, { ex, skillNameIdentifier })
   return projectId;
 };
 
-const migrateSkillsForExistingBots = (botProjectFile: BotProjectSpace, rootBotSkill: any) => {
-  if (Object.keys(botProjectFile.skills).length === 0 && Object.keys(rootBotSkill).length > 0) {
-    for (const skillName in rootBotSkill) {
-      const currentSkill = rootBotSkill[skillName];
-      const skillNameIdentifier = camelCase(skillName);
-
-      botProjectFile.skills[skillNameIdentifier] = {
-        manifest: currentSkill?.manifestUrl || '',
-        remote: true,
-      };
-    }
-  }
-  return botProjectFile;
-};
-
-const fetchEndpointNameForSkill = (rootBotSettings: DialogSetting, skillNameIdentifier: string, manifestData) => {
-  const endpointUrl = objectGet(rootBotSettings, `skill[${skillNameIdentifier}].endpointUrl`);
-  if (endpointUrl) {
-    const matchedEndpoint = getEndpointNameGivenUrl(manifestData, endpointUrl);
-    return matchedEndpoint;
-  }
-};
-
 const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, storageId = 'default') => {
   const { projectData, botFiles } = data;
   const { set, snapshot } = callbackHelpers;
@@ -506,6 +479,7 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
 
   set(botNameIdentifierState(rootBotProjectId), camelCase(name));
   set(botProjectIdsState, [rootBotProjectId]);
+  // Get the status of the bot on opening if it was opened and run in another window.
   dispatcher.getPublishStatus(rootBotProjectId, defaultPublishConfig);
 
   if (botFiles.botProjectSpaceFiles && botFiles.botProjectSpaceFiles.length) {

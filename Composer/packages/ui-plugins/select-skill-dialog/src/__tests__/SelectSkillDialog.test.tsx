@@ -2,23 +2,22 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { act, fireEvent, getAllByRole, render } from '@botframework-composer/test-utils';
+import { render, fireEvent, getAllByRole } from '@botframework-composer/test-utils';
 import { EditorExtension } from '@bfc/extension-client';
 import { ShellData } from '@bfc/shared';
+import { act } from '@botframework-composer/test-utils/lib/hooks';
 
 import { SelectSkillDialogField, settingReferences } from '../SelectSkillDialogField';
 
 import { skills } from './constants';
 
-const renderSelectSkillDialog = ({ addSkillDialog = jest.fn(), onChange = jest.fn() } = {}) => {
+const renderSelectSkillDialog = ({ onChange = jest.fn() } = {}) => {
   const props = {
     value: {},
     onChange,
   } as any;
 
-  const shell: any = {
-    addSkillDialog,
-  };
+  const shell: any = {};
 
   const shellData: ShellData = {
     skills,
@@ -32,38 +31,26 @@ const renderSelectSkillDialog = ({ addSkillDialog = jest.fn(), onChange = jest.f
 };
 
 describe('Select Skill Dialog', () => {
-  it('should add a new skill', async () => {
-    const addSkillDialog = jest.fn().mockImplementation(() => {
-      return {
-        then: (cb) => {
-          cb({
-            manifestUrl: 'https://skill',
-            name: 'test-skill',
-            msAppId: '0000-0000',
-            endpointUrl: 'https://skill/api/messafes',
-          });
-        },
-      };
-    });
-    const onChange = jest.fn();
+  it('should display label', async () => {
+    const { findByText } = renderSelectSkillDialog();
+    await findByText('Skill Dialog Name');
+  });
 
-    const { baseElement, findByRole } = renderSelectSkillDialog({ addSkillDialog, onChange });
+  it('should update the dialog file with the selected skill', async () => {
+    const onChange = jest.fn();
+    const keys = Object.keys(skills);
+
+    const { baseElement, findByRole } = renderSelectSkillDialog({ onChange });
     const combobox = await findByRole('combobox');
     act(() => {
       fireEvent.click(combobox);
     });
 
-    const dialogs = getAllByRole(baseElement, 'option');
+    const options = getAllByRole(baseElement, 'option');
     act(() => {
-      fireEvent.click(dialogs[dialogs.length - 1]);
+      fireEvent.click(options[options.length - 1]);
     });
 
-    expect(addSkillDialog).toHaveBeenCalled();
-    expect(onChange).toHaveBeenCalledWith({ ...settingReferences('test-skill') });
-  });
-
-  it('should display label', async () => {
-    const { findByText } = renderSelectSkillDialog();
-    await findByText('Skill Dialog Name');
+    expect(onChange).toHaveBeenCalledWith({ ...settingReferences(keys[1]) });
   });
 });

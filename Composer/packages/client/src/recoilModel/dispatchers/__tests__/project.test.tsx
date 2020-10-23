@@ -12,6 +12,7 @@ import findIndex from 'lodash/findIndex';
 import httpClient from '../../../utils/httpUtil';
 import { projectDispatcher } from '../project';
 import { botProjectFileDispatcher } from '../botProjectFile';
+import { publisherDispatcher } from '../publisher';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import {
   recentProjectsState,
@@ -182,6 +183,7 @@ describe('Project dispatcher', () => {
           initialValue: {
             projectDispatcher,
             botProjectFileDispatcher,
+            publisherDispatcher,
           },
         },
       }

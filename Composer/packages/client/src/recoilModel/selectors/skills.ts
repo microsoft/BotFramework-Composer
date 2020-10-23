@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Manifest, Skill } from '@bfc/shared';
+import { Skill } from '@bfc/shared';
 import { selector } from 'recoil';
 
 import {
@@ -10,7 +10,6 @@ import {
   botNameIdentifierState,
   botDisplayNameState,
   projectMetaDataState,
-  locationState,
 } from '../atoms';
 
 import { skillsProjectIdSelector } from './project';
@@ -22,13 +21,14 @@ export const skillsStateSelector = selector({
     const skillsProjectIds = get(skillsProjectIdSelector);
     const skills: Record<string, Skill> = skillsProjectIds.reduce((result, skillId: string) => {
       const manifests = get(skillManifestsState(skillId));
-      if (!manifests.length) {
-        return [];
-      }
       const currentSkillManifestIndex = get(currentSkillManifestIndexState(skillId));
       const skillNameIdentifier = get(botNameIdentifierState(skillId));
       const botName = get(botDisplayNameState(skillId));
-      const manifest: Manifest = manifests[currentSkillManifestIndex].content;
+      let manifest = undefined;
+      if (manifests[currentSkillManifestIndex]) {
+        manifest = manifests[currentSkillManifestIndex].content;
+      }
+
       const { isRemote } = get(projectMetaDataState(skillId));
       if (skillNameIdentifier) {
         result[skillNameIdentifier] = {

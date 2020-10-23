@@ -43,7 +43,7 @@ interface PublishConfig {
 const isWin = process.platform === 'win32';
 
 class LocalPublisher implements PublishPlugin<PublishConfig> {
-  public name = 'localPublisher';
+  public name = 'localpublish';
   public description = 'Publish bot to local runtime';
   static runningBots: { [key: string]: RunningBot } = {};
   private readonly baseDir = path.resolve(__dirname, '../');

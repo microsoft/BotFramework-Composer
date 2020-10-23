@@ -2,8 +2,7 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { act, fireEvent, getByLabelText, getByTestId, getByText } from '@botframework-composer/test-utils';
-import { Skill } from '@bfc/shared';
+import { act, fireEvent } from '@botframework-composer/test-utils';
 
 import httpClient from '../../src//utils/httpUtil';
 import { renderWithRecoil } from '../testUtils';
@@ -13,8 +12,6 @@ import { currentProjectIdState, settingsState } from '../../src/recoilModel';
 jest.mock('../../src//utils/httpUtil');
 
 jest.mock('../../src/components/Modal/dialogStyle', () => ({}));
-
-const skills: Record<string, Skill> = {};
 
 let recoilInitState;
 const projectId = '123a.234';
@@ -60,10 +57,14 @@ describe('<SkillForm />', () => {
 
     const urlInput = getByLabelText('Manifest url');
     act(() => {
-      fireEvent.change(urlInput, { target: { value: skills[0].manifestUrl } });
+      fireEvent.change(urlInput, {
+        target: { value: 'https://onenote-dev.azurewebsites.net/manifests/OneNoteSync-2-1-preview-1-manifest.json' },
+      });
     });
 
-    expect(urlInput.getAttribute('value')).toBe(skills[0].manifestUrl);
+    expect(urlInput.getAttribute('value')).toBe(
+      'https://onenote-dev.azurewebsites.net/manifests/OneNoteSync-2-1-preview-1-manifest.json'
+    );
 
     const submitButton = getByText('Confirm');
     act(() => {
