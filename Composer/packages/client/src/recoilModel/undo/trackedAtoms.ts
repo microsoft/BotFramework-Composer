@@ -3,10 +3,11 @@
 
 import { RecoilState } from 'recoil';
 
-import { dialogsState, luFilesState, lgFilesState } from '../atoms';
+import { luFilesState, lgFilesState } from '../atoms';
+import { dialogsSelectorFamily } from '../selectors';
 
 export type AtomAssetsMap = Map<RecoilState<any>, any>;
 
 export const trackedAtoms = (projectId: string): RecoilState<any>[] => {
-  return [dialogsState(projectId), luFilesState(projectId), lgFilesState(projectId)];
+  return [dialogsSelectorFamily(projectId), luFilesState(projectId), lgFilesState(projectId)];
 };
