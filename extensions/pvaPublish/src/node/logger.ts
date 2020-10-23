@@ -1,3 +1,11 @@
-import logger from 'debug';
+import defaultLogger from 'debug';
 
-export const log = logger('composer:extension:pva-publish');
+export const logger = {
+  log: defaultLogger('composer:extension:pva-publish'),
+};
+
+export const setLogger = (customLogger) => {
+  if (customLogger && typeof customLogger === 'function') {
+    logger.log = customLogger;
+  }
+};

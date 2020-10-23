@@ -1,8 +1,10 @@
 import { ExtensionRegistration } from '@bfc/extension';
 
 import { getStatus, history, publish } from './publish';
+import { setLogger } from './logger';
 
 function initialize(registration: ExtensionRegistration) {
+  setLogger(registration.log);
   const extension = {
     name: 'pva-publish-composer',
     description: 'Publish bot to Power Virtual Agents (Preview)',

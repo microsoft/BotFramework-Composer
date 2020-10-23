@@ -1,32 +1,32 @@
-import { log } from './logger';
+import { logger } from './logger';
 
 import { AUTH_CREDENTIALS, BASE_URLS } from './constants';
 
 export const getBaseUrl = () => {
-  log('Base URL not supplied in publishing target. Falling back to hardcoded URL...');
+  logger.log('Base URL not supplied in publishing target. Falling back to hardcoded URL...');
   const pvaEnv = (process.env.COMPOSER_PVA_PUBLISH_ENV || '').toLowerCase();
   switch (pvaEnv) {
     case 'prod': {
       const url = BASE_URLS.PROD;
-      log('prod pva publish detected, operation using PVA url: ', url);
+      logger.log('prod pva publish detected, operation using PVA url: ', url);
       return url;
     }
 
     case 'ppe': {
       const url = BASE_URLS.PPE;
-      log('ppe pva publish detected, operation using PVA url: ', url);
+      logger.log('ppe pva publish detected, operation using PVA url: ', url);
       return url;
     }
 
     case 'int': {
       const url = BASE_URLS.INT;
-      log('int pva publish env detected, operation using PVA url: ', url);
+      logger.log('int pva publish env detected, operation using PVA url: ', url);
       return url;
     }
 
     default: {
       const url = BASE_URLS.PROD;
-      log('No pva publish env detected, operation using PVA url: ', url);
+      logger.log('No pva publish env detected, operation using PVA url: ', url);
       return url;
     }
   }

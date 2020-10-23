@@ -17,7 +17,7 @@ import {
   PullResponse,
 } from './types';
 import { getAuthCredentials, getBaseUrl } from './utils';
-import { log } from './logger';
+import { logger } from './logger';
 
 // in-memory history that allows us to get the status of the most recent job
 const publishHistory: PublishHistory = {};
@@ -171,7 +171,7 @@ export const getStatus = async (
       },
     });
     const job: PVAPublishJob = await res.json();
-    log('Got updated status from publish job: %O', job);
+    logger.log('Got updated status from publish job: %O', job);
 
     // transform the PVA job to a publish response
     const result = xformJobToResult(job);
