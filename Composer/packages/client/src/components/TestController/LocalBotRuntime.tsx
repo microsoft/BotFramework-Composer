@@ -13,7 +13,7 @@ import { useCallback } from 'react';
 import { botStatusState } from '../../recoilModel';
 import { BotStatus } from '../../constants';
 
-import { useBotOperations } from './useLocalBotOperations';
+import { useLocalBotOperations } from './useLocalBotOperations';
 
 interface LocalBotRuntimeProps {
   projectId: string;
@@ -42,7 +42,7 @@ const icon: IButtonStyles = {
 
 export const LocalBotRuntime: React.FC<LocalBotRuntimeProps> = ({ projectId, displayName }) => {
   const currentBotStatus = useRecoilValue(botStatusState(projectId));
-  const { startSingleBot, stopSingleBot } = useBotOperations();
+  const { startSingleBot, stopSingleBot } = useLocalBotOperations();
 
   const botRunIndicatorCallback = useCallback(() => {
     switch (currentBotStatus) {

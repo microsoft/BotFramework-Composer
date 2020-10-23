@@ -16,7 +16,7 @@ import { useInterval } from '../../utils/hooks';
 
 import { EmulatorOpenButton } from './emulatorOpenButton';
 import { ErrorCallout } from './errorCallout';
-import { useBotOperations } from './useLocalBotOperations';
+import { useLocalBotOperations } from './useLocalBotOperations';
 
 const actionButton = css`
   color: #0078d4;
@@ -43,7 +43,7 @@ export const LocalBotStatusIndicator: React.FC<LocalBotStatusIndicatorProps> = (
   const botActionRef = useRef(null);
   const botLoadErrorMsg = useRecoilValue(botRuntimeErrorState(projectId));
   const [calloutVisible, setErrorCallout] = useState(false);
-  const { startSingleBot, stopSingleBot } = useBotOperations();
+  const { startSingleBot, stopSingleBot } = useLocalBotOperations();
 
   useInterval(
     () => {

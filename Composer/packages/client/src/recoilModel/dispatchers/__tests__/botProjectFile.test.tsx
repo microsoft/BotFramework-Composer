@@ -4,8 +4,10 @@
 import { selector, useRecoilValue, selectorFamily, useRecoilState } from 'recoil';
 import { act, RenderHookResult, HookResult } from '@botframework-composer/test-utils/lib/hooks';
 import noop from 'lodash/noop';
+import { BotProjectFile, Skill } from '@bfc/shared';
 
 import { botProjectFileDispatcher } from '../botProjectFile';
+import { settingsDispatcher } from '../setting';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import {
   botDisplayNameState,
@@ -16,6 +18,7 @@ import {
   currentProjectIdState,
   locationState,
   projectMetaDataState,
+  settingsState,
 } from '../../atoms';
 import { dispatcherState } from '../../DispatcherWrapper';
 import { Dispatcher } from '..';
@@ -59,10 +62,11 @@ describe('Bot Project File dispatcher', () => {
 
   const useRecoilTestHook = () => {
     const botName = useRecoilValue(botDisplayNameState(rootBotProjectId));
-    const botProjectFile = useRecoilValue(botProjectFileState(rootBotProjectId));
+    const [botProjectFile, setBotProjectFile] = useRecoilState(botProjectFileState(rootBotProjectId));
     const currentDispatcher = useRecoilValue(dispatcherState);
     const botStates = useRecoilValue(botStatesSelector);
     const [skillsData, setSkillsData] = useRecoilState(skillsDataSelector(testSkillId));
+    const settings = useRecoilValue(settingsState(rootBotProjectId));
 
     return {
       botName,
@@ -71,6 +75,10 @@ describe('Bot Project File dispatcher', () => {
       botStates,
       skillsData,
       setSkillsData,
+      settings,
+      setters: {
+        setBotProjectFile,
+      },
     };
   };
 
@@ -107,6 +115,7 @@ describe('Bot Project File dispatcher', () => {
           recoilState: dispatcherState,
           initialValue: {
             botProjectFileDispatcher,
+            settingsDispatcher,
           },
         },
       }
@@ -167,5 +176,165 @@ describe('Bot Project File dispatcher', () => {
       dispatcher.removeSkillFromBotProjectFile(testSkillId);
     });
     expect(renderedComponent.current.botProjectFile.content.skills.oneNoteSkill).toBeUndefined();
+  });
+
+  it('should update endpoint name of skill in Botproject file', async () => {
+    const mockFile: BotProjectFile = {
+      id: '',
+      content: {
+        name: 'TesterBot',
+        skills: {
+          googleSkill: {
+            workspace: '../googleSkill',
+            remote: false,
+            endpointName: 'default',
+          },
+        },
+      },
+      lastModified: '',
+    };
+    await act(async () => {
+      renderedComponent.current.setters.setBotProjectFile(mockFile);
+    });
+
+    await act(async () => {
+      dispatcher.updateEndpointNameInBotProjectFile('googleSkill', 'remote');
+    });
+
+    expect(renderedComponent.current.botProjectFile.content.skills.googleSkill.endpointName).toBe('remote');
+  });
+
+  it('should delete endpoint in BotProject file if Local Composer endpoint is chosen', async () => {
+    const googleKeepSkill: Skill = {
+      id: '12a-asd',
+      manifest: undefined,
+      name: 'googleSkill',
+      remote: false,
+    };
+
+    const mockFile: BotProjectFile = {
+      id: '',
+      content: {
+        name: 'TesterBot',
+        skills: {
+          googleSkill: {
+            workspace: '../googleSkill',
+            remote: false,
+            endpointName: 'default',
+          },
+        },
+      },
+      lastModified: '',
+    };
+    await act(async () => {
+      renderedComponent.current.setters.setBotProjectFile(mockFile);
+    });
+
+    await act(async () => {
+      await dispatcher.updateSkillsDataInBotProjectFile('googleSkill', googleKeepSkill, -1);
+    });
+    expect(renderedComponent.current.botProjectFile.content.skills.googleSkill.endpointName).toBeUndefined();
+
+    expect(renderedComponent.current.settings.skill).toEqual({
+      googleSkill: {
+        endpointUrl: '',
+        msAppId: '',
+      },
+    });
+  });
+
+  fit('should update manifest in BotProject file', async () => {
+    await act(async () => {
+      renderedComponent.current.setSkillsData({
+        location: '/Users/tester/Desktop/LoadedBotProject/Google-Skill',
+        botNameIdentifier: 'googleSkill',
+      });
+    });
+
+    const mockFile: BotProjectFile = {
+      id: '',
+      content: {
+        name: 'TesterBot',
+        skills: {
+          googleSkill: {
+            workspace: '../googleSkill',
+            remote: false,
+            endpointName: 'default',
+          },
+        },
+      },
+      lastModified: '',
+    };
+    await act(async () => {
+      renderedComponent.current.setters.setBotProjectFile(mockFile);
+    });
+
+    await act(async () => {
+      await dispatcher.updateManifestInBotProjectFile(testSkillId, 'googleKeepManifest');
+    });
+    expect(renderedComponent.current.botProjectFile.content.skills.googleSkill.manifest).toBe('googleKeepManifest');
+  });
+
+  it('should update endpoint in BotProject file', async () => {
+    const googleKeepSkill: Skill = {
+      id: '12a.asd',
+      manifest: {
+        name: 'google-keep-manifest',
+        version: '1.0',
+        description: 'Manifest',
+        endpoints: [
+          {
+            name: 'local',
+            endpointUrl: 'http://localhost:3978/api/messages',
+            msAppId: '1232-1233-1234-1231',
+            description: 'Local endpoint skill',
+          },
+          {
+            name: 'remote',
+            endpointUrl: 'http://azure.websites/api/messages',
+            msAppId: '6734-1233-1234-1231',
+            description: 'Remote endpoint skill',
+          },
+        ],
+      },
+      name: 'googleSkill',
+      remote: false,
+    };
+
+    await act(async () => {
+      renderedComponent.current.setSkillsData({
+        location: '/Users/tester/Desktop/LoadedBotProject/Todo-Skill',
+        botNameIdentifier: 'todoSkill',
+      });
+    });
+
+    const mockFile: BotProjectFile = {
+      id: '',
+      content: {
+        name: 'TesterBot',
+        skills: {
+          googleSkill: {
+            workspace: '../googleSkill',
+            remote: false,
+            endpointName: 'default',
+          },
+        },
+      },
+      lastModified: '',
+    };
+    await act(async () => {
+      renderedComponent.current.setters.setBotProjectFile(mockFile);
+    });
+
+    await act(async () => {
+      await dispatcher.updateSkillsDataInBotProjectFile('googleSkill', googleKeepSkill, 1);
+    });
+    expect(renderedComponent.current.botProjectFile.content.skills.googleSkill.endpointName).toBe('remote');
+    expect(renderedComponent.current.settings.skill).toEqual({
+      googleSkill: {
+        endpointUrl: 'http://azure.websites/api/messages',
+        msAppId: '6734-1233-1234-1231',
+      },
+    });
   });
 });

@@ -11,7 +11,7 @@ import { botRuntimeOperationsSelector, buildConfigurationSelector } from '../../
 
 import { useBotStatusTracker } from './useBotStatusTracker';
 
-export function useBotOperations(onAllBotsStarted?: (started: boolean) => void) {
+export function useLocalBotOperations(onAllBotsStarted?: (started: boolean) => void) {
   const builderEssentials = useRecoilValue(buildConfigurationSelector);
   const botRuntimeOperations = useRecoilValue(botRuntimeOperationsSelector);
   const rootBotId = useRecoilValue(rootBotProjectIdSelector);
@@ -53,6 +53,7 @@ export function useBotOperations(onAllBotsStarted?: (started: boolean) => void) 
   const startAllBots = async () => {
     const [, ...skillsBots] = builderEssentials;
     const trackProjects: string[] = skillsBots.map((skillBot) => skillBot.projectId);
+
     setProjectsToTrack(trackProjects);
     for (const botBuildConfig of skillsBots) {
       if (botBuildConfig.status !== BotStatus.connected) {

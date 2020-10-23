@@ -24,7 +24,7 @@ import { AppUpdaterStatus } from '../constants';
 import { useLocation } from '../utils/hooks';
 
 import { StartBotsPanel } from './TestController/startBotsPanel';
-import { useBotOperations } from './TestController/useLocalBotOperations';
+import { useLocalBotOperations } from './TestController/useLocalBotOperations';
 export const actionButton = css`
   font-size: 18px;
   margin-top: 2px;
@@ -124,7 +124,7 @@ export const Header = () => {
   const [startPanelText, setStartPanelText] = useState('');
   const { projectIds: runningProjects } = useRecoilValue(runningBotsSelector);
   const [areBotsStarted, setBotsInBotProjectStarted] = useState<boolean>(false);
-  const { stopAllBots, startAllBots } = useBotOperations();
+  const { stopAllBots, startAllBots } = useLocalBotOperations();
   const [showStartBotsWidget, setStartBotsWidgetVisible] = useState(true);
 
   useEffect(() => {
