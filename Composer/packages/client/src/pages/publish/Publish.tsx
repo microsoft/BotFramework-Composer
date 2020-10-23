@@ -8,7 +8,7 @@ import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { PublishTarget } from '@bfc/shared';
+import { PublishTarget, PublishResult } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
 import { setAccessToken, setGraphToken } from '../../utils/auth';
@@ -32,7 +32,7 @@ import { TargetList } from './targetList';
 import { PublishDialog } from './publishDialog';
 import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor, overflowSet, targetSelected } from './styles';
 import { CreatePublishTarget } from './createPublishTarget';
-import { PublishStatusList, IStatus } from './publishStatusList';
+import { PublishStatusList } from './publishStatusList';
 
 const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: string }>> = (props) => {
   const selectedTargetName = props.targetName;
@@ -60,9 +60,9 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const [publishDialogHidden, setPublishDialogHidden] = useState(true);
 
   // items to show in the list
-  const [thisPublishHistory, setThisPublishHistory] = useState<IStatus[]>([]);
+  const [thisPublishHistory, setThisPublishHistory] = useState<PublishResult[]>([]);
   const [groups, setGroups] = useState<any[]>([]);
-  const [selectedVersion, setSelectedVersion] = useState<IStatus | null>(null);
+  const [selectedVersion, setSelectedVersion] = useState<PublishResult | null>(null);
   const [dialogProps, setDialogProps] = useState({
     title: formatMessage('Title'),
     type: DialogType.normal,
@@ -482,7 +482,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 };
 
 export default Publish;
-const LogDialog = (props) => {
+const LogDialog: React.FC<{ version: PublishResult; onDismiss: () => void }> = (props) => {
   const logDialogProps = {
     title: 'Publish Log',
   };
@@ -498,7 +498,7 @@ const LogDialog = (props) => {
         multiline
         placeholder="Log Output"
         style={{ minHeight: 300 }}
-        value={props && props.version ? props.version.log.join('\n\n') : ''}
+        value={props.version?.log?.join('\n\n') ?? ''}
       />
     </Dialog>
   );

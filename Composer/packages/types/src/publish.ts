@@ -10,16 +10,11 @@ import type { ILuisConfig, IQnAConfig } from './settings';
 export type PublishResult = {
   message: string;
   comment?: string;
-  log?: string;
+  log?: string[];
   id?: string;
   time?: Date;
   endpointURL?: string;
   status?: number;
-};
-
-export type PublishResponse = {
-  status: number;
-  result: PublishResult;
 };
 
 // TODO: Add types for project, metadata
@@ -28,15 +23,15 @@ export type PublishPlugin<Config = any> = {
   description: string;
 
   // methods plugins should support
-  publish: (config: Config, project: IBotProject, metadata: any, user?: UserIdentity) => Promise<PublishResponse>;
-  getStatus?: (config: Config, project: IBotProject, user?: UserIdentity) => Promise<PublishResponse>;
+  publish: (config: Config, project: IBotProject, metadata: any, user?: UserIdentity) => Promise<PublishResult>;
+  getStatus?: (config: Config, project: IBotProject, user?: UserIdentity) => Promise<PublishResult>;
   getHistory?: (config: Config, project: IBotProject, user?: UserIdentity) => Promise<PublishResult[]>;
   rollback?: (
     config: Config,
     project: IBotProject,
     rollbackToVersion: string,
     user?: UserIdentity
-  ) => Promise<PublishResponse>;
+  ) => Promise<PublishResult>;
 
   // other properties
   schema?: JSONSchema7;

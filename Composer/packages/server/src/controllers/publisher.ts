@@ -188,14 +188,8 @@ export const PublishController = {
           // call the method
           const results = await pluginMethod.call(null, configuration, currentProject, version, user);
 
-          // copy status into payload for ease of access in client
-          const response = {
-            ...results.result,
-            status: results.status,
-          };
-
           // set status and return value as json
-          return res.status(results.status).json(response);
+          return res.status(results.status).json(results);
         } catch (err) {
           return res.status(400).json({
             statusCode: '400',
