@@ -165,7 +165,9 @@ export const resourcesListCellContent = css`
   flex: 1;
 `;
 
-export const customPublishUISurface = css``;
+export const customPublishUISurface = css`
+  min-height: 350px;
+`;
 
 export const separator = css`
   ::before {
