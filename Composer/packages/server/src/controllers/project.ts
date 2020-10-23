@@ -129,10 +129,11 @@ async function openProject(req: Request, res: Response) {
     return;
   }
   const user = await ExtensionContext.getUserFromRequest(req);
+  const path = process.platform === 'win32' ? req.body.path.replace(/^\//, '') : req.body.path;
 
   const location: LocationRef = {
     storageId: req.body.storageId,
-    path: req.body.path,
+    path,
   };
 
   try {
