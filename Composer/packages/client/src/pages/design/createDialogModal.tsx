@@ -11,7 +11,7 @@ import { RecognizerSchema, useRecognizerConfig, useShellApi } from '@bfc/extensi
 import { DialogFactory, SDKKinds } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
-import { DialogCreationCopy, nameRegex } from '../../constants';
+import { DialogCreationCopy, dialogNameRegex } from '../../constants';
 import { StorageFolder } from '../../recoilModel/types';
 import { FieldConfig, useForm } from '../../hooks/useForm';
 import { actionsSeedState, schemasState, validateDialogSelectorFamily } from '../../recoilModel';
@@ -46,8 +46,10 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
     name: {
       required: true,
       validate: (value) => {
-        if (!nameRegex.test(value)) {
-          return formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
+        if (!dialogNameRegex.test(value)) {
+          return formatMessage(
+            "Spaces and special characters are not allowed. Use letters, numbers, -, or _ and don't use number at the beginning."
+          );
         }
         if (dialogs.some((dialog) => dialog.id.toLowerCase() === value.toLowerCase())) {
           return formatMessage('Duplicate dialog name');

@@ -210,6 +210,8 @@ export const QnABotTemplateId = 'QnASample';
 
 export const nameRegex = /^[a-zA-Z0-9-_]+$/;
 
+export const dialogNameRegex = /^[a-zA-Z][a-zA-Z0-9-_]*$/;
+
 export const triggerNotSupportedWarning = formatMessage(
   'This trigger type is not supported by the RegEx recognizer. To ensure this trigger is fired, change the recognizer type.'
 );
