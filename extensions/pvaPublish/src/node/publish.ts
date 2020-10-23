@@ -1,6 +1,4 @@
-// TODO: reenable once types have been fixed and published again
-// https://github.com/microsoft/BotFramework-Composer/pull/4436
-//import { IBotProject } from '@botframework-composer/types';
+import { IBotProject } from '@botframework-composer/types';
 import { join } from 'path';
 import { createReadStream, createWriteStream } from 'fs';
 import { ensureDirSync, remove } from 'fs-extra';
@@ -24,7 +22,7 @@ const publishHistory: PublishHistory = {};
 
 export const publish = async (
   config: PublishConfig,
-  project: any, // TODO: reenable once types have been fixed and published again IBotProject,
+  project: IBotProject,
   metadata: any,
   _user: UserIdentity,
   getAccessToken
@@ -128,7 +126,7 @@ export const publish = async (
 
 export const getStatus = async (
   config: PublishConfig,
-  project: any, // TODO: reenable once types have been fixed and published again IBotProject,
+  project: IBotProject,
   user: UserIdentity,
   getAccessToken
 ): Promise<PublishResponse> => {
@@ -199,7 +197,7 @@ export const getStatus = async (
 
 export const history = async (
   config: PublishConfig,
-  _project: any, // TODO: reenable once types have been fixed and published again IBotProject,
+  _project: IBotProject,
   _user: UserIdentity,
   getAccessToken
 ): Promise<PublishResult[]> => {
@@ -234,7 +232,7 @@ export const history = async (
 
 export const pull = async (
   config: PublishConfig,
-  _project: any, // TODO: reenable once types have been fixed and published again IBotProject,
+  _project: IBotProject,
   _user: UserIdentity,
   getAccessToken
 ): Promise<PullResponse> => {

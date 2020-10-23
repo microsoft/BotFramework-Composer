@@ -1017,11 +1017,10 @@
     lodash "^4.17.19"
     react-test-renderer "^16.13.1"
 
-"@botframework-composer/types@*":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@botframework-composer/types/-/types-0.0.1.tgz#117b86bf8e3bf43567471d436eb1c2f0ffcd6bb8"
-  integrity sha512-JmCTZpopfcCrso6S6Nj7v68OgVQgyzGd/MwQDU00ieZL29KM0TGL2T9TB+LKeUVfUw9ruJDA9K9stvPAaDErAQ==
+"@botframework-composer/types@*", "@botframework-composer/types@file:../../Composer/packages/types":
+  version "0.0.2"
   dependencies:
+    "@types/express" "^4.16.1"
     json-schema "^0.2.5"
 
 "@cnakazawa/watch@^1.0.3":
@@ -1420,7 +1419,7 @@
     "@types/qs" "*"
     "@types/range-parser" "*"
 
-"@types/express@*":
+"@types/express@*", "@types/express@^4.16.1":
   version "4.17.8"
   resolved "https://registry.yarnpkg.com/@types/express/-/express-4.17.8.tgz#3df4293293317e61c60137d273a2e96cd8d5f27a"
   integrity sha512-wLhcKh3PMlyA2cNAB9sjM1BntnhPMiM0JOBwPBqttjHev2428MLEB4AYVN+d8s2iyCVZac+o41Pflm/ZH5vLXQ==

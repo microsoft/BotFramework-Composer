@@ -30,6 +30,7 @@
   },
   "main": "lib/node/index.js",
   "dependencies": {
+    "@botframework-composer/types": "file:../../Composer/packages/types",
     "@bfc/extension": "file:../../Composer/packages/extension",
     "@bfc/extension-client": "file:../../Composer/packages/extension-client",
     "@uifabric/icons": "7.3.59",
@@ -58,6 +59,6 @@
     "webpack-cli": "^3.3.12"
   },
   "resolutions": {
-    "@botframework-composer/types": "file:../../Composer/packages/extension"
+    "@botframework-composer/types": "file:../../Composer/packages/types"
   }
 }
