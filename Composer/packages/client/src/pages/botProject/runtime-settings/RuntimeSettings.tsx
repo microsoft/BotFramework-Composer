@@ -36,6 +36,7 @@ import {
   labelContainer,
   customerLabel,
   iconStyle,
+  textOr,
 } from './style';
 
 export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
@@ -190,7 +191,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
           onChange={updateSetting('path')}
           onRenderLabel={onRenderLabel}
         />
-        {formatMessage('Or: ')}
+        <span css={textOr}>{formatMessage('Or: ')}</span>
         <Link
           css={breathingSpace}
           disabled={!settings.runtime || !settings.runtime.customRuntime}

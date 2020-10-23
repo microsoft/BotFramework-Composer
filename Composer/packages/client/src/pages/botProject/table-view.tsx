@@ -54,8 +54,6 @@ import {
   botLanguageFieldStyle,
   manageBotLanguage,
   languageItem,
-  botLanguageContainerStyle,
-  customRuntimeStyle,
   deleteBotText,
   deleteBotButton,
   publishTargetsContainer,
@@ -65,7 +63,6 @@ import {
   publishTargetsItemText,
   addPublishProfile,
   editPublishProfile,
-  publishTargetsStyle,
   publishTargetsEditButton,
   marginBottom,
   unknownIconStyle,
@@ -722,25 +719,13 @@ const TableView: React.FC<BotProjectSettingsProps> = (props) => {
       <CollapsableWrapper title={formatMessage('External services')} titleStyle={titleStyle}>
         {ExternalService}
       </CollapsableWrapper>
-      <CollapsableWrapper
-        containerStyle={botLanguageContainerStyle}
-        title={formatMessage('Bot Language')}
-        titleStyle={titleStyle}
-      >
+      <CollapsableWrapper title={formatMessage('Bot Language')} titleStyle={titleStyle}>
         {BotLanguage}
       </CollapsableWrapper>
-      <CollapsableWrapper
-        containerStyle={customRuntimeStyle}
-        title={formatMessage('Custom runtime')}
-        titleStyle={titleStyle}
-      >
+      <CollapsableWrapper title={formatMessage('Custom runtime')} titleStyle={titleStyle}>
         <RuntimeSettings projectId={projectId} />
       </CollapsableWrapper>
-      <CollapsableWrapper
-        containerStyle={publishTargetsStyle}
-        title={formatMessage('Publish targets')}
-        titleStyle={titleStyle}
-      >
+      <CollapsableWrapper title={formatMessage('Publish targets')} titleStyle={titleStyle}>
         {PublishTargets}
       </CollapsableWrapper>
       {DeleteBotButton}

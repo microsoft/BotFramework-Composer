@@ -2,12 +2,13 @@
 // Licensed under the MIT License.
 
 import { css } from '@emotion/core';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 export const runtimeSettingsStyle = css`
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  height: 200px;
 `;
 
 export const runtimeControls = css`
@@ -26,11 +27,6 @@ export const runtimeToggle = css`
   }
 `;
 
-// export const controlGroup = css`
-//   border: 1px solid rgb(237, 235, 233);
-//   padding: 0.5rem 1rem 1rem 1rem;
-// `;
-
 export const modalControlGroup = css`
   border: 1px solid rgb(237, 235, 233);
   padding: 0.5rem 1rem 1rem 1rem;
@@ -43,6 +39,7 @@ export const runtimeControlsTitle = css`
 
 export const breathingSpace = css`
   margin-bottom: 1rem;
+  font-size: ${FontSizes.smallPlus};
 `;
 
 export const labelContainer = css`
@@ -60,6 +57,17 @@ export const iconStyle = (disabled) => {
   return {
     root: {
       color: disabled ? NeutralColors.gray90 : NeutralColors.gray160,
+      selectors: {
+        '&::before': {
+          content: " '*'",
+          color: SharedColors.red10,
+          paddingRight: 3,
+        },
+      },
     },
   };
 };
+
+export const textOr = css`
+  font-size: ${FontSizes.smallPlus};
+`;

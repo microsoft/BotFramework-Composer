@@ -92,7 +92,8 @@ export const botLanguageFieldStyle = css`
 
 export const manageBotLanguage = {
   root: {
-    fontSize: 12,
+    height: 30,
+    fontSize: FontSizes.smallPlus,
     fontWeight: FontWeights.regular,
     color: SharedColors.cyanBlue10,
     paddingLeft: 0,
@@ -135,31 +136,6 @@ export const toggleUseCustomRuntimeStyle = {
     marginTop: 15,
   },
 };
-
-export const botLanguageContainerStyle = css`
-  margin-left: 2px;
-  margin-bottom: 12px;
-`;
-
-export const runtimeLabelStyle = css`
-  display: flex;
-`;
-
-export const textOr = css`
-  font-size: 12px;
-  margin-right: 5px;
-  color: #000000;
-`;
-
-export const customRuntimeStyle = css`
-  margin-left: 2px;
-  margin-bottom: 14px;
-`;
-
-export const textRuntimeCode = (enable: boolean) => css`
-  font-size: 12px;
-  color: ${enable ? NeutralColors.black : '#585756'};
-`;
 
 export const deleteBotText = css`
   font-weight: ${FontWeights.semibold};
@@ -213,11 +189,6 @@ export const publishTargetsItemText = css`
   border-bottom: 1px solid ${NeutralColors.gray30};
   padding-top: 10px;
   padding-left: 10px;
-`;
-
-export const publishTargetsStyle = css`
-  margin-left: 2px;
-  margin-bottom: 14px;
 `;
 
 export const addPublishProfile = {
