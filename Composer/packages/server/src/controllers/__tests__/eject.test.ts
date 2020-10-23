@@ -54,6 +54,9 @@ beforeAll(async () => {
     eject: jest.fn(),
     build: jest.fn(),
     run: jest.fn(),
+    installComponent: jest.fn(),
+    uninstallComponent: jest.fn(),
+    identifyManifest: jest.fn(),
     buildDeploy: jest.fn(),
     setSkillManifest: jest.fn(),
   });
