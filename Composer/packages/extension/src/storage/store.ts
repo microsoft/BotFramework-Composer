@@ -3,12 +3,13 @@
 
 import path from 'path';
 
-import { existsSync, writeJsonSync, readJsonSync } from 'fs-extra';
+import { existsSync, writeJsonSync, readJsonSync, unlinkSync } from 'fs-extra';
 
 export type IStore<T> = {
   read: () => T;
   write: (data: T) => void;
   reload: () => void;
+  destroy: () => void;
 };
 
 export class Store<T extends object> implements IStore<T> {
@@ -38,6 +39,10 @@ export class Store<T extends object> implements IStore<T> {
 
   public reload() {
     this.readFromDisk();
+  }
+
+  public destroy() {
+    unlinkSync(this.path);
   }
 
   private readFromDisk() {

@@ -6,6 +6,7 @@ import { ExtensionMap, ExtensionMetadata } from '@botframework-composer/types';
 import logger from '../logger';
 
 import { Store, IStore } from './store';
+import { MemoryStore } from './memoryStore';
 
 const log = logger.extend('extensions');
 
@@ -19,7 +20,7 @@ export class ExtensionManifestStore {
   private store: IStore<ExtensionManifest>;
 
   constructor(private manifestPath: string, store?: IStore<ExtensionManifest>) {
-    this.store = store ?? new Store(this.manifestPath, DEFAULT_MANIFEST, log);
+    this.store = store ?? this.getDefaultStore();
     this.manifest = this.store.read();
 
     // remove extensions key from existing manifests
@@ -59,5 +60,14 @@ export class ExtensionManifestStore {
 
   public reload() {
     this.store.reload();
+  }
+
+  private getDefaultStore() {
+    /* istanbul ignore next */
+    if (process.env.NODE_ENV === 'test') {
+      return new MemoryStore(DEFAULT_MANIFEST);
+    }
+
+    return new Store(this.manifestPath, DEFAULT_MANIFEST, log);
   }
 }

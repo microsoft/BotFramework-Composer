@@ -1,20 +1,22 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import path from 'path';
+
 import { RequestHandler } from 'express-serve-static-core';
 import { Debugger } from 'debug';
 import { PublishPlugin, RuntimeTemplate, BotTemplate } from '@botframework-composer/types';
 
-import logger from './logger';
+import log from './logger';
 import { ExtensionContext } from './extensionContext';
-
-const log = logger.extend('extension-registration');
+import { Store } from './storage/store';
 
 export class ExtensionRegistration {
   public context: typeof ExtensionContext;
   private _name: string;
   private _description: string;
   private _log: Debugger;
+  private _store: Store<object> | null = null;
 
   constructor(context: typeof ExtensionContext, name: string, description: string) {
     this.context = context;
@@ -41,6 +43,15 @@ export class ExtensionRegistration {
 
   public get log() {
     return this._log;
+  }
+
+  public get store() {
+    if (this._store === null) {
+      const storePath = path.join(this.dataDir, `${this.name}.json`);
+      this._store = new Store(storePath, {}, this.log);
+    }
+
+    return this._store;
   }
 
   /**************************************************************************************
@@ -207,5 +218,14 @@ export class ExtensionRegistration {
     if (this.context.extensions.authentication.allowedUrls.indexOf(url) < 0) {
       this.context.extensions.authentication.allowedUrls.push(url);
     }
+  }
+
+  private get dataDir() {
+    /* istanbul ignore next */
+    if (!process.env.COMPOSER_EXTENSION_DATA_DIR) {
+      throw new Error('COMPOSER_EXTENSION_DATA_DIR must be set.');
+    }
+
+    return process.env.COMPOSER_EXTENSION_DATA_DIR;
   }
 }

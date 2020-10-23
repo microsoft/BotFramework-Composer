@@ -43,12 +43,12 @@ Extension modules must come in one of the following forms:
 Currently, extensions can be loaded into Composer using 1 of 2 methods:
 
 - The extension is placed in the /extensions/ folder
-- The extension is loaded directly via changes to Composer code, using `ExtensionContext.loadPlugin(name, extension)`
+- The extension is installed via the extensions page
 
 The simplest form of a extension module is below:
 
 ```ts
-export default async (composer: any): Promise<void> => {
+export default async (composer: ExtensionRegistration): Promise<void> => {
   // call methods (see below) on the composer API
   // composer.useStorage(...);
   // composer.usePassportStrategy(...);

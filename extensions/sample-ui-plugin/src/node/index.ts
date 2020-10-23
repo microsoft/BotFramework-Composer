@@ -21,6 +21,12 @@ function initialize(registration: ExtensionRegistration) {
   };
   registration.addPublishMethod(plugin1);
   registration.addPublishMethod(plugin2);
+
+  // test reading and writing data
+  registration.log('Reading from store:\n%O', registration.store.read());
+
+  registration.store.write({ some: 'data' });
+  registration.log('Reading from store:\n%O', registration.store.read());
 }
 
 async function getStatus(config, project, user) {

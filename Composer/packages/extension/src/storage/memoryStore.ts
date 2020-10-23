@@ -19,4 +19,5 @@ export class MemoryStore<T extends object> implements IStore<T> {
   }
 
   reload() {}
+  destroy() {}
 }
