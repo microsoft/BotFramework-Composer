@@ -7,7 +7,7 @@
 #
 ################
 
-FROM node:12-alpine as build
+FROM node:12-buster as build
 
 ARG YARN_ARGS
 
@@ -21,7 +21,7 @@ ENV NODE_ENV "production"
 ENV COMPOSER_BUILTIN_EXTENSIONS_DIR "/src/extensions"
 RUN yarn build:prod $YARN_ARGS
 
-FROM node:12-alpine as composerbasic
+FROM node:12-buster as composerbasic
 ARG YARN_ARGS
 
 WORKDIR /app/Composer
@@ -36,16 +36,15 @@ WORKDIR /app/Composer
 
 FROM composerbasic
 
-RUN apk add --no-cache \
-  ca-certificates \
-  \
-  # .NET Core dependencies
-  krb5-libs \
-  libgcc \
-  libintl \
-  libssl1.1 \
-  libstdc++ \
-  zlib
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        libc6 \
+        libgcc1 \
+        libgssapi-krb5-2 \
+        libssl1.1 \
+        libstdc++6 \
+        zlib1g \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install .Net Core SDK
 ENV \
@@ -60,16 +59,17 @@ ENV \
   # Skip extraction of XML docs - generally not useful within an image/container - helps performance
   NUGET_XMLDOC_MODE=skip \
   # PowerShell telemetry for docker image usage
-  POWERSHELL_DISTRIBUTION_CHANNEL=PSDocker-DotnetCoreSDK-Alpine-3.10
+  POWERSHELL_DISTRIBUTION_CHANNEL=PSDocker-DotnetCoreSDK-Ubuntu-18.04
 
 # Add dependencies for disabling invariant mode (set in base image)
-RUN apk add --no-cache icu-libs
+RUN wget http://mirrors.kernel.org/ubuntu/pool/main/i/icu/libicu60_60.2-3ubuntu3_amd64.deb
+RUN dpkg -i libicu60_60.2-3ubuntu3_amd64.deb
 
 # Install .NET Core SDK 3.1
-ENV DOTNET_SDK_VERSION 3.1.101
+ENV DOTNET_SDK_VERSION 3.1.403
 
-RUN wget -O dotnet.tar.gz https://dotnetcli.azureedge.net/dotnet/Sdk/$DOTNET_SDK_VERSION/dotnet-sdk-$DOTNET_SDK_VERSION-linux-musl-x64.tar.gz \
-  && dotnet_sha512='ce386da8bc07033957fd404909fc230e8ab9e29929675478b90f400a1838223379595a4459056c6c2251ab5c722f80858b9ca536db1a2f6d1670a97094d0fe55' \
+RUN wget -O dotnet.tar.gz https://dotnetcli.azureedge.net/dotnet/Sdk/$DOTNET_SDK_VERSION/dotnet-sdk-$DOTNET_SDK_VERSION-linux-x64.tar.gz \
+  && dotnet_sha512='0a0319ee8e9042bf04b6e83211c2d6e44e40e604bff0a133ba0d246d08bff76ebd88918ab5e10e6f7f0d2b504ddeb65c0108c6539bc4fbc4f09e4af3937e88ea' \
   && echo "$dotnet_sha512  dotnet.tar.gz" | sha512sum -c - \
   && mkdir -p /usr/share/dotnet \
   && tar -C /usr/share/dotnet -oxzf dotnet.tar.gz \
