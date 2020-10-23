@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "jsx": "react"
+  },
+  "include": [
+    "src/**/*",
+    "testing/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+  ]
+}
