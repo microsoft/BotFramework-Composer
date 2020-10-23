@@ -1,11 +1,20 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-import { ActivityHandler, ActivityTypes, ConversationState, SkillHttpClient, TurnContext, UserState } from 'botbuilder';
+import {
+  ActivityHandler,
+  ActivityTypes,
+  ComponentRegistration,
+  ConversationState,
+  SkillHttpClient,
+  TurnContext,
+  UserState,
+} from 'botbuilder';
+import { QnAMakerComponentRegistration, LuisComponentRegistration } from 'botbuilder-ai';
 import { DialogManager } from 'botbuilder-dialogs';
 import {
+  AdaptiveComponentRegistration,
   AdaptiveDialog,
-  AdaptiveDialogComponentRegistration,
   LanguageGeneratorExtensions,
   LanguagePolicy,
   ResourceExtensions,
@@ -16,6 +25,7 @@ import { SimpleCredentialProvider, SkillValidation } from 'botframework-connecto
 import { BotSettings } from './settings';
 import { SkillConversationIdFactory } from './skillConversationIdFactory';
 import { getSettings, getProjectRoot, getRootDialog } from './helpers';
+import { BoolExpression } from 'adaptive-expressions';
 
 /**
  * A composer bot to handle botframework activity requests.
@@ -41,10 +51,13 @@ export class ComposerBot extends ActivityHandler {
     this.projectRoot = getProjectRoot();
     this.settings = getSettings(this.projectRoot);
 
+    ComponentRegistration.add(new AdaptiveComponentRegistration());
+    ComponentRegistration.add(new QnAMakerComponentRegistration());
+    ComponentRegistration.add(new LuisComponentRegistration());
+
     // Create and configure resource explorer.
     this.resourceExplorer = new ResourceExplorer();
     this.resourceExplorer.addFolders(this.projectRoot, ['runtime'], false);
-    this.resourceExplorer.addComponent(new AdaptiveDialogComponentRegistration(this.resourceExplorer));
 
     this.loadRootDialog();
     this.configureLanguageGeneration();
@@ -55,9 +68,9 @@ export class ComposerBot extends ActivityHandler {
     const rootDialog = this.dialogManager.rootDialog as AdaptiveDialog;
     const claimIdentity = turnContext.turnState.get(turnContext.adapter.BotIdentityKey);
     if (claimIdentity && SkillValidation.isSkillClaim(claimIdentity.claims)) {
-      rootDialog.autoEndDialog = true;
+      rootDialog.autoEndDialog = new BoolExpression(true);
     } else {
-      rootDialog.autoEndDialog = false;
+      rootDialog.autoEndDialog = new BoolExpression(false);
     }
 
     const removeRecipientMention = (this.settings.feature && this.settings.feature.removeRecipientMention) || false;
@@ -76,8 +89,6 @@ export class ComposerBot extends ActivityHandler {
     this.dialogManager = new DialogManager(rootDialog);
     ResourceExtensions.useResourceExplorer(this.dialogManager, this.resourceExplorer);
     this.dialogManager.initialTurnState.set('settings', this.settings);
-    this.dialogManager.conversationState = this.conversationState;
-    this.dialogManager.userState = this.userState;
   }
 
   private configureLanguageGeneration() {

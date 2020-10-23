@@ -15,11 +15,9 @@ import {
   SkillHandler,
   TurnContext,
   UserState,
+  useBotState,
   WebRequest,
   WebResponse,
-  Activity,
-  StatusCodeError,
-  StatusCodes,
 } from 'botbuilder';
 import { AuthenticationConfiguration, SimpleCredentialProvider } from 'botframework-connector';
 import { ComposerBot } from './composerBot';
@@ -122,6 +120,7 @@ export const getBotAdapter = (userState: UserState, conversationState: Conversat
     appPassword: settings.MicrosoftAppPassword,
   };
   const adapter = new BotFrameworkAdapter(adapterSettings);
+  useBotState(adapter, userState, conversationState);
   adapter.onTurnError = async (turnContext: TurnContext, error: Error) => {
     try {
       // Send a message to the user.
