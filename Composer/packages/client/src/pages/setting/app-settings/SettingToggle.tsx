@@ -38,16 +38,14 @@ const SettingToggle: React.FC<ISettingToggleProps> = (props) => {
         <p css={styles.settingsDescription}>{description}</p>
       </div>
       {!hideToggle && (
-        <div>
-          <Toggle
-            checked={!!checked}
-            data-testid={id}
-            id={id || uniqueId}
-            offText={formatMessage('Off')}
-            onChange={(_e, checked) => onToggle(!!checked)}
-            onText={formatMessage('On')}
-          />
-        </div>
+        <Toggle
+          checked={!!checked}
+          data-testid={id}
+          id={id || uniqueId}
+          offText={formatMessage('Off')}
+          onChange={(_e, checked) => onToggle(!!checked)}
+          onText={formatMessage('On')}
+        />
       )}
     </div>
   );
