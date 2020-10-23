@@ -11,7 +11,6 @@ import { About } from '../about/About';
 
 import { DialogSettings } from './dialog-settings/DialogSettings';
 import { AppSettings } from './app-settings/AppSettings';
-import { RuntimeSettings } from './runtime-settings/RuntimeSettings';
 import { Extensions } from './extensions/Extensions';
 
 export const SettingsRoutes = React.memo(({ projectId }: { projectId: string }) => {
@@ -33,7 +32,6 @@ export const SettingsRoutes = React.memo(({ projectId }: { projectId: string }) 
         <AppSettings default path="application" />
         <About path="about" />
         <DialogSettings path="/bot/:projectId/dialog-settings" />
-        <RuntimeSettings path="/bot/:projectId/runtime" />
         <Extensions path="extensions" />
       </Router>
     </ErrorBoundary>

@@ -4,12 +4,14 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React from 'react';
-import { Label } from 'office-ui-fabric-react/lib/Label';
 import { useId } from '@uifabric/react-hooks';
 import kebabCase from 'lodash/kebabCase';
-import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
+import { Dropdown, IDropdownProps } from 'office-ui-fabric-react/lib/Dropdown';
+import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
 import * as styles from './styles';
+import formatMessage from 'format-message';
 
 interface ISettingToggleProps {
   description: React.ReactChild;
@@ -22,28 +24,31 @@ interface ISettingToggleProps {
 }
 
 const SettingDropdown: React.FC<ISettingToggleProps> = (props) => {
-  const { id, title, description, image, onChange, options, selected } = props;
+  const { id, title, onChange, options, selected } = props;
   const uniqueId = useId(kebabCase(title));
+
+  const onRenderLabel = (props: IDropdownProps | undefined) => {
+    return (
+      <div css={styles.labelContainer}>
+        <div css={styles.customerLabel}> {props?.label} </div>
+        <TooltipHost content={props?.label}>
+          <Icon iconName={'Unknown'} styles={styles.icon} />
+        </TooltipHost>
+      </div>
+    );
+  };
 
   return (
     <div css={styles.settingsContainer}>
-      <div aria-hidden="true" css={styles.image} role="presentation">
-        {image && <img aria-hidden alt={''} src={image} />}
-      </div>
-      <div css={styles.settingsContent}>
-        <Label htmlFor={id || uniqueId} styles={{ root: { padding: 0 } }}>
-          {title}
-        </Label>
-        <p css={styles.settingsDescription}>{description}</p>
-      </div>
-      <div>
-        <Dropdown
-          id={id || uniqueId}
-          options={options}
-          selectedKey={selected}
-          onChange={(_e, option) => onChange(option?.key?.toString() ?? '')}
-        />
-      </div>
+      <Dropdown
+        id={id || uniqueId}
+        options={options}
+        selectedKey={selected}
+        styles={{ root: { width: '100%' } }}
+        onChange={(_e, option) => onChange(option?.key?.toString() ?? '')}
+        label={formatMessage('Composer language is the language of Composer UI')}
+        onRenderLabel={onRenderLabel}
+      />
     </div>
   );
 };

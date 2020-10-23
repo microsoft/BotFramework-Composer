@@ -65,6 +65,17 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
   return (
     <div css={container}>
       <section css={section}>
+        <section css={section}>
+          <h2>{formatMessage('Application Language settings')}</h2>
+          <SettingDropdown
+            description={formatMessage('This is the language used for Composer’s user interface.')}
+            image={images.language}
+            options={languageOptions}
+            selected={userSettings.appLocale}
+            title={formatMessage('Application language')}
+            onChange={onLocaleChange}
+          />
+        </section>
         <h2>{formatMessage('Onboarding')}</h2>
         <SettingToggle
           checked={!complete}
@@ -142,17 +153,6 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
           image={images.wordWrap}
           title={formatMessage('Sentence wrap')}
           onToggle={onCodeEditorChange('wordWrap')}
-        />
-      </section>
-      <section css={section}>
-        <h2>{formatMessage('Application Language')}</h2>
-        <SettingDropdown
-          description={formatMessage('This is the language used for Composer’s user interface.')}
-          image={images.language}
-          options={languageOptions}
-          selected={userSettings.appLocale}
-          title={formatMessage('Application language')}
-          onChange={onLocaleChange}
         />
       </section>
       <Suspense fallback={<div />}>{renderElectronSettings && <ElectronSettings />}</Suspense>
