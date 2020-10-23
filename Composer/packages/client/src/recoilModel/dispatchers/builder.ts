@@ -58,7 +58,7 @@ export const builderDispatcher = () => {
           crossTrainConfig,
           recognizerTypes,
           luFiles: referredLuFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
-          qnaFiles: qnaFiles.map((file) => ({ id: file.id, isEmpty: !file.qnaSections.length })),
+          qnaFiles: qnaFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
         });
         luFileStatusStorage.publishAll(projectId);
         qnaFileStatusStorage.publishAll(projectId);
