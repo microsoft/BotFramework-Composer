@@ -36,7 +36,8 @@
     "minimist": "1.2.5",
     "request": "2.88.2",
     "request-promise": "4.2.5",
-    "uuid": "7.0.3"
+    "uuid": "7.0.3",
+    "node-global-proxy": "^1.0.1"
   },
   "resolutions": {
     "bl": "^4.0.3"
