@@ -10,6 +10,7 @@ import { BotProjectDeployConfig } from './botProjectDeployConfig';
 import { BotProjectDeployLoggerType } from './botProjectLoggerType';
 import { LuisAndQnaPublish } from './luisAndQnA';
 import archiver = require('archiver');
+const proxy = require("node-global-proxy").default;
 
 export class BotProjectDeploy {
   private accessToken: string;
@@ -19,6 +20,8 @@ export class BotProjectDeploy {
   private runtime: any;
 
   constructor(config: BotProjectDeployConfig) {
+    proxy.setConfig(process.env.COMPOSER_HTTP_PROXY);
+
     this.logger = config.logger;
     this.accessToken = config.accessToken;
     this.projPath = config.projPath;
@@ -46,6 +49,8 @@ export class BotProjectDeploy {
     luisResource?: string
   ) {
     try {
+      proxy.start();
+
       // STEP 1: CLEAN UP PREVIOUS BUILDS
       // cleanup any previous build
       if (await fs.pathExists(this.zipPath)) {
@@ -116,7 +121,9 @@ export class BotProjectDeploy {
         message: JSON.stringify(error, Object.getOwnPropertyNames(error)),
       });
       throw error;
+      proxy.stop();
     }
+    proxy.stop();
   }
 
   private async zipDirectory(source: string, out: string) {
