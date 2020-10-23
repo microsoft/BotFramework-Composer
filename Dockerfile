@@ -42,10 +42,12 @@ RUN yarn --production --frozen-lockfile --force $YARN_ARGS && yarn cache clean
 FROM BASE
 ENV NODE_ENV "production"
 
-WORKDIR /app
-COPY --from=composerbasic /app .
+WORKDIR /app/Composer
+COPY --from=composerbasic /app ..
+
 
 ENV COMPOSER_BUILTIN_EXTENSIONS_DIR "/app/extensions"
 ENV COMPOSER_REMOTE_EXTENSIONS_DIR "/app/remote-extensions"
 ENV COMPOSER_EXTENSION_DATA "/app/extensions.json"
+
 CMD ["yarn","start:server"]
