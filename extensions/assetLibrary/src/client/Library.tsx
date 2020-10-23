@@ -18,6 +18,28 @@ import { WorkingModal } from './workingModal';
 const DEFAULT_CATEGORY = formatMessage('Available');
 const RECENTLY_USED_KEY = 'recentlyUsedItems';
 
+const strings = {
+  title: formatMessage('Package Library'),
+  description: formatMessage('Discover and use components that can be installed into your bot. <a href="#">Learn more</a>'),
+  installButton: formatMessage('Install Package'),
+  importDialogTitle: formatMessage('Install a Package'),
+  installProgress: formatMessage('Installing package...'),
+  recentlyUsedCategory: formatMessage('Recently Used'),
+  installedCategory: formatMessage('Installed'),
+  updateConfirmationPrompt: formatMessage('Any changes you made to this package will be lost! Are you sure you want to continue?'),
+  updateConfirmationTitle: formatMessage('Update Package'),
+  conflictConfirmationTitle: formatMessage('Conflicting changes detected'),
+  conflictConfirmationPrompt: formatMessage(
+    'This operation will overwrite changes made to previously imported files. Do you want to proceed?'
+  ),
+  removeConfirmationTitle: formatMessage('Remove Package'),
+  removeConfirmationPrompt: formatMessage(
+      'Any changes you made to this package will be lost! In addition, this may leave your bot in a broken state. Are you sure you want to continue?'
+  ),
+  requireEject: formatMessage('To install components, this project must have an ejected runtime. Please navigate to the runtime settings page.'),
+  ejectRuntime: formatMessage('Eject Runtime'),
+}
+
 const Library: React.FC = () => {
   const [items, setItems] = useState<LibraryRef[]>([]);
   const [groups, setGroups] = useState<any[]>([]);
@@ -103,7 +125,7 @@ const Library: React.FC = () => {
 
       groups.push({
         key: 'installed',
-        name: 'Installed',
+        name: strings.installedCategory,
         startIndex: 0,
         count: installedComponents ? installedComponents.length : 0,
         level: 0,
@@ -139,7 +161,7 @@ const Library: React.FC = () => {
 
       groups.push({
         key: 'recently',
-        name: 'Recently Used',
+        name: strings.recentlyUsedCategory,
         startIndex: items.length,
         count: recentlyUsed ? recentlyUsed.length : 0,
         level: 0,
@@ -156,7 +178,7 @@ const Library: React.FC = () => {
   const toolbarItems: IToolbarItem[] = [
     {
       type: 'action',
-      text: formatMessage('Install Package'),
+      text: strings.installButton,
       buttonProps: {
         iconProps: {
           iconName: 'Add',
@@ -177,10 +199,8 @@ const Library: React.FC = () => {
     const existing = installedComponents?.find((l) => l.name === packageName);
     let okToProceed = true;
     if (existing) {
-      const title = formatMessage('Update Package');
-      const msg = formatMessage(
-        'Any changes you made to this package will be lost! Are you sure you want to continue?'
-      );
+      const title = strings.updateConfirmationTitle;
+      const msg = strings.updateConfirmationPrompt;
       okToProceed = await confirm(title, msg);
     }
 
@@ -198,10 +218,8 @@ const Library: React.FC = () => {
 
       // check to see if there was a conflict that requires confirmation
       if (results.data.success === false) {
-        const title = formatMessage('Conflicting changes detected');
-        const msg = formatMessage(
-          'This operation will overwrite changes made to previously imported files. Do you want to proceed?'
-        );
+        const title = strings.conflictConfirmationTitle;
+        const msg = strings.conflictConfirmationPrompt;
         if (await confirm(title, msg)) {
           await await installComponentAPI(projectId, packageName, version, true);
         }
@@ -259,10 +277,8 @@ const Library: React.FC = () => {
 
   const removeComponent = async () => {
     if (selectedItem) {
-      const title = formatMessage('Remove Package');
-      const msg = formatMessage(
-        'Any changes you made to this package will be lost! In addition, this may leave your bot in a broken state. Are you sure you want to continue?'
-      );
+      const title = strings.removeConfirmationTitle;
+      const msg = strings.removeConfirmationPrompt;
       const okToProceed = await confirm(title, msg);
       if (okToProceed) {
         closeDialog();
@@ -310,7 +326,7 @@ const Library: React.FC = () => {
     <Fragment>
       <Dialog
         dialogContentProps={{
-          title: formatMessage('Import a Package'),
+          title: strings.importDialogTitle,
           type: DialogType.normal,
         }}
         hidden={addDialogHidden}
@@ -320,10 +336,11 @@ const Library: React.FC = () => {
       >
         <ImportDialog closeDialog={closeDialog} doImport={importFromWeb} />
       </Dialog>
-      <WorkingModal hidden={!working} title={formatMessage('Installing package...')} />
+      <WorkingModal hidden={!working} title={strings.installProgress} />
       <Toolbar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
-        <h1 css={HeaderText}>{formatMessage('Package Library')}</h1>
+        <h1 css={HeaderText}>{strings.title}</h1>
+        <p>{strings.description}</p>
       </div>
       {!ejectedRuntime && (
         <MessageBar
@@ -331,12 +348,11 @@ const Library: React.FC = () => {
           isMultiline={false}
           actions={
             <div>
-              <MessageBarButton onClick={navigateToEject}>{formatMessage('Eject runtime')}</MessageBarButton>
+              <MessageBarButton onClick={navigateToEject}>{strings.ejectRuntime}</MessageBarButton>
             </div>
           }
         >
-          To install components, this project must have an ejected runtime. Please navigate to the runtime settings
-          page.
+          {strings.requireEject}
         </MessageBar>
       )}
       <div css={ContentStyle} data-testid="installedLibraries" role="main">
