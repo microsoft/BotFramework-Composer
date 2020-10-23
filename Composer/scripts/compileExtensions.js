@@ -9,6 +9,8 @@ const path = require('path');
 // eslint-disable-next-line security/detect-child-process
 const { execSync } = require('child_process');
 
+const FORCE = process.argv.includes('--force');
+
 const extensionsDir = process.env.COMPOSER_BUILTIN_EXTENSIONS_DIR || path.resolve(__dirname, '../../extensions');
 const buildCachePath = path.resolve(extensionsDir, '.build-cache.json');
 
@@ -108,11 +110,11 @@ for (const entry of allExtensions) {
     if (!fs.existsSync(packageJSONPath)) {
       console.warn(`Ignore directory ${extPath} which is not a npm module.`);
       continue;
-    };
+    }
 
     const packageJSON = JSON.parse(fs.readFileSync(packageJSONPath));
     const lastModified = getLastModified(extPath);
-    if (missingMain(extPath, packageJSON) || hasChanges(entry.name, lastModified)) {
+    if (FORCE || missingMain(extPath, packageJSON) || hasChanges(entry.name, lastModified)) {
       try {
         compile(entry.name, extPath);
         writeToCache(entry.name, lastModified);
