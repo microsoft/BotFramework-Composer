@@ -58,8 +58,24 @@ export function resolveFieldWidget(params: {
       return { field: DefaultFields.OneOfField };
     }
 
-    if (expression && typeof value === 'string' && value.startsWith('=')) {
-      return { field: isOneOf ? DefaultFields.IntellisenseExpressionField : IntellisenseExpressionFieldWithIcon };
+    if (expression && typeof value === 'string') {
+      // The schema has two types of expressions: "equalsExpression" and "expression".
+      // "equalsExpression" inputs start with "=". For those we want to have access to the adaptive expressions built-in functions and have intellisense surface it, thus using IntellisenseExpressionField.
+      // "expression" inputs don't leverage the built-in functions. For those, we only want to show IntellisenseTextField.
+      if (value.startsWith('=')) {
+        return { field: isOneOf ? DefaultFields.IntellisenseExpressionField : IntellisenseExpressionFieldWithIcon };
+      } else {
+        if (showIntellisense && isOneOf) {
+          return { field: DefaultFields.IntellisenseTextField };
+        } else if (showIntellisense && !isOneOf) {
+          return { field: IntellisenseTextFieldWithIcon };
+        } else if (!showIntellisense && !isOneOf) {
+          return { field: StringFieldWithIcon };
+        }
+        return {
+          field: DefaultFields.StringField,
+        };
+      }
     }
 
     if (Array.isArray(schema.enum)) {
