@@ -1,0 +1,356 @@
+{
+  "Microsoft.AdaptiveDialog": {
+    "form": {
+      "description": "Umożliwia skonfigurowanie dialogu opartego na danych przy użyciu kolekcji zdarzeń i akcji.",
+      "label": "Dialog adaptacyjny",
+      "properties": {
+        "recognizer": {
+          "description": "Aby zrozumieć, co mówi użytkownik, dialog wymaga „aparatu rozpoznawania” obejmującego przykładowe wyrazy i zdania, które mogą być używane przez użytkowników.",
+          "label": "Interpretacja języka"
+        }
+      }
+    }
+  },
+  "Microsoft.BeginDialog": {
+    "form": {
+      "label": "Rozpocznij nowy dialog",
+      "subtitle": "Rozpocznij dialog"
+    }
+  },
+  "Microsoft.BeginSkill": {
+    "form": {
+      "label": "Połącz z umiejętnością",
+      "subtitle": "Dialog umiejętności"
+    }
+  },
+  "Microsoft.BreakLoop": {
+    "form": {
+      "label": "Wyjdź z pętli",
+      "subtitle": "Wyjdź z pętli"
+    }
+  },
+  "Microsoft.CancelAllDialogs": {
+    "form": {
+      "label": "Anuluj wszystkie aktywne dialogi",
+      "subtitle": "Anuluj wszystkie dialogi"
+    }
+  },
+  "Microsoft.ContinueLoop": {
+    "form": {
+      "label": "Kontynuuj pętlę",
+      "subtitle": "Kontynuuj pętlę"
+    }
+  },
+  "Microsoft.DebugBreak": {
+    "form": {
+      "label": "Przerwanie w celu debugowania"
+    }
+  },
+  "Microsoft.DeleteProperties": {
+    "form": {
+      "label": "Usuń właściwości",
+      "subtitle": "Usuń właściwości"
+    }
+  },
+  "Microsoft.DeleteProperty": {
+    "form": {
+      "label": "Usuń właściwość",
+      "subtitle": "Usuń właściwość"
+    }
+  },
+  "Microsoft.EditActions": {
+    "form": {
+      "label": "Modyfikowanie aktywnego okna dialogowego",
+      "subtitle": "Edytuj akcje"
+    }
+  },
+  "Microsoft.EditArray": {
+    "form": {
+      "label": "Edytuj właściwość tablicy",
+      "subtitle": "Edytuj tablicę"
+    }
+  },
+  "Microsoft.EmitEvent": {
+    "form": {
+      "label": "Emituj zdarzenie niestandardowe",
+      "subtitle": "Emituj zdarzenie"
+    }
+  },
+  "Microsoft.EndDialog": {
+    "form": {
+      "label": "Zakończ ten dialog",
+      "subtitle": "Zakończ dialog"
+    }
+  },
+  "Microsoft.EndTurn": {
+    "form": {
+      "label": "Zakończ kolejkę",
+      "subtitle": "Zakończ kolejkę"
+    }
+  },
+  "Microsoft.Foreach": {
+    "form": {
+      "label": "Pętla: dla każdego elementu",
+      "subtitle": "Dla każdego"
+    }
+  },
+  "Microsoft.ForeachPage": {
+    "form": {
+      "label": "Pętla: dla każdej strony (wiele elementów)",
+      "subtitle": "Dla każdej strony"
+    }
+  },
+  "Microsoft.HttpRequest": {
+    "form": {
+      "label": "Wyślij żądanie HTTP",
+      "subtitle": "Żądanie HTTP"
+    }
+  },
+  "Microsoft.IfCondition": {
+    "form": {
+      "label": "Gałąź: if/else",
+      "subtitle": "Warunek „jeśli”"
+    }
+  },
+  "Microsoft.LogAction": {
+    "form": {
+      "label": "Rejestruj w konsoli",
+      "subtitle": "Dziennik akcji"
+    }
+  },
+  "Microsoft.RepeatDialog": {
+    "form": {
+      "label": "Powtórz ten dialog",
+      "subtitle": "Powtórz dialog"
+    }
+  },
+  "Microsoft.ReplaceDialog": {
+    "form": {
+      "label": "Zamień ten dialog",
+      "subtitle": "Zamień dialog"
+    }
+  },
+  "Microsoft.SendActivity": {
+    "form": {
+      "label": "Wyślij odpowiedź",
+      "subtitle": "Wyślij działanie"
+    }
+  },
+  "Microsoft.SetProperties": {
+    "form": {
+      "label": "Ustaw właściwości",
+      "subtitle": "Ustaw właściwości"
+    }
+  },
+  "Microsoft.SetProperty": {
+    "form": {
+      "label": "Ustaw właściwość",
+      "subtitle": "Ustaw właściwość"
+    }
+  },
+  "Microsoft.SignOutUser": {
+    "form": {
+      "label": "Wyloguj użytkownika",
+      "subtitle": "Wyloguj użytkownika"
+    }
+  },
+  "Microsoft.SwitchCondition": {
+    "form": {
+      "label": "Gałąź: switch (wiele opcji)",
+      "subtitle": "Przełącz warunek"
+    }
+  },
+  "Microsoft.ThrowException": {
+    "form": {
+      "label": "Throw an exception",
+      "subtitle": "Throw an exception"
+    }
+  },
+  "Microsoft.TraceActivity": {
+    "form": {
+      "label": "Emituj zdarzenie śledzenia",
+      "subtitle": "Śledź działanie"
+    }
+  },
+  "Microsoft.Ask": {
+    "form": {
+      "label": "Send a response to ask a question",
+      "subtitle": "Ask Activity"
+    }
+  },
+  "Microsoft.AttachmentInput": {
+    "form": {
+      "label": "Monituj o plik lub załącznik",
+      "subtitle": "Dane wejściowe załącznika"
+    }
+  },
+  "Microsoft.ChoiceInput": {
+    "form": {
+      "label": "Monituj z wieloma opcjami wyboru",
+      "subtitle": "Wprowadzanie wyboru"
+    }
+  },
+  "Microsoft.ConfirmInput": {
+    "form": {
+      "label": "Monituj o potwierdzenie",
+      "subtitle": "Potwierdź dane wejściowe"
+    }
+  },
+  "Microsoft.DateTimeInput": {
+    "form": {
+      "label": "Monituj o datę lub godzinę",
+      "subtitle": "Dane wejściowe daty i godziny"
+    }
+  },
+  "Microsoft.NumberInput": {
+    "form": {
+      "label": "Monituj o liczbę",
+      "subtitle": "Liczbowe dane wejściowe"
+    }
+  },
+  "Microsoft.OAuthInput": {
+    "form": {
+      "label": "Logowanie OAuth",
+      "subtitle": "Dane wejściowe OAuth"
+    }
+  },
+  "Microsoft.TextInput": {
+    "form": {
+      "label": "Monituj o tekst",
+      "subtitle": "Tekstowe dane wejściowe"
+    }
+  },
+  "Microsoft.OnActivity": {
+    "form": {
+      "label": "Działania",
+      "subtitle": "Odebrano działanie"
+    }
+  },
+  "Microsoft.OnAssignEntity": {
+    "form": {
+      "label": "Handle a condition when an entity is assigned",
+      "subtitle": "EntityAssigned activity"
+    }
+  },
+  "Microsoft.OnBeginDialog": {
+    "form": {
+      "label": "Rozpoczęto dialog",
+      "subtitle": "Zdarzenie rozpoczęcia dialogu"
+    }
+  },
+  "Microsoft.OnCancelDialog": {
+    "form": {
+      "label": "Anulowano dialog",
+      "subtitle": "Anuluj zdarzenie dialogu"
+    }
+  },
+  "Microsoft.OnCondition": {
+    "form": {
+      "label": "Obsługuj warunek",
+      "subtitle": "Warunek"
+    }
+  },
+  "Microsoft.OnConversationUpdateActivity": {
+    "form": {
+      "description": "Obsługuj zdarzenia wyzwalane, gdy użytkownik rozpocznie nową konwersację z botem.",
+      "label": "Powitanie",
+      "subtitle": "Działanie ConversationUpdate"
+    }
+  },
+  "Microsoft.OnDialogEvent": {
+    "form": {
+      "label": "Zdarzenia dialogu",
+      "subtitle": "Zdarzenie dialogu"
+    }
+  },
+  "Microsoft.OnEndOfActions": {
+    "form": {
+      "label": "Handle a condition when actions have ended",
+      "subtitle": "EndOfActions activity"
+    }
+  },
+  "Microsoft.OnEndOfConversationActivity": {
+    "form": {
+      "label": "Konwersacja zakończona",
+      "subtitle": "Działanie: koniec konwersacji"
+    }
+  },
+  "Microsoft.OnError": {
+    "form": {
+      "label": "Wystąpił błąd",
+      "subtitle": "Zdarzenie błędu"
+    }
+  },
+  "Microsoft.OnEventActivity": {
+    "form": {
+      "label": "Odebrano zdarzenie",
+      "subtitle": "Działanie: zdarzenie"
+    }
+  },
+  "Microsoft.OnHandoffActivity": {
+    "form": {
+      "label": "Przekazanie do człowieka",
+      "subtitle": "Działanie: przekazanie"
+    }
+  },
+  "Microsoft.OnInstallationUpdateActivity": {
+    "form": {
+      "label": "Installation updated",
+      "subtitle": "Installation updated activity"
+    }
+  },
+  "Microsoft.OnIntent": {
+    "form": {
+      "label": "Rozpoznano intencję",
+      "subtitle": "Rozpoznano intencję"
+    }
+  },
+  "Microsoft.OnInvokeActivity": {
+    "form": {
+      "label": "Wywołano konwersację",
+      "subtitle": "Działanie: wywołanie"
+    }
+  },
+  "Microsoft.OnMessageActivity": {
+    "form": {
+      "label": "Odebrano wiadomość",
+      "subtitle": "Działanie: odebranie wiadomości"
+    }
+  },
+  "Microsoft.OnMessageDeleteActivity": {
+    "form": {
+      "label": "Usunięto wiadomość",
+      "subtitle": "Działanie: usunięcie wiadomości"
+    }
+  },
+  "Microsoft.OnMessageReactionActivity": {
+    "form": {
+      "label": "Reakcja na wiadomość",
+      "subtitle": "Działanie: reakcja na wiadomość"
+    }
+  },
+  "Microsoft.OnMessageUpdateActivity": {
+    "form": {
+      "label": "Wiadomość została zaktualizowana",
+      "subtitle": "Działanie zaktualizowania wiadomości"
+    }
+  },
+  "Microsoft.OnRepromptDialog": {
+    "form": {
+      "label": "Ponownie monituj o dane wejściowe",
+      "subtitle": "Zdarzenie ponownego monitu w dialogu"
+    }
+  },
+  "Microsoft.OnTypingActivity": {
+    "form": {
+      "label": "Użytkownik pisze",
+      "subtitle": "Działanie: pisanie"
+    }
+  },
+  "Microsoft.OnUnknownIntent": {
+    "form": {
+      "label": "Nieznana intencja",
+      "subtitle": "Rozpoznano nieznaną intencję"
+    }
+  }
+}
