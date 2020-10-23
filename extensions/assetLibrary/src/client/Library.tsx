@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import React, { useState, Fragment, useEffect } from 'react';
 import formatMessage from 'format-message';
-import { Dialog, DialogType, MessageBar, MessageBarType, MessageBarButton } from 'office-ui-fabric-react';
+import { Dialog, DialogType, Dropdown, MessageBar, MessageBarType, MessageBarButton, ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react';
 import { render, useHttpClient, useProjectApi, useApplicationApi } from '@bfc/extension-client';
 
 import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
@@ -50,12 +50,30 @@ const Library: React.FC = () => {
   const [availableLibraries, updateAvailableLibraries] = useState<any[]>([]);
   const [installedComponents, updateInstalledComponents] = useState<any[]>([]);
   const [recentlyUsed, setRecentlyUsed] = useState<any[]>([]);
+  const [programmingLanguageSelection, setProgrammingLanguageSelection] = useState<string>('c#');
+  const [runtimeLanguage, setRuntimeLanguage] = useState<string>('c#');
 
   const [selectedItem, setSelectedItem] = useState<LibraryRef>();
   const [working, setWorking] = useState(false);
   const [addDialogHidden, setAddDialogHidden] = useState(true);
   const httpClient = useHttpClient();
   const API_ROOT = '';
+
+  const programmingLanguages = [
+    {
+      key: 'c#',
+      text: 'C#',
+    },
+    {
+      key: 'js',
+      text: 'Javascript',
+    }
+  ];
+
+  const onChangeLanguage = (ev, op, idx) => {
+    setProgrammingLanguageSelection(op.key);
+    return true;
+  }
 
   const installComponentAPI = async (projectId: string, packageName: string, version: string, isUpdating: boolean) => {
     return httpClient.post(`${API_ROOT}/projects/${projectId}/import`, {
@@ -79,6 +97,10 @@ const Library: React.FC = () => {
     });
   };
 
+  const isCompatible = (component) => {
+    return (component.language === programmingLanguageSelection);
+  }
+
   /**
    * This method will eventually be moved to the server, when we can store this list on disk via an extension mechanism.
    * For now, we're doing it in the client, using LocalStorage.
@@ -89,7 +111,7 @@ const Library: React.FC = () => {
 
     componentList.forEach((component) => {
       if (!recentlyUsed.find((used) => used.name === component.name)) {
-        recentlyUsed.unshift({...component, runtime: settings.runtime.key});
+        recentlyUsed.unshift({...component, language: runtimeLanguage });
       }
     });
 
@@ -99,6 +121,8 @@ const Library: React.FC = () => {
   }
 
   useEffect(() => {
+
+
     getLibraries();
     const recent = window.localStorage.getItem(RECENTLY_USED_KEY);
     if (recent) {
@@ -113,6 +137,16 @@ const Library: React.FC = () => {
     if (settings.runtime && settings.runtime.customRuntime === true && settings.runtime.path) {
       setEjectedRuntime(true);
       getInstalledLibraries();
+
+      // detect programming language.
+      // should one day be a dynamic property of the runtime or at least stored in the settings?
+      if (settings.runtime.key === 'node-azurewebapp') {
+        setRuntimeLanguage('js');
+        setProgrammingLanguageSelection('js');
+      } else {
+        setRuntimeLanguage('c#');
+        setProgrammingLanguageSelection('c#');
+      }
     }
   }, []);
 
@@ -134,7 +168,8 @@ const Library: React.FC = () => {
 
     // find all categories listed in the available libraries
     const categories = [DEFAULT_CATEGORY];
-    availableLibraries.forEach((item) => {
+    const availableCompatibleLibraries = availableLibraries.filter(component => isCompatible(component));
+    availableCompatibleLibraries.forEach((item) => {
       if (!item.category) {
         item.category = DEFAULT_CATEGORY;
       }
@@ -144,7 +179,7 @@ const Library: React.FC = () => {
     });
 
     categories.forEach((category) => {
-      const categoryItems = availableLibraries.filter((i) => i.category === category);
+      const categoryItems = availableCompatibleLibraries.filter((i) => i.category === category);
       if (categoryItems.length) {
         groups.push({
           key: category,
@@ -157,23 +192,22 @@ const Library: React.FC = () => {
       }
     });
 
-    if (recentlyUsed.length) {
-
+    const recentlyUsedCompatible = recentlyUsed.filter(component => isCompatible(component));
+    if (recentlyUsedCompatible.length) {
       groups.push({
         key: 'recently',
         name: strings.recentlyUsedCategory,
         startIndex: items.length,
-        count: recentlyUsed ? recentlyUsed.length : 0,
+        count: recentlyUsedCompatible.length,
         level: 0,
       });
-
-      items = items.concat(recentlyUsed || []);
+      items = items.concat(recentlyUsedCompatible || []);
     }
 
 
     setItems(items);
     setGroups(groups);
-  }, [installedComponents, availableLibraries, recentlyUsed]);
+  }, [installedComponents, availableLibraries, recentlyUsed, programmingLanguageSelection]);
 
   const toolbarItems: IToolbarItem[] = [
     {
@@ -318,12 +352,11 @@ const Library: React.FC = () => {
   };
 
   const navigateToEject = (evt: any): void => {
-    // TODO: update this when navigateTo is available
     navigateTo(`/settings/bot/${projectId}/runtime`);
   };
 
   return (
-    <Fragment>
+    <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
       <Dialog
         dialogContentProps={{
           title: strings.importDialogTitle,
@@ -355,11 +388,23 @@ const Library: React.FC = () => {
           {strings.requireEject}
         </MessageBar>
       )}
+      <Dropdown
+        placeholder="Choose"
+        label={formatMessage('Package Format')}
+        selectedKey={programmingLanguageSelection}
+        options={programmingLanguages}
+        onChange={onChangeLanguage}
+        styles={{
+          root: { width: '200px' },
+          label: { display: 'inline' },
+        }}
+      >
+      </Dropdown>
       <div css={ContentStyle} data-testid="installedLibraries" role="main">
         <div aria-label={formatMessage('List view')} css={contentEditor} role="region">
           <Fragment>
             <LibraryList
-              disabled={!ejectedRuntime}
+              disabled={!ejectedRuntime || runtimeLanguage != programmingLanguageSelection}
               groups={groups}
               install={install}
               isInstalled={isInstalled}
@@ -383,7 +428,7 @@ const Library: React.FC = () => {
           </Fragment>
         </div>
       </div>
-    </Fragment>
+    </ScrollablePane>
   );
 };
 

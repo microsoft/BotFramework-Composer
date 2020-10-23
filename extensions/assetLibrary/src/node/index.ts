@@ -148,7 +148,11 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
           }
         } catch (err) {
           console.error('Error in import', { message: err.message });
-          await runtime.uninstallComponent(currentProject.settings.runtime.path, packageName);
+          try {
+            await runtime.uninstallComponent(currentProject.settings.runtime.path, packageName);
+          } catch (err) {
+            console.log('Error uninstalling', err);
+          }
           // if packageName is in the github form <username/package> remove the first part, because otherwise the unisntall doesn't work
           if (packageName.match(/.*\/.*/)) {
             const [user, realPackageName] = packageName.split(/\//);

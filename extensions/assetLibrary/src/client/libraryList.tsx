@@ -129,20 +129,6 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
       },
       isPadded: true,
     },
-    // {
-    //   key: "AuthorName",
-    //   name: "Authors",
-    //   fieldName: "authors",
-    //   minWidth: 150,
-    //   maxWidth: 300,
-    //   isRowHeader: true,
-    //   isResizable: true,
-    //   data: "string",
-    //   onRender: (item: LibraryRef) => {
-    //     return <span>{item.authors ? item.authors.join(',') : ''}</span>;
-    //   },
-    //   isPadded: true,
-    // },
     {
       key: "actions",
       name: "",
