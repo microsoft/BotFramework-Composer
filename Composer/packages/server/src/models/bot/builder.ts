@@ -12,7 +12,7 @@ import log from '../../logger';
 
 import { luImportResolverGenerator, getLUFiles, getQnAFiles } from './luResolver';
 
-const crossTrainer = require('@microsoft/bf-lu/lib/parser/cross-train/crossTrainer.js');
+const crossTrainer = require('@bfcomposer/bf-lu/lib/parser/cross-train/crossTrainer.js');
 const luBuild = require('@microsoft/bf-lu/lib/parser/lubuild/builder.js');
 const qnaBuild = require('@microsoft/bf-lu/lib/parser/qnabuild/builder.js');
 const LuisBuilder = require('@microsoft/bf-lu/lib/parser/luis/luisBuilder');
@@ -110,11 +110,11 @@ export class Builder {
 
   private async crossTrain(luFiles: FileInfo[], qnaFiles: FileInfo[], allFiles: FileInfo[]) {
     const luContents = luFiles.map((file) => {
-      return { content: file.content, id: file.name };
+      return { content: file.content, id: Path.basename(file.name, '.lu') };
     });
 
     const qnaContents = qnaFiles.map((file) => {
-      return { content: file.content, id: file.name };
+      return { content: file.content, id: Path.basename(file.name, '.qna') };
     });
 
     const importResolver = luImportResolverGenerator([...getLUFiles(allFiles), ...getQnAFiles(allFiles)]);

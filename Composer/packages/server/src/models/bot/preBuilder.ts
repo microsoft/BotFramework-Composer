@@ -44,56 +44,11 @@ export class PreBuilder {
 
   async updateCrossTrainConfig(luFiles: FileInfo[], crossTrainConfig?: CrossTrainConfig) {
     if (crossTrainConfig && luFiles.length) {
-      const configWithPath = this.generateCrossTrainConfig(crossTrainConfig, luFiles);
       await this.storage.writeFile(
         `${this.folderPath}/cross-train.config.json`,
-        JSON.stringify(configWithPath, null, 2)
+        JSON.stringify(crossTrainConfig, null, 2)
       );
     }
-  }
-
-  replaceCrossTrainId(id: string, files: FileInfo[]) {
-    if (!id) return id;
-    const luFile = files.find((item) => item.name === id);
-    return Path.relative(this.folderPath, luFile?.path ?? '');
-  }
-
-  /**
-   * convert the cross train config from id to relativePath. The cli use the config to find the files.
-   * config = {
-   * 'main.lu': {
-   *  rootDialog: true,
-   *    triggers: {
-   *      'intentA':'diaA.lu',
-   *       'intentB': 'diaB.lu'
-   *    }
-   *  }
-   * }
-   */
-  generateCrossTrainConfig(crossTrainConfig: CrossTrainConfig, files: FileInfo[]) {
-    const pathCache = {};
-
-    const configWithPath = keys(crossTrainConfig).reduce((result: CrossTrainConfig, key: string) => {
-      const { triggers: preTriggers, rootDialog } = crossTrainConfig[key];
-      // replace the key with path
-      if (!pathCache[key]) pathCache[key] = this.replaceCrossTrainId(key, files);
-
-      const triggers = keys(preTriggers).reduce((result: { [key: string]: string[] }, key) => {
-        const ids = preTriggers[key];
-        result[key] = ids.map((item) => {
-          // replace the trigger value with path
-          if (!pathCache[item]) pathCache[item] = this.replaceCrossTrainId(item, files);
-
-          return pathCache[item];
-        });
-        return result;
-      }, {});
-
-      result[pathCache[key]] = { triggers, rootDialog };
-      return result;
-    }, {});
-
-    return configWithPath;
   }
 
   /**
