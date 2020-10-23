@@ -13,6 +13,7 @@ RUN apt update \
     && apt install -y nodejs \
     && npm install -g yarn
 
+feat/ubuntu-baseimage
 
 FROM BASE as build
 ARG YARN_ARGS
