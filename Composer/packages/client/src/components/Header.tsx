@@ -5,7 +5,9 @@
 import { jsx, css } from '@emotion/core';
 import formatMessage from 'format-message';
 import { IconButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
-import { useCallback, Fragment } from 'react';
+import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
+import { DirectionalHint } from 'office-ui-fabric-react/lib/Callout';
+import { useCallback, useState, Fragment } from 'react';
 import { useRecoilValue } from 'recoil';
 import { SharedColors } from '@uifabric/fluent-theme';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
@@ -84,6 +86,8 @@ export const Header = () => {
   const projectName = useRecoilValue(botDisplayNameState(projectId));
   const locale = useRecoilValue(localeState(projectId));
   const appUpdate = useRecoilValue(appUpdateState);
+  const [teachingBubbleVisibility, setTeachingBubbleVisibility] = useState<boolean>();
+
   const { showing, status } = appUpdate;
 
   const onUpdateAvailableClick = useCallback(() => {
@@ -105,7 +109,11 @@ export const Header = () => {
         {projectName && (
           <Fragment>
             <div css={divider} />
-            <span css={botName}>{`${projectName} (${locale})`}</span>
+            <span
+              css={botName}
+              id="targetButton"
+              onClick={() => setTeachingBubbleVisibility(true)}
+            >{`${projectName} (${locale})`}</span>
           </Fragment>
         )}
       </div>
@@ -116,6 +124,21 @@ export const Header = () => {
           title={formatMessage('Update available')}
           onClick={onUpdateAvailableClick}
         />
+      )}
+      {teachingBubbleVisibility && (
+        <TeachingBubble
+          calloutProps={{ directionalHint: DirectionalHint.bottomLeftEdge }}
+          styles={}
+          target="#targetButton"
+          hasCloseButton={true}
+          closeButtonAriaLabel="Close"
+          onDismiss={() => setTeachingBubbleVisibility(false)}
+          headline={formatMessage('Active language')}
+        >
+          {formatMessage(
+            'This is the bot language you are currently authoring. Change the active language in the dropdown below.'
+          )}
+        </TeachingBubble>
       )}
     </div>
   );
