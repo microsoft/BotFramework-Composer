@@ -21,6 +21,7 @@ import { SettingToggle } from './SettingToggle';
 import { SettingDropdown } from './SettingDropdown';
 import * as images from './images';
 import { FeatureFlagCheckBox } from './FeatureFlagCheckBox';
+import { PreviewFeatureToggle } from './PreviewFeatureToggle';
 
 const ElectronSettings = lazy(() =>
   import('./electronSettings').then((module) => ({ default: module.ElectronSettings }))
@@ -28,7 +29,6 @@ const ElectronSettings = lazy(() =>
 
 const AppSettings: React.FC<RouteComponentProps> = () => {
   const [calloutIsShown, showCallout] = useState(false);
-  const [featureFlagVisible, showFeatureFlag] = useState(false);
 
   const { onboardingSetComplete, updateUserSettings, toggleFeatureFlag } = useRecoilValue(dispatcherState);
   const userSettings = useRecoilValue(userSettingsState);
@@ -64,26 +64,6 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
       text: formatMessage('Does Not Exist'),
     });
   }
-
-  const renderFeatureFlagOptions = () => {
-    const result: React.ReactNode[] = [];
-    Object.keys(featureFlags).forEach((key: string) => {
-      const featureFlag: FeatureFlag = featureFlags[key];
-      if (!featureFlag.isHidden) {
-        result.push(
-          <FeatureFlagCheckBox
-            key={key}
-            description={featureFlag.description}
-            enabled={featureFlag.enabled}
-            featureFlagKey={key as FeatureFlagKey}
-            featureFlagName={featureFlag.displayName}
-            toggleFeatureFlag={toggleFeatureFlag}
-          />
-        );
-      }
-    });
-    return <div css={featureFlagGroupContainer}>{result}</div>;
-  };
 
   return (
     <div css={container}>
@@ -180,19 +160,9 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
       </section>
       <section css={section}>
         <h2>{formatMessage('Application Updates')}</h2>
-        <SettingToggle
-          hideToggle
-          checked={featureFlagVisible}
-          description={formatMessage('Toggle the visibility of individual, preview, features in Composer.')}
-          image={images.previewFeatures}
-          title={formatMessage('Preview features')}
-          onToggle={(checked: boolean) => {
-            showFeatureFlag(checked);
-          }}
-        />
-        {renderFeatureFlagOptions()}
+        <Suspense fallback={<div />}>{renderElectronSettings && <ElectronSettings />}</Suspense>
+        <PreviewFeatureToggle />
       </section>
-      <Suspense fallback={<div />}>{renderElectronSettings && <ElectronSettings />}</Suspense>
     </div>
   );
 };
