@@ -5,8 +5,6 @@
 'use strict';
 const { resolve } = require('path');
 
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-
 module.exports = {
   entry: './src/ui/index.tsx',
   mode: 'production',
@@ -15,9 +13,9 @@ module.exports = {
     path: resolve(__dirname, 'lib'),
   },
   externals: {
-    // expect react & react-dom to be available in the extension host iframe
     react: 'React',
     'react-dom': 'ReactDOM',
+    'office-ui-fabric-react': 'Fabric',
   },
   module: {
     rules: [
@@ -49,9 +47,4 @@ module.exports = {
     net: 'empty',
     tls: 'empty',
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: './src/ui/index.html',
-    }),
-  ],
 };

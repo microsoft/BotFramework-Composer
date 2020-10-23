@@ -6,7 +6,6 @@
   "scripts": {
     "build": "tsc"
   },
-  "extendsComposer": true,
   "author": "",
   "license": "ISC",
   "dependencies": {

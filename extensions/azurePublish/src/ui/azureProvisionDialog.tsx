@@ -21,23 +21,22 @@ import {
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { ResourceGroup } from '@azure/arm-resources/esm/models';
 import { DeployLocation } from '@bfc/types';
-import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import {
+  ChoiceGroup,
+  IChoiceGroupOption,
   DetailsList,
   DetailsListLayoutMode,
   IColumn,
   IGroup,
   CheckboxVisibility,
-} from 'office-ui-fabric-react/lib/DetailsList';
-import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+  Sticky,
+  StickyPositionType,
+  TooltipHost,
+  Spinner,
+} from 'office-ui-fabric-react';
 import { JsonEditor } from '@bfc/code-editor';
-import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 
 import { getResourceList, getSubscriptions, getResourceGroups, getDeployLocations, getPreview } from './api';
-
-initializeIcons(undefined, { disableWarnings: true });
 
 const resourceTypes = ['Azure Web App', 'Cognitive Services'];
 

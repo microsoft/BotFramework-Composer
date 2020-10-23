@@ -5,12 +5,11 @@
   "main": "lib/index.js",
   "license": "MIT",
   "scripts": {
-    "build:appinsight": "cd ../lib/arm-appinsights && yarn && yarn build",
+    "build:appinsight": "cd ./vendor/arm-appinsights && yarn && yarn build",
     "build:ui": "webpack --config webpack.config.js",
     "build:node": "tsc --project tsconfig.node.json",
-    "build": "yarn build:node && yarn build:ui"
+    "build": "yarn build:appinsight && yarn build:node && yarn build:ui"
   },
-  "extendsComposer": true,
   "composer": {
     "bundles": [
       {
@@ -20,14 +19,16 @@
     ],
     "contributes": {
       "views": {
-        "publish": [{
-          "bundleId": "publish"
-        }]
+        "publish": [
+          {
+            "bundleId": "publish"
+          }
+        ]
       }
     }
   },
   "dependencies": {
-    "@azure/arm-appinsights": "../lib/arm-appinsights",
+    "@azure/arm-appinsights": "./vendor/arm-appinsights",
     "@azure/arm-appservice": "^6.0.0",
     "@azure/arm-appservice-profile-2019-03-01-hybrid": "1.0.0",
     "@azure/arm-botservice": "^2.0.0",
@@ -51,6 +52,7 @@
     "@bfc/shared": "../../Composer/packages/lib/shared",
     "@bfc/types": "../../Composer/packages/types",
     "@microsoft/bf-lu": "^4.11.0-dev.20201005.7e5e1b8",
+    "@uifabric/fluent-theme": "^7.3.29",
     "adal-node": "0.2.1",
     "archiver": "^5.0.2",
     "axios": "^0.19.2",
@@ -67,9 +69,11 @@
   "devDependencies": {
     "@types/archiver": "3.1.0",
     "@types/fs-extra": "8.1.0",
+    "@types/node": "^14.11.2",
+    "@types/react": "^16.9.53",
+    "@types/react-dom": "^16.9.8",
     "@types/request": "2.48.4",
     "@types/request-promise": "4.1.45",
-    "@types/node": "^14.11.2",
     "html-webpack-plugin": "^4.3.0",
     "ts-loader": "^8.0.0",
     "typescript": "^3.9.6",
@@ -77,6 +81,7 @@
     "webpack-cli": "^3.3.12"
   },
   "resolutions": {
+    "@botframework-composer/types": "file:../../Composer/packages/types",
     "bl": "^4.0.3"
   }
 }

@@ -5,15 +5,14 @@ import path from 'path';
 
 import md5 from 'md5';
 import { copy, rmdir, emptyDir, readJson, pathExists, writeJson, mkdirSync, writeFileSync } from 'fs-extra';
-import { IBotProject } from '@bfc/shared';
-import { JSONSchema7 } from '@bfc/extension';
+import { JSONSchema7, ExtensionRegistration, PublishPlugin, PublishResult, IBotProject } from '@bfc/extension';
 import { Debugger } from 'debug';
 
 import { AzureResourceTypes, AzureResourceDefinitions } from './resourceTypes';
 import { mergeDeep } from './mergeDeep';
 import { BotProjectDeploy } from './deploy';
 import { BotProjectProvision } from './provision';
-import { BackgroundProcessManager } from './backgroundProcessManager';
+import { BackgroundProcessManager, ProcessStatus } from './backgroundProcessManager';
 import { ProvisionConfig } from './provision';
 import schema from './schema';
 
@@ -45,21 +44,34 @@ interface ResourceType {
   [key: string]: any;
 }
 
+function publishResultFromStatus(procStatus: ProcessStatus): PublishResult {
+  const { status, message, log, comment, time, id } = procStatus;
+
+  return {
+    status,
+    message,
+    log,
+    comment,
+    time,
+    id,
+  };
+}
+
 // Wrap the entire class definition in the export so the composer object can be available to it
-export default async (composer: any): Promise<void> => {
-  class AzurePublisher {
+export default async (composer: ExtensionRegistration): Promise<void> => {
+  class AzurePublisher implements PublishPlugin<PublishConfig> {
     private historyFilePath: string;
-    private publishHistories: any;
+    private publishHistories: Record<string, Record<string, PublishResult[]>>;
     private mode: string;
     public schema: JSONSchema7;
     public instructions: string;
-    public customName: string;
-    public customDescription: string;
+    public name: string;
+    public description: string;
     public logger: Debugger;
     public hasView = true;
     public bundleId = 'publish'; /** host custom UI */
 
-    constructor(mode?: string, customName?: string, customDescription?: string) {
+    constructor(mode: string, name: string, description: string) {
       this.publishHistories = {};
       this.historyFilePath = path.resolve(__dirname, '../publishHistory.txt');
       if (PERSIST_HISTORY) {
@@ -68,8 +80,8 @@ export default async (composer: any): Promise<void> => {
       this.mode = mode || 'azurewebapp';
       this.schema = schema;
       this.instructions = instructions;
-      this.customName = customName;
-      this.customDescription = customDescription;
+      this.name = name;
+      this.description = description;
       this.logger = composer.log;
     }
 
@@ -102,8 +114,8 @@ export default async (composer: any): Promise<void> => {
       }
     }
 
-    private getHistory = async (botId: string, profileName: string) => {
-      if (this.publishHistories && this.publishHistories[botId] && this.publishHistories[botId][profileName]) {
+    private history = async (botId: string, profileName: string) => {
+      if (this.publishHistories?.[botId]?.[profileName]) {
         return this.publishHistories[botId][profileName];
       }
       return [];
@@ -420,7 +432,7 @@ export default async (composer: any): Promise<void> => {
         this.cleanup(resourcekey);
       }
 
-      return BackgroundProcessManager.getStatus(jobId);
+      return publishResultFromStatus(BackgroundProcessManager.getStatus(jobId));
     };
 
     getStatus = async (config: PublishConfig, project: IBotProject, user) => {
@@ -430,17 +442,17 @@ export default async (composer: any): Promise<void> => {
       if (config.jobId) {
         const status = BackgroundProcessManager.getStatus(config.jobId);
         if (status) {
-          return status;
+          return publishResultFromStatus(status);
         }
       } else {
         // If job id was not present or failed to resolve the status, use the pid and profileName
         const status = BackgroundProcessManager.getStatusByName(project.id, profileName);
         if (status) {
-          return status;
+          return publishResultFromStatus(status);
         }
       }
       // if ACTIVE status is found, look for recent status in history
-      const current = await this.getHistory(botId, profileName);
+      const current = await this.history(botId, profileName);
       if (current.length > 0) {
         return current[0];
       }
@@ -451,10 +463,10 @@ export default async (composer: any): Promise<void> => {
       };
     };
 
-    history = async (config: PublishConfig, project: IBotProject, user) => {
+    public getHistory = async (config: PublishConfig, project: IBotProject, user) => {
       const profileName = config.profileName;
       const botId = project.id;
-      return await this.getHistory(botId, profileName);
+      return await this.history(botId, profileName);
     };
 
     /**************************************************************************************************
