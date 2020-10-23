@@ -12,6 +12,7 @@ import { LuisAndQnaPublish } from './luisAndQnA';
 import { HttpsProxyAgent } from 'https-proxy-agent';
 import archiver = require('archiver');
 import fetch from 'node-fetch';
+const proxy = require("node-global-proxy").default;
 
 export class BotProjectDeploy {
   private accessToken: string;
@@ -21,6 +22,7 @@ export class BotProjectDeploy {
   private runtime: any;
 
   constructor(config: BotProjectDeployConfig) {
+    proxy.setConfig(process.env.COMPOSER_HTTP_PROXY);
     this.logger = config.logger;
     this.accessToken = config.accessToken;
     this.projPath = config.projPath;
@@ -49,6 +51,7 @@ export class BotProjectDeploy {
     httpProxy?: string
   ) {
     try {
+      proxy.start();
       // STEP 1: CLEAN UP PREVIOUS BUILDS
       // cleanup any previous build
       if (await fs.pathExists(this.zipPath)) {
@@ -121,6 +124,7 @@ export class BotProjectDeploy {
       });
       throw error;
     }
+    proxy.stop();
   }
 
   private async zipDirectory(source: string, out: string) {

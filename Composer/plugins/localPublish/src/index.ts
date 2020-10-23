@@ -11,7 +11,7 @@ import archiver from 'archiver';
 import { v4 as uuid } from 'uuid';
 import AdmZip from 'adm-zip';
 import portfinder from 'portfinder';
-
+const proxy = require("node-global-proxy").default;
 const stat = promisify(fs.stat);
 const readDir = promisify(fs.readdir);
 const removeFile = promisify(fs.unlink);
@@ -43,6 +43,7 @@ class LocalPublisher {
 
   constructor(composer: any) {
     this.composer = composer;
+    proxy.setConfig(process.env.COMPOSER_HTTP_PROXY);
   }
 
   private setBotStatus = (botId: string, status: RunningBot) => {
@@ -60,6 +61,8 @@ class LocalPublisher {
 
   private publishAsync = async (botId: string, version: string, fullSettings: any, project: any, user) => {
     try {
+      proxy.start();
+
       // if enableCustomRuntime is not true, initialize the runtime code in a tmp folder
       // and export the content into that folder as well.
       const runtime = this.composer.getRuntimeByProject(project);
@@ -85,6 +88,7 @@ class LocalPublisher {
         throw new Error('Custom runtime settings are incomplete. Please specify path and command.');
       }
       await this.setBot(botId, version, fullSettings, project);
+      proxy.stop();
     } catch (error) {
       this.stopBot(botId);
       this.setBotStatus(botId, {

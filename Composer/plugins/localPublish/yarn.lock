@@ -93,6 +93,11 @@ bl@^4.0.3:
     inherits "^2.0.4"
     readable-stream "^3.4.0"
 
+boolean@^3.0.1:
+  version "3.0.1"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/boolean/-/boolean-3.0.1.tgz#35ecf2b4a2ee191b0b44986f14eb5f052a5cbb4f"
+  integrity sha1-NezytKLuGRsLRJhvFOtfBSpcu08=
+
 brace-expansion@^1.1.7:
   version "1.1.11"
   resolved "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-1.1.11.tgz#3c7fcbf529d87226f3d2f52b966ff5271eb441dd"
@@ -136,6 +141,19 @@ concat-map@0.0.1:
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
   integrity sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=
 
+config-chain@^1.1.11:
+  version "1.1.12"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/config-chain/-/config-chain-1.1.12.tgz#0fde8d091200eb5e808caf25fe618c02f48e4efa"
+  integrity sha1-D96NCRIA616AjK8l/mGMAvSOTvo=
+  dependencies:
+    ini "^1.3.4"
+    proto-list "~1.2.1"
+
+core-js@^3.6.5:
+  version "3.6.5"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/core-js/-/core-js-3.6.5.tgz#7395dc273af37fb2e50e9bd3d9fe841285231d1a"
+  integrity sha1-c5XcJzrzf7LlDpvT2f6EEoUjHRo=
+
 core-util-is@~1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/core-util-is/-/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
@@ -163,6 +181,18 @@ debug@^3.1.1:
   dependencies:
     ms "^2.1.1"
 
+define-properties@^1.1.3:
+  version "1.1.3"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/define-properties/-/define-properties-1.1.3.tgz#cf88da6cbee26fe6db7094f61d870cbd84cee9f1"
+  integrity sha1-z4jabL7ib+bbcJT2HYcMvYTO6fE=
+  dependencies:
+    object-keys "^1.0.12"
+
+detect-node@^2.0.4:
+  version "2.0.4"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/detect-node/-/detect-node-2.0.4.tgz#014ee8f8f669c5c58023da64b8179c083a28c46c"
+  integrity sha1-AU7o+PZpxcWAI9pkuBecCDooxGw=
+
 dir-glob@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/dir-glob/-/dir-glob-3.0.1.tgz#56dbf73d992a4a93ba1584f4534063fd2e41717f"
@@ -170,12 +200,27 @@ dir-glob@^3.0.1:
   dependencies:
     path-type "^4.0.0"
 
+encodeurl@^1.0.2:
+  version "1.0.2"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/encodeurl/-/encodeurl-1.0.2.tgz#ad3ff4c86ec2d029322f5a02c3a9a606c95b3f59"
+  integrity sha1-rT/0yG7C0CkyL1oCw6mmBslbP1k=
+
 end-of-stream@^1.4.1:
   version "1.4.4"
   resolved "https://registry.yarnpkg.com/end-of-stream/-/end-of-stream-1.4.4.tgz#5ae64a5f45057baf3626ec14da0ca5e4b2431eb0"
   integrity sha512-+uw1inIHVPQoaVuHzRyXd21icM+cnt4CzD5rW+NC1wjOUSTOs+Te7FOv7AhN7vS9x/oIyhLP5PR1H+phQAHu5Q==
   dependencies:
     once "^1.4.0"
+
+es6-error@^4.1.1:
+  version "4.1.1"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/es6-error/-/es6-error-4.1.1.tgz#9e3af407459deed47e9a91f9b885a84eb05c561d"
+  integrity sha1-njr0B0Wd7tR+mpH5uIWoTrBcVh0=
+
+escape-string-regexp@^4.0.0:
+  version "4.0.0"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/escape-string-regexp/-/escape-string-regexp-4.0.0.tgz#14ba83a5d373e3d311e5afca29cf5bfad965bf34"
+  integrity sha1-FLqDpdNz49MR5a/KKc9b+tllvzQ=
 
 fast-glob@^3.1.1:
   version "3.2.4"
@@ -232,6 +277,36 @@ glob@^7.1.3, glob@^7.1.4:
     once "^1.3.0"
     path-is-absolute "^1.0.0"
 
+global-agent@^2.1.12:
+  version "2.1.12"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/global-agent/-/global-agent-2.1.12.tgz#e4ae3812b731a9e81cbf825f9377ef450a8e4195"
+  integrity sha1-5K44Ercxqegcv4Jfk3fvRQqOQZU=
+  dependencies:
+    boolean "^3.0.1"
+    core-js "^3.6.5"
+    es6-error "^4.1.1"
+    matcher "^3.0.0"
+    roarr "^2.15.3"
+    semver "^7.3.2"
+    serialize-error "^7.0.1"
+
+global-tunnel-ng@^2.7.1:
+  version "2.7.1"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/global-tunnel-ng/-/global-tunnel-ng-2.7.1.tgz#d03b5102dfde3a69914f5ee7d86761ca35d57d8f"
+  integrity sha1-0DtRAt/eOmmRT17n2GdhyjXVfY8=
+  dependencies:
+    encodeurl "^1.0.2"
+    lodash "^4.17.10"
+    npm-conf "^1.1.3"
+    tunnel "^0.0.6"
+
+globalthis@^1.0.1:
+  version "1.0.1"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/globalthis/-/globalthis-1.0.1.tgz#40116f5d9c071f9e8fb0037654df1ab3a83b7ef9"
+  integrity sha1-QBFvXZwHH56PsAN2VN8as6g7fvk=
+  dependencies:
+    define-properties "^1.1.3"
+
 globby@^11.0.0:
   version "11.0.1"
   resolved "https://registry.yarnpkg.com/globby/-/globby-11.0.1.tgz#9a2bf107a068f3ffeabc49ad702c79ede8cfd357"
@@ -277,6 +352,11 @@ inherits@2.0.3:
   resolved "https://registry.yarnpkg.com/inherits/-/inherits-2.0.3.tgz#633c2c83e3da42a502f52466022480f4208261de"
   integrity sha1-Yzwsg+PaQqUC9SRmAiSA9CCCYd4=
 
+ini@^1.3.4:
+  version "1.3.5"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/ini/-/ini-1.3.5.tgz#eee25f56db1c9ec6085e0c22778083f596abf927"
+  integrity sha1-7uJfVtscnsYIXgwid4CD9Zar+Sc=
+
 is-extglob@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/is-extglob/-/is-extglob-2.1.1.tgz#a88c02535791f02ed37c76a1b9ea9773c833f8c2"
@@ -298,6 +378,11 @@ isarray@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/isarray/-/isarray-1.0.0.tgz#bb935d48582cba168c06834957a54a3e07124f11"
   integrity sha1-u5NdSFgsuhaMBoNJV6VKPgcSTxE=
+
+json-stringify-safe@^5.0.1:
+  version "5.0.1"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/json-stringify-safe/-/json-stringify-safe-5.0.1.tgz#1296a2d58fd45f19a0f6ce01d65701e2c735b6eb"
+  integrity sha1-Epai1Y/UXxmg9s4B1lcB4sc1tus=
 
 lazystream@^1.0.0:
   version "1.0.0"
@@ -331,10 +416,17 @@ lodash.union@^4.6.0:
   resolved "https://registry.yarnpkg.com/lodash.union/-/lodash.union-4.6.0.tgz#48bb5088409f16f1821666641c44dd1aaae3cd88"
   integrity sha1-SLtQiECfFvGCFmZkHETdGqrjzYg=
 
-lodash@^4.17.14:
+lodash@^4.17.10, lodash@^4.17.14:
   version "4.17.20"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
   integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
+
+matcher@^3.0.0:
+  version "3.0.0"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/matcher/-/matcher-3.0.0.tgz#bd9060f4c5b70aa8041ccc6f80368760994f30ca"
+  integrity sha1-vZBg9MW3CqgEHMxvgDaHYJlPMMo=
+  dependencies:
+    escape-string-regexp "^4.0.0"
 
 merge2@^1.3.0:
   version "1.4.1"
@@ -373,10 +465,31 @@ ms@^2.1.1:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
   integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
 
+node-global-proxy@^1.0.1:
+  version "1.0.1"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/node-global-proxy/-/node-global-proxy-1.0.1.tgz#6d1f66ed60427cb3f70066f7da0b70c78a1547a4"
+  integrity sha1-bR9m7WBCfLP3AGb32gtwx4oVR6Q=
+  dependencies:
+    global-agent "^2.1.12"
+    global-tunnel-ng "^2.7.1"
+
 normalize-path@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/normalize-path/-/normalize-path-3.0.0.tgz#0dcd69ff23a1c9b11fd0978316644a0388216a65"
   integrity sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==
+
+npm-conf@^1.1.3:
+  version "1.1.3"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/npm-conf/-/npm-conf-1.1.3.tgz#256cc47bd0e218c259c4e9550bf413bc2192aff9"
+  integrity sha1-JWzEe9DiGMJZxOlVC/QTvCGSr/k=
+  dependencies:
+    config-chain "^1.1.11"
+    pify "^3.0.0"
+
+object-keys@^1.0.12:
+  version "1.1.1"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/object-keys/-/object-keys-1.1.1.tgz#1c47f272df277f3b1daf061677d9c82e2322c60e"
+  integrity sha1-HEfyct8nfzsdrwYWd9nILiMixg4=
 
 once@^1.3.0, once@^1.4.0:
   version "1.4.0"
@@ -408,6 +521,11 @@ picomatch@^2.0.5, picomatch@^2.2.1:
   resolved "https://registry.yarnpkg.com/picomatch/-/picomatch-2.2.2.tgz#21f333e9b6b8eaff02468f5146ea406d345f4dad"
   integrity sha512-q0M/9eZHzmr0AulXyPwNfZjtwZ/RBZlbN3K3CErVrk50T2ASYI7Bye0EvekFY3IP1Nt2DHu0re+V2ZHIpMkuWg==
 
+pify@^3.0.0:
+  version "3.0.0"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/pify/-/pify-3.0.0.tgz#e5a4acd2c101fdf3d9a4d07f0dbc4db49dd28176"
+  integrity sha1-5aSs0sEB/fPZpNB/DbxNtJ3SgXY=
+
 portfinder@^1.0.26:
   version "1.0.26"
   resolved "https://registry.yarnpkg.com/portfinder/-/portfinder-1.0.26.tgz#475658d56ca30bed72ac7f1378ed350bd1b64e70"
@@ -426,6 +544,11 @@ process@^0.11.1:
   version "0.11.10"
   resolved "https://registry.yarnpkg.com/process/-/process-0.11.10.tgz#7332300e840161bda3e69a1d1d91a7d4bc16f182"
   integrity sha1-czIwDoQBYb2j5podHZGn1LwW8YI=
+
+proto-list@~1.2.1:
+  version "1.2.4"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/proto-list/-/proto-list-1.2.4.tgz#212d5bfe1318306a420f6402b8e26ff39647a849"
+  integrity sha1-IS1b/hMYMGpCD2QCuOJv85ZHqEk=
 
 readable-stream@^2.0.0, readable-stream@^2.0.5:
   version "2.3.7"
@@ -468,6 +591,18 @@ rimraf@^3.0.2:
   dependencies:
     glob "^7.1.3"
 
+roarr@^2.15.3:
+  version "2.15.4"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/roarr/-/roarr-2.15.4.tgz#f5fe795b7b838ccfe35dc608e0282b9eba2e7afd"
+  integrity sha1-9f55W3uDjM/jXcYI4Cgrnrouev0=
+  dependencies:
+    boolean "^3.0.1"
+    detect-node "^2.0.4"
+    globalthis "^1.0.1"
+    json-stringify-safe "^5.0.1"
+    semver-compare "^1.0.0"
+    sprintf-js "^1.1.2"
+
 run-parallel@^1.1.9:
   version "1.1.9"
   resolved "https://registry.yarnpkg.com/run-parallel/-/run-parallel-1.1.9.tgz#c9dd3a7cf9f4b2c4b6244e173a6ed866e61dd679"
@@ -483,10 +618,32 @@ safe-buffer@~5.2.0:
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.2.1.tgz#1eaf9fa9bdb1fdd4ec75f58f9cdb4e6b7827eec6"
   integrity sha512-rp3So07KcdmmKbGvgaNxQSJr7bGVSVk5S9Eq1F+ppbRo70+YeaDxkw5Dd8NPN+GD6bjnYm2VuPuCXmpuYvmCXQ==
 
+semver-compare@^1.0.0:
+  version "1.0.0"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/semver-compare/-/semver-compare-1.0.0.tgz#0dee216a1c941ab37e9efb1788f6afc5ff5537fc"
+  integrity sha1-De4hahyUGrN+nvsXiPavxf9VN/w=
+
+semver@^7.3.2:
+  version "7.3.2"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/semver/-/semver-7.3.2.tgz#604962b052b81ed0786aae84389ffba70ffd3938"
+  integrity sha1-YElisFK4HtB4aq6EOJ/7pw/9OTg=
+
+serialize-error@^7.0.1:
+  version "7.0.1"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/serialize-error/-/serialize-error-7.0.1.tgz#f1360b0447f61ffb483ec4157c737fab7d778e18"
+  integrity sha1-8TYLBEf2H/tIPsQVfHN/q313jhg=
+  dependencies:
+    type-fest "^0.13.1"
+
 slash@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/slash/-/slash-3.0.0.tgz#6539be870c165adbd5240220dbe361f1bc4d4634"
   integrity sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==
+
+sprintf-js@^1.1.2:
+  version "1.1.2"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/sprintf-js/-/sprintf-js-1.1.2.tgz#da1765262bf8c0f571749f2ad6c26300207ae673"
+  integrity sha1-2hdlJiv4wPVxdJ8q1sJjACB65nM=
 
 string_decoder@^1.1.1:
   version "1.3.0"
@@ -519,6 +676,16 @@ to-regex-range@^5.0.1:
   integrity sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==
   dependencies:
     is-number "^7.0.0"
+
+tunnel@^0.0.6:
+  version "0.0.6"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/tunnel/-/tunnel-0.0.6.tgz#72f1314b34a5b192db012324df2cc587ca47f92c"
+  integrity sha1-cvExSzSlsZLbASMk3yzFh8pH+Sw=
+
+type-fest@^0.13.1:
+  version "0.13.1"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/type-fest/-/type-fest-0.13.1.tgz#0172cb5bce80b0bd542ea348db50c7e21834d934"
+  integrity sha1-AXLLW86AsL1ULqNI21DH4hg02TQ=
 
 util-deprecate@^1.0.1, util-deprecate@~1.0.1:
   version "1.0.2"

@@ -40,7 +40,8 @@
     "http-proxy-agent": "^4.0.1",
     "https-proxy-agent": "^5.0.0",
     "request": "2.88.2",
-    "uuid": "7.0.3"
+    "uuid": "7.0.3",
+    "node-global-proxy": "^1.0.1"
   },
   "resolutions": {
     "bl": "^4.0.3"
