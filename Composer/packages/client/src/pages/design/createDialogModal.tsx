@@ -8,10 +8,10 @@ import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { useRecoilValue } from 'recoil';
 import { RecognizerSchema, useRecognizerConfig, useShellApi } from '@bfc/extension-client';
-import { DialogFactory, SDKKinds } from '@bfc/shared';
+import { DialogFactory, SDKKinds, DialogUtils } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
-import { DialogCreationCopy, dialogNameRegex } from '../../constants';
+import { DialogCreationCopy } from '../../constants';
 import { StorageFolder } from '../../recoilModel/types';
 import { FieldConfig, useForm } from '../../hooks/useForm';
 import { actionsSeedState, schemasState, validateDialogSelectorFamily } from '../../recoilModel';
@@ -46,11 +46,12 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
     name: {
       required: true,
       validate: (value) => {
-        if (!dialogNameRegex.test(value)) {
-          return formatMessage(
-            "Spaces and special characters are not allowed. Use letters, numbers, -, or _ and don't use number at the beginning."
-          );
+        try {
+          DialogUtils.validateDialogName(value);
+        } catch (error) {
+          return error.message;
         }
+
         if (dialogs.some((dialog) => dialog.id.toLowerCase() === value.toLowerCase())) {
           return formatMessage('Duplicate dialog name');
         }
