@@ -116,17 +116,17 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const { location, dialogId, projectId = '', skillId = null } = props;
   const userSettings = useRecoilValue(userSettingsState);
 
-  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
-  const schemas = useRecoilValue(schemasState(projectId));
+  const qnaFiles = useRecoilValue(qnaFilesState(skillId ?? projectId));
+  const schemas = useRecoilValue(schemasState(skillId ?? projectId));
   const dialogs = useRecoilValue(validateDialogSelectorFamily(skillId ?? projectId));
-  const displaySkillManifest = useRecoilValue(displaySkillManifestState(projectId));
-  const breadcrumb = useRecoilValue(breadcrumbState(projectId));
-  const focusPath = useRecoilValue(focusPathState(projectId));
-  const showCreateDialogModal = useRecoilValue(showCreateDialogModalState(projectId));
-  const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState(projectId));
-  const locale = useRecoilValue(localeState(projectId));
-  const undoFunction = useRecoilValue(undoFunctionState(projectId));
-  const undoVersion = useRecoilValue(undoVersionState(projectId));
+  const displaySkillManifest = useRecoilValue(displaySkillManifestState(skillId ?? projectId));
+  const breadcrumb = useRecoilValue(breadcrumbState(skillId ?? projectId));
+  const focusPath = useRecoilValue(focusPathState(skillId ?? projectId));
+  const showCreateDialogModal = useRecoilValue(showCreateDialogModalState(skillId ?? projectId));
+  const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState(skillId ?? projectId));
+  const locale = useRecoilValue(localeState(skillId ?? projectId));
+  const undoFunction = useRecoilValue(undoFunctionState(skillId ?? projectId));
+  const undoVersion = useRecoilValue(undoVersionState(skillId ?? projectId));
   const rootProjectId = useRecoilValue(rootBotProjectIdSelector) ?? projectId;
 
   const { undo, redo, canRedo, canUndo, commitChanges, clearUndo } = undoFunction;
