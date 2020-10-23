@@ -32,3 +32,6 @@ export function closeDialog(): void {
 export function onBack(): void {
   return window[ComposerGlobalName].onBack();
 }
+export function setTitle(value): void {
+  return window[ComposerGlobalName].setTitle(value);
+}

@@ -13,7 +13,8 @@ import { JsonEditor } from '@bfc/code-editor';
 import { useRecoilValue } from 'recoil';
 import { PublishTarget } from '@bfc/shared';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
-// import { DialogType } from 'office-ui-fabric-react/lib/Dialog';
+
+import { PublishProfileDialog } from '../../constants';
 // import { IPersonaSharedProps, Persona, PersonaSize } from 'office-ui-fabric-react/lib/Persona';
 // import { Link } from 'office-ui-fabric-react/lib/Link';
 
@@ -22,6 +23,7 @@ import { userSettingsState, currentProjectIdState } from '../../recoilModel';
 import { PluginAPI } from '../../plugins/api';
 import { PluginHost } from '../../components/PluginHost/PluginHost';
 import { dispatcherState } from '../../recoilModel';
+import { SettingToggle } from '../setting/app-settings/SettingToggle';
 
 import { label, separator, customPublishUISurface } from './styles';
 interface CreatePublishTargetProps {
@@ -29,8 +31,8 @@ interface CreatePublishTargetProps {
   current: { index: number; item: PublishTarget } | null;
   targets: PublishTarget[];
   types: PublishType[];
+  setDialogProps: (value) => void;
   updateSettings: (name: string, type: string, configuration: string, editTarget: any) => Promise<void>;
-  setDialogProps: (value: any) => void;
 }
 
 const PageTypes = {
@@ -41,7 +43,7 @@ const PageTypes = {
 };
 
 const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
-  const { current } = props;
+  const { current, setDialogProps } = props;
   const [targetType, setTargetType] = useState<string>(current?.item.type || '');
   const [name, setName] = useState(current ? current.item.name : '');
   const [config, setConfig] = useState(current ? JSON.parse(current.item.configuration) : undefined);
@@ -113,7 +115,10 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
     PluginAPI.publish.setConfigIsValid = (valid) => setPluginConfigIsValid(valid);
     PluginAPI.publish.useConfigBeingEdited = () => [current ? JSON.parse(current.item.configuration) : undefined];
     PluginAPI.publish.closeDialog = props.closeDialog;
-    PluginAPI.publish.onBack = () => setPage(PageTypes.AddProfile);
+    PluginAPI.publish.onBack = () => {
+      setPage(PageTypes.AddProfile);
+      props.setDialogProps(PublishProfileDialog.ADD_PROFILE);
+    };
   }, [current]);
 
   // setup plugin APIs so that the provisioning plugin can initiate the process from inside the iframe

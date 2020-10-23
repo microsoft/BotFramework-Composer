@@ -16,6 +16,7 @@ import {
   closeDialog,
   onBack,
   setPublishConfig,
+  setTitle,
 } from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { ResourceGroup } from '@azure/arm-resources/esm/models';
@@ -49,6 +50,20 @@ const choiceOptions: IChoiceGroupOption[] = [
 const PageTypes = {
   ConfigProvision: 'config',
   ReviewResource: 'review',
+};
+const DialogTitle = {
+  CONFIG_RESOURCES: {
+    title: formatMessage('Configure resources'),
+    subText: formatMessage(
+      'Composer will create your bot resources in this Azure destination. If you already have assets created then select import'
+    ),
+  },
+  REVIEW: {
+    title: formatMessage('Review + Create'),
+    subText: formatMessage(
+      'Please review the resources that will be created for your bot. Once these resources are provisioned, your resources will be available in your Azure profile'
+    ),
+  },
 };
 
 function onRenderDetailsHeader(props, defaultRender) {
@@ -143,6 +158,7 @@ export const AzureProvisionDialog: React.FC = () => {
   ];
 
   useEffect(() => {
+    setTitle(DialogTitle.CONFIG_RESOURCES);
     const { access_token, graph_token } = getAccessTokensFromStorage();
     setToken(access_token);
     setGraphToken(graph_token);
@@ -256,6 +272,7 @@ export const AzureProvisionDialog: React.FC = () => {
       setGroup(groups);
       setListItem(items);
       setPage(PageTypes.ReviewResource);
+      setTitle(DialogTitle.REVIEW);
     },
     [enabledResources]
   );
@@ -390,6 +407,7 @@ export const AzureProvisionDialog: React.FC = () => {
               text={'Back'}
               onClick={() => {
                 setPage(PageTypes.ConfigProvision);
+                setTitle(DialogTitle.CONFIG_RESOURCES);
               }}
             />
             <PrimaryButton

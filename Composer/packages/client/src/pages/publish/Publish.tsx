@@ -26,6 +26,7 @@ import { navigateTo } from '../../utils/navigation';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { PublishProfileDialog } from '../../constants';
+import { PluginAPI } from '../../plugins/api';
 
 import { TargetList } from './targetList';
 import { PublishDialog } from './publishDialog';
@@ -64,8 +65,8 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const [dialogProps, setDialogProps] = useState({
     title: formatMessage('Title'),
     type: DialogType.normal,
-    children: {},
   });
+  const [dialogChildren, setDialogChildren] = useState({});
   // const [editTarget, setEditTarget] = useState<{ index: number; item: PublishTarget } | null>(null);
 
   const isRollbackSupported = useMemo(
@@ -168,6 +169,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       // init selected status
       setSelectedVersion(null);
     }
+    PluginAPI.publish.setTitle = (value) => setDialogProps(value);
   }, [projectId]);
 
   useEffect(() => {
@@ -273,18 +275,17 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       setDialogProps({
         ...PublishProfileDialog.ADD_PROFILE,
         type: DialogType.normal,
-        children: (
-          <CreatePublishTarget
-            closeDialog={() => setDialogHidden(true)}
-            current={null}
-            // projectId={projectId}
-            setDialogProps={setDialogProps}
-            targets={settings.publishTargets || []}
-            types={publishTypes}
-            updateSettings={savePublishTarget}
-          />
-        ),
       });
+      setDialogChildren(
+        <CreatePublishTarget
+          closeDialog={() => setDialogHidden(true)}
+          current={null}
+          setDialogProps={setDialogProps}
+          targets={settings.publishTargets || []}
+          types={publishTypes}
+          updateSettings={savePublishTarget}
+        />
+      );
       setDialogHidden(false);
     },
     [publishTypes, savePublishTarget, settings.publishTargets]
@@ -295,18 +296,17 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       setDialogProps({
         ...PublishProfileDialog.EDIT_PROFILE,
         type: DialogType.normal,
-        children: (
-          <CreatePublishTarget
-            closeDialog={() => setDialogHidden(true)}
-            current={editTarget ? editTarget : null}
-            // projectId={projectId}
-            setDialogProps={setDialogProps}
-            targets={(settings.publishTargets || []).filter((item) => editTarget && item.name != editTarget.item.name)}
-            types={publishTypes}
-            updateSettings={updatePublishTarget}
-          />
-        ),
       });
+      setDialogChildren(
+        <CreatePublishTarget
+          closeDialog={() => setDialogHidden(true)}
+          current={editTarget ? editTarget : null}
+          setDialogProps={setDialogProps}
+          targets={(settings.publishTargets || []).filter((item) => editTarget && item.name != editTarget.item.name)}
+          types={publishTypes}
+          updateSettings={updatePublishTarget}
+        />
+      );
       setDialogHidden(false);
     },
     [publishTypes, updatePublishTarget]
@@ -400,7 +400,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         modalProps={{ isBlocking: true }}
         onDismiss={() => setDialogHidden(true)}
       >
-        {dialogProps.children}
+        {dialogChildren}
       </Dialog>
       {!publishDialogHidden && (
         <PublishDialog

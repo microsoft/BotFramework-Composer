@@ -34,6 +34,7 @@ interface PublishAPI {
   currentProjectId?: () => string;
   closeDialog?: () => void;
   onBack?: () => void;
+  setTitle?: (value) => void;
 }
 
 class API implements IAPI {
@@ -68,6 +69,7 @@ class API implements IAPI {
       currentProjectId: undefined,
       closeDialog: undefined,
       onBack: undefined,
+      setTitle: undefined,
     };
   }
 }
