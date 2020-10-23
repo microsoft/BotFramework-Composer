@@ -221,6 +221,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
           ></PluginHost>
         );
     }
+    return null;
   }, [page, nextDisabled, saveDisabled]);
 
   // const examplePersona: IPersonaSharedProps = {
