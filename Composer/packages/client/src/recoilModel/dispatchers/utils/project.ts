@@ -9,8 +9,9 @@ import {
   BotProjectSpace,
   BotProjectSpaceSkill,
   convertSkillsToDictionary,
-  getEndpointNameGivenUrl,
+  migrateSkillsForExistingBots,
   dereferenceDefinitions,
+  fetchEndpointNameForSkill,
   DialogInfo,
   DialogSetting,
   getManifestNameFromUrl,
@@ -464,29 +465,6 @@ const handleSkillLoadingFailure = (callbackHelpers, { ex, skillNameIdentifier })
   set(botNameIdentifierState(projectId), skillNameIdentifier);
   setErrorOnBotProject(callbackHelpers, projectId, skillNameIdentifier, ex);
   return projectId;
-};
-
-const migrateSkillsForExistingBots = (botProjectFile: BotProjectSpace, rootBotSkill: any) => {
-  if (Object.keys(botProjectFile.skills).length === 0 && Object.keys(rootBotSkill).length > 0) {
-    for (const skillName in rootBotSkill) {
-      const currentSkill = rootBotSkill[skillName];
-      const skillNameIdentifier = camelCase(skillName);
-
-      botProjectFile.skills[skillNameIdentifier] = {
-        manifest: currentSkill?.manifestUrl || '',
-        remote: true,
-      };
-    }
-  }
-  return botProjectFile;
-};
-
-const fetchEndpointNameForSkill = (rootBotSettings: DialogSetting, skillNameIdentifier: string, manifestData) => {
-  const endpointUrl = objectGet(rootBotSettings, `skill[${skillNameIdentifier}].endpointUrl`);
-  if (endpointUrl) {
-    const matchedEndpoint = getEndpointNameGivenUrl(manifestData, endpointUrl);
-    return matchedEndpoint;
-  }
 };
 
 const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, storageId = 'default') => {
