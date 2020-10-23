@@ -14,6 +14,7 @@ import {
   getAccessTokensFromStorage,
   startProvision,
   closeDialog,
+  onBack,
   setPublishConfig,
 } from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
@@ -45,6 +46,10 @@ const choiceOptions: IChoiceGroupOption[] = [
   { key: 'create', text: 'Create new Azure resources' },
   { key: 'import', text: 'Import existing Azure resources' },
 ];
+const PageTypes = {
+  ConfigProvision: 'config',
+  ReviewResource: 'review',
+};
 
 function onRenderDetailsHeader(props, defaultRender) {
   return (
@@ -75,7 +80,8 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const [isEditorError, setEditorError] = useState(false);
   const [importConfig, setImportConfig] = useState();
-  const [page, setPage] = useState(1);
+
+  const [page, setPage] = useState(PageTypes.ConfigProvision);
   const [group, setGroup] = useState<IGroup[]>();
   const [listItems, setListItem] = useState();
 
@@ -216,8 +222,8 @@ export const AzureProvisionDialog: React.FC = () => {
   }, [currentSubscription]);
 
   const onNext = useMemo(
-    () => (config) => {
-      const names = getPreview(config.hostname);
+    () => (hostname) => {
+      const names = getPreview(hostname);
       console.log('got names', names);
       const result = extensionResourceOptions.map((resource) => {
         const previewObject = names.find((n) => n.key === resource.key);
@@ -249,7 +255,7 @@ export const AzureProvisionDialog: React.FC = () => {
       }
       setGroup(groups);
       setListItem(items);
-      setPage(2);
+      setPage(PageTypes.ReviewResource);
     },
     [enabledResources]
   );
@@ -281,13 +287,18 @@ export const AzureProvisionDialog: React.FC = () => {
     []
   );
 
-  return page === 1 ? (
+  const isDisAble = useMemo(() => {
+    return !currentSubscription || !currentHostName || errorHostName !== '';
+  }, [currentSubscription, currentHostName, errorHostName]);
+
+  const PageFormConfig = (
     <Fragment>
       <ChoiceGroup defaultSelectedKey="create" options={choiceOptions} onChange={updateChoice} />
-      {subscriptionOption?.length && choice.key === 'create' && (
+      {subscriptionOption?.length > 0 && choice.key === 'create' && (
         <form style={{ width: '60%' }}>
           <Dropdown
             required
+            defaultSelectedKey={currentSubscription?.subscriptionId}
             label={'Subscription'}
             options={subscriptionOption}
             placeholder={'Select your subscription'}
@@ -295,6 +306,7 @@ export const AzureProvisionDialog: React.FC = () => {
           />
           <TextField
             required
+            defaultValue={currentHostName}
             errorMessage={errorHostName}
             label={'HostName'}
             placeholder={'Name of your new resource group'}
@@ -302,6 +314,7 @@ export const AzureProvisionDialog: React.FC = () => {
           />
           <Dropdown
             required
+            defaultSelectedKey={currentLocation?.id}
             label={'Locations'}
             options={deployLocationsOption}
             placeholder={'Select your location'}
@@ -309,9 +322,9 @@ export const AzureProvisionDialog: React.FC = () => {
           />
         </form>
       )}
-      {choice.key === 'create' && !subscriptionOption ? <Spinner label="Loading" /> : null}
+      {choice.key === 'create' && subscriptionOption?.length < 1 && <Spinner label="Loading" />}
       {choice.key === 'import' && (
-        <div style={{ width: '60%' }}>
+        <div style={{ width: '60%', marginTop: '10px', marginBottom: '20px' }}>
           <div>Publish Configuration</div>
           <JsonEditor
             id={publishType}
@@ -328,57 +341,100 @@ export const AzureProvisionDialog: React.FC = () => {
           />
         </div>
       )}
+    </Fragment>
+  );
 
-      <DialogFooter>
-        <DefaultButton text={'Cancel'} onClick={closeDialog} />
-        {choice.key === 'create' ? (
-          <PrimaryButton
-            disabled={!currentSubscription || !currentHostName || errorHostName !== ''}
-            text="Next"
-            onClick={() => {
-              onNext({
-                subscription: currentSubscription,
-                hostname: currentHostName,
-                location: currentLocation,
-                type: publishType,
-                externalResources: extensionResourceOptions,
-              });
-            }}
-          />
-        ) : (
-          <PrimaryButton disabled={isEditorError} text="Save" onClick={onSave} />
-        )}
-      </DialogFooter>
-    </Fragment>
-  ) : (
-    <Fragment>
-      <DetailsList
-        isHeaderVisible
-        checkboxVisibility={CheckboxVisibility.hidden}
-        columns={columns}
-        getKey={(item) => item.key}
-        groups={group}
-        items={listItems}
-        layoutMode={DetailsListLayoutMode.justified}
-        setKey="none"
-        onRenderDetailsHeader={onRenderDetailsHeader}
-      />
-      <DialogFooter>
-        <DefaultButton text={'Cancel'} onClick={closeDialog} />
-        <PrimaryButton
-          disabled={!currentSubscription || !currentHostName || errorHostName !== ''}
-          text={'Ok'}
-          onClick={async () => {
-            await onSubmit({
-              subscription: currentSubscription,
-              hostname: currentHostName,
-              location: currentLocation,
-              type: publishType,
-              externalResources: extensionResourceOptions,
-            });
-          }}
+  const PageReview = useMemo(() => {
+    return (
+      <Fragment>
+        <DetailsList
+          isHeaderVisible
+          checkboxVisibility={CheckboxVisibility.hidden}
+          columns={columns}
+          getKey={(item) => item.key}
+          groups={group}
+          items={listItems}
+          layoutMode={DetailsListLayoutMode.justified}
+          setKey="none"
+          onRenderDetailsHeader={onRenderDetailsHeader}
         />
-      </DialogFooter>
-    </Fragment>
+      </Fragment>
+    );
+  }, [group, listItems]);
+
+  const PageFooter = useMemo(() => {
+    if (page === PageTypes.ConfigProvision) {
+      return (
+        <Fragment>
+          <DialogFooter>
+            <DefaultButton text={'Back'} onClick={onBack} />
+            {choice.key === 'create' ? (
+              <PrimaryButton
+                disabled={isDisAble}
+                text="Next"
+                onClick={() => {
+                  onNext(currentHostName);
+                }}
+              />
+            ) : (
+              <PrimaryButton disabled={isEditorError} text="Save" onClick={onSave} />
+            )}
+          </DialogFooter>
+        </Fragment>
+      );
+    } else {
+      return (
+        <Fragment>
+          <DialogFooter>
+            <DefaultButton
+              text={'Back'}
+              onClick={() => {
+                setPage(PageTypes.ConfigProvision);
+              }}
+            />
+            <PrimaryButton
+              disabled={isDisAble}
+              text={'Done'}
+              onClick={async () => {
+                await onSubmit({
+                  subscription: currentSubscription,
+                  hostname: currentHostName,
+                  location: currentLocation,
+                  type: publishType,
+                  externalResources: extensionResourceOptions,
+                });
+              }}
+            />
+          </DialogFooter>
+        </Fragment>
+      );
+    }
+  }, [
+    page,
+    choice,
+    isEditorError,
+    isDisAble,
+    currentSubscription,
+    currentHostName,
+    currentLocation,
+    publishType,
+    extensionResourceOptions,
+  ]);
+
+  return (
+    <div style={{ height: 'fit-content' }}>
+      {page === PageTypes.ConfigProvision ? PageFormConfig : PageReview}
+      <div
+        style={{
+          background: '#FFFFFF',
+          borderTop: '1px solid #000',
+          position: 'sticky',
+          bottom: '0',
+          textAlign: 'right',
+        }}
+      >
+        {PageFooter}
+      </div>
+    </div>
   );
 };

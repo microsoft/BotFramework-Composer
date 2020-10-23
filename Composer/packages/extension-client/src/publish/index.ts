@@ -28,3 +28,7 @@ export function currentProjectId(): string {
 export function closeDialog(): void {
   return window[ComposerGlobalName].closeDialog();
 }
+
+export function onBack(): void {
+  return window[ComposerGlobalName].onBack();
+}

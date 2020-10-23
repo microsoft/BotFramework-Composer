@@ -33,6 +33,7 @@ interface PublishAPI {
   startProvision?: (config: any) => void;
   currentProjectId?: () => string;
   closeDialog?: () => void;
+  onBack?: () => void;
 }
 
 class API implements IAPI {
@@ -66,6 +67,7 @@ class API implements IAPI {
       startProvision: undefined,
       currentProjectId: undefined,
       closeDialog: undefined,
+      onBack: undefined,
     };
   }
 }

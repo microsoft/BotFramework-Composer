@@ -33,6 +33,13 @@ interface CreatePublishTargetProps {
   setDialogProps: (value: any) => void;
 }
 
+const PageTypes = {
+  AddProfile: 'add',
+  EditProfile: 'edit',
+  ConfigProvision: 'config',
+  ReviewResource: 'review',
+};
+
 const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
   const { current } = props;
   const [targetType, setTargetType] = useState<string>(current?.item.type || '');
@@ -40,7 +47,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
   const [config, setConfig] = useState(current ? JSON.parse(current.item.configuration) : undefined);
   const [errorMessage, setErrorMsg] = useState('');
   const [pluginConfigIsValid, setPluginConfigIsValid] = useState(false);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(current ? PageTypes.EditProfile : PageTypes.AddProfile);
 
   const userSettings = useRecoilValue(userSettingsState);
   const projectId = useRecoilValue(currentProjectIdState);
@@ -56,10 +63,6 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
     if (type) {
       setTargetType(type.name);
     }
-  };
-
-  const updateConfig = (newConfig) => {
-    setConfig(newConfig);
   };
 
   const isNameValid = (newName) => {
@@ -98,18 +101,19 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
   }, [errorMessage, name, targetType]);
 
   const nextDisabled = useMemo(() => {
-    if (page === 1) {
+    if (page === PageTypes.AddProfile) {
       return saveDisabled;
-    } else if (page > 1) {
+    } else if (page !== PageTypes.EditProfile) {
       return !pluginConfigIsValid;
     }
   }, [saveDisabled, pluginConfigIsValid]);
   // setup plugin APIs
   useEffect(() => {
-    PluginAPI.publish.setPublishConfig = (config) => updateConfig(config);
+    PluginAPI.publish.setPublishConfig = (config) => setConfig(config);
     PluginAPI.publish.setConfigIsValid = (valid) => setPluginConfigIsValid(valid);
     PluginAPI.publish.useConfigBeingEdited = () => [current ? JSON.parse(current.item.configuration) : undefined];
     PluginAPI.publish.closeDialog = props.closeDialog;
+    PluginAPI.publish.onBack = () => setPage(PageTypes.AddProfile);
   }, [current]);
 
   // setup plugin APIs so that the provisioning plugin can initiate the process from inside the iframe
@@ -132,78 +136,92 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
     }
   };
 
-  const PageOne = useMemo(() => {
+  const FormInPage = useMemo(() => {
+    return (
+      <form>
+        <TextField
+          defaultValue={name}
+          errorMessage={errorMessage}
+          label={formatMessage('Create profile name')}
+          placeholder={formatMessage('My Staging Environment')}
+          readOnly={props.current ? true : false}
+          onChange={updateName}
+        />
+        <Dropdown
+          defaultSelectedKey={targetType}
+          label={formatMessage('Select your publish target')}
+          options={targetTypes}
+          placeholder={formatMessage('Choose One')}
+          onChange={updateType}
+        />
+      </form>
+    );
+  }, [name, targetType, targetTypes, errorMessage]);
+
+  const PageEditProfile = useMemo(() => {
     return (
       <div style={{ width: '60%' }}>
-        <form>
-          <TextField
-            defaultValue={props.current ? props.current.item.name : ''}
-            errorMessage={errorMessage}
-            label={formatMessage('Create profile name')}
-            placeholder={formatMessage('My Staging Environment')}
-            readOnly={props.current ? true : false}
-            onChange={updateName}
+        {FormInPage}
+        <Fragment>
+          {instructions && <p>{instructions}</p>}
+          <div css={label}>{formatMessage('Publish Configuration')}</div>
+          <JsonEditor
+            key={targetType}
+            editorSettings={userSettings.codeEditor}
+            height={200}
+            schema={schema}
+            value={config}
+            onChange={setConfig}
           />
-          <Dropdown
-            defaultSelectedKey={props.current ? props.current.item.type : null}
-            label={formatMessage('Select your publish target')}
-            options={targetTypes}
-            placeholder={formatMessage('Choose One')}
-            onChange={updateType}
-          />
-        </form>
-        {props.current && (
-          <Fragment>
-            {instructions && <p>{instructions}</p>}
-            <div css={label}>{formatMessage('Publish Configuration')}</div>
-            <JsonEditor
-              key={targetType}
-              editorSettings={userSettings.codeEditor}
-              height={200}
-              schema={schema}
-              value={config}
-              onChange={updateConfig}
-            />
-          </Fragment>
-        )}
+        </Fragment>
       </div>
     );
-  }, [targetTypes, errorMessage, instructions, schema, userSettings]);
+  }, [instructions, schema, userSettings]);
 
-  const publishTargetContent = useMemo(() => {
-    if (page === 1) {
-      return (
-        <Fragment>
-          {PageOne}
-          <Separator css={separator} />
-          <DialogFooter>
-            {/* <Persona {...examplePersona} size={PersonaSize.size24} /> */}
-            <DefaultButton text={formatMessage('Cancel')} onClick={props.closeDialog} />
-            {current ? (
-              <PrimaryButton disabled={saveDisabled} text={formatMessage('Save')} onClick={submit} />
-            ) : (
+  const PageContent = useMemo(() => {
+    switch (page) {
+      case PageTypes.AddProfile:
+        return (
+          <Fragment>
+            <div style={{ width: '60%' }}>{FormInPage}</div>
+            <Separator css={separator} />
+            <DialogFooter>
+              {/* <Persona {...examplePersona} size={PersonaSize.size24} /> */}
+              <DefaultButton text={formatMessage('Cancel')} onClick={props.closeDialog} />
               <PrimaryButton
                 disabled={nextDisabled}
                 text={formatMessage('Next')}
                 onClick={() => {
-                  setPage(page + 1);
+                  setPage(PageTypes.ConfigProvision);
                 }}
               />
-            )}
-          </DialogFooter>
-        </Fragment>
-      );
-    } else {
-      return (
-        <PluginHost
-          bundleId={targetBundleId}
-          extraIframeStyles={[customPublishUISurface]}
-          pluginName={targetType}
-          pluginType="publish"
-        ></PluginHost>
-      );
+            </DialogFooter>
+          </Fragment>
+        );
+      case PageTypes.EditProfile:
+        return (
+          <Fragment>
+            {PageEditProfile}
+            <Separator css={separator} />
+            <DialogFooter>
+              {/* <Persona {...examplePersona} size={PersonaSize.size24} /> */}
+              <DefaultButton text={formatMessage('Cancel')} onClick={props.closeDialog} />
+              <PrimaryButton disabled={saveDisabled} text={formatMessage('Save')} onClick={submit} />
+            </DialogFooter>
+          </Fragment>
+        );
+      case PageTypes.ConfigProvision:
+      case PageTypes.ReviewResource:
+        return (
+          <PluginHost
+            bundleId={targetBundleId}
+            extraIframeStyles={[customPublishUISurface]}
+            pluginName={targetType}
+            pluginType="publish"
+          ></PluginHost>
+        );
     }
-  }, [page, targetType, PageOne]);
+  }, [page, nextDisabled, saveDisabled]);
 
   // const examplePersona: IPersonaSharedProps = {
   //   text: 'Somebody',
@@ -212,7 +230,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
   //   optionalText: 'Available at 4:00pm',
   // };
 
-  return <Fragment>{publishTargetContent}</Fragment>;
+  return PageContent;
 };
 
 export { CreatePublishTarget };
