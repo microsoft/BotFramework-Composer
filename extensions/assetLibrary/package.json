@@ -39,7 +39,7 @@
     "@bfc/extension-client": "file:../../Composer/packages/extension-client",
     "@bfc/extension": "file:../../Composer/packages/extension",
     "@bfc/ui-shared": "file:../../Composer/packages/lib/ui-shared",
-    "@microsoft/bf-dialog": "4.11.0-dev.20201015.a41c691",
+    "@microsoft/bf-dialog": "4.11.0-dev.20201023.4d90f4e",
     "@emotion/core": "^10.0.35",
     "@uifabric/fluent-theme": "^7.1.4",
     "date-fns": "^2.16.1",

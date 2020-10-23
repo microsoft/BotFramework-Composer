@@ -137,7 +137,6 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
             if (mergeResults) {
               res.json({
                 success: true,
-                name: packageName,
                 components: mergeResults.components.filter((c) => c.includesSchema || c.includesExports),
               });
             } else {

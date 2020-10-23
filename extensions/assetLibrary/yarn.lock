@@ -248,10 +248,10 @@
   resolved "https://registry.yarnpkg.com/@jsdevtools/ono/-/ono-7.1.3.tgz#9df03bbd7c696a5c58885c34aa06da41c8543796"
   integrity sha512-4JQNk+3mVzK3xh2rqd6RB4J46qUR19azEHBneZyTZM+c456qOrbbM/5xcR8huNCCcbVt7+UmizG6GuUvPvKUYg==
 
-"@microsoft/bf-cli-command@4.11.0-dev.20201015.a41c691":
-  version "4.11.0-dev.20201015.a41c691"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-cli-command/-/bf-cli-command-4.11.0-dev.20201015.a41c691.tgz#5bcc351aa8b73b8ec0d3ce86cba091713155b408"
-  integrity sha512-WxVd/OP9o5H20hXAMSuvndxcCR6M0dt5hjzM9iBohTJ5wHg1CO9VmBVz0kqFVXRiODAPeftv8e8Zj/A6wdRcQw==
+"@microsoft/bf-cli-command@4.11.0-dev.20201023.4d90f4e":
+  version "4.11.0-dev.20201023.4d90f4e"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-cli-command/-/bf-cli-command-4.11.0-dev.20201023.4d90f4e.tgz#fd102ba6c5ab19be4b228b76eb3d093df05e32b2"
+  integrity sha512-ts09iWiFB3KwMvoxVTQ3m+2b6MUGAh9yIiWQh2gDvYoZsU9zarGowLld36eqiRYqkcd1hZ8pMhV4aD71O3YFEA==
   dependencies:
     "@oclif/command" "~1.5.19"
     "@oclif/config" "~1.13.3"
@@ -263,13 +263,13 @@
     fs-extra "^7.0.1"
     tslib "^2.0.3"
 
-"@microsoft/bf-dialog@4.11.0-dev.20201015.a41c691":
-  version "4.11.0-dev.20201015.a41c691"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-dialog/-/bf-dialog-4.11.0-dev.20201015.a41c691.tgz#e4b56e64b4b18f38e67eac108fb2b881954d54e3"
-  integrity sha512-SQoBE4+HIg3rBY+Z2eZjh1L6JBqMpynhi35N+lqHUUXrMxojuyBPCz4AHdBpXMrVjrMBoGtdEI4XhnaCyxIxkw==
+"@microsoft/bf-dialog@4.11.0-dev.20201023.4d90f4e":
+  version "4.11.0-dev.20201023.4d90f4e"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-dialog/-/bf-dialog-4.11.0-dev.20201023.4d90f4e.tgz#8cbf6223afa4adeeae11823e5d19cde845cc32f1"
+  integrity sha512-Bt1U9zWhJsfDRkz2QgnGgLe2CfnweL4znoMUxjiVAfUBBj8GOJog4CPRM90+ocJAZwxsilM1YfqOsr8rcWeWng==
   dependencies:
     "@apidevtools/json-schema-ref-parser" "^9.0.1"
-    "@microsoft/bf-cli-command" "4.11.0-dev.20201015.a41c691"
+    "@microsoft/bf-cli-command" "4.11.0-dev.20201023.4d90f4e"
     "@oclif/command" "~1.5.19"
     "@oclif/config" "~1.13.3"
     "@oclif/errors" "~1.2.2"

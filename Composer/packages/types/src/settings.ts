@@ -45,6 +45,7 @@ export type DialogSetting = {
   runtime: {
     customRuntime: boolean;
     path: string;
+    key: string;
     command: string;
   };
   defaultLanguage: string;

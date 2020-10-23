@@ -16,6 +16,7 @@ import { LibraryRef, LibraryList } from './libraryList';
 import { WorkingModal } from './workingModal';
 
 const DEFAULT_CATEGORY = formatMessage('Available');
+const RECENTLY_USED_KEY = 'recentlyUsedItems';
 
 const Library: React.FC = () => {
   const [items, setItems] = useState<LibraryRef[]>([]);
@@ -26,6 +27,7 @@ const Library: React.FC = () => {
   const [ejectedRuntime, setEjectedRuntime] = useState<boolean>(false);
   const [availableLibraries, updateAvailableLibraries] = useState<any[]>([]);
   const [installedComponents, updateInstalledComponents] = useState<any[]>([]);
+  const [recentlyUsed, setRecentlyUsed] = useState<any[]>([]);
 
   const [selectedItem, setSelectedItem] = useState<LibraryRef>();
   const [working, setWorking] = useState(false);
@@ -55,8 +57,37 @@ const Library: React.FC = () => {
     });
   };
 
+  /**
+   * This method will eventually be moved to the server, when we can store this list on disk via an extension mechanism.
+   * For now, we're doing it in the client, using LocalStorage.
+   * The goal is to capture a list of recently used components, and offer them up across projects
+   * @param componentList
+   */
+  const updateRecentlyUsed = (componentList) => {
+
+    componentList.forEach((component) => {
+      if (!recentlyUsed.find((used) => used.name === component.name)) {
+        recentlyUsed.unshift({...component, runtime: settings.runtime.key});
+      }
+    });
+
+    window.localStorage.setItem(RECENTLY_USED_KEY, JSON.stringify(recentlyUsed));
+    setRecentlyUsed(recentlyUsed);
+
+  }
+
   useEffect(() => {
     getLibraries();
+    const recent = window.localStorage.getItem(RECENTLY_USED_KEY);
+    if (recent) {
+      try {
+        const list = JSON.parse(recent);
+        setRecentlyUsed(list);
+      } catch(err) {
+        window.localStorage.removeItem(RECENTLY_USED_KEY);
+      }
+    }
+
     if (settings.runtime && settings.runtime.customRuntime === true && settings.runtime.path) {
       setEjectedRuntime(true);
       getInstalledLibraries();
@@ -104,9 +135,23 @@ const Library: React.FC = () => {
       }
     });
 
+    if (recentlyUsed.length) {
+
+      groups.push({
+        key: 'recently',
+        name: 'Recently Used',
+        startIndex: items.length,
+        count: recentlyUsed ? recentlyUsed.length : 0,
+        level: 0,
+      });
+
+      items = items.concat(recentlyUsed || []);
+    }
+
+
     setItems(items);
     setGroups(groups);
-  }, [installedComponents, availableLibraries]);
+  }, [installedComponents, availableLibraries, recentlyUsed]);
 
   const toolbarItems: IToolbarItem[] = [
     {
@@ -162,6 +207,9 @@ const Library: React.FC = () => {
         }
       } else {
         updateInstalledComponents(results.data.components);
+
+        updateRecentlyUsed(results.data.components);
+
         // reload modified content
         await reloadProject();
       }
