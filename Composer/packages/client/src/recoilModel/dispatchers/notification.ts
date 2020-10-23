@@ -16,7 +16,7 @@ export const createNotification = (notificationCard: CardProps): Notification =>
 
 export const addNotificationInternal = ({ set }: CallbackInterface, notification: Notification) => {
   set(notificationsState(notification.id), notification);
-  set(notificationIdsState, (ids) => [...ids, notification.id]);
+  set(notificationIdsState, (ids) => [notification.id, ...ids]);
 };
 
 export const deleteNotificationInternal = ({ reset, set }: CallbackInterface, id: string) => {
