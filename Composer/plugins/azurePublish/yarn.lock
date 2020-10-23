@@ -407,6 +407,11 @@
   resolved "https://registry.yarnpkg.com/@oclif/screen/-/screen-1.0.4.tgz#b740f68609dfae8aa71c3a6cab15d816407ba493"
   integrity sha512-60CHpq+eqnTxLZQ4PGHYNwUX572hgpMHGPtTWMjdTMsAvlm69lZV/4ly6O3sAYkomo4NggGcomrDpBe34rxUqw==
 
+"@tootallnate/once@1":
+  version "1.1.2"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@tootallnate/once/-/@tootallnate/once-1.1.2.tgz#ccb91445360179a04e7fe6aff78c00ffc1eeaf82"
+  integrity sha1-zLkURTYBeaBOf+av94wA/8Hur4I=
+
 "@types/archiver@3.1.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@types/archiver/-/archiver-3.1.0.tgz#0d5bd922ba5cf06e137cd6793db7942439b1805e"
@@ -447,6 +452,13 @@
   integrity sha512-VgNIkxK+j7Nz5P7jvUZlRvhuPSmsEfS03b0alKcq5V/STUKAa3Plemsn5mrQUO7am6OErJ4rhGEGJbACclrtRA==
   dependencies:
     "@types/minimatch" "*"
+    "@types/node" "*"
+
+"@types/http-proxy-agent@^2.0.0":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@types/http-proxy-agent/-/http-proxy-agent-2.0.2.tgz#942c1f35c7e1f0edd1b6ffae5d0f9051cfb32be1"
+  integrity sha512-2S6IuBRhqUnH1/AUx9k8KWtY3Esg4eqri946MnxTG5HwehF1S5mqLln8fcyMiuQkY72p2gH3W+rIPqp5li0LyQ==
+  dependencies:
     "@types/node" "*"
 
 "@types/lru-cache@^5.1.0":
@@ -620,6 +632,13 @@ adaptive-expressions@4.10.1:
     lru-cache "^5.1.1"
     moment "^2.25.1"
     moment-timezone "^0.5.28"
+
+agent-base@6:
+  version "6.0.1"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/agent-base/-/agent-base-6.0.1.tgz#808007e4e5867decb0ab6ab2f928fbdb5a596db4"
+  integrity sha1-gIAH5OWGfeywq2qy+Sj721pZbbQ=
+  dependencies:
+    debug "4"
 
 ajv@^6.5.5:
   version "6.12.2"
@@ -1097,6 +1116,13 @@ date-utils@*:
   resolved "https://registry.yarnpkg.com/date-utils/-/date-utils-1.2.21.tgz#61fb16cdc1274b3c9acaaffe9fc69df8720a2b64"
   integrity sha1-YfsWzcEnSzyayq/+n8ad+HIKK2Q=
 
+debug@4:
+  version "4.2.0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/debug/-/debug-4.2.0.tgz#7f150f93920e94c58f5574c2fd01a3110effe7f1"
+  integrity sha1-fxUPk5IOlMWPVXTC/QGjEQ7/5/E=
+  dependencies:
+    ms "2.1.2"
+
 debug@=3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/debug/-/debug-3.1.0.tgz#5bb5a0672628b64149566ba16819e61518c67261"
@@ -1527,6 +1553,15 @@ has@^1.0.3:
   dependencies:
     function-bind "^1.1.1"
 
+http-proxy-agent@^4.0.1:
+  version "4.0.1"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/http-proxy-agent/-/http-proxy-agent-4.0.1.tgz#8a8c8ef7f5932ccf953c296ca8291b95aa74aa3a"
+  integrity sha1-ioyO9/WTLM+VPClsqCkblap0qjo=
+  dependencies:
+    "@tootallnate/once" "1"
+    agent-base "6"
+    debug "4"
+
 http-signature@~1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/http-signature/-/http-signature-1.2.0.tgz#9aecd925114772f3d95b65a60abb8f7c18fbace1"
@@ -1535,6 +1570,14 @@ http-signature@~1.2.0:
     assert-plus "^1.0.0"
     jsprim "^1.2.2"
     sshpk "^1.7.0"
+
+https-proxy-agent@^5.0.0:
+  version "5.0.0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/https-proxy-agent/-/https-proxy-agent-5.0.0.tgz#e2a90542abb68a762e0a0850f6c9edadfd8506b2"
+  integrity sha1-4qkFQqu2inYuCghQ9sntrf2FBrI=
+  dependencies:
+    agent-base "6"
+    debug "4"
 
 hyperlinker@^1.0.0:
   version "1.0.0"
@@ -1968,7 +2011,7 @@ ms@2.0.0:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
   integrity sha1-VgiurfwAvmwpAd9fmGF4jeDVl8g=
 
-ms@^2.1.1:
+ms@2.1.2, ms@^2.1.1:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
   integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==

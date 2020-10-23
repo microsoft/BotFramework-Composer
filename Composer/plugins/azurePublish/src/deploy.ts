@@ -9,6 +9,7 @@ import * as rp from 'request-promise';
 import { BotProjectDeployConfig } from './botProjectDeployConfig';
 import { BotProjectDeployLoggerType } from './botProjectLoggerType';
 import { LuisAndQnaPublish } from './luisAndQnA';
+import { HttpsProxyAgent } from 'https-proxy-agent';
 import archiver = require('archiver');
 import fetch from 'node-fetch';
 
@@ -44,7 +45,8 @@ export class BotProjectDeploy {
     name: string,
     environment: string,
     hostname?: string,
-    luisResource?: string
+    luisResource?: string,
+    httpProxy?: string
   ) {
     try {
       // STEP 1: CLEAN UP PREVIOUS BUILDS
@@ -70,7 +72,8 @@ export class BotProjectDeploy {
         language,
         settings.luis,
         settings.qna,
-        luisResource
+        luisResource,
+        httpProxy
       );
 
       // amend luis settings with newly generated values
@@ -106,7 +109,7 @@ export class BotProjectDeploy {
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
         message: 'Publishing to Azure ...',
       });
-      await this.deployZip(this.accessToken, this.zipPath, name, environment, hostname);
+      await this.deployZip(this.accessToken, this.zipPath, name, environment, hostname, httpProxy);
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_SUCCESS,
         message: 'Publish To Azure Success!',
@@ -141,11 +144,24 @@ export class BotProjectDeploy {
 
   // Upload the zip file to Azure
   // DOCS HERE: https://docs.microsoft.com/en-us/azure/app-service/deploy-zip
-  private async deployZip(token: string, zipPath: string, name: string, env: string, hostname?: string) {
+  private async deployZip(token: string, zipPath: string, name: string, env: string, hostname?: string, httpProxy?: string) {
     this.logger({
       status: BotProjectDeployLoggerType.DEPLOY_INFO,
       message: 'Retrieve publishing details ...',
     });
+
+    if (httpProxy) {
+      this.logger({
+        status: BotProjectDeployLoggerType.DEPLOY_INFO,
+        message: `Using http proxy :${httpProxy}`
+      })
+    }
+    else {
+      this.logger({
+        status: BotProjectDeployLoggerType.DEPLOY_INFO,
+        message: `Post without proxy ...`
+      })
+    }
 
     const publishEndpoint = `https://${
       hostname ? hostname : (name + '-' + env)
@@ -158,7 +174,8 @@ export class BotProjectDeploy {
           body: fs.createReadStream(zipPath),
           headers: {
             'Authorization': `Bearer ${token}`
-          }
+          },
+          agent: (httpProxy ? new HttpsProxyAgent(httpProxy) : undefined) as any
         }
       );
       this.logger({

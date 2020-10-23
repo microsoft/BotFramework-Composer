@@ -27,6 +27,10 @@ const schema: JSONSchema7 = {
       type: 'string',
       title: 'Language for luis - default to en-us',
     },
+    httpProxy: {
+      type: 'string',
+      title: 'Cutomized http proxy for calling external api'
+    },
     settings: {
       type: 'object',
       title: 'Settings for Azure resources',
@@ -108,6 +112,7 @@ const schema: JSONSchema7 = {
     accessToken: '<Access token from az account get-access-token>',
     name: '<unique name in your subscription>',
     environment: 'dev',
+    httpProxy: '',
     settings: {
       applicationInsights: {
         InstrumentationKey: '<Instrumentation Key>',
