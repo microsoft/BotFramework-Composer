@@ -277,6 +277,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
           <CreatePublishTarget
             closeDialog={() => setDialogHidden(true)}
             current={null}
+            // projectId={projectId}
             setDialogProps={setDialogProps}
             targets={settings.publishTargets || []}
             types={publishTypes}
@@ -298,6 +299,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
           <CreatePublishTarget
             closeDialog={() => setDialogHidden(true)}
             current={editTarget ? editTarget : null}
+            // projectId={projectId}
             setDialogProps={setDialogProps}
             targets={(settings.publishTargets || []).filter((item) => editTarget && item.name != editTarget.item.name)}
             types={publishTypes}

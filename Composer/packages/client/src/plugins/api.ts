@@ -32,9 +32,7 @@ interface PublishAPI {
   useConfigBeingEdited?: (() => PublishConfig[]) | (() => void);
   startProvision?: (config: any) => void;
   currentProjectId?: () => string;
-  setProvisionConfig?: (config: any) => void;
-  getProvisionConfig?: () => any;
-  currentPage?: () => string;
+  closeDialog?: () => void;
 }
 
 class API implements IAPI {
@@ -65,10 +63,9 @@ class API implements IAPI {
       setConfigIsValid: undefined,
       setPublishConfig: undefined,
       useConfigBeingEdited: undefined,
+      startProvision: undefined,
       currentProjectId: undefined,
-      setProvisionConfig: undefined,
-      getProvisionConfig: undefined,
-      currentPage: undefined,
+      closeDialog: undefined,
     };
   }
 }
