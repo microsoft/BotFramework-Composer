@@ -20,6 +20,9 @@
   "a_form_dialog_enables_your_bot_to_collect_pieces_o_fdd3fe56": {
     "message": "A form dialog enables your bot to collect pieces of information ."
   },
+  "a_knowledge_base_name_cannot_contain_spaces_or_spe_91dd53ac": {
+    "message": "A knowledge base name cannot contain spaces or special characters. Use letters, numbers, -, or _."
+  },
   "a_minimap_gives_an_overview_of_your_source_code_fo_9a897f4f": {
     "message": "A minimap gives an overview of your source code for quick navigation and code understanding."
   },
@@ -34,6 +37,9 @@
   },
   "a_subscription_key_is_created_when_you_create_a_qn_37a6926f": {
     "message": "A subscription key is created when you create a QnA Maker resource."
+  },
+  "a_valid_url_should_start_with_http_or_https_327b1a30": {
+    "message": "A valid URL should start with http:// or https://"
   },
   "a_valid_url_should_start_with_http_or_https_d24b3591": {
     "message": "A valid url should start with http:// or https://"
@@ -124,6 +130,9 @@
   },
   "add_a_welcome_message_9e1480b2": {
     "message": "Add a welcome message"
+  },
+  "add_additional_url_bdfac25d": {
+    "message": "Add additional URL"
   },
   "add_alternative_phrasing_17e0304c": {
     "message": "+ Add alternative phrasing"
@@ -223,6 +232,9 @@
   },
   "any_string_f22dc2e1": {
     "message": "any string"
+  },
+  "append_choices_35c45a2d": {
+    "message": "Append choices"
   },
   "application_language_87691b6": {
     "message": "Application Language"
@@ -683,6 +695,9 @@
   "create_kb_from_url_or_file_49ad6671": {
     "message": "Create KB from URL or file"
   },
+  "create_knowledge_base_db6d66c4": {
+    "message": "Create knowledge base"
+  },
   "create_knowledge_base_from_scratch_afe4d2a2": {
     "message": "Create knowledge base from scratch"
   },
@@ -757,9 +772,6 @@
   },
   "debugging_options_20e2e9da": {
     "message": "Debugging options"
-  },
-  "decrement_by_step_9b6c2fa3": {
-    "message": "decrement by { step }"
   },
   "default_language_486a558d": {
     "message": "Default language"
@@ -1280,9 +1292,6 @@
   "in_the_b_create_a_trigger_b_wizard_set_the_trigger_f9b23519": {
     "message": "In the <b>Create a trigger</b> wizard, set the trigger type to <i>Activities</i> in the dropdown. Then set the <b>Activity Type</b> to <i>Greeting (ConversationUpdate activity)</i>, and click the <b>Submit</b> button."
   },
-  "increment_by_step_1cf3a88": {
-    "message": "increment by { step }"
-  },
   "input_1d1d9b8e": {
     "message": "Input"
   },
@@ -1358,9 +1367,6 @@
   "kb_d9c53902": {
     "message": "KB"
   },
-  "kb_name_cannot_contain_special_characters_616d7939": {
-    "message": "KB name cannot contain special characters."
-  },
   "key_cannot_be_blank_dccc1b46": {
     "message": "Key cannot be blank"
   },
@@ -1402,6 +1408,9 @@
   },
   "learn_more_about_knowledge_base_sources_24369b09": {
     "message": "Learn more about knowledge base sources. "
+  },
+  "learn_more_about_qna_maker_skus_998c567": {
+    "message": "Learn more about QnA Maker SKUs."
   },
   "learn_more_about_title_d1d3edbe": {
     "message": "Learn more about { title }"
@@ -1754,9 +1763,6 @@
   "number_or_expression_55c7f9f": {
     "message": "Number or expression"
   },
-  "numeric_field_c2564f69": {
-    "message": "numeric field"
-  },
   "oauth_login_b6aa9534": {
     "message": "OAuth login"
   },
@@ -1888,6 +1894,9 @@
   },
   "please_select_an_activity_type_92f4a8a1": {
     "message": "Please select an activity type"
+  },
+  "populate_your_knowledge_base_bb2d3605": {
+    "message": "Populate your Knowledge Base"
   },
   "press_enter_to_add_this_item_or_tab_to_move_to_the_6beb8a14": {
     "message": "press Enter to add this item or Tab to move to the next interactive element"
@@ -2204,8 +2213,8 @@
   "select_options_9ee7b227": {
     "message": "Select options"
   },
-  "select_property_type_5f3ab685": {
-    "message": "select property type"
+  "select_property_type_45c6e68e": {
+    "message": "Select property type"
   },
   "select_runtime_version_to_add_d63d383b": {
     "message": "Select runtime version to add"
@@ -2303,6 +2312,9 @@
   "skills_49cccd6a": {
     "message": "Skills"
   },
+  "skip_this_step_to_add_questions_and_answers_manual_ed1b9f80": {
+    "message": "Skip this step to add questions and answers manually after creation. The number of sources and file size you can add depends on the QnA service SKU you choose. "
+  },
   "sorry_something_went_wrong_with_connecting_bot_run_7d6785e3": {
     "message": "Sorry, something went wrong with connecting bot runtime"
   },
@@ -2317,6 +2329,9 @@
   },
   "spaces_and_special_characters_are_not_allowed_20d47684": {
     "message": "Spaces and special characters are not allowed."
+  },
+  "spaces_and_special_characters_are_not_allowed_use__2a61c454": {
+    "message": "Spaces and special characters are not allowed. Use letters, numbers, -, or _ and don''t use number at the beginning."
   },
   "spaces_and_special_characters_are_not_allowed_use__48acec3c": {
     "message": "Spaces and special characters are not allowed. Use letters, numbers, -, or _."
@@ -2338,6 +2353,9 @@
   },
   "start_command_a085f2ec": {
     "message": "Start command"
+  },
+  "start_typing_kind_or_b0c305da": {
+    "message": "Start typing { kind } or"
   },
   "state_is_state_a2b8943": {
     "message": "State is { state }"
@@ -2401,6 +2419,9 @@
   },
   "the_dialog_you_have_tried_to_delete_is_currently_u_a37c7a02": {
     "message": "The dialog you have tried to delete is currently used in the below dialog(s). Removing this dialog will cause your Bot to malfunction without additional action."
+  },
+  "the_file_name_can_not_be_empty_cbdbe9c8": {
+    "message": "The file name can not be empty"
   },
   "the_following_customizations_will_be_applied_to_yo_7d3384cf": {
     "message": "The following customizations will be applied to your bot"
@@ -2485,6 +2506,9 @@
   },
   "this_trigger_type_is_not_supported_by_the_regex_re_dc3eefa2": {
     "message": "This trigger type is not supported by the RegEx recognizer. To ensure this trigger is fired, change the recognizer type."
+  },
+  "this_url_is_duplicated_a0768f44": {
+    "message": "This url is duplicated"
   },
   "this_version_of_the_content_is_out_of_date_and_you_5e878f29": {
     "message": "This version of the content is out of date, and your last change was rejected. The content will be automatically refreshed."
@@ -2645,6 +2669,9 @@
   "updating_scripts_e17a5722": {
     "message": "Updating scripts... "
   },
+  "url_22a5f3b8": {
+    "message": "URL"
+  },
   "url_8c4ff7d2": {
     "message": "Url"
   },
@@ -2794,6 +2821,9 @@
   },
   "which_event_6e655d2b": {
     "message": "Which event?"
+  },
+  "write_an_expression_8773ea5c": {
+    "message": "Write an expression"
   },
   "yes_dde87d5": {
     "message": "Yes"
