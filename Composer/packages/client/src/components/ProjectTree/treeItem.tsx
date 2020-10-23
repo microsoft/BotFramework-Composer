@@ -8,7 +8,8 @@ import { FontWeights } from '@uifabric/styling';
 import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { ActionButton, IconButton } from 'office-ui-fabric-react/lib/Button';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
@@ -16,9 +17,6 @@ import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuStyles } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { ICalloutContentStyles } from 'office-ui-fabric-react/lib/Callout';
 import { DiagnosticSeverity } from '@bfc/shared';
-
-import { ErrorInfo } from '../TestController/errorInfo';
-import { WarningInfo } from '../TestController/warningInfo';
 
 import { TreeLink, TreeMenuItem } from './ProjectTree';
 
@@ -113,6 +111,14 @@ const navItem = (isActive: boolean, isBroken: boolean, shift: number) => css`
   }
 `;
 
+export const diagnosticLink = css`
+  display: flex;
+  align-items: center;
+  span {
+    margin: 2px 5px;
+  }
+`;
+
 // export const errorIcon
 
 export const overflowSet = (isBroken: boolean) => css`
@@ -129,9 +135,9 @@ export const overflowSet = (isBroken: boolean) => css`
 `;
 
 const statusIcon = {
-  width: '12px',
-  height: '12px',
-  fontSize: 12,
+  width: '24px',
+  height: '18px',
+  fontSize: 16,
   marginLeft: 6,
 };
 
@@ -143,6 +149,26 @@ const warningIcon = {
 const errorIcon = {
   ...statusIcon,
   color: '#CC3F3F',
+};
+
+const diagnosticIcon = {
+  width: '20px',
+  height: '20px',
+  fontSize: '12px',
+  lineHeight: '20px',
+  textAlign: 'center' as 'center',
+};
+
+const diagnosticErrorIcon = {
+  ...diagnosticIcon,
+  color: '#A80000',
+  background: '#FED9CC',
+};
+
+const diagnosticWarningIcon = {
+  ...diagnosticIcon,
+  color: '#8A8780',
+  background: '#FFF4CE',
 };
 
 // -------------------- TreeItem -------------------- //
@@ -187,18 +213,30 @@ const onRenderItem = (item: IOverflowSetItemProps) => {
   const errorContent = errors.map((diag) => diag.message).join(',');
 
   const warningHTML = warnings.map((item) => {
-    return <WarningInfo count={1} hidden={false} onClick={() => {}} />;
+    let linkText = item.source;
+    if (item.message === 'Missing skill manifest' && item.source === 'manifest.json') {
+      linkText = 'Create skill mainfest';
+    }
+    return (
+      <div css={diagnosticLink}>
+        <Icon iconName={'Warning'} style={diagnosticWarningIcon} />
+        <span>{item.message}</span>
+        <Link>{linkText}</Link>
+      </div>
+    );
   });
 
   const errorHTML = errors.map((item) => {
+    let linkText = item.source;
+    if (item.source === 'appsettings.json') {
+      linkText = 'Fix in bot settings';
+    }
     return (
-      <ActionButton
-        ariaLabel={formatMessage('Error')}
-        iconProps={{ iconName: 'ErrorBadge', style: errorIcon }}
-        title={formatMessage('Error')}
-      >
-        {item.message}
-      </ActionButton>
+      <div css={diagnosticLink}>
+        <Icon iconName={'ErrorBadge'} style={diagnosticErrorIcon} />
+        <span>{item.message}</span>
+        <Link>{linkText}</Link>
+      </div>
     );
   });
 
@@ -227,16 +265,16 @@ const onRenderItem = (item: IOverflowSetItemProps) => {
           />
         )}
         {item.displayName}
-        {warnings.length && (
+        {warnings.length ? (
           <TooltipHost content={warningHTML} directionalHint={DirectionalHint.bottomLeftEdge}>
             <Icon iconName={'Warning'} style={warningIcon} />
           </TooltipHost>
-        )}
-        {errors.length && (
+        ) : undefined}
+        {errors.length ? (
           <TooltipHost content={errorHTML} directionalHint={DirectionalHint.bottomLeftEdge}>
             <Icon iconName={'ErrorBadge'} style={errorIcon} />
           </TooltipHost>
-        )}
+        ) : undefined}
       </div>
     </div>
   );

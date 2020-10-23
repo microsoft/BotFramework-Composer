@@ -29,7 +29,7 @@ const checkManifest = (assets: BotAssets): Diagnostic[] => {
 
   const diagnostics: Diagnostic[] = [];
   if (skillManifests.length === 0) {
-    diagnostics.push(new Diagnostic('Missing skill manifest', 'manifest.json', DiagnosticSeverity.Error));
+    diagnostics.push(new Diagnostic('Missing skill manifest', 'manifest.json', DiagnosticSeverity.Warning));
   }
   return diagnostics;
 };
