@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
@@ -19,6 +20,7 @@ import {
   botDisplayNameState,
   publishTypesState,
   publishHistoryState,
+  botProjectSpaceSelector,
 } from '../../recoilModel';
 import { navigateTo } from '../../utils/navigation';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
@@ -26,12 +28,56 @@ import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { PublishDialog } from './publishDialog';
 import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor } from './styles';
 import { CreatePublishTarget } from './createPublishTarget';
-import { PublishStatusList, IStatus } from './publishStatusList';
-import { BotStatusList } from './botStatusList';
+import { IStatus } from './publishStatusList';
+import { BotStatusList, IBotStatus } from './botStatusList';
 
 const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: string }>> = (props) => {
-  const selectedTargetName = props.targetName;
   const { projectId = '' } = props;
+  const botProjectsMeta = useRecoilValue(botProjectSpaceSelector);
+  const selectedTargetName = props.targetName;
+
+  // fill Settings, status, publishType, publish target for bot from botProjectMeta
+  const botSettingsList: { [key: string]: any }[] = [];
+  const botStatusList: IBotStatus[] = [];
+  const botPublishTypesList: { [key: string]: any }[] = [];
+  const botPublishHistoryList: { [key: string]: any }[] = [];
+
+  botProjectsMeta
+    .filter((bot) => bot.isRemote === false)
+    .forEach((bot) => {
+      const botProjectId = bot.projectId;
+      botSettingsList.push({
+        projectId: botProjectId,
+        settings: bot.settings,
+      });
+      botPublishTypesList.push({
+        projectId: botProjectId,
+        publishTypes: useRecoilValue(publishTypesState(botProjectId)),
+      });
+      const publishHistory = useRecoilValue(publishHistoryState(botProjectId));
+      botPublishHistoryList.push({
+        projectId: botProjectId,
+        publishHistory,
+      });
+      const publishTargets = bot.settings ? (bot.settings.publishTargets as any[]) : [];
+      const botStatus: IBotStatus = {
+        id: botProjectId,
+        name: bot.name,
+        publishTargets: [],
+      };
+      if (publishTargets.length > 0) {
+        botStatus.publishTarget = publishTargets[0].name as string;
+        botStatus.publishTargets = publishTargets;
+        if (publishHistory[botStatus.publishTarget] && publishHistory[botStatus.publishTarget].length > 0) {
+          const history = publishHistory[botStatus.publishTarget][0];
+          botStatus.time = history.time;
+          botStatus.comment = history.comment;
+          botStatus.message = history.message;
+          botStatus.status = history.status;
+        }
+      }
+      botStatusList.push(botStatus);
+    });
   const [selectedTarget, setSelectedTarget] = useState<PublishTarget | undefined>();
   const settings = useRecoilValue(settingsState(projectId));
   const botName = useRecoilValue(botDisplayNameState(projectId));
@@ -274,8 +320,8 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         <div aria-label={formatMessage('List view')} css={contentEditor} role="region">
           <Fragment>
             <BotStatusList
-              items={bot}
-              publishTargets={settings.publishTargets}
+              botPublishHistoryList={botPublishHistoryList}
+              items={botStatusList}
               updatePublishHistory={setThisPublishHistory}
               onLogClick={onShowLog}
               onRollbackClick={onRollbackToVersion}

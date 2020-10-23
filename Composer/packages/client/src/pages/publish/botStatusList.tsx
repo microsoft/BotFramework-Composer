@@ -17,37 +17,28 @@ import { IStatus, PublishStatusList } from './publishStatusList';
 // Licensed under the MIT License.
 export interface IBotStatus {
   id: string;
-  time: string;
   name: string;
-  publishTarget: string;
-  status: number;
-  message: string;
-  comment: string;
+  publishTargets: any[];
+  publishTarget?: string;
+  time?: string;
+  status?: number;
+  message?: string;
+  comment?: string;
 }
 export interface IBotStatusListProps {
   items: IBotStatus[];
-  botPublishHistory: { [key: string]: IStatus }[];
-  publishTargets: string[];
+  botPublishHistoryList: { [key: string]: any }[];
   updatePublishHistory: (items: IStatus[]) => void;
   onLogClick: (item: IStatus | null) => void;
   onRollbackClick: (item: IStatus | null) => void;
 }
 export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
-  const { items, publishTargets, botPublishHistory, updatePublishHistory, onLogClick, onRollbackClick } = props;
+  const { items, botPublishHistoryList, updatePublishHistory, onLogClick, onRollbackClick } = props;
   const [botDescend, setBotDescend] = useState(false);
   const sortBot = () => {
     setBotDescend(!botDescend);
   };
-  const publishTargetOptions = (): IDropdownOption[] => {
-    const options: IDropdownOption[] = [];
-    publishTargets.forEach((target) => {
-      options.push({
-        key: target,
-        text: target,
-      });
-    });
-    return options;
-  };
+
   const [selectedBots, setSelectedBots] = useState<IBotStatus[]>([]);
   const [showHistoryBots, setShowHistoryBots] = useState<string[]>([]);
   const renderStatus = (item: IBotStatus) => {
@@ -64,6 +55,19 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
     }
   };
   const renderItem = (item: IBotStatus) => {
+    const publishTargetOptions = (): IDropdownOption[] => {
+      const options: IDropdownOption[] = [];
+      item.publishTargets.forEach((target) => {
+        options.push({
+          key: target.name,
+          text: target.name,
+        });
+      });
+      return options;
+    };
+    const publishStatusList = item.publishTarget
+      ? botPublishHistoryList.find((list) => list.projectId === item.id)?.publishHistory[item.publishTarget]
+      : [];
     const changeSelected = (_, isChecked) => {
       let newSelectedBots: IBotStatus[];
       if (isChecked) {
@@ -110,14 +114,14 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
         </tr>
         <tr>
           <td colSpan={7}>
-            <div css={{ display: showHistoryBots.includes(item.id) ? 'block' : 'none' }}>
+            <div css={{ display: showHistoryBots.includes(item.id) && item.publishTarget ? 'block' : 'none' }}>
               <PublishStatusList
-                items={botPublishHistory[item.publishTarget]}
+                items={publishStatusList}
                 updateItems={updatePublishHistory}
                 onLogClick={onLogClick}
                 onRollbackClick={onRollbackClick}
               />
-              {!botPublishHistory[item.id] || botPublishHistory[item.id].length === 0 ? (
+              {publishStatusList.length === 0 ? (
                 <div style={{ marginLeft: '50px', fontSize: 'smaller', marginTop: '20px' }}>No publish history</div>
               ) : null}
             </div>
@@ -144,7 +148,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
             <td>{formatMessage('Comment')}</td>
           </tr>
         </thead>
-        <tbody></tbody>
+        <tbody>{items.map((item) => renderItem(item))}</tbody>
       </table>
     </Fragment>
   );

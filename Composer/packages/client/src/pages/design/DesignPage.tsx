@@ -48,6 +48,7 @@ import {
   showCreateDialogModalState,
   showAddSkillDialogModalState,
   localeState,
+  botProjectSpaceSelector,
 } from '../../recoilModel';
 import ImportQnAFromUrlModal from '../knowledge-base/ImportQnAFromUrlModal';
 import { triggerNotSupported } from '../../utils/dialogValidator';
@@ -108,6 +109,9 @@ const getTabFromFragment = () => {
 };
 
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = (props) => {
+  const botProjectsMetaData = useRecoilValue(botProjectSpaceSelector);
+
+  console.log(botProjectsMetaData);
   const { location, dialogId, projectId = '' } = props;
   const userSettings = useRecoilValue(userSettingsState);
 
