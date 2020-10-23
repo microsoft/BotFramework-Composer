@@ -16,7 +16,8 @@ export class ExtensionRegistration {
   private _name: string;
   private _description: string;
   private _log: Debugger;
-  private _store: Store<object> | null = null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private _store: Store<any> | null = null;
 
   constructor(context: typeof ExtensionContext, name: string, description: string) {
     this.context = context;
@@ -57,6 +58,7 @@ export class ExtensionRegistration {
   /**************************************************************************************
    * Storage related features
    *************************************************************************************/
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public async useStorage(customStorageClass: any) {
     if (!this.context.extensions.storage.customStorageClass) {
       this.context.extensions.storage.customStorageClass = customStorageClass;

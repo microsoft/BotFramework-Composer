@@ -5,40 +5,48 @@ import path from 'path';
 
 import { existsSync, writeJsonSync, readJsonSync, unlinkSync } from 'fs-extra';
 
-export type IStore<T> = {
-  read: () => T;
-  write: (data: T) => void;
-  reload: () => void;
-  destroy: () => void;
-};
-
-export class Store<T extends object> implements IStore<T> {
+type StoreData = { [key: string]: unknown };
+export class Store<T extends StoreData = StoreData> {
   private path: string;
-  private data: T;
+  private data: Partial<T>;
 
   public constructor(storePath: string, private defaultValue: T, private _log?: debug.Debugger) {
     this.path = storePath;
-    this.data = defaultValue;
+    this.data = { ...defaultValue };
 
     if (!existsSync(this.path)) {
       this.log('%s does not exist yet. Writing file to path: %s', path.basename(this.path), this.path);
-      writeJsonSync(this.path, defaultValue, { spaces: 2 });
+      this.writeToDisk();
+    } else {
+      this.readFromDisk();
     }
-
-    this.readFromDisk();
   }
 
-  public read() {
+  public readAll() {
+    this.readFromDisk();
     return this.data;
   }
 
-  public write(data: T) {
-    this.data = data;
+  public read(key: string): unknown | undefined {
+    this.readFromDisk();
+    return this.data[key];
+  }
+
+  public write(key: string, value: unknown) {
+    this.data = { ...this.data, [key]: value };
     this.writeToDisk();
   }
 
-  public reload() {
-    this.readFromDisk();
+  public delete(key: string) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { [key]: _, ...newData } = this.data;
+    this.data = newData as Partial<T>;
+    this.writeToDisk();
+  }
+
+  public replace(newData: Partial<T>) {
+    this.data = { ...newData };
+    this.writeToDisk();
   }
 
   public destroy() {
@@ -46,19 +54,23 @@ export class Store<T extends object> implements IStore<T> {
   }
 
   private readFromDisk() {
-    try {
-      const data: T = readJsonSync(this.path);
-      this.data = data ?? this.defaultValue;
-    } catch (e) {
-      this.log('Error reading %s: %O', this.path, e);
+    if (process.env.NODE_ENV !== 'test') {
+      try {
+        const data: Partial<T> = readJsonSync(this.path);
+        this.data = data ?? this.defaultValue;
+      } catch (e) {
+        this.log('Error reading %s: %O', this.path, e);
+      }
     }
   }
 
   private writeToDisk() {
-    try {
-      writeJsonSync(this.path, this.data, { spaces: 2 });
-    } catch (e) {
-      this.log('Error writing %s: %s', this.path, e);
+    if (process.env.NODE_ENV !== 'test') {
+      try {
+        writeJsonSync(this.path, this.data, { spaces: 2 });
+      } catch (e) {
+        this.log('Error writing %s: %s', this.path, e);
+      }
     }
   }
 

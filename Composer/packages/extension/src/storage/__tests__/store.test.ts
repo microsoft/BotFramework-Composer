@@ -4,7 +4,7 @@
 import fs from 'fs';
 import path from 'path';
 
-import { existsSync, writeJsonSync, readJsonSync, read } from 'fs-extra';
+import { existsSync, writeJsonSync, readJsonSync } from 'fs-extra';
 
 import { Store } from '../store';
 
@@ -16,10 +16,16 @@ jest.mock('fs-extra', () => ({
 
 const testPath = path.resolve(__dirname, '../../../__manifest__.json');
 
+beforeAll(() => {
+  // enable writing to disk for this test only
+  process.env.NODE_ENV = 'jest';
+});
+
 afterAll(() => {
   if (fs.existsSync(testPath)) {
     fs.unlinkSync(testPath);
   }
+  process.env.NODE_ENV = 'test';
 });
 
 describe('when the store does not exist on disk', () => {
@@ -31,9 +37,7 @@ describe('when the store does not exist on disk', () => {
 });
 
 describe('when the manifest already exists', () => {
-  const currentData = {
-    some: 'data',
-  };
+  let currentData = {};
 
   beforeAll(() => {
     if (fs.existsSync(testPath)) {
@@ -44,6 +48,10 @@ describe('when the manifest already exists', () => {
   });
 
   beforeEach(() => {
+    currentData = {
+      some: 'data',
+    };
+
     (existsSync as jest.Mock).mockReturnValue(true);
     (readJsonSync as jest.Mock).mockImplementation((path) => {
       if (path === testPath) {
@@ -57,33 +65,55 @@ describe('when the manifest already exists', () => {
     expect(readJsonSync).toHaveBeenCalledWith(testPath);
   });
 
-  describe('#read', () => {
+  describe('#readAll', () => {
     it('returns current data', () => {
-      const store = new Store<any>(testPath, { some: 'data' });
-      expect(store.read()).toEqual({ some: 'data' });
+      const store = new Store(testPath, currentData);
+      (readJsonSync as jest.Mock).mockClear();
+      expect(store.readAll()).toEqual({ some: 'data' });
+      expect(readJsonSync).toHaveBeenCalled();
 
-      store.write({ some: 'data', new: 'data' });
-      expect(store.read()).toEqual({ some: 'data', new: 'data' });
+      currentData = { some: 'data', new: 'data' };
+      store.replace(currentData);
+      expect(store.readAll()).toEqual(currentData);
+    });
+  });
+
+  describe('#read', () => {
+    it('can read a key from the store', () => {
+      const store = new Store(testPath, currentData);
+      expect(store.read('some')).toEqual('data');
+      expect(store.read('foo')).toBeUndefined();
     });
   });
 
   describe('#write', () => {
-    it('writes new data to disk', () => {
-      const store = new Store(testPath, {});
-
-      store.write({ new: 'data' });
-
-      expect(writeJsonSync).toHaveBeenCalledWith(testPath, { new: 'data' }, { spaces: 2 });
+    it('writes a single value into the store', () => {
+      const store = new Store(testPath, currentData);
+      (writeJsonSync as jest.Mock).mockClear();
+      store.write('new', 'value');
+      expect(writeJsonSync).toHaveBeenCalledWith(testPath, expect.objectContaining({ new: 'value' }), { spaces: 2 });
     });
   });
 
-  describe('#reload', () => {
-    it('reads from the manifest', () => {
-      const store = new Store(testPath, {});
-      (readJsonSync as jest.Mock).mockClear();
+  describe('#delete', () => {
+    it('removes a single value from the store', () => {
+      currentData = { ...currentData, new: 'value' };
+      const store = new Store(testPath, currentData);
+      (writeJsonSync as jest.Mock).mockClear();
+      store.delete('new');
+      expect(writeJsonSync).toHaveBeenCalledWith(testPath, { some: 'data' }, { spaces: 2 });
+    });
+  });
 
-      store.reload();
-      expect(readJsonSync).toHaveBeenCalledWith(testPath);
+  describe('#replace', () => {
+    it('writes new data to disk', () => {
+      const store = new Store(testPath, {});
+
+      currentData = { new: 'data' };
+      store.replace(currentData);
+
+      expect(writeJsonSync).toHaveBeenCalledWith(testPath, currentData, { spaces: 2 });
+      expect(store.readAll()).toEqual(currentData);
     });
   });
 });

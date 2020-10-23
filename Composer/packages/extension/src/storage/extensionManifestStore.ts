@@ -5,8 +5,7 @@ import { ExtensionMap, ExtensionMetadata } from '@botframework-composer/types';
 
 import logger from '../logger';
 
-import { Store, IStore } from './store';
-import { MemoryStore } from './memoryStore';
+import { Store } from './store';
 
 const log = logger.extend('extensions');
 
@@ -16,18 +15,16 @@ const DEFAULT_MANIFEST: ExtensionManifest = {};
 
 /** In-memory representation of extensions.json */
 export class ExtensionManifestStore {
-  private manifest: ExtensionManifest;
-  private store: IStore<ExtensionManifest>;
+  private store: Store<ExtensionManifest>;
 
-  constructor(private manifestPath: string, store?: IStore<ExtensionManifest>) {
-    this.store = store ?? this.getDefaultStore();
-    this.manifest = this.store.read();
+  constructor(private manifestPath: string) {
+    this.store = new Store(this.manifestPath, DEFAULT_MANIFEST, log);
 
     // remove extensions key from existing manifests
     // TODO: remove in the future
     /* istanbul ignore next */
     if (this.manifest && this.manifest.extensions) {
-      this.store.write((this.manifest.extensions as unknown) as ExtensionManifest);
+      this.store.replace((this.manifest.extensions as unknown) as ExtensionManifest);
     }
   }
 
@@ -40,34 +37,17 @@ export class ExtensionManifestStore {
   }
 
   public removeExtension(id: string) {
-    delete this.manifest[id];
-    // sync changes to disk
-    this.store.write(this.manifest);
+    this.store.delete(id);
   }
 
   // update extension config
   public updateExtensionConfig(id: string, newConfig: Partial<ExtensionMetadata>) {
     const currentConfig = this.manifest[id];
 
-    if (currentConfig) {
-      this.manifest[id] = Object.assign({}, currentConfig, newConfig);
-    } else {
-      this.manifest[id] = Object.assign({} as ExtensionMetadata, newConfig);
-    }
-    // sync changes to disk
-    this.store.write(this.manifest);
+    this.store.write(id, Object.assign({} as ExtensionMetadata, currentConfig ?? {}, newConfig));
   }
 
-  public reload() {
-    this.store.reload();
-  }
-
-  private getDefaultStore() {
-    /* istanbul ignore next */
-    if (process.env.NODE_ENV === 'test') {
-      return new MemoryStore(DEFAULT_MANIFEST);
-    }
-
-    return new Store(this.manifestPath, DEFAULT_MANIFEST, log);
+  private get manifest() {
+    return this.store.readAll();
   }
 }
