@@ -15,7 +15,7 @@ import {
   settingsState,
   clipboardActionsState,
   schemasState,
-  validateDialogSelectorFamily,
+  validateDialogsSelectorFamily,
   breadcrumbState,
   focusPathState,
   skillsState,
@@ -64,7 +64,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
   const dialogMapRef = useRef({});
 
   const schemas = useRecoilValue(schemasState(projectId));
-  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
   const breadcrumb = useRecoilValue(breadcrumbState(projectId));
   const focusPath = useRecoilValue(focusPathState(projectId));
   const skills = useRecoilValue(skillsState(projectId));

@@ -42,7 +42,7 @@ import {
   dispatcherState,
   schemasState,
   displaySkillManifestState,
-  validateDialogSelectorFamily,
+  validateDialogsSelectorFamily,
   breadcrumbState,
   focusPathState,
   showCreateDialogModalState,
@@ -118,7 +118,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
   const qnaFiles = useRecoilValue(qnaFilesState(skillId ?? projectId));
   const schemas = useRecoilValue(schemasState(skillId ?? projectId));
-  const dialogs = useRecoilValue(validateDialogSelectorFamily(skillId ?? projectId));
+  const dialogs = useRecoilValue(validateDialogsSelectorFamily(skillId ?? projectId));
   const displaySkillManifest = useRecoilValue(displaySkillManifestState(skillId ?? projectId));
   const breadcrumb = useRecoilValue(breadcrumbState(skillId ?? projectId));
   const focusPath = useRecoilValue(focusPathState(skillId ?? projectId));
