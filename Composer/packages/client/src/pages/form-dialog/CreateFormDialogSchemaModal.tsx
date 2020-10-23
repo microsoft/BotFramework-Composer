@@ -12,7 +12,7 @@ import { useRecoilValue } from 'recoil';
 
 import { nameRegex } from '../../constants';
 import { FieldConfig, useForm } from '../../hooks/useForm';
-import { dialogsState } from '../../recoilModel';
+import { dialogsSelectorFamily } from '../../recoilModel';
 
 type FormDialogSchemaFormData = {
   name: string;
@@ -28,7 +28,7 @@ type Props = {
 const CreateFormDialogSchemaModal: React.FC<Props> = (props) => {
   const { isOpen, projectId, onSubmit, onDismiss } = props;
 
-  const dialogs = useRecoilValue(dialogsState(projectId));
+  const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
 
   const formConfig: FieldConfig<FormDialogSchemaFormData> = {
     name: {
@@ -71,6 +71,7 @@ const CreateFormDialogSchemaModal: React.FC<Props> = (props) => {
         <Stack>
           <TextField
             required
+            autoComplete="off"
             errorMessage={formErrors.name}
             label={formatMessage('Name')}
             styles={name}

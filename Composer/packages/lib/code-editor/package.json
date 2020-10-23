@@ -34,7 +34,7 @@
     "@bfc/indexers": "*",
     "@bfc/lg-languageserver": "*",
     "@bfc/shared": "*",
-    "@bfc/test-utils": "*",
+    "@botframework-composer/test-utils": "*",
     "@types/express": "^4.17.1",
     "@types/lodash": "^4.14.146",
     "@types/node": "^12.12.8",

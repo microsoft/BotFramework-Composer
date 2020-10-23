@@ -10,6 +10,7 @@ import {
   DialogSchemaFile,
   DialogSetting,
   FormDialogSchema,
+  JsonSchemaFile,
   LgFile,
   LuFile,
   QnAFile,
@@ -17,7 +18,7 @@ import {
 } from '@bfc/shared';
 import { atomFamily } from 'recoil';
 
-import { BotLoadError, DesignPageLocation, QnAAllUpViewStatus } from '../../recoilModel/types';
+import { BotLoadError, DesignPageLocation } from '../../recoilModel/types';
 import FilePersistence from '../persistence/FilePersistence';
 
 import { BotStatus } from './../../constants';
@@ -27,9 +28,33 @@ const getFullyQualifiedKey = (value: string) => {
   return `Bot_${value}_State`;
 };
 
-export const dialogsState = atomFamily<DialogInfo[], string>({
-  key: getFullyQualifiedKey('dialogs'),
-  default: (id) => {
+const emptyDialog: DialogInfo = {
+  content: { $kind: '' },
+  diagnostics: [],
+  displayName: '',
+  id: '',
+  isRoot: false,
+  lgFile: '',
+  lgTemplates: [],
+  luFile: '',
+  qnaFile: '',
+  referredLuIntents: [],
+  referredDialogs: [],
+  triggers: [],
+  intentTriggers: [],
+  skills: [],
+};
+type dialogStateParams = { projectId: string; dialogId: string };
+export const dialogState = atomFamily<DialogInfo, dialogStateParams>({
+  key: getFullyQualifiedKey('dialog'),
+  default: () => {
+    return emptyDialog;
+  },
+});
+
+export const dialogIdsState = atomFamily<string[], string>({
+  key: getFullyQualifiedKey('dialogIds'),
+  default: () => {
     return [];
   },
 });
@@ -246,9 +271,27 @@ export const designPageLocationState = atomFamily<DesignPageLocation, string>({
   },
 });
 
-export const qnaAllUpViewStatusState = atomFamily<any, string>({
-  key: getFullyQualifiedKey('qnaAllUpViewStatusState'),
-  default: QnAAllUpViewStatus.Success,
+export const showCreateQnAFromUrlDialogState = atomFamily<boolean, string>({
+  key: getFullyQualifiedKey('showCreateQnAFromUrlDialog'),
+  default: false,
+});
+
+export const showCreateQnAFromUrlDialogWithScratchState = atomFamily<boolean, string>({
+  key: getFullyQualifiedKey('showCreateQnAFromUrlDialogWithScratch'),
+  default: false,
+});
+
+export const showCreateQnAFromScratchDialogState = atomFamily<boolean, string>({
+  key: getFullyQualifiedKey('showCreateQnAFromScratchDialog'),
+  default: false,
+});
+export const onCreateQnAFromUrlDialogCompleteState = atomFamily<{ func: undefined | (() => void) }, string>({
+  key: getFullyQualifiedKey('onCreateQnAFromUrlDialogCompleteState'),
+  default: { func: undefined },
+});
+export const onCreateQnAFromScratchDialogCompleteState = atomFamily<{ func: undefined | (() => void) }, string>({
+  key: getFullyQualifiedKey('onCreateQnAFromScratchDialogCompleteState'),
+  default: { func: undefined },
 });
 
 export const isEjectRuntimeExistState = atomFamily<boolean, string>({
@@ -258,6 +301,11 @@ export const isEjectRuntimeExistState = atomFamily<boolean, string>({
 
 export const qnaFilesState = atomFamily<QnAFile[], string>({
   key: getFullyQualifiedKey('qnaFiles'),
+  default: [],
+});
+
+export const jsonSchemaFilesState = atomFamily<JsonSchemaFile[], string>({
+  key: getFullyQualifiedKey('jsonSchemaFiles'),
   default: [],
 });
 

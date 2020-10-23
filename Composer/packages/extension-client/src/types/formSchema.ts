@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { MicrosoftIRecognizer, SDKKinds, SDKRoles, ShellApi, ShellData } from '@bfc/types';
+import { MicrosoftIRecognizer, SDKKinds, SDKRoles, ShellApi, ShellData } from '@botframework-composer/types';
 
 import { FieldWidget } from './form';
 

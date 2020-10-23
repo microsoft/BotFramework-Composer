@@ -1,59 +1,52 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { FileInfo, IConfig } from '@bfc/shared';
+import { ComposerReservoirSampler } from '@microsoft/bf-dispatcher/lib/mathematics/sampler/ComposerReservoirSampler';
+import { ComposerBootstrapSampler } from '@microsoft/bf-dispatcher/lib/mathematics/sampler/ComposerBootstrapSampler';
 
 import { Path } from '../../utility/path';
 import { IFileStorage } from '../storage/interface';
 import log from '../../logger';
 
-import { ComposerReservoirSampler } from './sampler/ReservoirSampler';
-import { ComposerBootstrapSampler } from './sampler/BootstrapSampler';
+import { luImportResolverGenerator, getLUFiles, getQnAFiles } from './luResolver';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const crossTrainer = require('@microsoft/bf-lu/lib/parser/cross-train/crossTrainer.js');
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const luBuild = require('@microsoft/bf-lu/lib/parser/lubuild/builder.js');
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const qnaBuild = require('@microsoft/bf-lu/lib/parser/qnabuild/builder.js');
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const LuisBuilder = require('@microsoft/bf-lu/lib/parser/luis/luisBuilder');
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const luisToLuContent = require('@microsoft/bf-lu/lib/parser/luis/luConverter');
 
 const GENERATEDFOLDER = 'generated';
 const INTERUPTION = 'interuption';
+const SAMPLE_SIZE_CONFIGURATION = 2;
 
-export interface ICrossTrainConfig {
-  rootIds: string[];
-  triggerRules: { [key: string]: any };
-  intentName: string;
-  verbose: boolean;
-  botName: string;
-}
+export type SingleConfig = {
+  rootDialog: boolean;
+  triggers: {
+    [key: string]: string[];
+  };
+};
 
-export interface IDownSamplingConfig {
+export type CrossTrainConfig = {
+  [key: string]: SingleConfig;
+};
+
+export type DownSamplingConfig = {
   maxImbalanceRatio: number;
   maxUtteranceAllowed: number;
-}
+};
 
 export class Builder {
   public botDir: string;
-  public dialogsDir: string;
   public generatedFolderPath: string;
   public interruptionFolderPath: string;
   public storage: IFileStorage;
   public config: IConfig | null = null;
-  public downSamplingConfig: IDownSamplingConfig = { maxImbalanceRatio: 0, maxUtteranceAllowed: 0 };
+  public downSamplingConfig: DownSamplingConfig = { maxImbalanceRatio: 0, maxUtteranceAllowed: 0 };
   private _locale: string;
-
-  public crossTrainConfig: ICrossTrainConfig = {
-    rootIds: [],
-    triggerRules: {},
-    intentName: '_Interruption',
-    verbose: true,
-    botName: '',
-  };
+  public crossTrainConfig: CrossTrainConfig = {};
 
   private luBuilder = new luBuild.Builder((message) => {
     log(message);
@@ -64,25 +57,20 @@ export class Builder {
 
   constructor(path: string, storage: IFileStorage, locale: string) {
     this.botDir = path;
-    this.dialogsDir = this.botDir;
-    this.generatedFolderPath = Path.join(this.dialogsDir, GENERATEDFOLDER);
+    this.generatedFolderPath = Path.join(this.botDir, GENERATEDFOLDER);
     this.interruptionFolderPath = Path.join(this.generatedFolderPath, INTERUPTION);
     this.storage = storage;
     this._locale = locale;
   }
 
-  public build = async (luFiles: FileInfo[], qnaFiles: FileInfo[]) => {
+  public build = async (luFiles: FileInfo[], qnaFiles: FileInfo[], allFiles: FileInfo[]) => {
     try {
       await this.createGeneratedDir();
-
       //do cross train before publish
-      await this.crossTrain(luFiles, qnaFiles);
+      await this.crossTrain(luFiles, qnaFiles, allFiles);
       const { interruptionLuFiles, interruptionQnaFiles } = await this.getInterruptionFiles();
-      await this.runLuBuild(interruptionLuFiles);
+      await this.runLuBuild(interruptionLuFiles, allFiles);
       await this.runQnaBuild(interruptionQnaFiles);
-
-      //remove the cross train result
-      await this.cleanCrossTrain();
     } catch (error) {
       throw new Error(error.message ?? error.text ?? 'Error publishing to LUIS or QNA.');
     }
@@ -98,9 +86,9 @@ export class Builder {
     }
   };
 
-  public setBuildConfig(config: IConfig, crossTrainConfig: ICrossTrainConfig, downSamplingConfig: IDownSamplingConfig) {
+  public setBuildConfig(config: IConfig, crossTrainConfig: CrossTrainConfig, downSamplingConfig: DownSamplingConfig) {
     this.config = config;
-    this.crossTrainConfig = { ...crossTrainConfig, botName: this.config.name };
+    this.crossTrainConfig = crossTrainConfig;
     this.downSamplingConfig = downSamplingConfig;
   }
 
@@ -115,10 +103,12 @@ export class Builder {
   private async createGeneratedDir() {
     // clear previous folder
     await this.deleteDir(this.generatedFolderPath);
+    //remove the cross train result
+    await this.cleanCrossTrain();
     await this.storage.mkDir(this.generatedFolderPath);
   }
 
-  private async crossTrain(luFiles: FileInfo[], qnaFiles: FileInfo[]) {
+  private async crossTrain(luFiles: FileInfo[], qnaFiles: FileInfo[], allFiles: FileInfo[]) {
     const luContents = luFiles.map((file) => {
       return { content: file.content, id: file.name };
     });
@@ -126,7 +116,9 @@ export class Builder {
     const qnaContents = qnaFiles.map((file) => {
       return { content: file.content, id: file.name };
     });
-    const result = await crossTrainer.crossTrain(luContents, qnaContents, this.crossTrainConfig);
+
+    const importResolver = luImportResolverGenerator([...getLUFiles(allFiles), ...getQnAFiles(allFiles)]);
+    const result = await crossTrainer.crossTrain(luContents, qnaContents, this.crossTrainConfig, { importResolver });
 
     await this.writeFiles(result.luResult);
     await this.writeFiles(result.qnaResult);
@@ -161,7 +153,8 @@ export class Builder {
     //do bootstramp sampling to make the utterances' number ratio to 1:10
     const bootstrapSampler = new ComposerBootstrapSampler(
       luObject.utterances,
-      this.downSamplingConfig.maxImbalanceRatio
+      this.downSamplingConfig.maxImbalanceRatio,
+      SAMPLE_SIZE_CONFIGURATION
     );
     luObject.utterances = bootstrapSampler.getSampledUtterances();
     //if detect the utterances>15000, use reservoir sampling to down size
@@ -176,10 +169,14 @@ export class Builder {
   private async downsizeUtterances(luContents: any) {
     return await Promise.all(
       luContents.map(async (luContent) => {
-        const result = await LuisBuilder.fromLUAsync(luContent.content);
-        const sampledResult = this.doDownSampling(result);
-        const content = luisToLuContent(sampledResult);
-        return { ...luContent, content };
+        if (luContent.content) {
+          const result = await LuisBuilder.fromLUAsync(luContent.content);
+          const sampledResult = this.doDownSampling(result);
+          const content = luisToLuContent(sampledResult);
+          return { ...luContent, content };
+        }
+
+        return luContent;
       })
     );
   }
@@ -197,72 +194,49 @@ export class Builder {
     );
   }
 
-  private async runLuBuild(files: FileInfo[]) {
+  private async runLuBuild(files: FileInfo[], allFiles: FileInfo[]) {
     const config = await this._getConfig(files, 'lu');
-    // if (config.models.length === 0) {
-    //   throw new Error('No LUIS files exist');
-    // }
 
-    const loadResult = await this.luBuilder.loadContents(
-      config.models,
-      config.fallbackLocal,
-      config.suffix,
-      config.region
-    );
-    loadResult.luContents = await this.downsizeUtterances(loadResult.luContents);
+    let luContents = await this.luBuilder.loadContents(config.models, {
+      culture: config.fallbackLocal,
+    });
+
+    luContents = await this.downsizeUtterances(luContents);
     const authoringEndpoint = config.authoringEndpoint ?? `https://${config.region}.api.cognitive.microsoft.com`;
 
-    const buildResult = await this.luBuilder.build(
-      loadResult.luContents,
-      loadResult.recognizers,
-      config.authoringKey,
-      authoringEndpoint,
-      config.botName,
-      config.suffix,
-      config.fallbackLocal,
-      true,
-      false,
-      loadResult.multiRecognizers,
-      loadResult.settings,
-      loadResult.crosstrainedRecognizers,
-      'crosstrained'
-    );
-    await this.luBuilder.writeDialogAssets(buildResult, true, this.generatedFolderPath);
+    const buildResult = await this.luBuilder.build(luContents, config.authoringKey, config.botName, {
+      endpoint: authoringEndpoint,
+      suffix: config.suffix,
+      keptVersionCount: 10,
+      isStaging: false,
+    });
+
+    await this.luBuilder.writeDialogAssets(buildResult, {
+      force: true,
+      out: this.generatedFolderPath,
+    });
   }
 
   private async runQnaBuild(files: FileInfo[]) {
     const config = await this._getConfig(files, 'qna');
-    // if (config.models.length === 0) {
-    //   throw new Error('No QnA files exist');
-    // }
 
-    const loadResult = await this.qnaBuilder.loadContents(
-      config.models,
-      config.botName,
-      config.suffix,
-      config.qnaRegion,
-      config.fallbackLocal
-    );
-    if (loadResult.qnaContents) {
+    const qnaContents = await this.qnaBuilder.loadContents(config.models, {
+      culture: config.fallbackLocal,
+    });
+
+    if (qnaContents) {
       const subscriptionKeyEndpoint =
         config.endpoint ?? `https://${config.qnaRegion}.api.cognitive.microsoft.com/qnamaker/v4.0`;
 
-      const buildResult = await this.qnaBuilder.build(
-        loadResult.qnaContents,
-        loadResult.recognizers,
-        config.subscriptionKey,
-        subscriptionKeyEndpoint,
-        config.botName,
-        config.suffix,
-        config.fallbackLocal,
-        loadResult.multiRecognizers,
-        loadResult.settings,
-        loadResult.crosstrainedRecognizers,
-        'crosstrained'
-      );
-      await this.qnaBuilder.writeDialogAssets(buildResult, true, this.generatedFolderPath);
-    } else {
-      await this.qnaBuilder.writeDialogAssets(loadResult.crosstrainedRecognizer.save(), true, this.generatedFolderPath);
+      const buildResult = await this.qnaBuilder.build(qnaContents, config.subscriptionKey, config.botName, {
+        endpoint: subscriptionKeyEndpoint,
+        suffix: config.suffix,
+      });
+
+      await this.qnaBuilder.writeDialogAssets(buildResult, {
+        force: true,
+        out: this.generatedFolderPath,
+      });
     }
   }
 

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useMemo, useRef } from 'react';
-import { ShellApi, ShellData, Shell, DialogSchemaFile, DialogInfo } from '@bfc/types';
+import { ShellApi, ShellData, Shell, DialogSchemaFile, DialogInfo } from '@botframework-composer/types';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
@@ -15,7 +15,7 @@ import {
   settingsState,
   clipboardActionsState,
   schemasState,
-  validateDialogSelectorFamily,
+  validateDialogsSelectorFamily,
   breadcrumbState,
   focusPathState,
   skillsState,
@@ -34,16 +34,36 @@ import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
 import { useQnaApi } from './qnaApi';
 import { useTriggerApi } from './triggerApi';
+import { useActionApi } from './actionApi';
 
 const FORM_EDITOR = 'PropertyEditor';
 
 type EventSource = 'FlowEditor' | 'PropertyEditor' | 'DesignPage' | 'VaCreation';
 
+const stubDialog = (): DialogInfo => ({
+  content: {
+    $kind: '',
+  },
+  diagnostics: [],
+  displayName: '',
+  id: '',
+  isRoot: true,
+  lgFile: '',
+  lgTemplates: [],
+  luFile: '',
+  qnaFile: '',
+  referredLuIntents: [],
+  referredDialogs: [],
+  triggers: [],
+  intentTriggers: [],
+  skills: [],
+});
+
 export function useShell(source: EventSource, projectId: string): Shell {
   const dialogMapRef = useRef({});
 
   const schemas = useRecoilValue(schemasState(projectId));
-  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
   const breadcrumb = useRecoilValue(breadcrumbState(projectId));
   const focusPath = useRecoilValue(focusPathState(projectId));
   const skills = useRecoilValue(skillsState(projectId));
@@ -83,6 +103,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
   const luApi = useLuApi(projectId);
   const qnaApi = useQnaApi(projectId);
   const triggerApi = useTriggerApi(projectId);
+  const actionApi = useActionApi(projectId);
   const { dialogId, selected, focused, promptTab } = designPageLocation;
 
   const dialogsMap = useMemo(() => {
@@ -114,11 +135,11 @@ export function useShell(source: EventSource, projectId: string): Shell {
   }
 
   function navigationTo(path) {
-    navTo(projectId, path, breadcrumb);
+    navTo(projectId, null, path, breadcrumb);
   }
 
   function focusEvent(subPath) {
-    selectTo(projectId, subPath);
+    selectTo(projectId, null, null, subPath);
   }
 
   function focusSteps(subPaths: string[] = [], fragment?: string) {
@@ -170,10 +191,6 @@ export function useShell(source: EventSource, projectId: string): Shell {
       updateDialog(payload);
       commitChanges();
     },
-    ...lgApi,
-    ...luApi,
-    ...qnaApi,
-    ...triggerApi,
     updateRegExIntent: updateRegExIntentHandler,
     renameRegExIntent: renameRegExIntentHandler,
     updateIntentTrigger: updateIntentTriggerHandler,
@@ -212,9 +229,17 @@ export function useShell(source: EventSource, projectId: string): Shell {
     },
     updateSkillSetting: (...params) => updateSkill(projectId, ...params),
     updateFlowZoomRate,
+    ...lgApi,
+    ...luApi,
+    ...qnaApi,
+    ...triggerApi,
+    ...actionApi,
   };
 
-  const currentDialog = useMemo(() => dialogs.find((d) => d.id === dialogId), [dialogs, dialogId]) as DialogInfo;
+  const currentDialog = useMemo(() => dialogs.find((d) => d.id === dialogId) ?? stubDialog(), [
+    dialogs,
+    dialogId,
+  ]) as DialogInfo;
   const editorData = useMemo(() => {
     return source === 'PropertyEditor'
       ? getDialogData(dialogsMap, dialogId, focused || selected || '')
@@ -222,7 +247,6 @@ export function useShell(source: EventSource, projectId: string): Shell {
   }, [source, dialogsMap, dialogId, focused, selected]);
 
   const data: ShellData = {
-    data: editorData,
     locale,
     botName,
     projectId,

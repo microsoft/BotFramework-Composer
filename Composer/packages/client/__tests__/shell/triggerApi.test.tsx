@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { renderHook } from '@bfc/test-utils/lib/hooks';
+import { renderHook } from '@botframework-composer/test-utils/lib/hooks';
 import * as React from 'react';
 import { RecoilRoot } from 'recoil';
 
@@ -10,7 +10,7 @@ import {
   localeState,
   luFilesState,
   lgFilesState,
-  dialogsState,
+  dialogsSelectorFamily,
   schemasState,
   dispatcherState,
   currentProjectIdState,
@@ -57,7 +57,7 @@ describe('use triggerApi hooks', () => {
       set(localeState(state.projectId), 'en-us');
       set(luFilesState(state.projectId), state.luFiles);
       set(lgFilesState(state.projectId), state.lgFiles);
-      set(dialogsState(state.projectId), state.dialogs);
+      set(dialogsSelectorFamily(state.projectId), state.dialogs);
       set(schemasState(state.projectId), state.schemas);
       set(dispatcherState, (current: Dispatcher) => ({
         ...current,

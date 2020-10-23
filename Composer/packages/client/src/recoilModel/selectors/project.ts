@@ -3,20 +3,20 @@
 
 import { selector, selectorFamily } from 'recoil';
 import isEmpty from 'lodash/isEmpty';
-import { FormDialogSchema } from '@bfc/shared';
+import { FormDialogSchema, JsonSchemaFile } from '@bfc/shared';
 
 import {
   botErrorState,
   botDisplayNameState,
   botProjectFileState,
   botProjectIdsState,
-  dialogsState,
   projectMetaDataState,
   botNameIdentifierState,
   formDialogSchemaIdsState,
   formDialogSchemaState,
+  jsonSchemaFilesState,
 } from '../atoms';
-
+import { dialogsSelectorFamily } from '../selectors';
 // Actions
 export const botsForFilePersistenceSelector = selector({
   key: 'botsForFilePersistenceSelector',
@@ -36,7 +36,7 @@ export const botProjectSpaceSelector = selector({
   get: ({ get }) => {
     const botProjects = get(botProjectIdsState);
     const result = botProjects.map((projectId: string) => {
-      const dialogs = get(dialogsState(projectId));
+      const dialogs = get(dialogsSelectorFamily(projectId));
       const metaData = get(projectMetaDataState(projectId));
       const botError = get(botErrorState(projectId));
       const name = get(botDisplayNameState(projectId));
@@ -72,7 +72,19 @@ export const formDialogSchemasSelectorFamily = selectorFamily<FormDialogSchema[]
 export const formDialogSchemaDialogExistsSelector = selectorFamily<boolean, { projectId: string; schemaId: string }>({
   key: 'formDialogSchemasSelector',
   get: ({ projectId, schemaId }: { projectId: string; schemaId: string }) => ({ get }) => {
-    const dialogs = get(dialogsState(projectId));
+    const dialogs = get(dialogsSelectorFamily(projectId));
     return !!dialogs.find((d) => d.id === schemaId);
+  },
+});
+
+export const jsonSchemaFilesByProjectIdSelector = selector({
+  key: 'jsonSchemaFilesByProjectIdSelector',
+  get: ({ get }) => {
+    const projectIds = get(botProjectIdsState);
+    const result: Record<string, JsonSchemaFile[]> = {};
+    projectIds.forEach((projectId) => {
+      result[projectId] = get(jsonSchemaFilesState(projectId));
+    });
+    return result;
   },
 });

@@ -20,6 +20,9 @@
   "a_form_dialog_enables_your_bot_to_collect_pieces_o_fdd3fe56": {
     "message": "A form dialog enables your bot to collect pieces of information ."
   },
+  "a_knowledge_base_name_cannot_contain_spaces_or_spe_91dd53ac": {
+    "message": "A knowledge base name cannot contain spaces or special characters. Use letters, numbers, -, or _."
+  },
   "a_minimap_gives_an_overview_of_your_source_code_fo_9a897f4f": {
     "message": "A minimap gives an overview of your source code for quick navigation and code understanding."
   },
@@ -29,8 +32,14 @@
   "a_profile_with_that_name_already_exists_7c559958": {
     "message": "A profile with that name already exists."
   },
+  "a_property_is_a_piece_of_information_that_your_bot_eccd34bf": {
+    "message": "A property is a piece of information that your bot will collect. The property name is the name used in Composer; it is not necessarily the same text that will appear in your bot''s messages."
+  },
   "a_subscription_key_is_created_when_you_create_a_qn_37a6926f": {
     "message": "A subscription key is created when you create a QnA Maker resource."
+  },
+  "a_valid_url_should_start_with_http_or_https_327b1a30": {
+    "message": "A valid URL should start with http:// or https://"
   },
   "a_valid_url_should_start_with_http_or_https_d24b3591": {
     "message": "A valid url should start with http:// or https://"
@@ -125,8 +134,8 @@
   "add_additional_url_bdfac25d": {
     "message": "Add additional URL"
   },
-  "add_alternative_phrasing_47234f77": {
-    "message": "add alternative phrasing"
+  "add_alternative_phrasing_17e0304c": {
+    "message": "+ Add alternative phrasing"
   },
   "add_an_intent_trigger_a9acc149": {
     "message": "Add an intent trigger"
@@ -139,6 +148,9 @@
   },
   "add_multiple_comma_separated_synonyms_2639283f": {
     "message": "Add multiple comma-separated synonyms"
+  },
+  "add_new_answer_9de3808e": {
+    "message": "Add new answer"
   },
   "add_new_dialog_25f12c9": {
     "message": "Add new dialog"
@@ -155,6 +167,9 @@
   "add_new_propertyname_bedf7dc6": {
     "message": "Add new { propertyName }"
   },
+  "add_new_question_85612b7f": {
+    "message": "Add new question"
+  },
   "add_new_trigger_on_displayname_2aaf6e4c": {
     "message": "Add new trigger on { displayName }"
   },
@@ -164,8 +179,8 @@
   "add_property_d381eba3": {
     "message": "Add Property"
   },
-  "add_qna_pair_bcb1624": {
-    "message": "Add QnA Pair"
+  "add_qna_pair_16c228f0": {
+    "message": "+ Add QnA Pair"
   },
   "add_some_example_phrases_to_trigger_this_intent_pl_568eaf51": {
     "message": "> add some example phrases to trigger this intent:\n> - please tell me the weather\n> - what is the weather like in '{'city=Seattle'}'\n\n> entity definitions:\n> @ ml city"
@@ -203,8 +218,11 @@
   "answer_4620913f": {
     "message": "Answer"
   },
-  "answer_is_answer_799483f0": {
-    "message": "Answer is { answer }"
+  "answer_is_content_c6af84ad": {
+    "message": "Answer is { content }"
+  },
+  "answer_is_required_da652c05": {
+    "message": "Answer is required"
   },
   "any_constant_or_expression_to_evaluate_ba2017b1": {
     "message": "Any constant or expression to evaluate."
@@ -268,6 +286,9 @@
   },
   "ask_a_question_92ef7e0c": {
     "message": "Ask a question"
+  },
+  "at_least_one_question_is_required_6f287e04": {
+    "message": "At least one question is required"
   },
   "attachment_input_e0ece49c": {
     "message": "Attachment Input"
@@ -623,6 +644,9 @@
   "create_a_dialog_9f6c8618": {
     "message": "Create a dialog"
   },
+  "create_a_knowledge_base_from_scratch_or_import_kno_2eb38ac0": {
+    "message": "Create a knowledge base from scratch or import knowledge from a URL or PDF files"
+  },
   "create_a_name_for_the_project_which_will_be_used_t_57e9b690": {
     "message": "Create a name for the project which will be used to name the application: (projectname-environment-LUfilename)"
   },
@@ -647,6 +671,9 @@
   "create_copy_to_translate_bot_content_efc872c": {
     "message": "Create copy to translate bot content"
   },
+  "create_edit_skill_manifest_1c1b14fe": {
+    "message": "Create/edit skill manifest"
+  },
   "create_folder_error_38aa86f5": {
     "message": "Create Folder Error"
   },
@@ -668,6 +695,15 @@
   "create_from_template_87e12c94": {
     "message": "Create from template"
   },
+  "create_kb_e78571ba": {
+    "message": "Create KB"
+  },
+  "create_kb_from_scratch_eddd037a": {
+    "message": "Create KB from scratch"
+  },
+  "create_kb_from_url_or_file_49ad6671": {
+    "message": "Create KB from URL or file"
+  },
   "create_knowledge_base_db6d66c4": {
     "message": "Create knowledge base"
   },
@@ -680,8 +716,17 @@
   "create_new_folder_19d3faa4": {
     "message": "Create new folder"
   },
+  "create_new_kb_1c4f86a0": {
+    "message": "Create new KB"
+  },
+  "create_new_knowledge_base_d15d6873": {
+    "message": "Create new knowledge base"
+  },
   "create_new_knowledge_base_e14d07a5": {
     "message": "Create New Knowledge Base"
+  },
+  "create_new_knowledge_base_from_scratch_638c4fd2": {
+    "message": "Create new knowledge base from scratch"
   },
   "create_or_edit_skill_manifest_8ad98da9": {
     "message": "Create or edit skill manifest"
@@ -740,9 +785,6 @@
   "debugging_options_20e2e9da": {
     "message": "Debugging options"
   },
-  "decrement_by_step_9b6c2fa3": {
-    "message": "decrement by { step }"
-  },
   "default_language_486a558d": {
     "message": "Default language"
   },
@@ -778,6 +820,9 @@
   },
   "delete_form_dialog_schema_892df4e8": {
     "message": "Delete form dialog schema"
+  },
+  "delete_knowledge_base_66e3a7f1": {
+    "message": "Delete knowledge base"
   },
   "delete_language_1527609d": {
     "message": "Delete language"
@@ -839,8 +884,8 @@
   "dialogfactory_missing_schema_5c3255c4": {
     "message": "DialogFactory missing schema."
   },
-  "dialognum_plural_0_no_dialogs_1_one_dialog_other_d_1b86909b": {
-    "message": "{ dialogNum, plural,\n     =0 {No dialogs}\n     =1 {One dialog}\n  other {# dialogs}\n} have been found.\n            { dialogNum, select,\n      0 {}\n  other {Press down arrow key to navigate the search results}\n}"
+  "dialognum_plural_0_no_bots_1_one_bot_other_bots_ha_1cf10787": {
+    "message": "{ dialogNum, plural,\n     =0 {No bots}\n     =1 {One bot}\n  other {# bots}\n} have been found.\n            { dialogNum, select,\n      0 {}\n  other {Press down arrow key to navigate the search results}\n}"
   },
   "disable_a5c05db3": {
     "message": "Disable"
@@ -914,11 +959,14 @@
   "edit_in_json_75d0d754": {
     "message": "Edit in JSON"
   },
-  "edit_mode_7e07cfdf": {
-    "message": "Edit mode"
+  "edit_kb_name_5e2d8c5b": {
+    "message": "Edit KB name"
   },
   "edit_property_dd6a1172": {
     "message": "Edit Property"
+  },
+  "edit_source_45af68b4": {
+    "message": "Edit source"
   },
   "ejecting_runtime_f6c90614": {
     "message": "Ejecting runtime..."
@@ -935,11 +983,17 @@
   "emit_event_32aa6583": {
     "message": "Emit Event"
   },
+  "empty_qna_icon_34c180c6": {
+    "message": "Empty QnA Icon"
+  },
   "enable_6f5d1328": {
     "message": "Enable"
   },
   "enable_line_numbers_to_refer_to_code_lines_by_numb_e5ba66ea": {
     "message": "Enable line numbers to refer to code lines by number."
+  },
+  "enable_multi_turn_extraction_8a168892": {
+    "message": "Enable multi-turn extraction"
   },
   "enabled_ba7cab66": {
     "message": "Enabled"
@@ -971,20 +1025,14 @@
   "enter_a_min_value_c3030813": {
     "message": "Enter a min value"
   },
-  "enter_a_question_74f2e045": {
-    "message": "Enter a question"
-  },
-  "enter_an_answer_84152a83": {
-    "message": "Enter an answer"
+  "enter_a_url_or_browse_to_upload_a_file_88a783fa": {
+    "message": "Enter a URL or browse to upload a file "
   },
   "enterprise_assistant_434df551": {
     "message": "Enterprise Assistant"
   },
   "entities_ef09392c": {
     "message": "Entities"
-  },
-  "enum_help_text_434bd44f": {
-    "message": "Enum help text"
   },
   "environment_68aed6d3": {
     "message": "Environment"
@@ -1079,8 +1127,8 @@
   "extract_question_and_answer_pairs_from_an_online_f_c1e12724": {
     "message": "Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence. "
   },
-  "extracting_qna_pairs_from_urls_eaed1b1c": {
-    "message": "Extracting QNA pairs from { urls }"
+  "extracting_qna_pairs_from_url_b0331bba": {
+    "message": "Extracting QNA pairs from { url }"
   },
   "fallback_text_e5ff1cb7": {
     "message": "Fallback Text"
@@ -1123,6 +1171,9 @@
   },
   "for_each_page_3b4d4b69": {
     "message": "For Each Page"
+  },
+  "for_properties_of_type_list_or_enum_your_bot_accep_9e7649c6": {
+    "message": "For properties of type list (or enum), your bot accepts only the values you define. After your dialog is generated, you can provide synonyms for each value."
   },
   "form_dialog_schema_actions_c9f1c26": {
     "message": "Form dialog schema actions"
@@ -1232,9 +1283,6 @@
   "id_already_exists_please_enter_a_unique_file_name_174913a3": {
     "message": "{ id } already exists. Please enter a unique file name."
   },
-  "id_is_id_c0fc7a7d": {
-    "message": "id is { id }"
-  },
   "if_condition_56c9be4a": {
     "message": "If Condition"
   },
@@ -1247,9 +1295,6 @@
   "if_you_already_have_a_qna_account_provide_the_info_466d6a4b": {
     "message": "If you already have a QNA account, provide the information below. If you do not have an account yet, create a (free) account first."
   },
-  "import_qna_from_url_26a99161": {
-    "message": "Import QnA From Url"
-  },
   "import_schema_75659c5f": {
     "message": "Import schema"
   },
@@ -1261,9 +1306,6 @@
   },
   "in_the_b_create_a_trigger_b_wizard_set_the_trigger_f9b23519": {
     "message": "In the <b>Create a trigger</b> wizard, set the trigger type to <i>Activities</i> in the dropdown. Then set the <b>Activity Type</b> to <i>Greeting (ConversationUpdate activity)</i>, and click the <b>Submit</b> button."
-  },
-  "increment_by_step_1cf3a88": {
-    "message": "increment by { step }"
   },
   "input_1d1d9b8e": {
     "message": "Input"
@@ -1348,6 +1390,12 @@
   },
   "keys_must_be_unique_2028cef3": {
     "message": "Keys must be unique"
+  },
+  "knowledge_base_name_7d83bbe4": {
+    "message": "Knowledge base name"
+  },
+  "knowledge_source_dd66f38f": {
+    "message": "Knowledge source"
   },
   "l_startline_startcharacter_l_endline_endcharacter_72bc2e5d": {
     "message": "L{ startLine }:{ startCharacter } - L{ endLine }:{ endCharacter } "
@@ -1463,6 +1511,9 @@
   "lu_editor_d09fb2b0": {
     "message": "LU editor"
   },
+  "lu_file_already_exist_7f118089": {
+    "message": "lu file already exist"
+  },
   "lu_file_id_not_found_8732d33e": {
     "message": "LU file { id } not found"
   },
@@ -1499,14 +1550,17 @@
   "manifest_version_1edc004a": {
     "message": "Manifest Version"
   },
+  "manually_add_question_and_answer_pairs_to_create_a_f1318c4e": {
+    "message": "Manually add question and answer pairs to create a KB"
+  },
   "maximum_f0e8e5e4": {
     "message": "Maximum"
   },
-  "maximum_help_text_7f3e6562": {
-    "message": "Maximum help text"
-  },
   "mb_8f9f9e84": {
     "message": "MB"
+  },
+  "menu_items_2d66492c": {
+    "message": "Menu items"
   },
   "message_5c38209d": {
     "message": "Message"
@@ -1546,9 +1600,6 @@
   },
   "minimum_f31b05ab": {
     "message": "Minimum"
-  },
-  "minimum_help_text_6ab5b190": {
-    "message": "Minimum help text"
   },
   "missing_definition_for_defname_33f2b594": {
     "message": "Missing definition for { defName }"
@@ -1736,9 +1787,6 @@
   "number_or_expression_55c7f9f": {
     "message": "Number or expression"
   },
-  "numeric_field_c2564f69": {
-    "message": "numeric field"
-  },
   "oauth_login_b6aa9534": {
     "message": "OAuth login"
   },
@@ -1789,6 +1837,12 @@
   },
   "optional_properties_2c23c7c6": {
     "message": "Optional properties"
+  },
+  "optional_setting_a_maximum_value_enables_your_bot__1ec30919": {
+    "message": "Optional. Setting a maximum value enables your bot to reject a value that is too large and re-prompt the user for a new value."
+  },
+  "optional_setting_a_minimum_value_enables_your_bot__f1fd4bce": {
+    "message": "Optional. Setting a minimum value enables your bot to reject a value that is too small and re-prompt the user for a new value."
   },
   "or_4f7d4edb": {
     "message": "Or: "
@@ -1922,9 +1976,6 @@
   "property_actions_9c1a20d9": {
     "message": "Property actions"
   },
-  "property_array_help_text_126845dc": {
-    "message": "Property array help text"
-  },
   "property_description_8d21ea2e": {
     "message": "Property description."
   },
@@ -1937,9 +1988,6 @@
   "property_name_914371f5": {
     "message": "Property name"
   },
-  "property_name_help_text_421a5f7f": {
-    "message": "Property name help text"
-  },
   "property_title_f2b443b7": {
     "message": "Property title"
   },
@@ -1948,9 +1996,6 @@
   },
   "property_type_e38cf7e4": {
     "message": "Property Type"
-  },
-  "property_type_help_text_8a2c202d": {
-    "message": "Property type help text"
   },
   "provide_a_brief_description_it_will_appear_on_the__f962eb38": {
     "message": "Provide a brief description. It will appear on the publish history list."
@@ -2027,6 +2072,12 @@
   "question_9121487": {
     "message": "Question"
   },
+  "question_is_content_3952e657": {
+    "message": "Question is { content }"
+  },
+  "question_is_empty_now_f0b5733e": {
+    "message": "Question is empty now"
+  },
   "randomselector_4a5274f1": {
     "message": "RandomSelector"
   },
@@ -2057,8 +2108,8 @@
   "regex_intent_is_already_defined_df095c1f": {
     "message": "RegEx { intent } is already defined"
   },
-  "regular_expression_855557bf": {
-    "message": "Regular Expression"
+  "regular_expression_recognizer_44664557": {
+    "message": "Regular expression recognizer"
   },
   "release_1af20f26": {
     "message": "Release: "
@@ -2068,6 +2119,12 @@
   },
   "remove_f47dc62a": {
     "message": "Remove"
+  },
+  "remove_this_dialog_6146716c": {
+    "message": "Remove this dialog"
+  },
+  "remove_this_trigger_622d866d": {
+    "message": "Remove this trigger"
   },
   "repeat_this_dialog_83ca994e": {
     "message": "Repeat this dialog"
@@ -2195,8 +2252,8 @@
   "select_options_9ee7b227": {
     "message": "Select options"
   },
-  "select_property_type_5f3ab685": {
-    "message": "select property type"
+  "select_property_type_45c6e68e": {
+    "message": "Select property type"
   },
   "select_runtime_version_to_add_d63d383b": {
     "message": "Select runtime version to add"
@@ -2324,6 +2381,9 @@
   "spaces_and_special_characters_are_not_allowed_20d47684": {
     "message": "Spaces and special characters are not allowed."
   },
+  "spaces_and_special_characters_are_not_allowed_use__2a61c454": {
+    "message": "Spaces and special characters are not allowed. Use letters, numbers, -, or _ and don''t use number at the beginning."
+  },
   "spaces_and_special_characters_are_not_allowed_use__48acec3c": {
     "message": "Spaces and special characters are not allowed. Use letters, numbers, -, or _."
   },
@@ -2344,6 +2404,9 @@
   },
   "start_command_a085f2ec": {
     "message": "Start command"
+  },
+  "start_typing_kind_or_b0c305da": {
+    "message": "Start typing { kind } or"
   },
   "state_is_state_a2b8943": {
     "message": "State is { state }"
@@ -2411,6 +2474,9 @@
   "the_dialog_you_have_tried_to_delete_is_currently_u_a37c7a02": {
     "message": "The dialog you have tried to delete is currently used in the below dialog(s). Removing this dialog will cause your Bot to malfunction without additional action."
   },
+  "the_file_name_can_not_be_empty_cbdbe9c8": {
+    "message": "The file name can not be empty"
+  },
   "the_following_customizations_will_be_applied_to_yo_7d3384cf": {
     "message": "The following customizations will be applied to your bot"
   },
@@ -2434,6 +2500,9 @@
   },
   "the_page_you_are_looking_for_can_t_be_found_a3b75795": {
     "message": "The page you are looking for can''t be found."
+  },
+  "the_property_type_defines_the_expected_input_the_t_58a6ef09": {
+    "message": "The property type defines the expected input. The type can be a list (or enum) of defined values or a data format, such as a date, email, number, or string."
   },
   "the_return_type_does_not_match_2ae72548": {
     "message": "the return type does not match"
@@ -2459,6 +2528,12 @@
   "these_tasks_will_be_used_to_generate_the_manifest__2791be0e": {
     "message": "These tasks will be used to generate the manifest and describe the capabilities of this skill to those who may want to use it."
   },
+  "this_bot_has_errors_72fb40d5": {
+    "message": "This bot has errors"
+  },
+  "this_bot_has_warnings_b6735e2e": {
+    "message": "This bot has warnings"
+  },
   "this_configures_a_data_driven_dialog_via_a_collect_c7fa4389": {
     "message": "This configures a data driven dialog via a collection of events and actions."
   },
@@ -2480,8 +2555,8 @@
   "this_operation_cannot_be_completed_the_skill_is_al_4886d311": {
     "message": "This operation cannot be completed. The skill is already part of the Bot Project"
   },
-  "this_trigger_type_is_not_supported_by_the_regex_re_2c3b7c46": {
-    "message": "This trigger type is not supported by the RegEx recognizer and will not be fired."
+  "this_option_allows_your_users_to_give_multiple_val_d2dd0d58": {
+    "message": "This option allows your users to give multiple values for this property."
   },
   "this_trigger_type_is_not_supported_by_the_regex_re_dc3eefa2": {
     "message": "This trigger type is not supported by the RegEx recognizer. To ensure this trigger is fired, change the recognizer type."
@@ -2549,6 +2624,9 @@
   "toggle_extension_e41de2d2": {
     "message": "Toggle extension"
   },
+  "toggle_show_all_61f19d77": {
+    "message": "Toggle show all"
+  },
   "toolbar_bafd4228": {
     "message": "toolbar"
   },
@@ -2576,6 +2654,9 @@
   "try_again_ad656c3c": {
     "message": "Try again"
   },
+  "type_a_name_that_describes_this_content_d1a910b6": {
+    "message": "Type a name that describes this content"
+  },
   "type_and_press_enter_33a2905d": {
     "message": "Type and press enter"
   },
@@ -2593,9 +2674,6 @@
   },
   "typing_activity_6b634ae": {
     "message": "Typing activity"
-  },
-  "unable_to_determine_recognizer_type_from_data_valu_2960f526": {
-    "message": "Unable to determine recognizer type from data: { value }"
   },
   "undo_a7be8fef": {
     "message": "Undo"
@@ -2801,8 +2879,14 @@
   "which_event_6e655d2b": {
     "message": "Which event?"
   },
+  "write_an_expression_8773ea5c": {
+    "message": "Write an expression"
+  },
   "yes_dde87d5": {
     "message": "Yes"
+  },
+  "you_already_have_a_kb_with_that_name_choose_anothe_b7f7c517": {
+    "message": "You already have a KB with that name. Choose another name and try again."
   },
   "you_are_about_to_publish_your_bot_to_the_profile_b_79a6a226": {
     "message": "You are about to publish your bot to the profile below. Do you want to proceed?"

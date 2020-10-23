@@ -3,7 +3,7 @@
 
 import { selector, useRecoilValue } from 'recoil';
 import { v4 as uuid } from 'uuid';
-import { act, RenderHookResult, HookResult } from '@bfc/test-utils/lib/hooks';
+import { act, RenderHookResult, HookResult } from '@botframework-composer/test-utils/lib/hooks';
 import { useRecoilState } from 'recoil';
 import cloneDeep from 'lodash/cloneDeep';
 import endsWith from 'lodash/endsWith';
@@ -26,7 +26,6 @@ import {
   luFilesState,
   lgFilesState,
   settingsState,
-  dialogsState,
   botEnvironmentState,
   botDiagnosticsState,
   localeState,
@@ -42,6 +41,7 @@ import {
   botErrorState,
   botProjectSpaceLoadedState,
 } from '../../atoms';
+import { dialogsSelectorFamily } from '../../selectors';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '../../dispatchers';
 import { BotStatus } from '../../../constants';
@@ -118,7 +118,7 @@ describe('Project dispatcher', () => {
     const luFiles = useRecoilValue(luFilesState(projectId));
     const lgFiles = useRecoilValue(lgFilesState(projectId));
     const settings = useRecoilValue(settingsState(projectId));
-    const dialogs = useRecoilValue(dialogsState(projectId));
+    const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
     const botEnvironment = useRecoilValue(botEnvironmentState(projectId));
     const diagnostics = useRecoilValue(botDiagnosticsState(projectId));
     const locale = useRecoilValue(localeState(projectId));
@@ -363,7 +363,7 @@ describe('Project dispatcher', () => {
     expect(renderedComponent.current.botStates.echoSkill2.botDisplayName).toBe('Echo-Skill-2');
 
     await act(async () => {
-      await dispatcher.addRemoteSkillToBotProject('https://test.net/api/manifest/man', 'test-skill', 'remote');
+      await dispatcher.addRemoteSkillToBotProject('https://test.net/api/manifest/test', 'remote');
     });
 
     expect(navigateTo).toHaveBeenLastCalledWith(`/bot/${projectId}/dialogs/emptybot-1`);
@@ -392,14 +392,12 @@ describe('Project dispatcher', () => {
     await act(async () => {
       await dispatcher.addRemoteSkillToBotProject(
         'https://test-dev.azurewebsites.net/manifests/onenote-2-1-preview-1-manifest.json',
-        'one-note',
         'remote'
       );
     });
-
-    expect(renderedComponent.current.botStates.oneNote).toBeDefined();
-    expect(renderedComponent.current.botStates.oneNote.botDisplayName).toBe('OneNoteSync');
-    expect(renderedComponent.current.botStates.oneNote.location).toBe(
+    expect(renderedComponent.current.botStates.oneNoteSync).toBeDefined();
+    expect(renderedComponent.current.botStates.oneNoteSync.botDisplayName).toBe('OneNoteSync');
+    expect(renderedComponent.current.botStates.oneNoteSync.location).toBe(
       'https://test-dev.azurewebsites.net/manifests/onenote-2-1-preview-1-manifest.json'
     );
     expect(navigateTo).toHaveBeenLastCalledWith(`/bot/${projectId}/dialogs/emptybot-1`);
@@ -429,26 +427,17 @@ describe('Project dispatcher', () => {
     await act(async () => {
       await dispatcher.addRemoteSkillToBotProject(
         'https://test-dev.azurewebsites.net/manifests/onenote-2-1-preview-1-manifest.json',
-        'one-note',
         'remote'
       );
     });
 
-    await act(async () => {
-      await dispatcher.addRemoteSkillToBotProject(
-        'https://test-dev.azurewebsites.net/manifests/onenote-second-manifest.json',
-        'one-note-2',
-        'remote'
-      );
-    });
-
-    const oneNoteProjectId = renderedComponent.current.botStates.oneNote.projectId;
+    const oneNoteProjectId = renderedComponent.current.botStates.oneNoteSync.projectId;
     mockImplementation.mockClear();
 
     await act(async () => {
       dispatcher.removeSkillFromBotProject(oneNoteProjectId);
     });
-    expect(renderedComponent.current.botStates.oneNote).toBeUndefined();
+    expect(renderedComponent.current.botStates.oneNoteSync).toBeUndefined();
   });
 
   it('should be able to add a new skill to Botproject', async () => {

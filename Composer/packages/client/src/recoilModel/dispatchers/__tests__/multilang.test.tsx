@@ -2,20 +2,20 @@
 // Licensed under the MIT License.
 
 import { useRecoilValue } from 'recoil';
-import { act } from '@bfc/test-utils/lib/hooks';
+import { act } from '@botframework-composer/test-utils/lib/hooks';
 
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import {
   luFilesState,
   lgFilesState,
   settingsState,
-  dialogsState,
   localeState,
   actionsSeedState,
   onAddLanguageDialogCompleteState,
   onDelLanguageDialogCompleteState,
   currentProjectIdState,
 } from '../../atoms';
+import { dialogsSelectorFamily } from '../../selectors';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
 import { multilangDispatcher } from '../multilang';
@@ -43,7 +43,7 @@ describe('Multilang dispatcher', () => {
   beforeEach(() => {
     const useRecoilTestHook = () => {
       const actionsSeed = useRecoilValue(actionsSeedState(state.projectId));
-      const dialogs = useRecoilValue(dialogsState(state.projectId));
+      const dialogs = useRecoilValue(dialogsSelectorFamily(state.projectId));
       const locale = useRecoilValue(localeState(state.projectId));
       const settings = useRecoilValue(settingsState(state.projectId));
       const luFiles = useRecoilValue(luFilesState(state.projectId));
@@ -69,7 +69,7 @@ describe('Multilang dispatcher', () => {
     const { result } = renderRecoilHook(useRecoilTestHook, {
       states: [
         { recoilState: currentProjectIdState, initialValue: state.projectId },
-        { recoilState: dialogsState(state.projectId), initialValue: state.dialogs },
+        { recoilState: dialogsSelectorFamily(state.projectId), initialValue: state.dialogs },
         { recoilState: localeState(state.projectId), initialValue: state.locale },
         { recoilState: lgFilesState(state.projectId), initialValue: state.lgFiles },
         { recoilState: luFilesState(state.projectId), initialValue: state.luFiles },

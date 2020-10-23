@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { Dispatch } from 'react';
-import { Shell } from '@bfc/types';
+import { Shell } from '@botframework-composer/types';
 
 export type State = Shell;
 

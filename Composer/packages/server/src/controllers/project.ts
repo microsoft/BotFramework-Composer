@@ -129,10 +129,11 @@ async function openProject(req: Request, res: Response) {
     return;
   }
   const user = await ExtensionContext.getUserFromRequest(req);
+  const path = process.platform === 'win32' ? req.body.path.replace(/^\//, '') : req.body.path;
 
   const location: LocationRef = {
     storageId: req.body.storageId,
-    path: req.body.path,
+    path,
   };
 
   try {
@@ -326,13 +327,14 @@ async function build(req: Request, res: Response) {
   const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
     try {
-      const { luisConfig, qnaConfig, luFiles, qnaFiles, crossTrainConfig } = req.body;
+      const { luisConfig, qnaConfig, luFiles, qnaFiles, crossTrainConfig, recognizerTypes } = req.body;
       const files = await currentProject.buildFiles({
         luisConfig,
         qnaConfig,
-        luFileIds: luFiles,
-        qnaFileIds: qnaFiles,
+        luResource: luFiles,
+        qnaResource: qnaFiles,
         crossTrainConfig,
+        recognizerTypes,
       });
       res.status(200).json(files);
     } catch (error) {

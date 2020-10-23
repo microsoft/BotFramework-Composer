@@ -81,12 +81,8 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
     }
   };
 
-  const instructions: string | undefined = useMemo((): string | undefined => {
-    return targetType ? props.types.find((t) => t.name === targetType)?.instructions : '';
-  }, [props.targets, targetType]);
-
-  const schema = useMemo(() => {
-    return targetType ? props.types.find((t) => t.name === targetType)?.schema : undefined;
+  const selectedTarget = useMemo(() => {
+    return props.types.find((t) => t.name === targetType);
   }, [props.targets, targetType]);
 
   const targetBundleId = useMemo(() => {
@@ -168,20 +164,20 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
       <div style={{ width: '60%' }}>
         {FormInPage}
         <Fragment>
-          {instructions && <p>{instructions}</p>}
+          {selectedTarget?.instructions && <p>{selectedTarget.instructions}</p>}
           <div css={label}>{formatMessage('Publish Configuration')}</div>
           <JsonEditor
             key={targetType}
             editorSettings={userSettings.codeEditor}
             height={200}
-            schema={schema}
+            schema={selectedTarget?.schema}
             value={config}
             onChange={setConfig}
           />
         </Fragment>
       </div>
     );
-  }, [instructions, schema, userSettings]);
+  }, [selectedTarget, userSettings]);
 
   const PageContent = useMemo(() => {
     switch (page) {
@@ -217,14 +213,15 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
         );
       case PageTypes.ConfigProvision:
       case PageTypes.ReviewResource:
-        return (
-          <PluginHost
-            bundleId={targetBundleId}
-            extraIframeStyles={[customPublishUISurface]}
-            pluginName={targetType}
-            pluginType="publish"
-          ></PluginHost>
-        );
+        if (selectedTarget && selectedTarget?.bundleId) {
+          return (
+            <PluginHost
+              bundleId={selectedTarget?.bundleId}
+              pluginName={selectedTarget?.extensionId}
+              pluginType="publish"
+            />
+          );
+        }
     }
     return null;
   }, [page, nextDisabled, saveDisabled]);

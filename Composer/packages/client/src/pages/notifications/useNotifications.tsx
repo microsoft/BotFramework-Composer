@@ -12,12 +12,13 @@ import {
   botProjectFileState,
   dialogSchemasState,
   formDialogSchemasSelectorFamily,
+  jsonSchemaFilesState,
   lgFilesState,
   luFilesState,
   qnaFilesState,
   settingsState,
   skillManifestsState,
-  validateDialogSelectorFamily,
+  validateDialogsSelectorFamily,
 } from '../../recoilModel';
 
 import { getReferredLuFiles } from './../../utils/luUtil';
@@ -33,7 +34,7 @@ import {
 } from './types';
 
 export default function useNotifications(projectId: string, filter?: string) {
-  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
   const luFiles = useRecoilValue(luFilesState(projectId));
   const lgFiles = useRecoilValue(lgFilesState(projectId));
   const diagnostics = useRecoilValue(botDiagnosticsState(projectId));
@@ -43,6 +44,7 @@ export default function useNotifications(projectId: string, filter?: string) {
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   const formDialogSchemas = useRecoilValue(formDialogSchemasSelectorFamily(projectId));
   const botProjectFile = useRecoilValue(botProjectFileState(projectId));
+  const jsonSchemaFiles = useRecoilValue(jsonSchemaFilesState(projectId));
 
   const botAssets: BotAssets = {
     projectId,
@@ -55,6 +57,7 @@ export default function useNotifications(projectId: string, filter?: string) {
     dialogSchemas,
     formDialogSchemas,
     botProjectFile,
+    jsonSchemaFiles,
   };
 
   const memoized = useMemo(() => {
@@ -77,25 +80,25 @@ export default function useNotifications(projectId: string, filter?: string) {
     });
 
     dialogs.forEach((dialog) => {
-      dialog.diagnostics.map((diagnostic) => {
+      dialog.diagnostics.forEach((diagnostic) => {
         const location = `${dialog.id}.dialog`;
         notifications.push(new DialogNotification(projectId, dialog.id, location, diagnostic));
       });
     });
     getReferredLuFiles(luFiles, dialogs).forEach((lufile) => {
-      lufile.diagnostics.map((diagnostic) => {
+      lufile.diagnostics.forEach((diagnostic) => {
         const location = `${lufile.id}.lu`;
         notifications.push(new LuNotification(projectId, lufile.id, location, diagnostic, lufile, dialogs));
       });
     });
     lgFiles.forEach((lgFile) => {
-      lgFile.diagnostics.map((diagnostic) => {
+      lgFile.diagnostics.forEach((diagnostic) => {
         const location = `${lgFile.id}.lg`;
         notifications.push(new LgNotification(projectId, lgFile.id, location, diagnostic, lgFile, dialogs));
       });
     });
     qnaFiles.forEach((qnaFile) => {
-      get(qnaFile, 'diagnostics', []).map((diagnostic) => {
+      get(qnaFile, 'diagnostics', []).forEach((diagnostic) => {
         const location = `${qnaFile.id}.qna`;
         notifications.push(new QnANotification(projectId, qnaFile.id, location, diagnostic));
       });
