@@ -3,9 +3,8 @@
 
 import { selector, selectorFamily } from 'recoil';
 import isEmpty from 'lodash/isEmpty';
-import { BotAssets, FormDialogSchema } from '@bfc/shared';
 import { BotIndexer } from '@bfc/indexers';
-import { FormDialogSchema, JsonSchemaFile } from '@bfc/shared';
+import { BotAssets, FormDialogSchema, JsonSchemaFile } from '@bfc/shared';
 
 import settingStorage from '../../utils/dialogSettingStorage';
 import {

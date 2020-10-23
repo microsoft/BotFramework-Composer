@@ -4,7 +4,6 @@
  * Verify bot settings, files meet LUIS/QnA requirments.
  */
 import get from 'lodash/get';
-
 import {
   BotAssets,
   BotInfo,

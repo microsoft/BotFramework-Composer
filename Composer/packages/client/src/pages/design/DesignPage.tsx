@@ -152,7 +152,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     createQnAKBFromScratch,
     createQnAFromUrlDialogBegin,
     updateZoomRate,
-    addSkillDialogBegin,
     setCreationFlowStatus,
     setCreationFlowTypes,
     removeSkillFromBotProject,
@@ -374,7 +373,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             key: 'ConnectRemoteSkill',
             text: formatMessage(' Connect a remote skill'),
             onClick: () => {
-              addSkillDialogBegin(() => {}, projectId);
+              setAddSkillDialogModalVisibility(true);
             },
           },
           {

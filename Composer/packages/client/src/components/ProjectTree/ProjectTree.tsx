@@ -362,6 +362,7 @@ export const ProjectTree: React.FC<Props> = ({
       dialogName: dialog.id,
       displayName: groupName,
       isRoot: false,
+      diagnostics: [],
       projectId: projectId,
       skillId: null,
     };
