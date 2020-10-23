@@ -130,7 +130,7 @@ export const ProjectTree: React.FC<Props> = ({
   onDeleteTrigger,
   onSelect,
 }) => {
-  const { onboardingAddCoachMarkRef, selectTo, navTo } = useRecoilValue(dispatcherState);
+  const { onboardingAddCoachMarkRef, selectTo, navTo, navigateToFormDialogSchema } = useRecoilValue(dispatcherState);
 
   const [filter, setFilter] = useState('');
   const [selectedLink, setSelectedLink] = useState<TreeLink | undefined>();
@@ -165,6 +165,13 @@ export const ProjectTree: React.FC<Props> = ({
 
   const dialogIsFormDialog = (dialog: DialogInfo) => {
     return process.env.COMPOSER_ENABLE_FORMS && dialog.content?.schema !== undefined;
+  };
+
+  const formDialogSchemaExists = (projectId: string, dialog: DialogInfo) => {
+    return (
+      dialogIsFormDialog(dialog) &&
+      !!botProjectSpace?.find((s) => s.projectId === projectId)?.formDialogSchemas.find((fd) => fd.id === dialog.id)
+    );
   };
 
   const botHasWarnings = (bot: BotInProject) => {
@@ -238,10 +245,14 @@ export const ProjectTree: React.FC<Props> = ({
       displayName: dialog.displayName,
       isRoot: dialog.isRoot,
       projectId: currentProjectId,
-      skillId: null,
+      skillId,
       errorContent,
       warningContent,
     };
+
+    const isFormDialog = dialogIsFormDialog(dialog);
+    const showEditSchema = formDialogSchemaExists(skillId, dialog);
+
     return (
       <span
         key={dialog.id}
@@ -256,7 +267,7 @@ export const ProjectTree: React.FC<Props> = ({
         <TreeItem
           showProps
           forceIndent={showTriggers ? 0 : SUMMARY_ARROW_SPACE}
-          icon={dialogIsFormDialog(dialog) ? icons.FORM_DIALOG : icons.DIALOG}
+          icon={isFormDialog ? icons.FORM_DIALOG : icons.DIALOG}
           isSubItemActive={isEqual(link, selectedLink)}
           link={link}
           menu={[
@@ -267,6 +278,16 @@ export const ProjectTree: React.FC<Props> = ({
                 onDeleteDialog(link.dialogName ?? '');
               },
             },
+            ...(showEditSchema
+              ? [
+                  {
+                    label: formatMessage('Edit schema'),
+                    icon: 'Edit',
+                    onClick: (link) =>
+                      navigateToFormDialogSchema({ projectId: link.skillId, schemaId: link.dialogName }),
+                  },
+                ]
+              : []),
           ]}
           onSelect={handleOnSelect}
         />
