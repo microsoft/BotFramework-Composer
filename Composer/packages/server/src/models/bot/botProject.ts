@@ -6,7 +6,16 @@ import fs from 'fs';
 
 import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
-import { getNewDesigner, FileInfo, Diagnostic, IBotProject, DialogSetting, FileExtensions, Skill } from '@bfc/shared';
+import {
+  getNewDesigner,
+  FileInfo,
+  Diagnostic,
+  IBotProject,
+  DialogSetting,
+  FileExtensions,
+  Skill,
+  DialogUtils,
+} from '@bfc/shared';
 import merge from 'lodash/merge';
 import { UserIdentity, ExtensionContext } from '@bfc/extension';
 import { FeedbackType, generate } from '@microsoft/bf-generate-library';
@@ -409,7 +418,6 @@ export class BotProject implements IBotProject {
   };
 
   public validateFileName = (name: string) => {
-    const nameRegex = /^[a-zA-Z0-9-_]+$/;
     const { fileId, fileType } = parseFileName(name, '');
 
     let fileName = fileId;
@@ -417,13 +425,7 @@ export class BotProject implements IBotProject {
       fileName = Path.basename(name, fileType);
     }
 
-    if (!fileName) {
-      throw new Error('The file name can not be empty');
-    }
-
-    if (!nameRegex.test(fileName)) {
-      throw new Error('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
-    }
+    DialogUtils.validateDialogName(fileName);
   };
 
   public createFile = async (name: string, content = '') => {
