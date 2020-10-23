@@ -20,3 +20,6 @@ Composer/packages/server/.composer
 extensions/.build-cache.json
 extensions/**/lib
 extensions/**/dist
+
+# ignore git folder
+**/.git
