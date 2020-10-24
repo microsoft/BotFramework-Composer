@@ -3,10 +3,10 @@
 
 import * as React from 'react';
 
-import { renderWithRecoil } from '../../../__tests__/testUtils/renderWithRecoil';
-import { botStatusState } from '../../recoilModel';
-import { LocalBotRuntime } from '../TestController/LocalBotRuntime';
-import { BotStatus } from '../../constants';
+import { renderWithRecoil } from '../../../../__tests__/testUtils/renderWithRecoil';
+import { botStatusState } from '../../../recoilModel';
+import { LocalBotRuntime } from '../../TestController/LocalBotRuntime';
+import { BotStatus } from '../../../constants';
 
 describe('<LocalBotRuntime />', () => {
   const projectId = '123a.324';

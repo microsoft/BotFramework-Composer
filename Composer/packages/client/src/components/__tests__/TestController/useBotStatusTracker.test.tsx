@@ -7,9 +7,9 @@ import * as React from 'react';
 import { RecoilRoot } from 'recoil';
 import { renderHook } from '@botframework-composer/test-utils/lib/hooks';
 
-import { botProjectIdsState, botStatusState, dispatcherState, projectMetaDataState } from '../../recoilModel';
-import { useBotStatusTracker } from '../TestController/useBotStatusTracker';
-import { BotStatus } from '../../constants';
+import { botProjectIdsState, botStatusState, dispatcherState, projectMetaDataState } from '../../../recoilModel';
+import { useBotStatusTracker } from '../../TestController/useBotStatusTracker';
+import { BotStatus } from '../../../constants';
 
 const state = {
   projectId: '123a.23fs',

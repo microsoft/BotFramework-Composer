@@ -4,19 +4,19 @@
 import * as React from 'react';
 import { act } from '@botframework-composer/test-utils';
 
-import httpClient from '../../utils/httpUtil';
-import { renderWithRecoil } from '../../../__tests__/testUtils/renderWithRecoil';
-import { botRuntimeErrorState, botStatusState } from '../../recoilModel';
-import { BotStatus, BotStatusesCopy } from '../../constants';
-import { LocalBotStatusIndicator } from '../TestController/LocalBotStatusIndicator';
+import httpClient from '../../../utils/httpUtil';
+import { renderWithRecoil } from '../../../../__tests__/testUtils/renderWithRecoil';
+import { botRuntimeErrorState, botStatusState } from '../../../recoilModel';
+import { BotStatus, BotStatusesCopy } from '../../../constants';
+import { LocalBotStatusIndicator } from '../../TestController/LocalBotStatusIndicator';
 
-jest.mock('../../utils/httpUtil');
+jest.mock('../../../utils/httpUtil');
 
 const mockStart = jest.fn();
 const mockStop = jest.fn();
 const pollingInterval = 3000;
 
-jest.mock('../TestController/useLocalBotOperations', () => {
+jest.mock('../../TestController/useLocalBotOperations', () => {
   return {
     useLocalBotOperations: () => ({
       startSingleBot: mockStart,
@@ -37,7 +37,7 @@ describe('<LocalBotStatusIndicator />', () => {
     const { findAllByText } = renderWithRecoil(<LocalBotStatusIndicator projectId={projectId} />, ({ set }) => {
       set(botStatusState(projectId), BotStatus.publishing);
     });
-    const element = await findAllByText(BotStatusesCopy[BotStatus.publishing]);
+    const element = await findAllByText(BotStatusesCopy.publishing);
     expect(element).toBeDefined();
   });
 
@@ -45,7 +45,7 @@ describe('<LocalBotStatusIndicator />', () => {
     const { findAllByText } = renderWithRecoil(<LocalBotStatusIndicator projectId={projectId} />, ({ set }) => {
       set(botStatusState(projectId), BotStatus.failed);
     });
-    const element = await findAllByText(BotStatusesCopy[BotStatus.failed]);
+    const element = await findAllByText(BotStatusesCopy.failed);
     expect(element).toBeDefined();
     expect(mockStop).toHaveBeenCalled();
   });
@@ -55,9 +55,9 @@ describe('<LocalBotStatusIndicator />', () => {
       set(botStatusState(projectId), BotStatus.published);
     });
 
-    const element = await findAllByText(BotStatusesCopy[BotStatus.published]);
+    const element = await findAllByText(BotStatusesCopy.published);
     expect(element).toBeDefined();
-    expect(mockStart).toHaveBeenCalled();
+    expect(mockStart).toHaveBeenCalledWith(projectId, true);
   });
 
   describe('<Poll Operations />', () => {

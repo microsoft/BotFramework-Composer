@@ -35,13 +35,17 @@ export function useLocalBotOperations(onAllBotsStarted?: (started: boolean) => v
     }
   };
 
-  const startRootBot = async () => {
+  const startRootBot = async (skipBuild: boolean | undefined = undefined) => {
     setProjectsToTrack([]);
     await updateSettingsForSkillsWithoutManifest();
     const rootBot = builderEssentials[0];
     const { projectId, configuration, buildRequired, status } = rootBot;
     if (status !== BotStatus.connected) {
-      handleBotStart(projectId, configuration, buildRequired);
+      let isBuildRequired = buildRequired;
+      if (skipBuild) {
+        isBuildRequired = false;
+      }
+      handleBotStart(projectId, configuration, isBuildRequired);
     }
   };
 
@@ -74,13 +78,17 @@ export function useLocalBotOperations(onAllBotsStarted?: (started: boolean) => v
     }
   };
 
-  const startSingleBot = (projectId: string) => {
+  const startSingleBot = (projectId: string, skipBuild: boolean | undefined = undefined) => {
     if (projectId === rootBotId) {
-      startRootBot();
+      startRootBot(skipBuild);
     } else {
       const botData = builderEssentials.find((builder) => builder.projectId === projectId);
       if (botData) {
-        handleBotStart(projectId, botData?.configuration, botData?.buildRequired);
+        let isBuildRequired = botData?.buildRequired;
+        if (skipBuild) {
+          isBuildRequired = false;
+        }
+        handleBotStart(projectId, botData?.configuration, isBuildRequired);
       }
     }
   };

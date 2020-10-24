@@ -10,7 +10,13 @@ import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 
 import { BotStatus, BotStatusesCopy } from '../../constants';
-import { botEndpointsState, botRuntimeErrorState, botStatusState, dispatcherState } from '../../recoilModel';
+import {
+  botEndpointsState,
+  botRuntimeErrorState,
+  botRuntimeOperationsSelector,
+  botStatusState,
+  dispatcherState,
+} from '../../recoilModel';
 import { useInterval } from '../../utils/hooks';
 
 import { EmulatorOpenButton } from './emulatorOpenButton';
@@ -68,7 +74,7 @@ export const LocalBotStatusIndicator: React.FC<LocalBotStatusIndicatorProps> = (
       case BotStatus.published:
         setBotStatusText(BotStatusesCopy.published);
         setIntervalRunning(false);
-        startSingleBot(projectId);
+        startSingleBot(projectId, true);
         break;
       case BotStatus.reloading:
         setBotStatusText(BotStatusesCopy.loading);

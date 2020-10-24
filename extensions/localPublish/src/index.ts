@@ -341,7 +341,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       try {
         spawnProcess = spawn(
           startCommand,
-          [...commandAndArgs, '--port', port, `--urls`, `http://0.0.0.0:${port}`, ...this.getConfig(settings)],
+          [...commandAndArgs, '--port', port, `--urls`, `http://0.0.0.0:${port}`, ...this.getConfig(settings, `http://localhost:${port}`)],
           {
             cwd: botDir,
             stdio: ['ignore', 'pipe', 'pipe'],
@@ -365,7 +365,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     });
   };
 
-  private getConfig = (config: any) => {
+  private getConfig = (config: any, endpointUrl: string) => {
     const configList: string[] = [];
     if (config.MicrosoftAppPassword) {
       configList.push('--MicrosoftAppPassword');
@@ -379,8 +379,8 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       configList.push('--qna:endpointKey');
       configList.push(config.qna.endpointKey);
     }
-    // console.log(config.qna);
-    // console.log(configList);
+    configList.push('--SkillHostEndpoint');
+    configList.push(`${endpointUrl}/api/skills`);
     return configList;
   };
 

@@ -7,8 +7,8 @@ import { renderHook } from '@botframework-composer/test-utils/lib/hooks';
 import { act } from '@botframework-composer/test-utils';
 import { defaultPublishConfig } from '@bfc/shared';
 
-import { useLocalBotOperations } from '../TestController/useLocalBotOperations';
-import { botProjectIdsState, dispatcherState, projectMetaDataState } from '../../recoilModel';
+import { useLocalBotOperations } from '../../TestController/useLocalBotOperations';
+import { botProjectIdsState, dispatcherState, projectMetaDataState } from '../../../recoilModel';
 
 const state = {
   projectId: '123a.23fs',
