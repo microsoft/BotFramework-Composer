@@ -150,6 +150,11 @@ export type LgParsed = {
   templates: LgTemplate[];
 };
 
+export type ImportExpression = {
+  id: string;
+  importPath: string;
+};
+
 export type LgFile = {
   id: string;
   content: string;
