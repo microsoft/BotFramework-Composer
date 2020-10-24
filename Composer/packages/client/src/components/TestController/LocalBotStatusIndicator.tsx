@@ -11,7 +11,6 @@ import formatMessage from 'format-message';
 
 import { BotStatus, BotStatusesCopy } from '../../constants';
 import { botEndpointsState, botRuntimeErrorState, botStatusState, dispatcherState } from '../../recoilModel';
-import { botRuntimeOperationsSelector } from '../../recoilModel/selectors/localRuntimeBuilder';
 import { useInterval } from '../../utils/hooks';
 
 import { EmulatorOpenButton } from './emulatorOpenButton';
@@ -27,7 +26,7 @@ const botStatusContainer = css`
   align-items: center;
 `;
 
-const POLLING_INTERVAL = 2500;
+const pollingInterval = 3000;
 
 interface LocalBotStatusIndicatorProps {
   projectId: string;
@@ -38,7 +37,6 @@ export const LocalBotStatusIndicator: React.FC<LocalBotStatusIndicatorProps> = (
   const botEndpoints = useRecoilValue(botEndpointsState);
   const { openBotInEmulator, getPublishStatus } = useRecoilValue(dispatcherState);
   const [botStatusText, setBotStatusText] = useState('');
-  const operations = useRecoilValue(botRuntimeOperationsSelector);
   const [isRunning, setIntervalRunning] = useState(false);
   const botActionRef = useRef(null);
   const botLoadErrorMsg = useRecoilValue(botRuntimeErrorState(projectId));
@@ -49,7 +47,7 @@ export const LocalBotStatusIndicator: React.FC<LocalBotStatusIndicatorProps> = (
     () => {
       getPublishStatus(projectId, defaultPublishConfig);
     },
-    isRunning ? POLLING_INTERVAL : null
+    isRunning ? pollingInterval : null
   );
 
   function dismissErrorDialog() {
@@ -63,36 +61,37 @@ export const LocalBotStatusIndicator: React.FC<LocalBotStatusIndicatorProps> = (
   useEffect(() => {
     switch (currentBotStatus) {
       case BotStatus.failed:
-        setBotStatusText(BotStatusesCopy[BotStatus.failed]);
+        setBotStatusText(BotStatusesCopy.failed);
         setIntervalRunning(false);
         stopSingleBot(projectId);
         break;
       case BotStatus.published:
-        setBotStatusText(BotStatusesCopy[BotStatus.published]);
+        setBotStatusText(BotStatusesCopy.published);
         setIntervalRunning(false);
-        operations?.startBot(projectId);
+        startSingleBot(projectId);
         break;
       case BotStatus.reloading:
-        setBotStatusText(BotStatusesCopy[BotStatus.reloading]);
+        setBotStatusText(BotStatusesCopy.loading);
         setIntervalRunning(true);
         break;
 
       case BotStatus.connected: {
-        // Runtime errors aren't surface immediately. Stop the interval after one more ping
-        setBotStatusText(BotStatusesCopy[BotStatus.connected]);
+        setBotStatusText(BotStatusesCopy.connected);
+        if (isRunning) {
+          setTimeout(() => {
+            getPublishStatus(projectId, defaultPublishConfig);
+          }, pollingInterval);
+        }
         setIntervalRunning(false);
-        setTimeout(() => {
-          getPublishStatus(projectId, defaultPublishConfig);
-        }, 3000);
         break;
       }
       case BotStatus.publishing:
-        setBotStatusText(BotStatusesCopy[BotStatus.publishing]);
+        setBotStatusText(BotStatusesCopy.publishing);
         break;
 
       default:
       case BotStatus.unConnected:
-        setBotStatusText(BotStatusesCopy[BotStatus.unConnected]);
+        setBotStatusText(BotStatusesCopy.unConnected);
         break;
     }
 

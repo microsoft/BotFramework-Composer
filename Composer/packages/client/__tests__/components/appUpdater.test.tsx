@@ -26,7 +26,13 @@ describe('<AppUpdater />', () => {
   });
 
   it('should not render anything when the modal is set to hidden (even when not idle)', () => {
-    const { container } = renderWithRecoil(<AppUpdater />);
+    const { container } = renderWithRecoil(<AppUpdater />, ({ set }) => {
+      set(appUpdateState, {
+        ...baseState,
+        showing: false,
+        status: AppUpdaterStatus.UPDATE_UNAVAILABLE,
+      });
+    });
     expect(container.firstChild).toBeFalsy();
   });
 

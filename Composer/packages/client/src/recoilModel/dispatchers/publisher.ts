@@ -175,6 +175,7 @@ export const publisherDispatcher = () => {
     (callbackHelpers: CallbackInterface) => async (projectId: string, target: any) => {
       try {
         const response = await httpClient.get(`/publish/${projectId}/status/${target.name}`);
+        console.log('Response', response);
         updatePublishStatus(callbackHelpers, projectId, target, response.data);
       } catch (err) {
         updatePublishStatus(callbackHelpers, projectId, target, err.response.data);

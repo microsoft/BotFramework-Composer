@@ -352,8 +352,8 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
         this.setBotStatus(botId, {
           process: spawnProcess,
           port: port,
-          status: 200,
-          result: { message: 'Runtime started' },
+          status: 202,
+          result: { message: 'Runtime process started. Waiting for communication from runtime' },
         });
         const processLog = this.composer.log.extend(spawnProcess.pid);
         this.addListeners(spawnProcess, botId, processLog);
@@ -402,7 +402,13 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     let erroutput = '';
     child.stdout &&
       child.stdout.on('data', (data: any) => {
-        logger('%s', data);
+        if(!erroutput && LocalPublisher.runningBots[botId].status === 202) {
+          this.setBotStatus(botId, {
+            status: 200,
+            result: { message: 'Runtime has started'},
+          });
+        }
+        logger('%s', data.toString());
       });
 
     child.stderr &&
@@ -421,7 +427,6 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     });
 
     child.on('error', (err) => {
-      logger('error: %s', err.message);
       this.setBotStatus(botId, {
         status: 500,
         result: { message: err.message },

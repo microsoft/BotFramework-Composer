@@ -53,7 +53,7 @@ export interface RuntimeTemplate {
   startCommand: string;
 }
 
-export interface BotLoadError {
+export interface BotRuntimeError {
   title: string;
   message: string;
   linkAfterMessage?: { url: string; text: string };
