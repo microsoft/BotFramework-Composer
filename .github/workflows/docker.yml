@@ -37,7 +37,7 @@ jobs:
       - name: Health check
         run: |
           docker run -d --rm -p "5000:5000" botframework-composer
-          sleep 10
+          sleep 30
           curl -Is http://localhost:5000 | grep -q "200 OK"
         shell: bash
       - name: Clean up
