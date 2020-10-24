@@ -953,6 +953,9 @@
   "edit_property_dd6a1172": {
     "message": "Edit Property"
   },
+  "edit_schema_a2ab5695": {
+    "message": "Edit schema"
+  },
   "edit_source_45af68b4": {
     "message": "Edit source"
   },
@@ -2585,9 +2588,6 @@
   "toggle_show_all_61f19d77": {
     "message": "Toggle show all"
   },
-  "toggle_the_visibility_of_individual_preview_featur_5eb7d8f3": {
-    "message": "Toggle the visibility of individual, preview, features in Composer."
-  },
   "toolbar_bafd4228": {
     "message": "toolbar"
   },
@@ -2614,6 +2614,9 @@
   },
   "try_again_ad656c3c": {
     "message": "Try again"
+  },
+  "try_new_features_in_preview_and_help_us_make_compo_e8e58983": {
+    "message": "Try new features in preview and help us make Composer better. You can turn them on or off at any time."
   },
   "type_a_name_that_describes_this_content_d1a910b6": {
     "message": "Type a name that describes this content"
