@@ -953,6 +953,9 @@
   "edit_property_dd6a1172": {
     "message": "Edit Property"
   },
+  "edit_schema_a2ab5695": {
+    "message": "Edit schema"
+  },
   "edit_source_45af68b4": {
     "message": "Edit source"
   },
@@ -1805,6 +1808,9 @@
   "open_inline_editor_a5aabcfa": {
     "message": "Open inline editor"
   },
+  "open_skills_page_for_configuration_details_a2a484ea": {
+    "message": "Open Skills page for configuration details"
+  },
   "optional_221bcc9d": {
     "message": "Optional"
   },
@@ -1903,6 +1909,9 @@
   },
   "press_enter_to_add_this_name_and_advance_to_the_ne_6a2ae080": {
     "message": "press Enter to add this name and advance to the next row, or press Tab to advance to the value field"
+  },
+  "preview_features_e279bac5": {
+    "message": "Preview features"
   },
   "previous_bd2ac015": {
     "message": "Previous"
@@ -2071,6 +2080,9 @@
   },
   "regex_intent_is_already_defined_df095c1f": {
     "message": "RegEx { intent } is already defined"
+  },
+  "regular_expression_855557bf": {
+    "message": "Regular Expression"
   },
   "regular_expression_recognizer_44664557": {
     "message": "Regular expression recognizer"
@@ -2281,6 +2293,12 @@
   },
   "show_code_f3e9d1cc": {
     "message": "Show code"
+  },
+  "show_form_dialog_90aad050": {
+    "message": "Show Form Dialog"
+  },
+  "show_form_dialog_editor_in_the_canvas_140492b2": {
+    "message": "Show form dialog editor in the canvas"
   },
   "show_keys_3072a5b8": {
     "message": "Show keys"
@@ -2597,6 +2615,9 @@
   "try_again_ad656c3c": {
     "message": "Try again"
   },
+  "try_new_features_in_preview_and_help_us_make_compo_e8e58983": {
+    "message": "Try new features in preview and help us make Composer better. You can turn them on or off at any time."
+  },
   "type_a_name_that_describes_this_content_d1a910b6": {
     "message": "Type a name that describes this content"
   },
@@ -2617,6 +2638,9 @@
   },
   "typing_activity_6b634ae": {
     "message": "Typing activity"
+  },
+  "unable_to_determine_recognizer_type_from_data_valu_2960f526": {
+    "message": "Unable to determine recognizer type from data: { value }"
   },
   "undo_a7be8fef": {
     "message": "Undo"
@@ -2707,6 +2731,12 @@
   },
   "user_is_typing_790cb502": {
     "message": "User is typing"
+  },
+  "va_creation_6babf7db": {
+    "message": "VA Creation"
+  },
+  "va_template_made_available_in_new_bot_flow_5f85baa4": {
+    "message": "VA template made available in new bot flow."
   },
   "validating_35b79a96": {
     "message": "Validating..."
