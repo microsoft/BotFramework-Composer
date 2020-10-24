@@ -21,9 +21,10 @@ import {
   currentProjectIdState,
   settingsState,
 } from '../recoilModel';
-import { languageListTemplates } from './MultiLanguage';
 import composerIcon from '../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../constants';
+
+import { languageListTemplates } from './MultiLanguage';
 
 // -------------------- Styles -------------------- //
 
@@ -183,12 +184,12 @@ export const Header = () => {
       )}
       {teachingBubbleVisibility && (
         <TeachingBubble
+          isWide
           calloutProps={{ directionalHint: DirectionalHint.bottomLeftEdge }}
+          headline={formatMessage('Active language')}
           styles={teachingBubbleStyle}
           target="#targetButton"
-          isWide
           onDismiss={() => setTeachingBubbleVisibility(false)}
-          headline={formatMessage('Active language')}
         >
           {formatMessage(
             'This is the bot language you are currently authoring. Change the active language in the dropdown below.'

@@ -9,9 +9,9 @@ import kebabCase from 'lodash/kebabCase';
 import { Dropdown, IDropdownProps } from 'office-ui-fabric-react/lib/Dropdown';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import formatMessage from 'format-message';
 
 import * as styles from './styles';
-import formatMessage from 'format-message';
 
 interface ISettingToggleProps {
   description: React.ReactChild;
@@ -42,11 +42,11 @@ const SettingDropdown: React.FC<ISettingToggleProps> = (props) => {
     <div css={styles.settingsContainer}>
       <Dropdown
         id={id || uniqueId}
+        label={formatMessage('Composer language is the language of Composer UI')}
         options={options}
         selectedKey={selected}
         styles={{ root: { width: '100%' } }}
         onChange={(_e, option) => onChange(option?.key?.toString() ?? '')}
-        label={formatMessage('Composer language is the language of Composer UI')}
         onRenderLabel={onRenderLabel}
       />
     </div>
