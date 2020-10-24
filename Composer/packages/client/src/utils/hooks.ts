@@ -78,3 +78,22 @@ export const useProjectIdCache = () => {
 
   return projectId;
 };
+
+export const useInterval = (callback, delay) => {
+  const savedCallback = useRef<() => void>();
+
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+  useEffect(() => {
+    if (delay !== null) {
+      const interval = setInterval(() => {
+        if (typeof savedCallback.current === 'function') {
+          savedCallback.current();
+        }
+      }, delay);
+      return () => clearInterval(interval);
+    }
+  }, [delay]);
+};
