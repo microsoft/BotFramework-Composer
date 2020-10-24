@@ -8,7 +8,8 @@ import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
 import { ActionButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
+import formatMessage from 'format-message';
 
 import { botStatusState } from '../../recoilModel';
 import { BotStatus } from '../../constants';
@@ -44,18 +45,18 @@ export const LocalBotRuntime: React.FC<LocalBotRuntimeProps> = ({ projectId, dis
   const currentBotStatus = useRecoilValue(botStatusState(projectId));
   const { startSingleBot, stopSingleBot } = useLocalBotOperations();
 
-  const botRunIndicatorCallback = useCallback(() => {
+  const botRunIndicator = useMemo(() => {
     switch (currentBotStatus) {
       case BotStatus.connected:
         return (
-          <ActionButton onClick={() => stopSingleBot(projectId)}>
+          <ActionButton aria-label={formatMessage('Stop Bot')} onClick={() => stopSingleBot(projectId)}>
             <Icon iconName={'CircleStopSolid'} styles={icon} />
           </ActionButton>
         );
       case BotStatus.unConnected:
       case BotStatus.failed:
         return (
-          <ActionButton onClick={() => startSingleBot(projectId)}>
+          <ActionButton aria-label={formatMessage('Start Bot')} onClick={() => startSingleBot(projectId)}>
             <Icon iconName={'Play'} styles={icon} />
           </ActionButton>
         );
@@ -66,7 +67,7 @@ export const LocalBotRuntime: React.FC<LocalBotRuntimeProps> = ({ projectId, dis
 
   return (
     <div css={localBotRuntimeContainerStyles}>
-      {botRunIndicatorCallback()}
+      {botRunIndicator}
       <span aria-label={displayName}>{displayName}</span>
     </div>
   );

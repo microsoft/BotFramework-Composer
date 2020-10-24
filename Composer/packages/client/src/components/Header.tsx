@@ -197,11 +197,19 @@ export const Header = () => {
         {showStartBotsWidget && (
           <div css={startBotWidgetContainer}>
             {runningBots.projectIds.length > 0 ? (
-              <ActionButton css={actionButton} onClick={handleStartOrStopAll}>
+              <ActionButton
+                aria-label={formatMessage('Stop all bots')}
+                css={actionButton}
+                onClick={handleStartOrStopAll}
+              >
                 <Icon iconName={'CircleStopSolid'} styles={botRuntimeStartIcon} />
               </ActionButton>
             ) : (
-              <ActionButton css={actionButton} onClick={handleStartOrStopAll}>
+              <ActionButton
+                aria-label={formatMessage('Start all bots')}
+                css={actionButton}
+                onClick={handleStartOrStopAll}
+              >
                 <Icon iconName={'Play'} styles={botRuntimeStartIcon} />
               </ActionButton>
             )}

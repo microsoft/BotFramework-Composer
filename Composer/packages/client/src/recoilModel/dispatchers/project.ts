@@ -189,7 +189,6 @@ export const projectDispatcher = () => {
         projectIdCache.set(projectId);
         navigateToBot(callbackHelpers, projectId, mainDialog);
       } catch (ex) {
-        console.log(ex);
         set(botProjectIdsState, []);
         removeRecentProject(callbackHelpers, path);
         handleProjectFailure(callbackHelpers, ex);
