@@ -6,14 +6,14 @@
 # before doing yarn install due to yarn workspace symlinking.
 #
 ################
-FROM  mcr.microsoft.com/dotnet/core/sdk:3.1-focal as BASE
+FROM  mcr.microsoft.com/dotnet/core/sdk:3.1-focal as base
 RUN apt update \
     && apt -y install curl dirmngr apt-transport-https lsb-release ca-certificates \
     && curl -sL https://deb.nodesource.com/setup_12.x | bash - \
     && apt install -y nodejs \
     && npm install -g yarn
 
-FROM BASE as build
+FROM base as build
 ARG YARN_ARGS
 
 WORKDIR /src/Composer
@@ -26,7 +26,7 @@ ENV NODE_ENV "production"
 ENV COMPOSER_BUILTIN_EXTENSIONS_DIR "/src/extensions"
 RUN yarn build:prod $YARN_ARGS
 
-FROM BASE as composerbasic
+FROM base as composerbasic
 ARG YARN_ARGS
 
 WORKDIR /app/Composer
@@ -38,7 +38,7 @@ COPY --from=build /src/extensions ../extensions
 ENV NODE_ENV "production"
 RUN yarn --production --frozen-lockfile --force $YARN_ARGS && yarn cache clean
 
-FROM BASE
+FROM base
 ENV NODE_ENV "production"
 
 WORKDIR /app/Composer
