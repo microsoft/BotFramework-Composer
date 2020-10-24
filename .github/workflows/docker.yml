@@ -21,12 +21,13 @@ jobs:
         
       - name: Health check
         run: |
-          docker run -d --rm -p 5000:5000 --name bfc botframework-composer
+          docker run -d -p 5000:5000 --name bfc botframework-composer
           sleep 15
+          docker ps -a
           docker logs bfc
           curl -Is http://localhost:5000 | grep -q "200 OK"
         shell: bash
         
       - name: Clean up
         if: always()
-        run: docker stop $(docker ps -a -q)
+        run: docker rm -f $(docker ps -a -q)
