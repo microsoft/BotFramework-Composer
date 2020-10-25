@@ -105,14 +105,11 @@ describe('<LocalBotStatusIndicator />', () => {
         set(botStatusState(projectId), BotStatus.reloading);
       });
 
-      act(() => {
-        jest.advanceTimersByTime(pollingInterval);
-      });
+      jest.advanceTimersByTime(pollingInterval);
       expect(updatePublishStatusMock).toHaveBeenCalledTimes(1);
 
-      act(() => {
-        jest.advanceTimersByTime(pollingInterval);
-      });
+      jest.advanceTimersByTime(pollingInterval);
+
       expect(updatePublishStatusMock).toHaveBeenCalledTimes(2);
     });
 

@@ -10,13 +10,7 @@ import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 
 import { BotStatus, BotStatusesCopy } from '../../constants';
-import {
-  botEndpointsState,
-  botRuntimeErrorState,
-  botRuntimeOperationsSelector,
-  botStatusState,
-  dispatcherState,
-} from '../../recoilModel';
+import { botEndpointsState, botRuntimeErrorState, botStatusState, dispatcherState } from '../../recoilModel';
 import { useInterval } from '../../utils/hooks';
 
 import { EmulatorOpenButton } from './emulatorOpenButton';

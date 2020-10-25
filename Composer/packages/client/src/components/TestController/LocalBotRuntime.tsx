@@ -8,7 +8,7 @@ import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
 import { ActionButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 import formatMessage from 'format-message';
 
 import { botStatusState } from '../../recoilModel';

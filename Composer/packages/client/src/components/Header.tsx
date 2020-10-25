@@ -18,15 +18,15 @@ import {
   localeState,
   currentProjectIdState,
   runningBotsSelector,
+  currentModeState,
 } from '../recoilModel';
 import composerIcon from '../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../constants';
-import { useLocation } from '../utils/hooks';
 
 import { StartBotsPanel } from './TestController/startBotsPanel';
 import { useLocalBotOperations } from './TestController/useLocalBotOperations';
 export const actionButton = css`
-  font-size: 18px;
+  font-size: ${FontSizes.size18};
   margin-top: 2px;
 `;
 
@@ -44,7 +44,7 @@ const headerContainer = css`
 const title = css`
   margin-left: 20px;
   font-weight: ${FontWeights.semibold};
-  font-size: 16px;
+  font-size: ${FontSizes.size16};
   color: #fff;
 `;
 
@@ -112,7 +112,6 @@ const startBotWidgetContainer = css`
 // -------------------- Header -------------------- //
 
 export const Header = () => {
-  const currentLocation = useLocation();
   const { setAppUpdateShowing } = useRecoilValue(dispatcherState);
   const projectId = useRecoilValue(currentProjectIdState);
   const projectName = useRecoilValue(botDisplayNameState(projectId));
@@ -122,30 +121,31 @@ export const Header = () => {
   const [showStartBotsPanel, setStartPanelView] = useState(false);
   const runningBots = useRecoilValue(runningBotsSelector);
   const [startPanelText, setStartPanelText] = useState('');
-  const { projectIds: runningProjects } = useRecoilValue(runningBotsSelector);
+  const { projectIds: projectIdsRunning } = runningBots;
   const [areBotsStarted, setBotsInBotProjectStarted] = useState<boolean>(false);
   const { stopAllBots, startAllBots } = useLocalBotOperations();
   const [showStartBotsWidget, setStartBotsWidgetVisible] = useState(true);
+  const currentMode = useRecoilValue(currentModeState);
 
   useEffect(() => {
     // TODO: Start using modes to detect current page after #4361
-    if (!currentLocation.location.pathname.includes('home')) {
+    if (currentMode !== 'home') {
       setStartBotsWidgetVisible(true);
       return;
     }
     setStartBotsWidgetVisible(false);
-  }, [currentLocation]);
+  }, [currentMode]);
 
   useEffect(() => {
-    if (runningProjects.length > 0) {
+    if (projectIdsRunning.length > 0) {
       setBotsInBotProjectStarted(true);
     }
-  }, [runningProjects]);
+  }, [projectIdsRunning]);
 
   useEffect(() => {
     if (runningBots.projectIds.length > 0) {
       setStartPanelText(
-        `${formatMessage('Stop all bots')} (${runningBots.projectIds.length}/${runningBots.totalBots}) ${formatMessage(
+        `${formatMessage('Stop all bots')} (${runningBots.projectIds.length}/${runningBots.totalBots} ${formatMessage(
           'running'
         )})`
       );
