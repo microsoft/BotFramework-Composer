@@ -34,7 +34,7 @@ import { BotStatusList, IBotStatus } from './botStatusList';
 const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: string }>> = (props) => {
   const { projectId = '' } = props;
   const botProjectsMeta = useRecoilValue(botProjectSpaceSelector);
-  const selectedTargetName = props.targetName;
+  const [selectedBots, setSelectedBots] = useState<IBotStatus[]>([]);
 
   // fill Settings, status, publishType, publish target for bot from botProjectMeta
   const botSettingsList: { [key: string]: any }[] = [];
@@ -78,16 +78,11 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       }
       botStatusList.push(botStatus);
     });
-  const [selectedTarget, setSelectedTarget] = useState<PublishTarget | undefined>();
-  const settings = useRecoilValue(settingsState(projectId));
-  const botName = useRecoilValue(botDisplayNameState(projectId));
   const publishTypes = useRecoilValue(publishTypesState(projectId));
-  const publishHistory = useRecoilValue(publishHistoryState(projectId));
 
   const {
     getPublishStatus,
     getPublishTargetTypes,
-    getPublishHistory,
     setPublishTargets,
     publishToTarget,
     setQnASettings,
@@ -100,7 +95,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const [publishDialogHidden, setPublishDialogHidden] = useState(true);
 
   // items to show in the list
-  const [thisPublishHistory, setThisPublishHistory] = useState<IStatus[]>([]);
   const [selectedVersion, setSelectedVersion] = useState<IStatus | null>(null);
   const [dialogProps, setDialogProps] = useState({
     title: formatMessage('Title'),
@@ -124,10 +118,11 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const toolbarItems: IToolbarItem[] = [
     {
       type: 'element',
+      align: 'left',
       element: (
         <ActionButton
           data-testid="publishPage-Toolbar-Publish"
-          disabled={selectedTargetName !== 'all' ? false : true}
+          disabled={selectedBots.length > 0 ? false : true}
           onClick={() => setPublishDialogHidden(false)}
         >
           <svg fill="none" height="15" viewBox="0 0 16 15" width="16" xmlns="http://www.w3.org/2000/svg">
@@ -136,7 +131,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
               fill="#0078D4"
             />
           </svg>
-          {formatMessage('Publish selected bots')}
+          <span css={{ marginLeft: '8px' }}>{formatMessage('Publish selected bots')}</span>
         </ActionButton>
       ),
     },
@@ -161,93 +156,12 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   };
 
   useEffect(() => {
-    // if url was wrong, redirect to all profiles page
-    const activeDialog = settings.publishTargets?.find(({ name }) => name === selectedTargetName);
-    if (!activeDialog && selectedTargetName !== 'all') {
-      navigateTo(`/bot/${projectId}/publish/all`);
-    }
-  }, [selectedTargetName, projectId, settings.publishTargets]);
-
-  useEffect(() => {
     if (projectId) {
       getPublishTargetTypes(projectId);
       // init selected status
       setSelectedVersion(null);
     }
   }, [projectId]);
-
-  useEffect(() => {
-    if (settings.publishTargets && settings.publishTargets.length > 0) {
-      const selected = settings.publishTargets.find((item) => item.name === selectedTargetName);
-      setSelectedTarget(selected);
-      // load publish histories
-      if (selectedTargetName === 'all') {
-        for (const target of settings.publishTargets) {
-          getPublishHistory(projectId, target);
-        }
-      } else if (selected) {
-        getPublishHistory(projectId, selected);
-      }
-    }
-  }, [projectId, selectedTargetName]);
-
-  // once history is loaded, display it
-  useEffect(() => {
-    if (settings.publishTargets && selectedTargetName === 'all') {
-      let histories: any[] = [];
-      for (const target of settings.publishTargets) {
-        if (publishHistory[target.name]) {
-          histories = histories.concat(publishHistory[target.name]);
-        }
-      }
-      setThisPublishHistory(histories);
-    } else if (selectedTargetName && publishHistory[selectedTargetName]) {
-      setThisPublishHistory(publishHistory[selectedTargetName]);
-    }
-  }, [publishHistory, selectedTargetName, settings.publishTargets]);
-
-  // check history to see if a 202 is found
-  useEffect(() => {
-    // most recent item is a 202, which means we should poll for updates...
-    if (selectedTargetName !== 'all' && thisPublishHistory.length && thisPublishHistory[0].status === 202) {
-      getUpdatedStatus(selectedTarget);
-    } else if (selectedTarget && selectedTarget.lastPublished && thisPublishHistory.length === 0) {
-      // if the history is EMPTY, but we think we've done a publish based on lastPublished timestamp,
-      // we still poll for the results IF we see that a publish has happened previously
-      getPublishStatus(projectId, selectedTarget);
-    }
-  }, [thisPublishHistory, selectedTargetName]);
-
-  const savePublishTarget = useCallback(
-    async (name: string, type: string, configuration: string) => {
-      const targets = (settings.publishTargets || []).concat([
-        {
-          name,
-          type,
-          configuration,
-        },
-      ]);
-      await setPublishTargets(targets, projectId);
-      onSelectTarget(name);
-    },
-    [settings.publishTargets, projectId, botName]
-  );
-
-  useEffect(() => {
-    setDialogProps({
-      title: formatMessage('Add a publish profile'),
-      type: DialogType.normal,
-      children: (
-        <CreatePublishTarget
-          closeDialog={() => setAddDialogHidden(true)}
-          current={null}
-          targets={settings.publishTargets || []}
-          types={publishTypes}
-          updateSettings={savePublishTarget}
-        />
-      ),
-    });
-  }, [publishTypes, savePublishTarget, settings.publishTargets]);
 
   const rollbackToVersion = useMemo(
     () => async (version) => {
@@ -263,6 +177,17 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const onShowLog = (selectedVersion) => {
     setSelectedVersion(selectedVersion);
     setShowLog(true);
+  };
+  const updateSelectedBots = (selectedBots) => {
+    const bots: IBotStatus[] = [];
+    selectedBots.forEach((bot) => {
+      bots.push({
+        id: bot.id,
+        name: bot.name,
+        publishTarget: bot.publishTarget,
+      });
+    });
+    setSelectedBots(bots);
   };
   const publish = useMemo(
     () => async (comment) => {
@@ -294,27 +219,13 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   return (
     <Fragment>
-      <Dialog
-        dialogContentProps={dialogProps}
-        hidden={addDialogHidden}
-        minWidth={450}
-        modalProps={{ isBlocking: true }}
-        onDismiss={() => setAddDialogHidden(true)}
-      >
-        {dialogProps.children}
-      </Dialog>
       {!publishDialogHidden && (
-        <PublishDialog
-          projectId={projectId}
-          target={selectedTarget}
-          onDismiss={() => setPublishDialogHidden(true)}
-          onSubmit={publish}
-        />
+        <PublishDialog items={selectedBots} onDismiss={() => setPublishDialogHidden(true)} onSubmit={publish} />
       )}
       {showLog && <LogDialog version={selectedVersion} onDismiss={() => setShowLog(false)} />}
       <Toolbar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
-        <h1 css={HeaderText}>{selectedTarget ? selectedTargetName : formatMessage('Publish Your bots')}</h1>
+        <h1 css={HeaderText}>{formatMessage('Publish Your bots')}</h1>
       </div>
       <div css={ContentStyle} data-testid="Publish" role="main">
         <div aria-label={formatMessage('List view')} css={contentEditor} role="region">
@@ -322,13 +233,10 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
             <BotStatusList
               botPublishHistoryList={botPublishHistoryList}
               items={botStatusList}
-              updatePublishHistory={setThisPublishHistory}
+              updateSelectedBots={updateSelectedBots}
               onLogClick={onShowLog}
               onRollbackClick={onRollbackToVersion}
             />
-            {!thisPublishHistory || thisPublishHistory.length === 0 ? (
-              <div style={{ marginLeft: '50px', fontSize: 'smaller', marginTop: '20px' }}>No publish history</div>
-            ) : null}
           </Fragment>
         </div>
       </div>

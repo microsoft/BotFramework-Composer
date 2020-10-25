@@ -8,16 +8,14 @@ import {
   DetailsListLayoutMode,
   SelectionMode,
   IColumn,
-  IGroup,
   CheckboxVisibility,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import moment from 'moment';
-import { useMemo, useState, useEffect } from 'react';
+import { useState } from 'react';
 import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 
@@ -51,15 +49,11 @@ function onRenderDetailsHeader(props, defaultRender) {
 
 export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
   const { items, onLogClick, onRollbackClick } = props;
-  const [selectIndex, setSelectedIndex] = useState<number>();
   const [currentSort, setSort] = useState({ key: 'PublishDate', descending: true });
   const sortByDate = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
     if (column.isSorted) {
       column.isSortedDescending = !column.isSortedDescending;
-      let newItems: IStatus[] = [];
-      for (const group of groups) {
-        newItems = newItems.concat(items.slice(group.startIndex, group.startIndex + group.count).reverse());
-      }
+      const newItems: IStatus[] = items.reverse();
       props.updateItems(newItems);
     }
   };
@@ -201,16 +195,6 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       isPadded: true,
     },
   ];
-  const selection = useMemo(() => {
-    return new Selection({
-      onSelectionChanged: () => {
-        const selectedIndexs = selection.getSelectedIndices();
-        if (selectedIndexs.length > 0) {
-          setSelectedIndex(selectedIndexs[0]);
-        }
-      },
-    });
-  }, [items]);
 
   return (
     <div css={listRoot} data-testid={'publish-status-list'}>
@@ -230,12 +214,8 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
           }}
           items={items}
           layoutMode={DetailsListLayoutMode.justified}
-          selection={selection}
           selectionMode={SelectionMode.single}
           setKey="none"
-          onActiveItemChanged={(item, index) => {
-            setSelectedIndex(index);
-          }}
           onColumnHeaderClick={(_, clickedCol) => {
             if (!clickedCol) return;
             if (clickedCol.key === currentSort.key) {
