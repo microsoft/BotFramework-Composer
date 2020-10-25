@@ -17,11 +17,23 @@ import StorageService from '../services/storage';
 import settings from '../settings';
 
 import { Path } from './../utility/path';
-import { remove } from 'fs-extra';
+import { ensureDir, remove } from 'fs-extra';
+import { existsSync } from 'fs';
 
 async function createProject(req: Request, res: Response) {
   let { templateId } = req.body;
-  const { name, description, storageId, location, schemaUrl, locale, preserveRoot, templateDir, eTag } = req.body;
+  const {
+    name,
+    description,
+    storageId,
+    location,
+    schemaUrl,
+    locale,
+    preserveRoot,
+    templateDir,
+    eTag,
+    alias,
+  } = req.body;
   const user = await ExtensionContext.getUserFromRequest(req);
   if (templateId === '') {
     templateId = 'EmptyBot';
@@ -54,7 +66,7 @@ async function createProject(req: Request, res: Response) {
       // clean up the temporary template directory -- fire and forget
       remove(templateDir);
       const id = await BotProjectService.openProject(newProjRef, user);
-      BotProjectService.setETagForProject(eTag, id);
+      BotProjectService.setProjectLocationData(id, { alias, eTag });
       const currentProject = await BotProjectService.getProjectById(id, user);
 
       if (currentProject !== undefined) {
@@ -197,8 +209,7 @@ async function getProjectByAlias(req: Request, res: Response) {
     const currentProject = await BotProjectService.getProjectByAlias(alias, user);
 
     if (currentProject !== undefined && (await currentProject.exists())) {
-      const project = currentProject.getProject();
-      res.status(200).json(project);
+      res.status(200).json({ location: currentProject.dir, id: currentProject.id });
     } else {
       res.status(404).json({
         message: 'No matching ',
@@ -519,6 +530,89 @@ async function updateBoilerplate(req: Request, res: Response) {
   }
 }
 
+async function backupProject(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  const user = await ExtensionContext.getUserFromRequest(req);
+
+  const project = await BotProjectService.getProjectById(projectId, user);
+  if (project !== undefined) {
+    try {
+      // ensure there isn't an older backup directory hanging around
+      const projectDirName = Path.basename(project.dir);
+      const backupPath = Path.join(process.env.COMPOSER_BACKUP_DIR as string, projectDirName);
+      await ensureDir(process.env.COMPOSER_BACKUP_DIR as string);
+      if (existsSync(backupPath)) {
+        log('%s already exists. Deleting before backing up.', backupPath);
+        await remove(backupPath);
+        log('Existing backup folder deleted successfully.');
+      }
+
+      // clone the bot project to the backup directory
+      const location: LocationRef = {
+        storageId: 'default',
+        path: backupPath,
+      };
+      log('Backing up project at %s to %s', project.dir, backupPath);
+      await project.cloneFiles(location);
+      log('Project backed up successfully.');
+      res.status(200).json({ path: backupPath });
+    } catch (e) {
+      log('Failed to backup project %s: %O', projectId, e);
+      res.status(500).json(e);
+    }
+  } else {
+    res.status(404).json({
+      message: `Could not find bot project with ID: ${projectId}`,
+    });
+  }
+}
+
+/** WARNING: This operation is destructive. Please call backupProject() before calling this method. */
+async function copyTemplateToExistingProject(req: Request, res: Response) {
+  const { eTag, templateDir } = req.body;
+  if (!templateDir) {
+    return res.status(400).json({
+      message: 'Missing parameters: templateDir required.',
+    });
+  }
+
+  const projectId = req.params.projectId;
+  const user = await ExtensionContext.getUserFromRequest(req);
+
+  const project = await BotProjectService.getProjectById(projectId, user);
+  if (project !== undefined) {
+    try {
+      log('Cleaning up bot content at %s before copying template content over.', project.dir);
+      await project.fileStorage.rmrfDir(project.dir);
+      const locationRef: LocationRef = {
+        storageId: 'default',
+        path: project.dir,
+      };
+      log('Copying content from template at %s to %s', templateDir, project.dir);
+      await AssetService.manager.copyProjectTemplateDirTo(
+        templateDir,
+        locationRef,
+        user,
+        project.settings?.defaultLanguage || 'en-us'
+      );
+      log('Copied template content successfully.');
+      // clean up the temporary template directory -- fire and forget
+      remove(templateDir);
+      log('Updating etag.');
+      BotProjectService.setProjectLocationData(projectId, { eTag });
+
+      res.sendStatus(200);
+    } catch (e) {
+      log('Failed to copy template content to existing project %s: %O', projectId, e);
+      res.status(500).json(e);
+    }
+  } else {
+    res.status(404).json({
+      message: `Could not find bot project with ID: ${projectId}`,
+    });
+  }
+}
+
 export const ProjectController = {
   getProjectById,
   openProject,
@@ -538,4 +632,6 @@ export const ProjectController = {
   checkBoilerplateVersion,
   generateProjectId,
   getProjectByAlias,
+  backupProject,
+  copyTemplateToExistingProject,
 };

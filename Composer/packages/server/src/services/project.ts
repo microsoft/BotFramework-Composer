@@ -261,6 +261,24 @@ export class BotProjectService {
     }
   };
 
+  public static setProjectLocationData(projectId: string, data: Partial<BotProjectMetadata>): void {
+    const projectLoc = BotProjectService.projectLocationMap[projectId];
+    if (projectLoc) {
+      // filter out undefined values
+      for (const key in data) {
+        if (data[key] === undefined) {
+          delete data[key];
+        }
+      }
+      log('Updating project location data for %s: %O', projectId, data);
+      BotProjectService.projectLocationMap[projectId] = {
+        ...projectLoc,
+        ...data,
+      };
+      Store.set('projectLocationMap', BotProjectService.projectLocationMap);
+    }
+  }
+
   public static getProjectByAlias = async (alias: string, user?: UserIdentity): Promise<BotProject | undefined> => {
     BotProjectService.initialize();
 
