@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ImportExpression, LgFile, LuFile } from '@bfc/shared';
+import { LanguageFileImport, LgFile, LuFile } from '@bfc/shared';
 import uniqBy from 'lodash/uniqBy';
 import { selectorFamily } from 'recoil';
 
@@ -11,7 +11,7 @@ import { localeState, lgFilesState, luFilesState } from '../atoms';
 // eslint-disable-next-line security/detect-unsafe-regex
 const importRegex = /\[(?<id>.*?)]\((?<importPath>.*?)(?="|\))(?<optionalpart>".*")?\)/g;
 
-const getImportsHelper = (content: string): ImportExpression[] => {
+const getImportsHelper = (content: string): LanguageFileImport[] => {
   const lines = content.split(/\r?\n/g).filter((l) => !!l) ?? [];
 
   return (lines
@@ -27,7 +27,7 @@ const getImportsHelper = (content: string): ImportExpression[] => {
 
 // Finds all the file imports starting from a given dialog file.
 const getImports = <T extends { content: string }>(rootDialogId: string, getFile: (fileId: string) => T): T[] => {
-  const imports: ImportExpression[] = [];
+  const imports: LanguageFileImport[] = [];
 
   const visitedIds: string[] = [];
   const fileIds = [rootDialogId];

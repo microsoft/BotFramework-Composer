@@ -150,7 +150,7 @@ export type LgParsed = {
   templates: LgTemplate[];
 };
 
-export type ImportExpression = {
+export type LanguageFileImport = {
   id: string;
   importPath: string;
 };
