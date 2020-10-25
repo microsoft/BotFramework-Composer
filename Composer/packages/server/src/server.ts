@@ -60,6 +60,7 @@ export async function start(electronContext?: ElectronContext): Promise<number |
   setEnvDefault('COMPOSER_REMOTE_TEMPLATES_DIR', path.resolve(__dirname, '../../../.composer/remoteTemplates'));
   // Composer/.composer/temp
   setEnvDefault('COMPOSER_TEMP_DIR', path.resolve(__dirname, '../../../.composer/temp'));
+  setEnvDefault('COMPOSER_BACKUP_DIR', path.resolve(__dirname, '../../../.composer/.backup'));
   await ExtensionManager.loadAll();
 
   const { login, authorize } = getAuthProvider();
