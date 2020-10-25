@@ -46,7 +46,6 @@ import {
   focusPathState,
   showCreateDialogModalState,
   localeState,
-  botProjectSpaceSelector,
   qnaFilesState,
   rootBotProjectIdSelector,
 } from '../../recoilModel';
@@ -124,8 +123,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const undoFunction = useRecoilValue(undoFunctionState(projectId));
   const undoVersion = useRecoilValue(undoVersionState(projectId));
   const rootProjectId = useRecoilValue(rootBotProjectIdSelector) ?? projectId;
-  const appLocale = useRecoilValue(localeState(projectId));
-  const botProjectsSpace = useRecoilValue(botProjectSpaceSelector);
   const [showAddSkillDialogModal, setAddSkillDialogModalVisibility] = useState(false);
   const { undo, redo, canRedo, canUndo, commitChanges, clearUndo } = undoFunction;
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
@@ -143,13 +140,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     exportToZip,
     onboardingAddCoachMarkRef,
     addRemoteSkillToBotProject,
-    addExistingSkillToBotProject,
     updateZoomRate,
-    addNewSkillToBotProject,
     createQnAKBFromUrl,
     createQnAKBFromScratch,
     createQnAFromUrlDialogBegin,
-    removeSkillFromBotProject,
+    setCurrentPageMode,
   } = useRecoilValue(dispatcherState);
 
   const params = new URLSearchParams(location?.search);
@@ -201,6 +196,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       updateDialog({ id: dialogId, content: dialogContent, projectId });
     }
   }, [dialogId]);
+
+  useEffect(() => {
+    setCurrentPageMode('design');
+  }, []);
 
   useEffect(() => {
     if (location && props.dialogId && props.projectId) {
@@ -336,78 +335,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                 projectId,
                 showFromScratch: true,
               });
-            },
-          },
-          {
-            'data-testid': 'AddRemoteSkill',
-            key: 'addRemoteSkill',
-            text: formatMessage(`Add remote skill`, {
-              displayName: currentDialog?.displayName ?? '',
-            }),
-            onClick: () => {
-              addRemoteSkillToBotProject(
-                'https://onenote-dev.azurewebsites.net/manifests/OneNoteSync-2-1-preview-1-manifest.json',
-                'remote'
-              );
-            },
-          },
-          {
-            'data-testid': 'createNewSkill',
-            key: 'createNewSkill',
-            text: formatMessage(`Create new Skill`, {
-              displayName: currentDialog?.displayName ?? '',
-            }),
-            onClick: () => {
-              addNewSkillToBotProject({
-                name: 'newers-bot',
-                description: '',
-                schemaUrl: '',
-                location: '/Users/srravich/Desktop/samples/Archive',
-                templateId: 'InterruptionSample',
-                locale: appLocale,
-                qnaKbUrls: [],
-              });
-            },
-          },
-          {
-            'data-testid': 'removeSkillAtIndex',
-            key: 'removeSkillAtIndex',
-            text: formatMessage(`Remove a skill`, {
-              displayName: currentDialog?.displayName ?? '',
-            }),
-            onClick: () => {
-              const matchedProject: any = botProjectsSpace[botProjectsSpace.length - 1];
-              removeSkillFromBotProject(matchedProject.projectId);
-            },
-          },
-          {
-            'data-testid': 'AddLocalSkill',
-            key: 'addLocalSkill',
-            text: formatMessage(`Add Google Keep Skill`, {
-              displayName: currentDialog?.displayName ?? '',
-            }),
-            onClick: () => {
-              addExistingSkillToBotProject('/Users/srravich/Desktop/samples/Archive/GoogleKeepSync');
-            },
-          },
-          {
-            'data-testid': 'AddLocalSkill-1',
-            key: 'addLocalSkill',
-            text: formatMessage(`Add Todo Skill`, {
-              displayName: currentDialog?.displayName ?? '',
-            }),
-            onClick: () => {
-              addExistingSkillToBotProject('/Users/srravich/Desktop/samples/Archive/Todo-Skill');
-            },
-          },
-          {
-            'data-testid': 'AddNewRemoteSkill',
-            key: 'AddNewRemoteSkill',
-            text: formatMessage(`Add New Remote skill`, {
-              displayName: currentDialog?.displayName ?? '',
-            }),
-            onClick: () => {
-              setAddSkillDialogModalVisibility(true);
             },
           },
         ],

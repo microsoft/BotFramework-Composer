@@ -65,7 +65,6 @@ import {
   schemasState,
   settingsState,
   skillManifestsState,
-  skillsState,
   dialogIdsState,
   showCreateQnAFromUrlDialogState,
 } from '../../atoms';

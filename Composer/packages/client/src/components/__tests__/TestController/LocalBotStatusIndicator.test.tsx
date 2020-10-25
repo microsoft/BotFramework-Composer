@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { act } from '@botframework-composer/test-utils';
 
 import httpClient from '../../../utils/httpUtil';
 import { renderWithRecoil } from '../../../../__tests__/testUtils/renderWithRecoil';
