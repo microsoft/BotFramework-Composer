@@ -22,12 +22,16 @@ jest.mock('../../src/components/TestController/useLocalBotOperations', () => {
 });
 
 describe('<Header />', () => {
+  beforeEach(() => {
+    mockStop.mockReset();
+    mockStart.mockReset();
+  });
   it('should render the header', () => {
     const { container } = renderWithRecoil(<Header />);
     expect(container).toHaveTextContent('Bot Framework Composer');
   });
 
-  it('should not show the start bots widget Home page', async () => {
+  it('should not show the start bots widget in Home page', async () => {
     const initRecoilState = ({ set }) => {
       set(currentModeState, 'home');
     };
@@ -45,21 +49,13 @@ describe('<Header />', () => {
 
   it('should show the start bots widget on settings page', async () => {
     const initRecoilState = ({ set }) => {
-      set(currentModeState, 'design');
-    };
-    const result = renderWithRecoil(<Header />, initRecoilState);
-    expect(result.queryByText('Start all bots')).not.toBeNull();
-  });
-
-  it('should show the start bots widget on settings page', async () => {
-    const initRecoilState = ({ set }) => {
       set(currentModeState, 'settings');
     };
     const result = renderWithRecoil(<Header />, initRecoilState);
     expect(result.queryByText('Start all bots')).not.toBeNull();
   });
 
-  it('should show the bots that have been started correctly', async () => {
+  it('should show that 2/3 bots have been started correctly', async () => {
     const initRecoilState = ({ set }) => {
       set(currentModeState, 'design');
       const projectIds = ['123a.234', '456a.234', '789a.234'];
@@ -72,7 +68,7 @@ describe('<Header />', () => {
     expect(result.queryByText('Stop all bots (2/3 running)')).not.toBeNull();
   });
 
-  it('should show the bots that have been started correctly', async () => {
+  it('should show that no bots have been started', async () => {
     const initRecoilState = ({ set }) => {
       set(currentModeState, 'design');
       const projectIds = ['123a.234', '456a.234', '789a.234'];
@@ -85,7 +81,7 @@ describe('<Header />', () => {
     expect(result.queryByText('Start all bots')).not.toBeNull();
   });
 
-  it('should show stop all bots if Stop all bots is clicked', async () => {
+  it('should stop all bots if Stop all bots is clicked', async () => {
     const initRecoilState = ({ set }) => {
       set(currentModeState, 'design');
       const projectIds = ['123a.234', '456a.234', '789a.234'];
@@ -104,7 +100,7 @@ describe('<Header />', () => {
     expect(mockStop).toHaveBeenCalled();
   });
 
-  it('should show start all bots if start all bots is clicked', async () => {
+  it('should start all bots if Start All bots is clicked', async () => {
     const initRecoilState = ({ set }) => {
       set(currentModeState, 'design');
       const projectIds = ['123a.234', '456a.234', '789a.234'];

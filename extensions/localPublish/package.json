@@ -17,8 +17,8 @@
     "get-port": "^5.1.1",
     "globby": "^11.0.0",
     "kill-port": "^1.6.1",
+    "lodash": "^4.17.20",
     "path": "^0.12.7",
-    "portfinder": "^1.0.26",
     "rimraf": "^3.0.2",
     "uuid": "^7.0.1"
   },
@@ -26,6 +26,7 @@
     "bl": "^4.0.3"
   },
   "devDependencies": {
-    "@types/node": "^14.11.8"
+    "@types/node": "^14.11.8",
+    "@types/lodash": "^4.14.162"
   }
 }
