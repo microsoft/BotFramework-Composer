@@ -61,24 +61,6 @@ const divider = css`
   margin: 0px 0px 0px 20px;
 `;
 
-const updateAvailableIcon = {
-  icon: {
-    color: '#FFF',
-    fontSize: '20px',
-  },
-  root: {
-    height: '20px',
-    width: '20px',
-    margin: '0 20px',
-  },
-  rootHovered: {
-    backgroundColor: 'transparent',
-  },
-  rootPressed: {
-    backgroundColor: 'transparent',
-  },
-};
-
 const headerTextContainer = css`
   display: flex;
   align-items: center;
@@ -94,7 +76,7 @@ const rightSection = css`
   margin: 15px 10px;
 `;
 
-const botRuntimeStartIcon: IButtonStyles = {
+const localBotOperationIcon: IButtonStyles = {
   root: {
     color: `#fff`,
     marginRight: '12px',
@@ -114,7 +96,7 @@ const startBotWidgetContainer = css`
 const buttonStyles: IButtonStyles = {
   icon: {
     color: '#fff',
-    fontSize: '20px',
+    fontSize: FontSizes.size20,
   },
   root: {
     height: '20px',
@@ -149,7 +131,6 @@ export const Header = () => {
   const currentMode = useRecoilValue(currentModeState);
 
   useEffect(() => {
-    // TODO: Start using modes to detect current page after #4361
     if (currentMode !== 'home') {
       setStartBotsWidgetVisible(true);
       return;
@@ -223,7 +204,7 @@ export const Header = () => {
                 css={actionButton}
                 onClick={handleStartOrStopAll}
               >
-                <Icon iconName={'CircleStopSolid'} styles={botRuntimeStartIcon} />
+                <Icon iconName={'CircleStopSolid'} styles={localBotOperationIcon} />
               </ActionButton>
             ) : (
               <ActionButton
@@ -231,12 +212,14 @@ export const Header = () => {
                 css={actionButton}
                 onClick={handleStartOrStopAll}
               >
-                <Icon iconName={'Play'} styles={botRuntimeStartIcon} />
+                <Icon iconName={'Play'} styles={localBotOperationIcon} />
               </ActionButton>
             )}
-            <span>{startPanelText}</span>
+            <span aria-label={startPanelText} aria-live={'assertive'}>
+              {startPanelText}
+            </span>
             <ActionButton css={actionButton} onClick={() => setStartPanelView(true)}>
-              <Icon iconName={'ProductList'} styles={botRuntimeStartIcon} />
+              <Icon iconName={'ProductList'} styles={localBotOperationIcon} />
             </ActionButton>
           </div>
         )}
@@ -244,7 +227,7 @@ export const Header = () => {
         {showUpdateAvailableIcon && (
           <IconButton
             iconProps={{ iconName: 'History' }}
-            styles={updateAvailableIcon as IButtonStyles}
+            styles={buttonStyles}
             title={formatMessage('Update available')}
             onClick={onUpdateAvailableClick}
           />
@@ -256,4 +239,3 @@ export const Header = () => {
     </div>
   );
 };
-//?Start Bots

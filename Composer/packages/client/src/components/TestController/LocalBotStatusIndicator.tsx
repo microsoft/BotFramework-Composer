@@ -107,9 +107,9 @@ export const LocalBotStatusIndicator: React.FC<LocalBotStatusIndicatorProps> = (
 
   return (
     <div ref={botActionRef} css={botStatusContainer}>
-      <span>{botStatusText}</span>
+      <span aria-live={'assertive'}>{botStatusText}</span>
       <EmulatorOpenButton
-        botEndpoint={botEndpoints[projectId] || 'http://localhost:3979/api/messages'}
+        botEndpoint={botEndpoints[projectId]}
         botStatus={currentBotStatus}
         hidden={false}
         onClick={() => openBotInEmulator(projectId)}

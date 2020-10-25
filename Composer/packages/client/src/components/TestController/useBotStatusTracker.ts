@@ -19,7 +19,9 @@ export function useBotStatusTracker(postTrackedBotsStartedAction: () => void, tr
     const allTrackedBotStarted = !areBotsStarting;
     if (trackedProjectIds.length && allTrackedBotStarted) {
       // Start the root bot now after skills are started.
-      savedCallback.current();
+      if (typeof savedCallback.current === 'function') {
+        savedCallback.current();
+      }
     }
   }, [areBotsStarting]);
 }

@@ -31,7 +31,7 @@ const loadingSpinnerStyle = css`
   margin-right: 12px;
 `;
 
-const icon: IButtonStyles = {
+const botStatusIcon: IButtonStyles = {
   root: {
     color: `${SharedColors.cyanBlue20}`,
     marginRight: '12px',
@@ -45,19 +45,19 @@ export const LocalBotRuntime: React.FC<LocalBotRuntimeProps> = ({ projectId, dis
   const currentBotStatus = useRecoilValue(botStatusState(projectId));
   const { startSingleBot, stopSingleBot } = useLocalBotOperations();
 
-  const botRunIndicator = useMemo(() => {
+  const botRunningIndicator = useMemo(() => {
     switch (currentBotStatus) {
       case BotStatus.connected:
         return (
           <ActionButton aria-label={formatMessage('Stop Bot')} onClick={() => stopSingleBot(projectId)}>
-            <Icon iconName={'CircleStopSolid'} styles={icon} />
+            <Icon iconName={'CircleStopSolid'} styles={botStatusIcon} />
           </ActionButton>
         );
       case BotStatus.unConnected:
       case BotStatus.failed:
         return (
           <ActionButton aria-label={formatMessage('Start Bot')} onClick={() => startSingleBot(projectId)}>
-            <Icon iconName={'Play'} styles={icon} />
+            <Icon iconName={'Play'} styles={botStatusIcon} />
           </ActionButton>
         );
       default:
@@ -67,7 +67,7 @@ export const LocalBotRuntime: React.FC<LocalBotRuntimeProps> = ({ projectId, dis
 
   return (
     <div css={localBotRuntimeContainerStyles}>
-      {botRunIndicator}
+      {botRunningIndicator}
       <span aria-label={displayName}>{displayName}</span>
     </div>
   );

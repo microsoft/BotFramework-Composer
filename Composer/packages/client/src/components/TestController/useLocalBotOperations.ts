@@ -11,7 +11,7 @@ import { botRuntimeOperationsSelector, buildConfigurationSelector } from '../../
 
 import { useBotStatusTracker } from './useBotStatusTracker';
 
-export function useLocalBotOperations(onAllBotsStarted?: (started: boolean) => void) {
+export function useLocalBotOperations() {
   const builderEssentials = useRecoilValue(buildConfigurationSelector);
   const botRuntimeOperations = useRecoilValue(botRuntimeOperationsSelector);
   const rootBotId = useRecoilValue(rootBotProjectIdSelector);
@@ -65,17 +65,11 @@ export function useLocalBotOperations(onAllBotsStarted?: (started: boolean) => v
         await handleBotStart(projectId, configuration, buildRequired);
       }
     }
-    if (onAllBotsStarted) {
-      onAllBotsStarted(true);
-    }
   };
 
   const stopAllBots = () => {
     setProjectsToTrack([]);
     builderEssentials.forEach(({ projectId }) => botRuntimeOperations?.stopBot(projectId));
-    if (onAllBotsStarted) {
-      onAllBotsStarted(false);
-    }
   };
 
   const startSingleBot = (projectId: string, skipBuild: boolean | undefined = undefined) => {
