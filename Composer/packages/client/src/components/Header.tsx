@@ -23,6 +23,7 @@ import {
 import composerIcon from '../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../constants';
 
+import { NotificationButton } from './Notifications/NotificationButton';
 import { StartBotsPanel } from './TestController/startBotsPanel';
 import { useLocalBotOperations } from './TestController/useLocalBotOperations';
 export const actionButton = css`
@@ -90,6 +91,7 @@ const rightSection = css`
   align-items: center;
   justify-content: flex-end;
   width: 50%;
+  margin: 15px 10px;
 `;
 
 const botRuntimeStartIcon: IButtonStyles = {
@@ -108,6 +110,25 @@ const startBotWidgetContainer = css`
   justify-content: center;
   color: #fff;
 `;
+
+const buttonStyles: IButtonStyles = {
+  icon: {
+    color: '#fff',
+    fontSize: '20px',
+  },
+  root: {
+    height: '20px',
+    width: '20px',
+    marginLeft: '16px',
+    marginTop: '4px',
+  },
+  rootHovered: {
+    backgroundColor: 'transparent',
+  },
+  rootPressed: {
+    backgroundColor: 'transparent',
+  },
+};
 
 // -------------------- Header -------------------- //
 
@@ -228,6 +249,7 @@ export const Header = () => {
             onClick={onUpdateAvailableClick}
           />
         )}
+        <NotificationButton buttonStyles={buttonStyles} />
       </div>
 
       {showStartBotsPanel && <StartBotsPanel isOpen={showStartBotsPanel} onDismiss={dismissStartPanelViewer} />}

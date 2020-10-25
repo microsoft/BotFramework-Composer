@@ -16,7 +16,7 @@ import {
   needsBuild,
 } from '../../utils/buildUtil';
 
-import { validateDialogSelectorFamily } from './validatedDialogs';
+import { validateDialogsSelectorFamily } from './validatedDialogs';
 import { localBotsWithoutErrorsSelector } from './project';
 
 export const trackBotStatusesSelector = selectorFamily({
@@ -36,7 +36,7 @@ export const trackBotStatusesSelector = selectorFamily({
 export const botBuildRequiredSelector = selectorFamily({
   key: 'botBuildRequiredSelector',
   get: (projectId: string) => ({ get }) => {
-    const dialogs = get(validateDialogSelectorFamily(projectId));
+    const dialogs = get(validateDialogsSelectorFamily(projectId));
     return !isAbsHosted() && needsBuild(dialogs);
   },
 });
@@ -49,7 +49,7 @@ export const buildEssentialsSelector = selectorFamily({
       luis: settings.luis,
       qna: settings.qna,
     };
-    const dialogs = get(validateDialogSelectorFamily(projectId));
+    const dialogs = get(validateDialogsSelectorFamily(projectId));
     const luFiles = get(luFilesState(projectId));
     const qnaFiles = get(qnaFilesState(projectId));
     const botBuildRequired = get(botBuildRequiredSelector(projectId));
@@ -72,7 +72,7 @@ export const buildConfigurationSelector = selector({
     return localProjects.map((projectId: string) => {
       const result = get(buildEssentialsSelector(projectId));
       const name = get(botDisplayNameState(projectId));
-      const dialogs = get(validateDialogSelectorFamily(projectId));
+      const dialogs = get(validateDialogsSelectorFamily(projectId));
       return { ...result, name, dialogs };
     });
   },

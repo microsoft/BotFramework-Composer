@@ -50,7 +50,7 @@ import {
   botStatusState,
   currentProjectIdState,
   dialogSchemasState,
-  dialogsState,
+  dialogState,
   filePersistenceState,
   formDialogSchemaIdsState,
   formDialogSchemaState,
@@ -65,6 +65,8 @@ import {
   schemasState,
   settingsState,
   skillManifestsState,
+  skillsState,
+  dialogIdsState,
   showCreateQnAFromUrlDialogState,
 } from '../../atoms';
 import * as botstates from '../../atoms/botState';
@@ -291,13 +293,17 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
   }
 
   let mainDialog = '';
-  const verifiedDialogs = dialogs.map((dialog) => {
+  const dialogIds: string[] = [];
+  dialogs.forEach((dialog) => {
     if (dialog.isRoot) {
       mainDialog = dialog.id;
     }
     dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles);
-    return dialog;
+    set(dialogState({ projectId, dialogId: dialog.id }), dialog);
+    dialogIds.push(dialog.id);
   });
+
+  set(dialogIdsState(projectId), dialogIds);
 
   await lgWorker.addProject(projectId, lgFiles);
 
@@ -314,7 +320,7 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
   set(luFilesState(projectId), initLuFilesStatus(botName, luFiles, dialogs));
   set(lgFilesState(projectId), lgFiles);
   set(jsonSchemaFilesState(projectId), jsonSchemaFiles);
-  set(dialogsState(projectId), verifiedDialogs);
+
   set(dialogSchemasState(projectId), dialogSchemas);
   set(botEnvironmentState(projectId), botEnvironment);
   set(botDisplayNameState(projectId), botName);

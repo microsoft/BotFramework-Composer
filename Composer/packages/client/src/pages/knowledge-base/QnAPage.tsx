@@ -13,10 +13,9 @@ import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { navigateTo } from '../../utils/navigation';
 import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
-import { dialogsState, qnaFilesState } from '../../recoilModel/atoms/botState';
+import { dialogsSelectorFamily, qnaFilesState } from '../../recoilModel';
 import { dispatcherState } from '../../recoilModel';
 import { CreateQnAModal } from '../../components/QnA';
-import { Dispatcher } from '../../recoilModel/dispatchers';
 
 import TableView from './table-view';
 
@@ -30,8 +29,8 @@ interface QnAPageProps extends RouteComponentProps<{}> {
 const QnAPage: React.FC<QnAPageProps> = (props) => {
   const { dialogId = '', projectId = '' } = props;
 
-  const actions: Dispatcher = useRecoilValue(dispatcherState);
-  const dialogs = useRecoilValue(dialogsState(projectId));
+  const actions = useRecoilValue(dispatcherState);
+  const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   //To do: support other languages
   const locale = 'en-us';
