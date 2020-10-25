@@ -40,7 +40,7 @@ jobs:
 
       - name: Health check
         run: |
-          $containerId=$(docker run -d -p "5000:5000" botframework-composer)
+          containerId=$(docker run -d -p "5000:5000" botframework-composer)
           sleep 10
           docker logs $containerId
           curl -Is http://localhost:5000 | grep -q "200 OK"
