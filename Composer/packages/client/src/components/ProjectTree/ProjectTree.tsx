@@ -15,7 +15,6 @@ import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 import isEqual from 'lodash/isEqual';
 import { extractSchemaProperties, groupTriggersByPropertyReference, NoGroupingTriggerGroupName } from '@bfc/indexers';
 
-import { useFeatureFlag } from '../../utils/hooks';
 import {
   dispatcherState,
   currentProjectIdState,
