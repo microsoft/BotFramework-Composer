@@ -611,9 +611,6 @@
   "could_not_connect_to_storage_50411de0": {
     "message": "Could not connect to storage."
   },
-  "could_not_init_plugin_1f1c29cd": {
-    "message": "Could not init plugin"
-  },
   "couldn_t_complete_the_update_a337a359": {
     "message": "Couldn''t complete the update:"
   },
@@ -1162,6 +1159,9 @@
   },
   "form_title_baf85c7e": {
     "message": "form title"
+  },
+  "form_wide_operations_1c1a73eb": {
+    "message": "form-wide operations"
   },
   "forms_380ab2ae": {
     "message": "Forms"

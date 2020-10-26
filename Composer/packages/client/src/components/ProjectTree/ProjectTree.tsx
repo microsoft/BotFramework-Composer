@@ -8,7 +8,6 @@ import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
 import cloneDeep from 'lodash/cloneDeep';
 import formatMessage from 'format-message';
-import { extractSchemaProperties, groupTriggersByPropertyReference } from '@bfc/indexers';
 import { DialogInfo, ITrigger, Diagnostic, DiagnosticSeverity } from '@bfc/shared';
 import debounce from 'lodash/debounce';
 import { useRecoilValue } from 'recoil';
@@ -370,7 +369,7 @@ export const ProjectTree: React.FC<Props> = ({
 
   const renderTriggerGroupHeader = (displayName: string, dialog: DialogInfo, projectId: string) => {
     const link: TreeLink = {
-      dialogName: dialog.id,
+      dialogId: dialog.id,
       displayName,
       isRoot: false,
       projectId: projectId,
