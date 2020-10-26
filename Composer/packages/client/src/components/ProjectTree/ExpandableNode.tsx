@@ -41,7 +41,14 @@ export const ExpandableNode = ({ children, summary, detailsRef, depth = 0 }: Pro
     <div css={nodeStyle(depth)} data-testid="dialog">
       <details ref={detailsRef} open={isExpanded}>
         {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */}
-        <summary css={summaryStyle} role="button" tabIndex={0} onClick={handleClick} onKeyUp={handleKey}>
+        <summary
+          css={summaryStyle}
+          data-testid={'summaryTag'}
+          role="button"
+          tabIndex={0}
+          onClick={handleClick}
+          onKeyUp={handleKey}
+        >
           {summary}
         </summary>
         {children}
