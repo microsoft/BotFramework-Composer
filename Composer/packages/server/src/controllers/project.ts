@@ -54,6 +54,30 @@ async function createProject(req: Request, res: Response) {
     await AssetService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage);
 
     if (currentProject !== undefined) {
+      // IF template specifies an ejected runtime, EJEcT IT
+      // if (currentProject.settings.runtime.customRuntime === true) {
+      //   const runtime = ExtensionContext.getRuntimeByProject(currentProject);
+      //   await runtime.eject(currentProject, currentProject.fileStorage);
+
+      //   // install all dependencies and build the app
+      //   await runtime.build(currentProject.dataDir + 'runtime/azurewebapp', currentProject);
+
+      //   const manifestFile = runtime.identifyManifest(currentProject.dataDir + 'runtime/azurewebapp');
+
+      //   // run the bf cli dialog merge command...
+      //   const realMerge = new SchemaMerger(
+      //     [manifestFile],
+      //     path.join(currentProject.dataDir, 'schemas/sdk'),
+      //     path.join(currentProject.dataDir, 'dialogs/imported'),
+      //     false, // copy only? true = dry run
+      //     false, // verbosity: true = verbose
+      //     console.log,
+      //     console.warn,
+      //     console.error
+      //   );
+
+      //   const mergeResults = await realMerge.merge();
+      // }
       await currentProject.updateBotInfo(name, description);
       if (schemaUrl) {
         await currentProject.saveSchemaToProject(schemaUrl, locationRef.path);

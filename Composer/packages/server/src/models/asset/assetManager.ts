@@ -76,7 +76,7 @@ export class AssetManager {
   public async copyBoilerplate(dstDir: string, dstStorage: IFileStorage) {
     for (const boilerplate of ExtensionContext.extensions.baseTemplates) {
       const boilerplatePath = boilerplate.path;
-      if (await this.templateStorage.exists(boilerplatePath)) {
+      if (boilerplatePath && (await this.templateStorage.exists(boilerplatePath))) {
         await copyDir(boilerplatePath, this.templateStorage, dstDir, dstStorage);
       }
     }
@@ -109,19 +109,21 @@ export class AssetManager {
       return undefined;
     }
     const boilerplate = ExtensionContext.extensions.baseTemplates[0];
-    const location = Path.join(boilerplate.path, 'scripts', 'package.json');
-    try {
-      if (fs.existsSync(location)) {
-        const raw = fs.readFileSync(location, 'utf8');
-        const json = JSON.parse(raw);
-        if (json && json.version) {
-          return json.version;
-        } else {
-          return undefined;
+    if (boilerplate.path) {
+      const location = Path.join(boilerplate.path, 'scripts', 'package.json');
+      try {
+        if (fs.existsSync(location)) {
+          const raw = fs.readFileSync(location, 'utf8');
+          const json = JSON.parse(raw);
+          if (json && json.version) {
+            return json.version;
+          } else {
+            return undefined;
+          }
         }
+      } catch (err) {
+        return undefined;
       }
-    } catch (err) {
-      return undefined;
     }
   }
 
@@ -131,15 +133,17 @@ export class AssetManager {
     }
     const boilerplate = ExtensionContext.extensions.botTemplates[0];
 
-    const location = Path.join(boilerplate.path, `${boilerplate.id}.botproj`);
-    try {
-      if (fs.existsSync(location)) {
-        const raw = fs.readFileSync(location, 'utf8');
-        const json = JSON.parse(raw);
-        return json;
+    if (boilerplate.path) {
+      const location = Path.join(boilerplate.path, `${boilerplate.id}.botproj`);
+      try {
+        if (fs.existsSync(location)) {
+          const raw = fs.readFileSync(location, 'utf8');
+          const json = JSON.parse(raw);
+          return json;
+        }
+      } catch (err) {
+        return '';
       }
-    } catch (err) {
-      return '';
     }
   }
 }

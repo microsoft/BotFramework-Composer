@@ -37,11 +37,15 @@ export type BotTemplate = {
   name: string;
   description: string;
   /* absolute path */
-  path: string;
+  path?: string;
   /* tags for further grouping and search secenario */
   tags?: string[];
   /* list of supported runtime versions */
   support?: string[];
+  packageName?: string;
+  packageSource?: string;
+  packageVersion?: string;
+  index?: number;
 };
 
 export type RuntimeTemplate = {

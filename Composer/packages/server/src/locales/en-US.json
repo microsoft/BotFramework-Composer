@@ -1808,6 +1808,9 @@
   "open_inline_editor_a5aabcfa": {
     "message": "Open inline editor"
   },
+  "open_notification_panel_5796edb3": {
+    "message": "Open notification panel"
+  },
   "open_skills_page_for_configuration_details_a2a484ea": {
     "message": "Open Skills page for configuration details"
   },
@@ -2479,6 +2482,9 @@
   },
   "there_are_no_kind_properties_e299287e": {
     "message": "There are no { kind } properties."
+  },
+  "there_are_no_notifications_e81eab8d": {
+    "message": "There are no notifications."
   },
   "there_was_an_error_74ed3c58": {
     "message": "There was an error"
