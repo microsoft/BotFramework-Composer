@@ -29,9 +29,8 @@ const DefaultFormSchema: FormUISchema = {
       recognizer: {
         label: () => formatMessage('Language Understanding'),
         description: () =>
-          formatMessage(
-            'To understand what the user says, your dialog needs a "Recognizer"; that includes example words and sentences that users may use.'
-          ),
+          formatMessage('Language Understanding uses a Recognizer to translate user input into intents and entities.'),
+        helpLink: 'https://aka.ms/lu-file-format',
       },
     },
   },
@@ -147,7 +146,7 @@ const DefaultFormSchema: FormUISchema = {
   },
   [SDKKinds.IRecognizer]: {
     field: RecognizerField,
-    helpLink: 'https://aka.ms/BFC-Using-LU',
+    helpLink: 'https://aka.ms/composer-language-understanding',
   },
   [SDKKinds.OnIntent]: {
     properties: {
