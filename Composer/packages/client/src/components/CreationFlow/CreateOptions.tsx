@@ -23,6 +23,7 @@ import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { ProjectTemplate } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { NeutralColors } from '@uifabric/fluent-theme';
+import { RouteComponentProps } from '@reach/router';
 
 import { DialogCreationCopy, EmptyBotTemplateId, QnABotTemplateId } from '../../constants';
 
@@ -103,14 +104,18 @@ const optionKeys = {
 };
 
 // -------------------- CreateOptions -------------------- //
+type CreateOptionsProps = {
+  templates: ProjectTemplate[];
+  onDismiss: () => void;
+  onNext: (data: string) => void;
+} & RouteComponentProps<{}>;
 
-export function CreateOptions(props) {
+export function CreateOptions(props: CreateOptionsProps) {
   const [option, setOption] = useState(optionKeys.createFromScratch);
   const [disabled, setDisabled] = useState(true);
   const { templates, onDismiss, onNext } = props;
   const [currentTemplate, setCurrentTemplate] = useState('');
   const [emptyBotKey, setEmptyBotKey] = useState('');
-
   const selection = useMemo(() => {
     return new Selection({
       onSelectionChanged: () => {

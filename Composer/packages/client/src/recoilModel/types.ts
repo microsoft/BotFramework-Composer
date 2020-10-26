@@ -5,7 +5,7 @@ import { AppUpdaterSettings, CodeEditorSettings, PromptTab } from '@bfc/shared';
 
 import { AppUpdaterStatus } from '../constants';
 
-import { CardProps } from './../components/NotificationCard';
+import { CardProps } from './../components/Notifications/NotificationCard';
 
 export interface StateError {
   status?: number;

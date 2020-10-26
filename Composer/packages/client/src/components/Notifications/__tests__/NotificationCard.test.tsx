@@ -3,9 +3,9 @@
 
 import * as React from 'react';
 
-import { renderWithRecoil } from '../../../__tests__/testUtils/renderWithRecoil';
+import { renderWithRecoil } from '../../../../__tests__/testUtils/renderWithRecoil';
 import { NotificationCard, CardProps } from '../NotificationCard';
-import Timer from '../../utils/timer';
+import Timer from '../../../utils/timer';
 
 jest.useFakeTimers();
 
@@ -18,7 +18,10 @@ describe('<NotificationCard />', () => {
       type: 'error',
     };
     const onDismiss = jest.fn();
-    const { container } = renderWithRecoil(<NotificationCard cardProps={cardProps} id="test" onDismiss={onDismiss} />);
+    const handleHide = jest.fn();
+    const { container } = renderWithRecoil(
+      <NotificationCard cardProps={cardProps} id="test" onDismiss={onDismiss} onHide={handleHide} />
+    );
 
     expect(container).toHaveTextContent('There was error creating your KB');
   });
@@ -32,7 +35,10 @@ describe('<NotificationCard />', () => {
       onRenderCardContent: () => <div>customized</div>,
     };
     const onDismiss = jest.fn();
-    const { container } = renderWithRecoil(<NotificationCard cardProps={cardProps} id="test" onDismiss={onDismiss} />);
+    const handleHide = jest.fn();
+    const { container } = renderWithRecoil(
+      <NotificationCard cardProps={cardProps} id="test" onDismiss={onDismiss} onHide={handleHide} />
+    );
 
     expect(container).toHaveTextContent('customized');
   });
