@@ -17,15 +17,13 @@ import { Separator } from 'office-ui-fabric-react/lib/Separator';
 import { PublishProfileDialog } from '../../constants';
 // import { IPersonaSharedProps, Persona, PersonaSize } from 'office-ui-fabric-react/lib/Persona';
 // import { Link } from 'office-ui-fabric-react/lib/Link';
-
 import { PublishType } from '../../recoilModel/types';
 import { userSettingsState, currentProjectIdState } from '../../recoilModel';
 import { PluginAPI } from '../../plugins/api';
 import { PluginHost } from '../../components/PluginHost/PluginHost';
 import { dispatcherState } from '../../recoilModel';
-import { SettingToggle } from '../setting/app-settings/SettingToggle';
 
-import { label, separator, customPublishUISurface } from './styles';
+import { label, separator } from './styles';
 interface CreatePublishTargetProps {
   closeDialog: () => void;
   current: { index: number; item: PublishTarget } | null;
@@ -57,7 +55,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
 
   const targetTypes = useMemo(() => {
     return props.types.map((t) => ({ key: t.name, text: t.description }));
-  }, [props.targets]);
+  }, [props.types]);
 
   const updateType = (_e, option?: IDropdownOption) => {
     const type = props.types.find((t) => t.name === option?.key);
@@ -81,13 +79,9 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
     }
   };
 
-  const selectedTarget = useMemo(() => {
+  const selectedType = useMemo(() => {
     return props.types.find((t) => t.name === targetType);
-  }, [props.targets, targetType]);
-
-  const targetBundleId = useMemo(() => {
-    return (targetType && props.types.find((t) => t.name === targetType)?.bundleId) || '';
-  }, [props.targets, targetType]);
+  }, [props.types, targetType]);
 
   const updateName = (e, newName) => {
     setName(newName);
@@ -113,7 +107,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
     PluginAPI.publish.closeDialog = props.closeDialog;
     PluginAPI.publish.onBack = () => {
       setPage(PageTypes.AddProfile);
-      props.setDialogProps(PublishProfileDialog.ADD_PROFILE);
+      setDialogProps(PublishProfileDialog.ADD_PROFILE);
     };
   }, [current]);
 
@@ -127,6 +121,9 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
     };
     PluginAPI.publish.currentProjectId = () => {
       return projectId;
+    };
+    PluginAPI.publish.getSchema = () => {
+      return props.types.find((t) => t.name === targetType)?.schema;
     };
   }, [projectId, name, targetType]);
 
@@ -164,20 +161,20 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
       <div style={{ width: '60%' }}>
         {FormInPage}
         <Fragment>
-          {selectedTarget?.instructions && <p>{selectedTarget.instructions}</p>}
+          {selectedType?.instructions && <p>{selectedType.instructions}</p>}
           <div css={label}>{formatMessage('Publish Configuration')}</div>
           <JsonEditor
             key={targetType}
             editorSettings={userSettings.codeEditor}
             height={200}
-            schema={selectedTarget?.schema}
+            schema={selectedType?.schema}
             value={config}
             onChange={setConfig}
           />
         </Fragment>
       </div>
     );
-  }, [selectedTarget, userSettings]);
+  }, [selectedType, userSettings]);
 
   const PageContent = useMemo(() => {
     switch (page) {
@@ -213,13 +210,9 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
         );
       case PageTypes.ConfigProvision:
       case PageTypes.ReviewResource:
-        if (selectedTarget && selectedTarget?.bundleId) {
+        if (selectedType && selectedType?.bundleId) {
           return (
-            <PluginHost
-              bundleId={selectedTarget?.bundleId}
-              pluginName={selectedTarget?.extensionId}
-              pluginType="publish"
-            />
+            <PluginHost bundleId={selectedType?.bundleId} pluginName={selectedType?.extensionId} pluginType="publish" />
           );
         }
     }

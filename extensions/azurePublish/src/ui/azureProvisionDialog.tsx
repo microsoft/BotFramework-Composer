@@ -17,6 +17,7 @@ import {
   onBack,
   setPublishConfig,
   setTitle,
+  getSchema,
 } from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { ResourceGroup } from '@azure/arm-resources/esm/models';
@@ -351,6 +352,7 @@ export const AzureProvisionDialog: React.FC = () => {
               setEditorError(false);
               setImportConfig(value);
             }}
+            schema={getSchema()}
             onError={() => {
               setEditorError(true);
             }}
@@ -439,7 +441,7 @@ export const AzureProvisionDialog: React.FC = () => {
   ]);
 
   return (
-    <div style={{ height: 'fit-content' }}>
+    <div style={{ height: '100vh' }}>
       {page === PageTypes.ConfigProvision ? PageFormConfig : PageReview}
       <div
         style={{

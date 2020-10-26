@@ -482,7 +482,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 };
 
 export default Publish;
-const LogDialog: React.FC<{ version: PublishResult; onDismiss: () => void }> = (props) => {
+const LogDialog: React.FC<{ version: PublishResult | null; onDismiss: () => void }> = (props) => {
   const logDialogProps = {
     title: 'Publish Log',
   };

@@ -35,3 +35,6 @@ export function onBack(): void {
 export function setTitle(value): void {
   return window[ComposerGlobalName].setTitle(value);
 }
+export function getSchema(): any {
+  return window[ComposerGlobalName].getSchema();
+}

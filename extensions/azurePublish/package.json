@@ -5,10 +5,10 @@
   "main": "lib/index.js",
   "license": "MIT",
   "scripts": {
-    "build:appinsight": "cd ./vendor/arm-appinsights && yarn && yarn build",
+    "build:botservice": "cd ./vendor/arm-botservice && yarn && yarn build",
     "build:ui": "webpack --config webpack.config.js",
     "build:node": "tsc --project tsconfig.node.json",
-    "build": "yarn build:appinsight && yarn build:node && yarn build:ui"
+    "build": "yarn build:botservice && yarn build:node && yarn build:ui"
   },
   "composer": {
     "bundles": [
@@ -28,10 +28,10 @@
     }
   },
   "dependencies": {
-    "@azure/arm-appinsights": "./vendor/arm-appinsights",
+    "@azure/arm-appinsights": "^3.0.0",
     "@azure/arm-appservice": "^6.0.0",
     "@azure/arm-appservice-profile-2019-03-01-hybrid": "1.0.0",
-    "@azure/arm-botservice": "^2.0.0",
+    "@azure/arm-botservice": "./vendor/arm-botservice",
     "@azure/arm-cognitiveservices": "^5.2.0",
     "@azure/arm-cosmosdb": "^9.0.0",
     "@azure/arm-deploymentmanager": "3.0.0",

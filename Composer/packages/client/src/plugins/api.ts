@@ -35,6 +35,7 @@ interface PublishAPI {
   closeDialog?: () => void;
   onBack?: () => void;
   setTitle?: (value) => void;
+  getSchema?: () => any;
 }
 
 class API implements IAPI {
@@ -70,6 +71,7 @@ class API implements IAPI {
       closeDialog: undefined,
       onBack: undefined,
       setTitle: undefined,
+      getSchema: undefined,
     };
   }
 }
