@@ -11,7 +11,6 @@ import {
   botProjectIdsState,
   currentProjectIdState,
   dialogIdsState,
-  dialogState,
   formDialogSchemaIdsState,
   jsonSchemaFilesState,
   lgFilesState,
@@ -110,8 +109,7 @@ describe('<NotificationList/>', () => {
   const initRecoilState = ({ set }) => {
     set(currentProjectIdState, state.projectId);
     set(botProjectIdsState, [state.projectId]);
-    set(dialogState({ projectId: state.projectId, dialogId: 'test' }), state.dialogs[0]);
-    set(dialogIdsState(state.projectId), [test]);
+    set(dialogIdsState(state.projectId), []);
     set(luFilesState(state.projectId), state.luFiles);
     set(lgFilesState(state.projectId), state.lgFiles);
     set(jsonSchemaFilesState(state.projectId), state.jsonSchemaFiles);
@@ -129,7 +127,7 @@ describe('<NotificationList/>', () => {
       <NotificationList projectId={state.projectId} showType="" onItemClick={jest.fn} />,
       initRecoilState
     );
-    expect(container).toHaveTextContent('test.en-us.lu');
+    expect(container).toHaveTextContent('server');
     expect(container).toHaveTextContent('test.en-us.lg');
   });
 });
