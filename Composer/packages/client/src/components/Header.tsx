@@ -18,15 +18,16 @@ import {
   localeState,
   currentProjectIdState,
   runningBotsSelector,
+  currentModeState,
 } from '../recoilModel';
 import composerIcon from '../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../constants';
-import { useLocation } from '../utils/hooks';
 
+import { NotificationButton } from './Notifications/NotificationButton';
 import { StartBotsPanel } from './TestController/startBotsPanel';
-import { useBotOperations } from './TestController/useLocalBotOperations';
+import { useLocalBotOperations } from './TestController/useLocalBotOperations';
 export const actionButton = css`
-  font-size: 18px;
+  font-size: ${FontSizes.size18};
   margin-top: 2px;
 `;
 
@@ -44,7 +45,7 @@ const headerContainer = css`
 const title = css`
   margin-left: 20px;
   font-weight: ${FontWeights.semibold};
-  font-size: 16px;
+  font-size: ${FontSizes.size16};
   color: #fff;
 `;
 
@@ -60,24 +61,6 @@ const divider = css`
   margin: 0px 0px 0px 20px;
 `;
 
-const updateAvailableIcon = {
-  icon: {
-    color: '#FFF',
-    fontSize: '20px',
-  },
-  root: {
-    height: '20px',
-    width: '20px',
-    margin: '0 20px',
-  },
-  rootHovered: {
-    backgroundColor: 'transparent',
-  },
-  rootPressed: {
-    backgroundColor: 'transparent',
-  },
-};
-
 const headerTextContainer = css`
   display: flex;
   align-items: center;
@@ -90,9 +73,10 @@ const rightSection = css`
   align-items: center;
   justify-content: flex-end;
   width: 50%;
+  margin: 15px 10px;
 `;
 
-const botRuntimeStartIcon: IButtonStyles = {
+const localBotOperationIcon: IButtonStyles = {
   root: {
     color: `#fff`,
     marginRight: '12px',
@@ -109,10 +93,28 @@ const startBotWidgetContainer = css`
   color: #fff;
 `;
 
+const buttonStyles: IButtonStyles = {
+  icon: {
+    color: '#fff',
+    fontSize: FontSizes.size20,
+  },
+  root: {
+    height: '20px',
+    width: '20px',
+    marginLeft: '16px',
+    marginTop: '4px',
+  },
+  rootHovered: {
+    backgroundColor: 'transparent',
+  },
+  rootPressed: {
+    backgroundColor: 'transparent',
+  },
+};
+
 // -------------------- Header -------------------- //
 
 export const Header = () => {
-  const currentLocation = useLocation();
   const { setAppUpdateShowing } = useRecoilValue(dispatcherState);
   const projectId = useRecoilValue(currentProjectIdState);
   const projectName = useRecoilValue(botDisplayNameState(projectId));
@@ -122,30 +124,30 @@ export const Header = () => {
   const [showStartBotsPanel, setStartPanelView] = useState(false);
   const runningBots = useRecoilValue(runningBotsSelector);
   const [startPanelText, setStartPanelText] = useState('');
-  const { projectIds: runningProjects } = useRecoilValue(runningBotsSelector);
+  const { projectIds: projectIdsRunning } = runningBots;
   const [areBotsStarted, setBotsInBotProjectStarted] = useState<boolean>(false);
-  const { stopAllBots, startAllBots } = useBotOperations();
+  const { stopAllBots, startAllBots } = useLocalBotOperations();
   const [showStartBotsWidget, setStartBotsWidgetVisible] = useState(true);
+  const currentMode = useRecoilValue(currentModeState);
 
   useEffect(() => {
-    // TODO: Start using modes to detect current page after #4361
-    if (!currentLocation.location.pathname.includes('home')) {
+    if (currentMode !== 'home') {
       setStartBotsWidgetVisible(true);
       return;
     }
     setStartBotsWidgetVisible(false);
-  }, [currentLocation]);
+  }, [currentMode]);
 
   useEffect(() => {
-    if (runningProjects.length > 0) {
+    if (projectIdsRunning.length > 0) {
       setBotsInBotProjectStarted(true);
     }
-  }, [runningProjects]);
+  }, [projectIdsRunning]);
 
   useEffect(() => {
     if (runningBots.projectIds.length > 0) {
       setStartPanelText(
-        `${formatMessage('Stop all bots')} (${runningBots.projectIds.length}/${runningBots.totalBots}) ${formatMessage(
+        `${formatMessage('Stop all bots')} (${runningBots.projectIds.length}/${runningBots.totalBots} ${formatMessage(
           'running'
         )})`
       );
@@ -197,17 +199,27 @@ export const Header = () => {
         {showStartBotsWidget && (
           <div css={startBotWidgetContainer}>
             {runningBots.projectIds.length > 0 ? (
-              <ActionButton css={actionButton} onClick={handleStartOrStopAll}>
-                <Icon iconName={'CircleStopSolid'} styles={botRuntimeStartIcon} />
+              <ActionButton
+                aria-label={formatMessage('Stop all bots')}
+                css={actionButton}
+                onClick={handleStartOrStopAll}
+              >
+                <Icon iconName={'CircleStopSolid'} styles={localBotOperationIcon} />
               </ActionButton>
             ) : (
-              <ActionButton css={actionButton} onClick={handleStartOrStopAll}>
-                <Icon iconName={'Play'} styles={botRuntimeStartIcon} />
+              <ActionButton
+                aria-label={formatMessage('Start all bots')}
+                css={actionButton}
+                onClick={handleStartOrStopAll}
+              >
+                <Icon iconName={'Play'} styles={localBotOperationIcon} />
               </ActionButton>
             )}
-            <span>{startPanelText}</span>
+            <span aria-label={startPanelText} aria-live={'assertive'}>
+              {startPanelText}
+            </span>
             <ActionButton css={actionButton} onClick={() => setStartPanelView(true)}>
-              <Icon iconName={'ProductList'} styles={botRuntimeStartIcon} />
+              <Icon iconName={'ProductList'} styles={localBotOperationIcon} />
             </ActionButton>
           </div>
         )}
@@ -215,15 +227,15 @@ export const Header = () => {
         {showUpdateAvailableIcon && (
           <IconButton
             iconProps={{ iconName: 'History' }}
-            styles={updateAvailableIcon as IButtonStyles}
+            styles={buttonStyles}
             title={formatMessage('Update available')}
             onClick={onUpdateAvailableClick}
           />
         )}
+        <NotificationButton buttonStyles={buttonStyles} />
       </div>
 
       {showStartBotsPanel && <StartBotsPanel isOpen={showStartBotsPanel} onDismiss={dismissStartPanelViewer} />}
     </div>
   );
 };
-//?Start Bots

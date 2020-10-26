@@ -17,10 +17,12 @@ import {
 } from '../atoms/botState';
 import { botEndpointsState } from '../atoms';
 import { openInEmulator } from '../../utils/navigation';
+import { rootBotProjectIdSelector } from '../selectors';
 
 import { BotStatus, Text } from './../../constants';
 import httpClient from './../../utils/httpUtil';
 import { logMessage, setError } from './shared';
+import { setSettingState } from './setting';
 
 const PUBLISH_SUCCESS = 200;
 const PUBLISH_PENDING = 202;
@@ -69,12 +71,23 @@ export const publisherDispatcher = () => {
     });
   };
 
-  const updatePublishStatus = ({ set }: CallbackInterface, projectId: string, target: any, data: any) => {
+  const updatePublishStatus = async (callbackHelpers: CallbackInterface, projectId: string, target: any, data: any) => {
+    const { set, snapshot } = callbackHelpers;
     const { endpointURL, status, id } = data;
     // the action below only applies to when a bot is being started using the "start bot" button
     // a check should be added to this that ensures this ONLY applies to the "default" profile.
     if (target.name === defaultPublishConfig.name) {
       if (status === PUBLISH_SUCCESS && endpointURL) {
+        const rootBotId = await snapshot.getPromise(rootBotProjectIdSelector);
+        if (rootBotId === projectId) {
+          // Update the skill host endpoint
+          const settings = await snapshot.getPromise(settingsState(projectId));
+          const updatedSettings = {
+            ...settings,
+            skillHostEndpoint: endpointURL + '/api/skills',
+          };
+          setSettingState(callbackHelpers, projectId, updatedSettings);
+        }
         set(botStatusState(projectId), BotStatus.connected);
         set(botEndpointsState, (botEndpoints) => ({
           ...botEndpoints,
@@ -175,9 +188,9 @@ export const publisherDispatcher = () => {
     (callbackHelpers: CallbackInterface) => async (projectId: string, target: any) => {
       try {
         const response = await httpClient.get(`/publish/${projectId}/status/${target.name}`);
-        updatePublishStatus(callbackHelpers, projectId, target, response.data);
+        await updatePublishStatus(callbackHelpers, projectId, target, response.data);
       } catch (err) {
-        updatePublishStatus(callbackHelpers, projectId, target, err.response.data);
+        await updatePublishStatus(callbackHelpers, projectId, target, err.response.data);
       }
     }
   );

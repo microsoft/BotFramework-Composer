@@ -8,12 +8,13 @@ import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
 import { ActionButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import { useCallback } from 'react';
+import { useMemo } from 'react';
+import formatMessage from 'format-message';
 
 import { botStatusState } from '../../recoilModel';
 import { BotStatus } from '../../constants';
 
-import { useBotOperations } from './useLocalBotOperations';
+import { useLocalBotOperations } from './useLocalBotOperations';
 
 interface LocalBotRuntimeProps {
   projectId: string;
@@ -30,7 +31,7 @@ const loadingSpinnerStyle = css`
   margin-right: 12px;
 `;
 
-const icon: IButtonStyles = {
+const botStatusIcon: IButtonStyles = {
   root: {
     color: `${SharedColors.cyanBlue20}`,
     marginRight: '12px',
@@ -42,21 +43,21 @@ const icon: IButtonStyles = {
 
 export const LocalBotRuntime: React.FC<LocalBotRuntimeProps> = ({ projectId, displayName }) => {
   const currentBotStatus = useRecoilValue(botStatusState(projectId));
-  const { startSingleBot, stopSingleBot } = useBotOperations();
+  const { startSingleBot, stopSingleBot } = useLocalBotOperations();
 
-  const botRunIndicatorCallback = useCallback(() => {
+  const botRunningIndicator = useMemo(() => {
     switch (currentBotStatus) {
       case BotStatus.connected:
         return (
-          <ActionButton onClick={() => stopSingleBot(projectId)}>
-            <Icon iconName={'CircleStopSolid'} styles={icon} />
+          <ActionButton aria-label={formatMessage('Stop Bot')} onClick={() => stopSingleBot(projectId)}>
+            <Icon iconName={'CircleStopSolid'} styles={botStatusIcon} />
           </ActionButton>
         );
       case BotStatus.unConnected:
       case BotStatus.failed:
         return (
-          <ActionButton onClick={() => startSingleBot(projectId)}>
-            <Icon iconName={'Play'} styles={icon} />
+          <ActionButton aria-label={formatMessage('Start Bot')} onClick={() => startSingleBot(projectId)}>
+            <Icon iconName={'Play'} styles={botStatusIcon} />
           </ActionButton>
         );
       default:
@@ -66,7 +67,7 @@ export const LocalBotRuntime: React.FC<LocalBotRuntimeProps> = ({ projectId, dis
 
   return (
     <div css={localBotRuntimeContainerStyles}>
-      {botRunIndicatorCallback()}
+      {botRunningIndicator}
       <span aria-label={displayName}>{displayName}</span>
     </div>
   );

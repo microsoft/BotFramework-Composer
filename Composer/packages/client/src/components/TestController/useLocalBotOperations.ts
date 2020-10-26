@@ -11,7 +11,7 @@ import { botRuntimeOperationsSelector, buildConfigurationSelector } from '../../
 
 import { useBotStatusTracker } from './useBotStatusTracker';
 
-export function useBotOperations(onAllBotsStarted?: (started: boolean) => void) {
+export function useLocalBotOperations() {
   const builderEssentials = useRecoilValue(buildConfigurationSelector);
   const botRuntimeOperations = useRecoilValue(botRuntimeOperationsSelector);
   const rootBotId = useRecoilValue(rootBotProjectIdSelector);
@@ -35,13 +35,17 @@ export function useBotOperations(onAllBotsStarted?: (started: boolean) => void) 
     }
   };
 
-  const startRootBot = async () => {
+  const startRootBot = async (skipBuild: boolean | undefined = undefined) => {
     setProjectsToTrack([]);
     await updateSettingsForSkillsWithoutManifest();
     const rootBot = builderEssentials[0];
     const { projectId, configuration, buildRequired, status } = rootBot;
     if (status !== BotStatus.connected) {
-      handleBotStart(projectId, configuration, buildRequired);
+      let isBuildRequired = buildRequired;
+      if (skipBuild) {
+        isBuildRequired = false;
+      }
+      handleBotStart(projectId, configuration, isBuildRequired);
     }
   };
 
@@ -53,6 +57,7 @@ export function useBotOperations(onAllBotsStarted?: (started: boolean) => void) 
   const startAllBots = async () => {
     const [, ...skillsBots] = builderEssentials;
     const trackProjects: string[] = skillsBots.map((skillBot) => skillBot.projectId);
+
     setProjectsToTrack(trackProjects);
     for (const botBuildConfig of skillsBots) {
       if (botBuildConfig.status !== BotStatus.connected) {
@@ -60,26 +65,24 @@ export function useBotOperations(onAllBotsStarted?: (started: boolean) => void) 
         await handleBotStart(projectId, configuration, buildRequired);
       }
     }
-    if (onAllBotsStarted) {
-      onAllBotsStarted(true);
-    }
   };
 
   const stopAllBots = () => {
     setProjectsToTrack([]);
     builderEssentials.forEach(({ projectId }) => botRuntimeOperations?.stopBot(projectId));
-    if (onAllBotsStarted) {
-      onAllBotsStarted(false);
-    }
   };
 
-  const startSingleBot = (projectId: string) => {
+  const startSingleBot = (projectId: string, skipBuild: boolean | undefined = undefined) => {
     if (projectId === rootBotId) {
-      startRootBot();
+      startRootBot(skipBuild);
     } else {
       const botData = builderEssentials.find((builder) => builder.projectId === projectId);
       if (botData) {
-        handleBotStart(projectId, botData?.configuration, botData?.buildRequired);
+        let isBuildRequired = botData?.buildRequired;
+        if (skipBuild) {
+          isBuildRequired = false;
+        }
+        handleBotStart(projectId, botData?.configuration, isBuildRequired);
       }
     }
   };

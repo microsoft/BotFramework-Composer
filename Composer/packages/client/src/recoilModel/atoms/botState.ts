@@ -18,7 +18,7 @@ import {
 } from '@bfc/shared';
 import { atomFamily } from 'recoil';
 
-import { BotLoadError, DesignPageLocation } from '../../recoilModel/types';
+import { BotRuntimeError, DesignPageLocation } from '../../recoilModel/types';
 import FilePersistence from '../persistence/FilePersistence';
 
 import { BotStatus } from './../../constants';
@@ -28,9 +28,33 @@ const getFullyQualifiedKey = (value: string) => {
   return `Bot_${value}_State`;
 };
 
-export const dialogsState = atomFamily<DialogInfo[], string>({
-  key: getFullyQualifiedKey('dialogs'),
-  default: (id) => {
+const emptyDialog: DialogInfo = {
+  content: { $kind: '' },
+  diagnostics: [],
+  displayName: '',
+  id: '',
+  isRoot: false,
+  lgFile: '',
+  lgTemplates: [],
+  luFile: '',
+  qnaFile: '',
+  referredLuIntents: [],
+  referredDialogs: [],
+  triggers: [],
+  intentTriggers: [],
+  skills: [],
+};
+type dialogStateParams = { projectId: string; dialogId: string };
+export const dialogState = atomFamily<DialogInfo, dialogStateParams>({
+  key: getFullyQualifiedKey('dialog'),
+  default: () => {
+    return emptyDialog;
+  },
+});
+
+export const dialogIdsState = atomFamily<string[], string>({
+  key: getFullyQualifiedKey('dialogIds'),
+  default: () => {
     return [];
   },
 });
@@ -90,7 +114,7 @@ export const botDiagnosticsState = atomFamily<Diagnostic[], string>({
   },
 });
 
-export const botRuntimeErrorState = atomFamily<BotLoadError, string>({
+export const botRuntimeErrorState = atomFamily<BotRuntimeError, string>({
   key: getFullyQualifiedKey('botLoadErrorMsg'),
   default: (id) => {
     return { title: '', message: '' };

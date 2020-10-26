@@ -13,7 +13,7 @@ import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { navigateTo } from '../../utils/navigation';
 import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
-import { validateDialogSelectorFamily } from '../../recoilModel';
+import { validateDialogsSelectorFamily } from '../../recoilModel';
 
 import TableView from './table-view';
 const CodeEditor = React.lazy(() => import('./code-editor'));
@@ -25,7 +25,7 @@ interface LGPageProps {
 
 const LGPage: React.FC<RouteComponentProps<LGPageProps>> = (props: RouteComponentProps<LGPageProps>) => {
   const { dialogId = '', projectId = '' } = props;
-  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
 
   const path = props.location?.pathname ?? '';
 

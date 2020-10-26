@@ -6,7 +6,7 @@ import path from 'path';
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 import { produce } from 'immer';
-import { BotProjectSpaceSkill, Skill } from '@bfc/shared';
+import { BotProjectFile, BotProjectSpaceSkill, Skill } from '@bfc/shared';
 
 import { botNameIdentifierState, botProjectFileState, locationState, settingsState } from '../atoms';
 import { rootBotProjectIdSelector } from '../selectors';
@@ -78,15 +78,15 @@ export const botProjectFileDispatcher = () => {
       if (!rootBotProjectId) {
         return;
       }
-      const skillNameIdentifier = await snapshot.getPromise(botNameIdentifierState(skillProjectId));
 
-      set(botProjectFileState(rootBotProjectId), (current) => {
+      const skillNameIdentifier = await snapshot.getPromise(botNameIdentifierState(skillProjectId));
+      set(botProjectFileState(rootBotProjectId), (current: BotProjectFile) => {
         const result = produce(current, (draftState) => {
           if (!manifestId) {
-            delete draftState[skillNameIdentifier].manifest;
+            delete draftState.content.skills[skillNameIdentifier].manifest;
           } else {
-            draftState[skillNameIdentifier] = {
-              ...draftState[skillNameIdentifier],
+            draftState.content.skills[skillNameIdentifier] = {
+              ...draftState.content.skills[skillNameIdentifier],
               manifest: manifestId,
             };
           }

@@ -5,7 +5,7 @@ import { AppUpdaterSettings, CodeEditorSettings, PromptTab } from '@bfc/shared';
 
 import { AppUpdaterStatus } from '../constants';
 
-import { CardProps } from './../components/NotificationCard';
+import { CardProps } from './../components/Notifications/NotificationCard';
 
 export interface StateError {
   status?: number;
@@ -53,7 +53,7 @@ export interface RuntimeTemplate {
   startCommand: string;
 }
 
-export interface BotLoadError {
+export interface BotRuntimeError {
   title: string;
   message: string;
   linkAfterMessage?: { url: string; text: string };

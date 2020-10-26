@@ -6,8 +6,9 @@ import { globalHistory } from '@reach/router';
 import replace from 'lodash/replace';
 import find from 'lodash/find';
 import { useRecoilValue } from 'recoil';
+import { FeatureFlagKey } from '@bfc/shared';
 
-import { designPageLocationState, currentProjectIdState, pluginPagesSelector } from '../recoilModel';
+import { designPageLocationState, currentProjectIdState, pluginPagesSelector, featureFlagsState } from '../recoilModel';
 
 import { bottomLinks, topLinks } from './pageLinks';
 import routerCache from './routerCache';
@@ -22,15 +23,28 @@ export const useLocation = () => {
   return state;
 };
 
+export const useFeatureFlag = (featureFlagKey: FeatureFlagKey): boolean => {
+  const featureFlags = useRecoilValue(featureFlagsState);
+  const enabled = useMemo(() => {
+    if (featureFlags[featureFlagKey]) {
+      return featureFlags[featureFlagKey].enabled;
+    }
+    return false;
+  }, [featureFlags[featureFlagKey]]);
+
+  return enabled;
+};
+
 export const useLinks = () => {
   const projectId = useRecoilValue(currentProjectIdState);
   const designPageLocation = useRecoilValue(designPageLocationState(projectId));
   const pluginPages = useRecoilValue(pluginPagesSelector);
   const openedDialogId = designPageLocation.dialogId || 'Main';
+  const showFormDialog = useFeatureFlag('FORM_DIALOG');
 
   const pageLinks = useMemo(() => {
-    return topLinks(projectId, openedDialogId, pluginPages);
-  }, [projectId, openedDialogId, pluginPages]);
+    return topLinks(projectId, openedDialogId, pluginPages, showFormDialog);
+  }, [projectId, openedDialogId, pluginPages, showFormDialog]);
 
   return { topLinks: pageLinks, bottomLinks };
 };
@@ -76,7 +90,9 @@ export function useInterval(callback, delay) {
   // Set up the interval.
   useEffect(() => {
     function tick() {
-      savedCallback.current();
+      if (typeof savedCallback.current === 'function') {
+        savedCallback.current();
+      }
     }
     if (delay !== null) {
       const id = setInterval(tick, delay);

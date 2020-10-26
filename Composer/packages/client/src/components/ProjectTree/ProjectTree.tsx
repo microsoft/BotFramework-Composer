@@ -133,7 +133,7 @@ export const ProjectTree: React.FC<Props> = ({
   onDeleteTrigger,
   onSelect,
 }) => {
-  const { onboardingAddCoachMarkRef, selectTo, navTo } = useRecoilValue(dispatcherState);
+  const { onboardingAddCoachMarkRef, selectTo, navTo, navigateToFormDialogSchema } = useRecoilValue(dispatcherState);
 
   const [filter, setFilter] = useState('');
   const [selectedLink, setSelectedLink] = useState<TreeLink | undefined>();
@@ -164,6 +164,13 @@ export const ProjectTree: React.FC<Props> = ({
 
   const dialogIsFormDialog = (dialog: DialogInfo) => {
     return process.env.COMPOSER_ENABLE_FORMS && dialog.content?.schema !== undefined;
+  };
+
+  const formDialogSchemaExists = (projectId: string, dialog: DialogInfo) => {
+    return (
+      dialogIsFormDialog(dialog) &&
+      !!botProjectSpace?.find((s) => s.projectId === projectId)?.formDialogSchemas.find((fd) => fd.id === dialog.id)
+    );
   };
 
   const handleOnSelect = (link: TreeLink) => {
@@ -256,7 +263,7 @@ export const ProjectTree: React.FC<Props> = ({
       skillId: null,
       diagnostics,
     };
-    const menu = [
+    const menu: any[] = [
       {
         label: formatMessage('Add a trigger'),
         icon: 'Add',
@@ -274,6 +281,16 @@ export const ProjectTree: React.FC<Props> = ({
       },
     ];
 
+    const isFormDialog = dialogIsFormDialog(dialog);
+    const showEditSchema = formDialogSchemaExists(skillId, dialog);
+
+    if (showEditSchema) {
+      menu.push({
+        label: formatMessage('Edit schema'),
+        icon: 'Edit',
+        onClick: (link) => navigateToFormDialogSchema({ projectId: link.skillId, schemaId: link.dialogName }),
+      });
+    }
     return (
       <span
         key={dialog.id}
@@ -288,7 +305,7 @@ export const ProjectTree: React.FC<Props> = ({
         <TreeItem
           showProps
           forceIndent={showTriggers ? 0 : SUMMARY_ARROW_SPACE}
-          icon={dialogIsFormDialog(dialog) ? icons.FORM_DIALOG : icons.DIALOG}
+          icon={isFormDialog ? icons.FORM_DIALOG : icons.DIALOG}
           isSubItemActive={isEqual(link, selectedLink)}
           link={link}
           menu={menu}

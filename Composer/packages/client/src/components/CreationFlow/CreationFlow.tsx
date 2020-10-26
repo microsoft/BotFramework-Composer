@@ -14,12 +14,12 @@ import { CreationFlowStatus } from '../../constants';
 import {
   dispatcherState,
   creationFlowStatusState,
-  templateProjectsState,
   storagesState,
   focusedStorageFolderState,
   currentProjectIdState,
   userSettingsState,
   creationFlowTypeState,
+  filteredTemplatesSelector,
 } from '../../recoilModel';
 import Home from '../../pages/home/Home';
 import { useProjectIdCache } from '../../utils/hooks';
@@ -51,10 +51,10 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     addExistingSkillToBotProject,
   } = useRecoilValue(dispatcherState);
 
+  const templateProjects = useRecoilValue(filteredTemplatesSelector);
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
   const creationFlowType = useRecoilValue(creationFlowTypeState);
   const projectId = useRecoilValue(currentProjectIdState);
-  const templateProjects = useRecoilValue(templateProjectsState);
   const storages = useRecoilValue(storagesState);
   const focusedStorageFolder = useRecoilValue(focusedStorageFolderState);
   const { appLocale } = useRecoilValue(userSettingsState);
@@ -166,7 +166,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     }
   };
 
-  const handleCreateNext = async (data) => {
+  const handleCreateNext = async (data: string) => {
     setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
     navigate(`./create/${data}`);
   };

@@ -91,6 +91,10 @@ export const formDialogsDispatcher = () => {
     navigate(`/bot/${projectId}/dialogs/${schemaId}`);
   };
 
+  const navigateToFormDialogSchema = ({ projectId, schemaId }) => {
+    navigate(`/bot/${projectId}/forms/${schemaId}`);
+  };
+
   return {
     createFormDialogSchema,
     updateFormDialogSchema,
@@ -98,5 +102,6 @@ export const formDialogsDispatcher = () => {
     removeFormDialogSchema,
     generateFormDialog,
     navigateToGeneratedDialog,
+    navigateToFormDialogSchema,
   };
 };

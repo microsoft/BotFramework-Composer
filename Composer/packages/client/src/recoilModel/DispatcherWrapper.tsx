@@ -10,11 +10,11 @@ import { BotAssets } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import isEmpty from 'lodash/isEmpty';
 
+import { dialogsSelectorFamily } from './selectors';
 import { UndoRoot } from './undo/history';
 import { prepareAxios } from './../utils/auth';
 import createDispatchers, { Dispatcher } from './dispatchers';
 import {
-  dialogsState,
   luFilesState,
   qnaFilesState,
   lgFilesState,
@@ -29,7 +29,7 @@ import { localBotsWithoutErrorsSelector, formDialogSchemasSelectorFamily } from 
 
 const getBotAssets = async (projectId, snapshot: Snapshot): Promise<BotAssets> => {
   const result = await Promise.all([
-    snapshot.getPromise(dialogsState(projectId)),
+    snapshot.getPromise(dialogsSelectorFamily(projectId)),
     snapshot.getPromise(luFilesState(projectId)),
     snapshot.getPromise(qnaFilesState(projectId)),
     snapshot.getPromise(lgFilesState(projectId)),

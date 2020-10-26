@@ -12,13 +12,8 @@ import { navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 
 import { CreationFlowStatus } from '../../constants';
-import { dispatcherState, botDisplayNameState } from '../../recoilModel';
-import {
-  recentProjectsState,
-  templateProjectsState,
-  templateIdState,
-  currentProjectIdState,
-} from '../../recoilModel/atoms/appState';
+import { dispatcherState, botDisplayNameState, filteredTemplatesSelector } from '../../recoilModel';
+import { recentProjectsState, templateIdState, currentProjectIdState } from '../../recoilModel/atoms/appState';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 
 import * as home from './styles';
@@ -61,7 +56,6 @@ const tutorials = [
 ];
 
 const Home: React.FC<RouteComponentProps> = () => {
-  const templateProjects = useRecoilValue(templateProjectsState);
   const projectId = useRecoilValue(currentProjectIdState);
   const botName = useRecoilValue(botDisplayNameState(projectId));
   const recentProjects = useRecoilValue(recentProjectsState);
@@ -73,6 +67,7 @@ const Home: React.FC<RouteComponentProps> = () => {
     saveTemplateId,
     setCreationFlowTypes,
   } = useRecoilValue(dispatcherState);
+  const filteredTemplates = useRecoilValue(filteredTemplatesSelector);
 
   const onItemChosen = async (item) => {
     if (item && item.path) {
@@ -140,7 +135,6 @@ const Home: React.FC<RouteComponentProps> = () => {
       disabled: botName ? false : true,
     },
   ];
-
   return (
     <div css={home.outline}>
       <Toolbar toolbarItems={toolbarItems} />
@@ -247,7 +241,7 @@ const Home: React.FC<RouteComponentProps> = () => {
               "These examples bring together all of the best practices and supporting components we've identified through building of conversational experiences."
             )}
           </p>
-          <ExampleList examples={templateProjects} onClick={onClickTemplate} />
+          <ExampleList examples={filteredTemplates} onClick={onClickTemplate} />
         </div>
       </div>
     </div>

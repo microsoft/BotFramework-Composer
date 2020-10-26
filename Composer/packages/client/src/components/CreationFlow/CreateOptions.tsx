@@ -24,6 +24,7 @@ import { ProjectTemplate } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { useRecoilState } from 'recoil';
+import { RouteComponentProps } from '@reach/router';
 
 import { DialogCreationCopy, EmptyBotTemplateId, QnABotTemplateId } from '../../constants';
 import { creationFlowTypeState } from '../../recoilModel';
@@ -105,8 +106,13 @@ const optionKeys = {
 };
 
 // -------------------- CreateOptions -------------------- //
+type CreateOptionsProps = {
+  templates: ProjectTemplate[];
+  onDismiss: () => void;
+  onNext: (data: string) => void;
+} & RouteComponentProps<{}>;
 
-export function CreateOptions(props) {
+export function CreateOptions(props: CreateOptionsProps) {
   const [option, setOption] = useState(optionKeys.createFromScratch);
   const [disabled, setDisabled] = useState(true);
   const { templates, onDismiss, onNext } = props;
