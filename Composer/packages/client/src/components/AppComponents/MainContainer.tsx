@@ -3,7 +3,7 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 
-import { NotificationContainer } from '../NotificationContainer';
+import { NotificationContainer } from '../Notifications/NotificationContainer';
 
 import { SideBar } from './SideBar';
 import { RightPanel } from './RightPanel';
