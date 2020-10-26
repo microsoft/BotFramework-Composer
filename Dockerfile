@@ -10,7 +10,7 @@ FROM  mcr.microsoft.com/dotnet/core/sdk:3.1-focal as base
 RUN apt update \
     && apt -y install curl dirmngr apt-transport-https lsb-release ca-certificates \
     && curl -sL https://deb.nodesource.com/setup_12.x | bash - \
-    && apt install -y nodejs \
+    && apt install -y nodejs libgomp1 \
     && npm install -g yarn
 
 FROM base as build
