@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Fragment, Suspense, useState } from 'react';
+import { Fragment, Suspense, useEffect, useState } from 'react';
 import { RouteComponentProps, Router } from '@reach/router';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
@@ -12,15 +12,24 @@ import { navigateTo } from '../../utils/navigation';
 import { convertPathToUrl } from '../../utils/navigation';
 import { Page } from '../../components/Page';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { notificationNavLinksSelector } from '../../recoilModel/selectors/notificationsPageSelector';
+import { diagnosticNavLinksSelector } from '../../recoilModel/selectors/diagnosticsPageSelector';
+import { currentProjectIdState } from '../../recoilModel';
 
-import { NotificationList } from './NotificationList';
-import { NotificationFilter } from './NotificationFilter';
+import { NotificationList } from './DiagnosticList';
+import { NotificationFilter } from './DiagnosticFilter';
 import { INotification, NotificationType } from './types';
 
-const Notifications: React.FC<RouteComponentProps<{}>> = () => {
+const Notifications: React.FC<RouteComponentProps<{}>> = (props) => {
   const [showType, setShowType] = useState('');
-  const navLinks = useRecoilValue(notificationNavLinksSelector);
+  const navLinks = useRecoilValue(diagnosticNavLinksSelector);
+  const projectId = props['*'];
+  const currentProjectId = useRecoilValue(currentProjectIdState);
+  useEffect(() => {
+    if (!projectId) {
+      navigateTo(`/bot/${currentProjectId}/diagnostics/${currentProjectId}`);
+    }
+  }, [projectId]);
+
   const navigations = {
     [NotificationType.LG]: (item: INotification) => {
       const { projectId, resourceId, diagnostic, dialogPath } = item;
@@ -72,10 +81,10 @@ const Notifications: React.FC<RouteComponentProps<{}>> = () => {
   return (
     <Page
       data-testid="LUPage"
-      mainRegionName={formatMessage('Notification List')}
+      mainRegionName={formatMessage('Diagnostic List')}
       navLinks={navLinks}
-      navRegionName={formatMessage('Notificaitons Pane')}
-      title={formatMessage('Notifications')}
+      navRegionName={formatMessage('Diagnostics Pane')}
+      title={formatMessage('Diagnostics')}
       toolbarItems={[]}
       onRenderHeaderContent={onRenderHeaderContent}
     >

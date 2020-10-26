@@ -5,7 +5,7 @@ import * as React from 'react';
 import { Range, Position } from '@bfc/shared';
 
 import { renderWithRecoil } from '../../testUtils';
-import { NotificationList } from '../../../src/pages/notifications/NotificationList';
+import { NotificationList } from '../../../src/pages/diagnostics/DiagnosticList';
 import {
   botDiagnosticsState,
   botProjectIdsState,

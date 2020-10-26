@@ -9,9 +9,8 @@ import formatMessage from 'format-message';
 
 import { getReferredLuFiles } from '../../utils/luUtil';
 import { INavTreeItem } from '../../components/NavTree';
-
-import { botDisplayNameState, qnaFilesState } from './../atoms/botState';
-import { currentProjectIdState } from './../atoms/appState';
+import { botDisplayNameState, qnaFilesState } from '../atoms/botState';
+import { currentProjectIdState } from '../atoms/appState';
 import {
   DialogNotification,
   LgNotification,
@@ -21,7 +20,7 @@ import {
   ServerNotification,
   SettingNotification,
   SkillNotification,
-} from './../../pages/notifications/types';
+} from '../../pages/diagnostics/types';
 import {
   botDiagnosticsState,
   botProjectFileState,
@@ -33,12 +32,13 @@ import {
   projectMetaDataState,
   settingsState,
   skillManifestsState,
-} from './../atoms';
+} from '../atoms';
+
 import { formDialogSchemasSelectorFamily } from './project';
 import { validateDialogsSelectorFamily } from './validatedDialogs';
 
-export const notificationListSelector = selectorFamily({
-  key: 'notificationListSelector',
+export const diagnosticsSelector = selectorFamily({
+  key: 'diagnosticsSelector',
   get: (projectId: string) => ({ get }) => {
     const projectsMetaData = get(projectMetaDataState(projectId));
     if (!projectsMetaData || projectsMetaData.isRemote) return [];
@@ -120,25 +120,25 @@ export const startAllBotEnableSelector = selector({
   get: ({ get }) => {
     const ids = get(botProjectIdsState);
     const result = ids.reduce((result: Notification[], id: string) => {
-      return [...result, ...get(notificationListSelector(id))];
+      return [...result, ...get(diagnosticsSelector(id))];
     }, []);
     return !result.length;
   },
 });
 
-export const allNotificationsSelector = selector({
+export const allDiagnosticsSelector = selector({
   key: 'allNotificationsSelector',
   get: ({ get }) => {
     const ids = get(botProjectIdsState);
     const result = ids.reduce((result: Notification[], id: string) => {
-      return [...result, ...get(notificationListSelector(id))];
+      return [...result, ...get(diagnosticsSelector(id))];
     }, []);
     return result;
   },
 });
 
-export const notificationNavLinksSelector = selector({
-  key: 'notificationNavLinksSelector',
+export const diagnosticNavLinksSelector = selector({
+  key: 'diagnosticNavLinksSelector',
   get: ({ get }) => {
     const projectId = get(currentProjectIdState);
     const ids = get(botProjectIdsState);
@@ -149,8 +149,8 @@ export const notificationNavLinksSelector = selector({
       result.push({
         id: id,
         name: name,
-        ariaLabel: formatMessage('notification links'),
-        url: `/bot/${projectId}/notifications/${id}`,
+        ariaLabel: formatMessage('diagnostic links'),
+        url: `/bot/${projectId}/diagnostics/${id}`,
       });
       return result;
     }, []);

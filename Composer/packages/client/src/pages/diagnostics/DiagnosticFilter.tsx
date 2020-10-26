@@ -15,15 +15,15 @@ export const dropdownStyles: Partial<IDropdownStyles> = {
 const createOptions = (): IDropdownOption[] => {
   const defaultOptions: IDropdownOption[] = [
     {
-      key: formatMessage('Show All Notifications'),
+      key: formatMessage('Show All Diagnostics'),
       text: formatMessage('All'),
-      ariaLabel: formatMessage('Show All Notifications'),
+      ariaLabel: formatMessage('Show All Diagnostics'),
       data: '',
       isSelected: true,
     },
   ];
   DiagnosticSeverity.forEach((item) => {
-    return defaultOptions.push({ key: item, text: item, data: item, ariaLabel: `Show ${item} Notifications` });
+    return defaultOptions.push({ key: item, text: item, data: item, ariaLabel: `Show ${item} Diagnostics` });
   });
   return defaultOptions;
 };
@@ -37,7 +37,7 @@ export const NotificationFilter: React.FC<INotificationFilter> = (props) => {
 
   return (
     <Dropdown
-      ariaLabel={formatMessage('Notification type')}
+      ariaLabel={formatMessage('Diagnostic type')}
       data-testid="notifications-dropdown"
       options={createOptions()}
       styles={dropdownStyles}

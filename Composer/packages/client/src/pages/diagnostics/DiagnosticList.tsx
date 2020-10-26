@@ -22,7 +22,7 @@ import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 import { css } from '@emotion/core';
 
 import { Pagination } from '../../components/Pagination';
-import { notificationListSelector } from '../../recoilModel/selectors/notificationsPageSelector';
+import { diagnosticsSelector } from '../../recoilModel/selectors/diagnosticsPageSelector';
 
 import { INotification } from './types';
 
@@ -200,7 +200,7 @@ function onRenderDetailsHeader(props, defaultRender) {
 
 export const NotificationList: React.FC<INotificationListProps> = (props) => {
   const { onItemClick, projectId = '', showType } = props;
-  const notifications = useRecoilValue(notificationListSelector(projectId));
+  const notifications = useRecoilValue(diagnosticsSelector(projectId));
   const availableNotifications = showType ? notifications.filter((x) => x.severity === showType) : notifications;
   const [pageIndex, setPageIndex] = useState<number>(1);
 

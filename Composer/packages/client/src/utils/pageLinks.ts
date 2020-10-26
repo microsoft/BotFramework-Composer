@@ -49,9 +49,9 @@ export const topLinks = (
       disabled: !botLoaded,
     },
     {
-      to: `/bot/${projectId}/notifications`,
+      to: `/bot/${projectId}/diagnostics`,
       iconName: 'Warning',
-      labelName: formatMessage('Notifications'),
+      labelName: formatMessage('Diagnostics'),
       exact: true,
       disabled: !botLoaded,
     },
