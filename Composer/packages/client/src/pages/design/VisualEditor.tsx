@@ -15,7 +15,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import grayComposerIcon from '../../images/grayComposerIcon.svg';
 import {
   dispatcherState,
-  validateDialogSelectorFamily,
+  validateDialogsSelectorFamily,
   schemasState,
   designPageLocationState,
 } from '../../recoilModel';
@@ -66,7 +66,7 @@ const VisualEditor: React.FC<VisualEditorProps> = (props) => {
   const { openNewTriggerModal, onFocus, onBlur } = props;
   const [triggerButtonVisible, setTriggerButtonVisibility] = useState(false);
   const { onboardingAddCoachMarkRef } = useRecoilValue(dispatcherState);
-  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
   const schemas = useRecoilValue(schemasState(projectId));
   const designPageLocation = useRecoilValue(designPageLocationState(projectId));
   const { dialogId, selected } = designPageLocation;

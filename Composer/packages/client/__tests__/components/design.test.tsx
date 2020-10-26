@@ -9,7 +9,7 @@ import { SAMPLE_DIALOG } from '../mocks/sampleDialog';
 import { ProjectTree } from '../../src/components/ProjectTree/ProjectTree';
 import { TriggerCreationModal } from '../../src/components/ProjectTree/TriggerCreationModal';
 import { CreateDialogModal } from '../../src/pages/design/createDialogModal';
-import { dialogsState, currentProjectIdState, botProjectIdsState, schemasState } from '../../src/recoilModel';
+import { dialogsSelectorFamily, currentProjectIdState, botProjectIdsState, schemasState } from '../../src/recoilModel';
 
 jest.mock('@bfc/code-editor', () => {
   return {
@@ -22,7 +22,7 @@ const dialogs = [SAMPLE_DIALOG];
 const initRecoilState = ({ set }) => {
   set(currentProjectIdState, projectId);
   set(botProjectIdsState, [projectId]);
-  set(dialogsState(projectId), dialogs);
+  set(dialogsSelectorFamily(projectId), dialogs);
   set(schemasState(projectId), { sdk: { content: {} } });
 };
 

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { atom, atomFamily } from 'recoil';
-import { FormDialogSchemaTemplate, ProjectTemplate, UserSettings } from '@bfc/shared';
+import { FormDialogSchemaTemplate, FeatureFlagMap, ProjectTemplate, UserSettings } from '@bfc/shared';
 import { ExtensionMetadata } from '@bfc/extension-client';
 
 import {
@@ -111,6 +111,11 @@ export const runtimeTemplatesState = atom<RuntimeTemplate[]>({
 export const userSettingsState = atom<UserSettings>({
   key: getFullyQualifiedKey('userSettings'),
   default: getUserSettings(),
+});
+
+export const featureFlagsState = atom<FeatureFlagMap>({
+  key: getFullyQualifiedKey('featureFlag'),
+  default: {} as FeatureFlagMap,
 });
 
 export const announcementState = atom<string>({

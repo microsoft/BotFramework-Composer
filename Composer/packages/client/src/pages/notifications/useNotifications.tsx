@@ -18,7 +18,7 @@ import {
   qnaFilesState,
   settingsState,
   skillManifestsState,
-  validateDialogSelectorFamily,
+  validateDialogsSelectorFamily,
 } from '../../recoilModel';
 
 import { getReferredLuFiles } from './../../utils/luUtil';
@@ -34,7 +34,7 @@ import {
 } from './types';
 
 export default function useNotifications(projectId: string, filter?: string) {
-  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
   const luFiles = useRecoilValue(luFilesState(projectId));
   const lgFiles = useRecoilValue(lgFilesState(projectId));
   const diagnostics = useRecoilValue(botDiagnosticsState(projectId));

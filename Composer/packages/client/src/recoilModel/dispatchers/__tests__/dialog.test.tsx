@@ -8,7 +8,6 @@ import { act } from '@botframework-composer/test-utils/lib/hooks';
 import { dialogsDispatcher } from '../dialogs';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import {
-  dialogsState,
   lgFilesState,
   luFilesState,
   schemasState,
@@ -18,6 +17,7 @@ import {
   showCreateDialogModalState,
   qnaFilesState,
 } from '../../atoms';
+import { dialogsSelectorFamily } from '../../selectors';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
 
@@ -105,7 +105,7 @@ describe('dialog dispatcher', () => {
   let renderedComponent, dispatcher: Dispatcher;
   beforeEach(() => {
     const useRecoilTestHook = () => {
-      const dialogs = useRecoilValue(dialogsState(projectId));
+      const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
       const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
       const luFiles = useRecoilValue(luFilesState(projectId));
       const lgFiles = useRecoilValue(lgFilesState(projectId));
@@ -130,7 +130,7 @@ describe('dialog dispatcher', () => {
 
     const { result } = renderRecoilHook(useRecoilTestHook, {
       states: [
-        { recoilState: dialogsState(projectId), initialValue: [{ id: '1' }, { id: '2' }] },
+        { recoilState: dialogsSelectorFamily(projectId), initialValue: [{ id: '1' }, { id: '2' }] },
         { recoilState: dialogSchemasState(projectId), initialValue: [{ id: '1' }, { id: '2' }] },
         { recoilState: lgFilesState(projectId), initialValue: [{ id: '1.en-us' }, { id: '2.en-us' }] },
         { recoilState: luFilesState(projectId), initialValue: [{ id: '1.en-us' }, { id: '2.en-us' }] },

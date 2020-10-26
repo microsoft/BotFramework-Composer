@@ -11,7 +11,8 @@ import { Text, BotStatus } from '../../constants';
 import httpClient from '../../utils/httpUtil';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
-import { luFilesState, qnaFilesState, dialogsState, botStatusState, botLoadErrorState } from '../atoms';
+import { luFilesState, qnaFilesState, botStatusState, botLoadErrorState } from '../atoms';
+import { dialogsSelectorFamily } from '../selectors';
 import { settingsState } from '../atoms/botState';
 
 const checkEmptyQuestionOrAnswerInQnAFile = (sections) => {
@@ -26,7 +27,7 @@ export const builderDispatcher = () => {
       recognizerTypes: { [fileName: string]: string },
       projectId: string
     ) => {
-      const dialogs = await snapshot.getPromise(dialogsState(projectId));
+      const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
       const luFiles = await snapshot.getPromise(luFilesState(projectId));
       const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
       const settings = await snapshot.getPromise(settingsState(projectId));
