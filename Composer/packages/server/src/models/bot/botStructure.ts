@@ -139,15 +139,18 @@ export const defaultFilePath = (botName: string, defaultLocale: string, filename
 };
 
 // when create/saveAs bot, serialize entry dialog/lg/lu
-export const serializeFiles = async (fileStorage, rootPath, botName) => {
+export const serializeFiles = async (fileStorage, rootPath, botName, preserveRoot = false) => {
   const entryPatterns = [
-    templateInterpolate(BotStructureTemplate.entry, { BOTNAME: '*' }),
     templateInterpolate(BotStructureTemplate.lg, { LOCALE: '*', BOTNAME: '*' }),
     templateInterpolate(BotStructureTemplate.lu, { LOCALE: '*', BOTNAME: '*' }),
     templateInterpolate(BotStructureTemplate.qna, { LOCALE: '*', BOTNAME: '*' }),
     templateInterpolate(BotStructureTemplate.dialogSchema, { BOTNAME: '*' }),
     templateInterpolate(BotStructureTemplate.botProject, { BOTNAME: '*' }),
   ];
+  if (!preserveRoot) {
+    entryPatterns.push(templateInterpolate(BotStructureTemplate.entry, { BOTNAME: '*' }));
+  }
+
   for (const pattern of entryPatterns) {
     const paths = await fileStorage.glob(pattern, rootPath);
     for (const filePath of paths.sort()) {
