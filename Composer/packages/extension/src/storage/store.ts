@@ -15,7 +15,7 @@ export class Store<T extends StoreData = StoreData> {
     this.data = { ...defaultValue };
 
     if (!existsSync(this.path)) {
-      this.log('%s does not exist yet. Writing file to path: %s', path.basename(this.path), this.path);
+      this.log('%s does not exist yet. Writing file to path: %s', path.basename(this.path ?? ''), this.path);
       this.writeToDisk();
     } else {
       this.readFromDisk();
