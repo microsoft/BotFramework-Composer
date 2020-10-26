@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import React, { useState, Fragment, useEffect } from 'react';
 import formatMessage from 'format-message';
-import { Pivot, PivotItem, Dialog, DialogType, Dropdown, MessageBar, MessageBarType, MessageBarButton, ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react';
+import { Link, Pivot, PivotItem, Dialog, DialogType, Dropdown, MessageBar, MessageBarType, MessageBarButton, ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react';
 import { render, useHttpClient, useProjectApi, useApplicationApi } from '@bfc/extension-client';
 
 import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
@@ -18,9 +18,12 @@ import { WorkingModal } from './workingModal';
 const DEFAULT_CATEGORY = formatMessage('Available');
 const RECENTLY_USED_KEY = 'recentlyUsedItems';
 
+const docsUrl = `https://aka.ms/composer-use-package-library`;
+
 const strings = {
   title: formatMessage('Package Library'),
-  description: formatMessage('Discover and use components that can be installed into your bot. <a href="#">Learn more</a>'),
+  description: formatMessage('Discover and use components that can be installed into your bot.'),
+  descriptionLink: formatMessage('Learn more'),
   installButton: formatMessage('Install Package'),
   importDialogTitle: formatMessage('Install a Package'),
   installProgress: formatMessage('Installing package...'),
@@ -373,7 +376,7 @@ const Library: React.FC = () => {
       <Toolbar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{strings.title}</h1>
-        <p>{strings.description}</p>
+        <p>{strings.description} <Link href={docsUrl} target="_new">{strings.descriptionLink }</Link></p>
       </div>
       {!ejectedRuntime && (
         <MessageBar

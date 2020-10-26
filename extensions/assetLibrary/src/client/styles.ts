@@ -6,11 +6,6 @@ import { NeutralColors } from "@uifabric/fluent-theme";
 
 export const ContentHeaderStyle = css`
   padding: 5px 20px;
-  height: 60px;
-  display: flex;
-  flex-shrink: 0;
-  justify-content: space-between;
-  align-items: center;
 `;
 export const HeaderText = css`
   font-size: ${FontSizes.xLarge};
