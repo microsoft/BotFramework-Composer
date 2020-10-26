@@ -201,7 +201,8 @@ export function generateSDKTitle(sdkschema: JSONSchema7, data, customizedTitle?:
 
   const title = titleFrom$designer || titleFromSDKSchema || customizedTitle || titleFrom$kind;
   if (tab) {
-    return `${PromptTabTitles} (${title})`;
+    const tabTitle = typeof PromptTabTitles[tab] === 'function' ? PromptTabTitles[tab]() : tab;
+    return `${tabTitle} (${title})`;
   }
   return title;
 }
