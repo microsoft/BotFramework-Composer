@@ -8,5 +8,6 @@ import wordWrap from './word-wrap.svg';
 import autoUpdate from './auto-update.svg';
 import earlyAdopters from './early-adopters.svg';
 import language from './language.svg';
+import previewFeatures from './preview-features.svg';
 
-export { minimap, onboarding, lineNumbers, wordWrap, autoUpdate, earlyAdopters, language };
+export { minimap, onboarding, lineNumbers, wordWrap, autoUpdate, earlyAdopters, language, previewFeatures };

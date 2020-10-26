@@ -18,7 +18,7 @@ import { userSettingsState } from '../../recoilModel';
 import { PluginHost } from '../../components/PluginHost/PluginHost';
 import { PluginAPI } from '../../plugins/api';
 
-import { label, customPublishUISurface } from './styles';
+import { label, defaultPublishSurface, pvaPublishSurface } from './styles';
 
 interface CreatePublishTargetProps {
   closeDialog: () => void;
@@ -104,14 +104,22 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
 
   const publishTargetContent = useMemo(() => {
     if (selectedTarget?.bundleId) {
+      let publishSurfaceStyles;
+      switch (selectedTarget.extensionId) {
+        case 'pva-publish-composer':
+          publishSurfaceStyles = pvaPublishSurface;
+          break;
+
+        default:
+          publishSurfaceStyles = defaultPublishSurface;
+          break;
+      }
+
       // render custom plugin view
       return (
-        <PluginHost
-          bundleId={selectedTarget.bundleId}
-          extraIframeStyles={[customPublishUISurface]}
-          pluginName={selectedTarget.extensionId}
-          pluginType="publish"
-        />
+        <div css={publishSurfaceStyles}>
+          <PluginHost bundleId={selectedTarget.bundleId} pluginName={selectedTarget.extensionId} pluginType="publish" />
+        </div>
       );
     }
     // render default instruction / schema editor view

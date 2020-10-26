@@ -38,7 +38,9 @@ switch (process.platform) {
 fs.copy(source, destination, { filter: (src) => !src.endsWith('.md') }, (err) => {
   if (err) {
     console.error(`[${tag}] Error while copying plugins: `, err);
+    process.exit(1);
     return;
   }
   console.log(`[${tag}] Copied plugins successfully.`);
+  process.exit(0);
 });
