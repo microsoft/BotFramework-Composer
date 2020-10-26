@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ILuisConfig, IQnAConfig } from '@bfc/shared';
+import { BaseSchema, ILuisConfig, IQnAConfig } from '@bfc/shared';
 
 import { CrossTrainConfig } from './builder';
 import { RecognizerTypes } from './recognizer';
@@ -47,4 +47,34 @@ export interface IOperationLUFile {
 
 export interface ILuisStatusOperation {
   [key: string]: IOperationLUFile;
+}
+
+export interface IOrchestratorNLRList {
+  version: string;
+  readonly models: {
+    [versionId: string]: {
+      releaseDate: string;
+      description: string;
+    };
+  };
+}
+
+export interface IOrchestratorProgress {
+  (status: string): void;
+}
+
+export interface IOrchestratorRecognizer extends BaseSchema {
+  modelPath: string;
+  snapshotPath: string;
+  entityRecognizers: any[];
+}
+
+export interface IOrchestratorBuildOutput {
+  outputs: [{ id: string; snapshot: Uint8Array; recognizer: { [recog: string]: BaseSchema } }];
+  settings: {
+    orchestrator: {
+      modelPath: string;
+      snapshots: Map<string, string>;
+    };
+  };
 }
