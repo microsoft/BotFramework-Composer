@@ -4,33 +4,24 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, useEffect, Fragment, useCallback, useMemo } from 'react';
+import { useState, useEffect, Fragment, useMemo } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
-import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
+import { Dialog } from 'office-ui-fabric-react/lib/Dialog';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { PublishTarget } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 
 import settingsStorage from '../../utils/dialogSettingStorage';
-import {
-  dispatcherState,
-  settingsState,
-  botDisplayNameState,
-  publishTypesState,
-  publishHistoryState,
-  botProjectSpaceSelector,
-} from '../../recoilModel';
-import { navigateTo } from '../../utils/navigation';
+import { dispatcherState, publishHistoryState, botProjectSpaceSelector, publishTypesState } from '../../recoilModel';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 
 import { PublishDialog } from './publishDialog';
 import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor } from './styles';
-import { CreatePublishTarget } from './createPublishTarget';
 import { IStatus } from './publishStatusList';
 import { BotStatusList, IBotStatus } from './botStatusList';
 
+const publishHistoyList: { [key: string]: any }[] = [];
 const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: string }>> = (props) => {
   const { projectId = '' } = props;
   const botProjectsMeta = useRecoilValue(botProjectSpaceSelector);
@@ -40,8 +31,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const botSettingsList: { [key: string]: any }[] = [];
   const botStatusList: IBotStatus[] = [];
   const botPublishTypesList: { [key: string]: any }[] = [];
-  const botPublishHistoryList: { [key: string]: any }[] = [];
-
+  const [botPublishHistoryList, setBotPublishHistoryList] = useState<{ [key: string]: any }[]>([]);
   botProjectsMeta
     .filter((bot) => bot.isRemote === false)
     .forEach((bot) => {
@@ -55,7 +45,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         publishTypes: useRecoilValue(publishTypesState(botProjectId)),
       });
       const publishHistory = useRecoilValue(publishHistoryState(botProjectId));
-      botPublishHistoryList.push({
+      publishHistoyList.push({
         projectId: botProjectId,
         publishHistory,
       });
@@ -78,10 +68,8 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       }
       botStatusList.push(botStatus);
     });
-  const publishTypes = useRecoilValue(publishTypesState(projectId));
 
   const {
-    getPublishStatus,
     getPublishTargetTypes,
     setPublishTargets,
     publishToTarget,
@@ -89,31 +77,23 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     rollbackToVersion: rollbackToVersionDispatcher,
   } = useRecoilValue(dispatcherState);
 
-  const [addDialogHidden, setAddDialogHidden] = useState(true);
-
   const [showLog, setShowLog] = useState(false);
   const [publishDialogHidden, setPublishDialogHidden] = useState(true);
 
   // items to show in the list
   const [selectedVersion, setSelectedVersion] = useState<IStatus | null>(null);
-  const [dialogProps, setDialogProps] = useState({
-    title: formatMessage('Title'),
-    type: DialogType.normal,
-    children: {},
-  });
 
-  const isRollbackSupported = useMemo(
-    () => (target, version): boolean => {
-      if (version.id && version.status === 200 && target) {
-        const type = publishTypes?.filter((t) => t.name === target.type)[0];
-        if (type?.features?.rollback) {
-          return true;
-        }
+  const isRollbackSupported = (targetName, version, publishTargets, projectId): boolean => {
+    const target = publishTargets.find((publishTarget) => publishTarget.name === targetName);
+    if (version.id && version.status === 200 && target) {
+      const publishTypes = botPublishTypesList.find((type) => type.projectId === projectId);
+      const type = publishTypes?.filter((t) => t.name === target.type)[0];
+      if (type?.features?.rollback) {
+        return true;
       }
-      return false;
-    },
-    [projectId, publishTypes]
-  );
+    }
+    return false;
+  };
 
   const toolbarItems: IToolbarItem[] = [
     {
@@ -137,24 +117,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     },
   ];
 
-  const onSelectTarget = useCallback(
-    (targetName) => {
-      const url = `/bot/${projectId}/publish/${targetName}`;
-      navigateTo(url);
-    },
-    [projectId]
-  );
-
-  const getUpdatedStatus = (target) => {
-    if (target) {
-      // TODO: this should use a backoff mechanism to not overload the server with requests
-      // OR BETTER YET, use a websocket events system to receive updates... (SOON!)
-      setTimeout(async () => {
-        getPublishStatus(projectId, target);
-      }, 10000);
-    }
-  };
-
   useEffect(() => {
     if (projectId) {
       getPublishTargetTypes(projectId);
@@ -163,20 +125,34 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     }
   }, [projectId]);
 
-  const rollbackToVersion = useMemo(
-    () => async (version) => {
-      const sensitiveSettings = settingsStorage.get(projectId);
-      await rollbackToVersionDispatcher(projectId, selectedTarget, version.id, sensitiveSettings);
-    },
-    [projectId, selectedTarget]
-  );
+  useEffect(() => {
+    if (publishHistoyList.length > 0) {
+      setBotPublishHistoryList(publishHistoyList);
+    }
+  }, [publishHistoyList]);
 
-  const onRollbackToVersion = (selectedVersion) => {
-    selectedTarget && isRollbackSupported(selectedTarget, selectedVersion) && rollbackToVersion(selectedVersion);
+  const rollbackToVersion = (version, item) => {
+    const sensitiveSettings = settingsStorage.get(item.id);
+    rollbackToVersionDispatcher(projectId, item.publishTarget, version.id, sensitiveSettings);
+  };
+
+  const onRollbackToVersion = (selectedVersion, item) => {
+    item.publishTarget &&
+      isRollbackSupported(item.publishTarget, selectedVersion, item.publishTargets, item.id) &&
+      rollbackToVersion(selectedVersion, item);
   };
   const onShowLog = (selectedVersion) => {
     setSelectedVersion(selectedVersion);
     setShowLog(true);
+  };
+  const updatePublishHistory = (publishHistories, botStatus) => {
+    const newPublishHistory = botPublishHistoryList.map((botPublishHistory) => {
+      if (botPublishHistory.projectId === botStatus) {
+        botPublishHistory.publishHistory = publishHistories;
+      }
+      return botPublishHistory;
+    });
+    setBotPublishHistoryList(newPublishHistory);
   };
   const updateSelectedBots = (selectedBots) => {
     const bots: IBotStatus[] = [];
@@ -192,29 +168,38 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const publish = useMemo(
     () => async (comment) => {
       // publish to remote
-      if (selectedTarget && settings.publishTargets) {
-        if (settings.qna && Object(settings.qna).subscriptionKey) {
-          await setQnASettings(projectId, Object(settings.qna).subscriptionKey);
-        }
-        const sensitiveSettings = settingsStorage.get(projectId);
-        await publishToTarget(projectId, selectedTarget, { comment: comment }, sensitiveSettings);
+      if (selectedBots.length > 0) {
+        selectedBots.forEach(async (bot) => {
+          if (bot.publishTarget) {
+            const selectedTarget = bot.publishTarget;
+            const projectId = bot.id;
+            const settings = botSettingsList.find((botSettings) => botSettings.projectId === bot.id) || {};
+            if (settings.publishTargets) {
+              if (settings.qna && Object(settings.qna).subscriptionKey) {
+                await setQnASettings(projectId, Object(settings.qna).subscriptionKey);
+              }
+              const sensitiveSettings = settingsStorage.get(projectId);
+              await publishToTarget(projectId, selectedTarget, { comment: comment }, sensitiveSettings);
 
-        // update the target with a lastPublished date
-        const updatedPublishTargets = settings.publishTargets.map((profile) => {
-          if (profile.name === selectedTarget.name) {
-            return {
-              ...profile,
-              lastPublished: new Date(),
-            };
-          } else {
-            return profile;
+              // update the target with a lastPublished date
+              const updatedPublishTargets = settings.publishTargets.map((profile) => {
+                if (profile.name === selectedTarget) {
+                  return {
+                    ...profile,
+                    lastPublished: new Date(),
+                  };
+                } else {
+                  return profile;
+                }
+              });
+
+              await setPublishTargets(updatedPublishTargets, projectId);
+            }
           }
         });
-
-        await setPublishTargets(updatedPublishTargets, projectId);
       }
     },
-    [projectId, selectedTarget, settings.publishTargets]
+    [selectedBots, botSettingsList]
   );
 
   return (
@@ -233,6 +218,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
             <BotStatusList
               botPublishHistoryList={botPublishHistoryList}
               items={botStatusList}
+              updatePublishHistory={updatePublishHistory}
               updateSelectedBots={updateSelectedBots}
               onLogClick={onShowLog}
               onRollbackClick={onRollbackToVersion}

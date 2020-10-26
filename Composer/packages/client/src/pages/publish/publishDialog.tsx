@@ -5,14 +5,75 @@
 import { jsx } from '@emotion/core';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import { useState, Fragment } from 'react';
+import { Fragment } from 'react';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import formatMessage from 'format-message';
+import {
+  CheckboxVisibility,
+  DetailsList,
+  DetailsListLayoutMode,
+  SelectionMode,
+} from 'office-ui-fabric-react/lib/DetailsList';
 
-import { publishDialogText } from './styles';
+import { IBotStatus } from './botStatusList';
 
 export const PublishDialog = (props) => {
-  const [comment, setComment] = useState('');
+  const { items } = props;
+  const columns = [
+    {
+      key: 'name',
+      name: formatMessage('Bot'),
+      className: 'botName',
+      fieldName: 'name',
+      minWidth: 70,
+      maxWidth: 90,
+      isRowHeader: true,
+      isResizable: true,
+      data: 'string',
+      onRender: (item: IBotStatus) => {
+        return <span>{item.name}</span>;
+      },
+      isPadded: true,
+    },
+    {
+      key: 'publishTarget',
+      name: formatMessage('Publish target'),
+      className: 'publishtarget',
+      fieldName: 'publishTarget',
+      minWidth: 70,
+      maxWidth: 90,
+      isRowHeader: true,
+      isResizable: true,
+      data: 'string',
+      onRender: (item: IBotStatus) => {
+        return <span>{item.publishTarget}</span>;
+      },
+      isPadded: true,
+    },
+    {
+      key: 'comment',
+      name: formatMessage('Comments'),
+      className: 'comment',
+      fieldName: 'comment',
+      minWidth: 70,
+      maxWidth: 90,
+      isRowHeader: true,
+      isResizable: true,
+      data: 'string',
+      onRender: (item: IBotStatus) => {
+        return (
+          <TextField
+            placeholder={formatMessage('Write your message')}
+            value={item.comment}
+            onChange={(e, newValue) => {
+              item.comment = newValue;
+            }}
+          />
+        );
+      },
+      isPadded: true,
+    },
+  ];
   const publishDialogProps = {
     title: formatMessage('Publish'),
     type: DialogType.normal,
@@ -20,26 +81,24 @@ export const PublishDialog = (props) => {
   };
   const submit = async () => {
     props.onDismiss();
-    await props.onSubmit(comment);
+    await props.onSubmit(items);
   };
-  return props.target ? (
+  return items && items.length > 0 ? (
     <Dialog
       dialogContentProps={publishDialogProps}
       hidden={false}
-      modalProps={{ isBlocking: true }}
+      modalProps={{ isBlocking: true, styles: { main: { maxWidth: '1063px !important' } } }}
       onDismiss={props.onDismiss}
     >
       <Fragment>
-        <div css={publishDialogText}>{props.target.name}</div>
-        <form onSubmit={submit}>
-          <TextField
-            multiline
-            label={formatMessage('Comment')}
-            // styles={styles.textarea}
-            placeholder={formatMessage('Provide a brief description. It will appear on the publish history list.')}
-            onChange={(e, newvalue) => setComment(newvalue || '')}
-          />
-        </form>
+        <DetailsList
+          checkboxVisibility={CheckboxVisibility.hidden}
+          columns={columns}
+          items={items}
+          layoutMode={DetailsListLayoutMode.justified}
+          selectionMode={SelectionMode.single}
+        />
+
         <DialogFooter>
           <DefaultButton text={formatMessage('Cancel')} onClick={props.onDismiss} />
           <PrimaryButton text={formatMessage('Okay')} onClick={submit} />

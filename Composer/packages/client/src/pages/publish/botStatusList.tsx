@@ -30,10 +30,10 @@ export interface IBotStatus {
 export interface IBotStatusListProps {
   items: IBotStatus[];
   botPublishHistoryList: { [key: string]: any }[];
-  updatePublishHistory: (items: IStatus[]) => void;
+  updatePublishHistory: (items: IStatus[], item: IBotStatus) => void;
   updateSelectedBots: (items: IBotStatus[]) => void;
   onLogClick: (item: IStatus | null) => void;
-  onRollbackClick: (item: IStatus | null) => void;
+  onRollbackClick: (selectedVersion: IStatus | null, item: IBotStatus) => void;
 }
 export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
   const { items, botPublishHistoryList, updatePublishHistory, onLogClick, onRollbackClick } = props;
@@ -89,7 +89,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
         newSelectedBots = selectedBots.filter((bot) => bot.id !== item.id);
       }
       setSelectedBots(newSelectedBots);
-      props.updateSelectedBots(selectedBots);
+      props.updateSelectedBots(newSelectedBots);
     };
     const changeShowHistoryBots = (_) => {
       let newShowHistoryBots: string[];
@@ -100,10 +100,16 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
       }
       setShowHistoryBots(newShowHistoryBots);
     };
+    const hanldeUpdatePublishHistory = (publishHistories) => {
+      updatePublishHistory(publishHistories, item);
+    };
     const changePublishTarget = (_, option?: IDropdownOption): void => {
       if (option && option.key === 'manageProfiles') {
         navigateTo(`/bot/${item.id}/botProjectsSettings/root`);
       }
+    };
+    const handleRollbackClick = (selectedVersion) => {
+      onRollbackClick(selectedVersion, item);
     };
     return (
       <Fragment key={index}>
@@ -148,9 +154,9 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
               ) : (
                 <PublishStatusList
                   items={publishStatusList}
-                  updateItems={updatePublishHistory}
+                  updateItems={hanldeUpdatePublishHistory}
                   onLogClick={onLogClick}
-                  onRollbackClick={onRollbackClick}
+                  onRollbackClick={handleRollbackClick}
                 />
               )}
             </div>
