@@ -104,7 +104,13 @@ const errors = [];
 for (const entry of allExtensions) {
   if (entry.isDirectory()) {
     const extPath = path.join(extensionsDir, entry.name);
-    const packageJSON = JSON.parse(fs.readFileSync(path.join(extPath, 'package.json')));
+    const packageJSONPath = path.join(extPath, 'package.json');
+    if (!fs.existsSync(packageJSONPath)) {
+      console.warn(`Ignore directory ${extPath} which is not a npm module.`);
+      continue;
+    };
+
+    const packageJSON = JSON.parse(fs.readFileSync(packageJSONPath));
     const lastModified = getLastModified(extPath);
     if (missingMain(extPath, packageJSON) || hasChanges(entry.name, lastModified)) {
       try {

@@ -13,10 +13,17 @@ import debounce from 'lodash/debounce';
 import { useRecoilValue } from 'recoil';
 import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 import isEqual from 'lodash/isEqual';
+import { extractSchemaProperties, groupTriggersByPropertyReference, NoGroupingTriggerGroupName } from '@bfc/indexers';
 
-import { dispatcherState, currentProjectIdState, botProjectSpaceSelector } from '../../recoilModel';
+import {
+  dispatcherState,
+  currentProjectIdState,
+  botProjectSpaceSelector,
+  jsonSchemaFilesByProjectIdSelector,
+} from '../../recoilModel';
 import { getFriendlyName } from '../../utils/dialogUtil';
 import { triggerNotSupported } from '../../utils/dialogValidator';
+import { useFeatureFlag } from '../../utils/hooks';
 
 import { TreeItem } from './treeItem';
 import { ExpandableNode } from './ExpandableNode';
@@ -47,7 +54,7 @@ const icons = {
   DIALOG: 'Org',
   BOT: 'CubeShape',
   EXTERNAL_SKILL: 'Globe',
-  FORM_DIALOG: '',
+  FORM_DIALOG: 'Table',
   FORM_FIELD: 'Variable2', // x in parentheses
   FORM_TRIGGER: 'TriggerAuto', // lightning bolt with gear
   FILTER: 'Filter',
@@ -62,6 +69,19 @@ const tree = css`
 `;
 
 const SUMMARY_ARROW_SPACE = 28; // the rough pixel size of the dropdown arrow to the left of a Details/Summary element
+
+// -------------------- Helper functions -------------------- //
+
+// sort trigger groups so that NoGroupingTriggerGroupName is last
+const sortTriggerGroups = (x: string, y: string): number => {
+  if (x === NoGroupingTriggerGroupName && y !== NoGroupingTriggerGroupName) {
+    return 1;
+  } else if (y === NoGroupingTriggerGroupName && x !== NoGroupingTriggerGroupName) {
+    return -1;
+  }
+
+  return x.localeCompare(y);
+};
 
 // -------------------- ProjectTree -------------------- //
 
@@ -124,9 +144,10 @@ export const ProjectTree: React.FC<Props> = ({
   onDeleteTrigger,
   onSelect,
 }) => {
-  const { onboardingAddCoachMarkRef, selectTo, navTo } = useRecoilValue(dispatcherState);
+  const { onboardingAddCoachMarkRef, selectTo, navTo, navigateToFormDialogSchema } = useRecoilValue(dispatcherState);
 
   const [filter, setFilter] = useState('');
+  const formDialogComposerFeatureEnabled = useFeatureFlag('FORM_DIALOG');
   const [selectedLink, setSelectedLink] = useState<TreeLink | undefined>();
   const delayedSetFilter = debounce((newValue) => setFilter(newValue), 1000);
   const addMainDialogRef = useCallback((mainDialog) => onboardingAddCoachMarkRef({ mainDialog }), []);
@@ -137,12 +158,15 @@ export const ProjectTree: React.FC<Props> = ({
   const currentProjectId = useRecoilValue(currentProjectIdState);
   const botProjectSpace = useRecoilValue(botProjectSpaceSelector);
 
+  const jsonSchemaFilesByProjectId = useRecoilValue(jsonSchemaFilesByProjectIdSelector);
+
   const notificationMap: { [projectId: string]: { [dialogId: string]: Diagnostic[] } } = {};
+
   for (const bot of projectCollection) {
     notificationMap[bot.projectId] = {};
 
-    const matchingBot = botProjectSpace.filter((project) => project.projectId === bot.projectId)[0];
-    if (matchingBot == null) continue; // should never happen, but just to be safe
+    const matchingBot = botProjectSpace?.filter((project) => project.projectId === bot.projectId)[0];
+    if (matchingBot == null) continue;
 
     for (const dialog of matchingBot.dialogs) {
       const dialogId = dialog.id;
@@ -151,7 +175,18 @@ export const ProjectTree: React.FC<Props> = ({
   }
 
   const dialogHasWarnings = (dialog: DialogInfo) => {
-    notificationMap[currentProjectId][dialog.id].some((diag) => diag.severity === DiagnosticSeverity.Warning);
+    notificationMap[currentProjectId][dialog.id]?.some((diag) => diag.severity === DiagnosticSeverity.Warning);
+  };
+
+  const dialogIsFormDialog = (dialog: DialogInfo) => {
+    return formDialogComposerFeatureEnabled && dialog.content?.schema !== undefined;
+  };
+
+  const formDialogSchemaExists = (projectId: string, dialog: DialogInfo) => {
+    return (
+      dialogIsFormDialog(dialog) &&
+      !!botProjectSpace?.find((s) => s.projectId === projectId)?.formDialogSchemas.find((fd) => fd.id === dialog.id)
+    );
   };
 
   const botHasWarnings = (bot: BotInProject) => {
@@ -159,7 +194,7 @@ export const ProjectTree: React.FC<Props> = ({
   };
 
   const dialogHasErrors = (dialog: DialogInfo) => {
-    notificationMap[currentProjectId][dialog.id].some((diag) => diag.severity === DiagnosticSeverity.Error);
+    notificationMap[currentProjectId][dialog.id]?.some((diag) => diag.severity === DiagnosticSeverity.Error);
   };
 
   const botHasErrors = (bot: BotInProject) => {
@@ -212,11 +247,11 @@ export const ProjectTree: React.FC<Props> = ({
 
   const renderDialogHeader = (skillId: string, dialog: DialogInfo) => {
     const warningContent = notificationMap[currentProjectId][dialog.id]
-      .filter((diag) => diag.severity === DiagnosticSeverity.Warning)
+      ?.filter((diag) => diag.severity === DiagnosticSeverity.Warning)
       .map((diag) => diag.message)
       .join(',');
     const errorContent = notificationMap[currentProjectId][dialog.id]
-      .filter((diag) => diag.severity === DiagnosticSeverity.Error)
+      ?.filter((diag) => diag.severity === DiagnosticSeverity.Error)
       .map((diag) => diag.message)
       .join(',');
 
@@ -225,10 +260,14 @@ export const ProjectTree: React.FC<Props> = ({
       displayName: dialog.displayName,
       isRoot: dialog.isRoot,
       projectId: currentProjectId,
-      skillId: null,
+      skillId,
       errorContent,
       warningContent,
     };
+
+    const isFormDialog = dialogIsFormDialog(dialog);
+    const showEditSchema = formDialogSchemaExists(skillId, dialog);
+
     return (
       <span
         key={dialog.id}
@@ -243,7 +282,7 @@ export const ProjectTree: React.FC<Props> = ({
         <TreeItem
           showProps
           forceIndent={showTriggers ? 0 : SUMMARY_ARROW_SPACE}
-          icon={icons.DIALOG}
+          icon={isFormDialog ? icons.FORM_DIALOG : icons.DIALOG}
           isSubItemActive={isEqual(link, selectedLink)}
           link={link}
           menu={[
@@ -254,6 +293,16 @@ export const ProjectTree: React.FC<Props> = ({
                 onDeleteDialog(link.dialogName ?? '');
               },
             },
+            ...(showEditSchema
+              ? [
+                  {
+                    label: formatMessage('Edit schema'),
+                    icon: 'Edit',
+                    onClick: (link) =>
+                      navigateToFormDialogSchema({ projectId: link.skillId, schemaId: link.dialogName }),
+                  },
+                ]
+              : []),
           ]}
           onSelect={handleOnSelect}
         />
@@ -261,7 +310,7 @@ export const ProjectTree: React.FC<Props> = ({
     );
   };
 
-  const renderTrigger = (projectId: string, item: any, dialog: DialogInfo): React.ReactNode => {
+  const renderTrigger = (item: any, dialog: DialogInfo, projectId: string): React.ReactNode => {
     // NOTE: put the form-dialog detection here when it's ready
     const link: TreeLink = {
       displayName: item.displayName,
@@ -270,7 +319,7 @@ export const ProjectTree: React.FC<Props> = ({
       trigger: item.index,
       dialogName: dialog.id,
       isRoot: false,
-      projectId: currentProjectId,
+      projectId,
       skillId: null,
     };
 
@@ -306,6 +355,86 @@ export const ProjectTree: React.FC<Props> = ({
     return scope.toLowerCase().includes(filter.toLowerCase());
   };
 
+  const renderTriggerList = (triggers: ITrigger[], dialog: DialogInfo, projectId: string) => {
+    return triggers
+      .filter((tr) => filterMatch(dialog.displayName) || filterMatch(getTriggerName(tr)))
+      .map((tr, index) => {
+        const warningContent = triggerNotSupported(dialog, tr);
+        const errorContent = notificationMap[projectId][dialog.id].some(
+          (diag) => diag.severity === DiagnosticSeverity.Error && diag.path?.match(RegExp(`triggers\\[${index}\\]`))
+        );
+        return renderTrigger(
+          { ...tr, index, displayName: getTriggerName(tr), warningContent, errorContent },
+          dialog,
+          projectId
+        );
+      });
+  };
+
+  const renderTriggerGroupHeader = (displayName: string, dialog: DialogInfo, projectId: string) => {
+    const link: TreeLink = {
+      dialogName: dialog.id,
+      displayName,
+      isRoot: false,
+      projectId: projectId,
+      skillId: null,
+    };
+    return (
+      <span
+        css={css`
+          margin-top: -6px;
+          width: 100%;
+          label: trigger-group-header;
+        `}
+        role="grid"
+      >
+        <TreeItem showProps forceIndent={0} isSubItemActive={false} link={link} />
+      </span>
+    );
+  };
+
+  // renders a named expandible node with the triggers as items underneath
+  const renderTriggerGroup = (
+    projectId: string,
+    dialog: DialogInfo,
+    groupName: string,
+    triggers: ITrigger[],
+    startDepth: number
+  ) => {
+    const groupDisplayName =
+      groupName === NoGroupingTriggerGroupName ? formatMessage('form-wide operations') : groupName;
+    const key = `${projectId}.${dialog.id}.group-${groupName}`;
+
+    return (
+      <ExpandableNode
+        key={key}
+        depth={startDepth}
+        summary={renderTriggerGroupHeader(groupDisplayName, dialog, projectId)}
+      >
+        <div>{renderTriggerList(triggers, dialog, projectId)}</div>
+      </ExpandableNode>
+    );
+  };
+
+  // renders triggers grouped by the schema property they are associated with.
+  const renderDialogTriggersByProperty = (dialog: DialogInfo, projectId: string, startDepth: number) => {
+    const jsonSchemaFiles = jsonSchemaFilesByProjectId[projectId];
+    const dialogSchemaProperties = extractSchemaProperties(dialog, jsonSchemaFiles);
+    const groupedTriggers = groupTriggersByPropertyReference(dialog, { validProperties: dialogSchemaProperties });
+
+    const triggerGroups = Object.keys(groupedTriggers);
+
+    return triggerGroups.sort(sortTriggerGroups).map((triggerGroup) => {
+      return renderTriggerGroup(projectId, dialog, triggerGroup, groupedTriggers[triggerGroup], startDepth);
+    });
+  };
+
+  const renderDialogTriggers = (dialog: DialogInfo, projectId: string, startDepth: number) => {
+    return dialogIsFormDialog(dialog)
+      ? renderDialogTriggersByProperty(dialog, projectId, startDepth)
+      : renderTriggerList(dialog.triggers, dialog, projectId);
+  };
+
   const createDetailsTree = (bot: BotInProject, startDepth: number) => {
     const { projectId } = bot;
     const dialogs = sortDialog(bot.dialogs);
@@ -320,19 +449,6 @@ export const ProjectTree: React.FC<Props> = ({
 
     if (showTriggers) {
       return filteredDialogs.map((dialog: DialogInfo) => {
-        const triggerList = dialog.triggers
-          .filter((tr) => filterMatch(dialog.displayName) || filterMatch(getTriggerName(tr)))
-          .map((tr, index) => {
-            const warningContent = triggerNotSupported(dialog, tr);
-            const errorContent = notificationMap[projectId][dialog.id].some(
-              (diag) => diag.severity === DiagnosticSeverity.Error && diag.path?.match(RegExp(`triggers\\[${index}\\]`))
-            );
-            return renderTrigger(
-              projectId,
-              { ...tr, index, displayName: getTriggerName(tr), warningContent, errorContent },
-              dialog
-            );
-          });
         return (
           <ExpandableNode
             key={dialog.id}
@@ -340,7 +456,7 @@ export const ProjectTree: React.FC<Props> = ({
             detailsRef={dialog.isRoot ? addMainDialogRef : undefined}
             summary={renderDialogHeader(projectId, dialog)}
           >
-            <div>{triggerList}</div>
+            <div>{renderDialogTriggers(dialog, projectId, startDepth + 1)}</div>
           </ExpandableNode>
         );
       });

@@ -62,7 +62,8 @@ async function createAppDataDir() {
   const localPublishPath: string = join(composerAppDataPath, 'hostedBots');
   const azurePublishPath: string = join(composerAppDataPath, 'publishBots');
   process.env.COMPOSER_APP_DATA = join(composerAppDataPath, 'data.json'); // path to the actual data file
-  process.env.COMPOSER_EXTENSION_DATA = join(composerAppDataPath, 'extensions.json');
+  process.env.COMPOSER_EXTENSION_MANIFEST = join(composerAppDataPath, 'extensions.json');
+  process.env.COMPOSER_EXTENSION_DATA_DIR = join(composerAppDataPath, 'extension-data');
   process.env.COMPOSER_REMOTE_EXTENSIONS_DIR = join(composerAppDataPath, 'extensions');
 
   log('creating composer app data path at: ', composerAppDataPath);
@@ -142,7 +143,7 @@ async function loadServer() {
     // only change paths if packaged electron app
     const unpackedDir = getUnpackedAsarPath();
     process.env.COMPOSER_RUNTIME_FOLDER = join(unpackedDir, 'runtime');
-    process.env.COMPOSER_BUILTIN_EXTENSIONS_DIR = join(unpackedDir, 'build', 'extensions');
+    process.env.COMPOSER_BUILTIN_EXTENSIONS_DIR = join(unpackedDir, 'extensions');
     process.env.COMPOSER_FORM_DIALOG_TEMPLATES_DIR = join(unpackedDir, 'form-dialog-templates');
   }
 

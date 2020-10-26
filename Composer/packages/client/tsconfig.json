@@ -3,7 +3,9 @@
   "compilerOptions": {
     "outDir": "build",
     "allowJs": true,
-    "module": "esnext"
+    "module": "esnext",
+    "declaration": false,
+    "declarationMap": false
   },
   "include": ["./src/**/*", "./__tests__/**/*", "./extension-container/**/*"]
 }

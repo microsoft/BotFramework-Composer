@@ -7,7 +7,8 @@ import { SDKKinds } from '@bfc/shared';
 
 import { navigationDispatcher } from '../navigation';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
-import { focusPathState, breadcrumbState, designPageLocationState, dialogsState } from '../../atoms/botState';
+import { focusPathState, breadcrumbState, designPageLocationState } from '../../atoms/botState';
+import { dialogsSelectorFamily } from '../../selectors';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '../../../recoilModel/dispatchers';
 import {
@@ -54,7 +55,7 @@ describe('navigation dispatcher', () => {
       const focusPath = useRecoilValue(focusPathState(projectId));
       const breadcrumb = useRecoilValue(breadcrumbState(projectId));
       const designPageLocation = useRecoilValue(designPageLocationState(projectId));
-      const dialogs = useRecoilValue(dialogsState(projectId));
+      const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
       const currentDispatcher = useRecoilValue(dispatcherState);
 
       return {
@@ -81,7 +82,7 @@ describe('navigation dispatcher', () => {
         },
         { recoilState: currentProjectIdState, initialValue: projectId },
         {
-          recoilState: dialogsState(projectId),
+          recoilState: dialogsSelectorFamily(projectId),
           initialValue: [{ id: 'newDialogId', triggers: [{ type: SDKKinds.OnBeginDialog }] }],
         },
       ],

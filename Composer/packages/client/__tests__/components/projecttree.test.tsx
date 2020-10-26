@@ -7,7 +7,7 @@ import { fireEvent } from '@botframework-composer/test-utils';
 import { ProjectTree } from '../../src/components/ProjectTree/ProjectTree';
 import { renderWithRecoil } from '../testUtils';
 import { SAMPLE_DIALOG } from '../mocks/sampleDialog';
-import { dialogsState, currentProjectIdState, botProjectIdsState, schemasState } from '../../src/recoilModel';
+import { dialogsSelectorFamily, currentProjectIdState, botProjectIdsState, schemasState } from '../../src/recoilModel';
 
 const projectId = '12345.6789';
 const dialogs = [SAMPLE_DIALOG];
@@ -15,7 +15,7 @@ const dialogs = [SAMPLE_DIALOG];
 const initRecoilState = ({ set }) => {
   set(currentProjectIdState, projectId);
   set(botProjectIdsState, [projectId]);
-  set(dialogsState(projectId), dialogs);
+  set(dialogsSelectorFamily(projectId), dialogs);
   set(schemasState(projectId), { sdk: { content: {} } });
 };
 

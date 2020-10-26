@@ -1,21 +1,22 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { selector, selectorFamily } from 'recoil';
+import { FormDialogSchema, JsonSchemaFile } from '@bfc/shared';
 import isEmpty from 'lodash/isEmpty';
-import { FormDialogSchema } from '@bfc/shared';
+import { selector, selectorFamily } from 'recoil';
 
 import {
-  botErrorState,
   botDisplayNameState,
+  botErrorState,
+  botNameIdentifierState,
   botProjectFileState,
   botProjectIdsState,
-  dialogsState,
-  projectMetaDataState,
-  botNameIdentifierState,
   formDialogSchemaIdsState,
   formDialogSchemaState,
+  jsonSchemaFilesState,
+  projectMetaDataState,
 } from '../atoms';
+import { dialogsSelectorFamily } from '../selectors';
 
 // Actions
 export const botsForFilePersistenceSelector = selector({
@@ -30,18 +31,36 @@ export const botsForFilePersistenceSelector = selector({
   },
 });
 
-// TODO: This selector would be modfied and leveraged by the project tree
+export const formDialogSchemasSelectorFamily = selectorFamily<FormDialogSchema[], string>({
+  key: 'formDialogSchemasSelector',
+  get: (projectId: string) => ({ get }) => {
+    const formDialogSchemaIds = get(formDialogSchemaIdsState(projectId));
+    return formDialogSchemaIds.map((schemaId) => get(formDialogSchemaState({ projectId, schemaId })));
+  },
+});
+
+// Given a form dialog schema, indicates if the dialog exist for it (aka is generated)
+export const formDialogSchemaDialogExistsSelector = selectorFamily<boolean, { projectId: string; schemaId: string }>({
+  key: 'formDialogSchemasSelector',
+  get: ({ projectId, schemaId }) => ({ get }) => {
+    const dialogs = get(dialogsSelectorFamily(projectId));
+    return !!dialogs.find((d) => d.id === schemaId);
+  },
+});
+
+// TODO: This selector would be modified and leveraged by the project tree
 export const botProjectSpaceSelector = selector({
   key: 'botProjectSpaceSelector',
   get: ({ get }) => {
     const botProjects = get(botProjectIdsState);
     const result = botProjects.map((projectId: string) => {
-      const dialogs = get(dialogsState(projectId));
+      const dialogs = get(dialogsSelectorFamily(projectId));
+      const formDialogSchemas = get(formDialogSchemasSelectorFamily(projectId));
       const metaData = get(projectMetaDataState(projectId));
       const botError = get(botErrorState(projectId));
       const name = get(botDisplayNameState(projectId));
       const botNameId = get(botNameIdentifierState(projectId));
-      return { dialogs, projectId, name, ...metaData, error: botError, botNameId };
+      return { dialogs, formDialogSchemas, projectId, name, ...metaData, error: botError, botNameId };
     });
     return result;
   },
@@ -61,18 +80,14 @@ export const rootBotProjectIdSelector = selector({
   },
 });
 
-export const formDialogSchemasSelectorFamily = selectorFamily<FormDialogSchema[], string>({
-  key: 'formDialogSchemasSelector',
-  get: (projectId: string) => ({ get }) => {
-    const formDialogSchemaIds = get(formDialogSchemaIdsState(projectId));
-    return formDialogSchemaIds.map((schemaId) => get(formDialogSchemaState({ projectId, schemaId })));
-  },
-});
-
-export const formDialogSchemaDialogExistsSelector = selectorFamily<boolean, { projectId: string; schemaId: string }>({
-  key: 'formDialogSchemasSelector',
-  get: ({ projectId, schemaId }: { projectId: string; schemaId: string }) => ({ get }) => {
-    const dialogs = get(dialogsState(projectId));
-    return !!dialogs.find((d) => d.id === schemaId);
+export const jsonSchemaFilesByProjectIdSelector = selector({
+  key: 'jsonSchemaFilesByProjectIdSelector',
+  get: ({ get }) => {
+    const projectIds = get(botProjectIdsState);
+    const result: Record<string, JsonSchemaFile[]> = {};
+    projectIds.forEach((projectId) => {
+      result[projectId] = get(jsonSchemaFilesState(projectId));
+    });
+    return result;
   },
 });

@@ -8,13 +8,13 @@ import { useRecoilValue, useSetRecoilState, useRecoilState } from 'recoil';
 
 import { UndoRoot, undoFunctionState, undoHistoryState } from '../history';
 import {
-  dialogsState,
   lgFilesState,
   luFilesState,
   projectMetaDataState,
   currentProjectIdState,
   botProjectIdsState,
 } from '../../atoms';
+import { dialogsSelectorFamily } from '../../selectors';
 import { renderRecoilHook } from '../../../../__tests__/testUtils/react-recoil-hooks-testing-library';
 import UndoHistory from '../undoHistory';
 const projectId = '123-asd';
@@ -31,7 +31,7 @@ describe('<UndoRoot/>', () => {
   beforeEach(() => {
     const useRecoilTestHook = () => {
       const { undo, redo, canRedo, canUndo, commitChanges, clearUndo } = useRecoilValue(undoFunctionState(projectId));
-      const [dialogs, setDialogs] = useRecoilState(dialogsState(projectId));
+      const [dialogs, setDialogs] = useRecoilState(dialogsSelectorFamily(projectId));
       const setProjectIdState = useSetRecoilState(currentProjectIdState);
       const history = useRecoilValue(undoHistoryState(projectId));
 
@@ -60,7 +60,7 @@ describe('<UndoRoot/>', () => {
       },
       states: [
         { recoilState: botProjectIdsState, initialValue: [projectId] },
-        { recoilState: dialogsState(projectId), initialValue: [{ id: '1' }] },
+        { recoilState: dialogsSelectorFamily(projectId), initialValue: [{ id: '1' }] },
         { recoilState: lgFilesState(projectId), initialValue: [{ id: '1.lg' }, { id: '2' }] },
         { recoilState: luFilesState(projectId), initialValue: [{ id: '1.lu' }, { id: '2' }] },
         { recoilState: currentProjectIdState, initialValue: projectId },

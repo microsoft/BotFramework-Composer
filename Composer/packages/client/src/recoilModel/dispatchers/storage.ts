@@ -4,6 +4,7 @@
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 import isArray from 'lodash/isArray';
 import formatMessage from 'format-message';
+import { FeatureFlagKey, FeatureFlagMap } from '@bfc/shared';
 
 import httpClient from '../../utils/httpUtil';
 import {
@@ -13,6 +14,7 @@ import {
   applicationErrorState,
   templateProjectsState,
   runtimeTemplatesState,
+  featureFlagsState,
 } from '../atoms/appState';
 import { FileTypes } from '../../constants';
 import { getExtension } from '../../utils/fileUtil';
@@ -167,6 +169,30 @@ export const storageDispatcher = () => {
     }
   );
 
+  const fetchFeatureFlags = useRecoilCallback<[], Promise<void>>((callbackHelpers: CallbackInterface) => async () => {
+    const { set } = callbackHelpers;
+    try {
+      const response = await httpClient.get('/featureFlags');
+      set(featureFlagsState, response.data);
+    } catch (ex) {
+      logMessage(callbackHelpers, `Error fetching feature flag data: ${ex}`);
+    }
+  });
+
+  const toggleFeatureFlag = useRecoilCallback(
+    ({ set }: CallbackInterface) => async (featureName: FeatureFlagKey, enabled: boolean) => {
+      let newFeatureFlags: FeatureFlagMap = {} as FeatureFlagMap;
+      // update local
+      set(featureFlagsState, (featureFlagsState) => {
+        newFeatureFlags = { ...featureFlagsState };
+        newFeatureFlags[featureName] = { ...featureFlagsState[featureName], enabled: enabled };
+        return newFeatureFlags;
+      });
+      // update server
+      await httpClient.post(`/featureFlags`, { featureFlags: newFeatureFlags });
+    }
+  );
+
   return {
     fetchStorages,
     updateCurrentPathForStorage,
@@ -178,5 +204,7 @@ export const storageDispatcher = () => {
     updateFolder,
     fetchTemplates,
     fetchRuntimeTemplates,
+    fetchFeatureFlags,
+    toggleFeatureFlag,
   };
 };

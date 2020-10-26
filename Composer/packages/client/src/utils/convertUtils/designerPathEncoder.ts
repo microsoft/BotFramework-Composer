@@ -83,13 +83,14 @@ export const decodeDesignerPathToArrayPath = (dialog, path: string): string => {
 
   let rootData = dialog;
   for (const p of subpaths) {
-    const pathInfo = parseDesignerPath(p);
-    if (!pathInfo) {
-      // For invalid input path, fallback to origin designer path
+    const designerPathInfo = parseDesignerPath(p);
+    const arrayPathInfo = parseArrayPath(p);
+
+    const arrayName = designerPathInfo?.prefix ?? arrayPathInfo?.prefix;
+    if (!arrayName) {
+      // For invalid input path, fallback to origin input path
       return path;
     }
-
-    const { prefix: arrayName, designerId } = pathInfo;
 
     const arrayData = get(rootData, arrayName);
     if (!Array.isArray(arrayData)) {
@@ -97,9 +98,16 @@ export const decodeDesignerPathToArrayPath = (dialog, path: string): string => {
       return path;
     }
 
-    const arrayIndex = arrayData.findIndex((x) => get(x, '$designer.id') === designerId);
+    let arrayIndex = -1;
+    if (designerPathInfo) {
+      const { designerId } = designerPathInfo;
+      arrayIndex = arrayData.findIndex((x) => get(x, '$designer.id') === designerId);
+    } else if (arrayPathInfo) {
+      arrayIndex = arrayPathInfo.index;
+    }
+
     if (arrayIndex === -1) {
-      // Can't find given designer id, fallback to input path.
+      // Can't find given designer id or index, fallback to input path.
       return path;
     }
 

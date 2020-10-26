@@ -3,15 +3,17 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 import { dialogIndexer, autofixReferInDialog, validateDialog } from '@bfc/indexers';
+import { DialogInfo } from '@bfc/shared';
 
 import {
-  dialogsState,
   lgFilesState,
   luFilesState,
+  dialogIdsState,
   schemasState,
   onCreateDialogCompleteState,
   actionsSeedState,
   showCreateDialogModalState,
+  dialogState,
 } from '../atoms/botState';
 
 import { createLgFileState, removeLgFileState } from './lg';
@@ -22,10 +24,11 @@ import { removeDialogSchema } from './dialogSchema';
 export const dialogsDispatcher = () => {
   const removeDialog = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (id: string, projectId: string) => {
-      const { set, snapshot } = callbackHelpers;
-      let dialogs = await snapshot.getPromise(dialogsState(projectId));
-      dialogs = dialogs.filter((dialog) => dialog.id !== id);
-      set(dialogsState(projectId), dialogs);
+      const { set, reset } = callbackHelpers;
+
+      reset(dialogState({ projectId, dialogId: id }));
+      set(dialogIdsState(projectId), (previousDialogIds) => previousDialogIds.filter((dialogId) => dialogId !== id));
+
       //remove dialog should remove all locales lu and lg files and the dialog schema file
       await removeLgFileState(callbackHelpers, { id, projectId });
       await removeLuFileState(callbackHelpers, { id, projectId });
@@ -34,21 +37,20 @@ export const dialogsDispatcher = () => {
     }
   );
 
-  const updateDialog = useRecoilCallback(({ set }: CallbackInterface) => ({ id, content, projectId }) => {
-    // migration: add id for dialog
-    if (typeof content === 'object' && !content.id) {
-      content.id = id;
+  const updateDialog = useRecoilCallback(
+    ({ snapshot, set }: CallbackInterface) => async ({ id, content, projectId }) => {
+      // migration: add id for dialog
+      if (typeof content === 'object' && !content.id) {
+        content.id = id;
+      }
+
+      const fixedContent = JSON.parse(autofixReferInDialog(id, JSON.stringify(content)));
+
+      const dialog = await snapshot.getPromise(dialogState({ projectId, dialogId: id }));
+      const newDialog: DialogInfo = { ...dialog, ...dialogIndexer.parse(dialog.id, fixedContent) };
+      set(dialogState({ projectId, dialogId: id }), newDialog);
     }
-    set(dialogsState(projectId), (dialogs) => {
-      return dialogs.map((dialog) => {
-        if (dialog.id === id) {
-          const fixedContent = JSON.parse(autofixReferInDialog(id, JSON.stringify(content)));
-          return { ...dialog, ...dialogIndexer.parse(dialog.id, fixedContent) };
-        }
-        return dialog;
-      });
-    });
-  });
+  );
 
   const createDialogBegin = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => (actions, onComplete, projectId: string) => {
@@ -81,7 +83,8 @@ export const dialogsDispatcher = () => {
     await createLuFileState(callbackHelpers, { id, content: '', projectId });
     await createQnAFileState(callbackHelpers, { id, content: '', projectId });
 
-    set(dialogsState(projectId), (dialogs) => [...dialogs, dialog]);
+    set(dialogState({ projectId, dialogId: dialog.id }), dialog);
+    set(dialogIdsState(projectId), (dialogsIds) => [...dialogsIds, dialog.id]);
     set(actionsSeedState(projectId), []);
     set(showCreateDialogModalState(projectId), false);
     const onComplete = (await snapshot.getPromise(onCreateDialogCompleteState(projectId))).func;

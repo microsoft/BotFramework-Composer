@@ -20,6 +20,9 @@
   "a_form_dialog_enables_your_bot_to_collect_pieces_o_fdd3fe56": {
     "message": "A form dialog enables your bot to collect pieces of information ."
   },
+  "a_knowledge_base_name_cannot_contain_spaces_or_spe_91dd53ac": {
+    "message": "A knowledge base name cannot contain spaces or special characters. Use letters, numbers, -, or _."
+  },
   "a_minimap_gives_an_overview_of_your_source_code_fo_9a897f4f": {
     "message": "A minimap gives an overview of your source code for quick navigation and code understanding."
   },
@@ -35,8 +38,8 @@
   "a_subscription_key_is_created_when_you_create_a_qn_37a6926f": {
     "message": "A subscription key is created when you create a QnA Maker resource."
   },
-  "a_valid_url_should_start_with_http_or_https_d24b3591": {
-    "message": "A valid url should start with http:// or https://"
+  "a_valid_url_should_start_with_http_or_https_327b1a30": {
+    "message": "A valid URL should start with http:// or https://"
   },
   "about_70c18bba": {
     "message": "About"
@@ -938,6 +941,9 @@
   "edit_property_dd6a1172": {
     "message": "Edit Property"
   },
+  "edit_schema_a2ab5695": {
+    "message": "Edit schema"
+  },
   "edit_source_45af68b4": {
     "message": "Edit source"
   },
@@ -1351,9 +1357,6 @@
   },
   "kb_d9c53902": {
     "message": "KB"
-  },
-  "kb_name_cannot_contain_special_characters_616d7939": {
-    "message": "KB name cannot contain special characters."
   },
   "key_cannot_be_blank_dccc1b46": {
     "message": "Key cannot be blank"
@@ -1790,6 +1793,9 @@
   "open_inline_editor_a5aabcfa": {
     "message": "Open inline editor"
   },
+  "open_notification_panel_5796edb3": {
+    "message": "Open notification panel"
+  },
   "optional_221bcc9d": {
     "message": "Optional"
   },
@@ -1885,6 +1891,9 @@
   },
   "press_enter_to_add_this_name_and_advance_to_the_ne_6a2ae080": {
     "message": "press Enter to add this name and advance to the next row, or press Tab to advance to the value field"
+  },
+  "preview_features_e279bac5": {
+    "message": "Preview features"
   },
   "previous_bd2ac015": {
     "message": "Previous"
@@ -2264,6 +2273,12 @@
   "show_code_f3e9d1cc": {
     "message": "Show code"
   },
+  "show_form_dialog_90aad050": {
+    "message": "Show Form Dialog"
+  },
+  "show_form_dialog_editor_in_the_canvas_140492b2": {
+    "message": "Show form dialog editor in the canvas"
+  },
   "show_keys_3072a5b8": {
     "message": "Show keys"
   },
@@ -2308,6 +2323,9 @@
   },
   "spaces_and_special_characters_are_not_allowed_20d47684": {
     "message": "Spaces and special characters are not allowed."
+  },
+  "spaces_and_special_characters_are_not_allowed_use__2a61c454": {
+    "message": "Spaces and special characters are not allowed. Use letters, numbers, -, or _ and don''t use number at the beginning."
   },
   "spaces_and_special_characters_are_not_allowed_use__48acec3c": {
     "message": "Spaces and special characters are not allowed. Use letters, numbers, -, or _."
@@ -2396,6 +2414,9 @@
   "the_dialog_you_have_tried_to_delete_is_currently_u_a37c7a02": {
     "message": "The dialog you have tried to delete is currently used in the below dialog(s). Removing this dialog will cause your Bot to malfunction without additional action."
   },
+  "the_file_name_can_not_be_empty_cbdbe9c8": {
+    "message": "The file name can not be empty"
+  },
   "the_following_customizations_will_be_applied_to_yo_7d3384cf": {
     "message": "The following customizations will be applied to your bot"
   },
@@ -2434,6 +2455,9 @@
   },
   "there_are_no_kind_properties_e299287e": {
     "message": "There are no { kind } properties."
+  },
+  "there_are_no_notifications_e81eab8d": {
+    "message": "There are no notifications."
   },
   "there_was_an_error_74ed3c58": {
     "message": "There was an error"
@@ -2567,6 +2591,9 @@
   "try_again_ad656c3c": {
     "message": "Try again"
   },
+  "try_new_features_in_preview_and_help_us_make_compo_e8e58983": {
+    "message": "Try new features in preview and help us make Composer better. You can turn them on or off at any time."
+  },
   "type_a_name_that_describes_this_content_d1a910b6": {
     "message": "Type a name that describes this content"
   },
@@ -2674,6 +2701,12 @@
   },
   "user_is_typing_790cb502": {
     "message": "User is typing"
+  },
+  "va_creation_6babf7db": {
+    "message": "VA Creation"
+  },
+  "va_template_made_available_in_new_bot_flow_5f85baa4": {
+    "message": "VA template made available in new bot flow."
   },
   "validating_35b79a96": {
     "message": "Validating..."

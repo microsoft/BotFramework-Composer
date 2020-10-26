@@ -9,7 +9,7 @@ import CodeEditor from '../../../src/pages/language-understanding/code-editor';
 import { renderWithRecoil } from '../../testUtils';
 import {
   localeState,
-  dialogsState,
+  dialogsSelectorFamily,
   luFilesState,
   settingsState,
   schemasState,
@@ -49,7 +49,7 @@ const state = {
 const initRecoilState = ({ set }) => {
   set(currentProjectIdState, state.projectId);
   set(localeState(state.projectId), state.locale);
-  set(dialogsState(state.projectId), state.dialogs);
+  set(dialogsSelectorFamily(state.projectId), state.dialogs);
   set(luFilesState(state.projectId), state.luFiles);
   set(settingsState(state.projectId), state.settings);
   set(schemasState(state.projectId), mockProjectResponse.schemas);
