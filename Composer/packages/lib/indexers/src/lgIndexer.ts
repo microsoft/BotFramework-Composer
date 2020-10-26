@@ -11,6 +11,9 @@ const { defaultFileResolver } = TemplatesParser;
 
 function parse(content: string, id = '', importResolver: ImportResolverDelegate = defaultFileResolver) {
   const lgFile = Templates.parseText(content, id, importResolver);
+  lgFile.diagnostics = lgFile.diagnostics.filter(
+    (diag) => !diag.message.includes('LG file must have at least one template definition.')
+  );
   return convertTemplatesToLgFile(id, content, lgFile);
 }
 
@@ -22,6 +25,9 @@ function index(files: FileInfo[], importResolver?: ImportResolverDelegate): LgFi
     if (name.endsWith('.lg')) {
       const id = getBaseName(name, '.lg');
       const result = parse(content, id, importResolver);
+      result.diagnostics = result.diagnostics.filter(
+        (diag) => !diag.message.includes('LG file must have at least one template definition.')
+      );
       delete result.parseResult;
       lgFiles.push(result);
     }

@@ -93,8 +93,13 @@ export function convertDiagnostics(lgDiags: BFDiagnostic[] = [], document: TextD
       message: diag.message,
       source: document.uri,
     };
-    diagnostics.push(diagnostic);
+
+    //exclude the warning of no template definition.
+    if (!diagnostic.message.includes('LG file must have at least one template definition.')) {
+      diagnostics.push(diagnostic);
+    }
   });
+
   return diagnostics;
 }
 
