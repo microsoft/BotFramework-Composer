@@ -5,7 +5,12 @@ import { ExtensionPageContribution } from '@bfc/extension-client';
 
 export type ExtensionPageConfig = ExtensionPageContribution & { id: string };
 
-export const topLinks = (projectId: string, openedDialogId: string, pluginPages: ExtensionPageConfig[]) => {
+export const topLinks = (
+  projectId: string,
+  openedDialogId: string,
+  pluginPages: ExtensionPageConfig[],
+  showFormDialog: boolean
+) => {
   const botLoaded = !!projectId;
   let links = [
     {
@@ -64,7 +69,7 @@ export const topLinks = (projectId: string, openedDialogId: string, pluginPages:
       exact: true,
       disabled: !botLoaded,
     },
-    ...(process.env.COMPOSER_ENABLE_FORMS
+    ...(showFormDialog
       ? [
           {
             to: `/bot/${projectId}/forms`,
