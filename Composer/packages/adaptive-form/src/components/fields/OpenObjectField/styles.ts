@@ -32,7 +32,7 @@ export const filler = css`
 
 export const item = (stackedLayout?: boolean) => css`
   flex: 1;
-
+  align-self: center;
   & + & {
     margin-left: ${!stackedLayout ? '16px' : '0'};
   }

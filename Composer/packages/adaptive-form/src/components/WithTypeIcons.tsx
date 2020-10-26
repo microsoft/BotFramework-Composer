@@ -36,7 +36,7 @@ export function WithTypeIcons(WrappedComponent: FieldWidget): FieldWidget {
           required={props.required}
         />
         <div css={styles.mainWrapper}>
-          <div css={styles.iconWrapper}>{iconText}</div>
+          {iconText && <div css={styles.iconWrapper}>{iconText}</div>}
           <div css={styles.componentWrapper}>
             <WrappedComponent {...props} label={undefined} />
           </div>
