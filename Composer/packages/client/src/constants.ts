@@ -26,12 +26,12 @@ export const Tips = {
 };
 
 export const Links = {
-  LUIS: 'https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-keys?tabs=V2',
-  QNA: 'https://docs.microsoft.com/en-us/azure/cognitive-services/qnamaker/concepts/azure-resources#keys-in-qna-maker',
+  LUIS: 'https://aka.ms/luis-resources',
+  QNA: 'https://aka.ms/qna-maker-keys',
 };
 
 export const Text = {
-  DEPLOY: formatMessage(`Your bot is using LUIS and QNA for natural language understanding.`),
+  DEPLOY: formatMessage(`Your bot is using LUIS and QnA for natural language understanding.`),
   LUISDEPLOY: formatMessage(
     `If you already have a LUIS account, provide the information below. If you do not have an account yet, create a (free) account first.`
   ),
@@ -99,8 +99,8 @@ export const Steps = {
 
 export const DialogCreationCopy = {
   CREATE_NEW_BOT: {
-    title: formatMessage('Create bot from template or scratch?'),
-    subText: formatMessage('You can create a new bot from scratch with Composer, or start with a template.'),
+    title: formatMessage('Create a new bot'),
+    subText: formatMessage('Create bot from a template, a knowledge base (QnA) or from scratch.'),
   },
   DEFINE_CONVERSATION_OBJECTIVE: {
     title: formatMessage('Define conversation objective'),
@@ -145,7 +145,7 @@ export const MultiLanguagesDialog = {
   ADD_DIALOG: {
     title: formatMessage('Copy content for translation'),
     subText: formatMessage(
-      `Composer cannot yet translate your bot automatically.\nTo create a translation manually, Composer will create a copy of your bot’s content with the name of the additional language. This content can then be translated without affecting the original bot logic or flow and you can switch between languages to ensure the responses are correctly and appropriately translated.`
+      `Composer cannot yet translate your bot automatically.\nTo create a translation manually, Composer will create a copy of your bot's content with the name of the additional language. This content can then be translated without affecting the original bot logic or flow and you can switch between languages to ensure the responses are correctly and appropriately translated.`
     ),
     selectDefaultLangTitle: formatMessage(
       'This language will be copied and used as the basis (and fallback language) for the translation.'
@@ -167,7 +167,7 @@ export const MultiLanguagesDialog = {
 export const addSkillDialog = {
   SKILL_MANIFEST_FORM: {
     title: formatMessage('Add a skill'),
-    subText: formatMessage('Enter a manifest url to add a new skill to your bot.'),
+    subText: formatMessage('Enter a manifest URL to add a new skill to your bot.'),
   },
   SKILL_MANIFEST_FORM_EDIT: {
     title: formatMessage('Edit a skill'),
