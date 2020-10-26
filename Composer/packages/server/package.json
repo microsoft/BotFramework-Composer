@@ -80,6 +80,7 @@
     "express-session": "^1.17.0",
     "form-data": "^2.3.3",
     "format-message": "^6.2.3",
+    "get-port": "^5.1.1",
     "globby": "^11.0.1",
     "http-errors": "^1.7.2",
     "immer": "^5.2.0",
