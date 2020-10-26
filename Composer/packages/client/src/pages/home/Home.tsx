@@ -15,7 +15,6 @@ import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
 import { CreationFlowStatus } from '../../constants';
 import { dispatcherState, botDisplayNameState, filteredTemplatesSelector } from '../../recoilModel';
 import { recentProjectsState, templateIdState, currentProjectIdState } from '../../recoilModel/atoms/appState';
-import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 
 import * as home from './styles';
 import { ItemContainer } from './ItemContainer';
