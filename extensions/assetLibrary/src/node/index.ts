@@ -13,15 +13,34 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
 
   const LibraryController = {
     getLibrary: async function (req, res) {
-      const url = `https://gist.githubusercontent.com/benbrown/b932bbbf8b7c1583bbfb0cc70f051c62/raw/botframework-composer-packages.json`;
-      try {
-        const raw = await axios.get(url);
-        res.json(raw.data);
-      } catch(err) {
-        console.error('Could not load library from URL');
-        console.error(err);
-        res.json([]);
+      // read the list of sources from the config file.
+      let packageSources = composer.store.read('sources') as string[];
+
+      // if no sources are in the config file, set the default list to our 1st party feed.
+      if (!packageSources) {
+        packageSources = [
+          `https://gist.githubusercontent.com/benbrown/b932bbbf8b7c1583bbfb0cc70f051c62/raw/botframework-composer-packages.json`
+        ];
+        composer.store.write('sources', packageSources);
       }
+
+      let combined = [];
+      for (let s = 0; s < packageSources.length; s++) {
+        const url = packageSources[s];
+        try {
+          const raw = await axios.get(url);
+          if (Array.isArray(raw.data)) {
+            combined = combined.concat(raw.data);
+          } else {
+            console.error('Received non-JSON response from ', url);
+          }
+        } catch(err) {
+          console.error('Could not load library from URL');
+          console.error(err);
+        }
+      }
+      res.json(combined);
+
     },
     getComponents: async function (req, res) {
       const user = await composer.context.getUserFromRequest(req);

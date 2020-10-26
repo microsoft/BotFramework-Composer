@@ -143,11 +143,11 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
             {props.isInstalled(item) && (
               <OverflowSet
                 overflowItems={[
-                  {
-                    key: "Update",
-                    name: "Update",
-                    onClick: () => props.redownload(item),
-                  },
+                  // {
+                  //   key: "Update",
+                  //   name: "Update",
+                  //   onClick: () => props.redownload(item),
+                  // },
                   {
                     key: "remove",
                     name: "Remove",
