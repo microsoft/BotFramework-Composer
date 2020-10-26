@@ -13,6 +13,7 @@ import AdmZip from 'adm-zip';
 import portfinder from 'portfinder';
 import { PublishPlugin } from '@botframework-composer/types';
 import { ExtensionRegistration } from '@bfc/extension';
+import * as tcpPortUsed from 'tcp-port-used';
 
 const stat = promisify(fs.stat);
 const readDir = promisify(fs.readdir);
@@ -344,15 +345,24 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       } catch (err) {
         return reject(err);
       }
-      this.setBotStatus(botId, {
-        process: spawnProcess,
-        port: port,
-        status: 200,
-        result: { message: 'Runtime started' },
-      });
-      const processLog = this.composer.log.extend(spawnProcess.pid);
-      this.addListeners(spawnProcess, botId, processLog);
-      resolve();
+
+      // check if the port if ready for connecting, issue: https://github.com/microsoft/BotFramework-Composer/issues/3728
+      // retry every 500ms, timeout 10min
+      const retryTime = 500;
+      const timeOutTime = 600000;
+      tcpPortUsed.waitUntilUsedOnHost(port, '0.0.0.0', retryTime, timeOutTime).then(() => {
+        this.setBotStatus(botId, {
+          process: spawnProcess,
+          port: port,
+          status: 200,
+          result: { message: 'Runtime started' },
+        });
+        const processLog = this.composer.log.extend(spawnProcess.pid);
+        this.addListeners(spawnProcess, botId, processLog);
+        resolve();
+      }, (err) => {
+        reject(`Bot on localhost:${port} not working, error message: ${err.message}`)
+      })
     });
   };
 
