@@ -25,7 +25,6 @@ import { SimpleCredentialProvider, SkillValidation } from 'botframework-connecto
 import { BotSettings } from './settings';
 import { SkillConversationIdFactory } from './skillConversationIdFactory';
 import { getSettings, getProjectRoot, getRootDialog } from './helpers';
-import { BoolExpression } from 'adaptive-expressions';
 
 /**
  * A composer bot to handle botframework activity requests.
@@ -68,9 +67,7 @@ export class ComposerBot extends ActivityHandler {
     const rootDialog = this.dialogManager.rootDialog as AdaptiveDialog;
     const claimIdentity = turnContext.turnState.get(turnContext.adapter.BotIdentityKey);
     if (claimIdentity && SkillValidation.isSkillClaim(claimIdentity.claims)) {
-      rootDialog.autoEndDialog = new BoolExpression(true);
-    } else {
-      rootDialog.autoEndDialog = new BoolExpression(false);
+      rootDialog.configure({ autoEndDialog: true });
     }
 
     const removeRecipientMention = (this.settings.feature && this.settings.feature.removeRecipientMention) || false;

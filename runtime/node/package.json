@@ -16,7 +16,6 @@
   "license": "ISC",
   "dependencies": {
     "@azure/functions": "^1.2.2",
-    "adaptive-expressions": "next",
     "botbuilder": "next",
     "botbuilder-ai": "next",
     "botbuilder-dialogs": "next",
