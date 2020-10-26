@@ -23,12 +23,12 @@ import { ExampleList } from './ExampleList';
 
 const linksButtom = [
   {
-    to: 'https://aka.ms/BF-Composer-Getting-Started',
-    text: formatMessage('Getting Started'),
+    to: 'https://aka.ms/composer-github-link',
+    text: formatMessage('Getting started'),
     css: home.linkInfo,
   },
   {
-    to: 'https://aka.ms/bf-composer-docs-create-first-bot',
+    to: 'https://aka.ms/composer-create-first-bot',
     text: formatMessage('Build your first bot'),
     css: home.linkInfo,
   },
@@ -180,7 +180,7 @@ const Home: React.FC<RouteComponentProps> = () => {
           </div>
           {recentProjects.length > 0 && (
             <div css={home.leftContainer}>
-              <h2 css={home.subtitle}>{formatMessage(`Recent Bots`)}</h2>
+              <h2 css={home.subtitle}>{formatMessage(`Recent bots`)}</h2>
               <RecentBotList
                 recentProjects={recentProjects}
                 onItemChosen={async (item) => {
@@ -208,7 +208,7 @@ const Home: React.FC<RouteComponentProps> = () => {
               <div css={home.linkContainer}>
                 <div>
                   {formatMessage(
-                    'Bot Framework provides the most comprehensive experience for building conversational applications.'
+                    'Bot Framework Composer provides a comprehensive experience for building conversational applications.'
                   )}
                 </div>
                 {linksButtom.map((link) => {
@@ -233,7 +233,7 @@ const Home: React.FC<RouteComponentProps> = () => {
           <h3 css={home.bluetitle}>{formatMessage(`Examples`)}</h3>
           <p css={home.examplesDescription}>
             {formatMessage(
-              "These examples bring together all of the best practices and supporting components we've identified through building of conversational experiences."
+              'These examples bring together all of the best practices and components for building conversational experiences.'
             )}
           </p>
           <ExampleList examples={filteredTemplates} onClick={onClickTemplate} />
