@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { atom, atomFamily } from 'recoil';
-import { FormDialogSchemaTemplate, ProjectTemplate, UserSettings } from '@bfc/shared';
+import { FormDialogSchemaTemplate, FeatureFlagMap, ProjectTemplate, UserSettings } from '@bfc/shared';
 import { ExtensionMetadata } from '@bfc/extension-client';
 
 import {
@@ -29,6 +29,18 @@ export type CurrentUser = {
   expiration?: number;
   sessionExpired: boolean;
 };
+
+export type PageMode =
+  | 'home'
+  | 'design'
+  | 'lg'
+  | 'lu'
+  | 'qna'
+  | 'notifications'
+  | 'publish'
+  | 'skills'
+  | 'settings'
+  | 'about';
 
 const getFullyQualifiedKey = (value: string) => {
   return `App_${value}_State`;
@@ -99,6 +111,11 @@ export const runtimeTemplatesState = atom<RuntimeTemplate[]>({
 export const userSettingsState = atom<UserSettings>({
   key: getFullyQualifiedKey('userSettings'),
   default: getUserSettings(),
+});
+
+export const featureFlagsState = atom<FeatureFlagMap>({
+  key: getFullyQualifiedKey('featureFlag'),
+  default: {} as FeatureFlagMap,
 });
 
 export const announcementState = atom<string>({
@@ -178,6 +195,11 @@ export const botProjectIdsState = atom<string[]>({
 export const currentProjectIdState = atom<string>({
   key: getFullyQualifiedKey('currentProjectId'),
   default: '',
+});
+
+export const currentModeState = atom<PageMode>({
+  key: getFullyQualifiedKey('currentMode'),
+  default: 'home',
 });
 
 export const botProjectSpaceLoadedState = atom<boolean>({

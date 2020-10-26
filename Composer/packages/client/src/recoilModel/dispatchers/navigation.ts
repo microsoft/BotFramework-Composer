@@ -9,10 +9,11 @@ import cloneDeep from 'lodash/cloneDeep';
 
 import { currentProjectIdState } from '../atoms';
 import { encodeArrayPathToDesignerPath } from '../../utils/convertUtils/designerPathEncoder';
+import { dialogsSelectorFamily } from '../selectors';
 
 import { createSelectedPath, getSelected } from './../../utils/dialogUtil';
 import { BreadcrumbItem } from './../../recoilModel/types';
-import { breadcrumbState, designPageLocationState, focusPathState, dialogsState } from './../atoms/botState';
+import { breadcrumbState, designPageLocationState, focusPathState } from './../atoms/botState';
 import {
   BreadcrumbUpdateType,
   checkUrl,
@@ -50,10 +51,11 @@ export const navigationDispatcher = () => {
   const navTo = useRecoilCallback(
     ({ snapshot, set }: CallbackInterface) => async (
       projectId: string,
+      skillId: string | null,
       dialogId: string,
       breadcrumb: BreadcrumbItem[] = []
     ) => {
-      const dialogs = await snapshot.getPromise(dialogsState(projectId));
+      const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
       const designPageLocation = await snapshot.getPromise(designPageLocationState(projectId));
       const updatedBreadcrumb = cloneDeep(breadcrumb);
       set(currentProjectIdState, projectId);
@@ -70,7 +72,7 @@ export const navigationDispatcher = () => {
         }
       }
 
-      const currentUri = convertPathToUrl(projectId, dialogId, path);
+      const currentUri = convertPathToUrl(projectId, skillId, dialogId, path);
 
       if (checkUrl(currentUri, projectId, designPageLocation)) return;
 
@@ -79,21 +81,24 @@ export const navigationDispatcher = () => {
   );
 
   const selectTo = useRecoilCallback(
-    ({ snapshot, set }: CallbackInterface) => async (projectId: string, selectPath: string) => {
+    ({ snapshot, set }: CallbackInterface) => async (
+      projectId: string,
+      skillId: string | null,
+      destinationDialogId: string | null,
+      selectPath: string
+    ) => {
       if (!selectPath) return;
       set(currentProjectIdState, projectId);
       const designPageLocation = await snapshot.getPromise(designPageLocationState(projectId));
       const breadcrumb = await snapshot.getPromise(breadcrumbState(projectId));
 
-      // initial dialogId, projectId maybe empty string  ""
-      let { dialogId } = designPageLocation;
+      // target dialogId, projectId maybe empty string  ""
+      const dialogId = destinationDialogId ?? designPageLocation.dialogId ?? 'Main';
 
-      if (!dialogId) dialogId = 'Main';
-
-      const dialogs = await snapshot.getPromise(dialogsState(projectId));
+      const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
       const currentDialog = dialogs.find(({ id }) => id === dialogId);
       const encodedSelectPath = encodeArrayPathToDesignerPath(currentDialog?.content, selectPath);
-      const currentUri = convertPathToUrl(projectId, dialogId, encodedSelectPath);
+      const currentUri = convertPathToUrl(projectId, skillId, dialogId, encodedSelectPath);
 
       if (checkUrl(currentUri, projectId, designPageLocation)) return;
       navigateTo(currentUri, { state: { breadcrumb: updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Selected) } });
@@ -111,7 +116,7 @@ export const navigationDispatcher = () => {
       let currentUri = `/bot/${projectId}/dialogs/${dialogId}`;
 
       if (focusPath) {
-        const dialogs = await snapshot.getPromise(dialogsState(projectId));
+        const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
         const currentDialog = dialogs.find(({ id }) => id === dialogId);
         const encodedFocusPath = encodeArrayPathToDesignerPath(currentDialog?.content, focusPath);
 
@@ -138,6 +143,7 @@ export const navigationDispatcher = () => {
   const selectAndFocus = useRecoilCallback(
     ({ snapshot, set }: CallbackInterface) => async (
       projectId: string,
+      skillId: string | null,
       dialogId: string,
       selectPath: string,
       focusPath: string,
@@ -145,7 +151,7 @@ export const navigationDispatcher = () => {
     ) => {
       set(currentProjectIdState, projectId);
 
-      const dialogs = await snapshot.getPromise(dialogsState(projectId));
+      const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
       const currentDialog = dialogs.find(({ id }) => id === dialogId)?.content;
       const encodedSelectPath = encodeArrayPathToDesignerPath(currentDialog, selectPath);
       const encodedFocusPath = encodeArrayPathToDesignerPath(currentDialog, focusPath);
@@ -157,7 +163,7 @@ export const navigationDispatcher = () => {
         if (checkUrl(currentUri, projectId, designPageLocation)) return;
         navigateTo(currentUri, { state: { breadcrumb } });
       } else {
-        navTo(projectId, dialogId, breadcrumb);
+        navTo(projectId, skillId, dialogId, breadcrumb);
       }
     }
   );

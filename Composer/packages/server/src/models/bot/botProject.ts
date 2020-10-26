@@ -9,12 +9,12 @@ import { autofixReferInDialog } from '@bfc/indexers';
 import {
   getNewDesigner,
   FileInfo,
-  Skill,
   Diagnostic,
   IBotProject,
   DialogSetting,
   FileExtensions,
-  convertAbsolutePathToFileProtocol,
+  Skill,
+  DialogUtils,
 } from '@bfc/shared';
 import merge from 'lodash/merge';
 import { UserIdentity, ExtensionContext } from '@bfc/extension';
@@ -375,7 +375,6 @@ export class BotProject implements IBotProject {
     for (const botProjectFile of this.botProjectFiles) {
       const { relativePath } = botProjectFile;
       const content = JSON.parse(botProjectFile.content);
-      content.workspace = convertAbsolutePathToFileProtocol(this.dataDir);
       content.name = botName;
       await this._updateFile(relativePath, JSON.stringify(content, null, 2));
     }
@@ -419,7 +418,6 @@ export class BotProject implements IBotProject {
   };
 
   public validateFileName = (name: string) => {
-    const nameRegex = /^[a-zA-Z0-9-_]+$/;
     const { fileId, fileType } = parseFileName(name, '');
 
     let fileName = fileId;
@@ -427,13 +425,7 @@ export class BotProject implements IBotProject {
       fileName = Path.basename(name, fileType);
     }
 
-    if (!fileName) {
-      throw new Error('The file name can not be empty');
-    }
-
-    if (!nameRegex.test(fileName)) {
-      throw new Error('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
-    }
+    DialogUtils.validateDialogName(fileName);
   };
 
   public createFile = async (name: string, content = '') => {
@@ -747,7 +739,7 @@ export class BotProject implements IBotProject {
       // deployment process
       const root = this.dataDir;
       const paths = await this.fileStorage.glob(
-        [pattern, '!(generated/**)', '!(runtime/**)', '!(recognizers/**)'],
+        [pattern, '!(generated/**)', '!(runtime/**)', '!(recognizers/**)', '!(scripts/**)', '!(settings/**)'],
         root
       );
 
@@ -833,8 +825,6 @@ export class BotProject implements IBotProject {
       }
       const fileName = `${this.name}${FileExtensions.BotProject}`;
       const root = this.dataDir;
-
-      defaultBotProjectFile.workspace = convertAbsolutePathToFileProtocol(root);
       defaultBotProjectFile.name = this.name;
 
       await this._createFile(fileName, JSON.stringify(defaultBotProjectFile, null, 2));

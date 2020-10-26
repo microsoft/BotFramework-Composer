@@ -29,7 +29,7 @@ import {
   luFilesState,
   localeState,
   settingsState,
-  validateDialogSelectorFamily,
+  validateDialogsSelectorFamily,
 } from '../../recoilModel';
 
 import { formCell, luPhraseCell, tableCell, editableFieldContainer } from './styles';
@@ -54,7 +54,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const luFiles = useRecoilValue(luFilesState(projectId));
   const locale = useRecoilValue(localeState(projectId));
   const settings = useRecoilValue(settingsState(projectId));
-  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
 
   const { languages, defaultLanguage } = settings;
 
