@@ -81,15 +81,8 @@ const VisualEditor: React.FC<VisualEditorProps> = (props) => {
     // Override the sdk.schema 'title' field with form ui option 'label' field
     // to make sure the title is consistent with Form Editor.
     Object.entries(formConfig).forEach(([$kind, formOptions]) => {
-      const formLabel = formOptions?.label;
-      const definition = sdkDefinitions[$kind];
-      if (formLabel && definition) {
-        if (typeof formLabel === 'string') {
-          definition.title = formLabel;
-        } else if (typeof formLabel === 'function') {
-          const computedTitle = formLabel({});
-          if (computedTitle) definition.title = computedTitle;
-        }
+      if (formOptions && sdkDefinitions[$kind]) {
+        sdkDefinitions[$kind].title = formOptions?.label;
       }
     });
     return sdkSchema;
