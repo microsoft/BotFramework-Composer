@@ -91,7 +91,7 @@ const ObjectItem: React.FC<ObjectItemProps> = ({
             {...rest}
             definitions={definitions}
             id={`${name}.value`}
-            label={false}
+            label={stackedLayout ? formatMessage('Value') : false}
             name="value"
             placeholder={placeholder}
             schema={schema}
