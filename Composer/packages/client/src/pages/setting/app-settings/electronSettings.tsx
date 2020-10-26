@@ -7,10 +7,11 @@ import formatMessage from 'format-message';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
+import { Fragment } from 'react';
 
 import { userSettingsState, dispatcherState } from '../../../recoilModel';
 
-import { link, section } from './styles';
+import { link } from './styles';
 import { SettingToggle } from './SettingToggle';
 import * as images from './images';
 
@@ -23,8 +24,7 @@ export const ElectronSettings: React.FC<RouteComponentProps> = () => {
   };
 
   return (
-    <section css={section}>
-      <h2>{formatMessage('Application Updates')}</h2>
+    <Fragment>
       <SettingToggle
         checked={userSettings.appUpdater.autoDownload}
         description={formatMessage('Check for updates and install them automatically.')}
@@ -55,6 +55,6 @@ export const ElectronSettings: React.FC<RouteComponentProps> = () => {
         title={formatMessage('Early adopters')}
         onToggle={onAppUpdatesChange('useNightly')}
       />
-    </section>
+    </Fragment>
   );
 };
