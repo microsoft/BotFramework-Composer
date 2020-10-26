@@ -97,7 +97,7 @@ export const DialogSettings: React.FC<RouteComponentProps<{ projectId: string }>
         <section>
           {BotSettings.botSettingDescription}
           &nbsp;
-          <Link href={'https://aka.ms/bf-composer-docs-publish-bot'} target="_blank">
+          <Link href={'https://aka.ms/composer-publish-bot'} target="_blank">
             {BotSettings.learnMore}
           </Link>
         </section>
