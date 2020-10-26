@@ -26,6 +26,7 @@ import { triggerNotSupported } from '../../utils/dialogValidator';
 
 import { TreeItem } from './treeItem';
 import { ExpandableNode } from './ExpandableNode';
+import { navigateTo } from '../../utils/navigation';
 
 // -------------------- Styles -------------------- //
 
@@ -121,17 +122,29 @@ type Props = {
   showTriggers?: boolean;
   showDialogs?: boolean;
   navLinks?: TreeLink[];
-  onDeleteTrigger: (id: string, index: number) => void;
-  onDeleteDialog: (id: string) => void;
+  onBotDeleteDialog: (projectId: string, dialogId: string) => void;
+  onBotCreateDialog: (projectId: string) => void;
+  onBotStart: (projectId: string) => void;
+  onBotEditManifest: (projectId: string) => void;
+  onBotExportZip: (projectId: string) => void;
+  onBotRemoveSkill: (skillId: string) => void;
+  onDialogCreateTrigger: (projectId: string, dialogId: string) => void;
+  onDialogDeleteTrigger: (projectId: string, dialogId: string, index: number) => void;
 };
 
 export const ProjectTree: React.FC<Props> = ({
   onSelectAllLink: onAllSelected = undefined,
   showTriggers = true,
   showDialogs = true,
-  onDeleteDialog,
-  onDeleteTrigger,
+  onBotDeleteDialog,
+  onDialogDeleteTrigger,
   onSelect,
+  onBotCreateDialog,
+  onBotStart,
+  onBotEditManifest,
+  onBotExportZip,
+  onBotRemoveSkill,
+  onDialogCreateTrigger,
 }) => {
   const { onboardingAddCoachMarkRef, selectTo, navTo, navigateToFormDialogSchema } = useRecoilValue(dispatcherState);
 
@@ -198,12 +211,16 @@ export const ProjectTree: React.FC<Props> = ({
       {
         label: formatMessage('Add a dialog'),
         icon: 'Add',
-        onClick: () => {},
+        onClick: () => {
+          onBotCreateDialog(bot.projectId);
+        },
       },
       {
         label: formatMessage('Start bot'),
         icon: 'TriangleSolidRight12',
-        onClick: () => {},
+        onClick: () => {
+          onBotStart(bot.projectId);
+        },
       },
       {
         label: '',
@@ -211,22 +228,30 @@ export const ProjectTree: React.FC<Props> = ({
       },
       {
         label: formatMessage('Create/edit skill manifest'),
-        onClick: () => {},
+        onClick: () => {
+          onBotEditManifest(bot.projectId);
+        },
       },
       {
         label: formatMessage('Export this bot as .zip'),
-        onClick: () => {},
+        onClick: () => {
+          onBotExportZip(bot.projectId);
+        },
       },
       {
         label: formatMessage('Settings'),
-        onClick: () => {},
+        onClick: () => {
+          navigateTo('/settings');
+        },
       },
     ];
 
     if (!bot.isRootBot) {
       menu.splice(3, 0, {
         label: formatMessage('Remove this skill from project'),
-        onClick: () => {},
+        onClick: () => {
+          onBotRemoveSkill(bot.projectId);
+        },
       });
     }
 
@@ -267,7 +292,9 @@ export const ProjectTree: React.FC<Props> = ({
       {
         label: formatMessage('Add a trigger'),
         icon: 'Add',
-        onClick: () => {},
+        onClick: () => {
+          onDialogCreateTrigger(skillId, dialog.id);
+        },
       },
       {
         label: '',
@@ -275,8 +302,8 @@ export const ProjectTree: React.FC<Props> = ({
       },
       {
         label: formatMessage('Remove this dialog'),
-        onClick: (link) => {
-          onDeleteDialog(link.dialogName ?? '');
+        onClick: () => {
+          onBotDeleteDialog(skillId, dialog.id);
         },
       },
     ];
@@ -338,8 +365,8 @@ export const ProjectTree: React.FC<Props> = ({
         menu={[
           {
             label: formatMessage('Remove this trigger'),
-            onClick: (link) => {
-              onDeleteTrigger(link.dialogName ?? '', link.trigger ?? 0);
+            onClick: () => {
+              onDialogDeleteTrigger(projectId, dialog.id, item.index);
             },
           },
         ]}

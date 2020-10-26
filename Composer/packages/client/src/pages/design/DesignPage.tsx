@@ -44,7 +44,6 @@ import {
   validateDialogsSelectorFamily,
   breadcrumbState,
   focusPathState,
-  showCreateDialogModalState,
   localeState,
   qnaFilesState,
   rootBotProjectIdSelector,
@@ -118,10 +117,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   const schemas = useRecoilValue(schemasState(projectId));
   const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
-  const displaySkillManifest = useRecoilValue(displaySkillManifestState(projectId));
   const breadcrumb = useRecoilValue(breadcrumbState(projectId));
   const focusPath = useRecoilValue(focusPathState(projectId));
-  const showCreateDialogModal = useRecoilValue(showCreateDialogModalState(projectId));
   const locale = useRecoilValue(localeState(projectId));
   const undoFunction = useRecoilValue(undoFunctionState(projectId));
   const undoVersion = useRecoilValue(undoVersionState(projectId));
@@ -160,16 +157,22 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     dialogs.find((x) => x.id === props.dialogId)?.content,
     params.get('selected') || ''
   );
-  const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
+  const [manifestModalVisible, setManifestModalVisibility] = useState<
+    undefined | { projectId: string; skillName: string }
+  >(undefined);
+  const [dialogModalVisible, setDialogModalVisibility] = useState<undefined | { projectId: string }>(undefined);
+  const [triggerModalVisible, setTriggerModalVisibility] = useState<
+    undefined | { projectId: string; dialogId: string }
+  >(undefined);
   const [dialogJsonVisible, setDialogJsonVisibility] = useState(false);
   const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0]);
-  const [exportSkillModalVisible, setExportSkillModalVisible] = useState(false);
+  const [exportSkillModalVisible, setExportSkillModalVisible] = useState<
+    undefined | { projectId: string; dialogId: string }
+  >(undefined);
   const [warningIsVisible, setWarningIsVisible] = useState(true);
   const shell = useShell('DesignPage', projectId);
   const shellForFlowEditor = useShell('FlowEditor', projectId);
   const shellForPropertyEditor = useShell('PropertyEditor', projectId);
-  const triggerApi = useTriggerApi(projectId);
-  const { createTrigger } = shell.api;
 
   const defaultQnATriggerData = {
     $kind: qnaMatcherKey,
@@ -265,15 +268,15 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   }, []);
 
   const onTriggerCreationDismiss = () => {
-    setTriggerModalVisibility(false);
+    setTriggerModalVisibility(undefined);
   };
 
-  const openNewTriggerModal = () => {
-    setTriggerModalVisibility(true);
+  const openNewTriggerModal = (projectId: string, dialogId: string) => {
+    setTriggerModalVisibility({ projectId, dialogId });
   };
 
-  const onTriggerCreationSubmit = async (dialogId: string, formData: TriggerFormData) => {
-    createTrigger(dialogId, formData);
+  const onTriggerCreationSubmit = async (projectId: string, dialogId: string, formData: TriggerFormData) => {
+    useTriggerApi(projectId).createTrigger(dialogId, formData);
   };
 
   function handleSelect(projectId, item, selected = '') {
@@ -545,12 +548,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     );
   }, [dialogs, breadcrumb, dialogJsonVisible]);
 
-  async function handleCreateDialogSubmit(dialogName, dialogData) {
+  async function handleCreateDialogSubmit(projectId, dialogName, dialogData) {
+    setDialogModalVisibility(undefined);
     await createDialog({ id: dialogName, content: dialogData, projectId });
     commitChanges();
   }
 
-  async function handleDeleteDialog(dialogId) {
+  async function handleDeleteDialog(projectId: string, dialogId: string) {
     const refs = getAllRef(dialogId, dialogs);
     let setting: any = {
       confirmBtnText: formatMessage('Yes'),
@@ -576,8 +580,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     }
   }
 
-  async function handleDeleteTrigger(dialogId: string, index: number) {
-    const content = deleteTrigger(dialogs, dialogId, index, (trigger) => triggerApi.deleteTrigger(dialogId, trigger));
+  async function handleDeleteTrigger(projectId: string, dialogId: string, index: number) {
+    const content = deleteTrigger(dialogs, dialogId, index, (trigger) =>
+      useTriggerApi(projectId).deleteTrigger(dialogId, trigger)
+    );
 
     if (content) {
       updateDialog({ id: dialogId, content, projectId });
@@ -605,7 +611,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
   const handleCreateQnA = async (data) => {
     if (!dialogId) return;
-    createTrigger(dialogId, defaultQnATriggerData);
+    useTriggerApi(projectId).createTrigger(dialogId, defaultQnATriggerData);
 
     const { name, url, multiTurn } = data;
     if (url) {
@@ -613,6 +619,15 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     } else {
       await createQnAKBFromScratch({ id: `${dialogId}.${locale}`, name, projectId });
     }
+  };
+
+  const handleCreateDialog = (projectId: string) => {
+    setDialogModalVisibility({ projectId });
+  };
+
+  const handleEditMainfest = (projectId: string) => {
+    const skillName = useRecoilValue(displaySkillManifestState(projectId));
+    setManifestModalVisibility({ projectId, skillName });
   };
 
   const pluginConfig: PluginConfig = useMemo(() => {
@@ -633,8 +648,16 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       <div css={pageRoot}>
         <LeftRightSplit initialLeftGridWidth="20%" minLeftPixels={200} minRightPixels={800}>
           <ProjectTree
-            onDeleteDialog={handleDeleteDialog}
-            onDeleteTrigger={handleDeleteTrigger}
+            onBotCreateDialog={handleCreateDialog}
+            onBotDeleteDialog={handleDeleteDialog}
+            onBotStart={(projectId) => {
+              console.log('bot start', projectId);
+            }}
+            onBotExportZip={() => {}}
+            onBotRemoveSkill={() => {}}
+            onBotEditManifest={handleEditMainfest}
+            onDialogDeleteTrigger={handleDeleteTrigger}
+            onDialogCreateTrigger={openNewTriggerModal}
             onSelect={(...props) => handleSelect(projectId, ...props)}
           />
           <div css={contentWrapper} role="main">
@@ -675,7 +698,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                     ) : (
                       <EditorExtension plugins={pluginConfig} projectId={projectId} shell={shellForFlowEditor}>
                         <VisualEditor
-                          openNewTriggerModal={openNewTriggerModal}
+                          openNewTriggerModal={() => {
+                            openNewTriggerModal(projectId, dialogId);
+                          }}
                           onBlur={() => onBlurFlowEditor()}
                           onFocus={() => onFocusFlowEditor()}
                         />
@@ -692,13 +717,15 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         </LeftRightSplit>
       </div>
       <Suspense fallback={<LoadingSpinner />}>
-        {showCreateDialogModal && (
-          <EditorExtension plugins={pluginConfig} projectId={projectId} shell={shell}>
+        {dialogModalVisible && (
+          <EditorExtension plugins={pluginConfig} projectId={dialogModalVisible.projectId} shell={shell}>
             <CreateDialogModal
-              isOpen={showCreateDialogModal}
-              projectId={projectId}
-              onDismiss={() => createDialogCancel(projectId)}
-              onSubmit={handleCreateDialogSubmit}
+              isOpen={true}
+              projectId={dialogModalVisible.projectId}
+              onDismiss={() => setDialogModalVisibility(undefined)}
+              onSubmit={(dialogName, dialogData) => {
+                handleCreateDialogSubmit(dialogModalVisible.projectId, dialogName, dialogData);
+              }}
             />
           </EditorExtension>
         )}
@@ -716,27 +743,31 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         )}
         {exportSkillModalVisible && (
           <ExportSkillModal
-            isOpen={exportSkillModalVisible}
+            isOpen={true}
             projectId={projectId}
-            onDismiss={() => setExportSkillModalVisible(false)}
-            onSubmit={() => setExportSkillModalVisible(false)}
+            onDismiss={() => setExportSkillModalVisible(undefined)}
+            onSubmit={() => setExportSkillModalVisible(undefined)}
           />
         )}
         {triggerModalVisible && (
           <TriggerCreationModal
             dialogId={dialogId}
-            isOpen={triggerModalVisible}
+            isOpen={true}
             projectId={projectId}
             onDismiss={onTriggerCreationDismiss}
-            onSubmit={onTriggerCreationSubmit}
+            onSubmit={(dialogId, formData) => {
+              onTriggerCreationSubmit(projectId, dialogId, formData);
+            }}
           />
         )}
         <CreateQnAModal dialogId={dialogId} projectId={projectId} qnaFiles={qnaFiles} onSubmit={handleCreateQnA} />
-        {displaySkillManifest && (
+        {manifestModalVisible && (
           <DisplayManifestModal
-            projectId={projectId}
-            skillNameIdentifier={displaySkillManifest}
-            onDismiss={() => dismissManifestModal(projectId)}
+            projectId={manifestModalVisible.projectId}
+            skillNameIdentifier={manifestModalVisible.skillName}
+            onDismiss={() => {
+              setManifestModalVisibility(undefined);
+            }}
           />
         )}
         {brokenSkillItem && (
