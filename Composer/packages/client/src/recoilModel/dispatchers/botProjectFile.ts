@@ -67,20 +67,22 @@ export const botProjectFileDispatcher = () => {
     }
 
     const botNameIdentifier = await snapshot.getPromise(botNameIdentifierState(skillId));
-    const rootBotSettings = await snapshot.getPromise(settingsState(rootBotProjectId));
-    const updatedSettings = produce(rootBotSettings, (draftState) => {
-      if (draftState.skill && draftState.skill[botNameIdentifier]) {
-        delete draftState.skill[botNameIdentifier];
-      }
-    });
-
     set(botProjectFileState(rootBotProjectId), (current) => {
       const result = produce(current, (draftState) => {
         delete draftState.content.skills[botNameIdentifier];
       });
       return result;
     });
-    setSettingState(callbackHelpers, rootBotProjectId, updatedSettings);
+
+    const rootBotSettings = await snapshot.getPromise(settingsState(rootBotProjectId));
+    if (rootBotSettings.skill) {
+      const updatedSettings = produce(rootBotSettings, (draftState) => {
+        if (draftState.skill && draftState.skill[botNameIdentifier]) {
+          delete draftState.skill[botNameIdentifier];
+        }
+      });
+      setSettingState(callbackHelpers, rootBotProjectId, updatedSettings);
+    }
   });
 
   const updateManifest = useRecoilCallback(
@@ -147,18 +149,20 @@ export const botProjectFileDispatcher = () => {
         });
       }
 
-      dispatcher.setSettings(
-        rootBotProjectId,
-        produce(settings, (draftSettings) => {
-          draftSettings.skill = {
-            ...settings.skill,
-            [skillNameIdentifier]: {
-              endpointUrl,
-              msAppId,
-            },
-          };
-        })
-      );
+      if (settings.skill) {
+        dispatcher.setSettings(
+          rootBotProjectId,
+          produce(settings, (draftSettings) => {
+            draftSettings.skill = {
+              ...settings.skill,
+              [skillNameIdentifier]: {
+                endpointUrl,
+                msAppId,
+              },
+            };
+          })
+        );
+      }
     }
   );
 
