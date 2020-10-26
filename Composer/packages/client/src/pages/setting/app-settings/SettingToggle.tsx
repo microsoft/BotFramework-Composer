@@ -19,10 +19,11 @@ interface ISettingToggleProps {
   image: string;
   onToggle: (checked: boolean) => void;
   title: string;
+  hideToggle?: boolean;
 }
 
 const SettingToggle: React.FC<ISettingToggleProps> = (props) => {
-  const { id, title, description, image, checked, onToggle } = props;
+  const { id, title, description, image, checked, onToggle, hideToggle } = props;
   const uniqueId = useId(kebabCase(title));
 
   return (
@@ -36,7 +37,7 @@ const SettingToggle: React.FC<ISettingToggleProps> = (props) => {
         </Label>
         <p css={styles.settingsDescription}>{description}</p>
       </div>
-      <div>
+      {!hideToggle && (
         <Toggle
           checked={!!checked}
           data-testid={id}
@@ -45,7 +46,7 @@ const SettingToggle: React.FC<ISettingToggleProps> = (props) => {
           onChange={(_e, checked) => onToggle(!!checked)}
           onText={formatMessage('On')}
         />
-      </div>
+      )}
     </div>
   );
 };

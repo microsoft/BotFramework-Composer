@@ -14,11 +14,11 @@ import { CreationFlowStatus } from '../../constants';
 import {
   dispatcherState,
   creationFlowStatusState,
-  templateProjectsState,
   storagesState,
   focusedStorageFolderState,
   currentProjectIdState,
   userSettingsState,
+  filteredTemplatesSelector,
 } from '../../recoilModel';
 import Home from '../../pages/home/Home';
 import { useProjectIdCache } from '../../utils/hooks';
@@ -48,9 +48,9 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     fetchProjectById,
   } = useRecoilValue(dispatcherState);
 
+  const templateProjects = useRecoilValue(filteredTemplatesSelector);
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
   const projectId = useRecoilValue(currentProjectIdState);
-  const templateProjects = useRecoilValue(templateProjectsState);
   const storages = useRecoilValue(storagesState);
   const focusedStorageFolder = useRecoilValue(focusedStorageFolderState);
   const { appLocale } = useRecoilValue(userSettingsState);
@@ -129,12 +129,6 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   };
 
   const handleDefineConversationSubmit = async (formData, templateId: string) => {
-    // If selected template is qnaSample then route to QNA import modal
-    if (templateId === 'QnASample') {
-      setFormData(formData);
-      navigate(`./QnASample/importQnA`);
-      return;
-    }
     // If selected template is vaCore then route to VA Customization modal
     if (templateId === 'va-core') {
       setFormData(formData);
@@ -158,7 +152,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     }
   };
 
-  const handleCreateNext = async (data) => {
+  const handleCreateNext = async (data: string) => {
     setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
     navigate(`./create/${data}`);
   };
