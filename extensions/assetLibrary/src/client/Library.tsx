@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import React, { useState, Fragment, useEffect } from 'react';
 import formatMessage from 'format-message';
-import { Dialog, DialogType, Dropdown, MessageBar, MessageBarType, MessageBarButton, ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react';
+import { Pivot, PivotItem, Dialog, DialogType, Dropdown, MessageBar, MessageBarType, MessageBarButton, ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react';
 import { render, useHttpClient, useProjectApi, useApplicationApi } from '@bfc/extension-client';
 
 import { Toolbar, IToolbarItem } from '@bfc/ui-shared';
@@ -154,17 +154,17 @@ const Library: React.FC = () => {
     const groups: any[] = [];
     let items: any[] = [];
 
-    if (installedComponents.length) {
-      items = items.concat(installedComponents || []);
+    // if (installedComponents.length) {
+    //   items = items.concat(installedComponents || []);
 
-      groups.push({
-        key: 'installed',
-        name: strings.installedCategory,
-        startIndex: 0,
-        count: installedComponents ? installedComponents.length : 0,
-        level: 0,
-      });
-    }
+    //   groups.push({
+    //     key: 'installed',
+    //     name: strings.installedCategory,
+    //     startIndex: 0,
+    //     count: installedComponents ? installedComponents.length : 0,
+    //     level: 0,
+    //   });
+    // }
 
     // find all categories listed in the available libraries
     const categories = [DEFAULT_CATEGORY];
@@ -388,46 +388,76 @@ const Library: React.FC = () => {
           {strings.requireEject}
         </MessageBar>
       )}
-      <Dropdown
-        placeholder="Choose"
-        label={formatMessage('Package Format')}
-        selectedKey={programmingLanguageSelection}
-        options={programmingLanguages}
-        onChange={onChangeLanguage}
-        styles={{
-          root: { width: '200px' },
-          label: { display: 'inline' },
-        }}
-      >
-      </Dropdown>
-      <div css={ContentStyle} data-testid="installedLibraries" role="main">
-        <div aria-label={formatMessage('List view')} css={contentEditor} role="region">
-          <Fragment>
-            <LibraryList
-              disabled={!ejectedRuntime || runtimeLanguage != programmingLanguageSelection}
-              groups={groups}
-              install={install}
-              isInstalled={isInstalled}
-              items={items}
-              redownload={redownload}
-              removeLibrary={removeComponent}
-              updateItems={setItems}
-              onItemClick={selectItem}
-            />
-            {!items || items.length === 0 ? (
-              <div
-                style={{
-                  marginLeft: '50px',
-                  fontSize: 'smaller',
-                  marginTop: '20px',
-                }}
+      <Fragment>
+        <Pivot aria-label="Library Views" style={{paddingLeft: '12px'}}>
+          <PivotItem headerText="Browse">
+            <section style={{paddingRight: '20px', display: 'grid', justifyContent: 'end'}}>
+              <Dropdown
+                placeholder="Format"
+                selectedKey={programmingLanguageSelection}
+                options={programmingLanguages}
+                onChange={onChangeLanguage}
+                styles={{
+                root: { width: '200px',  },
+              }}
               >
-                No libraries installed
-              </div>
-            ) : null}
-          </Fragment>
-        </div>
-      </div>
+              </Dropdown>
+            </section>
+            <LibraryList
+                disabled={!ejectedRuntime || runtimeLanguage != programmingLanguageSelection}
+                groups={groups}
+                install={install}
+                isInstalled={isInstalled}
+                items={items}
+                redownload={redownload}
+                removeLibrary={removeComponent}
+                updateItems={setItems}
+                onItemClick={selectItem}
+              />
+              {!items || items.length === 0 ? (
+                <div
+                  style={{
+                    marginLeft: '50px',
+                    fontSize: 'smaller',
+                    marginTop: '20px',
+                  }}
+                >
+                  No libraries installed
+                </div>
+              ) : null}
+          </PivotItem>
+          <PivotItem headerText="Installed">
+          <LibraryList
+                disabled={!ejectedRuntime}
+                groups={[{
+                  key: 'installed',
+                  name: strings.installedCategory,
+                  startIndex: 0,
+                  count: installedComponents ? installedComponents.length : 0,
+                  level: 0,
+                }]}
+                install={install}
+                isInstalled={isInstalled}
+                items={installedComponents}
+                redownload={redownload}
+                removeLibrary={removeComponent}
+                updateItems={setItems}
+                onItemClick={selectItem}
+              />
+              {!installedComponents || installedComponents.length === 0 ? (
+                <div
+                  style={{
+                    marginLeft: '50px',
+                    fontSize: 'smaller',
+                    marginTop: '20px',
+                  }}
+                >
+                  No libraries installed
+                </div>
+              ) : null}
+          </PivotItem>
+        </Pivot>
+      </Fragment>
     </ScrollablePane>
   );
 };
