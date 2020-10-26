@@ -357,7 +357,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
             data-testid={'triggerTypeDropDown'}
             defaultSelectedKey={selectedType}
             errorMessage={formData.errors.$kind}
-            label={formatMessage('What is the type of this trigger?')}
+            label={formatMessage('Select trigger type')}
             options={triggerTypeOptions}
             styles={dropdownStyles}
             onChange={onSelectTriggerType}
@@ -368,7 +368,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
             <Dropdown
               data-testid={'eventTypeDropDown'}
               errorMessage={formData.errors.event}
-              label={formatMessage('Which event?')}
+              label={formatMessage('Select event type')}
               options={eventTypes}
               placeholder={formatMessage('Select an event type')}
               styles={dropdownStyles}
@@ -380,7 +380,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
               required
               data-testid="CustomEventName"
               errorMessage={formData.errors.event}
-              label={formatMessage('What is the name of the custom event?')}
+              label={formatMessage('Custom event name')}
               styles={intent}
               onChange={handleEventNameChange}
             />
@@ -389,7 +389,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
             <Dropdown
               data-testid={'activityTypeDropDown'}
               errorMessage={formData.errors.activity}
-              label={formatMessage('Which activity type?')}
+              label={formatMessage('Select activity type')}
               options={activityTypes}
               placeholder={formatMessage('Select an activity type')}
               styles={dropdownStyles}
@@ -402,10 +402,10 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
               errorMessage={formData.errors.intent}
               label={
                 isRegEx
-                  ? formatMessage('What is the name of this trigger (RegEx)')
+                  ? formatMessage('Trigger name')
                   : isLUISnQnA
-                  ? formatMessage('What is the name of this trigger (LUIS)')
-                  : formatMessage('What is the name of this trigger')
+                  ? formatMessage('Trigger name')
+                  : formatMessage('Trigger name')
               }
               styles={intent}
               onChange={onNameChange}
@@ -416,7 +416,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
             <TextField
               data-testid="RegExField"
               errorMessage={formData.errors.regEx}
-              label={formatMessage('Please input regEx pattern')}
+              label={formatMessage('Regex pattern')}
               onChange={onChangeRegEx}
             />
           )}

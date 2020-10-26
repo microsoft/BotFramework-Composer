@@ -261,7 +261,7 @@ export function CreateOptions(props: CreateOptionsProps) {
         onDismiss={onDismiss}
       >
         <ChoiceGroup
-          label={formatMessage('Choose how to create your bot')}
+          // label={formatMessage('Choose how to create your bot')}
           options={choiceOptions}
           selectedKey={option}
           onChange={handleChange}
