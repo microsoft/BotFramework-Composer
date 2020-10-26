@@ -83,11 +83,12 @@ const VisualEditor: React.FC<VisualEditorProps> = (props) => {
     Object.entries(formConfig).forEach(([$kind, formOptions]) => {
       const formLabel = formOptions?.label;
       const definition = sdkDefinitions[$kind];
-      if (formLabel && sdkDefinitions) {
+      if (formLabel && definition) {
         if (typeof formLabel === 'string') {
           definition.title = formLabel;
         } else if (typeof formLabel === 'function') {
-          definition.title = formLabel({});
+          const computedTitle = formLabel({});
+          if (computedTitle) definition.title = computedTitle;
         }
       }
     });
