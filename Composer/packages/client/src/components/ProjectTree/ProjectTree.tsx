@@ -14,6 +14,7 @@ import debounce from 'lodash/debounce';
 import { useRecoilValue } from 'recoil';
 import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 import isEqual from 'lodash/isEqual';
+import { extractSchemaProperties, groupTriggersByPropertyReference, NoGroupingTriggerGroupName } from '@bfc/indexers';
 
 import {
   dispatcherState,
@@ -70,6 +71,19 @@ const tree = css`
 `;
 
 const SUMMARY_ARROW_SPACE = 28; // the rough pixel size of the dropdown arrow to the left of a Details/Summary element
+
+// -------------------- Helper functions -------------------- //
+
+// sort trigger groups so that NoGroupingTriggerGroupName is last
+const sortTriggerGroups = (x: string, y: string): number => {
+  if (x === NoGroupingTriggerGroupName && y !== NoGroupingTriggerGroupName) {
+    return 1;
+  } else if (y === NoGroupingTriggerGroupName && x !== NoGroupingTriggerGroupName) {
+    return -1;
+  }
+
+  return x.localeCompare(y);
+};
 
 // -------------------- ProjectTree -------------------- //
 
@@ -354,10 +368,10 @@ export const ProjectTree: React.FC<Props> = ({
       });
   };
 
-  const renderTriggerGroupHeader = (groupName: string, dialog: DialogInfo, projectId: string) => {
+  const renderTriggerGroupHeader = (displayName: string, dialog: DialogInfo, projectId: string) => {
     const link: TreeLink = {
-      dialogId: dialog.id,
-      displayName: groupName,
+      dialogName: dialog.id,
+      displayName,
       isRoot: false,
       projectId: projectId,
     };
@@ -383,10 +397,16 @@ export const ProjectTree: React.FC<Props> = ({
     triggers: ITrigger[],
     startDepth: number
   ) => {
+    const groupDisplayName =
+      groupName === NoGroupingTriggerGroupName ? formatMessage('form-wide operations') : groupName;
     const key = `${projectId}.${dialog.id}.group-${groupName}`;
 
     return (
-      <ExpandableNode key={key} depth={startDepth} summary={renderTriggerGroupHeader(groupName, dialog, projectId)}>
+      <ExpandableNode
+        key={key}
+        depth={startDepth}
+        summary={renderTriggerGroupHeader(groupDisplayName, dialog, projectId)}
+      >
         <div>{renderTriggerList(triggers, dialog, projectId)}</div>
       </ExpandableNode>
     );
@@ -400,7 +420,7 @@ export const ProjectTree: React.FC<Props> = ({
 
     const triggerGroups = Object.keys(groupedTriggers);
 
-    return triggerGroups.map((triggerGroup) => {
+    return triggerGroups.sort(sortTriggerGroups).map((triggerGroup) => {
       return renderTriggerGroup(projectId, dialog, triggerGroup, groupedTriggers[triggerGroup], startDepth);
     });
   };
