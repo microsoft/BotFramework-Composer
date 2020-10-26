@@ -78,8 +78,7 @@ export const groupTriggersByPropertyReference = (
 
   const validProperties = options?.validProperties;
   const isValidProperty = validProperties
-    ? (x: string | undefined) =>
-        x && (x === NoGroupingTriggerGroupName || validProperties.findIndex((p) => x === p) !== -1)
+    ? (x: string | undefined) => x && (x === NoGroupingTriggerGroupName || validProperties.includes(x))
     : () => true;
 
   const addResult = (property: string, trigger: ITrigger) => {
