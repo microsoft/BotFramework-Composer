@@ -35,7 +35,7 @@ import {
   skillManifestsState,
 } from './../atoms';
 import { formDialogSchemasSelectorFamily } from './project';
-import { validateDialogSelectorFamily } from './validatedDialogs';
+import { validateDialogsSelectorFamily } from './validatedDialogs';
 
 export const notificationListSelector = selectorFamily({
   key: 'notificationListSelector',
@@ -43,7 +43,7 @@ export const notificationListSelector = selectorFamily({
     const projectsMetaData = get(projectMetaDataState(projectId));
     if (!projectsMetaData || projectsMetaData.isRemote) return [];
 
-    const dialogs = get(validateDialogSelectorFamily(projectId));
+    const dialogs = get(validateDialogsSelectorFamily(projectId));
     const luFiles = get(luFilesState(projectId));
     const lgFiles = get(lgFilesState(projectId));
     const diagnostics = get(botDiagnosticsState(projectId));

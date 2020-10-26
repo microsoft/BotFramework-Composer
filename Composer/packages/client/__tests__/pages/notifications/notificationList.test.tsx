@@ -10,7 +10,8 @@ import {
   botDiagnosticsState,
   botProjectIdsState,
   currentProjectIdState,
-  dialogsState,
+  dialogIdsState,
+  dialogState,
   formDialogSchemaIdsState,
   jsonSchemaFilesState,
   lgFilesState,
@@ -109,7 +110,8 @@ describe('<NotificationList/>', () => {
   const initRecoilState = ({ set }) => {
     set(currentProjectIdState, state.projectId);
     set(botProjectIdsState, [state.projectId]);
-    set(dialogsState(state.projectId), state.dialogs);
+    set(dialogState({ projectId: state.projectId, dialogId: 'test' }), state.dialogs[0]);
+    set(dialogIdsState(state.projectId), [test]);
     set(luFilesState(state.projectId), state.luFiles);
     set(lgFilesState(state.projectId), state.lgFiles);
     set(jsonSchemaFilesState(state.projectId), state.jsonSchemaFiles);
