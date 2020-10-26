@@ -16,5 +16,4 @@ export const getFieldIconText = (type: any): string | undefined => {
   } else if (typeFormatted === 'expression') {
     return '=';
   }
-  return undefined;
 };
