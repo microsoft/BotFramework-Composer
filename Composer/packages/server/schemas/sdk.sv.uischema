@@ -1,0 +1,356 @@
+{
+  "Microsoft.AdaptiveDialog": {
+    "form": {
+      "description": "Med detta konfigureras en datadriven dialogruta via en samling händelser och åtgärder.",
+      "label": "Adaptiv dialogruta",
+      "properties": {
+        "recognizer": {
+          "description": "Om du vill förstå vad användaren säger måste din dialogruta vara försedd med en tolk som innehåller exempelord och meningar som användarna kan använda.",
+          "label": "Language Understanding"
+        }
+      }
+    }
+  },
+  "Microsoft.BeginDialog": {
+    "form": {
+      "label": "Påbörja en ny dialogruta",
+      "subtitle": "Påbörja dialogruta"
+    }
+  },
+  "Microsoft.BeginSkill": {
+    "form": {
+      "label": "Anslut till en färdighet",
+      "subtitle": "Skill Dialog"
+    }
+  },
+  "Microsoft.BreakLoop": {
+    "form": {
+      "label": "Bryta ut ur loop",
+      "subtitle": "Bryta ut ur loop"
+    }
+  },
+  "Microsoft.CancelAllDialogs": {
+    "form": {
+      "label": "Avbryt alla aktiva dialogrutor",
+      "subtitle": "Avbryt alla dialogrutor"
+    }
+  },
+  "Microsoft.ContinueLoop": {
+    "form": {
+      "label": "Fortsätt loop",
+      "subtitle": "Fortsätt loop"
+    }
+  },
+  "Microsoft.DebugBreak": {
+    "form": {
+      "label": "Felsökningsavbrott"
+    }
+  },
+  "Microsoft.DeleteProperties": {
+    "form": {
+      "label": "Ta bort egenskaper",
+      "subtitle": "Ta bort egenskaper"
+    }
+  },
+  "Microsoft.DeleteProperty": {
+    "form": {
+      "label": "Ta bort en egenskap",
+      "subtitle": "Ta bort egenskap"
+    }
+  },
+  "Microsoft.EditActions": {
+    "form": {
+      "label": "Ändra aktiv dialogruta",
+      "subtitle": "Redigera åtgärder"
+    }
+  },
+  "Microsoft.EditArray": {
+    "form": {
+      "label": "Redigera en matrisegenskap",
+      "subtitle": "Redigera matris"
+    }
+  },
+  "Microsoft.EmitEvent": {
+    "form": {
+      "label": "Generera en anpassad händelse",
+      "subtitle": "Generera händelse"
+    }
+  },
+  "Microsoft.EndDialog": {
+    "form": {
+      "label": "Avsluta den här dialogrutan",
+      "subtitle": "Avsluta dialogruta"
+    }
+  },
+  "Microsoft.EndTurn": {
+    "form": {
+      "label": "Avsluta tur",
+      "subtitle": "Avsluta tur"
+    }
+  },
+  "Microsoft.Foreach": {
+    "form": {
+      "label": "Loop: för varje objekt",
+      "subtitle": "För varje"
+    }
+  },
+  "Microsoft.ForeachPage": {
+    "form": {
+      "label": "Loop: för varje sida (flera objekt)",
+      "subtitle": "För varje sida"
+    }
+  },
+  "Microsoft.HttpRequest": {
+    "form": {
+      "label": "Skicka en HTTP-begäran",
+      "subtitle": "HTTP-begäran"
+    }
+  },
+  "Microsoft.IfCondition": {
+    "form": {
+      "label": "Gren: Om/annars",
+      "subtitle": "Om-villkor"
+    }
+  },
+  "Microsoft.LogAction": {
+    "form": {
+      "label": "Logga till konsol",
+      "subtitle": "Log Action"
+    }
+  },
+  "Microsoft.RepeatDialog": {
+    "form": {
+      "label": "Upprepa den här dialogrutan",
+      "subtitle": "Repeat Dialog"
+    }
+  },
+  "Microsoft.ReplaceDialog": {
+    "form": {
+      "label": "Ersätt den här dialogrutan",
+      "subtitle": "Replace Dialog"
+    }
+  },
+  "Microsoft.SendActivity": {
+    "form": {
+      "label": "Skicka ett svar",
+      "subtitle": "Send Activity"
+    }
+  },
+  "Microsoft.SetProperties": {
+    "form": {
+      "label": "Konfigurera egenskaper",
+      "subtitle": "Set Properties"
+    }
+  },
+  "Microsoft.SetProperty": {
+    "form": {
+      "label": "Konfigurera en egenskap",
+      "subtitle": "Ange egenskap"
+    }
+  },
+  "Microsoft.SignOutUser": {
+    "form": {
+      "label": "Logga ut användare",
+      "subtitle": "Signout User"
+    }
+  },
+  "Microsoft.SwitchCondition": {
+    "form": {
+      "label": "Gren: Växla (flera alternativ)",
+      "subtitle": "Switch Condition"
+    }
+  },
+  "Microsoft.ThrowException": {
+    "form": {
+      "label": "Throw an exception",
+      "subtitle": "Throw an exception"
+    }
+  },
+  "Microsoft.TraceActivity": {
+    "form": {
+      "label": "Generera en spårningshändelse",
+      "subtitle": "Trace Activity"
+    }
+  },
+  "Microsoft.Ask": {
+    "form": {
+      "label": "Send a response to ask a question",
+      "subtitle": "Ask Activity"
+    }
+  },
+  "Microsoft.AttachmentInput": {
+    "form": {
+      "label": "Fråga efter en fil eller bilaga",
+      "subtitle": "Indata för bifogad fil"
+    }
+  },
+  "Microsoft.ChoiceInput": {
+    "form": {
+      "label": "Fråga med flera alternativ",
+      "subtitle": "Utvalda indata"
+    }
+  },
+  "Microsoft.ConfirmInput": {
+    "form": {
+      "label": "Fråga efter bekräftelse",
+      "subtitle": "Bekräfta indata"
+    }
+  },
+  "Microsoft.DateTimeInput": {
+    "form": {
+      "label": "Fråga efter datum eller tid",
+      "subtitle": "Inmatning av datum/tid"
+    }
+  },
+  "Microsoft.NumberInput": {
+    "form": {
+      "label": "Fråga efter ett nummer",
+      "subtitle": "Number Input"
+    }
+  },
+  "Microsoft.OAuthInput": {
+    "form": {
+      "label": "OAuth-inloggning",
+      "subtitle": "OAuth Input"
+    }
+  },
+  "Microsoft.TextInput": {
+    "form": {
+      "label": "Fråga efter text",
+      "subtitle": "Textinmatning"
+    }
+  },
+  "Microsoft.OnActivity": {
+    "form": {
+      "label": "Aktiviteter",
+      "subtitle": "Aktiviteten har tagits emot"
+    }
+  },
+  "Microsoft.OnAssignEntity": {
+    "form": {
+      "label": "Handle a condition when an entity is assigned",
+      "subtitle": "EntityAssigned activity"
+    }
+  },
+  "Microsoft.OnBeginDialog": {
+    "form": {
+      "label": "Dialogrutan har startats",
+      "subtitle": "Starta dialogrutehändelse"
+    }
+  },
+  "Microsoft.OnCancelDialog": {
+    "form": {
+      "label": "Dialogrutan har tagits bort",
+      "subtitle": "Avbryt dialogrutehändelse"
+    }
+  },
+  "Microsoft.OnCondition": {
+    "form": {
+      "label": "Handle a condition",
+      "subtitle": "Villkor"
+    }
+  },
+  "Microsoft.OnConversationUpdateActivity": {
+    "form": {
+      "description": "Handle the events fired when a user begins a new conversation with the bot.",
+      "label": "Hälsning",
+      "subtitle": "ConversationUpdate-aktivitet"
+    }
+  },
+  "Microsoft.OnDialogEvent": {
+    "form": {
+      "label": "Dialogrutehändelser",
+      "subtitle": "Dialog event"
+    }
+  },
+  "Microsoft.OnEndOfActions": {
+    "form": {
+      "label": "Handle a condition when actions have ended",
+      "subtitle": "EndOfActions activity"
+    }
+  },
+  "Microsoft.OnEndOfConversationActivity": {
+    "form": {
+      "label": "Konversationem avslutades",
+      "subtitle": "EndOfConversation-aktivitet"
+    }
+  },
+  "Microsoft.OnError": {
+    "form": {
+      "label": "Ett fel har inträffat",
+      "subtitle": "Felhändelse"
+    }
+  },
+  "Microsoft.OnEventActivity": {
+    "form": {
+      "label": "Händelse mottagen",
+      "subtitle": "Händelseaktivitet"
+    }
+  },
+  "Microsoft.OnHandoffActivity": {
+    "form": {
+      "label": "Överlämnande till person",
+      "subtitle": "Leveransaktivitet"
+    }
+  },
+  "Microsoft.OnInstallationUpdateActivity": {
+    "form": {
+      "label": "Installation updated",
+      "subtitle": "Installation updated activity"
+    }
+  },
+  "Microsoft.OnIntent": {
+    "form": {
+      "label": "Avsikt identifierad",
+      "subtitle": "Avsikt identifierad"
+    }
+  },
+  "Microsoft.OnInvokeActivity": {
+    "form": {
+      "label": "Konversationen har anropats",
+      "subtitle": "Anropa aktivitet"
+    }
+  },
+  "Microsoft.OnMessageActivity": {
+    "form": {
+      "label": "Meddelande mottaget",
+      "subtitle": "Aktivitet för mottaget meddelande"
+    }
+  },
+  "Microsoft.OnMessageDeleteActivity": {
+    "form": {
+      "label": "Meddelandet har tagits bort",
+      "subtitle": "Aktivitet för borttaget meddelande"
+    }
+  },
+  "Microsoft.OnMessageReactionActivity": {
+    "form": {
+      "label": "Meddelandereaktion",
+      "subtitle": "Meddelandereaktionsaktivitet"
+    }
+  },
+  "Microsoft.OnMessageUpdateActivity": {
+    "form": {
+      "label": "Meddelandet har uppdaterats",
+      "subtitle": "Aktivitet för uppdaterat meddelande"
+    }
+  },
+  "Microsoft.OnRepromptDialog": {
+    "form": {
+      "label": "Fråga efter indata på nytt",
+      "subtitle": "Händelse för återuppmaningsdialogruta"
+    }
+  },
+  "Microsoft.OnTypingActivity": {
+    "form": {
+      "label": "Användaren skriver",
+      "subtitle": "Skrivaktivitet"
+    }
+  },
+  "Microsoft.OnUnknownIntent": {
+    "form": {
+      "label": "Okänd avsikt",
+      "subtitle": "Okänd avsikt identifierad"
+    }
+  }
+}
