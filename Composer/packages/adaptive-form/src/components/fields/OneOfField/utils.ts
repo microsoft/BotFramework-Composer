@@ -31,7 +31,7 @@ export function getOptions(
 ): { options: IDropdownOption[]; isNested: boolean } {
   const { type, oneOf, additionalProperties } = schema;
 
-  let isNested = additionalProperties ? true : false;
+  let isNested = !!additionalProperties;
 
   if (type && Array.isArray(type)) {
     const options: IDropdownOption[] = type.map((t) => ({
