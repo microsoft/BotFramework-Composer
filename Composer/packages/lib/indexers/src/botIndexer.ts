@@ -132,6 +132,15 @@ const checkSkillSetting = (assets: BotAssets): Diagnostic[] => {
   return diagnostics;
 };
 
+const validate = (assets: BotAssets, localStorage: { [key: string]: any }): Diagnostic[] => {
+  return [
+    ...checkManifest(assets),
+    ...checkSetting(assets, localStorage),
+    ...checkLUISLocales(assets),
+    ...checkSkillSetting(assets),
+  ];
+};
+
 const index = (name: string, assets: BotAssets): BotInfo => {
   const diagnostics: Diagnostic[] = [];
   diagnostics.push(...checkLUISLocales(assets), ...checkSkillSetting(assets));
@@ -152,6 +161,7 @@ const filterLUISFilesToPublish = (luFiles: LuFile[]): LuFile[] => {
 
 export const BotIndexer = {
   index,
+  validate,
   checkManifest,
   checkSetting,
   checkLUISLocales,

@@ -104,10 +104,7 @@ export const botProjectSpaceSelector = selector({
         botProjectFile,
         jsonSchemaFiles,
       };
-      const diagnostics = [
-        ...BotIndexer.checkSetting(botAssets, localeSetting),
-        ...BotIndexer.checkManifest(botAssets),
-      ];
+      const diagnostics = BotIndexer.validate(botAssets, localeSetting);
 
       return { dialogs, formDialogSchemas, projectId, name, ...metaData, error: botError, diagnostics, botNameId };
     });
@@ -149,5 +146,40 @@ export const skillsProjectIdSelector = selector({
       const { isRootBot } = get(projectMetaDataState(projectId));
       return !isRootBot;
     });
+  },
+});
+
+export const botProjectDiagnosticsSelector = selector({
+  key: 'botProjectDiagnosticsSelector',
+  get: ({ get }) => {
+    const botProjects = get(botProjectIdsState);
+    const result = botProjects.map((projectId: string) => {
+      const dialogs = get(dialogsSelectorFamily(projectId));
+      const formDialogSchemas = get(formDialogSchemasSelectorFamily(projectId));
+      const luFiles = get(luFilesState(projectId));
+      const lgFiles = get(lgFilesState(projectId));
+      const setting = get(settingsState(projectId));
+      const skillManifests = get(skillManifestsState(projectId));
+      const dialogSchemas = get(dialogSchemasState(projectId));
+      const qnaFiles = get(qnaFilesState(projectId));
+      const botProjectFile = get(botProjectFileState(projectId));
+      const jsonSchemaFiles = get(jsonSchemaFilesState(projectId));
+      const localeSetting = settingStorage.get(projectId);
+      const botAssets: BotAssets = {
+        projectId,
+        dialogs,
+        luFiles,
+        qnaFiles,
+        lgFiles,
+        skillManifests,
+        setting,
+        dialogSchemas,
+        formDialogSchemas,
+        botProjectFile,
+        jsonSchemaFiles,
+      };
+      return BotIndexer.validate(botAssets, localeSetting);
+    });
+    return result;
   },
 });
