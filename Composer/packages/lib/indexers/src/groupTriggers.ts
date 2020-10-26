@@ -5,19 +5,26 @@ import { DialogInfo, ITrigger } from '@bfc/shared';
 import { ExpressionParser } from 'adaptive-expressions';
 import uniq from 'lodash/uniq';
 
+export const NoGroupingTriggerGroupName = '(none)';
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const getPropertyReferences = (content: any) => {
   const foundProperties: string[] = [];
 
   if (content) {
     // has $designer: { "propertyGroups": ["<name1>", "<name2", ... ]
-    if (content.$designer?.propertyGroups && Array.isArray(content.$designer?.propertyGroups === 'array')) {
+    if (content.$designer?.propertyGroups && Array.isArray(content.$designer?.propertyGroups)) {
       foundProperties.push(...content.$designer.propertyGroups);
     }
 
     // has "property": "<name>"
     if (content.property && typeof content.property === 'string') {
       foundProperties.push(content.property);
+    }
+
+    // had "expectedProperties" : ["<name1>", "<name2", ... ]
+    if (content.expectedProperties && Array.isArray(content.expectedProperties)) {
+      foundProperties.push(...content.expectedProperties);
     }
 
     // has condition : "<expresssion referencing properties>"
@@ -45,9 +52,24 @@ const getTriggerPropertyReferences = (trigger: ITrigger) => {
     }
   }
 
-  return uniq(foundProperties);
+  const result = uniq(foundProperties);
+
+  if (result.length === 0) {
+    return [NoGroupingTriggerGroupName];
+  }
+
+  return result;
 };
 
+/**
+ * Groups triggers by the property name they reference in:
+ * - $designer: { "propertyGroups": ["<name1>", "<name2", ... ]
+ * - "property": "<name>"
+ * - "expectedProperties" : ["<name1>", "<name2", ... ]
+ * - condition : "<expresssion referencing properties>"
+ * - Any of the trigger's action that reference a property.
+ * If a trigger does not reference a property, it will be grouped under "(none)"
+ */
 export const groupTriggersByPropertyReference = (
   dialog: DialogInfo,
   options?: { allowMultiParent?: boolean; validProperties?: string[] }
@@ -56,7 +78,7 @@ export const groupTriggersByPropertyReference = (
 
   const validProperties = options?.validProperties;
   const isValidProperty = validProperties
-    ? (x: string | undefined) => x && validProperties.findIndex((p) => x === p) !== -1
+    ? (x: string | undefined) => x && (x === NoGroupingTriggerGroupName || validProperties.includes(x))
     : () => true;
 
   const addResult = (property: string, trigger: ITrigger) => {
