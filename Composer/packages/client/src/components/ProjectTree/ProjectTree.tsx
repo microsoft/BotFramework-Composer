@@ -24,6 +24,7 @@ import {
 } from '../../recoilModel';
 import { getFriendlyName } from '../../utils/dialogUtil';
 import { triggerNotSupported } from '../../utils/dialogValidator';
+import { useFeatureFlag } from '../../utils/hooks';
 
 import { TreeItem } from './treeItem';
 import { ExpandableNode } from './ExpandableNode';
