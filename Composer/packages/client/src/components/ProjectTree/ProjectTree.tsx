@@ -24,6 +24,7 @@ import {
 } from '../../recoilModel';
 import { getFriendlyName } from '../../utils/dialogUtil';
 import { triggerNotSupported } from '../../utils/dialogValidator';
+import { useFeatureFlag } from '../../utils/hooks';
 
 import { TreeItem } from './treeItem';
 import { ExpandableNode } from './ExpandableNode';
@@ -134,6 +135,7 @@ export const ProjectTree: React.FC<Props> = ({
   const { onboardingAddCoachMarkRef, navigateToFormDialogSchema } = useRecoilValue(dispatcherState);
 
   const [filter, setFilter] = useState('');
+  const formDialogComposerFeatureEnabled = useFeatureFlag('FORM_DIALOG');
   const [selectedLink, setSelectedLink] = useState<TreeLink | undefined>();
   const delayedSetFilter = debounce((newValue) => setFilter(newValue), 1000);
   const addMainDialogRef = useCallback((mainDialog) => onboardingAddCoachMarkRef({ mainDialog }), []);
@@ -167,7 +169,7 @@ export const ProjectTree: React.FC<Props> = ({
   };
 
   const dialogIsFormDialog = (dialog: DialogInfo) => {
-    return process.env.COMPOSER_ENABLE_FORMS && dialog.content?.schema !== undefined;
+    return formDialogComposerFeatureEnabled && dialog.content?.schema !== undefined;
   };
 
   const formDialogSchemaExists = (projectId: string, dialog: DialogInfo) => {
