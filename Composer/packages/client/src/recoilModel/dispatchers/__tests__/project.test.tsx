@@ -507,7 +507,7 @@ describe('Project dispatcher', () => {
     });
   });
 
-  fit('should migrate skills from existing bots and add them to botproject file', async () => {
+  it('should migrate skills from existing bots and add them to botproject file', async () => {
     const newProjectDataClone = cloneDeep(mockProjectResponse);
     newProjectDataClone.botName = 'new-bot';
     newProjectDataClone.settings = {
