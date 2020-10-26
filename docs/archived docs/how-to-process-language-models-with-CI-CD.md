@@ -35,7 +35,7 @@ First create folder that holds cross-trained language model files and then use b
 
 ~~~
 $ mkdir generated\interruption
-$ bf luis:cross-train --in . --out generated\interruption --config recognizers\cross-train.config.json
+$ bf luis:cross-train --in . --out generated\interruption --config recognizers\cross-train.config.json --force
 ~~~
 
 You can find more details about [cross-train](https://github.com/microsoft/botframework-cli/tree/main/packages/luis#bf-luiscross-train) cli tool.
@@ -44,7 +44,7 @@ You can find more details about [cross-train](https://github.com/microsoft/botfr
 Use bf cli tool to do down sampling on luis language model files and overwrite original ones. This step can be skipped if luis model files do not exist.
 
 ~~~
-$ bf sampler:sampling --in generated\interruption --out generated\interruption
+$ bf sampler:sampling --in generated\interruption --out generated\interruption --force
 ~~~
 
 You can find more details about [sampling](https://github.com/microsoft/botframework-cli/blob/beta/packages/sampler/README.md#bf-samplersampling) cli tool.
@@ -53,7 +53,7 @@ You can find more details about [sampling](https://github.com/microsoft/botframe
 Use bf cli tool to build luis models and generate model setting if luis model files exist.
 
 ~~~
-$ bf luis:build --in generated\interruption --authoringKey {YOUR_LUIS_AUTHORING_KEY} --botName {YOUR_BOT_NAME} --out generated --suffix composer --log
+$ bf luis:build --in generated\interruption --authoringKey {YOUR_LUIS_AUTHORING_KEY} --botName {YOUR_BOT_NAME} --out generated --suffix composer --force --log
 ~~~
 
 You can find more details about [luis:build](https://github.com/microsoft/botframework-cli/tree/main/packages/luis#bf-luisbuild) cli tool.
@@ -62,7 +62,7 @@ You can find more details about [luis:build](https://github.com/microsoft/botfra
 Use bf cli tool to build qnamaker models and generate model setting if qnamaker model files exist.
 
 ~~~
-$ bf qnamaker:build --in generated\interruption --subscriptionKey {YOUR_QnAMaker_SUBSCRIPTION_KEY} --botName {YOUR_BOT_NAME} --out generated --suffix composer --log
+$ bf qnamaker:build --in generated\interruption --subscriptionKey {YOUR_QnAMaker_SUBSCRIPTION_KEY} --botName {YOUR_BOT_NAME} --out generated --suffix composer --force --log
 ~~~
 
 You can find more details about [qnamaker:build](https://github.com/microsoft/botframework-cli/tree/main/packages/qnamaker#bf-qnamakerbuild) cli tool.
@@ -77,7 +77,7 @@ Go to settings folder and edit the appsettings.json.
 2. Copy and launch runtime
 ~~~
 $ mkdir runtime
-$ xcopy /S "C:\Program Files\Bot Framework Composer\resources\app.asar.unpacked\runtime\dotnet" "runtime" // replace with your own Composer installation folder
+$ xcopy /S "C:\Program Files\Bot Framework Composer\resources\app.asar.unpacked\runtime\dotnet" "runtime" // replace 'C:\Program Files\Bot Framework Composer' with your own Composer installation folder
 $ cd runtime
 $ dotnet run --project azurewebapp // launch runtime
 ~~~
