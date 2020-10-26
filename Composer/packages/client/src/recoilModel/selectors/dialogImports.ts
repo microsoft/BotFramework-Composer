@@ -26,7 +26,10 @@ const getImportsHelper = (content: string): LanguageFileImport[] => {
 };
 
 // Finds all the file imports starting from a given dialog file.
-const getImports = <T extends { content: string }>(rootDialogId: string, getFile: (fileId: string) => T): T[] => {
+export const getLanguageFileImports = <T extends { id: string; content: string }>(
+  rootDialogId: string,
+  getFile: (fileId: string) => T
+): T[] => {
   const imports: LanguageFileImport[] = [];
 
   const visitedIds: string[] = [];
@@ -62,7 +65,7 @@ export const lgImportsSelectorFamily = selectorFamily<LgFile[], { projectId: str
     const getFile = (fileId: string) =>
       get(lgFilesState(projectId)).find((f) => f.id === fileId || f.id === `${fileId}.${locale}`) as LgFile;
 
-    return getImports(dialogId, getFile);
+    return getLanguageFileImports(dialogId, getFile);
   },
 });
 
@@ -75,6 +78,6 @@ export const luImportsSelectorFamily = selectorFamily<LuFile[], { projectId: str
     const getFile = (fileId: string) =>
       get(luFilesState(projectId)).find((f) => f.id === fileId || f.id === `${fileId}.${locale}`) as LuFile;
 
-    return getImports(dialogId, getFile);
+    return getLanguageFileImports(dialogId, getFile);
   },
 });
