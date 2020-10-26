@@ -474,7 +474,7 @@ export const ProjectTree: React.FC<Props> = ({
           underlined
           ariaLabel={formatMessage('Type dialog name')}
           iconProps={{ iconName: icons.FILTER }}
-          placeholder={formatMessage('Filter Dialog')}
+          placeholder={formatMessage('Filter')}
           styles={searchBox}
           onChange={onFilter}
         />
