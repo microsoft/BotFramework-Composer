@@ -27,6 +27,7 @@ import objectSet from 'lodash/set';
 import { stringify } from 'query-string';
 import { CallbackInterface } from 'recoil';
 import { v4 as uuid } from 'uuid';
+import isEmpty from 'lodash/isEmpty';
 
 import { BotStatus, QnABotTemplateId } from '../../../constants';
 import settingStorage from '../../../utils/dialogSettingStorage';
@@ -78,6 +79,7 @@ import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../../se
 import { undoHistoryState } from '../../undo/history';
 import UndoHistory from '../../undo/undoHistory';
 import { logMessage, setError } from '../shared';
+import { setSettingState } from '../setting';
 
 export const resetBotStates = async ({ reset }: CallbackInterface, projectId: string) => {
   const botStates = Object.keys(botstates);
@@ -486,15 +488,21 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
   set(botProjectIdsState, [rootBotProjectId]);
   // Get the status of the bot on opening if it was opened and run in another window.
   dispatcher.getPublishStatus(rootBotProjectId, defaultPublishConfig);
-
   if (botFiles.botProjectSpaceFiles && botFiles.botProjectSpaceFiles.length) {
     const currentBotProjectFileIndexed: BotProjectFile = botFiles.botProjectSpaceFiles[0];
+
     if (mergedSettings.skill) {
-      const updatedFileContent = migrateSkillsForExistingBots(
+      const { botProjectFile, skillSettings } = migrateSkillsForExistingBots(
         currentBotProjectFileIndexed.content,
         mergedSettings.skill
       );
-      currentBotProjectFileIndexed.content = updatedFileContent;
+      if (!isEmpty(skillSettings)) {
+        setSettingState(callbackHelpers, rootBotProjectId, {
+          ...mergedSettings,
+          skill: skillSettings,
+        });
+      }
+      currentBotProjectFileIndexed.content = botProjectFile;
     }
 
     const currentBotProjectFile: BotProjectSpace = currentBotProjectFileIndexed.content;

@@ -3,7 +3,7 @@
 
 import get from 'lodash/get';
 import keyBy from 'lodash/keyBy';
-import { BotProjectSpace, DialogSetting } from '@botframework-composer/types';
+import { BotProjectSpace, DialogSetting, SkillSetting } from '@botframework-composer/types';
 import formatMessage from 'format-message';
 import camelCase from 'lodash/camelCase';
 
@@ -57,18 +57,25 @@ export const getManifestNameFromUrl = (manifestUrl: string) => {
 };
 
 export const migrateSkillsForExistingBots = (botProjectFile: BotProjectSpace, rootBotSkill: any) => {
+  const updatedSkillSetting: Record<string, SkillSetting> = {};
   if (Object.keys(botProjectFile.skills).length === 0 && Object.keys(rootBotSkill).length > 0) {
     for (const skillName in rootBotSkill) {
       const currentSkill = rootBotSkill[skillName];
       const skillNameIdentifier = camelCase(skillName);
-
+      updatedSkillSetting[skillNameIdentifier] = {
+        endpointUrl: currentSkill.endpointUrl,
+        msAppId: currentSkill.msAppId,
+      };
       botProjectFile.skills[skillNameIdentifier] = {
         manifest: currentSkill?.manifestUrl || '',
         remote: true,
       };
     }
   }
-  return botProjectFile;
+  return {
+    skillSettings: updatedSkillSetting,
+    botProjectFile,
+  };
 };
 
 export const fetchEndpointNameForSkill = (

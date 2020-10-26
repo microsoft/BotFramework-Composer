@@ -210,6 +210,7 @@ export const Header = () => {
               <ActionButton
                 aria-label={formatMessage('Start all bots')}
                 css={actionButton}
+                data-testid={'startAllBots'}
                 onClick={handleStartOrStopAll}
               >
                 <Icon iconName={'Play'} styles={localBotOperationIcon} />

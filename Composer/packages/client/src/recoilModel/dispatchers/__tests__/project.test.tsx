@@ -506,4 +506,40 @@ describe('Project dispatcher', () => {
       done();
     });
   });
+
+  fit('should migrate skills from existing bots and add them to botproject file', async () => {
+    const newProjectDataClone = cloneDeep(mockProjectResponse);
+    newProjectDataClone.botName = 'new-bot';
+    newProjectDataClone.settings = {
+      ...newProjectDataClone.settings,
+      skill: {
+        'one-note-sync': {
+          endpointUrl: 'https://azure-webservice.net/oneNoteSync/api/messages',
+          manifestUrl: 'https://azure-webservice.net/oneNoteSnyc-manifest.json',
+          msAppId: '123-234-234',
+        },
+      },
+    };
+
+    await act(async () => {
+      (httpClient.put as jest.Mock).mockResolvedValueOnce({
+        data: newProjectDataClone,
+      });
+      await dispatcher.openProject('../test/empty-bot', 'default');
+    });
+
+    expect(renderedComponent.current.settings.skill).toEqual({
+      oneNoteSync: {
+        endpointUrl: 'https://azure-webservice.net/oneNoteSync/api/messages',
+        msAppId: '123-234-234',
+      },
+    });
+
+    expect(renderedComponent.current.botProjectFile.content.skills).toEqual({
+      oneNoteSync: {
+        manifest: 'https://azure-webservice.net/oneNoteSnyc-manifest.json',
+        remote: true,
+      },
+    });
+  });
 });
