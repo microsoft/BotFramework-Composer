@@ -183,7 +183,8 @@ export function getDialogGroupByType(type) {
 
 const truncateSDKType = ($kind) => (typeof $kind === 'string' ? $kind.replace('Microsoft.', '') : '');
 
-const getSchemaTitle = (sdkschema: JSONSchema7, data) => {
+const getSchemaTitle = (data, sdkschema?: JSONSchema7) => {
+  if (!sdkschema) return;
   const rawTitleValue = sdkschema.title as string | ((d) => string) | undefined;
   // Handle the case that FormUIOption label function overrides sdk.schema.
   return typeof rawTitleValue === 'function' ? rawTitleValue(data) : rawTitleValue;
@@ -193,9 +194,9 @@ const getSchemaTitle = (sdkschema: JSONSchema7, data) => {
  * Title priority: $designer.name > title from sdk schema > customize title > $kind suffix
  * @param customizedTitile customized title
  */
-export function generateSDKTitle(sdkschema: JSONSchema7, data, customizedTitle?: string, tab?: PromptTab) {
+export function generateSDKTitle(data, sdkschema?: JSONSchema7, customizedTitle?: string, tab?: PromptTab) {
   const $kind = get(data, '$kind');
-  const titleFromSDKSchema = getSchemaTitle(sdkschema, data);
+  const titleFromSDKSchema = getSchemaTitle(data, sdkschema);
   const titleFrom$designer = get(data, '$designer.name');
   const titleFrom$kind = truncateSDKType($kind);
 

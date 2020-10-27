@@ -76,7 +76,7 @@ export const ActionNodeWrapper: FC<NodeWrapperProps> = ({ id, tab, data, onEvent
       `}
       data-testid="ActionNodeWrapper"
       {...declareElementAttributes(selectableId, id)}
-      aria-label={generateSDKTitle({}, data, '', tab)}
+      aria-label={generateSDKTitle(data, {}, '', tab)}
       onClick={(e) => {
         e.stopPropagation();
         e.preventDefault();
