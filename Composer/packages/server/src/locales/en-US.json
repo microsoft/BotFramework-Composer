@@ -542,9 +542,6 @@
   "composer_needs_net_core_sdk_46e2a8ae": {
     "message": "Composer needs .NET Core SDK"
   },
-  "composer_will_create_your_bot_resources_in_this_az_cc62faf8": {
-    "message": "Composer will create your bot resources in this Azure destination. If you already have assets created then select import"
-  },
   "composer_will_restart_88ee8dc3": {
     "message": "Composer will restart."
   },
@@ -559,9 +556,6 @@
   },
   "configure_composer_to_start_your_bot_using_runtime_fe37dadf": {
     "message": "Configure Composer to start your bot using runtime code you can customize and control."
-  },
-  "configure_resources_27fec71f": {
-    "message": "Configure resources"
   },
   "configured_with_enterprise_scenarios_calendar_who__e9e7e75a": {
     "message": "Configured with enterprise scenarios, calendar, who bot, professional chit-chat."
@@ -1901,9 +1895,6 @@
   "please_return_to_design_view_to_start_the_onboardi_a561af9d": {
     "message": "Please return to Design View to start the Onboarding tutorial."
   },
-  "please_review_the_resources_that_will_be_created_f_6697e7e8": {
-    "message": "Please review the resources that will be created for your bot. Once these resources are provisioned, your resources will be available in your Azure profile"
-  },
   "please_select_a_event_type_200c4c9f": {
     "message": "Please select a event type"
   },
@@ -1999,6 +1990,9 @@
   },
   "provide_a_brief_description_it_will_appear_on_the__f962eb38": {
     "message": "Provide a brief description. It will appear on the publish history list."
+  },
+  "provision_failure_983d3844": {
+    "message": "Provision failure"
   },
   "provision_success_d6a6e437": {
     "message": "Provision success"
@@ -2107,6 +2101,9 @@
   },
   "regex_intent_is_already_defined_df095c1f": {
     "message": "RegEx { intent } is already defined"
+  },
+  "regular_expression_855557bf": {
+    "message": "Regular Expression"
   },
   "regular_expression_recognizer_44664557": {
     "message": "Regular expression recognizer"
@@ -2585,9 +2582,6 @@
   "tips_80d0da2b": {
     "message": "tips"
   },
-  "title_2fc2fe36": {
-    "message": "title"
-  },
   "title_ee03d132": {
     "message": "Title"
   },
@@ -2674,6 +2668,9 @@
   },
   "typing_activity_6b634ae": {
     "message": "Typing activity"
+  },
+  "unable_to_determine_recognizer_type_from_data_valu_2960f526": {
+    "message": "Unable to determine recognizer type from data: { value }"
   },
   "undo_a7be8fef": {
     "message": "Undo"

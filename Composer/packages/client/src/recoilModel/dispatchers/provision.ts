@@ -173,7 +173,7 @@ export const provisionDispatcher = () => {
         }));
         clearInterval(timer);
       }
-    }, 2000);
+    }, 5000);
   };
 
   // const getProvisionStatus = useRecoilCallback(

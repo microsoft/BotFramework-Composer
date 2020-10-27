@@ -2,12 +2,14 @@
 # yarn lockfile v1
 
 
-"@azure/arm-appinsights@./vendor/arm-appinsights":
-  version "2.1.0"
+"@azure/arm-appinsights@^3.0.0":
+  version "3.0.0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@azure/arm-appinsights/-/@azure/arm-appinsights-3.0.0.tgz#d317d1e01fcfe9579139201ec49c038e4e23897e"
+  integrity sha1-0xfR4B/P6VeROSAexJwDjk4jiX4=
   dependencies:
-    "@azure/ms-rest-azure-js" "2.0.1"
-    "@azure/ms-rest-js" "2.0.7"
-    tslib "^1.9.3"
+    "@azure/ms-rest-azure-js" "^2.0.1"
+    "@azure/ms-rest-js" "^2.0.4"
+    tslib "^1.10.0"
 
 "@azure/arm-appservice-profile-2019-03-01-hybrid@1.0.0":
   version "1.0.0"
@@ -27,14 +29,12 @@
     "@azure/ms-rest-js" "^2.0.4"
     tslib "^1.10.0"
 
-"@azure/arm-botservice@^2.0.0":
-  version "2.0.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@azure/arm-botservice/-/@azure/arm-botservice-2.0.0.tgz#f82469374dde5ed6cdbe1f11669aa30d27889ec6"
-  integrity sha1-+CRpN03eXtbNvh8RZpqjDSeInsY=
+"@azure/arm-botservice@./vendor/arm-botservice":
+  version "1.0.0"
   dependencies:
-    "@azure/ms-rest-azure-js" "^2.0.1"
-    "@azure/ms-rest-js" "^2.0.4"
-    tslib "^1.10.0"
+    "@azure/ms-rest-azure-js" "2.0.1"
+    "@azure/ms-rest-js" "2.0.7"
+    tslib "^1.9.3"
 
 "@azure/arm-cognitiveservices@^5.2.0":
   version "5.2.0"
@@ -1674,6 +1674,9 @@ buffer@^5.1.0, buffer@^5.5.0:
   version "5.6.0"
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/buffer/-/buffer-5.6.0.tgz#a31749dc7d81d84db08abf937b6b8c4033f62786"
   integrity sha1-oxdJ3H2B2E2wir+Te2uMQDP2J4Y=
+  dependencies:
+    base64-js "^1.0.2"
+    ieee754 "^1.1.4"
 
 builtin-status-codes@^3.0.0:
   version "3.0.0"
