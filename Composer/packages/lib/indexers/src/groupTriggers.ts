@@ -39,7 +39,7 @@ const getPropertyReferences = (content: any) => {
   return uniq(foundProperties);
 };
 
-const getTriggerPropertyReferences = (trigger: ITrigger) => {
+const getTriggerPropertyReferences = (trigger: ITrigger, isValidProperty: (name: string) => boolean) => {
   const content = trigger.content;
 
   // inspect trigger
@@ -52,7 +52,7 @@ const getTriggerPropertyReferences = (trigger: ITrigger) => {
     }
   }
 
-  const result = uniq(foundProperties);
+  const result = uniq(foundProperties).filter(isValidProperty);
 
   if (result.length === 0) {
     return [NoGroupingTriggerGroupName];
@@ -76,10 +76,8 @@ export const groupTriggersByPropertyReference = (
 ): Record<string, ITrigger[]> => {
   const result = {} as Record<string, ITrigger[]>;
 
-  const validProperties = options?.validProperties;
-  const isValidProperty = validProperties
-    ? (x: string | undefined) => x && (x === NoGroupingTriggerGroupName || validProperties.includes(x))
-    : () => true;
+  const isValidProperty = (name: string) =>
+    !options?.validProperties || name === NoGroupingTriggerGroupName || options?.validProperties.includes(name);
 
   const addResult = (property: string, trigger: ITrigger) => {
     result[property] ? result[property].push(trigger) : (result[property] = [trigger]);
@@ -87,7 +85,7 @@ export const groupTriggersByPropertyReference = (
 
   if (dialog?.triggers) {
     dialog.triggers.forEach((t) => {
-      const properties = getTriggerPropertyReferences(t).filter(isValidProperty);
+      const properties = getTriggerPropertyReferences(t, isValidProperty);
       if (properties.length > 1 && options?.allowMultiParent) {
         properties.forEach((p) => {
           addResult(p, t);
