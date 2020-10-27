@@ -260,12 +260,7 @@ export function CreateOptions(props: CreateOptionsProps) {
         dialogType={DialogTypes.CreateFlow}
         onDismiss={onDismiss}
       >
-        <ChoiceGroup
-          // label={formatMessage('Choose how to create your bot')}
-          options={choiceOptions}
-          selectedKey={option}
-          onChange={handleChange}
-        />
+        <ChoiceGroup options={choiceOptions} selectedKey={option} onChange={handleChange} />
         <h3 css={listHeader}>{formatMessage('Examples')}</h3>
         <div css={detailListContainer} data-is-scrollable="true">
           <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
