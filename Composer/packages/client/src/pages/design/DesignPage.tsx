@@ -536,7 +536,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     const content = deleteTrigger(dialogs, dialogId, index, (trigger) => triggerApi.deleteTrigger(dialogId, trigger));
 
     if (content) {
-      updateDialog({ id: dialogId, content, projectId });
+      updateDialog({ id: dialogId, content, projectId: skillId ?? projectId });
       const match = /\[(\d+)\]/g.exec(selected);
       const current = match && match[1];
       if (!current) return;
@@ -584,11 +584,24 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const selectedTrigger = currentDialog?.triggers.find((t) => t.id === selected);
   const withWarning = triggerNotSupported(currentDialog, selectedTrigger);
 
+  const parseTriggerId = (triggerId: string | undefined): number | undefined => {
+    if (triggerId == null) return undefined;
+    const indexString = triggerId.match(/\d+/)?.[0];
+    if (indexString == null) return undefined;
+    return parseInt(indexString);
+  };
+
   return (
     <React.Fragment>
       <div css={pageRoot}>
         <LeftRightSplit initialLeftGridWidth="20%" minLeftPixels={200} minRightPixels={800}>
           <ProjectTree
+            defaultSelected={{
+              projectId,
+              skillId: skillId ?? undefined,
+              dialogId,
+              trigger: parseTriggerId(selectedTrigger?.id),
+            }}
             onDeleteDialog={handleDeleteDialog}
             onDeleteTrigger={handleDeleteTrigger}
             onSelect={handleSelect}

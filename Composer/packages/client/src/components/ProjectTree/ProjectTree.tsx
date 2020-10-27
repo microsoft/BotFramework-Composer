@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { jsx, css } from '@emotion/core';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
@@ -12,8 +12,8 @@ import { DialogInfo, ITrigger, Diagnostic, DiagnosticSeverity } from '@bfc/share
 import debounce from 'lodash/debounce';
 import { useRecoilValue } from 'recoil';
 import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
-import isEqual from 'lodash/isEqual';
 import { extractSchemaProperties, groupTriggersByPropertyReference, NoGroupingTriggerGroupName } from '@bfc/indexers';
+import isMatch from 'lodash/isMatch';
 
 import {
   dispatcherState,
@@ -43,7 +43,6 @@ const root = css`
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  overflow-y: auto;
   overflow-x: hidden;
   .ms-List-cell {
     min-height: 36px;
@@ -62,9 +61,6 @@ const icons = {
 };
 
 const tree = css`
-  height: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
   height: 100%;
   label: tree;
 `;
@@ -135,6 +131,7 @@ type Props = {
   navLinks?: TreeLink[];
   onDeleteTrigger: (id: string, index: number) => void;
   onDeleteDialog: (id: string) => void;
+  defaultSelected?: Partial<TreeLink>;
 };
 
 export const ProjectTree: React.FC<Props> = ({
@@ -144,18 +141,23 @@ export const ProjectTree: React.FC<Props> = ({
   onDeleteDialog,
   onDeleteTrigger,
   onSelect,
+  defaultSelected,
 }) => {
   const { onboardingAddCoachMarkRef, navigateToFormDialogSchema } = useRecoilValue(dispatcherState);
 
   const [filter, setFilter] = useState('');
   const formDialogComposerFeatureEnabled = useFeatureFlag('FORM_DIALOG');
-  const [selectedLink, setSelectedLink] = useState<TreeLink | undefined>();
+  const [selectedLink, setSelectedLink] = useState<Partial<TreeLink> | undefined>(defaultSelected);
   const delayedSetFilter = debounce((newValue) => setFilter(newValue), 1000);
   const addMainDialogRef = useCallback((mainDialog) => onboardingAddCoachMarkRef({ mainDialog }), []);
   const projectCollection = useRecoilValue<BotInProject[]>(botProjectSpaceSelector).map((bot) => ({
     ...bot,
     hasWarnings: false,
   }));
+
+  useEffect(() => {
+    setSelectedLink(defaultSelected);
+  }, [defaultSelected]);
 
   // if we're in a single-bot setting, the root will be undefined, so we fall back to current
   const rootProjectId = useRecoilValue(rootBotProjectIdSelector) ?? useRecoilValue(currentProjectIdState);
@@ -204,6 +206,11 @@ export const ProjectTree: React.FC<Props> = ({
     return bot.dialogs.some(dialogHasErrors(bot.projectId));
   };
 
+  const isTriggerMatch = (link1?: Partial<TreeLink>, link2?: Partial<TreeLink>) => {
+    if (link1 == null || link2 == null) return false;
+    return isMatch(link1, link2);
+  };
+
   const handleOnSelect = (link: TreeLink) => {
     setSelectedLink(link);
     onSelect(link);
@@ -233,7 +240,7 @@ export const ProjectTree: React.FC<Props> = ({
           showProps
           forceIndent={bot.isRemote ? SUMMARY_ARROW_SPACE : 0}
           icon={bot.isRemote ? icons.EXTERNAL_SKILL : icons.BOT}
-          isActive={isEqual(link, selectedLink)}
+          isActive={isTriggerMatch(link, selectedLink)}
           link={link}
           menu={[{ label: formatMessage('Create/edit skill manifest'), onClick: () => {} }]}
         />
@@ -279,7 +286,7 @@ export const ProjectTree: React.FC<Props> = ({
           showProps
           forceIndent={showTriggers ? 0 : SUMMARY_ARROW_SPACE}
           icon={isFormDialog ? icons.FORM_DIALOG : icons.DIALOG}
-          isActive={isEqual(link, selectedLink)}
+          isActive={isTriggerMatch(link, selectedLink)}
           link={link}
           menu={[
             {
@@ -325,7 +332,7 @@ export const ProjectTree: React.FC<Props> = ({
         dialogName={dialog.displayName}
         forceIndent={48}
         icon={icons.TRIGGER}
-        isActive={isEqual(link, selectedLink)}
+        isActive={isTriggerMatch(link, selectedLink)}
         link={link}
         menu={[
           {
