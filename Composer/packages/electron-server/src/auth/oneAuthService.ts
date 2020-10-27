@@ -17,17 +17,6 @@ import { OneAuthBase } from './oneAuthBase';
 
 const log = logger.extend('one-auth');
 
-let oneAuth;
-if (isWindows()) {
-  oneAuth = require('oneauth-win64');
-}
-if (isMac()) {
-  oneAuth = require('oneauth-mac');
-}
-if (isLinux()) {
-  oneAuth = {};
-}
-
 const COMPOSER_APP_ID = 'com.microsoft.BotFrameworkComposer';
 const COMPOSER_APP_NAME = 'BotFrameworkComposer';
 const COMPOSER_APP_VERSION = app.getVersion();
