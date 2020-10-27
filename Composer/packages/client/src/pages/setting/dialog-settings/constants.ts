@@ -16,6 +16,7 @@ export const BotSettings = {
   languagesubTitle: formatMessage(
     `To make this bot available in other languages, select "Create copy to translate bot content" and translate the content into the new language.`
   ),
+  helpLink: 'https://aka.ms/composer-multilingual-support',
   languageBotLanauge: formatMessage('Bot language (active)'),
   languageDefaultLanauge: formatMessage('Default language'),
   languageAddLanauge: formatMessage('Create copy to translate bot content'),
