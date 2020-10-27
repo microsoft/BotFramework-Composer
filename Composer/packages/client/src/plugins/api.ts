@@ -36,6 +36,7 @@ interface PublishAPI {
   onBack?: () => void;
   setTitle?: (value) => void;
   getSchema?: () => any;
+  savePublishConfig?: (config: PublishConfig) => void;
 }
 
 class API implements IAPI {
@@ -72,6 +73,7 @@ class API implements IAPI {
       onBack: undefined,
       setTitle: undefined,
       getSchema: undefined,
+      savePublishConfig: undefined,
     };
   }
 }

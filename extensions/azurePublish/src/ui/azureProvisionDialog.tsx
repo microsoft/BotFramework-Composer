@@ -15,7 +15,7 @@ import {
   startProvision,
   closeDialog,
   onBack,
-  setPublishConfig,
+  savePublishConfig,
   setTitle,
   getSchema,
 } from '@bfc/extension-client';
@@ -293,7 +293,7 @@ export const AzureProvisionDialog: React.FC = () => {
   const onSave = useMemo(
     () => () => {
       console.log('inside', importConfig);
-      setPublishConfig(importConfig);
+      savePublishConfig(importConfig);
       closeDialog();
     },
     [importConfig]
@@ -431,6 +431,7 @@ export const AzureProvisionDialog: React.FC = () => {
       );
     }
   }, [
+    onSave,
     page,
     choice,
     isEditorError,

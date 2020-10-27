@@ -125,6 +125,10 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
     PluginAPI.publish.getSchema = () => {
       return props.types.find((t) => t.name === targetType)?.schema;
     };
+    PluginAPI.publish.savePublishConfig = (config) => {
+      console.log(config);
+      props.updateSettings(name, targetType, JSON.stringify(config) || '{}', current);
+    };
   }, [projectId, name, targetType]);
 
   const submit = async (_e) => {
