@@ -346,7 +346,7 @@ export class BotProject implements IBotProject {
     }
   }
 
-  public updateBotInfo = async (name: string, description: string) => {
+  public updateBotInfo = async (name: string, description: string, preserveRoot = false) => {
     const mainDialogFile = this.dialogFiles.find((file) => !file.relativePath.includes('/'));
     if (!mainDialogFile) return;
     const botName = name.trim().toLowerCase();
@@ -375,7 +375,7 @@ export class BotProject implements IBotProject {
       content.name = botName;
       await this._updateFile(relativePath, JSON.stringify(content, null, 2));
     }
-    await serializeFiles(this.fileStorage, this.dataDir, botName);
+    await serializeFiles(this.fileStorage, this.dataDir, botName, preserveRoot);
   };
 
   public updateFile = async (name: string, content: string): Promise<string> => {
@@ -806,7 +806,7 @@ export class BotProject implements IBotProject {
     try {
       const defaultBotProjectFile: any = await AssetService.manager.botProjectFileTemplate;
 
-      for (const [_, file] of files) {
+      for (const [, file] of files) {
         if (file.name.endsWith(FileExtensions.BotProject)) {
           return fileList;
         }

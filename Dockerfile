@@ -10,7 +10,7 @@ FROM  mcr.microsoft.com/dotnet/core/sdk:3.1-focal as base
 RUN apt update \
     && apt -y install curl dirmngr apt-transport-https lsb-release ca-certificates \
     && curl -sL https://deb.nodesource.com/setup_12.x | bash - \
-    && apt install -y nodejs \
+    && apt install -y nodejs libgomp1 \
     && npm install -g yarn
 
 FROM base as build
@@ -47,6 +47,6 @@ COPY --from=composerbasic /app ..
 
 ENV COMPOSER_BUILTIN_EXTENSIONS_DIR "/app/extensions"
 ENV COMPOSER_REMOTE_EXTENSIONS_DIR "/app/remote-extensions"
-ENV COMPOSER_EXTENSION_DATA "/app/extensions.json"
-
+ENV COMPOSER_REMOTE_EXTENSION_DATA_DIR "/app/extension-data"
+ENV COMPOSER_EXTENSION_MANIFEST "/app/extensions.json"
 CMD ["yarn","start:server"]
