@@ -78,13 +78,18 @@ jobs:
         displayName: "dotnet build"
         inputs:
           projects: runtime/dotnet
-      #- task: ComponentGovernanceComponentDetection@0
-      #displayName: Component Detection
-      #inputs:
-      #scanType: 'Register'
-      #verbosity: 'Verbose'
-      #alertWarningLevel: 'High'
-      #failOnAlert: true
+      - task: ComponentGovernanceComponentDetection@0
+        displayName: Component Detection
+        inputs:
+          scanType: 'Register'
+          verbosity: 'Verbose'
+          alertWarningLevel: 'High'
+          failOnAlert: true
+
+  - job: static
+    pool: 'windows-latest'
+    displayName: Static Analysis (CodeQL & LGTM)
+    steps:
       - task: Semmle@0
         env:
           SYSTEM_ACCESSTOKEN: $(System.AccessToken)
