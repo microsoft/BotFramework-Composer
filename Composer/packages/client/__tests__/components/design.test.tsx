@@ -40,6 +40,7 @@ describe('<ProjectTree/>', () => {
         onBotExportZip={() => {}}
         onBotRemoveSkill={() => {}}
         onBotStart={() => {}}
+        onBotStop={() => {}}
         onDialogCreateTrigger={() => {}}
         onDialogDeleteTrigger={handleDeleteTrigger}
         onSelect={handleSelect}

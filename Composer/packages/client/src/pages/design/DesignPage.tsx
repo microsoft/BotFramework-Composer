@@ -67,6 +67,7 @@ import {
 } from './styles';
 import { VisualEditor } from './VisualEditor';
 import { PropertyEditor } from './PropertyEditor';
+import { useLocalBotOperations } from '../../components/TestController/useLocalBotOperations';
 
 const CreateSkillModal = React.lazy(() => import('../../components/CreateSkillModal'));
 const RepairSkillModal = React.lazy(() => import('../../components/RepairSkillModal'));
@@ -118,6 +119,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
   const projectDialogsMap = useRecoilValue(projectDialogsMapSelector);
   const projectDisplaySkillManifestMap = useRecoilValue(projectDisplaySkillManifestMapSelector);
+  const { startSingleBot, stopSingleBot } = useLocalBotOperations();
   const breadcrumb = useRecoilValue(breadcrumbState(projectId));
   const focusPath = useRecoilValue(focusPathState(projectId));
   const locale = useRecoilValue(localeState(projectId));
@@ -653,9 +655,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             onBotEditManifest={handleEditMainfest}
             onBotExportZip={exportToZip}
             onBotRemoveSkill={removeSkillFromBotProject}
-            onBotStart={(projectId) => {
-              console.log('bot start', projectId);
-            }}
+            onBotStart={startSingleBot}
+            onBotStop={stopSingleBot}
             onDialogCreateTrigger={(projectId, dialogId) => {
               setTriggerModalVisibility({ projectId, dialogId });
             }}

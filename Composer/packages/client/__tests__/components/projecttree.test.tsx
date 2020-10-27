@@ -29,6 +29,7 @@ describe('<ProjectTree/>', () => {
         onBotExportZip={() => {}}
         onBotRemoveSkill={() => {}}
         onBotStart={() => {}}
+        onBotStop={() => {}}
         onDialogCreateTrigger={() => {}}
         onDialogDeleteTrigger={() => {}}
         onSelect={() => {}}
@@ -49,6 +50,7 @@ describe('<ProjectTree/>', () => {
         onBotExportZip={() => {}}
         onBotRemoveSkill={() => {}}
         onBotStart={() => {}}
+        onBotStop={() => {}}
         onDialogCreateTrigger={() => {}}
         onDialogDeleteTrigger={() => {}}
         onSelect={mockFileSelect}
@@ -71,6 +73,7 @@ describe('<ProjectTree/>', () => {
         onBotExportZip={() => {}}
         onBotRemoveSkill={() => {}}
         onBotStart={() => {}}
+        onBotStop={() => {}}
         onDialogCreateTrigger={() => {}}
         onDialogDeleteTrigger={() => {}}
         onSelect={() => {}}

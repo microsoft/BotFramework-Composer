@@ -27,7 +27,7 @@ import {
   dialogState,
   displaySkillManifestState,
 } from '../atoms';
-import { dialogsSelectorFamily } from '../selectors';
+import { dialogsSelectorFamily, buildEssentialsSelector } from '../selectors';
 
 // Actions
 export const localBotsWithoutErrorsSelector = selector({
@@ -82,6 +82,7 @@ export const botProjectSpaceSelector = selector({
       const formDialogSchemas = get(formDialogSchemasSelectorFamily(projectId));
       const metaData = get(projectMetaDataState(projectId));
       const botError = get(botErrorState(projectId));
+      const buildEssentials = get(buildEssentialsSelector(projectId));
       const name = get(botDisplayNameState(projectId));
       const botNameId = get(botNameIdentifierState(projectId));
 
@@ -109,7 +110,17 @@ export const botProjectSpaceSelector = selector({
       };
       const diagnostics = BotIndexer.validate(botAssets, localeSetting);
 
-      return { dialogs, formDialogSchemas, projectId, name, ...metaData, error: botError, diagnostics, botNameId };
+      return {
+        dialogs,
+        formDialogSchemas,
+        projectId,
+        name,
+        ...metaData,
+        error: botError,
+        diagnostics,
+        botNameId,
+        buildEssentials,
+      };
     });
     return result;
   },

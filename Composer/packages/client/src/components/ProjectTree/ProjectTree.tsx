@@ -27,6 +27,7 @@ import { navigateTo } from '../../utils/navigation';
 
 import { TreeItem } from './treeItem';
 import { ExpandableNode } from './ExpandableNode';
+import { BotStatus } from '../../constants';
 
 // -------------------- Styles -------------------- //
 
@@ -113,7 +114,7 @@ type BotInProject = {
   isRemote: boolean;
   isRootBot: boolean;
   diagnostics: Diagnostic[];
-  error?: any;
+  [key: string]: any;
 };
 
 type Props = {
@@ -125,6 +126,7 @@ type Props = {
   onBotDeleteDialog: (projectId: string, dialogId: string) => void;
   onBotCreateDialog: (projectId: string) => void;
   onBotStart: (projectId: string) => void;
+  onBotStop: (projectId: string) => void;
   onBotEditManifest: (projectId: string) => void;
   onBotExportZip: (projectId: string) => void;
   onBotRemoveSkill: (skillId: string) => void;
@@ -141,6 +143,7 @@ export const ProjectTree: React.FC<Props> = ({
   onSelect,
   onBotCreateDialog,
   onBotStart,
+  onBotStop,
   onBotEditManifest,
   onBotExportZip,
   onBotRemoveSkill,
@@ -207,6 +210,8 @@ export const ProjectTree: React.FC<Props> = ({
       isBroken: !!bot.error,
       diagnostics: bot.diagnostics,
     };
+    const isRunning = bot.buildEssentials.status === BotStatus.connected;
+
     const menu = [
       {
         label: formatMessage('Add a dialog'),
@@ -216,10 +221,10 @@ export const ProjectTree: React.FC<Props> = ({
         },
       },
       {
-        label: formatMessage('Start bot'),
-        icon: 'TriangleSolidRight12',
+        label: isRunning ? formatMessage('Stop bot') : formatMessage('Start bot'),
+        icon: isRunning ? 'CircleStopSolid' : 'TriangleSolidRight12',
         onClick: () => {
-          onBotStart(bot.projectId);
+          isRunning ? onBotStop(bot.projectId) : onBotStart(bot.projectId);
         },
       },
       {
