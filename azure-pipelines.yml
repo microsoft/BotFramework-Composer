@@ -70,32 +70,30 @@ jobs:
   - job: security
     displayName: Security Analysis
     steps:
-    - task: UseDotNet@2
-      inputs:
-        version: '3.1.x'
-        packageType: runtime
-    - task: DotNetCoreCLI@2
-      displayName: 'dotnet build'
-      inputs:
-        projects: runtime/dotnet
-    - task: ComponentGovernanceComponentDetection@0
-      displayName: Component Detection
-      inputs:
-        scanType: 'Register'
-        verbosity: 'Verbose'
-        alertWarningLevel: 'High'
-        failOnAlert: true
-    - task: Semmle@0
-      env: 
-        SYSTEM_ACCESSTOKEN: $(System.AccessToken)
-      inputs:
-        toolVersion: 'LatestPreRelease'
-        sourceCodeDirectory: '$(Build.SourcesDirectory)\Composer'
-        language: 'tsandjs'
-        includeNodeModules: true
-        querySuite: 'Required'
-        timeout: '1800'
-        ram: '16384'
-        addProjectDirToScanningExclusionList: true
-
-
+      - task: UseDotNet@2
+        inputs:
+          version: "3.1.x"
+          packageType: runtime
+      - task: DotNetCoreCLI@2
+        displayName: "dotnet build"
+        inputs:
+          projects: runtime/dotnet
+      #- task: ComponentGovernanceComponentDetection@0
+      #displayName: Component Detection
+      #inputs:
+      #scanType: 'Register'
+      #verbosity: 'Verbose'
+      #alertWarningLevel: 'High'
+      #failOnAlert: true
+      - task: Semmle@0
+        env:
+          SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+        inputs:
+          toolVersion: "LatestPreRelease"
+          sourceCodeDirectory: '$(Build.SourcesDirectory)\Composer'
+          language: "tsandjs"
+          includeNodeModules: true
+          querySuite: "Required"
+          timeout: "1800"
+          ram: "16384"
+          addProjectDirToScanningExclusionList: true
