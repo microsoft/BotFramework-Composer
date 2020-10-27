@@ -100,7 +100,23 @@ However, the packages that we care about will contain one of more of the followi
 * an `exported` folder containing one or more sets of dialog files
 * an `exported` folder containing one or more sets of LG files
 
+## How to package a custom action
 
+1. <a href="https://docs.microsoft.com/en-us/composer/how-to-add-custom-action">Follow these steps</a> to create the code and schema for your custom action. Both the code and schema files are required to create the package.
+2. Add any additional exported dialogs using the instructions below.
+
+TODO: What else is necessary?
+TODO: How can I bundle multiple actions in a single package
+
+## How to package dialogs for re-use
+
+To share dialogs you've created in Composer:
+
+1. Open your bot project and find the `dialogs` folder. The files for each dialog are contained in a named sub-folder here.  Identify the dialogs you want to share.
+2. Create a new folder with the name of your new package. For example, `cool-dialogs`
+3. Inside this new folder, create a subfolder called `exported`.
+4. Copy the dialogs you want to share from the original `dialogs` folder into the new `exported` folder.
+5. Follow the instructions below to publish the package to nuget and/or npm.
 
 ## For Nuget
 
@@ -137,12 +153,10 @@ TODO: What else should go in this?  Keywords, homepage link,etc?
 
 ## For NPM
 
-In the parent folder containing the `exported` folder, make sure there is a `package.json` file. You can create one by running the command:
+In the parent folder containing the `exported` folder, make sure there is a `package.json` file. You can create one by running the command: `npm init`
 
-```bash
-npm init
-```
+<a href="https://docs.npmjs.com/creating-a-package-json-file">Follow these instructions</a> to customize the resulting package.json file to include an accurate description of your extension.
 
-
+Then, when you are ready to publish it, <a href="https://docs.npmjs.com/cli/v6/commands/npm-publish">follow these instructions to publish it to npm.</a> This will create the package file and upload its to the npm registry.
 
 TODO: This should also declare its minimum SDK version right???
