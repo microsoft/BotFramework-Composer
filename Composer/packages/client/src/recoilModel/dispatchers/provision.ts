@@ -6,9 +6,9 @@ import { CallbackInterface, useRecoilCallback } from 'recoil';
 
 import { provisionStatusState, settingsState } from '../atoms/botState';
 import { getAccessTokenInCache, getGraphTokenInCache } from '../../utils/auth';
-import { CardProps } from '../../components/NotificationCard';
+import { CardProps } from '../../components/Notifications/NotificationCard';
 
-import { addNotificationInternal, createNotifiction, updateNotificationInternal } from './notification';
+import { addNotificationInternal, createNotification, updateNotificationInternal } from './notification';
 import httpClient from './../../utils/httpUtil';
 
 export const provisionDispatcher = () => {
@@ -51,7 +51,7 @@ export const provisionDispatcher = () => {
           }
         );
         console.log(result.data);
-        const notification = createNotifiction(getProvisionPendingNotification(result.data.message));
+        const notification = createNotification(getProvisionPendingNotification(result.data.message));
         addNotificationInternal(callbackHelpers, notification);
         // update provision status
         callbackHelpers.set(provisionStatusState(projectId), (provisionStatus) => {

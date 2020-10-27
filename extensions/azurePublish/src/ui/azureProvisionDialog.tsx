@@ -23,6 +23,8 @@ import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { ResourceGroup } from '@azure/arm-resources/esm/models';
 import { DeployLocation } from '@bfc/types';
 import {
+  ScrollablePane,
+  ScrollbarVisibility,
   ChoiceGroup,
   IChoiceGroupOption,
   DetailsList,
@@ -290,11 +292,11 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const onSave = useMemo(
     () => () => {
-      console.log(importConfig);
+      console.log('inside', importConfig);
       setPublishConfig(importConfig);
       closeDialog();
     },
-    []
+    [importConfig]
   );
 
   const updateChoice = useMemo(
@@ -309,10 +311,10 @@ export const AzureProvisionDialog: React.FC = () => {
   }, [currentSubscription, currentHostName, errorHostName]);
 
   const PageFormConfig = (
-    <Fragment>
+    <div style={{height: 'inherit'}}>
       <ChoiceGroup defaultSelectedKey="create" options={choiceOptions} onChange={updateChoice} />
       {subscriptionOption?.length > 0 && choice.key === 'create' && (
-        <form style={{ width: '60%' }}>
+        <form style={{ width: '60%', height:'100%' }}>
           <Dropdown
             required
             defaultSelectedKey={currentSubscription?.subscriptionId}
@@ -341,7 +343,7 @@ export const AzureProvisionDialog: React.FC = () => {
       )}
       {choice.key === 'create' && subscriptionOption?.length < 1 && <Spinner label="Loading" />}
       {choice.key === 'import' && (
-        <div style={{ width: '60%', marginTop: '10px', marginBottom: '20px' }}>
+        <div style={{ width: '60%', marginTop: '10px', height: '100%' }}>
           <div>Publish Configuration</div>
           <JsonEditor
             id={publishType}
@@ -359,12 +361,13 @@ export const AzureProvisionDialog: React.FC = () => {
           />
         </div>
       )}
-    </Fragment>
+    </div>
   );
 
   const PageReview = useMemo(() => {
     return (
-      <Fragment>
+      <div style={{height: 'inherit'}}>
+        <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
         <DetailsList
           isHeaderVisible
           checkboxVisibility={CheckboxVisibility.hidden}
@@ -376,29 +379,28 @@ export const AzureProvisionDialog: React.FC = () => {
           setKey="none"
           onRenderDetailsHeader={onRenderDetailsHeader}
         />
-      </Fragment>
+        </ScrollablePane>
+      </div>
     );
   }, [group, listItems]);
 
   const PageFooter = useMemo(() => {
     if (page === PageTypes.ConfigProvision) {
       return (
-        <Fragment>
-          <DialogFooter>
-            <DefaultButton text={'Back'} onClick={onBack} />
-            {choice.key === 'create' ? (
-              <PrimaryButton
-                disabled={isDisAble}
-                text="Next"
-                onClick={() => {
-                  onNext(currentHostName);
-                }}
-              />
-            ) : (
-              <PrimaryButton disabled={isEditorError} text="Save" onClick={onSave} />
-            )}
-          </DialogFooter>
-        </Fragment>
+        <DialogFooter>
+          <DefaultButton text={'Back'} onClick={onBack} />
+          {choice.key === 'create' ? (
+            <PrimaryButton
+              disabled={isDisAble}
+              text="Next"
+              onClick={() => {
+                onNext(currentHostName);
+              }}
+            />
+          ) : (
+            <PrimaryButton disabled={isEditorError} text="Save" onClick={onSave} />
+          )}
+        </DialogFooter>
       );
     } else {
       return (

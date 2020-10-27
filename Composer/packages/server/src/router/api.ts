@@ -13,6 +13,7 @@ import { EjectController } from '../controllers/eject';
 import { FormDialogController } from '../controllers/formDialog';
 import * as ExtensionsController from '../controllers/extensions';
 import { ProvisionController } from '../controllers/provision';
+import { FeatureFlagController } from '../controllers/featureFlags';
 
 import { UtilitiesController } from './../controllers/utilities';
 
@@ -89,6 +90,10 @@ router.get('/extensions/search', ExtensionsController.searchExtensions);
 router.get('/extensions/:id/:bundleId', ExtensionsController.getBundleForView);
 // proxy route for extensions (allows extension client code to make fetch calls using the Composer server as a proxy -- avoids browser blocking request due to CORS)
 router.post('/extensions/proxy/:url', ExtensionsController.performExtensionFetch);
+
+//FeatureFlags
+router.get('/featureFlags', FeatureFlagController.getFeatureFlags);
+router.post('/featureFlags', FeatureFlagController.updateFeatureFlags);
 
 const errorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
   Promise.resolve(handler(req, res, next)).catch(next);

@@ -23,7 +23,8 @@ import { PluginAPI } from '../../plugins/api';
 import { PluginHost } from '../../components/PluginHost/PluginHost';
 import { dispatcherState } from '../../recoilModel';
 
-import { label, separator } from './styles';
+import { label, separator, defaultPublishSurface, pvaPublishSurface, azurePublishSurface } from './styles';
+
 interface CreatePublishTargetProps {
   closeDialog: () => void;
   current: { index: number; item: PublishTarget } | null;
@@ -37,7 +38,6 @@ const PageTypes = {
   AddProfile: 'add',
   EditProfile: 'edit',
   ConfigProvision: 'config',
-  ReviewResource: 'review',
 };
 
 const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
@@ -129,7 +129,8 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
 
   const submit = async (_e) => {
     if (targetType) {
-      await props.updateSettings(name, targetType, JSON.stringify(config) || '{}', current);
+      console.log(config);
+      props.updateSettings(name, targetType, JSON.stringify(config) || '{}', current);
       props.closeDialog();
     }
   };
@@ -174,7 +175,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
         </Fragment>
       </div>
     );
-  }, [selectedType, userSettings]);
+  }, [targetType, selectedType, userSettings, FormInPage]);
 
   const PageContent = useMemo(() => {
     switch (page) {
@@ -209,15 +210,29 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
           </Fragment>
         );
       case PageTypes.ConfigProvision:
-      case PageTypes.ReviewResource:
-        if (selectedType && selectedType?.bundleId) {
+        if (selectedType?.bundleId) {
+          // render custom plugin view
+          let publishSurfaceStyles;
+          switch (selectedType.extensionId) {
+            case 'pva-publish-composer':
+              publishSurfaceStyles = pvaPublishSurface;
+              break;
+            case 'azurePublish':
+              publishSurfaceStyles = azurePublishSurface;
+              break;
+            default:
+              publishSurfaceStyles = defaultPublishSurface;
+              break;
+          }
           return (
-            <PluginHost bundleId={selectedType?.bundleId} pluginName={selectedType?.extensionId} pluginType="publish" />
+            <div css={publishSurfaceStyles}>
+              <PluginHost bundleId={selectedType.bundleId} pluginName={selectedType.extensionId} pluginType="publish" />
+            </div>
           );
         }
     }
     return null;
-  }, [page, nextDisabled, saveDisabled]);
+  }, [config, page, FormInPage, PageEditProfile, nextDisabled, saveDisabled, selectedType]);
 
   // const examplePersona: IPersonaSharedProps = {
   //   text: 'Somebody',

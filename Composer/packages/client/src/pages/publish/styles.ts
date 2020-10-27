@@ -165,12 +165,21 @@ export const resourcesListCellContent = css`
   flex: 1;
 `;
 
-export const customPublishUISurface = css`
-  height: 350px;
-`;
-
 export const separator = css`
   ::before {
     background: gray;
   }
+`;
+
+export const defaultPublishSurface = css`
+  height: 230px;
+`;
+
+export const pvaPublishSurface = css`
+  height: 350px;
+`;
+export const azurePublishSurface = css`
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 400px;
 `;

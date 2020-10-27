@@ -21,9 +21,6 @@ const iframeStyle = (isLoading = false) => css`
   width: 100%;
   border: 0;
   display: ${isLoading ? 'none' : 'block'};
-  overflow-x: hidden;
-  overflow-y: auto;
-  min-height: 400px;
 `;
 
 const loadingStyles = css`
