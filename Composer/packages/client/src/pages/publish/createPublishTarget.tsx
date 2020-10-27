@@ -131,13 +131,16 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
     };
   }, [projectId, name, targetType]);
 
-  const submit = async (_e) => {
-    if (targetType) {
-      console.log(config);
-      props.updateSettings(name, targetType, JSON.stringify(config) || '{}', current);
-      props.closeDialog();
-    }
-  };
+  const submit = useMemo(
+    () => (_e) => {
+      if (targetType) {
+        console.log(config);
+        props.updateSettings(name, targetType, JSON.stringify(config) || '{}', current);
+        props.closeDialog();
+      }
+    },
+    [targetType, config, name, current]
+  );
 
   const FormInPage = useMemo(() => {
     return (
@@ -179,7 +182,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
         </Fragment>
       </div>
     );
-  }, [targetType, selectedType, userSettings, FormInPage]);
+  }, [targetType, selectedType, userSettings, FormInPage, config]);
 
   const PageContent = useMemo(() => {
     switch (page) {
@@ -236,7 +239,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
         }
     }
     return null;
-  }, [config, page, FormInPage, PageEditProfile, nextDisabled, saveDisabled, selectedType]);
+  }, [config, page, FormInPage, PageEditProfile, nextDisabled, saveDisabled, selectedType, submit]);
 
   // const examplePersona: IPersonaSharedProps = {
   //   text: 'Somebody',
