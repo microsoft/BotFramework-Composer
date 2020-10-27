@@ -23,7 +23,6 @@ export const setSettingState = async (
   settings: DialogSetting
 ) => {
   const { set, snapshot } = callbackHelpers;
-  console.log('哈哈哈');
   const previousSettings = await snapshot.getPromise(settingsState(projectId));
   if (!isEqual(settings.skill, previousSettings.skill)) {
     const skills = await snapshot.getPromise(skillsState(projectId));

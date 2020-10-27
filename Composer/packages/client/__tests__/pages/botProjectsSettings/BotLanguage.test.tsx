@@ -4,7 +4,7 @@
 import React from 'react';
 import { act, fireEvent } from '@bfc/test-utils';
 
-import { SkillHostEndPoint } from '../../../src/pages/botProject/SkillHostEndPoint';
+import { BotLanguage } from '../../../src/pages/botProject/BotLanguage';
 import { renderWithRecoilAndCustomDispatchers } from '../../testUtils';
 import { dispatcherState } from '../../../src/recoilModel';
 import { settingsState, currentProjectIdState } from '../../../src/recoilModel';
@@ -28,19 +28,30 @@ describe('SkillHostEndPoint', () => {
       });
     };
     const { getByTestId } = renderWithRecoilAndCustomDispatchers(
-      <SkillHostEndPoint projectId={state.projectId} />,
+      <BotLanguage projectId={state.projectId} />,
       initRecoilState
     );
-    const textField = getByTestId('SkillHostEndPointTextField');
+    const textField1 = getByTestId('MicrosoftAppId');
     act(() => {
-      fireEvent.change(textField, {
-        target: { value: 'mySkillHostEndPoint' },
+      fireEvent.change(textField1, {
+        target: { value: 'myMicrosoftAppId' },
       });
     });
     expect(setSettingsMock).toBeCalledWith('test', {
       defaultLanguage: 'en-us',
       languages: ['en-us', 'fr-fr'],
-      skillHostEndpoint: 'mySkillHostEndPoint',
+      MicrosoftAppId: 'myMicrosoftAppId',
+    });
+    const textField2 = getByTestId('MicrosoftPassword');
+    act(() => {
+      fireEvent.change(textField2, {
+        target: { value: 'myMicrosoftPassword' },
+      });
+    });
+    expect(setSettingsMock).toBeCalledWith('test', {
+      defaultLanguage: 'en-us',
+      languages: ['en-us', 'fr-fr'],
+      MicrosoftAppPassword: 'myMicrosoftPassword',
     });
   });
 });

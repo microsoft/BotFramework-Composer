@@ -45,7 +45,7 @@ const onRenderLabel = (props: ITextFieldProps | undefined) => {
 const errorElement = (errorText: string) => {
   if (!errorText) return '';
   return (
-    <div css={errorContainer}>
+    <div css={errorContainer} data-testid={'AppIdAndPasswordError'}>
       <Icon iconName={'ErrorBadge'} styles={errorIcon} />
       <div css={errorTextStyle}>{errorText}</div>
     </div>
@@ -83,6 +83,7 @@ export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {
       <div css={appIdAndPasswordStyle}>
         <TextField
           aria-labelledby={'Microsoft AppId'}
+          data-testid={'MicrosoftAppId'}
           errorMessage={required ? errorElement(microsoftAppIdErrorMsg) : ''}
           label={formatMessage('Microsoft App Id')}
           placeholder={'Enter Microsoft App Id'}
@@ -107,6 +108,7 @@ export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {
         />
         <TextField
           aria-labelledby={'Microsoft Password'}
+          data-testid={'MicrosoftPassword'}
           errorMessage={required ? errorElement(microsoftPasswordErrorMsg) : ''}
           label={formatMessage('Microsoft App Password')}
           placeholder={'Enter Microsoft App Password'}
