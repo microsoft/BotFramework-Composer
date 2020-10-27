@@ -46,7 +46,7 @@ export const PublishDialog = (props) => {
       isResizable: true,
       data: 'string',
       onRender: (item: IBotStatus) => {
-        return <span>{item.publishTarget}</span>;
+        return <div css={{ backgroundColor: '#DDF3DB', padding: '6px 0 0 8px' }}>{item.publishTarget}</div>;
       },
       isPadded: true,
     },

@@ -4,7 +4,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, useEffect, Fragment, useMemo } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { Dialog } from 'office-ui-fabric-react/lib/Dialog';
@@ -21,7 +21,6 @@ import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor } from './s
 import { IStatus } from './publishStatusList';
 import { BotStatusList, IBotStatus } from './botStatusList';
 
-const publishHistoyList: { [key: string]: any }[] = [];
 const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: string }>> = (props) => {
   const { projectId = '' } = props;
   const botProjectsMeta = useRecoilValue(botProjectSpaceSelector);
@@ -32,41 +31,42 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const botStatusList: IBotStatus[] = [];
   const botPublishTypesList: { [key: string]: any }[] = [];
   const [botPublishHistoryList, setBotPublishHistoryList] = useState<{ [key: string]: any }[]>([]);
+  const publishHistoyList: { [key: string]: any }[] = [];
   botProjectsMeta
     .filter((bot) => bot.isRemote === false)
     .forEach((bot) => {
       const botProjectId = bot.projectId;
-      botSettingsList.push({
-        projectId: botProjectId,
-        settings: bot.settings,
-      });
-      botPublishTypesList.push({
-        projectId: botProjectId,
-        publishTypes: useRecoilValue(publishTypesState(botProjectId)),
-      });
-      const publishHistory = useRecoilValue(publishHistoryState(botProjectId));
-      publishHistoyList.push({
-        projectId: botProjectId,
-        publishHistory,
-      });
-      const publishTargets = bot.settings ? (bot.settings.publishTargets as any[]) : [];
-      const botStatus: IBotStatus = {
-        id: botProjectId,
-        name: bot.name,
-        publishTargets: [],
-      };
-      if (publishTargets.length > 0) {
-        botStatus.publishTarget = publishTargets[0].name as string;
-        botStatus.publishTargets = publishTargets;
-        if (publishHistory[botStatus.publishTarget] && publishHistory[botStatus.publishTarget].length > 0) {
-          const history = publishHistory[botStatus.publishTarget][0];
-          botStatus.time = history.time;
-          botStatus.comment = history.comment;
-          botStatus.message = history.message;
-          botStatus.status = history.status;
-        }
-      }
-      botStatusList.push(botStatus);
+      // botSettingsList.push({
+      //   projectId: botProjectId,
+      //   settings: bot.settings,
+      // });
+      // botPublishTypesList.push({
+      //   projectId: botProjectId,
+      //   publishTypes: useRecoilValue(publishTypesState(botProjectId)),
+      // });
+      // const publishHistory = useRecoilValue(publishHistoryState(botProjectId));
+      // publishHistoyList.push({
+      //   projectId: botProjectId,
+      //   publishHistory,
+      // });
+      // const publishTargets = bot.settings ? (bot.settings.publishTargets as any[]) : [];
+      // const botStatus: IBotStatus = {
+      //   id: botProjectId,
+      //   name: bot.name,
+      //   publishTargets: [],
+      // };
+      // if (publishTargets.length > 0) {
+      //   botStatus.publishTarget = publishTargets[0].name as string;
+      //   botStatus.publishTargets = publishTargets;
+      //   if (publishHistory[botStatus.publishTarget] && publishHistory[botStatus.publishTarget].length > 0) {
+      //     const history = publishHistory[botStatus.publishTarget][0];
+      //     botStatus.time = history.time;
+      //     botStatus.comment = history.comment;
+      //     botStatus.message = history.message;
+      //     botStatus.status = history.status;
+      //   }
+      // }
+      // botStatusList.push(botStatus);
     });
 
   const {
@@ -108,7 +108,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
           <svg fill="none" height="15" viewBox="0 0 16 15" width="16" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M16 4.28906V15H5V0H11.7109L16 4.28906ZM12 4H14.2891L12 1.71094V4ZM15 14V5H11V1H6V14H15ZM0 5H4V6H0V5ZM1 7H4V8H1V7ZM2 9H4V10H2V9Z"
-              fill="#0078D4"
+              fill={selectedBots.length > 0 ? '#0078D4' : 'rgb(161, 159, 157)'}
             />
           </svg>
           <span css={{ marginLeft: '8px' }}>{formatMessage('Publish selected bots')}</span>
@@ -129,7 +129,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     if (publishHistoyList.length > 0) {
       setBotPublishHistoryList(publishHistoyList);
     }
-  }, [publishHistoyList]);
+  }, [botProjectsMeta]);
 
   const rollbackToVersion = (version, item) => {
     const sensitiveSettings = settingsStorage.get(item.id);
@@ -148,7 +148,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const updatePublishHistory = (publishHistories, botStatus) => {
     const newPublishHistory = botPublishHistoryList.map((botPublishHistory) => {
       if (botPublishHistory.projectId === botStatus) {
-        botPublishHistory.publishHistory = publishHistories;
+        botPublishHistory.publishHistory[botStatus.publishTarget] = publishHistories;
       }
       return botPublishHistory;
     });
@@ -161,46 +161,44 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         id: bot.id,
         name: bot.name,
         publishTarget: bot.publishTarget,
+        publishTargets: bot.publishTargets,
       });
     });
     setSelectedBots(bots);
   };
-  const publish = useMemo(
-    () => async (comment) => {
-      // publish to remote
-      if (selectedBots.length > 0) {
-        selectedBots.forEach(async (bot) => {
-          if (bot.publishTarget) {
-            const selectedTarget = bot.publishTarget;
-            const projectId = bot.id;
-            const settings = botSettingsList.find((botSettings) => botSettings.projectId === bot.id) || {};
-            if (settings.publishTargets) {
-              if (settings.qna && Object(settings.qna).subscriptionKey) {
-                await setQnASettings(projectId, Object(settings.qna).subscriptionKey);
-              }
-              const sensitiveSettings = settingsStorage.get(projectId);
-              await publishToTarget(projectId, selectedTarget, { comment: comment }, sensitiveSettings);
-
-              // update the target with a lastPublished date
-              const updatedPublishTargets = settings.publishTargets.map((profile) => {
-                if (profile.name === selectedTarget) {
-                  return {
-                    ...profile,
-                    lastPublished: new Date(),
-                  };
-                } else {
-                  return profile;
-                }
-              });
-
-              await setPublishTargets(updatedPublishTargets, projectId);
+  const publish = async (items: IBotStatus[]) => {
+    // publish to remote
+    if (items.length > 0) {
+      for (const bot of items) {
+        if (bot.publishTarget && bot.publishTargets) {
+          const selectedTarget = bot.publishTargets.find((target) => target.name === bot.publishTarget);
+          const projectId = bot.id;
+          const settings = botSettingsList.find((botSettings) => botSettings.projectId === bot.id)?.settings || {};
+          if (settings.publishTargets) {
+            if (settings.qna && Object(settings.qna).subscriptionKey) {
+              await setQnASettings(projectId, Object(settings.qna).subscriptionKey);
             }
+            const sensitiveSettings = settingsStorage.get(projectId);
+            await publishToTarget(projectId, selectedTarget, { comment: bot.comment }, sensitiveSettings);
+
+            // update the target with a lastPublished date
+            const updatedPublishTargets = settings.publishTargets.map((profile) => {
+              if (profile.name === selectedTarget) {
+                return {
+                  ...profile,
+                  lastPublished: new Date(),
+                };
+              } else {
+                return profile;
+              }
+            });
+
+            await setPublishTargets(updatedPublishTargets, projectId);
           }
-        });
+        }
       }
-    },
-    [selectedBots, botSettingsList]
-  );
+    }
+  };
 
   return (
     <Fragment>

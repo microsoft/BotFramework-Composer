@@ -114,14 +114,13 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
     return (
       <Fragment key={index}>
         <tr>
-          <td>
-            <Checkbox onChange={changeSelected} />
+          <td css={{ minWidth: '70px', maxWidth: '90px' }}>
+            <Checkbox label={item.name} onChange={changeSelected} />
           </td>
-          <td>{item.name}</td>
-          <td>
+          <td css={{ minWidth: '70px', maxWidth: '90px' }}>
             <Dropdown
               options={publishTargetOptions()}
-              placeHolder={formatMessage('Select a publish target')}
+              placeholder={formatMessage('Select a publish target')}
               onChange={changePublishTarget}
               onRenderOption={onRenderOption}
             />
