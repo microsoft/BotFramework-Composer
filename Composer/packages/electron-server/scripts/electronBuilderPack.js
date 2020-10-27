@@ -9,7 +9,7 @@ const { exec } = require('child_process');
  * will be packaged inside of the OS-specific distributable application
  */
 try {
-  const electronBuilderBinary = resolve(__dirname, '../../../node_modules/.bin/electron-builder');
+  const electronBuilderBinary = resolve(__dirname, '../node_modules/.bin/electron-builder');
   const electronServerDir = resolve(__dirname, '..');
   let platform;
   switch (process.platform) {
@@ -34,13 +34,13 @@ try {
   console.log('[electronBuilderPack.js] Executing command: ', cmd);
 
   const proc = exec(cmd);
-  proc.stdout.on('data', data => {
+  proc.stdout.on('data', (data) => {
     console.log(data);
   });
-  proc.stderr.on('data', data => {
+  proc.stderr.on('data', (data) => {
     console.error(data);
   });
-  proc.on('close', code => {
+  proc.on('close', (code) => {
     if (code !== 0) {
       throw new Error(`[electronBuilderPack.js] electron-builder exited with code ${code}`);
     }
