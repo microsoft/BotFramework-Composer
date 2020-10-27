@@ -138,6 +138,10 @@ export function useShell(source: EventSource, projectId: string): Shell {
     navTo(projectId, null, path, breadcrumb);
   }
 
+  function openDialog(dialogId: string) {
+    navTo(projectId, null, dialogId, breadcrumb);
+  }
+
   function focusEvent(subPath) {
     selectTo(projectId, null, null, subPath);
   }
@@ -195,6 +199,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     renameRegExIntent: renameRegExIntentHandler,
     updateIntentTrigger: updateIntentTriggerHandler,
     navTo: navigationTo,
+    onOpenDialog: openDialog,
     onFocusEvent: focusEvent,
     onFocusSteps: focusSteps,
     onSelect: setVisualEditorSelection,
