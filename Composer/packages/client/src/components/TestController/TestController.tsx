@@ -158,18 +158,13 @@ export const TestController: React.FC<{ projectId: string }> = (props) => {
     setBotStatus(BotStatus.publishing, projectId);
     dismissDialog();
     const { luis, qna } = config;
-    const recognizerTypes = dialogs.reduce((result, file) => {
-      const recognizer = recognizers.filter((r) => r.isSelected && r.isSelected(file.content.recognizer));
-      result[file.id] = recognizer[0]?.id || '';
-      return result;
-    }, {});
 
     await setSettings(projectId, {
       ...settings,
       luis: luis,
       qna: Object.assign({}, settings.qna, qna),
     });
-    await build(luis, qna, recognizerTypes, projectId);
+    await build(luis, qna, projectId);
   }
 
   async function handleLoadBot() {

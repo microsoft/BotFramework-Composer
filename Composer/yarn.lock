@@ -3055,6 +3055,28 @@
     semver "^5.5.1"
     tslib "^2.0.3"
 
+"@microsoft/bf-lu@^4.11.0-dev.20201025.69cf2b9":
+  version "4.11.0-dev.20201025.69cf2b9"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.11.0-dev.20201025.69cf2b9.tgz#0664a7ec491b0a9952456d9e581f6d934c385b20"
+  integrity sha512-mnMVxOiDkbXTsG7gHDbp4C65M3nELz0isvh/8MSlcnsy18q5lsvIi8lXeSONnfu3iePaUcwQfOiylXQKWtA7Ew==
+  dependencies:
+    "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
+    "@azure/ms-rest-azure-js" "2.0.1"
+    "@types/node-fetch" "~2.5.5"
+    antlr4 "^4.7.2"
+    chalk "2.4.1"
+    console-stream "^0.1.1"
+    deep-equal "^1.0.1"
+    delay "^4.3.0"
+    fs-extra "^8.1.0"
+    get-stdin "^6.0.0"
+    globby "^10.0.1"
+    intercept-stdout "^0.1.2"
+    lodash "^4.17.19"
+    node-fetch "~2.6.0"
+    semver "^5.5.1"
+    tslib "^2.0.3"
+
 "@microsoft/bf-lu@next":
   version "4.11.0-dev.20201015.a41c691"
   resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.11.0-dev.20201015.a41c691.tgz#1002eb10b7625fead68274c007ac857de79f4446"

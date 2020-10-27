@@ -29,6 +29,8 @@ const BotStructureTemplate = {
   formDialogs: 'form-dialogs/${FORMDIALOGNAME}',
   skillManifests: 'manifests/${MANIFESTFILENAME}',
   botProject: '${BOTNAME}.botproj',
+  recognizer: 'recognizers/${RECOGNIZERNAME}',
+  crossTrainConfig: 'recognizers/${CROSSTRAINCONFIGNAME}',
 };
 
 const templateInterpolate = (str: string, obj: { [key: string]: string }) =>
@@ -71,12 +73,29 @@ export const parseFileName = (name: string, defaultLocale: string) => {
   return { dialogId, fileId, locale, fileType };
 };
 
+export const isRecognizer = (fileName: string) => fileName.endsWith('.lu.dialog') || fileName.endsWith('.qna.dialog');
+export const isCrossTrainConfig = (fileName: string) => fileName.endsWith('cross-train.config');
+
 export const defaultFilePath = (botName: string, defaultLocale: string, filename: string): string => {
   const BOTNAME = botName.toLowerCase();
   const CommonFileId = 'common';
 
   const { fileId, locale, fileType, dialogId } = parseFileName(filename, defaultLocale);
   const LOCALE = locale;
+
+  // now recognizer extension is .lu.dialog or .qna.dialog
+  if (isRecognizer(filename)) {
+    return templateInterpolate(BotStructureTemplate.recognizer, {
+      RECOGNIZERNAME: filename,
+    });
+  }
+
+  //crossTrain config's file name is cross-train.config
+  if (isCrossTrainConfig(filename)) {
+    return templateInterpolate(BotStructureTemplate.crossTrainConfig, {
+      CROSSTRAINCONFIGNAME: filename,
+    });
+  }
 
   // 1. Even appsettings.json hit FileExtensions.Manifest, but it never use this do created.
   // 2. When export bot as a skill, name is `EchoBot-4-2-1-preview-1-manifest.json`
