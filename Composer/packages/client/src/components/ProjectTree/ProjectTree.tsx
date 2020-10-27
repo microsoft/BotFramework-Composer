@@ -72,7 +72,9 @@ const SUMMARY_ARROW_SPACE = 28; // the rough pixel size of the dropdown arrow to
 
 // -------------------- Helper functions -------------------- //
 
-type GetTriggerIndex = (trigger: ITrigger) => number;
+const getTriggerIndex = (trigger: ITrigger, dialog: DialogInfo): number => {
+  return dialog.triggers.indexOf(trigger);
+};
 
 // sort trigger groups so that NoGroupingTriggerGroupName is last
 const sortTriggerGroups = (x: string, y: string): number => {
@@ -356,16 +358,11 @@ export const ProjectTree: React.FC<Props> = ({
     return scope.toLowerCase().includes(filter.toLowerCase());
   };
 
-  const renderTriggerList = (
-    triggers: ITrigger[],
-    dialog: DialogInfo,
-    projectId: string,
-    getTriggerIndex: GetTriggerIndex
-  ) => {
+  const renderTriggerList = (triggers: ITrigger[], dialog: DialogInfo, projectId: string) => {
     return triggers
       .filter((tr) => filterMatch(dialog.displayName) || filterMatch(getTriggerName(tr)))
       .map((tr) => {
-        const index = getTriggerIndex(tr);
+        const index = getTriggerIndex(tr, dialog);
         const warningContent = triggerNotSupported(dialog, tr);
         const errorContent = notificationMap[projectId][dialog.id].some(
           (diag) => diag.severity === DiagnosticSeverity.Error && diag.path?.match(RegExp(`triggers\\[${index}\\]`))
@@ -406,8 +403,7 @@ export const ProjectTree: React.FC<Props> = ({
     dialog: DialogInfo,
     groupName: string,
     triggers: ITrigger[],
-    startDepth: number,
-    getTriggerIndex: GetTriggerIndex
+    startDepth: number
   ) => {
     const groupDisplayName =
       groupName === NoGroupingTriggerGroupName ? formatMessage('form-wide operations') : groupName;
@@ -419,18 +415,13 @@ export const ProjectTree: React.FC<Props> = ({
         depth={startDepth}
         summary={renderTriggerGroupHeader(groupDisplayName, dialog, projectId)}
       >
-        <div>{renderTriggerList(triggers, dialog, projectId, getTriggerIndex)}</div>
+        <div>{renderTriggerList(triggers, dialog, projectId)}</div>
       </ExpandableNode>
     );
   };
 
   // renders triggers grouped by the schema property they are associated with.
-  const renderDialogTriggersByProperty = (
-    dialog: DialogInfo,
-    projectId: string,
-    startDepth: number,
-    getTriggerIndex: GetTriggerIndex
-  ) => {
+  const renderDialogTriggersByProperty = (dialog: DialogInfo, projectId: string, startDepth: number) => {
     const jsonSchemaFiles = jsonSchemaFilesByProjectId[projectId];
     const dialogSchemaProperties = extractSchemaProperties(dialog, jsonSchemaFiles);
     const groupedTriggers = groupTriggersByPropertyReference(dialog, { validProperties: dialogSchemaProperties });
@@ -438,25 +429,14 @@ export const ProjectTree: React.FC<Props> = ({
     const triggerGroups = Object.keys(groupedTriggers);
 
     return triggerGroups.sort(sortTriggerGroups).map((triggerGroup) => {
-      return renderTriggerGroup(
-        projectId,
-        dialog,
-        triggerGroup,
-        groupedTriggers[triggerGroup],
-        startDepth,
-        getTriggerIndex
-      );
+      return renderTriggerGroup(projectId, dialog, triggerGroup, groupedTriggers[triggerGroup], startDepth);
     });
   };
 
   const renderDialogTriggers = (dialog: DialogInfo, projectId: string, startDepth: number) => {
-    const getTriggerIndex = (trigger: ITrigger): number => {
-      return dialog.triggers.indexOf(trigger);
-    };
-
     return dialogIsFormDialog(dialog)
-      ? renderDialogTriggersByProperty(dialog, projectId, startDepth, getTriggerIndex)
-      : renderTriggerList(dialog.triggers, dialog, projectId, getTriggerIndex);
+      ? renderDialogTriggersByProperty(dialog, projectId, startDepth)
+      : renderTriggerList(dialog.triggers, dialog, projectId);
   };
 
   const createDetailsTree = (bot: BotInProject, startDepth: number) => {
