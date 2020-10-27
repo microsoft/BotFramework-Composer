@@ -9,7 +9,7 @@ import cloneDeep from 'lodash/cloneDeep';
 
 import { currentProjectIdState } from '../atoms';
 import { encodeArrayPathToDesignerPath } from '../../utils/convertUtils/designerPathEncoder';
-import { dialogsSelectorFamily } from '../selectors';
+import { dialogsSelectorFamily, rootBotProjectIdSelector } from '../selectors';
 
 import { createSelectedPath, getSelected } from './../../utils/dialogUtil';
 import { BreadcrumbItem } from './../../recoilModel/types';
@@ -51,10 +51,12 @@ export const navigationDispatcher = () => {
   const navTo = useRecoilCallback(
     ({ snapshot, set }: CallbackInterface) => async (
       projectId: string,
-      skillId: string | null,
       dialogId: string,
       breadcrumb: BreadcrumbItem[] = []
     ) => {
+      const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
+      if (rootBotProjectId == null) return;
+
       const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
       const designPageLocation = await snapshot.getPromise(designPageLocationState(projectId));
       const updatedBreadcrumb = cloneDeep(breadcrumb);
@@ -72,9 +74,9 @@ export const navigationDispatcher = () => {
         }
       }
 
-      const currentUri = convertPathToUrl(projectId, skillId, dialogId, path);
+      const currentUri = convertPathToUrl(rootBotProjectId, projectId, dialogId, path);
 
-      if (checkUrl(currentUri, projectId, skillId, designPageLocation)) return;
+      if (checkUrl(currentUri, rootBotProjectId, projectId, designPageLocation)) return;
 
       navigateTo(currentUri, { state: { breadcrumb: updatedBreadcrumb } });
     }
@@ -174,7 +176,7 @@ export const navigationDispatcher = () => {
         if (checkUrl(currentUri, projectId, skillId, designPageLocation)) return;
         navigateTo(currentUri, { state: { breadcrumb } });
       } else {
-        navTo(projectId, skillId, dialogId, breadcrumb);
+        navTo(skillId ?? projectId, dialogId, breadcrumb);
       }
     }
   );

@@ -26,11 +26,11 @@ const nodeStyle = (depth: number) => css`
 const TRIANGLE_SCALE = 0.6;
 
 const detailsStyle = css`
-  details:not([open]) > summary::-webkit-details-marker {
+  &:not([open]) > summary::-webkit-details-marker {
     transform: scaleX(${TRIANGLE_SCALE});
   }
 
-  details[open] > summary::-webkit-details-marker {
+  &[open] > summary::-webkit-details-marker {
     transform: scaleY(${TRIANGLE_SCALE});
   }
 `;

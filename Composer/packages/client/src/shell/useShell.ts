@@ -137,11 +137,13 @@ export function useShell(source: EventSource, projectId: string): Shell {
   }
 
   function navigationTo(path) {
-    navTo(rootBotProjectId ?? projectId, projectId, path, breadcrumb);
+    if (rootBotProjectId == null) return;
+    navTo(projectId, path, breadcrumb);
   }
 
   function focusEvent(subPath) {
-    selectTo(rootBotProjectId ?? projectId, projectId, dialogId, subPath);
+    if (rootBotProjectId == null) return;
+    selectTo(rootBotProjectId, projectId, dialogId, subPath);
   }
 
   function focusSteps(subPaths: string[] = [], fragment?: string) {
