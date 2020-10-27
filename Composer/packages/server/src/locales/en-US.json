@@ -401,8 +401,8 @@
   "bot_framework_composer_is_an_open_source_visual_au_2be2e02b": {
     "message": "Bot Framework Composer is an open-source visual authoring canvas for developers and multi-disciplinary teams to build bots. Composer integrates LUIS and QnA Maker, and allows sophisticated composition of bot replies using language generation."
   },
-  "bot_framework_composer_provides_a_comprehensive_ex_9767c3a": {
-    "message": "Bot Framework Composer provides a comprehensive experience for building conversational applications."
+  "bot_framework_provides_the_most_comprehensive_expe_e34a7f5d": {
+    "message": "Bot Framework provides the most comprehensive experience for building conversational applications."
   },
   "bot_language_6cf30c2": {
     "message": "Bot language"
@@ -485,6 +485,9 @@
   "choose_a_location_for_your_new_bot_project_e979f2d5": {
     "message": "Choose a location for your new bot project."
   },
+  "choose_how_to_create_your_bot_a97f7b3e": {
+    "message": "Choose how to create your bot"
+  },
   "choose_one_2c4277df": {
     "message": "Choose One"
   },
@@ -524,8 +527,8 @@
   "component_stacktrace_e24b1983": {
     "message": "Component Stacktrace:"
   },
-  "composer_cannot_yet_translate_your_bot_automatical_96865d28": {
-    "message": "Composer cannot yet translate your bot automatically.\nTo create a translation manually, Composer will create a copy of your bot''s content with the name of the additional language. This content can then be translated without affecting the original bot logic or flow and you can switch between languages to ensure the responses are correctly and appropriately translated."
+  "composer_cannot_yet_translate_your_bot_automatical_2d54081b": {
+    "message": "Composer cannot yet translate your bot automatically.\nTo create a translation manually, Composer will create a copy of your bot’s content with the name of the additional language. This content can then be translated without affecting the original bot logic or flow and you can switch between languages to ensure the responses are correctly and appropriately translated."
   },
   "composer_introduction_98a93701": {
     "message": "Composer introduction"
@@ -641,9 +644,6 @@
   "create_a_name_for_the_project_which_will_be_used_t_57e9b690": {
     "message": "Create a name for the project which will be used to name the application: (projectname-environment-LUfilename)"
   },
-  "create_a_new_bot_51ce70d3": {
-    "message": "Create a new bot"
-  },
   "create_a_new_bot_or_choose_from_virtual_assistant__7c1e6674": {
     "message": "Create a new bot or choose from Virtual assistant templates."
   },
@@ -659,8 +659,8 @@
   "create_a_trigger_40e74743": {
     "message": "Create a trigger"
   },
-  "create_bot_from_a_template_a_knowledge_base_qna_or_8bc4ebc": {
-    "message": "Create bot from a template, a knowledge base (QnA) or from scratch."
+  "create_bot_from_template_or_scratch_92f0fefa": {
+    "message": "Create bot from template or scratch?"
   },
   "create_copy_to_translate_bot_content_efc872c": {
     "message": "Create copy to translate bot content"
@@ -730,9 +730,6 @@
   },
   "custom_actions_5d396747": {
     "message": "Custom Actions"
-  },
-  "custom_event_name_113a07c": {
-    "message": "Custom event name"
   },
   "custom_events_d6f0e45b": {
     "message": "Custom events"
@@ -832,6 +829,9 @@
   },
   "description_436c48d7": {
     "message": "Description"
+  },
+  "design_51b2812a": {
+    "message": "Design"
   },
   "dialog_68ba69ba": {
     "message": "(Dialog)"
@@ -1010,9 +1010,6 @@
   "enter_a_manifest_url_to_add_a_new_skill_to_your_bo_57e9d660": {
     "message": "Enter a manifest url to add a new skill to your bot."
   },
-  "enter_a_manifest_url_to_add_a_new_skill_to_your_bo_eb966c95": {
-    "message": "Enter a manifest URL to add a new skill to your bot."
-  },
   "enter_a_max_value_14e8ba52": {
     "message": "Enter a max value"
   },
@@ -1151,8 +1148,8 @@
   "file_type_fd1ba7ee": {
     "message": "File Type"
   },
-  "filter_e3398407": {
-    "message": "Filter"
+  "filter_dialog_de3ce43f": {
+    "message": "Filter Dialog"
   },
   "firstselector_a3daca5d": {
     "message": "FirstSelector"
@@ -1208,8 +1205,8 @@
   "getting_help_ab6811b0": {
     "message": "Getting Help"
   },
-  "getting_started_3be7471b": {
-    "message": "Getting started"
+  "getting_started_f45a7e87": {
+    "message": "Getting Started"
   },
   "give_your_bot_personality_multi_language_capabilit_f00c2c93": {
     "message": "Give your bot personality, multi-language capabilities and more; you can edit this later in Bot Settings."
@@ -1394,9 +1391,6 @@
   "language_generation_1876f6d6": {
     "message": "Language Generation"
   },
-  "language_generation_enables_bots_to_respond_to_use_b1ed9a95": {
-    "message": "Language Generation enables bots to respond to users with human readable language."
-  },
   "language_generation_file_80c08efe": {
     "message": "language generation file"
   },
@@ -1405,9 +1399,6 @@
   },
   "language_understanding_file_a65abc2c": {
     "message": "language understanding file"
-  },
-  "language_understanding_uses_a_recognizer_to_transl_7cce8142": {
-    "message": "Language Understanding uses a Recognizer to translate user input into intents and entities."
   },
   "languagepolicy_e754ad28": {
     "message": "LanguagePolicy"
@@ -1817,8 +1808,8 @@
   "open_inline_editor_a5aabcfa": {
     "message": "Open inline editor"
   },
-  "open_notification_panel_5796edb3": {
-    "message": "Open notification panel"
+  "open_skills_page_for_configuration_details_a2a484ea": {
+    "message": "Open Skills page for configuration details"
   },
   "optional_221bcc9d": {
     "message": "Optional"
@@ -2069,8 +2060,8 @@
   "re_prompt_for_input_c3b5b3ab": {
     "message": "Re-prompt for input"
   },
-  "recent_bots_f36af62f": {
-    "message": "Recent bots"
+  "recent_bots_53585911": {
+    "message": "Recent Bots"
   },
   "recognizer_type_dc591e16": {
     "message": "Recognizer Type"
@@ -2090,8 +2081,8 @@
   "regex_intent_is_already_defined_df095c1f": {
     "message": "RegEx { intent } is already defined"
   },
-  "regex_pattern_c2b3f66": {
-    "message": "Regex pattern"
+  "regular_expression_855557bf": {
+    "message": "Regular Expression"
   },
   "regular_expression_recognizer_44664557": {
     "message": "Regular expression recognizer"
@@ -2210,9 +2201,6 @@
   "select_a_trigger_on_the_left_a4b41558": {
     "message": "Select a trigger on the left"
   },
-  "select_activity_type_591a8226": {
-    "message": "Select activity type"
-  },
   "select_all_f73344a8": {
     "message": "Select all"
   },
@@ -2227,9 +2215,6 @@
   },
   "select_an_schema_to_edit_or_create_a_new_one_59c7326a": {
     "message": "Select an schema to edit or create a new one"
-  },
-  "select_event_type_c2c4c1ee": {
-    "message": "Select event type"
   },
   "select_language_to_delete_d1662d3d": {
     "message": "Select language to delete"
@@ -2246,8 +2231,8 @@
   "select_runtime_version_to_add_d63d383b": {
     "message": "Select runtime version to add"
   },
-  "select_trigger_type_a09777d8": {
-    "message": "Select trigger type"
+  "select_the_language_that_bot_will_be_able_to_under_1f2bcb96": {
+    "message": "Select the language that bot will be able to understand (User input) and respond to (Bot responses).\n    To make this bot available in other languages, click “Add’ to create a copy of the default language, and translate the content into the new language."
   },
   "select_which_dialogs_are_included_in_the_skill_man_281ef8c9": {
     "message": "Select which dialogs are included in the skill manifest"
@@ -2293,6 +2278,9 @@
   },
   "settings_5aa0fd0c": {
     "message": "Settings"
+  },
+  "settings_contains_detailed_information_about_your__54aa601d": {
+    "message": "Settings contains detailed information about your bot. For security reasons, they are hidden by default. To test your bot or publish to Azure, you may need to provide these settings."
   },
   "settings_editor_b5246933": {
     "message": "Settings editor"
@@ -2444,9 +2432,6 @@
   "the_azure_bot_service_resource_stores_configuratio_b7b4e73d": {
     "message": "The Azure Bot Service resource stores configuration information that allows your Virtual Assistant to be accessed on the supported Channels and provide OAuth authentication."
   },
-  "the_bot_settings_page_includes_detailed_configurat_ea45980f": {
-    "message": "The Bot Settings page includes detailed configuration information about the selected bot. To test your bot or publish to Azure, you may need to provide these settings."
-  },
   "the_callback_url_for_the_skill_host_e20e1012": {
     "message": "The callback url for the skill host."
   },
@@ -2495,17 +2480,14 @@
   "there_are_no_kind_properties_e299287e": {
     "message": "There are no { kind } properties."
   },
-  "there_are_no_notifications_e81eab8d": {
-    "message": "There are no notifications."
-  },
   "there_was_an_error_74ed3c58": {
     "message": "There was an error"
   },
   "there_was_error_creating_your_kb_53b31ff3": {
     "message": "There was error creating your KB"
   },
-  "these_examples_bring_together_all_of_the_best_prac_bd907b65": {
-    "message": "These examples bring together all of the best practices and components for building conversational experiences."
+  "these_examples_bring_together_all_of_the_best_prac_ca1b89c7": {
+    "message": "These examples bring together all of the best practices and supporting components we''ve identified through building of conversational experiences."
   },
   "these_tasks_will_be_used_to_generate_the_manifest__2791be0e": {
     "message": "These tasks will be used to generate the manifest and describe the capabilities of this skill to those who may want to use it."
@@ -2585,14 +2567,14 @@
   "to_learn_more_about_the_qna_file_format_read_the_d_1ce18259": {
     "message": "> To learn more about the QnA file format, read the documentation at\n> { QNA_HELP }"
   },
-  "to_make_this_bot_available_in_other_languages_sele_35fc5a58": {
-    "message": "To make this bot available in other languages, select \"Create copy to translate bot content\" and translate the content into the new language."
-  },
   "to_make_your_bot_available_for_others_as_a_skill_w_f2c19b9c": {
     "message": "To make your bot available for others as a skill, we need to generate a manifest."
   },
   "to_run_this_bot_composer_needs_net_core_sdk_d1551038": {
     "message": "To run this bot, Composer needs .NET Core SDK."
+  },
+  "to_understand_what_the_user_says_your_dialog_needs_4e791611": {
+    "message": "To understand what the user says, your dialog needs a \"Recognizer\"; that includes example words and sentences that users may use."
   },
   "to_understand_what_the_user_says_your_dialog_needs_957034cc": {
     "message": "To understand what the user says, your dialog needs an ''IRecognizer'' that includes example words and sentences that users may use."
@@ -2611,9 +2593,6 @@
   },
   "total_mb_531a3721": {
     "message": "{ total }MB"
-  },
-  "trigger_name_a23ed36c": {
-    "message": "Trigger name"
   },
   "trigger_phrases_f6754fa": {
     "message": "Trigger phrases"
@@ -2659,6 +2638,9 @@
   },
   "typing_activity_6b634ae": {
     "message": "Typing activity"
+  },
+  "unable_to_determine_recognizer_type_from_data_valu_2960f526": {
+    "message": "Unable to determine recognizer type from data: { value }"
   },
   "undo_a7be8fef": {
     "message": "Undo"
@@ -2825,11 +2807,29 @@
   "what_can_the_user_accomplish_through_this_conversa_7ddb03a1": {
     "message": "What can the user accomplish through this conversation? For example, BookATable, OrderACoffee etc."
   },
+  "what_is_the_name_of_the_custom_event_b28a7b3": {
+    "message": "What is the name of the custom event?"
+  },
+  "what_is_the_name_of_this_trigger_2642266e": {
+    "message": "What is the name of this trigger"
+  },
+  "what_is_the_name_of_this_trigger_luis_17b60a23": {
+    "message": "What is the name of this trigger (LUIS)"
+  },
+  "what_is_the_name_of_this_trigger_regex_f77376d7": {
+    "message": "What is the name of this trigger (RegEx)"
+  },
   "what_is_the_name_of_your_bot_a571c565": {
     "message": "What is the name of your bot?"
   },
+  "what_is_the_type_of_this_trigger_d2701744": {
+    "message": "What is the type of this trigger?"
+  },
   "what_will_your_virtual_assistant_say_if_it_does_no_972dd9ab": {
     "message": "What will your Virtual Assistant say if it does not understand the user?"
+  },
+  "what_your_bot_says_to_the_user_this_is_a_template__a8d2266d": {
+    "message": "What your bot says to the user. This is a template used to create the outgoing message. It can include language generation rules, properties from memory, and other features.\n\nFor example, to define variations that will be chosen at random, write:\n- hello\n- hi"
   },
   "what_your_bot_says_to_the_user_visit_a_target_blan_7735479": {
     "message": "What your Bot says to the user. Visit <a target=\"_blank\" href=\"https://aka.ms/bf-composer-docs-lg\"> the documentation</a> a reference of capabilities."
@@ -2843,8 +2843,14 @@
   "when_multiple_people_are_working_with_models_you_w_32b48099": {
     "message": "When multiple people are working with models you want to be able to work with models independently from each other tied to the source control."
   },
+  "which_activity_type_18333457": {
+    "message": "Which activity type?"
+  },
   "which_bot_do_you_want_to_open_974bb1e5": {
     "message": "Which bot do you want to open?"
+  },
+  "which_event_6e655d2b": {
+    "message": "Which event?"
   },
   "write_an_expression_8773ea5c": {
     "message": "Write an expression"
@@ -2858,6 +2864,9 @@
   "you_are_about_to_publish_your_bot_to_the_profile_b_79a6a226": {
     "message": "You are about to publish your bot to the profile below. Do you want to proceed?"
   },
+  "you_can_create_a_new_bot_from_scratch_with_compose_1486288c": {
+    "message": "You can create a new bot from scratch with Composer, or start with a template."
+  },
   "you_can_define_and_manage_b_intents_b_here_each_in_721b8a0c": {
     "message": "You can define and manage <b>intents</b> here. Each intent describes a particular user intention through utterances (i.e. user says). <b>Intents are often triggers of your bot.</b>"
   },
@@ -2870,8 +2879,8 @@
   "your_bot_creation_journey_on_composer_131c1a8b": {
     "message": "Your bot creation journey on Composer"
   },
-  "your_bot_is_using_luis_and_qna_for_natural_languag_e397e61f": {
-    "message": "Your bot is using LUIS and QnA for natural language understanding."
+  "your_bot_is_using_luis_and_qna_for_natural_languag_53830684": {
+    "message": "Your bot is using LUIS and QNA for natural language understanding."
   },
   "your_knowledge_base_is_ready_6ecc1871": {
     "message": "Your knowledge base is ready!"
