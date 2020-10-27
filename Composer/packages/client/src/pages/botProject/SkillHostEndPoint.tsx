@@ -34,6 +34,7 @@ export const SkillHostEndPoint: React.FC<SkillHostEndPointProps> = (props) => {
   const { projectId } = props;
   const { setSettings } = useRecoilValue(dispatcherState);
   const settings = useRecoilValue(settingsState(projectId));
+  console.log(setSettings);
   const { skillHostEndpoint } = useRecoilValue(settingsState(projectId));
   return (
     <CollapsableWrapper title={formatMessage('Skill host endpoint')} titleStyle={titleStyle}>
@@ -44,6 +45,10 @@ export const SkillHostEndPoint: React.FC<SkillHostEndPointProps> = (props) => {
         placeholder={formatMessage('Enter Skill host endpoint url')}
         value={skillHostEndpoint}
         onChange={(e, value) => {
+          console.log(projectId, {
+            ...settings,
+            skillHostEndpoint: value,
+          });
           setSettings(projectId, {
             ...settings,
             skillHostEndpoint: value,

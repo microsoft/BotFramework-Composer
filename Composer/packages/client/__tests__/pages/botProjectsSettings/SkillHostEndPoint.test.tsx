@@ -1,38 +1,41 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-/* eslint-disable react-hooks/rules-of-hooks */
 
 import React from 'react';
-import { fireEvent } from '@bfc/test-utils';
+import { act, fireEvent } from '@bfc/test-utils';
 
 import { SkillHostEndPoint } from '../../../src/pages/botProject/SkillHostEndPoint';
 import { renderWithRecoil } from '../../testUtils';
 import { dispatcherState } from '../../../src/recoilModel';
+import { settingsState, currentProjectIdState } from '../../../src/recoilModel';
+import { Dispatcher } from '../../../src/recoilModel/dispatchers';
 
 const state = {
   projectId: 'test',
+  settings: {
+    defaultLanguage: 'en-us',
+    languages: ['en-us', 'fr-fr'],
+  },
 };
 
 describe('SkillHostEndPoint', () => {
-  const setSettingsMock = jest.fn(() => {});
-  const initRecoilState = ({ set }) => {
-    //set(settingsState(state.projectId), state.settings);
-    set(dispatcherState, {
-      setSettings: setSettingsMock,
-    });
-  };
-
-  it('should render SkillHostEndPoint', () => {
-    const { getByTestId } = renderWithRecoil(<SkillHostEndPoint projectId={state.projectId} />, initRecoilState);
-    getByTestId('SkillHostEndPointTextField');
-  });
-
   it('should submit settings', () => {
+    const setSettingsMock = jest.fn(() => {});
+    const initRecoilState = ({ set }) => {
+      set(currentProjectIdState, state.projectId);
+      set(settingsState(state.projectId), state.settings);
+      set(dispatcherState, (current: Dispatcher) => ({
+        ...current,
+        setSettings: setSettingsMock,
+      }));
+    };
     const { getByTestId } = renderWithRecoil(<SkillHostEndPoint projectId={state.projectId} />, initRecoilState);
     const textField = getByTestId('SkillHostEndPointTextField');
-    fireEvent.change(textField, {
-      target: { value: 'mySkillHostEndPoint' },
+    act(() => {
+      fireEvent.change(textField, {
+        target: { value: 'mySkillHostEndPoint' },
+      });
     });
-    expect(setSettingsMock).toBeCalled();
+    expect(setSettingsMock).toBeCalledWith('');
   });
 });
