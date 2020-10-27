@@ -24,7 +24,7 @@ const onRenderLabel = (props: ITextFieldProps | undefined) => {
     <div css={labelContainer}>
       <div css={customerLabel}> {props?.label} </div>
       <TooltipHost content={props?.label}>
-        <Icon iconName={'Unknown'} styles={unknownIconStyle(props?.required)} />
+        <Icon iconName="Unknown" styles={unknownIconStyle(props?.required)} />
       </TooltipHost>
     </div>
   );
@@ -38,10 +38,10 @@ export const SkillHostEndPoint: React.FC<SkillHostEndPointProps> = (props) => {
   return (
     <CollapsableWrapper title={formatMessage('Skill host endpoint')} titleStyle={titleStyle}>
       <TextField
-        aria-labelledby={'SkillHostEndPoint'}
+        aria-labelledby={formatMessage('SkillHostEndPoint')}
         data-testid={'SkillHostEndPointTextField'}
         label={formatMessage('Skill host endpoint url')}
-        placeholder={'Enter Skill host endpoint url'}
+        placeholder={formatMessage('Enter Skill host endpoint url')}
         value={skillHostEndpoint}
         onChange={(e, value) => {
           setSettings(projectId, {

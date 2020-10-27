@@ -73,7 +73,7 @@ const onRenderLabel = (props: ITextFieldProps | undefined) => {
     <div css={labelContainer}>
       <div css={customerLabel}> {props?.label} </div>
       <TooltipHost content={props?.label}>
-        <Icon iconName={'Unknown'} styles={unknownIconStyle(props?.required)} />
+        <Icon iconName="Unknown" styles={unknownIconStyle(props?.required)} />
       </TooltipHost>
     </div>
   );

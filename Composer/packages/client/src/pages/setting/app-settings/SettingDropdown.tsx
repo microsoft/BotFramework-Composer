@@ -32,7 +32,7 @@ const SettingDropdown: React.FC<ISettingToggleProps> = (props) => {
       <div css={styles.labelContainer}>
         <div css={styles.customerLabel}> {props?.label} </div>
         <TooltipHost content={props?.label}>
-          <Icon iconName={'Unknown'} styles={styles.icon} />
+          <Icon iconName="Unknown" styles={styles.icon} />
         </TooltipHost>
       </div>
     );

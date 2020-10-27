@@ -3,7 +3,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import React from 'react';
-import { fireEvent, act } from '@bfc/test-utils';
+import { fireEvent } from '@bfc/test-utils';
 
 import { SkillHostEndPoint } from '../../../src/pages/botProject/SkillHostEndPoint';
 import { renderWithRecoil } from '../../testUtils';
