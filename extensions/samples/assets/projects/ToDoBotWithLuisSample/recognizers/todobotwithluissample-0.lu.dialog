@@ -1,0 +1,8 @@
+{
+  "$kind": "Microsoft.MultiLanguageRecognizer",
+  "id": "LUIS_todobotwithluissample-0",
+  "recognizers": {
+    "en-us": "todobotwithluissample-0.en-us.lu",
+    "": "todobotwithluissample-0.en-us.lu"
+  }
+}
