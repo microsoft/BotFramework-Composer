@@ -3006,10 +3006,10 @@
     ts-md5 "^1.2.6"
     tslib "^1.10.0"
 
-"@microsoft/bf-generate-library@^4.10.0-daily.20201015.174962":
-  version "4.10.0-daily.20201015.174962"
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-generate-library/-/@microsoft/bf-generate-library-4.10.0-daily.20201015.174962.tgz#42838aa5a44649a9de7bc3a7c987fe91b7ab65e3"
-  integrity sha1-QoOKpaRGSanee8OnyYf+kberZeM=
+"@microsoft/bf-generate-library@^4.10.0-daily.20201026.178528":
+  version "4.10.0-daily.20201026.178528"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-generate-library/-/@microsoft/bf-generate-library-4.10.0-daily.20201026.178528.tgz#9dd8acd3e5140776b515b9089f1238ff034352d0"
+  integrity sha1-ndis0+UUB3a1FbkInxI4/wNDUtA=
   dependencies:
     "@microsoft/bf-lu" "^4.11.0-dev.20201015.a41c691"
     adaptive-expressions "^4.11.0-dev.20201015.e56fdb7"
