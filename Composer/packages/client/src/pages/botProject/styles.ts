@@ -21,23 +21,23 @@ export const container = css`
   height: 100%;
 `;
 
-export const titleStyle = {
-  root: {
-    fontSize: FontSizes.medium,
-    fontWeight: FontWeights.semibold,
-  },
-};
+export const titleStyle = css`
+  font-size: ${FontSizes.medium};
+  font-weight: ${FontWeights.semibold};
+  margin-left: 22px;
+  margin-top: 6px;
+`;
 
 export const botNameStyle = css`
   font-size: ${FontSizes.xLarge};
   font-weight: ${FontWeights.semibold};
   color: ${NeutralColors.black};
-  margin-bottom: 27px;
 `;
 
 export const mainContentHeader = css`
   display: flex;
   justify-content: space-between;
+  margin-bottom: 15px;
 `;
 
 export const labelContainer = css`
@@ -70,7 +70,7 @@ export const runtimeLabel = (enabled: boolean) => css`
   color: ${enabled ? NeutralColors.black : '#585756'};
 `;
 
-export const appIdOrPassWordStyle = css`
+export const appIdAndPasswordStyle = css`
   display: flex;
   flex-direction: column;
 `;

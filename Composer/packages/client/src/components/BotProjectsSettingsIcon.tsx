@@ -5,10 +5,10 @@
 import { jsx } from '@emotion/core';
 import { FontSizes } from '@uifabric/fluent-theme';
 
-interface BotProjectsSettingsIconProps {
+type BotProjectsSettingsIconProps = {
   active: boolean;
   disabled: boolean;
-}
+};
 
 export const BotProjectsSettingsIcon: React.FC<BotProjectsSettingsIconProps> = (props) => {
   const { active, disabled } = props;

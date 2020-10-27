@@ -191,8 +191,10 @@ export const projectDispatcher = () => {
         for (const property of SensitivePropertiesManageGroup) {
           const settings = settingStorage.get(projectId);
           const value = get(settings, property, '');
-          const newValue = { root: value };
-          settingStorage.setField(projectId, property, newValue);
+          if (typeof value.root === undefined) {
+            const newValue = { root: value };
+            settingStorage.setField(projectId, property, newValue);
+          }
         }
 
         navigateToBot(callbackHelpers, projectId, mainDialog);

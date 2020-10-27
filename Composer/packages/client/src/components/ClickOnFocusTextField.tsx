@@ -9,7 +9,8 @@ import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { SharedColors } from '@uifabric/fluent-theme';
-import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { FontSizes } from '@uifabric/fluent-theme';
 
 const unknownIconStyle = (required) => {
   return {
@@ -31,7 +32,7 @@ const labelContainer = css`
 `;
 
 const customerLabel = css`
-  font-size: ${FontSizes.small};
+  font-size: ${FontSizes.size12};
   margin-right: 5px;
 `;
 
@@ -45,9 +46,9 @@ const disabledTextFieldStyle = {
   },
 };
 
-const ActionButtonStyle = {
+const actionButtonStyle = {
   root: {
-    fontSize: 12,
+    fontSize: FontSizes.size12,
     fontWeight: FontWeights.regular,
     color: SharedColors.cyanBlue10,
     marginLeft: 0,
@@ -56,7 +57,7 @@ const ActionButtonStyle = {
   },
 };
 
-interface ClickOnFocusTextField {
+type ClickOnFocusTextFieldProps = {
   label: string;
   ariaLabelledby: string;
   buttonText: string;
@@ -65,20 +66,20 @@ interface ClickOnFocusTextField {
   value: string;
   onChange: (e, value) => void;
   required: boolean;
-}
+};
 
 const onRenderLabel = (props: ITextFieldProps | undefined) => {
   return (
     <div css={labelContainer}>
       <div css={customerLabel}> {props?.label} </div>
       <TooltipHost content={props?.label}>
-        <Icon iconName={'Unknown'} styles={unknownIconStyle(props?.required)} />
+        <Icon iconName="Unknown" styles={unknownIconStyle(props?.required)} />
       </TooltipHost>
     </div>
   );
 };
 
-const ClickOnFocusTextField: React.FC<ClickOnFocusTextField> = (props) => {
+export const ClickOnFocusTextField: React.FC<ClickOnFocusTextFieldProps> = (props) => {
   const { label, placeholder, placeholderOnDisable, onChange, required, ariaLabelledby, value, buttonText } = props;
   const [isDisabled, setDisabled] = useState<boolean>(!value);
   const textFieldComponentRef = useRef<ITextField>(null);
@@ -91,7 +92,16 @@ const ClickOnFocusTextField: React.FC<ClickOnFocusTextField> = (props) => {
   }, [autoFoucsOnTextField]);
   return (
     <Fragment>
-      {!isDisabled && (
+      {isDisabled ? (
+        <TextField
+          disabled
+          label={label}
+          placeholder={placeholderOnDisable}
+          required={required}
+          styles={disabledTextFieldStyle}
+          onRenderLabel={onRenderLabel}
+        />
+      ) : (
         <TextField
           aria-labelledby={ariaLabelledby}
           componentRef={textFieldComponentRef}
@@ -106,26 +116,15 @@ const ClickOnFocusTextField: React.FC<ClickOnFocusTextField> = (props) => {
             }
           }}
           onChange={(e, value) => {
-            setLocalValue(value ? value : '');
+            setLocalValue(value ?? '');
             onChange(e, value);
           }}
           onRenderLabel={onRenderLabel}
         />
       )}
 
-      {isDisabled && (
-        <TextField
-          disabled
-          label={label}
-          placeholder={placeholderOnDisable}
-          required={required}
-          styles={disabledTextFieldStyle}
-          onRenderLabel={onRenderLabel}
-        />
-      )}
-
       <ActionButton
-        styles={ActionButtonStyle}
+        styles={actionButtonStyle}
         onClick={() => {
           setDisabled(false);
           setAutoFoucsOnTextField(true);
@@ -136,5 +135,3 @@ const ClickOnFocusTextField: React.FC<ClickOnFocusTextField> = (props) => {
     </Fragment>
   );
 };
-
-export default ClickOnFocusTextField;
