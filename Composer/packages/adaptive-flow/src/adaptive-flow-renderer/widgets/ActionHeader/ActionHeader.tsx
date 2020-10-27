@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { useContext } from 'react';
 import { jsx } from '@emotion/core';
-import { generateSDKTitle } from '@bfc/shared';
+import { generateActionTitle } from '@bfc/shared';
 import { WidgetComponent, WidgetContainerProps } from '@bfc/extension-client';
 
 import { DefaultColors } from '../../constants/ElementColors';
@@ -49,7 +49,7 @@ export const ActionHeader: WidgetComponent<ActionHeaderProps> = ({
   const textCSS = disabled ? DisabledHeaderTextCSS : HeaderTextCSS(colors.color);
   const iconColor = disabled ? DisabledIconColor : colors.icon;
 
-  const headerContent = disableSDKTitle ? title : generateSDKTitle(adaptiveSchema, data, title);
+  const headerContent = disableSDKTitle ? title : generateActionTitle(data, adaptiveSchema.title, title);
 
   const { NodeMenu } = useContext(RendererContext);
   const menuNode =
