@@ -24,10 +24,10 @@ import {
 import { getFriendlyName } from '../../utils/dialogUtil';
 import { triggerNotSupported } from '../../utils/dialogValidator';
 import { navigateTo } from '../../utils/navigation';
+import { BotStatus } from '../../constants';
 
 import { TreeItem } from './treeItem';
 import { ExpandableNode } from './ExpandableNode';
-import { BotStatus } from '../../constants';
 
 // -------------------- Styles -------------------- //
 

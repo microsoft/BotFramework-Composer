@@ -214,18 +214,3 @@ export const projectDialogsMapSelector = selector<{ [key: string]: DialogInfo[] 
     return projectDialogsMap;
   },
 });
-
-export const projectDisplaySkillManifestMapSelector = selector<{ [key: string]: string }>({
-  key: 'projectDisplaySkillManifestMap',
-  get: ({ get }) => {
-    const projectIds = get(botProjectIdsState);
-    const projectManifestMap = {};
-
-    projectIds.map((projectId) => {
-      const manifest = get(displaySkillManifestState(projectId));
-      projectManifestMap[projectId] = manifest;
-    });
-
-    return projectManifestMap;
-  },
-});
