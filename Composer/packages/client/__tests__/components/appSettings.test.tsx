@@ -27,7 +27,7 @@ describe('<AppSettings /> & <ElectronSettings />', () => {
     // there are 2 onboarding texts
     getAllByText('Onboarding');
     getByText('Property editor preferences');
-    expect(() => getByText('Application Updates')).toThrow();
+    getByText('Application Updates');
   });
 
   it('should render the electron settings section', () => {
@@ -47,7 +47,6 @@ describe('<AppSettings /> & <ElectronSettings />', () => {
         appLocale: 'en-US',
       });
     });
-    getByText('Application Updates');
     getByText('Auto update');
     getByText('Early adopters');
   });

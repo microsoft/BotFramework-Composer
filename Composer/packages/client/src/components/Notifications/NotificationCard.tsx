@@ -3,15 +3,15 @@
 
 /** @jsx jsx */
 import { jsx, css, keyframes } from '@emotion/core';
-import React from 'react';
+import React, { useState } from 'react';
 import { IconButton, ActionButton } from 'office-ui-fabric-react/lib/Button';
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import { FontSizes } from '@uifabric/fluent-theme';
 import { Shimmer, ShimmerElementType } from 'office-ui-fabric-react/lib/Shimmer';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 
-import Timer from '../utils/timer';
+import { useInterval } from '../../utils/hooks';
 
 // -------------------- Styles -------------------- //
 
@@ -129,6 +129,8 @@ export type CardProps = {
   description?: string;
   retentionTime?: number;
   link?: Link;
+  read?: boolean;
+  hidden?: boolean;
   onRenderCardContent?: (props: CardProps) => JSX.Element;
 };
 
@@ -136,6 +138,7 @@ export type NotificationProps = {
   id: string;
   cardProps: CardProps;
   onDismiss: (id: string) => void;
+  onHide?: (id: string) => void;
 };
 
 const defaultCardContentRenderer = (props: CardProps) => {
@@ -161,40 +164,29 @@ const defaultCardContentRenderer = (props: CardProps) => {
 };
 
 export const NotificationCard = React.memo((props: NotificationProps) => {
-  const { cardProps, id, onDismiss } = props;
-  const [show, setShow] = useState(true);
+  const { cardProps, id, onDismiss, onHide } = props;
+  const { hidden, retentionTime = null } = cardProps;
+
+  const [delay, setDelay] = useState(retentionTime || null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const removeNotification = () => {
-    setShow(false);
+    typeof onHide === 'function' && onHide(id);
+    setDelay(null);
   };
 
-  // notification will disappear in 5 secs
-  const timer = useRef(cardProps.retentionTime ? new Timer(removeNotification, cardProps.retentionTime) : null).current;
-
-  useEffect(() => {
-    return () => {
-      if (timer) {
-        timer.clear();
-      }
-    };
-  }, []);
+  useInterval(removeNotification, delay);
 
   const handleMouseOver = () => {
-    // if mouse over stop the time and record the remaining time
-    if (timer) {
-      timer.pause();
+    if (retentionTime) {
+      setDelay(null);
     }
   };
 
   const handleMouseLeave = () => {
-    if (timer) {
-      timer.resume();
+    if (retentionTime) {
+      setDelay(retentionTime);
     }
-  };
-
-  const handleAnimationEnd = () => {
-    if (!show) onDismiss(id);
   };
 
   const renderCard = cardProps.onRenderCardContent || defaultCardContentRenderer;
@@ -202,9 +194,8 @@ export const NotificationCard = React.memo((props: NotificationProps) => {
   return (
     <div
       ref={containerRef}
-      css={cardContainer(show, containerRef.current)}
+      css={cardContainer(!hidden, containerRef.current)}
       role="presentation"
-      onAnimationEnd={handleAnimationEnd}
       onFocus={() => void 0}
       onMouseLeave={handleMouseLeave}
       onMouseOver={handleMouseOver}
@@ -213,7 +204,7 @@ export const NotificationCard = React.memo((props: NotificationProps) => {
         ariaLabel={formatMessage('Close')}
         css={cancelButton}
         iconProps={{ iconName: 'Cancel', styles: { root: { fontSize: '12px' } } }}
-        onClick={removeNotification}
+        onClick={() => onDismiss(id)}
       />
       {renderCard(cardProps)}
     </div>

@@ -5,7 +5,7 @@ import path from 'path';
 
 import { Request, Response } from 'express';
 import rimraf from 'rimraf';
-import { ExtensionContext } from '@bfc/extension';
+import { ExtensionManager } from '@bfc/extension';
 
 import { BotProjectService } from '../../services/project';
 import { Path } from '../../utility/path';
@@ -41,7 +41,7 @@ beforeEach(async () => {
 });
 
 beforeAll(async () => {
-  await ExtensionContext.loadPluginsFromFolder(pluginDir);
+  await ExtensionManager.loadFromDir(pluginDir, true);
 });
 
 afterEach(() => {
