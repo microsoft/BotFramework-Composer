@@ -39,7 +39,7 @@ export const useEditorEventApi = (
   } = useDialogEditApi(shellApi);
   const { createDialog, readDialog, updateDialog } = useDialogApi(shellApi);
   const { path, data, nodeContext, selectionContext } = state;
-  const { focusedId, focusedEvent, clipboardActions, dialogFactory } = nodeContext;
+  const { focusedId, focusedTab, focusedEvent, clipboardActions, dialogFactory } = nodeContext;
   const { selectedIds, setSelectedIds, selectableElements } = selectionContext;
 
   const {
@@ -79,6 +79,7 @@ export const useEditorEventApi = (
     switch (eventName) {
       case NodeEventTypes.Focus:
         handler = (e: { id: string; tab?: string }) => {
+          if (e.id === focusedId && e.tab === focusedTab) return;
           const newFocusedIds = e.id ? [e.id] : [];
           setSelectedIds([...newFocusedIds]);
           onFocusSteps([...newFocusedIds], e.tab);
