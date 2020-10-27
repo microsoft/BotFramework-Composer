@@ -87,7 +87,8 @@ jobs:
           failOnAlert: true
 
   - job: static
-    pool: 'windows-latest'
+    pool:
+      vmImage: windows-latest
     displayName: Static Analysis (CodeQL & LGTM)
     steps:
       - task: Semmle@0
