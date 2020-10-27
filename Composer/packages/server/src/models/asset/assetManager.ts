@@ -5,7 +5,9 @@ import fs from 'fs';
 import path from 'path';
 
 import find from 'lodash/find';
-import { UserIdentity, ExtensionContext } from '@bfc/extension';
+import { UserIdentity, ExtensionContext, BotTemplate } from '@bfc/extension';
+import axios from 'axios';
+import * as unzipper from 'unzip-stream';
 
 import log from '../../logger';
 import { LocalDiskStorage } from '../storage/localDiskStorage';
@@ -52,13 +54,41 @@ export class AssetManager {
     return ref;
   }
 
+  private async getRemoteTemplate(template: BotTemplate): Promise<string> {
+    // const { stdout, stderr } = await execAsync(buildCommand, {
+    //   cwd: runtimePath,
+    // });
+    console.log(`Fetching from Nuget`);
+    const url =
+      'https://www.myget.org/F/bfctesttemplates/api/v3/microsoft.conversationalcore.template/0.0.1-preview2/microsoft.conversationalcore.template.0.0.1-preview2';
+
+    const stream = await axios({
+      method: 'get',
+      url: `https://www.nuget.org/api/v2/package/${uri}${version ? `/${version}` : ''}`,
+      responseType: 'stream',
+    });
+    stream.data.pipe(
+      unzipper.Extract({ path: path.join(TMP_DIR, uri) }).on('close', async () => {
+        // possible to get version from some package file?
+        resolve(await filterFiles(type));
+      })
+    );
+    return path;
+  }
+
   private async copyDataFilesTo(templateId: string, dstDir: string, dstStorage: IFileStorage, locale?: string) {
     const template = find(ExtensionContext.extensions.botTemplates, { id: templateId });
-    if (template === undefined || template.path === undefined) {
+    if (template === undefined || (template.path === undefined && template.packageName === undefined)) {
       throw new Error(`no such template with id ${templateId}`);
     }
+
+    let templateSrcPath = template.path;
+    if (!templateSrcPath) {
+      templateSrcPath = await this.getRemoteTemplate(template);
+    }
+
     // copy Composer data files
-    await copyDir(template.path, this.templateStorage, dstDir, dstStorage);
+    await copyDir(templateSrcPath, this.templateStorage, dstDir, dstStorage);
     // if we have a locale override, copy those files over too
     if (locale != null) {
       const localePath = path.join(__dirname, '..', '..', '..', 'schemas', `sdk.${locale}.schema`);
