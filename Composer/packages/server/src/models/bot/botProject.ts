@@ -591,6 +591,17 @@ export class BotProject implements IBotProject {
     );
   }
 
+  public async deleteFormDialog(dialogId: string) {
+    const defaultLocale = this.settings?.defaultLanguage || defaultLanguage;
+    const dialogPath = defaultFilePath(this.name, defaultLocale, `${dialogId}${FileExtensions.Dialog}`);
+    const dirToDelete = Path.dirname(Path.resolve(this.dir, dialogPath));
+
+    // I check that the path is longer 3 to avoid deleting a drive and all its contents.
+    if (dirToDelete.length > 3 && this.fileStorage.exists(dirToDelete)) {
+      this.fileStorage.rmrfDir(dirToDelete);
+    }
+  }
+
   private async removeLocalRuntimeData(projectId) {
     const method = 'localpublish';
     if (ExtensionContext.extensions.publish[method]?.methods?.stopBot) {
