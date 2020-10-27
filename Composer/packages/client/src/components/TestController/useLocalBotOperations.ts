@@ -56,6 +56,11 @@ export function useLocalBotOperations() {
 
   const startAllBots = async () => {
     const [, ...skillsBots] = builderEssentials;
+    if (skillsBots.length === 0) {
+      startRootBot();
+      return;
+    }
+
     const trackProjects: string[] = skillsBots.map((skillBot) => skillBot.projectId);
 
     setProjectsToTrack(trackProjects);
