@@ -6,7 +6,6 @@ import { ITriggerCondition } from '@botframework-composer/types';
 import { useRecoilValue } from 'recoil';
 
 import { TriggerFormData } from '../utils/dialogUtil';
-
 import { Dispatcher } from '../recoilModel/dispatchers';
 
 import { dispatcherState } from './../recoilModel/DispatcherWrapper';

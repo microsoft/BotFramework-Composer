@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 import { DialogInfo } from '@bfc/shared';
-import { selectorFamily, selector } from 'recoil';
+import { selectorFamily } from 'recoil';
 
-import { dialogIdsState, dialogState, botProjectIdsState } from '../atoms';
+import { dialogIdsState, dialogState } from '../atoms';
 
 export const dialogsSelectorFamily = selectorFamily<DialogInfo[], string>({
   key: 'dialogs',
@@ -23,22 +23,5 @@ export const dialogsSelectorFamily = selectorFamily<DialogInfo[], string>({
       newDialogArray.map((dialog) => dialog.id)
     );
     newDialogArray.forEach((dialog) => set(dialogState({ projectId, dialogId: dialog.id }), dialog));
-  },
-});
-
-export const projectDialogsSelectorFamily = selector<{ [key: string]: DialogInfo[] }>({
-  key: 'projectDialogs',
-  get: ({ get }) => {
-    const projectIds = get(botProjectIdsState);
-    const projectDialogsMap = {};
-
-    projectIds.map((projectId) => {
-      const dialogIds = get(dialogIdsState(projectId));
-      projectDialogsMap[projectId] = dialogIds.map((dialogId) => {
-        return get(dialogState({ projectId, dialogId }));
-      });
-    });
-
-    return projectDialogsMap;
   },
 });

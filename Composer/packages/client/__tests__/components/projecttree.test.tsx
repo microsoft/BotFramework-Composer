@@ -22,7 +22,17 @@ const initRecoilState = ({ set }) => {
 describe('<ProjectTree/>', () => {
   it('should render the projecttree', async () => {
     const { findByText } = renderWithRecoil(
-      <ProjectTree onDeleteDialog={() => {}} onDeleteTrigger={() => {}} onSelect={() => {}} />,
+      <ProjectTree
+        onBotCreateDialog={() => {}}
+        onBotDeleteDialog={() => {}}
+        onBotEditManifest={() => {}}
+        onBotExportZip={() => {}}
+        onBotRemoveSkill={() => {}}
+        onBotStart={() => {}}
+        onDialogCreateTrigger={() => {}}
+        onDialogDeleteTrigger={() => {}}
+        onSelect={() => {}}
+      />,
       initRecoilState
     );
 
@@ -32,7 +42,17 @@ describe('<ProjectTree/>', () => {
   it('should handle project tree item click', async () => {
     const mockFileSelect = jest.fn(() => null);
     const component = renderWithRecoil(
-      <ProjectTree onDeleteDialog={() => {}} onDeleteTrigger={() => {}} onSelect={mockFileSelect} />,
+      <ProjectTree
+        onBotCreateDialog={() => {}}
+        onBotDeleteDialog={() => {}}
+        onBotEditManifest={() => {}}
+        onBotExportZip={() => {}}
+        onBotRemoveSkill={() => {}}
+        onBotStart={() => {}}
+        onDialogCreateTrigger={() => {}}
+        onDialogDeleteTrigger={() => {}}
+        onSelect={mockFileSelect}
+      />,
       initRecoilState
     );
 
@@ -45,8 +65,14 @@ describe('<ProjectTree/>', () => {
     const mockOnSelected = jest.fn();
     const { findByText } = renderWithRecoil(
       <ProjectTree
-        onDeleteDialog={() => {}}
-        onDeleteTrigger={() => {}}
+        onBotCreateDialog={() => {}}
+        onBotDeleteDialog={() => {}}
+        onBotEditManifest={() => {}}
+        onBotExportZip={() => {}}
+        onBotRemoveSkill={() => {}}
+        onBotStart={() => {}}
+        onDialogCreateTrigger={() => {}}
+        onDialogDeleteTrigger={() => {}}
         onSelect={() => {}}
         onSelectAllLink={mockOnSelected}
       />,

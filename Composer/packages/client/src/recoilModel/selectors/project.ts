@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { BotIndexer } from '@bfc/indexers';
-import { BotAssets, FormDialogSchema, JsonSchemaFile } from '@bfc/shared';
+import { BotAssets, DialogInfo, FormDialogSchema, JsonSchemaFile } from '@bfc/shared';
 import isEmpty from 'lodash/isEmpty';
 import { selector, selectorFamily } from 'recoil';
 
@@ -23,6 +23,9 @@ import {
   dialogSchemasState,
   jsonSchemaFilesState,
   projectMetaDataState,
+  dialogIdsState,
+  dialogState,
+  displaySkillManifestState,
 } from '../atoms';
 import { dialogsSelectorFamily } from '../selectors';
 
@@ -181,5 +184,37 @@ export const botProjectDiagnosticsSelector = selector({
       return BotIndexer.validate(botAssets, localeSetting);
     });
     return result;
+  },
+});
+
+export const projectDialogsMapSelector = selector<{ [key: string]: DialogInfo[] }>({
+  key: 'projectDialogsMap',
+  get: ({ get }) => {
+    const projectIds = get(botProjectIdsState);
+    const projectDialogsMap = {};
+
+    projectIds.map((projectId) => {
+      const dialogIds = get(dialogIdsState(projectId));
+      projectDialogsMap[projectId] = dialogIds.map((dialogId) => {
+        return get(dialogState({ projectId, dialogId }));
+      });
+    });
+
+    return projectDialogsMap;
+  },
+});
+
+export const projectDisplaySkillManifestMapSelector = selector<{ [key: string]: string }>({
+  key: 'projectDisplaySkillManifestMap',
+  get: ({ get }) => {
+    const projectIds = get(botProjectIdsState);
+    const projectManifestMap = {};
+
+    projectIds.map((projectId) => {
+      const manifest = get(displaySkillManifestState(projectId));
+      projectManifestMap[projectId] = manifest;
+    });
+
+    return projectManifestMap;
   },
 });

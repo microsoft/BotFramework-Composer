@@ -23,10 +23,10 @@ import {
 } from '../../recoilModel';
 import { getFriendlyName } from '../../utils/dialogUtil';
 import { triggerNotSupported } from '../../utils/dialogValidator';
+import { navigateTo } from '../../utils/navigation';
 
 import { TreeItem } from './treeItem';
 import { ExpandableNode } from './ExpandableNode';
-import { navigateTo } from '../../utils/navigation';
 
 // -------------------- Styles -------------------- //
 

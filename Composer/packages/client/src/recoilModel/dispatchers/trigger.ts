@@ -6,7 +6,6 @@ import { BaseSchema, deleteActions, ITriggerCondition, LgTemplate, LgTemplateSam
 import get from 'lodash/get';
 
 import { lgFilesState, luFilesState, schemasState, dialogState, localeState } from '../atoms/botState';
-
 import { dispatcherState } from '../DispatcherWrapper';
 import { dialogsSelectorFamily } from '../selectors';
 import {
@@ -16,6 +15,7 @@ import {
   qnaMatcherKey,
   TriggerFormData,
 } from '../../utils/dialogUtil';
+
 import { setError } from './shared';
 
 const getDesignerIdFromDialogPath = (dialog, path) => {
