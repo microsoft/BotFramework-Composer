@@ -49,7 +49,7 @@ const botName = css`
   font-size: 16px;
   color: #fff;
   border-radius: 19px;
-  background: #3991ea;
+  background: #3393dd;
   padding-left: 10px;
   padding-right: 10px;
   cursor: pointer;
@@ -163,12 +163,11 @@ export const Header = () => {
         {projectName && (
           <Fragment>
             <div css={divider} />
-            {/* <ActionButton>
-              {`${projectName} (${locale})`}
-            </ActionButton> */}
             <span
               css={botName}
               id="targetButton"
+              role={'button'}
+              tabIndex={0}
               onClick={() => setTeachingBubbleVisibility(true)}
             >{`${projectName} (${locale})`}</span>
           </Fragment>

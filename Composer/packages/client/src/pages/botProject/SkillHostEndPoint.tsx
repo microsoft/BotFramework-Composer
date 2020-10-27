@@ -39,15 +39,17 @@ export const SkillHostEndPoint: React.FC<SkillHostEndPointProps> = (props) => {
     <CollapsableWrapper title={formatMessage('Skill host endpoint')} titleStyle={titleStyle}>
       <TextField
         aria-labelledby={'SkillHostEndPoint'}
+        data-testid={'SkillHostEndPointTextField'}
         label={formatMessage('Skill host endpoint url')}
         placeholder={'Enter Skill host endpoint url'}
         value={skillHostEndpoint}
-        onChange={async (e, value) =>
-          await setSettings(projectId, {
+        onChange={(e, value) => {
+          setSettings(projectId, {
             ...settings,
             skillHostEndpoint: value,
-          })
-        }
+          });
+          console.log('triggered');
+        }}
         onRenderLabel={onRenderLabel}
       />
     </CollapsableWrapper>
