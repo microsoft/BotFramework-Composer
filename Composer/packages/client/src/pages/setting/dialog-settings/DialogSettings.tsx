@@ -104,7 +104,13 @@ export const DialogSettings: React.FC<RouteComponentProps<{ projectId: string }>
       </StackItem>
       <StackItem>
         <Label>{BotSettings.languageTitle}</Label>
-        <section>{BotSettings.languagesubTitle}</section>
+        <section>
+          {BotSettings.languagesubTitle}
+          &nbsp;
+          <Link href={'https://aka.ms/composer-multilingual-support'} target="_blank">
+            {BotSettings.learnMore}
+          </Link>
+        </section>
         <section style={{ padding: '0 50px' }}>
           <div css={toolbar}>
             <Dropdown
