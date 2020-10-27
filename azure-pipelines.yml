@@ -9,6 +9,7 @@ pr:
 
 variables:
   YARN_CACHE_FOLDER: $(Pipeline.Workspace)/.yarn
+  LGTM.UploadSnapshot: true
 
 jobs:
   - job: e2e
@@ -84,6 +85,17 @@ jobs:
         verbosity: 'Verbose'
         alertWarningLevel: 'High'
         failOnAlert: true
-
+    - task: Semmle@0
+      env: 
+        SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+      inputs:
+        toolVersion: 'LatestPreRelease'
+        sourceCodeDirectory: '$(Build.SourcesDirectory)\Composer'
+        language: 'tsandjs'
+        includeNodeModules: true
+        querySuite: 'Required'
+        timeout: '1800'
+        ram: '16384'
+        addProjectDirToScanningExclusionList: true
 
 
