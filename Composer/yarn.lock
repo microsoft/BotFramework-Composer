@@ -3006,10 +3006,10 @@
     ts-md5 "^1.2.6"
     tslib "^1.10.0"
 
-"@microsoft/bf-generate-library@^4.10.0-daily.20201015.174962":
-  version "4.10.0-daily.20201015.174962"
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-generate-library/-/@microsoft/bf-generate-library-4.10.0-daily.20201015.174962.tgz#42838aa5a44649a9de7bc3a7c987fe91b7ab65e3"
-  integrity sha1-QoOKpaRGSanee8OnyYf+kberZeM=
+"@microsoft/bf-generate-library@^4.10.0-daily.20201026.178528":
+  version "4.10.0-daily.20201026.178528"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-generate-library/-/@microsoft/bf-generate-library-4.10.0-daily.20201026.178528.tgz#9dd8acd3e5140776b515b9089f1238ff034352d0"
+  integrity sha1-ndis0+UUB3a1FbkInxI4/wNDUtA=
   dependencies:
     "@microsoft/bf-lu" "^4.11.0-dev.20201015.a41c691"
     adaptive-expressions "^4.11.0-dev.20201015.e56fdb7"
@@ -3520,8 +3520,8 @@
 
 "@types/debug@^4.1.5":
   version "4.1.5"
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@types/debug/-/@types/debug-4.1.5.tgz#b14efa8852b7768d898906613c23f688713e02cd"
-  integrity sha1-sU76iFK3do2JiQZhPCP2iHE+As0=
+  resolved "https://registry.yarnpkg.com/@types/debug/-/debug-4.1.5.tgz#b14efa8852b7768d898906613c23f688713e02cd"
+  integrity sha512-Q1y515GcOdTHgagaVFhHnIFQ38ygs/kmxdNpvpou+raI9UO3YZcHDngBSYKQklcKlvA7iuQlmIKbzvmxcOE9CQ==
 
 "@types/eslint-visitor-keys@^1.0.0":
   version "1.0.0"
@@ -5648,8 +5648,8 @@ bindings@1.2.1:
 
 bl@^2.2.1, bl@^4.0.3:
   version "2.2.1"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/bl/-/bl-2.2.1.tgz#8c11a7b730655c5d56898cdc871224f40fd901d5"
-  integrity sha1-jBGntzBlXF1WiYzchxIk9A/ZAdU=
+  resolved "https://registry.yarnpkg.com/bl/-/bl-2.2.1.tgz#8c11a7b730655c5d56898cdc871224f40fd901d5"
+  integrity sha512-6Pesp1w0DEX1N550i/uGV/TqucVL4AM/pgThFSN/Qq9si1/DF9aIHs1BxD8V/QU0HoeHO6cQRTAuYnLPKq1e4g==
   dependencies:
     readable-stream "^2.3.5"
     safe-buffer "^5.1.1"
@@ -16628,8 +16628,8 @@ read-text-file@^1.1.0, read-text-file@~1.1.0:
 
 readable-stream@^2.3.5:
   version "2.3.7"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/readable-stream/-/readable-stream-2.3.7.tgz#1eca1cf711aef814c04f62252a36a62f6cb23b57"
-  integrity sha1-Hsoc9xGu+BTAT2IlKjamL2yyO1c=
+  resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-2.3.7.tgz#1eca1cf711aef814c04f62252a36a62f6cb23b57"
+  integrity sha512-Ebho8K4jIbHAxnuxi7o42OrZgF/ZTNcsZj6nRKyUmkhLFq8CHItp/fy6hQZuZmP/n3yZ9VBUbp4zz/mX8hmYPw==
   dependencies:
     core-util-is "~1.0.0"
     inherits "~2.0.3"
