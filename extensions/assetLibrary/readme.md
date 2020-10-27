@@ -97,9 +97,52 @@ The packages used by Composer are native packages - the process of building one 
 However, the packages that we care about will contain one of more of the following elements:
 
 * a .schema file describing an Adaptive $kind [LINK TO CUSTOM ACTIONS DOCS?]
-* an `exported/` folder containing one or more sets of dialog files
-* an `exported/` folder containing one or more sets of LG files
+* an `exported` folder containing one or more sets of dialog files
+* an `exported` folder containing one or more sets of LG files
+
+
 
 ## For Nuget
 
+In the parent folder containing the `exported` folder, make sure there is a `.csproj` file with the name of the package that contains at least the following items. This will configure your project to be published as a nuget package containing the exported files.
+
+Once configured, run `dotnet build`. This will create a file called `bin/Debug/MY_PROJECT.VERSION.nupkg`.  This is your package file! Next, <a href="https://docs.microsoft.com/en-us/nuget/nuget-org/publish-a-package">follow the instructions here to publish it to nuget.</a>
+
+TODO: This should also declare its minimum SDK version right???
+TODO: What else should go in this?  Keywords, homepage link,etc?
+
+```xml
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Description>MY PACKAGE DESCRIPTION</Description>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.0.0</Version>
+    <PackageReleaseNotes>MY RELEASE NOTES</PackageReleaseNotes>
+    <Authors>MY NAME</Authors>
+    <Company>MY COMPANY</Company>
+    <Copyright>MY COPYRIGHT NOTICE</Copyright>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="exported\**\*.*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+      <PackagePath>exported\$(AssemblyName)</PackagePath>
+    </Content>
+    <!-- Hide dependent project assets in UI. -->
+    <None Update="exported\**\*.*" Visible="false" />
+  </ItemGroup>
+</Project>
+```
+
 ## For NPM
+
+In the parent folder containing the `exported` folder, make sure there is a `package.json` file. You can create one by running the command:
+
+```bash
+npm init
+```
+
+
+
+TODO: This should also declare its minimum SDK version right???
