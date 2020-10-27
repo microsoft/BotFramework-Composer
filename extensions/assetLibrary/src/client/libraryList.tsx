@@ -6,6 +6,7 @@ import { jsx } from "@emotion/core";
 import formatMessage from "format-message";
 import {
   DetailsList,
+  Link,
   DetailsListLayoutMode,
   SelectionMode,
   CheckboxVisibility,
@@ -132,7 +133,7 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
     {
       key: "actions",
       name: "",
-      minWidth: 60,
+      minWidth: 90,
       maxWidth: 60,
       isRowHeader: true,
       isResizable: true,
@@ -143,11 +144,6 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
             {props.isInstalled(item) && (
               <OverflowSet
                 overflowItems={[
-                  // {
-                  //   key: "Update",
-                  //   name: "Update",
-                  //   onClick: () => props.redownload(item),
-                  // },
                   {
                     key: "remove",
                     name: "Remove",
@@ -159,13 +155,11 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
               />
             )}
             {!props.isInstalled(item) && (
-              <Fragment>
-                <DefaultButton
-                  text={formatMessage("Install")}
-                  onClick={props.install}
-                  disabled={disabled}
-                />
-              </Fragment>
+              <DefaultButton
+                text={formatMessage("Install")}
+                onClick={props.install}
+                disabled={disabled}
+              />
             )}
           </Fragment>
         );

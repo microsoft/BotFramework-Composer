@@ -41,6 +41,12 @@ const strings = {
   ),
   requireEject: formatMessage('To install components, this project must have an ejected runtime. Please navigate to the runtime settings page.'),
   ejectRuntime: formatMessage('Eject Runtime'),
+  noComponentsInstalled: formatMessage('No packages installed'),
+  noComponentsFound: formatMessage('No packages found. Check extension configuration.'),
+  browseHeader: formatMessage('Browse'),
+  installHeader: formatMessage('Installed'),
+  libraryError: formatMessage('Library Error'),
+  importError: formatMessage('Install Error'),
 }
 
 const Library: React.FC = () => {
@@ -157,18 +163,6 @@ const Library: React.FC = () => {
     const groups: any[] = [];
     let items: any[] = [];
 
-    // if (installedComponents.length) {
-    //   items = items.concat(installedComponents || []);
-
-    //   groups.push({
-    //     key: 'installed',
-    //     name: strings.installedCategory,
-    //     startIndex: 0,
-    //     count: installedComponents ? installedComponents.length : 0,
-    //     level: 0,
-    //   });
-    // }
-
     // find all categories listed in the available libraries
     const categories = [DEFAULT_CATEGORY];
     const availableCompatibleLibraries = availableLibraries.filter(component => isCompatible(component));
@@ -273,7 +267,7 @@ const Library: React.FC = () => {
       setApplicationLevelError({
         status: err.response.status,
         message: err.response && err.response.data.message ? err.response.data.message : err,
-        summary: 'IMPORT ERROR',
+        summary: strings.importError,
       });
     }
   };
@@ -286,7 +280,7 @@ const Library: React.FC = () => {
       setApplicationLevelError({
         status: err.response.status,
         message: err.response && err.response.data.message ? err.response.data.message : err,
-        summary: 'LIBRARY ERROR',
+        summary: strings.libraryError,
       });
     }
   };
@@ -299,7 +293,7 @@ const Library: React.FC = () => {
       setApplicationLevelError({
         status: err.response.status,
         message: err.response && err.response.data.message ? err.response.data.message : err,
-        summary: 'LIBRARY ERROR',
+        summary: strings.libraryError,
       });
     }
   };
@@ -335,7 +329,7 @@ const Library: React.FC = () => {
           setApplicationLevelError({
             status: err.response.status,
             message: err.response && err.response.data.message ? err.response.data.message : err,
-            summary: 'IMPORT ERROR',
+            summary: strings.importError,
           });
         }
         setWorking(false);
@@ -393,7 +387,7 @@ const Library: React.FC = () => {
       )}
       <Fragment>
         <Pivot aria-label="Library Views" style={{paddingLeft: '12px'}}>
-          <PivotItem headerText="Browse">
+          <PivotItem headerText={strings.browseHeader}>
             <section style={{paddingRight: '20px', display: 'grid', justifyContent: 'end'}}>
               <Dropdown
                 placeholder="Format"
@@ -425,11 +419,11 @@ const Library: React.FC = () => {
                     marginTop: '20px',
                   }}
                 >
-                  No libraries installed
+                  {strings.noComponentsFound}
                 </div>
               ) : null}
           </PivotItem>
-          <PivotItem headerText="Installed">
+          <PivotItem headerText={strings.installHeader}>
           <LibraryList
                 disabled={!ejectedRuntime}
                 groups={[{
@@ -455,7 +449,7 @@ const Library: React.FC = () => {
                     marginTop: '20px',
                   }}
                 >
-                  No libraries installed
+                  {strings.noComponentsInstalled}
                 </div>
               ) : null}
           </PivotItem>
