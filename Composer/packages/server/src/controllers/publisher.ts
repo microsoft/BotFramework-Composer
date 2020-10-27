@@ -5,13 +5,14 @@ import merge from 'lodash/merge';
 import { ExtensionContext } from '@bfc/extension';
 import { defaultPublishConfig } from '@bfc/shared';
 import { join } from 'path';
-import { ensureDirSync, removeSync } from 'fs-extra';
+import { ensureDirSync, remove } from 'fs-extra';
 import extractZip from 'extract-zip';
 
 import { BotProjectService } from '../services/project';
-import { copyDir } from '../utility/storage';
 import { authService } from '../services/auth';
+import AssetService from '../services/asset';
 import logger from '../logger';
+import { LocationRef } from '../models/bot/interface';
 
 const log = logger.extend('publisher-controller');
 
@@ -310,13 +311,13 @@ export const PublishController = {
   },
 
   pull: async (req, res) => {
-    log('starting pull');
+    log('Starting pull');
     const target = req.params.target;
     const user = await ExtensionContext.getUserFromRequest(req);
     const projectId = req.params.projectId;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
 
-    // deal with publishTargets not exist in settings
+    // deal with publishTargets not existing in settings
     const publishTargets = currentProject.settings?.publishTargets || [];
     const allTargets = [defaultPublishConfig, ...publishTargets];
 
@@ -356,36 +357,48 @@ export const PublishController = {
 
           // TODO: stop current bot project from running?
 
-          // wipe old .backup if present
-          const backupDir = join(currentProject.dir, '.backup');
-          log('wiping old .backup folder: ', backupDir);
-          await removeSync(backupDir);
+          // backup the current bot project contents
+          const backupLocation = await BotProjectService.backupProject(currentProject);
 
-          // copy current bot project contents into COMPOSER_TEMP_DIR/.backup
-          const tempBackupDir = join(process.env.COMPOSER_TEMP_DIR as string, '.backup');
-          log('copying current bot project contents into temp backup folder: ', tempBackupDir);
-          await copyDir(currentProject.dir, currentProject.fileStorage, tempBackupDir, currentProject.fileStorage); // .backup might get duplicated?
-
-          // extract downloaded assets into bot project
-          log('extracting pulled assets into project folder: ', currentProject.dir);
+          // extract zip into new "template" directory
+          const baseDir = process.env.COMPOSER_REMOTE_TEMPLATES_DIR as string;
+          const templateDir = join(baseDir, 'extractedTemplate-' + Date.now());
+          ensureDirSync(templateDir);
+          log('Extracting pulled assets into temp template folder %s ', templateDir);
           await extractZip(results.zipPath, { dir: currentProject.dir });
 
-          // copy from temp backup into backup
-          log(`copying backed up assets from ${tempBackupDir} into ${backupDir}`);
-          await ensureDirSync(backupDir);
-          await copyDir(tempBackupDir, currentProject.fileStorage, backupDir, currentProject.fileStorage);
-          await removeSync(tempBackupDir);
+          // TODO: abstract away the template copying logic so that the code can be shared between project and publisher controllers
+          // (see copyTemplateToExistingProject())
+          log('Cleaning up bot content at %s before copying pulled content over.', currentProject.dir);
+          await currentProject.fileStorage.rmrfDir(currentProject.dir);
+
+          // copy extracted template content into bot project
+          const locationRef: LocationRef = {
+            storageId: 'default',
+            path: currentProject.dir,
+          };
+          log('Copying content from template at %s to %s', templateDir, currentProject.dir);
+          await AssetService.manager.copyProjectTemplateDirTo(
+            templateDir,
+            locationRef,
+            user,
+            currentProject.settings?.defaultLanguage || 'en-us'
+          );
+          log('Copied template content successfully.');
+          // clean up the temporary template directory -- fire and forget
+          remove(templateDir);
 
           // update eTag
-          log('setting etag');
+          log('Updating etag.');
           BotProjectService.setProjectLocationData(projectId, { eTag: results.eTag });
 
-          log('pull successful');
+          log('Pull successful');
 
-          return res.status(200);
+          return res.status(200).json({
+            backupLocation,
+          });
         } catch (err) {
-          return res.status(400).json({
-            statusCode: '500',
+          return res.status(500).json({
             message: err.message,
           });
         }

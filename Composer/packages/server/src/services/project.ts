@@ -15,6 +15,7 @@ import log from '../logger';
 
 import StorageService from './storage';
 import { Path } from './../utility/path';
+import { ensureDir, existsSync, remove } from 'fs-extra';
 
 const MAX_RECENT_BOTS = 7;
 
@@ -366,6 +367,32 @@ export class BotProjectService {
       return projectId;
     } else {
       return '';
+    }
+  };
+
+  public static backupProject = async (project: BotProject): Promise<string> => {
+    try {
+      // ensure there isn't an older backup directory hanging around
+      const projectDirName = Path.basename(project.dir);
+      const backupPath = Path.join(process.env.COMPOSER_BACKUP_DIR as string, projectDirName);
+      await ensureDir(process.env.COMPOSER_BACKUP_DIR as string);
+      if (existsSync(backupPath)) {
+        log('%s already exists. Deleting before backing up.', backupPath);
+        await remove(backupPath);
+        log('Existing backup folder deleted successfully.');
+      }
+
+      // clone the bot project to the backup directory
+      const location: LocationRef = {
+        storageId: 'default',
+        path: backupPath,
+      };
+      log('Backing up project at %s to %s', project.dir, backupPath);
+      await project.cloneFiles(location);
+      log('Project backed up successfully.');
+      return location.path;
+    } catch (e) {
+      throw e;
     }
   };
 }
