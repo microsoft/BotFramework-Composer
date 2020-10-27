@@ -1,10 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+import path from 'path';
+
 import { app } from 'electron';
 
 import ElectronWindow from '../electronWindow';
 import { isLinux, isMac, isWindows } from '../utility/platform';
 import logger from '../utility/logger';
+import { getUnpackedAsarPath } from '../utility/getUnpackedAsarPath';
 
 const log = logger.extend('one-auth');
 
@@ -13,7 +16,8 @@ if (isWindows()) {
   oneAuth = require('oneauth-win64');
 }
 if (isMac()) {
-  oneAuth = require('oneauth-mac');
+  // eslint-disable-next-line security/detect-non-literal-require
+  oneAuth = require(path.join(getUnpackedAsarPath(), 'oneauth'));
 }
 if (isLinux()) {
   oneAuth = {};
