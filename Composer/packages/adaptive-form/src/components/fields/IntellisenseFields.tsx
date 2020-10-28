@@ -12,6 +12,8 @@ import { JsonField } from './JsonField';
 import { NumberField } from './NumberField';
 import { StringField } from './StringField';
 
+const noop = () => {};
+
 export const IntellisenseTextField: React.FC<FieldProps<string>> = (props) => {
   const { id, value = '', onChange, uiOptions, focused: defaultFocused } = props;
 
@@ -21,8 +23,6 @@ export const IntellisenseTextField: React.FC<FieldProps<string>> = (props) => {
 
   const scopes = uiOptions.intellisenseScopes || [];
   const intellisenseServerUrlRef = useRef(getIntellisenseUrl());
-
-  const noop = useCallback(() => {}, []);
 
   return (
     <Intellisense
@@ -57,8 +57,6 @@ export const IntellisenseExpressionField: React.FC<FieldProps<string>> = (props)
 
   const scopes = ['expressions', 'user-variables'];
   const intellisenseServerUrlRef = useRef(getIntellisenseUrl());
-
-  const noop = useCallback(() => {}, []);
 
   return (
     <Intellisense
@@ -96,8 +94,6 @@ export const IntellisenseNumberField: React.FC<FieldProps<string>> = (props) => 
 
   const scopes = uiOptions.intellisenseScopes || [];
   const intellisenseServerUrlRef = useRef(getIntellisenseUrl());
-
-  const noop = useCallback(() => {}, []);
 
   return (
     <Intellisense
@@ -156,8 +152,6 @@ export const IntellisenseJSONField: React.FC<FieldProps<string>> = (props) => {
   const defaultValue = schema.type === 'object' ? {} : [];
   const scopes = ['expressions'];
   const intellisenseServerUrlRef = useRef(getIntellisenseUrl());
-
-  const noop = useCallback(() => {}, []);
 
   return (
     <Intellisense
