@@ -206,6 +206,9 @@ export const ProjectTree: React.FC<Props> = ({
   };
 
   const handleOnSelect = (link: TreeLink) => {
+    // Skip state change when link not changed.
+    if (isEqual(link, selectedLink)) return;
+
     setSelectedLink(link);
     onSelect?.(link); // if we've defined a custom onSelect, use it
     if (link.dialogName != null) {
@@ -486,6 +489,8 @@ export const ProjectTree: React.FC<Props> = ({
       ? createDetailsTree(projectCollection[0], 0)
       : projectCollection.map(createBotSubtree);
 
+  console.log('render: project tree');
+
   return (
     <div
       aria-label={formatMessage('Navigation pane')}
@@ -533,4 +538,8 @@ export const ProjectTree: React.FC<Props> = ({
       </FocusZone>
     </div>
   );
+};
+
+ProjectTree.whyDidYouRender = {
+  customName: 'ProjectTree',
 };
