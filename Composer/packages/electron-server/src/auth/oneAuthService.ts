@@ -9,19 +9,10 @@ import { isLinux, isMac, isWindows } from '../utility/platform';
 import logger from '../utility/logger';
 import { getUnpackedAsarPath } from '../utility/getUnpackedAsarPath';
 
-const log = logger.extend('one-auth');
+import { OneAuth } from './oneauth';
+import { oneauthShim } from './oneauthShim';
 
-let oneAuth;
-if (isWindows()) {
-  oneAuth = require('oneauth-win64');
-}
-if (isMac()) {
-  // eslint-disable-next-line security/detect-non-literal-require
-  oneAuth = require(path.join(getUnpackedAsarPath(), 'oneauth'));
-}
-if (isLinux()) {
-  oneAuth = {};
-}
+const log = logger.extend('one-auth');
 
 const COMPOSER_APP_ID = 'com.microsoft.BotFrameworkComposer';
 const COMPOSER_APP_NAME = 'BotFrameworkComposer';
@@ -43,12 +34,11 @@ type AuthParamOptions = Partial<PartialAuthParamaters>;
 
 class OneAuthInstance {
   private initialized: boolean;
-  private oneAuth: any; //eslint-disable-line
+  private _oneAuth: typeof OneAuth | null = null; //eslint-disable-line
 
   constructor() {
     // will wait until called to initialize (so that we're sure we have a browser window)
     this.initialized = false;
-    this.oneAuth = oneAuth;
   }
 
   private initialize() {
@@ -58,7 +48,7 @@ class OneAuthInstance {
     }
     const window = ElectronWindow.getInstance().browserWindow;
     if (window) {
-      const isDevelopment = process.env.NODE_ENV && process.env.NODE_ENV === 'development';
+      const isDevelopment = Boolean(process.env.NODE_ENV && process.env.NODE_ENV === 'development');
       log('PII logging enabled: %s', isDevelopment);
       this.oneAuth.setLogPiiEnabled(isDevelopment);
       this.oneAuth.setLogCallback((logLevel, message) => {
@@ -146,7 +136,7 @@ class OneAuthInstance {
     }
     try {
       const result = await this.oneAuth.signInSilently(params, '' /* TODO: generate correlation id? */);
-      if (result.credential && result.credential.value) {
+      if (result?.credential?.value) {
         log('Acquired access token silently. %s', result.credential.value);
         return {
           accessToken: result.credential.value,
@@ -154,7 +144,7 @@ class OneAuthInstance {
           expiryTime: result.credential.expiresOn,
         };
       }
-      if (result.error) {
+      if (result?.error) {
         // TODO: better error handling
         throw result.error;
       }
@@ -169,6 +159,27 @@ class OneAuthInstance {
     log('Shutting down...');
     this.oneAuth.shutdown();
     log('Shut down.');
+  }
+
+  private get oneAuth() {
+    if (!this._oneAuth) {
+      if (this.loadOneAuth()) {
+        log('Loading oneauth module.');
+        // eslint-disable-next-line security/detect-non-literal-require
+        this._oneAuth = require(path.join(getUnpackedAsarPath(), 'oneauth')) as typeof OneAuth;
+      } else {
+        log('Using oneauth shim.');
+        this._oneAuth = oneauthShim;
+      }
+    }
+
+    return this._oneAuth;
+  }
+
+  private loadOneAuth() {
+    return Boolean(
+      (process.env.NODE_ENV === 'production' || process.env.COMPOSER_ENABLE_ONEAUTH) && (isMac() || isWindows())
+    );
   }
 }
 
