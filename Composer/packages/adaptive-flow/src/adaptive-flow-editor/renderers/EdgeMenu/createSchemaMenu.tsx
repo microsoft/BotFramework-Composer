@@ -179,7 +179,7 @@ const createSubMenu = (
   subItems: IContextualMenuItem[],
   forceDisabledActions: DisabledMenuActions[]
 ): IContextualMenuItem => {
-  const subMenuMapped = subItems.map((subMenuItem: IContextualMenuItem) => {
+  const subMenuItems = subItems.map((subMenuItem: IContextualMenuItem) => {
     let additionalProps: Partial<IContextualMenuItem> = {};
     const disabledAction = forceDisabledActions.find((action) => action.kind === subMenuItem.key);
     if (disabledAction) {
@@ -217,7 +217,7 @@ const createSubMenu = (
     key: label,
     text: label,
     subMenuProps: {
-      items: subMenuMapped,
+      items: subMenuItems,
       onItemClick: (e, itemData) => onClick(itemData),
     },
   };
