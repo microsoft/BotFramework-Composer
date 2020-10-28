@@ -41,6 +41,11 @@ export type BotSchemas = {
   diagnostics?: any[];
 };
 
+export type DisabledMenuActions = {
+  kind: string;
+  reason: string;
+};
+
 export type ApplicationContextApi = {
   navTo: (path: string, rest?: any) => void;
   updateUserSettings: (settings: AllPartial<UserSettings>) => void;
@@ -108,6 +113,7 @@ export type ProjectContext = {
   skills: any[];
   skillsSettings: Record<string, SkillSetting>;
   schemas: BotSchemas;
+  forceDisabledActions: DisabledMenuActions[];
 };
 
 export type ActionContextApi = {

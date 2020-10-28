@@ -7,11 +7,12 @@ import {
   IContextualMenuItem,
   ContextualMenuItemType,
 } from 'office-ui-fabric-react/lib/components/ContextualMenu/ContextualMenu.types';
-import { SDKKinds, DefinitionSummary } from '@bfc/shared';
+import { SDKKinds, DefinitionSummary, DisabledMenuActions } from '@bfc/shared';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 import { MenuUISchema, MenuOptions } from '@bfc/extension-client';
 import set from 'lodash/set';
+import { ITooltipHostStyles, TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 
 import { MenuEventTypes } from '../../constants/MenuTypes';
 
@@ -25,6 +26,7 @@ type MenuTree = { [key: string]: SDKKinds | MenuTree };
 const createBaseActionMenu = (
   menuSchema: MenuUISchema,
   onClick: ActionMenuItemClickHandler,
+  forceDisabledActions: DisabledMenuActions[],
   filter?: ActionKindFilter
 ): IContextualMenuItem[] => {
   const menuTree: MenuTree = Object.entries(menuSchema).reduce((result, [$kind, options]) => {
@@ -62,7 +64,7 @@ const createBaseActionMenu = (
           return order1 - order2;
         })
         .map((sublabelName) => buildMenuItemFromMenuTree(sublabelName, labelData[sublabelName]));
-      return createSubMenu(labelName, onClick, subMenuItems);
+      return createSubMenu(labelName, onClick, subMenuItems, forceDisabledActions);
     }
   };
 
@@ -174,13 +176,48 @@ interface ActionMenuOptions {
 const createSubMenu = (
   label: string,
   onClick: ActionMenuItemClickHandler,
-  subItems: IContextualMenuItem[]
+  subItems: IContextualMenuItem[],
+  forceDisabledActions: DisabledMenuActions[]
 ): IContextualMenuItem => {
+  const subMenuMapped = subItems.map((subMenuItem: IContextualMenuItem) => {
+    let additionalProps: Partial<IContextualMenuItem> = {};
+    const disabledAction = forceDisabledActions.find((action) => action.kind === subMenuItem.key);
+    if (disabledAction) {
+      additionalProps = {
+        title: disabledAction.reason,
+        disabled: true,
+        onRender: (item) => {
+          const calloutProps = { gapSpace: 0 };
+          const tooltipId = `tooltip-${disabledAction.kind}`;
+          const hostStyles: Partial<ITooltipHostStyles> = {
+            root: {
+              display: 'flex',
+              justifyContent: 'flex-start',
+              alignItems: 'center',
+              padding: '0px 7px',
+              height: '38px',
+              background: '#F3F2F1',
+            },
+          };
+
+          return (
+            <TooltipHost calloutProps={calloutProps} content={disabledAction.reason} id={tooltipId} styles={hostStyles}>
+              {item.name}
+            </TooltipHost>
+          );
+        },
+      };
+    }
+    return {
+      ...subMenuItem,
+      ...additionalProps,
+    };
+  });
   return {
     key: label,
     text: label,
     subMenuProps: {
-      items: subItems,
+      items: subMenuMapped,
       onItemClick: (e, itemData) => onClick(itemData),
     },
   };
@@ -189,6 +226,7 @@ const createSubMenu = (
 export const createActionMenu = (
   onClick: ActionMenuItemClickHandler,
   options: ActionMenuOptions,
+  forceDisabledActions: DisabledMenuActions[],
   menuSchema?: MenuUISchema,
   customActionGroups?: DefinitionSummary[][]
 ) => {
@@ -199,6 +237,7 @@ export const createActionMenu = (
   const baseMenuItems = createBaseActionMenu(
     menuOptions,
     onClick,
+    forceDisabledActions,
     options.isSelfHosted ? ($kind: SDKKinds) => $kind !== SDKKinds.LogAction : undefined
   );
   resultItems.push(...baseMenuItems);
@@ -217,7 +256,7 @@ export const createActionMenu = (
         submenuWithDuplicatedName.subMenuProps?.items.push(...customActionItems);
       } else {
         // Otherwise create a new submenu named as 'Custom Actions'.
-        resultItems.push(createSubMenu(customActionGroupName, onClick, customActionItems));
+        resultItems.push(createSubMenu(customActionGroupName, onClick, customActionItems, []));
       }
     }
   }
