@@ -3,11 +3,12 @@
 
 import fs from 'fs';
 import path from 'path';
+import { exec } from 'child_process';
+import { promisify } from 'util';
 
+import del from 'del';
 import find from 'lodash/find';
 import { UserIdentity, ExtensionContext, BotTemplate } from '@bfc/extension';
-import axios from 'axios';
-import * as unzipper from 'unzip-stream';
 
 import log from '../../logger';
 import { LocalDiskStorage } from '../storage/localDiskStorage';
@@ -17,6 +18,8 @@ import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
 import { IFileStorage } from '../storage/interface';
 import { BotProject } from '../bot/botProject';
+
+const execAsync = promisify(exec);
 
 export class AssetManager {
   public templateStorage: LocalDiskStorage;
@@ -54,26 +57,18 @@ export class AssetManager {
     return ref;
   }
 
-  private async getRemoteTemplate(template: BotTemplate): Promise<string> {
-    // const { stdout, stderr } = await execAsync(buildCommand, {
-    //   cwd: runtimePath,
-    // });
-    console.log(`Fetching from Nuget`);
-    const url =
-      'https://www.myget.org/F/bfctesttemplates/api/v3/microsoft.conversationalcore.template/0.0.1-preview2/microsoft.conversationalcore.template.0.0.1-preview2';
-
-    const stream = await axios({
-      method: 'get',
-      url: `https://www.nuget.org/api/v2/package/${uri}${version ? `/${version}` : ''}`,
-      responseType: 'stream',
+  private async getRemoteTemplate(template: BotTemplate, destinationPath: string) {
+    // install package
+    const { stderr: initErr } = await execAsync(`dotnet new -i ${template.packageName}`);
+    if (initErr) {
+      throw new Error(initErr);
+    }
+    const { stderr: initErr2 } = await execAsync(`dotnet new ${template.id}`, {
+      cwd: destinationPath,
     });
-    stream.data.pipe(
-      unzipper.Extract({ path: path.join(TMP_DIR, uri) }).on('close', async () => {
-        // possible to get version from some package file?
-        resolve(await filterFiles(type));
-      })
-    );
-    return path;
+    if (initErr2) {
+      throw new Error(initErr2);
+    }
   }
 
   private async copyDataFilesTo(templateId: string, dstDir: string, dstStorage: IFileStorage, locale?: string) {
@@ -83,12 +78,31 @@ export class AssetManager {
     }
 
     let templateSrcPath = template.path;
-    if (!templateSrcPath) {
-      templateSrcPath = await this.getRemoteTemplate(template);
+    const isHostedTemplate = !templateSrcPath;
+    if (isHostedTemplate) {
+      // create empty temp directory on server for holding externally hosted template src
+      templateSrcPath = path.resolve(__dirname, '../../../temp');
+      fs.mkdir(templateSrcPath, (err) => {
+        if (err) {
+          throw new Error('Error creating temp directory for external template storage');
+        }
+      });
+      await this.getRemoteTemplate(template, templateSrcPath);
     }
 
-    // copy Composer data files
-    await copyDir(templateSrcPath, this.templateStorage, dstDir, dstStorage);
+    if (templateSrcPath) {
+      // copy Composer data files
+      await copyDir(templateSrcPath, this.templateStorage, dstDir, dstStorage);
+
+      if (isHostedTemplate) {
+        try {
+          await del(templateSrcPath);
+        } catch (err) {
+          throw new Error('Issue deleting temp generated file for external template assets');
+        }
+      }
+    }
+
     // if we have a locale override, copy those files over too
     if (locale != null) {
       const localePath = path.join(__dirname, '..', '..', '..', 'schemas', `sdk.${locale}.schema`);

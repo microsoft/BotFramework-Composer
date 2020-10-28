@@ -71,12 +71,12 @@ const samplesRegitry = {
 
 function getRemoteSamples(): BotTemplate[] {
   return [{
-    id: 'conversational-core',
+    id: 'conversationalcore',
     name: 'Conversational Core',
     description: 'A hosted template that provides a root bot extended by common .lg packages',
-    packageName: 'Microsoft.ConversationalCore.Template',
-    packageSource: 'https://www.myget.org/F/bfctesttemplates/api/v3/index.json',
-    packageVersion: '0.0.1-preview2'
+    packageName: 'pavolum.testtemplate.core',
+    packageSource: 'nuget',
+    packageVersion: '0.0.1'
   }]
 }
 

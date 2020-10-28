@@ -57,6 +57,8 @@ export type RuntimeTemplate = {
 
   run: (project: IBotProject, localDisk?: any) => Promise<void>;
 
+  identifyManifest: (runtimePath: string) => string;
+
   /** build for deploy method */
   buildDeploy: (
     runtimePath: string,

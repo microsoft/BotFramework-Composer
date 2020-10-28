@@ -6,6 +6,7 @@ import * as fs from 'fs';
 import { Request, Response } from 'express';
 import { Archiver } from 'archiver';
 import { ExtensionContext } from '@bfc/extension';
+import { SchemaMerger } from '@microsoft/bf-dialog/lib/library/schemaMerger';
 
 import log from '../logger';
 import { BotProjectService } from '../services/project';
@@ -57,18 +58,17 @@ async function createProject(req: Request, res: Response) {
       // IF template specifies an ejected runtime, EJEcT IT
       if (currentProject?.settings?.runtime.customRuntime === true) {
         const runtime = ExtensionContext.getRuntimeByProject(currentProject);
-        await runtime.eject(currentProject, currentProject.fileStorage);
 
         // install all dependencies and build the app
-        await runtime.build(currentProject.dataDir + 'runtime/azurewebapp', currentProject);
+        await runtime.build(currentProject.dataDir + '/runtime', currentProject);
 
-        const manifestFile = runtime.identifyManifest(currentProject.dataDir + 'runtime/azurewebapp');
+        const manifestFile = runtime.identifyManifest(currentProject.dataDir + '/runtime');
 
         // run the bf cli dialog merge command...
         const realMerge = new SchemaMerger(
           [manifestFile],
-          path.join(currentProject.dataDir, 'schemas/sdk'),
-          path.join(currentProject.dataDir, 'dialogs/imported'),
+          Path.join(currentProject.dataDir, 'schemas/sdk'),
+          Path.join(currentProject.dataDir, 'dialogs/imported'),
           false, // copy only? true = dry run
           false, // verbosity: true = verbose
           console.log,
@@ -76,7 +76,7 @@ async function createProject(req: Request, res: Response) {
           console.error
         );
 
-        const mergeResults = await realMerge.merge();
+        await realMerge.merge();
       }
       await currentProject.updateBotInfo(name, description);
       if (schemaUrl) {
