@@ -593,6 +593,17 @@ export class BotProject implements IBotProject {
     );
   }
 
+  public async deleteFormDialog(dialogId: string) {
+    const defaultLocale = this.settings?.defaultLanguage || defaultLanguage;
+    const dialogPath = defaultFilePath(this.name, defaultLocale, `${dialogId}${FileExtensions.Dialog}`);
+    const dirToDelete = Path.dirname(Path.resolve(this.dir, dialogPath));
+
+    // I check that the path is longer 3 to avoid deleting a drive and all its contents.
+    if (dirToDelete.length > 3 && this.fileStorage.exists(dirToDelete)) {
+      this.fileStorage.rmrfDir(dirToDelete);
+    }
+  }
+
   public updateETag(eTag: string): void {
     this.eTag = eTag;
     // also update the bot project map
@@ -825,7 +836,7 @@ export class BotProject implements IBotProject {
     try {
       const defaultBotProjectFile: any = await AssetService.manager.botProjectFileTemplate;
 
-      for (const [, file] of files) {
+      for (const [_, file] of files) {
         if (file.name.endsWith(FileExtensions.BotProject)) {
           return fileList;
         }
