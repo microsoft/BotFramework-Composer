@@ -29,7 +29,7 @@ export const dialogsDispatcher = () => {
       reset(dialogState({ projectId, dialogId: id }));
       set(dialogIdsState(projectId), (previousDialogIds) => previousDialogIds.filter((dialogId) => dialogId !== id));
 
-      //remove dialog should remove all locales lu and lg files and the dialog schema file
+      //remove dialog should remove all locales lu, lg and qna files and the dialog schema file
       await removeLgFileState(callbackHelpers, { id, projectId });
       await removeLuFileState(callbackHelpers, { id, projectId });
       await removeQnAFileState(callbackHelpers, { id, projectId });
