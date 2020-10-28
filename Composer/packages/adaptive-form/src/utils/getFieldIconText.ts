@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export const getFieldIconText = (type: any): string => {
+export const getFieldIconText = (type: any): string | undefined => {
   const typeFormatted = Array.isArray(type) ? type[0] : type;
   if (typeFormatted === 'string') {
     return 'abc';
@@ -16,5 +16,4 @@ export const getFieldIconText = (type: any): string => {
   } else if (typeFormatted === 'expression') {
     return '=';
   }
-  return '';
 };
