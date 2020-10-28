@@ -11,7 +11,9 @@ export interface ProcessStatus {
   message: string; // contains latest message
   log: string[]; // contains all messages
   comment?: string; // contains user supplied comment about process
+  config? : any; // contains provision result
 }
+
 interface ProcessList {
   [key: string]: ProcessStatus;
 }
@@ -71,10 +73,13 @@ export class BackgroundProcessManager {
     }
   }
 
-  static updateProcess(id: string, status: number, message: string): string {
+  static updateProcess(id: string, status: number, message: string, config = undefined): string {
     this.processes[id].status = status;
     this.processes[id].message = message;
     this.processes[id].log.push(message);
+    if(config){
+      this.processes[id].config = config;
+    }
     return id;
   }
 

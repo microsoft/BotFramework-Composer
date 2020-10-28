@@ -169,10 +169,12 @@ export const AzureProvisionDialog: React.FC = () => {
   }, []);
 
   const getResources = async () => {
-    const resources = await getResourceList(currentProjectId(), publishType).catch((err) => {
+    const result = await getResourceList(currentProjectId(), publishType).catch((err) => {
       // todo: how do we handle API errors in this component
       console.log('ERROR', err);
     });
+    const resources = result.filter(resource => resource.required);
+    console.log(resources);
     setExtensionResourceOptions(resources);
 
     // set all of the resources to enabled by default.
@@ -244,7 +246,7 @@ export const AzureProvisionDialog: React.FC = () => {
       const names = getPreview(hostname);
       console.log('got names', names);
       const result = extensionResourceOptions.map((resource) => {
-        const previewObject = names.find((n) => n.key === resource.key);
+        const previewObject = names.find((n) => n.key === resource.key && resource.required);
         return {
           ...resource,
           name: previewObject ? previewObject.name : `UNKNOWN NAME FOR ${resource.key}`,

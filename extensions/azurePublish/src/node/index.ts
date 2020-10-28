@@ -361,17 +361,19 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
           },
         };
 
-        // write this to the project settings.
-        project.settings.publishTargets.push({
-          name: config.name,
-          type: 'azurePublish',
-          configuration: JSON.stringify(publishProfile),
-          lastPublished: null,
-        });
+        console.log(publishProfile);
 
-        await project.updateDefaultSlotEnvSettings(project.settings);
+        // write this to the project settings. Browser need to refresh to get the update
+        // project.settings.publishTargets.push({
+        //   name: config.name,
+        //   type: 'azurePublish',
+        //   configuration: JSON.stringify(publishProfile),
+        //   lastPublished: null,
+        // });
 
-        BackgroundProcessManager.updateProcess(jobId, 200, 'Provision completed successfully!');
+        // await project.updateDefaultSlotEnvSettings(project.settings);
+
+        BackgroundProcessManager.updateProcess(jobId, 200, 'Provision completed successfully!', publishProfile);
       } catch (error) {
         BackgroundProcessManager.updateProcess(jobId, 500, error.message);
       }
