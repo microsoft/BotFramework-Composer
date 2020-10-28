@@ -2,7 +2,10 @@
 // Licensed under the MIT License.
 
 const { resolve } = require('path');
+// eslint-disable-next-line security/detect-child-process
 const { exec } = require('child_process');
+
+const { log } = require('./common');
 
 /*
  * Calls electron-builder to pre-pack the app contents into what
@@ -31,7 +34,7 @@ try {
 
   // call electron-builder . --dir --config electron-builder-config.json
   const cmd = `"${electronBuilderBinary}" "${electronServerDir}" --dir --${platform} --x64 --config electron-builder-config.json`;
-  console.log('[electronBuilderPack.js] Executing command: ', cmd);
+  log.info('Executing command: ', cmd);
 
   const proc = exec(cmd);
   proc.stdout.on('data', (data) => {
@@ -46,6 +49,6 @@ try {
     }
   });
 } catch (e) {
-  console.error('[electronBuilderPack.js] Error occurred while using electron-builder --dir: ', e);
+  log.error('[electronBuilderPack.js] Error occurred while using electron-builder --dir: ', e);
   process.exit(1);
 }
