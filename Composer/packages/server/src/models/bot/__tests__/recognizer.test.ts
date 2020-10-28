@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 import { SDKKinds } from '@bfc/shared';
 
-import { IFileStorage } from '../../storage/interface';
 import {
   getCrossTrainedRecognizerDialog,
   getLuFileLocale,
