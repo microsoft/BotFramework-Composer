@@ -13,6 +13,8 @@ import {
   projectMetaDataState,
   botNameIdentifierState,
   settingsState,
+  publishHistoryState,
+  publishTypesState,
 } from '../atoms';
 
 // Actions
@@ -40,7 +42,19 @@ export const botProjectSpaceSelector = selector({
       const botError = get(botErrorState(projectId));
       const name = get(botDisplayNameState(projectId));
       const botNameId = get(botNameIdentifierState(projectId));
-      return { dialogs, projectId, settings, name, ...metaData, error: botError, botNameId };
+      const publishHistory = get(publishHistoryState(projectId));
+      const publishTypes = get(publishTypesState(projectId));
+      return {
+        dialogs,
+        projectId,
+        settings,
+        name,
+        ...metaData,
+        error: botError,
+        botNameId,
+        publishHistory,
+        publishTypes,
+      };
     });
     return result;
   },

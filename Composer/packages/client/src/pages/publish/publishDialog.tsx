@@ -31,7 +31,7 @@ export const PublishDialog = (props) => {
       isResizable: true,
       data: 'string',
       onRender: (item: IBotStatus) => {
-        return <span>{item.name}</span>;
+        return <div css={{ alignItems: 'center', display: 'flex', height: '32px' }}>{item.name}</div>;
       },
       isPadded: true,
     },
@@ -46,7 +46,11 @@ export const PublishDialog = (props) => {
       isResizable: true,
       data: 'string',
       onRender: (item: IBotStatus) => {
-        return <div css={{ backgroundColor: '#DDF3DB', padding: '6px 0 0 8px' }}>{item.publishTarget}</div>;
+        return (
+          <div css={{ backgroundColor: '#DDF3DB', alignItems: 'center', display: 'flex', height: '32px' }}>
+            {item.publishTarget}
+          </div>
+        );
       },
       isPadded: true,
     },

@@ -13,7 +13,7 @@ import { useRecoilValue } from 'recoil';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 
 import settingsStorage from '../../utils/dialogSettingStorage';
-import { dispatcherState, publishHistoryState, botProjectSpaceSelector, publishTypesState } from '../../recoilModel';
+import { dispatcherState, botProjectSpaceSelector } from '../../recoilModel';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 
 import { PublishDialog } from './publishDialog';
@@ -24,6 +24,7 @@ import { BotStatusList, IBotStatus } from './botStatusList';
 const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: string }>> = (props) => {
   const { projectId = '' } = props;
   const botProjectsMeta = useRecoilValue(botProjectSpaceSelector);
+
   const [selectedBots, setSelectedBots] = useState<IBotStatus[]>([]);
 
   // fill Settings, status, publishType, publish target for bot from botProjectMeta
@@ -36,37 +37,37 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     .filter((bot) => bot.isRemote === false)
     .forEach((bot) => {
       const botProjectId = bot.projectId;
-      // botSettingsList.push({
-      //   projectId: botProjectId,
-      //   settings: bot.settings,
-      // });
-      // botPublishTypesList.push({
-      //   projectId: botProjectId,
-      //   publishTypes: useRecoilValue(publishTypesState(botProjectId)),
-      // });
-      // const publishHistory = useRecoilValue(publishHistoryState(botProjectId));
-      // publishHistoyList.push({
-      //   projectId: botProjectId,
-      //   publishHistory,
-      // });
-      // const publishTargets = bot.settings ? (bot.settings.publishTargets as any[]) : [];
-      // const botStatus: IBotStatus = {
-      //   id: botProjectId,
-      //   name: bot.name,
-      //   publishTargets: [],
-      // };
-      // if (publishTargets.length > 0) {
-      //   botStatus.publishTarget = publishTargets[0].name as string;
-      //   botStatus.publishTargets = publishTargets;
-      //   if (publishHistory[botStatus.publishTarget] && publishHistory[botStatus.publishTarget].length > 0) {
-      //     const history = publishHistory[botStatus.publishTarget][0];
-      //     botStatus.time = history.time;
-      //     botStatus.comment = history.comment;
-      //     botStatus.message = history.message;
-      //     botStatus.status = history.status;
-      //   }
-      // }
-      // botStatusList.push(botStatus);
+      botSettingsList.push({
+        projectId: botProjectId,
+        settings: bot.settings,
+      });
+      botPublishTypesList.push({
+        projectId: botProjectId,
+        publishTypes: bot.publishTypes,
+      });
+      const publishHistory = bot.publishHistory;
+      publishHistoyList.push({
+        projectId: botProjectId,
+        publishHistory,
+      });
+      const publishTargets = bot.settings ? (bot.settings.publishTargets as any[]) : [];
+      const botStatus: IBotStatus = {
+        id: botProjectId,
+        name: bot.name,
+        publishTargets: [],
+      };
+      if (publishTargets.length > 0) {
+        botStatus.publishTarget = publishTargets[0].name as string;
+        botStatus.publishTargets = publishTargets;
+        if (publishHistory[botStatus.publishTarget] && publishHistory[botStatus.publishTarget].length > 0) {
+          const history = publishHistory[botStatus.publishTarget][0];
+          botStatus.time = history.time;
+          botStatus.comment = history.comment;
+          botStatus.message = history.message;
+          botStatus.status = history.status;
+        }
+      }
+      botStatusList.push(botStatus);
     });
 
   const {

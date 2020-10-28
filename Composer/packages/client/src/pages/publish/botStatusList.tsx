@@ -57,6 +57,9 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
       return <Icon iconName="Cancel" style={{ color: 'red', fontWeight: 600 }} />;
     }
   };
+  const headerStyle = { padding: '0 32px 0 11px', fontWeight: 400 };
+  const bodyStyle = { minWidth: '114px', maxWidth: '134px', padding: '11px 32px 11px 12px' };
+
   const renderItem = (item: IBotStatus, index: number) => {
     const publishTargetOptions = (): IDropdownOption[] => {
       const options: IDropdownOption[] = [];
@@ -114,28 +117,29 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
     return (
       <Fragment key={index}>
         <tr>
-          <td css={{ minWidth: '70px', maxWidth: '90px' }}>
+          <td css={bodyStyle}>
             <Checkbox label={item.name} onChange={changeSelected} />
           </td>
-          <td css={{ minWidth: '70px', maxWidth: '90px' }}>
+          <td css={bodyStyle}>
             <Dropdown
               options={publishTargetOptions()}
               placeholder={formatMessage('Select a publish target')}
+              styles={{ root: { width: '134px' } }}
               onChange={changePublishTarget}
               onRenderOption={onRenderOption}
             />
           </td>
-          <td>
+          <td css={bodyStyle}>
             <span>{item.time && moment(item.time).format('MM-DD-YYYY')}</span>
           </td>
-          <td>{item.status && renderStatus(item)}</td>
-          <td>
+          <td css={bodyStyle}>{item.status && renderStatus(item)}</td>
+          <td css={bodyStyle}>
             <span>{item.message}</span>
           </td>
-          <td>
+          <td css={bodyStyle}>
             <span>{item.comment}</span>
           </td>
-          <td>
+          <td css={bodyStyle}>
             <IconButton
               iconProps={{ iconName: showHistoryBots.includes(item.id) ? 'ChevronDown' : 'ChevronRight' }}
               onClick={changeShowHistoryBots}
@@ -169,18 +173,17 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
       <table>
         <thead>
           <tr>
-            <td></td>
-            <td>
+            <td css={headerStyle}>
               <ActionButton onClick={sortBot}>
                 {formatMessage('Bot')}
                 <FontIcon iconName={botDescend ? 'Down' : 'Up'} />
               </ActionButton>
             </td>
-            <td>{formatMessage('Publish target')}</td>
-            <td>{formatMessage('Date')}</td>
-            <td>{formatMessage('Status')}</td>
-            <td>{formatMessage('Message')}</td>
-            <td>{formatMessage('Comment')}</td>
+            <td css={headerStyle}>{formatMessage('Publish target')}</td>
+            <td css={headerStyle}>{formatMessage('Date')}</td>
+            <td css={headerStyle}>{formatMessage('Status')}</td>
+            <td css={headerStyle}>{formatMessage('Message')}</td>
+            <td css={headerStyle}>{formatMessage('Comment')}</td>
           </tr>
         </thead>
         <tbody>{items.map((item, index) => renderItem(item, index))}</tbody>
