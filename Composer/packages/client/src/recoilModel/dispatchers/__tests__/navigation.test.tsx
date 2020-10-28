@@ -81,6 +81,14 @@ describe('navigation dispatcher', () => {
             focused: 'b',
           },
         },
+        {
+          recoilState: designPageLocationState(skillId),
+          initialValue: {
+            dialogId: 'dialogInSkillId',
+            selected: 'a',
+            focused: 'b',
+          },
+        },
         { recoilState: currentProjectIdState, initialValue: projectId },
         {
           recoilState: dialogsSelectorFamily(projectId),
@@ -273,7 +281,7 @@ describe('navigation dispatcher', () => {
       await act(async () => {
         await dispatcher.focusTo(projectId, skillId, 'focus', '');
       });
-      expectNavTo(`/bot/${projectId}/skill/${skillId}/dialogs/dialogId?selected=select&focused=focus`);
+      expectNavTo(`/bot/${projectId}/skill/${skillId}/dialogs/dialogInSkillId?selected=select&focused=focus`);
       expect(mockUpdateBreadcrumb).toHaveBeenCalledWith(expect.anything(), BreadcrumbUpdateType.Selected);
       expect(mockUpdateBreadcrumb).toHaveBeenCalledWith(expect.anything(), BreadcrumbUpdateType.Focused);
     });
@@ -284,6 +292,18 @@ describe('navigation dispatcher', () => {
         await dispatcher.focusTo(projectId, null, 'focus', 'fragment');
       });
       expectNavTo(`/bot/${projectId}/dialogs/dialogId?selected=select&focused=focus#fragment`);
+      expect(mockUpdateBreadcrumb).toHaveBeenCalledWith(expect.anything(), BreadcrumbUpdateType.Selected);
+      expect(mockUpdateBreadcrumb).toHaveBeenCalledWith(expect.anything(), BreadcrumbUpdateType.Focused);
+    });
+
+    it('goes to a focused page with skill and fragment', async () => {
+      mockGetSelected.mockReturnValueOnce('select');
+      await act(async () => {
+        await dispatcher.focusTo(projectId, skillId, 'focus', 'fragment');
+      });
+      expectNavTo(
+        `/bot/${projectId}/skillId/${skillId}/dialogs/dialogInSkillId?selected=select&focused=focus#fragment`
+      );
       expect(mockUpdateBreadcrumb).toHaveBeenCalledWith(expect.anything(), BreadcrumbUpdateType.Selected);
       expect(mockUpdateBreadcrumb).toHaveBeenCalledWith(expect.anything(), BreadcrumbUpdateType.Focused);
     });
