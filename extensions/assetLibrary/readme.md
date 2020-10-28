@@ -33,7 +33,7 @@ However, any changes you make to these files will be lost or overwritten if you 
 
 ## What happens when I add a package that contains an LG files?
 
-When you add a package that contains a "stand-alone" LG file, it will be copied into your bot -- but it will not appear in the "Bot Responses" interface. In order to use the newly imported file, you must write an import statement into the `common.lg` file.
+When you add a package that contains a "stand alone" LG file, it will be copied into your bot -- but it will not appear in the "Bot Responses" interface. In order to use the newly imported file, you must write an import statement into the `common.lg` file.
 
 For example, if a package contains an LG file called `grammar.lg`, it would be necessary to add the following line to `common.lg`. Once added, the rules contained in imported templates will be available throughout the bot, and will appear in the editor Intellisense autocomplete.
 
@@ -47,8 +47,20 @@ When you add a package that contains a custom action, it will be installed into 
 
 This will cause the new action to appear inside Composer's dialog editor for use inside dialogs.
 
-However, in order for the bot application to perform these actions at runtime, additional steps are necessary. TBD!!!!!
+However, in order for the bot application to perform these actions at runtime, additional steps are necessary.
 
+**For C# bots:**
+
+In the `startup.cs` file, 2 lines need to be added to include the new component in the code. <a href="https://docs.microsoft.com/en-us/composer/how-to-add-custom-action#customize-your-exported-runtime">Examples of the required steps are described here</a> but each component will have its own package name.
+
+The steps are:
+
+1. Add `using My.New.Custom.Action` to the top of your startup.cs file with the other dependencies.
+2. Add `ComponentRegistration.Add(new [MyNewCustomActionComponentRegistration]());` to the startup.cs file after the other calls to `ComponentRegistration`.
+
+**For JS bots:**
+
+TK TK TK
 
 # How to install packages
 
@@ -88,7 +100,7 @@ After running one of these commands, the package will be listed in the appropria
 bf dialog:merge [package.json or .csproj] --import dialogs/imported --output schemas/sdk
 ```
 
-The output of the cli tool will include a list of the files that were added, deleted or updated. Note that changes to existing files will be overwritten if newer versions are found in a package.
+The output of the cli tool will include a list of the files that were added, deleted or updated. Note that **changes to existing files will be overwritten if newer versions are found in a package.**
 
 # How build your own packages
 
@@ -96,17 +108,15 @@ The packages used by Composer are native packages - the process of building one 
 
 However, the packages that we care about will contain one of more of the following elements:
 
-* a .schema file describing an Adaptive $kind [LINK TO CUSTOM ACTIONS DOCS?]
+* a .schema file describing an Adaptive Dialog $kind. <a href="https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-dialogs-declarative?view=azure-bot-service-4.0">Learn more</a>
 * an `exported` folder containing one or more sets of dialog files
 * an `exported` folder containing one or more sets of LG files
 
 ## How to package a custom action
 
 1. <a href="https://docs.microsoft.com/en-us/composer/how-to-add-custom-action">Follow these steps</a> to create the code and schema for your custom action. Both the code and schema files are required to create the package.
-2. Add any additional exported dialogs using the instructions below.
-
-TODO: What else is necessary?
-TODO: How can I bundle multiple actions in a single package
+2. Optionally add additional dialogs to the bundle using the instructions below.
+3. Follow the "For Nuget" instructions below.
 
 ## How to package dialogs for re-use
 
