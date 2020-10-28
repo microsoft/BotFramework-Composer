@@ -41,7 +41,7 @@ describe('Select Skill Dialog', () => {
     const keys = Object.keys(skills);
 
     const { baseElement, findByRole } = renderSelectSkillDialog({ onChange });
-    const combobox = await findByRole('combobox');
+    const combobox = await findByRole('listbox');
     act(() => {
       fireEvent.click(combobox);
     });
