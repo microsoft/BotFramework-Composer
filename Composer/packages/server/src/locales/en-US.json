@@ -608,9 +608,6 @@
   "could_not_connect_to_storage_50411de0": {
     "message": "Could not connect to storage."
   },
-  "could_not_init_plugin_1f1c29cd": {
-    "message": "Could not init plugin"
-  },
   "couldn_t_complete_the_update_a337a359": {
     "message": "Couldn''t complete the update:"
   },
@@ -814,6 +811,9 @@
   },
   "delete_property_b3786fa0": {
     "message": "Delete Property"
+  },
+  "deleting_dialogid_failed_1d7cc05a": {
+    "message": "Deleting \"{ dialogId }\" failed."
   },
   "describe_your_skill_88554792": {
     "message": "Describe your skill"
@@ -1166,6 +1166,9 @@
   "form_title_baf85c7e": {
     "message": "form title"
   },
+  "form_wide_operations_1c1a73eb": {
+    "message": "form-wide operations"
+  },
   "forms_380ab2ae": {
     "message": "Forms"
   },
@@ -1184,8 +1187,8 @@
   "generate_dialog_b80a85b2": {
     "message": "Generate dialog"
   },
-  "generating_form_dialog_using_schemaid_schema_faile_8062f953": {
-    "message": "Generating form dialog using ${ schemaId } schema failed."
+  "generating_form_dialog_using_schemaid_schema_faile_82ebdd72": {
+    "message": "Generating form dialog using \"{ schemaId }\" schema failed."
   },
   "get_a_new_copy_of_the_runtime_code_84970bf": {
     "message": "Get a new copy of the runtime code"
