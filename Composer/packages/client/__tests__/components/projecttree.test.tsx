@@ -6,7 +6,7 @@ import { fireEvent } from '@botframework-composer/test-utils';
 
 import { ProjectTree } from '../../src/components/ProjectTree/ProjectTree';
 import { renderWithRecoil } from '../testUtils';
-import { SAMPLE_DIALOG, SAMPLE_DIALOG_2 } from '../__mocks__/sampleDialog';
+import { SAMPLE_DIALOG, SAMPLE_DIALOG_2 } from '../mocks/sampleDialog';
 import { dialogsSelectorFamily, currentProjectIdState, botProjectIdsState, schemasState } from '../../src/recoilModel';
 
 const projectId = '12345.6789';

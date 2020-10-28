@@ -217,7 +217,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
          *   - If 'dialog' does not exist at `dialogId` path, fallback to main dialog.
          */
         if (foundId != null) {
-          navTo(projectId, skillId, foundId);
+          navTo(skillId ?? projectId, foundId);
         }
         return;
       }
@@ -261,15 +261,15 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     updateZoomRate({ currentRate: 1 });
     if (link.trigger != null || selectPath) {
       const path = link.trigger == null ? selectPath : `triggers[${link.trigger}]`;
-      selectTo(link.projectId, link.skillId ?? null, link.dialogId ?? null, path);
+      selectTo(link.skillId ?? link.projectId, link.dialogId ?? null, path);
     } else if (link.dialogId != null) {
-      navTo(link.projectId, link.skillId ?? null, link.dialogId, []);
+      navTo(link.skillId ?? link.projectId, link.dialogId, []);
     }
   }
 
   const onCreateDialogComplete = (dialogId) => {
     if (dialogId) {
-      navTo(projectId, null, dialogId, []);
+      navTo(projectId, dialogId, []);
     }
   };
 
@@ -544,14 +544,14 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       if (index === currentIdx) {
         if (currentIdx - 1 >= 0) {
           //if the deleted node is selected and the selected one is not the first one, navTo the previous trigger;
-          selectTo(projectId, skillId, dialogId, createSelectedPath(currentIdx - 1));
+          selectTo(skillId ?? projectId, dialogId, createSelectedPath(currentIdx - 1));
         } else {
           //if the deleted node is selected and the selected one is the first one, navTo the first trigger;
-          navTo(projectId, skillId, dialogId, []);
+          navTo(skillId ?? projectId, dialogId, []);
         }
       } else if (index < currentIdx) {
         //if the deleted node is at the front, navTo the current one;
-        selectTo(projectId, skillId, dialogId, createSelectedPath(currentIdx - 1));
+        selectTo(skillId ?? projectId, dialogId, createSelectedPath(currentIdx - 1));
       }
     }
   }

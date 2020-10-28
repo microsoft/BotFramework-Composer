@@ -75,7 +75,7 @@ export const navigationDispatcher = () => {
       }
 
       const currentUri = convertPathToUrl(rootBotProjectId, projectId, dialogId, path);
-
+      console.log('navigate to', currentUri);
       if (checkUrl(currentUri, rootBotProjectId, projectId, designPageLocation)) return;
 
       navigateTo(currentUri, { state: { breadcrumb: updatedBreadcrumb } });
@@ -84,12 +84,16 @@ export const navigationDispatcher = () => {
 
   const selectTo = useRecoilCallback(
     ({ snapshot, set }: CallbackInterface) => async (
-      projectId: string,
       skillId: string | null,
       destinationDialogId: string | null,
       selectPath: string
     ) => {
       if (!selectPath) return;
+      const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
+      if (rootBotProjectId == null) return;
+
+      const projectId = skillId ?? rootBotProjectId;
+
       set(currentProjectIdState, projectId);
       const designPageLocation = await snapshot.getPromise(designPageLocationState(projectId));
       const breadcrumb = await snapshot.getPromise(breadcrumbState(projectId));
@@ -100,9 +104,9 @@ export const navigationDispatcher = () => {
       const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
       const currentDialog = dialogs.find(({ id }) => id === dialogId);
       const encodedSelectPath = encodeArrayPathToDesignerPath(currentDialog?.content, selectPath);
-      const currentUri = convertPathToUrl(projectId, skillId, dialogId, encodedSelectPath);
+      const currentUri = convertPathToUrl(rootBotProjectId, skillId, dialogId, encodedSelectPath);
 
-      if (checkUrl(currentUri, projectId, skillId, designPageLocation)) return;
+      if (checkUrl(currentUri, rootBotProjectId, skillId, designPageLocation)) return;
       navigateTo(currentUri, { state: { breadcrumb: updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Selected) } });
     }
   );
@@ -171,7 +175,7 @@ export const navigationDispatcher = () => {
         const currentUri =
           skillId == null
             ? `/bot/${projectId}/dialogs/${dialogId}${search}`
-            : `/bot/${projectId}/skill/{skillId}/dialogs/${dialogId}${search}`;
+            : `/bot/${projectId}/skill/${skillId}/dialogs/${dialogId}${search}`;
 
         if (checkUrl(currentUri, projectId, skillId, designPageLocation)) return;
         navigateTo(currentUri, { state: { breadcrumb } });

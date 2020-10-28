@@ -143,7 +143,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
 
   function focusEvent(subPath) {
     if (rootBotProjectId == null) return;
-    selectTo(rootBotProjectId, projectId, dialogId, subPath);
+    selectTo(projectId, dialogId, subPath);
   }
 
   function focusSteps(subPaths: string[] = [], fragment?: string) {

@@ -18,13 +18,7 @@ import get from 'lodash/get';
 
 import { useResolvers } from '../hooks/useResolver';
 import { onChooseIntentKey, generateNewDialog, intentTypeKey, qnaMatcherKey } from '../utils/dialogUtil';
-import {
-  schemasState,
-  lgFilesState,
-  dialogsSelectorFamily,
-  localeState,
-  rootBotProjectIdSelector,
-} from '../recoilModel';
+import { schemasState, lgFilesState, dialogsSelectorFamily, localeState } from '../recoilModel';
 import { Dispatcher } from '../recoilModel/dispatchers';
 
 import { dispatcherState } from './../recoilModel/DispatcherWrapper';
@@ -41,7 +35,7 @@ const defaultQnATriggerData = {
 };
 
 function createTriggerApi(
-  state: { rootProjectId; projectId; schemas; dialogs; locale; lgFiles },
+  state: { projectId; schemas; dialogs; locale; lgFiles },
   dispatchers: Dispatcher, //TODO
   luFileResolver: (id: string) => LuFile | undefined,
   lgFileResolver: (id: string) => LgFile | undefined,
@@ -61,7 +55,7 @@ function createTriggerApi(
     const lgFile = lgFileResolver(id);
     const dialog = dialogResolver(id);
     const { createLuIntent, createLgTemplates, updateDialog, selectTo } = dispatchers;
-    const { rootProjectId, projectId, schemas, dialogs, locale, lgFiles } = state;
+    const { projectId, schemas, dialogs, locale, lgFiles } = state;
     if (!luFile) throw new Error(`lu file ${id} not found`);
     if (!lgFile) throw new Error(`lg file ${id} not found`);
     if (!dialog) throw new Error(`dialog ${id} not found`);
@@ -118,7 +112,7 @@ function createTriggerApi(
     };
     await updateDialog(dialogPayload);
     if (autoSelected) {
-      selectTo(rootProjectId, projectId, newDialog.id, `triggers[${index}]`);
+      selectTo(projectId, newDialog.id, `triggers[${index}]`);
     }
   };
 
@@ -161,7 +155,6 @@ export function useTriggerApi(projectId: string) {
   const lgFiles = useRecoilValue(lgFilesState(projectId));
   const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
   const locale = useRecoilValue(localeState(projectId));
-  const rootProjectId = useRecoilValue(rootBotProjectIdSelector);
   const { deleteActions } = useActionApi(projectId);
   const { removeLuIntent } = useLuApi(projectId);
 
@@ -169,7 +162,7 @@ export function useTriggerApi(projectId: string) {
   const { luFileResolver, lgFileResolver, dialogResolver } = useResolvers(projectId);
   const [api, setApi] = useState(
     createTriggerApi(
-      { rootProjectId, projectId, schemas, dialogs, locale, lgFiles },
+      { projectId, schemas, dialogs, locale, lgFiles },
       dispatchers,
       luFileResolver,
       lgFileResolver,
@@ -181,7 +174,7 @@ export function useTriggerApi(projectId: string) {
 
   useEffect(() => {
     const newApi = createTriggerApi(
-      { rootProjectId, projectId, schemas, dialogs, locale, lgFiles },
+      { projectId, schemas, dialogs, locale, lgFiles },
       dispatchers,
       luFileResolver,
       lgFileResolver,
