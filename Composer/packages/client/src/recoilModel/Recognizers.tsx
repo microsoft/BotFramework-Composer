@@ -18,7 +18,7 @@ const LuisRecognizerTemplate = (target: string, fileName: string) => ({
   $kind: SDKKinds.LuisRecognizer,
   id: `LUIS_${target}`,
   applicationId: `=settings.luis.${fileName.replace(/[.-]/g, '_')}_lu.appId`,
-  version: `=settings.luis.${fileName.replace(/[.-]/g, '_')}.version`,
+  version: `=settings.luis.${fileName.replace(/[.-]/g, '_')}_lu.version`,
   endpoint: '=settings.luis.endpoint',
   endpointKey: '=settings.luis.endpointKey',
 });
@@ -45,7 +45,7 @@ const CrossTrainedRecognizerTemplate = (): {
   recognizers: [],
 });
 
-const getMultiLanguagueRecognizerDialog = (
+export const getMultiLanguagueRecognizerDialog = (
   target: string,
   files: { empty: boolean; id: string }[],
   fileType: 'lu' | 'qna',
@@ -55,10 +55,10 @@ const getMultiLanguagueRecognizerDialog = (
 
   files.forEach((item) => {
     if (item.empty || !item.id.startsWith(target)) return;
-    const local = getExtension(item.id);
+    const locale = getExtension(item.id);
     const fileName = `${item.id}.${fileType}`;
-    multiLanguageRecognizer.recognizers[local] = fileName;
-    if (local === defalutLanguage) {
+    multiLanguageRecognizer.recognizers[locale] = fileName;
+    if (locale === defalutLanguage) {
       multiLanguageRecognizer.recognizers[''] = fileName;
     }
   });
@@ -66,19 +66,19 @@ const getMultiLanguagueRecognizerDialog = (
   return { id: `${target}.${fileType}.dialog`, content: multiLanguageRecognizer };
 };
 
-const getLuisRecognizerDialogs = (target: string, luFiles: LuFile[]) => {
+export const getLuisRecognizerDialogs = (target: string, luFiles: LuFile[]) => {
   return luFiles
     .filter((item) => !item.empty && item.id.startsWith(target))
     .map((item) => ({ id: `${item.id}.lu.dialog`, content: LuisRecognizerTemplate(target, item.id) }));
 };
 
-const getQnAMakerRecognizerDialogs = (target: string, qnaFiles: QnAFile[]) => {
+export const getQnAMakerRecognizerDialogs = (target: string, qnaFiles: QnAFile[]) => {
   return qnaFiles
     .filter((item) => !item.empty)
     .map((item) => ({ id: `${item.id}.qna.dialog`, content: QnAMakerRecognizerTemplate(target, item.id) }));
 };
 
-const getCrossTrainedRecognizerDialog = (target: string, luFiles: LuFile[], qnaFiles: QnAFile[]) => {
+export const getCrossTrainedRecognizerDialog = (target: string, luFiles: LuFile[], qnaFiles: QnAFile[]) => {
   const crossTrainedRecognizer = CrossTrainedRecognizerTemplate();
 
   if (luFiles.some((item) => !item.empty)) {
@@ -95,13 +95,13 @@ const getCrossTrainedRecognizerDialog = (target: string, luFiles: LuFile[], qnaF
   };
 };
 
-const isCrossTrainedRecognizerSet = (dialog: DialogInfo) =>
+export const isCrossTrainedRecognizerSet = (dialog: DialogInfo) =>
   typeof dialog.content.recognizer === 'string' && dialog.content.recognizer.endsWith('qna');
 
-const isLuisRecognizer = (dialog: DialogInfo) =>
+export const isLuisRecognizer = (dialog: DialogInfo) =>
   typeof dialog.content.recognizer === 'string' && dialog.content.recognizer.endsWith('lu');
 
-const generateRecognizers = (dialog: DialogInfo, luFiles: LuFile[], qnaFiles: QnAFile[]) => {
+export const generateRecognizers = (dialog: DialogInfo, luFiles: LuFile[], qnaFiles: QnAFile[]) => {
   const isCrossTrain = isCrossTrainedRecognizerSet(dialog);
   const luisRecognizers = getLuisRecognizerDialogs(dialog.id, luFiles);
   const luMultiLanguagueRecognizer = getMultiLanguagueRecognizerDialog(dialog.id, luFiles, 'lu');
@@ -124,7 +124,7 @@ export const preserveRecognizer = (recognizers: { id: string; content: any }[], 
   return recognizers.map((recognizer) => {
     const previous = previousRecognizers.find((item) => item.id === recognizer.id);
     if (previous) {
-      recognizer.content == previous.content;
+      recognizer.content = previous.content;
     }
 
     return recognizer;
