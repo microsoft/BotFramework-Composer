@@ -48,12 +48,12 @@ const QnAMakerRecognizerTemplate = (target: string, fileName: string) => ({
 });
 
 //in composer the luFile name is a.locale.lu
-const getLuFileLocale = (fileName: string) => {
+export const getLuFileLocale = (fileName: string) => {
   const items = fileName.split('.');
   return items[items.length - 2];
 };
 
-const getMultiLanguagueRecognizerDialog = (
+export const getMultiLanguagueRecognizerDialog = (
   target: string,
   fileNames: string[],
   fileType: 'lu' | 'qna',
@@ -64,7 +64,6 @@ const getMultiLanguagueRecognizerDialog = (
   fileNames.forEach((name) => {
     if (!name.startsWith(target)) return;
     const locale = getLuFileLocale(name);
-    if (locale === 'source') return;
     multiLanguageRecognizer.recognizers[locale] = name;
     if (locale === defalutLanguage) {
       multiLanguageRecognizer.recognizers[''] = name;
@@ -74,7 +73,7 @@ const getMultiLanguagueRecognizerDialog = (
   return { name: `${target}.${fileType}.dialog`, content: JSON.stringify(multiLanguageRecognizer, null, 2) };
 };
 
-const getCrossTrainedRecognizerDialog = (target: string, fileNames: string[]) => {
+export const getCrossTrainedRecognizerDialog = (target: string, fileNames: string[]) => {
   const crossTrainedRecognizer = CrossTrainedRecognizerTemplate();
 
   if (fileNames.some((item) => item.endsWith('.qna'))) {
@@ -91,7 +90,7 @@ const getCrossTrainedRecognizerDialog = (target: string, fileNames: string[]) =>
   };
 };
 
-const getLuisRecognizerDialogs = (target: string, luFileNames: string[]) => {
+export const getLuisRecognizerDialogs = (target: string, luFileNames: string[]) => {
   return luFileNames.map((item) => {
     const locale = getLuFileLocale(item);
     return {
@@ -101,7 +100,7 @@ const getLuisRecognizerDialogs = (target: string, luFileNames: string[]) => {
   });
 };
 
-const getQnaMakerRecognizerDialogs = (target: string, qnaFileNames: string[]) => {
+export const getQnaMakerRecognizerDialogs = (target: string, qnaFileNames: string[]) => {
   return qnaFileNames.map((item) => {
     const locale = getLuFileLocale(item);
     return {
@@ -121,14 +120,14 @@ const getQnaMakerRecognizerDialogs = (target: string, qnaFileNames: string[]) =>
  * @param fileNames the lu and qna files name list
  * @param folderPath the recognizers folder's path
  */
-const updateRecognizers = (isCrosstrain: boolean): UpdateRecognizer => async (
+export const updateRecognizers = (isCrosstrain: boolean): UpdateRecognizer => async (
   target: string,
   fileNames: string[],
   storage: IFileStorage,
   { defalutLanguage, folderPath }
 ) => {
   const luFileNames = fileNames.filter((item) => item.endsWith('.lu'));
-  const qnaFileNames = fileNames.filter((item) => item.endsWith('.qna'));
+  const qnaFileNames = fileNames.filter((item) => item.endsWith('.qna') && !item.endsWith('.source.qna'));
   const luMultiLanguageRecognizerDialog = getMultiLanguagueRecognizerDialog(target, luFileNames, 'lu', defalutLanguage);
   const qnaMultiLanguageRecognizerDialog = getMultiLanguagueRecognizerDialog(
     target,
