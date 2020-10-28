@@ -14,7 +14,7 @@ const { log } = require('./common');
 /**
  * USAGE:
  * Set the following npm config environment variables to install oneauth from the ADO registry.
- * Then invoke `yarn install-oneauth`.
+ * Then invoke `node scripts/installOneAuth.js`.
  *   - npm_config_username
  *   - npm_config__password (note the double _)
  *   - npm_config_registry

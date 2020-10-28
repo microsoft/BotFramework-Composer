@@ -12,7 +12,6 @@
     "build": "tsc -p tsconfig.build.json && ncp src/preload.js build/preload.js",
     "clean": "rimraf build && rimraf dist && rimraf l10ntemp",
     "copy-artifacts": "node scripts/copy-artifacts.js",
-    "install-oneauth": "node scripts/installOneAuth.js",
     "dist": "node scripts/electronBuilderDist.js",
     "dist:full": "yarn clean && yarn build && yarn run pack && yarn copy-artifacts && yarn dist",
     "lint": "eslint --quiet ./src",
