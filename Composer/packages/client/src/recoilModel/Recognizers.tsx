@@ -26,7 +26,7 @@ const LuisRecognizerTemplate = (target: string, fileName: string) => ({
 const QnAMakerRecognizerTemplate = (target: string, fileName: string) => ({
   $kind: SDKKinds.QnAMakerRecognizer,
   id: `QnA_${target}`,
-  knowledgeBaseId: `=settings.qna.${fileName.replace(/[.-]/g, '_')}`,
+  knowledgeBaseId: `=settings.qna.${fileName.replace(/[.-]/g, '_')}_qna`,
   hostname: '=settings.qna.hostname',
   endpointKey: '=settings.qna.endpointKey',
 });
