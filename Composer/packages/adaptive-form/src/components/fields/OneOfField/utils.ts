@@ -29,9 +29,9 @@ export function getOptions(
   schema: JSONSchema7,
   definitions?: SchemaDefinitions
 ): { options: IDropdownOption[]; isNested: boolean } {
-  const { type, oneOf } = schema;
+  const { type, oneOf, additionalProperties } = schema;
 
-  let isNested = false;
+  let isNested = !!additionalProperties;
 
   if (type && Array.isArray(type)) {
     const options: IDropdownOption[] = type.map((t) => ({
