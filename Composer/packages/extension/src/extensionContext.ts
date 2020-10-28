@@ -1,20 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import path from 'path';
-import fs from 'fs';
-
 import passport from 'passport';
 import { Express } from 'express';
 import { pathToRegexp } from 'path-to-regexp';
-import glob from 'globby';
 import formatMessage from 'format-message';
 import { UserIdentity, ExtensionCollection, RuntimeTemplate } from '@botframework-composer/types';
 
-import logger from './logger';
-import { ExtensionRegistration } from './extensionRegistration';
-
-const log = logger.extend('extension-context');
 export const DEFAULT_RUNTIME = 'csharp-azurewebapp';
 
 class ExtensionContext {
@@ -66,56 +58,6 @@ class ExtensionContext {
       }
       next && next();
     });
-  }
-
-  public async loadPlugin(name: string, description: string, thisPlugin: any) {
-    log('Loading extension: %s', name);
-
-    try {
-      const pluginRegistration = new ExtensionRegistration(this, name, description);
-      if (typeof thisPlugin.default === 'function') {
-        // the module exported just an init function
-        await thisPlugin.default.call(null, pluginRegistration);
-      } else if (thisPlugin.default && thisPlugin.default.initialize) {
-        // the module exported an object with an initialize method
-        await thisPlugin.default.initialize.call(null, pluginRegistration);
-      } else if (thisPlugin.initialize && typeof thisPlugin.initialize === 'function') {
-        // the module exported an object with an initialize method
-        await thisPlugin.initialize.call(null, pluginRegistration);
-      } else {
-        throw new Error(formatMessage('Could not init plugin'));
-      }
-    } catch (err) {
-      log('Error loading extension: %s', name);
-      // eslint-disable-next-line no-console
-      console.error(err);
-    }
-  }
-
-  public async loadPluginFromFile(packageJsonPath: string) {
-    const packageJSON = fs.readFileSync(packageJsonPath, 'utf8');
-    const json = JSON.parse(packageJSON);
-
-    if (json.composer?.enabled !== false) {
-      const modulePath = path.dirname(packageJsonPath);
-      try {
-        // eslint-disable-next-line security/detect-non-literal-require, @typescript-eslint/no-var-requires
-        const thisPlugin = require(modulePath);
-        this.loadPlugin(json.name, json.description, thisPlugin);
-      } catch (err) {
-        log('Error:', err?.message);
-      }
-    } else {
-      // noop - this is not a composer plugin
-    }
-  }
-
-  /** @deprecated */
-  public async loadPluginsFromFolder(dir: string) {
-    const plugins = await glob('*/package.json', { cwd: dir, dot: true });
-    for (const p in plugins) {
-      await this.loadPluginFromFile(path.join(dir, plugins[p]));
-    }
   }
 
   // get the runtime template currently used from project

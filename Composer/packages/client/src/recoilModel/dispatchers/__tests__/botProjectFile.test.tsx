@@ -66,7 +66,7 @@ describe('Bot Project File dispatcher', () => {
     const currentDispatcher = useRecoilValue(dispatcherState);
     const botStates = useRecoilValue(botStatesSelector);
     const [skillsData, setSkillsData] = useRecoilState(skillsDataSelector(testSkillId));
-    const settings = useRecoilValue(settingsState(rootBotProjectId));
+    const [settings, setSettings] = useRecoilState(settingsState(rootBotProjectId));
 
     return {
       botName,
@@ -78,6 +78,7 @@ describe('Bot Project File dispatcher', () => {
       settings,
       setters: {
         setBotProjectFile,
+        setSettings,
       },
     };
   };
@@ -158,7 +159,7 @@ describe('Bot Project File dispatcher', () => {
     expect(renderedComponent.current.botProjectFile.content.skills.oneNoteSkill.endpointName).toBe('remote');
   });
 
-  it('should remove a skill from the bot project file', async () => {
+  fit('should remove a skill from the bot project file', async () => {
     const manifestUrl = 'https://test-dev.azurewebsites.net/manifests/test-2-1-preview-1-manifest.json';
     await act(async () => {
       renderedComponent.current.setSkillsData({
@@ -173,9 +174,23 @@ describe('Bot Project File dispatcher', () => {
     expect(renderedComponent.current.botProjectFile.content.skills.oneNoteSkill.manifest).toBe(manifestUrl);
 
     await act(async () => {
+      renderedComponent.current.setters.setSettings({
+        ...renderedComponent.current.settings,
+        skill: {
+          oneNoteSkill: {
+            endpointUrl: 'https://test/api/messages',
+            msAppId: '1234-2312-23432-32432',
+          },
+        },
+      });
+    });
+    expect(renderedComponent.current.settings.skill?.oneNoteSkill).toBeDefined();
+
+    await act(async () => {
       dispatcher.removeSkillFromBotProjectFile(testSkillId);
     });
     expect(renderedComponent.current.botProjectFile.content.skills.oneNoteSkill).toBeUndefined();
+    expect(renderedComponent.current.settings.skill?.oneNoteSkill).toBeUndefined();
   });
 
   it('should update endpoint name of skill in Botproject file', async () => {
@@ -243,7 +258,7 @@ describe('Bot Project File dispatcher', () => {
     });
   });
 
-  fit('should update manifest in BotProject file', async () => {
+  it('should update manifest in BotProject file', async () => {
     await act(async () => {
       renderedComponent.current.setSkillsData({
         location: '/Users/tester/Desktop/LoadedBotProject/Google-Skill',

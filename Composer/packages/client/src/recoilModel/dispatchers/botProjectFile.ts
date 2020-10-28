@@ -12,6 +12,8 @@ import { botNameIdentifierState, botProjectFileState, locationState, settingsSta
 import { rootBotProjectIdSelector } from '../selectors';
 import { dispatcherState } from '../DispatcherWrapper';
 
+import { setSettingState } from './setting';
+
 export const botProjectFileDispatcher = () => {
   const addLocalSkill = useRecoilCallback(({ set, snapshot }: CallbackInterface) => async (skillId: string) => {
     const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
@@ -57,19 +59,30 @@ export const botProjectFileDispatcher = () => {
     }
   );
 
-  const removeSkill = useRecoilCallback(({ set, snapshot }: CallbackInterface) => async (skillId: string) => {
+  const removeSkill = useRecoilCallback((callbackHelpers: CallbackInterface) => async (skillId: string) => {
+    const { set, snapshot } = callbackHelpers;
     const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
     if (!rootBotProjectId) {
       return;
     }
 
-    const botName = await snapshot.getPromise(botNameIdentifierState(skillId));
+    const botNameIdentifier = await snapshot.getPromise(botNameIdentifierState(skillId));
     set(botProjectFileState(rootBotProjectId), (current) => {
       const result = produce(current, (draftState) => {
-        delete draftState.content.skills[botName];
+        delete draftState.content.skills[botNameIdentifier];
       });
       return result;
     });
+
+    const rootBotSettings = await snapshot.getPromise(settingsState(rootBotProjectId));
+    if (rootBotSettings.skill) {
+      const updatedSettings = produce(rootBotSettings, (draftState) => {
+        if (draftState.skill && draftState.skill[botNameIdentifier]) {
+          delete draftState.skill[botNameIdentifier];
+        }
+      });
+      setSettingState(callbackHelpers, rootBotProjectId, updatedSettings);
+    }
   });
 
   const updateManifest = useRecoilCallback(
@@ -136,18 +149,20 @@ export const botProjectFileDispatcher = () => {
         });
       }
 
-      dispatcher.setSettings(
-        rootBotProjectId,
-        produce(settings, (draftSettings) => {
-          draftSettings.skill = {
-            ...settings.skill,
-            [skillNameIdentifier]: {
-              endpointUrl,
-              msAppId,
-            },
-          };
-        })
-      );
+      if (settings.skill) {
+        dispatcher.setSettings(
+          rootBotProjectId,
+          produce(settings, (draftSettings) => {
+            draftSettings.skill = {
+              ...settings.skill,
+              [skillNameIdentifier]: {
+                endpointUrl,
+                msAppId,
+              },
+            };
+          })
+        );
+      }
     }
   );
 

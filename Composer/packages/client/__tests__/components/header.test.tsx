@@ -109,13 +109,16 @@ describe('<Header />', () => {
       set(botStatusState(projectIds[1]), BotStatus.unConnected);
       set(botStatusState(projectIds[2]), BotStatus.unConnected);
     };
-    const { findByLabelText } = renderWithRecoil(<Header />, initRecoilState);
-    const element = await findByLabelText('Start all bots');
+    const { getByTestId } = renderWithRecoil(<Header />, initRecoilState);
+
+    const element = await getByTestId('startAllBots');
     if (element) {
       act(() => {
         fireEvent.click(element);
       });
+      expect(mockStart).toHaveBeenCalled();
+      return;
     }
-    expect(mockStart).toHaveBeenCalled();
+    fail('element to startAll bots needed');
   });
 });
