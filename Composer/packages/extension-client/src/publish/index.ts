@@ -38,6 +38,9 @@ export function setTitle(value): void {
 export function getSchema(): any {
   return window[ComposerGlobalName].getSchema();
 }
+export function getType(): string {
+  return window[ComposerGlobalName].getType();
+}
 export function savePublishConfig(config): void {
   return window[ComposerGlobalName].savePublishConfig(config);
 }

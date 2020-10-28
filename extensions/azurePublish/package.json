@@ -13,7 +13,11 @@
   "composer": {
     "bundles": [
       {
-        "id": "publish",
+        "id": "azurePublish",
+        "path": "lib/publish.js"
+      },
+      {
+        "id": "azureFunctionsPublish",
         "path": "lib/publish.js"
       }
     ],
@@ -47,7 +51,7 @@
     "@azure/ms-rest-nodeauth": "3.0.3",
     "@bfc/code-editor": "../../Composer/packages/lib/code-editor",
     "@bfc/extension": "../../Composer/packages/extension",
-    "@bfc/extension-client": "../../Composer/packages/extension-client",
+    "@bfc/extension-client": "file:../../Composer/packages/extension-client",
     "@bfc/indexers": "../../Composer/packages/lib/indexers",
     "@bfc/shared": "../../Composer/packages/lib/shared",
     "@bfc/types": "../../Composer/packages/types",

@@ -369,6 +369,7 @@ export const CheckCognitiveResourceSku = async (
 
 export const getResourceList = async (projectId: string, type: string) => {
   try {
+    console.log('Get resources for ', type);
     const result = await axios.get(`/api/provision/${projectId}/${type}/resources`);
     return result.data;
   } catch (error) {

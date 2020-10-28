@@ -71,7 +71,7 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
     public hasView = true;
     public bundleId = 'publish'; /** host custom UI */
 
-    constructor(mode: string, name: string, description: string) {
+    constructor(mode: string, name: string, description: string, bundleId: string) {
       this.publishHistories = {};
       this.historyFilePath = path.resolve(__dirname, '../publishHistory.txt');
       if (PERSIST_HISTORY) {
@@ -83,6 +83,7 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
       this.name = name;
       this.description = description;
       this.logger = composer.log;
+      this.bundleId = bundleId;
     }
 
     private baseRuntimeFolder = process.env.AZURE_PUBLISH_PATH || path.resolve(__dirname, `../publishBots`);
@@ -565,11 +566,12 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
     };
   }
 
-  const azurePublish = new AzurePublisher('azurewebapp', 'azurePublish', 'Publish bot to Azure Web App (Preview)');
+  const azurePublish = new AzurePublisher('azurewebapp', 'azurePublish', 'Publish bot to Azure Web App (Preview)', 'azurePublish');
   const azureFunctionsPublish = new AzurePublisher(
     'azurefunctions',
     'azureFunctionsPublish',
-    'Publish bot to Azure Functions (Preview)'
+    'Publish bot to Azure Functions (Preview)',
+    'azureFunctionsPublish',
   );
 
   await composer.addPublishMethod(azurePublish);
