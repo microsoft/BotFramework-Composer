@@ -146,13 +146,7 @@ export const getMergedSettings = (projectId, settings): DialogSetting => {
   return mergedSettings;
 };
 
-export const navigateToBot = (
-  callbackHelpers: CallbackInterface,
-  projectId: string,
-  mainDialog: string,
-  qnaKbUrls?: string[],
-  templateId?: string
-) => {
+export const navigateToBot = (callbackHelpers: CallbackInterface, projectId: string, mainDialog: string) => {
   if (projectId) {
     const { set } = callbackHelpers;
     set(currentProjectIdState, projectId);

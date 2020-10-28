@@ -80,7 +80,6 @@ export function checkUrl(
 
 export interface NavigationState {
   breadcrumb?: BreadcrumbItem[];
-  qnaKbUrls?: string[];
 }
 
 export function convertPathToUrl(projectId: string, skillId: string | null, dialogId: string, path?: string): string {

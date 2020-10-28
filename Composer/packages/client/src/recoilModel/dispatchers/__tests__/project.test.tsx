@@ -458,7 +458,6 @@ describe('Project dispatcher', () => {
         location: '/Users/tester/Desktop/samples',
         templateId: 'InterruptionSample',
         locale: 'us-en',
-        qnaKbUrls: [],
       });
     });
 
