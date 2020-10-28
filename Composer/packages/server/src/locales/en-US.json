@@ -473,6 +473,9 @@
   "change_recognizer_3145b93d": {
     "message": "Change Recognizer"
   },
+  "changes_the_new_bot_flow_to_use_templates_stored_a_bfe5178c": {
+    "message": "Changes the new bot flow to use templates stored as packages on Nuget/npm"
+  },
   "check_for_updates_and_install_them_automatically_50337340": {
     "message": "Check for updates and install them automatically."
   },
@@ -2095,6 +2098,9 @@
   },
   "reloading_49d2f661": {
     "message": "Reloading"
+  },
+  "remote_template_creation_experience_2f9ea9e1": {
+    "message": "Remote template creation experience"
   },
   "remove_f47dc62a": {
     "message": "Remove"

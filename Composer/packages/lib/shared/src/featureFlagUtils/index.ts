@@ -14,7 +14,7 @@ export type FeatureFlag = {
   enabled: boolean;
 };
 
-export type FeatureFlagKey = 'VA_CREATION' | 'FORM_DIALOG';
+export type FeatureFlagKey = 'VA_CREATION' | 'FORM_DIALOG' | 'REMOTE_TEMPLATE_CREATION_EXPERIENCE';
 
 export type FeatureFlagMap = Record<FeatureFlagKey, FeatureFlag>;
 
@@ -28,6 +28,12 @@ export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
   FORM_DIALOG: {
     displayName: formatMessage('Show Form Dialog'),
     description: formatMessage('Show form dialog editor in the canvas'),
+    isHidden: false,
+    enabled: false,
+  },
+  REMOTE_TEMPLATE_CREATION_EXPERIENCE: {
+    displayName: formatMessage('Remote template creation experience'),
+    description: formatMessage('Changes the new bot flow to use templates stored as packages on Nuget/npm'),
     isHidden: false,
     enabled: false,
   },

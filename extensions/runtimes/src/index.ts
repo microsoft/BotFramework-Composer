@@ -40,7 +40,7 @@ export default async (composer: any): Promise<void> => {
       composer.log('FINISHED BUILDING!');
     },
     identifyManifest: (runtimePath: string): string => {
-      return path.join(runtimePath, 'Microsoft.BotFramework.Composer.WebApp.csproj');
+      return path.join(runtimePath, 'azurewebapp', 'Microsoft.BotFramework.Composer.WebApp.csproj');
     },
     run: async (project: any, localDisk: IFileStorage) => {
       composer.log('RUN THIS C# PROJECT!');
@@ -183,7 +183,7 @@ export default async (composer: any): Promise<void> => {
       composer.log('BUILD COMPLETE');
     },
     identifyManifest: (runtimePath: string): string => {
-      return path.join(runtimePath, 'azurewebapp', 'Microsoft.BotFramework.Composer.WebApp.csproj');
+      return path.join(runtimePath, 'Microsoft.BotFramework.Composer.WebApp.csproj');
     },
     run: async (project: any, localDisk: IFileStorage) => {
       // do stuff

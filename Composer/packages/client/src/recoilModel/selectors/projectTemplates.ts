@@ -18,6 +18,16 @@ export const filteredTemplatesSelector = selector({
         filteredTemplates.splice(vaTemplateIndex, 1);
       }
     }
+    if (!featureFlags?.REMOTE_TEMPLATE_CREATION_EXPERIENCE?.enabled) {
+      let index = filteredTemplates.length - 1;
+
+      while (index >= 0) {
+        if (!filteredTemplates[index].path) {
+          filteredTemplates.splice(index, 1);
+        }
+        index -= 1;
+      }
+    }
     return filteredTemplates;
   },
 });
