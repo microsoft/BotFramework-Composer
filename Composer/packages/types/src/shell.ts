@@ -4,7 +4,7 @@
 
 import type { DialogInfo, LuFile, LgFile, QnAFile, LuIntentSection, LgTemplate, DialogSchemaFile } from './indexers';
 import type { ILUFeaturesConfig, SkillSetting, UserSettings } from './settings';
-import type { JSONSchema7 } from './schema';
+import type { JSONSchema7, SDKKinds } from './schema';
 import { MicrosoftIDialog } from './sdk';
 
 /** Recursively marks all properties as optional. */
@@ -42,7 +42,7 @@ export type BotSchemas = {
 };
 
 export type DisabledMenuActions = {
-  kind: string;
+  kind: SDKKinds;
   reason: string;
 };
 

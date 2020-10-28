@@ -7,6 +7,7 @@ import {
   IContextualMenuItem,
   ContextualMenuItemType,
 } from 'office-ui-fabric-react/lib/components/ContextualMenu/ContextualMenu.types';
+import { NeutralColors } from '@uifabric/fluent-theme';
 import { SDKKinds, DefinitionSummary, DisabledMenuActions } from '@bfc/shared';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
@@ -17,6 +18,17 @@ import { ITooltipHostStyles, TooltipHost } from 'office-ui-fabric-react/lib/Tool
 import { MenuEventTypes } from '../../constants/MenuTypes';
 
 import { menuOrderMap } from './defaultMenuOrder';
+
+const toolTipHostStyles: Partial<ITooltipHostStyles> = {
+  root: {
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    padding: '0px 7px',
+    height: '38px',
+    background: NeutralColors.gray20,
+  },
+};
 
 type ActionMenuItemClickHandler = (item?: IContextualMenuItem) => any;
 type ActionKindFilter = ($kind: SDKKinds) => boolean;
@@ -187,21 +199,14 @@ const createSubMenu = (
         title: disabledAction.reason,
         disabled: true,
         onRender: (item) => {
-          const calloutProps = { gapSpace: 0 };
           const tooltipId = `tooltip-${disabledAction.kind}`;
-          const hostStyles: Partial<ITooltipHostStyles> = {
-            root: {
-              display: 'flex',
-              justifyContent: 'flex-start',
-              alignItems: 'center',
-              padding: '0px 7px',
-              height: '38px',
-              background: '#F3F2F1',
-            },
-          };
-
           return (
-            <TooltipHost calloutProps={calloutProps} content={disabledAction.reason} id={tooltipId} styles={hostStyles}>
+            <TooltipHost
+              calloutProps={{ gapSpace: 0 }}
+              content={disabledAction.reason}
+              id={tooltipId}
+              styles={toolTipHostStyles}
+            >
               {item.name}
             </TooltipHost>
           );
