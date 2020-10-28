@@ -489,8 +489,6 @@ export const ProjectTree: React.FC<Props> = ({
       ? createDetailsTree(projectCollection[0], 0)
       : projectCollection.map(createBotSubtree);
 
-  console.log('render: project tree');
-
   return (
     <div
       aria-label={formatMessage('Navigation pane')}
@@ -538,8 +536,4 @@ export const ProjectTree: React.FC<Props> = ({
       </FocusZone>
     </div>
   );
-};
-
-ProjectTree.whyDidYouRender = {
-  customName: 'ProjectTree',
 };
