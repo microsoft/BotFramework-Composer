@@ -1,8 +1,0 @@
-{
-  "$kind": "Microsoft.LuisRecognizer",
-  "id": "LUIS_interruptionsample-0",
-  "applicationId": "=settings.luis.interruptionsample_0_en_us_lu.appId",
-  "version": "=settings.luis.interruptionsample_0_en_us.version",
-  "endpoint": "=settings.luis.endpoint",
-  "endpointKey": "=settings.luis.endpointKey"
-}
