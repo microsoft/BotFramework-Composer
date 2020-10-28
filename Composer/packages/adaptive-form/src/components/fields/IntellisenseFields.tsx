@@ -3,7 +3,7 @@
 
 import { FieldProps } from '@bfc/extension-client';
 import { Intellisense } from '@bfc/intellisense';
-import React, { useRef } from 'react';
+import React, { useRef, useCallback } from 'react';
 
 import { getIntellisenseUrl } from '../../utils/getIntellisenseUrl';
 import { ExpressionSwitchWindow } from '../ExpressionSwitchWindow';
@@ -22,6 +22,8 @@ export const IntellisenseTextField: React.FC<FieldProps<string>> = (props) => {
   const scopes = uiOptions.intellisenseScopes || [];
   const intellisenseServerUrlRef = useRef(getIntellisenseUrl());
 
+  const noop = useCallback(() => {}, []);
+
   return (
     <Intellisense
       completionListOverrideResolver={completionListOverrideResolver}
@@ -39,7 +41,7 @@ export const IntellisenseTextField: React.FC<FieldProps<string>> = (props) => {
           focused={focused}
           id={id}
           value={textFieldValue}
-          onBlur={() => {}} // onBlur managed by Intellisense
+          onBlur={noop} // onBlur managed by Intellisense
           onChange={(newValue) => onValueChanged(newValue || '')}
           onClick={onClickTextField}
           onKeyDown={onKeyDownTextField}
@@ -55,6 +57,8 @@ export const IntellisenseExpressionField: React.FC<FieldProps<string>> = (props)
 
   const scopes = ['expressions', 'user-variables'];
   const intellisenseServerUrlRef = useRef(getIntellisenseUrl());
+
+  const noop = useCallback(() => {}, []);
 
   return (
     <Intellisense
@@ -72,7 +76,7 @@ export const IntellisenseExpressionField: React.FC<FieldProps<string>> = (props)
           focused={focused}
           id={id}
           value={textFieldValue}
-          onBlur={() => {}} // onBlur managed by Intellisense
+          onBlur={noop} // onBlur managed by Intellisense
           onChange={(newValue) => onValueChanged(newValue || '')}
           onClick={onClickTextField}
           onKeyDown={onKeyDownTextField}
@@ -93,6 +97,8 @@ export const IntellisenseNumberField: React.FC<FieldProps<string>> = (props) => 
   const scopes = uiOptions.intellisenseScopes || [];
   const intellisenseServerUrlRef = useRef(getIntellisenseUrl());
 
+  const noop = useCallback(() => {}, []);
+
   return (
     <Intellisense
       completionListOverrideResolver={completionListOverrideResolver}
@@ -110,7 +116,7 @@ export const IntellisenseNumberField: React.FC<FieldProps<string>> = (props) => 
           focused={focused}
           id={id}
           value={textFieldValue}
-          onBlur={() => {}} // onBlur managed by Intellisense
+          onBlur={noop} // onBlur managed by Intellisense
           onChange={(newValue) => onValueChanged(newValue || 0)}
           onClick={onClickTextField}
           onKeyDown={onKeyDownTextField}
@@ -151,6 +157,8 @@ export const IntellisenseJSONField: React.FC<FieldProps<string>> = (props) => {
   const scopes = ['expressions'];
   const intellisenseServerUrlRef = useRef(getIntellisenseUrl());
 
+  const noop = useCallback(() => {}, []);
+
   return (
     <Intellisense
       completionListOverrideResolver={completionListOverrideResolver}
@@ -167,7 +175,7 @@ export const IntellisenseJSONField: React.FC<FieldProps<string>> = (props) => {
           {...props}
           style={{ height: 100 }}
           value={textFieldValue}
-          onBlur={() => {}} // onBlur managed by Intellisense
+          onBlur={noop} // onBlur managed by Intellisense
           onChange={onValueChanged}
         />
       )}
