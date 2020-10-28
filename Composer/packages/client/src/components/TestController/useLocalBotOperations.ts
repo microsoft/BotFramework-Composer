@@ -16,10 +16,13 @@ export function useLocalBotOperations() {
   const botRuntimeOperations = useRecoilValue(botRuntimeOperationsSelector);
   const rootBotId = useRecoilValue(rootBotProjectIdSelector);
   const [trackedProjectIds, setProjectsToTrack] = useState<string[]>([]);
-  const { updateSettingsForSkillsWithoutManifest, resetBotRuntimeError } = useRecoilValue(dispatcherState);
+  const { updateSettingsForSkillsWithoutManifest, resetBotRuntimeError, setBotStatus } = useRecoilValue(
+    dispatcherState
+  );
 
   const handleBotStart = async (projectId: string, config: IPublishConfig, botBuildRequired: boolean) => {
     resetBotRuntimeError(projectId);
+    setBotStatus(projectId, BotStatus.pending);
     if (botBuildRequired) {
       // Default recognizer
       const matchedBuilder = builderEssentials.find(
