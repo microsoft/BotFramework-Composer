@@ -18,7 +18,6 @@ import {
   focusedStorageFolderState,
   currentProjectIdState,
   userSettingsState,
-  creationFlowTypeState,
   filteredTemplatesSelector,
 } from '../../recoilModel';
 import Home from '../../pages/home/Home';
@@ -47,13 +46,10 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     createNewBot,
     saveProjectAs,
     fetchProjectById,
-    addNewSkillToBotProject,
-    addExistingSkillToBotProject,
   } = useRecoilValue(dispatcherState);
 
   const templateProjects = useRecoilValue(filteredTemplatesSelector);
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
-  const creationFlowType = useRecoilValue(creationFlowTypeState);
   const projectId = useRecoilValue(currentProjectIdState);
   const storages = useRecoilValue(storagesState);
   const focusedStorageFolder = useRecoilValue(focusedStorageFolderState);
@@ -112,12 +108,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
 
   const openBot = async (botFolder) => {
     setCreationFlowStatus(CreationFlowStatus.CLOSE);
-
-    if (creationFlowType === 'Skill') {
-      addExistingSkillToBotProject(botFolder);
-    } else {
-      openProject(botFolder);
-    }
+    openProject(botFolder);
   };
 
   const handleCreateNew = async (formData, templateId: string) => {
@@ -129,11 +120,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
       schemaUrl: formData.schemaUrl,
       appLocale,
     };
-    if (creationFlowType === 'Skill') {
-      addNewSkillToBotProject(newBotData);
-    } else {
-      createNewBot(newBotData);
-    }
+    createNewBot(newBotData);
   };
 
   const handleSaveAs = (formData) => {

@@ -57,6 +57,7 @@ import { CreationFlowStatus } from '../../constants';
 import { RepairSkillModalOptionKeys } from '../../components/RepairSkillModal';
 import { useLocalBotOperations } from '../../components/TestController/useLocalBotOperations';
 
+import CreationModal from './creationModal';
 import { WarningMessage } from './WarningMessage';
 import {
   breadcrumbClass,
@@ -355,9 +356,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             key: 'CreateNewSkill',
             text: formatMessage(' Create a new skill'),
             onClick: () => {
-              setCreationFlowStatus(CreationFlowStatus.NEW);
               setCreationFlowTypes('Skill');
-              navigate(`/projects/create`);
+              setCreationFlowStatus(CreationFlowStatus.NEW);
             },
           },
           {
@@ -367,7 +367,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             onClick: () => {
               setCreationFlowTypes('Skill');
               setCreationFlowStatus(CreationFlowStatus.OPEN);
-              navigate(`/projects/open`);
             },
           },
           {
@@ -790,6 +789,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             }}
           ></RepairSkillModal>
         )}
+        <CreationModal onDismiss={() => {}} onSubmit={() => {}}></CreationModal>
       </Suspense>
     </React.Fragment>
   );
