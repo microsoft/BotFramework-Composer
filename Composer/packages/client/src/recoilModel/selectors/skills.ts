@@ -43,3 +43,18 @@ export const skillsStateSelector = selector({
     return skills;
   },
 });
+
+export const skillIdByProjectIdSelector = selector({
+  key: 'skillIdByProjectIdSelector',
+  get: ({ get }) => {
+    const skillsProjectIds = get(skillsProjectIdSelector);
+    const skills: Record<string, string> = skillsProjectIds.reduce((result, skillId: string) => {
+      const skillNameIdentifier = get(botNameIdentifierState(skillId));
+      if (skillNameIdentifier) {
+        result[skillId] = skillNameIdentifier;
+      }
+      return result;
+    }, {});
+    return skills;
+  },
+});

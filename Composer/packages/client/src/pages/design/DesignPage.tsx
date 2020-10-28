@@ -39,6 +39,7 @@ import {
   userSettingsState,
   dispatcherState,
   schemasState,
+  displaySkillManifestState,
   validateDialogsSelectorFamily,
   breadcrumbState,
   focusPathState,
@@ -46,6 +47,7 @@ import {
   qnaFilesState,
   rootBotProjectIdSelector,
   projectDialogsMapSelector,
+  skillIdByProjectIdSelector,
 } from '../../recoilModel';
 import { CreateQnAModal } from '../../components/QnA';
 import { triggerNotSupported } from '../../utils/dialogValidator';
@@ -116,6 +118,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   const schemas = useRecoilValue(schemasState(projectId));
   const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
+  const displaySkillManifest = useRecoilValue(displaySkillManifestState(projectId));
+  const skillsByProjectId = useRecoilValue(skillIdByProjectIdSelector);
   const projectDialogsMap = useRecoilValue(projectDialogsMapSelector);
   const { startSingleBot, stopSingleBot } = useLocalBotOperations();
   const breadcrumb = useRecoilValue(breadcrumbState(projectId));
@@ -132,6 +136,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     updateDialog,
     createDialogBegin,
     createDialog,
+    dismissManifestModal,
     setDesignPageLocation,
     navTo,
     selectTo,
@@ -149,6 +154,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     setCurrentPageMode,
     createTrigger,
     deleteTrigger,
+    displayManifestModal,
   } = useRecoilValue(dispatcherState);
 
   const params = new URLSearchParams(location?.search);
@@ -156,15 +162,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     dialogs.find((x) => x.id === props.dialogId)?.content,
     params.get('selected') || ''
   );
-  const [manifestModalInfo, setManifestModalInfo] = useState<undefined | { projectId: string; skillName: string }>(
-    undefined
-  );
+
   const [triggerModalInfo, setTriggerModalInfo] = useState<undefined | { projectId: string; dialogId: string }>(
     undefined
   );
   const [dialogModalInfo, setDialogModalInfo] = useState<undefined | { projectId: string }>(undefined);
   const [exportSkillModalInfo, setExportSkillModalInfo] = useState<undefined | { projectId: string }>(undefined);
-
+  const [brokenSkillInfo, setBrokenSkillInfo] = useState<undefined | TreeLink>(undefined);
   const [dialogJsonVisible, setDialogJsonVisibility] = useState(false);
   const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0]);
   const [warningIsVisible, setWarningIsVisible] = useState(true);
@@ -180,8 +184,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     regEx: '',
     triggerPhrases: '',
   };
-
-  const [brokenSkillItem, setBrokenSkillItem] = useState<undefined | TreeLink>(undefined);
 
   useEffect(() => {
     const currentDialog = dialogs.find(({ id }) => id === dialogId);
@@ -275,7 +277,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
   function handleSelect(projectId, item, selected = '') {
     if (item.isBroken) {
-      setBrokenSkillItem(item);
+      setBrokenSkillInfo(item);
     }
     updateZoomRate({ currentRate: 1 });
     if (selected) {
@@ -623,6 +625,12 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     setDialogModalInfo({ projectId });
   };
 
+  const handleDisplayManifestModal = (skillId: string) => {
+    const skillNameIdentifier = skillsByProjectId[skillId];
+    if (!skillNameIdentifier) return;
+    displayManifestModal(skillNameIdentifier, projectId);
+  };
+
   const pluginConfig: PluginConfig = useMemo(() => {
     const sdkUISchema = schemas?.ui?.content ?? {};
     const userUISchema = schemas?.uiOverrides?.content ?? {};
@@ -643,7 +651,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           <ProjectTree
             onBotCreateDialog={handleCreateDialog}
             onBotDeleteDialog={handleDeleteDialog}
-            onBotEditManifest={(projectId) => setExportSkillModalInfo({ projectId })}
+            onBotEditManifest={handleDisplayManifestModal}
             onBotExportZip={exportToZip}
             onBotRemoveSkill={removeSkillFromBotProject}
             onBotStart={startSingleBot}
@@ -755,20 +763,18 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           />
         )}
         <CreateQnAModal dialogId={dialogId} projectId={projectId} qnaFiles={qnaFiles} onSubmit={handleCreateQnA} />
-        {manifestModalInfo && (
+        {displaySkillManifest && (
           <DisplayManifestModal
-            projectId={manifestModalInfo.projectId}
-            skillNameIdentifier={manifestModalInfo.skillName}
-            onDismiss={() => {
-              setManifestModalInfo(undefined);
-            }}
+            projectId={projectId}
+            skillNameIdentifier={displaySkillManifest}
+            onDismiss={() => dismissManifestModal(projectId)}
           />
         )}
-        {brokenSkillItem && (
+        {brokenSkillInfo && (
           <RepairSkillModal
-            skillItem={brokenSkillItem}
+            skillItem={brokenSkillInfo}
             onDismiss={() => {
-              setBrokenSkillItem(undefined);
+              setBrokenSkillInfo(undefined);
             }}
             onNext={(option) => {
               if (option === RepairSkillModalOptionKeys.repairSkill) {
@@ -776,11 +782,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                 setCreationFlowStatus(CreationFlowStatus.OPEN);
                 navigate(`/projects/open`);
               } else if ((option = RepairSkillModalOptionKeys.removeSkill)) {
-                const skillIdToRemove = brokenSkillItem.skillId;
+                const skillIdToRemove = brokenSkillInfo.skillId;
                 if (!skillIdToRemove) return;
                 removeSkillFromBotProject(skillIdToRemove);
               }
-              setBrokenSkillItem(undefined);
+              setBrokenSkillInfo(undefined);
             }}
           ></RepairSkillModal>
         )}

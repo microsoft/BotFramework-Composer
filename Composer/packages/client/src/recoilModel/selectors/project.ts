@@ -25,7 +25,6 @@ import {
   projectMetaDataState,
   dialogIdsState,
   dialogState,
-  displaySkillManifestState,
 } from '../atoms';
 import { dialogsSelectorFamily, buildEssentialsSelector } from '../selectors';
 
