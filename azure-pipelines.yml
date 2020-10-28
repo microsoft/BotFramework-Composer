@@ -93,7 +93,7 @@ jobs:
     steps:
       - task: Semmle@0
         env:
-          SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+          SYSTEM_ACCESSTOKEN: $(ANALYSIS_READ_TOKEN)
         inputs:
           toolVersion: "LatestPreRelease"
           sourceCodeDirectory: '$(Build.SourcesDirectory)\Composer'
