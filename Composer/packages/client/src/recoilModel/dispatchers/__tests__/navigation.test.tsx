@@ -301,9 +301,7 @@ describe('navigation dispatcher', () => {
       await act(async () => {
         await dispatcher.focusTo(projectId, skillId, 'focus', 'fragment');
       });
-      expectNavTo(
-        `/bot/${projectId}/skillId/${skillId}/dialogs/dialogInSkillId?selected=select&focused=focus#fragment`
-      );
+      expectNavTo(`/bot/${projectId}/skill/${skillId}/dialogs/dialogInSkillId?selected=select&focused=focus#fragment`);
       expect(mockUpdateBreadcrumb).toHaveBeenCalledWith(expect.anything(), BreadcrumbUpdateType.Selected);
       expect(mockUpdateBreadcrumb).toHaveBeenCalledWith(expect.anything(), BreadcrumbUpdateType.Focused);
     });
