@@ -175,17 +175,8 @@ export namespace OneAuth {
     readonly toString: string | undefined;
   }
 
-  export interface AuthParametersConstructor {
-    new (
-      authScheme: AuthScheme,
-      authority: string,
-      target: string,
-      realm: string,
-      accessTokenToRenew: string
-    ): AuthParameters;
-  }
-
-  export interface AuthParameters {
+  export class AuthParameters {
+    constructor(authScheme: AuthScheme, authority: string, target: string, realm: string, accessTokenToRenew: string);
     readonly authScheme: AuthScheme;
     readonly authority: string;
     readonly realm: string;
@@ -194,20 +185,15 @@ export namespace OneAuth {
     SetAdditionalParameter(key: string, value: string): void;
   }
 
-  export let AuthParameters: AuthParametersConstructor;
-
-  export interface AppConfigurationConstructor {
-    new (
+  export class AppConfiguration {
+    constructor(
       appId: string,
       appName: string,
       appVersion: string,
       languageCode: string,
       signInWindowTitle: string | undefined,
       parentWindow: any | undefined
-    ): AppConfiguration;
-  }
-
-  export interface AppConfiguration {
+    );
     readonly appId: string;
     readonly appName: string;
     readonly appVersion: string;
@@ -216,41 +202,29 @@ export namespace OneAuth {
     readonly parentWindow: any | undefined; // Windows only
   }
 
-  export let AppConfiguration: AppConfigurationConstructor;
-
-  /// Constructor for MsaConfiguration
-  /// @param clientId
-  /// @param redirectUri
-  /// @param defaultSignInScope
-  /// @deprecated @param useMsalFlight no longer used and has no effect @see {@link SetFlights}
-  export interface MsaConfigurationConstructor {
-    new (
+  export class MsaConfiguration {
+    /// Constructor for MsaConfiguration
+    /// @param clientId
+    /// @param redirectUri
+    /// @param defaultSignInScope
+    /// @deprecated @param useMsalFlight no longer used and has no effect @see {@link SetFlights}
+    constructor(
       clientId: string,
       redirectUri: string,
       defaultSignInScope: string,
       useMsalFlight: boolean | undefined // deprecated
-    ): MsaConfiguration;
-  }
-
-  export interface MsaConfiguration {
+    );
     readonly clientId: string;
     readonly redirectUri: string;
     readonly defaultSignInScope: string;
   }
 
-  export let MsaConfiguration: MsaConfigurationConstructor;
-
-  export interface AadConfigurationConstructor {
-    new (clientId: string, redirectUri: string, defaultSignInResource: string, preferBroker: boolean): AadConfiguration;
-  }
-
-  export interface AadConfiguration extends AadConfigurationConstructor {
+  export class AadConfiguration {
+    constructor(clientId: string, redirectUri: string, defaultSignInResource: string, preferBroker: boolean);
     readonly clientId: string;
     readonly redirectUri: string;
     readonly defaultSignInResource: string;
   }
-
-  export let AadConfiguration: AadConfigurationConstructor;
 
   /// Configures the OneAuth module.
   ///
