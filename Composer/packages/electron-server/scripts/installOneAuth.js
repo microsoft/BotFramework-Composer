@@ -29,10 +29,10 @@ switch (process.platform) {
     break;
   case 'win32':
     packageName = 'oneauth-win64';
-    log.info('[installOneAuth.js] Windows detected. Using %s package.', packageName);
+    log.info('Windows detected. Using %s package.', packageName);
     break;
   default:
-    log.error('[installOneAuth.js] Detected platform is not Mac / Windows.');
+    log.error('Detected platform is not Mac / Windows.');
     process.exit(1);
 }
 
@@ -51,7 +51,7 @@ const outDir = path.resolve(__dirname, '../oneauth-temp');
 });
 
 async function downloadPackage() {
-  log.info('[installOneAuth.js] Starting download.');
+  log.info('Starting download.');
   await ensureDir(outDir);
   try {
     execSync(`cd ${outDir} && npm pack ${packageName}`, { encoding: 'utf-8' });
@@ -64,7 +64,7 @@ async function downloadPackage() {
   const files = await glob('oneauth*.tgz', { cwd: outDir });
 
   if (files.length !== 1) {
-    log.error('[installOneAuth.js] Did not find exactly 1 archive. Exiting.');
+    log.error('Did not find exactly 1 archive. Exiting.');
     process.exit(1);
     return;
   }
@@ -73,19 +73,19 @@ async function downloadPackage() {
 }
 
 async function extractPackage(archivePath) {
-  log.info('[installOneAuth.js] Extracting tarball.');
+  log.info('Extracting tarball.');
   await tar.extract({
     file: archivePath,
     strip: 1,
     C: outDir,
     strict: true,
   });
-  log.info('[installOneAuth.js] Done extracting.');
+  log.info('Done extracting.');
   return archivePath;
 }
 
 async function cleanUp(archivePath) {
-  log.info('[installOneAuth.js] Cleaning up archive.');
+  log.info('Cleaning up archive.');
   await remove(archivePath);
 }
 
@@ -95,10 +95,10 @@ remove(outDir)
   .then(extractPackage)
   .then(cleanUp)
   .then(() => {
-    log.info('[installOneAuth.js] Done installing oneauth.');
+    log.info('Done installing oneauth.');
     process.exit(0);
   })
   .catch((err) => {
-    log.error('[installOneAuth.js] Error downloading oneauth. ', err);
+    log.error('Error downloading oneauth. ', err);
     process.exit(1);
   });
