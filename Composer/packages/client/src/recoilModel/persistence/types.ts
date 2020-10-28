@@ -19,7 +19,7 @@ export enum FileExtensions {
   Setting = 'appsettings.json',
   BotProject = '.botproj',
   Recognizer = '',
-  CrossTrainConfig = 'cross-train.config',
+  CrossTrainConfig = 'cross-train.config.json',
 }
 
 export type FileErrorHandler = (error) => void;

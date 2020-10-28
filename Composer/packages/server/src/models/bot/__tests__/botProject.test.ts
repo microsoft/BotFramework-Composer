@@ -12,7 +12,6 @@ import { BotProject } from '../botProject';
 import { LocationRef } from '../interface';
 
 import { Resource } from './../interface';
-import { RecognizerTypes } from './../recognizer';
 
 jest.mock('azure-storage', () => {
   return {};

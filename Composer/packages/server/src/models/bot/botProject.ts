@@ -30,6 +30,7 @@ import log from '../../logger';
 import { BotProjectService } from '../../services/project';
 import AssetService from '../../services/asset';
 
+import { isCrossTrainConfig } from './botStructure';
 import { Builder } from './builder';
 import { IFileStorage } from './../storage/interface';
 import { LocationRef, IBuildConfig } from './interface';
@@ -416,6 +417,7 @@ export class BotProject implements IBotProject {
 
   public validateFileName = (name: string) => {
     if (isRecognizer(name)) return;
+    if (isCrossTrainConfig(name)) return;
     const { fileId, fileType } = parseFileName(name, '');
 
     let fileName = fileId;

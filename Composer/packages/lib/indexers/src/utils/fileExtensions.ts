@@ -11,5 +11,5 @@ export enum FileExtensions {
   Manifest = '.json',
   BotProjectSpace = '.botproj',
   Json = '.json',
-  CrossTrainConfig = '.config',
+  CrossTrainConfig = '.config.json',
 }

@@ -55,6 +55,20 @@ class Indexer {
     );
   };
 
+  private separateConfigAndManifests = (files: FileInfo[]) => {
+    return files.reduce(
+      (result: { crossTrainConfigs: FileInfo[]; skillManifestFiles: FileInfo[] }, file) => {
+        if (file.name.endsWith('.config.json')) {
+          result.crossTrainConfigs.push(file);
+        } else {
+          result.skillManifestFiles.push(file);
+        }
+        return result;
+      },
+      { crossTrainConfigs: [], skillManifestFiles: [] }
+    );
+  };
+
   private getLgImportResolver = (files: FileInfo[], locale: string) => {
     const lgFiles = files.map(({ name, content }) => {
       return {
@@ -70,19 +84,20 @@ class Indexer {
     const result = this.classifyFile(files);
     const luFeatures = settings.luFeatures;
     const { dialogs, recognizers } = this.separateDialogsAndRecognizers(result[FileExtensions.Dialog]);
+    const { skillManifestFiles, crossTrainConfigs } = this.separateConfigAndManifests(result[FileExtensions.Manifest]);
     return {
       dialogs: dialogIndexer.index(dialogs, botName),
       dialogSchemas: dialogSchemaIndexer.index(result[FileExtensions.DialogSchema]),
       lgFiles: lgIndexer.index(result[FileExtensions.lg], this.getLgImportResolver(result[FileExtensions.lg], locale)),
       luFiles: luIndexer.index(result[FileExtensions.Lu], luFeatures),
       qnaFiles: qnaIndexer.index(result[FileExtensions.QnA]),
-      skillManifestFiles: skillManifestIndexer.index(result[FileExtensions.Manifest]),
+      skillManifestFiles: skillManifestIndexer.index(skillManifestFiles),
       skills: skillIndexer.index(skillContent, settings.skill),
       botProjectSpaceFiles: botProjectSpaceIndexer.index(result[FileExtensions.BotProjectSpace]),
       jsonSchemaFiles: jsonSchemaFileIndexer.index(result[FileExtensions.Json]),
       formDialogSchemas: formDialogSchemaIndexer.index(result[FileExtensions.FormDialog]),
       recognizers: recognizerIndexer.index(recognizers),
-      crossTrainConfig: crossTrainConfigIndexer.index(result[FileExtensions.CrossTrainConfig]),
+      crossTrainConfig: crossTrainConfigIndexer.index(crossTrainConfigs),
     };
   }
 }

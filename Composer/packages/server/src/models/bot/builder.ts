@@ -166,10 +166,12 @@ export class Builder {
 
   private async crossTrain(luFiles: FileInfo[], qnaFiles: FileInfo[], allFiles: FileInfo[]) {
     const crossTrainConfigPath = Path.join(this.botDir, RECOGNIZERS, CrossTrainConfigName);
-    const crossTrainConfigStr = await this.storage.readFile(crossTrainConfigPath);
     let crossTrainConfig = {};
-    if (crossTrainConfigStr) {
-      crossTrainConfig = JSON.parse(crossTrainConfigStr);
+    if (await this.storage.exists(crossTrainConfigPath)) {
+      const crossTrainConfigStr = await this.storage.readFile(crossTrainConfigPath);
+      if (crossTrainConfigStr) {
+        crossTrainConfig = JSON.parse(crossTrainConfigStr);
+      }
     }
     const luContents = luFiles.map((file) => {
       return { content: file.content, id: Path.basename(file.name, '.lu') };

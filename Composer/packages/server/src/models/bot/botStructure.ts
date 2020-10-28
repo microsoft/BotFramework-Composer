@@ -74,7 +74,7 @@ export const parseFileName = (name: string, defaultLocale: string) => {
 };
 
 export const isRecognizer = (fileName: string) => fileName.endsWith('.lu.dialog') || fileName.endsWith('.qna.dialog');
-export const isCrossTrainConfig = (fileName: string) => fileName.endsWith('cross-train.config');
+export const isCrossTrainConfig = (fileName: string) => fileName.endsWith('cross-train.config.json');
 
 export const defaultFilePath = (botName: string, defaultLocale: string, filename: string): string => {
   const BOTNAME = botName.toLowerCase();
