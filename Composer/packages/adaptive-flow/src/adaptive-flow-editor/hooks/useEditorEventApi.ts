@@ -79,7 +79,7 @@ export const useEditorEventApi = (
     switch (eventName) {
       case NodeEventTypes.Focus:
         handler = (e: { id: string; tab?: string }) => {
-          if (e.id === focusedId && e.tab === focusedTab) return;
+          if (e.id === focusedId && e.tab === focusedTab && selectedIds.length === 0) return;
           const newFocusedIds = e.id ? [e.id] : [];
           setSelectedIds([...newFocusedIds]);
           onFocusSteps([...newFocusedIds], e.tab);
