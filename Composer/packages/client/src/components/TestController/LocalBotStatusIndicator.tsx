@@ -10,10 +10,9 @@ import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 
 import { BotStatus, BotStatusesCopy } from '../../constants';
-import { botEndpointsState, botRuntimeErrorState, botStatusState, dispatcherState } from '../../recoilModel';
+import { botRuntimeErrorState, botStatusState, dispatcherState } from '../../recoilModel';
 import { useInterval } from '../../utils/hooks';
 
-import { EmulatorOpenButton } from './emulatorOpenButton';
 import { ErrorCallout } from './errorCallout';
 import { useLocalBotOperations } from './useLocalBotOperations';
 
@@ -34,8 +33,7 @@ interface LocalBotStatusIndicatorProps {
 
 export const LocalBotStatusIndicator: React.FC<LocalBotStatusIndicatorProps> = ({ projectId }) => {
   const currentBotStatus = useRecoilValue(botStatusState(projectId));
-  const botEndpoints = useRecoilValue(botEndpointsState);
-  const { openBotInEmulator, getPublishStatus } = useRecoilValue(dispatcherState);
+  const { getPublishStatus } = useRecoilValue(dispatcherState);
   const [botStatusText, setBotStatusText] = useState('');
   const [isRunning, setIntervalRunning] = useState(false);
   const botActionRef = useRef(null);
@@ -108,12 +106,6 @@ export const LocalBotStatusIndicator: React.FC<LocalBotStatusIndicatorProps> = (
   return (
     <div ref={botActionRef} css={botStatusContainer}>
       <span aria-live={'assertive'}>{botStatusText}</span>
-      <EmulatorOpenButton
-        botEndpoint={botEndpoints[projectId]}
-        botStatus={currentBotStatus}
-        hidden={false}
-        onClick={() => openBotInEmulator(projectId)}
-      />
       {botLoadErrorMsg?.message && (
         <ActionButton
           css={actionButton}

@@ -10,13 +10,14 @@ import formatMessage from 'format-message';
 
 import { LocalBotRuntime } from './LocalBotRuntime';
 import { LocalBotStatusIndicator } from './LocalBotStatusIndicator';
+import { OpenEmulatorButton } from './OpenEmulatorButton';
 
 const tableColumns: IColumn[] = [
   {
     key: 'control',
     name: '',
-    minWidth: 40,
-    maxWidth: 40,
+    minWidth: 20,
+    maxWidth: 20,
     fieldName: 'control',
     isRowHeader: false,
     onRender: ({ displayName, projectId }) => {
@@ -26,18 +27,27 @@ const tableColumns: IColumn[] = [
   {
     key: 'displayName',
     name: formatMessage('Bot'),
-    minWidth: 200,
-    maxWidth: 200,
+    minWidth: 150,
+    maxWidth: 150,
     fieldName: 'displayName',
     isRowHeader: true,
   },
   {
     key: 'status',
     name: formatMessage('Status'),
-    minWidth: 200,
+    minWidth: 100,
     isRowHeader: true,
     onRender: (item: { displayName: string; projectId: string }) => {
       return <LocalBotStatusIndicator projectId={item.projectId} />;
+    },
+  },
+  {
+    key: 'emulator',
+    name: '',
+    minWidth: 200,
+    isRowHeader: true,
+    onRender: ({ projectId }) => {
+      return <OpenEmulatorButton projectId={projectId} />;
     },
   },
 ];
