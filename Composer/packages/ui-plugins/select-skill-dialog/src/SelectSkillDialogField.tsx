@@ -1,14 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from 'react';
-import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
+import React, { FormEvent } from 'react';
 import { FieldProps, useShellApi } from '@bfc/extension-client';
 import formatMessage from 'format-message';
 import { getSkillNameFromSetting, Skill } from '@bfc/shared';
 import { Link } from 'office-ui-fabric-react/lib/components/Link/Link';
-
-import { ComboBoxField } from './ComboBoxField';
+import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { FieldLabel } from '@bfc/adaptive-form';
 
 const referBySettings = (skillName: string, property: string) => {
   return `=settings.skill['${skillName}'].${property}`;
@@ -28,7 +27,7 @@ export const SelectSkillDialogField: React.FC<FieldProps> = (props) => {
   const skillNameIdentifier = getSkillNameFromSetting(value?.skillEndpoint);
   const { manifest, name }: Skill = skills[skillNameIdentifier] || {};
 
-  const options: IComboBoxOption[] = [];
+  const options: IDropdownOption[] = [];
   for (const key in skills) {
     const skill = skills[key];
     const option = {
@@ -40,7 +39,7 @@ export const SelectSkillDialogField: React.FC<FieldProps> = (props) => {
     options.push(option);
   }
 
-  const handleChange = (_, option: IComboBoxOption) => {
+  const handleChange = (event: FormEvent<HTMLDivElement>, option?: IDropdownOption | undefined) => {
     if (option) {
       onChange({ ...value, ...option.data });
     }
@@ -48,12 +47,17 @@ export const SelectSkillDialogField: React.FC<FieldProps> = (props) => {
 
   return (
     <React.Fragment>
-      <ComboBoxField
+      <FieldLabel
+        required
         description={formatMessage('Name of skill dialog to call')}
-        id={'SkillDialogName'}
+        id={'SkillDialogNameField'}
         label={formatMessage('Skill Dialog Name')}
+      />
+      <Dropdown
+        disabled={Object.keys(skills).length === 0}
+        id={'SkillDialogName'}
         options={options}
-        value={skillNameIdentifier}
+        selectedKey={skillNameIdentifier}
         onChange={handleChange}
       />
       <Link

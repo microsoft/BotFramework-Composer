@@ -5,7 +5,7 @@
 import { jsx, css } from '@emotion/core';
 import formatMessage from 'format-message';
 import { IconButton, IButtonStyles, ActionButton } from 'office-ui-fabric-react/lib/Button';
-import { useCallback, Fragment, useState, useEffect } from 'react';
+import { useCallback, Fragment, useState, useEffect, useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
@@ -123,7 +123,8 @@ export const Header = () => {
   const { showing, status } = appUpdate;
   const [showStartBotsPanel, setStartPanelView] = useState(false);
   const runningBots = useRecoilValue(runningBotsSelector);
-  const [startPanelText, setStartPanelText] = useState('');
+  const isRunning = runningBots.projectIds.length > 0;
+
   const { projectIds: projectIdsRunning } = runningBots;
   const [areBotsStarted, setBotsInBotProjectStarted] = useState<boolean>(false);
   const { stopAllBots, startAllBots } = useLocalBotOperations();
@@ -144,17 +145,15 @@ export const Header = () => {
     }
   }, [projectIdsRunning]);
 
-  useEffect(() => {
-    if (runningBots.projectIds.length > 0) {
-      setStartPanelText(
-        `${formatMessage('Stop all bots')} (${runningBots.projectIds.length}/${runningBots.totalBots} ${formatMessage(
-          'running'
-        )})`
-      );
-    } else {
-      setStartPanelText(formatMessage('Start all bots'));
+  const startPanelText = useMemo(() => {
+    if (isRunning) {
+      return formatMessage('Stop all bots ({running}/{total}) running', {
+        running: runningBots.projectIds.length,
+        total: runningBots.totalBots,
+      });
     }
-  }, [runningBots]);
+    return formatMessage('Start all bots');
+  }, [runningBots, isRunning]);
 
   const onUpdateAvailableClick = useCallback(() => {
     setAppUpdateShowing(true);

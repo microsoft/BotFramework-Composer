@@ -24,7 +24,7 @@ export const skillsStateSelector = selector({
       const currentSkillManifestIndex = get(currentSkillManifestIndexState(skillId));
       const skillNameIdentifier = get(botNameIdentifierState(skillId));
       const botName = get(botDisplayNameState(skillId));
-      let manifest = undefined;
+      let manifest;
       if (manifests[currentSkillManifestIndex]) {
         manifest = manifests[currentSkillManifestIndex].content;
       }

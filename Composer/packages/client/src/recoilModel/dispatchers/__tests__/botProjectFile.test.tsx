@@ -159,7 +159,7 @@ describe('Bot Project File dispatcher', () => {
     expect(renderedComponent.current.botProjectFile.content.skills.oneNoteSkill.endpointName).toBe('remote');
   });
 
-  fit('should remove a skill from the bot project file', async () => {
+  it('should remove a skill from the bot project file', async () => {
     const manifestUrl = 'https://test-dev.azurewebsites.net/manifests/test-2-1-preview-1-manifest.json';
     await act(async () => {
       renderedComponent.current.setSkillsData({
