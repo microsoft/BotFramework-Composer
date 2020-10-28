@@ -44,7 +44,8 @@ const getLastModified = (extensionPath) => {
   let last = new Date(0);
 
   try {
-    const gitTimestamp = execSync(`git log -1 --pretty="%cI" "${extensionPath}"`, {
+    // prettier-ignore
+    const gitTimestamp = execSync(`git log -1 --pretty="%cI" "${extensionPath}"`, { // lgtm [js/shell-command-injection-from-environment]
       encoding: 'utf-8',
       stdio: ['ignore', 'pipe', 'ignore'],
     }).trim();
@@ -108,7 +109,7 @@ for (const entry of allExtensions) {
     if (!fs.existsSync(packageJSONPath)) {
       console.warn(`Ignore directory ${extPath} which is not a npm module.`);
       continue;
-    };
+    }
 
     const packageJSON = JSON.parse(fs.readFileSync(packageJSONPath));
     const lastModified = getLastModified(extPath);

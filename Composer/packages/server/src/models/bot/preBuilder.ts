@@ -108,7 +108,8 @@ export class PreBuilder {
           .map((item) => item.name);
 
         const updateFunc = recognizers[type] ?? recognizers.Default;
-        await updateFunc(item, targetFiles, this.storage, {
+        // prettier-ignore
+        await updateFunc(item, targetFiles, this.storage, { // lgtm [js/unvalidated-dynamic-method-call]
           defalutLanguage: 'en-us',
           folderPath: this.folderPath,
         });

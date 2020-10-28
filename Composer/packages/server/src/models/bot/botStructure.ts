@@ -109,10 +109,6 @@ export const defaultFilePath = (botName: string, defaultLocale: string, filename
       FILENAME: fileId,
       DIALOGNAME,
     });
-
-    return templateInterpolate(BotStructureTemplate.skillManifests, {
-      MANIFESTFILENAME: filename,
-    });
   }
 
   let TemplatePath = '';

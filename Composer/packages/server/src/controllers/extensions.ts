@@ -163,7 +163,10 @@ export async function performExtensionFetch(req: ExtensionFetchRequest, res: Res
     let error = e;
     if (e && e.json) {
       error = await e.json();
+      res.status(500).json(error);
+    } else {
+      // re-throw error to be handled by our error handler
+      throw e;
     }
-    res.status(500).send(error);
   }
 }
