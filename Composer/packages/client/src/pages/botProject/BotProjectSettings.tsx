@@ -90,7 +90,7 @@ const BotProjectSettings: React.FC<BotProjectSettingsProps> = (props) => {
       mainRegionName={formatMessage('Bot projects settings list View')}
       navLinks={navLinks}
       navRegionName={formatMessage('Bot Projects Settings Navigation Pane')}
-      title={formatMessage('Bot management and configurations.')}
+      title={formatMessage('Bot management and configurations')}
       toolbarItems={[]}
       onRenderHeaderContent={onRenderHeaderContent}
     >

@@ -49,7 +49,7 @@ const onRenderLabel = (props: ITextFieldProps | undefined) => {
     <div css={labelContainer}>
       <div css={customerLabel}> {props?.label} </div>
       <TooltipHost content={props?.label}>
-        <Icon iconName={'Unknown'} styles={unknownIconStyle(props?.required)} />
+        <Icon iconName="Unknown" styles={unknownIconStyle(props?.required)} />
       </TooltipHost>
     </div>
   );
@@ -75,7 +75,7 @@ const errorElement = (errorText: string) => {
   if (!errorText) return '';
   return (
     <div css={errorContainer}>
-      <Icon iconName={'ErrorBadge'} styles={errorIcon} />
+      <Icon iconName="ErrorBadge" styles={errorIcon} />
       <div css={errorTextStyle}>{errorText}</div>
     </div>
   );
@@ -88,7 +88,6 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
   const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
   const luFiles = useRecoilValue(luFilesState(projectId));
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
-
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
   const botProjectsMetaData = useRecoilValue(botProjectSpaceSelector);
   const botProject = botProjectsMetaData.find((b) => b.projectId === projectId);
@@ -137,7 +136,6 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
         {isRootBot && (
           <TextField
             aria-labelledby={'LUIS key'}
-            data-testid={'rootLUISKey'}
             errorMessage={isLUISKeyNeeded ? errorElement(luisKeyErrorMsg) : ''}
             label={formatMessage('LUIS key')}
             placeholder={'Enter LUIS key'}
@@ -186,7 +184,6 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
         {isRootBot && (
           <TextField
             aria-labelledby={'LUIS region'}
-            data-testid={'rootLUISRegion'}
             label={formatMessage('LUIS region')}
             placeholder={'Enter LUIS region'}
             styles={{ root: { marginTop: 10 } }}
@@ -220,7 +217,6 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
         {isRootBot && (
           <TextField
             aria-labelledby={'QnA Maker Subscription key'}
-            data-testid={'QnASubscriptionKey'}
             errorMessage={isQnAKeyNeeded ? errorElement(qnaKeyErrorMsg) : ''}
             label={formatMessage('QnA Maker Subscription key')}
             placeholder={'Enter QnA Maker Subscription key'}

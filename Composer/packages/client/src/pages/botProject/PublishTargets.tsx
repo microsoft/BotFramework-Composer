@@ -145,7 +145,11 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
               </div>
             );
           })}
-          <ActionButton styles={addPublishProfile} onClick={() => setAddDialogHidden(false)}>
+          <ActionButton
+            data-testid={'addNewPublishProfile'}
+            styles={addPublishProfile}
+            onClick={() => setAddDialogHidden(false)}
+          >
             {formatMessage('Add new publish profile')}
           </ActionButton>
         </div>

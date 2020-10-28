@@ -12,9 +12,39 @@ import {
   currentProjectIdState,
   projectMetaDataState,
   botProjectIdsState,
+  dialogsState,
+  luFilesState,
 } from '../../../src/recoilModel';
 
 const state = {
+  dialogs: [
+    {
+      content: {
+        recognizer: '',
+      },
+      id: 'dialog1',
+    },
+    {
+      content: {
+        recognizer: '',
+      },
+      id: 'dialog2',
+    },
+  ],
+  qnaFiles: [
+    {
+      content: '',
+      empty: true,
+      id: 'dialog1.en-us',
+    },
+  ],
+  luFiles: [
+    {
+      content: '',
+      empty: true,
+      id: 'dialog1.en-us',
+    },
+  ],
   projectId: 'test',
   settings: {},
   projectMetaDataState: {
@@ -30,6 +60,8 @@ describe('External Service', () => {
     const initRecoilState = ({ set }) => {
       set(currentProjectIdState, state.projectId);
       set(botProjectIdsState, state.botProjectIdsState);
+      set(dialogsState, state.dialogs);
+      set(luFilesState, state.luFiles);
       set(projectMetaDataState(state.projectId), state.projectMetaDataState);
       set(settingsState(state.projectId), state.settings);
       set(dispatcherState, {
