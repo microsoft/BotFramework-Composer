@@ -137,6 +137,7 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
         {isRootBot && (
           <TextField
             aria-labelledby={'LUIS key'}
+            data-testid={'rootLUISKey'}
             errorMessage={isLUISKeyNeeded ? errorElement(luisKeyErrorMsg) : ''}
             label={formatMessage('LUIS key')}
             placeholder={'Enter LUIS key'}
@@ -185,6 +186,7 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
         {isRootBot && (
           <TextField
             aria-labelledby={'LUIS region'}
+            data-testid={'rootLUISRegion'}
             label={formatMessage('LUIS region')}
             placeholder={'Enter LUIS region'}
             styles={{ root: { marginTop: 10 } }}
@@ -218,6 +220,7 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
         {isRootBot && (
           <TextField
             aria-labelledby={'QnA Maker Subscription key'}
+            data-testid={'QnASubscriptionKey'}
             errorMessage={isQnAKeyNeeded ? errorElement(qnaKeyErrorMsg) : ''}
             label={formatMessage('QnA Maker Subscription key')}
             placeholder={'Enter QnA Maker Subscription key'}

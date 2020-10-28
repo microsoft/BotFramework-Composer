@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { act, fireEvent } from '@bfc/test-utils';
+import { act, fireEvent, within } from '@bfc/test-utils';
 
 import { BotLanguage } from '../../../src/pages/botProject/BotLanguage';
 import { renderWithRecoilAndCustomDispatchers } from '../../testUtils';
@@ -17,41 +17,36 @@ const state = {
   },
 };
 
-describe('SkillHostEndPoint', () => {
+describe('Bot Language', () => {
   it('should submit settings', () => {
     const setSettingsMock = jest.fn();
+    const setLocaleMock = jest.fn();
+    const deleteLanguages = jest.fn();
     const initRecoilState = ({ set }) => {
       set(currentProjectIdState, state.projectId);
+      set();
       set(settingsState(state.projectId), state.settings);
       set(dispatcherState, {
         setSettings: setSettingsMock,
+        setLocale: setLocaleMock,
+        deleteLanguages: deleteLanguages,
       });
     };
     const { getByTestId } = renderWithRecoilAndCustomDispatchers(
       <BotLanguage projectId={state.projectId} />,
       initRecoilState
     );
-    const textField1 = getByTestId('MicrosoftAppId');
+    const defaultLanguageContainer = getByTestId('defaultLanguage');
+    expect(within(defaultLanguageContainer).getByText('English (United States)')).toBeInTheDocument();
+    const setDefaultLanguage = getByTestId('setDefaultLanguage');
     act(() => {
-      fireEvent.change(textField1, {
-        target: { value: 'myMicrosoftAppId' },
-      });
+      fireEvent.click(setDefaultLanguage);
     });
-    expect(setSettingsMock).toBeCalledWith('test', {
-      defaultLanguage: 'en-us',
-      languages: ['en-us', 'fr-fr'],
-      MicrosoftAppId: 'myMicrosoftAppId',
-    });
-    const textField2 = getByTestId('MicrosoftPassword');
+    expect(setLocaleMock).toBeCalledWith('fr-fr', 'test');
+    const remove = getByTestId('remove');
     act(() => {
-      fireEvent.change(textField2, {
-        target: { value: 'myMicrosoftPassword' },
-      });
+      fireEvent.click(remove);
     });
-    expect(setSettingsMock).toBeCalledWith('test', {
-      defaultLanguage: 'en-us',
-      languages: ['en-us', 'fr-fr'],
-      MicrosoftAppPassword: 'myMicrosoftPassword',
-    });
+    expect(deleteLanguages).toBeCalledWith({ languages: ['fr-fr'], projectId: 'test' });
   });
 });

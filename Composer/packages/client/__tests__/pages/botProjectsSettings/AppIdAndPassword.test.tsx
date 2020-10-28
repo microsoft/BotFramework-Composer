@@ -17,7 +17,7 @@ const state = {
   },
 };
 
-describe('SkillHostEndPoint', () => {
+describe('App Id and Password', () => {
   it('should submit settings', () => {
     const setSettingsMock = jest.fn();
     const initRecoilState = ({ set }) => {

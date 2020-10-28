@@ -95,9 +95,9 @@ export const BotLanguage: React.FC<BotLanguageProps> = (props) => {
               <div key={l.key} css={languageRowContainer}>
                 {l.key === defaultLanguage && (
                   <Fragment>
-                    <div css={languageTextStyle}>
+                    <div css={languageTextStyle} data-testid={'defaultLanguage'}>
                       {l.text}
-                      <span css={defaultLanguageTextStyle}> {'DEFAULT LANGUAGE'}</span>
+                      <span css={defaultLanguageTextStyle}> {formatMessage('DEFAULT LANGUAGE')}</span>
                     </div>
                   </Fragment>
                 )}
@@ -105,10 +105,15 @@ export const BotLanguage: React.FC<BotLanguageProps> = (props) => {
                   <div css={languageItemContainer}>
                     <div css={languageItem}>{l.text}</div>
                     <div css={languageButtonContainer}>
-                      <ActionButton styles={languageButton} onClick={(e) => setDefaultLanguage(l.key)}>
+                      <ActionButton
+                        data-testid={'setDefaultLanguage'}
+                        styles={languageButton}
+                        onClick={(e) => setDefaultLanguage(l.key)}
+                      >
                         {formatMessage('Set it as default language')}
                       </ActionButton>
                       <ActionButton
+                        data-testid={'remove'}
                         styles={languageButton}
                         onClick={() => deleteLanguages({ languages: [l.key], projectId: projectId })}
                       >
