@@ -3,7 +3,7 @@
 
 import { FieldProps } from '@bfc/extension-client';
 import { Intellisense } from '@bfc/intellisense';
-import React, { useRef, useCallback } from 'react';
+import React, { useRef } from 'react';
 
 import { getIntellisenseUrl } from '../../utils/getIntellisenseUrl';
 import { ExpressionSwitchWindow } from '../ExpressionSwitchWindow';

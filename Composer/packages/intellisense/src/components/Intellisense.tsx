@@ -76,7 +76,7 @@ export const Intellisense = React.memo(
       }
     }, [completionItems]);
 
-    // Closes the list of completion items if user clicks away from component
+    // Closes the list of completion items if user clicks away from component or presses "Escape"
     React.useEffect(() => {
       const outsideClickHandler = (event: MouseEvent) => {
         const { x, y } = event;
@@ -97,28 +97,21 @@ export const Intellisense = React.memo(
         }
       };
 
-      document.body.addEventListener('click', outsideClickHandler);
-
-      return () => {
-        document.body.removeEventListener('click', outsideClickHandler);
-      };
-    }, [focused, onBlur]);
-
-    // Closes the list of completion items if user presses "Escape"
-    React.useEffect(() => {
       const keyupHandler = (event: KeyboardEvent) => {
-        if (event.key === 'Escape') {
+        if (event.key === 'Escape' && focused) {
           setShowCompletionList(false);
           onBlur && onBlur(id);
         }
       };
 
+      document.body.addEventListener('click', outsideClickHandler);
       document.body.addEventListener('keyup', keyupHandler);
 
       return () => {
+        document.body.removeEventListener('click', outsideClickHandler);
         document.body.removeEventListener('keyup', keyupHandler);
       };
-    }, [onBlur]);
+    }, [focused, onBlur]);
 
     // When textField value is changed
     const onValueChanged = (newValue: string) => {
