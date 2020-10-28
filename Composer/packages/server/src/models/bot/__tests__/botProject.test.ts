@@ -299,9 +299,7 @@ describe('buildFiles', () => {
       { id: 'b.en-us', isEmpty: false },
       { id: 'bot1.en-us', isEmpty: false },
     ];
-    const crossTrainConfig = {};
-    const recognizerTypes: RecognizerTypes = { a: 'DefaultRecognizer', b: 'DefaultRecognizer', c: 'DefaultRecognizer' };
-    await proj.buildFiles({ luisConfig, qnaConfig, luResource, qnaResource, crossTrainConfig, recognizerTypes });
+    await proj.buildFiles({ luisConfig, qnaConfig, luResource, qnaResource });
 
     try {
       if (fs.existsSync(path)) {

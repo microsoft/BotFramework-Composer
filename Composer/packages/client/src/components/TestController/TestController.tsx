@@ -9,7 +9,6 @@ import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 import { IConfig, IPublishConfig, defaultPublishConfig } from '@bfc/shared';
-import { useRecognizerConfig } from '@bfc/extension-client';
 
 import {
   botEndpointsState,
@@ -68,7 +67,6 @@ export const TestController: React.FC<{ projectId: string }> = (props) => {
   const settings = useRecoilValue(settingsState(projectId));
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   const botLoadErrorMsg = useRecoilValue(botLoadErrorState(projectId));
-  const { recognizers } = useRecognizerConfig();
 
   const botEndpoints = useRecoilValue(botEndpointsState);
   const {
