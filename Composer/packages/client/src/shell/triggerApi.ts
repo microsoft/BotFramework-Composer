@@ -25,6 +25,15 @@ import { dispatcherState } from './../recoilModel/DispatcherWrapper';
 import { useActionApi } from './actionApi';
 import { useLuApi } from './luApi';
 
+const defaultQnATriggerData = {
+  $kind: qnaMatcherKey,
+  errors: { $kind: '', intent: '', event: '', triggerPhrases: '', regEx: '', activity: '' },
+  event: '',
+  intent: '',
+  regEx: '',
+  triggerPhrases: '',
+};
+
 function createTriggerApi(
   state: { projectId; schemas; dialogs; locale; lgFiles },
   dispatchers: Dispatcher, //TODO
@@ -123,9 +132,21 @@ function createTriggerApi(
     deleteActions(dialogId, actions);
   };
 
+  const createQnATrigger = async (id) => {
+    const targetDialog = state.dialogs.find((item) => item.id === id);
+    if (!targetDialog) throw new Error(`dialog ${id} not found`);
+    const existedQnATrigger = get(targetDialog, 'content.triggers', []).find(
+      (item) => item.$kind === SDKKinds.OnQnAMatch
+    );
+    if (!existedQnATrigger) {
+      await createTriggerHandler(id, defaultQnATriggerData);
+    }
+  };
+
   return {
     createTrigger: createTriggerHandler,
     deleteTrigger,
+    createQnATrigger,
   };
 }
 

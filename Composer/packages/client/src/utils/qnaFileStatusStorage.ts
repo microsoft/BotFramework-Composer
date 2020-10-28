@@ -36,7 +36,7 @@ class QnaFileStatusStorage {
   }
 
   public removeFileStatus(projectId: string, fileId: string) {
-    if (!projectId) return;
+    if (!projectId || !this._all[projectId]) return;
     if (typeof this._all[projectId][fileId] !== 'undefined') {
       delete this._all[projectId][fileId];
       this.storage.set(KEY, this._all);
