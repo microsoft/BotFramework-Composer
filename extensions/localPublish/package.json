@@ -12,7 +12,6 @@
   "dependencies": {
     "@bfc/extension": "file:../../Composer/packages/extension",
     "@botframework-composer/types": "latest",
-    "@types/tcp-port-used": "1.0.0",
     "adm-zip": "^0.4.14",
     "archiver": "^5.0.2",
     "globby": "^11.0.0",
@@ -26,6 +25,7 @@
     "bl": "^4.0.3"
   },
   "devDependencies": {
-    "@types/node": "^14.11.8"
+    "@types/node": "^14.11.8",
+    "@types/tcp-port-used": "1.0.0"
   }
 }
