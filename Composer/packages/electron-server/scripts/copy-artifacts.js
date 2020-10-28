@@ -11,7 +11,7 @@ const { log } = require('./common');
 
 const oneauthSource = () => {
   if (process.env.COMPOSER_ENABLE_ONEAUTH && ['win32', 'darwin'].includes(process.platform)) {
-    const oneauthPath = process.env.ONEAUTH_PATH || path.resolve(__dirname, '../oneauth-temp/oneauth');
+    const oneauthPath = process.env.ONEAUTH_PATH || path.resolve(__dirname, '../oneauth-temp');
     return { source: oneauthPath, dest: 'oneauth', force: true };
   }
 
