@@ -170,6 +170,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const [dialogModalInfo, setDialogModalInfo] = useState<undefined | { projectId: string }>(undefined);
   const [exportSkillModalInfo, setExportSkillModalInfo] = useState<undefined | { projectId: string }>(undefined);
   const [brokenSkillInfo, setBrokenSkillInfo] = useState<undefined | TreeLink>(undefined);
+  const [brokenSkillRepairCallback, setBrokenSkillRepairCallback] = useState<undefined | (() => void)>(undefined);
   const [dialogJsonVisible, setDialogJsonVisibility] = useState(false);
   const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0]);
   const [warningIsVisible, setWarningIsVisible] = useState(true);
@@ -776,20 +777,30 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
               setBrokenSkillInfo(undefined);
             }}
             onNext={(option) => {
+              const skillIdToRemove = brokenSkillInfo.skillId;
+              if (!skillIdToRemove) return;
+
               if (option === RepairSkillModalOptionKeys.repairSkill) {
                 setCreationFlowTypes('Skill');
                 setCreationFlowStatus(CreationFlowStatus.OPEN);
-                navigate(`/projects/open`);
+                setBrokenSkillRepairCallback(() => {
+                  removeSkillFromBotProject(skillIdToRemove);
+                });
               } else if ((option = RepairSkillModalOptionKeys.removeSkill)) {
-                const skillIdToRemove = brokenSkillInfo.skillId;
-                if (!skillIdToRemove) return;
                 removeSkillFromBotProject(skillIdToRemove);
               }
               setBrokenSkillInfo(undefined);
             }}
           ></RepairSkillModal>
         )}
-        <CreationModal onDismiss={() => {}} onSubmit={() => {}}></CreationModal>
+        <CreationModal
+          onDismiss={() => {}}
+          onSubmit={() => {
+            if (brokenSkillRepairCallback) {
+              brokenSkillRepairCallback();
+            }
+          }}
+        ></CreationModal>
       </Suspense>
     </React.Fragment>
   );
