@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import { FC, useContext, useCallback } from 'react';
-import { generateSDKTitle, PromptTab } from '@bfc/shared';
+import { generateActionTitle, PromptTab } from '@bfc/shared';
 import { useShellApi } from '@bfc/extension-client';
 
 import { AttrNames } from '../constants/ElementAttributes';
@@ -76,7 +76,7 @@ export const ActionNodeWrapper: FC<NodeWrapperProps> = ({ id, tab, data, onEvent
       `}
       data-testid="ActionNodeWrapper"
       {...declareElementAttributes(selectableId, id)}
-      aria-label={generateSDKTitle(data, '', tab)}
+      aria-label={generateActionTitle(data, '', '', tab)}
       onClick={(e) => {
         e.stopPropagation();
         e.preventDefault();

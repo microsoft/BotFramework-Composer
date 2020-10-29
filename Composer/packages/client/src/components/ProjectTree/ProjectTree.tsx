@@ -72,6 +72,10 @@ const SUMMARY_ARROW_SPACE = 28; // the rough pixel size of the dropdown arrow to
 
 // -------------------- Helper functions -------------------- //
 
+const getTriggerIndex = (trigger: ITrigger, dialog: DialogInfo): number => {
+  return dialog.triggers.indexOf(trigger);
+};
+
 // sort trigger groups so that NoGroupingTriggerGroupName is last
 const sortTriggerGroups = (x: string, y: string): number => {
   if (x === NoGroupingTriggerGroupName && y !== NoGroupingTriggerGroupName) {
@@ -202,6 +206,9 @@ export const ProjectTree: React.FC<Props> = ({
   };
 
   const handleOnSelect = (link: TreeLink) => {
+    // Skip state change when link not changed.
+    if (isEqual(link, selectedLink)) return;
+
     setSelectedLink(link);
     onSelect?.(link); // if we've defined a custom onSelect, use it
     if (link.dialogName != null) {
@@ -311,7 +318,6 @@ export const ProjectTree: React.FC<Props> = ({
   };
 
   const renderTrigger = (item: any, dialog: DialogInfo, projectId: string): React.ReactNode => {
-    // NOTE: put the form-dialog detection here when it's ready
     const link: TreeLink = {
       displayName: item.displayName,
       warningContent: item.warningContent,
@@ -358,7 +364,8 @@ export const ProjectTree: React.FC<Props> = ({
   const renderTriggerList = (triggers: ITrigger[], dialog: DialogInfo, projectId: string) => {
     return triggers
       .filter((tr) => filterMatch(dialog.displayName) || filterMatch(getTriggerName(tr)))
-      .map((tr, index) => {
+      .map((tr) => {
+        const index = getTriggerIndex(tr, dialog);
         const warningContent = triggerNotSupported(dialog, tr);
         const errorContent = notificationMap[projectId][dialog.id].some(
           (diag) => diag.severity === DiagnosticSeverity.Error && diag.path?.match(RegExp(`triggers\\[${index}\\]`))
