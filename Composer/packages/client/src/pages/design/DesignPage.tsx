@@ -222,7 +222,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         return;
       }
 
-      setDesignPageLocation(skillId, {
+      setDesignPageLocation(skillId ?? projectId, {
         dialogId,
         selected,
         focused,

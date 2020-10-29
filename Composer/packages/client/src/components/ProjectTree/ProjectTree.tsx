@@ -13,7 +13,6 @@ import debounce from 'lodash/debounce';
 import { useRecoilValue } from 'recoil';
 import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 import { extractSchemaProperties, groupTriggersByPropertyReference, NoGroupingTriggerGroupName } from '@bfc/indexers';
-import isMatch from 'lodash/isMatch';
 import isEqual from 'lodash/isEqual';
 
 import {
@@ -211,9 +210,13 @@ export const ProjectTree: React.FC<Props> = ({
     return bot.dialogs.some(dialogHasErrors(bot.projectId));
   };
 
-  const isTriggerMatch = (link1?: Partial<TreeLink>, link2?: Partial<TreeLink>) => {
-    if (link1 == null || link2 == null) return false;
-    return isMatch(link1, link2);
+  const doesLinkMatch = (linkInTree?: Partial<TreeLink>, selectedLink?: Partial<TreeLink>) => {
+    if (linkInTree == null || selectedLink == null) return false;
+    return (
+      linkInTree.skillId === selectedLink.skillId &&
+      linkInTree.dialogId === selectedLink.dialogId &&
+      linkInTree.trigger === selectedLink.trigger
+    );
   };
 
   const handleOnSelect = (link: TreeLink) => {
@@ -248,7 +251,7 @@ export const ProjectTree: React.FC<Props> = ({
           showProps
           forceIndent={bot.isRemote ? SUMMARY_ARROW_SPACE : 0}
           icon={bot.isRemote ? icons.EXTERNAL_SKILL : icons.BOT}
-          isActive={isTriggerMatch(link, selectedLink)}
+          isActive={doesLinkMatch(link, selectedLink)}
           link={link}
           menu={[{ label: formatMessage('Create/edit skill manifest'), onClick: () => {} }]}
           onSelect={handleOnSelect}
@@ -295,7 +298,7 @@ export const ProjectTree: React.FC<Props> = ({
           showProps
           forceIndent={showTriggers ? 0 : SUMMARY_ARROW_SPACE}
           icon={isFormDialog ? icons.FORM_DIALOG : icons.DIALOG}
-          isActive={isTriggerMatch(link, selectedLink)}
+          isActive={doesLinkMatch(link, selectedLink)}
           link={link}
           menu={[
             {
@@ -340,7 +343,7 @@ export const ProjectTree: React.FC<Props> = ({
         dialogName={dialog.displayName}
         forceIndent={48}
         icon={icons.TRIGGER}
-        isActive={isTriggerMatch(link, selectedLink)}
+        isActive={doesLinkMatch(link, selectedLink)}
         link={link}
         menu={[
           {
