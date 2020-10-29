@@ -1,15 +1,11 @@
 
-# Run this job every night at midnight
+# Run this job every night at midnight on the main branch
 schedules:
 - cron: "0 0 * * *"
   displayName: Nightly static analysis build
   branches:
     include:
     - main
-
-# main branch
-trigger:
-- main
 
 # Semmle task only works on Windows
 pool:
