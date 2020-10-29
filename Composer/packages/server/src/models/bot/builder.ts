@@ -15,7 +15,7 @@ import { IOrchestratorBuildOutput, IOrchestratorNLRList, IOrchestratorProgress }
 import { luImportResolverGenerator, getLUFiles, getQnAFiles } from './luResolver';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const crossTrainer = require('@bfcomposer/bf-lu/lib/parser/cross-train/crossTrainer.js');
+const crossTrainer = require('@microsoft/bf-lu/lib/parser/cross-train/crossTrainer.js');
 const luBuild = require('@microsoft/bf-lu/lib/parser/lubuild/builder.js');
 const qnaBuild = require('@microsoft/bf-lu/lib/parser/qnabuild/builder.js');
 const LuisBuilder = require('@microsoft/bf-lu/lib/parser/luis/luisBuilder');
