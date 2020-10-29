@@ -72,8 +72,8 @@ async function createAppDataDir() {
   process.env.COMPOSER_EXTENSION_MANIFEST = join(composerAppDataPath, 'extensions.json');
   process.env.COMPOSER_EXTENSION_DATA_DIR = join(composerAppDataPath, 'extension-data');
   process.env.COMPOSER_REMOTE_EXTENSIONS_DIR = join(composerAppDataPath, 'extensions');
-  process.env.COMPOSER_REMOTE_TEMPLATES_DIR = join(composerAppDataPath, 'remoteTemplates');
-  process.env.COMPOSER_TEMP_DIR = join(composerAppDataPath, 'temp');
+  process.env.COMPOSER_TEMP_DIR = join(composerAppDataPath, '.temp');
+  process.env.COMPOSER_BACKUP_DIR = join(composerAppDataPath, '.backup');
 
   log('creating composer app data path at: ', composerAppDataPath);
 
