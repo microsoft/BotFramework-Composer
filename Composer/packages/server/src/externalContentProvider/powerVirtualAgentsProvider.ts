@@ -114,6 +114,10 @@ export class PowerVirtualAgentsProvider extends ExternalContentProvider<PowerVir
     return alias;
   }
 
+  public async authenticate(): Promise<string> {
+    return this.getAccessToken();
+  }
+
   private async getAccessToken(): Promise<string> {
     try {
       // login to the 1P app and get an access token

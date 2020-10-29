@@ -8,13 +8,34 @@ import logger from '../logger';
 
 const log = logger.extend('import-controller');
 
-interface StartImportRequest extends Request {
+type StartImportRequest = Request & {
   params: {
     source: ExternalContentProviderType;
   };
   query: {
     payload: string;
   };
+};
+
+type AuthenticateRequest = StartImportRequest;
+
+/** Route exists so that the front end knows when the import flow is authenticated and can start displaying import status. */
+async function authenticate(req: AuthenticateRequest, res: Response, next) {
+  const { source } = req.params;
+  const { payload } = req.query;
+  const metadata = JSON.parse(payload);
+
+  const contentProvider = contentProviderFactory.getProvider({ type: source, metadata });
+  if (contentProvider) {
+    if (contentProvider.authenticate) {
+      const accessToken = await contentProvider.authenticate();
+      return res.status(200).json({ accessToken });
+    }
+    // no-op
+    res.sendStatus(200);
+  } else {
+    res.status(400).json({ message: 'No content provider found for source: ' + source });
+  }
 }
 
 async function startImport(req: StartImportRequest, res: Response, next) {
@@ -49,13 +70,14 @@ async function startImport(req: StartImportRequest, res: Response, next) {
       const msg = 'Error importing bot content: ' + e;
       const err = new Error(msg);
       log(err);
-      res.status(500).send(err.stack);
+      res.status(500).json({ message: err.stack });
     }
   } else {
-    res.status(500).send('No content provider found for source: ' + source);
+    res.status(400).json({ message: 'No content provider found for source: ' + source });
   }
 }
 
 export const ImportController = {
+  authenticate,
   startImport,
 };

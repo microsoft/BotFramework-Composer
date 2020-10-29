@@ -28,7 +28,7 @@ import plugins from '../../plugins';
 import { CreateOptions } from './CreateOptions';
 import { OpenProject } from './OpenProject';
 import DefineConversation from './DefineConversation';
-import { ImportModal } from '../ImportModal';
+import { ImportModal } from '../ImportModal/ImportModal';
 
 type CreationFlowProps = RouteComponentProps<{}>;
 

@@ -45,4 +45,9 @@ export abstract class ExternalContentProvider<T extends ContentProviderMetadata>
    * updated content to the existing project.
    */
   abstract async getAlias?(): Promise<string>;
+
+  /**
+   * (Optional) Performs any necessary authentication for the service and returns an access token.
+   */
+  abstract async authenticate?(): Promise<string>;
 }
