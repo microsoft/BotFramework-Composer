@@ -25,8 +25,10 @@ export const skillsStateSelector = selector({
       const skillNameIdentifier = get(botNameIdentifierState(skillId));
       const botName = get(botDisplayNameState(skillId));
       let manifest = undefined;
+      let manifestId;
       if (manifests[currentSkillManifestIndex]) {
         manifest = manifests[currentSkillManifestIndex].content;
+        manifestId = manifests[currentSkillManifestIndex].id;
       }
 
       const { isRemote } = get(projectMetaDataState(skillId));
@@ -34,6 +36,7 @@ export const skillsStateSelector = selector({
         result[skillNameIdentifier] = {
           id: skillId,
           manifest,
+          manifestId,
           name: botName,
           remote: isRemote,
         };
