@@ -23,6 +23,7 @@ export class DefaultSettingManager extends FileSettingManager {
         UseInspectionMiddleware: false,
         RemoveRecipientMention: false,
       },
+      httpProxy: '',
       MicrosoftAppPassword: '',
       MicrosoftAppId: '',
       cosmosDb: {
