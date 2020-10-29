@@ -1,7 +1,12 @@
+/** @jsx jsx */
+import { jsx, css } from '@emotion/core';
 import { PublishTarget } from '@botframework-composer/types';
 import formatMessage from 'format-message';
-import { DefaultButton, Dialog, DialogFooter, DialogType, PrimaryButton } from 'office-ui-fabric-react';
+import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
+import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import React, { useCallback, useState } from 'react';
+
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 
 type PullDialogProps = {
@@ -11,12 +16,18 @@ type PullDialogProps = {
   selectedTarget: PublishTarget | undefined;
 };
 
-type PullDialogStatus = 'idle' | 'inProgress' | 'done' | 'upToDate' | 'error';
+type PullDialogStatus = 'idle' | 'inProgress' | 'done' | 'error';
+
+const boldText = css`
+  font-weight: ${FontWeights.semibold};
+  word-break: break-work;
+`;
 
 export const PullDialog: React.FC<PullDialogProps> = (props) => {
   const { hidden = true, onDismiss, projectId, selectedTarget } = props;
   const [status, setStatus] = useState<PullDialogStatus>('idle');
   const [error, setError] = useState<string>('');
+  const [backupPath, setBackupPath] = useState<string>('');
 
   const pull = useCallback(() => {
     if (selectedTarget) {
@@ -30,19 +41,17 @@ export const PullDialog: React.FC<PullDialogProps> = (props) => {
             method: 'POST',
           });
           const { status } = res;
-          if (status === 304) {
-            // content is up to date
-            setStatus('upToDate');
-            return;
-          }
           if (status === 200) {
+            const { backupLocation } = await res.json();
             // show complete
             setStatus('done');
+            setBackupPath(backupLocation);
             return;
           }
 
           // not what we expected
-          setError(formatMessage(`Something happened while attempting to pull: ${res.statusText}`));
+          const { message } = await res.json();
+          setError(formatMessage('Something happened while attempting to pull: ') + message);
           setStatus('error');
         } catch (e) {
           // something bad happened
@@ -84,6 +93,8 @@ export const PullDialog: React.FC<PullDialogProps> = (props) => {
             title: formatMessage('Pull complete'),
           }}
         >
+          <p>{formatMessage('Your old bot content was backed up to:')}</p>
+          <p css={boldText}>{backupPath}</p>
           <DialogFooter>
             <PrimaryButton text={formatMessage('Ok')} onClick={onCancelOrDone} />
           </DialogFooter>
@@ -96,7 +107,7 @@ export const PullDialog: React.FC<PullDialogProps> = (props) => {
           hidden={false}
           dialogContentProps={{
             title: formatMessage('Error'),
-            subText: formatMessage(error),
+            subText: error,
           }}
         >
           <DialogFooter>
@@ -113,7 +124,7 @@ export const PullDialog: React.FC<PullDialogProps> = (props) => {
           dialogContentProps={{
             title: 'Pull content?',
             subText:
-              'WARNING: Pulling bot content from the selected profile is a destructive operation. We will store your old bot contents in <BOTPROJECT>/.backup',
+              'WARNING: Pulling bot content from the selected profile is a destructive operation. We will backup your old bot contents to a separate folder.',
           }}
         >
           <DialogFooter>

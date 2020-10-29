@@ -352,7 +352,7 @@ export const PublishController = {
           }
           if (!results.zipPath) {
             // couldn't get zip from publish target
-            return res.status(500);
+            return res.status(500).json({ message: 'Could not get .zip from publishing target.' });
           }
 
           // TODO: stop current bot project from running?
@@ -361,11 +361,11 @@ export const PublishController = {
           const backupLocation = await BotProjectService.backupProject(currentProject);
 
           // extract zip into new "template" directory
-          const baseDir = process.env.COMPOSER_REMOTE_TEMPLATES_DIR as string;
+          const baseDir = process.env.COMPOSER_TEMP_DIR as string;
           const templateDir = join(baseDir, 'extractedTemplate-' + Date.now());
           ensureDirSync(templateDir);
           log('Extracting pulled assets into temp template folder %s ', templateDir);
-          await extractZip(results.zipPath, { dir: currentProject.dir });
+          await extractZip(results.zipPath, { dir: templateDir });
 
           // TODO: abstract away the template copying logic so that the code can be shared between project and publisher controllers
           // (see copyTemplateToExistingProject())
@@ -385,8 +385,9 @@ export const PublishController = {
             currentProject.settings?.defaultLanguage || 'en-us'
           );
           log('Copied template content successfully.');
-          // clean up the temporary template directory -- fire and forget
+          // clean up the temporary template & zip directories -- fire and forget
           remove(templateDir);
+          remove(results.zipPath);
 
           // update eTag
           log('Updating etag.');
