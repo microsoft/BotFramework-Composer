@@ -4,14 +4,14 @@
 
 //TODO: refactor the router to use one-way data flow
 import { useRecoilCallback, CallbackInterface } from 'recoil';
-import { PromptTab, SDKKinds } from '@bfc/shared';
+import { PromptTab } from '@bfc/shared';
 import cloneDeep from 'lodash/cloneDeep';
 
 import { currentProjectIdState } from '../atoms';
 import { encodeArrayPathToDesignerPath } from '../../utils/convertUtils/designerPathEncoder';
 import { dialogsSelectorFamily, rootBotProjectIdSelector } from '../selectors';
 
-import { createSelectedPath, getSelected } from './../../utils/dialogUtil';
+import { getSelected } from './../../utils/dialogUtil';
 import { BreadcrumbItem } from './../../recoilModel/types';
 import { breadcrumbState, designPageLocationState, focusPathState } from './../atoms/botState';
 import {

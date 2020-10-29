@@ -200,18 +200,7 @@ describe('navigation dispatcher', () => {
         await dispatcher.navTo(projectId, 'dialogId', []);
       });
       expectNavTo(`/bot/${projectId}/dialogs/dialogId`);
-      expect(mockConvertPathToUrl).toBeCalledWith(projectId, projectId, 'dialogId', undefined);
-    });
-
-    it('redirects to the begin dialog trigger', async () => {
-      mockConvertPathToUrl.mockReturnValue(`/bot/${projectId}/dialogs/newDialogId?selection=triggers[0]`);
-      mockCreateSelectedPath.mockReturnValue('triggers[0]');
-      await act(async () => {
-        await dispatcher.navTo(projectId, 'newDialogId', []);
-      });
-      expectNavTo(`/bot/${projectId}/dialogs/newDialogId?selection=triggers[0]`);
-      expect(mockConvertPathToUrl).toBeCalledWith(projectId, projectId, 'newDialogId', 'triggers[0]');
-      expect(mockCreateSelectedPath).toBeCalledWith(0);
+      expect(mockConvertPathToUrl).toBeCalledWith(projectId, projectId, 'dialogId');
     });
 
     it("doesn't navigate to a destination where we already are", async () => {
