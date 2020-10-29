@@ -139,7 +139,13 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
           <span>
             {item.message}
             {item.action && (
-              <Link aria-label={item.action.label} href={item.action.href} rel="noopener noreferrer" target="_blank">
+              <Link
+                aria-label={item.action.label}
+                href={item.action.href}
+                rel="noopener noreferrer"
+                style={{ marginLeft: '3px' }}
+                target="_blank"
+              >
                 {item.action.label}
               </Link>
             )}

@@ -1,5 +1,8 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import * as React from 'react';
 import { RouteComponentProps } from '@reach/router';
 import { Dialog, DialogType, IDialogContentProps } from 'office-ui-fabric-react/lib/Dialog';
@@ -60,7 +63,7 @@ export const ImportStatus: React.FC<RouteComponentProps & ImportStatusProps> = (
         </p>
       );
       return (
-        <Dialog hidden={false} dialogContentProps={contentProps} styles={{ main: { height: 263 } }} minWidth={560}>
+        <Dialog dialogContentProps={contentProps} hidden={false} minWidth={560} styles={{ main: { height: 263 } }}>
           <span style={{ display: 'flex', justifyContent: 'center' }}>
             {getServiceIcon(source)}
             {composerIcon}
@@ -80,7 +83,7 @@ export const ImportStatus: React.FC<RouteComponentProps & ImportStatusProps> = (
         </p>
       );
       return (
-        <Dialog hidden={false} dialogContentProps={contentProps} styles={{ main: { height: 263 } }} minWidth={560}>
+        <Dialog dialogContentProps={contentProps} hidden={false} minWidth={560} styles={{ main: { height: 263 } }}>
           <span style={{ display: 'flex', justifyContent: 'center' }}>
             {getServiceIcon(source)}
             {composerIcon}
@@ -93,7 +96,7 @@ export const ImportStatus: React.FC<RouteComponentProps & ImportStatusProps> = (
     case 'copying': {
       const label = <p style={{ fontSize: 16 }}>{formatMessage('Almost there. Setting things up...')}</p>;
       return (
-        <Dialog hidden={false} dialogContentProps={contentProps} styles={{ main: { height: 263 } }} minWidth={560}>
+        <Dialog dialogContentProps={contentProps} hidden={false} minWidth={560} styles={{ main: { height: 263 } }}>
           <span style={{ display: 'flex', justifyContent: 'center' }}>{composerIcon}</span>
           <ProgressIndicator label={label} styles={{ itemName: { textAlign: 'center' } }} />
         </Dialog>

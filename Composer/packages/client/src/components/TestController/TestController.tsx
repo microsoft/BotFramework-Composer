@@ -8,7 +8,7 @@ import { jsx, css } from '@emotion/core';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
-import { IConfig, IPublishConfig, defaultPublishConfig } from '@bfc/shared';
+import { IConfig, IPublishConfig, defaultPublishConfig, checkForPVASchema } from '@bfc/shared';
 
 import {
   botEndpointsState,
@@ -215,12 +215,8 @@ export const TestController: React.FC<{ projectId: string }> = (props) => {
     );
   }
 
-  const checkForPVASchema = () => {
-    return schemas.sdk.content.definitions['Microsoft.VirtualAgents.Recognizer'] !== undefined;
-  };
-
   const renderEmulatorOpenButton = () => {
-    if (checkForPVASchema()) return null;
+    if (checkForPVASchema(schemas.sdk)) return null;
     return (
       <EmulatorOpenButton
         botEndpoint={botEndpoints[projectId] || 'http://localhost:3979/api/messages'}
@@ -232,7 +228,7 @@ export const TestController: React.FC<{ projectId: string }> = (props) => {
   };
 
   const renderPublishingStatus = () => {
-    if (checkForPVASchema()) return null;
+    if (checkForPVASchema(schemas.sdk)) return null;
     return (
       <div
         aria-label={publishing ? formatMessage('Publishing') : reloading ? formatMessage('Reloading') : ''}
@@ -241,14 +237,13 @@ export const TestController: React.FC<{ projectId: string }> = (props) => {
     );
   };
 
-  // const renderLoading = () => {
-  //   if (checkForPVASchema()) return null;
-  //   return <Loading botStatus={botStatus} />;
-  // };
+  const renderLoading = () => {
+    if (checkForPVASchema(schemas.sdk)) return null;
+    return <Loading botStatus={botStatus} />;
+  };
 
   const renderStartButton = () => {
-    if (checkForPVASchema()) return null;
-    console.log('HEY', checkForPVASchema());
+    if (checkForPVASchema(schemas.sdk)) return null;
     return (
       <PrimaryButton
         css={botButton}
@@ -265,7 +260,7 @@ export const TestController: React.FC<{ projectId: string }> = (props) => {
       <div ref={botActionRef} css={bot}>
         {renderEmulatorOpenButton()}
         {renderPublishingStatus()}
-        <Loading botStatus={botStatus} />
+        {renderLoading()}
         <div ref={addRef}>
           <ErrorInfo count={errorLength} hidden={!showError} onClick={handleErrorButtonClick} />
           <WarningInfo count={warningLength} hidden={!showWarning} onClick={handleErrorButtonClick} />
