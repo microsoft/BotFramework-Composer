@@ -6,8 +6,8 @@ import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dia
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 
-import { LoadingSpinner } from './LoadingSpinner';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { ImportStatus } from './ImportStatus';
 
 type ImportedProjectInfo = {
   alias?: string;
@@ -19,12 +19,23 @@ type ImportedProjectInfo = {
   urlSuffix?: string;
 };
 
+type ImportPayload = {
+  name: string;
+  description?: string;
+};
+
 type ExistingProjectInfo = {
   id: string;
   location: string;
 };
 
-type ImportModalState = 'importing' | 'prompting' | 'saveToExistingComplete' | 'failed';
+type ImportModalState =
+  | 'downloadingContent'
+  | 'promptingToSave'
+  | 'saveToExistingComplete'
+  | 'failed'
+  | 'signingIn'
+  | 'copyingContent';
 
 const boldText = css`
   font-weight: ${FontWeights.semibold};
@@ -33,8 +44,10 @@ const boldText = css`
 
 export const ImportModal: React.FC<RouteComponentProps> = (props) => {
   const { location } = props;
+  const [importSource, setImportSource] = useState<string>('');
+  const [importPayload, setImportPayload] = useState<ImportPayload>({ name: '', description: '' });
   const [importedProjectInfo, setImportedProjectInfo] = useState<ImportedProjectInfo | undefined>(undefined);
-  const [modalState, setModalState] = useState<ImportModalState>('importing');
+  const [modalState, setModalState] = useState<ImportModalState>('signingIn');
   const [existingProject, setExistingProject] = useState<ExistingProjectInfo | undefined>(undefined);
   const [error, setError] = useState<any>(undefined);
   const [backupLocation, setBackupLocation] = useState<string>('');
@@ -64,7 +77,7 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
 
   const importToExistingProject = useCallback(() => {
     if (importedProjectInfo && existingProject) {
-      setModalState('importing');
+      setModalState('copyingContent');
 
       const backupAndSave = async () => {
         try {
@@ -98,40 +111,69 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
   }, [existingProject, importedProjectInfo]);
 
   useEffect(() => {
-    const doImport = async () => {
+    if (modalState === 'downloadingContent') {
+      const importBotContent = async () => {
+        if (location && location.href) {
+          try {
+            const { description, name } = importPayload;
+
+            let res = await fetch(
+              `/api/import/${importSource}?payload=${encodeURIComponent(JSON.stringify(importPayload))}`,
+              {
+                method: 'POST',
+              }
+            );
+            if (res.status !== 200) {
+              throw `Something went wrong during import: ${res.status} ${res.statusText}`;
+            }
+            const data = await res.json();
+            const { alias, eTag, templateDir, urlSuffix } = data;
+            const projectInfo = { description, name, templateDir, urlSuffix, eTag, source: importSource, alias };
+            setImportedProjectInfo(projectInfo);
+
+            if (alias) {
+              // check to see if Composer currently has a bot project corresponding to the alias
+              res = await fetch(`/api/projects/alias/${alias}`, { method: 'GET' });
+              if (res.status === 200) {
+                const project = await res.json();
+                setExistingProject(project);
+                // ask user if they want to save to existing, or save as a new project
+                setModalState('promptingToSave');
+                return;
+              }
+            }
+            importAsNewProject(projectInfo);
+          } catch (e) {
+            // something went wrong, abort and navigate to the home page
+            console.error(`Aborting import: ${e}`);
+            navigate('/home');
+          }
+        }
+      };
+      importBotContent();
+    }
+  }, [modalState, importPayload, importSource]);
+
+  useEffect(() => {
+    const signIn = async () => {
       if (location && location.href) {
         try {
+          // parse data from url and store in state
           const url = new URL(location.href);
           const source = url.searchParams.get('source');
           const payload = url.searchParams.get('payload');
           if (!source || !payload) {
             throw 'Missing source or payload.';
           }
-          const { description, name } = JSON.parse(payload) as { description: string; name: string };
-
-          let res = await fetch(`/api/import/${source}?payload=${encodeURIComponent(payload)}`, {
+          setImportSource(source);
+          setImportPayload(JSON.parse(payload));
+          const res = await fetch(`/api/import/${source}/authenticate?payload=${encodeURIComponent(payload)}`, {
             method: 'POST',
           });
           if (res.status !== 200) {
-            throw `Something went wrong during import: ${res.status} ${res.statusText}`;
+            throw `Something went wrong during authenticating import: ${res.status} ${res.statusText}`;
           }
-          const data = await res.json();
-          const { alias, eTag, templateDir, urlSuffix } = data;
-          const projectInfo = { description, name, templateDir, urlSuffix, eTag, source, alias };
-          setImportedProjectInfo(projectInfo);
-
-          if (alias) {
-            // check to see if Composer currently has a bot project corresponding to the alias
-            res = await fetch(`/api/projects/alias/${alias}`, { method: 'GET' });
-            if (res.status === 200) {
-              const project = await res.json();
-              setExistingProject(project);
-              // ask user if they want to save to existing, or save as a new project
-              setModalState('prompting');
-              return;
-            }
-          }
-          importAsNewProject(projectInfo);
+          setModalState('downloadingContent');
         } catch (e) {
           // something went wrong, abort and navigate to the home page
           console.error(`Aborting import: ${e}`);
@@ -139,7 +181,7 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
         }
       }
     };
-    doImport();
+    signIn();
   }, []);
 
   const cancel = useCallback(() => {
@@ -159,14 +201,13 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
 
   const modalContent = useMemo(() => {
     switch (modalState) {
-      case 'importing':
-        return (
-          <Dialog hidden={false} dialogContentProps={{ type: DialogType.normal }}>
-            <LoadingSpinner message={formatMessage('Importing bot content...')} />
-          </Dialog>
-        );
+      case 'downloadingContent':
+        return <ImportStatus state={'downloading'} botName={importPayload.name} source={importSource} />;
 
-      case 'prompting':
+      case 'copyingContent':
+        return <ImportStatus state={'copying'} botName={importPayload.name} source={importSource} />;
+
+      case 'promptingToSave':
         return (
           <Dialog
             hidden={false}
@@ -209,12 +250,16 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
           <Dialog
             hidden={false}
             dialogContentProps={{
-              title: formatMessage('Importing to existing project failed'),
-              type: DialogType.normal,
+              title: formatMessage('Something went wrong'),
+              type: DialogType.close,
             }}
-            minWidth={480}
+            minWidth={560}
+            onDismiss={cancel}
           >
-            <p>{formatMessage('There was an error while trying to import bot content to an existing project:')}</p>
+            <p>
+              {formatMessage('There was an unexpected error importing bot content to ')}
+              <span css={boldText}>{importPayload.name}</span>
+            </p>
             <p css={boldText}>{typeof error === 'object' ? JSON.stringify(error, undefined, 2) : error}</p>
             <DialogFooter>
               <PrimaryButton text={formatMessage('Dismiss')} onClick={cancel} />
@@ -222,10 +267,29 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
           </Dialog>
         );
 
+      case 'signingIn':
+        // block but don't show anything other than the login window
+        return (
+          <Dialog
+            hidden={false}
+            dialogContentProps={{ type: DialogType.normal }}
+            styles={{ main: { display: 'none' } }}
+          />
+        );
+
       default:
         return <div style={{ display: 'none' }} />;
     }
-  }, [modalState, existingProject, error, openExistingProject, backupLocation, importedProjectInfo]);
+  }, [
+    modalState,
+    existingProject,
+    error,
+    openExistingProject,
+    backupLocation,
+    importedProjectInfo,
+    importPayload,
+    importSource,
+  ]);
 
   return modalContent;
 };

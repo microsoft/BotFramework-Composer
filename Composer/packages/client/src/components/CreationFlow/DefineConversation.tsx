@@ -8,7 +8,7 @@ import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
-import React, { Fragment, useEffect, useCallback } from 'react';
+import React, { Fragment, useEffect, useCallback, useState } from 'react';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
@@ -151,6 +151,15 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
     },
   };
   const { formData, formErrors, hasErrors, updateField, updateForm } = useForm(formConfig);
+  const [isImported, setIsImported] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (props.location?.search) {
+      const decoded = decodeURIComponent(props.location.search);
+      const { imported } = querystring.parse(decoded);
+      setIsImported(imported === 'true');
+    }
+  }, []);
 
   useEffect(() => {
     const formData: DefineConversationFormData = {
@@ -233,14 +242,11 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
     updateField('location', location);
   }, [focusedStorageFolder]);
 
+  const dialogCopy = isImported ? DialogCreationCopy.IMPORT_BOT_PROJECT : DialogCreationCopy.DEFINE_BOT_PROJECT;
+
   return (
     <Fragment>
-      <DialogWrapper
-        isOpen
-        {...DialogCreationCopy.DEFINE_BOT_PROJECT}
-        dialogType={DialogTypes.CreateFlow}
-        onDismiss={onDismiss}
-      >
+      <DialogWrapper isOpen {...dialogCopy} dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss}>
         <form onSubmit={handleSubmit}>
           <input style={{ display: 'none' }} type="submit" />
           <Stack horizontal styles={stackinput} tokens={{ childrenGap: '2rem' }}>

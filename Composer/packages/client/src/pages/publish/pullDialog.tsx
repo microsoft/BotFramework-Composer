@@ -74,6 +74,7 @@ export const PullDialog: React.FC<PullDialogProps> = (props) => {
 
   switch (status) {
     case 'inProgress':
+      // TODO: show some fancy status like in import
       // show the blocking spinner
       return (
         <Dialog
@@ -86,6 +87,7 @@ export const PullDialog: React.FC<PullDialogProps> = (props) => {
       );
 
     case 'done':
+      // TODO: just show notification
       return (
         <Dialog
           hidden={false}
@@ -106,10 +108,19 @@ export const PullDialog: React.FC<PullDialogProps> = (props) => {
         <Dialog
           hidden={false}
           dialogContentProps={{
-            title: formatMessage('Error'),
-            subText: error,
+            title: formatMessage('Something went wrong'),
+            styles: {
+              content: {
+                fontSize: 16,
+              },
+            },
           }}
         >
+          <p>
+            {formatMessage('There was an unexpected error pulling from publish profile ')}
+            <span css={boldText}>{selectedTarget?.name}</span>
+          </p>
+          <p css={boldText}>{typeof error === 'object' ? JSON.stringify(error, undefined, 2) : error}</p>
           <DialogFooter>
             <PrimaryButton text={formatMessage('Ok')} onClick={onCancelOrDone} />
           </DialogFooter>
@@ -122,10 +133,19 @@ export const PullDialog: React.FC<PullDialogProps> = (props) => {
         <Dialog
           hidden={false}
           dialogContentProps={{
-            title: 'Pull content?',
-            subText:
-              'WARNING: Pulling bot content from the selected profile is a destructive operation. We will backup your old bot contents to a separate folder.',
+            title: formatMessage('Pull content?'),
+            subText: formatMessage(
+              'WARNING: Pulling bot content from the selected profile is a destructive operation. We will backup your old bot contents to a separate folder.'
+            ),
+            styles: {
+              subText: {
+                fontSize: 16,
+              },
+            },
+            type: DialogType.close,
           }}
+          minWidth={560}
+          onDismiss={onCancelOrDone}
         >
           <DialogFooter>
             <DefaultButton text={formatMessage('Cancel')} onClick={onCancelOrDone} />
