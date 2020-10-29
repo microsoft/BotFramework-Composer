@@ -4,12 +4,12 @@
 import * as React from 'react';
 import { fireEvent, render } from '@botframework-composer/test-utils';
 
-import { NotificationFilter } from '../../../src/pages/diagnostics/DiagnosticFilter';
+import { DiagnosticFilter } from '../../../src/pages/diagnostics/DiagnosticFilter';
 
 describe('<NotificationFilter/>', () => {
-  it('should render the NotificationHeader', () => {
+  it('should render the DiagnosticFilter', () => {
     const mockOnChange = jest.fn(() => null);
-    const { container } = render(<NotificationFilter onChange={mockOnChange} />);
+    const { container } = render(<DiagnosticFilter onChange={mockOnChange} />);
 
     expect(container).toHaveTextContent('All');
     const dropdown: any = container.querySelector('[data-testid="notifications-dropdown"]');

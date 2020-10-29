@@ -5,7 +5,7 @@ import * as React from 'react';
 import { Range, Position } from '@bfc/shared';
 
 import { renderWithRecoil } from '../../testUtils';
-import { NotificationList } from '../../../src/pages/diagnostics/DiagnosticList';
+import { DiagnosticList } from '../../../src/pages/diagnostics/DiagnosticList';
 import {
   botDiagnosticsState,
   botProjectIdsState,
@@ -105,7 +105,7 @@ const state = {
   formDialogSchemas: [{ id: '1', content: '{}' }],
 };
 
-describe('<NotificationList/>', () => {
+describe('<DiagnosticList/>', () => {
   const initRecoilState = ({ set }) => {
     set(currentProjectIdState, state.projectId);
     set(botProjectIdsState, [state.projectId]);
@@ -122,9 +122,9 @@ describe('<NotificationList/>', () => {
     );
   };
 
-  it('should render the NotificationList', () => {
+  it('should render the DiagnosticList', () => {
     const { container } = renderWithRecoil(
-      <NotificationList projectId={state.projectId} showType="" onItemClick={jest.fn} />,
+      <DiagnosticList projectId={state.projectId} showType="" onItemClick={jest.fn} />,
       initRecoilState
     );
     expect(container).toHaveTextContent('server');

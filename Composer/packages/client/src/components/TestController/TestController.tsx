@@ -206,7 +206,7 @@ export const TestController: React.FC<{ projectId: string }> = (props) => {
   }
 
   function handleErrorButtonClick() {
-    navigateTo(`/bot/${projectId}/diagnostics`);
+    navigateTo(`/bot/${projectId}/skill/${projectId}/diagnostics`);
   }
 
   async function handleOpenEmulator() {

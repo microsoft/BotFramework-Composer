@@ -12,14 +12,14 @@ import { INavTreeItem } from '../../components/NavTree';
 import { botDisplayNameState, qnaFilesState } from '../atoms/botState';
 import { currentProjectIdState } from '../atoms/appState';
 import {
-  DialogNotification,
-  LgNotification,
-  LuNotification,
-  Notification,
-  QnANotification,
-  ServerNotification,
-  SettingNotification,
-  SkillNotification,
+  DialogDiagnostic,
+  LgDiagnostic,
+  LuDiagnostic,
+  DiagnosticInfo,
+  QnADiagnostic,
+  ServerDiagnostic,
+  SettingDiagnostic,
+  SkillDiagnostic,
 } from '../../pages/diagnostics/types';
 import {
   botDiagnosticsState,
@@ -69,49 +69,49 @@ export const diagnosticsSelector = selectorFamily({
       jsonSchemaFiles,
     };
 
-    const notifications: Notification[] = [];
+    const diagnosticList: DiagnosticInfo[] = [];
     diagnostics.forEach((d) => {
-      notifications.push(new ServerNotification(projectId, '', d.source, d));
+      diagnosticList.push(new ServerDiagnostic(projectId, '', d.source, d));
     });
     const skillDiagnostics = BotIndexer.checkSkillSetting(botAssets);
     skillDiagnostics.forEach((item) => {
       if (item.source.endsWith('.json')) {
-        notifications.push(new SkillNotification(projectId, item.source, item.source, item));
+        diagnosticList.push(new SkillDiagnostic(projectId, item.source, item.source, item));
       } else {
-        notifications.push(new DialogNotification(projectId, item.source, item.source, item));
+        diagnosticList.push(new DialogDiagnostic(projectId, item.source, item.source, item));
       }
     });
     const luisLocaleDiagnostics = BotIndexer.checkLUISLocales(botAssets);
 
     luisLocaleDiagnostics.forEach((item) => {
-      notifications.push(new SettingNotification(projectId, item.source, item.source, item));
+      diagnosticList.push(new SettingDiagnostic(projectId, item.source, item.source, item));
     });
 
     dialogs.forEach((dialog) => {
       dialog.diagnostics.forEach((diagnostic) => {
         const location = `${dialog.id}.dialog`;
-        notifications.push(new DialogNotification(projectId, dialog.id, location, diagnostic));
+        diagnosticList.push(new DialogDiagnostic(projectId, dialog.id, location, diagnostic));
       });
     });
     getReferredLuFiles(luFiles, dialogs).forEach((lufile) => {
       lufile.diagnostics.forEach((diagnostic) => {
         const location = `${lufile.id}.lu`;
-        notifications.push(new LuNotification(projectId, lufile.id, location, diagnostic, lufile, dialogs));
+        diagnosticList.push(new LuDiagnostic(projectId, lufile.id, location, diagnostic, lufile, dialogs));
       });
     });
     lgFiles.forEach((lgFile) => {
       lgFile.diagnostics.forEach((diagnostic) => {
         const location = `${lgFile.id}.lg`;
-        notifications.push(new LgNotification(projectId, lgFile.id, location, diagnostic, lgFile, dialogs));
+        diagnosticList.push(new LgDiagnostic(projectId, lgFile.id, location, diagnostic, lgFile, dialogs));
       });
     });
     qnaFiles.forEach((qnaFile) => {
       lodashGet(qnaFile, 'diagnostics', []).forEach((diagnostic) => {
         const location = `${qnaFile.id}.qna`;
-        notifications.push(new QnANotification(projectId, qnaFile.id, location, diagnostic));
+        diagnosticList.push(new QnADiagnostic(projectId, qnaFile.id, location, diagnostic));
       });
     });
-    return notifications;
+    return diagnosticList;
   },
 });
 
@@ -119,18 +119,18 @@ export const startAllBotEnableSelector = selector({
   key: 'startAllBotEnableSelector',
   get: ({ get }) => {
     const ids = get(botProjectIdsState);
-    const result = ids.reduce((result: Notification[], id: string) => {
-      return [...result, ...get(diagnosticsSelector(id))];
+    const result = ids.reduce((result: DiagnosticInfo[], id: string) => {
+      return [...result, ...get(diagnosticsSelector(id)).filter((diagnostic) => diagnostic.severity === 'Error')];
     }, []);
     return !result.length;
   },
 });
 
 export const allDiagnosticsSelector = selector({
-  key: 'allNotificationsSelector',
+  key: 'allDiagnosticsSelector',
   get: ({ get }) => {
     const ids = get(botProjectIdsState);
-    const result = ids.reduce((result: Notification[], id: string) => {
+    const result = ids.reduce((result: DiagnosticInfo[], id: string) => {
       return [...result, ...get(diagnosticsSelector(id))];
     }, []);
     return result;
@@ -150,7 +150,7 @@ export const diagnosticNavLinksSelector = selector({
         id: id,
         name: name,
         ariaLabel: formatMessage('diagnostic links'),
-        url: `/bot/${projectId}/diagnostics/${id}`,
+        url: `/bot/${projectId}/skill/${id}/diagnostics`,
       });
       return result;
     }, []);

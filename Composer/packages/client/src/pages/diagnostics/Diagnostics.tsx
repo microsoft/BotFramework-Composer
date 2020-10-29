@@ -3,79 +3,77 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Fragment, Suspense, useEffect, useState } from 'react';
-import { RouteComponentProps, Router } from '@reach/router';
+import { useState } from 'react';
+import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 
 import { navigateTo } from '../../utils/navigation';
 import { convertPathToUrl } from '../../utils/navigation';
 import { Page } from '../../components/Page';
-import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { diagnosticNavLinksSelector } from '../../recoilModel/selectors/diagnosticsPageSelector';
-import { currentProjectIdState } from '../../recoilModel';
 
-import { NotificationList } from './DiagnosticList';
-import { NotificationFilter } from './DiagnosticFilter';
-import { INotification, NotificationType } from './types';
+import { DiagnosticList } from './DiagnosticList';
+import { DiagnosticFilter } from './DiagnosticFilter';
+import { IDiagnosticInfo, DiagnosticType } from './types';
 
-const Notifications: React.FC<RouteComponentProps<{}>> = (props) => {
+const Diagnostics: React.FC<RouteComponentProps<{ projectId: string; skillId: string }>> = (props) => {
   const [showType, setShowType] = useState('');
   const navLinks = useRecoilValue(diagnosticNavLinksSelector);
-  const projectId = props['*'];
-  const currentProjectId = useRecoilValue(currentProjectIdState);
-  useEffect(() => {
-    if (!projectId) {
-      navigateTo(`/bot/${currentProjectId}/diagnostics/${currentProjectId}`);
-    }
-  }, [projectId]);
+  const { projectId = '', skillId } = props;
 
   const navigations = {
-    [NotificationType.LG]: (item: INotification) => {
-      const { projectId, resourceId, diagnostic, dialogPath } = item;
-      let uri = `/bot/${projectId}/language-generation/${resourceId}/edit#L=${diagnostic.range?.start.line || 0}`;
+    [DiagnosticType.LG]: (item: IDiagnosticInfo) => {
+      const { projectId: skillId, resourceId, diagnostic, dialogPath } = item;
+      let uri = `/bot/${projectId}/skill/${skillId}/language-generation/${resourceId}/edit#L=${
+        diagnostic.range?.start.line || 0
+      }`;
       //the format of item.id is lgFile#inlineTemplateId
       if (dialogPath) {
-        uri = convertPathToUrl(projectId, resourceId, dialogPath);
+        uri = convertPathToUrl(projectId, skillId, resourceId, dialogPath);
       }
       navigateTo(uri);
     },
-    [NotificationType.LU]: (item: INotification) => {
-      const { projectId, resourceId, diagnostic, dialogPath } = item;
-      let uri = `/bot/${projectId}/language-understanding/${resourceId}/edit#L=${diagnostic.range?.start.line || 0}`;
+    [DiagnosticType.LU]: (item: IDiagnosticInfo) => {
+      const { projectId: skillId, resourceId, diagnostic, dialogPath } = item;
+      let uri = `/bot/${projectId}/skill/${skillId}/language-understanding/${resourceId}/edit#L=${
+        diagnostic.range?.start.line || 0
+      }`;
       if (dialogPath) {
-        uri = convertPathToUrl(projectId, resourceId, dialogPath);
+        uri = convertPathToUrl(projectId, skillId, resourceId, dialogPath);
       }
       navigateTo(uri);
     },
-    [NotificationType.QNA]: (item: INotification) => {
-      const { projectId, resourceId, diagnostic } = item;
-      const uri = `/bot/${projectId}/knowledge-base/${resourceId}/edit#L=${diagnostic.range?.start.line || 0}`;
+    [DiagnosticType.QNA]: (item: IDiagnosticInfo) => {
+      const { projectId: skillId, resourceId, diagnostic } = item;
+      const uri = `/bot/${projectId}/skill/${skillId}/knowledge-base/${resourceId}/edit#L=${
+        diagnostic.range?.start.line || 0
+      }`;
       navigateTo(uri);
     },
-    [NotificationType.DIALOG]: (item: INotification) => {
+    [DiagnosticType.DIALOG]: (item: IDiagnosticInfo) => {
       //path is like main.trigers[0].actions[0]
       //uri = id?selected=triggers[0]&focused=triggers[0].actions[0]
-      const { projectId, id, dialogPath } = item;
-      const uri = convertPathToUrl(projectId, id, dialogPath ?? '');
+      const { projectId: skillId, id, dialogPath } = item;
+      const uri = convertPathToUrl(projectId, skillId, id, dialogPath ?? '');
       navigateTo(uri);
     },
-    [NotificationType.SKILL]: (item: INotification) => {
+    [DiagnosticType.SKILL]: (item: IDiagnosticInfo) => {
       const { projectId } = item;
       navigateTo(`/bot/${projectId}/skills`);
     },
-    [NotificationType.SETTING]: (item: INotification) => {
+    [DiagnosticType.SETTING]: (item: IDiagnosticInfo) => {
       const { projectId } = item;
       navigateTo(`/settings/bot/${projectId}/dialog-settings`);
     },
   };
 
-  const handleItemClick = (item: INotification) => {
+  const handleItemClick = (item: IDiagnosticInfo) => {
     navigations[item.type](item);
   };
 
   const onRenderHeaderContent = () => {
-    return <NotificationFilter onChange={setShowType} />;
+    return <DiagnosticFilter onChange={setShowType} />;
   };
 
   return (
@@ -88,13 +86,9 @@ const Notifications: React.FC<RouteComponentProps<{}>> = (props) => {
       toolbarItems={[]}
       onRenderHeaderContent={onRenderHeaderContent}
     >
-      <Suspense fallback={<LoadingSpinner />}>
-        <Router component={Fragment} primary={false}>
-          <NotificationList path="/:projectId" showType={showType} onItemClick={handleItemClick} />
-        </Router>
-      </Suspense>
+      <DiagnosticList showType={showType} skillId={skillId} onItemClick={handleItemClick} />
     </Page>
   );
 };
 
-export default Notifications;
+export default Diagnostics;

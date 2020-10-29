@@ -19,12 +19,13 @@ import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
+import { FontSizes } from '@uifabric/fluent-theme';
 import { css } from '@emotion/core';
 
 import { Pagination } from '../../components/Pagination';
 import { diagnosticsSelector } from '../../recoilModel/selectors/diagnosticsPageSelector';
 
-import { INotification } from './types';
+import { IDiagnosticInfo } from './types';
 
 // -------------------- Styles -------------------- //
 
@@ -33,10 +34,10 @@ const icons = {
   Warning: { iconName: 'Warning', color: '#8A8780', background: '#FFF4CE' },
 };
 
-const notification = mergeStyleSets({
+const diagnostic = mergeStyleSets({
   typeIconHeaderIcon: {
     padding: 0,
-    fontSize: '16px',
+    fontSize: FontSizes.size16,
   },
   typeIconCell: {
     textAlign: 'center',
@@ -87,11 +88,11 @@ const content = css`
   outline: none;
 `;
 
-// -------------------- NotificationList -------------------- //
-export interface INotificationListProps extends RouteComponentProps {
-  projectId?: string;
+// -------------------- Diagnosticist -------------------- //
+export interface IDiagnosticListProps extends RouteComponentProps {
+  skillId?: string;
   showType: string;
-  onItemClick: (item: INotification) => void;
+  onItemClick: (item: IDiagnosticInfo) => void;
 }
 
 const itemCount = 10;
@@ -100,31 +101,31 @@ const columns: IColumn[] = [
   {
     key: 'Icon',
     name: '',
-    className: notification.typeIconCell,
-    iconClassName: notification.typeIconHeaderIcon,
+    className: diagnostic.typeIconCell,
+    iconClassName: diagnostic.typeIconHeaderIcon,
     fieldName: 'icon',
     minWidth: 30,
     maxWidth: 30,
-    onRender: (item: INotification) => {
+    onRender: (item: IDiagnosticInfo) => {
       const icon = icons[item.severity];
       return <FontIcon css={typeIcon(icon)} iconName={icon.iconName} />;
     },
   },
   {
-    key: 'NotificationType',
+    key: 'DiagnosticType',
     name: formatMessage('Type'),
-    className: notification.columnCell,
+    className: diagnostic.columnCell,
     fieldName: 'type',
     minWidth: 70,
     maxWidth: 90,
     isRowHeader: true,
     isResizable: true,
     data: 'string',
-    onRender: (item: INotification) => {
+    onRender: (item: IDiagnosticInfo) => {
       return (
         <div data-is-focusable css={tableCell}>
           <div
-            aria-label={formatMessage(`This is a {severity} notification`, { severity: item.severity })}
+            aria-label={formatMessage(`This is a {severity} diagnostic`, { severity: item.severity })}
             css={content}
             tabIndex={-1}
           >
@@ -136,15 +137,15 @@ const columns: IColumn[] = [
     isPadded: true,
   },
   {
-    key: 'NotificationLocation',
+    key: 'DiagnosticLocation',
     name: formatMessage('Location'),
-    className: notification.columnCell,
+    className: diagnostic.columnCell,
     fieldName: 'location',
     minWidth: 70,
     maxWidth: 90,
     isResizable: true,
     data: 'string',
-    onRender: (item: INotification) => {
+    onRender: (item: IDiagnosticInfo) => {
       return (
         <div data-is-focusable css={tableCell}>
           <div
@@ -160,9 +161,9 @@ const columns: IColumn[] = [
     isPadded: true,
   },
   {
-    key: 'NotificationDetail',
+    key: 'DiagnosticDetail',
     name: formatMessage('Message'),
-    className: notification.columnCell,
+    className: diagnostic.columnCell,
     fieldName: 'message',
     minWidth: 70,
     maxWidth: 90,
@@ -170,11 +171,11 @@ const columns: IColumn[] = [
     isCollapsible: true,
     isMultiline: true,
     data: 'string',
-    onRender: (item: INotification) => {
+    onRender: (item: IDiagnosticInfo) => {
       return (
         <div data-is-focusable css={tableCell}>
           <div
-            aria-label={formatMessage(`Notification Message {msg}`, { msg: item.message })}
+            aria-label={formatMessage(`Diagnostic Message {msg}`, { msg: item.message })}
             css={content}
             tabIndex={-1}
           >
@@ -198,21 +199,21 @@ function onRenderDetailsHeader(props, defaultRender) {
   );
 }
 
-export const NotificationList: React.FC<INotificationListProps> = (props) => {
-  const { onItemClick, projectId = '', showType } = props;
-  const notifications = useRecoilValue(diagnosticsSelector(projectId));
-  const availableNotifications = showType ? notifications.filter((x) => x.severity === showType) : notifications;
+export const DiagnosticList: React.FC<IDiagnosticListProps> = (props) => {
+  const { onItemClick, skillId = '', showType } = props;
+  const diagnostics = useRecoilValue(diagnosticsSelector(skillId));
+  const availableDiagnostics = showType ? diagnostics.filter((x) => x.severity === showType) : diagnostics;
   const [pageIndex, setPageIndex] = useState<number>(1);
 
   const pageCount: number = useMemo(() => {
-    return Math.ceil(availableNotifications.length / itemCount) || 1;
-  }, [availableNotifications]);
+    return Math.ceil(availableDiagnostics.length / itemCount) || 1;
+  }, [availableDiagnostics]);
 
-  const showItems = availableNotifications.slice((pageIndex - 1) * itemCount, pageIndex * itemCount);
+  const showItems = availableDiagnostics.slice((pageIndex - 1) * itemCount, pageIndex * itemCount);
 
   return (
-    <div css={listRoot} data-testid="notifications-table-view" role="main">
-      <div aria-label={formatMessage('Notification list')} css={tableView} role="region">
+    <div css={listRoot} data-testid="diagnostics-table-view" role="main">
+      <div aria-label={formatMessage('Diagnostic list')} css={tableView} role="region">
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
           <DetailsList
             isHeaderVisible

@@ -55,7 +55,6 @@ const Routes = (props) => {
             <LUPage path="language-understanding/:dialogId/*" />
             <LGPage path="language-generation/:dialogId/*" />
             <QnAPage path="knowledge-base/:dialogId/*" />
-            <Diagnostics path="diagnostics/*" />
             <Publish path="publish/:targetName" />
             <Skills path="skills/*" />
             <FormDialogPage path="forms/:schemaId/*" />
@@ -75,6 +74,7 @@ const Routes = (props) => {
             <LUPage path="language-understanding/:dialogId/*" />
             <LGPage path="language-generation/:dialogId/*" />
             <QnAPage path="knowledge-base/:dialogId/*" />
+            <Diagnostics path="diagnostics" />
             <DesignPage path="*" />
           </ProjectRouter>
           <SettingPage path="settings/*" />

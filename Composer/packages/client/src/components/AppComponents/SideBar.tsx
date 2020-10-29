@@ -95,6 +95,7 @@ export const SideBar = () => {
                 exact={link.exact}
                 iconName={link.iconName}
                 labelName={link.labelName}
+                match={link.match}
                 showTooltip={showTooltips(link)}
                 to={mapNavItemTo(link.to)}
               />

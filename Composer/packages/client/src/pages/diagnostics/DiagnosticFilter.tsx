@@ -23,16 +23,21 @@ const createOptions = (): IDropdownOption[] => {
     },
   ];
   DiagnosticSeverity.forEach((item) => {
-    return defaultOptions.push({ key: item, text: item, data: item, ariaLabel: `Show ${item} Diagnostics` });
+    defaultOptions.push({
+      key: item,
+      text: item,
+      data: item,
+      ariaLabel: formatMessage('Show {item} Diagnostics', { item: item }),
+    });
   });
   return defaultOptions;
 };
 
-export interface INotificationFilter {
+export interface IDiagnosticFilter {
   onChange: (text: string) => void;
 }
 
-export const NotificationFilter: React.FC<INotificationFilter> = (props) => {
+export const DiagnosticFilter: React.FC<IDiagnosticFilter> = (props) => {
   const { onChange } = props;
 
   return (

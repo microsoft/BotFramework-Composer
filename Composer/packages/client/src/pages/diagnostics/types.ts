@@ -8,7 +8,7 @@ import { getBaseName } from '../../utils/fileUtil';
 import { replaceDialogDiagnosticLabel } from '../../utils/dialogUtil';
 export const DiagnosticSeverity = ['Error', 'Warning']; //'Information', 'Hint'
 
-export enum NotificationType {
+export enum DiagnosticType {
   DIALOG,
   LG,
   LU,
@@ -18,11 +18,11 @@ export enum NotificationType {
   GENERAL,
 }
 
-export interface INotification {
+export interface IDiagnosticInfo {
   projectId: string;
   id: string;
   severity: string;
-  type: NotificationType;
+  type: DiagnosticType;
   location: string;
   message: string;
   diagnostic: any;
@@ -30,11 +30,11 @@ export interface INotification {
   resourceId: string; // id without locale
 }
 
-export abstract class Notification implements INotification {
+export abstract class DiagnosticInfo implements IDiagnosticInfo {
   projectId: string;
   id: string;
   severity: string;
-  type = NotificationType.GENERAL;
+  type = DiagnosticType.GENERAL;
   location: string;
   message = '';
   diagnostic: Diagnostic;
@@ -50,16 +50,16 @@ export abstract class Notification implements INotification {
   }
 }
 
-export class ServerNotification extends Notification {
-  type = NotificationType.GENERAL;
+export class ServerDiagnostic extends DiagnosticInfo {
+  type = DiagnosticType.GENERAL;
   constructor(projectId: string, id: string, location: string, diagnostic: Diagnostic) {
     super(projectId, id, location, diagnostic);
     this.message = diagnostic.message;
   }
 }
 
-export class DialogNotification extends Notification {
-  type = NotificationType.DIALOG;
+export class DialogDiagnostic extends DiagnosticInfo {
+  type = DiagnosticType.DIALOG;
   constructor(projectId: string, id: string, location: string, diagnostic: Diagnostic) {
     super(projectId, id, location, diagnostic);
     this.message = `In ${replaceDialogDiagnosticLabel(diagnostic.path)} ${diagnostic.message}`;
@@ -67,8 +67,8 @@ export class DialogNotification extends Notification {
   }
 }
 
-export class SkillNotification extends Notification {
-  type = NotificationType.SKILL;
+export class SkillDiagnostic extends DiagnosticInfo {
+  type = DiagnosticType.SKILL;
   constructor(projectId: string, id: string, location: string, diagnostic: Diagnostic) {
     super(projectId, id, location, diagnostic);
     this.message = `${replaceDialogDiagnosticLabel(diagnostic.path)} ${diagnostic.message}`;
@@ -76,8 +76,8 @@ export class SkillNotification extends Notification {
   }
 }
 
-export class SettingNotification extends Notification {
-  type = NotificationType.SETTING;
+export class SettingDiagnostic extends DiagnosticInfo {
+  type = DiagnosticType.SETTING;
   constructor(projectId: string, id: string, location: string, diagnostic: Diagnostic) {
     super(projectId, id, location, diagnostic);
     this.message = `${replaceDialogDiagnosticLabel(diagnostic.path)} ${diagnostic.message}`;
@@ -85,8 +85,8 @@ export class SettingNotification extends Notification {
   }
 }
 
-export class LgNotification extends Notification {
-  type = NotificationType.LG;
+export class LgDiagnostic extends DiagnosticInfo {
+  type = DiagnosticType.LG;
   constructor(
     projectId: string,
     id: string,
@@ -116,8 +116,8 @@ export class LgNotification extends Notification {
   }
 }
 
-export class LuNotification extends Notification {
-  type = NotificationType.LU;
+export class LuDiagnostic extends DiagnosticInfo {
+  type = DiagnosticType.LU;
   constructor(
     projectId: string,
     id: string,
@@ -144,8 +144,8 @@ export class LuNotification extends Notification {
   }
 }
 
-export class QnANotification extends Notification {
-  type = NotificationType.QNA;
+export class QnADiagnostic extends DiagnosticInfo {
+  type = DiagnosticType.QNA;
   constructor(projectId: string, id: string, location: string, diagnostic: Diagnostic) {
     super(projectId, id, location, diagnostic);
     this.dialogPath = '';
