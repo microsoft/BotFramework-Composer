@@ -257,11 +257,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     createTrigger(dialogId, formData);
   };
 
-  function handleSelect(link: TreeLink, selectPath = '') {
+  function handleSelect(link: TreeLink) {
     updateZoomRate({ currentRate: 1 });
-    if (link.trigger != null || selectPath) {
-      const path = link.trigger == null ? selectPath : `triggers[${link.trigger}]`;
-      selectTo(link.skillId ?? link.projectId, link.dialogId ?? null, path);
+    if (link.trigger != null) {
+      selectTo(link.skillId ?? null, link.dialogId ?? null, `triggers[${link.trigger}]`);
     } else if (link.dialogId != null) {
       navTo(link.skillId ?? link.projectId, link.dialogId, []);
     } else {
