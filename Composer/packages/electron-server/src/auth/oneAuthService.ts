@@ -164,11 +164,10 @@ class OneAuthInstance {
   private get oneAuth() {
     if (!this._oneAuth) {
       if (this.loadOneAuth()) {
-        const oneauthPath = path.join(getUnpackedAsarPath(), 'oneauth');
-        log('Attempting to load oneauth module from %s.', oneauthPath);
+        log('Attempting to load oneauth module from %s.', this.oneauthPath);
         try {
           // eslint-disable-next-line security/detect-non-literal-require
-          this._oneAuth = require(oneauthPath) as typeof OneAuth;
+          this._oneAuth = require(this.oneauthPath) as typeof OneAuth;
         } catch (e) {
           log('Error loading oneauth module. %O', e);
         }
@@ -188,6 +187,14 @@ class OneAuthInstance {
     return Boolean(
       (process.env.NODE_ENV === 'production' || process.env.COMPOSER_ENABLE_ONEAUTH) && (isMac() || isWindows())
     );
+  }
+
+  private get oneauthPath() {
+    if (process.env.NODE_ENV === 'production') {
+      return path.join(getUnpackedAsarPath(), 'oneauth');
+    } else {
+      return path.resolve(__dirname, '../../oneauth-temp');
+    }
   }
 }
 
