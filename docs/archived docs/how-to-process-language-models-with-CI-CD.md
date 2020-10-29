@@ -20,7 +20,7 @@ Type `bf` to make sure the command is installed successfully.
 
 You can find more details about [sampler](https://github.com/microsoft/botframework-cli/blob/beta/packages/sampler/README.md) cli plugin.
 
-You also need to create luis [resources](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-how-to-azure-subscription#create-luis-resources-in-azure-portal) to get the luis authoringKey and qnamaker [resources](https://docs.microsoft.com/en-us/azure/cognitive-services/qnamaker/how-to/set-up-qnamaker-service-azure) to get the qnamaker subscriptionKey if you don't have.
+You also need to create [luis resources](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-how-to-azure-subscription#create-luis-resources-in-azure-portal) to get the luis authoringKey and [qnamaker resources](https://docs.microsoft.com/en-us/azure/cognitive-services/qnamaker/how-to/set-up-qnamaker-service-azure) to get the qnamaker subscriptionKey if you don't have.
 
 ## Process language models with cli tool
 You can use the cli tool to process language models . A sample bot will be used to demonstrate how cli tool works with below steps.
@@ -73,8 +73,8 @@ You can find more details about [qnamaker:build](https://github.com/microsoft/bo
 After language models published and the setting files generated, you can use Emulator to test the bot by following below steps:
 1. Configure appsettings.json
 Go to settings folder and edit the appsettings.json.
-- Fill the luis prediction resource endpoint and endpointKey. You can assign the prediction resource to your models in [LUIS](https://www.luis.ai/home) portal. If there are no available prediction resources to assign, please create one in you luis resources.
-- Fill the qna endpointKey. You can find them in [QnAMaker](https://www.qnamaker.ai/) portal.
+- Fill the luis prediction resource endpoint and endpointKey. You can assign the prediction resource to your models in [LUIS](https://www.luis.ai/home) portal. If there are no available prediction resources to assign, please create one in you luis resources. For more details about prediction resource, please find them [here](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-how-to-azure-subscription#assign-a-resource-to-an-app).
+- Fill the qna endpointKey. You can find it on the console output of qnamaker build cmd or in the service settings page of [QnAMaker](https://www.qnamaker.ai/UserSettings) portal.
 
 2. Copy and launch runtime
 ~~~
