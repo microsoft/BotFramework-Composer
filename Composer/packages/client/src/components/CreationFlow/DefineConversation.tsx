@@ -8,7 +8,7 @@ import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
-import React, { Fragment, useEffect, useCallback, useMemo } from 'react';
+import React, { Fragment, useEffect, useCallback, useMemo, useState } from 'react';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
@@ -20,6 +20,10 @@ import { FieldConfig, useForm } from '../../hooks/useForm';
 import { StorageFolder } from '../../recoilModel/types';
 
 import { LocationSelectContent } from './LocationSelectContent';
+import { createNotification } from '../../recoilModel/dispatchers/notification';
+import { ImportSuccessNotification } from '../ImportModal/ImportSuccessNotification';
+import { useRecoilValue } from 'recoil';
+import { dispatcherState } from '../../recoilModel';
 
 // -------------------- Styles -------------------- //
 
@@ -114,6 +118,7 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
     );
     return defaultName;
   };
+  const { addNotification } = useRecoilValue(dispatcherState);
 
   const formConfig: FieldConfig<DefineConversationFormData> = {
     name: {
@@ -151,6 +156,15 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
     },
   };
   const { formData, formErrors, hasErrors, updateField, updateForm } = useForm(formConfig);
+  const [isImported, setIsImported] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (props.location?.search) {
+      const decoded = decodeURIComponent(props.location.search);
+      const { imported } = querystring.parse(decoded);
+      setIsImported(imported === 'true');
+    }
+  }, []);
 
   useEffect(() => {
     const formData: DefineConversationFormData = {
@@ -200,14 +214,24 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
       };
       if (props.location?.search) {
         const decoded = decodeURIComponent(props.location.search);
-        const { alias, eTag, imported, templateDir, urlSuffix } = querystring.parse(decoded);
+        const { alias = '', eTag = '', imported = '', templateDir = '', urlSuffix = '' } = querystring.parse(decoded);
 
-        if (imported && templateDir) {
+        if (imported) {
           dataToSubmit.templateDir = templateDir as string;
+          dataToSubmit.eTag = eTag as string;
+          dataToSubmit.urlSuffix = urlSuffix as string;
+          dataToSubmit.alias = alias as string;
+
+          // create a notification to indicate import success
+          const notification = createNotification({
+            type: 'success',
+            title: '',
+            onRenderCardContent: ImportSuccessNotification({
+              importedToExisting: false,
+            }),
+          });
+          addNotification(notification);
         }
-        dataToSubmit.eTag = eTag as string;
-        dataToSubmit.urlSuffix = urlSuffix as string;
-        dataToSubmit.alias = alias as string;
       }
 
       onSubmit(
@@ -244,15 +268,11 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
       />
     );
   }, [focusedStorageFolder]);
+  const dialogCopy = isImported ? DialogCreationCopy.IMPORT_BOT_PROJECT : DialogCreationCopy.DEFINE_BOT_PROJECT;
 
   return (
     <Fragment>
-      <DialogWrapper
-        isOpen
-        {...DialogCreationCopy.DEFINE_BOT_PROJECT}
-        dialogType={DialogTypes.CreateFlow}
-        onDismiss={onDismiss}
-      >
+      <DialogWrapper isOpen {...dialogCopy} dialogType={DialogTypes.CreateFlow} onDismiss={onDismiss}>
         <form onSubmit={handleSubmit}>
           <input style={{ display: 'none' }} type="submit" />
           <Stack horizontal styles={stackinput} tokens={{ childrenGap: '2rem' }}>

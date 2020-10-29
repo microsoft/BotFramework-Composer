@@ -2,10 +2,10 @@
 import { jsx, css } from '@emotion/core';
 import { PublishTarget } from '@botframework-composer/types';
 import formatMessage from 'format-message';
-import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
-import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import { Dialog, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
+import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { createNotification } from '../../recoilModel/dispatchers/notification';
 import { ImportSuccessNotification } from '../../components/ImportModal/ImportSuccessNotification';
@@ -14,33 +14,37 @@ import { dispatcherState, locationState } from '../../recoilModel';
 import { PullStatus } from './pullStatus';
 
 type PullDialogProps = {
-  hidden: boolean;
   onDismiss: () => void;
   projectId: string;
   selectedTarget: PublishTarget | undefined;
 };
 
-type PullDialogStatus = 'idle' | 'inProgress' | 'done' | 'error';
+type PullDialogStatus = 'connecting' | 'downloading' | 'error';
 
 const boldText = css`
   font-weight: ${FontWeights.semibold};
   word-break: break-work;
 `;
 
+const CONNECTING_STATUS_DISPLAY_TIME = 2000;
+
 export const PullDialog: React.FC<PullDialogProps> = (props) => {
-  const { hidden = true, onDismiss, projectId, selectedTarget } = props;
-  const [status, setStatus] = useState<PullDialogStatus>('idle');
+  const { onDismiss, projectId, selectedTarget } = props;
+  const [status, setStatus] = useState<PullDialogStatus>('connecting');
   const [error, setError] = useState<string>('');
   const { addNotification, openProject } = useRecoilValue(dispatcherState);
   const botLocation = useRecoilValue(locationState(projectId));
 
+  // TODO: pull needs to be broken down into a previous auth step so the UI can reflect status
+  // properly like in import flow
   const pull = useCallback(() => {
     if (selectedTarget) {
       const doPull = async () => {
-        // show spinner
-        setStatus('inProgress');
+        // show progress dialog
+        setStatus('downloading');
 
         try {
+          console.log('doing the pull');
           // wait for pull result from server
           const res = await fetch(`/api/publish/${projectId}/pull/${selectedTarget.name}`, {
             method: 'POST',
@@ -87,74 +91,42 @@ export const PullDialog: React.FC<PullDialogProps> = (props) => {
   }, [status]);
 
   const onCancelOrDone = useCallback(() => {
-    setStatus('idle');
+    setStatus('connecting');
     onDismiss();
   }, [onDismiss]);
 
-  if (hidden) {
-    return null;
-  }
-
   switch (status) {
-    case 'inProgress':
-      // show the blocking spinner
-      return (
-        <Dialog
-          hidden={false}
-          dialogContentProps={{ type: DialogType.normal, showCloseButton: false }}
-          modalProps={{ isBlocking: true }}
-        >
-          <LoadingSpinner message={formatMessage('Pulling bot content...')} />
-        </Dialog>
-      );
+    case 'connecting':
+      return <PullStatus state={'connecting'} publishTarget={selectedTarget} />;
 
-    case 'done':
-      return (
-        <Dialog
-          hidden={false}
-          dialogContentProps={{
-            title: formatMessage('Pull complete'),
-          }}
-        >
-          <p>{formatMessage('Your old bot content was backed up to:')}</p>
-          <p css={boldText}>{backupPath}</p>
-          <DialogFooter>
-            <PrimaryButton text={formatMessage('Ok')} onClick={onCancelOrDone} />
-          </DialogFooter>
-        </Dialog>
-      );
+    case 'downloading':
+      return <PullStatus state={'downloading'} publishTarget={selectedTarget} />;
 
     case 'error':
       return (
         <Dialog
           hidden={false}
           dialogContentProps={{
-            title: formatMessage('Error'),
-            subText: error,
+            title: formatMessage('Something went wrong'),
+            styles: {
+              content: {
+                fontSize: 16,
+              },
+            },
           }}
         >
+          <p>
+            {formatMessage('There was an unexpected error pulling from publish profile ')}
+            <span css={boldText}>{selectedTarget?.name}</span>
+          </p>
+          <p css={boldText}>{typeof error === 'object' ? JSON.stringify(error, undefined, 2) : error}</p>
           <DialogFooter>
             <PrimaryButton text={formatMessage('Ok')} onClick={onCancelOrDone} />
           </DialogFooter>
         </Dialog>
       );
 
-    case 'idle':
     default:
-      return (
-        <Dialog
-          hidden={false}
-          dialogContentProps={{
-            title: 'Pull content?',
-            subText:
-              'WARNING: Pulling bot content from the selected profile is a destructive operation. We will backup your old bot contents to a separate folder.',
-          }}
-        >
-          <DialogFooter>
-            <DefaultButton text={formatMessage('Cancel')} onClick={onCancelOrDone} />
-            <PrimaryButton text={formatMessage('Pull')} onClick={pull} />
-          </DialogFooter>
-        </Dialog>
-      );
+      return <div style={{ display: 'none' }}></div>;
   }
 };

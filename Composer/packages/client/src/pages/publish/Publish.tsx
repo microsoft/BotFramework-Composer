@@ -428,12 +428,9 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
           onSubmit={publish}
         />
       )}
-      <PullDialog
-        hidden={pullDialogHidden}
-        projectId={projectId}
-        selectedTarget={selectedTarget}
-        onDismiss={() => setPullDialogHidden(true)}
-      />
+      {!pullDialogHidden && (
+        <PullDialog projectId={projectId} selectedTarget={selectedTarget} onDismiss={() => setPullDialogHidden(true)} />
+      )}
       {showLog && <LogDialog version={selectedVersion} onDismiss={() => setShowLog(false)} />}
       <Toolbar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>

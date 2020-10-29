@@ -100,6 +100,7 @@ router.get('/featureFlags', FeatureFlagController.getFeatureFlags);
 router.post('/featureFlags', FeatureFlagController.updateFeatureFlags);
 // importing
 router.post('/import/:source', ImportController.startImport);
+router.post('/import/:source/authenticate', ImportController.authenticate);
 
 router.get('/auth/getAccessToken', AuthController.getAccessToken);
 
