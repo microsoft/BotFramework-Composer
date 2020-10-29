@@ -36,6 +36,7 @@ interface PublishAPI {
   onBack?: () => void;
   setTitle?: (value) => void;
   getSchema?: () => any;
+  getType?: () => string;
   savePublishConfig?: (config: PublishConfig) => void;
 }
 

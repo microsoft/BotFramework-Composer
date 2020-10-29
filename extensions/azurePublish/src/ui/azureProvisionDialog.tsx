@@ -18,6 +18,7 @@ import {
   savePublishConfig,
   setTitle,
   getSchema,
+  getType,
 } from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { ResourceGroup } from '@azure/arm-resources/esm/models';
@@ -40,10 +41,6 @@ import {
 import { JsonEditor } from '@bfc/code-editor';
 
 import { getResourceList, getSubscriptions, getResourceGroups, getDeployLocations, getPreview } from './api';
-
-const resourceTypes = ['Azure Web App', 'Cognitive Services'];
-
-const publishType = 'azurePublish';
 
 const choiceOptions: IChoiceGroupOption[] = [
   { key: 'create', text: 'Create new Azure resources' },
@@ -101,6 +98,10 @@ export const AzureProvisionDialog: React.FC = () => {
   const [page, setPage] = useState(PageTypes.ConfigProvision);
   const [group, setGroup] = useState<IGroup[]>();
   const [listItems, setListItem] = useState();
+
+  // set type of publish - azurePublish or azureFunctionsPublish
+  const publishType = getType();
+  console.log('PUBLISH TYPE IS', publishType);
 
   const columns: IColumn[] = [
     {
@@ -173,7 +174,9 @@ export const AzureProvisionDialog: React.FC = () => {
       // todo: how do we handle API errors in this component
       console.log('ERROR', err);
     });
-    const resources = result.filter(resource => resource.required);
+    // do not filter do only required
+    // const resources = result.filter(resource => resource.required);
+    const resources = result;
     console.log(resources);
     setExtensionResourceOptions(resources);
 
@@ -246,7 +249,7 @@ export const AzureProvisionDialog: React.FC = () => {
       const names = getPreview(hostname);
       console.log('got names', names);
       const result = extensionResourceOptions.map((resource) => {
-        const previewObject = names.find((n) => n.key === resource.key && resource.required);
+        const previewObject = names.find((n) => n.key === resource.key);
         return {
           ...resource,
           name: previewObject ? previewObject.name : `UNKNOWN NAME FOR ${resource.key}`,
@@ -255,6 +258,13 @@ export const AzureProvisionDialog: React.FC = () => {
       });
 
       // todo: generate list of resourceTypes based on what is in extensionResourceOptions
+      const resourceTypes = [];
+      extensionResourceOptions.forEach((resource) => {
+        if (resourceTypes.indexOf(resource.group) < 0) {
+          resourceTypes.push(resource.group);
+        }
+      });
+
       console.log('WILL PROVISION THESE ITEMS', result);
       let items = [] as any;
       const groups: IGroup[] = [];
