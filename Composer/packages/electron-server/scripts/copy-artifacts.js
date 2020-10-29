@@ -11,11 +11,9 @@ const { log } = require('./common');
 
 const oneauthSource = () => {
   if (process.env.COMPOSER_ENABLE_ONEAUTH && ['win32', 'darwin'].includes(process.platform)) {
-    const oneauthPath = process.env.ONEAUTH_PATH || path.resolve(__dirname, '../oneauth-temp');
+    const oneauthPath = path.resolve(__dirname, '../oneauth-temp');
     return { source: oneauthPath, dest: 'oneauth', force: true };
   }
-
-  return { source: path.resolve(__dirname, '../build/auth/oneauthShim'), dest: 'oneauth', force: true };
 };
 
 const sources = [
@@ -30,7 +28,7 @@ const sources = [
   },
   // oneauth
   oneauthSource(),
-];
+].filter(Boolean);
 
 let destinationDir;
 switch (process.platform) {

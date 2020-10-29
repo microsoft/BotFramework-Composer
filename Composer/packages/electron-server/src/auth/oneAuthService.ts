@@ -164,10 +164,18 @@ class OneAuthInstance {
   private get oneAuth() {
     if (!this._oneAuth) {
       if (this.loadOneAuth()) {
-        log('Loading oneauth module.');
-        // eslint-disable-next-line security/detect-non-literal-require
-        this._oneAuth = require(path.join(getUnpackedAsarPath(), 'oneauth')) as typeof OneAuth;
-      } else {
+        const oneauthPath = path.join(getUnpackedAsarPath(), 'oneauth');
+        log('Attempting to load oneauth module from %s.', oneauthPath);
+        try {
+          // eslint-disable-next-line security/detect-non-literal-require
+          this._oneAuth = require(oneauthPath) as typeof OneAuth;
+        } catch (e) {
+          log('Error loading oneauth module. %O', e);
+        }
+      }
+
+      // if we still haven't loaded oneauth, fallback to the shim
+      if (!this._oneAuth) {
         log('Using oneauth shim.');
         this._oneAuth = oneauthShim;
       }
