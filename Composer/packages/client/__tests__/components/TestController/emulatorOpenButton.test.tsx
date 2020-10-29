@@ -2,18 +2,20 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { fireEvent } from '@botframework-composer/test-utils';
+import { fireEvent, act } from '@botframework-composer/test-utils';
 
 import { OpenEmulatorButton } from '../../../src/components/TestController/OpenEmulatorButton';
 import { botEndpointsState, botStatusState, settingsState } from '../../../src/recoilModel';
 import { BotStatus } from '../../../src/constants';
 import { renderWithRecoil } from '../../testUtils';
 
-const mockOpenBotInEmulator = jest.fn();
+const mockCallEmulator = jest.fn();
 
-jest.mock('../../../src/utils/navigation', () => ({
-  openInEmulator: mockOpenBotInEmulator,
-}));
+jest.mock('../../../src/utils/navigation', () => {
+  return {
+    openInEmulator: mockCallEmulator,
+  };
+});
 
 jest.mock('office-ui-fabric-react/lib/Button', () => ({
   ActionButton: ({ onClick, children }) => (
@@ -41,16 +43,15 @@ const initialState = ({ currentStatus = BotStatus.connected } = {}) => ({ set })
 };
 
 describe('<OpenEmulatorButton />', () => {
-  beforeEach(() => {
-    mockOpenBotInEmulator.mockClear();
-  });
-
-  fit('should show the button to open emulator', async () => {
+  it('should show the button to open emulator', async () => {
+    mockCallEmulator.mockImplementationOnce((url) => {
+      expect(url).toBeDefined();
+    });
     const { findByTestId } = renderWithRecoil(<OpenEmulatorButton projectId={projectId} />, initialState());
-
     const button = await findByTestId('button');
-    fireEvent.click(button);
-    expect(mockOpenBotInEmulator).toHaveBeenCalled();
+    act(() => {
+      fireEvent.click(button);
+    });
   });
 
   it('should not show the button if the status is not `BotStatus.connected`', () => {

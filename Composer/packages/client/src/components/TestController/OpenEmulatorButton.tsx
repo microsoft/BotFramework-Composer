@@ -16,7 +16,7 @@ type OpenEmulatorButtonProps = {
   projectId: string;
 };
 
-const OpenEmulatorButton: React.FC<OpenEmulatorButtonProps> = ({ projectId }) => {
+export const OpenEmulatorButton: React.FC<OpenEmulatorButtonProps> = ({ projectId }) => {
   const { openBotInEmulator } = useRecoilValue(dispatcherState);
   const currentBotStatus = useRecoilValue(botStatusState(projectId));
   const botEndpoints = useRecoilValue(botEndpointsState);
@@ -47,5 +47,3 @@ const OpenEmulatorButton: React.FC<OpenEmulatorButtonProps> = ({ projectId }) =>
     </TooltipHost>
   ) : null;
 };
-
-export { OpenEmulatorButton };
