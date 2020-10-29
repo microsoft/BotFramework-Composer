@@ -16,6 +16,7 @@ import {
 } from './types';
 import { getAuthCredentials, getBaseUrl } from './utils';
 import { logger } from './logger';
+import { API_VERSION } from './constants';
 
 // in-memory history that allows us to get the status of the most recent job
 const publishHistory: PublishHistory = {};
@@ -84,7 +85,7 @@ export const publish = async (
     const length = zipReadStream.readableLength;
 
     // initiate the publish job
-    let url = `${base}/environments/${envId}/bots/${botId}/composer/publishoperations?deleteMissingDependencies=${deleteMissingDependencies}`;
+    let url = `${base}api/botmanagement/${API_VERSION}/environments/${envId}/bots/${botId}/composer/publishoperations?deleteMissingDependencies=${deleteMissingDependencies}`;
     if (comment) {
       url += `&comment=${encodeURIComponent(comment)}`;
     }
@@ -160,7 +161,7 @@ export const getStatus = async (
     const accessToken = await getAccessToken(creds);
 
     // check the status for the publish job
-    const url = `${base}/environments/${envId}/bots/${botId}/composer/publishoperations/${operationId}`;
+    const url = `${base}api/botmanagement/${API_VERSION}/environments/${envId}/bots/${botId}/composer/publishoperations/${operationId}`;
     const res = await fetch(url, {
       method: 'GET',
       headers: {
@@ -216,7 +217,7 @@ export const history = async (
     const accessToken = await getAccessToken(creds);
 
     // get the publish history for the bot
-    const url = `${base}/environments/${envId}/bots/${botId}/composer/publishoperations`;
+    const url = `${base}api/botmanagement/${API_VERSION}/environments/${envId}/bots/${botId}/composer/publishoperations`;
     const res = await fetch(url, {
       method: 'GET',
       headers: getAuthHeaders(accessToken, tenantId),
@@ -250,7 +251,7 @@ export const pull = async (
     const accessToken = await getAccessToken(creds);
 
     // fetch zip containing bot content
-    const url = `${base}/environments/${envId}/bots/${botId}/composer/content`;
+    const url = `${base}api/botmanagement/${API_VERSION}/environments/${envId}/bots/${botId}/composer/content`;
     const options: RequestInit = {
       method: 'GET',
       headers: getAuthHeaders(accessToken, tenantId),
