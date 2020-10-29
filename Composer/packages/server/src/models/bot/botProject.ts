@@ -199,6 +199,14 @@ export class BotProject implements IBotProject {
   public getEnvSettings = async (obfuscate: boolean) => {
     const settings = await this.settingManager.get(obfuscate);
 
+    if (settings?.runtime?.customRuntime && settings.runtime.path && !Path.isAbsolute(settings.runtime.path)) {
+      const absolutePath = Path.resolve(this.dir, 'settings', settings.runtime.path);
+      if (fs.existsSync(absolutePath)) {
+        settings.runtime.path = absolutePath;
+        await this.updateEnvSettings(settings);
+      }
+    }
+
     // fix old bot have no language settings
     if (!settings?.defaultLanguage) {
       settings.defaultLanguage = defaultLanguage;

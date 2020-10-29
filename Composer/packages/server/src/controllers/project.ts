@@ -57,7 +57,8 @@ async function createProject(req: Request, res: Response) {
     if (currentProject !== undefined) {
       if (currentProject?.settings?.runtime.customRuntime === true) {
         const runtime = ExtensionContext.getRuntimeByProject(currentProject);
-        const runtimePath = currentProject.dataDir + '/runtime';
+        const runtimePath = currentProject.settings.runtime.path;
+        // const runtimePath = currentProject.dataDir + '/runtime';
 
         if (!fs.existsSync(runtimePath)) {
           await runtime.eject(currentProject, currentProject.fileStorage);

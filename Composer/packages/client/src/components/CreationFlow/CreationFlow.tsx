@@ -130,7 +130,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
 
   const handleDefineConversationSubmit = async (formData, templateId: string) => {
     // If selected template is vaCore then route to VA Customization modal
-    if (templateId === 'conversational-core') {
+    if (templateId === 'va-core') {
       setFormData(formData);
       navigate(`./vaCore/customize`);
       return;
