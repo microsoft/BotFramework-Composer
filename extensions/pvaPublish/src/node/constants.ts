@@ -1,5 +1,5 @@
 const COMPOSER_1P_APP_ID = 'ce48853e-0605-4f77-8746-d70ac63cc6bc';
-const API_VERSION = 'v1';
+export const API_VERSION = 'v1';
 
 export const AUTH_CREDENTIALS = {
   INT: {
@@ -23,7 +23,7 @@ export const AUTH_CREDENTIALS = {
 };
 
 export const BASE_URLS = {
-  INT: `https://bots.int.customercareintelligence.net/api/botmanagement/${API_VERSION}`,
-  PPE: `https://bots.ppe.customercareintelligence.net/api/botmanagement/${API_VERSION}`,
-  PROD: `https://powerva.microsoft.com/api/botmanagement/${API_VERSION}`,
+  INT: `https://bots.int.customercareintelligence.net/`,
+  PPE: `https://bots.ppe.customercareintelligence.net/`,
+  PROD: `https://powerva.microsoft.com/`,
 };

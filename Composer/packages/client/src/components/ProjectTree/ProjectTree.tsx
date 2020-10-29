@@ -13,7 +13,7 @@ import debounce from 'lodash/debounce';
 import { useRecoilValue } from 'recoil';
 import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 import isEqual from 'lodash/isEqual';
-import { extractSchemaProperties, groupTriggersByPropertyReference } from '@bfc/indexers';
+import { extractSchemaProperties, groupTriggersByPropertyReference, NoGroupingTriggerGroupName } from '@bfc/indexers';
 
 import {
   dispatcherState,
@@ -69,6 +69,23 @@ const tree = css`
 `;
 
 const SUMMARY_ARROW_SPACE = 28; // the rough pixel size of the dropdown arrow to the left of a Details/Summary element
+
+// -------------------- Helper functions -------------------- //
+
+const getTriggerIndex = (trigger: ITrigger, dialog: DialogInfo): number => {
+  return dialog.triggers.indexOf(trigger);
+};
+
+// sort trigger groups so that NoGroupingTriggerGroupName is last
+const sortTriggerGroups = (x: string, y: string): number => {
+  if (x === NoGroupingTriggerGroupName && y !== NoGroupingTriggerGroupName) {
+    return 1;
+  } else if (y === NoGroupingTriggerGroupName && x !== NoGroupingTriggerGroupName) {
+    return -1;
+  }
+
+  return x.localeCompare(y);
+};
 
 // -------------------- ProjectTree -------------------- //
 
@@ -189,6 +206,9 @@ export const ProjectTree: React.FC<Props> = ({
   };
 
   const handleOnSelect = (link: TreeLink) => {
+    // Skip state change when link not changed.
+    if (isEqual(link, selectedLink)) return;
+
     setSelectedLink(link);
     onSelect?.(link); // if we've defined a custom onSelect, use it
     if (link.dialogName != null) {
@@ -298,7 +318,6 @@ export const ProjectTree: React.FC<Props> = ({
   };
 
   const renderTrigger = (item: any, dialog: DialogInfo, projectId: string): React.ReactNode => {
-    // NOTE: put the form-dialog detection here when it's ready
     const link: TreeLink = {
       displayName: item.displayName,
       warningContent: item.warningContent,
@@ -345,7 +364,8 @@ export const ProjectTree: React.FC<Props> = ({
   const renderTriggerList = (triggers: ITrigger[], dialog: DialogInfo, projectId: string) => {
     return triggers
       .filter((tr) => filterMatch(dialog.displayName) || filterMatch(getTriggerName(tr)))
-      .map((tr, index) => {
+      .map((tr) => {
+        const index = getTriggerIndex(tr, dialog);
         const warningContent = triggerNotSupported(dialog, tr);
         const errorContent = notificationMap[projectId][dialog.id].some(
           (diag) => diag.severity === DiagnosticSeverity.Error && diag.path?.match(RegExp(`triggers\\[${index}\\]`))
@@ -358,10 +378,10 @@ export const ProjectTree: React.FC<Props> = ({
       });
   };
 
-  const renderTriggerGroupHeader = (groupName: string, dialog: DialogInfo, projectId: string) => {
+  const renderTriggerGroupHeader = (displayName: string, dialog: DialogInfo, projectId: string) => {
     const link: TreeLink = {
       dialogName: dialog.id,
-      displayName: groupName,
+      displayName,
       isRoot: false,
       projectId: projectId,
       skillId: null,
@@ -388,10 +408,16 @@ export const ProjectTree: React.FC<Props> = ({
     triggers: ITrigger[],
     startDepth: number
   ) => {
+    const groupDisplayName =
+      groupName === NoGroupingTriggerGroupName ? formatMessage('form-wide operations') : groupName;
     const key = `${projectId}.${dialog.id}.group-${groupName}`;
 
     return (
-      <ExpandableNode key={key} depth={startDepth} summary={renderTriggerGroupHeader(groupName, dialog, projectId)}>
+      <ExpandableNode
+        key={key}
+        depth={startDepth}
+        summary={renderTriggerGroupHeader(groupDisplayName, dialog, projectId)}
+      >
         <div>{renderTriggerList(triggers, dialog, projectId)}</div>
       </ExpandableNode>
     );
@@ -405,7 +431,7 @@ export const ProjectTree: React.FC<Props> = ({
 
     const triggerGroups = Object.keys(groupedTriggers);
 
-    return triggerGroups.map((triggerGroup) => {
+    return triggerGroups.sort(sortTriggerGroups).map((triggerGroup) => {
       return renderTriggerGroup(projectId, dialog, triggerGroup, groupedTriggers[triggerGroup], startDepth);
     });
   };

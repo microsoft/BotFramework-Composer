@@ -20,7 +20,7 @@ import { Path } from './../utility/path';
 
 async function createProject(req: Request, res: Response) {
   let { templateId } = req.body;
-  const { name, description, storageId, location, schemaUrl, locale } = req.body;
+  const { name, description, storageId, location, schemaUrl, locale, preserveRoot } = req.body;
   const user = await ExtensionContext.getUserFromRequest(req);
   if (templateId === '') {
     templateId = 'EmptyBot';
@@ -82,7 +82,7 @@ async function createProject(req: Request, res: Response) {
 
         await realMerge.merge();
       }
-      await currentProject.updateBotInfo(name, description);
+      await currentProject.updateBotInfo(name, description, preserveRoot);
       if (schemaUrl) {
         await currentProject.saveSchemaToProject(schemaUrl, locationRef.path);
       }
