@@ -262,7 +262,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     if (link.trigger != null) {
       selectTo(link.skillId ?? null, link.dialogId ?? null, `triggers[${link.trigger}]`);
     } else if (link.dialogId != null) {
-      navTo(link.skillId ?? link.projectId, link.dialogId, []);
+      navTo(link.skillId ?? link.projectId, link.dialogId, [
+        { skillId: link.skillId, dialogId: link.dialogId, selected: '', focused: '' },
+      ]);
     } else {
       // with no dialog or ID, we must be looking at a bot link
       navTo(link.skillId ?? link.projectId, null, []);
@@ -271,7 +273,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
   const onCreateDialogComplete = (dialogId) => {
     if (dialogId) {
-      navTo(projectId, dialogId, []);
+      navTo(projectId, dialogId, [{ dialogId, selected: '', focused: '' }]);
     }
   };
 

@@ -60,13 +60,12 @@ export const navigationDispatcher = () => {
       const projectId = skillId ?? rootBotProjectId;
 
       const designPageLocation = await snapshot.getPromise(designPageLocationState(projectId));
-      const updatedBreadcrumb = cloneDeep(breadcrumb);
       set(currentProjectIdState, projectId);
 
       const currentUri = convertPathToUrl(rootBotProjectId, projectId, dialogId);
       if (checkUrl(currentUri, rootBotProjectId, projectId, designPageLocation)) return;
 
-      navigateTo(currentUri, { state: { breadcrumb: updatedBreadcrumb } });
+      navigateTo(currentUri, { state: { breadcrumb } });
     }
   );
 
@@ -119,7 +118,6 @@ export const navigationDispatcher = () => {
 
       if (focusPath) {
         const dialogs = await snapshot.getPromise(dialogsSelectorFamily(skillId ?? projectId));
-        console.log('in focusTo', projectId, skillId, focusPath, fragment, 'dialogs=', dialogs);
         const currentDialog = dialogs.find(({ id }) => id === dialogId);
         const encodedFocusPath = encodeArrayPathToDesignerPath(currentDialog?.content, focusPath);
 
