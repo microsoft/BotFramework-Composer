@@ -90,14 +90,24 @@ export const provisionDispatcher = () => {
         const response = await httpClient.get(`/provision/${projectId}/status/${targetType}/${targetName}/${jobId}`);
         if (response.data?.status === 200 && response.data.config && response.data.config != {}) {
           clearInterval(timer);
+          // delete provisionStatus
+          callbackHelpers.set(provisionStatusState(projectId), (status) => {
+            delete status[targetName];
+            return { ...status };
+          });
+
           // update publishConfig
           callbackHelpers.set(settingsState(projectId), (settings) => {
-            settings.publishTargets?.push({
+            const profile = {
               configuration: JSON.stringify(response.data.config, null, 2),
               name: targetName,
               type: targetType,
-            });
-            return settings;
+            };
+            const targetlist = (settings.publishTargets || []).concat([profile]);
+            return {
+              ...settings,
+              publishTargets: targetlist,
+            };
           });
 
           // update notification
@@ -106,11 +116,6 @@ export const provisionDispatcher = () => {
             notificationId,
             getProvisionSuccessNotification(response.data.message)
           );
-          // delete provisionStatus
-          callbackHelpers.set(provisionStatusState(projectId), (status) => {
-            delete status[targetName];
-            return status;
-          });
         } else {
           if (response.data.status !== 500) {
             updateNotificationInternal(
@@ -140,14 +145,14 @@ export const provisionDispatcher = () => {
           }
         }
       } catch (err) {
-        console.log(err.response.data);
+        console.error(err);
 
         updateNotificationInternal(
           callbackHelpers,
           notificationId,
-          getProvisionFailureNotification(err.response.data?.message || 'Error')
+          getProvisionFailureNotification(err.response?.data?.message || 'Error')
         );
-        const newStat = { ...err.response.data, notificationId };
+        const newStat = { ...err.response?.data, notificationId };
         // update provision status
         callbackHelpers.set(provisionStatusState(projectId), (status) => ({
           ...status,
