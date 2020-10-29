@@ -5,7 +5,6 @@
 //TODO: refactor the router to use one-way data flow
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 import { PromptTab } from '@bfc/shared';
-import cloneDeep from 'lodash/cloneDeep';
 
 import { currentProjectIdState } from '../atoms';
 import { encodeArrayPathToDesignerPath } from '../../utils/convertUtils/designerPathEncoder';
@@ -105,7 +104,7 @@ export const navigationDispatcher = () => {
       focusPath: string,
       fragment: string
     ) => {
-      set(currentProjectIdState, projectId);
+      set(currentProjectIdState, skillId ?? projectId);
       const designPageLocation = await snapshot.getPromise(designPageLocationState(skillId ?? projectId));
       const breadcrumb = await snapshot.getPromise(breadcrumbState(skillId ?? projectId));
       let updatedBreadcrumb = [...breadcrumb];
