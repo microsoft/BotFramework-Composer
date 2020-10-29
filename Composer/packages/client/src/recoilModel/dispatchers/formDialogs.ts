@@ -13,7 +13,7 @@ import {
   formDialogGenerationProgressingState,
   formDialogLibraryTemplatesState,
 } from '../atoms/appState';
-import { formDialogSchemaIdsState, formDialogSchemaState } from '../atoms/botState';
+import { dialogState, formDialogSchemaIdsState, formDialogSchemaState } from '../atoms/botState';
 import { dispatcherState } from '../DispatcherWrapper';
 
 export const formDialogsDispatcher = () => {
@@ -79,10 +79,33 @@ export const formDialogsDispatcher = () => {
       } catch (error) {
         set(applicationErrorState, {
           message: error.message,
-          summary: formatMessage('Generating form dialog using ${schemaId} schema failed.', { schemaId }),
+          summary: formatMessage('Generating form dialog using "{ schemaId }" schema failed.', { schemaId }),
         });
       } finally {
         set(formDialogGenerationProgressingState, false);
+      }
+    }
+  );
+
+  const removeFormDialog = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async ({ projectId, dialogId }) => {
+      const { set, snapshot } = callbackHelpers;
+
+      const dialog = await snapshot.getPromise(dialogState({ projectId, dialogId }));
+      const { reloadProject } = await snapshot.getPromise(dispatcherState);
+
+      try {
+        if (!dialog) {
+          return;
+        }
+
+        const response = await httpClient.delete(`/formDialogs/${projectId}/${dialogId}`);
+        await reloadProject(callbackHelpers, response);
+      } catch (error) {
+        set(applicationErrorState, {
+          message: error.message,
+          summary: formatMessage('Deleting "{ dialogId }" failed.', { dialogId }),
+        });
       }
     }
   );
@@ -103,5 +126,6 @@ export const formDialogsDispatcher = () => {
     generateFormDialog,
     navigateToGeneratedDialog,
     navigateToFormDialogSchema,
+    removeFormDialog,
   };
 };

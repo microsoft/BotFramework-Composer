@@ -81,7 +81,7 @@ export const Intellisense = React.memo(
       const outsideClickHandler = (event: MouseEvent) => {
         const { x, y } = event;
 
-        let shouldBlur = true;
+        let shouldBlur = focused;
 
         if (mainContainerRef.current && !checkIsOutside(x, y, mainContainerRef.current)) {
           shouldBlur = false;
@@ -98,7 +98,7 @@ export const Intellisense = React.memo(
       };
 
       const keyupHandler = (event: KeyboardEvent) => {
-        if (event.key === 'Escape') {
+        if (event.key === 'Escape' && focused) {
           setShowCompletionList(false);
           onBlur && onBlur(id);
         }
@@ -111,7 +111,7 @@ export const Intellisense = React.memo(
         document.body.removeEventListener('click', outsideClickHandler);
         document.body.removeEventListener('keyup', keyupHandler);
       };
-    }, []);
+    }, [focused, onBlur]);
 
     // When textField value is changed
     const onValueChanged = (newValue: string) => {
