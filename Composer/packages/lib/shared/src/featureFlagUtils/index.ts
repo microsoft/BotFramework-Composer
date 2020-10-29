@@ -34,7 +34,7 @@ export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
   REMOTE_TEMPLATE_CREATION_EXPERIENCE: {
     displayName: formatMessage('Remote template creation experience'),
     description: formatMessage('Changes the new bot flow to use templates stored as packages on Nuget/npm'),
-    isHidden: false,
+    isHidden: true,
     enabled: false,
   },
 });
