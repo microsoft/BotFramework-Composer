@@ -18,8 +18,7 @@
     "path": "^0.12.7",
     "portfinder": "^1.0.26",
     "rimraf": "^3.0.2",
-    "uuid": "^7.0.1",
-    "node-global-proxy": "^1.0.1"
+    "uuid": "^7.0.1"
   },
   "resolutions": {
     "bl": "^4.0.3"

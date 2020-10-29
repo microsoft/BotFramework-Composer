@@ -30,6 +30,7 @@ import { PreBuilder } from './preBuilder';
 
 const debug = log.extend('bot-project');
 const mkDirAsync = promisify(fs.mkdir);
+const proxy = require("node-global-proxy").default;
 
 const oauthInput = () => ({
   MicrosoftAppId: process.env.MicrosoftAppId || '',
@@ -485,7 +486,16 @@ export class BotProject implements IBotProject {
         crossTrainConfig,
         this.settings.downsampling
       );
+      const proxySettings = this.settings.httpProxy;
+      if (proxySettings) {
+        console.log(`local publishing using proxy: ${proxySettings}`);
+        proxy.setConfig(proxySettings);
+        proxy.start();
+      }
       await this.builder.build(luFiles, qnaFiles, Array.from(this.files.values()) as FileInfo[]);
+      if (proxySettings) {
+        proxy.stop();
+      }
     }
   };
 
