@@ -1,16 +1,34 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+/** @jsx jsx */
+import { css, jsx } from '@emotion/core';
 import React from 'react';
 import { Callout, DirectionalHint } from 'office-ui-fabric-react/lib/Callout';
 import { DetailsList, DetailsListLayoutMode, IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { IComponentAsProps, SelectionMode } from 'office-ui-fabric-react/lib/Utilities';
+import { FontWeights } from '@uifabric/styling';
+import { FontSizes } from '@uifabric/fluent-theme/lib/fluent';
 import formatMessage from 'format-message';
 
 import { LocalBotRuntime } from './LocalBotRuntime';
 import { LocalBotStatusIndicator } from './LocalBotStatusIndicator';
 import { OpenEmulatorButton } from './OpenEmulatorButton';
+
+const styles = {
+  container: css`
+    max-height: 500px;
+    overflow: auto;
+  `,
+  header: css`
+    margin: 18px 18px 0 18px;
+  `,
+  title: css`
+    font-weight: ${FontWeights.bold};
+    font-size: ${FontSizes.size18};
+  `,
+};
 
 const tableColumns: IColumn[] = [
   {
@@ -62,7 +80,11 @@ const BotControllerMenu: React.FC<IComponentAsProps<IContextualMenuProps>> = ({ 
       onDismiss={onDismiss}
     >
       <div>
-        <div>
+        <div css={styles.header}>
+          <div css={styles.title}>{formatMessage('Local bot runtime manager')}</div>
+          <p>{formatMessage('Start and stop local bot runtimes individually.')}</p>
+        </div>
+        <div css={styles.container}>
           <DetailsList
             columns={tableColumns}
             compact={false}
