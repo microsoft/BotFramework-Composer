@@ -119,7 +119,12 @@ export const diagnosticLink = css`
   }
 `;
 
-// export const errorIcon
+export const diagnosticLinkMessages = css`
+  max-width: 200px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+`;
 
 export const overflowSet = (isBroken: boolean) => css`
   width: 100%;
@@ -221,7 +226,9 @@ const onRenderItem = (item: IOverflowSetItemProps) => {
     return (
       <div key={item.message} css={diagnosticLink}>
         <Icon iconName={'Warning'} style={diagnosticWarningIcon} />
-        <span>{item.message}</span>
+        <span css={diagnosticLinkMessages} title={item.message}>
+          {item.message}
+        </span>
         <Link>{linkText}</Link>
       </div>
     );
@@ -235,7 +242,9 @@ const onRenderItem = (item: IOverflowSetItemProps) => {
     return (
       <div key={item.message} css={diagnosticLink}>
         <Icon iconName={'ErrorBadge'} style={diagnosticErrorIcon} />
-        <span>{item.message}</span>
+        <span css={diagnosticLinkMessages} title={item.message}>
+          {item.message}
+        </span>
         <Link>{linkText}</Link>
       </div>
     );
