@@ -20,8 +20,6 @@ export class BotProjectDeploy {
   private runtime: any;
 
   constructor(config: BotProjectDeployConfig) {
-    proxy.setConfig(process.env.COMPOSER_HTTP_PROXY);
-
     this.logger = config.logger;
     this.accessToken = config.accessToken;
     this.projPath = config.projPath;
@@ -49,7 +47,15 @@ export class BotProjectDeploy {
     luisResource?: string
   ) {
     try {
-      proxy.start();
+      const proxySettings = settings.httpProxy;
+      if (proxySettings) {
+        this.logger({
+          status: BotProjectDeployLoggerType.DEPLOY_INFO,
+          message: `Remote deploy using http proxy: ${proxySettings}`,
+        })
+        proxy.setConfig(proxySettings);
+        proxy.start();
+      }
 
       // STEP 1: CLEAN UP PREVIOUS BUILDS
       // cleanup any previous build
@@ -120,10 +126,14 @@ export class BotProjectDeploy {
         status: BotProjectDeployLoggerType.DEPLOY_ERROR,
         message: JSON.stringify(error, Object.getOwnPropertyNames(error)),
       });
+      if (settings.httpProxy) {
+        proxy.stop();
+      }
       throw error;
+    }
+    if (settings.httpProxy) {
       proxy.stop();
     }
-    proxy.stop();
   }
 
   private async zipDirectory(source: string, out: string) {
