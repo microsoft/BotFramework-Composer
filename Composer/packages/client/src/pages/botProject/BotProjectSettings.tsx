@@ -15,7 +15,8 @@ import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
 import { dispatcherState } from '../../recoilModel';
 import { settingsState, userSettingsState, schemasState } from '../../recoilModel/atoms';
-import { botProjectSpaceSelector } from '../../recoilModel/selectors/project';
+import { botProjectSpaceSelector, rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
+import { navigateTo } from '../../utils/navigation';
 
 import BotProjectSettingsTableView from './BotProjectSettingsTableView';
 import { header, container, botNameStyle, mainContentHeader } from './styles';
@@ -26,11 +27,17 @@ type BotProjectSettingsProps = {
 } & RouteComponentProps<{}>;
 
 const BotProjectSettings: React.FC<BotProjectSettingsProps> = (props) => {
-  const projectId = props.skillId || props.projectId || '';
   const botProjectsMetaData = useRecoilValue(botProjectSpaceSelector);
+  const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
   const userSettings = useRecoilValue(userSettingsState);
+  const projectId = (props['*'] === 'root' ? rootBotProjectId : props['*']) || '';
   const schemas = useRecoilValue(schemasState(projectId));
   const botProject = botProjectsMetaData.find((b) => b.projectId === projectId);
+
+  //Page will crash if navigating to a skill bot but it is not opened
+  if (!botProject) {
+    navigateTo(`/bot/${rootBotProjectId}/botProjectsSettings/root`);
+  }
   const isRootBot = !!botProject?.isRootBot;
   const botName = botProject?.name;
   const settings = useRecoilValue(settingsState(projectId));
@@ -41,15 +48,14 @@ const BotProjectSettings: React.FC<BotProjectSettingsProps> = (props) => {
 
   const navLinks: INavTreeItem[] = useMemo(() => {
     const localBotProjects = botProjectsMetaData.filter((b) => !b.isRemote);
-    const rootBotprojectId = botProjectsMetaData.find((b) => b.isRootBot)?.projectId;
     const newbotProjectLinks: INavTreeItem[] = localBotProjects.map((b) => {
       return {
         id: b.projectId,
         name: b.name,
         ariaLabel: formatMessage('bot'),
         url: b.isRootBot
-          ? `/bot/${rootBotprojectId}/botProjectsSettings/root`
-          : `/bot/${rootBotprojectId}/botProjectsSettings/skill/${b.projectId}`,
+          ? `/bot/${rootBotProjectId}/botProjectsSettings/root`
+          : `/bot/${rootBotProjectId}/botProjectsSettings/${b.projectId}`,
         isRootBot: b.isRootBot,
       };
     });
@@ -82,7 +88,6 @@ const BotProjectSettings: React.FC<BotProjectSettingsProps> = (props) => {
       saveChangeResult(result);
     }
   };
-
   return (
     <Page
       data-testid="BotProjectsSettings"

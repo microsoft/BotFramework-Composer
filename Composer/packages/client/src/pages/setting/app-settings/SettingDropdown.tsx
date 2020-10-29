@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import React from 'react';
 import { useId } from '@uifabric/react-hooks';
 import kebabCase from 'lodash/kebabCase';
-import { Dropdown, IDropdownProps } from 'office-ui-fabric-react/lib/Dropdown';
+import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
@@ -27,11 +27,11 @@ const SettingDropdown: React.FC<ISettingToggleProps> = (props) => {
   const { id, title, onChange, options, selected } = props;
   const uniqueId = useId(kebabCase(title));
 
-  const onRenderLabel = (props: IDropdownProps | undefined) => {
+  const onRenderLabel = (props) => {
     return (
       <div css={styles.labelContainer}>
-        <div css={styles.customerLabel}> {props?.label} </div>
-        <TooltipHost content={props?.label}>
+        <div css={styles.customerLabel}> {props.label} </div>
+        <TooltipHost content={props.label}>
           <Icon iconName="Unknown" styles={styles.icon} />
         </TooltipHost>
       </div>

@@ -5,7 +5,7 @@
 import React, { useState, useEffect } from 'react';
 import { jsx } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
-import { TextField, ITextFieldProps } from 'office-ui-fabric-react/lib/TextField';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
@@ -31,12 +31,12 @@ type AppIdAndPasswordProps = {
   required: boolean;
 };
 
-const onRenderLabel = (props: ITextFieldProps | undefined) => {
+const onRenderLabel = (props) => {
   return (
     <div css={labelContainer}>
-      <div css={customerLabel}> {props?.label} </div>
-      <TooltipHost content={props?.label}>
-        <Icon iconName={'Unknown'} styles={unknownIconStyle(props?.required)} />
+      <div css={customerLabel}> {props.label} </div>
+      <TooltipHost content={props.label}>
+        <Icon iconName="Unknown" styles={unknownIconStyle(props.required)} />
       </TooltipHost>
     </div>
   );

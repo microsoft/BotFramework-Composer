@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import React, { useState, useRef, Fragment, useEffect } from 'react';
-import { TextField, ITextFieldProps, ITextField } from 'office-ui-fabric-react/lib/TextField';
+import { TextField, ITextField } from 'office-ui-fabric-react/lib/TextField';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
@@ -57,7 +57,7 @@ const actionButtonStyle = {
   },
 };
 
-type ClickOnFocusTextFieldProps = {
+type TextFieldWithCustomButtonProps = {
   label: string;
   ariaLabelledby: string;
   buttonText: string;
@@ -68,18 +68,18 @@ type ClickOnFocusTextFieldProps = {
   required: boolean;
 };
 
-const onRenderLabel = (props: ITextFieldProps | undefined) => {
+const onRenderLabel = (props) => {
   return (
     <div css={labelContainer}>
-      <div css={customerLabel}> {props?.label} </div>
-      <TooltipHost content={props?.label}>
-        <Icon iconName="Unknown" styles={unknownIconStyle(props?.required)} />
+      <div css={customerLabel}> {props.label} </div>
+      <TooltipHost content={props.label}>
+        <Icon iconName="Unknown" styles={unknownIconStyle(props.required)} />
       </TooltipHost>
     </div>
   );
 };
 
-export const ClickOnFocusTextField: React.FC<ClickOnFocusTextFieldProps> = (props) => {
+export const TextFieldWithCustomButton: React.FC<TextFieldWithCustomButtonProps> = (props) => {
   const { label, placeholder, placeholderOnDisable, onChange, required, ariaLabelledby, value, buttonText } = props;
   const [isDisabled, setDisabled] = useState<boolean>(!value);
   const textFieldComponentRef = useRef<ITextField>(null);

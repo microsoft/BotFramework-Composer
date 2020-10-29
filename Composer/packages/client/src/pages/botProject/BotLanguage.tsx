@@ -83,7 +83,7 @@ export const BotLanguage: React.FC<BotLanguageProps> = (props) => {
   languageListOptions.unshift(dl);
   return (
     <Fragment>
-      <CollapsableWrapper title={formatMessage('Bot Language')} titleStyle={titleStyle}>
+      <CollapsableWrapper title={formatMessage('Bot language')} titleStyle={titleStyle}>
         <div css={appIdAndPasswordStyle}>
           <div css={botLanguageDescriptionStyle}>
             {formatMessage(

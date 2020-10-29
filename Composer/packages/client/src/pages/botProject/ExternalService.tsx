@@ -7,7 +7,7 @@ import { jsx } from '@emotion/core';
 import { QnAFile, DialogInfo, LuFile } from '@bfc/shared';
 import { mergeStyleSets } from '@uifabric/styling';
 import { useRecoilValue } from 'recoil';
-import { TextField, ITextFieldProps } from 'office-ui-fabric-react/lib/TextField';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
@@ -23,7 +23,7 @@ import {
 import settingStorage from '../../utils/dialogSettingStorage';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
-import { ClickOnFocusTextField } from '../../components/ClickOnFocusTextField';
+import { TextFieldWithCustomButton } from '../../components/TextFieldWithCustomButton';
 import { isLUISnQnARecognizerType } from '../../utils/dialogValidator';
 import { getBaseName } from '../../utils/fileUtil';
 import { botProjectSpaceSelector } from '../../recoilModel/selectors/project';
@@ -44,12 +44,12 @@ type ExternalServiceProps = {
   projectId: string;
 };
 
-const onRenderLabel = (props: ITextFieldProps | undefined) => {
+const onRenderLabel = (props) => {
   return (
     <div css={labelContainer}>
-      <div css={customerLabel}> {props?.label} </div>
-      <TooltipHost content={props?.label}>
-        <Icon iconName="Unknown" styles={unknownIconStyle(props?.required)} />
+      <div css={customerLabel}> {props.label} </div>
+      <TooltipHost content={props.label}>
+        <Icon iconName="Unknown" styles={unknownIconStyle(props.required)} />
       </TooltipHost>
     </div>
   );
@@ -165,7 +165,7 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
         )}
 
         {!isRootBot && (
-          <ClickOnFocusTextField
+          <TextFieldWithCustomButton
             required
             ariaLabelledby={'LUIS key'}
             buttonText={formatMessage('Use custom LUIS key')}
@@ -198,7 +198,7 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
           />
         )}
         {!isRootBot && (
-          <ClickOnFocusTextField
+          <TextFieldWithCustomButton
             required
             ariaLabelledby={'LUIS region'}
             buttonText={formatMessage('Use custom LUIS region')}
@@ -244,7 +244,7 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
         )}
 
         {!isRootBot && (
-          <ClickOnFocusTextField
+          <TextFieldWithCustomButton
             required
             ariaLabelledby={'QnA Maker Subscription key'}
             buttonText={formatMessage('Use custom QnA Maker Subscription key')}
