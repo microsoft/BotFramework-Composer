@@ -12,6 +12,8 @@ import { JsonField } from './JsonField';
 import { NumberField } from './NumberField';
 import { StringField } from './StringField';
 
+const noop = () => {};
+
 export const IntellisenseTextField: React.FC<FieldProps<string>> = (props) => {
   const { id, value = '', onChange, uiOptions, focused: defaultFocused } = props;
 
@@ -39,7 +41,7 @@ export const IntellisenseTextField: React.FC<FieldProps<string>> = (props) => {
           focused={focused}
           id={id}
           value={textFieldValue}
-          onBlur={() => {}} // onBlur managed by Intellisense
+          onBlur={noop} // onBlur managed by Intellisense
           onChange={(newValue) => onValueChanged(newValue || '')}
           onClick={onClickTextField}
           onKeyDown={onKeyDownTextField}
@@ -72,7 +74,7 @@ export const IntellisenseExpressionField: React.FC<FieldProps<string>> = (props)
           focused={focused}
           id={id}
           value={textFieldValue}
-          onBlur={() => {}} // onBlur managed by Intellisense
+          onBlur={noop} // onBlur managed by Intellisense
           onChange={(newValue) => onValueChanged(newValue || '')}
           onClick={onClickTextField}
           onKeyDown={onKeyDownTextField}
@@ -110,7 +112,7 @@ export const IntellisenseNumberField: React.FC<FieldProps<string>> = (props) => 
           focused={focused}
           id={id}
           value={textFieldValue}
-          onBlur={() => {}} // onBlur managed by Intellisense
+          onBlur={noop} // onBlur managed by Intellisense
           onChange={(newValue) => onValueChanged(newValue || 0)}
           onClick={onClickTextField}
           onKeyDown={onKeyDownTextField}
@@ -167,7 +169,7 @@ export const IntellisenseJSONField: React.FC<FieldProps<string>> = (props) => {
           {...props}
           style={{ height: 100 }}
           value={textFieldValue}
-          onBlur={() => {}} // onBlur managed by Intellisense
+          onBlur={noop} // onBlur managed by Intellisense
           onChange={onValueChanged}
         />
       )}
