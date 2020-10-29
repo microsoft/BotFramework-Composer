@@ -18,7 +18,6 @@ import isEqual from 'lodash/isEqual';
 import {
   dispatcherState,
   rootBotProjectIdSelector,
-  currentProjectIdState,
   botProjectSpaceSelector,
   jsonSchemaFilesByProjectIdSelector,
 } from '../../recoilModel';
