@@ -76,7 +76,7 @@ function getRemoteSamples(): BotTemplate[] {
     description: 'A hosted template that provides a root bot extended by common .lg packages',
     packageName: 'Microsoft.ConversationalCore.Template',
     packageSource: 'nuget',
-    packageVersion: '0.0.1-preview3'
+    packageVersion: '0.0.1-preview4'
   }]
 }
 

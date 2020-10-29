@@ -59,7 +59,7 @@ export class AssetManager {
 
   private async getRemoteTemplate(template: BotTemplate, destinationPath: string) {
     // install package
-    const { stderr: initErr } = await execAsync(`dotnet new -i ${template.packageName}`);
+    const { stderr: initErr } = await execAsync(`dotnet new -i ${template.packageName}::${template.packageVersion}`);
     if (initErr) {
       throw new Error(initErr);
     }
@@ -82,6 +82,9 @@ export class AssetManager {
     if (isHostedTemplate) {
       // create empty temp directory on server for holding externally hosted template src
       templateSrcPath = path.resolve(__dirname, '../../../temp');
+      if (fs.existsSync(templateSrcPath)) {
+        await del(templateSrcPath);
+      }
       fs.mkdir(templateSrcPath, (err) => {
         if (err) {
           throw new Error('Error creating temp directory for external template storage');
