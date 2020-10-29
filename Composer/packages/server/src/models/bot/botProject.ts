@@ -15,6 +15,7 @@ import {
   FileExtensions,
   Skill,
   DialogUtils,
+  checkForPVASchema,
 } from '@bfc/shared';
 import merge from 'lodash/merge';
 import { UserIdentity, ExtensionContext } from '@bfc/extension';
@@ -795,6 +796,9 @@ export class BotProject implements IBotProject {
 
   // migration: create qna files for old bots
   private _createQnAFilesForOldBot = async (files: Map<string, FileInfo>) => {
+    const schemas = await this.getSchemas();
+    if (checkForPVASchema(schemas.sdk)) return new Map<string, FileInfo>();
+
     const dialogFiles: FileInfo[] = [];
     const qnaFiles: FileInfo[] = [];
     files.forEach((file) => {
