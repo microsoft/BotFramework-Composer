@@ -99,6 +99,7 @@ remove(outDir)
   .then(downloadPackage)
   .then(extractPackage)
   .then(cleanUp)
+  .then(postinstall)
   .then(() => {
     // oneauth-mac requires us to relink the files
     if (process.platform === 'darwin') {
