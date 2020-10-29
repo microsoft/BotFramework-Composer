@@ -44,6 +44,7 @@ router.post('/projects/:projectId/copyTemplateToExisting', ProjectController.cop
 router.post('/formDialogs/expandJsonSchemaProperty', FormDialogController.expandJsonSchemaProperty);
 router.get('/formDialogs/templateSchemas', FormDialogController.getTemplateSchemas);
 router.post('/formDialogs/:projectId/generate', FormDialogController.generate);
+router.delete('/formDialogs/:projectId/:dialogId', FormDialogController.deleteDialog);
 
 // update the boilerplate content
 router.get('/projects/:projectId/boilerplateVersion', ProjectController.checkBoilerplateVersion);

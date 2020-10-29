@@ -9,5 +9,6 @@
       "@src/*": ["src/*"]
     }
   },
-  "include": ["src/**/*.ts"]
+  // include scripts to geting proper linting
+  "include": ["src/**/*.ts", "scripts/*.js"]
 }
