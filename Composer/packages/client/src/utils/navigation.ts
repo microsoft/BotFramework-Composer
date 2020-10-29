@@ -87,14 +87,23 @@ export interface NavigationState {
   qnaKbUrls?: string[];
 }
 
-export function convertPathToUrl(projectId: string, skillId: string | null, dialogId: string, path?: string): string {
+export function convertPathToUrl(
+  projectId: string,
+  skillId: string | null,
+  dialogId: string | null,
+  path?: string
+): string {
   //path is like main.triggers[0].actions[0]
   //uri = id?selected=triggers[0]&focused=triggers[0].actions[0]
 
-  let uri =
-    skillId == null
-      ? `/bot/${projectId}/dialogs/${dialogId}`
-      : `/bot/${projectId}/skill/${skillId}/dialogs/${dialogId}`;
+  let uri = `/bot/${projectId}`;
+  if (skillId != null) {
+    uri += `/skill/${skillId}`;
+  }
+  if (dialogId != null) {
+    uri += `/dialogs/${dialogId}`;
+  }
+
   if (!path) return uri;
 
   const items = path.split('#');

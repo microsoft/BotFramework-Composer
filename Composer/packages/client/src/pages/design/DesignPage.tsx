@@ -264,6 +264,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       selectTo(link.skillId ?? link.projectId, link.dialogId ?? null, path);
     } else if (link.dialogId != null) {
       navTo(link.skillId ?? link.projectId, link.dialogId, []);
+    } else {
+      // with no dialog or ID, we must be looking at a bot link
+      navTo(link.skillId ?? link.projectId, null, []);
     }
   }
 
@@ -284,7 +287,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     return { actionSelected, showDisableBtn, showEnableBtn };
   }, [visualEditorSelection]);
 
-  const { onFocusFlowEditor, onBlurFlowEditor } = useElectronFeatures(actionSelected, canUndo(), canRedo());
+  const { onFocusFlowEditor, onBlurFlowEditor } = useElectronFeatures(actionSelected, canUndo?.(), canRedo?.());
 
   const EditorAPI = getEditorAPI();
   const toolbarItems: IToolbarItem[] = [
@@ -345,13 +348,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           {
             key: 'edit.undo',
             text: formatMessage('Undo'),
-            disabled: !canUndo(),
+            disabled: !canUndo?.(),
             onClick: undo,
           },
           {
             key: 'edit.redo',
             text: formatMessage('Redo'),
-            disabled: !canRedo(),
+            disabled: !canRedo?.(),
             onClick: redo,
           },
           {

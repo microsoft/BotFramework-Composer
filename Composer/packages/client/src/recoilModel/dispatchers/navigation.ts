@@ -51,7 +51,7 @@ export const navigationDispatcher = () => {
   const navTo = useRecoilCallback(
     ({ snapshot, set }: CallbackInterface) => async (
       projectId: string,
-      dialogId: string,
+      dialogId: string | null,
       breadcrumb: BreadcrumbItem[] = []
     ) => {
       const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
@@ -64,13 +64,16 @@ export const navigationDispatcher = () => {
 
       let path;
       if (dialogId !== designPageLocation.dialogId) {
-        const currentDialog = dialogs.find(({ id }) => id === dialogId);
-        const beginDialogIndex = currentDialog?.triggers.findIndex(({ type }) => type === SDKKinds.OnBeginDialog);
+        if (dialogId == null) {
+        } else {
+          const currentDialog = dialogs.find(({ id }) => id === dialogId);
+          const beginDialogIndex = currentDialog?.triggers.findIndex(({ type }) => type === SDKKinds.OnBeginDialog);
 
-        if (typeof beginDialogIndex !== 'undefined' && beginDialogIndex >= 0) {
-          path = createSelectedPath(beginDialogIndex);
-          path = encodeArrayPathToDesignerPath(currentDialog?.content, path);
-          updatedBreadcrumb.push({ dialogId, selected: '', focused: '' });
+          if (typeof beginDialogIndex !== 'undefined' && beginDialogIndex >= 0) {
+            path = createSelectedPath(beginDialogIndex);
+            path = encodeArrayPathToDesignerPath(currentDialog?.content, path);
+            updatedBreadcrumb.push({ dialogId, selected: '', focused: '' });
+          }
         }
       }
 

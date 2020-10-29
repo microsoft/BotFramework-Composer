@@ -14,6 +14,7 @@ import { useRecoilValue } from 'recoil';
 import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 import { extractSchemaProperties, groupTriggersByPropertyReference, NoGroupingTriggerGroupName } from '@bfc/indexers';
 import isMatch from 'lodash/isMatch';
+import isEqual from 'lodash/isEqual';
 
 import {
   dispatcherState,
@@ -250,6 +251,7 @@ export const ProjectTree: React.FC<Props> = ({
           isActive={isTriggerMatch(link, selectedLink)}
           link={link}
           menu={[{ label: formatMessage('Create/edit skill manifest'), onClick: () => {} }]}
+          onSelect={handleOnSelect}
         />
       </span>
     );
