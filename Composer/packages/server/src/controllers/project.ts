@@ -58,7 +58,6 @@ async function createProject(req: Request, res: Response) {
       if (currentProject?.settings?.runtime.customRuntime === true) {
         const runtime = ExtensionContext.getRuntimeByProject(currentProject);
         const runtimePath = currentProject.settings.runtime.path;
-        // const runtimePath = currentProject.dataDir + '/runtime';
 
         if (!fs.existsSync(runtimePath)) {
           await runtime.eject(currentProject, currentProject.fileStorage);
@@ -69,7 +68,7 @@ async function createProject(req: Request, res: Response) {
 
         const manifestFile = runtime.identifyManifest(runtimePath);
 
-        // run the bf cli dialog merge command...
+        // run the merge command to merge all package dependencies from the template to the bot project
         const realMerge = new SchemaMerger(
           [manifestFile],
           Path.join(currentProject.dataDir, 'schemas/sdk'),
