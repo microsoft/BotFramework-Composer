@@ -1,13 +1,13 @@
 # Using botframework-cli tool to process language models for Composer bots
 
-Composer allows users to enable kinds of languages models such as [LUIS](https://www.luis.ai/home) and [QnAMaker](https://www.qnamaker.ai/). Composer can help to preprocess and publish these models to azure services if users provide the resource key and other essential elements. However, outside Composer, users can also use botframework-cli tool to achieve the same goal.
+Composer allows users to enable kinds of languages models such as [LUIS](https://www.luis.ai/home) and [QnAMaker](https://www.qnamaker.ai/). Composer can help to preprocess and publish these models to azure services if users provide the resource key and other essential elements. Fortunately, outside Composer, users can also use botframework-cli tool to achieve the same goal with below steps.
+* [`cross-train`](#Cross-train-luis-and-qna-files)
+* [`down-sampling`](#Down-sampling-on-luis-models)
+* [`luis build`](#Luis-models-build)
+* [`qnamaker build`](#Qnamaker-models-build)
 
 ## Prerequisites
-Botframework-cli tool is based on the Node.js platform and the [OClif](https://github.com/oclif/oclif) framework where it inherits its command line parsing style, and plugin architecture platform.
-
-You must download the following prerequisites:
-
-* [Node.js](https://nodejs.org/) version 12 or higher
+[Botframework-cli](https://github.com/microsoft/botframework-cli/blob/main/README.md) tool is based on the Node.js platform and the [OClif](https://github.com/oclif/oclif) framework where it inherits its command line parsing style, and plugin architecture platform.
 
 Install the tool using the following command:
 
@@ -18,7 +18,9 @@ $ bf plugins:install @microsoft/bf-sampler-cli@beta
 
 Type `bf` to make sure the command is installed successfully.
 
-You can find more details about [botframework-cli](https://github.com/microsoft/botframework-cli/blob/main/README.md) cli tool and [sampler](https://github.com/microsoft/botframework-cli/blob/beta/packages/sampler/README.md) cli plugin.
+You can find more details about [sampler](https://github.com/microsoft/botframework-cli/blob/beta/packages/sampler/README.md) cli plugin.
+
+You also need to create luis [resources](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-how-to-azure-subscription#create-luis-resources-in-azure-portal) to get the luis authoringKey and qnamaker [resources](https://docs.microsoft.com/en-us/azure/cognitive-services/qnamaker/how-to/set-up-qnamaker-service-azure) to get the qnamaker subscriptionKey if you don't have.
 
 ## Process language models with cli tool
 You can use the cli tool to process language models . A sample bot will be used to demonstrate how cli tool works with below steps.
@@ -35,7 +37,7 @@ First create folder that holds cross-trained language model files and then use b
 
 ~~~
 $ mkdir generated\interruption
-$ bf luis:cross-train --in . --out generated\interruption --config recognizers\cross-train.config.json --force
+$ bf luis:cross-train --in . --out generated\interruption --config recognizers\cross-train.config --force
 ~~~
 
 You can find more details about [cross-train](https://github.com/microsoft/botframework-cli/tree/main/packages/luis#bf-luiscross-train) cli tool.
@@ -50,7 +52,7 @@ $ bf sampler:sampling --in generated\interruption --out generated\interruption -
 You can find more details about [sampling](https://github.com/microsoft/botframework-cli/blob/beta/packages/sampler/README.md#bf-samplersampling) cli tool.
 
 ### Luis models build
-Use bf cli tool to build luis models and generate model setting if luis model files exist.
+Use bf cli tool to build luis models and generate model setting if luis model files exist. Here YOUR_LUIS_AUTHORING_KEY can be got from your luis resources.
 
 ~~~
 $ bf luis:build --in generated\interruption --authoringKey {YOUR_LUIS_AUTHORING_KEY} --botName {YOUR_BOT_NAME} --out generated --suffix composer --force --log
@@ -59,10 +61,10 @@ $ bf luis:build --in generated\interruption --authoringKey {YOUR_LUIS_AUTHORING_
 You can find more details about [luis:build](https://github.com/microsoft/botframework-cli/tree/main/packages/luis#bf-luisbuild) cli tool.
 
 ### Qnamaker models build
-Use bf cli tool to build qnamaker models and generate model setting if qnamaker model files exist.
+Use bf cli tool to build qnamaker models and generate model setting if qnamaker model files exist. Here YOUR_QNAMaker_SUBSCRIPTION_KEY can be got from your qnamaker resources.
 
 ~~~
-$ bf qnamaker:build --in generated\interruption --subscriptionKey {YOUR_QnAMaker_SUBSCRIPTION_KEY} --botName {YOUR_BOT_NAME} --out generated --suffix composer --force --log
+$ bf qnamaker:build --in generated\interruption --subscriptionKey {YOUR_QNAMaker_SUBSCRIPTION_KEY} --botName {YOUR_BOT_NAME} --out generated --suffix composer --force --log
 ~~~
 
 You can find more details about [qnamaker:build](https://github.com/microsoft/botframework-cli/tree/main/packages/qnamaker#bf-qnamakerbuild) cli tool.
@@ -71,8 +73,8 @@ You can find more details about [qnamaker:build](https://github.com/microsoft/bo
 After language models published and the setting files generated, you can use Emulator to test the bot by following below steps:
 1. Configure appsettings.json
 Go to settings folder and edit the appsettings.json.
-- Fill the luis prediction resource endpoint and endpointKey. You can find or create them in [LUIS](https://www.luis.ai/home).
-- Fill the qna endpointKey and hostname. You can find them in [QnAMaker](https://www.qnamaker.ai/).
+- Fill the luis prediction resource endpoint and endpointKey. You can assign the prediction resource to your models in [LUIS](https://www.luis.ai/home) portal. If there are no available prediction resources to assign, please create one in you luis resources.
+- Fill the qna endpointKey. You can find them in [QnAMaker](https://www.qnamaker.ai/) portal.
 
 2. Copy and launch runtime
 ~~~
