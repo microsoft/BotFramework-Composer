@@ -29,7 +29,7 @@ You can use the cli tool to process language models . A sample bot will be used 
 Open Composer and choose to create a bot from template. Select the `Todo with LUIS` example bot. Go to bot root folder.
 
 ~~~
-$ cd Composer\ToDoBotWithLuisSample-0
+$ cd ToDoBotWithLuisSample-0
 ~~~
 
 ### Cross train luis and qna files
@@ -37,7 +37,7 @@ First create folder that holds cross-trained language model files and then use b
 
 ~~~
 $ mkdir generated\interruption
-$ bf luis:cross-train --in . --out generated\interruption --config recognizers\cross-train.config --force
+$ bf luis:cross-train --in . --out generated\interruption --config recognizers\cross-train.config.json --force
 ~~~
 
 You can find more details about [cross-train](https://github.com/microsoft/botframework-cli/tree/main/packages/luis#bf-luiscross-train) cli tool.
@@ -73,13 +73,13 @@ You can find more details about [qnamaker:build](https://github.com/microsoft/bo
 After language models published and the setting files generated, you can use Emulator to test the bot by following below steps:
 1. Configure appsettings.json
 Go to settings folder and edit the appsettings.json.
-- Fill the luis prediction resource endpoint and endpointKey. You can assign the prediction resource to your models in [LUIS](https://www.luis.ai/home) portal. If there are no available prediction resources to assign, please create one in you luis resources. For more details about prediction resource, please find them [here](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-how-to-azure-subscription#assign-a-resource-to-an-app).
+- Fill the luis endpoint and endpointKey of prediction resource. You can find the endpoint and endpointKey after assigning the prediction resource to your models in [LUIS](https://www.luis.ai/home) portal. If there are no available prediction resources to assign, please create one in you luis resources. For more details about prediction resource, please find them [here](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-how-to-azure-subscription#assign-a-resource-to-an-app).
 - Fill the qna endpointKey. You can find it on the console output of qnamaker build cmd or in the service settings page of [QnAMaker](https://www.qnamaker.ai/UserSettings) portal.
 
 2. Copy and launch runtime
 ~~~
 $ mkdir runtime
-$ xcopy /S "C:\Program Files\Bot Framework Composer\resources\app.asar.unpacked\runtime\dotnet" "runtime" // replace 'C:\Program Files\Bot Framework Composer' with your own Composer installation folder
+$ xcopy /S "{YOUR_DOTNET_RUNTIME_FOLDER}" "runtime" // you can get the runtime by ejecting it in composer or find it in your composer installation folder
 $ cd runtime
 $ dotnet run --project azurewebapp // launch runtime
 ~~~
