@@ -26,7 +26,8 @@ const toolTipHostStyles: Partial<ITooltipHostStyles> = {
     alignItems: 'center',
     padding: '0px 7px',
     height: '38px',
-    background: NeutralColors.gray20,
+    background: NeutralColors.gray30,
+    opacity: 0.3,
   },
 };
 
