@@ -7,6 +7,9 @@ import { BotProjectSpace, DialogSetting, SkillSetting } from '@botframework-comp
 import formatMessage from 'format-message';
 import camelCase from 'lodash/camelCase';
 
+// eslint-disable-next-line security/detect-unsafe-regex
+const REGEX_LOCALHOST = /^https?:\/\/(localhost|127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}|::1)/;
+
 export const VIRTUAL_LOCAL_ENDPOINT = {
   key: -1,
   name: formatMessage('Local Composer'),
@@ -88,4 +91,12 @@ export const fetchEndpointNameForSkill = (
     const matchedEndpoint = getEndpointNameGivenUrl(manifestData, endpointUrl);
     return matchedEndpoint;
   }
+};
+
+export const isLocalhostUrl = (matchUrl: string) => {
+  return REGEX_LOCALHOST.test(matchUrl);
+};
+
+export const isSkillHostUpdateRequired = (skillHostEndpoint: string | undefined) => {
+  return !skillHostEndpoint || isLocalhostUrl(skillHostEndpoint);
 };
