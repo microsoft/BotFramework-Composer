@@ -30,25 +30,25 @@ const getBaseUrl = () => {
   const pvaEnv = (process.env.COMPOSER_PVA_ENV || '').toLowerCase();
   switch (pvaEnv) {
     case 'prod': {
-      const url = 'https://powerva.microsoft.com';
+      const url = 'https://powerva.microsoft.com/';
       console.log('prod detected, grabbing PVA content from: ', url);
       return url;
     }
 
     case 'ppe': {
-      const url = 'https://bots.ppe.customercareintelligence.net';
+      const url = 'https://bots.ppe.customercareintelligence.net/';
       console.log('ppe detected, grabbing PVA content from: ', url);
       return url;
     }
 
     case 'int': {
-      const url = 'https://bots.int.customercareintelligence.net';
+      const url = 'https://bots.int.customercareintelligence.net/';
       console.log('int detected, grabbing PVA content from: ', url);
       return url;
     }
 
     default: {
-      const url = 'https://bots.int.customercareintelligence.net';
+      const url = 'https://bots.int.customercareintelligence.net/';
       console.log('no flag detected, grabbing PVA content from: ', url);
       return url;
     }
@@ -123,14 +123,13 @@ export class PowerVirtualAgentsProvider extends ExternalContentProvider<PowerVir
       }
       return accessToken;
     } catch (e) {
-      //return Promise.reject(new Error(`Error while trying to get a PVA access token: ${prettyPrintError(e)}`));
       throw `Error while trying to get a PVA access token: ${prettyPrintError(e)}`;
     }
   }
 
   private getContentUrl(): string {
-    const { envId, botId } = this.metadata;
-    return `${getBaseUrl()}/api/botmanagement/v1/environments/${envId}/bots/${botId}/composer/content`;
+    const { envId, baseUrl, botId } = this.metadata;
+    return `${baseUrl || getBaseUrl()}api/botmanagement/v1/environments/${envId}/bots/${botId}/composer/content`;
   }
 
   private async getRequestHeaders() {
