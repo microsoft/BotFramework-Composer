@@ -84,6 +84,11 @@ async function extractPackage(archivePath) {
   return archivePath;
 }
 
+async function postinstall() {
+  log.info('Running post install tasks.');
+  execSync('npm run postinstall', { cwd: outDir });
+}
+
 async function cleanUp(archivePath) {
   log.info('Cleaning up archive.');
   await remove(archivePath);
@@ -94,6 +99,7 @@ remove(outDir)
   .then(downloadPackage)
   .then(extractPackage)
   .then(cleanUp)
+  .then(postinstall)
   .then(() => {
     log.info('Done installing oneauth.');
     process.exit(0);
