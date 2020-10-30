@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 import { DialogSetting, FileInfo, lgImportResolverGenerator } from '@bfc/shared';
 
+import { recognizerIndexer } from './recognizerIndexer';
 import { dialogIndexer } from './dialogIndexer';
 import { dialogSchemaIndexer } from './dialogSchemaIndexer';
 import { jsonSchemaFileIndexer } from './jsonSchemaFileIndexer';
@@ -14,6 +15,7 @@ import { botProjectSpaceIndexer } from './botProjectSpaceIndexer';
 import { FileExtensions } from './utils/fileExtensions';
 import { getExtension, getBaseName } from './utils/help';
 import { formDialogSchemaIndexer } from './formDialogSchemaIndexer';
+import { crossTrainConfigIndexer } from './crossTrainConfigIndexer';
 
 class Indexer {
   private classifyFile(files: FileInfo[]) {
@@ -34,9 +36,38 @@ class Indexer {
         [FileExtensions.DialogSchema]: [],
         [FileExtensions.Manifest]: [],
         [FileExtensions.BotProjectSpace]: [],
+        [FileExtensions.CrossTrainConfig]: [],
       }
     );
   }
+
+  private separateDialogsAndRecognizers = (files: FileInfo[]) => {
+    return files.reduce(
+      (result: { dialogs: FileInfo[]; recognizers: FileInfo[] }, file) => {
+        if (file.name.endsWith('.lu.dialog') || file.name.endsWith('.qna.dialog')) {
+          result.recognizers.push(file);
+        } else {
+          result.dialogs.push(file);
+        }
+        return result;
+      },
+      { dialogs: [], recognizers: [] }
+    );
+  };
+
+  private separateConfigAndManifests = (files: FileInfo[]) => {
+    return files.reduce(
+      (result: { crossTrainConfigs: FileInfo[]; skillManifestFiles: FileInfo[] }, file) => {
+        if (file.name.endsWith('.config.json')) {
+          result.crossTrainConfigs.push(file);
+        } else {
+          result.skillManifestFiles.push(file);
+        }
+        return result;
+      },
+      { crossTrainConfigs: [], skillManifestFiles: [] }
+    );
+  };
 
   private getLgImportResolver = (files: FileInfo[], locale: string) => {
     const lgFiles = files.map(({ name, content }) => {
@@ -52,17 +83,21 @@ class Indexer {
   public index(files: FileInfo[], botName: string, locale: string, skillContent: any, settings: DialogSetting) {
     const result = this.classifyFile(files);
     const luFeatures = settings.luFeatures;
+    const { dialogs, recognizers } = this.separateDialogsAndRecognizers(result[FileExtensions.Dialog]);
+    const { skillManifestFiles, crossTrainConfigs } = this.separateConfigAndManifests(result[FileExtensions.Manifest]);
     return {
-      dialogs: dialogIndexer.index(result[FileExtensions.Dialog], botName),
+      dialogs: dialogIndexer.index(dialogs, botName),
       dialogSchemas: dialogSchemaIndexer.index(result[FileExtensions.DialogSchema]),
       lgFiles: lgIndexer.index(result[FileExtensions.lg], this.getLgImportResolver(result[FileExtensions.lg], locale)),
       luFiles: luIndexer.index(result[FileExtensions.Lu], luFeatures),
       qnaFiles: qnaIndexer.index(result[FileExtensions.QnA]),
-      skillManifestFiles: skillManifestIndexer.index(result[FileExtensions.Manifest]),
+      skillManifestFiles: skillManifestIndexer.index(skillManifestFiles),
       skills: skillIndexer.index(skillContent, settings.skill),
       botProjectSpaceFiles: botProjectSpaceIndexer.index(result[FileExtensions.BotProjectSpace]),
       jsonSchemaFiles: jsonSchemaFileIndexer.index(result[FileExtensions.Json]),
       formDialogSchemas: formDialogSchemaIndexer.index(result[FileExtensions.FormDialog]),
+      recognizers: recognizerIndexer.index(recognizers),
+      crossTrainConfig: crossTrainConfigIndexer.index(crossTrainConfigs),
     };
   }
 }
