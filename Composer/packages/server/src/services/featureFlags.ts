@@ -15,10 +15,10 @@ export class FeatureFlagService {
     // Get users feature flag config from data.json and populate if it does not exist
     FeatureFlagService.defaultFeatureFlags = getDefaultFeatureFlags();
     FeatureFlagService.currentFeatureFlagMap = Store.get(storeKey, FeatureFlagService.defaultFeatureFlags);
-    FeatureFlagService.updateFeatureFlags();
+    FeatureFlagService.syncFeatureFlags();
   }
 
-  private static updateFeatureFlags = () => {
+  private static syncFeatureFlags = () => {
     const defaultFeatureFlagKeys = Object.keys(FeatureFlagService.defaultFeatureFlags);
 
     defaultFeatureFlagKeys.forEach((key: string) => {
