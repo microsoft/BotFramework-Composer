@@ -69,8 +69,8 @@ const InternalFormDialogSchemaEditor = React.memo((props: FormDialogSchemaEditor
   }, [editorId]);
 
   const startOver = React.useCallback(() => {
-    reset({ name: editorId });
-  }, [reset, editorId]);
+    reset({ name: schema.id });
+  }, [reset, editorId, schema]);
 
   useRecoilTransactionObserver_UNSTABLE(async ({ snapshot, previousSnapshot }) => {
     const content = await snapshot.getPromise(formDialogSchemaJsonSelector);
