@@ -40,33 +40,44 @@ context('Notification Page', () => {
     cy.findAllByText('__TestToDoBotWithLuisSample').should('exist');
   });
 
-  // it('can show dialog expression error ', () => {
-  //   cy.visitPage('Design');
+  it('can show dialog expression error ', () => {
+    cy.visitPage('Design');
 
-  //   cy.findByTestId('ProjectTree').within(() => {
-  //     cy.findByText('WelcomeUser').click();
-  //   });
+    cy.findByTestId('ProjectTree').within(() => {
+      cy.findByText('WelcomeUser').click();
+    });
 
-  //   cy.withinEditor('VisualEditor', () => {
-  //     cy.findByText('WelcomeUser').should('exist');
-  //   });
+    cy.withinEditor('VisualEditor', () => {
+      cy.findByText('WelcomeUser').should('exist');
+    });
 
-  //   cy.withinEditor('PropertyEditor', () => {
-  //     cy.findByText('Condition').should('exist');
-  //     cy.findByTestId('expression-type-dropdown-Condition').focus().should('contain.text', 'expression');
-  //     cy.get('#root\\.condition').click().type('=foo = bar', { delay: 200 });
-  //     cy.findByTestId('FieldErrorMessage').should('exist');
-  //   });
+    cy.withinEditor('PropertyEditor', () => {
+      cy.findByText('Condition').should('exist');
+      cy.get('.css-fmesii-SchemaFieldContainer')
+        .first()
+        .within(() => {
+          cy.get('.ms-Dropdown-container').first().click();
+        });
+    });
+    cy.findByText('Write an expression').click();
 
-  //   cy.findByTestId('notifications-info-button').click();
+    cy.withinEditor('PropertyEditor', () => {
+      cy.get('.css-fmesii-SchemaFieldContainer')
+        .first()
+        .within(() => {
+          cy.get('.ms-TextField-field').first().type('foo = bar', { delay: 200 });
+        });
+      cy.findByTestId('FieldErrorMessage').should('exist');
+    });
+    // move away from the Notifications button (clicking the logo should do nothing)
+    cy.findByAltText('Composer Logo').click();
 
-  //   // move away from the Notifications button (clicking the logo should do nothing)
-  //   cy.findByAltText('Composer Logo').click();
+    cy.findByTestId('notifications-info-button').click();
 
-  //   cy.findByTestId('notifications-table-view').within(() => {
-  //     cy.findAllByText('__testtodobotwithluissample.dialog').should('exist').first().dblclick();
-  //   });
+    cy.findByTestId('notifications-table-view').within(() => {
+      cy.findAllByText('__testtodobotwithluissample.dialog').should('exist').first().dblclick();
+    });
 
-  //   cy.findAllByText('WelcomeUser').should('exist');
-  // });
+    cy.findAllByText('WelcomeUser').should('exist');
+  });
 });
