@@ -42,9 +42,11 @@ export type BotTemplate = {
   tags?: string[];
   /* list of supported runtime versions */
   support?: string[];
-  packageName?: string;
-  packageSource?: string;
-  packageVersion?: string;
+  package?: {
+    packageName: string;
+    packageSource: string;
+    packageVersion: string;
+  };
   index?: number;
 };
 

@@ -20,8 +20,8 @@ export type FeatureFlagMap = Record<FeatureFlagKey, FeatureFlag>;
 
 export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
   VA_CREATION: {
-    displayName: formatMessage('VA Creation'),
-    description: formatMessage('VA template made available in new bot flow.'),
+    displayName: formatMessage('VA Creation Is Nice!!!'),
+    description: formatMessage('VA template made available in new bot flow. OH Yeah!!'),
     isHidden: false,
     enabled: false,
   },
@@ -34,7 +34,7 @@ export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
   REMOTE_TEMPLATE_CREATION_EXPERIENCE: {
     displayName: formatMessage('Remote template creation experience'),
     description: formatMessage('Changes the new bot flow to use templates stored as packages on Nuget/npm'),
-    isHidden: true,
+    isHidden: false,
     enabled: false,
   },
 });

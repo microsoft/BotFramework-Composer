@@ -55,7 +55,7 @@ async function createProject(req: Request, res: Response) {
     await AssetService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage);
 
     if (currentProject !== undefined) {
-      if (currentProject?.settings?.runtime.customRuntime === true) {
+      if (currentProject.settings?.runtime.customRuntime === true) {
         const runtime = ExtensionContext.getRuntimeByProject(currentProject);
         const runtimePath = currentProject.settings.runtime.path;
 
@@ -397,7 +397,7 @@ async function checkBoilerplateVersion(req: Request, res: Response) {
 
   const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
-    const latestVersion = AssetService.manager.getBoilerplateCurrentVersion();
+    const latestVersion = await AssetService.manager.getBoilerplateCurrentVersion();
     const currentVersion = await AssetService.manager.getBoilerplateVersionFromProject(currentProject);
     const updateRequired =
       (latestVersion && currentVersion && latestVersion > currentVersion) || // versions are present in both locations, latest is newer

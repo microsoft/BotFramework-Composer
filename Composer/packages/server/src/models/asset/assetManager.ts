@@ -8,7 +8,8 @@ import { promisify } from 'util';
 
 import del from 'del';
 import find from 'lodash/find';
-import { UserIdentity, ExtensionContext, BotTemplate } from '@bfc/extension';
+import { UserIdentity, ExtensionContext, BotTemplate, FileExtensions } from '@bfc/extension';
+import { mkdirs, readFile } from 'fs-extra';
 
 import log from '../../logger';
 import { LocalDiskStorage } from '../storage/localDiskStorage';
@@ -59,21 +60,27 @@ export class AssetManager {
 
   private async getRemoteTemplate(template: BotTemplate, destinationPath: string) {
     // install package
-    const { stderr: initErr } = await execAsync(`dotnet new -i ${template.packageName}::${template.packageVersion}`);
-    if (initErr) {
-      throw new Error(initErr);
-    }
-    const { stderr: initErr2 } = await execAsync(`dotnet new ${template.id}`, {
-      cwd: destinationPath,
-    });
-    if (initErr2) {
-      throw new Error(initErr2);
+    if (template.package) {
+      const { stderr: initErr } = await execAsync(
+        `dotnet new -i ${template.package.packageName}::${template.package.packageVersion}`
+      );
+      if (initErr) {
+        throw new Error(initErr);
+      }
+      const { stderr: initErr2 } = await execAsync(`dotnet new ${template.id}`, {
+        cwd: destinationPath,
+      });
+      if (initErr2) {
+        throw new Error(initErr2);
+      }
+    } else {
+      throw new Error('selected template has no local or external address');
     }
   }
 
   private async copyDataFilesTo(templateId: string, dstDir: string, dstStorage: IFileStorage, locale?: string) {
     const template = find(ExtensionContext.extensions.botTemplates, { id: templateId });
-    if (template === undefined || (template.path === undefined && template.packageName === undefined)) {
+    if (template === undefined || (template.path === undefined && template.package === undefined)) {
       throw new Error(`no such template with id ${templateId}`);
     }
 
@@ -85,7 +92,7 @@ export class AssetManager {
       if (fs.existsSync(templateSrcPath)) {
         await del(templateSrcPath);
       }
-      fs.mkdir(templateSrcPath, (err) => {
+      await mkdirs(templateSrcPath, (err) => {
         if (err) {
           throw new Error('Error creating temp directory for external template storage');
         }
@@ -151,7 +158,7 @@ export class AssetManager {
 
   // return the current version of the boilerplate content, if one exists so specified
   // this is based off of the first boilerplate template added to the app.
-  public getBoilerplateCurrentVersion(): string | undefined {
+  public async getBoilerplateCurrentVersion(): Promise<string | undefined> {
     if (!ExtensionContext.extensions.baseTemplates.length) {
       return undefined;
     }
@@ -160,7 +167,8 @@ export class AssetManager {
       const location = Path.join(boilerplate.path, 'scripts', 'package.json');
       try {
         if (fs.existsSync(location)) {
-          const raw = fs.readFileSync(location, 'utf8');
+          const raw = await readFile(location, 'utf8');
+
           const json = JSON.parse(raw);
           if (json && json.version) {
             return json.version;
@@ -181,7 +189,7 @@ export class AssetManager {
     const boilerplate = ExtensionContext.extensions.botTemplates[0];
 
     if (boilerplate.path) {
-      const location = Path.join(boilerplate.path, `${boilerplate.id}.botproj`);
+      const location = Path.join(boilerplate.path, `${boilerplate.id + FileExtensions.BotProject}`);
       try {
         if (fs.existsSync(location)) {
           const raw = fs.readFileSync(location, 'utf8');
