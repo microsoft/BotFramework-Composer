@@ -1,17 +1,20 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
 import path from 'path';
 
 import glob from 'globby';
 import { readJson, ensureDir, remove, pathExists } from 'fs-extra';
 import { ExtensionBundle, PackageJSON, ExtensionMetadata, IExtensionContext } from '@botframework-composer/types';
+import { ExtensionRegistration } from '@bfc/extension';
 
+import settings from '../settings';
 import logger from '../logger';
-import { ExtensionManifestStore } from '../storage/extensionManifestStore';
-import { search, downloadPackage } from '../utils/npm';
-import { isSubdirectory } from '../utils/isSubdirectory';
-import { ExtensionRegistration } from '../extensionRegistration';
+import { JsonStore } from '../store/store';
+import { search, downloadPackage } from '../utility/npm';
+import { isSubdirectory } from '../utility/isSubdirectory';
 
 const log = logger.extend('manager');
 
@@ -35,16 +38,18 @@ function getExtensionMetadata(extensionPath: string, packageJson: PackageJSON): 
   };
 }
 
+export type ExtensionManifest = Record<string, ExtensionMetadata>;
+
 export class ExtensionManagerImp {
   private context: IExtensionContext | null = null;
 
-  public constructor(private _manifest?: ExtensionManifestStore) {}
+  public constructor(private _manifest?: JsonStore<ExtensionManifest>) {}
 
   /**
    * Returns all extensions currently in the extension manifest
    */
   public getAll(): ExtensionMetadata[] {
-    const extensions = this.manifest.getExtensions();
+    const extensions = this.manifest.read();
     return Object.values(extensions).filter(Boolean) as ExtensionMetadata[];
   }
 
@@ -53,7 +58,7 @@ export class ExtensionManagerImp {
    * @param id Id of the extension to search for
    */
   public find(id: string) {
-    return this.manifest.getExtensionConfig(id);
+    return this.manifest.get(id);
   }
 
   /**
@@ -85,14 +90,14 @@ export class ExtensionManagerImp {
       const isEnabled = packageJson.composer?.enabled !== false;
       const metadata = getExtensionMetadata(extensionInstallPath, packageJson);
       if (isEnabled) {
-        this.manifest.updateExtensionConfig(metadata.id, {
+        this.updateManifest(metadata.id, {
           ...metadata,
           builtIn: isBuiltin,
         });
         await this.load(metadata.id);
-      } else if (this.manifest.getExtensionConfig(metadata.id)) {
+      } else if (this.manifest.get(metadata.id)) {
         // remove the extension if it exists in the manifest
-        this.manifest.removeExtension(metadata.id);
+        this.updateManifest(metadata.id, undefined);
       }
     }
   }
@@ -119,7 +124,7 @@ export class ExtensionManagerImp {
 
       const packageJson = await this.getPackageJson(name, this.remoteDir);
       if (packageJson) {
-        this.manifest.updateExtensionConfig(packageJson.name, getExtensionMetadata(destination, packageJson));
+        this.updateManifest(packageJson.name, getExtensionMetadata(destination, packageJson));
       }
 
       return name;
@@ -134,7 +139,7 @@ export class ExtensionManagerImp {
       throw new Error('Unable to load extension without extension context.');
     }
 
-    const metadata = this.manifest.getExtensionConfig(id);
+    const metadata = this.manifest.get(id);
     try {
       // eslint-disable-next-line @typescript-eslint/no-var-requires, security/detect-non-literal-require
       const extension = metadata?.path && require(metadata.path);
@@ -171,7 +176,7 @@ export class ExtensionManagerImp {
    * @param id Id of the extension to be enabled
    */
   public async enable(id: string) {
-    this.manifest.updateExtensionConfig(id, { enabled: true });
+    this.updateManifest(id, { enabled: true });
 
     await this.load(id);
   }
@@ -181,7 +186,7 @@ export class ExtensionManagerImp {
    * @param id Id of the extension to be disabled
    */
   public async disable(id: string) {
-    this.manifest.updateExtensionConfig(id, { enabled: false });
+    this.updateManifest(id, { enabled: false });
 
     // TODO: tear down extension?
   }
@@ -191,17 +196,17 @@ export class ExtensionManagerImp {
    * @param id Id of the extension to be removed
    */
   public async remove(id: string) {
-    log('Removing %s', id);
-
     const metadata = this.find(id);
 
     if (metadata) {
+      log('Removing %s', id);
+
       if (metadata.builtIn) {
         return;
       }
 
       await remove(metadata.path);
-      this.manifest.removeExtension(id);
+      this.updateManifest(id, undefined);
     } else {
       throw new Error(`Unable to remove extension: ${id}`);
     }
@@ -241,6 +246,16 @@ export class ExtensionManagerImp {
     return bundle.path;
   }
 
+  public updateManifest(id: string, data: Partial<ExtensionMetadata> | undefined) {
+    // remove from manifest
+    if (data === undefined) {
+      this.manifest.set(id, undefined);
+    } else {
+      const existingData = this.manifest.get(id);
+      this.manifest.set(id, Object.assign({}, existingData, data));
+    }
+  }
+
   private async cleanManifest() {
     for (const ext of this.getAll()) {
       if (!(await pathExists(ext.path))) {
@@ -265,7 +280,7 @@ export class ExtensionManagerImp {
   private get manifest() {
     /* istanbul ignore next */
     if (!this._manifest) {
-      this._manifest = new ExtensionManifestStore(process.env.COMPOSER_EXTENSION_MANIFEST as string);
+      this._manifest = new JsonStore(settings.extensions.manifestPath as string, {});
     }
 
     return this._manifest;
@@ -273,29 +288,29 @@ export class ExtensionManagerImp {
 
   private get builtinDir() {
     /* istanbul ignore next */
-    if (!process.env.COMPOSER_BUILTIN_EXTENSIONS_DIR) {
+    if (!settings.extensions.builtinDir) {
       throw new Error('COMPOSER_BUILTIN_EXTENSIONS_DIR must be set.');
     }
 
-    return process.env.COMPOSER_BUILTIN_EXTENSIONS_DIR;
+    return settings.extensions.builtinDir;
   }
 
   private get remoteDir() {
     /* istanbul ignore next */
-    if (!process.env.COMPOSER_REMOTE_EXTENSIONS_DIR) {
+    if (!settings.extensions.remoteDir) {
       throw new Error('COMPOSER_REMOTE_EXTENSIONS_DIR must be set.');
     }
 
-    return process.env.COMPOSER_REMOTE_EXTENSIONS_DIR;
+    return settings.extensions.remoteDir;
   }
 
   private get dataDir() {
     /* istanbul ignore next */
-    if (!process.env.COMPOSER_EXTENSION_DATA_DIR) {
+    if (!settings.extensions.dataDir) {
       throw new Error('COMPOSER_EXTENSION_DATA_DIR must be set.');
     }
 
-    return process.env.COMPOSER_EXTENSION_DATA_DIR;
+    return settings.extensions.dataDir;
   }
 }
 

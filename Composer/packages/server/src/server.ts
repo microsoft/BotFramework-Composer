@@ -17,8 +17,8 @@ import { IntellisenseServer } from '@bfc/intellisense-languageserver';
 import { LGServer } from '@bfc/lg-languageserver';
 import { LUServer } from '@bfc/lu-languageserver';
 import chalk from 'chalk';
-import { ExtensionManager } from '@bfc/extension';
 
+import { ExtensionManager } from './services/extensionManager';
 import { ExtensionContext } from './models/extension/extensionContext';
 import { BotProjectService } from './services/project';
 import { getAuthProvider } from './router/auth';
@@ -26,7 +26,7 @@ import { apiRouter } from './router/api';
 import { BASEURL } from './constants';
 import { attachLSPServer } from './utility/attachLSP';
 import log from './logger';
-import { setEnvDefault } from './utility/setEnvDefault';
+// import { setEnvDefault } from './utility/setEnvDefault';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const session = require('express-session');
@@ -48,11 +48,11 @@ export async function start(): Promise<number | string> {
   ExtensionContext.useExpress(app);
 
   // load all installed plugins
-  setEnvDefault('COMPOSER_EXTENSION_MANIFEST', path.resolve(__dirname, '../../../.composer/extensions.json'));
-  setEnvDefault('COMPOSER_EXTENSION_DATA_DIR', path.resolve(__dirname, '../../../.composer/extension-data'));
-  setEnvDefault('COMPOSER_BUILTIN_EXTENSIONS_DIR', path.resolve(__dirname, '../../../../extensions'));
-  // Composer/.composer/extensions
-  setEnvDefault('COMPOSER_REMOTE_EXTENSIONS_DIR', path.resolve(__dirname, '../../../.composer/extensions'));
+  // setEnvDefault('COMPOSER_EXTENSION_MANIFEST', path.resolve(__dirname, '../../../.composer/extensions.json'));
+  // setEnvDefault('COMPOSER_EXTENSION_DATA_DIR', path.resolve(__dirname, '../../../.composer/extension-data'));
+  // setEnvDefault('COMPOSER_BUILTIN_EXTENSIONS_DIR', path.resolve(__dirname, '../../../../extensions'));
+  // // Composer/.composer/extensions
+  // setEnvDefault('COMPOSER_REMOTE_EXTENSIONS_DIR', path.resolve(__dirname, '../../../.composer/extensions'));
   await ExtensionManager.loadAll(ExtensionContext);
 
   const { login, authorize } = getAuthProvider();
