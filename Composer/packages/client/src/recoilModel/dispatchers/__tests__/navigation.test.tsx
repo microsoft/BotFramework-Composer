@@ -21,7 +21,7 @@ import {
 } from '../../../utils/navigation';
 import { createSelectedPath, getSelected } from '../../../utils/dialogUtil';
 import { BreadcrumbItem } from '../../../recoilModel/types';
-import { currentProjectIdState } from '../../atoms';
+import { currentProjectIdState, botProjectIdsState, botProjectFileState, projectMetaDataState } from '../../atoms';
 
 jest.mock('../../../utils/navigation');
 jest.mock('../../../utils/dialogUtil');
@@ -35,6 +35,7 @@ const mockConvertPathToUrl = convertPathToUrl as jest.Mock<string>;
 const mockCreateSelectedPath = createSelectedPath as jest.Mock<string>;
 
 const projectId = '12345.678';
+const skillId = '98765.4321';
 
 function expectNavTo(location: string, state: {} | null = null) {
   expect(mockNavigateTo).toHaveBeenLastCalledWith(location, state == null ? expect.anything() : state);
@@ -80,10 +81,30 @@ describe('navigation dispatcher', () => {
             focused: 'b',
           },
         },
+        {
+          recoilState: designPageLocationState(skillId),
+          initialValue: {
+            dialogId: 'dialogInSkillId',
+            selected: 'a',
+            focused: 'b',
+          },
+        },
         { recoilState: currentProjectIdState, initialValue: projectId },
         {
           recoilState: dialogsSelectorFamily(projectId),
           initialValue: [{ id: 'newDialogId', triggers: [{ type: SDKKinds.OnBeginDialog }] }],
+        },
+        {
+          recoilState: botProjectIdsState,
+          initialValue: [projectId],
+        },
+        {
+          recoilState: botProjectFileState(projectId),
+          initialValue: { foo: 'bar' },
+        },
+        {
+          recoilState: projectMetaDataState(projectId),
+          initialValue: { isRootBot: true },
         },
       ],
       dispatcher: {
@@ -176,27 +197,16 @@ describe('navigation dispatcher', () => {
     it('navigates to a destination', async () => {
       mockConvertPathToUrl.mockReturnValue(`/bot/${projectId}/dialogs/dialogId`);
       await act(async () => {
-        await dispatcher.navTo(projectId, null, 'dialogId', []);
+        await dispatcher.navTo(projectId, 'dialogId', []);
       });
       expectNavTo(`/bot/${projectId}/dialogs/dialogId`);
-      expect(mockConvertPathToUrl).toBeCalledWith(projectId, null, 'dialogId', undefined);
-    });
-
-    it('redirects to the begin dialog trigger', async () => {
-      mockConvertPathToUrl.mockReturnValue(`/bot/${projectId}/dialogs/newDialogId?selection=triggers[0]`);
-      mockCreateSelectedPath.mockReturnValue('triggers[0]');
-      await act(async () => {
-        await dispatcher.navTo(projectId, null, 'newDialogId', []);
-      });
-      expectNavTo(`/bot/${projectId}/dialogs/newDialogId?selection=triggers[0]`);
-      expect(mockConvertPathToUrl).toBeCalledWith(projectId, null, 'newDialogId', 'triggers[0]');
-      expect(mockCreateSelectedPath).toBeCalledWith(0);
+      expect(mockConvertPathToUrl).toBeCalledWith(projectId, projectId, 'dialogId');
     });
 
     it("doesn't navigate to a destination where we already are", async () => {
       mockCheckUrl.mockReturnValue(true);
       await act(async () => {
-        await dispatcher.navTo(projectId, null, 'dialogId', []);
+        await dispatcher.navTo(projectId, 'dialogId', []);
       });
       expect(mockNavigateTo).not.toBeCalled();
     });
@@ -205,7 +215,7 @@ describe('navigation dispatcher', () => {
   describe('selectTo', () => {
     it("doesn't go anywhere without a selection", async () => {
       await act(async () => {
-        await dispatcher.selectTo(projectId, null, null, '');
+        await dispatcher.selectTo(null, null, '');
       });
       expect(mockNavigateTo).not.toBeCalled();
     });
@@ -213,16 +223,25 @@ describe('navigation dispatcher', () => {
     it('navigates to a default URL with selected path', async () => {
       mockConvertPathToUrl.mockReturnValue(`/bot/${projectId}/dialogs/dialogId?selected=selection`);
       await act(async () => {
-        await dispatcher.selectTo(projectId, null, null, 'selection');
+        await dispatcher.selectTo(null, null, 'selection');
       });
       expectNavTo(`/bot/${projectId}/dialogs/dialogId?selected=selection`);
       expect(mockConvertPathToUrl).toBeCalledWith(projectId, null, 'dialogId', 'selection');
     });
 
+    it('navigates to a default URL with skillId and selected path', async () => {
+      mockConvertPathToUrl.mockReturnValue(`/bot/${projectId}/skill/${skillId}/dialogs/dialogId?selected=selection`);
+      await act(async () => {
+        await dispatcher.selectTo(skillId, 'dialogId', 'selection');
+      });
+      expectNavTo(`/bot/${projectId}/skill/${skillId}/dialogs/dialogId?selected=selection`);
+      expect(mockConvertPathToUrl).toBeCalledWith(projectId, skillId, 'dialogId', 'selection');
+    });
+
     it("doesn't go anywhere if we're already there", async () => {
       mockCheckUrl.mockReturnValue(true);
       await act(async () => {
-        await dispatcher.selectTo(projectId, null, null, 'selection');
+        await dispatcher.selectTo(null, null, 'selection');
       });
       expect(mockNavigateTo).not.toBeCalled();
     });
@@ -231,7 +250,7 @@ describe('navigation dispatcher', () => {
   describe('focusTo', () => {
     it('goes to the same page with no arguments', async () => {
       await act(async () => {
-        await dispatcher.focusTo(projectId, '', '');
+        await dispatcher.focusTo(projectId, null, '', '');
       });
       expectNavTo(`/bot/${projectId}/dialogs/dialogId?selected=a`);
     });
@@ -239,9 +258,19 @@ describe('navigation dispatcher', () => {
     it('goes to a focused page', async () => {
       mockGetSelected.mockReturnValueOnce('select');
       await act(async () => {
-        await dispatcher.focusTo(projectId, 'focus', '');
+        await dispatcher.focusTo(projectId, null, 'focus', '');
       });
       expectNavTo(`/bot/${projectId}/dialogs/dialogId?selected=select&focused=focus`);
+      expect(mockUpdateBreadcrumb).toHaveBeenCalledWith(expect.anything(), BreadcrumbUpdateType.Selected);
+      expect(mockUpdateBreadcrumb).toHaveBeenCalledWith(expect.anything(), BreadcrumbUpdateType.Focused);
+    });
+
+    it('goes to a focused page with skill', async () => {
+      mockGetSelected.mockReturnValueOnce('select');
+      await act(async () => {
+        await dispatcher.focusTo(projectId, skillId, 'focus', '');
+      });
+      expectNavTo(`/bot/${projectId}/skill/${skillId}/dialogs/dialogInSkillId?selected=select&focused=focus`);
       expect(mockUpdateBreadcrumb).toHaveBeenCalledWith(expect.anything(), BreadcrumbUpdateType.Selected);
       expect(mockUpdateBreadcrumb).toHaveBeenCalledWith(expect.anything(), BreadcrumbUpdateType.Focused);
     });
@@ -249,9 +278,19 @@ describe('navigation dispatcher', () => {
     it('goes to a focused page with fragment', async () => {
       mockGetSelected.mockReturnValueOnce('select');
       await act(async () => {
-        await dispatcher.focusTo(projectId, 'focus', 'fragment');
+        await dispatcher.focusTo(projectId, null, 'focus', 'fragment');
       });
       expectNavTo(`/bot/${projectId}/dialogs/dialogId?selected=select&focused=focus#fragment`);
+      expect(mockUpdateBreadcrumb).toHaveBeenCalledWith(expect.anything(), BreadcrumbUpdateType.Selected);
+      expect(mockUpdateBreadcrumb).toHaveBeenCalledWith(expect.anything(), BreadcrumbUpdateType.Focused);
+    });
+
+    it('goes to a focused page with skill and fragment', async () => {
+      mockGetSelected.mockReturnValueOnce('select');
+      await act(async () => {
+        await dispatcher.focusTo(projectId, skillId, 'focus', 'fragment');
+      });
+      expectNavTo(`/bot/${projectId}/skill/${skillId}/dialogs/dialogInSkillId?selected=select&focused=focus#fragment`);
       expect(mockUpdateBreadcrumb).toHaveBeenCalledWith(expect.anything(), BreadcrumbUpdateType.Selected);
       expect(mockUpdateBreadcrumb).toHaveBeenCalledWith(expect.anything(), BreadcrumbUpdateType.Focused);
     });
@@ -260,7 +299,7 @@ describe('navigation dispatcher', () => {
       mockCheckUrl.mockReturnValue(true);
       mockGetSelected.mockReturnValueOnce('select');
       await act(async () => {
-        await dispatcher.focusTo(projectId, 'focus', 'fragment');
+        await dispatcher.focusTo(projectId, null, 'focus', 'fragment');
       });
       expect(mockNavigateTo).not.toBeCalled();
       expect(mockUpdateBreadcrumb).toHaveBeenCalledWith(expect.anything(), BreadcrumbUpdateType.Selected);
@@ -269,12 +308,20 @@ describe('navigation dispatcher', () => {
   });
 
   describe('selectAndFocus', () => {
-    it('sets selection and focus with a valud search', async () => {
+    it('sets selection and focus with a valid search', async () => {
       mockGetUrlSearch.mockReturnValue('?foo=bar&baz=quux');
       await act(async () => {
         await dispatcher.selectAndFocus(projectId, null, 'dialogId', 'select', 'focus');
       });
       expectNavTo(`/bot/${projectId}/dialogs/dialogId?foo=bar&baz=quux`);
+    });
+
+    it('sets selection and focus with a valid search and skillId', async () => {
+      mockGetUrlSearch.mockReturnValue('?foo=bar&baz=quux');
+      await act(async () => {
+        await dispatcher.selectAndFocus(projectId, skillId, 'dialogId', 'select', 'focus');
+      });
+      expectNavTo(`/bot/${projectId}/skill/${skillId}/dialogs/dialogId?foo=bar&baz=quux`);
     });
 
     it("doesn't go anywhere if we're already there", async () => {
