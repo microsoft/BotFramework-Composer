@@ -170,14 +170,10 @@ export const AzureProvisionDialog: React.FC = () => {
   }, []);
 
   const getResources = async () => {
-    const result = await getResourceList(currentProjectId(), publishType).catch((err) => {
+    const resources = await getResourceList(currentProjectId(), publishType).catch((err) => {
       // todo: how do we handle API errors in this component
       console.log('ERROR', err);
     });
-    // do not filter do only required
-    // const resources = result.filter(resource => resource.required);
-    const resources = result;
-    console.log(resources);
     setExtensionResourceOptions(resources);
 
     // set all of the resources to enabled by default.

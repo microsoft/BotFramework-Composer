@@ -18,7 +18,7 @@ import { PublishProfileDialog } from '../../constants';
 // import { IPersonaSharedProps, Persona, PersonaSize } from 'office-ui-fabric-react/lib/Persona';
 // import { Link } from 'office-ui-fabric-react/lib/Link';
 import { PublishType } from '../../recoilModel/types';
-import { userSettingsState, currentProjectIdState, currentUserState, grahpTokenState } from '../../recoilModel';
+import { userSettingsState, currentProjectIdState, currentUserState } from '../../recoilModel';
 import { PluginAPI } from '../../plugins/api';
 import { PluginHost } from '../../components/PluginHost/PluginHost';
 import { dispatcherState } from '../../recoilModel';
@@ -51,7 +51,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
 
   const userSettings = useRecoilValue(userSettingsState);
   const accessToken = useRecoilValue(currentUserState);
-  const graphToken = useRecoilValue(grahpTokenState);
+  // const graphToken = useRecoilValue(grahpTokenState);
   const projectId = useRecoilValue(currentProjectIdState);
   const { provisionToTarget, getAccessToken, getGraphToken } = useRecoilValue(dispatcherState);
 
