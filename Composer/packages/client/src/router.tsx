@@ -70,6 +70,13 @@ const Routes = (props) => {
               />
             ))}
           </ProjectRouter>
+          <ProjectRouter path="/bot/:projectId/skill/:skillId">
+            <DesignPage path="dialogs/:dialogId/*" />
+            <LUPage path="language-understanding/:dialogId/*" />
+            <LGPage path="language-generation/:dialogId/*" />
+            <QnAPage path="knowledge-base/:dialogId/*" />
+            <DesignPage path="*" />
+          </ProjectRouter>
           <SettingPage path="settings/*" />
           <BotCreationFlowRouter path="projects/*" />
           <BotCreationFlowRouter path="home" />
@@ -97,7 +104,7 @@ const projectStyle = css`
   label: ProjectRouter;
 `;
 
-const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
+const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string; skillId: string }>> = (props) => {
   const { projectId = '' } = props;
   const schemas = useRecoilValue(schemasState(projectId));
   const { fetchProjectById } = useRecoilValue(dispatcherState);
@@ -119,7 +126,11 @@ const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string }>> = (pro
   }, [schemas, projectId]);
 
   if (props.projectId && botProjects.includes(props.projectId)) {
-    return <div css={projectStyle}>{props.children}</div>;
+    if (props.skillId && !botProjects.includes(props.skillId)) {
+      return <LoadingSpinner />;
+    } else {
+      return <div css={projectStyle}>{props.children}</div>;
+    }
   }
   return <LoadingSpinner />;
 };
