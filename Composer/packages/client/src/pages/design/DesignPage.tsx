@@ -21,7 +21,6 @@ import {
   createSelectedPath,
   deleteTrigger,
   getBreadcrumbLabel,
-  qnaMatcherKey,
   TriggerFormData,
   getDialogData,
 } from '../../utils/dialogUtil';
@@ -161,16 +160,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const shellForFlowEditor = useShell('FlowEditor', projectId);
   const shellForPropertyEditor = useShell('PropertyEditor', projectId);
   const triggerApi = useTriggerApi(projectId);
-  const { createTrigger } = shell.api;
-
-  const defaultQnATriggerData = {
-    $kind: qnaMatcherKey,
-    errors: { $kind: '', intent: '', event: '', triggerPhrases: '', regEx: '', activity: '' },
-    event: '',
-    intent: '',
-    regEx: '',
-    triggerPhrases: '',
-  };
+  const { createTrigger, createQnATrigger } = shell.api;
 
   useEffect(() => {
     const currentDialog = dialogs.find(({ id }) => id === dialogId);
@@ -564,7 +554,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
   const handleCreateQnA = async (data) => {
     if (!dialogId) return;
-    createTrigger(dialogId, defaultQnATriggerData);
+    createQnATrigger(dialogId);
 
     const { name, url, multiTurn } = data;
     if (url) {

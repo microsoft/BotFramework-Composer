@@ -342,7 +342,7 @@ export class BotProject implements IBotProject {
     }
   }
 
-  public updateBotInfo = async (name: string, description: string) => {
+  public updateBotInfo = async (name: string, description: string, preserveRoot = false) => {
     const mainDialogFile = this.dialogFiles.find((file) => !file.relativePath.includes('/'));
     if (!mainDialogFile) return;
     const botName = name.trim().toLowerCase();
@@ -371,7 +371,7 @@ export class BotProject implements IBotProject {
       content.name = botName;
       await this._updateFile(relativePath, JSON.stringify(content, null, 2));
     }
-    await serializeFiles(this.fileStorage, this.dataDir, botName);
+    await serializeFiles(this.fileStorage, this.dataDir, botName, preserveRoot);
   };
 
   public updateFile = async (name: string, content: string): Promise<string> => {
@@ -582,6 +582,17 @@ export class BotProject implements IBotProject {
       generateParams.singleton,
       generateParams.feedback
     );
+  }
+
+  public async deleteFormDialog(dialogId: string) {
+    const defaultLocale = this.settings?.defaultLanguage || defaultLanguage;
+    const dialogPath = defaultFilePath(this.name, defaultLocale, `${dialogId}${FileExtensions.Dialog}`);
+    const dirToDelete = Path.dirname(Path.resolve(this.dir, dialogPath));
+
+    // I check that the path is longer 3 to avoid deleting a drive and all its contents.
+    if (dirToDelete.length > 3 && this.fileStorage.exists(dirToDelete)) {
+      this.fileStorage.rmrfDir(dirToDelete);
+    }
   }
 
   private async removeLocalRuntimeData(projectId) {
@@ -811,7 +822,7 @@ export class BotProject implements IBotProject {
     try {
       const defaultBotProjectFile: any = await AssetService.manager.botProjectFileTemplate;
 
-      for (const [, file] of files) {
+      for (const [_, file] of files) {
         if (file.name.endsWith(FileExtensions.BotProject)) {
           return fileList;
         }

@@ -4,7 +4,7 @@
 
 import type { DialogInfo, LuFile, LgFile, QnAFile, LuIntentSection, LgTemplate, DialogSchemaFile } from './indexers';
 import type { ILUFeaturesConfig, SkillSetting, UserSettings } from './settings';
-import type { JSONSchema7 } from './schema';
+import type { JSONSchema7, SDKKinds } from './schema';
 import { MicrosoftIDialog } from './sdk';
 
 import { Skill } from '.';
@@ -41,6 +41,11 @@ export type BotSchemas = {
   ui?: { content: UISchema };
   uiOverrides?: { content: UISchema };
   diagnostics?: any[];
+};
+
+export type DisabledMenuActions = {
+  kind: SDKKinds;
+  reason: string;
 };
 
 export type ApplicationContextApi = {
@@ -96,6 +101,8 @@ export type ProjectContextApi = {
   displayManifestModal: (manifestId: string) => void;
   updateDialogSchema: (_: DialogSchemaFile) => Promise<void>;
   createTrigger: (id: string, formData, autoSelected?: boolean) => void;
+  createQnATrigger: (id: string) => void;
+  updateSkillSetting: (skillId: string, skillsData: SkillSetting) => Promise<void>;
   updateFlowZoomRate: (currentRate: number) => void;
   updateSkill: (skillId: string, skillsData: { skill: Skill; selectedEndpointIndex: number }) => Promise<void>;
 };
@@ -112,6 +119,7 @@ export type ProjectContext = {
   skills: Record<string, Skill>;
   skillsSettings: Record<string, SkillSetting>;
   schemas: BotSchemas;
+  forceDisabledActions: DisabledMenuActions[];
 };
 
 export type ActionContextApi = {
