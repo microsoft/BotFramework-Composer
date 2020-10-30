@@ -155,6 +155,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const [exportSkillModalVisible, setExportSkillModalVisible] = useState(false);
   const [warningIsVisible, setWarningIsVisible] = useState(true);
   const [breadcrumbs, setBreadcrumbs] = useState<Array<BreadcrumbItem>>([]);
+
   const shell = useShell('DesignPage', skillId ?? rootProjectId);
   const shellForFlowEditor = useShell('FlowEditor', skillId ?? rootProjectId);
   const shellForPropertyEditor = useShell('PropertyEditor', skillId ?? rootProjectId);
@@ -254,12 +255,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     const { skillId, dialogId, trigger, parentLink } = link;
     updateZoomRate({ currentRate: 1 });
     const breadcrumbArray: Array<BreadcrumbItem> = [];
-    if (skillId != null) {
-      breadcrumbArray.push({ label: 'skill name', link: { skillId } });
-    }
     if (dialogId != null) {
       breadcrumbArray.push({
-        label: parentLink?.displayName ?? 'form dialog property',
+        label: parentLink?.displayName ?? link.displayName,
         link: { skillId: skillId ?? projectId, dialogId },
         onClick: () => navTo(skillId ?? projectId, dialogId),
       });
@@ -271,8 +269,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         onClick: () => selectTo(skillId ?? null, dialogId ?? null, `triggers[${trigger}]`),
       });
     }
-    console.log('in HS:', breadcrumbArray);
-    setBreadcrumbs(() => breadcrumbArray);
+
+    setBreadcrumbs(breadcrumbArray);
 
     if (trigger != null) {
       selectTo(skillId ?? null, dialogId ?? null, `triggers[${trigger}]`);
@@ -475,32 +473,29 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     };
   };
 
-  const breadcrumbItems = useMemo(() => {
-    const items = breadcrumbs.map(createBreadcrumbItem);
-    console.log(breadcrumbs, items);
+  const items = breadcrumbs.map(createBreadcrumbItem);
 
-    return (
-      <div style={{ display: 'flex', justifyContent: 'space-between', height: '65px' }}>
-        <Breadcrumb
-          ariaLabel={formatMessage('Navigation Path')}
-          data-testid="Breadcrumb"
-          items={items}
-          maxDisplayedItems={3}
-          styles={breadcrumbClass}
-          onReduceData={() => undefined}
-        />
-        <div style={{ padding: '10px' }}>
-          <ActionButton
-            onClick={() => {
-              setDialogJsonVisibility((current) => !current);
-            }}
-          >
-            {dialogJsonVisible ? formatMessage('Hide code') : formatMessage('Show code')}
-          </ActionButton>
-        </div>
+  const breadcrumbItems = (
+    <div style={{ display: 'flex', justifyContent: 'space-between', height: '65px' }}>
+      <Breadcrumb
+        ariaLabel={formatMessage('Navigation Path')}
+        data-testid="Breadcrumb"
+        items={items}
+        maxDisplayedItems={3}
+        styles={breadcrumbClass}
+        onReduceData={() => undefined}
+      />
+      <div style={{ padding: '10px' }}>
+        <ActionButton
+          onClick={() => {
+            setDialogJsonVisibility((current) => !current);
+          }}
+        >
+          {dialogJsonVisible ? formatMessage('Hide code') : formatMessage('Show code')}
+        </ActionButton>
       </div>
-    );
-  }, [dialogs, dialogJsonVisible]);
+    </div>
+  );
 
   async function handleCreateDialogSubmit(dialogName, dialogData) {
     await createDialog({ id: dialogName, content: dialogData, projectId });
