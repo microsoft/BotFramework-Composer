@@ -8,7 +8,7 @@ import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcru
 import formatMessage from 'format-message';
 import { globalHistory, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
-import { DialogInfo, PromptTab, getEditorAPI, registerEditorAPI, Skill } from '@bfc/shared';
+import { DialogInfo, PromptTab, getEditorAPI, registerEditorAPI } from '@bfc/shared';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import { EditorExtension, PluginConfig } from '@bfc/extension-client';
@@ -49,6 +49,7 @@ import {
   rootBotProjectIdSelector,
   projectDialogsMapSelector,
   skillIdByProjectIdSelector,
+  SkillInfo,
 } from '../../recoilModel';
 import { CreateQnAModal } from '../../components/QnA';
 import { triggerNotSupported } from '../../utils/dialogValidator';
@@ -71,6 +72,7 @@ import {
 } from './styles';
 import { VisualEditor } from './VisualEditor';
 import { PropertyEditor } from './PropertyEditor';
+import { ManifestEditor } from './ManifestEditor';
 
 const CreateSkillModal = React.lazy(() => import('../../components/CreateSkillModal'));
 const RepairSkillModal = React.lazy(() => import('../../components/RepairSkillModal'));
@@ -158,7 +160,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     createTrigger,
     deleteTrigger,
     displayManifestModal,
-    updateSkillManifest,
   } = useRecoilValue(dispatcherState);
 
   const params = new URLSearchParams(location?.search);
@@ -172,7 +173,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   );
   const [dialogModalInfo, setDialogModalInfo] = useState<undefined | { projectId: string }>(undefined);
   const [exportSkillModalInfo, setExportSkillModalInfo] = useState<undefined | { projectId: string }>(undefined);
-  const [skillManifestFile, setSkillManifestFile] = useState<undefined | Skill>(undefined);
+  const [skillManifestFile, setSkillManifestFile] = useState<undefined | SkillInfo>(undefined);
   const [brokenSkillInfo, setBrokenSkillInfo] = useState<undefined | TreeLink>(undefined);
   const [brokenSkillRepairCallback, setBrokenSkillRepairCallback] = useState<undefined | (() => void)>(undefined);
   const [dialogJsonVisible, setDialogJsonVisibility] = useState(false);
@@ -689,32 +690,16 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                   <div aria-label={formatMessage('Authoring canvas')} css={visualPanel} role="region">
                     {breadcrumbItems}
                     {dialogJsonVisible ? (
-                      skillManifestFile ? (
-                        <JsonEditor
-                          key={'manifestjson'}
-                          editorSettings={userSettings.codeEditor}
-                          id={skillManifestFile.id}
-                          schema={schemas.sdk.content}
-                          value={skillManifestFile.manifest}
-                          onChange={(data) => {
-                            updateSkillManifest(
-                              { id: skillManifestFile.manifestId, content: data },
-                              skillManifestFile.id
-                            );
-                          }}
-                        />
-                      ) : (
-                        <JsonEditor
-                          key={'dialogjson'}
-                          editorSettings={userSettings.codeEditor}
-                          id={currentDialog.id}
-                          schema={schemas.sdk.content}
-                          value={currentDialog.content || undefined}
-                          onChange={(data) => {
-                            updateDialog({ id: currentDialog.id, content: data, projectId });
-                          }}
-                        />
-                      )
+                      <JsonEditor
+                        key={'dialogjson'}
+                        editorSettings={userSettings.codeEditor}
+                        id={currentDialog.id}
+                        schema={schemas.sdk.content}
+                        value={currentDialog.content || undefined}
+                        onChange={(data) => {
+                          updateDialog({ id: currentDialog.id, content: data, projectId });
+                        }}
+                      />
                     ) : withWarning ? (
                       warningIsVisible && (
                         <WarningMessage
@@ -738,7 +723,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                     )}
                   </div>
                   <EditorExtension plugins={pluginConfig} projectId={projectId} shell={shellForPropertyEditor}>
-                    <PropertyEditor key={focusPath + undoVersion} />
+                    {skillManifestFile ? (
+                      <ManifestEditor formData={skillManifestFile} />
+                    ) : (
+                      <PropertyEditor key={focusPath + undoVersion} />
+                    )}
                   </EditorExtension>
                 </LeftRightSplit>
               </div>

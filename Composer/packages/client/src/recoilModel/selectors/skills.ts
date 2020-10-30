@@ -10,17 +10,24 @@ import {
   botNameIdentifierState,
   botDisplayNameState,
   projectMetaDataState,
+  locationState,
 } from '../atoms';
 
 import { skillsProjectIdSelector } from './project';
 
+export interface SkillInfo extends Skill {
+  manifestId: string;
+  location: string; // path to skill bot or manifest url
+  remote: boolean;
+}
 // Actions
 export const skillsStateSelector = selector({
   key: 'skillsStateSelector',
   get: ({ get }) => {
     const skillsProjectIds = get(skillsProjectIdSelector);
-    const skills: Record<string, Skill> = skillsProjectIds.reduce((result, skillId: string) => {
+    const skills: Record<string, SkillInfo> = skillsProjectIds.reduce((result, skillId: string) => {
       const manifests = get(skillManifestsState(skillId));
+      const location = get(locationState(skillId));
       const currentSkillManifestIndex = get(currentSkillManifestIndexState(skillId));
       const skillNameIdentifier = get(botNameIdentifierState(skillId));
       const botName = get(botDisplayNameState(skillId));
@@ -36,9 +43,10 @@ export const skillsStateSelector = selector({
         result[skillNameIdentifier] = {
           id: skillId,
           manifest,
-          manifestId,
           name: botName,
           remote: isRemote,
+          manifestId,
+          location,
         };
       }
       return result;
