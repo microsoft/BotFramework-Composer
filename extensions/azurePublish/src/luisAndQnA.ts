@@ -23,7 +23,7 @@ export interface PublishConfig {
   [key: string]: any;
 }
 
-const INTERUPTION = 'interuption';
+const INTERRUPTION = 'interruption';
 
 export class LuisAndQnaPublish {
   private logger: (string) => any;
@@ -37,7 +37,7 @@ export class LuisAndQnaPublish {
     // path to the ready to deploy generated folder
     this.remoteBotPath = path.join(config.projPath, 'ComposerDialogs');
     this.generatedFolder = path.join(this.remoteBotPath, 'generated');
-    this.interruptionFolderPath = path.join(this.generatedFolder, INTERUPTION);
+    this.interruptionFolderPath = path.join(this.generatedFolder, INTERRUPTION);
 
     // Cross Train config
     this.crossTrainConfig = {

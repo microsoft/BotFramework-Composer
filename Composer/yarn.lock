@@ -3055,10 +3055,10 @@
     semver "^5.5.1"
     tslib "^2.0.3"
 
-"@microsoft/bf-lu@next":
-  version "4.11.0-dev.20201015.a41c691"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.11.0-dev.20201015.a41c691.tgz#1002eb10b7625fead68274c007ac857de79f4446"
-  integrity sha512-Bq/4NJ8FpJV/wOOdjxLPMHmZoT08qSKozFbnukjdh5L0UNDDDyhTSSLmG1hdGc337VmtQF6YBsLu9sEmATSJUA==
+"@microsoft/bf-lu@^4.11.0-dev.20201025.69cf2b9":
+  version "4.11.0-rc.20201026.e06ad47"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.11.0-rc.20201026.e06ad47.tgz#a7664b94c9ec75d12e5d11205075a935928587b0"
+  integrity sha512-Ysjv6Nnr0caxsSNWCafO9Kngb7gqCP5tq8mhUBM3FzsyOcmvfg5VVwTLZSYmogjM/tcr6WxqXQw2y7QG7NKB1A==
   dependencies:
     "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
     "@azure/ms-rest-azure-js" "2.0.1"
@@ -3076,6 +3076,67 @@
     node-fetch "~2.6.0"
     semver "^5.5.1"
     tslib "^2.0.3"
+
+"@microsoft/bf-lu@^4.11.0-rc.20201028.6f4722f":
+  version "4.11.0-rc.20201028.6f4722f"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.11.0-rc.20201028.6f4722f.tgz#76e28d6737184f4915d11f6d59b3d2468c9ab947"
+  integrity sha512-KMVS6I/F6pMyTb5M65raBrYmglRGkcGeKRmxld1XErTKtdz7aNF007BGug/ISJn3JIDZJ5FExIqPy27ns438oQ==
+  dependencies:
+    "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
+    "@azure/ms-rest-azure-js" "2.0.1"
+    "@types/node-fetch" "~2.5.5"
+    antlr4 "^4.7.2"
+    chalk "2.4.1"
+    console-stream "^0.1.1"
+    deep-equal "^1.0.1"
+    delay "^4.3.0"
+    fs-extra "^8.1.0"
+    get-stdin "^6.0.0"
+    globby "^10.0.1"
+    intercept-stdout "^0.1.2"
+    lodash "^4.17.19"
+    node-fetch "~2.6.0"
+    semver "^5.5.1"
+    tslib "^2.0.3"
+
+"@microsoft/bf-lu@next":
+  version "4.12.0-dev.20201028.999bc32"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.12.0-dev.20201028.999bc32.tgz#be2d651dd0932d3d77c7fbca959837e61b4d5a92"
+  integrity sha512-GQWaH6IXNOC2qAFmURAT3sl5YD1MaBgpLAy4nS3r5zUcLPNJjE8taksueqtQwltvCWJGbZdPLgPVTdwI+iBR3g==
+  dependencies:
+    "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
+    "@azure/ms-rest-azure-js" "2.0.1"
+    "@types/node-fetch" "~2.5.5"
+    antlr4 "^4.7.2"
+    chalk "2.4.1"
+    console-stream "^0.1.1"
+    deep-equal "^1.0.1"
+    delay "^4.3.0"
+    fs-extra "^8.1.0"
+    get-stdin "^6.0.0"
+    globby "^10.0.1"
+    intercept-stdout "^0.1.2"
+    lodash "^4.17.19"
+    node-fetch "~2.6.0"
+    semver "^5.5.1"
+    tslib "^2.0.3"
+
+"@microsoft/bf-orchestrator@4.11.0-beta.20201013.20d7917":
+  version "4.11.0-beta.20201013.20d7917"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-orchestrator/-/bf-orchestrator-4.11.0-beta.20201013.20d7917.tgz#525e167625ce2c64f079d937aeb7495a07a7a1d0"
+  integrity sha512-J5yobTheQuE+gme1R30xIIlCU9xVaiHLUrXyI6xZnT922EYEGsn7qAWfeuP0AM6b5JgD4exAOwHf02ggOIZmGQ==
+  dependencies:
+    "@microsoft/bf-dispatcher" "4.11.0-beta.20201013.20d7917"
+    "@microsoft/bf-lu" next
+    "@types/fs-extra" "~8.1.0"
+    "@types/node-fetch" "~2.5.5"
+    fast-text-encoding "^1.0.3"
+    fs-extra "~9.0.0"
+    node-7z-forall "~1.0.5"
+    node-fetch "~2.6.0"
+    orchestrator-core beta
+    read-text-file "~1.1.0"
+    tslib "^1.10.0"
 
 "@microsoft/load-themed-styles@^1.10.26":
   version "1.10.39"
