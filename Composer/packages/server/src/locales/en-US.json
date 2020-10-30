@@ -473,9 +473,6 @@
   "change_recognizer_3145b93d": {
     "message": "Change Recognizer"
   },
-  "changes_the_new_bot_flow_to_use_templates_stored_a_bfe5178c": {
-    "message": "Changes the new bot flow to use templates stored as packages on Nuget/npm"
-  },
   "check_for_updates_and_install_them_automatically_50337340": {
     "message": "Check for updates and install them automatically."
   },
@@ -1285,6 +1282,9 @@
   },
   "if_this_problem_persists_please_file_an_issue_on_6fbc8e2b": {
     "message": "If this problem persists, please file an issue on"
+  },
+  "if_turned_on_then_externally_stored_templates_will_3f487651": {
+    "message": "If turned on then externally stored templates will be selectable in the new bot flow template list"
   },
   "if_you_already_have_a_luis_account_provide_the_inf_bede07a4": {
     "message": "If you already have a LUIS account, provide the information below. If you do not have an account yet, create a (free) account first."
@@ -2108,8 +2108,8 @@
   "reloading_49d2f661": {
     "message": "Reloading"
   },
-  "remote_template_creation_experience_2f9ea9e1": {
-    "message": "Remote template creation experience"
+  "remote_templates_a23c242d": {
+    "message": "Remote templates"
   },
   "remove_f47dc62a": {
     "message": "Remove"
@@ -2753,11 +2753,11 @@
   "user_is_typing_790cb502": {
     "message": "User is typing"
   },
-  "va_creation_is_nice_f75dbbdf": {
-    "message": "VA Creation Is Nice!!!"
+  "va_creation_6babf7db": {
+    "message": "VA Creation"
   },
-  "va_template_made_available_in_new_bot_flow_oh_yeah_49e8086a": {
-    "message": "VA template made available in new bot flow. OH Yeah!!"
+  "va_template_made_available_in_new_bot_flow_5f85baa4": {
+    "message": "VA template made available in new bot flow."
   },
   "validating_35b79a96": {
     "message": "Validating..."

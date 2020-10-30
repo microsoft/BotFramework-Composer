@@ -55,7 +55,7 @@ async function createProject(req: Request, res: Response) {
     await AssetService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage);
 
     if (currentProject !== undefined) {
-      if (currentProject.settings?.runtime.customRuntime === true) {
+      if (currentProject.settings?.runtime?.customRuntime === true) {
         const runtime = ExtensionContext.getRuntimeByProject(currentProject);
         const runtimePath = currentProject.settings.runtime.path;
 
