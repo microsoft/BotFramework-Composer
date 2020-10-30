@@ -9,7 +9,14 @@ import { SAMPLE_DIALOG } from '../mocks/sampleDialog';
 import { ProjectTree } from '../../src/components/ProjectTree/ProjectTree';
 import { TriggerCreationModal } from '../../src/components/ProjectTree/TriggerCreationModal';
 import { CreateDialogModal } from '../../src/pages/design/createDialogModal';
-import { dialogsSelectorFamily, currentProjectIdState, botProjectIdsState, schemasState } from '../../src/recoilModel';
+import {
+  dialogsSelectorFamily,
+  currentProjectIdState,
+  botProjectIdsState,
+  schemasState,
+  projectMetaDataState,
+  botProjectFileState,
+} from '../../src/recoilModel';
 
 jest.mock('@bfc/code-editor', () => {
   return {
@@ -24,6 +31,8 @@ const initRecoilState = ({ set }) => {
   set(botProjectIdsState, [projectId]);
   set(dialogsSelectorFamily(projectId), dialogs);
   set(schemasState(projectId), { sdk: { content: {} } });
+  set(projectMetaDataState(projectId), { isRootBot: true });
+  set(botProjectFileState(projectId), { foo: 'bar' });
 };
 
 describe('<ProjectTree/>', () => {
