@@ -21,7 +21,6 @@ import { StorageFolder } from '../../recoilModel/types';
 
 import { LocationSelectContent } from './LocationSelectContent';
 import { createNotification } from '../../recoilModel/dispatchers/notification';
-import { getUserFriendlySource } from '../ImportModal/getUserFriendlySource';
 import { ImportSuccessNotification } from '../ImportModal/ImportSuccessNotification';
 import { useRecoilValue } from 'recoil';
 import { dispatcherState } from '../../recoilModel';
@@ -215,14 +214,7 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
       };
       if (props.location?.search) {
         const decoded = decodeURIComponent(props.location.search);
-        const {
-          alias = '',
-          eTag = '',
-          imported = '',
-          source = '',
-          templateDir = '',
-          urlSuffix = '',
-        } = querystring.parse(decoded);
+        const { alias = '', eTag = '', imported = '', templateDir = '', urlSuffix = '' } = querystring.parse(decoded);
 
         if (imported) {
           dataToSubmit.templateDir = templateDir as string;
@@ -235,9 +227,7 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
             type: 'success',
             title: '',
             onRenderCardContent: ImportSuccessNotification({
-              botName: dataToSubmit.name,
               importedToExisting: false,
-              serviceName: getUserFriendlySource(source as string),
             }),
           });
           addNotification(notification);

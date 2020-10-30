@@ -12,7 +12,6 @@ import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
 import compIcon from '../../images/composerIcon.svg';
 import pvaIcon from '../../images/pvaIcon.svg';
-import { getUserFriendlySource } from './getUserFriendlySource';
 
 type ImportState = 'connecting' | 'downloading';
 
@@ -136,4 +135,15 @@ function getServiceIcon(source?: string) {
       <span style={{ display: 'block', margin: '0 16px' }}>---&gt;</span>
     </React.Fragment>
   );
+}
+
+// TODO: create a type for possible publish sources
+export function getUserFriendlySource(source?: string): string {
+  switch (source) {
+    case 'pva':
+      return 'PowerVirtualAgents';
+
+    default:
+      return 'external service';
+  }
 }

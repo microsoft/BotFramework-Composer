@@ -13,7 +13,6 @@ import { useRecoilValue } from 'recoil';
 import { dispatcherState } from '../../recoilModel';
 import { createNotification } from '../../recoilModel/dispatchers/notification';
 import { ImportSuccessNotification } from './ImportSuccessNotification';
-import { getUserFriendlySource } from './getUserFriendlySource';
 
 type ImportedProjectInfo = {
   alias?: string;
@@ -68,7 +67,7 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
     const { alias, description, eTag, name, source, templateDir, urlSuffix } = info;
     let creationUrl = `/projects/create/${encodeURIComponent(source)}?imported=true&templateDir=${encodeURIComponent(
       templateDir
-    )}&eTag=${encodeURIComponent(eTag)}&source=${encodeURIComponent(source)}`;
+    )}&eTag=${encodeURIComponent(eTag)}`;
 
     if (name) {
       creationUrl += `&name=${encodeURIComponent(name)}`;
@@ -110,10 +109,8 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
               type: 'success',
               title: '',
               onRenderCardContent: ImportSuccessNotification({
-                botName: existingProject.name,
                 importedToExisting: true,
                 location: existingProject.location,
-                serviceName: getUserFriendlySource(importSource),
               }),
             });
             addNotification(notification);
