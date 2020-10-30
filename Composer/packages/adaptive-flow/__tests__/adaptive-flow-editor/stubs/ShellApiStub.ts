@@ -12,6 +12,7 @@ export const ShellApiStub: ShellApi = {
   saveDialog: fn,
   saveData: fn,
   navTo: fn,
+  onOpenDialog: fn,
   onFocusSteps: fn,
   onFocusEvent: fn,
   onSelect: fn,
