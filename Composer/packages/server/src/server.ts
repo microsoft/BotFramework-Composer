@@ -48,12 +48,7 @@ export async function start(): Promise<number | string> {
   ExtensionContext.useExpress(app);
 
   // load all installed plugins
-  // setEnvDefault('COMPOSER_EXTENSION_MANIFEST', path.resolve(__dirname, '../../../.composer/extensions.json'));
-  // setEnvDefault('COMPOSER_EXTENSION_DATA_DIR', path.resolve(__dirname, '../../../.composer/extension-data'));
-  // setEnvDefault('COMPOSER_BUILTIN_EXTENSIONS_DIR', path.resolve(__dirname, '../../../../extensions'));
-  // // Composer/.composer/extensions
-  // setEnvDefault('COMPOSER_REMOTE_EXTENSIONS_DIR', path.resolve(__dirname, '../../../.composer/extensions'));
-  await ExtensionManager.loadAll(ExtensionContext);
+  await ExtensionManager.loadAll();
 
   const { login, authorize } = getAuthProvider();
 
