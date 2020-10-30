@@ -470,10 +470,12 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     return {
       key: breadcrumb.label,
       text: breadcrumb.label,
+      onClick: () => breadcrumb.onClick?.(),
     };
   };
 
   const items = breadcrumbs.map(createBreadcrumbItem);
+  console.log(items);
 
   const breadcrumbItems = (
     <div style={{ display: 'flex', justifyContent: 'space-between', height: '65px' }}>
