@@ -11,9 +11,6 @@ import { atomFamily, Snapshot, useRecoilCallback, CallbackInterface, useSetRecoi
 import uniqueId from 'lodash/uniqueId';
 import isEmpty from 'lodash/isEmpty';
 
-import { navigateTo, getUrlSearch } from '../../utils/navigation';
-
-import { breadcrumbState } from './../atoms/botState';
 import { designPageLocationState } from './../atoms';
 import { trackedAtoms, AtomAssetsMap } from './trackedAtoms';
 import UndoHistory from './undoHistory';
@@ -55,7 +52,6 @@ const getAtomAssetsMap = (snap: Snapshot, projectId: string): AtomAssetsMap => {
 
   //should record the location state
   atomMap.set(designPageLocationState(projectId), snap.getLoadable(designPageLocationState(projectId)).contents);
-  atomMap.set(breadcrumbState(projectId), snap.getLoadable(breadcrumbState(projectId)).contents);
   return atomMap;
 };
 
@@ -72,20 +68,6 @@ const checkAtomChanged = (current: AtomAssetsMap, previous: AtomAssetsMap, atom:
 const checkAtomsChanged = (current: AtomAssetsMap, previous: AtomAssetsMap, atoms: RecoilState<any>[]) => {
   return atoms.some((atom) => checkAtomChanged(current, previous, atom));
 };
-
-function navigate(next: AtomAssetsMap, projectId: string) {
-  const location = next.get(designPageLocationState(projectId));
-  const breadcrumb = [...next.get(breadcrumbState(projectId))];
-  if (location) {
-    const { dialogId, selected, focused, promptTab } = location;
-    let currentUri = `/bot/${projectId}/dialogs/${dialogId}${getUrlSearch(selected, focused)}`;
-    if (promptTab) {
-      currentUri += `#${promptTab}`;
-    }
-    breadcrumb.pop();
-    navigateTo(currentUri, { state: { breadcrumb } });
-  }
-}
 
 function mapTrackedAtomsOntoSnapshot(
   target: Snapshot,
@@ -105,10 +87,8 @@ function mapTrackedAtomsOntoSnapshot(
 
 function setInitialLocation(snapshot: Snapshot, projectId: string, undoHistory: UndoHistory) {
   const location = snapshot.getLoadable(designPageLocationState(projectId));
-  const breadcrumb = snapshot.getLoadable(breadcrumbState(projectId));
   if (location.state === 'hasValue') {
     undoHistory.setInitialValue(designPageLocationState(projectId), location.contents);
-    undoHistory.setInitialValue(breadcrumbState(projectId), breadcrumb.contents);
   }
 }
 interface UndoRootProps {
@@ -162,7 +142,6 @@ export const UndoRoot = React.memo((props: UndoRootProps) => {
   ) => {
     target = mapTrackedAtomsOntoSnapshot(target, current, next, projectId);
     gotoSnapshot(target);
-    navigate(next, projectId);
   };
 
   const undo = useRecoilCallback(({ snapshot, gotoSnapshot }: CallbackInterface) => () => {

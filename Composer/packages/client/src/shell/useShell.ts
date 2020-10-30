@@ -16,7 +16,6 @@ import {
   clipboardActionsState,
   schemasState,
   validateDialogsSelectorFamily,
-  breadcrumbState,
   focusPathState,
   skillsState,
   localeState,
@@ -65,7 +64,6 @@ export function useShell(source: EventSource, projectId: string): Shell {
 
   const schemas = useRecoilValue(schemasState(projectId));
   const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
-  const breadcrumb = useRecoilValue(breadcrumbState(projectId));
   const focusPath = useRecoilValue(focusPathState(projectId));
   const skills = useRecoilValue(skillsState(projectId));
   const locale = useRecoilValue(localeState(projectId));
@@ -138,7 +136,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
 
   function navigationTo(path) {
     if (rootBotProjectId == null) return;
-    navTo(projectId, path, breadcrumb);
+    navTo(projectId, path);
   }
 
   function focusEvent(subPath) {
