@@ -112,7 +112,7 @@ function createTriggerApi(
     };
     await updateDialog(dialogPayload);
     if (autoSelected) {
-      selectTo(projectId, null, null, `triggers[${index}]`);
+      selectTo(projectId, newDialog.id, `triggers[${index}]`);
     }
   };
 
