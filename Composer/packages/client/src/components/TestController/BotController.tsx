@@ -65,7 +65,7 @@ const BotController: React.FC = () => {
         }}
         onClick={handleClick}
       >
-        <div>{buttonText}</div>
+        {buttonText}
       </DefaultButton>
     </React.Fragment>
   );

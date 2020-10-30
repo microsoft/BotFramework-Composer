@@ -1,0 +1,95 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import React from 'react';
+import { act, fireEvent } from '@botframework-composer/test-utils';
+
+import { renderWithRecoil } from '../../../../__tests__/testUtils';
+import { BotStatus } from '../../../constants';
+import { botProjectIdsState, botStatusState } from '../../../recoilModel';
+import { BotController } from '../BotController';
+
+const mockStart = jest.fn();
+const mockStop = jest.fn();
+
+jest.mock('../../src/components/TestController/useLocalBotOperations', () => {
+  return {
+    useLocalBotOperations: () => ({
+      startAllBots: mockStart,
+      stopAllBots: mockStop,
+    }),
+  };
+});
+
+jest.mock('office-ui-fabric-react/lib/Button', () => ({
+  DefaultButton: ({ children, onClick }) => (
+    <button data-testid="button" onClick={onClick}>
+      {children}
+    </button>
+  ),
+}));
+
+describe('<BotController />', () => {
+  beforeEach(() => {
+    mockStop.mockReset();
+    mockStart.mockReset();
+  });
+
+  it('should show that 2/3 bots have been started correctly', async () => {
+    const initRecoilState = ({ set }) => {
+      const projectIds = ['123a.234', '456a.234', '789a.234'];
+      set(botProjectIdsState, projectIds);
+      set(botStatusState(projectIds[0]), BotStatus.connected);
+      set(botStatusState(projectIds[1]), BotStatus.connected);
+      set(botStatusState(projectIds[2]), BotStatus.failed);
+    };
+    const { findByTestId } = renderWithRecoil(<BotController />, initRecoilState);
+    const button = await findByTestId('button');
+    expect(button.innerText).toBe('Stop all bots (2/3 running)');
+  });
+
+  it('should show that no bots have been started', async () => {
+    const initRecoilState = ({ set }) => {
+      const projectIds = ['123a.234', '456a.234', '789a.234'];
+      set(botProjectIdsState, projectIds);
+      set(botStatusState(projectIds[0]), BotStatus.published);
+      set(botStatusState(projectIds[1]), BotStatus.publishing);
+      set(botStatusState(projectIds[2]), BotStatus.failed);
+    };
+    const { findByTestId } = renderWithRecoil(<BotController />, initRecoilState);
+    const button = await findByTestId('button');
+    expect(button.innerText).toBe('Start all bots');
+  });
+
+  it('should stop all bots if Stop all bots is clicked', async () => {
+    const initRecoilState = ({ set }) => {
+      const projectIds = ['123a.234', '456a.234', '789a.234'];
+      set(botProjectIdsState, projectIds);
+      set(botStatusState(projectIds[0]), BotStatus.published);
+      set(botStatusState(projectIds[1]), BotStatus.publishing);
+      set(botStatusState(projectIds[2]), BotStatus.connected);
+    };
+    const { findByTestId } = renderWithRecoil(<BotController />, initRecoilState);
+    const button = await findByTestId('button');
+    act(() => {
+      fireEvent.click(button);
+    });
+    expect(mockStop).toHaveBeenCalled();
+  });
+
+  it('should start all bots if Start All bots is clicked', async () => {
+    const initRecoilState = ({ set }) => {
+      const projectIds = ['123a.234', '456a.234', '789a.234'];
+      set(botProjectIdsState, projectIds);
+      set(botStatusState(projectIds[0]), BotStatus.unConnected);
+      set(botStatusState(projectIds[1]), BotStatus.unConnected);
+      set(botStatusState(projectIds[2]), BotStatus.unConnected);
+    };
+    const { findByTestId } = renderWithRecoil(<BotController />, initRecoilState);
+    const button = await findByTestId('button');
+    act(() => {
+      fireEvent.click(button);
+    });
+    expect(mockStart).toHaveBeenCalled();
+  });
+});
