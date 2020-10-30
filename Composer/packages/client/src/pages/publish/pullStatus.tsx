@@ -9,16 +9,18 @@ import { Dialog, DialogType, IDialogContentProps } from 'office-ui-fabric-react/
 import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
 import formatMessage from 'format-message';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { PublishTarget } from '@botframework-composer/types';
 
 import compIcon from '../../images/composerIcon.svg';
 import pvaIcon from '../../images/pvaIcon.svg';
 
-type ImportState = 'connecting' | 'downloading';
+type KnownPublishTargets = 'pva-publish-composer';
 
-type ImportStatusProps = {
-  botName?: string;
-  source?: string;
-  state: ImportState;
+type PullState = 'connecting' | 'downloading';
+
+type PullStatusProps = {
+  publishTarget: PublishTarget | undefined;
+  state: PullState;
 };
 
 const contentProps: IDialogContentProps = {
@@ -48,13 +50,8 @@ const boldBlueText = css`
   word-break: break-work;
 `;
 
-const boldText = css`
-  font-weight: ${FontWeights.semibold};
-  word-break: break-work;
-`;
-
-export const ImportStatus: React.FC<RouteComponentProps & ImportStatusProps> = (props) => {
-  const { botName, source, state } = props;
+export const PullStatus: React.FC<RouteComponentProps & PullStatusProps> = (props) => {
+  const { publishTarget, state } = props;
 
   const composerIcon = (
     <img
@@ -70,7 +67,7 @@ export const ImportStatus: React.FC<RouteComponentProps & ImportStatusProps> = (
       const label = (
         <p style={{ fontSize: 16, whiteSpace: 'normal' }}>
           {formatMessage('Connecting to ')}
-          <span css={boldBlueText}>{getUserFriendlySource(source)}</span>
+          <span css={boldBlueText}>{publishTarget?.name}</span>
           {formatMessage(' to import bot content...')}
         </p>
       );
@@ -83,7 +80,7 @@ export const ImportStatus: React.FC<RouteComponentProps & ImportStatusProps> = (
           modalProps={{ isBlocking: true }}
         >
           <span style={{ display: 'flex', justifyContent: 'center' }}>
-            {getServiceIcon(source)}
+            {getServiceIcon(publishTarget?.type as KnownPublishTargets)}
             {composerIcon}
           </span>
           <ProgressIndicator label={label} styles={{ itemName: { textAlign: 'center' } }} />
@@ -92,12 +89,9 @@ export const ImportStatus: React.FC<RouteComponentProps & ImportStatusProps> = (
     }
 
     case 'downloading': {
-      const sourceName = getUserFriendlySource(source);
       const label = (
         <p style={{ fontSize: 16, whiteSpace: 'normal' }}>
-          {formatMessage('Importing ')}
-          <span css={boldText}>{botName}</span>
-          {formatMessage(` from ${sourceName}...`)}
+          {formatMessage('Importing bot content from {targetName}...', { targetName: publishTarget?.name })}
         </p>
       );
       return (
@@ -109,7 +103,7 @@ export const ImportStatus: React.FC<RouteComponentProps & ImportStatusProps> = (
           modalProps={{ isBlocking: true }}
         >
           <span style={{ display: 'flex', justifyContent: 'center' }}>
-            {getServiceIcon(source)}
+            {getServiceIcon(publishTarget?.type as KnownPublishTargets)}
             {composerIcon}
           </span>
           <ProgressIndicator label={label} styles={{ itemName: { textAlign: 'center' } }} />
@@ -122,11 +116,10 @@ export const ImportStatus: React.FC<RouteComponentProps & ImportStatusProps> = (
   }
 };
 
-// TODO: typing of source
-function getServiceIcon(source?: string) {
+function getServiceIcon(targetType?: KnownPublishTargets) {
   let icon;
-  switch (source) {
-    case 'pva':
+  switch (targetType) {
+    case 'pva-publish-composer':
       icon = (
         <img
           alt={formatMessage('PowerVirtualAgents Logo')}
@@ -147,15 +140,4 @@ function getServiceIcon(source?: string) {
       <span style={{ display: 'block', margin: '0 16px' }}>---&gt;</span>
     </React.Fragment>
   );
-}
-
-// TODO: create a type for possible publish sources
-export function getUserFriendlySource(source?: string): string {
-  switch (source) {
-    case 'pva':
-      return 'PowerVirtualAgents';
-
-    default:
-      return 'external service';
-  }
 }

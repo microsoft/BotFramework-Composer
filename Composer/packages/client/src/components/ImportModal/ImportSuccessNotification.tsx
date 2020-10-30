@@ -81,7 +81,7 @@ export const ImportSuccessNotification = (outerProps: ImportSuccessNotificationP
             value={location}
             readOnly={true}
             componentRef={textFieldRef}
-            styles={{ root: { width: '100%' } }}
+            styles={{ root: { width: '100%' }, field: { paddingRight: 28 } }}
           />
           <IconButton
             iconProps={{ iconName: 'Copy' }}

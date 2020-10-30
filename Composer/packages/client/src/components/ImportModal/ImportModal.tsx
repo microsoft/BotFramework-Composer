@@ -315,6 +315,7 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
           <Dialog
             hidden={false}
             dialogContentProps={{ type: DialogType.normal }}
+            modalProps={{ isBlocking: true }}
             styles={{ main: { display: 'none' } }}
           />
         );

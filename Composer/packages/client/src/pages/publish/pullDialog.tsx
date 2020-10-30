@@ -2,50 +2,66 @@
 import { jsx, css } from '@emotion/core';
 import { PublishTarget } from '@botframework-composer/types';
 import formatMessage from 'format-message';
-import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
-import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import { Dialog, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
+import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
-import { LoadingSpinner } from '../../components/LoadingSpinner';
+import { createNotification } from '../../recoilModel/dispatchers/notification';
+import { ImportSuccessNotification } from '../../components/ImportModal/ImportSuccessNotification';
+import { useRecoilValue } from 'recoil';
+import { dispatcherState } from '../../recoilModel';
+import { PullStatus } from './pullStatus';
 
 type PullDialogProps = {
-  hidden: boolean;
   onDismiss: () => void;
   projectId: string;
   selectedTarget: PublishTarget | undefined;
 };
 
-type PullDialogStatus = 'idle' | 'inProgress' | 'done' | 'error';
+type PullDialogStatus = 'connecting' | 'downloading' | 'error';
 
 const boldText = css`
   font-weight: ${FontWeights.semibold};
   word-break: break-work;
 `;
 
-export const PullDialog: React.FC<PullDialogProps> = (props) => {
-  const { hidden = true, onDismiss, projectId, selectedTarget } = props;
-  const [status, setStatus] = useState<PullDialogStatus>('idle');
-  const [error, setError] = useState<string>('');
-  const [backupPath, setBackupPath] = useState<string>('');
+const CONNECTING_STATUS_DISPLAY_TIME = 2000;
 
+export const PullDialog: React.FC<PullDialogProps> = (props) => {
+  const { onDismiss, projectId, selectedTarget } = props;
+  const [status, setStatus] = useState<PullDialogStatus>('connecting');
+  const [error, setError] = useState<string>('');
+  const { addNotification } = useRecoilValue(dispatcherState);
+
+  // TODO: pull needs to be broken down into a previous auth step so the UI can reflect status
+  // properly like in import flow
   const pull = useCallback(() => {
     if (selectedTarget) {
       const doPull = async () => {
-        // show spinner
-        setStatus('inProgress');
+        // show progress dialog
+        setStatus('downloading');
 
         try {
+          console.log('doing the pull');
           // wait for pull result from server
           const res = await fetch(`/api/publish/${projectId}/pull/${selectedTarget.name}`, {
             method: 'POST',
           });
-          const { status } = res;
-          if (status === 200) {
+          console.log('got pull result back: ', res);
+          if (res.status && res.status === 200) {
             const { backupLocation } = await res.json();
-            // show complete
-            setStatus('done');
-            setBackupPath(backupLocation);
+            // show notification indicating success and close dialog
+            const notification = createNotification({
+              type: 'success',
+              title: '',
+              onRenderCardContent: ImportSuccessNotification({
+                importedToExisting: true,
+                location: backupLocation,
+              }),
+            });
+            addNotification(notification);
+            onDismiss();
             return;
           }
 
@@ -63,45 +79,27 @@ export const PullDialog: React.FC<PullDialogProps> = (props) => {
     }
   }, [projectId, selectedTarget]);
 
+  useEffect(() => {
+    if (status === 'connecting') {
+      // start the pull
+      console.log('starting pull');
+      setTimeout(() => {
+        pull();
+      }, CONNECTING_STATUS_DISPLAY_TIME);
+    }
+  }, [status]);
+
   const onCancelOrDone = useCallback(() => {
-    setStatus('idle');
+    setStatus('connecting');
     onDismiss();
   }, [onDismiss]);
 
-  if (hidden) {
-    return null;
-  }
-
   switch (status) {
-    case 'inProgress':
-      // TODO: show some fancy status like in import
-      // show the blocking spinner
-      return (
-        <Dialog
-          hidden={false}
-          dialogContentProps={{ type: DialogType.normal, showCloseButton: false }}
-          modalProps={{ isBlocking: true }}
-        >
-          <LoadingSpinner message={formatMessage('Pulling bot content...')} />
-        </Dialog>
-      );
+    case 'connecting':
+      return <PullStatus state={'connecting'} publishTarget={selectedTarget} />;
 
-    case 'done':
-      // TODO: just show notification
-      return (
-        <Dialog
-          hidden={false}
-          dialogContentProps={{
-            title: formatMessage('Pull complete'),
-          }}
-        >
-          <p>{formatMessage('Your old bot content was backed up to:')}</p>
-          <p css={boldText}>{backupPath}</p>
-          <DialogFooter>
-            <PrimaryButton text={formatMessage('Ok')} onClick={onCancelOrDone} />
-          </DialogFooter>
-        </Dialog>
-      );
+    case 'downloading':
+      return <PullStatus state={'downloading'} publishTarget={selectedTarget} />;
 
     case 'error':
       return (
@@ -127,31 +125,7 @@ export const PullDialog: React.FC<PullDialogProps> = (props) => {
         </Dialog>
       );
 
-    case 'idle':
     default:
-      return (
-        <Dialog
-          hidden={false}
-          dialogContentProps={{
-            title: formatMessage('Pull content?'),
-            subText: formatMessage(
-              'WARNING: Pulling bot content from the selected profile is a destructive operation. We will backup your old bot contents to a separate folder.'
-            ),
-            styles: {
-              subText: {
-                fontSize: 16,
-              },
-            },
-            type: DialogType.close,
-          }}
-          minWidth={560}
-          onDismiss={onCancelOrDone}
-        >
-          <DialogFooter>
-            <DefaultButton text={formatMessage('Cancel')} onClick={onCancelOrDone} />
-            <PrimaryButton text={formatMessage('Pull')} onClick={pull} />
-          </DialogFooter>
-        </Dialog>
-      );
+      return <div style={{ display: 'none' }}></div>;
   }
 };
