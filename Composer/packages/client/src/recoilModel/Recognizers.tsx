@@ -5,7 +5,7 @@ import { DialogInfo, LuFile, QnAFile, SDKKinds, RecognizerFile } from '@bfc/shar
 import React, { useEffect } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { useRecoilValue } from 'recoil';
-import { isEqual } from 'lodash';
+import isEqual from 'lodash/isEqual';
 
 import { getExtension } from '../utils/fileUtil';
 
