@@ -2,17 +2,19 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/core';
 import * as React from 'react';
 import { RouteComponentProps } from '@reach/router';
 import { Dialog, DialogType, IDialogContentProps } from 'office-ui-fabric-react/lib/Dialog';
 import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
 import formatMessage from 'format-message';
+import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
 import compIcon from '../../images/composerIcon.svg';
 import pvaIcon from '../../images/pvaIcon.svg';
+import { getUserFriendlySource } from './getUserFriendlySource';
 
-type ImportState = 'connecting' | 'downloading' | 'copying';
+type ImportState = 'connecting' | 'downloading';
 
 type ImportStatusProps = {
   botName?: string;
@@ -41,6 +43,17 @@ const contentProps: IDialogContentProps = {
   },
 };
 
+const boldBlueText = css`
+  font-weight: ${FontWeights.semibold};
+  color: #106ebe;
+  word-break: break-work;
+`;
+
+const boldText = css`
+  font-weight: ${FontWeights.semibold};
+  word-break: break-work;
+`;
+
 export const ImportStatus: React.FC<RouteComponentProps & ImportStatusProps> = (props) => {
   const { botName, source, state } = props;
 
@@ -58,7 +71,7 @@ export const ImportStatus: React.FC<RouteComponentProps & ImportStatusProps> = (
       const label = (
         <p style={{ fontSize: 16 }}>
           {formatMessage('Connecting to ')}
-          <span style={{ fontWeight: 600, color: 'blue' }}>{getUserFriendlySource(source)}</span>
+          <span css={boldBlueText}>{getUserFriendlySource(source)}</span>
           {formatMessage(' to import bot content...')}
         </p>
       );
@@ -78,7 +91,7 @@ export const ImportStatus: React.FC<RouteComponentProps & ImportStatusProps> = (
       const label = (
         <p style={{ fontSize: 16 }}>
           {formatMessage('Importing ')}
-          <span style={{ fontWeight: 600 }}>{botName}</span>
+          <span css={boldText}>{botName}</span>
           {formatMessage(` from ${sourceName}...`)}
         </p>
       );
@@ -93,31 +106,10 @@ export const ImportStatus: React.FC<RouteComponentProps & ImportStatusProps> = (
       );
     }
 
-    case 'copying': {
-      const label = <p style={{ fontSize: 16 }}>{formatMessage('Almost there. Setting things up...')}</p>;
-      return (
-        <Dialog dialogContentProps={contentProps} hidden={false} minWidth={560} styles={{ main: { height: 263 } }}>
-          <span style={{ display: 'flex', justifyContent: 'center' }}>{composerIcon}</span>
-          <ProgressIndicator label={label} styles={{ itemName: { textAlign: 'center' } }} />
-        </Dialog>
-      );
-    }
-
     default:
       return <div style={{ display: 'none' }}></div>;
   }
 };
-
-// TODO: create a type for possible publish sources
-function getUserFriendlySource(source?: string): string {
-  switch (source) {
-    case 'pva':
-      return 'PowerVirtualAgents';
-
-    default:
-      return 'external service';
-  }
-}
 
 // TODO: typing of source
 function getServiceIcon(source?: string) {

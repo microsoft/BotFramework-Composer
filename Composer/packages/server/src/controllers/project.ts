@@ -209,7 +209,7 @@ async function getProjectByAlias(req: Request, res: Response) {
     const currentProject = await BotProjectService.getProjectByAlias(alias, user);
 
     if (currentProject !== undefined && (await currentProject.exists())) {
-      res.status(200).json({ location: currentProject.dir, id: currentProject.id });
+      res.status(200).json({ location: currentProject.dir, id: currentProject.id, name: currentProject.name });
     } else {
       res.status(404).json({
         message: 'No matching ',

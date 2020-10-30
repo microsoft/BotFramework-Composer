@@ -131,7 +131,7 @@ export const DialogCreationCopy = {
     ),
   },
   IMPORT_BOT_PROJECT: {
-    title: formatMessage('Import your bot to'),
+    title: formatMessage('Import your bot to new project'),
     subText: formatMessage(`Specify a name, description, and location for your new bot project.`),
   },
 };
