@@ -711,11 +711,20 @@ export class BotProject implements IBotProject {
     }
   };
 
+  //migrate the recognizer folder
+  private removeRecognizers = async () => {
+    const paths = await this.fileStorage.glob('recognizers/cross-train.config.json', this.dataDir);
+    if (paths.length) {
+      await this.fileStorage.rmrfDir(Path.join(this.dataDir, 'recognizers'));
+    }
+  };
+
   private _getFiles = async () => {
     if (!(await this.exists())) {
       throw new Error(`${this.dir} is not a valid path`);
     }
 
+    await this.removeRecognizers();
     const fileList = new Map<string, FileInfo>();
     const patterns = [
       '**/*.dialog',
@@ -734,13 +743,14 @@ export class BotProject implements IBotProject {
       'app.schema',
       'app.uischema',
       '*.botproj',
+      'cross-train.config.json',
     ];
     for (const pattern of patterns) {
       // load only from the data dir, otherwise may get "build" versions from
       // deployment process
       const root = this.dataDir;
       const paths = await this.fileStorage.glob(
-        [pattern, '!(generated/**)', '!(runtime/**)', '!(scripts/**)', '!(settings/**)'],
+        [pattern, '!(generated/**)', '!(runtime/**)', '!(scripts/**)', '!(settings/appsettings.json)'],
         root
       );
 

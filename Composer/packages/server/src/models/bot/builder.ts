@@ -19,7 +19,7 @@ const LuisBuilder = require('@microsoft/bf-lu/lib/parser/luis/luisBuilder');
 const luisToLuContent = require('@microsoft/bf-lu/lib/parser/luis/luConverter');
 
 const GENERATEDFOLDER = 'generated';
-const RECOGNIZERS = 'recognizers';
+const SETTINGS = 'settings';
 const INTERRUPTION = 'interruption';
 const SAMPLE_SIZE_CONFIGURATION = 2;
 const CrossTrainConfigName = 'cross-train.config';
@@ -109,7 +109,7 @@ export class Builder {
   }
 
   private async crossTrain(luFiles: FileInfo[], qnaFiles: FileInfo[], allFiles: FileInfo[]) {
-    const crossTrainConfigPath = Path.join(this.botDir, RECOGNIZERS, CrossTrainConfigName);
+    const crossTrainConfigPath = Path.join(this.botDir, SETTINGS, CrossTrainConfigName);
     let crossTrainConfig = {};
     if (await this.storage.exists(crossTrainConfigPath)) {
       const crossTrainConfigStr = await this.storage.readFile(crossTrainConfigPath);

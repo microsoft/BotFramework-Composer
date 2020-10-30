@@ -25,12 +25,13 @@ const BotStructureTemplate = {
     qna: 'dialogs/${DIALOGNAME}/knowledge-base/en-us/${DIALOGNAME}.en-us.qna',
     sourceQnA: 'dialogs/${DIALOGNAME}/knowledge-base/source/${FILENAME}.source.qna',
     dialogSchema: 'dialogs/${DIALOGNAME}/${DIALOGNAME}.dialog.schema',
+    recognizer: 'dialogs/${DIALOGNAME}/recognizers/${RECOGNIZERNAME}',
   },
   formDialogs: 'form-dialogs/${FORMDIALOGNAME}',
   skillManifests: 'manifests/${MANIFESTFILENAME}',
   botProject: '${BOTNAME}.botproj',
   recognizer: 'recognizers/${RECOGNIZERNAME}',
-  crossTrainConfig: 'recognizers/${CROSSTRAINCONFIGNAME}',
+  crossTrainConfig: 'settings/${CROSSTRAINCONFIGNAME}',
 };
 
 const templateInterpolate = (str: string, obj: { [key: string]: string }) =>
@@ -85,9 +86,18 @@ export const defaultFilePath = (botName: string, defaultLocale: string, filename
 
   // now recognizer extension is .lu.dialog or .qna.dialog
   if (isRecognizer(filename)) {
-    return templateInterpolate(BotStructureTemplate.recognizer, {
-      RECOGNIZERNAME: filename,
-    });
+    const isRoot = filename.startsWith(botName.toLowerCase());
+    const dialogId = filename.slice(0, filename.indexOf('.'));
+    if (isRoot) {
+      return templateInterpolate(BotStructureTemplate.recognizer, {
+        RECOGNIZERNAME: filename,
+      });
+    } else {
+      return templateInterpolate(BotStructureTemplate.dialogs.recognizer, {
+        RECOGNIZERNAME: filename,
+        DIALOGNAME: dialogId,
+      });
+    }
   }
 
   //crossTrain config's file name is cross-train.config
