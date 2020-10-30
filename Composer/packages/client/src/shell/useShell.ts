@@ -27,6 +27,7 @@ import {
   lgFilesState,
   luFilesState,
   rateInfoState,
+  rootBotProjectIdSelector,
 } from '../recoilModel';
 import { undoFunctionState } from '../recoilModel/undo/history';
 
@@ -78,6 +79,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
   const botName = useRecoilValue(botDisplayNameState(projectId));
   const settings = useRecoilValue(settingsState(projectId));
   const flowZoomRate = useRecoilValue(rateInfoState);
+  const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
 
   const userSettings = useRecoilValue(userSettingsState);
   const clipboardActions = useRecoilValue(clipboardActionsState);
@@ -135,11 +137,13 @@ export function useShell(source: EventSource, projectId: string): Shell {
   }
 
   function navigationTo(path) {
-    navTo(projectId, null, path, breadcrumb);
+    if (rootBotProjectId == null) return;
+    navTo(projectId, path, breadcrumb);
   }
 
   function focusEvent(subPath) {
-    selectTo(projectId, null, null, subPath);
+    if (rootBotProjectId == null) return;
+    selectTo(projectId, dialogId, subPath);
   }
 
   function focusSteps(subPaths: string[] = [], fragment?: string) {
@@ -154,7 +158,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
       }
     }
 
-    focusTo(projectId, dataPath, fragment ?? '');
+    focusTo(rootBotProjectId ?? projectId, projectId, dataPath, fragment ?? '');
   }
 
   function updateFlowZoomRate(currentRate) {
