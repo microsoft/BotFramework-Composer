@@ -23,6 +23,59 @@
       }
     }
   },
+  "Microsoft.AttachmentInput": {
+    "form": {
+      "helpLink": "https://aka.ms/bfc-ask-for-user-input",
+      "label": "Prompt for a file or an attachment",
+      "subtitle": "Attachment Input"
+    }
+  },
+  "Microsoft.ChoiceInput": {
+    "form": {
+      "helpLink": "https://aka.ms/bfc-ask-for-user-input",
+      "label": "Prompt with multi-choice",
+      "subtitle": "Choice Input"
+    }
+  },
+  "Microsoft.ConfirmInput": {
+    "form": {
+      "helpLink": "https://aka.ms/bfc-ask-for-user-input",
+      "label": "Prompt for confirmation",
+      "subtitle": "Confirm Input"
+    }
+  },
+  "Microsoft.DateTimeInput": {
+    "form": {
+      "helpLink": "https://aka.ms/bfc-ask-for-user-input",
+      "label": "Prompt for a date or a time",
+      "subtitle": "Date Time Input"
+    }
+  },
+  "Microsoft.NumberInput": {
+    "form": {
+      "helpLink": "https://aka.ms/bfc-ask-for-user-input",
+      "label": "Prompt for a number",
+      "subtitle": "Number Input"
+    }
+  },
+  "Microsoft.OAuthInput": {
+    "form": {
+      "helpLink": "https://aka.ms/bfc-using-oauth",
+      "label": "OAuth login",
+      "order": [
+        "connectionName",
+        "*"
+      ],
+      "subtitle": "OAuth Input"
+    }
+  },
+  "Microsoft.TextInput": {
+    "form": {
+      "helpLink": "https://aka.ms/bfc-ask-for-user-input",
+      "label": "Prompt for text",
+      "subtitle": "Text Input"
+    }
+  },
   "Microsoft.BeginDialog": {
     "form": {
       "helpLink": "https://aka.ms/bfc-understanding-dialogs",
@@ -33,13 +86,6 @@
         "resultProperty",
         "*"
       ],
-      "properties": {
-        "resultProperty": {
-          "intellisenseScopes": [
-            "variable-scopes"
-          ]
-        }
-      },
       "subtitle": "Begin Dialog"
     }
   },
@@ -47,13 +93,6 @@
     "form": {
       "helpLink": "https://aka.ms/bf-composer-docs-connect-skill",
       "label": "Connect to a skill",
-      "properties": {
-        "resultProperty": {
-          "intellisenseScopes": [
-            "variable-scopes"
-          ]
-        }
-      },
       "subtitle": "Skill Dialog"
     }
   },
@@ -85,13 +124,6 @@
     "form": {
       "helpLink": "https://aka.ms/bfc-using-memory",
       "label": "Delete properties",
-      "properties": {
-        "properties": {
-          "intellisenseScopes": [
-            "user-variables"
-          ]
-        }
-      },
       "subtitle": "Delete Properties"
     }
   },
@@ -99,13 +131,6 @@
     "form": {
       "helpLink": "https://aka.ms/bfc-using-memory",
       "label": "Delete a property",
-      "properties": {
-        "property": {
-          "intellisenseScopes": [
-            "user-variables"
-          ]
-        }
-      },
       "subtitle": "Delete Property"
     }
   },
@@ -119,18 +144,6 @@
     "form": {
       "helpLink": "https://aka.ms/bfc-using-memory",
       "label": "Edit an array property",
-      "properties": {
-        "itemsProperty": {
-          "intellisenseScopes": [
-            "user-variables"
-          ]
-        },
-        "resultProperty": {
-          "intellisenseScopes": [
-            "variable-scopes"
-          ]
-        }
-      },
       "subtitle": "Edit Array"
     }
   },
@@ -166,23 +179,6 @@
         "itemsProperty",
         "*"
       ],
-      "properties": {
-        "index": {
-          "intellisenseScopes": [
-            "variable-scopes"
-          ]
-        },
-        "itemsProperty": {
-          "intellisenseScopes": [
-            "user-variables"
-          ]
-        },
-        "value": {
-          "intellisenseScopes": [
-            "variable-scopes"
-          ]
-        }
-      },
       "subtitle": "For Each"
     }
   },
@@ -198,23 +194,6 @@
         "pageSize",
         "*"
       ],
-      "properties": {
-        "itemsProperty": {
-          "intellisenseScopes": [
-            "user-variables"
-          ]
-        },
-        "page": {
-          "intellisenseScopes": [
-            "variable-scopes"
-          ]
-        },
-        "pageIndex": {
-          "intellisenseScopes": [
-            "variable-scopes"
-          ]
-        }
-      },
       "subtitle": "For Each Page"
     }
   },
@@ -229,13 +208,6 @@
         "headers",
         "*"
       ],
-      "properties": {
-        "resultProperty": {
-          "intellisenseScopes": [
-            "variable-scopes"
-          ]
-        }
-      },
       "subtitle": "HTTP Request"
     }
   },
@@ -295,17 +267,6 @@
     "form": {
       "helpLink": "https://aka.ms/bfc-using-memory",
       "label": "Set properties",
-      "properties": {
-        "assignments": {
-          "properties": {
-            "property": {
-              "intellisenseScopes": [
-                "variable-scopes"
-              ]
-            }
-          }
-        }
-      },
       "subtitle": "Set Properties"
     }
   },
@@ -313,13 +274,6 @@
     "form": {
       "helpLink": "https://aka.ms/bfc-using-memory",
       "label": "Set a property",
-      "properties": {
-        "property": {
-          "intellisenseScopes": [
-            "variable-scopes"
-          ]
-        }
-      },
       "subtitle": "Set Property"
     }
   },
@@ -341,20 +295,9 @@
           "hidden": [
             "actions"
           ]
-        },
-        "condition": {
-          "intellisenseScopes": [
-            "user-variables"
-          ]
         }
       },
       "subtitle": "Switch Condition"
-    }
-  },
-  "Microsoft.ThrowException": {
-    "form": {
-      "label": "Throw an exception",
-      "subtitle": "Throw an exception"
     }
   },
   "Microsoft.TraceActivity": {
@@ -362,112 +305,6 @@
       "helpLink": "https://aka.ms/bfc-debugging-bots",
       "label": "Emit a trace event",
       "subtitle": "Trace Activity"
-    }
-  },
-  "Microsoft.Ask": {
-    "form": {
-      "helpLink": "https://aka.ms/bfc-send-activity",
-      "label": "Send a response to ask a question",
-      "order": [
-        "activity",
-        "*"
-      ],
-      "subtitle": "Ask Activity"
-    }
-  },
-  "Microsoft.AttachmentInput": {
-    "form": {
-      "helpLink": "https://aka.ms/bfc-ask-for-user-input",
-      "label": "Prompt for a file or an attachment",
-      "properties": {
-        "property": {
-          "intellisenseScopes": [
-            "variable-scopes"
-          ]
-        }
-      },
-      "subtitle": "Attachment Input"
-    }
-  },
-  "Microsoft.ChoiceInput": {
-    "form": {
-      "helpLink": "https://aka.ms/bfc-ask-for-user-input",
-      "label": "Prompt with multi-choice",
-      "properties": {
-        "property": {
-          "intellisenseScopes": [
-            "variable-scopes"
-          ]
-        }
-      },
-      "subtitle": "Choice Input"
-    }
-  },
-  "Microsoft.ConfirmInput": {
-    "form": {
-      "helpLink": "https://aka.ms/bfc-ask-for-user-input",
-      "label": "Prompt for confirmation",
-      "properties": {
-        "property": {
-          "intellisenseScopes": [
-            "variable-scopes"
-          ]
-        }
-      },
-      "subtitle": "Confirm Input"
-    }
-  },
-  "Microsoft.DateTimeInput": {
-    "form": {
-      "helpLink": "https://aka.ms/bfc-ask-for-user-input",
-      "label": "Prompt for a date or a time",
-      "properties": {
-        "property": {
-          "intellisenseScopes": [
-            "variable-scopes"
-          ]
-        }
-      },
-      "subtitle": "Date Time Input"
-    }
-  },
-  "Microsoft.NumberInput": {
-    "form": {
-      "helpLink": "https://aka.ms/bfc-ask-for-user-input",
-      "label": "Prompt for a number",
-      "properties": {
-        "property": {
-          "intellisenseScopes": [
-            "variable-scopes"
-          ]
-        }
-      },
-      "subtitle": "Number Input"
-    }
-  },
-  "Microsoft.OAuthInput": {
-    "form": {
-      "helpLink": "https://aka.ms/bfc-using-oauth",
-      "label": "OAuth login",
-      "order": [
-        "connectionName",
-        "*"
-      ],
-      "subtitle": "OAuth Input"
-    }
-  },
-  "Microsoft.TextInput": {
-    "form": {
-      "helpLink": "https://aka.ms/bfc-ask-for-user-input",
-      "label": "Prompt for text",
-      "properties": {
-        "property": {
-          "intellisenseScopes": [
-            "variable-scopes"
-          ]
-        }
-      },
-      "subtitle": "Text Input"
     }
   },
   "Microsoft.RegexRecognizer": {
@@ -488,19 +325,6 @@
         "*"
       ],
       "subtitle": "Activity received"
-    }
-  },
-  "Microsoft.OnAssignEntity": {
-    "form": {
-      "hidden": [
-        "actions"
-      ],
-      "label": "Handle a condition when an entity is assigned",
-      "order": [
-        "condition",
-        "*"
-      ],
-      "subtitle": "EntityAssigned activity"
     }
   },
   "Microsoft.OnBeginDialog": {
@@ -570,19 +394,6 @@
       "subtitle": "Dialog event"
     }
   },
-  "Microsoft.OnEndOfActions": {
-    "form": {
-      "hidden": [
-        "actions"
-      ],
-      "label": "Handle a condition when actions have ended",
-      "order": [
-        "condition",
-        "*"
-      ],
-      "subtitle": "EndOfActions activity"
-    }
-  },
   "Microsoft.OnEndOfConversationActivity": {
     "form": {
       "hidden": [
@@ -633,19 +444,6 @@
         "*"
       ],
       "subtitle": "Handoff activity"
-    }
-  },
-  "Microsoft.OnInstallationUpdateActivity": {
-    "form": {
-      "hidden": [
-        "actions"
-      ],
-      "label": "Installation updated",
-      "order": [
-        "condition",
-        "*"
-      ],
-      "subtitle": "Installation updated activity"
     }
   },
   "Microsoft.OnIntent": {
