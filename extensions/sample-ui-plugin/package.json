@@ -45,6 +45,9 @@
     }
   },
   "main": "dist/index.js",
+  "resolutions": {
+    "@botframework-composer/types": "file:../../Composer/packages/types"
+  },
   "dependencies": {
     "@bfc/extension": "file:../../Composer/packages/extension",
     "@bfc/extension-client": "file:../../Composer/packages/extension-client",
