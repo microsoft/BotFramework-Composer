@@ -24,6 +24,7 @@ import {
 import { getFriendlyName } from '../../utils/dialogUtil';
 import { triggerNotSupported } from '../../utils/dialogValidator';
 import { useFeatureFlag } from '../../utils/hooks';
+import { LoadingSpinner } from '../LoadingSpinner';
 
 import { TreeItem } from './treeItem';
 import { ExpandableNode } from './ExpandableNode';
@@ -166,6 +167,11 @@ export const ProjectTree: React.FC<Props> = ({
   const botProjectSpace = useRecoilValue(botProjectSpaceSelector);
 
   const jsonSchemaFilesByProjectId = useRecoilValue(jsonSchemaFilesByProjectIdSelector);
+
+  if (rootProjectId == null) {
+    // this should only happen before a project is loaded in, so it won't last very long
+    return <LoadingSpinner />;
+  }
 
   const notificationMap: { [projectId: string]: { [dialogId: string]: Diagnostic[] } } = {};
 
