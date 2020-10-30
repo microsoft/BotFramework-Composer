@@ -7,7 +7,14 @@ import { fireEvent } from '@botframework-composer/test-utils';
 import { ProjectTree } from '../../src/components/ProjectTree/ProjectTree';
 import { renderWithRecoil } from '../testUtils';
 import { SAMPLE_DIALOG, SAMPLE_DIALOG_2 } from '../mocks/sampleDialog';
-import { dialogsSelectorFamily, currentProjectIdState, botProjectIdsState, schemasState } from '../../src/recoilModel';
+import {
+  dialogsSelectorFamily,
+  currentProjectIdState,
+  botProjectIdsState,
+  projectMetaDataState,
+  schemasState,
+  botProjectFileState,
+} from '../../src/recoilModel';
 
 const projectId = '12345.6789';
 const projectId2 = '56789.1234';
@@ -18,6 +25,8 @@ const initRecoilState = ({ set }) => {
   set(botProjectIdsState, [projectId]);
   set(dialogsSelectorFamily(projectId), dialogs);
   set(schemasState(projectId), { sdk: { content: {} } });
+  set(projectMetaDataState(projectId), { isRootBot: true });
+  set(botProjectFileState(projectId), { foo: 'bar' });
 };
 
 const initRecoilStateMulti = ({ set }) => {
@@ -27,6 +36,8 @@ const initRecoilStateMulti = ({ set }) => {
   set(dialogsSelectorFamily(projectId2), [SAMPLE_DIALOG, SAMPLE_DIALOG_2]);
   set(schemasState(projectId), { sdk: { content: {} } });
   set(schemasState(projectId2), { sdk: { content: {} } });
+  set(projectMetaDataState(projectId), { isRootBot: true });
+  set(botProjectFileState(projectId), { foo: 'bar' });
 };
 
 describe('<ProjectTree/>', () => {
