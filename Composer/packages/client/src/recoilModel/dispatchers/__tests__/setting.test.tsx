@@ -63,6 +63,7 @@ const settings = {
     customRuntime: false,
     path: '',
     command: '',
+    key: '',
   },
   downsampling: {
     maxImbalanceRatio: 10,

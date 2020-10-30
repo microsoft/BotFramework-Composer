@@ -5,9 +5,8 @@ import path from 'path';
 
 import glob from 'globby';
 import { readJson, ensureDir, remove, pathExists } from 'fs-extra';
-import { ExtensionBundle, PackageJSON, ExtensionMetadata } from '@botframework-composer/types';
+import { ExtensionBundle, PackageJSON, ExtensionMetadata, IExtensionContext } from '@botframework-composer/types';
 
-import { ExtensionContext } from '../extensionContext';
 import logger from '../logger';
 import { ExtensionManifestStore } from '../storage/extensionManifestStore';
 import { search, downloadPackage } from '../utils/npm';
@@ -37,6 +36,8 @@ function getExtensionMetadata(extensionPath: string, packageJson: PackageJSON): 
 }
 
 export class ExtensionManagerImp {
+  private context: IExtensionContext | null = null;
+
   public constructor(private _manifest?: ExtensionManifestStore) {}
 
   /**
@@ -58,7 +59,8 @@ export class ExtensionManagerImp {
   /**
    * Loads all builtin extensions and remote extensions.
    */
-  public async loadAll() {
+  public async loadAll(context: IExtensionContext) {
+    this.context = context;
     await ensureDir(this.remoteDir);
     await ensureDir(this.dataDir);
 
@@ -128,6 +130,10 @@ export class ExtensionManagerImp {
   }
 
   public async load(id: string) {
+    if (this.context === null) {
+      throw new Error('Unable to load extension without extension context.');
+    }
+
     const metadata = this.manifest.getExtensionConfig(id);
     try {
       // eslint-disable-next-line @typescript-eslint/no-var-requires, security/detect-non-literal-require
@@ -137,7 +143,7 @@ export class ExtensionManagerImp {
         throw new Error(`Extension not found: ${id}`);
       }
 
-      const registration = new ExtensionRegistration(ExtensionContext, metadata.id, metadata.description);
+      const registration = new ExtensionRegistration(this.context, metadata.id, metadata.description);
       if (typeof extension.default === 'function') {
         // the module exported just an init function
         await extension.default.call(null, registration);

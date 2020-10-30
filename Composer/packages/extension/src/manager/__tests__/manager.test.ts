@@ -4,10 +4,13 @@ import path from 'path';
 
 import { readJson, ensureDir, remove } from 'fs-extra';
 import glob from 'globby';
+import { IExtensionContext } from '@botframework-composer/types';
 
 import { search, downloadPackage } from '../../utils/npm';
 import { ExtensionManifestStore, ExtensionManifest } from '../../storage/extensionManifestStore';
 import { ExtensionManagerImp } from '../manager';
+
+const mockContext = ({} as unknown) as IExtensionContext;
 
 const mockManifest = ({
   extension1: {
@@ -112,13 +115,13 @@ describe('#loadAll', () => {
   });
 
   it('ensures remote dir is created', async () => {
-    await manager.loadAll();
+    await manager.loadAll(mockContext);
 
     expect(ensureDir).toHaveBeenCalledWith(process.env.COMPOSER_REMOTE_EXTENSIONS_DIR);
   });
 
   it('loads built-in extensions and remote extensions that are enabled', async () => {
-    await manager.loadAll();
+    await manager.loadAll(mockContext);
 
     expect(loadSpy).toHaveBeenCalledTimes(2);
     expect(loadSpy).toHaveBeenNthCalledWith(1, process.env.COMPOSER_BUILTIN_EXTENSIONS_DIR, true);

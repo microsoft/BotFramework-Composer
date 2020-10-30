@@ -53,7 +53,7 @@ export async function start(): Promise<number | string> {
   setEnvDefault('COMPOSER_BUILTIN_EXTENSIONS_DIR', path.resolve(__dirname, '../../../../extensions'));
   // Composer/.composer/extensions
   setEnvDefault('COMPOSER_REMOTE_EXTENSIONS_DIR', path.resolve(__dirname, '../../../.composer/extensions'));
-  await ExtensionManager.loadAll();
+  await ExtensionManager.loadAll(ExtensionContext);
 
   const { login, authorize } = getAuthProvider();
 
