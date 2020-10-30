@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 import formatMessage from 'format-message';
 
-import { CardProps } from './../components/NotificationCard';
+import { CardProps } from './../components/Notifications/NotificationCard';
 export const getQnaPendingNotification = (url: string): CardProps => {
   return {
     title: formatMessage('Creating your knowledge base'),

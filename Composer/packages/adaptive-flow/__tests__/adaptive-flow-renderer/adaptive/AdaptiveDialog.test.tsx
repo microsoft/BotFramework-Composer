@@ -37,7 +37,7 @@ describe('<AdaptiveDialog />', () => {
         activeTrigger="triggers[0]"
         dialogData={dialog}
         dialogId="test"
-        schema={uischema}
+        uischema={uischema}
         widgets={widgets}
         onEvent={() => null}
       />

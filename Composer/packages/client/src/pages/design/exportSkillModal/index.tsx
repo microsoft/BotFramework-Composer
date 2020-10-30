@@ -16,7 +16,7 @@ import {
   dispatcherState,
   skillManifestsState,
   qnaFilesState,
-  dialogsState,
+  dialogsSelectorFamily,
   dialogSchemasState,
   luFilesState,
 } from '../../../recoilModel';
@@ -33,7 +33,7 @@ interface ExportSkillModalProps {
 }
 
 const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss: handleDismiss, projectId }) => {
-  const dialogs = useRecoilValue(dialogsState(projectId));
+  const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
   const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
   const luFiles = useRecoilValue(luFilesState(projectId));
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));

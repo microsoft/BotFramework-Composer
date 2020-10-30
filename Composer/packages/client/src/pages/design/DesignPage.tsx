@@ -22,14 +22,13 @@ import {
   createSelectedPath,
   deleteTrigger,
   getBreadcrumbLabel,
-  qnaMatcherKey,
   TriggerFormData,
   getDialogData,
 } from '../../utils/dialogUtil';
 import { Conversation } from '../../components/Conversation';
 import { dialogStyle } from '../../components/Modal/dialogStyle';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
-import { ProjectTree } from '../../components/ProjectTree/ProjectTree';
+import { ProjectTree, TreeLink } from '../../components/ProjectTree/ProjectTree';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { clearBreadcrumb, getFocusPath } from '../../utils/navigation';
 import { navigateTo } from '../../utils/navigation';
@@ -42,12 +41,13 @@ import {
   dispatcherState,
   schemasState,
   displaySkillManifestState,
-  validateDialogSelectorFamily,
+  validateDialogsSelectorFamily,
   breadcrumbState,
   focusPathState,
   showCreateDialogModalState,
   showAddSkillDialogModalState,
   localeState,
+  rootBotProjectIdSelector,
   qnaFilesState,
 } from '../../recoilModel';
 import { CreateQnAModal } from '../../components/QnA';
@@ -109,21 +109,24 @@ const getTabFromFragment = () => {
   }
 };
 
-const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = (props) => {
-  const { location, dialogId, projectId = '' } = props;
+const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string; skillId?: string }>> = (
+  props
+) => {
+  const { location, dialogId, projectId = '', skillId = null } = props;
   const userSettings = useRecoilValue(userSettingsState);
 
-  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
-  const schemas = useRecoilValue(schemasState(projectId));
-  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
-  const displaySkillManifest = useRecoilValue(displaySkillManifestState(projectId));
-  const breadcrumb = useRecoilValue(breadcrumbState(projectId));
-  const focusPath = useRecoilValue(focusPathState(projectId));
-  const showCreateDialogModal = useRecoilValue(showCreateDialogModalState(projectId));
-  const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState(projectId));
-  const locale = useRecoilValue(localeState(projectId));
-  const undoFunction = useRecoilValue(undoFunctionState(projectId));
-  const undoVersion = useRecoilValue(undoVersionState(projectId));
+  const qnaFiles = useRecoilValue(qnaFilesState(skillId ?? projectId));
+  const schemas = useRecoilValue(schemasState(skillId ?? projectId));
+  const dialogs = useRecoilValue(validateDialogsSelectorFamily(skillId ?? projectId));
+  const displaySkillManifest = useRecoilValue(displaySkillManifestState(skillId ?? projectId));
+  const breadcrumb = useRecoilValue(breadcrumbState(skillId ?? projectId));
+  const focusPath = useRecoilValue(focusPathState(skillId ?? projectId));
+  const showCreateDialogModal = useRecoilValue(showCreateDialogModalState(skillId ?? projectId));
+  const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState(skillId ?? projectId));
+  const locale = useRecoilValue(localeState(skillId ?? projectId));
+  const undoFunction = useRecoilValue(undoFunctionState(skillId ?? projectId));
+  const undoVersion = useRecoilValue(undoVersionState(skillId ?? projectId));
+  const rootProjectId = useRecoilValue(rootBotProjectIdSelector) ?? projectId;
 
   const { undo, redo, canRedo, canUndo, commitChanges, clearUndo } = undoFunction;
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
@@ -158,20 +161,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0]);
   const [exportSkillModalVisible, setExportSkillModalVisible] = useState(false);
   const [warningIsVisible, setWarningIsVisible] = useState(true);
-  const shell = useShell('DesignPage', projectId);
-  const shellForFlowEditor = useShell('FlowEditor', projectId);
-  const shellForPropertyEditor = useShell('PropertyEditor', projectId);
-  const triggerApi = useTriggerApi(projectId);
-  const { createTrigger } = shell.api;
-
-  const defaultQnATriggerData = {
-    $kind: qnaMatcherKey,
-    errors: { $kind: '', intent: '', event: '', triggerPhrases: '', regEx: '', activity: '' },
-    event: '',
-    intent: '',
-    regEx: '',
-    triggerPhrases: '',
-  };
+  const shell = useShell('DesignPage', skillId ?? rootProjectId);
+  const shellForFlowEditor = useShell('FlowEditor', skillId ?? rootProjectId);
+  const shellForPropertyEditor = useShell('PropertyEditor', skillId ?? rootProjectId);
+  const triggerApi = useTriggerApi(skillId ?? rootProjectId);
+  const { createTrigger, createQnATrigger } = shell.api;
 
   useEffect(() => {
     const currentDialog = dialogs.find(({ id }) => id === dialogId);
@@ -201,6 +195,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   useEffect(() => {
     if (location && props.dialogId && props.projectId) {
       const { dialogId, projectId } = props;
+
+      let { skillId } = props;
+      if (skillId == null) skillId = projectId;
+
       const params = new URLSearchParams(location.search);
       const dialogMap = dialogs.reduce((acc, { content, id }) => ({ ...acc, [id]: content }), {});
       const dialogData = getDialogData(dialogMap, dialogId);
@@ -209,21 +207,22 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
       //make sure focusPath always valid
       const data = getDialogData(dialogMap, dialogId, getFocusPath(selected, focused));
+
       if (typeof data === 'undefined') {
-        const { id } = dialogs.find(({ id }) => id === dialogId) || dialogs.find(({ isRoot }) => isRoot) || {};
+        const { id: foundId } = dialogs.find(({ id }) => id === dialogId) || dialogs.find(({ isRoot }) => isRoot) || {};
         /**
          * It's improper to fallback to `dialogId` directly:
-         *   - If 'action' not exists at `focused` path, fallback to trigger path;
-         *   - If 'trigger' not exists at `selected` path, fallback to dialog Id;
-         *   - If 'dialog' not exists at `dialogId` path, fallback to main dialog.
+         *   - If 'action' does not exist at `focused` path, fallback to trigger path;
+         *   - If 'trigger' does not exist at `selected` path, fallback to dialog Id;
+         *   - If 'dialog' does not exist at `dialogId` path, fallback to main dialog.
          */
-        if (id) {
-          navTo(projectId, id);
+        if (foundId != null) {
+          navTo(skillId ?? projectId, foundId);
         }
         return;
       }
 
-      setDesignPageLocation(projectId, {
+      setDesignPageLocation(skillId ?? projectId, {
         dialogId,
         selected,
         focused,
@@ -258,22 +257,26 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     createTrigger(dialogId, formData);
   };
 
-  function handleSelect(projectId, id, selected = '') {
+  function handleSelect(link: TreeLink) {
     updateZoomRate({ currentRate: 1 });
-    if (selected) {
-      selectTo(projectId, selected);
+    if (link.trigger != null) {
+      selectTo(link.skillId ?? null, link.dialogId ?? null, `triggers[${link.trigger}]`);
+    } else if (link.dialogId != null) {
+      navTo(link.skillId ?? link.projectId, link.dialogId, [
+        { skillId: link.skillId, dialogId: link.dialogId, selected: '', focused: '' },
+      ]);
     } else {
-      navTo(projectId, id, []);
+      // with no dialog or ID, we must be looking at a bot link
+      navTo(link.skillId ?? link.projectId, null, []);
     }
   }
 
-  const onCreateDialogComplete = (newDialog) => {
-    if (newDialog) {
-      navTo(projectId, newDialog, []);
+  const onCreateDialogComplete = (dialogId) => {
+    if (dialogId) {
+      navTo(projectId, dialogId, [{ dialogId, selected: '', focused: '' }]);
     }
   };
 
-  const [flowEditorFocused, setFlowEditorFocused] = useState(false);
   const { actionSelected, showDisableBtn, showEnableBtn } = useMemo(() => {
     const actionSelected = Array.isArray(visualEditorSelection) && visualEditorSelection.length > 0;
     if (!actionSelected) {
@@ -285,7 +288,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     return { actionSelected, showDisableBtn, showEnableBtn };
   }, [visualEditorSelection]);
 
-  useElectronFeatures(actionSelected, flowEditorFocused, canUndo(), canRedo());
+  const { onFocusFlowEditor, onBlurFlowEditor } = useElectronFeatures(actionSelected, canUndo?.(), canRedo?.());
 
   const EditorAPI = getEditorAPI();
   const toolbarItems: IToolbarItem[] = [
@@ -346,13 +349,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           {
             key: 'edit.undo',
             text: formatMessage('Undo'),
-            disabled: !canUndo(),
+            disabled: !canUndo?.(),
             onClick: undo,
           },
           {
             key: 'edit.redo',
             text: formatMessage('Redo'),
-            disabled: !canRedo(),
+            disabled: !canRedo?.(),
             onClick: redo,
           },
           {
@@ -455,7 +458,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   function handleBreadcrumbItemClick(_event, item) {
     if (item) {
       const { dialogId, selected, focused, index } = item;
-      selectAndFocus(projectId, dialogId, selected, focused, clearBreadcrumb(breadcrumb, index));
+      selectAndFocus(projectId, skillId, dialogId, selected, focused, clearBreadcrumb(breadcrumb, index));
     }
   }
 
@@ -507,8 +510,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     commitChanges();
   }
 
-  async function handleDeleteDialog(id) {
-    const refs = getAllRef(id, dialogs);
+  async function handleDeleteDialog(dialogId) {
+    const refs = getAllRef(dialogId, dialogs);
     let setting: any = {
       confirmBtnText: formatMessage('Yes'),
       cancelBtnText: formatMessage('Cancel'),
@@ -528,16 +531,16 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     const result = await OpenConfirmModal(title, subTitle, setting);
 
     if (result) {
-      await removeDialog(id, projectId);
+      await removeDialog(dialogId, projectId);
       commitChanges();
     }
   }
 
-  async function handleDeleteTrigger(id, index) {
-    const content = deleteTrigger(dialogs, id, index, (trigger) => triggerApi.deleteTrigger(id, trigger));
+  async function handleDeleteTrigger(dialogId: string, index: number) {
+    const content = deleteTrigger(dialogs, dialogId, index, (trigger) => triggerApi.deleteTrigger(dialogId, trigger));
 
     if (content) {
-      updateDialog({ id, content, projectId });
+      updateDialog({ id: dialogId, content, projectId: skillId ?? projectId });
       const match = /\[(\d+)\]/g.exec(selected);
       const current = match && match[1];
       if (!current) return;
@@ -545,14 +548,14 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       if (index === currentIdx) {
         if (currentIdx - 1 >= 0) {
           //if the deleted node is selected and the selected one is not the first one, navTo the previous trigger;
-          selectTo(projectId, createSelectedPath(currentIdx - 1));
+          selectTo(skillId ?? projectId, dialogId, createSelectedPath(currentIdx - 1));
         } else {
           //if the deleted node is selected and the selected one is the first one, navTo the first trigger;
-          navTo(projectId, id, []);
+          navTo(skillId ?? projectId, dialogId, []);
         }
       } else if (index < currentIdx) {
         //if the deleted node is at the front, navTo the current one;
-        selectTo(projectId, createSelectedPath(currentIdx - 1));
+        selectTo(skillId ?? projectId, dialogId, createSelectedPath(currentIdx - 1));
       }
     }
   }
@@ -562,7 +565,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
   const handleCreateQnA = async (data) => {
     if (!dialogId) return;
-    createTrigger(dialogId, defaultQnATriggerData);
+    createQnATrigger(dialogId);
 
     const { name, url, multiTurn } = data;
     if (url) {
@@ -585,17 +588,27 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const selectedTrigger = currentDialog?.triggers.find((t) => t.id === selected);
   const withWarning = triggerNotSupported(currentDialog, selectedTrigger);
 
+  const parseTriggerId = (triggerId: string | undefined): number | undefined => {
+    if (triggerId == null) return undefined;
+    const indexString = triggerId.match(/\d+/)?.[0];
+    if (indexString == null) return undefined;
+    return parseInt(indexString);
+  };
+
   return (
     <React.Fragment>
       <div css={pageRoot}>
         <LeftRightSplit initialLeftGridWidth="20%" minLeftPixels={200} minRightPixels={800}>
           <ProjectTree
-            dialogId={dialogId}
-            dialogs={dialogs}
-            selected={selected}
+            defaultSelected={{
+              projectId,
+              skillId: skillId ?? undefined,
+              dialogId,
+              trigger: parseTriggerId(selectedTrigger?.id),
+            }}
             onDeleteDialog={handleDeleteDialog}
             onDeleteTrigger={handleDeleteTrigger}
-            onSelect={(...props) => handleSelect(projectId, ...props)}
+            onSelect={handleSelect}
           />
           <div css={contentWrapper} role="main">
             <div css={{ position: 'relative' }} data-testid="DesignPage-ToolBar">
@@ -619,7 +632,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                         schema={schemas.sdk.content}
                         value={currentDialog.content || undefined}
                         onChange={(data) => {
-                          updateDialog({ id: currentDialog.id, content: data, projectId });
+                          updateDialog({ id: currentDialog.id, content: data, projectId: skillId ?? projectId });
                         }}
                       />
                     ) : withWarning ? (
@@ -636,8 +649,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                       <EditorExtension plugins={pluginConfig} projectId={projectId} shell={shellForFlowEditor}>
                         <VisualEditor
                           openNewTriggerModal={openNewTriggerModal}
-                          onBlur={() => setFlowEditorFocused(false)}
-                          onFocus={() => setFlowEditorFocused(true)}
+                          onBlur={() => onBlurFlowEditor()}
+                          onFocus={() => onFocusFlowEditor()}
                         />
                       </EditorExtension>
                     )}
@@ -688,7 +701,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             />
           </EditorExtension>
         )}
-        <CreateQnAModal dialogId={dialogId} projectId={projectId} qnaFiles={qnaFiles} onSubmit={handleCreateQnA} />)
+        <CreateQnAModal dialogId={dialogId} projectId={projectId} qnaFiles={qnaFiles} onSubmit={handleCreateQnA} />
         {displaySkillManifest && (
           <DisplayManifestModal
             manifestId={displaySkillManifest}

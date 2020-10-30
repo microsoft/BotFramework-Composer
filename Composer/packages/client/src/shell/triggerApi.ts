@@ -18,12 +18,21 @@ import get from 'lodash/get';
 
 import { useResolvers } from '../hooks/useResolver';
 import { onChooseIntentKey, generateNewDialog, intentTypeKey, qnaMatcherKey } from '../utils/dialogUtil';
-import { schemasState, lgFilesState, dialogsState, localeState } from '../recoilModel';
+import { schemasState, lgFilesState, dialogsSelectorFamily, localeState } from '../recoilModel';
 import { Dispatcher } from '../recoilModel/dispatchers';
 
 import { dispatcherState } from './../recoilModel/DispatcherWrapper';
 import { useActionApi } from './actionApi';
 import { useLuApi } from './luApi';
+
+const defaultQnATriggerData = {
+  $kind: qnaMatcherKey,
+  errors: { $kind: '', intent: '', event: '', triggerPhrases: '', regEx: '', activity: '' },
+  event: '',
+  intent: '',
+  regEx: '',
+  triggerPhrases: '',
+};
 
 function createTriggerApi(
   state: { projectId; schemas; dialogs; locale; lgFiles },
@@ -103,7 +112,7 @@ function createTriggerApi(
     };
     await updateDialog(dialogPayload);
     if (autoSelected) {
-      selectTo(projectId, `triggers[${index}]`);
+      selectTo(projectId, newDialog.id, `triggers[${index}]`);
     }
   };
 
@@ -123,16 +132,28 @@ function createTriggerApi(
     deleteActions(dialogId, actions);
   };
 
+  const createQnATrigger = async (id) => {
+    const targetDialog = state.dialogs.find((item) => item.id === id);
+    if (!targetDialog) throw new Error(`dialog ${id} not found`);
+    const existedQnATrigger = get(targetDialog, 'content.triggers', []).find(
+      (item) => item.$kind === SDKKinds.OnQnAMatch
+    );
+    if (!existedQnATrigger) {
+      await createTriggerHandler(id, defaultQnATriggerData);
+    }
+  };
+
   return {
     createTrigger: createTriggerHandler,
     deleteTrigger,
+    createQnATrigger,
   };
 }
 
 export function useTriggerApi(projectId: string) {
   const schemas = useRecoilValue(schemasState(projectId));
   const lgFiles = useRecoilValue(lgFilesState(projectId));
-  const dialogs = useRecoilValue(dialogsState(projectId));
+  const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
   const locale = useRecoilValue(localeState(projectId));
   const { deleteActions } = useActionApi(projectId);
   const { removeLuIntent } = useLuApi(projectId);

@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "lib/node",
+    "sourceMap": true
+  },
+  "include": [
+    "src/node"
+  ],
+  "exclude": [
+    "src/node/**/*.spec.ts",
+    "src/ui",
+    "testing/"
+  ]
+}

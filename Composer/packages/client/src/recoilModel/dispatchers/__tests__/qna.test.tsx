@@ -95,7 +95,7 @@ describe('QnA dispatcher', () => {
       });
     });
 
-    expect(renderedComponent.current.qnaFiles[0].content).toContain(content);
+    expect(renderedComponent.current.qnaFiles[0].content.replace(/\s/g, '')).toContain(content.replace(/\s/g, ''));
   });
 
   it('should update a qna file', async () => {

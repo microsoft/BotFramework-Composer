@@ -19,7 +19,7 @@ import { Path } from './../utility/path';
 
 async function createProject(req: Request, res: Response) {
   let { templateId } = req.body;
-  const { name, description, storageId, location, schemaUrl, locale } = req.body;
+  const { name, description, storageId, location, schemaUrl, locale, preserveRoot } = req.body;
   const user = await ExtensionContext.getUserFromRequest(req);
   if (templateId === '') {
     templateId = 'EmptyBot';
@@ -54,7 +54,7 @@ async function createProject(req: Request, res: Response) {
     await AssetService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage);
 
     if (currentProject !== undefined) {
-      await currentProject.updateBotInfo(name, description);
+      await currentProject.updateBotInfo(name, description, preserveRoot);
       if (schemaUrl) {
         await currentProject.saveSchemaToProject(schemaUrl, locationRef.path);
       }
@@ -129,10 +129,11 @@ async function openProject(req: Request, res: Response) {
     return;
   }
   const user = await ExtensionContext.getUserFromRequest(req);
+  const path = process.platform === 'win32' ? req.body.path.replace(/^\//, '') : req.body.path;
 
   const location: LocationRef = {
     storageId: req.body.storageId,
-    path: req.body.path,
+    path,
   };
 
   try {
@@ -326,14 +327,12 @@ async function build(req: Request, res: Response) {
   const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
     try {
-      const { luisConfig, qnaConfig, luFiles, qnaFiles, crossTrainConfig, recognizerTypes } = req.body;
+      const { luisConfig, qnaConfig, luFiles, qnaFiles } = req.body;
       const files = await currentProject.buildFiles({
         luisConfig,
         qnaConfig,
         luResource: luFiles,
         qnaResource: qnaFiles,
-        crossTrainConfig,
-        recognizerTypes,
       });
       res.status(200).json(files);
     } catch (error) {

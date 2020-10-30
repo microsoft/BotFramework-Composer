@@ -9,7 +9,7 @@ import CodeEditor from '../../../src/pages/knowledge-base/code-editor';
 import { renderWithRecoil } from '../../testUtils';
 import {
   localeState,
-  dialogsState,
+  dialogsSelectorFamily,
   qnaFilesState,
   settingsState,
   schemasState,
@@ -57,7 +57,7 @@ const updateQnAFileMock = jest.fn();
 const initRecoilState = ({ set }) => {
   set(currentProjectIdState, state.projectId);
   set(localeState(state.projectId), state.locale);
-  set(dialogsState(state.projectId), state.dialogs);
+  set(dialogsSelectorFamily(state.projectId), state.dialogs);
   set(qnaFilesState(state.projectId), state.qnaFiles);
   set(settingsState(state.projectId), state.settings);
   set(schemasState(state.projectId), mockProjectResponse.schemas);

@@ -34,6 +34,7 @@ switch (process.platform) {
 fs.copy(source, destination, (err) => {
   if (err) {
     console.error('[copy-runtime.js] Error while copying runtime:');
+    process.exit(1);
     return;
   }
   console.log('[copy-runtime.js] Copied runtime successfully.');

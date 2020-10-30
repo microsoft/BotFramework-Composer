@@ -34,7 +34,7 @@ export const validateUrl: FieldValidator = (url: string): string => {
   let error = '';
 
   if (url && !url.startsWith('http://') && !url.startsWith('https://')) {
-    error = formatMessage('A valid url should start with http:// or https://');
+    error = formatMessage('A valid URL should start with http:// or https://');
   }
 
   return error;
@@ -47,7 +47,9 @@ export const validateName = (sources: QnAFile[]): FieldValidator => {
     let currentError = '';
     if (name) {
       if (!FileNameRegex.test(name)) {
-        currentError = formatMessage('KB name cannot contain special characters.');
+        currentError = formatMessage(
+          'A knowledge base name cannot contain spaces or special characters. Use letters, numbers, -, or _.'
+        );
       }
 
       const duplicatedItemIndex = sources.findIndex((item) => item.id.toLowerCase() === `${name.toLowerCase()}.source`);
@@ -59,7 +61,6 @@ export const validateName = (sources: QnAFile[]): FieldValidator => {
   };
 };
 
-export const knowledgeBaseSourceUrl =
-  'https://docs.microsoft.com/en-us/azure/cognitive-services/qnamaker/concepts/content-types';
+export const knowledgeBaseSourceUrl = 'https://aka.ms/qna-data-source-content';
 
-export const QnAMakerLearningUrl = 'https://azure.microsoft.com/en-us/pricing/details/cognitive-services/qna-maker/';
+export const QnAMakerLearningUrl = 'https://aka.ms/qna-maker-pricing';

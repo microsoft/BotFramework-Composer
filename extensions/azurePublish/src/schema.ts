@@ -27,6 +27,10 @@ const schema: JSONSchema7 = {
       type: 'string',
       title: 'Language for luis - default to en-us',
     },
+    runtimeIdentifier: {
+      type: 'string',
+      title: 'Runtime identifier for hosting bot, default to win-x64, please refer to https://docs.microsoft.com/en-us/dotnet/core/rid-catalog'
+    },
     settings: {
       type: 'object',
       title: 'Settings for Azure resources',
@@ -108,6 +112,7 @@ const schema: JSONSchema7 = {
     accessToken: '<Access token from az account get-access-token>',
     name: '<unique name in your subscription>',
     environment: 'dev',
+    runtimeIdentifier: 'win-x64',
     settings: {
       applicationInsights: {
         InstrumentationKey: '<Instrumentation Key>',

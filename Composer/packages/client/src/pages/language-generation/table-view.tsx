@@ -27,7 +27,7 @@ import {
   lgFilesState,
   localeState,
   settingsState,
-  validateDialogSelectorFamily,
+  validateDialogsSelectorFamily,
 } from '../../recoilModel';
 import { languageListTemplates } from '../../components/MultiLanguage';
 
@@ -42,7 +42,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const lgFiles = useRecoilValue(lgFilesState(projectId));
   const locale = useRecoilValue(localeState(projectId));
   const settings = useRecoilValue(settingsState(projectId));
-  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
   const { createLgTemplate, copyLgTemplate, removeLgTemplate, setMessage, updateLgTemplate } = useRecoilValue(
     dispatcherState
   );

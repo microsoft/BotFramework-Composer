@@ -351,11 +351,28 @@
       "subtitle": "Switch Condition"
     }
   },
+  "Microsoft.ThrowException": {
+    "form": {
+      "label": "Throw an exception",
+      "subtitle": "Throw an exception"
+    }
+  },
   "Microsoft.TraceActivity": {
     "form": {
       "helpLink": "https://aka.ms/bfc-debugging-bots",
       "label": "Emit a trace event",
       "subtitle": "Trace Activity"
+    }
+  },
+  "Microsoft.Ask": {
+    "form": {
+      "helpLink": "https://aka.ms/bfc-send-activity",
+      "label": "Send a response to ask a question",
+      "order": [
+        "activity",
+        "*"
+      ],
+      "subtitle": "Ask Activity"
     }
   },
   "Microsoft.AttachmentInput": {
@@ -473,6 +490,19 @@
       "subtitle": "Activity received"
     }
   },
+  "Microsoft.OnAssignEntity": {
+    "form": {
+      "hidden": [
+        "actions"
+      ],
+      "label": "Handle a condition when an entity is assigned",
+      "order": [
+        "condition",
+        "*"
+      ],
+      "subtitle": "EntityAssigned activity"
+    }
+  },
   "Microsoft.OnBeginDialog": {
     "form": {
       "hidden": [
@@ -538,6 +568,19 @@
         "*"
       ],
       "subtitle": "Dialog event"
+    }
+  },
+  "Microsoft.OnEndOfActions": {
+    "form": {
+      "hidden": [
+        "actions"
+      ],
+      "label": "Handle a condition when actions have ended",
+      "order": [
+        "condition",
+        "*"
+      ],
+      "subtitle": "EndOfActions activity"
     }
   },
   "Microsoft.OnEndOfConversationActivity": {

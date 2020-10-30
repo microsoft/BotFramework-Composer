@@ -5,7 +5,7 @@ import { AppUpdaterSettings, CodeEditorSettings, PromptTab } from '@bfc/shared';
 
 import { AppUpdaterStatus } from '../constants';
 
-import { CardProps } from './../components/NotificationCard';
+import { CardProps } from './../components/Notifications/NotificationCard';
 
 export interface StateError {
   status?: number;
@@ -77,6 +77,7 @@ export interface AppUpdateState {
 }
 
 export interface BreadcrumbItem {
+  skillId?: string;
   dialogId: string;
   selected: string;
   focused: string;

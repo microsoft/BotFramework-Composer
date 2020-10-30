@@ -12,7 +12,7 @@ import {
   lgFilesState,
   settingsState,
   schemasState,
-  dialogsState,
+  dialogsSelectorFamily,
   currentProjectIdState,
 } from '../../../src/recoilModel';
 import mockProjectResponse from '../../../src/recoilModel/dispatchers/__tests__/mocks/mockProjectResponse.json';
@@ -50,7 +50,7 @@ const state = {
 const initRecoilState = ({ set }) => {
   set(currentProjectIdState, state.projectId);
   set(localeState(state.projectId), state.locale);
-  set(dialogsState(state.projectId), state.dialogs);
+  set(dialogsSelectorFamily(state.projectId), state.dialogs);
   set(lgFilesState(state.projectId), state.lgFiles);
   set(settingsState(state.projectId), state.settings);
   set(schemasState(state.projectId), mockProjectResponse.schemas);
