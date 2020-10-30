@@ -73,10 +73,11 @@ describe('composer url util', () => {
     expect(result1).toEqual('?selected=triggers[0]&focused=triggers[0].actions[0]');
   });
 
-  it('check url', () => {
+  it('checks a URL without a skill', () => {
     const result1 = checkUrl(
       `/bot/${projectId}/dialogs/a?selected=triggers[0]&focused=triggers[0].actions[0]#botAsks`,
       projectId,
+      null,
       {
         dialogId: 'a',
         selected: 'triggers[0]',
@@ -85,7 +86,29 @@ describe('composer url util', () => {
       }
     );
     expect(result1).toEqual(true);
-    const result2 = checkUrl(`test`, projectId, {
+    const result2 = checkUrl(`test`, projectId, skillId, {
+      dialogId: 'a',
+      selected: 'triggers[0]',
+      focused: 'triggers[0].actions[0]',
+      promptTab: PromptTab.BOT_ASKS,
+    });
+    expect(result2).toEqual(false);
+  });
+
+  it('checks a URL with a skill', () => {
+    const result1 = checkUrl(
+      `/bot/${projectId}/skill/${skillId}/dialogs/a?selected=triggers[0]&focused=triggers[0].actions[0]#botAsks`,
+      projectId,
+      skillId,
+      {
+        dialogId: 'a',
+        selected: 'triggers[0]',
+        focused: 'triggers[0].actions[0]',
+        promptTab: PromptTab.BOT_ASKS,
+      }
+    );
+    expect(result1).toEqual(true);
+    const result2 = checkUrl(`test`, projectId, skillId, {
       dialogId: 'a',
       selected: 'triggers[0]',
       focused: 'triggers[0].actions[0]',

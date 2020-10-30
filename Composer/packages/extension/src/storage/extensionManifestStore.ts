@@ -1,10 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { existsSync, writeJsonSync, readJsonSync } from 'fs-extra';
 import { ExtensionMap, ExtensionMetadata } from '@botframework-composer/types';
 
 import logger from '../logger';
+
+import { Store } from './store';
 
 const log = logger.extend('extensions');
 
@@ -12,26 +13,18 @@ export type ExtensionManifest = ExtensionMap;
 
 const DEFAULT_MANIFEST: ExtensionManifest = {};
 
-/** In-memory representation of extensions.json as well as reads / writes data to disk. */
+/** In-memory representation of extensions.json */
 export class ExtensionManifestStore {
-  private manifest: ExtensionManifest = DEFAULT_MANIFEST;
+  private store: Store<ExtensionManifest>;
 
   constructor(private manifestPath: string) {
-    // create extensions.json if it doesn't exist
-
-    if (!existsSync(this.manifestPath)) {
-      log('extensions.json does not exist yet. Writing file to path: %s', this.manifestPath);
-      writeJsonSync(this.manifestPath, DEFAULT_MANIFEST, { spaces: 2 });
-    }
-
-    this.readManifestFromDisk(); // load manifest into memory
+    this.store = new Store(this.manifestPath, DEFAULT_MANIFEST, log);
 
     // remove extensions key from existing manifests
     // TODO: remove in the future
     /* istanbul ignore next */
     if (this.manifest && this.manifest.extensions) {
-      this.manifest = (this.manifest.extensions as unknown) as ExtensionMap;
-      this.writeManifestToDisk();
+      this.store.replace((this.manifest.extensions as unknown) as ExtensionManifest);
     }
   }
 
@@ -44,44 +37,17 @@ export class ExtensionManifestStore {
   }
 
   public removeExtension(id: string) {
-    delete this.manifest[id];
-    // sync changes to disk
-    this.writeManifestToDisk();
+    this.store.delete(id);
   }
 
   // update extension config
   public updateExtensionConfig(id: string, newConfig: Partial<ExtensionMetadata>) {
     const currentConfig = this.manifest[id];
 
-    if (currentConfig) {
-      this.manifest[id] = Object.assign({}, currentConfig, newConfig);
-    } else {
-      this.manifest[id] = Object.assign({} as ExtensionMetadata, newConfig);
-    }
-    // sync changes to disk
-    this.writeManifestToDisk();
+    this.store.write(id, Object.assign({} as ExtensionMetadata, currentConfig ?? {}, newConfig));
   }
 
-  public reload() {
-    this.readManifestFromDisk();
-  }
-
-  // load manifest into memory
-  private readManifestFromDisk() {
-    try {
-      const manifest: ExtensionManifest = readJsonSync(this.manifestPath);
-      this.manifest = manifest;
-    } catch (e) {
-      log('Error reading %s: %s', this.manifestPath, e);
-    }
-  }
-
-  // write manifest from memory to disk
-  private writeManifestToDisk() {
-    try {
-      writeJsonSync(this.manifestPath, this.manifest, { spaces: 2 });
-    } catch (e) {
-      log('Error writing %s: %s', this.manifestPath, e);
-    }
+  private get manifest() {
+    return this.store.readAll();
   }
 }
