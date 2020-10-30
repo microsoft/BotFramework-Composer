@@ -303,7 +303,7 @@ const xformJobToResult = (job: PVAPublishJob): PublishResult => {
 };
 
 const getAction = (job) => {
-  if (job.testUrl == null || job.testUrl == undefined) return null;
+  if (job.state !== 'Done' || job.testUrl == null || job.testUrl == undefined) return null;
   return { href: job.testUrl, label: 'Test in Power Virtual Agents' };
 };
 
