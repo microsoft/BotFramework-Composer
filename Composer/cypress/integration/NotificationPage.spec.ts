@@ -77,6 +77,5 @@ context('Notification Page', () => {
     cy.findByTestId('notifications-table-view').within(() => {
       cy.findAllByText('__testtodobotwithluissample.dialog').should('exist').first().dblclick();
     });
-    cy.findAllByText('__TestToDoBotWithLuisSample').should('exist');
   });
 });
