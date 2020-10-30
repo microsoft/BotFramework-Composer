@@ -49,12 +49,16 @@ export default async (composer: any): Promise<void> => {
       if (profile.type === 'azurePublish') {
         csproj = 'Microsoft.BotFramework.Composer.WebApp.csproj';
       }
-      else if (profile.type === 'coreBotAzurePublish') {
-        csproj = path.join('src', 'Microsoft.Bot.Runtime.WebHost', 'Microsoft.Bot.Runtime.WebHost.csproj');
-      }
       else if (profile.type === 'azureFunctionsPublish') {
         csproj = 'Microsoft.BotFramework.Composer.Functions.csproj';
       }
+      else if (profile.type === 'coreBotAzurePublish') {
+        csproj = path.join('src', 'Microsoft.Bot.Runtime.WebHost', 'Microsoft.Bot.Runtime.WebHost.csproj');
+      }
+      else if (profile.type === 'coreBotAzureFunctionsPublish') {
+        csproj = path.join('src', 'Microsoft.Bot.Runtime.Functions', 'Microsoft.Bot.Runtime.Functions.csproj');
+      }
+
       const publishFolder = path.join(runtimePath, 'bin', 'Release', 'netcoreapp3.1');
       const deployFilePath = path.join(runtimePath, '.deployment');
       const dotnetProjectPath = path.join(runtimePath, csproj);

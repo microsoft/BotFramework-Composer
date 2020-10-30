@@ -476,7 +476,14 @@ export default async (composer: any): Promise<void> => {
     'Publish bot to an Azure Web App using Core Bot (Preview)'
   );
 
+  const coreBotAzureFunctionsPublish = new AzurePublisher(
+    'corebotazurefunctions',
+    'coreBotAzureFunctionsPublish',
+    'Publish bot to Azure Functions using Core Bot (Preview)'
+  );
+
   await composer.addPublishMethod(azurePublish);
   await composer.addPublishMethod(azureFunctionsPublish);
   await composer.addPublishMethod(coreBotAzurePublish);
+  await composer.addPublishMethod(coreBotAzureFunctionsPublish);
 };
