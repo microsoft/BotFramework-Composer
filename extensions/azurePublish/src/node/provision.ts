@@ -107,10 +107,10 @@ export class BotProjectProvision {
       });
       throw new Error('App create failed!');
     }
-
+    console.log(appCreated);
     this.logger({
       status: BotProjectDeployLoggerType.PROVISION_INFO,
-      message: JSON.stringify(appCreated, null, 4),
+      message: `Start to add password for App, Id : ${appCreated.appId}`,
     });
 
     const appId = appCreated.appId;
@@ -143,7 +143,7 @@ export class BotProjectProvision {
 
     this.logger({
       status: BotProjectDeployLoggerType.PROVISION_INFO,
-      message: `> Create App Id Success! ID: ${appId}`,
+      message: `> Create App Registration Success! ID: ${appId}`,
     });
 
     return { appId, appPassword };

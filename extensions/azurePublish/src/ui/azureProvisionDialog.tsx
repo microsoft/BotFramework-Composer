@@ -319,7 +319,7 @@ export const AzureProvisionDialog: React.FC = () => {
   }, [currentSubscription, currentHostName, errorHostName]);
 
   const PageFormConfig = (
-    <div style={{height: 'inherit'}}>
+    <Fragment>
       <ChoiceGroup defaultSelectedKey="create" options={choiceOptions} onChange={updateChoice} />
       {subscriptionOption?.length > 0 && choice.key === 'create' && (
         <form style={{ width: '60%', height:'100%' }}>
@@ -369,13 +369,13 @@ export const AzureProvisionDialog: React.FC = () => {
           />
         </div>
       )}
-    </div>
+    </Fragment>
   );
 
   const PageReview = useMemo(() => {
     return (
-      <div style={{height: 'inherit'}}>
-        <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
+      <Fragment>
+        <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto} style={{height: 'calc(100vh - 50px)'}}>
         <DetailsList
           isHeaderVisible
           checkboxVisibility={CheckboxVisibility.hidden}
@@ -388,7 +388,7 @@ export const AzureProvisionDialog: React.FC = () => {
           onRenderDetailsHeader={onRenderDetailsHeader}
         />
         </ScrollablePane>
-      </div>
+      </Fragment>
     );
   }, [group, listItems]);
 
@@ -453,14 +453,16 @@ export const AzureProvisionDialog: React.FC = () => {
 
   return (
     <div style={{ height: '100vh' }}>
-      {page === PageTypes.ConfigProvision ? PageFormConfig : PageReview}
+        {page === PageTypes.ConfigProvision ? PageFormConfig : PageReview}
       <div
         style={{
           background: '#FFFFFF',
           borderTop: '1px solid #000',
-          position: 'sticky',
+          position: 'fixed',
+          width: '100%',
           bottom: '0',
           textAlign: 'right',
+          height:'50px'
         }}
       >
         {PageFooter}

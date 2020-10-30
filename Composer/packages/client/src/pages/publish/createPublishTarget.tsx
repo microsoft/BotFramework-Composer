@@ -50,7 +50,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
   const [page, setPage] = useState(current ? PageTypes.EditProfile : PageTypes.AddProfile);
 
   const userSettings = useRecoilValue(userSettingsState);
-  const accessToken = useRecoilValue(currentUserState);
+  // const accessToken = useRecoilValue(currentUserState);
   // const graphToken = useRecoilValue(grahpTokenState);
   const projectId = useRecoilValue(currentProjectIdState);
   const { provisionToTarget, getAccessToken, getGraphToken } = useRecoilValue(dispatcherState);
@@ -202,14 +202,12 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
               <PrimaryButton
                 disabled={nextDisabled}
                 text={formatMessage('Next')}
-                onClick={() => {
+                onClick={async () => {
                   // get accessToken
-                  getAccessToken();
-                  if (accessToken.token) {
-                    setPage(PageTypes.ConfigProvision);
-                    // graph token only used when provision, so can get it later
-                    getGraphToken();
-                  }
+                  await getAccessToken();
+                  setPage(PageTypes.ConfigProvision);
+                  // graph token only used when provision, so can get it later
+                  getGraphToken();
                 }}
               />
             </DialogFooter>
@@ -250,7 +248,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
         }
     }
     return null;
-  }, [config, page, FormInPage, PageEditProfile, nextDisabled, saveDisabled, selectedType, submit, accessToken]);
+  }, [config, page, FormInPage, PageEditProfile, nextDisabled, saveDisabled, selectedType, submit]);
 
   // const examplePersona: IPersonaSharedProps = {
   //   text: 'Somebody',
