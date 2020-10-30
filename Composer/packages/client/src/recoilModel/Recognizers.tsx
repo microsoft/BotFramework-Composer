@@ -3,8 +3,9 @@
 
 import { DialogInfo, LuFile, QnAFile, SDKKinds, RecognizerFile } from '@bfc/shared';
 import React, { useEffect } from 'react';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { useRecoilValue } from 'recoil';
+import { isEqual } from 'lodash';
 
 import { getExtension } from '../utils/fileUtil';
 
@@ -134,7 +135,7 @@ export const preserveRecognizer = (recognizers: { id: string; content: any }[], 
 export const Recognizer = React.memo((props: { projectId: string }) => {
   const { projectId } = props;
   const setRecognizers = useSetRecoilState(recognizersSelectorFamily(projectId));
-  const setCrossTrainConfig = useSetRecoilState(crossTrainConfigState(projectId));
+  const [crossTrainConfig, setCrossTrainConfig] = useRecoilState(crossTrainConfigState(projectId));
   const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
   const luFiles = useRecoilValue(luFilesState(projectId));
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
@@ -172,10 +173,16 @@ export const Recognizer = React.memo((props: { projectId: string }) => {
   }, [dialogs, luFiles, qnaFiles]);
 
   useEffect(() => {
-    const referredLuFiles = luUtil.checkLuisBuild(luFiles, dialogs);
+    try {
+      const referredLuFiles = luUtil.checkLuisBuild(luFiles, dialogs);
 
-    const crossTrainConfig = buildUtil.createCrossTrainConfig(dialogs, referredLuFiles, settings.languages);
-    setCrossTrainConfig(crossTrainConfig);
+      const curCrossTrainConfig = buildUtil.createCrossTrainConfig(dialogs, referredLuFiles, settings.languages);
+      if (!isEqual(crossTrainConfig, curCrossTrainConfig)) {
+        setCrossTrainConfig(curCrossTrainConfig);
+      }
+    } catch (error) {
+      setCrossTrainConfig(crossTrainConfig);
+    }
   }, [dialogs, luFiles, settings]);
 
   return null;
