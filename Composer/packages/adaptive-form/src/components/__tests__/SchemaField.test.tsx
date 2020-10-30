@@ -46,12 +46,14 @@ function renderSubject(overrides: Partial<FieldProps> = {}) {
 describe('<SchemaField />', () => {
   beforeEach(() => {
     (useFormConfig as jest.Mock).mockReturnValue('form ui options');
-    (resolveFieldWidget as jest.Mock).mockReturnValue(({ value, onChange, rawErrors }) => (
-      <div>
-        <input data-testid="resolved-field" value={value} onChange={(e) => onChange(e.target.value)} />
-        {typeof rawErrors === 'object' && <span data-testid="test-error">{JSON.stringify(rawErrors)}</span>}
-      </div>
-    ));
+    (resolveFieldWidget as jest.Mock).mockReturnValue({
+      field: ({ value, onChange, rawErrors }) => (
+        <div>
+          <input data-testid="resolved-field" value={value} onChange={(e) => onChange(e.target.value)} />
+          {typeof rawErrors === 'object' && <span data-testid="test-error">{JSON.stringify(rawErrors)}</span>}
+        </div>
+      ),
+    });
     (defaultProps.onChange as jest.Mock).mockReset();
   });
 

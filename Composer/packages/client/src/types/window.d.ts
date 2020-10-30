@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+// eslint-disable-next-line @bfc/bfcomposer/office-ui-import-scope
+import * as Fabric from 'office-ui-fabric-react';
 import * as ExtensionClient from '@bfc/extension-client';
 
 declare global {
@@ -26,5 +28,6 @@ declare global {
     };
 
     ExtensionClient: typeof ExtensionClient;
+    Fabric: typeof Fabric;
   }
 }

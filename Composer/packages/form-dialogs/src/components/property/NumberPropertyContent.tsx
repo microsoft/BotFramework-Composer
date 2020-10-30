@@ -45,7 +45,12 @@ export const NumberPropertyContent = React.memo((props: Props) => {
               minimum: payload.kind === 'integer' ? parseInt(value, 10) : parseFloat(value),
             })
           }
-          onRenderLabel={onRenderLabel(formatMessage('Minimum help text'), minTooltipId)}
+          onRenderLabel={onRenderLabel(
+            formatMessage(
+              'Optional. Setting a minimum value enables your bot to reject a value that is too small and re-prompt the user for a new value.'
+            ),
+            minTooltipId
+          )}
         />
         <TextField
           aria-describedby={maxTooltipId}
@@ -60,7 +65,12 @@ export const NumberPropertyContent = React.memo((props: Props) => {
               maximum: payload.kind === 'integer' ? parseInt(value, 10) : parseFloat(value),
             })
           }
-          onRenderLabel={onRenderLabel(formatMessage('Maximum help text'), maxTooltipId)}
+          onRenderLabel={onRenderLabel(
+            formatMessage(
+              'Optional. Setting a maximum value enables your bot to reject a value that is too large and re-prompt the user for a new value.'
+            ),
+            maxTooltipId
+          )}
         />
       </Stack>
     </Stack>

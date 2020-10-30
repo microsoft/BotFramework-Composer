@@ -48,6 +48,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     publishToTarget,
     setQnASettings,
     rollbackToVersion: rollbackToVersionDispatcher,
+    setCurrentPageMode,
   } = useRecoilValue(dispatcherState);
 
   const [addDialogHidden, setAddDialogHidden] = useState(true);
@@ -369,6 +370,10 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     },
     [settings.publishTargets, projectId, botName]
   );
+
+  useEffect(() => {
+    setCurrentPageMode('notifications');
+  }, []);
 
   return (
     <Fragment>

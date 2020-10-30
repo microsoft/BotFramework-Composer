@@ -150,6 +150,11 @@ export type LgParsed = {
   templates: LgTemplate[];
 };
 
+export type LanguageFileImport = {
+  id: string;
+  importPath: string;
+};
+
 export type LgFile = {
   id: string;
   content: string;
@@ -173,7 +178,7 @@ export type Skill = {
 
 export type JsonSchemaFile = {
   id: string;
-  content: string;
+  content: any;
 };
 
 export type TextFile = {
@@ -209,6 +214,8 @@ export type BotAssets = {
   formDialogSchemas: FormDialogSchema[];
   botProjectFile: BotProjectFile;
   jsonSchemaFiles: JsonSchemaFile[];
+  recognizers: RecognizerFile[];
+  crossTrainConfig: CrosstrainConfig;
 };
 
 export type BotInfo = {
@@ -225,7 +232,6 @@ export interface BotProjectSpaceSkill {
 }
 
 export interface BotProjectSpace {
-  workspace: string;
   name: string;
   skills: {
     [skillId: string]: BotProjectSpaceSkill;
@@ -246,4 +252,13 @@ export type FormDialogSchema = {
 export type FormDialogSchemaTemplate = {
   name: string;
   isGlobal: boolean;
+};
+
+export type RecognizerFile = {
+  id: string;
+  content: any;
+};
+
+export type CrosstrainConfig = {
+  [fileName: string]: { rootDialog: boolean; triggers: { [intentName: string]: string[] } };
 };

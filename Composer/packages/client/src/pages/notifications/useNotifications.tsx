@@ -10,6 +10,7 @@ import { useRecoilValue } from 'recoil';
 import {
   botDiagnosticsState,
   botProjectFileState,
+  crossTrainConfigState,
   dialogSchemasState,
   formDialogSchemasSelectorFamily,
   jsonSchemaFilesState,
@@ -18,8 +19,9 @@ import {
   qnaFilesState,
   settingsState,
   skillManifestsState,
-  validateDialogSelectorFamily,
+  validateDialogsSelectorFamily,
 } from '../../recoilModel';
+import { recognizersSelectorFamily } from '../../recoilModel/selectors/recognizers';
 
 import { getReferredLuFiles } from './../../utils/luUtil';
 import {
@@ -34,7 +36,7 @@ import {
 } from './types';
 
 export default function useNotifications(projectId: string, filter?: string) {
-  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
   const luFiles = useRecoilValue(luFilesState(projectId));
   const lgFiles = useRecoilValue(lgFilesState(projectId));
   const diagnostics = useRecoilValue(botDiagnosticsState(projectId));
@@ -45,7 +47,8 @@ export default function useNotifications(projectId: string, filter?: string) {
   const formDialogSchemas = useRecoilValue(formDialogSchemasSelectorFamily(projectId));
   const botProjectFile = useRecoilValue(botProjectFileState(projectId));
   const jsonSchemaFiles = useRecoilValue(jsonSchemaFilesState(projectId));
-
+  const recognizers = useRecoilValue(recognizersSelectorFamily(projectId));
+  const crossTrainConfig = useRecoilValue(crossTrainConfigState(projectId));
   const botAssets: BotAssets = {
     projectId,
     dialogs,
@@ -58,6 +61,8 @@ export default function useNotifications(projectId: string, filter?: string) {
     formDialogSchemas,
     botProjectFile,
     jsonSchemaFiles,
+    recognizers,
+    crossTrainConfig,
   };
 
   const memoized = useMemo(() => {

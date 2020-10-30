@@ -26,7 +26,7 @@ import {
 } from '../../utils/notifications';
 import httpClient from '../../utils/httpUtil';
 
-import { addNotificationInternal, deleteNotificationInternal, createNotifiction } from './notification';
+import { addNotificationInternal, deleteNotificationInternal, createNotification } from './notification';
 
 export const updateQnAFileState = async (
   callbackHelpers: CallbackInterface,
@@ -328,7 +328,7 @@ export const qnaDispatcher = () => {
       projectId: string;
     }) => {
       await dismissCreateQnAModal({ projectId });
-      const notification = createNotifiction(getQnaPendingNotification(url));
+      const notification = createNotification(getQnaPendingNotification(url));
       addNotificationInternal(callbackHelpers, notification);
 
       let response;
@@ -339,7 +339,7 @@ export const qnaDispatcher = () => {
         const content = response.data;
 
         await updateQnAFileState(callbackHelpers, { id, content, projectId });
-        const notification = createNotifiction(
+        const notification = createNotification(
           getQnaSuccessNotification(() => {
             navigateTo(`/bot/${projectId}/knowledge-base/${getBaseName(id)}`);
             deleteNotificationInternal(callbackHelpers, notification.id);
@@ -349,7 +349,7 @@ export const qnaDispatcher = () => {
       } catch (err) {
         addNotificationInternal(
           callbackHelpers,
-          createNotifiction(getQnaFailedNotification(err.response?.data?.message))
+          createNotification(getQnaFailedNotification(err.response?.data?.message))
         );
         createQnAFromUrlDialogCancel({ projectId });
         return;
@@ -395,7 +395,7 @@ ${response.data}
       });
       await createQnAFromScratchDialogSuccess({ projectId });
 
-      const notification = createNotifiction(
+      const notification = createNotification(
         getQnaSuccessNotification(() => {
           navigateTo(`/bot/${projectId}/knowledge-base/${getBaseName(id)}`);
           deleteNotificationInternal(callbackHelpers, notification.id);

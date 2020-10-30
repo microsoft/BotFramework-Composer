@@ -33,7 +33,6 @@ class JsonStore implements KVStore {
 
   public get<T = unknown>(key: string, defaultValue?: T): T {
     this.readStore();
-
     if (key in this.data) {
       return this.data[key];
     } else if (defaultValue) {

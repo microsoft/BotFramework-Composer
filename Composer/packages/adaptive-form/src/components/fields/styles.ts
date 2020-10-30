@@ -127,17 +127,3 @@ export const objectArrayField = {
     label: InputFieldContainer;
   `,
 };
-
-export const oneOfField = {
-  container: css`
-    width: 100%;
-
-    label: OneOfField;
-  `,
-  label: css`
-    display: flex;
-    justify-content: space-between;
-
-    label: OneOfFieldLabel;
-  `,
-};

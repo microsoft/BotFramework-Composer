@@ -5,6 +5,7 @@ import {
   BotProjectFile,
   BotProjectSpace,
   BotSchemas,
+  CrosstrainConfig,
   Diagnostic,
   DialogInfo,
   DialogSchemaFile,
@@ -14,6 +15,7 @@ import {
   LgFile,
   LuFile,
   QnAFile,
+  RecognizerFile,
   Skill,
 } from '@bfc/shared';
 import { atomFamily } from 'recoil';
@@ -28,9 +30,33 @@ const getFullyQualifiedKey = (value: string) => {
   return `Bot_${value}_State`;
 };
 
-export const dialogsState = atomFamily<DialogInfo[], string>({
-  key: getFullyQualifiedKey('dialogs'),
-  default: (id) => {
+const emptyDialog: DialogInfo = {
+  content: { $kind: '' },
+  diagnostics: [],
+  displayName: '',
+  id: '',
+  isRoot: false,
+  lgFile: '',
+  lgTemplates: [],
+  luFile: '',
+  qnaFile: '',
+  referredLuIntents: [],
+  referredDialogs: [],
+  triggers: [],
+  intentTriggers: [],
+  skills: [],
+};
+type dialogStateParams = { projectId: string; dialogId: string };
+export const dialogState = atomFamily<DialogInfo, dialogStateParams>({
+  key: getFullyQualifiedKey('dialog'),
+  default: () => {
+    return emptyDialog;
+  },
+});
+
+export const dialogIdsState = atomFamily<string[], string>({
+  key: getFullyQualifiedKey('dialogIds'),
+  default: () => {
     return [];
   },
 });
@@ -115,6 +141,27 @@ export const skillsState = atomFamily<Skill[], string>({
   key: getFullyQualifiedKey('skills'),
   default: (id) => {
     return [];
+  },
+});
+
+export const recognizerIdsState = atomFamily<string[], string>({
+  key: getFullyQualifiedKey('recognizerIds'),
+  default: (id) => {
+    return [];
+  },
+});
+
+export const recognizerState = atomFamily<RecognizerFile, { projectId: string; id: string }>({
+  key: getFullyQualifiedKey('recognizer'),
+  default: () => {
+    return { id: '', content: {}, lastModified: '' };
+  },
+});
+
+export const crossTrainConfigState = atomFamily<CrosstrainConfig, string>({
+  key: getFullyQualifiedKey('crossTrainConfig'),
+  default: () => {
+    return {};
   },
 });
 

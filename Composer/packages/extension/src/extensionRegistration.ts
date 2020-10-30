@@ -1,20 +1,23 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import path from 'path';
+
 import { RequestHandler } from 'express-serve-static-core';
 import { Debugger } from 'debug';
 import { PublishPlugin, RuntimeTemplate, BotTemplate } from '@botframework-composer/types';
 
-import logger from './logger';
+import log from './logger';
 import { ExtensionContext } from './extensionContext';
-
-const log = logger.extend('extension-registration');
+import { Store } from './storage/store';
 
 export class ExtensionRegistration {
   public context: typeof ExtensionContext;
   private _name: string;
   private _description: string;
   private _log: Debugger;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private _store: Store<any> | null = null;
 
   constructor(context: typeof ExtensionContext, name: string, description: string) {
     this.context = context;
@@ -43,9 +46,19 @@ export class ExtensionRegistration {
     return this._log;
   }
 
+  public get store() {
+    if (this._store === null) {
+      const storePath = path.join(this.dataDir, `${this.name}.json`);
+      this._store = new Store(storePath, {}, this.log);
+    }
+
+    return this._store;
+  }
+
   /**************************************************************************************
    * Storage related features
    *************************************************************************************/
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public async useStorage(customStorageClass: any) {
     if (!this.context.extensions.storage.customStorageClass) {
       this.context.extensions.storage.customStorageClass = customStorageClass;
@@ -58,12 +71,17 @@ export class ExtensionRegistration {
    * Publish related features
    *************************************************************************************/
   public async addPublishMethod(plugin: PublishPlugin) {
-    log('registering publish method', this.name);
-    this.context.extensions.publish[plugin.customName || this.name] = {
+    if (this.context.extensions.publish[plugin.name]) {
+      throw new Error(`Duplicate publish method. Cannot register publish method with name ${plugin.name}.`);
+    }
+
+    log('registering publish method', plugin.name);
+    this.context.extensions.publish[plugin.name] = {
       plugin: {
-        name: plugin.customName || this.name,
-        description: plugin.customDescription || this.description,
+        name: plugin.name,
+        description: plugin.description || this.description,
         instructions: plugin.instructions,
+        extensionId: this.name,
         bundleId: plugin.bundleId,
         schema: plugin.schema,
       },
@@ -202,5 +220,14 @@ export class ExtensionRegistration {
     if (this.context.extensions.authentication.allowedUrls.indexOf(url) < 0) {
       this.context.extensions.authentication.allowedUrls.push(url);
     }
+  }
+
+  private get dataDir() {
+    /* istanbul ignore next */
+    if (!process.env.COMPOSER_EXTENSION_DATA_DIR) {
+      throw new Error('COMPOSER_EXTENSION_DATA_DIR must be set.');
+    }
+
+    return process.env.COMPOSER_EXTENSION_DATA_DIR;
   }
 }

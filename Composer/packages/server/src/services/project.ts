@@ -4,7 +4,7 @@
 import merge from 'lodash/merge';
 import find from 'lodash/find';
 import flatten from 'lodash/flatten';
-import { importResolverGenerator, ResolverResource } from '@bfc/shared';
+import { luImportResolverGenerator, ResolverResource } from '@bfc/shared';
 import extractMemoryPaths from '@bfc/indexers/lib/dialogUtils/extractMemoryPaths';
 import { UserIdentity } from '@bfc/extension';
 
@@ -54,7 +54,7 @@ export class BotProjectService {
       const { name, content } = file;
       return { id: Path.basename(name, '.lu'), content };
     });
-    const resolver = importResolverGenerator(resource, '.lu');
+    const resolver = luImportResolverGenerator(resource, '.lu');
     return resolver(source, id);
   }
 

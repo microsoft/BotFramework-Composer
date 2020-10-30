@@ -19,6 +19,7 @@ import { container, section } from './styles';
 import { SettingToggle } from './SettingToggle';
 import { SettingDropdown } from './SettingDropdown';
 import * as images from './images';
+import { PreviewFeatureToggle } from './PreviewFeatureToggle';
 
 const ElectronSettings = lazy(() =>
   import('./electronSettings').then((module) => ({ default: module.ElectronSettings }))
@@ -30,7 +31,6 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
   const { onboardingSetComplete, updateUserSettings } = useRecoilValue(dispatcherState);
   const userSettings = useRecoilValue(userSettingsState);
   const { complete } = useRecoilValue(onboardingState);
-
   const onOnboardingChange = useCallback(
     (checked: boolean) => {
       // on means its not complete
@@ -155,7 +155,11 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
           onChange={onLocaleChange}
         />
       </section>
-      <Suspense fallback={<div />}>{renderElectronSettings && <ElectronSettings />}</Suspense>
+      <section css={section}>
+        <h2>{formatMessage('Application Updates')}</h2>
+        <Suspense fallback={<div />}>{renderElectronSettings && <ElectronSettings />}</Suspense>
+        <PreviewFeatureToggle />
+      </section>
     </div>
   );
 };

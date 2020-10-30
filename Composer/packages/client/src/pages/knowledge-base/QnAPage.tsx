@@ -14,7 +14,7 @@ import { navigateTo } from '../../utils/navigation';
 import { TestController } from '../../components/TestController/TestController';
 import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
-import { dialogsState, qnaFilesState } from '../../recoilModel/atoms/botState';
+import { dialogsSelectorFamily, qnaFilesState } from '../../recoilModel';
 import { dispatcherState } from '../../recoilModel';
 import { CreateQnAModal } from '../../components/QnA';
 
@@ -31,7 +31,7 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
   const { dialogId = '', projectId = '' } = props;
 
   const actions = useRecoilValue(dispatcherState);
-  const dialogs = useRecoilValue(dialogsState(projectId));
+  const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   //To do: support other languages
   const locale = 'en-us';
@@ -103,6 +103,10 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
     },
     [dialogId, projectId, edit]
   );
+
+  useEffect(() => {
+    actions.setCurrentPageMode('qna');
+  }, []);
 
   const toolbarItems = [
     {

@@ -9,13 +9,16 @@ import { AdaptiveKinds } from '../../../src/adaptive-flow-renderer/constants/Ada
 
 describe('ActionCard', () => {
   it('can be rendered.', () => {
-    const card = render(<ActionCard data={{ $kind: AdaptiveKinds.SendActivity }} id="test" onEvent={() => null} />);
+    const card = render(
+      <ActionCard adaptiveSchema={{}} data={{ $kind: AdaptiveKinds.SendActivity }} id="test" onEvent={() => null} />
+    );
     expect(card).toBeTruthy();
   });
 
   it('can be rendered with injected content.', () => {
     const card = render(
       <ActionCard
+        adaptiveSchema={{}}
         body={<span data-testid="test-body">Body</span>}
         data={{ $kind: AdaptiveKinds.SendActivity }}
         footer={<span data-testid="test-footer">Footer</span>}

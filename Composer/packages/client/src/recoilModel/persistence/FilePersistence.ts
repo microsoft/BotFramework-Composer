@@ -14,6 +14,8 @@ import {
   LgFile,
   QnAFile,
   FormDialogSchema,
+  RecognizerFile,
+  CrosstrainConfig,
 } from '@bfc/shared';
 import keys from 'lodash/keys';
 
@@ -125,6 +127,8 @@ class FilePersistence {
       FileExtensions.DialogSchema,
       FileExtensions.Manifest,
       FileExtensions.Setting,
+      FileExtensions.Recognizer,
+      FileExtensions.CrossTrainConfig,
     ].includes(fileExtension);
     if (isJson) {
       content = JSON.stringify(content, null, 2) + '\n';
@@ -195,6 +199,24 @@ class FilePersistence {
     return changes;
   }
 
+  private getRecognizerChanges(current: RecognizerFile[], previous: RecognizerFile[]) {
+    const changeItems = this.getDifferenceItems(current, previous);
+    const changes = this.getFileChanges(FileExtensions.Recognizer, changeItems);
+    return changes;
+  }
+
+  private getCrossTrainConfigChanges(current: CrosstrainConfig, previous: CrosstrainConfig) {
+    if (isEqual(current, previous)) return [];
+    let changeType = ChangeType.UPDATE;
+    if (!keys(previous).length) {
+      changeType = ChangeType.CREATE;
+    }
+    if (!keys(current).length) {
+      changeType = ChangeType.DELETE;
+    }
+    return [this.createChange({ id: '', content: current }, FileExtensions.CrossTrainConfig, changeType)];
+  }
+
   private getBotProjectFileChanges(current: BotProjectFile, previous: BotProjectFile) {
     if (!isEqual(current, previous)) {
       return [
@@ -251,6 +273,13 @@ class FilePersistence {
       previousAssets.botProjectFile
     );
 
+    const recognizerFileChanges = this.getRecognizerChanges(currentAssets.recognizers, previousAssets.recognizers);
+
+    const crossTrainFileChanges = this.getCrossTrainConfigChanges(
+      currentAssets.crossTrainConfig,
+      previousAssets.crossTrainConfig
+    );
+
     const fileChanges: IFileChange[] = [
       ...dialogChanges,
       ...dialogSchemaChanges,
@@ -261,6 +290,8 @@ class FilePersistence {
       ...settingChanges,
       ...formDialogChanges,
       ...botProjectFileChanges,
+      ...recognizerFileChanges,
+      ...crossTrainFileChanges,
     ];
     return fileChanges;
   }
