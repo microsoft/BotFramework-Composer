@@ -330,11 +330,12 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   const overflowMenu = menu.map(renderTreeMenuItem(link));
 
   const linkString = `${link.projectId}_DialogTreeItem${link.dialogName}_${link.trigger ?? ''}`;
+  const isBroken = !!link.bot?.error;
 
   return (
     <div
       aria-label={a11yLabel}
-      css={navItem(!!isActive, !!link.isBroken, shiftOut ?? 0)}
+      css={navItem(!!isActive, isBroken, shiftOut ?? 0)}
       data-testid={a11yLabel}
       role="gridcell"
       tabIndex={0}
@@ -351,12 +352,12 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         //In 8.0 the OverflowSet will no longer be wrapped in a FocusZone
         //remove this at that time
         doNotContainWithinFocusZone
-        css={overflowSet(!!link.isBroken)}
+        css={overflowSet(isBroken)}
         data-testid={linkString}
         items={[
           {
             key: linkString,
-            icon: link.isBroken ? 'RemoveLink' : icon,
+            icon: isBroken ? 'RemoveLink' : icon,
             ...link,
           },
         ]}

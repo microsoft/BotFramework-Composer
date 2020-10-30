@@ -26,7 +26,12 @@ export const RepairSkillModalOptionKeys = {
 };
 
 export const CreateSkillModal: React.FC<RepairSkillModalProps> = ({ skillItem, onNext, onDismiss }) => {
-  const [option, setOption] = useState(RepairSkillModalOptionKeys.repairSkill);
+  const isRemote = skillItem.bot?.isRemote;
+  const [option, setOption] = useState(
+    isRemote ? RepairSkillModalOptionKeys.removeSkill : RepairSkillModalOptionKeys.repairSkill
+  );
+
+  if (!skillItem.bot?.error) return null;
 
   const handleChange = (event, option) => {
     setOption(option.key);
@@ -44,6 +49,7 @@ export const CreateSkillModal: React.FC<RepairSkillModalProps> = ({ skillItem, o
       key: RepairSkillModalOptionKeys.repairSkill,
       'data-testid': 'Locate the bot file and repair the link',
       text: formatMessage('Locate the bot file and repair the link'),
+      disabled: isRemote,
     },
     {
       ariaLabel:

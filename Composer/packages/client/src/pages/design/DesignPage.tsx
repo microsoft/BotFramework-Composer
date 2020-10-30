@@ -291,7 +291,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   };
 
   function handleSelect(projectId, item, selected = '') {
-    if (item.isBroken) {
+    if (item.bot?.error) {
       setBrokenSkillInfo(item);
     }
     updateZoomRate({ currentRate: 1 });

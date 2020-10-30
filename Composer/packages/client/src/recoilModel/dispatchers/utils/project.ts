@@ -363,8 +363,7 @@ export const openRemoteSkill = async (
     url: manifestUrl,
   });
 
-  //TODO: check local modified manifest.
-
+  //TODO: open remote url 404. isRemote set to false?
   const manifestResponse = await httpClient.get(
     `/projects/${projectId}/skill/retrieveSkillManifest?${stringified}&ignoreProjectValidation=true`
   );

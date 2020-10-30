@@ -76,7 +76,7 @@ const SUMMARY_ARROW_SPACE = 28; // the rough pixel size of the dropdown arrow to
 export type TreeLink = {
   displayName: string;
   isRoot: boolean;
-  isBroken?: boolean;
+  bot?: BotInProject;
   diagnostics: Diagnostic[];
   projectId: string;
   skillId: string | null;
@@ -207,7 +207,7 @@ export const ProjectTree: React.FC<Props> = ({
       projectId: currentProjectId,
       skillId: bot.projectId,
       isRoot: true,
-      isBroken: !!bot.error,
+      bot,
       diagnostics: bot.diagnostics,
     };
     const isRunning = bot.buildEssentials.status === BotStatus.connected;
