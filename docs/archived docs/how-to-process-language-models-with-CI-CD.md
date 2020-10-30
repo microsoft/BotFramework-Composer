@@ -37,7 +37,7 @@ First create folder that holds cross-trained language model files and then use b
 
 ~~~
 $ mkdir generated\interruption
-$ bf luis:cross-train --in . --out generated\interruption --config recognizers\cross-train.config.json --force
+$ bf luis:cross-train --in . --out generated\interruption --config settings\cross-train.config.json --force
 ~~~
 
 You can find more details about [cross-train](https://github.com/microsoft/botframework-cli/tree/main/packages/luis#bf-luiscross-train) cli tool.
