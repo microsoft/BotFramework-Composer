@@ -23,18 +23,6 @@ const nodeStyle = (depth: number) => css`
   margin-left: ${depth * 16}px;
 `;
 
-const TRIANGLE_SCALE = 0.6;
-
-const detailsStyle = css`
-  &:not([open]) > summary::-webkit-details-marker {
-    transform: scaleX(${TRIANGLE_SCALE});
-  }
-
-  &[open] > summary::-webkit-details-marker {
-    transform: scaleY(${TRIANGLE_SCALE});
-  }
-`;
-
 export const ExpandableNode = ({ children, summary, detailsRef, depth = 0 }: Props) => {
   const [isExpanded, setExpanded] = useState(true);
 
@@ -51,16 +39,9 @@ export const ExpandableNode = ({ children, summary, detailsRef, depth = 0 }: Pro
 
   return (
     <div css={nodeStyle(depth)} data-testid="dialog">
-      <details ref={detailsRef} css={detailsStyle} open={isExpanded}>
+      <details ref={detailsRef} open={isExpanded}>
         {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */}
-        <summary
-          css={summaryStyle}
-          data-testid={'summaryTag'}
-          role="button"
-          tabIndex={0}
-          onClick={handleClick}
-          onKeyUp={handleKey}
-        >
+        <summary css={summaryStyle} role="button" tabIndex={0} onClick={handleClick} onKeyUp={handleKey}>
           {summary}
         </summary>
         {children}

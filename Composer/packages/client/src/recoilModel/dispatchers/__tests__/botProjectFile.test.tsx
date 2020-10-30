@@ -127,9 +127,7 @@ describe('Bot Project File dispatcher', () => {
       dispatcher.addLocalSkillToBotProjectFile(testSkillId);
     });
 
-    expect(renderedComponent.current.botProjectFile.content.skills.todoSkill.workspace).toMatch(
-      /\.\.(\/|\\)Todo-Skill/
-    );
+    expect(renderedComponent.current.botProjectFile.content.skills.todoSkill.workspace).toBe('../Todo-Skill');
     expect(renderedComponent.current.botProjectFile.content.skills.todoSkill.remote).toBeFalsy();
   });
 

@@ -69,13 +69,9 @@ export function getUrlSearch(selected: string, focused: string): string {
 export function checkUrl(
   currentUri: string,
   projectId: string,
-  skillId: string | null,
   { dialogId, selected, focused, promptTab }: DesignPageLocation
 ) {
-  let lastUri =
-    skillId == null
-      ? `/bot/${projectId}/dialogs/${dialogId}${getUrlSearch(selected, focused)}`
-      : `/bot/${projectId}/skill/${skillId}/dialogs/${dialogId}${getUrlSearch(selected, focused)}`;
+  let lastUri = `/bot/${projectId}/dialogs/${dialogId}${getUrlSearch(selected, focused)}`;
   if (promptTab) {
     lastUri += `#${promptTab}`;
   }

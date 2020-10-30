@@ -240,7 +240,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   isActive = false,
   icon,
   dialogName,
-  forceIndent,
+  forceIndent: shiftOut,
   onSelect,
   menu = [],
 }) => {
@@ -248,12 +248,12 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
 
   const overflowMenu = menu.map(renderTreeMenuItem(link));
 
-  const linkString = `${link.projectId}_DialogTreeItem${link.dialogId}_${link.trigger ?? ''}`;
+  const linkString = `${link.projectId}_DialogTreeItem${link.dialogName}_${link.trigger ?? ''}`;
 
   return (
     <div
       aria-label={a11yLabel}
-      css={navItem(!!isActive, forceIndent ?? 0)}
+      css={navItem(!!isActive, shiftOut ?? 0)}
       data-testid={a11yLabel}
       role="gridcell"
       tabIndex={0}
