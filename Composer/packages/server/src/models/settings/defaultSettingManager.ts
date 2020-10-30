@@ -73,6 +73,7 @@ export class DefaultSettingManager extends FileSettingManager {
         customRuntime: false,
         path: '',
         command: '',
+        key: '',
       },
       downsampling: {
         maxImbalanceRatio: 10,

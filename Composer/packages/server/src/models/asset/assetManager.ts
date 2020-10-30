@@ -5,8 +5,9 @@ import fs from 'fs';
 import path from 'path';
 
 import find from 'lodash/find';
-import { UserIdentity, ExtensionContext } from '@bfc/extension';
+import { UserIdentity } from '@bfc/extension';
 
+import { ExtensionContext } from '../extension/extensionContext';
 import log from '../../logger';
 import { LocalDiskStorage } from '../storage/localDiskStorage';
 import { LocationRef } from '../bot/interface';
