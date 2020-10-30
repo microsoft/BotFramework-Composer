@@ -16,10 +16,6 @@ import { useInterval } from '../../utils/hooks';
 import { ErrorCallout } from './errorCallout';
 import { useLocalBotOperations } from './useLocalBotOperations';
 
-const actionButton = css`
-  color: #0078d4;
-`;
-
 const botStatusContainer = css`
   display: flex;
   align-items: center;
@@ -108,7 +104,12 @@ export const LocalBotStatusIndicator: React.FC<LocalBotStatusIndicatorProps> = (
       <span aria-live={'assertive'}>{botStatusText}</span>
       {botLoadErrorMsg?.message && (
         <ActionButton
-          css={actionButton}
+          styles={{
+            root: {
+              color: '#0078d4',
+              height: '20px',
+            },
+          }}
           onClick={() => {
             openErrorDialog();
           }}

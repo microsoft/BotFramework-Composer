@@ -53,7 +53,7 @@ const tableColumns: IColumn[] = [
   {
     key: 'status',
     name: formatMessage('Status'),
-    minWidth: 100,
+    minWidth: 150,
     isRowHeader: true,
     onRender: (item: { displayName: string; projectId: string }) => {
       return <LocalBotStatusIndicator projectId={item.projectId} />;
