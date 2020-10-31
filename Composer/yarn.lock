@@ -3121,23 +3121,6 @@
     semver "^5.5.1"
     tslib "^2.0.3"
 
-"@microsoft/bf-orchestrator@4.11.0-beta.20201013.20d7917":
-  version "4.11.0-beta.20201013.20d7917"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-orchestrator/-/bf-orchestrator-4.11.0-beta.20201013.20d7917.tgz#525e167625ce2c64f079d937aeb7495a07a7a1d0"
-  integrity sha512-J5yobTheQuE+gme1R30xIIlCU9xVaiHLUrXyI6xZnT922EYEGsn7qAWfeuP0AM6b5JgD4exAOwHf02ggOIZmGQ==
-  dependencies:
-    "@microsoft/bf-dispatcher" "4.11.0-beta.20201013.20d7917"
-    "@microsoft/bf-lu" next
-    "@types/fs-extra" "~8.1.0"
-    "@types/node-fetch" "~2.5.5"
-    fast-text-encoding "^1.0.3"
-    fs-extra "~9.0.0"
-    node-7z-forall "~1.0.5"
-    node-fetch "~2.6.0"
-    orchestrator-core beta
-    read-text-file "~1.1.0"
-    tslib "^1.10.0"
-
 "@microsoft/load-themed-styles@^1.10.26":
   version "1.10.39"
   resolved "https://registry.yarnpkg.com/@microsoft/load-themed-styles/-/load-themed-styles-1.10.39.tgz#23024bfa264a01ab2f05a9fda9c97c1f90ef80d8"
