@@ -21,23 +21,23 @@ export const container = css`
   height: 100%;
 `;
 
-export const titleStyle = {
-  root: {
-    fontSize: FontSizes.medium,
-    fontWeight: FontWeights.semibold,
-  },
-};
+export const titleStyle = css`
+  font-size: ${FontSizes.medium};
+  font-weight: ${FontWeights.semibold};
+  margin-left: 22px;
+  margin-top: 6px;
+`;
 
 export const botNameStyle = css`
   font-size: ${FontSizes.xLarge};
   font-weight: ${FontWeights.semibold};
   color: ${NeutralColors.black};
-  margin-bottom: 27px;
 `;
 
 export const mainContentHeader = css`
   display: flex;
   justify-content: space-between;
+  margin-bottom: 15px;
 `;
 
 export const labelContainer = css`
@@ -70,7 +70,7 @@ export const runtimeLabel = (enabled: boolean) => css`
   color: ${enabled ? NeutralColors.black : '#585756'};
 `;
 
-export const appIdOrPassWordStyle = css`
+export const appIdAndPasswordStyle = css`
   display: flex;
   flex-direction: column;
 `;
@@ -87,11 +87,13 @@ export const botLanguageFieldStyle = css`
   max-height: 150px;
   border: 1px solid #c4c4c4;
   margin-top: 17px;
+  padding: 10px;
 `;
 
 export const manageBotLanguage = {
   root: {
-    fontSize: 12,
+    height: 30,
+    fontSize: FontSizes.smallPlus,
     fontWeight: FontWeights.regular,
     color: SharedColors.cyanBlue10,
     paddingLeft: 0,
@@ -99,43 +101,41 @@ export const manageBotLanguage = {
 };
 
 export const languageItem = css`
-  margin: 5px;
-  height: 34px;
   &:hover {
     background: #ebebeb;
   }
 `;
+
+export const languageRowContainer = css`
+  display: flex;
+  height: 30px;
+  line-height: 30px;
+`;
+
+export const languageItemContainer = css`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  &:hover .ms-Button {
+    visibility: visible;
+  }
+`;
+
+export const languageButton = {
+  root: {
+    fontSize: FontSizes.small,
+    fontWeight: FontWeights.regular,
+    color: SharedColors.cyanBlue10,
+    height: 30,
+    visibility: 'hidden',
+  },
+};
 
 export const toggleUseCustomRuntimeStyle = {
   root: {
     marginTop: 15,
   },
 };
-
-export const botLanguageContainerStyle = css`
-  margin-left: 2px;
-  margin-bottom: 12px;
-`;
-
-export const runtimeLabelStyle = css`
-  display: flex;
-`;
-
-export const textOr = css`
-  font-size: 12px;
-  margin-right: 5px;
-  color: #000000;
-`;
-
-export const customRuntimeStyle = css`
-  margin-left: 2px;
-  margin-bottom: 14px;
-`;
-
-export const textRuntimeCode = (enable: boolean) => css`
-  font-size: 12px;
-  color: ${enable ? NeutralColors.black : '#585756'};
-`;
 
 export const deleteBotText = css`
   font-weight: ${FontWeights.semibold};
@@ -147,6 +147,10 @@ export const deleteBotButton = {
   root: {
     height: 32,
     width: 82,
+    background: SharedColors.cyanBlue10,
+    color: NeutralColors.white,
+  },
+  rootHovered: {
     background: SharedColors.cyanBlue10,
     color: NeutralColors.white,
   },
@@ -185,11 +189,6 @@ export const publishTargetsItemText = css`
   border-bottom: 1px solid ${NeutralColors.gray30};
   padding-top: 10px;
   padding-left: 10px;
-`;
-
-export const publishTargetsStyle = css`
-  margin-left: 2px;
-  margin-bottom: 14px;
 `;
 
 export const addPublishProfile = {
@@ -257,12 +256,6 @@ export const marginBottom = css`
   margin-bottom: 20px;
 `;
 
-export const textFieldStyle = {
-  root: {
-    marginTop: 10,
-  },
-};
-
 export const defaultLanguageTextStyle = css`
   color: #898989;
   font-size: 8px;
@@ -271,4 +264,42 @@ export const defaultLanguageTextStyle = css`
 export const languageTextStyle = css`
   color: ${NeutralColors.black};
   font-size: 12px;
+`;
+
+export const languageButtonContainer = css`
+  display: flex;
+  justify-content: space-between;
+  width: 240px;
+`;
+
+export const errorContainer = css`
+  display: flex;
+  width: 100%;
+  height: 48px;
+  line-height: 48px;
+  background: #fed9cc;
+  color: ${NeutralColors.black};
+`;
+
+export const customError = {
+  root: {
+    selectors: {
+      'p > span': {
+        width: '100%',
+      },
+    },
+  },
+};
+
+export const errorIcon = {
+  root: {
+    color: '#A80000',
+    marginRight: 8,
+    paddingLeft: 12,
+    fontSize: FontSizes.mediumPlus,
+  },
+};
+
+export const errorTextStyle = css`
+  margin-bottom: 5px;
 `;

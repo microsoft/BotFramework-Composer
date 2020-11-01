@@ -5,18 +5,21 @@
 import { jsx } from '@emotion/core';
 import { FontSizes } from '@uifabric/fluent-theme';
 
-interface BotProjectsSettingsIconProps {
+const color = (active: boolean, disabled: boolean) => {
+  return active ? '#000' : disabled ? '#999' : '#4f4f4f';
+};
+
+type BotProjectsSettingsIconProps = {
   active: boolean;
   disabled: boolean;
-}
+};
 
 export const BotProjectsSettingsIcon: React.FC<BotProjectsSettingsIconProps> = (props) => {
   const { active, disabled } = props;
 
   return (
     <svg
-      fill={active ? '#000' : disabled ? '#999' : '#4f4f4f'}
-      height="15"
+      fill={color(active, disabled)}
       style={{
         padding: '8px 12px',
         marginLeft: active ? '1px' : '4px',
@@ -27,7 +30,6 @@ export const BotProjectsSettingsIcon: React.FC<BotProjectsSettingsIconProps> = (
         height: '32px',
       }}
       viewBox="0 0 16 15"
-      width="16"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path

@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
-import React, { useMemo, useState, Suspense, useEffect } from 'react';
+import React, { useMemo, useState, Suspense } from 'react';
 import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
 import { JsonEditor } from '@bfc/code-editor';
@@ -15,45 +15,47 @@ import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
 import { dispatcherState } from '../../recoilModel';
 import { settingsState, userSettingsState, schemasState } from '../../recoilModel/atoms';
-import { botProjectSpaceSelector } from '../../recoilModel/selectors/project';
+import { botProjectSpaceSelector, rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
+import { navigateTo } from '../../utils/navigation';
 
-import TableView from './table-view';
+import BotProjectSettingsTableView from './BotProjectSettingsTableView';
 import { header, container, botNameStyle, mainContentHeader } from './styles';
 
-interface BotProjectSettingsProps extends RouteComponentProps<{}> {
+type BotProjectSettingsProps = {
   projectId?: string;
   skillId?: string;
-}
+} & RouteComponentProps<{}>;
 
 const BotProjectSettings: React.FC<BotProjectSettingsProps> = (props) => {
-  const projectId = props.skillId || props.projectId || '';
   const botProjectsMetaData = useRecoilValue(botProjectSpaceSelector);
+  const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
   const userSettings = useRecoilValue(userSettingsState);
+  const projectId = (props['*'] === 'root' ? rootBotProjectId : props['*']) || '';
   const schemas = useRecoilValue(schemasState(projectId));
   const botProject = botProjectsMetaData.find((b) => b.projectId === projectId);
-  const isRootBot = botProject?.isRootBot;
+
+  //Page will crash if navigating to a skill bot but it is not opened
+  if (!botProject) {
+    navigateTo(`/bot/${rootBotProjectId}/botProjectsSettings/root`);
+  }
+  const isRootBot = !!botProject?.isRootBot;
   const botName = botProject?.name;
   const settings = useRecoilValue(settingsState(projectId));
 
-  const [isAdvancedSettingsEnabled, setAdvancedSettings] = useState<boolean>(false);
+  const [isAdvancedSettingsEnabled, setAdvancedSettingsEnabled] = useState<boolean>(false);
 
   const { setSettings } = useRecoilValue(dispatcherState);
 
-  useEffect(() => {
-    setAdvancedSettings(false);
-  }, [projectId]);
-
   const navLinks: INavTreeItem[] = useMemo(() => {
     const localBotProjects = botProjectsMetaData.filter((b) => !b.isRemote);
-    const rootBotprojectId = botProjectsMetaData.find((b) => b.isRootBot)?.projectId;
     const newbotProjectLinks: INavTreeItem[] = localBotProjects.map((b) => {
       return {
         id: b.projectId,
         name: b.name,
         ariaLabel: formatMessage('bot'),
         url: b.isRootBot
-          ? `/bot/${rootBotprojectId}/botProjectsSettings/root`
-          : `/bot/${rootBotprojectId}/botProjectsSettings/skill/${b.projectId}`,
+          ? `/bot/${rootBotProjectId}/botProjectsSettings/root`
+          : `/bot/${rootBotProjectId}/botProjectsSettings/${b.projectId}`,
         isRootBot: b.isRootBot,
       };
     });
@@ -86,29 +88,30 @@ const BotProjectSettings: React.FC<BotProjectSettingsProps> = (props) => {
       saveChangeResult(result);
     }
   };
-
   return (
     <Page
-      data-testid="BotProjectsSetting"
+      data-testid="BotProjectsSettings"
       headerStyle={header}
       mainRegionName={formatMessage('Bot projects settings list View')}
       navLinks={navLinks}
       navRegionName={formatMessage('Bot Projects Settings Navigation Pane')}
-      title={formatMessage('Bot management and configurations.')}
+      title={formatMessage('Bot management and configurations')}
       toolbarItems={[]}
       onRenderHeaderContent={onRenderHeaderContent}
     >
       <Suspense fallback={<LoadingSpinner />}>
         <div css={container}>
           <div css={mainContentHeader}>
-            <div css={botNameStyle}> {`${botName} (${isRootBot ? 'Root Bot' : 'Skill'})`} </div>
+            <div css={botNameStyle}>
+              {`${botName} (${isRootBot ? formatMessage('Root Bot') : formatMessage('Skill')})`}
+            </div>
             <Toggle
+              inlineLabel
               checked={isAdvancedSettingsEnabled}
               className={'advancedSettingsView'}
               defaultChecked={false}
-              offText={formatMessage('Advanced Settings View (json)')}
-              onChange={() => setAdvancedSettings(!isAdvancedSettingsEnabled)}
-              onText={formatMessage('Advanced Settings View (json)')}
+              label={formatMessage('Advanced Settings View (json)')}
+              onChange={() => setAdvancedSettingsEnabled(!isAdvancedSettingsEnabled)}
             />
           </div>
           {isAdvancedSettingsEnabled && (
@@ -121,7 +124,9 @@ const BotProjectSettings: React.FC<BotProjectSettingsProps> = (props) => {
               onChange={handleChange}
             />
           )}
-          {!isAdvancedSettingsEnabled && <TableView hasSkills={botProjectsMetaData.length > 1} projectId={projectId} />}
+          {!isAdvancedSettingsEnabled && (
+            <BotProjectSettingsTableView hasSkills={botProjectsMetaData.length > 1} projectId={projectId} />
+          )}
         </div>
       </Suspense>
     </Page>

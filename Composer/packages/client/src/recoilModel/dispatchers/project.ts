@@ -5,6 +5,8 @@
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 import formatMessage from 'format-message';
 import findIndex from 'lodash/findIndex';
+import { SensitivePropertiesManageGroup } from '@bfc/shared';
+import get from 'lodash/get';
 
 import httpClient from '../../utils/httpUtil';
 import { BotStatus } from '../../constants';
@@ -184,6 +186,17 @@ export const projectDispatcher = () => {
           isRemote: false,
         });
         projectIdCache.set(projectId);
+
+        //migration on some sensitive property in browser local storage
+        for (const property of SensitivePropertiesManageGroup) {
+          const settings = settingStorage.get(projectId);
+          const value = get(settings, property, '');
+          if (typeof value.root === undefined) {
+            const newValue = { root: value };
+            settingStorage.setField(projectId, property, newValue);
+          }
+        }
+
         navigateToBot(callbackHelpers, projectId, mainDialog);
       } catch (ex) {
         set(botProjectIdsState, []);

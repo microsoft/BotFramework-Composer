@@ -7,7 +7,7 @@ import { useState, Fragment, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { TextField, ITextFieldProps } from 'office-ui-fabric-react/lib/TextField';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Link } from 'office-ui-fabric-react/lib/Link';
@@ -36,6 +36,7 @@ import {
   labelContainer,
   customerLabel,
   iconStyle,
+  textOr,
 } from './style';
 
 export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
@@ -163,12 +164,12 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
     }
   };
 
-  const onRenderLabel = (props: ITextFieldProps | undefined) => {
+  const onRenderLabel = (props) => {
     return (
       <div css={labelContainer}>
-        <div css={customerLabel(props?.disabled)}> {props?.label} </div>
-        <TooltipHost content={props?.label}>
-          <Icon iconName={'Unknown'} styles={iconStyle(props?.disabled)} />
+        <div css={customerLabel(props.disabled)}> {props.label} </div>
+        <TooltipHost content={props.label}>
+          <Icon iconName="Unknown" styles={iconStyle(props.disabled)} />
         </TooltipHost>
       </div>
     );
@@ -190,7 +191,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
           onChange={updateSetting('path')}
           onRenderLabel={onRenderLabel}
         />
-        {formatMessage('Or: ')}
+        <span css={textOr}>{formatMessage('Or: ')}</span>
         <Link
           css={breathingSpace}
           disabled={!settings.runtime || !settings.runtime.customRuntime}

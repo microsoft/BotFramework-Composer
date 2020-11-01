@@ -63,7 +63,12 @@ export const setSettingState = async (
     if (has(settings, property) && rootProjectId) {
       const propertyValue = get(settings, property, '');
       const luisPropertyValue = get(settingStorage.get(rootProjectId), property, '');
-      const newluisPropertyValue = { ...luisPropertyValue, [projectId]: propertyValue };
+      let newluisPropertyValue = {};
+      if (projectId === rootProjectId) {
+        newluisPropertyValue = { ...luisPropertyValue, root: propertyValue };
+      } else {
+        newluisPropertyValue = { ...luisPropertyValue, [projectId]: propertyValue };
+      }
       settingStorage.setField(rootProjectId, property, newluisPropertyValue);
     }
   }

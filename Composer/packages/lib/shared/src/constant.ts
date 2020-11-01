@@ -1,13 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export const SensitiveProperties = [
-  'MicrosoftAppPassword',
-  //'luis.authoringKey',
-  'luis.endpointKey',
-  //'qna.subscriptionKey',
-  'qna.endpointKey',
-];
+export const SensitiveProperties = ['MicrosoftAppPassword', 'luis.endpointKey', 'qna.endpointKey'];
 
 export const SensitivePropertiesManageGroup = ['luis.authoringKey', 'luis.authoringRegion', 'qna.subscriptionKey'];
 

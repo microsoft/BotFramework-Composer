@@ -88,11 +88,11 @@ const AddLanguageModal: React.FC<IAddLanguageModalProps> = (props) => {
     [formData]
   );
 
-  const onDismiss = useCallback((e) => {
+  const onDismiss = (e) => {
     e.preventDefault();
     setFormData(initialFormData);
     props.onDismiss();
-  }, []);
+  };
 
   const formTitles = { ...MultiLanguagesDialog.ADD_DIALOG };
 
