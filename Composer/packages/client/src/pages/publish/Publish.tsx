@@ -15,11 +15,14 @@ import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { dispatcherState, botProjectSpaceSelector } from '../../recoilModel';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
+import { createNotifiction } from '../../recoilModel/dispatchers/notification';
+import { Notification } from '../../recoilModel/types';
 
 import { PublishDialog } from './publishDialog';
 import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor } from './styles';
 import { IStatus } from './publishStatusList';
 import { BotStatusList, IBotStatus } from './botStatusList';
+import { pendingNotificationCard, publishedNotificationCard } from './notifications';
 
 const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: string }>> = (props) => {
   const { projectId = '' } = props;
@@ -71,11 +74,14 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     });
 
   const {
+    getPublishStatus,
     getPublishTargetTypes,
     setPublishTargets,
     publishToTarget,
     setQnASettings,
     rollbackToVersion: rollbackToVersionDispatcher,
+    addNotification,
+    deleteNotification,
   } = useRecoilValue(dispatcherState);
 
   const [showLog, setShowLog] = useState(false);
@@ -117,6 +123,41 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       ),
     },
   ];
+  const getUpdatedStatus = (target) => {
+    if (target) {
+      // TODO: this should use a backoff mechanism to not overload the server with requests
+      // OR BETTER YET, use a websocket events system to receive updates... (SOON!)
+      setTimeout(async () => {
+        getPublishStatus(projectId, target);
+      }, 10000);
+    }
+  };
+
+  let pendingNotification: Notification;
+  // check history to see if a 202 is found
+  useEffect(() => {
+    // most recent item is a 202, which means we should poll for updates...
+    selectedBots.forEach((bot) => {
+      if (bot.publishTarget && bot.publishTargets) {
+        const selectedTarget = bot.publishTargets.find((target) => target.name === bot.publishTarget);
+        const projectId = bot.id;
+        if (selectedTarget) {
+          const botPublishHistory = botPublishHistoryList.find((publishHistory) => publishHistory.projectId === bot.id)
+            ?.publishHistory[bot.publishTarget];
+          if (botPublishHistory[0].status === 202) {
+            getUpdatedStatus(selectedTarget);
+          } else if (botPublishHistory[0].status === 200 || botPublishHistory[0].status === 500) {
+            deleteNotification(pendingNotification.id);
+            addNotification(createNotifiction(publishedNotificationCard(bot)));
+          } else if (selectedTarget && selectedTarget.lastPublished && botPublishHistory.length === 0) {
+            // if the history is EMPTY, but we think we've done a publish based on lastPublished timestamp,
+            // we still poll for the results IF we see that a publish has happened previously
+            getPublishStatus(projectId, selectedTarget);
+          }
+        }
+      }
+    });
+  }, [botPublishHistoryList, selectedBots]);
 
   useEffect(() => {
     if (projectId) {
@@ -168,6 +209,9 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     setSelectedBots(bots);
   };
   const publish = async (items: IBotStatus[]) => {
+    // notifications
+    pendingNotification = createNotifiction(pendingNotificationCard(items));
+    addNotification(pendingNotification);
     // publish to remote
     if (items.length > 0) {
       for (const bot of items) {

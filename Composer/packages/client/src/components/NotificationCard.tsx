@@ -55,17 +55,20 @@ const cancelButton = css`
   height: 24px;
 `;
 
-const cardContent = css`
+export const cardContent = css`
   display: flex;
   padding: 0 8px 16px 12px;
   min-height: 64px;
 `;
 
-const cardDetail = css`
+export const cardDetail = css`
   margin-left: 8px;
   flex-grow: 1;
 `;
 
+export const infoType = css`
+  margin-top: 4px;
+`;
 const errorType = css`
   margin-top: 4px;
   color: #a80000;
@@ -82,7 +85,7 @@ const cardTitle = css`
   margin-right: 16px;
 `;
 
-const cardDescription = css`
+export const cardDescription = css`
   text-size-adjust: none;
   font-size: ${FontSizes.size10};
   margin-top: 8px;
