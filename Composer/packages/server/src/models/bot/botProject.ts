@@ -357,14 +357,14 @@ export class BotProject implements IBotProject {
     const mainDialogFile = this.dialogFiles.find((file) => !file.relativePath.includes('/'));
     if (!mainDialogFile) return;
 
-    const botName = name.trim().toLowerCase();
+    const botName = name.trim();
 
     const { relativePath } = mainDialogFile;
     const content = JSON.parse(mainDialogFile.content);
 
-    content.$designer = getNewDesigner(name, description);
+    content.$designer = getNewDesigner(botName, description);
 
-    content.id = preserveRoot ? Path.basename(mainDialogFile.name, '.dialog') : name;
+    content.id = preserveRoot ? Path.basename(mainDialogFile.name, '.dialog') : botName;
 
     const updatedContent = autofixReferInDialog(content.id, JSON.stringify(content, null, 2));
 
