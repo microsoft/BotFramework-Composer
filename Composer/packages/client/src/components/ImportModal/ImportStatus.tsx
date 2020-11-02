@@ -12,6 +12,7 @@ import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
 import compIcon from '../../images/composerIcon.svg';
 import pvaIcon from '../../images/pvaIcon.svg';
+import dataTransferLine from '../../images/dataTransferLine.svg';
 
 type ImportState = 'connecting' | 'downloading';
 
@@ -144,7 +145,12 @@ function getServiceIcon(source?: string) {
   return (
     <React.Fragment>
       {icon}
-      <span style={{ display: 'block', margin: '0 16px' }}>---&gt;</span>
+      <img
+        alt={formatMessage('Data transferring between services')}
+        aria-label={formatMessage('Data transferring between services')}
+        src={dataTransferLine}
+        style={{ margin: '0 16px', width: '78px' }}
+      />
     </React.Fragment>
   );
 }

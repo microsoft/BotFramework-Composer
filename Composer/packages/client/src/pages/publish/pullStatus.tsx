@@ -13,6 +13,7 @@ import { PublishTarget } from '@botframework-composer/types';
 
 import compIcon from '../../images/composerIcon.svg';
 import pvaIcon from '../../images/pvaIcon.svg';
+import dataTransferLine from '../../images/dataTransferLine.svg';
 
 type KnownPublishTargets = 'pva-publish-composer';
 
@@ -137,7 +138,12 @@ function getServiceIcon(targetType?: KnownPublishTargets) {
   return (
     <React.Fragment>
       {icon}
-      <span style={{ display: 'block', margin: '0 16px' }}>---&gt;</span>
+      <img
+        alt={formatMessage('Data transferring between services')}
+        aria-label={formatMessage('Data transferring between services')}
+        src={dataTransferLine}
+        style={{ margin: '0 16px', width: '78px' }}
+      />
     </React.Fragment>
   );
 }
