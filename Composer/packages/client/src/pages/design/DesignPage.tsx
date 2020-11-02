@@ -63,6 +63,7 @@ import { VisualEditor } from './VisualEditor';
 import { PropertyEditor } from './PropertyEditor';
 
 type BreadcrumbItem = {
+  key: string;
   label: string;
   link: Partial<TreeLink>;
   onClick?: () => void;
@@ -257,6 +258,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     const breadcrumbArray: Array<BreadcrumbItem> = [];
     if (dialogId != null) {
       breadcrumbArray.push({
+        key: 'dialog-' + parentLink?.dialogId,
         label: parentLink?.displayName ?? link.displayName,
         link: { skillId: skillId ?? projectId, dialogId },
         onClick: () => navTo(skillId ?? projectId, dialogId),
@@ -264,6 +266,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     }
     if (trigger != null) {
       breadcrumbArray.push({
+        key: 'trigger-' + parentLink?.trigger,
         label: link.displayName,
         link: { skillId: skillId ?? projectId, dialogId, trigger },
         onClick: () => selectTo(skillId ?? null, dialogId ?? null, `triggers[${trigger}]`),
@@ -468,14 +471,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
   const createBreadcrumbItem: (breadcrumb: BreadcrumbItem) => IBreadcrumbItem = (breadcrumb: BreadcrumbItem) => {
     return {
-      key: breadcrumb.label,
+      key: breadcrumb.key,
       text: breadcrumb.label,
       onClick: () => breadcrumb.onClick?.(),
     };
   };
 
   const items = breadcrumbs.map(createBreadcrumbItem);
-  console.log(items);
 
   const breadcrumbItems = (
     <div style={{ display: 'flex', justifyContent: 'space-between', height: '65px' }}>
