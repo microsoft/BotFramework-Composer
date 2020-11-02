@@ -122,6 +122,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
           </td>
           <td css={bodyStyle}>
             <Dropdown
+              defaultSelectedKey={item.publishTarget}
               options={publishTargetOptions()}
               placeholder={formatMessage('Select a publish target')}
               styles={{ root: { width: '134px' } }}

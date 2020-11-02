@@ -27,15 +27,29 @@ import { pendingNotificationCard, publishedNotificationCard } from './notificati
 const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: string }>> = (props) => {
   const { projectId = '' } = props;
   const botProjectsMeta = useRecoilValue(botProjectSpaceSelector);
+  const {
+    getPublishHistory,
+    getPublishStatus,
+    getPublishTargetTypes,
+    setPublishTargets,
+    publishToTarget,
+    setQnASettings,
+    rollbackToVersion: rollbackToVersionDispatcher,
+    addNotification,
+    deleteNotification,
+  } = useRecoilValue(dispatcherState);
 
   const [selectedBots, setSelectedBots] = useState<IBotStatus[]>([]);
 
+  const [showNotification, setShowNotification] = useState<boolean>(false);
   // fill Settings, status, publishType, publish target for bot from botProjectMeta
   const botSettingsList: { [key: string]: any }[] = [];
   const botStatusList: IBotStatus[] = [];
   const botPublishTypesList: { [key: string]: any }[] = [];
   const [botPublishHistoryList, setBotPublishHistoryList] = useState<{ [key: string]: any }[]>([]);
   const publishHistoyList: { [key: string]: any }[] = [];
+  const publishTargetsList: { [key: string]: any }[] = [];
+  const [hasGetPublishHistory, setHasGetPublishHistory] = useState<boolean>(false);
   botProjectsMeta
     .filter((bot) => bot.isRemote === false)
     .forEach((bot) => {
@@ -54,6 +68,10 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         publishHistory,
       });
       const publishTargets = bot.settings ? (bot.settings.publishTargets as any[]) : [];
+      publishTargetsList.push({
+        projectId: botProjectId,
+        publishTargets,
+      });
       const botStatus: IBotStatus = {
         id: botProjectId,
         name: bot.name,
@@ -72,17 +90,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       }
       botStatusList.push(botStatus);
     });
-
-  const {
-    getPublishStatus,
-    getPublishTargetTypes,
-    setPublishTargets,
-    publishToTarget,
-    setQnASettings,
-    rollbackToVersion: rollbackToVersionDispatcher,
-    addNotification,
-    deleteNotification,
-  } = useRecoilValue(dispatcherState);
 
   const [showLog, setShowLog] = useState(false);
   const [publishDialogHidden, setPublishDialogHidden] = useState(true);
@@ -133,7 +140,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     }
   };
 
-  let pendingNotification: Notification;
+  const [pendingNotification, setPendingNotification] = useState<Notification>();
   // check history to see if a 202 is found
   useEffect(() => {
     // most recent item is a 202, which means we should poll for updates...
@@ -144,15 +151,20 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         if (selectedTarget) {
           const botPublishHistory = botPublishHistoryList.find((publishHistory) => publishHistory.projectId === bot.id)
             ?.publishHistory[bot.publishTarget];
-          if (botPublishHistory[0].status === 202) {
-            getUpdatedStatus(selectedTarget);
-          } else if (botPublishHistory[0].status === 200 || botPublishHistory[0].status === 500) {
-            deleteNotification(pendingNotification.id);
-            addNotification(createNotifiction(publishedNotificationCard(bot)));
-          } else if (selectedTarget && selectedTarget.lastPublished && botPublishHistory.length === 0) {
-            // if the history is EMPTY, but we think we've done a publish based on lastPublished timestamp,
-            // we still poll for the results IF we see that a publish has happened previously
-            getPublishStatus(projectId, selectedTarget);
+          if (botPublishHistory && botPublishHistory.length > 0) {
+            if (botPublishHistory[0].status === 202) {
+              getPublishHistory(projectId, selectedTarget);
+              getUpdatedStatus(selectedTarget);
+            } else if (botPublishHistory[0].status === 200 || botPublishHistory[0].status === 500) {
+              if (showNotification) {
+                pendingNotification && deleteNotification(pendingNotification.id);
+                addNotification(createNotifiction(publishedNotificationCard(bot)));
+              }
+            } else if (selectedTarget && selectedTarget.lastPublished && botPublishHistory.length === 0) {
+              // if the history is EMPTY, but we think we've done a publish based on lastPublished timestamp,
+              // we still poll for the results IF we see that a publish has happened previously
+              getPublishStatus(projectId, selectedTarget);
+            }
           }
         }
       }
@@ -170,6 +182,14 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   useEffect(() => {
     if (publishHistoyList.length > 0) {
       setBotPublishHistoryList(publishHistoyList);
+    }
+    if (!hasGetPublishHistory) {
+      publishTargetsList.forEach((botTargets) => {
+        botTargets.publishTargets.forEach((target) => {
+          getPublishHistory(botTargets.projectId, target);
+        });
+      });
+      setHasGetPublishHistory(true);
     }
   }, [botProjectsMeta]);
 
@@ -210,8 +230,10 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   };
   const publish = async (items: IBotStatus[]) => {
     // notifications
-    pendingNotification = createNotifiction(pendingNotificationCard(items));
-    addNotification(pendingNotification);
+    setShowNotification(true);
+    const notification = createNotifiction(pendingNotificationCard(items));
+    setPendingNotification(notification);
+    addNotification(notification);
     // publish to remote
     if (items.length > 0) {
       for (const bot of items) {
