@@ -243,6 +243,19 @@ describe('Bot Project File dispatcher', () => {
       },
       lastModified: '',
     };
+
+    await act(async () => {
+      renderedComponent.current.setters.setSettings({
+        ...renderedComponent.current.settings,
+        skill: {
+          googleSkill: {
+            endpointUrl: 'https://test/api/messages',
+            msAppId: '1234-2312-23432-32432',
+          },
+        },
+      });
+    });
+
     await act(async () => {
       renderedComponent.current.setters.setBotProjectFile(mockFile);
     });
@@ -250,6 +263,7 @@ describe('Bot Project File dispatcher', () => {
     await act(async () => {
       await dispatcher.updateSkillsDataInBotProjectFile('googleSkill', googleKeepSkill, -1);
     });
+
     expect(renderedComponent.current.botProjectFile.content.skills.googleSkill.endpointName).toBeUndefined();
 
     expect(renderedComponent.current.settings.skill).toEqual({
@@ -292,7 +306,13 @@ describe('Bot Project File dispatcher', () => {
     expect(renderedComponent.current.botProjectFile.content.skills.googleSkill.manifest).toBe('googleKeepManifest');
   });
 
-  it('should update endpoint in BotProject file', async () => {
+  fit('should update endpoint in BotProject file', async () => {
+    await act(async () => {
+      renderedComponent.current.setters.setSettings({
+        ...renderedComponent.current.settings,
+        skill: {},
+      });
+    });
     const googleKeepSkill: Skill = {
       id: '12a.asd',
       manifest: {

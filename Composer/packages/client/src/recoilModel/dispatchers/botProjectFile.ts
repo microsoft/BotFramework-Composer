@@ -148,7 +148,6 @@ export const botProjectFileDispatcher = () => {
           return result;
         });
       }
-
       if (settings.skill) {
         dispatcher.setSettings(
           rootBotProjectId,

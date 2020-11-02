@@ -6,8 +6,7 @@ import type { DialogInfo, LuFile, LgFile, QnAFile, LuIntentSection, LgTemplate, 
 import type { ILUFeaturesConfig, SkillSetting, UserSettings } from './settings';
 import type { JSONSchema7, SDKKinds } from './schema';
 import { MicrosoftIDialog } from './sdk';
-
-import { Skill } from '.';
+import { Skill } from './indexers';
 
 /** Recursively marks all properties as optional. */
 type AllPartial<T> = {
