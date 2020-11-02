@@ -3,14 +3,13 @@
 
 import * as path from 'path';
 import axios from 'axios';
-import { ExtensionRegistration } from '@bfc/extension';
+import { IExtensionRegistration } from '@botframework-composer/types';
 
 import { SchemaMerger } from '@microsoft/bf-dialog/lib/library/schemaMerger';
 
 const API_ROOT = '/api';
 
-export default async (composer: ExtensionRegistration): Promise<void> => {
-
+export default async (composer: IExtensionRegistration): Promise<void> => {
   const LibraryController = {
     getLibrary: async function (req, res) {
       // read the list of sources from the config file.
@@ -19,7 +18,7 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
       // if no sources are in the config file, set the default list to our 1st party feed.
       if (!packageSources) {
         packageSources = [
-          `https://gist.githubusercontent.com/benbrown/b932bbbf8b7c1583bbfb0cc70f051c62/raw/botframework-composer-packages.json`
+          `https://gist.githubusercontent.com/benbrown/b932bbbf8b7c1583bbfb0cc70f051c62/raw/botframework-composer-packages.json`,
         ];
         composer.store.write('sources', packageSources);
       }
@@ -34,13 +33,12 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
           } else {
             console.error('Received non-JSON response from ', url);
           }
-        } catch(err) {
+        } catch (err) {
           console.error('Could not load library from URL');
           console.error(err);
         }
       }
       res.json(combined);
-
     },
     getComponents: async function (req, res) {
       const user = await composer.context.getUserFromRequest(req);
@@ -134,7 +132,12 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
           }
 
           // check the results to see if we have any problems
-          if (dryRunMergeResults && dryRunMergeResults.conflicts && dryRunMergeResults.conflicts.length && !isUpdating) {
+          if (
+            dryRunMergeResults &&
+            dryRunMergeResults.conflicts &&
+            dryRunMergeResults.conflicts.length &&
+            !isUpdating
+          ) {
             // we need to prompt the user to confirm the changes before proceeding
             res.json({
               success: false,
@@ -241,8 +244,8 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
     },
   };
 
-  composer.addWebRoute('post',`${ API_ROOT }/projects/:projectId/import`, LibraryController.import);
-  composer.addWebRoute('post',`${ API_ROOT }/projects/:projectId/unimport`, LibraryController.removeImported);
-  composer.addWebRoute('get',`${ API_ROOT }/projects/:projectId/installedComponents`, LibraryController.getComponents);
-  composer.addWebRoute('get',`${ API_ROOT }/library`, LibraryController.getLibrary);
-}
+  composer.addWebRoute('post', `${API_ROOT}/projects/:projectId/import`, LibraryController.import);
+  composer.addWebRoute('post', `${API_ROOT}/projects/:projectId/unimport`, LibraryController.removeImported);
+  composer.addWebRoute('get', `${API_ROOT}/projects/:projectId/installedComponents`, LibraryController.getComponents);
+  composer.addWebRoute('get', `${API_ROOT}/library`, LibraryController.getLibrary);
+};
