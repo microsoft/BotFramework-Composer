@@ -362,7 +362,9 @@ export class BotProject implements IBotProject {
     const { relativePath } = mainDialogFile;
     const content = JSON.parse(mainDialogFile.content);
 
-    content.$designer = getNewDesigner(botName, description);
+    const { $designer } = content;
+
+    content.$designer = $designer?.id ? { ...$designer, name, description } : getNewDesigner(botName, description);
 
     content.id = preserveRoot ? Path.basename(mainDialogFile.name, '.dialog') : botName;
 
