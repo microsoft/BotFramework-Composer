@@ -29,11 +29,11 @@ import log from '../../logger';
 import { BotProjectService } from '../../services/project';
 import AssetService from '../../services/asset';
 
+import { isCrossTrainConfig } from './botStructure';
 import { Builder } from './builder';
 import { IFileStorage } from './../storage/interface';
 import { LocationRef, IBuildConfig } from './interface';
-import { defaultFilePath, serializeFiles, parseFileName } from './botStructure';
-import { PreBuilder } from './preBuilder';
+import { defaultFilePath, serializeFiles, parseFileName, isRecognizer } from './botStructure';
 
 const debug = log.extend('bot-project');
 const mkDirAsync = promisify(fs.mkdir);
@@ -54,7 +54,6 @@ export class BotProject implements IBotProject {
   public dataDir: string;
   public fileStorage: IFileStorage;
   public builder: Builder;
-  public preBuilder: PreBuilder;
   public defaultSDKSchema: {
     [key: string]: string;
   };
@@ -79,7 +78,6 @@ export class BotProject implements IBotProject {
     this.settingManager = new DefaultSettingManager(this.dir);
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId, user);
     this.builder = new Builder(this.dir, this.fileStorage, defaultLanguage);
-    this.preBuilder = new PreBuilder(this.dir, this.fileStorage);
   }
 
   public get dialogFiles() {
@@ -411,6 +409,8 @@ export class BotProject implements IBotProject {
   };
 
   public validateFileName = (name: string) => {
+    if (isRecognizer(name)) return;
+    if (isCrossTrainConfig(name)) return;
     const { fileId, fileType } = parseFileName(name, '');
 
     let fileName = fileId;
@@ -444,14 +444,7 @@ export class BotProject implements IBotProject {
     return createdFiles;
   };
 
-  public buildFiles = async ({
-    luisConfig,
-    qnaConfig,
-    luResource = [],
-    qnaResource = [],
-    crossTrainConfig,
-    recognizerTypes,
-  }: IBuildConfig) => {
+  public buildFiles = async ({ luisConfig, qnaConfig, luResource = [], qnaResource = [] }: IBuildConfig) => {
     if (this.settings) {
       const emptyFiles = {};
       const luFiles: FileInfo[] = [];
@@ -473,11 +466,8 @@ export class BotProject implements IBotProject {
         }
       });
 
-      await this.preBuilder.prebuild(recognizerTypes, { crossTrainConfig, luFiles, qnaFiles, emptyFiles });
-
       this.builder.setBuildConfig(
         { ...luisConfig, subscriptionKey: qnaConfig.subscriptionKey, qnaRegion: qnaConfig.qnaRegion },
-        crossTrainConfig,
         this.settings.downsampling
       );
       await this.builder.build(luFiles, qnaFiles, Array.from(this.files.values()) as FileInfo[]);
@@ -714,11 +704,20 @@ export class BotProject implements IBotProject {
     }
   };
 
+  //migrate the recognizer folder
+  private removeRecognizers = async () => {
+    const paths = await this.fileStorage.glob('recognizers/cross-train.config.json', this.dataDir);
+    if (paths.length) {
+      await this.fileStorage.rmrfDir(Path.join(this.dataDir, 'recognizers'));
+    }
+  };
+
   private _getFiles = async () => {
     if (!(await this.exists())) {
       throw new Error(`${this.dir} is not a valid path`);
     }
 
+    await this.removeRecognizers();
     const fileList = new Map<string, FileInfo>();
     const patterns = [
       '**/*.dialog',
@@ -737,13 +736,14 @@ export class BotProject implements IBotProject {
       'app.schema',
       'app.uischema',
       '*.botproj',
+      'cross-train.config.json',
     ];
     for (const pattern of patterns) {
       // load only from the data dir, otherwise may get "build" versions from
       // deployment process
       const root = this.dataDir;
       const paths = await this.fileStorage.glob(
-        [pattern, '!(generated/**)', '!(runtime/**)', '!(recognizers/**)', '!(scripts/**)', '!(settings/**)'],
+        [pattern, '!(generated/**)', '!(runtime/**)', '!(scripts/**)', '!(settings/appsettings.json)'],
         root
       );
 

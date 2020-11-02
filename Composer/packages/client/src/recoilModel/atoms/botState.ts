@@ -5,6 +5,7 @@ import {
   BotProjectFile,
   BotProjectSpace,
   BotSchemas,
+  CrosstrainConfig,
   Diagnostic,
   DialogInfo,
   DialogSchemaFile,
@@ -15,6 +16,8 @@ import {
   LuFile,
   QnAFile,
   SkillManifestFile,
+  RecognizerFile,
+  Skill,
 } from '@bfc/shared';
 import { atomFamily } from 'recoil';
 
@@ -132,6 +135,27 @@ export const luFilesState = atomFamily<LuFile[], string>({
   key: getFullyQualifiedKey('luFiles'),
   default: (id) => {
     return [];
+  },
+});
+
+export const recognizerIdsState = atomFamily<string[], string>({
+  key: getFullyQualifiedKey('recognizerIds'),
+  default: (id) => {
+    return [];
+  },
+});
+
+export const recognizerState = atomFamily<RecognizerFile, { projectId: string; id: string }>({
+  key: getFullyQualifiedKey('recognizer'),
+  default: () => {
+    return { id: '', content: {}, lastModified: '' };
+  },
+});
+
+export const crossTrainConfigState = atomFamily<CrosstrainConfig, string>({
+  key: getFullyQualifiedKey('crossTrainConfig'),
+  default: () => {
+    return {};
   },
 });
 
@@ -340,4 +364,11 @@ export const botNameIdentifierState = atomFamily<string, string>({
 export const currentSkillManifestIndexState = atomFamily<number, string>({
   key: getFullyQualifiedKey('currentSkillManifestIndex'),
   default: 0,
+});
+
+export const skillsState = atomFamily<Skill[], string>({
+  key: getFullyQualifiedKey('skills'),
+  default: (id) => {
+    return [];
+  },
 });

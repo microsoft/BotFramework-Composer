@@ -81,6 +81,9 @@ import UndoHistory from '../../undo/undoHistory';
 import { logMessage, setError } from '../shared';
 import { setSettingState } from '../setting';
 
+import { crossTrainConfigState } from './../../atoms/botState';
+import { recognizersSelectorFamily } from './../../selectors/recognizers';
+
 export const resetBotStates = async ({ reset }: CallbackInterface, projectId: string) => {
   const botStates = Object.keys(botstates);
   botStates.forEach((state) => {
@@ -280,6 +283,8 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
     formDialogSchemas,
     skillManifestFiles,
     mergedSettings,
+    recognizers,
+    crossTrainConfig,
   } = botFiles;
   const curLocation = await snapshot.getPromise(locationState(projectId));
   const storedLocale = languageStorage.get(botName)?.locale;
@@ -305,6 +310,8 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
   });
 
   set(dialogIdsState(projectId), dialogIds);
+  set(recognizersSelectorFamily(projectId), recognizers);
+  set(crossTrainConfigState(projectId), crossTrainConfig);
 
   await lgWorker.addProject(projectId, lgFiles);
 

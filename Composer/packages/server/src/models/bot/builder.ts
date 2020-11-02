@@ -19,8 +19,10 @@ const LuisBuilder = require('@microsoft/bf-lu/lib/parser/luis/luisBuilder');
 const luisToLuContent = require('@microsoft/bf-lu/lib/parser/luis/luConverter');
 
 const GENERATEDFOLDER = 'generated';
-const INTERUPTION = 'interuption';
+const SETTINGS = 'settings';
+const INTERRUPTION = 'interruption';
 const SAMPLE_SIZE_CONFIGURATION = 2;
+const CrossTrainConfigName = 'cross-train.config';
 
 export type SingleConfig = {
   rootDialog: boolean;
@@ -46,7 +48,6 @@ export class Builder {
   public config: IConfig | null = null;
   public downSamplingConfig: DownSamplingConfig = { maxImbalanceRatio: 0, maxUtteranceAllowed: 0 };
   private _locale: string;
-  public crossTrainConfig: CrossTrainConfig = {};
 
   private luBuilder = new luBuild.Builder((message) => {
     log(message);
@@ -58,7 +59,7 @@ export class Builder {
   constructor(path: string, storage: IFileStorage, locale: string) {
     this.botDir = path;
     this.generatedFolderPath = Path.join(this.botDir, GENERATEDFOLDER);
-    this.interruptionFolderPath = Path.join(this.generatedFolderPath, INTERUPTION);
+    this.interruptionFolderPath = Path.join(this.generatedFolderPath, INTERRUPTION);
     this.storage = storage;
     this._locale = locale;
   }
@@ -86,9 +87,8 @@ export class Builder {
     }
   };
 
-  public setBuildConfig(config: IConfig, crossTrainConfig: CrossTrainConfig, downSamplingConfig: DownSamplingConfig) {
+  public setBuildConfig(config: IConfig, downSamplingConfig: DownSamplingConfig) {
     this.config = config;
-    this.crossTrainConfig = crossTrainConfig;
     this.downSamplingConfig = downSamplingConfig;
   }
 
@@ -109,19 +109,27 @@ export class Builder {
   }
 
   private async crossTrain(luFiles: FileInfo[], qnaFiles: FileInfo[], allFiles: FileInfo[]) {
+    const crossTrainConfigPath = Path.join(this.botDir, SETTINGS, CrossTrainConfigName);
+    let crossTrainConfig = {};
+    if (await this.storage.exists(crossTrainConfigPath)) {
+      const crossTrainConfigStr = await this.storage.readFile(crossTrainConfigPath);
+      if (crossTrainConfigStr) {
+        crossTrainConfig = JSON.parse(crossTrainConfigStr);
+      }
+    }
     const luContents = luFiles.map((file) => {
-      return { content: file.content, id: file.name };
+      return { content: file.content, id: Path.basename(file.name, '.lu') };
     });
 
     const qnaContents = qnaFiles.map((file) => {
-      return { content: file.content, id: file.name };
+      return { content: file.content, id: Path.basename(file.name, '.qna') };
     });
 
     const importResolver = luImportResolverGenerator([...getLUFiles(allFiles), ...getQnAFiles(allFiles)]);
-    const result = await crossTrainer.crossTrain(luContents, qnaContents, this.crossTrainConfig, { importResolver });
+    const result = await crossTrainer.crossTrain(luContents, qnaContents, crossTrainConfig, { importResolver });
 
-    await this.writeFiles(result.luResult);
-    await this.writeFiles(result.qnaResult);
+    await this.writeFiles(result.luResult, 'lu');
+    await this.writeFiles(result.qnaResult, 'qna');
   }
 
   private async getInterruptionFiles() {
@@ -181,13 +189,13 @@ export class Builder {
     );
   }
 
-  private async writeFiles(crossTrainResult) {
+  private async writeFiles(crossTrainResult, fileExtension: 'lu' | 'qna') {
     if (!(await this.storage.exists(this.interruptionFolderPath))) {
       await this.storage.mkDir(this.interruptionFolderPath);
     }
     await Promise.all(
       [...crossTrainResult.keys()].map(async (key: string) => {
-        const fileName = Path.basename(key);
+        const fileName = `${key}.${fileExtension}`;
         const newFileId = Path.join(this.interruptionFolderPath, fileName);
         await this.storage.writeFile(newFileId, crossTrainResult.get(key).Content);
       })

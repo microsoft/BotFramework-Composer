@@ -1955,6 +1955,9 @@
   "property_name_914371f5": {
     "message": "Property name"
   },
+  "property_name_is_required_5bc57d97": {
+    "message": "Property name is required!"
+  },
   "property_title_f2b443b7": {
     "message": "Property title"
   },
