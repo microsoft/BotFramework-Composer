@@ -281,7 +281,7 @@
     reconnecting-websocket "^3.2.2"
     vscode-ws-jsonrpc "^0.1.1"
 
-"@bfc/extension-client@../../Composer/packages/extension-client":
+"@bfc/extension-client@file:../../Composer/packages/extension-client":
   version "1.0.0"
   dependencies:
     "@botframework-composer/types" "*"
