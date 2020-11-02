@@ -5,8 +5,6 @@ context('ToDo Bot', () => {
   before(() => {
     cy.visit('/home');
     cy.createBot('TodoSample');
-    cy.findByTestId('WelcomeModalCloseIcon').click();
-    cy.findByText('Yes').click();
   });
 
   it('can open the main dialog', () => {
