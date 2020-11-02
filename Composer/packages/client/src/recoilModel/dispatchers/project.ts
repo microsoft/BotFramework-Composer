@@ -35,8 +35,8 @@ import {
   flushExistingTasks,
   getSkillNameIdentifier,
   handleProjectFailure,
-  initBotState,
-  loadProjectData,
+  // initBotState,
+  // loadProjectData,
   navigateToBot,
   openLocalSkill,
   openRemoteSkill,
@@ -343,12 +343,13 @@ export const projectDispatcher = () => {
     }
   });
 
-  const reloadProject = async (callbackHelpers: CallbackInterface, response: any) => {
-    callbackHelpers.reset(filePersistenceState(response.data.id));
-    const { projectData, botFiles } = loadProjectData(response);
+  const reloadProject = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
+    callbackHelpers.reset(filePersistenceState(projectId));
+    await openRootBotAndSkillsByProjectId(callbackHelpers, projectId);
+    // const { projectData, botFiles } = loadProjectData(response);
 
-    await initBotState(callbackHelpers, projectData, botFiles);
-  };
+    // await initBotState(callbackHelpers, projectData, botFiles);
+  });
 
   return {
     openProject,

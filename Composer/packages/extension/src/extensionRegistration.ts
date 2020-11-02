@@ -124,6 +124,10 @@ export class ExtensionRegistration {
     return this.context.getRuntime(type);
   }
 
+  public async getProjectById(projectId: string, user?: UserIdentity): Promise<IBotProject> {
+    return this.context.getProjectById(projectId, user);
+  }
+
   /**************************************************************************************
    * Add Bot Template (aka, SampleBot)
    *************************************************************************************/

@@ -39,6 +39,32 @@ export default async (composer: any): Promise<void> => {
       }
       composer.log('FINISHED BUILDING!');
     },
+    installComponent: async (runtimePath: string, packageName: string, version: string): Promise<string> => {
+      // run dotnet install on the project
+      const { stderr: installError, stdout: installOutput } = await execAsync(
+        `dotnet add package ${packageName}${version ? ' --version=' + version : ''}`,
+        {
+          cwd: path.join(runtimePath, 'azurewebapp'),
+        }
+      );
+      if (installError) {
+        throw new Error(installError);
+      }
+      return installOutput;
+    },
+    uninstallComponent: async (runtimePath: string, packageName: string): Promise<string> => {
+      // run dotnet install on the project
+      const { stderr: installError, stdout: installOutput } = await execAsync(`dotnet remove package ${packageName}`, {
+        cwd: path.join(runtimePath, 'azurewebapp'),
+      });
+      if (installError) {
+        throw new Error(installError);
+      }
+      return installOutput;
+    },
+    identifyManifest: (runtimePath: string): string => {
+      return path.join(runtimePath, 'azurewebapp', 'Microsoft.BotFramework.Composer.WebApp.csproj');
+    },
     run: async (project: any, localDisk: IFileStorage) => {
       composer.log('RUN THIS C# PROJECT!');
     },
@@ -178,6 +204,35 @@ export default async (composer: any): Promise<void> => {
         throw new Error(install2Err);
       }
       composer.log('BUILD COMPLETE');
+    },
+    installComponent: async (runtimePath: string, packageName: string, version: string): Promise<string> => {
+      // run dotnet install on the project
+      const { stderr: installError, stdout: installOutput } = await execAsync(
+        `npm install --loglevel=error --save ${packageName}${version ? '@' + version : ''}`,
+        {
+          cwd: path.join(runtimePath),
+        }
+      );
+      if (installError) {
+        throw new Error(installError);
+      }
+      return installOutput;
+    },
+    uninstallComponent: async (runtimePath: string, packageName: string): Promise<string> => {
+      // run dotnet install on the project
+      const { stderr: installError, stdout: installOutput } = await execAsync(
+        `npm uninstall --loglevel=error --save ${packageName}`,
+        {
+          cwd: path.join(runtimePath),
+        }
+      );
+      if (installError) {
+        throw new Error(installError);
+      }
+      return installOutput;
+    },
+    identifyManifest: (runtimePath: string): string => {
+      return path.join(runtimePath, 'package.json');
     },
     run: async (project: any, localDisk: IFileStorage) => {
       // do stuff

@@ -4,11 +4,12 @@
 import * as React from 'react';
 import { fireEvent, render } from '@botframework-composer/test-utils';
 import { ProjectTemplate } from '@bfc/shared';
+import { Toolbar } from '@bfc/ui-shared';
 
 import { RecentBotList } from '../../src/pages/home/RecentBotList';
 import { ExampleList } from '../../src/pages/home/ExampleList';
 import { renderWithRecoil } from '../testUtils';
-import { Toolbar } from '../../src/components/Toolbar';
+
 describe('<Home/>', () => {
   it('should dispatch onSelectionChanged event when clicked on a link on <RecentBotList>', () => {
     const recentProjects = [
