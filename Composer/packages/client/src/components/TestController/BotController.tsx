@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React, { useMemo } from 'react';
-import { DefaultButton } from 'office-ui-fabric-react/lib/components/Button';
+import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
@@ -32,7 +32,7 @@ const BotController: React.FC = () => {
 
   const buttonText = useMemo(() => {
     if (running) {
-      return formatMessage('Stop all bots ({running}/{total}) running', {
+      return formatMessage('Stop all bots ({running}/{total} running)', {
         running: runningBots.projectIds.length,
         total: runningBots.totalBots,
       });

@@ -15,14 +15,13 @@ import { useLocalBotOperations } from './useLocalBotOperations';
 
 interface LocalBotRuntimeProps {
   projectId: string;
-  displayName: string;
 }
 
 const loadingSpinnerStyle = css`
-  margin-right: 12px;
+  margin-left: 8px;
 `;
 
-export const LocalBotRuntime: React.FC<LocalBotRuntimeProps> = ({ projectId, displayName }) => {
+export const LocalBotRuntime: React.FC<LocalBotRuntimeProps> = ({ projectId }) => {
   const currentBotStatus = useRecoilValue(botStatusState(projectId));
   const { startSingleBot, stopSingleBot } = useLocalBotOperations();
 

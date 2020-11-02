@@ -102,7 +102,6 @@ export type ProjectContextApi = {
   updateDialogSchema: (_: DialogSchemaFile) => Promise<void>;
   createTrigger: (id: string, formData, autoSelected?: boolean) => void;
   createQnATrigger: (id: string) => void;
-  updateSkillSetting: (skillId: string, skillsData: SkillSetting) => Promise<void>;
   updateFlowZoomRate: (currentRate: number) => void;
   updateSkill: (skillId: string, skillsData: { skill: Skill; selectedEndpointIndex: number }) => Promise<void>;
 };

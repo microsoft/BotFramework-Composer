@@ -38,8 +38,8 @@ const tableColumns: IColumn[] = [
     maxWidth: 20,
     fieldName: 'control',
     isRowHeader: false,
-    onRender: ({ displayName, projectId }) => {
-      return <LocalBotRuntime displayName={displayName} projectId={projectId} />;
+    onRender: ({ projectId }) => {
+      return <LocalBotRuntime projectId={projectId} />;
     },
   },
   {
