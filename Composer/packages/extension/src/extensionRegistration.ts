@@ -5,7 +5,14 @@ import path from 'path';
 
 import { RequestHandler } from 'express-serve-static-core';
 import { Debugger } from 'debug';
-import { PublishPlugin, RuntimeTemplate, BotTemplate, IExtensionContext } from '@botframework-composer/types';
+import {
+  PublishPlugin,
+  RuntimeTemplate,
+  BotTemplate,
+  IExtensionContext,
+  UserIdentity,
+  IBotProject,
+} from '@botframework-composer/types';
 import { PassportStatic } from 'passport';
 
 import log from './logger';
