@@ -3,28 +3,94 @@
 
 /** @jsx jsx */
 import React, { Fragment, useState, useCallback, useEffect } from 'react';
-import { jsx } from '@emotion/core';
+import { jsx, css } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
 import { PublishTarget } from '@bfc/shared';
 import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
-import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
+import { DialogType } from 'office-ui-fabric-react/lib/Dialog';
+import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 
-import { dispatcherState, settingsState, botDisplayNameState, publishTypesState } from '../../recoilModel';
+import { DialogWrapper, DialogTypes } from '../../components/DialogWrapper';
+import { dispatcherState, settingsState, publishTypesState } from '../../recoilModel';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 import { CreatePublishTarget } from '../publish/createPublishTarget';
 
-import {
-  titleStyle,
-  publishTargetsContainer,
-  publishTargetsHeader,
-  publishTargetsHeaderText,
-  publishTargetsItem,
-  publishTargetsItemText,
-  publishTargetsEditButton,
-  editPublishProfile,
-  addPublishProfile,
-} from './styles';
+// -------------------- Styles -------------------- //
+
+const titleStyle = css`
+  font-size: ${FontSizes.medium};
+  font-weight: ${FontWeights.semibold};
+  margin-left: 22px;
+  margin-top: 6px;
+`;
+
+const publishTargetsContainer = css`
+  display: flex;
+  flex-direction: column;
+`;
+
+const publishTargetsHeader = css`
+  display: flex;
+  flex-direction: row;
+  height: 42px;
+`;
+
+const publishTargetsHeaderText = css`
+  width: 200px;
+  font-size: ${FontSizes.medium};
+  font-weight: ${FontWeights.semibold};
+  border-bottom: 1px solid ${NeutralColors.gray30};
+  padding-top: 10px;
+  padding-left: 10px;
+`;
+
+const publishTargetsItem = css`
+  display: flex;
+  flex-direction: row;
+  height: 42px;
+`;
+
+const publishTargetsItemText = css`
+  width: 200px;
+  font-size: ${FontSizes.medium};
+  font-weight: ${FontWeights.regular};
+  border-bottom: 1px solid ${NeutralColors.gray30};
+  padding-top: 10px;
+  padding-left: 10px;
+`;
+
+const addPublishProfile = {
+  root: {
+    fontSize: 12,
+    fontWeight: FontWeights.regular,
+    color: SharedColors.cyanBlue10,
+    paddingLeft: 0,
+    marginLeft: 5,
+  },
+};
+
+const editPublishProfile = {
+  root: {
+    fontSize: 12,
+    fontWeight: FontWeights.regular,
+    color: SharedColors.cyanBlue10,
+    paddingLeft: 0,
+    paddingBottom: 5,
+  },
+};
+
+const publishTargetsEditButton = css`
+  width: 200px;
+  font-size: ${FontSizes.medium};
+  font-weight: ${FontWeights.regular};
+  border-bottom: 1px solid ${NeutralColors.gray30};
+  padding-top: 3px;
+  padding-left: 10px;
+`;
+
+// -------------------- PublishTargets -------------------- //
 
 type PublishTargetsProps = {
   projectId: string;
@@ -35,7 +101,6 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
   const { publishTargets } = useRecoilValue(settingsState(projectId));
   const { getPublishTargetTypes, setPublishTargets } = useRecoilValue(dispatcherState);
   const publishTypes = useRecoilValue(publishTypesState(projectId));
-  const botName = useRecoilValue(botDisplayNameState(projectId));
   const [editTarget, setEditTarget] = useState<{ index: number; item: PublishTarget } | null>(null);
   const [editDialogProps, setEditDialogProps] = useState({
     title: formatMessage('Title'),
@@ -52,11 +117,14 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
   const [addDialogHidden, setAddDialogHidden] = useState(true);
   const [editDialogHidden, setEditDialogHidden] = useState(true);
 
-  const onEdit = async (index: number, item: PublishTarget) => {
-    const newItem = { item: item, index: index };
-    setEditTarget(newItem);
-    setEditDialogHidden(false);
-  };
+  const onEdit = useCallback(
+    async (index: number, item: PublishTarget) => {
+      const newItem = { item: item, index: index };
+      setEditTarget(newItem);
+      setEditDialogHidden(false);
+    },
+    [publishTargets]
+  );
 
   const updatePublishTarget = useCallback(
     async (name: string, type: string, configuration: string) => {
@@ -74,7 +142,7 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
 
       await setPublishTargets(targets, projectId);
     },
-    [publishTargets, projectId, botName, editTarget]
+    [publishTargets, projectId, editTarget]
   );
 
   const savePublishTarget = useCallback(
@@ -82,7 +150,7 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
       const targets = [...(publishTargets || []), { name, type, configuration }];
       await setPublishTargets(targets, projectId);
     },
-    [publishTargets, projectId, botName]
+    [publishTargets, projectId]
   );
 
   useEffect(() => {
@@ -109,7 +177,7 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
         <CreatePublishTarget
           closeDialog={() => setEditDialogHidden(true)}
           current={editTarget ? editTarget.item : null}
-          targets={(publishTargets || []).filter((item) => editTarget && item.name != editTarget.item.name)}
+          targets={(publishTargets || []).filter((item) => editTarget && item.name !== editTarget.item.name)}
           types={publishTypes}
           updateSettings={updatePublishTarget}
         />
@@ -154,24 +222,24 @@ export const PublishTargets: React.FC<PublishTargetsProps> = (props) => {
           </ActionButton>
         </div>
       </CollapsableWrapper>
-      <Dialog
-        dialogContentProps={dialogProps}
-        hidden={addDialogHidden}
+      <DialogWrapper
+        dialogType={DialogTypes.Customer}
+        isOpen={!addDialogHidden}
         minWidth={450}
-        modalProps={{ isBlocking: true }}
+        title={dialogProps.title}
         onDismiss={() => setAddDialogHidden(true)}
       >
         {dialogProps.children}
-      </Dialog>
-      <Dialog
-        dialogContentProps={editDialogProps}
-        hidden={editDialogHidden}
+      </DialogWrapper>
+      <DialogWrapper
+        dialogType={DialogTypes.Customer}
+        isOpen={!editDialogHidden}
         minWidth={450}
-        modalProps={{ isBlocking: true }}
+        title={editDialogProps.title}
         onDismiss={() => setEditDialogHidden(true)}
       >
         {editDialogProps.children}
-      </Dialog>
+      </DialogWrapper>
     </Fragment>
   );
 };

@@ -65,10 +65,10 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
   useEffect(() => {
     // check the status of the boilerplate material and see if it requires an update
     if (projectId) getBoilerplateVersion(projectId);
-  }, []);
+  }, [projectId]);
 
   useEffect(() => {
-    setNeedsUpdate(boilerplateVersion.updateRequired || false);
+    setNeedsUpdate(!!boilerplateVersion.updateRequired);
   }, [boilerplateVersion.updateRequired]);
 
   useEffect(() => {
@@ -78,7 +78,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
     }
   }, [ejectedRuntimeExists, templateKey]);
 
-  const handleChangeToggle = (_, isOn = false) => {
+  const toggleCustomRuntime = (_, isOn = false) => {
     setCustomRuntime(projectId, isOn);
   };
 
@@ -105,13 +105,13 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
     </div>
   );
 
-  const toggle = () => (
+  const toggleOfCustomRuntime = () => (
     <div css={runtimeToggle}>
       <Toggle
         inlineLabel
         checked={settings.runtime?.customRuntime}
         label={formatMessage('Use custom runtime')}
-        onChange={handleChangeToggle}
+        onChange={toggleCustomRuntime}
       />
     </div>
   );
@@ -178,7 +178,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
   return botName ? (
     <div css={runtimeSettingsStyle}>
       {header()}
-      {toggle()}
+      {toggleOfCustomRuntime()}
       <div>
         <TextField
           required
@@ -232,8 +232,8 @@ export const RuntimeSettings: React.FC<RouteComponentProps<{ projectId: string }
           </DefaultButton>
         </div>
       )}
-      <WorkingModal hidden={!ejecting} title={formatMessage('Ejecting runtime...')} />
-      <EjectModal closeModal={closeEjectModal} ejectRuntime={callEjectRuntime} hidden={!ejectModalVisible} />
+      <WorkingModal isOpen={ejecting} title={formatMessage('Ejecting runtime...')} />
+      <EjectModal ejectRuntime={callEjectRuntime} hidden={!ejectModalVisible} onDismiss={closeEjectModal} />
     </div>
   ) : (
     <LoadingSpinner />

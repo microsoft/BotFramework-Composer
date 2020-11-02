@@ -3,17 +3,52 @@
 
 /** @jsx jsx */
 import React from 'react';
-import { jsx } from '@emotion/core';
+import { jsx, css } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
+import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { SharedColors } from '@uifabric/fluent-theme';
 
 import { dispatcherState, settingsState } from '../../recoilModel';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 
-import { labelContainer, customerLabel, unknownIconStyle, titleStyle } from './styles';
+// -------------------- Styles -------------------- //
+
+const titleStyle = css`
+  font-size: ${FontSizes.medium};
+  font-weight: ${FontWeights.semibold};
+  margin-left: 22px;
+  margin-top: 6px;
+`;
+
+const labelContainer = css`
+  display: flex;
+  flex-direction: row;
+`;
+
+const customerLabel = css`
+  font-size: ${FontSizes.small};
+  margin-right: 5px;
+`;
+
+const unknownIconStyle = (required) => {
+  return {
+    root: {
+      selectors: {
+        '&::before': {
+          content: required ? " '*'" : '',
+          color: SharedColors.red10,
+          paddingRight: 3,
+        },
+      },
+    },
+  };
+};
+
+// -------------------- SkillHostEndPoint -------------------- //
 
 type SkillHostEndPointProps = {
   projectId: string;
@@ -35,6 +70,7 @@ export const SkillHostEndPoint: React.FC<SkillHostEndPointProps> = (props) => {
   const { setSettings } = useRecoilValue(dispatcherState);
   const settings = useRecoilValue(settingsState(projectId));
   const { skillHostEndpoint } = useRecoilValue(settingsState(projectId));
+
   return (
     <CollapsableWrapper title={formatMessage('Skill host endpoint')} titleStyle={titleStyle}>
       <TextField

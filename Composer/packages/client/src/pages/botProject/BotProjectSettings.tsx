@@ -2,13 +2,16 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx, css } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
 import React, { useMemo, useState, Suspense } from 'react';
 import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
 import { JsonEditor } from '@bfc/code-editor';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
+import { DialogSetting } from '@bfc/shared';
+import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { NeutralColors } from '@uifabric/fluent-theme';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { INavTreeItem } from '../../components/NavTree';
@@ -19,14 +22,40 @@ import { botProjectSpaceSelector, rootBotProjectIdSelector } from '../../recoilM
 import { navigateTo } from '../../utils/navigation';
 
 import BotProjectSettingsTableView from './BotProjectSettingsTableView';
-import { header, container, botNameStyle, mainContentHeader } from './styles';
 
-type BotProjectSettingsProps = {
-  projectId?: string;
-  skillId?: string;
-} & RouteComponentProps<{}>;
+// -------------------- Styles -------------------- //
 
-const BotProjectSettings: React.FC<BotProjectSettingsProps> = (props) => {
+const header = css`
+  padding: 5px 20px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  justify-content: space-between;
+  label: PageHeader;
+`;
+
+const container = css`
+  display: flex;
+  flex-direction: column;
+  max-width: 1000px;
+  height: 100%;
+`;
+
+const botNameStyle = css`
+  font-size: ${FontSizes.xLarge};
+  font-weight: ${FontWeights.semibold};
+  color: ${NeutralColors.black};
+`;
+
+const mainContentHeader = css`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+`;
+
+// -------------------- BotProjectSettings -------------------- //
+
+const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skillId: string }>> = (props) => {
   const botProjectsMetaData = useRecoilValue(botProjectSpaceSelector);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
   const userSettings = useRecoilValue(userSettingsState);
@@ -34,10 +63,6 @@ const BotProjectSettings: React.FC<BotProjectSettingsProps> = (props) => {
   const schemas = useRecoilValue(schemasState(projectId));
   const botProject = botProjectsMetaData.find((b) => b.projectId === projectId);
 
-  //Page will crash if navigating to a skill bot but it is not opened
-  if (!botProject) {
-    navigateTo(`/bot/${rootBotProjectId}/botProjectsSettings/root`);
-  }
   const isRootBot = !!botProject?.isRootBot;
   const botName = botProject?.name;
   const settings = useRecoilValue(settingsState(projectId));
@@ -67,13 +92,14 @@ const BotProjectSettings: React.FC<BotProjectSettingsProps> = (props) => {
     }
     return newbotProjectLinks;
   }, [botProjectsMetaData]);
+
   const onRenderHeaderContent = () => {
     return formatMessage(
       'This Page contains detailed information about your bot. For security reasons, they are hidden by default. To test your bot or publish to Azure, you may need to provide these settings'
     );
   };
 
-  const saveChangeResult = (result) => {
+  const saveChangeResult = (result: DialogSetting) => {
     try {
       setSettings(projectId, result);
     } catch (err) {
@@ -88,6 +114,12 @@ const BotProjectSettings: React.FC<BotProjectSettingsProps> = (props) => {
       saveChangeResult(result);
     }
   };
+
+  if (!botProject) {
+    navigateTo(`/bot/${rootBotProjectId}/botProjectsSettings/root`);
+    return null;
+  }
+
   return (
     <Page
       data-testid="BotProjectsSettings"
@@ -114,7 +146,7 @@ const BotProjectSettings: React.FC<BotProjectSettingsProps> = (props) => {
               onChange={() => setAdvancedSettingsEnabled(!isAdvancedSettingsEnabled)}
             />
           </div>
-          {isAdvancedSettingsEnabled && (
+          {isAdvancedSettingsEnabled ? (
             <JsonEditor
               key={'settingsjson'}
               editorSettings={userSettings.codeEditor}
@@ -123,8 +155,7 @@ const BotProjectSettings: React.FC<BotProjectSettingsProps> = (props) => {
               value={settings}
               onChange={handleChange}
             />
-          )}
-          {!isAdvancedSettingsEnabled && (
+          ) : (
             <BotProjectSettingsTableView hasSkills={botProjectsMetaData.length > 1} projectId={projectId} />
           )}
         </div>
