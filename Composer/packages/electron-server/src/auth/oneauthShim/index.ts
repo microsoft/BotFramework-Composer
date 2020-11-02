@@ -15,5 +15,7 @@ export const oneauthShim = ({
   AuthParameters() {},
   AuthResult() {},
   Account() {},
+  Status() {},
+  acquireCredentialInteractively() {},
 } as unknown) as typeof OneAuth;
 export default oneauthShim;
