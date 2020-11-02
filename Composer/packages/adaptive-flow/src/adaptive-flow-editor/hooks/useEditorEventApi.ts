@@ -3,7 +3,6 @@
 
 import { DialogUtils, SDKKinds, ShellApi, registerEditorAPI } from '@bfc/shared';
 import get from 'lodash/get';
-import { useDialogApi } from '@bfc/extension-client';
 
 // TODO: leak of visual-sdk domain (designerCache)
 import { designerCache } from '../../adaptive-flow-renderer/utils/visual/DesignerCache';
@@ -24,7 +23,7 @@ export const useEditorEventApi = (
   state: { path: string; data: any; nodeContext: NodeRendererContextValue; selectionContext: SelectionContextData },
   shellApi: ShellApi
 ) => {
-  const { actionsContainLuIntent } = shellApi;
+  const { actionsContainLuIntent, getDialog, saveDialog, createDialog } = shellApi;
   const {
     insertAction,
     insertActions,
@@ -37,7 +36,6 @@ export const useEditorEventApi = (
     enableSelectedActions,
     updateRecognizer,
   } = useDialogEditApi(shellApi);
-  const { createDialog, readDialog, updateDialog } = useDialogApi(shellApi);
   const { path, data, nodeContext, selectionContext } = state;
   const { focusedId, focusedTab, focusedEvent, clipboardActions, dialogFactory } = nodeContext;
   const { selectedIds, setSelectedIds, selectableElements } = selectionContext;
@@ -227,7 +225,7 @@ export const useEditorEventApi = (
           // Create target dialog
           const newDialogId = await createDialog();
           if (!newDialogId) return;
-          let newDialogData = readDialog(newDialogId);
+          let newDialogData = getDialog(newDialogId);
 
           // Using copy->paste->delete pattern is safer than using cut->paste
           const actionsToBeMoved = await copySelectedActions(path, data, actionIds);
@@ -242,7 +240,7 @@ export const useEditorEventApi = (
             // auto assign recognizer type to lu
             newDialogData = updateRecognizer(path, newDialogData, `${newDialogId}.lu`);
           }
-          updateDialog(newDialogId, newDialogData);
+          saveDialog(newDialogId, newDialogData);
 
           // Delete moved actions
           const deleteResult = deleteSelectedActions(path, data, actionIds);

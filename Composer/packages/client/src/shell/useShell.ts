@@ -203,7 +203,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     onFocusSteps: focusSteps,
     onSelect: setVisualEditorSelection,
     onCopy: setVisualEditorClipboard,
-    createDialog: (actionsSeed) => {
+    createDialog: (actionsSeed = []) => {
       return new Promise((resolve) => {
         createDialogBegin(
           actionsSeed,
