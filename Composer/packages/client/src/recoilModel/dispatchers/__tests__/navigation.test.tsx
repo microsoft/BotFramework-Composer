@@ -28,8 +28,8 @@ const mockCreateSelectedPath = createSelectedPath as jest.Mock<string>;
 const projectId = '12345.678';
 const skillId = '98765.4321';
 
-function expectNavTo(location: string, state: {} | null = null) {
-  expect(mockNavigateTo).toHaveBeenLastCalledWith(location, state == null ? expect.anything() : state);
+function expectNavTo(location: string) {
+  expect(mockNavigateTo).toHaveBeenLastCalledWith(location);
 }
 
 describe('navigation dispatcher', () => {
@@ -115,12 +115,7 @@ describe('navigation dispatcher', () => {
         });
       });
       expect(renderedComponent.current.focusPath).toEqual('dialogId#');
-      expect(renderedComponent.current.breadcrumb).toHaveLength(1);
-      expect(renderedComponent.current.breadcrumb[0]).toEqual({
-        dialogId: 'dialogId',
-        focused: '',
-        selected: '',
-      });
+
       expect(renderedComponent.current.designPageLocation).toEqual({
         dialogId: 'dialogId',
         promptTab: undefined,
@@ -138,12 +133,7 @@ describe('navigation dispatcher', () => {
         });
       });
       expect(renderedComponent.current.focusPath).toEqual('dialogId#.select');
-      expect(renderedComponent.current.breadcrumb).toHaveLength(1);
-      expect(renderedComponent.current.breadcrumb[0]).toEqual({
-        dialogId: 'dialogId',
-        focused: '',
-        selected: 'select',
-      });
+
       expect(renderedComponent.current.designPageLocation).toEqual({
         dialogId: 'dialogId',
         promptTab: undefined,
@@ -162,12 +152,7 @@ describe('navigation dispatcher', () => {
         });
       });
       expect(renderedComponent.current.focusPath).toEqual('dialogId#.focus');
-      expect(renderedComponent.current.breadcrumb).toHaveLength(1);
-      expect(renderedComponent.current.breadcrumb[0]).toEqual({
-        dialogId: 'dialogId',
-        focused: 'focus',
-        selected: 'select',
-      });
+
       expect(renderedComponent.current.designPageLocation).toEqual({
         dialogId: 'dialogId',
         promptTab: undefined,
