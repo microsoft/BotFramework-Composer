@@ -3,10 +3,10 @@
 
 import { PluginType } from '../types/pluginType';
 
-type HookContext = 'project' | 'dialog';
+type HookContext = 'project' | 'dialog' | 'lg';
 
 const pluginTypeToContextMap: { [key in PluginType]: HookContext[] } = {
-  page: ['project', 'dialog'],
+  page: ['project', 'dialog', 'lg'],
   publish: [],
   storage: ['project'],
   create: [],
