@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { ElectronContext, useElectronContext } from '../utility/electronContext';
 import { isElectron } from '../utility/isElectron';
 import logger from '../logger';
@@ -32,7 +35,7 @@ type OAuthConfig = {
 
 class ElectronAuthProvider extends AuthProvider {
   private _electronContext: ElectronContext | undefined;
-  private tokenRefreshFactor: number = 0.75; // refresh the token after 75% of the expiry time has passed
+  private tokenRefreshFactor = 0.75; // refresh the token after 75% of the expiry time has passed
   private tokenCache: TokenCache;
 
   constructor(config: OAuthConfig) {
@@ -114,7 +117,7 @@ class ElectronAuthProvider extends AuthProvider {
     const { getAccessTokenSilently } = this.electronContext;
     const { targetResource } = options;
     const cachedToken = this.tokenCache[this.getTokenHash(options)];
-    if (!!cachedToken) {
+    if (cachedToken) {
       const { accessToken, acquiredAt, expiryTime } = await getAccessTokenSilently({ target: targetResource });
       this.cacheTokens({ accessToken, acquiredAt, expiryTime }, options);
       log('Access token refreshed.');

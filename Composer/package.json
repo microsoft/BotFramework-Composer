@@ -5,7 +5,7 @@
   "resolutions": {
     "@babel/parser": "^7.11.3",
     "@types/react": "16.9.23",
-    "bl": "^2.2.1",
+    "bl": "^4.0.3",
     "elliptic": "^6.5.3",
     "kind-of": "^6.0.3",
     "lodash": "^4.17.12",

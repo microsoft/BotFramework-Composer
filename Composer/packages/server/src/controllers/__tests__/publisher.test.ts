@@ -1,17 +1,29 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import path from 'path';
-
 import { Request, Response } from 'express';
 import rimraf from 'rimraf';
-import { ExtensionManager } from '@bfc/extension';
 
 import { BotProjectService } from '../../services/project';
 import { Path } from '../../utility/path';
 import { PublishController } from '../../controllers/publisher';
 
-const pluginDir = path.resolve(__dirname, '../../../../../../extensions');
+jest.mock('@bfc/extension', () => {
+  return {
+    ExtensionContext: {
+      extensions: {
+        botTemplates: [],
+        baseTemplates: [],
+        runtimeTemplates: [],
+        publish: {
+          azureplugin: { plugin: { name: 'azure' }, methods: {} },
+          default: { plugin: { name: 'defalut' }, methods: {} },
+        },
+      },
+      getUserFromRequest: jest.fn(),
+    },
+  };
+});
 
 let mockRes: Response;
 
@@ -38,10 +50,6 @@ beforeEach(async () => {
   const currentProjectId = await BotProjectService.openProject(location1);
   const currentProject = await BotProjectService.getProjectById(currentProjectId);
   await BotProjectService.saveProjectAs(currentProject, location2);
-});
-
-beforeAll(async () => {
-  await ExtensionManager.loadFromDir(pluginDir, true);
 });
 
 afterEach(() => {

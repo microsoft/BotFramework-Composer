@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { app } from 'electron';
 import { AadConfiguration, AppConfiguration, AuthParameters, AuthScheme } from 'oneauth-win64';
 

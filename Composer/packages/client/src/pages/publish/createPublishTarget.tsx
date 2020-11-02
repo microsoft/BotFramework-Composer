@@ -18,7 +18,7 @@ import { PublishProfileDialog } from '../../constants';
 // import { IPersonaSharedProps, Persona, PersonaSize } from 'office-ui-fabric-react/lib/Persona';
 // import { Link } from 'office-ui-fabric-react/lib/Link';
 import { PublishType } from '../../recoilModel/types';
-import { userSettingsState, currentProjectIdState, currentUserState } from '../../recoilModel';
+import { userSettingsState, currentProjectIdState } from '../../recoilModel';
 import { PluginAPI } from '../../plugins/api';
 import { PluginHost } from '../../components/PluginHost/PluginHost';
 import { dispatcherState } from '../../recoilModel';

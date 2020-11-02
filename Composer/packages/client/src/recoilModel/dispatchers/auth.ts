@@ -3,7 +3,7 @@
 // Licensed under the MIT License.
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 
-import { grahpTokenState, currentUserState } from '../atoms/appState';
+// import { grahpTokenState, currentUserState } from '../atoms/appState';
 import { setAccessToken, setGraphToken, getAccessTokenInCache, getGraphTokenInCache } from '../../utils/auth';
 
 import httpClient from './../../utils/httpUtil';
