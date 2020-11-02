@@ -81,10 +81,10 @@ describe('createCrossTrainConfig', () => {
       { id: 'dia6.en-us' },
     ];
     const config = createCrossTrainConfig(dialogs as DialogInfo[], luFiles as LuFile[], ['en-us']);
-    expect(config['main.en-us.lu'].rootDialog).toBeTruthy();
-    expect(config['main.en-us.lu'].triggers.dia1_trigger[0]).toEqual('dia1.en-us.lu');
-    expect(config['main.en-us.lu'].triggers.no_dialog.length).toEqual(0);
-    expect(config['main.en-us.lu'].triggers.dia2_trigger[0]).toEqual('dia2.en-us.lu');
-    expect(config['main.en-us.lu'].triggers.dias_trigger.length).toBe(2);
+    expect(config['main.en-us'].rootDialog).toBeTruthy();
+    expect(config['main.en-us'].triggers.dia1_trigger[0]).toEqual('dia1.en-us');
+    expect(config['main.en-us'].triggers.no_dialog.length).toEqual(0);
+    expect(config['main.en-us'].triggers.dia2_trigger[0]).toEqual('dia2.en-us');
+    expect(config['main.en-us'].triggers.dias_trigger.length).toBe(2);
   });
 });
