@@ -7,6 +7,18 @@ const botName = 'Mybot';
 const defaultLocale = 'en-us';
 
 describe('Bot structure file path', () => {
+  // cross-train config
+  it('should get entry cross-train config file path', async () => {
+    const targetPath = defaultFilePath(botName, defaultLocale, 'cross-train.config.json');
+    expect(targetPath).toEqual('settings/cross-train.config.json');
+  });
+
+  // recognizer
+  it('should get entry recognizer file path', async () => {
+    const targetPath = defaultFilePath(botName, defaultLocale, 'test.lu.qna.dialog');
+    expect(targetPath).toEqual('dialogs/test/recognizers/test.lu.qna.dialog');
+  });
+
   // entry dialog
   it('should get entry <botName>.dialog file path', async () => {
     const targetPath = defaultFilePath(botName, defaultLocale, 'mybot.dialog');

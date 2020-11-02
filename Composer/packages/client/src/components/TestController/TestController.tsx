@@ -9,7 +9,6 @@ import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 import { IConfig, IPublishConfig, defaultPublishConfig } from '@bfc/shared';
-import { useRecognizerConfig } from '@bfc/extension-client';
 
 import {
   botEndpointsState,
@@ -68,7 +67,6 @@ export const TestController: React.FC<{ projectId: string }> = (props) => {
   const settings = useRecoilValue(settingsState(projectId));
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   const botLoadErrorMsg = useRecoilValue(botLoadErrorState(projectId));
-  const { recognizers } = useRecognizerConfig();
 
   const botEndpoints = useRecoilValue(botEndpointsState);
   const {
@@ -158,18 +156,13 @@ export const TestController: React.FC<{ projectId: string }> = (props) => {
     setBotStatus(BotStatus.publishing, projectId);
     dismissDialog();
     const { luis, qna } = config;
-    const recognizerTypes = dialogs.reduce((result, file) => {
-      const recognizer = recognizers.filter((r) => r.isSelected && r.isSelected(file.content.recognizer));
-      result[file.id] = recognizer[0]?.id || '';
-      return result;
-    }, {});
 
     await setSettings(projectId, {
       ...settings,
       luis: luis,
       qna: Object.assign({}, settings.qna, qna),
     });
-    await build(luis, qna, recognizerTypes, projectId);
+    await build(luis, qna, projectId);
   }
 
   async function handleLoadBot() {
