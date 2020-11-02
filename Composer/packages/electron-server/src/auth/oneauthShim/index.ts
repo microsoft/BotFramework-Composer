@@ -13,5 +13,7 @@ export const oneauthShim = ({
   AppConfiguration() {},
   AadConfiguration() {},
   AuthParameters() {},
+  AuthResult() {},
+  Account() {},
 } as unknown) as typeof OneAuth;
 export default oneauthShim;

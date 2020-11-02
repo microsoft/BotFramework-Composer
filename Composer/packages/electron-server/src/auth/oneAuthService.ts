@@ -21,20 +21,18 @@ const COMPOSER_CLIENT_ID = 'ce48853e-0605-4f77-8746-d70ac63cc6bc';
 const COMPOSER_REDIRECT_URI = 'ms-appx-web://Microsoft.AAD.BrokerPlugin/ce48853e-0605-4f77-8746-d70ac63cc6bc';
 const GRAPH_RESOURCE = 'https://graph.microsoft.com';
 const DEFAULT_LOCALE = 'en'; // TODO: get this from settings?
-const DEFAULT_AUTH_SCHEME = 2; //oneAuth.AuthScheme.Bearer; // bearer token
+const DEFAULT_AUTH_SCHEME = 2; // bearer token
 const DEFAULT_AUTH_AUTHORITY = 'https://login.microsoftonline.com/common'; // work and school accounts
 
 // TODO: share this type with ElectronContext
-interface PartialAuthParamaters {
-  realm: string;
+type AuthParamOptions = {
   target: string;
-}
-
-type AuthParamOptions = Partial<PartialAuthParamaters>;
+};
 
 class OneAuthInstance {
   private initialized: boolean;
   private _oneAuth: typeof OneAuth | null = null; //eslint-disable-line
+  private signedInAccount: OneAuth.Account | undefined;
 
   constructor() {
     // will wait until called to initialize (so that we're sure we have a browser window)
@@ -75,29 +73,38 @@ class OneAuthInstance {
       this.initialized = true;
       log('Service initialized.');
     } else {
-      log('Electron window did not at time of initialization.');
+      log('Electron window did exist not at time of initialization.');
     }
   }
 
   public async getAccessToken(
     options?: AuthParamOptions
   ): Promise<{ accessToken: string; acquiredAt: number; expiryTime: number }> {
-    if (!this.initialized) {
-      this.initialize();
-    }
-    log('Getting access token...');
-    let params;
-    if (options) {
-      params = new this.oneAuth.AuthParameters(
+    try {
+      if (!this.initialized) {
+        this.initialize();
+      }
+      log('Getting access token...');
+      if (!options?.target) {
+        throw 'Target resource required to get access token.';
+      }
+      if (!this.signedInAccount) {
+        // we need to sign in
+        log('No signed in account found. Signing user in before getting access token.');
+        await this.signIn();
+      }
+      if (!this.signedInAccount?.id) {
+        throw 'Signed in account does not have an id.';
+      }
+      // use the signed in account to acquire a token
+      const params = new this.oneAuth.AuthParameters(
         DEFAULT_AUTH_SCHEME,
         DEFAULT_AUTH_AUTHORITY,
-        options.target || GRAPH_RESOURCE,
-        options.realm || '',
+        options.target,
+        this.signedInAccount.realm,
         ''
       );
-    }
-    try {
-      const result = await this.oneAuth.signInInteractively('', params, '' /* TODO: generate correlation id? */);
+      const result = await this.oneAuth.acquireCredentialSilently(this.signedInAccount?.id, params, '');
       if (result.credential && result.credential.value) {
         log('Acquired access token. %s', result.credential.value);
         return {
@@ -117,48 +124,34 @@ class OneAuthInstance {
     }
   }
 
-  public async getAccessTokenSilently(
-    options?: AuthParamOptions
-  ): Promise<{ accessToken: string; acquiredAt: number; expiryTime: number }> {
-    if (!this.initialized) {
-      this.initialize();
-    }
-    log('Getting access token silently...');
-    let params;
-    if (options) {
-      params = new this.oneAuth.AuthParameters(
-        DEFAULT_AUTH_SCHEME,
-        DEFAULT_AUTH_AUTHORITY,
-        options.target || GRAPH_RESOURCE,
-        options.realm || '',
-        ''
-      );
-    }
-    try {
-      const result = await this.oneAuth.signInSilently(params, '' /* TODO: generate correlation id? */);
-      if (result?.credential?.value) {
-        log('Acquired access token silently. %s', result.credential.value);
-        return {
-          accessToken: result.credential.value,
-          acquiredAt: Date.now(),
-          expiryTime: result.credential.expiresOn,
-        };
-      }
-      if (result?.error) {
-        // TODO: better error handling
-        throw result.error;
-      }
-      throw 'Could not acquire an access token silently.';
-    } catch (e) {
-      log('Error while trying to get an access token silently: %O', e);
-      throw e;
-    }
-  }
-
   public shutdown() {
     log('Shutting down...');
     this.oneAuth.shutdown();
     log('Shut down.');
+  }
+
+  /**
+   * Clears the account saved in memory.
+   */
+  public signOut() {
+    log('Signing out user...');
+    this.signedInAccount = undefined;
+    log('Signed out user.');
+  }
+
+  /**
+   * Sign the user in and save the account in memory.
+   */
+  private async signIn(): Promise<void> {
+    try {
+      log('Signing in...');
+      const result: OneAuth.AuthResult = await this.oneAuth.signInInteractively('', undefined, '');
+      this.signedInAccount = result.account;
+      log('Signed in successfully. Got account: %O', result.account);
+    } catch (e) {
+      log('There was an error trying to sign in: %O', e);
+      throw e;
+    }
   }
 
   private get oneAuth() {
