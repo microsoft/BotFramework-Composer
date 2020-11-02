@@ -87,7 +87,7 @@ const compile = (name, extPath) => {
 
   console.log('[%s] compiling', name);
   console.log('[%s] yarn install', name);
-  execSync('yarn --force --production=false', { cwd: extPath, stdio: 'inherit' });
+  execSync('yarn --force --production=false --frozen-lockfile', { cwd: extPath, stdio: 'inherit' });
 
   if (hasBuild) {
     console.log('[%s] yarn build', name);
@@ -95,6 +95,9 @@ const compile = (name, extPath) => {
   } else {
     console.log('[%s] no build script found.', name);
   }
+
+  console.log('[%s] Cleaning development dependencies.', name);
+  execSync('yarn --force --production=true --frozen-lockfile', { cwd: extPath, stdio: 'inherit' });
 };
 
 checkComposerLibs();
@@ -108,7 +111,7 @@ for (const entry of allExtensions) {
     if (!fs.existsSync(packageJSONPath)) {
       console.warn(`Ignore directory ${extPath} which is not a npm module.`);
       continue;
-    };
+    }
 
     const packageJSON = JSON.parse(fs.readFileSync(packageJSONPath));
     const lastModified = getLastModified(extPath);
