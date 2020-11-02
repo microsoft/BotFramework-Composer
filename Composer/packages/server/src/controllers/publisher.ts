@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 import merge from 'lodash/merge';
-import { ExtensionContext } from '@bfc/extension';
 import { defaultPublishConfig } from '@bfc/shared';
 
+import { ExtensionContext } from '../models/extension/extensionContext';
 import { BotProjectService } from '../services/project';
 
 export const PublishController = {

@@ -9,16 +9,17 @@ import {
   UserIdentity,
   ExtensionCollection,
   RuntimeTemplate,
-  BotProjectService,
   IBotProject,
+  IExtensionContext,
 } from '@botframework-composer/types';
+
+import { BotProjectService } from '../../services/project';
 
 export const DEFAULT_RUNTIME = 'csharp-azurewebapp';
 
-class ExtensionContext {
+class ExtensionContext implements IExtensionContext {
   private _passport: passport.PassportStatic;
   private _webserver: Express | undefined;
-  private _botprojectservice: BotProjectService | undefined;
   public loginUri = '/login';
 
   public extensions: ExtensionCollection;
@@ -46,7 +47,7 @@ class ExtensionContext {
   }
 
   public get botProjectService() {
-    return this._botprojectservice;
+    return BotProjectService;
   }
 
   // allow webserver to be set programmatically
@@ -71,13 +72,9 @@ class ExtensionContext {
     });
   }
 
-  public useBotProjectService(service: BotProjectService) {
-    this._botprojectservice = service;
-  }
-
   // get the runtime template currently used from project
-  public getRuntimeByProject(project): RuntimeTemplate {
-    const type = project.settings.runtime?.key || DEFAULT_RUNTIME;
+  public getRuntimeByProject(project: IBotProject): RuntimeTemplate {
+    const type = project.settings?.runtime?.key || DEFAULT_RUNTIME;
     const template = this.extensions.runtimeTemplates.find((t) => t.key === type);
     if (template) {
       return template;

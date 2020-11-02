@@ -6,6 +6,7 @@ export * from './dialogUtils';
 export * from './project';
 export * from './extension';
 export * from './indexers';
+export * from './project';
 export * from './publish';
 export * from './runtime';
 export * from './schema';

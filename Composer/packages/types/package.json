@@ -17,6 +17,7 @@
   "dependencies": {
     "@types/axios": "^0.14.0",
     "@types/express": "^4.16.1",
+    "@types/passport": "^1.0.4",
     "json-schema": "^0.2.5"
   },
   "devDependencies": {

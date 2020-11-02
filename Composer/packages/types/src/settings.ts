@@ -43,9 +43,9 @@ export type DialogSetting = {
   qna: IQnAConfig;
   publishTargets?: PublishTarget[];
   runtime: {
+    key: string;
     customRuntime: boolean;
     path: string;
-    key: string;
     command: string;
   };
   defaultLanguage: string;

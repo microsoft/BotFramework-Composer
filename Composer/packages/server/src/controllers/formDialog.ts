@@ -3,11 +3,11 @@
 
 import * as path from 'path';
 
-import { ExtensionContext } from '@bfc/extension';
 import { expandPropertyDefinition, schemas } from '@microsoft/bf-generate-library';
 import { Request, Response } from 'express';
 import * as fs from 'fs-extra';
 
+import { ExtensionContext } from '../models/extension/extensionContext';
 import { BotProjectService } from '../services/project';
 
 // If we are in electron, the env variable has the asar.unpacked path to the templates

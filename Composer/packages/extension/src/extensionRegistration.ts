@@ -5,28 +5,33 @@ import path from 'path';
 
 import { RequestHandler } from 'express-serve-static-core';
 import { Debugger } from 'debug';
-import { PublishPlugin, RuntimeTemplate, BotTemplate, IBotProject, UserIdentity } from '@botframework-composer/types';
+import {
+  PublishPlugin,
+  RuntimeTemplate,
+  BotTemplate,
+  IExtensionContext,
+  UserIdentity,
+  IBotProject,
+} from '@botframework-composer/types';
+import { PassportStatic } from 'passport';
 
 import log from './logger';
-import { ExtensionContext } from './extensionContext';
 import { Store } from './storage/store';
 
 export class ExtensionRegistration {
-  public context: typeof ExtensionContext;
   private _name: string;
   private _description: string;
   private _log: Debugger;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private _store: Store<any> | null = null;
 
-  constructor(context: typeof ExtensionContext, name: string, description: string) {
-    this.context = context;
+  constructor(public context: IExtensionContext, name: string, description: string) {
     this._name = name;
     this._description = description;
     this._log = log.extend(name);
   }
 
-  public get passport() {
+  public get passport(): PassportStatic {
     return this.context.passport;
   }
 

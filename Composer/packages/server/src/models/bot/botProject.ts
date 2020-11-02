@@ -17,9 +17,10 @@ import {
   DialogUtils,
 } from '@bfc/shared';
 import merge from 'lodash/merge';
-import { UserIdentity, ExtensionContext } from '@bfc/extension';
+import { UserIdentity } from '@bfc/extension';
 import { FeedbackType, generate } from '@microsoft/bf-generate-library';
 
+import { ExtensionContext } from '../extension/extensionContext';
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
@@ -831,7 +832,7 @@ export class BotProject implements IBotProject {
     try {
       const defaultBotProjectFile: any = await AssetService.manager.botProjectFileTemplate;
 
-      for (const [_, file] of files) {
+      for (const [, file] of files) {
         if (file.name.endsWith(FileExtensions.BotProject)) {
           return fileList;
         }
