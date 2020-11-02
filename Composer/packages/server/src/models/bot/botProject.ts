@@ -434,7 +434,13 @@ export class BotProject implements IBotProject {
     this._validateFileContent(name, content);
     const botName = this.name;
     const defaultLocale = this.settings?.defaultLanguage || defaultLanguage;
-    const relativePath = defaultFilePath(botName, defaultLocale, filename);
+
+    // find created file belong to which dialog, all resources should be writed to <dialog>/
+    const dialogId = name.split('.')[0];
+    const dialogFile = this.files.get(`${dialogId}.dialog`);
+    const endpoint = dialogFile ? Path.dirname(dialogFile.relativePath) : '';
+
+    const relativePath = defaultFilePath(botName, defaultLocale, filename, endpoint);
     const file = this.files.get(filename);
     if (file) {
       throw new Error(`${filename} dialog already exist`);
@@ -773,6 +779,9 @@ export class BotProject implements IBotProject {
       }
       fileList.set(file.name, file);
     });
+
+    // flowing migration scripts depends on files;
+    this.files = new Map<string, FileInfo>([...fileList]);
 
     const migrationFilesList = await Promise.all([
       this._createQnAFilesForOldBot(fileList),
