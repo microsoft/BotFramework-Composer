@@ -125,6 +125,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
       eTag: formData.eTag,
       urlSuffix: formData.urlSuffix,
       alias: formData.alias,
+      preserveRoot: formData.preserveRoot,
     };
     createNewBot(newBotData);
   };

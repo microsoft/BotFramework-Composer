@@ -75,6 +75,7 @@ interface DefineConversationFormData {
   eTag?: string; // e tag used for content sync between composer and imported bot content
   urlSuffix?: string; // url to deep link to after creation
   alias?: string; // identifier that is used to track bots between imports
+  preserveRoot?: boolean; // identifier that is used to determine ay project file renames upon creation
 }
 
 interface DefineConversationProps
@@ -221,6 +222,7 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
           dataToSubmit.eTag = eTag as string;
           dataToSubmit.urlSuffix = urlSuffix as string;
           dataToSubmit.alias = alias as string;
+          dataToSubmit.preserveRoot = true;
 
           // create a notification to indicate import success
           const notification = createNotification({
