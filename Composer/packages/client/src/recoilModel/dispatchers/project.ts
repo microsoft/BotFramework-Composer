@@ -238,6 +238,7 @@ export const projectDispatcher = () => {
         eTag,
         urlSuffix,
         alias,
+        preserveRoot,
       } = newProjectData;
       const { projectId, mainDialog } = await createNewBotFromTemplate(
         callbackHelpers,
@@ -249,7 +250,8 @@ export const projectDispatcher = () => {
         locale,
         templateDir,
         eTag,
-        alias
+        alias,
+        preserveRoot
       );
       set(botProjectIdsState, [projectId]);
 
