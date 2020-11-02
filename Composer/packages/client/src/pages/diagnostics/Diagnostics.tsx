@@ -7,19 +7,32 @@ import { useState } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
+import { css } from '@emotion/core';
 
 import { navigateTo } from '../../utils/navigation';
 import { convertPathToUrl } from '../../utils/navigation';
 import { Page } from '../../components/Page';
-import { diagnosticNavLinksSelector } from '../../recoilModel/selectors/diagnosticsPageSelector';
+import {
+  allDiagnosticsSelectorFamily,
+  diagnosticNavLinksSelector,
+} from '../../recoilModel/selectors/diagnosticsPageSelector';
+import { IToolbarItem } from '../../components/Toolbar';
+import { ErrorInfo } from '../../components/TestController/errorInfo';
+import { WarningInfo } from '../../components/TestController/warningInfo';
 
 import { DiagnosticList } from './DiagnosticList';
 import { DiagnosticFilter } from './DiagnosticFilter';
 import { IDiagnosticInfo, DiagnosticType } from './types';
 
+const iconPosition = css`
+  padding-top: 6px;
+`;
+
 const Diagnostics: React.FC<RouteComponentProps<{ projectId: string; skillId: string }>> = (props) => {
   const [showType, setShowType] = useState('');
   const navLinks = useRecoilValue(diagnosticNavLinksSelector);
+  const errors = useRecoilValue(allDiagnosticsSelectorFamily('Error'));
+  const warnings = useRecoilValue(allDiagnosticsSelectorFamily('Warning'));
   const { projectId = '', skillId } = props;
 
   const navigations = {
@@ -68,6 +81,19 @@ const Diagnostics: React.FC<RouteComponentProps<{ projectId: string; skillId: st
     },
   };
 
+  const toolbarItems: IToolbarItem[] = [
+    {
+      type: 'element',
+      element: (
+        <div css={iconPosition}>
+          <WarningInfo count={warnings.length} hidden={!warnings.length} onClick={() => {}} />
+          <ErrorInfo count={errors.length} hidden={!errors.length} onClick={() => {}} />
+        </div>
+      ),
+      align: 'right',
+    },
+  ];
+
   const handleItemClick = (item: IDiagnosticInfo) => {
     navigations[item.type](item);
   };
@@ -83,7 +109,7 @@ const Diagnostics: React.FC<RouteComponentProps<{ projectId: string; skillId: st
       navLinks={navLinks}
       navRegionName={formatMessage('Diagnostics Pane')}
       title={formatMessage('Diagnostics')}
-      toolbarItems={[]}
+      toolbarItems={toolbarItems}
       onRenderHeaderContent={onRenderHeaderContent}
     >
       <DiagnosticList showType={showType} skillId={skillId} onItemClick={handleItemClick} />

@@ -34,8 +34,10 @@ import {
   skillManifestsState,
 } from '../atoms';
 
+import { crossTrainConfigState } from './../atoms/botState';
 import { formDialogSchemasSelectorFamily } from './project';
 import { validateDialogsSelectorFamily } from './validatedDialogs';
+import { recognizersSelectorFamily } from './recognizers';
 
 export const diagnosticsSelector = selectorFamily({
   key: 'diagnosticsSelector',
@@ -54,7 +56,8 @@ export const diagnosticsSelector = selectorFamily({
     const formDialogSchemas = get(formDialogSchemasSelectorFamily(projectId));
     const botProjectFile = get(botProjectFileState(projectId));
     const jsonSchemaFiles = get(jsonSchemaFilesState(projectId));
-
+    const recognizers = get(recognizersSelectorFamily(projectId));
+    const crossTrainConfig = get(crossTrainConfigState(projectId));
     const botAssets: BotAssets = {
       projectId,
       dialogs,
@@ -67,6 +70,8 @@ export const diagnosticsSelector = selectorFamily({
       formDialogSchemas,
       botProjectFile,
       jsonSchemaFiles,
+      recognizers,
+      crossTrainConfig,
     };
 
     const diagnosticList: DiagnosticInfo[] = [];
@@ -115,23 +120,15 @@ export const diagnosticsSelector = selectorFamily({
   },
 });
 
-export const startAllBotEnableSelector = selector({
-  key: 'startAllBotEnableSelector',
-  get: ({ get }) => {
-    const ids = get(botProjectIdsState);
-    const result = ids.reduce((result: DiagnosticInfo[], id: string) => {
-      return [...result, ...get(diagnosticsSelector(id)).filter((diagnostic) => diagnostic.severity === 'Error')];
-    }, []);
-    return !result.length;
-  },
-});
-
-export const allDiagnosticsSelector = selector({
+export const allDiagnosticsSelectorFamily = selectorFamily({
   key: 'allDiagnosticsSelector',
-  get: ({ get }) => {
+  get: (type: 'Error' | 'Warning' | 'All') => ({ get }) => {
     const ids = get(botProjectIdsState);
     const result = ids.reduce((result: DiagnosticInfo[], id: string) => {
-      return [...result, ...get(diagnosticsSelector(id))];
+      return [
+        ...result,
+        ...get(diagnosticsSelector(id)).filter((diagnostic) => type === 'All' || diagnostic.severity === type),
+      ];
     }, []);
     return result;
   },

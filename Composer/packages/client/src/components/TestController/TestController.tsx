@@ -25,7 +25,7 @@ import settingsStorage from '../../utils/dialogSettingStorage';
 import { BotStatus } from '../../constants';
 import { isAbsHosted } from '../../utils/envUtil';
 import { navigateTo, openInEmulator } from '../../utils/navigation';
-import { allDiagnosticsSelector } from '../../recoilModel/selectors/diagnosticsPageSelector';
+import { allDiagnosticsSelectorFamily } from '../../recoilModel/selectors/diagnosticsPageSelector';
 
 import { isBuildConfigComplete, needsBuild } from './../../utils/buildUtil';
 import { PublishDialog } from './publishDialog';
@@ -58,7 +58,8 @@ export const TestController: React.FC<{ projectId: string }> = (props) => {
   const [calloutVisible, setCalloutVisible] = useState(false);
 
   const botActionRef = useRef(null);
-  const notifications = useRecoilValue(allDiagnosticsSelector);
+  const errors = useRecoilValue(allDiagnosticsSelectorFamily('Error'));
+  const warnings = useRecoilValue(allDiagnosticsSelectorFamily('Warning'));
 
   const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
   const botStatus = useRecoilValue(botStatusState(projectId));
@@ -82,10 +83,10 @@ export const TestController: React.FC<{ projectId: string }> = (props) => {
   const publishing = botStatus === BotStatus.publishing;
   const reloading = botStatus === BotStatus.reloading;
   const addRef = useCallback((startBot) => onboardingAddCoachMarkRef({ startBot }), []);
-  const errorLength = notifications.filter((n) => n.severity === 'Error').length;
+  const errorLength = errors.length;
   const showError = errorLength > 0;
   const publishDialogConfig = { subscriptionKey: settings.qna?.subscriptionKey, ...settings.luis } as IConfig;
-  const warningLength = notifications.filter((n) => n.severity === 'Warning').length;
+  const warningLength = warnings.length;
   const showWarning = !showError && warningLength > 0;
 
   useEffect(() => {
