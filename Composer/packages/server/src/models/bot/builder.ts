@@ -217,6 +217,7 @@ export class Builder {
       suffix: config.suffix,
       keptVersionCount: 10,
       isStaging: false,
+      retryCount: config.authoringCallRetryCount,
     });
 
     await this.luBuilder.writeDialogAssets(buildResult, {
@@ -280,6 +281,7 @@ export class Builder {
       endpoint: this.config.endpoint || null,
       authoringEndpoint: this.config.authoringEndpoint || null,
       models: [] as string[],
+      authoringCallRetryCount: this.config.authoringCallRetryCount || 2,
     };
 
     //add all file after cross train

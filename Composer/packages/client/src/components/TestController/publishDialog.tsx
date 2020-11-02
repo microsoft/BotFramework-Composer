@@ -61,10 +61,11 @@ interface FormData {
   environment: string;
   endpoint: string;
   authoringEndpoint: string;
+  authoringCallRetryCount: number;
 }
 
-const validate = (value: string) => {
-  if (!nameRegex.test(value)) {
+const validate = (value: string | number) => {
+  if (typeof value !== 'number' && !nameRegex.test(value)) {
     return formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
   }
 };
@@ -155,6 +156,10 @@ export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
     authoringEndpoint: {
       required: false,
       defaultValue: config.authoringEndpoint,
+    },
+    authoringCallRetryCount: {
+      required: false,
+      defaultValue: config.authoringCallRetryCount,
     },
   };
 

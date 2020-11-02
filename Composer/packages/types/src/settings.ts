@@ -60,6 +60,7 @@ export type ILuisConfig = {
   authoringRegion: string | 'westus';
   defaultLanguage: string | 'en-us';
   environment: string | 'composer';
+  authoringCallRetryCount: number | 2;
 };
 
 export type ILUFeaturesConfig = {

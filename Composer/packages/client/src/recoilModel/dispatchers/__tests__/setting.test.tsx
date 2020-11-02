@@ -47,6 +47,7 @@ const settings = {
     authoringRegion: 'westus',
     defaultLanguage: 'en-us',
     environment: 'composer',
+    authoringCallRetryCount: 2,
   },
   publishTargets: [],
   qna: {

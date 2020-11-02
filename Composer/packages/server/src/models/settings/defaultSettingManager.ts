@@ -47,6 +47,7 @@ export class DefaultSettingManager extends FileSettingManager {
         authoringRegion: 'westus',
         defaultLanguage: 'en-us',
         environment: 'composer',
+        authoringCallRetryCount: 2,
       },
       luFeatures: {
         enablePattern: true,
