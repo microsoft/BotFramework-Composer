@@ -43,7 +43,7 @@ class ElectronAuthProvider extends AuthProvider {
 
   async getAccessToken(options: OAuthOptions): Promise<string> {
     const { getAccessToken } = this.electronContext;
-    const { targetResource } = options;
+    const { targetResource = '' } = options;
 
     if (process.platform === 'linux') {
       log('Auth login flow is currently unsupported in Linux.');
@@ -111,11 +111,11 @@ class ElectronAuthProvider extends AuthProvider {
 
   private async refreshAccessToken(options: OAuthOptions) {
     log('Refreshing access token...');
-    const { getAccessTokenSilently } = this.electronContext;
-    const { targetResource } = options;
+    const { getAccessToken } = this.electronContext;
+    const { targetResource = '' } = options;
     const cachedToken = this.tokenCache[this.getTokenHash(options)];
     if (!!cachedToken) {
-      const { accessToken, acquiredAt, expiryTime } = await getAccessTokenSilently({ target: targetResource });
+      const { accessToken, acquiredAt, expiryTime } = await getAccessToken({ target: targetResource });
       this.cacheTokens({ accessToken, acquiredAt, expiryTime }, options);
       log('Access token refreshed.');
     }
