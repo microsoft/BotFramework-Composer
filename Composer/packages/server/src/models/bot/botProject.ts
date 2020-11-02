@@ -94,6 +94,12 @@ export class BotProject implements IBotProject {
     return files;
   }
 
+  public get rootDialogId() {
+    const mainDialogFile = this.dialogFiles.find((file) => !file.relativePath.includes('/'));
+
+    return Path.basename(mainDialogFile?.name ?? '', '.dialog');
+  }
+
   public get formDialogSchemaFiles() {
     const files: FileInfo[] = [];
     this.files.forEach((file) => {
@@ -350,24 +356,20 @@ export class BotProject implements IBotProject {
   public updateBotInfo = async (name: string, description: string, preserveRoot = false) => {
     const mainDialogFile = this.dialogFiles.find((file) => !file.relativePath.includes('/'));
     if (!mainDialogFile) return;
-    const botName = name.trim().toLowerCase();
+
+    const botName = name.trim();
+
     const { relativePath } = mainDialogFile;
     const content = JSON.parse(mainDialogFile.content);
-    if (!content.$designer) return;
-    const oldDesigner = content.$designer;
-    let newDesigner;
-    if (oldDesigner && oldDesigner.id) {
-      newDesigner = {
-        ...oldDesigner,
-        name,
-        description,
-      };
-    } else {
-      newDesigner = getNewDesigner(name, description);
-    }
-    content.$designer = newDesigner;
-    content.id = name;
-    const updatedContent = autofixReferInDialog(botName, JSON.stringify(content, null, 2));
+
+    const { $designer } = content;
+
+    content.$designer = $designer?.id ? { ...$designer, name, description } : getNewDesigner(botName, description);
+
+    content.id = preserveRoot ? Path.basename(mainDialogFile.name, '.dialog') : botName;
+
+    const updatedContent = autofixReferInDialog(content.id, JSON.stringify(content, null, 2));
+
     await this._updateFile(relativePath, updatedContent);
 
     for (const botProjectFile of this.botProjectFiles) {
@@ -434,7 +436,7 @@ export class BotProject implements IBotProject {
     this._validateFileContent(name, content);
     const botName = this.name;
     const defaultLocale = this.settings?.defaultLanguage || defaultLanguage;
-    const relativePath = defaultFilePath(botName, defaultLocale, filename);
+    const relativePath = defaultFilePath(botName, defaultLocale, filename, this.rootDialogId);
     const file = this.files.get(filename);
     if (file) {
       throw new Error(`${filename} dialog already exist`);
