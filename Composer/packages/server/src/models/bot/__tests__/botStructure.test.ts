@@ -108,6 +108,12 @@ describe('Bot structure file path', () => {
     const targetPath = defaultFilePath(botName, defaultLocale, 'greeting.myimport1.source.qna');
     expect(targetPath).toEqual('dialogs/greeting/knowledge-base/source/myimport1.source.qna');
   });
+
+  // customized endpoint
+  it('should get child dialog.source.qna file path', async () => {
+    const targetPath = defaultFilePath(botName, defaultLocale, 'myimport1.qna', 'dialogs/Welcome');
+    expect(targetPath).toEqual('dialogs/Welcome/knowledge-base/en-us/myimport1.en-us.qna');
+  });
 });
 
 describe('Parse file name', () => {
