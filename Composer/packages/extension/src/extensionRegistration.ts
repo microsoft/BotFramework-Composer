@@ -12,20 +12,21 @@ import {
   IExtensionContext,
   UserIdentity,
   IBotProject,
+  IExtensionRegistration,
 } from '@botframework-composer/types';
 import { PassportStatic } from 'passport';
 
 import log from './logger';
 import { Store } from './storage/store';
 
-export class ExtensionRegistration {
+export class ExtensionRegistration implements IExtensionRegistration {
   private _name: string;
   private _description: string;
   private _log: Debugger;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private _store: Store<any> | null = null;
 
-  constructor(public context: IExtensionContext, name: string, description: string) {
+  constructor(public context: IExtensionContext, name: string, description: string, private dataDir: string) {
     this._name = name;
     this._description = description;
     this._log = log.extend(name);
@@ -229,14 +230,5 @@ export class ExtensionRegistration {
     if (this.context.extensions.authentication.allowedUrls.indexOf(url) < 0) {
       this.context.extensions.authentication.allowedUrls.push(url);
     }
-  }
-
-  private get dataDir() {
-    /* istanbul ignore next */
-    if (!process.env.COMPOSER_EXTENSION_DATA_DIR) {
-      throw new Error('COMPOSER_EXTENSION_DATA_DIR must be set.');
-    }
-
-    return process.env.COMPOSER_EXTENSION_DATA_DIR;
   }
 }
