@@ -7,5 +7,6 @@ export * from './useLgApi';
 export * from './useLuApi';
 export * from './useMenuConfig';
 export * from './useProjectApi';
+export * from './usePublishApi';
 export * from './useRecognizerConfig';
 export * from './useShellApi';

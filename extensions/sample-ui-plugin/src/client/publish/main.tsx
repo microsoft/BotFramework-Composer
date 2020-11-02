@@ -2,15 +2,21 @@
 // Licensed under the MIT License.
 
 import React, { useEffect, useCallback, useState } from 'react';
-import { setConfigIsValid, setPublishConfig, useConfigBeingEdited } from '@bfc/extension-client';
+import { setConfigIsValid, usePublishApi } from '@bfc/extension-client';
 
 import { column, label, publishRoot, textField } from '../styles';
 
+type SamplePublishConfig = {
+  val1: string;
+  val2: string;
+  val3: string;
+};
+
 export const Main: React.FC<{ title: string }> = (props) => {
-  const [configBeingEdited] = useConfigBeingEdited();
-  const [val1, setVal1] = useState(configBeingEdited ? configBeingEdited.val1 : '');
-  const [val2, setVal2] = useState(configBeingEdited ? configBeingEdited.val2 : '');
-  const [val3, setVal3] = useState(configBeingEdited ? configBeingEdited.val3 : '');
+  const { publishConfig, setPublishConfig } = usePublishApi<SamplePublishConfig>();
+  const [val1, setVal1] = useState(publishConfig ? publishConfig.val1 : '');
+  const [val2, setVal2] = useState(publishConfig ? publishConfig.val2 : '');
+  const [val3, setVal3] = useState(publishConfig ? publishConfig.val3 : '');
 
   const updateVal1 = useCallback((ev) => {
     setVal1(ev.target.value);

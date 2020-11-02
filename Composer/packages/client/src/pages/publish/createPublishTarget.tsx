@@ -27,6 +27,8 @@ interface CreatePublishTargetProps {
   types: PublishType[];
   updateSettings: (name: string, type: string, configuration: string) => Promise<void>;
 }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const configCache = new Map<string, any>();
 
 const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
   const { current } = props;
@@ -46,11 +48,20 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
 
     if (type) {
       setTargetType(type.name);
+      // update config from cache
+      if (configCache.has(type.name)) {
+        setConfig(configCache.get(type.name));
+      } else {
+        setConfig(undefined);
+      }
     }
   };
 
   const updateConfig = (newConfig) => {
     setConfig(newConfig);
+    if (targetType) {
+      configCache.set(targetType, newConfig);
+    }
   };
 
   const isNameValid = (newName) => {
@@ -92,7 +103,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
   useEffect(() => {
     PluginAPI.publish.setPublishConfig = (config) => updateConfig(config);
     PluginAPI.publish.setConfigIsValid = (valid) => setPluginConfigIsValid(valid);
-    PluginAPI.publish.useConfigBeingEdited = () => [current ? JSON.parse(current.configuration) : undefined];
+    PluginAPI.publish.getPublishConfig = () => config;
   }, [current, targetType, name]);
 
   const submit = async (_e) => {
