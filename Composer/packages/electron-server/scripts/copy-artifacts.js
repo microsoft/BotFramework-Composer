@@ -10,9 +10,11 @@ const electronBuildConfig = require('../electron-builder-config.json');
 const { log } = require('./common');
 
 const oneauthSource = () => {
-  if (process.env.COMPOSER_ENABLE_ONEAUTH && ['win32', 'darwin'].includes(process.platform)) {
-    const oneauthPath = path.resolve(__dirname, '../oneauth-temp');
+  const oneauthPath = path.resolve(__dirname, '../oneauth-temp');
+  if (['win32', 'darwin'].includes(process.platform) && fs.existsSync(oneauthPath)) {
     return { source: oneauthPath, dest: 'oneauth', force: true };
+  } else {
+    log.info('Skipping OneAuth. Either on an unsupported platform or it has not been installed to %s.', oneauthPath);
   }
 };
 
