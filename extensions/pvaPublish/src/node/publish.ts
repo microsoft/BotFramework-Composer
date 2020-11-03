@@ -1,3 +1,4 @@
+import { IBotProject } from '@botframework-composer/types';
 import { join } from 'path';
 import { createWriteStream } from 'fs';
 import { ensureDirSync } from 'fs-extra';
@@ -23,7 +24,7 @@ const publishHistory: PublishHistory = {};
 
 export const publish = async (
   config: PublishConfig,
-  project: any, // TODO: reenable once types have been fixed and published again IBotProject,
+  project: IBotProject,
   metadata: any,
   _user: UserIdentity,
   getAccessToken
@@ -83,7 +84,7 @@ export const publish = async (
     }
     const res = await fetch(url, {
       method: 'POST',
-      body: botContent, //zipReadStream,
+      body: botContent,
       headers: {
         ...getAuthHeaders(accessToken, tenantId),
         'Content-Type': 'application/zip',
@@ -120,7 +121,7 @@ export const publish = async (
 
 export const getStatus = async (
   config: PublishConfig,
-  project: any, // TODO: reenable once types have been fixed and published again IBotProject,
+  project: IBotProject,
   user: UserIdentity,
   getAccessToken
 ): Promise<PublishResponse> => {
@@ -166,6 +167,9 @@ export const getStatus = async (
     logger.log('Got updated status from publish job: %O', job);
 
     // transform the PVA job to a publish response
+    if (!job.lastUpdateTimeUtc) {
+      job.lastUpdateTimeUtc = Date.now().toString(); // patch update time if server doesn't send one
+    }
     const result = xformJobToResult(job);
 
     // update publish history
@@ -191,7 +195,7 @@ export const getStatus = async (
 
 export const history = async (
   config: PublishConfig,
-  _project: any, // TODO: reenable once types have been fixed and published again IBotProject,
+  _project: IBotProject,
   _user: UserIdentity,
   getAccessToken
 ): Promise<PublishResult[]> => {
@@ -226,7 +230,7 @@ export const history = async (
 
 export const pull = async (
   config: PublishConfig,
-  _project: any, // TODO: reenable once types have been fixed and published again IBotProject,
+  _project: IBotProject,
   _user: UserIdentity,
   getAccessToken
 ): Promise<PullResponse> => {

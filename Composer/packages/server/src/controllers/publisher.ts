@@ -382,7 +382,7 @@ export const PublishController = {
             templateDir,
             locationRef,
             user,
-            currentProject.settings?.defaultLanguage || 'en-us'
+            undefined // TODO: re-enable once we figure out path issue currentProject.settings?.defaultLanguage || 'en-us'
           );
           log('Copied template content successfully.');
           // clean up the temporary template & zip directories -- fire and forget
