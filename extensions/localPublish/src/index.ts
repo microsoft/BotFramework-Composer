@@ -10,13 +10,12 @@ import rimraf from 'rimraf';
 import archiver from 'archiver';
 import { v4 as uuid } from 'uuid';
 import AdmZip from 'adm-zip';
-import { PublishPlugin } from '@botframework-composer/types';
+import { DialogSetting, PublishPlugin } from '@botframework-composer/types';
 import { ExtensionRegistration } from '@bfc/extension';
 import killPort from 'kill-port';
 import map from 'lodash/map';
 import range from 'lodash/range';
 import getPort from 'get-port';
-
 
 const stat = promisify(fs.stat);
 const readDir = promisify(fs.readdir);
@@ -41,6 +40,17 @@ interface PublishConfig {
 }
 
 const isWin = process.platform === 'win32';
+
+const REGEX_LOCALHOST = /^https?:\/\/(localhost|127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}|::1)/;
+
+
+const isLocalhostUrl = (matchUrl: string) => {
+  return REGEX_LOCALHOST.test(matchUrl);
+};
+
+const isSkillHostUpdateRequired = (skillHostEndpoint: string | undefined) => {
+  return !skillHostEndpoint || isLocalhostUrl(skillHostEndpoint);
+};
 
 class LocalPublisher implements PublishPlugin<PublishConfig> {
   public name = 'localpublish';
@@ -321,7 +331,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     }
   };
 
-  private startBot = async (botId: string, port: number, settings: any, project: any): Promise<string> => {
+  private startBot = async (botId: string, port: number, settings: DialogSetting, project: any): Promise<string> => {
     const botDir = settings.runtime?.customRuntime === true ? settings.runtime.path : this.getBotRuntimeDir(botId);
     const commandAndArgs =
       settings.runtime?.customRuntime === true
@@ -337,11 +347,20 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       // take the 0th item off the array, leaving just the args
       this.composer.log('Starting bot on port %d. (%s)', port, commandAndArgs.join(' '));
       const startCommand = commandAndArgs.shift();
+
+      let config: any[] = [];
+      let skillHostEndpoint;
+      if (isSkillHostUpdateRequired(settings?.skillHostEndpoint)) {
+        // Update skillhost endpoint only if ngrok url not set meaning empty or localhost url
+        skillHostEndpoint = `http://127.0.0.1:${port}/api/skills`;
+
+      }
+      config = this.getConfig(settings, skillHostEndpoint)
       let spawnProcess;
       try {
         spawnProcess = spawn(
           startCommand,
-          [...commandAndArgs, '--port', port, `--urls`, `http://0.0.0.0:${port}`, ...this.getConfig(settings, `http://localhost:${port}`)],
+          [...commandAndArgs, '--port', port, `--urls`, `http://0.0.0.0:${port}`, ...config],
           {
             cwd: botDir,
             stdio: ['ignore', 'pipe', 'pipe'],
@@ -365,7 +384,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     });
   };
 
-  private getConfig = (config: any, endpointUrl: string) => {
+  private getConfig = (config: DialogSetting, skillHostEndpointUrl?: string): string[] => {
     const configList: string[] = [];
     if (config.MicrosoftAppPassword) {
       configList.push('--MicrosoftAppPassword');
@@ -379,8 +398,12 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       configList.push('--qna:endpointKey');
       configList.push(config.qna.endpointKey);
     }
-    configList.push('--SkillHostEndpoint');
-    configList.push(`${endpointUrl}/api/skills`);
+
+    if(skillHostEndpointUrl) {
+      configList.push('--SkillHostEndpoint');
+      configList.push(skillHostEndpointUrl);
+    }
+
     return configList;
   };
 

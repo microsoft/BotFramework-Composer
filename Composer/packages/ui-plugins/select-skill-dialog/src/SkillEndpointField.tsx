@@ -33,30 +33,32 @@ export const SkillEndpointField: React.FC<FieldProps> = (props) => {
     }));
 
     let localEndpoint: any[] = [];
-    if (!skill.remote) {
-      localEndpoint = [
-        {
-          key: 'localEndpointHeader',
-          itemType: SelectableOptionMenuItemType.Header,
-          text: 'Local Endpoints',
-        },
-        {
-          key: -1,
-          text: VIRTUAL_LOCAL_ENDPOINT.name,
-          data: {
-            endpointUrl: endpointUrlInSettings,
-            msAppId: msAppIdInSettings,
-            name: VIRTUAL_LOCAL_ENDPOINT.name,
+    if (Object.keys(skills).length > 0) {
+      if (!skill.remote) {
+        localEndpoint = [
+          {
+            key: 'localEndpointHeader',
+            itemType: SelectableOptionMenuItemType.Header,
+            text: 'Local Endpoints',
           },
-        },
-      ];
-    }
-    if (endpointsInManifest.length > 0) {
-      endpointsInManifest.unshift({
-        key: 'remoteEndpointHeader',
-        itemType: SelectableOptionMenuItemType.Header,
-        text: 'Manifest Endpoints',
-      });
+          {
+            key: -1,
+            text: VIRTUAL_LOCAL_ENDPOINT.name,
+            data: {
+              endpointUrl: endpointUrlInSettings,
+              msAppId: msAppIdInSettings,
+              name: VIRTUAL_LOCAL_ENDPOINT.name,
+            },
+          },
+        ];
+      }
+      if (endpointsInManifest.length > 0) {
+        endpointsInManifest.unshift({
+          key: 'remoteEndpointHeader',
+          itemType: SelectableOptionMenuItemType.Header,
+          text: 'Manifest Endpoints',
+        });
+      }
     }
 
     return [...localEndpoint, ...endpointsInManifest];
@@ -75,7 +77,7 @@ export const SkillEndpointField: React.FC<FieldProps> = (props) => {
   return (
     <React.Fragment>
       <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
-      <Dropdown options={options} selectedKey={key} onChange={handleChange} />
+      <Dropdown disabled={!skill.id} options={options} selectedKey={key} onChange={handleChange} />
     </React.Fragment>
   );
 };

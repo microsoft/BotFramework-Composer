@@ -4,7 +4,7 @@
 
 import formatMessage from 'format-message';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
-import { defaultPublishConfig } from '@bfc/shared';
+import { defaultPublishConfig, isSkillHostUpdateRequired } from '@bfc/shared';
 
 import {
   publishTypesState,
@@ -82,11 +82,14 @@ export const publisherDispatcher = () => {
         if (rootBotId === projectId) {
           // Update the skill host endpoint
           const settings = await snapshot.getPromise(settingsState(projectId));
-          const updatedSettings = {
-            ...settings,
-            skillHostEndpoint: endpointURL + '/api/skills',
-          };
-          setSettingState(callbackHelpers, projectId, updatedSettings);
+          if (isSkillHostUpdateRequired(settings?.skillHostEndpoint)) {
+            // Update skillhost endpoint only if ngrok url not set meaning empty or localhost url
+            const updatedSettings = {
+              ...settings,
+              skillHostEndpoint: endpointURL + '/api/skills',
+            };
+            setSettingState(callbackHelpers, projectId, updatedSettings);
+          }
         }
         set(botStatusState(projectId), BotStatus.connected);
         set(botEndpointsState, (botEndpoints) => ({

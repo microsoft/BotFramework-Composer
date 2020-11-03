@@ -86,7 +86,7 @@ export const botProjectFileDispatcher = () => {
   });
 
   const updateManifest = useRecoilCallback(
-    ({ set, snapshot }: CallbackInterface) => async (skillProjectId: string, manifestId: string | undefined) => {
+    ({ set, snapshot }: CallbackInterface) => async (skillProjectId: string, manifestId?: string) => {
       const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
       if (!rootBotProjectId) {
         return;
@@ -148,7 +148,6 @@ export const botProjectFileDispatcher = () => {
           return result;
         });
       }
-
       if (settings.skill) {
         dispatcher.setSettings(
           rootBotProjectId,

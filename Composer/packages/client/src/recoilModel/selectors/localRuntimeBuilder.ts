@@ -10,11 +10,7 @@ import { isAbsHosted } from '../../utils/envUtil';
 import { botDisplayNameState, botStatusState, luFilesState, qnaFilesState, settingsState } from '../atoms';
 import { Dispatcher } from '../dispatchers';
 import { dispatcherState } from '../DispatcherWrapper';
-import {
-  getRecognizerTypes,
-  isBuildConfigComplete as isBuildConfigurationComplete,
-  needsBuild,
-} from '../../utils/buildUtil';
+import { isBuildConfigComplete as isBuildConfigurationComplete, needsBuild } from '../../utils/buildUtil';
 
 import { validateDialogsSelectorFamily } from './validatedDialogs';
 import { localBotsWithoutErrorsSelector } from './project';
@@ -96,11 +92,10 @@ export const runningBotsSelector = selector({
 const botRuntimeAction = (dispatcher: Dispatcher) => {
   return {
     buildWithDefaultRecognizer: async (projectId: string, buildDependencies) => {
-      const { dialogs, config } = buildDependencies;
+      const { config } = buildDependencies;
       if (config) {
         dispatcher.setBotStatus(projectId, BotStatus.publishing);
-        const recognizerTypes = getRecognizerTypes(dialogs);
-        await dispatcher.build(projectId, config.luis, config.qna, recognizerTypes);
+        await dispatcher.build(projectId, config.luis, config.qna);
       }
     },
     startBot: async (projectId: string, config?: IPublishConfig) => {
@@ -114,6 +109,7 @@ const botRuntimeAction = (dispatcher: Dispatcher) => {
     },
     stopBot: async (projectId: string) => {
       dispatcher.stopPublishBot(projectId);
+      dispatcher.setBotStatus(projectId, BotStatus.unConnected);
     },
   };
 };

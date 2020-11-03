@@ -16,8 +16,7 @@ export function useBotStatusTracker(postTrackedBotsStartedAction: () => void, tr
   }, [postTrackedBotsStartedAction]);
 
   useEffect(() => {
-    const allTrackedBotStarted = !areBotsStarting;
-    if (trackedProjectIds.length && allTrackedBotStarted) {
+    if (trackedProjectIds.length && !areBotsStarting) {
       // Start the root bot now after skills are started.
       if (typeof savedCallback.current === 'function') {
         savedCallback.current();

@@ -24,7 +24,7 @@ const renderSelectSkillDialog = ({ onChange = jest.fn() } = {}) => {
   } as ShellData;
 
   return render(
-    <EditorExtension shell={{ api: shell, data: shellData }}>
+    <EditorExtension plugins={{}} projectId="12a.32" shell={{ api: shell, data: shellData }}>
       <SelectSkillDialogField {...props} />
     </EditorExtension>
   );
@@ -41,7 +41,7 @@ describe('Select Skill Dialog', () => {
     const keys = Object.keys(skills);
 
     const { baseElement, findByRole } = renderSelectSkillDialog({ onChange });
-    const combobox = await findByRole('combobox');
+    const combobox = await findByRole('listbox');
     act(() => {
       fireEvent.click(combobox);
     });
