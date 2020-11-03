@@ -87,7 +87,7 @@ export const TestController: React.FC<{ projectId: string }> = (props) => {
   const showError = errorLength > 0;
   const publishDialogConfig = { subscriptionKey: settings.qna?.subscriptionKey, ...settings.luis } as IConfig;
   const warningLength = warnings.length;
-  const showWarning = !showError && warningLength > 0;
+  const showWarning = warningLength > 0;
 
   useEffect(() => {
     if (projectId) {
@@ -229,8 +229,8 @@ export const TestController: React.FC<{ projectId: string }> = (props) => {
         />
         <Loading botStatus={botStatus} />
         <div ref={addRef}>
-          <ErrorInfo count={errorLength} hidden={!showError} onClick={handleErrorButtonClick} />
           <WarningInfo count={warningLength} hidden={!showWarning} onClick={handleErrorButtonClick} />
+          <ErrorInfo count={errorLength} hidden={!showError} onClick={handleErrorButtonClick} />
           <PrimaryButton
             css={botButton}
             disabled={showError || publishing || reloading}
