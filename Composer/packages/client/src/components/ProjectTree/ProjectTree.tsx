@@ -392,8 +392,6 @@ export const ProjectTree: React.FC<Props> = ({
       trigger: item.index,
       displayName: item.displayName,
       diagnostics: [],
-      trigger: item.index,
-      dialogName: dialog.id,
       isRoot: false,
     };
 

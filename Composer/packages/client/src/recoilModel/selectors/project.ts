@@ -106,6 +106,8 @@ export const botProjectSpaceSelector = selector({
         formDialogSchemas,
         botProjectFile,
         jsonSchemaFiles,
+        recognizers: [],
+        crossTrainConfig: {},
       };
       const diagnostics = BotIndexer.validate(botAssets, localeSetting);
 
@@ -190,6 +192,8 @@ export const botProjectDiagnosticsSelector = selector({
         formDialogSchemas,
         botProjectFile,
         jsonSchemaFiles,
+        recognizers: [],
+        crossTrainConfig: {},
       };
       return BotIndexer.validate(botAssets, localeSetting);
     });

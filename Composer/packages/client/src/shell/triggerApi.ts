@@ -16,6 +16,7 @@ function createTriggerApi(projectId: string, dispatchers: Dispatcher) {
       dispatchers.createTrigger(projectId, dialogId, formData, autoSelected),
     deleteTrigger: (dialogId: string, trigger: ITriggerCondition) =>
       dispatchers.deleteTrigger(projectId, dialogId, trigger),
+    createQnATrigger: (dialogId: string) => dispatchers.createQnATrigger(projectId, dialogId),
   };
 }
 

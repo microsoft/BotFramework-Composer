@@ -63,7 +63,18 @@ describe('<ProjectTree/>', () => {
 
   it('should render the projecttree with multiple bots', async () => {
     const { findAllByText, findByText } = renderWithRecoil(
-      <ProjectTree onDeleteDialog={() => {}} onDeleteTrigger={() => {}} onSelect={() => {}} />,
+      <ProjectTree
+        onBotCreateDialog={() => {}}
+        onBotDeleteDialog={() => {}}
+        onBotEditManifest={() => {}}
+        onBotExportZip={() => {}}
+        onBotRemoveSkill={() => {}}
+        onBotStart={() => {}}
+        onBotStop={() => {}}
+        onDialogCreateTrigger={() => {}}
+        onDialogDeleteTrigger={() => {}}
+        onSelect={() => {}}
+      />,
       initRecoilStateMulti
     );
 

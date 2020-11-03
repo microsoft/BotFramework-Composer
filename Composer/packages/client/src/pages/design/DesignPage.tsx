@@ -22,7 +22,6 @@ import {
   deleteTrigger as DialogdeleteTrigger,
   getBreadcrumbLabel,
   qnaMatcherKey,
-  TriggerFormData,
   getDialogData,
 } from '../../utils/dialogUtil';
 import { Conversation } from '../../components/Conversation';
@@ -182,9 +181,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const [dialogJsonVisible, setDialogJsonVisibility] = useState(false);
   const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0]);
   const [warningIsVisible, setWarningIsVisible] = useState(true);
-  const shell = useShell('DesignPage', skillId ?? projectId);
-  const shellForFlowEditor = useShell('FlowEditor', skillId ?? projectId);
-  const shellForPropertyEditor = useShell('PropertyEditor', skillId ?? projectId);
+  const shell = useShell('DesignPage', skillId ?? rootProjectId);
+  const shellForFlowEditor = useShell('FlowEditor', skillId ?? rootProjectId);
+  const shellForPropertyEditor = useShell('PropertyEditor', skillId ?? rootProjectId);
 
   const defaultQnATriggerData = {
     $kind: qnaMatcherKey,

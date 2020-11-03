@@ -18,6 +18,15 @@ import {
 
 import { setError } from './shared';
 
+const defaultQnATriggerData = {
+  $kind: qnaMatcherKey,
+  errors: { $kind: '', intent: '', event: '', triggerPhrases: '', regEx: '', activity: '' },
+  event: '',
+  intent: '',
+  regEx: '',
+  triggerPhrases: '',
+};
+
 const getDesignerIdFromDialogPath = (dialog, path) => {
   const value = get(dialog, path, '');
   const startIndex = value.lastIndexOf('_');
@@ -104,7 +113,7 @@ export const triggerDispatcher = () => {
         };
         await updateDialog(dialogPayload);
         if (autoSelected) {
-          selectTo(projectId, null, null, `triggers[${index}]`);
+          selectTo(projectId, newDialog.id, `triggers[${index}]`);
         }
       } catch (ex) {
         setError(callbackHelpers, ex);
@@ -141,8 +150,30 @@ export const triggerDispatcher = () => {
     }
   );
 
+  const createQnATrigger = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async (projectId: string, dialogId: string) => {
+      try {
+        const { snapshot } = callbackHelpers;
+        const dispatcher = await snapshot.getPromise(dispatcherState);
+        const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
+
+        const targetDialog = dialogs.find((item) => item.id === dialogId);
+        if (!targetDialog) throw new Error(`dialog ${dialogId} not found`);
+        const existedQnATrigger = get(targetDialog, 'content.triggers', []).find(
+          (item) => item.$kind === SDKKinds.OnQnAMatch
+        );
+        if (!existedQnATrigger) {
+          await dispatcher.createTrigger(projectId, dialogId, defaultQnATriggerData);
+        }
+      } catch (ex) {
+        setError(callbackHelpers, ex);
+      }
+    }
+  );
+
   return {
     createTrigger,
     deleteTrigger,
+    createQnATrigger,
   };
 };
