@@ -81,18 +81,22 @@ export const defaultFilePath = (
   botName: string,
   defaultLocale: string,
   filename: string,
-  endpoint = '' // <endpoint>/<file-path>
+  options: {
+    endpoint?: string; // <endpoint>/<file-path>
+    rootDialogId?: string;
+  }
 ): string => {
   const BOTNAME = botName.toLowerCase();
   const CommonFileId = 'common';
 
+  const { endpoint = '', rootDialogId = '' } = options;
   const { fileId, locale, fileType, dialogId } = parseFileName(filename, defaultLocale);
   const LOCALE = locale;
 
   // now recognizer extension is .lu.dialog or .qna.dialog
   if (isRecognizer(filename)) {
-    const isRoot = filename.startsWith(botName.toLowerCase());
-    const dialogId = filename.slice(0, filename.indexOf('.'));
+    const dialogId = filename.split('.')[0];
+    const isRoot = filename.startsWith(botName) || (rootDialogId && filename.startsWith(rootDialogId));
     if (endpoint) {
       return templateInterpolate(Path.join(endpoint, BotStructureTemplate.recognizer), {
         RECOGNIZERNAME: filename,
@@ -206,14 +210,15 @@ export const defaultFilePath = (
 // when create/saveAs bot, serialize entry dialog/lg/lu
 export const serializeFiles = async (fileStorage, rootPath, botName, preserveRoot = false) => {
   const entryPatterns = [
-    templateInterpolate(BotStructureTemplate.lg, { LOCALE: '*', BOTNAME: '*' }),
-    templateInterpolate(BotStructureTemplate.lu, { LOCALE: '*', BOTNAME: '*' }),
-    templateInterpolate(BotStructureTemplate.qna, { LOCALE: '*', BOTNAME: '*' }),
     templateInterpolate(BotStructureTemplate.dialogSchema, { BOTNAME: '*' }),
     templateInterpolate(BotStructureTemplate.botProject, { BOTNAME: '*' }),
   ];
+
   if (!preserveRoot) {
     entryPatterns.push(templateInterpolate(BotStructureTemplate.entry, { BOTNAME: '*' }));
+    entryPatterns.push(templateInterpolate(BotStructureTemplate.lg, { LOCALE: '*', BOTNAME: '*' }));
+    entryPatterns.push(templateInterpolate(BotStructureTemplate.lu, { LOCALE: '*', BOTNAME: '*' }));
+    entryPatterns.push(templateInterpolate(BotStructureTemplate.qna, { LOCALE: '*', BOTNAME: '*' }));
   }
 
   for (const pattern of entryPatterns) {
