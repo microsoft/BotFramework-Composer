@@ -48,13 +48,13 @@ export const buildEssentialsSelector = selectorFamily({
     const dialogs = get(validateDialogsSelectorFamily(projectId));
     const luFiles = get(luFilesState(projectId));
     const qnaFiles = get(qnaFilesState(projectId));
-    const botBuildRequired = get(botBuildRequiredSelector(projectId));
+    const buildRequired = get(botBuildRequiredSelector(projectId));
     const status = get(botStatusState(projectId));
 
     return {
       isConfigurationComplete: isBuildConfigurationComplete(configuration, dialogs, luFiles, qnaFiles),
       configuration,
-      buildRequired: botBuildRequired,
+      buildRequired,
       projectId,
       status,
     };
@@ -100,8 +100,10 @@ const botRuntimeAction = (dispatcher: Dispatcher) => {
     },
     startBot: async (projectId: string, config?: IPublishConfig) => {
       dispatcher.setBotStatus(projectId, BotStatus.reloading);
-      if (config?.qna?.subscriptionKey && !config?.qna?.endpointKey) {
-        await dispatcher.setQnASettings(projectId, config.qna.subscriptionKey);
+
+      // TODO: This code will be removed when endpoint keys are obtained for new qna configs
+      if (typeof config?.qna?.subscriptionKey === 'string' && config.qna.subscriptionKey && !config?.qna?.endpointKey) {
+        await dispatcher.setQnASettings(projectId, config?.qna?.subscriptionKey);
       }
 
       const sensitiveSettings = settingsStorage.get(projectId);

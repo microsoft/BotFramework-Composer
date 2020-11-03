@@ -9,7 +9,7 @@ import { BotStatus } from '../../constants';
 import { dispatcherState, rootBotProjectIdSelector } from '../../recoilModel';
 import { botRuntimeOperationsSelector, buildConfigurationSelector } from '../../recoilModel/selectors';
 
-import { useBotStatusTracker } from './useBotStatusTracker';
+import { useRuntimeStartedTracker } from './useRuntimeStartedTracker';
 
 export function useLocalBotOperations() {
   const builderEssentials = useRecoilValue(buildConfigurationSelector);
@@ -54,7 +54,7 @@ export function useLocalBotOperations() {
   };
 
   // Custom hook to make sure root bot is started after all skills have been started.
-  useBotStatusTracker(() => {
+  useRuntimeStartedTracker(() => {
     startRootBot();
   }, trackedProjectIds);
 

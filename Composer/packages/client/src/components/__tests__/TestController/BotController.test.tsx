@@ -11,6 +11,8 @@ import { BotController } from '../../TestController/BotController';
 
 const mockStart = jest.fn();
 const mockStop = jest.fn();
+const mockSingleStop = jest.fn();
+const mockSingleStart = jest.fn();
 
 jest.mock('office-ui-fabric-react/lib/Button', () => ({
   DefaultButton: ({ children, onClick }) => (
@@ -30,6 +32,8 @@ jest.mock('../../TestController/useLocalBotOperations', () => {
     useLocalBotOperations: () => ({
       startAllBots: mockStart,
       stopAllBots: mockStop,
+      startSingleBot: mockSingleStart,
+      stopSingleBot: mockSingleStop,
     }),
   };
 });
@@ -64,7 +68,7 @@ describe('<BotController />', () => {
     await findByText('Start all bots');
   });
 
-  it('should stop all bots if Stop all bots is clicked', async () => {
+  fit('should stop all bots if Stop all bots is clicked', async () => {
     const initRecoilState = ({ set }) => {
       const projectIds = ['123a.234', '456a.234', '789a.234'];
       set(botProjectIdsState, projectIds);
@@ -74,6 +78,7 @@ describe('<BotController />', () => {
     };
     const { findByTestId } = renderWithRecoil(<BotController />, initRecoilState);
     const button = await findByTestId('button');
+
     act(() => {
       fireEvent.click(button);
     });
@@ -90,9 +95,11 @@ describe('<BotController />', () => {
     };
     const { findByTestId } = renderWithRecoil(<BotController />, initRecoilState);
     const button = await findByTestId('button');
+
     act(() => {
       fireEvent.click(button);
     });
+
     expect(mockStart).toHaveBeenCalled();
   });
 });

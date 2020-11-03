@@ -40,87 +40,14 @@ describe('<LocalBotStatusIndicator />', () => {
     expect(element).toBeDefined();
   });
 
-  it('should render the Local Bot Runtime with failed status and stop the bot', async () => {
-    const { findAllByText } = renderWithRecoil(<LocalBotStatusIndicator projectId={projectId} />, ({ set }) => {
+  it('should show error if bot start failed', async () => {
+    const { findByText } = renderWithRecoil(<LocalBotStatusIndicator projectId={projectId} />, ({ set }) => {
       set(botStatusState(projectId), BotStatus.failed);
-    });
-    const element = await findAllByText(BotStatusesCopy.failed);
-    expect(element).toBeDefined();
-    expect(mockStop).toHaveBeenCalled();
-  });
-
-  it('should start the bot once its published', async () => {
-    const { findAllByText } = renderWithRecoil(<LocalBotStatusIndicator projectId={projectId} />, ({ set }) => {
-      set(botStatusState(projectId), BotStatus.published);
-    });
-
-    const element = await findAllByText(BotStatusesCopy.published);
-    expect(element).toBeDefined();
-    expect(mockStart).toHaveBeenCalledWith(projectId, true);
-  });
-
-  describe('<Poll Operations />', () => {
-    const updatePublishStatusMock = jest.fn();
-    (httpClient.get as jest.Mock).mockImplementation(() => {
-      updatePublishStatusMock();
-      return new Promise((resolve) => {
-        resolve({
-          status: 200,
-          data: {
-            status: 200,
-          },
-        });
+      set(botRuntimeErrorState(projectId), {
+        title: 'Error',
+        message: 'Failed to bind to port 3979',
       });
     });
-    beforeEach(() => {
-      jest.useFakeTimers();
-      updatePublishStatusMock.mockClear();
-    });
-
-    afterEach(() => {
-      jest.useRealTimers();
-    });
-
-    it('should not poll if bot is started', async () => {
-      renderWithRecoil(<LocalBotStatusIndicator projectId={projectId} />, ({ set }) => {
-        set(botStatusState(projectId), BotStatus.connected);
-      });
-
-      jest.advanceTimersByTime(pollingInterval);
-      expect(updatePublishStatusMock).toHaveBeenCalledTimes(0);
-    });
-
-    it('should not poll if bot is stopped', async () => {
-      renderWithRecoil(<LocalBotStatusIndicator projectId={projectId} />, ({ set }) => {
-        set(botStatusState(projectId), BotStatus.failed);
-      });
-
-      jest.advanceTimersByTime(pollingInterval);
-      expect(updatePublishStatusMock).toHaveBeenCalledTimes(0);
-    });
-
-    it('should poll if bot is loading', async () => {
-      renderWithRecoil(<LocalBotStatusIndicator projectId={projectId} />, ({ set }) => {
-        set(botStatusState(projectId), BotStatus.reloading);
-      });
-
-      jest.advanceTimersByTime(pollingInterval);
-      expect(updatePublishStatusMock).toHaveBeenCalledTimes(1);
-
-      jest.advanceTimersByTime(pollingInterval);
-
-      expect(updatePublishStatusMock).toHaveBeenCalledTimes(2);
-    });
-
-    it('should show error if bot start failed', async () => {
-      const { findByText } = renderWithRecoil(<LocalBotStatusIndicator projectId={projectId} />, ({ set }) => {
-        set(botStatusState(projectId), BotStatus.failed);
-        set(botRuntimeErrorState(projectId), {
-          title: 'Error',
-          message: 'Failed to bind to port 3979',
-        });
-      });
-      expect(findByText('See details')).toBeDefined();
-    });
+    expect(findByText('See details')).toBeDefined();
   });
 });

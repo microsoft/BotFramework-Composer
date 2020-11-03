@@ -7,7 +7,7 @@ import React from 'react';
 import { Callout, DirectionalHint } from 'office-ui-fabric-react/lib/Callout';
 import { DetailsList, DetailsListLayoutMode, IColumn } from 'office-ui-fabric-react/lib/DetailsList';
 import { IContextualMenuProps } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { IComponentAsProps, SelectionMode } from 'office-ui-fabric-react/lib/Utilities';
+import { SelectionMode } from 'office-ui-fabric-react/lib/Utilities';
 import { FontWeights } from '@uifabric/styling';
 import { FontSizes } from '@uifabric/fluent-theme/lib/fluent';
 import formatMessage from 'format-message';
@@ -70,16 +70,19 @@ const tableColumns: IColumn[] = [
   },
 ];
 
-const BotControllerMenu: React.FC<IComponentAsProps<IContextualMenuProps>> = ({ items, target, onDismiss }) => {
+const BotControllerMenu = React.forwardRef<HTMLDivElement, IContextualMenuProps>((props, ref: any) => {
+  const { items, target, onDismiss, hidden } = props;
   return (
     <Callout
+      hideOverflow
       setInitialFocus
       directionalHint={DirectionalHint.bottomRightEdge}
+      hidden={hidden}
       role="dialog"
       target={target}
       onDismiss={onDismiss}
     >
-      <div>
+      <div ref={ref}>
         <div css={styles.header}>
           <div css={styles.title}>{formatMessage('Local bot runtime manager')}</div>
           <p>{formatMessage('Start and stop local bot runtimes individually.')}</p>
@@ -97,6 +100,6 @@ const BotControllerMenu: React.FC<IComponentAsProps<IContextualMenuProps>> = ({ 
       </div>
     </Callout>
   );
-};
+});
 
 export { BotControllerMenu };

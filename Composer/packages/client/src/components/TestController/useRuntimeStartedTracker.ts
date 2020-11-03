@@ -6,7 +6,7 @@ import { useRecoilValue } from 'recoil';
 
 import { trackBotStatusesSelector } from '../../recoilModel';
 
-export function useBotStatusTracker(postTrackedBotsStartedAction: () => void, trackedProjectIds: string[]) {
+export function useRuntimeStartedTracker(postTrackedBotsStartedAction: () => void, trackedProjectIds: string[]) {
   const savedCallback: any = useRef();
   const areBotsStarting = useRecoilValue(trackBotStatusesSelector(trackedProjectIds));
 

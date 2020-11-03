@@ -100,3 +100,26 @@ export function useInterval(callback, delay) {
     }
   }, [delay]);
 }
+
+export function useClickOutside(ref, callback) {
+  const handleEvent = (e) => {
+    if (ref?.current && !ref.current.contains(e.target)) {
+      console.log('Click outside');
+      callback();
+    } else {
+      console.log('Click outside');
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('click', handleEvent);
+    document.addEventListener('mousedown', handleEvent);
+    document.addEventListener('touchstart', handleEvent);
+
+    return () => {
+      document.removeEventListener('click', handleEvent);
+      document.removeEventListener('mousedown', handleEvent);
+      document.removeEventListener('touchstart', handleEvent);
+    };
+  }, [ref, callback]);
+}
