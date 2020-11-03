@@ -127,6 +127,7 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
       mainRegionName={formatMessage('Bot projects settings list View')}
       navLinks={navLinks}
       navRegionName={formatMessage('Bot Projects Settings Navigation Pane')}
+      shouldShowEditorError={false}
       title={formatMessage('Bot management and configurations')}
       toolbarItems={[]}
       onRenderHeaderContent={onRenderHeaderContent}

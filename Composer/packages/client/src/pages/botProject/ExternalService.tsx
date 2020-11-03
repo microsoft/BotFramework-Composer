@@ -21,7 +21,7 @@ import {
   settingsState,
   luFilesState,
   qnaFilesState,
-  validateDialogSelectorFamily,
+  validateDialogsSelectorFamily,
 } from '../../recoilModel';
 import settingStorage from '../../utils/dialogSettingStorage';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
@@ -148,7 +148,7 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
   const { projectId } = props;
   const { setSettings } = useRecoilValue(dispatcherState);
   const settings = useRecoilValue(settingsState(projectId));
-  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
   const luFiles = useRecoilValue(luFilesState(projectId));
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';

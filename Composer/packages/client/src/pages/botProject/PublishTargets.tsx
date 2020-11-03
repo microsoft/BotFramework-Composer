@@ -11,8 +11,8 @@ import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
-import { DialogWrapper, DialogTypes } from '../../components/DialogWrapper';
 import { dispatcherState, settingsState, publishTypesState } from '../../recoilModel';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 import { CreatePublishTarget } from '../publish/createPublishTarget';

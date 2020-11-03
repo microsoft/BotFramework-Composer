@@ -3,9 +3,9 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
+import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
-import { DialogWrapper, DialogTypes } from '../../../components/DialogWrapper';
 
 import { modalControlGroup } from './style';
 

@@ -119,14 +119,16 @@ export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {
   const [microsoftAppIdErrorMsg, setMicrosoftAppIdErrorMsg] = useState<string>('');
   const [microsoftPasswordErrorMsg, setMicrosoftPasswordErrorMsg] = useState<string>('');
   const { MicrosoftAppId, MicrosoftAppPassword } = useRecoilValue(settingsState(projectId));
-  const [localMicrosoftAppId, setLocalMicrosoftAppId] = useState<string>(MicrosoftAppId ?? '');
-  const [localMicrosoftAppPassword, setLocalMicrosoftAppPassword] = useState<string>(MicrosoftAppPassword ?? '');
+  const [localMicrosoftAppId, setLocalMicrosoftAppId] = useState<string>('');
+  const [localMicrosoftAppPassword, setLocalMicrosoftAppPassword] = useState<string>('');
   const { setSettings } = useRecoilValue(dispatcherState);
   const settings = useRecoilValue(settingsState(projectId));
 
   useEffect(() => {
     setMicrosoftAppIdErrorMsg('');
     setMicrosoftPasswordErrorMsg('');
+    setLocalMicrosoftAppId(MicrosoftAppId ?? '');
+    setLocalMicrosoftAppPassword(MicrosoftAppPassword ?? '');
   }, [projectId]);
 
   const handleMicrosoftAppIdOnBlur = () => {

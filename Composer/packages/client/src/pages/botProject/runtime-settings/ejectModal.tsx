@@ -8,9 +8,9 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { useRecoilValue } from 'recoil';
+import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
 import { runtimeTemplatesState, dispatcherState } from '../../../recoilModel';
-import { DialogWrapper, DialogTypes } from '../../../components/DialogWrapper';
 
 import { modalControlGroup } from './style';
 
