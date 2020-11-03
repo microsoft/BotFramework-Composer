@@ -2,9 +2,13 @@ import { createWriteStream } from 'fs';
 import { ensureDirSync, remove } from 'fs-extra';
 import fetch, { RequestInit } from 'node-fetch';
 import { join } from 'path';
+
+import logger from '../logger';
 import { authService } from '../services/auth';
 
 import { BotContentInfo, ContentProviderMetadata, ExternalContentProvider } from './externalContentProvider';
+
+const log = logger.extend('pva-provider');
 
 const COMPOSER_1P_APP_ID = 'ce48853e-0605-4f77-8746-d70ac63cc6bc';
 
@@ -31,25 +35,25 @@ const getBaseUrl = () => {
   switch (pvaEnv) {
     case 'prod': {
       const url = 'https://powerva.microsoft.com/api/botmanagement/v1';
-      console.log('prod detected, grabbing PVA content from: ', url);
+      log('PROD env detected, grabbing PVA content from %s', url);
       return url;
     }
 
     case 'ppe': {
       const url = 'https://bots.ppe.customercareintelligence.net/api/botmanagement/v1';
-      console.log('ppe detected, grabbing PVA content from: ', url);
+      log('PPE env detected, grabbing PVA content from %s', url);
       return url;
     }
 
     case 'int': {
       const url = 'https://bots.int.customercareintelligence.net/api/botmanagement/v1';
-      console.log('int detected, grabbing PVA content from: ', url);
+      log('INT env detected, grabbing PVA content from %s', url);
       return url;
     }
 
     default: {
       const url = 'https://bots.int.customercareintelligence.net/api/botmanagement/v1';
-      console.log('no flag detected, grabbing PVA content from: ', url);
+      log('No env flag detected, grabbing PVA content from %s', url);
       return url;
     }
   }
@@ -149,9 +153,8 @@ export class PowerVirtualAgentsProvider extends ExternalContentProvider<PowerVir
   private getDeepLink(): string {
     // use metadata (if provided) to create a deep link to a specific dialog / trigger / action etc. after opening bot.
     let deepLink = '';
-    const dialogId = 'my-dialog';
-    const triggerId = 'my-trigger';
-    const actionId = 'my-action';
+    const { dialogId, triggerId, actionId = '' } = this.metadata;
+
     if (dialogId) {
       deepLink += `dialogs/${dialogId}`;
     }
