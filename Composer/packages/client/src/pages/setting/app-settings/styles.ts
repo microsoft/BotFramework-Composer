@@ -75,3 +75,16 @@ export const icon = {
     fontSize: FontSizes.size12,
   },
 };
+
+export const featureFlagGroupContainer = css`
+  margin-left: 166px;
+  font-size: ${FontSizes.size12};
+`;
+
+export const featureFlagContainer = css`
+  margin-bottom: 15px;
+`;
+
+export const featureFlagTitle = css`
+  font-weight: ${FontWeights.semibold};
+`;

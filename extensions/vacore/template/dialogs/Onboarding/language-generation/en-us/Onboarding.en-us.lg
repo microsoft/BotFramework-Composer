@@ -1,0 +1,15 @@
+[import](common.lg)
+
+# TextInput_Prompt_hWwg7E()
+[Activity
+Text = What's your name?
+SuggestedActions = Why?
+]
+# SendActivity_Fp5DpR()
+- Nice to meet you, ${user.name}!
+# SendActivity_qft3d6()
+- ${YouCanAskMeCard()}
+# SendActivity_AXlYsm()
+- ${HowCanIHelp()}
+# SendActivity_dMoo6D()
+- I need your name so I know how to address you.

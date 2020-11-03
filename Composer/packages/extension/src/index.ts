@@ -3,7 +3,7 @@
 
 export { JSONSchema7 } from 'json-schema';
 
-export * from '@bfc/types';
+export * from '@botframework-composer/types';
 
 export * from './manager';
 export * from './storage';

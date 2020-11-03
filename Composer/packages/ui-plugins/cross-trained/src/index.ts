@@ -13,6 +13,7 @@ const config: PluginConfig = {
         isSelected: (data) => {
           return typeof data === 'string' && data.endsWith('.lu.qna');
         },
+        intentEditor: 'LuIntentEditor',
         seedNewRecognizer: (shellData) => {
           const { qnaFiles, luFiles, currentDialog, locale } = shellData;
           const qnaFile = qnaFiles.find((f) => f.id === `${currentDialog.id}.${locale}`);

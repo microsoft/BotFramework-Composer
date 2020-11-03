@@ -3,8 +3,9 @@
 
 declare module '@microsoft/bf-lu/lib/parser/composerindex' {
   namespace parser {
-    function parseFile(fileContent: any, log: any, locale: any): any;
+    function parseFile(fileContent: any, log: any, locale: any, luFeatures: any): any;
     function validateLUISBlob(LUISJSONBlob: any): any;
+    function validateResource(resource: any, luFeatures: any): any;
   }
   namespace sectionHandler {
     namespace luParser {

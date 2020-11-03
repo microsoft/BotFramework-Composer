@@ -4,7 +4,7 @@
 import { jsx } from '@emotion/core';
 import React, { Fragment, useMemo, Suspense, useCallback, useEffect } from 'react';
 import formatMessage from 'format-message';
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
+import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { RouteComponentProps, Router } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 
@@ -13,10 +13,9 @@ import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TestController } from '../../components/TestController/TestController';
 import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
-import { validateDialogSelectorFamily } from '../../recoilModel';
+import { validateDialogsSelectorFamily } from '../../recoilModel';
 
 import TableView from './table-view';
-import { actionButton } from './styles';
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
 const LUPage: React.FC<RouteComponentProps<{
@@ -24,7 +23,7 @@ const LUPage: React.FC<RouteComponentProps<{
   projectId: string;
 }>> = (props) => {
   const { dialogId = '', projectId = '' } = props;
-  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
 
   const path = props.location?.pathname ?? '';
   const edit = /\/edit(\/)?$/.test(path);
@@ -66,12 +65,12 @@ const LUPage: React.FC<RouteComponentProps<{
   }, [dialogId, dialogs, projectId]);
 
   const onToggleEditMode = useCallback(
-    (_e, checked) => {
+    (_e) => {
       let url = `/bot/${projectId}/language-understanding/${dialogId}`;
-      if (checked) url += `/edit`;
+      if (!edit) url += `/edit`;
       navigateTo(url);
     },
-    [dialogId, projectId]
+    [dialogId, projectId, edit]
   );
 
   const toolbarItems = [
@@ -83,19 +82,13 @@ const LUPage: React.FC<RouteComponentProps<{
   ];
 
   const onRenderHeaderContent = () => {
-    if (!isRoot || edit) {
+    if (!isRoot) {
       return (
-        <Toggle
-          checked={!!edit}
-          className={'toggleEditMode'}
-          css={actionButton}
-          offText={formatMessage('Edit mode')}
-          onChange={onToggleEditMode}
-          onText={formatMessage('Edit mode')}
-        />
+        <ActionButton data-testid="showcode" onClick={onToggleEditMode}>
+          {edit ? formatMessage('Hide code') : formatMessage('Show code')}
+        </ActionButton>
       );
     }
-
     return null;
   };
 

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { act, RenderHookResult, HookResult } from '@bfc/test-utils/lib/hooks';
+import { act, RenderHookResult, HookResult } from '@botframework-composer/test-utils/lib/hooks';
 // eslint-disable-next-line lodash/import-scope
 import debounce from 'lodash/debounce';
 

@@ -9,6 +9,7 @@ import { FormErrors, JSONSchema7, useFormConfig, useShellApi } from '@bfc/extens
 import formatMessage from 'format-message';
 import isEqual from 'lodash/isEqual';
 import debounce from 'lodash/debounce';
+import get from 'lodash/get';
 import { MicrosoftAdaptiveDialog } from '@bfc/shared';
 
 import { formEditor } from './styles';
@@ -25,10 +26,18 @@ function resolveBaseSchema(schema: JSONSchema7, $kind: string): JSONSchema7 | un
 
 const PropertyEditor: React.FC = () => {
   const { shellApi, ...shellData } = useShellApi();
-  const { currentDialog, data: formData = {}, focusPath, focusedSteps, focusedTab, schemas } = shellData;
+  const { currentDialog, focusPath, focusedSteps, focusedTab, schemas } = shellData;
   const { onFocusSteps } = shellApi;
 
-  const [localData, setLocalData] = useState(formData as MicrosoftAdaptiveDialog);
+  const dialogData = useMemo(() => {
+    if (currentDialog?.content) {
+      return focusedSteps[0] ? get(currentDialog.content, focusedSteps[0]) : currentDialog.content;
+    } else {
+      return {};
+    }
+  }, [currentDialog, focusedSteps[0]]);
+
+  const [localData, setLocalData] = useState(dialogData as MicrosoftAdaptiveDialog);
 
   const syncData = useRef(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -40,12 +49,12 @@ const PropertyEditor: React.FC = () => {
   ).current;
 
   useEffect(() => {
-    syncData(formData, localData);
+    syncData(dialogData, localData);
 
     return () => {
       syncData.cancel();
     };
-  }, [formData]);
+  }, [dialogData]);
 
   const formUIOptions = useFormConfig();
 
@@ -92,7 +101,7 @@ const PropertyEditor: React.FC = () => {
 
   useEffect(() => {
     const id = setTimeout(() => {
-      if (!isEqual(formData, localData)) {
+      if (!isEqual(dialogData, localData)) {
         shellApi.saveData(localData, focusedSteps[0]);
       } else {
         shellApi.commitChanges();

@@ -15,7 +15,7 @@ export interface FormRowProps extends Omit<FieldProps, 'onChange'> {
   row: string | [string, string];
 }
 
-export const getRowProps = (rowProps: FormRowProps, field: string) => {
+export function getRowProps(rowProps: FormRowProps, field: string): FieldProps {
   const {
     id,
     depth,
@@ -67,7 +67,7 @@ export const getRowProps = (rowProps: FormRowProps, field: string) => {
     onBlur,
     onFocus,
   };
-};
+}
 
 const formRow = {
   row: css`

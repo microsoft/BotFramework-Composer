@@ -11,4 +11,5 @@ export interface LUOption {
   projectId?: string;
   fileId: string;
   sectionId?: string;
+  luFeatures: any;
 }

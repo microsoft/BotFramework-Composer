@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { renderHook } from '@bfc/test-utils/lib/hooks';
+import { renderHook } from '@botframework-composer/test-utils/lib/hooks';
 
 import { useEditorEventApi } from '../../../src/adaptive-flow-editor/hooks/useEditorEventApi';
 import { ShellApiStub } from '../stubs/ShellApiStub';
@@ -9,7 +9,7 @@ import { defaultRendererContextValue } from '../../../src/adaptive-flow-editor/c
 import { defaultSelectionContextValue } from '../../../src/adaptive-flow-editor/contexts/SelectionContext';
 import { NodeEventTypes } from '../../../src/adaptive-flow-renderer/constants/NodeEventTypes';
 
-describe('useSelectionEffect', () => {
+describe('useEditorEventApi', () => {
   const hook = renderHook(() =>
     useEditorEventApi(
       {

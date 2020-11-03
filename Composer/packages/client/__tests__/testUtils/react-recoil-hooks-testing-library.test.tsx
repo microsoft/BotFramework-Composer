@@ -3,7 +3,7 @@
 
 import React, { useContext } from 'react';
 import { atom, useRecoilState, useRecoilValue } from 'recoil';
-import { act } from '@bfc/test-utils/lib/hooks';
+import { act } from '@botframework-composer/test-utils/lib/hooks';
 
 import { renderRecoilHook } from './react-recoil-hooks-testing-library';
 

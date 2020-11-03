@@ -1,21 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { sectionHandler } from '@microsoft/bf-lu/lib/parser/composerindex';
-import { FileInfo, LuFile } from '@bfc/shared';
+import { FileInfo, LuFile, ILUFeaturesConfig } from '@bfc/shared';
 
 import { getBaseName } from './utils/help';
 import { FileExtensions } from './utils/fileExtensions';
-import { convertLuParseResultToLuFile } from './utils/luUtil';
+import * as luUtil from './utils/luUtil';
 
-const { luParser } = sectionHandler;
-
-function parse(content: string, id = ''): LuFile {
-  const result = luParser.parse(content);
-  return convertLuParseResultToLuFile(id, result);
+function parse(content: string, id = '', config: ILUFeaturesConfig): LuFile {
+  return luUtil.parse(id, content, config);
 }
 
-function index(files: FileInfo[]): LuFile[] {
+function index(files: FileInfo[], config: ILUFeaturesConfig): LuFile[] {
   if (files.length === 0) return [];
 
   const filtered = files.filter((file) => file.name.endsWith(FileExtensions.Lu));
@@ -23,7 +19,7 @@ function index(files: FileInfo[]): LuFile[] {
   const luFiles = filtered.map((file) => {
     const { name, content } = file;
     const id = getBaseName(name);
-    return parse(content, id);
+    return parse(content, id, config);
   });
 
   return luFiles;

@@ -3,7 +3,7 @@
 
 import { DialogUtils, SDKKinds, ShellApi, registerEditorAPI } from '@bfc/shared';
 import get from 'lodash/get';
-import { useDialogEditApi, useDialogApi, useActionApi } from '@bfc/extension-client';
+import { useDialogApi } from '@bfc/extension-client';
 
 // TODO: leak of visual-sdk domain (designerCache)
 import { designerCache } from '../../adaptive-flow-renderer/utils/visual/DesignerCache';
@@ -18,10 +18,13 @@ import { NodeRendererContextValue } from '../contexts/NodeRendererContext';
 import { SelectionContextData } from '../contexts/SelectionContext';
 import { calculateRangeSelection } from '../utils/calculateRangeSelection';
 
+import { useDialogEditApi } from './useDialogEditApi';
+
 export const useEditorEventApi = (
   state: { path: string; data: any; nodeContext: NodeRendererContextValue; selectionContext: SelectionContextData },
   shellApi: ShellApi
 ) => {
+  const { actionsContainLuIntent } = shellApi;
   const {
     insertAction,
     insertActions,
@@ -35,9 +38,8 @@ export const useEditorEventApi = (
     updateRecognizer,
   } = useDialogEditApi(shellApi);
   const { createDialog, readDialog, updateDialog } = useDialogApi(shellApi);
-  const { actionsContainLuIntent } = useActionApi(shellApi);
   const { path, data, nodeContext, selectionContext } = state;
-  const { focusedId, focusedEvent, clipboardActions, dialogFactory } = nodeContext;
+  const { focusedId, focusedTab, focusedEvent, clipboardActions, dialogFactory } = nodeContext;
   const { selectedIds, setSelectedIds, selectableElements } = selectionContext;
 
   const {
@@ -77,6 +79,7 @@ export const useEditorEventApi = (
     switch (eventName) {
       case NodeEventTypes.Focus:
         handler = (e: { id: string; tab?: string }) => {
+          if (e.id === focusedId && e.tab === focusedTab && selectedIds.length === 0) return;
           const newFocusedIds = e.id ? [e.id] : [];
           setSelectedIds([...newFocusedIds]);
           onFocusSteps([...newFocusedIds], e.tab);

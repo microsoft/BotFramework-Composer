@@ -50,7 +50,17 @@ describe('decodeDesignerPathToArrayPath()', () => {
     expect(decodeDesignerPathToArrayPath(dialog, `triggers["1234"].actions["5678"]`)).toEqual('triggers[0].actions[0]');
   });
 
-  it('can handle valid designer path.', () => {
+  it('should transform array index path.', () => {
+    expect(decodeDesignerPathToArrayPath(dialog, `triggers[0].actions[0]`)).toEqual('triggers[0].actions[0]');
+    expect(decodeDesignerPathToArrayPath(dialog, `triggers[1].actions[1]`)).toEqual('triggers[1].actions[1]');
+  });
+
+  it('should transform path in mixed format.', () => {
+    expect(decodeDesignerPathToArrayPath(dialog, `triggers[0].actions["5678"]`)).toEqual(`triggers[0].actions[0]`);
+    expect(decodeDesignerPathToArrayPath(dialog, `triggers["1234"].actions[1]`)).toEqual(`triggers[0].actions[1]`);
+  });
+
+  it('can handle invalid designer path.', () => {
     expect(decodeDesignerPathToArrayPath(dialog, `triggers["1234"].actions["9999"]`)).toEqual(
       `triggers["1234"].actions["9999"]`
     );

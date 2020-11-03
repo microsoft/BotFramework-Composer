@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ShellApi } from '@bfc/types';
+import { ShellApi } from '@botframework-composer/types';
 
 export const useDialogApi = (shellApi: ShellApi) => {
   const { getDialog, saveDialog, createDialog } = shellApi;

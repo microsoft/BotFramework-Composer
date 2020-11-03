@@ -12,8 +12,8 @@ import { ScrollablePane, IScrollablePaneStyles } from 'office-ui-fabric-react/li
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { Label } from 'office-ui-fabric-react/lib/Label';
+import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
-import { DialogWrapper, DialogTypes } from '../DialogWrapper';
 import { MultiLanguagesDialog } from '../../constants';
 
 import { ILanguageFormData } from './types';

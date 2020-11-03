@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render, fireEvent } from '@bfc/test-utils';
+import { render, fireEvent } from '@botframework-composer/test-utils';
 import assign from 'lodash/assign';
 import { useShellApi } from '@bfc/extension-client';
 
@@ -21,10 +21,11 @@ function renderSubject(overrides = {}, shellOverrides = {}) {
       {
         currentDialog: {
           content: { recognizer: undefined },
-          shellApi: {
-            updateRegExIntent: jest.fn(),
-          },
         },
+        shellApi: {
+          updateRegExIntent: jest.fn(),
+        },
+        focusedSteps: [],
       },
       shellOverrides
     )

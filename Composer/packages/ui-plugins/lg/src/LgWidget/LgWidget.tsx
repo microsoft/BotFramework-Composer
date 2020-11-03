@@ -16,7 +16,7 @@ export interface LgWidgetProps extends WidgetContainerProps {
 }
 
 export const LgWidget: React.FC<LgWidgetProps> = ({ data, field, defaultContent = '' }) => {
-  const activityTemplate = get(data, field, '');
+  const activityTemplate = get(data, field, '') as string;
 
   const templateText = useLgTemplate(activityTemplate);
   const displayedText = templateText ? normalizeLgText(templateText) : defaultContent;

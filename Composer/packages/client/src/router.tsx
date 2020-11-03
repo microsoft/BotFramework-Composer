@@ -12,11 +12,11 @@ import { resolveToBasePath } from './utils/fileUtil';
 import { data } from './styles';
 import { NotFound } from './components/NotFound';
 import { BASEPATH } from './constants';
-import { dispatcherState, schemasState, botProjectIdsState, botOpeningState } from './recoilModel';
+import { dispatcherState, schemasState, botProjectIdsState, botOpeningState, pluginPagesSelector } from './recoilModel';
 import { openAlertModal } from './components/Modal/AlertDialog';
 import { dialogStyle } from './components/Modal/dialogStyle';
 import { LoadingSpinner } from './components/LoadingSpinner';
-import { PluginPageContainer } from './pages/plugin/pluginPageContainer';
+import { PluginPageContainer } from './pages/plugin/PluginPageContainer';
 
 const DesignPage = React.lazy(() => import('./pages/design/DesignPage'));
 const LUPage = React.lazy(() => import('./pages/language-understanding/LUPage'));
@@ -28,9 +28,12 @@ const Notifications = React.lazy(() => import('./pages/notifications/Notificatio
 const Publish = React.lazy(() => import('./pages/publish/Publish'));
 const Skills = React.lazy(() => import('./pages/skills'));
 const BotCreationFlowRouter = React.lazy(() => import('./components/CreationFlow/CreationFlow'));
+const FormDialogPage = React.lazy(() => import('./pages/form-dialog/FormDialogPage'));
 
 const Routes = (props) => {
   const botOpening = useRecoilValue(botOpeningState);
+  const pluginPages = useRecoilValue(pluginPagesSelector);
+
   return (
     <div css={data}>
       <Suspense fallback={<LoadingSpinner />}>
@@ -58,12 +61,28 @@ const Routes = (props) => {
             <Publish path="publish/:targetName" />
             <Skills path="skills/*" />
             <BotProjectSettings path="botProjectsSettings/*" />
+            <FormDialogPage path="forms/:schemaId/*" />
+            <FormDialogPage path="forms/*" />
+            <DesignPage path="*" />
+            {pluginPages.map((page) => (
+              <PluginPageContainer
+                key={`${page.id}/${page.bundleId}`}
+                bundleId={page.bundleId}
+                path={`plugin/${page.id}/${page.bundleId}`}
+                pluginId={page.id}
+              />
+            ))}
+          </ProjectRouter>
+          <ProjectRouter path="/bot/:projectId/skill/:skillId">
+            <DesignPage path="dialogs/:dialogId/*" />
+            <LUPage path="language-understanding/:dialogId/*" />
+            <LGPage path="language-generation/:dialogId/*" />
+            <QnAPage path="knowledge-base/:dialogId/*" />
             <DesignPage path="*" />
           </ProjectRouter>
           <SettingPage path="settings/*" />
           <BotCreationFlowRouter path="projects/*" />
           <BotCreationFlowRouter path="home" />
-          <PluginPageContainer path="plugin/:pluginId/:bundleId" />
           <NotFound default />
         </Router>
       </Suspense>
@@ -88,7 +107,7 @@ const projectStyle = css`
   label: ProjectRouter;
 `;
 
-const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
+const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string; skillId: string }>> = (props) => {
   const { projectId = '' } = props;
   const schemas = useRecoilValue(schemasState(projectId));
   const { fetchProjectById } = useRecoilValue(dispatcherState);
@@ -110,7 +129,11 @@ const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string }>> = (pro
   }, [schemas, projectId]);
 
   if (props.projectId && botProjects.includes(props.projectId)) {
-    return <div css={projectStyle}>{props.children}</div>;
+    if (props.skillId && !botProjects.includes(props.skillId)) {
+      return <LoadingSpinner />;
+    } else {
+      return <div css={projectStyle}>{props.children}</div>;
+    }
   }
   return <LoadingSpinner />;
 };

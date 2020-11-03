@@ -3,12 +3,13 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React from 'react';
 
+import QnAPage from '../../../src/pages/knowledge-base/QnAPage';
 import TableView from '../../../src/pages/knowledge-base/table-view';
 import CodeEditor from '../../../src/pages/knowledge-base/code-editor';
 import { renderWithRecoil } from '../../testUtils';
 import {
   localeState,
-  dialogsState,
+  dialogsSelectorFamily,
   qnaFilesState,
   settingsState,
   schemasState,
@@ -26,12 +27,16 @@ answer
 
 const state = {
   projectId: 'test',
-  dialogs: [{ id: '1' }, { id: '2' }],
+  dialogs: [
+    { id: '1', content: '', skills: [] },
+    { id: '2', content: '', skills: [] },
+  ],
   locale: 'en-us',
   qnaFiles: [
     {
       id: 'a.en-us',
       content: initialContent,
+      imports: [],
       qnaSections: [
         {
           Questions: [{ content: 'question', id: 1 }],
@@ -52,7 +57,7 @@ const updateQnAFileMock = jest.fn();
 const initRecoilState = ({ set }) => {
   set(currentProjectIdState, state.projectId);
   set(localeState(state.projectId), state.locale);
-  set(dialogsState(state.projectId), state.dialogs);
+  set(dialogsSelectorFamily(state.projectId), state.dialogs);
   set(qnaFilesState(state.projectId), state.qnaFiles);
   set(settingsState(state.projectId), state.settings);
   set(schemasState(state.projectId), mockProjectResponse.schemas);
@@ -63,16 +68,20 @@ const initRecoilState = ({ set }) => {
 
 describe('QnA page all up view', () => {
   it('should render QnA page table view', () => {
-    const { getByText, getByTestId } = renderWithRecoil(
+    const { getByTestId, getByText } = renderWithRecoil(
       <TableView dialogId={'a'} projectId={state.projectId} />,
       initRecoilState
     );
     getByTestId('table-view');
-    getByText('question (1)');
-    getByText('answer');
+    getByText('Question');
   });
 
   it('should render QnA page code editor', () => {
     renderWithRecoil(<CodeEditor dialogId={'a'} projectId={state.projectId} />, initRecoilState);
+  });
+
+  it('should render QnA page', () => {
+    const { getByTestId } = renderWithRecoil(<QnAPage dialogId={'a'} projectId={state.projectId} />, initRecoilState);
+    getByTestId('QnAPage');
   });
 });

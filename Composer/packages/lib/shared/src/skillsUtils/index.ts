@@ -3,7 +3,7 @@
 
 import get from 'lodash/get';
 import keyBy from 'lodash/keyBy';
-import { DialogSetting, Skill } from '@bfc/types';
+import { DialogSetting, Skill } from '@botframework-composer/types';
 
 export function fetchFromSettings(path: string, settings: DialogSetting): string {
   if (path) {

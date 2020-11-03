@@ -19,6 +19,7 @@ import { container, section } from './styles';
 import { SettingToggle } from './SettingToggle';
 import { SettingDropdown } from './SettingDropdown';
 import * as images from './images';
+import { PreviewFeatureToggle } from './PreviewFeatureToggle';
 
 const ElectronSettings = lazy(() =>
   import('./electronSettings').then((module) => ({ default: module.ElectronSettings }))
@@ -30,7 +31,6 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
   const { onboardingSetComplete, updateUserSettings } = useRecoilValue(dispatcherState);
   const userSettings = useRecoilValue(userSettingsState);
   const { complete } = useRecoilValue(onboardingState);
-
   const onOnboardingChange = useCallback(
     (checked: boolean) => {
       // on means its not complete
@@ -155,7 +155,22 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
           onToggle={onCodeEditorChange('wordWrap')}
         />
       </section>
-      <Suspense fallback={<div />}>{renderElectronSettings && <ElectronSettings />}</Suspense>
+      <section css={section}>
+        <h2>{formatMessage('Application Language')}</h2>
+        <SettingDropdown
+          description={formatMessage('This is the language used for Composer’s user interface.')}
+          image={images.language}
+          options={languageOptions}
+          selected={userSettings.appLocale}
+          title={formatMessage('Application language')}
+          onChange={onLocaleChange}
+        />
+      </section>
+      <section css={section}>
+        <h2>{formatMessage('Application Updates')}</h2>
+        <Suspense fallback={<div />}>{renderElectronSettings && <ElectronSettings />}</Suspense>
+        <PreviewFeatureToggle />
+      </section>
     </div>
   );
 };

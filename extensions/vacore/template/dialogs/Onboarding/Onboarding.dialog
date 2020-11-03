@@ -1,0 +1,94 @@
+{
+  "$kind": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "iXqeHu",
+    "name": "Onboarding",
+    "description": ""
+  },
+  "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
+  "triggers": [
+    {
+      "$kind": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "name": "BeginDialog",
+        "description": "",
+        "id": "Kwl4Mg"
+      },
+      "actions": [
+        {
+          "$kind": "Microsoft.TextInput",
+          "$designer": {
+            "id": "hWwg7E"
+          },
+          "disabled": false,
+          "maxTurnCount": 3,
+          "alwaysPrompt": false,
+          "allowInterruptions": false,
+          "prompt": "${TextInput_Prompt_hWwg7E()}",
+          "unrecognizedPrompt": "",
+          "invalidPrompt": "",
+          "defaultValueResponse": "",
+          "property": "user.name"
+        },
+        {
+          "$kind": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "Alpkp1"
+          },
+          "condition": "exists(turn.recognizedEntities.PersonName[0])",
+          "actions": [
+            {
+              "$kind": "Microsoft.SetProperty",
+              "$designer": {
+                "id": "sCAkak"
+              },
+              "property": "user.name",
+              "value": "(turn.recognizedEntities.PersonName[0]"
+            }
+          ]
+        },
+        {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "Fp5DpR"
+          },
+          "activity": "${SendActivity_Fp5DpR()}"
+        },
+        {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "qft3d6"
+          },
+          "activity": "${SendActivity_qft3d6()}"
+        },
+        {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "AXlYsm"
+          },
+          "activity": "${SendActivity_AXlYsm()}"
+        }
+      ]
+    },
+    {
+      "$kind": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "C4vzKP",
+        "name": "Why"
+      },
+      "intent": "Why",
+      "actions": [
+        {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "dMoo6D"
+          },
+          "activity": "${SendActivity_dMoo6D()}"
+        }
+      ]
+    }
+  ],
+  "generator": "Onboarding.lg",
+  "recognizer": "Onboarding.lu"
+}

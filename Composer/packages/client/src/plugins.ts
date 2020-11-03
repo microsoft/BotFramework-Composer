@@ -29,7 +29,7 @@ const mergeArrays: MergeWithCustomizer = (objValue, srcValue, key) => {
 
 const defaultPlugin: Required<PluginConfig> = {
   uiSchema: {},
-  flowWidgets: {},
+  widgets: {},
 };
 
 export function mergePluginConfigs(...plugins: PluginConfig[]): Required<PluginConfig> {

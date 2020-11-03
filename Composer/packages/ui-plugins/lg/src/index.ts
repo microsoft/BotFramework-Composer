@@ -62,8 +62,10 @@ const config: PluginConfig = {
       },
     },
   },
-  flowWidgets: {
-    LgWidget,
+  widgets: {
+    flow: {
+      LgWidget,
+    },
   },
 };
 

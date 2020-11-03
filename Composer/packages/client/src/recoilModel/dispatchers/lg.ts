@@ -112,14 +112,18 @@ export const removeLgFileState = async (
   callbackHelpers: CallbackInterface,
   { id, projectId }: { id: string; projectId: string }
 ) => {
-  try {
-    const { set, snapshot } = callbackHelpers;
-    let lgFiles = await snapshot.getPromise(lgFilesState(projectId));
-    lgFiles = lgFiles.filter((file) => getBaseName(file.id) !== id);
-    set(lgFilesState(projectId), lgFiles);
-  } catch (error) {
-    setError(callbackHelpers, error);
+  const { set, snapshot } = callbackHelpers;
+  let lgFiles = await snapshot.getPromise(lgFilesState(projectId));
+  const locale = await snapshot.getPromise(localeState(projectId));
+
+  const targetLgFile = lgFiles.find((item) => item.id === id) || lgFiles.find((item) => item.id === `${id}.${locale}`);
+  if (!targetLgFile) {
+    setError(callbackHelpers, new Error(`remove lg file ${id} not exist`));
+    return;
   }
+
+  lgFiles = lgFiles.filter((file) => file.id !== targetLgFile.id);
+  set(lgFilesState(projectId), lgFiles);
 };
 
 export const lgDispatcher = () => {

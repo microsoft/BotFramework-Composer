@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useMemo, useRef } from 'react';
-import { ShellApi, ShellData, Shell, DialogSchemaFile } from '@bfc/shared';
+import { ShellApi, ShellData, Shell, DialogSchemaFile, DialogInfo, SDKKinds } from '@botframework-composer/types';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
@@ -15,7 +15,7 @@ import {
   settingsState,
   clipboardActionsState,
   schemasState,
-  validateDialogSelectorFamily,
+  validateDialogsSelectorFamily,
   breadcrumbState,
   focusPathState,
   skillsState,
@@ -26,6 +26,8 @@ import {
   dialogSchemasState,
   lgFilesState,
   luFilesState,
+  rateInfoState,
+  rootBotProjectIdSelector,
 } from '../recoilModel';
 import { undoFunctionState } from '../recoilModel/undo/history';
 
@@ -33,16 +35,36 @@ import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
 import { useQnaApi } from './qnaApi';
 import { useTriggerApi } from './triggerApi';
+import { useActionApi } from './actionApi';
 
 const FORM_EDITOR = 'PropertyEditor';
 
-type EventSource = 'FlowEditor' | 'PropertyEditor' | 'DesignPage';
+type EventSource = 'FlowEditor' | 'PropertyEditor' | 'DesignPage' | 'VaCreation';
+
+const stubDialog = (): DialogInfo => ({
+  content: {
+    $kind: '',
+  },
+  diagnostics: [],
+  displayName: '',
+  id: '',
+  isRoot: true,
+  lgFile: '',
+  lgTemplates: [],
+  luFile: '',
+  qnaFile: '',
+  referredLuIntents: [],
+  referredDialogs: [],
+  triggers: [],
+  intentTriggers: [],
+  skills: [],
+});
 
 export function useShell(source: EventSource, projectId: string): Shell {
   const dialogMapRef = useRef({});
 
   const schemas = useRecoilValue(schemasState(projectId));
-  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
   const breadcrumb = useRecoilValue(breadcrumbState(projectId));
   const focusPath = useRecoilValue(focusPathState(projectId));
   const skills = useRecoilValue(skillsState(projectId));
@@ -56,6 +78,9 @@ export function useShell(source: EventSource, projectId: string): Shell {
   const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
   const botName = useRecoilValue(botDisplayNameState(projectId));
   const settings = useRecoilValue(settingsState(projectId));
+  const flowZoomRate = useRecoilValue(rateInfoState);
+  const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
+  const isRootBot = rootBotProjectId === projectId;
 
   const userSettings = useRecoilValue(userSettingsState);
   const clipboardActions = useRecoilValue(clipboardActionsState);
@@ -74,12 +99,14 @@ export function useShell(source: EventSource, projectId: string): Shell {
     setMessage,
     displayManifestModal,
     updateSkill,
+    updateZoomRate,
   } = useRecoilValue(dispatcherState);
 
   const lgApi = useLgApi(projectId);
   const luApi = useLuApi(projectId);
   const qnaApi = useQnaApi(projectId);
   const triggerApi = useTriggerApi(projectId);
+  const actionApi = useActionApi(projectId);
   const { dialogId, selected, focused, promptTab } = designPageLocation;
 
   const dialogsMap = useMemo(() => {
@@ -111,11 +138,13 @@ export function useShell(source: EventSource, projectId: string): Shell {
   }
 
   function navigationTo(path) {
+    if (rootBotProjectId == null) return;
     navTo(projectId, path, breadcrumb);
   }
 
   function focusEvent(subPath) {
-    selectTo(projectId, subPath);
+    if (rootBotProjectId == null) return;
+    selectTo(projectId, dialogId, subPath);
   }
 
   function focusSteps(subPaths: string[] = [], fragment?: string) {
@@ -130,7 +159,11 @@ export function useShell(source: EventSource, projectId: string): Shell {
       }
     }
 
-    focusTo(projectId, dataPath, fragment ?? '');
+    focusTo(rootBotProjectId ?? projectId, projectId, dataPath, fragment ?? '');
+  }
+
+  function updateFlowZoomRate(currentRate) {
+    updateZoomRate({ currentRate });
   }
 
   dialogMapRef.current = dialogsMap;
@@ -163,10 +196,6 @@ export function useShell(source: EventSource, projectId: string): Shell {
       updateDialog(payload);
       commitChanges();
     },
-    ...lgApi,
-    ...luApi,
-    ...qnaApi,
-    ...triggerApi,
     updateRegExIntent: updateRegExIntentHandler,
     renameRegExIntent: renameRegExIntentHandler,
     updateIntentTrigger: updateIntentTriggerHandler,
@@ -204,42 +233,58 @@ export function useShell(source: EventSource, projectId: string): Shell {
       updateDialogSchema(dialogSchema, projectId);
     },
     updateSkillSetting: (...params) => updateSkill(projectId, ...params),
+    updateFlowZoomRate,
+    ...lgApi,
+    ...luApi,
+    ...qnaApi,
+    ...triggerApi,
+    ...actionApi,
   };
 
-  const currentDialog = useMemo(() => dialogs.find((d) => d.id === dialogId), [dialogs, dialogId]);
+  const currentDialog = useMemo(() => dialogs.find((d) => d.id === dialogId) ?? stubDialog(), [
+    dialogs,
+    dialogId,
+  ]) as DialogInfo;
   const editorData = useMemo(() => {
     return source === 'PropertyEditor'
       ? getDialogData(dialogsMap, dialogId, focused || selected || '')
       : getDialogData(dialogsMap, dialogId);
   }, [source, dialogsMap, dialogId, focused, selected]);
 
-  const data: ShellData = currentDialog
-    ? {
-        data: editorData,
-        locale,
-        botName,
-        projectId,
-        dialogs,
-        dialogSchemas,
-        dialogId,
-        focusPath,
-        schemas,
-        lgFiles,
-        luFiles,
-        qnaFiles,
-        currentDialog,
-        userSettings,
-        designerId: editorData?.$designer?.id,
-        focusedEvent: selected,
-        focusedActions: focused ? [focused] : [],
-        focusedSteps: focused ? [focused] : selected ? [selected] : [],
-        focusedTab: promptTab,
-        clipboardActions,
-        hosted: !!isAbsHosted(),
-        skills,
-        skillsSettings: settings.skill || {},
-      }
-    : ({} as ShellData);
+  const data: ShellData = {
+    locale,
+    botName,
+    projectId,
+    dialogs,
+    dialogSchemas,
+    dialogId,
+    focusPath,
+    schemas,
+    lgFiles,
+    luFiles,
+    qnaFiles,
+    currentDialog,
+    userSettings,
+    designerId: editorData?.$designer?.id,
+    focusedEvent: selected,
+    focusedActions: focused ? [focused] : [],
+    focusedSteps: focused ? [focused] : selected ? [selected] : [],
+    focusedTab: promptTab,
+    clipboardActions,
+    hosted: !!isAbsHosted(),
+    luFeatures: settings.luFeatures,
+    skills,
+    skillsSettings: settings.skill || {},
+    flowZoomRate,
+    forceDisabledActions: isRootBot
+      ? []
+      : [
+          {
+            kind: SDKKinds.BeginSkill,
+            reason: formatMessage('You can only connect to a skill in the root bot.'),
+          },
+        ],
+  };
 
   return {
     api,

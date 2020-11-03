@@ -4,7 +4,7 @@
 // @ts-nocheck
 
 import React from 'react';
-import { fireEvent, getAllByRole, render } from '@bfc/test-utils';
+import { fireEvent, getAllByRole, render } from '@botframework-composer/test-utils';
 import { EditorExtension } from '@bfc/extension-client';
 
 import { SelectDialog } from '../SelectDialog';

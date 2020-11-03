@@ -13,7 +13,7 @@ context('LG Page', () => {
     cy.contains('TodoSample');
     cy.contains('All');
 
-    cy.get('.toggleEditMode button').as('switchButton');
+    cy.findByTestId('showcode').as('switchButton');
 
     // by default is table view
     cy.findByTestId('LGPage').findByTestId('table-view').should('exist');

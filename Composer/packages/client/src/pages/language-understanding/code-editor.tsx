@@ -125,10 +125,12 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
     [file, intent, projectId]
   );
 
+  const luFeatures = settings?.luFeatures || {};
   const luOption = {
     projectId,
     fileId: file?.id || dialogId,
     sectionId: intent?.Name,
+    luFeatures,
   };
 
   const handleSettingsChange = (settings: Partial<CodeEditorSettings>) => {
@@ -158,6 +160,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         editorSettings={userSettings.codeEditor}
         luOption={{
           fileId: dialogId,
+          luFeatures,
         }}
         options={{
           readOnly: true,

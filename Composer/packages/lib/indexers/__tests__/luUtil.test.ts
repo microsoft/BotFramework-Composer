@@ -2,10 +2,34 @@
 // Licensed under the MIT License.
 import { sectionHandler } from '@microsoft/bf-lu/lib/parser/composerindex';
 
-import { updateIntent, addIntent, removeIntent, checkSection, parse } from '../src/utils/luUtil';
+import { updateIntent, addIntent, removeIntent, checkSection, parse, semanticValidate } from '../src/utils/luUtil';
 import { luIndexer } from '../src/luIndexer';
 
 const { luParser, luSectionTypes } = sectionHandler;
+
+describe('LU parse and validation', () => {
+  it('Throws when ML entity is disable (validateResource)', () => {
+    const fileContent = `# AskForName
+    - {@userName=Jack}
+    `;
+    const result1 = luIndexer.parse(fileContent, 'a.lu', { enableMLEntities: false });
+    expect(result1.diagnostics.length).toEqual(1);
+
+    const result2 = luIndexer.parse(fileContent, 'a.lu', { enableMLEntities: true });
+    expect(result2.diagnostics.length).toEqual(0);
+  });
+
+  it('Throws when ML entity is disable (parseFile)', async () => {
+    const fileContent = `# AskForName
+    - {@userName=Jack}
+    `;
+    const diagnostics = await semanticValidate('a.lu', fileContent, { enableMLEntities: false });
+    expect(diagnostics.length).toEqual(1);
+
+    const diagnostics2 = await semanticValidate('a.lu', fileContent, { enableMLEntities: true });
+    expect(diagnostics2.length).toEqual(0);
+  });
+});
 
 describe('LU Check', () => {
   const diagnostics1 = checkSection({
@@ -48,9 +72,10 @@ hi
 `;
   const fileId1 = 'a.lu';
   const fileId2 = 'b.lu';
+  const luFeatures = {};
 
   it('parse section test', () => {
-    const luresource = luIndexer.parse(fileContent, fileId1).resource;
+    const luresource = luIndexer.parse(fileContent, fileId1, luFeatures).resource;
     const { Sections, Errors, Content } = luresource;
 
     expect(Content).toEqual(fileContent);
@@ -65,7 +90,7 @@ hi
   });
 
   it('parse section with syntax error test', () => {
-    const luresource = luIndexer.parse(fileContentError1, fileId2).resource;
+    const luresource = luIndexer.parse(fileContentError1, fileId2, luFeatures).resource;
     const { Sections, Errors, Content } = luresource;
 
     expect(Content).toEqual(fileContentError1);
@@ -76,7 +101,7 @@ hi
   });
 
   it('parse section can get diagnostic line number', () => {
-    const luFile = parse(fileId2, fileContentError1);
+    const luFile = parse(fileId2, fileContentError1, luFeatures);
     const { intents, diagnostics, content } = luFile;
 
     expect(content).toEqual(fileContentError1);
@@ -94,9 +119,9 @@ hi
       Body: `- check my unread email
       - show my unread emails`,
     };
-    const luFile1 = luIndexer.parse(fileContent, fileId1);
+    const luFile1 = luIndexer.parse(fileContent, fileId1, luFeatures);
 
-    const luFile1Updated = addIntent(luFile1, intent);
+    const luFile1Updated = addIntent(luFile1, intent, luFeatures);
     const luresource = luParser.parse(luFile1Updated.content);
     const { Sections, Errors } = luresource;
 
@@ -126,8 +151,8 @@ hi
 - show my emails 2
 - check my mail box please`,
     };
-    const luFile1 = luIndexer.parse(fileContent, fileId1);
-    const updatedLuFile = updateIntent(luFile1, intentName, intent);
+    const luFile1 = luIndexer.parse(fileContent, fileId1, luFeatures);
+    const updatedLuFile = updateIntent(luFile1, intentName, intent, luFeatures);
     const luresource = updatedLuFile.resource;
 
     const { Sections, Errors } = luresource;
@@ -143,7 +168,7 @@ hi
     expect(luresource.Sections[1].UtteranceAndEntitiesMap[2].utterance).toEqual('check my mail box please');
 
     // continue update on luresource
-    const updatedLuFile2 = updateIntent(updatedLuFile, intentName, intent2);
+    const updatedLuFile2 = updateIntent(updatedLuFile, intentName, intent2, luFeatures);
     const luresource2 = updatedLuFile2.resource;
 
     expect(luresource2.Errors.length).toEqual(0);
@@ -161,8 +186,8 @@ hi
   it('update section with only name', () => {
     const intentName = 'CheckEmail';
 
-    const luFile1 = luIndexer.parse(fileContent, fileId1);
-    const updatedLuFile = updateIntent(luFile1, intentName, { Name: 'CheckEmail1' });
+    const luFile1 = luIndexer.parse(fileContent, fileId1, luFeatures);
+    const updatedLuFile = updateIntent(luFile1, intentName, { Name: 'CheckEmail1' }, luFeatures);
     const luresource = updatedLuFile.resource;
 
     const { Sections, Errors } = luresource;
@@ -183,8 +208,8 @@ hi
 - show my emails 2
 - check my mail box please`;
 
-    const luFile1 = luIndexer.parse(fileContent, fileId1);
-    const updatedLuFile = updateIntent(luFile1, intentName, { Body: updatedBody });
+    const luFile1 = luIndexer.parse(fileContent, fileId1, luFeatures);
+    const updatedLuFile = updateIntent(luFile1, intentName, { Body: updatedBody }, luFeatures);
     const luresource = updatedLuFile.resource;
 
     const { Sections, Errors } = luresource;
@@ -202,8 +227,8 @@ hi
 
   it('update section with empty, should perform a remove', () => {
     const intentName = 'CheckEmail';
-    const luFile1 = luIndexer.parse(fileContent, fileId1);
-    const updatedLuFile = updateIntent(luFile1, intentName, null);
+    const luFile1 = luIndexer.parse(fileContent, fileId1, luFeatures);
+    const updatedLuFile = updateIntent(luFile1, intentName, null, luFeatures);
     const luresource = updatedLuFile.resource;
 
     const { Sections, Errors } = luresource;
@@ -233,17 +258,17 @@ hi
 `,
     };
 
-    const luFile1 = luIndexer.parse(validFileContent);
+    const luFile1 = luIndexer.parse(validFileContent, 'a.lu', luFeatures);
 
     // when intent invalid, after update can still be parsed
-    const updatedContent2 = updateIntent(luFile1, intentName, invalidIntent).content;
+    const updatedContent2 = updateIntent(luFile1, intentName, invalidIntent, luFeatures).content;
     const updatedContent2Parsed = luParser.parse(updatedContent2);
     expect(updatedContent2Parsed.Sections.length).toEqual(1);
     expect(updatedContent2Parsed.Errors.length).toBeGreaterThan(0);
     // when file invalid, update with valid intent should fix error.
-    const luFile2 = luIndexer.parse(updatedContent2);
+    const luFile2 = luIndexer.parse(updatedContent2, 'a.lu', luFeatures);
 
-    const updatedContent3 = updateIntent(luFile2, intentName, validIntent).content;
+    const updatedContent3 = updateIntent(luFile2, intentName, validIntent, luFeatures).content;
     const updatedContent3Parsed = luParser.parse(updatedContent3);
     expect(updatedContent3Parsed.Sections.length).toEqual(1);
     expect(updatedContent3Parsed.Errors.length).toEqual(0);
@@ -262,10 +287,10 @@ hi
 - show my emails
 @`,
     };
-    const luFile1 = luIndexer.parse(validFileContent);
+    const luFile1 = luIndexer.parse(validFileContent, 'a.lu', luFeatures);
 
     // when intent invalid, after update can still be parsed
-    const updatedContent2 = updateIntent(luFile1, intentName, invalidIntent).content;
+    const updatedContent2 = updateIntent(luFile1, intentName, invalidIntent, luFeatures).content;
     const updatedContent2Parsed = luParser.parse(updatedContent2);
     expect(updatedContent2Parsed.Errors.length).toBeGreaterThan(0);
     // TODO: update back should fix error.
@@ -288,10 +313,10 @@ hi
 # UnexpectedIntentDefination
 `,
     };
-    const luFile1 = luIndexer.parse(validFileContent);
+    const luFile1 = luIndexer.parse(validFileContent, 'a.lu', luFeatures);
 
     // should auto escape # to \#
-    const updatedContent2 = updateIntent(luFile1, intentName, invalidIntent).content;
+    const updatedContent2 = updateIntent(luFile1, intentName, invalidIntent, luFeatures).content;
     const { Sections, Errors } = luParser.parse(updatedContent2);
     expect(Errors.length).toEqual(0);
     expect(Sections.length).toEqual(1);
@@ -303,8 +328,8 @@ hi
 
   it('delete section test', () => {
     const intentName = 'CheckEmail';
-    const luFile1 = luIndexer.parse(fileContent, fileId1);
-    const fileContentUpdated = removeIntent(luFile1, intentName).content;
+    const luFile1 = luIndexer.parse(fileContent, fileId1, luFeatures);
+    const fileContentUpdated = removeIntent(luFile1, intentName, luFeatures).content;
     const luresource = luParser.parse(fileContentUpdated);
 
     const { Sections, Errors } = luresource;
@@ -333,6 +358,7 @@ describe('LU Nested Section CRUD test', () => {
 
 @ simple todoSubject`;
   const fileId = 'a.lu';
+  const luFeatures = {};
 
   it('update IntentSection test', () => {
     const intentName = 'CheckTodo';
@@ -346,8 +372,8 @@ describe('LU Nested Section CRUD test', () => {
   `,
     };
 
-    const luFile1 = luIndexer.parse(fileContent, fileId);
-    const luFile1Updated = updateIntent(luFile1, intentName, intent);
+    const luFile1 = luIndexer.parse(fileContent, fileId, luFeatures);
+    const luFile1Updated = updateIntent(luFile1, intentName, intent, luFeatures);
     const result = luParser.parse(luFile1Updated.content);
     const { Sections, Errors } = result;
 
@@ -383,14 +409,14 @@ describe('LU Nested Section CRUD test', () => {
     const intent = {
       Name: 'CheckTodo/CheckCompletedTodo',
       Body: `- check my completed todo
-    - show my completed todos
+      - show my completed todos
 
-    @ simple todoTime
-    `,
+      @ simple todoTime
+      `,
     };
 
-    const luFile1 = luIndexer.parse(fileContent, fileId);
-    const luFile1Updated = addIntent(luFile1, intent);
+    const luFile1 = luIndexer.parse(fileContent, fileId, luFeatures);
+    const luFile1Updated = addIntent(luFile1, intent, luFeatures);
     const luresource = luParser.parse(luFile1Updated.content);
 
     const { Sections, Errors } = luresource;
@@ -415,14 +441,14 @@ describe('LU Nested Section CRUD test', () => {
     const intent = {
       Name: 'CheckMyTodo/CheckCompletedTodo',
       Body: `- check my completed todo
-    - show my completed todos
+      - show my completed todos
 
-    @ simple todoTime
-    `,
+      @ simple todoTime
+      `,
     };
 
-    const luFile1 = luIndexer.parse(fileContent, fileId);
-    const luFile1Updated = addIntent(luFile1, intent);
+    const luFile1 = luIndexer.parse(fileContent, fileId, luFeatures);
+    const luFile1Updated = addIntent(luFile1, intent, luFeatures);
     const luresource = luParser.parse(luFile1Updated.content);
 
     const { Sections, Errors } = luresource;
@@ -449,15 +475,15 @@ describe('LU Nested Section CRUD test', () => {
     const intent = {
       Name: 'CheckMyUnreadTodo',
       Body: `- please check my unread todo
-    - please show my unread todos
+      - please show my unread todos
 
-    @ simple todoTitle
-    @ simple todoContent
-    `,
+      @ simple todoTitle
+      @ simple todoContent
+      `,
     };
 
-    const luFile1 = luIndexer.parse(fileContent, fileId);
-    const luFile1Updated = updateIntent(luFile1, intentName, intent);
+    const luFile1 = luIndexer.parse(fileContent, fileId, luFeatures);
+    const luFile1Updated = updateIntent(luFile1, intentName, intent, luFeatures);
     const luresource = luParser.parse(luFile1Updated.content);
 
     const { Sections, Errors } = luresource;
@@ -487,16 +513,16 @@ describe('LU Nested Section CRUD test', () => {
     const intent = {
       Name: 'CheckMyUnreadTodo',
       Body: `- please check my unread todo
-- please show my unread todos
-# Oops
-## Oops
-@ simple todoTitle
-@ simple todoContent
-`,
+  - please show my unread todos
+  # Oops
+  ## Oops
+  @ simple todoTitle
+  @ simple todoContent
+  `,
     };
 
-    const luFile1 = luIndexer.parse(fileContent, fileId);
-    const luFile1Updated = updateIntent(luFile1, intentName, intent);
+    const luFile1 = luIndexer.parse(fileContent, fileId, luFeatures);
+    const luFile1Updated = updateIntent(luFile1, intentName, intent, luFeatures);
     const luresource = luParser.parse(luFile1Updated.content);
 
     const { Sections, Errors } = luresource;
@@ -523,21 +549,21 @@ describe('LU Nested Section CRUD test', () => {
   it('update nestedIntentSection with # ## ### in body', () => {
     const intentName = 'CheckTodo';
     const intentBody1 = `# Oops
-## Oops
-### Oops
-`;
+  ## Oops
+  ### Oops
+  `;
 
-    const luFile1 = luIndexer.parse(fileContent, fileId);
-    const luFile1Updated1 = updateIntent(luFile1, intentName, { Name: intentName, Body: intentBody1 });
+    const luFile1 = luIndexer.parse(fileContent, fileId, luFeatures);
+    const luFile1Updated1 = updateIntent(luFile1, intentName, { Name: intentName, Body: intentBody1 }, luFeatures);
     const luresource1 = luParser.parse(luFile1Updated1.content);
 
     expect(luresource1.Sections.length).toBeGreaterThan(0);
     expect(luresource1.Errors.length).toBeGreaterThan(0);
 
     const intentBody2 = `## Oops
-    ### Oops
-    `;
-    const luFile1Updated2 = updateIntent(luFile1, intentName, { Name: intentName, Body: intentBody2 });
+      ### Oops
+      `;
+    const luFile1Updated2 = updateIntent(luFile1, intentName, { Name: intentName, Body: intentBody2 }, luFeatures);
     const luresource2 = luParser.parse(luFile1Updated2.content);
     expect(luresource2.Sections.length).toEqual(2);
     expect(luresource2.Errors.length).toBeGreaterThan(0);
@@ -546,16 +572,16 @@ describe('LU Nested Section CRUD test', () => {
 
     // if nestedSection not enable
     const fileContent3 = `# Greeting
-- hi
+  - hi
 
-# CheckTodo
-- please check my todo
-`;
+  # CheckTodo
+  - please check my todo
+  `;
     const intentBody3 = `## Oops
-### Oops
-`;
-    const luFile2 = luIndexer.parse(fileContent3, fileId);
-    const luFile1Updated3 = updateIntent(luFile2, intentName, { Name: intentName, Body: intentBody3 });
+  ### Oops
+  `;
+    const luFile2 = luIndexer.parse(fileContent3, fileId, luFeatures);
+    const luFile1Updated3 = updateIntent(luFile2, intentName, { Name: intentName, Body: intentBody3 }, luFeatures);
     const luresource3 = luParser.parse(luFile1Updated3.content);
     expect(luresource3.Sections.length).toBeGreaterThan(0);
     expect(luresource3.Errors.length).toBeGreaterThan(0);
@@ -570,15 +596,15 @@ describe('LU Nested Section CRUD test', () => {
     const intent = {
       Name: 'CheckMyUnreadTodo',
       Body: `- please check my unread todo
-  - please show my unread todos
+    - please show my unread todos
 
-  @ simple todoContent
-  `,
+    @ simple todoContent
+    `,
     };
 
-    const luFile1 = luIndexer.parse(fileContent, fileId);
+    const luFile1 = luIndexer.parse(fileContent, fileId, luFeatures);
 
-    const luFile1Updated = updateIntent(luFile1, intentName, intent);
+    const luFile1Updated = updateIntent(luFile1, intentName, intent, luFeatures);
     const luresource = luParser.parse(luFile1Updated.content);
     const { Sections, Errors } = luresource;
 
@@ -605,8 +631,8 @@ describe('LU Nested Section CRUD test', () => {
 
   it('delete nestedIntentSection test', () => {
     const Name = 'CheckTodo/CheckUnreadTodo';
-    const luFile1 = luIndexer.parse(fileContent, fileId);
-    const luFile1Updated = removeIntent(luFile1, Name);
+    const luFile1 = luIndexer.parse(fileContent, fileId, luFeatures);
+    const luFile1Updated = removeIntent(luFile1, Name, luFeatures);
     const luresource = luParser.parse(luFile1Updated.content);
 
     const { Sections, Errors } = luresource;
@@ -628,9 +654,9 @@ describe('LU Nested Section CRUD test', () => {
 
   it('delete nestedIntentSection test, parrent not exist', () => {
     const Name = 'CheckTodoNotExist/CheckUnreadTodo';
-    const luFile1 = luIndexer.parse(fileContent, fileId);
+    const luFile1 = luIndexer.parse(fileContent, fileId, luFeatures);
 
-    const luFile1Updated = removeIntent(luFile1, Name);
+    const luFile1Updated = removeIntent(luFile1, Name, luFeatures);
     const luresource = luParser.parse(luFile1Updated.content);
     const { Content } = luresource;
     expect(Content).toEqual(fileContent);
@@ -638,9 +664,9 @@ describe('LU Nested Section CRUD test', () => {
 
   it('delete nestedIntentSection test, child not exist', () => {
     const Name = 'CheckTodo/CheckUnreadTodoNotExist';
-    const luFile1 = luIndexer.parse(fileContent, fileId);
+    const luFile1 = luIndexer.parse(fileContent, fileId, luFeatures);
 
-    const luFile1Updated = removeIntent(luFile1, Name);
+    const luFile1Updated = removeIntent(luFile1, Name, luFeatures);
     const luresource = luParser.parse(luFile1Updated.content);
     const { Content } = luresource;
     expect(Content).toEqual(fileContent);

@@ -2,20 +2,23 @@
 // Licensed under the MIT License.
 
 /* eslint-disable react/display-name */
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, Fragment } from 'react';
 import { useRecoilValue } from 'recoil';
-import { EditorDidMount, defaultQnAPlaceholder } from '@bfc/code-editor';
+import { EditorDidMount, defaultQnAPlaceholder, QnAEditor } from '@bfc/code-editor';
 import isEmpty from 'lodash/isEmpty';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
 import { CodeEditorSettings } from '@bfc/shared';
-import { QnAEditor } from '@bfc/code-editor';
+import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 
-import { qnaFilesState } from '../../recoilModel/atoms/botState';
-import { dispatcherState } from '../../recoilModel';
-import { userSettingsState } from '../../recoilModel';
+import { dispatcherState, userSettingsState, qnaFilesState } from '../../recoilModel';
+import { navigateTo } from '../../utils/navigation';
+import { getBaseName } from '../../utils/fileUtil';
+
+import { backIcon } from './styles';
+
 interface CodeEditorProps extends RouteComponentProps<{}> {
   dialogId: string;
   projectId: string;
@@ -31,13 +34,20 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   //const locale = useRecoilValue(localeState);
   const userSettings = useRecoilValue(userSettingsState);
 
-  const file = qnaFiles.find(({ id }) => id === `${dialogId}.${locale}`);
+  const search = props.location?.search ?? '';
+  const searchContainerId = querystring.parse(search).C;
+  const searchContainerName =
+    searchContainerId && typeof searchContainerId === 'string' && getBaseName(searchContainerId);
+  const targetFileId =
+    searchContainerId && typeof searchContainerId === 'string' ? searchContainerId : `${dialogId}.${locale}`;
+  const file = qnaFiles.find(({ id }) => id === targetFileId);
   const hash = props.location?.hash ?? '';
   const hashLine = querystring.parse(hash).L;
   const line = Array.isArray(hashLine) ? +hashLine[0] : typeof hashLine === 'string' ? +hashLine : 0;
   const [content, setContent] = useState(file?.content);
   const currentDiagnostics = get(file, 'diagnostics', []);
   const [qnaEditor, setQnAEditor] = useState<any>(null);
+
   useEffect(() => {
     if (qnaEditor) {
       window.requestAnimationFrame(() => {
@@ -66,24 +76,39 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   const onChangeContent = useMemo(
     () =>
       debounce((newContent: string) => {
-        actions.updateQnAFile({ id: `${dialogId}.${locale}`, content: newContent, projectId });
+        actions.updateQnAFile({ id: targetFileId, content: newContent, projectId });
       }, 500),
     [projectId]
   );
 
   return (
-    <QnAEditor
-      diagnostics={currentDiagnostics}
-      editorDidMount={editorDidMount}
-      editorSettings={userSettings.codeEditor}
-      languageServer={{
-        path: lspServerPath,
-      }}
-      placeholder={defaultQnAPlaceholder}
-      value={content}
-      onChange={onChangeContent}
-      onChangeSettings={handleSettingsChange}
-    />
+    <Fragment>
+      {searchContainerName && (
+        <ActionButton
+          iconProps={{
+            iconName: 'ChromeBack',
+          }}
+          styles={backIcon}
+          onClick={() => {
+            navigateTo(`/bot/${projectId}/knowledge-base/${dialogId}`);
+          }}
+        >
+          {searchContainerName}
+        </ActionButton>
+      )}
+      <QnAEditor
+        diagnostics={currentDiagnostics}
+        editorDidMount={editorDidMount}
+        editorSettings={userSettings.codeEditor}
+        languageServer={{
+          path: lspServerPath,
+        }}
+        placeholder={defaultQnAPlaceholder}
+        value={content}
+        onChange={onChangeContent}
+        onChangeSettings={handleSettingsChange}
+      />
+    </Fragment>
   );
 };
 

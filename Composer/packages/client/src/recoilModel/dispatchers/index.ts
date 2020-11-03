@@ -20,7 +20,10 @@ import { userDispatcher } from './user';
 import { multilangDispatcher } from './multilang';
 import { notificationDispatcher } from './notification';
 import { extensionsDispatcher } from './extensions';
+import { formDialogsDispatcher } from './formDialogs';
 import { botProjectFileDispatcher } from './botProjectFile';
+import { zoomDispatcher } from './zoom';
+import { recognizerDispatcher } from './recognizers';
 
 const createDispatchers = () => {
   return {
@@ -43,7 +46,10 @@ const createDispatchers = () => {
     ...multilangDispatcher(),
     ...notificationDispatcher(),
     ...extensionsDispatcher(),
+    ...formDialogsDispatcher(),
     ...botProjectFileDispatcher(),
+    ...zoomDispatcher(),
+    ...recognizerDispatcher(),
   };
 };
 

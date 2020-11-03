@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IRange, IPosition, IDiagnostic, DiagnosticSeverity } from '@bfc/types';
+import { IRange, IPosition, IDiagnostic, DiagnosticSeverity } from '@botframework-composer/types';
 
 export class Range implements IRange {
   start: Position;

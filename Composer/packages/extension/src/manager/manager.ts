@@ -4,14 +4,15 @@
 import path from 'path';
 
 import glob from 'globby';
-import { readJson, ensureDir, remove } from 'fs-extra';
-import { ExtensionBundle, PackageJSON, ExtensionMetadata } from '@bfc/types';
+import { readJson, ensureDir, remove, pathExists } from 'fs-extra';
+import { ExtensionBundle, PackageJSON, ExtensionMetadata } from '@botframework-composer/types';
 
 import { ExtensionContext } from '../extensionContext';
 import logger from '../logger';
 import { ExtensionManifestStore } from '../storage/extensionManifestStore';
 import { search, downloadPackage } from '../utils/npm';
 import { isSubdirectory } from '../utils/isSubdirectory';
+import { ExtensionRegistration } from '../extensionRegistration';
 
 const log = logger.extend('manager');
 
@@ -59,9 +60,12 @@ export class ExtensionManagerImp {
    */
   public async loadAll() {
     await ensureDir(this.remoteDir);
+    await ensureDir(this.dataDir);
 
     await this.loadFromDir(this.builtinDir, true);
     await this.loadFromDir(this.remoteDir);
+
+    await this.cleanManifest();
   }
 
   /**
@@ -129,11 +133,23 @@ export class ExtensionManagerImp {
       // eslint-disable-next-line @typescript-eslint/no-var-requires, security/detect-non-literal-require
       const extension = metadata?.path && require(metadata.path);
 
-      if (!extension) {
+      if (!extension || !metadata) {
         throw new Error(`Extension not found: ${id}`);
       }
 
-      await ExtensionContext.loadPlugin(id, '', extension);
+      const registration = new ExtensionRegistration(ExtensionContext, metadata.id, metadata.description);
+      if (typeof extension.default === 'function') {
+        // the module exported just an init function
+        await extension.default.call(null, registration);
+      } else if (extension.default && extension.default.initialize) {
+        // the module exported an object with an initialize method
+        await extension.default.initialize.call(null, registration);
+      } else if (extension.initialize && typeof extension.initialize === 'function') {
+        // the module exported an object with an initialize method
+        await extension.initialize.call(null, registration);
+      } else {
+        throw new Error('Could not init extension');
+      }
     } catch (err) {
       log('Unable to load extension `%s`', id);
       log('%O', err);
@@ -219,6 +235,15 @@ export class ExtensionManagerImp {
     return bundle.path;
   }
 
+  private async cleanManifest() {
+    for (const ext of this.getAll()) {
+      if (!(await pathExists(ext.path))) {
+        log('Removing %s. It is in the manifest but could not be located.', ext.id);
+        this.remove(ext.id);
+      }
+    }
+  }
+
   private async getPackageJson(id: string, dir: string): Promise<PackageJSON | undefined> {
     try {
       const extensionPackagePath = path.resolve(dir, id, 'package.json');
@@ -234,7 +259,7 @@ export class ExtensionManagerImp {
   private get manifest() {
     /* istanbul ignore next */
     if (!this._manifest) {
-      this._manifest = new ExtensionManifestStore(process.env.COMPOSER_EXTENSION_DATA as string);
+      this._manifest = new ExtensionManifestStore(process.env.COMPOSER_EXTENSION_MANIFEST as string);
     }
 
     return this._manifest;
@@ -256,6 +281,15 @@ export class ExtensionManagerImp {
     }
 
     return process.env.COMPOSER_REMOTE_EXTENSIONS_DIR;
+  }
+
+  private get dataDir() {
+    /* istanbul ignore next */
+    if (!process.env.COMPOSER_EXTENSION_DATA_DIR) {
+      throw new Error('COMPOSER_EXTENSION_DATA_DIR must be set.');
+    }
+
+    return process.env.COMPOSER_EXTENSION_DATA_DIR;
   }
 }
 

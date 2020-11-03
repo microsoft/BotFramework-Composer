@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { renderHook } from '@bfc/test-utils/lib/hooks';
+import { renderHook } from '@botframework-composer/test-utils/lib/hooks';
 
 import { useMenuConfig } from '../useMenuConfig';
 import { EditorExtensionContext } from '../../EditorExtensionContext';
@@ -42,7 +42,7 @@ describe('useMenuConfig', () => {
   it('returns a map of sdk kinds to their menu config', () => {
     const { result } = renderHook(() => useMenuConfig(), { wrapper });
 
-    expect(result.current).toEqual({
+    expect(result.current.menuSchema).toEqual({
       foo: 'foo menu config',
       bar: 'bar menu config',
     });
