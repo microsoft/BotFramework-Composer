@@ -12,7 +12,6 @@ import {
   botProjectIdsState,
   currentProjectIdState,
   dialogIdsState,
-  dialogState,
   formDialogSchemaIdsState,
   jsonSchemaFilesState,
   lgFilesState,
