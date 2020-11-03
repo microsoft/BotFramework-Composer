@@ -142,7 +142,7 @@ export class ExtensionManagerImp {
         throw new Error(`Extension not found: ${id}`);
       }
 
-      const registration = new ExtensionRegistration(ExtensionContext, metadata.id, metadata.description);
+      const registration = new ExtensionRegistration(ExtensionContext, metadata.id, metadata.description, this.dataDir);
       if (typeof extension.default === 'function') {
         // the module exported just an init function
         await extension.default.call(null, registration);
