@@ -195,12 +195,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   };
 
   useEffect(() => {
-    const searchParams = new URLSearchParams(location?.search);
-    const currentSkill = searchParams.get('skill-manifest');
-    if (currentSkill) {
-      setSkillManifestFile(skills[currentSkill]);
+    if (!skillId) return;
+    const skillNameIdentifier = skillsByProjectId[skillId];
+    if (skillNameIdentifier) {
+      setSkillManifestFile(skills[skillNameIdentifier]);
     }
-  }, [location, skills]);
+  }, [skills, skillId]);
+  const isRemoteSkill = !dialogId && !!skillManifestFile?.remote;
 
   useEffect(() => {
     const currentDialog = dialogs.find(({ id }) => id === dialogId);
@@ -657,7 +658,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     return mergePluginConfigs({ uiSchema: sdkUISchema }, plugins, { uiSchema: userUISchema });
   }, [schemas?.ui?.content, schemas?.uiOverrides?.content]);
 
-  if (!dialogId) {
+  if (!dialogId && !skillId) {
     return <LoadingSpinner />;
   }
 
@@ -676,6 +677,12 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       <div css={pageRoot}>
         <LeftRightSplit initialLeftGridWidth="20%" minLeftPixels={200} minRightPixels={800}>
           <ProjectTree
+            defaultSelected={{
+              projectId,
+              skillId: skillId ?? undefined,
+              dialogId,
+              trigger: parseTriggerId(selectedTrigger?.id),
+            }}
             onBotCreateDialog={handleCreateDialog}
             onBotDeleteDialog={handleDeleteDialog}
             onBotEditManifest={handleDisplayManifestModal}
@@ -687,12 +694,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
               setTriggerModalInfo({ projectId, dialogId });
             }}
             onDialogDeleteTrigger={handleDeleteTrigger}
-            defaultSelected={{
-              projectId,
-              skillId: skillId ?? undefined,
-              dialogId,
-              trigger: parseTriggerId(selectedTrigger?.id),
-            }}
             onSelect={handleSelect}
           />
           <div css={contentWrapper} role="main">
@@ -708,7 +709,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
               <div css={editorWrapper}>
                 <LeftRightSplit initialLeftGridWidth="75%" minLeftPixels={500} minRightPixels={300}>
                   <div aria-label={formatMessage('Authoring canvas')} css={visualPanel} role="region">
-                    {breadcrumbItems}
+                    {!isRemoteSkill ? breadcrumbItems : null}
                     {dialogJsonVisible ? (
                       <JsonEditor
                         key={'dialogjson'}
@@ -733,7 +734,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                     ) : (
                       <EditorExtension plugins={pluginConfig} projectId={projectId} shell={shellForFlowEditor}>
                         <VisualEditor
+                          isRemoteSkill={isRemoteSkill}
                           openNewTriggerModal={() => {
+                            if (!dialogId) return;
                             openNewTriggerModal(projectId, dialogId);
                           }}
                           onBlur={() => onBlurFlowEditor()}
