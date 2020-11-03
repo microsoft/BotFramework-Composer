@@ -163,11 +163,11 @@ export const UndoRoot = React.memo((props: UndoRootProps) => {
   });
 
   const canUndo = () => {
-    return history.canUndo();
+    return history?.canUndo?.();
   };
 
   const canRedo = () => {
-    return history.canRedo();
+    return history?.canRedo?.();
   };
 
   const commit = useRecoilCallback(({ snapshot }) => () => {
