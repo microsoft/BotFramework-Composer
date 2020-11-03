@@ -279,7 +279,7 @@ export const ProjectTree: React.FC<Props> = ({
       displayName: dialog.displayName,
       isRoot: dialog.isRoot,
       projectId: rootProjectId,
-      skillId: skillId,
+      skillId: skillId === rootProjectId ? undefined : skillId,
       errorContent,
       warningContent,
     };
@@ -332,7 +332,7 @@ export const ProjectTree: React.FC<Props> = ({
   const renderTrigger = (item: any, dialog: DialogInfo, projectId: string): React.ReactNode => {
     const link: TreeLink = {
       projectId: rootProjectId,
-      skillId: projectId,
+      skillId: projectId === rootProjectId ? undefined : projectId,
       dialogId: dialog.id,
       trigger: item.index,
       displayName: item.displayName,

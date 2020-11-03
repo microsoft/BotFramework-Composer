@@ -67,7 +67,11 @@ export function getOptions(
     const expression = (resolvedOneOf as JSONSchema7[]).find(({ $role }) => $role === 'expression');
     const merged = merge({}, omit(schema, 'oneOf'), expression);
 
-    if (expression && (resolvedOneOf as JSONSchema7[]).some(({ properties, items }) => properties || items)) {
+    isNested =
+      isNested ||
+      !!(expression && (resolvedOneOf as JSONSchema7[]).some(({ properties, items }) => properties || items));
+
+    if (expression && isNested) {
       options.push({
         key: 'expression',
         text: formatMessage('Write an expression'),
@@ -76,7 +80,6 @@ export function getOptions(
           schema: merged,
         },
       });
-      isNested = true;
     }
 
     return { options, isNested };
