@@ -65,7 +65,7 @@ import { PropertyEditor } from './PropertyEditor';
 type BreadcrumbItem = {
   key: string;
   label: string;
-  link: Partial<TreeLink>;
+  link?: Partial<TreeLink>;
   onClick?: () => void;
 };
 
@@ -291,6 +291,12 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     }
   };
 
+  const pluginConfig: PluginConfig = useMemo(() => {
+    const sdkUISchema = schemas?.ui?.content ?? {};
+    const userUISchema = schemas?.uiOverrides?.content ?? {};
+    return mergePluginConfigs({ uiSchema: sdkUISchema }, plugins, { uiSchema: userUISchema });
+  }, [schemas?.ui?.content, schemas?.uiOverrides?.content]);
+
   const { actionSelected, showDisableBtn, showEnableBtn } = useMemo(() => {
     const actionSelected = Array.isArray(visualEditorSelection) && visualEditorSelection.length > 0;
     if (!actionSelected) {
@@ -299,6 +305,19 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     const selectedActions = visualEditorSelection.map((id) => get(currentDialog?.content, id));
     const showDisableBtn = selectedActions.some((x) => get(x, 'disabled') !== true);
     const showEnableBtn = selectedActions.some((x) => get(x, 'disabled') === true);
+
+    if (selectedActions.length === 1 && selectedActions[0] != null) {
+      let nameFromAction = selectedActions[0].$designer?.name;
+      if (nameFromAction == null) {
+        const kind = selectedActions[0].$kind;
+        nameFromAction = pluginConfig.uiSchema[kind].form.label;
+        if (typeof nameFromAction === 'function') {
+          nameFromAction = nameFromAction();
+        }
+      }
+      setBreadcrumbs((prev) => [prev[0], prev[1], { key: 'action-' + nameFromAction, label: nameFromAction }]);
+    }
+
     return { actionSelected, showDisableBtn, showEnableBtn };
   }, [visualEditorSelection]);
 
@@ -570,12 +589,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       await createQnAKBFromScratch({ id: `${dialogId}.${locale}`, name, projectId });
     }
   };
-
-  const pluginConfig: PluginConfig = useMemo(() => {
-    const sdkUISchema = schemas?.ui?.content ?? {};
-    const userUISchema = schemas?.uiOverrides?.content ?? {};
-    return mergePluginConfigs({ uiSchema: sdkUISchema }, plugins, { uiSchema: userUISchema });
-  }, [schemas?.ui?.content, schemas?.uiOverrides?.content]);
 
   if (!dialogId) {
     return <LoadingSpinner />;

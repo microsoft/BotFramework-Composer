@@ -43,7 +43,7 @@ context('breadcrumb', () => {
     hasBreadcrumbItems(cy, ['addtodo', 'Dialog started']);
   });
 
-  it.skip('can show action name in breadcrumb', () => {
+  it('can show action name in breadcrumb', () => {
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('Greeting').click();
     });
