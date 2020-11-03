@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Shell } from '@botframework-composer/types';
+import { Shell, ExtensionSettings } from '@botframework-composer/types';
 
 import * as ExtensionClient from '../index';
 
@@ -21,9 +21,11 @@ declare global {
      * Composer UI Extension API
      */
     Composer: {
+      __extensionId: string;
       __pluginType: string;
       render: (component: React.ReactElement) => void;
       sync: (shell: Shell) => void;
+      settings: ExtensionSettings;
       [key: string]: any;
     };
 

@@ -38,6 +38,14 @@ export type ExtensionBundle = {
   path: string;
 };
 
+export type ExtensionConfigurationSchema = {
+  [key: string]: JSONSchema7;
+};
+
+export type ExtensionSettings = {
+  [key: string]: unknown;
+};
+
 export type ExtensionMetadata = {
   /** name field from package.json */
   id: string;
@@ -55,6 +63,7 @@ export type ExtensionMetadata = {
   builtIn?: boolean;
   bundles: ExtensionBundle[];
   contributes: ExtensionContribution;
+  configurationSchema?: ExtensionConfigurationSchema;
 };
 
 export type ExtensionMap = {
@@ -80,6 +89,9 @@ export type PackageJSON = {
     enabled?: boolean;
     contributes?: ExtensionContribution;
     bundles?: ExtensionBundle[];
+    configuration?: {
+      [key: string]: JSONSchema7;
+    };
   };
 };
 
