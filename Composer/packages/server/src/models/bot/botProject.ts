@@ -752,7 +752,14 @@ export class BotProject implements IBotProject {
       // deployment process
       const root = this.dataDir;
       const paths = await this.fileStorage.glob(
-        [pattern, '!(generated/**)', '!(runtime/**)', '!(scripts/**)', '!(settings/appsettings.json)'],
+        [
+          pattern,
+          '!(generated/**)',
+          '!(runtime/**)',
+          '!(scripts/**)',
+          '!(settings/appsettings.json)',
+          '!(**/luconfig.json)',
+        ],
         root
       );
 
