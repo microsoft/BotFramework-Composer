@@ -4,14 +4,15 @@
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 
 // import { grahpTokenState, currentUserState } from '../atoms/appState';
-import { setAccessToken, setGraphToken, getAccessTokenInCache, getGraphTokenInCache } from '../../utils/auth';
+import { setAccessToken, setGraphToken } from '../../utils/auth';
+import { isElectron } from '../../utils/electronUtil';
 
 import httpClient from './../../utils/httpUtil';
 
 export const authDispatcher = () => {
   const getAccessToken = useRecoilCallback(({ set }: CallbackInterface) => async () => {
     try {
-      if (!getAccessTokenInCache()) {
+      if (isElectron()) {
         const result = await httpClient.get(`/auth/getAccessToken`, {
           params: { targetResource: 'https://management.azure.com/' },
         });
@@ -28,7 +29,7 @@ export const authDispatcher = () => {
   });
   const getGraphToken = useRecoilCallback(({ set }: CallbackInterface) => async () => {
     try {
-      if (!getGraphTokenInCache()) {
+      if (isElectron()) {
         const result = await httpClient.get(`/auth/getAccessToken`, {
           params: { targetResource: 'https://graph.microsoft.com/' },
         });

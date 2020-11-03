@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
-export namespace OneAuth {
+export declare namespace OneAuth {
   /// Levels of logging. Defines the priority of the logged message
   export enum LogLevel {
     /// Available to fully disable logging
