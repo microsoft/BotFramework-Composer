@@ -9,9 +9,11 @@ export const topLinks = (
   projectId: string,
   openedDialogId: string,
   pluginPages: ExtensionPageConfig[],
-  showFormDialog: boolean
+  showFormDialog: boolean,
+  rootBotId: string
 ) => {
   const botLoaded = !!projectId;
+  const urlBase = projectId === rootBotId ? `/bot/${projectId}/` : `/bot/${rootBotId}/skill/${projectId}/`;
   let links = [
     {
       to: '/home',
@@ -21,28 +23,28 @@ export const topLinks = (
       disabled: false,
     },
     {
-      to: `/bot/${projectId}/dialogs/${openedDialogId}`,
+      to: urlBase + `dialogs/${openedDialogId}`,
       iconName: 'SplitObject',
       labelName: formatMessage('Design'),
       exact: false,
       disabled: !botLoaded,
     },
     {
-      to: `/bot/${projectId}/language-generation`,
+      to: urlBase + `language-generation`,
       iconName: 'Robot',
       labelName: formatMessage('Bot Responses'),
       exact: false,
       disabled: !botLoaded,
     },
     {
-      to: `/bot/${projectId}/language-understanding`,
+      to: urlBase + `language-understanding`,
       iconName: 'People',
       labelName: formatMessage('User Input'),
       exact: false,
       disabled: !botLoaded,
     },
     {
-      to: `/bot/${projectId}/knowledge-base`,
+      to: urlBase + `knowledge-base`,
       iconName: 'QnAIcon',
       labelName: formatMessage('QnA'),
       exact: true,
@@ -56,16 +58,9 @@ export const topLinks = (
       disabled: !botLoaded,
     },
     {
-      to: `/bot/${projectId}/publish`,
+      to: `/bot/${rootBotId}/publish`,
       iconName: 'CloudUpload',
       labelName: formatMessage('Publish'),
-      exact: true,
-      disabled: !botLoaded,
-    },
-    {
-      to: `/bot/${projectId}/skills`,
-      iconName: 'PlugDisconnected',
-      labelName: formatMessage('Skills'),
       exact: true,
       disabled: !botLoaded,
     },
@@ -101,12 +96,14 @@ export const topLinks = (
   return links;
 };
 
-export const bottomLinks = [
-  {
-    to: `/settings`,
-    iconName: 'Settings',
-    labelName: formatMessage('Settings'),
-    exact: false,
-    disabled: false,
-  },
-];
+export const bottomLinks = (rootBotId: string) => {
+  return [
+    {
+      to: `/bot/${rootBotId}/settings`,
+      iconName: 'Settings',
+      labelName: formatMessage('Settings'),
+      exact: false,
+      disabled: false,
+    },
+  ];
+};

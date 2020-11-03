@@ -8,7 +8,13 @@ import find from 'lodash/find';
 import { useRecoilValue } from 'recoil';
 import { FeatureFlagKey } from '@bfc/shared';
 
-import { designPageLocationState, currentProjectIdState, pluginPagesSelector, featureFlagsState } from '../recoilModel';
+import {
+  designPageLocationState,
+  currentProjectIdState,
+  pluginPagesSelector,
+  featureFlagsState,
+  rootBotProjectIdSelector,
+} from '../recoilModel';
 
 import { bottomLinks, topLinks } from './pageLinks';
 import routerCache from './routerCache';
@@ -39,14 +45,19 @@ export const useLinks = () => {
   const projectId = useRecoilValue(currentProjectIdState);
   const designPageLocation = useRecoilValue(designPageLocationState(projectId));
   const pluginPages = useRecoilValue(pluginPagesSelector);
+  const rootBotId = useRecoilValue(rootBotProjectIdSelector) ?? '';
   const openedDialogId = designPageLocation.dialogId || 'Main';
   const showFormDialog = useFeatureFlag('FORM_DIALOG');
 
   const pageLinks = useMemo(() => {
-    return topLinks(projectId, openedDialogId, pluginPages, showFormDialog);
-  }, [projectId, openedDialogId, pluginPages, showFormDialog]);
+    return topLinks(projectId, openedDialogId, pluginPages, showFormDialog, rootBotId);
+  }, [projectId, openedDialogId, pluginPages, showFormDialog, rootBotId]);
 
-  return { topLinks: pageLinks, bottomLinks };
+  const bottomPageLinks = useMemo(() => {
+    return bottomLinks(rootBotId);
+  }, [rootBotId]);
+
+  return { topLinks: pageLinks, bottomLinks: bottomPageLinks };
 };
 
 export const useRouterCache = (to: string) => {
