@@ -3,15 +3,14 @@
 
 import * as React from 'react';
 import { Range, Position } from '@bfc/shared';
-import { MutableSnapshot, RecoilRoot } from 'recoil';
-import { render } from '@botframework-composer/test-utils';
-import noop from 'lodash/noop';
+import { fireEvent } from '@botframework-composer/test-utils';
 
 import {
   botDiagnosticsState,
   botProjectIdsState,
   currentProjectIdState,
   dialogIdsState,
+  dialogState,
   formDialogSchemaIdsState,
   jsonSchemaFilesState,
   lgFilesState,
@@ -22,13 +21,14 @@ import {
 } from '../../../src/recoilModel';
 import mockProjectResponse from '../../../src/recoilModel/dispatchers/__tests__/mocks/mockProjectResponse.json';
 import Diagnostics from '../../../src/pages/diagnostics/Diagnostics';
+import { renderWithRecoil } from '../../testUtils/renderWithRecoil';
 
 const state = {
   projectId: 'testproj',
   dialogs: [
     {
       id: 'test',
-      content: { recognizer: 'test.en-us.lu' },
+      content: { recognizer: {} },
       luFile: 'test',
       referredLuIntents: [],
       skills: [`=settings.skill['Email-Skill'].endpointUrl`],
@@ -131,16 +131,16 @@ const state = {
   },
   formDialogSchemas: [{ id: '1', content: '{}' }],
 };
-
-export function renderWithRecoil(subject, initRecoilState: (mutableSnapshot: MutableSnapshot) => void = noop) {
-  return render(<RecoilRoot initializeState={initRecoilState}>{subject}</RecoilRoot>);
-}
-
+const mockNavigationTo = jest.fn();
+jest.mock('../../../src/utils/navigation', () => ({
+  navigateTo: (...args) => mockNavigationTo(...args),
+}));
 describe('<Diagnostics/>', () => {
   const initRecoilState = ({ set }) => {
     set(currentProjectIdState, state.projectId);
     set(botProjectIdsState, [state.projectId]);
-    set(dialogIdsState(state.projectId), []);
+    set(dialogIdsState(state.projectId), ['test']);
+    set(dialogState({ projectId: state.projectId, dialogId: 'test' }), state.dialogs[0]);
     set(luFilesState(state.projectId), state.luFiles);
     set(lgFilesState(state.projectId), state.lgFiles);
     set(qnaFilesState(state.projectId), state.qnaFiles);
@@ -155,7 +155,16 @@ describe('<Diagnostics/>', () => {
   };
 
   it('should render the Diagnostics', () => {
-    const { container } = renderWithRecoil(<Diagnostics />, initRecoilState);
+    const { container, getByText } = renderWithRecoil(
+      <Diagnostics projectId={state.projectId} skillId={state.projectId} />,
+      initRecoilState
+    );
     expect(container).toHaveTextContent('Diagnostics');
+    fireEvent.doubleClick(getByText(/test.en-us.lg/));
+    expect(mockNavigationTo).toBeCalledWith('/bot/testproj/skill/testproj/language-generation/test/edit#L=13');
+    fireEvent.doubleClick(getByText(/test.en-us.lu/));
+    expect(mockNavigationTo).nthCalledWith(2, '/bot/testproj/skill/testproj/language-understanding/test/edit#L=7');
+    fireEvent.doubleClick(getByText(/test.en-us.qna/));
+    expect(mockNavigationTo).nthCalledWith(3, '/bot/testproj/skill/testproj/knowledge-base/test/edit#L=7');
   });
 });
