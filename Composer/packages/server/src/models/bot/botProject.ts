@@ -4,6 +4,7 @@
 import { promisify } from 'util';
 import fs from 'fs';
 
+import has from 'lodash/has';
 import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
 import {
@@ -801,7 +802,16 @@ export class BotProject implements IBotProject {
     const qnaFiles: FileInfo[] = [];
     files.forEach((file) => {
       if (file.name.endsWith('.dialog')) {
-        dialogFiles.push(file);
+        try {
+          // filter form dialog generated file.
+          const dialogJson = JSON.parse(file.content);
+          const isFormDialog = has(dialogJson, '$Generator');
+          if (!isFormDialog) {
+            dialogFiles.push(file);
+          }
+        } catch (_e) {
+          // ignore
+        }
       }
       if (file.name.endsWith('.qna')) {
         qnaFiles.push(file);
