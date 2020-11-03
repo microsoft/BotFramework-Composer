@@ -152,7 +152,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   );
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
   const [dialogJsonVisible, setDialogJsonVisibility] = useState(false);
-  const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0]);
+  const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0] as DialogInfo);
   const [exportSkillModalVisible, setExportSkillModalVisible] = useState(false);
   const [warningIsVisible, setWarningIsVisible] = useState(true);
   const [breadcrumbs, setBreadcrumbs] = useState<Array<BreadcrumbItem>>([]);
@@ -164,7 +164,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const { createTrigger, createQnATrigger } = shell.api;
 
   useEffect(() => {
-    const currentDialog = dialogs.find(({ id }) => id === dialogId);
+    const currentDialog = dialogs.find(({ id }) => id === dialogId) as DialogInfo | undefined;
     if (currentDialog) {
       setCurrentDialog(currentDialog);
     }
@@ -307,15 +307,25 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     const showEnableBtn = selectedActions.some((x) => get(x, 'disabled') === true);
 
     if (selectedActions.length === 1 && selectedActions[0] != null) {
-      let nameFromAction = selectedActions[0].$designer?.name;
-      if (nameFromAction == null) {
-        const kind = selectedActions[0].$kind;
-        nameFromAction = pluginConfig.uiSchema[kind].form.label;
-        if (typeof nameFromAction === 'function') {
-          nameFromAction = nameFromAction();
+      const action = selectedActions[0] as any;
+      const nameFromAction = action?.$designer?.name as string | undefined;
+      let detectedActionName: string;
+
+      if (typeof nameFromAction === 'string') {
+        detectedActionName = nameFromAction;
+      } else {
+        const kind: string = action?.$kind as string;
+        const actionNameFromSchema = pluginConfig?.uiSchema?.[kind]?.form?.label as string | (() => string) | undefined;
+        if (typeof actionNameFromSchema === 'string') {
+          detectedActionName = actionNameFromSchema;
+        } else if (typeof actionNameFromSchema === 'function') {
+          detectedActionName = actionNameFromSchema();
+        } else {
+          detectedActionName = formatMessage('Unknown');
         }
       }
-      setBreadcrumbs((prev) => [prev[0], prev[1], { key: 'action-' + nameFromAction, label: nameFromAction }]);
+
+      setBreadcrumbs((prev) => [prev[0], prev[1], { key: 'action-' + detectedActionName, label: detectedActionName }]);
     }
 
     return { actionSelected, showDisableBtn, showEnableBtn };
