@@ -94,7 +94,7 @@ export const navigationDispatcher = () => {
       const { dialogId, selected } = designPageLocation;
 
       let currentUri =
-        skillId == null
+        skillId == null || skillId === projectId
           ? `/bot/${projectId}/dialogs/${dialogId}`
           : `/bot/${projectId}/skill/${skillId}/dialogs/${dialogId}`;
 
@@ -136,7 +136,7 @@ export const navigationDispatcher = () => {
       const designPageLocation = await snapshot.getPromise(designPageLocationState(projectId));
       if (search) {
         const currentUri =
-          skillId == null
+          skillId == null || skillId === projectId
             ? `/bot/${projectId}/dialogs/${dialogId}${search}`
             : `/bot/${projectId}/skill/${skillId}/dialogs/${dialogId}${search}`;
 
