@@ -125,13 +125,13 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
     name: {
       required: true,
       validate: (value) => {
-        if (!value || !nameRegex.test(value)) {
+        if (!value || !nameRegex.test(value + '')) {
           return formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
         }
 
         const newBotPath =
           focusedStorageFolder !== null && Object.keys(focusedStorageFolder as Record<string, any>).length
-            ? Path.join(focusedStorageFolder.parent, focusedStorageFolder.name, value)
+            ? Path.join(focusedStorageFolder.parent, focusedStorageFolder.name, value + '')
             : '';
         if (
           files.some((bot) => {

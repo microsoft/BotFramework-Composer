@@ -593,7 +593,7 @@ async function copyTemplateToExistingProject(req: Request, res: Response) {
         templateDir,
         locationRef,
         user,
-        project.settings?.defaultLanguage || 'en-us'
+        undefined // TODO: re-enable once we figure out path issue project.settings?.defaultLanguage || 'en-us'
       );
       log('Copied template content successfully.');
       // clean up the temporary template directory -- fire and forget
