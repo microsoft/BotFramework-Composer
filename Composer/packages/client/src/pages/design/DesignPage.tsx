@@ -329,7 +329,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             onClick: () => {
               createQnAFromUrlDialogBegin({
                 projectId,
-                showFromScratch: true,
               });
             },
           },
