@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { isEmpty } from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 import { useRecoilValue } from 'recoil';
 
 import { dispatcherState } from '../../recoilModel';
