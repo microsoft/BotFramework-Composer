@@ -16,7 +16,7 @@ export type RepairSkillModalFormData = 'repairSkill' | 'removeSkill';
 
 export interface RepairSkillModalProps {
   skillItem: TreeLink;
-  onNext: (RepairSkillModalFormData) => void;
+  onNext: (option: RepairSkillModalFormData) => void;
   onDismiss: () => void;
 }
 

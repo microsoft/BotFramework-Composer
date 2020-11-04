@@ -826,7 +826,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                 setBrokenSkillRepairCallback(() => {
                   removeSkillFromBotProject(skillIdToRemove);
                 });
-              } else if ((option = RepairSkillModalOptionKeys.removeSkill)) {
+              } else if (option === RepairSkillModalOptionKeys.removeSkill) {
                 removeSkillFromBotProject(skillIdToRemove);
               }
               setBrokenSkillInfo(undefined);
