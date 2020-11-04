@@ -26,6 +26,7 @@ import { ProjectTree, TreeLink } from '../../components/ProjectTree/ProjectTree'
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { getFocusPath } from '../../utils/navigation';
 import { navigateTo } from '../../utils/navigation';
+import { getFriendlyName } from '../../utils/dialogUtil';
 import { useShell } from '../../shell';
 import plugins, { mergePluginConfigs } from '../../plugins';
 import { useElectronFeatures } from '../../hooks/useElectronFeatures';
@@ -103,6 +104,13 @@ const getTabFromFragment = () => {
   if (Object.values<string>(PromptTab).includes(tab)) {
     return tab;
   }
+};
+
+const parseTriggerId = (triggerId: string | undefined): number | undefined => {
+  if (triggerId == null) return undefined;
+  const indexString = triggerId.match(/\d+/)?.[0];
+  if (indexString == null) return undefined;
+  return parseInt(indexString);
 };
 
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string; skillId?: string }>> = (
@@ -201,10 +209,48 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       const selected = decodeDesignerPathToArrayPath(dialogData, params.get('selected') ?? '');
       const focused = decodeDesignerPathToArrayPath(dialogData, params.get('focused') ?? '');
 
-      //make sure focusPath always valid
-      const data = getDialogData(dialogMap, dialogId, getFocusPath(selected, focused));
+      // TODO: get these from a second return value from decodeDesignerPathToArrayPath
+      const triggerIndex = parseTriggerId(selected);
 
-      if (typeof data === 'undefined') {
+      //make sure focusPath always valid
+      const focusPath = getFocusPath(selected, focused);
+      const trigger = triggerIndex != null && dialogData.triggers[triggerIndex];
+
+      const breadcrumbArray: Array<BreadcrumbItem> = [];
+
+      breadcrumbArray.push({
+        key: 'dialog-' + props.dialogId,
+        label: dialogMap[props.dialogId]?.$designer?.name,
+        link: {
+          projectId: props.projectId,
+          dialogId: props.dialogId,
+        },
+        onClick: () => navTo(projectId, dialogId),
+      });
+      if (triggerIndex != null) {
+        breadcrumbArray.push({
+          key: 'trigger-' + triggerIndex,
+          label: trigger.$designer.name || getFriendlyName(trigger),
+          link: {
+            projectId: props.projectId,
+            dialogId: props.dialogId,
+            trigger: triggerIndex,
+          },
+        });
+      }
+
+      // getDialogData returns whatever's at the end of the path, which could be a trigger or an action
+      const possibleAction = getDialogData(dialogMap, dialogId, focusPath);
+
+      if (params.get('focused') != null) {
+        // we've linked to an action, so put that in too
+        breadcrumbArray.push({
+          key: 'action-' + focusPath,
+          label: getActionName(possibleAction),
+        });
+      }
+
+      if (typeof possibleAction === 'undefined') {
         const { id: foundId } = dialogs.find(({ id }) => id === dialogId) || dialogs.find(({ isRoot }) => isRoot) || {};
         /**
          * It's improper to fallback to `dialogId` directly:
@@ -224,6 +270,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         focused,
         promptTab: getTabFromFragment(),
       });
+      setBreadcrumbs(breadcrumbArray);
       /* eslint-disable no-underscore-dangle */
       // @ts-ignore
       globalHistory._onTransitionComplete();
@@ -260,7 +307,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       breadcrumbArray.push({
         key: 'dialog-' + parentLink?.dialogId,
         label: parentLink?.displayName ?? link.displayName,
-        link: { skillId: skillId ?? projectId, dialogId },
+        link: { projectId, skillId, dialogId },
         onClick: () => navTo(skillId ?? projectId, dialogId),
       });
     }
@@ -268,7 +315,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       breadcrumbArray.push({
         key: 'trigger-' + parentLink?.trigger,
         label: link.displayName,
-        link: { skillId: skillId ?? projectId, dialogId, trigger },
+        link: { projectId, skillId, dialogId, trigger },
         onClick: () => selectTo(skillId ?? null, dialogId ?? null, `triggers[${trigger}]`),
       });
     }
@@ -297,6 +344,26 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     return mergePluginConfigs({ uiSchema: sdkUISchema }, plugins, { uiSchema: userUISchema });
   }, [schemas?.ui?.content, schemas?.uiOverrides?.content]);
 
+  const getActionName = (action) => {
+    const nameFromAction = action?.$designer?.name as string | undefined;
+    let detectedActionName: string;
+
+    if (typeof nameFromAction === 'string') {
+      detectedActionName = nameFromAction;
+    } else {
+      const kind: string = action?.$kind as string;
+      const actionNameFromSchema = pluginConfig?.uiSchema?.[kind]?.form?.label as string | (() => string) | undefined;
+      if (typeof actionNameFromSchema === 'string') {
+        detectedActionName = actionNameFromSchema;
+      } else if (typeof actionNameFromSchema === 'function') {
+        detectedActionName = actionNameFromSchema();
+      } else {
+        detectedActionName = formatMessage('Unknown');
+      }
+    }
+    return detectedActionName;
+  };
+
   const { actionSelected, showDisableBtn, showEnableBtn } = useMemo(() => {
     const actionSelected = Array.isArray(visualEditorSelection) && visualEditorSelection.length > 0;
     if (!actionSelected) {
@@ -308,24 +375,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
     if (selectedActions.length === 1 && selectedActions[0] != null) {
       const action = selectedActions[0] as any;
-      const nameFromAction = action?.$designer?.name as string | undefined;
-      let detectedActionName: string;
+      const actionName = getActionName(action);
 
-      if (typeof nameFromAction === 'string') {
-        detectedActionName = nameFromAction;
-      } else {
-        const kind: string = action?.$kind as string;
-        const actionNameFromSchema = pluginConfig?.uiSchema?.[kind]?.form?.label as string | (() => string) | undefined;
-        if (typeof actionNameFromSchema === 'string') {
-          detectedActionName = actionNameFromSchema;
-        } else if (typeof actionNameFromSchema === 'function') {
-          detectedActionName = actionNameFromSchema();
-        } else {
-          detectedActionName = formatMessage('Unknown');
-        }
-      }
-
-      setBreadcrumbs((prev) => [prev[0], prev[1], { key: 'action-' + detectedActionName, label: detectedActionName }]);
+      setBreadcrumbs((prev) => [...prev.slice(0, 2), { key: 'action-' + actionName, label: actionName }]);
     }
 
     return { actionSelected, showDisableBtn, showEnableBtn };
@@ -605,13 +657,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
   const selectedTrigger = currentDialog?.triggers.find((t) => t.id === selected);
   const withWarning = triggerNotSupported(currentDialog, selectedTrigger);
-
-  const parseTriggerId = (triggerId: string | undefined): number | undefined => {
-    if (triggerId == null) return undefined;
-    const indexString = triggerId.match(/\d+/)?.[0];
-    if (indexString == null) return undefined;
-    return parseInt(indexString);
-  };
 
   return (
     <React.Fragment>
