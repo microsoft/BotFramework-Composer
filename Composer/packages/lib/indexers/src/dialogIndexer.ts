@@ -180,7 +180,7 @@ function parse(id: string, content: any) {
   const luFile = typeof content.recognizer === 'string' ? content.recognizer : '';
   const qnaFile = typeof content.recognizer === 'string' ? content.recognizer : '';
   const lgFile = typeof content.generator === 'string' ? content.generator : '';
-  const isFormDialog = has(content, '$Generator'); // mark as form generated dialog;
+  const isFormDialog = has(content, 'schema'); // mark as form generated dialog;
   const diagnostics: Diagnostic[] = [];
   return {
     id,
