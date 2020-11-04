@@ -1,4 +1,5 @@
 import { v4 as uuid } from 'uuid';
+import { AuthParameters } from '@botframework-composer/types';
 
 import { ElectronContext, useElectronContext } from '../utility/electronContext';
 import { isElectron } from '../utility/isElectron';
@@ -9,7 +10,7 @@ const log = logger.extend('electron-auth-provider');
 abstract class AuthProvider {
   constructor(protected config: OAuthConfig) {}
 
-  abstract async getAccessToken(options: OAuthOptions): Promise<string>;
+  abstract async getAccessToken(params: AuthParameters): Promise<string>;
 }
 
 type TokenRecord = {
@@ -19,13 +20,6 @@ type TokenRecord = {
 
 type TokenCache = {
   [credentials: string]: TokenRecord | undefined;
-};
-
-export type OAuthOptions = {
-  clientId: string;
-  /** ID of the resource to fetch an access token for -- can either be a URI (https://graph.microsoft.com) or a <guid>[/scope] (abc-123-456) */
-  targetResource?: string;
-  scopes: string[];
 };
 
 type OAuthConfig = {
@@ -43,9 +37,9 @@ class ElectronAuthProvider extends AuthProvider {
     log('Initialized.');
   }
 
-  async getAccessToken(options: OAuthOptions): Promise<string> {
+  async getAccessToken(params: AuthParameters): Promise<string> {
     const { getAccessToken } = this.electronContext;
-    const { targetResource = '' } = options;
+    const { targetResource = '' } = params;
 
     if (process.platform === 'linux') {
       log('Auth login flow is currently unsupported in Linux.');
@@ -55,7 +49,7 @@ class ElectronAuthProvider extends AuthProvider {
     log('Getting access token.');
 
     // try to get a cached token
-    const cachedToken = this.getCachedToken(options);
+    const cachedToken = this.getCachedToken(params);
     if (!!cachedToken && Date.now() <= cachedToken.expiryTime.valueOf()) {
       log('Returning cached token.');
       return cachedToken.accessToken;
@@ -64,8 +58,8 @@ class ElectronAuthProvider extends AuthProvider {
     try {
       // otherwise get a fresh token
       log('Did not find cached token. Getting fresh token.');
-      const { accessToken, acquiredAt, expiryTime } = await getAccessToken({ target: targetResource });
-      this.cacheTokens({ accessToken, acquiredAt, expiryTime }, options);
+      const { accessToken, acquiredAt, expiryTime } = await getAccessToken({ targetResource });
+      this.cacheTokens({ accessToken, acquiredAt, expiryTime }, params);
 
       return accessToken;
     } catch (e) {
@@ -82,18 +76,18 @@ class ElectronAuthProvider extends AuthProvider {
     return this._electronContext;
   }
 
-  private getCachedToken(options: OAuthOptions): TokenRecord | undefined {
-    const tokenHash = this.getTokenHash(options);
+  private getCachedToken(params: AuthParameters): TokenRecord | undefined {
+    const tokenHash = this.getTokenHash(params);
     const cachedToken = this.tokenCache[tokenHash];
     return cachedToken;
   }
 
   private cacheTokens(
     tokenInfo: { accessToken: string; acquiredAt: number; expiryTime: number },
-    options: OAuthOptions
+    params: AuthParameters
   ): void {
     const { accessToken, acquiredAt, expiryTime } = tokenInfo;
-    const tokenHash = this.getTokenHash(options);
+    const tokenHash = this.getTokenHash(params);
     const expiresIn = expiryTime - acquiredAt;
 
     log('Caching token...');
@@ -108,23 +102,23 @@ class ElectronAuthProvider extends AuthProvider {
 
     // setup timer to refresh token
     const timeUntilRefresh = this.tokenRefreshFactor * expiresIn;
-    setTimeout(() => this.refreshAccessToken(options), timeUntilRefresh);
+    setTimeout(() => this.refreshAccessToken(params), timeUntilRefresh);
   }
 
-  private async refreshAccessToken(options: OAuthOptions) {
+  private async refreshAccessToken(params: AuthParameters) {
     log('Refreshing access token...');
     const { getAccessToken } = this.electronContext;
-    const { targetResource = '' } = options;
-    const cachedToken = this.tokenCache[this.getTokenHash(options)];
+    const { targetResource = '' } = params;
+    const cachedToken = this.tokenCache[this.getTokenHash(params)];
     if (!!cachedToken) {
-      const { accessToken, acquiredAt, expiryTime } = await getAccessToken({ target: targetResource });
-      this.cacheTokens({ accessToken, acquiredAt, expiryTime }, options);
+      const { accessToken, acquiredAt, expiryTime } = await getAccessToken({ targetResource });
+      this.cacheTokens({ accessToken, acquiredAt, expiryTime }, params);
       log('Access token refreshed.');
     }
   }
 
-  private getTokenHash(options: OAuthOptions): string {
-    return options.targetResource || '';
+  private getTokenHash(params: AuthParameters): string {
+    return params.targetResource || '';
   }
 }
 
@@ -134,7 +128,7 @@ class WebAuthProvider extends AuthProvider {
   }
 
   // TODO (toanzian / ccastro): implement
-  async getAccessToken(options: OAuthOptions): Promise<string> {
+  async getAccessToken(params: AuthParameters): Promise<string> {
     throw new Error(
       'WebAuthProvider has not been implemented yet. Implicit auth flow currently only works in Electron.'
     );
@@ -161,8 +155,8 @@ class AuthService {
     }
   }
 
-  async getAccessToken(options: OAuthOptions): Promise<string> {
-    return this.provider.getAccessToken(options);
+  async getAccessToken(params: AuthParameters): Promise<string> {
+    return this.provider.getAccessToken(params);
   }
 
   get csrfToken(): string {

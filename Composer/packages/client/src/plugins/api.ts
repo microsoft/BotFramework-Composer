@@ -1,7 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { OAuthClient, OAuthOptions } from '../utils/oauthClient';
+import { AuthParameters } from '@botframework-composer/types';
+
+import { AuthClient } from '../utils/authClient';
 
 interface IAPI {
   auth: AuthAPI;
@@ -15,7 +17,7 @@ interface PublishConfig {
 }
 
 interface AuthAPI {
-  getAccessToken: (options: OAuthOptions) => Promise<string>; // returns an access token
+  getAccessToken: (options: AuthParameters) => Promise<string>; // returns an access token
 }
 
 interface PublishAPI {
@@ -30,8 +32,8 @@ class API implements IAPI {
 
   constructor() {
     this.auth = {
-      getAccessToken: (options: OAuthOptions) => {
-        return OAuthClient.getAccessToken(options);
+      getAccessToken: (params: AuthParameters) => {
+        return AuthClient.getAccessToken(params);
       },
     };
     this.publish = {

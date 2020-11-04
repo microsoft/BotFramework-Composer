@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import path from 'path';
+import { ElectronAuthParameters } from '@botframework-composer/types';
 
 import { app } from 'electron';
 
@@ -23,11 +24,6 @@ const GRAPH_RESOURCE = 'https://graph.microsoft.com';
 const DEFAULT_LOCALE = 'en'; // TODO: get this from settings?
 const DEFAULT_AUTH_SCHEME = 2; // bearer token
 const DEFAULT_AUTH_AUTHORITY = 'https://login.microsoftonline.com/common'; // work and school accounts
-
-// TODO: share this type with ElectronContext
-type AuthParamOptions = {
-  target: string;
-};
 
 class OneAuthInstance {
   private initialized: boolean;
@@ -61,8 +57,6 @@ class OneAuthInstance {
         'Please login',
         window.getNativeWindowHandle()
       );
-      // Personal Accounts
-      // const msaConfig = new OneAuth.MsaConfiguration();
       const aadConfig = new this.oneAuth.AadConfiguration(
         COMPOSER_CLIENT_ID,
         COMPOSER_REDIRECT_URI,
@@ -78,14 +72,14 @@ class OneAuthInstance {
   }
 
   public async getAccessToken(
-    options?: AuthParamOptions
+    params: ElectronAuthParameters
   ): Promise<{ accessToken: string; acquiredAt: number; expiryTime: number }> {
     try {
       if (!this.initialized) {
         this.initialize();
       }
       log('Getting access token...');
-      if (!options?.target) {
+      if (!params.targetResource) {
         throw 'Target resource required to get access token.';
       }
       if (!this.signedInAccount) {
@@ -97,14 +91,14 @@ class OneAuthInstance {
         throw 'Signed in account does not have an id.';
       }
       // use the signed in account to acquire a token
-      const params = new this.oneAuth.AuthParameters(
+      const reqParams = new this.oneAuth.AuthParameters(
         DEFAULT_AUTH_SCHEME,
         DEFAULT_AUTH_AUTHORITY,
-        options.target,
+        params.targetResource,
         this.signedInAccount.realm,
         ''
       );
-      const result = await this.oneAuth.acquireCredentialSilently(this.signedInAccount?.id, params, '');
+      const result = await this.oneAuth.acquireCredentialSilently(this.signedInAccount?.id, reqParams, '');
       if (result.credential && result.credential.value) {
         log('Acquired access token. %s', result.credential.value);
         return {
