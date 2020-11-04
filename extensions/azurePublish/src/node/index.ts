@@ -15,6 +15,7 @@ import { BotProjectProvision } from './provision';
 import { BackgroundProcessManager, ProcessStatus } from './backgroundProcessManager';
 import { ProvisionConfig } from './provision';
 import schema from './schema';
+import { stringifyError, AzurePublishErrors, createCustomizeError } from './utils/errorHandler';
 
 // This option controls whether the history is serialized to a file between sessions with Composer
 // set to TRUE for history to be saved to disk
@@ -146,39 +147,44 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
      * @param resourcekey
      */
     private init = async (project: any, srcTemplate: string, resourcekey: string, runtime: any) => {
-      // point to the declarative assets (possibly in remote storage)
-      const botFiles = project.getProject().files;
-      const botFolder = this.getBotFolder(resourcekey, this.mode);
-      const runtimeFolder = this.getRuntimeFolder(resourcekey);
+      try {
+        // point to the declarative assets (possibly in remote storage)
+        const botFiles = project.getProject().files;
+        const botFolder = this.getBotFolder(resourcekey, this.mode);
+        const runtimeFolder = this.getRuntimeFolder(resourcekey);
 
-      // clean up from any previous deploys
-      await this.cleanup(resourcekey);
+        // clean up from any previous deploys
+        await this.cleanup(resourcekey);
 
-      // create the temporary folder to contain this project
-      mkdirSync(runtimeFolder, { recursive: true });
+        // create the temporary folder to contain this project
+        mkdirSync(runtimeFolder, { recursive: true });
 
-      // create the ComposerDialogs/ folder
-      mkdirSync(botFolder, { recursive: true });
+        // create the ComposerDialogs/ folder
+        mkdirSync(botFolder, { recursive: true });
 
-      let manifestPath;
-      for (const file of botFiles) {
-        const pattern = /manifests\/[0-9A-z-]*.json/;
-        if (file.relativePath.match(pattern)) {
-          manifestPath = path.dirname(file.path);
+        let manifestPath;
+        for (const file of botFiles) {
+          const pattern = /manifests\/[0-9A-z-]*.json/;
+          if (file.relativePath.match(pattern)) {
+            manifestPath = path.dirname(file.path);
+          }
+          // save bot files
+          const filePath = path.resolve(botFolder, file.relativePath);
+          if (!(await pathExists(path.dirname(filePath)))) {
+            mkdirSync(path.dirname(filePath), { recursive: true });
+          }
+          writeFileSync(filePath, file.content);
         }
-        // save bot files
-        const filePath = path.resolve(botFolder, file.relativePath);
-        if (!(await pathExists(path.dirname(filePath)))) {
-          mkdirSync(path.dirname(filePath), { recursive: true });
-        }
-        writeFileSync(filePath, file.content);
+
+        // save manifest
+        runtime.setSkillManifest(runtimeFolder, project.fileStorage, manifestPath, project.fileStorage, this.mode);
+
+        // copy bot and runtime into projFolder
+        await copy(srcTemplate, runtimeFolder);
+
+      } catch (error) {
+        throw createCustomizeError(AzurePublishErrors.INITIALIZE_ERROR, `Error during init publish folder, ${error.message}`);
       }
-
-      // save manifest
-      runtime.setSkillManifest(runtimeFolder, project.fileStorage, manifestPath, project.fileStorage, this.mode);
-
-      // copy bot and runtime into projFolder
-      await copy(srcTemplate, runtimeFolder);
     };
 
     /**
@@ -190,6 +196,8 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
       await emptyDir(projFolder);
       await rmdir(projFolder);
     }
+
+
 
     /**
      * Take the project from a given folder, build it, and push it to Azure.
@@ -212,34 +220,25 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
       customizeConfiguration: DeployResources
     ) => {
       const { subscriptionID, accessToken, name, environment, hostname, luisResource } = customizeConfiguration;
-      try {
-        // Create the BotProjectDeploy object, which is used to carry out the deploy action.
-        const azDeployer = new BotProjectDeploy({
-          subId: subscriptionID, // deprecate - not used
-          logger: (msg: any) => {
-            this.logger(msg);
-            BackgroundProcessManager.updateProcess(jobId, 202, msg.message.replace(/\n$/, ''));
-          },
-          accessToken: accessToken,
-          projPath: this.getProjectFolder(resourcekey, this.mode),
-          runtime: runtime,
-        });
 
-        // Perform the deploy
-        await azDeployer.deploy(project, settings, profileName, name, environment, hostname, luisResource);
+      // Create the BotProjectDeploy object, which is used to carry out the deploy action.
+      const azDeployer = new BotProjectDeploy({
+        subId: subscriptionID, // deprecate - not used
+        logger: (msg: any) => {
+          this.logger(msg);
+          BackgroundProcessManager.updateProcess(jobId, 202, msg.message.replace(/\n$/, ''));
+        },
+        accessToken: accessToken,
+        projPath: this.getProjectFolder(resourcekey, this.mode),
+        runtime: runtime,
+      });
 
-        // If we've made it this far, the deploy succeeded!
-        BackgroundProcessManager.updateProcess(jobId, 200, 'Success');
-      } catch (error) {
-        this.logger(error);
-        if (error instanceof Error) {
-          BackgroundProcessManager.updateProcess(jobId, 500, error.message);
-        } else if (typeof error === 'object') {
-          BackgroundProcessManager.updateProcess(jobId, 500, JSON.stringify(error));
-        } else {
-          BackgroundProcessManager.updateProcess(jobId, 500, error);
-        }
-      }
+      // Perform the deploy
+      await azDeployer.deploy(project, settings, profileName, name, environment, hostname, luisResource);
+
+      // If we've made it this far, the deploy succeeded!
+      BackgroundProcessManager.updateProcess(jobId, 200, 'Success');
+
       // update status and history
       // get the latest status
       const status = BackgroundProcessManager.getStatus(jobId);
@@ -272,50 +271,58 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
         accessToken,
       } = config;
 
-      // get the appropriate runtime template which contains methods to build and configure the runtime
-      const runtime = composer.getRuntimeByProject(project);
-      // set runtime code path as runtime template folder path
-      let runtimeCodePath = runtime.path;
+      try{
+          // get the appropriate runtime template which contains methods to build and configure the runtime
+        const runtime = composer.getRuntimeByProject(project);
+        // set runtime code path as runtime template folder path
+        let runtimeCodePath = runtime.path;
 
-      // If the project is using an "ejected" runtime, use that version of the code instead of the built-in template
-      // TODO: this templatePath should come from the runtime instead of this magic parameter
-      if (
-        project.settings &&
-        project.settings.runtime &&
-        project.settings.runtime.customRuntime === true &&
-        project.settings.runtime.path
-      ) {
-        runtimeCodePath = project.settings.runtime.path;
+        // If the project is using an "ejected" runtime, use that version of the code instead of the built-in template
+        // TODO: this templatePath should come from the runtime instead of this magic parameter
+        if (
+          project.settings &&
+          project.settings.runtime &&
+          project.settings.runtime.customRuntime === true &&
+          project.settings.runtime.path
+        ) {
+          runtimeCodePath = project.settings.runtime.path;
+        }
+
+        // Prepare the temporary project
+        // this writes all the settings to the root settings/appsettings.json file
+        await this.init(project, runtimeCodePath, resourcekey, runtime);
+
+        // Merge all the settings
+        // this combines the bot-wide settings, the environment specific settings, and 2 new fields needed for deployed bots
+        // these will be written to the appropriate settings file inside the appropriate runtime plugin.
+        const mergedSettings = mergeDeep(fullSettings, settings);
+
+        // Prepare parameters and then perform the actual deployment action
+        const customizeConfiguration: DeployResources = {
+          accessToken,
+          subscriptionID,
+          name,
+          environment,
+          hostname,
+          luisResource,
+        };
+        await this.performDeploymentAction(
+          project,
+          mergedSettings,
+          runtime,
+          project.id,
+          profileName,
+          jobId,
+          resourcekey,
+          customizeConfiguration
+        );
+      }catch(err){
+        this.logger(err);
+        BackgroundProcessManager.updateProcess(jobId, 500, stringifyError(err));
+        await this.updateHistory(project.id, profileName, BackgroundProcessManager.getStatus(jobId));
+        BackgroundProcessManager.removeProcess(jobId);
+        this.cleanup(resourcekey);
       }
-
-      // Prepare the temporary project
-      // this writes all the settings to the root settings/appsettings.json file
-      await this.init(project, runtimeCodePath, resourcekey, runtime);
-
-      // Merge all the settings
-      // this combines the bot-wide settings, the environment specific settings, and 2 new fields needed for deployed bots
-      // these will be written to the appropriate settings file inside the appropriate runtime plugin.
-      const mergedSettings = mergeDeep(fullSettings, settings);
-
-      // Prepare parameters and then perform the actual deployment action
-      const customizeConfiguration: DeployResources = {
-        accessToken,
-        subscriptionID,
-        name,
-        environment,
-        hostname,
-        luisResource,
-      };
-      await this.performDeploymentAction(
-        project,
-        mergedSettings,
-        runtime,
-        project.id,
-        profileName,
-        jobId,
-        resourcekey,
-        customizeConfiguration
-      );
     };
 
     /*******************************************************************************************************************************/
@@ -376,7 +383,7 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
 
         BackgroundProcessManager.updateProcess(jobId, 200, 'Provision completed successfully!', publishProfile);
       } catch (error) {
-        BackgroundProcessManager.updateProcess(jobId, 500, error.message);
+        BackgroundProcessManager.updateProcess(jobId, 500, stringifyError(error));
       }
     };
 
@@ -421,18 +428,11 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
 
         this.asyncPublish(config, project, resourcekey, jobId);
       } catch (err) {
-        if (err instanceof Error) {
-          BackgroundProcessManager.updateProcess(jobId, 500, err.message);
-        } else if (typeof err === 'object') {
-          BackgroundProcessManager.updateProcess(jobId, 500, JSON.stringify(err));
-        } else {
-          BackgroundProcessManager.updateProcess(jobId, 500, err);
-        }
-
+        // can only can accessToken and settings missing. Because asyncPublish is not await.
+        BackgroundProcessManager.updateProcess(jobId, 500, stringifyError(err));
         await this.updateHistory(botId, profileName, BackgroundProcessManager.getStatus(jobId));
         BackgroundProcessManager.removeProcess(jobId);
-        // this.removeLoadingStatus(botId, profileName, jobId);
-        this.cleanup(resourcekey);
+        this.cleanup(resourcekey as string);
       }
 
       return publishResultFromStatus(BackgroundProcessManager.getStatus(jobId));

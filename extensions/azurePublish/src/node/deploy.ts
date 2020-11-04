@@ -10,6 +10,7 @@ import { BotProjectDeployConfig } from './botProjectDeployConfig';
 import { BotProjectDeployLoggerType } from './botProjectLoggerType';
 import { LuisAndQnaPublish } from './luisAndQnA';
 import archiver = require('archiver');
+import { AzurePublishErrors, createCustomizeError, stringifyError } from './utils/errorHandler';
 
 export class BotProjectDeploy {
   private accessToken: string;
@@ -120,22 +121,26 @@ export class BotProjectDeploy {
   }
 
   private async zipDirectory(source: string, out: string) {
-    const archive = archiver('zip', { zlib: { level: 9 } });
-    const stream = fs.createWriteStream(out);
+    try {
+      const archive = archiver('zip', { zlib: { level: 9 } });
+      const stream = fs.createWriteStream(out);
 
-    return new Promise((resolve, reject) => {
-      archive
-        .glob('**/*', {
-          cwd: source,
-          dot: true,
-          ignore: ['**/code.zip', 'node_modules/**/*'],
-        })
-        .on('error', (err) => reject(err))
-        .pipe(stream);
+      return new Promise((resolve, reject) => {
+        archive
+          .glob('**/*', {
+            cwd: source,
+            dot: true,
+            ignore: ['**/code.zip', 'node_modules/**/*'],
+          })
+          .on('error', (err) => reject(err))
+          .pipe(stream);
 
-      stream.on('close', () => resolve());
-      archive.finalize();
-    });
+        stream.on('close', () => resolve());
+        archive.finalize();
+      });
+    } catch (error) {
+      createCustomizeError(AzurePublishErrors.ZIP_FOLDER_ERROR, stringifyError(error));
+    }
   }
 
   // Upload the zip file to Azure
@@ -163,11 +168,11 @@ export class BotProjectDeploy {
       });
     } catch (err) {
       if (err.statusCode === 403) {
-        throw new Error(
+        throw createCustomizeError(AzurePublishErrors.DEPLOY_ZIP_ERROR,
           `Token expired, please run az account get-access-token, then replace the accessToken in your configuration`
         );
       } else {
-        throw err;
+        throw createCustomizeError(AzurePublishErrors.DEPLOY_ZIP_ERROR, stringifyError(err));
       }
     }
   }

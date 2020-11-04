@@ -26,6 +26,7 @@ import {
   QnAResourceConfig,
   AzureFuntionsConfig,
 } from './azureResourceManagerConfig';
+import { createCustomizeError, ProvisionErrors, stringifyError } from '../utils/errorHandler';
 
 export class AzureResourceMananger {
   // Logger
@@ -110,7 +111,7 @@ export class AzureResourceMananger {
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
         message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
       });
-      throw err;
+      throw createCustomizeError(ProvisionErrors.CREATE_RESOURCEGROUP_ERROR, stringifyError(err));
     }
   }
 
@@ -202,7 +203,7 @@ export class AzureResourceMananger {
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
         message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
       });
-      throw err;
+      throw createCustomizeError(ProvisionErrors.CREATE_LUIS_ERROR, stringifyError(err));
     }
   }
 
@@ -410,7 +411,7 @@ export class AzureResourceMananger {
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
         message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
       });
-      throw err;
+      throw createCustomizeError(ProvisionErrors.CREATE_QNA_ERROR, stringifyError(err));
     }
   }
 
@@ -454,7 +455,7 @@ export class AzureResourceMananger {
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
         message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
       });
-      throw err;
+      throw createCustomizeError(ProvisionErrors.CREATE_APP_INSIGHT_ERROR, stringifyError(err));
     }
   }
 
@@ -488,67 +489,59 @@ export class AzureResourceMananger {
         config.resourceGroupName,
         apiKeyOptions
       );
+
+      const appinsightsApiKey = appinsightsApiKeyResponse.apiKey;
+
+      this.logger({
+        status: BotProjectDeployLoggerType.PROVISION_INFO,
+        message: `> AppInsights AppId: ${appinsightsId} ...`,
+      });
+      this.logger({
+        status: BotProjectDeployLoggerType.PROVISION_INFO,
+        message: `> AppInsights InstrumentationKey: ${appinsightsInstrumentationKey} ...`,
+      });
+      this.logger({
+        status: BotProjectDeployLoggerType.PROVISION_INFO,
+        message: `> AppInsights ApiKey: ${appinsightsApiKey} ...`,
+      });
+
+      if (appinsightsId && appinsightsInstrumentationKey && appinsightsApiKey) {
+        const botServiceClient = new AzureBotService(this.creds, this.subscriptionId);
+        let botCreated;
+        botCreated = await botServiceClient.bots.get(config.resourceGroupName, config.name);
+        if (botCreated.properties) {
+          botCreated.properties.developerAppInsightKey = appinsightsInstrumentationKey;
+          botCreated.properties.developerAppInsightsApiKey = appinsightsApiKey;
+          botCreated.properties.developerAppInsightsApplicationId = appinsightsId;
+          let botUpdateResult;
+          try {
+            botUpdateResult = await botServiceClient.bots.update(config.resourceGroupName, config.name, botCreated);
+          } catch (err) {
+            this.logger({
+              status: BotProjectDeployLoggerType.PROVISION_ERROR,
+              message: `! Something went wrong while trying to link Application Insights settings to Bot Service Result: ${JSON.stringify(
+                botUpdateResult
+              )}`,
+            });
+            throw err;
+          }
+          this.logger({
+            status: BotProjectDeployLoggerType.PROVISION_INFO,
+            message: `> Linking Application Insights settings to Bot Service Success!`,
+          });
+        } else {
+          this.logger({
+            status: BotProjectDeployLoggerType.PROVISION_WARNING,
+            message: `! The Bot doesn't have a keys properties to update.`,
+          });
+        }
+      }
     } catch (err) {
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
         message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
       });
-      throw err;
-    }
-
-    const appinsightsApiKey = appinsightsApiKeyResponse.apiKey;
-
-    this.logger({
-      status: BotProjectDeployLoggerType.PROVISION_INFO,
-      message: `> AppInsights AppId: ${appinsightsId} ...`,
-    });
-    this.logger({
-      status: BotProjectDeployLoggerType.PROVISION_INFO,
-      message: `> AppInsights InstrumentationKey: ${appinsightsInstrumentationKey} ...`,
-    });
-    this.logger({
-      status: BotProjectDeployLoggerType.PROVISION_INFO,
-      message: `> AppInsights ApiKey: ${appinsightsApiKey} ...`,
-    });
-
-    if (appinsightsId && appinsightsInstrumentationKey && appinsightsApiKey) {
-      const botServiceClient = new AzureBotService(this.creds, this.subscriptionId);
-      let botCreated;
-      try {
-        botCreated = await botServiceClient.bots.get(config.resourceGroupName, config.name);
-      } catch (err) {
-        this.logger({
-          status: BotProjectDeployLoggerType.PROVISION_ERROR,
-          message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
-        });
-        throw err;
-      }
-      if (botCreated.properties) {
-        botCreated.properties.developerAppInsightKey = appinsightsInstrumentationKey;
-        botCreated.properties.developerAppInsightsApiKey = appinsightsApiKey;
-        botCreated.properties.developerAppInsightsApplicationId = appinsightsId;
-        let botUpdateResult;
-        try {
-          botUpdateResult = await botServiceClient.bots.update(config.resourceGroupName, config.name, botCreated);
-        } catch (err) {
-          this.logger({
-            status: BotProjectDeployLoggerType.PROVISION_ERROR,
-            message: `! Something went wrong while trying to link Application Insights settings to Bot Service Result: ${JSON.stringify(
-              botUpdateResult
-            )}`,
-          });
-          throw err;
-        }
-        this.logger({
-          status: BotProjectDeployLoggerType.PROVISION_INFO,
-          message: `> Linking Application Insights settings to Bot Service Success!`,
-        });
-      } else {
-        this.logger({
-          status: BotProjectDeployLoggerType.PROVISION_WARNING,
-          message: `! The Bot doesn't have a keys properties to update.`,
-        });
-      }
+      throw createCustomizeError(ProvisionErrors.CONNECT_APP_INSIGHT_ERROR, stringifyError(err));
     }
   }
 
@@ -679,7 +672,7 @@ export class AzureResourceMananger {
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
         message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
       });
-      throw err;
+      throw createCustomizeError(ProvisionErrors.CREATE_COSMOSDB_ERROR, stringifyError(err));
     }
   }
 
@@ -724,7 +717,7 @@ export class AzureResourceMananger {
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
         message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
       });
-      throw err;
+      throw createCustomizeError(ProvisionErrors.CREATE_BLOB_STORAGE_ERROR, stringifyError(err));
     }
   }
 
@@ -806,7 +799,7 @@ export class AzureResourceMananger {
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
         message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
       });
-      throw err;
+      throw createCustomizeError(ProvisionErrors.CREATE_WEB_APP_ERROR, stringifyError(err));
     }
   }
 
@@ -868,7 +861,7 @@ export class AzureResourceMananger {
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
         message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
       });
-      throw err;
+      throw createCustomizeError(ProvisionErrors.CREATE_FUNCTIONS_RESOURCE_ERROR, stringifyError(err));
     }
   }
 
@@ -911,7 +904,7 @@ export class AzureResourceMananger {
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
         message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
       });
-      throw err;
+      throw createCustomizeError(ProvisionErrors.BOT_REGISTRATION_ERROR, stringifyError(err));
     }
   }
 

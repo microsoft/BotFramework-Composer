@@ -8,6 +8,7 @@ import { BotProjectDeployLoggerType } from './botProjectLoggerType';
 import { AzureResourceManangerConfig } from './azureResourceManager/azureResourceManagerConfig';
 import { AzureResourceMananger } from './azureResourceManager/azureResourceManager';
 import { AzureResourceTypes } from './resourceTypes';
+import { createCustomizeError, ProvisionErrors, stringifyError } from './utils/errorHandler';
 
 export interface ProvisionConfig {
   accessToken: string;
@@ -219,18 +220,10 @@ export class BotProjectProvision {
       this.azureResourceManagementClient = new AzureResourceMananger(armConfig);
 
       // Ensure the resource group is ready
-      try {
-        provisionResults.resourceGroup = await this.azureResourceManagementClient.createResourceGroup({
-          name: resourceGroupName,
-          location: config.location.name,
-        });
-      } catch (err) {
-        this.logger({
-          status: BotProjectDeployLoggerType.PROVISION_ERROR,
-          message: err.message,
-        });
-        throw err;
-      }
+      provisionResults.resourceGroup = await this.azureResourceManagementClient.createResourceGroup({
+        name: resourceGroupName,
+        location: config.location.name,
+      });
 
       // SOME OF THESE MUST HAPPEN IN THE RIGHT ORDER!
       // TODO: ensure the sort order?
