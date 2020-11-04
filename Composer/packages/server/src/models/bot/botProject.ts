@@ -4,6 +4,7 @@
 import { promisify } from 'util';
 import fs from 'fs';
 
+import has from 'lodash/has';
 import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
 import {
@@ -436,7 +437,14 @@ export class BotProject implements IBotProject {
     this._validateFileContent(name, content);
     const botName = this.name;
     const defaultLocale = this.settings?.defaultLanguage || defaultLanguage;
-    const relativePath = defaultFilePath(botName, defaultLocale, filename, this.rootDialogId);
+
+    // find created file belong to which dialog, all resources should be writed to <dialog>/
+    const dialogId = name.split('.')[0];
+    const dialogFile = this.files.get(`${dialogId}.dialog`);
+    const endpoint = dialogFile ? Path.dirname(dialogFile.relativePath) : '';
+    const rootDialogId = this.rootDialogId;
+
+    const relativePath = defaultFilePath(botName, defaultLocale, filename, { endpoint, rootDialogId });
     const file = this.files.get(filename);
     if (file) {
       throw new Error(`${filename} dialog already exist`);
@@ -535,10 +543,10 @@ export class BotProject implements IBotProject {
 
   public async generateDialog(name: string, templateDirs?: string[]) {
     const defaultLocale = this.settings?.defaultLanguage || defaultLanguage;
-    const relativePath = defaultFilePath(this.name, defaultLocale, `${name}${FileExtensions.FormDialogSchema}`);
+    const relativePath = defaultFilePath(this.name, defaultLocale, `${name}${FileExtensions.FormDialogSchema}`, {});
     const schemaPath = Path.resolve(this.dir, relativePath);
 
-    const dialogPath = defaultFilePath(this.name, defaultLocale, `${name}${FileExtensions.Dialog}`);
+    const dialogPath = defaultFilePath(this.name, defaultLocale, `${name}${FileExtensions.Dialog}`, {});
     const outDir = Path.dirname(Path.resolve(this.dir, dialogPath));
 
     const feedback = (type: FeedbackType, message: string): void => {
@@ -585,7 +593,7 @@ export class BotProject implements IBotProject {
 
   public async deleteFormDialog(dialogId: string) {
     const defaultLocale = this.settings?.defaultLanguage || defaultLanguage;
-    const dialogPath = defaultFilePath(this.name, defaultLocale, `${dialogId}${FileExtensions.Dialog}`);
+    const dialogPath = defaultFilePath(this.name, defaultLocale, `${dialogId}${FileExtensions.Dialog}`, {});
     const dirToDelete = Path.dirname(Path.resolve(this.dir, dialogPath));
 
     // I check that the path is longer 3 to avoid deleting a drive and all its contents.
@@ -790,11 +798,22 @@ export class BotProject implements IBotProject {
 
   // migration: create qna files for old bots
   private _createQnAFilesForOldBot = async (files: Map<string, FileInfo>) => {
+    // flowing migration scripts depends on files;
+    this.files = new Map<string, FileInfo>([...files]);
     const dialogFiles: FileInfo[] = [];
     const qnaFiles: FileInfo[] = [];
     files.forEach((file) => {
       if (file.name.endsWith('.dialog')) {
-        dialogFiles.push(file);
+        try {
+          // filter form dialog generated file.
+          const dialogJson = JSON.parse(file.content);
+          const isFormDialog = has(dialogJson, 'schema');
+          if (!isFormDialog) {
+            dialogFiles.push(file);
+          }
+        } catch (_e) {
+          // ignore
+        }
       }
       if (file.name.endsWith('.qna')) {
         qnaFiles.push(file);
