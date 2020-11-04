@@ -27,6 +27,7 @@ import { attachLSPServer } from './utility/attachLSP';
 import log from './logger';
 import { setEnvDefault } from './utility/setEnvDefault';
 import { ElectronContext, setElectronContext } from './utility/electronContext';
+import { authService } from './services/auth';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const session = require('express-session');
@@ -125,7 +126,10 @@ export async function start(electronContext?: ElectronContext): Promise<number |
   });
 
   app.get('*', (req, res) => {
-    res.render(path.resolve(clientDirectory, 'index.ejs'), { __nonce__: req.__nonce__ });
+    res.render(path.resolve(clientDirectory, 'index.ejs'), {
+      __nonce__: req.__nonce__,
+      __csrf__: authService.csrfToken,
+    });
   });
 
   const preferredPort = process.env.PORT || 5000;

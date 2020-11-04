@@ -1,3 +1,5 @@
+import { v4 as uuid } from 'uuid';
+
 import { ElectronContext, useElectronContext } from '../utility/electronContext';
 import { isElectron } from '../utility/isElectron';
 import logger from '../logger';
@@ -141,6 +143,7 @@ class WebAuthProvider extends AuthProvider {
 
 class AuthService {
   private provider: AuthProvider;
+  private _csrfToken: string;
 
   constructor() {
     if (isElectron) {
@@ -150,10 +153,20 @@ class AuthService {
       // hosted / web scenario
       this.provider = new WebAuthProvider({ redirectUri: 'bfcomposer://oauth' });
     }
+    // generate anti-csrf token in production environment
+    if (process.env.NODE_ENV === 'production') {
+      this._csrfToken = uuid();
+    } else {
+      this._csrfToken = '';
+    }
   }
 
   async getAccessToken(options: OAuthOptions): Promise<string> {
     return this.provider.getAccessToken(options);
+  }
+
+  get csrfToken(): string {
+    return this._csrfToken;
   }
 }
 

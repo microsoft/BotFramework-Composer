@@ -15,7 +15,6 @@ interface PublishConfig {
 }
 
 interface AuthAPI {
-  login: (options: OAuthOptions) => Promise<string>; // returns an id token
   getAccessToken: (options: OAuthOptions) => Promise<string>; // returns an access token
 }
 
@@ -31,13 +30,8 @@ class API implements IAPI {
 
   constructor() {
     this.auth = {
-      login: (options: OAuthOptions) => {
-        const client = new OAuthClient(options);
-        return client.login();
-      },
       getAccessToken: (options: OAuthOptions) => {
-        const client = new OAuthClient(options);
-        return client.getTokenSilently();
+        return OAuthClient.getAccessToken(options);
       },
     };
     this.publish = {
