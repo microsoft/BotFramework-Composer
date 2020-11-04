@@ -6,10 +6,10 @@ import path from 'path';
 import { exec } from 'child_process';
 import { promisify } from 'util';
 
-import del from 'del';
 import find from 'lodash/find';
 import { UserIdentity, ExtensionContext, BotTemplate, FileExtensions } from '@bfc/extension';
 import { mkdirs, readFile } from 'fs-extra';
+import rimraf from 'rimraf';
 
 import log from '../../logger';
 import { LocalDiskStorage } from '../storage/localDiskStorage';
@@ -21,6 +21,7 @@ import { IFileStorage } from '../storage/interface';
 import { BotProject } from '../bot/botProject';
 
 const execAsync = promisify(exec);
+const removeDirAndFiles = promisify(rimraf);
 
 export class AssetManager {
   public templateStorage: LocalDiskStorage;
@@ -90,7 +91,7 @@ export class AssetManager {
       // create empty temp directory on server for holding externally hosted template src
       templateSrcPath = path.resolve(__dirname, '../../../temp');
       if (fs.existsSync(templateSrcPath)) {
-        await del(templateSrcPath);
+        await removeDirAndFiles(templateSrcPath);
       }
       await mkdirs(templateSrcPath, (err) => {
         if (err) {
@@ -106,7 +107,7 @@ export class AssetManager {
 
       if (isHostedTemplate) {
         try {
-          await del(templateSrcPath);
+          await removeDirAndFiles(templateSrcPath);
         } catch (err) {
           throw new Error('Issue deleting temp generated file for external template assets');
         }
