@@ -9,7 +9,7 @@ import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZ
 import cloneDeep from 'lodash/cloneDeep';
 import formatMessage from 'format-message';
 import { DialogInfo, ITrigger, Diagnostic, DiagnosticSeverity } from '@bfc/shared';
-import debounce from 'lodash/debounce';
+import throttle from 'lodash/throttle';
 import { useRecoilValue } from 'recoil';
 import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 import { extractSchemaProperties, groupTriggersByPropertyReference, NoGroupingTriggerGroupName } from '@bfc/indexers';
@@ -153,7 +153,7 @@ export const ProjectTree: React.FC<Props> = ({
   const [filter, setFilter] = useState('');
   const formDialogComposerFeatureEnabled = useFeatureFlag('FORM_DIALOG');
   const [selectedLink, setSelectedLink] = useState<Partial<TreeLink> | undefined>(defaultSelected);
-  const delayedSetFilter = debounce((newValue) => setFilter(newValue), 1000);
+  const delayedSetFilter = throttle((newValue) => setFilter(newValue), 200);
   const addMainDialogRef = useCallback((mainDialog) => onboardingAddCoachMarkRef({ mainDialog }), []);
   const projectCollection = useRecoilValue<BotInProject[]>(botProjectSpaceSelector).map((bot) => ({
     ...bot,
@@ -307,13 +307,17 @@ export const ProjectTree: React.FC<Props> = ({
             isActive={doesLinkMatch(dialogLink, selectedLink)}
             link={dialogLink}
             menu={[
-              {
-                label: formatMessage('Remove this dialog'),
-                icon: 'Delete',
-                onClick: (link) => {
-                  onDeleteDialog(link.dialogId ?? '');
-                },
-              },
+              ...(!dialog.isRoot
+                ? [
+                    {
+                      label: formatMessage('Remove this dialog'),
+                      icon: 'Delete',
+                      onClick: (link) => {
+                        onDeleteDialog(link.dialogId ?? '');
+                      },
+                    },
+                  ]
+                : []),
               ...(showEditSchema
                 ? [
                     {

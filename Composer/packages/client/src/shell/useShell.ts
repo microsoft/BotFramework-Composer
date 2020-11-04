@@ -57,6 +57,7 @@ const stubDialog = (): DialogInfo => ({
   triggers: [],
   intentTriggers: [],
   skills: [],
+  isFormDialog: false,
 });
 
 export function useShell(source: EventSource, projectId: string): Shell {
@@ -190,8 +191,9 @@ export function useShell(source: EventSource, projectId: string): Shell {
         projectId,
       };
       dialogMapRef.current[dialogId] = updatedDialog;
-      updateDialog(payload);
-      commitChanges();
+      return updateDialog(payload).then(() => {
+        commitChanges();
+      });
     },
     updateRegExIntent: updateRegExIntentHandler,
     renameRegExIntent: renameRegExIntentHandler,
