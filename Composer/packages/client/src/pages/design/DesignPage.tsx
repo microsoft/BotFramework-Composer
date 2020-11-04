@@ -286,7 +286,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     const showDisableBtn = selectedActions.some((x) => get(x, 'disabled') !== true);
     const showEnableBtn = selectedActions.some((x) => get(x, 'disabled') === true);
     return { actionSelected, showDisableBtn, showEnableBtn };
-  }, [visualEditorSelection]);
+  }, [visualEditorSelection, currentDialog?.content]);
 
   const { onFocusFlowEditor, onBlurFlowEditor } = useElectronFeatures(actionSelected, canUndo?.(), canRedo?.());
 
@@ -329,7 +329,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             onClick: () => {
               createQnAFromUrlDialogBegin({
                 projectId,
-                showFromScratch: true,
               });
             },
           },
