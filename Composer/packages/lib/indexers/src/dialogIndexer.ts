@@ -12,6 +12,7 @@ import {
   LgTemplateJsonPath,
   ReferredLuIntents,
   Diagnostic,
+  LuProviderType,
 } from '@bfc/shared';
 import formatMessage from 'format-message';
 
@@ -181,6 +182,7 @@ function parse(id: string, content: any) {
   const qnaFile = typeof content.recognizer === 'string' ? content.recognizer : '';
   const lgFile = typeof content.generator === 'string' ? content.generator : '';
   const diagnostics: Diagnostic[] = [];
+  const luProvider: LuProviderType = '';
   return {
     id,
     content,
@@ -194,6 +196,7 @@ function parse(id: string, content: any) {
     triggers: extractTriggers(content),
     intentTriggers: extractIntentTriggers(content),
     skills: extractReferredSkills(content),
+    luProvider,
   };
 }
 
@@ -210,7 +213,7 @@ function index(files: FileInfo[], botName: string): DialogInfo[] {
             throw new Error(formatMessage('a dialog file must have a name'));
           }
           const isRoot = file.relativePath.includes('/') === false; // root dialog should be in root path
-          const dialog = {
+          const dialog: DialogInfo = {
             isRoot,
             displayName: isRoot ? `${botName}` : id,
             ...parse(id, dialogJson),

@@ -94,6 +94,7 @@ export type ProjectContextApi = {
   createQnATrigger: (id: string) => void;
   updateSkillSetting: (skillId: string, skillsData: SkillSetting) => Promise<void>;
   updateFlowZoomRate: (currentRate: number) => void;
+  updateRecognizer: (projectId: string, dialogId: string, kind) => void;
 };
 
 export type ProjectContext = {

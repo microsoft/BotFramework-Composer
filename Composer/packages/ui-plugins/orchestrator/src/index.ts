@@ -7,12 +7,11 @@ import formatMessage from 'format-message';
 
 const config: PluginConfig = {
   uiSchema: {
-    [SDKKinds.CrossTrainedRecognizerSet]: {
+    [SDKKinds.OrchestratorRecognizer]: {
       recognizer: {
-        displayName: () => formatMessage('Default recognizer'),
-        isSelected: (data, dialog: DialogInfo) => {
-          if (dialog.luProvider === SDKKinds.OrchestratorRecognizer) return false;
-          return typeof data === 'string' && data.endsWith('.lu.qna');
+        displayName: () => formatMessage('Orchestrator Recognizer'),
+        isSelected: (_, dialog: DialogInfo) => {
+          return dialog.luProvider === SDKKinds.OrchestratorRecognizer;
         },
         intentEditor: 'LuIntentEditor',
         seedNewRecognizer: (shellData, shellApi) => {
@@ -24,8 +23,11 @@ const config: PluginConfig = {
             alert(formatMessage(`NO LU OR QNA FILE WITH NAME { id }`, { id: currentDialog.id }));
           }
 
-          shellApi.updateRecognizer(projectId, currentDialog.id, SDKKinds.LuisRecognizer);
+          if (luFile?.empty) {
+            alert(formatMessage(`LU FILE IS EMPTY WITH NAME { id }`, { id: currentDialog.id }));
+          }
 
+          shellApi.updateRecognizer(projectId, currentDialog.id, SDKKinds.OrchestratorRecognizer);
           return `${currentDialog.id}.lu.qna`;
         },
       },

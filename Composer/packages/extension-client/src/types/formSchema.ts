@@ -1,6 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { MicrosoftIRecognizer, SDKKinds, SDKRoles, ShellApi, ShellData } from '@botframework-composer/types';
+import {
+  MicrosoftIRecognizer,
+  SDKKinds,
+  SDKRoles,
+  ShellApi,
+  ShellData,
+  DialogInfo,
+} from '@botframework-composer/types';
 
 import { FieldWidget } from './form';
 
@@ -78,7 +85,7 @@ export type RecognizerSchema = {
   /** An inline editor to edit an intent. If none provided, users will not be able to edit. */
   intentEditor?: FieldWidget | string;
   /** A function invoked with the form data to determine if this is the currently selected recognizer */
-  isSelected?: (data: any) => boolean;
+  isSelected?: (data: any, dialog: DialogInfo) => boolean;
   /** Invoked when constructing a new recognizer instance.
    *  Make sure the instance can be recognized either by $kind or isSelected().
    */
