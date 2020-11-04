@@ -6,14 +6,12 @@ import { useRecoilCallback, CallbackInterface } from 'recoil';
 import { ILuisConfig, IQnAConfig } from '@bfc/shared';
 
 import * as luUtil from '../../utils/luUtil';
-import * as buildUtil from '../../utils/buildUtil';
 import { Text, BotStatus } from '../../constants';
 import httpClient from '../../utils/httpUtil';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
 import { luFilesState, qnaFilesState, botStatusState, botLoadErrorState } from '../atoms';
 import { dialogsSelectorFamily } from '../selectors';
-import { settingsState } from '../atoms/botState';
 
 const checkEmptyQuestionOrAnswerInQnAFile = (sections) => {
   return sections.some((s) => !s.Answer || s.Questions.some((q) => !q.content));
@@ -24,13 +22,11 @@ export const builderDispatcher = () => {
     ({ set, snapshot }: CallbackInterface) => async (
       luisConfig: ILuisConfig,
       qnaConfig: IQnAConfig,
-      recognizerTypes: { [fileName: string]: string },
       projectId: string
     ) => {
       const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
       const luFiles = await snapshot.getPromise(luFilesState(projectId));
       const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
-      const settings = await snapshot.getPromise(settingsState(projectId));
       const referredLuFiles = luUtil.checkLuisBuild(luFiles, dialogs);
       const errorMsg = qnaFiles.reduce(
         (result, file) => {
@@ -51,13 +47,10 @@ export const builderDispatcher = () => {
         return;
       }
       try {
-        const crossTrainConfig = buildUtil.createCrossTrainConfig(dialogs, referredLuFiles, settings.languages);
         await httpClient.post(`/projects/${projectId}/build`, {
           luisConfig,
           qnaConfig,
           projectId,
-          crossTrainConfig,
-          recognizerTypes,
           luFiles: referredLuFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
           qnaFiles: qnaFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
         });

@@ -11,9 +11,9 @@ context('Creating a new Dialog', () => {
   it('can create a new dialog from project tree', () => {
     cy.findByTestId('AddFlyout').click();
     cy.findByTestId('FlyoutNewDialog').click();
-    cy.findByTestId('NewDialogName').type('{selectall}__TestNewDialog2{enter}');
+    cy.findByTestId('NewDialogName').type('{selectall}TestNewDialog2{enter}');
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('__TestNewDialog2').should('exist');
+      cy.findByText('TestNewDialog2').should('exist');
     });
   });
 });

@@ -5,6 +5,7 @@ import {
   BotProjectFile,
   BotProjectSpace,
   BotSchemas,
+  CrosstrainConfig,
   Diagnostic,
   DialogInfo,
   DialogSchemaFile,
@@ -14,6 +15,7 @@ import {
   LgFile,
   LuFile,
   QnAFile,
+  RecognizerFile,
   Skill,
 } from '@bfc/shared';
 import { atomFamily } from 'recoil';
@@ -43,6 +45,7 @@ const emptyDialog: DialogInfo = {
   triggers: [],
   intentTriggers: [],
   skills: [],
+  isFormDialog: false,
 };
 type dialogStateParams = { projectId: string; dialogId: string };
 export const dialogState = atomFamily<DialogInfo, dialogStateParams>({
@@ -139,6 +142,27 @@ export const skillsState = atomFamily<Skill[], string>({
   key: getFullyQualifiedKey('skills'),
   default: (id) => {
     return [];
+  },
+});
+
+export const recognizerIdsState = atomFamily<string[], string>({
+  key: getFullyQualifiedKey('recognizerIds'),
+  default: (id) => {
+    return [];
+  },
+});
+
+export const recognizerState = atomFamily<RecognizerFile, { projectId: string; id: string }>({
+  key: getFullyQualifiedKey('recognizer'),
+  default: () => {
+    return { id: '', content: {}, lastModified: '' };
+  },
+});
+
+export const crossTrainConfigState = atomFamily<CrosstrainConfig, string>({
+  key: getFullyQualifiedKey('crossTrainConfig'),
+  default: () => {
+    return {};
   },
 });
 
@@ -268,11 +292,6 @@ export const designPageLocationState = atomFamily<DesignPageLocation, string>({
 
 export const showCreateQnAFromUrlDialogState = atomFamily<boolean, string>({
   key: getFullyQualifiedKey('showCreateQnAFromUrlDialog'),
-  default: false,
-});
-
-export const showCreateQnAFromUrlDialogWithScratchState = atomFamily<boolean, string>({
-  key: getFullyQualifiedKey('showCreateQnAFromUrlDialogWithScratch'),
   default: false,
 });
 

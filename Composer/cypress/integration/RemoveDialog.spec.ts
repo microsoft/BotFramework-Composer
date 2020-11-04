@@ -9,17 +9,19 @@ context('RemoveDialog', () => {
 
   it('can remove dialog', () => {
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByTestId('DialogTreeItemtriggers[4]').within(() => {
+      cy.findByTestId('$Root_additem').within(() => {
         cy.findByTestId('dialogMoreButton').first().invoke('attr', 'style', 'visibility: visible').click();
       });
     });
 
     cy.get('.ms-ContextualMenu-linkContent > .ms-ContextualMenu-itemText').within(() => {
-      cy.findByText('Delete').click();
+      cy.findByText('Remove this dialog').click();
     });
 
+    cy.findByText('Yes').click();
+
     cy.findByTestId('ProjectTree').within(() => {
-      cy.get('[title="AddItem"]').should('not.exist');
+      cy.get('[title="addItem"]').should('not.exist');
     });
   });
 });

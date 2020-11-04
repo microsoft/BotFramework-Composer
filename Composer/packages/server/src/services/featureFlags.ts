@@ -21,69 +21,64 @@ export class FeatureFlagService {
   private static updateFeatureFlags = () => {
     const currentFeatureFlagKeys = Object.keys(FeatureFlagService.currentFeatureFlagMap);
     const defaultFeatureFlagKeys = Object.keys(FeatureFlagService.defaultFeatureFlags);
-    const keysToAdd: string[] = [];
-    const keysToUpdateHidden: string[] = [];
 
-    defaultFeatureFlagKeys.forEach((key: string) => {
-      if (!currentFeatureFlagKeys.includes(key)) {
-        keysToAdd.push(key);
-      } else if (
-        currentFeatureFlagKeys.includes(key) &&
-        FeatureFlagService.currentFeatureFlagMap[key as FeatureFlagKey].isHidden !==
-          FeatureFlagService.defaultFeatureFlags[key as FeatureFlagKey].isHidden
-      ) {
-        keysToUpdateHidden.push(key);
-      }
+    // apply defaults to the loaded feature flags
+    Object.keys(FeatureFlagService.currentFeatureFlagMap).forEach((key) => {
+      FeatureFlagService.currentFeatureFlagMap[key] = {
+        ...FeatureFlagService.defaultFeatureFlags[key],
+        ...FeatureFlagService.currentFeatureFlagMap[key],
+      };
     });
 
-    const keysToRemove = currentFeatureFlagKeys.filter((key: string) => {
-      if (!defaultFeatureFlagKeys.includes(key)) {
-        return key;
-      }
-    });
+    let saveNeeded = false;
 
-    keysToAdd.forEach((key: string) => {
-      FeatureFlagService.currentFeatureFlagMap[key] = FeatureFlagService.defaultFeatureFlags[key];
-    });
+    // add any new keys defined in the defaults that aren't in current
+    defaultFeatureFlagKeys
+      .filter((key: string) => !currentFeatureFlagKeys.includes(key))
+      .forEach((key: string) => {
+        FeatureFlagService.currentFeatureFlagMap[key] = FeatureFlagService.defaultFeatureFlags[key];
+        saveNeeded = true;
+      });
 
-    keysToRemove.forEach((key: string) => {
-      delete FeatureFlagService.currentFeatureFlagMap[key];
-    });
+    // remove any keys no longer in default that are in current
+    currentFeatureFlagKeys
+      .filter((key: string) => !defaultFeatureFlagKeys.includes(key))
+      .forEach((key: string) => {
+        delete FeatureFlagService.currentFeatureFlagMap[key];
+        saveNeeded = true;
+      });
 
-    keysToUpdateHidden.forEach((key: string) => {
-      FeatureFlagService.currentFeatureFlagMap[key as FeatureFlagKey].isHidden =
-        FeatureFlagService.defaultFeatureFlags[key as FeatureFlagKey].isHidden;
-    });
+    // set any hidden feature flags from the process
+    // process should override value for hidden features flags
+    Object.keys(FeatureFlagService.currentFeatureFlagMap)
+      .filter((key) => FeatureFlagService.currentFeatureFlagMap[key as FeatureFlagKey].isHidden)
+      .forEach((key) => {
+        const enabled = FeatureFlagService.currentFeatureFlagMap[key as FeatureFlagKey].enabled;
+        const processEnvEnabled = key in process.env;
 
-    const hiddenFeatureFlagUpdated = FeatureFlagService.updateHiddenFeatureFlags();
+        if (enabled !== processEnvEnabled) {
+          FeatureFlagService.currentFeatureFlagMap[key as FeatureFlagKey].enabled = processEnvEnabled;
+          saveNeeded = true;
+        }
+      });
 
-    if (
-      keysToRemove?.length > 0 ||
-      keysToAdd?.length > 0 ||
-      keysToUpdateHidden?.length > 0 ||
-      hiddenFeatureFlagUpdated
-    ) {
-      Store.set(storeKey, FeatureFlagService.currentFeatureFlagMap);
+    if (saveNeeded) {
+      FeatureFlagService.saveFeatureFlags();
     }
   };
 
-  private static updateHiddenFeatureFlags = (): boolean => {
-    const hiddenFeatureFlagKeys = Object.keys(FeatureFlagService.currentFeatureFlagMap).filter((key: string) => {
-      if (FeatureFlagService.currentFeatureFlagMap[key as FeatureFlagKey].isHidden) {
-        return key;
-      }
-    });
+  private static saveFeatureFlags() {
+    const saveFeatureFlagMap: FeatureFlagMap = {} as FeatureFlagMap;
 
-    let result = false;
-    hiddenFeatureFlagKeys.forEach((key: string) => {
-      if (process.env[key] && process.env[key] !== FeatureFlagService.currentFeatureFlagMap[key]) {
-        FeatureFlagService.currentFeatureFlagMap[key as FeatureFlagKey].enabled =
-          process.env[key]?.toLowerCase() === 'true';
-        result = true;
-      }
+    // only save user data to avoid replacing values from defaults like displayName
+    Object.keys(FeatureFlagService.currentFeatureFlagMap).forEach((key) => {
+      saveFeatureFlagMap[key] = {
+        enabled: FeatureFlagService.currentFeatureFlagMap[key].enabled,
+        isHidden: FeatureFlagService.currentFeatureFlagMap[key].isHidden,
+      };
     });
-    return result;
-  };
+    Store.set(storeKey, saveFeatureFlagMap);
+  }
 
   public static getFeatureFlags(): FeatureFlagMap {
     FeatureFlagService.initialize();
@@ -92,7 +87,7 @@ export class FeatureFlagService {
 
   public static updateFeatureFlag(newFeatureFlags: FeatureFlagMap) {
     FeatureFlagService.currentFeatureFlagMap = newFeatureFlags;
-    Store.set(storeKey, newFeatureFlags);
+    FeatureFlagService.saveFeatureFlags();
   }
 
   public static getFeatureFlagValue(featureFlagKey: FeatureFlagKey): boolean {
