@@ -66,7 +66,7 @@ export function getFileEditDate(file: File) {
 export function formatBytes(bytes?: number, decimals?: number) {
   if (bytes === 0 || !bytes) return formatMessage('0 Bytes');
   const k = 1024,
-    dm = !decimals || decimals <= 0 ? 0 : decimals || 2,
+    dm = !decimals || decimals <= 0 ? 0 : decimals || 2, // lgtm [js/trivial-conditional]
     sizes = [
       formatMessage('Bytes'),
       formatMessage('KB'),

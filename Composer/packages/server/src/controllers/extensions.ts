@@ -114,7 +114,7 @@ export async function removeExtension(req: RemoveExtensionRequest, res: Response
 export async function searchExtensions(req: SearchExtensionsRequest, res: Response) {
   const { q } = req.query;
 
-  const results = await ExtensionManager.search(q ?? '');
+  const results = await ExtensionManager.search(q ?? ''); // lgtm [js/regex-injection]
   res.json(results);
 }
 

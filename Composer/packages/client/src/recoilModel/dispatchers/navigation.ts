@@ -107,7 +107,7 @@ export const navigationDispatcher = () => {
       set(currentProjectIdState, skillId ?? projectId);
       const designPageLocation = await snapshot.getPromise(designPageLocationState(skillId ?? projectId));
       const breadcrumb = await snapshot.getPromise(breadcrumbState(skillId ?? projectId));
-      let updatedBreadcrumb = [...breadcrumb];
+      let updatedBreadcrumb = [...breadcrumb]; // lgtm [js/useless-assignment-to-local]
       const { dialogId, selected } = designPageLocation;
 
       let currentUri =
