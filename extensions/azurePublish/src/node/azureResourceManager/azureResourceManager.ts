@@ -50,11 +50,11 @@ export class AzureResourceMananger {
    */
   public async createResourceGroup(config: ResourceGroupConfig): Promise<ResourceGroupConfig> {
     if (!config.name) {
-      throw new Error('You should provide a valid resource group name.');
+      throw createCustomizeError(ProvisionErrors.CREATE_RESOURCEGROUP_ERROR,'You should provide a valid resource group name.');
     }
     // Create a new resource group
     if (!config.location) {
-      throw new Error('You should provide a valid resource group name.');
+      throw createCustomizeError(ProvisionErrors.CREATE_RESOURCEGROUP_ERROR,'You should provide a valid resource group name.');
     }
 
     try {
@@ -77,7 +77,7 @@ export class AzureResourceMananger {
             status: BotProjectDeployLoggerType.PROVISION_ERROR,
             message: resourceGroupGetResult._response.bodyAsText,
           });
-          throw new Error(resourceGroupGetResult._response.bodyAsText);
+          throw createCustomizeError(ProvisionErrors.CREATE_RESOURCEGROUP_ERROR, resourceGroupGetResult._response.bodyAsText);
         }
 
         this.logger({
@@ -101,7 +101,7 @@ export class AzureResourceMananger {
         });
 
         if (resourceGroupResult._response.status >= 300) {
-          throw new Error(resourceGroupResult._response.bodyAsText);
+          throw createCustomizeError(ProvisionErrors.CREATE_RESOURCEGROUP_ERROR, resourceGroupResult._response.bodyAsText);
         }
 
         return config;
@@ -142,7 +142,7 @@ export class AzureResourceMananger {
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
           message: deployResult._response.bodyAsText,
         });
-        throw new Error(deployResult._response.bodyAsText);
+        throw createCustomizeError(ProvisionErrors.CREATE_LUIS_AUTHORING_RESOURCE_ERROR, deployResult._response.bodyAsText);
       }
 
       const authoringEndpoint = deployResult.properties?.endpoint ?? '';
@@ -157,7 +157,7 @@ export class AzureResourceMananger {
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
         message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
       });
-      throw err;
+      throw createCustomizeError(ProvisionErrors.CREATE_LUIS_AUTHORING_RESOURCE_ERROR, stringifyError(err));
     }
   }
 
@@ -188,7 +188,7 @@ export class AzureResourceMananger {
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
           message: deployResult._response.bodyAsText,
         });
-        throw new Error(deployResult._response.bodyAsText);
+        throw createCustomizeError(ProvisionErrors.CREATE_LUIS_ERROR, deployResult._response.bodyAsText);
       }
 
       const endpoint = deployResult.properties?.endpoint ?? '';
@@ -239,7 +239,7 @@ export class AzureResourceMananger {
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
           message: searchServiceDeployResult._response.bodyAsText,
         });
-        throw new Error(searchServiceDeployResult._response.bodyAsText);
+        throw createCustomizeError(ProvisionErrors.CREATE_QNA_ERROR, searchServiceDeployResult._response.bodyAsText);
       }
 
       // deploy websites
@@ -266,7 +266,7 @@ export class AzureResourceMananger {
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
           message: servicePlanResult._response.bodyAsText,
         });
-        throw new Error(servicePlanResult._response.bodyAsText);
+        throw createCustomizeError(ProvisionErrors.CREATE_QNA_ERROR, servicePlanResult._response.bodyAsText);
       }
 
       // deploy or update exisiting app insights component
@@ -286,7 +286,7 @@ export class AzureResourceMananger {
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
           message: appinsightsDeployResult._response.bodyAsText,
         });
-        throw new Error(appinsightsDeployResult._response.bodyAsText);
+        throw createCustomizeError(ProvisionErrors.CREATE_QNA_ERROR, appinsightsDeployResult._response.bodyAsText);
       }
 
       // deploy qna host webapp
@@ -307,7 +307,7 @@ export class AzureResourceMananger {
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
           message: webAppResult._response.bodyAsText,
         });
-        throw new Error(webAppResult._response.bodyAsText);
+        throw createCustomizeError(ProvisionErrors.CREATE_QNA_ERROR, webAppResult._response.bodyAsText);
       }
 
       // add web config for websites
@@ -366,7 +366,7 @@ export class AzureResourceMananger {
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
           message: webAppConfigUpdateResult._response.bodyAsText,
         });
-        throw new Error(webAppConfigUpdateResult._response.bodyAsText);
+        throw createCustomizeError(ProvisionErrors.CREATE_QNA_ERROR, webAppConfigUpdateResult._response.bodyAsText);
       }
 
       // Create qna account
@@ -392,7 +392,7 @@ export class AzureResourceMananger {
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
           message: deployResult._response.bodyAsText,
         });
-        throw new Error(deployResult._response.bodyAsText);
+        throw createCustomizeError(ProvisionErrors.CREATE_QNA_ERROR, deployResult._response.bodyAsText);
       }
 
       const endpoint = webAppResult.hostNames?.[0];
@@ -443,7 +443,7 @@ export class AzureResourceMananger {
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
           message: deployResult._response.bodyAsText,
         });
-        throw new Error(deployResult._response.bodyAsText);
+        throw createCustomizeError(ProvisionErrors.CREATE_APP_INSIGHT_ERROR, deployResult._response.bodyAsText);
       }
 
       // Update output and status
@@ -577,7 +577,7 @@ export class AzureResourceMananger {
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
           message: dbAccountDeployResult._response.bodyAsText,
         });
-        throw new Error(dbAccountDeployResult._response.bodyAsText);
+        throw createCustomizeError(ProvisionErrors.CREATE_COSMOSDB_ERROR, dbAccountDeployResult._response.bodyAsText);
       }
 
       // Create DB
@@ -598,7 +598,7 @@ export class AzureResourceMananger {
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
           message: dbDeployResult._response.bodyAsText,
         });
-        throw new Error(dbDeployResult._response.bodyAsText);
+        throw createCustomizeError(ProvisionErrors.CREATE_COSMOSDB_ERROR, dbDeployResult._response.bodyAsText);
       }
 
       // Create Container
@@ -642,7 +642,7 @@ export class AzureResourceMananger {
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
           message: containerCreateResult._response.bodyAsText,
         });
-        throw new Error(containerCreateResult._response.bodyAsText);
+        throw createCustomizeError(ProvisionErrors.CREATE_COSMOSDB_ERROR, containerCreateResult._response.bodyAsText);
       }
 
       const authKeyResult = await cosmosDBManagementClient.databaseAccounts.listKeys(
@@ -654,7 +654,7 @@ export class AzureResourceMananger {
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
           message: authKeyResult._response.bodyAsText,
         });
-        throw new Error(authKeyResult._response.bodyAsText);
+        throw createCustomizeError(ProvisionErrors.CREATE_COSMOSDB_ERROR, authKeyResult._response.bodyAsText);
       }
 
       const authKey = authKeyResult.primaryMasterKey;
@@ -702,7 +702,7 @@ export class AzureResourceMananger {
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
           message: deployResult._response.bodyAsText,
         });
-        throw new Error(deployResult._response.bodyAsText);
+        throw createCustomizeError(ProvisionErrors.CREATE_BLOB_STORAGE_ERROR, deployResult._response.bodyAsText);
       }
 
       const accountKeysResult = await storageManagementClient.storageAccounts.listKeys(
@@ -754,7 +754,7 @@ export class AzureResourceMananger {
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
           message: servicePlanResult._response.bodyAsText,
         });
-        throw new Error(servicePlanResult._response.bodyAsText);
+        throw createCustomizeError(ProvisionErrors.CREATE_WEB_APP_ERROR, servicePlanResult._response.bodyAsText);
       }
 
       const webAppName = config.name;
@@ -789,7 +789,7 @@ export class AzureResourceMananger {
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
           message: webAppResult._response.bodyAsText,
         });
-        throw new Error(webAppResult._response.bodyAsText);
+        throw createCustomizeError(ProvisionErrors.CREATE_WEB_APP_ERROR, webAppResult._response.bodyAsText);
       }
 
       const siteHost = webAppResult?.hostNames?.[0];
@@ -851,7 +851,7 @@ export class AzureResourceMananger {
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
           message: azureFunctionsResult._response.bodyAsText,
         });
-        throw new Error(azureFunctionsResult._response.bodyAsText);
+        throw createCustomizeError(ProvisionErrors.CREATE_FUNCTIONS_RESOURCE_ERROR, azureFunctionsResult._response.bodyAsText);
       }
 
       const siteHost = azureFunctionsResult?.hostNames?.[0];
@@ -896,7 +896,7 @@ export class AzureResourceMananger {
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
           message: botResult._response.bodyAsText,
         });
-        throw new Error(botResult._response.bodyAsText);
+        throw createCustomizeError(ProvisionErrors.BOT_REGISTRATION_ERROR, botResult._response.bodyAsText);
       }
 
     } catch (err) {
@@ -937,7 +937,7 @@ export class AzureResourceMananger {
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
           message: counterResult._response.bodyAsText,
         });
-        throw new Error(counterResult._response.bodyAsText);
+        throw createCustomizeError(ProvisionErrors.CREATE_COUNTER_ERROR, counterResult._response.bodyAsText);
       }
 
     } catch (err) {
@@ -945,7 +945,7 @@ export class AzureResourceMananger {
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
         message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
       });
-      throw err;
+      throw createCustomizeError(ProvisionErrors.CREATE_COUNTER_ERROR, stringifyError(err));
     }
   }
 }
