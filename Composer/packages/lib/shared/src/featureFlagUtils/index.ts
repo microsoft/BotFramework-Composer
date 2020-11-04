@@ -28,7 +28,7 @@ export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
   FORM_DIALOG: {
     displayName: formatMessage('Show Form Dialog'),
     description: formatMessage('Show form dialog editor in the canvas'),
-    isHidden: false,
+    isHidden: true,
     enabled: false,
   },
 });
