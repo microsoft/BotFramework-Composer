@@ -179,7 +179,7 @@ export const defaultFilePath = (
         TemplatePath = BotStructureTemplate.dialogSchema;
     }
     return templateInterpolate(Path.join(endpoint, TemplatePath), {
-      BOTNAME,
+      BOTNAME: fileId,
       DIALOGNAME,
       LOCALE,
     });

@@ -784,9 +784,6 @@ export class BotProject implements IBotProject {
       fileList.set(file.name, file);
     });
 
-    // flowing migration scripts depends on files;
-    this.files = new Map<string, FileInfo>([...fileList]);
-
     const migrationFilesList = await Promise.all([
       this._createQnAFilesForOldBot(fileList),
       this._createBotProjectFileForOldBots(fileList),
@@ -801,6 +798,8 @@ export class BotProject implements IBotProject {
 
   // migration: create qna files for old bots
   private _createQnAFilesForOldBot = async (files: Map<string, FileInfo>) => {
+    // flowing migration scripts depends on files;
+    this.files = new Map<string, FileInfo>([...files]);
     const dialogFiles: FileInfo[] = [];
     const qnaFiles: FileInfo[] = [];
     files.forEach((file) => {
