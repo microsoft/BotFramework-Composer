@@ -146,7 +146,7 @@ const errorElement = (errorText: string) => {
 
 export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
   const { projectId } = props;
-  const { setSettings } = useRecoilValue(dispatcherState);
+  const { setSettings, setQnASettings } = useRecoilValue(dispatcherState);
   const settings = useRecoilValue(settingsState(projectId));
   const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
   const luFiles = useRecoilValue(luFilesState(projectId));
@@ -210,10 +210,7 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
   };
 
   const handleRootQnAKeyOnChange = async (e, value) => {
-    await setSettings(projectId, {
-      ...settings,
-      qna: { ...settings.qna, subscriptionKey: value ? value : '' },
-    });
+    await handleQnASubscripionKeyOnChange(e, value);
     if (value) {
       setQnAKeyErrorMsg('');
       setLocalRootQnAKey(value);
@@ -221,6 +218,14 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
       setQnAKeyErrorMsg(formatMessage('QnA Maker subscription Key is required to start your bot locally, and publish'));
       setLocalRootQnAKey('');
     }
+  };
+
+  const handleQnASubscripionKeyOnChange = async (e, value) => {
+    await setSettings(projectId, {
+      ...settings,
+      qna: { ...settings.qna, subscriptionKey: value ? value : '' },
+    });
+    await setQnASettings(projectId, value);
   };
 
   return (
@@ -313,12 +318,7 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
             placeholder={'Enter QnA Maker Subscription key'}
             placeholderOnDisable={"<---- Same as root bot's QnA Maker Subscription key ---->"}
             value={skillqnaKey}
-            onChange={async (e, value) => {
-              await setSettings(projectId, {
-                ...settings,
-                qna: { ...settings.qna, subscriptionKey: value ? value : '' },
-              });
-            }}
+            onChange={handleQnASubscripionKeyOnChange}
           />
         )}
       </div>
