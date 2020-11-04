@@ -33,20 +33,20 @@ export class FeatureFlagService {
     let saveNeeded = false;
 
     // add any new keys defined in the defaults that aren't in current
-    const keysToAdd = defaultFeatureFlagKeys.filter((key: string) => !currentFeatureFlagKeys.includes(key));
-
-    keysToAdd.forEach((key: string) => {
-      FeatureFlagService.currentFeatureFlagMap[key] = FeatureFlagService.defaultFeatureFlags[key];
-      saveNeeded = true;
-    });
+    defaultFeatureFlagKeys
+      .filter((key: string) => !currentFeatureFlagKeys.includes(key))
+      .forEach((key: string) => {
+        FeatureFlagService.currentFeatureFlagMap[key] = FeatureFlagService.defaultFeatureFlags[key];
+        saveNeeded = true;
+      });
 
     // remove any keys no longer in default that are in current
-    const keysToRemove = currentFeatureFlagKeys.filter((key: string) => !defaultFeatureFlagKeys.includes(key));
-
-    keysToRemove.forEach((key: string) => {
-      delete FeatureFlagService.currentFeatureFlagMap[key];
-      saveNeeded = true;
-    });
+    currentFeatureFlagKeys
+      .filter((key: string) => !defaultFeatureFlagKeys.includes(key))
+      .forEach((key: string) => {
+        delete FeatureFlagService.currentFeatureFlagMap[key];
+        saveNeeded = true;
+      });
 
     // set any hidden feature flags from the process
     // process should override value for hidden features flags
