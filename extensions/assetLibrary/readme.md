@@ -102,7 +102,7 @@ bf dialog:merge [package.json or .csproj] --import dialogs/imported --output sch
 
 The output of the cli tool will include a list of the files that were added, deleted or updated. Note that **changes to existing files will be overwritten if newer versions are found in a package.**
 
-# How build your own packages
+# How to build your own packages
 
 The packages used by Composer are native packages - the process of building one is the same as it would be for any software component published to NPM or Nuget.
 
