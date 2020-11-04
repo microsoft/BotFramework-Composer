@@ -807,7 +807,7 @@ export class BotProject implements IBotProject {
         try {
           // filter form dialog generated file.
           const dialogJson = JSON.parse(file.content);
-          const isFormDialog = has(dialogJson, '$Generator');
+          const isFormDialog = has(dialogJson, 'schema');
           if (!isFormDialog) {
             dialogFiles.push(file);
           }
