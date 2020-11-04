@@ -25,6 +25,7 @@ import { SimpleCredentialProvider, SkillValidation } from 'botframework-connecto
 import { BotSettings } from './settings';
 import { SkillConversationIdFactory } from './skillConversationIdFactory';
 import { getSettings, getProjectRoot, getRootDialog } from './helpers';
+// import { CustomActionComponentRegistration } from '../customaction/customActionComponentRegistration';
 
 /**
  * A composer bot to handle botframework activity requests.
@@ -53,6 +54,7 @@ export class ComposerBot extends ActivityHandler {
     ComponentRegistration.add(new AdaptiveComponentRegistration());
     ComponentRegistration.add(new QnAMakerComponentRegistration());
     ComponentRegistration.add(new LuisComponentRegistration());
+    // ComponentRegistration.add(new CustomActionComponentRegistration());
 
     // Create and configure resource explorer.
     this.resourceExplorer = new ResourceExplorer();

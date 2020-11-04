@@ -16,6 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "@azure/functions": "^1.2.2",
+    "adaptive-expressions": "4.11.0-rc3",
     "botbuilder": "4.11.0-rc3",
     "botbuilder-ai": "4.11.0-rc3",
     "botbuilder-dialogs": "4.11.0-rc3",
