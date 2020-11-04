@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
