@@ -4,11 +4,14 @@ Param(
 	[string] $hostName,
 	[string] $luisAuthoringKey,
 	[string] $luisAuthoringRegion,
+	[string] $luisEndpointKey,
 	[string] $qnaSubscriptionKey,
 	[string] $language,
 	[string] $projFolder = $(Get-Location),
 	[string] $botPath,
-	[string] $logFile = $(Join-Path $PSScriptRoot .. "deploy_log.txt")
+	[string] $logFile = $(Join-Path $PSScriptRoot .. "deploy_log.txt"),
+	[string] $runtimeIdentifier = 'win-x64',
+	[string] $luisResource
 )
 
 if ($PSVersionTable.PSVersion.Major -lt 6) {
@@ -38,6 +41,14 @@ if (-not $language) {
 	$language = "en-us"
 }
 
+if (-not $luisAuthoringKey) {
+	$luisAuthoringKey = ""
+}
+
+if (-not $luisEndpointKey) {
+	$luisEndpointKey = ""
+}
+
 # Reset log file
 if (Test-Path $logFile) {
 	Clear-Content $logFile -Force | Out-Null
@@ -60,7 +71,7 @@ if (Test-Path $zipPath) {
 
 # Perform dotnet publish step ahead of zipping up
 $publishFolder = $(Join-Path $projFolder 'bin\Release\netcoreapp3.1')
-dotnet publish -c release -o $publishFolder -v q > $logFile
+dotnet publish -c release -o $publishFolder -v q --self-contained true -r $runtimeIdentifier > $logFile
 
 # Copy bot files to running folder
 $remoteBotPath = $(Join-Path $publishFolder "ComposerDialogs")
@@ -96,22 +107,6 @@ if (-not $qnaSubscriptionKey) {
 	$qnaSubscriptionKey = $qnaSettings.subscriptionKey
 }
 
-# set feature configuration
-$featureConfig = @{ }
-if ($settings.feature) {
-	$featureConfig = $settings.feature
-}
-else {
-	# Enable all features to true by default
-	$featureConfig["UseTelementryLoggerMiddleware"] = $true
-	$featureConfig["UseTranscriptLoggerMiddleware"] = $true
-	$featureConfig["UseShowTypingMiddleware"] = $true
-	$featureConfig["UseInspectionMiddleware"] = $true
-	$featureConfig["UseCosmosDb"] = $true
-}
-
-
-
 # if luis and qna enabled, crosstrain
 if ($luisAuthoringKey -or $qnaSubscriptionKey) {
 	# if luis or qna enabled, ensure bf cli installed
@@ -130,7 +125,7 @@ if ($luisAuthoringKey -or $qnaSubscriptionKey) {
 		$null = New-Item -ItemType Directory -Force -Path generated
 	}
 	if (!(Test-Path generated\interruption)) {
-		New-Item -ItemType Directory -Force -Path generated\interruption
+		$null = New-Item -ItemType Directory -Force -Path generated\interruption
 	}
 
 	bf luis:cross-train --in . --out generated\interruption --config .\settings\cross-train.config.json --force
@@ -145,7 +140,7 @@ if ($luisAuthoringKey) {
 	Set-Location -Path $remoteBotPath
 
 	# execute lubuild
-	bf luis:build --in generated\interruption --authoringKey $luisAuthoringKey --botName $name --out generated --suffix $environment --force --log
+	bf luis:build --in generated\interruption --authoringKey $luisAuthoringKey --botName $name --out generated --suffix $environment --force --log --defaultCulture $language
 
 	if ($?) {
 		Write-Host "lubuild succeeded"
@@ -156,8 +151,6 @@ if ($luisAuthoringKey) {
 	}
 
 	Set-Location -Path $projFolder
-
-	$settings = New-Object PSObject
 
 	# get all luis settings
 	$luisConfigFiles = Get-ChildItem -Path $publishFolder -Include "luis.settings*" -Recurse -Force
@@ -176,6 +169,8 @@ if ($luisAuthoringKey) {
 	$luisConfig = @{ }
 
 	$luisConfig["endpoint"] = $luisEndpoint
+	$luisConfig["authoringKey"] = $luisAuthoringKey
+	$luisConfig["endpointKey"] = $luisEndpointKey
 
 	foreach ($key in $luisAppIds.Keys) { $luisConfig[$key] = $luisAppIds[$key] }
 
@@ -195,10 +190,13 @@ if ($luisAuthoringKey) {
 	$luisAccountEndpoint = "$luisEndpoint/luis/api/v2.0/azureaccounts"
 	$luisAccount = $null
 	try {
+		if (-not $luisResource) {
+			$luisResource = "$name-$environment-luis"
+		}
 		$luisAccounts = Invoke-WebRequest -Method GET -Uri $luisAccountEndpoint -Headers @{"Authorization" = "Bearer $token"; "Ocp-Apim-Subscription-Key" = $luisAuthoringKey } | ConvertFrom-Json
 
 		foreach ($account in $luisAccounts) {
-			if ($account.AccountName -eq "$name-$environment-luis") {
+			if ($account.AccountName -eq $luisResource) {
 				$luisAccount = $account
 				break
 			}
@@ -206,6 +204,11 @@ if ($luisAuthoringKey) {
 	}
 	catch {
 		Write-Host "Return invalid status code while gettings luis accounts: $($_.Exception.Response.StatusCode.Value__), error message: $($_.Exception.Response)"
+		break
+	}
+
+	if (-not $luisAccount) {
+		Write-Host "Could not find your luis account which matches '$name-$environment-luis', please check your command or specify 'luisResource' parameter."
 		break
 	}
 
@@ -230,7 +233,7 @@ if ($luisAuthoringKey) {
 # if qna enabled
 if ($qnaSubscriptionKey) {
 	Set-Location -Path $remoteBotPath
-	bf qnamaker:build --in generated\interruption --subscriptionKey $qnaSubscriptionKey --botName $name --out generated --suffix $environment --force --log
+	bf qnamaker:build --in generated\interruption --subscriptionKey $qnaSubscriptionKey --botName $name --out generated --suffix $environment --force --log --defaultCulture $language
 	if ($?) {
 		Write-Host "qna build succeeded"
 	}
@@ -242,7 +245,6 @@ if ($qnaSubscriptionKey) {
 
 
 # add feature config to the settings
-$settings | Add-Member -Type NoteProperty -Force -Name 'feature' -Value $featureConfig
 $settings | ConvertTo-Json -depth 100 | Out-File $settingsPath
 
 $resourceGroup = "$name-$environment"
