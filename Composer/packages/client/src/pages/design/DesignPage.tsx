@@ -289,7 +289,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   }, [visualEditorSelection, currentDialog?.content]);
 
   const { onFocusFlowEditor, onBlurFlowEditor } = useElectronFeatures(actionSelected, canUndo?.(), canRedo?.());
-  console.log('DesignPage Render');
 
   const EditorAPI = getEditorAPI();
   const toolbarItems: IToolbarItem[] = [
