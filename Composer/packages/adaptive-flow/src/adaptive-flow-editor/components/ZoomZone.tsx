@@ -10,7 +10,6 @@ import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
 
 import { scrollNodeIntoView } from '../utils/scrollNodeIntoView';
 import { AttrNames } from '../constants/ElementAttributes';
-import { ZoomContext } from '../contexts/ZoomContext';
 
 function scrollZoom(delta: number, rateList: number[], maxRate: number, minRate: number, currentRate: number): number {
   let rate: number = currentRate;
@@ -143,11 +142,9 @@ export const ZoomZone: React.FC<ZoomZoneProps> = ({ flowZoomRate, focusedId, upd
   }, [flowZoomRate]);
 
   return (
-    <ZoomContext.Provider value={flowZoomRate.currentRate}>
-      <div ref={divRef} css={{ overflow: 'scroll', width: '100%', height: '100%' }}>
-        {children}
-        {buttonRender()}
-      </div>
-    </ZoomContext.Provider>
+    <div ref={divRef} css={{ overflow: 'scroll', width: '100%', height: '100%' }}>
+      {children}
+      {buttonRender()}
+    </div>
   );
 };
