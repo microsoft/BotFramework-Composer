@@ -11,6 +11,8 @@ import { atomFamily, Snapshot, useRecoilCallback, CallbackInterface, useSetRecoi
 import uniqueId from 'lodash/uniqueId';
 import isEmpty from 'lodash/isEmpty';
 
+import { navigateTo, getUrlSearch } from '../../utils/navigation';
+
 import { designPageLocationState } from './../atoms';
 import { trackedAtoms, AtomAssetsMap } from './trackedAtoms';
 import UndoHistory from './undoHistory';
@@ -68,6 +70,18 @@ const checkAtomChanged = (current: AtomAssetsMap, previous: AtomAssetsMap, atom:
 const checkAtomsChanged = (current: AtomAssetsMap, previous: AtomAssetsMap, atoms: RecoilState<any>[]) => {
   return atoms.some((atom) => checkAtomChanged(current, previous, atom));
 };
+
+function navigate(next: AtomAssetsMap, projectId: string) {
+  const location = next.get(designPageLocationState(projectId));
+  if (location) {
+    const { dialogId, selected, focused, promptTab } = location;
+    let currentUri = `/bot/${projectId}/dialogs/${dialogId}${getUrlSearch(selected, focused)}`;
+    if (promptTab) {
+      currentUri += `#${promptTab}`;
+    }
+    navigateTo(currentUri);
+  }
+}
 
 function mapTrackedAtomsOntoSnapshot(
   target: Snapshot,
@@ -142,6 +156,7 @@ export const UndoRoot = React.memo((props: UndoRootProps) => {
   ) => {
     target = mapTrackedAtomsOntoSnapshot(target, current, next, projectId);
     gotoSnapshot(target);
+    navigate(next, projectId);
   };
 
   const undo = useRecoilCallback(({ snapshot, gotoSnapshot }: CallbackInterface) => () => {
