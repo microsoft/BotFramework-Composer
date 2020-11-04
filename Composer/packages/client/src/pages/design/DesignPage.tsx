@@ -220,7 +220,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
       breadcrumbArray.push({
         key: 'dialog-' + props.dialogId,
-        label: dialogMap[props.dialogId]?.$designer?.name,
+        label: dialogMap[props.dialogId]?.$designer?.name ?? dialogMap[props.dialogId]?.$designer?.$designer?.name,
         link: {
           projectId: props.projectId,
           dialogId: props.dialogId,
