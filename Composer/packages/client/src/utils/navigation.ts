@@ -67,7 +67,7 @@ export function convertPathToUrl(
   //uri = id?selected=triggers[0]&focused=triggers[0].actions[0]
 
   let uri = `/bot/${projectId}`;
-  if (skillId != null) {
+  if (skillId != null && skillId !== projectId) {
     uri += `/skill/${skillId}`;
   }
   if (dialogId != null) {

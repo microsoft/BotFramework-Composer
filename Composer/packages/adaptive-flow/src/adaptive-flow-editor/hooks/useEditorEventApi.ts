@@ -46,7 +46,7 @@ export const useEditorEventApi = (
     onFocusSteps,
     onFocusEvent,
     onCopy: onClipboardChange,
-    navTo: onOpen,
+    navTo,
     saveData: onChange,
     undo,
     redo,
@@ -153,7 +153,7 @@ export const useEditorEventApi = (
         break;
       case NodeEventTypes.OpenDialog:
         handler = ({ callee }) => {
-          onOpen(callee);
+          navTo(callee, '0'); // 0 will route to trigger[0], which should always be BeginDialog
           announce(ScreenReaderMessage.DialogOpened);
         };
         break;

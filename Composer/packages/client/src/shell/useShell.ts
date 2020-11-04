@@ -135,9 +135,9 @@ export function useShell(source: EventSource, projectId: string): Shell {
     updateDialog({ id, content: newDialog.content, projectId });
   }
 
-  function navigationTo(path) {
+  function navigationTo(path, rest?) {
     if (rootBotProjectId == null) return;
-    navTo(projectId, path);
+    navTo(projectId, path, rest);
   }
 
   function focusEvent(subPath) {
