@@ -15,35 +15,74 @@ export class FeatureFlagService {
     // Get users feature flag config from data.json and populate if it does not exist
     FeatureFlagService.defaultFeatureFlags = getDefaultFeatureFlags();
     FeatureFlagService.currentFeatureFlagMap = Store.get(storeKey, FeatureFlagService.defaultFeatureFlags);
-    FeatureFlagService.syncFeatureFlags();
+    FeatureFlagService.updateFeatureFlags();
   }
 
-  private static syncFeatureFlags = () => {
+  private static updateFeatureFlags = () => {
+    const currentFeatureFlagKeys = Object.keys(FeatureFlagService.currentFeatureFlagMap);
     const defaultFeatureFlagKeys = Object.keys(FeatureFlagService.defaultFeatureFlags);
+    const keysToAdd: string[] = [];
+    const keysToUpdateHidden: string[] = [];
 
     defaultFeatureFlagKeys.forEach((key: string) => {
-      if (FeatureFlagService.currentFeatureFlagMap[key]) {
-        // Grab latest changes from default but preserve users enabled value for any given feature flag
-        FeatureFlagService.currentFeatureFlagMap[key] = {
-          ...FeatureFlagService.defaultFeatureFlags[key],
-          enabled: FeatureFlagService.currentFeatureFlagMap[key].enabled,
-        };
-      } else {
-        // Add new feature flags from default to current if current does not have it
-        FeatureFlagService.currentFeatureFlagMap[key] = FeatureFlagService.defaultFeatureFlags[key];
-      }
-    });
-    const currentFeatureFlagKeys = Object.keys(FeatureFlagService.currentFeatureFlagMap);
-
-    // If default has removed a feature flag then remove from current
-    currentFeatureFlagKeys.forEach((key: string) => {
-      if (defaultFeatureFlagKeys.indexOf(key) === -1) {
-        delete FeatureFlagService.currentFeatureFlagMap[key];
+      if (!currentFeatureFlagKeys.includes(key)) {
+        keysToAdd.push(key);
+      } else if (
+        currentFeatureFlagKeys.includes(key) &&
+        FeatureFlagService.currentFeatureFlagMap[key as FeatureFlagKey].isHidden !==
+          FeatureFlagService.defaultFeatureFlags[key as FeatureFlagKey].isHidden
+      ) {
+        keysToUpdateHidden.push(key);
       }
     });
 
-    // Store updates
-    Store.set(storeKey, FeatureFlagService.currentFeatureFlagMap);
+    const keysToRemove = currentFeatureFlagKeys.filter((key: string) => {
+      if (!defaultFeatureFlagKeys.includes(key)) {
+        return key;
+      }
+    });
+
+    keysToAdd.forEach((key: string) => {
+      FeatureFlagService.currentFeatureFlagMap[key] = FeatureFlagService.defaultFeatureFlags[key];
+    });
+
+    keysToRemove.forEach((key: string) => {
+      delete FeatureFlagService.currentFeatureFlagMap[key];
+    });
+
+    keysToUpdateHidden.forEach((key: string) => {
+      FeatureFlagService.currentFeatureFlagMap[key as FeatureFlagKey].isHidden =
+        FeatureFlagService.defaultFeatureFlags[key as FeatureFlagKey].isHidden;
+    });
+
+    const hiddenFeatureFlagUpdated = FeatureFlagService.updateHiddenFeatureFlags();
+
+    if (
+      keysToRemove?.length > 0 ||
+      keysToAdd?.length > 0 ||
+      keysToUpdateHidden?.length > 0 ||
+      hiddenFeatureFlagUpdated
+    ) {
+      Store.set(storeKey, FeatureFlagService.currentFeatureFlagMap);
+    }
+  };
+
+  private static updateHiddenFeatureFlags = (): boolean => {
+    const hiddenFeatureFlagKeys = Object.keys(FeatureFlagService.currentFeatureFlagMap).filter((key: string) => {
+      if (FeatureFlagService.currentFeatureFlagMap[key as FeatureFlagKey].isHidden) {
+        return key;
+      }
+    });
+
+    let result = false;
+    hiddenFeatureFlagKeys.forEach((key: string) => {
+      if (process.env[key] && process.env[key] !== FeatureFlagService.currentFeatureFlagMap[key]) {
+        FeatureFlagService.currentFeatureFlagMap[key as FeatureFlagKey].enabled =
+          process.env[key]?.toLowerCase() === 'true';
+        result = true;
+      }
+    });
+    return result;
   };
 
   public static getFeatureFlags(): FeatureFlagMap {
