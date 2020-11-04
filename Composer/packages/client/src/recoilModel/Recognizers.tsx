@@ -144,6 +144,7 @@ export const Recognizer = React.memo((props: { projectId: string }) => {
   useEffect(() => {
     let recognizers: RecognizerFile[] = [];
     dialogs
+      .filter((dialog) => !dialog.isFormDialog)
       .filter((dialog) => isCrossTrainedRecognizerSet(dialog) || isLuisRecognizer(dialog))
       .forEach((dialog) => {
         const filtedLus = luFiles.filter((item) => item.id.startsWith(dialog.id));
