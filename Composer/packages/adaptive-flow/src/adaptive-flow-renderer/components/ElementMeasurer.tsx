@@ -1,9 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from 'react';
+import React, { useContext } from 'react';
 import Measure from 'react-measure';
 
+import { ZoomContext } from '../../adaptive-flow-editor/contexts/ZoomContext';
 import { Boundary } from '../models/Boundary';
 
 export interface ElementMeasurerProps {
@@ -17,6 +18,7 @@ export interface ElementMeasurerProps {
  * Remember to use it inside the focus border component (ElementWrapper).
  */
 export const ElementMeasurer: React.FC<ElementMeasurerProps> = ({ children, style, onResize }) => {
+  const flowZoomRate = useContext(ZoomContext);
   return (
     <Measure
       bounds
@@ -27,7 +29,7 @@ export const ElementMeasurer: React.FC<ElementMeasurerProps> = ({ children, styl
          */
         const { width, height } = bounds ?? { width: 0, height: 0 };
         if (width === 0 && height === 0) return;
-        onResize(new Boundary(width, height));
+        onResize(new Boundary(width / flowZoomRate, height / flowZoomRate));
       }}
     >
       {({ measureRef }) => (
