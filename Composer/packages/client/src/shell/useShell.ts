@@ -58,6 +58,7 @@ const stubDialog = (): DialogInfo => ({
   triggers: [],
   intentTriggers: [],
   skills: [],
+  isFormDialog: false,
 });
 
 export function useShell(source: EventSource, projectId: string): Shell {
