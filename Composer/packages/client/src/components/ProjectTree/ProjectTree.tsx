@@ -305,13 +305,17 @@ export const ProjectTree: React.FC<Props> = ({
           isActive={doesLinkMatch(link, selectedLink)}
           link={link}
           menu={[
-            {
-              label: formatMessage('Remove this dialog'),
-              icon: 'Delete',
-              onClick: (link) => {
-                onDeleteDialog(link.dialogId ?? '');
-              },
-            },
+            ...(!dialog.isRoot
+              ? [
+                  {
+                    label: formatMessage('Remove this dialog'),
+                    icon: 'Delete',
+                    onClick: (link) => {
+                      onDeleteDialog(link.dialogId ?? '');
+                    },
+                  },
+                ]
+              : []),
             ...(showEditSchema
               ? [
                   {
