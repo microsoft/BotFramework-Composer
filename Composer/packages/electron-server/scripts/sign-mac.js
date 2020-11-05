@@ -31,9 +31,47 @@ if (!tempDir) {
   process.exit(1);
 }
 
-// first step is to setup a dev cert to use to sign
+// sign each app bundle with correct entitlements
+const baseBundlePath = path.resolve(__dirname, '../dist/mac/Bot Framework Composer.app');
+const baseEntitlementsPath = path.resolve(__dirname, '../resources/entitlements.plist');
+const keychainEntitlementsPath = path.resolve(__dirname, '../resources/entitlements-keychain.plist');
+
+const bundles = [
+  {
+    path: path.join(baseBundlePath, 'Contents/Frameworks/Bot Framework Composer Helper (GPU).app'),
+    entitlements: baseEntitlementsPath,
+  },
+  {
+    path: path.join(baseBundlePath, 'Contents/Frameworks/Bot Framework Composer Helper (Plugin).app'),
+    entitlements: baseEntitlementsPath,
+  },
+  {
+    path: path.join(baseBundlePath, 'Contents/Frameworks/Bot Framework Composer Helper (Renderer).app'),
+    entitlements: baseEntitlementsPath,
+  },
+  {
+    path: path.join(baseBundlePath, 'Contents/Frameworks/Bot Framework Composer Helper.app'),
+    entitlements: keychainEntitlementsPath,
+  },
+  {
+    path: baseBundlePath,
+    entitlements: keychainEntitlementsPath,
+  },
+];
+
+// first copy the provision profile into each app bundle
 try {
-  log.info('\n-------- Setting up keychain. --------\n');
+  for (const bundle of bundles) {
+    fs.copyFileSync(provisionProfilePath, path.join(bundle.path, 'embedded.provisionprofile'));
+  }
+} catch (err) {
+  log.error('Error copying provision profile. %O', err);
+  process.exit(1);
+}
+
+// second step is to setup a dev cert to use to sign
+try {
+  log.info('-------- Setting up keychain. --------\n');
   const keychainPath = `${tempDir}/buildagent.keychain`;
   const certPath = `${tempDir}/cert.p12`;
 
@@ -64,36 +102,8 @@ try {
   process.exit(1);
 }
 
-// sign each app bundle with correct entitlements
-const baseBundlePath = path.resolve(__dirname, '../dist/mac/Bot Framework Composer.app');
-const baseEntitlementsPath = path.resolve(__dirname, '../resources/entitlements.plist');
-const keychainEntitlementsPath = path.resolve(__dirname, '../resources/entitlements-keychain.plist');
-
-const bundles = [
-  {
-    path: path.join(baseBundlePath, 'Contents/Frameworks/Bot Framework Composer Helper (GPU).app'),
-    entitlements: baseEntitlementsPath,
-  },
-  {
-    path: path.join(baseBundlePath, 'Contents/Frameworks/Bot Framework Composer Helper (Plugin).app'),
-    entitlements: baseEntitlementsPath,
-  },
-  {
-    path: path.join(baseBundlePath, 'Contents/Frameworks/Bot Framework Composer Helper (Renderer).app'),
-    entitlements: baseEntitlementsPath,
-  },
-  {
-    path: path.join(baseBundlePath, 'Contents/Frameworks/Bot Framework Composer Helper.app'),
-    entitlements: keychainEntitlementsPath,
-  },
-  {
-    path: baseBundlePath,
-    entitlements: keychainEntitlementsPath,
-  },
-];
-
 try {
-  log.info('\n-------- Signing bundles. --------\n');
+  log.info('-------- Signing bundles. --------\n');
   for (const bundle of bundles) {
     log.info(
       `codesign -s ******* --deep --force --options runtime --entitlements "${bundle.entitlements}" "${bundle.path}"`
@@ -110,7 +120,7 @@ try {
 
 // verify codesign
 try {
-  log.info('\n-------- Verifying codesigning. --------\n');
+  log.info('-------- Verifying codesigning. --------\n');
   for (const bundle of bundles) {
     log.info(`codesign -dv --verbose=4 "${bundle.path}"`);
     execSync(`codesign -dv --verbose=4 "${bundle.path}"`);
