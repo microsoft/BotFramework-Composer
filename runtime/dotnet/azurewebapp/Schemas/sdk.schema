@@ -783,7 +783,7 @@
           "description": "Optional id for the dialog"
         },
         "disabled": {
-          "$ref": "#/definitions/stringExpression",
+          "$ref": "#/definitions/booleanExpression",
           "title": "Disabled",
           "description": "Optional condition which if true will disable this action.",
           "examples": [
@@ -8650,7 +8650,7 @@
           "description": "Optional id for the dialog"
         },
         "disabled": {
-          "$ref": "#/definitions/stringExpression",
+          "$ref": "#/definitions/booleanExpression",
           "title": "Disabled",
           "description": "Optional condition which if true will disable this action.",
           "examples": [
