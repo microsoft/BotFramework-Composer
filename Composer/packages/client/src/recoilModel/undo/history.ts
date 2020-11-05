@@ -12,6 +12,8 @@ import uniqueId from 'lodash/uniqueId';
 import isEmpty from 'lodash/isEmpty';
 
 import { navigateTo, getUrlSearch } from '../../utils/navigation';
+import { encodeArrayPathToDesignerPath } from '../../utils/convertUtils/designerPathEncoder';
+import { dialogsSelectorFamily } from '../selectors';
 
 import { designPageLocationState } from './../atoms';
 import { trackedAtoms, AtomAssetsMap } from './trackedAtoms';
@@ -20,8 +22,6 @@ import UndoHistory from './undoHistory';
 type IUndoRedo = {
   undo: () => void;
   redo: () => void;
-  canUndo: () => boolean;
-  canRedo: () => boolean;
   commitChanges: () => void;
   clearUndo: () => void;
 };
@@ -29,6 +29,15 @@ type IUndoRedo = {
 export const undoFunctionState = atomFamily<IUndoRedo, string>({
   key: 'undoFunction',
   default: {} as IUndoRedo,
+  dangerouslyAllowMutability: true,
+});
+
+export const undoStatusState = atomFamily<{ canUndo: boolean; canRedo: boolean }, string>({
+  key: 'undoStatus',
+  default: {
+    canRedo: false,
+    canUndo: false,
+  },
   dangerouslyAllowMutability: true,
 });
 
@@ -75,7 +84,11 @@ function navigate(next: AtomAssetsMap, projectId: string) {
   const location = next.get(designPageLocationState(projectId));
   if (location) {
     const { dialogId, selected, focused, promptTab } = location;
-    let currentUri = `/bot/${projectId}/dialogs/${dialogId}${getUrlSearch(selected, focused)}`;
+    const dialog = next.get(dialogsSelectorFamily(projectId)).find((dialog) => dialogId === dialog.id);
+    let currentUri = `/bot/${projectId}/dialogs/${dialogId}${getUrlSearch(
+      encodeArrayPathToDesignerPath(dialog.content, selected),
+      encodeArrayPathToDesignerPath(dialog.content, focused)
+    )}`;
     if (promptTab) {
       currentUri += `#${promptTab}`;
     }
@@ -96,6 +109,11 @@ function mapTrackedAtomsOntoSnapshot(
       target = target.map(({ set }) => set(atom, next));
     }
   });
+
+  //add design page location to snapshot
+  target = target.map(({ set }) =>
+    set(designPageLocationState(projectId), nextAssets.get(designPageLocationState(projectId)))
+  );
   return target;
 }
 
@@ -114,7 +132,7 @@ export const UndoRoot = React.memo((props: UndoRootProps) => {
   const undoHistory = useRecoilValue(undoHistoryState(projectId));
   const history: UndoHistory = useRef(undoHistory).current;
   const [initialStateLoaded, setInitialStateLoaded] = useState(false);
-
+  const setUndoStatus = useSetRecoilState(undoStatusState(projectId));
   const setUndoFunction = useSetRecoilState(undoFunctionState(projectId));
   const [, forceUpdate] = useState([]);
   const setVersion = useSetRecoilState(undoVersionState(projectId));
@@ -159,12 +177,20 @@ export const UndoRoot = React.memo((props: UndoRootProps) => {
     navigate(next, projectId);
   };
 
+  const updateUndoResult = () => {
+    setUndoStatus({
+      canUndo: history.canUndo(),
+      canRedo: history.canRedo(),
+    });
+  };
+
   const undo = useRecoilCallback(({ snapshot, gotoSnapshot }: CallbackInterface) => () => {
     if (history.canUndo()) {
       const present = history.getPresentAssets();
       const next = history.undo();
       if (present) undoAssets(snapshot, present, next, gotoSnapshot, projectId);
       setVersion(uniqueId());
+      updateUndoResult();
     }
   });
 
@@ -174,16 +200,9 @@ export const UndoRoot = React.memo((props: UndoRootProps) => {
       const next = history.redo();
       if (present) undoAssets(snapshot, present, next, gotoSnapshot, projectId);
       setVersion(uniqueId());
+      updateUndoResult();
     }
   });
-
-  const canUndo = () => {
-    return history?.canUndo?.();
-  };
-
-  const canRedo = () => {
-    return history?.canRedo?.();
-  };
 
   const commit = useRecoilCallback(({ snapshot }) => () => {
     const currentAssets = getAtomAssetsMap(snapshot, projectId);
@@ -192,6 +211,7 @@ export const UndoRoot = React.memo((props: UndoRootProps) => {
 
     if (previousAssets && checkAtomsChanged(currentAssets, previousAssets, trackedAtoms(projectId))) {
       history.add(getAtomAssetsMap(snapshot, projectId));
+      updateUndoResult();
     }
   });
 
@@ -208,7 +228,7 @@ export const UndoRoot = React.memo((props: UndoRootProps) => {
   });
 
   useEffect(() => {
-    setUndoFunction({ undo, redo, canRedo, canUndo, commitChanges, clearUndo });
+    setUndoFunction({ undo, redo, commitChanges, clearUndo });
   }, []);
 
   return null;

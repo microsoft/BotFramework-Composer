@@ -46,7 +46,7 @@ import {
 } from '../../recoilModel';
 import { CreateQnAModal } from '../../components/QnA';
 import { triggerNotSupported } from '../../utils/dialogValidator';
-import { undoFunctionState, undoVersionState } from '../../recoilModel/undo/history';
+import { undoFunctionState, undoStatusState, undoVersionState } from '../../recoilModel/undo/history';
 import { decodeDesignerPathToArrayPath } from '../../utils/convertUtils/designerPathEncoder';
 import { useTriggerApi } from '../../shell/triggerApi';
 
@@ -131,7 +131,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const undoVersion = useRecoilValue(undoVersionState(skillId ?? projectId));
   const rootProjectId = useRecoilValue(rootBotProjectIdSelector) ?? projectId;
 
-  const { undo, redo, canRedo, canUndo, commitChanges, clearUndo } = undoFunction;
+  const { undo, redo, commitChanges, clearUndo } = undoFunction;
+  const { canUndo, canRedo } = useRecoilValue(undoStatusState(projectId));
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
   const {
     removeDialog,
@@ -384,8 +385,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     return { actionSelected, showDisableBtn, showEnableBtn };
   }, [visualEditorSelection, currentDialog?.content]);
 
-  const { onFocusFlowEditor, onBlurFlowEditor } = useElectronFeatures(actionSelected, canUndo?.(), canRedo?.());
-
+  const { onFocusFlowEditor, onBlurFlowEditor } = useElectronFeatures(actionSelected, canUndo, canRedo);
   const EditorAPI = getEditorAPI();
   const toolbarItems: IToolbarItem[] = [
     {
@@ -444,13 +444,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           {
             key: 'edit.undo',
             text: formatMessage('Undo'),
-            disabled: !canUndo?.(),
+            disabled: !canUndo,
             onClick: undo,
           },
           {
             key: 'edit.redo',
             text: formatMessage('Redo'),
-            disabled: !canRedo?.(),
+            disabled: !canRedo,
             onClick: redo,
           },
           {

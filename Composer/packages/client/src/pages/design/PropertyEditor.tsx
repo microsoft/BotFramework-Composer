@@ -38,7 +38,8 @@ const PropertyEditor: React.FC = () => {
   }, [currentDialog, focusedSteps[0]]);
 
   const [localData, setLocalData] = useState(dialogData as MicrosoftAdaptiveDialog);
-
+  console.log(currentDialog);
+  console.log(focusedSteps[0]);
   const syncData = useRef(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     debounce((shellData: any, localData: any) => {
@@ -103,8 +104,6 @@ const PropertyEditor: React.FC = () => {
     const id = setTimeout(() => {
       if (!isEqual(dialogData, localData)) {
         shellApi.saveData(localData, focusedSteps[0]);
-      } else {
-        shellApi.commitChanges?.();
       }
     }, 300);
 
