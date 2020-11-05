@@ -115,11 +115,11 @@ const boilerplates = getBoilerplates();
 
 export default async (composer: any): Promise<void> => {
   // register this publishing method with Composer
-  for (const temlate of samples) {
-    await composer.addBotTemplate(temlate);
+  for (const template of samples) {
+    await composer.addBotTemplate(template);
   }
 
-  for (const temlate of boilerplates) {
-    await composer.addBaseTemplate(temlate);
+  for (const template of boilerplates) {
+    await composer.addBaseTemplate(template);
   }
 };
