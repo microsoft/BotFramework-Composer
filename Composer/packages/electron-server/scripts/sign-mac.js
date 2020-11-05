@@ -65,7 +65,7 @@ try {
 }
 
 // sign each app bundle with correct entitlements
-const baseBundlePath = path.resolve(__dirname, 'dist/mac/Bot Framework Composer.app');
+const baseBundlePath = path.resolve(__dirname, '../dist/mac/Bot Framework Composer.app');
 const baseEntitlementsPath = path.resolve(__dirname, '../resources/entitlements.plist');
 const keychainEntitlementsPath = path.resolve(__dirname, '../resources/entitlements-keychain.plist');
 
