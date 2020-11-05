@@ -10,5 +10,13 @@
     <true/>
     <key>com.apple.security.cs.allow-dyld-environment-variables</key>
     <true/>
+    <key>keychain-access-groups</key>
+    <array>
+      <string>UBF8T346G9.com.microsoft.identity.universalstorage</string>
+    </array>
+    <key>com.apple.application-identifier</key>
+    <string>UBF8T346G9.com.microsoft.botframework.composer</string>
+    <key>com.apple.developer.team-identifier</key>
+    <string>UBF8T346G9</string>
 </dict>
 </plist>
