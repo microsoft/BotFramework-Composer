@@ -71,13 +71,13 @@ describe('getOptions', () => {
       const { options } = getOptions(schema, definitions);
       const optionKeys = options.map((o) => o.key);
       expect(optionKeys).toEqual([
-        'my awesome string',
-        'boolean',
+        'string',
         'number',
+        'boolean',
+        'my awesome string',
         'an enum',
         'dropdown',
         'another type',
-        'string',
         'unknown',
       ]);
     });

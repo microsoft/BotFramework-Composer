@@ -34,7 +34,7 @@ const typePriorityWeights = {
 };
 
 const sortOptionsByTypeWeights = ({ key: type1 }, { key: type2 }): number => {
-  return (typePriorityWeights[type1] || 0) < (typePriorityWeights[type2] || 0) ? 1 : -1;
+  return (typePriorityWeights[type1] || 0) > (typePriorityWeights[type2] || 0) ? -1 : 1;
 };
 
 export function getOptions(
