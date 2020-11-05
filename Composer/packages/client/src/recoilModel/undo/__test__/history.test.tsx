@@ -6,13 +6,14 @@ import { jsx } from '@emotion/core';
 import { act } from 'react-test-renderer';
 import { useRecoilValue, useSetRecoilState, useRecoilState } from 'recoil';
 
-import { UndoRoot, undoFunctionState, undoHistoryState } from '../history';
+import { UndoRoot, undoFunctionState, undoHistoryState, undoStatusState } from '../history';
 import {
   lgFilesState,
   luFilesState,
   projectMetaDataState,
   currentProjectIdState,
   botProjectIdsState,
+  designPageLocationState,
 } from '../../atoms';
 import { dialogsSelectorFamily } from '../../selectors';
 import { renderRecoilHook } from '../../../../__tests__/testUtils/react-recoil-hooks-testing-library';
@@ -30,11 +31,12 @@ describe('<UndoRoot/>', () => {
 
   beforeEach(() => {
     const useRecoilTestHook = () => {
-      const { undo, redo, canRedo, canUndo, commitChanges, clearUndo } = useRecoilValue(undoFunctionState(projectId));
+      const { undo, redo, commitChanges, clearUndo } = useRecoilValue(undoFunctionState(projectId));
       const [dialogs, setDialogs] = useRecoilState(dialogsSelectorFamily(projectId));
       const setProjectIdState = useSetRecoilState(currentProjectIdState);
+      const setDesignPageLocation = useSetRecoilState(designPageLocationState(projectId));
       const history = useRecoilValue(undoHistoryState(projectId));
-
+      const { canRedo, canUndo } = useRecoilValue(undoStatusState(projectId));
       return {
         undo,
         redo,
@@ -46,6 +48,7 @@ describe('<UndoRoot/>', () => {
         setDialogs,
         dialogs,
         history,
+        setDesignPageLocation,
       };
     };
 
@@ -60,18 +63,18 @@ describe('<UndoRoot/>', () => {
       },
       states: [
         { recoilState: botProjectIdsState, initialValue: [projectId] },
-        { recoilState: dialogsSelectorFamily(projectId), initialValue: [{ id: '1' }] },
+        { recoilState: dialogsSelectorFamily(projectId), initialValue: [{ id: '1', content: '' }] },
         { recoilState: lgFilesState(projectId), initialValue: [{ id: '1.lg' }, { id: '2' }] },
         { recoilState: luFilesState(projectId), initialValue: [{ id: '1.lu' }, { id: '2' }] },
         { recoilState: currentProjectIdState, initialValue: projectId },
         { recoilState: undoHistoryState(projectId), initialValue: new UndoHistory(projectId) },
+        { recoilState: undoStatusState(projectId), initialValue: { canUndo: false, canRedo: false } },
+        { recoilState: designPageLocationState(projectId), initialValue: { dialogId: '1', focused: '', selected: '' } },
         {
           recoilState: undoFunctionState(projectId),
           initialValue: {
             undo: jest.fn(),
             redo: jest.fn(),
-            canUndo: jest.fn(),
-            canRedo: jest.fn(),
             commitChanges: jest.fn(),
             clearUndo: jest.fn(),
           },
@@ -107,14 +110,14 @@ describe('<UndoRoot/>', () => {
       renderedComponent.current.commitChanges();
     });
 
-    expect(renderedComponent.current.canUndo()).toBeTruthy();
+    expect(renderedComponent.current.canUndo).toBeTruthy();
 
     act(() => {
       renderedComponent.current.undo();
     });
     expect(renderedComponent.current.history.stack.length).toBe(2);
-    expect(renderedComponent.current.dialogs).toStrictEqual([{ id: '1' }]);
-    expect(renderedComponent.current.canRedo()).toBeTruthy();
+    expect(renderedComponent.current.dialogs).toStrictEqual([{ id: '1', content: '' }]);
+    expect(renderedComponent.current.canRedo).toBeTruthy();
   });
 
   it('should remove the items from present when commit a new change', () => {
@@ -132,24 +135,30 @@ describe('<UndoRoot/>', () => {
 
   it('should redo', () => {
     act(() => {
-      renderedComponent.current.setDialogs([{ id: '2' }]);
+      renderedComponent.current.setDialogs([{ id: '2', content: '' }]);
     });
+
+    act(() => {
+      renderedComponent.current.setDesignPageLocation({ dialogId: '2' });
+    });
+
     act(() => {
       renderedComponent.current.commitChanges();
     });
-    expect(renderedComponent.current.canRedo()).toBeFalsy();
+    expect(renderedComponent.current.canRedo).toBeFalsy();
 
     act(() => {
       renderedComponent.current.undo();
     });
-    expect(renderedComponent.current.dialogs).toStrictEqual([{ id: '1' }]);
-    expect(renderedComponent.current.canRedo()).toBeTruthy();
+
+    expect(renderedComponent.current.dialogs).toStrictEqual([{ id: '1', content: '' }]);
+    expect(renderedComponent.current.canRedo).toBeTruthy();
 
     act(() => {
       renderedComponent.current.redo();
     });
     expect(renderedComponent.current.history.stack.length).toBe(2);
-    expect(renderedComponent.current.dialogs).toStrictEqual([{ id: '2' }]);
+    expect(renderedComponent.current.dialogs).toStrictEqual([{ id: '2', content: '' }]);
   });
 
   it('should clear undo history', () => {

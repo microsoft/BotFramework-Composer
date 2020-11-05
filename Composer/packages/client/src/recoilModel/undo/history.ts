@@ -10,11 +10,14 @@ import {
 import { atomFamily, Snapshot, useRecoilCallback, CallbackInterface, useSetRecoilState } from 'recoil';
 import uniqueId from 'lodash/uniqueId';
 import isEmpty from 'lodash/isEmpty';
+import has from 'lodash/has';
+import { DialogInfo } from '@bfc/shared';
 
 import { navigateTo, getUrlSearch } from '../../utils/navigation';
 import { encodeArrayPathToDesignerPath } from '../../utils/convertUtils/designerPathEncoder';
 import { dialogsSelectorFamily } from '../selectors';
 
+import { rootBotProjectIdSelector } from './../selectors/project';
 import { designPageLocationState } from './../atoms';
 import { trackedAtoms, AtomAssetsMap } from './trackedAtoms';
 import UndoHistory from './undoHistory';
@@ -53,8 +56,25 @@ export const undoVersionState = atomFamily({
   dangerouslyAllowMutability: true,
 });
 
+const checkLocation = (projectId: string, atomMap: AtomAssetsMap) => {
+  let location = atomMap.get(designPageLocationState(projectId));
+  const { dialogId, selected, focused } = location;
+  const dialog: DialogInfo = atomMap.get(dialogsSelectorFamily(projectId)).find((dialog) => dialogId === dialog.id);
+  if (!dialog) return atomMap;
+
+  const { content } = dialog;
+  if (!has(content, selected)) {
+    location = { ...location, selected: '', focused: '' };
+  } else if (!has(content, focused)) {
+    location = { ...location, focused: '' };
+  }
+
+  atomMap.set(designPageLocationState(projectId), location);
+  return atomMap;
+};
+
 const getAtomAssetsMap = (snap: Snapshot, projectId: string): AtomAssetsMap => {
-  const atomMap = new Map<RecoilState<any>, any>();
+  let atomMap = new Map<RecoilState<any>, any>();
   const atomsToBeTracked = trackedAtoms(projectId);
   atomsToBeTracked.forEach((atom) => {
     const loadable = snap.getLoadable(atom);
@@ -63,6 +83,7 @@ const getAtomAssetsMap = (snap: Snapshot, projectId: string): AtomAssetsMap => {
 
   //should record the location state
   atomMap.set(designPageLocationState(projectId), snap.getLoadable(designPageLocationState(projectId)).contents);
+  atomMap = checkLocation(projectId, atomMap);
   return atomMap;
 };
 
@@ -80,16 +101,22 @@ const checkAtomsChanged = (current: AtomAssetsMap, previous: AtomAssetsMap, atom
   return atoms.some((atom) => checkAtomChanged(current, previous, atom));
 };
 
-function navigate(next: AtomAssetsMap, projectId: string) {
-  const location = next.get(designPageLocationState(projectId));
-  if (location) {
+function navigate(next: AtomAssetsMap, skillId: string, projectId: string) {
+  const location = next.get(designPageLocationState(skillId));
+
+  if (location && projectId) {
     const { dialogId, selected, focused, promptTab } = location;
-    const dialog = next.get(dialogsSelectorFamily(projectId)).find((dialog) => dialogId === dialog.id);
-    let currentUri = `/bot/${projectId}/dialogs/${dialogId}${getUrlSearch(
+    const dialog = next.get(dialogsSelectorFamily(skillId)).find((dialog) => dialogId === dialog.id);
+    const baseUri =
+      skillId == null || skillId === projectId
+        ? `/bot/${projectId}/dialogs/${dialogId}`
+        : `/bot/${projectId}/skill/${skillId}/dialogs/${dialogId}`;
+
+    let currentUri = `${baseUri}${getUrlSearch(
       encodeArrayPathToDesignerPath(dialog.content, selected),
       encodeArrayPathToDesignerPath(dialog.content, focused)
     )}`;
-    if (promptTab) {
+    if (promptTab && focused) {
       currentUri += `#${promptTab}`;
     }
     navigateTo(currentUri);
@@ -130,13 +157,15 @@ interface UndoRootProps {
 export const UndoRoot = React.memo((props: UndoRootProps) => {
   const { projectId } = props;
   const undoHistory = useRecoilValue(undoHistoryState(projectId));
+  const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
   const history: UndoHistory = useRef(undoHistory).current;
   const [initialStateLoaded, setInitialStateLoaded] = useState(false);
   const setUndoStatus = useSetRecoilState(undoStatusState(projectId));
   const setUndoFunction = useSetRecoilState(undoFunctionState(projectId));
   const [, forceUpdate] = useState([]);
   const setVersion = useSetRecoilState(undoVersionState(projectId));
-
+  const rootBotId = useRef('');
+  rootBotId.current = rootBotProjectId || '';
   //use to record the first time change, this will help to get the init location
   //init location is used to undo navigate
   const assetsChanged = useRef(false);
@@ -174,7 +203,7 @@ export const UndoRoot = React.memo((props: UndoRootProps) => {
   ) => {
     target = mapTrackedAtomsOntoSnapshot(target, current, next, projectId);
     gotoSnapshot(target);
-    navigate(next, projectId);
+    navigate(next, projectId, rootBotId.current);
   };
 
   const updateUndoResult = () => {
