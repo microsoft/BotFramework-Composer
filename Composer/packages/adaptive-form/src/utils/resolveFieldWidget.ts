@@ -135,7 +135,7 @@ export function resolveFieldWidget(params: {
         return { field: DefaultFields.ArrayField };
       }
       case 'object':
-        if (schema.additionalProperties) {
+        if (typeof schema.additionalProperties === 'object') {
           return { field: DefaultFields.OpenObjectField };
         } else if (!schema.properties) {
           if (showIntellisense && isOneOf) {

@@ -26,9 +26,9 @@ using Microsoft.Bot.Builder.Skills;
 using Microsoft.Bot.Connector.Authentication;
 using Microsoft.BotFramework.Composer.Core;
 using Microsoft.BotFramework.Composer.Core.Settings;
-using Microsoft.BotFramework.Composer.WebAppTemplates.Authorization;
 
 //using Microsoft.BotFramework.Composer.CustomAction;
+using Microsoft.BotFramework.Composer.WebAppTemplates.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -130,14 +130,7 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             services.AddSingleton<BotAdapter>(sp => (BotFrameworkHttpAdapter)sp.GetService<IBotFrameworkHttpAdapter>());
 
             // Register AuthConfiguration to enable custom claim validation for skills.
-            if (IsSkill(settings))
-            {
-                services.AddSingleton(sp => new AuthenticationConfiguration { ClaimsValidator = new AllowedCallersClaimsValidator(settings.SkillConfiguration) });
-            }
-            else
-            {
-                services.AddSingleton(sp => new AuthenticationConfiguration());
-            }
+            services.AddSingleton(sp => new AuthenticationConfiguration { ClaimsValidator = new AllowedCallersClaimsValidator(settings.SkillConfiguration) });
 
             // register components.
             ComponentRegistration.Add(new DialogsComponentRegistration());

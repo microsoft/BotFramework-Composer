@@ -27,10 +27,10 @@ const iconSectionContainer = css`
   :before {
     content: '';
     position: relative;
-    margin: 4px 0;
+    margin: auto 0px;
     width: 1px;
     background: ${NeutralColors.white};
-    height: 23px;
+    height: 21px;
   }
 `;
 

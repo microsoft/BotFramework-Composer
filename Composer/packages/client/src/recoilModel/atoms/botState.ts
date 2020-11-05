@@ -25,7 +25,7 @@ import { BotRuntimeError, DesignPageLocation } from '../../recoilModel/types';
 import FilePersistence from '../persistence/FilePersistence';
 
 import { BotStatus } from './../../constants';
-import { BreadcrumbItem, PublishType } from './../../recoilModel/types';
+import { PublishType } from './../../recoilModel/types';
 
 const getFullyQualifiedKey = (value: string) => {
   return `Bot_${value}_State`;
@@ -46,6 +46,7 @@ const emptyDialog: DialogInfo = {
   triggers: [],
   intentTriggers: [],
   skills: [],
+  isFormDialog: false,
 };
 type dialogStateParams = { projectId: string; dialogId: string };
 export const dialogState = atomFamily<DialogInfo, dialogStateParams>({
@@ -173,13 +174,6 @@ export const skillManifestsState = atomFamily<SkillManifestFile[], string>({
   },
 });
 
-export const breadcrumbState = atomFamily<BreadcrumbItem[], string>({
-  key: getFullyQualifiedKey('breadcrumb'),
-  default: (id) => {
-    return [];
-  },
-});
-
 export const showCreateDialogModalState = atomFamily<boolean, string>({
   key: getFullyQualifiedKey('showCreateDialogModal'),
   default: (id) => {
@@ -285,11 +279,6 @@ export const designPageLocationState = atomFamily<DesignPageLocation, string>({
 
 export const showCreateQnAFromUrlDialogState = atomFamily<boolean, string>({
   key: getFullyQualifiedKey('showCreateQnAFromUrlDialog'),
-  default: false,
-});
-
-export const showCreateQnAFromUrlDialogWithScratchState = atomFamily<boolean, string>({
-  key: getFullyQualifiedKey('showCreateQnAFromUrlDialogWithScratch'),
   default: false,
 });
 

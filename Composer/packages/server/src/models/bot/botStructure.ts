@@ -77,18 +77,31 @@ export const parseFileName = (name: string, defaultLocale: string) => {
 export const isRecognizer = (fileName: string) => fileName.endsWith('.lu.dialog') || fileName.endsWith('.qna.dialog');
 export const isCrossTrainConfig = (fileName: string) => fileName.endsWith('cross-train.config.json');
 
-export const defaultFilePath = (botName: string, defaultLocale: string, filename: string): string => {
+export const defaultFilePath = (
+  botName: string,
+  defaultLocale: string,
+  filename: string,
+  options: {
+    endpoint?: string; // <endpoint>/<file-path>
+    rootDialogId?: string;
+  }
+): string => {
   const BOTNAME = botName.toLowerCase();
   const CommonFileId = 'common';
 
+  const { endpoint = '', rootDialogId = '' } = options;
   const { fileId, locale, fileType, dialogId } = parseFileName(filename, defaultLocale);
   const LOCALE = locale;
 
   // now recognizer extension is .lu.dialog or .qna.dialog
   if (isRecognizer(filename)) {
-    const isRoot = filename.startsWith(botName.toLowerCase());
-    const dialogId = filename.slice(0, filename.indexOf('.'));
-    if (isRoot) {
+    const dialogId = filename.split('.')[0];
+    const isRoot = filename.startsWith(botName) || (rootDialogId && filename.startsWith(rootDialogId));
+    if (endpoint) {
+      return templateInterpolate(Path.join(endpoint, BotStructureTemplate.recognizer), {
+        RECOGNIZERNAME: filename,
+      });
+    } else if (isRoot) {
       return templateInterpolate(BotStructureTemplate.recognizer, {
         RECOGNIZERNAME: filename,
       });
@@ -132,19 +145,46 @@ export const defaultFilePath = (botName: string, defaultLocale: string, filename
   const isRootFile = BOTNAME === DIALOGNAME.toLowerCase();
 
   if (fileType === FileExtensions.SourceQnA) {
+    if (endpoint) {
+      return templateInterpolate(Path.join(endpoint, BotStructureTemplate.sourceQnA), {
+        FILENAME: fileId,
+        DIALOGNAME,
+      });
+    }
     const TemplatePath =
       isRootFile || !dialogId ? BotStructureTemplate.sourceQnA : BotStructureTemplate.dialogs.sourceQnA;
     return templateInterpolate(TemplatePath, {
       FILENAME: fileId,
       DIALOGNAME,
     });
-
-    return templateInterpolate(BotStructureTemplate.skillManifests, {
-      MANIFESTFILENAME: filename,
-    });
   }
 
   let TemplatePath = '';
+
+  if (endpoint) {
+    switch (fileType) {
+      case FileExtensions.Dialog:
+        TemplatePath = BotStructureTemplate.entry;
+        break;
+      case FileExtensions.Lg:
+        TemplatePath = BotStructureTemplate.lg;
+        break;
+      case FileExtensions.Lu:
+        TemplatePath = BotStructureTemplate.lu;
+        break;
+      case FileExtensions.Qna:
+        TemplatePath = BotStructureTemplate.qna;
+        break;
+      case FileExtensions.DialogSchema:
+        TemplatePath = BotStructureTemplate.dialogSchema;
+    }
+    return templateInterpolate(Path.join(endpoint, TemplatePath), {
+      BOTNAME: fileId,
+      DIALOGNAME,
+      LOCALE,
+    });
+  }
+
   if (fileType === FileExtensions.Dialog) {
     TemplatePath = isRootFile ? BotStructureTemplate.entry : BotStructureTemplate.dialogs.entry;
   } else if (fileType === FileExtensions.Lg) {
@@ -170,14 +210,15 @@ export const defaultFilePath = (botName: string, defaultLocale: string, filename
 // when create/saveAs bot, serialize entry dialog/lg/lu
 export const serializeFiles = async (fileStorage, rootPath, botName, preserveRoot = false) => {
   const entryPatterns = [
-    templateInterpolate(BotStructureTemplate.lg, { LOCALE: '*', BOTNAME: '*' }),
-    templateInterpolate(BotStructureTemplate.lu, { LOCALE: '*', BOTNAME: '*' }),
-    templateInterpolate(BotStructureTemplate.qna, { LOCALE: '*', BOTNAME: '*' }),
     templateInterpolate(BotStructureTemplate.dialogSchema, { BOTNAME: '*' }),
     templateInterpolate(BotStructureTemplate.botProject, { BOTNAME: '*' }),
   ];
+
   if (!preserveRoot) {
     entryPatterns.push(templateInterpolate(BotStructureTemplate.entry, { BOTNAME: '*' }));
+    entryPatterns.push(templateInterpolate(BotStructureTemplate.lg, { LOCALE: '*', BOTNAME: '*' }));
+    entryPatterns.push(templateInterpolate(BotStructureTemplate.lu, { LOCALE: '*', BOTNAME: '*' }));
+    entryPatterns.push(templateInterpolate(BotStructureTemplate.qna, { LOCALE: '*', BOTNAME: '*' }));
   }
 
   for (const pattern of entryPatterns) {

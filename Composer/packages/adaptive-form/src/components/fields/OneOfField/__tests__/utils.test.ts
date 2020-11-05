@@ -22,9 +22,9 @@ describe('getOptions', () => {
     it('returns all of the types, sorted', () => {
       const { options } = getOptions(schema, {});
       expect(options).toEqual([
-        makeOption(schema, 'boolean'),
-        makeOption(schema, 'number'),
         makeOption(schema, 'string'),
+        makeOption(schema, 'number'),
+        makeOption(schema, 'boolean'),
       ]);
     });
   });
@@ -71,13 +71,13 @@ describe('getOptions', () => {
       const { options } = getOptions(schema, definitions);
       const optionKeys = options.map((o) => o.key);
       expect(optionKeys).toEqual([
-        'my awesome string',
-        'boolean',
+        'string',
         'number',
+        'boolean',
+        'my awesome string',
         'an enum',
         'dropdown',
         'another type',
-        'string',
         'unknown',
       ]);
     });
