@@ -107,7 +107,7 @@ export class Builder {
    * Orchestrator: Get available list of NLR models
    */
   public async runOrchestratorNlrList(): Promise<IOrchestratorNLRList> {
-    return JSON.parse(await Orchestrator.nlrListAsync());
+    return await Orchestrator.baseModelGetVersionsAsync();
   }
 
   /**
@@ -126,7 +126,7 @@ export class Builder {
     onProgress: IOrchestratorProgress,
     onFinish: IOrchestratorProgress
   ): Promise<void> {
-    await Orchestrator.nlrGetAsync(modelPath, nlrId, onProgress, onFinish);
+    await Orchestrator.baseModelGetAsync(modelPath, nlrId, onProgress, onFinish);
   }
 
   /**

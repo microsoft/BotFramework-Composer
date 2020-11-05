@@ -46,10 +46,13 @@ export interface ILuisStatusOperation {
 
 export interface IOrchestratorNLRList {
   version: string;
+  default: string;
   readonly models: {
     [versionId: string]: {
       releaseDate: string;
+      modelUri: string;
       description: string;
+      minSDKVersion: string;
     };
   };
 }

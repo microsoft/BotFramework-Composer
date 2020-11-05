@@ -11,7 +11,7 @@ import { IFileStorage } from '../../storage/interface';
 import { Builder } from '../builder';
 import mockLUInput from '../__mocks__/mockLUInput.json';
 
-const nlrId = 'pretrained.20200924.microsoft.dte.00.03.en.onnx';
+const nlrId = 'pretrained.20200924.microsoft.dte.00.06.en.onnx';
 const nlrPath: string = path.resolve('./orchestrator_ut_model/');
 const downloadModelTimeoutMs = 90000;
 
@@ -39,7 +39,7 @@ describe('Orchestrator Tests', () => {
     expect(callbackStub).toBeCalledWith();
   });
 
-  it('always lists DTE 3L model for FTs', async () => {
+  it('always lists DTE 6L model for FTs', async () => {
     const builder = new Builder('', {} as IFileStorage, 'en-us');
 
     const nlrList = await builder.runOrchestratorNlrList();
