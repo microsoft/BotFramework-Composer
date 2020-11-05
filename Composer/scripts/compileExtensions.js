@@ -95,9 +95,6 @@ const compile = (name, extPath) => {
   } else {
     console.log('[%s] no build script found.', name);
   }
-
-  console.log('[%s] Cleaning development dependencies.', name);
-  execSync('yarn --force --production=true --frozen-lockfile', { cwd: extPath, stdio: 'inherit' });
 };
 
 checkComposerLibs();
