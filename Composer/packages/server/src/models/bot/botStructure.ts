@@ -81,11 +81,15 @@ export const defaultFilePath = (
   botName: string,
   defaultLocale: string,
   filename: string,
-  rootDialogId = ''
+  options: {
+    endpoint?: string; // <endpoint>/<file-path>
+    rootDialogId?: string;
+  }
 ): string => {
   const BOTNAME = botName.toLowerCase();
   const CommonFileId = 'common';
 
+  const { endpoint = '', rootDialogId = '' } = options;
   const { fileId, locale, fileType, dialogId } = parseFileName(filename, defaultLocale);
   const LOCALE = locale;
 
@@ -93,7 +97,11 @@ export const defaultFilePath = (
   if (isRecognizer(filename)) {
     const dialogId = filename.split('.')[0];
     const isRoot = filename.startsWith(botName) || (rootDialogId && filename.startsWith(rootDialogId));
-    if (isRoot) {
+    if (endpoint) {
+      return templateInterpolate(Path.join(endpoint, BotStructureTemplate.recognizer), {
+        RECOGNIZERNAME: filename,
+      });
+    } else if (isRoot) {
       return templateInterpolate(BotStructureTemplate.recognizer, {
         RECOGNIZERNAME: filename,
       });
@@ -137,19 +145,46 @@ export const defaultFilePath = (
   const isRootFile = BOTNAME === DIALOGNAME.toLowerCase();
 
   if (fileType === FileExtensions.SourceQnA) {
+    if (endpoint) {
+      return templateInterpolate(Path.join(endpoint, BotStructureTemplate.sourceQnA), {
+        FILENAME: fileId,
+        DIALOGNAME,
+      });
+    }
     const TemplatePath =
       isRootFile || !dialogId ? BotStructureTemplate.sourceQnA : BotStructureTemplate.dialogs.sourceQnA;
     return templateInterpolate(TemplatePath, {
       FILENAME: fileId,
       DIALOGNAME,
     });
-
-    return templateInterpolate(BotStructureTemplate.skillManifests, {
-      MANIFESTFILENAME: filename,
-    });
   }
 
   let TemplatePath = '';
+
+  if (endpoint) {
+    switch (fileType) {
+      case FileExtensions.Dialog:
+        TemplatePath = BotStructureTemplate.entry;
+        break;
+      case FileExtensions.Lg:
+        TemplatePath = BotStructureTemplate.lg;
+        break;
+      case FileExtensions.Lu:
+        TemplatePath = BotStructureTemplate.lu;
+        break;
+      case FileExtensions.Qna:
+        TemplatePath = BotStructureTemplate.qna;
+        break;
+      case FileExtensions.DialogSchema:
+        TemplatePath = BotStructureTemplate.dialogSchema;
+    }
+    return templateInterpolate(Path.join(endpoint, TemplatePath), {
+      BOTNAME: fileId,
+      DIALOGNAME,
+      LOCALE,
+    });
+  }
+
   if (fileType === FileExtensions.Dialog) {
     TemplatePath = isRootFile ? BotStructureTemplate.entry : BotStructureTemplate.dialogs.entry;
   } else if (fileType === FileExtensions.Lg) {

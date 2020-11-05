@@ -14,11 +14,7 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { FieldConfig, useForm } from '../../hooks/useForm';
-import {
-  dispatcherState,
-  onCreateQnAFromUrlDialogCompleteState,
-  showCreateQnAFromUrlDialogWithScratchState,
-} from '../../recoilModel';
+import { dispatcherState, onCreateQnAFromUrlDialogCompleteState } from '../../recoilModel';
 
 import {
   knowledgeBaseSourceUrl,
@@ -67,7 +63,6 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromModalProps> = (props) 
   const { onDismiss, onSubmit, dialogId, projectId, qnaFiles } = props;
   const actions = useRecoilValue(dispatcherState);
   const onComplete = useRecoilValue(onCreateQnAFromUrlDialogCompleteState(projectId));
-  const showWithScratch = useRecoilValue(showCreateQnAFromUrlDialogWithScratchState(projectId));
 
   formConfig.name.validate = validateName(qnaFiles);
   const { formData, updateField, hasErrors, formErrors } = useForm(formConfig);
@@ -123,17 +118,15 @@ export const CreateQnAFromUrlModal: React.FC<CreateQnAFromModalProps> = (props) 
         </Stack>
       </div>
       <DialogFooter>
-        {showWithScratch && (
-          <DefaultButton
-            data-testid={'createKnowledgeBaseFromScratch'}
-            styles={{ root: { float: 'left' } }}
-            text={formatMessage('Create knowledge base from scratch')}
-            onClick={() => {
-              // switch to create from scratch flow, pass onComplete callback.
-              actions.createQnAFromScratchDialogBegin({ projectId, onComplete: onComplete?.func });
-            }}
-          />
-        )}
+        <DefaultButton
+          data-testid={'createKnowledgeBaseFromScratch'}
+          styles={{ root: { float: 'left' } }}
+          text={formatMessage('Create knowledge base from scratch')}
+          onClick={() => {
+            // switch to create from scratch flow, pass onComplete callback.
+            actions.createQnAFromScratchDialogBegin({ projectId, onComplete: onComplete?.func });
+          }}
+        />
         <DefaultButton
           text={formatMessage('Cancel')}
           onClick={() => {

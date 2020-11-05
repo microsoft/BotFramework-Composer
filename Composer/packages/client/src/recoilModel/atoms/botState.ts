@@ -46,6 +46,7 @@ const emptyDialog: DialogInfo = {
   intentTriggers: [],
   skills: [],
   luProvider: '',
+  isFormDialog: false,
 };
 type dialogStateParams = { projectId: string; dialogId: string };
 export const dialogState = atomFamily<DialogInfo, dialogStateParams>({
@@ -292,11 +293,6 @@ export const designPageLocationState = atomFamily<DesignPageLocation, string>({
 
 export const showCreateQnAFromUrlDialogState = atomFamily<boolean, string>({
   key: getFullyQualifiedKey('showCreateQnAFromUrlDialog'),
-  default: false,
-});
-
-export const showCreateQnAFromUrlDialogWithScratchState = atomFamily<boolean, string>({
-  key: getFullyQualifiedKey('showCreateQnAFromUrlDialogWithScratch'),
   default: false,
 });
 

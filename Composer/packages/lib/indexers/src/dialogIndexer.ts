@@ -181,6 +181,7 @@ function parse(id: string, content: any) {
   const luFile = typeof content.recognizer === 'string' ? content.recognizer : '';
   const qnaFile = typeof content.recognizer === 'string' ? content.recognizer : '';
   const lgFile = typeof content.generator === 'string' ? content.generator : '';
+  const isFormDialog = has(content, 'schema'); // mark as form generated dialog;
   const diagnostics: Diagnostic[] = [];
   const luProvider: LuProviderType = '';
   return {
@@ -197,6 +198,7 @@ function parse(id: string, content: any) {
     intentTriggers: extractIntentTriggers(content),
     skills: extractReferredSkills(content),
     luProvider,
+    isFormDialog,
   };
 }
 

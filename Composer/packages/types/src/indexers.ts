@@ -66,6 +66,7 @@ export type DialogInfo = {
   intentTriggers: IIntentTrigger[];
   skills: string[];
   luProvider: LuProviderType;
+  isFormDialog: boolean;
 };
 
 export type LgTemplateJsonPath = {
