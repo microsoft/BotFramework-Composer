@@ -22,9 +22,9 @@ describe('getOptions', () => {
     it('returns all of the types, sorted', () => {
       const { options } = getOptions(schema, {});
       expect(options).toEqual([
-        makeOption(schema, 'boolean'),
-        makeOption(schema, 'number'),
         makeOption(schema, 'string'),
+        makeOption(schema, 'number'),
+        makeOption(schema, 'boolean'),
       ]);
     });
   });
