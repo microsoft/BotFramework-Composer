@@ -217,6 +217,7 @@ export class Builder {
       suffix: config.suffix,
       keptVersionCount: 10,
       isStaging: false,
+      region: config.region,
     });
 
     await this.luBuilder.writeDialogAssets(buildResult, {
