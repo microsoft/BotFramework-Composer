@@ -128,7 +128,7 @@ export class AzureResourceMananger {
         message: 'Deploying Luis Authoring Resource ...',
       });
       const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(this.creds, this.subscriptionId);
-      // check location is valiable
+      // check location is validated
       let authoringLocation = config.location;
       if(!LuisAuthoringSupportLocation.includes(config.location)){
         authoringLocation = 'westus'; // default as westus
@@ -179,7 +179,7 @@ export class AzureResourceMananger {
         message: 'Deploying Luis Resource ...',
       });
       const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(this.creds, this.subscriptionId);
-      // check luis publish location is valiable
+      // check luis publish location is validated
       let authoringLocation = config.location;
       if(!LuisAuthoringSupportLocation.includes(config.location)){
         authoringLocation = 'westus'; // default as westus
@@ -867,6 +867,10 @@ export class AzureResourceMananger {
       }
 
       const siteHost = azureFunctionsResult?.hostNames?.[0];
+      this.logger({
+        status: BotProjectDeployLoggerType.PROVISION_INFO,
+        message: 'Deploying Azure Functions Success',
+      });
       return siteHost;
     } catch (err) {
       this.logger({

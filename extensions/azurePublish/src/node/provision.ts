@@ -276,13 +276,16 @@ export class BotProjectProvision {
           /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
           // Create the Azure Bot Service registration
           case AzureResourceTypes.AZUREFUNCTIONS:
-            await this.azureResourceManagementClient.deployAzureFunctions({
+            const functionsHostName = await this.azureResourceManagementClient.deployAzureFunctions({
               resourceGroupName: resourceGroupName,
               location: provisionResults.resourceGroup.location,
               name: config.hostname,
               appId: provisionResults.appId,
               appPwd: provisionResults.appPassword,
             });
+            provisionResults.webApp = {
+              hostname: functionsHostName,
+            };
             break;
 
           /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
@@ -374,7 +377,7 @@ export class BotProjectProvision {
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
         message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
       });
-      throw err;
+      throw stringifyError(err);
     }
   }
 }
