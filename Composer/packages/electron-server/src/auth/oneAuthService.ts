@@ -104,7 +104,7 @@ class OneAuthInstance extends OneAuthBase {
         this.signedInAccount.realm,
         ''
       );
-      const result = await this.oneAuth.acquireCredentialSilently(this.signedInAccount?.id, reqParams, '');
+      let result = await this.oneAuth.acquireCredentialSilently(this.signedInAccount?.id, reqParams, '');
       if (result.credential && result.credential.value) {
         log('Acquired access token. %s', result.credential.value);
         return {
@@ -114,7 +114,19 @@ class OneAuthInstance extends OneAuthBase {
         };
       }
       if (result.error) {
-        // TODO: better error handling
+        if (result.error.status === this.oneAuth.Status.InteractionRequired) {
+          // try again but interactively
+          log('Interaction required. Trying again interactively to get access token.');
+          result = await this.oneAuth.acquireCredentialInteractively(this.signedInAccount?.id, reqParams, '');
+          if (result.credential && result.credential.value) {
+            log('Acquired access token interactively. %s', result.credential.value);
+            return {
+              accessToken: result.credential.value,
+              acquiredAt: Date.now(),
+              expiryTime: result.credential.expiresOn,
+            };
+          }
+        }
         throw result.error;
       }
       throw 'Could not acquire an access token.';
