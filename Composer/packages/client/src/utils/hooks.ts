@@ -50,10 +50,16 @@ export const useLinks = () => {
 };
 
 export const useRouterCache = (to: string) => {
+  const projectId = useRecoilValue(currentProjectIdState);
   const [state, setState] = useState(routerCache.getAll());
   const { topLinks, bottomLinks } = useLinks();
   const linksRef = useRef(topLinks.concat(bottomLinks));
   linksRef.current = topLinks.concat(bottomLinks);
+
+  useEffect(() => {
+    routerCache.cleanAll();
+  }, [projectId]);
+
   useEffect(() => {
     globalHistory.listen(({ location }) => {
       const links = linksRef.current;
