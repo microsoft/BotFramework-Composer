@@ -7,12 +7,12 @@
     "additionalProperties": false,
     "properties": {
         "arg1": {
-            "$ref": "schema:#/definitions/integerExpression",
+            "$ref": "schema:#/definitions/numberExpression",
             "title": "Arg1",
             "description": "Value from callers memory to use as arg 1"
         },
         "arg2": {
-            "$ref": "schema:#/definitions/integerExpression",
+            "$ref": "schema:#/definitions/numberExpression",
             "title": "Arg2",
             "description": "Value from callers memory to use as arg 2"
         },

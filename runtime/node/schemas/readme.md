@@ -59,12 +59,12 @@ The above steps should have generated a new sdk.schema file inside `schemas` fol
 
 - In this tutorial, we will be going over the steps to include a custom action `MultiplyDialog` that multiplies two numbers passed as inputs. Note that the ejected runtime should contain a `customaction` folder that has this sample.
 
-- Uncomment line 28 and 57 in src/shared/composerBot.ts file so as to register this action.
+- Uncomment line 30 and 61 in src/shared/composerBot.ts file so as to register this action.
 
 ```
 
 import { CustomActionComponentRegistration } from '../customaction/customActionComponentRegistration';
-// This is for custom action component registration.
+// This is for custom action component registration, uncomment this to enable custom action support.
 ComponentRegistration.add(new CustomActionComponentRegistration());
 
 ```
