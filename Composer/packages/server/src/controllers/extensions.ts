@@ -160,9 +160,8 @@ export async function performExtensionFetch(req: ExtensionFetchRequest, res: Res
     const json = await response.json();
     res.json(json);
   } catch (e) {
-    let error = e;
     if (e && e.json) {
-      error = await e.json();
+      const error = await e.json();
       res.status(500).json(error);
     } else {
       // re-throw error to be handled by our error handler
