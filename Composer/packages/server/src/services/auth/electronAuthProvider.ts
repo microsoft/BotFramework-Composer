@@ -53,7 +53,6 @@ export class ElectronAuthProvider extends AuthProvider {
 
       return accessToken;
     } catch (e) {
-      // TODO: error handling
       log('Error while trying to get access token: %O', e);
       return '';
     }
