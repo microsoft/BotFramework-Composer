@@ -128,3 +128,36 @@ export interface QnAResourceConfig {
 }
 
 export type ApplicationType = 'web' | 'other';
+
+// https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-reference-regions
+export const LuisAuthoringSupportLocation = ['westus', 'australiaeast', 'westeurope'];
+export const LuisPublishSupportLocation = {
+  'australiaeast': [
+    'australiaeast'
+  ],
+  'westeurope': [
+    'francecentral',
+    'northeurope',
+    'westeurope',
+    'uksouth',
+  ],
+  'westus':[
+    'southafricanorth',
+    'centralindia',
+    'eastasia',
+    'japaneast',
+    'japanwest',
+    'koreacentral',
+    'southeastasia',
+    'canadacentral',
+    'centralus',
+    'eastus',
+    'eastus2',
+    'northcentralus',
+    'southcentralus',
+    'westcentralus',
+    'westus',
+    'westus2',
+    'brazilsouth'
+  ]
+}

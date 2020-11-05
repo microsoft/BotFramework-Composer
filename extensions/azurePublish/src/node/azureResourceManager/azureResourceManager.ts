@@ -25,6 +25,8 @@ import {
   DeploymentsConfig,
   QnAResourceConfig,
   AzureFuntionsConfig,
+  LuisAuthoringSupportLocation,
+  LuisPublishSupportLocation,
 } from './azureResourceManagerConfig';
 import { createCustomizeError, ProvisionErrors, stringifyError } from '../utils/errorHandler';
 
@@ -126,6 +128,11 @@ export class AzureResourceMananger {
         message: 'Deploying Luis Authoring Resource ...',
       });
       const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(this.creds, this.subscriptionId);
+      // check location is valiable
+      let authoringLocation = config.location;
+      if(!LuisAuthoringSupportLocation.includes(config.location)){
+        authoringLocation = 'westus'; // default as westus
+      }
       const deployResult = await cognitiveServicesManagementClient.accounts.create(
         config.resourceGroupName,
         config.name,
@@ -134,7 +141,7 @@ export class AzureResourceMananger {
           sku: {
             name: config.sku ?? 'F0',
           },
-          location: config.location,
+          location: authoringLocation,
         }
       );
       if (deployResult._response.status >= 300) {
@@ -172,6 +179,11 @@ export class AzureResourceMananger {
         message: 'Deploying Luis Resource ...',
       });
       const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(this.creds, this.subscriptionId);
+      // check luis publish location is valiable
+      let authoringLocation = config.location;
+      if(!LuisAuthoringSupportLocation.includes(config.location)){
+        authoringLocation = 'westus'; // default as westus
+      }
       const deployResult = await cognitiveServicesManagementClient.accounts.create(
         config.resourceGroupName,
         config.name,
@@ -180,7 +192,7 @@ export class AzureResourceMananger {
           sku: {
             name: config.sku ?? 'S0',
           },
-          location: config.location,
+          location: authoringLocation,
         }
       );
       if (deployResult._response.status >= 300) {
