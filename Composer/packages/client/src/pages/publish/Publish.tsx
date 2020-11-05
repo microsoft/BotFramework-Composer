@@ -15,7 +15,7 @@ import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { dispatcherState, botProjectSpaceSelector } from '../../recoilModel';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
-import { createNotifiction } from '../../recoilModel/dispatchers/notification';
+import { createNotification } from '../../recoilModel/dispatchers/notification';
 import { Notification } from '../../recoilModel/types';
 
 import { PublishDialog } from './publishDialog';
@@ -159,7 +159,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
             } else if (botPublishHistory[0].status === 200 || botPublishHistory[0].status === 500) {
               if (showNotification) {
                 pendingNotification && deleteNotification(pendingNotification.id);
-                addNotification(createNotifiction(publishedNotificationCard(bot)));
+                addNotification(createNotification(publishedNotificationCard(bot)));
               }
             } else if (selectedTarget && selectedTarget.lastPublished && botPublishHistory.length === 0) {
               // if the history is EMPTY, but we think we've done a publish based on lastPublished timestamp,
@@ -232,7 +232,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const publish = async (items: IBotStatus[]) => {
     // notifications
     setShowNotification(true);
-    const notification = createNotifiction(pendingNotificationCard(items));
+    const notification = createNotification(pendingNotificationCard(items));
     setPendingNotification(notification);
     addNotification(notification);
     // publish to remote

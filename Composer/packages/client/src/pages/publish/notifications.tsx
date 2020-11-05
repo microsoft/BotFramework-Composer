@@ -6,7 +6,7 @@ import formatMessage from 'format-message';
 import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
-import { CardProps } from '../../components/NotificationCard';
+import { CardProps } from '../../components/Notifications/NotificationCard';
 
 import { IBotStatus } from './botStatusList';
 
