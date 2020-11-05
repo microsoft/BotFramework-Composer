@@ -14,6 +14,9 @@ import {
   DialogTurnResult,
 } from 'botbuilder-dialogs';
 
+/**
+ * Configuration for a `MultiplyDialog`.
+ */
 export interface MultiplyDialogConfiguration extends DialogConfiguration {
   arg1: number | string | Expression | NumberExpression;
   arg2: number | string | Expression | NumberExpression;
