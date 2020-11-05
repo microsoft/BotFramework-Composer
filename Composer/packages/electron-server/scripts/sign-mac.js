@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 const fs = require('fs');
+const path = require('path');
 // eslint-disable-next-line security/detect-child-process
 const { execSync } = require('child_process');
 
@@ -32,6 +33,7 @@ if (!tempDir) {
 
 // first step is to setup a dev cert to use to sign
 try {
+  log.info('\n-------- Setting up keychain. --------\n');
   const keychainPath = `${tempDir}/buildagent.keychain`;
   const certPath = `${tempDir}/cert.p12`;
 
@@ -59,5 +61,61 @@ try {
   });
 } catch (err) {
   log.error('Error setting up dev certificate and keychain. %O', err);
+  process.exit(1);
+}
+
+// sign each app bundle with correct entitlements
+const baseBundlePath = path.resolve(__dirname, 'dist/mac/Bot Framework Composer.app');
+const baseEntitlementsPath = path.resolve(__dirname, '../resources/entitlements.plist');
+const keychainEntitlementsPath = path.resolve(__dirname, '../resources/entitlements-keychain.plist');
+
+const bundles = [
+  {
+    path: path.join(baseBundlePath, 'Contents/Frameworks/Bot Framework Composer Helper (GPU).app'),
+    entitlements: baseEntitlementsPath,
+  },
+  {
+    path: path.join(baseBundlePath, 'Contents/Frameworks/Bot Framework Composer Helper (Plugin).app'),
+    entitlements: baseEntitlementsPath,
+  },
+  {
+    path: path.join(baseBundlePath, 'Contents/Frameworks/Bot Framework Composer Helper (Renderer).app'),
+    entitlements: baseEntitlementsPath,
+  },
+  {
+    path: path.join(baseBundlePath, 'Contents/Frameworks/Bot Framework Composer Helper.app'),
+    entitlements: keychainEntitlementsPath,
+  },
+  {
+    path: baseBundlePath,
+    entitlements: keychainEntitlementsPath,
+  },
+];
+
+try {
+  log.info('\n-------- Signing bundles. --------\n');
+  for (const bundle of bundles) {
+    log.info(
+      `codesign -s ******* --deep --force --options runtime --entitlements "${bundle.entitlements}" "${bundle.path}"`
+    );
+    execSync(
+      `codesign -s ${process.env.DEV_CERT_ID} --deep --force --options runtime --entitlements "${bundle.entitlements}" "${bundle.path}"`,
+      { stdio: 'inherit' }
+    );
+  }
+} catch (err) {
+  log.error('Error setting signing app bundles. %O', err);
+  process.exit(1);
+}
+
+// verify codesign
+try {
+  log.info('\n-------- Verifying codesigning. --------\n');
+  for (const bundle of bundles) {
+    log.info(`codesign -dv --verbose=4 "${bundle.path}"`);
+    execSync(`codesign -dv --verbose=4 "${bundle.path}"`);
+  }
+} catch (err) {
+  log.error('Error verifying codesign. %O', err);
   process.exit(1);
 }
