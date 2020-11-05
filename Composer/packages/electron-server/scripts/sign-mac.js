@@ -62,7 +62,7 @@ const bundles = [
 // first copy the provision profile into each app bundle
 try {
   for (const bundle of bundles) {
-    fs.copyFileSync(provisionProfilePath, path.join(bundle.path, 'embedded.provisionprofile'));
+    fs.copyFileSync(provisionProfilePath, path.join(bundle.path, 'Contents/embedded.provisionprofile'));
   }
 } catch (err) {
   log.error('Error copying provision profile. %O', err);
