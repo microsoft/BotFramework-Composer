@@ -133,13 +133,10 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
 
       // clean up from any previous deploys
       await this.cleanup(resourcekey);
-
       // create the temporary folder to contain this project
       mkdirSync(runtimeFolder, { recursive: true });
-
       // create the ComposerDialogs/ folder
       mkdirSync(botFolder, { recursive: true });
-
       let manifestPath;
       for (const file of botFiles) {
         const pattern = /manifests\/[0-9A-z-]*.json/;
@@ -302,66 +299,81 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
 
     // move the init folder and publsih together and not wait in publish method. because init folder take a long time
     private asyncPublish = async (config: PublishConfig, project, resourcekey, jobId) => {
-      const {
-        // these are provided by Composer
-        fullSettings, // all the bot's settings - includes sensitive values not included in projet.settings
-        profileName, // the name of the publishing profile "My Azure Prod Slot"
+      try {
+        const {
+          // these are provided by Composer
+          fullSettings, // all the bot's settings - includes sensitive values not included in projet.settings
+          profileName, // the name of the publishing profile "My Azure Prod Slot"
 
-        // these are specific to the azure publish profile shape
-        subscriptionID,
-        name,
-        environment,
-        hostname,
-        luisResource,
-        defaultLanguage,
-        settings,
-        accessToken,
-      } = config;
+          // these are specific to the azure publish profile shape
+          subscriptionID,
+          name,
+          environment,
+          hostname,
+          luisResource,
+          defaultLanguage,
+          settings,
+          accessToken,
+        } = config;
 
-      // get the appropriate runtime template which contains methods to build and configure the runtime
-      const runtime = composer.getRuntimeByProject(project);
-      // set runtime code path as runtime template folder path
-      let runtimeCodePath = runtime.path;
+        // get the appropriate runtime template which contains methods to build and configure the runtime
+        const runtime = composer.getRuntimeByProject(project);
+        // set runtime code path as runtime template folder path
+        let runtimeCodePath = runtime.path;
 
-      // If the project is using an "ejected" runtime, use that version of the code instead of the built-in template
-      // TODO: this templatePath should come from the runtime instead of this magic parameter
-      if (
-        project.settings &&
-        project.settings.runtime &&
-        project.settings.runtime.customRuntime === true &&
-        project.settings.runtime.path
-      ) {
-        runtimeCodePath = project.settings.runtime.path;
+        // If the project is using an "ejected" runtime, use that version of the code instead of the built-in template
+        // TODO: this templatePath should come from the runtime instead of this magic parameter
+        if (
+          project.settings &&
+          project.settings.runtime &&
+          project.settings.runtime.customRuntime === true &&
+          project.settings.runtime.path
+        ) {
+          runtimeCodePath = project.settings.runtime.path;
+        }
+
+        // Prepare the temporary project
+        // this writes all the settings to the root settings/appsettings.json file
+        await this.init(project, runtimeCodePath, resourcekey, runtime);
+
+        // Merge all the settings
+        // this combines the bot-wide settings, the environment specific settings, and 2 new fields needed for deployed bots
+        // these will be written to the appropriate settings file inside the appropriate runtime plugin.
+        const mergedSettings = mergeDeep(fullSettings, settings);
+
+        // Prepare parameters and then perform the actual deployment action
+        const customizeConfiguration: CreateAndDeployResources = {
+          accessToken,
+          subscriptionID,
+          name,
+          environment,
+          hostname,
+          luisResource,
+        };
+        await this.performDeploymentAction(
+          project,
+          mergedSettings,
+          runtime,
+          project.id,
+          profileName,
+          jobId,
+          resourcekey,
+          customizeConfiguration
+        );
       }
+      catch (err) {
+        console.log('async publish')
+        console.log(err);
+        this.logMessages.push(JSON.stringify(err, Object.getOwnPropertyNames(err)));
+        const status = this.getLoadingStatus(project.id, config.profileName, jobId);
+        status.result.log = this.logMessages.join('\n');
+        status.result.message = this.logMessages[this.logMessages.length - 1];
+        this.updateLoadingStatus(project.id, config.profileName, jobId, status);
 
-      // Prepare the temporary project
-      // this writes all the settings to the root settings/appsettings.json file
-      await this.init(project, runtimeCodePath, resourcekey, runtime);
-
-      // Merge all the settings
-      // this combines the bot-wide settings, the environment specific settings, and 2 new fields needed for deployed bots
-      // these will be written to the appropriate settings file inside the appropriate runtime plugin.
-      const mergedSettings = mergeDeep(fullSettings, settings);
-
-      // Prepare parameters and then perform the actual deployment action
-      const customizeConfiguration: CreateAndDeployResources = {
-        accessToken,
-        subscriptionID,
-        name,
-        environment,
-        hostname,
-        luisResource,
-      };
-      await this.performDeploymentAction(
-        project,
-        mergedSettings,
-        runtime,
-        project.id,
-        profileName,
-        jobId,
-        resourcekey,
-        customizeConfiguration
-      );
+        await this.updateHistory(project.id, config.profileName, { status: 500, ...status.result });
+        this.removeLoadingStatus(project.id, config.profileName, jobId);
+        this.cleanup(resourcekey);
+      }
     };
 
     /**************************************************************************************************
@@ -416,9 +428,9 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
       } catch (err) {
         console.log(err);
         if (err instanceof Error) {
-          this.logMessages.push(err.message);
-        } else if (typeof err === 'object') {
           this.logMessages.push(JSON.stringify(err));
+        } else if (typeof err === 'object') {
+          this.logMessages.push(JSON.stringify(err, Object.getOwnPropertyNames(err)));
         } else {
           this.logMessages.push(err);
         }
