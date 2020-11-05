@@ -153,7 +153,7 @@ export const useEditorEventApi = (
         break;
       case NodeEventTypes.OpenDialog:
         handler = ({ callee }) => {
-          navTo(callee, '0'); // 0 will route to trigger[0], which should always be BeginDialog
+          navTo(callee, '"beginDialog"');
           announce(ScreenReaderMessage.DialogOpened);
         };
         break;
