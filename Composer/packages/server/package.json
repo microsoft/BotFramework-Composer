@@ -64,7 +64,7 @@
     "@bfc/shared": "*",
     "@microsoft/bf-dispatcher": "^4.11.0-beta.20201016.393c6b2",
     "@microsoft/bf-generate-library": "^4.10.0-daily.20201026.178799",
-    "@microsoft/bf-lu": "^4.11.0-dev.20201013.7ccb128",
+    "@microsoft/bf-lu": "^4.11.0-rc.20201030.a9f9b96",
     "@microsoft/bf-orchestrator": "4.11.0-beta.20201013.20d7917",
     "archiver": "^5.0.2",
     "axios": "^0.19.2",
@@ -102,6 +102,6 @@
     "ws": "^5.0.0"
   },
   "resolutions": {
-    "bl": "^2.2.1"
+    "bl": "^4.0.3"
   }
 }
