@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useMemo, useRef, useState, createRef } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { DefaultButton, IconButton } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { useRecoilValue } from 'recoil';
@@ -41,7 +41,7 @@ const BotController: React.FC = () => {
   const target = useRef(null);
   const botControllerMenuTarget = useRef(null);
 
-  useClickOutside(isControllerHidden ? null : botControllerMenuTarget, () => {
+  useClickOutside(botControllerMenuTarget, () => {
     setControllerVisibility(true);
   });
 

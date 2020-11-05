@@ -1,12 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo, MutableRefObject } from 'react';
 import { globalHistory } from '@reach/router';
 import replace from 'lodash/replace';
 import find from 'lodash/find';
 import { useRecoilValue } from 'recoil';
 import { FeatureFlagKey } from '@bfc/shared';
+import isFunction from 'lodash/isFunction';
 
 import { designPageLocationState, currentProjectIdState, pluginPagesSelector, featureFlagsState } from '../recoilModel';
 
@@ -79,8 +80,8 @@ export const useProjectIdCache = () => {
   return projectId;
 };
 
-export function useInterval(callback, delay) {
-  const savedCallback: any = useRef();
+export function useInterval(callback: Function, delay: number | undefined) {
+  const savedCallback: MutableRefObject<Function | undefined> = useRef();
 
   // Remember the latest callback.
   useEffect(() => {
@@ -90,26 +91,31 @@ export function useInterval(callback, delay) {
   // Set up the interval.
   useEffect(() => {
     function tick() {
-      if (typeof savedCallback.current === 'function') {
+      if (isFunction(savedCallback.current)) {
         savedCallback.current();
       }
     }
-    if (delay !== null) {
+    if (delay != null) {
       const id = setInterval(tick, delay);
       return () => clearInterval(id);
     }
   }, [delay]);
 }
 
-export function useClickOutside(ref, callback) {
+export function useClickOutside(ref: MutableRefObject<HTMLElement | null>, callback: Function) {
+  const savedCallback: MutableRefObject<Function | undefined> = useRef();
+
   const handleEvent = (e) => {
     if (ref?.current && !ref.current.contains(e.target)) {
-      console.log('Click outside');
-      callback();
-    } else {
-      console.log('Click outside');
+      if (isFunction(callback)) {
+        callback();
+      }
     }
   };
+
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
 
   useEffect(() => {
     document.addEventListener('click', handleEvent);

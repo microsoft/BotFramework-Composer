@@ -38,6 +38,15 @@ jest.mock('../../TestController/useLocalBotOperations', () => {
   };
 });
 
+// BotController Menu is tested in its own test file
+jest.mock('../../TestController/BotControllerMenu', () => {
+  return {
+    BotControllerMenu: () => {
+      return <></>;
+    },
+  };
+});
+
 describe('<BotController />', () => {
   beforeEach(() => {
     mockStop.mockReset();
@@ -68,7 +77,7 @@ describe('<BotController />', () => {
     await findByText('Start all bots');
   });
 
-  fit('should stop all bots if Stop all bots is clicked', async () => {
+  it('should stop all bots if Stop all bots is clicked', async () => {
     const initRecoilState = ({ set }) => {
       const projectIds = ['123a.234', '456a.234', '789a.234'];
       set(botProjectIdsState, projectIds);

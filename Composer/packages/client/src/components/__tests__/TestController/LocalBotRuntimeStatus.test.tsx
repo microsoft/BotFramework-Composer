@@ -6,7 +6,7 @@ import * as React from 'react';
 import httpClient from '../../../utils/httpUtil';
 import { renderWithRecoil } from '../../../../__tests__/testUtils/renderWithRecoil';
 import { botRuntimeErrorState, botStatusState } from '../../../recoilModel';
-import { BotStatus, BotStatusesCopy } from '../../../constants';
+import { BotStatus } from '../../../constants';
 import { LocalBotRuntimeStatus } from '../../TestController/LocalBotRuntimeStatus';
 
 jest.mock('../../../utils/httpUtil');
