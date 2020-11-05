@@ -34,7 +34,7 @@ context('Notification Page', () => {
     cy.findByTestId('LeftNav-CommandBarButtonNotifications').click();
 
     cy.findByTestId('notifications-table-view').within(() => {
-      cy.findAllByText('__testtodobotwithluissample.en-us.lu').should('exist').first().dblclick();
+      cy.findAllByText('__TestToDoBotWithLuisSample.en-us.lu').should('exist').first().dblclick();
     });
 
     cy.findAllByText('__TestToDoBotWithLuisSample').should('exist');
