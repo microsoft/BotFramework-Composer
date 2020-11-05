@@ -194,6 +194,7 @@ export class BotProject implements IBotProject {
       skills: this.skills,
       diagnostics: this.diagnostics,
       settings: this.settings,
+      filesWithoutRecognizers: Array.from(this.files.values()).filter(({ name }) => !isRecognizer(name)),
     };
   };
 
