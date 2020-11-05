@@ -4348,7 +4348,7 @@
             }
         },
         "Microsoft.UpdateActivity": {
-            "title": "Send an activity",
+            "title": "Update an activity",
             "description": "Respond with an activity.",
             "patternProperties": {
                 "^\\$": {
