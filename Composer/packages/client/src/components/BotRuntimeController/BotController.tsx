@@ -23,7 +23,15 @@ const iconSectionContainer = css`
   display: flex;
   align-items: flex-end;
   flex-direction: 'row';
-  border-left: 1px solid ${NeutralColors.white};
+
+  :before {
+    content: '';
+    position: relative;
+    margin: 4px 0;
+    width: 1px;
+    background: ${NeutralColors.white};
+    height: 23px;
+  }
 `;
 
 const startPanelsContainer = css`
