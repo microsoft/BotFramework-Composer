@@ -236,6 +236,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             dialogId: props.dialogId,
             trigger: triggerIndex,
           },
+          onClick: () => navTo(projectId, dialogId, `${triggerIndex}`),
         });
       }
 
