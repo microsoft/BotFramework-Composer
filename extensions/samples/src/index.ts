@@ -3,6 +3,7 @@
 
 import path from 'path';
 import fs from 'fs';
+import { BotTemplate } from '@botframework-composer/types';
 
 const samplesDir = path.resolve(__dirname, '../assets/projects');
 const boilerplateDir = path.resolve(__dirname, '../assets/shared');
@@ -68,9 +69,22 @@ const samplesRegitry = {
   },
 };
 
-function getSamples(): any[] {
+function getRemoteSamples(): BotTemplate[] {
+  return [{
+    id: 'conversationalcore',
+    name: 'Conversational Core',
+    description: 'A hosted template that provides a root bot extended by common .lg packages',
+    package: {
+      packageName: 'Microsoft.ConversationalCore.Template',
+      packageSource: 'nuget',
+      packageVersion: '0.0.1-preview5'
+    }
+  }]
+}
+
+function getSamples(): BotTemplate[] {
   const subPaths = fs.readdirSync(samplesDir);
-  const samples = [];
+  let samples: BotTemplate[] = [];
   for (const subPath of subPaths) {
     const fullPath = samplesDir + '/' + subPath;
     if (!fs.statSync(fullPath).isDirectory()) {
@@ -79,12 +93,15 @@ function getSamples(): any[] {
 
     // only looking for directories
     const dirname = subPath;
-    let sample = { id: dirname, name: dirname, description: dirname, path: fullPath, ...samplesRegitry['*'] };
+    let sample: BotTemplate = { id: dirname, name: dirname, description: dirname, path: fullPath, ...samplesRegitry['*'] };
     if (samplesRegitry[sample.id]) {
       sample = { ...sample, ...samplesRegitry[sample.id] };
     }
     samples.push(sample);
   }
+
+  samples = samples.concat(getRemoteSamples());
+
   samples.sort((a, b) => {
     if (a.index && b.index) {
       return a.index - b.index;
