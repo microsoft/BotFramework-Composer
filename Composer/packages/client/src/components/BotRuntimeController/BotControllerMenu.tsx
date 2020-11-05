@@ -12,8 +12,8 @@ import { FontWeights } from '@uifabric/styling';
 import { FontSizes } from '@uifabric/fluent-theme/lib/fluent';
 import formatMessage from 'format-message';
 
-import { LocalBotRuntime } from './LocalBotRuntime';
-import { LocalBotStatusIndicator } from './LocalBotStatusIndicator';
+import { BotRuntimeOperations } from './BotRuntimeOperations';
+import { BotStatusIndicator } from './BotStatusIndicator';
 import { OpenEmulatorButton } from './OpenEmulatorButton';
 
 const styles = {
@@ -39,7 +39,7 @@ const tableColumns: IColumn[] = [
     fieldName: 'control',
     isRowHeader: false,
     onRender: ({ projectId }) => {
-      return <LocalBotRuntime projectId={projectId} />;
+      return <BotRuntimeOperations projectId={projectId} />;
     },
   },
   {
@@ -56,7 +56,7 @@ const tableColumns: IColumn[] = [
     minWidth: 150,
     isRowHeader: true,
     onRender: (item: { displayName: string; projectId: string }) => {
-      return <LocalBotStatusIndicator projectId={item.projectId} />;
+      return <BotStatusIndicator projectId={item.projectId} />;
     },
   },
   {

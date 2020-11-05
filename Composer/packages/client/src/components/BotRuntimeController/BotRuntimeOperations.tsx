@@ -11,9 +11,9 @@ import formatMessage from 'format-message';
 import { botStatusState } from '../../recoilModel';
 import { BotStatus } from '../../constants';
 
-import { useLocalBotOperations } from './useLocalBotOperations';
+import { useBotOperations } from './useBotOperations';
 
-interface LocalBotRuntimeProps {
+interface BotRuntimeOperationsProps {
   projectId: string;
 }
 
@@ -21,9 +21,9 @@ const loadingSpinnerStyle = css`
   margin-left: 8px;
 `;
 
-export const LocalBotRuntime: React.FC<LocalBotRuntimeProps> = ({ projectId }) => {
+export const BotRuntimeOperations: React.FC<BotRuntimeOperationsProps> = ({ projectId }) => {
   const currentBotStatus = useRecoilValue(botStatusState(projectId));
-  const { startSingleBot, stopSingleBot } = useLocalBotOperations();
+  const { startSingleBot, stopSingleBot } = useBotOperations();
 
   switch (currentBotStatus) {
     case BotStatus.connected:

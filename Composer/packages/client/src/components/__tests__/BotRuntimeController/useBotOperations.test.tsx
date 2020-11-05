@@ -7,7 +7,7 @@ import { renderHook } from '@botframework-composer/test-utils/lib/hooks';
 import { act } from '@botframework-composer/test-utils';
 import { defaultPublishConfig } from '@bfc/shared';
 
-import { useLocalBotOperations } from '../../TestController/useLocalBotOperations';
+import { useBotOperations } from '../../BotRuntimeController/useBotOperations';
 import { botProjectIdsState, dispatcherState, projectMetaDataState } from '../../../recoilModel';
 
 const state = {
@@ -40,7 +40,7 @@ const initRecoilState = ({ set }) => {
 };
 
 // TODO: An integration test needs to be added to test this component better.
-describe('useLocalBotOperations', () => {
+describe('useBotOperations', () => {
   afterEach(() => {
     mocks.resetBotRuntimeError.mockReset();
     mocks.publishToTarget.mockReset();
@@ -54,7 +54,7 @@ describe('useLocalBotOperations', () => {
       return <RecoilRoot initializeState={initRecoilState}>{children}</RecoilRoot>;
     };
 
-    const { result } = renderHook(() => useLocalBotOperations(), {
+    const { result } = renderHook(() => useBotOperations(), {
       wrapper,
     });
 
@@ -71,7 +71,7 @@ describe('useLocalBotOperations', () => {
       return <RecoilRoot initializeState={initRecoilState}>{children}</RecoilRoot>;
     };
 
-    const { result } = renderHook(() => useLocalBotOperations(), {
+    const { result } = renderHook(() => useBotOperations(), {
       wrapper,
     });
 

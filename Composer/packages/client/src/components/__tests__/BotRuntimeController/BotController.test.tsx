@@ -7,7 +7,7 @@ import { act, fireEvent } from '@botframework-composer/test-utils';
 import { renderWithRecoil } from '../../../../__tests__/testUtils';
 import { BotStatus } from '../../../constants';
 import { botProjectIdsState, botStatusState } from '../../../recoilModel';
-import { BotController } from '../../TestController/BotController';
+import { BotController } from '../../BotRuntimeController/BotController';
 
 const mockStart = jest.fn();
 const mockStop = jest.fn();
@@ -27,9 +27,9 @@ jest.mock('office-ui-fabric-react/lib/Button', () => ({
   ),
 }));
 
-jest.mock('../../TestController/useLocalBotOperations', () => {
+jest.mock('../../BotRuntimeController/useBotOperations', () => {
   return {
-    useLocalBotOperations: () => ({
+    useBotOperations: () => ({
       startAllBots: mockStart,
       stopAllBots: mockStop,
       startSingleBot: mockSingleStart,
@@ -39,7 +39,7 @@ jest.mock('../../TestController/useLocalBotOperations', () => {
 });
 
 // BotController Menu is tested in its own test file
-jest.mock('../../TestController/BotControllerMenu', () => {
+jest.mock('../../BotRuntimeController/BotControllerMenu', () => {
   return {
     BotControllerMenu: () => {
       return <></>;

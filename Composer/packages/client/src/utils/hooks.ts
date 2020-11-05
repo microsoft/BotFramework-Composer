@@ -80,7 +80,7 @@ export const useProjectIdCache = () => {
   return projectId;
 };
 
-export function useInterval(callback: Function, delay: number | undefined) {
+export function useInterval(callback: Function, delay: number | null) {
   const savedCallback: MutableRefObject<Function | undefined> = useRef();
 
   // Remember the latest callback.

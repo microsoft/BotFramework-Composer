@@ -7,7 +7,7 @@ import httpClient from '../../../utils/httpUtil';
 import { renderWithRecoil } from '../../../../__tests__/testUtils/renderWithRecoil';
 import { botRuntimeErrorState, botStatusState } from '../../../recoilModel';
 import { BotStatus } from '../../../constants';
-import { LocalBotRuntimeStatus } from '../../TestController/LocalBotRuntimeStatus';
+import { BotRuntimeStatus } from '../../BotRuntimeController/BotRuntimeStatus';
 
 jest.mock('../../../utils/httpUtil');
 
@@ -15,16 +15,16 @@ const mockStart = jest.fn();
 const mockStop = jest.fn();
 const pollingInterval = 3000;
 
-jest.mock('../../TestController/useLocalBotOperations', () => {
+jest.mock('../../BotRuntimeController/useBotOperations', () => {
   return {
-    useLocalBotOperations: () => ({
+    useBotOperations: () => ({
       startSingleBot: mockStart,
       stopSingleBot: mockStop,
     }),
   };
 });
 
-describe('<LocalBotStatusIndicator />', () => {
+describe('<BotRuntimeStatus />', () => {
   const projectId = '123a.324';
 
   beforeEach(() => {
@@ -33,7 +33,7 @@ describe('<LocalBotStatusIndicator />', () => {
   });
 
   it('should start the bot once its published', async () => {
-    renderWithRecoil(<LocalBotRuntimeStatus projectId={projectId} />, ({ set }) => {
+    renderWithRecoil(<BotRuntimeStatus projectId={projectId} />, ({ set }) => {
       set(botStatusState(projectId), BotStatus.published);
     });
 
@@ -63,7 +63,7 @@ describe('<LocalBotStatusIndicator />', () => {
     });
 
     it('should not poll if bot is started', async () => {
-      renderWithRecoil(<LocalBotRuntimeStatus projectId={projectId} />, ({ set }) => {
+      renderWithRecoil(<BotRuntimeStatus projectId={projectId} />, ({ set }) => {
         set(botStatusState(projectId), BotStatus.connected);
       });
 
@@ -72,7 +72,7 @@ describe('<LocalBotStatusIndicator />', () => {
     });
 
     it('should not poll if bot is stopped', async () => {
-      renderWithRecoil(<LocalBotRuntimeStatus projectId={projectId} />, ({ set }) => {
+      renderWithRecoil(<BotRuntimeStatus projectId={projectId} />, ({ set }) => {
         set(botStatusState(projectId), BotStatus.failed);
       });
 
@@ -81,7 +81,7 @@ describe('<LocalBotStatusIndicator />', () => {
     });
 
     it('should poll if bot is loading', async () => {
-      renderWithRecoil(<LocalBotRuntimeStatus projectId={projectId} />, ({ set }) => {
+      renderWithRecoil(<BotRuntimeStatus projectId={projectId} />, ({ set }) => {
         set(botStatusState(projectId), BotStatus.reloading);
       });
 
@@ -94,7 +94,7 @@ describe('<LocalBotStatusIndicator />', () => {
     });
 
     it('should show error if bot start failed', async () => {
-      const { findByText } = renderWithRecoil(<LocalBotRuntimeStatus projectId={projectId} />, ({ set }) => {
+      const { findByText } = renderWithRecoil(<BotRuntimeStatus projectId={projectId} />, ({ set }) => {
         set(botStatusState(projectId), BotStatus.failed);
         set(botRuntimeErrorState(projectId), {
           title: 'Error',

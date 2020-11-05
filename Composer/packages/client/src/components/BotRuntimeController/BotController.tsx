@@ -16,8 +16,8 @@ import { BotStatus } from '../../constants';
 import { useClickOutside } from '../../utils/hooks';
 
 import { BotControllerMenu } from './BotControllerMenu';
-import { useLocalBotOperations } from './useLocalBotOperations';
-import { LocalBotRuntimeStatus } from './LocalBotRuntimeStatus';
+import { useBotOperations } from './useBotOperations';
+import { BotRuntimeStatus } from './BotRuntimeStatus';
 
 const iconSectionContainer = css`
   display: flex;
@@ -49,7 +49,7 @@ const BotController: React.FC = () => {
     projectCollection,
   ]);
 
-  const { startAllBots, stopAllBots } = useLocalBotOperations();
+  const { startAllBots, stopAllBots } = useBotOperations();
 
   const handleClick = () => {
     if (!running) {
@@ -81,7 +81,7 @@ const BotController: React.FC = () => {
   return (
     <React.Fragment>
       {projectCollection.map(({ projectId }) => {
-        return <LocalBotRuntimeStatus key={projectId} projectId={projectId} />;
+        return <BotRuntimeStatus key={projectId} projectId={projectId} />;
       })}
       <div ref={target} css={startPanelsContainer}>
         <DefaultButton

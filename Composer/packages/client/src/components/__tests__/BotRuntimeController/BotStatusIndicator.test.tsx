@@ -6,23 +6,23 @@ import * as React from 'react';
 import { renderWithRecoil } from '../../../../__tests__/testUtils/renderWithRecoil';
 import { botRuntimeErrorState, botStatusState } from '../../../recoilModel';
 import { BotStatus, BotStatusesCopy } from '../../../constants';
-import { LocalBotStatusIndicator } from '../../TestController/LocalBotStatusIndicator';
+import { BotStatusIndicator } from '../../BotRuntimeController/BotStatusIndicator';
 
 jest.mock('../../../utils/httpUtil');
 
 const mockStart = jest.fn();
 const mockStop = jest.fn();
 
-jest.mock('../../TestController/useLocalBotOperations', () => {
+jest.mock('../../BotRuntimeController/useBotOperations', () => {
   return {
-    useLocalBotOperations: () => ({
+    useBotOperations: () => ({
       startSingleBot: mockStart,
       stopSingleBot: mockStop,
     }),
   };
 });
 
-describe('<LocalBotStatusIndicator />', () => {
+describe('<BotStatusIndicator />', () => {
   const projectId = '123a.324';
 
   beforeEach(() => {
@@ -31,7 +31,7 @@ describe('<LocalBotStatusIndicator />', () => {
   });
 
   it('should render the Local Bot Runtime with publishing status', async () => {
-    const { findAllByText } = renderWithRecoil(<LocalBotStatusIndicator projectId={projectId} />, ({ set }) => {
+    const { findAllByText } = renderWithRecoil(<BotStatusIndicator projectId={projectId} />, ({ set }) => {
       set(botStatusState(projectId), BotStatus.publishing);
     });
     const element = await findAllByText(BotStatusesCopy.publishing);
@@ -39,7 +39,7 @@ describe('<LocalBotStatusIndicator />', () => {
   });
 
   it('should show error if bot start failed', async () => {
-    const { findByText } = renderWithRecoil(<LocalBotStatusIndicator projectId={projectId} />, ({ set }) => {
+    const { findByText } = renderWithRecoil(<BotStatusIndicator projectId={projectId} />, ({ set }) => {
       set(botStatusState(projectId), BotStatus.failed);
       set(botRuntimeErrorState(projectId), {
         title: 'Error',

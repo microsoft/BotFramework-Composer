@@ -12,23 +12,23 @@ import { botRuntimeErrorState, botStatusState } from '../../recoilModel';
 import { getBotStatusText } from '../../utils/botRuntimeUtils';
 
 import { ErrorCallout } from './errorCallout';
-import { useLocalBotOperations } from './useLocalBotOperations';
+import { useBotOperations } from './useBotOperations';
 
 const botStatusContainer = css`
   display: flex;
   align-items: center;
 `;
 
-interface LocalBotStatusIndicatorProps {
+type BotStatusIndicatorProps = {
   projectId: string;
-}
+};
 
-export const LocalBotStatusIndicator: React.FC<LocalBotStatusIndicatorProps> = ({ projectId }) => {
+export const BotStatusIndicator: React.FC<BotStatusIndicatorProps> = ({ projectId }) => {
   const botStatus = useRecoilValue(botStatusState(projectId));
   const botActionRef = useRef(null);
   const botLoadErrorMsg = useRecoilValue(botRuntimeErrorState(projectId));
   const [calloutVisible, setErrorCallout] = useState(false);
-  const { startSingleBot } = useLocalBotOperations();
+  const { startSingleBot } = useBotOperations();
 
   function dismissErrorDialog() {
     setErrorCallout(false);

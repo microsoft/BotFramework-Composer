@@ -4,7 +4,7 @@
 import * as React from 'react';
 import { fireEvent, act } from '@botframework-composer/test-utils';
 
-import { OpenEmulatorButton } from '../../../src/components/TestController/OpenEmulatorButton';
+import { OpenEmulatorButton } from '../../../src/components/BotRuntimeController/OpenEmulatorButton';
 import { botEndpointsState, botStatusState, settingsState } from '../../../src/recoilModel';
 import { BotStatus } from '../../../src/constants';
 import { renderWithRecoil } from '../../testUtils';

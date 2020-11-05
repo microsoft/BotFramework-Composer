@@ -8,7 +8,7 @@ import { RecoilRoot } from 'recoil';
 import { renderHook } from '@botframework-composer/test-utils/lib/hooks';
 
 import { botProjectIdsState, botStatusState, dispatcherState, projectMetaDataState } from '../../../recoilModel';
-import { useRuntimeStartedTracker } from '../../TestController/useRuntimeStartedTracker';
+import { useStartedRuntimesTracker } from '../../BotRuntimeController/useStartedRuntimesTracker';
 import { BotStatus } from '../../../constants';
 
 const state = {
@@ -68,7 +68,7 @@ describe('useBotStatusTracker', () => {
       );
     };
 
-    renderHook(() => useRuntimeStartedTracker(onBotStartedAction, trackedProjectIds), {
+    renderHook(() => useStartedRuntimesTracker(onBotStartedAction, trackedProjectIds), {
       wrapper,
     });
     expect(onBotStartedAction).toHaveBeenCalledTimes(1);
@@ -97,7 +97,7 @@ describe('useBotStatusTracker', () => {
       );
     };
 
-    renderHook(() => useRuntimeStartedTracker(onBotStartedAction, trackedProjectIds), {
+    renderHook(() => useStartedRuntimesTracker(onBotStartedAction, trackedProjectIds), {
       wrapper,
     });
     expect(onBotStartedAction).toHaveBeenCalledTimes(0);
