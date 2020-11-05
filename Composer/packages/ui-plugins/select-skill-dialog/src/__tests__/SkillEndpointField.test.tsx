@@ -3,10 +3,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import React from 'react';
-import { fireEvent, getAllByRole, render } from '@bfc/test-utils';
+import { fireEvent, getAllByRole, render } from '@botframework-composer/test-utils';
 import { EditorExtension } from '@bfc/extension-client';
 import { convertSkillsToDictionary, Skill } from '@bfc/shared';
-import { act } from '@bfc/test-utils/lib/hooks';
+import { act } from '@botframework-composer/test-utils/lib/hooks';
 
 import { SkillEndpointField } from '../SkillEndpointField';
 

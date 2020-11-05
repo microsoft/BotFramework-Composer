@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License
 
-import { MicrosoftIDialog, SDKKinds } from '@bfc/types';
+import { MicrosoftIDialog, SDKKinds } from '@botframework-composer/types';
 
 import { LuMetaData, LuType } from '../luNameBuilder';
 import { walkAdaptiveAction } from '../walkerUtils/walkAdaptiveAction';

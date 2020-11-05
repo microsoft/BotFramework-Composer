@@ -56,38 +56,38 @@ export const handleMessage = (msg: LuMessageEvent) => {
   let result: any = null;
   switch (msg.type) {
     case LuActionType.Parse: {
-      const { id, content } = msg.payload;
-      result = luUtil.parse(id, content);
+      const { id, content, luFeatures } = msg.payload;
+      result = luUtil.parse(id, content, luFeatures);
       break;
     }
 
     case LuActionType.AddIntent: {
-      const { luFile, intent } = msg.payload;
-      result = luUtil.addIntent(luFile, intent);
+      const { luFile, intent, luFeatures } = msg.payload;
+      result = luUtil.addIntent(luFile, intent, luFeatures);
       break;
     }
 
     case LuActionType.AddIntents: {
-      const { luFile, intents } = msg.payload;
-      result = luUtil.addIntents(luFile, intents);
+      const { luFile, intents, luFeatures } = msg.payload;
+      result = luUtil.addIntents(luFile, intents, luFeatures);
       break;
     }
 
     case LuActionType.UpdateIntent: {
-      const { luFile, intentName, intent } = msg.payload;
-      result = luUtil.updateIntent(luFile, intentName, intent || null);
+      const { luFile, intentName, intent, luFeatures } = msg.payload;
+      result = luUtil.updateIntent(luFile, intentName, intent || null, luFeatures);
       break;
     }
 
     case LuActionType.RemoveIntent: {
-      const { luFile, intentName } = msg.payload;
-      result = luUtil.removeIntent(luFile, intentName);
+      const { luFile, intentName, luFeatures } = msg.payload;
+      result = luUtil.removeIntent(luFile, intentName, luFeatures);
       break;
     }
 
     case LuActionType.RemoveIntents: {
-      const { luFile, intentNames } = msg.payload;
-      result = luUtil.removeIntents(luFile, intentNames);
+      const { luFile, intentNames, luFeatures } = msg.payload;
+      result = luUtil.removeIntents(luFile, intentNames, luFeatures);
       break;
     }
   }

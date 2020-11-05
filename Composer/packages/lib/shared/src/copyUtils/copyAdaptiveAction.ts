@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { MicrosoftIDialog } from '@bfc/types';
+import { MicrosoftIDialog } from '@botframework-composer/types';
 
 import { ExternalApi } from './ExternalApi';
 import CopyConstructorMap from './CopyConstructorMap';
@@ -11,7 +11,7 @@ export async function copyAdaptiveAction(data: MicrosoftIDialog, externalApi: Ex
     return data;
   }
 
-  if (!data || !data.$kind) return {};
+  if (!data || !data.$kind) return {} as MicrosoftIDialog;
 
   const copier = CopyConstructorMap[data.$kind] || CopyConstructorMap.default;
 

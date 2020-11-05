@@ -6,12 +6,12 @@ import { useRecoilCallback, CallbackInterface } from 'recoil';
 import { ILuisConfig, IQnAConfig } from '@bfc/shared';
 
 import * as luUtil from '../../utils/luUtil';
-import * as buildUtil from '../../utils/buildUtil';
 import { Text, BotStatus } from '../../constants';
 import httpClient from '../../utils/httpUtil';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
-import { luFilesState, qnaFilesState, dialogsState, botStatusState, botLoadErrorState } from '../atoms';
+import { luFilesState, qnaFilesState, botStatusState, botLoadErrorState } from '../atoms';
+import { dialogsSelectorFamily } from '../selectors';
 
 const checkEmptyQuestionOrAnswerInQnAFile = (sections) => {
   return sections.some((s) => !s.Answer || s.Questions.some((q) => !q.content));
@@ -24,11 +24,10 @@ export const builderDispatcher = () => {
       qnaConfig: IQnAConfig,
       projectId: string
     ) => {
-      const dialogs = await snapshot.getPromise(dialogsState(projectId));
+      const dialogs = await snapshot.getPromise(dialogsSelectorFamily(projectId));
       const luFiles = await snapshot.getPromise(luFilesState(projectId));
       const qnaFiles = await snapshot.getPromise(qnaFilesState(projectId));
       const referredLuFiles = luUtil.checkLuisBuild(luFiles, dialogs);
-
       const errorMsg = qnaFiles.reduce(
         (result, file) => {
           if (
@@ -48,15 +47,12 @@ export const builderDispatcher = () => {
         return;
       }
       try {
-        //TODO crosstrain should add locale
-        const crossTrainConfig = buildUtil.createCrossTrainConfig(dialogs, referredLuFiles);
         await httpClient.post(`/projects/${projectId}/build`, {
           luisConfig,
           qnaConfig,
           projectId,
-          crossTrainConfig,
-          luFiles: referredLuFiles.map((file) => file.id),
-          qnaFiles: qnaFiles.map((file) => file.id),
+          luFiles: referredLuFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
+          qnaFiles: qnaFiles.map((file) => ({ id: file.id, isEmpty: file.empty })),
         });
         luFileStatusStorage.publishAll(projectId);
         qnaFileStatusStorage.publishAll(projectId);

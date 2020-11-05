@@ -69,19 +69,19 @@ export const main = css`
   label: PageMain;
 `;
 
-export const content = css`
+export const content = (shouldShowEditorError: boolean) => css`
   flex: 4;
   padding: 20px;
   position: relative;
   overflow: auto;
-  height: 100%;
+  height: ${shouldShowEditorError ? 'calc(100% - 40px)' : 'calc(100% - 10px)'};
   label: PageContent;
   box-sizing: border-box;
 `;
 
 // -------------------- Page -------------------- //
 
-interface IPageProps {
+type IPageProps = {
   // TODO: add type
   toolbarItems: IToolbarItem[];
   navLinks: INavTreeItem[];
@@ -89,9 +89,10 @@ interface IPageProps {
   headerStyle?: SerializedStyles;
   navRegionName: string;
   mainRegionName: string;
+  shouldShowEditorError?: boolean;
   onRenderHeaderContent?: () => string | JSX.Element | null;
   'data-testid'?: string;
-}
+};
 
 const Page: React.FC<IPageProps> = (props) => {
   const {
@@ -103,6 +104,7 @@ const Page: React.FC<IPageProps> = (props) => {
     navRegionName,
     mainRegionName,
     headerStyle = header,
+    shouldShowEditorError = true,
   } = props;
 
   return (
@@ -116,7 +118,12 @@ const Page: React.FC<IPageProps> = (props) => {
         <div css={main} role="main">
           <LeftRightSplit initialLeftGridWidth="20%" minLeftPixels={200} minRightPixels={800}>
             <NavTree navLinks={navLinks} regionName={navRegionName} />
-            <div aria-label={mainRegionName} css={content} data-testid="PageContent" role="region">
+            <div
+              aria-label={mainRegionName}
+              css={content(shouldShowEditorError)}
+              data-testid="PageContent"
+              role="region"
+            >
               {children}
             </div>
           </LeftRightSplit>

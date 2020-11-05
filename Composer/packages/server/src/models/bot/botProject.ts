@@ -9,12 +9,12 @@ import { autofixReferInDialog } from '@bfc/indexers';
 import {
   getNewDesigner,
   FileInfo,
-  Skill,
   Diagnostic,
   IBotProject,
   DialogSetting,
   FileExtensions,
-  convertAbsolutePathToFileProtocol,
+  Skill,
+  DialogUtils,
 } from '@bfc/shared';
 import merge from 'lodash/merge';
 import { UserIdentity, ExtensionContext } from '@bfc/extension';
@@ -30,11 +30,12 @@ import log from '../../logger';
 import { BotProjectService } from '../../services/project';
 import AssetService from '../../services/asset';
 
+import { isCrossTrainConfig } from './botStructure';
 import { Builder } from './builder';
 import { IFileStorage } from './../storage/interface';
 import { LocationRef, IBuildConfig } from './interface';
 import { retrieveSkillManifests } from './skillManager';
-import { defaultFilePath, serializeFiles, parseFileName } from './botStructure';
+import { defaultFilePath, serializeFiles, parseFileName, isRecognizer } from './botStructure';
 
 const debug = log.extend('bot-project');
 const mkDirAsync = promisify(fs.mkdir);
@@ -93,6 +94,17 @@ export class BotProject implements IBotProject {
     return files;
   }
 
+  public get formDialogSchemaFiles() {
+    const files: FileInfo[] = [];
+    this.files.forEach((file) => {
+      if (file.name.endsWith('.form-dialog')) {
+        files.push(file);
+      }
+    });
+
+    return files;
+  }
+
   public get botProjectFiles() {
     const files: FileInfo[] = [];
     this.files.forEach((file) => {
@@ -138,19 +150,19 @@ export class BotProject implements IBotProject {
   }
 
   public get schema() {
-    return this.files.get('sdk.schema');
+    return this.files.get('app.schema') ?? this.files.get('sdk.schema');
   }
 
   public get uiSchema() {
-    return this.files.get('sdk.uischema');
+    return this.files.get('app.uischema') ?? this.files.get('sdk.uischema');
   }
 
   public get uiSchemaOverrides() {
-    return this.files.get('sdk.override.uischema');
+    return this.files.get('app.override.uischema') ?? this.files.get('sdk.override.uischema');
   }
 
   public get schemaOverrides() {
-    return this.files.get('sdk.override.schema');
+    return this.files.get('app.override.schema') ?? this.files.get('sdk.override.schema');
   }
 
   public getFile(id: string) {
@@ -335,7 +347,7 @@ export class BotProject implements IBotProject {
     }
   }
 
-  public updateBotInfo = async (name: string, description: string) => {
+  public updateBotInfo = async (name: string, description: string, preserveRoot = false) => {
     const mainDialogFile = this.dialogFiles.find((file) => !file.relativePath.includes('/'));
     if (!mainDialogFile) return;
     const botName = name.trim().toLowerCase();
@@ -361,11 +373,10 @@ export class BotProject implements IBotProject {
     for (const botProjectFile of this.botProjectFiles) {
       const { relativePath } = botProjectFile;
       const content = JSON.parse(botProjectFile.content);
-      content.workspace = convertAbsolutePathToFileProtocol(this.dataDir);
       content.name = botName;
       await this._updateFile(relativePath, JSON.stringify(content, null, 2));
     }
-    await serializeFiles(this.fileStorage, this.dataDir, botName);
+    await serializeFiles(this.fileStorage, this.dataDir, botName, preserveRoot);
   };
 
   public updateFile = async (name: string, content: string): Promise<string> => {
@@ -375,7 +386,8 @@ export class BotProject implements IBotProject {
     }
     const file = this.files.get(name);
     if (file === undefined) {
-      throw new Error(`no such file ${name}`);
+      const { lastModified } = await this.createFile(name, content);
+      return lastModified;
     }
 
     const relativePath = file.relativePath;
@@ -404,7 +416,8 @@ export class BotProject implements IBotProject {
   };
 
   public validateFileName = (name: string) => {
-    const nameRegex = /^[a-zA-Z0-9-_]+$/;
+    if (isRecognizer(name)) return;
+    if (isCrossTrainConfig(name)) return;
     const { fileId, fileType } = parseFileName(name, '');
 
     let fileName = fileId;
@@ -412,13 +425,7 @@ export class BotProject implements IBotProject {
       fileName = Path.basename(name, fileType);
     }
 
-    if (!fileName) {
-      throw new Error('The file name can not be empty');
-    }
-
-    if (!nameRegex.test(fileName)) {
-      throw new Error('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
-    }
+    DialogUtils.validateDialogName(fileName);
   };
 
   public createFile = async (name: string, content = '') => {
@@ -444,34 +451,33 @@ export class BotProject implements IBotProject {
     return createdFiles;
   };
 
-  public buildFiles = async ({
-    luisConfig,
-    qnaConfig,
-    luFileIds = [],
-    qnaFileIds = [],
-    crossTrainConfig,
-  }: IBuildConfig) => {
-    if ((luFileIds.length || qnaFileIds.length) && this.settings) {
+  public buildFiles = async ({ luisConfig, qnaConfig, luResource = [], qnaResource = [] }: IBuildConfig) => {
+    if (this.settings) {
+      const emptyFiles = {};
       const luFiles: FileInfo[] = [];
-      luFileIds.forEach((id) => {
-        const f = this.files.get(`${id}.lu`);
+      luResource.forEach(({ id, isEmpty }) => {
+        const fileName = `${id}.lu`;
+        const f = this.files.get(fileName);
         if (f) {
           luFiles.push(f);
+          emptyFiles[fileName] = isEmpty;
         }
       });
       const qnaFiles: FileInfo[] = [];
-      qnaFileIds.forEach((id) => {
-        const f = this.files.get(`${id}.qna`);
+      qnaResource.forEach(({ id, isEmpty }) => {
+        const fileName = `${id}.qna`;
+        const f = this.files.get(fileName);
         if (f) {
           qnaFiles.push(f);
+          emptyFiles[fileName] = isEmpty;
         }
       });
+
       this.builder.setBuildConfig(
         { ...luisConfig, subscriptionKey: qnaConfig.subscriptionKey, qnaRegion: qnaConfig.qnaRegion },
-        crossTrainConfig,
         this.settings.downsampling
       );
-      await this.builder.build(luFiles, qnaFiles);
+      await this.builder.build(luFiles, qnaFiles, Array.from(this.files.values()) as FileInfo[]);
     }
   };
 
@@ -525,7 +531,7 @@ export class BotProject implements IBotProject {
     return qnaEndpointKey;
   };
 
-  public async generateDialog(name: string) {
+  public async generateDialog(name: string, templateDirs?: string[]) {
     const defaultLocale = this.settings?.defaultLanguage || defaultLanguage;
     const relativePath = defaultFilePath(this.name, defaultLocale, `${name}${FileExtensions.FormDialogSchema}`);
     const schemaPath = Path.resolve(this.dir, relativePath);
@@ -544,7 +550,7 @@ export class BotProject implements IBotProject {
       outDir,
       metaSchema: undefined,
       allLocales: undefined,
-      templateDirs: [],
+      templateDirs: templateDirs || [],
       force: false,
       merge: true,
       singleton: true,
@@ -573,6 +579,17 @@ export class BotProject implements IBotProject {
       generateParams.singleton,
       generateParams.feedback
     );
+  }
+
+  public async deleteFormDialog(dialogId: string) {
+    const defaultLocale = this.settings?.defaultLanguage || defaultLanguage;
+    const dialogPath = defaultFilePath(this.name, defaultLocale, `${dialogId}${FileExtensions.Dialog}`);
+    const dirToDelete = Path.dirname(Path.resolve(this.dir, dialogPath));
+
+    // I check that the path is longer 3 to avoid deleting a drive and all its contents.
+    if (dirToDelete.length > 3 && this.fileStorage.exists(dirToDelete)) {
+      this.fileStorage.rmrfDir(dirToDelete);
+    }
   }
 
   private async removeLocalRuntimeData(projectId) {
@@ -694,30 +711,48 @@ export class BotProject implements IBotProject {
     }
   };
 
+  //migrate the recognizer folder
+  private removeRecognizers = async () => {
+    const paths = await this.fileStorage.glob('recognizers/cross-train.config.json', this.dataDir);
+    if (paths.length) {
+      await this.fileStorage.rmrfDir(Path.join(this.dataDir, 'recognizers'));
+    }
+  };
+
   private _getFiles = async () => {
     if (!(await this.exists())) {
       throw new Error(`${this.dir} is not a valid path`);
     }
 
+    await this.removeRecognizers();
     const fileList = new Map<string, FileInfo>();
     const patterns = [
       '**/*.dialog',
       '**/*.dialog.schema',
+      '**/*.form-dialog',
       '**/*.lg',
       '**/*.lu',
       '**/*.qna',
-      'manifests/*.json',
+      '**/*.json',
       'sdk.override.schema',
       'sdk.override.uischema',
       'sdk.schema',
       'sdk.uischema',
+      'app.override.schema',
+      'app.override.uischema',
+      'app.schema',
+      'app.uischema',
       '*.botproj',
+      'cross-train.config.json',
     ];
     for (const pattern of patterns) {
       // load only from the data dir, otherwise may get "build" versions from
       // deployment process
       const root = this.dataDir;
-      const paths = await this.fileStorage.glob([pattern, '!(generated/**)', '!(runtime/**)'], root);
+      const paths = await this.fileStorage.glob(
+        [pattern, '!(generated/**)', '!(runtime/**)', '!(scripts/**)', '!(settings/appsettings.json)'],
+        root
+      );
 
       for (const filePath of paths.sort()) {
         const realFilePath: string = Path.join(root, filePath);
@@ -801,8 +836,6 @@ export class BotProject implements IBotProject {
       }
       const fileName = `${this.name}${FileExtensions.BotProject}`;
       const root = this.dataDir;
-
-      defaultBotProjectFile.workspace = convertAbsolutePathToFileProtocol(root);
       defaultBotProjectFile.name = this.name;
 
       await this._createFile(fileName, JSON.stringify(defaultBotProjectFile, null, 2));

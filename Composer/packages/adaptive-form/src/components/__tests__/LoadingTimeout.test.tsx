@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render, act } from '@bfc/test-utils';
+import { render, act } from '@botframework-composer/test-utils';
 import assign from 'lodash/assign';
 
 import { LoadingTimeout } from '../LoadingTimeout';

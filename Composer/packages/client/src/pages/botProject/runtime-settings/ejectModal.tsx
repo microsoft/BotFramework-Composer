@@ -3,22 +3,22 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useEffect, useMemo, useState } from 'react';
-import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { useRecoilValue } from 'recoil';
+import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 
 import { runtimeTemplatesState, dispatcherState } from '../../../recoilModel';
 
 import { modalControlGroup } from './style';
 
-export interface EjectModalProps {
+export type EjectModalProps = {
   ejectRuntime: (templateKey: string) => Promise<void>;
   hidden: boolean;
-  closeModal: () => void;
-}
+  onDismiss: () => void;
+};
 
 export const EjectModal: React.FC<EjectModalProps> = (props) => {
   const [selectedTemplate, setSelectedTemplate] = useState<string | undefined>();
@@ -52,27 +52,22 @@ export const EjectModal: React.FC<EjectModalProps> = (props) => {
   };
 
   return (
-    <Dialog
-      dialogContentProps={{
-        type: DialogType.normal,
-        title: formatMessage('Add custom runtime'),
-        subText: formatMessage('Select runtime version to add'),
-      }}
-      hidden={props.hidden}
-      modalProps={{
-        isBlocking: false,
-      }}
-      onDismiss={props.closeModal}
+    <DialogWrapper
+      dialogType={DialogTypes.Customer}
+      isOpen={!props.hidden}
+      subText={formatMessage('Select runtime version to add')}
+      title={formatMessage('Add custom runtime')}
+      onDismiss={props.onDismiss}
     >
       <div css={modalControlGroup}>
         <ChoiceGroup required options={availableRuntimeTemplates} onChange={selectTemplate} />
       </div>
       <DialogFooter>
-        <DefaultButton onClick={props.closeModal}>Cancel</DefaultButton>
+        <DefaultButton onClick={props.onDismiss}>{formatMessage('Cancel')}</DefaultButton>
         <PrimaryButton disabled={!selectedTemplate} onClick={doEject}>
           {formatMessage('Okay')}
         </PrimaryButton>
       </DialogFooter>
-    </Dialog>
+    </DialogWrapper>
   );
 };

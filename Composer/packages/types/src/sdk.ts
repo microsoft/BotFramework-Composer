@@ -18,6 +18,8 @@ export type BaseSchema = {
   $designer?: DesignerData;
   /** If 'disabled' equals to or be evaluated as 'true', runtime will skip this action. */
   disabled?: boolean | string;
+
+  [key: string]: unknown;
 };
 
 /* Union of components which implement the IActivityTemplate interface */
@@ -293,14 +295,4 @@ export type MicrosoftAdaptiveDialog = BaseSchema & {
 };
 
 /* Union of components which implement the IDialog interface */
-export type MicrosoftIDialog =
-  | ChoiceInput
-  | ConfirmInput
-  | MicrosoftIRecognizer
-  | ITriggerCondition
-  | SwitchCondition
-  | TextInput
-  | SendActivity
-  | IfCondition
-  | Foreach
-  | ForeachPage;
+export type MicrosoftIDialog = BaseSchema;

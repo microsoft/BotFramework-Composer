@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { JSONSchema7, SchemaDefinitions } from '@bfc/types';
+import { JSONSchema7, SchemaDefinitions } from '@botframework-composer/types';
 import React from 'react';
 
 import { UIOptions } from './formSchema';
@@ -20,6 +20,7 @@ export interface FieldProps<T = any> {
   disabled?: boolean;
   enumOptions?: string[];
   error?: string | JSX.Element;
+  expression?: boolean;
   hidden?: boolean;
   hideError?: boolean;
   id: string;
@@ -33,10 +34,16 @@ export interface FieldProps<T = any> {
   transparentBorder?: boolean;
   uiOptions: UIOptions;
   value?: T;
+  focused?: boolean;
+  style?: React.CSSProperties;
 
   onChange: ChangeHandler<T>;
   onFocus?: (id: string, value?: T) => void;
   onBlur?: (id: string, value?: T) => void;
+
+  onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+  onKeyUp?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+  onClick?: (event: React.MouseEvent<HTMLInputElement, MouseEvent>) => void;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -62,14 +62,14 @@ export const setSettingState = async (
     const rootProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
     if (has(settings, property) && rootProjectId) {
       const propertyValue = get(settings, property, '');
-      const luisPropertyValue = get(settingStorage.get(rootProjectId), property, '');
-      let newluisPropertyValue = {};
+      const groupPropertyValue = get(settingStorage.get(rootProjectId), property, '');
+      let newGroupPropertyValue = {};
       if (projectId === rootProjectId) {
-        newluisPropertyValue = { ...luisPropertyValue, root: propertyValue };
+        newGroupPropertyValue = { ...groupPropertyValue, root: propertyValue };
       } else {
-        newluisPropertyValue = { ...luisPropertyValue, [projectId]: propertyValue };
+        newGroupPropertyValue = { ...groupPropertyValue, [projectId]: propertyValue };
       }
-      settingStorage.setField(rootProjectId, property, newluisPropertyValue);
+      settingStorage.setField(rootProjectId, property, newGroupPropertyValue);
     }
   }
   set(settingsState(projectId), settings);

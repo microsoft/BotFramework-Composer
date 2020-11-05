@@ -3,6 +3,7 @@
 
 import { IDiagnostic, IRange } from './diagnostic';
 import { IIntentTrigger } from './dialogUtils';
+import { MicrosoftIDialog } from './sdk';
 
 import { DialogSetting } from './index';
 
@@ -13,9 +14,11 @@ export enum FileExtensions {
   Lu = '.lu',
   Lg = '.lg',
   Qna = '.qna',
+  SourceQnA = '.source.qna',
   Setting = 'appsettings.json',
   FormDialogSchema = '.form-dialog',
   BotProject = '.botproj',
+  Json = '.json',
 }
 
 export type FileInfo = {
@@ -31,6 +34,7 @@ export type ITrigger = {
   displayName: string;
   type: string;
   isIntent: boolean;
+  content: any;
 };
 
 export type ReferredLuIntents = {
@@ -44,7 +48,7 @@ export type DialogSchemaFile = {
 };
 
 export type DialogInfo = {
-  content: any;
+  content: MicrosoftIDialog;
   diagnostics: IDiagnostic[];
   displayName: string;
   id: string;
@@ -104,19 +108,33 @@ export type LuFile = {
   diagnostics: IDiagnostic[];
   intents: LuIntentSection[];
   empty: boolean;
+  resource: LuParseResource;
   [key: string]: any;
 };
 
+export type LuParseResource = {
+  Sections: any[];
+  Errors: any[];
+  Content: string;
+};
+
 export type QnASection = {
+  sectionId: string;
   Questions: { content: string; id: string }[];
   Answer: string;
   Body: string;
+  range?: IRange;
 };
 
 export type QnAFile = {
   id: string;
   content: string;
+  diagnostics: IDiagnostic[];
   qnaSections: QnASection[];
+  imports: { id: string; path: string }[];
+  options: { id: string; name: string; value: string }[];
+  empty: boolean;
+  resource: LuParseResource;
   [key: string]: any;
 };
 
@@ -130,6 +148,11 @@ export type LgTemplate = {
 export type LgParsed = {
   diagnostics: IDiagnostic[];
   templates: LgTemplate[];
+};
+
+export type LanguageFileImport = {
+  id: string;
+  importPath: string;
 };
 
 export type LgFile = {
@@ -151,6 +174,11 @@ export type Skill = {
   manifestUrl: string;
   msAppId: string;
   name: string;
+};
+
+export type JsonSchemaFile = {
+  id: string;
+  content: any;
 };
 
 export type TextFile = {
@@ -183,7 +211,11 @@ export type BotAssets = {
   skillManifests: SkillManifest[];
   setting: DialogSetting;
   dialogSchemas: DialogSchemaFile[];
+  formDialogSchemas: FormDialogSchema[];
   botProjectFile: BotProjectFile;
+  jsonSchemaFiles: JsonSchemaFile[];
+  recognizers: RecognizerFile[];
+  crossTrainConfig: CrosstrainConfig;
 };
 
 export type BotInfo = {
@@ -200,7 +232,6 @@ export interface BotProjectSpaceSkill {
 }
 
 export interface BotProjectSpace {
-  workspace: string;
   name: string;
   skills: {
     [skillId: string]: BotProjectSpaceSkill;
@@ -212,3 +243,22 @@ export interface BotProjectFile {
   content: BotProjectSpace;
   lastModified: string;
 }
+
+export type FormDialogSchema = {
+  id: string;
+  content: string;
+};
+
+export type FormDialogSchemaTemplate = {
+  name: string;
+  isGlobal: boolean;
+};
+
+export type RecognizerFile = {
+  id: string;
+  content: any;
+};
+
+export type CrosstrainConfig = {
+  [fileName: string]: { rootDialog: boolean; triggers: { [intentName: string]: string[] } };
+};

@@ -19,6 +19,7 @@ import { JsonWalk, VisitorFunc } from './utils/jsonWalk';
 import { getBaseName } from './utils/help';
 import extractIntentTriggers from './dialogUtils/extractIntentTriggers';
 import { createPath } from './validations/expressionValidation/utils';
+
 // find out all lg templates given dialog
 function extractLgTemplates(id, dialog): LgTemplateJsonPath[] {
   const templates: LgTemplateJsonPath[] = [];
@@ -118,6 +119,7 @@ function extractTriggers(dialog): ITrigger[] {
             displayName: '',
             type: rule.$kind,
             isIntent: rule.$kind === SDKKinds.OnIntent,
+            content: rule,
           };
           if (has(rule, '$designer.name')) {
             trigger.displayName = rule.$designer.name;

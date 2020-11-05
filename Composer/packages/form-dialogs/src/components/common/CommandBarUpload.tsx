@@ -7,6 +7,10 @@ import * as React from 'react';
 
 type Props = {
   /**
+   * Indicates if the button should be disabled.
+   */
+  disabled: boolean;
+  /**
    * Allowed files extension.
    */
   accept: string;
@@ -17,7 +21,7 @@ type Props = {
 };
 
 export const CommandBarUploadButton = (props: Props) => {
-  const { onUpload, accept } = props;
+  const { onUpload, accept, disabled } = props;
 
   const inputFileRef = React.useRef<HTMLInputElement>();
   const onClickImport = () => {
@@ -37,6 +41,7 @@ export const CommandBarUploadButton = (props: Props) => {
     <>
       <CommandBarButton
         ariaLabel={title}
+        disabled={disabled}
         iconProps={{ iconName: 'Import' }}
         styles={{ root: { height: '100%' } }}
         text={title}

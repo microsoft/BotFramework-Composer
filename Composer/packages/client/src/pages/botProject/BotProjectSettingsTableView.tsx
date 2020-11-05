@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx, css } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
 import React from 'react';
 import { RouteComponentProps } from '@reach/router';
@@ -16,7 +16,17 @@ import { BotLanguage } from './BotLanguage';
 import { RuntimeSettings } from './RuntimeSettings';
 import { PublishTargets } from './PublishTargets';
 import { DeleteBotButton } from './DeleteBotButton';
-import { container } from './styles';
+
+// -------------------- Styles -------------------- //
+
+const container = css`
+  display: flex;
+  flex-direction: column;
+  max-width: 1000px;
+  height: 100%;
+`;
+
+// -------------------- BotProjectSettingsTableView -------------------- //
 
 type BotProjectSettingsTableViewProps = {
   projectId?: string;
@@ -24,7 +34,7 @@ type BotProjectSettingsTableViewProps = {
 } & RouteComponentProps<{}>;
 
 export const BotProjectSettingsTableView: React.FC<BotProjectSettingsTableViewProps> = (props) => {
-  const { projectId = '', hasSkills = false } = props;
+  const { projectId = '', hasSkills } = props;
   const botProjectsMetaData = useRecoilValue(botProjectSpaceSelector);
   const botProject = botProjectsMetaData.find((b) => b.projectId === projectId);
   const isRootBot = !!botProject?.isRootBot;

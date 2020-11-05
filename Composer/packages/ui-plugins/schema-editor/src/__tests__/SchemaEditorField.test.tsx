@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { EditorExtension } from '@bfc/extension-client';
-import { render, fireEvent, findAllByRole } from '@bfc/test-utils';
+import { render, fireEvent, findAllByRole } from '@botframework-composer/test-utils';
 
 import { SchemaEditorField } from '../Fields/SchemaEditorField';
 

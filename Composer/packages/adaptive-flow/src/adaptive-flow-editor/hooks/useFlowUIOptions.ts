@@ -7,5 +7,5 @@ export function useFlowUIOptions() {
   const { plugins } = useShellApi();
   const schema = useFlowConfig();
 
-  return { widgets: plugins.flowWidgets ?? {}, schema };
+  return { widgets: plugins?.widgets?.flow ?? {}, schema };
 }

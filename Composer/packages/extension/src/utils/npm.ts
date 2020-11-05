@@ -6,7 +6,7 @@ import { promisify } from 'util';
 import { mkdir, remove } from 'fs-extra';
 import fetch from 'node-fetch';
 import tar from 'tar';
-import { ExtensionSearchResult } from '@bfc/types';
+import { ExtensionSearchResult } from '@botframework-composer/types';
 
 import logger from '../logger';
 

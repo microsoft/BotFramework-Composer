@@ -12,7 +12,7 @@ import formatMessage from 'format-message';
 import { ContentProps } from '../constants';
 import { getFriendlyName } from '../../../../utils/dialogUtil';
 import { isSupportedTrigger } from '../generateSkillManifest';
-import { dialogsState, schemasState } from '../../../../recoilModel';
+import { dialogsSelectorFamily, schemasState } from '../../../../recoilModel';
 
 import { SelectItems } from './SelectItems';
 
@@ -22,7 +22,7 @@ const getLabel = (kind: SDKKinds, uiSchema) => {
 };
 
 export const SelectTriggers: React.FC<ContentProps> = ({ setSelectedTriggers, projectId }) => {
-  const dialogs = useRecoilValue(dialogsState(projectId));
+  const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
   const schemas = useRecoilValue(schemasState(projectId));
 
   const items = useMemo(() => {

@@ -3,7 +3,7 @@
 
 import { ILuisConfig, IQnAConfig } from '@bfc/shared';
 
-import { ICrossTrainConfig } from './builder';
+export type Resource = { id: string; isEmpty: boolean };
 
 export interface LocationRef {
   storageId: string;
@@ -13,9 +13,8 @@ export interface LocationRef {
 export interface IBuildConfig {
   luisConfig: ILuisConfig;
   qnaConfig: IQnAConfig;
-  luFileIds: string[];
-  qnaFileIds: string[];
-  crossTrainConfig: ICrossTrainConfig;
+  luResource: Resource[];
+  qnaResource: Resource[];
 }
 
 export interface ILuisSettings {

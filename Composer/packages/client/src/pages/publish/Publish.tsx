@@ -37,6 +37,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     rollbackToVersion: rollbackToVersionDispatcher,
     addNotification,
     deleteNotification,
+    setCurrentPageMode,
   } = useRecoilValue(dispatcherState);
 
   const [selectedBots, setSelectedBots] = useState<IBotStatus[]>([]);
@@ -266,6 +267,10 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       }
     }
   };
+
+  useEffect(() => {
+    setCurrentPageMode('notifications');
+  }, []);
 
   return (
     <Fragment>

@@ -2,22 +2,12 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { BaseSchema } from '@bfc/shared';
-import { FlowEditorWidgetMap, FlowWidget, FlowWidgetProp, WidgetEventHandler } from '@bfc/extension-client';
+import { FlowEditorWidgetMap, FlowWidget, FlowWidgetProp, WidgetContainerProps } from '@bfc/extension-client';
 
 import { Boundary } from '../../models/Boundary';
 import { evaluateWidgetProp, ActionContextKey } from '../expression/widgetExpressionEvaluator';
 
-export interface UIWidgetContext {
-  /** The uniq id of current schema data. Usually a json path. */
-  id: string;
-
-  /** Declarative json with a $kind field. */
-  data: BaseSchema;
-
-  /** Handle UI events */
-  onEvent: WidgetEventHandler;
-
+export interface UIWidgetContext extends WidgetContainerProps {
   /** Report widget boundary */
   onResize: (boundary: Boundary) => void;
 }

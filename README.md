@@ -5,6 +5,7 @@
 [![Build Status](https://github.com/microsoft/BotFramework-Composer/workflows/Composer%20CI/badge.svg?branch=main)](https://github.com/microsoft/BotFramework-Composer/actions?query=branch%3Amain)
 [![Coverage Status](https://coveralls.io/repos/github/microsoft/BotFramework-Composer/badge.svg?branch=main)](https://coveralls.io/github/microsoft/BotFramework-Composer?branch=main)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/microsoft/BotFramework-Composer.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/microsoft/BotFramework-Composer/alerts/)
+[![license](https://img.shields.io/badge/license-MIT%20License-00AAAA.svg)](https://github.com/microsoft/BotFramework-Composer/blob/main/LICENSE.md)
 
 ## Overview
 
@@ -30,7 +31,6 @@ The Bot Framework Composer is an open source tool based on the Bot Framework SDK
 - [Create your first bot][3]!
 - To find the most recent release and learn what has changed in Bot Framework Composer, see the [latest release][204].
 
-
 ## Build Composer Locally
 
 To build and run the Composer project locally as a web application, clone the source code from Github and build the application using the instructions below.
@@ -44,12 +44,11 @@ $ yarn build // build extensions and libs
 $ yarn startall // start client and server at the same time
 ```
 
-## Extend Composer with Plugins
+## Extend Composer with Extensions
 
-Many aspects of Composer's functionality can be customized and extended through plugins. Features such as authentication, storage, publishing and even the samples and templates available on the homescreen can be customized by creating new plugins.
+Many aspects of Composer's functionality can be customized and extended through extensions. Features such as authentication, storage, publishing and even the samples and templates available on the homescreen can be customized by creating new extensions.
 
-[Read more about building Composer plugins &rarr;](Composer/plugins/README.md)
-
+[Read more about building Composer extensions &rarr;](extensions/README.md)
 
 ## Support and Feedback
 

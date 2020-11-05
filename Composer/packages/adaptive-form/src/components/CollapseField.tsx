@@ -4,31 +4,35 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import { Fragment, useState, useEffect, useLayoutEffect, useRef } from 'react';
-import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Label } from 'office-ui-fabric-react/lib/Label';
-import { Separator } from 'office-ui-fabric-react/lib/Separator';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 
 const styles = {
+  description: css`
+    font-size: ${FontSizes.medium};
+  `,
   transition: css`
     transition: height 300ms cubic-bezier(0.4, 0, 0.2, 1);
     overflow: hidden;
   `,
   header: css`
+    background-color: #eff6fc;
     display: flex;
-    margin: 0 8px;
+    margin: 4px 0px;
     align-items: center;
   `,
 };
 
 interface CollapseField {
   defaultExpanded?: boolean;
+  description?: string;
   title?: string | boolean;
 }
 
-export const CollapseField: React.FC<CollapseField> = ({ children, defaultExpanded, title }) => {
+export const CollapseField: React.FC<CollapseField> = ({ children, description, defaultExpanded, title }) => {
   const [isOpen, setIsOpen] = useState(!!defaultExpanded);
 
   return (
@@ -45,11 +49,15 @@ export const CollapseField: React.FC<CollapseField> = ({ children, defaultExpand
       >
         <IconButton
           iconProps={{ iconName: isOpen ? 'ChevronDown' : 'ChevronRight' }}
-          styles={{ root: { color: NeutralColors.gray150 } }}
+          styles={{
+            root: { color: NeutralColors.gray150 },
+            rootHovered: { backgroundColor: 'transparent' },
+            rootFocused: { backgroundColor: 'transparent' },
+          }}
         />
         {title && <Label styles={{ root: { fontWeight: FontWeights.semibold } }}>{title}</Label>}
+        {description && <span css={styles.description}>&nbsp;- {description}</span>}
       </div>
-      <Separator styles={{ root: { height: 0 } }} />
       <div>
         <CollapseContent isOpen={isOpen}>{children}</CollapseContent>
       </div>

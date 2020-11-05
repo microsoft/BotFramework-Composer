@@ -16,14 +16,20 @@ initializeIcons(undefined, { disableWarnings: true });
 
 export const App: React.FC = () => {
   const { appLocale } = useRecoilValue(userSettingsState);
+  const { fetchFeatureFlags } = useRecoilValue(dispatcherState);
   useEffect(() => {
     loadLocale(appLocale);
   }, [appLocale]);
 
+  useEffect(() => {
+    fetchFeatureFlags();
+  }, []);
+
   const { fetchExtensions } = useRecoilValue(dispatcherState);
+
   useEffect(() => {
     fetchExtensions();
-  });
+  }, []);
 
   return (
     <Fragment key={appLocale}>

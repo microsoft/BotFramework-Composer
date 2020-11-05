@@ -3,9 +3,8 @@
 
 import get from 'lodash/get';
 import formatMessage from 'format-message';
-import { SDKKinds } from '@bfc/types';
+import { SDKKinds } from '@botframework-composer/types';
 
-import { conceptLabels as conceptLabelsFn } from './labelMap';
 import { PromptTab, PromptTabTitles } from './promptTabs';
 
 export const PROMPT_TYPES = [
@@ -184,19 +183,29 @@ export function getDialogGroupByType(type) {
 
 const truncateSDKType = ($kind) => (typeof $kind === 'string' ? $kind.replace('Microsoft.', '') : '');
 
+// string type comes from sdk.schema, function type comes from FormUIOptions.
+type SDKTitle = string | ((data: any) => string);
+
+const getSDKTitle = (data, sdkTitle?: SDKTitle) => {
+  if (!sdkTitle) return;
+  // Handle the case that FormUIOption label function overrides sdk.schema.
+  return typeof sdkTitle === 'function' ? sdkTitle(data) : sdkTitle;
+};
+
 /**
  * Title priority: $designer.name > title from sdk schema > customize title > $kind suffix
  * @param customizedTitile customized title
  */
-export function generateSDKTitle(data, customizedTitle?: string, tab?: PromptTab) {
+export function generateActionTitle(data, sdkTitle?: SDKTitle, customizedTitle?: string, tab?: PromptTab) {
   const $kind = get(data, '$kind');
-  const titleFromShared = get(conceptLabelsFn(), [$kind, 'title']);
+  const titleFromSDKSchema = getSDKTitle(data, sdkTitle);
   const titleFrom$designer = get(data, '$designer.name');
   const titleFrom$kind = truncateSDKType($kind);
 
-  const title = titleFromShared || titleFrom$designer || customizedTitle || titleFrom$kind;
+  const title = titleFrom$designer || titleFromSDKSchema || customizedTitle || titleFrom$kind;
   if (tab) {
-    return `${PromptTabTitles} (${title})`;
+    const tabTitle = typeof PromptTabTitles[tab] === 'function' ? PromptTabTitles[tab]() : tab;
+    return `${tabTitle} (${title})`;
   }
   return title;
 }

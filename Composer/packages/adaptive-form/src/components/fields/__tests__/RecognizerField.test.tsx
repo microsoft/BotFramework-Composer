@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render, fireEvent, screen } from '@bfc/test-utils';
+import { render, fireEvent, screen } from '@botframework-composer/test-utils';
 import { useRecognizerConfig, useShellApi } from '@bfc/extension-client';
 import assign from 'lodash/assign';
 

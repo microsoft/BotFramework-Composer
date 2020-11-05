@@ -5,6 +5,8 @@ import { Range, Position, LuIntentSection } from '@bfc/shared';
 
 import luWorker from '../luWorker';
 
+const luFeatures = {};
+
 jest.mock('./../workers/luParser.worker.ts', () => {
   class Test {
     onmessage = (data) => data;
@@ -29,7 +31,7 @@ describe('test lu worker', () => {
   it('get expected parse result', async () => {
     const content = `# Hello
 - hi`;
-    const result: any = await luWorker.parse('', content);
+    const result: any = await luWorker.parse('', content, luFeatures);
     const expected = [
       { Body: '- hi', Entities: [], Name: 'Hello', range: new Range(new Position(1, 0), new Position(2, 4)) },
     ];
@@ -45,7 +47,7 @@ hi
 @ simple friendsName
 
 `;
-    const { intents, diagnostics }: any = await luWorker.parse('', content);
+    const { intents, diagnostics }: any = await luWorker.parse('', content, luFeatures);
     expect(intents.length).toEqual(1);
     expect(diagnostics.length).toEqual(1);
     expect(diagnostics[0].range.start.line).toEqual(2);
@@ -55,7 +57,7 @@ hi
   });
 
   it('get expected add intent result', async () => {
-    const result: any = await luWorker.addIntent(luFile, getLuIntent('New', '-IntentValue'));
+    const result: any = await luWorker.addIntent(luFile, getLuIntent('New', '-IntentValue'), luFeatures);
     const expected = {
       Body: '-IntentValue',
       Entities: [],
@@ -68,10 +70,11 @@ hi
   });
 
   it('get expected add intents result', async () => {
-    const result: any = await luWorker.addIntents(luFile, [
-      getLuIntent('New1', '-IntentValue1'),
-      getLuIntent('New2', '-IntentValue2'),
-    ]);
+    const result: any = await luWorker.addIntents(
+      luFile,
+      [getLuIntent('New1', '-IntentValue1'), getLuIntent('New2', '-IntentValue2')],
+      luFeatures
+    );
     const expected = {
       Body: '-IntentValue2',
       Entities: [],
@@ -84,7 +87,7 @@ hi
   });
 
   it('get expected update intent result', async () => {
-    const result: any = await luWorker.updateIntent(luFile, 'New', getLuIntent('New', '-update'));
+    const result: any = await luWorker.updateIntent(luFile, 'New', getLuIntent('New', '-update'), luFeatures);
     const expected = {
       Body: '-update',
       Entities: [],
@@ -97,14 +100,14 @@ hi
   });
 
   it('get expected remove intent result', async () => {
-    const result: any = await luWorker.removeIntent(luFile, 'New2');
+    const result: any = await luWorker.removeIntent(luFile, 'New2', luFeatures);
     expect(result.intents.length).toBe(3);
     expect(result.intents[3]).toBeUndefined();
     luFile = result;
   });
 
   it('get expected remove intent result', async () => {
-    const result: any = await luWorker.removeIntents(luFile, ['New1', 'New']);
+    const result: any = await luWorker.removeIntents(luFile, ['New1', 'New'], luFeatures);
     expect(result.intents.length).toBe(1);
   });
 });

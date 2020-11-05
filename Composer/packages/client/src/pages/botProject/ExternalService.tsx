@@ -12,13 +12,16 @@ import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 import get from 'lodash/get';
+import { css } from '@emotion/core';
+import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 
 import {
   dispatcherState,
   settingsState,
   luFilesState,
   qnaFilesState,
-  validateDialogSelectorFamily,
+  validateDialogsSelectorFamily,
 } from '../../recoilModel';
 import settingStorage from '../../utils/dialogSettingStorage';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
@@ -28,17 +31,77 @@ import { isLUISnQnARecognizerType } from '../../utils/dialogValidator';
 import { getBaseName } from '../../utils/fileUtil';
 import { botProjectSpaceSelector } from '../../recoilModel/selectors/project';
 
-import {
-  labelContainer,
-  customerLabel,
-  unknownIconStyle,
-  appIdAndPasswordStyle,
-  customError,
-  errorContainer,
-  errorTextStyle,
-  errorIcon,
-  titleStyle,
-} from './styles';
+// -------------------- Styles -------------------- //
+
+const titleStyle = css`
+  font-size: ${FontSizes.medium};
+  font-weight: ${FontWeights.semibold};
+  margin-left: 22px;
+  margin-top: 6px;
+`;
+
+const labelContainer = css`
+  display: flex;
+  flex-direction: row;
+`;
+
+const customerLabel = css`
+  font-size: ${FontSizes.small};
+  margin-right: 5px;
+`;
+
+const unknownIconStyle = (required) => {
+  return {
+    root: {
+      selectors: {
+        '&::before': {
+          content: required ? " '*'" : '',
+          color: SharedColors.red10,
+          paddingRight: 3,
+        },
+      },
+    },
+  };
+};
+
+const externalServiceContainerStyle = css`
+  display: flex;
+  flex-direction: column;
+`;
+
+const errorContainer = css`
+  display: flex;
+  width: 100%;
+  height: 48px;
+  line-height: 48px;
+  background: #fed9cc;
+  color: ${NeutralColors.black};
+`;
+
+const customError = {
+  root: {
+    selectors: {
+      'p > span': {
+        width: '100%',
+      },
+    },
+  },
+};
+
+const errorIcon = {
+  root: {
+    color: '#A80000',
+    marginRight: 8,
+    paddingLeft: 12,
+    fontSize: FontSizes.mediumPlus,
+  },
+};
+
+const errorTextStyle = css`
+  margin-bottom: 5px;
+`;
+
+// -------------------- ExternalService -------------------- //
 
 type ExternalServiceProps = {
   projectId: string;
@@ -59,7 +122,7 @@ const isLUISMandatory = (dialogs: DialogInfo[], luFiles: LuFile[]) => {
   return dialogs.some((dialog) => {
     const isDefault = isLUISnQnARecognizerType(dialog);
     const luFile = luFiles.find((luFile) => getBaseName(luFile.id) === dialog.id);
-    return isDefault && luFile?.content;
+    return !!(isDefault && luFile?.content);
   });
 };
 
@@ -67,7 +130,7 @@ const isQnAKeyMandatory = (dialogs: DialogInfo[], qnaFiles: QnAFile[]) => {
   return dialogs.some((dialog) => {
     const isDefault = isLUISnQnARecognizerType(dialog);
     const qnaFile = qnaFiles.find((qnaFile) => getBaseName(qnaFile.id) === dialog.id);
-    return isDefault && qnaFile?.content;
+    return !!(isDefault && qnaFile?.content);
   });
 };
 
@@ -83,9 +146,9 @@ const errorElement = (errorText: string) => {
 
 export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
   const { projectId } = props;
-  const { setSettings } = useRecoilValue(dispatcherState);
+  const { setSettings, setQnASettings } = useRecoilValue(dispatcherState);
   const settings = useRecoilValue(settingsState(projectId));
-  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
   const luFiles = useRecoilValue(luFilesState(projectId));
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
@@ -130,9 +193,44 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
     setQnAKeyErrorMsg('');
   }, [projectId]);
 
+  const handleRootLUISKeyOnChange = async (e, value) => {
+    await setSettings(projectId, {
+      ...settings,
+      luis: { ...settings.luis, authoringKey: value ? value : '' },
+    });
+    if (value) {
+      setLuisKeyErrorMsg('');
+      setLocalRootLuisKey(value);
+    } else {
+      setLuisKeyErrorMsg(
+        formatMessage('LUIS Key is required with the current recognizer setting to start your bot locally, and publish')
+      );
+      setLocalRootLuisKey('');
+    }
+  };
+
+  const handleRootQnAKeyOnChange = async (e, value) => {
+    await handleQnASubscripionKeyOnChange(e, value);
+    if (value) {
+      setQnAKeyErrorMsg('');
+      setLocalRootQnAKey(value);
+    } else {
+      setQnAKeyErrorMsg(formatMessage('QnA Maker subscription Key is required to start your bot locally, and publish'));
+      setLocalRootQnAKey('');
+    }
+  };
+
+  const handleQnASubscripionKeyOnChange = async (e, value) => {
+    await setSettings(projectId, {
+      ...settings,
+      qna: { ...settings.qna, subscriptionKey: value ? value : '' },
+    });
+    await setQnASettings(projectId, value);
+  };
+
   return (
     <CollapsableWrapper title={formatMessage('External services')} titleStyle={titleStyle}>
-      <div css={appIdAndPasswordStyle}>
+      <div css={externalServiceContainerStyle}>
         {isRootBot && (
           <TextField
             aria-labelledby={'LUIS key'}
@@ -143,23 +241,7 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
             styles={customError}
             value={localRootLuisKey}
             onBlur={handleRootLuisKeyOnBlur}
-            onChange={async (e, value) => {
-              await setSettings(projectId, {
-                ...settings,
-                luis: { ...settings.luis, authoringKey: value ? value : '' },
-              });
-              if (value) {
-                setLuisKeyErrorMsg('');
-                setLocalRootLuisKey(value);
-              } else {
-                setLuisKeyErrorMsg(
-                  formatMessage(
-                    'LUIS Key is required with the current recognizer setting to start your bot locally, and publish'
-                  )
-                );
-                setLocalRootLuisKey('');
-              }
-            }}
+            onChange={handleRootLUISKeyOnChange}
             onRenderLabel={onRenderLabel}
           />
         )}
@@ -214,7 +296,7 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
             }}
           />
         )}
-        {isRootBot && (
+        {isRootBot ? (
           <TextField
             aria-labelledby={'QnA Maker Subscription key'}
             errorMessage={isQnAKeyNeeded ? errorElement(qnaKeyErrorMsg) : ''}
@@ -224,26 +306,10 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
             styles={mergeStyleSets({ root: { marginTop: 10 } }, customError)}
             value={localRootQnAKey}
             onBlur={handleRootQnAKeyOnBlur}
-            onChange={async (e, value) => {
-              await setSettings(projectId, {
-                ...settings,
-                qna: { ...settings.qna, subscriptionKey: value ? value : '' },
-              });
-              if (value) {
-                setQnAKeyErrorMsg('');
-                setLocalRootQnAKey(value);
-              } else {
-                setQnAKeyErrorMsg(
-                  formatMessage('QnA Maker subscription Key is required to start your bot locally, and publish')
-                );
-                setLocalRootQnAKey('');
-              }
-            }}
+            onChange={handleRootQnAKeyOnChange}
             onRenderLabel={onRenderLabel}
           />
-        )}
-
-        {!isRootBot && (
+        ) : (
           <TextFieldWithCustomButton
             required
             ariaLabelledby={'QnA Maker Subscription key'}
@@ -252,12 +318,7 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
             placeholder={'Enter QnA Maker Subscription key'}
             placeholderOnDisable={"<---- Same as root bot's QnA Maker Subscription key ---->"}
             value={skillqnaKey}
-            onChange={async (e, value) => {
-              await setSettings(projectId, {
-                ...settings,
-                qna: { ...settings.qna, subscriptionKey: value ? value : '' },
-              });
-            }}
+            onChange={handleQnASubscripionKeyOnChange}
           />
         )}
       </div>

@@ -105,3 +105,7 @@ export const diffEditorContent = css`
 export const dropdown = {
   dropdown: { width: '50%', maxWidth: 300, minWidth: 100 },
 };
+
+export const editableFieldContainer = css`
+  outline: none;
+`;

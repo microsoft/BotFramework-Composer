@@ -12,7 +12,7 @@ import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import formatMessage from 'format-message';
 
 import { StringField } from '../StringField';
-import SchemaField from '../../SchemaField';
+import { SchemaField } from '../../SchemaField';
 
 import { container, item, itemContainer } from './styles';
 
@@ -91,6 +91,7 @@ const ObjectItem: React.FC<ObjectItemProps> = ({
             {...rest}
             definitions={definitions}
             id={`${name}.value`}
+            label={stackedLayout ? formatMessage('Value') : false}
             name="value"
             placeholder={placeholder}
             schema={schema}

@@ -90,7 +90,7 @@ export const CompletionElement = (props: {
       <div css={[styles.completionElement, additionalStyles]} onClick={onClickCompletionItem}>
         <FontIcon iconName={getIconName(completionItem.kind)} css={styles.icon} />
         <div css={styles.text}>
-          {completionItem.data.matches
+          {completionItem.data?.matches
             ? renderLabelWithCharacterHighlights(completionItem.data.matches)
             : completionItem.label}
         </div>

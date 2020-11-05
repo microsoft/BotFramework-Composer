@@ -3,18 +3,45 @@
 
 /** @jsx jsx */
 import React from 'react';
-import { jsx } from '@emotion/core';
+import { jsx, css } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { Button } from 'office-ui-fabric-react/lib/Button';
 import { Text } from 'office-ui-fabric-react/lib/Text';
+import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { navigateTo } from '../../utils/navigation';
 import { dispatcherState } from '../../recoilModel';
 
-import { marginBottom, deleteBotText, deleteBotButton } from './styles';
+// -------------------- Styles -------------------- //
+
+const marginBottom = css`
+  margin-bottom: 20px;
+`;
+
+const deleteBotText = css`
+  font-weight: ${FontWeights.semibold};
+  font-size: 12px;
+  margin-bottom: 20px;
+`;
+
+const deleteBotButton = {
+  root: {
+    height: 32,
+    width: 82,
+    background: SharedColors.cyanBlue10,
+    color: NeutralColors.white,
+  },
+  rootHovered: {
+    background: SharedColors.cyanBlue10,
+    color: NeutralColors.white,
+  },
+};
+
+// -------------------- DeleteBotButton -------------------- //
 
 type DeleteBotButtonProps = {
   projectId: string;
@@ -89,6 +116,7 @@ export const DeleteBotButton: React.FC<DeleteBotButtonProps> = (props) => {
       navigateTo('home');
     }
   };
+
   return (
     <div css={marginBottom}>
       <div css={deleteBotText}> {formatMessage('Delete this bot')}</div>

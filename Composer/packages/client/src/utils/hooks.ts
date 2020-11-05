@@ -1,15 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { globalHistory } from '@reach/router';
 import replace from 'lodash/replace';
 import find from 'lodash/find';
 import { useRecoilValue } from 'recoil';
+import { FeatureFlagKey } from '@bfc/shared';
 
-import { designPageLocationState, enabledExtensionsSelector, currentProjectIdState } from '../recoilModel';
+import { designPageLocationState, currentProjectIdState, pluginPagesSelector, featureFlagsState } from '../recoilModel';
 
-import { bottomLinks, topLinks, ExtensionPageConfig } from './pageLinks';
+import { bottomLinks, topLinks } from './pageLinks';
 import routerCache from './routerCache';
 import { projectIdCache } from './projectCache';
 
@@ -22,22 +23,30 @@ export const useLocation = () => {
   return state;
 };
 
+export const useFeatureFlag = (featureFlagKey: FeatureFlagKey): boolean => {
+  const featureFlags = useRecoilValue(featureFlagsState);
+  const enabled = useMemo(() => {
+    if (featureFlags[featureFlagKey]) {
+      return featureFlags[featureFlagKey].enabled;
+    }
+    return false;
+  }, [featureFlags[featureFlagKey]]);
+
+  return enabled;
+};
+
 export const useLinks = () => {
   const projectId = useRecoilValue(currentProjectIdState);
   const designPageLocation = useRecoilValue(designPageLocationState(projectId));
-  const extensions = useRecoilValue(enabledExtensionsSelector);
+  const pluginPages = useRecoilValue(pluginPagesSelector);
   const openedDialogId = designPageLocation.dialogId || 'Main';
+  const showFormDialog = useFeatureFlag('FORM_DIALOG');
 
-  // add page-contributing extensions
-  const pluginPages = extensions.reduce((pages, p) => {
-    const pagesConfig = p.contributes?.views?.pages;
-    if (Array.isArray(pagesConfig) && pagesConfig.length > 0) {
-      pages.push(...pagesConfig.map((page) => ({ ...page, id: p.id })));
-    }
-    return pages;
-  }, [] as ExtensionPageConfig[]);
+  const pageLinks = useMemo(() => {
+    return topLinks(projectId, openedDialogId, pluginPages, showFormDialog);
+  }, [projectId, openedDialogId, pluginPages, showFormDialog]);
 
-  return { topLinks: topLinks(projectId, openedDialogId, pluginPages), bottomLinks };
+  return { topLinks: pageLinks, bottomLinks };
 };
 
 export const useRouterCache = (to: string) => {
@@ -68,4 +77,23 @@ export const useProjectIdCache = () => {
   }, []);
 
   return projectId;
+};
+
+export const useInterval = (callback, delay) => {
+  const savedCallback = useRef<() => void>();
+
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+  useEffect(() => {
+    if (delay !== null) {
+      const interval = setInterval(() => {
+        if (typeof savedCallback.current === 'function') {
+          savedCallback.current();
+        }
+      }, delay);
+      return () => clearInterval(interval);
+    }
+  }, [delay]);
 };

@@ -4,24 +4,26 @@
 // TODO: Remove path module
 import Path from 'path';
 
-import React, { useEffect, useRef, Fragment, useState } from 'react';
+import React, { useEffect, useRef, Fragment, useState, useMemo } from 'react';
 import { RouteComponentProps, Router, navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
+import VirtualAssistantCreationModal from '@bfc/ui-plugin-va-creation';
+import { PluginConfig, mergePluginConfigs, EditorExtension } from '@bfc/extension-client';
 
 import { CreationFlowStatus } from '../../constants';
 import {
   dispatcherState,
   creationFlowStatusState,
-  templateProjectsState,
   storagesState,
   focusedStorageFolderState,
   currentProjectIdState,
   userSettingsState,
+  filteredTemplatesSelector,
 } from '../../recoilModel';
 import Home from '../../pages/home/Home';
-import ImportQnAFromUrlModal from '../../pages/knowledge-base/ImportQnAFromUrlModal';
-import { QnABotTemplateId } from '../../constants';
 import { useProjectIdCache } from '../../utils/hooks';
+import { useShell } from '../../shell';
+import plugins from '../../plugins';
 
 import { CreateOptions } from './CreateOptions';
 import { OpenProject } from './OpenProject';
@@ -46,9 +48,9 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     fetchProjectById,
   } = useRecoilValue(dispatcherState);
 
+  const templateProjects = useRecoilValue(filteredTemplatesSelector);
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
   const projectId = useRecoilValue(currentProjectIdState);
-  const templateProjects = useRecoilValue(templateProjectsState);
   const storages = useRecoilValue(storagesState);
   const focusedStorageFolder = useRecoilValue(focusedStorageFolderState);
   const { appLocale } = useRecoilValue(userSettingsState);
@@ -56,8 +58,8 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   const currentStorageIndex = useRef(0);
   const storage = storages[currentStorageIndex.current];
   const currentStorageId = storage ? storage.id : 'default';
-  const [formData, setFormData] = useState({ name: '' });
-
+  const [formData, setFormData] = useState({ name: '', description: '', location: '' });
+  const shellForCreation = useShell('VaCreation', projectId);
   useEffect(() => {
     if (storages && storages.length) {
       const storageId = storage.id;
@@ -66,6 +68,13 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
       fetchFolderItemsByPath(storageId, formattedPath);
     }
   }, [storages]);
+
+  // Plugin config for VA creation plug in
+  const pluginConfig: PluginConfig = useMemo(() => {
+    const sdkUISchema = {};
+    const userUISchema = {};
+    return mergePluginConfigs({ uiSchema: sdkUISchema }, plugins, { uiSchema: userUISchema });
+  }, []);
 
   const fetchResources = async () => {
     // fetchProject use `gotoSnapshot` which will wipe out all state value.
@@ -119,18 +128,14 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     saveProjectAs(projectId, formData.name, formData.description, formData.location);
   };
 
-  const handleCreateQnA = async (urls: string[]) => {
-    saveTemplateId(QnABotTemplateId);
-    handleDismiss();
-    handleCreateNew(formData, QnABotTemplateId, urls);
-  };
-
-  const handleSubmitOrImportQnA = async (formData, templateId: string) => {
-    if (templateId === 'QnASample') {
+  const handleDefineConversationSubmit = async (formData, templateId: string) => {
+    // If selected template is vaCore then route to VA Customization modal
+    if (templateId === 'va-core') {
       setFormData(formData);
-      navigate(`./QnASample/importQnA`);
+      navigate(`./vaCore/customize`);
       return;
     }
+
     handleSubmit(formData, templateId);
   };
 
@@ -147,7 +152,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     }
   };
 
-  const handleCreateNext = async (data) => {
+  const handleCreateNext = async (data: string) => {
     setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
     navigate(`./create/${data}`);
   };
@@ -155,40 +160,47 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   return (
     <Fragment>
       <Home />
-      <Router>
-        <DefineConversation
-          createFolder={createFolder}
-          focusedStorageFolder={focusedStorageFolder}
-          path="create/:templateId"
-          updateFolder={updateFolder}
-          onCurrentPathUpdate={updateCurrentPath}
-          onDismiss={handleDismiss}
-          onSubmit={handleSubmitOrImportQnA}
-        />
-        <CreateOptions path="create" templates={templateProjects} onDismiss={handleDismiss} onNext={handleCreateNext} />
-        <DefineConversation
-          createFolder={createFolder}
-          focusedStorageFolder={focusedStorageFolder}
-          path=":projectId/:templateId/save"
-          updateFolder={updateFolder}
-          onCurrentPathUpdate={updateCurrentPath}
-          onDismiss={handleDismiss}
-          onSubmit={handleSubmitOrImportQnA}
-        />
-        <OpenProject
-          focusedStorageFolder={focusedStorageFolder}
-          path="open"
-          onCurrentPathUpdate={updateCurrentPath}
-          onDismiss={handleDismiss}
-          onOpen={openBot}
-        />
-        <ImportQnAFromUrlModal
-          dialogId={formData.name.toLowerCase()}
-          path="create/QnASample/importQnA"
-          onDismiss={handleDismiss}
-          onSubmit={handleCreateQnA}
-        />
-      </Router>
+      <EditorExtension plugins={pluginConfig} projectId={projectId} shell={shellForCreation}>
+        <Router>
+          <DefineConversation
+            createFolder={createFolder}
+            focusedStorageFolder={focusedStorageFolder}
+            path="create/:templateId"
+            updateFolder={updateFolder}
+            onCurrentPathUpdate={updateCurrentPath}
+            onDismiss={handleDismiss}
+            onSubmit={handleDefineConversationSubmit}
+          />
+          <CreateOptions
+            path="create"
+            templates={templateProjects}
+            onDismiss={handleDismiss}
+            onNext={handleCreateNext}
+          />
+          <DefineConversation
+            createFolder={createFolder}
+            focusedStorageFolder={focusedStorageFolder}
+            path=":projectId/:templateId/save"
+            updateFolder={updateFolder}
+            onCurrentPathUpdate={updateCurrentPath}
+            onDismiss={handleDismiss}
+            onSubmit={handleDefineConversationSubmit}
+          />
+          <OpenProject
+            focusedStorageFolder={focusedStorageFolder}
+            path="open"
+            onCurrentPathUpdate={updateCurrentPath}
+            onDismiss={handleDismiss}
+            onOpen={openBot}
+          />
+          <VirtualAssistantCreationModal
+            formData={formData}
+            handleCreateNew={handleCreateNew}
+            path="create/vaCore/*"
+            onDismiss={handleDismiss}
+          />
+        </Router>
+      </EditorExtension>
     </Fragment>
   );
 };

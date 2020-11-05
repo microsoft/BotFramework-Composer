@@ -3,11 +3,13 @@
 
 /** @jsx jsx */
 import React, { Fragment, useMemo } from 'react';
-import { jsx } from '@emotion/core';
+import { jsx, css } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 import cloneDeep from 'lodash/cloneDeep';
+import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 
 import { dispatcherState, settingsState } from '../../recoilModel';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
@@ -15,20 +17,93 @@ import { languageListTemplates } from '../../components/MultiLanguage';
 import { localeState, showAddLanguageModalState } from '../../recoilModel/atoms';
 import { AddLanguageModal } from '../../components/MultiLanguage';
 
-import {
-  titleStyle,
-  appIdAndPasswordStyle,
-  botLanguageDescriptionStyle,
-  botLanguageFieldStyle,
-  languageRowContainer,
-  languageTextStyle,
-  defaultLanguageTextStyle,
-  languageItemContainer,
-  languageItem,
-  languageButtonContainer,
-  languageButton,
-  manageBotLanguage,
-} from './styles';
+// -------------------- Styles -------------------- //
+
+const titleStyle = css`
+  font-size: ${FontSizes.medium};
+  font-weight: ${FontWeights.semibold};
+  margin-left: 22px;
+  margin-top: 6px;
+`;
+
+const botLanguageContainerStyle = css`
+  display: flex;
+  flex-direction: column;
+`;
+
+const botLanguageDescriptionStyle = css`
+  font-size: ${FontSizes.small};
+  color: ${NeutralColors.gray130};
+`;
+
+const botLanguageFieldStyle = css`
+  font-size: ${FontSizes.small};
+  color: ${NeutralColors.black};
+  overflow-y: auto;
+  max-height: 150px;
+  border: 1px solid #c4c4c4;
+  margin-top: 17px;
+  padding: 10px;
+`;
+
+const manageBotLanguage = {
+  root: {
+    height: 30,
+    fontSize: FontSizes.smallPlus,
+    fontWeight: FontWeights.regular,
+    color: SharedColors.cyanBlue10,
+    paddingLeft: 0,
+  },
+};
+
+const languageItem = css`
+  &:hover {
+    background: #ebebeb;
+  }
+`;
+
+const languageRowContainer = css`
+  display: flex;
+  height: 30px;
+  line-height: 30px;
+`;
+
+const languageItemContainer = css`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  &:hover .ms-Button {
+    visibility: visible;
+  }
+`;
+
+const languageButton = {
+  root: {
+    fontSize: FontSizes.small,
+    fontWeight: FontWeights.regular,
+    color: SharedColors.cyanBlue10,
+    height: 30,
+    visibility: 'hidden',
+  },
+};
+
+const defaultLanguageTextStyle = css`
+  color: #898989;
+  font-size: 8px;
+`;
+
+const languageTextStyle = css`
+  color: ${NeutralColors.black};
+  font-size: 12px;
+`;
+
+const languageButtonContainer = css`
+  display: flex;
+  justify-content: space-between;
+  width: 240px;
+`;
+
+// -------------------- BotLanguage -------------------- //
 
 type BotLanguageProps = {
   projectId: string;
@@ -81,10 +156,11 @@ export const BotLanguage: React.FC<BotLanguageProps> = (props) => {
   const index = languageListOptions.findIndex((l) => l.key === defaultLanguage);
   const dl = languageListOptions.splice(index, 1)[0];
   languageListOptions.unshift(dl);
+
   return (
     <Fragment>
       <CollapsableWrapper title={formatMessage('Bot language')} titleStyle={titleStyle}>
-        <div css={appIdAndPasswordStyle}>
+        <div css={botLanguageContainerStyle}>
           <div css={botLanguageDescriptionStyle}>
             {formatMessage(
               'List of languages that bot will be able to understand (User input) and respond to (Bot responses). To make this bot available in other languages, click ‘Manage bot languages’ to create a copy of the default language, and translate the content into the new language.'
@@ -94,12 +170,10 @@ export const BotLanguage: React.FC<BotLanguageProps> = (props) => {
             {languageListOptions.map((l) => (
               <div key={l.key} css={languageRowContainer}>
                 {l.key === defaultLanguage && (
-                  <Fragment>
-                    <div css={languageTextStyle} data-testid={'defaultLanguage'}>
-                      {l.text}
-                      <span css={defaultLanguageTextStyle}> {formatMessage('DEFAULT LANGUAGE')}</span>
-                    </div>
-                  </Fragment>
+                  <div css={languageTextStyle} data-testid={'defaultLanguage'}>
+                    {l.text}
+                    <span css={defaultLanguageTextStyle}> {formatMessage('DEFAULT LANGUAGE')}</span>
+                  </div>
                 )}
                 {l.key !== defaultLanguage && (
                   <div css={languageItemContainer}>

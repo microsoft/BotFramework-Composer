@@ -13,7 +13,7 @@ import { IConfig, IPublishConfig, defaultPublishConfig } from '@bfc/shared';
 import {
   botEndpointsState,
   dispatcherState,
-  validateDialogSelectorFamily,
+  validateDialogsSelectorFamily,
   botStatusState,
   botDisplayNameState,
   luFilesState,
@@ -60,7 +60,7 @@ export const TestController: React.FC<{ projectId: string }> = (props) => {
   const botActionRef = useRef(null);
   const notifications = useNotifications(projectId);
 
-  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
   const botStatus = useRecoilValue(botStatusState(projectId));
   const botName = useRecoilValue(botDisplayNameState(projectId));
   const luFiles = useRecoilValue(luFilesState(projectId));
@@ -156,6 +156,7 @@ export const TestController: React.FC<{ projectId: string }> = (props) => {
     setBotStatus(BotStatus.publishing, projectId);
     dismissDialog();
     const { luis, qna } = config;
+
     await setSettings(projectId, {
       ...settings,
       luis: luis,

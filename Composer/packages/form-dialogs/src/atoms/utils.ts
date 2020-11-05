@@ -7,15 +7,16 @@ import formatMessage from 'format-message';
 import {
   builtInStringFormats,
   FormDialogProperty,
+  FormDialogPropertyKind,
   FormDialogPropertyPayload,
   IntegerPropertyPayload,
   NumberPropertyPayload,
   RefPropertyPayload,
-  FormDialogPropertyKind,
   StringPropertyPayload,
   TypedPropertyPayload,
 } from 'src/atoms/types';
 import { generateId } from 'src/utils/base';
+import { nameRegex } from 'src/utils/constants';
 
 export const getDefaultPayload = (kind: FormDialogPropertyKind) => {
   switch (kind) {
@@ -77,7 +78,7 @@ export const createSchemaStoreFromJson = (schemaName: string, jsonString: string
     const propertyType = propertyData?.type || 'ref';
     const array = propertyType === 'array';
     const payload = retrievePayload(propertyType, propertyData, array);
-    const kind = <FormDialogPropertyKind>(propertyType === 'array' ? payload.kind : propertyType);
+    const kind = <FormDialogPropertyKind>(propertyType === 'array' ? payload.kind || 'ref' : propertyType);
     const required = requiredArray.indexOf(name) !== -1;
     const examples = examplesRecord[name] || [];
 
@@ -261,7 +262,7 @@ export const validateSchemaPropertyStore = (property: FormDialogProperty) => {
     }
   }
 
-  return !!(payloadValid && property.name);
+  return !!(payloadValid && property.name && nameRegex.test(property.name));
 };
 
 export const getPropertyTypeDisplayName = (property: FormDialogProperty) => {

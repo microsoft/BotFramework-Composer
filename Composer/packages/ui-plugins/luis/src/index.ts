@@ -5,15 +5,20 @@ import { PluginConfig } from '@bfc/extension-client';
 import { SDKKinds } from '@bfc/shared';
 import formatMessage from 'format-message';
 
-import { LuisIntentEditor } from './LuisIntentEditor';
+import { LuisIntentEditor as LuIntentEditor } from './LuisIntentEditor';
 
 const config: PluginConfig = {
+  widgets: {
+    recognizer: {
+      LuIntentEditor,
+    },
+  },
   uiSchema: {
     [SDKKinds.LuisRecognizer]: {
       recognizer: {
         disabled: true,
         displayName: () => formatMessage('LUIS'),
-        intentEditor: LuisIntentEditor,
+        intentEditor: 'LuIntentEditor',
         isSelected: (data) => {
           return typeof data === 'string' && data.endsWith('.lu');
         },

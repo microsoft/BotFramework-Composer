@@ -11,19 +11,20 @@ const intent = {
   body: `- hi
 - hello
 - hiya
-- how are you? 
+- how are you?
 - how do you do?`,
 };
 
 const luOption = {
   fileId: 'Main',
   sectionId: 'Greeting',
+  luFeatures: {},
 };
 
 export default function App() {
   const [value, setValue] = useState(intent.body);
 
-  const onChange = value => {
+  const onChange = (value) => {
     setValue(value);
   };
 

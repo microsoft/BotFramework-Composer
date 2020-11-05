@@ -1,37 +1,42 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { BotIndexer } from '@bfc/indexers';
+import { BotAssets } from '@bfc/shared';
+import get from 'lodash/get';
 import { useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
-import get from 'lodash/get';
-import { BotIndexer } from '@bfc/indexers';
 
 import {
-  validateDialogSelectorFamily,
-  luFilesState,
-  lgFilesState,
   botDiagnosticsState,
+  botProjectFileState,
+  crossTrainConfigState,
+  dialogSchemasState,
+  formDialogSchemasSelectorFamily,
+  jsonSchemaFilesState,
+  lgFilesState,
+  luFilesState,
+  qnaFilesState,
   settingsState,
   skillManifestsState,
-  dialogSchemasState,
-  qnaFilesState,
-  botProjectFileState,
+  validateDialogsSelectorFamily,
 } from '../../recoilModel';
+import { recognizersSelectorFamily } from '../../recoilModel/selectors/recognizers';
 
+import { getReferredLuFiles } from './../../utils/luUtil';
 import {
-  Notification,
   DialogNotification,
-  SettingNotification,
-  LuNotification,
   LgNotification,
+  LuNotification,
+  Notification,
   QnANotification,
   ServerNotification,
+  SettingNotification,
   SkillNotification,
 } from './types';
-import { getReferredLuFiles } from './../../utils/luUtil';
 
 export default function useNotifications(projectId: string, filter?: string) {
-  const dialogs = useRecoilValue(validateDialogSelectorFamily(projectId));
+  const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
   const luFiles = useRecoilValue(luFilesState(projectId));
   const lgFiles = useRecoilValue(lgFilesState(projectId));
   const diagnostics = useRecoilValue(botDiagnosticsState(projectId));
@@ -39,9 +44,12 @@ export default function useNotifications(projectId: string, filter?: string) {
   const skillManifests = useRecoilValue(skillManifestsState(projectId));
   const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
+  const formDialogSchemas = useRecoilValue(formDialogSchemasSelectorFamily(projectId));
   const botProjectFile = useRecoilValue(botProjectFileState(projectId));
-
-  const botAssets = {
+  const jsonSchemaFiles = useRecoilValue(jsonSchemaFilesState(projectId));
+  const recognizers = useRecoilValue(recognizersSelectorFamily(projectId));
+  const crossTrainConfig = useRecoilValue(crossTrainConfigState(projectId));
+  const botAssets: BotAssets = {
     projectId,
     dialogs,
     luFiles,
@@ -50,7 +58,11 @@ export default function useNotifications(projectId: string, filter?: string) {
     skillManifests,
     setting,
     dialogSchemas,
+    formDialogSchemas,
     botProjectFile,
+    jsonSchemaFiles,
+    recognizers,
+    crossTrainConfig,
   };
 
   const memoized = useMemo(() => {
@@ -73,25 +85,25 @@ export default function useNotifications(projectId: string, filter?: string) {
     });
 
     dialogs.forEach((dialog) => {
-      dialog.diagnostics.map((diagnostic) => {
+      dialog.diagnostics.forEach((diagnostic) => {
         const location = `${dialog.id}.dialog`;
         notifications.push(new DialogNotification(projectId, dialog.id, location, diagnostic));
       });
     });
     getReferredLuFiles(luFiles, dialogs).forEach((lufile) => {
-      lufile.diagnostics.map((diagnostic) => {
+      lufile.diagnostics.forEach((diagnostic) => {
         const location = `${lufile.id}.lu`;
         notifications.push(new LuNotification(projectId, lufile.id, location, diagnostic, lufile, dialogs));
       });
     });
     lgFiles.forEach((lgFile) => {
-      lgFile.diagnostics.map((diagnostic) => {
+      lgFile.diagnostics.forEach((diagnostic) => {
         const location = `${lgFile.id}.lg`;
         notifications.push(new LgNotification(projectId, lgFile.id, location, diagnostic, lgFile, dialogs));
       });
     });
     qnaFiles.forEach((qnaFile) => {
-      get(qnaFile, 'diagnostics', []).map((diagnostic) => {
+      get(qnaFile, 'diagnostics', []).forEach((diagnostic) => {
         const location = `${qnaFile.id}.qna`;
         notifications.push(new QnANotification(projectId, qnaFile.id, location, diagnostic));
       });

@@ -116,6 +116,10 @@ export const targetSelected = css`
   font-size: ${FontSizes.small};
 `;
 
-export const customPublishUISurface = css`
-  min-height: 300px;
+export const defaultPublishSurface = css`
+  height: 230px;
+`;
+
+export const pvaPublishSurface = css`
+  height: 350px;
 `;

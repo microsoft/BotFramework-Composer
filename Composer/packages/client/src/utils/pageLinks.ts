@@ -5,7 +5,12 @@ import { ExtensionPageContribution } from '@bfc/extension-client';
 
 export type ExtensionPageConfig = ExtensionPageContribution & { id: string };
 
-export const topLinks = (projectId: string, openedDialogId: string, pluginPages: ExtensionPageConfig[]) => {
+export const topLinks = (
+  projectId: string,
+  openedDialogId: string,
+  pluginPages: ExtensionPageConfig[],
+  showFormDialog: boolean
+) => {
   const botLoaded = !!projectId;
   let links = [
     {
@@ -71,6 +76,17 @@ export const topLinks = (projectId: string, openedDialogId: string, pluginPages:
       exact: true,
       disabled: !botLoaded,
     },
+    ...(showFormDialog
+      ? [
+          {
+            to: `/bot/${projectId}/forms`,
+            iconName: 'Table',
+            labelName: formatMessage('Forms'),
+            exact: false,
+            disabled: !botLoaded,
+          },
+        ]
+      : []),
   ];
 
   if (process.env.COMPOSER_AUTH_PROVIDER === 'abs-h') {
@@ -80,11 +96,11 @@ export const topLinks = (projectId: string, openedDialogId: string, pluginPages:
   if (pluginPages.length > 0) {
     pluginPages.forEach((p) => {
       links.push({
-        to: `plugin/${p.id}/${p.bundleId}`,
+        to: `/bot/${projectId}/plugin/${p.id}/${p.bundleId}`,
         iconName: p.icon ?? 'StatusCircleQuestionMark',
         labelName: p.label,
         exact: true,
-        disabled: false,
+        disabled: !projectId,
       });
     });
   }
