@@ -27,7 +27,7 @@ import { attachLSPServer } from './utility/attachLSP';
 import log from './logger';
 import { setEnvDefault } from './utility/setEnvDefault';
 import { ElectronContext, setElectronContext } from './utility/electronContext';
-import { authService } from './services/auth';
+import { authService } from './services/auth/auth';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const session = require('express-session');

@@ -1,37 +1,27 @@
-import { v4 as uuid } from 'uuid';
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { AuthParameters } from '@botframework-composer/types';
 
-import { ElectronContext, useElectronContext } from '../utility/electronContext';
-import { isElectron } from '../utility/isElectron';
-import logger from '../logger';
+import logger from '../../logger';
+import { ElectronContext, useElectronContext } from '../../utility/electronContext';
+import { AuthConfig, AuthProvider } from './authProvider';
 
 const log = logger.extend('electron-auth-provider');
-
-abstract class AuthProvider {
-  constructor(protected config: OAuthConfig) {}
-
-  abstract async getAccessToken(params: AuthParameters): Promise<string>;
-}
 
 type TokenRecord = {
   expiryTime: number;
   accessToken: string;
 };
 
-type TokenCache = {
-  [credentials: string]: TokenRecord | undefined;
-};
+type TokenCache = Record<string, TokenRecord>;
 
-type OAuthConfig = {
-  redirectUri: string;
-};
-
-class ElectronAuthProvider extends AuthProvider {
+export class ElectronAuthProvider extends AuthProvider {
   private _electronContext: ElectronContext | undefined;
   private tokenRefreshFactor: number = 0.75; // refresh the token after 75% of the expiry time has passed
   private tokenCache: TokenCache;
 
-  constructor(config: OAuthConfig) {
+  constructor(config: AuthConfig) {
     super(config);
     this.tokenCache = {};
     log('Initialized.');
@@ -121,47 +111,3 @@ class ElectronAuthProvider extends AuthProvider {
     return params.targetResource || '';
   }
 }
-
-class WebAuthProvider extends AuthProvider {
-  constructor(config: OAuthConfig) {
-    super(config);
-  }
-
-  // TODO (toanzian / ccastro): implement
-  async getAccessToken(params: AuthParameters): Promise<string> {
-    throw new Error(
-      'WebAuthProvider has not been implemented yet. Implicit auth flow currently only works in Electron.'
-    );
-  }
-}
-
-class AuthService {
-  private provider: AuthProvider;
-  private _csrfToken: string;
-
-  constructor() {
-    if (isElectron) {
-      // desktop scenario
-      this.provider = new ElectronAuthProvider({ redirectUri: 'bfcomposer://oauth' });
-    } else {
-      // hosted / web scenario
-      this.provider = new WebAuthProvider({ redirectUri: 'bfcomposer://oauth' });
-    }
-    // generate anti-csrf token in production environment
-    if (process.env.NODE_ENV === 'production') {
-      this._csrfToken = uuid();
-    } else {
-      this._csrfToken = '';
-    }
-  }
-
-  async getAccessToken(params: AuthParameters): Promise<string> {
-    return this.provider.getAccessToken(params);
-  }
-
-  get csrfToken(): string {
-    return this._csrfToken;
-  }
-}
-
-export const authService = new AuthService();

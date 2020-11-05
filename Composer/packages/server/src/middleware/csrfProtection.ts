@@ -3,7 +3,7 @@
 
 import { NextFunction, Request, Response } from 'express';
 
-import { authService } from '../services/auth';
+import { authService } from '../services/auth/auth';
 
 /**
  * Middleware that verifies if the server-generated CSRF token is sent with the incoming request via header.
