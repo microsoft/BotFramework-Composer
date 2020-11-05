@@ -58,6 +58,7 @@ export const useRouterCache = (to: string) => {
 
   useEffect(() => {
     routerCache.cleanAll();
+    setState({});
   }, [projectId]);
 
   useEffect(() => {
