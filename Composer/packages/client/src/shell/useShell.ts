@@ -58,6 +58,7 @@ const stubDialog = (): DialogInfo => ({
   triggers: [],
   intentTriggers: [],
   skills: [],
+  luProvider: '',
   isFormDialog: false,
 });
 
@@ -81,7 +82,6 @@ export function useShell(source: EventSource, projectId: string): Shell {
   const settings = useRecoilValue(settingsState(projectId));
   const flowZoomRate = useRecoilValue(rateInfoState);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
-
   const userSettings = useRecoilValue(userSettingsState);
   const clipboardActions = useRecoilValue(clipboardActionsState);
   const {
@@ -100,6 +100,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
     displayManifestModal,
     updateSkill,
     updateZoomRate,
+    updateRecognizer,
   } = useRecoilValue(dispatcherState);
 
   const lgApi = useLgApi(projectId);
@@ -197,6 +198,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
         commitChanges();
       });
     },
+    updateRecognizer,
     updateRegExIntent: updateRegExIntentHandler,
     renameRegExIntent: renameRegExIntentHandler,
     updateIntentTrigger: updateIntentTriggerHandler,

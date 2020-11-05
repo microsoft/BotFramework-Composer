@@ -45,6 +45,7 @@ const emptyDialog: DialogInfo = {
   triggers: [],
   intentTriggers: [],
   skills: [],
+  luProvider: '',
   isFormDialog: false,
 };
 type dialogStateParams = { projectId: string; dialogId: string };
@@ -155,7 +156,7 @@ export const recognizerIdsState = atomFamily<string[], string>({
 export const recognizerState = atomFamily<RecognizerFile, { projectId: string; id: string }>({
   key: getFullyQualifiedKey('recognizer'),
   default: () => {
-    return { id: '', content: {}, lastModified: '' };
+    return {} as RecognizerFile;
   },
 });
 
