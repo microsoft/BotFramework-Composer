@@ -95,6 +95,7 @@ export type TreeLink = {
   skillId?: string;
   dialogId?: string;
   trigger?: number;
+  parentLink?: TreeLink;
 };
 
 export type TreeMenuItem = {
@@ -274,7 +275,7 @@ export const ProjectTree: React.FC<Props> = ({
       .map((diag) => diag.message)
       .join(',');
 
-    const link: TreeLink = {
+    const dialogLink: TreeLink = {
       dialogId: dialog.id,
       displayName: dialog.displayName,
       isRoot: dialog.isRoot,
@@ -287,53 +288,56 @@ export const ProjectTree: React.FC<Props> = ({
     const isFormDialog = dialogIsFormDialog(dialog);
     const showEditSchema = formDialogSchemaExists(skillId, dialog);
 
-    return (
-      <span
-        key={dialog.id}
-        ref={dialog.isRoot ? addMainDialogRef : null}
-        css={css`
-          margin-top: -6px;
-          width: 100%;
-          label: dialog-header;
-        `}
-        role="grid"
-      >
-        <TreeItem
-          showProps
-          forceIndent={showTriggers ? 0 : SUMMARY_ARROW_SPACE}
-          icon={isFormDialog ? icons.FORM_DIALOG : icons.DIALOG}
-          isActive={doesLinkMatch(link, selectedLink)}
-          link={link}
-          menu={[
-            ...(!dialog.isRoot
-              ? [
-                  {
-                    label: formatMessage('Remove this dialog'),
-                    icon: 'Delete',
-                    onClick: (link) => {
-                      onDeleteDialog(link.dialogId ?? '');
+    return {
+      summaryElement: (
+        <span
+          key={dialog.id}
+          ref={dialog.isRoot ? addMainDialogRef : null}
+          css={css`
+            margin-top: -6px;
+            width: 100%;
+            label: dialog-header;
+          `}
+          role="grid"
+        >
+          <TreeItem
+            showProps
+            forceIndent={showTriggers ? 0 : SUMMARY_ARROW_SPACE}
+            icon={isFormDialog ? icons.FORM_DIALOG : icons.DIALOG}
+            isActive={doesLinkMatch(dialogLink, selectedLink)}
+            link={dialogLink}
+            menu={[
+              ...(!dialog.isRoot
+                ? [
+                    {
+                      label: formatMessage('Remove this dialog'),
+                      icon: 'Delete',
+                      onClick: (link) => {
+                        onDeleteDialog(link.dialogId ?? '');
+                      },
                     },
-                  },
-                ]
-              : []),
-            ...(showEditSchema
-              ? [
-                  {
-                    label: formatMessage('Edit schema'),
-                    icon: 'Edit',
-                    onClick: (link) =>
-                      navigateToFormDialogSchema({ projectId: link.skillId, schemaId: link.dialogName }),
-                  },
-                ]
-              : []),
-          ]}
-          onSelect={handleOnSelect}
-        />
-      </span>
-    );
+                  ]
+                : []),
+              ...(showEditSchema
+                ? [
+                    {
+                      label: formatMessage('Edit schema'),
+                      icon: 'Edit',
+                      onClick: (link) =>
+                        navigateToFormDialogSchema({ projectId: link.skillId, schemaId: link.dialogName }),
+                    },
+                  ]
+                : []),
+            ]}
+            onSelect={handleOnSelect}
+          />
+        </span>
+      ),
+      dialogLink,
+    };
   };
 
-  const renderTrigger = (item: any, dialog: DialogInfo, projectId: string): React.ReactNode => {
+  const renderTrigger = (item: any, dialog: DialogInfo, projectId: string, dialogLink?: TreeLink): React.ReactNode => {
     const link: TreeLink = {
       projectId: rootProjectId,
       skillId: projectId === rootProjectId ? undefined : projectId,
@@ -343,6 +347,7 @@ export const ProjectTree: React.FC<Props> = ({
       warningContent: item.warningContent,
       errorContent: item.errorContent,
       isRoot: false,
+      parentLink: dialogLink,
     };
 
     return (
@@ -377,7 +382,7 @@ export const ProjectTree: React.FC<Props> = ({
     return scope.toLowerCase().includes(filter.toLowerCase());
   };
 
-  const renderTriggerList = (triggers: ITrigger[], dialog: DialogInfo, projectId: string) => {
+  const renderTriggerList = (triggers: ITrigger[], dialog: DialogInfo, projectId: string, dialogLink?: TreeLink) => {
     return triggers
       .filter((tr) => filterMatch(dialog.displayName) || filterMatch(getTriggerName(tr)))
       .map((tr) => {
@@ -389,7 +394,8 @@ export const ProjectTree: React.FC<Props> = ({
         return renderTrigger(
           { ...tr, index, displayName: getTriggerName(tr), warningContent, errorContent },
           dialog,
-          projectId
+          projectId,
+          dialogLink
         );
       });
   };
@@ -451,10 +457,10 @@ export const ProjectTree: React.FC<Props> = ({
     });
   };
 
-  const renderDialogTriggers = (dialog: DialogInfo, projectId: string, startDepth: number) => {
+  const renderDialogTriggers = (dialog: DialogInfo, projectId: string, startDepth: number, dialogLink?: TreeLink) => {
     return dialogIsFormDialog(dialog)
       ? renderDialogTriggersByProperty(dialog, projectId, startDepth)
-      : renderTriggerList(dialog.triggers, dialog, projectId);
+      : renderTriggerList(dialog.triggers, dialog, projectId, dialogLink);
   };
 
   const createDetailsTree = (bot: BotInProject, startDepth: number) => {
@@ -471,14 +477,15 @@ export const ProjectTree: React.FC<Props> = ({
 
     if (showTriggers) {
       return filteredDialogs.map((dialog: DialogInfo) => {
+        const { summaryElement, dialogLink } = renderDialogHeader(projectId, dialog);
         return (
           <ExpandableNode
             key={dialog.id}
             depth={startDepth}
             detailsRef={dialog.isRoot ? addMainDialogRef : undefined}
-            summary={renderDialogHeader(projectId, dialog)}
+            summary={summaryElement}
           >
-            <div>{renderDialogTriggers(dialog, projectId, startDepth + 1)}</div>
+            <div>{renderDialogTriggers(dialog, projectId, startDepth + 1, dialogLink)}</div>
           </ExpandableNode>
         );
       });

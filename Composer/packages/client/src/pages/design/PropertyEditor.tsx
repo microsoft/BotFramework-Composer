@@ -104,7 +104,7 @@ const PropertyEditor: React.FC = () => {
       if (!isEqual(dialogData, localData)) {
         shellApi.saveData(localData, focusedSteps[0]);
       } else {
-        shellApi.commitChanges();
+        shellApi.commitChanges?.();
       }
     }, 300);
 
