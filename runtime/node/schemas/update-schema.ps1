@@ -8,7 +8,7 @@ Write-Host "Running schema merge on nodejs runtime."
 if (Test-Path $SCHEMA_FILE -PathType leaf) { Move-Item -Force -Path $SCHEMA_FILE -Destination $BACKUP_SCHEMA_FILE }
 if (Test-Path $UISCHEMA_FILE -PathType leaf) { Move-Item -Force -Path $UISCHEMA_FILE -Destination $BACKUP_UISCHEMA_FILE }
 
-bf dialog:merge "*.schema" "!sdk-backup.schema" "*.uischema" "!sdk-backup.uischema" "!sdk.override.uischema" "../runtime/package.json" -o $SCHEMA_FILE
+bf dialog:merge "*.schema" "!sdk-backup.schema" "*.uischema" "!sdk-backup.uischema" "!sdk.override.uischema" "../runtime/package.json" --imports="../dialogs/imported" -o $SCHEMA_FILE
 
 if (Test-Path $SCHEMA_FILE -PathType leaf)
 {
