@@ -227,7 +227,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         },
         onClick: () => navTo(projectId, dialogId),
       });
-      if (triggerIndex != null) {
+      if (triggerIndex != null && trigger != null) {
         breadcrumbArray.push({
           key: 'trigger-' + triggerIndex,
           label: trigger.$designer.name || getFriendlyName(trigger),
