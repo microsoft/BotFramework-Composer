@@ -4,6 +4,7 @@
 import { promisify } from 'util';
 import fs from 'fs';
 
+import has from 'lodash/has';
 import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
 import {
@@ -92,6 +93,12 @@ export class BotProject implements IBotProject {
     });
 
     return files;
+  }
+
+  public get rootDialogId() {
+    const mainDialogFile = this.dialogFiles.find((file) => !file.relativePath.includes('/'));
+
+    return Path.basename(mainDialogFile?.name ?? '', '.dialog');
   }
 
   public get formDialogSchemaFiles() {
@@ -187,6 +194,7 @@ export class BotProject implements IBotProject {
       skills: this.skills,
       diagnostics: this.diagnostics,
       settings: this.settings,
+      filesWithoutRecognizers: Array.from(this.files.values()).filter(({ name }) => !isRecognizer(name)),
     };
   };
 
@@ -196,6 +204,15 @@ export class BotProject implements IBotProject {
 
   public getEnvSettings = async (obfuscate: boolean) => {
     const settings = await this.settingManager.get(obfuscate);
+
+    // Resolve relative path for custom runtime if the path is relative
+    if (settings?.runtime?.customRuntime && settings.runtime.path && !Path.isAbsolute(settings.runtime.path)) {
+      const absolutePath = Path.resolve(this.dir, 'settings', settings.runtime.path);
+      if (fs.existsSync(absolutePath)) {
+        settings.runtime.path = absolutePath;
+        await this.updateEnvSettings(settings);
+      }
+    }
 
     // fix old bot have no language settings
     if (!settings?.defaultLanguage) {
@@ -350,24 +367,20 @@ export class BotProject implements IBotProject {
   public updateBotInfo = async (name: string, description: string, preserveRoot = false) => {
     const mainDialogFile = this.dialogFiles.find((file) => !file.relativePath.includes('/'));
     if (!mainDialogFile) return;
-    const botName = name.trim().toLowerCase();
+
+    const botName = name.trim();
+
     const { relativePath } = mainDialogFile;
     const content = JSON.parse(mainDialogFile.content);
-    if (!content.$designer) return;
-    const oldDesigner = content.$designer;
-    let newDesigner;
-    if (oldDesigner && oldDesigner.id) {
-      newDesigner = {
-        ...oldDesigner,
-        name,
-        description,
-      };
-    } else {
-      newDesigner = getNewDesigner(name, description);
-    }
-    content.$designer = newDesigner;
-    content.id = name;
-    const updatedContent = autofixReferInDialog(botName, JSON.stringify(content, null, 2));
+
+    const { $designer } = content;
+
+    content.$designer = $designer?.id ? { ...$designer, name, description } : getNewDesigner(botName, description);
+
+    content.id = preserveRoot ? Path.basename(mainDialogFile.name, '.dialog') : botName;
+
+    const updatedContent = autofixReferInDialog(content.id, JSON.stringify(content, null, 2));
+
     await this._updateFile(relativePath, updatedContent);
 
     for (const botProjectFile of this.botProjectFiles) {
@@ -434,7 +447,14 @@ export class BotProject implements IBotProject {
     this._validateFileContent(name, content);
     const botName = this.name;
     const defaultLocale = this.settings?.defaultLanguage || defaultLanguage;
-    const relativePath = defaultFilePath(botName, defaultLocale, filename);
+
+    // find created file belong to which dialog, all resources should be writed to <dialog>/
+    const dialogId = name.split('.')[0];
+    const dialogFile = this.files.get(`${dialogId}.dialog`);
+    const endpoint = dialogFile ? Path.dirname(dialogFile.relativePath) : '';
+    const rootDialogId = this.rootDialogId;
+
+    const relativePath = defaultFilePath(botName, defaultLocale, filename, { endpoint, rootDialogId });
     const file = this.files.get(filename);
     if (file) {
       throw new Error(`${filename} dialog already exist`);
@@ -533,10 +553,10 @@ export class BotProject implements IBotProject {
 
   public async generateDialog(name: string, templateDirs?: string[]) {
     const defaultLocale = this.settings?.defaultLanguage || defaultLanguage;
-    const relativePath = defaultFilePath(this.name, defaultLocale, `${name}${FileExtensions.FormDialogSchema}`);
+    const relativePath = defaultFilePath(this.name, defaultLocale, `${name}${FileExtensions.FormDialogSchema}`, {});
     const schemaPath = Path.resolve(this.dir, relativePath);
 
-    const dialogPath = defaultFilePath(this.name, defaultLocale, `${name}${FileExtensions.Dialog}`);
+    const dialogPath = defaultFilePath(this.name, defaultLocale, `${name}${FileExtensions.Dialog}`, {});
     const outDir = Path.dirname(Path.resolve(this.dir, dialogPath));
 
     const feedback = (type: FeedbackType, message: string): void => {
@@ -583,7 +603,7 @@ export class BotProject implements IBotProject {
 
   public async deleteFormDialog(dialogId: string) {
     const defaultLocale = this.settings?.defaultLanguage || defaultLanguage;
-    const dialogPath = defaultFilePath(this.name, defaultLocale, `${dialogId}${FileExtensions.Dialog}`);
+    const dialogPath = defaultFilePath(this.name, defaultLocale, `${dialogId}${FileExtensions.Dialog}`, {});
     const dirToDelete = Path.dirname(Path.resolve(this.dir, dialogPath));
 
     // I check that the path is longer 3 to avoid deleting a drive and all its contents.
@@ -788,11 +808,22 @@ export class BotProject implements IBotProject {
 
   // migration: create qna files for old bots
   private _createQnAFilesForOldBot = async (files: Map<string, FileInfo>) => {
+    // flowing migration scripts depends on files;
+    this.files = new Map<string, FileInfo>([...files]);
     const dialogFiles: FileInfo[] = [];
     const qnaFiles: FileInfo[] = [];
     files.forEach((file) => {
       if (file.name.endsWith('.dialog')) {
-        dialogFiles.push(file);
+        try {
+          // filter form dialog generated file.
+          const dialogJson = JSON.parse(file.content);
+          const isFormDialog = has(dialogJson, 'schema');
+          if (!isFormDialog) {
+            dialogFiles.push(file);
+          }
+        } catch (_e) {
+          // ignore
+        }
       }
       if (file.name.endsWith('.qna')) {
         qnaFiles.push(file);

@@ -16,7 +16,6 @@ import {
   clipboardActionsState,
   schemasState,
   validateDialogsSelectorFamily,
-  breadcrumbState,
   focusPathState,
   skillsState,
   localeState,
@@ -58,6 +57,7 @@ const stubDialog = (): DialogInfo => ({
   triggers: [],
   intentTriggers: [],
   skills: [],
+  isFormDialog: false,
 });
 
 export function useShell(source: EventSource, projectId: string): Shell {
@@ -65,7 +65,6 @@ export function useShell(source: EventSource, projectId: string): Shell {
 
   const schemas = useRecoilValue(schemasState(projectId));
   const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
-  const breadcrumb = useRecoilValue(breadcrumbState(projectId));
   const focusPath = useRecoilValue(focusPathState(projectId));
   const skills = useRecoilValue(skillsState(projectId));
   const locale = useRecoilValue(localeState(projectId));
@@ -137,9 +136,9 @@ export function useShell(source: EventSource, projectId: string): Shell {
     updateDialog({ id, content: newDialog.content, projectId });
   }
 
-  function navigationTo(path) {
+  function navigationTo(path, rest?) {
     if (rootBotProjectId == null) return;
-    navTo(projectId, path, breadcrumb);
+    navTo(projectId, path, rest);
   }
 
   function focusEvent(subPath) {
@@ -193,8 +192,9 @@ export function useShell(source: EventSource, projectId: string): Shell {
         projectId,
       };
       dialogMapRef.current[dialogId] = updatedDialog;
-      updateDialog(payload);
-      commitChanges();
+      return updateDialog(payload).then(() => {
+        commitChanges();
+      });
     },
     updateRegExIntent: updateRegExIntentHandler,
     renameRegExIntent: renameRegExIntentHandler,

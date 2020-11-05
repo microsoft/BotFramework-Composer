@@ -127,7 +127,7 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
      */
     private init = async (project: any, srcTemplate: string, resourcekey: string, runtime: any) => {
       // point to the declarative assets (possibly in remote storage)
-      const botFiles = project.getProject().files;
+      const botFiles = project.getProject().filesWithoutRecognizers;
       const botFolder = this.getBotFolder(resourcekey, this.mode);
       const runtimeFolder = this.getRuntimeFolder(resourcekey);
 
