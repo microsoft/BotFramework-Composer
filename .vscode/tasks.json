@@ -9,8 +9,15 @@
       "command": "yarn build",
       "options": {
         "cwd": "Composer/packages/server"
-      },
-      "problemMatcher": []
+      }
+    },
+    {
+      "label": "electron: build",
+      "type": "shell",
+      "command": "yarn build",
+      "options": {
+        "cwd": "Composer/packages/electron-server"
+      }
     }
   ]
 }

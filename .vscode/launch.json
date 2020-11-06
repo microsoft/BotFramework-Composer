@@ -87,7 +87,8 @@
         "NODE_ENV": "development",
         "DEBUG": "composer*"
       },
-      "outputCapture": "std"
+      "outputCapture": "std",
+      "preLaunchTask": "electron: build"
     },
     {
       "name": "Debug current jest test",
