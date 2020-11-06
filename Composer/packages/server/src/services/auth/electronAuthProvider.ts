@@ -5,6 +5,7 @@ import { AuthParameters } from '@botframework-composer/types';
 
 import logger from '../../logger';
 import { ElectronContext, useElectronContext } from '../../utility/electronContext';
+
 import { AuthConfig, AuthProvider } from './authProvider';
 
 const log = logger.extend('electron-auth-provider');
@@ -18,7 +19,7 @@ type TokenCache = Record<string, TokenRecord>;
 
 export class ElectronAuthProvider extends AuthProvider {
   private _electronContext: ElectronContext | undefined;
-  private tokenRefreshFactor: number = 0.75; // refresh the token after 75% of the expiry time has passed
+  private tokenRefreshFactor = 0.75; // refresh the token after 75% of the expiry time has passed
   private tokenCache: TokenCache;
 
   constructor(config: AuthConfig) {
@@ -99,7 +100,7 @@ export class ElectronAuthProvider extends AuthProvider {
     const { getAccessToken } = this.electronContext;
     const { targetResource = '' } = params;
     const cachedToken = this.tokenCache[this.getTokenHash(params)];
-    if (!!cachedToken) {
+    if (cachedToken) {
       const { accessToken, acquiredAt, expiryTime } = await getAccessToken({ targetResource });
       this.cacheTokens({ accessToken, acquiredAt, expiryTime }, params);
       log('Access token refreshed.');

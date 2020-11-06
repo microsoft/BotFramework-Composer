@@ -10,5 +10,5 @@
     }
   },
   // include scripts to geting proper linting
-  "include": ["src/**/*.ts", "scripts/*.js"]
+  "include": ["src/**/*.ts", "scripts/*.js", "src/preload.js"]
 }

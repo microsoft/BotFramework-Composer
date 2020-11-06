@@ -1,8 +1,12 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { v4 as uuid } from 'uuid';
 import { AuthParameters } from '@botframework-composer/types';
 
 import { isElectron } from '../../utility/isElectron';
 import logger from '../../logger';
+
 import { AuthProvider } from './authProvider';
 import { ElectronAuthProvider } from './electronAuthProvider';
 import { WebAuthProvider } from './webAuthProvider';

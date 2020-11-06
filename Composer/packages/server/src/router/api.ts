@@ -13,10 +13,10 @@ import { EjectController } from '../controllers/eject';
 import { FormDialogController } from '../controllers/formDialog';
 import * as ExtensionsController from '../controllers/extensions';
 import { FeatureFlagController } from '../controllers/featureFlags';
-
-import { UtilitiesController } from './../controllers/utilities';
 import { AuthController } from '../controllers/auth';
 import { csrfProtection } from '../middleware/csrfProtection';
+
+import { UtilitiesController } from './../controllers/utilities';
 
 const router: Router = express.Router({});
 

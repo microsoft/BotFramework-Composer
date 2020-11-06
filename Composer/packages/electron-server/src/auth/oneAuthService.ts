@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import path from 'path';
-import { ElectronAuthParameters } from '@botframework-composer/types';
 
+import { ElectronAuthParameters } from '@botframework-composer/types';
 import { app } from 'electron';
 
 import ElectronWindow from '../electronWindow';
@@ -168,6 +168,7 @@ class OneAuthInstance extends OneAuthBase {
   }
 
   /** Temporary workaround on Mac until we figure out how to enable keychain access on a dev build. */
+  // eslint-disable-next-line
   private async TEMPORARY_getAccessTokenOnMacDev(
     params: ElectronAuthParameters
   ): Promise<{ accessToken: string; acquiredAt: number; expiryTime: number }> {

@@ -3,8 +3,9 @@
 
 import { ElectronAuthParameters } from '@botframework-composer/types';
 
-import { OneAuthBase } from './oneAuthBase';
 import logger from '../utility/logger';
+
+import { OneAuthBase } from './oneAuthBase';
 
 const log = logger.extend('one-auth-shim');
 

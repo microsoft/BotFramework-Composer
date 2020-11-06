@@ -1,4 +1,8 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { Request, Response } from 'express';
+
 import { authService } from '../services/auth/auth';
 import { isElectron } from '../utility/isElectron';
 

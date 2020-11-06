@@ -9,7 +9,7 @@ export type ElectronContext = {
   ) => Promise<{ accessToken: string; acquiredAt: number; expiryTime: number }>;
 };
 
-var context;
+let context;
 
 export const useElectronContext = (): ElectronContext => context;
 
