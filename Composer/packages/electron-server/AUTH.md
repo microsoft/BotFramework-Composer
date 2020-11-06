@@ -21,11 +21,6 @@ When building Composer from source, in order to leverage the OneAuth library you
 
 Depending on your OS (Mac vs. Windows), you will need to install the `oneauth-mac` or `oneauth-win64` modules respectively.
 
-There are two ways of doing this:
-
-- using the `installOneAuth.js` script to download and copy the library to the correct folder
-- downloading the library manually from the OneAuth npm feed, and then copying it to the correct folder
-
 ### Using the `installOneAuth.js` script
 
 1. Set `npm_config_registry` to `https://office.pkgs.visualstudio.com/_packaging/OneAuth/npm/registry/`
@@ -34,13 +29,3 @@ There are two ways of doing this:
 1. Run `node scripts/installOneAuth.js` from `/electron-server/`
 
 There should now be a `/electron-server/oneauth-temp/` directory containing the contents of the OneAuth module which will be called by Composer assuming you set the `COMPOSER_ENABLE_ONEAUTH` environment variable.
-
-### Manually downloading and installing the module
-
-1. Download the appropriate library for your OS (`oneauth-win64` or `oneauth-mac`) from [the OneAuth Azure DevOps feed.](https://office.visualstudio.com/OneAuth/_packaging?_a=feed&feed=OneAuth%40Local)
-1. Create a directory named `oneauth-temp` inside of `/electron-server/`
-1. Drag **the contents of the module** you downloaded into `/oneauth-temp/`.
-Make sure that the folder structure does not look like this: `/oneauth-temp/oneauth-[win64 | mac]/`. Do not copy the entire folder.
-
-There should now be a `/electron-server/oneauth-temp/` directory containing the contents of the OneAuth module which will be called by Composer assuming you set the `COMPOSER_ENABLE_ONEAUTH` environment variable.
-
