@@ -9,6 +9,10 @@
       "@src/*": ["src/*"]
     }
   },
-  // include scripts to geting proper linting
-  "include": ["src/**/*.ts", "scripts/*.js", "src/preload.js"]
+  "include": [
+    "src/**/*.ts",
+    "scripts/*.js", // include scripts to geting proper linting
+    "__tests__", // intellisense
+    "src/preload.js"
+  ]
 }
