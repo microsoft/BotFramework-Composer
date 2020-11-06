@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 import { selectorFamily } from 'recoil';
 
-import { canRedoState, canUndoState } from './../undo/history';
+import { canRedoState, canUndoState } from '../atoms/botState';
 
 export const undoStatusSelectorFamily = selectorFamily<[boolean, boolean], string>({
   key: 'undoStatus',

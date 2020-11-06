@@ -18,7 +18,7 @@ import { encodeArrayPathToDesignerPath } from '../../utils/convertUtils/designer
 import { dialogsSelectorFamily } from '../selectors';
 
 import { rootBotProjectIdSelector } from './../selectors/project';
-import { designPageLocationState } from './../atoms';
+import { canRedoState, canUndoState, designPageLocationState } from './../atoms';
 import { trackedAtoms, AtomAssetsMap } from './trackedAtoms';
 import UndoHistory from './undoHistory';
 
@@ -32,18 +32,6 @@ type IUndoRedo = {
 export const undoFunctionState = atomFamily<IUndoRedo, string>({
   key: 'undoFunction',
   default: {} as IUndoRedo,
-  dangerouslyAllowMutability: true,
-});
-
-export const canUndoState = atomFamily<boolean, string>({
-  key: 'canUndoState',
-  default: false,
-  dangerouslyAllowMutability: true,
-});
-
-export const canRedoState = atomFamily<boolean, string>({
-  key: 'canRedoState',
-  default: false,
   dangerouslyAllowMutability: true,
 });
 
