@@ -881,9 +881,9 @@
     js-tokens "^4.0.0"
 
 "@babel/parser@^7.0.0", "@babel/parser@^7.1.0", "@babel/parser@^7.10.4", "@babel/parser@^7.10.5", "@babel/parser@^7.11.5", "@babel/parser@^7.2.2", "@babel/parser@^7.3.4", "@babel/parser@^7.4.0", "@babel/parser@^7.7.0", "@babel/parser@^7.7.4", "@babel/parser@^7.7.5", "@babel/parser@^7.8.6", "@babel/parser@^7.9.0", "@babel/parser@^7.9.6":
-  version "7.12.3"
-  resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.12.3.tgz#a305415ebe7a6c7023b40b5122a0662d928334cd"
-  integrity sha512-kFsOS0IbsuhO5ojF8Hc8z/8vEIOkylVBrjiZUbLTE3XFe0Qi+uu6HjzQixkFaqr0ZPAMZcBVxEwmsnsLPZ2Xsw==
+  version "7.12.5"
+  resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.12.5.tgz#b4af32ddd473c0bfa643bd7ff0728b8e71b81ea0"
+  integrity sha512-FVM6RZQ0mn2KCf1VUED7KepYeUWoVShczewOCfm3nzoBybaih51h+sYVVGthW9M6lPByEPTQf+xm27PBdlpwmQ==
 
 "@babel/plugin-proposal-async-generator-functions@^7.2.0":
   version "7.2.0"
@@ -2980,10 +2980,10 @@
     fs-extra "^7.0.1"
     tslib "~1.10.0"
 
-"@microsoft/bf-dispatcher@4.11.0-beta.20201105.0cc03df":
-  version "4.11.0-beta.20201105.0cc03df"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-dispatcher/-/bf-dispatcher-4.11.0-beta.20201105.0cc03df.tgz#def11616cb03212444e934dc17aacfcda731c25e"
-  integrity sha512-m3lVnT8uH0nSGVt8m4Enm/gF1vsp7eqqA/g4NCGGiYfChwIMBjTwErOzITTHn1Cwz4/ztUw3/Bc4tTXuuOjypQ==
+"@microsoft/bf-dispatcher@4.11.0-beta.20201106.87dcae0":
+  version "4.11.0-beta.20201106.87dcae0"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-dispatcher/-/bf-dispatcher-4.11.0-beta.20201106.87dcae0.tgz#6ac40eed6724e4edf2a8be4ce18783c2ced72922"
+  integrity sha512-uLG9I5HQxaSXU7qJcd6qvz7R36bXYCWxuSWSSbtJ557rI78Gl8Zj8nJdZf2///12njCWuihi6HpzW11DRyHw7A==
   dependencies:
     "@microsoft/bf-lu" next
     "@oclif/command" "~1.5.19"
@@ -3090,19 +3090,19 @@
     semver "^5.5.1"
     tslib "^2.0.3"
 
-"@microsoft/bf-orchestrator@^4.11.0-beta.20201105.0cc03df":
-  version "4.11.0-beta.20201105.0cc03df"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-orchestrator/-/bf-orchestrator-4.11.0-beta.20201105.0cc03df.tgz#0f3490539e6e3d3cf0b4fab2cb50c58ccbbda1c8"
-  integrity sha512-+zevlBLcl1Yh62ZqbUgEN5yHPMiMg3DtDPerfyZlyR8BJqP8z6y9+8ME+tVayQ0WcAq0TVMwr3eaMVNNM6WIhA==
+"@microsoft/bf-orchestrator@^4.11.0-beta.20201106.87dcae0":
+  version "4.11.0-beta.20201106.87dcae0"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-orchestrator/-/bf-orchestrator-4.11.0-beta.20201106.87dcae0.tgz#aed3f5913988afb60451f7fbb959e1f8650a9de2"
+  integrity sha512-004TR6N8bZ9SjN4MHBgImUDsXSaDbn4rvihTRZC+DXd9EDfLStO9Y4hdLyzZKM3IfcpB+toLeiMBx7qXaQ4IQw==
   dependencies:
-    "@microsoft/bf-dispatcher" "4.11.0-beta.20201105.0cc03df"
+    "@microsoft/bf-dispatcher" "4.11.0-beta.20201106.87dcae0"
     "@microsoft/bf-lu" next
     "@types/fs-extra" "~8.1.0"
     "@types/node-fetch" "~2.5.5"
     fast-text-encoding "^1.0.3"
     fs-extra "~9.0.0"
     node-fetch "~2.6.0"
-    orchestrator-core "4.11.0-beta.0"
+    orchestrator-core "4.11.0-beta.1"
     read-text-file "~1.1.0"
     tslib "^1.10.0"
     unzip-stream "^0.3.1"
@@ -14823,10 +14823,10 @@ optionator@^0.9.1:
     type-check "^0.4.0"
     word-wrap "^1.2.3"
 
-orchestrator-core@4.11.0-beta.0:
-  version "4.11.0-beta.0"
-  resolved "https://registry.yarnpkg.com/orchestrator-core/-/orchestrator-core-4.11.0-beta.0.tgz#f36c567f4559243b5dc79e8a67349da08355633b"
-  integrity sha512-IvjQ7xKREyTENtOdfZ4C+jT7Sq4m51od3IvoZKTlXwJGvBrP9L3enFLiWz5n4NyeaH0H7XlNhJhTRTvOesNvGQ==
+orchestrator-core@4.11.0-beta.1:
+  version "4.11.0-beta.1"
+  resolved "https://registry.yarnpkg.com/orchestrator-core/-/orchestrator-core-4.11.0-beta.1.tgz#d85b6497dc2c9907bbaf3c026c01fa6c8620c096"
+  integrity sha512-NeUJ2QdmaiNe0spDaJjA4KPgrvvmYC+Wa3ffAOE8X89rew5zLePL8jr9SoGTS2YK8DT6++etG6HTGBra5SoCng==
   dependencies:
     bindings "1.2.1"
     node-addon-api "^3.0.0"
