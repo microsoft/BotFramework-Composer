@@ -173,7 +173,7 @@
 "@bfc/indexers@../../Composer/packages/lib/indexers":
   version "0.0.0"
   dependencies:
-    "@microsoft/bf-lu" "^4.11.0-dev.20201013.7ccb128"
+    "@microsoft/bf-lu" "^4.11.0-rc.20201030.a9f9b96"
     adaptive-expressions "^4.11.0-dev.20201013.d5458bf"
     botbuilder-lg "4.11.0-dev.20201010.6e4a99e"
     lodash "^4.17.19"
@@ -184,6 +184,7 @@
     "@botframework-composer/types" "*"
     format-message "6.2.3"
     json-schema "^0.2.5"
+    multimatch "^5.0.0"
     nanoid "^3.1.3"
     nanoid-dictionary "^3.0.0"
 
@@ -255,10 +256,10 @@
     semver "^5.5.1"
     tslib "^1.10.0"
 
-"@microsoft/bf-lu@^4.11.0-dev.20201013.7ccb128":
-  version "4.11.0-dev.20201014.d8a6b54"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.11.0-dev.20201014.d8a6b54.tgz#59bdb6e94e54307f76ccadd606ca9e61b6ee4aed"
-  integrity sha512-3iTq2YSXlQaxShepP/Hu393iuyAAOsAg0IGqt88Hhm+1QhT0WJeuqxzYQeZHYitxJrpEcWfN9/PsoCkBqDEsgw==
+"@microsoft/bf-lu@^4.11.0-rc.20201030.a9f9b96":
+  version "4.11.0-rc.20201030.a9f9b96"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.11.0-rc.20201030.a9f9b96.tgz#9fcb2a18d66bcef74eabc98f06df4574215c402f"
+  integrity sha1-n8sqGNZrzvdOq8mPBt9FdCFcQC8=
   dependencies:
     "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
     "@azure/ms-rest-azure-js" "2.0.1"
@@ -532,7 +533,7 @@
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@types/mime/-/@types/mime-2.0.3.tgz#c893b73721db73699943bfc3653b1deb7faa4a3a"
   integrity sha1-yJO3NyHbc2mZQ7/DZTsd63+qSjo=
 
-"@types/minimatch@*":
+"@types/minimatch@*", "@types/minimatch@^3.0.3":
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-3.0.3.tgz#3dca0e3f33b200fc7d1139c0cd96c1268cadfd9d"
   integrity sha512-tHq6qdbT9U1IRSGf14CL0pUlULksvY9OZ+5eEgl1N7t+OA3tGvNpxJCzuKQlsNgCVwbAs670L1vcVQi8j9HjnA==
@@ -823,10 +824,20 @@ archiver@^5.0.2:
     tar-stream "^2.1.4"
     zip-stream "^4.0.0"
 
+array-differ@^3.0.0:
+  version "3.0.0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/array-differ/-/array-differ-3.0.0.tgz#3cbb3d0f316810eafcc47624734237d6aee4ae6b"
+  integrity sha1-PLs9DzFoEOr8xHYkc0I31q7krms=
+
 array-union@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/array-union/-/array-union-2.1.0.tgz#b798420adbeb1de828d84acd8a2e23d3efe85e8d"
   integrity sha512-HGyxoOTYUyCM6stUe6EJgnd4EoewAI7zMdfqO+kGjnlZmBDz/cR5pf8r/cR4Wq60sL/p0IkcjUEEPwS3GFrIyw==
+
+arrify@^2.0.1:
+  version "2.0.1"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/arrify/-/arrify-2.0.1.tgz#c9655e9331e0abcd588d2a7cad7e9956f66701fa"
+  integrity sha1-yWVekzHgq81YjSp8rX6ZVvZnAfo=
 
 asn1@~0.2.3:
   version "0.2.4"
@@ -2112,6 +2123,17 @@ ms@^2.1.1:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
   integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
+
+multimatch@^5.0.0:
+  version "5.0.0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/multimatch/-/multimatch-5.0.0.tgz#932b800963cea7a31a033328fa1e0c3a1874dbe6"
+  integrity sha1-kyuACWPOp6MaAzMo+h4MOhh02+Y=
+  dependencies:
+    "@types/minimatch" "^3.0.3"
+    array-differ "^3.0.0"
+    array-union "^2.1.0"
+    arrify "^2.0.1"
+    minimatch "^3.0.4"
 
 nanoid-dictionary@^3.0.0:
   version "3.0.0"

@@ -18,20 +18,15 @@ import { LeftRightSplit } from '../../components/Split/LeftRightSplit';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TestController } from '../../components/TestController/TestController';
 import { DialogDeleting } from '../../constants';
-import {
-  createSelectedPath,
-  deleteTrigger,
-  getBreadcrumbLabel,
-  TriggerFormData,
-  getDialogData,
-} from '../../utils/dialogUtil';
+import { createSelectedPath, deleteTrigger, TriggerFormData, getDialogData } from '../../utils/dialogUtil';
 import { Conversation } from '../../components/Conversation';
 import { dialogStyle } from '../../components/Modal/dialogStyle';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { ProjectTree, TreeLink } from '../../components/ProjectTree/ProjectTree';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
-import { clearBreadcrumb, getFocusPath } from '../../utils/navigation';
+import { getFocusPath } from '../../utils/navigation';
 import { navigateTo } from '../../utils/navigation';
+import { getFriendlyName } from '../../utils/dialogUtil';
 import { useShell } from '../../shell';
 import plugins, { mergePluginConfigs } from '../../plugins';
 import { useElectronFeatures } from '../../hooks/useElectronFeatures';
@@ -42,7 +37,6 @@ import {
   schemasState,
   displaySkillManifestState,
   validateDialogsSelectorFamily,
-  breadcrumbState,
   focusPathState,
   showCreateDialogModalState,
   showAddSkillDialogModalState,
@@ -55,6 +49,7 @@ import { triggerNotSupported } from '../../utils/dialogValidator';
 import { undoFunctionState, undoVersionState } from '../../recoilModel/undo/history';
 import { decodeDesignerPathToArrayPath } from '../../utils/convertUtils/designerPathEncoder';
 import { useTriggerApi } from '../../shell/triggerApi';
+import { undoStatusSelectorFamily } from '../../recoilModel/selectors/undo';
 
 import { WarningMessage } from './WarningMessage';
 import {
@@ -68,6 +63,13 @@ import {
 } from './styles';
 import { VisualEditor } from './VisualEditor';
 import { PropertyEditor } from './PropertyEditor';
+
+type BreadcrumbItem = {
+  key: string;
+  label: string;
+  link?: Partial<TreeLink>;
+  onClick?: () => void;
+};
 
 const CreateSkillModal = React.lazy(() => import('../../components/CreateSkillModal'));
 const CreateDialogModal = React.lazy(() => import('./createDialogModal'));
@@ -83,10 +85,6 @@ function onRenderContent(subTitle, style) {
       <p>{DialogDeleting.CONFIRM_CONTENT}</p>
     </div>
   );
-}
-
-function onRenderBreadcrumbItem(item, render) {
-  return <span>{render(item)}</span>;
 }
 
 function getAllRef(targetId, dialogs) {
@@ -109,6 +107,13 @@ const getTabFromFragment = () => {
   }
 };
 
+const parseTriggerId = (triggerId: string | undefined): number | undefined => {
+  if (triggerId == null) return undefined;
+  const indexString = triggerId.match(/\d+/)?.[0];
+  if (indexString == null) return undefined;
+  return parseInt(indexString);
+};
+
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string; skillId?: string }>> = (
   props
 ) => {
@@ -119,7 +124,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const schemas = useRecoilValue(schemasState(skillId ?? projectId));
   const dialogs = useRecoilValue(validateDialogsSelectorFamily(skillId ?? projectId));
   const displaySkillManifest = useRecoilValue(displaySkillManifestState(skillId ?? projectId));
-  const breadcrumb = useRecoilValue(breadcrumbState(skillId ?? projectId));
   const focusPath = useRecoilValue(focusPathState(skillId ?? projectId));
   const showCreateDialogModal = useRecoilValue(showCreateDialogModalState(skillId ?? projectId));
   const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState(skillId ?? projectId));
@@ -128,7 +132,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const undoVersion = useRecoilValue(undoVersionState(skillId ?? projectId));
   const rootProjectId = useRecoilValue(rootBotProjectIdSelector) ?? projectId;
 
-  const { undo, redo, canRedo, canUndo, commitChanges, clearUndo } = undoFunction;
+  const { undo, redo, commitChanges, clearUndo } = undoFunction;
+  const [canUndo, canRedo] = useRecoilValue(undoStatusSelectorFamily(projectId));
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
   const {
     removeDialog,
@@ -140,7 +145,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     setDesignPageLocation,
     navTo,
     selectTo,
-    selectAndFocus,
     addSkillDialogCancel,
     exportToZip,
     onboardingAddCoachMarkRef,
@@ -158,9 +162,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   );
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
   const [dialogJsonVisible, setDialogJsonVisibility] = useState(false);
-  const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0]);
+  const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0] as DialogInfo);
   const [exportSkillModalVisible, setExportSkillModalVisible] = useState(false);
   const [warningIsVisible, setWarningIsVisible] = useState(true);
+  const [breadcrumbs, setBreadcrumbs] = useState<Array<BreadcrumbItem>>([]);
+
   const shell = useShell('DesignPage', skillId ?? rootProjectId);
   const shellForFlowEditor = useShell('FlowEditor', skillId ?? rootProjectId);
   const shellForPropertyEditor = useShell('PropertyEditor', skillId ?? rootProjectId);
@@ -168,7 +174,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const { createTrigger, createQnATrigger } = shell.api;
 
   useEffect(() => {
-    const currentDialog = dialogs.find(({ id }) => id === dialogId);
+    const currentDialog = dialogs.find(({ id }) => id === dialogId) as DialogInfo | undefined;
     if (currentDialog) {
       setCurrentDialog(currentDialog);
     }
@@ -205,10 +211,49 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       const selected = decodeDesignerPathToArrayPath(dialogData, params.get('selected') ?? '');
       const focused = decodeDesignerPathToArrayPath(dialogData, params.get('focused') ?? '');
 
-      //make sure focusPath always valid
-      const data = getDialogData(dialogMap, dialogId, getFocusPath(selected, focused));
+      // TODO: get these from a second return value from decodeDesignerPathToArrayPath
+      const triggerIndex = parseTriggerId(selected);
 
-      if (typeof data === 'undefined') {
+      //make sure focusPath always valid
+      const focusPath = getFocusPath(selected, focused);
+      const trigger = triggerIndex != null && dialogData.triggers[triggerIndex];
+
+      const breadcrumbArray: Array<BreadcrumbItem> = [];
+
+      breadcrumbArray.push({
+        key: 'dialog-' + props.dialogId,
+        label: dialogMap[props.dialogId]?.$designer?.name ?? dialogMap[props.dialogId]?.$designer?.$designer?.name,
+        link: {
+          projectId: props.projectId,
+          dialogId: props.dialogId,
+        },
+        onClick: () => navTo(projectId, dialogId),
+      });
+      if (triggerIndex != null && trigger != null) {
+        breadcrumbArray.push({
+          key: 'trigger-' + triggerIndex,
+          label: trigger.$designer.name || getFriendlyName(trigger),
+          link: {
+            projectId: props.projectId,
+            dialogId: props.dialogId,
+            trigger: triggerIndex,
+          },
+          onClick: () => navTo(projectId, dialogId, `${triggerIndex}`),
+        });
+      }
+
+      // getDialogData returns whatever's at the end of the path, which could be a trigger or an action
+      const possibleAction = getDialogData(dialogMap, dialogId, focusPath);
+
+      if (params.get('focused') != null) {
+        // we've linked to an action, so put that in too
+        breadcrumbArray.push({
+          key: 'action-' + focusPath,
+          label: getActionName(possibleAction),
+        });
+      }
+
+      if (typeof possibleAction === 'undefined') {
         const { id: foundId } = dialogs.find(({ id }) => id === dialogId) || dialogs.find(({ isRoot }) => isRoot) || {};
         /**
          * It's improper to fallback to `dialogId` directly:
@@ -226,9 +271,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         dialogId,
         selected,
         focused,
-        breadcrumb: location.state?.breadcrumb || [],
         promptTab: getTabFromFragment(),
       });
+      setBreadcrumbs(breadcrumbArray);
       /* eslint-disable no-underscore-dangle */
       // @ts-ignore
       globalHistory._onTransitionComplete();
@@ -258,23 +303,68 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   };
 
   function handleSelect(link: TreeLink) {
+    const { skillId, dialogId, trigger, parentLink } = link;
     updateZoomRate({ currentRate: 1 });
-    if (link.trigger != null) {
-      selectTo(link.skillId ?? null, link.dialogId ?? null, `triggers[${link.trigger}]`);
-    } else if (link.dialogId != null) {
-      navTo(link.skillId ?? link.projectId, link.dialogId, [
-        { skillId: link.skillId, dialogId: link.dialogId, selected: '', focused: '' },
-      ]);
+    const breadcrumbArray: Array<BreadcrumbItem> = [];
+    if (dialogId != null) {
+      breadcrumbArray.push({
+        key: 'dialog-' + parentLink?.dialogId,
+        label: parentLink?.displayName ?? link.displayName,
+        link: { projectId, skillId, dialogId },
+        onClick: () => navTo(skillId ?? projectId, dialogId),
+      });
+    }
+    if (trigger != null) {
+      breadcrumbArray.push({
+        key: 'trigger-' + parentLink?.trigger,
+        label: link.displayName,
+        link: { projectId, skillId, dialogId, trigger },
+        onClick: () => selectTo(skillId ?? null, dialogId ?? null, `triggers[${trigger}]`),
+      });
+    }
+
+    setBreadcrumbs(breadcrumbArray);
+
+    if (trigger != null) {
+      selectTo(skillId ?? null, dialogId ?? null, `triggers[${trigger}]`);
+    } else if (dialogId != null) {
+      navTo(skillId ?? projectId, dialogId);
     } else {
       // with no dialog or ID, we must be looking at a bot link
-      navTo(link.skillId ?? link.projectId, null, []);
+      navTo(skillId ?? projectId, null);
     }
   }
 
   const onCreateDialogComplete = (dialogId) => {
     if (dialogId) {
-      navTo(projectId, dialogId, [{ dialogId, selected: '', focused: '' }]);
+      navTo(projectId, dialogId);
     }
+  };
+
+  const pluginConfig: PluginConfig = useMemo(() => {
+    const sdkUISchema = schemas?.ui?.content ?? {};
+    const userUISchema = schemas?.uiOverrides?.content ?? {};
+    return mergePluginConfigs({ uiSchema: sdkUISchema }, plugins, { uiSchema: userUISchema });
+  }, [schemas?.ui?.content, schemas?.uiOverrides?.content]);
+
+  const getActionName = (action) => {
+    const nameFromAction = action?.$designer?.name as string | undefined;
+    let detectedActionName: string;
+
+    if (typeof nameFromAction === 'string') {
+      detectedActionName = nameFromAction;
+    } else {
+      const kind: string = action?.$kind as string;
+      const actionNameFromSchema = pluginConfig?.uiSchema?.[kind]?.form?.label as string | (() => string) | undefined;
+      if (typeof actionNameFromSchema === 'string') {
+        detectedActionName = actionNameFromSchema;
+      } else if (typeof actionNameFromSchema === 'function') {
+        detectedActionName = actionNameFromSchema();
+      } else {
+        detectedActionName = formatMessage('Unknown');
+      }
+    }
+    return detectedActionName;
   };
 
   const { actionSelected, showDisableBtn, showEnableBtn } = useMemo(() => {
@@ -285,11 +375,18 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     const selectedActions = visualEditorSelection.map((id) => get(currentDialog?.content, id));
     const showDisableBtn = selectedActions.some((x) => get(x, 'disabled') !== true);
     const showEnableBtn = selectedActions.some((x) => get(x, 'disabled') === true);
+
+    if (selectedActions.length === 1 && selectedActions[0] != null) {
+      const action = selectedActions[0] as any;
+      const actionName = getActionName(action);
+
+      setBreadcrumbs((prev) => [...prev.slice(0, 2), { key: 'action-' + actionName, label: actionName }]);
+    }
+
     return { actionSelected, showDisableBtn, showEnableBtn };
-  }, [visualEditorSelection]);
+  }, [visualEditorSelection, currentDialog?.content]);
 
-  const { onFocusFlowEditor, onBlurFlowEditor } = useElectronFeatures(actionSelected, canUndo?.(), canRedo?.());
-
+  const { onFocusFlowEditor, onBlurFlowEditor } = useElectronFeatures(actionSelected, canUndo, canRedo);
   const EditorAPI = getEditorAPI();
   const toolbarItems: IToolbarItem[] = [
     {
@@ -329,7 +426,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             onClick: () => {
               createQnAFromUrlDialogBegin({
                 projectId,
-                showFromScratch: true,
               });
             },
           },
@@ -349,13 +445,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           {
             key: 'edit.undo',
             text: formatMessage('Undo'),
-            disabled: !canUndo?.(),
+            disabled: !canUndo,
             onClick: undo,
           },
           {
             key: 'edit.redo',
             text: formatMessage('Redo'),
-            disabled: !canRedo?.(),
+            disabled: !canRedo,
             onClick: redo,
           },
           {
@@ -455,55 +551,37 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     },
   ];
 
-  function handleBreadcrumbItemClick(_event, item) {
-    if (item) {
-      const { dialogId, selected, focused, index } = item;
-      selectAndFocus(projectId, skillId, dialogId, selected, focused, clearBreadcrumb(breadcrumb, index));
-    }
-  }
+  const createBreadcrumbItem: (breadcrumb: BreadcrumbItem) => IBreadcrumbItem = (breadcrumb: BreadcrumbItem) => {
+    return {
+      key: breadcrumb.key,
+      text: breadcrumb.label,
+      onClick: () => breadcrumb.onClick?.(),
+    };
+  };
 
-  const breadcrumbItems = useMemo(() => {
-    const items =
-      dialogs.length > 0
-        ? breadcrumb.reduce((result, item, index) => {
-            const { dialogId, selected, focused } = item;
-            const text = getBreadcrumbLabel(dialogs, dialogId, selected, focused);
-            if (text) {
-              result.push({
-                // @ts-ignore
-                index,
-                isRoot: !selected && !focused,
-                text,
-                ...item,
-                onClick: handleBreadcrumbItemClick,
-              });
-            }
-            return result;
-          }, [] as IBreadcrumbItem[])
-        : [];
-    return (
-      <div style={{ display: 'flex', justifyContent: 'space-between', height: '65px' }}>
-        <Breadcrumb
-          ariaLabel={formatMessage('Navigation Path')}
-          data-testid="Breadcrumb"
-          items={items}
-          maxDisplayedItems={3}
-          styles={breadcrumbClass}
-          onReduceData={() => undefined}
-          onRenderItem={onRenderBreadcrumbItem}
-        />
-        <div style={{ padding: '10px' }}>
-          <ActionButton
-            onClick={() => {
-              setDialogJsonVisibility((current) => !current);
-            }}
-          >
-            {dialogJsonVisible ? formatMessage('Hide code') : formatMessage('Show code')}
-          </ActionButton>
-        </div>
+  const items = breadcrumbs.map(createBreadcrumbItem);
+
+  const breadcrumbItems = (
+    <div style={{ display: 'flex', justifyContent: 'space-between', height: '65px' }}>
+      <Breadcrumb
+        ariaLabel={formatMessage('Navigation Path')}
+        data-testid="Breadcrumb"
+        items={items}
+        maxDisplayedItems={3}
+        styles={breadcrumbClass}
+        onReduceData={() => undefined}
+      />
+      <div style={{ padding: '10px' }}>
+        <ActionButton
+          onClick={() => {
+            setDialogJsonVisibility((current) => !current);
+          }}
+        >
+          {dialogJsonVisible ? formatMessage('Hide code') : formatMessage('Show code')}
+        </ActionButton>
       </div>
-    );
-  }, [dialogs, breadcrumb, dialogJsonVisible]);
+    </div>
+  );
 
   async function handleCreateDialogSubmit(dialogName, dialogData) {
     await createDialog({ id: dialogName, content: dialogData, projectId });
@@ -551,7 +629,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           selectTo(skillId ?? projectId, dialogId, createSelectedPath(currentIdx - 1));
         } else {
           //if the deleted node is selected and the selected one is the first one, navTo the first trigger;
-          navTo(skillId ?? projectId, dialogId, []);
+          navTo(skillId ?? projectId, dialogId);
         }
       } else if (index < currentIdx) {
         //if the deleted node is at the front, navTo the current one;
@@ -575,25 +653,12 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     }
   };
 
-  const pluginConfig: PluginConfig = useMemo(() => {
-    const sdkUISchema = schemas?.ui?.content ?? {};
-    const userUISchema = schemas?.uiOverrides?.content ?? {};
-    return mergePluginConfigs({ uiSchema: sdkUISchema }, plugins, { uiSchema: userUISchema });
-  }, [schemas?.ui?.content, schemas?.uiOverrides?.content]);
-
   if (!dialogId) {
     return <LoadingSpinner />;
   }
 
   const selectedTrigger = currentDialog?.triggers.find((t) => t.id === selected);
   const withWarning = triggerNotSupported(currentDialog, selectedTrigger);
-
-  const parseTriggerId = (triggerId: string | undefined): number | undefined => {
-    if (triggerId == null) return undefined;
-    const indexString = triggerId.match(/\d+/)?.[0];
-    if (indexString == null) return undefined;
-    return parseInt(indexString);
-  };
 
   return (
     <React.Fragment>
@@ -642,7 +707,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                           onCancel={() => {
                             setWarningIsVisible(false);
                           }}
-                          onOk={() => navigateTo(`/bot/${projectId}/knowledge-base/all`)}
+                          onOk={() => navigateTo(`/bot/${projectId}`)}
                         />
                       )
                     ) : (
