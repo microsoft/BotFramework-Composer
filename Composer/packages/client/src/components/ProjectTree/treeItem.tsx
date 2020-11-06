@@ -17,7 +17,7 @@ import { IContextualMenuStyles } from 'office-ui-fabric-react/lib/ContextualMenu
 import { ICalloutContentStyles } from 'office-ui-fabric-react/lib/Callout';
 
 import { TreeLink, TreeMenuItem } from './ProjectTree';
-import { SUMMARY_ARROW_SPACE, INDENT_PER_LEVEL } from './constants';
+import { SUMMARY_ARROW_SPACE } from './constants';
 
 // -------------------- Styles -------------------- //
 
@@ -117,7 +117,6 @@ const navItem = (isActive: boolean) => css`
 export const overflowSet = css`
   width: 100%;
   height: 100%;
-  padding-right: 12px;
   box-sizing: border-box;
   line-height: 24px;
   justify-content: space-between;
@@ -125,7 +124,7 @@ export const overflowSet = css`
 `;
 
 const statusIcon = {
-  width: '24px',
+  width: '12px',
   height: '18px',
   fontSize: 11,
   marginLeft: 6,
@@ -160,7 +159,7 @@ interface ITreeItemProps {
   dialogName?: string;
   showProps?: boolean;
   textWidth?: number;
-  depth: number;
+  extraSpace?: number;
   hasChildren?: boolean;
 }
 
@@ -257,16 +256,16 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   dialogName,
   onSelect,
   textWidth = 100,
-  depth,
   hasChildren = false,
   menu = [],
+  extraSpace = 0,
 }) => {
   const a11yLabel = `${dialogName ?? '$Root'}_${link.displayName}`;
 
   const overflowMenu = menu.map(renderTreeMenuItem(link));
 
   const linkString = `${link.projectId}_DialogTreeItem${link.dialogId}_${link.trigger ?? ''}`;
-  const spacerWidth = hasChildren ? 0 : SUMMARY_ARROW_SPACE;
+  const spacerWidth = hasChildren ? 0 : SUMMARY_ARROW_SPACE + extraSpace;
 
   return (
     <div
@@ -301,7 +300,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         overflowItems={overflowMenu}
         role="row"
         styles={{ item: { flex: 1 } }}
-        onRenderItem={onRenderItem(textWidth)}
+        onRenderItem={onRenderItem(textWidth - spacerWidth + extraSpace)}
         onRenderOverflowButton={onRenderOverflowButton(!!isActive)}
       />
     </div>

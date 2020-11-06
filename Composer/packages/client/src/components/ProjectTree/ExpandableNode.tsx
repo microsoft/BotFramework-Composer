@@ -30,6 +30,8 @@ const nodeStyle = (depth: number) => css`
 const TRIANGLE_SCALE = 0.6;
 
 const detailsStyle = css`
+  min-width: 100%;
+
   &:not([open]) > summary::-webkit-details-marker {
     transform: scaleX(${TRIANGLE_SCALE});
   }

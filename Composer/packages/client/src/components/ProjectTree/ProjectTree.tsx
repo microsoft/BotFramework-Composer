@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { jsx, css } from '@emotion/core';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
@@ -29,6 +29,7 @@ import { LoadingSpinner } from '../LoadingSpinner';
 
 import { TreeItem } from './treeItem';
 import { ExpandableNode } from './ExpandableNode';
+import { INDENT_PER_LEVEL } from './constants';
 
 // -------------------- Styles -------------------- //
 
@@ -138,6 +139,8 @@ type Props = {
   defaultSelected?: Partial<TreeLink>;
 };
 
+const TREE_PADDING = 100;
+
 export const ProjectTree: React.FC<Props> = ({
   onSelectAllLink: onAllSelected = undefined,
   showTriggers = true,
@@ -157,6 +160,7 @@ export const ProjectTree: React.FC<Props> = ({
     setPageElementState('design', { ...pageElements, [name]: value });
 
   const [filter, setFilter] = useState('');
+  const [width, setWidth] = useState(0);
   const formDialogComposerFeatureEnabled = useFeatureFlag('FORM_DIALOG');
   const [selectedLink, setSelectedLink] = useState<Partial<TreeLink> | undefined>(defaultSelected);
   const delayedSetFilter = throttle((newValue) => setFilter(newValue), 200);
@@ -165,6 +169,12 @@ export const ProjectTree: React.FC<Props> = ({
     ...bot,
     hasWarnings: false,
   }));
+
+  const treeRef = useRef<Element>(null);
+
+  useEffect(() => {
+    setWidth(treeRef.current?.clientWidth ?? 0);
+  }, [treeRef.current]);
 
   useEffect(() => {
     setSelectedLink(defaultSelected);
@@ -260,12 +270,12 @@ export const ProjectTree: React.FC<Props> = ({
       >
         <TreeItem
           showProps
-          depth={0}
           hasChildren={!bot.isRemote}
           icon={bot.isRemote ? icons.EXTERNAL_SKILL : icons.BOT}
           isActive={doesLinkMatch(link, selectedLink)}
           link={link}
           menu={[{ label: formatMessage('Create/edit skill manifest'), onClick: () => {} }]}
+          textWidth={width - TREE_PADDING}
           onSelect={handleOnSelect}
         />
       </span>
@@ -310,7 +320,6 @@ export const ProjectTree: React.FC<Props> = ({
           <TreeItem
             hasChildren
             showProps
-            depth={depth}
             icon={isFormDialog ? icons.FORM_DIALOG : icons.DIALOG}
             isActive={doesLinkMatch(dialogLink, selectedLink)}
             link={dialogLink}
@@ -337,6 +346,7 @@ export const ProjectTree: React.FC<Props> = ({
                   ]
                 : []),
             ]}
+            textWidth={width - TREE_PADDING}
             onSelect={handleOnSelect}
           />
         </span>
@@ -367,8 +377,8 @@ export const ProjectTree: React.FC<Props> = ({
     return (
       <TreeItem
         key={`${item.id}_${item.index}`}
-        depth={depth}
         dialogName={dialog.displayName}
+        extraSpace={INDENT_PER_LEVEL}
         icon={icons.TRIGGER}
         isActive={doesLinkMatch(link, selectedLink)}
         link={link}
@@ -381,6 +391,7 @@ export const ProjectTree: React.FC<Props> = ({
             },
           },
         ]}
+        textWidth={width - TREE_PADDING}
         onSelect={handleOnSelect}
       />
     );
@@ -437,7 +448,7 @@ export const ProjectTree: React.FC<Props> = ({
         `}
         role="grid"
       >
-        <TreeItem showProps depth={depth} isSubItemActive={false} link={link} />
+        <TreeItem showProps isSubItemActive={false} link={link} textWidth={width - TREE_PADDING} />
       </span>
     );
   };
@@ -550,6 +561,7 @@ export const ProjectTree: React.FC<Props> = ({
 
   return (
     <div
+      ref={treeRef}
       aria-label={formatMessage('Navigation pane')}
       className="ProjectTree"
       css={root}
@@ -585,9 +597,9 @@ export const ProjectTree: React.FC<Props> = ({
         <div css={tree}>
           {onAllSelected != null ? (
             <TreeItem
-              depth={0}
               hasChildren={false}
               link={{ displayName: formatMessage('All'), projectId: rootProjectId, isRoot: true }}
+              textWidth={width - TREE_PADDING}
               onSelect={onAllSelected}
             />
           ) : null}
