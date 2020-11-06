@@ -106,9 +106,8 @@ export class BotProjectProvision {
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
         message: `App create failed: ${JSON.stringify(err, null, 4)}`,
       });
-      throw new Error('App create failed!');
+      throw createCustomizeError(ProvisionErrors.CREATE_APP_REGISTRATION ,'App create failed!');
     }
-    console.log(appCreated);
     this.logger({
       status: BotProjectDeployLoggerType.PROVISION_INFO,
       message: `Start to add password for App, Id : ${appCreated.appId}`,
@@ -137,7 +136,7 @@ export class BotProjectProvision {
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
         message: `Add application password failed: ${JSON.stringify(err, null, 4)}`,
       });
-      throw new Error('Add application password failed!');
+      throw createCustomizeError(ProvisionErrors.CREATE_APP_REGISTRATION ,'Add application password failed!');
     }
 
     const appPassword = passwordSet.secretText;
@@ -157,12 +156,12 @@ export class BotProjectProvision {
    */
   private async getTenantId() {
     if (!this.accessToken) {
-      throw new Error(
+      throw createCustomizeError(ProvisionErrors.GET_TENANTID ,
         'Error: Missing access token. Please provide a non-expired Azure access token. Tokens can be obtained by running az account get-access-token'
       );
     }
     if (!this.subscriptionId) {
-      throw new Error(`Error: Missing subscription Id. Please provide a valid Azure subscription id.`);
+      throw createCustomizeError(ProvisionErrors.GET_TENANTID ,`Error: Missing subscription Id. Please provide a valid Azure subscription id.`);
     }
     try {
       const tenantUrl = `https://management.azure.com/subscriptions/${this.subscriptionId}?api-version=2020-01-01`;
@@ -172,11 +171,11 @@ export class BotProjectProvision {
       const response = await rp.get(tenantUrl, options);
       const jsonRes = JSON.parse(response);
       if (jsonRes.tenantId === undefined) {
-        throw new Error(`No tenants found in the account.`);
+        throw createCustomizeError(ProvisionErrors.GET_TENANTID ,`No tenants found in the account.`);
       }
       return jsonRes.tenantId;
     } catch (err) {
-      throw new Error(`Get Tenant Id Failed, details: ${this.getErrorMesssage(err)}`);
+      throw createCustomizeError(ProvisionErrors.GET_TENANTID ,`Get Tenant Id Failed, details: ${this.getErrorMesssage(err)}`);
     }
   }
 

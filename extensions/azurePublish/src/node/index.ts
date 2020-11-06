@@ -21,7 +21,7 @@ import { stringifyError, AzurePublishErrors, createCustomizeError } from './util
 // set to TRUE for history to be saved to disk
 // set to FALSE for history to be cached in memory only
 const PERSIST_HISTORY = false;
-
+const ProvisionLog = `provison.${process.env.NODE_ENV === 'production'? 'production': 'development'}.log`;
 const instructions = `To create a publish configuration, follow the instructions in the README file in your bot project folder.`;
 
 interface DeployResources {
@@ -43,6 +43,14 @@ interface ResourceType {
   key: string;
   // other keys TBD
   [key: string]: any;
+}
+
+interface ProvisionHistoryItem {
+  profileName: string;
+  jobId: string; // use for unique each provision
+  projectId: string;
+  time: Date;
+  log: string[];
 }
 
 function publishResultFromStatus(procStatus: ProcessStatus): PublishResult {
@@ -135,6 +143,18 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
         await writeJson(this.historyFilePath, this.publishHistories);
       }
     };
+
+    private persistProvisionHistory = async (jobId: string, profileName:string, logPath: string) => {
+      const currentStatus = BackgroundProcessManager.getStatus(jobId);
+      const curr : ProvisionHistoryItem= {
+        profileName: profileName,
+        jobId: jobId,
+        projectId: currentStatus.projectId,
+        time: currentStatus.time,
+        log: currentStatus.log,
+      };
+      await writeJson(logPath, curr, {spaces: 2});
+    }
 
     /*******************************************************************************************************************************/
     /* These methods implement the publish actions */
@@ -329,7 +349,7 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
     /* These methods provision resources to azure async */
     /*******************************************************************************************************************************/
     asyncProvision = async (jobId: string, config: ProvisionConfig, project: IBotProject, user) => {
-      const { subscription } = config;
+      const { subscription, name } = config;
       // Create the object responsible for actually taking the provision actions.
       const azureProvisioner = new BotProjectProvision({
         ...config,
@@ -383,7 +403,12 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
 
         BackgroundProcessManager.updateProcess(jobId, 200, 'Provision completed successfully!', publishProfile);
       } catch (error) {
-        BackgroundProcessManager.updateProcess(jobId, 500, stringifyError(error));
+        BackgroundProcessManager.updateProcess(jobId, 500,
+        `${stringifyError(error)}
+        detail message can see ${ProvisionLog} in your bot folder`);
+        // save provision history to log file.
+        const provisionHistoryPath = path.resolve(project.dataDir, ProvisionLog);
+        await this.persistProvisionHistory(jobId, name, provisionHistoryPath);
       }
     };
 
@@ -477,7 +502,6 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
      *************************************************************************************************/
     provision = async (config: ProvisionConfig, project: IBotProject, user) => {
       const jobId = BackgroundProcessManager.startProcess(202, project.id, config.name, 'Creating Azure resources...');
-      console.log(config);
       this.asyncProvision(jobId, config, project, user);
       return BackgroundProcessManager.getStatus(jobId);
     };
