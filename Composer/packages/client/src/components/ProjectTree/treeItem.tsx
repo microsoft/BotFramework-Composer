@@ -75,9 +75,9 @@ const moreButton = (isActive: boolean): IButtonStyles => {
   };
 };
 
-const navItem = (isActive: boolean, shift: number) => css`
+const navItem = (isActive: boolean) => css`
   label: navItem;
-  width: 100%;
+  min-width: 100%;
   position: relative;
   height: 24px;
   font-size: 12px;
@@ -145,6 +145,7 @@ const itemName = (nameWidth: number) => css`
   max-width: ${nameWidth}px;
   overflow: hidden;
   text-overflow: ellipsis;
+  flex-shrink: 1;
 `;
 
 // -------------------- TreeItem -------------------- //
@@ -158,8 +159,9 @@ interface ITreeItemProps {
   icon?: string;
   dialogName?: string;
   showProps?: boolean;
-  forceIndent?: number; // needed to make an outline look right; should be the size of the "details" reveal arrow
   textWidth?: number;
+  depth: number;
+  hasChildren?: boolean;
 }
 
 const renderTreeMenuItem = (link: TreeLink) => (item: TreeMenuItem) => {
@@ -253,9 +255,10 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   isActive = false,
   icon,
   dialogName,
-  forceIndent,
   onSelect,
   textWidth = 100,
+  depth,
+  hasChildren = false,
   menu = [],
 }) => {
   const a11yLabel = `${dialogName ?? '$Root'}_${link.displayName}`;
@@ -263,11 +266,12 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   const overflowMenu = menu.map(renderTreeMenuItem(link));
 
   const linkString = `${link.projectId}_DialogTreeItem${link.dialogId}_${link.trigger ?? ''}`;
+  const spacerWidth = hasChildren ? 0 : SUMMARY_ARROW_SPACE;
 
   return (
     <div
       aria-label={a11yLabel}
-      css={navItem(!!isActive, forceIndent ?? 0)}
+      css={navItem(isActive)}
       data-testid={a11yLabel}
       role="gridcell"
       tabIndex={0}
@@ -280,7 +284,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         }
       }}
     >
-      <div style={{ width: `${SUMMARY_ARROW_SPACE + INDENT_PER_LEVEL}px` }}></div>
+      <div style={{ minWidth: `${spacerWidth}px` }}></div>
       <OverflowSet
         //In 8.0 the OverflowSet will no longer be wrapped in a FocusZone
         //remove this at that time

@@ -12,6 +12,8 @@ type Props = {
   summary: React.ReactNode;
   depth?: number;
   detailsRef?: (el: HTMLElement | null) => void;
+  onToggle?: (newState: boolean) => void;
+  defaultState?: boolean;
 };
 
 const summaryStyle = css`
@@ -37,18 +39,23 @@ const detailsStyle = css`
   }
 `;
 
-export const ExpandableNode = ({ children, summary, detailsRef, depth = 0 }: Props) => {
-  const [isExpanded, setExpanded] = useState(true);
+export const ExpandableNode = ({ children, summary, detailsRef, depth = 0, onToggle, defaultState = true }: Props) => {
+  const [isExpanded, setExpanded] = useState(defaultState);
+
+  function setExpandedWithCallback(newState: boolean) {
+    setExpanded(newState);
+    onToggle?.(newState);
+  }
 
   function handleClick(ev: MouseEvent) {
     if ((ev.target as Element)?.tagName.toLowerCase() === 'summary') {
-      setExpanded(!isExpanded);
+      setExpandedWithCallback(!isExpanded);
     }
     ev.preventDefault();
   }
 
   function handleKey(ev: KeyboardEvent) {
-    if (ev.key === 'Enter' || ev.key === 'Space') setExpanded(!isExpanded);
+    if (ev.key === 'Enter' || ev.key === 'Space') setExpandedWithCallback(!isExpanded);
   }
 
   return (

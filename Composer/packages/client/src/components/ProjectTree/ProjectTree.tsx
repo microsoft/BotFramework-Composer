@@ -20,6 +20,7 @@ import {
   rootBotProjectIdSelector,
   botProjectSpaceSelector,
   jsonSchemaFilesByProjectIdSelector,
+  pageElementState,
 } from '../../recoilModel';
 import { getFriendlyName } from '../../utils/dialogUtil';
 import { triggerNotSupported } from '../../utils/dialogValidator';
@@ -28,7 +29,6 @@ import { LoadingSpinner } from '../LoadingSpinner';
 
 import { TreeItem } from './treeItem';
 import { ExpandableNode } from './ExpandableNode';
-import { INDENT_PER_LEVEL, SUMMARY_ARROW_SPACE } from './constants';
 
 // -------------------- Styles -------------------- //
 
@@ -147,7 +147,14 @@ export const ProjectTree: React.FC<Props> = ({
   onSelect,
   defaultSelected,
 }) => {
-  const { onboardingAddCoachMarkRef, navigateToFormDialogSchema } = useRecoilValue(dispatcherState);
+  const { onboardingAddCoachMarkRef, navigateToFormDialogSchema, setPageElementState } = useRecoilValue(
+    dispatcherState
+  );
+
+  const pageElements = useRecoilValue(pageElementState).design;
+  const getPageElement = (name: string) => pageElements?.[name];
+  const setPageElement = (name: string, value: any) =>
+    setPageElementState('design', { ...pageElements, [name]: value });
 
   const [filter, setFilter] = useState('');
   const formDialogComposerFeatureEnabled = useFeatureFlag('FORM_DIALOG');
@@ -253,7 +260,8 @@ export const ProjectTree: React.FC<Props> = ({
       >
         <TreeItem
           showProps
-          forceIndent={bot.isRemote ? SUMMARY_ARROW_SPACE : 0}
+          depth={0}
+          hasChildren={!bot.isRemote}
           icon={bot.isRemote ? icons.EXTERNAL_SKILL : icons.BOT}
           isActive={doesLinkMatch(link, selectedLink)}
           link={link}
@@ -264,7 +272,7 @@ export const ProjectTree: React.FC<Props> = ({
     );
   };
 
-  const renderDialogHeader = (skillId: string, dialog: DialogInfo) => {
+  const renderDialogHeader = (skillId: string, dialog: DialogInfo, depth: number) => {
     const warningContent = notificationMap[skillId][dialog.id]
       ?.filter((diag) => diag.severity === DiagnosticSeverity.Warning)
       .map((diag) => diag.message)
@@ -300,8 +308,9 @@ export const ProjectTree: React.FC<Props> = ({
           role="grid"
         >
           <TreeItem
+            hasChildren
             showProps
-            forceIndent={showTriggers ? 0 : SUMMARY_ARROW_SPACE}
+            depth={depth}
             icon={isFormDialog ? icons.FORM_DIALOG : icons.DIALOG}
             isActive={doesLinkMatch(dialogLink, selectedLink)}
             link={dialogLink}
@@ -336,7 +345,13 @@ export const ProjectTree: React.FC<Props> = ({
     };
   };
 
-  const renderTrigger = (item: any, dialog: DialogInfo, projectId: string, dialogLink?: TreeLink): React.ReactNode => {
+  const renderTrigger = (
+    item: any,
+    dialog: DialogInfo,
+    projectId: string,
+    dialogLink: TreeLink,
+    depth: number
+  ): React.ReactNode => {
     const link: TreeLink = {
       projectId: rootProjectId,
       skillId: projectId === rootProjectId ? undefined : projectId,
@@ -352,8 +367,8 @@ export const ProjectTree: React.FC<Props> = ({
     return (
       <TreeItem
         key={`${item.id}_${item.index}`}
+        depth={depth}
         dialogName={dialog.displayName}
-        forceIndent={SUMMARY_ARROW_SPACE + INDENT_PER_LEVEL}
         icon={icons.TRIGGER}
         isActive={doesLinkMatch(link, selectedLink)}
         link={link}
@@ -381,7 +396,13 @@ export const ProjectTree: React.FC<Props> = ({
     return scope.toLowerCase().includes(filter.toLowerCase());
   };
 
-  const renderTriggerList = (triggers: ITrigger[], dialog: DialogInfo, projectId: string, dialogLink?: TreeLink) => {
+  const renderTriggerList = (
+    triggers: ITrigger[],
+    dialog: DialogInfo,
+    projectId: string,
+    dialogLink: TreeLink,
+    depth: number
+  ) => {
     return triggers
       .filter((tr) => filterMatch(dialog.displayName) || filterMatch(getTriggerName(tr)))
       .map((tr) => {
@@ -394,17 +415,18 @@ export const ProjectTree: React.FC<Props> = ({
           { ...tr, index, displayName: getTriggerName(tr), warningContent, errorContent },
           dialog,
           projectId,
-          dialogLink
+          dialogLink,
+          depth
         );
       });
   };
 
-  const renderTriggerGroupHeader = (displayName: string, dialog: DialogInfo, projectId: string) => {
+  const renderTriggerGroupHeader = (displayName: string, dialog: DialogInfo, projectId: string, depth: number) => {
     const link: TreeLink = {
       dialogId: dialog.id,
       displayName,
       isRoot: false,
-      projectId: projectId,
+      projectId,
     };
     return (
       <span
@@ -415,12 +437,12 @@ export const ProjectTree: React.FC<Props> = ({
         `}
         role="grid"
       >
-        <TreeItem showProps forceIndent={0} isSubItemActive={false} link={link} />
+        <TreeItem showProps depth={depth} isSubItemActive={false} link={link} />
       </span>
     );
   };
 
-  // renders a named expandible node with the triggers as items underneath
+  // renders a named expandable node with the triggers as items underneath
   const renderTriggerGroup = (
     projectId: string,
     dialog: DialogInfo,
@@ -431,14 +453,21 @@ export const ProjectTree: React.FC<Props> = ({
     const groupDisplayName =
       groupName === NoGroupingTriggerGroupName ? formatMessage('form-wide operations') : groupName;
     const key = `${projectId}.${dialog.id}.group-${groupName}`;
+    const link: TreeLink = {
+      dialogId: dialog.id,
+      displayName: groupName,
+      isRoot: false,
+      projectId,
+    };
 
     return (
       <ExpandableNode
         key={key}
         depth={startDepth}
-        summary={renderTriggerGroupHeader(groupDisplayName, dialog, projectId)}
+        summary={renderTriggerGroupHeader(groupDisplayName, dialog, projectId, startDepth + 1)}
+        onToggle={(newState) => setPageElement(key, newState)}
       >
-        <div>{renderTriggerList(triggers, dialog, projectId)}</div>
+        <div>{renderTriggerList(triggers, dialog, projectId, link, startDepth + 1)}</div>
       </ExpandableNode>
     );
   };
@@ -456,10 +485,10 @@ export const ProjectTree: React.FC<Props> = ({
     });
   };
 
-  const renderDialogTriggers = (dialog: DialogInfo, projectId: string, startDepth: number, dialogLink?: TreeLink) => {
+  const renderDialogTriggers = (dialog: DialogInfo, projectId: string, startDepth: number, dialogLink: TreeLink) => {
     return dialogIsFormDialog(dialog)
-      ? renderDialogTriggersByProperty(dialog, projectId, startDepth)
-      : renderTriggerList(dialog.triggers, dialog, projectId, dialogLink);
+      ? renderDialogTriggersByProperty(dialog, projectId, startDepth + 1)
+      : renderTriggerList(dialog.triggers, dialog, projectId, dialogLink, startDepth + 1);
   };
 
   const createDetailsTree = (bot: BotInProject, startDepth: number) => {
@@ -476,27 +505,36 @@ export const ProjectTree: React.FC<Props> = ({
 
     if (showTriggers) {
       return filteredDialogs.map((dialog: DialogInfo) => {
-        const { summaryElement, dialogLink } = renderDialogHeader(projectId, dialog);
+        const { summaryElement, dialogLink } = renderDialogHeader(projectId, dialog, startDepth);
+        const key = 'dialog-' + dialog.id;
         return (
           <ExpandableNode
-            key={dialog.id}
+            key={key}
+            defaultState={getPageElement(key)}
             depth={startDepth}
             detailsRef={dialog.isRoot ? addMainDialogRef : undefined}
             summary={summaryElement}
+            onToggle={(newState) => setPageElement(key, newState)}
           >
             <div>{renderDialogTriggers(dialog, projectId, startDepth + 1, dialogLink)}</div>
           </ExpandableNode>
         );
       });
     } else {
-      return filteredDialogs.map((dialog: DialogInfo) => renderDialogHeader(projectId, dialog));
+      return filteredDialogs.map((dialog: DialogInfo) => renderDialogHeader(projectId, dialog, startDepth));
     }
   };
 
   const createBotSubtree = (bot: BotInProject & { hasWarnings: boolean }) => {
+    const key = 'bot-' + bot.projectId;
     if (showDialogs && !bot.isRemote) {
       return (
-        <ExpandableNode key={bot.projectId} summary={renderBotHeader(bot)}>
+        <ExpandableNode
+          key={key}
+          defaultState={getPageElement(key)}
+          summary={renderBotHeader(bot)}
+          onToggle={(newState) => setPageElement(key, newState)}
+        >
           <div>{createDetailsTree(bot, 1)}</div>
         </ExpandableNode>
       );
@@ -547,7 +585,8 @@ export const ProjectTree: React.FC<Props> = ({
         <div css={tree}>
           {onAllSelected != null ? (
             <TreeItem
-              forceIndent={SUMMARY_ARROW_SPACE}
+              depth={0}
+              hasChildren={false}
               link={{ displayName: formatMessage('All'), projectId: rootProjectId, isRoot: true }}
               onSelect={onAllSelected}
             />
