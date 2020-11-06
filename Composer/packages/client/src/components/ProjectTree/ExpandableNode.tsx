@@ -5,6 +5,8 @@
 import { jsx, css } from '@emotion/core';
 import { useState, MouseEvent, KeyboardEvent } from 'react';
 
+import { INDENT_PER_LEVEL } from './constants';
+
 type Props = {
   children: React.ReactNode;
   summary: React.ReactNode;
@@ -20,7 +22,7 @@ const summaryStyle = css`
 `;
 
 const nodeStyle = (depth: number) => css`
-  margin-left: ${depth * 16}px;
+  margin-left: ${depth * INDENT_PER_LEVEL}px;
 `;
 
 const TRIANGLE_SCALE = 0.6;

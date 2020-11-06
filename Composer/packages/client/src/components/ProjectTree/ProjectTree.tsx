@@ -28,6 +28,7 @@ import { LoadingSpinner } from '../LoadingSpinner';
 
 import { TreeItem } from './treeItem';
 import { ExpandableNode } from './ExpandableNode';
+import { INDENT_PER_LEVEL, SUMMARY_ARROW_SPACE } from './constants';
 
 // -------------------- Styles -------------------- //
 
@@ -64,8 +65,6 @@ const tree = css`
   height: 100%;
   label: tree;
 `;
-
-const SUMMARY_ARROW_SPACE = 28; // the rough pixel size of the dropdown arrow to the left of a Details/Summary element
 
 // -------------------- Helper functions -------------------- //
 
@@ -354,7 +353,7 @@ export const ProjectTree: React.FC<Props> = ({
       <TreeItem
         key={`${item.id}_${item.index}`}
         dialogName={dialog.displayName}
-        forceIndent={48}
+        forceIndent={SUMMARY_ARROW_SPACE + INDENT_PER_LEVEL}
         icon={icons.TRIGGER}
         isActive={doesLinkMatch(link, selectedLink)}
         link={link}
