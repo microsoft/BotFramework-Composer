@@ -46,9 +46,10 @@ import {
 } from '../../recoilModel';
 import { CreateQnAModal } from '../../components/QnA';
 import { triggerNotSupported } from '../../utils/dialogValidator';
-import { undoFunctionState, undoStatusState, undoVersionState } from '../../recoilModel/undo/history';
+import { undoFunctionState, undoVersionState } from '../../recoilModel/undo/history';
 import { decodeDesignerPathToArrayPath } from '../../utils/convertUtils/designerPathEncoder';
 import { useTriggerApi } from '../../shell/triggerApi';
+import { undoStatusSelectorFamily } from '../../recoilModel/selectors/undo';
 
 import { WarningMessage } from './WarningMessage';
 import {
@@ -132,7 +133,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const rootProjectId = useRecoilValue(rootBotProjectIdSelector) ?? projectId;
 
   const { undo, redo, commitChanges, clearUndo } = undoFunction;
-  const { canUndo, canRedo } = useRecoilValue(undoStatusState(projectId));
+  const [canUndo, canRedo] = useRecoilValue(undoStatusSelectorFamily(projectId));
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
   const {
     removeDialog,

@@ -35,12 +35,15 @@ export const undoFunctionState = atomFamily<IUndoRedo, string>({
   dangerouslyAllowMutability: true,
 });
 
-export const undoStatusState = atomFamily<{ canUndo: boolean; canRedo: boolean }, string>({
-  key: 'undoStatus',
-  default: {
-    canRedo: false,
-    canUndo: false,
-  },
+export const canUndoState = atomFamily<boolean, string>({
+  key: 'canUndoState',
+  default: false,
+  dangerouslyAllowMutability: true,
+});
+
+export const canRedoState = atomFamily<boolean, string>({
+  key: 'canRedoState',
+  default: false,
   dangerouslyAllowMutability: true,
 });
 
@@ -160,7 +163,8 @@ export const UndoRoot = React.memo((props: UndoRootProps) => {
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
   const history: UndoHistory = useRef(undoHistory).current;
   const [initialStateLoaded, setInitialStateLoaded] = useState(false);
-  const setUndoStatus = useSetRecoilState(undoStatusState(projectId));
+  const setCanUndo = useSetRecoilState(canUndoState(projectId));
+  const setCanRedo = useSetRecoilState(canRedoState(projectId));
   const setUndoFunction = useSetRecoilState(undoFunctionState(projectId));
   const [, forceUpdate] = useState([]);
   const setVersion = useSetRecoilState(undoVersionState(projectId));
@@ -207,10 +211,8 @@ export const UndoRoot = React.memo((props: UndoRootProps) => {
   };
 
   const updateUndoResult = () => {
-    setUndoStatus({
-      canUndo: history.canUndo(),
-      canRedo: history.canRedo(),
-    });
+    setCanRedo(history.canRedo());
+    setCanUndo(history.canUndo());
   };
 
   const undo = useRecoilCallback(({ snapshot, gotoSnapshot }: CallbackInterface) => () => {
