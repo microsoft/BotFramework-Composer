@@ -7,6 +7,5 @@
     "target": "es6",
     "composite": true
   },
-  "include": ["src"],
-  "exclude": ["**/__tests__/**", "*.test.ts", "**/__mocks__/**"]
+  "include": ["src"]
 }

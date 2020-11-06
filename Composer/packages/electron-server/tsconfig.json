@@ -11,6 +11,6 @@
   },
   "include": ["src/main.ts", "src/preload.js"],
   "references": [
-    { "path": "../server" }
+    { "path": "../server/tsconfig.build.json" }
   ]
 }
