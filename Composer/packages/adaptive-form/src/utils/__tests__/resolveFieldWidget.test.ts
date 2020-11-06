@@ -215,7 +215,11 @@ describe('resolveFieldWidget', () => {
     it('returns OpenObjectField when additional properties are allowed', () => {
       const schema = {
         type: 'object' as const,
-        additionalProperties: true,
+        additionalProperties: {
+          type: 'string',
+          title: '',
+          description: '',
+        },
       };
 
       const { field: ReturnedField } = resolveFieldWidget({ schema });

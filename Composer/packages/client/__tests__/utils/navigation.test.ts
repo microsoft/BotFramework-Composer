@@ -3,15 +3,7 @@
 
 import { PromptTab } from '@bfc/shared';
 
-import {
-  BreadcrumbUpdateType,
-  getUrlSearch,
-  checkUrl,
-  getFocusPath,
-  clearBreadcrumb,
-  updateBreadcrumb,
-  convertPathToUrl,
-} from './../../src/utils/navigation';
+import { getUrlSearch, checkUrl, getFocusPath, convertPathToUrl } from './../../src/utils/navigation';
 
 const projectId = '123a-sdf123';
 const skillId = '98765.4321';
@@ -24,46 +16,6 @@ describe('getFocusPath', () => {
     expect(result2).toEqual('selected');
     const result3 = getFocusPath('', '');
     expect(result3).toEqual('');
-  });
-});
-
-describe('Breadcrumb Util', () => {
-  it('return focus path', () => {
-    const breadcrumb = [
-      { dialogId: `1`, selected: `1`, focused: `1` },
-      { dialogId: `2`, selected: `2`, focused: `2` },
-      { dialogId: `3`, selected: `3`, focused: `3` },
-    ];
-    const result1 = clearBreadcrumb(breadcrumb);
-    expect(result1).toEqual([]);
-    const result2 = clearBreadcrumb(breadcrumb, 0);
-    expect(result2).toEqual([]);
-    const result3 = clearBreadcrumb(breadcrumb, 1);
-    expect(result3.length).toEqual(1);
-    expect(result3[0].dialogId).toEqual('1');
-    const result4 = clearBreadcrumb(breadcrumb, 4);
-    expect(result4.length).toEqual(3);
-  });
-
-  it('update breadcrumb', () => {
-    const result1 = updateBreadcrumb([], BreadcrumbUpdateType.Selected);
-    expect(result1).toEqual([]);
-    let breadcrumb = [
-      { dialogId: `1`, selected: `1`, focused: `1` },
-      { dialogId: `2`, selected: `2`, focused: `2` },
-      { dialogId: `3`, selected: `3`, focused: `3` },
-    ];
-    const result2 = updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Selected);
-    expect(result2.length).toEqual(1);
-    expect(result2[0].dialogId).toEqual('1');
-    breadcrumb = [
-      { dialogId: `1`, selected: `1`, focused: `` },
-      { dialogId: `2`, selected: `2`, focused: `` },
-      { dialogId: `3`, selected: `3`, focused: `3` },
-    ];
-    const result3 = updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Focused);
-    expect(result3.length).toEqual(2);
-    expect(result3[1].dialogId).toEqual('2');
   });
 });
 

@@ -356,7 +356,7 @@ describe('dialog schema operations', () => {
 
 describe('should validate the file name when create a new one', () => {
   const error = new Error(
-    "Spaces and special characters are not allowed. Use letters, numbers, -, or _ and don't use number at the beginning."
+    'Spaces and special characters are not allowed. Use letters, numbers, -, or _, and begin the name with a letter.'
   );
   const emptyError = new Error('The file name can not be empty');
 
