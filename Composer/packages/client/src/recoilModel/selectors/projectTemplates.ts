@@ -19,7 +19,7 @@ export const filteredTemplatesSelector = selector({
         filteredTemplates.splice(vaTemplateIndex, 1);
       }
     }
-    if (!featureFlags.REMOTE_TEMPLATE_CREATION_EXPERIENCE.enabled) {
+    if (!featureFlags?.REMOTE_TEMPLATE_CREATION_EXPERIENCE?.enabled) {
       filteredTemplates = filteredTemplates.filter((template: BotTemplate) => {
         if (template.path) {
           return template;
