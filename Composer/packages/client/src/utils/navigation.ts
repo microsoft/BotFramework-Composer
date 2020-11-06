@@ -1,20 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import cloneDeep from 'lodash/cloneDeep';
 import { navigate, NavigateOptions } from '@reach/router';
 
-import { BreadcrumbItem, DesignPageLocation } from '../recoilModel/types';
+import { DesignPageLocation } from '../recoilModel/types';
 import { BASEPATH } from '../constants';
 
 import { parsePathToFocused } from './convertUtils/parsePathToFocused';
 import { parsePathToSelected } from './convertUtils/parsePathToSelected';
 import { parseTypeToFragment } from './convertUtils/parseTypeToFragment';
 import { resolveToBasePath } from './fileUtil';
-export const BreadcrumbUpdateType = {
-  Selected: 'selected',
-  Focused: 'focused',
-};
 
 export function getFocusPath(selected: string, focused: string): string {
   if (selected && focused) return focused;
@@ -22,31 +17,6 @@ export function getFocusPath(selected: string, focused: string): string {
   if (!focused) return selected;
 
   return '';
-}
-
-export function clearBreadcrumb(breadcrumb: BreadcrumbItem[], fromIndex?: number): BreadcrumbItem[] {
-  let breadcrumbCopy = cloneDeep(breadcrumb);
-  if (fromIndex) {
-    breadcrumbCopy.splice(fromIndex, breadcrumbCopy.length - fromIndex);
-  } else {
-    breadcrumbCopy = [];
-  }
-  return breadcrumbCopy;
-}
-
-export function updateBreadcrumb(breadcrumb: BreadcrumbItem[], type: string): BreadcrumbItem[] {
-  const breadcrumbCopy = cloneDeep(breadcrumb);
-  if (breadcrumbCopy.length === 0) {
-    return breadcrumbCopy;
-  }
-
-  let lastIndex = breadcrumbCopy.length - 1;
-  while (lastIndex > 0 && breadcrumbCopy[lastIndex][type]) {
-    breadcrumbCopy.pop();
-    lastIndex--;
-  }
-
-  return breadcrumbCopy;
 }
 
 export function getUrlSearch(selected: string, focused: string): string {
@@ -69,9 +39,13 @@ export function getUrlSearch(selected: string, focused: string): string {
 export function checkUrl(
   currentUri: string,
   projectId: string,
+  skillId: string | null,
   { dialogId, selected, focused, promptTab }: DesignPageLocation
 ) {
-  let lastUri = `/bot/${projectId}/dialogs/${dialogId}${getUrlSearch(selected, focused)}`;
+  let lastUri =
+    skillId == null
+      ? `/bot/${projectId}/dialogs/${dialogId}${getUrlSearch(selected, focused)}`
+      : `/bot/${projectId}/skill/${skillId}/dialogs/${dialogId}${getUrlSearch(selected, focused)}`;
   if (promptTab) {
     lastUri += `#${promptTab}`;
   }
@@ -79,18 +53,27 @@ export function checkUrl(
 }
 
 export interface NavigationState {
-  breadcrumb?: BreadcrumbItem[];
+  breadcrumb?: string[];
   qnaKbUrls?: string[];
 }
 
-export function convertPathToUrl(projectId: string, skillId: string | null, dialogId: string, path?: string): string {
+export function convertPathToUrl(
+  projectId: string,
+  skillId: string | null,
+  dialogId: string | null,
+  path?: string
+): string {
   //path is like main.triggers[0].actions[0]
   //uri = id?selected=triggers[0]&focused=triggers[0].actions[0]
 
-  let uri =
-    skillId == null
-      ? `/bot/${projectId}/dialogs/${dialogId}`
-      : `/bot/${projectId}/skill/${skillId}/dialogs/${dialogId}`;
+  let uri = `/bot/${projectId}`;
+  if (skillId != null && skillId !== projectId) {
+    uri += `/skill/${skillId}`;
+  }
+  if (dialogId != null) {
+    uri += `/dialogs/${dialogId}`;
+  }
+
   if (!path) return uri;
 
   const items = path.split('#');

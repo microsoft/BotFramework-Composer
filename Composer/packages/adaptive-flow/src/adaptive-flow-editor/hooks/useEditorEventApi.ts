@@ -46,7 +46,7 @@ export const useEditorEventApi = (
     onFocusSteps,
     onFocusEvent,
     onCopy: onClipboardChange,
-    navTo: onOpen,
+    navTo,
     saveData: onChange,
     undo,
     redo,
@@ -153,7 +153,7 @@ export const useEditorEventApi = (
         break;
       case NodeEventTypes.OpenDialog:
         handler = ({ callee }) => {
-          onOpen(callee);
+          navTo(callee, '"beginDialog"');
           announce(ScreenReaderMessage.DialogOpened);
         };
         break;
@@ -170,19 +170,20 @@ export const useEditorEventApi = (
         if (eventData.$kind === MenuEventTypes.Paste) {
           handler = (e) => {
             insertActions(path, data, e.id, e.position, clipboardActions).then((dialog) => {
-              onChange(dialog);
-              onFocusSteps([`${e.id}[${e.position || 0}]`]);
+              return onChange(dialog).then(() => {
+                onFocusSteps([`${e.id}[${e.position || 0}]`]);
+                announce(ScreenReaderMessage.ActionCreated);
+              });
             });
-
-            announce(ScreenReaderMessage.ActionCreated);
           };
         } else {
           handler = (e) => {
             const newAction = dialogFactory.create(e.$kind);
             insertAction(path, data, e.id, e.position, newAction).then((dialog) => {
-              onChange(dialog);
-              onFocusSteps([`${e.id}[${e.position || 0}]`]);
-              announce(ScreenReaderMessage.ActionCreated);
+              return onChange(dialog).then(() => {
+                onFocusSteps([`${e.id}[${e.position || 0}]`]);
+                announce(ScreenReaderMessage.ActionCreated);
+              });
             });
           };
         }
