@@ -48,6 +48,8 @@ export const CrossTrainedRecognizerTemplate = (): {
 
 export const OrchestratorRecognizerTemplate = (target: string, fileName: string) => ({
   $kind: SDKKinds.OrchestratorRecognizer,
+  modelPath: '=settings.orchestrator.modelPath',
+  snapshotPath: `=settings.orchestrator.snapshots.${fileName.replace(/[.-]/g, '_')}`,
 });
 
 export const getMultiLanguagueRecognizerDialog = (

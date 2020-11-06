@@ -10,6 +10,7 @@ import { Orchestrator } from '@microsoft/bf-orchestrator';
 import { Path } from '../../utility/path';
 import { IFileStorage } from '../storage/interface';
 import log from '../../logger';
+import { writeFile } from 'fs';
 
 import { IOrchestratorBuildOutput, IOrchestratorNLRList, IOrchestratorProgress } from './interface';
 import { luImportResolverGenerator, getLUFiles, getQnAFiles } from './luResolver';
@@ -75,6 +76,7 @@ export class Builder {
       const { interruptionLuFiles, interruptionQnaFiles } = await this.getInterruptionFiles();
       await this.runLuBuild(interruptionLuFiles, allFiles);
       await this.runQnaBuild(interruptionQnaFiles);
+      await this.doOrchestratorBuildAsync(interruptionLuFiles);
     } catch (error) {
       throw new Error(error.message ?? error.text ?? 'Error publishing to LUIS or QNA.');
     }
@@ -102,6 +104,60 @@ export class Builder {
   public set locale(v: string) {
     this._locale = v;
   }
+
+  public getModelPathAsync = async () => {
+    let appDataPath: string = '';
+    if (process.versions.hasOwnProperty('electron')) {
+      // Electron-specific code
+      const { app } = await import('electron');
+      appDataPath = app.getPath('appData');
+    } else {
+      appDataPath = process.env.APPDATA || process.env.HOME || '';
+    }
+    let baseModelPath = Path.resolve(appDataPath, 'BotFrameworkComposer', 'models', 'microsoft.dte.00.06.en');
+    console.log('Saving models to: ' + baseModelPath);
+    return baseModelPath;
+  };
+
+  public doOrchestratorBuildAsync = async (luFiles: FileInfo[]) => {
+    //orchestrator stuff
+    //let nlrList = await this.runOrchestratorNlrList();
+    //let defaultNLR = nlrList.default;
+    //let modelPath = Path.resolve(Path.join('models', defaultNLR));
+    let modelPath = await this.getModelPathAsync();
+    console.log('modelPath: ' + modelPath);
+    let returnData = await this.runOrchestratorBuild(luFiles, modelPath);
+    console.log(returnData.outputs[0].id);
+
+    let orchestratorSettings: any = {
+      orchestrator: {
+        ModelPath: modelPath,
+      },
+    };
+
+    let snapshots: any = {};
+
+    for (let dialog of returnData.outputs) {
+      let bluFilePath = Path.resolve(this.generatedFolderPath, dialog.id.replace('.lu', '.blu'));
+      snapshots[dialog.id.replace('.lu', '').replace(/[-.]/g, '_')] = bluFilePath;
+
+      writeFile(bluFilePath, Buffer.from(dialog.snapshot), (err) => {
+        if (err) {
+          console.log('cannot write snapshot');
+        }
+      });
+    }
+
+    //put out the general settings file - write into orchestrator.settings.json
+    orchestratorSettings.orchestrator.snapshots = snapshots;
+    let orchestratorSettingsPath = Path.resolve(this.generatedFolderPath, 'orchestrator.settings.json');
+
+    writeFile(orchestratorSettingsPath, JSON.stringify(orchestratorSettings), (err) => {
+      if (err) {
+        console.log('cannot write snapshot');
+      }
+    });
+  };
 
   /**
    * Orchestrator: Get available list of NLR models
@@ -147,7 +203,7 @@ export class Builder {
     fullEmbedding = false
   ): Promise<IOrchestratorBuildOutput> {
     const luObjects = files
-      .filter((fi) => fi.name.endsWith('.lu'))
+      .filter((fi) => fi.name.endsWith('.lu') && fi.content)
       .map((fi) => ({
         id: fi.name,
         content: fi.content,

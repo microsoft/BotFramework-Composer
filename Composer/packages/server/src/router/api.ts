@@ -13,6 +13,7 @@ import { EjectController } from '../controllers/eject';
 import { FormDialogController } from '../controllers/formDialog';
 import * as ExtensionsController from '../controllers/extensions';
 import { FeatureFlagController } from '../controllers/featureFlags';
+import { OrchestratorController } from '../controllers/orchestrator';
 
 import { UtilitiesController } from './../controllers/utilities';
 
@@ -87,6 +88,9 @@ router.post('/extensions/proxy/:url', ExtensionsController.performExtensionFetch
 //FeatureFlags
 router.get('/featureFlags', FeatureFlagController.getFeatureFlags);
 router.post('/featureFlags', FeatureFlagController.updateFeatureFlags);
+
+//Orchestrator-specific routes
+router.get('/orchestrator/downloadModel', OrchestratorController.downloadModel);
 
 const errorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
   Promise.resolve(handler(req, res, next)).catch(next);

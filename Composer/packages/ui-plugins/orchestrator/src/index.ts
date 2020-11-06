@@ -15,6 +15,11 @@ const config: PluginConfig = {
         },
         intentEditor: 'LuIntentEditor',
         seedNewRecognizer: (shellData, shellApi) => {
+          //trigger the download of the model if needed
+          //TODO: must check model exists when publishing as well
+          //MOve this out into shellAPI
+          fetch('/api/orchestrator/downloadModel');
+
           const { qnaFiles, luFiles, currentDialog, locale, projectId } = shellData;
           const qnaFile = qnaFiles.find((f) => f.id === `${currentDialog.id}.${locale}`);
           const luFile = luFiles.find((f) => f.id === `${currentDialog.id}.${locale}`);
