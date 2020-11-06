@@ -1,9 +1,12 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    "rootDir": "./src",
     "outDir": "./build/",
     "sourceMap": true,
-    "target": "es6"
+    "target": "es6",
+    "composite": true
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src"],
+  "exclude": ["**/__tests__/**", "*.test.ts", "**/__mocks__/**"]
 }

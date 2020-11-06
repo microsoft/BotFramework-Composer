@@ -6,8 +6,11 @@
     "target": "es6",
     "baseUrl": ".",
     "paths": {
-      "@src/*": ["src/*"]
+      "@bfc/server": ["../server"]
     }
   },
   "include": ["src/main.ts", "src/preload.js"],
+  "references": [
+    { "path": "../server" }
+  ]
 }
