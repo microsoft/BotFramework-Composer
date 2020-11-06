@@ -354,3 +354,13 @@ export const botNameIdentifierState = atomFamily<string, string>({
   key: getFullyQualifiedKey('botNameIdentifier'),
   default: '',
 });
+
+export const canUndoState = atomFamily<boolean, string>({
+  key: getFullyQualifiedKey('canUndoState'),
+  default: false,
+});
+
+export const canRedoState = atomFamily<boolean, string>({
+  key: getFullyQualifiedKey('canRedoState'),
+  default: false,
+});
