@@ -9,6 +9,7 @@ import ElectronWindow from '../electronWindow';
 import { isLinux, isMac } from '../utility/platform';
 import logger from '../utility/logger';
 import { getUnpackedAsarPath } from '../utility/getUnpackedAsarPath';
+import { isDevelopment } from '../utility/env';
 
 import { OneAuth } from './oneauth';
 import { OneAuthShim } from './oneauthShim';
@@ -83,9 +84,9 @@ class OneAuthInstance extends OneAuthBase {
       }
 
       // Temporary until we properly configure local Mac dev experience
-      if (isMac()) {
-        log('Mac detected. Getting access token using interactive sign in instead of silently.');
-        return this.TEMPORARY_getAccessTokenOnMac(params);
+      if (isMac() && isDevelopment) {
+        log('Mac development env detected. Getting access token using interactive sign in instead of silently.');
+        return this.TEMPORARY_getAccessTokenOnMacDev(params);
       }
 
       if (!this.signedInAccount) {
@@ -167,7 +168,7 @@ class OneAuthInstance extends OneAuthBase {
   }
 
   /** Temporary workaround on Mac until we figure out how to enable keychain access on a dev build. */
-  private async TEMPORARY_getAccessTokenOnMac(
+  private async TEMPORARY_getAccessTokenOnMacDev(
     params: ElectronAuthParameters
   ): Promise<{ accessToken: string; acquiredAt: number; expiryTime: number }> {
     try {
@@ -220,6 +221,6 @@ class OneAuthInstance extends OneAuthBase {
 }
 
 // only use the shim in Linux, or dev environment without flag enabled
-const useShim = (process.env.NODE_ENV === 'development' && !process.env.COMPOSER_ENABLE_ONEAUTH) || isLinux();
+const useShim = (isDevelopment && !process.env.COMPOSER_ENABLE_ONEAUTH) || isLinux();
 
 export const OneAuthService = useShim ? new OneAuthShim() : new OneAuthInstance();
