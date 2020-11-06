@@ -4,18 +4,6 @@ import { Skill, FileInfo } from './indexers';
 import { IDiagnostic } from './diagnostic';
 import { DialogSetting } from './settings';
 
-export type ProjectTemplate = {
-  id: string;
-  name: string;
-  description: string;
-  /* absolute path */
-  path: string;
-  /* tags for further grouping and search secenario */
-  tags?: string[];
-  /* list of supported runtime versions */
-  support?: string[];
-};
-
 export type IBotProject = {
   fileStorage: any;
   dir: string;
