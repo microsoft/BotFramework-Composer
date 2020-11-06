@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import { act } from 'react-test-renderer';
 import { useRecoilValue, useSetRecoilState, useRecoilState } from 'recoil';
 
-import { UndoRoot, undoFunctionState, undoHistoryState, undoStatusState } from '../history';
+import { UndoRoot, undoFunctionState, undoHistoryState } from '../history';
 import {
   lgFilesState,
   luFilesState,
@@ -14,10 +14,13 @@ import {
   currentProjectIdState,
   botProjectIdsState,
   designPageLocationState,
+  canUndoState,
+  canRedoState,
 } from '../../atoms';
 import { dialogsSelectorFamily } from '../../selectors';
 import { renderRecoilHook } from '../../../../__tests__/testUtils/react-recoil-hooks-testing-library';
 import UndoHistory from '../undoHistory';
+import { undoStatusSelectorFamily } from '../../selectors/undo';
 const projectId = '123-asd';
 
 export const UndoRedoWrapper = () => {
@@ -36,7 +39,7 @@ describe('<UndoRoot/>', () => {
       const setProjectIdState = useSetRecoilState(currentProjectIdState);
       const setDesignPageLocation = useSetRecoilState(designPageLocationState(projectId));
       const history = useRecoilValue(undoHistoryState(projectId));
-      const { canRedo, canUndo } = useRecoilValue(undoStatusState(projectId));
+      const [canUndo, canRedo] = useRecoilValue(undoStatusSelectorFamily(projectId));
       return {
         undo,
         redo,
@@ -68,7 +71,8 @@ describe('<UndoRoot/>', () => {
         { recoilState: luFilesState(projectId), initialValue: [{ id: '1.lu' }, { id: '2' }] },
         { recoilState: currentProjectIdState, initialValue: projectId },
         { recoilState: undoHistoryState(projectId), initialValue: new UndoHistory(projectId) },
-        { recoilState: undoStatusState(projectId), initialValue: { canUndo: false, canRedo: false } },
+        { recoilState: canUndoState(projectId), initialValue: false },
+        { recoilState: canRedoState(projectId), initialValue: false },
         { recoilState: designPageLocationState(projectId), initialValue: { dialogId: '1', focused: '', selected: '' } },
         {
           recoilState: undoFunctionState(projectId),
