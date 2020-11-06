@@ -12,7 +12,7 @@ import { getUnpackedAsarPath } from '../utility/getUnpackedAsarPath';
 import { isDevelopment } from '../utility/env';
 
 import { OneAuth } from './oneauth';
-import { OneAuthShim } from './oneauthShim';
+import { OneAuthShim } from './oneAuthShim';
 import { OneAuthBase } from './oneAuthBase';
 
 const log = logger.extend('one-auth');
