@@ -7,7 +7,7 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import { useRecoilValue } from 'recoil';
 import isEqual from 'lodash/isEqual';
 
-import { getExtension } from '../utils/fileUtil';
+import { getBaseName, getExtension } from '../utils/fileUtil';
 
 import * as luUtil from './../utils/luUtil';
 import * as buildUtil from './../utils/buildUtil';
@@ -55,7 +55,7 @@ export const getMultiLanguagueRecognizerDialog = (
   const multiLanguageRecognizer = MultiLanguageRecognizerTemplate(target, fileType);
 
   files.forEach((item) => {
-    if (item.empty || !item.id.startsWith(target)) return;
+    if (item.empty || getBaseName(item.id) !== target) return;
     const locale = getExtension(item.id);
     const fileName = `${item.id}.${fileType}`;
     multiLanguageRecognizer.recognizers[locale] = fileName;
@@ -69,7 +69,7 @@ export const getMultiLanguagueRecognizerDialog = (
 
 export const getLuisRecognizerDialogs = (target: string, luFiles: LuFile[]) => {
   return luFiles
-    .filter((item) => !item.empty && item.id.startsWith(target))
+    .filter((item) => !item.empty && getBaseName(item.id) === target)
     .map((item) => ({ id: `${item.id}.lu.dialog`, content: LuisRecognizerTemplate(target, item.id) }));
 };
 
@@ -147,8 +147,8 @@ export const Recognizer = React.memo((props: { projectId: string }) => {
       .filter((dialog) => !dialog.isFormDialog)
       .filter((dialog) => isCrossTrainedRecognizerSet(dialog) || isLuisRecognizer(dialog))
       .forEach((dialog) => {
-        const filtedLus = luFiles.filter((item) => item.id.startsWith(dialog.id));
-        const filtedQnas = qnaFiles.filter((item) => item.id.startsWith(dialog.id));
+        const filtedLus = luFiles.filter((item) => getBaseName(item.id) === dialog.id);
+        const filtedQnas = qnaFiles.filter((item) => getBaseName(item.id) === dialog.id);
         const {
           isCrossTrain,
           luisRecognizers,
