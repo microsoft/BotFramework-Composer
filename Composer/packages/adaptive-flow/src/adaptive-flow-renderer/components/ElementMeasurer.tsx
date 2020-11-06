@@ -19,7 +19,7 @@ export interface ElementMeasurerProps {
 export const ElementMeasurer: React.FC<ElementMeasurerProps> = ({ children, style, onResize }) => {
   return (
     <Measure
-      bounds
+      scroll
       onResize={({ bounds }) => {
         /**
          * As a parent node, <Measure /> mounted before children mounted.

@@ -95,7 +95,7 @@ const optionRow = {
 export const warningIcon = {
   marginLeft: 5,
   color: '#BE880A',
-  fontSize: 5,
+  fontSize: 8,
 };
 
 // -------------------- Validation Helpers -------------------- //

@@ -6,6 +6,7 @@ import * as fs from 'fs';
 import { Request, Response } from 'express';
 import { Archiver } from 'archiver';
 import { ExtensionContext } from '@bfc/extension';
+import { SchemaMerger } from '@microsoft/bf-dialog/lib/library/schemaMerger';
 
 import log from '../logger';
 import { BotProjectService } from '../services/project';
@@ -54,6 +55,33 @@ async function createProject(req: Request, res: Response) {
     await AssetService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage);
 
     if (currentProject !== undefined) {
+      if (currentProject.settings?.runtime?.customRuntime === true) {
+        const runtime = ExtensionContext.getRuntimeByProject(currentProject);
+        const runtimePath = currentProject.settings.runtime.path;
+
+        if (!fs.existsSync(runtimePath)) {
+          await runtime.eject(currentProject, currentProject.fileStorage);
+        }
+
+        // install all dependencies and build the app
+        await runtime.build(runtimePath, currentProject);
+
+        const manifestFile = runtime.identifyManifest(runtimePath);
+
+        // run the merge command to merge all package dependencies from the template to the bot project
+        const realMerge = new SchemaMerger(
+          [manifestFile],
+          Path.join(currentProject.dataDir, 'schemas/sdk'),
+          Path.join(currentProject.dataDir, 'dialogs/imported'),
+          false,
+          false,
+          console.log,
+          console.warn,
+          console.error
+        );
+
+        await realMerge.merge();
+      }
       await currentProject.updateBotInfo(name, description, preserveRoot);
       if (schemaUrl) {
         await currentProject.saveSchemaToProject(schemaUrl, locationRef.path);
@@ -367,7 +395,7 @@ async function checkBoilerplateVersion(req: Request, res: Response) {
 
   const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
-    const latestVersion = AssetService.manager.getBoilerplateCurrentVersion();
+    const latestVersion = await AssetService.manager.getBoilerplateCurrentVersion();
     const currentVersion = await AssetService.manager.getBoilerplateVersionFromProject(currentProject);
     const updateRequired =
       (latestVersion && currentVersion && latestVersion > currentVersion) || // versions are present in both locations, latest is newer
