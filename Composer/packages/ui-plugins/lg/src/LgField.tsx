@@ -78,6 +78,7 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
       if (body) {
         updateLgTemplate(body);
         props.onChange(new LgTemplateRef(lgName).toString());
+        shellApi.commitChanges();
       } else {
         shellApi.removeLgTemplate(lgFileId, lgName);
         props.onChange();
