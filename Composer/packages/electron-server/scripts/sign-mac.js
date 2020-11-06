@@ -104,22 +104,6 @@ try {
 }
 
 try {
-  log.info('-------- Signing bundles. --------\n');
-  for (const bundle of bundles) {
-    log.info(
-      `codesign -s ******* --timestamp=none --force --options runtime --entitlements "${bundle.entitlements}" "${bundle.path}"`
-    );
-    execSync(
-      `codesign -s ${process.env.DEV_CERT_ID} --timestamp=none --force --options runtime --entitlements "${bundle.entitlements}" "${bundle.path}"`,
-      { stdio: 'inherit' }
-    );
-  }
-} catch (err) {
-  log.error('Error setting signing app bundles. %O', err);
-  process.exit(1);
-}
-
-try {
   log.info('-------- Signing frameworks. --------\n');
   const fwsPath = path.join(baseBundlePath, 'Contents/Frameworks');
   const frameworks = glob.sync('*.framework', { cwd: fwsPath, onlyFiles: false });
@@ -142,6 +126,22 @@ try {
   }
 } catch (err) {
   log.error('Error signing frameworks. %O', err);
+  process.exit(1);
+}
+
+try {
+  log.info('-------- Signing bundles. --------\n');
+  for (const bundle of bundles) {
+    log.info(
+      `codesign -s ******* --timestamp=none --force --options runtime --entitlements "${bundle.entitlements}" "${bundle.path}"`
+    );
+    execSync(
+      `codesign -s ${process.env.DEV_CERT_ID} --timestamp=none --force --options runtime --entitlements "${bundle.entitlements}" "${bundle.path}"`,
+      { stdio: 'inherit' }
+    );
+  }
+} catch (err) {
+  log.error('Error setting signing app bundles. %O', err);
   process.exit(1);
 }
 
