@@ -64,10 +64,20 @@ export const updateLgFileState = async (projectId: string, lgFiles: LgFile[], up
     }
   }
 
-  return lgFiles.map((file) => {
+  const newLgFiles = lgFiles.map((file) => {
     const changedFile = changes.find(({ id }) => id === file.id);
     return changedFile ? changedFile : file;
   });
+
+  if (dialogId !== 'common') return newLgFiles;
+
+  // if changes happen on common.lg, re-parse all.
+  const reparsedNewLgFiles: LgFile[] = [];
+  for (const file of newLgFiles) {
+    const reparsedFile = (await LgWorker.parse(projectId, file.id, file.content, newLgFiles)) as LgFile;
+    reparsedNewLgFiles.push(reparsedFile);
+  }
+  return reparsedNewLgFiles;
 };
 
 // when do create, passed id do not carried with locale
@@ -198,6 +208,8 @@ export const lgDispatcher = () => {
         return;
       }
 
+      let newLgFiles: LgFile[] = [];
+
       try {
         if (template.name !== templateName) {
           // name change, need update cross multi locale file.
@@ -214,11 +226,9 @@ export const lgDispatcher = () => {
             changes.push(updatedFile);
           }
 
-          set(lgFilesState(projectId), (lgFiles) => {
-            return lgFiles.map((file) => {
-              const changedFile = changes.find(({ id }) => id === file.id);
-              return changedFile ? changedFile : file;
-            });
+          newLgFiles = lgFiles.map((file) => {
+            const changedFile = changes.find(({ id }) => id === file.id);
+            return changedFile ? changedFile : file;
           });
         } else {
           // body change, only update current locale file
@@ -230,15 +240,27 @@ export const lgDispatcher = () => {
             lgFiles
           )) as LgFile;
 
-          set(lgFilesState(projectId), (lgFiles) => {
-            return lgFiles.map((file) => {
-              return file.id === id ? updatedFile : file;
-            });
+          newLgFiles = lgFiles.map((file) => {
+            return file.id === id ? updatedFile : file;
           });
         }
       } catch (error) {
         setError(callbackHelpers, error);
+        return;
       }
+
+      if (getBaseName(lgFile.id) !== 'common') {
+        set(lgFilesState(projectId), newLgFiles);
+        return;
+      }
+
+      // if changes happen on common.lg, re-parse all.
+      const reparsedNewLgFiles: LgFile[] = [];
+      for (const file of newLgFiles) {
+        const reparsedFile = (await LgWorker.parse(projectId, file.id, file.content, newLgFiles)) as LgFile;
+        reparsedNewLgFiles.push(reparsedFile);
+      }
+      set(lgFilesState(projectId), reparsedNewLgFiles);
     }
   );
 
