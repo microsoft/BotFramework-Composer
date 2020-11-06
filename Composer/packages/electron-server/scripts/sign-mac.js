@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 // eslint-disable-next-line security/detect-child-process
 const { execSync } = require('child_process');
+const glob = require('globby');
 
 const { log } = require('./common');
 
@@ -106,15 +107,41 @@ try {
   log.info('-------- Signing bundles. --------\n');
   for (const bundle of bundles) {
     log.info(
-      `codesign -s ******* --deep --force --options runtime --entitlements "${bundle.entitlements}" "${bundle.path}"`
+      `codesign -s ******* --timestamp=none --force --options runtime --entitlements "${bundle.entitlements}" "${bundle.path}"`
     );
     execSync(
-      `codesign -s ${process.env.DEV_CERT_ID} --deep --force --options runtime --entitlements "${bundle.entitlements}" "${bundle.path}"`,
+      `codesign -s ${process.env.DEV_CERT_ID} --timestamp=none --force --options runtime --entitlements "${bundle.entitlements}" "${bundle.path}"`,
       { stdio: 'inherit' }
     );
   }
 } catch (err) {
   log.error('Error setting signing app bundles. %O', err);
+  process.exit(1);
+}
+
+try {
+  log.info('-------- Signing frameworks. --------\n');
+  const fwsPath = path.join(baseBundlePath, 'Contents/Frameworks');
+  const frameworks = glob.sync('*.framework', { cwd: fwsPath, onlyFiles: false });
+
+  for (const fw of frameworks) {
+    const fwPath = path.join(baseBundlePath, 'Contents/Frameworks', fw, 'Versions/A');
+    const dylibs = glob.sync('Libraries/*.dylib', { cwd: fwPath });
+
+    for (const lib of dylibs) {
+      log.info(`codesign -s ******* --timestamp=none --force "${path.join(fwPath, lib)}"`);
+      execSync(`codesign -s ${process.env.DEV_CERT_ID} --timestamp=none --force "${path.join(fwPath, lib)}"`, {
+        stdio: 'inherit',
+      });
+    }
+
+    log.info(`codesign -s ******* --timestamp=none --force "${fwPath}"`);
+    execSync(`codesign -s ${process.env.DEV_CERT_ID} --timestamp=none --force "${fwPath}"`, {
+      stdio: 'inherit',
+    });
+  }
+} catch (err) {
+  log.error('Error setting signing frameworks. %O', err);
   process.exit(1);
 }
 
