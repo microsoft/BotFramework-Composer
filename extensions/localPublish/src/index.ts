@@ -41,14 +41,14 @@ interface PublishConfig {
 
 const isWin = process.platform === 'win32';
 
-const REGEX_LOCALHOST = /^https?:\/\/(localhost|127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}|::1)/;
+const localhostRegex = /^https?:\/\/(localhost|127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}|::1)/;
 
 
 const isLocalhostUrl = (matchUrl: string) => {
-  return REGEX_LOCALHOST.test(matchUrl);
+  return localhostRegex.test(matchUrl);
 };
 
-const isSkillHostUpdateRequired = (skillHostEndpoint: string | undefined) => {
+const isSkillHostUpdateRequired = (skillHostEndpoint?: string) => {
   return !skillHostEndpoint || isLocalhostUrl(skillHostEndpoint);
 };
 

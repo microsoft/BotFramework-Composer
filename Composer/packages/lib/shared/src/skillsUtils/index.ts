@@ -8,7 +8,7 @@ import formatMessage from 'format-message';
 import camelCase from 'lodash/camelCase';
 
 // eslint-disable-next-line security/detect-unsafe-regex
-const REGEX_LOCALHOST = /^https?:\/\/(localhost|127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}|::1)/;
+const localhostRegex = /^https?:\/\/(localhost|127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}|::1)/;
 
 export const VIRTUAL_LOCAL_ENDPOINT = {
   key: -1,
@@ -94,9 +94,9 @@ export const fetchEndpointNameForSkill = (
 };
 
 export const isLocalhostUrl = (matchUrl: string) => {
-  return REGEX_LOCALHOST.test(matchUrl);
+  return localhostRegex.test(matchUrl);
 };
 
-export const isSkillHostUpdateRequired = (skillHostEndpoint: string | undefined) => {
+export const isSkillHostUpdateRequired = (skillHostEndpoint?: string) => {
   return !skillHostEndpoint || isLocalhostUrl(skillHostEndpoint);
 };
