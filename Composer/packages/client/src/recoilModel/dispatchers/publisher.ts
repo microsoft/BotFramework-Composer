@@ -68,6 +68,7 @@ export const publisherDispatcher = () => {
   };
 
   const updatePublishStatus = ({ set }: CallbackInterface, projectId: string, target: any, data: any) => {
+    if (data == null) return;
     const { endpointURL, status, id } = data;
     // the action below only applies to when a bot is being started using the "start bot" button
     // a check should be added to this that ensures this ONLY applies to the "default" profile.
@@ -173,9 +174,9 @@ export const publisherDispatcher = () => {
     (callbackHelpers: CallbackInterface) => async (projectId: string, target: any) => {
       try {
         const response = await httpClient.get(`/publish/${projectId}/status/${target.name}`);
-        updatePublishStatus(callbackHelpers, projectId, target, response.data);
+        updatePublishStatus(callbackHelpers, projectId, target, response?.data);
       } catch (err) {
-        updatePublishStatus(callbackHelpers, projectId, target, err.response.data);
+        updatePublishStatus(callbackHelpers, projectId, target, err.response?.data);
       }
     }
   );

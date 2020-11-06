@@ -10,19 +10,21 @@ import {
 import { atomFamily, Snapshot, useRecoilCallback, CallbackInterface, useSetRecoilState } from 'recoil';
 import uniqueId from 'lodash/uniqueId';
 import isEmpty from 'lodash/isEmpty';
+import has from 'lodash/has';
+import { DialogInfo } from '@bfc/shared';
 
 import { navigateTo, getUrlSearch } from '../../utils/navigation';
+import { encodeArrayPathToDesignerPath } from '../../utils/convertUtils/designerPathEncoder';
+import { dialogsSelectorFamily } from '../selectors';
 
-import { breadcrumbState } from './../atoms/botState';
-import { designPageLocationState } from './../atoms';
+import { rootBotProjectIdSelector } from './../selectors/project';
+import { canRedoState, canUndoState, designPageLocationState } from './../atoms';
 import { trackedAtoms, AtomAssetsMap } from './trackedAtoms';
 import UndoHistory from './undoHistory';
 
 type IUndoRedo = {
   undo: () => void;
   redo: () => void;
-  canUndo: () => boolean;
-  canRedo: () => boolean;
   commitChanges: () => void;
   clearUndo: () => void;
 };
@@ -45,8 +47,25 @@ export const undoVersionState = atomFamily({
   dangerouslyAllowMutability: true,
 });
 
+const checkLocation = (projectId: string, atomMap: AtomAssetsMap) => {
+  let location = atomMap.get(designPageLocationState(projectId));
+  const { dialogId, selected, focused } = location;
+  const dialog: DialogInfo = atomMap.get(dialogsSelectorFamily(projectId)).find((dialog) => dialogId === dialog.id);
+  if (!dialog) return atomMap;
+
+  const { content } = dialog;
+  if (!has(content, selected)) {
+    location = { ...location, selected: '', focused: '' };
+  } else if (!has(content, focused)) {
+    location = { ...location, focused: '' };
+  }
+
+  atomMap.set(designPageLocationState(projectId), location);
+  return atomMap;
+};
+
 const getAtomAssetsMap = (snap: Snapshot, projectId: string): AtomAssetsMap => {
-  const atomMap = new Map<RecoilState<any>, any>();
+  let atomMap = new Map<RecoilState<any>, any>();
   const atomsToBeTracked = trackedAtoms(projectId);
   atomsToBeTracked.forEach((atom) => {
     const loadable = snap.getLoadable(atom);
@@ -55,7 +74,7 @@ const getAtomAssetsMap = (snap: Snapshot, projectId: string): AtomAssetsMap => {
 
   //should record the location state
   atomMap.set(designPageLocationState(projectId), snap.getLoadable(designPageLocationState(projectId)).contents);
-  atomMap.set(breadcrumbState(projectId), snap.getLoadable(breadcrumbState(projectId)).contents);
+  atomMap = checkLocation(projectId, atomMap);
   return atomMap;
 };
 
@@ -73,17 +92,25 @@ const checkAtomsChanged = (current: AtomAssetsMap, previous: AtomAssetsMap, atom
   return atoms.some((atom) => checkAtomChanged(current, previous, atom));
 };
 
-function navigate(next: AtomAssetsMap, projectId: string) {
-  const location = next.get(designPageLocationState(projectId));
-  const breadcrumb = [...next.get(breadcrumbState(projectId))];
-  if (location) {
+function navigate(next: AtomAssetsMap, skillId: string, projectId: string) {
+  const location = next.get(designPageLocationState(skillId));
+
+  if (location && projectId) {
     const { dialogId, selected, focused, promptTab } = location;
-    let currentUri = `/bot/${projectId}/dialogs/${dialogId}${getUrlSearch(selected, focused)}`;
-    if (promptTab) {
+    const dialog = next.get(dialogsSelectorFamily(skillId)).find((dialog) => dialogId === dialog.id);
+    const baseUri =
+      skillId == null || skillId === projectId
+        ? `/bot/${projectId}/dialogs/${dialogId}`
+        : `/bot/${projectId}/skill/${skillId}/dialogs/${dialogId}`;
+
+    let currentUri = `${baseUri}${getUrlSearch(
+      encodeArrayPathToDesignerPath(dialog.content, selected),
+      encodeArrayPathToDesignerPath(dialog.content, focused)
+    )}`;
+    if (promptTab && focused) {
       currentUri += `#${promptTab}`;
     }
-    breadcrumb.pop();
-    navigateTo(currentUri, { state: { breadcrumb } });
+    navigateTo(currentUri);
   }
 }
 
@@ -100,15 +127,18 @@ function mapTrackedAtomsOntoSnapshot(
       target = target.map(({ set }) => set(atom, next));
     }
   });
+
+  //add design page location to snapshot
+  target = target.map(({ set }) =>
+    set(designPageLocationState(projectId), nextAssets.get(designPageLocationState(projectId)))
+  );
   return target;
 }
 
 function setInitialLocation(snapshot: Snapshot, projectId: string, undoHistory: UndoHistory) {
   const location = snapshot.getLoadable(designPageLocationState(projectId));
-  const breadcrumb = snapshot.getLoadable(breadcrumbState(projectId));
   if (location.state === 'hasValue') {
     undoHistory.setInitialValue(designPageLocationState(projectId), location.contents);
-    undoHistory.setInitialValue(breadcrumbState(projectId), breadcrumb.contents);
   }
 }
 interface UndoRootProps {
@@ -118,13 +148,16 @@ interface UndoRootProps {
 export const UndoRoot = React.memo((props: UndoRootProps) => {
   const { projectId } = props;
   const undoHistory = useRecoilValue(undoHistoryState(projectId));
+  const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
   const history: UndoHistory = useRef(undoHistory).current;
   const [initialStateLoaded, setInitialStateLoaded] = useState(false);
-
+  const setCanUndo = useSetRecoilState(canUndoState(projectId));
+  const setCanRedo = useSetRecoilState(canRedoState(projectId));
   const setUndoFunction = useSetRecoilState(undoFunctionState(projectId));
   const [, forceUpdate] = useState([]);
   const setVersion = useSetRecoilState(undoVersionState(projectId));
-
+  const rootBotId = useRef('');
+  rootBotId.current = rootBotProjectId || '';
   //use to record the first time change, this will help to get the init location
   //init location is used to undo navigate
   const assetsChanged = useRef(false);
@@ -162,7 +195,12 @@ export const UndoRoot = React.memo((props: UndoRootProps) => {
   ) => {
     target = mapTrackedAtomsOntoSnapshot(target, current, next, projectId);
     gotoSnapshot(target);
-    navigate(next, projectId);
+    navigate(next, projectId, rootBotId.current);
+  };
+
+  const updateUndoResult = () => {
+    setCanRedo(history.canRedo());
+    setCanUndo(history.canUndo());
   };
 
   const undo = useRecoilCallback(({ snapshot, gotoSnapshot }: CallbackInterface) => () => {
@@ -171,6 +209,7 @@ export const UndoRoot = React.memo((props: UndoRootProps) => {
       const next = history.undo();
       if (present) undoAssets(snapshot, present, next, gotoSnapshot, projectId);
       setVersion(uniqueId());
+      updateUndoResult();
     }
   });
 
@@ -180,16 +219,9 @@ export const UndoRoot = React.memo((props: UndoRootProps) => {
       const next = history.redo();
       if (present) undoAssets(snapshot, present, next, gotoSnapshot, projectId);
       setVersion(uniqueId());
+      updateUndoResult();
     }
   });
-
-  const canUndo = () => {
-    return history.canUndo();
-  };
-
-  const canRedo = () => {
-    return history.canRedo();
-  };
 
   const commit = useRecoilCallback(({ snapshot }) => () => {
     const currentAssets = getAtomAssetsMap(snapshot, projectId);
@@ -198,6 +230,7 @@ export const UndoRoot = React.memo((props: UndoRootProps) => {
 
     if (previousAssets && checkAtomsChanged(currentAssets, previousAssets, trackedAtoms(projectId))) {
       history.add(getAtomAssetsMap(snapshot, projectId));
+      updateUndoResult();
     }
   });
 
@@ -214,7 +247,7 @@ export const UndoRoot = React.memo((props: UndoRootProps) => {
   });
 
   useEffect(() => {
-    setUndoFunction({ undo, redo, canRedo, canUndo, commitChanges, clearUndo });
+    setUndoFunction({ undo, redo, commitChanges, clearUndo });
   }, []);
 
   return null;
