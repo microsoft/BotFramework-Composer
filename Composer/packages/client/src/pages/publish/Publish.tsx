@@ -68,7 +68,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         projectId: botProjectId,
         publishHistory,
       });
-      const publishTargets = bot.settings ? (bot.settings.publishTargets as any[]) : [];
+      const publishTargets = bot.settings ? bot.settings.publishTargets || [] : [];
       publishTargetsList.push({
         projectId: botProjectId,
         publishTargets,
