@@ -139,7 +139,7 @@ type Props = {
   defaultSelected?: Partial<TreeLink>;
 };
 
-const TREE_PADDING = 100;
+const TREE_PADDING = 100; // the horizontal space taken up by stuff in the tree other than text or indentation
 
 export const ProjectTree: React.FC<Props> = ({
   onSelectAllLink: onAllSelected = undefined,
@@ -173,7 +173,7 @@ export const ProjectTree: React.FC<Props> = ({
   const treeRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setWidth(treeRef.current?.clientWidth ?? 0);
+    setWidth(treeRef?.current?.clientWidth ?? 0);
   }, [treeRef.current]);
 
   useEffect(() => {
