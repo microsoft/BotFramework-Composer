@@ -170,7 +170,7 @@ export const ProjectTree: React.FC<Props> = ({
     hasWarnings: false,
   }));
 
-  const treeRef = useRef<Element>(null);
+  const treeRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setWidth(treeRef.current?.clientWidth ?? 0);
