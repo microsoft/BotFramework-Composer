@@ -145,10 +145,10 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
       <form onSubmit={submit}>
         <TextField
           defaultValue={props.current ? props.current.name : ''}
+          disabled={props.current ? true : false}
           errorMessage={errorMessage}
           label={formatMessage('Name')}
           placeholder={formatMessage('My Publish Profile')}
-          readOnly={props.current ? true : false}
           onChange={updateName}
         />
         <Dropdown
