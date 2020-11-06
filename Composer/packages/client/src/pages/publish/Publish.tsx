@@ -86,6 +86,19 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     [projectId, publishTypes]
   );
 
+  const isPublishDisable = useMemo(
+    () => () => {
+      // if current profile is already publishing, set disable to true
+      if (selectedTargetName && selectedTargetName !== 'all') {
+        if (thisPublishHistory?.length >= 0) {
+          return thisPublishHistory[0]?.status === 202;
+        }
+      } else {
+        return selectedTargetName === 'all';
+      }
+    },
+    [selectedTargetName, thisPublishHistory]
+  );
   const toolbarItems: IToolbarItem[] = [
     {
       type: 'action',
@@ -111,7 +124,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       },
       align: 'left',
       dataTestid: 'publishPage-Toolbar-Publish',
-      disabled: selectedTargetName !== 'all' ? false : true,
+      disabled: isPublishDisable(),
     },
     {
       type: 'action',
