@@ -141,7 +141,7 @@ try {
     });
   }
 } catch (err) {
-  log.error('Error setting signing frameworks. %O', err);
+  log.error('Error signing frameworks. %O', err);
   process.exit(1);
 }
 
