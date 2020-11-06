@@ -7,7 +7,11 @@ import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import React, { useCallback, useState } from 'react';
 
-import { LoadingSpinner } from '../../components/LoadingSpinner';
+import { createNotification } from '../../recoilModel/dispatchers/notification';
+import { ImportSuccessNotification } from '../../components/ImportModal/ImportSuccessNotification';
+import { useRecoilValue } from 'recoil';
+import { dispatcherState, locationState } from '../../recoilModel';
+import { PullStatus } from './pullStatus';
 
 type PullDialogProps = {
   hidden: boolean;
@@ -27,7 +31,8 @@ export const PullDialog: React.FC<PullDialogProps> = (props) => {
   const { hidden = true, onDismiss, projectId, selectedTarget } = props;
   const [status, setStatus] = useState<PullDialogStatus>('idle');
   const [error, setError] = useState<string>('');
-  const [backupPath, setBackupPath] = useState<string>('');
+  const { addNotification, openProject } = useRecoilValue(dispatcherState);
+  const botLocation = useRecoilValue(locationState(projectId));
 
   const pull = useCallback(() => {
     if (selectedTarget) {
@@ -40,12 +45,21 @@ export const PullDialog: React.FC<PullDialogProps> = (props) => {
           const res = await fetch(`/api/publish/${projectId}/pull/${selectedTarget.name}`, {
             method: 'POST',
           });
-          const { status } = res;
-          if (status === 200) {
+          if (res.status && res.status === 200) {
             const { backupLocation } = await res.json();
-            // show complete
-            setStatus('done');
-            setBackupPath(backupLocation);
+            // show notification indicating success and close dialog
+            const notification = createNotification({
+              type: 'success',
+              title: '',
+              onRenderCardContent: ImportSuccessNotification({
+                importedToExisting: true,
+                location: backupLocation,
+              }),
+            });
+            addNotification(notification);
+            // reload the bot project to update the authoring canvas
+            openProject(botLocation, undefined, false);
+            onDismiss();
             return;
           }
 
@@ -62,6 +76,15 @@ export const PullDialog: React.FC<PullDialogProps> = (props) => {
       doPull();
     }
   }, [projectId, selectedTarget]);
+
+  useEffect(() => {
+    if (status === 'connecting') {
+      // start the pull
+      setTimeout(() => {
+        pull();
+      }, CONNECTING_STATUS_DISPLAY_TIME);
+    }
+  }, [status]);
 
   const onCancelOrDone = useCallback(() => {
     setStatus('idle');

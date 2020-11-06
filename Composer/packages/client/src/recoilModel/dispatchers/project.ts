@@ -174,7 +174,7 @@ export const projectDispatcher = () => {
   );
 
   const openProject = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (path: string, storageId = 'default') => {
+    (callbackHelpers: CallbackInterface) => async (path: string, storageId = 'default', navigate = true) => {
       const { set } = callbackHelpers;
       try {
         set(botOpeningState, true);
@@ -187,7 +187,9 @@ export const projectDispatcher = () => {
           isRemote: false,
         });
         projectIdCache.set(projectId);
-        navigateToBot(callbackHelpers, projectId, mainDialog);
+        if (navigate) {
+          navigateToBot(callbackHelpers, projectId, mainDialog);
+        }
       } catch (ex) {
         set(botProjectIdsState, []);
         removeRecentProject(callbackHelpers, path);
