@@ -47,6 +47,7 @@ import { triggerNotSupported } from '../../utils/dialogValidator';
 import { undoFunctionState, undoVersionState } from '../../recoilModel/undo/history';
 import { decodeDesignerPathToArrayPath } from '../../utils/convertUtils/designerPathEncoder';
 import { useTriggerApi } from '../../shell/triggerApi';
+import { undoStatusSelectorFamily } from '../../recoilModel/selectors/undo';
 
 import { WarningMessage } from './WarningMessage';
 import {
@@ -128,8 +129,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const undoVersion = useRecoilValue(undoVersionState(skillId ?? projectId));
   const rootProjectId = useRecoilValue(rootBotProjectIdSelector) ?? projectId;
   const [showAddSkillDialogModal, setAddSkillDialogModalVisibility] = useState(false);
-  const { undo, redo, canRedo, canUndo, commitChanges, clearUndo } = undoFunction;
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
+  const { undo, redo, commitChanges, clearUndo } = undoFunction;
+  const [canUndo, canRedo] = useRecoilValue(undoStatusSelectorFamily(projectId));
+
   const {
     removeDialog,
     updateDialog,
@@ -385,8 +388,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     return { actionSelected, showDisableBtn, showEnableBtn };
   }, [visualEditorSelection, currentDialog?.content]);
 
-  const { onFocusFlowEditor, onBlurFlowEditor } = useElectronFeatures(actionSelected, canUndo?.(), canRedo?.());
-
+  const { onFocusFlowEditor, onBlurFlowEditor } = useElectronFeatures(actionSelected, canUndo, canRedo);
   const EditorAPI = getEditorAPI();
   const toolbarItems: IToolbarItem[] = [
     {
@@ -445,13 +447,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           {
             key: 'edit.undo',
             text: formatMessage('Undo'),
-            disabled: !canUndo?.(),
+            disabled: !canUndo,
             onClick: undo,
           },
           {
             key: 'edit.redo',
             text: formatMessage('Redo'),
-            disabled: !canRedo?.(),
+            disabled: !canRedo,
             onClick: redo,
           },
           {
@@ -702,7 +704,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                           onCancel={() => {
                             setWarningIsVisible(false);
                           }}
-                          onOk={() => navigateTo(`/bot/${projectId}/knowledge-base/all`)}
+                          onOk={() => navigateTo(`/bot/${projectId}`)}
                         />
                       )
                     ) : (

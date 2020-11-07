@@ -361,3 +361,13 @@ export const skillsState = atomFamily<Skill[], string>({
     return [];
   },
 });
+
+export const canUndoState = atomFamily<boolean, string>({
+  key: getFullyQualifiedKey('canUndoState'),
+  default: false,
+});
+
+export const canRedoState = atomFamily<boolean, string>({
+  key: getFullyQualifiedKey('canRedoState'),
+  default: false,
+});
