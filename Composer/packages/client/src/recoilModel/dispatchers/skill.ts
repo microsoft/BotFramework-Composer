@@ -58,7 +58,7 @@ export const skillDispatcher = () => {
 
   const createSkillManifest = async (callbackHelpers: CallbackInterface, { id, content, projectId }) => {
     const { set, snapshot } = callbackHelpers;
-    let manifestForBotProjectFile = undefined;
+    let manifestForBotProjectFile;
     const dispatcher = await snapshot.getPromise(dispatcherState);
     set(skillManifestsState(projectId), (skillManifests) => {
       if (!skillManifests.length) {
@@ -73,7 +73,7 @@ export const skillDispatcher = () => {
 
   const removeSkillManifest = useRecoilCallback(
     ({ set, snapshot }: CallbackInterface) => async (id: string, projectId: string) => {
-      let newCurrentManifestId: string | undefined = undefined;
+      let newCurrentManifestId: string | undefined;
       const dispatcher = await snapshot.getPromise(dispatcherState);
       set(skillManifestsState(projectId), (skillManifests) => {
         const filtered = skillManifests.filter((manifest) => manifest.id !== id);

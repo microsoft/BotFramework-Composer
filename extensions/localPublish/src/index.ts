@@ -51,7 +51,6 @@ const isLocalhostUrl = (matchUrl: string) => {
 const isSkillHostUpdateRequired = (skillHostEndpoint?: string) => {
   return !skillHostEndpoint || isLocalhostUrl(skillHostEndpoint);
 };
-
 class LocalPublisher implements PublishPlugin<PublishConfig> {
   public name = 'localpublish';
   public description = 'Publish bot to local runtime';
