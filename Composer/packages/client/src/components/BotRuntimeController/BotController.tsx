@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { DefaultButton, IconButton } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { useRecoilValue } from 'recoil';
@@ -11,7 +11,7 @@ import formatMessage from 'format-message';
 import { css } from '@emotion/core';
 import { NeutralColors } from '@uifabric/fluent-theme';
 
-import { buildConfigurationSelector, runningBotsSelector } from '../../recoilModel';
+import { buildConfigurationSelector, dispatcherState, runningBotsSelector } from '../../recoilModel';
 import { BotStatus } from '../../constants';
 import { useClickOutside } from '../../utils/hooks';
 
@@ -45,6 +45,8 @@ const BotController: React.FC = () => {
   const runningBots = useRecoilValue(runningBotsSelector);
   const projectCollection = useRecoilValue(buildConfigurationSelector);
   const [isControllerHidden, setControllerVisibility] = useState(true);
+  const { onboardingAddCoachMarkRef } = useRecoilValue(dispatcherState);
+  const onboardRef = useCallback((startBot) => onboardingAddCoachMarkRef({ startBot }), []);
 
   const target = useRef(null);
   const botControllerMenuTarget = useRef(null);
@@ -113,7 +115,7 @@ const BotController: React.FC = () => {
         >
           <span>{buttonText}</span>
         </DefaultButton>
-        <div css={iconSectionContainer}>
+        <div ref={onboardRef} css={iconSectionContainer}>
           <IconButton
             ariaDescription={formatMessage('Open start bots panel')}
             iconProps={{
