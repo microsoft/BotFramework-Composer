@@ -4,6 +4,9 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
 import { default as Measure, ContentRect } from 'react-measure';
+import { useRecoilValue } from 'recoil';
+
+import { dispatcherState, currentModeState } from '../../recoilModel';
 
 const defaultSplitterWidth = 5;
 
@@ -163,6 +166,9 @@ export const LeftRightSplit = (props: React.PropsWithChildren<Props>) => {
   const [leftStart, setLeftStart] = React.useState(0);
   const [screenStart, setScreenStart] = React.useState(0);
 
+  const currentPageMode = useRecoilValue(currentModeState);
+  const { setPageElementState } = useRecoilValue(dispatcherState);
+
   const constrainLeft = (value: number): number => {
     return constrainPaneExtent(value, {
       total: currentContentWidth,
@@ -198,6 +204,7 @@ export const LeftRightSplit = (props: React.PropsWithChildren<Props>) => {
       // calculate candidate left
       const newLeft = constrainLeft(leftStart + (event.screenX - screenStart));
       setLeftWidth(newLeft);
+      setPageElementState(currentPageMode, { leftSplitWidth: newLeft });
     }
   };
 

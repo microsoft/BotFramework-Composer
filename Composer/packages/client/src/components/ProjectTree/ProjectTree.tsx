@@ -153,14 +153,15 @@ export const ProjectTree: React.FC<Props> = ({
   const { onboardingAddCoachMarkRef, navigateToFormDialogSchema, setPageElementState } = useRecoilValue(
     dispatcherState
   );
+  const treeRef = useRef<HTMLDivElement>(null);
 
   const pageElements = useRecoilValue(pageElementState).design;
+  const leftSplitWidth = pageElements?.leftSplitWidth ?? treeRef?.current?.clientWidth ?? 0;
   const getPageElement = (name: string) => pageElements?.[name];
   const setPageElement = (name: string, value: any) =>
     setPageElementState('design', { ...pageElements, [name]: value });
 
   const [filter, setFilter] = useState('');
-  const [width, setWidth] = useState(0);
   const formDialogComposerFeatureEnabled = useFeatureFlag('FORM_DIALOG');
   const [selectedLink, setSelectedLink] = useState<Partial<TreeLink> | undefined>(defaultSelected);
   const delayedSetFilter = throttle((newValue) => setFilter(newValue), 200);
@@ -169,12 +170,6 @@ export const ProjectTree: React.FC<Props> = ({
     ...bot,
     hasWarnings: false,
   }));
-
-  const treeRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setWidth(treeRef?.current?.clientWidth ?? 0);
-  }, [treeRef.current]);
 
   useEffect(() => {
     setSelectedLink(defaultSelected);
@@ -275,7 +270,7 @@ export const ProjectTree: React.FC<Props> = ({
           isActive={doesLinkMatch(link, selectedLink)}
           link={link}
           menu={[{ label: formatMessage('Create/edit skill manifest'), onClick: () => {} }]}
-          textWidth={width - TREE_PADDING}
+          textWidth={leftSplitWidth - TREE_PADDING}
           onSelect={handleOnSelect}
         />
       </span>
@@ -346,7 +341,7 @@ export const ProjectTree: React.FC<Props> = ({
                   ]
                 : []),
             ]}
-            textWidth={width - TREE_PADDING}
+            textWidth={leftSplitWidth - TREE_PADDING}
             onSelect={handleOnSelect}
           />
         </span>
@@ -391,7 +386,7 @@ export const ProjectTree: React.FC<Props> = ({
             },
           },
         ]}
-        textWidth={width - TREE_PADDING}
+        textWidth={leftSplitWidth - TREE_PADDING}
         onSelect={handleOnSelect}
       />
     );
@@ -448,7 +443,7 @@ export const ProjectTree: React.FC<Props> = ({
         `}
         role="grid"
       >
-        <TreeItem showProps isSubItemActive={false} link={link} textWidth={width - TREE_PADDING} />
+        <TreeItem showProps isSubItemActive={false} link={link} textWidth={leftSplitWidth - TREE_PADDING} />
       </span>
     );
   };
@@ -599,7 +594,7 @@ export const ProjectTree: React.FC<Props> = ({
             <TreeItem
               hasChildren={false}
               link={{ displayName: formatMessage('All'), projectId: rootProjectId, isRoot: true }}
-              textWidth={width - TREE_PADDING}
+              textWidth={leftSplitWidth - TREE_PADDING}
               onSelect={onAllSelected}
             />
           ) : null}
