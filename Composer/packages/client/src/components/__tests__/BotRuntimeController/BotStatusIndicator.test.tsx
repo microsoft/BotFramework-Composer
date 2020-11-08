@@ -46,6 +46,6 @@ describe('<BotStatusIndicator />', () => {
         message: 'Failed to bind to port 3979',
       });
     });
-    expect(findByText('See details')).toBeDefined();
+    expect(findByText('See Details')).toBeDefined();
   });
 });

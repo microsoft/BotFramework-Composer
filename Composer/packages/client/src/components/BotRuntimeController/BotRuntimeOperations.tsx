@@ -32,6 +32,7 @@ export const BotRuntimeOperations: React.FC<BotRuntimeOperationsProps> = ({ proj
           aria-label={formatMessage('Stop Bot')}
           iconProps={{ iconName: 'CircleStopSolid' }}
           styles={{ root: { height: '20px' } }}
+          title={formatMessage('Stop Bot')}
           onClick={() => stopSingleBot(projectId)}
         />
       );
@@ -42,6 +43,7 @@ export const BotRuntimeOperations: React.FC<BotRuntimeOperationsProps> = ({ proj
           aria-label={formatMessage('Start Bot')}
           iconProps={{ iconName: 'Play' }}
           styles={{ root: { height: '20px' } }}
+          title={formatMessage('Start Bot')}
           onClick={() => startSingleBot(projectId)}
         />
       );

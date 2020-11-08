@@ -62,7 +62,7 @@ export const BotStatusIndicator: React.FC<BotStatusIndicatorProps> = ({ projectI
             openErrorDialog();
           }}
         >
-          <span>{formatMessage('See details')}</span>
+          <span>{formatMessage('See Details')}</span>
         </ActionButton>
       )}
       <ErrorCallout

@@ -115,6 +115,7 @@ const BotController: React.FC = () => {
         </DefaultButton>
         <div css={iconSectionContainer}>
           <IconButton
+            ariaDescription={formatMessage('Open start bots panel')}
             iconProps={{
               iconName: 'ProductList',
             }}
