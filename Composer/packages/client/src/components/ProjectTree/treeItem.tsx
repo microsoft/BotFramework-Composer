@@ -27,7 +27,6 @@ const iconAndText = css`
     outline: rgb(102, 102, 102) solid 1px;
     z-index: 1;
   }
-  padding-left: 4px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
@@ -42,6 +41,7 @@ const content = css`
   outline: none;
   display: flex;
   align-items: center;
+  height: 24px;
 
   label: ProjectTreeItem;
 `;
@@ -62,7 +62,7 @@ const menuStyle: Partial<IContextualMenuStyles> = {
 const moreButton = (isActive: boolean): IButtonStyles => {
   return {
     root: {
-      padding: '0 4px',
+      padding: '4px 4px 0 4px',
       alignSelf: 'stretch',
       visibility: isActive ? 'visible' : 'hidden',
       height: 'auto',
@@ -87,6 +87,7 @@ const navItem = (isActive: boolean) => css`
 
   display: flex;
   flex-direction: row;
+  align-items: center;
 
   &:hover {
     color: #545454;
@@ -121,6 +122,7 @@ export const overflowSet = css`
   line-height: 24px;
   justify-content: space-between;
   display: flex;
+  margin-top: 2px;
 `;
 
 const statusIcon = {
