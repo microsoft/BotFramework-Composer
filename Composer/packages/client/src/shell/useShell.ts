@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useMemo, useRef } from 'react';
-import { ShellApi, ShellData, Shell, DialogSchemaFile, DialogInfo } from '@botframework-composer/types';
+import { ShellApi, ShellData, Shell, DialogSchemaFile, DialogInfo, SDKKinds } from '@botframework-composer/types';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
@@ -79,6 +79,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
   const settings = useRecoilValue(settingsState(projectId));
   const flowZoomRate = useRecoilValue(rateInfoState);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
+  const isRootBot = rootBotProjectId === projectId;
 
   const userSettings = useRecoilValue(userSettingsState);
   const clipboardActions = useRecoilValue(clipboardActionsState);
@@ -277,6 +278,14 @@ export function useShell(source: EventSource, projectId: string): Shell {
     skills,
     skillsSettings: settings.skill || {},
     flowZoomRate,
+    forceDisabledActions: isRootBot
+      ? []
+      : [
+          {
+            kind: SDKKinds.BeginSkill,
+            reason: formatMessage('You can only connect to a skill in the root bot.'),
+          },
+        ],
   };
 
   return {
