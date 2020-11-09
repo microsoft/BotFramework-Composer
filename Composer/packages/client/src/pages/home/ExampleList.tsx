@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import React from 'react';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { List } from 'office-ui-fabric-react/lib/List';
-import { ProjectTemplate } from '@bfc/shared';
+import { BotTemplate } from '@bfc/shared';
 
 import * as exampleIcons from '../../images/samples';
 
@@ -20,7 +20,7 @@ import {
 } from './styles';
 
 interface ExampleListProps {
-  examples: ProjectTemplate[];
+  examples: BotTemplate[];
   onClick: (templateId: string) => void;
 }
 
@@ -35,7 +35,7 @@ const resolveIcon = (exampleId: string): string => {
 export const ExampleList: React.FC<ExampleListProps> = (props) => {
   const { onClick, examples } = props;
 
-  function onRenderCell(item?: ProjectTemplate): React.ReactNode {
+  function onRenderCell(item?: BotTemplate): React.ReactNode {
     if (!item) {
       return;
     }

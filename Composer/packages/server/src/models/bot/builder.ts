@@ -5,16 +5,14 @@
 import { FileInfo, IConfig } from '@bfc/shared';
 import { ComposerReservoirSampler } from '@microsoft/bf-dispatcher/lib/mathematics/sampler/ComposerReservoirSampler';
 import { ComposerBootstrapSampler } from '@microsoft/bf-dispatcher/lib/mathematics/sampler/ComposerBootstrapSampler';
+import { luImportResolverGenerator, getLUFiles, getQnAFiles } from '@bfc/shared/lib/luBuildResolver';
 import { Orchestrator } from '@microsoft/bf-orchestrator';
+import { IOrchestratorBuildOutput, IOrchestratorNLRList, IOrchestratorProgress } from './interface';
 
 import { Path } from '../../utility/path';
 import { IFileStorage } from '../storage/interface';
 import log from '../../logger';
 
-import { IOrchestratorBuildOutput, IOrchestratorNLRList, IOrchestratorProgress } from './interface';
-import { luImportResolverGenerator, getLUFiles, getQnAFiles } from './luResolver';
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const crossTrainer = require('@microsoft/bf-lu/lib/parser/cross-train/crossTrainer.js');
 const luBuild = require('@microsoft/bf-lu/lib/parser/lubuild/builder.js');
 const qnaBuild = require('@microsoft/bf-lu/lib/parser/qnabuild/builder.js');
@@ -273,6 +271,7 @@ export class Builder {
       suffix: config.suffix,
       keptVersionCount: 10,
       isStaging: false,
+      region: config.region,
     });
 
     await this.luBuilder.writeDialogAssets(buildResult, {
