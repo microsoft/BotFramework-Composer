@@ -1,4 +1,4 @@
-import { OneAuthService } from '../../src/auth/oneAuthService';
+import { OneAuthInstance } from '../../src/auth/oneAuthService';
 
 jest.mock('../../src/electronWindow', () => ({
   getInstance: jest.fn().mockReturnValue({
@@ -6,6 +6,11 @@ jest.mock('../../src/electronWindow', () => ({
       getNativeWindowHandle: jest.fn(),
     },
   }),
+}));
+
+jest.mock('../../src/utility/platform', () => ({
+  isLinux: () => process.env.TEST_IS_LINUX === 'true',
+  isMac: () => false,
 }));
 
 describe('OneAuth Serivce', () => {
@@ -33,9 +38,17 @@ describe('OneAuth Serivce', () => {
       InteractionRequired: INTERACTION_REQUIRED,
     },
   };
+  let oneAuthService = new OneAuthInstance(); // bypass the shim logic
+  let processEnvBackup = { ...process.env };
+
+  afterEach(() => {
+    process.env = processEnvBackup;
+  });
 
   beforeEach(() => {
-    (OneAuthService as any)._oneAuth = mockOneAuth;
+    jest.resetModules();
+    oneAuthService = new OneAuthInstance();
+    (oneAuthService as any)._oneAuth = mockOneAuth;
     mockOneAuth.acquireCredentialInteractively.mockClear();
     mockOneAuth.acquireCredentialSilently.mockClear();
     mockOneAuth.initialize.mockClear();
@@ -43,12 +56,12 @@ describe('OneAuth Serivce', () => {
     mockOneAuth.setLogPiiEnabled.mockClear();
     mockOneAuth.signInInteractively.mockClear();
     mockOneAuth.shutdown.mockClear();
-    (OneAuthService as any).initialized = false;
-    (OneAuthService as any).signedInAccount = undefined;
+    (oneAuthService as any).initialized = false;
+    (oneAuthService as any).signedInAccount = undefined;
   });
 
   it('should sign in and get an access token (happy path)', async () => {
-    const result = await OneAuthService.getAccessToken({ targetResource: 'someProtectedResource' });
+    const result = await oneAuthService.getAccessToken({ targetResource: 'someProtectedResource' });
 
     // it should have initialized
     expect(mockOneAuth.setLogPiiEnabled).toHaveBeenCalled();
@@ -57,7 +70,7 @@ describe('OneAuth Serivce', () => {
 
     // it should have signed in
     expect(mockOneAuth.signInInteractively).toHaveBeenCalled();
-    expect((OneAuthService as any).signedInAccount).toEqual(mockAccount);
+    expect((oneAuthService as any).signedInAccount).toEqual(mockAccount);
 
     // it should have called acquireCredentialSilently
     expect(mockOneAuth.acquireCredentialSilently).toHaveBeenCalled();
@@ -68,7 +81,7 @@ describe('OneAuth Serivce', () => {
 
   it('should try to acquire a token interactively if interaction is required', async () => {
     mockOneAuth.acquireCredentialSilently.mockReturnValueOnce({ error: { status: INTERACTION_REQUIRED } });
-    const result = await OneAuthService.getAccessToken({ targetResource: 'someProtectedResource' });
+    const result = await oneAuthService.getAccessToken({ targetResource: 'someProtectedResource' });
 
     expect(mockOneAuth.acquireCredentialInteractively).toHaveBeenCalled();
 
@@ -78,7 +91,7 @@ describe('OneAuth Serivce', () => {
 
   it('should throw if there is no targetResource passed as an arg', async () => {
     try {
-      await OneAuthService.getAccessToken({ targetResource: undefined } as any);
+      await oneAuthService.getAccessToken({ targetResource: undefined } as any);
       throw 'Did not throw expected.';
     } catch (e) {
       expect(e).toBe('Target resource required to get access token.');
@@ -88,7 +101,7 @@ describe('OneAuth Serivce', () => {
   it('should throw if the signed in account does not have an id', async () => {
     try {
       mockOneAuth.signInInteractively.mockReturnValueOnce({ account: { id: undefined } });
-      await OneAuthService.getAccessToken({ targetResource: 'someProtectedResource' } as any);
+      await oneAuthService.getAccessToken({ targetResource: 'someProtectedResource' } as any);
       throw 'Did not throw expected.';
     } catch (e) {
       expect(e).toBe('Signed in account does not have an id.');
@@ -96,19 +109,42 @@ describe('OneAuth Serivce', () => {
   });
 
   it('should sign out', async () => {
-    await OneAuthService.getAccessToken({ targetResource: 'someProtectedResource' });
+    await oneAuthService.getAccessToken({ targetResource: 'someProtectedResource' });
 
     // it should have signed in
-    expect((OneAuthService as any).signedInAccount).toEqual(mockAccount);
+    expect((oneAuthService as any).signedInAccount).toEqual(mockAccount);
 
-    OneAuthService.signOut();
+    oneAuthService.signOut();
 
-    expect((OneAuthService as any).signedInAccount).toBeUndefined();
+    expect((oneAuthService as any).signedInAccount).toBeUndefined();
   });
 
   it('should shut down', async () => {
-    await OneAuthService.shutdown();
+    await oneAuthService.shutdown();
 
     expect(mockOneAuth.shutdown).toHaveBeenCalled();
+  });
+
+  it('should return the shim on Linux', async () => {
+    Object.assign(process.env, { ...process.env, COMPOSER_ENABLE_ONEAUTH: 'true', TEST_IS_LINUX: 'true' });
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { OneAuthService: service } = require('../../src/auth/oneAuthService');
+    const result = await service.getAccessToken({});
+
+    expect(result).toEqual({ accessToken: '', acquiredAt: 0, expiryTime: 99999999999 });
+  });
+
+  it('should return the shim in the dev environment without the oneauth env variable set', async () => {
+    Object.assign(process.env, {
+      ...process.env,
+      COMPOSER_ENABLE_ONEAUTH: undefined,
+      NODE_ENV: 'development',
+      TEST_IS_LINUX: 'false',
+    });
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { OneAuthService: service } = require('../../src/auth/oneAuthService');
+    const result = await service.getAccessToken({});
+
+    expect(result).toEqual({ accessToken: '', acquiredAt: 0, expiryTime: 99999999999 });
   });
 });

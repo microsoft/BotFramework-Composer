@@ -1,4 +1,3 @@
-process.env.NODE_ENV = 'production';
 process.env.DEBUG = 'composer*';
 
 jest.mock('electron', () => ({

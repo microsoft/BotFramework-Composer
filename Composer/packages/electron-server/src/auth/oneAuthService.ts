@@ -27,7 +27,7 @@ const DEFAULT_LOCALE = 'en'; // TODO: get this from settings?
 const DEFAULT_AUTH_SCHEME = 2; // bearer token
 const DEFAULT_AUTH_AUTHORITY = 'https://login.microsoftonline.com/common'; // work and school accounts
 
-class OneAuthInstance extends OneAuthBase {
+export class OneAuthInstance extends OneAuthBase {
   private initialized: boolean;
   private _oneAuth: typeof OneAuth | null = null; //eslint-disable-line
   private signedInAccount: OneAuth.Account | undefined;
@@ -222,6 +222,6 @@ class OneAuthInstance extends OneAuthBase {
 }
 
 // only use the shim in Linux, or dev environment without flag enabled
-const useShim = (isDevelopment && !process.env.COMPOSER_ENABLE_ONEAUTH) || isLinux();
+const useShim = (isDevelopment && process.env.COMPOSER_ENABLE_ONEAUTH !== 'true') || isLinux();
 
 export const OneAuthService = useShim ? new OneAuthShim() : new OneAuthInstance();
