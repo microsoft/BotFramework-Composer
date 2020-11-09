@@ -20,12 +20,12 @@ export const ElementMeasurer: React.FC<ElementMeasurerProps> = ({ children, styl
   return (
     <Measure
       scroll
-      onResize={({ bounds }) => {
+      onResize={({ scroll }) => {
         /**
          * As a parent node, <Measure /> mounted before children mounted.
          * Avoid flickering issue by filtering out the first onResize event.
          */
-        const { width, height } = bounds ?? { width: 0, height: 0 };
+        const { width, height } = scroll ?? { width: 0, height: 0 };
         if (width === 0 && height === 0) return;
         onResize(new Boundary(width, height));
       }}
