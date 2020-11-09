@@ -56,6 +56,6 @@ describe('undoHistory class', () => {
     }
     expect(undoHistory.stack.length).toBe(30);
     expect(undoHistory.getPresentAssets()?.get(dialogsSelectorFamily(projectId))).toBe('39');
-    expect(undoHistory.stack[0].get(dialogsSelectorFamily(projectId))).toBe('10');
+    expect(undoHistory.stack[0].atomMaps.get(dialogsSelectorFamily(projectId))).toBe('10');
   });
 });
