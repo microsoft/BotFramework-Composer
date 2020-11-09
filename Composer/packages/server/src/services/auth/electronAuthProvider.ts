@@ -32,8 +32,6 @@ export class ElectronAuthProvider extends AuthProvider {
   async getAccessToken(params: AuthParameters): Promise<string> {
     const { getAccessToken } = this.electronContext;
     const { targetResource = '' } = params;
-    console.log(this.electronContext);
-    console.log(getAccessToken);
 
     if (isLinux()) {
       log('Auth login flow is currently unsupported in Linux.');
