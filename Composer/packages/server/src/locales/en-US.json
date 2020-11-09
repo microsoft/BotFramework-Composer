@@ -377,6 +377,9 @@
   "boolean_value_98d39ea1": {
     "message": "Boolean value."
   },
+  "bot_7926b66d": {
+    "message": "Bot"
+  },
   "bot_asks_5e9f0202": {
     "message": "Bot Asks"
   },
@@ -2501,6 +2504,9 @@
   "there_are_no_notifications_e81eab8d": {
     "message": "There are no notifications."
   },
+  "there_are_no_preview_features_at_this_time_a5c40953": {
+    "message": "There are no preview features at this time."
+  },
   "there_was_an_error_74ed3c58": {
     "message": "There was an error"
   },
@@ -2524,6 +2530,9 @@
   },
   "this_dialog_has_no_trigger_yet_d1f1d173": {
     "message": "This dialog has no trigger yet."
+  },
+  "this_is_a_botname_notification_c8a391c7": {
+    "message": "This is a { botName } notification"
   },
   "this_is_a_required_field_acb9837e": {
     "message": "This is a required field."
