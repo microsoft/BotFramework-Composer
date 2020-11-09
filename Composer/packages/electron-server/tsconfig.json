@@ -4,13 +4,7 @@
     "outDir": "./build/",
     "sourceMap": true,
     "target": "es6",
-    "baseUrl": ".",
-    "paths": {
-      "@bfc/server": ["../server"]
-    }
+    "baseUrl": "."
   },
-  "include": ["src/main.ts", "src/preload.js"],
-  "references": [
-    { "path": "../server/tsconfig.build.json" }
-  ]
+  "include": ["src/main.ts", "src/preload.js"]
 }
