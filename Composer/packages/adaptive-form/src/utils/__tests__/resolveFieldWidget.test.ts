@@ -98,7 +98,7 @@ describe('resolveFieldWidget', () => {
         enum: ['one', 'two', 'three'],
       };
 
-      const { field: ReturnedField } = resolveFieldWidget({ schema });
+      const { field: ReturnedField } = resolveFieldWidget({ schema, isOneOf: true });
       expect(ReturnedField).toEqual(DefaultFields.SelectField);
     });
   });

@@ -7,4 +7,12 @@ module.exports = {
   rules: {
     'security/detect-non-literal-fs-filename': 'off',
   },
+  overrides: [
+    {
+      files: ['scripts/*'],
+      rules: {
+        '@typescript-eslint/no-var-requires': 'off',
+      },
+    },
+  ],
 };
