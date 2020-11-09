@@ -19,9 +19,9 @@ import { isDevelopment } from './utility/env';
 import { getUnpackedAsarPath } from './utility/getUnpackedAsarPath';
 import { loadLocale, getAppLocale, updateAppLocale } from './utility/locale';
 import log from './utility/logger';
-import { getAccessToken, loginAndGetIdToken, OAuthLoginOptions } from './utility/oauthImplicitFlowHelper';
 import { isMac, isWindows } from './utility/platform';
 import { parseDeepLinkUrl } from './utility/url';
+import { OneAuthService } from './auth/oneAuthService';
 
 const microsoftLogoPath = join(__dirname, '../resources/ms_logo.svg');
 let currentAppLocale = getAppLocale().appLocale;
@@ -119,25 +119,6 @@ function initializeAppUpdater(settings: AppUpdaterSettings) {
   log('App updater initialized.');
 }
 
-function initAuthListeners(window: Electron.BrowserWindow) {
-  ipcMain.on('oauth-start-login', async (_ev, options: OAuthLoginOptions, id: number) => {
-    try {
-      const idToken = await loginAndGetIdToken(options);
-      window.webContents.send('oauth-login-complete', idToken, id);
-    } catch (e) {
-      window.webContents.send('oauth-login-error', e, id);
-    }
-  });
-  ipcMain.on('oauth-get-access-token', async (_ev, options: OAuthLoginOptions, idToken: string, id: number) => {
-    try {
-      const accessToken = await getAccessToken({ ...options, idToken });
-      window.webContents.send('oauth-get-access-token-complete', accessToken, id);
-    } catch (e) {
-      window.webContents.send('oauth-get-access-token-error', e, id);
-    }
-  });
-}
-
 async function loadServer() {
   if (!isDevelopment) {
     // only change paths if packaged electron app
@@ -154,7 +135,9 @@ async function loadServer() {
 
   log('Starting server...');
   const { start } = await import('@bfc/server');
-  serverPort = await start();
+  serverPort = await start({
+    getAccessToken: OneAuthService.getAccessToken.bind(OneAuthService),
+  });
   log(`Server started at port: ${serverPort}`);
 }
 
@@ -166,7 +149,6 @@ async function main(show = false) {
     if (process.env.COMPOSER_DEV_TOOLS) {
       mainWindow.webContents.openDevTools();
     }
-    initAuthListeners(mainWindow);
 
     if (isWindows()) {
       deeplinkUrl = processArgsForWindows(process.argv);

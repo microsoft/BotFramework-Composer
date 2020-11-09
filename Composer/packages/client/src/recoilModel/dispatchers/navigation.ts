@@ -16,10 +16,7 @@ import { checkUrl, convertPathToUrl, getUrlSearch, navigateTo } from './../../ut
 
 export const navigationDispatcher = () => {
   const setDesignPageLocation = useRecoilCallback(
-    ({ set }: CallbackInterface) => async (
-      projectId: string,
-      { dialogId = '', selected = '', focused = '', promptTab }
-    ) => {
+    ({ set }: CallbackInterface) => (projectId: string, { dialogId = '', selected = '', focused = '', promptTab }) => {
       let focusPath = dialogId + '#';
       if (focused) {
         focusPath = dialogId + '#.' + focused;
@@ -56,7 +53,11 @@ export const navigationDispatcher = () => {
           ? convertPathToUrl(rootBotProjectId, skillId, dialogId)
           : convertPathToUrl(rootBotProjectId, skillId, dialogId, `selected=triggers[${trigger}]`);
       if (checkUrl(currentUri, rootBotProjectId, projectId, designPageLocation)) return;
-
+      set(designPageLocationState(projectId), {
+        dialogId: dialogId ?? '',
+        selected: trigger ?? '',
+        focused: '',
+      });
       navigateTo(currentUri);
     }
   );
@@ -85,6 +86,11 @@ export const navigationDispatcher = () => {
       const currentUri = convertPathToUrl(rootBotProjectId, skillId, dialogId, encodedSelectPath);
 
       if (checkUrl(currentUri, rootBotProjectId, skillId, designPageLocation)) return;
+      set(designPageLocationState(projectId), {
+        dialogId,
+        selected: selectPath,
+        focused: '',
+      });
       navigateTo(currentUri);
     }
   );
@@ -121,6 +127,13 @@ export const navigationDispatcher = () => {
         currentUri += `#${fragment}`;
       }
       if (checkUrl(currentUri, projectId, skillId, designPageLocation)) return;
+
+      set(designPageLocationState(projectId), {
+        dialogId,
+        selected: getSelected(focusPath) || selected,
+        focused: focusPath ?? '',
+        promptTab: Object.values(PromptTab).find((value) => fragment === value),
+      });
       navigateTo(currentUri);
     }
   );
