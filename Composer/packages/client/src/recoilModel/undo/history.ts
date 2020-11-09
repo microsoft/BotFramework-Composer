@@ -47,25 +47,8 @@ export const undoVersionState = atomFamily({
   dangerouslyAllowMutability: true,
 });
 
-const checkLocation = (projectId: string, atomMap: AtomAssetsMap) => {
-  let location = atomMap.get(designPageLocationState(projectId));
-  const { dialogId, selected, focused } = location;
-  const dialog: DialogInfo = atomMap.get(dialogsSelectorFamily(projectId)).find((dialog) => dialogId === dialog.id);
-  if (!dialog) return atomMap;
-
-  const { content } = dialog;
-  if (!has(content, selected)) {
-    location = { ...location, selected: '', focused: '' };
-  } else if (!has(content, focused)) {
-    location = { ...location, focused: '' };
-  }
-
-  atomMap.set(designPageLocationState(projectId), location);
-  return atomMap;
-};
-
 const getAtomAssetsMap = (snap: Snapshot, projectId: string): AtomAssetsMap => {
-  let atomMap = new Map<RecoilState<any>, any>();
+  const atomMap = new Map<RecoilState<any>, any>();
   const atomsToBeTracked = trackedAtoms(projectId);
   atomsToBeTracked.forEach((atom) => {
     const loadable = snap.getLoadable(atom);
@@ -74,7 +57,7 @@ const getAtomAssetsMap = (snap: Snapshot, projectId: string): AtomAssetsMap => {
 
   //should record the location state
   atomMap.set(designPageLocationState(projectId), snap.getLoadable(designPageLocationState(projectId)).contents);
-  atomMap = checkLocation(projectId, atomMap);
+  //atomMap = checkLocation(projectId, atomMap);
   return atomMap;
 };
 
@@ -129,9 +112,11 @@ function mapTrackedAtomsOntoSnapshot(
   });
 
   //add design page location to snapshot
-  target = target.map(({ set }) =>
-    set(designPageLocationState(projectId), nextAssets.get(designPageLocationState(projectId)))
-  );
+  const currentLocation = currentAssets.get(designPageLocationState(projectId));
+  const nextLocation = nextAssets.get(designPageLocationState(projectId));
+  if (currentLocation !== nextLocation) {
+    target = target.map(({ set }) => set(designPageLocationState(projectId), nextLocation));
+  }
   return target;
 }
 
@@ -157,6 +142,8 @@ export const UndoRoot = React.memo((props: UndoRootProps) => {
   const [, forceUpdate] = useState([]);
   const setVersion = useSetRecoilState(undoVersionState(projectId));
   const rootBotId = useRef('');
+  const [commitVersion, setCommitVersion] = useState('');
+  const designPageLocation = useRecoilValue(designPageLocationState(projectId));
   rootBotId.current = rootBotProjectId || '';
   //use to record the first time change, this will help to get the init location
   //init location is used to undo navigate
@@ -186,6 +173,11 @@ export const UndoRoot = React.memo((props: UndoRootProps) => {
     setInitialProjectState();
   }, []);
 
+  const updateUndoResult = () => {
+    setCanRedo(history.canRedo());
+    setCanUndo(history.canUndo());
+  };
+
   const undoAssets = (
     target: Snapshot,
     current: AtomAssetsMap,
@@ -196,11 +188,9 @@ export const UndoRoot = React.memo((props: UndoRootProps) => {
     target = mapTrackedAtomsOntoSnapshot(target, current, next, projectId);
     gotoSnapshot(target);
     navigate(next, projectId, rootBotId.current);
-  };
-
-  const updateUndoResult = () => {
-    setCanRedo(history.canRedo());
-    setCanUndo(history.canUndo());
+    updateUndoResult();
+    setCommitVersion('');
+    setVersion(uniqueId());
   };
 
   const undo = useRecoilCallback(({ snapshot, gotoSnapshot }: CallbackInterface) => () => {
@@ -208,8 +198,6 @@ export const UndoRoot = React.memo((props: UndoRootProps) => {
       const present = history.getPresentAssets();
       const next = history.undo();
       if (present) undoAssets(snapshot, present, next, gotoSnapshot, projectId);
-      setVersion(uniqueId());
-      updateUndoResult();
     }
   });
 
@@ -218,8 +206,6 @@ export const UndoRoot = React.memo((props: UndoRootProps) => {
       const present = history.getPresentAssets();
       const next = history.redo();
       if (present) undoAssets(snapshot, present, next, gotoSnapshot, projectId);
-      setVersion(uniqueId());
-      updateUndoResult();
     }
   });
 
@@ -229,7 +215,8 @@ export const UndoRoot = React.memo((props: UndoRootProps) => {
     //filter some invalid changes
 
     if (previousAssets && checkAtomsChanged(currentAssets, previousAssets, trackedAtoms(projectId))) {
-      history.add(getAtomAssetsMap(snapshot, projectId));
+      const version = history.add(getAtomAssetsMap(snapshot, projectId));
+      setCommitVersion(version);
       updateUndoResult();
     }
   });
@@ -249,6 +236,17 @@ export const UndoRoot = React.memo((props: UndoRootProps) => {
   useEffect(() => {
     setUndoFunction({ undo, redo, commitChanges, clearUndo });
   }, []);
+
+  useEffect(() => {
+    if (commitVersion) {
+      const assets = history.getAssets(commitVersion);
+      if (assets) {
+        assets.set(designPageLocationState(projectId), { ...designPageLocation });
+        history.update(commitVersion, assets);
+      }
+      setCommitVersion('');
+    }
+  }, [designPageLocation]);
 
   return null;
 });

@@ -42,7 +42,6 @@ export const messagersSelector = selector({
     const botProjectSpace = get(botProjectSpaceSelector);
     const allMessage: Notification[] = [];
 
-    console.log(botProjectSpace);
     for (const project of botProjectSpace) {
       const { projectId, name } = project;
       const dialogs = get(validateDialogsSelectorFamily(projectId));
