@@ -77,8 +77,37 @@ const generate = async (req: Request, res: Response) => {
   }
 };
 
+const deleteDialog = async (req: Request, res: Response) => {
+  const projectId = req.params.projectId;
+  const dialogId = req.params.dialogId;
+
+  const user = await ExtensionContext.getUserFromRequest(req);
+
+  const currentProject = await BotProjectService.getProjectById(projectId, user);
+  if (currentProject !== undefined) {
+    try {
+      const rootDialogId = currentProject.rootDialogId;
+      if (rootDialogId === dialogId) {
+        throw new Error('root dialog is not allowed to delete');
+      }
+      await currentProject.deleteFormDialog(dialogId);
+      const updatedProject = await BotProjectService.getProjectById(projectId, user);
+      res.status(200).json({ id: projectId, ...updatedProject.getProject() });
+    } catch (e) {
+      res.status(400).json({
+        message: e.message,
+      });
+    }
+  } else {
+    res.status(404).json({
+      message: `Could not delete form dialog. Project ${projectId} not found.`,
+    });
+  }
+};
+
 export const FormDialogController = {
   getTemplateSchemas,
   generate,
   expandJsonSchemaProperty,
+  deleteDialog,
 };

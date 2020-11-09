@@ -91,6 +91,7 @@ export type ProjectContextApi = {
   displayManifestModal: (manifestId: string) => void;
   updateDialogSchema: (_: DialogSchemaFile) => Promise<void>;
   createTrigger: (id: string, formData, autoSelected?: boolean) => void;
+  createQnATrigger: (id: string) => void;
   updateSkillSetting: (skillId: string, skillsData: SkillSetting) => Promise<void>;
   updateFlowZoomRate: (currentRate: number) => void;
 };
@@ -120,7 +121,7 @@ export type ActionContextApi = {
 };
 
 export type DialogEditingContextApi = {
-  saveData: <T = any>(newData: T, updatePath?: string) => void;
+  saveData: <T = any>(newData: T, updatePath?: string) => Promise<void>;
   onFocusSteps: (stepIds: string[], focusedTab?: string) => void;
   onFocusEvent: (eventId: string) => void;
   onSelect: (ids: string[]) => void;

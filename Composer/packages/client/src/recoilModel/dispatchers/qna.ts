@@ -12,7 +12,6 @@ import {
   settingsState,
   showCreateQnAFromScratchDialogState,
   showCreateQnAFromUrlDialogState,
-  showCreateQnAFromUrlDialogWithScratchState,
   onCreateQnAFromScratchDialogCompleteState,
   onCreateQnAFromUrlDialogCompleteState,
 } from '../atoms/botState';
@@ -203,18 +202,11 @@ export const qnaDispatcher = () => {
     ({ set }: CallbackInterface) => async ({
       onComplete,
       projectId,
-      showFromScratch,
     }: {
       onComplete?: () => void;
-      showFromScratch: boolean;
       projectId: string;
     }) => {
       set(showCreateQnAFromUrlDialogState(projectId), true);
-      if (showFromScratch) {
-        set(showCreateQnAFromUrlDialogWithScratchState(projectId), true);
-      } else {
-        set(showCreateQnAFromUrlDialogWithScratchState(projectId), false);
-      }
       set(onCreateQnAFromUrlDialogCompleteState(projectId), { func: onComplete });
     }
   );

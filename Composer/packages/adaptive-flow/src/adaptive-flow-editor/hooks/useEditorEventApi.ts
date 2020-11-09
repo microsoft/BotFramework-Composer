@@ -39,14 +39,14 @@ export const useEditorEventApi = (
   } = useDialogEditApi(shellApi);
   const { createDialog, readDialog, updateDialog } = useDialogApi(shellApi);
   const { path, data, nodeContext, selectionContext } = state;
-  const { focusedId, focusedEvent, clipboardActions, dialogFactory } = nodeContext;
+  const { focusedId, focusedTab, focusedEvent, clipboardActions, dialogFactory } = nodeContext;
   const { selectedIds, setSelectedIds, selectableElements } = selectionContext;
 
   const {
     onFocusSteps,
     onFocusEvent,
     onCopy: onClipboardChange,
-    navTo: onOpen,
+    navTo,
     saveData: onChange,
     undo,
     redo,
@@ -79,6 +79,7 @@ export const useEditorEventApi = (
     switch (eventName) {
       case NodeEventTypes.Focus:
         handler = (e: { id: string; tab?: string }) => {
+          if (e.id === focusedId && e.tab === focusedTab && selectedIds.length === 0) return;
           const newFocusedIds = e.id ? [e.id] : [];
           setSelectedIds([...newFocusedIds]);
           onFocusSteps([...newFocusedIds], e.tab);
@@ -152,7 +153,7 @@ export const useEditorEventApi = (
         break;
       case NodeEventTypes.OpenDialog:
         handler = ({ callee }) => {
-          onOpen(callee);
+          navTo(callee, '"beginDialog"');
           announce(ScreenReaderMessage.DialogOpened);
         };
         break;
@@ -169,19 +170,20 @@ export const useEditorEventApi = (
         if (eventData.$kind === MenuEventTypes.Paste) {
           handler = (e) => {
             insertActions(path, data, e.id, e.position, clipboardActions).then((dialog) => {
-              onChange(dialog);
-              onFocusSteps([`${e.id}[${e.position || 0}]`]);
+              return onChange(dialog).then(() => {
+                onFocusSteps([`${e.id}[${e.position || 0}]`]);
+                announce(ScreenReaderMessage.ActionCreated);
+              });
             });
-
-            announce(ScreenReaderMessage.ActionCreated);
           };
         } else {
           handler = (e) => {
             const newAction = dialogFactory.create(e.$kind);
             insertAction(path, data, e.id, e.position, newAction).then((dialog) => {
-              onChange(dialog);
-              onFocusSteps([`${e.id}[${e.position || 0}]`]);
-              announce(ScreenReaderMessage.ActionCreated);
+              return onChange(dialog).then(() => {
+                onFocusSteps([`${e.id}[${e.position || 0}]`]);
+                announce(ScreenReaderMessage.ActionCreated);
+              });
             });
           };
         }

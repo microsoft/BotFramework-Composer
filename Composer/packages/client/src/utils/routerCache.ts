@@ -25,6 +25,11 @@ class RouterCache {
     this._all[linkTo] = uri;
     this.storage.set(KEY, this._all);
   }
+
+  cleanAll() {
+    this._all = {};
+    this.storage.set(KEY, this._all);
+  }
 }
 
 export default new RouterCache();

@@ -15,6 +15,7 @@ import {
   showCreateDialogModalState,
   dialogState,
 } from '../atoms/botState';
+import { dispatcherState } from '../DispatcherWrapper';
 
 import { createLgFileState, removeLgFileState } from './lg';
 import { createLuFileState, removeLuFileState } from './lu';
@@ -24,12 +25,21 @@ import { removeDialogSchema } from './dialogSchema';
 export const dialogsDispatcher = () => {
   const removeDialog = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (id: string, projectId: string) => {
-      const { set, reset } = callbackHelpers;
+      const { set, reset, snapshot } = callbackHelpers;
+
+      const dialog = await snapshot.getPromise(dialogState({ projectId, dialogId: id }));
+
+      // If the dialog is a generated form dialog, delete using form dialog dispatcher
+      if (dialog.content?.$schema) {
+        const { removeFormDialog } = await snapshot.getPromise(dispatcherState);
+        await removeFormDialog({ projectId, dialogId: id });
+        return;
+      }
 
       reset(dialogState({ projectId, dialogId: id }));
       set(dialogIdsState(projectId), (previousDialogIds) => previousDialogIds.filter((dialogId) => dialogId !== id));
 
-      //remove dialog should remove all locales lu and lg files and the dialog schema file
+      //remove dialog should remove all locales lu, lg and qna files and the dialog schema file
       await removeLgFileState(callbackHelpers, { id, projectId });
       await removeLuFileState(callbackHelpers, { id, projectId });
       await removeQnAFileState(callbackHelpers, { id, projectId });
