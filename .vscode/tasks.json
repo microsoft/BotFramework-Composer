@@ -17,6 +17,16 @@
       "command": "yarn build",
       "options": {
         "cwd": "Composer/packages/electron-server"
+      },
+      "dependsOn": ["server: build", "client: ping"]
+    },
+    {
+      "label": "client: ping",
+      "type": "shell",
+      "command": "./node_modules/.bin/wait-on",
+      "args": ["-t", "300000", "http://localhost:3000"],
+      "options": {
+        "cwd": "Composer"
       }
     }
   ]
