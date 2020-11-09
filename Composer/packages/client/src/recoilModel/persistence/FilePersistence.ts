@@ -247,7 +247,7 @@ class FilePersistence {
 
   private getFormDialogSchemaFileChanges(current: FormDialogSchema[], previous: FormDialogSchema[]) {
     const changeItems = this.getDifferenceItems(current, previous);
-    const changes = this.getFileChanges(FileExtensions.FormDialog, changeItems);
+    const changes = this.getFileChanges(FileExtensions.FormDialogSchema, changeItems);
     return changes;
   }
 
