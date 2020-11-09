@@ -10,8 +10,6 @@ import {
 import { atomFamily, Snapshot, useRecoilCallback, CallbackInterface, useSetRecoilState } from 'recoil';
 import uniqueId from 'lodash/uniqueId';
 import isEmpty from 'lodash/isEmpty';
-import has from 'lodash/has';
-import { DialogInfo } from '@bfc/shared';
 
 import { navigateTo, getUrlSearch } from '../../utils/navigation';
 import { encodeArrayPathToDesignerPath } from '../../utils/convertUtils/designerPathEncoder';
@@ -57,7 +55,6 @@ const getAtomAssetsMap = (snap: Snapshot, projectId: string): AtomAssetsMap => {
 
   //should record the location state
   atomMap.set(designPageLocationState(projectId), snap.getLoadable(designPageLocationState(projectId)).contents);
-  //atomMap = checkLocation(projectId, atomMap);
   return atomMap;
 };
 
