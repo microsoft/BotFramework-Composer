@@ -1,9 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FileInfo } from '@bfc/shared';
-
-import { luImportResolverGenerator, getLUFiles, getQnAFiles } from '../luResolver';
+import { FileInfo } from '../src';
+import { luImportResolverGenerator, getLUFiles, getQnAFiles } from '../src/luBuildResolver';
 
 const files = [
   {

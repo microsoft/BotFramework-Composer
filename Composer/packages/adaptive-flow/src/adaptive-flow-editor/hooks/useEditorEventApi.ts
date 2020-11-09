@@ -46,7 +46,7 @@ export const useEditorEventApi = (
     onFocusSteps,
     onFocusEvent,
     onCopy: onClipboardChange,
-    navTo: onOpen,
+    navTo,
     saveData: onChange,
     undo,
     redo,
@@ -153,16 +153,17 @@ export const useEditorEventApi = (
         break;
       case NodeEventTypes.OpenDialog:
         handler = ({ callee }) => {
-          onOpen(callee);
+          navTo(callee, '"beginDialog"');
           announce(ScreenReaderMessage.DialogOpened);
         };
         break;
       case NodeEventTypes.Delete:
         trackActionChange(eventData.id);
         handler = (e) => {
-          onChange(deleteSelectedAction(path, data, e.id));
-          onFocusSteps([]);
-          announce(ScreenReaderMessage.ActionDeleted);
+          onChange(deleteSelectedAction(path, data, e.id), undefined, async () => {
+            await onFocusSteps([]);
+            announce(ScreenReaderMessage.ActionDeleted);
+          });
         };
         break;
       case NodeEventTypes.Insert:
@@ -170,19 +171,20 @@ export const useEditorEventApi = (
         if (eventData.$kind === MenuEventTypes.Paste) {
           handler = (e) => {
             insertActions(path, data, e.id, e.position, clipboardActions).then((dialog) => {
-              onChange(dialog);
-              onFocusSteps([`${e.id}[${e.position || 0}]`]);
+              return onChange(dialog, undefined, async () => {
+                await onFocusSteps([`${e.id}[${e.position || 0}]`]);
+                announce(ScreenReaderMessage.ActionCreated);
+              });
             });
-
-            announce(ScreenReaderMessage.ActionCreated);
           };
         } else {
           handler = (e) => {
             const newAction = dialogFactory.create(e.$kind);
             insertAction(path, data, e.id, e.position, newAction).then((dialog) => {
-              onChange(dialog);
-              onFocusSteps([`${e.id}[${e.position || 0}]`]);
-              announce(ScreenReaderMessage.ActionCreated);
+              return onChange(dialog, undefined, async () => {
+                await onFocusSteps([`${e.id}[${e.position || 0}]`]);
+                announce(ScreenReaderMessage.ActionCreated);
+              });
             });
           };
         }
@@ -199,9 +201,10 @@ export const useEditorEventApi = (
           const actionIds = getClipboardTargetsFromContext();
           trackActionListChange(actionIds);
           cutSelectedActions(path, data, actionIds).then(({ dialog, cutActions }) => {
-            onChange(dialog);
-            onFocusSteps([]);
-            onClipboardChange(cutActions);
+            onChange(dialog, undefined, async () => {
+              await onFocusSteps([]);
+              onClipboardChange(cutActions);
+            });
           });
           announce(ScreenReaderMessage.ActionsCut);
         };
@@ -259,18 +262,20 @@ export const useEditorEventApi = (
             placeholderPosition.arrayIndex,
             placeholderAction
           );
-          onChange(insertResult);
-          onFocusSteps([]);
-          announce(ScreenReaderMessage.ActionsMoved);
+          onChange(insertResult, undefined, async () => {
+            await onFocusSteps([]);
+            announce(ScreenReaderMessage.ActionsMoved);
+          });
         };
         break;
       case NodeEventTypes.DeleteSelection:
         handler = () => {
           const actionIds = getClipboardTargetsFromContext();
           trackActionListChange(actionIds);
-          onChange(deleteSelectedActions(path, data, actionIds));
-          onFocusSteps([]);
-          announce(ScreenReaderMessage.ActionsDeleted);
+          onChange(deleteSelectedActions(path, data, actionIds), undefined, async () => {
+            await onFocusSteps([]);
+            announce(ScreenReaderMessage.ActionsDeleted);
+          });
         };
         break;
       case NodeEventTypes.DisableSelection:
