@@ -368,6 +368,9 @@
   "boolean_value_98d39ea1": {
     "message": "Boolean value."
   },
+  "bot_7926b66d": {
+    "message": "Bot"
+  },
   "bot_asks_5e9f0202": {
     "message": "Bot Asks"
   },
@@ -1268,6 +1271,9 @@
   "if_this_problem_persists_please_file_an_issue_on_6fbc8e2b": {
     "message": "If this problem persists, please file an issue on"
   },
+  "if_turned_on_then_externally_stored_templates_will_3f487651": {
+    "message": "If turned on then externally stored templates will be selectable in the new bot flow template list"
+  },
   "if_you_already_have_a_luis_account_provide_the_inf_bede07a4": {
     "message": "If you already have a LUIS account, provide the information below. If you do not have an account yet, create a (free) account first."
   },
@@ -2078,6 +2084,9 @@
   "reloading_49d2f661": {
     "message": "Reloading"
   },
+  "remote_templates_a23c242d": {
+    "message": "Remote templates"
+  },
   "remove_f47dc62a": {
     "message": "Remove"
   },
@@ -2330,11 +2339,11 @@
   "spaces_and_special_characters_are_not_allowed_20d47684": {
     "message": "Spaces and special characters are not allowed."
   },
-  "spaces_and_special_characters_are_not_allowed_use__2a61c454": {
-    "message": "Spaces and special characters are not allowed. Use letters, numbers, -, or _ and don''t use number at the beginning."
-  },
   "spaces_and_special_characters_are_not_allowed_use__48acec3c": {
     "message": "Spaces and special characters are not allowed. Use letters, numbers, -, or _."
+  },
+  "spaces_and_special_characters_are_not_allowed_use__d24a8636": {
+    "message": "Spaces and special characters are not allowed. Use letters, numbers, -, or _, and begin the name with a letter."
   },
   "specify_a_name_and_description_for_your_new_dialog_86eb3130": {
     "message": "Specify a name and description for your new dialog."
@@ -2489,6 +2498,9 @@
   "this_dialog_has_no_trigger_yet_d1f1d173": {
     "message": "This dialog has no trigger yet."
   },
+  "this_is_a_botname_notification_c8a391c7": {
+    "message": "This is a { botName } notification"
+  },
   "this_is_a_required_field_acb9837e": {
     "message": "This is a required field."
   },
@@ -2629,6 +2641,9 @@
   },
   "uninstall_8730233": {
     "message": "Uninstall"
+  },
+  "unknown_47a3b725": {
+    "message": "Unknown"
   },
   "unknown_intent_44b962ba": {
     "message": "Unknown intent"

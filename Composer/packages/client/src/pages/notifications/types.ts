@@ -20,6 +20,7 @@ export enum NotificationType {
 
 export interface INotification {
   projectId: string;
+  botName: string;
   id: string;
   severity: string;
   type: NotificationType;
@@ -32,6 +33,7 @@ export interface INotification {
 
 export abstract class Notification implements INotification {
   projectId: string;
+  botName: string;
   id: string;
   severity: string;
   type = NotificationType.GENERAL;
@@ -40,8 +42,9 @@ export abstract class Notification implements INotification {
   diagnostic: Diagnostic;
   dialogPath?: string;
   resourceId: string;
-  constructor(projectId: string, id: string, location: string, diagnostic: Diagnostic) {
+  constructor(projectId: string, botName: string, id: string, location: string, diagnostic: Diagnostic) {
     this.projectId = projectId;
+    this.botName = botName;
     this.id = id;
     this.resourceId = getBaseName(id);
     this.severity = DiagnosticSeverity[diagnostic.severity] || '';
@@ -52,16 +55,16 @@ export abstract class Notification implements INotification {
 
 export class ServerNotification extends Notification {
   type = NotificationType.GENERAL;
-  constructor(projectId: string, id: string, location: string, diagnostic: Diagnostic) {
-    super(projectId, id, location, diagnostic);
+  constructor(projectId: string, botName: string, id: string, location: string, diagnostic: Diagnostic) {
+    super(projectId, botName, id, location, diagnostic);
     this.message = diagnostic.message;
   }
 }
 
 export class DialogNotification extends Notification {
   type = NotificationType.DIALOG;
-  constructor(projectId: string, id: string, location: string, diagnostic: Diagnostic) {
-    super(projectId, id, location, diagnostic);
+  constructor(projectId: string, botName: string, id: string, location: string, diagnostic: Diagnostic) {
+    super(projectId, botName, id, location, diagnostic);
     this.message = `In ${replaceDialogDiagnosticLabel(diagnostic.path)} ${diagnostic.message}`;
     this.dialogPath = diagnostic.path;
   }
@@ -69,8 +72,8 @@ export class DialogNotification extends Notification {
 
 export class SkillNotification extends Notification {
   type = NotificationType.SKILL;
-  constructor(projectId: string, id: string, location: string, diagnostic: Diagnostic) {
-    super(projectId, id, location, diagnostic);
+  constructor(projectId: string, botName: string, id: string, location: string, diagnostic: Diagnostic) {
+    super(projectId, botName, id, location, diagnostic);
     this.message = `${replaceDialogDiagnosticLabel(diagnostic.path)} ${diagnostic.message}`;
     this.dialogPath = diagnostic.path;
   }
@@ -78,8 +81,8 @@ export class SkillNotification extends Notification {
 
 export class SettingNotification extends Notification {
   type = NotificationType.SETTING;
-  constructor(projectId: string, id: string, location: string, diagnostic: Diagnostic) {
-    super(projectId, id, location, diagnostic);
+  constructor(projectId: string, botName: string, id: string, location: string, diagnostic: Diagnostic) {
+    super(projectId, botName, id, location, diagnostic);
     this.message = `${replaceDialogDiagnosticLabel(diagnostic.path)} ${diagnostic.message}`;
     this.dialogPath = diagnostic.path;
   }
@@ -89,13 +92,14 @@ export class LgNotification extends Notification {
   type = NotificationType.LG;
   constructor(
     projectId: string,
+    botName: string,
     id: string,
     location: string,
     diagnostic: Diagnostic,
     lgFile: LgFile,
     dialogs: DialogInfo[]
   ) {
-    super(projectId, id, location, diagnostic);
+    super(projectId, botName, id, location, diagnostic);
     this.message = createSingleMessage(diagnostic);
     this.dialogPath = this.findDialogPath(lgFile, dialogs, diagnostic);
   }
@@ -120,13 +124,14 @@ export class LuNotification extends Notification {
   type = NotificationType.LU;
   constructor(
     projectId: string,
+    botName: string,
     id: string,
     location: string,
     diagnostic: Diagnostic,
     luFile: LuFile,
     dialogs: DialogInfo[]
   ) {
-    super(projectId, id, location, diagnostic);
+    super(projectId, botName, id, location, diagnostic);
     this.dialogPath = this.findDialogPath(luFile, dialogs, diagnostic);
     this.message = createSingleMessage(diagnostic);
   }
@@ -146,8 +151,8 @@ export class LuNotification extends Notification {
 
 export class QnANotification extends Notification {
   type = NotificationType.QNA;
-  constructor(projectId: string, id: string, location: string, diagnostic: Diagnostic) {
-    super(projectId, id, location, diagnostic);
+  constructor(projectId: string, botName: string, id: string, location: string, diagnostic: Diagnostic) {
+    super(projectId, botName, id, location, diagnostic);
     this.dialogPath = '';
     this.message = createSingleMessage(diagnostic);
   }
