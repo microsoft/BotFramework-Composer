@@ -104,7 +104,7 @@ export class BotProject implements IBotProject {
   public get formDialogSchemaFiles() {
     const files: FileInfo[] = [];
     this.files.forEach((file) => {
-      if (file.name.endsWith('.form-dialog')) {
+      if (file.name.endsWith(FileExtensions.FormDialogSchema)) {
         files.push(file);
       }
     });
@@ -749,7 +749,7 @@ export class BotProject implements IBotProject {
     const patterns = [
       '**/*.dialog',
       '**/*.dialog.schema',
-      '**/*.form-dialog',
+      '**/*.form',
       '**/*.lg',
       '**/*.lu',
       '**/*.qna',
