@@ -10,8 +10,6 @@ import {
 import { atomFamily, Snapshot, useRecoilCallback, CallbackInterface, useSetRecoilState } from 'recoil';
 import uniqueId from 'lodash/uniqueId';
 import isEmpty from 'lodash/isEmpty';
-import has from 'lodash/has';
-import { DialogInfo } from '@bfc/shared';
 
 import { navigateTo, getUrlSearch } from '../../utils/navigation';
 import { encodeArrayPathToDesignerPath } from '../../utils/convertUtils/designerPathEncoder';
@@ -47,25 +45,8 @@ export const undoVersionState = atomFamily({
   dangerouslyAllowMutability: true,
 });
 
-const checkLocation = (projectId: string, atomMap: AtomAssetsMap) => {
-  let location = atomMap.get(designPageLocationState(projectId));
-  const { dialogId, selected, focused } = location;
-  const dialog: DialogInfo = atomMap.get(dialogsSelectorFamily(projectId)).find((dialog) => dialogId === dialog.id);
-  if (!dialog) return atomMap;
-
-  const { content } = dialog;
-  if (!has(content, selected)) {
-    location = { ...location, selected: '', focused: '' };
-  } else if (!has(content, focused)) {
-    location = { ...location, focused: '' };
-  }
-
-  atomMap.set(designPageLocationState(projectId), location);
-  return atomMap;
-};
-
 const getAtomAssetsMap = (snap: Snapshot, projectId: string): AtomAssetsMap => {
-  let atomMap = new Map<RecoilState<any>, any>();
+  const atomMap = new Map<RecoilState<any>, any>();
   const atomsToBeTracked = trackedAtoms(projectId);
   atomsToBeTracked.forEach((atom) => {
     const loadable = snap.getLoadable(atom);
@@ -74,7 +55,6 @@ const getAtomAssetsMap = (snap: Snapshot, projectId: string): AtomAssetsMap => {
 
   //should record the location state
   atomMap.set(designPageLocationState(projectId), snap.getLoadable(designPageLocationState(projectId)).contents);
-  atomMap = checkLocation(projectId, atomMap);
   return atomMap;
 };
 
@@ -129,9 +109,12 @@ function mapTrackedAtomsOntoSnapshot(
   });
 
   //add design page location to snapshot
-  target = target.map(({ set }) =>
-    set(designPageLocationState(projectId), nextAssets.get(designPageLocationState(projectId)))
-  );
+  const currentLocation = currentAssets.get(designPageLocationState(projectId));
+  const nextLocation = nextAssets.get(designPageLocationState(projectId));
+
+  if (currentLocation !== nextLocation) {
+    target = target.map(({ set }) => set(designPageLocationState(projectId), nextLocation));
+  }
   return target;
 }
 
