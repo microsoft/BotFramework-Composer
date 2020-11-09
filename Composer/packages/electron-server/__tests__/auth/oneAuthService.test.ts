@@ -33,6 +33,7 @@ describe('OneAuth Serivce', () => {
       InteractionRequired: INTERACTION_REQUIRED,
     },
   };
+
   beforeEach(() => {
     (OneAuthService as any)._oneAuth = mockOneAuth;
     mockOneAuth.acquireCredentialInteractively.mockClear();

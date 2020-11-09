@@ -5,6 +5,7 @@ import { AuthParameters } from '@botframework-composer/types';
 
 import logger from '../../logger';
 import { ElectronContext, useElectronContext } from '../../utility/electronContext';
+import { isLinux } from '../../utility/platform';
 
 import { AuthConfig, AuthProvider } from './authProvider';
 
@@ -31,8 +32,10 @@ export class ElectronAuthProvider extends AuthProvider {
   async getAccessToken(params: AuthParameters): Promise<string> {
     const { getAccessToken } = this.electronContext;
     const { targetResource = '' } = params;
+    console.log(this.electronContext);
+    console.log(getAccessToken);
 
-    if (process.platform === 'linux') {
+    if (isLinux()) {
       log('Auth login flow is currently unsupported in Linux.');
       return '';
     }
