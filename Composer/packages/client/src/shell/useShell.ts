@@ -136,17 +136,17 @@ export function useShell(source: EventSource, projectId: string): Shell {
     updateDialog({ id, content: newDialog.content, projectId });
   }
 
-  function navigationTo(path, rest?) {
+  async function navigationTo(path, rest?) {
     if (rootBotProjectId == null) return;
-    navTo(projectId, path, rest);
+    await navTo(projectId, path, rest);
   }
 
-  function focusEvent(subPath) {
+  async function focusEvent(subPath) {
     if (rootBotProjectId == null) return;
-    selectTo(projectId, dialogId, subPath);
+    await selectTo(projectId, dialogId, subPath);
   }
 
-  function focusSteps(subPaths: string[] = [], fragment?: string) {
+  async function focusSteps(subPaths: string[] = [], fragment?: string) {
     let dataPath: string = subPaths[0];
 
     if (source === FORM_EDITOR) {
@@ -157,8 +157,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
         dataPath = `${focused}.${dataPath}`;
       }
     }
-
-    focusTo(rootBotProjectId ?? projectId, projectId, dataPath, fragment ?? '');
+    await focusTo(rootBotProjectId ?? projectId, projectId, dataPath, fragment ?? '');
   }
 
   function updateFlowZoomRate(currentRate) {
@@ -179,7 +178,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
         projectId,
       });
     },
-    saveData: (newData, updatePath) => {
+    saveData: (newData, updatePath, callback) => {
       let dataPath = '';
       if (source === FORM_EDITOR) {
         dataPath = updatePath || focused || '';
@@ -192,7 +191,10 @@ export function useShell(source: EventSource, projectId: string): Shell {
         projectId,
       };
       dialogMapRef.current[dialogId] = updatedDialog;
-      return updateDialog(payload).then(() => {
+      return updateDialog(payload).then(async () => {
+        if (typeof callback === 'function') {
+          await callback();
+        }
         commitChanges();
       });
     },
