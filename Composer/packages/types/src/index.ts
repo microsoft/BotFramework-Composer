@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+export * from './auth';
 export * from './diagnostic';
 export * from './dialogUtils';
 export * from './extension';
