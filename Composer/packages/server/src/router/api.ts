@@ -14,6 +14,8 @@ import { FormDialogController } from '../controllers/formDialog';
 import * as ExtensionsController from '../controllers/extensions';
 import { FeatureFlagController } from '../controllers/featureFlags';
 import { OrchestratorController } from '../controllers/orchestrator';
+import { AuthController } from '../controllers/auth';
+import { csrfProtection } from '../middleware/csrfProtection';
 
 import { UtilitiesController } from './../controllers/utilities';
 
@@ -84,6 +86,9 @@ router.get('/extensions/search', ExtensionsController.searchExtensions);
 router.get('/extensions/:id/:bundleId', ExtensionsController.getBundleForView);
 // proxy route for extensions (allows extension client code to make fetch calls using the Composer server as a proxy -- avoids browser blocking request due to CORS)
 router.post('/extensions/proxy/:url', ExtensionsController.performExtensionFetch);
+
+// authentication from client
+router.get('/auth/getAccessToken', csrfProtection, AuthController.getAccessToken);
 
 //FeatureFlags
 router.get('/featureFlags', FeatureFlagController.getFeatureFlags);

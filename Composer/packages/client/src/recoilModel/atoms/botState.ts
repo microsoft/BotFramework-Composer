@@ -24,7 +24,7 @@ import { BotLoadError, DesignPageLocation } from '../../recoilModel/types';
 import FilePersistence from '../persistence/FilePersistence';
 
 import { BotStatus } from './../../constants';
-import { BreadcrumbItem, PublishType } from './../../recoilModel/types';
+import { PublishType } from './../../recoilModel/types';
 
 const getFullyQualifiedKey = (value: string) => {
   return `Bot_${value}_State`;
@@ -176,13 +176,6 @@ export const actionsSeedState = atomFamily<any, string>({
 
 export const skillManifestsState = atomFamily<any, string>({
   key: getFullyQualifiedKey('skillManifests'),
-  default: (id) => {
-    return [];
-  },
-});
-
-export const breadcrumbState = atomFamily<BreadcrumbItem[], string>({
-  key: getFullyQualifiedKey('breadcrumb'),
   default: (id) => {
     return [];
   },
@@ -361,4 +354,14 @@ export const botErrorState = atomFamily<any, string>({
 export const botNameIdentifierState = atomFamily<string, string>({
   key: getFullyQualifiedKey('botNameIdentifier'),
   default: '',
+});
+
+export const canUndoState = atomFamily<boolean, string>({
+  key: getFullyQualifiedKey('canUndoState'),
+  default: false,
+});
+
+export const canRedoState = atomFamily<boolean, string>({
+  key: getFullyQualifiedKey('canRedoState'),
+  default: false,
 });
