@@ -95,13 +95,18 @@ export class DefaultSettingManager extends FileSettingManager {
   public async get(obfuscate = false): Promise<any> {
     const result = await super.get(obfuscate);
     const defaultValue = this.createDefaultSettings();
+    let updateFile = false;
     newSettingsValuePath.forEach((jsonPath: string) => {
       if (!has(result, jsonPath)) {
         set(result, jsonPath, get(defaultValue, jsonPath));
+        updateFile = true;
       }
     });
 
-    this.set(result);
+    if (updateFile) {
+      this.set(result);
+    }
+
     return result;
   }
 
