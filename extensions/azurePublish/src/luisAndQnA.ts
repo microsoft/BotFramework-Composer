@@ -133,13 +133,17 @@ export class LuisAndQnaPublish {
     for (const luFile of luFiles) {
       luContents.push({
         content: fs.readFileSync(luFile, { encoding: 'utf-8' }),
-        name: path.basename(luFile)
+        name: path.basename(luFile),
+        id: path.basename(luFile),
+        path: luFile,
       });
     }
     for (const qnaFile of qnaFiles) {
       qnaContents.push({
         content: fs.readFileSync(qnaFile, { encoding: 'utf-8' }),
-        name: path.basename(qnaFile)
+        name: path.basename(qnaFile),
+        id: path.basename(qnaFile),
+        path: qnaFile,
       });
     }
     const importResolver = luImportResolverGenerator([...qnaContents, ...luContents] as FileInfo[]);
