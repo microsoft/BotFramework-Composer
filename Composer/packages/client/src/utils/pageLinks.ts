@@ -10,10 +10,13 @@ export const topLinks = (
   openedDialogId: string,
   pluginPages: ExtensionPageConfig[],
   showFormDialog: boolean,
-  rootProjectId: string
+  rootProjectId: string | undefined
 ) => {
   const botLoaded = !!projectId;
-  const linkBase = projectId === rootProjectId ? `/bot/${projectId}/` : `/bot/${rootProjectId}/skill/${projectId}/`;
+  const linkBase =
+    projectId === rootProjectId || rootProjectId == null
+      ? `/bot/${projectId}/`
+      : `/bot/${rootProjectId}/skill/${projectId}/`;
   let links = [
     {
       to: '/home',
