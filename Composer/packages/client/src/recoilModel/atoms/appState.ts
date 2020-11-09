@@ -221,3 +221,13 @@ export const formDialogGenerationProgressingState = atom({
   key: getFullyQualifiedKey('formDialogGenerationProgressing'),
   default: false,
 });
+
+export const pageElementState = atom<{ [page in PageMode]?: { [key: string]: any } }>({
+  key: getFullyQualifiedKey('pageElement'),
+  default: {
+    design: {},
+    lg: {},
+    lu: {},
+    qna: {},
+  },
+});
