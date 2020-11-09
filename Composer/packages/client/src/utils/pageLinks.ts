@@ -9,9 +9,11 @@ export const topLinks = (
   projectId: string,
   openedDialogId: string,
   pluginPages: ExtensionPageConfig[],
-  showFormDialog: boolean
+  showFormDialog: boolean,
+  rootProjectId: string
 ) => {
   const botLoaded = !!projectId;
+  const linkBase = projectId === rootProjectId ? `/bot/${projectId}/` : `/bot/${rootProjectId}/skill/${projectId}/`;
   let links = [
     {
       to: '/home',
@@ -21,28 +23,28 @@ export const topLinks = (
       disabled: false,
     },
     {
-      to: `/bot/${projectId}/dialogs/${openedDialogId}`,
+      to: linkBase + `dialogs/${openedDialogId}`,
       iconName: 'SplitObject',
       labelName: formatMessage('Design'),
       exact: false,
       disabled: !botLoaded,
     },
     {
-      to: `/bot/${projectId}/language-generation`,
+      to: linkBase + `language-generation/${openedDialogId}`,
       iconName: 'Robot',
       labelName: formatMessage('Bot Responses'),
       exact: false,
       disabled: !botLoaded,
     },
     {
-      to: `/bot/${projectId}/language-understanding`,
+      to: linkBase + `language-understanding/${openedDialogId}`,
       iconName: 'People',
       labelName: formatMessage('User Input'),
       exact: false,
       disabled: !botLoaded,
     },
     {
-      to: `/bot/${projectId}/knowledge-base`,
+      to: linkBase + `knowledge-base/${openedDialogId}`,
       iconName: 'QnAIcon',
       labelName: formatMessage('QnA'),
       exact: true,

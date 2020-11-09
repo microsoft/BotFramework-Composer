@@ -22,19 +22,25 @@ const CodeEditor = React.lazy(() => import('./code-editor'));
 interface LGPageProps {
   dialogId: string;
   projectId: string;
+  skillId?: string;
 }
 
 const LGPage: React.FC<RouteComponentProps<LGPageProps>> = (props: RouteComponentProps<LGPageProps>) => {
-  const { dialogId = '', projectId = '' } = props;
-  const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
+  const { dialogId = '', projectId = '', skillId = null } = props;
+  const dialogs = useRecoilValue(validateDialogsSelectorFamily(skillId ?? projectId));
+
+  console.log(skillId, projectId, skillId ?? projectId, dialogs);
 
   const path = props.location?.pathname ?? '';
 
   const edit = /\/edit(\/)?$/.test(path);
 
+  const baseURL =
+    projectId === skillId || skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
+
   const navLinks: INavTreeItem[] = useMemo(() => {
     const newDialogLinks: INavTreeItem[] = dialogs.map((dialog) => {
-      let url = `/bot/${projectId}/language-generation/${dialog.id}`;
+      let url = baseURL + `language-generation/${dialog.id}`;
       if (edit) {
         url += `/edit`;
       }
@@ -51,7 +57,7 @@ const LGPage: React.FC<RouteComponentProps<LGPageProps>> = (props: RouteComponen
       const mainDialog = newDialogLinks.splice(mainDialogIndex, 1)[0];
       newDialogLinks.splice(0, 0, mainDialog);
     }
-    let commonUrl = `/bot/${projectId}/language-generation/common`;
+    let commonUrl = baseURL + `language-generation/common`;
     if (edit) {
       commonUrl += '/edit';
     }
@@ -68,13 +74,13 @@ const LGPage: React.FC<RouteComponentProps<LGPageProps>> = (props: RouteComponen
   useEffect(() => {
     const activeDialog = dialogs.find(({ id }) => id === dialogId);
     if (!activeDialog && dialogs.length && dialogId !== 'common') {
-      navigateTo(`/bot/${projectId}/language-generation/common`);
+      navigateTo(baseURL + `language-generation/common`);
     }
   }, [dialogId, dialogs, projectId]);
 
   const onToggleEditMode = useCallback(
     (_e) => {
-      let url = `/bot/${projectId}/language-generation/${dialogId}`;
+      let url = baseURL + `language-generation/${dialogId}`;
       if (!edit) url += `/edit`;
       navigateTo(url);
     },
