@@ -131,14 +131,7 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             services.AddSingleton<BotAdapter>(sp => (BotFrameworkHttpAdapter)sp.GetService<IBotFrameworkHttpAdapter>());
 
             // Register AuthConfiguration to enable custom claim validation for skills.
-            if (IsSkill(settings))
-            {
-                services.AddSingleton(sp => new AuthenticationConfiguration { ClaimsValidator = new AllowedCallersClaimsValidator(settings.SkillConfiguration) });
-            }
-            else
-            {
-                services.AddSingleton(sp => new AuthenticationConfiguration());
-            }
+            services.AddSingleton(sp => new AuthenticationConfiguration { ClaimsValidator = new AllowedCallersClaimsValidator(settings.SkillConfiguration) });
 
             // register components.
             ComponentRegistration.Add(new DialogsComponentRegistration());
