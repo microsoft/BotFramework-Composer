@@ -6,5 +6,10 @@
     "target": "es6",
     "baseUrl": "."
   },
-  "include": ["src/main.ts", "src/preload.js"]
+  "include": [
+    "src/**/*.ts",
+    "scripts/*.js", // include scripts to get proper linting
+    "__tests__", // intellisense
+    "src/preload.js"
+  ]
 }
