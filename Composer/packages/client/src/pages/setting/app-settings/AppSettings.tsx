@@ -68,7 +68,7 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
     { key: 'sv', text: 'Svenska‎', englishName: 'Swedish' },
     { key: 'tr', text: 'Türkçe‎', englishName: 'Turkish' },
     { key: 'zh-Hans', text: '中文(简体)‎', englishName: 'Chinese(Simplified)' },
-    { key: 'hz-Hant', text: '中文(繁體)', englishName: 'Chinese(Traditional)' },
+    { key: 'zh-Hant', text: '中文(繁體)', englishName: 'Chinese(Traditional)' },
   ];
 
   if (process.env.NODE_ENV !== 'production') {
