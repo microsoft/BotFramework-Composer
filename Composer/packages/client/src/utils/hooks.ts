@@ -8,7 +8,13 @@ import find from 'lodash/find';
 import { useRecoilValue } from 'recoil';
 import { FeatureFlagKey } from '@bfc/shared';
 
-import { designPageLocationState, currentProjectIdState, pluginPagesSelector, featureFlagsState } from '../recoilModel';
+import {
+  designPageLocationState,
+  currentProjectIdState,
+  pluginPagesSelector,
+  featureFlagsState,
+  rootBotProjectIdSelector,
+} from '../recoilModel';
 
 import { bottomLinks, topLinks } from './pageLinks';
 import routerCache from './routerCache';
@@ -50,10 +56,17 @@ export const useLinks = () => {
 };
 
 export const useRouterCache = (to: string) => {
+  const rootProjectId = useRecoilValue(rootBotProjectIdSelector);
   const [state, setState] = useState(routerCache.getAll());
   const { topLinks, bottomLinks } = useLinks();
   const linksRef = useRef(topLinks.concat(bottomLinks));
   linksRef.current = topLinks.concat(bottomLinks);
+
+  useEffect(() => {
+    routerCache.cleanAll();
+    setState({});
+  }, [rootProjectId]);
+
   useEffect(() => {
     globalHistory.listen(({ location }) => {
       const links = linksRef.current;
