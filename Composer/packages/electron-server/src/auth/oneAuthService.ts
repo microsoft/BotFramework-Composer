@@ -37,17 +37,6 @@ export class OneAuthInstance extends OneAuthBase {
     log('Using genuine OneAuth.');
     // will wait until called to initialize (so that we're sure we have a browser window)
     this.initialized = false;
-    if (isWindows()) {
-      this._oneAuth = require('oneauth-win64');
-    }
-    if (isMac()) {
-      this._oneAuth = require('oneauth-mac');
-    }
-    this._oneAuth = {};
-  }
-
-  private get oneAuth() {
-    return this._oneAuth;
   }
 
   private initialize() {

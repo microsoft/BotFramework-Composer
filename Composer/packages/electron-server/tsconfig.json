@@ -11,7 +11,7 @@
   },
   "include": [
     "src/**/*.ts",
-    "scripts/*.js", // include scripts to get proper linting
+    "scripts/*.js", // include scripts to geting proper linting
     "__tests__", // intellisense
     "src/preload.js"
   ]
