@@ -205,15 +205,12 @@ export const projectDialogsMapSelector = selector<{ [key: string]: DialogInfo[] 
   key: 'projectDialogsMap',
   get: ({ get }) => {
     const projectIds = get(botProjectIdsState);
-    const projectDialogsMap = {};
 
-    projectIds.map((projectId) => {
+    return projectIds.reduce((result, projectId) => {
       const dialogIds = get(dialogIdsState(projectId));
-      projectDialogsMap[projectId] = dialogIds.map((dialogId) => {
+      return (result[projectId] = dialogIds.map((dialogId) => {
         return get(dialogState({ projectId, dialogId }));
-      });
-    });
-
-    return projectDialogsMap;
+      }));
+    }, {});
   },
 });

@@ -76,12 +76,12 @@ describe('check manifest', () => {
 });
 
 describe('check LUIS & QnA key', () => {
-  it('LUIS authoringKey shoud exsit in setting', () => {
+  it('LUIS authoringKey should exist in setting', () => {
     const diagnostics = checkSetting(botAssets, {});
     expect(diagnostics.length).toEqual(1);
   });
 
-  it('LUIS authoringKey shoud exsit in setting or locale storage', () => {
+  it('LUIS authoringKey should exist in setting or locale storage', () => {
     const diagnostics = checkSetting(botAssets, {
       MicrosoftAppPassword: '',
       luis: {
@@ -96,7 +96,7 @@ describe('check LUIS & QnA key', () => {
     expect(diagnostics.length).toEqual(0);
   });
 
-  it('QnA subscriptionKey shoud exsit in setting', () => {
+  it('QnA subscriptionKey should exist in setting', () => {
     const botAssets2 = {
       ...botAssets,
       dialogs: [
@@ -110,7 +110,7 @@ describe('check LUIS & QnA key', () => {
     expect(diagnostics.length).toEqual(2);
   });
 
-  it('QnA subscriptionKe shoud exsit in setting or locale storage', () => {
+  it('QnA subscriptionKey should exist in setting or locale storage', () => {
     const botAssets2 = {
       ...botAssets,
       dialogs: [

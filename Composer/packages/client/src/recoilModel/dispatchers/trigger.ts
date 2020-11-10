@@ -129,13 +129,13 @@ export const triggerDispatcher = () => {
 
         const { removeLuIntent, removeLgTemplates } = dispatcher;
 
-        if (get(trigger, '$kind') === SDKKinds.OnIntent) {
-          const intentName = get(trigger, 'intent', '') as string;
+        if (trigger.$kind === SDKKinds.OnIntent) {
+          const intentName = trigger.intent as string;
           removeLuIntent({ id: dialogId, intentName, projectId });
         }
 
         // Clean action resources
-        const actions = get(trigger, 'actions') as BaseSchema[];
+        const actions = trigger.actions as BaseSchema[];
         if (!actions || !Array.isArray(actions)) return;
 
         deleteActions(
