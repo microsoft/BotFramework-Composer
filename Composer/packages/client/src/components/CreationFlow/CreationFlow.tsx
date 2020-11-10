@@ -28,6 +28,7 @@ import plugins from '../../plugins';
 import { CreateOptions } from './CreateOptions';
 import { OpenProject } from './OpenProject';
 import DefineConversation from './DefineConversation';
+import { ImportModal } from '../ImportModal/ImportModal';
 
 type CreationFlowProps = RouteComponentProps<{}>;
 
@@ -120,6 +121,11 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
       schemaUrl: formData.schemaUrl,
       appLocale,
       qnaKbUrls,
+      templateDir: formData.templateDir,
+      eTag: formData.eTag,
+      urlSuffix: formData.urlSuffix,
+      alias: formData.alias,
+      preserveRoot: formData.preserveRoot,
     };
     createNewBot(newBotData);
   };
@@ -199,6 +205,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
             path="create/vaCore/*"
             onDismiss={handleDismiss}
           />
+          <ImportModal path="import" />
         </Router>
       </EditorExtension>
     </Fragment>
