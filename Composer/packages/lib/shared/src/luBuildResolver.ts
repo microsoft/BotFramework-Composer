@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FileInfo } from '@bfc/shared';
+import { FileInfo } from '@botframework-composer/types';
 import multimatch from 'multimatch';
 
-import { Path } from '../../utility/path';
+import { Path } from './path';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const luObject = require('@microsoft/bf-lu/lib/parser/lu/lu.js');
