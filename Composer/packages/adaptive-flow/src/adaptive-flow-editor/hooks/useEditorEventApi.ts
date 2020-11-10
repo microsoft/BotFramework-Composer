@@ -160,10 +160,12 @@ export const useEditorEventApi = (
       case NodeEventTypes.Delete:
         trackActionChange(eventData.id);
         handler = (e) => {
-          onChange(deleteSelectedAction(path, data, e.id), undefined, async () => {
-            await onFocusSteps([]);
-            announce(ScreenReaderMessage.ActionDeleted);
-          });
+          deleteSelectedAction(path, data, e.id).then((value) =>
+            onChange(value, undefined, async () => {
+              await onFocusSteps([]);
+              announce(ScreenReaderMessage.ActionDeleted);
+            })
+          );
         };
         break;
       case NodeEventTypes.Insert:
@@ -272,10 +274,12 @@ export const useEditorEventApi = (
         handler = () => {
           const actionIds = getClipboardTargetsFromContext();
           trackActionListChange(actionIds);
-          onChange(deleteSelectedActions(path, data, actionIds), undefined, async () => {
-            await onFocusSteps([]);
-            announce(ScreenReaderMessage.ActionsDeleted);
-          });
+          deleteSelectedActions(path, data, actionIds).then((value) =>
+            onChange(value, undefined, async () => {
+              await onFocusSteps([]);
+              announce(ScreenReaderMessage.ActionsDeleted);
+            })
+          );
         };
         break;
       case NodeEventTypes.DisableSelection:
@@ -319,15 +323,6 @@ export const useEditorEventApi = (
     }
     return handler(eventData);
   };
-
-  registerEditorAPI('Actions', {
-    CopySelection: () => handleEditorEvent(NodeEventTypes.CopySelection),
-    CutSelection: () => handleEditorEvent(NodeEventTypes.CutSelection),
-    MoveSelection: () => handleEditorEvent(NodeEventTypes.MoveSelection),
-    DeleteSelection: () => handleEditorEvent(NodeEventTypes.DeleteSelection),
-    DisableSelection: () => handleEditorEvent(NodeEventTypes.DisableSelection),
-    EnableSelection: () => handleEditorEvent(NodeEventTypes.EnableSelection),
-  });
 
   return {
     handleEditorEvent,
