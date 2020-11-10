@@ -29,9 +29,9 @@ export const LocalBotRuntime: React.FC<LocalBotRuntimeProps> = ({ projectId }) =
     case BotStatus.connected:
       return (
         <IconButton
-          styles={{ root: { height: '20px' } }}
-          iconProps={{ iconName: 'CircleStopSolid' }}
           aria-label={formatMessage('Stop Bot')}
+          iconProps={{ iconName: 'CircleStopSolid' }}
+          styles={{ root: { height: '20px' } }}
           onClick={() => stopSingleBot(projectId)}
         />
       );
@@ -39,9 +39,9 @@ export const LocalBotRuntime: React.FC<LocalBotRuntimeProps> = ({ projectId }) =
     case BotStatus.failed:
       return (
         <IconButton
-          styles={{ root: { height: '20px' } }}
-          iconProps={{ iconName: 'Play' }}
           aria-label={formatMessage('Start Bot')}
+          iconProps={{ iconName: 'Play' }}
+          styles={{ root: { height: '20px' } }}
           onClick={() => startSingleBot(projectId)}
         />
       );

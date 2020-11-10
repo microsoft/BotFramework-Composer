@@ -355,12 +355,6 @@ export const ProjectTree: React.FC<Props> = ({
         label: '',
         onClick: () => {},
       },
-      {
-        label: formatMessage('Remove this dialog'),
-        onClick: () => {
-          onBotDeleteDialog(skillId, dialog.id);
-        },
-      },
     ];
 
     const isFormDialog = dialogIsFormDialog(dialog);
@@ -369,8 +363,7 @@ export const ProjectTree: React.FC<Props> = ({
     if (!dialog.isRoot) {
       menu.push({
         label: formatMessage('Remove this dialog'),
-        icon: 'Delete',
-        onClick: (link) => {
+        onClick: () => {
           onBotDeleteDialog(skillId, dialog.id);
         },
       });

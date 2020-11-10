@@ -20,7 +20,6 @@ import { DialogDeleting } from '../../constants';
 import {
   createSelectedPath,
   deleteTrigger as DialogdeleteTrigger,
-  getBreadcrumbLabel,
   qnaMatcherKey,
   getDialogData,
 } from '../../utils/dialogUtil';
@@ -50,7 +49,6 @@ import {
   projectDialogsMapSelector,
   skillIdByProjectIdSelector,
   SkillInfo,
-  showCreateDialogModalState,
 } from '../../recoilModel';
 import { CreateQnAModal } from '../../components/QnA';
 import { triggerNotSupported } from '../../utils/dialogValidator';
@@ -58,7 +56,7 @@ import { undoFunctionState, undoVersionState } from '../../recoilModel/undo/hist
 import { decodeDesignerPathToArrayPath } from '../../utils/convertUtils/designerPathEncoder';
 import { CreationFlowStatus } from '../../constants';
 import { RepairSkillModalOptionKeys } from '../../components/RepairSkillModal';
-import { useLocalBotOperations } from '../../components/TestController/useLocalBotOperations';
+import { useLocalBotOperations } from '../../components/BotRuntimeController/useLocalBotOperations';
 import { undoStatusSelectorFamily } from '../../recoilModel/selectors/undo';
 
 import CreationModal from './creationModal';
@@ -142,7 +140,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const projectDialogsMap = useRecoilValue(projectDialogsMapSelector);
   const { startSingleBot, stopSingleBot } = useLocalBotOperations();
   const focusPath = useRecoilValue(focusPathState(skillId ?? projectId));
-  const showCreateDialogModal = useRecoilValue(showCreateDialogModalState(skillId ?? projectId));
   const locale = useRecoilValue(localeState(skillId ?? projectId));
   const undoFunction = useRecoilValue(undoFunctionState(skillId ?? projectId));
   const undoVersion = useRecoilValue(undoVersionState(skillId ?? projectId));
@@ -161,7 +158,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     setDesignPageLocation,
     navTo,
     selectTo,
-    selectAndFocus,
     exportToZip,
     onboardingAddCoachMarkRef,
     addRemoteSkillToBotProject,
@@ -740,12 +736,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     displayManifestModal(skillNameIdentifier, projectId);
   };
 
-  const pluginConfig: PluginConfig = useMemo(() => {
-    const sdkUISchema = schemas?.ui?.content ?? {};
-    const userUISchema = schemas?.uiOverrides?.content ?? {};
-    return mergePluginConfigs({ uiSchema: sdkUISchema }, plugins, { uiSchema: userUISchema });
-  }, [schemas?.ui?.content, schemas?.uiOverrides?.content]);
-
   if (!dialogId && !skillId) {
     return <LoadingSpinner />;
   }
@@ -827,7 +817,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                     )}
                   </div>
                   <EditorExtension plugins={pluginConfig} projectId={projectId} shell={shellForPropertyEditor}>
-                    {skillManifestFile ? (
+                    {isRemoteSkill && skillManifestFile ? (
                       <ManifestEditor formData={skillManifestFile} />
                     ) : (
                       <PropertyEditor key={focusPath + undoVersion} />
@@ -883,7 +873,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             }}
           />
         )}
-        <CreateQnAModal dialogId={dialogId} projectId={projectId} qnaFiles={qnaFiles} onSubmit={handleCreateQnA} />
+        {dialogId && (
+          <CreateQnAModal dialogId={dialogId} projectId={projectId} qnaFiles={qnaFiles} onSubmit={handleCreateQnA} />
+        )}
         {displaySkillManifest && (
           <DisplayManifestModal
             projectId={projectId}

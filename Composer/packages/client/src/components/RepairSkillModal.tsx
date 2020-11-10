@@ -27,9 +27,7 @@ export const RepairSkillModalOptionKeys = {
 
 export const CreateSkillModal: React.FC<RepairSkillModalProps> = ({ skillItem, onNext, onDismiss }) => {
   const isRemote = skillItem.bot?.isRemote;
-  const [option, setOption] = useState(
-    isRemote ? RepairSkillModalOptionKeys.removeSkill : RepairSkillModalOptionKeys.repairSkill
-  );
+  const [option, setOption] = useState<RepairSkillModalFormData>(isRemote ? 'removeSkill' : 'repairSkill');
 
   if (!skillItem.bot?.error) return null;
 
