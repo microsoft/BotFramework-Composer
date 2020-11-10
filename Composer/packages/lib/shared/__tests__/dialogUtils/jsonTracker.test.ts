@@ -38,9 +38,9 @@ describe('delete node flow', () => {
   });
 
   describe('when target node does not exist', () => {
-    it('should not change the data', () => {
+    it('should not change the data', async () => {
       path = null;
-      const result = deleteNode(dialog, path, removedDataFn);
+      const result = await deleteNode(dialog, path, removedDataFn);
 
       expect(result).toEqual(dialog);
       expect(removedDataFn).not.toBeCalled();
@@ -48,24 +48,24 @@ describe('delete node flow', () => {
   });
 
   describe('when target node exists', () => {
-    it("should delete node successfully when targetNode's currentKey type is number", () => {
+    it("should delete node successfully when targetNode's currentKey type is number", async () => {
       path = 'foo.bar[0]';
-      const result = deleteNode(dialog, path, removedDataFn);
+      const result = await deleteNode(dialog, path, removedDataFn);
 
       expect(result).toEqual({ foo: { bar: [{ $kind: 'secondOne' }] } });
       expect(removedDataFn).toBeCalledWith(dialog.foo.bar[0]);
     });
-    it("should delete node successfully when targetNode's currentKey type is string", () => {
+    it("should delete node successfully when targetNode's currentKey type is string", async () => {
       path = 'foo.bar';
-      const result = deleteNode(dialog, path, removedDataFn);
+      const result = await deleteNode(dialog, path, removedDataFn);
 
       expect(result).toEqual({ foo: {} });
       expect(removedDataFn).toBeCalledWith(dialog.foo.bar);
     });
-    it("removeLgTemplate function should be called when targetNode's $kind is 'Microsoft.SendActivity' && activity includes '[SendActivity_'", () => {
+    it("removeLgTemplate function should be called when targetNode's $kind is 'Microsoft.SendActivity' && activity includes '[SendActivity_'", async () => {
       dialog.foo.activityNode = { $kind: 'Microsoft.SendActivity', activity: '[SendActivity_a]' };
       path = 'foo.activityNode';
-      const result = deleteNode(dialog, path, removedDataFn);
+      const result = await deleteNode(dialog, path, removedDataFn);
 
       expect(removedDataFn).toBeCalledWith(dialog.foo.activityNode);
       expect(result).toEqual({ foo: { bar: [{ $kind: 'firstOne' }, { $kind: 'secondOne' }] } });
