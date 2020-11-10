@@ -1,6 +1,7 @@
+import { ExternalContentProviderType } from '@botframework-composer/types';
+
 import { ExternalContentProvider, ContentProviderMetadata } from './externalContentProvider';
 import { PowerVirtualAgentsProvider, PowerVirtualAgentsMetadata } from './powerVirtualAgentsProvider';
-import { ExternalContentProviderType } from './providerType';
 
 type ProviderInfo = PowerVirtualAgentsProviderInfo; // union with additional provider info types (ex. PowerVirtualAgentsProviderInfo | ABSProviderInfo | etc.)
 

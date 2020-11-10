@@ -85,8 +85,8 @@ export const ImportSuccessNotification = (outerProps: ImportSuccessNotificationP
           />
           <IconButton
             iconProps={{ iconName: 'Copy' }}
-            title={'Copy project location to clipboard'}
-            ariaLabel={'Copy project location to clipboard'}
+            title={formatMessage('Copy project location to clipboard')}
+            ariaLabel={formatMessage('Copy project location to clipboard')}
             onClick={copyLocationToClipboard}
             styles={copyIconStyles}
           />

@@ -58,116 +58,76 @@ async function createProject(req: Request, res: Response) {
 
   log('Attempting to create project at %s', path);
 
-  if (templateDir) {
-    // we want to create the bot project from the specified template directory (template was downloaded remotely)
-    try {
-      await BotProjectService.cleanProject(locationRef);
-      const newProjRef = await AssetService.manager.copyProjectTemplateDirTo(templateDir, locationRef, user, locale);
+  try {
+    // the template was downloaded remotely (via import) and will be used instead of an internal Composer template
+    const createFromRemoteTemplate = !!templateDir;
+
+    await BotProjectService.cleanProject(locationRef);
+    let newProjRef;
+    if (createFromRemoteTemplate) {
+      log('Creating project from remote template at %s', templateDir);
+      newProjRef = await AssetService.manager.copyRemoteProjectTemplateTo(templateDir, locationRef, user, locale);
       // clean up the temporary template directory -- fire and forget
       remove(templateDir);
-      const id = await BotProjectService.openProject(newProjRef, user);
-      BotProjectService.setProjectLocationData(id, { alias, eTag });
-      const currentProject = await BotProjectService.getProjectById(id, user);
-
-      if (currentProject !== undefined) {
-        if (currentProject.settings?.runtime?.customRuntime === true) {
-          const runtime = ExtensionContext.getRuntimeByProject(currentProject);
-          const runtimePath = currentProject.settings.runtime.path;
-
-          if (!fs.existsSync(runtimePath)) {
-            await runtime.eject(currentProject, currentProject.fileStorage);
-          }
-
-          // install all dependencies and build the app
-          await runtime.build(runtimePath, currentProject);
-
-          const manifestFile = runtime.identifyManifest(runtimePath);
-
-          // run the merge command to merge all package dependencies from the template to the bot project
-          const realMerge = new SchemaMerger(
-            [manifestFile],
-            Path.join(currentProject.dataDir, 'schemas/sdk'),
-            Path.join(currentProject.dataDir, 'dialogs/imported'),
-            false,
-            false,
-            console.log,
-            console.warn,
-            console.error
-          );
-
-          await realMerge.merge();
-        }
-        await currentProject.updateBotInfo(name, description, preserveRoot);
-        await currentProject.init();
-
-        const project = currentProject.getProject();
-        log('Project created successfully.');
-        res.status(200).json({
-          id,
-          ...project,
-        });
-      }
-    } catch (err) {
-      res.status(404).json({
-        message: err instanceof Error ? err.message : err,
-      });
+    } else {
+      log('Creating project from internal template %s', templateId);
+      newProjRef = await AssetService.manager.copyProjectTemplateTo(templateId, locationRef, user, locale);
     }
-  } else {
-    try {
-      await BotProjectService.cleanProject(locationRef);
-      const newProjRef = await AssetService.manager.copyProjectTemplateTo(templateId, locationRef, user, locale);
-      const id = await BotProjectService.openProject(newProjRef, user);
-      const currentProject = await BotProjectService.getProjectById(id, user);
+    const id = await BotProjectService.openProject(newProjRef, user);
+    // in the case of a remote template, we need to update the eTag and alias used by the import mechanism
+    createFromRemoteTemplate && BotProjectService.setProjectLocationData(id, { alias, eTag });
+    const currentProject = await BotProjectService.getProjectById(id, user);
 
-      // inject shared content into every new project.  this comes from assets/shared
+    // inject shared content into every new project.  this comes from assets/shared
+    if (!createFromRemoteTemplate) {
       await AssetService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage);
+    }
 
-      if (currentProject !== undefined) {
-        if (currentProject.settings?.runtime?.customRuntime === true) {
-          const runtime = ExtensionContext.getRuntimeByProject(currentProject);
-          const runtimePath = currentProject.settings.runtime.path;
+    if (currentProject !== undefined) {
+      if (currentProject.settings?.runtime?.customRuntime === true) {
+        const runtime = ExtensionContext.getRuntimeByProject(currentProject);
+        const runtimePath = currentProject.settings.runtime.path;
 
-          if (!fs.existsSync(runtimePath)) {
-            await runtime.eject(currentProject, currentProject.fileStorage);
-          }
-
-          // install all dependencies and build the app
-          await runtime.build(runtimePath, currentProject);
-
-          const manifestFile = runtime.identifyManifest(runtimePath);
-
-          // run the merge command to merge all package dependencies from the template to the bot project
-          const realMerge = new SchemaMerger(
-            [manifestFile],
-            Path.join(currentProject.dataDir, 'schemas/sdk'),
-            Path.join(currentProject.dataDir, 'dialogs/imported'),
-            false,
-            false,
-            console.log,
-            console.warn,
-            console.error
-          );
-
-          await realMerge.merge();
+        if (!fs.existsSync(runtimePath)) {
+          await runtime.eject(currentProject, currentProject.fileStorage);
         }
-        await currentProject.updateBotInfo(name, description, preserveRoot);
-        if (schemaUrl) {
-          await currentProject.saveSchemaToProject(schemaUrl, locationRef.path);
-        }
-        await currentProject.init();
 
-        const project = currentProject.getProject();
-        log('Project created successfully.');
-        res.status(200).json({
-          id,
-          ...project,
-        });
+        // install all dependencies and build the app
+        await runtime.build(runtimePath, currentProject);
+
+        const manifestFile = runtime.identifyManifest(runtimePath);
+
+        // run the merge command to merge all package dependencies from the template to the bot project
+        const realMerge = new SchemaMerger(
+          [manifestFile],
+          Path.join(currentProject.dataDir, 'schemas/sdk'),
+          Path.join(currentProject.dataDir, 'dialogs/imported'),
+          false,
+          false,
+          console.log,
+          console.warn,
+          console.error
+        );
+
+        await realMerge.merge();
       }
-    } catch (err) {
-      res.status(404).json({
-        message: err instanceof Error ? err.message : err,
+      await currentProject.updateBotInfo(name, description, preserveRoot);
+      if (schemaUrl && !createFromRemoteTemplate) {
+        await currentProject.saveSchemaToProject(schemaUrl, locationRef.path);
+      }
+      await currentProject.init();
+
+      const project = currentProject.getProject();
+      log('Project created successfully.');
+      res.status(200).json({
+        id,
+        ...project,
       });
     }
+  } catch (err) {
+    res.status(404).json({
+      message: err instanceof Error ? err.message : err,
+    });
   }
 }
 
@@ -589,7 +549,7 @@ async function copyTemplateToExistingProject(req: Request, res: Response) {
         path: project.dir,
       };
       log('Copying content from template at %s to %s', templateDir, project.dir);
-      await AssetService.manager.copyProjectTemplateDirTo(
+      await AssetService.manager.copyRemoteProjectTemplateTo(
         templateDir,
         locationRef,
         user,

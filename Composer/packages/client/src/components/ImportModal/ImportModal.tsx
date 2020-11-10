@@ -7,12 +7,14 @@ import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
 import formatMessage from 'format-message';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import { ExternalContentProviderType } from '@botframework-composer/types';
 
 import { ImportStatus } from './ImportStatus';
 import { useRecoilValue } from 'recoil';
 import { dispatcherState } from '../../recoilModel';
 import { createNotification } from '../../recoilModel/dispatchers/notification';
 import { ImportSuccessNotification } from './ImportSuccessNotification';
+import { dialogContent, hidden } from './style';
 
 type ImportedProjectInfo = {
   alias?: string;
@@ -53,7 +55,7 @@ const CONNECTING_STATUS_DISPLAY_TIME = 2000;
 
 export const ImportModal: React.FC<RouteComponentProps> = (props) => {
   const { location } = props;
-  const [importSource, setImportSource] = useState<string>('');
+  const [importSource, setImportSource] = useState<ExternalContentProviderType | undefined>(undefined);
   const [importPayload, setImportPayload] = useState<ImportPayload>({ name: '', description: '' });
   const [importedProjectInfo, setImportedProjectInfo] = useState<ImportedProjectInfo | undefined>(undefined);
   const [modalState, setModalState] = useState<ImportModalState>('connecting');
@@ -147,7 +149,15 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
             }
             const data = await res.json();
             const { alias, eTag, templateDir, urlSuffix } = data;
-            const projectInfo = { description, name, templateDir, urlSuffix, eTag, source: importSource, alias };
+            const projectInfo = {
+              description,
+              name,
+              templateDir,
+              urlSuffix,
+              eTag,
+              source: importSource as ExternalContentProviderType,
+              alias,
+            };
             setImportedProjectInfo(projectInfo);
 
             if (alias) {
@@ -207,7 +217,7 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
         if (!source || !payload) {
           throw 'Missing source or payload.';
         }
-        setImportSource(source);
+        setImportSource(source as ExternalContentProviderType);
         setImportPayload(JSON.parse(payload));
         setTimeout(() => {
           setModalState('signingIn');
@@ -258,7 +268,7 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
             minWidth={560}
             onDismiss={cancel}
           >
-            <p style={{ fontSize: 16 }}>
+            <p css={dialogContent}>
               {formatMessage('Updating ')}
               {existingProject?.name}
               {formatMessage(' will overwrite the current bot content and create a backup.')}
@@ -298,7 +308,7 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
             minWidth={560}
             onDismiss={cancel}
           >
-            <p style={{ fontSize: 16 }}>
+            <p css={dialogContent}>
               {formatMessage('There was an unexpected error importing bot content to ')}
               <span css={boldText}>{importPayload.name}</span>
             </p>
@@ -321,7 +331,7 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
         );
 
       default:
-        return <div style={{ display: 'none' }} />;
+        return <div css={hidden} />;
     }
   }, [
     modalState,

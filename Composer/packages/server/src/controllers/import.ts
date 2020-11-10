@@ -2,8 +2,9 @@ import { Request, Response } from 'express';
 import { join } from 'path';
 import { ensureDirSync } from 'fs-extra';
 import extractZip from 'extract-zip';
+import { ExternalContentProviderType } from '@botframework-composer/types';
+
 import { contentProviderFactory } from '../externalContentProvider/contentProviderFactory';
-import { ExternalContentProviderType } from '../externalContentProvider/providerType';
 import logger from '../logger';
 
 const log = logger.extend('import-controller');

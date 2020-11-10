@@ -8,17 +8,20 @@ import { RouteComponentProps } from '@reach/router';
 import { Dialog, DialogType, IDialogContentProps } from 'office-ui-fabric-react/lib/Dialog';
 import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
 import formatMessage from 'format-message';
+import { ExternalContentProviderType } from '@botframework-composer/types';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
 import compIcon from '../../images/composerIcon.svg';
 import pvaIcon from '../../images/pvaIcon.svg';
 import dataTransferLine from '../../images/dataTransferLine.svg';
 
+import { dialogContent, hidden } from './style';
+
 type ImportState = 'connecting' | 'downloading';
 
 type ImportStatusProps = {
   botName?: string;
-  source?: string;
+  source?: ExternalContentProviderType;
   state: ImportState;
 };
 
@@ -54,6 +57,20 @@ const boldText = css`
   word-break: break-work;
 `;
 
+const serviceIcon = css`
+  width: 33px;
+`;
+
+const iconsContainer = css`
+  display: flex;
+  justify-content: center;
+`;
+
+const dataTransferIcon = css`
+  margin: 0 16px;
+  width: 78px;
+`;
+
 export const ImportStatus: React.FC<RouteComponentProps & ImportStatusProps> = (props) => {
   const { botName, source, state } = props;
 
@@ -61,15 +78,15 @@ export const ImportStatus: React.FC<RouteComponentProps & ImportStatusProps> = (
     <img
       alt={formatMessage('Composer Logo')}
       aria-label={formatMessage('Composer Logo')}
+      css={serviceIcon}
       src={compIcon}
-      style={{ width: '33px' }}
     />
   );
 
   switch (state) {
     case 'connecting': {
       const label = (
-        <p style={{ fontSize: 16, whiteSpace: 'normal' }}>
+        <p css={dialogContent}>
           {formatMessage('Connecting to ')}
           <span css={boldBlueText}>{getUserFriendlySource(source)}</span>
           {formatMessage(' to import bot content...')}
@@ -83,7 +100,7 @@ export const ImportStatus: React.FC<RouteComponentProps & ImportStatusProps> = (
           styles={{ main: { height: 263 } }}
           modalProps={{ isBlocking: true }}
         >
-          <span style={{ display: 'flex', justifyContent: 'center' }}>
+          <span css={iconsContainer}>
             {getServiceIcon(source)}
             {composerIcon}
           </span>
@@ -95,7 +112,7 @@ export const ImportStatus: React.FC<RouteComponentProps & ImportStatusProps> = (
     case 'downloading': {
       const sourceName = getUserFriendlySource(source);
       const label = (
-        <p style={{ fontSize: 16, whiteSpace: 'normal' }}>
+        <p css={dialogContent}>
           {formatMessage('Importing ')}
           <span css={boldText}>{botName}</span>
           {formatMessage(` from ${sourceName}...`)}
@@ -109,7 +126,7 @@ export const ImportStatus: React.FC<RouteComponentProps & ImportStatusProps> = (
           styles={{ main: { height: 263 } }}
           modalProps={{ isBlocking: true }}
         >
-          <span style={{ display: 'flex', justifyContent: 'center' }}>
+          <span css={iconsContainer}>
             {getServiceIcon(source)}
             {composerIcon}
           </span>
@@ -119,12 +136,11 @@ export const ImportStatus: React.FC<RouteComponentProps & ImportStatusProps> = (
     }
 
     default:
-      return <div style={{ display: 'none' }}></div>;
+      return <div css={hidden}></div>;
   }
 };
 
-// TODO: typing of source
-function getServiceIcon(source?: string) {
+function getServiceIcon(source?: ExternalContentProviderType) {
   let icon;
   switch (source) {
     case 'pva':
@@ -132,8 +148,8 @@ function getServiceIcon(source?: string) {
         <img
           alt={formatMessage('PowerVirtualAgents Logo')}
           aria-label={formatMessage('PowerVirtualAgents Logo')}
+          css={serviceIcon}
           src={pvaIcon}
-          style={{ width: '33px' }}
         />
       );
       break;
@@ -148,15 +164,14 @@ function getServiceIcon(source?: string) {
       <img
         alt={formatMessage('Data transferring between services')}
         aria-label={formatMessage('Data transferring between services')}
+        css={dataTransferIcon}
         src={dataTransferLine}
-        style={{ margin: '0 16px', width: '78px' }}
       />
     </React.Fragment>
   );
 }
 
-// TODO: create a type for possible publish sources
-export function getUserFriendlySource(source?: string): string {
+export function getUserFriendlySource(source?: ExternalContentProviderType): string {
   switch (source) {
     case 'pva':
       return 'PowerVirtualAgents';

@@ -42,7 +42,7 @@ export class AssetManager {
     return ExtensionContext.extensions.botTemplates;
   }
 
-  public async copyProjectTemplateDirTo(
+  public async copyRemoteProjectTemplateTo(
     templateDir: string,
     ref: LocationRef,
     user?: UserIdentity,
