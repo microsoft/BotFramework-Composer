@@ -5,6 +5,9 @@ module.exports = {
   mode: 'production',
   devtool: 'source-map',
   target: 'node',
+  node: {
+    __dirname: false,
+  },
   output: {
     path: resolve(__dirname, 'lib'),
     filename: 'index.js',
