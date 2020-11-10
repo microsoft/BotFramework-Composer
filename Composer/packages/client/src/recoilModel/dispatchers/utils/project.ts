@@ -9,12 +9,16 @@ import {
   BotProjectSpace,
   BotProjectSpaceSkill,
   convertSkillsToDictionary,
+  migrateSkillsForExistingBots,
   dereferenceDefinitions,
+  fetchEndpointNameForSkill,
   DialogInfo,
   DialogSetting,
+  getManifestNameFromUrl,
   LuFile,
   QnAFile,
   SensitiveProperties,
+  defaultPublishConfig,
 } from '@bfc/shared';
 import formatMessage from 'format-message';
 import camelCase from 'lodash/camelCase';
@@ -23,6 +27,7 @@ import objectSet from 'lodash/set';
 import { stringify } from 'query-string';
 import { CallbackInterface } from 'recoil';
 import { v4 as uuid } from 'uuid';
+import isEmpty from 'lodash/isEmpty';
 
 import { BotStatus, QnABotTemplateId } from '../../../constants';
 import settingStorage from '../../../utils/dialogSettingStorage';
@@ -61,19 +66,20 @@ import {
   schemasState,
   settingsState,
   skillManifestsState,
-  skillsState,
   dialogIdsState,
   showCreateQnAFromUrlDialogState,
 } from '../../atoms';
 import * as botstates from '../../atoms/botState';
+import { dispatcherState } from '../../DispatcherWrapper';
 import lgWorker from '../../parsers/lgWorker';
 import luWorker from '../../parsers/luWorker';
 import qnaWorker from '../../parsers/qnaWorker';
 import FilePersistence from '../../persistence/FilePersistence';
-import { rootBotProjectIdSelector } from '../../selectors';
+import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../../selectors';
 import { undoHistoryState } from '../../undo/history';
 import UndoHistory from '../../undo/undoHistory';
 import { logMessage, setError } from '../shared';
+import { setSettingState } from '../setting';
 
 import { crossTrainConfigState } from './../../atoms/botState';
 import { recognizersSelectorFamily } from './../../selectors/recognizers';
@@ -101,12 +107,15 @@ export const setErrorOnBotProject = async (
   if (payload != null) logMessage(callbackHelpers, `Error loading ${botName}: ${JSON.stringify(payload)}`);
 };
 
-export const flushExistingTasks = async (callbackHelpers) => {
+export const flushExistingTasks = async (callbackHelpers: CallbackInterface) => {
   const { snapshot, reset } = callbackHelpers;
   reset(botProjectSpaceLoadedState);
   const projectIds = await snapshot.getPromise(botProjectIdsState);
-  reset(botProjectIdsState, []);
+  const runtimeOperations = await snapshot.getPromise(botRuntimeOperationsSelector);
+
+  reset(botProjectIdsState);
   for (const projectId of projectIds) {
+    await runtimeOperations?.stopBot(projectId);
     resetBotStates(callbackHelpers, projectId);
   }
   const workers = [lgWorker, luWorker, qnaWorker];
@@ -156,11 +165,11 @@ export const navigateToBot = (
 };
 
 export const loadProjectData = (response) => {
-  const { files, botName, settings, skills: skillContent, id: projectId } = response.data;
+  const { files, botName, settings, id: projectId } = response.data;
   const mergedSettings = getMergedSettings(projectId, settings);
   const storedLocale = languageStorage.get(botName)?.locale;
   const locale = settings.languages.includes(storedLocale) ? storedLocale : settings.defaultLanguage;
-  const indexedFiles = indexer.index(files, botName, locale, skillContent, mergedSettings);
+  const indexedFiles = indexer.index(files, botName, locale, mergedSettings);
 
   // migrate script move qna pairs in *.qna to *-manual.source.qna.
   // TODO: remove after a period of time.
@@ -273,7 +282,6 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
     jsonSchemaFiles,
     formDialogSchemas,
     skillManifestFiles,
-    skills,
     mergedSettings,
     recognizers,
     crossTrainConfig,
@@ -329,13 +337,13 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
     set(botStatusState(projectId), BotStatus.unConnected);
     set(locationState(projectId), location);
   }
-  set(skillsState(projectId), skills);
   set(schemasState(projectId), schemas);
   set(localeState(projectId), locale);
   set(botDiagnosticsState(projectId), diagnostics);
 
   refreshLocalStorage(projectId, settings);
   set(settingsState(projectId), mergedSettings);
+
   set(filePersistenceState(projectId), new FilePersistence(projectId));
   set(undoHistoryState(projectId), new UndoHistory(projectId));
   return mainDialog;
@@ -358,7 +366,7 @@ export const removeRecentProject = async (callbackHelpers: CallbackInterface, pa
 export const openRemoteSkill = async (
   callbackHelpers: CallbackInterface,
   manifestUrl: string,
-  botNameIdentifier?: string
+  botNameIdentifier = ''
 ) => {
   const { set } = callbackHelpers;
 
@@ -375,9 +383,21 @@ export const openRemoteSkill = async (
     isRemote: true,
   });
 
-  set(botNameIdentifierState(projectId), botNameIdentifier || camelCase(manifestResponse.data.name));
+  let uniqueSkillNameIdentifier = botNameIdentifier;
+  if (!uniqueSkillNameIdentifier) {
+    uniqueSkillNameIdentifier = await getSkillNameIdentifier(callbackHelpers, manifestResponse.data.name);
+  }
+
+  set(botNameIdentifierState(projectId), uniqueSkillNameIdentifier);
   set(botDisplayNameState(projectId), manifestResponse.data.name);
   set(locationState(projectId), manifestUrl);
+  set(skillManifestsState(projectId), [
+    {
+      content: manifestResponse.data,
+      id: getManifestNameFromUrl(manifestUrl),
+      lastModified: new Date().toDateString(),
+    },
+  ]);
   return { projectId, manifestResponse: manifestResponse.data };
 };
 
@@ -463,24 +483,41 @@ const handleSkillLoadingFailure = (callbackHelpers, { ex, skillNameIdentifier })
 
 const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, storageId = 'default') => {
   const { projectData, botFiles } = data;
-  const { set } = callbackHelpers;
+  const { set, snapshot } = callbackHelpers;
+  const dispatcher = await snapshot.getPromise(dispatcherState);
 
   const mainDialog = await initBotState(callbackHelpers, projectData, botFiles);
   const rootBotProjectId = projectData.id;
   const { name, location } = projectData;
+  const { mergedSettings } = botFiles;
 
   set(botNameIdentifierState(rootBotProjectId), camelCase(name));
-
+  set(botProjectIdsState, [rootBotProjectId]);
+  // Get the status of the bot on opening if it was opened and run in another window.
+  dispatcher.getPublishStatus(rootBotProjectId, defaultPublishConfig);
   if (botFiles.botProjectSpaceFiles && botFiles.botProjectSpaceFiles.length) {
     const currentBotProjectFileIndexed: BotProjectFile = botFiles.botProjectSpaceFiles[0];
-    set(botProjectFileState(rootBotProjectId), currentBotProjectFileIndexed);
+
+    if (mergedSettings.skill) {
+      const { botProjectFile, skillSettings } = migrateSkillsForExistingBots(
+        currentBotProjectFileIndexed.content,
+        mergedSettings.skill
+      );
+      if (!isEmpty(skillSettings)) {
+        setSettingState(callbackHelpers, rootBotProjectId, {
+          ...mergedSettings,
+          skill: skillSettings,
+        });
+      }
+      currentBotProjectFileIndexed.content = botProjectFile;
+    }
+
     const currentBotProjectFile: BotProjectSpace = currentBotProjectFileIndexed.content;
 
-    const skills: { [skillId: string]: BotProjectSpaceSkill } = {
-      ...currentBotProjectFile.skills,
-    };
+    set(botProjectFileState(rootBotProjectId), currentBotProjectFileIndexed);
 
-    // RootBot loads first + skills load async
+    const skills: { [skillId: string]: BotProjectSpaceSkill } = currentBotProjectFile.skills;
+
     const totalProjectsCount = Object.keys(skills).length + 1;
     if (totalProjectsCount > 0) {
       for (const nameIdentifier in skills) {
@@ -496,8 +533,13 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
         }
         if (skillPromise) {
           skillPromise
-            .then(({ projectId }) => {
+            .then(({ projectId, manifestResponse }) => {
               addProjectToBotProjectSpace(set, projectId, totalProjectsCount);
+              const matchedEndpoint = fetchEndpointNameForSkill(mergedSettings, nameIdentifier, manifestResponse);
+              if (matchedEndpoint) {
+                dispatcher.updateEndpointNameInBotProjectFile(nameIdentifier, matchedEndpoint);
+              }
+              dispatcher.getPublishStatus(projectId, defaultPublishConfig);
             })
             .catch((ex) => {
               const projectId = handleSkillLoadingFailure(callbackHelpers, {
@@ -513,7 +555,7 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
     // Should never hit here as all projects should have a botproject file
     throw new Error(formatMessage('Bot project file does not exist.'));
   }
-  set(botProjectIdsState, [rootBotProjectId]);
+
   set(currentProjectIdState, rootBotProjectId);
   return {
     mainDialog,

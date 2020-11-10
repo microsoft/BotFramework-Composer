@@ -4,21 +4,25 @@
 
 import formatMessage from 'format-message';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
-import { defaultPublishConfig } from '@bfc/shared';
+import { defaultPublishConfig, isSkillHostUpdateRequired } from '@bfc/shared';
 
 import {
   publishTypesState,
   botStatusState,
   publishHistoryState,
-  botLoadErrorState,
+  botRuntimeErrorState,
   isEjectRuntimeExistState,
   filePersistenceState,
+  settingsState,
 } from '../atoms/botState';
 import { botEndpointsState } from '../atoms';
+import { openInEmulator } from '../../utils/navigation';
+import { rootBotProjectIdSelector } from '../selectors';
 
 import { BotStatus, Text } from './../../constants';
 import httpClient from './../../utils/httpUtil';
 import { logMessage, setError } from './shared';
+import { setSettingState } from './setting';
 
 const PUBLISH_SUCCESS = 200;
 const PUBLISH_PENDING = 202;
@@ -28,7 +32,7 @@ export const publisherDispatcher = () => {
   const publishFailure = async ({ set }: CallbackInterface, title: string, error, target, projectId: string) => {
     if (target.name === defaultPublishConfig.name) {
       set(botStatusState(projectId), BotStatus.failed);
-      set(botLoadErrorState(projectId), { ...error, title });
+      set(botRuntimeErrorState(projectId), { ...error, title });
     }
     // prepend the latest publish results to the history
 
@@ -67,13 +71,27 @@ export const publisherDispatcher = () => {
     });
   };
 
-  const updatePublishStatus = ({ set }: CallbackInterface, projectId: string, target: any, data: any) => {
+  const updatePublishStatus = async (callbackHelpers: CallbackInterface, projectId: string, target: any, data: any) => {
     if (data == null) return;
+    const { set, snapshot } = callbackHelpers;
     const { endpointURL, status, id } = data;
     // the action below only applies to when a bot is being started using the "start bot" button
     // a check should be added to this that ensures this ONLY applies to the "default" profile.
     if (target.name === defaultPublishConfig.name) {
       if (status === PUBLISH_SUCCESS && endpointURL) {
+        const rootBotId = await snapshot.getPromise(rootBotProjectIdSelector);
+        if (rootBotId === projectId) {
+          // Update the skill host endpoint
+          const settings = await snapshot.getPromise(settingsState(projectId));
+          if (isSkillHostUpdateRequired(settings?.skillHostEndpoint)) {
+            // Update skillhost endpoint only if ngrok url not set meaning empty or localhost url
+            const updatedSettings = {
+              ...settings,
+              skillHostEndpoint: endpointURL + '/api/skills',
+            };
+            setSettingState(callbackHelpers, projectId, updatedSettings);
+          }
+        }
         set(botStatusState(projectId), BotStatus.connected);
         set(botEndpointsState, (botEndpoints) => ({
           ...botEndpoints,
@@ -83,7 +101,7 @@ export const publisherDispatcher = () => {
         set(botStatusState(projectId), BotStatus.reloading);
       } else if (status === PUBLISH_FAILED) {
         set(botStatusState(projectId), BotStatus.failed);
-        set(botLoadErrorState(projectId), { ...data, title: formatMessage('Start bot failed') });
+        set(botRuntimeErrorState(projectId), { ...data, title: formatMessage('Start bot failed') });
       }
     }
 
@@ -208,16 +226,41 @@ export const publisherDispatcher = () => {
   // only support local publish
   const stopPublishBot = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (projectId: string, target: any = defaultPublishConfig) => {
-      const { set } = callbackHelpers;
+      const { set, snapshot } = callbackHelpers;
       try {
         await httpClient.post(`/publish/${projectId}/stopPublish/${target.name}`);
-        set(botStatusState(projectId), BotStatus.unConnected);
+        const currentBotStatus = await snapshot.getPromise(botStatusState(projectId));
+        if (currentBotStatus !== BotStatus.failed) {
+          set(botStatusState(projectId), BotStatus.unConnected);
+        }
       } catch (err) {
         setError(callbackHelpers, err);
         logMessage(callbackHelpers, err.message);
       }
     }
   );
+
+  const resetBotRuntimeError = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
+    const { reset } = callbackHelpers;
+    reset(botRuntimeErrorState(projectId));
+  });
+
+  const openBotInEmulator = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
+    const { snapshot } = callbackHelpers;
+    const botEndpoints = await snapshot.getPromise(botEndpointsState);
+    const settings = await snapshot.getPromise(settingsState(projectId));
+    try {
+      openInEmulator(
+        botEndpoints[projectId] || 'http://localhost:3979/api/messages',
+        settings.MicrosoftAppId && settings.MicrosoftAppPassword
+          ? { MicrosoftAppId: settings.MicrosoftAppId, MicrosoftAppPassword: settings.MicrosoftAppPassword }
+          : { MicrosoftAppPassword: '', MicrosoftAppId: '' }
+      );
+    } catch (err) {
+      setError(callbackHelpers, err);
+      logMessage(callbackHelpers, err.message);
+    }
+  });
 
   return {
     getPublishTargetTypes,
@@ -227,5 +270,7 @@ export const publisherDispatcher = () => {
     getPublishStatus,
     getPublishHistory,
     setEjectRuntimeExist,
+    openBotInEmulator,
+    resetBotRuntimeError,
   };
 };

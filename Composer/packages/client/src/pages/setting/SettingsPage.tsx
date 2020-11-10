@@ -18,7 +18,6 @@ import {
   settingsState,
   currentProjectIdState,
 } from '../../recoilModel';
-import { TestController } from '../../components/TestController/TestController';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page';
@@ -216,12 +215,6 @@ const SettingPage: React.FC<RouteComponentProps> = () => {
       align: 'left',
       dataTestid: 'AddLanguageFlyout',
       disabled: false,
-    },
-
-    {
-      type: 'element',
-      element: <TestController projectId={projectId} />,
-      align: 'right',
     },
   ];
 

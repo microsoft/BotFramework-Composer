@@ -1,12 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo, MutableRefObject } from 'react';
 import { globalHistory } from '@reach/router';
 import replace from 'lodash/replace';
 import find from 'lodash/find';
 import { useRecoilValue } from 'recoil';
 import { FeatureFlagKey } from '@bfc/shared';
+import isFunction from 'lodash/isFunction';
 
 import {
   designPageLocationState,
@@ -92,21 +93,52 @@ export const useProjectIdCache = () => {
   return projectId;
 };
 
-export const useInterval = (callback, delay) => {
-  const savedCallback = useRef<() => void>();
+export function useInterval(callback: Function, delay: number | null) {
+  const savedCallback: MutableRefObject<Function | undefined> = useRef();
+
+  // Remember the latest callback.
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+  // Set up the interval.
+  useEffect(() => {
+    function tick() {
+      if (isFunction(savedCallback.current)) {
+        savedCallback.current();
+      }
+    }
+    if (delay != null) {
+      const id = setInterval(tick, delay);
+      return () => clearInterval(id);
+    }
+  }, [delay]);
+}
+
+export function useClickOutside(ref: MutableRefObject<HTMLElement | null>, callback: Function) {
+  const savedCallback: MutableRefObject<Function | undefined> = useRef();
+
+  const handleEvent = (e) => {
+    if (ref?.current && !ref.current.contains(e.target)) {
+      if (isFunction(callback)) {
+        callback();
+      }
+    }
+  };
 
   useEffect(() => {
     savedCallback.current = callback;
   }, [callback]);
 
   useEffect(() => {
-    if (delay !== null) {
-      const interval = setInterval(() => {
-        if (typeof savedCallback.current === 'function') {
-          savedCallback.current();
-        }
-      }, delay);
-      return () => clearInterval(interval);
-    }
-  }, [delay]);
-};
+    document.addEventListener('click', handleEvent);
+    document.addEventListener('mousedown', handleEvent);
+    document.addEventListener('touchstart', handleEvent);
+
+    return () => {
+      document.removeEventListener('click', handleEvent);
+      document.removeEventListener('mousedown', handleEvent);
+      document.removeEventListener('touchstart', handleEvent);
+    };
+  }, [ref, callback]);
+}
