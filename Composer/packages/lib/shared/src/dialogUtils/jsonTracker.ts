@@ -99,7 +99,7 @@ export function queryNodes(inputDialog, nodeIds: string[]) {
   return nodeIds.map((id) => queryNode(inputDialog, id)).filter((x) => x !== null);
 }
 
-export function deleteNode(inputDialog, path, callbackOnRemovedData?: (removedData: any) => any) {
+export async function deleteNode(inputDialog, path, callbackOnRemovedData?: (removedData: any) => Promise<any>) {
   const dialog = cloneDeep(inputDialog);
   const target = locateNode(dialog, path);
   if (!target) return dialog;
@@ -117,13 +117,17 @@ export function deleteNode(inputDialog, path, callbackOnRemovedData?: (removedDa
 
   // invoke callback handler
   if (callbackOnRemovedData && typeof callbackOnRemovedData === 'function') {
-    callbackOnRemovedData(deletedData);
+    await callbackOnRemovedData(deletedData);
   }
 
   return dialog;
 }
 
-export function deleteNodes(inputDialog, nodeIds: string[], callbackOnRemovedNodes?: (nodes: any[]) => any) {
+export async function deleteNodes(
+  inputDialog,
+  nodeIds: string[],
+  callbackOnRemovedNodes?: (nodes: any[]) => Promise<any>
+) {
   const dialog = cloneDeep(inputDialog);
 
   const nodeLocations = nodeIds.map((id) => locateNode(dialog, id));
@@ -151,7 +155,7 @@ export function deleteNodes(inputDialog, nodeIds: string[], callbackOnRemovedNod
 
   // invoke callback handler
   if (callbackOnRemovedNodes && typeof callbackOnRemovedNodes === 'function') {
-    callbackOnRemovedNodes(deletedNodes);
+    await callbackOnRemovedNodes(deletedNodes);
   }
 
   return dialog;

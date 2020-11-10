@@ -73,7 +73,7 @@ export type LuContextApi = {
   updateLuIntent: (id: string, intentName: string, intent: LuIntentSection) => Promise<LuFile[] | undefined>;
   debouncedUpdateLuIntent: (id: string, intentName: string, intent: LuIntentSection) => Promise<LuFile[] | undefined>;
   renameLuIntent: (id: string, intentName: string, newIntentName: string) => Promise<LuFile[] | undefined>;
-  removeLuIntent: (id: string, intentName: string) => void;
+  removeLuIntent: (id: string, intentName: string) => Promise<LuFile[] | undefined>;
 };
 
 export type LgContextApi = {
