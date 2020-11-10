@@ -41,7 +41,7 @@ export interface IPaginationProps {
 const createDropdownOption = (pageCount: number) => {
   return range(pageCount).map((_, i) => ({
     key: `page ${i + 1}`,
-    text: `${i}`,
+    text: `${i + 1}`,
   }));
 };
 

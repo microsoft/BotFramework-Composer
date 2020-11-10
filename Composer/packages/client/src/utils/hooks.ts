@@ -43,7 +43,9 @@ export const useFeatureFlag = (featureFlagKey: FeatureFlagKey): boolean => {
 };
 
 export const useLinks = () => {
-  const projectId = useRecoilValue(currentProjectIdState);
+  const rootProjectId = useRecoilValue(rootBotProjectIdSelector);
+  const currentProjectId = useRecoilValue(currentProjectIdState);
+  const projectId = rootProjectId ?? currentProjectId;
   const designPageLocation = useRecoilValue(designPageLocationState(projectId));
   const pluginPages = useRecoilValue(pluginPagesSelector);
   const openedDialogId = designPageLocation.dialogId || 'Main';

@@ -6,6 +6,7 @@ import get from 'lodash/get';
 
 import { getBaseName } from '../../utils/fileUtil';
 import { replaceDialogDiagnosticLabel } from '../../utils/dialogUtil';
+import { convertPathToUrl } from '../../utils/navigation';
 export const DiagnosticSeverity = ['Error', 'Warning']; //'Information', 'Hint'
 
 export enum DiagnosticType {
@@ -20,7 +21,6 @@ export enum DiagnosticType {
 
 export interface IDiagnosticInfo {
   projectId: string;
-  botName: string;
   id: string;
   severity: string;
   type: DiagnosticType;
@@ -29,11 +29,11 @@ export interface IDiagnosticInfo {
   diagnostic: any;
   dialogPath?: string; //the data path in dialog
   resourceId: string; // id without locale
+  getUrl: (projectId: string) => string;
 }
 
 export abstract class DiagnosticInfo implements IDiagnosticInfo {
   projectId: string;
-  botName: string;
   id: string;
   severity: string;
   type = DiagnosticType.GENERAL;
@@ -42,9 +42,10 @@ export abstract class DiagnosticInfo implements IDiagnosticInfo {
   diagnostic: Diagnostic;
   dialogPath?: string;
   resourceId: string;
-  constructor(projectId: string, botName: string, id: string, location: string, diagnostic: Diagnostic) {
+  getUrl = (projectId: string) => '';
+
+  constructor(projectId: string, id: string, location: string, diagnostic: Diagnostic) {
     this.projectId = projectId;
-    this.botName = botName;
     this.id = id;
     this.resourceId = getBaseName(id);
     this.severity = DiagnosticSeverity[diagnostic.severity] || '';
@@ -59,6 +60,8 @@ export class ServerDiagnostic extends DiagnosticInfo {
     super(projectId, id, location, diagnostic);
     this.message = diagnostic.message;
   }
+
+  getUrl = () => '';
 }
 
 export class DialogDiagnostic extends DiagnosticInfo {
@@ -68,6 +71,13 @@ export class DialogDiagnostic extends DiagnosticInfo {
     this.message = `In ${replaceDialogDiagnosticLabel(diagnostic.path)} ${diagnostic.message}`;
     this.dialogPath = diagnostic.path;
   }
+
+  getUrl = (rootProjectId: string) => {
+    //path is like main.trigers[0].actions[0]
+    //uri = id?selected=triggers[0]&focused=triggers[0].actions[0]
+    const { projectId, id, dialogPath = '' } = this;
+    return convertPathToUrl(rootProjectId, rootProjectId === projectId ? null : projectId, id, dialogPath);
+  };
 }
 
 export class SkillDiagnostic extends DiagnosticInfo {
@@ -77,6 +87,9 @@ export class SkillDiagnostic extends DiagnosticInfo {
     this.message = `${replaceDialogDiagnosticLabel(diagnostic.path)} ${diagnostic.message}`;
     this.dialogPath = diagnostic.path;
   }
+  getUrl = (rootProjectId: string) => {
+    return `/bot/${rootProjectId}/skills`;
+  };
 }
 
 export class SettingDiagnostic extends DiagnosticInfo {
@@ -86,20 +99,22 @@ export class SettingDiagnostic extends DiagnosticInfo {
     this.message = `${replaceDialogDiagnosticLabel(diagnostic.path)} ${diagnostic.message}`;
     this.dialogPath = diagnostic.path;
   }
+  getUrl = (rootProjectId: string) => {
+    return `/settings/bot/${rootProjectId}/dialog-settings`;
+  };
 }
 
 export class LgDiagnostic extends DiagnosticInfo {
   type = DiagnosticType.LG;
   constructor(
     projectId: string,
-    botName: string,
     id: string,
     location: string,
     diagnostic: Diagnostic,
     lgFile: LgFile,
     dialogs: DialogInfo[]
   ) {
-    super(projectId, botName, id, location, diagnostic);
+    super(projectId, id, location, diagnostic);
     this.message = createSingleMessage(diagnostic);
     this.dialogPath = this.findDialogPath(lgFile, dialogs, diagnostic);
   }
@@ -118,20 +133,30 @@ export class LgDiagnostic extends DiagnosticInfo {
       return path;
     }
   }
+
+  getUrl = (rootProjectId: string) => {
+    const { projectId, resourceId, diagnostic, dialogPath } = this;
+    let uri = `/bot/${rootProjectId}/language-generation/${resourceId}/edit#L=${diagnostic.range?.start.line || 0}`;
+    //the format of item.id is lgFile#inlineTemplateId
+    if (dialogPath) {
+      uri = convertPathToUrl(rootProjectId, rootProjectId === projectId ? null : projectId, resourceId, dialogPath);
+    }
+
+    return uri;
+  };
 }
 
 export class LuDiagnostic extends DiagnosticInfo {
   type = DiagnosticType.LU;
   constructor(
     projectId: string,
-    botName: string,
     id: string,
     location: string,
     diagnostic: Diagnostic,
     luFile: LuFile,
     dialogs: DialogInfo[]
   ) {
-    super(projectId, botName, id, location, diagnostic);
+    super(projectId, id, location, diagnostic);
     this.dialogPath = this.findDialogPath(luFile, dialogs, diagnostic);
     this.message = createSingleMessage(diagnostic);
   }
@@ -147,6 +172,15 @@ export class LuDiagnostic extends DiagnosticInfo {
       .find((dialog) => dialog.id === this.resourceId)
       ?.referredLuIntents.find((lu) => lu.name === intentName)?.path;
   }
+
+  getUrl = (rootProjectId: string) => {
+    const { projectId, resourceId, diagnostic, dialogPath } = this;
+    let uri = `/bot/${projectId}/language-understanding/${resourceId}/edit#L=${diagnostic.range?.start.line || 0}`;
+    if (dialogPath) {
+      uri = convertPathToUrl(rootProjectId, rootProjectId === projectId ? null : projectId, resourceId, dialogPath);
+    }
+    return uri;
+  };
 }
 
 export class QnADiagnostic extends DiagnosticInfo {
@@ -156,4 +190,9 @@ export class QnADiagnostic extends DiagnosticInfo {
     this.dialogPath = '';
     this.message = createSingleMessage(diagnostic);
   }
+
+  getUrl = (rootProjectId: string) => {
+    const { resourceId, diagnostic } = this;
+    return `/bot/${rootProjectId}/knowledge-base/${resourceId}/edit#L=${diagnostic.range?.start.line || 0}`;
+  };
 }

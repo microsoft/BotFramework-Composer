@@ -58,6 +58,7 @@ const Routes = (props) => {
             <FormDialogPage path="forms/:schemaId/*" />
             <FormDialogPage path="forms/*" />
             <DesignPage path="*" />
+            <Diagnostics path="diagnostics" />
             {pluginPages.map((page) => (
               <PluginPageContainer
                 key={`${page.id}/${page.bundleId}`}

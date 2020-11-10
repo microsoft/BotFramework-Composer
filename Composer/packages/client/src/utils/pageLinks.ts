@@ -49,7 +49,7 @@ export const topLinks = (
       disabled: !botLoaded,
     },
     {
-      to: `/bot/${projectId}/skill/${projectId}/diagnostics`,
+      to: `/bot/${projectId}/diagnostics`,
       iconName: 'Warning',
       labelName: formatMessage('Diagnostics'),
       exact: true,

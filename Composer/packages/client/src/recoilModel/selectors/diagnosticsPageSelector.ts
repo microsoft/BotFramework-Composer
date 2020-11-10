@@ -10,7 +10,6 @@ import formatMessage from 'format-message';
 import { getReferredLuFiles } from '../../utils/luUtil';
 import { INavTreeItem } from '../../components/NavTree';
 import { botDisplayNameState, qnaFilesState } from '../atoms/botState';
-import { currentProjectIdState } from '../atoms/appState';
 import {
   DialogDiagnostic,
   LgDiagnostic,
@@ -35,7 +34,7 @@ import {
 } from '../atoms';
 
 import { crossTrainConfigState } from './../atoms/botState';
-import { formDialogSchemasSelectorFamily } from './project';
+import { formDialogSchemasSelectorFamily, rootBotProjectIdSelector } from './project';
 import { validateDialogsSelectorFamily } from './validatedDialogs';
 import { recognizersSelectorFamily } from './recognizers';
 
@@ -137,17 +136,18 @@ export const allDiagnosticsSelectorFamily = selectorFamily({
 export const diagnosticNavLinksSelector = selector({
   key: 'diagnosticNavLinksSelector',
   get: ({ get }) => {
-    const projectId = get(currentProjectIdState);
+    const projectId = get(rootBotProjectIdSelector);
     const ids = get(botProjectIdsState);
     const result = ids.reduce((result: INavTreeItem[], id: string) => {
       const projectsMetaData = get(projectMetaDataState(id));
       if (projectsMetaData.isRemote) return result;
       const name = get(botDisplayNameState(id));
+      const url = id === projectId ? `/bot/${projectId}/diagnostics` : `/bot/${projectId}/skill/${id}/diagnostics`;
       result.push({
         id: id,
         name: name,
         ariaLabel: formatMessage('diagnostic links'),
-        url: `/bot/${projectId}/skill/${id}/diagnostics`,
+        url,
       });
       return result;
     }, []);
