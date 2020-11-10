@@ -219,6 +219,13 @@ export class Builder {
       region: config.region,
     });
 
+    //write downsampling result to the interruption folder
+    await Promise.all(
+      luContents.map(async ({ path, content }) => {
+        return await this.storage.writeFile(path, content);
+      })
+    );
+
     await this.luBuilder.writeDialogAssets(buildResult, {
       force: true,
       out: this.generatedFolderPath,
