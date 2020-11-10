@@ -26,7 +26,6 @@ const SettingPage = React.lazy(() => import('./pages/setting/SettingsPage'));
 const BotProjectSettings = React.lazy(() => import('./pages/botProject/BotProjectSettings'));
 const Notifications = React.lazy(() => import('./pages/notifications/Notifications'));
 const Publish = React.lazy(() => import('./pages/publish/Publish'));
-const Skills = React.lazy(() => import('./pages/skills'));
 const BotCreationFlowRouter = React.lazy(() => import('./components/CreationFlow/CreationFlow'));
 const FormDialogPage = React.lazy(() => import('./pages/form-dialog/FormDialogPage'));
 
@@ -59,7 +58,6 @@ const Routes = (props) => {
             <QnAPage path="knowledge-base/:dialogId/*" />
             <Notifications path="notifications" />
             <Publish path="publish/:targetName" />
-            <Skills path="skills/*" />
             <BotProjectSettings path="botProjectsSettings/*" />
             <FormDialogPage path="forms/:schemaId/*" />
             <FormDialogPage path="forms/*" />

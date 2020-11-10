@@ -5,11 +5,10 @@ import { useRecoilValue } from 'recoil';
 import { act } from '@botframework-composer/test-utils/lib/hooks';
 
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
-import { settingsState, currentProjectIdState, skillsState } from '../../atoms';
+import { settingsState, currentProjectIdState } from '../../atoms';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
 import { settingsDispatcher } from '../setting';
-import httpClient from '../../../utils/httpUtil';
 
 jest.mock('../../../utils/httpUtil');
 
@@ -76,11 +75,9 @@ describe('setting dispatcher', () => {
   beforeEach(() => {
     const useRecoilTestHook = () => {
       const settings = useRecoilValue(settingsState(projectId));
-      const skills = useRecoilValue(skillsState(projectId));
       const currentDispatcher = useRecoilValue(dispatcherState);
       return {
         settings,
-        skills,
         currentDispatcher,
       };
     };
@@ -89,7 +86,6 @@ describe('setting dispatcher', () => {
       states: [
         { recoilState: settingsState(projectId), initialValue: settings },
         { recoilState: currentProjectIdState, initialValue: projectId },
-        { recoilState: skillsState(projectId), initialValue: [] },
       ],
       dispatcher: {
         recoilState: dispatcherState,
@@ -157,39 +153,5 @@ describe('setting dispatcher', () => {
       await dispatcher.setCustomRuntime(projectId, true);
     });
     expect(renderedComponent.current.settings.runtime.customRuntime).toBeTruthy();
-  });
-
-  it('should update skills state', async () => {
-    (httpClient.get as jest.Mock).mockResolvedValue({
-      data: { description: 'description', endpoints: [{ endpointUrl: 'https://test' }] },
-    });
-
-    await act(async () => {
-      await dispatcher.setSettings(projectId, {
-        skill: {
-          foo: {
-            msAppId: '00000000-0000',
-            endpointUrl: 'https://skill-manifest/api/messages',
-            name: 'foo',
-            manifestUrl: 'https://skill-manifest',
-          },
-        },
-      } as any);
-    });
-
-    expect(renderedComponent.current.skills).toEqual(
-      expect.arrayContaining([
-        {
-          id: 'foo',
-          name: 'foo',
-          manifestUrl: 'https://skill-manifest',
-          msAppId: '00000000-0000',
-          endpointUrl: 'https://skill-manifest/api/messages',
-          description: 'description',
-          endpoints: expect.any(Array),
-          content: expect.any(Object),
-        },
-      ])
-    );
   });
 });

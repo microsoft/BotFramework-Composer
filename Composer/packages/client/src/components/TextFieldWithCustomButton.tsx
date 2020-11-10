@@ -64,7 +64,8 @@ type TextFieldWithCustomButtonProps = {
   placeholder: string;
   placeholderOnDisable: string;
   value: string;
-  onChange: (e, value) => void;
+  onBlur?: (value) => void;
+  onChange?: (e, value) => void;
   required: boolean;
 };
 
@@ -80,7 +81,17 @@ const onRenderLabel = (props) => {
 };
 
 export const TextFieldWithCustomButton: React.FC<TextFieldWithCustomButtonProps> = (props) => {
-  const { label, placeholder, placeholderOnDisable, onChange, required, ariaLabelledby, value, buttonText } = props;
+  const {
+    label,
+    placeholder,
+    placeholderOnDisable,
+    onChange,
+    required,
+    ariaLabelledby,
+    value,
+    buttonText,
+    onBlur,
+  } = props;
   const [isDisabled, setDisabled] = useState<boolean>(!value);
   const textFieldComponentRef = useRef<ITextField>(null);
   const [autoFoucsOnTextField, setAutoFoucsOnTextField] = useState<boolean>();
@@ -114,10 +125,11 @@ export const TextFieldWithCustomButton: React.FC<TextFieldWithCustomButtonProps>
             if (!localValue) {
               setDisabled(true);
             }
+            onBlur && onBlur(localValue);
           }}
           onChange={(e, value) => {
             setLocalValue(value ?? '');
-            onChange(e, value);
+            onChange && onChange(e, value);
           }}
           onRenderLabel={onRenderLabel}
         />

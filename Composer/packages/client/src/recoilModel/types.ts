@@ -53,7 +53,7 @@ export interface RuntimeTemplate {
   startCommand: string;
 }
 
-export interface BotLoadError {
+export interface BotRuntimeError {
   title: string;
   message: string;
   linkAfterMessage?: { url: string; text: string };
@@ -76,13 +76,6 @@ export interface AppUpdateState {
   version?: string;
 }
 
-export interface BreadcrumbItem {
-  skillId?: string;
-  dialogId: string;
-  selected: string;
-  focused: string;
-}
-
 export type dialogPayload = {
   id: string;
   content: any;
@@ -94,7 +87,7 @@ export type DesignPageLocationPayload = {
   dialogId: string;
   selected: string;
   focused: string;
-  breadcrumb: BreadcrumbItem[];
+  breadcrumb: string[];
   promptTab?: string;
 };
 

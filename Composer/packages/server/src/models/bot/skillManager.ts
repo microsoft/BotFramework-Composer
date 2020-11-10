@@ -2,8 +2,6 @@
 // Licensed under the MIT License.
 
 import * as msRest from '@azure/ms-rest-js';
-import { SkillSetting, Diagnostic, DiagnosticSeverity } from '@bfc/shared';
-import toPairs from 'lodash/toPairs';
 
 import logger from './../../logger';
 
@@ -24,29 +22,4 @@ export const getSkillManifest = async (url: string): Promise<any> => {
   });
 
   return typeof content === 'string' ? JSON.parse(content) : {};
-};
-
-export const retrieveSkillManifests = async (skillSettings?: { [name: string]: SkillSetting } | SkillSetting[]) => {
-  const skills = toPairs(skillSettings);
-
-  const diagnostics: Diagnostic[] = [];
-  const skillManifests: any = [];
-
-  for (const [id, { manifestUrl }] of skills) {
-    try {
-      const content = await getSkillManifest(manifestUrl);
-
-      skillManifests.push({ content, id, manifestUrl });
-    } catch (error) {
-      const notify = new Diagnostic(
-        `Accessing skill manifest url error, ${manifestUrl}`,
-        'appsettings.json',
-        DiagnosticSeverity.Warning
-      );
-      diagnostics.push(notify);
-      skillManifests.push({ id, manifestUrl });
-    }
-  }
-
-  return { diagnostics, skillManifests };
 };
