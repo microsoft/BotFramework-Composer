@@ -4,7 +4,7 @@
 import * as React from 'react';
 import { render, fireEvent, getByText } from '@botframework-composer/test-utils';
 
-import { ErrorCallout } from '../../../src/components/TestController/errorCallout';
+import { ErrorCallout } from '../../../src/components/BotRuntimeController/errorCallout';
 
 describe('<ErrorCallout />', () => {
   it('should render the <ErrorCallout />', () => {

@@ -17,7 +17,6 @@ import {
   schemasState,
   validateDialogsSelectorFamily,
   focusPathState,
-  skillsState,
   localeState,
   qnaFilesState,
   designPageLocationState,
@@ -29,6 +28,7 @@ import {
   rootBotProjectIdSelector,
 } from '../recoilModel';
 import { undoFunctionState } from '../recoilModel/undo/history';
+import { skillsStateSelector } from '../recoilModel/selectors';
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
@@ -66,7 +66,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
   const schemas = useRecoilValue(schemasState(projectId));
   const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
   const focusPath = useRecoilValue(focusPathState(projectId));
-  const skills = useRecoilValue(skillsState(projectId));
+  const skills = useRecoilValue(skillsStateSelector);
   const locale = useRecoilValue(localeState(projectId));
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   const undoFunction = useRecoilValue(undoFunctionState(projectId));
@@ -92,12 +92,11 @@ export function useShell(source: EventSource, projectId: string): Shell {
     selectTo,
     setVisualEditorSelection,
     setVisualEditorClipboard,
-    addSkillDialogBegin,
     onboardingAddCoachMarkRef,
     updateUserSettings,
     setMessage,
     displayManifestModal,
-    updateSkill,
+    updateSkillsDataInBotProjectFile: updateEndpointInBotProjectFile,
     updateZoomRate,
   } = useRecoilValue(dispatcherState);
 
@@ -217,13 +216,6 @@ export function useShell(source: EventSource, projectId: string): Shell {
         );
       });
     },
-    addSkillDialog: () => {
-      return new Promise((resolve) => {
-        addSkillDialogBegin((newSkill: { manifestUrl: string; name: string } | null) => {
-          resolve(newSkill);
-        }, projectId);
-      });
-    },
     undo,
     redo,
     commitChanges,
@@ -234,7 +226,9 @@ export function useShell(source: EventSource, projectId: string): Shell {
     updateDialogSchema: async (dialogSchema: DialogSchemaFile) => {
       updateDialogSchema(dialogSchema, projectId);
     },
-    updateSkillSetting: (...params) => updateSkill(projectId, ...params),
+    updateSkill: async (skillId: string, skillsData) => {
+      updateEndpointInBotProjectFile(skillId, skillsData.skill, skillsData.selectedEndpointIndex);
+    },
     updateFlowZoomRate,
     ...lgApi,
     ...luApi,

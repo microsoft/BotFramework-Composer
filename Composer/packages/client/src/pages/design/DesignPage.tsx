@@ -16,7 +16,6 @@ import { useRecoilValue } from 'recoil';
 
 import { LeftRightSplit } from '../../components/Split/LeftRightSplit';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { TestController } from '../../components/TestController/TestController';
 import { DialogDeleting } from '../../constants';
 import { createSelectedPath, deleteTrigger, TriggerFormData, getDialogData } from '../../utils/dialogUtil';
 import { Conversation } from '../../components/Conversation';
@@ -39,10 +38,9 @@ import {
   validateDialogsSelectorFamily,
   focusPathState,
   showCreateDialogModalState,
-  showAddSkillDialogModalState,
   localeState,
-  rootBotProjectIdSelector,
   qnaFilesState,
+  rootBotProjectIdSelector,
 } from '../../recoilModel';
 import { CreateQnAModal } from '../../components/QnA';
 import { triggerNotSupported } from '../../utils/dialogValidator';
@@ -126,15 +124,15 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const displaySkillManifest = useRecoilValue(displaySkillManifestState(skillId ?? projectId));
   const focusPath = useRecoilValue(focusPathState(skillId ?? projectId));
   const showCreateDialogModal = useRecoilValue(showCreateDialogModalState(skillId ?? projectId));
-  const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState(skillId ?? projectId));
   const locale = useRecoilValue(localeState(skillId ?? projectId));
   const undoFunction = useRecoilValue(undoFunctionState(skillId ?? projectId));
   const undoVersion = useRecoilValue(undoVersionState(skillId ?? projectId));
   const rootProjectId = useRecoilValue(rootBotProjectIdSelector) ?? projectId;
-
+  const [showAddSkillDialogModal, setAddSkillDialogModalVisibility] = useState(false);
+  const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
   const { undo, redo, commitChanges, clearUndo } = undoFunction;
   const [canUndo, canRedo] = useRecoilValue(undoStatusSelectorFamily(projectId));
-  const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
+
   const {
     removeDialog,
     updateDialog,
@@ -145,14 +143,14 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     setDesignPageLocation,
     navTo,
     selectTo,
-    addSkillDialogCancel,
     exportToZip,
     onboardingAddCoachMarkRef,
+    addRemoteSkillToBotProject,
+    updateZoomRate,
     createQnAKBFromUrl,
     createQnAKBFromScratch,
     createQnAFromUrlDialogBegin,
-    addSkill,
-    updateZoomRate,
+    setCurrentPageMode,
   } = useRecoilValue(dispatcherState);
 
   const params = new URLSearchParams(location?.search);
@@ -197,6 +195,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       updateDialog({ id: dialogId, content: dialogContent, projectId });
     }
   }, [dialogId]);
+
+  useEffect(() => {
+    setCurrentPageMode('design');
+  }, []);
 
   useEffect(() => {
     if (location && props.dialogId && props.projectId) {
@@ -544,11 +546,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         ],
       },
     },
-    {
-      type: 'element',
-      element: <TestController projectId={projectId} />,
-      align: 'right',
-    },
   ];
 
   const createBreadcrumbItem: (breadcrumb: BreadcrumbItem) => IBreadcrumbItem = (breadcrumb: BreadcrumbItem) => {
@@ -743,8 +740,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         {showAddSkillDialogModal && (
           <CreateSkillModal
             projectId={projectId}
-            onDismiss={() => addSkillDialogCancel(projectId)}
-            onSubmit={(skill) => addSkill(projectId, skill)}
+            onDismiss={() => {
+              setAddSkillDialogModalVisibility(false);
+            }}
+            onSubmit={(manifestUrl, endpointName) => {
+              setAddSkillDialogModalVisibility(false);
+              addRemoteSkillToBotProject(manifestUrl, endpointName);
+            }}
           />
         )}
         {exportSkillModalVisible && (
@@ -767,8 +769,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         <CreateQnAModal dialogId={dialogId} projectId={projectId} qnaFiles={qnaFiles} onSubmit={handleCreateQnA} />
         {displaySkillManifest && (
           <DisplayManifestModal
-            manifestId={displaySkillManifest}
             projectId={projectId}
+            skillNameIdentifier={displaySkillManifest}
             onDismiss={() => dismissManifestModal(projectId)}
           />
         )}

@@ -166,15 +166,30 @@ export type LgFile = {
   parseResult?: any;
 };
 
+export type Manifest = {
+  name: string;
+  version: string;
+  description: string;
+  endpoints: ManifestEndpoint[];
+  // Other props of manifest are not used in Composer.
+  [prop: string]: any;
+};
+
+export type ManifestEndpoint = {
+  name: string;
+  endpointUrl: string;
+  msAppId: string;
+  description: string;
+  // Other skill endpoint fields in the schema that Composer is not using presently
+  [prop: string]: any;
+};
+
 export type Skill = {
   id: string;
-  content: any;
+  manifest?: Manifest;
   description?: string;
-  endpoints: any[];
-  endpointUrl: string;
-  manifestUrl: string;
-  msAppId: string;
   name: string;
+  remote: boolean;
 };
 
 export type JsonSchemaFile = {
@@ -190,13 +205,7 @@ export type FileResolver = (id: string) => FileInfo | undefined;
 
 export type MemoryResolver = (id: string) => string[] | undefined;
 
-export type SkillManifestInfo = {
-  content: { [key: string]: any };
-  lastModified: string;
-  id: string;
-};
-
-export type SkillManifest = {
+export type SkillManifestFile = {
   content: any;
   id: string;
   path?: string;
@@ -209,7 +218,7 @@ export type BotAssets = {
   luFiles: LuFile[];
   lgFiles: LgFile[];
   qnaFiles: QnAFile[];
-  skillManifests: SkillManifest[];
+  skillManifests: SkillManifestFile[];
   setting: DialogSetting;
   dialogSchemas: DialogSchemaFile[];
   formDialogSchemas: FormDialogSchema[];

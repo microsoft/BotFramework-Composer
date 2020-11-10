@@ -9,7 +9,6 @@ import { jsonSchemaFileIndexer } from './jsonSchemaFileIndexer';
 import { lgIndexer } from './lgIndexer';
 import { luIndexer } from './luIndexer';
 import { qnaIndexer } from './qnaIndexer';
-import { skillIndexer } from './skillIndexer';
 import { skillManifestIndexer } from './skillManifestIndexer';
 import { botProjectSpaceIndexer } from './botProjectSpaceIndexer';
 import { FileExtensions } from './utils/fileExtensions';
@@ -80,7 +79,7 @@ class Indexer {
     return lgImportResolverGenerator(lgFiles, '.lg', locale);
   };
 
-  public index(files: FileInfo[], botName: string, locale: string, skillContent: any, settings: DialogSetting) {
+  public index(files: FileInfo[], botName: string, locale: string, settings: DialogSetting) {
     const result = this.classifyFile(files);
     const luFeatures = settings.luFeatures;
     const { dialogs, recognizers } = this.separateDialogsAndRecognizers(result[FileExtensions.Dialog]);
@@ -92,7 +91,6 @@ class Indexer {
       luFiles: luIndexer.index(result[FileExtensions.Lu], luFeatures),
       qnaFiles: qnaIndexer.index(result[FileExtensions.QnA]),
       skillManifestFiles: skillManifestIndexer.index(skillManifestFiles),
-      skills: skillIndexer.index(skillContent, settings.skill),
       botProjectSpaceFiles: botProjectSpaceIndexer.index(result[FileExtensions.BotProjectSpace]),
       jsonSchemaFiles: jsonSchemaFileIndexer.index(result[FileExtensions.Json]),
       formDialogSchemas: formDialogSchemaIndexer.index(result[FileExtensions.FormDialog]),
