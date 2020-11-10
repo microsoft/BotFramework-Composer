@@ -5,7 +5,7 @@
   },
   "include": [
     "src/**/*",
-    "testing/**/*"
+    "testing"
   ],
   "exclude": [
     "node_modules",
