@@ -21,13 +21,11 @@ import TableView from './table-view';
 
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
-interface QnAPageProps extends RouteComponentProps<{}> {
-  dialogId: string;
+const QnAPage: React.FC<RouteComponentProps<{
+  dialogId?: string;
   projectId: string;
   skillId?: string;
-}
-
-const QnAPage: React.FC<QnAPageProps> = (props) => {
+}>> = (props) => {
   const { dialogId = '', projectId = '', skillId } = props;
 
   const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;

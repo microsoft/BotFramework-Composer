@@ -18,13 +18,11 @@ import { validateDialogsSelectorFamily } from '../../recoilModel';
 import TableView from './table-view';
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
-interface LGPageProps {
-  dialogId: string;
+const LGPage: React.FC<RouteComponentProps<{
+  dialogId?: string;
   projectId: string;
   skillId?: string;
-}
-
-const LGPage: React.FC<RouteComponentProps<LGPageProps>> = (props: RouteComponentProps<LGPageProps>) => {
+}>> = (props) => {
   const { dialogId = '', projectId = '', skillId } = props;
   const dialogs = useRecoilValue(validateDialogsSelectorFamily(skillId ?? projectId ?? ''));
 
