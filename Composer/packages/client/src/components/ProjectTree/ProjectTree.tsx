@@ -129,14 +129,15 @@ type BotInProject = {
 };
 
 type Props = {
-  onSelect: (link: TreeLink) => void;
+  onSelect?: (link: TreeLink) => void;
   onSelectAllLink?: () => void;
   showTriggers?: boolean;
   showDialogs?: boolean;
   navLinks?: TreeLink[];
-  onDeleteTrigger: (id: string, index: number) => void;
-  onDeleteDialog: (id: string) => void;
+  onDeleteTrigger?: (id: string, index: number) => void;
+  onDeleteDialog?: (id: string) => void;
   defaultSelected?: Partial<TreeLink>;
+  showDelete?: boolean;
 };
 
 const TREE_PADDING = 100; // the horizontal space taken up by stuff in the tree other than text or indentation
@@ -149,6 +150,7 @@ export const ProjectTree: React.FC<Props> = ({
   onDeleteTrigger,
   onSelect,
   defaultSelected,
+  showDelete = true,
 }) => {
   const { onboardingAddCoachMarkRef, navigateToFormDialogSchema, setPageElementState } = useRecoilValue(
     dispatcherState
@@ -240,7 +242,7 @@ export const ProjectTree: React.FC<Props> = ({
     if (isEqual(link, selectedLink)) return;
 
     setSelectedLink(link);
-    onSelect(link);
+    onSelect?.(link);
   };
 
   const renderBotHeader = (bot: BotInProject) => {
@@ -319,13 +321,13 @@ export const ProjectTree: React.FC<Props> = ({
             isActive={doesLinkMatch(dialogLink, selectedLink)}
             link={dialogLink}
             menu={[
-              ...(!dialog.isRoot
+              ...(!dialog.isRoot && showDelete
                 ? [
                     {
                       label: formatMessage('Remove this dialog'),
                       icon: 'Delete',
                       onClick: (link) => {
-                        onDeleteDialog(link.dialogId ?? '');
+                        onDeleteDialog?.(link.dialogId ?? '');
                       },
                     },
                   ]
@@ -378,13 +380,17 @@ export const ProjectTree: React.FC<Props> = ({
         isActive={doesLinkMatch(link, selectedLink)}
         link={link}
         menu={[
-          {
-            label: formatMessage('Remove this trigger'),
-            icon: 'Delete',
-            onClick: (link) => {
-              onDeleteTrigger(link.dialogId ?? '', link.trigger ?? 0);
-            },
-          },
+          ...(showDelete
+            ? [
+                {
+                  label: formatMessage('Remove this trigger'),
+                  icon: 'Delete',
+                  onClick: (link) => {
+                    onDeleteTrigger?.(link.dialogId ?? '', link.trigger ?? 0);
+                  },
+                },
+              ]
+            : []),
         ]}
         textWidth={leftSplitWidth - TREE_PADDING}
         onSelect={handleOnSelect}

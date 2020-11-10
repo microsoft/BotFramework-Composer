@@ -3,6 +3,7 @@
 
 import { selectorFamily } from 'recoil';
 import { validateDialog } from '@bfc/indexers';
+import { DialogInfo } from '@bfc/shared';
 
 import { botProjectIdsState, dialogIdsState, schemasState, lgFilesState, luFilesState, dialogState } from '../atoms';
 
@@ -10,7 +11,7 @@ type validateDialogSelectorFamilyParams = { projectId: string; dialogId: string 
 const validateDialogSelectorFamily = selectorFamily({
   key: 'validateDialogSelectorFamily',
   get: ({ projectId, dialogId }: validateDialogSelectorFamilyParams) => ({ get }) => {
-    const dialog = get(dialogState({ projectId, dialogId }));
+    const dialog: DialogInfo = get(dialogState({ projectId, dialogId }));
     const schemas = get(schemasState(projectId));
     const lgFiles = get(lgFilesState(projectId));
     const luFiles = get(luFilesState(projectId));

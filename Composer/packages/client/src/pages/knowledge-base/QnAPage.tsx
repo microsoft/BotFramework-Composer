@@ -11,7 +11,7 @@ import { RouteComponentProps, Router } from '@reach/router';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { navigateTo } from '../../utils/navigation';
-import { INavTreeItem } from '../../components/NavTree';
+import { TreeLink } from '../../components/ProjectTree/ProjectTree';
 import { Page } from '../../components/Page';
 import { dialogsSelectorFamily, qnaFilesState } from '../../recoilModel';
 import { dispatcherState } from '../../recoilModel';
@@ -42,8 +42,8 @@ const QnAPage: React.FC<RouteComponentProps<{
 
   const edit = /\/edit(\/)?$/.test(path);
   const isRoot = dialogId === 'all';
-  const navLinks: INavTreeItem[] = useMemo(() => {
-    const newDialogLinks: INavTreeItem[] = dialogs.map((dialog) => {
+  const navLinks: TreeLink[] = useMemo(() => {
+    const newDialogLinks: TreeLink[] = dialogs.map((dialog) => {
       return {
         id: dialog.id,
         name: dialog.displayName,
@@ -121,6 +121,7 @@ const QnAPage: React.FC<RouteComponentProps<{
 
   return (
     <Page
+      useNewTree
       data-testid="QnAPage"
       mainRegionName={formatMessage('QnA editor')}
       navLinks={navLinks}

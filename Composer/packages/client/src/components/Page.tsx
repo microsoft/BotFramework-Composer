@@ -10,6 +10,7 @@ import { LeftRightSplit } from '../components/Split/LeftRightSplit';
 
 import { Toolbar, IToolbarItem } from './Toolbar';
 import { NavTree, INavTreeItem } from './NavTree';
+import { TreeLink, ProjectTree } from './ProjectTree/ProjectTree';
 
 // -------------------- Styles -------------------- //
 
@@ -80,19 +81,36 @@ export const content = css`
 
 // -------------------- Page -------------------- //
 
-interface IPageProps {
-  // TODO: add type
+type PageBaseProps = {
   toolbarItems: IToolbarItem[];
-  navLinks: INavTreeItem[];
   title: string;
   navRegionName: string;
   mainRegionName: string;
   onRenderHeaderContent?: () => string | JSX.Element | null;
   'data-testid'?: string;
-}
+};
+
+type IPageProps =
+  | (PageBaseProps & {
+      navLinks: INavTreeItem[];
+      useNewTree: false;
+    })
+  | (PageBaseProps & {
+      navLinks: TreeLink[];
+      useNewTree: true;
+    });
 
 const Page: React.FC<IPageProps> = (props) => {
-  const { title, navLinks, toolbarItems, onRenderHeaderContent, children, navRegionName, mainRegionName } = props;
+  const {
+    title,
+    navLinks,
+    toolbarItems,
+    onRenderHeaderContent,
+    children,
+    navRegionName,
+    mainRegionName,
+    useNewTree,
+  } = props;
 
   return (
     <div css={root} data-testid={props['data-testid']}>
@@ -104,7 +122,11 @@ const Page: React.FC<IPageProps> = (props) => {
         </div>
         <div css={main} role="main">
           <LeftRightSplit initialLeftGridWidth="20%" minLeftPixels={200} minRightPixels={800}>
-            <NavTree navLinks={navLinks} regionName={navRegionName} />
+            {useNewTree ? (
+              <ProjectTree navLinks={navLinks as TreeLink[]} showDelete={false} />
+            ) : (
+              <NavTree navLinks={navLinks as INavTreeItem[]} regionName={navRegionName} />
+            )}
             <div aria-label={mainRegionName} css={content} data-testid="PageContent" role="region">
               {children}
             </div>

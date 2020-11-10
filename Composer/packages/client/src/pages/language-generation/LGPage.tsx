@@ -11,7 +11,7 @@ import { useRecoilValue } from 'recoil';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { navigateTo } from '../../utils/navigation';
-import { INavTreeItem } from '../../components/NavTree';
+import { TreeLink } from '../../components/ProjectTree/ProjectTree';
 import { Page } from '../../components/Page';
 import { validateDialogsSelectorFamily } from '../../recoilModel';
 
@@ -32,8 +32,8 @@ const LGPage: React.FC<RouteComponentProps<{
 
   const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
 
-  const navLinks: INavTreeItem[] = useMemo(() => {
-    const newDialogLinks: INavTreeItem[] = dialogs.map((dialog) => {
+  const navLinks: TreeLink[] = useMemo(() => {
+    const newDialogLinks: TreeLink[] = dialogs.map((dialog) => {
       let url = `${baseURL}language-generation/${dialog.id}`;
       if (edit) {
         url += `/edit`;
@@ -91,6 +91,7 @@ const LGPage: React.FC<RouteComponentProps<{
 
   return (
     <Page
+      useNewTree
       data-testid="LGPage"
       mainRegionName={formatMessage('LG editor')}
       navLinks={navLinks}

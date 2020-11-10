@@ -9,8 +9,8 @@ import { RouteComponentProps, Router } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 
 import { navigateTo } from '../../utils/navigation';
+import { TreeLink } from '../../components/ProjectTree/ProjectTree';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
 import { validateDialogsSelectorFamily } from '../../recoilModel';
 
@@ -30,8 +30,8 @@ const LUPage: React.FC<RouteComponentProps<{
   const isRoot = dialogId === 'all';
   const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
 
-  const navLinks: INavTreeItem[] = useMemo(() => {
-    const newDialogLinks: INavTreeItem[] = dialogs.map((dialog) => {
+  const navLinks: TreeLink[] = useMemo(() => {
+    const newDialogLinks: TreeLink[] = dialogs.map((dialog) => {
       let url = `${baseURL}language-understanding/${dialog.id}`;
       if (edit) {
         url += `/edit`;
@@ -87,6 +87,7 @@ const LUPage: React.FC<RouteComponentProps<{
 
   return (
     <Page
+      useNewTree
       data-testid="LUPage"
       mainRegionName={formatMessage('LU editor')}
       navLinks={navLinks}
