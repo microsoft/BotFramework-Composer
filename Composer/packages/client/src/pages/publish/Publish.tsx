@@ -11,7 +11,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { PublishTarget, PublishResult } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
-import { setAccessToken, setGraphToken } from '../../utils/auth';
+// import { setAccessToken, setGraphToken } from '../../utils/auth';
 import { LeftRightSplit } from '../../components/Split/LeftRightSplit';
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { projectContainer } from '../design/styles';
@@ -52,6 +52,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     setQnASettings,
     rollbackToVersion: rollbackToVersionDispatcher,
     setCurrentPageMode,
+    getAccessToken,
   } = useRecoilValue(dispatcherState);
 
   const [dialogHidden, setDialogHidden] = useState(true);
@@ -104,7 +105,11 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         iconProps: {
           iconName: 'CloudUpload',
         },
-        onClick: () => setPublishDialogHidden(false),
+        onClick: async () => {
+          // get accessToken
+          await getAccessToken();
+          setPublishDialogHidden(false);
+        },
       },
       align: 'left',
       dataTestid: 'publishPage-Toolbar-Publish',
@@ -378,19 +383,19 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     [settings.publishTargets, projectId, botName]
   );
 
-  const updateAccessToken = useMemo(
-    () => (e, token) => {
-      setAccessToken(token);
-    },
-    []
-  );
+  // const updateAccessToken = useMemo(
+  //   () => (e, token) => {
+  //     setAccessToken(token);
+  //   },
+  //   []
+  // );
 
-  const updateGraphToken = useMemo(
-    () => (e, token) => {
-      setGraphToken(token);
-    },
-    []
-  );
+  // const updateGraphToken = useMemo(
+  //   () => (e, token) => {
+  //     setGraphToken(token);
+  //   },
+  //   []
+  // );
 
   useEffect(() => {
     setCurrentPageMode('notifications');
@@ -417,13 +422,13 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       )}
       {showLog && <LogDialog version={selectedVersion} onDismiss={() => setShowLog(false)} />}
       <Toolbar toolbarItems={toolbarItems} />
-      <div>
+      {/* <div>
         <form>
           <h1>Set Tokens Here</h1>
           <TextField placeholder="access token" onChange={updateAccessToken} />
           <TextField placeholder="graph token" onChange={updateGraphToken} />
         </form>
-      </div>
+      </div> */}
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{selectedTarget ? selectedTargetName : formatMessage('Publish Profiles')}</h1>
       </div>

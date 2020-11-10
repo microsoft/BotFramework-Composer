@@ -169,7 +169,7 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
     private init = async (project: any, srcTemplate: string, resourcekey: string, runtime: any) => {
       try {
         // point to the declarative assets (possibly in remote storage)
-        const botFiles = project.getProject().files;
+        const botFiles = project.getProject().filesWithoutRecognizers;
         const botFolder = this.getBotFolder(resourcekey, this.mode);
         const runtimeFolder = this.getRuntimeFolder(resourcekey);
 
@@ -290,7 +290,6 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
         settings,
         accessToken,
       } = config;
-
       try{
           // get the appropriate runtime template which contains methods to build and configure the runtime
         const runtime = composer.getRuntimeByProject(project);

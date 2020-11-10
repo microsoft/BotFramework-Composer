@@ -55,7 +55,7 @@
     "@bfc/indexers": "../../Composer/packages/lib/indexers",
     "@bfc/shared": "../../Composer/packages/lib/shared",
     "@bfc/types": "../../Composer/packages/types",
-    "@microsoft/bf-lu": "^4.11.0-dev.20201005.7e5e1b8",
+    "@microsoft/bf-lu": "4.11.0-dev.20201005.7e5e1b8",
     "@uifabric/fluent-theme": "^7.3.29",
     "adal-node": "0.2.1",
     "archiver": "^5.0.2",
