@@ -707,7 +707,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                           onCancel={() => {
                             setWarningIsVisible(false);
                           }}
-                          onOk={() => navigateTo(`/bot/${projectId}`)}
+                          onOk={() => navigateTo(`/bot/${projectId}/dialogs/${dialogId}`)}
                         />
                       )
                     ) : (
