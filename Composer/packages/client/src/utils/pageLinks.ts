@@ -62,13 +62,6 @@ export const topLinks = (
       exact: true,
       disabled: !botLoaded,
     },
-    {
-      to: `/bot/${projectId}/skills`,
-      iconName: 'PlugDisconnected',
-      labelName: formatMessage('Skills'),
-      exact: true,
-      disabled: !botLoaded,
-    },
     ...(showFormDialog
       ? [
           {

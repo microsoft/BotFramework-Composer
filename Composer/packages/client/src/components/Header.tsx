@@ -22,7 +22,7 @@ import composerIcon from '../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../constants';
 
 import { NotificationButton } from './Notifications/NotificationButton';
-import { BotController } from './TestController/BotController';
+import { BotController } from './BotRuntimeController/BotController';
 export const actionButton = css`
   font-size: ${FontSizes.size18};
   margin-top: 2px;

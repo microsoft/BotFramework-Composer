@@ -19,16 +19,16 @@ import { ICalloutContentStyles } from 'office-ui-fabric-react/lib/Callout';
 import { DiagnosticSeverity, Diagnostic } from '@bfc/shared';
 
 import { TreeLink, TreeMenuItem } from './ProjectTree';
+import { SUMMARY_ARROW_SPACE } from './constants';
 
 // -------------------- Styles -------------------- //
-const indent = 8;
-const itemText = css`
+
+const iconAndText = css`
   outline: none;
   :focus {
     outline: rgb(102, 102, 102) solid 1px;
     z-index: 1;
   }
-  padding-left: ${indent}px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
@@ -43,6 +43,7 @@ const content = css`
   outline: none;
   display: flex;
   align-items: center;
+  height: 24px;
 
   label: ProjectTreeItem;
 `;
@@ -63,7 +64,7 @@ const menuStyle: Partial<IContextualMenuStyles> = {
 const moreButton = (isActive: boolean): IButtonStyles => {
   return {
     root: {
-      padding: '0 4px',
+      padding: '4px 4px 0 4px',
       alignSelf: 'stretch',
       visibility: isActive ? 'visible' : 'hidden',
       height: 'auto',
@@ -76,16 +77,21 @@ const moreButton = (isActive: boolean): IButtonStyles => {
   };
 };
 
-const navItem = (isActive: boolean, isBroken: boolean, shift: number) => css`
-  width: calc(100%-${shift}px);
+const navItem = (isActive: boolean, isBroken: boolean) => css`
+  label: navItem;
+  min-width: 100%;
   position: relative;
   height: 24px;
   font-size: 12px;
-  margin-left: ${shift}px;
   color: ${isActive ? '#ffffff' : '#545454'};
   background: ${isActive ? '#0078d4' : 'transparent'};
   opacity: ${isBroken ? 0.5 : 1};
   font-weight: ${isActive ? FontWeights.semibold : FontWeights.regular};
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
   &:hover {
     color: #545454;
     background: #f2f2f2;
@@ -94,6 +100,7 @@ const navItem = (isActive: boolean, isBroken: boolean, shift: number) => css`
       visibility: visible;
     }
   }
+
   &:focus {
     outline: none;
     .ms-Fabric--isFocusVisible &::after {
@@ -129,7 +136,6 @@ export const diagnosticLinkMessages = css`
 export const overflowSet = (isBroken: boolean) => css`
   width: 100%;
   height: 100%;
-  padding-right: 12px;
   box-sizing: border-box;
   line-height: 24px;
   justify-content: space-between;
@@ -137,12 +143,13 @@ export const overflowSet = (isBroken: boolean) => css`
   i {
     color: ${isBroken ? SharedColors.red20 : 'inherit'};
   }
+  margin-top: 2px;
 `;
 
 const statusIcon = {
-  width: '24px',
+  width: '12px',
   height: '18px',
-  fontSize: 16,
+  fontSize: 11,
   marginLeft: 6,
 };
 
@@ -175,6 +182,12 @@ const diagnosticWarningIcon = {
   color: '#8A8780',
   background: '#FFF4CE',
 };
+const itemName = (nameWidth: number) => css`
+  max-width: ${nameWidth}px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 1;
+`;
 
 // -------------------- TreeItem -------------------- //
 
@@ -187,7 +200,9 @@ interface ITreeItemProps {
   icon?: string;
   dialogName?: string;
   showProps?: boolean;
-  forceIndent?: number; // needed to make an outline look right; should be the size of the "details" reveal arrow
+  textWidth?: number;
+  extraSpace?: number;
+  hasChildren?: boolean;
 }
 
 const renderTreeMenuItem = (link: TreeLink) => (item: TreeMenuItem) => {
@@ -209,7 +224,7 @@ const renderTreeMenuItem = (link: TreeLink) => (item: TreeMenuItem) => {
   };
 };
 
-const onRenderItem = (item: IOverflowSetItemProps) => {
+const onRenderItem = (textWidth: number) => (item: IOverflowSetItemProps) => {
   const { diagnostics = [] } = item;
   const warnings: Diagnostic[] = diagnostics.filter((diag) => diag.severity === DiagnosticSeverity.Warning);
   const errors: Diagnostic[] = diagnostics.filter((diag) => diag.severity === DiagnosticSeverity.Error);
@@ -254,7 +269,7 @@ const onRenderItem = (item: IOverflowSetItemProps) => {
     <div
       data-is-focusable
       aria-label={`${item.displayName} ${warningContent ?? ''} ${errorContent ?? ''}`}
-      css={itemText}
+      css={iconAndText}
       role="cell"
       tabIndex={0}
       onBlur={item.onBlur}
@@ -274,15 +289,15 @@ const onRenderItem = (item: IOverflowSetItemProps) => {
             tabIndex={-1}
           />
         )}
-        {item.displayName}
+        <span css={itemName(textWidth)}>{item.displayName}</span>
         {warnings.length ? (
-          <TooltipHost content={warningHTML} directionalHint={DirectionalHint.bottomLeftEdge}>
-            <Icon iconName={'Warning'} style={warningIcon} />
+          <TooltipHost content={errorHTML} directionalHint={DirectionalHint.bottomLeftEdge}>
+            <Icon iconName={'WarningSolid'} style={warningIcon} />
           </TooltipHost>
         ) : undefined}
         {errors.length ? (
-          <TooltipHost content={errorHTML} directionalHint={DirectionalHint.bottomLeftEdge}>
-            <Icon iconName={'ErrorBadge'} style={errorIcon} />
+          <TooltipHost content={warningHTML} directionalHint={DirectionalHint.bottomLeftEdge}>
+            <Icon iconName={'StatusErrorFull'} style={errorIcon} />
           </TooltipHost>
         ) : undefined}
       </div>
@@ -321,9 +336,11 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   isActive = false,
   icon,
   dialogName,
-  forceIndent,
   onSelect,
+  textWidth = 100,
+  hasChildren = false,
   menu = [],
+  extraSpace = 0,
 }) => {
   const a11yLabel = `${dialogName ?? '$Root'}_${link.displayName}`;
 
@@ -331,11 +348,12 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
 
   const linkString = `${link.projectId}_DialogTreeItem${link.dialogId}_${link.trigger ?? ''}`;
   const isBroken = !!link.bot?.error;
+  const spacerWidth = hasChildren ? 0 : SUMMARY_ARROW_SPACE + extraSpace;
 
   return (
     <div
       aria-label={a11yLabel}
-      css={navItem(!!isActive, isBroken, forceIndent ?? 0)}
+      css={navItem(isActive, isBroken)}
       data-testid={a11yLabel}
       role="gridcell"
       tabIndex={0}
@@ -348,6 +366,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         }
       }}
     >
+      <div style={{ minWidth: `${spacerWidth}px` }}></div>
       <OverflowSet
         //In 8.0 the OverflowSet will no longer be wrapped in a FocusZone
         //remove this at that time
@@ -364,7 +383,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         overflowItems={overflowMenu}
         role="row"
         styles={{ item: { flex: 1 } }}
-        onRenderItem={onRenderItem}
+        onRenderItem={onRenderItem(textWidth - spacerWidth + extraSpace)}
         onRenderOverflowButton={onRenderOverflowButton(!!isActive)}
       />
     </div>

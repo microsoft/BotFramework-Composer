@@ -2,14 +2,14 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { jsx, css } from '@emotion/core';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
 import cloneDeep from 'lodash/cloneDeep';
 import formatMessage from 'format-message';
 import { DialogInfo, ITrigger, Diagnostic, DiagnosticSeverity } from '@bfc/shared';
-import debounce from 'lodash/debounce';
+import throttle from 'lodash/throttle';
 import { useRecoilValue } from 'recoil';
 import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 import { extractSchemaProperties, groupTriggersByPropertyReference, NoGroupingTriggerGroupName } from '@bfc/indexers';
@@ -20,6 +20,7 @@ import {
   rootBotProjectIdSelector,
   botProjectSpaceSelector,
   jsonSchemaFilesByProjectIdSelector,
+  pageElementState,
 } from '../../recoilModel';
 import { getFriendlyName } from '../../utils/dialogUtil';
 import { triggerNotSupported } from '../../utils/dialogValidator';
@@ -30,6 +31,7 @@ import { LoadingSpinner } from '../LoadingSpinner';
 
 import { TreeItem } from './treeItem';
 import { ExpandableNode } from './ExpandableNode';
+import { INDENT_PER_LEVEL } from './constants';
 
 // -------------------- Styles -------------------- //
 
@@ -67,8 +69,6 @@ const tree = css`
   label: tree;
 `;
 
-const SUMMARY_ARROW_SPACE = 28; // the rough pixel size of the dropdown arrow to the left of a Details/Summary element
-
 // -------------------- Helper functions -------------------- //
 
 const getTriggerIndex = (trigger: ITrigger, dialog: DialogInfo): number => {
@@ -97,6 +97,7 @@ export type TreeLink = {
   skillId?: string;
   dialogId?: string;
   trigger?: number;
+  parentLink?: TreeLink;
 };
 
 export type TreeMenuItem = {
@@ -150,6 +151,8 @@ type Props = {
   defaultSelected?: Partial<TreeLink>;
 };
 
+const TREE_PADDING = 100; // the horizontal space taken up by stuff in the tree other than text or indentation
+
 export const ProjectTree: React.FC<Props> = ({
   onSelectAllLink: onAllSelected = undefined,
   showTriggers = true,
@@ -166,12 +169,21 @@ export const ProjectTree: React.FC<Props> = ({
   onDialogCreateTrigger,
   defaultSelected,
 }) => {
-  const { onboardingAddCoachMarkRef, navigateToFormDialogSchema } = useRecoilValue(dispatcherState);
+  const { onboardingAddCoachMarkRef, navigateToFormDialogSchema, setPageElementState } = useRecoilValue(
+    dispatcherState
+  );
+  const treeRef = useRef<HTMLDivElement>(null);
+
+  const pageElements = useRecoilValue(pageElementState).design;
+  const leftSplitWidth = pageElements?.leftSplitWidth ?? treeRef?.current?.clientWidth ?? 0;
+  const getPageElement = (name: string) => pageElements?.[name];
+  const setPageElement = (name: string, value: any) =>
+    setPageElementState('design', { ...pageElements, [name]: value });
 
   const [filter, setFilter] = useState('');
   const formDialogComposerFeatureEnabled = useFeatureFlag('FORM_DIALOG');
   const [selectedLink, setSelectedLink] = useState<Partial<TreeLink> | undefined>(defaultSelected);
-  const delayedSetFilter = debounce((newValue) => setFilter(newValue), 1000);
+  const delayedSetFilter = throttle((newValue) => setFilter(newValue), 200);
   const addMainDialogRef = useCallback((mainDialog) => onboardingAddCoachMarkRef({ mainDialog }), []);
   const projectCollection = useRecoilValue<BotInProject[]>(botProjectSpaceSelector).map((bot) => ({
     ...bot,
@@ -309,26 +321,27 @@ export const ProjectTree: React.FC<Props> = ({
       >
         <TreeItem
           showProps
-          forceIndent={bot.isRemote ? SUMMARY_ARROW_SPACE : 0}
+          hasChildren={!bot.isRemote}
           icon={bot.isRemote ? icons.EXTERNAL_SKILL : icons.BOT}
           isActive={doesLinkMatch(link, selectedLink)}
           link={link}
           menu={menu}
+          textWidth={leftSplitWidth - TREE_PADDING}
           onSelect={handleOnSelect}
         />
       </span>
     );
   };
 
-  const renderDialogHeader = (skillId: string, dialog: DialogInfo) => {
+  const renderDialogHeader = (skillId: string, dialog: DialogInfo, depth: number) => {
     const diagnostics: Diagnostic[] = notificationMap[rootProjectId][dialog.id];
-    const link: TreeLink = {
+    const dialogLink: TreeLink = {
       dialogId: dialog.id,
       displayName: dialog.displayName,
       isRoot: dialog.isRoot,
       diagnostics,
       projectId: rootProjectId,
-      skillId: skillId,
+      skillId: skillId === rootProjectId ? undefined : skillId,
     };
     const menu: any[] = [
       {
@@ -353,6 +366,16 @@ export const ProjectTree: React.FC<Props> = ({
     const isFormDialog = dialogIsFormDialog(dialog);
     const showEditSchema = formDialogSchemaExists(skillId, dialog);
 
+    if (!dialog.isRoot) {
+      menu.push({
+        label: formatMessage('Remove this dialog'),
+        icon: 'Delete',
+        onClick: (link) => {
+          onBotDeleteDialog(skillId, dialog.id);
+        },
+      });
+    }
+
     if (showEditSchema) {
       menu.push({
         label: formatMessage('Edit schema'),
@@ -360,46 +383,58 @@ export const ProjectTree: React.FC<Props> = ({
         onClick: (link) => navigateToFormDialogSchema({ projectId: link.skillId, schemaId: link.dialogName }),
       });
     }
-    return (
-      <span
-        key={dialog.id}
-        ref={dialog.isRoot ? addMainDialogRef : null}
-        css={css`
-          margin-top: -6px;
-          width: 100%;
-          label: dialog-header;
-        `}
-        role="grid"
-      >
-        <TreeItem
-          showProps
-          forceIndent={showTriggers ? 0 : SUMMARY_ARROW_SPACE}
-          icon={isFormDialog ? icons.FORM_DIALOG : icons.DIALOG}
-          isActive={doesLinkMatch(link, selectedLink)}
-          link={link}
-          menu={menu}
-          onSelect={handleOnSelect}
-        />
-      </span>
-    );
+
+    return {
+      summaryElement: (
+        <span
+          key={dialog.id}
+          ref={dialog.isRoot ? addMainDialogRef : null}
+          css={css`
+            margin-top: -6px;
+            width: 100%;
+            label: dialog-header;
+          `}
+          role="grid"
+        >
+          <TreeItem
+            hasChildren
+            showProps
+            icon={isFormDialog ? icons.FORM_DIALOG : icons.DIALOG}
+            isActive={doesLinkMatch(dialogLink, selectedLink)}
+            link={dialogLink}
+            menu={menu}
+            textWidth={leftSplitWidth - TREE_PADDING}
+            onSelect={handleOnSelect}
+          />
+        </span>
+      ),
+      dialogLink,
+    };
   };
 
-  const renderTrigger = (item: any, dialog: DialogInfo, projectId: string): React.ReactNode => {
+  const renderTrigger = (
+    item: any,
+    dialog: DialogInfo,
+    projectId: string,
+    dialogLink: TreeLink,
+    depth: number
+  ): React.ReactNode => {
     const link: TreeLink = {
       projectId: rootProjectId,
-      skillId: projectId,
+      skillId: projectId === rootProjectId ? undefined : projectId,
       dialogId: dialog.id,
       trigger: item.index,
       displayName: item.displayName,
       diagnostics: [],
       isRoot: false,
+      parentLink: dialogLink,
     };
 
     return (
       <TreeItem
         key={`${item.id}_${item.index}`}
         dialogName={dialog.displayName}
-        forceIndent={48}
+        extraSpace={INDENT_PER_LEVEL}
         icon={icons.TRIGGER}
         isActive={doesLinkMatch(link, selectedLink)}
         link={link}
@@ -412,6 +447,7 @@ export const ProjectTree: React.FC<Props> = ({
             },
           },
         ]}
+        textWidth={leftSplitWidth - TREE_PADDING}
         onSelect={handleOnSelect}
       />
     );
@@ -427,7 +463,13 @@ export const ProjectTree: React.FC<Props> = ({
     return scope.toLowerCase().includes(filter.toLowerCase());
   };
 
-  const renderTriggerList = (triggers: ITrigger[], dialog: DialogInfo, projectId: string) => {
+  const renderTriggerList = (
+    triggers: ITrigger[],
+    dialog: DialogInfo,
+    projectId: string,
+    dialogLink: TreeLink,
+    depth: number
+  ) => {
     return triggers
       .filter((tr) => filterMatch(dialog.displayName) || filterMatch(getTriggerName(tr)))
       .map((tr) => {
@@ -439,18 +481,20 @@ export const ProjectTree: React.FC<Props> = ({
         return renderTrigger(
           { ...tr, index, displayName: getTriggerName(tr), warningContent, errorContent },
           dialog,
-          projectId
+          projectId,
+          dialogLink,
+          depth
         );
       });
   };
 
-  const renderTriggerGroupHeader = (displayName: string, dialog: DialogInfo, projectId: string) => {
+  const renderTriggerGroupHeader = (displayName: string, dialog: DialogInfo, projectId: string, depth: number) => {
     const link: TreeLink = {
       dialogId: dialog.id,
       displayName,
       isRoot: false,
       diagnostics: [],
-      projectId: projectId,
+      projectId,
     };
     return (
       <span
@@ -461,12 +505,12 @@ export const ProjectTree: React.FC<Props> = ({
         `}
         role="grid"
       >
-        <TreeItem showProps forceIndent={0} isSubItemActive={false} link={link} />
+        <TreeItem showProps isSubItemActive={false} link={link} textWidth={leftSplitWidth - TREE_PADDING} />
       </span>
     );
   };
 
-  // renders a named expandible node with the triggers as items underneath
+  // renders a named expandable node with the triggers as items underneath
   const renderTriggerGroup = (
     projectId: string,
     dialog: DialogInfo,
@@ -477,14 +521,22 @@ export const ProjectTree: React.FC<Props> = ({
     const groupDisplayName =
       groupName === NoGroupingTriggerGroupName ? formatMessage('form-wide operations') : groupName;
     const key = `${projectId}.${dialog.id}.group-${groupName}`;
+    const link: TreeLink = {
+      dialogId: dialog.id,
+      displayName: groupName,
+      isRoot: false,
+      projectId,
+      diagnostics: [],
+    };
 
     return (
       <ExpandableNode
         key={key}
         depth={startDepth}
-        summary={renderTriggerGroupHeader(groupDisplayName, dialog, projectId)}
+        summary={renderTriggerGroupHeader(groupDisplayName, dialog, projectId, startDepth + 1)}
+        onToggle={(newState) => setPageElement(key, newState)}
       >
-        <div>{renderTriggerList(triggers, dialog, projectId)}</div>
+        <div>{renderTriggerList(triggers, dialog, projectId, link, startDepth + 1)}</div>
       </ExpandableNode>
     );
   };
@@ -502,10 +554,10 @@ export const ProjectTree: React.FC<Props> = ({
     });
   };
 
-  const renderDialogTriggers = (dialog: DialogInfo, projectId: string, startDepth: number) => {
+  const renderDialogTriggers = (dialog: DialogInfo, projectId: string, startDepth: number, dialogLink: TreeLink) => {
     return dialogIsFormDialog(dialog)
-      ? renderDialogTriggersByProperty(dialog, projectId, startDepth)
-      : renderTriggerList(dialog.triggers, dialog, projectId);
+      ? renderDialogTriggersByProperty(dialog, projectId, startDepth + 1)
+      : renderTriggerList(dialog.triggers, dialog, projectId, dialogLink, startDepth + 1);
   };
 
   const createDetailsTree = (bot: BotInProject, startDepth: number) => {
@@ -522,26 +574,36 @@ export const ProjectTree: React.FC<Props> = ({
 
     if (showTriggers) {
       return filteredDialogs.map((dialog: DialogInfo) => {
+        const { summaryElement, dialogLink } = renderDialogHeader(projectId, dialog, startDepth);
+        const key = 'dialog-' + dialog.id;
         return (
           <ExpandableNode
-            key={dialog.id}
+            key={key}
+            defaultState={getPageElement(key)}
             depth={startDepth}
             detailsRef={dialog.isRoot ? addMainDialogRef : undefined}
-            summary={renderDialogHeader(projectId, dialog)}
+            summary={summaryElement}
+            onToggle={(newState) => setPageElement(key, newState)}
           >
-            <div>{renderDialogTriggers(dialog, projectId, startDepth + 1)}</div>
+            <div>{renderDialogTriggers(dialog, projectId, startDepth + 1, dialogLink)}</div>
           </ExpandableNode>
         );
       });
     } else {
-      return filteredDialogs.map((dialog: DialogInfo) => renderDialogHeader(projectId, dialog));
+      return filteredDialogs.map((dialog: DialogInfo) => renderDialogHeader(projectId, dialog, startDepth));
     }
   };
 
   const createBotSubtree = (bot: BotInProject & { hasWarnings: boolean }) => {
+    const key = 'bot-' + bot.projectId;
     if (showDialogs && !bot.isRemote) {
       return (
-        <ExpandableNode key={bot.projectId} summary={renderBotHeader(bot)}>
+        <ExpandableNode
+          key={key}
+          defaultState={getPageElement(key)}
+          summary={renderBotHeader(bot)}
+          onToggle={(newState) => setPageElement(key, newState)}
+        >
           <div>{createDetailsTree(bot, 1)}</div>
         </ExpandableNode>
       );
@@ -557,6 +619,7 @@ export const ProjectTree: React.FC<Props> = ({
 
   return (
     <div
+      ref={treeRef}
       aria-label={formatMessage('Navigation pane')}
       className="ProjectTree"
       css={root}
@@ -592,13 +655,9 @@ export const ProjectTree: React.FC<Props> = ({
         <div css={tree}>
           {onAllSelected != null ? (
             <TreeItem
-              forceIndent={SUMMARY_ARROW_SPACE}
-              link={{
-                displayName: formatMessage('All'),
-                projectId: rootProjectId,
-                isRoot: true,
-                diagnostics: [],
-              }}
+              hasChildren={false}
+              link={{ displayName: formatMessage('All'), projectId: rootProjectId, isRoot: true, diagnostics: [] }}
+              textWidth={leftSplitWidth - TREE_PADDING}
               onSelect={onAllSelected}
             />
           ) : null}

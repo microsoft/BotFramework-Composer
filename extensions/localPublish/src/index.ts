@@ -41,17 +41,16 @@ interface PublishConfig {
 
 const isWin = process.platform === 'win32';
 
-const REGEX_LOCALHOST = /^https?:\/\/(localhost|127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}|::1)/;
+const localhostRegex = /^https?:\/\/(localhost|127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}|::1)/;
 
 
 const isLocalhostUrl = (matchUrl: string) => {
-  return REGEX_LOCALHOST.test(matchUrl);
+  return localhostRegex.test(matchUrl);
 };
 
-const isSkillHostUpdateRequired = (skillHostEndpoint: string | undefined) => {
+const isSkillHostUpdateRequired = (skillHostEndpoint?: string) => {
   return !skillHostEndpoint || isLocalhostUrl(skillHostEndpoint);
 };
-
 class LocalPublisher implements PublishPlugin<PublishConfig> {
   public name = 'localpublish';
   public description = 'Publish bot to local runtime';
@@ -94,6 +93,8 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
           'azurewebapp'
         );
       } else if (project.settings.runtime.path && project.settings.runtime.command) {
+        const runtimePath =  path.isAbsolute(project.settings.runtime.path)? project.settings.runtime.path: path.resolve(project.dataDir, project.settings.runtime.path);
+        await runtime.build(runtimePath, project);
         await runtime.setSkillManifest(
           project.settings.runtime.path,
           project.fileStorage,

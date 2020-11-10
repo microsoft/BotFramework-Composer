@@ -20,7 +20,7 @@ import {
   DetailsRow,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
-import { ProjectTemplate } from '@bfc/shared';
+import { BotTemplate } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { useRecoilState } from 'recoil';
@@ -107,7 +107,7 @@ const optionKeys = {
 
 // -------------------- CreateOptions -------------------- //
 type CreateOptionsProps = {
-  templates: ProjectTemplate[];
+  templates: BotTemplate[];
   onDismiss: () => void;
   onNext: (data: string) => void;
 } & RouteComponentProps<{}>;
@@ -123,7 +123,7 @@ export function CreateOptions(props: CreateOptionsProps) {
   const selection = useMemo(() => {
     return new Selection({
       onSelectionChanged: () => {
-        const t = selection.getSelection()[0] as ProjectTemplate;
+        const t = selection.getSelection()[0] as BotTemplate;
         if (t) {
           setCurrentTemplate(t.id);
         }

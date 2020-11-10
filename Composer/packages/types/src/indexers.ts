@@ -62,6 +62,7 @@ export type DialogInfo = {
   triggers: ITrigger[];
   intentTriggers: IIntentTrigger[];
   skills: string[];
+  isFormDialog: boolean;
 };
 
 export type LgTemplateJsonPath = {

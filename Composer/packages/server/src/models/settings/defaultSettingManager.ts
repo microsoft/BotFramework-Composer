@@ -1,15 +1,19 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import set from 'lodash/set';
 import { DialogSetting, SensitiveProperties } from '@bfc/shared';
 import { UserIdentity } from '@bfc/extension';
+import has from 'lodash/has';
+import get from 'lodash/get';
+import set from 'lodash/set';
 
 import { Path } from '../../utility/path';
 import log from '../../logger';
 
 import { FileSettingManager } from './fileSettingManager';
 const debug = log.extend('default-settings-manager');
+
+const newSettingsValuePath = ['downsampling', 'luis.endpoint', 'luis.authoringEndpoint', 'skillConfiguration'];
 
 export class DefaultSettingManager extends FileSettingManager {
   constructor(basePath: string, user?: UserIdentity) {
@@ -91,18 +95,19 @@ export class DefaultSettingManager extends FileSettingManager {
 
   public async get(obfuscate = false): Promise<any> {
     const result = await super.get(obfuscate);
-    //add downsampling property for old bot
-    if (!result.downsampling) {
-      result.downsampling = this.createDefaultSettings().downsampling;
+    const defaultValue = this.createDefaultSettings();
+    let updateFile = false;
+    newSettingsValuePath.forEach((jsonPath: string) => {
+      if (!has(result, jsonPath)) {
+        set(result, jsonPath, get(defaultValue, jsonPath));
+        updateFile = true;
+      }
+    });
+
+    if (updateFile) {
+      this.set(result);
     }
-    //add luis endpoint for old bot
-    if (!result.luis.endpoint && result.luis.endpoint !== '') {
-      result.luis.endpoint = this.createDefaultSettings().luis.endpoint;
-    }
-    //add luis authoring endpoint for old bot
-    if (!result.luis.authoringEndpoint && result.luis.authoringEndpoint !== '') {
-      result.luis.authoringEndpoint = this.createDefaultSettings().luis.authoringEndpoint;
-    }
+
     return result;
   }
 
