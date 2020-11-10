@@ -11,7 +11,6 @@ import { useRecoilValue } from 'recoil';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { navigateTo } from '../../utils/navigation';
-import { TestController } from '../../components/TestController/TestController';
 import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
 import { validateDialogsSelectorFamily } from '../../recoilModel';
@@ -19,22 +18,23 @@ import { validateDialogsSelectorFamily } from '../../recoilModel';
 import TableView from './table-view';
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
-interface LGPageProps {
+const LGPage: React.FC<RouteComponentProps<{
   dialogId: string;
   projectId: string;
-}
-
-const LGPage: React.FC<RouteComponentProps<LGPageProps>> = (props: RouteComponentProps<LGPageProps>) => {
-  const { dialogId = '', projectId = '' } = props;
-  const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
+  skillId: string;
+}>> = (props) => {
+  const { dialogId = '', projectId = '', skillId } = props;
+  const dialogs = useRecoilValue(validateDialogsSelectorFamily(skillId ?? projectId ?? ''));
 
   const path = props.location?.pathname ?? '';
 
   const edit = /\/edit(\/)?$/.test(path);
 
+  const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
+
   const navLinks: INavTreeItem[] = useMemo(() => {
     const newDialogLinks: INavTreeItem[] = dialogs.map((dialog) => {
-      let url = `/bot/${projectId}/language-generation/${dialog.id}`;
+      let url = `${baseURL}language-generation/${dialog.id}`;
       if (edit) {
         url += `/edit`;
       }
@@ -51,7 +51,7 @@ const LGPage: React.FC<RouteComponentProps<LGPageProps>> = (props: RouteComponen
       const mainDialog = newDialogLinks.splice(mainDialogIndex, 1)[0];
       newDialogLinks.splice(0, 0, mainDialog);
     }
-    let commonUrl = `/bot/${projectId}/language-generation/common`;
+    let commonUrl = `${baseURL}language-generation/common`;
     if (edit) {
       commonUrl += '/edit';
     }
@@ -68,26 +68,18 @@ const LGPage: React.FC<RouteComponentProps<LGPageProps>> = (props: RouteComponen
   useEffect(() => {
     const activeDialog = dialogs.find(({ id }) => id === dialogId);
     if (!activeDialog && dialogs.length && dialogId !== 'common') {
-      navigateTo(`/bot/${projectId}/language-generation/common`);
+      navigateTo(`${baseURL}language-generation/common`);
     }
   }, [dialogId, dialogs, projectId]);
 
   const onToggleEditMode = useCallback(
     (_e) => {
-      let url = `/bot/${projectId}/language-generation/${dialogId}`;
+      let url = `${baseURL}language-generation/${dialogId}`;
       if (!edit) url += `/edit`;
       navigateTo(url);
     },
     [dialogId, projectId, edit]
   );
-
-  const toolbarItems = [
-    {
-      type: 'element',
-      element: <TestController projectId={projectId} />,
-      align: 'right',
-    },
-  ];
 
   const onRenderHeaderContent = () => {
     return (
@@ -104,7 +96,7 @@ const LGPage: React.FC<RouteComponentProps<LGPageProps>> = (props: RouteComponen
       navLinks={navLinks}
       navRegionName={formatMessage('LG Navigation Pane')}
       title={formatMessage('Bot Responses')}
-      toolbarItems={toolbarItems}
+      toolbarItems={[]}
       onRenderHeaderContent={onRenderHeaderContent}
     >
       <Suspense fallback={<LoadingSpinner />}>

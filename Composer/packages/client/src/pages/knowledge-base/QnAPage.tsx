@@ -11,7 +11,6 @@ import { RouteComponentProps, Router } from '@reach/router';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { navigateTo } from '../../utils/navigation';
-import { TestController } from '../../components/TestController/TestController';
 import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
 import { dialogsSelectorFamily, qnaFilesState } from '../../recoilModel';
@@ -22,17 +21,18 @@ import TableView from './table-view';
 
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
-interface QnAPageProps extends RouteComponentProps<{}> {
-  projectId?: string;
-  dialogId?: string;
-}
+const QnAPage: React.FC<RouteComponentProps<{
+  dialogId: string;
+  projectId: string;
+  skillId: string;
+}>> = (props) => {
+  const { dialogId = '', projectId = '', skillId } = props;
 
-const QnAPage: React.FC<QnAPageProps> = (props) => {
-  const { dialogId = '', projectId = '' } = props;
+  const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
 
   const actions = useRecoilValue(dispatcherState);
-  const dialogs = useRecoilValue(dialogsSelectorFamily(projectId));
-  const qnaFiles = useRecoilValue(qnaFilesState(projectId));
+  const dialogs = useRecoilValue(dialogsSelectorFamily(skillId ?? projectId));
+  const qnaFiles = useRecoilValue(qnaFilesState(skillId ?? projectId));
   //To do: support other languages
   const locale = 'en-us';
   //const locale = useRecoilValue(localeState);
@@ -48,7 +48,7 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
         id: dialog.id,
         name: dialog.displayName,
         ariaLabel: formatMessage('qna file'),
-        url: `/bot/${projectId}/knowledge-base/${dialog.id}`,
+        url: `${baseURL}knowledge-base/${dialog.id}`,
         menuIconProps: {
           iconName: 'Add',
         },
@@ -82,7 +82,7 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
       id: 'all',
       name: 'All',
       ariaLabel: formatMessage('all qna files'),
-      url: `/bot/${projectId}/knowledge-base/all`,
+      url: `${baseURL}knowledge-base/all`,
     });
     return newDialogLinks;
   }, [dialogs]);
@@ -91,13 +91,13 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
     setCreateOnDialogId('');
     const activeDialog = dialogs.find(({ id }) => id === dialogId);
     if (!activeDialog && dialogs.length && dialogId !== 'all') {
-      navigateTo(`/bot/${projectId}/knowledge-base/${dialogId}`);
+      navigateTo(`${baseURL}knowledge-base/${dialogId}`);
     }
   }, [dialogId, dialogs, projectId]);
 
   const onToggleEditMode = useCallback(
     (_e) => {
-      let url = `/bot/${projectId}/knowledge-base/${dialogId}`;
+      let url = `${baseURL}knowledge-base/${dialogId}`;
       if (!edit) url += `/edit`;
       navigateTo(url);
     },
@@ -107,14 +107,6 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
   useEffect(() => {
     actions.setCurrentPageMode('qna');
   }, []);
-
-  const toolbarItems = [
-    {
-      type: 'element',
-      element: <TestController projectId={projectId} />,
-      align: 'right',
-    },
-  ];
 
   const onRenderHeaderContent = () => {
     if (!isRoot) {
@@ -134,7 +126,7 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
       navLinks={navLinks}
       navRegionName={formatMessage('Qna Navigation Pane')}
       title={formatMessage('QnA')}
-      toolbarItems={toolbarItems}
+      toolbarItems={[]}
       onRenderHeaderContent={onRenderHeaderContent}
     >
       <Suspense fallback={<LoadingSpinner />}>
