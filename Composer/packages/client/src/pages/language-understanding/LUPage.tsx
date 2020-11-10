@@ -18,9 +18,9 @@ import TableView from './table-view';
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
 const LUPage: React.FC<RouteComponentProps<{
-  dialogId?: string;
+  dialogId: string;
   projectId: string;
-  skillId?: string;
+  skillId: string;
 }>> = (props) => {
   const { dialogId = '', projectId = '', skillId } = props;
   const dialogs = useRecoilValue(validateDialogsSelectorFamily(skillId ?? projectId ?? ''));
@@ -32,7 +32,7 @@ const LUPage: React.FC<RouteComponentProps<{
 
   const navLinks: INavTreeItem[] = useMemo(() => {
     const newDialogLinks: INavTreeItem[] = dialogs.map((dialog) => {
-      let url = baseURL + `language-understanding/${dialog.id}`;
+      let url = `${baseURL}language-understanding/${dialog.id}`;
       if (edit) {
         url += `/edit`;
       }
@@ -53,7 +53,7 @@ const LUPage: React.FC<RouteComponentProps<{
       id: 'all',
       name: formatMessage('All'),
       ariaLabel: formatMessage('all language understanding files'),
-      url: baseURL + `language-understanding/all`,
+      url: `${baseURL}language-understanding/all`,
     });
     return newDialogLinks;
   }, [dialogs, edit]);
@@ -61,13 +61,13 @@ const LUPage: React.FC<RouteComponentProps<{
   useEffect(() => {
     const activeDialog = dialogs.find(({ id }) => id === dialogId);
     if (!activeDialog && dialogId !== 'all' && dialogs.length) {
-      navigateTo(baseURL + `language-understanding/all`);
+      navigateTo(`${baseURL}language-understanding/all`);
     }
   }, [dialogId, dialogs, projectId]);
 
   const onToggleEditMode = useCallback(
     (_e) => {
-      let url = baseURL + `language-understanding/${dialogId}`;
+      let url = `${baseURL}language-understanding/${dialogId}`;
       if (!edit) url += `/edit`;
       navigateTo(url);
     },

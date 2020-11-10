@@ -19,9 +19,9 @@ import TableView from './table-view';
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
 const LGPage: React.FC<RouteComponentProps<{
-  dialogId?: string;
+  dialogId: string;
   projectId: string;
-  skillId?: string;
+  skillId: string;
 }>> = (props) => {
   const { dialogId = '', projectId = '', skillId } = props;
   const dialogs = useRecoilValue(validateDialogsSelectorFamily(skillId ?? projectId ?? ''));
@@ -34,7 +34,7 @@ const LGPage: React.FC<RouteComponentProps<{
 
   const navLinks: INavTreeItem[] = useMemo(() => {
     const newDialogLinks: INavTreeItem[] = dialogs.map((dialog) => {
-      let url = baseURL + `language-generation/${dialog.id}`;
+      let url = `${baseURL}language-generation/${dialog.id}`;
       if (edit) {
         url += `/edit`;
       }
@@ -51,7 +51,7 @@ const LGPage: React.FC<RouteComponentProps<{
       const mainDialog = newDialogLinks.splice(mainDialogIndex, 1)[0];
       newDialogLinks.splice(0, 0, mainDialog);
     }
-    let commonUrl = baseURL + `language-generation/common`;
+    let commonUrl = `${baseURL}language-generation/common`;
     if (edit) {
       commonUrl += '/edit';
     }
@@ -68,13 +68,13 @@ const LGPage: React.FC<RouteComponentProps<{
   useEffect(() => {
     const activeDialog = dialogs.find(({ id }) => id === dialogId);
     if (!activeDialog && dialogs.length && dialogId !== 'common') {
-      navigateTo(baseURL + `language-generation/common`);
+      navigateTo(`${baseURL}language-generation/common`);
     }
   }, [dialogId, dialogs, projectId]);
 
   const onToggleEditMode = useCallback(
     (_e) => {
-      let url = baseURL + `language-generation/${dialogId}`;
+      let url = `${baseURL}language-generation/${dialogId}`;
       if (!edit) url += `/edit`;
       navigateTo(url);
     },
