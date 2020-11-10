@@ -356,16 +356,16 @@ export const deepCopyActions = async (
 
 export const deleteAction = (
   data: MicrosoftIDialog,
-  deleteLgTemplates: (templates: string[]) => any,
-  deleteLuIntents: (luIntents: string[]) => any
+  deleteLgTemplates: (templates: string[]) => Promise<void>,
+  deleteLuIntents: (luIntents: string[]) => Promise<void>
 ) => {
   return deleteAdaptiveAction(data, deleteLgTemplates, deleteLuIntents);
 };
 
 export const deleteActions = (
   inputs: MicrosoftIDialog[],
-  deleteLgTemplates: (templates: string[]) => any,
-  deleteLuIntents: (luIntents: string[]) => any
+  deleteLgTemplates: (templates: string[]) => Promise<void>,
+  deleteLuIntents: (luIntents: string[]) => Promise<void>
 ) => {
   return deleteAdaptiveActionList(inputs, deleteLgTemplates, deleteLuIntents);
 };
