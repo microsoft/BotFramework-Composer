@@ -10,6 +10,9 @@ schedules:
 # Do not run PR validation
 pr: none
 
+# Do not run CI validation
+trigger: none
+
 # Semmle task only works on Windows
 pool:
   vmImage: 'windows-latest'
