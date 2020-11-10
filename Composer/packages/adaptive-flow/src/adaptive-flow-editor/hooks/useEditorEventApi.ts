@@ -324,6 +324,15 @@ export const useEditorEventApi = (
     return handler(eventData);
   };
 
+  registerEditorAPI('Actions', {
+    CopySelection: () => handleEditorEvent(NodeEventTypes.CopySelection),
+    CutSelection: () => handleEditorEvent(NodeEventTypes.CutSelection),
+    MoveSelection: () => handleEditorEvent(NodeEventTypes.MoveSelection),
+    DeleteSelection: () => handleEditorEvent(NodeEventTypes.DeleteSelection),
+    DisableSelection: () => handleEditorEvent(NodeEventTypes.DisableSelection),
+    EnableSelection: () => handleEditorEvent(NodeEventTypes.EnableSelection),
+  });
+
   return {
     handleEditorEvent,
   };
