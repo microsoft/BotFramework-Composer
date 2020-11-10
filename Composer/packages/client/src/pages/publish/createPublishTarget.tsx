@@ -13,12 +13,11 @@ import { JsonEditor } from '@bfc/code-editor';
 import { useRecoilValue } from 'recoil';
 import { PublishTarget } from '@bfc/shared';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
+import { Persona, PersonaSize } from 'office-ui-fabric-react/lib/Persona';
 
 import { PublishProfileDialog } from '../../constants';
-// import { IPersonaSharedProps, Persona, PersonaSize } from 'office-ui-fabric-react/lib/Persona';
-// import { Link } from 'office-ui-fabric-react/lib/Link';
 import { PublishType } from '../../recoilModel/types';
-import { userSettingsState, currentProjectIdState } from '../../recoilModel';
+import { userSettingsState, currentProjectIdState, currentUserState } from '../../recoilModel';
 import { PluginAPI } from '../../plugins/api';
 import { PluginHost } from '../../components/PluginHost/PluginHost';
 import { dispatcherState } from '../../recoilModel';
@@ -50,7 +49,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
   const [page, setPage] = useState(current ? PageTypes.EditProfile : PageTypes.AddProfile);
 
   const userSettings = useRecoilValue(userSettingsState);
-  // const accessToken = useRecoilValue(currentUserState);
+  const currentUser = useRecoilValue(currentUserState);
   // const graphToken = useRecoilValue(grahpTokenState);
   const projectId = useRecoilValue(currentProjectIdState);
   const { provisionToTarget, getAccessToken, getGraphToken } = useRecoilValue(dispatcherState);
@@ -197,7 +196,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
             <div style={{ width: '60%' }}>{FormInPage}</div>
             <Separator css={separator} />
             <DialogFooter>
-              {/* <Persona {...examplePersona} size={PersonaSize.size24} /> */}
+              <Persona size={PersonaSize.size24} text={currentUser.name} />
               <DefaultButton text={formatMessage('Cancel')} onClick={props.closeDialog} />
               <PrimaryButton
                 disabled={nextDisabled}
@@ -219,7 +218,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
             {PageEditProfile}
             <Separator css={separator} />
             <DialogFooter>
-              {/* <Persona {...examplePersona} size={PersonaSize.size24} /> */}
+              {/* <Persona size={PersonaSize.size24} text={getSignInAccountInCache().} /> */}
               <DefaultButton text={formatMessage('Cancel')} onClick={props.closeDialog} />
               <PrimaryButton disabled={saveDisabled} text={formatMessage('Save')} onClick={submit} />
             </DialogFooter>
@@ -248,14 +247,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
         }
     }
     return null;
-  }, [config, page, FormInPage, PageEditProfile, nextDisabled, saveDisabled, selectedType, submit]);
-
-  // const examplePersona: IPersonaSharedProps = {
-  //   text: 'Somebody',
-  //   secondaryText: 'Software Engineer',
-  //   tertiaryText: 'In a meeting',
-  //   optionalText: 'Available at 4:00pm',
-  // };
+  }, [currentUser, config, page, FormInPage, PageEditProfile, nextDisabled, saveDisabled, selectedType, submit]);
 
   return PageContent;
 };
