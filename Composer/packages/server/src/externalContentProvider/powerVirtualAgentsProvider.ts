@@ -4,7 +4,7 @@ import fetch, { RequestInit } from 'node-fetch';
 import { join } from 'path';
 
 import logger from '../logger';
-import { authService } from '../services/auth';
+import { authService } from '../services/auth/auth';
 
 import { BotContentInfo, ContentProviderMetadata, ExternalContentProvider } from './externalContentProvider';
 
