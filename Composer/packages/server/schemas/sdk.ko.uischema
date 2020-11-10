@@ -1,356 +1,356 @@
 {
   "Microsoft.AdaptiveDialog": {
     "form": {
-      "description": "This configures a data driven dialog via a collection of events and actions.",
-      "label": "Adaptive dialog",
+      "description": "이벤트 및 작업 컬렉션을 통해 데이터 기반 대화가 구성됩니다.",
+      "label": "적응형 대화",
       "properties": {
         "recognizer": {
-          "description": "To understand what the user says, your dialog needs a \"Recognizer\"; that includes example words and sentences that users may use.",
+          "description": "사용자가 말하는 내용을 이해하려면 대화에 \"인식기\"가 있어야 합니다. 인식기에는 사용자가 사용할 수 있는 예제 단어와 문장이 포함되어 있습니다.",
           "label": "Language Understanding"
         }
       }
     }
   },
+  "Microsoft.Ask": {
+    "form": {
+      "label": "응답을 보내 질문하기",
+      "subtitle": "질문 활동"
+    }
+  },
+  "Microsoft.AttachmentInput": {
+    "form": {
+      "label": "파일 또는 첨부 파일 요청 메시지 표시",
+      "subtitle": "첨부 파일 입력"
+    }
+  },
+  "Microsoft.ChoiceInput": {
+    "form": {
+      "label": "다중 선택 요청 메시지 표시",
+      "subtitle": "선택 항목 입력"
+    }
+  },
+  "Microsoft.ConfirmInput": {
+    "form": {
+      "label": "확인 요청 메시지 표시",
+      "subtitle": "입력 확인"
+    }
+  },
+  "Microsoft.DateTimeInput": {
+    "form": {
+      "label": "날짜 또는 시간 요청 메시지 표시",
+      "subtitle": "날짜/시간 입력"
+    }
+  },
+  "Microsoft.NumberInput": {
+    "form": {
+      "label": "숫자 요청 메시지 표시",
+      "subtitle": "숫자 입력"
+    }
+  },
+  "Microsoft.OAuthInput": {
+    "form": {
+      "label": "OAuth 로그인",
+      "subtitle": "OAuth 입력"
+    }
+  },
+  "Microsoft.TextInput": {
+    "form": {
+      "label": "텍스트 요청 메시지 표시",
+      "subtitle": "텍스트 입력"
+    }
+  },
   "Microsoft.BeginDialog": {
     "form": {
-      "label": "Begin a new dialog",
-      "subtitle": "Begin Dialog"
+      "label": "새 대화 시작",
+      "subtitle": "대화 시작"
     }
   },
   "Microsoft.BeginSkill": {
     "form": {
-      "label": "Connect to a skill",
-      "subtitle": "Skill Dialog"
+      "label": "기술에 연결",
+      "subtitle": "기술 대화"
     }
   },
   "Microsoft.BreakLoop": {
     "form": {
-      "label": "Break out of loop",
-      "subtitle": "Break out of loop"
+      "label": "루프 중단",
+      "subtitle": "루프 중단"
     }
   },
   "Microsoft.CancelAllDialogs": {
     "form": {
-      "label": "Cancel all active dialogs",
-      "subtitle": "Cancel All Dialogs"
+      "label": "활성 대화 모두 취소",
+      "subtitle": "모든 대화 취소"
     }
   },
   "Microsoft.ContinueLoop": {
     "form": {
-      "label": "Continue loop",
-      "subtitle": "Continue loop"
+      "label": "루프 계속",
+      "subtitle": "루프 계속"
     }
   },
   "Microsoft.DebugBreak": {
     "form": {
-      "label": "Debug Break"
+      "label": "디버그 중단"
     }
   },
   "Microsoft.DeleteProperties": {
     "form": {
-      "label": "Delete properties",
-      "subtitle": "Delete Properties"
+      "label": "속성 삭제",
+      "subtitle": "속성 삭제"
     }
   },
   "Microsoft.DeleteProperty": {
     "form": {
-      "label": "Delete a property",
-      "subtitle": "Delete Property"
+      "label": "속성 삭제",
+      "subtitle": "속성 삭제"
     }
   },
   "Microsoft.EditActions": {
     "form": {
-      "label": "Modify active dialog",
-      "subtitle": "Edit Actions"
+      "label": "활성 대화 수정",
+      "subtitle": "편집 작업"
     }
   },
   "Microsoft.EditArray": {
     "form": {
-      "label": "Edit an array property",
-      "subtitle": "Edit Array"
+      "label": "배열 속성 편집",
+      "subtitle": "배열 편집"
     }
   },
   "Microsoft.EmitEvent": {
     "form": {
-      "label": "Emit a custom event",
-      "subtitle": "Emit Event"
+      "label": "사용자 지정 이벤트 내보내기",
+      "subtitle": "이벤트 내보내기"
     }
   },
   "Microsoft.EndDialog": {
     "form": {
-      "label": "End this dialog",
-      "subtitle": "End Dialog"
+      "label": "이 대화 종료",
+      "subtitle": "대화 종료"
     }
   },
   "Microsoft.EndTurn": {
     "form": {
-      "label": "End turn",
-      "subtitle": "End Turn"
+      "label": "차례 종료",
+      "subtitle": "차례 종료"
     }
   },
   "Microsoft.Foreach": {
     "form": {
-      "label": "Loop: For each item",
+      "label": "루프: 각 항목에 적용",
       "subtitle": "For Each"
     }
   },
   "Microsoft.ForeachPage": {
     "form": {
-      "label": "Loop: For each page (multiple items)",
-      "subtitle": "For Each Page"
+      "label": "루프: 각 페이지에 적용(여러 항목)",
+      "subtitle": "각 페이지에 적용"
     }
   },
   "Microsoft.HttpRequest": {
     "form": {
-      "label": "Send an HTTP request",
+      "label": "HTTP 요청 보내기",
       "subtitle": "HTTP 요청"
     }
   },
   "Microsoft.IfCondition": {
     "form": {
-      "label": "Branch: If/Else",
-      "subtitle": "If Condition"
+      "label": "분기: If/Else",
+      "subtitle": "If 조건"
     }
   },
   "Microsoft.LogAction": {
     "form": {
       "label": "콘솔에 기록",
-      "subtitle": "Log Action"
+      "subtitle": "로깅 작업"
     }
   },
   "Microsoft.RepeatDialog": {
     "form": {
-      "label": "Repeat this dialog",
-      "subtitle": "Repeat Dialog"
+      "label": "이 대화 반복",
+      "subtitle": "대화 반복"
     }
   },
   "Microsoft.ReplaceDialog": {
     "form": {
-      "label": "Replace this dialog",
-      "subtitle": "Replace Dialog"
+      "label": "이 대화 바꾸기",
+      "subtitle": "대화 바꾸기"
     }
   },
   "Microsoft.SendActivity": {
     "form": {
-      "label": "Send a response",
-      "subtitle": "Send Activity"
+      "label": "응답 보내기",
+      "subtitle": "활동 보내기"
     }
   },
   "Microsoft.SetProperties": {
     "form": {
-      "label": "Set properties",
+      "label": "속성 설정",
       "subtitle": "속성 설정"
     }
   },
   "Microsoft.SetProperty": {
     "form": {
-      "label": "Set a property",
+      "label": "속성 설정",
       "subtitle": "속성 설정"
     }
   },
   "Microsoft.SignOutUser": {
     "form": {
-      "label": "Sign out user",
-      "subtitle": "Signout User"
+      "label": "사용자 로그아웃",
+      "subtitle": "사용자 로그아웃"
     }
   },
   "Microsoft.SwitchCondition": {
     "form": {
-      "label": "Branch: Switch (multiple options)",
-      "subtitle": "Switch Condition"
+      "label": "분기: Switch(여러 옵션)",
+      "subtitle": "전환 조건"
     }
   },
   "Microsoft.ThrowException": {
     "form": {
-      "label": "Throw an exception",
-      "subtitle": "Throw an exception"
+      "label": "예외 throw",
+      "subtitle": "예외 throw"
     }
   },
   "Microsoft.TraceActivity": {
     "form": {
-      "label": "Emit a trace event",
-      "subtitle": "Trace Activity"
-    }
-  },
-  "Microsoft.Ask": {
-    "form": {
-      "label": "Send a response to ask a question",
-      "subtitle": "Ask Activity"
-    }
-  },
-  "Microsoft.AttachmentInput": {
-    "form": {
-      "label": "Prompt for a file or an attachment",
-      "subtitle": "Attachment Input"
-    }
-  },
-  "Microsoft.ChoiceInput": {
-    "form": {
-      "label": "Prompt with multi-choice",
-      "subtitle": "Choice Input"
-    }
-  },
-  "Microsoft.ConfirmInput": {
-    "form": {
-      "label": "Prompt for confirmation",
-      "subtitle": "Confirm Input"
-    }
-  },
-  "Microsoft.DateTimeInput": {
-    "form": {
-      "label": "Prompt for a date or a time",
-      "subtitle": "Date Time Input"
-    }
-  },
-  "Microsoft.NumberInput": {
-    "form": {
-      "label": "Prompt for a number",
-      "subtitle": "Number Input"
-    }
-  },
-  "Microsoft.OAuthInput": {
-    "form": {
-      "label": "OAuth login",
-      "subtitle": "OAuth Input"
-    }
-  },
-  "Microsoft.TextInput": {
-    "form": {
-      "label": "Prompt for text",
-      "subtitle": "텍스트 입력"
+      "label": "추적 이벤트 내보내기",
+      "subtitle": "추적 활동"
     }
   },
   "Microsoft.OnActivity": {
     "form": {
-      "label": "작업",
-      "subtitle": "Activity received"
+      "label": "활동",
+      "subtitle": "활동 받음"
     }
   },
   "Microsoft.OnAssignEntity": {
     "form": {
-      "label": "Handle a condition when an entity is assigned",
-      "subtitle": "EntityAssigned activity"
+      "label": "엔터티가 할당될 때 조건 처리",
+      "subtitle": "EntityAssigned 활동"
     }
   },
   "Microsoft.OnBeginDialog": {
     "form": {
-      "label": "Dialog started",
-      "subtitle": "Begin dialog event"
+      "label": "대화 시작됨",
+      "subtitle": "대화 시작 이벤트"
     }
   },
   "Microsoft.OnCancelDialog": {
     "form": {
-      "label": "Dialog cancelled",
-      "subtitle": "Cancel dialog event"
+      "label": "대화 취소됨",
+      "subtitle": "대화 취소 이벤트"
     }
   },
   "Microsoft.OnCondition": {
     "form": {
-      "label": "Handle a condition",
+      "label": "조건 처리",
       "subtitle": "조건"
     }
   },
   "Microsoft.OnConversationUpdateActivity": {
     "form": {
-      "description": "Handle the events fired when a user begins a new conversation with the bot.",
+      "description": "사용자가 봇과 새 대화를 시작하는 경우에 발생하는 이벤트를 처리합니다.",
       "label": "인사말",
-      "subtitle": "ConversationUpdate activity"
+      "subtitle": "ConversationUpdate 활동"
     }
   },
   "Microsoft.OnDialogEvent": {
     "form": {
-      "label": "Dialog events",
-      "subtitle": "Dialog event"
+      "label": "대화 이벤트",
+      "subtitle": "대화 이벤트"
     }
   },
   "Microsoft.OnEndOfActions": {
     "form": {
-      "label": "Handle a condition when actions have ended",
-      "subtitle": "EndOfActions activity"
+      "label": "작업이 종료될 때 조건 처리",
+      "subtitle": "EndOfActions 활동"
     }
   },
   "Microsoft.OnEndOfConversationActivity": {
     "form": {
-      "label": "Conversation ended",
-      "subtitle": "EndOfConversation activity"
+      "label": "대화 종료됨",
+      "subtitle": "EndOfConversation 활동"
     }
   },
   "Microsoft.OnError": {
     "form": {
-      "label": "오류가 발생했습니다.",
-      "subtitle": "Error event"
+      "label": "오류 발생",
+      "subtitle": "오류 이벤트"
     }
   },
   "Microsoft.OnEventActivity": {
     "form": {
-      "label": "Event received",
-      "subtitle": "Event activity"
+      "label": "이벤트 받음",
+      "subtitle": "이벤트 활동"
     }
   },
   "Microsoft.OnHandoffActivity": {
     "form": {
-      "label": "Handover to human",
-      "subtitle": "Handoff activity"
+      "label": "인간에게 핸드오버",
+      "subtitle": "핸드오프 활동"
     }
   },
   "Microsoft.OnInstallationUpdateActivity": {
     "form": {
-      "label": "Installation updated",
-      "subtitle": "Installation updated activity"
+      "label": "설치가 업데이트됨",
+      "subtitle": "설치가 업데이트됨 활동"
     }
   },
   "Microsoft.OnIntent": {
     "form": {
-      "label": "Intent recognized",
-      "subtitle": "Intent recognized"
+      "label": "의도 인식됨",
+      "subtitle": "의도 인식됨"
     }
   },
   "Microsoft.OnInvokeActivity": {
     "form": {
-      "label": "Conversation invoked",
-      "subtitle": "Invoke activity"
+      "label": "대화 호출됨",
+      "subtitle": "호출 활동"
     }
   },
   "Microsoft.OnMessageActivity": {
     "form": {
-      "label": "Message received",
-      "subtitle": "Message received activity"
+      "label": "메시지 받음",
+      "subtitle": "메시지 받음 활동"
     }
   },
   "Microsoft.OnMessageDeleteActivity": {
     "form": {
-      "label": "Message deleted",
-      "subtitle": "Message deleted activity"
+      "label": "메시지 삭제됨",
+      "subtitle": "메시지 삭제됨 활동"
     }
   },
   "Microsoft.OnMessageReactionActivity": {
     "form": {
-      "label": "Message reaction",
-      "subtitle": "Message reaction activity"
+      "label": "메시지 반응",
+      "subtitle": "메시지 반응 활동"
     }
   },
   "Microsoft.OnMessageUpdateActivity": {
     "form": {
-      "label": "Message updated",
-      "subtitle": "Message updated activity"
+      "label": "메시지 업데이트됨",
+      "subtitle": "메시지 업데이트됨 활동"
     }
   },
   "Microsoft.OnRepromptDialog": {
     "form": {
-      "label": "Re-prompt for input",
-      "subtitle": "Reprompt dialog event"
+      "label": "입력 요청 메시지 다시 표시",
+      "subtitle": "대화 요청 메시지 다시 표시 이벤트"
     }
   },
   "Microsoft.OnTypingActivity": {
     "form": {
-      "label": "User is typing",
-      "subtitle": "Typing activity"
+      "label": "사용자가 입력 중입니다.",
+      "subtitle": "입력 활동"
     }
   },
   "Microsoft.OnUnknownIntent": {
     "form": {
-      "label": "Unknown intent",
-      "subtitle": "Unknown intent recognized"
+      "label": "알 수 없는 의도",
+      "subtitle": "알 수 없는 의도 인식됨"
     }
   }
 }
