@@ -11,6 +11,7 @@ const IntellisenseNumberFieldWithIcon = WithTypeIcons(DefaultFields.Intellisense
 const NumberFieldWithIcon = WithTypeIcons(DefaultFields.NumberField);
 const BooleanFieldWithIcon = WithTypeIcons(DefaultFields.BooleanField);
 const JsonFieldWithIcon = WithTypeIcons(DefaultFields.JsonField);
+const SelectFieldWithIcon = WithTypeIcons(DefaultFields.SelectField);
 const IntellisenseJSONFieldWithIcon = WithTypeIcons(DefaultFields.IntellisenseJSONField);
 const IntellisenseExpressionFieldWithIcon = WithTypeIcons(DefaultFields.IntellisenseExpressionField);
 
@@ -79,7 +80,7 @@ export function resolveFieldWidget(params: {
     }
 
     if (Array.isArray(schema.enum)) {
-      return { field: DefaultFields.SelectField };
+      return { field: isOneOf ? DefaultFields.SelectField : SelectFieldWithIcon };
     }
 
     switch (schema.type) {
@@ -135,7 +136,7 @@ export function resolveFieldWidget(params: {
         return { field: DefaultFields.ArrayField };
       }
       case 'object':
-        if (schema.additionalProperties) {
+        if (typeof schema.additionalProperties === 'object') {
           return { field: DefaultFields.OpenObjectField };
         } else if (!schema.properties) {
           if (showIntellisense && isOneOf) {

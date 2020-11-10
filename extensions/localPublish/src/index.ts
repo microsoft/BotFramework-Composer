@@ -80,6 +80,8 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
           'azurewebapp'
         );
       } else if (project.settings.runtime.path && project.settings.runtime.command) {
+        const runtimePath =  path.isAbsolute(project.settings.runtime.path)? project.settings.runtime.path: path.resolve(project.dataDir, project.settings.runtime.path);
+        await runtime.build(runtimePath, project);
         await runtime.setSkillManifest(
           project.settings.runtime.path,
           project.fileStorage,

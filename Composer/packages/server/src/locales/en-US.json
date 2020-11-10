@@ -377,6 +377,9 @@
   "boolean_value_98d39ea1": {
     "message": "Boolean value."
   },
+  "bot_7926b66d": {
+    "message": "Bot"
+  },
   "bot_asks_5e9f0202": {
     "message": "Bot Asks"
   },
@@ -619,6 +622,9 @@
   },
   "could_not_connect_to_storage_50411de0": {
     "message": "Could not connect to storage."
+  },
+  "could_not_init_plugin_1f1c29cd": {
+    "message": "Could not init plugin"
   },
   "couldn_t_complete_the_update_a337a359": {
     "message": "Couldn''t complete the update:"
@@ -1280,6 +1286,9 @@
   "if_this_problem_persists_please_file_an_issue_on_6fbc8e2b": {
     "message": "If this problem persists, please file an issue on"
   },
+  "if_turned_on_then_externally_stored_templates_will_3f487651": {
+    "message": "If turned on then externally stored templates will be selectable in the new bot flow template list"
+  },
   "if_you_already_have_a_luis_account_provide_the_inf_bede07a4": {
     "message": "If you already have a LUIS account, provide the information below. If you do not have an account yet, create a (free) account first."
   },
@@ -1817,6 +1826,9 @@
   "open_notification_panel_5796edb3": {
     "message": "Open notification panel"
   },
+  "open_skills_page_for_configuration_details_a2a484ea": {
+    "message": "Open Skills page for configuration details"
+  },
   "optional_221bcc9d": {
     "message": "Optional"
   },
@@ -2093,6 +2105,9 @@
   "regex_intent_is_already_defined_df095c1f": {
     "message": "RegEx { intent } is already defined"
   },
+  "regular_expression_855557bf": {
+    "message": "Regular Expression"
+  },
   "regular_expression_recognizer_44664557": {
     "message": "Regular expression recognizer"
   },
@@ -2101,6 +2116,9 @@
   },
   "reloading_49d2f661": {
     "message": "Reloading"
+  },
+  "remote_templates_a23c242d": {
+    "message": "Remote templates"
   },
   "remove_f47dc62a": {
     "message": "Remove"
@@ -2357,11 +2375,11 @@
   "spaces_and_special_characters_are_not_allowed_20d47684": {
     "message": "Spaces and special characters are not allowed."
   },
-  "spaces_and_special_characters_are_not_allowed_use__2a61c454": {
-    "message": "Spaces and special characters are not allowed. Use letters, numbers, -, or _ and don''t use number at the beginning."
-  },
   "spaces_and_special_characters_are_not_allowed_use__48acec3c": {
     "message": "Spaces and special characters are not allowed. Use letters, numbers, -, or _."
+  },
+  "spaces_and_special_characters_are_not_allowed_use__d24a8636": {
+    "message": "Spaces and special characters are not allowed. Use letters, numbers, -, or _, and begin the name with a letter."
   },
   "specify_a_name_and_description_for_your_new_dialog_86eb3130": {
     "message": "Specify a name and description for your new dialog."
@@ -2492,6 +2510,9 @@
   "there_are_no_notifications_e81eab8d": {
     "message": "There are no notifications."
   },
+  "there_are_no_preview_features_at_this_time_a5c40953": {
+    "message": "There are no preview features at this time."
+  },
   "there_was_an_error_74ed3c58": {
     "message": "There was an error"
   },
@@ -2515,6 +2536,9 @@
   },
   "this_dialog_has_no_trigger_yet_d1f1d173": {
     "message": "This dialog has no trigger yet."
+  },
+  "this_is_a_botname_notification_c8a391c7": {
+    "message": "This is a { botName } notification"
   },
   "this_is_a_required_field_acb9837e": {
     "message": "This is a required field."
@@ -2651,6 +2675,9 @@
   "typing_activity_6b634ae": {
     "message": "Typing activity"
   },
+  "unable_to_determine_recognizer_type_from_data_valu_2960f526": {
+    "message": "Unable to determine recognizer type from data: { value }"
+  },
   "undo_a7be8fef": {
     "message": "Undo"
   },
@@ -2659,6 +2686,9 @@
   },
   "uninstall_8730233": {
     "message": "Uninstall"
+  },
+  "unknown_47a3b725": {
+    "message": "Unknown"
   },
   "unknown_intent_44b962ba": {
     "message": "Unknown intent"

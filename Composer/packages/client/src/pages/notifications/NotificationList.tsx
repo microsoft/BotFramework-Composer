@@ -43,6 +43,7 @@ const columns: IColumn[] = [
       return <FontIcon css={typeIcon(icon)} iconName={icon.iconName} />;
     },
   },
+
   {
     key: 'NotificationType',
     name: formatMessage('Type'),
@@ -62,6 +63,31 @@ const columns: IColumn[] = [
             tabIndex={-1}
           >
             {item.severity}
+          </div>
+        </div>
+      );
+    },
+    isPadded: true,
+  },
+  {
+    key: 'NotificationBotName',
+    name: formatMessage('Bot'),
+    className: notification.columnCell,
+    fieldName: 'botName',
+    minWidth: 70,
+    maxWidth: 90,
+    isRowHeader: true,
+    isResizable: true,
+    data: 'string',
+    onRender: (item: INotification) => {
+      return (
+        <div data-is-focusable css={tableCell}>
+          <div
+            aria-label={formatMessage(`This is a {botName} notification`, { botName: item.botName })}
+            css={content}
+            tabIndex={-1}
+          >
+            {item.botName}
           </div>
         </div>
       );
