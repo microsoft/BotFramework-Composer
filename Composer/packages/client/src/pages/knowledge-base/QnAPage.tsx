@@ -22,16 +22,15 @@ import TableView from './table-view';
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
 interface QnAPageProps extends RouteComponentProps<{}> {
-  projectId?: string;
-  dialogId?: string;
+  dialogId: string;
+  projectId: string;
   skillId?: string;
 }
 
 const QnAPage: React.FC<QnAPageProps> = (props) => {
-  const { dialogId = '', projectId = '', skillId = null } = props;
+  const { dialogId = '', projectId = '', skillId } = props;
 
-  const baseURL =
-    projectId === skillId || skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
+  const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
 
   const actions = useRecoilValue(dispatcherState);
   const dialogs = useRecoilValue(dialogsSelectorFamily(skillId ?? projectId));

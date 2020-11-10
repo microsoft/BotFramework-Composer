@@ -25,17 +25,14 @@ interface LGPageProps {
 }
 
 const LGPage: React.FC<RouteComponentProps<LGPageProps>> = (props: RouteComponentProps<LGPageProps>) => {
-  const { dialogId = '', projectId = '', skillId = null } = props;
-  const dialogs = useRecoilValue(validateDialogsSelectorFamily(skillId ?? projectId));
-
-  console.log(skillId, projectId, skillId ?? projectId, dialogs);
+  const { dialogId = '', projectId = '', skillId } = props;
+  const dialogs = useRecoilValue(validateDialogsSelectorFamily(skillId ?? projectId ?? ''));
 
   const path = props.location?.pathname ?? '';
 
   const edit = /\/edit(\/)?$/.test(path);
 
-  const baseURL =
-    projectId === skillId || skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
+  const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
 
   const navLinks: INavTreeItem[] = useMemo(() => {
     const newDialogLinks: INavTreeItem[] = dialogs.map((dialog) => {

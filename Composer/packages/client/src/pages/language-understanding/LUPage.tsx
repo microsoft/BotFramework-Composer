@@ -20,16 +20,15 @@ const CodeEditor = React.lazy(() => import('./code-editor'));
 const LUPage: React.FC<RouteComponentProps<{
   dialogId?: string;
   projectId: string;
-  skillId: string;
+  skillId?: string;
 }>> = (props) => {
-  const { dialogId = '', projectId = '', skillId = null } = props;
-  const dialogs = useRecoilValue(validateDialogsSelectorFamily(skillId ?? projectId));
+  const { dialogId = '', projectId = '', skillId } = props;
+  const dialogs = useRecoilValue(validateDialogsSelectorFamily(skillId ?? projectId ?? ''));
 
   const path = props.location?.pathname ?? '';
   const edit = /\/edit(\/)?$/.test(path);
   const isRoot = dialogId === 'all';
-  const baseURL =
-    projectId === skillId || skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
+  const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
 
   const navLinks: INavTreeItem[] = useMemo(() => {
     const newDialogLinks: INavTreeItem[] = dialogs.map((dialog) => {
