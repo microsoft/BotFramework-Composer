@@ -4,7 +4,7 @@
 import * as React from 'react';
 import { render } from '@botframework-composer/test-utils';
 
-import { Loading } from '../../../src/components/TestController/loading';
+import { Loading } from '../../../src/components/BotRuntimeController/loading';
 import { BotStatus } from '../../../src/constants';
 
 describe('<Loading />', () => {

@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { fireEvent } from '@botframework-composer/test-utils';
 
-import { PublishDialog } from '../../../src/components/TestController/publishDialog';
+import { PublishDialog } from '../../../src/components/BotRuntimeController/publishDialog';
 import { botDisplayNameState, settingsState, dispatcherState, currentProjectIdState } from '../../../src/recoilModel';
 import { renderWithRecoil } from '../../testUtils';
 jest.useFakeTimers();
