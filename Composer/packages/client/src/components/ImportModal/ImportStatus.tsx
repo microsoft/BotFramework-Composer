@@ -97,8 +97,8 @@ export const ImportStatus: React.FC<RouteComponentProps & ImportStatusProps> = (
           dialogContentProps={contentProps}
           hidden={false}
           minWidth={560}
-          styles={{ main: { height: 263 } }}
           modalProps={{ isBlocking: true }}
+          styles={{ main: { height: 263 } }}
         >
           <span css={iconsContainer}>
             {getServiceIcon(source)}
@@ -115,7 +115,7 @@ export const ImportStatus: React.FC<RouteComponentProps & ImportStatusProps> = (
         <p css={dialogContent}>
           {formatMessage('Importing ')}
           <span css={boldText}>{botName}</span>
-          {formatMessage(` from ${sourceName}...`)}
+          {`${formatMessage(' from ')}${sourceName}...`}
         </p>
       );
       return (
@@ -123,8 +123,8 @@ export const ImportStatus: React.FC<RouteComponentProps & ImportStatusProps> = (
           dialogContentProps={contentProps}
           hidden={false}
           minWidth={560}
-          styles={{ main: { height: 263 } }}
           modalProps={{ isBlocking: true }}
+          styles={{ main: { height: 263 } }}
         >
           <span css={iconsContainer}>
             {getServiceIcon(source)}

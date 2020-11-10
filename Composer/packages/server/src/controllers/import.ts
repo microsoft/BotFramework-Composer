@@ -1,5 +1,9 @@
-import { Request, Response } from 'express';
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { join } from 'path';
+
+import { Request, Response } from 'express';
 import { ensureDirSync } from 'fs-extra';
 import extractZip from 'extract-zip';
 import { ExternalContentProviderType } from '@botframework-composer/types';

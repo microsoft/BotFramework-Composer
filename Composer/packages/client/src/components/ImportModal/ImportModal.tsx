@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -8,12 +11,13 @@ import formatMessage from 'format-message';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { ExternalContentProviderType } from '@botframework-composer/types';
-
-import { ImportStatus } from './ImportStatus';
 import { useRecoilValue } from 'recoil';
+
 import { dispatcherState } from '../../recoilModel';
 import { createNotification } from '../../recoilModel/dispatchers/notification';
-import { ImportSuccessNotification } from './ImportSuccessNotification';
+
+import { ImportStatus } from './ImportStatus';
+import { ImportSuccessNotificationWrapper } from './ImportSuccessNotification';
 import { dialogContent, hidden } from './style';
 
 type ImportedProjectInfo = {
@@ -110,7 +114,7 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
             const notification = createNotification({
               type: 'success',
               title: '',
-              onRenderCardContent: ImportSuccessNotification({
+              onRenderCardContent: ImportSuccessNotificationWrapper({
                 importedToExisting: true,
                 location: existingProject.location,
               }),
@@ -247,13 +251,13 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
   const modalContent = useMemo(() => {
     switch (modalState) {
       case 'connecting':
-        return <ImportStatus state={'connecting'} source={importSource} />;
+        return <ImportStatus source={importSource} state={'connecting'} />;
 
       case 'downloadingContent':
-        return <ImportStatus state={'downloading'} botName={importPayload.name} source={importSource} />;
+        return <ImportStatus botName={importPayload.name} source={importSource} state={'downloading'} />;
 
       case 'copyingContent':
-      case 'promptingToSave':
+      case 'promptingToSave': {
         const dialogTitle = (
           <span>
             {formatMessage('Do you want to update ')}
@@ -263,8 +267,8 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
         const isCopyingContent = modalState === 'copyingContent';
         return (
           <Dialog
-            hidden={false}
             dialogContentProps={{ title: dialogTitle, type: DialogType.close }}
+            hidden={false}
             minWidth={560}
             onDismiss={cancel}
           >
@@ -278,8 +282,8 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
             >
               {isCopyingContent && (
                 <Spinner
-                  labelPosition={'left'}
                   label={formatMessage('Setting things up...')}
+                  labelPosition={'left'}
                   size={SpinnerSize.small}
                 />
               )}
@@ -296,15 +300,16 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
             </DialogFooter>
           </Dialog>
         );
+      }
 
       case 'failed':
         return (
           <Dialog
-            hidden={false}
             dialogContentProps={{
               title: formatMessage('Something went wrong'),
               type: DialogType.close,
             }}
+            hidden={false}
             minWidth={560}
             onDismiss={cancel}
           >
@@ -323,8 +328,8 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
         // block but don't show anything other than the login window
         return (
           <Dialog
-            hidden={false}
             dialogContentProps={{ type: DialogType.normal }}
+            hidden={false}
             modalProps={{ isBlocking: true }}
             styles={{ main: { display: 'none' } }}
           />

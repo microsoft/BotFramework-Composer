@@ -14,16 +14,16 @@ import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 import { FontWeights } from '@uifabric/styling';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
+import { useRecoilValue } from 'recoil';
 
 import { DialogCreationCopy, QnABotTemplateId, nameRegex } from '../../constants';
 import { FieldConfig, useForm } from '../../hooks/useForm';
 import { StorageFolder } from '../../recoilModel/types';
-
-import { LocationSelectContent } from './LocationSelectContent';
 import { createNotification } from '../../recoilModel/dispatchers/notification';
 import { ImportSuccessNotification } from '../ImportModal/ImportSuccessNotification';
-import { useRecoilValue } from 'recoil';
 import { dispatcherState } from '../../recoilModel';
+
+import { LocationSelectContent } from './LocationSelectContent';
 
 // -------------------- Styles -------------------- //
 

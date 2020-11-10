@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import formatMessage from 'format-message';
@@ -49,49 +52,52 @@ type ImportSuccessNotificationProps = {
   importedToExisting: boolean;
 };
 
-export const ImportSuccessNotification = (outerProps: ImportSuccessNotificationProps) => (props: CardProps) => {
-  const { location, importedToExisting } = outerProps;
-  const textFieldRef = useRef<ITextField>(null);
-  const copyLocationToClipboard = () => {
-    try {
-      textFieldRef.current?.select();
-      document.execCommand('copy');
-      textFieldRef.current?.setSelectionRange(0, 0);
-      textFieldRef.current?.blur();
-    } catch (e) {
-      console.error('Something went wrong when trying to copy bot location to clipboard.', e, location);
-    }
-  };
+export const ImportSuccessNotificationWrapper = (outerProps: ImportSuccessNotificationProps) => {
+  const ImportSuccessNotification: React.FC<CardProps> = (props: CardProps) => {
+    const { location, importedToExisting } = outerProps;
+    const textFieldRef = useRef<ITextField>(null);
+    const copyLocationToClipboard = () => {
+      try {
+        textFieldRef.current?.select();
+        document.execCommand('copy');
+        textFieldRef.current?.setSelectionRange(0, 0);
+        textFieldRef.current?.blur();
+      } catch (e) {
+        console.error('Something went wrong when trying to copy bot location to clipboard.', e, location);
+      }
+    };
 
-  const existingProjectCopy = formatMessage(' Previous bot content has been backed up to:');
+    const existingProjectCopy = formatMessage(' Previous bot content has been backed up to:');
 
-  return (
-    <div css={container}>
-      <div css={iconContainer}>
-        <Icon iconName={'CloudDownload'} />
-        <Icon iconName={'Accept'} css={greenCheckMark} />
-      </div>
-      <p css={copyContainer}>
-        {formatMessage('Bot content was successfully imported.')}
-        {importedToExisting && existingProjectCopy}
-      </p>
-      {importedToExisting && (
-        <div css={locationContainer}>
-          <TextField
-            value={location}
-            readOnly={true}
-            componentRef={textFieldRef}
-            styles={{ root: { width: '100%' }, field: { paddingRight: 28 } }}
-          />
-          <IconButton
-            iconProps={{ iconName: 'Copy' }}
-            title={formatMessage('Copy project location to clipboard')}
-            ariaLabel={formatMessage('Copy project location to clipboard')}
-            onClick={copyLocationToClipboard}
-            styles={copyIconStyles}
-          />
+    return (
+      <div css={container}>
+        <div css={iconContainer}>
+          <Icon iconName={'CloudDownload'} />
+          <Icon css={greenCheckMark} iconName={'Accept'} />
         </div>
-      )}
-    </div>
-  );
+        <p css={copyContainer}>
+          {formatMessage('Bot content was successfully imported.')}
+          {importedToExisting && existingProjectCopy}
+        </p>
+        {importedToExisting && (
+          <div css={locationContainer}>
+            <TextField
+              readOnly
+              componentRef={textFieldRef}
+              styles={{ root: { width: '100%' }, field: { paddingRight: 28 } }}
+              value={location}
+            />
+            <IconButton
+              ariaLabel={formatMessage('Copy project location to clipboard')}
+              iconProps={{ iconName: 'Copy' }}
+              styles={copyIconStyles}
+              title={formatMessage('Copy project location to clipboard')}
+              onClick={copyLocationToClipboard}
+            />
+          </div>
+        )}
+      </div>
+    );
+  };
+  return ImportSuccessNotification;
 };

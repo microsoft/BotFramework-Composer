@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { ExternalContentProviderType } from '@botframework-composer/types';
 
 import { ExternalContentProvider, ContentProviderMetadata } from './externalContentProvider';

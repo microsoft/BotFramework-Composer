@@ -2,11 +2,13 @@
 // Licensed under the MIT License.
 
 import * as fs from 'fs';
+import { existsSync } from 'fs';
 
 import { Request, Response } from 'express';
 import { Archiver } from 'archiver';
 import { ExtensionContext } from '@bfc/extension';
 import { SchemaMerger } from '@microsoft/bf-dialog/lib/library/schemaMerger';
+import { ensureDir, remove } from 'fs-extra';
 
 import log from '../logger';
 import { BotProjectService } from '../services/project';
@@ -17,8 +19,6 @@ import StorageService from '../services/storage';
 import settings from '../settings';
 
 import { Path } from './../utility/path';
-import { ensureDir, remove } from 'fs-extra';
-import { existsSync } from 'fs';
 
 async function createProject(req: Request, res: Response) {
   let { templateId } = req.body;

@@ -24,11 +24,11 @@ import Home from '../../pages/home/Home';
 import { useProjectIdCache } from '../../utils/hooks';
 import { useShell } from '../../shell';
 import plugins from '../../plugins';
+import { ImportModal } from '../ImportModal/ImportModal';
 
 import { CreateOptions } from './CreateOptions';
 import { OpenProject } from './OpenProject';
 import DefineConversation from './DefineConversation';
-import { ImportModal } from '../ImportModal/ImportModal';
 
 type CreationFlowProps = RouteComponentProps<{}>;
 

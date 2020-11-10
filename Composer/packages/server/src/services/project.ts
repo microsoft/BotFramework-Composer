@@ -7,6 +7,7 @@ import flatten from 'lodash/flatten';
 import { luImportResolverGenerator, ResolverResource } from '@bfc/shared';
 import extractMemoryPaths from '@bfc/indexers/lib/dialogUtils/extractMemoryPaths';
 import { UserIdentity } from '@bfc/extension';
+import { ensureDir, existsSync, remove } from 'fs-extra';
 
 import { BotProject } from '../models/bot/botProject';
 import { LocationRef } from '../models/bot/interface';
@@ -15,7 +16,6 @@ import log from '../logger';
 
 import StorageService from './storage';
 import { Path } from './../utility/path';
-import { ensureDir, existsSync, remove } from 'fs-extra';
 
 const MAX_RECENT_BOTS = 7;
 
@@ -385,6 +385,7 @@ export class BotProjectService {
       log('Project backed up successfully.');
       return location.path;
     } catch (e) {
+      log('There was an error while backing up project %s: %O', project.id, e);
       throw e;
     }
   };

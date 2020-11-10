@@ -1,7 +1,11 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { createWriteStream } from 'fs';
+import { join } from 'path';
+
 import { ensureDirSync, remove } from 'fs-extra';
 import fetch, { RequestInit } from 'node-fetch';
-import { join } from 'path';
 
 import logger from '../logger';
 import { authService } from '../services/auth/auth';
