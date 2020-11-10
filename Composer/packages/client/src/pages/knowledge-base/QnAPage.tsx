@@ -22,9 +22,9 @@ import TableView from './table-view';
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
 const QnAPage: React.FC<RouteComponentProps<{
-  dialogId?: string;
+  dialogId: string;
   projectId: string;
-  skillId?: string;
+  skillId: string;
 }>> = (props) => {
   const { dialogId = '', projectId = '', skillId } = props;
 
@@ -48,7 +48,7 @@ const QnAPage: React.FC<RouteComponentProps<{
         id: dialog.id,
         name: dialog.displayName,
         ariaLabel: formatMessage('qna file'),
-        url: baseURL + `knowledge-base/${dialog.id}`,
+        url: `${baseURL}knowledge-base/${dialog.id}`,
         menuIconProps: {
           iconName: 'Add',
         },
@@ -82,7 +82,7 @@ const QnAPage: React.FC<RouteComponentProps<{
       id: 'all',
       name: 'All',
       ariaLabel: formatMessage('all qna files'),
-      url: baseURL + `knowledge-base/all`,
+      url: `${baseURL}knowledge-base/all`,
     });
     return newDialogLinks;
   }, [dialogs]);
@@ -91,13 +91,13 @@ const QnAPage: React.FC<RouteComponentProps<{
     setCreateOnDialogId('');
     const activeDialog = dialogs.find(({ id }) => id === dialogId);
     if (!activeDialog && dialogs.length && dialogId !== 'all') {
-      navigateTo(baseURL + `knowledge-base/${dialogId}`);
+      navigateTo(`${baseURL}knowledge-base/${dialogId}`);
     }
   }, [dialogId, dialogs, projectId]);
 
   const onToggleEditMode = useCallback(
     (_e) => {
-      let url = baseURL + `knowledge-base/${dialogId}`;
+      let url = `${baseURL}knowledge-base/${dialogId}`;
       if (!edit) url += `/edit`;
       navigateTo(url);
     },
