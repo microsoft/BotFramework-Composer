@@ -85,7 +85,7 @@ function createLuApi(
     getLuIntents,
     getLuIntent,
     updateLuIntent,
-    debouncedUpdateLuIntent: debounce(updateLuIntent, 250, { leading: true }),
+    debouncedUpdateLuIntent: debounce(updateLuIntent, 250, { leading: true, trailing: false }),
     renameLuIntent,
     removeLuIntent,
   };

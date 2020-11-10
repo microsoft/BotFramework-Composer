@@ -99,7 +99,7 @@ function createLgApi(
     addLgTemplate: updateLgTemplate,
     getLgTemplates,
     updateLgTemplate,
-    debouncedUpdateLgTemplate: debounce(updateLgTemplate, 250, { leading: true }),
+    debouncedUpdateLgTemplate: debounce(updateLgTemplate, 250, { leading: true, trailing: false }),
     removeLgTemplate,
     removeLgTemplates,
     copyLgTemplate,
