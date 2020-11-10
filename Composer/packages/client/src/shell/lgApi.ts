@@ -36,22 +36,18 @@ function createLgApi(
     await actions.updateLgFile({ id, content, projectId: state.projectId });
   };
 
-  const updateLgTemplate = async (id: string, templateName: string, templateBody: string, callback) => {
+  const updateLgTemplate = async (id: string, templateName: string, templateBody: string) => {
     const file = lgFileResolver(id);
     if (!file) throw new Error(fileNotFound(id));
     if (!templateName) throw new Error(TEMPLATE_ERROR);
     const template = { name: templateName, body: templateBody, parameters: [] };
 
-    await actions.updateLgTemplate({
+    return await actions.updateLgTemplate({
       id: file.id,
       templateName,
       template,
       projectId: state.projectId,
     });
-
-    if (typeof callback === 'function') {
-      callback();
-    }
   };
 
   const copyLgTemplate = async (id, fromTemplateName, toTemplateName) => {

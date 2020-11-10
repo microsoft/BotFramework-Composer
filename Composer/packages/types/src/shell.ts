@@ -71,13 +71,8 @@ export type LgContextApi = {
   copyLgTemplate: (id: string, fromTemplateName: string, toTemplateName?: string) => Promise<LgFile[] | undefined>;
   addLgTemplate: (id: string, templateName: string, templateStr: string) => Promise<LgFile[] | undefined>;
   updateLgFile: (id: string, content: string) => Promise<void>;
-  updateLgTemplate: (id: string, templateName: string, templateStr: string, callback?) => Promise<LgFile[] | undefined>;
-  debouncedUpdateLgTemplate: (
-    id: string,
-    templateName: string,
-    templateStr: string,
-    callback?
-  ) => Promise<LgFile[] | undefined>;
+  updateLgTemplate: (id: string, templateName: string, templateStr: string) => Promise<LgFile[] | undefined>;
+  debouncedUpdateLgTemplate: (id: string, templateName: string, templateStr: string) => Promise<LgFile[] | undefined>;
   removeLgTemplate: (id: string, templateName: string) => Promise<LgFile[] | undefined>;
   removeLgTemplates: (id: string, templateNames: string[]) => Promise<LgFile[] | undefined>;
 };

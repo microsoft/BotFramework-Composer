@@ -50,7 +50,7 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
 
   const updateLgTemplate = useCallback(
     (body: string) => {
-      shellApi.debouncedUpdateLgTemplate(lgFileId, lgName, body, shellApi.commitChanges);
+      shellApi.debouncedUpdateLgTemplate(lgFileId, lgName, body);
     },
     [lgName, lgFileId]
   );
@@ -73,15 +73,15 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
     templateId: lgName,
   };
 
-  const onChange = async (body: string) => {
+  const onChange = (body: string) => {
     if (designerId) {
       if (body) {
         updateLgTemplate(body);
         props.onChange(new LgTemplateRef(lgName).toString());
-      } else {
-        await shellApi.removeLgTemplate(lgFileId, lgName);
-        props.onChange();
         shellApi.commitChanges();
+      } else {
+        shellApi.removeLgTemplate(lgFileId, lgName);
+        props.onChange();
       }
     }
   };
