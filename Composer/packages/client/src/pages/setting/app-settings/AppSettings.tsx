@@ -51,36 +51,34 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
   const renderElectronSettings = isElectron();
 
   const languageOptions = [
-    { key: 'en-US', text: 'English (US)', englishName: 'English (US)' },
-    { key: 'cs', text: 'Čeština‎ Czech', englishName: 'Czech' },
-    { key: 'de', text: 'Deutsch‎', englishName: 'German' },
-    { key: 'es', text: 'Español‎', englishName: 'Spanish' },
-    { key: 'fr', text: 'Français‎', englishName: 'French' },
-    { key: 'hu', text: 'Magyar‎', englishName: 'Hungarian' },
-    { key: 'it', text: 'Italiano‎', englishName: ' Italian' },
-    { key: 'ja', text: '日本語‎', englishName: 'Japanese' },
-    { key: 'ko', text: '한국어‎', englishName: 'Korean' },
-    { key: 'nl', text: 'Nederlands‎', englishName: 'Dutch (Netherlands)' },
-    { key: 'pl', text: 'Polski‎', englishName: 'Polish' },
-    { key: 'pt-BR', text: 'Português (Brasil)‎', englishName: 'Portuguese (Brazil)' },
-    { key: 'pt-PT', text: 'Português (Portugal)‎', englishName: 'Portuguese (Portugal)' },
-    { key: 'ru', text: 'Русский‎', englishName: 'Russian' },
-    { key: 'sv', text: 'Svenska‎', englishName: 'Swedish' },
-    { key: 'tr', text: 'Türkçe‎', englishName: 'Turkish' },
-    { key: 'zh-Hans', text: '中文(简体)‎', englishName: 'Chinese(Simplified)' },
-    { key: 'zh-Hant', text: '中文(繁體)', englishName: 'Chinese(Traditional)' },
+    { key: 'en-US', text: 'English (US)' },
+    { key: 'cs', text: 'Čeština‎ Czech' }, //Czech
+    { key: 'de', text: 'Deutsch‎' }, //German
+    { key: 'es', text: 'Español‎' }, //Spanish
+    { key: 'fr', text: 'Français‎' }, //French
+    { key: 'hu', text: 'Magyar‎' }, //Hungarian
+    { key: 'it', text: 'Italiano‎' }, //Italian
+    { key: 'ja', text: '日本語‎' }, //Japanese
+    { key: 'ko', text: '한국어‎' }, //Korean
+    { key: 'nl', text: 'Nederlands‎' }, //Dutch (Netherlands)
+    { key: 'pl', text: 'Polski‎' }, //Polish
+    { key: 'pt-BR', text: 'Português (Brasil)‎' }, //Portuguese (Brazil)
+    { key: 'pt-PT', text: 'Português (Portugal)‎' }, //Portuguese (Portugal)
+    { key: 'ru', text: 'Русский‎' }, //Russian
+    { key: 'sv', text: 'Svenska‎' }, //Swedish
+    { key: 'tr', text: 'Türkçe‎' }, //Turkish
+    { key: 'zh-Hans', text: '中文(简体)‎' }, //Chinese(Simplified)
+    { key: 'zh-Hant', text: '中文(繁體)' }, //Chinese(Traditional)
   ];
 
   if (process.env.NODE_ENV !== 'production') {
     languageOptions.push({
       key: 'en-US-pseudo',
       text: formatMessage('Pseudo'),
-      englishName: 'pseudo',
     });
     languageOptions.push({
       key: 'en-US-DoesNotExist',
       text: formatMessage('Does Not Exist'),
-      englishName: 'does not exist',
     });
   }
 
