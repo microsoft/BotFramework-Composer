@@ -17,10 +17,23 @@ import StorageService from '../services/storage';
 import settings from '../settings';
 
 import { Path } from './../utility/path';
+import { ensureDir, remove } from 'fs-extra';
+import { existsSync } from 'fs';
 
 async function createProject(req: Request, res: Response) {
   let { templateId } = req.body;
-  const { name, description, storageId, location, schemaUrl, locale, preserveRoot } = req.body;
+  const {
+    name,
+    description,
+    storageId,
+    location,
+    schemaUrl,
+    locale,
+    preserveRoot,
+    templateDir,
+    eTag,
+    alias,
+  } = req.body;
   const user = await ExtensionContext.getUserFromRequest(req);
   if (templateId === '') {
     templateId = 'EmptyBot';
@@ -45,60 +58,116 @@ async function createProject(req: Request, res: Response) {
 
   log('Attempting to create project at %s', path);
 
-  try {
-    await BotProjectService.cleanProject(locationRef);
-    const newProjRef = await AssetService.manager.copyProjectTemplateTo(templateId, locationRef, user, locale);
-    const id = await BotProjectService.openProject(newProjRef, user);
-    const currentProject = await BotProjectService.getProjectById(id, user);
+  if (templateDir) {
+    // we want to create the bot project from the specified template directory (template was downloaded remotely)
+    try {
+      await BotProjectService.cleanProject(locationRef);
+      const newProjRef = await AssetService.manager.copyProjectTemplateDirTo(templateDir, locationRef, user, locale);
+      // clean up the temporary template directory -- fire and forget
+      remove(templateDir);
+      const id = await BotProjectService.openProject(newProjRef, user);
+      BotProjectService.setProjectLocationData(id, { alias, eTag });
+      const currentProject = await BotProjectService.getProjectById(id, user);
 
-    // inject shared content into every new project.  this comes from assets/shared
-    await AssetService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage);
+      if (currentProject !== undefined) {
+        if (currentProject.settings?.runtime?.customRuntime === true) {
+          const runtime = ExtensionContext.getRuntimeByProject(currentProject);
+          const runtimePath = currentProject.settings.runtime.path;
 
-    if (currentProject !== undefined) {
-      if (currentProject.settings?.runtime?.customRuntime === true) {
-        const runtime = ExtensionContext.getRuntimeByProject(currentProject);
-        const runtimePath = currentProject.settings.runtime.path;
+          if (!fs.existsSync(runtimePath)) {
+            await runtime.eject(currentProject, currentProject.fileStorage);
+          }
 
-        if (!fs.existsSync(runtimePath)) {
-          await runtime.eject(currentProject, currentProject.fileStorage);
+          // install all dependencies and build the app
+          await runtime.build(runtimePath, currentProject);
+
+          const manifestFile = runtime.identifyManifest(runtimePath);
+
+          // run the merge command to merge all package dependencies from the template to the bot project
+          const realMerge = new SchemaMerger(
+            [manifestFile],
+            Path.join(currentProject.dataDir, 'schemas/sdk'),
+            Path.join(currentProject.dataDir, 'dialogs/imported'),
+            false,
+            false,
+            console.log,
+            console.warn,
+            console.error
+          );
+
+          await realMerge.merge();
         }
+        await currentProject.updateBotInfo(name, description, preserveRoot);
+        await currentProject.init();
 
-        // install all dependencies and build the app
-        await runtime.build(runtimePath, currentProject);
-
-        const manifestFile = runtime.identifyManifest(runtimePath);
-
-        // run the merge command to merge all package dependencies from the template to the bot project
-        const realMerge = new SchemaMerger(
-          [manifestFile],
-          Path.join(currentProject.dataDir, 'schemas/sdk'),
-          Path.join(currentProject.dataDir, 'dialogs/imported'),
-          false,
-          false,
-          console.log,
-          console.warn,
-          console.error
-        );
-
-        await realMerge.merge();
+        const project = currentProject.getProject();
+        log('Project created successfully.');
+        res.status(200).json({
+          id,
+          ...project,
+        });
       }
-      await currentProject.updateBotInfo(name, description, preserveRoot);
-      if (schemaUrl) {
-        await currentProject.saveSchemaToProject(schemaUrl, locationRef.path);
-      }
-      await currentProject.init();
-
-      const project = currentProject.getProject();
-      log('Project created successfully.');
-      res.status(200).json({
-        id,
-        ...project,
+    } catch (err) {
+      res.status(404).json({
+        message: err instanceof Error ? err.message : err,
       });
     }
-  } catch (err) {
-    res.status(404).json({
-      message: err instanceof Error ? err.message : err,
-    });
+  } else {
+    try {
+      await BotProjectService.cleanProject(locationRef);
+      const newProjRef = await AssetService.manager.copyProjectTemplateTo(templateId, locationRef, user, locale);
+      const id = await BotProjectService.openProject(newProjRef, user);
+      const currentProject = await BotProjectService.getProjectById(id, user);
+
+      // inject shared content into every new project.  this comes from assets/shared
+      await AssetService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage);
+
+      if (currentProject !== undefined) {
+        if (currentProject.settings?.runtime?.customRuntime === true) {
+          const runtime = ExtensionContext.getRuntimeByProject(currentProject);
+          const runtimePath = currentProject.settings.runtime.path;
+
+          if (!fs.existsSync(runtimePath)) {
+            await runtime.eject(currentProject, currentProject.fileStorage);
+          }
+
+          // install all dependencies and build the app
+          await runtime.build(runtimePath, currentProject);
+
+          const manifestFile = runtime.identifyManifest(runtimePath);
+
+          // run the merge command to merge all package dependencies from the template to the bot project
+          const realMerge = new SchemaMerger(
+            [manifestFile],
+            Path.join(currentProject.dataDir, 'schemas/sdk'),
+            Path.join(currentProject.dataDir, 'dialogs/imported'),
+            false,
+            false,
+            console.log,
+            console.warn,
+            console.error
+          );
+
+          await realMerge.merge();
+        }
+        await currentProject.updateBotInfo(name, description, preserveRoot);
+        if (schemaUrl) {
+          await currentProject.saveSchemaToProject(schemaUrl, locationRef.path);
+        }
+        await currentProject.init();
+
+        const project = currentProject.getProject();
+        log('Project created successfully.');
+        res.status(200).json({
+          id,
+          ...project,
+        });
+      }
+    } catch (err) {
+      res.status(404).json({
+        message: err instanceof Error ? err.message : err,
+      });
+    }
   }
 }
 
@@ -121,6 +190,33 @@ async function getProjectById(req: Request, res: Response) {
     }
   } catch (error) {
     res.status(404).json({
+      message: error.message,
+    });
+  }
+}
+
+async function getProjectByAlias(req: Request, res: Response) {
+  const alias = req.params.alias;
+  if (!alias) {
+    res.status(400).json({
+      message: 'parameters not provided, requires alias parameter',
+    });
+    return;
+  }
+
+  const user = await ExtensionContext.getUserFromRequest(req);
+  try {
+    const currentProject = await BotProjectService.getProjectByAlias(alias, user);
+
+    if (currentProject !== undefined && (await currentProject.exists())) {
+      res.status(200).json({ location: currentProject.dir, id: currentProject.id, name: currentProject.name });
+    } else {
+      res.status(404).json({
+        message: 'No matching ',
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
       message: error.message,
     });
   }
@@ -316,7 +412,7 @@ async function getSkill(req: Request, res: Response) {
 
 async function exportProject(req: Request, res: Response) {
   const currentProject = await BotProjectService.getProjectById(req.params.projectId);
-  currentProject.exportToZip((archive: Archiver) => {
+  currentProject.exportToZip(null, (archive: Archiver) => {
     archive.on('error', (err) => {
       res.status(500).send({ error: err.message });
     });
@@ -434,6 +530,89 @@ async function updateBoilerplate(req: Request, res: Response) {
   }
 }
 
+async function backupProject(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  const user = await ExtensionContext.getUserFromRequest(req);
+
+  const project = await BotProjectService.getProjectById(projectId, user);
+  if (project !== undefined) {
+    try {
+      // ensure there isn't an older backup directory hanging around
+      const projectDirName = Path.basename(project.dir);
+      const backupPath = Path.join(process.env.COMPOSER_BACKUP_DIR as string, projectDirName);
+      await ensureDir(process.env.COMPOSER_BACKUP_DIR as string);
+      if (existsSync(backupPath)) {
+        log('%s already exists. Deleting before backing up.', backupPath);
+        await remove(backupPath);
+        log('Existing backup folder deleted successfully.');
+      }
+
+      // clone the bot project to the backup directory
+      const location: LocationRef = {
+        storageId: 'default',
+        path: backupPath,
+      };
+      log('Backing up project at %s to %s', project.dir, backupPath);
+      await project.cloneFiles(location);
+      log('Project backed up successfully.');
+      res.status(200).json({ path: backupPath });
+    } catch (e) {
+      log('Failed to backup project %s: %O', projectId, e);
+      res.status(500).json(e);
+    }
+  } else {
+    res.status(404).json({
+      message: `Could not find bot project with ID: ${projectId}`,
+    });
+  }
+}
+
+/** WARNING: This operation is destructive. Please call backupProject() before calling this method. */
+async function copyTemplateToExistingProject(req: Request, res: Response) {
+  const { eTag, templateDir } = req.body;
+  if (!templateDir) {
+    return res.status(400).json({
+      message: 'Missing parameters: templateDir required.',
+    });
+  }
+
+  const projectId = req.params.projectId;
+  const user = await ExtensionContext.getUserFromRequest(req);
+
+  const project = await BotProjectService.getProjectById(projectId, user);
+  if (project !== undefined) {
+    try {
+      log('Cleaning up bot content at %s before copying template content over.', project.dir);
+      await project.fileStorage.rmrfDir(project.dir);
+      const locationRef: LocationRef = {
+        storageId: 'default',
+        path: project.dir,
+      };
+      log('Copying content from template at %s to %s', templateDir, project.dir);
+      await AssetService.manager.copyProjectTemplateDirTo(
+        templateDir,
+        locationRef,
+        user,
+        undefined // TODO: re-enable once we figure out path issue project.settings?.defaultLanguage || 'en-us'
+      );
+      log('Copied template content successfully.');
+      // clean up the temporary template directory -- fire and forget
+      remove(templateDir);
+      log('Updating etag.');
+      BotProjectService.setProjectLocationData(projectId, { eTag });
+
+      res.sendStatus(200);
+    } catch (e) {
+      log('Failed to copy template content to existing project %s: %O', projectId, e);
+      res.status(500).json(e);
+    }
+  } else {
+    res.status(404).json({
+      message: `Could not find bot project with ID: ${projectId}`,
+    });
+  }
+}
+
 export const ProjectController = {
   getProjectById,
   openProject,
@@ -452,4 +631,7 @@ export const ProjectController = {
   updateBoilerplate,
   checkBoilerplateVersion,
   generateProjectId,
+  getProjectByAlias,
+  backupProject,
+  copyTemplateToExistingProject,
 };

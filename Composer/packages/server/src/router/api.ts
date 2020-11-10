@@ -17,6 +17,7 @@ import { AuthController } from '../controllers/auth';
 import { csrfProtection } from '../middleware/csrfProtection';
 
 import { UtilitiesController } from './../controllers/utilities';
+import { ImportController } from '../controllers/import';
 
 const router: Router = express.Router({});
 
@@ -36,6 +37,9 @@ router.post('/projects/:projectId/build', ProjectController.build);
 router.post('/projects/:projectId/qnaSettings/set', ProjectController.setQnASettings);
 router.post('/projects/:projectId/project/saveAs', ProjectController.saveProjectAs);
 router.get('/projects/:projectId/export', ProjectController.exportProject);
+router.get('/projects/alias/:alias', ProjectController.getProjectByAlias);
+router.post('/projects/:projectId/backup', ProjectController.backupProject);
+router.post('/projects/:projectId/copyTemplateToExisting', ProjectController.copyTemplateToExistingProject);
 
 // form dialog generation apis
 router.post('/formDialogs/expandJsonSchemaProperty', FormDialogController.expandJsonSchemaProperty);
@@ -92,6 +96,10 @@ router.get('/auth/getAccessToken', csrfProtection, AuthController.getAccessToken
 //FeatureFlags
 router.get('/featureFlags', FeatureFlagController.getFeatureFlags);
 router.post('/featureFlags', FeatureFlagController.updateFeatureFlags);
+
+// importing
+router.post('/import/:source', ImportController.startImport);
+router.post('/import/:source/authenticate', ImportController.authenticate);
 
 const errorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
   Promise.resolve(handler(req, res, next)).catch(next);
