@@ -4,7 +4,7 @@
 import formatMessage from 'format-message';
 import { JSONSchema7 } from '@bfc/extension-client';
 import { resolveRef } from '@bfc/adaptive-form';
-import { SkillManifest } from '@bfc/shared';
+import { SkillManifestFile } from '@bfc/shared';
 import startCase from 'lodash/startCase';
 import { SDKKinds } from '@bfc/shared';
 
@@ -88,14 +88,14 @@ export interface ContentProps {
   completeStep: () => void;
   errors: { [key: string]: any };
   editJson: () => void;
-  manifest: Partial<SkillManifest>;
+  manifest: Partial<SkillManifestFile>;
   setErrors: (errors: { [key: string]: any }) => void;
   setSchema: (_: JSONSchema7) => void;
   setSelectedDialogs: (dialogs: any[]) => void;
   setSelectedTriggers: (selectedTriggers: any[]) => void;
-  setSkillManifest: (_: Partial<SkillManifest>) => void;
+  setSkillManifest: (_: Partial<SkillManifestFile>) => void;
   schema: JSONSchema7;
-  skillManifests: SkillManifest[];
+  skillManifests: SkillManifestFile[];
   value: { [key: string]: any };
   onChange: (_: any) => void;
   projectId: string;
@@ -113,7 +113,7 @@ interface ValidationDetails {
   editingId?: string;
   id?: string;
   schema: any;
-  skillManifests: SkillManifest[];
+  skillManifests: SkillManifestFile[];
 }
 
 interface EditorStep {

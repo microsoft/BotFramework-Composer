@@ -12,6 +12,7 @@ import findIndex from 'lodash/findIndex';
 import httpClient from '../../../utils/httpUtil';
 import { projectDispatcher } from '../project';
 import { botProjectFileDispatcher } from '../botProjectFile';
+import { publisherDispatcher } from '../publisher';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import {
   recentProjectsState,
@@ -31,7 +32,6 @@ import {
   localeState,
   schemasState,
   locationState,
-  skillsState,
   botStatusState,
   botDisplayNameState,
   botOpeningState,
@@ -112,7 +112,6 @@ describe('Project dispatcher', () => {
   const useRecoilTestHook = () => {
     const schemas = useRecoilValue(schemasState(projectId));
     const location = useRecoilValue(locationState(projectId));
-    const skills = useRecoilValue(skillsState(projectId));
     const botName = useRecoilValue(botDisplayNameState(projectId));
     const skillManifests = useRecoilValue(skillManifestsState(projectId));
     const luFiles = useRecoilValue(luFilesState(projectId));
@@ -146,7 +145,6 @@ describe('Project dispatcher', () => {
       botEnvironment,
       botName,
       botStatus,
-      skills,
       location,
       schemas,
       diagnostics,
@@ -185,6 +183,7 @@ describe('Project dispatcher', () => {
           initialValue: {
             projectDispatcher,
             botProjectFileDispatcher,
+            publisherDispatcher,
           },
         },
       }
@@ -220,7 +219,6 @@ describe('Project dispatcher', () => {
     expect(renderedComponent.current.lgFiles.length).toBe(1);
     expect(renderedComponent.current.luFiles.length).toBe(1);
     expect(renderedComponent.current.botEnvironment).toBe(mockProjectResponse.botEnvironment);
-    expect(renderedComponent.current.skills.length).toBe(0);
     expect(renderedComponent.current.botOpening).toBeFalsy();
     expect(renderedComponent.current.schemas.sdk).toBeDefined();
     expect(renderedComponent.current.schemas.default).toBeDefined();
@@ -273,7 +271,6 @@ describe('Project dispatcher', () => {
     expect(renderedComponent.current.lgFiles.length).toBe(0);
     expect(renderedComponent.current.luFiles.length).toBe(0);
     expect(renderedComponent.current.botEnvironment).toBe('production');
-    expect(renderedComponent.current.skills.length).toBe(0);
     expect(renderedComponent.current.botOpening).toBeFalsy();
     expect(renderedComponent.current.schemas.sdk).toBeUndefined();
     expect(renderedComponent.current.schemas.default).toBeUndefined();
@@ -282,7 +279,7 @@ describe('Project dispatcher', () => {
 
   it('should set bot status', async () => {
     await act(async () => {
-      await dispatcher.setBotStatus(BotStatus.pending, projectId);
+      await dispatcher.setBotStatus(projectId, BotStatus.pending);
     });
 
     expect(renderedComponent.current.botStatus).toEqual(BotStatus.pending);
@@ -507,6 +504,42 @@ describe('Project dispatcher', () => {
       expect(renderedComponent.current.botStates.googleKeepSync.botDisplayName).toBe('google-keep-sync');
       expect(renderedComponent.current.botProjectSpaceLoaded).toBeTruthy();
       done();
+    });
+  });
+
+  it('should migrate skills from existing bots and add them to botproject file', async () => {
+    const newProjectDataClone = cloneDeep(mockProjectResponse);
+    newProjectDataClone.botName = 'new-bot';
+    newProjectDataClone.settings = {
+      ...newProjectDataClone.settings,
+      skill: {
+        'one-note-sync': {
+          endpointUrl: 'https://azure-webservice.net/oneNoteSync/api/messages',
+          manifestUrl: 'https://azure-webservice.net/oneNoteSnyc-manifest.json',
+          msAppId: '123-234-234',
+        },
+      },
+    };
+
+    await act(async () => {
+      (httpClient.put as jest.Mock).mockResolvedValueOnce({
+        data: newProjectDataClone,
+      });
+      await dispatcher.openProject('../test/empty-bot', 'default');
+    });
+
+    expect(renderedComponent.current.settings.skill).toEqual({
+      oneNoteSync: {
+        endpointUrl: 'https://azure-webservice.net/oneNoteSync/api/messages',
+        msAppId: '123-234-234',
+      },
+    });
+
+    expect(renderedComponent.current.botProjectFile.content.skills).toEqual({
+      oneNoteSync: {
+        manifest: 'https://azure-webservice.net/oneNoteSnyc-manifest.json',
+        remote: true,
+      },
     });
   });
 });

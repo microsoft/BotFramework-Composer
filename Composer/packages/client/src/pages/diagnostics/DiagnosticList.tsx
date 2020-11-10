@@ -111,6 +111,7 @@ const columns: IColumn[] = [
       return <FontIcon css={typeIcon(icon)} iconName={icon.iconName} />;
     },
   },
+
   {
     key: 'DiagnosticType',
     name: formatMessage('Type'),

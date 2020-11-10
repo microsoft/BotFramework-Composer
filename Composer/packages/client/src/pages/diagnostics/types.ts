@@ -20,6 +20,7 @@ export enum DiagnosticType {
 
 export interface IDiagnosticInfo {
   projectId: string;
+  botName: string;
   id: string;
   severity: string;
   type: DiagnosticType;
@@ -32,6 +33,7 @@ export interface IDiagnosticInfo {
 
 export abstract class DiagnosticInfo implements IDiagnosticInfo {
   projectId: string;
+  botName: string;
   id: string;
   severity: string;
   type = DiagnosticType.GENERAL;
@@ -40,8 +42,9 @@ export abstract class DiagnosticInfo implements IDiagnosticInfo {
   diagnostic: Diagnostic;
   dialogPath?: string;
   resourceId: string;
-  constructor(projectId: string, id: string, location: string, diagnostic: Diagnostic) {
+  constructor(projectId: string, botName: string, id: string, location: string, diagnostic: Diagnostic) {
     this.projectId = projectId;
+    this.botName = botName;
     this.id = id;
     this.resourceId = getBaseName(id);
     this.severity = DiagnosticSeverity[diagnostic.severity] || '';
@@ -89,13 +92,14 @@ export class LgDiagnostic extends DiagnosticInfo {
   type = DiagnosticType.LG;
   constructor(
     projectId: string,
+    botName: string,
     id: string,
     location: string,
     diagnostic: Diagnostic,
     lgFile: LgFile,
     dialogs: DialogInfo[]
   ) {
-    super(projectId, id, location, diagnostic);
+    super(projectId, botName, id, location, diagnostic);
     this.message = createSingleMessage(diagnostic);
     this.dialogPath = this.findDialogPath(lgFile, dialogs, diagnostic);
   }
@@ -120,13 +124,14 @@ export class LuDiagnostic extends DiagnosticInfo {
   type = DiagnosticType.LU;
   constructor(
     projectId: string,
+    botName: string,
     id: string,
     location: string,
     diagnostic: Diagnostic,
     luFile: LuFile,
     dialogs: DialogInfo[]
   ) {
-    super(projectId, id, location, diagnostic);
+    super(projectId, botName, id, location, diagnostic);
     this.dialogPath = this.findDialogPath(luFile, dialogs, diagnostic);
     this.message = createSingleMessage(diagnostic);
   }

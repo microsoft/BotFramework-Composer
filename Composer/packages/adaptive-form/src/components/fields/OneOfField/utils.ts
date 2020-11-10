@@ -25,6 +25,18 @@ function getOptionLabel(schema: JSONSchema7): string {
   return type || 'unknown';
 }
 
+const typePriorityWeights = {
+  string: 5,
+  number: 4,
+  boolean: 3,
+  array: 2,
+  object: 1,
+};
+
+const sortOptionsByTypeWeights = ({ key: type1 }, { key: type2 }): number => {
+  return (typePriorityWeights[type1] || 0) > (typePriorityWeights[type2] || 0) ? -1 : 1;
+};
+
 export function getOptions(
   schema: JSONSchema7,
   definitions?: SchemaDefinitions
@@ -40,7 +52,7 @@ export function getOptions(
       data: { schema: { ...schema, type: t }, icon: getFieldIconText(t) },
     }));
 
-    options.sort(({ text: t1 }, { text: t2 }) => (t1 > t2 ? 1 : -1));
+    options.sort(sortOptionsByTypeWeights);
 
     return { options, isNested };
   }
@@ -64,10 +76,16 @@ export function getOptions(
       })
       .filter(Boolean) as IDropdownOption[];
 
+    options.sort(sortOptionsByTypeWeights);
+
     const expression = (resolvedOneOf as JSONSchema7[]).find(({ $role }) => $role === 'expression');
     const merged = merge({}, omit(schema, 'oneOf'), expression);
 
-    if (expression && (resolvedOneOf as JSONSchema7[]).some(({ properties, items }) => properties || items)) {
+    isNested =
+      isNested ||
+      !!(expression && (resolvedOneOf as JSONSchema7[]).some(({ properties, items }) => properties || items));
+
+    if (expression && isNested) {
       options.push({
         key: 'expression',
         text: formatMessage('Write an expression'),
@@ -76,7 +94,6 @@ export function getOptions(
           schema: merged,
         },
       });
-      isNested = true;
     }
 
     return { options, isNested };
