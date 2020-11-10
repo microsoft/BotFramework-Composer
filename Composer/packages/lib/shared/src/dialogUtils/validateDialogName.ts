@@ -13,7 +13,7 @@ export const validateDialogName = (name: string) => {
   if (!nameRegex.test(name)) {
     throw new Error(
       formatMessage(
-        "Spaces and special characters are not allowed. Use letters, numbers, -, or _ and don't use number at the beginning."
+        'Spaces and special characters are not allowed. Use letters, numbers, -, or _, and begin the name with a letter.'
       )
     );
   }

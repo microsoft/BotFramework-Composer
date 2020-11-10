@@ -7,7 +7,6 @@ import {
   DialogInfo,
   DialogSchemaFile,
   DialogSetting,
-  SkillManifest,
   BotAssets,
   BotProjectFile,
   LuFile,
@@ -16,6 +15,7 @@ import {
   FormDialogSchema,
   RecognizerFile,
   CrosstrainConfig,
+  SkillManifestFile,
 } from '@bfc/shared';
 import keys from 'lodash/keys';
 
@@ -193,7 +193,7 @@ class FilePersistence {
     return changes;
   }
 
-  private getSkillManifestsChanges(current: SkillManifest[], previous: SkillManifest[]) {
+  private getSkillManifestsChanges(current: SkillManifestFile[], previous: SkillManifestFile[]) {
     const changeItems = this.getDifferenceItems(current, previous);
     const changes = this.getFileChanges(FileExtensions.Manifest, changeItems);
     return changes;

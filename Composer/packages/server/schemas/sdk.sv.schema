@@ -4348,7 +4348,7 @@
       }
     },
     "Microsoft.UpdateActivity": {
-      "title": "Skicka en aktivitet",
+      "title": "Uppdatera en aktivitet",
       "description": "Svara med en aktivitet.",
       "patternProperties": {
         "^\\$": {

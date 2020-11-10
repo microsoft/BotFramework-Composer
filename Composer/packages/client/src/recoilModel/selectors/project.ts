@@ -20,14 +20,27 @@ import {
 import { dialogsSelectorFamily } from '../selectors';
 
 // Actions
-export const botsForFilePersistenceSelector = selector({
-  key: 'botsForFilePersistenceSelector',
+export const localBotsWithoutErrorsSelector = selector({
+  key: 'localBotsWithoutErrorsSelector',
   get: ({ get }) => {
     const botProjectIds = get(botProjectIdsState);
     return botProjectIds.filter((projectId: string) => {
       const { isRemote } = get(projectMetaDataState(projectId));
       const botError = get(botErrorState(projectId));
-      return !botError && !isRemote;
+      return !isRemote && !botError;
+    });
+  },
+});
+
+export const localBotsDataSelector = selector({
+  key: 'localBotsDataSelector',
+  get: ({ get }) => {
+    const botProjectIds = get(localBotsWithoutErrorsSelector);
+    return botProjectIds.map((projectId: string) => {
+      return {
+        projectId,
+        name: get(botDisplayNameState(projectId)),
+      };
     });
   },
 });
@@ -91,5 +104,16 @@ export const jsonSchemaFilesByProjectIdSelector = selector({
       result[projectId] = get(jsonSchemaFilesState(projectId));
     });
     return result;
+  },
+});
+
+export const skillsProjectIdSelector = selector({
+  key: 'skillsProjectIdSelector',
+  get: ({ get }) => {
+    const botIds = get(botProjectIdsState);
+    return botIds.filter((projectId: string) => {
+      const { isRootBot } = get(projectMetaDataState(projectId));
+      return !isRootBot;
+    });
   },
 });

@@ -101,7 +101,12 @@ export const decodeDesignerPathToArrayPath = (dialog, path: string): string => {
     let arrayIndex = -1;
     if (designerPathInfo) {
       const { designerId } = designerPathInfo;
-      arrayIndex = arrayData.findIndex((x) => get(x, '$designer.id') === designerId);
+      if (designerId === 'beginDialog') {
+        // special notation to route to this specific trigger
+        arrayIndex = arrayData.findIndex((x) => get(x, '$kind') === 'Microsoft.OnBeginDialog');
+      } else {
+        arrayIndex = arrayData.findIndex((x) => get(x, '$designer.id') === designerId);
+      }
     } else if (arrayPathInfo) {
       arrayIndex = arrayPathInfo.index;
     }

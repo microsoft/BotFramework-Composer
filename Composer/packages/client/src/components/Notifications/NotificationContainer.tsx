@@ -3,10 +3,11 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
+import isEmpty from 'lodash/isEmpty';
 import { useRecoilValue } from 'recoil';
 
 import { dispatcherState } from '../../recoilModel';
-import { notificationsSelector } from '../../recoilModel/selectors/notificationsSelector';
+import { notificationsSelector } from '../../recoilModel/selectors/notifications';
 
 import { NotificationCard } from './NotificationCard';
 
@@ -22,8 +23,10 @@ const container = css`
 // -------------------- NotificationContainer -------------------- //
 
 export const NotificationContainer = () => {
-  const notifications = useRecoilValue(notificationsSelector);
+  const notifications = useRecoilValue(notificationsSelector).filter(({ hidden }) => !hidden);
   const { deleteNotification, hideNotification } = useRecoilValue(dispatcherState);
+
+  if (isEmpty(notifications)) return null;
 
   return (
     <div css={container} role="presentation">

@@ -39,6 +39,9 @@ export default async (composer: any): Promise<void> => {
       }
       composer.log('FINISHED BUILDING!');
     },
+    identifyManifest: (runtimePath: string): string => {
+      return path.join(runtimePath, 'azurewebapp', 'Microsoft.BotFramework.Composer.WebApp.csproj');
+    },
     run: async (project: any, localDisk: IFileStorage) => {
       composer.log('RUN THIS C# PROJECT!');
     },
@@ -166,11 +169,14 @@ export default async (composer: any): Promise<void> => {
       // install dev dependencies in production, make sure typescript is installed
       const { stderr: installErr } = await execAsync('npm install && npm install --only=dev', {
         cwd: runtimePath,
+        timeout: 120000,
       });
       if (installErr) {
         // in order to not throw warning, we just log all warning and error message
-        composer.log(installErr);
+        composer.log(`npm install timeout, ${installErr}`);
       }
+
+      // runtime build need typescript
       const { stderr: install2Err } = await execAsync('npm run build', {
         cwd: runtimePath,
       });
@@ -178,6 +184,9 @@ export default async (composer: any): Promise<void> => {
         throw new Error(install2Err);
       }
       composer.log('BUILD COMPLETE');
+    },
+    identifyManifest: (runtimePath: string): string => {
+      return path.join(runtimePath, 'Microsoft.BotFramework.Composer.WebApp.csproj');
     },
     run: async (project: any, localDisk: IFileStorage) => {
       // do stuff
@@ -220,17 +229,6 @@ export default async (composer: any): Promise<void> => {
         // used to read bot project template from source (bundled in plugin)
         const excludeFolder = new Set<string>().add(path.resolve(sourcePath, 'node_modules'));
         await copyDir(sourcePath, localDisk, destPath, project.fileStorage, excludeFolder);
-        // install dev dependencies in production, make sure typescript is installed
-        const { stderr: initErr } = await execAsync('npm install && npm install --only=dev', {
-          cwd: destPath,
-        });
-        if (initErr) {
-          composer.log(initErr);
-        }
-        const { stderr: initErr2 } = await execAsync('npm run build', { cwd: destPath });
-        if (initErr2) {
-          throw new Error(initErr2);
-        }
         return destPath;
       } else {
         throw new Error(`Runtime already exists at ${destPath}`);

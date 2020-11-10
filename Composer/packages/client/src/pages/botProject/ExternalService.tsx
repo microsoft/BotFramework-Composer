@@ -174,20 +174,6 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
   const [localRootLuisKey, setLocalRootLuisKey] = useState<string>(rootLuisKey ?? '');
   const [localRootQnAKey, setLocalRootQnAKey] = useState<string>(rootqnaKey ?? '');
 
-  const handleRootLuisKeyOnBlur = () => {
-    if (!localRootLuisKey) {
-      setLuisKeyErrorMsg(
-        formatMessage('LUIS Key is required with the current recognizer setting to start your bot locally, and publish')
-      );
-    }
-  };
-
-  const handleRootQnAKeyOnBlur = () => {
-    if (!localRootQnAKey) {
-      setQnAKeyErrorMsg(formatMessage('QnA Maker subscription Key is required to start your bot locally, and publish'));
-    }
-  };
-
   useEffect(() => {
     setLuisKeyErrorMsg('');
     setQnAKeyErrorMsg('');
@@ -210,7 +196,6 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
   };
 
   const handleRootQnAKeyOnChange = async (e, value) => {
-    await handleQnASubscripionKeyOnChange(e, value);
     if (value) {
       setQnAKeyErrorMsg('');
       setLocalRootQnAKey(value);
@@ -220,7 +205,34 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
     }
   };
 
-  const handleQnASubscripionKeyOnChange = async (e, value) => {
+  const handleRootLuisKeyOnBlur = () => {
+    if (!localRootLuisKey) {
+      setLuisKeyErrorMsg(
+        formatMessage('LUIS Key is required with the current recognizer setting to start your bot locally, and publish')
+      );
+    }
+  };
+
+  const handleRootQnAKeyOnBlur = async () => {
+    if (!localRootQnAKey) {
+      setQnAKeyErrorMsg(formatMessage('QnA Maker subscription Key is required to start your bot locally, and publish'));
+    }
+    await submitQnASubscripionKey(localRootQnAKey);
+  };
+
+  const handleSkillQnAKeyOnBlur = async (value) => {
+    if (value) {
+      await submitQnASubscripionKey(value);
+    } else {
+      await setSettings(projectId, {
+        ...settings,
+        qna: { ...settings.qna, subscriptionKey: '' },
+      });
+      await setQnASettings(projectId, rootqnaKey);
+    }
+  };
+
+  const submitQnASubscripionKey = async (value) => {
     await setSettings(projectId, {
       ...settings,
       qna: { ...settings.qna, subscriptionKey: value ? value : '' },
@@ -318,7 +330,7 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
             placeholder={'Enter QnA Maker Subscription key'}
             placeholderOnDisable={"<---- Same as root bot's QnA Maker Subscription key ---->"}
             value={skillqnaKey}
-            onChange={handleQnASubscripionKeyOnChange}
+            onBlur={handleSkillQnAKeyOnBlur}
           />
         )}
       </div>
