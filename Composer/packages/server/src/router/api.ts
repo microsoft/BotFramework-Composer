@@ -18,7 +18,6 @@ import { csrfProtection } from '../middleware/csrfProtection';
 
 import { UtilitiesController } from './../controllers/utilities';
 import { ImportController } from '../controllers/import';
-import { AuthController } from '../controllers/auth';
 
 const router: Router = express.Router({});
 
@@ -98,6 +97,7 @@ router.get('/auth/getAccessToken', csrfProtection, AuthController.getAccessToken
 //FeatureFlags
 router.get('/featureFlags', FeatureFlagController.getFeatureFlags);
 router.post('/featureFlags', FeatureFlagController.updateFeatureFlags);
+
 // importing
 router.post('/import/:source', ImportController.startImport);
 router.post('/import/:source/authenticate', ImportController.authenticate);
