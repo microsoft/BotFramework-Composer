@@ -161,10 +161,10 @@ describe('<Diagnostics/>', () => {
     );
     expect(container).toHaveTextContent('Diagnostics');
     fireEvent.doubleClick(getByText(/test.en-us.lg/));
-    expect(mockNavigationTo).toBeCalledWith('/bot/testproj/skill/testproj/language-generation/test/edit#L=13');
+    expect(mockNavigationTo).toBeCalledWith('/bot/testproj/language-generation/test/edit#L=13');
     fireEvent.doubleClick(getByText(/test.en-us.lu/));
-    expect(mockNavigationTo).nthCalledWith(2, '/bot/testproj/skill/testproj/language-understanding/test/edit#L=7');
+    expect(mockNavigationTo).nthCalledWith(2, '/bot/testproj/language-understanding/test/edit#L=7');
     fireEvent.doubleClick(getByText(/test.en-us.qna/));
-    expect(mockNavigationTo).nthCalledWith(3, '/bot/testproj/skill/testproj/knowledge-base/test/edit#L=7');
+    expect(mockNavigationTo).nthCalledWith(3, '/bot/testproj/knowledge-base/test/edit#L=7');
   });
 });
