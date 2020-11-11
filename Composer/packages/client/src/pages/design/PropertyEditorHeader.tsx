@@ -41,10 +41,10 @@ const styles = {
     margin-bottom: 10px;
     white-space: pre-line;
     font-size: ${FontSizes.size12};
+    margin-bottom: 10px;
   `,
 
   helplink: css`
-    margin-top: 15px;
     font-size: ${FontSizes.size12};
   `,
 };
@@ -52,7 +52,6 @@ const styles = {
 export type PropertyEditorHeaderProps = {
   projectData: { isRootBot: boolean; isRemote: boolean };
   botName: string;
-  description?: string;
   helpLink?: string;
 };
 
