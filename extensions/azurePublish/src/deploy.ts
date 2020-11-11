@@ -150,9 +150,6 @@ export class BotProjectDeploy {
       hostname ? hostname : name + '-' + env
     }.scm.azurewebsites.net/zipdeploy/?isAsync=true`;
     const fileReadStream = fs.createReadStream(zipPath, {autoClose:true});
-    fileReadStream.on( "close", function () {
-      console.log( "close file read stream" );
-    });
     fileReadStream.on( "error", function (err) {
       console.log(err);
       throw err;
