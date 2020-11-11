@@ -88,7 +88,6 @@ export const multilangDispatcher = () => {
   const addLanguages = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async ({ languages, defaultLang, switchTo = false, projectId }) => {
       const { set, snapshot } = callbackHelpers;
-      const botName = await snapshot.getPromise(botDisplayNameState(projectId));
       const prevlgFiles = await snapshot.getPromise(lgFilesState(projectId));
       const prevluFiles = await snapshot.getPromise(luFilesState(projectId));
       const prevSettings = await snapshot.getPromise(settingsState(projectId));
@@ -105,10 +104,10 @@ export const multilangDispatcher = () => {
         settings.languages = languages;
       }
 
+      //Set active language and update skill bot's active language
       if (switchTo) {
         const switchToLocale = languages[0];
-        set(localeState(projectId), switchToLocale);
-        languageStorage.setLocale(botName, switchToLocale);
+        setLocale(switchToLocale, projectId);
       }
 
       set(lgFilesState(projectId), [...prevlgFiles, ...lgFiles]);
