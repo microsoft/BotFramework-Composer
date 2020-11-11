@@ -85,7 +85,8 @@
       "args": ["${workspaceRoot}/Composer/packages/electron-server"],
       "env": {
         "NODE_ENV": "development",
-        "DEBUG": "composer*"
+        "DEBUG": "composer*",
+        "COMPOSER_ENABLE_ONEAUTH": "false"
       },
       "outputCapture": "std"
     },

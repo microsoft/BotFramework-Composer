@@ -9,5 +9,10 @@
       "@src/*": ["src/*"]
     }
   },
-  "include": ["src/main.ts", "src/preload.js"],
+  "include": [
+    "src/**/*.ts",
+    "scripts/*.js", // include scripts to geting proper linting
+    "__tests__", // intellisense
+    "src/preload.js"
+  ]
 }

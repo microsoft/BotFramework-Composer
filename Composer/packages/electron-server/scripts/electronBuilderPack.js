@@ -6,12 +6,14 @@ const { resolve } = require('path');
 // eslint-disable-next-line security/detect-child-process
 const { execSync } = require('child_process');
 
+const { log } = require('./common');
+
 /*
  * Calls electron-builder to pre-pack the app contents into what
  * will be packaged inside of the OS-specific distributable application
  */
 try {
-  const electronBuilderBinary = resolve(__dirname, '../../../node_modules/.bin/electron-builder');
+  const electronBuilderBinary = resolve(__dirname, '../node_modules/.bin/electron-builder');
   const electronServerDir = resolve(__dirname, '..');
   let platform;
   switch (process.platform) {
@@ -33,10 +35,10 @@ try {
 
   // call electron-builder . --dir --config electron-builder-config.json
   const cmd = `"${electronBuilderBinary}" "${electronServerDir}" --dir --${platform} --x64 --config electron-builder-config.json`;
-  console.log('[electronBuilderPack.js] Executing command: ', cmd);
+  log.info('Executing command: ', cmd);
 
   execSync(cmd, { stdio: 'inherit' }); // lgtm [js/shell-command-injection-from-environment]
 } catch (e) {
-  console.error('[electronBuilderPack.js] Error occurred while using electron-builder --dir: ', e);
+  log.error('[electronBuilderPack.js] Error occurred while using electron-builder --dir: ', e);
   process.exit(1);
 }

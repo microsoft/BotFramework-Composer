@@ -232,7 +232,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       if (triggerIndex != null && trigger != null) {
         breadcrumbArray.push({
           key: 'trigger-' + triggerIndex,
-          label: trigger.$designer.name || getFriendlyName(trigger),
+          label: trigger.$designer?.name || getFriendlyName(trigger),
           link: {
             projectId: props.projectId,
             dialogId: props.dialogId,
@@ -707,7 +707,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                           onCancel={() => {
                             setWarningIsVisible(false);
                           }}
-                          onOk={() => navigateTo(`/bot/${projectId}`)}
+                          onOk={() => navigateTo(`/bot/${projectId}/dialogs/${dialogId}`)}
                         />
                       )
                     ) : (
