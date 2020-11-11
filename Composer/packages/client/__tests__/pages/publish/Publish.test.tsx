@@ -46,6 +46,7 @@ const state = {
         publish: true,
         status: true,
         rollback: true,
+        pull: true,
       },
     },
   ],

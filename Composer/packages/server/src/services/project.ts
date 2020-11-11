@@ -7,6 +7,7 @@ import flatten from 'lodash/flatten';
 import { luImportResolverGenerator, ResolverResource } from '@bfc/shared';
 import extractMemoryPaths from '@bfc/indexers/lib/dialogUtils/extractMemoryPaths';
 import { UserIdentity } from '@bfc/extension';
+import { ensureDir, existsSync, remove } from 'fs-extra';
 
 import { BotProject } from '../models/bot/botProject';
 import { LocationRef } from '../models/bot/interface';
@@ -366,6 +367,32 @@ export class BotProjectService {
       return projectId;
     } else {
       return '';
+    }
+  };
+
+  public static backupProject = async (project: BotProject): Promise<string> => {
+    try {
+      // ensure there isn't an older backup directory hanging around
+      const projectDirName = Path.basename(project.dir);
+      const backupPath = Path.join(process.env.COMPOSER_BACKUP_DIR as string, `${projectDirName}.${Date.now()}`);
+      await ensureDir(process.env.COMPOSER_BACKUP_DIR as string);
+      if (existsSync(backupPath)) {
+        log('%s already exists. Deleting before backing up.', backupPath);
+        await remove(backupPath);
+        log('Existing backup folder deleted successfully.');
+      }
+
+      // clone the bot project to the backup directory
+      const location: LocationRef = {
+        storageId: 'default',
+        path: backupPath,
+      };
+      log('Backing up project at %s to %s', project.dir, backupPath);
+      await project.cloneFiles(location);
+      log('Project backed up successfully.');
+      return location.path;
+    } catch (e) {
+      throw new Error(`Failed to backup project ${project.id}: ${e}`);
     }
   };
 }
