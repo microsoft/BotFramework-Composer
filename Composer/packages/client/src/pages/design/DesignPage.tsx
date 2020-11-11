@@ -114,7 +114,7 @@ const parseTriggerId = (triggerId: string | undefined): number | undefined => {
   return parseInt(indexString);
 };
 
-const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string; skillId?: string }>> = (
+const DesignPage: React.FC<RouteComponentProps<{ dialogId?: string; projectId: string; skillId?: string }>> = (
   props
 ) => {
   const { location, dialogId, projectId = '', skillId = null } = props;
@@ -178,13 +178,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     if (currentDialog) {
       setCurrentDialog(currentDialog);
     }
-    const rootDialog = dialogs.find(({ isRoot }) => isRoot);
-    if (!currentDialog && rootDialog) {
-      const { search } = location || {};
-      navigateTo(`/bot/${projectId}/dialogs/${rootDialog.id}${search}`);
-      return;
-    }
-    setWarningIsVisible(true);
   }, [dialogId, dialogs, location]);
 
   // migration: add id to dialog when dialog doesn't have id
@@ -220,15 +213,16 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
       const breadcrumbArray: Array<BreadcrumbItem> = [];
 
-      breadcrumbArray.push({
-        key: 'dialog-' + props.dialogId,
-        label: dialogMap[props.dialogId]?.$designer?.name ?? dialogMap[props.dialogId]?.$designer?.$designer?.name,
-        link: {
-          projectId: props.projectId,
-          dialogId: props.dialogId,
-        },
-        onClick: () => navTo(projectId, dialogId),
-      });
+      if (dialogId != null)
+        breadcrumbArray.push({
+          key: 'dialog-' + props.dialogId,
+          label: dialogMap[props.dialogId]?.$designer?.name ?? dialogMap[props.dialogId]?.$designer?.$designer?.name,
+          link: {
+            projectId: props.projectId,
+            dialogId: props.dialogId,
+          },
+          onClick: () => navTo(projectId, dialogId),
+        });
       if (triggerIndex != null && trigger != null) {
         breadcrumbArray.push({
           key: 'trigger-' + triggerIndex,
@@ -653,10 +647,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     }
   };
 
-  if (!dialogId) {
-    return <LoadingSpinner />;
-  }
-
   const selectedTrigger = currentDialog?.triggers.find((t) => t.id === selected);
   const withWarning = triggerNotSupported(currentDialog, selectedTrigger);
 
@@ -755,7 +745,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             onSubmit={() => setExportSkillModalVisible(false)}
           />
         )}
-        {triggerModalVisible && (
+        {dialogId != null && triggerModalVisible && (
           <TriggerCreationModal
             dialogId={dialogId}
             isOpen={triggerModalVisible}
@@ -764,7 +754,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             onSubmit={onTriggerCreationSubmit}
           />
         )}
-        <CreateQnAModal dialogId={dialogId} projectId={projectId} qnaFiles={qnaFiles} onSubmit={handleCreateQnA} />
+        {dialogId != null && (
+          <CreateQnAModal dialogId={dialogId} projectId={projectId} qnaFiles={qnaFiles} onSubmit={handleCreateQnA} />
+        )}
         {displaySkillManifest && (
           <DisplayManifestModal
             manifestId={displaySkillManifest}
