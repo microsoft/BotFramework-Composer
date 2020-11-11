@@ -7,21 +7,17 @@ import React from 'react';
 import { FormErrors, JSONSchema7, UIOptions } from '@bfc/extension-client';
 import ErrorBoundary from 'react-error-boundary';
 import formatMessage from 'format-message';
+import { FontSizes } from '@uifabric/fluent-theme';
 
 import AdaptiveFormContext from '../AdaptiveFormContext';
 
+import { PropertyEditorHeader, PropertyEditorHeaderProps } from './PropertyEditorHeader';
 import { SchemaField } from './SchemaField';
 import FormTitle from './FormTitle';
 import ErrorInfo from './ErrorInfo';
 import { LoadingTimeout } from './LoadingTimeout';
 
-const styles = {
-  errorLoading: css`
-    padding: 18px;
-  `,
-};
-
-export interface AdaptiveFormProps {
+export interface AdaptiveFormProps extends PropertyEditorHeaderProps {
   errors?: string | FormErrors | string[] | FormErrors[];
   schema?: JSONSchema7;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -32,18 +28,44 @@ export interface AdaptiveFormProps {
   onChange: (value: any) => void;
 }
 
+const schemaErrorContainer = css`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+`;
+
+const schemaLoadErrorStyle = css`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: ${FontSizes.size14};
+`;
+
 export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(props) {
-  const { errors, focusedTab, formData, schema, uiOptions, onChange, onFocusedTab } = props;
+  const { errors, focusedTab, formData, schema, uiOptions, onChange, onFocusedTab, projectMetadata, botName } = props;
 
   if (!formData || !schema) {
-    return (
-      <LoadingTimeout timeout={2000}>
-        <div css={styles.errorLoading}>
-          {formatMessage('{type} could not be loaded', {
-            type: formData ? formatMessage('Schema') : formatMessage('Dialog data'),
-          })}
+    const propertyHeaderComponent = <PropertyEditorHeader botName={botName} projectMetadata={projectMetadata} />;
+    let schemaLoadErrorComponent;
+    if (!formData && !schema) {
+      schemaLoadErrorComponent = (
+        <div css={schemaLoadErrorStyle}>
+          <LoadingTimeout timeout={2000}>
+            <p>
+              {formatMessage('{type} could not be loaded', {
+                type: formData ? formatMessage('Schema') : formatMessage('Dialog data'),
+              })}
+            </p>
+          </LoadingTimeout>
         </div>
-      </LoadingTimeout>
+      );
+    }
+    return (
+      <div css={schemaErrorContainer}>
+        {propertyHeaderComponent}
+        {schemaLoadErrorComponent}
+      </div>
     );
   }
 
