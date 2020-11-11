@@ -43,14 +43,7 @@ describe('<ProjectTree/>', () => {
 
     const { findByTestId } = renderWithRecoil(
       <ProjectTree
-        onBotCreateDialog={() => {}}
         onBotDeleteDialog={handleDeleteDialog}
-        onBotEditManifest={() => {}}
-        onBotExportZip={() => {}}
-        onBotRemoveSkill={() => {}}
-        onBotStart={() => {}}
-        onBotStop={() => {}}
-        onDialogCreateTrigger={() => {}}
         onDialogDeleteTrigger={handleDeleteTrigger}
         onSelect={handleSelect}
       />,

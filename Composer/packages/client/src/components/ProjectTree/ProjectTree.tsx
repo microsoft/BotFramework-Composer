@@ -130,7 +130,8 @@ type BotInProject = {
   isRemote: boolean;
   isRootBot: boolean;
   diagnostics: Diagnostic[];
-  [key: string]: any;
+  error: { [key: string]: any };
+  buildEssentials: { [key: string]: any };
 };
 
 type Props = {
@@ -139,15 +140,15 @@ type Props = {
   showTriggers?: boolean;
   showDialogs?: boolean;
   navLinks?: TreeLink[];
-  onBotDeleteDialog: (projectId: string, dialogId: string) => void;
-  onBotCreateDialog: (projectId: string) => void;
-  onBotStart: (projectId: string) => void;
-  onBotStop: (projectId: string) => void;
-  onBotEditManifest: (projectId: string) => void;
-  onBotExportZip: (projectId: string) => void;
-  onBotRemoveSkill: (skillId: string) => void;
-  onDialogCreateTrigger: (projectId: string, dialogId: string) => void;
-  onDialogDeleteTrigger: (projectId: string, dialogId: string, index: number) => void;
+  onBotDeleteDialog?: (projectId: string, dialogId: string) => void;
+  onBotCreateDialog?: (projectId: string) => void;
+  onBotStart?: (projectId: string) => void;
+  onBotStop?: (projectId: string) => void;
+  onBotEditManifest?: (projectId: string) => void;
+  onBotExportZip?: (projectId: string) => void;
+  onBotRemoveSkill?: (skillId: string) => void;
+  onDialogCreateTrigger?: (projectId: string, dialogId: string) => void;
+  onDialogDeleteTrigger?: (projectId: string, dialogId: string, index: number) => void;
   defaultSelected?: Partial<TreeLink>;
 };
 
@@ -157,16 +158,16 @@ export const ProjectTree: React.FC<Props> = ({
   onSelectAllLink: onAllSelected = undefined,
   showTriggers = true,
   showDialogs = true,
-  onBotDeleteDialog,
-  onDialogDeleteTrigger,
+  onBotDeleteDialog = () => {},
+  onDialogDeleteTrigger = () => {},
   onSelect,
-  onBotCreateDialog,
-  onBotStart,
-  onBotStop,
-  onBotEditManifest,
-  onBotExportZip,
-  onBotRemoveSkill,
-  onDialogCreateTrigger,
+  onBotCreateDialog = () => {},
+  onBotStart = () => {},
+  onBotStop = () => {},
+  onBotEditManifest = () => {},
+  onBotExportZip = () => {},
+  onBotRemoveSkill = () => {},
+  onDialogCreateTrigger = () => {},
   defaultSelected,
 }) => {
   const { onboardingAddCoachMarkRef, navigateToFormDialogSchema, setPageElementState } = useRecoilValue(

@@ -162,7 +162,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     onboardingAddCoachMarkRef,
     addRemoteSkillToBotProject,
     setCreationFlowStatus,
-    setCreationFlowTypes,
+    setCreationFlowType,
     removeSkillFromBotProject,
     updateZoomRate,
     createQnAKBFromUrl,
@@ -183,8 +183,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const [triggerModalInfo, setTriggerModalInfo] = useState<undefined | { projectId: string; dialogId: string }>(
     undefined
   );
-  const [dialogModalInfo, setDialogModalInfo] = useState<undefined | { projectId: string }>(undefined);
-  const [exportSkillModalInfo, setExportSkillModalInfo] = useState<undefined | { projectId: string }>(undefined);
+  const [dialogModalInfo, setDialogModalInfo] = useState<undefined | string>(undefined);
+  const [exportSkillModalInfo, setExportSkillModalInfo] = useState<undefined | string>(undefined);
   const [skillManifestFile, setSkillManifestFile] = useState<undefined | SkillInfo>(undefined);
   const [brokenSkillInfo, setBrokenSkillInfo] = useState<undefined | TreeLink>(undefined);
   const [brokenSkillRepairCallback, setBrokenSkillRepairCallback] = useState<undefined | (() => void)>(undefined);
@@ -466,7 +466,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           {
             'data-testid': 'AddNewKnowledgebase',
             key: 'addKnowledge',
-            text: formatMessage(` Add new knowledge base on {displayName}`, {
+            text: formatMessage(`Add new knowledge base on {displayName}`, {
               displayName: currentDialog?.displayName ?? '',
             }),
             onClick: () => {
@@ -478,25 +478,25 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           {
             'data-testid': 'CreateNewSkill',
             key: 'CreateNewSkill',
-            text: formatMessage(' Create a new skill'),
+            text: formatMessage('Create a new skill'),
             onClick: () => {
-              setCreationFlowTypes('Skill');
+              setCreationFlowType('Skill');
               setCreationFlowStatus(CreationFlowStatus.NEW);
             },
           },
           {
             'data-testid': 'OpenSkill',
             key: 'OpenSkill',
-            text: formatMessage(' Open a new skill'),
+            text: formatMessage('Open a new skill'),
             onClick: () => {
-              setCreationFlowTypes('Skill');
+              setCreationFlowType('Skill');
               setCreationFlowStatus(CreationFlowStatus.OPEN);
             },
           },
           {
             'data-testid': 'ConnectRemoteSkill',
             key: 'ConnectRemoteSkill',
-            text: formatMessage(' Connect a remote skill'),
+            text: formatMessage('Connect a remote skill'),
             onClick: () => {
               setAddSkillDialogModalVisibility(true);
             },
@@ -610,7 +610,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             key: 'exportAsSkill',
             text: formatMessage('Export as skill'),
             onClick: () => {
-              setExportSkillModalInfo({ projectId });
+              setExportSkillModalInfo(projectId);
             },
           },
         ],
@@ -727,7 +727,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   };
 
   const handleCreateDialog = (projectId: string) => {
-    setDialogModalInfo({ projectId });
+    setDialogModalInfo(projectId);
   };
 
   const handleDisplayManifestModal = (skillId: string) => {
@@ -831,13 +831,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       </div>
       <Suspense fallback={<LoadingSpinner />}>
         {dialogModalInfo && (
-          <EditorExtension plugins={pluginConfig} projectId={dialogModalInfo.projectId} shell={shell}>
+          <EditorExtension plugins={pluginConfig} projectId={dialogModalInfo} shell={shell}>
             <CreateDialogModal
               isOpen
-              projectId={dialogModalInfo.projectId}
+              projectId={dialogModalInfo}
               onDismiss={() => setDialogModalInfo(undefined)}
               onSubmit={(dialogName, dialogData) => {
-                handleCreateDialogSubmit(dialogModalInfo.projectId, dialogName, dialogData);
+                handleCreateDialogSubmit(dialogModalInfo, dialogName, dialogData);
               }}
             />
           </EditorExtension>
@@ -857,7 +857,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         {exportSkillModalInfo && (
           <ExportSkillModal
             isOpen
-            projectId={exportSkillModalInfo.projectId}
+            projectId={exportSkillModalInfo}
             onDismiss={() => setExportSkillModalInfo(undefined)}
             onSubmit={() => setExportSkillModalInfo(undefined)}
           />
@@ -894,7 +894,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
               if (!skillIdToRemove) return;
 
               if (option === RepairSkillModalOptionKeys.repairSkill) {
-                setCreationFlowTypes('Skill');
+                setCreationFlowType('Skill');
                 setCreationFlowStatus(CreationFlowStatus.OPEN);
                 setBrokenSkillRepairCallback(() => {
                   removeSkillFromBotProject(skillIdToRemove);
@@ -907,7 +907,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           ></RepairSkillModal>
         )}
         <CreationModal
-          onDismiss={() => {}}
           onSubmit={() => {
             if (brokenSkillRepairCallback) {
               brokenSkillRepairCallback();

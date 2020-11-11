@@ -21,7 +21,7 @@ import { CreationFlowStatus } from '../../constants';
 
 interface CreationModalProps {
   onSubmit: () => void;
-  onDismiss: () => void;
+  onDismiss?: () => void;
 }
 
 export const CreationModal: React.FC<CreationModalProps> = (props) => {
@@ -98,7 +98,7 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
 
   const handleDismiss = () => {
     setCreationFlowStatus(CreationFlowStatus.CLOSE);
-    props.onDismiss();
+    props.onDismiss && props.onDismiss();
   };
 
   const handleDefineConversationSubmit = async (formData, templateId: string) => {

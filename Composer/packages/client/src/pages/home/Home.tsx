@@ -65,7 +65,7 @@ const Home: React.FC<RouteComponentProps> = () => {
     setCreationFlowStatus,
     onboardingAddCoachMarkRef,
     saveTemplateId,
-    setCreationFlowTypes,
+    setCreationFlowType,
   } = useRecoilValue(dispatcherState);
   const filteredTemplates = useRecoilValue(filteredTemplatesSelector);
 
@@ -94,7 +94,7 @@ const Home: React.FC<RouteComponentProps> = () => {
           iconName: 'CirclePlus',
         },
         onClick: () => {
-          setCreationFlowTypes('Bot');
+          setCreationFlowType('Bot');
           setCreationFlowStatus(CreationFlowStatus.NEW);
           navigate(`projects/create`);
         },

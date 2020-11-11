@@ -9,7 +9,7 @@ import React from 'react';
 import { LoadingTimeout } from '@bfc/adaptive-form/lib/components/LoadingTimeout';
 import { FieldLabel } from '@bfc/adaptive-form/lib/components/FieldLabel';
 import ErrorInfo from '@bfc/adaptive-form/lib/components/ErrorInfo';
-import { FontSizes } from '@uifabric/fluent-theme';
+import { FontSizes, NeutralColors } from '@uifabric/fluent-theme';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { FontWeights } from '@uifabric/styling';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
@@ -33,15 +33,16 @@ const styles = {
   title: css`
     font-size: ${FontSizes.size20};
     font-weight: ${FontWeights.semibold};
-    margin: '5px 0 7px -9px';
+    margin: 5px 0px;
   `,
 
   subtitle: css`
     height: 15px;
     line-height: 15px;
     font-size: ${FontSizes.size12};
-    color: #4f4f4f;
-    margin: -7px 0 7px;
+    color: ${NeutralColors.gray130};
+    font-weight: ${FontWeights.semibold};
+    margin: 5px 0;
   `,
 
   description: css`
@@ -51,19 +52,21 @@ const styles = {
     font-size: ${FontSizes.size12};
   `,
 
+  helplink: css`
+    margin-top: 15px;
+    font-size: ${FontSizes.size12};
+  `,
+
   body: css`
     padding: 0 18px;
     font-size: ${FontSizes.size12};
-    section {
-      padding-top: 20px;
-    }
-    label {
-      color: #585756;
-      font-size: ${FontSizes.size12};
-    }
     .ms-DetailsHeader {
       padding-top: 0;
     }
+  `,
+
+  section: css`
+    padding-top: 20px;
   `,
 };
 
@@ -101,38 +104,33 @@ export const ManifestEditor: React.FC<ManifestEditorProps> = (props) => {
       <ErrorBoundary FallbackComponent={ErrorInfo}>
         <div css={styles.banner}>
           <p css={styles.title}>
-            {' '}
             {formData.name} {'(Remote)'}
           </p>
           <p css={styles.subtitle}> {formatMessage('Remote skill')} </p>
-          <p css={styles.description}>
-            {manifest.description}
-            <React.Fragment>
-              <br />
-              <br />
-              <Link
-                aria-label={formatMessage('Learn more about skill manifest')}
-                href={helpLink}
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                {formatMessage('Learn more')}
-              </Link>
-            </React.Fragment>
+          <p css={styles.description}>{manifest.description}</p>
+          <p css={styles.helplink}>
+            <Link
+              aria-label={formatMessage('Learn more about skill manifests')}
+              href={helpLink}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              {formatMessage('Learn more')}
+            </Link>
           </p>
         </div>
 
         <div css={styles.body}>
-          <section>
+          <section css={styles.section}>
             <FieldLabel
-              description={formatMessage('Learn more about manifest')}
+              description={formatMessage('Learn more about manifests')}
               helpLink={helpLink}
               id={'url'}
               label={formatMessage('Manifest url')}
             />
             <p>{formData.location}</p>
           </section>
-          <section>
+          <section css={styles.section}>
             <FieldLabel
               description={formatMessage('Learn more about endpoints')}
               helpLink={helpLink}
@@ -149,7 +147,7 @@ export const ManifestEditor: React.FC<ManifestEditorProps> = (props) => {
               selectionMode={SelectionMode.none}
             />
           </section>
-          <section>
+          <section css={styles.section}>
             <FieldLabel
               description={formatMessage('Learn more about activities')}
               helpLink={helpLink}

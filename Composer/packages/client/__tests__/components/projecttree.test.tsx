@@ -42,41 +42,13 @@ const initRecoilStateMulti = ({ set }) => {
 
 describe('<ProjectTree/>', () => {
   it('should render the projecttree', async () => {
-    const { findByText } = renderWithRecoil(
-      <ProjectTree
-        onBotCreateDialog={() => {}}
-        onBotDeleteDialog={() => {}}
-        onBotEditManifest={() => {}}
-        onBotExportZip={() => {}}
-        onBotRemoveSkill={() => {}}
-        onBotStart={() => {}}
-        onBotStop={() => {}}
-        onDialogCreateTrigger={() => {}}
-        onDialogDeleteTrigger={() => {}}
-        onSelect={() => {}}
-      />,
-      initRecoilState
-    );
+    const { findByText } = renderWithRecoil(<ProjectTree onSelect={() => {}} />, initRecoilState);
 
     await findByText('EchoBot-1');
   });
 
   it('should render the projecttree with multiple bots', async () => {
-    const { findAllByText, findByText } = renderWithRecoil(
-      <ProjectTree
-        onBotCreateDialog={() => {}}
-        onBotDeleteDialog={() => {}}
-        onBotEditManifest={() => {}}
-        onBotExportZip={() => {}}
-        onBotRemoveSkill={() => {}}
-        onBotStart={() => {}}
-        onBotStop={() => {}}
-        onDialogCreateTrigger={() => {}}
-        onDialogDeleteTrigger={() => {}}
-        onSelect={() => {}}
-      />,
-      initRecoilStateMulti
-    );
+    const { findAllByText, findByText } = renderWithRecoil(<ProjectTree onSelect={() => {}} />, initRecoilStateMulti);
 
     await findAllByText('EchoBot-1');
     await findByText('EchoBot-1b');
@@ -84,21 +56,7 @@ describe('<ProjectTree/>', () => {
 
   it('should handle project tree item click', async () => {
     const mockFileSelect = jest.fn(() => null);
-    const component = renderWithRecoil(
-      <ProjectTree
-        onBotCreateDialog={() => {}}
-        onBotDeleteDialog={() => {}}
-        onBotEditManifest={() => {}}
-        onBotExportZip={() => {}}
-        onBotRemoveSkill={() => {}}
-        onBotStart={() => {}}
-        onBotStop={() => {}}
-        onDialogCreateTrigger={() => {}}
-        onDialogDeleteTrigger={() => {}}
-        onSelect={mockFileSelect}
-      />,
-      initRecoilState
-    );
+    const component = renderWithRecoil(<ProjectTree onSelect={mockFileSelect} />, initRecoilState);
 
     const node = await component.findByTestId('EchoBot-1_Greeting');
     fireEvent.click(node);
@@ -108,19 +66,7 @@ describe('<ProjectTree/>', () => {
   it('fires the onSelectAll event', async () => {
     const mockOnSelected = jest.fn();
     const { findByText } = renderWithRecoil(
-      <ProjectTree
-        onBotCreateDialog={() => {}}
-        onBotDeleteDialog={() => {}}
-        onBotEditManifest={() => {}}
-        onBotExportZip={() => {}}
-        onBotRemoveSkill={() => {}}
-        onBotStart={() => {}}
-        onBotStop={() => {}}
-        onDialogCreateTrigger={() => {}}
-        onDialogDeleteTrigger={() => {}}
-        onSelect={() => {}}
-        onSelectAllLink={mockOnSelected}
-      />,
+      <ProjectTree onSelect={() => {}} onSelectAllLink={mockOnSelected} />,
       initRecoilState
     );
 
