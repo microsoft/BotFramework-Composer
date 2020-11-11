@@ -8,12 +8,7 @@ import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
 import { Fragment, useState } from 'react';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import formatMessage from 'format-message';
-import {
-  CheckboxVisibility,
-  DetailsList,
-  DetailsListLayoutMode,
-  SelectionMode,
-} from 'office-ui-fabric-react/lib/DetailsList';
+import { CheckboxVisibility, DetailsList } from 'office-ui-fabric-react/lib/DetailsList';
 
 import { IBotStatus } from './botStatusList';
 

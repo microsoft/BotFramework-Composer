@@ -32,11 +32,19 @@ export interface IBotStatusListProps {
   botPublishHistoryList: { [key: string]: any }[];
   updatePublishHistory: (items: IStatus[], item: IBotStatus) => void;
   updateSelectedBots: (items: IBotStatus[]) => void;
+  changePublishTarget: (PublishTarget: string, item: IBotStatus) => void;
   onLogClick: (item: IStatus | null) => void;
   onRollbackClick: (selectedVersion: IStatus | null, item: IBotStatus) => void;
 }
 export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
-  const { items, botPublishHistoryList, updatePublishHistory, onLogClick, onRollbackClick } = props;
+  const {
+    items,
+    botPublishHistoryList,
+    updatePublishHistory,
+    changePublishTarget,
+    onLogClick,
+    onRollbackClick,
+  } = props;
   const [botDescend, setBotDescend] = useState(false);
   const sortBot = () => {
     setBotDescend(!botDescend);
@@ -62,7 +70,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
   const trStyle = { borderTop: '1px solid #EDEBE9' };
   const spanStyle = { wordBreak: 'break-word' };
 
-  const renderItem = (item: IBotStatus, index: number) => {
+  const RenderItem = (item: IBotStatus, index: number) => {
     const publishTargetOptions = (): IDropdownOption[] => {
       const options: IDropdownOption[] = [];
       item.publishTargets &&
@@ -108,9 +116,13 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
     const hanldeUpdatePublishHistory = (publishHistories) => {
       updatePublishHistory(publishHistories, item);
     };
-    const changePublishTarget = (_, option?: IDropdownOption): void => {
-      if (option && option.key === 'manageProfiles') {
-        navigateTo(`/bot/${item.id}/botProjectsSettings/root`);
+    const handleChangePublishTarget = (_, option?: IDropdownOption): void => {
+      if (option) {
+        if (option.key === 'manageProfiles') {
+          navigateTo(`/bot/${item.id}/botProjectsSettings/root`);
+          return;
+        }
+        changePublishTarget(option.text, item);
       }
     };
     const handleRollbackClick = (selectedVersion) => {
@@ -128,7 +140,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
               options={publishTargetOptions()}
               placeholder={formatMessage('Select a publish target')}
               styles={{ root: { width: '134px' } }}
-              onChange={changePublishTarget}
+              onChange={handleChangePublishTarget}
               onRenderOption={onRenderOption}
             />
           </td>
@@ -196,7 +208,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
             <th css={headerStyle}>{formatMessage('Comment')}</th>
           </tr>
         </thead>
-        <tbody>{items.map((item, index) => renderItem(item, index))}</tbody>
+        <tbody>{items.map((item, index) => RenderItem(item, index))}</tbody>
       </table>
     </Fragment>
   );

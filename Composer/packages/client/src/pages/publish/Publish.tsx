@@ -45,9 +45,9 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const [showNotifications, setShowNotifications] = useState<{ [key: string]: boolean }>({});
   // fill Settings, status, publishType, publish target for bot from botProjectMeta
   const botSettingsList: { [key: string]: any }[] = [];
-  const botStatusList: IBotStatus[] = [];
+  const [botStatusList, setBotStatusList] = useState<IBotStatus[]>([]);
+  const statusList: IBotStatus[] = [];
   const botPublishTypesList: { [key: string]: any }[] = [];
-  const [botPublishHistoryList, setBotPublishHistoryList] = useState<{ [key: string]: any }[]>([]);
   const publishHistoyList: { [key: string]: any }[] = [];
   const publishTargetsList: { [key: string]: any }[] = [];
   const [hasGetPublishHistory, setHasGetPublishHistory] = useState<boolean>(false);
@@ -89,9 +89,10 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
           botStatus.status = history.status;
         }
       }
-      botStatusList.push(botStatus);
+      statusList.push(botStatus);
     });
 
+  const [botPublishHistoryList, setBotPublishHistoryList] = useState<{ [key: string]: any }[]>(statusList);
   const [showLog, setShowLog] = useState(false);
   const [publishDialogHidden, setPublishDialogHidden] = useState(true);
 
@@ -273,6 +274,15 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       }
     }
   };
+  const changePublishTarget = (publishTarget, botStatus) => {
+    const newBotStatusItems = botStatusList.map((status) => {
+      if (status.id === botStatus.id) {
+        status.publishTarget = publishTarget;
+      }
+      return status;
+    });
+    setBotStatusList(newBotStatusItems);
+  };
 
   useEffect(() => {
     setCurrentPageMode('notifications');
@@ -293,6 +303,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
           <Fragment>
             <BotStatusList
               botPublishHistoryList={botPublishHistoryList}
+              changePublishTarget={changePublishTarget}
               items={botStatusList}
               updatePublishHistory={updatePublishHistory}
               updateSelectedBots={updateSelectedBots}
