@@ -24,6 +24,7 @@ interface AuthAPI {
   login: (options: OAuthOptions) => Promise<string>; // returns an id token
   getAccessToken: (options: OAuthOptions) => Promise<string>; // returns an access token
   getAccessTokensFromStorage: () => TokenPair;
+  getCurrentUser?: () => any;
 }
 
 interface PublishAPI {
@@ -63,6 +64,7 @@ class API implements IAPI {
           graph_token: getGraphTokenInCache(),
         };
       },
+      getCurrentUser: undefined,
     };
     this.publish = {
       setConfigIsValid: undefined,

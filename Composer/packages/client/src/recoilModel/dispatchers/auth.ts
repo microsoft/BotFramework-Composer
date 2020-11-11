@@ -5,37 +5,42 @@ import { CallbackInterface, useRecoilCallback } from 'recoil';
 import jwtDecode from 'jwt-decode';
 
 import { currentUserState } from '../atoms/appState';
-import { setAccessToken, setGraphToken } from '../../utils/auth';
+import { setAccessToken, setGraphToken, getAccessTokenInCache } from '../../utils/auth';
 import { isElectron } from '../../utils/electronUtil';
 
 import httpClient from './../../utils/httpUtil';
 
 export const authDispatcher = () => {
-  const getAccessToken = useRecoilCallback(({ set }: CallbackInterface) => async () => {
+  const setCurrentUser = ({ set }: CallbackInterface, token: string) => {
+    // decode token and set current user
+    let decoded = {} as any;
     try {
+      decoded = jwtDecode(token);
+    } catch (err) {
+      console.error(err);
+    }
+    set(currentUserState, {
+      token: token,
+      email: decoded.upn,
+      name: decoded.name,
+      expiration: (decoded.exp || 0) * 1000, // convert to ms,
+      sessionExpired: false,
+    });
+  };
+
+  const getAccessToken = useRecoilCallback((callbackHelpers: CallbackInterface) => async () => {
+    try {
+      let token;
       if (isElectron()) {
         const result = await httpClient.get(`/auth/getAccessToken`, {
           params: { targetResource: 'https://management.core.windows.net/' },
         });
-        if (result.data.accessToken) {
-          let decoded = {} as any;
-
-          try {
-            decoded = jwtDecode(result.data.accessToken);
-          } catch (err) {
-            console.error(err);
-          }
-
-          set(currentUserState, {
-            token: result.data.accessToken,
-            email: decoded.upn,
-            name: decoded.name,
-            expiration: (decoded.exp || 0) * 1000, // convert to ms,
-            sessionExpired: false,
-          });
-          setAccessToken(result.data.accessToken);
-        }
+        setAccessToken(result.data.accessToken);
+        token = result.data.accessToken;
+      } else {
+        token = getAccessTokenInCache();
       }
+      setCurrentUser(callbackHelpers, token);
     } catch (err) {
       console.log(err);
     }

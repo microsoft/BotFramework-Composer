@@ -6,7 +6,6 @@ import * as formatMessage from 'format-message';
 import * as React from 'react';
 import { useState, useMemo, useEffect, Fragment } from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import {
@@ -19,6 +18,7 @@ import {
   setTitle,
   getSchema,
   getType,
+  getCurrentUser,
 } from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { ResourceGroup } from '@azure/arm-resources/esm/models';
@@ -37,6 +37,8 @@ import {
   StickyPositionType,
   TooltipHost,
   Spinner,
+  Persona,
+  PersonaSize,
 } from 'office-ui-fabric-react';
 import { JsonEditor } from '@bfc/code-editor';
 
@@ -83,6 +85,7 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const [token, setToken] = useState<string>();
   const [graphToken, setGraphToken] = useState<string>();
+  const [currentUser, setCurrentUser] = useState<any>();
 
   const [choice, setChoice] = useState(choiceOptions[0]);
   const [currentSubscription, setSubscription] = useState<Subscription>();
@@ -166,8 +169,10 @@ export const AzureProvisionDialog: React.FC = () => {
   useEffect(() => {
     setTitle(DialogTitle.CONFIG_RESOURCES);
     const { access_token, graph_token } = getAccessTokensFromStorage();
+    const user = getCurrentUser();
     setToken(access_token);
     setGraphToken(graph_token);
+    setCurrentUser(user);
     getSubscriptions(access_token).then(setSubscriptions);
     getResources();
   }, []);
@@ -270,7 +275,7 @@ export const AzureProvisionDialog: React.FC = () => {
       let startIndex = 0;
       for (const type of resourceTypes) {
         const resources = result.filter(
-          (item) => enabledResources[item.key] && enabledResources[item.key].enabled === true && item.group === type
+          (item) => enabledResources[item.key] && enabledResources[item.key].enabled && item.group === type
         );
 
         groups.push({
@@ -398,25 +403,29 @@ export const AzureProvisionDialog: React.FC = () => {
   const PageFooter = useMemo(() => {
     if (page === PageTypes.ConfigProvision) {
       return (
-        <DialogFooter>
-          <DefaultButton text={'Back'} onClick={onBack} />
-          {choice.key === 'create' ? (
-            <PrimaryButton
-              disabled={isDisAble}
-              text="Next"
-              onClick={() => {
-                onNext(currentHostName);
-              }}
-            />
-          ) : (
-            <PrimaryButton disabled={isEditorError} text="Save" onClick={onSave} />
-          )}
-        </DialogFooter>
+        <div style={{display: 'flex', flexFlow: 'row nowrap', justifyContent: 'space-between'}}>
+          {currentUser? <Persona size={PersonaSize.size32} text={currentUser.name} />: null}
+          <div>
+            <DefaultButton text={'Back'} onClick={onBack} />
+            {choice.key === 'create' ? (
+              <PrimaryButton
+                disabled={isDisAble}
+                text="Next"
+                onClick={() => {
+                  onNext(currentHostName);
+                }}
+              />
+            ) : (
+              <PrimaryButton disabled={isEditorError} text="Save" onClick={onSave} />
+            )}
+          </div>
+        </div>
       );
     } else {
       return (
-        <Fragment>
-          <DialogFooter>
+        <div style={{display: 'flex', flexFlow: 'row nowrap', justifyContent: 'space-between'}}>
+          {currentUser? <Persona size={PersonaSize.size32} text={currentUser.name} />: null}
+          <div>
             <DefaultButton
               text={'Back'}
               onClick={() => {
@@ -437,8 +446,8 @@ export const AzureProvisionDialog: React.FC = () => {
                 });
               }}
             />
-          </DialogFooter>
-        </Fragment>
+          </div>
+        </div>
       );
     }
   }, [
@@ -452,6 +461,7 @@ export const AzureProvisionDialog: React.FC = () => {
     currentLocation,
     publishType,
     extensionResourceOptions,
+    currentUser
   ]);
 
   return (
@@ -465,7 +475,8 @@ export const AzureProvisionDialog: React.FC = () => {
           width: '100%',
           bottom: '0',
           textAlign: 'right',
-          height:'50px'
+          height:'fit-content',
+          padding: '16px 0px 0px',
         }}
       >
         {PageFooter}

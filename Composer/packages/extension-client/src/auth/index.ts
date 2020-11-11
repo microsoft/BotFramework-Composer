@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { ComposerGlobalName } from '../common/constants';
+
 import { OAuthOptions } from './types';
 
 /** Logs the user into Azure for a given client ID with the provided scopes. Returns an ID token. */
@@ -22,4 +23,10 @@ export function getAccessToken(options: OAuthOptions): Promise<string> {
  */
 export function getAccessTokensFromStorage(): { access_token: string; graph_token: string } {
   return window[ComposerGlobalName].getAccessTokensFromStorage();
+}
+/**
+ * Return the current user info, like name, email and so on.
+ */
+export function getCurrentUser() {
+  return window[ComposerGlobalName].getCurrentUser();
 }
