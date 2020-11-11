@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { act, fireEvent } from '@bfc/test-utils';
+import { act, fireEvent } from '@botframework-composer/test-utils';
 
 import { ExternalService } from '../../../src/pages/botProject/ExternalService';
 import { renderWithRecoilAndCustomDispatchers } from '../../testUtils';
@@ -12,7 +12,7 @@ import {
   currentProjectIdState,
   projectMetaDataState,
   botProjectIdsState,
-  dialogsState,
+  dialogState,
   luFilesState,
 } from '../../../src/recoilModel';
 
@@ -57,15 +57,18 @@ const state = {
 describe('External Service', () => {
   it('should submit settings', () => {
     const setSettingsMock = jest.fn();
+    const setQnASettingsMock = jest.fn();
     const initRecoilState = ({ set }) => {
       set(currentProjectIdState, state.projectId);
+      set(dialogState({ projectId: state.projectId, dialogId: state.dialogs[0].id }), state.dialogs[0]);
+      set(dialogState({ projectId: state.projectId, dialogId: state.dialogs[1].id }), state.dialogs[1]);
       set(botProjectIdsState, state.botProjectIdsState);
-      set(dialogsState, state.dialogs);
-      set(luFilesState, state.luFiles);
+      set(luFilesState(state.projectId), state.luFiles);
       set(projectMetaDataState(state.projectId), state.projectMetaDataState);
       set(settingsState(state.projectId), state.settings);
       set(dispatcherState, {
         setSettings: setSettingsMock,
+        setQnASettings: setQnASettingsMock,
       });
     };
     const { getByTestId } = renderWithRecoilAndCustomDispatchers(
@@ -100,10 +103,9 @@ describe('External Service', () => {
         target: { value: 'myQnASubscriptionKey' },
       });
     });
-    expect(setSettingsMock).toBeCalledWith('test', {
-      qna: {
-        subscriptionKey: 'myQnASubscriptionKey',
-      },
+    act(() => {
+      fireEvent.blur(textField3);
     });
+    expect(setQnASettingsMock).toBeCalledWith('test', 'myQnASubscriptionKey');
   });
 });
