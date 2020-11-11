@@ -1,14 +1,62 @@
 {
   "Microsoft.AdaptiveDialog": {
     "form": {
-      "description": "This configures a data driven dialog via a collection of events and actions.",
+      "description": "Configura um diálogo condicionado por dados através de uma recolha de eventos e ações.",
       "label": "Diálogo adaptativo",
       "properties": {
         "recognizer": {
-          "description": "To understand what the user says, your dialog needs a \"Recognizer\"; that includes example words and sentences that users may use.",
+          "description": "Para compreender o que o utilizador diz, o diálogo precisa de um \"Reconhecedor\". Os reconhecedores incluem palavras e frases exemplo que os utilizadores podem utilizar.",
           "label": "Language Understanding"
         }
       }
+    }
+  },
+  "Microsoft.Ask": {
+    "form": {
+      "label": "Enviar uma resposta para fazer uma pergunta",
+      "subtitle": "Atividade de Pergunta"
+    }
+  },
+  "Microsoft.AttachmentInput": {
+    "form": {
+      "label": "Pedir um ficheiro ou um anexo",
+      "subtitle": "Entrada de Anexo"
+    }
+  },
+  "Microsoft.ChoiceInput": {
+    "form": {
+      "label": "Pedir com multiescolha",
+      "subtitle": "Introdução da Escolha"
+    }
+  },
+  "Microsoft.ConfirmInput": {
+    "form": {
+      "label": "Pedir confirmação",
+      "subtitle": "Confirmar Entrada"
+    }
+  },
+  "Microsoft.DateTimeInput": {
+    "form": {
+      "label": "Pedir uma data ou uma hora",
+      "subtitle": "Entrada de Data e Hora"
+    }
+  },
+  "Microsoft.NumberInput": {
+    "form": {
+      "label": "Pedir um número",
+      "subtitle": "Entrada de Número"
+    }
+  },
+  "Microsoft.OAuthInput": {
+    "form": {
+      "label": "Início de sessão de OAuth",
+      "subtitle": "Entrada OAuth"
+    }
+  },
+  "Microsoft.TextInput": {
+    "form": {
+      "label": "Pedir texto",
+      "subtitle": "Introdução de Texto"
     }
   },
   "Microsoft.BeginDialog": {
@@ -20,7 +68,7 @@
   "Microsoft.BeginSkill": {
     "form": {
       "label": "Ligar a uma competência",
-      "subtitle": "Skill Dialog"
+      "subtitle": "Diálogo de Competências"
     }
   },
   "Microsoft.BreakLoop": {
@@ -102,7 +150,7 @@
   },
   "Microsoft.HttpRequest": {
     "form": {
-      "label": "Send an HTTP request",
+      "label": "Enviar um pedido HTTP",
       "subtitle": "Pedido HTTP"
     }
   },
@@ -115,109 +163,61 @@
   "Microsoft.LogAction": {
     "form": {
       "label": "Iniciar sessão na consola",
-      "subtitle": "Log Action"
+      "subtitle": "Registar Ação"
     }
   },
   "Microsoft.RepeatDialog": {
     "form": {
-      "label": "Repeat this dialog",
-      "subtitle": "Repeat Dialog"
+      "label": "Repetir este diálogo",
+      "subtitle": "Repetir Diálogo"
     }
   },
   "Microsoft.ReplaceDialog": {
     "form": {
-      "label": "Replace this dialog",
-      "subtitle": "Replace Dialog"
+      "label": "Substituir este diálogo",
+      "subtitle": "Substituir Diálogo"
     }
   },
   "Microsoft.SendActivity": {
     "form": {
-      "label": "Send a response",
-      "subtitle": "Send Activity"
+      "label": "Enviar uma resposta",
+      "subtitle": "Enviar Atividade"
     }
   },
   "Microsoft.SetProperties": {
     "form": {
-      "label": "Set properties",
-      "subtitle": "Set Properties"
+      "label": "Definir propriedades",
+      "subtitle": "Definir Propriedades"
     }
   },
   "Microsoft.SetProperty": {
     "form": {
-      "label": "Set a property",
+      "label": "Definir uma propriedade",
       "subtitle": "Definir Propriedade"
     }
   },
   "Microsoft.SignOutUser": {
     "form": {
-      "label": "Sign out user",
-      "subtitle": "Signout User"
+      "label": "Terminar sessão do utilizador",
+      "subtitle": "Terminar Sessão do Utilizador"
     }
   },
   "Microsoft.SwitchCondition": {
     "form": {
       "label": "Ramo: Parâmetro (várias opções)",
-      "subtitle": "Switch Condition"
+      "subtitle": "Mudar Condição"
     }
   },
   "Microsoft.ThrowException": {
     "form": {
-      "label": "Throw an exception",
-      "subtitle": "Throw an exception"
+      "label": "Gerar uma exceção",
+      "subtitle": "Gerar uma exceção"
     }
   },
   "Microsoft.TraceActivity": {
     "form": {
       "label": "Emite um evento de rastreio",
-      "subtitle": "Trace Activity"
-    }
-  },
-  "Microsoft.Ask": {
-    "form": {
-      "label": "Send a response to ask a question",
-      "subtitle": "Ask Activity"
-    }
-  },
-  "Microsoft.AttachmentInput": {
-    "form": {
-      "label": "Pedir um ficheiro ou um anexo",
-      "subtitle": "Entrada de Anexo"
-    }
-  },
-  "Microsoft.ChoiceInput": {
-    "form": {
-      "label": "Pedir com multiescolha",
-      "subtitle": "Introdução da Escolha"
-    }
-  },
-  "Microsoft.ConfirmInput": {
-    "form": {
-      "label": "Pedir confirmação",
-      "subtitle": "Confirmar Entrada"
-    }
-  },
-  "Microsoft.DateTimeInput": {
-    "form": {
-      "label": "Pedir uma data ou uma hora",
-      "subtitle": "Entrada de Data e Hora"
-    }
-  },
-  "Microsoft.NumberInput": {
-    "form": {
-      "label": "Pedir um número",
-      "subtitle": "Number Input"
-    }
-  },
-  "Microsoft.OAuthInput": {
-    "form": {
-      "label": "Início de sessão de OAuth",
-      "subtitle": "OAuth Input"
-    }
-  },
-  "Microsoft.TextInput": {
-    "form": {
-      "label": "Pedir texto",
-      "subtitle": "Entrada de Texto"
+      "subtitle": "Atividade de Rastreio"
     }
   },
   "Microsoft.OnActivity": {
@@ -228,8 +228,8 @@
   },
   "Microsoft.OnAssignEntity": {
     "form": {
-      "label": "Handle a condition when an entity is assigned",
-      "subtitle": "EntityAssigned activity"
+      "label": "Processar uma condição quando uma entidade é atribuída",
+      "subtitle": "Atividade de EntityAssigned"
     }
   },
   "Microsoft.OnBeginDialog": {
@@ -246,13 +246,13 @@
   },
   "Microsoft.OnCondition": {
     "form": {
-      "label": "Handle a condition",
+      "label": "Processar uma condição",
       "subtitle": "Condição"
     }
   },
   "Microsoft.OnConversationUpdateActivity": {
     "form": {
-      "description": "Handle the events fired when a user begins a new conversation with the bot.",
+      "description": "Processe os eventos acionados quando um utilizador inicia uma nova conversa com o bot.",
       "label": "Saudação",
       "subtitle": "Atividade ConversationUpdate"
     }
@@ -260,13 +260,13 @@
   "Microsoft.OnDialogEvent": {
     "form": {
       "label": "Eventos de diálogo",
-      "subtitle": "Dialog event"
+      "subtitle": "Evento de diálogo"
     }
   },
   "Microsoft.OnEndOfActions": {
     "form": {
-      "label": "Handle a condition when actions have ended",
-      "subtitle": "EndOfActions activity"
+      "label": "Processar uma condição quando as ações terminarem",
+      "subtitle": "Atividade de EndOfActions"
     }
   },
   "Microsoft.OnEndOfConversationActivity": {
@@ -295,8 +295,8 @@
   },
   "Microsoft.OnInstallationUpdateActivity": {
     "form": {
-      "label": "Installation updated",
-      "subtitle": "Installation updated activity"
+      "label": "Instalação atualizada",
+      "subtitle": "Atividade de instalação atualizada"
     }
   },
   "Microsoft.OnIntent": {
@@ -337,20 +337,20 @@
   },
   "Microsoft.OnRepromptDialog": {
     "form": {
-      "label": "Re-prompt for input",
-      "subtitle": "Reprompt dialog event"
+      "label": "Voltar a pedir para a entrada",
+      "subtitle": "Voltar a pedir evento de diálogo"
     }
   },
   "Microsoft.OnTypingActivity": {
     "form": {
-      "label": "User is typing",
-      "subtitle": "Typing activity"
+      "label": "O utilizador está a escrever",
+      "subtitle": "Atividade de escrita"
     }
   },
   "Microsoft.OnUnknownIntent": {
     "form": {
-      "label": "Unknown intent",
-      "subtitle": "Unknown intent recognized"
+      "label": "Intenção desconhecida",
+      "subtitle": "Intenção desconhecida reconhecida"
     }
   }
 }

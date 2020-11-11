@@ -3,7 +3,7 @@
     "message": "Info"
   },
   "actual_zoom_211ec99": {
-    "message": "Actual Zoom"
+    "message": "Tatsächlicher Zoom"
   },
   "bring_all_to_front_207a7ad1": {
     "message": "Alle in den Vordergrund"
@@ -18,7 +18,7 @@
     "message": "Fenster schließen"
   },
   "composer_on_github_1e3782ef": {
-    "message": "Composer on GitHub"
+    "message": "Composer auf GitHub"
   },
   "copy_9748f9f": {
     "message": "Kopieren"
@@ -45,7 +45,7 @@
     "message": "Hilfe"
   },
   "hide_bot_framework_composer_eeba3ea8": {
-    "message": "Hide Bot Framework Composer"
+    "message": "Bot Framework Composer ausblenden"
   },
   "hide_others_4204b552": {
     "message": "Andere ausblenden"
@@ -54,7 +54,7 @@
     "message": "Initialisierung..."
   },
   "learn_more_about_bot_framework_2daca065": {
-    "message": "Learn More About Bot Framework"
+    "message": "Weitere Informationen zu Bot Framework"
   },
   "minimize_4f999e30": {
     "message": "Minimieren"
@@ -66,7 +66,7 @@
     "message": "Datenschutzerklärung"
   },
   "quit_bot_framework_composer_455ceb74": {
-    "message": "Quit Bot Framework Composer"
+    "message": "Bot Framework Composer beenden"
   },
   "redo_363c58b7": {
     "message": "Wiederholen"
@@ -87,13 +87,13 @@
     "message": "Speech"
   },
   "start_speaking_f8d406ff": {
-    "message": "Spracheingabe/-ausgabe starten"
+    "message": "Spracheingabe starten"
   },
   "starting_server_721c37fd": {
-    "message": "Starting server..."
+    "message": "Server wird gestartet..."
   },
   "stop_speaking_7b4b9834": {
-    "message": "Spracheingabe/-ausgabe beenden"
+    "message": "Spracheingabe beenden"
   },
   "toggle_developer_tools_d2ef8ea7": {
     "message": "Entwicklertools umschalten"
