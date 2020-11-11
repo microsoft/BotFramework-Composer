@@ -32,6 +32,7 @@ import { logMessage, setError } from './../dispatchers/shared';
 import {
   checkIfBotExistsInBotProjectFile,
   createNewBotFromTemplate,
+  fetchProjectDataById,
   flushExistingTasks,
   getSkillNameIdentifier,
   handleProjectFailure,
@@ -369,6 +370,13 @@ export const projectDispatcher = () => {
     await initBotState(callbackHelpers, projectData, botFiles);
   };
 
+  /** Resets the file persistence of a project, and then reloads the bot state. */
+  const reloadExistingProject = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
+    callbackHelpers.reset(filePersistenceState(projectId));
+    const { projectData, botFiles } = await fetchProjectDataById(projectId);
+    await initBotState(callbackHelpers, projectData, botFiles);
+  });
+
   return {
     openProject,
     createNewBot,
@@ -386,5 +394,6 @@ export const projectDispatcher = () => {
     addRemoteSkillToBotProject,
     replaceSkillInBotProject,
     reloadProject,
+    reloadExistingProject,
   };
 };

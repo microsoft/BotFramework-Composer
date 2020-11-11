@@ -269,7 +269,7 @@ export const pull = async (
       // where we will store the bot .zip
       const zipDir = join(process.env.COMPOSER_TEMP_DIR as string, 'pva-publish');
       ensureDirSync(zipDir);
-      const zipPath = join(zipDir, 'bot-assets.zip');
+      const zipPath = join(zipDir, `bot-assets-${Date.now()}.zip`);
       const writeStream = createWriteStream(zipPath);
       await new Promise((resolve, reject) => {
         writeStream.once('finish', resolve);
