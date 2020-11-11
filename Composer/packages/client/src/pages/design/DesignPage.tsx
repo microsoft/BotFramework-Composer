@@ -49,6 +49,7 @@ import {
   projectDialogsMapSelector,
   skillNameIdentifierByProjectIdSelector,
   SkillInfo,
+  projectMetaDataState,
 } from '../../recoilModel';
 import { CreateQnAModal } from '../../components/QnA';
 import { triggerNotSupported } from '../../utils/dialogValidator';
@@ -148,6 +149,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
   const { undo, redo, commitChanges, clearUndo } = undoFunction;
   const [canUndo, canRedo] = useRecoilValue(undoStatusSelectorFamily(skillId ?? projectId));
+  const { isRemote: isRemoteSkill } = useRecoilValue(projectMetaDataState(skillId ?? projectId));
 
   const {
     removeDialog,
@@ -213,7 +215,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       setSkillManifestFile(skills[skillNameIdentifier]);
     }
   }, [skills, skillId]);
-  const isRemoteSkill = !dialogId && !!skillManifestFile?.remote;
 
   useEffect(() => {
     const currentDialog = dialogs.find(({ id }) => id === dialogId) as DialogInfo | undefined;
@@ -729,10 +730,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     if (!skillNameIdentifier) return;
     displayManifestModal(skillNameIdentifier, projectId);
   };
-
-  if (!dialogId && !skillId) {
-    return <LoadingSpinner />;
-  }
 
   const selectedTrigger = currentDialog?.triggers.find((t) => t.id === selected);
   const withWarning = triggerNotSupported(currentDialog, selectedTrigger);

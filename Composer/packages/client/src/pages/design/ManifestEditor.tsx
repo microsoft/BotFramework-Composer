@@ -10,7 +10,6 @@ import { LoadingTimeout } from '@bfc/adaptive-form/lib/components/LoadingTimeout
 import { FieldLabel } from '@bfc/adaptive-form/lib/components/FieldLabel';
 import ErrorInfo from '@bfc/adaptive-form/lib/components/ErrorInfo';
 import { FontSizes, NeutralColors } from '@uifabric/fluent-theme';
-import { Link } from 'office-ui-fabric-react/lib/Link';
 import { FontWeights } from '@uifabric/styling';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import get from 'lodash/get';
@@ -18,6 +17,7 @@ import get from 'lodash/get';
 import { SkillInfo } from '../../recoilModel';
 
 import { formEditor } from './styles';
+import { PropertyEditorHeader } from './PropertyEditorHeader';
 
 const styles = {
   errorLoading: css`
@@ -102,24 +102,11 @@ export const ManifestEditor: React.FC<ManifestEditorProps> = (props) => {
   return (
     <div aria-label={formatMessage('manifest editor')} css={formEditor} data-testid="ManifestEditor" role="region">
       <ErrorBoundary FallbackComponent={ErrorInfo}>
-        <div css={styles.banner}>
-          <p css={styles.title}>
-            {formData.name} {'(Remote)'}
-          </p>
-          <p css={styles.subtitle}> {formatMessage('Remote skill')} </p>
-          <p css={styles.description}>{manifest.description}</p>
-          <p css={styles.helplink}>
-            <Link
-              aria-label={formatMessage('Learn more about skill manifests')}
-              href={helpLink}
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              {formatMessage('Learn more')}
-            </Link>
-          </p>
-        </div>
-
+        <PropertyEditorHeader
+          botName={formData.name}
+          helpLink={helpLink}
+          projectData={{ isRootBot: false, isRemote: true }}
+        />
         <div css={styles.body}>
           <section css={styles.section}>
             <FieldLabel

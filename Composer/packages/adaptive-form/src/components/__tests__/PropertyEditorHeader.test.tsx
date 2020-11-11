@@ -36,7 +36,7 @@ describe('<PropertyEditorHeader />', () => {
     expect(findByText('Local Skill'));
   });
 
-  it('renders property editor header for a local skill', () => {
+  it('renders property editor header for a remote skill', () => {
     const metadata = {
       isRootBot: false,
       isRemote: true,

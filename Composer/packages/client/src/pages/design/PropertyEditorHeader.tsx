@@ -15,7 +15,7 @@ const styles = {
     padding: 18px;
   `,
 
-  banner: css`
+  propertyEditorHeaderStyle: css`
     border-top: 1px solid ${NeutralColors.gray10};
     padding: 0 18px;
     margin-bottom: 0px;
@@ -65,7 +65,7 @@ const PropertyEditorHeader: React.FC<PropertyEditorHeaderProps> = (props) => {
 
   const botTypeText = useMemo(() => {
     if (isRootBot) {
-      return formatMessage('Root bot');
+      return formatMessage('Root bot.');
     } else {
       if (isRemote) {
         return formatMessage('Remote Skill.');
@@ -86,7 +86,7 @@ const PropertyEditorHeader: React.FC<PropertyEditorHeaderProps> = (props) => {
   }, [isRemote, isRootBot]);
 
   return (
-    <div css={styles.banner}>
+    <div css={styles.propertyEditorHeaderStyle}>
       <h2 style={{ margin: '7px 0' }}>
         {botName} {isRemote ? '(Remote)' : ''}
         <span css={styles.subtitle}>{botTypeText}</span>
