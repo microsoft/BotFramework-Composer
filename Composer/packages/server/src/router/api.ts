@@ -16,6 +16,7 @@ import { FeatureFlagController } from '../controllers/featureFlags';
 import { OrchestratorController } from '../controllers/orchestrator';
 import { AuthController } from '../controllers/auth';
 import { csrfProtection } from '../middleware/csrfProtection';
+import { ImportController } from '../controllers/import';
 
 import { UtilitiesController } from './../controllers/utilities';
 
@@ -37,6 +38,9 @@ router.post('/projects/:projectId/build', ProjectController.build);
 router.post('/projects/:projectId/qnaSettings/set', ProjectController.setQnASettings);
 router.post('/projects/:projectId/project/saveAs', ProjectController.saveProjectAs);
 router.get('/projects/:projectId/export', ProjectController.exportProject);
+router.get('/projects/alias/:alias', ProjectController.getProjectByAlias);
+router.post('/projects/:projectId/backup', ProjectController.backupProject);
+router.post('/projects/:projectId/copyTemplateToExisting', ProjectController.copyTemplateToExistingProject);
 
 // form dialog generation apis
 router.post('/formDialogs/expandJsonSchemaProperty', FormDialogController.expandJsonSchemaProperty);
@@ -96,6 +100,10 @@ router.post('/featureFlags', FeatureFlagController.updateFeatureFlags);
 
 //Orchestrator-specific routes
 router.get('/orchestrator/downloadModel', OrchestratorController.downloadModel);
+
+// importing
+router.post('/import/:source', ImportController.startImport);
+router.post('/import/:source/authenticate', ImportController.authenticate);
 
 const errorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
   Promise.resolve(handler(req, res, next)).catch(next);

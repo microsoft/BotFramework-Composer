@@ -3,7 +3,7 @@
     "message": "Om"
   },
   "actual_zoom_211ec99": {
-    "message": "Actual Zoom"
+    "message": "Faktisk zoom"
   },
   "bring_all_to_front_207a7ad1": {
     "message": "Lägg alla överst"
@@ -18,7 +18,7 @@
     "message": "Stäng fönstret"
   },
   "composer_on_github_1e3782ef": {
-    "message": "Composer on GitHub"
+    "message": "Composer på GitHub"
   },
   "copy_9748f9f": {
     "message": "Kopiera"
@@ -45,7 +45,7 @@
     "message": "Hjälp"
   },
   "hide_bot_framework_composer_eeba3ea8": {
-    "message": "Hide Bot Framework Composer"
+    "message": "Dölj Bot Framework Composer"
   },
   "hide_others_4204b552": {
     "message": "Dölj övriga"
@@ -54,7 +54,7 @@
     "message": "Initierar..."
   },
   "learn_more_about_bot_framework_2daca065": {
-    "message": "Learn More About Bot Framework"
+    "message": "Läs mer om Bot Framework"
   },
   "minimize_4f999e30": {
     "message": "Minimera"
@@ -66,16 +66,16 @@
     "message": "Sekretesspolicy"
   },
   "quit_bot_framework_composer_455ceb74": {
-    "message": "Quit Bot Framework Composer"
+    "message": "Avsluta Bot Framework Composer"
   },
   "redo_363c58b7": {
     "message": "Göra om"
   },
   "report_an_issue_f33f3ba5": {
-    "message": "Rapportera ett problem"
+    "message": "Rapportera ett ärende"
   },
   "select_all_cf7e0248": {
-    "message": "Markera alla"
+    "message": "Välj alla"
   },
   "services_ccd7bca0": {
     "message": "Tjänster"
@@ -87,19 +87,19 @@
     "message": "Tal"
   },
   "start_speaking_f8d406ff": {
-    "message": "Start Speaking"
+    "message": "Börja tala"
   },
   "starting_server_721c37fd": {
-    "message": "Starting server..."
+    "message": "Startar servern..."
   },
   "stop_speaking_7b4b9834": {
-    "message": "Stop Speaking"
+    "message": "Sluta tala"
   },
   "toggle_developer_tools_d2ef8ea7": {
     "message": "Växla utvecklarverktyg"
   },
   "toggle_full_screen_272a0c5": {
-    "message": "Toggle Full Screen"
+    "message": "Växla till helskärm"
   },
   "undo_a7be8fef": {
     "message": "Ångra"
@@ -108,7 +108,7 @@
     "message": "Vy"
   },
   "view_license_720d341a": {
-    "message": "View License"
+    "message": "Visa licens"
   },
   "window_171922c7": {
     "message": "Fönster"
