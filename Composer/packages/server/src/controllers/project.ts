@@ -2,13 +2,12 @@
 // Licensed under the MIT License.
 
 import * as fs from 'fs';
-import { existsSync } from 'fs';
 
 import { Request, Response } from 'express';
 import { Archiver } from 'archiver';
 import { ExtensionContext } from '@bfc/extension';
 import { SchemaMerger } from '@microsoft/bf-dialog/lib/library/schemaMerger';
-import { ensureDir, remove } from 'fs-extra';
+import { remove } from 'fs-extra';
 
 import log from '../logger';
 import { BotProjectService } from '../services/project';
