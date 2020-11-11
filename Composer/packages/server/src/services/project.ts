@@ -374,7 +374,7 @@ export class BotProjectService {
     try {
       // ensure there isn't an older backup directory hanging around
       const projectDirName = Path.basename(project.dir);
-      const backupPath = Path.join(process.env.COMPOSER_BACKUP_DIR as string, projectDirName);
+      const backupPath = Path.join(process.env.COMPOSER_BACKUP_DIR as string, `${projectDirName}.${Date.now()}`);
       await ensureDir(process.env.COMPOSER_BACKUP_DIR as string);
       if (existsSync(backupPath)) {
         log('%s already exists. Deleting before backing up.', backupPath);

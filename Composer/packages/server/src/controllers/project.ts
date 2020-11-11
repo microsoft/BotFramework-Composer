@@ -497,24 +497,7 @@ async function backupProject(req: Request, res: Response) {
   const project = await BotProjectService.getProjectById(projectId, user);
   if (project !== undefined) {
     try {
-      // ensure there isn't an older backup directory hanging around
-      const projectDirName = Path.basename(project.dir);
-      const backupPath = Path.join(process.env.COMPOSER_BACKUP_DIR as string, projectDirName);
-      await ensureDir(process.env.COMPOSER_BACKUP_DIR as string);
-      if (existsSync(backupPath)) {
-        log('%s already exists. Deleting before backing up.', backupPath);
-        await remove(backupPath);
-        log('Existing backup folder deleted successfully.');
-      }
-
-      // clone the bot project to the backup directory
-      const location: LocationRef = {
-        storageId: 'default',
-        path: backupPath,
-      };
-      log('Backing up project at %s to %s', project.dir, backupPath);
-      await project.cloneFiles(location);
-      log('Project backed up successfully.');
+      const backupPath = await BotProjectService.backupProject(project);
       res.status(200).json({ path: backupPath });
     } catch (e) {
       log('Failed to backup project %s: %O', projectId, e);

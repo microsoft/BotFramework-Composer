@@ -356,8 +356,6 @@ export const PublishController = {
             return res.status(500).json({ message: 'Could not get .zip from publishing target.' });
           }
 
-          // TODO: stop current bot project from running?
-
           // backup the current bot project contents
           const backupLocation = await BotProjectService.backupProject(currentProject);
 
@@ -368,7 +366,7 @@ export const PublishController = {
           log('Extracting pulled assets into temp template folder %s ', templateDir);
           await extractZip(results.zipPath, { dir: templateDir });
 
-          // TODO: abstract away the template copying logic so that the code can be shared between project and publisher controllers
+          // TODO (toanzian): abstract away the template copying logic so that the code can be shared between project and publisher controllers
           // (see copyTemplateToExistingProject())
           log('Cleaning up bot content at %s before copying pulled content over.', currentProject.dir);
           await currentProject.fileStorage.rmrfDir(currentProject.dir);
