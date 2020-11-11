@@ -131,7 +131,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const [showAddSkillDialogModal, setAddSkillDialogModalVisibility] = useState(false);
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
   const { undo, redo, commitChanges, clearUndo } = undoFunction;
-  const [canUndo, canRedo] = useRecoilValue(undoStatusSelectorFamily(projectId));
+  const [canUndo, canRedo] = useRecoilValue(undoStatusSelectorFamily(skillId ?? projectId));
 
   const {
     removeDialog,
