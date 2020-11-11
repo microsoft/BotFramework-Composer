@@ -25,7 +25,6 @@ import {
   projectMetaDataState,
   dialogIdsState,
   dialogState,
-  botDiagnosticsState,
 } from '../atoms';
 import { dialogsSelectorFamily, buildEssentialsSelector } from '../selectors';
 
@@ -85,7 +84,10 @@ export const botProjectSpaceSelector = selector({
       const buildEssentials = get(buildEssentialsSelector(projectId));
       const name = get(botDisplayNameState(projectId));
       const botNameId = get(botNameIdentifierState(projectId));
-      const diagnostics = get(botDiagnosticsState(projectId));
+      const setting = get(settingsState(projectId));
+      const skillManifests = get(skillManifestsState(projectId));
+      const localeSetting = settingStorage.get(projectId);
+      const diagnostics = BotIndexer.validate({ dialogs, setting, skillManifests }, localeSetting);
 
       return {
         dialogs,

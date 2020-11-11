@@ -31,7 +31,9 @@ const getDesignerIdFromDialogPath = (dialog, path) => {
   const value = get(dialog, path, '');
   const startIndex = value.lastIndexOf('_');
   const endIndex = value.indexOf('()');
-  return value.substring(startIndex + 1, endIndex);
+  const designerId = value.substring(startIndex + 1, endIndex);
+  if (!designerId) throw new Error(`missing designerId in path: ${path}`);
+  return designerId;
 };
 
 export const triggerDispatcher = () => {
