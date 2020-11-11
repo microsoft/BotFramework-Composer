@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import rimraf from 'rimraf';
 import { ExtensionContext } from '@bfc/extension';
 import * as msRest from '@azure/ms-rest-js';
