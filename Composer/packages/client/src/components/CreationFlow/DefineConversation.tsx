@@ -8,7 +8,7 @@ import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
-import React, { Fragment, useEffect, useCallback } from 'react';
+import React, { Fragment, useEffect, useCallback, useMemo } from 'react';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
@@ -212,6 +212,18 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
     updateField('location', location);
   }, [focusedStorageFolder]);
 
+  const locationSelectContent = useMemo(() => {
+    return (
+      <LocationSelectContent
+        createFolder={createFolder}
+        focusedStorageFolder={focusedStorageFolder}
+        operationMode={{ read: true, write: true }}
+        updateFolder={updateFolder}
+        onCurrentPathUpdate={onCurrentPathUpdateWrap}
+      />
+    );
+  }, [focusedStorageFolder]);
+
   return (
     <Fragment>
       <DialogWrapper
@@ -246,14 +258,7 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
               />
             </StackItem>
           </Stack>
-          <LocationSelectContent
-            createFolder={createFolder}
-            focusedStorageFolder={focusedStorageFolder}
-            operationMode={{ read: true, write: true }}
-            updateFolder={updateFolder}
-            onCurrentPathUpdate={onCurrentPathUpdateWrap}
-          />
-
+          {locationSelectContent}
           <DialogFooter>
             <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
             <PrimaryButton

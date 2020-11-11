@@ -4348,7 +4348,7 @@
       }
     },
     "Microsoft.UpdateActivity": {
-      "title": "Wyślij działanie",
+      "title": "Zmodernizować działanie",
       "description": "Reaguj działaniem.",
       "patternProperties": {
         "^\\$": {

@@ -41,6 +41,9 @@
   "a_valid_url_should_start_with_http_or_https_327b1a30": {
     "message": "A valid URL should start with http:// or https://"
   },
+  "a_valid_url_should_start_with_http_or_https_d24b3591": {
+    "message": "A valid url should start with http:// or https://"
+  },
   "about_70c18bba": {
     "message": "About"
   },
@@ -128,6 +131,9 @@
   "add_a_welcome_message_9e1480b2": {
     "message": "Add a welcome message"
   },
+  "add_additional_url_bdfac25d": {
+    "message": "Add additional URL"
+  },
   "add_alternative_phrasing_17e0304c": {
     "message": "+ Add alternative phrasing"
   },
@@ -161,13 +167,11 @@
   "add_new_propertyname_bedf7dc6": {
     "message": "Add new { propertyName }"
   },
-<<<<<<< HEAD
   "add_new_publish_profile_93345a07": {
     "message": "Add new publish profile"
-=======
+  },
   "add_new_question_85612b7f": {
     "message": "Add new question"
->>>>>>> settingsPage
   },
   "add_new_trigger_on_displayname_2aaf6e4c": {
     "message": "Add new trigger on { displayName }"
@@ -235,15 +239,12 @@
   "any_string_f22dc2e1": {
     "message": "any string"
   },
-<<<<<<< HEAD
   "app_id_password_424f613a": {
     "message": "App Id / Password"
   },
   "append_choices_35c45a2d": {
     "message": "Append choices"
   },
-=======
->>>>>>> settingsPage
   "application_language_87691b6": {
     "message": "Application Language"
   },
@@ -385,8 +386,8 @@
   "boolean_value_98d39ea1": {
     "message": "Boolean value."
   },
-  "bot_416bf08d": {
-    "message": "bot"
+  "bot_7926b66d": {
+    "message": "Bot"
   },
   "bot_asks_5e9f0202": {
     "message": "Bot Asks"
@@ -421,15 +422,6 @@
   "bot_language_active_7cf9dc78": {
     "message": "Bot language (active)"
   },
-<<<<<<< HEAD
-  "bot_language_ffb95294": {
-    "message": "Bot Language"
-  },
-  "bot_management_and_configurations_66bdc20a": {
-    "message": "Bot management and configurations."
-  },
-=======
->>>>>>> settingsPage
   "bot_name_bbd0779d": {
     "message": "Bot Name"
   },
@@ -649,6 +641,9 @@
   "could_not_connect_to_storage_50411de0": {
     "message": "Could not connect to storage."
   },
+  "could_not_init_plugin_1f1c29cd": {
+    "message": "Could not init plugin"
+  },
   "couldn_t_complete_the_update_a337a359": {
     "message": "Couldn''t complete the update:"
   },
@@ -715,16 +710,14 @@
   "create_kb_e78571ba": {
     "message": "Create KB"
   },
-<<<<<<< HEAD
-  "create_knowledge_base_db6d66c4": {
-    "message": "Create knowledge base"
-=======
   "create_kb_from_scratch_eddd037a": {
     "message": "Create KB from scratch"
   },
   "create_kb_from_url_or_file_49ad6671": {
     "message": "Create KB from URL or file"
->>>>>>> settingsPage
+  },
+  "create_knowledge_base_db6d66c4": {
+    "message": "Create knowledge base"
   },
   "create_knowledge_base_from_scratch_afe4d2a2": {
     "message": "Create knowledge base from scratch"
@@ -735,12 +728,9 @@
   "create_new_folder_19d3faa4": {
     "message": "Create new folder"
   },
-<<<<<<< HEAD
-=======
   "create_new_kb_1c4f86a0": {
     "message": "Create new KB"
   },
->>>>>>> settingsPage
   "create_new_knowledge_base_d15d6873": {
     "message": "Create new knowledge base"
   },
@@ -771,12 +761,9 @@
   "custom_recognizer_951bab90": {
     "message": "Custom recognizer"
   },
-<<<<<<< HEAD
   "custom_runtime_426aa34f": {
     "message": "Custom runtime"
   },
-=======
->>>>>>> settingsPage
   "customize_your_assistant_e4038b74": {
     "message": "Customize your assistant"
   },
@@ -846,12 +833,9 @@
   "delete_form_dialog_schema_892df4e8": {
     "message": "Delete form dialog schema"
   },
-<<<<<<< HEAD
-=======
   "delete_knowledge_base_66e3a7f1": {
     "message": "Delete knowledge base"
   },
->>>>>>> settingsPage
   "delete_language_1527609d": {
     "message": "Delete language"
   },
@@ -864,13 +848,8 @@
   "delete_property_b3786fa0": {
     "message": "Delete Property"
   },
-<<<<<<< HEAD
-  "delete_this_bot_fb78e519": {
-    "message": "Delete this bot"
-=======
   "deleting_dialogid_failed_1d7cc05a": {
     "message": "Deleting \"{ dialogId }\" failed."
->>>>>>> settingsPage
   },
   "describe_your_skill_88554792": {
     "message": "Describe your skill"
@@ -997,12 +976,9 @@
   },
   "edit_kb_name_5e2d8c5b": {
     "message": "Edit KB name"
-<<<<<<< HEAD
   },
   "edit_mode_7e07cfdf": {
     "message": "Edit mode"
-=======
->>>>>>> settingsPage
   },
   "edit_property_dd6a1172": {
     "message": "Edit Property"
@@ -1073,16 +1049,8 @@
   "enter_a_url_or_browse_to_upload_a_file_88a783fa": {
     "message": "Enter a URL or browse to upload a file "
   },
-<<<<<<< HEAD
-  "enter_a_url_or_browse_to_upload_a_file_88a783fa": {
-    "message": "Enter a URL or browse to upload a file "
-  },
   "enter_an_answer_84152a83": {
     "message": "Enter an answer"
-=======
-  "enterprise_assistant_434df551": {
-    "message": "Enterprise Assistant"
->>>>>>> settingsPage
   },
   "enterprise_assistant_434df551": {
     "message": "Enterprise Assistant"
@@ -1234,12 +1202,9 @@
   "for_each_page_3b4d4b69": {
     "message": "For Each Page"
   },
-<<<<<<< HEAD
-=======
   "for_properties_of_type_list_or_enum_your_bot_accep_9e7649c6": {
     "message": "For properties of type list (or enum), your bot accepts only the values you define. After your dialog is generated, you can provide synonyms for each value."
   },
->>>>>>> settingsPage
   "form_dialog_schema_actions_c9f1c26": {
     "message": "Form dialog schema actions"
   },
@@ -1270,13 +1235,8 @@
   "generate_dialog_b80a85b2": {
     "message": "Generate dialog"
   },
-<<<<<<< HEAD
-  "generating_form_dialog_using_schemaid_schema_faile_8062f953": {
-    "message": "Generating form dialog using ${ schemaId } schema failed."
-=======
   "generating_form_dialog_using_schemaid_schema_faile_82ebdd72": {
     "message": "Generating form dialog using \"{ schemaId }\" schema failed."
->>>>>>> settingsPage
   },
   "get_a_new_copy_of_the_runtime_code_84970bf": {
     "message": "Get a new copy of the runtime code"
@@ -1358,6 +1318,9 @@
   },
   "if_this_problem_persists_please_file_an_issue_on_6fbc8e2b": {
     "message": "If this problem persists, please file an issue on"
+  },
+  "if_turned_on_then_externally_stored_templates_will_3f487651": {
+    "message": "If turned on then externally stored templates will be selectable in the new bot flow template list"
   },
   "if_you_already_have_a_luis_account_provide_the_inf_bede07a4": {
     "message": "If you already have a LUIS account, provide the information below. If you do not have an account yet, create a (free) account first."
@@ -1496,6 +1459,9 @@
   },
   "learn_more_about_knowledge_base_sources_24369b09": {
     "message": "Learn more about knowledge base sources. "
+  },
+  "learn_more_about_qna_maker_skus_998c567": {
+    "message": "Learn more about QnA Maker SKUs."
   },
   "learn_more_about_title_d1d3edbe": {
     "message": "Learn more about { title }"
@@ -1917,13 +1883,11 @@
   "open_inline_editor_a5aabcfa": {
     "message": "Open inline editor"
   },
-<<<<<<< HEAD
-  "open_skills_page_for_configuration_details_a2a484ea": {
-    "message": "Open Skills page for configuration details"
-=======
   "open_notification_panel_5796edb3": {
     "message": "Open notification panel"
->>>>>>> settingsPage
+  },
+  "open_skills_page_for_configuration_details_a2a484ea": {
+    "message": "Open Skills page for configuration details"
   },
   "optional_221bcc9d": {
     "message": "Optional"
@@ -2014,6 +1978,9 @@
   },
   "please_select_an_activity_type_92f4a8a1": {
     "message": "Please select an activity type"
+  },
+  "populate_your_knowledge_base_bb2d3605": {
+    "message": "Populate your Knowledge Base"
   },
   "press_enter_to_add_this_item_or_tab_to_move_to_the_6beb8a14": {
     "message": "press Enter to add this item or Tab to move to the next interactive element"
@@ -2141,24 +2108,12 @@
   "qna_intent_recognized_49c3d797": {
     "message": "QnA Intent recognized"
   },
-<<<<<<< HEAD
-  "qna_key_is_needed_ab7c2263": {
-    "message": "QnA Key is needed"
-  },
-=======
->>>>>>> settingsPage
   "qna_maker_azure_search_service_88a403db": {
     "message": "QnA Maker Azure Search Service"
   },
   "qna_maker_c313ed6e": {
     "message": "QnA Maker"
   },
-<<<<<<< HEAD
-  "qna_maker_subscription_key_e009c9d9": {
-    "message": "QnA Maker Subscription key"
-  },
-=======
->>>>>>> settingsPage
   "qna_maker_web_app_3da183bd": {
     "message": "QnA Maker Web App"
   },
@@ -2210,6 +2165,9 @@
   "regex_intent_is_already_defined_df095c1f": {
     "message": "RegEx { intent } is already defined"
   },
+  "regular_expression_855557bf": {
+    "message": "Regular Expression"
+  },
   "regular_expression_recognizer_44664557": {
     "message": "Regular expression recognizer"
   },
@@ -2218,6 +2176,9 @@
   },
   "reloading_49d2f661": {
     "message": "Reloading"
+  },
+  "remote_templates_a23c242d": {
+    "message": "Remote templates"
   },
   "remove_f47dc62a": {
     "message": "Remove"
@@ -2462,6 +2423,9 @@
   "skills_49cccd6a": {
     "message": "Skills"
   },
+  "skip_this_step_to_add_questions_and_answers_manual_ed1b9f80": {
+    "message": "Skip this step to add questions and answers manually after creation. The number of sources and file size you can add depends on the QnA service SKU you choose. "
+  },
   "sorry_something_went_wrong_with_connecting_bot_run_7d6785e3": {
     "message": "Sorry, something went wrong with connecting bot runtime"
   },
@@ -2477,11 +2441,11 @@
   "spaces_and_special_characters_are_not_allowed_20d47684": {
     "message": "Spaces and special characters are not allowed."
   },
-  "spaces_and_special_characters_are_not_allowed_use__2a61c454": {
-    "message": "Spaces and special characters are not allowed. Use letters, numbers, -, or _ and don''t use number at the beginning."
-  },
   "spaces_and_special_characters_are_not_allowed_use__48acec3c": {
     "message": "Spaces and special characters are not allowed. Use letters, numbers, -, or _."
+  },
+  "spaces_and_special_characters_are_not_allowed_use__d24a8636": {
+    "message": "Spaces and special characters are not allowed. Use letters, numbers, -, or _, and begin the name with a letter."
   },
   "specify_a_name_and_description_for_your_new_dialog_86eb3130": {
     "message": "Specify a name and description for your new dialog."
@@ -2567,12 +2531,9 @@
   "the_dialog_you_have_tried_to_delete_is_currently_u_a37c7a02": {
     "message": "The dialog you have tried to delete is currently used in the below dialog(s). Removing this dialog will cause your Bot to malfunction without additional action."
   },
-<<<<<<< HEAD
-=======
   "the_file_name_can_not_be_empty_cbdbe9c8": {
     "message": "The file name can not be empty"
   },
->>>>>>> settingsPage
   "the_following_customizations_will_be_applied_to_yo_7d3384cf": {
     "message": "The following customizations will be applied to your bot"
   },
@@ -2615,6 +2576,9 @@
   "there_are_no_notifications_e81eab8d": {
     "message": "There are no notifications."
   },
+  "there_are_no_preview_features_at_this_time_a5c40953": {
+    "message": "There are no preview features at this time."
+  },
   "there_was_an_error_74ed3c58": {
     "message": "There was an error"
   },
@@ -2639,6 +2603,9 @@
   "this_dialog_has_no_trigger_yet_d1f1d173": {
     "message": "This dialog has no trigger yet."
   },
+  "this_is_a_botname_notification_c8a391c7": {
+    "message": "This is a { botName } notification"
+  },
   "this_is_a_required_field_acb9837e": {
     "message": "This is a required field."
   },
@@ -2654,19 +2621,20 @@
   "this_operation_cannot_be_completed_the_skill_is_al_4886d311": {
     "message": "This operation cannot be completed. The skill is already part of the Bot Project"
   },
-<<<<<<< HEAD
   "this_page_contains_detailed_information_about_your_b2b3413b": {
     "message": "This Page contains detailed information about your bot. For security reasons, they are hidden by default. To test your bot or publish to Azure, you may need to provide these settings"
   },
   "this_trigger_type_is_not_supported_by_the_regex_re_2c3b7c46": {
     "message": "This trigger type is not supported by the RegEx recognizer and will not be fired."
-=======
+  },
   "this_option_allows_your_users_to_give_multiple_val_d2dd0d58": {
     "message": "This option allows your users to give multiple values for this property."
->>>>>>> settingsPage
   },
   "this_trigger_type_is_not_supported_by_the_regex_re_dc3eefa2": {
     "message": "This trigger type is not supported by the RegEx recognizer. To ensure this trigger is fired, change the recognizer type."
+  },
+  "this_url_is_duplicated_a0768f44": {
+    "message": "This url is duplicated"
   },
   "this_version_of_the_content_is_out_of_date_and_you_5e878f29": {
     "message": "This version of the content is out of date, and your last change was rejected. The content will be automatically refreshed."
@@ -2725,12 +2693,9 @@
   "toggle_extension_e41de2d2": {
     "message": "Toggle extension"
   },
-<<<<<<< HEAD
-=======
   "toggle_show_all_61f19d77": {
     "message": "Toggle show all"
   },
->>>>>>> settingsPage
   "toolbar_bafd4228": {
     "message": "toolbar"
   },
@@ -2758,12 +2723,9 @@
   "try_again_ad656c3c": {
     "message": "Try again"
   },
-<<<<<<< HEAD
-=======
   "try_new_features_in_preview_and_help_us_make_compo_e8e58983": {
     "message": "Try new features in preview and help us make Composer better. You can turn them on or off at any time."
   },
->>>>>>> settingsPage
   "type_a_name_that_describes_this_content_d1a910b6": {
     "message": "Type a name that describes this content"
   },
@@ -2785,6 +2747,9 @@
   "typing_activity_6b634ae": {
     "message": "Typing activity"
   },
+  "unable_to_determine_recognizer_type_from_data_valu_2960f526": {
+    "message": "Unable to determine recognizer type from data: { value }"
+  },
   "undo_a7be8fef": {
     "message": "Undo"
   },
@@ -2793,6 +2758,9 @@
   },
   "uninstall_8730233": {
     "message": "Uninstall"
+  },
+  "unknown_47a3b725": {
+    "message": "Unknown"
   },
   "unknown_intent_44b962ba": {
     "message": "Unknown intent"
@@ -2835,6 +2803,9 @@
   },
   "updating_scripts_e17a5722": {
     "message": "Updating scripts... "
+  },
+  "url_22a5f3b8": {
+    "message": "URL"
   },
   "url_8c4ff7d2": {
     "message": "Url"

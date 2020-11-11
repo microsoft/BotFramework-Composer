@@ -3,15 +3,12 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
-import { SensitiveProperties, SensitivePropertiesManageGroup, DialogSetting, PublishTarget, Skill } from '@bfc/shared';
-import { skillIndexer } from '@bfc/indexers';
+import { SensitiveProperties, SensitivePropertiesManageGroup, DialogSetting, PublishTarget } from '@bfc/shared';
 import get from 'lodash/get';
 import has from 'lodash/has';
-import isEqual from 'lodash/isEqual';
-import keys from 'lodash/keys';
 
 import settingStorage from '../../utils/dialogSettingStorage';
-import { settingsState, skillsState } from '../atoms/botState';
+import { settingsState } from '../atoms/botState';
 import { rootBotProjectIdSelector } from '../selectors/project';
 
 import httpClient from './../../utils/httpUtil';
@@ -23,32 +20,6 @@ export const setSettingState = async (
   settings: DialogSetting
 ) => {
   const { set, snapshot } = callbackHelpers;
-  const previousSettings = await snapshot.getPromise(settingsState(projectId));
-  if (!isEqual(settings.skill, previousSettings.skill)) {
-    const skills = await snapshot.getPromise(skillsState(projectId));
-    const skillContent = await Promise.all(
-      keys(settings.skill).map(async (id) => {
-        if (settings?.skill?.[id]?.manifestUrl !== previousSettings?.skill?.[id]?.manifestUrl) {
-          try {
-            const { data: content } = await httpClient.get(`/projects/${projectId}/skill/retrieveSkillManifest`, {
-              params: {
-                url: settings?.skill?.[id]?.manifestUrl,
-              },
-            });
-            return { id, content };
-          } catch (error) {
-            return { id };
-          }
-        }
-
-        const { content = {} } = skills.find(({ id: key }) => id === key) || ({} as Skill);
-
-        return { id, content };
-      })
-    );
-
-    set(skillsState(projectId), skillIndexer.index(skillContent, settings.skill));
-  }
 
   // set value in local storage
   for (const property of SensitiveProperties) {
@@ -143,7 +114,6 @@ export const settingsDispatcher = () => {
       }
     }
   );
-
   return {
     setSettings,
     setRuntimeSettings,

@@ -8,9 +8,9 @@ import { IconButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
 import { DirectionalHint } from 'office-ui-fabric-react/lib/Callout';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { useCallback, useState, Fragment, useMemo } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useCallback, useState, Fragment, useMemo, useEffect } from 'react';
 import { NeutralColors, SharedColors, FontSizes } from '@uifabric/fluent-theme';
+import { useRecoilValue } from 'recoil';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
 import {
@@ -20,31 +20,34 @@ import {
   localeState,
   currentProjectIdState,
   settingsState,
+  currentModeState,
 } from '../recoilModel';
 import composerIcon from '../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../constants';
 
 import { languageListTemplates } from './MultiLanguage';
 import { NotificationButton } from './Notifications/NotificationButton';
+import { BotController } from './BotRuntimeController/BotController';
+export const actionButton = css`
+  font-size: ${FontSizes.size18};
+  margin-top: 2px;
+`;
 
 // -------------------- Styles -------------------- //
 
 const headerContainer = css`
+  position: relative;
   background: ${SharedColors.cyanBlue10};
   height: 50px;
   display: flex;
-  justify-content: space-between;
-  padding-right: 20px;
-  margin: auto;
-`;
-
-const logo = css`
-  display: flex;
+  flex-direction: row;
+  align-items: center;
 `;
 
 const title = css`
+  margin-left: 20px;
   font-weight: ${FontWeights.semibold};
-  font-size: 16px;
+  font-size: ${FontSizes.size16};
   color: #fff;
 `;
 
@@ -65,20 +68,31 @@ const divider = css`
   margin: 0px 0px 0px 20px;
 `;
 
-const controls = css`
+const headerTextContainer = css`
   display: flex;
   align-items: center;
+  justify-content: flex-start;
+  width: 50%;
+`;
+
+const rightSection = css`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 50%;
+  margin: 15px 10px;
 `;
 
 const buttonStyles: IButtonStyles = {
   icon: {
-    color: '#FFF',
-    fontSize: '20px',
+    color: '#fff',
+    fontSize: FontSizes.size20,
   },
   root: {
     height: '20px',
     width: '20px',
     marginLeft: '16px',
+    marginTop: '4px',
   },
   rootHovered: {
     backgroundColor: 'transparent',
@@ -87,14 +101,6 @@ const buttonStyles: IButtonStyles = {
     backgroundColor: 'transparent',
   },
 };
-
-const headerTextContainer = css`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
-  margin-left: 20px;
-`;
 
 const teachingBubbleStyle = {
   root: {
@@ -132,6 +138,16 @@ export const Header = () => {
 
   const { languages, defaultLanguage } = settings;
   const { showing, status } = appUpdate;
+  const [showStartBotsWidget, setStartBotsWidgetVisible] = useState(true);
+  const currentMode = useRecoilValue(currentModeState);
+
+  useEffect(() => {
+    if (currentMode !== 'home') {
+      setStartBotsWidgetVisible(true);
+      return;
+    }
+    setStartBotsWidgetVisible(false);
+  }, [currentMode]);
 
   const onUpdateAvailableClick = useCallback(() => {
     setAppUpdateShowing(true);
@@ -161,32 +177,32 @@ export const Header = () => {
 
   return (
     <div css={headerContainer} role="banner">
-      <div css={logo}>
-        <img
-          alt={formatMessage('Composer Logo')}
-          aria-label={formatMessage('Composer Logo')}
-          src={composerIcon}
-          style={{ marginLeft: '9px' }}
-        />
-        <div css={headerTextContainer}>
-          <div css={title}>{formatMessage('Bot Framework Composer')}</div>
-          {projectName && (
-            <Fragment>
-              <div css={divider} />
-              <span
-                css={botName}
-                id="targetButton"
-                role={'button'}
-                tabIndex={0}
-                onClick={() => setTeachingBubbleVisibility(true)}
-              >
-                {`${projectName} (${locale})`}
-              </span>
-            </Fragment>
-          )}
-        </div>
+      <img
+        alt={formatMessage('Composer Logo')}
+        aria-label={formatMessage('Composer Logo')}
+        src={composerIcon}
+        style={{ marginLeft: '9px' }}
+      />
+      <div css={headerTextContainer}>
+        <div css={title}>{formatMessage('Bot Framework Composer')}</div>
+        {projectName && (
+          <Fragment>
+            <div css={divider} />
+            <span
+              css={botName}
+              id="targetButton"
+              role={'button'}
+              tabIndex={0}
+              onClick={() => setTeachingBubbleVisibility(true)}
+            >
+              {`${projectName} (${locale})`}
+            </span>
+          </Fragment>
+        )}
       </div>
-      <div css={controls}>
+
+      <div css={rightSection}>
+        {showStartBotsWidget && <BotController />}
         {showUpdateAvailableIcon && (
           <IconButton
             iconProps={{ iconName: 'History' }}
