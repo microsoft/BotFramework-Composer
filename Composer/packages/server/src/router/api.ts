@@ -15,6 +15,7 @@ import * as ExtensionsController from '../controllers/extensions';
 import { FeatureFlagController } from '../controllers/featureFlags';
 import { AuthController } from '../controllers/auth';
 import { csrfProtection } from '../middleware/csrfProtection';
+import { StatusController } from '../controllers/status';
 
 import { UtilitiesController } from './../controllers/utilities';
 
@@ -89,9 +90,12 @@ router.post('/extensions/proxy/:url', ExtensionsController.performExtensionFetch
 // authentication from client
 router.get('/auth/getAccessToken', csrfProtection, AuthController.getAccessToken);
 
-//FeatureFlags
+// FeatureFlags
 router.get('/featureFlags', FeatureFlagController.getFeatureFlags);
 router.post('/featureFlags', FeatureFlagController.updateFeatureFlags);
+
+// Process status
+router.get('/status/:projectId/:type/:target/:jobId', StatusController.getStatus);
 
 const errorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
   Promise.resolve(handler(req, res, next)).catch(next);
