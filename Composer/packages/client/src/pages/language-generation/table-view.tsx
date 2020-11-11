@@ -398,9 +398,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
   }, []);
 
   const onRenderDetailsFooter = useCallback(() => {
-    // do not allow add template in particular dialog lg, it suppose to be auto generated in form.
-    if (activeDialog) return <div />;
-
     return (
       <div data-testid="tableFooter">
         <ActionButton
