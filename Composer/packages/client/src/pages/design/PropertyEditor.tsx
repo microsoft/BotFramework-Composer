@@ -11,6 +11,10 @@ import isEqual from 'lodash/isEqual';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
 import { MicrosoftAdaptiveDialog } from '@bfc/shared';
+import { PropertyEditorHeader } from '@bfc/adaptive-form/lib/components/PropertyEditorHeader';
+import { useRecoilValue } from 'recoil';
+
+import { botDisplayNameState, projectMetaDataState } from '../../recoilModel';
 
 import { formEditor } from './styles';
 
@@ -26,8 +30,10 @@ function resolveBaseSchema(schema: JSONSchema7, $kind: string): JSONSchema7 | un
 
 const PropertyEditor: React.FC = () => {
   const { shellApi, ...shellData } = useShellApi();
-  const { currentDialog, focusPath, focusedSteps, focusedTab, schemas } = shellData;
+  const { currentDialog, focusPath, focusedSteps, focusedTab, schemas, projectId } = shellData;
   const { onFocusSteps } = shellApi;
+  const botName = useRecoilValue(botDisplayNameState(projectId));
+  const projectData = useRecoilValue(projectMetaDataState(projectId));
 
   const dialogData = useMemo(() => {
     if (currentDialog?.content) {
@@ -120,16 +126,19 @@ const PropertyEditor: React.FC = () => {
   };
 
   return (
-    <div aria-label={formatMessage('form editor')} css={formEditor} data-testid="PropertyEditor" role="region">
-      <AdaptiveForm
-        errors={errors}
-        focusedTab={focusedTab}
-        formData={localData}
-        schema={$schema}
-        uiOptions={$uiOptions}
-        onChange={handleDataChange}
-        onFocusedTab={handleFocusTab}
-      />
+    <div>
+      {!localData || !$schema ? <PropertyEditorHeader botName={botName} projectData={projectData} /> : null}
+      <div aria-label={formatMessage('form editor')} css={formEditor} data-testid="PropertyEditor" role="region">
+        <AdaptiveForm
+          errors={errors}
+          focusedTab={focusedTab}
+          formData={localData}
+          schema={$schema}
+          uiOptions={$uiOptions}
+          onChange={handleDataChange}
+          onFocusedTab={handleFocusTab}
+        />
+      </div>
     </div>
   );
 };

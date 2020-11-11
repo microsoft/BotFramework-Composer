@@ -176,12 +176,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     if (currentDialog) {
       setCurrentDialog(currentDialog);
     }
-    const rootDialog = dialogs.find(({ isRoot }) => isRoot);
-    if (!currentDialog && rootDialog) {
-      const { search } = location || {};
-      navigateTo(`/bot/${projectId}/dialogs/${rootDialog.id}${search}`);
-      return;
-    }
     setWarningIsVisible(true);
   }, [dialogId, dialogs, location]);
 
@@ -650,10 +644,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     }
   };
 
-  if (!dialogId) {
-    return <LoadingSpinner />;
-  }
-
   const selectedTrigger = currentDialog?.triggers.find((t) => t.id === selected);
   const withWarning = triggerNotSupported(currentDialog, selectedTrigger);
 
@@ -757,7 +747,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             onSubmit={() => setExportSkillModalVisible(false)}
           />
         )}
-        {triggerModalVisible && (
+
+        {triggerModalVisible && dialogId && (
           <TriggerCreationModal
             dialogId={dialogId}
             isOpen={triggerModalVisible}
@@ -766,7 +757,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             onSubmit={onTriggerCreationSubmit}
           />
         )}
-        <CreateQnAModal dialogId={dialogId} projectId={projectId} qnaFiles={qnaFiles} onSubmit={handleCreateQnA} />
+
+        {dialogId && (
+          <CreateQnAModal dialogId={dialogId} projectId={projectId} qnaFiles={qnaFiles} onSubmit={handleCreateQnA} />
+        )}
+
         {displaySkillManifest && (
           <DisplayManifestModal
             projectId={projectId}
