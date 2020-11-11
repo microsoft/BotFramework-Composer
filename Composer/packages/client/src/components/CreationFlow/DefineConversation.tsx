@@ -20,7 +20,7 @@ import { DialogCreationCopy, QnABotTemplateId, nameRegex } from '../../constants
 import { FieldConfig, useForm } from '../../hooks/useForm';
 import { StorageFolder } from '../../recoilModel/types';
 import { createNotification } from '../../recoilModel/dispatchers/notification';
-import { ImportSuccessNotification } from '../ImportModal/ImportSuccessNotification';
+import { ImportSuccessNotificationWrapper } from '../ImportModal/ImportSuccessNotification';
 import { dispatcherState } from '../../recoilModel';
 
 import { LocationSelectContent } from './LocationSelectContent';
@@ -125,13 +125,13 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
     name: {
       required: true,
       validate: (value) => {
-        if (!value || !nameRegex.test(value + '')) {
+        if (!value || !nameRegex.test(`${value}`)) {
           return formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
         }
 
         const newBotPath =
           focusedStorageFolder !== null && Object.keys(focusedStorageFolder as Record<string, any>).length
-            ? Path.join(focusedStorageFolder.parent, focusedStorageFolder.name, value + '')
+            ? Path.join(focusedStorageFolder.parent, focusedStorageFolder.name, `${value}`)
             : '';
         if (
           files.some((bot) => {
@@ -160,12 +160,11 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
   const [isImported, setIsImported] = useState<boolean>(false);
 
   useEffect(() => {
-    if (props.location?.search) {
-      const decoded = decodeURIComponent(props.location.search);
-      const { imported } = querystring.parse(decoded);
-      setIsImported(imported === 'true');
+    if (props.location?.state) {
+      const { imported } = props.location.state;
+      setIsImported(imported);
     }
-  }, []);
+  }, [props.location?.state]);
 
   useEffect(() => {
     const formData: DefineConversationFormData = {
@@ -213,22 +212,21 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
       const dataToSubmit = {
         ...formData,
       };
-      if (props.location?.search) {
-        const decoded = decodeURIComponent(props.location.search);
-        const { alias = '', eTag = '', imported = '', templateDir = '', urlSuffix = '' } = querystring.parse(decoded);
+      if (props.location?.state) {
+        const { alias, eTag, imported, templateDir, urlSuffix } = props.location.state;
 
         if (imported) {
-          dataToSubmit.templateDir = templateDir as string;
-          dataToSubmit.eTag = eTag as string;
-          dataToSubmit.urlSuffix = urlSuffix as string;
-          dataToSubmit.alias = alias as string;
+          dataToSubmit.templateDir = templateDir;
+          dataToSubmit.eTag = eTag;
+          dataToSubmit.urlSuffix = urlSuffix;
+          dataToSubmit.alias = alias;
           dataToSubmit.preserveRoot = true;
 
           // create a notification to indicate import success
           const notification = createNotification({
             type: 'success',
             title: '',
-            onRenderCardContent: ImportSuccessNotification({
+            onRenderCardContent: ImportSuccessNotificationWrapper({
               importedToExisting: false,
             }),
           });

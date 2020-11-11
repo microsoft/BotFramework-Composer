@@ -9,13 +9,13 @@ import { Dialog, DialogType, IDialogContentProps } from 'office-ui-fabric-react/
 import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
 import formatMessage from 'format-message';
 import { ExternalContentProviderType } from '@botframework-composer/types';
-import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { generateUniqueId } from '@bfc/shared';
 
 import compIcon from '../../images/composerIcon.svg';
 import pvaIcon from '../../images/pvaIcon.svg';
 import dataTransferLine from '../../images/dataTransferLine.svg';
 
-import { dialogContent, hidden } from './style';
+import { boldText, boldBlueText, dialogContent, hidden } from './style';
 
 type ImportState = 'connecting' | 'downloading';
 
@@ -46,17 +46,6 @@ const contentProps: IDialogContentProps = {
   },
 };
 
-const boldBlueText = css`
-  font-weight: ${FontWeights.semibold};
-  color: #106ebe;
-  word-break: break-work;
-`;
-
-const boldText = css`
-  font-weight: ${FontWeights.semibold};
-  word-break: break-work;
-`;
-
 const serviceIcon = css`
   width: 33px;
 `;
@@ -70,6 +59,28 @@ const dataTransferIcon = css`
   margin: 0 16px;
   width: 78px;
 `;
+
+function getUserFriendlySource(source?: ExternalContentProviderType): string {
+  switch (source) {
+    case 'pva':
+      return 'PowerVirtualAgents';
+
+    default:
+      return 'external service';
+  }
+}
+
+const BoldBlue = ({ children }) => (
+  <span key={generateUniqueId()} css={boldBlueText}>
+    {children}
+  </span>
+);
+
+const Bold = ({ children }) => (
+  <span key={generateUniqueId()} css={boldText}>
+    {children}
+  </span>
+);
 
 export const ImportStatus: React.FC<RouteComponentProps & ImportStatusProps> = (props) => {
   const { botName, source, state } = props;
@@ -87,9 +98,10 @@ export const ImportStatus: React.FC<RouteComponentProps & ImportStatusProps> = (
     case 'connecting': {
       const label = (
         <p css={dialogContent}>
-          {formatMessage('Connecting to ')}
-          <span css={boldBlueText}>{getUserFriendlySource(source)}</span>
-          {formatMessage(' to import bot content...')}
+          {formatMessage.rich('Connecting to <b>{ source }</b> to import bot content...', {
+            b: BoldBlue,
+            source: getUserFriendlySource(source),
+          })}
         </p>
       );
       return (
@@ -113,9 +125,11 @@ export const ImportStatus: React.FC<RouteComponentProps & ImportStatusProps> = (
       const sourceName = getUserFriendlySource(source);
       const label = (
         <p css={dialogContent}>
-          {formatMessage('Importing ')}
-          <span css={boldText}>{botName}</span>
-          {`${formatMessage(' from ')}${sourceName}...`}
+          {formatMessage.rich('Importing <b>{ botName }</b> from { sourceName }...', {
+            b: Bold,
+            botName,
+            sourceName,
+          })}
         </p>
       );
       return (
@@ -169,14 +183,4 @@ function getServiceIcon(source?: ExternalContentProviderType) {
       />
     </React.Fragment>
   );
-}
-
-export function getUserFriendlySource(source?: ExternalContentProviderType): string {
-  switch (source) {
-    case 'pva':
-      return 'PowerVirtualAgents';
-
-    default:
-      return 'external service';
-  }
 }

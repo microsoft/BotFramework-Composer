@@ -2,23 +2,21 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { navigate, RouteComponentProps } from '@reach/router';
-import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import formatMessage from 'format-message';
-import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { ExternalContentProviderType } from '@botframework-composer/types';
 import { useRecoilValue } from 'recoil';
+import axios from 'axios';
 
 import { dispatcherState } from '../../recoilModel';
 import { createNotification } from '../../recoilModel/dispatchers/notification';
 
 import { ImportStatus } from './ImportStatus';
 import { ImportSuccessNotificationWrapper } from './ImportSuccessNotification';
-import { dialogContent, hidden } from './style';
+import { ImportPromptToSaveModal } from './ImportPromptToSaveModal';
+import { ImportFailedModal } from './ImportFailedModal';
 
 type ImportedProjectInfo = {
   alias?: string;
@@ -49,12 +47,6 @@ type ImportModalState =
   | 'promptingToSave' // when an existing project is found under the same alias
   | 'signingIn'; // when login prompt is showing
 
-const boldText = css`
-  font-weight: ${FontWeights.semibold};
-  color: #106ebe;
-  word-break: break-work;
-`;
-
 const CONNECTING_STATUS_DISPLAY_TIME = 2000;
 
 export const ImportModal: React.FC<RouteComponentProps> = (props) => {
@@ -64,74 +56,73 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
   const [importedProjectInfo, setImportedProjectInfo] = useState<ImportedProjectInfo | undefined>(undefined);
   const [modalState, setModalState] = useState<ImportModalState>('connecting');
   const [existingProject, setExistingProject] = useState<ExistingProjectInfo | undefined>(undefined);
-  const [error, setError] = useState<any>(undefined);
+  const [error, setError] = useState<Error | undefined>(undefined);
   const [backupLocation, setBackupLocation] = useState<string>('');
   const { addNotification } = useRecoilValue(dispatcherState);
 
   const importAsNewProject = useCallback((info: ImportedProjectInfo) => {
     // navigate to creation flow with template selected
     const { alias, description, eTag, name, source, templateDir, urlSuffix } = info;
-    let creationUrl = `/projects/create/${encodeURIComponent(source)}?imported=true&templateDir=${encodeURIComponent(
-      templateDir
-    )}&eTag=${encodeURIComponent(eTag)}`;
+    const state = {
+      alias,
+      eTag,
+      imported: true,
+      templateDir,
+      urlSuffix,
+    };
+    let creationUrl = `/projects/create/${encodeURIComponent(source)}`;
 
+    const searchParams = new URLSearchParams();
     if (name) {
-      creationUrl += `&name=${encodeURIComponent(name)}`;
+      searchParams.set('name', encodeURIComponent(name));
     }
     if (description) {
-      creationUrl += `&description=${encodeURIComponent(description)}`;
+      searchParams.set('description', encodeURIComponent(description));
     }
-    if (urlSuffix) {
-      creationUrl += `&urlSuffix=${encodeURIComponent(urlSuffix)}`;
-    }
-    if (alias) {
-      creationUrl += `&alias=${encodeURIComponent(alias)}`;
+    if (searchParams.toString()) {
+      creationUrl += `?${searchParams.toString()}`;
     }
 
-    navigate(creationUrl);
+    navigate(creationUrl, { state });
   }, []);
 
-  const importToExistingProject = useCallback(() => {
+  const importToExistingProject = useCallback(async () => {
     if (importedProjectInfo && existingProject) {
       setModalState('copyingContent');
+      try {
+        // call server to do backup and then save to existing project
+        let res = await axios.post<{ path: string }>(`/api/projects/${existingProject.id}/backup`);
+        const { path } = res.data;
+        setBackupLocation(path);
 
-      const backupAndSave = async () => {
-        try {
-          // call server to do backup and then save to existing project
-          let res = await fetch(`/api/projects/${existingProject.id}/backup`, { method: 'POST' });
-          const { path } = await res.json();
-          setBackupLocation(path);
+        const { eTag, templateDir } = importedProjectInfo;
+        res = await axios.post(
+          `/api/projects/${existingProject.id}/copyTemplateToExisting`,
+          { eTag, templateDir },
+          { headers: { 'Content-Type': 'application/json' } }
+        );
 
-          const { eTag, templateDir } = importedProjectInfo;
-          res = await fetch(`/api/projects/${existingProject.id}/copyTemplateToExisting`, {
-            method: 'POST',
-            body: JSON.stringify({ eTag, templateDir }),
-            headers: { 'Content-Type': 'application/json' },
+        // open project and create a notification saying that import was complete
+        if (res.status === 200) {
+          const notification = createNotification({
+            type: 'success',
+            title: '',
+            onRenderCardContent: ImportSuccessNotificationWrapper({
+              importedToExisting: true,
+              location: existingProject.location,
+            }),
           });
-
-          // open project and create a notification saying that import was complete
-          if (res.status === 200) {
-            const notification = createNotification({
-              type: 'success',
-              title: '',
-              onRenderCardContent: ImportSuccessNotificationWrapper({
-                importedToExisting: true,
-                location: existingProject.location,
-              }),
-            });
-            addNotification(notification);
-            navigate(`/bot/${existingProject?.id}`);
-          } else {
-            const err = await res.json();
-            throw err;
-          }
-        } catch (e) {
-          console.error('Something went wrong while saving bot to existing project: ', e);
-          setError(e);
-          setModalState('failed');
+          addNotification(notification);
+          navigate(`/bot/${existingProject?.id}`);
+        } else {
+          const err = res.data ? res.data : res.statusText;
+          throw err;
         }
-      };
-      backupAndSave();
+      } catch (e) {
+        console.error('Something went wrong while saving bot to existing project: ', e);
+        setError(e);
+        setModalState('failed');
+      }
     }
   }, [existingProject, importedProjectInfo]);
 
@@ -142,17 +133,13 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
           try {
             const { description, name } = importPayload;
 
-            let res = await fetch(
-              `/api/import/${importSource}?payload=${encodeURIComponent(JSON.stringify(importPayload))}`,
-              {
-                method: 'POST',
-              }
+            const res = await axios.post<{ alias: string; eTag: string; templateDir: string; urlSuffix: string }>(
+              `/api/import/${importSource}?payload=${encodeURIComponent(JSON.stringify(importPayload))}`
             );
             if (res.status !== 200) {
-              throw `Something went wrong during import: ${res.status} ${res.statusText}`;
+              throw new Error(`Something went wrong during import: ${res.status} ${res.statusText}`);
             }
-            const data = await res.json();
-            const { alias, eTag, templateDir, urlSuffix } = data;
+            const { alias, eTag, templateDir, urlSuffix } = res.data;
             const projectInfo = {
               description,
               name,
@@ -166,9 +153,9 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
 
             if (alias) {
               // check to see if Composer currently has a bot project corresponding to the alias
-              res = await fetch(`/api/projects/alias/${alias}`, { method: 'GET' });
-              if (res.status === 200) {
-                const project = await res.json();
+              const aliasRes = await axios.get<any>(`/api/projects/alias/${alias}`);
+              if (aliasRes.status === 200) {
+                const project = await aliasRes.data;
                 setExistingProject(project);
                 // ask user if they want to save to existing, or save as a new project
                 setModalState('promptingToSave');
@@ -191,14 +178,11 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
     if (modalState === 'signingIn') {
       const signIn = async () => {
         try {
-          const res = await fetch(
-            `/api/import/${importSource}/authenticate?payload=${encodeURIComponent(JSON.stringify(importPayload))}`,
-            {
-              method: 'POST',
-            }
+          const res = await axios.post(
+            `/api/import/${importSource}/authenticate?payload=${encodeURIComponent(JSON.stringify(importPayload))}`
           );
           if (res.status !== 200) {
-            throw `Something went wrong during authenticating import: ${res.status} ${res.statusText}`;
+            throw new Error(`Something went wrong during authenticating import: ${res.status} ${res.statusText}`);
           }
           setModalState('downloadingContent');
         } catch (e) {
@@ -219,7 +203,7 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
         const source = url.searchParams.get('source');
         const payload = url.searchParams.get('payload');
         if (!source || !payload) {
-          throw 'Missing source or payload.';
+          throw new Error('Missing source or payload.');
         }
         setImportSource(source as ExternalContentProviderType);
         setImportPayload(JSON.parse(payload));
@@ -234,19 +218,20 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
   }, []);
 
   const cancel = useCallback(() => {
-    console.log('Cancelled import.');
     navigate('/home');
   }, []);
 
   const openExistingProject = useCallback(() => {
-    navigate(`/bot/${existingProject?.id}`);
+    if (existingProject) {
+      navigate(`/bot/${existingProject.id}`);
+    }
   }, [existingProject]);
 
   const createNewProxy = useCallback(() => {
     if (importedProjectInfo) {
       importAsNewProject(importedProjectInfo);
     }
-  }, [importedProjectInfo]);
+  }, [importedProjectInfo, importAsNewProject]);
 
   const modalContent = useMemo(() => {
     switch (modalState) {
@@ -258,71 +243,20 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
 
       case 'copyingContent':
       case 'promptingToSave': {
-        const dialogTitle = (
-          <span>
-            {formatMessage('Do you want to update ')}
-            <span css={boldText}>{existingProject?.name}</span>
-          </span>
-        );
         const isCopyingContent = modalState === 'copyingContent';
         return (
-          <Dialog
-            dialogContentProps={{ title: dialogTitle, type: DialogType.close }}
-            hidden={false}
-            minWidth={560}
+          <ImportPromptToSaveModal
+            existingProjectName={existingProject?.name}
+            isCopyingContent={isCopyingContent}
             onDismiss={cancel}
-          >
-            <p css={dialogContent}>
-              {formatMessage('Updating ')}
-              {existingProject?.name}
-              {formatMessage(' will overwrite the current bot content and create a backup.')}
-            </p>
-            <DialogFooter
-              styles={{ actionsRight: { display: 'flex', justifyContent: 'flex-end' }, action: { display: 'flex' } }}
-            >
-              {isCopyingContent && (
-                <Spinner
-                  label={formatMessage('Setting things up...')}
-                  labelPosition={'left'}
-                  size={SpinnerSize.small}
-                />
-              )}
-              <PrimaryButton
-                disabled={isCopyingContent}
-                text={formatMessage('Update')}
-                onClick={importToExistingProject}
-              />
-              <DefaultButton
-                disabled={isCopyingContent}
-                text={formatMessage('Import as new')}
-                onClick={createNewProxy}
-              />
-            </DialogFooter>
-          </Dialog>
+            onImportAsNew={createNewProxy}
+            onUpdate={importToExistingProject}
+          />
         );
       }
 
       case 'failed':
-        return (
-          <Dialog
-            dialogContentProps={{
-              title: formatMessage('Something went wrong'),
-              type: DialogType.close,
-            }}
-            hidden={false}
-            minWidth={560}
-            onDismiss={cancel}
-          >
-            <p css={dialogContent}>
-              {formatMessage('There was an unexpected error importing bot content to ')}
-              <span css={boldText}>{importPayload.name}</span>
-            </p>
-            <p css={boldText}>{typeof error === 'object' ? JSON.stringify(error, undefined, 2) : error}</p>
-            <DialogFooter>
-              <DefaultButton text={formatMessage('Cancel')} onClick={cancel} />
-            </DialogFooter>
-          </Dialog>
-        );
+        return <ImportFailedModal botName={importPayload.name} error={error} onDismiss={cancel} />;
 
       case 'signingIn':
         // block but don't show anything other than the login window
@@ -336,7 +270,7 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
         );
 
       default:
-        return <div css={hidden} />;
+        throw new Error(`ImportModal trying to render for unexpected state: ${modalState}`);
     }
   }, [
     modalState,
