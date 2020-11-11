@@ -136,9 +136,6 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
             const res = await axios.post<{ alias: string; eTag: string; templateDir: string; urlSuffix: string }>(
               `/api/import/${importSource}?payload=${encodeURIComponent(JSON.stringify(importPayload))}`
             );
-            if (res.status !== 200) {
-              throw new Error(`Something went wrong during import: ${res.status} ${res.statusText}`);
-            }
             const { alias, eTag, templateDir, urlSuffix } = res.data;
             const projectInfo = {
               description,
@@ -153,9 +150,17 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
 
             if (alias) {
               // check to see if Composer currently has a bot project corresponding to the alias
-              const aliasRes = await axios.get<any>(`/api/projects/alias/${alias}`);
+              const aliasRes = await axios.get<any>(`/api/projects/alias/${alias}`, {
+                validateStatus: (status) => {
+                  // a 404 should fall through
+                  if (status === 404) {
+                    return true;
+                  }
+                  return status >= 200 && status < 300;
+                },
+              });
               if (aliasRes.status === 200) {
-                const project = await aliasRes.data;
+                const project = aliasRes.data;
                 setExistingProject(project);
                 // ask user if they want to save to existing, or save as a new project
                 setModalState('promptingToSave');
@@ -165,7 +170,7 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
             importAsNewProject(projectInfo);
           } catch (e) {
             // something went wrong, abort and navigate to the home page
-            console.error(`Aborting import: ${e}`);
+            console.error(`Something went wrong during import: ${e}`);
             navigate('/home');
           }
         }
@@ -178,16 +183,13 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
     if (modalState === 'signingIn') {
       const signIn = async () => {
         try {
-          const res = await axios.post(
+          await axios.post(
             `/api/import/${importSource}/authenticate?payload=${encodeURIComponent(JSON.stringify(importPayload))}`
           );
-          if (res.status !== 200) {
-            throw new Error(`Something went wrong during authenticating import: ${res.status} ${res.statusText}`);
-          }
           setModalState('downloadingContent');
         } catch (e) {
           // something went wrong, abort and navigate to the home page
-          console.error(`Aborting import: ${e}`);
+          console.error(`Something went wrong during authenticating import: ${e}`);
           navigate('/home');
         }
       };
