@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { Fragment, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import AdaptiveForm, { resolveRef, getUIOptions } from '@bfc/adaptive-form';
 import { FormErrors, JSONSchema7, useFormConfig, useShellApi } from '@bfc/extension-client';
 import formatMessage from 'format-message';
@@ -12,11 +12,18 @@ import debounce from 'lodash/debounce';
 import get from 'lodash/get';
 import { MicrosoftAdaptiveDialog } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
+import { css } from '@emotion/core';
 
 import { botDisplayNameState, projectMetaDataState } from '../../recoilModel';
 
 import { PropertyEditorHeader } from './PropertyEditorHeader';
 import { formEditor } from './styles';
+
+const propertyEditorWrapperStyle = css`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+`;
 
 function resolveBaseSchema(schema: JSONSchema7, $kind: string): JSONSchema7 | undefined {
   const defSchema = schema.definitions?.[$kind];
@@ -126,7 +133,7 @@ const PropertyEditor: React.FC = () => {
   };
 
   return (
-    <Fragment>
+    <div css={propertyEditorWrapperStyle}>
       {!localData || !$schema ? <PropertyEditorHeader botName={botName} projectData={projectData} /> : null}
       <div aria-label={formatMessage('form editor')} css={formEditor} data-testid="PropertyEditor" role="region">
         <AdaptiveForm
@@ -139,7 +146,7 @@ const PropertyEditor: React.FC = () => {
           onFocusedTab={handleFocusTab}
         />
       </div>
-    </Fragment>
+    </div>
   );
 };
 
