@@ -149,19 +149,30 @@ export class BotProjectDeploy {
     const publishEndpoint = `https://${
       hostname ? hostname : name + '-' + env
     }.scm.azurewebsites.net/zipdeploy/?isAsync=true`;
+    const fileReadStream = fs.createReadStream(zipPath, {autoClose:true});
+    fileReadStream.on( "close", function () {
+      console.log( "close file read stream" );
+    });
+    fileReadStream.on( "error", function (err) {
+      console.log(err);
+      throw err;
+    });
+
     try {
       const response = await rp.post({
         uri: publishEndpoint,
         auth: {
           bearer: token,
         },
-        body: fs.createReadStream(zipPath),
+        body: fileReadStream,
       });
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
         message: response,
       });
     } catch (err) {
+      // close file read stream
+      fileReadStream.close();
       if (err.statusCode === 403) {
         throw new Error(
           `Token expired, please run az account get-access-token, then replace the accessToken in your configuration`
