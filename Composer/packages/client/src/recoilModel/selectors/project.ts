@@ -25,6 +25,7 @@ import {
   projectMetaDataState,
   dialogIdsState,
   dialogState,
+  botDiagnosticsState,
 } from '../atoms';
 import { dialogsSelectorFamily, buildEssentialsSelector } from '../selectors';
 
@@ -84,32 +85,7 @@ export const botProjectSpaceSelector = selector({
       const buildEssentials = get(buildEssentialsSelector(projectId));
       const name = get(botDisplayNameState(projectId));
       const botNameId = get(botNameIdentifierState(projectId));
-
-      const luFiles = get(luFilesState(projectId));
-      const lgFiles = get(lgFilesState(projectId));
-      const setting = get(settingsState(projectId));
-      const skillManifests = get(skillManifestsState(projectId));
-      const dialogSchemas = get(dialogSchemasState(projectId));
-      const qnaFiles = get(qnaFilesState(projectId));
-      const botProjectFile = get(botProjectFileState(projectId));
-      const jsonSchemaFiles = get(jsonSchemaFilesState(projectId));
-      const localeSetting = settingStorage.get(projectId);
-      const botAssets: BotAssets = {
-        projectId,
-        dialogs,
-        luFiles,
-        qnaFiles,
-        lgFiles,
-        skillManifests,
-        setting,
-        dialogSchemas,
-        formDialogSchemas,
-        botProjectFile,
-        jsonSchemaFiles,
-        recognizers: [],
-        crossTrainConfig: {},
-      };
-      const diagnostics = BotIndexer.validate(botAssets, localeSetting);
+      const diagnostics = get(botDiagnosticsState(projectId));
 
       return {
         dialogs,

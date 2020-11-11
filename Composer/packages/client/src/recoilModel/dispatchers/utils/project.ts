@@ -275,7 +275,7 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
     qnaFiles,
     jsonSchemaFiles,
     formDialogSchemas,
-    skillManifestFiles,
+    skillManifests,
     mergedSettings,
     recognizers,
     crossTrainConfig,
@@ -318,7 +318,7 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
     set(formDialogSchemaState({ projectId, schemaId: id }), { id, content });
   });
 
-  set(skillManifestsState(projectId), skillManifestFiles);
+  set(skillManifestsState(projectId), skillManifests);
   set(luFilesState(projectId), initLuFilesStatus(botName, luFiles, dialogs));
   set(lgFilesState(projectId), lgFiles);
   set(jsonSchemaFilesState(projectId), jsonSchemaFiles);
@@ -333,8 +333,7 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
   }
   set(schemasState(projectId), schemas);
   set(localeState(projectId), locale);
-  set(botDiagnosticsState(projectId), diagnostics);
-
+  set(botDiagnosticsState(projectId), [...diagnostics, ...botFiles.diagnostics]);
   refreshLocalStorage(projectId, settings);
   set(settingsState(projectId), mergedSettings);
 

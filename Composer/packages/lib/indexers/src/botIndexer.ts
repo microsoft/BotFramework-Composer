@@ -5,14 +5,15 @@
  */
 import get from 'lodash/get';
 import {
-  BotAssets,
-  BotInfo,
   LUISLocales,
   Diagnostic,
   DiagnosticSeverity,
   LuFile,
   getSkillNameFromSetting,
   fetchFromSettings,
+  SkillManifestFile,
+  DialogInfo,
+  DialogSetting,
 } from '@bfc/shared';
 import difference from 'lodash/difference';
 import map from 'lodash/map';
@@ -23,7 +24,7 @@ import { getLocale } from './utils/help';
  * Check skill manifest.json.
  * 1. Manifest should exist
  */
-const checkManifest = (assets: BotAssets): Diagnostic[] => {
+const checkManifest = (assets: { skillManifests: SkillManifestFile[] }): Diagnostic[] => {
   const { skillManifests } = assets;
 
   const diagnostics: Diagnostic[] = [];
@@ -38,7 +39,10 @@ const checkManifest = (assets: BotAssets): Diagnostic[] => {
  * 1. Missing LUIS key
  * 2. Missing QnA Maker subscription key.
  */
-const checkSetting = (assets: BotAssets, localStorage: { [key: string]: any }): Diagnostic[] => {
+const checkSetting = (
+  assets: { dialogs: DialogInfo[]; setting: DialogSetting },
+  localStorage: { [key: string]: any }
+): Diagnostic[] => {
   const { dialogs, setting } = assets;
   const diagnostics: Diagnostic[] = [];
 
@@ -71,7 +75,7 @@ const checkSetting = (assets: BotAssets, localStorage: { [key: string]: any }): 
  * Check bot settings & dialog
  * files meet LUIS/QnA requirments.
  */
-const checkLUISLocales = (assets: BotAssets): Diagnostic[] => {
+const checkLUISLocales = (assets: { dialogs: DialogInfo[]; setting: DialogSetting }): Diagnostic[] => {
   const {
     dialogs,
     setting: { languages },
@@ -92,7 +96,7 @@ const checkLUISLocales = (assets: BotAssets): Diagnostic[] => {
  * 1. used skill not existed in setting
  * 2. appsettings.json Microsoft App Id or Skill Host Endpoint are empty
  */
-const checkSkillSetting = (assets: BotAssets): Diagnostic[] => {
+const checkSkillSetting = (assets: { dialogs: DialogInfo[]; setting: DialogSetting }): Diagnostic[] => {
   const {
     setting: { skill = {}, botId, skillHostEndpoint },
     dialogs,
@@ -132,24 +136,16 @@ const checkSkillSetting = (assets: BotAssets): Diagnostic[] => {
   return diagnostics;
 };
 
-const validate = (assets: BotAssets, localStorage: { [key: string]: any }): Diagnostic[] => {
+const validate = (
+  assets: { dialogs: DialogInfo[]; setting: DialogSetting; skillManifests: SkillManifestFile[] },
+  localStorage: { [key: string]: any }
+): Diagnostic[] => {
   return [
     ...checkManifest(assets),
     ...checkSetting(assets, localStorage),
     ...checkLUISLocales(assets),
     ...checkSkillSetting(assets),
   ];
-};
-
-const index = (name: string, assets: BotAssets): BotInfo => {
-  const diagnostics: Diagnostic[] = [];
-  diagnostics.push(...checkLUISLocales(assets), ...checkSkillSetting(assets));
-
-  return {
-    name,
-    assets,
-    diagnostics,
-  };
 };
 
 const filterLUISFilesToPublish = (luFiles: LuFile[]): LuFile[] => {
@@ -160,7 +156,6 @@ const filterLUISFilesToPublish = (luFiles: LuFile[]): LuFile[] => {
 };
 
 export const BotIndexer = {
-  index,
   validate,
   checkManifest,
   checkSetting,
