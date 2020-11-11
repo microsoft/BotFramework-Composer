@@ -16,15 +16,83 @@ import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { useMemo, useState } from 'react';
 import formatMessage from 'format-message';
+import { RouteComponentProps } from '@reach/router';
+import { useRecoilValue } from 'recoil';
+import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
+import { FontSizes } from '@uifabric/fluent-theme';
+import { css } from '@emotion/core';
 
 import { Pagination } from '../../components/Pagination';
+import { diagnosticsSelector } from '../../recoilModel/selectors/diagnosticsPageSelector';
 
-import { INotification } from './types';
-import { notification, typeIcon, listRoot, icons, tableView, detailList, tableCell, content } from './styles';
+import { IDiagnosticInfo } from './types';
 
-export interface INotificationListProps {
-  items: INotification[];
-  onItemClick: (item: INotification) => void;
+// -------------------- Styles -------------------- //
+
+const icons = {
+  Error: { iconName: 'ErrorBadge', color: '#A80000', background: '#FED9CC' },
+  Warning: { iconName: 'Warning', color: '#8A8780', background: '#FFF4CE' },
+};
+
+const diagnostic = mergeStyleSets({
+  typeIconHeaderIcon: {
+    padding: 0,
+    fontSize: FontSizes.size16,
+  },
+  typeIconCell: {
+    textAlign: 'center',
+    cursor: 'pointer',
+  },
+  columnCell: {
+    cursor: 'pointer',
+  },
+});
+
+const typeIcon = (icon) => css`
+  vertical-align: middle;
+  font-size: 16px;
+  width: 24px;
+  height: 24px;
+  background: ${icon.background};
+  line-height: 24px;
+  color: ${icon.color};
+  cursor: pointer;
+`;
+
+const listRoot = css`
+  position: relative;
+  overflow-y: auto;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+`;
+
+const tableView = css`
+  position: relative;
+  flex-grow: 1;
+`;
+
+const detailList = css`
+  overflow-x: hidden;
+`;
+
+const tableCell = css`
+  outline: none;
+  :focus {
+    outline: rgb(102, 102, 102) solid 1px;
+  }
+`;
+
+const content = css`
+  outline: none;
+`;
+
+// -------------------- Diagnosticist -------------------- //
+export interface IDiagnosticListProps extends RouteComponentProps {
+  skillId?: string;
+  showType: string;
+  onItemClick: (item: IDiagnosticInfo) => void;
 }
 
 const itemCount = 10;
@@ -33,32 +101,32 @@ const columns: IColumn[] = [
   {
     key: 'Icon',
     name: '',
-    className: notification.typeIconCell,
-    iconClassName: notification.typeIconHeaderIcon,
+    className: diagnostic.typeIconCell,
+    iconClassName: diagnostic.typeIconHeaderIcon,
     fieldName: 'icon',
     minWidth: 30,
     maxWidth: 30,
-    onRender: (item: INotification) => {
+    onRender: (item: IDiagnosticInfo) => {
       const icon = icons[item.severity];
       return <FontIcon css={typeIcon(icon)} iconName={icon.iconName} />;
     },
   },
 
   {
-    key: 'NotificationType',
+    key: 'DiagnosticType',
     name: formatMessage('Type'),
-    className: notification.columnCell,
+    className: diagnostic.columnCell,
     fieldName: 'type',
     minWidth: 70,
     maxWidth: 90,
     isRowHeader: true,
     isResizable: true,
     data: 'string',
-    onRender: (item: INotification) => {
+    onRender: (item: IDiagnosticInfo) => {
       return (
         <div data-is-focusable css={tableCell}>
           <div
-            aria-label={formatMessage(`This is a {severity} notification`, { severity: item.severity })}
+            aria-label={formatMessage(`This is a {severity} diagnostic`, { severity: item.severity })}
             css={content}
             tabIndex={-1}
           >
@@ -70,40 +138,15 @@ const columns: IColumn[] = [
     isPadded: true,
   },
   {
-    key: 'NotificationBotName',
-    name: formatMessage('Bot'),
-    className: notification.columnCell,
-    fieldName: 'botName',
-    minWidth: 70,
-    maxWidth: 90,
-    isRowHeader: true,
-    isResizable: true,
-    data: 'string',
-    onRender: (item: INotification) => {
-      return (
-        <div data-is-focusable css={tableCell}>
-          <div
-            aria-label={formatMessage(`This is a {botName} notification`, { botName: item.botName })}
-            css={content}
-            tabIndex={-1}
-          >
-            {item.botName}
-          </div>
-        </div>
-      );
-    },
-    isPadded: true,
-  },
-  {
-    key: 'NotificationLocation',
+    key: 'DiagnosticLocation',
     name: formatMessage('Location'),
-    className: notification.columnCell,
+    className: diagnostic.columnCell,
     fieldName: 'location',
     minWidth: 70,
     maxWidth: 90,
     isResizable: true,
     data: 'string',
-    onRender: (item: INotification) => {
+    onRender: (item: IDiagnosticInfo) => {
       return (
         <div data-is-focusable css={tableCell}>
           <div
@@ -119,9 +162,9 @@ const columns: IColumn[] = [
     isPadded: true,
   },
   {
-    key: 'NotificationDetail',
+    key: 'DiagnosticDetail',
     name: formatMessage('Message'),
-    className: notification.columnCell,
+    className: diagnostic.columnCell,
     fieldName: 'message',
     minWidth: 70,
     maxWidth: 90,
@@ -129,11 +172,11 @@ const columns: IColumn[] = [
     isCollapsible: true,
     isMultiline: true,
     data: 'string',
-    onRender: (item: INotification) => {
+    onRender: (item: IDiagnosticInfo) => {
       return (
         <div data-is-focusable css={tableCell}>
           <div
-            aria-label={formatMessage(`Notification Message {msg}`, { msg: item.message })}
+            aria-label={formatMessage(`Diagnostic Message {msg}`, { msg: item.message })}
             css={content}
             tabIndex={-1}
           >
@@ -157,19 +200,21 @@ function onRenderDetailsHeader(props, defaultRender) {
   );
 }
 
-export const NotificationList: React.FC<INotificationListProps> = (props) => {
-  const { items, onItemClick } = props;
+export const DiagnosticList: React.FC<IDiagnosticListProps> = (props) => {
+  const { onItemClick, skillId = '', showType } = props;
+  const diagnostics = useRecoilValue(diagnosticsSelector(skillId));
+  const availableDiagnostics = showType ? diagnostics.filter((x) => x.severity === showType) : diagnostics;
   const [pageIndex, setPageIndex] = useState<number>(1);
 
   const pageCount: number = useMemo(() => {
-    return Math.ceil(items.length / itemCount) || 1;
-  }, [items]);
+    return Math.ceil(availableDiagnostics.length / itemCount) || 1;
+  }, [availableDiagnostics]);
 
-  const showItems = items.slice((pageIndex - 1) * itemCount, pageIndex * itemCount);
+  const showItems = availableDiagnostics.slice((pageIndex - 1) * itemCount, pageIndex * itemCount);
 
   return (
-    <div css={listRoot} data-testid="notifications-table-view" role="main">
-      <div aria-label={formatMessage('Notification list')} css={tableView} role="region">
+    <div css={listRoot} data-testid="diagnostics-table-view" role="main">
+      <div aria-label={formatMessage('Diagnostic list')} css={tableView} role="region">
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
           <DetailsList
             isHeaderVisible
