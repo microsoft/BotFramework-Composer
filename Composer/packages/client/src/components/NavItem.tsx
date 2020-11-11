@@ -84,19 +84,20 @@ export interface INavItemProps {
   labelName: string;
   disabled: boolean;
   showTooltip: boolean;
+  match?: string;
 }
 
 export const NavItem: React.FC<INavItemProps> = (props) => {
   const { onboardingAddCoachMarkRef } = useRecoilValue(dispatcherState);
 
-  const { to, iconName, labelName, disabled, showTooltip } = props;
+  const { to, iconName, labelName, disabled, showTooltip, match } = props;
   const {
     location: { pathname },
   } = useLocation();
 
   const linkTo = useRouterCache(to);
 
-  const active = pathname.startsWith(to);
+  const active = pathname.startsWith(to) || !!(match && pathname.indexOf(match) > -1);
 
   const addRef = useCallback((ref) => onboardingAddCoachMarkRef({ [`nav${labelName.replace(' ', '')}`]: ref }), []);
   const iconElement =
