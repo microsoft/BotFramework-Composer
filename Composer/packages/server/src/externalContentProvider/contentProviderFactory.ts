@@ -3,20 +3,20 @@
 
 import { ExternalContentProviderType } from '@botframework-composer/types';
 
-import { ExternalContentProvider, ContentProviderMetadata } from './externalContentProvider';
+import { ExternalContentProvider, IContentProviderMetadata } from './externalContentProvider';
 import { PowerVirtualAgentsProvider, PowerVirtualAgentsMetadata } from './powerVirtualAgentsProvider';
 
 type ProviderInfo = PowerVirtualAgentsProviderInfo; // union with additional provider info types (ex. PowerVirtualAgentsProviderInfo | ABSProviderInfo | etc.)
 
-type ProviderInfoBase<T extends ContentProviderMetadata> = {
-  type: ExternalContentProviderType;
+type ProviderInfoBase<T extends IContentProviderMetadata> = {
+  kind: ExternalContentProviderType;
   metadata: T;
 };
 
-type PowerVirtualAgentsProviderInfo = ProviderInfoBase<PowerVirtualAgentsMetadata> & { type: 'pva' };
+type PowerVirtualAgentsProviderInfo = ProviderInfoBase<PowerVirtualAgentsMetadata> & { kind: 'pva' };
 
-function getProvider(info: ProviderInfo): ExternalContentProvider<ContentProviderMetadata> | undefined {
-  switch (info.type) {
+function getProvider(info: ProviderInfo): ExternalContentProvider<IContentProviderMetadata> | undefined {
+  switch (info.kind) {
     case 'pva':
       return new PowerVirtualAgentsProvider(info.metadata);
 

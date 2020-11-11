@@ -10,13 +10,13 @@ import fetch, { RequestInit } from 'node-fetch';
 import logger from '../logger';
 import { authService } from '../services/auth/auth';
 
-import { BotContentInfo, ContentProviderMetadata, ExternalContentProvider } from './externalContentProvider';
+import { BotContentInfo, IContentProviderMetadata, ExternalContentProvider } from './externalContentProvider';
 
 const log = logger.extend('pva-provider');
 
 const COMPOSER_1P_APP_ID = 'ce48853e-0605-4f77-8746-d70ac63cc6bc';
 
-export type PowerVirtualAgentsMetadata = ContentProviderMetadata & {
+export type PowerVirtualAgentsMetadata = IContentProviderMetadata & {
   baseUrl: string;
   botId: string;
   dialogId?: string;
@@ -92,13 +92,13 @@ export class PowerVirtualAgentsProvider extends ExternalContentProvider<PowerVir
       const contentType = result.headers.get('content-type');
       if (!contentType || contentType !== 'application/zip') {
         const json = await result.json();
-        throw `Did not receive zip back from PVA: ${prettyPrintError(json)}`;
+        throw new Error(`Did not receive zip back from PVA: ${prettyPrintError(json)}`);
       }
 
       // write the zip to disk
       if (result && result.body) {
         ensureDirSync(this.tempBotAssetsDir);
-        const zipPath = join(this.tempBotAssetsDir, 'bot-assets.zip');
+        const zipPath = join(this.tempBotAssetsDir, `bot-assets-${Date.now()}.zip-}`);
         const writeStream = createWriteStream(zipPath);
         await new Promise((resolve, reject) => {
           writeStream.once('finish', resolve);
@@ -107,10 +107,10 @@ export class PowerVirtualAgentsProvider extends ExternalContentProvider<PowerVir
         });
         return { eTag, zipPath, urlSuffix: this.getDeepLink() };
       } else {
-        throw 'Response containing zip does not have a body';
+        throw new Error('Response containing zip does not have a body');
       }
     } catch (e) {
-      throw `Error while trying to download the bot content: ${prettyPrintError(e)}`;
+      throw new Error(`Error while trying to download the bot content: ${prettyPrintError(e)}`);
     }
   }
 

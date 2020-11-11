@@ -13,7 +13,7 @@ import logger from '../logger';
 
 const log = logger.extend('import-controller');
 
-type StartImportRequest = Request & {
+type ImportRequest = Request & {
   params: {
     source: ExternalContentProviderType;
   };
@@ -22,15 +22,13 @@ type StartImportRequest = Request & {
   };
 };
 
-type AuthenticateRequest = StartImportRequest;
-
 /** Route exists so that the front end knows when the import flow is authenticated and can start displaying import status. */
-async function authenticate(req: AuthenticateRequest, res: Response, next) {
+async function authenticate(req: ImportRequest, res: Response) {
   const { source } = req.params;
   const { payload } = req.query;
   const metadata = JSON.parse(payload);
 
-  const contentProvider = contentProviderFactory.getProvider({ type: source, metadata });
+  const contentProvider = contentProviderFactory.getProvider({ kind: source, metadata });
   if (contentProvider) {
     if (contentProvider.authenticate) {
       const accessToken = await contentProvider.authenticate();
@@ -43,12 +41,12 @@ async function authenticate(req: AuthenticateRequest, res: Response, next) {
   }
 }
 
-async function startImport(req: StartImportRequest, res: Response, next) {
+async function startImport(req: ImportRequest, res: Response) {
   const { source } = req.params;
   const { payload } = req.query;
   const metadata = JSON.parse(payload);
 
-  const contentProvider = contentProviderFactory.getProvider({ type: source, metadata });
+  const contentProvider = contentProviderFactory.getProvider({ kind: source, metadata });
   if (contentProvider) {
     try {
       // download the bot content zip
@@ -68,9 +66,7 @@ async function startImport(req: StartImportRequest, res: Response, next) {
         alias = await contentProvider.getAlias();
       }
 
-      setTimeout(() => {
-        res.json({ alias, eTag, templateDir, urlSuffix });
-      }, 2000);
+      res.status(200).json({ alias, eTag, templateDir, urlSuffix });
     } catch (e) {
       const msg = 'Error importing bot content: ' + e;
       const err = new Error(msg);

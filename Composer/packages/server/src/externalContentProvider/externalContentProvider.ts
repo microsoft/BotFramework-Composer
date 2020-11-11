@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export interface ContentProviderMetadata {
+export interface IContentProviderMetadata {
   [key: string]: any;
 }
 
@@ -19,7 +19,7 @@ export type BotContentInfo = {
   urlSuffix?: string;
 };
 
-export abstract class ExternalContentProvider<T extends ContentProviderMetadata> {
+export abstract class ExternalContentProvider<T extends IContentProviderMetadata> {
   constructor(protected metadata: T) {}
 
   /**
