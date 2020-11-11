@@ -15,6 +15,8 @@ import { BotContentInfo, IContentProviderMetadata, ExternalContentProvider } fro
 const log = logger.extend('pva-provider');
 
 const COMPOSER_1P_APP_ID = 'ce48853e-0605-4f77-8746-d70ac63cc6bc';
+const PVA_TEST_APP_ID = 'a522f059-bb65-47c0-8934-7db6e5286414';
+const PVA_PROD_APP_ID = '96ff4394-9197-43aa-b393-6a41652e21f8';
 
 export type PowerVirtualAgentsMetadata = IContentProviderMetadata & {
   baseUrl: string;
@@ -26,13 +28,22 @@ export type PowerVirtualAgentsMetadata = IContentProviderMetadata & {
   triggerId?: string;
 };
 
-// TODO: these need to be set to prod
-const authCredentials = {
-  // web auth flow
-  clientId: COMPOSER_1P_APP_ID,
-  scopes: ['a522f059-bb65-47c0-8934-7db6e5286414/.default'], // int / ppe
-  // electron auth flow
-  targetResource: 'a522f059-bb65-47c0-8934-7db6e5286414',
+const getAuthCredentials = (baseUrl: string) => {
+  const url = new URL(baseUrl);
+  if (url.hostname.includes('int') || url.hostname.includes('ppe')) {
+    log('Using INT / PPE auth credentials.');
+    return {
+      clientId: COMPOSER_1P_APP_ID,
+      scopes: [`${PVA_TEST_APP_ID}/.default`],
+      targetResource: PVA_TEST_APP_ID,
+    };
+  }
+  log('Using PROD auth credentials.');
+  return {
+    clientId: COMPOSER_1P_APP_ID,
+    scopes: [`${PVA_PROD_APP_ID}/.default`],
+    targetResource: PVA_PROD_APP_ID,
+  };
 };
 
 const getBaseUrl = () => {
@@ -130,6 +141,8 @@ export class PowerVirtualAgentsProvider extends ExternalContentProvider<PowerVir
   private async getAccessToken(): Promise<string> {
     try {
       // login to the 1P app and get an access token
+      const { baseUrl } = this.metadata;
+      const authCredentials = getAuthCredentials(baseUrl || getBaseUrl());
       const accessToken = await authService.getAccessToken(authCredentials);
       if (accessToken === '') {
         throw 'User cancelled login flow.';
