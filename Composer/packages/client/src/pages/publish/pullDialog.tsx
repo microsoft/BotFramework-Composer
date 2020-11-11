@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import { PublishTarget } from '@botframework-composer/types';
@@ -6,11 +9,12 @@ import { Dialog, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 
 import { createNotification } from '../../recoilModel/dispatchers/notification';
 import { ImportSuccessNotification } from '../../components/ImportModal/ImportSuccessNotification';
-import { useRecoilValue } from 'recoil';
 import { dispatcherState, locationState } from '../../recoilModel';
+
 import { PullStatus } from './pullStatus';
 
 type PullDialogProps = {
@@ -44,7 +48,6 @@ export const PullDialog: React.FC<PullDialogProps> = (props) => {
         setStatus('downloading');
 
         try {
-          console.log('doing the pull');
           // wait for pull result from server
           const res = await fetch(`/api/publish/${projectId}/pull/${selectedTarget.name}`, {
             method: 'POST',
@@ -97,15 +100,14 @@ export const PullDialog: React.FC<PullDialogProps> = (props) => {
 
   switch (status) {
     case 'connecting':
-      return <PullStatus state={'connecting'} publishTarget={selectedTarget} />;
+      return <PullStatus publishTarget={selectedTarget} state={'connecting'} />;
 
     case 'downloading':
-      return <PullStatus state={'downloading'} publishTarget={selectedTarget} />;
+      return <PullStatus publishTarget={selectedTarget} state={'downloading'} />;
 
     case 'error':
       return (
         <Dialog
-          hidden={false}
           dialogContentProps={{
             title: formatMessage('Something went wrong'),
             styles: {
@@ -114,6 +116,7 @@ export const PullDialog: React.FC<PullDialogProps> = (props) => {
               },
             },
           }}
+          hidden={false}
         >
           <p>
             {formatMessage('There was an unexpected error pulling from publish profile ')}

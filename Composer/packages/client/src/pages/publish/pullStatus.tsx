@@ -51,72 +51,6 @@ const boldBlueText = css`
   word-break: break-work;
 `;
 
-export const PullStatus: React.FC<RouteComponentProps & PullStatusProps> = (props) => {
-  const { publishTarget, state } = props;
-
-  const composerIcon = (
-    <img
-      alt={formatMessage('Composer Logo')}
-      aria-label={formatMessage('Composer Logo')}
-      src={compIcon}
-      style={{ width: '33px' }}
-    />
-  );
-
-  switch (state) {
-    case 'connecting': {
-      const label = (
-        <p style={{ fontSize: 16, whiteSpace: 'normal' }}>
-          {formatMessage('Connecting to ')}
-          <span css={boldBlueText}>{publishTarget?.name}</span>
-          {formatMessage(' to import bot content...')}
-        </p>
-      );
-      return (
-        <Dialog
-          dialogContentProps={contentProps}
-          hidden={false}
-          minWidth={560}
-          styles={{ main: { height: 263 } }}
-          modalProps={{ isBlocking: true }}
-        >
-          <span style={{ display: 'flex', justifyContent: 'center' }}>
-            {getServiceIcon(publishTarget?.type as KnownPublishTargets)}
-            {composerIcon}
-          </span>
-          <ProgressIndicator label={label} styles={{ itemName: { textAlign: 'center' } }} />
-        </Dialog>
-      );
-    }
-
-    case 'downloading': {
-      const label = (
-        <p style={{ fontSize: 16, whiteSpace: 'normal' }}>
-          {formatMessage('Importing bot content from {targetName}...', { targetName: publishTarget?.name })}
-        </p>
-      );
-      return (
-        <Dialog
-          dialogContentProps={contentProps}
-          hidden={false}
-          minWidth={560}
-          styles={{ main: { height: 263 } }}
-          modalProps={{ isBlocking: true }}
-        >
-          <span style={{ display: 'flex', justifyContent: 'center' }}>
-            {getServiceIcon(publishTarget?.type as KnownPublishTargets)}
-            {composerIcon}
-          </span>
-          <ProgressIndicator label={label} styles={{ itemName: { textAlign: 'center' } }} />
-        </Dialog>
-      );
-    }
-
-    default:
-      return <div style={{ display: 'none' }}></div>;
-  }
-};
-
 function getServiceIcon(targetType?: KnownPublishTargets) {
   let icon;
   switch (targetType) {
@@ -147,3 +81,69 @@ function getServiceIcon(targetType?: KnownPublishTargets) {
     </React.Fragment>
   );
 }
+
+export const PullStatus: React.FC<RouteComponentProps & PullStatusProps> = (props) => {
+  const { publishTarget, state } = props;
+
+  const composerIcon = (
+    <img
+      alt={formatMessage('Composer Logo')}
+      aria-label={formatMessage('Composer Logo')}
+      src={compIcon}
+      style={{ width: '33px' }}
+    />
+  );
+
+  switch (state) {
+    case 'connecting': {
+      const label = (
+        <p style={{ fontSize: 16, whiteSpace: 'normal' }}>
+          {formatMessage('Connecting to ')}
+          <span css={boldBlueText}>{publishTarget?.name}</span>
+          {formatMessage(' to import bot content...')}
+        </p>
+      );
+      return (
+        <Dialog
+          dialogContentProps={contentProps}
+          hidden={false}
+          minWidth={560}
+          modalProps={{ isBlocking: true }}
+          styles={{ main: { height: 263 } }}
+        >
+          <span style={{ display: 'flex', justifyContent: 'center' }}>
+            {getServiceIcon(publishTarget?.type as KnownPublishTargets)}
+            {composerIcon}
+          </span>
+          <ProgressIndicator label={label} styles={{ itemName: { textAlign: 'center' } }} />
+        </Dialog>
+      );
+    }
+
+    case 'downloading': {
+      const label = (
+        <p style={{ fontSize: 16, whiteSpace: 'normal' }}>
+          {formatMessage('Importing bot content from {targetName}...', { targetName: publishTarget?.name })}
+        </p>
+      );
+      return (
+        <Dialog
+          dialogContentProps={contentProps}
+          hidden={false}
+          minWidth={560}
+          modalProps={{ isBlocking: true }}
+          styles={{ main: { height: 263 } }}
+        >
+          <span style={{ display: 'flex', justifyContent: 'center' }}>
+            {getServiceIcon(publishTarget?.type as KnownPublishTargets)}
+            {composerIcon}
+          </span>
+          <ProgressIndicator label={label} styles={{ itemName: { textAlign: 'center' } }} />
+        </Dialog>
+      );
+    }
+
+    default:
+      return <div style={{ display: 'none' }}></div>;
+  }
+};

@@ -1,15 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { join } from 'path';
+
 import merge from 'lodash/merge';
 import { ExtensionContext } from '@bfc/extension';
 import { defaultPublishConfig } from '@bfc/shared';
-import { join } from 'path';
 import { ensureDirSync, remove } from 'fs-extra';
 import extractZip from 'extract-zip';
 
 import { BotProjectService } from '../services/project';
-import { authService } from '../services/auth';
+import { authService } from '../services/auth/auth';
 import AssetService from '../services/asset';
 import logger from '../logger';
 import { LocationRef } from '../models/bot/interface';
