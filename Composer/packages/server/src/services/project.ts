@@ -159,9 +159,15 @@ export class BotProjectService {
   };
 
   public static deleteProject = async (projectId: string): Promise<string> => {
-    const { path = '' } = BotProjectService.projectLocationMap[projectId];
-    BotProjectService.removeProjectIdFromCache(projectId);
-    return path;
+    const projectLoc = BotProjectService.projectLocationMap[projectId];
+    if (!projectLoc) {
+      // no-op
+      return '';
+    } else {
+      const { path = '' } = projectLoc;
+      BotProjectService.removeProjectIdFromCache(projectId);
+      return path;
+    }
   };
 
   public static openProject = async (locationRef: LocationRef, user?: UserIdentity): Promise<string> => {
@@ -234,11 +240,12 @@ export class BotProjectService {
   public static getProjectById = async (projectId: string, user?: UserIdentity): Promise<BotProject> => {
     BotProjectService.initialize();
 
-    const { eTag, path } = BotProjectService.projectLocationMap[projectId];
+    const projectLoc = BotProjectService.projectLocationMap[projectId];
 
-    if (path == null) {
+    if (!projectLoc || projectLoc.path == null) {
       throw new Error(`project ${projectId} not found in cache`);
     } else {
+      const { eTag, path } = projectLoc;
       // check to make sure the project is still there!
       if (!(await StorageService.checkBlob('default', path, user))) {
         BotProjectService.deleteRecentProject(path);
