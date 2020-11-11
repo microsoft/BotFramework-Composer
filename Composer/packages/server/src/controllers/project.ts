@@ -15,6 +15,7 @@ import { LocationRef } from '../models/bot/interface';
 import { getSkillManifest } from '../models/bot/skillManager';
 import StorageService from '../services/storage';
 import settings from '../settings';
+import { BackgroundProcessManager } from '../services/backgroundProcessManager';
 
 import { Path } from './../utility/path';
 
@@ -25,7 +26,6 @@ async function createProject(req: Request, res: Response) {
   if (templateId === '') {
     templateId = 'EmptyBot';
   }
-
   // default the path to the default folder.
   let path = settings.botsFolder;
   // however, if path is specified as part of post body, use that one.
@@ -50,6 +50,7 @@ async function createProject(req: Request, res: Response) {
     const newProjRef = await AssetService.manager.copyProjectTemplateTo(templateId, locationRef, user, locale);
     const id = await BotProjectService.openProject(newProjRef, user);
     const currentProject = await BotProjectService.getProjectById(id, user);
+    const jobId = BackgroundProcessManager.startProcess(202, id, 'create', 'Creating Bot Project');
 
     // inject shared content into every new project.  this comes from assets/shared
     await AssetService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage);
