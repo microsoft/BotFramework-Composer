@@ -232,7 +232,7 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
           await this.cleanup(resourcekey);
         }
       } catch (error) {
-        this.logger('%0', error);
+        this.logger('%O', error);
         if (error instanceof Error) {
           this.logMessages.push(error.message);
         } else if (typeof error === 'object') {
