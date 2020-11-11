@@ -166,9 +166,14 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
      * @param resourcekey
      */
     private async cleanup(resourcekey: string) {
-      const projFolder = this.getRuntimeFolder(resourcekey);
-      await emptyDir(projFolder);
-      await rmdir(projFolder);
+      try {
+        const projFolder = this.getRuntimeFolder(resourcekey);
+        await emptyDir(projFolder);
+        await rmdir(projFolder);
+      } catch (error) {
+        console.error(error);
+      }
+
     }
 
     /**
@@ -334,34 +339,53 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
         runtimeCodePath = project.settings.runtime.path;
       }
 
-      // Prepare the temporary project
-      // this writes all the settings to the root settings/appsettings.json file
-      await this.init(project, runtimeCodePath, resourcekey, runtime);
+      try {
+        // Prepare the temporary project
+        // this writes all the settings to the root settings/appsettings.json file
+        await this.init(project, runtimeCodePath, resourcekey, runtime);
 
-      // Merge all the settings
-      // this combines the bot-wide settings, the environment specific settings, and 2 new fields needed for deployed bots
-      // these will be written to the appropriate settings file inside the appropriate runtime plugin.
-      const mergedSettings = mergeDeep(fullSettings, settings);
+        // Merge all the settings
+        // this combines the bot-wide settings, the environment specific settings, and 2 new fields needed for deployed bots
+        // these will be written to the appropriate settings file inside the appropriate runtime plugin.
+        const mergedSettings = mergeDeep(fullSettings, settings);
 
-      // Prepare parameters and then perform the actual deployment action
-      const customizeConfiguration: CreateAndDeployResources = {
-        accessToken,
-        subscriptionID,
-        name,
-        environment,
-        hostname,
-        luisResource,
-      };
-      await this.performDeploymentAction(
-        project,
-        mergedSettings,
-        runtime,
-        project.id,
-        profileName,
-        jobId,
-        resourcekey,
-        customizeConfiguration
-      );
+        // Prepare parameters and then perform the actual deployment action
+        const customizeConfiguration: CreateAndDeployResources = {
+          accessToken,
+          subscriptionID,
+          name,
+          environment,
+          hostname,
+          luisResource,
+        };
+        await this.performDeploymentAction(
+          project,
+          mergedSettings,
+          runtime,
+          project.id,
+          profileName,
+          jobId,
+          resourcekey,
+          customizeConfiguration
+        );
+      } catch (err) {
+        console.log(err);
+        if (err instanceof Error) {
+          this.logMessages.push(err.message);
+        } else if (typeof err === 'object') {
+          this.logMessages.push(JSON.stringify(err));
+        } else {
+          this.logMessages.push(err);
+        }
+
+        const response = this.getLoadingStatus(project.id, profileName, jobId);
+        response.status = 500;
+        response.result.message = this.logMessages[this.logMessages.length - 1];
+
+        await this.updateHistory(project.id, profileName, { status: response.status, ...response.result });
+        this.removeLoadingStatus(project.id, profileName, jobId);
+        this.cleanup(resourcekey);
+      }
     };
 
     /**************************************************************************************************
