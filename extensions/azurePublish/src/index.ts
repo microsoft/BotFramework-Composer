@@ -171,9 +171,8 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
         await emptyDir(projFolder);
         await rmdir(projFolder);
       } catch (error) {
-        console.error(error);
+        this.logger('$O', error);
       }
-
     }
 
     /**
@@ -201,15 +200,17 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
         // Create the BotProjectDeploy object, which is used to carry out the deploy action.
         const azDeployer = new BotProjectDeploy({
           subId: subscriptionID, // deprecate - not used
-          logger: (msg: any) => {
-            this.logger(msg);
-            this.logMessages.push(JSON.stringify(msg, null, 2));
+          logger: (msg: any, ...args: any[]) => {
+            this.logger(msg, ...args);
+            if (msg?.status || msg?.message) {
+              this.logMessages.push(JSON.stringify(msg, null, 2));
 
-            // update the log messages provided to Composer via the status API.
-            const status = this.getLoadingStatus(botId, profileName, jobId);
-            status.result.log = this.logMessages.join('\n');
+              // update the log messages provided to Composer via the status API.
+              const status = this.getLoadingStatus(botId, profileName, jobId);
+              status.result.log = this.logMessages.join('\n');
 
-            this.updateLoadingStatus(botId, profileName, jobId, status);
+              this.updateLoadingStatus(botId, profileName, jobId, status);
+            }
           },
           accessToken: accessToken,
           projPath: this.getProjectFolder(resourcekey, this.mode),
@@ -231,7 +232,7 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
           await this.cleanup(resourcekey);
         }
       } catch (error) {
-        this.logger(error);
+        this.logger('%0', error);
         if (error instanceof Error) {
           this.logMessages.push(error.message);
         } else if (typeof error === 'object') {
@@ -369,7 +370,7 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
           customizeConfiguration
         );
       } catch (err) {
-        console.log(err);
+        this.logger('%O', err);
         if (err instanceof Error) {
           this.logMessages.push(err.message);
         } else if (typeof err === 'object') {
@@ -438,7 +439,7 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
 
         this.asyncPublish(config, project, resourcekey, jobId);
       } catch (err) {
-        console.log(err);
+        this.logger('%O', err);
         if (err instanceof Error) {
           this.logMessages.push(err.message);
         } else if (typeof err === 'object') {

@@ -15,7 +15,7 @@ export class BotProjectDeploy {
   private accessToken: string;
   private projPath: string;
   private zipPath: string;
-  private logger: (string) => any;
+  private logger: (...args: any[]) => void;
   private runtime: any;
 
   constructor(config: BotProjectDeployConfig) {
@@ -149,9 +149,9 @@ export class BotProjectDeploy {
     const publishEndpoint = `https://${
       hostname ? hostname : name + '-' + env
     }.scm.azurewebsites.net/zipdeploy/?isAsync=true`;
-    const fileReadStream = fs.createReadStream(zipPath, {autoClose:true});
-    fileReadStream.on( "error", function (err) {
-      console.log(err);
+    const fileReadStream = fs.createReadStream(zipPath, { autoClose: true });
+    fileReadStream.on('error', function (err) {
+      this.logger('%O', err);
       throw err;
     });
 
