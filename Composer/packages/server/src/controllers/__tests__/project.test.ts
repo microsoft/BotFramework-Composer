@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import rimraf from 'rimraf';
 import { ExtensionContext } from '@bfc/extension';
 import * as msRest from '@azure/ms-rest-js';
@@ -28,7 +28,7 @@ msRest.ServiceClient.prototype.sendRequest = mockSendRequest;
 
 const mockSampleBotPath = Path.join(__dirname, '../../__mocks__/asset/projects/SampleBot');
 
-let mockRes: Response;
+let mockRes: any;
 
 const newBot = Path.resolve(__dirname, '../../__mocks__/samplebots/newBot');
 const saveAsDir = Path.resolve(__dirname, '../../__mocks__/samplebots/saveAsBot');
@@ -50,7 +50,10 @@ beforeEach(() => {
     status: jest.fn().mockReturnThis(),
     json: jest.fn().mockReturnThis(),
     send: jest.fn().mockReturnThis(),
-  } as any;
+  };
+  mockRes.status.mockClear();
+  mockRes.json.mockClear();
+  mockRes.send.mockClear();
 });
 
 beforeAll(async () => {
