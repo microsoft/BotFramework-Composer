@@ -18,19 +18,21 @@ import TableView from './table-view';
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
 const LUPage: React.FC<RouteComponentProps<{
-  dialogId?: string;
+  dialogId: string;
   projectId: string;
+  skillId: string;
 }>> = (props) => {
-  const { dialogId = '', projectId = '' } = props;
-  const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
+  const { dialogId = '', projectId = '', skillId } = props;
+  const dialogs = useRecoilValue(validateDialogsSelectorFamily(skillId ?? projectId ?? ''));
 
   const path = props.location?.pathname ?? '';
   const edit = /\/edit(\/)?$/.test(path);
   const isRoot = dialogId === 'all';
+  const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
 
   const navLinks: INavTreeItem[] = useMemo(() => {
     const newDialogLinks: INavTreeItem[] = dialogs.map((dialog) => {
-      let url = `/bot/${projectId}/language-understanding/${dialog.id}`;
+      let url = `${baseURL}language-understanding/${dialog.id}`;
       if (edit) {
         url += `/edit`;
       }
@@ -51,7 +53,7 @@ const LUPage: React.FC<RouteComponentProps<{
       id: 'all',
       name: formatMessage('All'),
       ariaLabel: formatMessage('all language understanding files'),
-      url: `/bot/${projectId}/language-understanding/all`,
+      url: `${baseURL}language-understanding/all`,
     });
     return newDialogLinks;
   }, [dialogs, edit]);
@@ -59,13 +61,13 @@ const LUPage: React.FC<RouteComponentProps<{
   useEffect(() => {
     const activeDialog = dialogs.find(({ id }) => id === dialogId);
     if (!activeDialog && dialogId !== 'all' && dialogs.length) {
-      navigateTo(`/bot/${projectId}/language-understanding/all`);
+      navigateTo(`${baseURL}language-understanding/all`);
     }
   }, [dialogId, dialogs, projectId]);
 
   const onToggleEditMode = useCallback(
     (_e) => {
-      let url = `/bot/${projectId}/language-understanding/${dialogId}`;
+      let url = `${baseURL}language-understanding/${dialogId}`;
       if (!edit) url += `/edit`;
       navigateTo(url);
     },

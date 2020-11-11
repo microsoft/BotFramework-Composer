@@ -2,9 +2,7 @@
   "name": "pva-publish-composer",
   "version": "1.0.0",
   "scripts": {
-    "build": "yarn clean && yarn build:ui && yarn build:node",
-    "build:node": "tsc --project tsconfig.node.json",
-    "build:ui": "webpack --config webpack.config.js",
+    "build": "yarn clean && webpack",
     "clean": "rimraf lib",
     "test": "yarn test:node && yarn test:ui",
     "test:node": "jest --config jest.config.node.js",
