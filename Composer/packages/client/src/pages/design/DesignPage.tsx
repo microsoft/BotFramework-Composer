@@ -47,7 +47,7 @@ import {
   skillsStateSelector,
   rootBotProjectIdSelector,
   projectDialogsMapSelector,
-  skillIdByProjectIdSelector,
+  skillNameIdentifierByProjectIdSelector,
   SkillInfo,
 } from '../../recoilModel';
 import { CreateQnAModal } from '../../components/QnA';
@@ -136,7 +136,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const dialogs = useRecoilValue(validateDialogsSelectorFamily(skillId ?? projectId));
   const skills = useRecoilValue(skillsStateSelector);
   const displaySkillManifest = useRecoilValue(displaySkillManifestState(skillId ?? projectId));
-  const skillsByProjectId = useRecoilValue(skillIdByProjectIdSelector);
+  const skillsByProjectId = useRecoilValue(skillNameIdentifierByProjectIdSelector);
   const projectDialogsMap = useRecoilValue(projectDialogsMapSelector);
   const { startSingleBot, stopSingleBot } = useLocalBotOperations();
   const focusPath = useRecoilValue(focusPathState(skillId ?? projectId));

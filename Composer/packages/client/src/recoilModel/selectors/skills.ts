@@ -11,9 +11,19 @@ import {
   botDisplayNameState,
   projectMetaDataState,
   locationState,
+  botProjectIdsState,
 } from '../atoms';
 
-import { skillsProjectIdSelector } from './project';
+export const skillsProjectIdSelector = selector({
+  key: 'skillsProjectIdSelector',
+  get: ({ get }) => {
+    const botIds = get(botProjectIdsState);
+    return botIds.filter((projectId: string) => {
+      const { isRootBot } = get(projectMetaDataState(projectId));
+      return !isRootBot;
+    });
+  },
+});
 
 export interface SkillInfo extends Skill {
   manifestId: string;
@@ -55,8 +65,8 @@ export const skillsStateSelector = selector({
   },
 });
 
-export const skillIdByProjectIdSelector = selector({
-  key: 'skillIdByProjectIdSelector',
+export const skillNameIdentifierByProjectIdSelector = selector({
+  key: 'skillNameIdentifierByProjectIdSelector',
   get: ({ get }) => {
     const skillsProjectIds = get(skillsProjectIdSelector);
     const skills: Record<string, string> = skillsProjectIds.reduce((result, skillId: string) => {

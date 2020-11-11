@@ -131,17 +131,6 @@ export const jsonSchemaFilesByProjectIdSelector = selector({
   },
 });
 
-export const skillsProjectIdSelector = selector({
-  key: 'skillsProjectIdSelector',
-  get: ({ get }) => {
-    const botIds = get(botProjectIdsState);
-    return botIds.filter((projectId: string) => {
-      const { isRootBot } = get(projectMetaDataState(projectId));
-      return !isRootBot;
-    });
-  },
-});
-
 export const botProjectDiagnosticsSelector = selector({
   key: 'botProjectDiagnosticsSelector',
   get: ({ get }) => {
