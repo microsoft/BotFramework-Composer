@@ -158,6 +158,19 @@ export const navigateToBot = (callbackHelpers: CallbackInterface, projectId: str
   }
 };
 
+export const navigateToSkillBot = (
+  callbackHelpers: CallbackInterface,
+  rootProjectId: string,
+  skillId: string,
+  mainDialog: string
+) => {
+  if (rootProjectId && skillId) {
+    let url = `/bot/${rootProjectId}/skill/${skillId}`;
+    if (mainDialog) url += `/dialogs/${mainDialog}`;
+    navigateTo(url);
+  }
+};
+
 export const loadProjectData = (response) => {
   const { files, botName, settings, id: projectId } = response.data;
   const mergedSettings = getMergedSettings(projectId, settings);
