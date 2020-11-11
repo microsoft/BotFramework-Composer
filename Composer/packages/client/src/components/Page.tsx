@@ -5,12 +5,15 @@
 import { jsx, css } from '@emotion/core';
 import React from 'react';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
+import { useRecoilValue } from 'recoil';
 
 import { LeftRightSplit } from '../components/Split/LeftRightSplit';
+import { navigateTo, buildURL } from '../utils/navigation';
+import { currentModeState } from '../recoilModel';
 
 import { Toolbar, IToolbarItem } from './Toolbar';
 import { NavTree, INavTreeItem } from './NavTree';
-import { TreeLink, ProjectTree } from './ProjectTree/ProjectTree';
+import { ProjectTree } from './ProjectTree/ProjectTree';
 
 // -------------------- Styles -------------------- //
 
@@ -81,24 +84,16 @@ export const content = css`
 
 // -------------------- Page -------------------- //
 
-type PageBaseProps = {
+type IPageProps = {
   toolbarItems: IToolbarItem[];
   title: string;
   navRegionName: string;
   mainRegionName: string;
   onRenderHeaderContent?: () => string | JSX.Element | null;
   'data-testid'?: string;
+  useNewTree: boolean;
+  navLinks?: INavTreeItem[];
 };
-
-type IPageProps =
-  | (PageBaseProps & {
-      navLinks: INavTreeItem[];
-      useNewTree: false;
-    })
-  | (PageBaseProps & {
-      navLinks: TreeLink[];
-      useNewTree: true;
-    });
 
 const Page: React.FC<IPageProps> = (props) => {
   const {
@@ -112,6 +107,8 @@ const Page: React.FC<IPageProps> = (props) => {
     useNewTree,
   } = props;
 
+  const pageMode = useRecoilValue(currentModeState);
+
   return (
     <div css={root} data-testid={props['data-testid']}>
       <div css={pageWrapper}>
@@ -123,7 +120,17 @@ const Page: React.FC<IPageProps> = (props) => {
         <div css={main} role="main">
           <LeftRightSplit initialLeftGridWidth="20%" minLeftPixels={200} minRightPixels={800}>
             {useNewTree ? (
-              <ProjectTree navLinks={navLinks as TreeLink[]} showDelete={false} />
+              <ProjectTree
+                showDelete={false}
+                showTriggers={false}
+                onSelect={(link) => {
+                  console.log(buildURL(pageMode, link));
+                  navigateTo(buildURL(pageMode, link));
+                }}
+                onSelectAllLink={() => {
+                  console.log('all');
+                }}
+              />
             ) : (
               <NavTree navLinks={navLinks as INavTreeItem[]} regionName={navRegionName} />
             )}

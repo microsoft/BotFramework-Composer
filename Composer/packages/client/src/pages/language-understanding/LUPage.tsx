@@ -8,7 +8,7 @@ import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { RouteComponentProps, Router } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 
-import { navigateTo } from '../../utils/navigation';
+import { navigateTo, buildURL } from '../../utils/navigation';
 import { TreeLink } from '../../components/ProjectTree/ProjectTree';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { Page } from '../../components/Page';
@@ -22,57 +22,47 @@ const LUPage: React.FC<RouteComponentProps<{
   projectId: string;
   skillId: string;
 }>> = (props) => {
-  const { dialogId = '', projectId = '', skillId } = props;
-  const dialogs = useRecoilValue(validateDialogsSelectorFamily(skillId ?? projectId ?? ''));
+  const { dialogId = '', projectId = '' } = props;
+  const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId ?? ''));
 
   const path = props.location?.pathname ?? '';
   const edit = /\/edit(\/)?$/.test(path);
   const isRoot = dialogId === 'all';
-  const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
 
   const navLinks: TreeLink[] = useMemo(() => {
-    const newDialogLinks: TreeLink[] = dialogs.map((dialog) => {
-      let url = `${baseURL}language-understanding/${dialog.id}`;
-      if (edit) {
-        url += `/edit`;
-      }
-      return {
-        id: dialog.id,
-        url: url,
-        name: dialog.displayName,
-        ariaLabel: formatMessage('language understanding file'),
-      };
-    });
-    const mainDialogIndex = newDialogLinks.findIndex((link) => link.id === 'Main');
+    const newDialogLinks: TreeLink[] = dialogs.map((dialog) => ({
+      projectId,
+      dialogId: dialog.id,
+      displayName: dialog.displayName,
+      isRoot: false,
+    }));
+    const mainDialogIndex = newDialogLinks.findIndex((link) => link.dialogId === 'Main');
 
     if (mainDialogIndex > -1) {
       const mainDialog = newDialogLinks.splice(mainDialogIndex, 1)[0];
       newDialogLinks.splice(0, 0, mainDialog);
     }
-    newDialogLinks.splice(0, 0, {
-      id: 'all',
-      name: formatMessage('All'),
-      ariaLabel: formatMessage('all language understanding files'),
-      url: `${baseURL}language-understanding/all`,
-    });
+    // newDialogLinks.splice(0, 0, {
+    //   id: 'all',
+    //   name: formatMessage('All'),
+    //   ariaLabel: formatMessage('all language understanding files'),
+    //   url: `${baseURL}language-understanding/all`,
+    // });
     return newDialogLinks;
   }, [dialogs, edit]);
 
   useEffect(() => {
     const activeDialog = dialogs.find(({ id }) => id === dialogId);
     if (!activeDialog && dialogId !== 'all' && dialogs.length) {
-      navigateTo(`${baseURL}language-understanding/all`);
+      navigateTo(buildURL('lu', { projectId }));
     }
   }, [dialogId, dialogs, projectId]);
 
-  const onToggleEditMode = useCallback(
-    (_e) => {
-      let url = `${baseURL}language-understanding/${dialogId}`;
-      if (!edit) url += `/edit`;
-      navigateTo(url);
-    },
-    [dialogId, projectId, edit]
-  );
+  const onToggleEditMode = useCallback(() => {
+    let url = buildURL('lu', { projectId, dialogId });
+    if (!edit) url += `/edit`;
+    navigateTo(url);
+  }, [dialogId, projectId, edit]);
 
   const onRenderHeaderContent = () => {
     if (!isRoot) {
@@ -90,7 +80,6 @@ const LUPage: React.FC<RouteComponentProps<{
       useNewTree
       data-testid="LUPage"
       mainRegionName={formatMessage('LU editor')}
-      navLinks={navLinks}
       navRegionName={formatMessage('LU Navigation Pane')}
       title={formatMessage('User Input')}
       toolbarItems={[]}

@@ -133,7 +133,6 @@ type Props = {
   onSelectAllLink?: () => void;
   showTriggers?: boolean;
   showDialogs?: boolean;
-  navLinks?: TreeLink[];
   onDeleteTrigger?: (id: string, index: number) => void;
   onDeleteDialog?: (id: string) => void;
   defaultSelected?: Partial<TreeLink>;
@@ -352,13 +351,7 @@ export const ProjectTree: React.FC<Props> = ({
     };
   };
 
-  const renderTrigger = (
-    item: any,
-    dialog: DialogInfo,
-    projectId: string,
-    dialogLink: TreeLink,
-    depth: number
-  ): React.ReactNode => {
+  const renderTrigger = (item: any, dialog: DialogInfo, projectId: string, dialogLink: TreeLink): React.ReactNode => {
     const link: TreeLink = {
       projectId: rootProjectId,
       skillId: projectId === rootProjectId ? undefined : projectId,
@@ -408,13 +401,7 @@ export const ProjectTree: React.FC<Props> = ({
     return scope.toLowerCase().includes(filter.toLowerCase());
   };
 
-  const renderTriggerList = (
-    triggers: ITrigger[],
-    dialog: DialogInfo,
-    projectId: string,
-    dialogLink: TreeLink,
-    depth: number
-  ) => {
+  const renderTriggerList = (triggers: ITrigger[], dialog: DialogInfo, projectId: string, dialogLink: TreeLink) => {
     return triggers
       .filter((tr) => filterMatch(dialog.displayName) || filterMatch(getTriggerName(tr)))
       .map((tr) => {
@@ -427,13 +414,12 @@ export const ProjectTree: React.FC<Props> = ({
           { ...tr, index, displayName: getTriggerName(tr), warningContent, errorContent },
           dialog,
           projectId,
-          dialogLink,
-          depth
+          dialogLink
         );
       });
   };
 
-  const renderTriggerGroupHeader = (displayName: string, dialog: DialogInfo, projectId: string, depth: number) => {
+  const renderTriggerGroupHeader = (displayName: string, dialog: DialogInfo, projectId: string) => {
     const link: TreeLink = {
       dialogId: dialog.id,
       displayName,
@@ -476,10 +462,10 @@ export const ProjectTree: React.FC<Props> = ({
       <ExpandableNode
         key={key}
         depth={startDepth}
-        summary={renderTriggerGroupHeader(groupDisplayName, dialog, projectId, startDepth + 1)}
+        summary={renderTriggerGroupHeader(groupDisplayName, dialog, projectId)}
         onToggle={(newState) => setPageElement(key, newState)}
       >
-        <div>{renderTriggerList(triggers, dialog, projectId, link, startDepth + 1)}</div>
+        <div>{renderTriggerList(triggers, dialog, projectId, link)}</div>
       </ExpandableNode>
     );
   };
@@ -500,7 +486,7 @@ export const ProjectTree: React.FC<Props> = ({
   const renderDialogTriggers = (dialog: DialogInfo, projectId: string, startDepth: number, dialogLink: TreeLink) => {
     return dialogIsFormDialog(dialog)
       ? renderDialogTriggersByProperty(dialog, projectId, startDepth + 1)
-      : renderTriggerList(dialog.triggers, dialog, projectId, dialogLink, startDepth + 1);
+      : renderTriggerList(dialog.triggers, dialog, projectId, dialogLink);
   };
 
   const createDetailsTree = (bot: BotInProject, startDepth: number) => {
@@ -533,7 +519,9 @@ export const ProjectTree: React.FC<Props> = ({
         );
       });
     } else {
-      return filteredDialogs.map((dialog: DialogInfo) => renderDialogHeader(projectId, dialog, startDepth));
+      return filteredDialogs.map(
+        (dialog: DialogInfo) => renderDialogHeader(projectId, dialog, startDepth + 1).summaryElement
+      );
     }
   };
 
