@@ -2,19 +2,18 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import { PublishTarget } from '@botframework-composer/types';
 import formatMessage from 'format-message';
-import { Dialog, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
+import axios from 'axios';
 
 import { createNotification } from '../../recoilModel/dispatchers/notification';
-import { ImportSuccessNotification } from '../../components/ImportModal/ImportSuccessNotification';
+import { ImportSuccessNotificationWrapper } from '../../components/ImportModal/ImportSuccessNotification';
 import { dispatcherState, locationState } from '../../recoilModel';
 
+import { PullFailedDialog } from './pullFailedDialog';
 import { PullStatus } from './pullStatus';
 
 type PullDialogProps = {
@@ -25,22 +24,15 @@ type PullDialogProps = {
 
 type PullDialogStatus = 'connecting' | 'downloading' | 'error';
 
-const boldText = css`
-  font-weight: ${FontWeights.semibold};
-  word-break: break-work;
-`;
-
 const CONNECTING_STATUS_DISPLAY_TIME = 2000;
 
 export const PullDialog: React.FC<PullDialogProps> = (props) => {
   const { onDismiss, projectId, selectedTarget } = props;
   const [status, setStatus] = useState<PullDialogStatus>('connecting');
   const [error, setError] = useState<string>('');
-  const { addNotification, openProject } = useRecoilValue(dispatcherState);
+  const { addNotification, reloadExistingProject } = useRecoilValue(dispatcherState);
   const botLocation = useRecoilValue(locationState(projectId));
 
-  // TODO: pull needs to be broken down into a previous auth step so the UI can reflect status
-  // properly like in import flow
   const pull = useCallback(() => {
     if (selectedTarget) {
       const doPull = async () => {
@@ -49,40 +41,33 @@ export const PullDialog: React.FC<PullDialogProps> = (props) => {
 
         try {
           // wait for pull result from server
-          const res = await fetch(`/api/publish/${projectId}/pull/${selectedTarget.name}`, {
-            method: 'POST',
+          const res = await axios.post<{ backupLocation: string }>(
+            `/api/publish/${projectId}/pull/${selectedTarget.name}`
+          );
+          const { backupLocation } = res.data;
+          // show notification indicating success and close dialog
+          const notification = createNotification({
+            type: 'success',
+            title: '',
+            onRenderCardContent: ImportSuccessNotificationWrapper({
+              importedToExisting: true,
+              location: backupLocation,
+            }),
           });
-          if (res.status && res.status === 200) {
-            const { backupLocation } = await res.json();
-            // show notification indicating success and close dialog
-            const notification = createNotification({
-              type: 'success',
-              title: '',
-              onRenderCardContent: ImportSuccessNotification({
-                importedToExisting: true,
-                location: backupLocation,
-              }),
-            });
-            addNotification(notification);
-            // reload the bot project to update the authoring canvas
-            openProject(botLocation, undefined, false);
-            onDismiss();
-            return;
-          }
-
-          // not what we expected
-          const { message } = await res.json();
-          setError(formatMessage('Something happened while attempting to pull: ') + message);
-          setStatus('error');
+          addNotification(notification);
+          // reload the bot project to update the authoring canvas
+          reloadExistingProject(projectId);
+          onDismiss();
+          return;
         } catch (e) {
           // something bad happened
-          setError(e);
+          setError(formatMessage('Something happened while attempting to pull: { e }', { e }));
           setStatus('error');
         }
       };
       doPull();
     }
-  }, [projectId, selectedTarget]);
+  }, [botLocation, projectId, selectedTarget]);
 
   useEffect(() => {
     if (status === 'connecting') {
@@ -106,30 +91,9 @@ export const PullDialog: React.FC<PullDialogProps> = (props) => {
       return <PullStatus publishTarget={selectedTarget} state={'downloading'} />;
 
     case 'error':
-      return (
-        <Dialog
-          dialogContentProps={{
-            title: formatMessage('Something went wrong'),
-            styles: {
-              content: {
-                fontSize: 16,
-              },
-            },
-          }}
-          hidden={false}
-        >
-          <p>
-            {formatMessage('There was an unexpected error pulling from publish profile ')}
-            <span css={boldText}>{selectedTarget?.name}</span>
-          </p>
-          <p css={boldText}>{typeof error === 'object' ? JSON.stringify(error, undefined, 2) : error}</p>
-          <DialogFooter>
-            <PrimaryButton text={formatMessage('Ok')} onClick={onCancelOrDone} />
-          </DialogFooter>
-        </Dialog>
-      );
+      return <PullFailedDialog error={error} selectedTargetName={selectedTarget?.name} onDismiss={onCancelOrDone} />;
 
     default:
-      return <div style={{ display: 'none' }}></div>;
+      throw new Error(`PullDialog trying to render for unexpected status: ${status}`);
   }
 };

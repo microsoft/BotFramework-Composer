@@ -339,16 +339,16 @@ export const PublishController = {
       if (typeof pluginMethod === 'function') {
         try {
           // call the method
-          const results = (await pluginMethod.call(
+          const results = await pluginMethod.call(
             null,
             configuration,
             currentProject,
             user,
             authService.getAccessToken.bind(authService)
-          )) as { zipPath?: string; eTag: string; status: number; error?: any };
+          );
           if (results.status === 500) {
             // something went wrong
-            console.error(results.error?.message);
+            log('Error while trying to pull: %s', results.error?.message);
             return res.status(500).send(results.error?.message);
           }
           if (!results.zipPath) {
@@ -379,7 +379,7 @@ export const PublishController = {
             path: currentProject.dir,
           };
           log('Copying content from template at %s to %s', templateDir, currentProject.dir);
-          await AssetService.manager.copyProjectTemplateDirTo(
+          await AssetService.manager.copyRemoteProjectTemplateTo(
             templateDir,
             locationRef,
             user,

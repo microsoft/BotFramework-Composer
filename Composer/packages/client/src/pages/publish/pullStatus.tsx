@@ -6,10 +6,11 @@ import { css, jsx } from '@emotion/core';
 import * as React from 'react';
 import { RouteComponentProps } from '@reach/router';
 import { Dialog, DialogType, IDialogContentProps } from 'office-ui-fabric-react/lib/Dialog';
-import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
+import { IProgressIndicatorStyles, ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
 import formatMessage from 'format-message';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { PublishTarget } from '@botframework-composer/types';
+import { generateUniqueId } from '@bfc/shared';
 
 import compIcon from '../../images/composerIcon.svg';
 import pvaIcon from '../../images/pvaIcon.svg';
@@ -45,11 +46,32 @@ const contentProps: IDialogContentProps = {
   },
 };
 
+const serviceIcon = css`
+  width: 33px;
+`;
+
 const boldBlueText = css`
   font-weight: ${FontWeights.semibold};
   color: #106ebe;
   word-break: break-work;
 `;
+
+const iconContainer = css`
+  display: flex;
+  justify-content: center;
+`;
+
+const progressLabel = css`
+  font-size: 16px;
+  white-space: normal;
+`;
+
+const dataTransferStyle = css`
+  margin: 0 16px;
+  width: 78px;
+`;
+
+const centeredProgressIndicatorStyles: Partial<IProgressIndicatorStyles> = { itemName: { textAlign: 'center' } };
 
 function getServiceIcon(targetType?: KnownPublishTargets) {
   let icon;
@@ -59,8 +81,8 @@ function getServiceIcon(targetType?: KnownPublishTargets) {
         <img
           alt={formatMessage('PowerVirtualAgents Logo')}
           aria-label={formatMessage('PowerVirtualAgents Logo')}
+          css={serviceIcon}
           src={pvaIcon}
-          style={{ width: '33px' }}
         />
       );
       break;
@@ -75,12 +97,18 @@ function getServiceIcon(targetType?: KnownPublishTargets) {
       <img
         alt={formatMessage('Data transferring between services')}
         aria-label={formatMessage('Data transferring between services')}
+        css={dataTransferStyle}
         src={dataTransferLine}
-        style={{ margin: '0 16px', width: '78px' }}
       />
     </React.Fragment>
   );
 }
+
+const Bold = ({ children }) => (
+  <span key={generateUniqueId()} css={boldBlueText}>
+    {children}
+  </span>
+);
 
 export const PullStatus: React.FC<RouteComponentProps & PullStatusProps> = (props) => {
   const { publishTarget, state } = props;
@@ -89,18 +117,19 @@ export const PullStatus: React.FC<RouteComponentProps & PullStatusProps> = (prop
     <img
       alt={formatMessage('Composer Logo')}
       aria-label={formatMessage('Composer Logo')}
+      css={serviceIcon}
       src={compIcon}
-      style={{ width: '33px' }}
     />
   );
 
   switch (state) {
     case 'connecting': {
       const label = (
-        <p style={{ fontSize: 16, whiteSpace: 'normal' }}>
-          {formatMessage('Connecting to ')}
-          <span css={boldBlueText}>{publishTarget?.name}</span>
-          {formatMessage(' to import bot content...')}
+        <p css={progressLabel}>
+          {formatMessage.rich('Connecting to <b>{ targetName }</b> to import bot content...', {
+            b: Bold,
+            targetName: publishTarget?.name,
+          })}
         </p>
       );
       return (
@@ -111,18 +140,18 @@ export const PullStatus: React.FC<RouteComponentProps & PullStatusProps> = (prop
           modalProps={{ isBlocking: true }}
           styles={{ main: { height: 263 } }}
         >
-          <span style={{ display: 'flex', justifyContent: 'center' }}>
+          <span css={iconContainer}>
             {getServiceIcon(publishTarget?.type as KnownPublishTargets)}
             {composerIcon}
           </span>
-          <ProgressIndicator label={label} styles={{ itemName: { textAlign: 'center' } }} />
+          <ProgressIndicator label={label} styles={centeredProgressIndicatorStyles} />
         </Dialog>
       );
     }
 
     case 'downloading': {
       const label = (
-        <p style={{ fontSize: 16, whiteSpace: 'normal' }}>
+        <p css={progressLabel}>
           {formatMessage('Importing bot content from {targetName}...', { targetName: publishTarget?.name })}
         </p>
       );
@@ -134,16 +163,16 @@ export const PullStatus: React.FC<RouteComponentProps & PullStatusProps> = (prop
           modalProps={{ isBlocking: true }}
           styles={{ main: { height: 263 } }}
         >
-          <span style={{ display: 'flex', justifyContent: 'center' }}>
+          <span css={iconContainer}>
             {getServiceIcon(publishTarget?.type as KnownPublishTargets)}
             {composerIcon}
           </span>
-          <ProgressIndicator label={label} styles={{ itemName: { textAlign: 'center' } }} />
+          <ProgressIndicator label={label} styles={centeredProgressIndicatorStyles} />
         </Dialog>
       );
     }
 
     default:
-      return <div style={{ display: 'none' }}></div>;
+      throw new Error(`PullStatus trying to render for unexpected status: ${state}`);
   }
 };
