@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx, css } from '@emotion/core';
 import moment from 'moment';
 import formatMessage from 'format-message';
 import { ActionButton, IconButton } from 'office-ui-fabric-react/lib/Button';
@@ -59,6 +59,8 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
   };
   const headerStyle = { padding: '0 32px 0 11px', fontWeight: 400 };
   const bodyStyle = { minWidth: '114px', maxWidth: '134px', padding: '11px 32px 11px 12px' };
+  const trStyle = { borderTop: '1px solid #EDEBE9' };
+  const spanStyle = { wordBreak: 'break-word' };
 
   const renderItem = (item: IBotStatus, index: number) => {
     const publishTargetOptions = (): IDropdownOption[] => {
@@ -116,7 +118,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
     };
     return (
       <Fragment key={index}>
-        <tr>
+        <tr css={trStyle}>
           <td css={bodyStyle}>
             <Checkbox label={item.name} onChange={changeSelected} />
           </td>
@@ -135,10 +137,10 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
           </td>
           <td css={bodyStyle}>{item.status && renderStatus(item)}</td>
           <td css={bodyStyle}>
-            <span>{item.message}</span>
+            <span css={spanStyle}>{item.message}</span>
           </td>
           <td css={bodyStyle}>
-            <span>{item.comment}</span>
+            <span css={spanStyle}>{item.comment}</span>
           </td>
           <td css={bodyStyle}>
             <IconButton
@@ -147,7 +149,7 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
             />
           </td>
         </tr>
-        <tr>
+        <tr css={showHistoryBots.includes(item.id) ? trStyle : ''}>
           <td colSpan={8}>
             <div css={{ display: showHistoryBots.includes(item.id) ? 'block' : 'none' }}>
               <div css={{ fontSize: '14px', lineHeight: '20px', color: '#323130', fontWeight: 'bold' }}>
@@ -169,22 +171,29 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
       </Fragment>
     );
   };
+
+  const tableStyle = css({
+    height: '100%',
+    overflow: 'auto',
+    borderCollapse: 'collapse',
+    display: 'inline-block',
+  });
   return (
     <Fragment>
-      <table>
+      <table css={tableStyle}>
         <thead>
           <tr>
-            <td css={headerStyle}>
+            <th css={headerStyle}>
               <ActionButton onClick={sortBot}>
                 {formatMessage('Bot')}
                 <FontIcon iconName={botDescend ? 'Down' : 'Up'} />
               </ActionButton>
-            </td>
-            <td css={headerStyle}>{formatMessage('Publish target')}</td>
-            <td css={headerStyle}>{formatMessage('Date')}</td>
-            <td css={headerStyle}>{formatMessage('Status')}</td>
-            <td css={headerStyle}>{formatMessage('Message')}</td>
-            <td css={headerStyle}>{formatMessage('Comment')}</td>
+            </th>
+            <th css={headerStyle}>{formatMessage('Publish target')}</th>
+            <th css={headerStyle}>{formatMessage('Date')}</th>
+            <th css={headerStyle}>{formatMessage('Status')}</th>
+            <th css={headerStyle}>{formatMessage('Message')}</th>
+            <th css={headerStyle}>{formatMessage('Comment')}</th>
           </tr>
         </thead>
         <tbody>{items.map((item, index) => renderItem(item, index))}</tbody>

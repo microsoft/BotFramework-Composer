@@ -14,7 +14,7 @@ const cardContent = css`
   display: flex;
   padding: 0 16px 16px 12px;
   min-height: 64px;
-  align-item: center;
+  align-items: center;
 `;
 
 const cardDetail = css`
@@ -31,28 +31,19 @@ const cardDescription = css`
   text-size-adjust: none;
   font-size: 12px;
   line-height: 16px;
-  margin-top: 8px;
   margin-right: 16px;
   word-break: break-word;
 `;
-export const pendingNotificationCard = (items): CardProps => {
-  return {
-    title: '',
-    description: formatMessage(`Publishing {count} bots`, { count: items.length }),
-    type: 'pending',
-    onRenderCardContent: (props) => (
-      <div css={cardContent}>
-        <Icon css={infoType} iconName="CloudUpload" />
-        <div css={cardDetail}>
-          <div css={cardDescription}>{props.description}</div>
-          <ProgressIndicator />
-        </div>
-      </div>
-    ),
-  };
-};
 
 export const publishedNotificationCard = (item: IBotStatus): CardProps => {
+  const statusIconStyle = css({
+    margin: '12px 0 0 -1px',
+    width: '12px',
+    height: '12px',
+    fontSize: '12px',
+    color: item.status === 200 ? '#27AE60' : 'rgb(161, 159, 157)',
+    transform: item.status !== 200 ? 'rotate(45deg)' : '',
+  });
   return {
     title: '',
     description: formatMessage(`You have {status} published {name} to {publishTarget}`, {
@@ -64,16 +55,15 @@ export const publishedNotificationCard = (item: IBotStatus): CardProps => {
     onRenderCardContent: (props) => (
       <div css={cardContent}>
         <Icon css={infoType} iconName="CloudUpload" />
-        <Icon css={infoType} iconName={item.status === 200 ? 'Completed' : 'ErrorBadge'} />
+        <Icon css={statusIconStyle} iconName={item.status === 200 ? 'SkypeCircleCheck' : 'CircleAdditionSolid'} />
         <div css={cardDetail}>
           <div css={cardDescription}>{props.description}</div>
-          <ProgressIndicator description="Example description" label="Example title" />
         </div>
       </div>
     ),
   };
 };
-export const pendingNotification = (items): CardProps => {
+export const pendingNotificationCard = (items): CardProps => {
   return {
     title: '',
     description: formatMessage(`Publishing {count} bots`, { count: items.length }),
@@ -82,8 +72,7 @@ export const pendingNotification = (items): CardProps => {
       <div css={cardContent}>
         <Icon css={infoType} iconName="CloudUpload" />
         <div css={cardDetail}>
-          <div css={cardDescription}>{props.description}</div>
-          <ProgressIndicator description="Example description" label="Example title" />
+          <ProgressIndicator label={props.description} />
         </div>
       </div>
     ),

@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import formatMessage from 'format-message';
 import {
@@ -19,6 +19,7 @@ import { IBotStatus } from './botStatusList';
 
 export const PublishDialog = (props) => {
   const { items } = props;
+  const [showItems, setShowItems] = useState<IBotStatus[]>(items);
   const columns = [
     {
       key: 'name',
@@ -27,8 +28,6 @@ export const PublishDialog = (props) => {
       fieldName: 'name',
       minWidth: 70,
       maxWidth: 90,
-      isRowHeader: true,
-      isResizable: true,
       data: 'string',
       onRender: (item: IBotStatus) => {
         return <div css={{ alignItems: 'center', display: 'flex', height: '32px' }}>{item.name}</div>;
@@ -42,12 +41,18 @@ export const PublishDialog = (props) => {
       fieldName: 'publishTarget',
       minWidth: 70,
       maxWidth: 90,
-      isRowHeader: true,
-      isResizable: true,
       data: 'string',
       onRender: (item: IBotStatus) => {
         return (
-          <div css={{ backgroundColor: '#DDF3DB', alignItems: 'center', display: 'flex', height: '32px' }}>
+          <div
+            css={{
+              backgroundColor: '#DDF3DB',
+              alignItems: 'center',
+              display: 'flex',
+              height: '32px',
+              paddingLeft: '8px',
+            }}
+          >
             {item.publishTarget}
           </div>
         );
@@ -61,8 +66,6 @@ export const PublishDialog = (props) => {
       fieldName: 'comment',
       minWidth: 70,
       maxWidth: 90,
-      isRowHeader: true,
-      isResizable: true,
       data: 'string',
       onRender: (item: IBotStatus) => {
         return (
@@ -70,7 +73,13 @@ export const PublishDialog = (props) => {
             placeholder={formatMessage('Write your message')}
             value={item.comment}
             onChange={(e, newValue) => {
-              item.comment = newValue;
+              const newItems = showItems.map((obj) => {
+                if (obj.id === item.id) {
+                  obj.comment = newValue;
+                }
+                return obj;
+              });
+              setShowItems(newItems);
             }}
           />
         );
@@ -83,28 +92,39 @@ export const PublishDialog = (props) => {
     type: DialogType.normal,
     subText: formatMessage('You are about to publish your bot to the profile below. Do you want to proceed?'),
   };
+  const cleanComments = () => {
+    const cleanedItems = showItems.map((item) => {
+      item.comment = '';
+      return item;
+    });
+    setShowItems(cleanedItems);
+  };
   const submit = async () => {
     props.onDismiss();
-    await props.onSubmit(items);
+    await props.onSubmit(showItems);
+    cleanComments();
   };
-  return items && items.length > 0 ? (
+  return showItems && showItems.length > 0 ? (
     <Dialog
       dialogContentProps={publishDialogProps}
       hidden={false}
       modalProps={{ isBlocking: true, styles: { main: { maxWidth: '1063px !important' } } }}
-      onDismiss={props.onDismiss}
+      onDismiss={() => {
+        cleanComments();
+        props.onDismiss();
+      }}
     >
       <Fragment>
-        <DetailsList
-          checkboxVisibility={CheckboxVisibility.hidden}
-          columns={columns}
-          items={items}
-          layoutMode={DetailsListLayoutMode.justified}
-          selectionMode={SelectionMode.single}
-        />
+        <DetailsList checkboxVisibility={CheckboxVisibility.hidden} columns={columns} items={showItems} />
 
         <DialogFooter>
-          <DefaultButton text={formatMessage('Cancel')} onClick={props.onDismiss} />
+          <DefaultButton
+            text={formatMessage('Cancel')}
+            onClick={() => {
+              cleanComments();
+              props.onDismiss();
+            }}
+          />
           <PrimaryButton text={formatMessage('Okay')} onClick={submit} />
         </DialogFooter>
       </Fragment>

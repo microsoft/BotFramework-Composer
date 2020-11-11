@@ -42,7 +42,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
 
   const [selectedBots, setSelectedBots] = useState<IBotStatus[]>([]);
 
-  const [showNotification, setShowNotification] = useState<boolean>(false);
+  const [showNotifications, setShowNotifications] = useState<{ [key: string]: boolean }>({});
   // fill Settings, status, publishType, publish target for bot from botProjectMeta
   const botSettingsList: { [key: string]: any }[] = [];
   const botStatusList: IBotStatus[] = [];
@@ -157,9 +157,10 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
               getPublishHistory(projectId, selectedTarget);
               getUpdatedStatus(selectedTarget);
             } else if (botPublishHistory[0].status === 200 || botPublishHistory[0].status === 500) {
-              if (showNotification) {
+              if (showNotifications[bot.id]) {
                 pendingNotification && deleteNotification(pendingNotification.id);
                 addNotification(createNotification(publishedNotificationCard(bot)));
+                setShowNotifications({ ...showNotifications, [bot.id]: false });
               }
             } else if (selectedTarget && selectedTarget.lastPublished && botPublishHistory.length === 0) {
               // if the history is EMPTY, but we think we've done a publish based on lastPublished timestamp,
@@ -231,7 +232,12 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   };
   const publish = async (items: IBotStatus[]) => {
     // notifications
-    setShowNotification(true);
+    setShowNotifications(
+      items.reduce((accumulator, item) => {
+        accumulator[item.id] = true;
+        return accumulator;
+      }, {})
+    );
     const notification = createNotification(pendingNotificationCard(items));
     setPendingNotification(notification);
     addNotification(notification);
