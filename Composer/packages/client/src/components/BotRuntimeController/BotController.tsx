@@ -36,7 +36,7 @@ const iconSectionContainer = css`
 
 const disabledStyle = css`
   &:before {
-    opacity: 0.4;
+    opacity: 0.6;
   }
   pointer-events: none;
 `;
@@ -134,6 +134,13 @@ const BotController: React.FC = () => {
             rootHovered: {
               background: transparentBackground,
             },
+            rootDisabled: {
+              opacity: 0.6,
+              backgroundColor: '#3393DD',
+              color: `${NeutralColors.white}`,
+              border: 'none',
+              font: '62px',
+            },
           }}
           onClick={handleClick}
         >
@@ -150,6 +157,13 @@ const BotController: React.FC = () => {
               root: {
                 color: NeutralColors.white,
                 background: isControllerHidden ? '#3393DD' : transparentBackground,
+                selectors: {
+                  ':disabled .ms-Button-icon': {
+                    opacity: 0.6,
+                    backgroundColor: '#3393DD',
+                    color: `${NeutralColors.white}`,
+                  },
+                },
               },
               rootHovered: { background: transparentBackground, color: NeutralColors.white },
             }}
