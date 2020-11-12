@@ -68,18 +68,6 @@ export const projectDispatcher = () => {
     }
   );
 
-  const removeRemoteSkillFromBotProject = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (skillIdToRemove: string) => {
-      try {
-        const { snapshot } = callbackHelpers;
-        const dispatcher = await snapshot.getPromise(dispatcherState);
-        await dispatcher.removeRemoteSkillFromBotProjectFile(skillIdToRemove);
-      } catch (ex) {
-        setError(callbackHelpers, ex);
-      }
-    }
-  );
-
   const replaceSkillInBotProject = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (projectIdToRemove: string, path: string, storageId = 'default') => {
       try {
@@ -390,6 +378,5 @@ export const projectDispatcher = () => {
     addRemoteSkillToBotProject,
     replaceSkillInBotProject,
     reloadProject,
-    removeRemoteSkillFromBotProject,
   };
 };
