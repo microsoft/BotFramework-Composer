@@ -382,14 +382,15 @@ export const openRemoteSkill = async (
     url: manifestUrl,
   });
 
-  //TODO: open remote url 404. isRemote set to false?
-  const manifestResponse = await httpClient.get(
-    `/projects/${projectId}/skill/retrieveSkillManifest?${stringified}&ignoreProjectValidation=true`
-  );
   set(projectMetaDataState(projectId), {
     isRootBot: false,
     isRemote: true,
   });
+
+  //TODO: open remote url 404. isRemote set to false?
+  const manifestResponse = await httpClient.get(
+    `/projects/${projectId}/skill/retrieveSkillManifest?${stringified}&ignoreProjectValidation=true`
+  );
 
   let uniqueSkillNameIdentifier = botNameIdentifier;
   if (!uniqueSkillNameIdentifier) {
