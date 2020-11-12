@@ -378,9 +378,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     }
   }
 
-  const onCreateDialogComplete = (dialogId) => {
+  const onCreateDialogComplete = (projectId: string) => (dialogId: string) => {
+    const target = projectId;
     if (dialogId) {
-      navTo(projectId, dialogId);
+      navTo(target, dialogId);
     }
   };
 
@@ -439,7 +440,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         key: 'adddialog',
         text: formatMessage('Add new dialog'),
         onClick: () => {
-          createDialogBegin([], onCreateDialogComplete, projectId);
+          const id = skillId ?? projectId;
+          createDialogBegin([], onCreateDialogComplete(id), id);
         },
       },
       {
@@ -733,7 +735,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   };
 
   const handleCreateDialog = (projectId: string) => {
-    createDialogBegin([], onCreateDialogComplete, projectId);
+    createDialogBegin([], onCreateDialogComplete(projectId), projectId);
     setDialogModalInfo(projectId);
   };
 
