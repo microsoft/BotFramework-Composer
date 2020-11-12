@@ -57,7 +57,7 @@ import { undoFunctionState, undoVersionState } from '../../recoilModel/undo/hist
 import { decodeDesignerPathToArrayPath } from '../../utils/convertUtils/designerPathEncoder';
 import { CreationFlowStatus } from '../../constants';
 import { RepairSkillModalOptionKeys } from '../../components/RepairSkillModal';
-import { useLocalBotOperations } from '../../components/BotRuntimeController/useLocalBotOperations';
+import { useBotOperations } from '../../components/BotRuntimeController/useBotOperations';
 import { undoStatusSelectorFamily } from '../../recoilModel/selectors/undo';
 
 import CreationModal from './creationModal';
@@ -139,7 +139,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const displaySkillManifest = useRecoilValue(displaySkillManifestState(skillId ?? projectId));
   const skillsByProjectId = useRecoilValue(skillNameIdentifierByProjectIdSelector);
   const projectDialogsMap = useRecoilValue(projectDialogsMapSelector);
-  const { startSingleBot, stopSingleBot } = useLocalBotOperations();
+  const { startSingleBot, stopSingleBot } = useBotOperations();
   const focusPath = useRecoilValue(focusPathState(skillId ?? projectId));
   const locale = useRecoilValue(localeState(skillId ?? projectId));
   const undoFunction = useRecoilValue(undoFunctionState(skillId ?? projectId));
@@ -446,7 +446,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           displayName: currentDialog?.displayName ?? '',
         }),
         onClick: () => {
-          openNewTriggerModal();
+          if (!projectId || !currentDialog) return;
+          openNewTriggerModal(projectId, currentDialog.id);
         },
       },
       {
