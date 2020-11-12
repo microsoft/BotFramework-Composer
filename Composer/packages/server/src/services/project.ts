@@ -7,6 +7,7 @@ import flatten from 'lodash/flatten';
 import { luImportResolverGenerator, ResolverResource } from '@bfc/shared';
 import extractMemoryPaths from '@bfc/indexers/lib/dialogUtils/extractMemoryPaths';
 import { UserIdentity } from '@bfc/extension';
+import { ensureDir, existsSync, remove } from 'fs-extra';
 
 import { BotProject } from '../models/bot/botProject';
 import { LocationRef } from '../models/bot/interface';
@@ -18,12 +19,38 @@ import { Path } from './../utility/path';
 
 const MAX_RECENT_BOTS = 7;
 
+/** Metadata stored by Composer and associated by internal bot project id */
+type BotProjectMetadata = {
+  alias?: string;
+  eTag?: string;
+  path: string;
+};
+
+type BotProjectLocationMap = Record<string, BotProjectMetadata>;
+
+/** Converts old bot project location maps to the new shape */
+function fixOldBotProjectMapEntries(
+  projectMap: BotProjectLocationMap | { [key: string]: string }
+): BotProjectLocationMap {
+  const map: BotProjectLocationMap = {};
+  for (const botId in projectMap) {
+    const entry = projectMap[botId];
+    if (typeof entry === 'string') {
+      map[botId] = {
+        path: entry,
+        eTag: '',
+      };
+    } else {
+      map[botId] = entry;
+    }
+  }
+  return map;
+}
+
 export class BotProjectService {
   private static currentBotProjects: BotProject[] = [];
   private static recentBotProjects: LocationRef[] = [];
-  private static projectLocationMap: {
-    [key: string]: string;
-  };
+  private static projectLocationMap: BotProjectLocationMap;
 
   private static initialize() {
     if (!BotProjectService.recentBotProjects || BotProjectService.recentBotProjects.length === 0) {
@@ -31,7 +58,7 @@ export class BotProjectService {
     }
 
     if (!BotProjectService.projectLocationMap || Object.keys(BotProjectService.projectLocationMap).length === 0) {
-      BotProjectService.projectLocationMap = Store.get('projectLocationMap', {});
+      BotProjectService.projectLocationMap = fixOldBotProjectMapEntries(Store.get('projectLocationMap', {}));
     }
   }
 
@@ -133,9 +160,15 @@ export class BotProjectService {
   };
 
   public static deleteProject = async (projectId: string): Promise<string> => {
-    const path = BotProjectService.projectLocationMap[projectId];
-    BotProjectService.removeProjectIdFromCache(projectId);
-    return path;
+    const projectLoc = BotProjectService.projectLocationMap[projectId];
+    if (!projectLoc) {
+      // no-op
+      return '';
+    } else {
+      const { path = '' } = projectLoc;
+      BotProjectService.removeProjectIdFromCache(projectId);
+      return path;
+    }
   };
 
   public static openProject = async (locationRef: LocationRef, user?: UserIdentity): Promise<string> => {
@@ -152,7 +185,8 @@ export class BotProjectService {
     }
 
     for (const key in BotProjectService.projectLocationMap) {
-      if (BotProjectService.projectLocationMap[key] === locationRef.path) {
+      const projectLoc = BotProjectService.projectLocationMap[key];
+      if (projectLoc && projectLoc.path === locationRef.path) {
         // TODO: this should probably move to getProjectById
         BotProjectService.addRecentProject(locationRef.path);
         return key;
@@ -169,7 +203,8 @@ export class BotProjectService {
   // clean project registry based on path to avoid reuseing the same id
   public static cleanProject = async (location: LocationRef): Promise<void> => {
     for (const key in BotProjectService.projectLocationMap) {
-      if (BotProjectService.projectLocationMap[key] === location.path) {
+      const projectLoc = BotProjectService.projectLocationMap[key];
+      if (projectLoc && projectLoc.path === location.path) {
         delete BotProjectService.projectLocationMap[key];
       }
     }
@@ -178,7 +213,7 @@ export class BotProjectService {
 
   public static generateProjectId = async (path: string): Promise<string> => {
     const projectId = (Math.random() * 100000).toString();
-    BotProjectService.projectLocationMap[projectId] = path;
+    BotProjectService.projectLocationMap[projectId] = { eTag: '', path };
     return projectId;
   };
 
@@ -195,7 +230,8 @@ export class BotProjectService {
 
   public static getProjectIdByPath = async (path: string) => {
     for (const key in BotProjectService.projectLocationMap) {
-      if (BotProjectService.projectLocationMap[key] === path) {
+      const projectLoc = BotProjectService.projectLocationMap[key];
+      if (projectLoc && projectLoc.path === path) {
         return key;
       }
     }
@@ -205,23 +241,78 @@ export class BotProjectService {
   public static getProjectById = async (projectId: string, user?: UserIdentity): Promise<BotProject> => {
     BotProjectService.initialize();
 
-    const path = BotProjectService.projectLocationMap[projectId];
+    const projectLoc = BotProjectService.projectLocationMap[projectId];
 
-    if (path == null) {
+    if (!projectLoc || projectLoc.path == null) {
       throw new Error(`project ${projectId} not found in cache`);
     } else {
+      const { eTag, path } = projectLoc;
       // check to make sure the project is still there!
       if (!(await StorageService.checkBlob('default', path, user))) {
         BotProjectService.deleteRecentProject(path);
         BotProjectService.removeProjectIdFromCache(projectId);
         throw new Error(`file ${path} does not exist`);
       }
-      const project = new BotProject({ storageId: 'default', path: path }, user);
+      const project = new BotProject({ storageId: 'default', path: path }, user, eTag);
       await project.init();
       project.id = projectId;
       // update current indexed bot projects
       BotProjectService.updateCurrentProjects(project);
       return project;
+    }
+  };
+
+  public static setProjectLocationData(projectId: string, data: Partial<BotProjectMetadata>): void {
+    const projectLoc = BotProjectService.projectLocationMap[projectId];
+    if (projectLoc) {
+      // filter out undefined values
+      for (const key in data) {
+        if (data[key] === undefined) {
+          delete data[key];
+        }
+      }
+      log('Updating project location data for %s: %O', projectId, data);
+      BotProjectService.projectLocationMap[projectId] = {
+        ...projectLoc,
+        ...data,
+      };
+      Store.set('projectLocationMap', BotProjectService.projectLocationMap);
+    }
+  }
+
+  public static getProjectByAlias = async (alias: string, user?: UserIdentity): Promise<BotProject | undefined> => {
+    BotProjectService.initialize();
+
+    let matchingProjectId;
+    for (const projectId in BotProjectService.projectLocationMap) {
+      const info = BotProjectService.projectLocationMap[projectId];
+      if (info.alias && info.alias === alias) {
+        matchingProjectId = projectId;
+        break;
+      }
+    }
+
+    if (matchingProjectId) {
+      const { eTag, path } = BotProjectService.projectLocationMap[matchingProjectId];
+      if (path == null) {
+        throw new Error(`project ${matchingProjectId} not found in cache`);
+      } else {
+        // check to make sure the project is still there!
+        if (!(await StorageService.checkBlob('default', path, user))) {
+          BotProjectService.deleteRecentProject(path);
+          BotProjectService.removeProjectIdFromCache(matchingProjectId);
+          throw new Error(`file ${path} does not exist`);
+        }
+        const project = new BotProject({ storageId: 'default', path: path }, user, eTag);
+        await project.init();
+        project.id = matchingProjectId;
+        // update current indexed bot projects
+        BotProjectService.updateCurrentProjects(project);
+        return project;
+      }
+    } else {
+      // no match found
+      return undefined;
     }
   };
 
@@ -276,6 +367,32 @@ export class BotProjectService {
       return projectId;
     } else {
       return '';
+    }
+  };
+
+  public static backupProject = async (project: BotProject): Promise<string> => {
+    try {
+      // ensure there isn't an older backup directory hanging around
+      const projectDirName = Path.basename(project.dir);
+      const backupPath = Path.join(process.env.COMPOSER_BACKUP_DIR as string, `${projectDirName}.${Date.now()}`);
+      await ensureDir(process.env.COMPOSER_BACKUP_DIR as string);
+      if (existsSync(backupPath)) {
+        log('%s already exists. Deleting before backing up.', backupPath);
+        await remove(backupPath);
+        log('Existing backup folder deleted successfully.');
+      }
+
+      // clone the bot project to the backup directory
+      const location: LocationRef = {
+        storageId: 'default',
+        path: backupPath,
+      };
+      log('Backing up project at %s to %s', project.dir, backupPath);
+      await project.cloneFiles(location);
+      log('Project backed up successfully.');
+      return location.path;
+    } catch (e) {
+      throw new Error(`Failed to backup project ${project.id}: ${e}`);
     }
   };
 }
