@@ -7,6 +7,7 @@ import { Request, Response } from 'express';
 import { Archiver } from 'archiver';
 import { ExtensionContext } from '@bfc/extension';
 import { SchemaMerger } from '@microsoft/bf-dialog/lib/library/schemaMerger';
+import { remove } from 'fs-extra';
 
 import log from '../logger';
 import { BotProjectService } from '../services/project';
@@ -20,7 +21,18 @@ import { Path } from './../utility/path';
 
 async function createProject(req: Request, res: Response) {
   let { templateId } = req.body;
-  const { name, description, storageId, location, schemaUrl, locale, preserveRoot } = req.body;
+  const {
+    name,
+    description,
+    storageId,
+    location,
+    schemaUrl,
+    locale,
+    preserveRoot,
+    templateDir,
+    eTag,
+    alias,
+  } = req.body;
   const user = await ExtensionContext.getUserFromRequest(req);
   if (templateId === '') {
     templateId = 'EmptyBot';
@@ -46,13 +58,29 @@ async function createProject(req: Request, res: Response) {
   log('Attempting to create project at %s', path);
 
   try {
+    // the template was downloaded remotely (via import) and will be used instead of an internal Composer template
+    const createFromRemoteTemplate = !!templateDir;
+
     await BotProjectService.cleanProject(locationRef);
-    const newProjRef = await AssetService.manager.copyProjectTemplateTo(templateId, locationRef, user, locale);
+    let newProjRef;
+    if (createFromRemoteTemplate) {
+      log('Creating project from remote template at %s', templateDir);
+      newProjRef = await AssetService.manager.copyRemoteProjectTemplateTo(templateDir, locationRef, user, locale);
+      // clean up the temporary template directory -- fire and forget
+      remove(templateDir);
+    } else {
+      log('Creating project from internal template %s', templateId);
+      newProjRef = await AssetService.manager.copyProjectTemplateTo(templateId, locationRef, user, locale);
+    }
     const id = await BotProjectService.openProject(newProjRef, user);
+    // in the case of a remote template, we need to update the eTag and alias used by the import mechanism
+    createFromRemoteTemplate && BotProjectService.setProjectLocationData(id, { alias, eTag });
     const currentProject = await BotProjectService.getProjectById(id, user);
 
     // inject shared content into every new project.  this comes from assets/shared
-    await AssetService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage);
+    if (!createFromRemoteTemplate) {
+      await AssetService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage);
+    }
 
     if (currentProject !== undefined) {
       if (currentProject.settings?.runtime?.customRuntime === true) {
@@ -83,7 +111,7 @@ async function createProject(req: Request, res: Response) {
         await realMerge.merge();
       }
       await currentProject.updateBotInfo(name, description, preserveRoot);
-      if (schemaUrl) {
+      if (schemaUrl && !createFromRemoteTemplate) {
         await currentProject.saveSchemaToProject(schemaUrl, locationRef.path);
       }
       await currentProject.init();
@@ -121,6 +149,33 @@ async function getProjectById(req: Request, res: Response) {
     }
   } catch (error) {
     res.status(404).json({
+      message: error.message,
+    });
+  }
+}
+
+async function getProjectByAlias(req: Request, res: Response) {
+  const alias = req.params.alias;
+  if (!alias) {
+    res.status(400).json({
+      message: 'parameters not provided, requires alias parameter',
+    });
+    return;
+  }
+
+  const user = await ExtensionContext.getUserFromRequest(req);
+  try {
+    const currentProject = await BotProjectService.getProjectByAlias(alias, user);
+
+    if (currentProject !== undefined && (await currentProject.exists())) {
+      res.status(200).json({ location: currentProject.dir, id: currentProject.id, name: currentProject.name });
+    } else {
+      res.status(404).json({
+        message: 'No matching ',
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
       message: error.message,
     });
   }
@@ -316,7 +371,7 @@ async function getSkill(req: Request, res: Response) {
 
 async function exportProject(req: Request, res: Response) {
   const currentProject = await BotProjectService.getProjectById(req.params.projectId);
-  currentProject.exportToZip((archive: Archiver) => {
+  currentProject.exportToZip(null, (archive: Archiver) => {
     archive.on('error', (err) => {
       res.status(500).send({ error: err.message });
     });
@@ -434,6 +489,72 @@ async function updateBoilerplate(req: Request, res: Response) {
   }
 }
 
+async function backupProject(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  const user = await ExtensionContext.getUserFromRequest(req);
+
+  const project = await BotProjectService.getProjectById(projectId, user);
+  if (project !== undefined) {
+    try {
+      const backupPath = await BotProjectService.backupProject(project);
+      res.status(200).json({ path: backupPath });
+    } catch (e) {
+      log('Failed to backup project %s: %O', projectId, e);
+      res.status(500).json(e);
+    }
+  } else {
+    res.status(404).json({
+      message: `Could not find bot project with ID: ${projectId}`,
+    });
+  }
+}
+
+/** WARNING: This operation is destructive. Please call backupProject() before calling this method. */
+async function copyTemplateToExistingProject(req: Request, res: Response) {
+  const { eTag, templateDir } = req.body;
+  if (!templateDir) {
+    return res.status(400).json({
+      message: 'Missing parameters: templateDir required.',
+    });
+  }
+
+  const projectId = req.params.projectId;
+  const user = await ExtensionContext.getUserFromRequest(req);
+
+  const project = await BotProjectService.getProjectById(projectId, user);
+  if (project !== undefined) {
+    try {
+      log('Cleaning up bot content at %s before copying template content over.', project.dir);
+      await project.fileStorage.rmrfDir(project.dir);
+      const locationRef: LocationRef = {
+        storageId: 'default',
+        path: project.dir,
+      };
+      log('Copying content from template at %s to %s', templateDir, project.dir);
+      await AssetService.manager.copyRemoteProjectTemplateTo(
+        templateDir,
+        locationRef,
+        user,
+        undefined // TODO: re-enable once we figure out path issue project.settings?.defaultLanguage || 'en-us'
+      );
+      log('Copied template content successfully.');
+      // clean up the temporary template directory -- fire and forget
+      remove(templateDir);
+      log('Updating etag.');
+      BotProjectService.setProjectLocationData(projectId, { eTag });
+
+      res.sendStatus(200);
+    } catch (e) {
+      log('Failed to copy template content to existing project %s: %O', projectId, e);
+      res.status(500).json(e);
+    }
+  } else {
+    res.status(404).json({
+      message: `Could not find bot project with ID: ${projectId}`,
+    });
+  }
+}
+
 export const ProjectController = {
   getProjectById,
   openProject,
@@ -452,4 +573,7 @@ export const ProjectController = {
   updateBoilerplate,
   checkBoilerplateVersion,
   generateProjectId,
+  getProjectByAlias,
+  backupProject,
+  copyTemplateToExistingProject,
 };

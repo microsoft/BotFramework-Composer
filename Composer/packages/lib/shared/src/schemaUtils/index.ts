@@ -2,3 +2,4 @@
 // Licensed under the MIT License.
 
 export * from './dereference';
+export * from './pvaSchema';

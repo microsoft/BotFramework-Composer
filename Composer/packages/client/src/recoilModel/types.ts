@@ -37,6 +37,7 @@ export interface PublishType {
   features: {
     history: boolean;
     publish: boolean;
+    pull: boolean;
     rollback: boolean;
     status: boolean;
   };

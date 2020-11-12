@@ -15,6 +15,7 @@ import {
   pluginPagesSelector,
   featureFlagsState,
   rootBotProjectIdSelector,
+  schemasState,
 } from '../recoilModel';
 
 import { bottomLinks, topLinks } from './pageLinks';
@@ -47,11 +48,12 @@ export const useLinks = () => {
   const rootProjectId = useRecoilValue(rootBotProjectIdSelector);
   const designPageLocation = useRecoilValue(designPageLocationState(projectId));
   const pluginPages = useRecoilValue(pluginPagesSelector);
+  const schemas = useRecoilValue(schemasState(projectId));
   const openedDialogId = designPageLocation.dialogId || 'Main';
   const showFormDialog = useFeatureFlag('FORM_DIALOG');
 
   const pageLinks = useMemo(() => {
-    return topLinks(projectId, openedDialogId, pluginPages, showFormDialog, rootProjectId);
+    return topLinks(projectId, openedDialogId, pluginPages, showFormDialog, schemas.sdk, rootProjectId);
   }, [projectId, openedDialogId, pluginPages, showFormDialog]);
 
   return { topLinks: pageLinks, bottomLinks };
