@@ -24,6 +24,7 @@ import {
 import { navigateTo } from '../../utils/navigation';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
+import { AuthClient } from '../../utils/authClient';
 
 import { TargetList } from './targetList';
 import { PublishDialog } from './publishDialog';
@@ -94,7 +95,11 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
         iconProps: {
           iconName: 'Add',
         },
-        onClick: () => setAddDialogHidden(false),
+        onClick: async () => {
+          const token = await AuthClient.getAccessToken({ targetResource: 'https://management.core.windows.net/' });
+          console.log(token);
+          setAddDialogHidden(false);
+        },
       },
       align: 'left',
       dataTestid: 'publishPage-Toolbar-Add',
