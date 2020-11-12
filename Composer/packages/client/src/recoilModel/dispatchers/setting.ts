@@ -3,14 +3,15 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
-import { SensitiveProperties, SensitivePropertiesManageGroup, DialogSetting, PublishTarget } from '@bfc/shared';
+import { SensitiveProperties, RootBotManagedProperties, DialogSetting, PublishTarget } from '@bfc/shared';
 import get from 'lodash/get';
+import set from 'lodash/set';
 import has from 'lodash/has';
+import cloneDeep from 'lodash/cloneDeep';
 
 import settingStorage from '../../utils/dialogSettingStorage';
 import { settingsState } from '../atoms/botState';
-import { rootBotProjectIdSelector } from '../selectors/project';
-
+import { rootBotProjectIdSelector, botProjectSpaceSelector } from '../selectors/project';
 import httpClient from './../../utils/httpUtil';
 import { setError } from './shared';
 
@@ -19,31 +20,53 @@ export const setSettingState = async (
   projectId: string,
   settings: DialogSetting
 ) => {
-  const { set, snapshot } = callbackHelpers;
+  const { set: recoilSet, snapshot } = callbackHelpers;
 
   // set value in local storage
   for (const property of SensitiveProperties) {
-    if (has(settings, property)) {
+    if (!RootBotManagedProperties.includes(property) && has(settings, property)) {
       const propertyValue = get(settings, property, '');
       settingStorage.setField(projectId, property, propertyValue);
     }
   }
 
-  for (const property of SensitivePropertiesManageGroup) {
+  for (const property of RootBotManagedProperties) {
     const rootProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
     if (has(settings, property) && rootProjectId) {
       const propertyValue = get(settings, property, '');
+      console.log(propertyValue);
       const groupPropertyValue = get(settingStorage.get(rootProjectId), property, '');
       let newGroupPropertyValue = {};
+
+      //store RootBotManagedProperties in browser localStorage
       if (projectId === rootProjectId) {
         newGroupPropertyValue = { ...groupPropertyValue, root: propertyValue };
       } else {
         newGroupPropertyValue = { ...groupPropertyValue, [projectId]: propertyValue };
       }
       settingStorage.setField(rootProjectId, property, newGroupPropertyValue);
+
+      //sync skill bots' RootBotManagedProperties with root bot
+      if (projectId === rootProjectId) {
+        const botProjectsMetaData = await snapshot.getPromise(botProjectSpaceSelector);
+        for (let i = 0; i < botProjectsMetaData.length; i++) {
+          const botProject = botProjectsMetaData[i];
+          if (!botProject.isRootBot && !botProject.isRemote) {
+            const skillSettings = await snapshot.getPromise(settingsState(botProject.projectId));
+            const localStorageSettings = settingStorage.get(rootProjectId);
+            const shouldUseRootProperty = !get(localStorageSettings, property, {})[botProject.projectId];
+            if (shouldUseRootProperty) {
+              const newSkillSettings = cloneDeep(skillSettings);
+              set(newSkillSettings, property, propertyValue);
+              console.log(newSkillSettings);
+              recoilSet(settingsState(botProject.projectId), newSkillSettings);
+            }
+          }
+        }
+      }
     }
   }
-  set(settingsState(projectId), settings);
+  recoilSet(settingsState(projectId), settings);
 };
 
 export const settingsDispatcher = () => {

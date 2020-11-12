@@ -4,7 +4,7 @@
 
 import formatMessage from 'format-message';
 import findIndex from 'lodash/findIndex';
-import { SensitivePropertiesManageGroup } from '@bfc/shared';
+import { RootBotManagedProperties } from '@bfc/shared';
 import get from 'lodash/get';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 
@@ -191,7 +191,7 @@ export const projectDispatcher = () => {
         projectIdCache.set(projectId);
 
         //migration on some sensitive property in browser local storage
-        for (const property of SensitivePropertiesManageGroup) {
+        for (const property of RootBotManagedProperties) {
           const settings = settingStorage.get(projectId);
           const value = get(settings, property, '');
           if (!value.root && value.root !== '') {

@@ -18,12 +18,14 @@ import {
   LuFile,
   QnAFile,
   SensitiveProperties,
+  RootBotManagedProperties,
   defaultPublishConfig,
 } from '@bfc/shared';
 import formatMessage from 'format-message';
 import camelCase from 'lodash/camelCase';
 import objectGet from 'lodash/get';
 import objectSet from 'lodash/set';
+import cloneDeep from 'lodash/cloneDeep';
 import { stringify } from 'query-string';
 import { CallbackInterface } from 'recoil';
 import { v4 as uuid } from 'uuid';
@@ -129,11 +131,32 @@ const mergeLocalStorage = (projectId: string, settings: DialogSetting) => {
   const mergedSettings = { ...settings };
   if (localSetting) {
     for (const property of SensitiveProperties) {
+      if (RootBotManagedProperties.includes(property)) {
+        continue;
+      }
       const value = objectGet(localSetting, property);
       if (value) {
         objectSet(mergedSettings, property, value);
       } else {
         objectSet(mergedSettings, property, ''); // set those key back, because that were omit after persisited
+      }
+    }
+  }
+  return mergedSettings;
+};
+
+export const mergePropertiesManagedByRootBot = (projectId: string, rootBotProjectId, settings: DialogSetting) => {
+  const localSetting = settingStorage.get(rootBotProjectId);
+  const mergedSettings = cloneDeep(settings);
+  if (localSetting) {
+    for (const property of RootBotManagedProperties) {
+      const rootValue = objectGet(localSetting, property)['root'];
+      if (projectId === rootBotProjectId) {
+        objectSet(mergedSettings, property, rootValue ?? '');
+      }
+      if (projectId !== rootBotProjectId) {
+        const skillValue = objectGet(localSetting, property)[projectId];
+        objectSet(mergedSettings, property, skillValue ? skillValue : rootValue ? rootValue : '');
       }
     }
   }

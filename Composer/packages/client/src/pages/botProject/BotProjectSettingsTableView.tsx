@@ -28,13 +28,8 @@ const container = css`
 
 // -------------------- BotProjectSettingsTableView -------------------- //
 
-type BotProjectSettingsTableViewProps = {
-  projectId?: string;
-  hasSkills: boolean;
-} & RouteComponentProps<{}>;
-
-export const BotProjectSettingsTableView: React.FC<BotProjectSettingsTableViewProps> = (props) => {
-  const { projectId = '', hasSkills } = props;
+export const BotProjectSettingsTableView: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
+  const { projectId = '' } = props;
   const botProjectsMetaData = useRecoilValue(botProjectSpaceSelector);
   const botProject = botProjectsMetaData.find((b) => b.projectId === projectId);
   const isRootBot = !!botProject?.isRootBot;
@@ -42,7 +37,7 @@ export const BotProjectSettingsTableView: React.FC<BotProjectSettingsTableViewPr
   return (
     <div css={container}>
       {isRootBot && <SkillHostEndPoint projectId={projectId} />}
-      <AppIdAndPassword projectId={projectId} required={hasSkills} />
+      <AppIdAndPassword projectId={projectId} />
       <ExternalService projectId={projectId} />
       <BotLanguage projectId={projectId} />
       <RuntimeSettings projectId={projectId} />

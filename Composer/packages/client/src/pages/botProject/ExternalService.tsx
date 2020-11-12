@@ -23,7 +23,6 @@ import {
   qnaFilesState,
   validateDialogsSelectorFamily,
 } from '../../recoilModel';
-import settingStorage from '../../utils/dialogSettingStorage';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 import { TextFieldWithCustomButton } from '../../components/TextFieldWithCustomButton';
@@ -152,19 +151,29 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
   const luFiles = useRecoilValue(luFilesState(projectId));
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
+  const rootSettings = useRecoilValue(settingsState(rootBotProjectId));
   const botProjectsMetaData = useRecoilValue(botProjectSpaceSelector);
   const botProject = botProjectsMetaData.find((b) => b.projectId === projectId);
   const isRootBot = !!botProject?.isRootBot;
-  const sensitiveGroupManageProperty = settingStorage.get(rootBotProjectId);
-  const groupLUISAuthoringKey = get(sensitiveGroupManageProperty, 'luis.authoringKey', {});
-  const rootLuisKey = groupLUISAuthoringKey.root;
-  const skillLuisKey = groupLUISAuthoringKey[projectId];
-  const groupLUISRegion = get(sensitiveGroupManageProperty, 'luis.authoringRegion', {});
-  const rootLuisRegion = groupLUISRegion.root;
-  const skillLuisRegion = groupLUISRegion[projectId];
-  const groupQnAKey = get(sensitiveGroupManageProperty, 'qna.subscriptionKey', {});
-  const rootqnaKey = groupQnAKey.root;
-  const skillqnaKey = groupQnAKey[projectId];
+
+  // const sensitiveGroupManageProperty = settingStorage.get(rootBotProjectId);
+
+  // const groupLUISAuthoringKey = get(sensitiveGroupManageProperty, 'luis.authoringKey', {});
+  // const rootLuisKey = groupLUISAuthoringKey.root;
+  // const skillLuisKey = groupLUISAuthoringKey[projectId];
+  const rootLuisKey = get(rootSettings, 'luis.authoringKey', '');
+  const skillLuisKey = get(settings, 'luis.authoringKey', '');
+  //console.log(rootSettings);
+  // const groupLUISRegion = get(sensitiveGroupManageProperty, 'luis.authoringRegion', {});
+  // const rootLuisRegion = groupLUISRegion.root;
+  // const skillLuisRegion = groupLUISRegion[projectId];
+  const rootLuisRegion = get(rootSettings, 'luis.authoringRegion', '');
+  const skillLuisRegion = get(settings, 'luis.authoringRegion', '');
+  // const groupQnAKey = get(sensitiveGroupManageProperty, 'qna.subscriptionKey', {});
+  // const rootqnaKey = groupQnAKey.root;
+  // const skillqnaKey = groupQnAKey[projectId];
+  const rootqnaKey = get(rootSettings, 'qna.subscriptionKey', '');
+  const skillqnaKey = get(settings, 'qna.subscriptionKey', '');
   const isLUISKeyNeeded = isLUISMandatory(dialogs, luFiles);
   const isQnAKeyNeeded = isQnAKeyMandatory(dialogs, qnaFiles);
 
@@ -175,9 +184,23 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
   const [localRootQnAKey, setLocalRootQnAKey] = useState<string>(rootqnaKey ?? '');
 
   useEffect(() => {
-    setLuisKeyErrorMsg('');
-    setQnAKeyErrorMsg('');
-  }, [projectId]);
+    if (!localRootLuisKey) {
+      setLuisKeyErrorMsg(
+        formatMessage('LUIS Key is required with the current recognizer setting to start your bot locally, and publish')
+      );
+    } else {
+      setLuisKeyErrorMsg('');
+    }
+    if (!localRootQnAKey) {
+      setQnAKeyErrorMsg(formatMessage('QnA Maker subscription Key is required to start your bot locally, and publish'));
+    } else {
+      setQnAKeyErrorMsg('');
+    }
+  }, [projectId, localRootLuisKey, localRootQnAKey]);
+
+  useEffect(() => {
+    setLocalRootLuisKey(rootLuisKey);
+  }, [rootLuisKey]);
 
   const handleRootLUISKeyOnChange = (e, value) => {
     setSettings(projectId, {
@@ -220,24 +243,27 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
     submitQnASubscripionKey(localRootQnAKey);
   };
 
-  const handleSkillQnAKeyOnBlur = (value) => {
-    if (value) {
-      submitQnASubscripionKey(value);
+  const handleSkillQnAKeyOnBlur = (key: string) => {
+    if (key) {
+      submitQnASubscripionKey(key);
     } else {
-      setSettings(projectId, {
-        ...settings,
-        qna: { ...settings.qna, subscriptionKey: '' },
-      });
-      setQnASettings(projectId, rootqnaKey);
+      submitQnASubscripionKey(rootqnaKey);
     }
   };
 
-  const submitQnASubscripionKey = (value) => {
-    setSettings(projectId, {
-      ...settings,
-      qna: { ...settings.qna, subscriptionKey: value ? value : '' },
-    });
-    setQnASettings(projectId, value);
+  const submitQnASubscripionKey = (key: string) => {
+    if (key) {
+      setSettings(projectId, {
+        ...settings,
+        qna: { ...settings.qna, subscriptionKey: key },
+      });
+      setQnASettings(projectId, key);
+    } else {
+      setSettings(projectId, {
+        ...settings,
+        qna: { ...settings.qna, subscriptionKey: '', endpointKey: '' },
+      });
+    }
   };
 
   return (
