@@ -17,6 +17,7 @@ import { getSkillManifest } from '../models/bot/skillManager';
 import StorageService from '../services/storage';
 import settings from '../settings';
 import { BackgroundProcessManager } from '../services/backgroundProcessManager';
+import { ejectAndMerge, getLocationRef, getNewProjRef } from '../utility/project';
 
 import { Path } from './../utility/path';
 
@@ -38,40 +39,16 @@ async function createProject(req: Request, res: Response) {
   if (templateId === '') {
     templateId = 'EmptyBot';
   }
-  // default the path to the default folder.
-  let path = settings.botsFolder;
-  // however, if path is specified as part of post body, use that one.
-  // this allows developer to specify a custom home for their bot.
-  if (location) {
-    // validate that this path exists
-    // prettier-ignore
-    if (fs.existsSync(location)) { // lgtm [js/path-injection]
-      path = location;
-    }
-  }
 
-  const locationRef: LocationRef = {
-    storageId,
-    path: Path.resolve(path, name),
-  };
-
-  log('Attempting to create project at %s', path);
+  const locationRef = getLocationRef(location, storageId);
 
   try {
     // the template was downloaded remotely (via import) and will be used instead of an internal Composer template
     const createFromRemoteTemplate = !!templateDir;
 
     await BotProjectService.cleanProject(locationRef);
-    let newProjRef;
-    if (createFromRemoteTemplate) {
-      log('Creating project from remote template at %s', templateDir);
-      newProjRef = await AssetService.manager.copyRemoteProjectTemplateTo(templateDir, locationRef, user, locale);
-      // clean up the temporary template directory -- fire and forget
-      remove(templateDir);
-    } else {
-      log('Creating project from internal template %s', templateId);
-      newProjRef = await AssetService.manager.copyProjectTemplateTo(templateId, locationRef, user, locale);
-    }
+    const newProjRef = await getNewProjRef(templateDir, templateId, locationRef, user, locale);
+
     const id = await BotProjectService.openProject(newProjRef, user);
     // in the case of a remote template, we need to update the eTag and alias used by the import mechanism
     createFromRemoteTemplate && BotProjectService.setProjectLocationData(id, { alias, eTag });
@@ -83,33 +60,6 @@ async function createProject(req: Request, res: Response) {
     }
 
     if (currentProject !== undefined) {
-      if (currentProject.settings?.runtime?.customRuntime === true) {
-        const runtime = ExtensionContext.getRuntimeByProject(currentProject);
-        const runtimePath = currentProject.settings.runtime.path;
-
-        if (!fs.existsSync(runtimePath)) {
-          await runtime.eject(currentProject, currentProject.fileStorage);
-        }
-
-        // install all dependencies and build the app
-        await runtime.build(runtimePath, currentProject);
-
-        const manifestFile = runtime.identifyManifest(runtimePath);
-
-        // run the merge command to merge all package dependencies from the template to the bot project
-        const realMerge = new SchemaMerger(
-          [manifestFile],
-          Path.join(currentProject.dataDir, 'schemas/sdk'),
-          Path.join(currentProject.dataDir, 'dialogs/imported'),
-          false,
-          false,
-          console.log,
-          console.warn,
-          console.error
-        );
-
-        await realMerge.merge();
-      }
       await currentProject.updateBotInfo(name, description, preserveRoot);
       if (schemaUrl && !createFromRemoteTemplate) {
         await currentProject.saveSchemaToProject(schemaUrl, locationRef.path);
@@ -555,6 +505,65 @@ async function copyTemplateToExistingProject(req: Request, res: Response) {
   }
 }
 
+async function createProjectV2(req: Request, res: Response) {
+  let { templateId } = req.body;
+  const {
+    name,
+    description,
+    storageId,
+    location,
+    schemaUrl,
+    locale,
+    preserveRoot,
+    templateDir,
+    eTag,
+    alias,
+  } = req.body;
+  const user = await ExtensionContext.getUserFromRequest(req);
+  if (templateId === '') {
+    templateId = 'EmptyBot';
+  }
+
+  const locationRef = getLocationRef(location, storageId);
+  try {
+    // the template was downloaded remotely (via import) and will be used instead of an internal Composer template
+    const createFromRemoteTemplate = !!templateDir;
+
+    await BotProjectService.cleanProject(locationRef);
+    const newProjRef = await getNewProjRef(templateDir, templateId, locationRef, user, locale);
+
+    const id = await BotProjectService.openProject(newProjRef, user);
+    // in the case of a remote template, we need to update the eTag and alias used by the import mechanism
+    createFromRemoteTemplate && BotProjectService.setProjectLocationData(id, { alias, eTag });
+    const currentProject = await BotProjectService.getProjectById(id, user);
+
+    // inject shared content into every new project.  this comes from assets/shared
+    if (!createFromRemoteTemplate) {
+      await AssetService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage);
+    }
+
+    if (currentProject !== undefined) {
+      await ejectAndMerge(currentProject);
+      await currentProject.updateBotInfo(name, description, preserveRoot);
+      if (schemaUrl && !createFromRemoteTemplate) {
+        await currentProject.saveSchemaToProject(schemaUrl, locationRef.path);
+      }
+      await currentProject.init();
+
+      const project = currentProject.getProject();
+      log('Project created successfully.');
+      res.status(200).json({
+        id,
+        ...project,
+      });
+    }
+  } catch (err) {
+    res.status(404).json({
+      message: err instanceof Error ? err.message : err,
+    });
+  }
+}
+
 export const ProjectController = {
   getProjectById,
   openProject,
@@ -568,6 +577,7 @@ export const ProjectController = {
   exportProject,
   saveProjectAs,
   createProject,
+  createProjectV2,
   getAllProjects,
   getRecentProjects,
   updateBoilerplate,

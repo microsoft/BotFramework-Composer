@@ -23,6 +23,7 @@ import { UtilitiesController } from './../controllers/utilities';
 const router: Router = express.Router({});
 
 router.post('/projects', ProjectController.createProject);
+router.post('/v2/projects', ProjectController.createProjectV2);
 router.get('/projects', ProjectController.getAllProjects);
 router.get('/projects/recent', ProjectController.getRecentProjects);
 router.get('/projects/generateProjectId', ProjectController.generateProjectId);
