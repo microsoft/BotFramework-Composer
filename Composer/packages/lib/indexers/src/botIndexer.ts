@@ -39,19 +39,14 @@ const checkManifest = (assets: { skillManifests: SkillManifestFile[] }): Diagnos
  * 1. Missing LUIS key
  * 2. Missing QnA Maker subscription key.
  */
-const checkSetting = (
-  assets: { dialogs: DialogInfo[]; setting: DialogSetting },
-  localStorage: { [key: string]: any }
-): Diagnostic[] => {
+const checkSetting = (assets: { dialogs: DialogInfo[]; setting: DialogSetting }): Diagnostic[] => {
   const { dialogs, setting } = assets;
   const diagnostics: Diagnostic[] = [];
 
   const useLUIS = dialogs.some((item) => !!item.luFile);
   // if use LUIS, check LUIS authoringKey key
   if (useLUIS) {
-    const authoringKeyFromSettings = get(setting, 'luis.authoringKey');
-    const authoringKeyFromLocal = get(localStorage, 'luis.authoringKey');
-    if (!authoringKeyFromLocal && !authoringKeyFromSettings) {
+    if (!get(setting, 'luis.authoringKey')) {
       diagnostics.push(new Diagnostic('Missing LUIS key', 'appsettings.json', DiagnosticSeverity.Error));
     }
   }
@@ -59,9 +54,7 @@ const checkSetting = (
   const useQnA = dialogs.some((item) => !!item.qnaFile);
   // if use QnA, check QnA subscriptionKey
   if (useQnA) {
-    const authoringKeyFromSettings = get(setting, 'qna.subscriptionKey');
-    const authoringKeyFromLocal = get(localStorage, 'qna.subscriptionKey');
-    if (!authoringKeyFromLocal && !authoringKeyFromSettings) {
+    if (!get(setting, 'qna.subscriptionKey')) {
       diagnostics.push(
         new Diagnostic('Missing QnA Maker subscription key', 'appsettings.json', DiagnosticSeverity.Error)
       );
@@ -136,16 +129,12 @@ const checkSkillSetting = (assets: { dialogs: DialogInfo[]; setting: DialogSetti
   return diagnostics;
 };
 
-const validate = (
-  assets: { dialogs: DialogInfo[]; setting: DialogSetting; skillManifests: SkillManifestFile[] },
-  localStorage: { [key: string]: any }
-): Diagnostic[] => {
-  return [
-    ...checkManifest(assets),
-    ...checkSetting(assets, localStorage),
-    ...checkLUISLocales(assets),
-    ...checkSkillSetting(assets),
-  ];
+const validate = (assets: {
+  dialogs: DialogInfo[];
+  setting: DialogSetting;
+  skillManifests: SkillManifestFile[];
+}): Diagnostic[] => {
+  return [...checkManifest(assets), ...checkSetting(assets), ...checkLUISLocales(assets), ...checkSkillSetting(assets)];
 };
 
 const filterLUISFilesToPublish = (luFiles: LuFile[]): LuFile[] => {

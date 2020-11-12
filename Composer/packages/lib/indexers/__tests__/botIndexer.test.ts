@@ -77,22 +77,16 @@ describe('check manifest', () => {
 
 describe('check LUIS & QnA key', () => {
   it('LUIS authoringKey should exist in setting', () => {
-    const diagnostics = checkSetting(botAssets, {});
+    const diagnostics = checkSetting(botAssets);
     expect(diagnostics.length).toEqual(1);
   });
 
-  it('LUIS authoringKey should exist in setting or locale storage', () => {
-    const diagnostics = checkSetting(botAssets, {
-      MicrosoftAppPassword: '',
-      luis: {
-        authoringKey: '4d210acc6d794d71a2a3450*****2fb7',
-        endpointKey: '',
-      },
-      qna: {
-        authoringKey: '',
-        endpointKey: '',
-      },
-    });
+  it('LUIS authoringKey should exist in setting', () => {
+    const mergedSettings = {
+      ...botAssets.setting,
+      luis: { authoringKey: '4d210acc6d794d71a2a3450*****2fb7', endpointKey: '' } as ILuisConfig,
+    };
+    const diagnostics = checkSetting({ ...botAssets, setting: mergedSettings });
     expect(diagnostics.length).toEqual(0);
   });
 
@@ -106,11 +100,11 @@ describe('check LUIS & QnA key', () => {
         } as DialogInfo,
       ],
     };
-    const diagnostics = checkSetting(botAssets2, {});
+    const diagnostics = checkSetting(botAssets2);
     expect(diagnostics.length).toEqual(2);
   });
 
-  it('QnA subscriptionKey should exist in setting or locale storage', () => {
+  it('QnA subscriptionKey should exist in setting', () => {
     const botAssets2 = {
       ...botAssets,
       dialogs: [
@@ -120,18 +114,8 @@ describe('check LUIS & QnA key', () => {
         } as DialogInfo,
       ],
     };
-    const diagnostics = checkSetting(botAssets2, {
-      MicrosoftAppPassword: '',
-      luis: {
-        authoringKey: '4d210acc6d794d71a2a3450*****2fb7',
-        endpointKey: '',
-      },
-      qna: {
-        subscriptionKey: '4d210acc6d794d71a2a3450*****2fb7',
-        endpointKey: '',
-      },
-    });
-    expect(diagnostics.length).toEqual(0);
+    const diagnostics = checkSetting(botAssets2);
+    expect(diagnostics.length).toEqual(2);
   });
 });
 
