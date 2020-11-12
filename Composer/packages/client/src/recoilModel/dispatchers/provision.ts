@@ -92,8 +92,9 @@ export const provisionDispatcher = () => {
           clearInterval(timer);
           // delete provisionStatus
           callbackHelpers.set(provisionStatusState(projectId), (status) => {
-            delete status[targetName];
-            return { ...status };
+            const newStatus = { ...status };
+            delete newStatus[targetName];
+            return newStatus;
           });
 
           // update publishConfig

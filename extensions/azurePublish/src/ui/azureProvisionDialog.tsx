@@ -23,6 +23,7 @@ import {
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { ResourceGroup } from '@azure/arm-resources/esm/models';
 import { DeployLocation } from '@bfc/types';
+import { ResourcesItem } from './types';
 import {
   ScrollablePane,
   ScrollbarVisibility,
@@ -39,6 +40,8 @@ import {
   Spinner,
   Persona,
   PersonaSize,
+  Selection,
+  SelectionMode,
 } from 'office-ui-fabric-react';
 import { JsonEditor } from '@bfc/code-editor';
 
@@ -92,19 +95,19 @@ export const AzureProvisionDialog: React.FC = () => {
   const [currentHostName, setHostName] = useState('');
   const [errorHostName, setErrorHostName] = useState('');
   const [currentLocation, setLocation] = useState<DeployLocation>();
-  const [extensionResourceOptions, setExtensionResourceOptions] = useState<any[]>([]);
-  const [enabledResources, setEnabledResources] = useState({});
+  const [extensionResourceOptions, setExtensionResourceOptions] = useState<ResourcesItem[]>([]);
+  const [enabledResources, setEnabledResources] = useState<ResourcesItem[]>([]); // create from optional list
+  const [requireResources, setRequireResources] = useState<ResourcesItem[]>([]);
 
   const [isEditorError, setEditorError] = useState(false);
   const [importConfig, setImportConfig] = useState();
 
   const [page, setPage] = useState(PageTypes.ConfigProvision);
   const [group, setGroup] = useState<IGroup[]>();
-  const [listItems, setListItem] = useState();
+  const [listItems, setListItem] = useState<(ResourcesItem & {name,icon})[]>();
 
   // set type of publish - azurePublish or azureFunctionsPublish
   const publishType = getType();
-  console.log('PUBLISH TYPE IS', publishType);
 
   const columns: IColumn[] = [
     {
@@ -115,7 +118,7 @@ export const AzureProvisionDialog: React.FC = () => {
       fieldName: 'name',
       minWidth: 16,
       maxWidth: 16,
-      onRender: (item: any) => {
+      onRender: (item: ResourcesItem & {name,icon}) => {
         return <img src={item.icon} />;
       },
     },
@@ -129,41 +132,29 @@ export const AzureProvisionDialog: React.FC = () => {
       isRowHeader: true,
       isResizable: true,
       data: 'string',
-      onRender: (item: any) => {
-        return <span>{item.name}</span>;
+      onRender: (item: ResourcesItem & {name,icon}) => {
+        return <div>
+            {item.name}
+            <div>{item.text} | {item.tier}</div>
+          </div>;
       },
       isPadded: true,
     },
     {
-      key: 'Type',
-      name: formatMessage('Type'),
-      className: 'type',
-      fieldName: 'type',
-      minWidth: 200,
-      maxWidth: 300,
+      key: 'Description',
+      name: formatMessage('Description'),
+      className: 'description',
+      fieldName: 'description',
+      minWidth: 300,
+      maxWidth: 350,
       isRowHeader: true,
       isResizable: true,
       data: 'string',
-      onRender: (item: any) => {
-        return <span>{item.text}</span>;
+      onRender: (item: ResourcesItem & {name,icon}) => {
+        return <span>{item.description}</span>;
       },
       isPadded: true,
-    },
-    {
-      key: 'Tier',
-      name: formatMessage('Tier'),
-      className: 'tier',
-      fieldName: 'tier',
-      minWidth: 150,
-      maxWidth:200,
-      isRowHeader: true,
-      isResizable: true,
-      data: 'string',
-      onRender: (item: any) => {
-        return <span>{item.tier}</span>;
-      },
-      isPadded: true,
-    },
+    }
   ];
 
   useEffect(() => {
@@ -178,21 +169,13 @@ export const AzureProvisionDialog: React.FC = () => {
   }, []);
 
   const getResources = async () => {
-    const resources = await getResourceList(currentProjectId(), publishType).catch((err) => {
+    try {
+      const resources = await getResourceList(currentProjectId(), publishType);
+      setExtensionResourceOptions(resources);
+    } catch (err) {
       // todo: how do we handle API errors in this component
       console.log('ERROR', err);
-    });
-    setExtensionResourceOptions(resources);
-
-    // set all of the resources to enabled by default.
-    // in the future we may allow users to toggle some of them on and off
-    const enabled = {};
-    resources.forEach((resourceType) => {
-      enabled[resourceType.key] = {
-        enabled: true,
-      };
-    });
-    setEnabledResources(enabled);
+    }
   };
 
   const subscriptionOption = useMemo(() => {
@@ -251,7 +234,6 @@ export const AzureProvisionDialog: React.FC = () => {
   const onNext = useMemo(
     () => (hostname) => {
       const names = getPreview(hostname);
-      console.log('got names', names);
       const result = extensionResourceOptions.map((resource) => {
         const previewObject = names.find((n) => n.key === resource.key);
         return {
@@ -261,38 +243,32 @@ export const AzureProvisionDialog: React.FC = () => {
         };
       });
 
-      // todo: generate list of resourceTypes based on what is in extensionResourceOptions
-      const resourceTypes = [];
-      extensionResourceOptions.forEach((resource) => {
-        if (resourceTypes.indexOf(resource.group) < 0) {
-          resourceTypes.push(resource.group);
-        }
-      });
-
-      console.log('WILL PROVISION THESE ITEMS', result);
-      let items = [] as any;
+      // set review list
       const groups: IGroup[] = [];
-      let startIndex = 0;
-      for (const type of resourceTypes) {
-        const resources = result.filter(
-          (item) => enabledResources[item.key] && enabledResources[item.key].enabled && item.group === type
-        );
+      const requireList = result.filter(item => item.required);
+      setRequireResources(requireList);
+      const externalList = result.filter(item => !item.required);
+      groups.push({
+        key: 'required',
+        name: 'Required',
+        startIndex: 0,
+        count: requireList.length,
+      });
+      groups.push({
+        key: 'optional',
+        name: 'Optional',
+        startIndex: requireList.length,
+        count: externalList.length,
+      });
+      const items = requireList.concat(externalList);
 
-        groups.push({
-          key: type,
-          name: type,
-          startIndex: startIndex,
-          count: resources.length,
-        });
-        startIndex = startIndex + resources.length;
-        items = items.concat(resources);
-      }
       setGroup(groups);
       setListItem(items);
+
       setPage(PageTypes.ReviewResource);
       setTitle(DialogTitle.REVIEW);
     },
-    [enabledResources]
+    [extensionResourceOptions]
   );
 
   const onSubmit = useMemo(
@@ -308,7 +284,6 @@ export const AzureProvisionDialog: React.FC = () => {
 
   const onSave = useMemo(
     () => () => {
-      console.log('inside', importConfig);
       savePublishConfig(importConfig);
       closeDialog();
     },
@@ -380,13 +355,32 @@ export const AzureProvisionDialog: React.FC = () => {
     </Fragment>
   );
 
+  const selection = useMemo(() => {
+     const s =  new Selection({
+      onSelectionChanged: () => {
+        const list = s.getSelection();
+        setEnabledResources(list);
+      },
+      canSelectItem: (item, index) => {
+        return item.required === false;
+      },
+    });
+    if(s && listItems){
+      s.setItems(listItems,false);
+      s.setAllSelected(true);
+    }
+    return s;
+  }, [listItems]);
+
   const PageReview = useMemo(() => {
     return (
       <Fragment>
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto} style={{height: 'calc(100vh - 50px)'}}>
         <DetailsList
           isHeaderVisible
-          checkboxVisibility={CheckboxVisibility.hidden}
+          checkboxVisibility={CheckboxVisibility.onHover}
+          selectionMode={SelectionMode.multiple}
+          selection={selection}
           columns={columns}
           getKey={(item) => item.key}
           groups={group}
@@ -398,7 +392,7 @@ export const AzureProvisionDialog: React.FC = () => {
         </ScrollablePane>
       </Fragment>
     );
-  }, [group, listItems]);
+  }, [group, listItems, selection]);
 
   const PageFooter = useMemo(() => {
     if (page === PageTypes.ConfigProvision) {
@@ -437,12 +431,13 @@ export const AzureProvisionDialog: React.FC = () => {
               disabled={isDisAble}
               text={'Done'}
               onClick={async () => {
+                const selectedResources = enabledResources.concat(requireResources);
                 await onSubmit({
                   subscription: currentSubscription,
                   hostname: currentHostName,
                   location: currentLocation,
                   type: publishType,
-                  externalResources: extensionResourceOptions,
+                  externalResources: selectedResources,
                 });
               }}
             />
@@ -461,7 +456,9 @@ export const AzureProvisionDialog: React.FC = () => {
     currentLocation,
     publishType,
     extensionResourceOptions,
-    currentUser
+    currentUser,
+    enabledResources,
+    requireResources,
   ]);
 
   return (

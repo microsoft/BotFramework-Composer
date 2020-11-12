@@ -15,7 +15,7 @@ import { TokenCredentials } from '@azure/ms-rest-js';
 import debug from 'debug';
 
 import * as Images from './images';
-import { AzureAPIStatus, AzureResourceProviderType } from './types';
+import { AzureAPIStatus, AzureResourceProviderType, ResourcesItem } from './types';
 
 const logger = debug('composer:extension:azureProvision');
 
@@ -367,11 +367,16 @@ export const CheckCognitiveResourceSku = async (
   }
 };
 
-export const getResourceList = async (projectId: string, type: string) => {
+/**
+ * get all resources need to be created for different type(webapp/functions)
+ * @param projectId
+ * @param type
+ */
+export const getResourceList = async (projectId: string, type: string): Promise<ResourcesItem[]> => {
   try {
     console.log('Get resources for ', type);
     const result = await axios.get(`/api/provision/${projectId}/${type}/resources`);
-    return result.data;
+    return result.data as ResourcesItem[];
   } catch (error) {
     console.error(error);
     throw error;
