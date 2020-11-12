@@ -120,6 +120,7 @@ export enum SDKKinds {
   TemplateEngineLanguageGenerator = 'Microsoft.TemplateEngineLanguageGenerator',
   TextInput = 'Microsoft.TextInput',
   TextTemplate = 'Microsoft.TextTemplate',
+  ThrowException = 'Microsoft.ThrowException',
   TraceActivity = 'Microsoft.TraceActivity',
   TrueSelector = 'Microsoft.TrueSelector',
   UpdateActivity = 'Microsoft.UpdateActivity',
