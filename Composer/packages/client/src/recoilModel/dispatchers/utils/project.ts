@@ -153,7 +153,6 @@ export const navigateToBot = (
   callbackHelpers: CallbackInterface,
   projectId: string,
   mainDialog: string,
-  qnaKbUrls?: string[],
   templateId?: string,
   urlSuffix?: string
 ) => {

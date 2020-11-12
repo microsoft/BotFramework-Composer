@@ -120,7 +120,6 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
       location: formData.location,
       schemaUrl: formData.schemaUrl,
       appLocale,
-      qnaKbUrls,
       templateDir: formData.templateDir,
       eTag: formData.eTag,
       urlSuffix: formData.urlSuffix,

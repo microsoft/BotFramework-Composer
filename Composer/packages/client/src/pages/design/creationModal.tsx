@@ -79,7 +79,7 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
     }
   };
 
-  const handleCreateNew = async (formData, templateId: string, qnaKbUrls?: string[]) => {
+  const handleCreateNew = async (formData, templateId: string) => {
     const newBotData = {
       templateId: templateId || '',
       name: formData.name,
@@ -87,7 +87,6 @@ export const CreationModal: React.FC<CreationModalProps> = (props) => {
       location: formData.location,
       schemaUrl: formData.schemaUrl,
       appLocale,
-      qnaKbUrls,
     };
     if (creationFlowType === 'Skill') {
       addNewSkillToBotProject(newBotData);

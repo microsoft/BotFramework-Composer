@@ -247,7 +247,6 @@ export const projectDispatcher = () => {
         location,
         schemaUrl,
         locale,
-        qnaKbUrls,
         templateDir,
         eTag,
         urlSuffix,
@@ -275,7 +274,7 @@ export const projectDispatcher = () => {
         isRemote: false,
       });
       projectIdCache.set(projectId);
-      navigateToBot(callbackHelpers, projectId, mainDialog, qnaKbUrls, templateId, urlSuffix);
+      navigateToBot(callbackHelpers, projectId, mainDialog, templateId, urlSuffix);
     } catch (ex) {
       set(botProjectIdsState, []);
       handleProjectFailure(callbackHelpers, ex);
