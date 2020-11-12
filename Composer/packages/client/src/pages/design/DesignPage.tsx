@@ -451,18 +451,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         },
       },
       {
-        'data-testid': 'AddNewKnowledgebase',
-        key: 'addKnowledge',
-        text: formatMessage(`Add new knowledge base on {displayName}`, {
-          displayName: currentDialog?.displayName ?? '',
-        }),
-        onClick: () => {
-          createQnAFromUrlDialogBegin({
-            projectId,
-          });
-        },
-      },
-      {
         'data-testid': 'CreateNewSkill',
         key: 'CreateNewSkill',
         text: formatMessage('Create a new skill'),
