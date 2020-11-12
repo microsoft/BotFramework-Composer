@@ -1,9 +1,9 @@
 {
-  "title": "Component kinds",
-  "description": "These are all of the kinds that can be created by the loader.",
+  "title": "Komponentvarianter",
+  "description": "Dessa är alla de varianter som kan skapas av inläsaren.",
   "definitions": {
     "Microsoft.ActivityTemplate": {
-      "title": "Microsoft ActivityTemplate",
+      "title": "Microsoft activity template",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -13,7 +13,7 @@
       "properties": {
         "template": {
           "title": "Mall",
-          "description": "Language Generator template to use to create the activity"
+          "description": "Språkgeneratormall att användas för att skapa aktiviteten"
         },
         "$kind": {
           "title": "Variant av dialogruteobjekt",
@@ -26,8 +26,8 @@
       }
     },
     "Microsoft.AdaptiveDialog": {
-      "title": "Adaptive Dialog",
-      "description": "Flexible, data driven dialog that can adapt to the conversation.",
+      "title": "Adaptive dialog",
+      "description": "Flexibel, datadriven dialog som kan anpassas till konversationen.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -37,43 +37,46 @@
       "properties": {
         "id": {
           "title": "ID",
-          "description": "Optional dialog ID."
+          "description": "Valfritt dialog-ID."
         },
         "autoEndDialog": {
-          "title": "Auto end dialog",
-          "description": "If set to true the dialog will automatically end when there are no further actions.  If set to false, remember to manually end the dialog using EndDialog action."
+          "title": "Avsluta dialogruta automatiskt",
+          "description": "Om värdet anges som sant avslutas dialogrutan automatiskt när det inte finns några ytterligare åtgärder. Om värdet anges som falskt, så kom ihåg att manuellt avsluta dialogrutan med instruktionen EndDialog."
         },
         "defaultResultProperty": {
-          "title": "Default result property",
-          "description": "Value that will be passed back to the parent dialog."
+          "title": "Standardresultategenskap",
+          "description": "Värde som kommer att skickas tillbaka till den överordnade dialogen."
         },
         "recognizer": {
-          "title": "Recognizer",
-          "description": "Input recognizer that interprets user input into intent and entities."
+          "title": "Identifieringsobjekt",
+          "description": "Indataidentifieringsobjekt som tolkar användarindata till avsikt och entiteter."
         },
         "generator": {
-          "title": "Language Generator",
-          "description": "Language generator that generates bot responses."
+          "title": "Language generator",
+          "description": "Språkgenerator som genererar robotsvar."
         },
         "selector": {
           "title": "Väljare",
-          "description": "Policy to determine which trigger is executed. Defaults to a 'best match' selector (optional)."
+          "description": "Princip för att avgöra vilken utlösare som körs. Standard är en väljare för bästa matchning (valfritt)."
         },
         "triggers": {
-          "description": "List of triggers defined for this dialog.",
+          "description": "Lista med utlösare som definierats för den här dialogen.",
           "title": "Utlösare",
           "items": {
-            "title": "Event triggers",
-            "description": "Event triggers for handling events."
+            "title": "Händelseutlösare",
+            "description": "Händelseutlösare för händelsehantering."
           }
         },
         "schema": {
           "title": "Schema",
-          "description": "Schema to fill in.",
+          "description": "Schema att fylla i.",
           "anyOf": {
+            "0": {
+              "title": "Core schema meta-schema"
+            },
             "1": {
-              "title": "Reference to JSON schema",
-              "description": "Reference to JSON schema .dialog file."
+              "title": "Referens till JSON-schema",
+              "description": "Referens till JSON-schemats .dialog-fil."
             }
           }
         },
@@ -88,8 +91,8 @@
       }
     },
     "Microsoft.AgeEntityRecognizer": {
-      "title": "Age Entity Recognizer",
-      "description": "Recognizer which recognizes age.",
+      "title": "Age entity recognizer",
+      "description": "Identifieringsobjekt som identifierar ålder.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -108,8 +111,8 @@
       }
     },
     "Microsoft.Ask": {
-      "title": "Send Activity to Ask a question",
-      "description": "This is an action which sends an activity to the user when a response is expected",
+      "title": "Send activity to ask a question",
+      "description": "Detta är en åtgärd som skickar en aktivitet till användaren när ett svar förväntas",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -118,16 +121,16 @@
       },
       "properties": {
         "expectedProperties": {
-          "title": "Expected Properties",
-          "description": "Properties expected from the user.",
+          "title": "Expected properties",
+          "description": "Egenskaper som förväntas från användaren.",
           "items": {
             "title": "Namn",
             "description": "Egenskapens namn"
           }
         },
         "defaultOperation": {
-          "title": "Default Operation",
-          "description": "Sets the default operation that will be used when no operation is recognized in the response to this Ask."
+          "title": "Default operation",
+          "description": "Anger den standardåtgärd som kommer att användas när ingen åtgärd känns igen i svaret på den här frågan."
         },
         "id": {
           "title": "ID",
@@ -152,8 +155,8 @@
       }
     },
     "Microsoft.AttachmentInput": {
-      "title": "Attachment input dialog",
-      "description": "Collect information - Ask for a file or image.",
+      "title": "Indatadialogruta för bifogad fil",
+      "description": "Samla in information – Fråga efter en fil eller avbildning.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -163,7 +166,7 @@
       "properties": {
         "defaultValue": {
           "title": "Standardvärde",
-          "description": "'Property' will be set to the object or the result of this expression when max turn count is exceeded.",
+          "description": "Property kommer att ställas in på objektet eller resultatet av det här uttrycket när max antal inmatningar har överskridits.",
           "oneOf": {
             "0": {
               "title": "Objekt",
@@ -173,7 +176,7 @@
         },
         "value": {
           "title": "Värde",
-          "description": "'Property' will be set to the object or the result of this expression unless it evaluates to null.",
+          "description": "Property kommer att ställas in på objektet eller resultatet av det här uttrycket, såvida det inte utvärderas till null.",
           "oneOf": {
             "0": {
               "title": "Objekt",
@@ -183,11 +186,11 @@
         },
         "outputFormat": {
           "title": "Utdataformat",
-          "description": "Attachment output format.",
+          "description": "Utdataformat för bifogad fil.",
           "oneOf": {
             "0": {
-              "title": "Standard format",
-              "description": "Standard output formats."
+              "title": "Standardformat",
+              "description": "Standardutdataformat."
             }
           }
         },
@@ -200,23 +203,23 @@
           "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
         },
         "prompt": {
-          "title": "Initial fråga",
+          "title": "Initial prompt",
           "description": "Meddelande att skicka för att samla in information."
         },
         "unrecognizedPrompt": {
-          "title": "Okänd fråga",
-          "description": "Meddelande som ska skickas när maximalt antal turer (om angivet) har överskridits och standardvärdet har valts som värde."
+          "title": "Okänd prompt",
+          "description": "Meddelande som ska skickas när max antal inmatningar (om angivet) har överskridits och standardvärdet har valts som värde."
         },
         "invalidPrompt": {
-          "title": "Ogiltig fråga",
+          "title": "Ogiltig prompt",
           "description": "Meddelande som ska skickas när användarindata inte uppfyller något valideringsuttryck."
         },
         "defaultValueResponse": {
           "title": "Standardvärdesvar",
-          "description": "Meddelande som ska skickas när maximalt antal turer (om angivet) har överskridits och standardvärdet har valts som värde."
+          "description": "Meddelande som ska skickas när max antal inmatningar (om angivet) har överskridits och standardvärdet har valts som värde."
         },
         "maxTurnCount": {
-          "title": "Maximalt antal turer",
+          "title": "Max antal inmatningar",
           "description": "Maximalt antal återställningsförsök att samla in information."
         },
         "validations": {
@@ -250,8 +253,8 @@
       }
     },
     "Microsoft.BeginDialog": {
-      "title": "Begin a dialog",
-      "description": "Begin another dialog.",
+      "title": "Starta en dialogruta",
+      "description": "Starta en annan dialogruta.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -281,11 +284,11 @@
           "description": "Ett eller flera alternativ som skickas till den dialogruta som anropas.",
           "additionalProperties": {
             "title": "Alternativ",
-            "description": "Options for dialog."
+            "description": "Alternativ för dialog."
           }
         },
         "activityProcessed": {
-          "title": "Aktiviteten har bearbetats",
+          "title": "Activity processed",
           "description": "Om värdet är inställt på falskt kan dialogrutan som anropas bearbeta den aktuella aktiviteten."
         },
         "resultProperty": {
@@ -303,8 +306,8 @@
       }
     },
     "Microsoft.BeginSkill": {
-      "title": "Begin a skill",
-      "description": "Begin a remote skill.",
+      "title": "Påbörja en färdighet",
+      "description": "Starta en fjärrfärdighet.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -314,47 +317,47 @@
       "properties": {
         "id": {
           "title": "ID",
-          "description": "Optional id for the skill dialog"
+          "description": "Valfritt ID för färdighetsdialogrutan"
         },
         "disabled": {
           "title": "Inaktiverat",
           "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
         },
         "activityProcessed": {
-          "title": "Aktiviteten har bearbetats",
-          "description": "When set to false, the skill will be started using the activity in the current turn context instead of the activity in the Activity property."
+          "title": "Activity processed",
+          "description": "Om värdet är falskt startas färdigheten med aktiviteten i den aktuella turkontexten i stället för aktiviteten i aktivitetsegenskapen."
         },
         "resultProperty": {
           "title": "Egenskap",
           "description": "Egenskap för att lagra alla värden som returneras av den dialogruta som anropas."
         },
         "botId": {
-          "title": "Skill host bot ID",
-          "description": "The Microsoft App ID that will be calling the skill."
+          "title": "Robot-ID för färdighetsvärd",
+          "description": "Det Microsoft App-ID som kommer att anropa färdigheten."
         },
         "skillHostEndpoint": {
-          "title": "Skill host",
-          "description": "The callback Url for the skill host."
+          "title": "Färdighetsvärd",
+          "description": "Motringningsadress för färdighetsvärddatorn."
         },
         "connectionName": {
-          "title": "OAuth Connection Name (SSO)",
-          "description": "The OAuth Connection Name, that would be used to perform Single SignOn with a skill."
+          "title": "OAuth connection name (SSO)",
+          "description": "Namnet på OAuth-anslutningen som skulle användas för att genomföra enkel inloggning med en färdighet."
         },
         "skillAppId": {
-          "title": "Skill App ID",
-          "description": "The Microsoft App ID for the skill."
+          "title": "Skill App Id",
+          "description": "Färdighetens Microsoft App-ID."
         },
         "skillEndpoint": {
-          "title": "Skill endpoint ",
+          "title": "Färdighetsslutpunkt ",
           "description": "Färdighetens slutpunkt /API/messages."
         },
         "activity": {
           "title": "Aktivitet",
-          "description": "The activity to send to the skill."
+          "description": "Den aktivitet som ska skickas till färdigheten."
         },
         "allowInterruptions": {
-          "title": "Tillåt avbrott",
-          "description": "A boolean expression that determines whether the parent should be allowed to interrupt the skill."
+          "title": "Allow interruptions",
+          "description": "Ett booleskt uttryck som anger om det överordnade objektet ska tillåtas att avbryta färdigheten."
         },
         "$kind": {
           "title": "Variant av dialogruteobjekt",
@@ -367,8 +370,8 @@
       }
     },
     "Microsoft.BreakLoop": {
-      "title": "Break Loop",
-      "description": "Stop executing this loop",
+      "title": "Break loop",
+      "description": "Stoppa den här loopen",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -413,7 +416,7 @@
           "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
         },
         "activityProcessed": {
-          "title": "Aktiviteten har bearbetats",
+          "title": "Activity processed",
           "description": "Om värdet är inställt på falskt, uppmanas anroparens dialogruta att bearbeta den aktuella aktiviteten."
         },
         "eventName": {
@@ -453,7 +456,7 @@
           "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
         },
         "activityProcessed": {
-          "title": "Aktiviteten har bearbetats",
+          "title": "Activity processed",
           "description": "Om värdet är inställt på falskt, uppmanas anroparens dialogruta att bearbeta den aktuella aktiviteten."
         },
         "eventName": {
@@ -474,9 +477,29 @@
         }
       }
     },
+    "Microsoft.ChannelMentionEntityRecognizer": {
+      "title": "Channel mention entity recognizer",
+      "description": "Promotes mention entities passed by a channel via the activity.entities into recognizer result.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
     "Microsoft.ChoiceInput": {
-      "title": "Choice input dialog",
-      "description": "Collect information - Pick from a list of choices",
+      "title": "Dialogruta för valindata",
+      "description": "Samla in information – Välj i en lista med alternativ",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -486,7 +509,7 @@
       "properties": {
         "defaultValue": {
           "title": "Standardvärde",
-          "description": "Property ställs in på värdet för det här uttrycket när maximalt antal turer har överskrids."
+          "description": "Property ställs in på värdet för det här uttrycket när max antal inmatningar har överskrids."
         },
         "value": {
           "title": "Värde",
@@ -494,35 +517,35 @@
         },
         "outputFormat": {
           "title": "Utdataformat",
-          "description": "Sets the desired choice output format (either value or index into choices).",
+          "description": "Anger önskat utdataformat (antingen värde eller index i alternativ).",
           "oneOf": {
             "0": {
               "title": "Standard",
-              "description": "Standard output format."
+              "description": "Standardutdataformat."
             }
           }
         },
         "choices": {
-          "title": "Array of choices",
-          "description": "Choices to choose from.",
+          "title": "Matris med alternativ",
+          "description": "Alternativ att välja bland.",
           "oneOf": {
             "0": {
               "title": "Enkla val",
-              "description": "Simple choices to choose from.",
+              "description": "Enkla val att välja bland.",
               "items": {
                 "0": {
                   "title": "Enkelt val",
-                  "description": "One choice for choice input."
+                  "description": "Ett alternativ för utvalda indata."
                 }
               }
             },
             "1": {
               "title": "Strukturerade val",
-              "description": "Choices that allow full control.",
+              "description": "Alternativ som tillåter fullständig kontroll.",
               "items": {
                 "0": {
-                  "title": "Structured choice",
-                  "description": "Structured choice to choose from.",
+                  "title": "Strukturerat val",
+                  "description": "Strukturerat val att välja från.",
                   "properties": {
                     "value": {
                       "title": "Värde",
@@ -537,7 +560,7 @@
                       "description": "Lista över synonymer som ska identifieras utöver värdet (valfritt).",
                       "items": {
                         "title": "Synonym",
-                        "description": "Synonym for value."
+                        "description": "Synonym för värde."
                       }
                     }
                   }
@@ -548,7 +571,7 @@
         },
         "defaultLocale": {
           "title": "Standard för nationella inställningar",
-          "description": "The default locale to use to parse confirmation choices if there is not one passed by the caller."
+          "description": "De nationella inställningar som ska användas för att parsa bekräftelseval om ingen information om detta skickas från anroparen."
         },
         "style": {
           "title": "Listformat",
@@ -556,61 +579,61 @@
           "oneOf": {
             "0": {
               "title": "Listformat",
-              "description": "Standard list style."
+              "description": "Standardlistformat."
             }
           }
         },
         "choiceOptions": {
           "title": "Utvalda alternativ",
-          "description": "Sets the choice options used for controlling how choices are combined.",
+          "description": "Anger de alternativ som ska användas för att styra hur alternativen kombineras.",
           "oneOf": {
             "0": {
               "title": "Objekt",
-              "description": "Choice options object.",
+              "description": "Utvalt alternativobjekt.",
               "properties": {
                 "inlineSeparator": {
                   "title": "Infogad avgränsare",
-                  "description": "Character used to separate individual choices when there are more than 2 choices"
+                  "description": "Tecken som används för att avgränsa enskilda val när det finns fler än två alternativ"
                 },
                 "inlineOr": {
                   "title": "Infogad eller",
-                  "description": "Separator inserted between the choices when there are only 2 choices"
+                  "description": "Avgränsare infogad mellan alternativen när det bara finns två alternativ"
                 },
                 "inlineOrMore": {
                   "title": "Infogad eller mer",
-                  "description": "Separator inserted between the last 2 choices when their are more than 2 choices."
+                  "description": "Avgränsare infogad mellan de två senaste alternativen när det finns mer än två alternativ."
                 },
                 "includeNumbers": {
                   "title": "Inkludera siffror",
-                  "description": "If true, 'inline' and 'list' list style will be prefixed with the index of the choice."
+                  "description": "Om värdet är sant kommer listformaten \"inline\" och \"list\" att föregås av ett index."
                 }
               }
             }
           }
         },
         "recognizerOptions": {
-          "title": "Recognizer options",
-          "description": "Sets how to recognize choices in the response",
+          "title": "Alternativ för identifieringsobjekt",
+          "description": "Anger hur alternativ ska identifieras i svaret",
           "oneOf": {
             "0": {
               "title": "Objekt",
-              "description": "Options for recognizer.",
+              "description": "Alternativ för identifieringsobjekt.",
               "properties": {
                 "noValue": {
                   "title": "Inget värde",
-                  "description": "If true, the choices value field will NOT be search over"
+                  "description": "Om värdet är sant genomsöks värdefältet INTE"
                 },
                 "noAction": {
                   "title": "Ingen åtgärd",
-                  "description": "If true, the choices action.title field will NOT be searched over"
+                  "description": "Om värdet är sant genomsöks INTE fältet action.title"
                 },
                 "recognizeNumbers": {
-                  "title": "Recognize numbers",
-                  "description": "If true, the number recognizer will be used to recognize an index response (1,2,3...) to the prompt."
+                  "title": "Identifiera tal",
+                  "description": "Om värdet är sant används talidentifieringsobjektet för att identifiera ett indexsvar (1, 2, 3...) till prompten."
                 },
                 "recognizeOrdinals": {
-                  "title": "Recognize ordinals",
-                  "description": "If true, the ordinal recognizer will be used to recognize ordinal response (first/second/...) to the prompt."
+                  "title": "Identifiera ordningstal",
+                  "description": "Om värdet är sant kommer talidentifieringsobjektet att användas för att tolka ordningstalssvar (första/andra/...) till prompten."
                 }
               }
             }
@@ -625,23 +648,23 @@
           "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
         },
         "prompt": {
-          "title": "Initial fråga",
+          "title": "Initial prompt",
           "description": "Meddelande att skicka för att samla in information."
         },
         "unrecognizedPrompt": {
-          "title": "Okänd fråga",
-          "description": "Meddelande som ska skickas när maximalt antal turer (om angivet) har överskridits och standardvärdet har valts som värde."
+          "title": "Okänd prompt",
+          "description": "Meddelande som ska skickas när max antal inmatningar (om angivet) har överskridits och standardvärdet har valts som värde."
         },
         "invalidPrompt": {
-          "title": "Ogiltig fråga",
+          "title": "Ogiltig prompt",
           "description": "Meddelande som ska skickas när användarindata inte uppfyller något valideringsuttryck."
         },
         "defaultValueResponse": {
           "title": "Standardvärdesvar",
-          "description": "Meddelande som ska skickas när maximalt antal turer (om angivet) har överskridits och standardvärdet har valts som värde."
+          "description": "Meddelande som ska skickas när max antal inmatningar (om angivet) har överskridits och standardvärdet har valts som värde."
         },
         "maxTurnCount": {
-          "title": "Maximalt antal turer",
+          "title": "Max antal inmatningar",
           "description": "Maximalt antal återställningsförsök att samla in information."
         },
         "validations": {
@@ -675,8 +698,8 @@
       }
     },
     "Microsoft.ConditionalSelector": {
-      "title": "Conditional Trigger Selector",
-      "description": "Use a rule selector based on a condition",
+      "title": "Conditional trigger selector",
+      "description": "Använd en regelväljare baserad på ett villkor",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -686,7 +709,7 @@
       "properties": {
         "condition": {
           "title": "Villkor",
-          "description": "Expression to evaluate"
+          "description": "Uttryck att utvärdera"
         },
         "$kind": {
           "title": "Variant av dialogruteobjekt",
@@ -699,8 +722,8 @@
       }
     },
     "Microsoft.ConfirmInput": {
-      "title": "Confirm input dialog",
-      "description": "Collect information - Ask for confirmation (yes or no).",
+      "title": "Bekräfta dialogruta för indata",
+      "description": "Samla in information – Fråga efter bekräftelse (ja eller nej).",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -710,45 +733,45 @@
       "properties": {
         "outputFormat": {
           "title": "Utdataformat",
-          "description": "Optional expression to use to format the output."
+          "description": "Valfritt uttryck att använda för att formatera utdata."
         },
         "defaultLocale": {
           "title": "Standard för nationella inställningar",
-          "description": "The Default locale or an expression which provides the default locale to use as default if not found in the activity."
+          "description": "Standardspråk eller ett uttryck som anger de nationella inställningar som ska användas som standard om de inte hittas i aktiviteten."
         },
         "style": {
           "title": "Listformat",
           "description": "Konfigurerar ListStyle till att styra hur val ska återges.",
           "oneOf": {
             "0": {
-              "title": "Standard style",
-              "description": "Standard style for rendering choices."
+              "title": "Standardformat",
+              "description": "Standardformat för återgivningsval."
             }
           }
         },
         "choiceOptions": {
-          "title": "Choice Options",
-          "description": "Choice Options or expression which provides Choice Options to control display choices to the user.",
+          "title": "Choice options",
+          "description": "Utvalda alternativ eller uttryck som tillhandahåller utvalda alternativ för att kontrollera alternativ för användaren.",
           "oneOf": {
             "0": {
               "title": "Utvalda alternativ",
-              "description": "Choice options.",
+              "description": "Utvalda alternativ.",
               "properties": {
                 "inlineSeparator": {
                   "title": "Infogad avgränsare",
-                  "description": "Text to separate individual choices when there are more than 2 choices"
+                  "description": "Text som ska avgränsa enskilda alternativ när det finns mer än två alternativ"
                 },
                 "inlineOr": {
                   "title": "Infogad eller",
-                  "description": "Text to be inserted between the choices when their are only 2 choices"
+                  "description": "Text som ska infogas mellan alternativen när det bara finns två alternativ"
                 },
                 "inlineOrMore": {
                   "title": "Infogad eller mer",
-                  "description": "Text to be inserted between the last 2 choices when their are more than 2 choices."
+                  "description": "Text som ska infogas mellan de sista två alternativen när det finns mer än två alternativ."
                 },
                 "includeNumbers": {
                   "title": "Inkludera siffror",
-                  "description": "If true, inline and list style choices will be prefixed with the index of the choice."
+                  "description": "Om värdet är sant, så kommer listalternativen att föregås av alternativets index."
                 }
               }
             }
@@ -756,33 +779,33 @@
         },
         "defaultValue": {
           "title": "Standardvärde",
-          "description": "Property ställs in på värdet för det här uttrycket när maximalt antal turer har överskrids."
+          "description": "Property ställs in på värdet för det här uttrycket när max antal inmatningar har överskrids."
         },
         "value": {
           "title": "Värde",
           "description": "Property ställs in på värdet för det här uttrycket såvida det inte utvärderas till null."
         },
         "confirmChoices": {
-          "title": "Array of choice objects",
-          "description": "Array of simple or structured choices.",
+          "title": "Matris med utvalda objekt",
+          "description": "Matris med enkla eller strukturerade alternativ.",
           "oneOf": {
             "0": {
               "title": "Enkla val",
-              "description": "Simple choices to confirm from.",
+              "description": "Enkla val att bekräfta från.",
               "items": {
                 "0": {
                   "title": "Enkelt val",
-                  "description": "Simple choice to confirm."
+                  "description": "Enkelt val att bekräfta."
                 }
               }
             },
             "1": {
               "title": "Strukturerade val",
-              "description": "Structured choices for confirmations.",
+              "description": "Strukturerade val för bekräftelser.",
               "items": {
                 "0": {
-                  "title": "Choice",
-                  "description": "Choice to confirm.",
+                  "title": "Val",
+                  "description": "Val att bekräfta.",
                   "properties": {
                     "value": {
                       "title": "Värde",
@@ -797,7 +820,7 @@
                       "description": "Lista över synonymer som ska identifieras utöver värdet (valfritt).",
                       "items": {
                         "title": "Synonym",
-                        "description": "Synonym for choice."
+                        "description": "Synonym för val."
                       }
                     }
                   }
@@ -815,23 +838,23 @@
           "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
         },
         "prompt": {
-          "title": "Initial fråga",
+          "title": "Initial prompt",
           "description": "Meddelande att skicka för att samla in information."
         },
         "unrecognizedPrompt": {
-          "title": "Okänd fråga",
-          "description": "Meddelande som ska skickas när maximalt antal turer (om angivet) har överskridits och standardvärdet har valts som värde."
+          "title": "Okänd prompt",
+          "description": "Meddelande som ska skickas när max antal inmatningar (om angivet) har överskridits och standardvärdet har valts som värde."
         },
         "invalidPrompt": {
-          "title": "Ogiltig fråga",
+          "title": "Ogiltig prompt",
           "description": "Meddelande som ska skickas när användarindata inte uppfyller något valideringsuttryck."
         },
         "defaultValueResponse": {
           "title": "Standardvärdesvar",
-          "description": "Meddelande som ska skickas när maximalt antal turer (om angivet) har överskridits och standardvärdet har valts som värde."
+          "description": "Meddelande som ska skickas när max antal inmatningar (om angivet) har överskridits och standardvärdet har valts som värde."
         },
         "maxTurnCount": {
-          "title": "Maximalt antal turer",
+          "title": "Max antal inmatningar",
           "description": "Maximalt antal återställningsförsök att samla in information."
         },
         "validations": {
@@ -865,8 +888,8 @@
       }
     },
     "Microsoft.ConfirmationEntityRecognizer": {
-      "title": "Confirmation Entity Recognizer",
-      "description": "Recognizer which recognizes confirmation choices (yes/no).",
+      "title": "Confirmation entity recognizer",
+      "description": "Identifieringsobjekt som identifierar bekräftelsealternativ (Ja/Nej).",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -884,9 +907,45 @@
         }
       }
     },
+    "Microsoft.ContinueConversationLater": {
+      "title": "Continue conversation later (Queue)",
+      "description": "Continue conversation at later time (via Azure Storage Queue).",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Id",
+          "description": "Optional id for the dialog"
+        },
+        "disabled": {
+          "title": "Disabled",
+          "description": "Optional condition which if true will disable this action."
+        },
+        "date": {
+          "title": "Date",
+          "description": "Date in the future as a ISO string when the conversation should continue."
+        },
+        "value": {
+          "title": "Value",
+          "description": "Value to send in the activity.value."
+        },
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
     "Microsoft.ContinueLoop": {
-      "title": "Continue Loop",
-      "description": "Stop executing this template and continue with the next iteration of the loop.",
+      "title": "Continue loop",
+      "description": "Sluta köra den här mallen och fortsätt med nästa iteration av loopen.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -913,8 +972,8 @@
       }
     },
     "Microsoft.CrossTrainedRecognizerSet": {
-      "title": "Cross-trained Recognizer Set",
-      "description": "Recognizer for selecting between cross trained recognizers.",
+      "title": "Cross-trained recognizer set",
+      "description": "Identifieringsobjekt för att välja mellan korstränade identifieringsobjekt.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -927,8 +986,8 @@
           "description": "Valfritt unikt ID som används med RecognizerSet."
         },
         "recognizers": {
-          "title": "Tolkar",
-          "description": "Lista över identifierare som definierats för den här uppsättningen."
+          "title": "Identifieringsobjekt",
+          "description": "Lista över identifieringsobjekt som definierats för den här uppsättningen."
         },
         "$kind": {
           "title": "Variant av dialogruteobjekt",
@@ -941,8 +1000,8 @@
       }
     },
     "Microsoft.CurrencyEntityRecognizer": {
-      "title": "Currency Entity Recognizer",
-      "description": "Recognizer which recognizes currency.",
+      "title": "Currency entity recognizer",
+      "description": "Identifieringsobjekt som identifierar valuta.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -961,8 +1020,8 @@
       }
     },
     "Microsoft.DateTimeEntityRecognizer": {
-      "title": "DateTime Entity Recognizer",
-      "description": "Recognizer which recognizes dates and time fragments.",
+      "title": "Date and time entity recognizer",
+      "description": "Identifieringsobjekt som identifierar datum-och tidsfragment.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -981,11 +1040,11 @@
       }
     },
     "Microsoft.DateTimeInput": {
-      "title": "Date/time input dialog",
-      "description": "Collect information - Ask for date and/ or time",
+      "title": "Indatadialogruta för datum/tid",
+      "description": "Samla in information – Fråga efter datum och/eller tid",
       "defaultLocale": {
         "title": "Standard för nationella inställningar",
-        "description": "Default locale."
+        "description": "Standardinställning för nationella inställningar."
       },
       "patternProperties": {
         "^\\$": {
@@ -995,16 +1054,16 @@
       },
       "properties": {
         "defaultValue": {
-          "title": "Default Date",
-          "description": "'Property' will be set to the value or the result of the expression when max turn count is exceeded."
+          "title": "Default date",
+          "description": "Property kommer att ställas in på värdet eller resultatet av uttrycket när max antal inmatningar har överskridits."
         },
         "value": {
           "title": "Värde",
-          "description": "'Property' will be set to the value or the result of the expression unless it evaluates to null."
+          "description": "Property kommer att ställas in på värdet eller resultatet av uttrycket, såvida det inte utvärderas till null."
         },
         "outputFormat": {
           "title": "Utdataformat",
-          "description": "Expression to use for formatting the output."
+          "description": "Uttryck att användas för formatering av utdata."
         },
         "id": {
           "title": "ID",
@@ -1015,23 +1074,23 @@
           "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
         },
         "prompt": {
-          "title": "Initial fråga",
+          "title": "Initial prompt",
           "description": "Meddelande att skicka för att samla in information."
         },
         "unrecognizedPrompt": {
-          "title": "Okänd fråga",
-          "description": "Meddelande som ska skickas när maximalt antal turer (om angivet) har överskridits och standardvärdet har valts som värde."
+          "title": "Okänd prompt",
+          "description": "Meddelande som ska skickas när max antal inmatningar (om angivet) har överskridits och standardvärdet har valts som värde."
         },
         "invalidPrompt": {
-          "title": "Ogiltig fråga",
+          "title": "Ogiltig prompt",
           "description": "Meddelande som ska skickas när användarindata inte uppfyller något valideringsuttryck."
         },
         "defaultValueResponse": {
           "title": "Standardvärdesvar",
-          "description": "Meddelande som ska skickas när maximalt antal turer (om angivet) har överskridits och standardvärdet har valts som värde."
+          "description": "Meddelande som ska skickas när max antal inmatningar (om angivet) har överskridits och standardvärdet har valts som värde."
         },
         "maxTurnCount": {
-          "title": "Maximalt antal turer",
+          "title": "Max antal inmatningar",
           "description": "Maximalt antal återställningsförsök att samla in information."
         },
         "validations": {
@@ -1065,8 +1124,8 @@
       }
     },
     "Microsoft.DebugBreak": {
-      "title": "Debugger break",
-      "description": "If debugger is attached, stop the execution at this point in the conversation.",
+      "title": "Avbrott i felsökningsprogram",
+      "description": "Om ett felsökningsprogram har bifogats, så avbryt körningen vid den här tidpunkten i konversationen.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -1094,7 +1153,7 @@
     },
     "Microsoft.DeleteActivity": {
       "title": "Ta bort aktivitet",
-      "description": "Delete an activity that was previously sent.",
+      "description": "Ta bort en aktivitet som tidigare har skickats.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -1108,7 +1167,7 @@
         },
         "activityId": {
           "title": "ActivityId",
-          "description": "expression to an activityId to delete"
+          "description": "uttryck till ett activityId som ska tas bort"
         },
         "disabled": {
           "title": "Inaktiverat",
@@ -1126,7 +1185,7 @@
     },
     "Microsoft.DeleteProperties": {
       "title": "Ta bort egenskaper",
-      "description": "Delete multiple properties and any value it holds.",
+      "description": "Ta bort flera egenskaper och alla värden som de rymmer.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -1144,7 +1203,7 @@
         },
         "properties": {
           "title": "Egenskaper",
-          "description": "Properties to delete.",
+          "description": "Egenskaper att ta bort.",
           "items": {
             "title": "Egenskap",
             "description": "Egenskap att ta bort."
@@ -1161,8 +1220,8 @@
       }
     },
     "Microsoft.DeleteProperty": {
-      "title": "Ta bort egenskap",
-      "description": "Delete a property and any value it holds.",
+      "title": "Delete property",
+      "description": "Ta bort en egenskap och valfritt värde som den rymmer.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -1193,8 +1252,8 @@
       }
     },
     "Microsoft.DimensionEntityRecognizer": {
-      "title": "Dimension Entity Recognizer",
-      "description": "Recognizer which recognizes dimension.",
+      "title": "Dimension entity recognizer",
+      "description": "Identifieringsobjekt som identifierar dimension.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -1213,8 +1272,8 @@
       }
     },
     "Microsoft.EditActions": {
-      "title": "Edit actions.",
-      "description": "Edit the current list of actions.",
+      "title": "Redigera åtgärder.",
+      "description": "Redigera den aktuella listan med åtgärder.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -1232,17 +1291,17 @@
         },
         "changeType": {
           "title": "Ändringstyp",
-          "description": "Type of change to apply to the current actions.",
+          "description": "Typ av ändring som ska gälla för de aktuella åtgärderna.",
           "oneOf": {
             "0": {
-              "title": "Standard change",
-              "description": "Standard change types."
+              "title": "Standardändring",
+              "description": "Standardändringstyper."
             }
           }
         },
         "actions": {
           "title": "Åtgärder",
-          "description": "Actions to apply."
+          "description": "Åtgärder att använda."
         },
         "$kind": {
           "title": "Variant av dialogruteobjekt",
@@ -1255,8 +1314,8 @@
       }
     },
     "Microsoft.EditArray": {
-      "title": "Edit array",
-      "description": "Modify an array in memory",
+      "title": "Redigera matris",
+      "description": "Ändra en matris i minnet",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -1270,11 +1329,11 @@
         },
         "changeType": {
           "title": "Ändringstyp",
-          "description": "Type of change to the array in memory.",
+          "description": "Typ av ändring av matrisen i minnet.",
           "oneOf": {
             "0": {
-              "title": "Enum",
-              "description": "Standard change type."
+              "title": "Change type",
+              "description": "Standardändringstyp."
             }
           }
         },
@@ -1284,11 +1343,11 @@
         },
         "itemsProperty": {
           "title": "Objektegenskap",
-          "description": "Property that holds the array to update."
+          "description": "Egenskapen som innehåller den matris som ska uppdateras."
         },
         "resultProperty": {
-          "title": "Result Property",
-          "description": "Property to store the result of this action."
+          "title": "Result property",
+          "description": "Egenskap som lagrar den här åtgärdens resultat."
         },
         "value": {
           "title": "Värde",
@@ -1305,8 +1364,8 @@
       }
     },
     "Microsoft.EmailEntityRecognizer": {
-      "title": "Email Entity Recognizer",
-      "description": "Recognizer which recognizes email.",
+      "title": "Email entity recognizer",
+      "description": "Identifieringsobjekt som identifierar e-post.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -1326,7 +1385,7 @@
     },
     "Microsoft.EmitEvent": {
       "title": "Generera en anpassad händelse",
-      "description": "Emit an event. Capture this event with a trigger.",
+      "description": "Generera en händelse. Fånga in den här händelsen med en utlösare.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -1347,12 +1406,12 @@
           "description": "Namn på händelsen som ska genereras.",
           "oneOf": {
             "0": {
-              "title": "Built-in event",
-              "description": "Standard event type."
+              "title": "Inbyggd händelse",
+              "description": "Standardhändelsetyp."
             },
             "1": {
-              "title": "Custom event",
-              "description": "Custom event type"
+              "title": "Anpassad händelse",
+              "description": "Anpassad händelsetyp"
             }
           }
         },
@@ -1361,8 +1420,8 @@
           "description": "Värde att generera med händelsen (valfritt)."
         },
         "bubbleEvent": {
-          "title": "Bubble event",
-          "description": "If true this event is passed on to parent dialogs."
+          "title": "Händelseredigering uppåt av händelse",
+          "description": "Om värdet är sant skickas händelsen till överordnade dialogrutor."
         },
         "$kind": {
           "title": "Variant av dialogruteobjekt",
@@ -1375,8 +1434,8 @@
       }
     },
     "Microsoft.EndDialog": {
-      "title": "End dialog",
-      "description": "End this dialog.",
+      "title": "Avsluta dialogruta",
+      "description": "Avsluta den här dialogrutan.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -1394,7 +1453,7 @@
         },
         "value": {
           "title": "Värde",
-          "description": "Result value returned to the parent dialog."
+          "description": "Resultatvärdet som returneras till den överordnade dialogrutan."
         },
         "$kind": {
           "title": "Variant av dialogruteobjekt",
@@ -1408,7 +1467,7 @@
     },
     "Microsoft.EndTurn": {
       "title": "Avsluta tur",
-      "description": "End the current turn without ending the dialog.",
+      "description": "Avsluta den aktuella turen utan att avsluta dialogen.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -1435,8 +1494,8 @@
       }
     },
     "Microsoft.FirstSelector": {
-      "title": "First Trigger Selector",
-      "description": "Selector for first true rule",
+      "title": "First trigger selector",
+      "description": "Väljare för första sanna regeln",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -1455,8 +1514,8 @@
       }
     },
     "Microsoft.Foreach": {
-      "title": "For each item",
-      "description": "Execute actions on each item in an a collection.",
+      "title": "För varje objekt",
+      "description": "Kör åtgärder för varje objekt i en mängd.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -1478,15 +1537,15 @@
         },
         "index": {
           "title": "Indexegenskap",
-          "description": "Property that holds the index of the item."
+          "description": "Egenskapen som innehåller objektets index."
         },
         "value": {
-          "title": "Value property",
-          "description": "Property that holds the value of the item."
+          "title": "Värdeegenskap",
+          "description": "Egenskapen som innehåller objektets värde."
         },
         "actions": {
           "title": "Åtgärder",
-          "description": "Actions to execute for each item. Use '$foreach.value' to access the value of each item. Use '$foreach.index' to access the index of each item."
+          "description": "Åtgärder som ska utföras för varje objekt. Använd $foreach.value när du vill ha åtkomst till respektive objekts värde. Använd $foreach.index när du vill ha åtkomst till respektive objekts index."
         },
         "$kind": {
           "title": "Variant av dialogruteobjekt",
@@ -1499,8 +1558,8 @@
       }
     },
     "Microsoft.ForeachPage": {
-      "title": "For each page",
-      "description": "Execute actions on each page (collection of items) in an array.",
+      "title": "För varje sida",
+      "description": "Kör åtgärder på varje sida (objektmängd) i en matris.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -1522,19 +1581,19 @@
         },
         "actions": {
           "title": "Åtgärder",
-          "description": "Actions to execute for each page. Use '$foreach.page' to access each page."
+          "description": "Åtgärder som ska köras för varje sida. Använd $foreach.page när du vill öppna varje sida."
         },
         "pageIndex": {
           "title": "Indexegenskap",
-          "description": "Property that holds the index of the page."
+          "description": "Egenskapen som innehåller sidans index."
         },
         "page": {
-          "title": "Page property",
-          "description": "Property that holds the value of the page."
+          "title": "Sidegenskap",
+          "description": "Egenskapen som innehåller sidans värde."
         },
         "pageSize": {
           "title": "Sidstorlek",
-          "description": "Number of items in each page."
+          "description": "Antal objekt på varje sida."
         },
         "$kind": {
           "title": "Variant av dialogruteobjekt",
@@ -1547,8 +1606,8 @@
       }
     },
     "Microsoft.GetActivityMembers": {
-      "title": "Get Activity Members",
-      "description": "Get the members who are participating in an activity. (BotFrameworkAdapter only)",
+      "title": "Get activity members",
+      "description": "Hämta de medlemmar som deltar i en aktivitet. (Endast BotFrameworkAdapter)",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -1565,8 +1624,8 @@
           "description": "Egenskap (namngiven plats för att lagra information)."
         },
         "activityId": {
-          "title": "ActivityId",
-          "description": "Activity ID or expression to an activityId to use to get the members. If none is defined then the current activity id will be used."
+          "title": "Activity Id",
+          "description": "Aktivitets-ID eller ett uttryck för att hämta medlemmarna med ett activityId. Om inget anges används det aktuella aktivitets-ID:t."
         },
         "disabled": {
           "title": "Inaktiverat",
@@ -1583,8 +1642,8 @@
       }
     },
     "Microsoft.GetConversationMembers": {
-      "title": "Get Converation Members",
-      "description": "Get the members who are participating in an conversation. (BotFrameworkAdapter only)",
+      "title": "Get conversation members",
+      "description": "Hämta de medlemmar som deltar i en konversation. (Endast BotFrameworkAdapter)",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -1615,8 +1674,8 @@
       }
     },
     "Microsoft.GotoAction": {
-      "title": "Go to Action",
-      "description": "Go to an an action by id.",
+      "title": "Go to action",
+      "description": "Gå till en åtgärd efter ID.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -1633,8 +1692,8 @@
           "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
         },
         "actionId": {
-          "title": "Action Id",
-          "description": "Action Id to execute next"
+          "title": "Åtgärds-ID",
+          "description": "Åtgärds-ID för att köra nästa"
         },
         "$kind": {
           "title": "Variant av dialogruteobjekt",
@@ -1647,8 +1706,8 @@
       }
     },
     "Microsoft.GuidEntityRecognizer": {
-      "title": "Guid Entity Recognizer",
-      "description": "Recognizer which recognizes guids.",
+      "title": "Guid entity recognizer",
+      "description": "Identifieringsobjekt som identifierar GUID.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -1667,8 +1726,8 @@
       }
     },
     "Microsoft.HashtagEntityRecognizer": {
-      "title": "Hashtag Entity Recognizer",
-      "description": "Recognizer which recognizes Hashtags.",
+      "title": "Hashtag entity recognizer",
+      "description": "Identifieringsobjekt som identifierar hashtaggar.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -1688,7 +1747,7 @@
     },
     "Microsoft.HttpRequest": {
       "title": "HTTP-begäran",
-      "description": "Make a HTTP request.",
+      "description": "Gör HTTP-begäran.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -1706,35 +1765,35 @@
         },
         "method": {
           "title": "HTTP-metod",
-          "description": "HTTP method to use."
+          "description": "HTTP-metod att använda."
         },
         "url": {
           "title": "URL",
-          "description": "URL to call (supports data binding)."
+          "description": "URL att anropa (stöder databindning)."
         },
         "body": {
           "title": "Brödtext",
-          "description": "Body to include in the HTTP call (supports data binding)."
+          "description": "Text att inkludera i HTTP-anrop (stöder databindning)."
         },
         "resultProperty": {
-          "title": "Result property",
-          "description": "A property to store the result of this action. The result can include any of the 4 properties from the HTTP response: statusCode, reasonPhrase, content, and headers. If the content is JSON it will be a deserialized object. The values can be accessed via .content for example."
+          "title": "Resultategenskap",
+          "description": "En egenskap för att lagra resultatet av den här åtgärden. Resultatet kan innehålla vilken som helst av de fyra egenskaperna från HTTP-svaret: statusCode, reasonPhrase, content och headers. Om innehållet är JSON blir det ett deserialiserat objekt. Dessa värden kan du t. ex. nå via .innehåll."
         },
         "contentType": {
           "title": "Innehållstyp",
-          "description": "Content media type for the body."
+          "description": "Brödtextens innehållsmediatyp."
         },
         "headers": {
           "title": "Rubriker",
-          "description": "One or more headers to include in the request (supports data binding)."
+          "description": "Ett eller flera huvuden att inkludera i begäran (stöder databindning)."
         },
         "responseType": {
           "title": "Svarstyp",
-          "description": "Defines the type of HTTP response. Automatically calls the 'Send a response' action if set to 'Activity' or 'Activities'.",
+          "description": "Definierar typen av HTTP-svar. Anropar automatiskt åtgärden \"Skicka ett svar\" om det är inställt på Aktivitet eller Aktiviteter.",
           "oneOf": {
             "0": {
-              "title": "Standard response",
-              "description": "Standard response type."
+              "title": "Standardsvar",
+              "description": "Standardsvarstyp."
             }
           }
         },
@@ -1750,57 +1809,425 @@
     },
     "Microsoft.IActivityTemplate": {
       "title": "Microsoft ActivityTemplates",
-      "description": "Components which are ActivityTemplate, which is string template, an activity, or a implementation of ActivityTemplate"
+      "description": "ActivityTemplate-komponenter kan vara strängmallar, aktiviteter eller en implementeringar av ActivityTemplate",
+      "oneOf": {
+        "1": {
+          "description": "An Activity is the basic communication type for the Bot Framework 3.0 protocol.",
+          "title": "Activity",
+          "properties": {
+            "type": {
+              "description": "Contains the activity type. Possible values include: 'message', 'contactRelationUpdate',\n'conversationUpdate', 'typing', 'endOfConversation', 'event', 'invoke', 'deleteUserData',\n'messageUpdate', 'messageDelete', 'installationUpdate', 'messageReaction', 'suggestion',\n'trace', 'handoff'",
+              "title": "type"
+            },
+            "id": {
+              "description": "Contains an ID that uniquely identifies the activity on the channel.",
+              "title": "id"
+            },
+            "timestamp": {
+              "description": "Contains the date and time that the message was sent, in UTC, expressed in ISO-8601 format.",
+              "title": "timestamp"
+            },
+            "localTimestamp": {
+              "description": "Contains the date and time that the message was sent, in local time, expressed in ISO-8601\nformat.\nFor example, 2016-09-23T13:07:49.4714686-07:00.",
+              "title": "localTimestamp"
+            },
+            "localTimezone": {
+              "description": "Contains the name of the timezone in which the message, in local time, expressed in IANA Time\nZone database format.\nFor example, America/Los_Angeles.",
+              "title": "localTimezone"
+            },
+            "serviceUrl": {
+              "description": "Contains the URL that specifies the channel's service endpoint. Set by the channel.",
+              "title": "serviceUrl"
+            },
+            "channelId": {
+              "description": "Contains an ID that uniquely identifies the channel. Set by the channel.",
+              "title": "channelId"
+            },
+            "from": {
+              "description": "Identifies the sender of the message.",
+              "title": "from"
+            },
+            "conversation": {
+              "description": "Identifies the conversation to which the activity belongs.",
+              "title": "conversation",
+              "properties": {
+                "isGroup": {
+                  "description": "Indicates whether the conversation contains more than two participants at the time the\nactivity was generated",
+                  "title": "isGroup"
+                },
+                "conversationType": {
+                  "description": "Indicates the type of the conversation in channels that distinguish between conversation types",
+                  "title": "conversationType"
+                },
+                "id": {
+                  "description": "Channel id for the user or bot on this channel (Example: joe@smith.com, or @joesmith or\n123456)",
+                  "title": "id"
+                },
+                "name": {
+                  "description": "Display friendly name",
+                  "title": "name"
+                },
+                "aadObjectId": {
+                  "description": "This account's object ID within Azure Active Directory (AAD)",
+                  "title": "aadObjectId"
+                },
+                "role": {
+                  "description": "Role of the entity behind the account (Example: User, Bot, etc.). Possible values include:\n'user', 'bot'",
+                  "title": "role"
+                }
+              }
+            },
+            "recipient": {
+              "description": "Identifies the recipient of the message.",
+              "title": "recipient"
+            },
+            "textFormat": {
+              "description": "Format of text fields Default:markdown. Possible values include: 'markdown', 'plain', 'xml'",
+              "title": "textFormat"
+            },
+            "attachmentLayout": {
+              "description": "The layout hint for multiple attachments. Default: list. Possible values include: 'list',\n'carousel'",
+              "title": "attachmentLayout"
+            },
+            "membersAdded": {
+              "description": "The collection of members added to the conversation.",
+              "title": "membersAdded",
+              "items": {
+                "description": "Channel account information needed to route a message",
+                "title": "ChannelAccount",
+                "properties": {
+                  "id": {
+                    "description": "Channel id for the user or bot on this channel (Example: joe@smith.com, or @joesmith or\n123456)",
+                    "title": "id"
+                  },
+                  "name": {
+                    "description": "Display friendly name",
+                    "title": "name"
+                  },
+                  "aadObjectId": {
+                    "description": "This account's object ID within Azure Active Directory (AAD)",
+                    "title": "aadObjectId"
+                  },
+                  "role": {
+                    "description": "Role of the entity behind the account (Example: User, Bot, etc.). Possible values include:\n'user', 'bot'",
+                    "title": "role"
+                  }
+                }
+              }
+            },
+            "membersRemoved": {
+              "description": "The collection of members removed from the conversation.",
+              "title": "membersRemoved"
+            },
+            "reactionsAdded": {
+              "description": "The collection of reactions added to the conversation.",
+              "title": "reactionsAdded",
+              "items": {
+                "description": "Message reaction object",
+                "title": "MessageReaction",
+                "properties": {
+                  "type": {
+                    "description": "Message reaction type. Possible values include: 'like', 'plusOne'",
+                    "title": "type"
+                  }
+                }
+              }
+            },
+            "reactionsRemoved": {
+              "description": "The collection of reactions removed from the conversation.",
+              "title": "reactionsRemoved"
+            },
+            "topicName": {
+              "description": "The updated topic name of the conversation.",
+              "title": "topicName"
+            },
+            "historyDisclosed": {
+              "description": "Indicates whether the prior history of the channel is disclosed.",
+              "title": "historyDisclosed"
+            },
+            "locale": {
+              "description": "A locale name for the contents of the text field.\nThe locale name is a combination of an ISO 639 two- or three-letter culture code associated\nwith a language\nand an ISO 3166 two-letter subculture code associated with a country or region.\nThe locale name can also correspond to a valid BCP-47 language tag.",
+              "title": "locale"
+            },
+            "text": {
+              "description": "The text content of the message.",
+              "title": "text"
+            },
+            "speak": {
+              "description": "The text to speak.",
+              "title": "speak"
+            },
+            "inputHint": {
+              "description": "Indicates whether your bot is accepting,\nexpecting, or ignoring user input after the message is delivered to the client. Possible\nvalues include: 'acceptingInput', 'ignoringInput', 'expectingInput'",
+              "title": "inputHint"
+            },
+            "summary": {
+              "description": "The text to display if the channel cannot render cards.",
+              "title": "summary"
+            },
+            "suggestedActions": {
+              "description": "The suggested actions for the activity.",
+              "title": "suggestedActions",
+              "properties": {
+                "to": {
+                  "description": "Ids of the recipients that the actions should be shown to.  These Ids are relative to the\nchannelId and a subset of all recipients of the activity",
+                  "title": "to",
+                  "items": {
+                    "title": "Id",
+                    "description": "Id of recipient."
+                  }
+                },
+                "actions": {
+                  "description": "Actions that can be shown to the user",
+                  "title": "actions",
+                  "items": {
+                    "description": "A clickable action",
+                    "title": "CardAction",
+                    "properties": {
+                      "type": {
+                        "description": "The type of action implemented by this button. Possible values include: 'openUrl', 'imBack',\n'postBack', 'playAudio', 'playVideo', 'showImage', 'downloadFile', 'signin', 'call',\n'payment', 'messageBack'",
+                        "title": "type"
+                      },
+                      "title": {
+                        "description": "Text description which appears on the button",
+                        "title": "title"
+                      },
+                      "image": {
+                        "description": "Image URL which will appear on the button, next to text label",
+                        "title": "image"
+                      },
+                      "text": {
+                        "description": "Text for this action",
+                        "title": "text"
+                      },
+                      "displayText": {
+                        "description": "(Optional) text to display in the chat feed if the button is clicked",
+                        "title": "displayText"
+                      },
+                      "value": {
+                        "description": "Supplementary parameter for action. Content of this property depends on the ActionType",
+                        "title": "value"
+                      },
+                      "channelData": {
+                        "description": "Channel-specific data associated with this action",
+                        "title": "channelData"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "attachments": {
+              "description": "Attachments",
+              "title": "attachments",
+              "items": {
+                "description": "An attachment within an activity",
+                "title": "Attachment",
+                "properties": {
+                  "contentType": {
+                    "description": "mimetype/Contenttype for the file",
+                    "title": "contentType"
+                  },
+                  "contentUrl": {
+                    "description": "Content Url",
+                    "title": "contentUrl"
+                  },
+                  "content": {
+                    "description": "Embedded content",
+                    "title": "content"
+                  },
+                  "name": {
+                    "description": "(OPTIONAL) The name of the attachment",
+                    "title": "name"
+                  },
+                  "thumbnailUrl": {
+                    "description": "(OPTIONAL) Thumbnail associated with attachment",
+                    "title": "thumbnailUrl"
+                  }
+                }
+              }
+            },
+            "entities": {
+              "description": "Represents the entities that were mentioned in the message.",
+              "title": "entities",
+              "items": {
+                "description": "Metadata object pertaining to an activity",
+                "title": "Entity",
+                "properties": {
+                  "type": {
+                    "description": "Type of this entity (RFC 3987 IRI)",
+                    "title": "type"
+                  }
+                }
+              }
+            },
+            "channelData": {
+              "description": "Contains channel-specific content.",
+              "title": "channelData"
+            },
+            "action": {
+              "description": "Indicates whether the recipient of a contactRelationUpdate was added or removed from the\nsender's contact list.",
+              "title": "action"
+            },
+            "replyToId": {
+              "description": "Contains the ID of the message to which this message is a reply.",
+              "title": "replyToId"
+            },
+            "label": {
+              "description": "A descriptive label for the activity.",
+              "title": "label"
+            },
+            "valueType": {
+              "description": "The type of the activity's value object.",
+              "title": "valueType"
+            },
+            "value": {
+              "description": "A value that is associated with the activity.",
+              "title": "value"
+            },
+            "name": {
+              "description": "The name of the operation associated with an invoke or event activity.",
+              "title": "name"
+            },
+            "relatesTo": {
+              "description": "A reference to another conversation or activity.",
+              "title": "relatesTo",
+              "properties": {
+                "activityId": {
+                  "description": "(Optional) ID of the activity to refer to",
+                  "title": "activityId"
+                },
+                "user": {
+                  "description": "(Optional) User participating in this conversation",
+                  "title": "user"
+                },
+                "bot": {
+                  "description": "Bot participating in this conversation",
+                  "title": "bot"
+                },
+                "conversation": {
+                  "description": "Conversation reference",
+                  "title": "conversation"
+                },
+                "channelId": {
+                  "description": "Channel ID",
+                  "title": "channelId"
+                },
+                "serviceUrl": {
+                  "description": "Service endpoint where operations concerning the referenced conversation may be performed",
+                  "title": "serviceUrl"
+                }
+              }
+            },
+            "code": {
+              "description": "The a code for endOfConversation activities that indicates why the conversation ended.\nPossible values include: 'unknown', 'completedSuccessfully', 'userCancelled', 'botTimedOut',\n'botIssuedInvalidMessage', 'channelFailed'",
+              "title": "code"
+            },
+            "expiration": {
+              "description": "The time at which the activity should be considered to be \"expired\" and should not be\npresented to the recipient.",
+              "title": "expiration"
+            },
+            "importance": {
+              "description": "The importance of the activity. Possible values include: 'low', 'normal', 'high'",
+              "title": "importance"
+            },
+            "deliveryMode": {
+              "description": "A delivery hint to signal to the recipient alternate delivery paths for the activity.\nThe default delivery mode is \"default\". Possible values include: 'normal', 'notification'",
+              "title": "deliveryMode"
+            },
+            "listenFor": {
+              "description": "List of phrases and references that speech and language priming systems should listen for",
+              "title": "listenFor",
+              "items": {
+                "title": "Phrase",
+                "description": "Phrase to listen for."
+              }
+            },
+            "textHighlights": {
+              "description": "The collection of text fragments to highlight when the activity contains a ReplyToId value.",
+              "title": "textHighlights",
+              "items": {
+                "description": "Refers to a substring of content within another field",
+                "title": "TextHighlight",
+                "properties": {
+                  "text": {
+                    "description": "Defines the snippet of text to highlight",
+                    "title": "text"
+                  },
+                  "occurrence": {
+                    "description": "Occurrence of the text field within the referenced text, if multiple exist.",
+                    "title": "occurrence"
+                  }
+                }
+              }
+            },
+            "semanticAction": {
+              "description": "An optional programmatic action accompanying this request",
+              "title": "semanticAction",
+              "properties": {
+                "id": {
+                  "description": "ID of this action",
+                  "title": "id"
+                },
+                "entities": {
+                  "description": "Entities associated with this action",
+                  "title": "entities"
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "Microsoft.IDialog": {
-      "title": "Microsoft Dialogs",
-      "description": "Components which derive from Dialog"
+      "title": "Microsoft dialogs",
+      "description": "Komponenter som härleds från dialogruta"
     },
     "Microsoft.IEntityRecognizer": {
-      "title": "Entity Recognizers",
-      "description": "Components which derive from EntityRecognizer.",
+      "title": "Entity recognizers",
+      "description": "Komponenter som härleds från EntityRecognizer.",
       "oneOf": {
         "0": {
-          "title": "Reference to Microsoft.IEntityRecognizer",
-          "description": "Reference to Microsoft.IEntityRecognizer .dialog file."
+          "title": "Referens till Microsoft.IEntityRecognizer",
+          "description": "Referens till .dialog-filen för Microsoft.IEntityRecognizer."
         }
       }
     },
     "Microsoft.ILanguageGenerator": {
       "title": "Microsoft LanguageGenerator",
-      "description": "Components which dervie from the LanguageGenerator class"
+      "description": "Komponenter som härleds från LanguageGenerator-klassen"
     },
     "Microsoft.IRecognizer": {
-      "title": "Microsoft Recognizer",
-      "description": "Components which derive from Recognizer class"
+      "title": "Microsoft recognizer",
+      "description": "Komponenter som härleds från identifieringsobjektsklassen"
     },
     "Microsoft.ITextTemplate": {
       "title": "Microsoft TextTemplate",
-      "description": "Components which derive from TextTemplate class"
+      "description": "Komponenter som härleds från TextTemplate-klassen"
     },
     "Microsoft.ITrigger": {
-      "title": "Microsoft Triggers",
-      "description": "Components which derive from OnCondition class.",
+      "title": "Microsoft-utlösare",
+      "description": "Komponenter som härleds från OnCondition-klassen.",
       "oneOf": {
         "0": {
-          "title": "Reference to Microsoft.ITrigger",
-          "description": "Reference to Microsoft.ITrigger .dialog file."
+          "title": "Referens till Microsoft.ITrigger",
+          "description": "Referens till .dialog-filen för Microsoft.ITrigger."
         }
       }
     },
     "Microsoft.ITriggerSelector": {
       "title": "Väljare",
-      "description": "Components which derive from TriggerSelector class.",
+      "description": "Komponenter som härleds från TriggerSelector-klassen.",
       "oneOf": {
         "0": {
-          "title": "Reference to Microsoft.ITriggerSelector",
-          "description": "Reference to Microsoft.ITriggerSelector .dialog file."
+          "title": "Referens till Microsoft.ITriggerSelector",
+          "description": "Referens till .dialog-filen för Microsoft.ITriggerSelector."
         }
       }
     },
     "Microsoft.IfCondition": {
-      "title": "If condition",
-      "description": "Two-way branch the conversation flow based on a condition.",
+      "title": "Om-villkor",
+      "description": "Dubbelriktad gren som konversationsflödet som baseras på ett villkor.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -1822,11 +2249,11 @@
         },
         "actions": {
           "title": "Åtgärder",
-          "description": "Actions to execute if condition is true."
+          "description": "Åtgärder som ska köras om villkoret är sant."
         },
         "elseActions": {
           "title": "Annars",
-          "description": "Actions to execute if condition is false."
+          "description": "Åtgärder som ska köras om villkoret är falskt."
         },
         "$kind": {
           "title": "Variant av dialogruteobjekt",
@@ -1855,23 +2282,23 @@
           "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
         },
         "prompt": {
-          "title": "Initial fråga",
+          "title": "Initial prompt",
           "description": "Meddelande att skicka för att samla in information."
         },
         "unrecognizedPrompt": {
-          "title": "Okänd fråga",
-          "description": "Meddelande som ska skickas när maximalt antal turer (om angivet) har överskridits och standardvärdet har valts som värde."
+          "title": "Okänd prompt",
+          "description": "Meddelande som ska skickas när max antal inmatningar (om angivet) har överskridits och standardvärdet har valts som värde."
         },
         "invalidPrompt": {
-          "title": "Ogiltig fråga",
+          "title": "Ogiltig prompt",
           "description": "Meddelande som ska skickas när användarindata inte uppfyller något valideringsuttryck."
         },
         "defaultValueResponse": {
           "title": "Standardvärdesvar",
-          "description": "Meddelande som ska skickas när maximalt antal turer (om angivet) har överskridits och standardvärdet har valts som värde."
+          "description": "Meddelande som ska skickas när max antal inmatningar (om angivet) har överskridits och standardvärdet har valts som värde."
         },
         "maxTurnCount": {
-          "title": "Maximalt antal turer",
+          "title": "Max antal inmatningar",
           "description": "Maximalt antal återställningsförsök att samla in information."
         },
         "validations": {
@@ -1905,8 +2332,8 @@
       }
     },
     "Microsoft.IpEntityRecognizer": {
-      "title": "Ip Entity Recognizer",
-      "description": "Recognizer which recognizes internet IP patterns (like 192.1.1.1).",
+      "title": "IP entity recognizer",
+      "description": "Identifieringsobjekt som identifierar Internet-IP-mönster (som 192.1.1.1).",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -1925,14 +2352,14 @@
       }
     },
     "Microsoft.LanguagePolicy": {
-      "title": "Språkprincip",
-      "description": "This represents a policy map for locales lookups to use for language",
+      "title": "Language policy",
+      "description": "Detta representerar en principmappning för sökningar efter nationella inställningar att användas som språk",
       "additionalProperties": {
-        "title": "Per-locale policy",
-        "description": "Language policy per locale.",
+        "title": "Princip per nationella inställningar",
+        "description": "Språkprincip per nationella inställningar.",
         "items": {
           "title": "Nationella inställningar",
-          "description": "Locale like en-us."
+          "description": "Nationella inställningar som sv-se."
         }
       },
       "patternProperties": {
@@ -1954,7 +2381,7 @@
     },
     "Microsoft.LogAction": {
       "title": "Logga till konsol",
-      "description": "Log a message to the host application. Send a TraceActivity to Bot Framework Emulator (optional).",
+      "description": "Logga ett meddelande till värdprogrammet. Skicka en TraceActivity till Bot Framework Emulator (valfritt).",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -1972,15 +2399,15 @@
         },
         "text": {
           "title": "Text",
-          "description": "Information to log."
+          "description": "Information att logga."
         },
         "label": {
           "title": "Etikett",
           "description": "Etikett för spårningsaktiviteten (används för att identifiera den i en lista över spårningsaktiviteter.)"
         },
         "traceActivity": {
-          "title": "Send Trace Activity",
-          "description": "If true, automatically sends a TraceActivity (view in Bot Framework Emulator)."
+          "title": "Send trace activity",
+          "description": "Om värdet är sant skickas en TraceActivity automatiskt (vy i Bot Framework Emulator)."
         },
         "$kind": {
           "title": "Variant av dialogruteobjekt",
@@ -1993,8 +2420,8 @@
       }
     },
     "Microsoft.LuisRecognizer": {
-      "title": "LUIS Recognizer",
-      "description": "LUIS recognizer.",
+      "title": "LUIS-identifieringsobjekt",
+      "description": "LUIS-identifieringsobjekt.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -2007,49 +2434,53 @@
           "description": "Valfritt unikt ID som används med RecognizerSet. Andra identifierare bör returnera avsikten DeferToRecognizer_{Id} vid korsanslutningsträning av data för den här tolken."
         },
         "applicationId": {
-          "title": "LUIS Application ID",
-          "description": "Application ID for your model from the LUIS service."
+          "title": "LUIS application id",
+          "description": "Program-ID för din modell från LUIS-tjänsten."
+        },
+        "version": {
+          "title": "LUIS version",
+          "description": "Optional version to target.  If null then predictionOptions.Slot is used."
         },
         "endpoint": {
-          "title": "LUIS Endpoint",
-          "description": "Endpoint to use for LUIS service like https://westus.api.cognitive.microsoft.com."
+          "title": "LUIS endpoint",
+          "description": "Slutpunkt att använda med LUIS-tjänster som https://westus.api.cognitive.microsoft.com."
         },
         "endpointKey": {
-          "title": "LUIS prediction key",
-          "description": "LUIS prediction key used to call endpoint."
+          "title": "LUIS-förutsägelsenyckel",
+          "description": "LUIS-förutsägelsenyckel som används för att anropa slutpunkten."
         },
         "externalEntityRecognizer": {
-          "title": "External Entity Recognizer",
-          "description": "Entities recognized by this recognizer will be passed to LUIS as external entities."
+          "title": "External entity recognizer",
+          "description": "Entiteter som känns igen av det här identifieringsobjektet skickas som externa entiteter till LUIS."
         },
         "dynamicLists": {
-          "title": "Dynamic lists",
-          "description": "Runtime defined entity lists.",
+          "title": "Dynamiska listor",
+          "description": "Körningsdefinierade entitetslistor.",
           "items": {
-            "title": "Entity list",
-            "description": "Lists of canonical values and synonyms for an entity.",
+            "title": "Entitetslista",
+            "description": "Listor med kanoniska värden och synonymer för en entitet.",
             "properties": {
               "entity": {
                 "title": "Entitet",
-                "description": "Entity to extend with a dynamic list."
+                "description": "Entitet som ska utökas med en dynamisk lista."
               },
               "list": {
-                "title": "Dynamic list",
-                "description": "List of canonical forms and synonyms.",
+                "title": "Dynamisk lista",
+                "description": "Lista med kanoniska former och synonymer.",
                 "items": {
-                  "title": "List entry",
-                  "description": "Canonical form and synonynms.",
+                  "title": "Listpost",
+                  "description": "Kanoniskt formulär och synonymer.",
                   "properties": {
                     "canonicalForm": {
-                      "title": "Canonical form",
-                      "description": "Resolution if any synonym matches."
+                      "title": "Kanoniskt formulär",
+                      "description": "Lösning om någon synonym matchar."
                     },
                     "synonyms": {
                       "title": "Synonymer",
-                      "description": "List of synonyms for a canonical form.",
+                      "description": "Lista med synonymer för ett kanoniskt formulär.",
                       "items": {
                         "title": "Synonym",
-                        "description": "Synonym for canonical form."
+                        "description": "Synonym för kanoniskt formulär."
                       }
                     }
                   }
@@ -2059,32 +2490,28 @@
           }
         },
         "predictionOptions": {
-          "title": "Prediction options",
-          "description": "Options to control LUIS prediction behavior.",
+          "title": "Förutsägelsealternativ",
+          "description": "Alternativ för att kontrollera LUIS-förutsägelsebeteende.",
           "properties": {
             "includeAllIntents": {
-              "title": "Include all intents",
-              "description": "True for all intents, false for only top intent."
+              "title": "Inkludera alla avsikter",
+              "description": "Sant för alla avsikter, falskt endast för toppavsikten."
             },
             "includeInstanceData": {
-              "title": "Include $instance",
-              "description": "True to include $instance metadata in the LUIS response."
+              "title": "Inkludera $instance",
+              "description": "Sant om du vill inkludera $instance-metadata i LUIS-svaret."
             },
             "log": {
-              "title": "Log utterances",
-              "description": "True to log utterances on LUIS service."
+              "title": "Logga talindata",
+              "description": "Sant om du vill logga talindata i LUIS-tjänsten."
             },
             "preferExternalEntities": {
-              "title": "Prefer External Entities",
-              "description": "True to prefer external entities to those generated by LUIS models."
+              "title": "Prefer external entities",
+              "description": "Sant om du föredrar externa entiteter framför dem som genererats av LUIS-modeller."
             },
             "slot": {
               "title": "Fack",
-              "description": "Slot to use for talking to LUIS service like production or staging."
-            },
-            "version": {
-              "title": "Version",
-              "description": "LUIS application version to use."
+              "description": "Fack att använda för att prata med en LUIS-tjänst som produktion eller mellanlagring."
             }
           }
         },
@@ -2099,8 +2526,8 @@
       }
     },
     "Microsoft.MentionEntityRecognizer": {
-      "title": "Mentions Entity Recognizer",
-      "description": "Recognizer which recognizes @Mentions",
+      "title": "Mentions entity recognizer",
+      "description": "Identifieringsobjekt som identifierar @Mentions",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -2119,8 +2546,8 @@
       }
     },
     "Microsoft.MostSpecificSelector": {
-      "title": "Most Specific Trigger Selector",
-      "description": "Select most specific true events with optional additional selector",
+      "title": "Most specific trigger selector",
+      "description": "Välj de mest specifika sanna händelserna med en valfri ytterligare väljare",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -2139,8 +2566,8 @@
       }
     },
     "Microsoft.MultiLanguageRecognizer": {
-      "title": "Multi-language recognizer",
-      "description": "Configure one recognizer per language and the specify the language fallback policy.",
+      "title": "Flerspråkigt identifieringsobjekt",
+      "description": "Konfigurera ett identifieringsobjekt per språk och ange språkåterställningsprincipen.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -2153,12 +2580,12 @@
           "description": "Valfritt unikt ID som används med RecognizerSet. Andra identifierare bör returnera avsikten DeferToRecognizer_{Id} vid korsanslutningsträning av data för den här tolken."
         },
         "languagePolicy": {
-          "title": "Language policy",
-          "description": "Defines fall back languages to try per user input language."
+          "title": "Språkprincip",
+          "description": "Definierar grundspråk att testa som användarindataspråk."
         },
         "recognizers": {
-          "title": "Tolkar",
-          "description": "Map of language -> Recognizer"
+          "title": "Identifieringsobjekt",
+          "description": "Språkkarta -> Identifieringsobjekt"
         },
         "$kind": {
           "title": "Variant av dialogruteobjekt",
@@ -2171,8 +2598,8 @@
       }
     },
     "Microsoft.NumberEntityRecognizer": {
-      "title": "Number Entity Recognizer",
-      "description": "Recognizer which recognizes numbers.",
+      "title": "Number entity recognizer",
+      "description": "Identifieringsobjekt som identifierar tal.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -2191,8 +2618,8 @@
       }
     },
     "Microsoft.NumberInput": {
-      "title": "Number input dialog",
-      "description": "Collect information - Ask for a number.",
+      "title": "Dialogruta för nummerindata",
+      "description": "Samla in information – Fråga efter ett nummer.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -2202,7 +2629,7 @@
       "properties": {
         "defaultValue": {
           "title": "Standardvärde",
-          "description": "Property ställs in på värdet för det här uttrycket när maximalt antal turer har överskrids."
+          "description": "Property ställs in på värdet för det här uttrycket när max antal inmatningar har överskrids."
         },
         "value": {
           "title": "Värde",
@@ -2210,11 +2637,11 @@
         },
         "outputFormat": {
           "title": "Utdataformat",
-          "description": "Expression to format the number output."
+          "description": "Uttryck för att formatera talutdata."
         },
         "defaultLocale": {
           "title": "Standard för nationella inställningar",
-          "description": "Default locale to use if there is no locale available.."
+          "description": "Standardspråk som ska användas om det inte finns några tillgängliga nationella inställningar."
         },
         "id": {
           "title": "ID",
@@ -2225,23 +2652,23 @@
           "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
         },
         "prompt": {
-          "title": "Initial fråga",
+          "title": "Initial prompt",
           "description": "Meddelande att skicka för att samla in information."
         },
         "unrecognizedPrompt": {
-          "title": "Okänd fråga",
-          "description": "Meddelande som ska skickas när maximalt antal turer (om angivet) har överskridits och standardvärdet har valts som värde."
+          "title": "Okänd prompt",
+          "description": "Meddelande som ska skickas när max antal inmatningar (om angivet) har överskridits och standardvärdet har valts som värde."
         },
         "invalidPrompt": {
-          "title": "Ogiltig fråga",
+          "title": "Ogiltig prompt",
           "description": "Meddelande som ska skickas när användarindata inte uppfyller något valideringsuttryck."
         },
         "defaultValueResponse": {
           "title": "Standardvärdesvar",
-          "description": "Meddelande som ska skickas när maximalt antal turer (om angivet) har överskridits och standardvärdet har valts som värde."
+          "description": "Meddelande som ska skickas när max antal inmatningar (om angivet) har överskridits och standardvärdet har valts som värde."
         },
         "maxTurnCount": {
-          "title": "Maximalt antal turer",
+          "title": "Max antal inmatningar",
           "description": "Maximalt antal återställningsförsök att samla in information."
         },
         "validations": {
@@ -2275,8 +2702,8 @@
       }
     },
     "Microsoft.NumberRangeEntityRecognizer": {
-      "title": "NumberRange Entity Recognizer",
-      "description": "Recognizer which recognizes ranges of numbers (Example:2 to 5).",
+      "title": "Number range entity recognizer",
+      "description": "Identifieringsobjekt som identifierar talintervall (exempelvis 2 till 5).",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -2295,8 +2722,8 @@
       }
     },
     "Microsoft.OAuthInput": {
-      "title": "OAuthInput Dialog",
-      "description": "Collect login information.",
+      "title": "OAuthInput-dialogruta",
+      "description": "Samla in inloggningsinformation.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -2306,7 +2733,7 @@
       "properties": {
         "connectionName": {
           "title": "Anslutningsnamn",
-          "description": "The connection name configured in Azure Web App Bot OAuth settings."
+          "description": "Anslutningsnamnet som konfigurerats i Azure Web App Bot OAuth-inställningarna."
         },
         "disabled": {
           "title": "Inaktiverat",
@@ -2314,38 +2741,38 @@
         },
         "text": {
           "title": "Text",
-          "description": "Text shown in the OAuth signin card."
+          "description": "Text som visas på OAuth-inloggningskortet."
         },
         "title": {
           "title": "Rubrik",
-          "description": "Title shown in the OAuth signin card."
+          "description": "Rubrik som visas på OAuth-inloggningskortet."
         },
         "timeout": {
-          "title": "Timeout",
-          "description": "Time out setting for the OAuth signin card."
+          "title": "Tidsgräns",
+          "description": "Timeout-inställning för OAuth-inloggningskortet."
         },
         "property": {
-          "title": "Token property",
-          "description": "Property to store the OAuth token result."
+          "title": "Tokenegenskap",
+          "description": "Egenskap som lagrar OAuth-tokenresultatet."
         },
         "invalidPrompt": {
-          "title": "Ogiltig fråga",
-          "description": "Message to send if user response is invalid."
+          "title": "Ogiltig prompt",
+          "description": "Meddelande att skicka om användarsvaret är ogiltigt."
         },
         "defaultValueResponse": {
           "title": "Standardvärdesvar",
-          "description": "Meddelande som ska skickas när maximalt antal turer (om angivet) har överskridits och standardvärdet har valts som värde."
+          "description": "Meddelande som ska skickas när max antal inmatningar (om angivet) har överskridits och standardvärdet har valts som värde."
         },
         "maxTurnCount": {
-          "title": "Maximalt antal turer",
+          "title": "Max antal inmatningar",
           "description": "Maximalt antal återställningsförsök att samla in information."
         },
         "defaultValue": {
           "title": "Standardvärde",
-          "description": "Expression to examine on each turn of the conversation as possible value to the property."
+          "description": "Uttryck för att undersöka varje tur i konversationen som ett möjligt värde till egenskapen."
         },
         "allowInterruptions": {
-          "title": "Tillåt avbrott",
+          "title": "Allow interruptions",
           "description": "Ett booleskt uttryck som anger huruvida det överordnade objektet ska tillåtas att avbryta indata eller inte."
         },
         "alwaysPrompt": {
@@ -2363,8 +2790,8 @@
       }
     },
     "Microsoft.OnActivity": {
-      "title": "On activity",
-      "description": "Actions to perform on receipt of a generic activity.",
+      "title": "Vid aktivitet",
+      "description": "Åtgärder som ska genomföras vid mottande av en generisk aktivitet.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -2374,7 +2801,7 @@
       "properties": {
         "type": {
           "title": "Aktivitetstyp",
-          "description": "The Activity.Type to match"
+          "description": "Activity.Type att matcha"
         },
         "condition": {
           "title": "Villkor",
@@ -2403,8 +2830,8 @@
       }
     },
     "Microsoft.OnAssignEntity": {
-      "title": "On entity assignment",
-      "description": "Actions to take when an entity should be assigned to a property.",
+      "title": "Om entitetstilldelning",
+      "description": "Åtgärder som ska vidtas när en egenskap ska tilldelas en entitet.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -2418,11 +2845,11 @@
         },
         "entity": {
           "title": "Entitet",
-          "description": "Entity being put into property"
+          "description": "Entitet placeras i egenskap"
         },
         "operation": {
           "title": "Åtgärd",
-          "description": "Operation for assigning entity."
+          "description": "Åtgärd för att tilldela entitet."
         },
         "condition": {
           "title": "Villkor",
@@ -2451,8 +2878,8 @@
       }
     },
     "Microsoft.OnBeginDialog": {
-      "title": "On begin dialog",
-      "description": "Actions to perform when this dialog begins.",
+      "title": "I dialogrutan Starta",
+      "description": "Åtgärder som ska genomföras när den här dialogen startar.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -2487,8 +2914,8 @@
       }
     },
     "Microsoft.OnCancelDialog": {
-      "title": "On cancel dialog",
-      "description": "Actions to perform on cancel dialog event.",
+      "title": "I dialogrutan Avbryt",
+      "description": "Åtgärder som ska genomföras för händelsen Avbryt dialogruta.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -2523,8 +2950,8 @@
       }
     },
     "Microsoft.OnChooseEntity": {
-      "title": "On choose entity",
-      "description": "Actions to be performed when an entity value needs to be resolved.",
+      "title": "Att välja entitet",
+      "description": "Åtgärder som ska utföras när ett enhetsvärde måste matchas.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -2533,7 +2960,7 @@
       },
       "properties": {
         "property": {
-          "title": "Property to be set",
+          "title": "Egenskap som ska konfigureras",
           "description": "Egenskap som ska anges när entiteten har valts."
         },
         "entity": {
@@ -2567,8 +2994,8 @@
       }
     },
     "Microsoft.OnChooseIntent": {
-      "title": "On ambigious intent",
-      "description": "Actions to perform on when an intent is ambigious.",
+      "title": "Vid tvetydig avsikt",
+      "description": "Åtgärder som ska genomföras när en avsikt är tvetydig.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -2577,11 +3004,11 @@
       },
       "properties": {
         "intents": {
-          "title": "Intents",
-          "description": "Intents that must be in the ChooseIntent result for this condition to trigger.",
+          "title": "Avsikter",
+          "description": "Avsikter som måste finnas i ChooseIntent-resultatet för att det här villkoret ska kunna utlösas.",
           "items": {
             "title": "Avsikt",
-            "description": "Intent name to trigger on."
+            "description": "Avsiktsnamn att utlösas av."
           }
         },
         "condition": {
@@ -2611,8 +3038,8 @@
       }
     },
     "Microsoft.OnChooseProperty": {
-      "title": "On choose property",
-      "description": "Actions to take when there are multiple possible mappings of entities to properties.",
+      "title": "Att välja egenskap",
+      "description": "Åtgärder som ska vidtas när det finns flera möjliga mappningar av entiteter till egenskaper.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -2621,23 +3048,23 @@
       },
       "properties": {
         "entity": {
-          "title": "Entity being assigned",
-          "description": "Entity being assigned to property choice"
+          "title": "Entitet tilldelas",
+          "description": "Entitet tilldelas till egenskapsval"
         },
         "properties": {
-          "title": "Possible properties",
-          "description": "Properties to be chosen between.",
+          "title": "Möjliga egenskaper",
+          "description": "Egenskaper att välja mellan.",
           "items": {
             "title": "Egenskapsnamn",
-            "description": "Possible property to choose."
+            "description": "Möjlig egenskap att välja."
           }
         },
         "entities": {
           "title": "Entiteter",
-          "description": "Ambiguous entity names.",
+          "description": "Tvetydiga entitetsnamn.",
           "items": {
             "title": "Entitetsnamn",
-            "description": "Entity name being chosen between."
+            "description": "Entitetsnamn att välja mellan."
           }
         },
         "condition": {
@@ -2667,8 +3094,8 @@
       }
     },
     "Microsoft.OnCondition": {
-      "title": "On condition",
-      "description": "Actions to perform when specified condition is true.",
+      "title": "På ett villkor",
+      "description": "Åtgärder som ska genomföras när det angivna villkoret är sant.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -2703,8 +3130,8 @@
       }
     },
     "Microsoft.OnContinueConversation": {
-      "title": "On Continue Conversation",
-      "description": "Actions to perform when a conversation is started up again from a ContinueConversationLater action.",
+      "title": "On continue conversation",
+      "description": "Åtgärder som ska genomföras när en konversation startas igen från en ContinueConversationLater-åtgärd.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -2739,8 +3166,8 @@
       }
     },
     "Microsoft.OnConversationUpdateActivity": {
-      "title": "On ConversationUpdate activity",
-      "description": "Actions to perform on receipt of an activity with type 'ConversationUpdate'.",
+      "title": "Om ConversationUpdate-aktiviteten",
+      "description": "Åtgärder som ska genomföras efter en aktivitet med typen ConversationUpdate.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -2775,8 +3202,8 @@
       }
     },
     "Microsoft.OnDialogEvent": {
-      "title": "On dialog event",
-      "description": "Actions to perform when a specific dialog event occurs.",
+      "title": "Om dialogrutehändelse",
+      "description": "Åtgärder som ska genomföras när en specifik dialoghändelse inträffar.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -2785,8 +3212,8 @@
       },
       "properties": {
         "event": {
-          "title": "Dialog event name",
-          "description": "Name of dialog event."
+          "title": "Namn på dialogrutehändelse",
+          "description": "Namn på dialoghändelse."
         },
         "condition": {
           "title": "Villkor",
@@ -2815,8 +3242,8 @@
       }
     },
     "Microsoft.OnEndOfActions": {
-      "title": "On end of actions",
-      "description": "Actions to take when there are no more actions in the current dialog.",
+      "title": "Vid slut på åtgärder",
+      "description": "Åtgärder som ska vidtas när det inte finns några fler åtgärder i den aktuella dialogen.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -2851,8 +3278,8 @@
       }
     },
     "Microsoft.OnEndOfConversationActivity": {
-      "title": "On EndOfConversation activity",
-      "description": "Actions to perform on receipt of an activity with type 'EndOfConversation'.",
+      "title": "Om EndOfConversation-aktivitet",
+      "description": "Åtgärder som ska genomföras efter en aktivitet med typen EndOfConversation.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -2887,8 +3314,8 @@
       }
     },
     "Microsoft.OnError": {
-      "title": "Vid fel",
-      "description": "Action to perform when an 'Error' dialog event occurs.",
+      "title": "On error",
+      "description": "Åtgärd att utföra när en feldialogruta visas.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -2923,8 +3350,8 @@
       }
     },
     "Microsoft.OnEventActivity": {
-      "title": "On Event activity",
-      "description": "Actions to perform on receipt of an activity with type 'Event'.",
+      "title": "Om händelseaktivitet",
+      "description": "Åtgärder som ska genomföras efter mottagandet av en aktivitet med typen Event.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -2959,8 +3386,8 @@
       }
     },
     "Microsoft.OnHandoffActivity": {
-      "title": "On Handoff activity",
-      "description": "Actions to perform on receipt of an activity with type 'HandOff'.",
+      "title": "Om överlämningsaktivitet",
+      "description": "Åtgärder som ska genomföras efter en aktivitet med typen HandOff.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -2994,9 +3421,45 @@
         }
       }
     },
+    "Microsoft.OnInstallationUpdateActivity": {
+      "title": "On InstallationUpdate activity",
+      "description": "Actions to perform on receipt of an activity with type 'InstallationUpdate'.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "condition": {
+          "title": "Condition",
+          "description": "Condition (expression)."
+        },
+        "actions": {
+          "title": "Actions",
+          "description": "Sequence of actions to execute."
+        },
+        "priority": {
+          "title": "Priority",
+          "description": "Priority for trigger with 0 being the highest and < 0 ignored."
+        },
+        "runOnce": {
+          "title": "Run Once",
+          "description": "True if rule should run once per unique conditions"
+        },
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
     "Microsoft.OnIntent": {
-      "title": "On intent recognition",
-      "description": "Actions to perform when specified intent is recognized.",
+      "title": "Om avsiktsigenkänning",
+      "description": "Åtgärder som ska genomföras när den angivna avsikten har identifierats.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -3006,14 +3469,14 @@
       "properties": {
         "intent": {
           "title": "Avsikt",
-          "description": "Name of intent."
+          "description": "Avsiktsnamn."
         },
         "entities": {
           "title": "Entiteter",
-          "description": "Required entities.",
+          "description": "Obligatoriska entiteter.",
           "items": {
             "title": "Entitet",
-            "description": "Entity that must be present."
+            "description": "Entitet som måste vara närvarande."
           }
         },
         "condition": {
@@ -3043,8 +3506,8 @@
       }
     },
     "Microsoft.OnInvokeActivity": {
-      "title": "On Invoke activity",
-      "description": "Actions to perform on receipt of an activity with type 'Invoke'.",
+      "title": "Om anropsaktivitet",
+      "description": "Åtgärder som ska genomföras vid mottagande av en aktivitet med typen Invoke.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -3079,8 +3542,8 @@
       }
     },
     "Microsoft.OnMessageActivity": {
-      "title": "On Message activity",
-      "description": "Actions to perform on receipt of an activity with type 'Message'. Overrides Intent trigger.",
+      "title": "Om meddelandeaktivitet",
+      "description": "Åtgärder som ska genomföras vid mottagande av en aktivitet med typen Message. Åsidosätter avsiktsutlösaren.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -3115,8 +3578,8 @@
       }
     },
     "Microsoft.OnMessageDeleteActivity": {
-      "title": "On MessageDelete activity",
-      "description": "Actions to perform on receipt of an activity with type 'MessageDelete'.",
+      "title": "Om MessageDelete-aktivitet",
+      "description": "Åtgärder som ska genomföras vid mottagande av en aktivitet med typen MessageDelete.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -3151,8 +3614,8 @@
       }
     },
     "Microsoft.OnMessageReactionActivity": {
-      "title": "On MessageReaction activity",
-      "description": "Actions to perform on receipt of an activity with type 'MessageReaction'.",
+      "title": "Om MessageReaction-aktivitet",
+      "description": "Åtgärder som ska genomföras vid mottagande av en aktivitet med typen MessageReaction.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -3187,8 +3650,8 @@
       }
     },
     "Microsoft.OnMessageUpdateActivity": {
-      "title": "On MessageUpdate activity",
-      "description": "Actions to perform on receipt of an activity with type 'MessageUpdate'.",
+      "title": "Om MessageUpdate-aktivitet",
+      "description": "Åtgärder som ska genomföras vid mottagande av en aktivitet med typen MessageUpdate.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -3223,8 +3686,8 @@
       }
     },
     "Microsoft.OnQnAMatch": {
-      "title": "On QnAMaker Match",
-      "description": "Actions to perform on when an match from QnAMaker is found.",
+      "title": "On QnAMaker match",
+      "description": "Åtgärder som ska genomföras när en matchning från QnAMaker påträffas.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -3259,8 +3722,8 @@
       }
     },
     "Microsoft.OnRepromptDialog": {
-      "title": "On RepromptDialog",
-      "description": "Actions to perform when 'RepromptDialog' event occurs.",
+      "title": "Om RepromptDialog",
+      "description": "Åtgärder att genomföras när händelsen RepromptDialog inträffar.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -3295,8 +3758,8 @@
       }
     },
     "Microsoft.OnTypingActivity": {
-      "title": "On Typing activity",
-      "description": "Actions to perform on receipt of an activity with type 'Typing'.",
+      "title": "Vid skrivaktivitet",
+      "description": "Åtgärder som ska genomföras vid mottagande av en aktivitet med typen Typing.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -3331,8 +3794,8 @@
       }
     },
     "Microsoft.OnUnknownIntent": {
-      "title": "On unknown intent",
-      "description": "Action to perform when user input is unrecognized or if none of the 'on intent recognition' triggers match recognized intent.",
+      "title": "Vid okänd avsikt",
+      "description": "Åtgärd att utföra när användarindata inte kan identifieras eller om ingen av utlösarna av avsiktsigenkänning matchar en känd avsikt.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -3367,8 +3830,8 @@
       }
     },
     "Microsoft.OrdinalEntityRecognizer": {
-      "title": "Ordinal Entity Recognizer",
-      "description": "Recognizer which recognizes ordinals (example: first, second, 3rd).",
+      "title": "Ordinal entity recognizer",
+      "description": "Identifieringsobjekt som identifierar ordningstal (exempel: första, andra, tredje).",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -3387,8 +3850,8 @@
       }
     },
     "Microsoft.PercentageEntityRecognizer": {
-      "title": "Percentage Entity Recognizer",
-      "description": "Recognizer which recognizes percentages.",
+      "title": "Percentage entity recognizer",
+      "description": "Identifieringsobjekt som identifierar procentandelar.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -3407,8 +3870,8 @@
       }
     },
     "Microsoft.PhoneNumberEntityRecognizer": {
-      "title": "Phone Number Entity Recognizer",
-      "description": "Recognizer which recognizes phone numbers.",
+      "title": "Phone number entity recognizer",
+      "description": "Identifieringsobjekt som identifierar telefonnummer.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -3427,8 +3890,8 @@
       }
     },
     "Microsoft.QnAMakerDialog": {
-      "title": "QnAMaker Dialog",
-      "description": "Dialog which uses QnAMAker knowledge base to answer questions.",
+      "title": "QnAMaker dialog",
+      "description": "Dialogruta som använder QnAMAker-kunskapsbasen för att besvara frågor.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -3441,7 +3904,7 @@
           "description": "KnowledgeBase-ID för din QnA Maker-KnowledgeBase."
         },
         "endpointKey": {
-          "title": "Slutpunktsnyckel",
+          "title": "Endpoint key",
           "description": "Slutpunktsnyckel för QnA Maker KB."
         },
         "hostname": {
@@ -3449,39 +3912,39 @@
           "description": "Värddatornamn för din QnA Maker-tjänst."
         },
         "noAnswer": {
-          "title": "Fallback answer",
-          "description": "Default answer to return when none found in KB."
+          "title": "Återställningssvar",
+          "description": "Standardsvar att returnera när inget hittades i kunskapsbasen."
         },
         "threshold": {
           "title": "Tröskelvärde",
           "description": "Tröskelvärde för att filtrera resultat."
         },
         "activeLearningCardTitle": {
-          "title": "Active learning card title",
-          "description": "Title for active learning suggestions card."
+          "title": "Kortubrik för aktiv inlärning",
+          "description": "Rubrik för kort för aktiva utbildningsförslag."
         },
         "cardNoMatchText": {
-          "title": "Card no match text",
-          "description": "Text for no match option."
+          "title": "Kort – ingen matchningstext",
+          "description": "Text utan matchningsalternativ."
         },
         "cardNoMatchResponse": {
-          "title": "Card no match response",
-          "description": "Custom response when no match option was selected."
+          "title": "Kort – inget matchningssvar",
+          "description": "Anpassat svar när inget matchningsalternativ har valts."
         },
         "strictFilters": {
-          "title": "Strikta filter",
+          "title": "Strict filters",
           "description": "Metadatafilter som ska användas när QnA Maker KB anropas.",
           "items": {
             "title": "Metadatafilter",
-            "description": "Metadata filter.",
+            "description": "Metadatafilter.",
             "properties": {
               "name": {
                 "title": "Namn",
-                "description": "Name of filter property."
+                "description": "Namn på filteregenskap."
               },
               "value": {
                 "title": "Värde",
-                "description": "Value to filter on."
+                "description": "Värde att filtrera på."
               }
             }
           }
@@ -3495,12 +3958,22 @@
           "description": "Sant om du pekar på Testmiljö, i annat fall falskt."
         },
         "rankerType": {
-          "title": "Rankningsberäknaretyp",
+          "title": "Ranker type",
           "description": "Rankningsberäknaretyp.",
           "oneOf": {
             "0": {
-              "title": "Standard ranker",
-              "description": "Standard ranker types."
+              "title": "Standardrankningsberäknare",
+              "description": "Typer av standardrankningsberäknare."
+            }
+          }
+        },
+        "strictFiltersJoinOperator": {
+          "title": "StrictFiltersJoinOperator",
+          "description": "Join operator for Strict Filters.",
+          "oneOf": {
+            "0": {
+              "title": "Join operator",
+              "description": "Value of Join Operator to be used as conjunction with Strict Filter values."
             }
           }
         },
@@ -3515,8 +3988,8 @@
       }
     },
     "Microsoft.QnAMakerRecognizer": {
-      "title": "QnAMaker Recognizer",
-      "description": "Recognizer for generating QnAMatch intents from a KB.",
+      "title": "QnAMaker recognizer",
+      "description": "Identifieringsobjekt för att generera QnAMatch-avsikter från en kunskapsbas.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -3530,10 +4003,10 @@
         },
         "knowledgeBaseId": {
           "title": "KnowledgeBase-ID",
-          "description": "KnowledgeBase-ID för din QnA Maker-KnowledgeBase."
+          "description": "Knowledge base Id of your QnA Maker knowledge base."
         },
         "endpointKey": {
-          "title": "Slutpunktsnyckel",
+          "title": "Endpoint key",
           "description": "Slutpunktsnyckel för QnA Maker KB."
         },
         "hostname": {
@@ -3545,19 +4018,19 @@
           "description": "Tröskelvärde för att filtrera resultat."
         },
         "strictFilters": {
-          "title": "Strikta filter",
+          "title": "Strict filters",
           "description": "Metadatafilter som ska användas när QnA Maker KB anropas.",
           "items": {
             "title": "Metadatafilter",
-            "description": "Metadata filters to use when querying QnA Maker KB.",
+            "description": "Metadatafilter som ska användas vid frågor till QnA Maker KB.",
             "properties": {
               "name": {
                 "title": "Namn",
-                "description": "Name to filter on."
+                "description": "Namn att filtrera efter."
               },
               "value": {
                 "title": "Värde",
-                "description": "Value to restrict filter."
+                "description": "Värde för att begränsa filtret."
               }
             }
           }
@@ -3567,48 +4040,58 @@
           "description": "Det antal svar du vill hämta."
         },
         "isTest": {
-          "title": "IsTest",
+          "title": "Use test environment",
           "description": "Sant om du pekar på Testmiljö, i annat fall falskt."
         },
         "rankerType": {
-          "title": "Rankningsberäknaretyp",
+          "title": "Ranker type",
           "description": "Rankningsberäknaretyp.",
           "oneOf": {
             "0": {
-              "title": "Ranker type",
+              "title": "Typ av rankningsberäknare",
               "description": "Rankningsberäknaretyp."
             }
           }
         },
+        "strictFiltersJoinOperator": {
+          "title": "StrictFiltersJoinOperator",
+          "description": "Join operator for Strict Filters.",
+          "oneOf": {
+            "0": {
+              "title": "Join operator",
+              "description": "Value of Join Operator to be used as onjuction with Strict Filter values."
+            }
+          }
+        },
         "includeDialogNameInMetadata": {
-          "title": "Include Dialog Name",
-          "description": "When set to false, the dialog name will not be passed to QnAMaker. (default) is true"
+          "title": "Include dialog name",
+          "description": "Om värdet är inställt på falskt skickas inte dialognamnet till QnAMaker. (default) är sant"
         },
         "metadata": {
           "title": "Metadatafilter",
           "description": "Metadatafilter som ska användas när QnA Maker KB anropas.",
           "items": {
             "title": "Metadatafilter",
-            "description": "Metadata filter to use when calling the QnA Maker KB.",
+            "description": "Det metadataegenskaper som ska användas när QnA Maker KB anropas.",
             "properties": {
               "name": {
                 "title": "Namn",
-                "description": "Name of value to test."
+                "description": "Namn på det värde som ska testas."
               },
               "value": {
                 "title": "Värde",
-                "description": "Value to filter against."
+                "description": "Värde att filtrera mot."
               }
             }
           }
         },
         "context": {
-          "title": "QnARequestContext",
-          "description": "Context to use for ranking."
+          "title": "QnA request context",
+          "description": "Sammanhang som ska användas för rankning."
         },
         "qnaId": {
-          "title": "QnAId",
-          "description": "A number or expression which is the QnAId to paass to QnAMaker API."
+          "title": "QnA Id",
+          "description": "Ett tal eller uttryck som är det QnAId som ska skickas till QnAMaker-API:et."
         },
         "$kind": {
           "title": "Variant av dialogruteobjekt",
@@ -3621,8 +4104,8 @@
       }
     },
     "Microsoft.RandomSelector": {
-      "title": "Random rule selector",
-      "description": "Select most specific true rule.",
+      "title": "Slumpmässig regelväljare",
+      "description": "Välj den mest specifika sanna regeln.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -3631,8 +4114,8 @@
       },
       "properties": {
         "seed": {
-          "title": "Random seed",
-          "description": "Random seed to start random number generation."
+          "title": "Slumpmässigt startvärde",
+          "description": "Slumpmässigt startvärde för att starta slumptalsgenerering."
         },
         "$kind": {
           "title": "Variant av dialogruteobjekt",
@@ -3645,8 +4128,8 @@
       }
     },
     "Microsoft.RecognizerSet": {
-      "title": "Recognizer Set",
-      "description": "Creates the union of the intents and entities of the recognizers in the set.",
+      "title": "Recognizer set",
+      "description": "Skapar unionen av avsikter och entiteter för identifieringsobjekten i uppsättningen.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -3659,8 +4142,8 @@
           "description": "Valfritt unikt ID som används med RecognizerSet. Andra identifierare bör returnera avsikten DeferToRecognizer_{Id} vid korsanslutningsträning av data för den här tolken."
         },
         "recognizers": {
-          "title": "Tolkar",
-          "description": "Lista över identifierare som definierats för den här uppsättningen."
+          "title": "Identifieringsobjekt",
+          "description": "Lista över identifieringsobjekt som definierats för den här uppsättningen."
         },
         "$kind": {
           "title": "Variant av dialogruteobjekt",
@@ -3673,8 +4156,8 @@
       }
     },
     "Microsoft.RegexEntityRecognizer": {
-      "title": "Regex Entity Recognizer",
-      "description": "Recognizer which recognizes patterns of input based on regex.",
+      "title": "Regex entity recognizer",
+      "description": "Identifieringsobjekt som identifierar mönster för indata baserade på regex.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -3684,11 +4167,11 @@
       "properties": {
         "name": {
           "title": "Namn",
-          "description": "Name of the entity"
+          "description": "Namn på entiteten"
         },
         "pattern": {
           "title": "Mönster",
-          "description": "Pattern expressed as regular expression."
+          "description": "Mönster uttryckt som reguljärt uttryck."
         },
         "$kind": {
           "title": "Variant av dialogruteobjekt",
@@ -3701,8 +4184,8 @@
       }
     },
     "Microsoft.RegexRecognizer": {
-      "title": "Regex recognizer",
-      "description": "Use regular expressions to recognize intents and entities from user input.",
+      "title": "Regex-identifieringsobjekt",
+      "description": "Använd reguljära uttryck när du ska tolka avsikter och entiteter från användarindata.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -3715,26 +4198,26 @@
           "description": "Valfritt unikt ID som används med RecognizerSet. Andra identifierare bör returnera avsikten DeferToRecognizer_{Id} vid korsanslutningsträning av data för den här tolken."
         },
         "intents": {
-          "title": "RegEx patterns to intents",
-          "description": "Collection of patterns to match for an intent.",
+          "title": "RegEx-mönster till avsikter",
+          "description": "Mönstermängd som ska matcha en avsikt.",
           "items": {
             "title": "Mönster",
-            "description": "Intent and regex pattern.",
+            "description": "Avsikt och regexmönster.",
             "properties": {
               "intent": {
                 "title": "Avsikt",
-                "description": "The intent name."
+                "description": "Avsiktens namn."
               },
               "pattern": {
                 "title": "Mönster",
-                "description": "The regular expression pattern."
+                "description": "Mönster för reguljärt uttryck."
               }
             }
           }
         },
         "entities": {
-          "title": "Entity recognizers",
-          "description": "Collection of entity recognizers to use."
+          "title": "Entitetsidentifieringsobjekt",
+          "description": "Mängd med entitetsidentifieringsobjekt att använda."
         },
         "$kind": {
           "title": "Variant av dialogruteobjekt",
@@ -3747,8 +4230,8 @@
       }
     },
     "Microsoft.RepeatDialog": {
-      "title": "Repeat dialog",
-      "description": "Repeat current dialog.",
+      "title": "Upprepa dialog",
+      "description": "Upprepa aktuell dialog.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -3762,7 +4245,7 @@
         },
         "allowLoop": {
           "title": "AllowLoop",
-          "description": "Optional condition which if true will allow loop of the repeated dialog."
+          "description": "Valfritt villkor som, om det är sant, tillåter loop av den upprepande dialogen."
         },
         "disabled": {
           "title": "Inaktiverat",
@@ -3773,11 +4256,11 @@
           "description": "Ett eller flera alternativ som skickas till den dialogruta som anropas.",
           "additionalProperties": {
             "title": "Alternativ",
-            "description": "Options for repeating dialog."
+            "description": "Alternativ för upprepande dialog."
           }
         },
         "activityProcessed": {
-          "title": "Aktiviteten har bearbetats",
+          "title": "Activity processed",
           "description": "Om värdet är inställt på falskt kan dialogrutan som anropas bearbeta den aktuella aktiviteten."
         },
         "$kind": {
@@ -3791,8 +4274,8 @@
       }
     },
     "Microsoft.ReplaceDialog": {
-      "title": "Replace dialog",
-      "description": "Replace current dialog with another dialog.",
+      "title": "Ersätt dialog",
+      "description": "Ersätt aktuell dialog med en annan dialog.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -3822,11 +4305,11 @@
           "description": "Ett eller flera alternativ som skickas till den dialogruta som anropas.",
           "additionalProperties": {
             "title": "Alternativ",
-            "description": "Options for replacing dialog."
+            "description": "Alternativ för att ersättande dialog."
           }
         },
         "activityProcessed": {
-          "title": "Aktiviteten har bearbetats",
+          "title": "Activity processed",
           "description": "Om värdet är inställt på falskt kan dialogrutan som anropas bearbeta den aktuella aktiviteten."
         },
         "$kind": {
@@ -3840,8 +4323,8 @@
       }
     },
     "Microsoft.ResourceMultiLanguageGenerator": {
-      "title": "Resource Multi-Language Generator",
-      "description": "MultiLanguage Generator which is bound to resource by resource Id.",
+      "title": "Resource multi-language generator",
+      "description": "MultiLanguage-generator som är bunden till resursen med resurs-ID.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -3855,11 +4338,11 @@
         },
         "resourceId": {
           "title": "Resurs-ID",
-          "description": "Resource which is the root language generator.  Other generaters with the same name and language suffix will be loaded into this generator and used based on the Language Policy."
+          "description": "Resurs som är rotspråksgenerator.  Andra generatorer med samma namn och språksuffix kommer att läsas in i den här generatorn och användas baserat på språkprincipen."
         },
         "languagePolicy": {
-          "title": "Språkprincip",
-          "description": "Set alternate language policy for this generator.  If not set, the global language policy will be used."
+          "title": "Language policy",
+          "description": "Ange en alternativ språkprincip för den här generatorn. Om du inte anger den används den globala språkprincipen."
         },
         "$kind": {
           "title": "Variant av dialogruteobjekt",
@@ -3905,7 +4388,7 @@
     },
     "Microsoft.SetProperties": {
       "title": "Konfigurera egenskap",
-      "description": "Set one or more property values.",
+      "description": "Ange ett eller flera egenskapsvärden.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -3923,10 +4406,10 @@
         },
         "assignments": {
           "title": "Tilldelningar",
-          "description": "Property value assignments to set.",
+          "description": "Egenskapsvärdetilldelningar som ska konfigureras.",
           "items": {
             "title": "Tilldelning",
-            "description": "Property assignment.",
+            "description": "Egenskapstilldelning.",
             "properties": {
               "property": {
                 "title": "Egenskap",
@@ -3951,7 +4434,7 @@
     },
     "Microsoft.SetProperty": {
       "title": "Konfigurera egenskap",
-      "description": "Set property to a value.",
+      "description": "Ange en egenskap för ett värde.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -3986,8 +4469,8 @@
       }
     },
     "Microsoft.SignOutUser": {
-      "title": "Sign Out User",
-      "description": "Sign a user out that was logged in previously using OAuthInput.",
+      "title": "Sign out user",
+      "description": "Registrera en användare som loggats in tidigare med OAuthInput.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -4001,11 +4484,11 @@
         },
         "userId": {
           "title": "UserId",
-          "description": "Expression to an user to signout. Default is user.id."
+          "description": "Uttryck till en användare för att logga ut. Standardinställningen är user.id."
         },
         "connectionName": {
-          "title": "Namn på anslutning",
-          "description": "Connection name that was used with OAuthInput to log a user in."
+          "title": "Connection name",
+          "description": "Anslutningsnamn som användes med OAuthInput för att logga en användare."
         },
         "disabled": {
           "title": "Inaktiverat",
@@ -4022,8 +4505,8 @@
       }
     },
     "Microsoft.StaticActivityTemplate": {
-      "title": "Microsoft Static Activity Template",
-      "description": "This allows you to define a static Activity object",
+      "title": "Microsoft static activity template",
+      "description": "Detta låter dig definiera ett statiskt aktivitetsobjekt",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -4033,7 +4516,7 @@
       "properties": {
         "activity": {
           "title": "Aktivitet",
-          "description": "A static Activity to used."
+          "description": "En statisk aktivitet att använda."
         },
         "$kind": {
           "title": "Variant av dialogruteobjekt",
@@ -4046,8 +4529,8 @@
       }
     },
     "Microsoft.SwitchCondition": {
-      "title": "Switch condition",
-      "description": "Execute different actions based on the value of a property.",
+      "title": "Växlingsvillkor",
+      "description": "Kör olika åtgärder baserat på en egenskaps värde.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -4061,7 +4544,7 @@
         },
         "condition": {
           "title": "Villkor",
-          "description": "Property to evaluate."
+          "description": "Egenskap som ska utvärderas."
         },
         "disabled": {
           "title": "Inaktiverat",
@@ -4069,25 +4552,25 @@
         },
         "cases": {
           "title": "Fall",
-          "description": "Actions for each possible condition.",
+          "description": "Åtgärder för varje möjligt villkor.",
           "items": {
             "title": "Fall",
-            "description": "Case and actions.",
+            "description": "Fall och åtgärder.",
             "properties": {
               "value": {
                 "title": "Värde",
-                "description": "The value to compare the condition with."
+                "description": "Det värde som villkoret ska jämföras med."
               },
               "actions": {
                 "title": "Åtgärder",
-                "description": "Actions to execute."
+                "description": "Åtgärder att köra."
               }
             }
           }
         },
         "default": {
-          "title": "Standard",
-          "description": "Actions to execute if none of the cases meet the condition."
+          "title": "Standardinställning",
+          "description": "Åtgärder som ska utföras om inget av fallen uppfyller villkoret."
         },
         "$kind": {
           "title": "Variant av dialogruteobjekt",
@@ -4100,8 +4583,8 @@
       }
     },
     "Microsoft.TelemetryTrackEvent": {
-      "title": "Telemetry - Track Event",
-      "description": "Track a custom event using the registered Telemetry Client.",
+      "title": "Telemetry - track event",
+      "description": "Spåra en anpassad händelse med hjälp av den registrerade telemetriklienten.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -4118,12 +4601,12 @@
           "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
         },
         "eventName": {
-          "title": "Händelsenamn",
-          "description": "The name of the event to track."
+          "title": "Event name",
+          "description": "Namnet på den händelse som ska spåras."
         },
         "properties": {
           "title": "Egenskaper",
-          "description": "One or more properties to attach to the event being tracked."
+          "description": "En eller flera egenskaper att bifoga till händelsen som spåras."
         },
         "$kind": {
           "title": "Variant av dialogruteobjekt",
@@ -4136,8 +4619,8 @@
       }
     },
     "Microsoft.TemperatureEntityRecognizer": {
-      "title": "Temperature Recognizer",
-      "description": "Recognizer which recognizes temperatures.",
+      "title": "Temperature recognizer",
+      "description": "Identifieringsobjekt som identifierar temperaturer.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -4156,8 +4639,8 @@
       }
     },
     "Microsoft.TemplateEngineLanguageGenerator": {
-      "title": "Template Multi-Language Generator",
-      "description": "Template Generator which allows only inline evaluation of templates.",
+      "title": "Template multi-language generator",
+      "description": "Mallgenerator som endast tillåter infogad utvärdering av mallar.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -4180,8 +4663,8 @@
       }
     },
     "Microsoft.TextInput": {
-      "title": "Text input dialog",
-      "description": "Collection information - Ask for a word or sentence.",
+      "title": "Dialogrutan för textinmatning",
+      "description": "Mängdinformation – Fråga efter ett ord eller en mening.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -4191,7 +4674,7 @@
       "properties": {
         "defaultValue": {
           "title": "Standardvärde",
-          "description": "Property ställs in på värdet för det här uttrycket när maximalt antal turer har överskrids."
+          "description": "Property ställs in på värdet för det här uttrycket när max antal inmatningar har överskrids."
         },
         "value": {
           "title": "Värde",
@@ -4199,7 +4682,7 @@
         },
         "outputFormat": {
           "title": "Utdataformat",
-          "description": "Expression to format the output."
+          "description": "Uttryck för att formatera utdata."
         },
         "id": {
           "title": "ID",
@@ -4210,23 +4693,23 @@
           "description": "Valfritt villkor som, om det är sant, inaktiverar den här åtgärden."
         },
         "prompt": {
-          "title": "Initial fråga",
+          "title": "Initial prompt",
           "description": "Meddelande att skicka för att samla in information."
         },
         "unrecognizedPrompt": {
-          "title": "Okänd fråga",
-          "description": "Meddelande som ska skickas när maximalt antal turer (om angivet) har överskridits och standardvärdet har valts som värde."
+          "title": "Okänd prompt",
+          "description": "Meddelande som ska skickas när max antal inmatningar (om angivet) har överskridits och standardvärdet har valts som värde."
         },
         "invalidPrompt": {
-          "title": "Ogiltig fråga",
+          "title": "Ogiltig prompt",
           "description": "Meddelande som ska skickas när användarindata inte uppfyller något valideringsuttryck."
         },
         "defaultValueResponse": {
           "title": "Standardvärdesvar",
-          "description": "Meddelande som ska skickas när maximalt antal turer (om angivet) har överskridits och standardvärdet har valts som värde."
+          "description": "Meddelande som ska skickas när max antal inmatningar (om angivet) har överskridits och standardvärdet har valts som värde."
         },
         "maxTurnCount": {
-          "title": "Maximalt antal turer",
+          "title": "Max antal inmatningar",
           "description": "Maximalt antal återställningsförsök att samla in information."
         },
         "validations": {
@@ -4261,7 +4744,7 @@
     },
     "Microsoft.TextTemplate": {
       "title": "Microsoft TextTemplate",
-      "description": "Use LG Templates to create text",
+      "description": "Använd LG-mallar för att skapa text",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -4271,7 +4754,7 @@
       "properties": {
         "template": {
           "title": "Mall",
-          "description": "Language Generator template to evaluate to create the text."
+          "description": "Språkgeneratormall att utvärdera för att skapa texten."
         },
         "$kind": {
           "title": "Variant av dialogruteobjekt",
@@ -4283,9 +4766,41 @@
         }
       }
     },
+    "Microsoft.ThrowException": {
+      "title": "Throw an exception",
+      "description": "Throw an exception. Capture this exception with OnError trigger.",
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "id": {
+          "title": "Id",
+          "description": "Optional id for the dialog"
+        },
+        "disabled": {
+          "title": "Disabled",
+          "description": "Optional condition which if true will disable this action."
+        },
+        "errorValue": {
+          "title": "Error value",
+          "description": "Error value to throw."
+        },
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
     "Microsoft.TraceActivity": {
-      "title": "Send a TraceActivity",
-      "description": "Send a trace activity to the transcript logger and/ or Bot Framework Emulator.",
+      "title": "Skicka en TraceActivity",
+      "description": "Skicka en spårningsaktivitet till transkriptionsloggaren och/eller Bot Framework Emulator.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -4303,7 +4818,7 @@
         },
         "name": {
           "title": "Namn",
-          "description": "Name of the trace activity"
+          "description": "Namn på spårningsaktiviteten"
         },
         "label": {
           "title": "Etikett",
@@ -4311,11 +4826,11 @@
         },
         "valueType": {
           "title": "Värdetyp",
-          "description": "Type of value"
+          "description": "Värdetyp"
         },
         "value": {
           "title": "Värde",
-          "description": "Property that holds the value to send as trace activity."
+          "description": "Egenskapen som innehåller det värde som ska skickas som spårningsaktivitet."
         },
         "$kind": {
           "title": "Variant av dialogruteobjekt",
@@ -4328,8 +4843,8 @@
       }
     },
     "Microsoft.TrueSelector": {
-      "title": "True Trigger Selector",
-      "description": "Selector for all true events",
+      "title": "True trigger selector",
+      "description": "Väljare för alla sanna händelser",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -4348,7 +4863,7 @@
       }
     },
     "Microsoft.UpdateActivity": {
-      "title": "Uppdatera en aktivitet",
+      "title": "Update an activity",
       "description": "Svara med en aktivitet.",
       "patternProperties": {
         "^\\$": {
@@ -4367,7 +4882,7 @@
         },
         "activityId": {
           "title": "Aktivitets-ID",
-          "description": "An string expression with the activity id to update."
+          "description": "Ett stränguttryck med det aktivitets-ID som ska uppdateras."
         },
         "activity": {
           "title": "Aktivitet",
@@ -4384,8 +4899,8 @@
       }
     },
     "Microsoft.UrlEntityRecognizer": {
-      "title": "Confirmation Url Recognizer",
-      "description": "Recognizer which recognizes urls.",
+      "title": "Url recognizer",
+      "description": "Identifieringsobjekt som identifierar URL:er.",
       "patternProperties": {
         "^\\$": {
           "title": "Verktygsegenskap",
@@ -4491,7 +5006,7 @@
     },
     "role": {
       "title": "$role",
-      "description": "Defines the role played in the dialog schema from [expression|interface|implements($kind)|extends($kind)]."
+      "description": "Definierar rollen som spelas i dialogschemat från [expression|interface|implements($kind)|extends($kind)]."
     },
     "stringExpression": {
       "title": "Sträng eller uttryck",
@@ -4526,395 +5041,6 @@
         "4": {
           "title": "Nummer",
           "description": "Nummerkonstant."
-        }
-      }
-    },
-    "schema": {
-      "title": "Core schema meta-schema"
-    },
-    "botframework.json": {
-      "definitions": {
-        "ChannelAccount": {
-          "description": "Channel account information needed to route a message",
-          "title": "ChannelAccount",
-          "properties": {
-            "id": {
-              "description": "Kanal-ID för användaren eller roboten på den här kanalen (exempel: joe@smith.com, @joesmith eller\n123456)",
-              "title": "ID"
-            },
-            "name": {
-              "description": "Visa användarvänligt namn",
-              "title": "namn"
-            },
-            "aadObjectId": {
-              "description": "Det här kontots objekt-ID i Azure Active Directory (AAD)",
-              "title": "aadObjectId"
-            },
-            "role": {
-              "description": "Rollen för entiteten bakom kontot (exempelvis Användare, Robot, osv). Möjliga värden är:\nanvändare, robot",
-              "title": "roll"
-            }
-          }
-        },
-        "ConversationAccount": {
-          "description": "Channel account information for a conversation",
-          "title": "ConversationAccount",
-          "properties": {
-            "isGroup": {
-              "description": "Indicates whether the conversation contains more than two participants at the time the\nactivity was generated",
-              "title": "isGroup"
-            },
-            "conversationType": {
-              "description": "Indicates the type of the conversation in channels that distinguish between conversation types",
-              "title": "conversationType"
-            },
-            "id": {
-              "description": "Kanal-ID för användaren eller roboten på den här kanalen (exempel: joe@smith.com, @joesmith eller\n123456)",
-              "title": "ID"
-            },
-            "name": {
-              "description": "Visa användarvänligt namn",
-              "title": "namn"
-            },
-            "aadObjectId": {
-              "description": "Det här kontots objekt-ID i Azure Active Directory (AAD)",
-              "title": "aadObjectId"
-            },
-            "role": {
-              "description": "Rollen för entiteten bakom kontot (exempelvis Användare, Robot, osv). Möjliga värden är:\nanvändare, robot",
-              "title": "roll"
-            }
-          }
-        },
-        "MessageReaction": {
-          "description": "Message reaction object",
-          "title": "MessageReaction",
-          "properties": {
-            "type": {
-              "description": "Message reaction type. Possible values include: 'like', 'plusOne'",
-              "title": "typ"
-            }
-          }
-        },
-        "CardAction": {
-          "description": "A clickable action",
-          "title": "CardAction",
-          "properties": {
-            "type": {
-              "description": "The type of action implemented by this button. Possible values include: 'openUrl', 'imBack',\n'postBack', 'playAudio', 'playVideo', 'showImage', 'downloadFile', 'signin', 'call',\n'payment', 'messageBack'",
-              "title": "typ"
-            },
-            "title": {
-              "description": "Text description which appears on the button",
-              "title": "titel"
-            },
-            "image": {
-              "description": "Image URL which will appear on the button, next to text label",
-              "title": "avbildning"
-            },
-            "text": {
-              "description": "Text for this action",
-              "title": "text"
-            },
-            "displayText": {
-              "description": "(Optional) text to display in the chat feed if the button is clicked",
-              "title": "displayText"
-            },
-            "value": {
-              "description": "Supplementary parameter for action. Content of this property depends on the ActionType",
-              "title": "värde"
-            },
-            "channelData": {
-              "description": "Channel-specific data associated with this action",
-              "title": "channelData"
-            }
-          }
-        },
-        "SuggestedActions": {
-          "description": "SuggestedActions that can be performed",
-          "title": "SuggestedActions",
-          "properties": {
-            "to": {
-              "description": "Ids of the recipients that the actions should be shown to.  These Ids are relative to the\nchannelId and a subset of all recipients of the activity",
-              "title": "till",
-              "items": {
-                "title": "ID",
-                "description": "Id of recipient."
-              }
-            },
-            "actions": {
-              "description": "Actions that can be shown to the user",
-              "title": "åtgärder"
-            }
-          }
-        },
-        "Attachment": {
-          "description": "An attachment within an activity",
-          "title": "Bilaga",
-          "properties": {
-            "contentType": {
-              "description": "mimetype/Contenttype for the file",
-              "title": "contentType"
-            },
-            "contentUrl": {
-              "description": "Content Url",
-              "title": "contentUrl"
-            },
-            "content": {
-              "description": "Inbäddat innehåll",
-              "title": "content"
-            },
-            "name": {
-              "description": "(OPTIONAL) The name of the attachment",
-              "title": "namn"
-            },
-            "thumbnailUrl": {
-              "description": "(OPTIONAL) Thumbnail associated with attachment",
-              "title": "thumbnailUrl"
-            }
-          }
-        },
-        "Entity": {
-          "description": "Metadata object pertaining to an activity",
-          "title": "Entitet",
-          "properties": {
-            "type": {
-              "description": "Type of this entity (RFC 3987 IRI)",
-              "title": "typ"
-            }
-          }
-        },
-        "ConversationReference": {
-          "description": "An object relating to a particular point in a conversation",
-          "title": "ConversationReference",
-          "properties": {
-            "activityId": {
-              "description": "(Optional) ID of the activity to refer to",
-              "title": "activityId"
-            },
-            "user": {
-              "description": "(Optional) User participating in this conversation",
-              "title": "användare"
-            },
-            "bot": {
-              "description": "Bot participating in this conversation",
-              "title": "bot"
-            },
-            "conversation": {
-              "description": "Conversation reference",
-              "title": "konversation"
-            },
-            "channelId": {
-              "description": "Kanal-id",
-              "title": "channelId"
-            },
-            "serviceUrl": {
-              "description": "Service endpoint where operations concerning the referenced conversation may be performed",
-              "title": "serviceUrl"
-            }
-          }
-        },
-        "TextHighlight": {
-          "description": "Refers to a substring of content within another field",
-          "title": "TextHighlight",
-          "properties": {
-            "text": {
-              "description": "Defines the snippet of text to highlight",
-              "title": "text"
-            },
-            "occurrence": {
-              "description": "Occurrence of the text field within the referenced text, if multiple exist.",
-              "title": "occurrence"
-            }
-          }
-        },
-        "SemanticAction": {
-          "description": "Represents a reference to a programmatic action",
-          "title": "SemanticAction",
-          "properties": {
-            "id": {
-              "description": "ID of this action",
-              "title": "ID"
-            },
-            "entities": {
-              "description": "Entities associated with this action",
-              "title": "entiteter"
-            }
-          }
-        },
-        "Activity": {
-          "description": "An Activity is the basic communication type for the Bot Framework 3.0 protocol.",
-          "title": "Aktivitet",
-          "properties": {
-            "type": {
-              "description": "Contains the activity type. Possible values include: 'message', 'contactRelationUpdate',\n'conversationUpdate', 'typing', 'endOfConversation', 'event', 'invoke', 'deleteUserData',\n'messageUpdate', 'messageDelete', 'installationUpdate', 'messageReaction', 'suggestion',\n'trace', 'handoff'",
-              "title": "typ"
-            },
-            "id": {
-              "description": "Contains an ID that uniquely identifies the activity on the channel.",
-              "title": "ID"
-            },
-            "timestamp": {
-              "description": "Contains the date and time that the message was sent, in UTC, expressed in ISO-8601 format.",
-              "title": "timestamp"
-            },
-            "localTimestamp": {
-              "description": "Contains the date and time that the message was sent, in local time, expressed in ISO-8601\nformat.\nFor example, 2016-09-23T13:07:49.4714686-07:00.",
-              "title": "localTimestamp"
-            },
-            "localTimezone": {
-              "description": "Contains the name of the timezone in which the message, in local time, expressed in IANA Time\nZone database format.\nFor example, America/Los_Angeles.",
-              "title": "localTimezone"
-            },
-            "serviceUrl": {
-              "description": "Contains the URL that specifies the channel's service endpoint. Set by the channel.",
-              "title": "serviceUrl"
-            },
-            "channelId": {
-              "description": "Contains an ID that uniquely identifies the channel. Set by the channel.",
-              "title": "channelId"
-            },
-            "from": {
-              "description": "Identifies the sender of the message.",
-              "title": "från"
-            },
-            "conversation": {
-              "description": "Identifies the conversation to which the activity belongs.",
-              "title": "konversation"
-            },
-            "recipient": {
-              "description": "Identifies the recipient of the message.",
-              "title": "recipient"
-            },
-            "textFormat": {
-              "description": "Format of text fields Default:markdown. Possible values include: 'markdown', 'plain', 'xml'",
-              "title": "textFormat"
-            },
-            "attachmentLayout": {
-              "description": "The layout hint for multiple attachments. Default: list. Possible values include: 'list',\n'carousel'",
-              "title": "attachmentLayout"
-            },
-            "membersAdded": {
-              "description": "The collection of members added to the conversation.",
-              "title": "membersAdded"
-            },
-            "membersRemoved": {
-              "description": "The collection of members removed from the conversation.",
-              "title": "membersRemoved"
-            },
-            "reactionsAdded": {
-              "description": "The collection of reactions added to the conversation.",
-              "title": "reactionsAdded"
-            },
-            "reactionsRemoved": {
-              "description": "The collection of reactions removed from the conversation.",
-              "title": "reactionsRemoved"
-            },
-            "topicName": {
-              "description": "The updated topic name of the conversation.",
-              "title": "topicName"
-            },
-            "historyDisclosed": {
-              "description": "Indicates whether the prior history of the channel is disclosed.",
-              "title": "historyDisclosed"
-            },
-            "locale": {
-              "description": "A locale name for the contents of the text field.\nThe locale name is a combination of an ISO 639 two- or three-letter culture code associated\nwith a language\nand an ISO 3166 two-letter subculture code associated with a country or region.\nThe locale name can also correspond to a valid BCP-47 language tag.",
-              "title": "locale"
-            },
-            "text": {
-              "description": "The text content of the message.",
-              "title": "text"
-            },
-            "speak": {
-              "description": "The text to speak.",
-              "title": "speak"
-            },
-            "inputHint": {
-              "description": "Indicates whether your bot is accepting,\nexpecting, or ignoring user input after the message is delivered to the client. Possible\nvalues include: 'acceptingInput', 'ignoringInput', 'expectingInput'",
-              "title": "inputHint"
-            },
-            "summary": {
-              "description": "The text to display if the channel cannot render cards.",
-              "title": "sammanfattning"
-            },
-            "suggestedActions": {
-              "description": "The suggested actions for the activity.",
-              "title": "suggestedActions"
-            },
-            "attachments": {
-              "description": "Bifogade filer",
-              "title": "attachments"
-            },
-            "entities": {
-              "description": "Represents the entities that were mentioned in the message.",
-              "title": "entiteter"
-            },
-            "channelData": {
-              "description": "Contains channel-specific content.",
-              "title": "channelData"
-            },
-            "action": {
-              "description": "Indicates whether the recipient of a contactRelationUpdate was added or removed from the\nsender's contact list.",
-              "title": "action"
-            },
-            "replyToId": {
-              "description": "Contains the ID of the message to which this message is a reply.",
-              "title": "replyToId"
-            },
-            "label": {
-              "description": "A descriptive label for the activity.",
-              "title": "etikett"
-            },
-            "valueType": {
-              "description": "The type of the activity's value object.",
-              "title": "valueType"
-            },
-            "value": {
-              "description": "A value that is associated with the activity.",
-              "title": "värde"
-            },
-            "name": {
-              "description": "The name of the operation associated with an invoke or event activity.",
-              "title": "namn"
-            },
-            "relatesTo": {
-              "description": "A reference to another conversation or activity.",
-              "title": "relatesTo"
-            },
-            "code": {
-              "description": "The a code for endOfConversation activities that indicates why the conversation ended.\nPossible values include: 'unknown', 'completedSuccessfully', 'userCancelled', 'botTimedOut',\n'botIssuedInvalidMessage', 'channelFailed'",
-              "title": "kod"
-            },
-            "expiration": {
-              "description": "The time at which the activity should be considered to be \"expired\" and should not be\npresented to the recipient.",
-              "title": "upphörande"
-            },
-            "importance": {
-              "description": "The importance of the activity. Possible values include: 'low', 'normal', 'high'",
-              "title": "importance"
-            },
-            "deliveryMode": {
-              "description": "A delivery hint to signal to the recipient alternate delivery paths for the activity.\nThe default delivery mode is \"default\". Possible values include: 'normal', 'notification'",
-              "title": "deliveryMode"
-            },
-            "listenFor": {
-              "description": "List of phrases and references that speech and language priming systems should listen for",
-              "title": "listenFor",
-              "items": {
-                "title": "Phrase",
-                "description": "Phrase to listen for."
-              }
-            },
-            "textHighlights": {
-              "description": "The collection of text fragments to highlight when the activity contains a ReplyToId value.",
-              "title": "textHighlights"
-            },
-            "semanticAction": {
-              "description": "An optional programmatic action accompanying this request",
-              "title": "semanticAction"
-            }
-          }
         }
       }
     }
