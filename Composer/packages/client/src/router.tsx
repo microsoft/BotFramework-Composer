@@ -16,7 +16,6 @@ import {
   dispatcherState,
   schemasState,
   botProjectIdsState,
-  settingsState,
   botOpeningState,
   pluginPagesSelector,
   botProjectSpaceSelector,
@@ -29,7 +28,6 @@ import { PluginPageContainer } from './pages/plugin/PluginPageContainer';
 
 import { botProjectSpaceLoadedState } from './recoilModel/atoms';
 import { mergePropertiesManagedByRootBot } from './recoilModel/dispatchers/utils/project';
-import { setSettingState } from './recoilModel/dispatchers/setting';
 
 const DesignPage = React.lazy(() => import('./pages/design/DesignPage'));
 const LUPage = React.lazy(() => import('./pages/language-understanding/LUPage'));
@@ -122,7 +120,7 @@ const projectStyle = css`
 const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string; skillId: string }>> = (props) => {
   const { projectId = '' } = props;
   const schemas = useRecoilValue(schemasState(projectId));
-  const { fetchProjectById, setSettings } = useRecoilValue(dispatcherState);
+  const { fetchProjectById, setSettingStateWithoutSync } = useRecoilValue(dispatcherState);
   const botProjects = useRecoilValue(botProjectIdsState);
   const botProjectsMetaData = useRecoilValue(botProjectSpaceSelector);
   const botProjectSpaceLoaded = useRecoilValue(botProjectSpaceLoadedState);
@@ -131,10 +129,12 @@ const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string; skillId: 
   useEffect(() => {
     if (botProjectSpaceLoaded && rootBotProjectId && botProjectsMetaData) {
       for (let i = 0; i < botProjectsMetaData.length; i++) {
-        const id = botProjectsMetaData[i].projectId;
-        const settings = botProjectsMetaData[i].settings;
-        const mergedSettings = mergePropertiesManagedByRootBot(id, rootBotProjectId, settings);
-        setSettings(id, mergedSettings);
+        if (!botProjectsMetaData[i].isRemote) {
+          const id = botProjectsMetaData[i].projectId;
+          const settings = botProjectsMetaData[i].settings;
+          const mergedSettings = mergePropertiesManagedByRootBot(id, rootBotProjectId, settings);
+          setSettingStateWithoutSync(id, mergedSettings);
+        }
       }
     }
   }, [botProjectSpaceLoaded, rootBotProjectId]);

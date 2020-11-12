@@ -23,6 +23,7 @@ import {
   qnaFilesState,
   validateDialogsSelectorFamily,
 } from '../../recoilModel';
+import settingStorage from '../../utils/dialogSettingStorage';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 import { TextFieldWithCustomButton } from '../../components/TextFieldWithCustomButton';
@@ -151,29 +152,21 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
   const luFiles = useRecoilValue(luFilesState(projectId));
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
-  const rootSettings = useRecoilValue(settingsState(rootBotProjectId));
   const botProjectsMetaData = useRecoilValue(botProjectSpaceSelector);
   const botProject = botProjectsMetaData.find((b) => b.projectId === projectId);
   const isRootBot = !!botProject?.isRootBot;
 
-  // const sensitiveGroupManageProperty = settingStorage.get(rootBotProjectId);
+  const sensitiveGroupManageProperty = settingStorage.get(rootBotProjectId);
 
-  // const groupLUISAuthoringKey = get(sensitiveGroupManageProperty, 'luis.authoringKey', {});
-  // const rootLuisKey = groupLUISAuthoringKey.root;
-  // const skillLuisKey = groupLUISAuthoringKey[projectId];
-  const rootLuisKey = get(rootSettings, 'luis.authoringKey', '');
-  const skillLuisKey = get(settings, 'luis.authoringKey', '');
-  //console.log(rootSettings);
-  // const groupLUISRegion = get(sensitiveGroupManageProperty, 'luis.authoringRegion', {});
-  // const rootLuisRegion = groupLUISRegion.root;
-  // const skillLuisRegion = groupLUISRegion[projectId];
-  const rootLuisRegion = get(rootSettings, 'luis.authoringRegion', '');
-  const skillLuisRegion = get(settings, 'luis.authoringRegion', '');
-  // const groupQnAKey = get(sensitiveGroupManageProperty, 'qna.subscriptionKey', {});
-  // const rootqnaKey = groupQnAKey.root;
-  // const skillqnaKey = groupQnAKey[projectId];
-  const rootqnaKey = get(rootSettings, 'qna.subscriptionKey', '');
-  const skillqnaKey = get(settings, 'qna.subscriptionKey', '');
+  const groupLUISAuthoringKey = get(sensitiveGroupManageProperty, 'luis.authoringKey', {});
+  const rootLuisKey = groupLUISAuthoringKey.root;
+  const skillLuisKey = groupLUISAuthoringKey[projectId];
+  const groupLUISRegion = get(sensitiveGroupManageProperty, 'luis.authoringRegion', {});
+  const rootLuisRegion = groupLUISRegion.root;
+  const skillLuisRegion = groupLUISRegion[projectId];
+  const groupQnAKey = get(sensitiveGroupManageProperty, 'qna.subscriptionKey', {});
+  const rootqnaKey = groupQnAKey.root;
+  const skillqnaKey = groupQnAKey[projectId];
   const isLUISKeyNeeded = isLUISMandatory(dialogs, luFiles);
   const isQnAKeyNeeded = isQnAKeyMandatory(dialogs, qnaFiles);
 
@@ -196,7 +189,7 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
     } else {
       setQnAKeyErrorMsg('');
     }
-  }, [projectId, localRootLuisKey, localRootQnAKey]);
+  }, [projectId]);
 
   useEffect(() => {
     setLocalRootLuisKey(rootLuisKey);
