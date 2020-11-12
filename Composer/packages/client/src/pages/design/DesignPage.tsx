@@ -42,6 +42,7 @@ import {
   displaySkillManifestState,
   validateDialogsSelectorFamily,
   focusPathState,
+  showCreateDialogModalState,
   localeState,
   qnaFilesState,
   skillsStateSelector,
@@ -141,6 +142,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const projectDialogsMap = useRecoilValue(projectDialogsMapSelector);
   const { startSingleBot, stopSingleBot } = useBotOperations();
   const focusPath = useRecoilValue(focusPathState(skillId ?? projectId));
+  const showCreateDialogModal = useRecoilValue(showCreateDialogModalState);
   const locale = useRecoilValue(localeState(skillId ?? projectId));
   const undoFunction = useRecoilValue(undoFunctionState(skillId ?? projectId));
   const undoVersion = useRecoilValue(undoVersionState(skillId ?? projectId));
@@ -174,6 +176,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     createTrigger,
     deleteTrigger,
     displayManifestModal,
+    createDialogCancel,
   } = useRecoilValue(dispatcherState);
 
   const params = new URLSearchParams(location?.search);
@@ -730,6 +733,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   };
 
   const handleCreateDialog = (projectId: string) => {
+    createDialogBegin([], onCreateDialogComplete, projectId);
     setDialogModalInfo(projectId);
   };
 
@@ -741,6 +745,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
   const selectedTrigger = currentDialog?.triggers.find((t) => t.id === selected);
   const withWarning = triggerNotSupported(currentDialog, selectedTrigger);
+  const dialogCreateSource = dialogModalInfo ?? skillId ?? projectId;
 
   return (
     <React.Fragment>
@@ -829,14 +834,17 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         </LeftRightSplit>
       </div>
       <Suspense fallback={<LoadingSpinner />}>
-        {dialogModalInfo && (
-          <EditorExtension plugins={pluginConfig} projectId={dialogModalInfo} shell={shell}>
+        {showCreateDialogModal && (
+          <EditorExtension plugins={pluginConfig} projectId={dialogCreateSource} shell={shell}>
             <CreateDialogModal
-              isOpen
-              projectId={dialogModalInfo}
-              onDismiss={() => setDialogModalInfo(undefined)}
+              isOpen={showCreateDialogModal}
+              projectId={dialogCreateSource}
+              onDismiss={() => {
+                createDialogCancel(dialogCreateSource);
+                setDialogModalInfo(undefined);
+              }}
               onSubmit={(dialogName, dialogData) => {
-                handleCreateDialogSubmit(dialogModalInfo, dialogName, dialogData);
+                handleCreateDialogSubmit(dialogModalInfo ?? skillId ?? projectId, dialogName, dialogData);
               }}
             />
           </EditorExtension>
