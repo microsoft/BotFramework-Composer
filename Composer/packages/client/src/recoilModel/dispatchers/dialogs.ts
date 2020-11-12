@@ -3,7 +3,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 import { dialogIndexer, autofixReferInDialog, validateDialog } from '@bfc/indexers';
-import { DialogInfo } from '@bfc/shared';
+import { DialogInfo, checkForPVASchema } from '@bfc/shared';
 
 import {
   lgFilesState,
@@ -91,7 +91,10 @@ export const dialogsDispatcher = () => {
     }
     await createLgFileState(callbackHelpers, { id, content: '', projectId });
     await createLuFileState(callbackHelpers, { id, content: '', projectId });
-    await createQnAFileState(callbackHelpers, { id, content: '', projectId });
+
+    if (!checkForPVASchema(schemas.sdk)) {
+      await createQnAFileState(callbackHelpers, { id, content: '', projectId });
+    }
 
     set(dialogState({ projectId, dialogId: dialog.id }), dialog);
     set(dialogIdsState(projectId), (dialogsIds) => [...dialogsIds, dialog.id]);

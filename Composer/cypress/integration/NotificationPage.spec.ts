@@ -12,9 +12,9 @@ context('Notification Page', () => {
     cy.findByTestId('showcode').click();
     cy.get('textarea').type('#', { delay: 200 });
 
-    cy.findByTestId('LeftNav-CommandBarButtonNotifications').click();
+    cy.findByTestId('LeftNav-CommandBarButtonDiagnostics').click();
 
-    cy.findByTestId('notifications-table-view').within(() => {
+    cy.findByTestId('diagnostics-table-view').within(() => {
       cy.findAllByText('common.en-us.lg').should('exist').first().click();
     });
 
@@ -31,9 +31,9 @@ context('Notification Page', () => {
     cy.findByTestId('showcode').click();
     cy.get('textarea').type('t', { delay: 200 });
 
-    cy.findByTestId('LeftNav-CommandBarButtonNotifications').click();
+    cy.findByTestId('LeftNav-CommandBarButtonDiagnostics').click();
 
-    cy.findByTestId('notifications-table-view').within(() => {
+    cy.findByTestId('diagnostics-table-view').within(() => {
       cy.findAllByText('__TestToDoBotWithLuisSample.en-us.lu').should('exist').first().dblclick();
     });
 

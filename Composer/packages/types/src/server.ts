@@ -8,6 +8,7 @@ export type IBotProject = {
   fileStorage: any;
   dir: string;
   dataDir: string;
+  eTag?: string;
   id: string | undefined;
   name: string;
   builder: any;
