@@ -1,356 +1,356 @@
 {
   "Microsoft.AdaptiveDialog": {
     "form": {
-      "description": "This configures a data driven dialog via a collection of events and actions.",
-      "label": "Adaptive dialog",
+      "description": "Hiermee wordt een dialoog op basis van gegevens geconfigureerd via een verzameling gebeurtenissen en acties.",
+      "label": "Adaptieve dialoog",
       "properties": {
         "recognizer": {
-          "description": "To understand what the user says, your dialog needs a \"Recognizer\"; that includes example words and sentences that users may use.",
-          "label": "Language Understanding"
+          "description": "Als u wilt weten wat de gebruiker zegt, heeft uw dialoog een herkenningsfunctie nodig. Hieronder vallen voorbeeldwoorden en -zinnen die gebruikers kunnen gebruiken.",
+          "label": "Taalbegrip"
         }
       }
     }
   },
+  "Microsoft.Ask": {
+    "form": {
+      "label": "Een reactie verzenden om een vraag te stellen",
+      "subtitle": "Activiteit vragen"
+    }
+  },
+  "Microsoft.AttachmentInput": {
+    "form": {
+      "label": "Vragen om een bestand of een bijlage",
+      "subtitle": "Invoer van bijlage"
+    }
+  },
+  "Microsoft.ChoiceInput": {
+    "form": {
+      "label": "Vragen met meerdere keuzes",
+      "subtitle": "Invoer van keuze"
+    }
+  },
+  "Microsoft.ConfirmInput": {
+    "form": {
+      "label": "Vragen om bevestiging",
+      "subtitle": "Invoer bevestigen"
+    }
+  },
+  "Microsoft.DateTimeInput": {
+    "form": {
+      "label": "Vragen om een datum of tijd",
+      "subtitle": "Invoer van datum/tijd"
+    }
+  },
+  "Microsoft.NumberInput": {
+    "form": {
+      "label": "Vragen om een getal",
+      "subtitle": "Invoer van getallen"
+    }
+  },
+  "Microsoft.OAuthInput": {
+    "form": {
+      "label": "OAuth-aanmelding",
+      "subtitle": "OAuth-invoer"
+    }
+  },
+  "Microsoft.TextInput": {
+    "form": {
+      "label": "Vragen om tekst",
+      "subtitle": "Tekstinvoer"
+    }
+  },
   "Microsoft.BeginDialog": {
     "form": {
-      "label": "Begin a new dialog",
-      "subtitle": "Begin Dialog"
+      "label": "Een nieuwe dialoog beginnen",
+      "subtitle": "Dialoog beginnen"
     }
   },
   "Microsoft.BeginSkill": {
     "form": {
-      "label": "Connect to a skill",
-      "subtitle": "Skill Dialog"
+      "label": "Verbinding maken met een skill-bot",
+      "subtitle": "Dialoog van skill-bot"
     }
   },
   "Microsoft.BreakLoop": {
     "form": {
-      "label": "Break out of loop",
-      "subtitle": "Break out of loop"
+      "label": "Lus doorbreken",
+      "subtitle": "Lus doorbreken"
     }
   },
   "Microsoft.CancelAllDialogs": {
     "form": {
-      "label": "Cancel all active dialogs",
-      "subtitle": "Cancel All Dialogs"
+      "label": "Alle actieve dialogen annuleren",
+      "subtitle": "Alle dialogen annuleren"
     }
   },
   "Microsoft.ContinueLoop": {
     "form": {
-      "label": "Continue loop",
-      "subtitle": "Continue loop"
+      "label": "Doorgaan met lus",
+      "subtitle": "Doorgaan met lus"
     }
   },
   "Microsoft.DebugBreak": {
     "form": {
-      "label": "Debug Break"
+      "label": "Onderbrekingspunt bij foutopsporing"
     }
   },
   "Microsoft.DeleteProperties": {
     "form": {
-      "label": "Delete properties",
-      "subtitle": "Delete Properties"
+      "label": "Eigenschappen verwijderen",
+      "subtitle": "Eigenschappen verwijderen"
     }
   },
   "Microsoft.DeleteProperty": {
     "form": {
-      "label": "Delete a property",
-      "subtitle": "Delete Property"
+      "label": "Een eigenschap verwijderen",
+      "subtitle": "Eigenschap verwijderen"
     }
   },
   "Microsoft.EditActions": {
     "form": {
-      "label": "Modify active dialog",
-      "subtitle": "Edit Actions"
+      "label": "Actieve dialoog wijzigen",
+      "subtitle": "Acties bewerken"
     }
   },
   "Microsoft.EditArray": {
     "form": {
-      "label": "Edit an array property",
-      "subtitle": "Edit Array"
+      "label": "Een matrixeigenschap bewerken",
+      "subtitle": "Matrix bewerken"
     }
   },
   "Microsoft.EmitEvent": {
     "form": {
-      "label": "Emit a custom event",
-      "subtitle": "Emit Event"
+      "label": "Een aangepaste gebeurtenis verzenden",
+      "subtitle": "Gebeurtenis verzenden"
     }
   },
   "Microsoft.EndDialog": {
     "form": {
-      "label": "End this dialog",
-      "subtitle": "End Dialog"
+      "label": "Deze dialoog beëindigen",
+      "subtitle": "Dialoog beëindigen"
     }
   },
   "Microsoft.EndTurn": {
     "form": {
-      "label": "End turn",
-      "subtitle": "End Turn"
+      "label": "Taaluiting beëindigen",
+      "subtitle": "Taaluiting beëindigen"
     }
   },
   "Microsoft.Foreach": {
     "form": {
-      "label": "Loop: For each item",
-      "subtitle": "For Each"
+      "label": "Lus: voor elk item",
+      "subtitle": "Voor elk"
     }
   },
   "Microsoft.ForeachPage": {
     "form": {
-      "label": "Loop: For each page (multiple items)",
-      "subtitle": "For Each Page"
+      "label": "Lus: voor elke pagina (meerdere items)",
+      "subtitle": "Voor elke pagina"
     }
   },
   "Microsoft.HttpRequest": {
     "form": {
-      "label": "Send an HTTP request",
+      "label": "Een HTTP-aanvraag verzenden",
       "subtitle": "HTTP-aanvraag"
     }
   },
   "Microsoft.IfCondition": {
     "form": {
-      "label": "Branch: If/Else",
-      "subtitle": "If Condition"
+      "label": "Vertakking: if/else",
+      "subtitle": "If-voorwaarde"
     }
   },
   "Microsoft.LogAction": {
     "form": {
       "label": "Aanmelden bij console",
-      "subtitle": "Log Action"
+      "subtitle": "Actie registreren"
     }
   },
   "Microsoft.RepeatDialog": {
     "form": {
-      "label": "Repeat this dialog",
-      "subtitle": "Repeat Dialog"
+      "label": "Deze dialoog herhalen",
+      "subtitle": "Dialoog herhalen"
     }
   },
   "Microsoft.ReplaceDialog": {
     "form": {
-      "label": "Replace this dialog",
-      "subtitle": "Replace Dialog"
+      "label": "Deze dialoog vervangen",
+      "subtitle": "Dialoog vervangen"
     }
   },
   "Microsoft.SendActivity": {
     "form": {
-      "label": "Send a response",
-      "subtitle": "Send Activity"
+      "label": "Een antwoord verzenden",
+      "subtitle": "Activiteit verzenden"
     }
   },
   "Microsoft.SetProperties": {
     "form": {
-      "label": "Set properties",
-      "subtitle": "Set Properties"
+      "label": "Eigenschappen instellen",
+      "subtitle": "Eigenschappen instellen"
     }
   },
   "Microsoft.SetProperty": {
     "form": {
-      "label": "Set a property",
+      "label": "Een eigenschap instellen",
       "subtitle": "Eigenschap instellen"
     }
   },
   "Microsoft.SignOutUser": {
     "form": {
-      "label": "Sign out user",
-      "subtitle": "Signout User"
+      "label": "Gebruiker afmelden",
+      "subtitle": "Gebruiker afmelden"
     }
   },
   "Microsoft.SwitchCondition": {
     "form": {
-      "label": "Branch: Switch (multiple options)",
-      "subtitle": "Switch Condition"
+      "label": "Vertakking: schakelen (meerdere opties)",
+      "subtitle": "Van voorwaarde veranderen"
     }
   },
   "Microsoft.ThrowException": {
     "form": {
-      "label": "Throw an exception",
-      "subtitle": "Throw an exception"
+      "label": "Een uitzondering genereren",
+      "subtitle": "Een uitzondering genereren"
     }
   },
   "Microsoft.TraceActivity": {
     "form": {
-      "label": "Emit a trace event",
-      "subtitle": "Trace Activity"
-    }
-  },
-  "Microsoft.Ask": {
-    "form": {
-      "label": "Send a response to ask a question",
-      "subtitle": "Ask Activity"
-    }
-  },
-  "Microsoft.AttachmentInput": {
-    "form": {
-      "label": "Prompt for a file or an attachment",
-      "subtitle": "Attachment Input"
-    }
-  },
-  "Microsoft.ChoiceInput": {
-    "form": {
-      "label": "Prompt with multi-choice",
-      "subtitle": "Choice Input"
-    }
-  },
-  "Microsoft.ConfirmInput": {
-    "form": {
-      "label": "Prompt for confirmation",
-      "subtitle": "Confirm Input"
-    }
-  },
-  "Microsoft.DateTimeInput": {
-    "form": {
-      "label": "Prompt for a date or a time",
-      "subtitle": "Date Time Input"
-    }
-  },
-  "Microsoft.NumberInput": {
-    "form": {
-      "label": "Prompt for a number",
-      "subtitle": "Number Input"
-    }
-  },
-  "Microsoft.OAuthInput": {
-    "form": {
-      "label": "OAuth login",
-      "subtitle": "OAuth Input"
-    }
-  },
-  "Microsoft.TextInput": {
-    "form": {
-      "label": "Prompt for text",
-      "subtitle": "Tekstinvoer"
+      "label": "Een traceringsgebeurtenis verzenden",
+      "subtitle": "Traceringsgebeurtenis"
     }
   },
   "Microsoft.OnActivity": {
     "form": {
       "label": "Activiteiten",
-      "subtitle": "Activity received"
+      "subtitle": "Activiteit ontvangen"
     }
   },
   "Microsoft.OnAssignEntity": {
     "form": {
-      "label": "Handle a condition when an entity is assigned",
-      "subtitle": "EntityAssigned activity"
+      "label": "Een voorwaarde verwerken wanneer een entiteit wordt toegewezen",
+      "subtitle": "EntityAssigned-activiteit"
     }
   },
   "Microsoft.OnBeginDialog": {
     "form": {
-      "label": "Dialog started",
-      "subtitle": "Begin dialog event"
+      "label": "Dialoog gestart",
+      "subtitle": "Dialooggebeurtenis beginnen"
     }
   },
   "Microsoft.OnCancelDialog": {
     "form": {
-      "label": "Dialog cancelled",
-      "subtitle": "Cancel dialog event"
+      "label": "Dialoog geannuleerd",
+      "subtitle": "Dialooggebeurtenis annuleren"
     }
   },
   "Microsoft.OnCondition": {
     "form": {
-      "label": "Handle a condition",
+      "label": "Een voorwaarde verwerken",
       "subtitle": "Voorwaarde"
     }
   },
   "Microsoft.OnConversationUpdateActivity": {
     "form": {
-      "description": "Handle the events fired when a user begins a new conversation with the bot.",
+      "description": "De gebeurtenissen verwerken die worden geactiveerd wanneer een gebruiker een nieuw gesprek begint met de bot.",
       "label": "Begroeting",
-      "subtitle": "ConversationUpdate activity"
+      "subtitle": "ConversationUpdate-activiteit"
     }
   },
   "Microsoft.OnDialogEvent": {
     "form": {
-      "label": "Dialog events",
-      "subtitle": "Dialog event"
+      "label": "Dialooggebeurtenissen",
+      "subtitle": "Dialooggebeurtenis"
     }
   },
   "Microsoft.OnEndOfActions": {
     "form": {
-      "label": "Handle a condition when actions have ended",
-      "subtitle": "EndOfActions activity"
+      "label": "Een voorwaarde verwerken wanneer acties zijn beëindigd",
+      "subtitle": "EndOfActions-activiteit"
     }
   },
   "Microsoft.OnEndOfConversationActivity": {
     "form": {
-      "label": "Conversation ended",
-      "subtitle": "EndOfConversation activity"
+      "label": "Gesprek beëindigd",
+      "subtitle": "EndOfConversation-activiteit"
     }
   },
   "Microsoft.OnError": {
     "form": {
       "label": "Er is een fout opgetreden",
-      "subtitle": "Error event"
+      "subtitle": "Foutgebeurtenis"
     }
   },
   "Microsoft.OnEventActivity": {
     "form": {
-      "label": "Event received",
-      "subtitle": "Event activity"
+      "label": "Gebeurtenis ontvangen",
+      "subtitle": "Gebeurtenisactiviteit"
     }
   },
   "Microsoft.OnHandoffActivity": {
     "form": {
-      "label": "Handover to human",
-      "subtitle": "Handoff activity"
+      "label": "Overdracht aan mens",
+      "subtitle": "Overdrachtsactiviteit"
     }
   },
   "Microsoft.OnInstallationUpdateActivity": {
     "form": {
-      "label": "Installation updated",
-      "subtitle": "Installation updated activity"
+      "label": "De installatie is bijgewerkt",
+      "subtitle": "Activiteit: de installatie is bijgewerkt"
     }
   },
   "Microsoft.OnIntent": {
     "form": {
-      "label": "Intent recognized",
-      "subtitle": "Intent recognized"
+      "label": "Intentie herkend",
+      "subtitle": "Intentie herkend"
     }
   },
   "Microsoft.OnInvokeActivity": {
     "form": {
-      "label": "Conversation invoked",
-      "subtitle": "Invoke activity"
+      "label": "Gesprek aangeroepen",
+      "subtitle": "Activiteit aanroepen"
     }
   },
   "Microsoft.OnMessageActivity": {
     "form": {
-      "label": "Message received",
-      "subtitle": "Message received activity"
+      "label": "Bericht ontvangen",
+      "subtitle": "Activiteit: bericht ontvangen"
     }
   },
   "Microsoft.OnMessageDeleteActivity": {
     "form": {
-      "label": "Message deleted",
-      "subtitle": "Message deleted activity"
+      "label": "Bericht verwijderd",
+      "subtitle": "Activiteit: bericht verwijderd"
     }
   },
   "Microsoft.OnMessageReactionActivity": {
     "form": {
-      "label": "Message reaction",
-      "subtitle": "Message reaction activity"
+      "label": "Berichtreactie",
+      "subtitle": "Activiteit: berichtreactie"
     }
   },
   "Microsoft.OnMessageUpdateActivity": {
     "form": {
-      "label": "Message updated",
-      "subtitle": "Message updated activity"
+      "label": "Bericht bijgewerkt",
+      "subtitle": "Activiteit: bericht bijgewerkt"
     }
   },
   "Microsoft.OnRepromptDialog": {
     "form": {
-      "label": "Re-prompt for input",
-      "subtitle": "Reprompt dialog event"
+      "label": "Opnieuw vragen om invoer",
+      "subtitle": "Dialooggebeurtenis: opnieuw vragen"
     }
   },
   "Microsoft.OnTypingActivity": {
     "form": {
-      "label": "User is typing",
-      "subtitle": "Typing activity"
+      "label": "Gebruiker typt",
+      "subtitle": "Typactiviteit"
     }
   },
   "Microsoft.OnUnknownIntent": {
     "form": {
-      "label": "Unknown intent",
-      "subtitle": "Unknown intent recognized"
+      "label": "Onbekende intentie",
+      "subtitle": "Onbekende intentie herkend"
     }
   }
 }

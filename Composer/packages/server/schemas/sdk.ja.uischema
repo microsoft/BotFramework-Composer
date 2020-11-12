@@ -1,356 +1,356 @@
 {
   "Microsoft.AdaptiveDialog": {
     "form": {
-      "description": "This configures a data driven dialog via a collection of events and actions.",
-      "label": "Adaptive dialog",
+      "description": "これにより、イベントとアクションのコレクションを使用してデータドリブン ダイアログが構成されます。",
+      "label": "適応型ダイアログ",
       "properties": {
         "recognizer": {
-          "description": "To understand what the user says, your dialog needs a \"Recognizer\"; that includes example words and sentences that users may use.",
-          "label": "Language Understanding"
+          "description": "ユーザーが話す内容を理解するため、ダイアログには \"認識エンジン\" が必要です。これには、ユーザーが使用する可能性のあるサンプルの単語と文が含まれます。",
+          "label": "言語理解"
         }
       }
     }
   },
+  "Microsoft.Ask": {
+    "form": {
+      "label": "質問をするための応答を送信する",
+      "subtitle": "Ask アクティビティ"
+    }
+  },
+  "Microsoft.AttachmentInput": {
+    "form": {
+      "label": "ファイルまたは添付ファイルの入力を求めるプロンプト",
+      "subtitle": "添付ファイルの入力"
+    }
+  },
+  "Microsoft.ChoiceInput": {
+    "form": {
+      "label": "複数選択のプロンプト",
+      "subtitle": "選択肢の入力"
+    }
+  },
+  "Microsoft.ConfirmInput": {
+    "form": {
+      "label": "確認を求めるプロンプト",
+      "subtitle": "入力の確認"
+    }
+  },
+  "Microsoft.DateTimeInput": {
+    "form": {
+      "label": "日付または時刻の入力を求めるプロンプト",
+      "subtitle": "日付/時刻の入力"
+    }
+  },
+  "Microsoft.NumberInput": {
+    "form": {
+      "label": "数値の入力を求めるプロンプト",
+      "subtitle": "数値入力"
+    }
+  },
+  "Microsoft.OAuthInput": {
+    "form": {
+      "label": "OAuth ログイン",
+      "subtitle": "OAuth 入力"
+    }
+  },
+  "Microsoft.TextInput": {
+    "form": {
+      "label": "テキストの入力を求めるプロンプト",
+      "subtitle": "テキスト入力"
+    }
+  },
   "Microsoft.BeginDialog": {
     "form": {
-      "label": "Begin a new dialog",
-      "subtitle": "Begin Dialog"
+      "label": "新しいダイアログの開始",
+      "subtitle": "ダイアログの開始"
     }
   },
   "Microsoft.BeginSkill": {
     "form": {
-      "label": "Connect to a skill",
-      "subtitle": "Skill Dialog"
+      "label": "スキルへの接続",
+      "subtitle": "スキル ダイアログ"
     }
   },
   "Microsoft.BreakLoop": {
     "form": {
-      "label": "Break out of loop",
-      "subtitle": "Break out of loop"
+      "label": "ループの中断",
+      "subtitle": "ループの中断"
     }
   },
   "Microsoft.CancelAllDialogs": {
     "form": {
-      "label": "Cancel all active dialogs",
-      "subtitle": "Cancel All Dialogs"
+      "label": "すべてのアクティブなダイアログを取り消す",
+      "subtitle": "すべてのダイアログを取り消す"
     }
   },
   "Microsoft.ContinueLoop": {
     "form": {
-      "label": "Continue loop",
-      "subtitle": "Continue loop"
+      "label": "ループの続行",
+      "subtitle": "ループの続行"
     }
   },
   "Microsoft.DebugBreak": {
     "form": {
-      "label": "Debug Break"
+      "label": "デバッグ中断"
     }
   },
   "Microsoft.DeleteProperties": {
     "form": {
-      "label": "Delete properties",
-      "subtitle": "Delete Properties"
+      "label": "プロパティの削除",
+      "subtitle": "プロパティの削除"
     }
   },
   "Microsoft.DeleteProperty": {
     "form": {
-      "label": "Delete a property",
-      "subtitle": "Delete Property"
+      "label": "プロパティの削除",
+      "subtitle": "プロパティの削除"
     }
   },
   "Microsoft.EditActions": {
     "form": {
-      "label": "Modify active dialog",
-      "subtitle": "Edit Actions"
+      "label": "アクティブ ダイアログの変更",
+      "subtitle": "アクションの編集"
     }
   },
   "Microsoft.EditArray": {
     "form": {
-      "label": "Edit an array property",
-      "subtitle": "Edit Array"
+      "label": "配列プロパティの編集",
+      "subtitle": "配列の編集"
     }
   },
   "Microsoft.EmitEvent": {
     "form": {
-      "label": "Emit a custom event",
-      "subtitle": "Emit Event"
+      "label": "カスタム イベントの生成",
+      "subtitle": "イベントの生成"
     }
   },
   "Microsoft.EndDialog": {
     "form": {
-      "label": "End this dialog",
-      "subtitle": "End Dialog"
+      "label": "このダイアログを終了します",
+      "subtitle": "ダイアログの終了"
     }
   },
   "Microsoft.EndTurn": {
     "form": {
-      "label": "End turn",
-      "subtitle": "End Turn"
+      "label": "ターンの終了",
+      "subtitle": "ターンの終了"
     }
   },
   "Microsoft.Foreach": {
     "form": {
-      "label": "Loop: For each item",
-      "subtitle": "For Each"
+      "label": "ループ: 項目ごと",
+      "subtitle": "それぞれ"
     }
   },
   "Microsoft.ForeachPage": {
     "form": {
-      "label": "Loop: For each page (multiple items)",
-      "subtitle": "For Each Page"
+      "label": "ループ: ページごと (複数の項目)",
+      "subtitle": "ページごと"
     }
   },
   "Microsoft.HttpRequest": {
     "form": {
-      "label": "Send an HTTP request",
+      "label": "HTTP 要求の送信",
       "subtitle": "HTTP 要求"
     }
   },
   "Microsoft.IfCondition": {
     "form": {
-      "label": "Branch: If/Else",
-      "subtitle": "If Condition"
+      "label": "分岐: If/Else",
+      "subtitle": "if 条件"
     }
   },
   "Microsoft.LogAction": {
     "form": {
       "label": "コンソールにログを作成",
-      "subtitle": "Log Action"
+      "subtitle": "アクションのログ"
     }
   },
   "Microsoft.RepeatDialog": {
     "form": {
-      "label": "Repeat this dialog",
-      "subtitle": "Repeat Dialog"
+      "label": "このダイアログを繰り返す",
+      "subtitle": "ダイアログの繰り返し"
     }
   },
   "Microsoft.ReplaceDialog": {
     "form": {
-      "label": "Replace this dialog",
-      "subtitle": "Replace Dialog"
+      "label": "このダイアログを置換する",
+      "subtitle": "ダイアログの置換"
     }
   },
   "Microsoft.SendActivity": {
     "form": {
-      "label": "Send a response",
-      "subtitle": "Send Activity"
+      "label": "応答の送信",
+      "subtitle": "アクティビティの送信"
     }
   },
   "Microsoft.SetProperties": {
     "form": {
-      "label": "Set properties",
+      "label": "プロパティの設定",
       "subtitle": "プロパティの設定"
     }
   },
   "Microsoft.SetProperty": {
     "form": {
-      "label": "Set a property",
+      "label": "プロパティの設定",
       "subtitle": "プロパティの設定"
     }
   },
   "Microsoft.SignOutUser": {
     "form": {
-      "label": "Sign out user",
-      "subtitle": "Signout User"
+      "label": "ユーザーのサインアウト",
+      "subtitle": "ユーザーのサインアウト"
     }
   },
   "Microsoft.SwitchCondition": {
     "form": {
-      "label": "Branch: Switch (multiple options)",
-      "subtitle": "Switch Condition"
+      "label": "分岐: スイッチ (複数のオプション)",
+      "subtitle": "条件の切り替え"
     }
   },
   "Microsoft.ThrowException": {
     "form": {
-      "label": "Throw an exception",
-      "subtitle": "Throw an exception"
+      "label": "例外のスロー ",
+      "subtitle": "例外のスロー "
     }
   },
   "Microsoft.TraceActivity": {
     "form": {
-      "label": "Emit a trace event",
-      "subtitle": "Trace Activity"
-    }
-  },
-  "Microsoft.Ask": {
-    "form": {
-      "label": "Send a response to ask a question",
-      "subtitle": "Ask Activity"
-    }
-  },
-  "Microsoft.AttachmentInput": {
-    "form": {
-      "label": "Prompt for a file or an attachment",
-      "subtitle": "Attachment Input"
-    }
-  },
-  "Microsoft.ChoiceInput": {
-    "form": {
-      "label": "Prompt with multi-choice",
-      "subtitle": "Choice Input"
-    }
-  },
-  "Microsoft.ConfirmInput": {
-    "form": {
-      "label": "Prompt for confirmation",
-      "subtitle": "Confirm Input"
-    }
-  },
-  "Microsoft.DateTimeInput": {
-    "form": {
-      "label": "Prompt for a date or a time",
-      "subtitle": "Date Time Input"
-    }
-  },
-  "Microsoft.NumberInput": {
-    "form": {
-      "label": "Prompt for a number",
-      "subtitle": "Number Input"
-    }
-  },
-  "Microsoft.OAuthInput": {
-    "form": {
-      "label": "OAuth login",
-      "subtitle": "OAuth Input"
-    }
-  },
-  "Microsoft.TextInput": {
-    "form": {
-      "label": "Prompt for text",
-      "subtitle": "テキスト入力"
+      "label": "トレース イベントの生成",
+      "subtitle": "アクティビティのトレース"
     }
   },
   "Microsoft.OnActivity": {
     "form": {
       "label": "アクティビティ",
-      "subtitle": "Activity received"
+      "subtitle": "アクティビティを受信しました"
     }
   },
   "Microsoft.OnAssignEntity": {
     "form": {
-      "label": "Handle a condition when an entity is assigned",
-      "subtitle": "EntityAssigned activity"
+      "label": "エンティティが割り当てられたときに条件を処理する",
+      "subtitle": "EntityAssigned アクティビティ"
     }
   },
   "Microsoft.OnBeginDialog": {
     "form": {
-      "label": "Dialog started",
-      "subtitle": "Begin dialog event"
+      "label": "ダイアログが開始しました",
+      "subtitle": "ダイアログの開始イベント"
     }
   },
   "Microsoft.OnCancelDialog": {
     "form": {
-      "label": "Dialog cancelled",
-      "subtitle": "Cancel dialog event"
+      "label": "ダイアログが取り消されました",
+      "subtitle": "ダイアログ イベントを取り消す"
     }
   },
   "Microsoft.OnCondition": {
     "form": {
-      "label": "Handle a condition",
+      "label": "条件の処理",
       "subtitle": "条件"
     }
   },
   "Microsoft.OnConversationUpdateActivity": {
     "form": {
-      "description": "Handle the events fired when a user begins a new conversation with the bot.",
+      "description": "ユーザーがボットとの新しい会話を開始したときに発生するイベントを処理します。",
       "label": "案内",
-      "subtitle": "ConversationUpdate activity"
+      "subtitle": "ConversationUpdate アクティビティ"
     }
   },
   "Microsoft.OnDialogEvent": {
     "form": {
-      "label": "Dialog events",
-      "subtitle": "Dialog event"
+      "label": "ダイアログ イベント",
+      "subtitle": "ダイアログ イベント"
     }
   },
   "Microsoft.OnEndOfActions": {
     "form": {
-      "label": "Handle a condition when actions have ended",
-      "subtitle": "EndOfActions activity"
+      "label": "アクションが終了したときに条件を処理する",
+      "subtitle": "EndOfActions アクティビティ"
     }
   },
   "Microsoft.OnEndOfConversationActivity": {
     "form": {
-      "label": "Conversation ended",
-      "subtitle": "EndOfConversation activity"
+      "label": "会話が終了しました",
+      "subtitle": "EndOfConversation アクティビティ"
     }
   },
   "Microsoft.OnError": {
     "form": {
       "label": "エラーが発生しました",
-      "subtitle": "Error event"
+      "subtitle": "エラー イベント"
     }
   },
   "Microsoft.OnEventActivity": {
     "form": {
-      "label": "Event received",
-      "subtitle": "Event activity"
+      "label": "イベントを受信しました",
+      "subtitle": "イベント アクティビティ"
     }
   },
   "Microsoft.OnHandoffActivity": {
     "form": {
-      "label": "Handover to human",
-      "subtitle": "Handoff activity"
+      "label": "人間への引き渡し",
+      "subtitle": "ハンドオフ アクティビティ"
     }
   },
   "Microsoft.OnInstallationUpdateActivity": {
     "form": {
-      "label": "Installation updated",
-      "subtitle": "Installation updated activity"
+      "label": "インストールの更新済み",
+      "subtitle": "インストールの更新済みアクティビティ"
     }
   },
   "Microsoft.OnIntent": {
     "form": {
-      "label": "Intent recognized",
-      "subtitle": "Intent recognized"
+      "label": "インテントが認識されました",
+      "subtitle": "インテントが認識されました"
     }
   },
   "Microsoft.OnInvokeActivity": {
     "form": {
-      "label": "Conversation invoked",
-      "subtitle": "Invoke activity"
+      "label": "会話が呼び出されました",
+      "subtitle": "アクティビティの呼び出し"
     }
   },
   "Microsoft.OnMessageActivity": {
     "form": {
-      "label": "Message received",
-      "subtitle": "Message received activity"
+      "label": "メッセージを受信しました",
+      "subtitle": "メッセージの受信アクティビティ"
     }
   },
   "Microsoft.OnMessageDeleteActivity": {
     "form": {
-      "label": "Message deleted",
-      "subtitle": "Message deleted activity"
+      "label": "メッセージが削除されました",
+      "subtitle": "メッセージの削除アクティビティ"
     }
   },
   "Microsoft.OnMessageReactionActivity": {
     "form": {
-      "label": "Message reaction",
-      "subtitle": "Message reaction activity"
+      "label": "メッセージの応答",
+      "subtitle": "メッセージの応答アクティビティ"
     }
   },
   "Microsoft.OnMessageUpdateActivity": {
     "form": {
-      "label": "Message updated",
-      "subtitle": "Message updated activity"
+      "label": "メッセージが更新されました",
+      "subtitle": "メッセージの更新アクティビティ"
     }
   },
   "Microsoft.OnRepromptDialog": {
     "form": {
-      "label": "Re-prompt for input",
-      "subtitle": "Reprompt dialog event"
+      "label": "入力を再確認する",
+      "subtitle": "ダイアログ イベントを再確認する"
     }
   },
   "Microsoft.OnTypingActivity": {
     "form": {
-      "label": "User is typing",
-      "subtitle": "Typing activity"
+      "label": "ユーザーが入力中",
+      "subtitle": "入力アクティビティ"
     }
   },
   "Microsoft.OnUnknownIntent": {
     "form": {
-      "label": "Unknown intent",
-      "subtitle": "Unknown intent recognized"
+      "label": "不明なインテント",
+      "subtitle": "認識された不明なインテント"
     }
   }
 }
