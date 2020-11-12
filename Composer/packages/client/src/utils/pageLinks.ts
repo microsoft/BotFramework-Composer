@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 import formatMessage from 'format-message';
 import { ExtensionPageContribution } from '@bfc/extension-client';
+import { checkForPVASchema } from '@bfc/shared';
 
 export type ExtensionPageConfig = ExtensionPageContribution & { id: string };
 
@@ -10,13 +11,15 @@ export const topLinks = (
   openedDialogId: string,
   pluginPages: ExtensionPageConfig[],
   showFormDialog: boolean,
-  rootProjectId: string | undefined
+  schema: any,
+  rootProjectId?: string
 ) => {
   const botLoaded = !!projectId;
   const linkBase =
     projectId === rootProjectId || rootProjectId == null
       ? `/bot/${projectId}/`
       : `/bot/${rootProjectId}/skill/${projectId}/`;
+
   let links = [
     {
       to: '/home',
@@ -81,8 +84,9 @@ export const topLinks = (
       : []),
   ];
 
-  if (process.env.COMPOSER_AUTH_PROVIDER === 'abs-h') {
-    links = links.filter((link) => link.to !== '/home');
+  // TODO: refactor when Composer can better model the left nav based on schema
+  if (schema && checkForPVASchema(schema)) {
+    links = links.filter((link) => link.to.indexOf('/knowledge-base') == -1 && link.to.indexOf('/skills') == -1);
   }
 
   if (pluginPages.length > 0) {

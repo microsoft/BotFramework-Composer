@@ -18,5 +18,6 @@ module.exports = {
   },
   resolve: {
     extensions: ['.js', '.ts', '.tsx', '.json'],
+    mainFields: ['main'],
   },
 };

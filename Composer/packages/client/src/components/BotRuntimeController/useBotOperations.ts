@@ -36,7 +36,7 @@ export function useBotOperations() {
       }
     } else {
       // Regex recognizer
-      await botRuntimeOperations?.startBot(projectId, config);
+      await botRuntimeOperations?.startBot(projectId);
     }
   };
 
