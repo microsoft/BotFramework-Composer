@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { PluginConfig } from '@bfc/extension-client';
-import { SDKKinds } from '@bfc/shared';
+import { SDKKinds, checkForPVASchema } from '@bfc/shared';
 import formatMessage from 'format-message';
 
 const config: PluginConfig = {
@@ -15,12 +15,16 @@ const config: PluginConfig = {
         },
         intentEditor: 'LuIntentEditor',
         seedNewRecognizer: (shellData) => {
-          const { qnaFiles, luFiles, currentDialog, locale } = shellData;
+          const { qnaFiles, luFiles, currentDialog, locale, schemas } = shellData;
           const qnaFile = qnaFiles.find((f) => f.id === `${currentDialog.id}.${locale}`);
           const luFile = luFiles.find((f) => f.id === `${currentDialog.id}.${locale}`);
 
-          if (!qnaFile || !luFile) {
-            alert(formatMessage(`NO LU OR QNA FILE WITH NAME { id }`, { id: currentDialog.id }));
+          if (!luFile) {
+            alert(formatMessage(`NO LU  FILE WITH NAME { id }`, { id: currentDialog.id }));
+          }
+
+          if (!qnaFile && !checkForPVASchema(schemas.sdk)) {
+            alert(formatMessage(`NO QNA FILE WITH NAME { id }`, { id: currentDialog.id }));
           }
 
           return `${currentDialog.id}.lu.qna`;
