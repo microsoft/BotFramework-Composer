@@ -14,6 +14,7 @@ import {
 } from '@botframework-composer/types';
 
 import { BotProjectService } from '../../services/project';
+import { FeatureFlagService } from '../../services/featureFlags';
 
 export const DEFAULT_RUNTIME = 'csharp-azurewebapp';
 
@@ -48,6 +49,10 @@ class ExtensionContext implements IExtensionContext {
 
   public get botProjectService() {
     return BotProjectService;
+  }
+
+  public get featureFlagService() {
+    return FeatureFlagService;
   }
 
   // allow webserver to be set programmatically

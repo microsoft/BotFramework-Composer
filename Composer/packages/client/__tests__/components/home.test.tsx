@@ -3,8 +3,8 @@
 
 import * as React from 'react';
 import { fireEvent, render } from '@botframework-composer/test-utils';
-import { ProjectTemplate } from '@bfc/shared';
 import { Toolbar } from '@bfc/ui-shared';
+import { BotTemplate } from '@bfc/shared';
 
 import { RecentBotList } from '../../src/pages/home/RecentBotList';
 import { ExampleList } from '../../src/pages/home/ExampleList';
@@ -33,7 +33,7 @@ describe('<Home/>', () => {
     const templates = [
       { description: 'echo bot', id: 'EchoBot', name: 'Echo Bot' },
       { description: 'empty bot', id: 'EmptyBot', name: 'Empty Bot' },
-    ] as ProjectTemplate[];
+    ] as BotTemplate[];
     const onClickTemplate = jest.fn((item) => item);
     const { container, getByText } = render(<ExampleList examples={templates} onClick={onClickTemplate} />);
     expect(container).toHaveTextContent('Echo Bot');

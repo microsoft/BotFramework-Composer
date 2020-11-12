@@ -85,9 +85,19 @@ const deleteDialog = async (req: Request, res: Response) => {
 
   const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
-    await currentProject.deleteFormDialog(dialogId);
-    const updatedProject = await BotProjectService.getProjectById(projectId, user);
-    res.status(200).json({ id: projectId, ...updatedProject.getProject() });
+    try {
+      const rootDialogId = currentProject.rootDialogId;
+      if (rootDialogId === dialogId) {
+        throw new Error('root dialog is not allowed to delete');
+      }
+      await currentProject.deleteFormDialog(dialogId);
+      const updatedProject = await BotProjectService.getProjectById(projectId, user);
+      res.status(200).json({ id: projectId, ...updatedProject.getProject() });
+    } catch (e) {
+      res.status(400).json({
+        message: e.message,
+      });
+    }
   } else {
     res.status(404).json({
       message: `Could not delete form dialog. Project ${projectId} not found.`,
