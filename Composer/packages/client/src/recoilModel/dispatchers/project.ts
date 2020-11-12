@@ -145,30 +145,31 @@ export const projectDispatcher = () => {
       try {
         const { templateId, name, description, location, schemaUrl, locale, qnaKbUrls } = newProjectData;
         set(botOpeningState, true);
-
-        const { projectId, mainDialog } = await createNewBotFromTemplate(
+        const postCreateCallBack = async (projectId: string, mainDialog: string) => {
+          const skillNameIdentifier: string = await getSkillNameIdentifier(callbackHelpers, getFileNameFromPath(name));
+          set(botNameIdentifierState(projectId), skillNameIdentifier);
+          set(projectMetaDataState(projectId), {
+            isRemote: false,
+            isRootBot: false,
+          });
+          set(botProjectIdsState, (current) => [...current, projectId]);
+          await dispatcher.addLocalSkillToBotProjectFile(projectId);
+          navigateToBot(callbackHelpers, projectId, mainDialog, qnaKbUrls, templateId);
+        };
+        await createNewBotFromTemplate(
           callbackHelpers,
           templateId,
           name,
           description,
           location,
+          postCreateCallBack,
           schemaUrl,
           locale
         );
-        const skillNameIdentifier: string = await getSkillNameIdentifier(callbackHelpers, getFileNameFromPath(name));
-        set(botNameIdentifierState(projectId), skillNameIdentifier);
-        set(projectMetaDataState(projectId), {
-          isRemote: false,
-          isRootBot: false,
-        });
-        set(botProjectIdsState, (current) => [...current, projectId]);
-        await dispatcher.addLocalSkillToBotProjectFile(projectId);
-        navigateToBot(callbackHelpers, projectId, mainDialog, qnaKbUrls, templateId);
-        return projectId;
       } catch (ex) {
         handleProjectFailure(callbackHelpers, ex);
       } finally {
-        set(botOpeningState, false);
+        // set(botOpeningState, false);
       }
     }
   );
@@ -227,30 +228,35 @@ export const projectDispatcher = () => {
       await flushExistingTasks(callbackHelpers);
       set(botOpeningState, true);
       const { templateId, name, description, location, schemaUrl, locale, qnaKbUrls } = newProjectData;
-      const { projectId, mainDialog } = await createNewBotFromTemplate(
+
+      const postCreateCallBack = (projectId: string, mainDialog: string) => {
+        set(botProjectIdsState, [projectId]);
+
+        // Post project creation
+        set(projectMetaDataState(projectId), {
+          isRootBot: true,
+          isRemote: false,
+        });
+        projectIdCache.set(projectId);
+        navigateToBot(callbackHelpers, projectId, mainDialog, qnaKbUrls, templateId);
+      };
+
+      await createNewBotFromTemplate(
         callbackHelpers,
         templateId,
         name,
         description,
         location,
+        postCreateCallBack,
         schemaUrl,
         locale
       );
-      set(botProjectIdsState, [projectId]);
-
-      // Post project creation
-      set(projectMetaDataState(projectId), {
-        isRootBot: true,
-        isRemote: false,
-      });
-      projectIdCache.set(projectId);
-      navigateToBot(callbackHelpers, projectId, mainDialog, qnaKbUrls, templateId);
     } catch (ex) {
       set(botProjectIdsState, []);
       handleProjectFailure(callbackHelpers, ex);
       navigateTo('/home');
     } finally {
-      set(botOpeningState, false);
+      // set(botOpeningState, false);
     }
   });
 

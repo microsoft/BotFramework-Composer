@@ -2,14 +2,8 @@
 // Licensed under the MIT License.
 
 import { BackgroundProcessManager } from '../services/backgroundProcessManager';
-import { BotProjectService } from '../services/project';
 
 const getStatus = async (req, res) => {
-  //   const type = req.params.type;
-  //   const target = req.params.target;
-  //   const projectId = req.params.projectId;
-  //   const user = await ExtensionContext.getUserFromRequest(req);
-  // const currentProject = await BotProjectService.getProjectById(projectId);
   const jobId = req.params.jobId;
   try {
     if (jobId) {

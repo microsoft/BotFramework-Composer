@@ -19,7 +19,7 @@ import { BackgroundProcessManager } from '../services/backgroundProcessManager';
 
 import { Path } from './../utility/path';
 
-async function createProject(req: Request, res: Response) {
+async function createProjectAsync(req: Request, jobId: string) {
   let { templateId } = req.body;
   const { name, description, storageId, location, schemaUrl, locale, preserveRoot } = req.body;
   const user = await ExtensionContext.getUserFromRequest(req);
@@ -47,10 +47,10 @@ async function createProject(req: Request, res: Response) {
 
   try {
     await BotProjectService.cleanProject(locationRef);
+    BackgroundProcessManager.updateProcess(jobId, 202, 'Grabbing remote template');
     const newProjRef = await AssetService.manager.copyProjectTemplateTo(templateId, locationRef, user, locale);
     const id = await BotProjectService.openProject(newProjRef, user);
     const currentProject = await BotProjectService.getProjectById(id, user);
-    const jobId = BackgroundProcessManager.startProcess(202, id, 'create', 'Creating Bot Project');
 
     // inject shared content into every new project.  this comes from assets/shared
     await AssetService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage);
@@ -64,11 +64,12 @@ async function createProject(req: Request, res: Response) {
           await runtime.eject(currentProject, currentProject.fileStorage);
         }
 
+        BackgroundProcessManager.updateProcess(jobId, 202, 'building runtime');
         // install all dependencies and build the app
         await runtime.build(runtimePath, currentProject);
 
         const manifestFile = runtime.identifyManifest(runtimePath);
-
+        BackgroundProcessManager.updateProcess(jobId, 202, 'Merging packages');
         // run the merge command to merge all package dependencies from the template to the bot project
         const realMerge = new SchemaMerger(
           [manifestFile],
@@ -82,6 +83,7 @@ async function createProject(req: Request, res: Response) {
         );
 
         await realMerge.merge();
+        BackgroundProcessManager.updateProcess(jobId, 202, 'Wrapping up');
       }
       await currentProject.updateBotInfo(name, description, preserveRoot);
       if (schemaUrl) {
@@ -91,16 +93,22 @@ async function createProject(req: Request, res: Response) {
 
       const project = currentProject.getProject();
       log('Project created successfully.');
-      res.status(200).json({
+      BackgroundProcessManager.updateProcess(jobId, 200, 'Created Successfully', {
         id,
         ...project,
       });
     }
   } catch (err) {
-    res.status(404).json({
-      message: err instanceof Error ? err.message : err,
-    });
+    BackgroundProcessManager.updateProcess(jobId, 404, err instanceof Error ? err.message : err);
   }
+}
+
+function createProject(req: Request, res: Response) {
+  const jobId = BackgroundProcessManager.startProcess(202, 'create', 'Creating Bot Project');
+  createProjectAsync(req, jobId);
+  res.status(202).json({
+    jobId: jobId,
+  });
 }
 
 async function getProjectById(req: Request, res: Response) {

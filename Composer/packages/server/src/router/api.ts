@@ -95,7 +95,7 @@ router.get('/featureFlags', FeatureFlagController.getFeatureFlags);
 router.post('/featureFlags', FeatureFlagController.updateFeatureFlags);
 
 // Process status
-router.get('/status/:projectId/:type/:target/:jobId', StatusController.getStatus);
+router.get('/status/:jobId', StatusController.getStatus);
 
 const errorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
   Promise.resolve(handler(req, res, next)).catch(next);

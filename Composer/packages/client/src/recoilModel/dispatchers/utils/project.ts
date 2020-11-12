@@ -23,6 +23,7 @@ import objectSet from 'lodash/set';
 import { stringify } from 'query-string';
 import { CallbackInterface } from 'recoil';
 import { v4 as uuid } from 'uuid';
+import { AxiosResponse } from 'axios';
 
 import { BotStatus, QnABotTemplateId } from '../../../constants';
 import settingStorage from '../../../utils/dialogSettingStorage';
@@ -64,6 +65,8 @@ import {
   skillsState,
   dialogIdsState,
   showCreateQnAFromUrlDialogState,
+  botOpeningMessage,
+  botOpeningState,
 } from '../../atoms';
 import * as botstates from '../../atoms/botState';
 import lgWorker from '../../parsers/lgWorker';
@@ -155,8 +158,8 @@ export const navigateToBot = (
   }
 };
 
-export const loadProjectData = (response) => {
-  const { files, botName, settings, skills: skillContent, id: projectId } = response.data;
+export const loadProjectData = (responseData) => {
+  const { files, botName, settings, skills: skillContent, id: projectId } = responseData;
   const mergedSettings = getMergedSettings(projectId, settings);
   const storedLocale = languageStorage.get(botName)?.locale;
   const locale = settings.languages.includes(storedLocale) ? storedLocale : settings.defaultLanguage;
@@ -168,7 +171,7 @@ export const loadProjectData = (response) => {
 
   return {
     botFiles: { ...indexedFiles, qnaFiles: updateQnAFiles, mergedSettings },
-    projectData: response.data,
+    projectData: responseData,
     error: undefined,
   };
 };
@@ -407,11 +410,12 @@ export const createNewBotFromTemplate = async (
   name: string,
   description: string,
   location: string,
+  postCreateCallBack: (projectId: string, mainDialog: string) => void,
   schemaUrl?: string,
   locale?: string
 ) => {
   const { set } = callbackHelpers;
-  const response = await httpClient.post(`/projects`, {
+  const jobIdResponse = await httpClient.post(`/projects`, {
     storageId: 'default',
     templateId,
     name,
@@ -420,21 +424,50 @@ export const createNewBotFromTemplate = async (
     schemaUrl,
     locale,
   });
-  const { botFiles, projectData } = loadProjectData(response);
-  const projectId = response.data.id;
-  if (settingStorage.get(projectId)) {
-    settingStorage.remove(projectId);
-  }
-  const currentBotProjectFileIndexed: BotProjectFile = botFiles.botProjectSpaceFiles[0];
-  set(botProjectFileState(projectId), currentBotProjectFileIndexed);
 
-  const mainDialog = await initBotState(callbackHelpers, projectData, botFiles);
-  // if create from QnATemplate, continue creation flow.
-  if (templateId === QnABotTemplateId) {
-    set(showCreateQnAFromUrlDialogState(projectId), true);
-  }
+  const jobId = jobIdResponse.data.jobId;
 
-  return { projectId, mainDialog };
+  let response: AxiosResponse<any> = {} as AxiosResponse<any>;
+
+  const timer = setInterval(async () => {
+    try {
+      response = await httpClient.get(`/status/${jobId}`);
+      console.log(response);
+      if (response.data?.status === 200 && response.data.data && response.data.data != {}) {
+        // success
+        clearInterval(timer);
+        const { botFiles, projectData } = loadProjectData(response.data.data);
+        const projectId = response.data.id;
+        if (settingStorage.get(projectId)) {
+          settingStorage.remove(projectId);
+        }
+        const currentBotProjectFileIndexed: BotProjectFile = botFiles.botProjectSpaceFiles[0];
+        set(botProjectFileState(projectId), currentBotProjectFileIndexed);
+
+        const mainDialog = await initBotState(callbackHelpers, projectData, botFiles);
+        // if create from QnATemplate, continue creation flow.
+        if (templateId === QnABotTemplateId) {
+          set(showCreateQnAFromUrlDialogState(projectId), true);
+        }
+
+        await postCreateCallBack(projectId, mainDialog);
+        set(botOpeningState, false);
+      } else {
+        if (response.data.status !== 500) {
+          // pending
+          set(botOpeningMessage, response.data.message);
+        } else {
+          // failure
+          console.log(response.data.message);
+          set(botOpeningMessage, response.data.message);
+          clearInterval(timer);
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      clearInterval(timer);
+    }
+  }, 5000);
 };
 
 const addProjectToBotProjectSpace = (set, projectId: string, skillCt: number) => {
