@@ -65,10 +65,10 @@ export const BotStatusList: React.FC<IBotStatusListProps> = (props) => {
       return <Icon iconName="Cancel" style={{ color: 'red', fontWeight: 600 }} />;
     }
   };
-  const headerStyle = { padding: '0 32px 0 11px', fontWeight: 400 };
-  const bodyStyle = { minWidth: '114px', maxWidth: '134px', padding: '11px 32px 11px 12px' };
-  const trStyle = { borderTop: '1px solid #EDEBE9' };
-  const spanStyle = { wordBreak: 'break-word' };
+  const headerStyle = css({ padding: '0 32px 0 11px', fontWeight: 400 });
+  const bodyStyle = css({ minWidth: '114px', maxWidth: '134px', padding: '11px 32px 11px 12px', textAlign: 'center' });
+  const trStyle = css({ borderTop: '1px solid #EDEBE9' });
+  const spanStyle = css({ wordBreak: 'break-word' });
 
   const RenderItem = (item: IBotStatus, index: number) => {
     const publishTargetOptions = (): IDropdownOption[] => {

@@ -45,7 +45,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const [showNotifications, setShowNotifications] = useState<{ [key: string]: boolean }>({});
   // fill Settings, status, publishType, publish target for bot from botProjectMeta
   const botSettingsList: { [key: string]: any }[] = [];
-  const [botStatusList, setBotStatusList] = useState<IBotStatus[]>([]);
   const statusList: IBotStatus[] = [];
   const botPublishTypesList: { [key: string]: any }[] = [];
   const publishHistoyList: { [key: string]: any }[] = [];
@@ -92,7 +91,8 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       statusList.push(botStatus);
     });
 
-  const [botPublishHistoryList, setBotPublishHistoryList] = useState<{ [key: string]: any }[]>(statusList);
+  const [botStatusList, setBotStatusList] = useState<IBotStatus[]>(statusList);
+  const [botPublishHistoryList, setBotPublishHistoryList] = useState<{ [key: string]: any }[]>(publishHistoyList);
   const [showLog, setShowLog] = useState(false);
   const [publishDialogHidden, setPublishDialogHidden] = useState(true);
 
@@ -155,7 +155,6 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
             ?.publishHistory[bot.publishTarget];
           if (botPublishHistory && botPublishHistory.length > 0) {
             if (botPublishHistory[0].status === 202) {
-              getPublishHistory(projectId, selectedTarget);
               getUpdatedStatus(selectedTarget);
             } else if (botPublishHistory[0].status === 200 || botPublishHistory[0].status === 500) {
               if (showNotifications[bot.id]) {
@@ -163,6 +162,14 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
                 addNotification(createNotification(publishedNotificationCard(bot)));
                 setShowNotifications({ ...showNotifications, [bot.id]: false });
               }
+              setBotStatusList(
+                botStatusList.map((item) => {
+                  if (item.id === bot.id) {
+                    item.status = botPublishHistory[0].status;
+                  }
+                  return item;
+                })
+              );
             } else if (selectedTarget && selectedTarget.lastPublished && botPublishHistory.length === 0) {
               // if the history is EMPTY, but we think we've done a publish based on lastPublished timestamp,
               // we still poll for the results IF we see that a publish has happened previously
@@ -242,6 +249,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     const notification = createNotification(pendingNotificationCard(items));
     setPendingNotification(notification);
     addNotification(notification);
+
     // publish to remote
     if (items.length > 0) {
       for (const bot of items) {
@@ -272,6 +280,16 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
           }
         }
       }
+      setBotStatusList(
+        botStatusList.map((bot) => {
+          const item = items.find((i) => i.id === bot.id);
+          if (item) {
+            item.status = 202;
+            return item;
+          }
+          return bot;
+        })
+      );
     }
   };
   const changePublishTarget = (publishTarget, botStatus) => {
