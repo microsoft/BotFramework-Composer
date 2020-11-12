@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import { BackgroundProcessManager } from '../services/backgroundProcessManager';
-import { BotProjectService } from '../services/project';
 
 const getStatus = async (req, res) => {
   const jobId = req.params.jobId;

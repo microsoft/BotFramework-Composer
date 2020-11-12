@@ -451,6 +451,50 @@ export const createNewBotFromTemplate = async (
   return { projectId, mainDialog };
 };
 
+export const createNewBotFromTemplateV2 = async (
+  callbackHelpers,
+  templateId: string,
+  name: string,
+  description: string,
+  location: string,
+  schemaUrl?: string,
+  locale?: string,
+  templateDir?: string,
+  eTag?: string,
+  alias?: string,
+  preserveRoot?: boolean
+) => {
+  const { set } = callbackHelpers;
+  const response = await httpClient.post(`/v2/projects`, {
+    storageId: 'default',
+    templateId,
+    name,
+    description,
+    location,
+    schemaUrl,
+    locale,
+    templateDir,
+    eTag,
+    alias,
+    preserveRoot,
+  });
+  const { botFiles, projectData } = loadProjectData(response);
+  const projectId = response.data.id;
+  if (settingStorage.get(projectId)) {
+    settingStorage.remove(projectId);
+  }
+  const currentBotProjectFileIndexed: BotProjectFile = botFiles.botProjectSpaceFiles[0];
+  set(botProjectFileState(projectId), currentBotProjectFileIndexed);
+
+  const mainDialog = await initBotState(callbackHelpers, projectData, botFiles);
+  // if create from QnATemplate, continue creation flow.
+  if (templateId === QnABotTemplateId) {
+    set(showCreateQnAFromUrlDialogState(projectId), true);
+  }
+
+  return { projectId, mainDialog };
+};
+
 const addProjectToBotProjectSpace = (set, projectId: string, skillCt: number) => {
   let isBotProjectLoaded = false;
   set(botProjectIdsState, (current: string[]) => {

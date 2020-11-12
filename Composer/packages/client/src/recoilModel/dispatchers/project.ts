@@ -274,6 +274,56 @@ export const projectDispatcher = () => {
     }
   });
 
+  const createNewBotV2 = useRecoilCallback((callbackHelpers: CallbackInterface) => async (newProjectData: any) => {
+    const { set } = callbackHelpers;
+    try {
+      await flushExistingTasks(callbackHelpers);
+      set(botOpeningState, true);
+      const {
+        templateId,
+        name,
+        description,
+        location,
+        schemaUrl,
+        locale,
+        qnaKbUrls,
+        templateDir,
+        eTag,
+        urlSuffix,
+        alias,
+        preserveRoot,
+      } = newProjectData;
+      const { projectId, mainDialog } = await createNewBotFromTemplate(
+        callbackHelpers,
+        templateId,
+        name,
+        description,
+        location,
+        schemaUrl,
+        locale,
+        templateDir,
+        eTag,
+        alias,
+        preserveRoot
+      );
+      set(botProjectIdsState, [projectId]);
+
+      // Post project creation
+      set(projectMetaDataState(projectId), {
+        isRootBot: true,
+        isRemote: false,
+      });
+      projectIdCache.set(projectId);
+      navigateToBot(callbackHelpers, projectId, mainDialog, qnaKbUrls, templateId, urlSuffix);
+    } catch (ex) {
+      set(botProjectIdsState, []);
+      handleProjectFailure(callbackHelpers, ex);
+      navigateTo('/home');
+    } finally {
+      set(botOpeningState, false);
+    }
+  });
+
   const saveProjectAs = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (oldProjectId, name, description, location) => {
       const { set } = callbackHelpers;
@@ -380,6 +430,7 @@ export const projectDispatcher = () => {
   return {
     openProject,
     createNewBot,
+    createNewBotV2,
     deleteBot,
     saveProjectAs,
     fetchProjectById,

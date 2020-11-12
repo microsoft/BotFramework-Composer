@@ -1,12 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import * as fs from 'fs';
-
 import { Request, Response } from 'express';
 import { Archiver } from 'archiver';
 import { ExtensionContext } from '@bfc/extension';
-import { SchemaMerger } from '@microsoft/bf-dialog/lib/library/schemaMerger';
 import { remove } from 'fs-extra';
 
 import log from '../logger';
@@ -16,7 +13,6 @@ import { LocationRef } from '../models/bot/interface';
 import { getSkillManifest } from '../models/bot/skillManager';
 import StorageService from '../services/storage';
 import settings from '../settings';
-import { BackgroundProcessManager } from '../services/backgroundProcessManager';
 import { ejectAndMerge, getLocationRef, getNewProjRef } from '../utility/project';
 
 import { Path } from './../utility/path';
@@ -40,7 +36,7 @@ async function createProject(req: Request, res: Response) {
     templateId = 'EmptyBot';
   }
 
-  const locationRef = getLocationRef(location, storageId);
+  const locationRef = getLocationRef(location, storageId, name);
 
   try {
     // the template was downloaded remotely (via import) and will be used instead of an internal Composer template
@@ -524,7 +520,7 @@ async function createProjectV2(req: Request, res: Response) {
     templateId = 'EmptyBot';
   }
 
-  const locationRef = getLocationRef(location, storageId);
+  const locationRef = getLocationRef(location, storageId, name);
   try {
     // the template was downloaded remotely (via import) and will be used instead of an internal Composer template
     const createFromRemoteTemplate = !!templateDir;

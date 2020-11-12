@@ -15,7 +15,7 @@ import { BotProject } from '../models/bot/botProject';
 
 import { Path } from './path';
 
-export function getLocationRef(location: any, storageId: any) {
+export function getLocationRef(location: any, storageId: any, name: any) {
   // default the path to the default folder.
   let path = settings.botsFolder;
   // however, if path is specified as part of post body, use that one.

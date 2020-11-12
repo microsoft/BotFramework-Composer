@@ -127,7 +127,11 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
       alias: formData.alias,
       preserveRoot: formData.preserveRoot,
     };
-    createNewBot(newBotData);
+    if (templateId === 'conversationalcore') {
+      createNewBotV2(newBotData);
+    } else {
+      createNewBot(newBotData);
+    }
   };
 
   const handleSaveAs = (formData) => {
