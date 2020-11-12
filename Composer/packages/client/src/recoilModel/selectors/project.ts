@@ -6,7 +6,6 @@ import { BotAssets, DialogInfo, FormDialogSchema, JsonSchemaFile } from '@bfc/sh
 import isEmpty from 'lodash/isEmpty';
 import { selector, selectorFamily } from 'recoil';
 
-import settingStorage from '../../utils/dialogSettingStorage';
 import {
   botDisplayNameState,
   botErrorState,
@@ -86,8 +85,8 @@ export const botProjectSpaceSelector = selector({
       const botNameId = get(botNameIdentifierState(projectId));
       const setting = get(settingsState(projectId));
       const skillManifests = get(skillManifestsState(projectId));
-      const localeSetting = settingStorage.get(projectId);
-      const diagnostics = BotIndexer.validate({ dialogs, setting, skillManifests }, localeSetting);
+
+      const diagnostics = BotIndexer.validate({ dialogs, setting, skillManifests });
 
       return {
         dialogs,
@@ -146,7 +145,6 @@ export const botProjectDiagnosticsSelector = selector({
       const qnaFiles = get(qnaFilesState(projectId));
       const botProjectFile = get(botProjectFileState(projectId));
       const jsonSchemaFiles = get(jsonSchemaFilesState(projectId));
-      const localeSetting = settingStorage.get(projectId);
       const botAssets: BotAssets = {
         projectId,
         dialogs,
@@ -162,7 +160,7 @@ export const botProjectDiagnosticsSelector = selector({
         recognizers: [],
         crossTrainConfig: {},
       };
-      return BotIndexer.validate(botAssets, localeSetting);
+      return BotIndexer.validate(botAssets);
     });
     return result;
   },

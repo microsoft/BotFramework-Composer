@@ -98,7 +98,7 @@ class Indexer {
       recognizers: recognizerIndexer.index(recognizers),
       crossTrainConfig: crossTrainConfigIndexer.index(crossTrainConfigs),
     };
-    const diagnostics = BotIndexer.validate({ ...assets, setting: settings }, {});
+    const diagnostics = BotIndexer.validate({ ...assets, setting: settings });
     return { ...assets, diagnostics };
   }
 }
