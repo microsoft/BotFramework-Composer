@@ -28,6 +28,7 @@ export type PullResponse = {
   error?: any;
   eTag?: string;
   status: number;
+  /** Path to the pulled .zip containing updated bot content */
   zipPath?: string;
 };
 

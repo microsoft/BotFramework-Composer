@@ -499,7 +499,7 @@ const LogDialog = (props) => {
     <Dialog
       dialogContentProps={logDialogProps}
       hidden={false}
-      minWidth={450}
+      minWidth={700}
       modalProps={{ isBlocking: true }}
       onDismiss={props.onDismiss}
     >

@@ -109,7 +109,7 @@ export const ImportModal: React.FC<RouteComponentProps> = (props) => {
             title: '',
             onRenderCardContent: ImportSuccessNotificationWrapper({
               importedToExisting: true,
-              location: existingProject.location,
+              location: path,
             }),
           });
           addNotification(notification);
