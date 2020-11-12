@@ -75,12 +75,10 @@ export const buildConfigurationSelector = selector({
     const localProjects = get(localBotsWithoutErrorsSelector);
 
     return localProjects
-      .filter((projectId: string, index) => {
+      .filter((projectId: string) => {
         const schema = get(schemasState(projectId));
-        if (index === 1) {
-          return false;
-        }
-        return !checkForPVASchema(schema.sdk);
+        const isPvaBot = !!checkForPVASchema(schema.sdk);
+        return !isPvaBot;
       })
       .map((projectId: string) => {
         const result = get(buildEssentialsSelector(projectId));
