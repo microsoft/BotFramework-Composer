@@ -14,7 +14,7 @@ import {
   actionsSeedState,
   showCreateDialogModalState,
   dialogState,
-} from '../atoms/botState';
+} from '../atoms';
 import { dispatcherState } from '../DispatcherWrapper';
 
 import { createLgFileState, removeLgFileState } from './lg';

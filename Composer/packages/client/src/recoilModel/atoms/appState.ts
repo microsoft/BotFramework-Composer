@@ -236,3 +236,8 @@ export const pageElementState = atom<{ [page in PageMode]?: { [key: string]: any
     qna: {},
   },
 });
+
+export const showCreateDialogModalState = atom<boolean>({
+  key: getFullyQualifiedKey('showCreateDialogModal'),
+  default: false,
+});
