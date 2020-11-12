@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useRef, useState, Fragment, useLayoutEffect } from 'react';
+import { useRef, useState, Fragment, useLayoutEffect, MutableRefObject } from 'react';
 // eslint-disable-next-line @typescript-eslint/camelcase
 import { atom, useRecoilTransactionObserver_UNSTABLE, Snapshot, useRecoilState } from 'recoil';
 import once from 'lodash/once';
@@ -74,7 +74,7 @@ const wrapDispatcher = (dispatchers, forceUpdate) => {
     };
     boundDispatchers[dispatcherName] = dispatcher;
     return boundDispatchers;
-  }, {} as any);
+  }, {} as Dispatcher);
 };
 
 const InitDispatcher = ({ onLoad }) => {
@@ -82,7 +82,7 @@ const InitDispatcher = ({ onLoad }) => {
   const prepareAxiosWithRecoil = once(prepareAxios);
 
   // Use a ref to ensure the dispatcher is only created once
-  const dispatcherRef = useRef(wrapDispatcher(createDispatchers(), forceUpdate));
+  const dispatcherRef: MutableRefObject<Dispatcher> = useRef(wrapDispatcher(createDispatchers(), forceUpdate));
 
   const [currentDispatcherState, setDispatcher] = useRecoilState(dispatcherState);
 
