@@ -5,10 +5,58 @@
       "label": "Adaptiv dialogruta",
       "properties": {
         "recognizer": {
-          "description": "Om du vill förstå vad användaren säger måste din dialogruta vara försedd med en tolk som innehåller exempelord och meningar som användarna kan använda.",
-          "label": "Language Understanding"
+          "description": "Om du vill förstå vad användaren säger måste din dialogruta vara försedd med ett identifieringsobekt som innehåller exempelord och meningar som användarna kan använda.",
+          "label": "Språkförståelse"
         }
       }
+    }
+  },
+  "Microsoft.Ask": {
+    "form": {
+      "label": "Skicka ett svar för att ställa en fråga",
+      "subtitle": "Fråga aktivitet"
+    }
+  },
+  "Microsoft.AttachmentInput": {
+    "form": {
+      "label": "Fråga efter en fil eller bilaga",
+      "subtitle": "Indata för bifogad fil"
+    }
+  },
+  "Microsoft.ChoiceInput": {
+    "form": {
+      "label": "Prompt med flera alternativ",
+      "subtitle": "Utvalda indata"
+    }
+  },
+  "Microsoft.ConfirmInput": {
+    "form": {
+      "label": "Fråga efter bekräftelse",
+      "subtitle": "Bekräfta indata"
+    }
+  },
+  "Microsoft.DateTimeInput": {
+    "form": {
+      "label": "Fråga efter datum eller tid",
+      "subtitle": "Inmatning av datum/tid"
+    }
+  },
+  "Microsoft.NumberInput": {
+    "form": {
+      "label": "Fråga efter ett nummer",
+      "subtitle": "Nummerindata"
+    }
+  },
+  "Microsoft.OAuthInput": {
+    "form": {
+      "label": "OAuth-inloggning",
+      "subtitle": "OAuth-indata"
+    }
+  },
+  "Microsoft.TextInput": {
+    "form": {
+      "label": "Fråga efter text",
+      "subtitle": "Textinmatning"
     }
   },
   "Microsoft.BeginDialog": {
@@ -20,7 +68,7 @@
   "Microsoft.BeginSkill": {
     "form": {
       "label": "Anslut till en färdighet",
-      "subtitle": "Skill Dialog"
+      "subtitle": "Färdighetsdialog"
     }
   },
   "Microsoft.BreakLoop": {
@@ -115,31 +163,31 @@
   "Microsoft.LogAction": {
     "form": {
       "label": "Logga till konsol",
-      "subtitle": "Log Action"
+      "subtitle": "Loggåtgärd"
     }
   },
   "Microsoft.RepeatDialog": {
     "form": {
       "label": "Upprepa den här dialogrutan",
-      "subtitle": "Repeat Dialog"
+      "subtitle": "Upprepa dialog"
     }
   },
   "Microsoft.ReplaceDialog": {
     "form": {
       "label": "Ersätt den här dialogrutan",
-      "subtitle": "Replace Dialog"
+      "subtitle": "Ersätt dialog"
     }
   },
   "Microsoft.SendActivity": {
     "form": {
       "label": "Skicka ett svar",
-      "subtitle": "Send Activity"
+      "subtitle": "Skicka aktivitet"
     }
   },
   "Microsoft.SetProperties": {
     "form": {
       "label": "Konfigurera egenskaper",
-      "subtitle": "Set Properties"
+      "subtitle": "Ange egenskaper"
     }
   },
   "Microsoft.SetProperty": {
@@ -151,73 +199,25 @@
   "Microsoft.SignOutUser": {
     "form": {
       "label": "Logga ut användare",
-      "subtitle": "Signout User"
+      "subtitle": "Logga ut användare"
     }
   },
   "Microsoft.SwitchCondition": {
     "form": {
       "label": "Gren: Växla (flera alternativ)",
-      "subtitle": "Switch Condition"
+      "subtitle": "Växlingsvillkor"
     }
   },
   "Microsoft.ThrowException": {
     "form": {
-      "label": "Throw an exception",
-      "subtitle": "Throw an exception"
+      "label": "Utlösa ett undantag",
+      "subtitle": "Utlösa ett undantag"
     }
   },
   "Microsoft.TraceActivity": {
     "form": {
       "label": "Generera en spårningshändelse",
-      "subtitle": "Trace Activity"
-    }
-  },
-  "Microsoft.Ask": {
-    "form": {
-      "label": "Send a response to ask a question",
-      "subtitle": "Ask Activity"
-    }
-  },
-  "Microsoft.AttachmentInput": {
-    "form": {
-      "label": "Fråga efter en fil eller bilaga",
-      "subtitle": "Indata för bifogad fil"
-    }
-  },
-  "Microsoft.ChoiceInput": {
-    "form": {
-      "label": "Fråga med flera alternativ",
-      "subtitle": "Utvalda indata"
-    }
-  },
-  "Microsoft.ConfirmInput": {
-    "form": {
-      "label": "Fråga efter bekräftelse",
-      "subtitle": "Bekräfta indata"
-    }
-  },
-  "Microsoft.DateTimeInput": {
-    "form": {
-      "label": "Fråga efter datum eller tid",
-      "subtitle": "Inmatning av datum/tid"
-    }
-  },
-  "Microsoft.NumberInput": {
-    "form": {
-      "label": "Fråga efter ett nummer",
-      "subtitle": "Number Input"
-    }
-  },
-  "Microsoft.OAuthInput": {
-    "form": {
-      "label": "OAuth-inloggning",
-      "subtitle": "OAuth Input"
-    }
-  },
-  "Microsoft.TextInput": {
-    "form": {
-      "label": "Fråga efter text",
-      "subtitle": "Textinmatning"
+      "subtitle": "Spårningsaktivitet"
     }
   },
   "Microsoft.OnActivity": {
@@ -228,8 +228,8 @@
   },
   "Microsoft.OnAssignEntity": {
     "form": {
-      "label": "Handle a condition when an entity is assigned",
-      "subtitle": "EntityAssigned activity"
+      "label": "Hanterar ett villkor när en entitet har tilldelats",
+      "subtitle": "EntityAssigned-aktivitet"
     }
   },
   "Microsoft.OnBeginDialog": {
@@ -246,13 +246,13 @@
   },
   "Microsoft.OnCondition": {
     "form": {
-      "label": "Handle a condition",
+      "label": "Hantera ett villkor",
       "subtitle": "Villkor"
     }
   },
   "Microsoft.OnConversationUpdateActivity": {
     "form": {
-      "description": "Handle the events fired when a user begins a new conversation with the bot.",
+      "description": "Hantera de händelser som startas när en användare påbörjar en ny konversation med roboten.",
       "label": "Hälsning",
       "subtitle": "ConversationUpdate-aktivitet"
     }
@@ -260,13 +260,13 @@
   "Microsoft.OnDialogEvent": {
     "form": {
       "label": "Dialogrutehändelser",
-      "subtitle": "Dialog event"
+      "subtitle": "Dialogrutehändelse"
     }
   },
   "Microsoft.OnEndOfActions": {
     "form": {
-      "label": "Handle a condition when actions have ended",
-      "subtitle": "EndOfActions activity"
+      "label": "Hantera ett villkor när åtgärderna har avslutats",
+      "subtitle": "EndOfActions-aktivitet"
     }
   },
   "Microsoft.OnEndOfConversationActivity": {
@@ -295,8 +295,8 @@
   },
   "Microsoft.OnInstallationUpdateActivity": {
     "form": {
-      "label": "Installation updated",
-      "subtitle": "Installation updated activity"
+      "label": "Installationen har uppdaterats",
+      "subtitle": "Installationen uppdaterade aktivitet"
     }
   },
   "Microsoft.OnIntent": {

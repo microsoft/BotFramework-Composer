@@ -15,6 +15,7 @@ import * as ExtensionsController from '../controllers/extensions';
 import { FeatureFlagController } from '../controllers/featureFlags';
 import { AuthController } from '../controllers/auth';
 import { csrfProtection } from '../middleware/csrfProtection';
+import { ImportController } from '../controllers/import';
 import { StatusController } from '../controllers/status';
 
 import { UtilitiesController } from './../controllers/utilities';
@@ -37,6 +38,9 @@ router.post('/projects/:projectId/build', ProjectController.build);
 router.post('/projects/:projectId/qnaSettings/set', ProjectController.setQnASettings);
 router.post('/projects/:projectId/project/saveAs', ProjectController.saveProjectAs);
 router.get('/projects/:projectId/export', ProjectController.exportProject);
+router.get('/projects/alias/:alias', ProjectController.getProjectByAlias);
+router.post('/projects/:projectId/backup', ProjectController.backupProject);
+router.post('/projects/:projectId/copyTemplateToExisting', ProjectController.copyTemplateToExistingProject);
 
 // form dialog generation apis
 router.post('/formDialogs/expandJsonSchemaProperty', FormDialogController.expandJsonSchemaProperty);
@@ -63,6 +67,7 @@ router.post('/publish/:projectId/publish/:target', PublishController.publish);
 router.get('/publish/:projectId/history/:target', PublishController.history);
 router.post('/publish/:projectId/rollback/:target', PublishController.rollback);
 router.post('/publish/:projectId/stopPublish/:target', PublishController.stopBot);
+router.post('/publish/:projectId/pull/:target', PublishController.pull);
 
 router.get('/publish/:method', PublishController.publish);
 
@@ -93,6 +98,10 @@ router.get('/auth/getAccessToken', csrfProtection, AuthController.getAccessToken
 // FeatureFlags
 router.get('/featureFlags', FeatureFlagController.getFeatureFlags);
 router.post('/featureFlags', FeatureFlagController.updateFeatureFlags);
+
+// importing
+router.post('/import/:source', ImportController.startImport);
+router.post('/import/:source/authenticate', ImportController.authenticate);
 
 // Process status
 router.get('/status/:projectId/:type/:target/:jobId', StatusController.getStatus);
