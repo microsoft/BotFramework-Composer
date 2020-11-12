@@ -13,7 +13,6 @@ import { EjectController } from '../controllers/eject';
 import { FormDialogController } from '../controllers/formDialog';
 import * as ExtensionsController from '../controllers/extensions';
 import { FeatureFlagController } from '../controllers/featureFlags';
-import { OrchestratorController } from '../controllers/orchestrator';
 import { AuthController } from '../controllers/auth';
 import { csrfProtection } from '../middleware/csrfProtection';
 import { ImportController } from '../controllers/import';
@@ -97,9 +96,6 @@ router.get('/auth/getAccessToken', csrfProtection, AuthController.getAccessToken
 //FeatureFlags
 router.get('/featureFlags', FeatureFlagController.getFeatureFlags);
 router.post('/featureFlags', FeatureFlagController.updateFeatureFlags);
-
-//Orchestrator-specific routes
-router.get('/orchestrator/downloadModel', OrchestratorController.downloadModel);
 
 // importing
 router.post('/import/:source', ImportController.startImport);

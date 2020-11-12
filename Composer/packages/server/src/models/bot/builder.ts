@@ -12,7 +12,7 @@ import { IOrchestratorBuildOutput, IOrchestratorNLRList, IOrchestratorProgress }
 import { Path } from '../../utility/path';
 import { IFileStorage } from '../storage/interface';
 import log from '../../logger';
-import { writeFile } from 'fs';
+import { writeFile, existsSync } from 'fs';
 
 const crossTrainer = require('@microsoft/bf-lu/lib/parser/cross-train/crossTrainer.js');
 const luBuild = require('@microsoft/bf-lu/lib/parser/lubuild/builder.js');
@@ -112,20 +112,28 @@ export class Builder {
     } else {
       appDataPath = process.env.APPDATA || process.env.HOME || '';
     }
-    let baseModelPath = Path.resolve(appDataPath, 'BotFrameworkComposer', 'models', 'microsoft.dte.00.06.en');
+    let baseModelPath = Path.resolve(appDataPath, 'BotFrameworkComposer', 'models');
     console.log('Saving models to: ' + baseModelPath);
     return baseModelPath;
   };
 
   public doOrchestratorBuildAsync = async (luFiles: FileInfo[]) => {
     //orchestrator stuff
-    //let nlrList = await this.runOrchestratorNlrList();
-    //let defaultNLR = nlrList.default;
-    //let modelPath = Path.resolve(Path.join('models', defaultNLR));
-    let modelPath = await this.getModelPathAsync();
+    let nlrList = await this.runOrchestratorNlrList();
+    let defaultNLR = nlrList.default;
+    let modelPath = Path.resolve(await this.getModelPathAsync(), defaultNLR.replace('.onnx', ''));
+
+    if (!existsSync(modelPath)) {
+      let handler: IOrchestratorProgress = (status) => {
+        console.log(status);
+      };
+      await this.runOrchestratorNlrGet(modelPath, defaultNLR, handler, handler);
+    } else {
+      console.log('already exists');
+    }
+
     console.log('modelPath: ' + modelPath);
     let returnData = await this.runOrchestratorBuild(luFiles, modelPath);
-    console.log(returnData.outputs[0].id);
 
     let orchestratorSettings: any = {
       orchestrator: {
