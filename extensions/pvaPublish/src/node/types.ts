@@ -6,6 +6,7 @@ export type PVAPublishJob = {
   operationId: string;
   startTimeUtc: string;
   state: PublishState;
+  testUrl: string;
 };
 
 type DiagnosticInfo = {
@@ -52,6 +53,7 @@ export interface PublishResult {
   message: string;
   status?: number;
   time?: Date;
+  action?: { href: string; label: string };
 }
 
 /** Copied from @bfc/extension */

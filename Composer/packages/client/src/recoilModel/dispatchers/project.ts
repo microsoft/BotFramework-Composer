@@ -32,6 +32,7 @@ import { logMessage, setError } from './../dispatchers/shared';
 import {
   checkIfBotExistsInBotProjectFile,
   createNewBotFromTemplate,
+  fetchProjectDataById,
   flushExistingTasks,
   getSkillNameIdentifier,
   handleProjectFailure,
@@ -174,7 +175,7 @@ export const projectDispatcher = () => {
   );
 
   const openProject = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (path: string, storageId = 'default') => {
+    (callbackHelpers: CallbackInterface) => async (path: string, storageId = 'default', navigate = true) => {
       const { set } = callbackHelpers;
       try {
         set(botOpeningState, true);
@@ -187,7 +188,9 @@ export const projectDispatcher = () => {
           isRemote: false,
         });
         projectIdCache.set(projectId);
-        navigateToBot(callbackHelpers, projectId, mainDialog);
+        if (navigate) {
+          navigateToBot(callbackHelpers, projectId, mainDialog);
+        }
       } catch (ex) {
         set(botProjectIdsState, []);
         removeRecentProject(callbackHelpers, path);
@@ -226,7 +229,20 @@ export const projectDispatcher = () => {
     try {
       await flushExistingTasks(callbackHelpers);
       set(botOpeningState, true);
-      const { templateId, name, description, location, schemaUrl, locale, qnaKbUrls } = newProjectData;
+      const {
+        templateId,
+        name,
+        description,
+        location,
+        schemaUrl,
+        locale,
+        qnaKbUrls,
+        templateDir,
+        eTag,
+        urlSuffix,
+        alias,
+        preserveRoot,
+      } = newProjectData;
       const { projectId, mainDialog } = await createNewBotFromTemplate(
         callbackHelpers,
         templateId,
@@ -234,7 +250,11 @@ export const projectDispatcher = () => {
         description,
         location,
         schemaUrl,
-        locale
+        locale,
+        templateDir,
+        eTag,
+        alias,
+        preserveRoot
       );
       set(botProjectIdsState, [projectId]);
 
@@ -244,7 +264,7 @@ export const projectDispatcher = () => {
         isRemote: false,
       });
       projectIdCache.set(projectId);
-      navigateToBot(callbackHelpers, projectId, mainDialog, qnaKbUrls, templateId);
+      navigateToBot(callbackHelpers, projectId, mainDialog, qnaKbUrls, templateId, urlSuffix);
     } catch (ex) {
       set(botProjectIdsState, []);
       handleProjectFailure(callbackHelpers, ex);
@@ -350,6 +370,13 @@ export const projectDispatcher = () => {
     await initBotState(callbackHelpers, projectData, botFiles);
   };
 
+  /** Resets the file persistence of a project, and then reloads the bot state. */
+  const reloadExistingProject = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
+    callbackHelpers.reset(filePersistenceState(projectId));
+    const { projectData, botFiles } = await fetchProjectDataById(projectId);
+    await initBotState(callbackHelpers, projectData, botFiles);
+  });
+
   return {
     openProject,
     createNewBot,
@@ -367,5 +394,6 @@ export const projectDispatcher = () => {
     addRemoteSkillToBotProject,
     replaceSkillInBotProject,
     reloadProject,
+    reloadExistingProject,
   };
 };

@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { DefaultButton, IconButton } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { useRecoilValue } from 'recoil';
@@ -34,6 +34,13 @@ const iconSectionContainer = css`
   }
 `;
 
+const disabledStyle = css`
+  &:before {
+    opacity: 0.4;
+  }
+  pointer-events: none;
+`;
+
 const startPanelsContainer = css`
   display: flex;
   flex-direction: 'row';
@@ -47,6 +54,7 @@ const BotController: React.FC = () => {
   const [isControllerHidden, setControllerVisibility] = useState(true);
   const { onboardingAddCoachMarkRef } = useRecoilValue(dispatcherState);
   const onboardRef = useCallback((startBot) => onboardingAddCoachMarkRef({ startBot }), []);
+  const [disableStartBots, setDisableOnStartBotsWidget] = useState(false);
 
   const target = useRef(null);
   const botControllerMenuTarget = useRef(null);
@@ -54,6 +62,14 @@ const BotController: React.FC = () => {
   useClickOutside(botControllerMenuTarget, () => {
     setControllerVisibility(true);
   });
+
+  useEffect(() => {
+    if (projectCollection.length === 0) {
+      setDisableOnStartBotsWidget(true);
+      return;
+    }
+    setDisableOnStartBotsWidget(false);
+  }, [projectCollection]);
 
   const running = useMemo(() => !projectCollection.every(({ status }) => status === BotStatus.unConnected), [
     projectCollection,
@@ -93,11 +109,19 @@ const BotController: React.FC = () => {
       {projectCollection.map(({ projectId }) => {
         return <BotRuntimeStatus key={projectId} projectId={projectId} />;
       })}
-      <div ref={target} css={startPanelsContainer}>
+      <div ref={target} css={[startPanelsContainer]}>
         <DefaultButton
           primary
-          aria-roledescription={formatMessage('bot controller')}
-          iconProps={{ iconName: running ? 'CircleStopSolid' : 'Play' }}
+          aria-roledescription={formatMessage('Bot Controller')}
+          disabled={disableStartBots}
+          iconProps={{
+            iconName: running ? 'CircleStopSolid' : 'Play',
+            styles: {
+              root: {
+                color: `${NeutralColors.white}`,
+              },
+            },
+          }}
           menuAs={() => null}
           styles={{
             root: {
@@ -115,9 +139,10 @@ const BotController: React.FC = () => {
         >
           <span>{buttonText}</span>
         </DefaultButton>
-        <div ref={onboardRef} css={iconSectionContainer}>
+        <div ref={onboardRef} css={[iconSectionContainer, disableStartBots ? disabledStyle : '']}>
           <IconButton
             ariaDescription={formatMessage('Open start bots panel')}
+            disabled={disableStartBots}
             iconProps={{
               iconName: 'ProductList',
             }}

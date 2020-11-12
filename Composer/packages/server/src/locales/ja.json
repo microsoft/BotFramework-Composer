@@ -1,93 +1,96 @@
 {
   "0_bytes_a1e1cdb3": {
-    "message": "0 Bytes"
+    "message": "0 バイト"
   },
   "5_minute_intro_7ea06d2b": {
-    "message": "5 Minute Intro"
+    "message": "5 分のイントロ"
   },
   "ErrorInfo_part1": {
-    "message": "An error occured in the form editor!"
+    "message": "フォーム エディターでエラーが発生しました。"
   },
   "ErrorInfo_part2": {
-    "message": "This is likely due to malformed data or missing functionality in Composer."
+    "message": "これは、データの形式に誤りがあるか、Composer の機能が不足している可能性があります。"
   },
   "ErrorInfo_part3": {
-    "message": "Try navigating to another node in the visual editor."
+    "message": "ビジュアル エディターで別のノードに移動してみてください。"
   },
   "a_dialog_file_must_have_a_name_123ff67d": {
-    "message": "a dialog file must have a name"
+    "message": "ダイアログ ファイルには名前が必要です"
   },
   "a_form_dialog_enables_your_bot_to_collect_pieces_o_fdd3fe56": {
-    "message": "A form dialog enables your bot to collect pieces of information ."
+    "message": "フォーム ダイアログを使用すると、ボットで情報の断片を収集できます。"
+  },
+  "a_knowledge_base_name_cannot_contain_spaces_or_spe_91dd53ac": {
+    "message": "A knowledge base name cannot contain spaces or special characters. Use letters, numbers, -, or _."
   },
   "a_minimap_gives_an_overview_of_your_source_code_fo_9a897f4f": {
-    "message": "A minimap gives an overview of your source code for quick navigation and code understanding."
+    "message": "ミニマップには、迅速なナビゲーションとコード理解のためにソース コードの概要が示されています。"
   },
   "a_newer_version_of_the_provisioning_scripts_has_be_85d3ad94": {
-    "message": "A newer version of the provisioning scripts has been found, and this project can be updated to the latest."
+    "message": "新しいバージョンのプロビジョニング スクリプトが見つかりました。このプロジェクトを最新のものに更新することができます。"
   },
   "a_profile_with_that_name_already_exists_7c559958": {
-    "message": "A profile with that name already exists."
+    "message": "その名前のプロファイルは既に存在します。"
   },
   "a_property_is_a_piece_of_information_that_your_bot_eccd34bf": {
-    "message": "A property is a piece of information that your bot will collect. The property name is the name used in Composer; it is not necessarily the same text that will appear in your bot''s messages."
+    "message": "プロパティはボットが収集する情報の断片です。プロパティ名は Composer で使用される名前です。ボットのメッセージに表示されるものと同じテキストとは限りません。"
   },
   "a_subscription_key_is_created_when_you_create_a_qn_37a6926f": {
-    "message": "A subscription key is created when you create a QnA Maker resource."
+    "message": "QnA Maker リソースを作成すると、サブスクリプション キーが作成されます。"
   },
-  "a_valid_url_should_start_with_http_or_https_d24b3591": {
-    "message": "A valid url should start with http:// or https://"
+  "a_valid_url_should_start_with_http_or_https_327b1a30": {
+    "message": "A valid URL should start with http:// or https://"
   },
   "about_70c18bba": {
     "message": "バージョン情報"
   },
   "accepted_values_b4224bcd": {
-    "message": "Accepted values"
+    "message": "受け入れられる値"
   },
   "accepts_multiple_values_73658f63": {
-    "message": "Accepts multiple values"
+    "message": "複数の値を受け入れる"
   },
   "access_external_resources_7e37fe21": {
-    "message": "Access external resources"
+    "message": "外部リソースにアクセス"
   },
   "action_created_f80af9a0": {
-    "message": "Action created"
+    "message": "作成されたアクション"
   },
   "action_deleted_a10c002b": {
-    "message": "Action deleted"
+    "message": "削除されたアクション"
   },
   "action_focused_400ee4af": {
-    "message": "Action focused"
+    "message": "フォーカスされたアクション"
   },
   "action_unfocused_18a2800e": {
-    "message": "Action unfocused"
+    "message": "フォーカスされていないアクション"
   },
   "actions_copied_2821ab27": {
-    "message": "Actions copied"
+    "message": "コピーされたアクション"
   },
   "actions_created_6c5acc11": {
-    "message": "Actions created"
+    "message": "作成されたアクション"
   },
   "actions_cut_929f4c37": {
-    "message": "Actions cut"
+    "message": "切り取られたアクション"
   },
   "actions_define_b_how_the_bot_responds_b_to_a_certa_890a71f4": {
-    "message": "Actions define <b>how the bot responds</b> to a certain trigger."
+    "message": "アクションは特定のトリガーに<b>ボットが応答する方法</b>を定義します。"
   },
   "actions_deleted_355c359a": {
-    "message": "Actions deleted"
+    "message": "削除されたアクション"
   },
   "actions_disabled_c1accfb6": {
-    "message": "Actions disabled"
+    "message": "無効になったアクション"
   },
   "actions_efcde10d": {
     "message": "アクション"
   },
   "actions_enabled_8e9ec02d": {
-    "message": "Actions enabled"
+    "message": "有効になったアクション"
   },
   "actions_moved_d7777b29": {
-    "message": "Actions moved"
+    "message": "移動されたアクション"
   },
   "activities_125193f7": {
     "message": "アクティビティ"
@@ -96,94 +99,94 @@
     "message": "アクティビティ"
   },
   "activity_received_2f20fa9d": {
-    "message": "Activity received"
+    "message": "アクティビティを受信しました"
   },
   "adaptive_dialog_61a05dde": {
-    "message": "Adaptive dialog"
+    "message": "適応型ダイアログ"
   },
   "add_8523c19b": {
     "message": "追加"
   },
   "add_a_new_key_5c208c29": {
-    "message": "Add a new key"
+    "message": "新しいキーの追加"
   },
   "add_a_new_skill_dialog_aaaafa9c": {
-    "message": "Add a new Skill Dialog"
+    "message": "新しいスキル ダイアログの追加"
   },
   "add_a_new_trigger_a82d3db8": {
-    "message": "Add a new trigger"
+    "message": "新しいトリガーの追加"
   },
   "add_a_new_value_24ca14ac": {
-    "message": "Add a new value"
+    "message": "新しい値の追加"
   },
   "add_a_publish_profile_fca2263a": {
-    "message": "Add a publish profile"
+    "message": "公開プロファイルの追加"
   },
   "add_a_skill_46d2b71c": {
-    "message": "Add a skill"
+    "message": "スキルの追加"
   },
   "add_a_welcome_message_9e1480b2": {
-    "message": "Add a welcome message"
+    "message": "新しいウェルカム メッセージの追加"
   },
   "add_alternative_phrasing_17e0304c": {
-    "message": "+ Add alternative phrasing"
+    "message": "+ 代替フレージングの追加"
   },
   "add_an_intent_trigger_a9acc149": {
-    "message": "Add an intent trigger"
+    "message": "インテント トリガーの追加"
   },
   "add_custom_runtime_6b73dc44": {
-    "message": "Add custom runtime"
+    "message": "カスタム ランタイムの追加"
   },
   "add_language_75dee49e": {
     "message": "言語の追加"
   },
   "add_multiple_comma_separated_synonyms_2639283f": {
-    "message": "Add multiple comma-separated synonyms"
+    "message": "コンマで区切られた複数の類義語を追加します"
   },
   "add_new_answer_9de3808e": {
-    "message": "Add new answer"
+    "message": "新しい回答の追加"
   },
   "add_new_dialog_25f12c9": {
-    "message": "Add new dialog"
+    "message": "新しいダイアログの追加"
   },
   "add_new_extension_19b82b77": {
-    "message": "Add new extension"
+    "message": "新しい拡張機能の追加"
   },
   "add_new_knowledge_base_on_displayname_7f44609c": {
-    "message": " Add new knowledge base on { displayName }"
+    "message": "{ displayName } に新しいナレッジ ベースを追加します"
   },
   "add_new_profile_47b225e6": {
-    "message": "Add new profile"
+    "message": "新しいプロファイルの追加"
   },
   "add_new_propertyname_bedf7dc6": {
-    "message": "Add new { propertyName }"
+    "message": "新しい { propertyName } を追加します"
   },
   "add_new_question_85612b7f": {
-    "message": "Add new question"
+    "message": "新しい質問の追加"
   },
   "add_new_trigger_on_displayname_2aaf6e4c": {
-    "message": "Add new trigger on { displayName }"
+    "message": "{ displayName } に新しいトリガーを追加します"
   },
   "add_new_validation_rule_here_eb675ccf": {
-    "message": "Add new validation rule here"
+    "message": "ここに新しい検証ルールを追加します"
   },
   "add_property_d381eba3": {
-    "message": "プロパティを追加する"
+    "message": "プロパティの追加"
   },
   "add_qna_pair_16c228f0": {
-    "message": "+ Add QnA Pair"
+    "message": "+ QnA ペアの追加"
   },
   "add_some_example_phrases_to_trigger_this_intent_pl_568eaf51": {
-    "message": "> add some example phrases to trigger this intent:\n> - please tell me the weather\n> - what is the weather like in '{'city=Seattle'}'\n\n> entity definitions:\n> @ ml city"
+    "message": "> このインテントをトリガーするために、いくつかの語句の例を追加します:\n> - 天気を教えてください\n> - '{'city=Seattle'}' の天気はどうですか\n\n> エンティティ定義:\n> @ ml city"
   },
   "add_some_expected_user_responses_please_remind_me__31dc5c07": {
-    "message": "> add some expected user responses:\n> - Please remind me to '{'itemTitle=buy milk'}'\n> - remind me to '{'itemTitle'}'\n> - add '{'itemTitle'}' to my todo list\n>\n> entity definitions:\n> @ ml itemTitle\n"
+    "message": "> 予想されるいくつかのユーザー応答を追加します:\n> - '{'itemTitle=buy milk'} するよう通知してください'\n> - '{'itemTitle'}' について通知してください \n> - To Do リストに '{'itemTitle'}' を追加します\n>\n> エンティティ定義:\n> @ ml itemTitle\n"
   },
   "add_welcome_message_49d9ded9": {
-    "message": "Add welcome message"
+    "message": "ウェルカム メッセージの追加"
   },
   "advanced_events_2cbfa47d": {
-    "message": "Advanced Events"
+    "message": "高度なイベント"
   },
   "advanced_options_4dcc8385": {
     "message": "詳細オプション"
@@ -192,40 +195,40 @@
     "message": "すべて"
   },
   "all_language_generation_files_ef778f24": {
-    "message": "all language generation files"
+    "message": "すべての言語生成ファイル"
   },
   "all_language_understanding_files_714b33eb": {
-    "message": "all language understanding files"
+    "message": "すべての言語理解ファイル"
   },
   "all_profiles_8321b1aa": {
-    "message": "All profiles"
+    "message": "すべてのプロファイル"
   },
   "all_qna_files_349d7fe1": {
-    "message": "all qna files"
+    "message": "すべての QnA ファイル"
   },
   "an_authoring_key_is_created_automatically_when_you_21cf77aa": {
-    "message": "An authoring key is created automatically when you create a LUIS account."
+    "message": "LUIS アカウントを作成すると、オーサリング キーが自動的に作成されます。"
   },
   "answer_4620913f": {
     "message": "回答"
   },
   "answer_is_content_c6af84ad": {
-    "message": "Answer is { content }"
+    "message": "回答は { content } です"
   },
   "answer_is_required_da652c05": {
-    "message": "Answer is required"
+    "message": "回答が必要です"
   },
   "any_constant_or_expression_to_evaluate_ba2017b1": {
-    "message": "Any constant or expression to evaluate."
+    "message": "評価する任意の定数または式です。"
   },
   "any_or_expression_acad7d37": {
-    "message": "Any or expression"
+    "message": "任意または式"
   },
   "any_string_f22dc2e1": {
-    "message": "any string"
+    "message": "任意の文字列"
   },
   "application_language_87691b6": {
-    "message": "Application Language"
+    "message": "アプリケーションの言語"
   },
   "application_language_f100f3e0": {
     "message": "アプリケーションの言語"
@@ -237,67 +240,67 @@
     "message": "アプリケーションの更新プログラム"
   },
   "apr_9_2020_3c8b47d7": {
-    "message": "Apr 9, 2020"
+    "message": "2020 年 4 月 9 日"
   },
   "are_you_sure_you_want_to_exit_the_onboarding_produ_c2de1b23": {
-    "message": "Are you sure you want to exit the Onboarding Product Tour? You can restart the tour in the onboarding settings."
+    "message": "製品のオンボードツアーを終了しますか? オンボードの設定でツアーを再開できます。"
   },
   "are_you_sure_you_want_to_remove_form_dialog_schema_67c927ce": {
-    "message": "Are you sure you want to remove form dialog schema \"{ id }\"?"
+    "message": "フォーム ダイアログ スキーマ \"{ id }\" を削除しますか?"
   },
   "are_you_sure_you_want_to_remove_propertyname_8a793e4f": {
-    "message": "Are you sure you want to remove \"{ propertyName }\"?"
+    "message": "\"{ propertyName }\" を削除しますか?"
   },
   "are_you_sure_you_want_to_start_over_your_progress__3b7cde9b": {
-    "message": "Are you sure you want to start over? Your progress will be lost."
+    "message": "やり直しますか? 進行状況は失われます。"
   },
   "are_you_sure_you_want_to_stop_current_runtime_and__a5f883b2": {
-    "message": "Are you sure you want to stop current runtime and replace them?"
+    "message": "現在のランタイムを停止して置き換えますか?"
   },
   "are_you_sure_you_want_to_uninstall_these_extension_cf6265e8": {
-    "message": "Are you sure you want to uninstall these extensions?"
+    "message": "これらの拡張機能をアンインストールしますか?"
   },
   "arm_template_bc8441bb": {
     "message": "ARM テンプレート"
   },
   "array_643947ee": {
-    "message": "アレイ"
+    "message": "配列"
   },
   "array_constant_8829b2ec": {
-    "message": "Array constant."
+    "message": "配列定数です。"
   },
   "array_or_expression_c52b2ecc": {
-    "message": "Array or expression"
+    "message": "配列または式"
   },
   "array_or_expression_to_evaluate_87d9328b": {
-    "message": "Array or expression to evaluate."
+    "message": "評価する配列または式です。"
   },
   "ask_a_question_92ef7e0c": {
     "message": "質問する"
   },
   "at_least_one_question_is_required_6f287e04": {
-    "message": "At least one question is required"
+    "message": "少なくとも 1 つの質問が必要です"
   },
   "attachment_input_e0ece49c": {
-    "message": "Attachment Input"
+    "message": "添付ファイルの入力"
   },
   "australia_6a25c95b": {
-    "message": "australia"
+    "message": "オーストラリア"
   },
   "authoring_canvas_18802e39": {
-    "message": "Authoring canvas"
+    "message": "作成キャンバス"
   },
   "authoring_region_to_use_e_g_westus_westeurope_aust_d43d5245": {
-    "message": "Authoring region to use (e.g. westus, westeurope, australiaeast)"
+    "message": "使用する作成リージョン (例: westus、westeurope、australiaeast)"
   },
   "authoring_region_to_use_westus_qna_maker_resource__4588c2f9": {
-    "message": "Authoring region to use (westus)  (QnA maker resource location)"
+    "message": "使用する作成リージョン (westus) (QnA Maker のリソースの場所)"
   },
   "auto_update_86eb33b0": {
     "message": "自動更新"
   },
   "available_skills_95c114ac": {
-    "message": "Available Skills"
+    "message": "利用可能なスキル"
   },
   "azure_app_service_plan_a285fb06": {
     "message": "Azure App Service プラン"
@@ -318,22 +321,22 @@
     "message": "戻る"
   },
   "basic_assistant_d23bde15": {
-    "message": "Basic Assistant"
+    "message": "基本アシスタント"
   },
   "been_used_5daccdb2": {
-    "message": "Been used"
+    "message": "使用済み"
   },
   "begin_a_new_dialog_60249bd8": {
-    "message": "Begin a new dialog"
+    "message": "新しいダイアログの開始"
   },
   "begin_a_remote_skill_dialog_93e47189": {
-    "message": "Begin a remote skill dialog."
+    "message": "リモート スキル ダイアログを開始します。"
   },
   "begin_dialog_12e2becf": {
-    "message": "Begin Dialog"
+    "message": "ダイアログの開始"
   },
   "begin_dialog_event_285bc650": {
-    "message": "Begin dialog event"
+    "message": "ダイアログの開始イベント"
   },
   "begindialog_a5594562": {
     "message": "BeginDialog"
@@ -345,100 +348,103 @@
     "message": "ブール値"
   },
   "boolean_condition_b65450ca": {
-    "message": "Boolean condition"
+    "message": "ブール値の条件"
   },
   "boolean_constant_7d3fcbf6": {
-    "message": "Boolean constant"
+    "message": "ブール型定数"
   },
   "boolean_constant_8d950af8": {
-    "message": "Boolean constant."
+    "message": "ブール型定数です。"
   },
   "boolean_constant_or_expression_to_evaluate_86d77849": {
-    "message": "Boolean constant or expression to evaluate."
+    "message": "評価するブール型定数または式です。"
   },
   "boolean_field_602934c9": {
-    "message": "boolean field"
+    "message": "ブール値フィールド"
   },
   "boolean_or_expression_6bd88208": {
-    "message": "Boolean or expression"
+    "message": "ブール値または式"
   },
   "boolean_value_98d39ea1": {
-    "message": "Boolean value."
+    "message": "ブール値です。"
+  },
+  "bot_7926b66d": {
+    "message": "Bot"
   },
   "bot_asks_5e9f0202": {
-    "message": "Bot Asks"
+    "message": "ボットからの要求"
   },
   "bot_configured_for_speech_66fc8e57": {
-    "message": "Bot Configured for Speech"
+    "message": "音声用に構成されたボット"
   },
   "bot_configured_for_text_a67eca78": {
-    "message": "Bot Configured for Text"
+    "message": "テキスト用に構成されたボット"
   },
   "bot_framework_composer_enables_developers_and_mult_ce0e42a9": {
-    "message": "Bot Framework Composer enables developers and multi-disciplinary teams to build all kinds of conversational experiences, using the latest components from the Bot Framework: SDK, LG, LU, and declarative file formats, all without writing code."
+    "message": "Bot Framework Composer を使用すると、開発者や分野横断的なチームは、Bot Framework の最新コンポーネント (SDK、LG、LU、および宣言ファイル形式) を使用して、コードを記述せずにあらゆる種類の会話環境を構築できます。"
   },
   "bot_framework_composer_fae721be": {
     "message": "Bot Framework Composer"
   },
   "bot_framework_composer_icon_gray_fa72d3d6": {
-    "message": "bot framework composer icon gray"
+    "message": "Bot Framework Composer アイコン (灰色)"
   },
   "bot_framework_composer_is_a_visual_authoring_canva_c3947d91": {
-    "message": "Bot Framework Composer is a visual authoring canvas for building bots and other types of conversational application with the Microsoft Bot Framework technology stack. With Composer you will find everything you need to build a modern, state-of-the-art conversational experience."
+    "message": "Bot Framework Composer は、Microsoft Bot Framework テクノロジ スタックを使用してボットやその他の種類の会話アプリケーションを作成するための視覚的な作成キャンバスです。Composer では、現代的な最先端の会話環境を構築するために必要なすべてのものを見つけることができます。"
   },
   "bot_framework_composer_is_an_open_source_visual_au_2be2e02b": {
-    "message": "Bot Framework Composer is an open-source visual authoring canvas for developers and multi-disciplinary teams to build bots. Composer integrates LUIS and QnA Maker, and allows sophisticated composition of bot replies using language generation."
+    "message": "Bot Framework Composer は、開発者や分野横断的なチームがボットを作成するためのオープンソースの視覚的な作成キャンバスです。Composer では LUIS と QnA Maker が統合されており、言語生成を使用してボット応答の高度な合成が可能になります。"
   },
   "bot_framework_provides_the_most_comprehensive_expe_e34a7f5d": {
-    "message": "Bot Framework provides the most comprehensive experience for building conversational applications."
+    "message": "Bot Framework は、対話アプリケーションを作成するための最も包括的なエクスペリエンスを提供します。"
   },
   "bot_language_6cf30c2": {
-    "message": "Bot language"
+    "message": "ボット言語"
   },
   "bot_language_active_7cf9dc78": {
-    "message": "Bot language (active)"
+    "message": "ボット言語 (アクティブ)"
   },
   "bot_name_bbd0779d": {
-    "message": "Bot Name"
+    "message": "ボット名"
   },
   "bot_name_is_botname_a28c2d05": {
-    "message": "Bot name is { botName }"
+    "message": "ボット名は { botName } です"
   },
   "bot_project_file_does_not_exist_a0864a2c": {
-    "message": "Bot project file does not exist."
+    "message": "ボット プロジェクト ファイルが存在しません。"
   },
   "bot_responses_4617b4a2": {
-    "message": "Bot responses"
+    "message": "ボット応答"
   },
   "bot_responses_c4e63601": {
-    "message": "Bot Responses"
+    "message": "ボット応答"
   },
   "bot_settings_3751e1b2": {
-    "message": "Bot settings"
+    "message": "ボットの設定"
   },
   "bot_settings_ce2783e4": {
-    "message": "Bot Settings"
+    "message": "ボットの設定"
   },
   "bot_web_app_ca8b1468": {
-    "message": "Bot Web App"
+    "message": "ボット Web アプリ"
   },
   "branch_if_else_391e5681": {
-    "message": "Branch: If/else"
+    "message": "分岐: if/else"
   },
   "branch_if_else_992cf9bf": {
-    "message": "Branch: If/Else"
+    "message": "分岐: If/Else"
   },
   "branch_if_else_f6a36f1d": {
-    "message": "Branch: if/else"
+    "message": "分岐: if/else"
   },
   "branch_switch_multiple_options_95c6a326": {
-    "message": "Branch: Switch (multiple options)"
+    "message": "分岐: スイッチ (複数のオプション)"
   },
   "break_out_of_loop_ab30157c": {
-    "message": "Break out of loop"
+    "message": "ループの中断"
   },
   "build_your_first_bot_f9c3e427": {
-    "message": "Build your first bot"
+    "message": "最初のボットの作成"
   },
   "bytes_74acea97": {
     "message": "バイト"
@@ -447,43 +453,43 @@
     "message": "計算しています..."
   },
   "cancel_all_active_dialogs_335b1623": {
-    "message": "Cancel all active dialogs"
+    "message": "すべてのアクティブなダイアログを取り消す"
   },
   "cancel_all_dialogs_32144c45": {
-    "message": "Cancel All Dialogs"
+    "message": "すべてのダイアログを取り消す"
   },
   "cancel_caeb1e68": {
     "message": "キャンセル"
   },
   "cancel_dialog_event_cc671dee": {
-    "message": "Cancel dialog event"
+    "message": "ダイアログ イベントを取り消す"
   },
   "change_recognizer_3145b93d": {
-    "message": "Change Recognizer"
+    "message": "認識エンジンの変更"
   },
   "check_for_updates_and_install_them_automatically_50337340": {
-    "message": "Check for updates and install them automatically."
+    "message": "更新プログラムがあるかどうかを確認し、自動的にインストールします。"
   },
   "choice_input_f75a2353": {
-    "message": "Choice Input"
+    "message": "選択肢の入力"
   },
   "choice_name_fe8411f4": {
-    "message": "Choice Name"
+    "message": "選択肢の名前"
   },
   "choose_a_location_for_your_new_bot_project_e979f2d5": {
-    "message": "Choose a location for your new bot project."
+    "message": "新しいボット プロジェクトの場所を選択します。"
   },
   "choose_how_to_create_your_bot_a97f7b3e": {
-    "message": "Choose how to create your bot"
+    "message": "ボットの作成方法を選択する"
   },
   "choose_one_2c4277df": {
-    "message": "Choose One"
+    "message": "1 つ選択"
   },
   "choose_one_7feacdb6": {
-    "message": "Choose one:"
+    "message": "1 つを選択:"
   },
   "choose_your_assistant_7ee96d89": {
-    "message": "Choose Your Assistant"
+    "message": "アシスタントを選択してください"
   },
   "chris_whitten_11df1f35": {
     "message": "Chris Whitten"
@@ -492,13 +498,13 @@
     "message": "すべてクリア"
   },
   "click_on_the_b_add_b_button_in_the_toolbar_and_sel_4daf351a": {
-    "message": "Click on the <b>Add</b> button in the toolbar, and select <b>Add a new trigger</b>. In the <b>Create a trigger</b> wizard, set the <b>Trigger Type</b> to <i>Intent recognized</i> and configure the <b>Trigger Name</b> and <b>Trigger Phrases</b>. Then add actions in the Visual Editor."
+    "message": "ツールバーの <b>[追加]</b> ボタンをクリックして、 <b>[新しいトリガーの追加]</b> を選択します。<b>[トリガーの作成]</b> ウィザードで、<b>[トリガーの種類]</b> を <i>[認識されたインテント]</i> に設定し、<b>[トリガー名]</b> および <b>[トリガー フレーズ]</b> を構成します。次に、ビジュアル エディターでアクションを追加します。"
   },
   "click_the_b_add_b_button_in_the_toolbar_and_select_79001156": {
-    "message": "Click the <b>Add</b> button in the toolbar, and select <b>Add a new trigger</b> from the dropdown menu."
+    "message": "ツールバーの <b>[追加]</b> ボタンをクリックして、ドロップダウン メニューから <b>[新しいトリガーの追加]</b> を選択します。"
   },
   "click_to_sort_by_file_type_1b0c9bd": {
-    "message": "Click to sort by file type"
+    "message": "クリックしてファイルの種類順に並べ替えます"
   },
   "close_d634289d": {
     "message": "閉じる"
@@ -507,34 +513,34 @@
     "message": "折りたたむ"
   },
   "collapse_navigation_17228b95": {
-    "message": "Collapse Navigation"
+    "message": "ナビゲーションを折りたたむ"
   },
   "comment_7ef1428e": {
     "message": "コメント"
   },
   "component_stacktrace_e24b1983": {
-    "message": "Component Stacktrace:"
+    "message": "コンポーネントのスタックトレース:"
   },
   "composer_cannot_yet_translate_your_bot_automatical_2d54081b": {
-    "message": "Composer cannot yet translate your bot automatically.\nTo create a translation manually, Composer will create a copy of your bot’s content with the name of the additional language. This content can then be translated without affecting the original bot logic or flow and you can switch between languages to ensure the responses are correctly and appropriately translated."
+    "message": "Composer ではまだボットを自動的に翻訳することはできません。\n手動で翻訳を作成するため、Composer で追加の言語の名前でボットのコンテンツのコピーが作成されます。その後このコンテンツを、元のボット ロジックやフローに影響を与えずに翻訳することができます。また、言語を切り替えて、応答が正しく、適切に翻訳されていることを確認できます。"
   },
   "composer_introduction_98a93701": {
-    "message": "Composer introduction"
+    "message": "Composer の概要"
   },
   "composer_is_up_to_date_9118257d": {
-    "message": "Composer is up to date."
+    "message": "Composer は最新の状態です。"
   },
   "composer_logo_ba2048a0": {
-    "message": "Composer Logo"
+    "message": "Composer ロゴ"
   },
   "composer_needs_net_core_sdk_46e2a8ae": {
-    "message": "Composer needs .NET Core SDK"
+    "message": "Composer には .NET Core SDK が必要です"
   },
   "composer_will_restart_88ee8dc3": {
-    "message": "Composer will restart."
+    "message": "Composer が再起動されます。"
   },
   "composer_will_update_the_next_time_you_close_the_a_d74264a1": {
-    "message": "Composer will update the next time you close the app."
+    "message": "Composer は次回アプリを閉じたときに更新されます。"
   },
   "conditionalselector_ed2031f0": {
     "message": "ConditionalSelector"
@@ -543,175 +549,172 @@
     "message": "構成の概要"
   },
   "configure_composer_to_start_your_bot_using_runtime_fe37dadf": {
-    "message": "Configure Composer to start your bot using runtime code you can customize and control."
+    "message": "カスタマイズおよび制御可能なランタイム コードを使用してボットを起動するよう Composer を構成します。"
   },
   "configured_with_enterprise_scenarios_calendar_who__e9e7e75a": {
-    "message": "Configured with enterprise scenarios, calendar, who bot, professional chit-chat."
+    "message": "エンタープライズ シナリオ、カレンダー、who ボット、プロのおしゃべりなどで構成されています。"
   },
   "configured_with_hospitality_scenarios_bing_search__f71c09c0": {
-    "message": "Configured with hospitality scenarios, Bing search and caring chit-chat."
+    "message": "おもてなしのシナリオ、Bing 検索、思いやりのあるおしゃべりで構成されます。"
   },
   "configured_with_simple_conversational_capability_l_d42f128c": {
-    "message": "Configured with simple conversational capability like greeting, chit-chat & more."
+    "message": "あいさつ、おしゃべりなどの単純な会話機能で構成されます。"
   },
   "configures_default_language_model_to_use_if_there__f09f1acd": {
-    "message": "Configures default language model to use if there is no culture code in the file name (Default: en-us)"
+    "message": "ファイル名にカルチャ コードが含まれていない場合に使用する既定の言語モデルを構成します (既定値: en-us)"
   },
   "confirm_6556b3a6": {
     "message": "確認"
   },
   "confirm_choices_db8e99fb": {
-    "message": "Confirm Choices"
+    "message": "選択肢の確認"
   },
   "confirm_input_bf996e7a": {
-    "message": "Confirm Input"
+    "message": "入力の確認"
   },
   "confirmation_fec87d65": {
     "message": "確認"
   },
   "confirmation_modal_must_have_a_title_b0816e0b": {
-    "message": "Confirmation modal must have a title."
+    "message": "確認モーダルにはタイトルが必要です。"
   },
   "congratulations_your_model_is_successfully_publish_52ebc297": {
-    "message": "Congratulations! Your model is successfully published."
+    "message": "モデルが正常に発行されました。"
   },
   "connect_to_a_new_skill_34d582ab": {
-    "message": "Connect to a new skill"
+    "message": "新しいスキルに接続"
   },
   "connect_to_a_skill_53c9dff0": {
-    "message": "Connect to a skill"
+    "message": "スキルへの接続"
   },
   "connect_to_qna_knowledgebase_4b324132": {
-    "message": "Connect to QnA Knowledgebase"
+    "message": "QnA ナレッジベースに接続"
   },
   "content_1440204b": {
     "message": "コンテンツ"
   },
   "continue_loop_22635585": {
-    "message": "Continue loop"
+    "message": "ループの続行"
   },
   "conversation_ended_a8bd37dd": {
-    "message": "Conversation ended"
+    "message": "会話が終了しました"
   },
   "conversation_invoked_e960884e": {
-    "message": "Conversation invoked"
+    "message": "会話が呼び出されました"
   },
   "conversationupdate_activity_9e94bff5": {
-    "message": "ConversationUpdate activity"
+    "message": "ConversationUpdate アクティビティ"
   },
   "copy_9748f9f": {
     "message": "コピー"
   },
   "copy_content_for_translation_7affbcbb": {
-    "message": "Copy content for translation"
+    "message": "翻訳用のコンテンツのコピー"
   },
   "could_not_connect_to_storage_50411de0": {
-    "message": "Could not connect to storage."
-  },
-  "could_not_init_plugin_1f1c29cd": {
-    "message": "Could not init plugin"
+    "message": "ストレージに接続できませんでした。"
   },
   "couldn_t_complete_the_update_a337a359": {
-    "message": "Couldn''t complete the update:"
+    "message": "更新を完了できませんでした:"
   },
   "create_132b3be1": {
     "message": "作成"
   },
   "create_a_bot_project_73e6ce33": {
-    "message": "Create a bot project"
+    "message": "ボット プロジェクトの作成"
   },
   "create_a_condition_8686fd5": {
-    "message": "Create a condition"
+    "message": "条件の作成"
   },
   "create_a_dialog_9f6c8618": {
-    "message": "Create a dialog"
+    "message": "ダイアログの作成"
   },
   "create_a_knowledge_base_from_scratch_or_import_kno_2eb38ac0": {
-    "message": "Create a knowledge base from scratch or import knowledge from a URL or PDF files"
+    "message": "ナレッジ ベースを最初から作成するか、URL または PDF ファイルからナレッジをインポートします"
   },
   "create_a_name_for_the_project_which_will_be_used_t_57e9b690": {
-    "message": "Create a name for the project which will be used to name the application: (projectname-environment-LUfilename)"
+    "message": "アプリケーションの名前を指定するために使用されるプロジェクトの名前を作成します: (projectname-environment-LUfilename)"
   },
   "create_a_new_bot_or_choose_from_virtual_assistant__7c1e6674": {
-    "message": "Create a new bot or choose from Virtual assistant templates."
+    "message": "新しいボットを作成するか、仮想アシスタント テンプレートから選択します。"
   },
   "create_a_new_dialog_21d84b82": {
-    "message": "Create a new dialog"
+    "message": "新しいダイアログの作成"
   },
   "create_a_new_form_dialog_schema_by_clicking_above_34b80531": {
-    "message": "Create a new form dialog schema by clicking + above."
+    "message": "上の + をクリックして新しいフォーム ダイアログ スキーマを作成します。"
   },
   "create_a_new_skill_manifest_or_select_which_one_yo_a97e9616": {
-    "message": "Create a new skill manifest or select which one you want to edit"
+    "message": "新しいスキル マニフェストを作成するか、編集する必要のあるものを選択します"
   },
   "create_a_trigger_40e74743": {
-    "message": "Create a trigger"
+    "message": "トリガーの作成"
   },
   "create_bot_from_template_or_scratch_92f0fefa": {
-    "message": "Create bot from template or scratch?"
+    "message": "ボットをテンプレートから作成しますか? または最初から作成しますか?"
   },
   "create_copy_to_translate_bot_content_efc872c": {
-    "message": "Create copy to translate bot content"
+    "message": "ボット コンテンツを翻訳するためのコピーを作成します"
   },
   "create_edit_skill_manifest_1c1b14fe": {
-    "message": "Create/edit skill manifest"
+    "message": "スキル マニフェストを作成/編集します"
   },
   "create_folder_error_38aa86f5": {
-    "message": "Create Folder Error"
+    "message": "フォルダーの作成エラー"
   },
   "create_form_dialog_bb98a4f2": {
-    "message": "Create form dialog"
+    "message": "フォームの作成ダイアログ"
   },
   "create_from_knowledge_base_qna_maker_7422486": {
-    "message": "Create from knowledge base (QnA Maker)"
+    "message": "ナレッジ ベース (QnA Maker) から作成します"
   },
   "create_from_qna_7aa9dcbb": {
-    "message": "Create from QnA"
+    "message": "QnA から作成"
   },
   "create_from_scratch_485c3045": {
-    "message": "Create from scratch"
+    "message": "最初から作成"
   },
   "create_from_template_87e12c94": {
-    "message": "Create from template"
+    "message": "テンプレートから作成"
   },
   "create_kb_e78571ba": {
-    "message": "Create KB"
+    "message": "KB の作成"
   },
   "create_kb_from_scratch_eddd037a": {
-    "message": "Create KB from scratch"
+    "message": "KB を最初から作成"
   },
   "create_kb_from_url_or_file_49ad6671": {
-    "message": "Create KB from URL or file"
+    "message": "URL またはファイルから KB を作成"
   },
   "create_knowledge_base_from_scratch_afe4d2a2": {
-    "message": "Create knowledge base from scratch"
+    "message": "最初からナレッジベースを作成します"
   },
   "create_new_empty_bot_21cf0ea3": {
-    "message": "Create new empty bot"
+    "message": "新しい空のボットの作成"
   },
   "create_new_folder_19d3faa4": {
     "message": "新しいフォルダーの作成"
   },
   "create_new_kb_1c4f86a0": {
-    "message": "Create new KB"
+    "message": "新しい KB の作成"
   },
   "create_new_knowledge_base_d15d6873": {
-    "message": "Create new knowledge base"
+    "message": "新しいナレッジ ベースの作成"
   },
   "create_new_knowledge_base_e14d07a5": {
-    "message": "Create New Knowledge Base"
+    "message": "新しいナレッジ ベースの作成"
   },
   "create_new_knowledge_base_from_scratch_638c4fd2": {
-    "message": "Create new knowledge base from scratch"
+    "message": "新しいナレッジ ベースを最初から作成"
   },
   "create_or_edit_skill_manifest_8ad98da9": {
-    "message": "Create or edit skill manifest"
+    "message": "スキル マニフェストの作成または編集"
   },
   "creating_your_knowledge_base_ef4f9872": {
-    "message": "Creating your knowledge base"
+    "message": "ナレッジ ベースを作成しています"
   },
   "current_40c0812f": {
-    "message": " - Current"
+    "message": " - 最新"
   },
   "custom_actions_5d396747": {
     "message": "カスタム アクション"
@@ -720,19 +723,19 @@
     "message": "カスタム イベント"
   },
   "custom_name_optional_60ee6a1a": {
-    "message": "Custom name (optional)"
+    "message": "カスタム名 (省略可能)"
   },
   "custom_recognizer_951bab90": {
-    "message": "Custom recognizer"
+    "message": "カスタム認識エンジン"
   },
   "customize_your_assistant_e4038b74": {
-    "message": "Customize your assistant"
+    "message": "アシスタントのカスタマイズ"
   },
   "cut_c8c92681": {
     "message": "切り取り"
   },
   "data_loading_4c9bb9f6": {
-    "message": "Data loading..."
+    "message": "データの読み込み中..."
   },
   "date_ee500367": {
     "message": "日付"
@@ -744,76 +747,76 @@
     "message": "更新日"
   },
   "date_or_time_d30bcc7d": {
-    "message": "Date or time"
+    "message": "日付または時刻"
   },
   "date_time_input_2416ffc1": {
-    "message": "Date Time Input"
+    "message": "日付/時刻の入力"
   },
   "debug_break_46cb5adb": {
-    "message": "Debug Break"
+    "message": "デバッグ中断"
   },
   "debug_break_870a75df": {
-    "message": "Debug break"
+    "message": "デバッグの中断"
   },
   "debugging_options_20e2e9da": {
     "message": "デバッグ オプション"
-  },
-  "decrement_by_step_9b6c2fa3": {
-    "message": "decrement by { step }"
   },
   "default_language_486a558d": {
     "message": "既定の言語"
   },
   "default_language_b11c37db": {
-    "message": "Default Language"
+    "message": "既定の言語"
   },
   "default_recognizer_9c06c1a3": {
-    "message": "Default recognizer"
+    "message": "既定の認識エンジン"
   },
   "define_by_value_type_3cd3d1a8": {
-    "message": "Define by value type"
+    "message": "値の種類による定義"
   },
   "define_conversation_objective_146d1cc6": {
-    "message": "Define conversation objective"
+    "message": "会話の目的の定義"
   },
   "defined_in_475568fb": {
-    "message": "Defined in:"
+    "message": "定義されている場所:"
   },
   "definition_not_found_for_defname_7194fd07": {
-    "message": "Definition not found for { defName }"
+    "message": "{ defName } の定義が見つかりません"
   },
   "delete_a6efa79d": {
     "message": "削除"
   },
   "delete_a_property_f2d70f79": {
-    "message": "Delete a property"
+    "message": "プロパティの削除"
   },
   "delete_activity_6d881872": {
-    "message": "活動の削除"
+    "message": "アクティビティの削除"
   },
   "delete_bot_73586104": {
-    "message": "Delete Bot"
+    "message": "ボットの削除"
   },
   "delete_form_dialog_schema_892df4e8": {
-    "message": "Delete form dialog schema"
+    "message": "フォーム ダイアログ スキーマの削除"
   },
   "delete_knowledge_base_66e3a7f1": {
-    "message": "Delete knowledge base"
+    "message": "ナレッジ ベースの削除"
   },
   "delete_language_1527609d": {
-    "message": "Delete language"
+    "message": "言語の削除"
   },
   "delete_properties_8bc77b42": {
-    "message": "Delete Properties"
+    "message": "プロパティの削除"
   },
   "delete_properties_c49a7892": {
-    "message": "Delete properties"
+    "message": "プロパティの削除"
   },
   "delete_property_b3786fa0": {
-    "message": "Delete Property"
+    "message": "プロパティの削除"
+  },
+  "deleting_dialogid_failed_1d7cc05a": {
+    "message": "Deleting \"{ dialogId }\" failed."
   },
   "describe_your_skill_88554792": {
-    "message": "Describe your skill"
+    "message": "スキルの説明"
   },
   "description_436c48d7": {
     "message": "説明"
@@ -822,58 +825,58 @@
     "message": "デザイン"
   },
   "dialog_68ba69ba": {
-    "message": "(Dialog)"
+    "message": "(ダイアログ)"
   },
   "dialog_cancelled_767b512a": {
-    "message": "Dialog cancelled"
+    "message": "ダイアログが取り消されました"
   },
   "dialog_data_61d5539b": {
-    "message": "Dialog data"
+    "message": "ダイアログ データ"
   },
   "dialog_dialogid_not_found_5e8214c3": {
-    "message": "dialog { dialogId } not found"
+    "message": "ダイアログ { dialogId } が見つかりません"
   },
   "dialog_events_f1b2e2a0": {
-    "message": "Dialog events"
+    "message": "ダイアログ イベント"
   },
   "dialog_input_schema_c7864fbd": {
-    "message": "Dialog input schema."
+    "message": "ダイアログ入力スキーマ。"
   },
   "dialog_interface_398bc493": {
-    "message": "Dialog Interface"
+    "message": "ダイアログ インターフェイス"
   },
   "dialog_management_2980578": {
-    "message": "Dialog management"
+    "message": "ダイアログの管理"
   },
   "dialog_opened_f6392b1": {
-    "message": "Dialog opened"
+    "message": "ダイアログが開きました"
   },
   "dialog_output_schema_acfe2186": {
-    "message": "Dialog output schema."
+    "message": "ダイアログの出力スキーマ。"
   },
   "dialog_started_912507c": {
-    "message": "Dialog started"
+    "message": "ダイアログが開始しました"
   },
   "dialog_with_the_name_value_already_exists_62838518": {
-    "message": "Dialog with the name: { value } already exists."
+    "message": "{ value } という名前のダイアログは既に存在します。"
   },
   "dialogfactory_missing_schema_5c3255c4": {
-    "message": "DialogFactory missing schema."
+    "message": "DialogFactory にスキーマがありません。"
   },
   "dialognum_plural_0_no_bots_1_one_bot_other_bots_ha_1cf10787": {
-    "message": "{ dialogNum, plural,\n     =0 {No bots}\n     =1 {One bot}\n  other {# bots}\n} have been found.\n            { dialogNum, select,\n      0 {}\n  other {Press down arrow key to navigate the search results}\n}"
+    "message": "{ dialogNum, plural,\n     =0 {ボットなし}\n     =1 {1 つのボット}\n  other {ボットの数}\n} が見つかりました。\n            { dialogNum, select,\n      0 {}\n  other {検索結果内で移動するには下方向キーを押してください}\n}"
   },
   "disable_a5c05db3": {
     "message": "無効化"
   },
   "display_lines_that_extends_beyond_the_width_of_the_9e500f3c": {
-    "message": "Display lines that extends beyond the width of the editor on the next line."
+    "message": "エディターの幅を越える行を次の行に表示します。"
   },
   "do_you_wish_to_continue_96469eaf": {
     "message": "続行しますか?"
   },
   "does_not_exist_3a34b418": {
-    "message": "Does Not Exist"
+    "message": "存在しない"
   },
   "done_1a4a010a": {
     "message": "完了"
@@ -882,130 +885,133 @@
     "message": "完了"
   },
   "download_now_and_install_when_you_close_composer_e241ed74": {
-    "message": "Download now and install when you close Composer."
+    "message": "今すぐダウンロードして、Composer を閉じるときにインストールしてください。"
   },
   "downloading_bb6fb34b": {
-    "message": "ダウンロード中..."
+    "message": "ダウンロードしています..."
   },
   "duplicate_31cec192": {
     "message": "複製"
   },
   "duplicate_dialog_name_824f9fce": {
-    "message": "Duplicate dialog name"
+    "message": "ダイアログ名が重複しています"
   },
   "duplicate_fields_9fd0d3c2": {
-    "message": "duplicate fields"
+    "message": "重複フィールド"
   },
   "duplicate_name_d295a09d": {
     "message": "名前が重複しています"
   },
   "duplicate_skill_manifest_url_74d85839": {
-    "message": "Duplicate skill manifest Url"
+    "message": "スキル マニフェスト URL が重複しています"
   },
   "duplicate_skill_name_d9f6eb8d": {
-    "message": "Duplicate skill name"
+    "message": "スキル名が重複しています"
   },
   "duplicated_intents_recognized_d3908424": {
-    "message": "Duplicated intents recognized"
+    "message": "重複するインテントが認識されました"
   },
   "early_adopters_e8db7999": {
-    "message": "Early adopters"
+    "message": "早期導入者"
   },
   "edit_a_publish_profile_30ebab3e": {
-    "message": "Edit a publish profile"
+    "message": "公開プロファイルの編集"
   },
   "edit_a_skill_5665d9ac": {
-    "message": "Edit a skill"
+    "message": "スキルの編集"
   },
   "edit_actions_b38e9fac": {
-    "message": "Edit Actions"
+    "message": "アクションの編集"
   },
   "edit_an_array_property_5d886011": {
-    "message": "Edit an array property"
+    "message": "配列プロパティの編集"
   },
   "edit_array_4ab37c8": {
-    "message": "Edit Array"
+    "message": "配列の編集"
   },
   "edit_c5fbea07": {
     "message": "編集"
   },
   "edit_displayname_dialog_description_986a7d60": {
-    "message": "Edit { displayName } dialog description"
+    "message": "{ displayName } ダイアログの説明の編集"
   },
   "edit_in_json_75d0d754": {
-    "message": "Edit in JSON"
+    "message": "JSON 内の編集"
   },
   "edit_kb_name_5e2d8c5b": {
-    "message": "Edit KB name"
+    "message": "KB 名の編集"
   },
   "edit_property_dd6a1172": {
     "message": "プロパティの編集"
   },
+  "edit_schema_a2ab5695": {
+    "message": "Edit schema"
+  },
   "edit_source_45af68b4": {
-    "message": "Edit source"
+    "message": "ソースの編集"
   },
   "ejecting_runtime_f6c90614": {
-    "message": "Ejecting runtime..."
+    "message": "ランタイムを取り出しています..."
   },
   "emit_a_custom_event_78cf318b": {
-    "message": "Emit a custom event"
+    "message": "カスタム イベントの生成"
   },
   "emit_a_telemetry_track_event_e2442842": {
-    "message": "Emit a telemetry track event"
+    "message": "テレメトリ追跡イベントの生成"
   },
   "emit_a_trace_event_f653ae84": {
-    "message": "Emit a trace event"
+    "message": "トレース イベントの生成"
   },
   "emit_event_32aa6583": {
-    "message": "Emit Event"
+    "message": "イベントの生成"
   },
   "empty_qna_icon_34c180c6": {
-    "message": "Empty QnA Icon"
+    "message": "空の QnA アイコン"
   },
   "enable_6f5d1328": {
     "message": "有効化"
   },
   "enable_line_numbers_to_refer_to_code_lines_by_numb_e5ba66ea": {
-    "message": "Enable line numbers to refer to code lines by number."
+    "message": "コード行を番号で参照するには、行番号を有効にしてください。"
   },
   "enable_multi_turn_extraction_8a168892": {
-    "message": "Enable multi-turn extraction"
+    "message": "マルチターン抽出を有効にする"
   },
   "enabled_ba7cab66": {
     "message": "有効"
   },
   "end_dialog_8f562a4c": {
-    "message": "End Dialog"
+    "message": "ダイアログの終了"
   },
   "end_this_dialog_3ed0d50b": {
-    "message": "End this dialog"
+    "message": "このダイアログを終了します"
   },
   "end_turn_6ab71cea": {
-    "message": "End Turn"
+    "message": "ターンの終了"
   },
   "end_turn_ca85b3d4": {
-    "message": "End turn"
+    "message": "ターンの終了"
   },
   "endofconversation_activity_4aa21306": {
-    "message": "EndOfConversation activity"
+    "message": "EndOfConversation アクティビティ"
   },
   "english_us_1d884ccd": {
     "message": "英語 (米国)"
   },
   "enter_a_manifest_url_to_add_a_new_skill_to_your_bo_57e9d660": {
-    "message": "Enter a manifest url to add a new skill to your bot."
+    "message": "新しいスキルをボットに追加するには、マニフェスト URL を入力してください。"
   },
   "enter_a_max_value_14e8ba52": {
-    "message": "Enter a max value"
+    "message": "最大値を入力してください"
   },
   "enter_a_min_value_c3030813": {
-    "message": "Enter a min value"
+    "message": "最小値を入力してください"
   },
   "enter_a_url_or_browse_to_upload_a_file_88a783fa": {
-    "message": "Enter a URL or browse to upload a file "
+    "message": "URL を入力するか参照してファイルをアップロードします"
   },
   "enterprise_assistant_434df551": {
-    "message": "Enterprise Assistant"
+    "message": "エンタープライズ アシスタント"
   },
   "entities_ef09392c": {
     "message": "エンティティ"
@@ -1014,7 +1020,7 @@
     "message": "環境"
   },
   "equals_expression_47199f4e": {
-    "message": "Equals Expression"
+    "message": "等式"
   },
   "error_98e81528": {
     "message": "エラー"
@@ -1023,61 +1029,61 @@
     "message": "エラー:"
   },
   "error_event_c079b608": {
-    "message": "Error event"
+    "message": "エラー イベント"
   },
   "error_func_does_not_have_an_evaluator_it_s_not_a_b_8c660980": {
-    "message": "Error: { func } does not have an evaluator, it''s not a built-in function or a custom function"
+    "message": "エラー: { func } にエバリュエーターが指定されていません。これは組み込み関数またはカスタム関数ではありません"
   },
   "error_in_ui_schema_for_title_errormsg_options_7f3c22f2": {
-    "message": "Error in UI schema for { title }: { errorMsg }\n{ options }"
+    "message": "{ title } の UI スキーマのエラー: { errorMsg }\n{ options }"
   },
   "error_occured_ejecting_runtime_76bb48e7": {
-    "message": "Error occured ejecting runtime!"
+    "message": "ランタイムの取り出し中にエラーが発生しました。"
   },
   "error_occurred_5549a6b4": {
     "message": "エラーが発生しました"
   },
   "error_processing_schema_2c707cf3": {
-    "message": "Error Processing Schema"
+    "message": "スキーマの処理エラー"
   },
   "event_activity_2067a94b": {
-    "message": "Event activity"
+    "message": "イベント アクティビティ"
   },
   "event_created_e9e05afc": {
-    "message": "Event created"
+    "message": "イベントが作成されました"
   },
   "event_focused_51e447f3": {
-    "message": "Event focused"
+    "message": "フォーカスのあるイベント"
   },
   "event_received_457f99d6": {
-    "message": "Event received"
+    "message": "イベントを受信しました"
   },
   "events_cf7a8c50": {
     "message": "イベント"
   },
   "example_bot_list_9be1d563": {
-    "message": "Example bot list"
+    "message": "ボット リストの例"
   },
   "examples_c435f08c": {
     "message": "例"
   },
   "existing_files_in_scripts_folder_will_be_overwritt_afa8d787": {
-    "message": "Existing files in scripts/folder will be overwritten. Are you sure you want to continue?"
+    "message": "スクリプト/フォルダー内の既存のファイルは上書きされます。続行しますか?"
   },
   "expand_2f2fadbd": {
     "message": "展開"
   },
   "expand_navigation_20330d1d": {
-    "message": "Expand Navigation"
+    "message": "ナビゲーションの展開"
   },
   "expected_responses_intent_intentname_44b051c": {
-    "message": "Expected responses (intent: #{ intentName })"
+    "message": "予想される応答 (インテント: #{ intentName })"
   },
   "export_as_skill_764cf284": {
-    "message": "Export as skill"
+    "message": "スキルとしてエクスポート"
   },
   "export_assets_to_zip_d2d798ab": {
-    "message": "Export assets to .zip"
+    "message": "アセットを .zip にエクスポート"
   },
   "export_de71cd8e": {
     "message": "エクスポート"
@@ -1086,40 +1092,40 @@
     "message": "式"
   },
   "expression_starting_with_a750efc8": {
-    "message": "Expression starting with =."
+    "message": "= で始まる式です。"
   },
   "expression_to_evaluate_ce4095b1": {
-    "message": "Expression to evaluate."
+    "message": "評価する式です。"
   },
   "extensions_7250a0bb": {
     "message": "拡張機能"
   },
   "external_resources_will_not_be_changed_c08b0009": {
-    "message": "External resources will not be changed."
+    "message": "外部リソースは変更されません。"
   },
   "extract_question_and_answer_pairs_from_an_online_f_7316548e": {
-    "message": "Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence. Learn more about knowledge base sources. Skip this step to add questions and answers manually after creation. The number of sources and file size you can add depends on the QnA service SKU you choose. Learn more about QnA Maker SKUs."
+    "message": "オンラインの FAQ、製品マニュアル、またはその他のファイルから、質問と回答のペアを抽出します。サポートされている形式は、質問と回答が順番に含まれている .tsv、.pdf、.doc、.docx、.xlsx です。ナレッジ ベースのソースに関する詳細情報をご覧ください。作成後に質問と回答を手動で追加するには、この手順をスキップします。追加できるソースとファイル サイズは、選択した QnA サービス SKU によって異なります。QnA Maker SKU に関する詳細情報をご覧ください。"
   },
   "extract_question_and_answer_pairs_from_an_online_f_c1e12724": {
-    "message": "Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence. "
+    "message": "オンラインの FAQ、製品マニュアル、またはその他のファイルから、質問と回答のペアを抽出します。サポートされている形式は、質問と回答が順番に含まれている .tsv、.pdf、.doc、.docx、.xlsx です。"
   },
   "extracting_qna_pairs_from_url_b0331bba": {
-    "message": "Extracting QNA pairs from { url }"
+    "message": "{ url } から QNA ペアを抽出しています"
   },
   "fallback_text_e5ff1cb7": {
-    "message": "Fallback Text"
+    "message": "フォールバック テキスト"
   },
   "false_2f39ee6d": {
-    "message": "FALSE"
+    "message": "false"
   },
   "false_eef8c169": {
     "message": "False"
   },
   "field_set_6e7d7f67": {
-    "message": "Field Set"
+    "message": "フィールド セット"
   },
   "fields_must_be_either_all_strings_or_all_fieldset__d3df28c": {
-    "message": "fields must be either all strings or all fieldset objects"
+    "message": "フィールドはすべて文字列か、すべて fieldset オブジェクトである必要があります"
   },
   "file_name_8fd421ff": {
     "message": "ファイル名"
@@ -1128,7 +1134,7 @@
     "message": "ファイルが見つかりません"
   },
   "file_or_attachment_5467e604": {
-    "message": "File or attachment"
+    "message": "ファイルまたは添付ファイル"
   },
   "file_type_fd1ba7ee": {
     "message": "ファイルの種類"
@@ -1140,31 +1146,34 @@
     "message": "FirstSelector"
   },
   "folder_foldername_already_exists_4a2260e9": {
-    "message": "folder { folderName } already exists"
+    "message": "フォルダー { folderName } は既に存在します"
   },
   "for_each_def04c48": {
-    "message": "For Each"
+    "message": "それぞれ"
   },
   "for_each_page_3b4d4b69": {
-    "message": "For Each Page"
+    "message": "ページごと"
   },
   "for_properties_of_type_list_or_enum_your_bot_accep_9e7649c6": {
-    "message": "For properties of type list (or enum), your bot accepts only the values you define. After your dialog is generated, you can provide synonyms for each value."
+    "message": "型のリスト (または列挙型) のプロパティの場合、ボットは定義された値のみを受け付けます。ダイアログが生成された後は、各値のシノニムを指定できます。"
   },
   "form_dialog_schema_actions_c9f1c26": {
-    "message": "Form dialog schema actions"
+    "message": "フォーム ダイアログ スキーマのアクション"
   },
   "form_editor_7c2b02f0": {
-    "message": "form editor"
+    "message": "フォーム エディター"
   },
   "form_title_baf85c7e": {
-    "message": "form title"
+    "message": "フォームのタイトル"
+  },
+  "form_wide_operations_1c1a73eb": {
+    "message": "form-wide operations"
   },
   "forms_380ab2ae": {
     "message": "フォーム"
   },
   "fromtemplatename_does_not_exist_d429483c": {
-    "message": "fromTemplateName does not exist"
+    "message": "fromTemplateName が存在しません"
   },
   "gb_7570760e": {
     "message": "GB"
@@ -1176,28 +1185,28 @@
     "message": "生成"
   },
   "generate_dialog_b80a85b2": {
-    "message": "Generate dialog"
+    "message": "ダイアログの生成"
   },
-  "generating_form_dialog_using_schemaid_schema_faile_8062f953": {
-    "message": "Generating form dialog using ${ schemaId } schema failed."
+  "generating_form_dialog_using_schemaid_schema_faile_82ebdd72": {
+    "message": "Generating form dialog using \"{ schemaId }\" schema failed."
   },
   "get_a_new_copy_of_the_runtime_code_84970bf": {
-    "message": "Get a new copy of the runtime code"
+    "message": "ランタイム コードの新しいコピーを取得します"
   },
   "get_started_50c13c6c": {
     "message": "開始しましょう!"
   },
   "getting_help_ab6811b0": {
-    "message": "Getting Help"
+    "message": "ヘルプの表示"
   },
   "getting_started_f45a7e87": {
     "message": "作業の開始"
   },
   "give_your_bot_personality_multi_language_capabilit_f00c2c93": {
-    "message": "Give your bot personality, multi-language capabilities and more; you can edit this later in Bot Settings."
+    "message": "ボットの性格、多言語機能などを指定します。これは、後からボットの設定で編集できます。"
   },
   "go_to_qna_all_up_view_page_d475333d": {
-    "message": "Go to QnA all-up view page."
+    "message": "QnA 総合ビュー ページに移動します。"
   },
   "got_it_2c06b54a": {
     "message": "了解しました"
@@ -1206,22 +1215,22 @@
     "message": "案内"
   },
   "greeting_message_ce77bbb2": {
-    "message": "Greeting Message"
+    "message": "あいさつメッセージ"
   },
   "handle_a_condition_f32eb8d": {
-    "message": "Handle a Condition"
+    "message": "条件の処理"
   },
   "handoff_activity_14363a20": {
-    "message": "Handoff activity"
+    "message": "ハンドオフ アクティビティ"
   },
   "handover_to_human_1a619574": {
-    "message": "Handover to human"
+    "message": "人間への引き渡し"
   },
   "here_s_what_we_know_4e9c1731": {
-    "message": "Here’s what we know…"
+    "message": "これが分かっていることです..."
   },
   "hi_there_here_are_some_things_that_i_can_do_32909722": {
-    "message": "Hi there! Here are some things that I can do!"
+    "message": "こんにちは。私はこんなことができます。"
   },
   "hide_code_5dcffa94": {
     "message": "コードを非表示にする"
@@ -1230,70 +1239,70 @@
     "message": "ホーム"
   },
   "hospitality_assistant_c330e403": {
-    "message": "Hospitality Assistant"
+    "message": "おもてなしアシスタント"
   },
   "hosts_your_bot_application_9dd01ffc": {
-    "message": "Hosts your Bot application."
+    "message": "ボット アプリケーションをホストします。"
   },
   "hosts_your_qna_maker_knowledgebases_64713aee": {
-    "message": "Hosts your QnA Maker knowledgebases"
+    "message": "QnA Maker ナレッジ ベースをホストします"
   },
   "http_request_79847109": {
     "message": "HTTP 要求"
   },
   "i_am_sorry_i_didn_t_understand_that_f86e307a": {
-    "message": "I am sorry, I didn''t understand that"
+    "message": "すみません。よくわかりませんでした"
   },
   "i_want_to_delete_this_bot_f81a4735": {
-    "message": "I want to delete this bot"
+    "message": "このボットを削除する"
   },
   "icon_name_is_file_c80dacae": {
-    "message": "{ icon } name is { file }"
+    "message": "{ icon } 名は { file } です"
   },
   "iconname_file_icon_29976c8e": {
-    "message": "{ iconName } file icon"
+    "message": "{ iconName } ファイルのアイコン"
   },
   "id_already_exists_please_enter_a_unique_file_name_174913a3": {
-    "message": "{ id } already exists. Please enter a unique file name."
+    "message": "{ id } は既に存在します。一意のファイル名を入力してください。"
   },
   "if_condition_56c9be4a": {
-    "message": "If Condition"
+    "message": "if 条件"
   },
   "if_this_problem_persists_please_file_an_issue_on_6fbc8e2b": {
-    "message": "If this problem persists, please file an issue on"
+    "message": "この問題が解決しない場合は、問題を提出してください"
+  },
+  "if_turned_on_then_externally_stored_templates_will_3f487651": {
+    "message": "If turned on then externally stored templates will be selectable in the new bot flow template list"
   },
   "if_you_already_have_a_luis_account_provide_the_inf_bede07a4": {
-    "message": "If you already have a LUIS account, provide the information below. If you do not have an account yet, create a (free) account first."
+    "message": "既に LUIS アカウントをお持ちの場合は、以下の情報を入力してください。アカウントをまだお持ちでない場合は、最初に (無料) アカウントを作成してください。"
   },
   "if_you_already_have_a_qna_account_provide_the_info_466d6a4b": {
-    "message": "If you already have a QNA account, provide the information below. If you do not have an account yet, create a (free) account first."
+    "message": "既に QNA アカウントをお持ちの場合は、以下の情報を入力してください。アカウントをまだお持ちでない場合は、最初に (無料) アカウントを作成してください。"
   },
   "import_schema_75659c5f": {
-    "message": "Import schema"
+    "message": "スキーマのインポート"
   },
   "in_production_5a70b8b4": {
-    "message": "In production"
+    "message": "運用中"
   },
   "in_test_63c32694": {
-    "message": "In test"
+    "message": "テスト中"
   },
   "in_the_b_create_a_trigger_b_wizard_set_the_trigger_f9b23519": {
-    "message": "In the <b>Create a trigger</b> wizard, set the trigger type to <i>Activities</i> in the dropdown. Then set the <b>Activity Type</b> to <i>Greeting (ConversationUpdate activity)</i>, and click the <b>Submit</b> button."
-  },
-  "increment_by_step_1cf3a88": {
-    "message": "increment by { step }"
+    "message": "<b>[トリガーの作成]</b> ウィザードで、トリガーの種類をドロップダウンの <i>[アクティビティ]</i> に設定します。次に、<b>[アクティビティの種類]</b> を <i>[挨拶 (ConversationUpdate アクティビティ)]</i> に設定し、<b>[送信]</b> ボタンをクリックします。"
   },
   "input_1d1d9b8e": {
     "message": "入力"
   },
   "install_microsoft_net_core_sdk_2de509f0": {
-    "message": "Install Microsoft .NET Core SDK"
+    "message": "Microsoft .NET Core SDK をインストール"
   },
   "install_pre_release_versions_of_composer_daily_to__ceb41b54": {
-    "message": "Install pre-release versions of Composer, daily, to access and test the latest features. <a>Learn more</a>."
+    "message": "Composer のプレリリース版を毎日インストールして、最新の機能にアクセスしてテストしてください。<a>詳細はこちらをご覧ください</a>。"
   },
   "install_the_update_and_restart_composer_fac30a61": {
-    "message": "Install the update and restart Composer."
+    "message": "更新プログラムをインストールし、Composer を再起動します。"
   },
   "integer_7f378275": {
     "message": "整数"
@@ -1302,154 +1311,151 @@
     "message": "整数"
   },
   "integer_constant_650191ba": {
-    "message": "Integer constant."
+    "message": "整数定数です。"
   },
   "integer_constant_or_expression_to_evaluate_ec4a17da": {
-    "message": "Integer constant or expression to evaluate."
+    "message": "評価する整数定数または式です。"
   },
   "integer_or_expression_107f60fb": {
-    "message": "Integer or expression"
+    "message": "整数または式"
   },
   "intent_2291200b": {
     "message": "意図"
   },
   "intent_recognized_c3840853": {
-    "message": "Intent recognized"
+    "message": "インテントが認識されました"
   },
   "intentname_is_missing_or_empty_e49db2f8": {
-    "message": "intentName is missing or empty"
+    "message": "intentName が見つからないか、空です"
   },
   "interpolated_string_c96053f2": {
-    "message": "Interpolated string."
+    "message": "補間された文字列です。"
   },
   "interpolated_string_e04923d3": {
-    "message": "Interpolated string"
+    "message": "補間された文字列"
   },
   "interpolated_string_or_expression_to_evaluate_ba0b0ba": {
-    "message": "Interpolated string or expression to evaluate."
+    "message": "評価される補間された文字列または式です。"
   },
   "introduction_of_key_concepts_and_user_experience_e_971b32e9": {
-    "message": "Introduction of key concepts and user experience elements for Composer."
+    "message": "Composer の主要な概念とユーザー エクスペリエンス要素の紹介。"
   },
   "invoke_activity_87df4903": {
-    "message": "Invoke activity"
+    "message": "アクティビティの呼び出し"
   },
   "is_missing_or_empty_a551462e": {
-    "message": "is missing or empty"
+    "message": "が見つからないか、空です"
   },
   "it_s_not_a_built_in_function_or_a_custom_function_1527ed83": {
-    "message": "it''s not a built-in function or a custom function."
+    "message": "これは組み込み関数またはカスタム関数ではありません。"
   },
   "item_actions_22d0242": {
-    "message": "Item Actions"
+    "message": "項目のアクション"
   },
   "item_actions_cd903bde": {
-    "message": "Item actions"
+    "message": "項目のアクション"
   },
   "item_added_f3910bed": {
-    "message": "item added"
+    "message": "追加された項目"
   },
   "itemcount_plural_0_no_schemas_1_one_schema_other_s_e1aea7f": {
-    "message": "{ itemCount, plural,\n     =0 {No schemas}\n     =1 {One schema}\n  other {# schemas}\n} have been found.\n            { itemCount, select,\n      0 {}\n  other {Press down arrow key to navigate the search results}\n}"
+    "message": "{ itemCount, plural,\n     =0 {スキーマなし}\n     =1 {1 つのスキーマ}\n  other {スキーマの数}\n} が見つかりました。\n            { itemCount, select,\n      0 {}\n  other {検索結果内で移動するには下矢印キーを押してください}\n}"
   },
   "jan_28_2020_8beb36dc": {
-    "message": "Jan 28, 2020"
+    "message": "2020 年 1 月 28 日"
   },
   "kb_d9c53902": {
     "message": "KB"
   },
-  "kb_name_cannot_contain_special_characters_616d7939": {
-    "message": "KB name cannot contain special characters."
-  },
   "key_cannot_be_blank_dccc1b46": {
-    "message": "Key cannot be blank"
+    "message": "キーを空白にすることはできません"
   },
   "key_f2a919d5": {
     "message": "キー"
   },
   "keys_must_be_unique_2028cef3": {
-    "message": "Keys must be unique"
+    "message": "キーは一意である必要があります"
   },
   "knowledge_base_name_7d83bbe4": {
-    "message": "Knowledge base name"
+    "message": "ナレッジ ベース名"
   },
   "knowledge_source_dd66f38f": {
-    "message": "Knowledge source"
+    "message": "ナレッジ ソース"
   },
   "l_startline_startcharacter_l_endline_endcharacter_72bc2e5d": {
     "message": "L{ startLine }:{ startCharacter } - L{ endLine }:{ endCharacter } "
   },
   "language_generation_1876f6d6": {
-    "message": "Language Generation"
+    "message": "言語生成"
   },
   "language_generation_file_80c08efe": {
-    "message": "language generation file"
+    "message": "言語生成ファイル"
   },
   "language_understanding_9ae3f1f6": {
-    "message": "Language Understanding"
+    "message": "言語理解"
   },
   "language_understanding_file_a65abc2c": {
-    "message": "language understanding file"
+    "message": "言語理解ファイル"
   },
   "languagepolicy_e754ad28": {
     "message": "LanguagePolicy"
   },
   "last_modified_time_is_time_b1497d3": {
-    "message": "Last modified time is { time }"
+    "message": "最終更新時刻は { time } です"
   },
   "learn_more_a79a7918": {
     "message": "詳細情報"
   },
   "learn_more_about_knowledge_base_sources_24369b09": {
-    "message": "Learn more about knowledge base sources. "
+    "message": "ナレッジ ベースのソースに関する詳細情報をご覧ください。"
   },
   "learn_more_about_title_d1d3edbe": {
-    "message": "Learn more about { title }"
+    "message": "{ title } の詳細"
   },
   "learn_more_c08939e8": {
-    "message": "詳細情報。"
+    "message": "詳しくはこちら。"
   },
   "learn_the_basics_2d9ae7df": {
-    "message": "Learn the basics"
+    "message": "基礎を学ぶ"
   },
   "leave_product_tour_49585718": {
-    "message": "Leave Product Tour?"
+    "message": "製品ツアーを終了しますか?"
   },
   "lg_editor_ee0184e6": {
-    "message": "LG editor"
+    "message": "LG エディター"
   },
   "lg_file_already_exist_55195d20": {
-    "message": "lg file already exist"
+    "message": "lg ファイルは既に存在します"
   },
   "lg_file_id_not_found_6bd6869b": {
-    "message": "LG file { id } not found"
+    "message": "LG ファイル { id } が見つかりません"
   },
   "lg_language_client_7892c4c1": {
-    "message": "LG Language Client"
+    "message": "LG 言語クライアント"
   },
   "lg_navigation_pane_97b15c3d": {
-    "message": "LG Navigation Pane"
+    "message": "LG ナビゲーション ペイン"
   },
   "line_numbers_1bfa7fb": {
-    "message": "行の範囲"
+    "message": "行番号"
   },
   "line_startline_startcharacter_line_endline_endchar_372bb2f4": {
-    "message": "line { startLine }:{ startCharacter } - line { endLine }:{ endCharacter }"
+    "message": "行 { startLine }:{ startCharacter } - 行 { endLine }:{ endCharacter }"
   },
   "link_to_where_this_luis_intent_is_defined_9be25fb7": {
-    "message": "link to where this LUIS intent is defined"
+    "message": "この LUIS インテントが定義されている場所へのリンク"
   },
   "list_a034633b": {
-    "message": "一覧"
+    "message": "リスト"
   },
   "list_count_values_33ea7088": {
-    "message": "list - { count } values"
+    "message": "list - { count } 個の値"
   },
   "list_view_e33843f0": {
     "message": "リスト ビュー"
   },
   "load_form_dialog_schema_templates_error_6a348e76": {
-    "message": "Load form dialog schema templates Error"
+    "message": "フォーム ダイアログ スキーマ テンプレートからの読み込みエラー"
   },
   "loading_25990131": {
     "message": "読み込み中..."
@@ -1461,7 +1467,7 @@
     "message": "場所"
   },
   "location_is_location_8c17b5de": {
-    "message": "location is { location }"
+    "message": "場所は { location } です"
   },
   "log_to_console_4fc23e34": {
     "message": "コンソールにログを作成"
@@ -1470,64 +1476,64 @@
     "message": "ログイン"
   },
   "login_to_composer_eb42b41": {
-    "message": "Login to Composer"
+    "message": "Composer にログインする"
   },
   "loop_for_each_item_53eb7c5b": {
-    "message": "Loop: for each item"
+    "message": "ループ: 項目ごと"
   },
   "loop_for_each_item_e09537ae": {
-    "message": "Loop: For each item"
+    "message": "ループ: 項目ごと"
   },
   "loop_for_each_page_multiple_items_733e7f41": {
-    "message": "Loop: For each page (multiple items)"
+    "message": "ループ: ページごと (複数の項目)"
   },
   "looping_ddae56ff": {
     "message": "ループ"
   },
   "lu_editor_d09fb2b0": {
-    "message": "LU editor"
+    "message": "LU エディター"
   },
   "lu_file_already_exist_7f118089": {
-    "message": "lu file already exist"
+    "message": "lu ファイルは既に存在します"
   },
   "lu_file_id_not_found_8732d33e": {
-    "message": "LU file { id } not found"
+    "message": "LU ファイル { id } が見つかりません"
   },
   "lu_language_client_bbffcd7b": {
-    "message": "LU Language Client"
+    "message": "LU 言語クライアント"
   },
   "lu_navigation_pane_54dc5587": {
-    "message": "LU Navigation Pane"
+    "message": "LU ナビゲーション ペイン"
   },
   "luis_add4bbe3": {
     "message": "LUIS"
   },
   "luis_authoring_key_cfaba7dd": {
-    "message": "LUIS Authoring key:"
+    "message": "LUIS オーサリング キー:"
   },
   "luis_authoring_region_b142f97b": {
-    "message": "Luis Authoring Region"
+    "message": "LUIS 作成リージョン"
   },
   "main_dialog_eed5c847": {
-    "message": "Main dialog"
+    "message": "メイン ダイアログ"
   },
   "make_a_copy_77d1233": {
     "message": "コピーの作成"
   },
   "manage_properties_c9fa4456": {
-    "message": "Manage properties"
+    "message": "プロパティの管理"
   },
   "manifest_url_30824e88": {
-    "message": "Manifest url"
+    "message": "マニフェスト URL"
   },
   "manifest_url_can_not_be_accessed_a7f147b2": {
-    "message": "Manifest url can not be accessed"
+    "message": "マニフェスト URL にアクセスできません"
   },
   "manifest_version_1edc004a": {
-    "message": "Manifest Version"
+    "message": "マニフェストのバージョン"
   },
   "manually_add_question_and_answer_pairs_to_create_a_f1318c4e": {
-    "message": "Manually add question and answer pairs to create a KB"
+    "message": "質問と回答のペアを手動で追加して KB を作成する"
   },
   "maximum_f0e8e5e4": {
     "message": "最大"
@@ -1536,40 +1542,40 @@
     "message": "MB"
   },
   "menu_items_2d66492c": {
-    "message": "Menu items"
+    "message": "メニュー項目"
   },
   "message_5c38209d": {
     "message": "メッセージ"
   },
   "message_deleted_628eef3a": {
-    "message": "Message deleted"
+    "message": "メッセージが削除されました"
   },
   "message_deleted_activity_85dd8915": {
-    "message": "Message deleted activity"
+    "message": "メッセージの削除アクティビティ"
   },
   "message_reaction_3704d790": {
-    "message": "Message reaction"
+    "message": "メッセージの応答"
   },
   "message_reaction_activity_379944e7": {
-    "message": "Message reaction activity"
+    "message": "メッセージの応答アクティビティ"
   },
   "message_received_5abfe9a0": {
-    "message": "Message received"
+    "message": "メッセージを受信しました"
   },
   "message_received_activity_1ff7c2a4": {
-    "message": "Message received activity"
+    "message": "メッセージの受信アクティビティ"
   },
   "message_updated_4f2e37fe": {
-    "message": "Message updated"
+    "message": "メッセージが更新されました"
   },
   "message_updated_activity_4997737e": {
-    "message": "Message updated activity"
+    "message": "メッセージの更新アクティビティ"
   },
   "microsoft_app_id_a7f3e591": {
-    "message": "Microsoft App Id"
+    "message": "Microsoft アプリ ID"
   },
   "microsoft_app_password_737ebc90": {
-    "message": "Microsoft App Password"
+    "message": "Microsoft アプリのパスワード"
   },
   "minimap_beb3be27": {
     "message": "ミニマップ"
@@ -1578,19 +1584,19 @@
     "message": "最小"
   },
   "missing_definition_for_defname_33f2b594": {
-    "message": "Missing definition for { defName }"
+    "message": "{ defName } の定義が見つかりません"
   },
   "missing_fields_1c88ab71": {
-    "message": "missing fields"
+    "message": "フィールドが見つかりません"
   },
   "modification_rejected_6a6e8322": {
-    "message": "Modification Rejected"
+    "message": "変更が拒否されました"
   },
   "modify_active_dialog_edcf4a45": {
-    "message": "Modify active dialog"
+    "message": "アクティブ ダイアログの変更"
   },
   "modify_this_dialog_3c38af24": {
-    "message": "Modify this dialog"
+    "message": "このダイアログを変更"
   },
   "more_options_e89670cf": {
     "message": "その他のオプション"
@@ -1608,61 +1614,61 @@
     "message": "上へ移動"
   },
   "msft_ignite_ai_show_e131edef": {
-    "message": "MSFT Ignite AI Show"
+    "message": "MSFT Ignite AI 展示会"
   },
   "multi_choice_839b54bb": {
-    "message": "Multi-choice"
+    "message": "複数選択肢"
   },
   "multiple_wildcards_26f50b6c": {
-    "message": "multiple wildcards"
+    "message": "複数のワイルドカード"
   },
   "must_be_an_expression_error_477cbda6": {
-    "message": "must be an expression: { error }"
+    "message": "式でなければなりません: { error }"
   },
   "must_have_a_name_d5c5c464": {
-    "message": "Must have a name"
+    "message": "名前が必要です"
   },
   "my_publish_profile_2ed56828": {
-    "message": "My Publish Profile"
+    "message": "自分の公開プロファイル"
   },
   "name_1aed4a1b": {
     "message": "名前"
   },
   "name_and_save_your_skill_manifest_cfd672b7": {
-    "message": "Name and save your skill manifest."
+    "message": "スキル マニフェストに名前を付けて保存します。"
   },
   "name_cannot_include_special_characters_or_spaces_59a1950b": {
-    "message": "Name cannot include special characters or spaces"
+    "message": "名前に特殊文字やスペースを含めることはできません"
   },
   "name_copy_55d27c1a": {
     "message": "{ name }_Copy"
   },
   "name_is_name_abc564f9": {
-    "message": "Name is { name }"
+    "message": "名前は { name } です"
   },
   "name_is_required_29d28f8d": {
-    "message": "{ name } is required"
+    "message": "{ name } は必須です"
   },
   "name_of_skill_dialog_to_call_201707f3": {
-    "message": "Name of skill dialog to call"
+    "message": "呼び出すスキル ダイアログの名前"
   },
   "name_of_the_property_f3cae657": {
     "message": "プロパティの名前"
   },
   "navigation_control_94f2649e": {
-    "message": "navigation control"
+    "message": "ナビゲーション コントロール"
   },
   "navigation_pane_e587b73c": {
-    "message": "Navigation pane"
+    "message": "ナビゲーション ペイン"
   },
   "navigation_panel_530ae4ac": {
     "message": "ナビゲーション パネル"
   },
   "navigation_path_8b299e64": {
-    "message": "Navigation Path"
+    "message": "ナビゲーション パス"
   },
   "navigation_to_see_actions_3be545c9": {
-    "message": "navigation to see actions"
+    "message": "アクションを表示するためのナビゲーション"
   },
   "new_13daf639": {
     "message": "新規"
@@ -1671,7 +1677,7 @@
     "message": "新しいテンプレート"
   },
   "new_trigger_331c811b": {
-    "message": "New Trigger .."
+    "message": "新しいトリガー .."
   },
   "new_update_available_30534ea5": {
     "message": "新しい更新プログラムが利用可能"
@@ -1686,49 +1692,49 @@
     "message": "次へ"
   },
   "no_editor_for_type_8b5593c5": {
-    "message": "No Editor for { type }"
+    "message": "{ type} のエディターがありません"
   },
   "no_extensions_installed_4b925277": {
-    "message": "No extensions installed"
+    "message": "拡張機能がインストールされていません"
   },
   "no_form_dialog_schema_matches_your_filtering_crite_a198cb62": {
-    "message": "No form dialog schema matches your filtering criteria!"
+    "message": "フィルター条件に一致するフォーム ダイアログ スキーマがありません!"
   },
   "no_lu_file_with_name_id_fb21315d": {
-    "message": "NO LU FILE WITH NAME { id }"
+    "message": "名前が { id } の LU ファイルがありません"
   },
   "no_lu_or_qna_file_with_name_id_21cfe9dc": {
-    "message": "NO LU OR QNA FILE WITH NAME { id }"
+    "message": "名前が { id } の LU または QnA ファイルがありません"
   },
   "no_name_e082310e": {
-    "message": "[no name]"
+    "message": "[名前なし]"
   },
   "no_search_results_1ba50423": {
     "message": "検索結果がありません"
   },
   "no_updates_available_cecd904d": {
-    "message": "No updates available"
+    "message": "利用できる更新プログラムはありません"
   },
   "no_wildcard_ff439e76": {
-    "message": "no wildcard"
+    "message": "ワイルドカードなし"
   },
   "node_menu_e2aa8092": {
-    "message": "Node menu"
+    "message": "ノード メニュー"
   },
   "not_a_single_template_e37f894": {
-    "message": "Not a single template"
+    "message": "単一のテンプレートではありません"
   },
   "not_yet_published_669e37b3": {
-    "message": "まだ発行されていません"
+    "message": "まだ公開されていません"
   },
   "notes_c42e0fd5": {
     "message": "注意"
   },
   "notification_list_ee2abb6c": {
-    "message": "Notification list"
+    "message": "通知リスト"
   },
   "notification_message_msg_7d55d08e": {
-    "message": "Notification Message { msg }"
+    "message": "通知メッセージ { msg }"
   },
   "notification_type_263c145d": {
     "message": "通知の種類"
@@ -1737,40 +1743,37 @@
     "message": "通知"
   },
   "nov_12_2019_96ec5473": {
-    "message": "Nov 12, 2019"
+    "message": "2019 年 11 月 12 日"
   },
   "number_a6dc44e": {
     "message": "数"
   },
   "number_constant_1938e96e": {
-    "message": "Number constant."
+    "message": "数値定数です。"
   },
   "number_constant_or_expression_to_evaluate_1098771": {
-    "message": "Number constant or expression to evaluate."
+    "message": "評価する数値定数または式です。"
   },
   "number_dc1c178": {
     "message": "数値"
   },
   "number_or_expression_55c7f9f": {
-    "message": "Number or expression"
-  },
-  "numeric_field_c2564f69": {
-    "message": "numeric field"
+    "message": "数値または式"
   },
   "oauth_login_b6aa9534": {
-    "message": "OAuth login"
+    "message": "OAuth ログイン"
   },
   "object_345070f6": {
     "message": "オブジェクト"
   },
   "object_constant_77052b91": {
-    "message": "Object constant."
+    "message": "オブジェクト定数です。"
   },
   "object_or_expression_89903fa1": {
-    "message": "Object or expression"
+    "message": "オブジェクトまたは式"
   },
   "object_or_expression_to_evaluate_699c8827": {
-    "message": "Object or expression to evaluate."
+    "message": "評価するオブジェクトまたは式です。"
   },
   "off_5385ef3f": {
     "message": "オフ"
@@ -1791,40 +1794,43 @@
     "message": "オンボード"
   },
   "ondialogevents_types_3dc569b5": {
-    "message": "OnDialogEvents Types"
+    "message": "OnDialogEvents タイプ"
   },
   "open_e0beb7b9": {
     "message": "開く"
   },
   "open_inline_editor_a5aabcfa": {
-    "message": "Open inline editor"
+    "message": "インライン エディターを開く"
+  },
+  "open_notification_panel_5796edb3": {
+    "message": "Open notification panel"
   },
   "optional_221bcc9d": {
-    "message": "オプション"
+    "message": "省略可能"
   },
   "optional_db6daecb": {
     "message": "省略可能"
   },
   "optional_properties_2c23c7c6": {
-    "message": "Optional properties"
+    "message": "省略可能なプロパティ"
   },
   "optional_setting_a_maximum_value_enables_your_bot__1ec30919": {
-    "message": "Optional. Setting a maximum value enables your bot to reject a value that is too large and re-prompt the user for a new value."
+    "message": "オプション。最大値を設定すると、ボットで大きすぎる値を拒否して新しい値の入力をユーザーに再度求めることができます。"
   },
   "optional_setting_a_minimum_value_enables_your_bot__f1fd4bce": {
-    "message": "Optional. Setting a minimum value enables your bot to reject a value that is too small and re-prompt the user for a new value."
+    "message": "オプション。最小値を設定すると、ボットで小さすぎる値を拒否して新しい値の入力をユーザーに再度求めることができます。"
   },
   "or_4f7d4edb": {
-    "message": "Or: "
+    "message": "または:"
   },
   "origin_lg_file_not_found_in_store_d194cdbc": {
-    "message": "origin lg file not found in store"
+    "message": "配信元の lg ファイルがストアで見つかりませんでした"
   },
   "origin_lu_file_not_found_in_store_19e5cc8f": {
-    "message": "origin lu file not found in store"
+    "message": "配信元の lu ファイルがストアで見つかりませんでした"
   },
   "original_ce7b7e64": {
-    "message": " - Original"
+    "message": " - オリジナル"
   },
   "other_1c6d9c79": {
     "message": "その他"
@@ -1836,202 +1842,208 @@
     "message": "ページ番号"
   },
   "parse_failed_at_name_error_8f562bda": {
-    "message": "Parse failed at { name }: { error }"
+    "message": "解析が { name } で失敗しました: { error }"
   },
   "paste_5963d1c1": {
     "message": "貼り付け"
   },
   "personality_1381bf78": {
-    "message": "{ personality }"
+    "message": "{ 性格 }"
   },
   "personality_cf47985f": {
-    "message": "個人情報"
+    "message": "性格"
   },
   "personality_choice_3dfd8268": {
-    "message": "Personality Choice"
+    "message": "性格の選択"
   },
   "please_add_at_least_minitems_endpoint_5439fd74": {
-    "message": "Please add at least { minItems } endpoint"
+    "message": "少なくとも { minItems } エンドポイントを追加してください"
   },
   "please_enter_a_value_for_key_77cfc097": {
-    "message": "Please enter a value for { key }"
+    "message": "{ key } の値を入力してください"
   },
   "please_enter_an_event_name_a148275a": {
-    "message": "Please enter an event name"
+    "message": "イベント名を入力してください"
   },
   "please_input_a_manifest_url_d726edbf": {
-    "message": "Please input a manifest Url"
+    "message": "マニフェスト URL を入力してください"
   },
   "please_input_regex_pattern_5cd659a2": {
-    "message": "Please input regEx pattern"
+    "message": "正規表現パターンを入力してください"
   },
   "please_log_in_before_continuing_b6eace13": {
-    "message": "Please log in before continuing."
+    "message": "続行する前にログインしてください。"
   },
   "please_return_to_design_view_to_start_the_onboardi_a561af9d": {
-    "message": "Please return to Design View to start the Onboarding tutorial."
+    "message": "オンボードのチュートリアルを開始するには、デザイン ビューに戻ってください。"
   },
   "please_select_a_event_type_200c4c9f": {
-    "message": "Please select a event type"
+    "message": "イベントの種類を選択してください"
   },
   "please_select_a_specific_qna_file_to_import_qna_d71d871": {
-    "message": "Please select a specific qna file to import QnA"
+    "message": "QnA をインポートするには、特定の qna ファイルを選択してください"
   },
   "please_select_a_trigger_type_67417abb": {
-    "message": "Please select a trigger type"
+    "message": "トリガーの種類を選択してください"
   },
   "please_select_a_valid_endpoint_bf608af1": {
-    "message": "Please select a valid endpoint"
+    "message": "有効なエンドポイントを選択してください"
   },
   "please_select_a_version_of_the_manifest_schema_4a3efbb1": {
-    "message": "Please select a version of the manifest schema"
+    "message": "マニフェスト スキーマのバージョンを選択してください"
   },
   "please_select_an_activity_type_92f4a8a1": {
-    "message": "Please select an activity type"
+    "message": "アクティビティの種類を選択してください"
   },
   "press_enter_to_add_this_item_or_tab_to_move_to_the_6beb8a14": {
-    "message": "press Enter to add this item or Tab to move to the next interactive element"
+    "message": "この項目を追加するには Enter を押し、次のインタラクティブな要素に移動するには Tab を押します"
   },
   "press_enter_to_add_this_name_and_advance_to_the_ne_6a2ae080": {
-    "message": "press Enter to add this name and advance to the next row, or press Tab to advance to the value field"
+    "message": "この名前を追加して次の行に進むには Enter を押し、値フィールドに進むには Tab を押します"
+  },
+  "preview_features_e279bac5": {
+    "message": "Preview features"
   },
   "previous_bd2ac015": {
     "message": "前へ"
   },
   "previous_folder_e7eeb306": {
-    "message": "previous folder"
+    "message": "前のフォルダー"
   },
   "privacy_290109ea": {
     "message": "プライバシー"
   },
   "privacy_button_b58e437": {
-    "message": "Privacy button"
+    "message": "プライバシー ボタン"
   },
   "progress_of_total_87de8616": {
-    "message": "{ progress }% of { total }"
+    "message": "{ progress }% / { total }"
   },
   "prompt_configurations_ab47cd3f": {
-    "message": "Prompt Configurations"
+    "message": "プロンプトの構成"
   },
   "prompt_for_a_date_5d2c689e": {
-    "message": "Prompt for a date"
+    "message": "日付の入力を求める"
   },
   "prompt_for_a_date_or_a_time_d2df7f90": {
-    "message": "Prompt for a date or a time"
+    "message": "日付または時刻の入力を求めるプロンプト"
   },
   "prompt_for_a_file_or_an_attachment_1bf18e7e": {
-    "message": "Prompt for a file or an attachment"
+    "message": "ファイルまたは添付ファイルの入力を求めるプロンプト"
   },
   "prompt_for_a_number_84999edb": {
-    "message": "Prompt for a number"
+    "message": "数値の入力を求めるプロンプト"
   },
   "prompt_for_attachment_727d4fac": {
-    "message": "Prompt for Attachment"
+    "message": "添付ファイルの確認"
   },
   "prompt_for_confirmation_dc85565c": {
-    "message": "Prompt for confirmation"
+    "message": "確認を求めるプロンプト"
   },
   "prompt_for_text_5c524f80": {
-    "message": "Prompt for text"
+    "message": "テキストの入力を求めるプロンプト"
   },
   "prompt_with_multi_choice_f428542f": {
-    "message": "Prompt with multi-choice"
+    "message": "複数選択のプロンプト"
   },
   "property_actions_9c1a20d9": {
-    "message": "Property actions"
+    "message": "プロパティ アクション"
   },
   "property_description_8d21ea2e": {
-    "message": "Property description."
+    "message": "プロパティの説明。"
   },
   "property_editor_preferences_ad7a4b62": {
-    "message": "Property editor preferences"
+    "message": "プロパティ エディターの設定"
   },
   "property_has_error_s_please_fix_the_error_s_for_th_e994c143": {
-    "message": "Property has error(s), please fix the error(s) for this property."
+    "message": "プロパティにエラーがあります。このプロパティのエラーを修正してください。"
   },
   "property_name_914371f5": {
     "message": "プロパティ名"
   },
+  "property_name_is_required_5bc57d97": {
+    "message": "Property name is required!"
+  },
   "property_title_f2b443b7": {
-    "message": "Property title"
+    "message": "プロパティのタイトル"
   },
   "property_type_95689fa5": {
-    "message": "Property type."
+    "message": "プロパティの種類。"
   },
   "property_type_e38cf7e4": {
     "message": "プロパティの種類"
   },
   "provide_a_brief_description_it_will_appear_on_the__f962eb38": {
-    "message": "Provide a brief description. It will appear on the publish history list."
+    "message": "簡単な説明を入力してください。これは公開履歴リストに表示されます。"
   },
   "provisioning_summary_2be9422f": {
-    "message": "Provisioning Summary"
+    "message": "プロビジョニングの概要"
   },
   "pseudo_1a319287": {
-    "message": "Pseudo"
+    "message": "疑似"
   },
   "publish_5211dca3": {
-    "message": "発行"
+    "message": "公開"
   },
   "publish_configuration_d759a4e3": {
-    "message": "Publish Configuration"
+    "message": "公開の構成"
   },
   "publish_destination_type_5f8c200a": {
-    "message": "Publish Destination Type"
+    "message": "公開先の種類"
   },
   "publish_models_9a36752a": {
-    "message": "Publish models"
+    "message": "モデルの公開"
   },
   "publish_profiles_cf8d307b": {
     "message": "公開プロファイル"
   },
   "publish_to_selected_profile_c0998a2": {
-    "message": "Publish to selected profile"
+    "message": "選択したプロファイルに公開"
   },
   "published_4bb5209e": {
-    "message": "発行済み"
+    "message": "公開済み"
   },
   "publishing_d63a8f2d": {
-    "message": "パブリッシング"
+    "message": "公開しています"
   },
   "qna_28ee5e26": {
     "message": "QnA"
   },
   "qna_editor_9eb94b02": {
-    "message": "QnA editor"
+    "message": "QnA エディター"
   },
   "qna_file_37705cb7": {
-    "message": "qna file"
+    "message": "qna ファイル"
   },
   "qna_intent_recognized_49c3d797": {
-    "message": "QnA Intent recognized"
+    "message": "認識された QnA インテント"
   },
   "qna_maker_azure_search_service_88a403db": {
-    "message": "QnA Maker Azure Search Service"
+    "message": "QnA Maker Azure Search サービス"
   },
   "qna_maker_c313ed6e": {
     "message": "QnA Maker"
   },
   "qna_maker_web_app_3da183bd": {
-    "message": "QnA Maker Web App"
+    "message": "QnA Maker Web アプリ"
   },
   "qna_navigation_pane_b79ebcbf": {
-    "message": "Qna Navigation Pane"
+    "message": "QnA ナビゲーション ペイン"
   },
   "qna_region_5a864ef8": {
-    "message": "QnA Region"
+    "message": "QnA リージョン"
   },
   "qna_subscription_key_ed72a47": {
-    "message": "QNA Subscription key:"
+    "message": "QNA サブスクリプション キー:"
   },
   "question_9121487": {
     "message": "質問"
   },
   "question_is_content_3952e657": {
-    "message": "Question is { content }"
+    "message": "質問は { content } です"
   },
   "question_is_empty_now_f0b5733e": {
-    "message": "Question is empty now"
+    "message": "質問は今のところ空です"
   },
   "randomselector_4a5274f1": {
     "message": "RandomSelector"
@@ -2040,55 +2052,58 @@
     "message": "範囲の選択"
   },
   "re_prompt_for_input_c3b5b3ab": {
-    "message": "Re-prompt for input"
+    "message": "入力を再確認する"
   },
   "recent_bots_53585911": {
-    "message": "Recent Bots"
+    "message": "最近使用したボット"
   },
   "recognizer_type_dc591e16": {
-    "message": "Recognizer Type"
+    "message": "認識エンジンの種類"
   },
   "recognizers_cefce9d1": {
-    "message": "Recognizers"
+    "message": "認識エンジン"
   },
   "redo_363c58b7": {
     "message": "やり直し"
   },
   "redo_is_not_supported_b743e4dc": {
-    "message": "Redo is not supported"
+    "message": "Redo はサポートされていません"
   },
   "refer_to_the_syntax_documentation_here_df8dc9b4": {
-    "message": "Refer to the syntax documentation here."
+    "message": "こちらの構文のドキュメントを参照してください。"
   },
   "regex_intent_is_already_defined_df095c1f": {
-    "message": "RegEx { intent } is already defined"
+    "message": "正規表現 { intent } は既に定義されています"
   },
   "regular_expression_recognizer_44664557": {
-    "message": "Regular expression recognizer"
+    "message": "正規表現認識エンジン"
   },
   "release_1af20f26": {
-    "message": "Release: "
+    "message": "リリース:"
   },
   "reloading_49d2f661": {
-    "message": "Reloading"
+    "message": "再度読み込んでいます"
+  },
+  "remote_templates_a23c242d": {
+    "message": "Remote templates"
   },
   "remove_f47dc62a": {
     "message": "削除"
   },
   "remove_this_dialog_6146716c": {
-    "message": "Remove this dialog"
+    "message": "このダイアログを削除します"
   },
   "remove_this_trigger_622d866d": {
-    "message": "Remove this trigger"
+    "message": "このトリガーを削除します"
   },
   "repeat_this_dialog_83ca994e": {
-    "message": "Repeat this dialog"
+    "message": "このダイアログを繰り返す"
   },
   "replace_this_dialog_e304015e": {
-    "message": "Replace this dialog"
+    "message": "このダイアログを置換する"
   },
   "reprompt_dialog_event_c42d2c33": {
-    "message": "Reprompt dialog event"
+    "message": "ダイアログ イベントを再確認する"
   },
   "required_5f7ef8c0": {
     "message": "必須"
@@ -2097,25 +2112,25 @@
     "message": "必須"
   },
   "required_properties_dfb0350d": {
-    "message": "Required properties"
+    "message": "必須のプロパティ"
   },
   "requiredtext_ff8f722f": {
     "message": "{ requiredText }"
   },
   "requiredtext_priority_priority_4293288f": {
-    "message": "{ requiredText } | Priority: { priority }"
+    "message": "{ requiredText } | 優先度: { priority }"
   },
   "resource_374a9df": {
     "message": "リソース"
   },
   "response_is_response_3cd62f8f": {
-    "message": "Response is { response }"
+    "message": "応答は { response } です"
   },
   "responses_12d6df1d": {
-    "message": "Responses"
+    "message": "応答"
   },
   "restart_bot_34e36428": {
-    "message": "Restart Bot"
+    "message": "ボットの再起動"
   },
   "review_and_generate_63dec712": {
     "message": "レビューと生成"
@@ -2124,19 +2139,19 @@
     "message": "ロールバック"
   },
   "runtime_already_exists_f181f5ec": {
-    "message": "Runtime already exists"
+    "message": "ランタイムは既に存在します"
   },
   "runtime_code_location_4e94ee12": {
-    "message": "Runtime code location"
+    "message": "ランタイム コードの場所"
   },
   "runtime_config_a2904ff9": {
-    "message": "Runtime Config"
+    "message": "ランタイム構成"
   },
   "sample_phrases_5d78fa35": {
-    "message": "Sample Phrases"
+    "message": "サンプルの語句"
   },
   "sample_phrases_are_phrases_a966b47f": {
-    "message": "Sample Phrases are { phrases }"
+    "message": "サンプルの語句は { phrase } です"
   },
   "save_11a80ec3": {
     "message": "保存"
@@ -2145,169 +2160,175 @@
     "message": "名前を付けて保存"
   },
   "save_your_skill_manifest_63bf5f26": {
-    "message": "Save your skill manifest"
+    "message": "スキル マニフェストの保存"
   },
   "schema_24739a48": {
     "message": "スキーマ"
   },
   "schemaid_doesn_t_exists_select_an_schema_to_edit_o_9cccc954": {
-    "message": "{ schemaId } doesn''t exists, select an schema to edit or create a new one"
+    "message": "{ schemaId } は存在しません。編集するスキーマを選択するか、新しいスキーマを作成してください"
   },
   "schemas_74566170": {
     "message": "スキーマ"
   },
   "scripts_successfully_updated_3a75d57f": {
-    "message": "Scripts successfully updated."
+    "message": "スクリプトが正常に更新されました。"
   },
   "sdk_runtime_packages_22d8ed1a": {
-    "message": "SDK runtime packages"
+    "message": "SDK ランタイム パッケージ"
   },
   "search_280d00bd": {
     "message": "検索"
   },
   "search_for_extensions_on_npm_c5ca65d9": {
-    "message": "Search for extensions on npm"
+    "message": "NPM で拡張機能を検索します"
   },
   "search_index_for_your_qna_maker_knowledgebases_22700ca7": {
-    "message": "Search index for your QnA Maker knowledgebases."
+    "message": "QnA Maker ナレッジ ベースの検索インデックス。"
   },
   "see_log_4b833bf7": {
-    "message": "See Log"
+    "message": "ログの表示"
   },
   "select_a_bot_e1c4dc2b": {
-    "message": "Select a Bot"
+    "message": "ボットの選択"
   },
   "select_a_trigger_on_the_left_a4b41558": {
-    "message": "Select a trigger on the left"
+    "message": "左側でトリガーを選択します"
   },
   "select_all_f73344a8": {
     "message": "すべて選択"
   },
   "select_an_activity_type_c982fcbe": {
-    "message": "Select an activity type"
+    "message": "アクティビティの種類の選択"
   },
   "select_an_event_type_3d7108f1": {
-    "message": "Select an event type"
+    "message": "イベントの種類の選択"
   },
   "select_an_option_9f5dfb55": {
     "message": "オプションの選択"
   },
   "select_an_schema_to_edit_or_create_a_new_one_59c7326a": {
-    "message": "Select an schema to edit or create a new one"
+    "message": "編集するスキーマを選択するか新しいものを作成します"
   },
   "select_language_to_delete_d1662d3d": {
-    "message": "Select language to delete"
+    "message": "削除する言語の選択"
   },
   "select_manifest_version_4f5b1230": {
-    "message": "Select manifest version"
+    "message": "マニフェストのバージョンの選択"
   },
   "select_options_9ee7b227": {
     "message": "オプションの選択"
   },
-  "select_property_type_5f3ab685": {
-    "message": "select property type"
+  "select_property_type_45c6e68e": {
+    "message": "Select property type"
   },
   "select_runtime_version_to_add_d63d383b": {
-    "message": "Select runtime version to add"
+    "message": "追加するランタイム バージョンの選択"
   },
   "select_the_language_that_bot_will_be_able_to_under_1f2bcb96": {
-    "message": "Select the language that bot will be able to understand (User input) and respond to (Bot responses).\n    To make this bot available in other languages, click “Add’ to create a copy of the default language, and translate the content into the new language."
+    "message": "ボットが理解できる言語 (ユーザーによる入力) と応答できる言語 (ボット応答) を選択します。\n    このボットを他の言語で使用できるようにするには、[追加] をクリックして既定の言語のコピーを作成し、コンテンツを新しい言語に翻訳します。"
   },
   "select_which_dialogs_are_included_in_the_skill_man_281ef8c9": {
-    "message": "Select which dialogs are included in the skill manifest"
+    "message": "スキル マニフェストに含めるダイアログを選択します"
   },
   "select_which_tasks_this_skill_can_perform_172b0eae": {
-    "message": "Select which tasks this skill can perform"
+    "message": "このスキルが実行できるタスクを選択します"
   },
   "selected_assistant_type_83d58f54": {
-    "message": "Selected Assistant Type"
+    "message": "選択したアシスタントの種類"
   },
   "selection_field_86d1dc94": {
-    "message": "selection field"
+    "message": "選択フィールド"
   },
   "selectors_2dcb3029": {
-    "message": "Selectors"
+    "message": "セレクター"
   },
   "send_a_response_1a917d7e": {
-    "message": "Send a response"
+    "message": "応答の送信"
   },
   "send_an_http_request_aa32fd2": {
-    "message": "Send an HTTP request"
+    "message": "HTTP 要求の送信"
   },
   "send_messages_c48b239": {
-    "message": "Send Messages"
+    "message": "メッセージの送信"
   },
   "sentence_wrap_930c8ced": {
-    "message": "Sentence wrap"
+    "message": "文の折り返し"
   },
   "session_expired_12aaf414": {
     "message": "セッションの有効期限が切れました"
   },
   "set_a_property_4258d8d7": {
-    "message": "Set a property"
+    "message": "プロパティの設定"
   },
   "set_destination_folder_f76e0259": {
-    "message": "Set destination folder"
+    "message": "ターゲット フォルダーの設定"
   },
   "set_properties_7415af3c": {
-    "message": "Set properties"
+    "message": "プロパティの設定"
   },
   "set_up_your_bot_75009578": {
-    "message": "Set up your bot"
+    "message": "ボットのセットアップ"
   },
   "settings_5aa0fd0c": {
     "message": "設定"
   },
   "settings_contains_detailed_information_about_your__54aa601d": {
-    "message": "Settings contains detailed information about your bot. For security reasons, they are hidden by default. To test your bot or publish to Azure, you may need to provide these settings."
+    "message": "設定には、ボットの詳細情報が含まれています。セキュリティ上の理由により、既定では非表示になっています。ボットをテストしたり Azure に公開したりするには、これらの設定を指定する必要がある場合があります。"
   },
   "settings_editor_b5246933": {
-    "message": "Settings editor"
+    "message": "設定エディター"
   },
   "settings_menu_c99ecc6d": {
     "message": "設定メニュー"
   },
   "show_all_notifications_55bf7858": {
-    "message": "Show All Notifications"
+    "message": "すべての通知を表示"
   },
   "show_code_f3e9d1cc": {
     "message": "コードを表示する"
+  },
+  "show_form_dialog_90aad050": {
+    "message": "Show Form Dialog"
+  },
+  "show_form_dialog_editor_in_the_canvas_140492b2": {
+    "message": "Show form dialog editor in the canvas"
   },
   "show_keys_3072a5b8": {
     "message": "キーの表示"
   },
   "show_skill_manifest_5d0abde1": {
-    "message": "Show skill manifest"
+    "message": "スキル マニフェストの表示"
   },
   "sign_out_user_6845d640": {
-    "message": "Sign out user"
+    "message": "ユーザーのサインアウト"
   },
   "skill_dialog_name_1bbf0eff": {
-    "message": "Skill Dialog Name"
+    "message": "スキル ダイアログ名"
   },
   "skill_endpoint_b563491e": {
-    "message": "Skill Endpoint"
+    "message": "スキル エンドポイント"
   },
   "skill_endpoints_e4e3d8c1": {
-    "message": "Skill endpoints"
+    "message": "スキル エンドポイント"
   },
   "skill_host_endpoint_b1088d0": {
-    "message": "Skill Host Endpoint"
+    "message": "スキル ホストのエンドポイント"
   },
   "skill_manifest_endpoint_is_configured_improperly_e083731d": {
-    "message": "Skill manifest endpoint is configured improperly"
+    "message": "スキル マニフェストのエンドポイントが正しく構成されていません"
   },
   "skillname_manifest_ef3d9fed": {
-    "message": "{ skillName } Manifest"
+    "message": "{ skillName } マニフェスト"
   },
   "skills_49cccd6a": {
-    "message": "Skills"
+    "message": "スキル"
   },
   "sorry_something_went_wrong_with_connecting_bot_run_7d6785e3": {
-    "message": "Sorry, something went wrong with connecting bot runtime"
+    "message": "申し訳ございません。ボット ランタイムの接続中に問題が発生しました"
   },
   "sorry_something_went_wrong_with_publishing_try_aga_306a48f5": {
-    "message": "Sorry, something went wrong with publishing. Try again or exit out of this task."
+    "message": "申し訳ございません。公開中に問題が発生しました。もう一度やり直すか、このタスクを終了してください。"
   },
   "sorted_a_to_z_915b2ed3": {
     "message": "昇順で並べ替え"
@@ -2316,253 +2337,268 @@
     "message": "降順で並べ替え"
   },
   "spaces_and_special_characters_are_not_allowed_20d47684": {
-    "message": "Spaces and special characters are not allowed."
+    "message": "スペースと特殊文字は使用できません。"
   },
   "spaces_and_special_characters_are_not_allowed_use__48acec3c": {
-    "message": "Spaces and special characters are not allowed. Use letters, numbers, -, or _."
+    "message": "スペースと特殊文字は使用できません。文字、数字、-、または _ を使用してください。"
+  },
+  "spaces_and_special_characters_are_not_allowed_use__d24a8636": {
+    "message": "Spaces and special characters are not allowed. Use letters, numbers, -, or _, and begin the name with a letter."
   },
   "specify_a_name_and_description_for_your_new_dialog_86eb3130": {
-    "message": "Specify a name and description for your new dialog."
+    "message": "新しいダイアログの名前と説明を入力します。"
   },
   "specify_a_name_description_and_location_for_your_n_667f1438": {
-    "message": "Specify a name, description, and location for your new bot project."
+    "message": "新しいボット プロジェクトの名前、説明、場所を指定します。"
   },
   "speech_16063aed": {
     "message": "音声"
   },
   "start_bot_25ecad14": {
-    "message": "Start Bot"
+    "message": "ボットの起動"
   },
   "start_bot_failed_d75647d5": {
-    "message": "Start bot failed"
+    "message": "ボットの起動に失敗しました"
   },
   "start_command_a085f2ec": {
-    "message": "Start command"
+    "message": "開始コマンド"
+  },
+  "start_typing_kind_or_b0c305da": {
+    "message": "Start typing { kind } or"
   },
   "state_is_state_a2b8943": {
-    "message": "State is { state }"
+    "message": "状態は { state } です"
   },
   "status_e7fdbe06": {
     "message": "状態"
   },
   "step_of_setlength_43c73821": {
-    "message": "{ step } of { setLength }"
+    "message": "{ step } / { setLength }"
   },
   "string_24369b3": {
     "message": "文字列"
   },
   "string_field_db491570": {
-    "message": "string field"
+    "message": "文字列フィールド"
   },
   "string_or_expression_c441b45c": {
-    "message": "String or expression"
+    "message": "文字列または式"
   },
   "submit_a3cc6859": {
     "message": "送信"
   },
   "subscription_keys_for_language_understanding_cogni_105e039f": {
-    "message": "Subscription keys for Language Understanding Cognitive Service."
+    "message": "Language Understanding コグニティブ サービスのサブスクリプション キー。"
   },
   "subscription_keys_for_qna_maker_cognitive_service__91da99a4": {
-    "message": "Subscription keys for QnA Maker Cognitive Service which facilitates the bot personality you selected."
+    "message": "選択したボットの性格を促進する QnA Maker コグニティブ サービスのサブスクリプション キー。"
   },
   "summary_24ad7681": {
     "message": "概要"
   },
   "synonyms_optional_afe5cdb1": {
-    "message": "Synonyms (Optional)"
+    "message": "類義語 (省略可能)"
   },
   "tb_149f379c": {
     "message": "TB"
   },
   "templatename_is_missing_or_empty_23e6b06e": {
-    "message": "templateName is missing or empty"
+    "message": "templateName が見つからないか、空です"
   },
   "terms_of_use_6542769b": {
     "message": "利用規約"
   },
   "test_in_emulator_b1b3c278": {
-    "message": "Test in Emulator"
+    "message": "Emulator でのテスト"
   },
   "test_your_bot_3cd1f4bb": {
-    "message": "Test your bot"
+    "message": "ボットのテスト"
   },
   "text_7f4593da": {
     "message": "テキスト"
   },
   "the_api_messages_endpoint_for_the_skill_f318dc63": {
-    "message": "The /api/messages endpoint for the skill."
+    "message": "スキルの /api/messages エンドポイント。"
   },
   "the_azure_bot_service_resource_stores_configuratio_b7b4e73d": {
-    "message": "The Azure Bot Service resource stores configuration information that allows your Virtual Assistant to be accessed on the supported Channels and provide OAuth authentication."
+    "message": "Azure Bot Service リソースは、サポートされているチャネルで仮想アシスタントにアクセスし、OAuth 認証を提供するための構成情報を保存します。"
   },
   "the_callback_url_for_the_skill_host_e20e1012": {
-    "message": "The callback url for the skill host."
+    "message": "スキル ホストのコールバック URL。"
   },
   "the_dialog_you_have_tried_to_delete_is_currently_u_a37c7a02": {
-    "message": "The dialog you have tried to delete is currently used in the below dialog(s). Removing this dialog will cause your Bot to malfunction without additional action."
+    "message": "削除しようとしたダイアログは、以下のダイアログで現在使用されています。このダイアログを削除すると、追加の操作なしでボットが正しく動作しなくなります。"
+  },
+  "the_file_name_can_not_be_empty_cbdbe9c8": {
+    "message": "The file name can not be empty"
   },
   "the_following_customizations_will_be_applied_to_yo_7d3384cf": {
-    "message": "The following customizations will be applied to your bot"
+    "message": "次のカスタマイズがボットに適用されます"
   },
   "the_following_lufile_s_are_invalid_c61ea748": {
-    "message": "The Following LuFile(s) are invalid: \n"
+    "message": "次の LuFile が無効です: \n"
   },
   "the_following_will_be_provisioned_to_enable_your_b_6c52fdac": {
-    "message": "The following will be provisioned to enable your bot"
+    "message": "ボットを有効にするために次のものがプロビジョニングされます"
   },
   "the_main_dialog_is_named_after_your_bot_it_is_the__3d9864f": {
-    "message": "The main dialog is named after your bot. It is the root and entry point of a bot."
+    "message": "メイン ダイアログには、ボットにちなんで名前が付けられています。これはボットのルートとエントリ ポイントです。"
   },
   "the_manifest_can_be_edited_and_refined_manually_if_9269e3f2": {
-    "message": "The manifest can be edited and refined manually if and where needed."
+    "message": "マニフェストは必要に応じて手動で編集および調整できます。"
   },
   "the_microsoft_app_id_that_will_be_calling_the_skil_955424de": {
-    "message": "The Microsoft App Id that will be calling the skill."
+    "message": "スキルを呼び出す Microsoft アプリ ID。"
   },
   "the_microsoft_app_password_that_will_be_calling_th_acf9e1ea": {
-    "message": "The Microsoft App Password that will be calling the skill."
+    "message": "スキルを呼び出す Microsoft アプリのパスワード。"
   },
   "the_page_you_are_looking_for_can_t_be_found_a3b75795": {
-    "message": "The page you are looking for can''t be found."
+    "message": "検索しているページが見つかりません。"
   },
   "the_property_type_defines_the_expected_input_the_t_58a6ef09": {
-    "message": "The property type defines the expected input. The type can be a list (or enum) of defined values or a data format, such as a date, email, number, or string."
+    "message": "プロパティの型は、期待される入力を定義します。この型は、定義された値またはデータ形式 (日付、電子メール、数値、文字列など) のリスト (または列挙型) で指定できます。"
   },
   "the_return_type_does_not_match_2ae72548": {
-    "message": "the return type does not match"
+    "message": "戻り値の型が一致していません"
   },
   "the_root_bot_is_not_a_bot_project_d1495cf6": {
-    "message": "The root bot is not a bot project"
+    "message": "このルート ボットはボット プロジェクトではありません"
   },
   "the_welcome_message_is_triggered_by_the_i_conversa_a3ff58f8": {
-    "message": "The welcome message is triggered by the <i>ConversationUpdate</i> event. To add a new <i>ConversationUpdate</i> trigger:"
+    "message": "ウェルカム メッセージは <i>ConversationUpdate</i> イベントによってトリガーされます。新しい <i>ConversationUpdate</i> トリガーを追加するには:"
   },
   "there_are_no_kind_properties_e299287e": {
-    "message": "There are no { kind } properties."
+    "message": "{ kind } プロパティはありません。"
+  },
+  "there_are_no_notifications_e81eab8d": {
+    "message": "There are no notifications."
   },
   "there_was_an_error_74ed3c58": {
     "message": "エラーが発生しました"
   },
   "there_was_error_creating_your_kb_53b31ff3": {
-    "message": "There was error creating your KB"
+    "message": "KB の作成中にエラーが起きました"
   },
   "these_examples_bring_together_all_of_the_best_prac_ca1b89c7": {
-    "message": "These examples bring together all of the best practices and supporting components we''ve identified through building of conversational experiences."
+    "message": "これらの例は、会話環境の構築によって識別されたすべてのベスト プラクティスとサポートするコンポーネントを提供します。"
   },
   "these_tasks_will_be_used_to_generate_the_manifest__2791be0e": {
-    "message": "These tasks will be used to generate the manifest and describe the capabilities of this skill to those who may want to use it."
+    "message": "これらのタスクはマニフェストを生成するために使用され、このスキルを使用する必要があるユーザーにこのスキルの機能を説明します。"
   },
   "this_bot_has_errors_72fb40d5": {
-    "message": "This bot has errors"
+    "message": "このボットにはエラーがあります"
   },
   "this_bot_has_warnings_b6735e2e": {
-    "message": "This bot has warnings"
+    "message": "このボットには警告があります"
   },
   "this_configures_a_data_driven_dialog_via_a_collect_c7fa4389": {
-    "message": "This configures a data driven dialog via a collection of events and actions."
+    "message": "これにより、イベントとアクションのコレクションを使用してデータドリブン ダイアログが構成されます。"
   },
   "this_dialog_has_no_trigger_yet_d1f1d173": {
-    "message": "This dialog has no trigger yet."
+    "message": "このダイアログにはまだトリガーがありません。"
+  },
+  "this_is_a_botname_notification_c8a391c7": {
+    "message": "This is a { botName } notification"
   },
   "this_is_a_required_field_acb9837e": {
     "message": "これは必須フィールドです。"
   },
   "this_is_a_severity_notification_9beabb58": {
-    "message": "This is a { severity } notification"
+    "message": "これは { severity } の通知です"
   },
   "this_is_the_language_used_for_composer_s_user_inte_ab7fa82e": {
-    "message": "This is the language used for Composer’s user interface."
+    "message": "これは Composer のユーザー インターフェイスに使用される言語です。"
   },
   "this_language_will_be_copied_and_used_as_the_basis_573515e4": {
-    "message": "This language will be copied and used as the basis (and fallback language) for the translation."
+    "message": "この言語はコピーされ、翻訳の基準 (およびフォールバック言語) として使用されます。"
   },
   "this_operation_cannot_be_completed_the_skill_is_al_4886d311": {
-    "message": "This operation cannot be completed. The skill is already part of the Bot Project"
+    "message": "この操作を完了できません。スキルは既にボット プロジェクトに含まれています"
   },
   "this_option_allows_your_users_to_give_multiple_val_d2dd0d58": {
-    "message": "This option allows your users to give multiple values for this property."
+    "message": "このオプションを使用すると、ユーザーはこのプロパティに複数の値を指定できます。"
   },
   "this_trigger_type_is_not_supported_by_the_regex_re_dc3eefa2": {
-    "message": "This trigger type is not supported by the RegEx recognizer. To ensure this trigger is fired, change the recognizer type."
+    "message": "このトリガーの種類は正規表現認識エンジンでサポートされていません。このトリガーが起動されるようにするには、認識エンジンの種類を変更してください。"
   },
   "this_version_of_the_content_is_out_of_date_and_you_5e878f29": {
-    "message": "This version of the content is out of date, and your last change was rejected. The content will be automatically refreshed."
+    "message": "このバージョンのコンテンツは最新ではありません。前回の変更は拒否されました。コンテンツは自動的に更新されます。"
   },
   "this_will_delete_the_dialog_and_its_contents_do_yo_9b48fa3c": {
-    "message": "This will delete the Dialog and its contents. Do you wish to continue?"
+    "message": "ダイアログとその内容が削除されます。続行しますか?"
   },
   "this_will_delete_the_profile_do_you_wish_to_contin_61b54894": {
-    "message": "This will delete the profile. Do you wish to continue?"
+    "message": "プロファイルが削除されます。続行しますか?"
   },
   "this_will_open_your_emulator_application_if_you_do_ba277151": {
-    "message": "This will open your Emulator application. If you don''t yet have the Bot Framework Emulator installed, you can download it <a>here</a>."
+    "message": "エミュレーター アプリケーションが開きます。まだ Bot Framework Emulator がインストールされていない場合は、 <a>ここで</a> ダウンロードできます。"
   },
   "time_2b5aac58": {
     "message": "時間"
   },
   "tip_8f74cd0": {
-    "message": "tip"
+    "message": "ヒント"
   },
   "tips_80d0da2b": {
-    "message": "tips"
+    "message": "ヒント"
   },
   "title_ee03d132": {
     "message": "タイトル"
   },
   "title_msg_ee91458d": {
-    "message": "{ title }. { msg }"
+    "message": "{ title }。{ msg }"
   },
   "to_customize_the_welcome_message_select_the_i_send_9b4bf4f": {
-    "message": "To customize the welcome message, select the <i>Send a response</i> action in the Visual Editor. Then in the Form Editor on the right, you can edit the bot''s welcome message in the <b>Language Generation</b> field."
+    "message": "ウェルカム メッセージをカスタマイズするには、ビジュアル エディターで <i>[応答の送信]</i> アクションを選択します。右側のフォーム エディターの <b>[言語生成]</b> フィールドで、ボットのウェルカム メッセージを編集できます。"
   },
   "to_learn_more_about_the_lg_file_format_read_the_do_ef6e083d": {
-    "message": "> To learn more about the LG file format, read the documentation at\n> { lgHelp }"
+    "message": "> LG ファイル形式の詳細については、{ lgHelp } にあるドキュメントを\n>参照してください "
   },
   "to_learn_more_about_the_lu_file_format_read_the_do_cac5ffc9": {
-    "message": "> To learn more about the LU file format, read the documentation at\n> { LU_HELP }"
+    "message": "> LU ファイル形式の詳細については、{ LU_HELP } にあるドキュメントを\n>参照してください "
   },
   "to_learn_more_about_the_qna_file_format_read_the_d_1ce18259": {
-    "message": "> To learn more about the QnA file format, read the documentation at\n> { QNA_HELP }"
+    "message": "> QnA ファイル形式の詳細については、{ QNA_HELP } にあるドキュメントを\n>参照してください "
   },
   "to_make_your_bot_available_for_others_as_a_skill_w_f2c19b9c": {
-    "message": "To make your bot available for others as a skill, we need to generate a manifest."
+    "message": "ボットを他のユーザーがスキルとして利用できるようにするには、マニフェストを生成する必要があります。"
   },
   "to_run_this_bot_composer_needs_net_core_sdk_d1551038": {
-    "message": "To run this bot, Composer needs .NET Core SDK."
+    "message": "このボットを実行するには、Composer に .NET Core SDK が必要です。"
   },
   "to_understand_what_the_user_says_your_dialog_needs_4e791611": {
-    "message": "To understand what the user says, your dialog needs a \"Recognizer\"; that includes example words and sentences that users may use."
+    "message": "ユーザーが話す内容を理解するため、ダイアログには \"認識エンジン\" が必要です。これには、ユーザーが使用する可能性のあるサンプルの単語と文が含まれます。"
   },
   "to_understand_what_the_user_says_your_dialog_needs_957034cc": {
-    "message": "To understand what the user says, your dialog needs an ''IRecognizer'' that includes example words and sentences that users may use."
+    "message": "ユーザーが話す内容を理解するには、ダイアログに、ユーザーが使用する可能性のあるサンプルの語句と文を含む ''IRecognizer'' が必要です。"
   },
   "to_which_language_will_you_be_translating_your_bot_77219d69": {
-    "message": "To which language will you be translating your bot?"
+    "message": "どの言語でボットを翻訳しますか?"
   },
   "toggle_extension_e41de2d2": {
-    "message": "Toggle extension"
+    "message": "拡張機能の切り替え"
   },
   "toggle_show_all_61f19d77": {
-    "message": "Toggle show all"
+    "message": "すべて表示の切り替え"
   },
   "toolbar_bafd4228": {
-    "message": "toolbar"
+    "message": "ツール バー"
   },
   "total_mb_531a3721": {
     "message": "{ total }MB"
   },
   "trigger_phrases_f6754fa": {
-    "message": "Trigger phrases"
+    "message": "トリガー フレーズ"
   },
   "trigger_phrases_intent_intentname_a1b62148": {
-    "message": "Trigger phrases (intent: #{ intentName })"
+    "message": "トリガー フレーズ (インテント: #{ intentName })"
   },
   "triggers_connect_intents_with_bot_responses_think__fdfc97ea": {
-    "message": "Triggers connect intents with bot responses. Think of a trigger as one capability of your bot. So your bot is a collection of triggers. To add a new trigger, click the <b>Add</b> button in the toolbar, and then select the <b>Add a new trigger</b> option from the dropdown menu."
+    "message": "トリガーはインテントをボット応答と関連付けます。トリガーはボットの 1 つの機能と考えてください。ボットはトリガーのコレクションです。新しいトリガーを追加するには、ツールバーの <b>[追加]</b> ボタンをクリックしてから、ドロップダウン メニューから <b>[新しいトリガーの追加]</b> オプションを選択します。"
   },
   "true_1900d7ae": {
-    "message": "真"
+    "message": "true"
   },
   "true_b9327890": {
     "message": "True"
@@ -2573,41 +2609,47 @@
   "try_again_ad656c3c": {
     "message": "もう一度試してください"
   },
+  "try_new_features_in_preview_and_help_us_make_compo_e8e58983": {
+    "message": "Try new features in preview and help us make Composer better. You can turn them on or off at any time."
+  },
   "type_a_name_that_describes_this_content_d1a910b6": {
-    "message": "Type a name that describes this content"
+    "message": "このコンテンツを説明する名前を入力します"
   },
   "type_and_press_enter_33a2905d": {
-    "message": "Type and press enter"
+    "message": "入力して Enter キーを押します"
   },
   "type_c8106334": {
     "message": "種類"
   },
   "type_could_not_be_loaded_65ebaf86": {
-    "message": "{ type } could not be loaded"
+    "message": "{ type } を読み込むことができませんでした"
   },
   "type_dialog_name_14a50769": {
-    "message": "Type dialog name"
+    "message": "ダイアログ名の入力"
   },
   "type_form_dialog_schema_name_b767985c": {
-    "message": "Type form dialog schema name"
+    "message": "フォーム ダイアログ スキーマ名を入力します"
   },
   "typing_activity_6b634ae": {
-    "message": "Typing activity"
+    "message": "入力アクティビティ"
   },
   "undo_a7be8fef": {
     "message": "元に戻す"
   },
   "undo_is_not_supported_ecd6f9fc": {
-    "message": "Undo is not supported"
+    "message": "Undo はサポートされていません"
   },
   "uninstall_8730233": {
     "message": "アンインストール"
   },
+  "unknown_47a3b725": {
+    "message": "Unknown"
+  },
   "unknown_intent_44b962ba": {
-    "message": "Unknown intent"
+    "message": "不明なインテント"
   },
   "unknown_intent_recognized_1953f9be": {
-    "message": "Unknown intent recognized"
+    "message": "認識された不明なインテント"
   },
   "unknown_state_23f73afb": {
     "message": "不明な状態"
@@ -2616,10 +2658,10 @@
     "message": "未使用"
   },
   "update_a_an_activity_previously_sent_during_the_co_f0619cca": {
-    "message": "Update a an activity previously sent during the conversation"
+    "message": "会話中に既に送信されたアクティビティを更新します"
   },
   "update_activity_2b05e6c6": {
-    "message": "Update activity"
+    "message": "アクティビティの更新"
   },
   "update_available_b637d767": {
     "message": "更新があります"
@@ -2631,55 +2673,61 @@
     "message": "更新に失敗しました"
   },
   "update_folder_name_error_24563bf6": {
-    "message": "Update Folder Name Error"
+    "message": "フォルダー名の更新エラー"
   },
   "update_in_progress_f65e6b29": {
     "message": "更新が進行中です"
   },
   "update_scripts_a3a483e": {
-    "message": "Update scripts"
+    "message": "スクリプトの更新"
   },
   "update_scripts_c58771a2": {
-    "message": "Update Scripts"
+    "message": "スクリプトの更新"
   },
   "updating_scripts_e17a5722": {
-    "message": "Updating scripts... "
+    "message": "スクリプトを更新しています..."
   },
   "url_8c4ff7d2": {
     "message": "URL"
   },
   "url_should_start_with_http_s_9ca55d94": {
-    "message": "Url should start with http[s]://"
+    "message": "URL は http[s]:// で始まる必要があります"
   },
   "use_custom_runtime_d7d323fd": {
-    "message": "Use custom runtime"
+    "message": "カスタム ランタイムを使用する"
   },
   "used_3d895705": {
     "message": "使用済み"
   },
   "used_in_126529e5": {
-    "message": "Used In"
+    "message": "使用されている場所"
   },
   "used_to_capture_conversation_and_application_telem_cae2c2a4": {
-    "message": "Used to capture conversation and application telemetry."
+    "message": "会話とアプリケーションテレメトリをキャプチャするために使用されます。"
   },
   "used_to_host_your_bot_web_app_and_qna_maker_web_ap_514dc11b": {
-    "message": "Used to host your Bot Web App and QnA Maker Web App."
+    "message": "ボット Web アプリと QnA Maker Web アプリをホストするために使用されます。"
   },
   "used_to_store_conversation_state_11f348bd": {
-    "message": "Used to store conversation state."
+    "message": "会話の状態を保存するために使用されます。"
   },
   "used_to_store_conversation_transcripts_d80440ab": {
-    "message": "Used to store conversation transcripts."
+    "message": "会話の記録を保存するために使用されます。"
   },
   "user_input_673e4a89": {
-    "message": "User input"
+    "message": "ユーザーによる入力"
   },
   "user_input_a6ff658d": {
-    "message": "ユーザー入力"
+    "message": "ユーザーによる入力"
   },
   "user_is_typing_790cb502": {
-    "message": "User is typing"
+    "message": "ユーザーが入力しています"
+  },
+  "va_creation_6babf7db": {
+    "message": "VA Creation"
+  },
+  "va_template_made_available_in_new_bot_flow_5f85baa4": {
+    "message": "VA template made available in new bot flow."
   },
   "validating_35b79a96": {
     "message": "検証しています..."
@@ -2688,7 +2736,7 @@
     "message": "検証"
   },
   "validation_rules_efd3144d": {
-    "message": "検証規則"
+    "message": "検証ルール"
   },
   "value_d842f16d": {
     "message": "値"
@@ -2697,22 +2745,22 @@
     "message": "バージョン"
   },
   "version_version_a051e218": {
-    "message": "Version { version }"
+    "message": "バージョン { version }"
   },
   "video_tutorials_79eb26ca": {
-    "message": "Video tutorials:"
+    "message": "ビデオ チュートリアル:"
   },
   "view_ba339f93": {
     "message": "表示"
   },
   "view_dialog_f5151228": {
-    "message": "View dialog"
+    "message": "ダイアログの表示"
   },
   "view_kb_c382e495": {
-    "message": "View KB"
+    "message": "KB の表示"
   },
   "view_on_npm_2051324d": {
-    "message": "View on npm"
+    "message": "NPM で表示"
   },
   "vishwac_sena_45910bf0": {
     "message": "Vishwac Sena"
@@ -2724,16 +2772,16 @@
     "message": "警告!"
   },
   "warning_the_action_you_are_about_to_take_cannot_be_1071a3c3": {
-    "message": "Warning: the action you are about to take cannot be undone. Going further will delete this bot and any related files in the bot project folder."
+    "message": "警告: 実行しようとしているアクションは元に戻すことができません。さらに続けると、このボットとボット プロジェクト フォルダー内の関連ファイルが削除されます。"
   },
   "we_have_created_a_sample_bot_to_help_you_get_start_95a58922": {
-    "message": "We have created a sample bot to help you get started with Composer. Click here to open the bot."
+    "message": "Composer の使用を開始するためのサンプル ボットが作成されました。ボットを開くには、ここをクリックしてください。"
   },
   "we_need_to_define_the_endpoints_for_the_skill_to_a_5dc98d90": {
-    "message": "We need to define the endpoints for the skill to allow other bots to interact with it."
+    "message": "他のボットが対話できるようにするには、スキルのエンドポイントを定義する必要があります。"
   },
   "weather_bot_c38920cd": {
-    "message": "Weather Bot"
+    "message": "天気ボット"
   },
   "welcome_73d18b4d": {
     "message": "ようこそ"
@@ -2748,81 +2796,84 @@
     "message": "westus"
   },
   "what_can_the_user_accomplish_through_this_conversa_7ddb03a1": {
-    "message": "What can the user accomplish through this conversation? For example, BookATable, OrderACoffee etc."
+    "message": "この会話でユーザーは何を実行できますか? 例: BookATable、OrderACoffee など"
   },
   "what_is_the_name_of_the_custom_event_b28a7b3": {
-    "message": "What is the name of the custom event?"
+    "message": "カスタム イベントの名前は何ですか?"
   },
   "what_is_the_name_of_this_trigger_2642266e": {
-    "message": "What is the name of this trigger"
+    "message": "このトリガーの名前は何ですか?"
   },
   "what_is_the_name_of_this_trigger_luis_17b60a23": {
-    "message": "What is the name of this trigger (LUIS)"
+    "message": "このトリガーの名前を指定してください (LUIS)"
   },
   "what_is_the_name_of_this_trigger_regex_f77376d7": {
-    "message": "What is the name of this trigger (RegEx)"
+    "message": "このトリガーの名前を指定してください (正規表現)"
   },
   "what_is_the_name_of_your_bot_a571c565": {
-    "message": "What is the name of your bot?"
+    "message": "ボットの名前は何ですか?"
   },
   "what_is_the_type_of_this_trigger_d2701744": {
-    "message": "What is the type of this trigger?"
+    "message": "このトリガーの種類は何ですか?"
   },
   "what_will_your_virtual_assistant_say_if_it_does_no_972dd9ab": {
-    "message": "What will your Virtual Assistant say if it does not understand the user?"
+    "message": "ユーザーの言ったことを理解できない場合に仮想アシスタントは何と言いますか?"
   },
   "what_your_bot_says_to_the_user_this_is_a_template__a8d2266d": {
-    "message": "What your bot says to the user. This is a template used to create the outgoing message. It can include language generation rules, properties from memory, and other features.\n\nFor example, to define variations that will be chosen at random, write:\n- hello\n- hi"
+    "message": "ボットがユーザーに対して話す内容。これは、送信メッセージを作成するために使用されるテンプレートです。言語生成ルール、メモリのプロパティ、およびその他の機能を含めることができます。\n\nたとえば、ランダムに選択されるバリエーションを定義するには、次のように記述します:\n- hello\n- hi"
   },
   "what_your_bot_says_to_the_user_visit_a_target_blan_7735479": {
-    "message": "What your Bot says to the user. Visit <a target=\"_blank\" href=\"https://aka.ms/bf-composer-docs-lg\"> the documentation</a> a reference of capabilities."
+    "message": "ボットがユーザーに対して話す内容。機能のリファレンスの<a target=\"_blank\" href=\"https://aka.ms/bf-composer-docs-lg\">ドキュメント</a>をご覧ください。"
   },
   "when_deleting_a_language_only_the_content_will_be__8f7f8dee": {
-    "message": "When deleting a language, only the content will be removed. The flow and logic of the conversation and dialog will remain functional."
+    "message": "言語を削除すると、コンテンツのみが削除されます。会話とダイアログのフローとロジックは引き続き機能します。"
   },
   "when_done_switch_to_the_newly_created_language_and_862b7dd9": {
-    "message": "When done, switch to the newly created language and start the (manual) translation process."
+    "message": "完了したら、新しく作成された言語に切り替えて、(手動) 翻訳プロセスを開始します。"
   },
   "when_multiple_people_are_working_with_models_you_w_32b48099": {
-    "message": "When multiple people are working with models you want to be able to work with models independently from each other tied to the source control."
+    "message": "複数のユーザーがモデルを使用している場合は、ソース管理に関連付けられたモデルを互いに独立して操作できるようにする必要があります。"
   },
   "which_activity_type_18333457": {
-    "message": "Which activity type?"
+    "message": "どのアクティビティの種類ですか?"
   },
   "which_bot_do_you_want_to_open_974bb1e5": {
-    "message": "Which bot do you want to open?"
+    "message": "どのボットを開きますか?"
   },
   "which_event_6e655d2b": {
-    "message": "Which event?"
+    "message": "どのイベントですか?"
+  },
+  "write_an_expression_8773ea5c": {
+    "message": "Write an expression"
   },
   "yes_dde87d5": {
     "message": "はい"
   },
   "you_already_have_a_kb_with_that_name_choose_anothe_b7f7c517": {
-    "message": "You already have a KB with that name. Choose another name and try again."
+    "message": "同じ名前の KB が既に存在します。別の名前を選択して、もう一度お試しください。"
   },
   "you_are_about_to_publish_your_bot_to_the_profile_b_79a6a226": {
-    "message": "You are about to publish your bot to the profile below. Do you want to proceed?"
+    "message": "以下のプロファイルにボットを公開しようとしています。続行しますか?"
   },
   "you_can_create_a_new_bot_from_scratch_with_compose_1486288c": {
-    "message": "You can create a new bot from scratch with Composer, or start with a template."
+    "message": "Composer を使用して新規のボットを最初から作成するか、テンプレートを使用して始めることができます。"
   },
   "you_can_define_and_manage_b_intents_b_here_each_in_721b8a0c": {
-    "message": "You can define and manage <b>intents</b> here. Each intent describes a particular user intention through utterances (i.e. user says). <b>Intents are often triggers of your bot.</b>"
+    "message": "ここでは、<b>インテント</b>を定義して管理できます。各インテントは、発話 (つまり、ユーザーが言うこと) を通じて特定のユーザーの意図を記述します。<b>インテントは、多くの場合はボットのトリガーになります。</b>"
   },
   "you_can_manage_all_bot_responses_here_make_good_us_5e6e1953": {
-    "message": "You can manage all bot responses here. Make good use of the templates to create sophisticated response logic based on your own needs."
+    "message": "すべてのボット応答をここで管理できます。テンプレートを活用して、必要に応じて高度な応答ロジックを作成してください。"
   },
   "you_do_not_have_permission_to_save_bots_here_56cc10c7": {
-    "message": "You do not have permission to save bots here"
+    "message": "ここにボットを保存するアクセス許可がありません"
   },
   "your_bot_creation_journey_on_composer_131c1a8b": {
-    "message": "Your bot creation journey on Composer"
+    "message": "Composer でのボットの作成体験"
   },
   "your_bot_is_using_luis_and_qna_for_natural_languag_53830684": {
-    "message": "Your bot is using LUIS and QNA for natural language understanding."
+    "message": "ボットは自然言語理解のために LUIS と QNA を使用しています。"
   },
   "your_knowledge_base_is_ready_6ecc1871": {
-    "message": "Your knowledge base is ready!"
+    "message": "ナレッジ ベースの準備が完了しました!"
   }
 }
