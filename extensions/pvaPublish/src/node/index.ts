@@ -1,6 +1,6 @@
 import { ExtensionRegistration } from '@bfc/extension';
 
-import { getStatus, history, publish } from './publish';
+import { getStatus, history, publish, pull } from './publish';
 import { setLogger } from './logger';
 
 function initialize(registration: ExtensionRegistration) {
@@ -12,10 +12,9 @@ function initialize(registration: ExtensionRegistration) {
     history,
     getStatus,
     publish,
-    // TODO: add 'pull' once ready,
+    pull,
   };
 
-  // @ts-expect-error (TODO: remove once auth is integrated and added to publish method signature)
   registration.addPublishMethod(extension);
 }
 

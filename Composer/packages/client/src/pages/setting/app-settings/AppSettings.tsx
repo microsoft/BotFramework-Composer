@@ -50,7 +50,30 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
 
   const renderElectronSettings = isElectron();
 
-  const languageOptions = [{ key: 'en-US', text: formatMessage('English (US)') }];
+  // temporarily commented out until some translation issues are resolved post  Composer 1.2
+  // const languageOptions = [
+  //   { key: 'en-US', text: 'English (US)' },
+  //   { key: 'cs', text: 'Čeština‎ Czech' }, //Czech
+  //   { key: 'de', text: 'Deutsch‎' }, //German
+  //   { key: 'es', text: 'Español‎' }, //Spanish
+  //   { key: 'fr', text: 'Français‎' }, //French
+  //   { key: 'hu', text: 'Magyar‎' }, //Hungarian
+  //   { key: 'it', text: 'Italiano‎' }, //Italian
+  //   { key: 'ja', text: '日本語‎' }, //Japanese
+  //   { key: 'ko', text: '한국어‎' }, //Korean
+  //   { key: 'nl', text: 'Nederlands‎' }, //Dutch (Netherlands)
+  //   { key: 'pl', text: 'Polski‎' }, //Polish
+  //   { key: 'pt-BR', text: 'Português (Brasil)‎' }, //Portuguese (Brazil)
+  //   { key: 'pt-PT', text: 'Português (Portugal)‎' }, //Portuguese (Portugal)
+  //   { key: 'ru', text: 'Русский‎' }, //Russian
+  //   { key: 'sv', text: 'Svenska‎' }, //Swedish
+  //   { key: 'tr', text: 'Türkçe‎' }, //Turkish
+  //   { key: 'zh-Hans', text: '中文(简体)‎' }, //Chinese(Simplified)
+  //   { key: 'zh-Hant', text: '中文(繁體)' }, //Chinese(Traditional)
+  // ];
+
+  const languageOptions = [{ key: 'en-US', text: 'English (US)' }];
+
   if (process.env.NODE_ENV !== 'production') {
     languageOptions.push({
       key: 'en-US-pseudo',
@@ -148,6 +171,7 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
         <h2>{formatMessage('Application Language')}</h2>
         <SettingDropdown
           description={formatMessage('This is the language used for Composer’s user interface.')}
+          dropdownWidth={200}
           image={images.language}
           options={languageOptions}
           selected={userSettings.appLocale}
