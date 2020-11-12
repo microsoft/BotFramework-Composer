@@ -24,7 +24,7 @@ const QnAPage = React.lazy(() => import('./pages/knowledge-base/QnAPage'));
 const LGPage = React.lazy(() => import('./pages/language-generation/LGPage'));
 const SettingPage = React.lazy(() => import('./pages/setting/SettingsPage'));
 const BotProjectSettings = React.lazy(() => import('./pages/botProject/BotProjectSettings'));
-const Notifications = React.lazy(() => import('./pages/notifications/Notifications'));
+const Diagnostics = React.lazy(() => import('./pages/diagnostics/Diagnostics'));
 const Publish = React.lazy(() => import('./pages/publish/Publish'));
 const BotCreationFlowRouter = React.lazy(() => import('./components/CreationFlow/CreationFlow'));
 const FormDialogPage = React.lazy(() => import('./pages/form-dialog/FormDialogPage'));
@@ -56,12 +56,12 @@ const Routes = (props) => {
             <LUPage path="language-understanding/:dialogId/*" />
             <LGPage path="language-generation/:dialogId/*" />
             <QnAPage path="knowledge-base/:dialogId/*" />
-            <Notifications path="notifications" />
             <Publish path="publish/:targetName" />
             <BotProjectSettings path="botProjectsSettings/*" />
             <FormDialogPage path="forms/:schemaId/*" />
             <FormDialogPage path="forms/*" />
             <DesignPage path="*" />
+            <Diagnostics path="diagnostics" />
             {pluginPages.map((page) => (
               <PluginPageContainer
                 key={`${page.id}/${page.bundleId}`}
@@ -76,6 +76,7 @@ const Routes = (props) => {
             <LUPage path="language-understanding/:dialogId/*" />
             <LGPage path="language-generation/:dialogId/*" />
             <QnAPage path="knowledge-base/:dialogId/*" />
+            <Diagnostics path="diagnostics" />
             <DesignPage path="*" />
           </ProjectRouter>
           <SettingPage path="settings/*" />

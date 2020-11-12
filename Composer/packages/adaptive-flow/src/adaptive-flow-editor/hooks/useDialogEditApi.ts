@@ -47,9 +47,7 @@ export function useDialogEditApi(shellApi: ShellApi) {
   }
 
   function deleteSelectedActions(dialogId: string, dialogData, actionIds: string[]) {
-    return deleteNodes(dialogData, actionIds, (nodes) => {
-      deleteActions(dialogId, nodes);
-    });
+    return deleteNodes(dialogData, actionIds, (nodes) => deleteActions(dialogId, nodes));
   }
 
   function disableSelectedActions(dialogId: string, dialogData, actionIds: string[]) {

@@ -2,22 +2,21 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { RecoilRoot } from 'recoil';
-import { renderHook } from '@botframework-composer/test-utils/lib/hooks';
 import { Range, Position } from '@bfc/shared';
 
-import useNotifications from '../../../src/pages/notifications/useNotifications';
+import { renderWithRecoil } from '../../testUtils';
+import { DiagnosticList } from '../../../src/pages/diagnostics/DiagnosticList';
 import {
-  dialogsSelectorFamily,
-  luFilesState,
-  lgFilesState,
-  settingsState,
-  schemasState,
-  currentProjectIdState,
   botDiagnosticsState,
-  jsonSchemaFilesState,
   botProjectIdsState,
+  currentProjectIdState,
+  dialogIdsState,
   formDialogSchemaIdsState,
+  jsonSchemaFilesState,
+  lgFilesState,
+  luFilesState,
+  schemasState,
+  settingsState,
 } from '../../../src/recoilModel';
 import mockProjectResponse from '../../../src/recoilModel/dispatchers/__tests__/mocks/mockProjectResponse.json';
 
@@ -106,50 +105,29 @@ const state = {
   formDialogSchemas: [{ id: '1', content: '{}' }],
 };
 
-const initRecoilState = ({ set }) => {
-  set(currentProjectIdState, state.projectId);
-  set(botProjectIdsState, [state.projectId]);
-  set(dialogsSelectorFamily(state.projectId), state.dialogs);
-  set(luFilesState(state.projectId), state.luFiles);
-  set(lgFilesState(state.projectId), state.lgFiles);
-  set(jsonSchemaFilesState(state.projectId), state.jsonSchemaFiles);
-  set(botDiagnosticsState(state.projectId), state.diagnostics);
-  set(settingsState(state.projectId), state.settings);
-  set(schemasState(state.projectId), mockProjectResponse.schemas);
-  set(
-    formDialogSchemaIdsState(state.projectId),
-    state.formDialogSchemas.map((fds) => fds.id)
-  );
-};
+describe('<DiagnosticList/>', () => {
+  const initRecoilState = ({ set }) => {
+    set(currentProjectIdState, state.projectId);
+    set(botProjectIdsState, [state.projectId]);
+    set(dialogIdsState(state.projectId), []);
+    set(luFilesState(state.projectId), state.luFiles);
+    set(lgFilesState(state.projectId), state.lgFiles);
+    set(jsonSchemaFilesState(state.projectId), state.jsonSchemaFiles);
+    set(botDiagnosticsState(state.projectId), state.diagnostics);
+    set(settingsState(state.projectId), state.settings);
+    set(schemasState(state.projectId), mockProjectResponse.schemas);
+    set(
+      formDialogSchemaIdsState(state.projectId),
+      state.formDialogSchemas.map((fds) => fds.id)
+    );
+  };
 
-describe('useNotification hooks', () => {
-  let renderedResult;
-  beforeEach(() => {
-    const wrapper = (props: { children?: React.ReactNode }) => {
-      const { children } = props;
-      return <RecoilRoot initializeState={initRecoilState}>{children}</RecoilRoot>;
-    };
-
-    const { result } = renderHook(() => useNotifications(state.projectId), {
-      wrapper,
-    });
-    renderedResult = result;
-  });
-
-  it('should return notifications', () => {
-    expect(renderedResult.current.length).toBe(4);
-  });
-
-  it('should return filtered notifications', () => {
-    const wrapper = (props: { children?: React.ReactNode }) => {
-      const { children } = props;
-      return <RecoilRoot initializeState={initRecoilState}>{children}</RecoilRoot>;
-    };
-
-    const { result } = renderHook(() => useNotifications(state.projectId, 'Error'), {
-      wrapper,
-    });
-
-    expect(result.current.length).toBe(2);
+  it('should render the DiagnosticList', () => {
+    const { container } = renderWithRecoil(
+      <DiagnosticList showType="" skillId={state.projectId} onItemClick={jest.fn} />,
+      initRecoilState
+    );
+    expect(container).toHaveTextContent('server');
+    expect(container).toHaveTextContent('test.en-us.lg');
   });
 });
