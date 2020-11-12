@@ -175,7 +175,7 @@ describe('navigation dispatcher', () => {
     it("doesn't navigate to a destination where we already are", async () => {
       mockCheckUrl.mockReturnValue(true);
       await act(async () => {
-        await dispatcher.navTo(projectId, 'dialogId');
+        await dispatcher.navTo(projectId, 'dialogId', 'trigger');
       });
       expect(mockNavigateTo).not.toBeCalled();
     });
