@@ -23,8 +23,8 @@ import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { BotTemplate } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { NeutralColors } from '@uifabric/fluent-theme';
-import { useRecoilState } from 'recoil';
 import { RouteComponentProps } from '@reach/router';
+import { useRecoilValue } from 'recoil';
 
 import { DialogCreationCopy, EmptyBotTemplateId, QnABotTemplateId } from '../../constants';
 import { creationFlowTypeState } from '../../recoilModel';
@@ -118,7 +118,7 @@ export function CreateOptions(props: CreateOptionsProps) {
   const { templates, onDismiss, onNext } = props;
   const [currentTemplate, setCurrentTemplate] = useState('');
   const [emptyBotKey, setEmptyBotKey] = useState('');
-  const creationFlowType = useRecoilState(creationFlowTypeState);
+  const creationFlowType = useRecoilValue(creationFlowTypeState);
 
   const selection = useMemo(() => {
     return new Selection({
@@ -256,10 +256,9 @@ export function CreateOptions(props: CreateOptionsProps) {
     },
   ];
 
-  // TODO: creationFlowType[0] ?
-  const choiceGroupTitle = creationFlowType[0] === 'Skill' ? '' : formatMessage('Choose how to create your bot');
+  const choiceGroupTitle = creationFlowType === 'Skill' ? '' : formatMessage('Choose how to create your bot');
   const dialogWrapperProps =
-    creationFlowType[0] === 'Skill' ? DialogCreationCopy.CREATE_NEW_SKILLBOT : DialogCreationCopy.CREATE_NEW_BOT;
+    creationFlowType === 'Skill' ? DialogCreationCopy.CREATE_NEW_SKILLBOT : DialogCreationCopy.CREATE_NEW_BOT;
 
   return (
     <Fragment>

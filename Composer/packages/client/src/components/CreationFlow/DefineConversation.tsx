@@ -14,7 +14,7 @@ import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 import { FontWeights } from '@uifabric/styling';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 
 import { DialogCreationCopy, QnABotTemplateId, nameRegex } from '../../constants';
 import { FieldConfig, useForm } from '../../hooks/useForm';
@@ -94,7 +94,7 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
     createFolder,
     updateFolder,
   } = props;
-  const creationFlowType = useRecoilState(creationFlowTypeState);
+  const creationFlowType = useRecoilValue(creationFlowTypeState);
   const files = focusedStorageFolder?.children ?? [];
   const writable = focusedStorageFolder.writable;
   const getDefaultName = () => {
@@ -216,7 +216,7 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
   }, [focusedStorageFolder]);
 
   const dialogWrapperProps =
-    creationFlowType[0] === 'Skill'
+    creationFlowType === 'Skill'
       ? DialogCreationCopy.DEFINE_CONVERSATION_OBJECTIVE
       : DialogCreationCopy.DEFINE_BOT_PROJECT;
 
