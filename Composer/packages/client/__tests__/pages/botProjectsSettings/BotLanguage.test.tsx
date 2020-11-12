@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { act, fireEvent, within } from '@bfc/test-utils';
+import { act, fireEvent, within } from '@botframework-composer/test-utils';
 
 import { BotLanguage } from '../../../src/pages/botProject/BotLanguage';
 import { renderWithRecoilAndCustomDispatchers } from '../../testUtils';
@@ -24,7 +24,6 @@ describe('Bot Language', () => {
     const deleteLanguages = jest.fn();
     const initRecoilState = ({ set }) => {
       set(currentProjectIdState, state.projectId);
-      set();
       set(settingsState(state.projectId), state.settings);
       set(dispatcherState, {
         setSettings: setSettingsMock,

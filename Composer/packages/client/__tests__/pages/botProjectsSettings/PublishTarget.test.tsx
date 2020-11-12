@@ -3,7 +3,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import React from 'react';
-import { act, fireEvent } from '@bfc/test-utils';
+import { act, fireEvent } from '@botframework-composer/test-utils';
 
 import { PublishTargets } from '../../../src/pages/botProject/PublishTargets';
 import { renderWithRecoilAndCustomDispatchers } from '../../testUtils';

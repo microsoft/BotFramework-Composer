@@ -179,8 +179,8 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
     setQnAKeyErrorMsg('');
   }, [projectId]);
 
-  const handleRootLUISKeyOnChange = async (e, value) => {
-    await setSettings(projectId, {
+  const handleRootLUISKeyOnChange = (e, value) => {
+    setSettings(projectId, {
       ...settings,
       luis: { ...settings.luis, authoringKey: value ? value : '' },
     });
@@ -195,7 +195,7 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
     }
   };
 
-  const handleRootQnAKeyOnChange = async (e, value) => {
+  const handleRootQnAKeyOnChange = (e, value) => {
     if (value) {
       setQnAKeyErrorMsg('');
       setLocalRootQnAKey(value);
@@ -213,39 +213,40 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
     }
   };
 
-  const handleRootQnAKeyOnBlur = async () => {
+  const handleRootQnAKeyOnBlur = () => {
     if (!localRootQnAKey) {
       setQnAKeyErrorMsg(formatMessage('QnA Maker subscription Key is required to start your bot locally, and publish'));
     }
-    await submitQnASubscripionKey(localRootQnAKey);
+    submitQnASubscripionKey(localRootQnAKey);
   };
 
-  const handleSkillQnAKeyOnBlur = async (value) => {
+  const handleSkillQnAKeyOnBlur = (value) => {
     if (value) {
-      await submitQnASubscripionKey(value);
+      submitQnASubscripionKey(value);
     } else {
-      await setSettings(projectId, {
+      setSettings(projectId, {
         ...settings,
         qna: { ...settings.qna, subscriptionKey: '' },
       });
-      await setQnASettings(projectId, rootqnaKey);
+      setQnASettings(projectId, rootqnaKey);
     }
   };
 
-  const submitQnASubscripionKey = async (value) => {
-    await setSettings(projectId, {
+  const submitQnASubscripionKey = (value) => {
+    setSettings(projectId, {
       ...settings,
       qna: { ...settings.qna, subscriptionKey: value ? value : '' },
     });
-    await setQnASettings(projectId, value);
+    setQnASettings(projectId, value);
   };
 
   return (
     <CollapsableWrapper title={formatMessage('External services')} titleStyle={titleStyle}>
       <div css={externalServiceContainerStyle}>
-        {isRootBot && (
+        {isRootBot ? (
           <TextField
             aria-labelledby={'LUIS key'}
+            data-testId={'rootLUISKey'}
             errorMessage={isLUISKeyNeeded ? errorElement(luisKeyErrorMsg) : ''}
             label={formatMessage('LUIS key')}
             placeholder={'Enter LUIS key'}
@@ -256,9 +257,7 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
             onChange={handleRootLUISKeyOnChange}
             onRenderLabel={onRenderLabel}
           />
-        )}
-
-        {!isRootBot && (
+        ) : (
           <TextFieldWithCustomButton
             required
             ariaLabelledby={'LUIS key'}
@@ -275,10 +274,12 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
             }}
           />
         )}
-        {isRootBot && (
+
+        {isRootBot ? (
           <TextField
             aria-labelledby={'LUIS region'}
             label={formatMessage('LUIS region')}
+            data-testid={'rootLUISRegion'}
             placeholder={'Enter LUIS region'}
             styles={{ root: { marginTop: 10 } }}
             value={rootLuisRegion}
@@ -290,8 +291,7 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
             }}
             onRenderLabel={onRenderLabel}
           />
-        )}
-        {!isRootBot && (
+        ) : (
           <TextFieldWithCustomButton
             required
             ariaLabelledby={'LUIS region'}
@@ -311,6 +311,7 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
         {isRootBot ? (
           <TextField
             aria-labelledby={'QnA Maker Subscription key'}
+            data-testId={'QnASubscriptionKey'}
             errorMessage={isQnAKeyNeeded ? errorElement(qnaKeyErrorMsg) : ''}
             label={formatMessage('QnA Maker Subscription key')}
             placeholder={'Enter QnA Maker Subscription key'}

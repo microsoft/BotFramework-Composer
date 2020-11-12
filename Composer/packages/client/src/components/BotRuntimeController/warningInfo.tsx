@@ -44,7 +44,7 @@ export const WarningInfo: React.FC<IwarningInfoProps> = (props) => {
   return (
     <div css={warningInfo} data-testid="notifications-info-button" onClick={onClick}>
       <span css={warningCount}>{count}</span>
-      <IconButton ariaLabel="warning" css={warningButton} iconProps={{ iconName: 'Error' }} title="warning" />
+      <IconButton ariaLabel="warning" css={warningButton} iconProps={{ iconName: 'Warning' }} title="warning" />
     </div>
   );
 };

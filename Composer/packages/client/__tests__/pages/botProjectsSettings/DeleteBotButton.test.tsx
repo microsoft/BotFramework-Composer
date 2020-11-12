@@ -3,7 +3,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import React from 'react';
-import { act, fireEvent } from '@bfc/test-utils';
+import { act, fireEvent } from '@botframework-composer/test-utils';
 
 import { DeleteBotButton } from '../../../src/pages/botProject/DeleteBotButton';
 import { renderWithRecoil } from '../../testUtils';

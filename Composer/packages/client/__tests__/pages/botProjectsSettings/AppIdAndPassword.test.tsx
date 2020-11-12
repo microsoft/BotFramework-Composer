@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { act, fireEvent } from '@bfc/test-utils';
+import { act, fireEvent } from '@botframework-composer/test-utils';
 
 import { AppIdAndPassword } from '../../../src/pages/botProject/AppIdAndPassword';
 import { renderWithRecoilAndCustomDispatchers } from '../../testUtils';

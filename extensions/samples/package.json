@@ -4,9 +4,7 @@
   "description": "providing samples to Composer core",
   "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc",
-    "start": "node lib/index.js"
+    "build": "webpack"
   },
   "author": "",
   "license": "ISC",
@@ -18,6 +16,10 @@
     "uuid": "^7.0.1"
   },
   "devDependencies": {
-    "@types/node": "^14.11.8"
+    "@types/node": "^14.11.8",
+    "ts-loader": "^8.0.9",
+    "typescript": "^4.0.5",
+    "webpack": "^5.4.0",
+    "webpack-cli": "^4.2.0"
   }
 }

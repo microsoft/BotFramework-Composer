@@ -44,13 +44,14 @@ export const useFeatureFlag = (featureFlagKey: FeatureFlagKey): boolean => {
 
 export const useLinks = () => {
   const projectId = useRecoilValue(currentProjectIdState);
+  const rootProjectId = useRecoilValue(rootBotProjectIdSelector);
   const designPageLocation = useRecoilValue(designPageLocationState(projectId));
   const pluginPages = useRecoilValue(pluginPagesSelector);
   const openedDialogId = designPageLocation.dialogId || 'Main';
   const showFormDialog = useFeatureFlag('FORM_DIALOG');
 
   const pageLinks = useMemo(() => {
-    return topLinks(projectId, openedDialogId, pluginPages, showFormDialog);
+    return topLinks(projectId, openedDialogId, pluginPages, showFormDialog, rootProjectId);
   }, [projectId, openedDialogId, pluginPages, showFormDialog]);
 
   return { topLinks: pageLinks, bottomLinks };
