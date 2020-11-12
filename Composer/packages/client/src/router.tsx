@@ -108,7 +108,6 @@ const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string; skillId: 
   const schemas = useRecoilValue(schemasState(projectId));
   const { fetchProjectById } = useRecoilValue(dispatcherState);
   const botProjects = useRecoilValue(botProjectIdsState);
-
   useEffect(() => {
     if (props.projectId && !botProjects.includes(props.projectId)) {
       fetchProjectById(props.projectId);

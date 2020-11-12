@@ -3,7 +3,7 @@
     "message": "バージョン情報"
   },
   "actual_zoom_211ec99": {
-    "message": "Actual Zoom"
+    "message": "実際のズーム"
   },
   "bring_all_to_front_207a7ad1": {
     "message": "すべてを手前に移動"
@@ -18,7 +18,7 @@
     "message": "ウィンドウを閉じる"
   },
   "composer_on_github_1e3782ef": {
-    "message": "Composer on GitHub"
+    "message": "GitHub 上の Composer"
   },
   "copy_9748f9f": {
     "message": "コピー"
@@ -45,7 +45,7 @@
     "message": "ヘルプ"
   },
   "hide_bot_framework_composer_eeba3ea8": {
-    "message": "Hide Bot Framework Composer"
+    "message": "Bot Framework Composer を非表示にする"
   },
   "hide_others_4204b552": {
     "message": "その他を非表示にする"
@@ -54,7 +54,7 @@
     "message": "初期化しています..."
   },
   "learn_more_about_bot_framework_2daca065": {
-    "message": "Learn More About Bot Framework"
+    "message": "Bot Framework の詳細"
   },
   "minimize_4f999e30": {
     "message": "最小化"
@@ -66,7 +66,7 @@
     "message": "プライバシーに関する声明"
   },
   "quit_bot_framework_composer_455ceb74": {
-    "message": "Quit Bot Framework Composer"
+    "message": "Bot Framework Composer を終了する"
   },
   "redo_363c58b7": {
     "message": "やり直し"
@@ -90,7 +90,7 @@
     "message": "読み上げを開始"
   },
   "starting_server_721c37fd": {
-    "message": "Starting server..."
+    "message": "サーバーを起動しています..."
   },
   "stop_speaking_7b4b9834": {
     "message": "読み上げを停止"

@@ -1,13 +1,21 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { defaultPublishConfig, IPublishConfig } from '@bfc/shared';
+import { defaultPublishConfig } from '@bfc/shared';
 import { selector, selectorFamily } from 'recoil';
+import { checkForPVASchema } from '@bfc/shared';
 
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { BotStatus } from '../../constants';
 import { isAbsHosted } from '../../utils/envUtil';
-import { botDisplayNameState, botStatusState, luFilesState, qnaFilesState, settingsState } from '../atoms';
+import {
+  botDisplayNameState,
+  botStatusState,
+  luFilesState,
+  qnaFilesState,
+  schemasState,
+  settingsState,
+} from '../atoms';
 import { Dispatcher } from '../dispatchers';
 import { dispatcherState } from '../DispatcherWrapper';
 import { isBuildConfigComplete as isBuildConfigurationComplete, needsBuild } from '../../utils/buildUtil';
@@ -65,12 +73,19 @@ export const buildConfigurationSelector = selector({
   key: 'buildConfigurationSelector',
   get: ({ get }) => {
     const localProjects = get(localBotsWithoutErrorsSelector);
-    return localProjects.map((projectId: string) => {
-      const result = get(buildEssentialsSelector(projectId));
-      const name = get(botDisplayNameState(projectId));
-      const dialogs = get(validateDialogsSelectorFamily(projectId));
-      return { ...result, name, dialogs };
-    });
+
+    return localProjects
+      .filter((projectId: string) => {
+        const schema = get(schemasState(projectId));
+        const isPvaBot = !!checkForPVASchema(schema.sdk);
+        return !isPvaBot;
+      })
+      .map((projectId: string) => {
+        const result = get(buildEssentialsSelector(projectId));
+        const name = get(botDisplayNameState(projectId));
+        const dialogs = get(validateDialogsSelectorFamily(projectId));
+        return { ...result, name, dialogs };
+      });
   },
 });
 
@@ -98,14 +113,8 @@ const botRuntimeAction = (dispatcher: Dispatcher) => {
         await dispatcher.build(projectId, config.luis, config.qna);
       }
     },
-    startBot: async (projectId: string, config?: IPublishConfig) => {
+    startBot: async (projectId: string) => {
       dispatcher.setBotStatus(projectId, BotStatus.reloading);
-
-      // TODO: This code will be removed when endpoint keys are obtained for new qna configs
-      if (typeof config?.qna?.subscriptionKey === 'string' && config.qna.subscriptionKey && !config?.qna?.endpointKey) {
-        await dispatcher.setQnASettings(projectId, config?.qna?.subscriptionKey);
-      }
-
       const sensitiveSettings = settingsStorage.get(projectId);
       await dispatcher.publishToTarget(projectId, defaultPublishConfig, { comment: '' }, sensitiveSettings);
     },

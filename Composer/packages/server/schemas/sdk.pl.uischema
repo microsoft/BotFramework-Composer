@@ -5,10 +5,58 @@
       "label": "Dialog adaptacyjny",
       "properties": {
         "recognizer": {
-          "description": "Aby zrozumieć, co mówi użytkownik, dialog wymaga „aparatu rozpoznawania” obejmującego przykładowe wyrazy i zdania, które mogą być używane przez użytkowników.",
-          "label": "Interpretacja języka"
+          "description": "Aby zrozumieć, co mówi użytkownik, dialog wymaga elementu „Recognizer” obejmującego przykładowe wyrazy i zdania, które mogą być używane przez użytkowników.",
+          "label": "Rozumienie języka"
         }
       }
+    }
+  },
+  "Microsoft.Ask": {
+    "form": {
+      "label": "Wyślij odpowiedź, aby zadać pytanie",
+      "subtitle": "Działanie Ask"
+    }
+  },
+  "Microsoft.AttachmentInput": {
+    "form": {
+      "label": "Monituj o plik lub załącznik",
+      "subtitle": "Dane wejściowe załącznika"
+    }
+  },
+  "Microsoft.ChoiceInput": {
+    "form": {
+      "label": "Monituj z wieloma opcjami wyboru",
+      "subtitle": "Wprowadzanie wyboru"
+    }
+  },
+  "Microsoft.ConfirmInput": {
+    "form": {
+      "label": "Monituj o potwierdzenie",
+      "subtitle": "Potwierdź dane wejściowe"
+    }
+  },
+  "Microsoft.DateTimeInput": {
+    "form": {
+      "label": "Monituj o datę lub godzinę",
+      "subtitle": "Dane wejściowe daty i godziny"
+    }
+  },
+  "Microsoft.NumberInput": {
+    "form": {
+      "label": "Monituj o liczbę",
+      "subtitle": "Liczbowe dane wejściowe"
+    }
+  },
+  "Microsoft.OAuthInput": {
+    "form": {
+      "label": "Logowanie OAuth",
+      "subtitle": "Dane wejściowe OAuth"
+    }
+  },
+  "Microsoft.TextInput": {
+    "form": {
+      "label": "Monituj o tekst",
+      "subtitle": "Tekstowe dane wejściowe"
     }
   },
   "Microsoft.BeginDialog": {
@@ -162,62 +210,14 @@
   },
   "Microsoft.ThrowException": {
     "form": {
-      "label": "Throw an exception",
-      "subtitle": "Throw an exception"
+      "label": "Zgłoś wyjątek",
+      "subtitle": "Zgłoś wyjątek"
     }
   },
   "Microsoft.TraceActivity": {
     "form": {
       "label": "Emituj zdarzenie śledzenia",
       "subtitle": "Śledź działanie"
-    }
-  },
-  "Microsoft.Ask": {
-    "form": {
-      "label": "Send a response to ask a question",
-      "subtitle": "Ask Activity"
-    }
-  },
-  "Microsoft.AttachmentInput": {
-    "form": {
-      "label": "Monituj o plik lub załącznik",
-      "subtitle": "Dane wejściowe załącznika"
-    }
-  },
-  "Microsoft.ChoiceInput": {
-    "form": {
-      "label": "Monituj z wieloma opcjami wyboru",
-      "subtitle": "Wprowadzanie wyboru"
-    }
-  },
-  "Microsoft.ConfirmInput": {
-    "form": {
-      "label": "Monituj o potwierdzenie",
-      "subtitle": "Potwierdź dane wejściowe"
-    }
-  },
-  "Microsoft.DateTimeInput": {
-    "form": {
-      "label": "Monituj o datę lub godzinę",
-      "subtitle": "Dane wejściowe daty i godziny"
-    }
-  },
-  "Microsoft.NumberInput": {
-    "form": {
-      "label": "Monituj o liczbę",
-      "subtitle": "Liczbowe dane wejściowe"
-    }
-  },
-  "Microsoft.OAuthInput": {
-    "form": {
-      "label": "Logowanie OAuth",
-      "subtitle": "Dane wejściowe OAuth"
-    }
-  },
-  "Microsoft.TextInput": {
-    "form": {
-      "label": "Monituj o tekst",
-      "subtitle": "Tekstowe dane wejściowe"
     }
   },
   "Microsoft.OnActivity": {
@@ -228,8 +228,8 @@
   },
   "Microsoft.OnAssignEntity": {
     "form": {
-      "label": "Handle a condition when an entity is assigned",
-      "subtitle": "EntityAssigned activity"
+      "label": "Obsłuż warunek, gdy jednostka zostanie przypisana",
+      "subtitle": "Działanie EntityAssigned"
     }
   },
   "Microsoft.OnBeginDialog": {
@@ -265,8 +265,8 @@
   },
   "Microsoft.OnEndOfActions": {
     "form": {
-      "label": "Handle a condition when actions have ended",
-      "subtitle": "EndOfActions activity"
+      "label": "Obsłuż warunek, gdy akcje zostaną zakończone",
+      "subtitle": "Działanie EndOfActions"
     }
   },
   "Microsoft.OnEndOfConversationActivity": {
@@ -295,8 +295,8 @@
   },
   "Microsoft.OnInstallationUpdateActivity": {
     "form": {
-      "label": "Installation updated",
-      "subtitle": "Installation updated activity"
+      "label": "Zaktualizowano instalację",
+      "subtitle": "Działanie zaktualizowania instalacji"
     }
   },
   "Microsoft.OnIntent": {

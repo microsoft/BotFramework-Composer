@@ -149,11 +149,23 @@ export const getMergedSettings = (projectId, settings): DialogSetting => {
   return mergedSettings;
 };
 
-export const navigateToBot = (callbackHelpers: CallbackInterface, projectId: string, mainDialog: string) => {
+export const navigateToBot = (
+  callbackHelpers: CallbackInterface,
+  projectId: string,
+  mainDialog: string,
+  qnaKbUrls?: string[],
+  templateId?: string,
+  urlSuffix?: string
+) => {
   if (projectId) {
     const { set } = callbackHelpers;
     set(currentProjectIdState, projectId);
-    const url = `/bot/${projectId}/dialogs/${mainDialog}`;
+    let url = `/bot/${projectId}/dialogs/${mainDialog}`;
+    if (urlSuffix) {
+      // deep link was provided to creation flow (base64 encoded to make query string parsing easier)
+      urlSuffix = atob(urlSuffix);
+      url = `/bot/${projectId}/${urlSuffix}`;
+    }
     navigateTo(url);
   }
 };
@@ -437,7 +449,11 @@ export const createNewBotFromTemplate = async (
   description: string,
   location: string,
   schemaUrl?: string,
-  locale?: string
+  locale?: string,
+  templateDir?: string,
+  eTag?: string,
+  alias?: string,
+  preserveRoot?: boolean
 ) => {
   const { set } = callbackHelpers;
   const response = await httpClient.post(`/projects`, {
@@ -448,6 +464,10 @@ export const createNewBotFromTemplate = async (
     location,
     schemaUrl,
     locale,
+    templateDir,
+    eTag,
+    alias,
+    preserveRoot,
   });
   const { botFiles, projectData } = loadProjectData(response);
   const projectId = response.data.id;

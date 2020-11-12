@@ -8,7 +8,7 @@ import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcru
 import formatMessage from 'format-message';
 import { globalHistory, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
-import { DialogInfo, PromptTab, getEditorAPI, registerEditorAPI } from '@bfc/shared';
+import { DialogInfo, PromptTab, getEditorAPI, registerEditorAPI, checkForPVASchema } from '@bfc/shared';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import { EditorExtension, PluginConfig } from '@bfc/extension-client';
@@ -273,7 +273,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       if (triggerIndex != null && trigger != null) {
         breadcrumbArray.push({
           key: 'trigger-' + triggerIndex,
-          label: trigger.$designer.name || getFriendlyName(trigger),
+          label: trigger.$designer?.name || getFriendlyName(trigger),
           link: {
             projectId: props.projectId,
             dialogId: props.dialogId,
@@ -428,6 +428,83 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
   const { onFocusFlowEditor, onBlurFlowEditor } = useElectronFeatures(actionSelected, canUndo, canRedo);
   const EditorAPI = getEditorAPI();
+
+  const getMenuItems = () => {
+    const items = [
+      {
+        'data-testid': 'FlyoutNewDialog',
+        key: 'adddialog',
+        text: formatMessage('Add new dialog'),
+        onClick: () => {
+          createDialogBegin([], onCreateDialogComplete, projectId);
+        },
+      },
+      {
+        'data-testid': 'FlyoutNewTrigger',
+        key: 'addtrigger',
+        text: formatMessage(`Add new trigger on {displayName}`, {
+          displayName: currentDialog?.displayName ?? '',
+        }),
+        onClick: () => {
+          openNewTriggerModal();
+        },
+      },
+      {
+        'data-testid': 'AddNewKnowledgebase',
+        key: 'addKnowledge',
+        text: formatMessage(`Add new knowledge base on {displayName}`, {
+          displayName: currentDialog?.displayName ?? '',
+        }),
+        onClick: () => {
+          createQnAFromUrlDialogBegin({
+            projectId,
+          });
+        },
+      },
+      {
+        'data-testid': 'CreateNewSkill',
+        key: 'CreateNewSkill',
+        text: formatMessage('Create a new skill'),
+        onClick: () => {
+          setCreationFlowType('Skill');
+          setCreationFlowStatus(CreationFlowStatus.NEW);
+        },
+      },
+      {
+        'data-testid': 'OpenSkill',
+        key: 'OpenSkill',
+        text: formatMessage('Open a new skill'),
+        onClick: () => {
+          setCreationFlowType('Skill');
+          setCreationFlowStatus(CreationFlowStatus.OPEN);
+        },
+      },
+      {
+        'data-testid': 'ConnectRemoteSkill',
+        key: 'ConnectRemoteSkill',
+        text: formatMessage('Connect a remote skill'),
+        onClick: () => {
+          setAddSkillDialogModalVisibility(true);
+        },
+      },
+    ];
+
+    // TODO: refactor when Composer can better model the PVA scenarios
+    if (schemas && !checkForPVASchema(schemas.sdk)) {
+      items.push({
+        'data-testid': 'AddNewKnowledgebase',
+        key: 'addKnowledge',
+        text: formatMessage(` Add new knowledge base on {displayName}`, {
+          displayName: currentDialog?.displayName ?? '',
+        }),
+        onClick: () => {
+          createQnAFromUrlDialogBegin({ projectId });
+        },
+      });
+    }
+    return items;
+  };
+
   const toolbarItems: IToolbarItem[] = [
     {
       type: 'dropdown',
@@ -438,65 +515,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         iconProps: { iconName: 'Add' },
       },
       menuProps: {
-        items: [
-          {
-            'data-testid': 'FlyoutNewDialog',
-            key: 'adddialog',
-            text: formatMessage('Add new dialog'),
-            onClick: () => {
-              createDialogBegin([], onCreateDialogComplete, projectId);
-            },
-          },
-          {
-            'data-testid': 'FlyoutNewTrigger',
-            key: 'addtrigger',
-            text: formatMessage(`Add new trigger on {displayName}`, {
-              displayName: currentDialog?.displayName ?? '',
-            }),
-            onClick: () => {
-              if (!projectId || !dialogId) return;
-              openNewTriggerModal(projectId, dialogId);
-            },
-          },
-          {
-            'data-testid': 'AddNewKnowledgebase',
-            key: 'addKnowledge',
-            text: formatMessage(`Add new knowledge base on {displayName}`, {
-              displayName: currentDialog?.displayName ?? '',
-            }),
-            onClick: () => {
-              createQnAFromUrlDialogBegin({
-                projectId,
-              });
-            },
-          },
-          {
-            'data-testid': 'CreateNewSkill',
-            key: 'CreateNewSkill',
-            text: formatMessage('Create a new skill'),
-            onClick: () => {
-              setCreationFlowType('Skill');
-              setCreationFlowStatus(CreationFlowStatus.NEW);
-            },
-          },
-          {
-            'data-testid': 'OpenSkill',
-            key: 'OpenSkill',
-            text: formatMessage('Open a new skill'),
-            onClick: () => {
-              setCreationFlowType('Skill');
-              setCreationFlowStatus(CreationFlowStatus.OPEN);
-            },
-          },
-          {
-            'data-testid': 'ConnectRemoteSkill',
-            key: 'ConnectRemoteSkill',
-            text: formatMessage('Connect a remote skill'),
-            onClick: () => {
-              setAddSkillDialogModalVisibility(true);
-            },
-          },
-        ],
+        items: getMenuItems(),
       },
     },
     {
