@@ -78,6 +78,10 @@ export class ElectronAuthProvider extends AuthProvider {
     params: AuthParameters
   ): void {
     const { accessToken, acquiredAt, expiryTime } = tokenInfo;
+    if (!accessToken) {
+      // oneauth shim returns an empty access token as a result
+      return;
+    }
     const tokenHash = this.getTokenHash(params);
     const expiresIn = expiryTime - acquiredAt;
 
