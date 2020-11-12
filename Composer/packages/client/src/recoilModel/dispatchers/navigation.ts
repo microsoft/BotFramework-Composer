@@ -36,29 +36,32 @@ export const navigationDispatcher = () => {
 
   const navTo = useRecoilCallback(
     ({ snapshot, set }: CallbackInterface) => async (
-      skillId: string | null,
-      dialogId: string | null,
-      trigger?: string
+      destinationSkillId: string | null,
+      destinationDialogId: string | null,
+      destinationTrigger?: string
     ) => {
       const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
       if (rootBotProjectId == null) return;
 
-      const projectId = skillId ?? rootBotProjectId;
+      const projectId = destinationSkillId ?? rootBotProjectId;
 
-      const designPageLocation = await snapshot.getPromise(designPageLocationState(projectId));
+      const destinationUri =
+        destinationTrigger == null
+          ? convertPathToUrl(rootBotProjectId, destinationSkillId, destinationDialogId)
+          : convertPathToUrl(
+              rootBotProjectId,
+              destinationSkillId,
+              destinationDialogId,
+              `selected=triggers[${destinationTrigger}]`
+            );
+
       set(currentProjectIdState, projectId);
-
-      const currentUri =
-        trigger == null
-          ? convertPathToUrl(rootBotProjectId, skillId, dialogId)
-          : convertPathToUrl(rootBotProjectId, skillId, dialogId, `selected=triggers[${trigger}]`);
-      if (checkUrl(currentUri, rootBotProjectId, projectId, designPageLocation)) return;
       set(designPageLocationState(projectId), {
-        dialogId: dialogId ?? '',
-        selected: trigger ?? '',
+        dialogId: destinationDialogId ?? '',
+        selected: destinationTrigger ?? '',
         focused: '',
       });
-      navigateTo(currentUri);
+      navigateTo(destinationUri);
     }
   );
 

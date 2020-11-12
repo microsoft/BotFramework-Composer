@@ -42,6 +42,7 @@ const content = css`
   display: flex;
   align-items: center;
   height: 24px;
+  margin-left: 4px;
 
   label: ProjectTreeItem;
 `;
