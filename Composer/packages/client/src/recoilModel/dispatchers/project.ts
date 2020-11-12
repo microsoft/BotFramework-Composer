@@ -112,7 +112,7 @@ export const projectDispatcher = () => {
 
         set(botProjectIdsState, (current) => [...current, projectId]);
         await dispatcher.addLocalSkillToBotProjectFile(projectId);
-        navigateToSkillBot(callbackHelpers, rootBotProjectId, projectId, mainDialog);
+        navigateToSkillBot(rootBotProjectId, projectId, mainDialog);
       } catch (ex) {
         handleProjectFailure(callbackHelpers, ex);
       } finally {
@@ -140,7 +140,7 @@ export const projectDispatcher = () => {
         const { projectId } = await openRemoteSkill(callbackHelpers, manifestUrl);
         set(botProjectIdsState, (current) => [...current, projectId]);
         await dispatcher.addRemoteSkillToBotProjectFile(projectId, manifestUrl, endpointName);
-        navigateToSkillBot(callbackHelpers, rootBotProjectId, projectId, '');
+        navigateToSkillBot(rootBotProjectId, projectId);
       } catch (ex) {
         handleProjectFailure(callbackHelpers, ex);
       } finally {
@@ -175,7 +175,7 @@ export const projectDispatcher = () => {
         });
         set(botProjectIdsState, (current) => [...current, projectId]);
         await dispatcher.addLocalSkillToBotProjectFile(projectId);
-        navigateToSkillBot(callbackHelpers, rootBotProjectId, projectId, mainDialog);
+        navigateToSkillBot(rootBotProjectId, projectId, mainDialog);
         return projectId;
       } catch (ex) {
         handleProjectFailure(callbackHelpers, ex);
@@ -274,7 +274,7 @@ export const projectDispatcher = () => {
         isRemote: false,
       });
       projectIdCache.set(projectId);
-      navigateToBot(callbackHelpers, projectId, mainDialog, templateId, urlSuffix);
+      navigateToBot(callbackHelpers, projectId, mainDialog, urlSuffix);
     } catch (ex) {
       set(botProjectIdsState, []);
       handleProjectFailure(callbackHelpers, ex);

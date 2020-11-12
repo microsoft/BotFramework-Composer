@@ -153,7 +153,6 @@ export const navigateToBot = (
   callbackHelpers: CallbackInterface,
   projectId: string,
   mainDialog: string,
-  templateId?: string,
   urlSuffix?: string
 ) => {
   if (projectId) {
@@ -169,12 +168,7 @@ export const navigateToBot = (
   }
 };
 
-export const navigateToSkillBot = (
-  callbackHelpers: CallbackInterface,
-  rootProjectId: string,
-  skillId: string,
-  mainDialog: string
-) => {
+export const navigateToSkillBot = (rootProjectId: string, skillId: string, mainDialog?: string) => {
   if (rootProjectId && skillId) {
     let url = `/bot/${rootProjectId}/skill/${skillId}`;
     if (mainDialog) url += `/dialogs/${mainDialog}`;

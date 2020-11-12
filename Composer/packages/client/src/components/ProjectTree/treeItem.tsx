@@ -5,6 +5,7 @@
 import { jsx, css } from '@emotion/core';
 import React from 'react';
 import { FontWeights } from '@uifabric/styling';
+import { FontSizes } from '@uifabric/fluent-theme';
 import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
@@ -216,8 +217,11 @@ const renderTreeMenuItem = (link: TreeLink) => (item: TreeMenuItem) => {
     key: item.label,
     ariaLabel: item.label,
     text: item.label,
-    style: { fontSize: 12 },
-    iconProps: { iconName: item.icon, styles: { root: { fontSize: 12, display: item.icon ? 'inherit' : 'none' } } },
+    style: { fontSize: FontSizes.size12 },
+    iconProps: {
+      iconName: item.icon,
+      styles: { root: { fontSize: FontSizes.size12, display: item.icon ? 'inherit' : 'none' } },
+    },
     onClick: () => {
       item.onClick?.(link);
     },
