@@ -9,7 +9,7 @@ import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 import { css } from '@emotion/core';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+import { NeutralColors } from '@uifabric/fluent-theme';
 
 import { buildConfigurationSelector, dispatcherState, runningBotsSelector } from '../../recoilModel';
 import { BotStatus } from '../../constants';
