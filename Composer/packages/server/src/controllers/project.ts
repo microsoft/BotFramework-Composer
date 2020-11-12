@@ -76,7 +76,6 @@ async function createProject(req: Request, res: Response) {
     // in the case of a remote template, we need to update the eTag and alias used by the import mechanism
     createFromRemoteTemplate && BotProjectService.setProjectLocationData(id, { alias, eTag });
     const currentProject = await BotProjectService.getProjectById(id, user);
-    const jobId = BackgroundProcessManager.startProcess(202, id, 'create', 'Creating Bot Project');
 
     // inject shared content into every new project.  this comes from assets/shared
     if (!createFromRemoteTemplate) {
