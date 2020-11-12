@@ -67,7 +67,7 @@ export const ImportSuccessNotificationWrapper = (outerProps: ImportSuccessNotifi
       }
     };
 
-    const existingProjectCopy = formatMessage(' Previous bot content has been backed up to:');
+    const existingProjectCopy = formatMessage('Previous bot content has been backed up to:');
 
     return (
       <div css={container}>
