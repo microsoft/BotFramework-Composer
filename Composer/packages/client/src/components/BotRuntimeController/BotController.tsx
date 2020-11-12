@@ -14,6 +14,7 @@ import { NeutralColors } from '@uifabric/fluent-theme';
 import { buildConfigurationSelector, dispatcherState, runningBotsSelector } from '../../recoilModel';
 import { BotStatus } from '../../constants';
 import { useClickOutside } from '../../utils/hooks';
+import { allDiagnosticsSelectorFamily } from '../../recoilModel/selectors/diagnosticsPageSelector';
 
 import { BotControllerMenu } from './BotControllerMenu';
 import { useBotOperations } from './useBotOperations';
@@ -51,6 +52,7 @@ const transparentBackground = 'rgba(255, 255, 255, 0.5)';
 const BotController: React.FC = () => {
   const runningBots = useRecoilValue(runningBotsSelector);
   const projectCollection = useRecoilValue(buildConfigurationSelector);
+  const diagnostics = useRecoilValue(allDiagnosticsSelectorFamily('Error'));
   const [isControllerHidden, setControllerVisibility] = useState(true);
   const { onboardingAddCoachMarkRef } = useRecoilValue(dispatcherState);
   const onboardRef = useCallback((startBot) => onboardingAddCoachMarkRef({ startBot }), []);
@@ -64,12 +66,12 @@ const BotController: React.FC = () => {
   });
 
   useEffect(() => {
-    if (projectCollection.length === 0) {
+    if (projectCollection.length === 0 || diagnostics.length) {
       setDisableOnStartBotsWidget(true);
       return;
     }
     setDisableOnStartBotsWidget(false);
-  }, [projectCollection]);
+  }, [projectCollection, diagnostics]);
 
   const running = useMemo(() => !projectCollection.every(({ status }) => status === BotStatus.unConnected), [
     projectCollection,
