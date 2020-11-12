@@ -295,12 +295,12 @@ const onRenderItem = (textWidth: number) => (item: IOverflowSetItemProps) => {
         )}
         <span css={itemName(textWidth)}>{item.displayName}</span>
         {warnings.length ? (
-          <TooltipHost content={errorHTML} directionalHint={DirectionalHint.bottomLeftEdge}>
+          <TooltipHost content={warningHTML} directionalHint={DirectionalHint.bottomLeftEdge}>
             <Icon iconName={'WarningSolid'} style={warningIcon} />
           </TooltipHost>
         ) : undefined}
         {errors.length ? (
-          <TooltipHost content={warningHTML} directionalHint={DirectionalHint.bottomLeftEdge}>
+          <TooltipHost content={errorHTML} directionalHint={DirectionalHint.bottomLeftEdge}>
             <Icon iconName={'StatusErrorFull'} style={errorIcon} />
           </TooltipHost>
         ) : undefined}

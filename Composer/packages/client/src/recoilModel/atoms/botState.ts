@@ -19,7 +19,7 @@ import {
   RecognizerFile,
   Skill,
 } from '@bfc/shared';
-import { atom, atomFamily } from 'recoil';
+import { atomFamily } from 'recoil';
 
 import { BotRuntimeError, DesignPageLocation } from '../../recoilModel/types';
 import FilePersistence from '../persistence/FilePersistence';
