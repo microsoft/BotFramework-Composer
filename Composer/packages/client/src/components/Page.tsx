@@ -124,7 +124,6 @@ const Page: React.FC<IPageProps> = (props) => {
                 showDelete={false}
                 showTriggers={false}
                 onSelect={(link) => {
-                  console.log(buildURL(pageMode, link));
                   navigateTo(buildURL(pageMode, link));
                 }}
                 onSelectAllLink={() => {

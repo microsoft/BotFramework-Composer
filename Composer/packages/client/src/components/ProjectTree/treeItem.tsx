@@ -21,7 +21,7 @@ import { SUMMARY_ARROW_SPACE } from './constants';
 
 // -------------------- Styles -------------------- //
 
-const iconAndText = css`
+const projectTreeItemContainer = css`
   outline: none;
   :focus {
     outline: rgb(102, 102, 102) solid 1px;
@@ -32,12 +32,11 @@ const iconAndText = css`
   overflow: hidden;
   text-align: left;
   cursor: pointer;
-  width: 100%;
 
   label: ProjectTreeItemContainer;
 `;
 
-const content = css`
+const projectTreeItem = css`
   outline: none;
   display: flex;
   align-items: center;
@@ -75,12 +74,12 @@ const moreButton = (isActive: boolean): IButtonStyles => {
   };
 };
 
-const navItem = (isActive: boolean) => css`
+const navItem = (isActive: boolean, padLeft: number) => css`
   label: navItem;
-  min-width: 100%;
   position: relative;
   height: 24px;
   font-size: 12px;
+  padding-left: ${padLeft}px;
   color: ${isActive ? '#ffffff' : '#545454'};
   background: ${isActive ? '#0078d4' : 'transparent'};
   font-weight: ${isActive ? FontWeights.semibold : FontWeights.regular};
@@ -162,6 +161,7 @@ interface ITreeItemProps {
   showProps?: boolean;
   textWidth?: number;
   extraSpace?: number;
+  padLeft?: number;
   hasChildren?: boolean;
 }
 
@@ -189,13 +189,13 @@ const onRenderItem = (textWidth: number) => (item: IOverflowSetItemProps) => {
     <div
       data-is-focusable
       aria-label={`${item.displayName} ${warningContent ?? ''} ${errorContent ?? ''}`}
-      css={iconAndText}
+      css={projectTreeItemContainer}
       role="cell"
       tabIndex={0}
       onBlur={item.onBlur}
       onFocus={item.onFocus}
     >
-      <div css={content} role="presentation" tabIndex={-1}>
+      <div css={projectTreeItem} role="presentation" tabIndex={-1}>
         {item.icon != null && (
           <Icon
             iconName={item.icon}
@@ -261,6 +261,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   hasChildren = false,
   menu = [],
   extraSpace = 0,
+  padLeft = 0,
 }) => {
   const a11yLabel = `${dialogName ?? '$Root'}_${link.displayName}`;
 
@@ -272,7 +273,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   return (
     <div
       aria-label={a11yLabel}
-      css={navItem(isActive)}
+      css={navItem(isActive, padLeft)}
       data-testid={a11yLabel}
       role="gridcell"
       tabIndex={0}

@@ -12,7 +12,7 @@ import { navigateTo, buildURL } from '../../utils/navigation';
 import { TreeLink } from '../../components/ProjectTree/ProjectTree';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { Page } from '../../components/Page';
-import { validateDialogsSelectorFamily } from '../../recoilModel';
+import { validateDialogsSelectorFamily, dispatcherState } from '../../recoilModel';
 
 import TableView from './table-view';
 const CodeEditor = React.lazy(() => import('./code-editor'));
@@ -24,6 +24,11 @@ const LUPage: React.FC<RouteComponentProps<{
 }>> = (props) => {
   const { dialogId = '', projectId = '' } = props;
   const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId ?? ''));
+
+  const { setCurrentPageMode } = useRecoilValue(dispatcherState);
+  useEffect(() => {
+    setCurrentPageMode('lu');
+  }, []);
 
   const path = props.location?.pathname ?? '';
   const edit = /\/edit(\/)?$/.test(path);

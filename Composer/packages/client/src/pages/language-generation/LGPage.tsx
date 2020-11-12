@@ -13,7 +13,7 @@ import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { navigateTo } from '../../utils/navigation';
 import { TreeLink } from '../../components/ProjectTree/ProjectTree';
 import { Page } from '../../components/Page';
-import { validateDialogsSelectorFamily } from '../../recoilModel';
+import { validateDialogsSelectorFamily, dispatcherState } from '../../recoilModel';
 
 import TableView from './table-view';
 const CodeEditor = React.lazy(() => import('./code-editor'));
@@ -26,6 +26,10 @@ const LGPage: React.FC<RouteComponentProps<{
   const { dialogId = '', projectId = '', skillId } = props;
   const dialogs = useRecoilValue(validateDialogsSelectorFamily(skillId ?? projectId ?? ''));
 
+  const { setCurrentPageMode } = useRecoilValue(dispatcherState);
+  useEffect(() => {
+    setCurrentPageMode('lg');
+  }, []);
   const path = props.location?.pathname ?? '';
 
   const edit = /\/edit(\/)?$/.test(path);
@@ -33,35 +37,19 @@ const LGPage: React.FC<RouteComponentProps<{
   const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
 
   const navLinks: TreeLink[] = useMemo(() => {
-    const newDialogLinks: TreeLink[] = dialogs.map((dialog) => {
-      let url = `${baseURL}language-generation/${dialog.id}`;
-      if (edit) {
-        url += `/edit`;
-      }
-      return {
-        id: dialog.id,
-        name: dialog.displayName,
-        ariaLabel: formatMessage('language generation file'),
-        url,
-      };
-    });
-    const mainDialogIndex = newDialogLinks.findIndex((link) => link.id === 'Main');
+    const newDialogLinks: TreeLink[] = dialogs.map((dialog) => ({
+      projectId,
+      dialogId: dialog.id,
+      displayName: dialog.displayName,
+      isRoot: false,
+    }));
+    const mainDialogIndex = newDialogLinks.findIndex((link) => link.dialogId === 'Main');
 
     if (mainDialogIndex > -1) {
       const mainDialog = newDialogLinks.splice(mainDialogIndex, 1)[0];
       newDialogLinks.splice(0, 0, mainDialog);
     }
-    let commonUrl = `${baseURL}language-generation/common`;
-    if (edit) {
-      commonUrl += '/edit';
-    }
 
-    newDialogLinks.splice(0, 0, {
-      id: 'common',
-      name: formatMessage('All'),
-      ariaLabel: formatMessage('all language generation files'),
-      url: commonUrl,
-    });
     return newDialogLinks;
   }, [dialogs, edit]);
 
@@ -94,7 +82,6 @@ const LGPage: React.FC<RouteComponentProps<{
       useNewTree
       data-testid="LGPage"
       mainRegionName={formatMessage('LG editor')}
-      navLinks={navLinks}
       navRegionName={formatMessage('LG Navigation Pane')}
       title={formatMessage('Bot Responses')}
       toolbarItems={[]}

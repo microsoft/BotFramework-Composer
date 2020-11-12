@@ -278,7 +278,7 @@ export const ProjectTree: React.FC<Props> = ({
     );
   };
 
-  const renderDialogHeader = (skillId: string, dialog: DialogInfo, depth: number) => {
+  const renderDialogHeader = (skillId: string, dialog: DialogInfo, padLeft: number) => {
     const warningContent = notificationMap[skillId][dialog.id]
       ?.filter((diag) => diag.severity === DiagnosticSeverity.Warning)
       .map((diag) => diag.message)
@@ -342,6 +342,7 @@ export const ProjectTree: React.FC<Props> = ({
                   ]
                 : []),
             ]}
+            padLeft={padLeft}
             textWidth={leftSplitWidth - TREE_PADDING}
             onSelect={handleOnSelect}
           />
@@ -503,7 +504,7 @@ export const ProjectTree: React.FC<Props> = ({
 
     if (showTriggers) {
       return filteredDialogs.map((dialog: DialogInfo) => {
-        const { summaryElement, dialogLink } = renderDialogHeader(projectId, dialog, startDepth);
+        const { summaryElement, dialogLink } = renderDialogHeader(projectId, dialog, 0);
         const key = 'dialog-' + dialog.id;
         return (
           <ExpandableNode
@@ -519,9 +520,7 @@ export const ProjectTree: React.FC<Props> = ({
         );
       });
     } else {
-      return filteredDialogs.map(
-        (dialog: DialogInfo) => renderDialogHeader(projectId, dialog, startDepth + 1).summaryElement
-      );
+      return filteredDialogs.map((dialog: DialogInfo) => renderDialogHeader(projectId, dialog, 44).summaryElement);
     }
   };
 
