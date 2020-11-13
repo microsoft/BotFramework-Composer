@@ -64,7 +64,6 @@ import {
   skillsState,
   dialogIdsState,
   showCreateQnAFromUrlDialogState,
-  creationJobId,
 } from '../../atoms';
 import * as botstates from '../../atoms/botState';
 import lgWorker from '../../parsers/lgWorker';
@@ -75,7 +74,6 @@ import { rootBotProjectIdSelector } from '../../selectors';
 import { undoHistoryState } from '../../undo/history';
 import UndoHistory from '../../undo/undoHistory';
 import { logMessage, setError } from '../shared';
-import { dispatcherState } from '../..';
 
 import { crossTrainConfigState } from './../../atoms/botState';
 import { recognizersSelectorFamily } from './../../selectors/recognizers';

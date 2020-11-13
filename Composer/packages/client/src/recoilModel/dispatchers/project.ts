@@ -7,7 +7,7 @@ import formatMessage from 'format-message';
 import findIndex from 'lodash/findIndex';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 
-import { BotStatus, QnABotTemplateId } from '../../constants';
+import { BotStatus } from '../../constants';
 import settingStorage from '../../utils/dialogSettingStorage';
 import { getFileNameFromPath } from '../../utils/fileUtil';
 import httpClient from '../../utils/httpUtil';
@@ -27,7 +27,6 @@ import {
   currentProjectIdState,
   filePersistenceState,
   projectMetaDataState,
-  showCreateQnAFromUrlDialogState,
 } from '../atoms';
 import { dispatcherState } from '../DispatcherWrapper';
 
@@ -149,7 +148,7 @@ export const projectDispatcher = () => {
       const { set, snapshot } = callbackHelpers;
       const dispatcher = await snapshot.getPromise(dispatcherState);
       try {
-        const { templateId, name, description, location, schemaUrl, locale, qnaKbUrls } = newProjectData;
+        const { templateId, name, description, location, schemaUrl, locale } = newProjectData;
         set(botOpeningState, true);
 
         const { projectId, mainDialog } = await createNewBotFromTemplate(
@@ -291,8 +290,6 @@ export const projectDispatcher = () => {
         location,
         schemaUrl,
         locale,
-        qnaKbUrls,
-        createNewBot,
         templateDir,
         eTag,
         urlSuffix,
