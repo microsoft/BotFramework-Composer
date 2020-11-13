@@ -549,10 +549,7 @@ export const ProjectTree: React.FC<Props> = ({
     }
   };
 
-  const projectTree =
-    projectCollection.length === 1
-      ? createDetailsTree(projectCollection[0], 0)
-      : projectCollection.map(createBotSubtree);
+  const projectTree = projectCollection.map(createBotSubtree);
 
   return (
     <div
