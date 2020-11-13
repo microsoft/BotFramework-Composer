@@ -36,7 +36,7 @@ export class BackgroundProcessManager {
     return this.processes[id];
   }
 
-  static updateProcess(id: string, status: number, message: string, result = undefined): string {
+  static updateProcess(id: string, status: number, message: string, result?: any): string {
     this.processes[id].status = status;
     this.processes[id].message = message;
     this.processes[id].log.push(message);

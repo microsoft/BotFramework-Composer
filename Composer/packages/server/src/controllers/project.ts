@@ -5,6 +5,7 @@ import { Request, Response } from 'express';
 import { Archiver } from 'archiver';
 import { ExtensionContext } from '@bfc/extension';
 import { remove } from 'fs-extra';
+import formatMessage from 'format-message';
 
 import log from '../logger';
 import { BotProjectService } from '../services/project';
@@ -14,6 +15,7 @@ import { getSkillManifest } from '../models/bot/skillManager';
 import StorageService from '../services/storage';
 import settings from '../settings';
 import { ejectAndMerge, getLocationRef, getNewProjRef } from '../utility/project';
+import { BackgroundProcessManager } from '../services/backgroundProcessManager';
 
 import { Path } from './../utility/path';
 
@@ -501,7 +503,14 @@ async function copyTemplateToExistingProject(req: Request, res: Response) {
   }
 }
 
-async function createProjectV2(req: Request, res: Response) {
+function createProjectV2(req: Request, res: Response) {
+  const jobId = BackgroundProcessManager.startProcess(202, 'create', 'Creating Bot Project');
+  createProjectAsync(req, jobId);
+  res.status(202).json({
+    jobId: jobId,
+  });
+}
+async function createProjectAsync(req: Request, jobId: string) {
   let { templateId } = req.body;
   const {
     name,
@@ -526,6 +535,7 @@ async function createProjectV2(req: Request, res: Response) {
     const createFromRemoteTemplate = !!templateDir;
 
     await BotProjectService.cleanProject(locationRef);
+    BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Getting template'));
     const newProjRef = await getNewProjRef(templateDir, templateId, locationRef, user, locale);
 
     const id = await BotProjectService.openProject(newProjRef, user);
@@ -539,7 +549,8 @@ async function createProjectV2(req: Request, res: Response) {
     }
 
     if (currentProject !== undefined) {
-      await ejectAndMerge(currentProject);
+      await ejectAndMerge(currentProject, jobId);
+      BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Initializing bot project'));
       await currentProject.updateBotInfo(name, description, preserveRoot);
       if (schemaUrl && !createFromRemoteTemplate) {
         await currentProject.saveSchemaToProject(schemaUrl, locationRef.path);
@@ -548,15 +559,13 @@ async function createProjectV2(req: Request, res: Response) {
 
       const project = currentProject.getProject();
       log('Project created successfully.');
-      res.status(200).json({
+      BackgroundProcessManager.updateProcess(jobId, 200, 'Created Successfully', {
         id,
         ...project,
       });
     }
   } catch (err) {
-    res.status(404).json({
-      message: err instanceof Error ? err.message : err,
-    });
+    BackgroundProcessManager.updateProcess(jobId, 404, err instanceof Error ? err.message : err);
   }
 }
 

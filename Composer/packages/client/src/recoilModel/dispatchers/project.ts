@@ -2,11 +2,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { BotProjectFile } from '@bfc/shared';
 import formatMessage from 'format-message';
 import findIndex from 'lodash/findIndex';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 
-import { BotStatus } from '../../constants';
+import { BotStatus, QnABotTemplateId } from '../../constants';
 import settingStorage from '../../utils/dialogSettingStorage';
 import { getFileNameFromPath } from '../../utils/fileUtil';
 import httpClient from '../../utils/httpUtil';
@@ -17,13 +18,16 @@ import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
 import {
   botErrorState,
   botNameIdentifierState,
+  botOpeningMessage,
   botOpeningState,
+  botProjectFileState,
   botProjectIdsState,
   botProjectSpaceLoadedState,
   botStatusState,
   currentProjectIdState,
   filePersistenceState,
   projectMetaDataState,
+  showCreateQnAFromUrlDialogState,
 } from '../atoms';
 import { dispatcherState } from '../DispatcherWrapper';
 
@@ -32,6 +36,7 @@ import { logMessage, setError } from './../dispatchers/shared';
 import {
   checkIfBotExistsInBotProjectFile,
   createNewBotFromTemplate,
+  createNewBotFromTemplateV2,
   fetchProjectDataById,
   flushExistingTasks,
   getSkillNameIdentifier,
@@ -275,9 +280,10 @@ export const projectDispatcher = () => {
   });
 
   const createNewBotV2 = useRecoilCallback((callbackHelpers: CallbackInterface) => async (newProjectData: any) => {
-    const { set } = callbackHelpers;
+    const { set, snapshot } = callbackHelpers;
     try {
       await flushExistingTasks(callbackHelpers);
+      const dispatcher = await snapshot.getPromise(dispatcherState);
       set(botOpeningState, true);
       const {
         templateId,
@@ -287,13 +293,15 @@ export const projectDispatcher = () => {
         schemaUrl,
         locale,
         qnaKbUrls,
+        createNewBot,
         templateDir,
         eTag,
         urlSuffix,
         alias,
         preserveRoot,
       } = newProjectData;
-      const { projectId, mainDialog } = await createNewBotFromTemplate(
+      // starts the creation process and stores the jobID in state for tracking
+      const response = await createNewBotFromTemplateV2(
         callbackHelpers,
         templateId,
         name,
@@ -306,21 +314,13 @@ export const projectDispatcher = () => {
         alias,
         preserveRoot
       );
-      set(botProjectIdsState, [projectId]);
-
-      // Post project creation
-      set(projectMetaDataState(projectId), {
-        isRootBot: true,
-        isRemote: false,
-      });
-      projectIdCache.set(projectId);
-      navigateToBot(callbackHelpers, projectId, mainDialog, qnaKbUrls, templateId, urlSuffix);
+      if (response.data.jobId) {
+        dispatcher.updateCreationMessage(response.data.jobId, templateId, qnaKbUrls, urlSuffix);
+      }
     } catch (ex) {
       set(botProjectIdsState, []);
       handleProjectFailure(callbackHelpers, ex);
       navigateTo('/home');
-    } finally {
-      set(botOpeningState, false);
     }
   });
 
@@ -415,7 +415,7 @@ export const projectDispatcher = () => {
 
   const reloadProject = async (callbackHelpers: CallbackInterface, response: any) => {
     callbackHelpers.reset(filePersistenceState(response.data.id));
-    const { projectData, botFiles } = loadProjectData(response);
+    const { projectData, botFiles } = loadProjectData(response.data);
 
     await initBotState(callbackHelpers, projectData, botFiles);
   };
@@ -426,6 +426,55 @@ export const projectDispatcher = () => {
     const { projectData, botFiles } = await fetchProjectDataById(projectId);
     await initBotState(callbackHelpers, projectData, botFiles);
   });
+
+  const updateCreationMessage = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async (jobId: string, templateId: any, qnaKbUrls: any, urlSuffix: any) => {
+      const timer = setInterval(async () => {
+        try {
+          const response = await httpClient.get(`/status/${jobId}`);
+          if (response.data?.status === 200 && response.data.result && response.data.result != {}) {
+            // Bot creation successful
+            clearInterval(timer);
+            callbackHelpers.set(botOpeningMessage, response.data.message);
+            const { botFiles, projectData } = loadProjectData(response.data.result);
+            const projectId = response.data.id;
+            if (settingStorage.get(projectId)) {
+              settingStorage.remove(projectId);
+            }
+            const currentBotProjectFileIndexed: BotProjectFile = botFiles.botProjectSpaceFiles[0];
+            callbackHelpers.set(botProjectFileState(projectId), currentBotProjectFileIndexed);
+
+            const mainDialog = await initBotState(callbackHelpers, projectData, botFiles);
+            callbackHelpers.set(botProjectIdsState, [projectId]);
+
+            // Post project creation
+            callbackHelpers.set(projectMetaDataState(projectId), {
+              isRootBot: true,
+              isRemote: false,
+            });
+            projectIdCache.set(projectId);
+            navigateToBot(callbackHelpers, projectId, mainDialog, qnaKbUrls, templateId, urlSuffix);
+            callbackHelpers.set(botOpeningMessage, '');
+            callbackHelpers.set(botOpeningState, false);
+          } else {
+            if (response.data.status !== 500) {
+              // pending
+              callbackHelpers.set(botOpeningMessage, response.data.message);
+            } else {
+              // failure
+              callbackHelpers.set(botOpeningMessage, response.data.message);
+              clearInterval(timer);
+            }
+          }
+        } catch (err) {
+          clearInterval(timer);
+          callbackHelpers.set(botProjectIdsState, []);
+          handleProjectFailure(callbackHelpers, err);
+          navigateTo('/home');
+        }
+      }, 5000);
+    }
+  );
 
   return {
     openProject,
@@ -446,5 +495,6 @@ export const projectDispatcher = () => {
     replaceSkillInBotProject,
     reloadProject,
     reloadExistingProject,
+    updateCreationMessage,
   };
 };

@@ -4,6 +4,7 @@
 import { atom, atomFamily } from 'recoil';
 import { FormDialogSchemaTemplate, FeatureFlagMap, BotTemplate, UserSettings } from '@bfc/shared';
 import { ExtensionMetadata } from '@bfc/extension-client';
+import formatMessage from 'format-message';
 
 import {
   StorageFolder,
@@ -210,6 +211,16 @@ export const botProjectSpaceLoadedState = atom<boolean>({
 export const botOpeningState = atom<boolean>({
   key: getFullyQualifiedKey('botOpeningState'),
   default: false,
+});
+
+export const botOpeningMessage = atom({
+  key: getFullyQualifiedKey('botOpeningMessage'),
+  default: formatMessage('Loading'),
+});
+
+export const creationJobId = atom({
+  key: getFullyQualifiedKey('creationJobId'),
+  default: '',
 });
 
 export const formDialogLibraryTemplatesState = atom<FormDialogSchemaTemplate[]>({

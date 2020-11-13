@@ -64,6 +64,7 @@ import {
   skillsState,
   dialogIdsState,
   showCreateQnAFromUrlDialogState,
+  creationJobId,
 } from '../../atoms';
 import * as botstates from '../../atoms/botState';
 import lgWorker from '../../parsers/lgWorker';
@@ -74,6 +75,7 @@ import { rootBotProjectIdSelector } from '../../selectors';
 import { undoHistoryState } from '../../undo/history';
 import UndoHistory from '../../undo/undoHistory';
 import { logMessage, setError } from '../shared';
+import { dispatcherState } from '../..';
 
 import { crossTrainConfigState } from './../../atoms/botState';
 import { recognizersSelectorFamily } from './../../selectors/recognizers';
@@ -161,8 +163,8 @@ export const navigateToBot = (
   }
 };
 
-export const loadProjectData = (response) => {
-  const { files, botName, settings, skills: skillContent, id: projectId } = response.data;
+export const loadProjectData = (data) => {
+  const { files, botName, settings, skills: skillContent, id: projectId } = data;
   const mergedSettings = getMergedSettings(projectId, settings);
   const storedLocale = languageStorage.get(botName)?.locale;
   const locale = settings.languages.includes(storedLocale) ? storedLocale : settings.defaultLanguage;
@@ -174,7 +176,7 @@ export const loadProjectData = (response) => {
 
   return {
     botFiles: { ...indexedFiles, qnaFiles: updateQnAFiles, mergedSettings },
-    projectData: response.data,
+    projectData: data,
     error: undefined,
   };
 };
@@ -185,7 +187,7 @@ export const fetchProjectDataByPath = async (
 ): Promise<{ botFiles: any; projectData: any; error: any }> => {
   try {
     const response = await httpClient.put(`/projects/open`, { path, storageId });
-    const projectData = loadProjectData(response);
+    const projectData = loadProjectData(response.data);
     return projectData;
   } catch (ex) {
     return {
@@ -199,7 +201,7 @@ export const fetchProjectDataByPath = async (
 export const fetchProjectDataById = async (projectId): Promise<{ botFiles: any; projectData: any; error: any }> => {
   try {
     const response = await httpClient.get(`/projects/${projectId}`);
-    const projectData = loadProjectData(response);
+    const projectData = loadProjectData(response.data);
     return projectData;
   } catch (ex) {
     return {
@@ -434,7 +436,7 @@ export const createNewBotFromTemplate = async (
     alias,
     preserveRoot,
   });
-  const { botFiles, projectData } = loadProjectData(response);
+  const { botFiles, projectData } = loadProjectData(response.data);
   const projectId = response.data.id;
   if (settingStorage.get(projectId)) {
     settingStorage.remove(projectId);
@@ -464,8 +466,7 @@ export const createNewBotFromTemplateV2 = async (
   alias?: string,
   preserveRoot?: boolean
 ) => {
-  const { set } = callbackHelpers;
-  const response = await httpClient.post(`/v2/projects`, {
+  const jobId = await httpClient.post(`/v2/projects`, {
     storageId: 'default',
     templateId,
     name,
@@ -478,21 +479,7 @@ export const createNewBotFromTemplateV2 = async (
     alias,
     preserveRoot,
   });
-  const { botFiles, projectData } = loadProjectData(response);
-  const projectId = response.data.id;
-  if (settingStorage.get(projectId)) {
-    settingStorage.remove(projectId);
-  }
-  const currentBotProjectFileIndexed: BotProjectFile = botFiles.botProjectSpaceFiles[0];
-  set(botProjectFileState(projectId), currentBotProjectFileIndexed);
-
-  const mainDialog = await initBotState(callbackHelpers, projectData, botFiles);
-  // if create from QnATemplate, continue creation flow.
-  if (templateId === QnABotTemplateId) {
-    set(showCreateQnAFromUrlDialogState(projectId), true);
-  }
-
-  return { projectId, mainDialog };
+  return jobId;
 };
 
 const addProjectToBotProjectSpace = (set, projectId: string, skillCt: number) => {
@@ -603,7 +590,7 @@ export const saveProject = async (callbackHelpers, oldProjectData) => {
     description,
     location,
   });
-  const data = loadProjectData(response);
+  const data = loadProjectData(response.data);
   if (data.error) {
     throw data.error;
   }

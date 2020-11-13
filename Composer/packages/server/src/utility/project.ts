@@ -6,12 +6,14 @@ import * as fs from 'fs';
 import { ExtensionContext } from '@bfc/extension';
 import { remove } from 'fs-extra';
 import { SchemaMerger } from '@microsoft/bf-dialog/lib/library/schemaMerger';
+import formatMessage from 'format-message';
 
 import { LocationRef } from '../models/bot/interface';
 import settings from '../settings';
 import log from '../logger';
 import AssetService from '../services/asset';
 import { BotProject } from '../models/bot/botProject';
+import { BackgroundProcessManager } from '../services/backgroundProcessManager';
 
 import { Path } from './path';
 
@@ -50,7 +52,7 @@ export async function getNewProjRef(templateDir: any, templateId: any, locationR
   return newProjRef;
 }
 
-export async function ejectAndMerge(currentProject: BotProject) {
+export async function ejectAndMerge(currentProject: BotProject, jobId: string) {
   if (currentProject.settings?.runtime?.customRuntime === true) {
     const runtime = ExtensionContext.getRuntimeByProject(currentProject);
     const runtimePath = currentProject.settings.runtime.path;
@@ -60,11 +62,13 @@ export async function ejectAndMerge(currentProject: BotProject) {
     }
 
     // install all dependencies and build the app
+    BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Building runtime'));
     await runtime.build(runtimePath, currentProject);
 
     const manifestFile = runtime.identifyManifest(runtimePath);
 
     // run the merge command to merge all package dependencies from the template to the bot project
+    BackgroundProcessManager.updateProcess(jobId, 202, formatMessage('Merging Packages'));
     const realMerge = new SchemaMerger(
       [manifestFile],
       Path.join(currentProject.dataDir, 'schemas/sdk'),

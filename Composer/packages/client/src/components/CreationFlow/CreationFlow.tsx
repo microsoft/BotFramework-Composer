@@ -47,6 +47,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     createNewBot,
     saveProjectAs,
     fetchProjectById,
+    createNewBotV2,
   } = useRecoilValue(dispatcherState);
 
   const templateProjects = useRecoilValue(filteredTemplatesSelector);
