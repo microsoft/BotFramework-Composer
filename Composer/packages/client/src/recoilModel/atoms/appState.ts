@@ -218,11 +218,6 @@ export const botOpeningMessage = atom({
   default: formatMessage('Loading'),
 });
 
-export const creationJobId = atom({
-  key: getFullyQualifiedKey('creationJobId'),
-  default: '',
-});
-
 export const formDialogLibraryTemplatesState = atom<FormDialogSchemaTemplate[]>({
   key: getFullyQualifiedKey('formDialogLibraryTemplates'),
   default: [],

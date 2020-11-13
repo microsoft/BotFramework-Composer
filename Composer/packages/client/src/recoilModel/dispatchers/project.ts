@@ -169,7 +169,7 @@ export const projectDispatcher = () => {
         });
         set(botProjectIdsState, (current) => [...current, projectId]);
         await dispatcher.addLocalSkillToBotProjectFile(projectId);
-        navigateToBot(callbackHelpers, projectId, mainDialog, qnaKbUrls, templateId);
+        navigateToBot(callbackHelpers, projectId, mainDialog);
         return projectId;
       } catch (ex) {
         handleProjectFailure(callbackHelpers, ex);
@@ -241,7 +241,6 @@ export const projectDispatcher = () => {
         location,
         schemaUrl,
         locale,
-        qnaKbUrls,
         templateDir,
         eTag,
         urlSuffix,
@@ -269,7 +268,7 @@ export const projectDispatcher = () => {
         isRemote: false,
       });
       projectIdCache.set(projectId);
-      navigateToBot(callbackHelpers, projectId, mainDialog, qnaKbUrls, templateId, urlSuffix);
+      navigateToBot(callbackHelpers, projectId, mainDialog, urlSuffix);
     } catch (ex) {
       set(botProjectIdsState, []);
       handleProjectFailure(callbackHelpers, ex);
@@ -315,7 +314,7 @@ export const projectDispatcher = () => {
         preserveRoot
       );
       if (response.data.jobId) {
-        dispatcher.updateCreationMessage(response.data.jobId, templateId, qnaKbUrls, urlSuffix);
+        dispatcher.updateCreationMessage(response.data.jobId, templateId, urlSuffix);
       }
     } catch (ex) {
       set(botProjectIdsState, []);
@@ -428,7 +427,7 @@ export const projectDispatcher = () => {
   });
 
   const updateCreationMessage = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (jobId: string, templateId: any, qnaKbUrls: any, urlSuffix: any) => {
+    (callbackHelpers: CallbackInterface) => async (jobId: string, templateId: string, urlSuffix: string) => {
       const timer = setInterval(async () => {
         try {
           const response = await httpClient.get(`/status/${jobId}`);
@@ -453,7 +452,7 @@ export const projectDispatcher = () => {
               isRemote: false,
             });
             projectIdCache.set(projectId);
-            navigateToBot(callbackHelpers, projectId, mainDialog, qnaKbUrls, templateId, urlSuffix);
+            navigateToBot(callbackHelpers, projectId, mainDialog, urlSuffix);
             callbackHelpers.set(botOpeningMessage, '');
             callbackHelpers.set(botOpeningState, false);
           } else {

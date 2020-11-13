@@ -3,7 +3,7 @@
 
 import * as fs from 'fs';
 
-import { ExtensionContext } from '@bfc/extension';
+import { ExtensionContext, UserIdentity } from '@bfc/extension';
 import { remove } from 'fs-extra';
 import { SchemaMerger } from '@microsoft/bf-dialog/lib/library/schemaMerger';
 import formatMessage from 'format-message';
@@ -17,7 +17,7 @@ import { BackgroundProcessManager } from '../services/backgroundProcessManager';
 
 import { Path } from './path';
 
-export function getLocationRef(location: any, storageId: any, name: any) {
+export function getLocationRef(location: string, storageId: string, name: string) {
   // default the path to the default folder.
   let path = settings.botsFolder;
   // however, if path is specified as part of post body, use that one.
@@ -37,7 +37,13 @@ export function getLocationRef(location: any, storageId: any, name: any) {
   return locationRef;
 }
 
-export async function getNewProjRef(templateDir: any, templateId: any, locationRef: any, user: any, locale: any) {
+export async function getNewProjRef(
+  templateDir: string,
+  templateId: string,
+  locationRef: LocationRef,
+  user: UserIdentity,
+  locale: string
+) {
   const createFromRemoteTemplate = !!templateDir;
   let newProjRef;
   if (createFromRemoteTemplate) {
