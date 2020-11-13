@@ -52,7 +52,8 @@ describe('useForm', () => {
       expect(result.current.formData.requiredField).toEqual('new value');
     });
 
-    it('can update the whole object', async () => {
+    it('can update the whole object and validates', async () => {
+      custValidate.mockReturnValue('custom');
       const { result, waitForNextUpdate } = renderHook(() => useForm(fields));
 
       await act(async () => {
@@ -69,6 +70,10 @@ describe('useForm', () => {
         customValidationField: 'form',
         asyncValidationField: 'data',
       });
+
+      expect(result.current.formErrors).toEqual({
+        customValidationField: 'custom',
+      });
     });
   });
 
@@ -78,6 +83,21 @@ describe('useForm', () => {
       asyncValidate.mockResolvedValue('async');
       const { result, waitForNextUpdate } = renderHook(() => useForm(fields, { validateOnMount: true }));
       await waitForNextUpdate();
+
+      expect(result.current.formErrors).toMatchObject({
+        customValidationField: 'custom',
+        asyncValidationField: 'async',
+      });
+    });
+
+    it('can validate on command', async () => {
+      custValidate.mockReturnValue('custom');
+      asyncValidate.mockResolvedValue('async');
+      const { result, waitForNextUpdate } = renderHook(() => useForm(fields, { validateOnMount: false }));
+      await act(async () => {
+        result.current.validateForm();
+        await waitForNextUpdate();
+      });
 
       expect(result.current.formErrors).toMatchObject({
         customValidationField: 'custom',
@@ -108,7 +128,7 @@ describe('useForm', () => {
       expect(result.current.formErrors.customValidationField).toEqual('my custom validation');
     });
 
-    it('validates using an asyn validator', async () => {
+    it('validates using an async validator', async () => {
       asyncValidate.mockResolvedValue('my async validation');
       const { result, waitForNextUpdate } = renderHook(() => useForm(fields));
 
