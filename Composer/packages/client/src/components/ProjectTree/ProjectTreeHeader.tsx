@@ -19,14 +19,14 @@ const headerText = css`
 const buttonStyles: IButtonStyles = {
   icon: {
     color: NeutralColors.black,
-    fontSize: FontSizes.size20,
+    fontSize: FontSizes.size12,
   },
   root: {
     height: '20px',
     width: '20px',
     position: 'absolute',
     right: '6px',
-    top: '0px',
+    top: '3px',
   },
   rootHovered: {
     backgroundColor: 'transparent',
