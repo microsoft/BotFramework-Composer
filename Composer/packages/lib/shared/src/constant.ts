@@ -1,9 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export const SensitiveProperties = ['MicrosoftAppPassword', 'luis.endpointKey', 'qna.endpointKey'];
+export const SensitiveProperties = [
+  'MicrosoftAppPassword',
+  'luis.endpointKey',
+  'qna.endpointKey',
+  'luis.authoringKey',
+  'qna.subscriptionKey',
+];
 
-export const SensitivePropertiesManageGroup = ['luis.authoringKey', 'luis.authoringRegion', 'qna.subscriptionKey'];
+export const RootBotManagedProperties = ['luis.authoringKey', 'luis.authoringRegion', 'qna.subscriptionKey'];
 
 export const FieldNames = {
   Events: 'triggers',

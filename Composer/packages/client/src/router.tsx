@@ -12,11 +12,22 @@ import { resolveToBasePath } from './utils/fileUtil';
 import { data } from './styles';
 import { NotFound } from './components/NotFound';
 import { BASEPATH } from './constants';
-import { dispatcherState, schemasState, botProjectIdsState, botOpeningState, pluginPagesSelector } from './recoilModel';
+import {
+  dispatcherState,
+  schemasState,
+  botProjectIdsState,
+  botOpeningState,
+  pluginPagesSelector,
+  botProjectSpaceSelector,
+} from './recoilModel';
+import { rootBotProjectIdSelector } from './recoilModel/selectors/project';
 import { openAlertModal } from './components/Modal/AlertDialog';
 import { dialogStyle } from './components/Modal/dialogStyle';
 import { LoadingSpinner } from './components/LoadingSpinner';
 import { PluginPageContainer } from './pages/plugin/PluginPageContainer';
+
+import { botProjectSpaceLoadedState } from './recoilModel/atoms';
+import { mergePropertiesManagedByRootBot } from './recoilModel/dispatchers/utils/project';
 
 const DesignPage = React.lazy(() => import('./pages/design/DesignPage'));
 const LUPage = React.lazy(() => import('./pages/language-understanding/LUPage'));
@@ -109,8 +120,24 @@ const projectStyle = css`
 const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string; skillId: string }>> = (props) => {
   const { projectId = '' } = props;
   const schemas = useRecoilValue(schemasState(projectId));
-  const { fetchProjectById } = useRecoilValue(dispatcherState);
+  const { fetchProjectById, setSettingStateWithoutSync } = useRecoilValue(dispatcherState);
   const botProjects = useRecoilValue(botProjectIdsState);
+  const botProjectsMetaData = useRecoilValue(botProjectSpaceSelector);
+  const botProjectSpaceLoaded = useRecoilValue(botProjectSpaceLoadedState);
+  const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
+
+  useEffect(() => {
+    if (botProjectSpaceLoaded && rootBotProjectId && botProjectsMetaData) {
+      for (let i = 0; i < botProjectsMetaData.length; i++) {
+        if (!botProjectsMetaData[i].isRemote) {
+          const id = botProjectsMetaData[i].projectId;
+          const settings = botProjectsMetaData[i].settings;
+          const mergedSettings = mergePropertiesManagedByRootBot(id, rootBotProjectId, settings);
+          setSettingStateWithoutSync(id, mergedSettings);
+        }
+      }
+    }
+  }, [botProjectSpaceLoaded, rootBotProjectId]);
 
   useEffect(() => {
     if (props.projectId && !botProjects.includes(props.projectId)) {

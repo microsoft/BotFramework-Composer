@@ -3,14 +3,15 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
-import { SensitiveProperties, SensitivePropertiesManageGroup, DialogSetting, PublishTarget } from '@bfc/shared';
+import { SensitiveProperties, RootBotManagedProperties, DialogSetting, PublishTarget } from '@bfc/shared';
 import get from 'lodash/get';
+import set from 'lodash/set';
 import has from 'lodash/has';
+import cloneDeep from 'lodash/cloneDeep';
 
 import settingStorage from '../../utils/dialogSettingStorage';
 import { settingsState } from '../atoms/botState';
-import { rootBotProjectIdSelector } from '../selectors/project';
-
+import { rootBotProjectIdSelector, botProjectSpaceSelector } from '../selectors/project';
 import httpClient from './../../utils/httpUtil';
 import { setError } from './shared';
 
@@ -19,18 +20,18 @@ export const setSettingState = async (
   projectId: string,
   settings: DialogSetting
 ) => {
-  const { set, snapshot } = callbackHelpers;
-
+  const { set: recoilSet, snapshot } = callbackHelpers;
   // set value in local storage
   for (const property of SensitiveProperties) {
-    if (has(settings, property)) {
+    if (!RootBotManagedProperties.includes(property) && has(settings, property)) {
       const propertyValue = get(settings, property, '');
       settingStorage.setField(projectId, property, propertyValue);
     }
   }
 
-  for (const property of SensitivePropertiesManageGroup) {
-    const rootProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
+  const rootProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
+  //store RootBotManagedProperties in browser localStorage
+  for (const property of RootBotManagedProperties) {
     if (has(settings, property) && rootProjectId) {
       const propertyValue = get(settings, property, '');
       const groupPropertyValue = get(settingStorage.get(rootProjectId), property, '');
@@ -40,10 +41,46 @@ export const setSettingState = async (
       } else {
         newGroupPropertyValue = { ...groupPropertyValue, [projectId]: propertyValue };
       }
+      console.log(newGroupPropertyValue, projectId);
       settingStorage.setField(rootProjectId, property, newGroupPropertyValue);
     }
   }
-  set(settingsState(projectId), settings);
+
+  //sync skill bots' RootBotManagedProperties with root bot
+  if (projectId === rootProjectId) {
+    const botProjectsMetaData = await snapshot.getPromise(botProjectSpaceSelector);
+    for (let i = 0; i < botProjectsMetaData.length; i++) {
+      const botProject = botProjectsMetaData[i];
+      if (!botProject.isRootBot && !botProject.isRemote && rootProjectId) {
+        const skillSettings = await snapshot.getPromise(settingsState(botProject.projectId));
+        const newSkillSettings = cloneDeep(skillSettings);
+        const localStorageSettings = settingStorage.get(rootProjectId);
+        for (const property of RootBotManagedProperties) {
+          const propertyValue = get(settings, property, '');
+          const shouldUseRootProperty = !get(localStorageSettings, property, {})[botProject.projectId];
+          if (shouldUseRootProperty) {
+            set(newSkillSettings, property, propertyValue);
+          }
+        }
+        recoilSet(settingsState(botProject.projectId), newSkillSettings);
+      }
+    }
+  }
+
+  if (projectId !== rootProjectId && rootProjectId) {
+    const rootSettings = await snapshot.getPromise(settingsState(rootProjectId));
+    // const newSkillSettings = cloneDeep(skillSettings);
+    //const localStorageSettings = settingStorage.get(rootProjectId);
+    for (const property of RootBotManagedProperties) {
+      const propertyValue = get(settings, property, '');
+      const rootPropertyValue = get(rootSettings, property, '');
+      // const shouldUseRootProperty = !get(localStorageSettings, property, {})[projectId];
+      if (!propertyValue) {
+        set(settings, property, rootPropertyValue);
+      }
+    }
+  }
+  recoilSet(settingsState(projectId), settings);
 };
 
 export const settingsDispatcher = () => {
@@ -114,8 +151,17 @@ export const settingsDispatcher = () => {
       }
     }
   );
+
+  const setSettingStateWithoutSync = useRecoilCallback<[string, DialogSetting], Promise<void>>(
+    (callbackHelpers: CallbackInterface) => async (projectId: string, settings: DialogSetting) => {
+      const { set } = callbackHelpers;
+      set(settingsState(projectId), settings);
+    }
+  );
+
   return {
     setSettings,
+    setSettingStateWithoutSync,
     setRuntimeSettings,
     setPublishTargets,
     setRuntimeField,

@@ -157,7 +157,7 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
               onChange={handleChange}
             />
           ) : (
-            <BotProjectSettingsTableView hasSkills={botProjectsMetaData.length > 1} projectId={projectId} />
+            <BotProjectSettingsTableView projectId={projectId} />
           )}
         </div>
       </Suspense>

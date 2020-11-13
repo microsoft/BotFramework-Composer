@@ -155,7 +155,9 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
   const botProjectsMetaData = useRecoilValue(botProjectSpaceSelector);
   const botProject = botProjectsMetaData.find((b) => b.projectId === projectId);
   const isRootBot = !!botProject?.isRootBot;
+
   const sensitiveGroupManageProperty = settingStorage.get(rootBotProjectId);
+
   const groupLUISAuthoringKey = get(sensitiveGroupManageProperty, 'luis.authoringKey', {});
   const rootLuisKey = groupLUISAuthoringKey.root;
   const skillLuisKey = groupLUISAuthoringKey[projectId];
@@ -175,9 +177,23 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
   const [localRootQnAKey, setLocalRootQnAKey] = useState<string>(rootqnaKey ?? '');
 
   useEffect(() => {
-    setLuisKeyErrorMsg('');
-    setQnAKeyErrorMsg('');
+    if (!localRootLuisKey) {
+      setLuisKeyErrorMsg(
+        formatMessage('LUIS Key is required with the current recognizer setting to start your bot locally, and publish')
+      );
+    } else {
+      setLuisKeyErrorMsg('');
+    }
+    if (!localRootQnAKey) {
+      setQnAKeyErrorMsg(formatMessage('QnA Maker subscription Key is required to start your bot locally, and publish'));
+    } else {
+      setQnAKeyErrorMsg('');
+    }
   }, [projectId]);
+
+  useEffect(() => {
+    setLocalRootLuisKey(rootLuisKey);
+  }, [rootLuisKey]);
 
   const handleRootLUISKeyOnChange = (e, value) => {
     setSettings(projectId, {
@@ -220,24 +236,27 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
     submitQnASubscripionKey(localRootQnAKey);
   };
 
-  const handleSkillQnAKeyOnBlur = (value) => {
-    if (value) {
-      submitQnASubscripionKey(value);
+  const handleSkillQnAKeyOnBlur = (key: string) => {
+    if (key) {
+      submitQnASubscripionKey(key);
     } else {
-      setSettings(projectId, {
-        ...settings,
-        qna: { ...settings.qna, subscriptionKey: '' },
-      });
-      setQnASettings(projectId, rootqnaKey);
+      submitQnASubscripionKey(rootqnaKey);
     }
   };
 
-  const submitQnASubscripionKey = (value) => {
-    setSettings(projectId, {
-      ...settings,
-      qna: { ...settings.qna, subscriptionKey: value ? value : '' },
-    });
-    setQnASettings(projectId, value);
+  const submitQnASubscripionKey = (key: string) => {
+    if (key) {
+      setSettings(projectId, {
+        ...settings,
+        qna: { ...settings.qna, subscriptionKey: key },
+      });
+      setQnASettings(projectId, key);
+    } else {
+      setSettings(projectId, {
+        ...settings,
+        qna: { ...settings.qna, subscriptionKey: '', endpointKey: '' },
+      });
+    }
   };
 
   return (
