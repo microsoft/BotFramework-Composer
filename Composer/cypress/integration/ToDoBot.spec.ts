@@ -11,10 +11,10 @@ context('ToDo Bot', () => {
 
   it('can open the main dialog', () => {
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('__TestTodoSample').click();
+      cy.findAllByText('__TestTodoSample').last().click();
     });
     cy.withinEditor('PropertyEditor', () => {
-      cy.findByDisplayValue('__TestTodoSample').should('exist');
+      cy.findAllByDisplayValue('__TestTodoSample').should('exist');
     });
   });
 
