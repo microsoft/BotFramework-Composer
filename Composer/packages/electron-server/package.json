@@ -9,7 +9,7 @@
     "node": ">=12"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json && ncp src/preload.js build/preload.js",
+    "build": "tsc -b tsconfig.build.json && ncp src/preload.js build/preload.js",
     "clean": "rimraf build && rimraf dist && rimraf l10ntemp",
     "copy-artifacts": "node scripts/copy-artifacts.js",
     "dist": "node scripts/electronBuilderDist.js",
@@ -17,9 +17,7 @@
     "lint": "eslint --quiet ./src",
     "lint:fix": "yarn lint --fix",
     "pack": "node scripts/electronBuilderPack.js",
-    "start": "cross-env NODE_ENV=development electron .",
-    "start:electron": "./node_modules/.bin/electron --inspect=7777 --remote-debugging-port=7778 .",
-    "start:electron:dev": "cross-env NODE_ENV=development ELECTRON_TARGET_URL=http://localhost:3000/ npm run start:electron",
+    "start": "DEBUG=composer* cross-env NODE_ENV=development electron --inspect=7777 --remote-debugging-port=7778 .",
     "test": "jest",
     "test:watch": "jest --watch",
     "l10n:extract": "cross-env NODE_ENV=production format-message extract -g underscored_crc32 -o locales/en-US.json l10ntemp/**/*.js",

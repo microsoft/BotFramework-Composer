@@ -4,14 +4,11 @@
     "outDir": "./build/",
     "sourceMap": true,
     "target": "es6",
-    "baseUrl": ".",
-    "paths": {
-      "@src/*": ["src/*"]
-    }
+    "baseUrl": "."
   },
   "include": [
     "src/**/*.ts",
-    "scripts/*.js", // include scripts to geting proper linting
+    "scripts/*.js", // include scripts to get proper linting
     "__tests__", // intellisense
     "src/preload.js"
   ]
