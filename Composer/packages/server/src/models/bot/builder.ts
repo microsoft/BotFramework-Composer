@@ -2,17 +2,19 @@
 // Licensed under the MIT License.
 
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { FileInfo, IConfig } from '@bfc/shared';
+import { writeFile, existsSync } from 'fs';
+
+import { FileInfo, IConfig, SDKKinds } from '@bfc/shared';
 import { ComposerReservoirSampler } from '@microsoft/bf-dispatcher/lib/mathematics/sampler/ComposerReservoirSampler';
 import { ComposerBootstrapSampler } from '@microsoft/bf-dispatcher/lib/mathematics/sampler/ComposerBootstrapSampler';
 import { luImportResolverGenerator, getLUFiles, getQnAFiles } from '@bfc/shared/lib/luBuildResolver';
 import { Orchestrator } from '@microsoft/bf-orchestrator';
-import { IOrchestratorBuildOutput, IOrchestratorNLRList, IOrchestratorProgress } from './interface';
 
 import { Path } from '../../utility/path';
 import { IFileStorage } from '../storage/interface';
 import log from '../../logger';
-import { writeFile, existsSync } from 'fs';
+
+import { IOrchestratorBuildOutput, IOrchestratorNLRList, IOrchestratorProgress } from './interface';
 
 const crossTrainer = require('@microsoft/bf-lu/lib/parser/cross-train/crossTrainer.js');
 const luBuild = require('@microsoft/bf-lu/lib/parser/lubuild/builder.js');
@@ -71,10 +73,14 @@ export class Builder {
       await this.createGeneratedDir();
       //do cross train before publish
       await this.crossTrain(luFiles, qnaFiles, allFiles);
+      await this.downSampling((await this.getInterruptionFiles()).interruptionLuFiles);
+
       const { interruptionLuFiles, interruptionQnaFiles } = await this.getInterruptionFiles();
-      await this.runLuBuild(interruptionLuFiles, allFiles);
+      const { luBuildFiles, orchestratorBuildFiles } = this.separateLuFiles(interruptionLuFiles, allFiles);
+
+      await this.runLuBuild(luBuildFiles);
       await this.runQnaBuild(interruptionQnaFiles);
-      await this.doOrchestratorBuildAsync(interruptionLuFiles);
+      await this.doOrchestratorBuildAsync(orchestratorBuildFiles);
     } catch (error) {
       throw new Error(error.message ?? error.text ?? 'Error publishing to LUIS or QNA.');
     }
@@ -104,7 +110,7 @@ export class Builder {
   }
 
   public getModelPathAsync = async () => {
-    let appDataPath: string = '';
+    let appDataPath = '';
     if (process.versions.hasOwnProperty('electron')) {
       // Electron-specific code
       const { app } = await import('electron');
@@ -112,19 +118,20 @@ export class Builder {
     } else {
       appDataPath = process.env.APPDATA || process.env.HOME || '';
     }
-    let baseModelPath = Path.resolve(appDataPath, 'BotFrameworkComposer', 'models');
+    const baseModelPath = Path.resolve(appDataPath, 'BotFrameworkComposer', 'models');
     console.log('Saving models to: ' + baseModelPath);
     return baseModelPath;
   };
 
   public doOrchestratorBuildAsync = async (luFiles: FileInfo[]) => {
+    if (!luFiles.length) return;
     //orchestrator stuff
-    let nlrList = await this.runOrchestratorNlrList();
-    let defaultNLR = nlrList.default;
-    let modelPath = Path.resolve(await this.getModelPathAsync(), defaultNLR.replace('.onnx', ''));
+    const nlrList = await this.runOrchestratorNlrList();
+    const defaultNLR = nlrList.default;
+    const modelPath = Path.resolve(await this.getModelPathAsync(), defaultNLR.replace('.onnx', ''));
 
     if (!existsSync(modelPath)) {
-      let handler: IOrchestratorProgress = (status) => {
+      const handler: IOrchestratorProgress = (status) => {
         console.log(status);
       };
       await this.runOrchestratorNlrGet(modelPath, defaultNLR, handler, handler);
@@ -133,18 +140,18 @@ export class Builder {
     }
 
     console.log('modelPath: ' + modelPath);
-    let returnData = await this.runOrchestratorBuild(luFiles, modelPath);
+    const returnData = await this.runOrchestratorBuild(luFiles, modelPath);
 
-    let orchestratorSettings: any = {
+    const orchestratorSettings: any = {
       orchestrator: {
         ModelPath: modelPath,
       },
     };
 
-    let snapshots: any = {};
+    const snapshots: any = {};
 
-    for (let dialog of returnData.outputs) {
-      let bluFilePath = Path.resolve(this.generatedFolderPath, dialog.id.replace('.lu', '.blu'));
+    for (const dialog of returnData.outputs) {
+      const bluFilePath = Path.resolve(this.generatedFolderPath, dialog.id.replace('.lu', '.blu'));
       snapshots[dialog.id.replace('.lu', '').replace(/[-.]/g, '_')] = bluFilePath;
 
       writeFile(bluFilePath, Buffer.from(dialog.snapshot), (err) => {
@@ -156,7 +163,7 @@ export class Builder {
 
     //put out the general settings file - write into orchestrator.settings.json
     orchestratorSettings.orchestrator.snapshots = snapshots;
-    let orchestratorSettingsPath = Path.resolve(this.generatedFolderPath, 'orchestrator.settings.json');
+    const orchestratorSettingsPath = Path.resolve(this.generatedFolderPath, 'orchestrator.settings.json');
 
     writeFile(orchestratorSettingsPath, JSON.stringify(orchestratorSettings), (err) => {
       if (err) {
@@ -320,14 +327,31 @@ export class Builder {
     );
   }
 
-  private async runLuBuild(files: FileInfo[], allFiles: FileInfo[]) {
-    const config = await this._getConfig(files, 'lu');
+  private async downSampling(files: FileInfo[]) {
+    const models = files.map((file) => file.path);
 
-    let luContents = await this.luBuilder.loadContents(config.models, {
-      culture: config.fallbackLocal,
+    let luContents = await this.luBuilder.loadContents(models, {
+      culture: this.config?.defaultLanguage || 'en-us',
     });
 
     luContents = await this.downsizeUtterances(luContents);
+    //write downsampling result to the interruption folder
+    await Promise.all(
+      luContents.map(async ({ path, content }) => {
+        return await this.storage.writeFile(path, content);
+      })
+    );
+  }
+
+  private async runLuBuild(files: FileInfo[]) {
+    if (!files.length) return;
+
+    const config = this._getConfig(files);
+
+    const luContents = await this.luBuilder.loadContents(config.models, {
+      culture: config.fallbackLocal,
+    });
+
     const authoringEndpoint = config.authoringEndpoint ?? `https://${config.region}.api.cognitive.microsoft.com`;
 
     const buildResult = await this.luBuilder.build(luContents, config.authoringKey, config.botName, {
@@ -338,13 +362,6 @@ export class Builder {
       region: config.region,
     });
 
-    //write downsampling result to the interruption folder
-    await Promise.all(
-      luContents.map(async ({ path, content }) => {
-        return await this.storage.writeFile(path, content);
-      })
-    );
-
     await this.luBuilder.writeDialogAssets(buildResult, {
       force: true,
       out: this.generatedFolderPath,
@@ -352,7 +369,7 @@ export class Builder {
   }
 
   private async runQnaBuild(files: FileInfo[]) {
-    const config = await this._getConfig(files, 'qna');
+    const config = this._getConfig(files);
 
     const qnaContents = await this.qnaBuilder.loadContents(config.models, {
       culture: config.fallbackLocal,
@@ -390,12 +407,12 @@ export class Builder {
     }
   }
 
-  private _getConfig = async (files: FileInfo[], fileSuffix) => {
+  private _getConfig = (files: FileInfo[]) => {
     if (!this.config) {
       throw new Error('Please complete your LUIS settings');
     }
 
-    const config = {
+    return {
       authoringKey: this.config.authoringKey || '',
       subscriptionKey: this.config.subscriptionKey || '',
       region: this.config.authoringRegion || '',
@@ -405,23 +422,28 @@ export class Builder {
       fallbackLocal: this.config.defaultLanguage || 'en-us',
       endpoint: this.config.endpoint || null,
       authoringEndpoint: this.config.authoringEndpoint || null,
-      models: [] as string[],
+      models: files.map((file) => file.path),
     };
+  };
 
-    //add all file after cross train
-    let paths: string[] = [];
-    paths = await this.storage.glob('**/*.' + fileSuffix, this.interruptionFolderPath);
-    config.models = paths.map((filePath) => Path.join(this.interruptionFolderPath, filePath));
+  private separateLuFiles = (luFiles: FileInfo[], allFiles: FileInfo[]) => {
+    const luRecoginzers = allFiles.filter((item) => item.name.endsWith('.lu.dialog'));
+    const luBuildFiles: FileInfo[] = [];
+    const orchestratorBuildFiles: FileInfo[] = [];
 
-    const pathSet = new Set(paths);
-
-    //add the file that are not in interruption folder.
-    files.forEach((file) => {
-      if (!pathSet.has(file.name)) {
-        config.models.push(Path.resolve(this.botDir, file.relativePath));
+    luFiles.forEach((file) => {
+      const recognizer = luRecoginzers.find((item) => item.name.replace('.dialog', '') === file.name);
+      if (recognizer && JSON.parse(recognizer.content).$kind === SDKKinds.OrchestratorRecognizer) {
+        orchestratorBuildFiles.push(file);
+      } else {
+        luBuildFiles.push(file);
       }
     });
-    return config;
+
+    return {
+      luBuildFiles,
+      orchestratorBuildFiles,
+    };
   };
 
   private async cleanCrossTrain() {
