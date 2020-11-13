@@ -77,8 +77,6 @@ const LGPage: React.FC<RouteComponentProps<{
     );
   };
 
-  console.log(skillId ?? projectId);
-
   return (
     <Page
       useNewTree

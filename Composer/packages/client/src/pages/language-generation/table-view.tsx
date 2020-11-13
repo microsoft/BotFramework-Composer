@@ -31,7 +31,7 @@ import {
 } from '../../recoilModel';
 import { languageListTemplates } from '../../components/MultiLanguage';
 
-interface TableViewProps extends RouteComponentProps<{ dialogId: string; projectId: string }> {
+interface TableViewProps extends RouteComponentProps<{ dialogId: string; skillId: string; projectId: string }> {
   projectId?: string;
   skillId?: string;
   dialogId?: string;

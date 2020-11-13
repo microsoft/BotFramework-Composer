@@ -22,7 +22,7 @@ const LUPage: React.FC<RouteComponentProps<{
   skillId?: string;
 }>> = (props) => {
   const { dialogId = '', projectId = '', skillId } = props;
-  const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId ?? ''));
+  const dialogs = useRecoilValue(validateDialogsSelectorFamily(skillId ?? projectId ?? ''));
 
   const { setCurrentPageMode } = useRecoilValue(dispatcherState);
   useEffect(() => {
@@ -69,8 +69,8 @@ const LUPage: React.FC<RouteComponentProps<{
     >
       <Suspense fallback={<LoadingSpinner />}>
         <Router component={Fragment} primary={false}>
-          <CodeEditor dialogId={dialogId} path="/edit" projectId={skillId ?? projectId} />
-          <TableView dialogId={dialogId} path="/" projectId={skillId ?? projectId} />
+          <CodeEditor dialogId={dialogId} path="/edit" projectId={projectId} skillId={skillId} />
+          <TableView path="/" />
         </Router>
       </Suspense>
     </Page>
