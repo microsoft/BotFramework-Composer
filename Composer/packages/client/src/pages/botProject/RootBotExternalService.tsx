@@ -26,8 +26,7 @@ import {
 import settingStorage from '../../utils/dialogSettingStorage';
 import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
-import { isLUISnQnARecognizerType } from '../../utils/dialogValidator';
-import { getBaseName } from '../../utils/fileUtil';
+import { isLUISMandatory, isQnAKeyMandatory } from '../../utils/dialogValidator';
 import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 // -------------------- Styles -------------------- //
 
@@ -116,22 +115,6 @@ const onRenderLabel = (props) => {
   );
 };
 
-const isLUISMandatory = (dialogs: DialogInfo[], luFiles: LuFile[]) => {
-  return dialogs.some((dialog) => {
-    const isDefault = isLUISnQnARecognizerType(dialog);
-    const luFile = luFiles.find((luFile) => getBaseName(luFile.id) === dialog.id);
-    return !!(isDefault && luFile?.content);
-  });
-};
-
-const isQnAKeyMandatory = (dialogs: DialogInfo[], qnaFiles: QnAFile[]) => {
-  return dialogs.some((dialog) => {
-    const isDefault = isLUISnQnARecognizerType(dialog);
-    const qnaFile = qnaFiles.find((qnaFile) => getBaseName(qnaFile.id) === dialog.id);
-    return !!(isDefault && qnaFile?.content);
-  });
-};
-
 const errorElement = (errorText: string) => {
   if (!errorText) return '';
   return (
@@ -186,7 +169,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
       setQnAKeyErrorMsg('');
     }
 
-    if (!localRootLuisRegion) {
+    if (isLUISKeyNeeded && !localRootLuisRegion) {
       setLuisRegionErrorMsg(formatMessage('LUIS Region is required'));
     } else {
       setLuisRegionErrorMsg('');
@@ -230,7 +213,7 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
   };
 
   const handleRootLuisRegionOnBlur = () => {
-    if (!localRootLuisRegion) {
+    if (isLUISKeyNeeded && !localRootLuisRegion) {
       setLuisRegionErrorMsg(formatMessage('LUIS Region is required'));
     }
     setSettings(projectId, {
@@ -290,7 +273,6 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
           onRenderLabel={onRenderLabel}
         />
         <TextField
-          required
           aria-labelledby={'LUIS region'}
           data-testid={'rootLUISRegion'}
           errorMessage={errorElement(luisRegionErrorMsg)}

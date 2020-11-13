@@ -11,7 +11,7 @@ import { css } from '@emotion/core';
 import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { QnAFile, DialogInfo, LuFile } from '@bfc/shared';
 
-import { isLUISnQnARecognizerType } from '../../utils/dialogValidator';
+import { isLUISMandatory, isLUISnQnARecognizerType, isQnAKeyMandatory } from '../../utils/dialogValidator';
 import { getBaseName } from '../../utils/fileUtil';
 import {
   dispatcherState,
@@ -43,22 +43,6 @@ const externalServiceContainerStyle = css`
 
 type SkillBotExternalServiceProps = {
   projectId: string;
-};
-
-const isLUISMandatory = (dialogs: DialogInfo[], luFiles: LuFile[]) => {
-  return dialogs.some((dialog) => {
-    const isDefault = isLUISnQnARecognizerType(dialog);
-    const luFile = luFiles.find((luFile) => getBaseName(luFile.id) === dialog.id);
-    return !!(isDefault && luFile?.content);
-  });
-};
-
-const isQnAKeyMandatory = (dialogs: DialogInfo[], qnaFiles: QnAFile[]) => {
-  return dialogs.some((dialog) => {
-    const isDefault = isLUISnQnARecognizerType(dialog);
-    const qnaFile = qnaFiles.find((qnaFile) => getBaseName(qnaFile.id) === dialog.id);
-    return !!(isDefault && qnaFile?.content);
-  });
 };
 
 export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (props) => {
@@ -137,13 +121,13 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
           onBlur={handleLUISKeyOnBlur}
         />
         <TextFieldWithCustomButton
-          required
           ariaLabelledby={'LUIS region'}
           buttonText={formatMessage('Use custom LUIS region')}
           errorMessage={!rootLuisRegion ? formatMessage('Root Bot LUIS region is empty') : ''}
           label={formatMessage('LUIS region')}
           placeholder={'Enter LUIS region'}
           placeholderOnDisable={"<---- Same as root bot's LUIS region ---->"}
+          required={isLUISKeyNeeded}
           value={skillLuisRegion}
           onBlur={handleLUISRegionOnBlur}
         />
