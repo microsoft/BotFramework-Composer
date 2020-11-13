@@ -26,8 +26,9 @@ import { openAlertModal } from './components/Modal/AlertDialog';
 import { dialogStyle } from './components/Modal/dialogStyle';
 import { LoadingSpinner } from './components/LoadingSpinner';
 import { PluginPageContainer } from './pages/plugin/PluginPageContainer';
-import { botProjectSpaceLoadedState } from './recoilModel/atoms';
 import { mergePropertiesManagedByRootBot } from './recoilModel/dispatchers/utils/project';
+import { botProjectSpaceLoadedState, botDisplayNameState } from './recoilModel/atoms';
+import languageStorage from './utils/languageStorage';
 
 const DesignPage = React.lazy(() => import('./pages/design/DesignPage'));
 const LUPage = React.lazy(() => import('./pages/language-understanding/LUPage'));
@@ -121,11 +122,12 @@ const projectStyle = css`
 const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string; skillId: string }>> = (props) => {
   const { projectId = '' } = props;
   const schemas = useRecoilValue(schemasState(projectId));
-  const { fetchProjectById, setSettings } = useRecoilValue(dispatcherState);
+  const { fetchProjectById, setSettings, setLocale } = useRecoilValue(dispatcherState);
   const botProjects = useRecoilValue(botProjectIdsState);
   const botProjectsMetaData = useRecoilValue(botProjectSpaceSelector);
   const botProjectSpaceLoaded = useRecoilValue(botProjectSpaceLoadedState);
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
+  const botName = useRecoilValue(botDisplayNameState(rootBotProjectId || ''));
 
   useEffect(() => {
     if (botProjectSpaceLoaded && rootBotProjectId && botProjectsMetaData) {
@@ -139,6 +141,14 @@ const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string; skillId: 
       }
     }
   }, [botProjectSpaceLoaded, rootBotProjectId]);
+
+  useEffect(() => {
+    if (botProjectSpaceLoadedState && rootBotProjectId && botName) {
+      const storedLocale = languageStorage.get(botName)?.locale;
+      setLocale(storedLocale, rootBotProjectId);
+    }
+  }, [botProjectSpaceLoaded, rootBotProjectId, botName]);
+
 
   useEffect(() => {
     if (props.projectId && !botProjects.includes(props.projectId)) {
