@@ -3,11 +3,15 @@
 
 import formatMessage from 'format-message';
 
+import { creationFeatureFlagReadMe } from '../constant';
+
 export type FeatureFlag = {
   // Name to be displayed for this features toggle UI in app settings page
   displayName: string;
   // Description to be displayed for this features toggle UI in app settings page
   description: string;
+  // Link used for learn more link
+  documentationLink?: string;
   // Indicates whether or not the feature flag toggle will be visible to the user through the settings page UI
   // Hidden feature flags are intended for features not ready for public preview
   isHidden: boolean;
@@ -32,10 +36,9 @@ export const getDefaultFeatureFlags = (): FeatureFlagMap => ({
     enabled: false,
   },
   REMOTE_TEMPLATE_CREATION_EXPERIENCE: {
-    displayName: formatMessage('Remote templates'),
-    description: formatMessage(
-      'If turned on then externally stored templates will be selectable in the new bot flow template list'
-    ),
+    displayName: formatMessage('Conversational Core Template'),
+    description: formatMessage('Enable the new conversational core template built on the component model'),
+    documentationLink: creationFeatureFlagReadMe,
     isHidden: true,
     enabled: false,
   },

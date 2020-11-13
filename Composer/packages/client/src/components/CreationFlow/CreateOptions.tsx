@@ -20,12 +20,15 @@ import {
   DetailsRow,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
-import { BotTemplate } from '@bfc/shared';
+import { BotTemplate, creationFeatureFlagReadMe } from '@bfc/shared';
 import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
+import { useRecoilValue } from 'recoil';
+import { Link, mergeStyles, MessageBar } from 'office-ui-fabric-react/lib';
 
 import { DialogCreationCopy, EmptyBotTemplateId, QnABotTemplateId } from '../../constants';
+import { featureFlagsState } from '../../recoilModel';
 
 // -------------------- Styles -------------------- //
 
@@ -53,6 +56,10 @@ const listHeader = css`
   margin-top: 10px;
   margin-bottom: 0;
 `;
+
+export const bannerClass = mergeStyles({
+  marginTop: '5px',
+});
 
 const rowDetails = (disabled) => {
   return {
@@ -116,6 +123,7 @@ export function CreateOptions(props: CreateOptionsProps) {
   const { templates, onDismiss, onNext } = props;
   const [currentTemplate, setCurrentTemplate] = useState('');
   const [emptyBotKey, setEmptyBotKey] = useState('');
+  const featureFlags = useRecoilValue(featureFlagsState);
   const selection = useMemo(() => {
     return new Selection({
       onSelectionChanged: () => {
@@ -267,6 +275,14 @@ export function CreateOptions(props: CreateOptionsProps) {
           onChange={handleChange}
         />
         <h3 css={listHeader}>{formatMessage('Examples')}</h3>
+        {featureFlags.REMOTE_TEMPLATE_CREATION_EXPERIENCE.enabled && (
+          <MessageBar className={bannerClass}>
+            {formatMessage('Conversational Core preview template is available since you have that feature turned on.')}
+            <Link href={creationFeatureFlagReadMe} target="_blank">
+              {formatMessage('Learn More.')}
+            </Link>
+          </MessageBar>
+        )}
         <div css={detailListContainer} data-is-scrollable="true">
           <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
             <DetailsList

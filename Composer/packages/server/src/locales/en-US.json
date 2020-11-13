@@ -389,6 +389,9 @@
   "bot_configured_for_text_a67eca78": {
     "message": "Bot Configured for Text"
   },
+  "bot_content_was_successfully_imported_5a07ae64": {
+    "message": "Bot content was successfully imported."
+  },
   "bot_framework_composer_enables_developers_and_mult_ce0e42a9": {
     "message": "Bot Framework Composer enables developers and multi-disciplinary teams to build all kinds of conversational experiences, using the latest components from the Bot Framework: SDK, LG, LU, and declarative file formats, all without writing code."
   },
@@ -599,6 +602,12 @@
   "connect_to_qna_knowledgebase_4b324132": {
     "message": "Connect to QnA Knowledgebase"
   },
+  "connecting_to_b_source_b_to_import_bot_content_106cf675": {
+    "message": "Connecting to <b>{ source }</b> to import bot content..."
+  },
+  "connecting_to_b_targetname_b_to_import_bot_content_65d8db95": {
+    "message": "Connecting to <b>{ targetName }</b> to import bot content..."
+  },
   "content_1440204b": {
     "message": "Content"
   },
@@ -611,6 +620,9 @@
   "conversation_invoked_e960884e": {
     "message": "Conversation invoked"
   },
+  "conversational_core_preview_template_is_available__ba9b43b8": {
+    "message": "Conversational Core preview template is available since you have that feature turned on."
+  },
   "conversationupdate_activity_9e94bff5": {
     "message": "ConversationUpdate activity"
   },
@@ -619,6 +631,9 @@
   },
   "copy_content_for_translation_7affbcbb": {
     "message": "Copy content for translation"
+  },
+  "copy_project_location_to_clipboard_eb85c474": {
+    "message": "Copy project location to clipboard"
   },
   "could_not_connect_to_storage_50411de0": {
     "message": "Could not connect to storage."
@@ -751,6 +766,9 @@
   },
   "data_loading_4c9bb9f6": {
     "message": "Data loading..."
+  },
+  "data_transferring_between_services_c0971544": {
+    "message": "Data transferring between services"
   },
   "date_ee500367": {
     "message": "Date"
@@ -886,6 +904,9 @@
   },
   "display_lines_that_extends_beyond_the_width_of_the_9e500f3c": {
     "message": "Display lines that extends beyond the width of the editor on the next line."
+  },
+  "do_you_want_to_update_b_existingprojectname_b_c34014f": {
+    "message": "Do you want to update <b>{ existingProjectName }</b>"
   },
   "do_you_wish_to_continue_96469eaf": {
     "message": "Do you wish to continue?"
@@ -1283,14 +1304,26 @@
   "if_this_problem_persists_please_file_an_issue_on_6fbc8e2b": {
     "message": "If this problem persists, please file an issue on"
   },
+  "if_turned_on_then_externally_stored_templates_will_3f487651": {
+    "message": "If turned on then externally stored templates will be selectable in the new bot flow template list"
+  },
   "if_you_already_have_a_luis_account_provide_the_inf_bede07a4": {
     "message": "If you already have a LUIS account, provide the information below. If you do not have an account yet, create a (free) account first."
   },
   "if_you_already_have_a_qna_account_provide_the_info_466d6a4b": {
     "message": "If you already have a QNA account, provide the information below. If you do not have an account yet, create a (free) account first."
   },
+  "import_as_new_35630827": {
+    "message": "Import as new"
+  },
   "import_schema_75659c5f": {
     "message": "Import schema"
+  },
+  "importing_b_botname_b_from_sourcename_f7410826": {
+    "message": "Importing <b>{ botName }</b> from { sourceName }..."
+  },
+  "importing_bot_content_from_targetname_6da78f15": {
+    "message": "Importing bot content from { targetName }..."
   },
   "in_production_5a70b8b4": {
     "message": "In production"
@@ -1412,6 +1445,9 @@
   "last_modified_time_is_time_b1497d3": {
     "message": "Last modified time is { time }"
   },
+  "learn_more_14816ec": {
+    "message": "Learn More."
+  },
   "learn_more_a79a7918": {
     "message": "Learn more"
   },
@@ -1426,6 +1462,9 @@
   },
   "learn_more_c08939e8": {
     "message": "Learn more."
+  },
+  "learn_more_ffb8910": {
+    "message": " Learn More."
   },
   "learn_the_basics_2d9ae7df": {
     "message": "Learn the basics"
@@ -1817,6 +1856,9 @@
   "open_notification_panel_5796edb3": {
     "message": "Open notification panel"
   },
+  "open_skills_page_for_configuration_details_a2a484ea": {
+    "message": "Open Skills page for configuration details"
+  },
   "optional_221bcc9d": {
     "message": "Optional"
   },
@@ -1910,6 +1952,9 @@
   "populate_your_knowledge_base_bb2d3605": {
     "message": "Populate your Knowledge Base"
   },
+  "powervirtualagents_logo_11858924": {
+    "message": "PowerVirtualAgents Logo"
+  },
   "press_enter_to_add_this_item_or_tab_to_move_to_the_6beb8a14": {
     "message": "press Enter to add this item or Tab to move to the next interactive element"
   },
@@ -1921,6 +1966,9 @@
   },
   "previous_bd2ac015": {
     "message": "Previous"
+  },
+  "previous_bot_content_has_been_backed_up_to_d6d23960": {
+    "message": " Previous bot content has been backed up to:"
   },
   "previous_folder_e7eeb306": {
     "message": "previous folder"
@@ -2021,6 +2069,9 @@
   "publishing_d63a8f2d": {
     "message": "Publishing"
   },
+  "pull_from_selected_profile_b5c635ec": {
+    "message": "Pull from selected profile"
+  },
   "qna_28ee5e26": {
     "message": "QnA"
   },
@@ -2101,6 +2152,9 @@
   },
   "reloading_49d2f661": {
     "message": "Reloading"
+  },
+  "remote_templates_a23c242d": {
+    "message": "Remote templates"
   },
   "remove_f47dc62a": {
     "message": "Remove"
@@ -2285,6 +2339,9 @@
   "set_up_your_bot_75009578": {
     "message": "Set up your bot"
   },
+  "setting_things_up_8022afe8": {
+    "message": "Setting things up..."
+  },
   "settings_5aa0fd0c": {
     "message": "Settings"
   },
@@ -2342,6 +2399,12 @@
   "skip_this_step_to_add_questions_and_answers_manual_ed1b9f80": {
     "message": "Skip this step to add questions and answers manually after creation. The number of sources and file size you can add depends on the QnA service SKU you choose. "
   },
+  "something_happened_while_attempting_to_pull_e_952c7afe": {
+    "message": "Something happened while attempting to pull: { e }"
+  },
+  "something_went_wrong_d238c551": {
+    "message": "Something went wrong"
+  },
   "sorry_something_went_wrong_with_connecting_bot_run_7d6785e3": {
     "message": "Sorry, something went wrong with connecting bot runtime"
   },
@@ -2357,11 +2420,11 @@
   "spaces_and_special_characters_are_not_allowed_20d47684": {
     "message": "Spaces and special characters are not allowed."
   },
-  "spaces_and_special_characters_are_not_allowed_use__2a61c454": {
-    "message": "Spaces and special characters are not allowed. Use letters, numbers, -, or _ and don''t use number at the beginning."
-  },
   "spaces_and_special_characters_are_not_allowed_use__48acec3c": {
     "message": "Spaces and special characters are not allowed. Use letters, numbers, -, or _."
+  },
+  "spaces_and_special_characters_are_not_allowed_use__d24a8636": {
+    "message": "Spaces and special characters are not allowed. Use letters, numbers, -, or _, and begin the name with a letter."
   },
   "specify_a_name_and_description_for_your_new_dialog_86eb3130": {
     "message": "Specify a name and description for your new dialog."
@@ -2497,6 +2560,12 @@
   },
   "there_was_an_error_74ed3c58": {
     "message": "There was an error"
+  },
+  "there_was_an_unexpected_error_importing_bot_conten_cac97236": {
+    "message": "There was an unexpected error importing bot content to <b>{ botName }</b>"
+  },
+  "there_was_an_unexpected_error_pulling_from_publish_c3fbefa4": {
+    "message": "There was an unexpected error pulling from publish profile <b>{ selectedTargetName }</b>"
   },
   "there_was_error_creating_your_kb_53b31ff3": {
     "message": "There was error creating your KB"
@@ -2684,6 +2753,9 @@
   "unused_8d193e3": {
     "message": "Unused"
   },
+  "update_4d8ee62": {
+    "message": "Update"
+  },
   "update_a_an_activity_previously_sent_during_the_co_f0619cca": {
     "message": "Update a an activity previously sent during the conversation"
   },
@@ -2710,6 +2782,9 @@
   },
   "update_scripts_c58771a2": {
     "message": "Update Scripts"
+  },
+  "updating_existingprojectname_will_overwrite_the_cu_1e649e50": {
+    "message": "Updating { existingProjectName } will overwrite the current bot content and create a backup."
   },
   "updating_scripts_e17a5722": {
     "message": "Updating scripts... "
