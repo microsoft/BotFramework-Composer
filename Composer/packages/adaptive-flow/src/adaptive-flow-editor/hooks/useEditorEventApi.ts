@@ -160,10 +160,12 @@ export const useEditorEventApi = (
       case NodeEventTypes.Delete:
         trackActionChange(eventData.id);
         handler = (e) => {
-          onChange(deleteSelectedAction(path, data, e.id), undefined, async () => {
-            await onFocusSteps([]);
-            announce(ScreenReaderMessage.ActionDeleted);
-          });
+          deleteSelectedAction(path, data, e.id).then((value) =>
+            onChange(value, undefined, async () => {
+              await onFocusSteps([]);
+              announce(ScreenReaderMessage.ActionDeleted);
+            })
+          );
         };
         break;
       case NodeEventTypes.Insert:
@@ -248,7 +250,7 @@ export const useEditorEventApi = (
           updateDialog(newDialogId, newDialogData);
 
           // Delete moved actions
-          const deleteResult = deleteSelectedActions(path, data, actionIds);
+          const deleteResult = await deleteSelectedActions(path, data, actionIds);
 
           // Insert a BeginDialog as placeholder
           const placeholderPosition = DialogUtils.parseNodePath(actionIds[0]);
@@ -272,10 +274,12 @@ export const useEditorEventApi = (
         handler = () => {
           const actionIds = getClipboardTargetsFromContext();
           trackActionListChange(actionIds);
-          onChange(deleteSelectedActions(path, data, actionIds), undefined, async () => {
-            await onFocusSteps([]);
-            announce(ScreenReaderMessage.ActionsDeleted);
-          });
+          deleteSelectedActions(path, data, actionIds).then((value) =>
+            onChange(value, undefined, async () => {
+              await onFocusSteps([]);
+              announce(ScreenReaderMessage.ActionsDeleted);
+            })
+          );
         };
         break;
       case NodeEventTypes.DisableSelection:

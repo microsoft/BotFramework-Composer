@@ -3,13 +3,13 @@
     "message": "Névjegy"
   },
   "actual_zoom_211ec99": {
-    "message": "Actual Zoom"
+    "message": "Tényleges nagyítás/kicsinyítés"
   },
   "bring_all_to_front_207a7ad1": {
     "message": "Legyen az összes előtérben"
   },
   "check_for_updates_12a70061": {
-    "message": "Frissítések ellenőrzése"
+    "message": "Frissítések keresése"
   },
   "close_d634289d": {
     "message": "Bezárás"
@@ -18,7 +18,7 @@
     "message": "Ablak bezárása"
   },
   "composer_on_github_1e3782ef": {
-    "message": "Composer on GitHub"
+    "message": "Composer a GitHubon"
   },
   "copy_9748f9f": {
     "message": "Másolás"
@@ -45,7 +45,7 @@
     "message": "Súgó"
   },
   "hide_bot_framework_composer_eeba3ea8": {
-    "message": "Hide Bot Framework Composer"
+    "message": "A Bot Framework Composer elrejtése"
   },
   "hide_others_4204b552": {
     "message": "Egyebek elrejtése"
@@ -54,7 +54,7 @@
     "message": "Inicializálás..."
   },
   "learn_more_about_bot_framework_2daca065": {
-    "message": "Learn More About Bot Framework"
+    "message": "További tudnivalók a Bot Frameworkről"
   },
   "minimize_4f999e30": {
     "message": "Kis méret"
@@ -63,10 +63,10 @@
     "message": "Beillesztés"
   },
   "privacy_statement_58986965": {
-    "message": "Adatvédelmi szabályzat"
+    "message": "Adatvédelmi nyilatkozat"
   },
   "quit_bot_framework_composer_455ceb74": {
-    "message": "Quit Bot Framework Composer"
+    "message": "Kilépés a Bot Framework Composerből"
   },
   "redo_363c58b7": {
     "message": "Mégis"
@@ -75,7 +75,7 @@
     "message": "Probléma bejelentése"
   },
   "select_all_cf7e0248": {
-    "message": "Összes kijelölése"
+    "message": "Az összes kijelölése"
   },
   "services_ccd7bca0": {
     "message": "Szolgáltatások"
@@ -87,13 +87,13 @@
     "message": "Beszéd"
   },
   "start_speaking_f8d406ff": {
-    "message": "Start Speaking"
+    "message": "Beszéd indítása"
   },
   "starting_server_721c37fd": {
-    "message": "Starting server..."
+    "message": "Kiszolgáló indítása..."
   },
   "stop_speaking_7b4b9834": {
-    "message": "Stop Speaking"
+    "message": "Beszéd leállítása"
   },
   "toggle_developer_tools_d2ef8ea7": {
     "message": "Fejlesztői eszközök be- és kikapcsolása"
@@ -117,7 +117,7 @@
     "message": "Nagyítás/kicsinyítés"
   },
   "zoom_in_a781ccc7": {
-    "message": "Közelítés"
+    "message": "Nagyítás"
   },
   "zoom_out_dc7d60d2": {
     "message": "Kicsinyítés"
