@@ -248,7 +248,7 @@ export const ProjectTree: React.FC<Props> = ({
     const link: TreeLink = {
       displayName: bot.name,
       projectId: rootProjectId,
-      skillId: bot.projectId,
+      skillId: rootProjectId === bot.projectId ? undefined : bot.projectId,
       isRoot: true,
       warningContent: botHasWarnings(bot) ? formatMessage('This bot has warnings') : undefined,
       errorContent: botHasErrors(bot) ? formatMessage('This bot has errors') : undefined,
