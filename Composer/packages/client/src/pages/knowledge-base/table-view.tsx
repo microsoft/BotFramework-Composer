@@ -231,7 +231,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     if (!Question || !Answer) return;
     const createdQnAPair = qnaUtil.generateQnAPair(Question, Answer);
     setCreatQnAPairSettings({ groupKey: '', sectionIndex: -1 });
-    createQnAPairs({ id: fileId, content: createdQnAPair, actualProjectId });
+    createQnAPairs({ id: fileId, content: createdQnAPair, projectId: actualProjectId });
   };
 
   const onCreateNewQnAPairsStart = (fileId: string | undefined) => {
@@ -266,9 +266,14 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const onSubmitEditKB = async ({ name }: { name: string }) => {
     if (!editQnAFile) return;
     const newId = `${name}.source`;
-    await actions.renameQnAKB({ id: editQnAFile.id, name: newId, actualProjectId });
+    await actions.renameQnAKB({ id: editQnAFile.id, name: newId, projectId: actualProjectId });
     if (!qnaFile) return;
-    await actions.updateQnAImport({ id: qnaFile.id, sourceId: editQnAFile.id, newSourceId: newId, actualProjectId });
+    await actions.updateQnAImport({
+      id: qnaFile.id,
+      sourceId: editQnAFile.id,
+      newSourceId: newId,
+      projectId: actualProjectId,
+    });
     setEditQnAFile(undefined);
   };
 

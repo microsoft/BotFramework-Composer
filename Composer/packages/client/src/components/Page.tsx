@@ -91,7 +91,7 @@ type IPageProps = {
   mainRegionName: string;
   onRenderHeaderContent?: () => string | JSX.Element | null;
   'data-testid'?: string;
-  useNewTree: boolean;
+  useNewTree?: boolean;
   navLinks?: INavTreeItem[];
 };
 
@@ -104,7 +104,7 @@ const Page: React.FC<IPageProps> = (props) => {
     children,
     navRegionName,
     mainRegionName,
-    useNewTree,
+    useNewTree = false,
   } = props;
 
   const pageMode = useRecoilValue(currentModeState);

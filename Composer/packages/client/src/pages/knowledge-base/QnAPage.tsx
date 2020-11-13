@@ -95,7 +95,7 @@ const QnAPage: React.FC<RouteComponentProps<{
           projectId={actualProjectId}
           qnaFiles={qnaFiles}
           onDismiss={() => {
-            actions.createQnAFromUrlDialogCancel({ actualProjectId });
+            actions.createQnAFromUrlDialogCancel({ projectId: actualProjectId });
           }}
           onSubmit={async ({ name, url, multiTurn = false }) => {
             if (url) {
