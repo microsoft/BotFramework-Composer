@@ -11,6 +11,7 @@ import {
   ILUFeaturesConfig,
   IQnAConfig,
   SkillSetting,
+  QnAFile,
 } from '@bfc/shared';
 
 import { BotIndexer } from '../src/botIndexer';
@@ -33,12 +34,15 @@ const botAssets: BotAssets = {
   luFiles: [
     {
       id: 'a.en-us',
+      empty: false,
     } as LuFile,
     {
       id: 'a.zh-cn',
+      empty: true,
     } as LuFile,
     {
       id: 'a.ar',
+      empty: true,
     } as LuFile,
   ],
   skillManifests: [],
@@ -90,7 +94,7 @@ describe('check LUIS & QnA key', () => {
     expect(diagnostics.length).toEqual(0);
   });
 
-  it('QnA subscriptionKey should exist in setting', () => {
+  it('QnA subscriptionKey should exist in setting, when qna file is not empty', () => {
     const botAssets2 = {
       ...botAssets,
       dialogs: [
@@ -98,13 +102,19 @@ describe('check LUIS & QnA key', () => {
           luFile: 'a.lu',
           qnaFile: 'a.lu.qna',
         } as DialogInfo,
+      ],
+      qnaFiles: [
+        {
+          id: 'a.en-us',
+          empty: false,
+        } as QnAFile,
       ],
     };
     const diagnostics = checkSetting(botAssets2);
     expect(diagnostics.length).toEqual(2);
   });
 
-  it('QnA subscriptionKey should exist in setting', () => {
+  it('QnA subscriptionKey should exist in setting, when qna file is empty', () => {
     const botAssets2 = {
       ...botAssets,
       dialogs: [
@@ -115,7 +125,7 @@ describe('check LUIS & QnA key', () => {
       ],
     };
     const diagnostics = checkSetting(botAssets2);
-    expect(diagnostics.length).toEqual(2);
+    expect(diagnostics.length).toEqual(1);
   });
 });
 

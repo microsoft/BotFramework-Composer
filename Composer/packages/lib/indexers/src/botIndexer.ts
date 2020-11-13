@@ -14,11 +14,13 @@ import {
   SkillManifestFile,
   DialogInfo,
   DialogSetting,
+  LgFile,
+  QnAFile,
 } from '@bfc/shared';
 import difference from 'lodash/difference';
 import map from 'lodash/map';
 
-import { getLocale } from './utils/help';
+import { getBaseName, getLocale } from './utils/help';
 
 /**
  * Check skill manifest.json.
@@ -39,11 +41,40 @@ const checkManifest = (assets: { skillManifests: SkillManifestFile[] }): Diagnos
  * 1. Missing LUIS key
  * 2. Missing QnA Maker subscription key.
  */
-const checkSetting = (assets: { dialogs: DialogInfo[]; setting: DialogSetting }): Diagnostic[] => {
-  const { dialogs, setting } = assets;
+const checkSetting = (assets: {
+  dialogs: DialogInfo[];
+  lgFiles: LgFile[];
+  luFiles: LuFile[];
+  qnaFiles: QnAFile[];
+  setting: DialogSetting;
+}): Diagnostic[] => {
+  const { dialogs, setting, luFiles, qnaFiles } = assets;
   const diagnostics: Diagnostic[] = [];
 
-  const useLUIS = dialogs.some((item) => !!item.luFile);
+  let useLUIS = false;
+  let useQnA = false;
+  dialogs.forEach((item) => {
+    const luFileName = item.luFile;
+    if (luFileName) {
+      const luFileId = luFileName.replace(/\.lu$/, '');
+      luFiles
+        .filter(({ id }) => getBaseName(id) === luFileId)
+        .forEach((item) => {
+          if (!item.empty) useLUIS = true;
+        });
+    }
+
+    const qnaFileName = item.qnaFile;
+    if (qnaFileName) {
+      const qnaFileId = qnaFileName.replace(/\.qna$/, '').replace(/\.lu$/, '');
+      qnaFiles
+        .filter(({ id }) => getBaseName(id) === qnaFileId)
+        .forEach((item) => {
+          if (!item.empty) useQnA = true;
+        });
+    }
+  });
+
   // if use LUIS, check LUIS authoringKey key
   if (useLUIS) {
     if (!get(setting, 'luis.authoringKey')) {
@@ -51,7 +82,6 @@ const checkSetting = (assets: { dialogs: DialogInfo[]; setting: DialogSetting })
     }
   }
 
-  const useQnA = dialogs.some((item) => !!item.qnaFile);
   // if use QnA, check QnA subscriptionKey
   if (useQnA) {
     if (!get(setting, 'qna.subscriptionKey')) {
@@ -131,6 +161,9 @@ const checkSkillSetting = (assets: { dialogs: DialogInfo[]; setting: DialogSetti
 
 const validate = (assets: {
   dialogs: DialogInfo[];
+  lgFiles: LgFile[];
+  luFiles: LuFile[];
+  qnaFiles: QnAFile[];
   setting: DialogSetting;
   skillManifests: SkillManifestFile[];
 }): Diagnostic[] => {
