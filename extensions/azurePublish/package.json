@@ -14,11 +14,11 @@
     "bundles": [
       {
         "id": "azurePublish",
-        "path": "lib/publish.js"
+        "path": "lib/ui/publish.js"
       },
       {
         "id": "azureFunctionsPublish",
-        "path": "lib/publish.js"
+        "path": "lib/ui/publish.js"
       }
     ],
     "contributes": {

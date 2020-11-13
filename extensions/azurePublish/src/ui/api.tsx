@@ -7,15 +7,14 @@ import { ResourceManagementClient } from '@azure/arm-resources';
 import { ResourceGroup, GenericResource } from '@azure/arm-resources/esm/models';
 import { AzureBotService } from '@azure/arm-botservice';
 import { WebSiteManagementClient } from '@azure/arm-appservice';
-import { ResourceNameAvailability, GlobalCsmSkuDescription } from '@azure/arm-appservice/esm/models';
+import { ResourceNameAvailability } from '@azure/arm-appservice/esm/models';
 import { CheckNameAvailabilityResponseBody } from '@azure/arm-botservice/esm/models';
 import { CognitiveServicesManagementClient } from '@azure/arm-cognitiveservices';
-import { CognitiveServicesResourceAndSku } from '@azure/arm-cognitiveservices/esm/models';
 import { TokenCredentials } from '@azure/ms-rest-js';
 import debug from 'debug';
 
 import * as Images from './images';
-import { AzureAPIStatus, AzureResourceProviderType, ResourcesItem } from './types';
+import { AzureAPIStatus, AzureResourceProviderType, ResourcesItem, LuisAuthoringSupportLocation, LuisPublishSupportLocation } from '../types';
 
 const logger = debug('composer:extension:azureProvision');
 
@@ -136,7 +135,7 @@ export const getDeployLocations = async (token: string, subscriptionId: string) 
   }
 };
 
-export const GetSupportedRegionsByType = async (
+export const getSupportedRegionsByType = async (
   token: string,
   subscriptionId: string,
   resourceType: AzureResourceProviderType
@@ -457,3 +456,11 @@ export const getPreview = (hostname: string) => {
 
   return previewList;
 };
+
+export const getLuisAuthoringRegions = (): string[] => {
+  return LuisAuthoringSupportLocation;
+};
+
+export const getLuisPredictionRegions = ():{ [key:string]: string[]} => {
+  return LuisPublishSupportLocation;
+}

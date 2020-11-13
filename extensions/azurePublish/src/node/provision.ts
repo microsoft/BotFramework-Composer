@@ -17,6 +17,7 @@ export interface ProvisionConfig {
   hostname: string; // for previous bot, it's ${name}-${environment}
   externalResources: ResourceType[];
   location: { id: string; name: string; displayName: string };
+  luisLocation: string;
   subscription: { subscriptionId: string; tenantId: string; displayName: string };
   logger?: (string) => any;
   name: string; // profile name
@@ -323,7 +324,7 @@ export class BotProjectProvision {
           case AzureResourceTypes.LUIS_AUTHORING:
             provisionResults.luisAuthoring = await this.azureResourceManagementClient.deployLuisAuthoringResource({
               resourceGroupName: resourceGroupName,
-              location: provisionResults.resourceGroup.location,
+              location: config.luisLocation,
               name: `${config.hostname}-luis-authoring`,
             });
 
@@ -335,7 +336,7 @@ export class BotProjectProvision {
             // eslint-disable-next-line no-case-declarations
             provisionResults.luisPrediction = await this.azureResourceManagementClient.deployLuisResource({
               resourceGroupName: resourceGroupName,
-              location: provisionResults.resourceGroup.location,
+              location: config.luisLocation,
               name: `${config.hostname}-luis`,
             });
             break;
