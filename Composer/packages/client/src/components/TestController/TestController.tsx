@@ -197,6 +197,7 @@ export const TestController: React.FC<{ projectId: string }> = (props) => {
       !isBuildConfigComplete(config, dialogs, luFiles, qnaFiles)
     ) {
       openDialog();
+    } else {
       await handleBuild(config);
     }
   }
