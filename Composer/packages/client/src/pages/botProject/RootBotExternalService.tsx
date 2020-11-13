@@ -263,8 +263,8 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
         />
         <TextField
           aria-labelledby={'LUIS region'}
-          label={formatMessage('LUIS region')}
           data-testid={'rootLUISRegion'}
+          label={formatMessage('LUIS region')}
           placeholder={'Enter LUIS region'}
           styles={{ root: { marginTop: 10 } }}
           value={rootLuisRegion}

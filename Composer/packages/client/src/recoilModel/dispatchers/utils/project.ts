@@ -30,6 +30,8 @@ import { stringify } from 'query-string';
 import { CallbackInterface } from 'recoil';
 import { v4 as uuid } from 'uuid';
 import isEmpty from 'lodash/isEmpty';
+import get from 'lodash/get';
+import set from 'lodash/set';
 
 import { BotStatus, QnABotTemplateId } from '../../../constants';
 import settingStorage from '../../../utils/dialogSettingStorage';
@@ -82,12 +84,10 @@ import { undoHistoryState } from '../../undo/history';
 import UndoHistory from '../../undo/undoHistory';
 import { logMessage, setError } from '../shared';
 import { setRootBotSettingState } from '../setting';
+import settingsStorage from '../../../utils/dialogSettingStorage';
 
 import { crossTrainConfigState } from './../../atoms/botState';
 import { recognizersSelectorFamily } from './../../selectors/recognizers';
-import settingsStorage from '../../../utils/dialogSettingStorage';
-import get from 'lodash/get';
-import set from 'lodash/set';
 
 export const resetBotStates = async ({ reset }: CallbackInterface, projectId: string) => {
   const botStates = Object.keys(botstates);
@@ -153,12 +153,12 @@ export const mergePropertiesManagedByRootBot = (projectId: string, rootBotProjec
   const mergedSettings = cloneDeep(settings);
   if (localSetting) {
     for (const property of RootBotManagedProperties) {
-      const rootValue = objectGet(localSetting, property)['root'];
+      const rootValue = get(localSetting, property, {}).root;
       if (projectId === rootBotProjectId) {
         objectSet(mergedSettings, property, rootValue ?? '');
       }
       if (projectId !== rootBotProjectId) {
-        const skillValue = objectGet(localSetting, property)[projectId];
+        const skillValue = get(localSetting, property, {})[projectId];
         objectSet(mergedSettings, property, skillValue ?? '');
       }
     }

@@ -5,12 +5,12 @@
 import React from 'react';
 import { jsx } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
-
 import formatMessage from 'format-message';
 import get from 'lodash/get';
 import { css } from '@emotion/core';
 import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { QnAFile, DialogInfo, LuFile } from '@bfc/shared';
+
 import { isLUISnQnARecognizerType } from '../../utils/dialogValidator';
 import { getBaseName } from '../../utils/fileUtil';
 import {
@@ -126,21 +126,21 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
     <CollapsableWrapper title={formatMessage('External services')} titleStyle={titleStyle}>
       <div css={externalServiceContainerStyle}>
         <TextFieldWithCustomButton
-          required={isLUISKeyNeeded}
           ariaLabelledby={'LUIS key'}
           buttonText={formatMessage('Use custom LUIS key')}
           errorMessage={!rootLuisKey ? formatMessage('Root Bot LUIS key is empty') : ''}
           label={formatMessage('LUIS key')}
           placeholder={'Enter LUIS key'}
           placeholderOnDisable={"<---- Same as root bot's LUIS key ---->"}
+          required={isLUISKeyNeeded}
           value={skillLuisKey}
           onBlur={handleLUISKeyOnBlur}
         />
         <TextFieldWithCustomButton
           required
           ariaLabelledby={'LUIS region'}
-          errorMessage={!rootLuisRegion ? formatMessage('Root Bot LUIS region is empty') : ''}
           buttonText={formatMessage('Use custom LUIS region')}
+          errorMessage={!rootLuisRegion ? formatMessage('Root Bot LUIS region is empty') : ''}
           label={formatMessage('LUIS region')}
           placeholder={'Enter LUIS region'}
           placeholderOnDisable={"<---- Same as root bot's LUIS region ---->"}
@@ -148,13 +148,13 @@ export const SkillBotExternalService: React.FC<SkillBotExternalServiceProps> = (
           onBlur={handleLUISRegionOnBlur}
         />
         <TextFieldWithCustomButton
-          required={isQnAKeyNeeded}
           ariaLabelledby={'QnA Maker Subscription key'}
-          errorMessage={!rootqnaKey ? formatMessage('Root Bot QnA Maker Subscription key is empty') : ''}
           buttonText={formatMessage('Use custom QnA Maker Subscription key')}
+          errorMessage={!rootqnaKey ? formatMessage('Root Bot QnA Maker Subscription key is empty') : ''}
           label={formatMessage('QnA Maker Subscription key')}
           placeholder={'Enter QnA Maker Subscription key'}
           placeholderOnDisable={"<---- Same as root bot's QnA Maker Subscription key ---->"}
+          required={isQnAKeyNeeded}
           value={skillqnaKey}
           onBlur={handleSkillQnAKeyOnBlur}
         />

@@ -18,7 +18,7 @@ const state = {
 };
 
 describe('SkillHostEndPoint', () => {
-  it('should submit settings', () => {
+  it('should submit settings', async () => {
     const setSettingsMock = jest.fn();
     const initRecoilState = ({ set }) => {
       set(currentProjectIdState, state.projectId);
@@ -32,15 +32,23 @@ describe('SkillHostEndPoint', () => {
       initRecoilState
     );
     const textField = getByTestId('SkillHostEndPointTextField');
-    act(() => {
-      fireEvent.change(textField, {
+    await act(async () => {
+      await fireEvent.change(textField, {
         target: { value: 'mySkillHostEndPoint' },
       });
+      await fireEvent.blur(textField);
     });
     expect(setSettingsMock).toBeCalledWith('test', {
       defaultLanguage: 'en-us',
       languages: ['en-us', 'fr-fr'],
       skillHostEndpoint: 'mySkillHostEndPoint',
+      luis: {
+        authoringKey: '',
+        authoringRegion: '',
+      },
+      qna: {
+        subscriptionKey: '',
+      },
     });
   });
 });
