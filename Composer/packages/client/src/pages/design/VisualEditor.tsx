@@ -98,7 +98,7 @@ const VisualEditor: React.FC<VisualEditorProps> = (props) => {
 
   useEffect(() => {
     const dialog = dialogs.find((d) => d.id === dialogId);
-    const visible = get(dialog, 'triggers', []).length === 0;
+    const visible = dialog ? get(dialog, 'triggers', []).length === 0 : false;
     setTriggerButtonVisibility(visible);
   }, [dialogs, dialogId]);
 

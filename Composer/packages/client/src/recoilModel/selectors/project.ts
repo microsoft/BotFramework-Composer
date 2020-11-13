@@ -173,9 +173,10 @@ export const projectDialogsMapSelector = selector<{ [key: string]: DialogInfo[] 
 
     return projectIds.reduce((result, projectId) => {
       const dialogIds = get(dialogIdsState(projectId));
-      return (result[projectId] = dialogIds.map((dialogId) => {
+      result[projectId] = dialogIds.map((dialogId) => {
         return get(dialogState({ projectId, dialogId }));
-      }));
+      });
+      return result;
     }, {});
   },
 });
