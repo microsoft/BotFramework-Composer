@@ -4,14 +4,13 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
-import React, { Fragment, useMemo, useCallback, Suspense, useEffect, useState } from 'react';
+import React, { Fragment, useCallback, Suspense, useEffect, useState } from 'react';
 import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { RouteComponentProps, Router } from '@reach/router';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { navigateTo } from '../../utils/navigation';
-import { TreeLink } from '../../components/ProjectTree/ProjectTree';
 import { Page } from '../../components/Page';
 import { dialogsSelectorFamily, qnaFilesState } from '../../recoilModel';
 import { dispatcherState } from '../../recoilModel';

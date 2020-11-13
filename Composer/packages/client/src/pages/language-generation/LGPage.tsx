@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { Fragment, useMemo, useCallback, Suspense, useEffect } from 'react';
+import React, { Fragment, useCallback, Suspense, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { RouteComponentProps, Router } from '@reach/router';
@@ -11,7 +11,6 @@ import { useRecoilValue } from 'recoil';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { navigateTo } from '../../utils/navigation';
-import { TreeLink } from '../../components/ProjectTree/ProjectTree';
 import { Page } from '../../components/Page';
 import { validateDialogsSelectorFamily, dispatcherState } from '../../recoilModel';
 
@@ -35,23 +34,6 @@ const LGPage: React.FC<RouteComponentProps<{
   const edit = /\/edit(\/)?$/.test(path);
 
   const baseURL = skillId == null ? `/bot/${projectId}/` : `/bot/${projectId}/skill/${skillId}/`;
-
-  const navLinks: TreeLink[] = useMemo(() => {
-    const newDialogLinks: TreeLink[] = dialogs.map((dialog) => ({
-      projectId,
-      dialogId: dialog.id,
-      displayName: dialog.displayName,
-      isRoot: false,
-    }));
-    const mainDialogIndex = newDialogLinks.findIndex((link) => link.dialogId === 'Main');
-
-    if (mainDialogIndex > -1) {
-      const mainDialog = newDialogLinks.splice(mainDialogIndex, 1)[0];
-      newDialogLinks.splice(0, 0, mainDialog);
-    }
-
-    return newDialogLinks;
-  }, [dialogs, edit]);
 
   useEffect(() => {
     const activeDialog = dialogs.find(({ id }) => id === dialogId);
