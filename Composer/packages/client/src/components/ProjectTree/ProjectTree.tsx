@@ -32,6 +32,7 @@ import { LoadingSpinner } from '../LoadingSpinner';
 import { TreeItem } from './treeItem';
 import { ExpandableNode } from './ExpandableNode';
 import { INDENT_PER_LEVEL } from './constants';
+import { ProjectTreeHeader } from './ProjectTreeHeader';
 
 // -------------------- Styles -------------------- //
 
@@ -629,6 +630,7 @@ export const ProjectTree: React.FC<Props> = ({
           styles={searchBox}
           onChange={onFilter}
         />
+        <ProjectTreeHeader />
         <div
           aria-label={formatMessage(
             `{
