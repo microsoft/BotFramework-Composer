@@ -77,6 +77,8 @@ const LGPage: React.FC<RouteComponentProps<{
     );
   };
 
+  console.log(skillId ?? projectId);
+
   return (
     <Page
       useNewTree
@@ -89,8 +91,8 @@ const LGPage: React.FC<RouteComponentProps<{
     >
       <Suspense fallback={<LoadingSpinner />}>
         <Router component={Fragment} primary={false}>
-          <CodeEditor dialogId={dialogId} path="/edit/*" projectId={projectId} />
-          <TableView dialogId={dialogId} path="/" projectId={projectId} />
+          <CodeEditor dialogId={dialogId} path="/edit/*" projectId={projectId} skillId={skillId} />
+          <TableView path="/" />
         </Router>
       </Suspense>
     </Page>
