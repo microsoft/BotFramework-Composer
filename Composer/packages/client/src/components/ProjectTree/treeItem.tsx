@@ -49,20 +49,20 @@ const content = css`
   label: ProjectTreeItem;
 `;
 
-const moreMenu: Partial<ICalloutContentStyles> = {
+export const moreMenu: Partial<ICalloutContentStyles> = {
   root: {
     marginTop: '-1px',
   },
 };
 
-const menuStyle: Partial<IContextualMenuStyles> = {
+export const menuStyle: Partial<IContextualMenuStyles> = {
   subComponentStyles: {
     menuItem: {},
     callout: moreMenu,
   },
 };
 
-const moreButton = (isActive: boolean): IButtonStyles => {
+export const moreButton = (isActive: boolean): IButtonStyles => {
   return {
     root: {
       padding: '4px 4px 0 4px',

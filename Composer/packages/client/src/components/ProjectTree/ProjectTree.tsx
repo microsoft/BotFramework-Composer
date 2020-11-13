@@ -141,6 +141,7 @@ type Props = {
   showTriggers?: boolean;
   showDialogs?: boolean;
   navLinks?: TreeLink[];
+  headerMenu?: TreeMenuItem[];
   onBotDeleteDialog?: (projectId: string, dialogId: string) => void;
   onBotCreateDialog?: (projectId: string) => void;
   onBotStart?: (projectId: string) => void;
@@ -159,6 +160,7 @@ export const ProjectTree: React.FC<Props> = ({
   onSelectAllLink: onAllSelected = undefined,
   showTriggers = true,
   showDialogs = true,
+  headerMenu = [],
   onBotDeleteDialog = () => {},
   onDialogDeleteTrigger = () => {},
   onSelect,
@@ -630,7 +632,7 @@ export const ProjectTree: React.FC<Props> = ({
           styles={searchBox}
           onChange={onFilter}
         />
-        <ProjectTreeHeader />
+        <ProjectTreeHeader menu={headerMenu} />
         <div
           aria-label={formatMessage(
             `{

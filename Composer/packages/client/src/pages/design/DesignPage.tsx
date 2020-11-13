@@ -433,6 +433,32 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const { onFocusFlowEditor, onBlurFlowEditor } = useElectronFeatures(actionSelected, canUndo, canRedo);
   const EditorAPI = getEditorAPI();
 
+  const projectTreeHeaderMenuItems = [
+    {
+      key: 'CreateNewSkill',
+      label: formatMessage('Create a new skill'),
+      onClick: () => {
+        setCreationFlowType('Skill');
+        setCreationFlowStatus(CreationFlowStatus.NEW);
+      },
+    },
+    {
+      key: 'OpenSkill',
+      label: formatMessage('Open a new skill'),
+      onClick: () => {
+        setCreationFlowType('Skill');
+        setCreationFlowStatus(CreationFlowStatus.OPEN);
+      },
+    },
+    {
+      key: 'ConnectRemoteSkill',
+      label: formatMessage('Connect a remote skill'),
+      onClick: () => {
+        setAddSkillDialogModalVisibility(true);
+      },
+    },
+  ];
+
   const getMenuItems = () => {
     const items = [
       {
@@ -453,32 +479,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         onClick: () => {
           if (!projectId || !currentDialog) return;
           openNewTriggerModal(projectId, currentDialog.id);
-        },
-      },
-      {
-        'data-testid': 'CreateNewSkill',
-        key: 'CreateNewSkill',
-        text: formatMessage('Create a new skill'),
-        onClick: () => {
-          setCreationFlowType('Skill');
-          setCreationFlowStatus(CreationFlowStatus.NEW);
-        },
-      },
-      {
-        'data-testid': 'OpenSkill',
-        key: 'OpenSkill',
-        text: formatMessage('Open a new skill'),
-        onClick: () => {
-          setCreationFlowType('Skill');
-          setCreationFlowStatus(CreationFlowStatus.OPEN);
-        },
-      },
-      {
-        'data-testid': 'ConnectRemoteSkill',
-        key: 'ConnectRemoteSkill',
-        text: formatMessage('Connect a remote skill'),
-        onClick: () => {
-          setAddSkillDialogModalVisibility(true);
         },
       },
     ];
@@ -760,6 +760,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
               dialogId,
               trigger: parseTriggerId(selectedTrigger?.id),
             }}
+            headerMenu={projectTreeHeaderMenuItems}
             onBotCreateDialog={handleCreateDialog}
             onBotDeleteDialog={handleDeleteDialog}
             onBotEditManifest={handleDisplayManifestModal}
