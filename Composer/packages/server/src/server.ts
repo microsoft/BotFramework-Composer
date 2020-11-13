@@ -125,7 +125,10 @@ export async function start(electronContext?: ElectronContext): Promise<number |
   });
 
   app.get(`${BASEURL}/plugin-host.html`, (req, res) => {
-    res.render(path.resolve(clientDirectory, 'plugin-host.ejs'), { __nonce__: req.__nonce__ });
+    res.render(path.resolve(clientDirectory, 'plugin-host.ejs'), {
+      __nonce__: req.__nonce__,
+      __csrf__: authService.csrfToken,
+    });
   });
 
   app.get('*', (req, res) => {
