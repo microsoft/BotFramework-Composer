@@ -7,7 +7,7 @@ import createCache from '@emotion/cache';
 import React, { useRef, useMemo, useEffect } from 'react';
 import isEqual from 'lodash/isEqual';
 import formatMessage from 'format-message';
-import { DialogFactory, SchemaDefinitions } from '@bfc/shared';
+import { DialogFactory, MicrosoftIDialog, SchemaDefinitions } from '@bfc/shared';
 import { useShellApi, JSONSchema7, FlowUISchema, FlowWidget } from '@bfc/extension-client';
 import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 
@@ -88,7 +88,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
     dataCache.current = inputData;
   }
 
-  const data = dataCache.current;
+  const data = dataCache.current as MicrosoftIDialog;
   const focusedId = Array.isArray(focusedActions) && focusedActions[0] ? focusedActions[0] : '';
 
   // Compute schema diff
