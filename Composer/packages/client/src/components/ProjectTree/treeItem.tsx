@@ -17,16 +17,16 @@ import { IContextualMenuStyles } from 'office-ui-fabric-react/lib/ContextualMenu
 import { ICalloutContentStyles } from 'office-ui-fabric-react/lib/Callout';
 
 import { TreeLink, TreeMenuItem } from './ProjectTree';
+import { SUMMARY_ARROW_SPACE } from './constants';
 
 // -------------------- Styles -------------------- //
-const indent = 8;
-const itemText = css`
+
+const iconAndText = css`
   outline: none;
   :focus {
     outline: rgb(102, 102, 102) solid 1px;
     z-index: 1;
   }
-  padding-left: ${indent}px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
@@ -41,6 +41,7 @@ const content = css`
   outline: none;
   display: flex;
   align-items: center;
+  height: 24px;
 
   label: ProjectTreeItem;
 `;
@@ -61,7 +62,7 @@ const menuStyle: Partial<IContextualMenuStyles> = {
 const moreButton = (isActive: boolean): IButtonStyles => {
   return {
     root: {
-      padding: '0 4px',
+      padding: '4px 4px 0 4px',
       alignSelf: 'stretch',
       visibility: isActive ? 'visible' : 'hidden',
       height: 'auto',
@@ -74,15 +75,20 @@ const moreButton = (isActive: boolean): IButtonStyles => {
   };
 };
 
-const navItem = (isActive: boolean, shift: number) => css`
-  width: calc(100%-${shift}px);
+const navItem = (isActive: boolean) => css`
+  label: navItem;
+  min-width: 100%;
   position: relative;
   height: 24px;
   font-size: 12px;
-  margin-left: ${shift}px;
   color: ${isActive ? '#ffffff' : '#545454'};
   background: ${isActive ? '#0078d4' : 'transparent'};
   font-weight: ${isActive ? FontWeights.semibold : FontWeights.regular};
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
   &:hover {
     color: #545454;
     background: #f2f2f2;
@@ -91,6 +97,7 @@ const navItem = (isActive: boolean, shift: number) => css`
       visibility: visible;
     }
   }
+
   &:focus {
     outline: none;
     .ms-Fabric--isFocusVisible &::after {
@@ -111,17 +118,17 @@ const navItem = (isActive: boolean, shift: number) => css`
 export const overflowSet = css`
   width: 100%;
   height: 100%;
-  padding-right: 12px;
   box-sizing: border-box;
   line-height: 24px;
   justify-content: space-between;
   display: flex;
+  margin-top: 2px;
 `;
 
 const statusIcon = {
-  width: '24px',
+  width: '12px',
   height: '18px',
-  fontSize: 16,
+  fontSize: 11,
   marginLeft: 6,
 };
 
@@ -135,6 +142,13 @@ const errorIcon = {
   color: '#CC3F3F',
 };
 
+const itemName = (nameWidth: number) => css`
+  max-width: ${nameWidth}px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 1;
+`;
+
 // -------------------- TreeItem -------------------- //
 
 interface ITreeItemProps {
@@ -146,7 +160,9 @@ interface ITreeItemProps {
   icon?: string;
   dialogName?: string;
   showProps?: boolean;
-  forceIndent?: number; // needed to make an outline look right; should be the size of the "details" reveal arrow
+  textWidth?: number;
+  extraSpace?: number;
+  hasChildren?: boolean;
 }
 
 const renderTreeMenuItem = (link: TreeLink) => (item: TreeMenuItem) => {
@@ -167,13 +183,13 @@ const renderTreeMenuItem = (link: TreeLink) => (item: TreeMenuItem) => {
   };
 };
 
-const onRenderItem = (item: IOverflowSetItemProps) => {
+const onRenderItem = (textWidth: number) => (item: IOverflowSetItemProps) => {
   const { warningContent, errorContent } = item;
   return (
     <div
       data-is-focusable
       aria-label={`${item.displayName} ${warningContent ?? ''} ${errorContent ?? ''}`}
-      css={itemText}
+      css={iconAndText}
       role="cell"
       tabIndex={0}
       onBlur={item.onBlur}
@@ -193,15 +209,15 @@ const onRenderItem = (item: IOverflowSetItemProps) => {
             tabIndex={-1}
           />
         )}
-        {item.displayName}
+        <span css={itemName(textWidth)}>{item.displayName}</span>
         {item.errorContent && (
           <TooltipHost content={item.errorContent} directionalHint={DirectionalHint.bottomLeftEdge}>
-            <Icon iconName={'Warning'} style={warningIcon} />
+            <Icon iconName={'WarningSolid'} style={warningIcon} />
           </TooltipHost>
         )}
         {item.warningContent && (
           <TooltipHost content={item.warningContent} directionalHint={DirectionalHint.bottomLeftEdge}>
-            <Icon iconName={'ErrorBadge'} style={errorIcon} />
+            <Icon iconName={'StatusErrorFull'} style={errorIcon} />
           </TooltipHost>
         )}
       </div>
@@ -240,20 +256,23 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   isActive = false,
   icon,
   dialogName,
-  forceIndent,
   onSelect,
+  textWidth = 100,
+  hasChildren = false,
   menu = [],
+  extraSpace = 0,
 }) => {
   const a11yLabel = `${dialogName ?? '$Root'}_${link.displayName}`;
 
   const overflowMenu = menu.map(renderTreeMenuItem(link));
 
   const linkString = `${link.projectId}_DialogTreeItem${link.dialogId}_${link.trigger ?? ''}`;
+  const spacerWidth = hasChildren ? 0 : SUMMARY_ARROW_SPACE + extraSpace;
 
   return (
     <div
       aria-label={a11yLabel}
-      css={navItem(!!isActive, forceIndent ?? 0)}
+      css={navItem(isActive)}
       data-testid={a11yLabel}
       role="gridcell"
       tabIndex={0}
@@ -266,6 +285,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         }
       }}
     >
+      <div style={{ minWidth: `${spacerWidth}px` }}></div>
       <OverflowSet
         //In 8.0 the OverflowSet will no longer be wrapped in a FocusZone
         //remove this at that time
@@ -282,7 +302,7 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         overflowItems={overflowMenu}
         role="row"
         styles={{ item: { flex: 1 } }}
-        onRenderItem={onRenderItem}
+        onRenderItem={onRenderItem(textWidth - spacerWidth + extraSpace)}
         onRenderOverflowButton={onRenderOverflowButton(!!isActive)}
       />
     </div>

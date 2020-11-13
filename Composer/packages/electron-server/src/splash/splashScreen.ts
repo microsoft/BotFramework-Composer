@@ -73,9 +73,13 @@ export const initSplashScreen = async ({
   /**
    * Displays the main windows of the app and destroys the splash screen.
    */
-  const startApp = () => {
+  const startApp = (onShowMainApp?: () => any) => {
     setTimeout(() => splashScreenWindow.destroy(), 500);
     getMainWindow()?.show();
+    // allows us to defer actions until the main app is showing
+    if (onShowMainApp) {
+      onShowMainApp();
+    }
   };
 
   /**
