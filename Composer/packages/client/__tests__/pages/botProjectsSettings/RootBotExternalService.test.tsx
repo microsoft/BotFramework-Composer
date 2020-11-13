@@ -4,7 +4,7 @@
 import React from 'react';
 import { act, fireEvent } from '@botframework-composer/test-utils';
 
-import { ExternalService } from '../../../src/pages/botProject/ExternalService';
+import { RootBotExternalService } from '../../../src/pages/botProject/RootBotExternalService';
 import { renderWithRecoilAndCustomDispatchers } from '../../testUtils';
 import { dispatcherState } from '../../../src/recoilModel';
 import {
@@ -54,7 +54,7 @@ const state = {
   botProjectIdsState: ['test'],
 };
 
-describe('External Service', () => {
+describe('Root Bot External Service', () => {
   it('should submit settings', () => {
     const setSettingsMock = jest.fn();
     const setQnASettingsMock = jest.fn();
@@ -72,7 +72,7 @@ describe('External Service', () => {
       });
     };
     const { getByTestId } = renderWithRecoilAndCustomDispatchers(
-      <ExternalService projectId={state.projectId} />,
+      <RootBotExternalService projectId={state.projectId} />,
       initRecoilState
     );
     const textField1 = getByTestId('rootLUISKey');

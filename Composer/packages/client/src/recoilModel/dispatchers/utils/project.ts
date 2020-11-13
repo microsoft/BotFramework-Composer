@@ -421,6 +421,10 @@ export const openRemoteSkill = async (
   const manifestResponse = await httpClient.get(
     `/projects/${projectId}/skill/retrieveSkillManifest?${stringified}&ignoreProjectValidation=true`
   );
+  console.log(projectId, {
+    isRootBot: false,
+    isRemote: true,
+  });
   set(projectMetaDataState(projectId), {
     isRootBot: false,
     isRemote: true,

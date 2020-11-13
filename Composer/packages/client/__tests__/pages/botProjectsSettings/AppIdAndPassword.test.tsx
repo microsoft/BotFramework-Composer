@@ -28,7 +28,7 @@ describe('App Id and Password', () => {
       });
     };
     const { getByTestId } = renderWithRecoilAndCustomDispatchers(
-      <AppIdAndPassword required projectId={state.projectId} />,
+      <AppIdAndPassword projectId={state.projectId} />,
       initRecoilState
     );
     const textField1 = getByTestId('MicrosoftAppId');
