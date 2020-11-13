@@ -165,10 +165,12 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
   const isQnAKeyNeeded = isQnAKeyMandatory(dialogs, qnaFiles);
 
   const [luisKeyErrorMsg, setLuisKeyErrorMsg] = useState<string>('');
+  const [luisRegionErrorMsg, setLuisRegionErrorMsg] = useState<string>('');
   const [qnaKeyErrorMsg, setQnAKeyErrorMsg] = useState<string>('');
 
   const [localRootLuisKey, setLocalRootLuisKey] = useState<string>(rootLuisKey ?? '');
   const [localRootQnAKey, setLocalRootQnAKey] = useState<string>(rootqnaKey ?? '');
+  const [localRootLuisRegion, setLocalRootLuisRegion] = useState<string>(rootLuisRegion ?? '');
 
   useEffect(() => {
     if (!localRootLuisKey) {
@@ -182,6 +184,12 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
       setQnAKeyErrorMsg(formatMessage('QnA Maker subscription Key is required to start your bot locally, and publish'));
     } else {
       setQnAKeyErrorMsg('');
+    }
+
+    if (!localRootLuisRegion) {
+      setLuisRegionErrorMsg(formatMessage('LUIS Region is required'));
+    } else {
+      setLuisRegionErrorMsg('');
     }
   }, [projectId]);
 
@@ -209,6 +217,26 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
       setQnAKeyErrorMsg(formatMessage('QnA Maker subscription Key is required to start your bot locally, and publish'));
       setLocalRootQnAKey('');
     }
+  };
+
+  const handleRootLuisRegionOnChange = (e, value) => {
+    if (value) {
+      setLuisRegionErrorMsg('');
+      setLocalRootLuisRegion(value);
+    } else {
+      setLuisRegionErrorMsg(formatMessage('LUIS Region is required'));
+      setLocalRootLuisRegion('');
+    }
+  };
+
+  const handleRootLuisRegionOnBlur = () => {
+    if (!localRootLuisRegion) {
+      setLuisRegionErrorMsg(formatMessage('LUIS Region is required'));
+    }
+    setSettings(projectId, {
+      ...mergedSettings,
+      luis: { ...mergedSettings.luis, authoringRegion: localRootLuisRegion },
+    });
   };
 
   const handleRootLuisKeyOnBlur = () => {
@@ -262,18 +290,16 @@ export const RootBotExternalService: React.FC<RootBotExternalServiceProps> = (pr
           onRenderLabel={onRenderLabel}
         />
         <TextField
+          required
           aria-labelledby={'LUIS region'}
           data-testid={'rootLUISRegion'}
+          errorMessage={errorElement(luisRegionErrorMsg)}
           label={formatMessage('LUIS region')}
           placeholder={'Enter LUIS region'}
-          styles={{ root: { marginTop: 10 } }}
-          value={rootLuisRegion}
-          onChange={async (e, value) => {
-            await setSettings(projectId, {
-              ...mergedSettings,
-              luis: { ...mergedSettings.luis, authoringRegion: value ? value : '' },
-            });
-          }}
+          styles={mergeStyleSets({ root: { marginTop: 10 } }, customError)}
+          value={localRootLuisRegion}
+          onBlur={handleRootLuisRegionOnBlur}
+          onChange={handleRootLuisRegionOnChange}
           onRenderLabel={onRenderLabel}
         />
         <TextField
