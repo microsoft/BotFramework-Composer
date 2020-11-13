@@ -249,6 +249,7 @@ async function run() {
     const getMainWindow = () => ElectronWindow.getInstance().browserWindow;
     const { startApp, updateStatus } = await initSplashScreen({
       getMainWindow,
+      icon: join(__dirname, '../resources/composerIcon_1024x1024.png'),
       color: 'rgb(0, 120, 212)',
       logo: `file://${microsoftLogoPath}`,
       productName: 'Bot Framework Composer',
