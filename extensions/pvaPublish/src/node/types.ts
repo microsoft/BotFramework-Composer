@@ -8,6 +8,7 @@ export type PVAPublishJob = {
   operationId: string;
   startTimeUtc: string;
   state: PublishState;
+  testUrl: string;
 };
 
 type DiagnosticInfo = {
@@ -43,6 +44,30 @@ export type PublishState =
   | 'Done'
   | 'PreconditionFailed'
   | 'Failed';
+
+/** Copied from @bfc/extension */
+export interface PublishResult {
+  comment?: string;
+  endpointURL?: string;
+  eTag?: string;
+  id?: string;
+  log?: string;
+  message: string;
+  status?: number;
+  time?: Date;
+  action?: { href: string; label: string };
+}
+
+/** Copied from @bfc/extension */
+export type PublishResponse = {
+  status: number;
+  result: PublishResult;
+};
+
+/** Copied from @bfc/extension */
+export type UserIdentity = {
+  [key: string]: any;
+};
 
 export type PullResponse = {
   error?: { message: string };

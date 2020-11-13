@@ -8,7 +8,7 @@ import { jsx, css } from '@emotion/core';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
-import { IConfig, IPublishConfig, defaultPublishConfig } from '@bfc/shared';
+import { IConfig, IPublishConfig, defaultPublishConfig, checkForPVASchema } from '@bfc/shared';
 import { EditorExtension, PluginConfig, mergePluginConfigs } from '@bfc/extension-client';
 
 import {
@@ -65,6 +65,7 @@ export const TestControllerContent: React.FC<{ projectId: string }> = (props) =>
   const notifications = useNotifications(projectId);
 
   const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
+  const schemas = useRecoilValue(schemasState(projectId));
   const botStatus = useRecoilValue(botStatusState(projectId));
   const botName = useRecoilValue(botDisplayNameState(projectId));
   const luFiles = useRecoilValue(luFilesState(projectId));
@@ -217,30 +218,56 @@ export const TestControllerContent: React.FC<{ projectId: string }> = (props) =>
     );
   }
 
+  const renderEmulatorOpenButton = () => {
+    if (checkForPVASchema(schemas.sdk)) return null;
+    return (
+      <EmulatorOpenButton
+        botEndpoint={botEndpoints[projectId] || 'http://localhost:3979/api/messages'}
+        botStatus={botStatus}
+        hidden={showError}
+        onClick={handleOpenEmulator}
+      />
+    );
+  };
+
+  const renderPublishingStatus = () => {
+    if (checkForPVASchema(schemas.sdk)) return null;
+    return (
+      <div
+        aria-label={publishing ? formatMessage('Publishing') : reloading ? formatMessage('Reloading') : ''}
+        aria-live={'assertive'}
+      />
+    );
+  };
+
+  const renderLoading = () => {
+    if (checkForPVASchema(schemas.sdk)) return null;
+    return <Loading botStatus={botStatus} />;
+  };
+
+  const renderStartButton = () => {
+    if (checkForPVASchema(schemas.sdk)) return null;
+    return (
+      <PrimaryButton
+        css={botButton}
+        disabled={showError || publishing || reloading}
+        id={'publishAndConnect'}
+        text={connected ? formatMessage('Restart Bot') : formatMessage('Start Bot')}
+        onClick={handleStart}
+      />
+    );
+  };
+
   return (
     <Fragment>
       <div ref={botActionRef} css={bot}>
-        <EmulatorOpenButton
-          botEndpoint={botEndpoints[projectId] || 'http://localhost:3979/api/messages'}
-          botStatus={botStatus}
-          hidden={showError}
-          onClick={handleOpenEmulator}
-        />
-        <div
-          aria-label={publishing ? formatMessage('Publishing') : reloading ? formatMessage('Reloading') : ''}
-          aria-live={'assertive'}
-        />
-        <Loading botStatus={botStatus} />
+        {renderEmulatorOpenButton()}
+        {renderPublishingStatus()}
+        {renderLoading()}
         <div ref={addRef}>
           <ErrorInfo count={errorLength} hidden={!showError} onClick={handleErrorButtonClick} />
           <WarningInfo count={warningLength} hidden={!showWarning} onClick={handleErrorButtonClick} />
-          <PrimaryButton
-            css={botButton}
-            disabled={showError || publishing || reloading}
-            id={'publishAndConnect'}
-            text={connected ? formatMessage('Restart Bot') : formatMessage('Start Bot')}
-            onClick={handleStart}
-          />
+          {renderStartButton()}
         </div>
       </div>
       <ErrorCallout

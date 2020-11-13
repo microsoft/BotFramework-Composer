@@ -165,40 +165,44 @@ const Library: React.FC = () => {
 
     // find all categories listed in the available libraries
     const categories = [DEFAULT_CATEGORY];
-    const availableCompatibleLibraries = availableLibraries.filter(component => isCompatible(component));
-    availableCompatibleLibraries.forEach((item) => {
-      if (!item.category) {
-        item.category = DEFAULT_CATEGORY;
-      }
-      if (item.category && categories.indexOf(item.category) == -1) {
-        categories.push(item.category);
-      }
-    });
+    if (availableLibraries) {
+      const availableCompatibleLibraries = availableLibraries.filter(component => isCompatible(component));
+      availableCompatibleLibraries.forEach((item) => {
+        if (!item.category) {
+          item.category = DEFAULT_CATEGORY;
+        }
+        if (item.category && categories.indexOf(item.category) == -1) {
+          categories.push(item.category);
+        }
+      });
 
-    categories.forEach((category) => {
-      const categoryItems = availableCompatibleLibraries.filter((i) => i.category === category);
-      if (categoryItems.length) {
+      categories.forEach((category) => {
+        const categoryItems = availableCompatibleLibraries.filter((i) => i.category === category);
+        if (categoryItems.length) {
+          groups.push({
+            key: category,
+            name: category,
+            startIndex: items.length,
+            count: categoryItems.length,
+            level: 0,
+          });
+          items = items.concat(categoryItems || []);
+        }
+      });
+    }
+
+    if (recentlyUsed) {
+      const recentlyUsedCompatible = recentlyUsed.filter(component => isCompatible(component));
+      if (recentlyUsedCompatible.length) {
         groups.push({
-          key: category,
-          name: category,
+          key: 'recently',
+          name: strings.recentlyUsedCategory,
           startIndex: items.length,
-          count: categoryItems.length,
+          count: recentlyUsedCompatible.length,
           level: 0,
         });
-        items = items.concat(categoryItems || []);
+        items = items.concat(recentlyUsedCompatible || []);
       }
-    });
-
-    const recentlyUsedCompatible = recentlyUsed.filter(component => isCompatible(component));
-    if (recentlyUsedCompatible.length) {
-      groups.push({
-        key: 'recently',
-        name: strings.recentlyUsedCategory,
-        startIndex: items.length,
-        count: recentlyUsedCompatible.length,
-        level: 0,
-      });
-      items = items.concat(recentlyUsedCompatible || []);
     }
 
 

@@ -8,7 +8,7 @@ export * from './extension';
 export * from './extensionRegistration';
 export * from './indexers';
 export * from './project';
-export * from './project';
+export * from './import';
 export * from './publish';
 export * from './runtime';
 export * from './schema';

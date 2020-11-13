@@ -1,6 +1,6 @@
 import { IExtensionRegistration } from '@botframework-composer/types';
 
-import { getStatus, history, publish } from './publish';
+import { getStatus, history, publish, pull } from './publish';
 import { setLogger } from './logger';
 
 function initialize(registration: IExtensionRegistration) {
@@ -12,10 +12,9 @@ function initialize(registration: IExtensionRegistration) {
     history,
     getStatus,
     publish,
-    // TODO: add 'pull' once ready,
+    pull,
   };
 
-  // @ts-expect-error (TODO: remove once auth is integrated and added to publish method signature)
   registration.addPublishMethod(extension);
 }
 

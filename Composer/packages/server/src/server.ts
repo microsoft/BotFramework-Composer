@@ -26,6 +26,7 @@ import { apiRouter } from './router/api';
 import { BASEURL } from './constants';
 import { attachLSPServer } from './utility/attachLSP';
 import log from './logger';
+import { setEnvDefault } from './utility/setEnvDefault';
 import { ElectronContext, setElectronContext } from './utility/electronContext';
 import { authService } from './services/auth/auth';
 
@@ -52,6 +53,13 @@ export async function start(electronContext?: ElectronContext): Promise<number |
   ExtensionContext.useExpress(app);
 
   // load all installed plugins
+  setEnvDefault('COMPOSER_EXTENSION_MANIFEST', path.resolve(__dirname, '../../../.composer/extensions.json'));
+  setEnvDefault('COMPOSER_EXTENSION_DATA_DIR', path.resolve(__dirname, '../../../.composer/extension-data'));
+  setEnvDefault('COMPOSER_BUILTIN_EXTENSIONS_DIR', path.resolve(__dirname, '../../../../extensions'));
+  // Composer/.composer/extensions
+  setEnvDefault('COMPOSER_REMOTE_EXTENSIONS_DIR', path.resolve(__dirname, '../../../.composer/extensions'));
+  setEnvDefault('COMPOSER_TEMP_DIR', path.resolve(__dirname, '../../../.composer/temp'));
+  setEnvDefault('COMPOSER_BACKUP_DIR', path.resolve(__dirname, '../../../.composer/backup'));
   await ExtensionManager.loadAll();
 
   const { login, authorize } = getAuthProvider();

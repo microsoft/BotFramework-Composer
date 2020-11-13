@@ -9,7 +9,6 @@ import { PassportStatic } from 'passport';
 import { PublishPlugin } from './publish';
 import { RuntimeTemplate, BotTemplate } from './runtime';
 import { BotProjectService } from './project';
-import { FeatureFlagService } from './featureFlags';
 import { UserIdentity } from './user';
 import { IBotProject } from './server';
 
@@ -122,7 +121,6 @@ export type IExtensionContext = {
   passport: PassportStatic;
   webserver: Express | undefined;
   botProjectService: BotProjectService;
-  featureFlagService: FeatureFlagService;
   useExpress(webserver: Express): void;
   getRuntimeByProject(project: IBotProject): RuntimeTemplate;
   getRuntime(type: string | undefined): RuntimeTemplate;

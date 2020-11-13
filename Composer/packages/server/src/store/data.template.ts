@@ -6,6 +6,7 @@ import { getDefaultFeatureFlags } from '@bfc/shared';
 import settings from '../settings';
 import { LocationRef } from '../models/bot/interface';
 import { StorageConnection } from '../models/storage/interface';
+import { BotProjectMetadata } from '../services/project';
 
 export default {
   version: 1,
@@ -20,6 +21,6 @@ export default {
     },
   ] as StorageConnection[],
   recentBotProjects: [] as LocationRef[],
-  projectLocationMap: {} as Record<string, string>,
+  projectLocationMap: {} as Record<string, BotProjectMetadata>,
   featureFlags: getDefaultFeatureFlags(),
 };
