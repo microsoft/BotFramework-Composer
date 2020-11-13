@@ -437,7 +437,7 @@ export const projectDispatcher = () => {
             clearInterval(timer);
             callbackHelpers.set(botOpeningMessage, response.data.message);
             const { botFiles, projectData } = loadProjectData(response.data.result);
-            const projectId = response.data.id;
+            const projectId = response.data.result.id;
             if (settingStorage.get(projectId)) {
               settingStorage.remove(projectId);
             }
