@@ -1,8 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
-import * as formatMessage from 'format-message';
+
+import formatMessage from 'format-message';
 import * as React from 'react';
 import { useState, useMemo, useEffect, Fragment } from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
@@ -22,7 +21,7 @@ import {
 } from '@bfc/extension-client';
 import { Subscription } from '@azure/arm-subscriptions/esm/models';
 import { ResourceGroup } from '@azure/arm-resources/esm/models';
-import { DeployLocation } from '@bfc/types';
+import { DeployLocation } from '@botframework-composer/types';
 import { ResourcesItem } from './types';
 import {
   ScrollablePane,
@@ -339,7 +338,6 @@ export const AzureProvisionDialog: React.FC = () => {
           <JsonEditor
             id={publishType}
             height={200}
-            styles={{ width: '60%' }}
             value={importConfig}
             onChange={(value) => {
               setEditorError(false);

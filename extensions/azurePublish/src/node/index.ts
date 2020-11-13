@@ -5,7 +5,7 @@ import path from 'path';
 
 import md5 from 'md5';
 import { copy, rmdir, emptyDir, readJson, pathExists, writeJson, mkdirSync, writeFileSync } from 'fs-extra';
-import { JSONSchema7, ExtensionRegistration, PublishPlugin, PublishResult, IBotProject } from '@bfc/extension';
+import { JSONSchema7, ExtensionRegistration, PublishPlugin, PublishResponse, PublishResult, IBotProject } from '@bfc/extension';
 import { Debugger } from 'debug';
 
 import { AzureResourceTypes, AzureResourceDefinitions } from './resourceTypes';
@@ -53,16 +53,19 @@ interface ProvisionHistoryItem {
   log: string[];
 }
 
-function publishResultFromStatus(procStatus: ProcessStatus): PublishResult {
-  const { status, message, log, comment, time, id } = procStatus;
+function publishResultFromStatus(procStatus: ProcessStatus): PublishResponse {
+  const { status, message, log, comment, time, projectId } = procStatus;
 
   return {
     status,
-    message,
-    log,
-    comment,
-    time,
-    id,
+    result: {
+      message,
+      log,
+      comment,
+      time,
+      id: projectId,
+      status,
+    }
   };
 }
 
@@ -481,12 +484,18 @@ export default async (composer: ExtensionRegistration): Promise<void> => {
       // if ACTIVE status is found, look for recent status in history
       const current = await this.history(botId, profileName);
       if (current.length > 0) {
-        return current[0];
+        return {
+          status: current[0].status,
+          result: current[0]
+        };
       }
       // finally, return a 404 if not found at all
       return {
         status: 404,
-        message: 'bot not published',
+        result: {
+          message: 'bot not published',
+        }
+
       };
     };
 

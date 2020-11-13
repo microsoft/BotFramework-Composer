@@ -2,15 +2,18 @@
 // Licensed under the MIT License.
 import path from 'path';
 
+import { ElectronAuthParameters } from '@botframework-composer/types';
 import { app } from 'electron';
 
 import ElectronWindow from '../electronWindow';
-import { isLinux, isMac, isWindows } from '../utility/platform';
+import { isLinux, isMac } from '../utility/platform';
 import logger from '../utility/logger';
 import { getUnpackedAsarPath } from '../utility/getUnpackedAsarPath';
+import { isDevelopment } from '../utility/env';
 
 import { OneAuth } from './oneauth';
-import { oneauthShim } from './oneauthShim';
+import { OneAuthShim } from './oneAuthShim';
+import { OneAuthBase } from './oneAuthBase';
 
 const log = logger.extend('one-auth');
 
@@ -24,26 +27,19 @@ const DEFAULT_LOCALE = 'en'; // TODO: get this from settings?
 const DEFAULT_AUTH_SCHEME = 2; // bearer token
 const DEFAULT_AUTH_AUTHORITY = 'https://login.microsoftonline.com/common'; // work and school accounts
 
-// TODO: share this type with ElectronContext
-type AuthParamOptions = {
-  target: string;
-};
-
-class OneAuthInstance {
+export class OneAuthInstance extends OneAuthBase {
   private initialized: boolean;
   private _oneAuth: typeof OneAuth | null = null; //eslint-disable-line
   private signedInAccount: OneAuth.Account | undefined;
 
   constructor() {
+    super();
+    log('Using genuine OneAuth.');
     // will wait until called to initialize (so that we're sure we have a browser window)
     this.initialized = false;
   }
 
   private initialize() {
-    if (isLinux()) {
-      console.error('OneAuth is currently unsupported in Linux.');
-      return;
-    }
     const window = ElectronWindow.getInstance().browserWindow;
     if (window) {
       const isDevelopment = Boolean(process.env.NODE_ENV && process.env.NODE_ENV === 'development');
@@ -61,8 +57,6 @@ class OneAuthInstance {
         'Please login',
         window.getNativeWindowHandle()
       );
-      // Personal Accounts
-      // const msaConfig = new OneAuth.MsaConfiguration();
       const aadConfig = new this.oneAuth.AadConfiguration(
         COMPOSER_CLIENT_ID,
         COMPOSER_REDIRECT_URI,
@@ -78,16 +72,23 @@ class OneAuthInstance {
   }
 
   public async getAccessToken(
-    options?: AuthParamOptions
+    params: ElectronAuthParameters
   ): Promise<{ accessToken: string; acquiredAt: number; expiryTime: number }> {
     try {
       if (!this.initialized) {
         this.initialize();
       }
       log('Getting access token...');
-      if (!options?.target) {
+      if (!params.targetResource) {
         throw 'Target resource required to get access token.';
       }
+
+      // Temporary until we properly configure local Mac dev experience
+      if (isMac() && isDevelopment) {
+        log('Mac development env detected. Getting access token using interactive sign in instead of silently.');
+        return this.TEMPORARY_getAccessTokenOnMacDev(params);
+      }
+
       if (!this.signedInAccount) {
         // we need to sign in
         log('No signed in account found. Signing user in before getting access token.');
@@ -97,14 +98,14 @@ class OneAuthInstance {
         throw 'Signed in account does not have an id.';
       }
       // use the signed in account to acquire a token
-      const params = new this.oneAuth.AuthParameters(
+      const reqParams = new this.oneAuth.AuthParameters(
         DEFAULT_AUTH_SCHEME,
         DEFAULT_AUTH_AUTHORITY,
-        options.target,
+        params.targetResource,
         this.signedInAccount.realm,
         ''
       );
-      const result = await this.oneAuth.acquireCredentialSilently(this.signedInAccount?.id, params, '');
+      let result = await this.oneAuth.acquireCredentialSilently(this.signedInAccount?.id, reqParams, '');
       if (result.credential && result.credential.value) {
         log('Acquired access token. %s', result.credential.value);
         return {
@@ -114,7 +115,19 @@ class OneAuthInstance {
         };
       }
       if (result.error) {
-        // TODO: better error handling
+        if (result.error.status === this.oneAuth.Status.InteractionRequired) {
+          // try again but interactively
+          log('Interaction required. Trying again interactively to get access token.');
+          result = await this.oneAuth.acquireCredentialInteractively(this.signedInAccount?.id, reqParams, '');
+          if (result.credential && result.credential.value) {
+            log('Acquired access token interactively. %s', result.credential.value);
+            return {
+              accessToken: result.credential.value,
+              acquiredAt: Date.now(),
+              expiryTime: result.credential.expiresOn,
+            };
+          }
+        }
         throw result.error;
       }
       throw 'Could not acquire an access token.';
@@ -154,32 +167,49 @@ class OneAuthInstance {
     }
   }
 
+  /** Temporary workaround on Mac until we figure out how to enable keychain access on a dev build. */
+  // eslint-disable-next-line
+  private async TEMPORARY_getAccessTokenOnMacDev(
+    params: ElectronAuthParameters
+  ): Promise<{ accessToken: string; acquiredAt: number; expiryTime: number }> {
+    try {
+      // sign-in every time with auth parameters to get a token
+      const reqParams = new this.oneAuth.AuthParameters(
+        DEFAULT_AUTH_SCHEME,
+        DEFAULT_AUTH_AUTHORITY,
+        params.targetResource,
+        '',
+        ''
+      );
+      const result = await this.oneAuth.signInInteractively('', reqParams, '');
+      if (result && result.credential && result.credential.value) {
+        log('Acquired access token. %s', result.credential.value);
+        return {
+          accessToken: result.credential.value,
+          acquiredAt: Date.now(),
+          expiryTime: result.credential.expiresOn,
+        };
+      }
+      throw 'Could not acquire an access token.';
+    } catch (e) {
+      log('There was an error trying to acquire a token on Mac by signing in interactively: %O', e);
+      throw e;
+    }
+  }
+
   private get oneAuth() {
     if (!this._oneAuth) {
-      if (this.loadOneAuth()) {
-        log('Attempting to load oneauth module from %s.', this.oneauthPath);
-        try {
-          // eslint-disable-next-line security/detect-non-literal-require
-          this._oneAuth = require(this.oneauthPath) as typeof OneAuth;
-        } catch (e) {
-          log('Error loading oneauth module. %O', e);
-        }
-      }
-
-      // if we still haven't loaded oneauth, fallback to the shim
-      if (!this._oneAuth) {
-        log('Using oneauth shim.');
-        this._oneAuth = oneauthShim;
+      log('Attempting to load oneauth module from %s.', this.oneauthPath);
+      try {
+        // eslint-disable-next-line security/detect-non-literal-require
+        this._oneAuth = require(this.oneauthPath) as typeof OneAuth;
+      } catch (e) {
+        log('Error loading oneauth module. %O', e);
+        throw e;
       }
     }
 
     return this._oneAuth;
-  }
-
-  private loadOneAuth() {
-    return Boolean(
-      (process.env.NODE_ENV === 'production' || process.env.COMPOSER_ENABLE_ONEAUTH) && (isMac() || isWindows())
-    );
   }
 
   private get oneauthPath() {
@@ -191,4 +221,7 @@ class OneAuthInstance {
   }
 }
 
-export const OneAuthService = new OneAuthInstance();
+// only use the shim in Linux, or dev environment without flag enabled
+const useShim = (isDevelopment && process.env.COMPOSER_ENABLE_ONEAUTH !== 'true') || isLinux();
+
+export const OneAuthService = useShim ? new OneAuthShim() : new OneAuthInstance();

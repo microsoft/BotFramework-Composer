@@ -24,6 +24,11 @@ const schema: JSONSchema7 = {
       type: 'string',
       title: 'Language for luis - default to en-us',
     },
+    runtimeIdentifier: {
+      type: 'string',
+      title:
+        'Runtime identifier for hosting bot, default to win-x64, please refer to https://docs.microsoft.com/en-us/dotnet/core/rid-catalog',
+    },
     settings: {
       type: 'object',
       title: 'Settings for Azure resources',

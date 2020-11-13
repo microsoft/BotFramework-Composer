@@ -2,13 +2,13 @@
   "name": "azurePublish",
   "version": "1.0.0",
   "description": "Publish bot to an Azure Web App (Preview)",
-  "main": "lib/index.js",
+  "main": "lib/node/index.js",
   "license": "MIT",
   "scripts": {
     "build:botservice": "cd ./vendor/arm-botservice && yarn && yarn build",
     "build:ui": "webpack --config webpack.config.js",
     "build:node": "tsc --project tsconfig.node.json",
-    "build": "yarn build:botservice && yarn build:node && yarn build:ui"
+    "build": "yarn build:botservice && webpack"
   },
   "composer": {
     "bundles": [
@@ -54,13 +54,13 @@
     "@bfc/extension-client": "file:../../Composer/packages/extension-client",
     "@bfc/indexers": "../../Composer/packages/lib/indexers",
     "@bfc/shared": "../../Composer/packages/lib/shared",
-    "@bfc/types": "../../Composer/packages/types",
     "@microsoft/bf-lu": "4.11.0-dev.20201005.7e5e1b8",
     "@uifabric/fluent-theme": "^7.3.29",
     "adal-node": "0.2.1",
     "archiver": "^5.0.2",
     "axios": "^0.19.2",
     "fs-extra": "8.1.0",
+    "https-proxy-agent": "^5.0.0",
     "lodash": "^4.17.20",
     "md5": "2.2.1",
     "minimist": "1.2.5",

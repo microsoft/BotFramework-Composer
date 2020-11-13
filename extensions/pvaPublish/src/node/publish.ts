@@ -1,8 +1,9 @@
 import { IBotProject } from '@botframework-composer/types';
 import { join } from 'path';
-import { createReadStream, createWriteStream } from 'fs';
-import { ensureDirSync, remove } from 'fs-extra';
+import { createWriteStream } from 'fs';
+import { ensureDirSync } from 'fs-extra';
 import fetch, { RequestInit } from 'node-fetch';
+import stream from 'stream';
 
 import {
   PVAPublishJob,
@@ -42,47 +43,39 @@ export const publish = async (
   const { comment = '' } = metadata;
 
   try {
+    logger.log('Starting publish to Power Virtual Agents.');
     // authenticate with PVA
     const base = baseUrl || getBaseUrl();
     const creds = getAuthCredentials(base);
     const accessToken = await getAccessToken(creds);
 
-    // TODO: Investigate optimizing stream logic before enabling extension.
-    // (https://github.com/microsoft/BotFramework-Composer/pull/4446#discussion_r510314378)
-
-    // where we will store the bot .zip
-    const zipDir = join(process.env.COMPOSER_TEMP_DIR as string, 'pva-publish');
-    ensureDirSync(zipDir);
-    const zipPath = join(zipDir, 'bot.zip');
-
-    // write the .zip to disk
-    const zipWriteStream = createWriteStream(zipPath);
+    // write the .zip to a buffer in memory
+    logger.log('Writing bot content to in-memory buffer.');
+    const botContentWriter = new stream.Writable();
+    const botContentData = [];
+    botContentWriter._write = (chunk, encoding, callback) => {
+      botContentData.push(chunk);
+      callback(); // let the internal write() call know that the _write() was successful
+    };
     await new Promise((resolve, reject) => {
-      project.exportToZip((archive: NodeJS.ReadStream & { finalize: () => void; on: (ev, listener) => void }) => {
-        archive.on('error', (err) => {
-          console.error('Got error trying to export to zip: ', err);
-          reject(err.message);
-        });
-        archive.pipe(zipWriteStream);
-        archive.on('end', () => {
-          archive.unpipe();
-          zipWriteStream.end();
-          resolve();
-        });
-      });
+      project.exportToZip(
+        { files: ['*.botproject'], directories: ['/knowledge-base/'] },
+        (archive: NodeJS.ReadStream & { finalize: () => void; on: (ev, listener) => void }) => {
+          archive.on('error', (err) => {
+            console.error('Got error trying to export to zip: ', err);
+            reject(err.message);
+          });
+          archive.on('end', () => {
+            archive.unpipe();
+            logger.log('Done reading bot content.');
+            resolve();
+          });
+          archive.pipe(botContentWriter);
+        }
+      );
     });
-
-    // open up the .zip for reading
-    const zipReadStream = createReadStream(zipPath);
-    await new Promise((resolve, reject) => {
-      zipReadStream.on('error', (err) => {
-        reject(err);
-      });
-      zipReadStream.once('readable', () => {
-        resolve();
-      });
-    });
-    const length = zipReadStream.readableLength;
+    const botContent = Buffer.concat(botContentData);
+    logger.log('In-memory buffer created from bot content.');
 
     // initiate the publish job
     let url = `${base}api/botmanagement/${API_VERSION}/environments/${envId}/bots/${botId}/composer/publishoperations?deleteMissingDependencies=${deleteMissingDependencies}`;
@@ -91,15 +84,16 @@ export const publish = async (
     }
     const res = await fetch(url, {
       method: 'POST',
-      body: zipReadStream,
+      body: botContent,
       headers: {
         ...getAuthHeaders(accessToken, tenantId),
         'Content-Type': 'application/zip',
-        'Content-Length': length.toString(),
+        'Content-Length': botContent.buffer.byteLength,
         'If-Match': project.eTag,
       },
     });
     const job: PVAPublishJob = await res.json();
+    logger.log('Publish job started: %O', job);
 
     // transform the PVA job to a publish response
     const result = xformJobToResult(job);
@@ -109,7 +103,7 @@ export const publish = async (
     ensurePublishProfileHistory(botProjectId, profileName);
     publishHistory[botProjectId][profileName].unshift(result);
 
-    remove(zipDir); // clean up zip -- fire and forget
+    logger.log('Publish call successful.');
 
     return {
       status: result.status,
@@ -173,6 +167,9 @@ export const getStatus = async (
     logger.log('Got updated status from publish job: %O', job);
 
     // transform the PVA job to a publish response
+    if (!job.lastUpdateTimeUtc) {
+      job.lastUpdateTimeUtc = Date.now().toString(); // patch update time if server doesn't send one
+    }
     const result = xformJobToResult(job);
 
     // update publish history
@@ -269,7 +266,7 @@ export const pull = async (
       // where we will store the bot .zip
       const zipDir = join(process.env.COMPOSER_TEMP_DIR as string, 'pva-publish');
       ensureDirSync(zipDir);
-      const zipPath = join(zipDir, 'bot-assets.zip');
+      const zipPath = join(zipDir, `bot-assets-${Date.now()}.zip`);
       const writeStream = createWriteStream(zipPath);
       await new Promise((resolve, reject) => {
         writeStream.once('finish', resolve);
@@ -291,11 +288,17 @@ const xformJobToResult = (job: PVAPublishJob): PublishResult => {
     eTag: job.importedContentEtag,
     id: job.operationId, // what is this used for in Composer?
     log: (job.diagnostics || []).map((diag) => `---\n${JSON.stringify(diag, null, 2)}\n---\n`).join('\n'),
-    message: getUserFriendlyMessage(job.state),
+    message: getUserFriendlyMessage(job),
     time: new Date(job.lastUpdateTimeUtc),
     status: getStatusFromJobState(job.state),
+    action: getAction(job),
   };
   return result;
+};
+
+const getAction = (job) => {
+  if (job.state !== 'Done' || job.testUrl == null || job.testUrl == undefined) return null;
+  return { href: job.testUrl, label: 'Test in Power Virtual Agents' };
 };
 
 const getStatusFromJobState = (state: PublishState): number => {
@@ -337,8 +340,8 @@ const getOperationIdOfLastJob = (botProjectId: string, profileName: string): str
   return '';
 };
 
-const getUserFriendlyMessage = (state: PublishState): string => {
-  switch (state) {
+const getUserFriendlyMessage = (job: PVAPublishJob): string => {
+  switch (job.state) {
     case 'Done':
       return 'Publish successful.';
 

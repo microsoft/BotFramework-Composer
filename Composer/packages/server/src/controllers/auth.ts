@@ -3,7 +3,7 @@
 
 import { Request, Response } from 'express';
 
-import { authService } from '../services/auth';
+import { authService } from '../services/auth/auth';
 import { isElectron } from '../utility/isElectron';
 
 type GetAccessTokenRequest = Request & {

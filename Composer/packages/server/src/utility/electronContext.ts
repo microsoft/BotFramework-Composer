@@ -1,17 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-// TODO: add types for "options"
-type ElectronAuthOptions = {
-  target: string;
-};
+import { ElectronAuthParameters } from '@botframework-composer/types';
+
 export type ElectronContext = {
   getAccessToken: (
-    options: ElectronAuthOptions
+    params: ElectronAuthParameters
   ) => Promise<{ accessToken: string; acquiredAt: number; expiryTime: number }>;
 };
 
-var context;
+let context;
 
 export const useElectronContext = (): ElectronContext => context;
 

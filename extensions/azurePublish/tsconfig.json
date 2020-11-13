@@ -1,11 +1,10 @@
 {
   "compilerOptions": {
-    "alwaysStrict": true,
-    "jsx": "react",
-    "outDir": "./lib"
+    "esModuleInterop": true,
+    "jsx": "react"
   },
   "include": [
-    "src/ui/**/*"
+    "src/**/*",
   ],
   "exclude": [
     "node_modules",

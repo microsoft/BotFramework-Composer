@@ -17,7 +17,7 @@
     "javascript",
     "javascriptreact",
     "typescript",
-    "typescriptreact",
+    "typescriptreact"
   ],
   "eslint.workingDirectories": ["./Composer"],
   "typescript.tsdk": "./Composer/node_modules/typescript/lib",

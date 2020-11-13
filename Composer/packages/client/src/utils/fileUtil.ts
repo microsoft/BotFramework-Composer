@@ -91,7 +91,7 @@ export async function loadLocale(locale: string) {
   const data = resp?.data;
   if (data == null || typeof data === 'string') {
     // this is an invalid locale, so don't set anything
-    console.error('Tried to read an invalid locale');
+    console.log('Tried to read an invalid locale');
     return null;
   } else {
     // We don't care about the return value except in our unit tests
