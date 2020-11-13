@@ -27,6 +27,7 @@ import {
   luFilesState,
   rateInfoState,
   rootBotProjectIdSelector,
+  featureFlagsState,
 } from '../recoilModel';
 import { undoFunctionState } from '../recoilModel/undo/history';
 
@@ -82,6 +83,7 @@ export function useShell(source: EventSource, projectId: string): Shell {
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
   const userSettings = useRecoilValue(userSettingsState);
   const clipboardActions = useRecoilValue(clipboardActionsState);
+  const featureFlags = useRecoilValue(featureFlagsState);
   const {
     updateDialog,
     updateDialogSchema,
@@ -229,6 +231,12 @@ export function useShell(source: EventSource, projectId: string): Shell {
     redo,
     commitChanges,
     addCoachMarkRef: onboardingAddCoachMarkRef,
+    featureFlags: (featureFlagKey: any): boolean => {
+      if (featureFlags?.[featureFlagKey]) {
+        return featureFlags[featureFlagKey].enabled;
+      }
+      return false;
+    },
     updateUserSettings,
     announce: setMessage,
     displayManifestModal: (skillId) => displayManifestModal(skillId, projectId),
