@@ -120,7 +120,7 @@ const projectStyle = css`
 const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string; skillId: string }>> = (props) => {
   const { projectId = '' } = props;
   const schemas = useRecoilValue(schemasState(projectId));
-  const { fetchProjectById, setSettingStateWithoutSync } = useRecoilValue(dispatcherState);
+  const { fetchProjectById, setSettings } = useRecoilValue(dispatcherState);
   const botProjects = useRecoilValue(botProjectIdsState);
   const botProjectsMetaData = useRecoilValue(botProjectSpaceSelector);
   const botProjectSpaceLoaded = useRecoilValue(botProjectSpaceLoadedState);
@@ -133,7 +133,7 @@ const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string; skillId: 
           const id = botProjectsMetaData[i].projectId;
           const settings = botProjectsMetaData[i].settings;
           const mergedSettings = mergePropertiesManagedByRootBot(id, rootBotProjectId, settings);
-          setSettingStateWithoutSync(id, mergedSettings);
+          setSettings(id, mergedSettings);
         }
       }
     }

@@ -22,7 +22,7 @@ import { rootBotProjectIdSelector } from '../selectors';
 import { BotStatus, Text } from './../../constants';
 import httpClient from './../../utils/httpUtil';
 import { logMessage, setError } from './shared';
-import { setSettingState } from './setting';
+import { setRootBotSettingState } from './setting';
 
 const PUBLISH_SUCCESS = 200;
 const PUBLISH_PENDING = 202;
@@ -89,7 +89,7 @@ export const publisherDispatcher = () => {
               ...settings,
               skillHostEndpoint: endpointURL + '/api/skills',
             };
-            setSettingState(callbackHelpers, projectId, updatedSettings);
+            setRootBotSettingState(callbackHelpers, projectId, updatedSettings);
           }
         }
         set(botStatusState(projectId), BotStatus.connected);

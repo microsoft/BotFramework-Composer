@@ -11,6 +11,7 @@ import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { SharedColors } from '@uifabric/fluent-theme';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { FontSizes } from '@uifabric/fluent-theme';
+import { NeutralColors } from '@uifabric/fluent-theme';
 
 const unknownIconStyle = (required) => {
   return {
@@ -42,6 +43,9 @@ const disabledTextFieldStyle = {
       '.ms-TextField-field': {
         background: '#ddf3db',
       },
+      'p > span': {
+        width: '100%',
+      },
     },
   },
 };
@@ -57,16 +61,49 @@ const actionButtonStyle = {
   },
 };
 
+const errorContainer = css`
+  display: flex;
+  width: 100%;
+  height: 48px;
+  line-height: 48px;
+  background: #fed9cc;
+  color: ${NeutralColors.black};
+`;
+
+const errorIcon = {
+  root: {
+    color: '#A80000',
+    marginRight: 8,
+    paddingLeft: 12,
+    fontSize: FontSizes.size12,
+  },
+};
+
+const errorTextStyle = css`
+  margin-bottom: 5px;
+`;
+
 type TextFieldWithCustomButtonProps = {
   label: string;
   ariaLabelledby: string;
   buttonText: string;
+  errorMessage;
   placeholder: string;
   placeholderOnDisable: string;
   value: string;
   onBlur?: (value) => void;
   onChange?: (e, value) => void;
   required: boolean;
+};
+
+const errorElement = (errorText: string) => {
+  if (!errorText) return '';
+  return (
+    <div css={errorContainer}>
+      <Icon iconName="ErrorBadge" styles={errorIcon} />
+      <div css={errorTextStyle}>{errorText}</div>
+    </div>
+  );
 };
 
 const onRenderLabel = (props) => {
@@ -91,6 +128,7 @@ export const TextFieldWithCustomButton: React.FC<TextFieldWithCustomButtonProps>
     value,
     buttonText,
     onBlur,
+    errorMessage,
   } = props;
   const [isDisabled, setDisabled] = useState<boolean>(!value);
   const textFieldComponentRef = useRef<ITextField>(null);
@@ -101,11 +139,18 @@ export const TextFieldWithCustomButton: React.FC<TextFieldWithCustomButtonProps>
       textFieldComponentRef.current?.focus();
     }
   }, [autoFoucsOnTextField]);
+
+  useEffect(() => {
+    setLocalValue(value);
+    setDisabled(!value);
+  }, [value]);
+
   return (
     <Fragment>
       {isDisabled ? (
         <TextField
           disabled
+          errorMessage={required ? errorElement(errorMessage) : ''}
           label={label}
           placeholder={placeholderOnDisable}
           required={required}

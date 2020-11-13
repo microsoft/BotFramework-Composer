@@ -81,10 +81,13 @@ import { botRuntimeOperationsSelector, rootBotProjectIdSelector } from '../../se
 import { undoHistoryState } from '../../undo/history';
 import UndoHistory from '../../undo/undoHistory';
 import { logMessage, setError } from '../shared';
-import { setSettingState } from '../setting';
+import { setRootBotSettingState } from '../setting';
 
 import { crossTrainConfigState } from './../../atoms/botState';
 import { recognizersSelectorFamily } from './../../selectors/recognizers';
+import settingsStorage from '../../../utils/dialogSettingStorage';
+import get from 'lodash/get';
+import set from 'lodash/set';
 
 export const resetBotStates = async ({ reset }: CallbackInterface, projectId: string) => {
   const botStates = Object.keys(botstates);
@@ -156,11 +159,28 @@ export const mergePropertiesManagedByRootBot = (projectId: string, rootBotProjec
       }
       if (projectId !== rootBotProjectId) {
         const skillValue = objectGet(localSetting, property)[projectId];
-        objectSet(mergedSettings, property, skillValue ? skillValue : rootValue ? rootValue : '');
+        objectSet(mergedSettings, property, skillValue ?? '');
       }
     }
   }
   return mergedSettings;
+};
+
+export const getSensitiveProperties = (projectId: string, rootBotProjectId: string) => {
+  const rootBotLocalStorage = settingsStorage.get(rootBotProjectId);
+  const skillBotLocalStorage = settingsStorage.get(projectId);
+  const sensitiveProperties = {};
+  for (const property of SensitiveProperties) {
+    if (!RootBotManagedProperties.includes(property)) {
+      const value = get(skillBotLocalStorage, property, '');
+      set(sensitiveProperties, property, value);
+    } else {
+      const groupValue = get(rootBotLocalStorage, property, {});
+      const value = get(groupValue, projectId, '');
+      set(sensitiveProperties, property, value);
+    }
+  }
+  return sensitiveProperties;
 };
 
 export const getMergedSettings = (projectId, settings): DialogSetting => {
@@ -527,7 +547,7 @@ const openRootBotAndSkills = async (callbackHelpers: CallbackInterface, data, st
         mergedSettings.skill
       );
       if (!isEmpty(skillSettings)) {
-        setSettingState(callbackHelpers, rootBotProjectId, {
+        setRootBotSettingState(callbackHelpers, rootBotProjectId, {
           ...mergedSettings,
           skill: skillSettings,
         });
