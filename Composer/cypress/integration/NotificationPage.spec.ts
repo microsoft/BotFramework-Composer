@@ -7,6 +7,7 @@ context('Notification Page', () => {
   });
 
   it('can show lg syntax error ', () => {
+    cy.visitPage('Design');
     cy.visitPage('Bot Responses');
 
     cy.findByTestId('showcode').click();
@@ -22,6 +23,7 @@ context('Notification Page', () => {
   });
 
   it('can show lu syntax error ', () => {
+    cy.visitPage('Design');
     cy.visitPage('User Input');
 
     cy.findByTestId('ProjectTree').within(() => {
