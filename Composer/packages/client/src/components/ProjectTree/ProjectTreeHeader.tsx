@@ -10,16 +10,16 @@ import { OverflowSet } from 'office-ui-fabric-react/lib/OverflowSet';
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 
-import { moreButton, menuStyle, overflowSet } from './treeItem';
+import { moreButton, overflowSet } from './treeItem';
 
 const headerText = css`
   text-align: left;
-  margin: 0;
-  padding: 6px 0 6px 12px;
   text-transform: uppercase;
   font-size: ${FontSizes.size12};
   position: relative;
   display: flex;
+  margin: 0;
+  padding: 0 0 0 12px;
 `;
 
 const headerWrapper = css`
@@ -62,10 +62,10 @@ export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({ menu }) =>
             className="project-tree-header-more-btn"
             data-is-focusable={isActive}
             data-testid="projectTreeHeaderMoreButton"
-            menuIconProps={{ iconName: 'Add' }}
-            menuProps={{ items: overflowItems, styles: menuStyle }}
+            menuIconProps={{ iconName: 'Add', style: { color: NeutralColors.black } }}
+            menuProps={{ items: overflowItems }}
             role="cell"
-            styles={moreButton(true)}
+            styles={{ ...moreButton(true), rootHovered: { background: 'none' } }}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 e.stopPropagation();

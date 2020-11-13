@@ -70,9 +70,10 @@ export const moreButton = (isActive: boolean): IButtonStyles => {
       visibility: isActive ? 'visible' : 'hidden',
       height: 'auto',
       width: '16px',
+      color: '#000',
     },
     menuIcon: {
-      fontSize: '14px',
+      fontSize: '12px',
       color: '#000',
     },
   };
