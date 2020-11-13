@@ -14,7 +14,8 @@ import { SharedColors } from '@uifabric/fluent-theme';
 
 import { dispatcherState, settingsState } from '../../recoilModel';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
-
+import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
+import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 // -------------------- Styles -------------------- //
 
 const titleStyle = css`
@@ -69,6 +70,8 @@ export const SkillHostEndPoint: React.FC<SkillHostEndPointProps> = (props) => {
   const { projectId } = props;
   const { setSettings } = useRecoilValue(dispatcherState);
   const settings = useRecoilValue(settingsState(projectId));
+  const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
+  const mergedSettings = mergePropertiesManagedByRootBot(projectId, rootBotProjectId, settings);
   const { skillHostEndpoint } = useRecoilValue(settingsState(projectId));
 
   return (
@@ -81,7 +84,7 @@ export const SkillHostEndPoint: React.FC<SkillHostEndPointProps> = (props) => {
         value={skillHostEndpoint}
         onChange={(e, value) => {
           setSettings(projectId, {
-            ...settings,
+            ...mergedSettings,
             skillHostEndpoint: value,
           });
         }}

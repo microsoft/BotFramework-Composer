@@ -23,6 +23,8 @@ import { navigateTo } from '../../utils/navigation';
 
 import BotProjectSettingsTableView from './BotProjectSettingsTableView';
 
+import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
+
 // -------------------- Styles -------------------- //
 
 const header = css`
@@ -66,6 +68,7 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
   const isRootBot = !!botProject?.isRootBot;
   const botName = botProject?.name;
   const settings = useRecoilValue(settingsState(projectId));
+  const mergedSettings = mergePropertiesManagedByRootBot(projectId, rootBotProjectId, settings);
 
   const [isAdvancedSettingsEnabled, setAdvancedSettingsEnabled] = useState<boolean>(false);
 
@@ -153,7 +156,7 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
               editorSettings={userSettings.codeEditor}
               id={projectId}
               schema={schemas.sdk.content}
-              value={settings}
+              value={mergedSettings}
               onChange={handleChange}
             />
           ) : (

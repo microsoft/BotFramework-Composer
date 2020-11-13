@@ -15,7 +15,8 @@ import { SharedColors } from '@uifabric/fluent-theme';
 
 import { dispatcherState, settingsState } from '../../recoilModel';
 import { CollapsableWrapper } from '../../components/CollapsableWrapper';
-
+import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
+import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 // -------------------- Styles -------------------- //
 
 const titleStyle = css`
@@ -87,8 +88,9 @@ export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {
   const [localMicrosoftAppId, setLocalMicrosoftAppId] = useState<string>('');
   const [localMicrosoftAppPassword, setLocalMicrosoftAppPassword] = useState<string>('');
   const { setSettings } = useRecoilValue(dispatcherState);
+  const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
   const settings = useRecoilValue(settingsState(projectId));
-
+  const mergedSettings = mergePropertiesManagedByRootBot(projectId, rootBotProjectId, settings);
   useEffect(() => {
     setLocalMicrosoftAppId(MicrosoftAppId ?? '');
     setLocalMicrosoftAppPassword(MicrosoftAppPassword ?? '');
@@ -104,17 +106,17 @@ export const AppIdAndPassword: React.FC<AppIdAndPasswordProps> = (props) => {
 
   const handleAppPasswordOnBlur = useCallback(() => {
     setSettings(projectId, {
-      ...settings,
+      ...mergedSettings,
       MicrosoftAppPassword: localMicrosoftAppPassword,
     });
-  }, [projectId, settings, localMicrosoftAppPassword]);
+  }, [projectId, mergedSettings, localMicrosoftAppPassword]);
 
   const handleAppIdOnBlur = useCallback(() => {
     setSettings(projectId, {
-      ...settings,
+      ...mergedSettings,
       MicrosoftAppId: localMicrosoftAppId,
     });
-  }, [projectId, settings, localMicrosoftAppId]);
+  }, [projectId, mergedSettings, localMicrosoftAppId]);
 
   return (
     <CollapsableWrapper title={formatMessage('App Id / Password')} titleStyle={titleStyle}>

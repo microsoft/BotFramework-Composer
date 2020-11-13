@@ -30,7 +30,7 @@ import { TextFieldWithCustomButton } from '../../components/TextFieldWithCustomB
 import { isLUISnQnARecognizerType } from '../../utils/dialogValidator';
 import { getBaseName } from '../../utils/fileUtil';
 import { botProjectSpaceSelector } from '../../recoilModel/selectors/project';
-
+import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 // -------------------- Styles -------------------- //
 
 const titleStyle = css`
@@ -147,15 +147,15 @@ const errorElement = (errorText: string) => {
 export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
   const { projectId } = props;
   const { setSettings, setQnASettings } = useRecoilValue(dispatcherState);
-  const settings = useRecoilValue(settingsState(projectId));
   const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
   const luFiles = useRecoilValue(luFilesState(projectId));
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
+  const settings = useRecoilValue(settingsState(projectId));
+  const mergedSettings = mergePropertiesManagedByRootBot(projectId, rootBotProjectId, settings);
   const botProjectsMetaData = useRecoilValue(botProjectSpaceSelector);
   const botProject = botProjectsMetaData.find((b) => b.projectId === projectId);
   const isRootBot = !!botProject?.isRootBot;
-
   const sensitiveGroupManageProperty = settingStorage.get(rootBotProjectId);
 
   const groupLUISAuthoringKey = get(sensitiveGroupManageProperty, 'luis.authoringKey', {});
@@ -196,10 +196,6 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
   }, [rootLuisKey]);
 
   const handleRootLUISKeyOnChange = (e, value) => {
-    setSettings(projectId, {
-      ...settings,
-      luis: { ...settings.luis, authoringKey: value ? value : '' },
-    });
     if (value) {
       setLuisKeyErrorMsg('');
       setLocalRootLuisKey(value);
@@ -227,6 +223,10 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
         formatMessage('LUIS Key is required with the current recognizer setting to start your bot locally, and publish')
       );
     }
+    setSettings(projectId, {
+      ...mergedSettings,
+      luis: { ...mergedSettings.luis, authoringKey: localRootLuisKey },
+    });
   };
 
   const handleRootQnAKeyOnBlur = () => {
@@ -247,16 +247,30 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
   const submitQnASubscripionKey = (key: string) => {
     if (key) {
       setSettings(projectId, {
-        ...settings,
-        qna: { ...settings.qna, subscriptionKey: key },
+        ...mergedSettings,
+        qna: { ...mergedSettings.qna, subscriptionKey: key },
       });
       setQnASettings(projectId, key);
     } else {
       setSettings(projectId, {
-        ...settings,
-        qna: { ...settings.qna, subscriptionKey: '', endpointKey: '' },
+        ...mergedSettings,
+        qna: { ...mergedSettings.qna, subscriptionKey: '', endpointKey: '' },
       });
     }
+  };
+
+  const handleLUISRegionOnBlur = (value) => {
+    setSettings(projectId, {
+      ...mergedSettings,
+      luis: { ...mergedSettings.luis, authoringRegion: value ? value : '' },
+    });
+  };
+
+  const handleLUISKeyOnBlur = (value) => {
+    setSettings(projectId, {
+      ...mergedSettings,
+      luis: { ...mergedSettings.luis, authoringKey: value ? value : '' },
+    });
   };
 
   return (
@@ -281,16 +295,12 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
             required
             ariaLabelledby={'LUIS key'}
             buttonText={formatMessage('Use custom LUIS key')}
+            errorMessage={!rootLuisKey ? formatMessage('Root Bot LUIS key is empty') : ''}
             label={formatMessage('LUIS key')}
             placeholder={'Enter LUIS key'}
             placeholderOnDisable={"<---- Same as root bot's LUIS key ---->"}
             value={skillLuisKey}
-            onChange={async (e, value) => {
-              await setSettings(projectId, {
-                ...settings,
-                luis: { ...settings.luis, authoringKey: value ? value : '' },
-              });
-            }}
+            onBlur={handleLUISKeyOnBlur}
           />
         )}
 
@@ -304,8 +314,8 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
             value={rootLuisRegion}
             onChange={async (e, value) => {
               await setSettings(projectId, {
-                ...settings,
-                luis: { ...settings.luis, authoringRegion: value ? value : '' },
+                ...mergedSettings,
+                luis: { ...mergedSettings.luis, authoringRegion: value ? value : '' },
               });
             }}
             onRenderLabel={onRenderLabel}
@@ -314,17 +324,13 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
           <TextFieldWithCustomButton
             required
             ariaLabelledby={'LUIS region'}
+            errorMessage={!rootLuisRegion ? formatMessage('Root Bot LUIS region is empty') : ''}
             buttonText={formatMessage('Use custom LUIS region')}
             label={formatMessage('LUIS region')}
             placeholder={'Enter LUIS region'}
             placeholderOnDisable={"<---- Same as root bot's LUIS region ---->"}
             value={skillLuisRegion}
-            onChange={async (e, value) => {
-              await setSettings(projectId, {
-                ...settings,
-                luis: { ...settings.luis, authoringRegion: value ? value : '' },
-              });
-            }}
+            onBlur={handleLUISRegionOnBlur}
           />
         )}
         {isRootBot ? (
@@ -345,6 +351,7 @@ export const ExternalService: React.FC<ExternalServiceProps> = (props) => {
           <TextFieldWithCustomButton
             required
             ariaLabelledby={'QnA Maker Subscription key'}
+            errorMessage={!rootqnaKey ? formatMessage('Root Bot QnA Maker Subscription key is empty') : ''}
             buttonText={formatMessage('Use custom QnA Maker Subscription key')}
             label={formatMessage('QnA Maker Subscription key')}
             placeholder={'Enter QnA Maker Subscription key'}

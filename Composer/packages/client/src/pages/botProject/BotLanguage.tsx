@@ -16,7 +16,8 @@ import { CollapsableWrapper } from '../../components/CollapsableWrapper';
 import { languageListTemplates } from '../../components/MultiLanguage';
 import { localeState, showAddLanguageModalState } from '../../recoilModel/atoms';
 import { AddLanguageModal } from '../../components/MultiLanguage';
-
+import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
+import { rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 // -------------------- Styles -------------------- //
 
 const titleStyle = css`
@@ -112,7 +113,9 @@ type BotLanguageProps = {
 export const BotLanguage: React.FC<BotLanguageProps> = (props) => {
   const { projectId } = props;
   const { languages, defaultLanguage } = useRecoilValue(settingsState(projectId));
+  const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector) || '';
   const settings = useRecoilValue(settingsState(projectId));
+  const mergedSettings = mergePropertiesManagedByRootBot(projectId, rootBotProjectId, settings);
   const locale = useRecoilValue(localeState(projectId));
   const showAddLanguageModal = useRecoilValue(showAddLanguageModalState(projectId));
   const {
@@ -146,7 +149,7 @@ export const BotLanguage: React.FC<BotLanguageProps> = (props) => {
 
   const setDefaultLanguage = (language: string) => {
     setLocale(language, projectId);
-    const updatedSetting = { ...cloneDeep(settings), defaultLanguage: language };
+    const updatedSetting = { ...cloneDeep(mergedSettings), defaultLanguage: language };
     if (updatedSetting?.luis?.defaultLanguage) {
       updatedSetting.luis.defaultLanguage = language;
     }

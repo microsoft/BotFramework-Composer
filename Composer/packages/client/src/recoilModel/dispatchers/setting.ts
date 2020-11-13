@@ -15,7 +15,7 @@ import { rootBotProjectIdSelector, botProjectSpaceSelector } from '../selectors/
 import httpClient from './../../utils/httpUtil';
 import { setError } from './shared';
 
-export const setSettingState = async (
+export const setRootBotSettingState = async (
   callbackHelpers: CallbackInterface,
   projectId: string,
   settings: DialogSetting
@@ -35,46 +35,63 @@ export const setSettingState = async (
     if (has(settings, property) && rootProjectId) {
       const propertyValue = get(settings, property, '');
       const groupPropertyValue = get(settingStorage.get(rootProjectId), property, '');
-      let newGroupPropertyValue = {};
-      if (projectId === rootProjectId) {
-        newGroupPropertyValue = { ...groupPropertyValue, root: propertyValue };
-      } else {
-        newGroupPropertyValue = { ...groupPropertyValue, [projectId]: propertyValue };
-      }
-      console.log(newGroupPropertyValue, projectId);
+      const newGroupPropertyValue = { ...groupPropertyValue, root: propertyValue };
       settingStorage.setField(rootProjectId, property, newGroupPropertyValue);
     }
   }
 
   //sync skill bots' RootBotManagedProperties with root bot
-  if (projectId === rootProjectId) {
-    const botProjectsMetaData = await snapshot.getPromise(botProjectSpaceSelector);
-    for (let i = 0; i < botProjectsMetaData.length; i++) {
-      const botProject = botProjectsMetaData[i];
-      if (!botProject.isRootBot && !botProject.isRemote && rootProjectId) {
-        const skillSettings = await snapshot.getPromise(settingsState(botProject.projectId));
-        const newSkillSettings = cloneDeep(skillSettings);
-        const localStorageSettings = settingStorage.get(rootProjectId);
-        for (const property of RootBotManagedProperties) {
-          const propertyValue = get(settings, property, '');
-          const shouldUseRootProperty = !get(localStorageSettings, property, {})[botProject.projectId];
-          if (shouldUseRootProperty) {
-            set(newSkillSettings, property, propertyValue);
-          }
+  const botProjectSpaceData = await snapshot.getPromise(botProjectSpaceSelector);
+  for (let i = 0; i < botProjectSpaceData.length; i++) {
+    const botProject = botProjectSpaceData[i];
+    if (!botProject.isRootBot && !botProject.isRemote && rootProjectId) {
+      const skillSettings = await snapshot.getPromise(settingsState(botProject.projectId));
+      const newSkillSettings = cloneDeep(skillSettings);
+      const localStorageSettings = settingStorage.get(rootProjectId);
+      for (const property of RootBotManagedProperties) {
+        const propertyValue = get(settings, property, '');
+        const shouldUseRootProperty = !get(localStorageSettings, property, {})[botProject.projectId];
+        if (shouldUseRootProperty) {
+          set(newSkillSettings, property, propertyValue);
         }
-        recoilSet(settingsState(botProject.projectId), newSkillSettings);
       }
+      recoilSet(settingsState(botProject.projectId), newSkillSettings);
+    }
+  }
+  recoilSet(settingsState(projectId), settings);
+};
+
+export const setSkillBotSettingState = async (
+  callbackHelpers: CallbackInterface,
+  projectId: string,
+  settings: DialogSetting
+) => {
+  const { set: recoilSet, snapshot } = callbackHelpers;
+  // set value in local storage
+  for (const property of SensitiveProperties) {
+    if (!RootBotManagedProperties.includes(property) && has(settings, property)) {
+      const propertyValue = get(settings, property, '');
+      settingStorage.setField(projectId, property, propertyValue);
     }
   }
 
-  if (projectId !== rootProjectId && rootProjectId) {
+  const rootProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
+  //store RootBotManagedProperties in browser localStorage
+  for (const property of RootBotManagedProperties) {
+    if (has(settings, property) && rootProjectId) {
+      const propertyValue = get(settings, property, '');
+      const groupPropertyValue = get(settingStorage.get(rootProjectId), property, '');
+      const newGroupPropertyValue = { ...groupPropertyValue, [projectId]: propertyValue };
+      settingStorage.setField(rootProjectId, property, newGroupPropertyValue);
+    }
+  }
+
+  //Use root bot's RootBotManagedProperties value if those of the skill bot's are empty
+  if (rootProjectId) {
     const rootSettings = await snapshot.getPromise(settingsState(rootProjectId));
-    // const newSkillSettings = cloneDeep(skillSettings);
-    //const localStorageSettings = settingStorage.get(rootProjectId);
     for (const property of RootBotManagedProperties) {
       const propertyValue = get(settings, property, '');
       const rootPropertyValue = get(rootSettings, property, '');
-      // const shouldUseRootProperty = !get(localStorageSettings, property, {})[projectId];
       if (!propertyValue) {
         set(settings, property, rootPropertyValue);
       }
@@ -86,7 +103,13 @@ export const setSettingState = async (
 export const settingsDispatcher = () => {
   const setSettings = useRecoilCallback<[string, DialogSetting], Promise<void>>(
     (callbackHelpers: CallbackInterface) => async (projectId: string, settings: DialogSetting) => {
-      setSettingState(callbackHelpers, projectId, settings);
+      const { snapshot } = callbackHelpers;
+      const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
+      if (projectId === rootBotProjectId) {
+        setRootBotSettingState(callbackHelpers, projectId, settings);
+      } else {
+        setSkillBotSettingState(callbackHelpers, projectId, settings);
+      }
     }
   );
 
