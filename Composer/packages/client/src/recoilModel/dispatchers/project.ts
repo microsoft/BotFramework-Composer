@@ -57,12 +57,16 @@ export const projectDispatcher = () => {
         const { set, snapshot } = callbackHelpers;
         const dispatcher = await snapshot.getPromise(dispatcherState);
         await dispatcher.removeSkillFromBotProjectFile(projectIdToRemove);
+        const rootBotProjectId = await snapshot.getPromise(rootBotProjectIdSelector);
 
         set(botProjectIdsState, (currentProjects) => {
           const filtered = currentProjects.filter((id) => id !== projectIdToRemove);
           return filtered;
         });
         resetBotStates(callbackHelpers, projectIdToRemove);
+        if (rootBotProjectId) {
+          navigateToBot(callbackHelpers, rootBotProjectId, '');
+        }
       } catch (ex) {
         setError(callbackHelpers, ex);
       }

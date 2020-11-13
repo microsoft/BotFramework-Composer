@@ -12,6 +12,7 @@ import ErrorInfo from '@bfc/adaptive-form/lib/components/ErrorInfo';
 import { FontSizes, NeutralColors } from '@uifabric/fluent-theme';
 import { FontWeights } from '@uifabric/styling';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 import get from 'lodash/get';
 
 import { SkillInfo } from '../../recoilModel';
@@ -115,7 +116,11 @@ export const ManifestEditor: React.FC<ManifestEditorProps> = (props) => {
               id={'url'}
               label={formatMessage('Manifest url')}
             />
-            <p>{formData.location}</p>
+            <p>
+              <Link aria-label={formData.location} href={formData.location} rel="noopener noreferrer" target="_blank">
+                {formData.location}
+              </Link>
+            </p>
           </section>
           <section css={styles.section}>
             <FieldLabel
@@ -127,7 +132,25 @@ export const ManifestEditor: React.FC<ManifestEditorProps> = (props) => {
             <DetailsList
               columns={[
                 { key: 'Name', name: 'Name', fieldName: 'name', minWidth: 100, maxWidth: 200, isResizable: true },
-                { key: 'EndpointUrl', name: 'EndpointUrl', fieldName: 'endpointUrl', minWidth: 100, isResizable: true },
+                {
+                  key: 'EndpointUrl',
+                  name: 'EndpointUrl',
+                  fieldName: 'endpointUrl',
+                  minWidth: 100,
+                  isResizable: true,
+                  onRender: (item) => {
+                    return (
+                      <Link
+                        aria-label={item.endpointUrl}
+                        href={item.endpointUrl}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        {item.endpointUrl}
+                      </Link>
+                    );
+                  },
+                },
               ]}
               items={get(manifest, 'endpoints', [])}
               layoutMode={DetailsListLayoutMode.justified}
