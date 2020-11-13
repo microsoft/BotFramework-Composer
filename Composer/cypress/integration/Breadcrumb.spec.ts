@@ -8,7 +8,7 @@ context('breadcrumb', () => {
 
     // Return to Main.dialog
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('__TestTodoSample').click();
+      cy.findAllByText('__TestTodoSample').last().click();
     });
   });
 
@@ -29,7 +29,7 @@ context('breadcrumb', () => {
 
     // Return to Main.dialog
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('__TestTodoSample').click();
+      cy.findAllByText('__TestTodoSample').last().click();
     });
 
     hasBreadcrumbItems(cy, ['__TestTodoSample']);
