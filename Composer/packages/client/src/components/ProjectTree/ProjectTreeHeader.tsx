@@ -26,8 +26,14 @@ const headerWrapper = css`
   background: ${NeutralColors.gray60};
 `;
 
+export interface ProjectTreeHeaderMenuItem {
+  icon?: string;
+  label: string;
+  onClick: () => void;
+}
+
 export interface ProjectTreeHeaderProps {
-  menu: { icon?: string; label: string; onClick: () => void }[];
+  menu: ProjectTreeHeaderMenuItem[];
 }
 
 export const ProjectTreeHeader: React.FC<ProjectTreeHeaderProps> = ({ menu }) => {

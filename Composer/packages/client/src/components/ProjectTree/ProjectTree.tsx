@@ -32,7 +32,7 @@ import { LoadingSpinner } from '../LoadingSpinner';
 import { TreeItem } from './treeItem';
 import { ExpandableNode } from './ExpandableNode';
 import { INDENT_PER_LEVEL } from './constants';
-import { ProjectTreeHeader } from './ProjectTreeHeader';
+import { ProjectTreeHeader, ProjectTreeHeaderMenuItem } from './ProjectTreeHeader';
 
 // -------------------- Styles -------------------- //
 
@@ -141,7 +141,7 @@ type Props = {
   showTriggers?: boolean;
   showDialogs?: boolean;
   navLinks?: TreeLink[];
-  headerMenu?: TreeMenuItem[];
+  headerMenu?: ProjectTreeHeaderMenuItem[];
   onBotDeleteDialog?: (projectId: string, dialogId: string) => void;
   onBotCreateDialog?: (projectId: string) => void;
   onBotStart?: (projectId: string) => void;
