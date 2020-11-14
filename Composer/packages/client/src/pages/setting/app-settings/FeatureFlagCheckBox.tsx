@@ -23,10 +23,10 @@ type FeatureFlagCheckBoxProps = {
 const renderLabel = (featureName: string, description: string, documentationLink?: string) => () => (
   <span>
     <span css={styles.featureFlagTitle}>{`${featureName}.`}</span>
-    {` ${description}.`}
+    {`${description}.`}
     {documentationLink && (
-      <Link href={documentationLink} target="_blank">
-        {formatMessage(' Learn More.')}
+      <Link ref={documentationLink} target="_blank">
+        <span css={styles.featureFlagDescription}>{formatMessage('Learn More.')}</span>
       </Link>
     )}
   </span>
