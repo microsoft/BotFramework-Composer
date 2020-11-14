@@ -25,7 +25,9 @@ import { DialogWrapper, DialogTypes } from '@bfc/ui-shared';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
-import { Link, mergeStyles, MessageBar } from 'office-ui-fabric-react/lib';
+import { mergeStyles } from '@uifabric/styling/lib/MergeStyles';
+import { MessageBar } from 'office-ui-fabric-react/lib/components/MessageBar';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { DialogCreationCopy, EmptyBotTemplateId, QnABotTemplateId } from '../../constants';
 import { featureFlagsState } from '../../recoilModel';
