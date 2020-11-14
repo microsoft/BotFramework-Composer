@@ -153,8 +153,6 @@ export const navigateToBot = (
   callbackHelpers: CallbackInterface,
   projectId: string,
   mainDialog: string,
-  qnaKbUrls?: string[],
-  templateId?: string,
   urlSuffix?: string
 ) => {
   if (projectId) {
@@ -166,6 +164,14 @@ export const navigateToBot = (
       urlSuffix = atob(urlSuffix);
       url = `/bot/${projectId}/${urlSuffix}`;
     }
+    navigateTo(url);
+  }
+};
+
+export const navigateToSkillBot = (rootProjectId: string, skillId: string, mainDialog?: string) => {
+  if (rootProjectId && skillId) {
+    let url = `/bot/${rootProjectId}/skill/${skillId}`;
+    if (mainDialog) url += `/dialogs/${mainDialog}`;
     navigateTo(url);
   }
 };
@@ -287,7 +293,7 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
     qnaFiles,
     jsonSchemaFiles,
     formDialogSchemas,
-    skillManifestFiles,
+    skillManifests,
     mergedSettings,
     recognizers,
     crossTrainConfig,
@@ -330,7 +336,7 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
     set(formDialogSchemaState({ projectId, schemaId: id }), { id, content });
   });
 
-  set(skillManifestsState(projectId), skillManifestFiles);
+  set(skillManifestsState(projectId), skillManifests);
   set(luFilesState(projectId), initLuFilesStatus(botName, luFiles, dialogs));
   set(lgFilesState(projectId), lgFiles);
   set(jsonSchemaFilesState(projectId), jsonSchemaFiles);
@@ -345,8 +351,7 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
   }
   set(schemasState(projectId), schemas);
   set(localeState(projectId), locale);
-  set(botDiagnosticsState(projectId), diagnostics);
-
+  set(botDiagnosticsState(projectId), [...diagnostics, ...botFiles.diagnostics]);
   refreshLocalStorage(projectId, settings);
   set(settingsState(projectId), mergedSettings);
 
@@ -381,13 +386,16 @@ export const openRemoteSkill = async (
   const stringified = stringify({
     url: manifestUrl,
   });
-  const manifestResponse = await httpClient.get(
-    `/projects/${projectId}/skill/retrieveSkillManifest?${stringified}&ignoreProjectValidation=true`
-  );
+
   set(projectMetaDataState(projectId), {
     isRootBot: false,
     isRemote: true,
   });
+
+  //TODO: open remote url 404. isRemote set to false?
+  const manifestResponse = await httpClient.get(
+    `/projects/${projectId}/skill/retrieveSkillManifest?${stringified}&ignoreProjectValidation=true`
+  );
 
   let uniqueSkillNameIdentifier = botNameIdentifier;
   if (!uniqueSkillNameIdentifier) {

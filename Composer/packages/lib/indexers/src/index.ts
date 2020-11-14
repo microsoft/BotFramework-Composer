@@ -15,6 +15,7 @@ import { FileExtensions } from './utils/fileExtensions';
 import { getExtension, getBaseName } from './utils/help';
 import { formDialogSchemaIndexer } from './formDialogSchemaIndexer';
 import { crossTrainConfigIndexer } from './crossTrainConfigIndexer';
+import { BotIndexer } from './botIndexer';
 
 class Indexer {
   private classifyFile(files: FileInfo[]) {
@@ -84,19 +85,21 @@ class Indexer {
     const luFeatures = settings.luFeatures;
     const { dialogs, recognizers } = this.separateDialogsAndRecognizers(result[FileExtensions.Dialog]);
     const { skillManifestFiles, crossTrainConfigs } = this.separateConfigAndManifests(result[FileExtensions.Manifest]);
-    return {
+    const assets = {
       dialogs: dialogIndexer.index(dialogs, botName),
       dialogSchemas: dialogSchemaIndexer.index(result[FileExtensions.DialogSchema]),
       lgFiles: lgIndexer.index(result[FileExtensions.lg], this.getLgImportResolver(result[FileExtensions.lg], locale)),
       luFiles: luIndexer.index(result[FileExtensions.Lu], luFeatures),
       qnaFiles: qnaIndexer.index(result[FileExtensions.QnA]),
-      skillManifestFiles: skillManifestIndexer.index(skillManifestFiles),
+      skillManifests: skillManifestIndexer.index(skillManifestFiles),
       botProjectSpaceFiles: botProjectSpaceIndexer.index(result[FileExtensions.BotProjectSpace]),
       jsonSchemaFiles: jsonSchemaFileIndexer.index(result[FileExtensions.Json]),
       formDialogSchemas: formDialogSchemaIndexer.index(result[FileExtensions.FormDialog]),
       recognizers: recognizerIndexer.index(recognizers),
       crossTrainConfig: crossTrainConfigIndexer.index(crossTrainConfigs),
     };
+    const diagnostics = BotIndexer.validate({ ...assets, setting: settings });
+    return { ...assets, diagnostics };
   }
 }
 
