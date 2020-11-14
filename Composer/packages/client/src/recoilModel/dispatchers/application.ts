@@ -12,9 +12,10 @@ import {
   creationFlowStatusState,
   currentModeState,
   PageMode,
+  creationFlowTypeState,
   pageElementState,
 } from '../atoms/appState';
-import { AppUpdaterStatus, CreationFlowStatus } from '../../constants';
+import { AppUpdaterStatus, CreationFlowStatus, CreationFlowType } from '../../constants';
 import OnboardingState from '../../utils/onboardingStorage';
 import { StateError, AppUpdateState } from '../../recoilModel/types';
 
@@ -111,6 +112,10 @@ export const applicationDispatcher = () => {
     set(creationFlowStatusState, status);
   });
 
+  const setCreationFlowType = useRecoilCallback(({ set }: CallbackInterface) => (type: CreationFlowType) => {
+    set(creationFlowTypeState, type);
+  });
+
   const setApplicationLevelError = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => (errorObj: StateError | undefined) => {
       setError(callbackHelpers, errorObj);
@@ -127,6 +132,7 @@ export const applicationDispatcher = () => {
     onboardingAddCoachMarkRef,
     setCreationFlowStatus,
     setApplicationLevelError,
+    setCreationFlowType,
     setCurrentPageMode,
     setPageElementState,
   };
