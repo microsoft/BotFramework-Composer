@@ -428,10 +428,10 @@ export const projectDispatcher = () => {
       const timer = setInterval(async () => {
         try {
           const response = await httpClient.get(`/status/${jobId}`);
-          if (response.data?.status === 200 && response.data.result && response.data.result != {}) {
+          if (response.data?.httpStatusCode === 200 && response.data.result && response.data.result != {}) {
             // Bot creation successful
             clearInterval(timer);
-            callbackHelpers.set(botOpeningMessage, response.data.message);
+            callbackHelpers.set(botOpeningMessage, response.data.latestMessage);
             const { botFiles, projectData } = loadProjectData(response.data.result);
             const projectId = response.data.result.id;
             if (settingStorage.get(projectId)) {
@@ -453,12 +453,12 @@ export const projectDispatcher = () => {
             callbackHelpers.set(botOpeningMessage, '');
             callbackHelpers.set(botOpeningState, false);
           } else {
-            if (response.data.status !== 500) {
+            if (response.data.httpStatusCode !== 500) {
               // pending
-              callbackHelpers.set(botOpeningMessage, response.data.message);
+              callbackHelpers.set(botOpeningMessage, response.data.latestMessage);
             } else {
               // failure
-              callbackHelpers.set(botOpeningMessage, response.data.message);
+              callbackHelpers.set(botOpeningMessage, response.data.latestMessage);
               clearInterval(timer);
             }
           }

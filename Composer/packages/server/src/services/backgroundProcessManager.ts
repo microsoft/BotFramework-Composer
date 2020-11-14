@@ -4,17 +4,15 @@ import { v4 as uuid } from 'uuid';
 
 export interface ProcessStatus {
   id: string;
-  time: Date; // contains start time
-  status: number; // contains http status code
-  message: string; // contains latest message
-  log: string[]; // contains all messages
+  startTime: Date; // contains start time
+  httpStatusCode: number; // contains http status code
+  latestMessage: string; // contains latest message
+  logs: string[]; // contains all messages
   comment?: string; // contains user supplied comment about process
   result?: any; // contains provision result
 }
 
-interface ProcessList {
-  [key: string]: ProcessStatus;
-}
+type ProcessList = Record<string, ProcessStatus>;
 
 export class BackgroundProcessManager {
   static processes: ProcessList = {};
@@ -23,27 +21,29 @@ export class BackgroundProcessManager {
     const id = uuid();
     this.processes[id] = {
       id: id,
-      time: new Date(),
-      status: initialStatus,
-      message: initialMessage ? initialMessage : '',
-      log: [initialMessage ? initialMessage : ''],
+      startTime: new Date(),
+      httpStatusCode: initialStatus,
+      latestMessage: initialMessage || '',
+      logs: [initialMessage || ''],
       comment: comment,
     };
     return id;
   }
 
-  static getStatus(id: string): ProcessStatus {
+  static getProcessStatus(id: string): ProcessStatus {
     return this.processes[id];
   }
 
   static updateProcess(id: string, status: number, message: string, result?: any): string {
-    this.processes[id].status = status;
-    this.processes[id].message = message;
-    this.processes[id].log.push(message);
-    if (result) {
-      this.processes[id].result = result;
+    if (this.processes[id]) {
+      this.processes[id].httpStatusCode = status;
+      this.processes[id].latestMessage = message;
+      this.processes[id].logs.push(message);
+      if (result) {
+        this.processes[id].result = result;
+      }
+      return id;
     }
-    return id;
   }
 
   static removeProcess(id: string) {

@@ -4,17 +4,27 @@
 import { BackgroundProcessManager } from '../services/backgroundProcessManager';
 
 const getStatus = async (req, res) => {
-  const jobId = req.params.jobId;
   try {
+    const jobId = req.params.jobId;
     if (jobId) {
-      const result = BackgroundProcessManager.getStatus(jobId);
+      const result = BackgroundProcessManager.getProcessStatus(jobId);
       if (result) {
-        res.status(result.status).json(result);
+        res.status(result.httpStatusCode).json(result);
+      } else {
+        res.status(404).json({
+          statusCode: '404',
+          message: 'JobId not found',
+        });
       }
+    } else {
+      res.status(400).json({
+        statusCode: '400',
+        message: 'JobId not provided',
+      });
     }
   } catch (err) {
-    res.status(400).json({
-      statusCode: '400',
+    res.status(500).json({
+      statusCode: '500',
       message: err.message,
     });
   }
