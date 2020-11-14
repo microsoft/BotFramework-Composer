@@ -277,7 +277,7 @@ export function CreateOptions(props: CreateOptionsProps) {
           onChange={handleChange}
         />
         <h3 css={listHeader}>{formatMessage('Examples')}</h3>
-        {featureFlags.REMOTE_TEMPLATE_CREATION_EXPERIENCE.enabled && (
+        {featureFlags?.REMOTE_TEMPLATE_CREATION_EXPERIENCE?.enabled && (
           <MessageBar className={bannerClass}>
             {formatMessage('Conversational Core preview template is available since you have that feature turned on.')}
             <Link href={creationFeatureFlagReadMe} target="_blank">
