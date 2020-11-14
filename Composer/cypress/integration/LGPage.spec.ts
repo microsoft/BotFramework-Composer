@@ -29,7 +29,7 @@ context('LG Page', () => {
 
     // nav to Main dialog
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('__TestTodoSample').click();
+      cy.findAllByText('__TestTodoSample').last().click();
     });
   });
 });
