@@ -34,7 +34,7 @@ export class BackgroundProcessManager {
     return this.processes[id];
   }
 
-  static updateProcess(id: string, status: number, message: string, result?: any): string {
+  static updateProcess(id: string, status: number, message: string, result?: any) {
     if (this.processes[id]) {
       this.processes[id].httpStatusCode = status;
       this.processes[id].latestMessage = message;
@@ -42,7 +42,6 @@ export class BackgroundProcessManager {
       if (result) {
         this.processes[id].result = result;
       }
-      return id;
     }
   }
 
