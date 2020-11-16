@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "build": "yarn clean && cross-env NODE_ENV=production webpack",
-    "build:dev": "yarn clean && cross-env NODE_ENV=development webpack && tsc -P tsconfig.dev.json",
+    "build:dev": "yarn clean && cross-env NODE_ENV=development webpack",
     "clean": "rimraf lib",
     "test": "yarn test:node && yarn test:ui",
     "test:node": "jest --config jest.config.node.js",
