@@ -51,9 +51,12 @@ export const setRootBotSettingState = async (
       const localStorageSettings = settingStorage.get(rootProjectId);
       for (const property of RootBotManagedProperties) {
         const propertyValue = get(settings, property, '');
-        const shouldUseRootProperty = !get(localStorageSettings, property, {})[botProject.projectId];
+        const skillBotValue = get(localStorageSettings, property, {})[botProject.projectId];
+        const shouldUseRootProperty = !skillBotValue;
         if (shouldUseRootProperty) {
           set(newSkillSettings, property, propertyValue);
+        } else {
+          set(newSkillSettings, property, skillBotValue);
         }
       }
       recoilSet(settingsState(botProject.projectId), newSkillSettings);
@@ -176,16 +179,8 @@ export const settingsDispatcher = () => {
     }
   );
 
-  const setSettingStateWithoutSync = useRecoilCallback<[string, DialogSetting], Promise<void>>(
-    (callbackHelpers: CallbackInterface) => async (projectId: string, settings: DialogSetting) => {
-      const { set } = callbackHelpers;
-      set(settingsState(projectId), settings);
-    }
-  );
-
   return {
     setSettings,
-    setSettingStateWithoutSync,
     setRuntimeSettings,
     setPublishTargets,
     setRuntimeField,

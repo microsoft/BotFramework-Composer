@@ -358,19 +358,33 @@ describe('Project dispatcher', () => {
 
     expect(renderedComponent.current.botStates.echoSkill2).toBeDefined();
     expect(renderedComponent.current.botStates.echoSkill2.botDisplayName).toBe('Echo-Skill-2');
+    const skillId = '1234.1123213';
+    const mockImplementation = (httpClient.get as jest.Mock).mockImplementation((url: string) => {
+      if (endsWith(url, '/projects/generateProjectId')) {
+        return {
+          data: skillId,
+        };
+      } else {
+        return {
+          data: {},
+        };
+      }
+    });
 
     await act(async () => {
       await dispatcher.addRemoteSkillToBotProject('https://test.net/api/manifest/test', 'remote');
     });
 
-    expect(navigateTo).toHaveBeenLastCalledWith(`/bot/${projectId}/dialogs/emptybot-1`);
+    expect(navigateTo).toHaveBeenLastCalledWith(`/bot/${projectId}/skill/${skillId}`);
+    mockImplementation.mockClear();
   });
 
   it('should be able to add a remote skill to Botproject', async () => {
+    const skillId = '1234.1123213';
     const mockImplementation = (httpClient.get as jest.Mock).mockImplementation((url: string) => {
       if (endsWith(url, '/projects/generateProjectId')) {
         return {
-          data: '1234.1123213',
+          data: skillId,
         };
       } else {
         return {
@@ -397,7 +411,7 @@ describe('Project dispatcher', () => {
     expect(renderedComponent.current.botStates.oneNoteSync.location).toBe(
       'https://test-dev.azurewebsites.net/manifests/onenote-2-1-preview-1-manifest.json'
     );
-    expect(navigateTo).toHaveBeenLastCalledWith(`/bot/${projectId}/dialogs/emptybot-1`);
+    expect(navigateTo).toHaveBeenLastCalledWith(`/bot/${projectId}/skill/${skillId}`);
     mockImplementation.mockClear();
   });
 
@@ -438,6 +452,7 @@ describe('Project dispatcher', () => {
   });
 
   it('should be able to add a new skill to Botproject', async () => {
+    const skillId = projectId;
     await act(async () => {
       (httpClient.put as jest.Mock).mockResolvedValueOnce({
         data: mockProjectResponse,
@@ -458,13 +473,12 @@ describe('Project dispatcher', () => {
         location: '/Users/tester/Desktop/samples',
         templateId: 'InterruptionSample',
         locale: 'us-en',
-        qnaKbUrls: [],
       });
     });
 
     expect(renderedComponent.current.botStates.newBot).toBeDefined();
     expect(renderedComponent.current.botStates.newBot.botDisplayName).toBe('new-bot');
-    expect(navigateTo).toHaveBeenLastCalledWith(`/bot/${projectId}/dialogs/emptybot-1`);
+    expect(navigateTo).toHaveBeenLastCalledWith(`/bot/${projectId}/skill/${skillId}/dialogs/emptybot-1`);
   });
 
   it('should be able to open a project and its skills in Bot project file', async (done) => {

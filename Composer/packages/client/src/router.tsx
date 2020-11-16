@@ -130,8 +130,8 @@ const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string; skillId: 
       for (let i = 0; i < botProjectsMetaData.length; i++) {
         if (!botProjectsMetaData[i].isRemote) {
           const id = botProjectsMetaData[i].projectId;
-          const settings = botProjectsMetaData[i].settings;
-          const mergedSettings = mergePropertiesManagedByRootBot(id, rootBotProjectId, settings);
+          const setting = botProjectsMetaData[i].setting;
+          const mergedSettings = mergePropertiesManagedByRootBot(id, rootBotProjectId, setting);
           setSettings(id, mergedSettings);
         }
       }

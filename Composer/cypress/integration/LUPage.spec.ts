@@ -23,7 +23,7 @@ context('LU Page', () => {
 
     // nav to ToDoBotWithLuisSample.main dialog
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('__TestToDoBotWithLuisSample').click('left');
+      cy.findAllByText('__TestToDoBotWithLuisSample').last().click('left');
     });
     cy.findByTestId('showcode').as('switchButton');
     // goto edit-mode

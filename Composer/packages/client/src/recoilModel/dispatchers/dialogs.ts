@@ -14,7 +14,7 @@ import {
   actionsSeedState,
   showCreateDialogModalState,
   dialogState,
-} from '../atoms/botState';
+} from '../atoms';
 import { dispatcherState } from '../DispatcherWrapper';
 
 import { createLgFileState, removeLgFileState } from './lg';
@@ -67,7 +67,7 @@ export const dialogsDispatcher = () => {
       const { set } = callbackHelpers;
       set(actionsSeedState(projectId), actions);
       set(onCreateDialogCompleteState(projectId), { func: onComplete });
-      set(showCreateDialogModalState(projectId), true);
+      set(showCreateDialogModalState, true);
     }
   );
 
@@ -75,7 +75,7 @@ export const dialogsDispatcher = () => {
     const { set } = callbackHelpers;
     set(actionsSeedState(projectId), []);
     set(onCreateDialogCompleteState(projectId), { func: undefined });
-    set(showCreateDialogModalState(projectId), false);
+    set(showCreateDialogModalState, false);
   });
 
   const createDialog = useRecoilCallback((callbackHelpers: CallbackInterface) => async ({ id, content, projectId }) => {
@@ -99,7 +99,7 @@ export const dialogsDispatcher = () => {
     set(dialogState({ projectId, dialogId: dialog.id }), dialog);
     set(dialogIdsState(projectId), (dialogsIds) => [...dialogsIds, dialog.id]);
     set(actionsSeedState(projectId), []);
-    set(showCreateDialogModalState(projectId), false);
+    set(showCreateDialogModalState, false);
     const onComplete = (await snapshot.getPromise(onCreateDialogCompleteState(projectId))).func;
     if (typeof onComplete === 'function') {
       setTimeout(() => onComplete(id));

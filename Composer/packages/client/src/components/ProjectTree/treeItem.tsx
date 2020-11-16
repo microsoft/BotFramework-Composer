@@ -5,16 +5,19 @@
 import { jsx, css } from '@emotion/core';
 import React from 'react';
 import { FontWeights } from '@uifabric/styling';
+import { FontSizes } from '@uifabric/fluent-theme';
 import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 import { ContextualMenuItemType, IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuStyles } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { ICalloutContentStyles } from 'office-ui-fabric-react/lib/Callout';
+import { DiagnosticSeverity, Diagnostic } from '@bfc/shared';
 
 import { TreeLink, TreeMenuItem } from './ProjectTree';
 import { SUMMARY_ARROW_SPACE } from './constants';
@@ -46,20 +49,20 @@ const content = css`
   label: ProjectTreeItem;
 `;
 
-const moreMenu: Partial<ICalloutContentStyles> = {
+export const moreMenu: Partial<ICalloutContentStyles> = {
   root: {
     marginTop: '-1px',
   },
 };
 
-const menuStyle: Partial<IContextualMenuStyles> = {
+export const menuStyle: Partial<IContextualMenuStyles> = {
   subComponentStyles: {
     menuItem: {},
     callout: moreMenu,
   },
 };
 
-const moreButton = (isActive: boolean): IButtonStyles => {
+export const moreButton = (isActive: boolean): IButtonStyles => {
   return {
     root: {
       padding: '4px 4px 0 4px',
@@ -67,22 +70,24 @@ const moreButton = (isActive: boolean): IButtonStyles => {
       visibility: isActive ? 'visible' : 'hidden',
       height: 'auto',
       width: '16px',
+      color: '#000',
     },
     menuIcon: {
-      fontSize: '14px',
+      fontSize: '12px',
       color: '#000',
     },
   };
 };
 
-const navItem = (isActive: boolean) => css`
+const navItem = (isActive: boolean, isBroken: boolean) => css`
   label: navItem;
   min-width: 100%;
   position: relative;
   height: 24px;
   font-size: 12px;
-  color: ${isActive ? '#ffffff' : '#545454'};
+  color: ${isActive ? NeutralColors.white : '#545454'};
   background: ${isActive ? '#0078d4' : 'transparent'};
+  opacity: ${isBroken ? 0.5 : 1};
   font-weight: ${isActive ? FontWeights.semibold : FontWeights.regular};
 
   display: flex;
@@ -115,13 +120,31 @@ const navItem = (isActive: boolean) => css`
   }
 `;
 
-export const overflowSet = css`
+export const diagnosticLink = css`
+  display: flex;
+  align-items: center;
+  span {
+    margin: 2px 5px;
+  }
+`;
+
+export const diagnosticLinkMessages = css`
+  max-width: 200px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+`;
+
+export const overflowSet = (isBroken: boolean) => css`
   width: 100%;
   height: 100%;
   box-sizing: border-box;
   line-height: 24px;
   justify-content: space-between;
   display: flex;
+  i {
+    color: ${isBroken ? SharedColors.red20 : 'inherit'};
+  }
   margin-top: 2px;
 `;
 
@@ -142,6 +165,25 @@ const errorIcon = {
   color: '#CC3F3F',
 };
 
+const diagnosticIcon = {
+  width: '20px',
+  height: '20px',
+  fontSize: '12px',
+  lineHeight: '20px',
+  textAlign: 'center' as 'center',
+};
+
+const diagnosticErrorIcon = {
+  ...diagnosticIcon,
+  color: '#A80000',
+  background: '#FED9CC',
+};
+
+const diagnosticWarningIcon = {
+  ...diagnosticIcon,
+  color: '#8A8780',
+  background: '#FFF4CE',
+};
 const itemName = (nameWidth: number) => css`
   max-width: ${nameWidth}px;
   overflow: hidden;
@@ -176,7 +218,11 @@ const renderTreeMenuItem = (link: TreeLink) => (item: TreeMenuItem) => {
     key: item.label,
     ariaLabel: item.label,
     text: item.label,
-    iconProps: { iconName: item.icon },
+    style: { fontSize: FontSizes.size12 },
+    iconProps: {
+      iconName: item.icon,
+      styles: { root: { fontSize: FontSizes.size12, display: item.icon ? 'inherit' : 'none' } },
+    },
     onClick: () => {
       item.onClick?.(link);
     },
@@ -184,7 +230,46 @@ const renderTreeMenuItem = (link: TreeLink) => (item: TreeMenuItem) => {
 };
 
 const onRenderItem = (textWidth: number) => (item: IOverflowSetItemProps) => {
-  const { warningContent, errorContent } = item;
+  const { diagnostics = [] } = item;
+  const warnings: Diagnostic[] = diagnostics.filter((diag) => diag.severity === DiagnosticSeverity.Warning);
+  const errors: Diagnostic[] = diagnostics.filter((diag) => diag.severity === DiagnosticSeverity.Error);
+
+  const warningContent = warnings.map((diag) => diag.message).join(',');
+
+  const errorContent = errors.map((diag) => diag.message).join(',');
+
+  const warningHTML = warnings.map((item) => {
+    let linkText = item.source;
+    if (item.message === 'Missing skill manifest' && item.source === 'manifest.json') {
+      linkText = 'Create skill mainfest';
+    }
+    return (
+      <div key={item.message} css={diagnosticLink}>
+        <Icon iconName={'Warning'} style={diagnosticWarningIcon} />
+        <span css={diagnosticLinkMessages} title={item.message}>
+          {item.message}
+        </span>
+        <Link>{linkText}</Link>
+      </div>
+    );
+  });
+
+  const errorHTML = errors.map((item) => {
+    let linkText = item.source;
+    if (item.source === 'appsettings.json') {
+      linkText = 'Fix in bot settings';
+    }
+    return (
+      <div key={item.message} css={diagnosticLink}>
+        <Icon iconName={'ErrorBadge'} style={diagnosticErrorIcon} />
+        <span css={diagnosticLinkMessages} title={item.message}>
+          {item.message}
+        </span>
+        <Link>{linkText}</Link>
+      </div>
+    );
+  });
+
   return (
     <div
       data-is-focusable
@@ -210,16 +295,16 @@ const onRenderItem = (textWidth: number) => (item: IOverflowSetItemProps) => {
           />
         )}
         <span css={itemName(textWidth)}>{item.displayName}</span>
-        {item.errorContent && (
-          <TooltipHost content={item.errorContent} directionalHint={DirectionalHint.bottomLeftEdge}>
+        {warnings.length ? (
+          <TooltipHost content={warningHTML} directionalHint={DirectionalHint.bottomLeftEdge}>
             <Icon iconName={'WarningSolid'} style={warningIcon} />
           </TooltipHost>
-        )}
-        {item.warningContent && (
-          <TooltipHost content={item.warningContent} directionalHint={DirectionalHint.bottomLeftEdge}>
+        ) : undefined}
+        {errors.length ? (
+          <TooltipHost content={errorHTML} directionalHint={DirectionalHint.bottomLeftEdge}>
             <Icon iconName={'StatusErrorFull'} style={errorIcon} />
           </TooltipHost>
-        )}
+        ) : undefined}
       </div>
     </div>
   );
@@ -267,12 +352,13 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
   const overflowMenu = menu.map(renderTreeMenuItem(link));
 
   const linkString = `${link.projectId}_DialogTreeItem${link.dialogId}_${link.trigger ?? ''}`;
+  const isBroken = !!link.bot?.error;
   const spacerWidth = hasChildren ? 0 : SUMMARY_ARROW_SPACE + extraSpace;
 
   return (
     <div
       aria-label={a11yLabel}
-      css={navItem(isActive)}
+      css={navItem(isActive, isBroken)}
       data-testid={a11yLabel}
       role="gridcell"
       tabIndex={0}
@@ -290,12 +376,12 @@ export const TreeItem: React.FC<ITreeItemProps> = ({
         //In 8.0 the OverflowSet will no longer be wrapped in a FocusZone
         //remove this at that time
         doNotContainWithinFocusZone
-        css={overflowSet}
+        css={overflowSet(isBroken)}
         data-testid={linkString}
         items={[
           {
             key: linkString,
-            icon,
+            icon: isBroken ? 'RemoveLink' : icon,
             ...link,
           },
         ]}
