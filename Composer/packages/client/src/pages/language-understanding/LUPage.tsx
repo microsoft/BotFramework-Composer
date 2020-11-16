@@ -36,12 +36,12 @@ const LUPage: React.FC<RouteComponentProps<{
   useEffect(() => {
     const activeDialog = dialogs.find(({ id }) => id === dialogId);
     if (!activeDialog && dialogId !== 'all' && dialogs.length) {
-      navigateTo(buildURL('lu', { projectId }));
+      navigateTo(buildURL('lu', { projectId, skillId }));
     }
   }, [dialogId, dialogs, projectId]);
 
   const onToggleEditMode = useCallback(() => {
-    let url = buildURL('lu', { projectId, dialogId });
+    let url = buildURL('lu', { projectId, skillId, dialogId });
     if (!edit) url += `/edit`;
     navigateTo(url);
   }, [dialogId, projectId, edit]);
