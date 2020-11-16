@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css, SerializedStyles } from '@emotion/core';
 import React from 'react';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 
@@ -50,7 +50,7 @@ export const headerTitle = css`
 export const headerContent = css`
   display: flex;
   align-items: center;
-
+  font-size: ${FontSizes.smallPlus};
   label: PageHeaderContent;
 `;
 
@@ -69,43 +69,61 @@ export const main = css`
   label: PageMain;
 `;
 
-export const content = css`
+export const content = (shouldShowEditorError: boolean) => css`
   flex: 4;
   padding: 20px;
   position: relative;
   overflow: auto;
-  height: calc(100% - 40px);
+  height: ${shouldShowEditorError ? 'calc(100% - 40px)' : 'calc(100% - 10px)'};
   label: PageContent;
+  box-sizing: border-box;
 `;
 
 // -------------------- Page -------------------- //
 
-interface IPageProps {
+type IPageProps = {
   // TODO: add type
   toolbarItems: IToolbarItem[];
   navLinks: INavTreeItem[];
   title: string;
+  headerStyle?: SerializedStyles;
   navRegionName: string;
   mainRegionName: string;
+  shouldShowEditorError?: boolean;
   onRenderHeaderContent?: () => string | JSX.Element | null;
   'data-testid'?: string;
-}
+};
 
 const Page: React.FC<IPageProps> = (props) => {
-  const { title, navLinks, toolbarItems, onRenderHeaderContent, children, navRegionName, mainRegionName } = props;
+  const {
+    title,
+    navLinks,
+    toolbarItems,
+    onRenderHeaderContent,
+    children,
+    navRegionName,
+    mainRegionName,
+    headerStyle = header,
+    shouldShowEditorError = true,
+  } = props;
 
   return (
     <div css={root} data-testid={props['data-testid']}>
       <div css={pageWrapper}>
         <Toolbar toolbarItems={toolbarItems} />
-        <div css={header}>
+        <div css={headerStyle}>
           <h1 css={headerTitle}>{title}</h1>
           {onRenderHeaderContent && <div css={headerContent}>{onRenderHeaderContent()}</div>}
         </div>
         <div css={main} role="main">
           <LeftRightSplit initialLeftGridWidth="20%" minLeftPixels={200} minRightPixels={800}>
             <NavTree navLinks={navLinks} regionName={navRegionName} />
-            <div aria-label={mainRegionName} css={content} data-testid="PageContent" role="region">
+            <div
+              aria-label={mainRegionName}
+              css={content(shouldShowEditorError)}
+              data-testid="PageContent"
+              role="region"
+            >
               {children}
             </div>
           </LeftRightSplit>

@@ -12,17 +12,28 @@ import { resolveToBasePath } from './utils/fileUtil';
 import { data } from './styles';
 import { NotFound } from './components/NotFound';
 import { BASEPATH } from './constants';
-import { dispatcherState, schemasState, botProjectIdsState, botOpeningState, pluginPagesSelector } from './recoilModel';
+import {
+  dispatcherState,
+  schemasState,
+  botProjectIdsState,
+  botOpeningState,
+  pluginPagesSelector,
+  botProjectSpaceSelector,
+} from './recoilModel';
+import { rootBotProjectIdSelector } from './recoilModel/selectors/project';
 import { openAlertModal } from './components/Modal/AlertDialog';
 import { dialogStyle } from './components/Modal/dialogStyle';
 import { LoadingSpinner } from './components/LoadingSpinner';
 import { PluginPageContainer } from './pages/plugin/PluginPageContainer';
+import { botProjectSpaceLoadedState } from './recoilModel/atoms';
+import { mergePropertiesManagedByRootBot } from './recoilModel/dispatchers/utils/project';
 
 const DesignPage = React.lazy(() => import('./pages/design/DesignPage'));
 const LUPage = React.lazy(() => import('./pages/language-understanding/LUPage'));
 const QnAPage = React.lazy(() => import('./pages/knowledge-base/QnAPage'));
 const LGPage = React.lazy(() => import('./pages/language-generation/LGPage'));
 const SettingPage = React.lazy(() => import('./pages/setting/SettingsPage'));
+const BotProjectSettings = React.lazy(() => import('./pages/botProject/BotProjectSettings'));
 const Diagnostics = React.lazy(() => import('./pages/diagnostics/Diagnostics'));
 const Publish = React.lazy(() => import('./pages/publish/Publish'));
 const BotCreationFlowRouter = React.lazy(() => import('./components/CreationFlow/CreationFlow'));
@@ -48,6 +59,7 @@ const Routes = (props) => {
           />
           <Redirect noThrow from="/bot/:projectId/knowledge-base" to="/bot/:projectId/knowledge-base/all" />
           <Redirect noThrow from="/bot/:projectId/publish" to="/bot/:projectId/publish/all" />
+          <Redirect noThrow from="/bot/:projectId/botProjectsSettings" to="/bot/:projectId/botProjectsSettings/root" />
           <Redirect noThrow from="/" to={resolveToBasePath(BASEPATH, 'home')} />
           <ProjectRouter path="/bot/:projectId">
             <DesignPage path="dialogs/:dialogId/*" />
@@ -55,6 +67,7 @@ const Routes = (props) => {
             <LGPage path="language-generation/:dialogId/*" />
             <QnAPage path="knowledge-base/:dialogId/*" />
             <Publish path="publish/:targetName" />
+            <BotProjectSettings path="botProjectsSettings/*" />
             <FormDialogPage path="forms/:schemaId/*" />
             <FormDialogPage path="forms/*" />
             <DesignPage path="*" />
@@ -106,8 +119,25 @@ const projectStyle = css`
 const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string; skillId: string }>> = (props) => {
   const { projectId = '' } = props;
   const schemas = useRecoilValue(schemasState(projectId));
-  const { fetchProjectById } = useRecoilValue(dispatcherState);
+  const { fetchProjectById, setSettings } = useRecoilValue(dispatcherState);
   const botProjects = useRecoilValue(botProjectIdsState);
+  const botProjectsMetaData = useRecoilValue(botProjectSpaceSelector);
+  const botProjectSpaceLoaded = useRecoilValue(botProjectSpaceLoadedState);
+  const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
+
+  useEffect(() => {
+    if (botProjectSpaceLoaded && rootBotProjectId && botProjectsMetaData) {
+      for (let i = 0; i < botProjectsMetaData.length; i++) {
+        if (!botProjectsMetaData[i].isRemote) {
+          const id = botProjectsMetaData[i].projectId;
+          const setting = botProjectsMetaData[i].setting;
+          const mergedSettings = mergePropertiesManagedByRootBot(id, rootBotProjectId, setting);
+          setSettings(id, mergedSettings);
+        }
+      }
+    }
+  }, [botProjectSpaceLoaded, rootBotProjectId]);
+
   useEffect(() => {
     if (props.projectId && !botProjects.includes(props.projectId)) {
       fetchProjectById(props.projectId);

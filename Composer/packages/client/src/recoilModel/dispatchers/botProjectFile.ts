@@ -12,7 +12,7 @@ import { botNameIdentifierState, botProjectFileState, locationState, settingsSta
 import { rootBotProjectIdSelector } from '../selectors';
 import { dispatcherState } from '../DispatcherWrapper';
 
-import { setSettingState } from './setting';
+import { setRootBotSettingState } from './setting';
 
 export const botProjectFileDispatcher = () => {
   const addLocalSkill = useRecoilCallback(({ set, snapshot }: CallbackInterface) => async (skillId: string) => {
@@ -81,7 +81,7 @@ export const botProjectFileDispatcher = () => {
           delete draftState.skill[botNameIdentifier];
         }
       });
-      setSettingState(callbackHelpers, rootBotProjectId, updatedSettings);
+      setRootBotSettingState(callbackHelpers, rootBotProjectId, updatedSettings);
     }
   });
 

@@ -15,7 +15,7 @@ import {
 } from '../../recoilModel/types';
 import { getUserSettings } from '../utils';
 import onboardingStorage from '../../utils/onboardingStorage';
-import { CreationFlowStatus, AppUpdaterStatus } from '../../constants';
+import { CreationFlowStatus, AppUpdaterStatus, CreationFlowType } from '../../constants';
 
 export type BotProject = {
   readonly id: string;
@@ -137,6 +137,11 @@ export const creationFlowStatusState = atom<CreationFlowStatus>({
   default: CreationFlowStatus.CLOSE,
 });
 
+export const creationFlowTypeState = atom<CreationFlowType>({
+  key: getFullyQualifiedKey('creationFlowTpye'),
+  default: 'Bot',
+});
+
 export const logEntryListState = atom<string[]>({
   key: getFullyQualifiedKey('logEntryList'),
   default: [],
@@ -230,4 +235,9 @@ export const pageElementState = atom<{ [page in PageMode]?: { [key: string]: any
     lu: {},
     qna: {},
   },
+});
+
+export const showCreateDialogModalState = atom<boolean>({
+  key: getFullyQualifiedKey('showCreateDialogModal'),
+  default: false,
 });
