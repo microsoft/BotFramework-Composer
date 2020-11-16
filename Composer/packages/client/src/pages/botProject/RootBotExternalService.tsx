@@ -4,7 +4,6 @@
 /** @jsx jsx */
 import React, { useState, useEffect } from 'react';
 import { jsx } from '@emotion/core';
-import { QnAFile, DialogInfo, LuFile } from '@bfc/shared';
 import { mergeStyleSets } from '@uifabric/styling';
 import { useRecoilValue } from 'recoil';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
