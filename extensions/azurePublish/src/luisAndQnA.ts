@@ -10,6 +10,7 @@ import { ILuisConfig, FileInfo, IQnAConfig } from '@botframework-composer/types'
 
 import { ICrossTrainConfig, createCrossTrainConfig } from './utils/crossTrainUtil';
 import { BotProjectDeployLoggerType } from './botProjectLoggerType';
+import { luImportResolverGenerator } from '@bfc/shared/lib/luBuildResolver';
 
 const crossTrainer = require('@microsoft/bf-lu/lib/parser/cross-train/crossTrainer.js');
 const luBuild = require('@microsoft/bf-lu/lib/parser/lubuild/builder.js');
@@ -23,7 +24,7 @@ export interface PublishConfig {
   [key: string]: any;
 }
 
-const INTERUPTION = 'interuption';
+const INTERRUPTION = 'interruption';
 
 export class LuisAndQnaPublish {
   private logger: (string) => any;
@@ -37,7 +38,7 @@ export class LuisAndQnaPublish {
     // path to the ready to deploy generated folder
     this.remoteBotPath = path.join(config.projPath, 'ComposerDialogs');
     this.generatedFolder = path.join(this.remoteBotPath, 'generated');
-    this.interruptionFolderPath = path.join(this.generatedFolder, INTERUPTION);
+    this.interruptionFolderPath = path.join(this.generatedFolder, INTERRUPTION);
 
     // Cross Train config
     this.crossTrainConfig = {
@@ -132,16 +133,21 @@ export class LuisAndQnaPublish {
     for (const luFile of luFiles) {
       luContents.push({
         content: fs.readFileSync(luFile, { encoding: 'utf-8' }),
-        id: luFile.substring(luFile.lastIndexOf('\\') + 1),
+        name: path.basename(luFile),
+        id: path.basename(luFile),
+        path: luFile,
       });
     }
     for (const qnaFile of qnaFiles) {
       qnaContents.push({
         content: fs.readFileSync(qnaFile, { encoding: 'utf-8' }),
-        id: qnaFile.substring(qnaFile.lastIndexOf('\\') + 1),
+        name: path.basename(qnaFile),
+        id: path.basename(qnaFile),
+        path: qnaFile,
       });
     }
-    const result = await crossTrainer.crossTrain(luContents, qnaContents, this.crossTrainConfig);
+    const importResolver = luImportResolverGenerator([...qnaContents, ...luContents] as FileInfo[]);
+    const result = await crossTrainer.crossTrain(luContents, qnaContents, this.crossTrainConfig, importResolver);
 
     await this.writeCrossTrainFiles(result.luResult);
     await this.writeCrossTrainFiles(result.qnaResult);

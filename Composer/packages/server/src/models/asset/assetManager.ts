@@ -3,9 +3,13 @@
 
 import fs from 'fs';
 import path from 'path';
+import { exec } from 'child_process';
+import { promisify } from 'util';
 
 import find from 'lodash/find';
-import { UserIdentity, ExtensionContext } from '@bfc/extension';
+import { UserIdentity, ExtensionContext, BotTemplate, FileExtensions } from '@bfc/extension';
+import { mkdirs, readFile } from 'fs-extra';
+import rimraf from 'rimraf';
 
 import log from '../../logger';
 import { LocalDiskStorage } from '../storage/localDiskStorage';
@@ -15,6 +19,9 @@ import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
 import { IFileStorage } from '../storage/interface';
 import { BotProject } from '../bot/botProject';
+
+const execAsync = promisify(exec);
+const removeDirAndFiles = promisify(rimraf);
 
 export class AssetManager {
   public templateStorage: LocalDiskStorage;
@@ -35,6 +42,38 @@ export class AssetManager {
     return ExtensionContext.extensions.botTemplates;
   }
 
+  public async copyRemoteProjectTemplateTo(
+    templateDir: string,
+    ref: LocationRef,
+    user?: UserIdentity,
+    locale?: string
+  ): Promise<LocationRef> {
+    // user storage maybe diff from template storage
+    const dstStorage = StorageService.getStorageClient(ref.storageId, user);
+    const dstDir = Path.resolve(ref.path);
+    if (await dstStorage.exists(dstDir)) {
+      log('Failed copying template to %s', dstDir);
+      throw new Error('already have this folder, please give another name');
+    }
+    await this.copyTemplateDirTo(templateDir, dstDir, dstStorage, locale);
+    return ref;
+  }
+
+  private async copyTemplateDirTo(templateDir: string, dstDir: string, dstStorage: IFileStorage, locale?: string) {
+    // copy Composer data files
+    await copyDir(templateDir, this.templateStorage, dstDir, dstStorage);
+    // if we have a locale override, copy those files over too
+    if (locale != null) {
+      const localePath = path.join(__dirname, '..', '..', '..', 'schemas', `sdk.${locale}.schema`);
+      const content = await this.templateStorage.readFile(localePath);
+      await dstStorage.writeFile(path.join(dstDir, `sdk.override.schema`), content);
+
+      const uiLocalePath = path.join(__dirname, '..', '..', '..', 'schemas', `sdk.${locale}.uischema`);
+      const uiContent = await this.templateStorage.readFile(uiLocalePath);
+      await dstStorage.writeFile(path.join(dstDir, `sdk.override.uischema`), uiContent);
+    }
+  }
+
   public async copyProjectTemplateTo(
     templateId: string,
     ref: LocationRef,
@@ -52,13 +91,61 @@ export class AssetManager {
     return ref;
   }
 
+  private async getRemoteTemplate(template: BotTemplate, destinationPath: string) {
+    // install package
+    if (template.package) {
+      const { stderr: initErr } = await execAsync(
+        `dotnet new -i ${template.package.packageName}::${template.package.packageVersion}`
+      );
+      if (initErr) {
+        throw new Error(initErr);
+      }
+      const { stderr: initErr2 } = await execAsync(`dotnet new ${template.id}`, {
+        cwd: destinationPath,
+      });
+      if (initErr2) {
+        throw new Error(initErr2);
+      }
+    } else {
+      throw new Error('selected template has no local or external address');
+    }
+  }
+
   private async copyDataFilesTo(templateId: string, dstDir: string, dstStorage: IFileStorage, locale?: string) {
     const template = find(ExtensionContext.extensions.botTemplates, { id: templateId });
-    if (template === undefined || template.path === undefined) {
+    if (template === undefined || (template.path === undefined && template.package === undefined)) {
       throw new Error(`no such template with id ${templateId}`);
     }
-    // copy Composer data files
-    await copyDir(template.path, this.templateStorage, dstDir, dstStorage);
+
+    let templateSrcPath = template.path;
+    const isHostedTemplate = !templateSrcPath;
+    if (isHostedTemplate) {
+      // create empty temp directory on server for holding externally hosted template src
+      templateSrcPath = path.resolve(__dirname, '../../../temp');
+      if (fs.existsSync(templateSrcPath)) {
+        await removeDirAndFiles(templateSrcPath);
+      }
+      await mkdirs(templateSrcPath, (err) => {
+        if (err) {
+          throw new Error('Error creating temp directory for external template storage');
+        }
+      });
+      await this.getRemoteTemplate(template, templateSrcPath);
+    }
+
+    if (templateSrcPath) {
+      // copy Composer data files
+      await copyDir(templateSrcPath, this.templateStorage, dstDir, dstStorage);
+
+      if (isHostedTemplate) {
+        try {
+          await removeDirAndFiles(templateSrcPath);
+        } catch (err) {
+          throw new Error('Issue deleting temp generated file for external template assets');
+        }
+      }
+    }
+
     // if we have a locale override, copy those files over too
     if (locale != null) {
       const localePath = path.join(__dirname, '..', '..', '..', 'schemas', `sdk.${locale}.schema`);
@@ -76,7 +163,7 @@ export class AssetManager {
   public async copyBoilerplate(dstDir: string, dstStorage: IFileStorage) {
     for (const boilerplate of ExtensionContext.extensions.baseTemplates) {
       const boilerplatePath = boilerplate.path;
-      if (await this.templateStorage.exists(boilerplatePath)) {
+      if (boilerplatePath && (await this.templateStorage.exists(boilerplatePath))) {
         await copyDir(boilerplatePath, this.templateStorage, dstDir, dstStorage);
       }
     }
@@ -104,24 +191,27 @@ export class AssetManager {
 
   // return the current version of the boilerplate content, if one exists so specified
   // this is based off of the first boilerplate template added to the app.
-  public getBoilerplateCurrentVersion(): string | undefined {
+  public async getBoilerplateCurrentVersion(): Promise<string | undefined> {
     if (!ExtensionContext.extensions.baseTemplates.length) {
       return undefined;
     }
     const boilerplate = ExtensionContext.extensions.baseTemplates[0];
-    const location = Path.join(boilerplate.path, 'scripts', 'package.json');
-    try {
-      if (fs.existsSync(location)) {
-        const raw = fs.readFileSync(location, 'utf8');
-        const json = JSON.parse(raw);
-        if (json && json.version) {
-          return json.version;
-        } else {
-          return undefined;
+    if (boilerplate.path) {
+      const location = Path.join(boilerplate.path, 'scripts', 'package.json');
+      try {
+        if (fs.existsSync(location)) {
+          const raw = await readFile(location, 'utf8');
+
+          const json = JSON.parse(raw);
+          if (json && json.version) {
+            return json.version;
+          } else {
+            return undefined;
+          }
         }
+      } catch (err) {
+        return undefined;
       }
-    } catch (err) {
-      return undefined;
     }
   }
 
@@ -131,15 +221,17 @@ export class AssetManager {
     }
     const boilerplate = ExtensionContext.extensions.botTemplates[0];
 
-    const location = Path.join(boilerplate.path, `${boilerplate.id}.botproj`);
-    try {
-      if (fs.existsSync(location)) {
-        const raw = fs.readFileSync(location, 'utf8');
-        const json = JSON.parse(raw);
-        return json;
+    if (boilerplate.path) {
+      const location = Path.join(boilerplate.path, `${boilerplate.id + FileExtensions.BotProject}`);
+      try {
+        if (fs.existsSync(location)) {
+          const raw = fs.readFileSync(location, 'utf8');
+          const json = JSON.parse(raw);
+          return json;
+        }
+      } catch (err) {
+        return '';
       }
-    } catch (err) {
-      return '';
     }
   }
 }

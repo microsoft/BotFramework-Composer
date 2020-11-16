@@ -75,6 +75,9 @@ import { undoHistoryState } from '../../undo/history';
 import UndoHistory from '../../undo/undoHistory';
 import { logMessage, setError } from '../shared';
 
+import { crossTrainConfigState } from './../../atoms/botState';
+import { recognizersSelectorFamily } from './../../selectors/recognizers';
+
 export const resetBotStates = async ({ reset }: CallbackInterface, projectId: string) => {
   const botStates = Object.keys(botstates);
   botStates.forEach((state) => {
@@ -142,12 +145,18 @@ export const navigateToBot = (
   projectId: string,
   mainDialog: string,
   qnaKbUrls?: string[],
-  templateId?: string
+  templateId?: string,
+  urlSuffix?: string
 ) => {
   if (projectId) {
     const { set } = callbackHelpers;
     set(currentProjectIdState, projectId);
-    const url = `/bot/${projectId}/dialogs/${mainDialog}`;
+    let url = `/bot/${projectId}/dialogs/${mainDialog}`;
+    if (urlSuffix) {
+      // deep link was provided to creation flow (base64 encoded to make query string parsing easier)
+      urlSuffix = atob(urlSuffix);
+      url = `/bot/${projectId}/${urlSuffix}`;
+    }
     navigateTo(url);
   }
 };
@@ -272,6 +281,8 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
     skillManifestFiles,
     skills,
     mergedSettings,
+    recognizers,
+    crossTrainConfig,
   } = botFiles;
   const curLocation = await snapshot.getPromise(locationState(projectId));
   const storedLocale = languageStorage.get(botName)?.locale;
@@ -297,6 +308,8 @@ export const initBotState = async (callbackHelpers: CallbackInterface, data: any
   });
 
   set(dialogIdsState(projectId), dialogIds);
+  set(recognizersSelectorFamily(projectId), recognizers);
+  set(crossTrainConfigState(projectId), crossTrainConfig);
 
   await lgWorker.addProject(projectId, lgFiles);
 
@@ -401,7 +414,11 @@ export const createNewBotFromTemplate = async (
   description: string,
   location: string,
   schemaUrl?: string,
-  locale?: string
+  locale?: string,
+  templateDir?: string,
+  eTag?: string,
+  alias?: string,
+  preserveRoot?: boolean
 ) => {
   const { set } = callbackHelpers;
   const response = await httpClient.post(`/projects`, {
@@ -412,6 +429,10 @@ export const createNewBotFromTemplate = async (
     location,
     schemaUrl,
     locale,
+    templateDir,
+    eTag,
+    alias,
+    preserveRoot,
   });
   const { botFiles, projectData } = loadProjectData(response);
   const projectId = response.data.id;

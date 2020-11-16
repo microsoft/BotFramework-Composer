@@ -5,16 +5,12 @@
 import { FileInfo, IConfig } from '@bfc/shared';
 import { ComposerReservoirSampler } from '@microsoft/bf-dispatcher/lib/mathematics/sampler/ComposerReservoirSampler';
 import { ComposerBootstrapSampler } from '@microsoft/bf-dispatcher/lib/mathematics/sampler/ComposerBootstrapSampler';
-import { Orchestrator } from '@microsoft/bf-orchestrator';
+import { luImportResolverGenerator, getLUFiles, getQnAFiles } from '@bfc/shared/lib/luBuildResolver';
 
 import { Path } from '../../utility/path';
 import { IFileStorage } from '../storage/interface';
 import log from '../../logger';
 
-import { IOrchestratorBuildOutput, IOrchestratorNLRList, IOrchestratorProgress } from './interface';
-import { luImportResolverGenerator, getLUFiles, getQnAFiles } from './luResolver';
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const crossTrainer = require('@microsoft/bf-lu/lib/parser/cross-train/crossTrainer.js');
 const luBuild = require('@microsoft/bf-lu/lib/parser/lubuild/builder.js');
 const qnaBuild = require('@microsoft/bf-lu/lib/parser/qnabuild/builder.js');
@@ -22,8 +18,10 @@ const LuisBuilder = require('@microsoft/bf-lu/lib/parser/luis/luisBuilder');
 const luisToLuContent = require('@microsoft/bf-lu/lib/parser/luis/luConverter');
 
 const GENERATEDFOLDER = 'generated';
-const INTERUPTION = 'interuption';
+const SETTINGS = 'settings';
+const INTERRUPTION = 'interruption';
 const SAMPLE_SIZE_CONFIGURATION = 2;
+const CrossTrainConfigName = 'cross-train.config';
 
 export type SingleConfig = {
   rootDialog: boolean;
@@ -49,7 +47,6 @@ export class Builder {
   public config: IConfig | null = null;
   public downSamplingConfig: DownSamplingConfig = { maxImbalanceRatio: 0, maxUtteranceAllowed: 0 };
   private _locale: string;
-  public crossTrainConfig: CrossTrainConfig = {};
 
   private luBuilder = new luBuild.Builder((message) => {
     log(message);
@@ -61,7 +58,7 @@ export class Builder {
   constructor(path: string, storage: IFileStorage, locale: string) {
     this.botDir = path;
     this.generatedFolderPath = Path.join(this.botDir, GENERATEDFOLDER);
-    this.interruptionFolderPath = Path.join(this.generatedFolderPath, INTERUPTION);
+    this.interruptionFolderPath = Path.join(this.generatedFolderPath, INTERRUPTION);
     this.storage = storage;
     this._locale = locale;
   }
@@ -89,9 +86,8 @@ export class Builder {
     }
   };
 
-  public setBuildConfig(config: IConfig, crossTrainConfig: CrossTrainConfig, downSamplingConfig: DownSamplingConfig) {
+  public setBuildConfig(config: IConfig, downSamplingConfig: DownSamplingConfig) {
     this.config = config;
-    this.crossTrainConfig = crossTrainConfig;
     this.downSamplingConfig = downSamplingConfig;
   }
 
@@ -103,59 +99,6 @@ export class Builder {
     this._locale = v;
   }
 
-  /**
-   * Orchestrator: Get available list of NLR models
-   */
-  public async runOrchestratorNlrList(): Promise<IOrchestratorNLRList> {
-    return JSON.parse(await Orchestrator.nlrListAsync());
-  }
-
-  /**
-   * Orchestrator: Download an available NLR model.
-   *
-   * @remarks Available NLR models and VersionIds are obtained by running runOrchestratorNlrList first.
-   *
-   * @param modelPath - Folder path to save NLR model
-   * @param nlrId - VersionId of the model
-   * @param onProgress - Callback to notify of D/L progress
-   * @param onFinish - Callback to notify of D/L completed
-   */
-  public async runOrchestratorNlrGet(
-    modelPath: string,
-    nlrId: string,
-    onProgress: IOrchestratorProgress,
-    onFinish: IOrchestratorProgress
-  ): Promise<void> {
-    await Orchestrator.nlrGetAsync(modelPath, nlrId, onProgress, onFinish);
-  }
-
-  /**
-   * Orchestrator: Build command to compile .lu files into Binary LU (.blu) snapshots.
-   *
-   * A snapshot (.blu file) is created per .lu supplied
-   *
-   * @param files - Array of FileInfo
-   * @param modelPath - Path to NLR model folder
-   * @param isDialog - Flag to toggle creation of Recognizer Dialogs (default: true)
-   * @param fullEmbedding - Use larger embeddings and skip size optimization (default: false)
-   * @returns An object containing snapshot bytes and recognizer dialogs for each .lu file
-   */
-  public async runOrchestratorBuild(
-    files: FileInfo[],
-    modelPath: string,
-    isDialog = true,
-    fullEmbedding = false
-  ): Promise<IOrchestratorBuildOutput> {
-    const luObjects = files
-      .filter((fi) => fi.name.endsWith('.lu'))
-      .map((fi) => ({
-        id: fi.name,
-        content: fi.content,
-      }));
-
-    return await Orchestrator.buildAsync(modelPath, luObjects, isDialog, null, fullEmbedding);
-  }
-
   private async createGeneratedDir() {
     // clear previous folder
     await this.deleteDir(this.generatedFolderPath);
@@ -165,19 +108,27 @@ export class Builder {
   }
 
   private async crossTrain(luFiles: FileInfo[], qnaFiles: FileInfo[], allFiles: FileInfo[]) {
+    const crossTrainConfigPath = Path.join(this.botDir, SETTINGS, CrossTrainConfigName);
+    let crossTrainConfig = {};
+    if (await this.storage.exists(crossTrainConfigPath)) {
+      const crossTrainConfigStr = await this.storage.readFile(crossTrainConfigPath);
+      if (crossTrainConfigStr) {
+        crossTrainConfig = JSON.parse(crossTrainConfigStr);
+      }
+    }
     const luContents = luFiles.map((file) => {
-      return { content: file.content, id: file.name };
+      return { content: file.content, id: Path.basename(file.name, '.lu') };
     });
 
     const qnaContents = qnaFiles.map((file) => {
-      return { content: file.content, id: file.name };
+      return { content: file.content, id: Path.basename(file.name, '.qna') };
     });
 
     const importResolver = luImportResolverGenerator([...getLUFiles(allFiles), ...getQnAFiles(allFiles)]);
-    const result = await crossTrainer.crossTrain(luContents, qnaContents, this.crossTrainConfig, { importResolver });
+    const result = await crossTrainer.crossTrain(luContents, qnaContents, crossTrainConfig, { importResolver });
 
-    await this.writeFiles(result.luResult);
-    await this.writeFiles(result.qnaResult);
+    await this.writeFiles(result.luResult, 'lu');
+    await this.writeFiles(result.qnaResult, 'qna');
   }
 
   private async getInterruptionFiles() {
@@ -237,13 +188,13 @@ export class Builder {
     );
   }
 
-  private async writeFiles(crossTrainResult) {
+  private async writeFiles(crossTrainResult, fileExtension: 'lu' | 'qna') {
     if (!(await this.storage.exists(this.interruptionFolderPath))) {
       await this.storage.mkDir(this.interruptionFolderPath);
     }
     await Promise.all(
       [...crossTrainResult.keys()].map(async (key: string) => {
-        const fileName = Path.basename(key);
+        const fileName = `${key}.${fileExtension}`;
         const newFileId = Path.join(this.interruptionFolderPath, fileName);
         await this.storage.writeFile(newFileId, crossTrainResult.get(key).Content);
       })
@@ -265,6 +216,7 @@ export class Builder {
       suffix: config.suffix,
       keptVersionCount: 10,
       isStaging: false,
+      region: config.region,
     });
 
     await this.luBuilder.writeDialogAssets(buildResult, {
