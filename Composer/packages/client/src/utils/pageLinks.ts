@@ -71,6 +71,13 @@ export const topLinks = (
       exact: true,
       disabled: !botLoaded,
     },
+    {
+      to: `/bot/${projectId}/botProjectsSettings`,
+      iconName: 'BotProjectsSettings',
+      labelName: formatMessage('Bot Projects'),
+      exact: true,
+      disabled: !botLoaded,
+    },
     ...(showFormDialog
       ? [
           {
