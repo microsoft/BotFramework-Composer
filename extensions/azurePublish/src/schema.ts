@@ -29,7 +29,8 @@ const schema: JSONSchema7 = {
     },
     runtimeIdentifier: {
       type: 'string',
-      title: 'Runtime identifier for hosting bot, default to win-x64, please refer to https://docs.microsoft.com/en-us/dotnet/core/rid-catalog'
+      title:
+        'Runtime identifier for hosting bot, default to win-x64, please refer to https://docs.microsoft.com/en-us/dotnet/core/rid-catalog',
     },
     settings: {
       type: 'object',
