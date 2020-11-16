@@ -131,6 +131,15 @@ export const multilangDispatcher = () => {
 
       set(showDelLanguageModalState(projectId), false);
       set(onDelLanguageDialogCompleteState(projectId), { func: undefined });
+
+      //use default language as active language if active language is deleted
+      const botName = await snapshot.getPromise(botDisplayNameState(projectId));
+      const currentActiveLanguage = languageStorage.get(botName)?.locale;
+      if (languages.includes(currentActiveLanguage)) {
+        const defaultLanguage = settings.defaultLanguage;
+        set(localeState(projectId), defaultLanguage);
+        languageStorage.setLocale(botName, defaultLanguage);
+      }
     }
   );
 

@@ -56,7 +56,6 @@ export function checkUrl(
 
 export interface NavigationState {
   breadcrumb?: string[];
-  qnaKbUrls?: string[];
 }
 
 export function convertPathToUrl(

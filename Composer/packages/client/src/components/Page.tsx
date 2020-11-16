@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx, css, SerializedStyles } from '@emotion/core';
 import React from 'react';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { useRecoilValue } from 'recoil';
@@ -54,7 +54,7 @@ export const headerTitle = css`
 export const headerContent = css`
   display: flex;
   align-items: center;
-
+  font-size: ${FontSizes.smallPlus};
   label: PageHeaderContent;
 `;
 
@@ -73,22 +73,26 @@ export const main = css`
   label: PageMain;
 `;
 
-export const content = css`
+export const content = (shouldShowEditorError: boolean) => css`
   flex: 4;
   padding: 20px;
   position: relative;
   overflow: auto;
-  height: calc(100% - 40px);
+  height: ${shouldShowEditorError ? 'calc(100% - 40px)' : 'calc(100% - 10px)'};
   label: PageContent;
+  box-sizing: border-box;
 `;
 
 // -------------------- Page -------------------- //
 
 type IPageProps = {
+  // TODO: add type
   toolbarItems: IToolbarItem[];
   title: string;
+  headerStyle?: SerializedStyles;
   navRegionName: string;
   mainRegionName: string;
+  shouldShowEditorError?: boolean;
   onRenderHeaderContent?: () => string | JSX.Element | null;
   'data-testid'?: string;
   useNewTree?: boolean;
@@ -105,6 +109,8 @@ const Page: React.FC<IPageProps> = (props) => {
     navRegionName,
     mainRegionName,
     useNewTree = false,
+    headerStyle = header,
+    shouldShowEditorError = true,
   } = props;
 
   const pageMode = useRecoilValue(currentModeState);
@@ -113,7 +119,7 @@ const Page: React.FC<IPageProps> = (props) => {
     <div css={root} data-testid={props['data-testid']}>
       <div css={pageWrapper}>
         <Toolbar toolbarItems={toolbarItems} />
-        <div css={header}>
+        <div css={headerStyle}>
           <h1 css={headerTitle}>{title}</h1>
           {onRenderHeaderContent && <div css={headerContent}>{onRenderHeaderContent()}</div>}
         </div>
@@ -124,7 +130,6 @@ const Page: React.FC<IPageProps> = (props) => {
                 showDelete={false}
                 showTriggers={false}
                 onSelect={(link) => {
-                  console.log(link);
                   navigateTo(buildURL(pageMode, link));
                 }}
                 onSelectAllLink={() => {
@@ -134,7 +139,12 @@ const Page: React.FC<IPageProps> = (props) => {
             ) : (
               <NavTree navLinks={navLinks as INavTreeItem[]} regionName={navRegionName} />
             )}
-            <div aria-label={mainRegionName} css={content} data-testid="PageContent" role="region">
+            <div
+              aria-label={mainRegionName}
+              css={content(shouldShowEditorError)}
+              data-testid="PageContent"
+              role="region"
+            >
               {children}
             </div>
           </LeftRightSplit>
