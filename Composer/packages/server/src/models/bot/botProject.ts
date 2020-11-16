@@ -564,11 +564,22 @@ export class BotProject implements IBotProject {
       console.log(`${type} - ${message}`);
     };
 
+    // fix casing for case-sensitive schema paths
+    const schemaLocale = defaultLocale
+      .replace(/en-us/i, 'en-US')
+      .replace(/en-us-pseudo/i, 'en-US-pseudo')
+      .replace(/zh-hans/i, 'zh-Hans')
+      .replace(/zh-hant/i, 'zh-Hant')
+      .replace(/pt-br/i, 'pt-BR')
+      .replace(/pt-pt/i, 'pt-PT');
+
+    const metaSchema = `https://raw.githubusercontent.com/microsoft/BotFramework-Composer/main/Composer/packages/server/schemas/sdk.${schemaLocale}.schema`;
+
     const generateParams = {
       schemaPath,
       prefix: name,
       outDir,
-      metaSchema: undefined,
+      metaSchema: metaSchema,
       allLocales: undefined,
       templateDirs: templateDirs || [],
       force: false,
