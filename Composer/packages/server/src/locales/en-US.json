@@ -227,6 +227,9 @@
   "any_string_f22dc2e1": {
     "message": "any string"
   },
+  "app_based_link_query_908f29db": {
+    "message": "App based link query"
+  },
   "application_language_87691b6": {
     "message": "Application Language"
   },
@@ -467,8 +470,23 @@
   "cancel_dialog_event_cc671dee": {
     "message": "Cancel dialog event"
   },
+  "card_action_15b77d5": {
+    "message": "Card action"
+  },
   "change_recognizer_3145b93d": {
     "message": "Change Recognizer"
+  },
+  "channel_created_1c4313bc": {
+    "message": "Channel created"
+  },
+  "channel_deleted_4545ea37": {
+    "message": "Channel deleted"
+  },
+  "channel_renamed_a71e1f0b": {
+    "message": "Channel renamed"
+  },
+  "channel_restored_581d15b1": {
+    "message": "Channel restored"
   },
   "check_for_updates_and_install_them_automatically_50337340": {
     "message": "Check for updates and install them automatically."
@@ -1142,6 +1160,9 @@
   "fields_must_be_either_all_strings_or_all_fieldset__d3df28c": {
     "message": "fields must be either all strings or all fieldset objects"
   },
+  "file_consent_fbf15d4e": {
+    "message": "File consent"
+  },
   "file_name_8fd421ff": {
     "message": "File name"
   },
@@ -1595,6 +1616,27 @@
   "message_updated_activity_4997737e": {
     "message": "Message updated activity"
   },
+  "messaging_extension_card_button_clicked_fee52f29": {
+    "message": "Messaging extension card button clicked"
+  },
+  "messaging_extension_config_query_setting_url_d36a7483": {
+    "message": "Messaging extension config query setting url"
+  },
+  "messaging_extension_config_setting_d7abc3ae": {
+    "message": "Messaging extension config setting"
+  },
+  "messaging_extension_fetch_task_38bcdf6d": {
+    "message": "Messaging extension fetch task"
+  },
+  "messaging_extension_query_fa1c338f": {
+    "message": "Messaging extension query"
+  },
+  "messaging_extension_select_item_eced2632": {
+    "message": "Messaging extension select item"
+  },
+  "messaging_extension_submit_action_7b2e6031": {
+    "message": "Messaging extension submit action"
+  },
   "microsoft_app_id_a7f3e591": {
     "message": "Microsoft App Id"
   },
@@ -1786,6 +1828,12 @@
   },
   "number_or_expression_55c7f9f": {
     "message": "Number or expression"
+  },
+  "numeric_field_c2564f69": {
+    "message": "numeric field"
+  },
+  "o365_card_action_2602363c": {
+    "message": "O365 card action"
   },
   "oauth_login_b6aa9534": {
     "message": "OAuth login"
@@ -2174,6 +2222,9 @@
   "retrieve_meeting_participant_information_73c714f5": {
     "message": "Retrieve meeting participant information"
   },
+  "retrieve_team_member_information_8c0009ec": {
+    "message": "Retrieve Team member information"
+  },
   "review_and_generate_63dec712": {
     "message": "Review and generate"
   },
@@ -2296,6 +2347,9 @@
   },
   "send_messages_c48b239": {
     "message": "Send Messages"
+  },
+  "send_messaging_extension_auth_response_35e4cad9": {
+    "message": "Send messaging extension auth response"
   },
   "send_query_link_response_3298d645": {
     "message": "Send query link response"
@@ -2462,8 +2516,32 @@
   "synonyms_optional_afe5cdb1": {
     "message": "Synonyms (Optional)"
   },
+  "task_module_fetch_4dd85ef5": {
+    "message": "Task module fetch"
+  },
+  "task_module_submit_6163e4e6": {
+    "message": "Task module submit"
+  },
   "tb_149f379c": {
     "message": "TB"
+  },
+  "team_archived_5d137e53": {
+    "message": "Team archived"
+  },
+  "team_deleted_d7c7d361": {
+    "message": "Team deleted"
+  },
+  "team_hard_deleted_449d3854": {
+    "message": "Team hard deleted"
+  },
+  "team_renamed_359c265d": {
+    "message": "Team renamed"
+  },
+  "team_restored_89fa65c3": {
+    "message": "Team restored"
+  },
+  "team_unarchived_5c9606c2": {
+    "message": "Team unarchived"
   },
   "teams_53f78b01": {
     "message": "Teams"
