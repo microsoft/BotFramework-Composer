@@ -112,3 +112,15 @@ export const openInEmulator = (url, authSettings: { MicrosoftAppId: string; Micr
   }&msaAppPassword=${encodeURIComponent(authSettings.MicrosoftAppPassword)}`;
   document.body.appendChild(i);
 };
+
+export function createBotSettingUrl(rootProjectId: string, activeProjectId: string) {
+  let url = '';
+  const base = `/bot/${rootProjectId}/botProjectsSettings`;
+  if (rootProjectId === activeProjectId) {
+    url = `${base}/root`;
+  } else {
+    url = `${base}/${activeProjectId}`;
+  }
+
+  return url;
+}

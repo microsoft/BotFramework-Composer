@@ -12,9 +12,12 @@ context('Luis Deploy', () => {
   });
 
   it('can deploy luis success', () => {
-    cy.findByTestId('LeftNav-CommandBarButtonUser Input').click();
+    cy.visitPage('Bot Projects');
+    cy.findAllByTestId('rootLUISKey').type('12345678', { delay: 200 });
+    cy.findAllByTestId('rootLUISRegion').type('westus', { delay: 200 });
+    cy.visitPage('User Input');
     cy.url().should('contain', 'language-understanding/all');
-    cy.findByTestId('LeftNav-CommandBarButtonDesign').click();
+    cy.visitPage('Design');
     cy.route({
       method: 'POST',
       url: 'api/projects/*/build',
