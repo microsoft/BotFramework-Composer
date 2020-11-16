@@ -153,12 +153,12 @@ export const mergePropertiesManagedByRootBot = (projectId: string, rootBotProjec
   const mergedSettings = cloneDeep(settings);
   if (localSetting) {
     for (const property of RootBotManagedProperties) {
-      const rootValue = objectGet(localSetting, property).root;
+      const rootValue = get(localSetting, property, {}).root;
       if (projectId === rootBotProjectId) {
         objectSet(mergedSettings, property, rootValue ?? '');
       }
       if (projectId !== rootBotProjectId) {
-        const skillValue = objectGet(localSetting, property)[projectId];
+        const skillValue = get(localSetting, property, {})[projectId];
         objectSet(mergedSettings, property, skillValue ?? '');
       }
     }
@@ -197,12 +197,18 @@ export const navigateToBot = (
   projectId: string,
   mainDialog: string,
   qnaKbUrls?: string[],
-  templateId?: string
+  templateId?: string,
+  urlSuffix?: string
 ) => {
   if (projectId) {
     const { set } = callbackHelpers;
     set(currentProjectIdState, projectId);
-    const url = `/bot/${projectId}/dialogs/${mainDialog}`;
+    let url = `/bot/${projectId}/dialogs/${mainDialog}`;
+    if (urlSuffix) {
+      // deep link was provided to creation flow (base64 encoded to make query string parsing easier)
+      urlSuffix = atob(urlSuffix);
+      url = `/bot/${projectId}/${urlSuffix}`;
+    }
     navigateTo(url);
   }
 };
@@ -421,6 +427,7 @@ export const openRemoteSkill = async (
   const manifestResponse = await httpClient.get(
     `/projects/${projectId}/skill/retrieveSkillManifest?${stringified}&ignoreProjectValidation=true`
   );
+
   set(projectMetaDataState(projectId), {
     isRootBot: false,
     isRemote: true,
@@ -471,7 +478,11 @@ export const createNewBotFromTemplate = async (
   description: string,
   location: string,
   schemaUrl?: string,
-  locale?: string
+  locale?: string,
+  templateDir?: string,
+  eTag?: string,
+  alias?: string,
+  preserveRoot?: boolean
 ) => {
   const { set } = callbackHelpers;
   const response = await httpClient.post(`/projects`, {
@@ -482,6 +493,10 @@ export const createNewBotFromTemplate = async (
     location,
     schemaUrl,
     locale,
+    templateDir,
+    eTag,
+    alias,
+    preserveRoot,
   });
   const { botFiles, projectData } = loadProjectData(response);
   const projectId = response.data.id;

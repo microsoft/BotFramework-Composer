@@ -18,7 +18,7 @@ const state = {
 };
 
 describe('App Id and Password', () => {
-  it('should submit settings', () => {
+  it('should submit settings', async () => {
     const setSettingsMock = jest.fn();
     const initRecoilState = ({ set }) => {
       set(currentProjectIdState, state.projectId);
@@ -28,29 +28,45 @@ describe('App Id and Password', () => {
       });
     };
     const { getByTestId } = renderWithRecoilAndCustomDispatchers(
-      <AppIdAndPassword required projectId={state.projectId} />,
+      <AppIdAndPassword projectId={state.projectId} />,
       initRecoilState
     );
     const textField1 = getByTestId('MicrosoftAppId');
-    act(() => {
-      fireEvent.change(textField1, {
+    await act(async () => {
+      await fireEvent.change(textField1, {
         target: { value: 'myMicrosoftAppId' },
       });
+      await fireEvent.blur(textField1);
     });
     expect(setSettingsMock).toBeCalledWith('test', {
       defaultLanguage: 'en-us',
       languages: ['en-us', 'fr-fr'],
+      luis: {
+        authoringKey: '',
+        authoringRegion: '',
+      },
+      qna: {
+        subscriptionKey: '',
+      },
       MicrosoftAppId: 'myMicrosoftAppId',
     });
     const textField2 = getByTestId('MicrosoftPassword');
-    act(() => {
-      fireEvent.change(textField2, {
+    await act(async () => {
+      await fireEvent.change(textField2, {
         target: { value: 'myMicrosoftPassword' },
       });
+      await fireEvent.blur(textField2);
     });
     expect(setSettingsMock).toBeCalledWith('test', {
       defaultLanguage: 'en-us',
       languages: ['en-us', 'fr-fr'],
+      luis: {
+        authoringKey: '',
+        authoringRegion: '',
+      },
+      qna: {
+        subscriptionKey: '',
+      },
       MicrosoftAppPassword: 'myMicrosoftPassword',
     });
   });

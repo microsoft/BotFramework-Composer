@@ -131,7 +131,7 @@ export type CardProps = {
   link?: Link;
   read?: boolean;
   hidden?: boolean;
-  onRenderCardContent?: (props: CardProps) => JSX.Element;
+  onRenderCardContent?: ((props: CardProps) => JSX.Element) | React.FC<any>;
 };
 
 export type NotificationProps = {

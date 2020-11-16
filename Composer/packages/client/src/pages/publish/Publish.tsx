@@ -4,7 +4,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, useEffect, Fragment } from 'react';
+import { useState, useEffect, useMemo, Fragment } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { Dialog } from 'office-ui-fabric-react/lib/Dialog';
@@ -23,6 +23,7 @@ import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor } from './s
 import { IStatus } from './publishStatusList';
 import { BotStatusList, IBotStatus } from './botStatusList';
 import { pendingNotificationCard, publishedNotificationCard } from './notifications';
+import { PullDialog } from './pullDialog';
 
 const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: string }>> = (props) => {
   const { projectId = '' } = props;
@@ -95,6 +96,7 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
   const [botPublishHistoryList, setBotPublishHistoryList] = useState<{ [key: string]: any }[]>(publishHistoyList);
   const [showLog, setShowLog] = useState(false);
   const [publishDialogHidden, setPublishDialogHidden] = useState(true);
+  const [pullDialogHidden, setPullDialogHidden] = useState(true);
 
   // items to show in the list
   const [selectedVersion, setSelectedVersion] = useState<IStatus | null>(null);
@@ -110,6 +112,22 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
     }
     return false;
   };
+
+  const isPullSupported = useMemo(() => {
+    const isSupported = false;
+    if (selectedBots && selectedBots.length > 0) {
+      selectedBots.forEach((bot) => {
+        const publishTypes = botPublishTypesList.find((types) => types.projectId === bot.id)?.publishTypes;
+        const type = publishTypes?.find(
+          (t) => t.name === bot.publishTargets?.find((target) => target.name === bot.publishTarget)?.type
+        );
+        if (type?.features?.pull) {
+          return true;
+        }
+      });
+    }
+    return isSupported;
+  }, [selectedBots]);
 
   const toolbarItems: IToolbarItem[] = [
     {
@@ -130,6 +148,19 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
           <span css={{ marginLeft: '8px' }}>{formatMessage('Publish selected bots')}</span>
         </ActionButton>
       ),
+    },
+    {
+      type: 'action',
+      text: formatMessage('Pull from selected profile'),
+      buttonProps: {
+        iconProps: {
+          iconName: 'CloudDownload',
+        },
+        onClick: () => setPullDialogHidden(false),
+      },
+      align: 'left',
+      dataTestid: 'publishPage-Toolbar-Pull',
+      disabled: !isPullSupported,
     },
   ];
   const getUpdatedStatus = (target) => {
@@ -314,6 +345,19 @@ const Publish: React.FC<RouteComponentProps<{ projectId: string; targetName?: st
       {!publishDialogHidden && (
         <PublishDialog items={selectedBots} onDismiss={() => setPublishDialogHidden(true)} onSubmit={publish} />
       )}
+      {!pullDialogHidden &&
+        selectedBots.map((bot) => {
+          const selectedTarget = bot.publishTargets?.find((target) => target.name === bot.publishTarget);
+          const botProjectId = bot.id;
+          return (
+            <PullDialog
+              key={botProjectId}
+              projectId={botProjectId}
+              selectedTarget={selectedTarget}
+              onDismiss={() => setPullDialogHidden(true)}
+            />
+          );
+        })}
       {showLog && <LogDialog version={selectedVersion} onDismiss={() => setShowLog(false)} />}
       <Toolbar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
@@ -347,7 +391,7 @@ const LogDialog = (props) => {
     <Dialog
       dialogContentProps={logDialogProps}
       hidden={false}
-      minWidth={450}
+      minWidth={700}
       modalProps={{ isBlocking: true }}
       onDismiss={props.onDismiss}
     >

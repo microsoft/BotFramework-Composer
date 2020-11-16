@@ -13,6 +13,7 @@ import {
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import moment from 'moment';
 import { useState } from 'react';
@@ -34,6 +35,10 @@ export interface IStatus {
   status: number;
   message: string;
   comment: string;
+  action?: {
+    href: string;
+    label: string;
+  };
 }
 
 function onRenderDetailsHeader(props, defaultRender) {
@@ -94,8 +99,8 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       name: formatMessage('Status'),
       className: 'publishstatus',
       fieldName: 'status',
-      minWidth: 70,
-      maxWidth: 90,
+      minWidth: 40,
+      maxWidth: 40,
       isResizable: true,
       data: 'string',
       onRender: (item: IStatus) => {
@@ -118,14 +123,29 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
       name: formatMessage('Message'),
       className: 'publishmessage',
       fieldName: 'message',
-      minWidth: 70,
-      maxWidth: 90,
+      minWidth: 150,
+      maxWidth: 300,
       isResizable: true,
       isCollapsible: true,
       isMultiline: true,
       data: 'string',
       onRender: (item: IStatus) => {
-        return <span>{item.message}</span>;
+        return (
+          <span>
+            {item.message}
+            {item.action && (
+              <Link
+                aria-label={item.action.label}
+                href={item.action.href}
+                rel="noopener noreferrer"
+                style={{ marginLeft: '3px' }}
+                target="_blank"
+              >
+                {item.action.label}
+              </Link>
+            )}
+          </span>
+        );
       },
       isPadded: true,
     },

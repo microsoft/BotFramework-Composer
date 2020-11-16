@@ -20,10 +20,9 @@ import { dispatcherState } from '../../recoilModel';
 import { settingsState, userSettingsState, schemasState } from '../../recoilModel/atoms';
 import { botProjectSpaceSelector, rootBotProjectIdSelector } from '../../recoilModel/selectors/project';
 import { navigateTo } from '../../utils/navigation';
+import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 
 import BotProjectSettingsTableView from './BotProjectSettingsTableView';
-
-import { mergePropertiesManagedByRootBot } from '../../recoilModel/dispatchers/utils/project';
 
 // -------------------- Styles -------------------- //
 
@@ -103,12 +102,7 @@ const BotProjectSettings: React.FC<RouteComponentProps<{ projectId: string; skil
   };
 
   const saveChangeResult = (result: DialogSetting) => {
-    try {
-      setSettings(projectId, result);
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error(err.message);
-    }
+    setSettings(projectId, result);
   };
 
   const handleChange = (result: any) => {

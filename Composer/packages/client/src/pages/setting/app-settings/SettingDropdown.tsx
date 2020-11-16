@@ -21,6 +21,7 @@ interface ISettingToggleProps {
   title: string;
   options: { key: string; text: string }[];
   selected?: string;
+  dropdownWidth?: number;
 }
 
 const SettingDropdown: React.FC<ISettingToggleProps> = (props) => {

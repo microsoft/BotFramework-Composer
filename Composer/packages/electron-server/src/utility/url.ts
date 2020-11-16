@@ -20,6 +20,16 @@ export const parseDeepLinkUrl = (deeplinkUrl: string) => {
         return `projects/${convertedUrl.hostname}${convertedUrl.pathname}${convertedUrl.search}`;
       }
 
+      // process the import and load the URL at the server
+      case 'import': {
+        const source = convertedUrl.searchParams.get('source');
+        const payload = convertedUrl.searchParams.get('payload');
+        if (!source || !payload) {
+          throw new Error('bfcomposer://import must include a "source" and "payload" parameter.');
+        }
+        return `projects/import?source=${encodeURIComponent(source)}&payload=${encodeURIComponent(payload)}`;
+      }
+
       default:
         return '';
     }

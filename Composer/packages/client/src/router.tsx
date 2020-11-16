@@ -25,7 +25,6 @@ import { openAlertModal } from './components/Modal/AlertDialog';
 import { dialogStyle } from './components/Modal/dialogStyle';
 import { LoadingSpinner } from './components/LoadingSpinner';
 import { PluginPageContainer } from './pages/plugin/PluginPageContainer';
-
 import { botProjectSpaceLoadedState } from './recoilModel/atoms';
 import { mergePropertiesManagedByRootBot } from './recoilModel/dispatchers/utils/project';
 

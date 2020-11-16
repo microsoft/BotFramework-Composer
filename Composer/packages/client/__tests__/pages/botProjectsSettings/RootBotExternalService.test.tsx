@@ -4,7 +4,7 @@
 import React from 'react';
 import { act, fireEvent } from '@botframework-composer/test-utils';
 
-import { ExternalService } from '../../../src/pages/botProject/ExternalService';
+import { RootBotExternalService } from '../../../src/pages/botProject/RootBotExternalService';
 import { renderWithRecoilAndCustomDispatchers } from '../../testUtils';
 import { dispatcherState } from '../../../src/recoilModel';
 import {
@@ -54,8 +54,8 @@ const state = {
   botProjectIdsState: ['test'],
 };
 
-describe('External Service', () => {
-  it('should submit settings', () => {
+describe('Root Bot External Service', () => {
+  it('should submit settings', async () => {
     const setSettingsMock = jest.fn();
     const setQnASettingsMock = jest.fn();
     const initRecoilState = ({ set }) => {
@@ -72,39 +72,56 @@ describe('External Service', () => {
       });
     };
     const { getByTestId } = renderWithRecoilAndCustomDispatchers(
-      <ExternalService projectId={state.projectId} />,
+      <RootBotExternalService projectId={state.projectId} />,
       initRecoilState
     );
     const textField1 = getByTestId('rootLUISKey');
-    act(() => {
-      fireEvent.change(textField1, {
+    await act(async () => {
+      await fireEvent.change(textField1, {
         target: { value: 'myRootLUISKey' },
       });
+      await fireEvent.blur(textField1);
     });
     expect(setSettingsMock).toBeCalledWith('test', {
       luis: {
         authoringKey: 'myRootLUISKey',
+        authoringRegion: '',
+      },
+      qna: {
+        subscriptionKey: '',
       },
     });
     const textField2 = getByTestId('rootLUISRegion');
-    act(() => {
-      fireEvent.change(textField2, {
+    await act(async () => {
+      await fireEvent.change(textField2, {
         target: { value: 'myRootLUISRegion' },
       });
+      await fireEvent.blur(textField2);
     });
     expect(setSettingsMock).toBeCalledWith('test', {
       luis: {
+        authoringKey: '',
         authoringRegion: 'myRootLUISRegion',
+      },
+      qna: {
+        subscriptionKey: '',
       },
     });
     const textField3 = getByTestId('QnASubscriptionKey');
-    act(() => {
-      fireEvent.change(textField3, {
+    await act(async () => {
+      await fireEvent.change(textField3, {
         target: { value: 'myQnASubscriptionKey' },
       });
+      await fireEvent.blur(textField3);
     });
-    act(() => {
-      fireEvent.blur(textField3);
+    expect(setSettingsMock).toBeCalledWith('test', {
+      luis: {
+        authoringKey: '',
+        authoringRegion: '',
+      },
+      qna: {
+        subscriptionKey: 'myQnASubscriptionKey',
+      },
     });
     expect(setQnASettingsMock).toBeCalledWith('test', 'myQnASubscriptionKey');
   });

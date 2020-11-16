@@ -10,7 +10,7 @@ import { ILuisConfig, FileInfo, IQnAConfig } from '@botframework-composer/types'
 
 import { ICrossTrainConfig, createCrossTrainConfig } from './utils/crossTrainUtil';
 import { BotProjectDeployLoggerType } from './botProjectLoggerType';
-import { luImportResolverGenerator } from '@bfc/shared/lib/luBuildResolver'
+import { luImportResolverGenerator } from '@bfc/shared/lib/luBuildResolver';
 
 const crossTrainer = require('@microsoft/bf-lu/lib/parser/cross-train/crossTrainer.js');
 const luBuild = require('@microsoft/bf-lu/lib/parser/lubuild/builder.js');
