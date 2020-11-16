@@ -339,7 +339,7 @@ export const ProjectTree: React.FC<Props> = ({
     );
   };
 
-  const renderDialogHeader = (skillId: string, dialog: DialogInfo, depth: number) => {
+  const renderDialogHeader = (skillId: string, dialog: DialogInfo, padLeft: number) => {
     const diagnostics: Diagnostic[] = notificationMap[rootProjectId][dialog.id];
     const dialogLink: TreeLink = {
       dialogId: dialog.id,
@@ -402,6 +402,7 @@ export const ProjectTree: React.FC<Props> = ({
             isActive={doesLinkMatch(dialogLink, selectedLink)}
             link={dialogLink}
             menu={menu}
+            padLeft={padLeft}
             textWidth={leftSplitWidth - TREE_PADDING}
             onSelect={handleOnSelect}
           />

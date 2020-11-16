@@ -44,6 +44,7 @@ const projectTreeItem = css`
   display: flex;
   align-items: center;
   height: 24px;
+  padding-left: 4px;
 
   label: ProjectTreeItem;
 `;
