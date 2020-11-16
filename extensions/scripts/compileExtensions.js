@@ -11,7 +11,7 @@ const { execSync } = require('child_process');
 
 const FORCE_BUILD = process.argv.includes('--force') || process.argv.includes('-f');
 
-const extensionsDir = process.env.COMPOSER_BUILTIN_EXTENSIONS_DIR || path.resolve(__dirname, '../../extensions');
+const extensionsDir = process.env.COMPOSER_BUILTIN_EXTENSIONS_DIR || path.resolve(__dirname, '..');
 const buildCachePath = path.resolve(extensionsDir, '.build-cache.json');
 
 console.log('Compiling extensions in %s', extensionsDir);
@@ -20,13 +20,13 @@ if (FORCE_BUILD) {
   console.log('--force is true. Forcing a rebuild of all extensions.');
 }
 
-const allExtensions = fs.readdirSync(extensionsDir, { withFileTypes: true });
+const allExtensions = fs.readdirSync(extensionsDir, { withFileTypes: true }).filter((ent) => ent.name !== 'scripts');
 
 const checkComposerLibs = () => {
   const libsToCheck = ['types', 'extension', 'extension-client', 'lib/shared'];
 
   for (const libName of libsToCheck) {
-    const libPath = path.resolve(__dirname, '../packages/', libName, 'lib/index.js');
+    const libPath = path.resolve(__dirname, '../../Composer/packages/', libName, 'lib/index.js');
     if (!fs.existsSync(libPath)) {
       console.error('Composer libraries have not yet been compiled. Run `yarn build:libs` first.');
       process.exit(1);
